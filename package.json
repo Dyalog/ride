@@ -1,0 +1,7 @@
+{
+  "main": "./server.js",
+  "devDependencies": {
+    "coffee-script": "",
+    "express": "4.8.5"
+  }
+}
