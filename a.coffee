@@ -1,59 +1,74 @@
 #!/usr/bin/env coffee
-express = require 'express'
-net = require 'net'
 
 rideMsg = (s) ->
   console.assert /[\x00-\xff]*/.test s
-  b = new Buffer s.length + 8
+  b = Buffer s.length + 8
   b.writeInt32BE b.length, 0
   b.write 'RIDE' + s, 4
   b
 
-b64 = (s) -> new Buffer(s).toString 'base64'
-b64d = (s) -> '' + new Buffer s, 'base64'
+b64 = (s) -> Buffer(s).toString 'base64'
+b64d = (s) -> '' + Buffer s, 'base64'
 
-client = net.connect {host: '127.0.0.1', port: 4502}, ->
+express = require 'express'
+app = express()
+router = express.Router()
+router.use express.static __dirname
 
-  session = '' # the text of it
+# compile *.coffee on the fly and serve it as *.js
+app.get '/:name.js', (req, res, next) ->
+  require('fs').readFile "#{__dirname}/#{req.params.name}.coffee", 'utf8', (err, s) ->
+    if err then console.error err; res.status(404).send ''
+    else res.header('Content-Type', 'application/x-javascript').send require('coffee-script').compile s, bare: true
+    next()
 
-  q = new Buffer 0 # a queue for data received from the server
+app.use '/', router
+server = app.listen 3000, -> console.info 'HTTP server listening on :3000'
+
+require('socket.io').listen(server).on 'connection', (socket) ->
+  console.info 'browser connected'
+  client = require('net').connect {host: '127.0.0.1', port: 4502}, -> console.info 'interpreter connected'
+
+  toInterpreter = (s) -> console.info 'to interpreter: ' + JSON.stringify s; client.write rideMsg s
+  toBrowser = (m...) -> console.info 'to browser: ' + JSON.stringify m; socket.emit m...
+
+  q = Buffer 0 # a buffer for data received from the server
   client.on 'data', (data) ->
-    console.info 'data: ', data.length
-    console.info 'data: ' + data
     q = Buffer.concat [q, data]
     while q.length >= 4 and (n = q.readInt32BE 0) <= q.length
-      processServerMsg q[8...n].toString()
+      m = '' + q[8...n]
       q = q[n..]
+      console.info 'from interpreter: ' + JSON.stringify m
+      if /^SupportedProtocols=/.test m
+        toInterpreter 'SupportedProtocols=1'
+      else if /^UsingProtocol=/.test m
+        toInterpreter 'UsingProtocol=1'
+      else if /^<ReplyExecute>/.test m
+        toBrowser 'add', b64d m.replace /^[^]*<result>([^]*)<\/result>[^]*$/, '$1'
+      else if /^<ReplyNotAtInputPrompt>/.test m
+        # ignore
+      else if /^<ReplyEchoInput>/.test m
+        toBrowser 'add', b64d(m.replace /^[^]*<input>([^]*)<\/input>[^]*$/, '$1') + '\n'
+      else if /^<ReplyAtInputPrompt>/.test m
+        toBrowser 'prompt'
+      else
+        console.info 'unrecognised'
     return
 
-  processServerMsg = (m) ->
-    session +=
-      if /^<ReplyExecute>/.test m
-        b64d m.replace /^[^]*<result>([^]*)<\/result>[^]*$/, '$1'
-      else if /^<ReplyEchoInput>/.test m
-        "      #{b64d m.replace /^[^]*<input>([^]*)<\/input>[^]*$/, '$1'}\n"
-      else
-        ''
+  socket.on 'exec', (s) ->
+    console.info 'from browser: ' + JSON.stringify ['exec', s]
+    toInterpreter """
+      <?xml version="1.0" encoding="utf-8"?>
+      <Command>
+        <cmd>Execute</cmd>
+        <id>0</id>
+        <args><Execute><Text>#{b64 s}</Text><Trace>0</Trace></Execute></args>
+      </Command>
+    """
 
-  client.write rideMsg 'SupportedProtocols=1'
-  client.write rideMsg 'UsingProtocol=1'
-  client.write rideMsg '''<?xml version="1.0" encoding="utf-8"?><Command><cmd>Identify</cmd><id>0</id><args><Identify><Sender><Process>RIDE.EXE</Process><Proxy>0</Proxy></Sender></Identify></args></Command>'''
+  socket.onpacket (a...) -> console.info 'onpacket', a...
 
-  app = express()
-  router = express.Router()
-  router.use express.static __dirname
+#   toInterpreter '<?xml version="1.0" encoding="utf-8"?><Command><cmd>Identify</cmd><id>0</id><args><Identify><Sender><Process>RIDE.EXE</Process><Proxy>0</Proxy></Sender></Identify></args></Command>'
 
-  app.use (req, res, next) ->
-    data = ''
-    req.setEncoding 'utf8'
-    req.on 'data', (chunk) -> data += chunk
-    req.on 'end', -> req.body = data; next()
-
-  app.post '/session', (req, res, next) ->
-    s = req.body + '\n'
-    client.write rideMsg """<?xml version="1.0" encoding="utf-8"?><Command><cmd>Execute</cmd><id>0</id><args><Execute><Text>#{b64 s}</Text><Trace>0</Trace></Execute></args></Command>"""
-    res.send 'ok'
-
-  app.get '/session', (req, res) -> res.send session; session = ''
-  app.use '/', router
-  app.listen 3000
+  client.on 'end', -> console.info 'interpreter disconnected'; socket.emit 'end'
+  socket.on 'disconnect', -> console.info 'browser disconnected'; client.end()
