@@ -10,7 +10,6 @@ jQuery ($) ->
 
   cm = CodeMirror document.getElementById('session'),
     autofocus: true
-    value: '      '
     extraKeys:
       'Enter': ->
         l = cm.lineCount() - 1
