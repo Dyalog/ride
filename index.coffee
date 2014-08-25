@@ -3,7 +3,9 @@ jQuery ($) ->
   send = (a...) -> console.info 'send:', a...; socket.emit a...
   recv = (x, f) -> socket.on x, (a...) -> console.info 'recv:', x, a...; f a...
 
-  recv 'add', (s) -> cm.setValue cm.getValue() + s
+  recv 'add', (s) ->
+    cm.replaceRange s, line: cm.lineCount() - 1, ch: 0
+
   recv 'prompt', ->
     cm.replaceRange '      ', line: cm.lineCount() - 1, ch: 0
     cm.setCursor cm.lineCount() - 1, 6
