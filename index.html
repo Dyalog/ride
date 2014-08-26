@@ -6,14 +6,30 @@
 	<link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css">
 	<style>
 		body { padding: 0; margin: 0; }
-		.CodeMirror, #lbar { font-family: "APL385 Unicode", monospace; }
-		#lbar { background-color: #eee; padding: 2px 10px; cursor: default; }
+		.CodeMirror, #lbar, #tip { font-family: "APL385 Unicode", monospace; }
+		#lbar { background-color: #eee; padding: 2px 10px 2px 24px; cursor: default; }
 		#lbar .glyph { padding: 0; margin-right: -1px; border: solid black 1px; }
 		#lbar .glyph:hover { outline: solid black 1px; }
+		#tip {
+			position: absolute;
+			width: 310px;
+			z-index: 3;
+			padding: 20px 0 0 0;
+			background: center 0 url(tip.png) no-repeat;
+		}
+		#tip-inner {
+			background: #ffffe1 url(i.png) 10px 10px no-repeat;
+			padding: 10px;
+			border-radius: 10px;
+			border: solid black 1px;
+			border-top-width: 0;
+		}
+		#tip-title { padding: 0 0 0 30px; margin: 0; font-weight: bold; }
 	</style>
 </head>
 <body>
 	<div id="lbar"></div>
+	<div id="tip" style="display: none"><div id="tip-inner"><div id="tip-title"></div><pre id="tip-description"></pre></div></div>
 	<div id="session"></div>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="node_modules/jquery/dist/cdn/jquery-2.1.1.min.js"></script>
