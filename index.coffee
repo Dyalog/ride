@@ -1,14 +1,22 @@
 jQuery ($) ->
-  socket = io()
-  send = (a...) -> console.info 'send:', a...; socket.emit a...
-  recv = (x, f) -> socket.on x, (a...) -> console.info 'recv:', x, a...; f a...
+  debug = 1
 
-  recv 'add', (s) ->
+  socket = io()
+
+  if debug
+    {emit, onevent} = socket
+    socket.emit = (a...) -> console.info 'send:' + JSON.stringify(a)[..1000]; emit.apply socket, a
+    socket.onevent = (packet) -> console.info 'recv:' + JSON.stringify(packet.data)[..1000]; onevent.apply socket, [packet]
+
+  socket.on 'add', (s) ->
     cm.replaceRange s, line: cm.lineCount() - 1, ch: 0
 
-  recv 'prompt', ->
+  socket.on 'prompt', ->
     cm.replaceRange '      ', line: cm.lineCount() - 1, ch: 0
     cm.setCursor cm.lineCount() - 1, 6
+
+  socket.on 'open', (name, text) ->
+    # todo
 
   cm = CodeMirror document.getElementById('session'),
     autofocus: true
@@ -17,7 +25,10 @@ jQuery ($) ->
         l = cm.lineCount() - 1
         s = cm.getLine l
         cm.replaceRange '', {line: l, ch: 0}, {line: l, ch: s.length}
-        send 'exec', s + '\n'
+        socket.emit 'exec', s + '\n'
+      'Shift-Enter': ->
+        c = cm.getCursor()
+        socket.emit 'edit', cm.getLine(c.line), c.ch
   cm.setCursor 0, 6
 
   # language bar
@@ -64,5 +75,6 @@ jQuery ($) ->
 
   $(window).resize(-> cm.setSize null, $(window).height() - 4 - $('#lbar').height()).resize()
 
-  window.socket = socket
-  window.cm = cm
+  if debug
+    window.socket = socket
+    window.cm = cm
