@@ -20,7 +20,15 @@ jQuery ($) ->
         send 'exec', s + '\n'
   cm.setCursor 0, 6
 
-  $(window).resize(-> cm.setSize null, $(window).height() - 2).resize()
+  $('#lbar').html(
+    '← +-×÷*⍟⌹○!? |⌈⌊⊥⊤⊣⊢ =≠≤<>≥≡≢ ∨∧⍱⍲ ↑↓⊂⊃⌷⍋⍒ ⍳⍷∪∩∊~ /\\⌿⍀ ,⍪⍴⌽⊖⍉ ¨⍨⍣.∘⍤ ⍞⎕⍠⌸⍎⍕ ⋄⍝→⍵⍺∇& ¯⍬'
+      .replace /\S+/g, (g) ->
+        """<span class="group">#{g.replace /(.)/g, '<span class="glyph">$1</span>'}</span>"""
+  )
+  $('#lbar').on 'mousedown', -> false
+  $('.glyph', '#lbar').on 'mousedown', (e) -> cm.replaceRange $(e.target).text(), cm.getCursor(); false
+
+  $(window).resize(-> cm.setSize null, $(window).height() - 4 - $('#lbar').height()).resize()
 
   window.socket = socket
   window.cm = cm
