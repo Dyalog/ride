@@ -25,16 +25,21 @@
 			border-top-width: 0;
 		}
 		#tip-title { padding: 0 0 0 30px; margin: 0; font-weight: bold; }
+		.ui-layout-resizer { background-color: #ccc; }
+		.ui-layout-toggler { background-color: #888; }
 	</style>
 </head>
 <body>
-	<div id="lbar"></div>
+	<div id="session" class="ui-layout-center"></div>
+	<div id="lbar" class="ui-layout-north"></div>
 	<div id="tip" style="display: none"><div id="tip-inner"><div id="tip-title"></div><pre id="tip-description"></pre></div></div>
-	<div id="session"></div>
+	<div class="ui-layout-east">editor</div>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="node_modules/jquery/dist/cdn/jquery-2.1.1.min.js"></script>
 	<script src="node_modules/codemirror/lib/codemirror.js"></script>
 	<script src="node_modules/codemirror/mode/apl/apl.js"></script>
-	<script src="index.js"></script>
+	<script src="jquery-ui.min.js"></script>
+	<script src="jquery.layout.js"></script>
+	<script src="index.coffee.js"></script>
 </body>
 </html>

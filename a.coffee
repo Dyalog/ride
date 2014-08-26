@@ -16,7 +16,7 @@ router = express.Router()
 router.use express.static __dirname
 
 # compile *.coffee on the fly and serve it as *.js
-app.get '/:name.js', (req, res, next) ->
+app.get '/:name.coffee.js', (req, res, next) ->
   require('fs').readFile "#{__dirname}/#{req.params.name}.coffee", 'utf8', (err, s) ->
     if err then console.error err; res.status(404).send ''
     else res.header('Content-Type', 'application/x-javascript').send require('coffee-script').compile s, bare: true

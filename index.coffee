@@ -16,7 +16,7 @@ jQuery ($) ->
     cm.setCursor cm.lineCount() - 1, 6
 
   socket.on 'open', (name, text) ->
-    # todo
+    layout.open 'east'
 
   cm = CodeMirror document.getElementById('session'),
     autofocus: true
@@ -73,7 +73,11 @@ jQuery ($) ->
   $('.glyph', '#lbar').on 'mouseout blur', ->
     clearTimeout ttid; ttid = null; $('#tip').hide()
 
-  $(window).resize(-> cm.setSize null, $(window).height() - 4 - $('#lbar').height()).resize()
+  layout = $('body').layout
+    north: resizable: 0, togglerLength_closed: '100%'
+    east: initClosed: true, spacing_closed: 0
+    center: onresize: updateCM = -> cm.setSize $('#session').width(), $('#session').height()
+  updateCM()
 
   if debug
     window.socket = socket
