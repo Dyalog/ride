@@ -41,12 +41,13 @@ require('socket.io').listen(server).on 'connection', (socket) ->
       console.info 'from interpreter: ' + JSON.stringify(m)[..1000]
       if !/^(?:SupportedProtocols|UsingProtocol)=1$/.test m # ignore these
         switch (/^<(\w+)>/.exec m)?[1] or ''
-          when 'ReplyIdentify', 'ReplyConnect', 'ReplyNotAtInputPrompt' then ; # ignore
+          when 'ReplyIdentify', 'ReplyConnect', 'ReplyNotAtInputPrompt', 'ReplyEdit' then ; # ignore
           when 'ReplyExecute'       then toBrowser 'add', b64d getTag 'result', m
           when 'ReplyEchoInput'     then toBrowser 'add', b64d(getTag 'input', m) + '\n'
           when 'ReplyGetLog'        then toBrowser 'add', b64d getTag 'Log', m
           when 'ReplyAtInputPrompt' then toBrowser 'prompt'
           when 'ReplyOpenWindow'    then toBrowser 'open', b64d(getTag 'name', m), b64d(getTag 'text', m)
+          when 'ReplyFocusWindow'   then toBrowser 'focus', +getTag 'win', m
           else console.info 'unrecognised'
     return
 

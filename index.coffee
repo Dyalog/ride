@@ -17,6 +17,8 @@ jQuery ($) ->
 
   socket.on 'open', (name, text) ->
     layout.open 'east'
+    cme.setValue text
+    cme.focus()
 
   cm = CodeMirror document.getElementById('session'),
     autofocus: true
@@ -31,7 +33,11 @@ jQuery ($) ->
       'Shift-Enter': ->
         c = cm.getCursor()
         socket.emit 'edit', cm.getLine(c.line), c.ch
-  cm.setCursor 0, 6
+
+  cme = CodeMirror document.getElementById('editor'),
+    lineNumbers: true
+    firstLineNumber: 0
+    lineNumberFormatter: (i) -> "[#{i}]"
 
   # language bar
   $('#lbar').append(
@@ -62,11 +68,12 @@ jQuery ($) ->
 
   layout = $('body').layout
     north: resizable: 0, togglerLength_closed: '100%', togglerTip_closed: 'Show Language Bar', spacing_open: 0
-    east: initClosed: true, spacing_closed: 0
-    center: onresize: updateCM = -> cm.setSize $('#session').width(), $('#session').height()
-  updateCM()
+    east: spacing_closed: 0, size: '50%', resizable: true
+    center: onresize: updateCMSizes = ->
+      console.info 'resized'
+      cm.setSize $('#session').width(), $('#session').height()
+      cme.setSize $('#editor').width() - 10, $('#editor').height()
+  layout.close 'east' # "east:{initOpen:false}" doesn't work---the resizer doesn't get rendered
+  updateCMSizes()
 
-  if debug
-    window.socket = socket
-    window.cm = cm
-    window.layout = layout
+  if debug then $.extend window, {socket, cm, cme, layout}
