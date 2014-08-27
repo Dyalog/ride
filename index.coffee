@@ -34,13 +34,14 @@ jQuery ($) ->
   cm.setCursor 0, 6
 
   # language bar
-  $('#lbar').html(
+  $('#lbar').append(
     '← +-×÷*⍟⌹○!? |⌈⌊⊥⊤⊣⊢ =≠≤<>≥≡≢ ∨∧⍱⍲ ↑↓⊂⊃⌷⍋⍒ ⍳⍷∪∩∊~ /\\⌿⍀ ,⍪⍴⌽⊖⍉ ¨⍨⍣.∘⍤ ⍞⎕⍠⌸⍎⍕ ⋄⍝→⍵⍺∇& ¯⍬'
       .replace /\S+/g, (g) ->
         """<span class="group">#{g.replace /(.)/g, '<span class="glyph">$1</span>'}</span>"""
   )
   $('#lbar').on 'mousedown', -> false
   $('.glyph', '#lbar').on 'mousedown', (e) -> cm.replaceRange $(e.target).text(), cm.getCursor(); false
+  $('#lbar-close').on 'click', -> layout.close 'north'; false
 
   # tooltips
   help =
@@ -76,7 +77,7 @@ jQuery ($) ->
     clearTimeout ttid; ttid = null; $('#tip').hide()
 
   layout = $('body').layout
-    north: resizable: 0, togglerLength_closed: '100%'
+    north: resizable: 0, togglerLength_closed: '100%', togglerTip_closed: 'Show Language Bar', spacing_open: 0
     east: initClosed: true, spacing_closed: 0
     center: onresize: updateCM = -> cm.setSize $('#session').width(), $('#session').height()
   updateCM()
@@ -84,3 +85,4 @@ jQuery ($) ->
   if debug
     window.socket = socket
     window.cm = cm
+    window.layout = layout
