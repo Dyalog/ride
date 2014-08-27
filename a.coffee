@@ -1,27 +1,54 @@
 #!/usr/bin/env coffee
+fs = require 'fs'
+coffee = require 'coffee-script'
+express = require 'express'
+io = require 'socket.io'
+net = require 'net'
+
+debug = 1
+
+jsFiles = [
+  'node_modules/socket.io/node_modules/socket.io-client/socket.io.js'
+  'node_modules/jquery/dist/cdn/jquery-2.1.1.min.js'
+  'node_modules/codemirror/lib/codemirror.js'
+  'node_modules/codemirror/mode/apl/apl.js'
+  'jquery-ui.min.js'
+  'jquery.layout.js'
+  'lbar.js'
+  'index.coffee'
+]
+cssFiles = [
+  'node_modules/codemirror/lib/codemirror.css'
+  'index.css'
+]
+
+js = css = ''
+do jsPrepare = ->
+  js = jsFiles.map((f) -> s = fs.readFileSync f, 'utf8'; if /\.coffee$/.test f then coffee.compile s else s).join '\n'
+  console.info "prepared js: #{js.length} bytes"
+do cssPrepare = ->
+  css = cssFiles.map((f) -> fs.readFileSync f, 'utf8').join '\n'
+  console.info "prepared css: #{css.length} bytes"
+jsFiles.forEach (f) -> fs.watch f, jsPrepare
+cssFiles.forEach (f) -> fs.watch f, cssPrepare
 
 b64 = (s) -> Buffer(s).toString 'base64'
 b64d = (s) -> '' + Buffer s, 'base64'
 getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^]*)</#{tagName}>[^]*$///.exec xml)?[1]
 
-express = require 'express'
 app = express()
 router = express.Router()
 router.use express.static __dirname
 
-# compile *.coffee on the fly and serve it as *.js
-app.get '/:name.coffee.js', (req, res, next) ->
-  require('fs').readFile "#{__dirname}/#{req.params.name}.coffee", 'utf8', (err, s) ->
-    if err then console.error err; res.status(404).send ''
-    else res.header('Content-Type', 'application/x-javascript').send require('coffee-script').compile s, bare: true
-    next()
+app.get '/D.js', (req, res) -> res.header('Content-Type', 'application/x-javascript').send js
+app.get '/D.css', (req, res) -> res.header('Content-Type', 'text/css').send css
 
 app.use '/', router
 server = app.listen 3000, -> console.info 'HTTP server listening on :3000'
 
-require('socket.io').listen(server).on 'connection', (socket) ->
+io.listen(server).on 'connection', (socket) ->
   console.info 'browser connected'
-  client = require('net').connect {host: '127.0.0.1', port: 4502}, -> console.info 'interpreter connected'
+  client = net.connect {host: '127.0.0.1', port: 4502}, -> console.info 'interpreter connected'
 
   toInterpreter = (s) ->
     console.info 'to interpreter: ' + JSON.stringify(s)[..1000]

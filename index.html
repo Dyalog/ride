@@ -3,64 +3,13 @@
 <head>
 	<meta charset="utf-8">
 	<title>Dyalog</title>
-	<link rel="stylesheet" href="node_modules/codemirror/lib/codemirror.css">
-	<style>
-		body { padding: 0; margin: 0; }
-		.CodeMirror, #lbar, #tip { font-family: "APL385 Unicode", monospace; }
-		#lbar { background-color: #d4d0c8; padding: 2px 2px 2px 24px; cursor: default; }
-		#lbar .glyph { padding: 0; margin-right: -1px; border: solid black 1px; }
-		#lbar .glyph:hover { outline: solid black 1px; }
-		#lbar-close {
-			float: right;
-			color: black;
-			background-color: #eee;
-			border: solid #ddd 1px;
-			border-radius: 16px;
-			width:         16px;
-			height:        16px;
-			line-height:   16px;
-			text-align: center;
-			text-decoration: none;
-		}
-		#lbar-close:hover {
-			font-weight: bolder;
-			background-color: orange;
-			border-color: black;
-		}
-		#tip {
-			position: absolute;
-			z-index: 3;
-			padding: 0;
-			margin: 0;
-		}
-		#tip-img {
-			margin-left: 20px;
-		}
-		#tip-inner {
-			margin-top: -5px;
-			background: #ffffe1 url(i.png) 10px 10px no-repeat;
-			padding: 10px;
-			border-radius: 10px;
-			border: solid black 1px;
-		}
-		#tip-desc { padding: 0 0 0 30px; margin: 0; font-weight: bold; }
-		.ui-layout-resizer { background-color: #d4d0c8; }
-		.ui-layout-toggler { background-color: #808080; }
-		.ui-layout-resizer:hover .ui-layout-toggler { background-color: orange; }
-	</style>
+	<link rel="stylesheet" href="D.css">
 </head>
 <body>
 	<div id="session" class="ui-layout-center"></div>
 	<div id="lbar" class="ui-layout-north"><a id="lbar-close" title="Hide Language Bar" href="#">×</a></div>
 	<div id="tip" style="display: none"><img id="tip-img" src="tip.png"><div id="tip-inner"><div id="tip-desc"></div><pre id="tip-text"></pre></div></div>
 	<div id="editor" class="ui-layout-east"></div>
-	<script src="/socket.io/socket.io.js"></script>
-	<script src="node_modules/jquery/dist/cdn/jquery-2.1.1.min.js"></script>
-	<script src="node_modules/codemirror/lib/codemirror.js"></script>
-	<script src="node_modules/codemirror/mode/apl/apl.js"></script>
-	<script src="jquery-ui.min.js"></script>
-	<script src="jquery.layout.js"></script>
-	<script src="lbar.js"></script>
-	<script src="index.coffee.js"></script>
+	<script src="D.js"></script>
 </body>
 </html>
