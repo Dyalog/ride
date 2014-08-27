@@ -1,14 +1,8 @@
 #!/usr/bin/env coffee
 
-rideMsg = (s) ->
-  console.assert /[\x00-\xff]*/.test s
-  b = Buffer s.length + 8
-  b.writeInt32BE b.length, 0
-  b.write 'RIDE' + s, 4
-  b
-
 b64 = (s) -> Buffer(s).toString 'base64'
 b64d = (s) -> '' + Buffer s, 'base64'
+getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^]*)</#{tagName}>[^]*$///.exec xml)?[1]
 
 express = require 'express'
 app = express()
@@ -29,40 +23,31 @@ require('socket.io').listen(server).on 'connection', (socket) ->
   console.info 'browser connected'
   client = require('net').connect {host: '127.0.0.1', port: 4502}, -> console.info 'interpreter connected'
 
-  toInterpreter = (s) -> console.info 'to interpreter: ' + JSON.stringify(s)[..1000]; client.write rideMsg s
+  toInterpreter = (s) ->
+    console.info 'to interpreter: ' + JSON.stringify(s)[..1000]
+    console.assert /[\x01-\x7f]*/.test s
+    b = Buffer s.length + 8
+    b.writeInt32BE b.length, 0
+    b.write 'RIDE' + s, 4
+    client.write b
+
   toBrowser = (m...) -> console.info 'to browser: ' + JSON.stringify(m)[..1000]; socket.emit m...
 
   q = Buffer 0 # a buffer for data received from the server
   client.on 'data', (data) ->
     q = Buffer.concat [q, data]
     while q.length >= 4 and (n = q.readInt32BE 0) <= q.length
-      m = '' + q[8...n]
-      q = q[n..]
+      m = '' + q[8...n]; q = q[n..]
       console.info 'from interpreter: ' + JSON.stringify(m)[..1000]
-      if /^SupportedProtocols=/.test m
-        # ignore
-      else if /^UsingProtocol=/.test m
-        # ignore
-      else if /^<ReplyIdentify>/.test m
-        # ignore
-      else if /^<ReplyConnect>/.test m
-        # ignore
-      else if /^<ReplyExecute>/.test m
-        toBrowser 'add', b64d m.replace /^[^]*<result>([^]*)<\/result>[^]*$/, '$1'
-      else if /^<ReplyNotAtInputPrompt>/.test m
-        # ignore
-      else if /^<ReplyEchoInput>/.test m
-        toBrowser 'add', b64d(m.replace /^[^]*<input>([^]*)<\/input>[^]*$/, '$1') + '\n'
-      else if /^<ReplyAtInputPrompt>/.test m
-        toBrowser 'prompt'
-      else if /^<ReplyGetLog>/.test m
-        toBrowser 'add', b64d m.replace /^[^]*<Log>([^]*)<\/Log>[^]*$/, '$1'
-      else if /^<ReplyOpenWindow>/.test m
-        name = b64d m.replace /^[^]*<name>([^]*)<\/name>[^]*$/, '$1'
-        text = b64d m.replace /^[^]*<text>([^]*)<\/text>[^]*$/, '$1'
-        toBrowser 'open', name, text
-      else
-        console.info 'unrecognised'
+      if !/^(?:SupportedProtocols|UsingProtocol)=1$/.test m # ignore these
+        switch (/^<(\w+)>/.exec m)?[1] or ''
+          when 'ReplyIdentify', 'ReplyConnect', 'ReplyNotAtInputPrompt' then ; # ignore
+          when 'ReplyExecute'       then toBrowser 'add', b64d getTag 'result', m
+          when 'ReplyEchoInput'     then toBrowser 'add', b64d(getTag 'input', m) + '\n'
+          when 'ReplyGetLog'        then toBrowser 'add', b64d getTag 'Log', m
+          when 'ReplyAtInputPrompt' then toBrowser 'prompt'
+          when 'ReplyOpenWindow'    then toBrowser 'open', b64d(getTag 'name', m), b64d(getTag 'text', m)
+          else console.info 'unrecognised'
     return
 
   onevent = socket.onevent
@@ -96,6 +81,7 @@ require('socket.io').listen(server).on 'connection', (socket) ->
       </Command>
     """
 
+  # Send the first few packets immediately to reduce latency
   toInterpreter 'SupportedProtocols=1'
   toInterpreter 'UsingProtocol=1'
   toInterpreter '<?xml version="1.0" encoding="utf-8"?><Command><cmd>Identify</cmd><id>0</id><args><Identify><Sender><Process>RIDE.EXE</Process><Proxy>0</Proxy></Sender></Identify></args></Command>'
