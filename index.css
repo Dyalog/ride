@@ -26,12 +26,16 @@ body { padding: 0; margin: 0; }
 	padding: 0;
 	margin: 0;
 }
-#tip-img {
-	margin-left: 20px;
+#tip-triangle {
+	position: relative;
+	padding: 0;
+	margin: 0;
+	height: 19px;
+	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAUCAYAAACAl21KAAAAcUlEQVQ4y6WTUQ7AMAhCDfe/5E7CvpZsmVVEfmvoA9uIWgxREGa4NZJpWiLykk3R0bzMPKLEgNuyJSoMS+aIKCPoqGCsnBJRdXN1hvDEyojDDfJIpD6+bA7Ov8pSYEpzmnfL/lFhEetDBSdW5rmO9kDcybhABXRYE1UAAAAASUVORK5CYII=) 20px 0 no-repeat;
+	margin-bottom: -1px;
 }
 #tip-inner {
-	margin-top: -5px;
-	background: #ffffe1 url(i.png) 10px 10px no-repeat;
+	background: #ffffe1 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAsklEQVQoz5VS2xHDIAyTuOyRUZilk2Am6SpkFCZRP0iJC6S96vwDJ/khm1LFGzk/MSGlh39unppSmgUkAVx5pWpmcgDO6CilNKZUw5zSLA8/Mcar4SH9HXqRsULOmUSLZZEweZLmljwC/kQAcBzHT97FGWztnnpn28RmJtXTXQCllC/+mNmHoC/SyxrVs6VKf0sAyL3JYowkzWw4p20YrunJXdLy+Na2SpXD5u4qeM3y2l8gjORluK0/wAAAAABJRU5ErkJggg==) 10px 10px no-repeat;
 	padding: 10px;
 	border-radius: 10px;
 	border: solid black 1px;
