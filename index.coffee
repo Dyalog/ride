@@ -44,22 +44,6 @@ jQuery ($) ->
   $('#lbar-close').on 'click', -> layout.close 'north'; false
 
   # tooltips
-  help =
-    '←': ['Left Arrow', '''
-      Dyadic function:  Assignment
-
-            X←3 5⍴'ABCDEFG'
-            X
-      ABCDE
-      FGABC
-      DEFGA
-
-            X,←3 4 5
-            X
-      ABCDE 3
-      FGABC 4
-      DEFGA 5
-    ''']
   ttid = null # tooltip timeout id
   $('.glyph', '#lbar').on 'mouseover focus', (e) ->
     clearTimeout ttid
@@ -67,10 +51,10 @@ jQuery ($) ->
       ->
         ttid = null
         $t = $ e.target; p = $t.position(); x = $t.text()
-        h = help[x] or [x, 'Help for ' + x]
-        $('#tip-title').text h[0]
-        $('#tip-description').text h[1]
-        $('#tip').css(left: p.left - 22, top: p.top + $t.height() - 2).show()
+        h = help[x] or [x, '']
+        $('#tip-desc').text h[0]
+        $('#tip-text').text h[1]
+        $('#tip').css(left: p.left - 21, top: p.top + $t.height() + 2).show()
       500
     )
   $('.glyph', '#lbar').on 'mouseout blur', ->

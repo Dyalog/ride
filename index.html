@@ -29,19 +29,21 @@
 		}
 		#tip {
 			position: absolute;
-			width: 310px;
 			z-index: 3;
-			padding: 20px 0 0 0;
-			background: center 0 url(tip.png) no-repeat;
+			padding: 0;
+			margin: 0;
+		}
+		#tip-img {
+			margin-left: 20px;
 		}
 		#tip-inner {
+			margin-top: -5px;
 			background: #ffffe1 url(i.png) 10px 10px no-repeat;
 			padding: 10px;
 			border-radius: 10px;
 			border: solid black 1px;
-			border-top-width: 0;
 		}
-		#tip-title { padding: 0 0 0 30px; margin: 0; font-weight: bold; }
+		#tip-desc { padding: 0 0 0 30px; margin: 0; font-weight: bold; }
 		.ui-layout-resizer { background-color: #ccc; }
 		.ui-layout-toggler { background-color: #888; }
 		.ui-layout-resizer:hover .ui-layout-toggler { background-color: orange; }
@@ -50,7 +52,7 @@
 <body>
 	<div id="session" class="ui-layout-center"></div>
 	<div id="lbar" class="ui-layout-north"><a id="lbar-close" title="Hide Language Bar" href="#">×</a></div>
-	<div id="tip" style="display: none"><div id="tip-inner"><div id="tip-title"></div><pre id="tip-description"></pre></div></div>
+	<div id="tip" style="display: none"><img id="tip-img" src="tip.png"><div id="tip-inner"><div id="tip-desc"></div><pre id="tip-text"></pre></div></div>
 	<div class="ui-layout-east">editor</div>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="node_modules/jquery/dist/cdn/jquery-2.1.1.min.js"></script>
@@ -58,6 +60,7 @@
 	<script src="node_modules/codemirror/mode/apl/apl.js"></script>
 	<script src="jquery-ui.min.js"></script>
 	<script src="jquery.layout.js"></script>
+	<script src="lbar.js"></script>
 	<script src="index.coffee.js"></script>
 </body>
 </html>
