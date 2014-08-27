@@ -69,11 +69,10 @@ jQuery ($) ->
   layout = $('body').layout
     north: resizable: 0, togglerLength_closed: '100%', togglerTip_closed: 'Show Language Bar', spacing_open: 0
     east: spacing_closed: 0, size: '50%', resizable: true
-    center: onresize: updateCMSizes = ->
+    center: onresize: ->
       console.info 'resized'
       cm.setSize $('#session').width(), $('#session').height()
-      cme.setSize $('#editor').width() - 10, $('#editor').height()
+      cme.setSize $('#editor').width(), $('#editor').height()
   layout.close 'east' # "east:{initOpen:false}" doesn't work---the resizer doesn't get rendered
-  updateCMSizes()
 
   if debug then $.extend window, {socket, cm, cme, layout}
