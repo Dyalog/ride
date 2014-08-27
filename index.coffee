@@ -22,8 +22,10 @@ jQuery ($) ->
     autofocus: true
     extraKeys:
       'Enter': ->
+        # TODO: exec all modified lines
+        # TODO: restore all modified lines to their original content
+        s = cm.getLine cm.getCursor().line # current line content
         l = cm.lineCount() - 1
-        s = cm.getLine l
         cm.replaceRange '', {line: l, ch: 0}, {line: l, ch: s.length}
         socket.emit 'exec', s + '\n'
       'Shift-Enter': ->
