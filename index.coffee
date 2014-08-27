@@ -8,6 +8,9 @@ jQuery ($) ->
     socket.emit = (a...) -> console.info 'send:' + JSON.stringify(a)[..1000]; emit.apply socket, a
     socket.onevent = (packet) -> console.info 'recv:' + JSON.stringify(packet.data)[..1000]; onevent.apply socket, [packet]
 
+  winInfos = {}
+  editorWin = null
+
   socket.on 'add', (s) ->
     cm.replaceRange s, line: cm.lineCount() - 1, ch: 0
 
@@ -15,10 +18,26 @@ jQuery ($) ->
     cm.replaceRange '      ', line: cm.lineCount() - 1, ch: 0
     cm.setCursor cm.lineCount() - 1, 6
 
-  socket.on 'open', (name, text) ->
+  socket.on 'open', (name, text, token) ->
     layout.open 'east'
+    winInfos[token] = {name, text}
+    if editorWin? then winInfos[editorWin].text = cme.getValue()
+    editorWin = token
     cme.setValue text
     cme.focus()
+
+  socket.on 'close', (win) ->
+    delete winInfos[win]
+    for win, v of winInfos then break
+    if v
+      editorWin = win
+      cme.setValue v.text
+    else
+      editorWin = null
+      layout.close 'east'
+
+  socket.on 'focus', (win) ->
+    if win then cme.focus() else cm.focus()
 
   cm = CodeMirror document.getElementById('session'),
     autofocus: true
@@ -38,6 +57,13 @@ jQuery ($) ->
     lineNumbers: true
     firstLineNumber: 0
     lineNumberFormatter: (i) -> "[#{i}]"
+    extraKeys:
+      'Esc': ->
+        s = winInfos[editorWin].text = cme.getValue()
+        socket.emit 'save', editorWin, s
+        socket.emit 'close', editorWin
+      'Shift-Esc': ->
+        socket.emit 'close', editorWin
 
   # language bar
   $('#lbar').append(

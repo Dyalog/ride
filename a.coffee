@@ -68,13 +68,14 @@ io.listen(server).on 'connection', (socket) ->
       console.info 'from interpreter: ' + JSON.stringify(m)[..1000]
       if !/^(?:SupportedProtocols|UsingProtocol)=1$/.test m # ignore these
         switch (/^<(\w+)>/.exec m)?[1] or ''
-          when 'ReplyIdentify', 'ReplyConnect', 'ReplyNotAtInputPrompt', 'ReplyEdit' then ; # ignore
+          when 'ReplyIdentify', 'ReplyConnect', 'ReplyNotAtInputPrompt', 'ReplyEdit', 'ReplySaveChanges' then ; # ignore
           when 'ReplyExecute'       then toBrowser 'add', b64d getTag 'result', m
           when 'ReplyEchoInput'     then toBrowser 'add', b64d(getTag 'input', m) + '\n'
           when 'ReplyGetLog'        then toBrowser 'add', b64d getTag 'Log', m
           when 'ReplyAtInputPrompt' then toBrowser 'prompt'
-          when 'ReplyOpenWindow'    then toBrowser 'open', b64d(getTag 'name', m), b64d(getTag 'text', m)
+          when 'ReplyOpenWindow'    then toBrowser 'open', b64d(getTag 'name', m), b64d(getTag 'text', m), +getTag 'token', m
           when 'ReplyFocusWindow'   then toBrowser 'focus', +getTag 'win', m
+          when 'ReplyCloseWindow'   then toBrowser 'close', +getTag 'win', m
           else console.info 'unrecognised'
     return
 
@@ -106,6 +107,48 @@ io.listen(server).on 'connection', (socket) ->
             <Win>0</Win>
           </Edit>
         </args>
+      </Command>
+    """
+
+  socket.on 'save', (win, text) ->
+    toInterpreter """
+      <?xml version="1.0" encoding="utf-8"?>
+      <Command>
+        <cmd>SaveChanges</cmd>
+        <id>0</id>
+        <args>
+          <SaveChanges>
+            <win>#{win}</win>
+            <Text>#{b64 text}</Text>
+            <attributes>
+              <LineAttribute>
+                <attribute>Stop</attribute>
+                <values>
+                  #{
+                    (
+                      for i in [0...text.split('\n').length] by 1 then "
+                        <LineAttributeValue>
+                          <row>#{i}</row>
+                          <value>0</value>
+                        </LineAttributeValue>
+                      "
+                    ).join '\n'
+                  }
+                </values>
+              </LineAttribute>
+            </attributes>
+          </SaveChanges>
+        </args>
+      </Command>
+    """
+
+  socket.on 'close', (win) ->
+    toInterpreter """
+      <?xml version="1.0" encoding="utf-8"?>
+      <Command>
+        <cmd>CloseWindow</cmd>
+        <id>0</id>
+        <args><CloseWindow><win>#{win}</win></CloseWindow></args>
       </Command>
     """
 
