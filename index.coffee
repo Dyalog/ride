@@ -64,6 +64,18 @@ jQuery ($) ->
         socket.emit 'close', editorWin
       'Shift-Esc': closeEditor = ->
         socket.emit 'close', editorWin
+      'Ctrl-Up': ->
+        c = cme.getCursor()
+        s = cme.getLine c.line
+        r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*' # regex fragment to match identifiers
+        name = ((///⎕?#{r}$///.exec(s[...c.ch])?[0] ? '') +
+                (///^#{r}///.exec(s[c.ch..])?[0] ? ''))
+                  .replace /^\d+/, ''
+        if name and name[0] != '⎕'
+          h = cme.getLine 0 # header line
+          h1 = h.replace ///;#{name}(;|$)///, '$1'
+          cme.replaceRange (if h == h1 then h1 += ';' + name else h1),
+            {line: 0, ch: 0}, {line: 0, ch: h.length}
 
   # language bar
   $('#lbar').append(
@@ -102,7 +114,9 @@ jQuery ($) ->
       cme.setSize $('#editor').width(), $('#editor').height()
   layout.close 'east' # "east:{initOpen:false}" doesn't work---the resizer doesn't get rendered
 
-  $('#editor-container').layout north: resizable: 0, spacing_open: 0
+  $('#editor-container').layout
+    defaults: enableCursorHotkey: 0
+    north: resizable: 0, spacing_open: 0
 
   $('.button', '#editor-toolbar')
     .on('mousedown', (e) -> $(e.target).addClass 'armed'; e.preventDefault(); return)
