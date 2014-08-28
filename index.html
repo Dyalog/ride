@@ -9,24 +9,25 @@
 	<div id="session" class="ui-layout-center"></div>
 	<div id="lbar" class="ui-layout-north"><a id="lbar-close" title="Hide Language Bar" href="#">×</a></div>
 	<div id="tip" style="display: none"><div id="tip-triangle"></div><div id="tip-inner"><div id="tip-desc"></div><pre id="tip-text"></pre></div></div>
-	<div class="ui-layout-east">
-		<div id="editor-toolbar">
+	<div class="ui-layout-east" id="editor-container">
+		<div id="editor-toolbar" class="ui-layout-north">
 			<span id="b-line-numbers" class="button" title="Toggle line numbers"      >[⋯]</span>
 			<span id="b-comment"      class="button" title="Comment selected text"    >⍝</span>
 			<span id="b-uncomment"    class="button" title="Uncomment selected text"  >/⍝</span>
-			<span id="b-save"         class="button" title="Save changes and return"  >X</span>
+			<span id="b-save"         class="button" title="Save changes and return"  >×</span>
 			<span class="separator"></span>
 			<input id="search">
-			<span id="b-next"         class="button" title="Search for next match"    >→</span>
-			<span id="b-prev"         class="button" title="Search for previous match">←</span>
-			<span id="b-hid"          class="button" title="Search for hidden text"   >+</span>
+			<span id="b-next"         class="button" title="Search for next match"    >▶</span>
+			<span id="b-prev"         class="button" title="Search for previous match">◀</span>
+			<span id="b-hid"          class="button" title="Search for hidden text"   >⊞</span>
 			<span id="b-case"         class="button" title="Match case"               >aA</span>
 			<span class="separator"></span>
 			<span id="b-refac-m"      class="button" title="Refactor text as method"  >+m</span>
 			<span id="b-refac-f"      class="button" title="Refactor text as field"   >+f</span>
 			<span id="b-refac-p"      class="button" title="Refactor text as property">+p</span>
 		</div>
-		<div id="editor"></div></div>
+		<div id="editor" class="ui-layout-center"></div>
+	</div>
 	<script src="D.js"></script>
 </body>
 </html>

@@ -93,12 +93,15 @@ jQuery ($) ->
     clearTimeout ttid; ttid = null; $('#tip').hide()
 
   layout = $('body').layout
+    defaults: enableCursorHotkey: 0
     north: resizable: 0, togglerLength_closed: '100%', togglerTip_closed: 'Show Language Bar', spacing_open: 0
-    east: spacing_closed: 0, size: '50%', resizable: true
+    east: spacing_closed: 0, size: '50%', resizable: 1, togglerClass: 'hidden'
     center: onresize: ->
       console.info 'resized'
       cm.setSize $('#session').width(), $('#session').height()
       cme.setSize $('#editor').width(), $('#editor').height()
   layout.close 'east' # "east:{initOpen:false}" doesn't work---the resizer doesn't get rendered
+
+  $('#editor-container').layout north: resizable: 0, spacing_open: 0
 
   if debug then $.extend window, {socket, cm, cme, layout}
