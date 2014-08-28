@@ -111,4 +111,16 @@ jQuery ($) ->
   $('#b-line-numbers').click -> cme.setOption 'lineNumbers', b = !cme.getOption 'lineNumbers'; $(@).toggleClass 'pressed', !b; false
   $('#b-save').click -> saveAndCloseEditor(); false
 
+  $('#b-comment').click ->
+    a = cme.listSelections()
+    cme.replaceSelections cme.getSelections().map (s) -> s.replace(/^/gm, '⍝').replace /\n⍝$/, '\n'
+    cme.setSelections a
+    false
+
+  $('#b-uncomment').click ->
+    a = cme.listSelections()
+    cme.replaceSelections cme.getSelections().map (s) -> s.replace /^⍝/gm, ''
+    cme.setSelections a
+    false
+
   if debug then $.extend window, {socket, cm, cme, layout}
