@@ -48,9 +48,9 @@ body { padding: 0; margin: 0; }
 
 #editor-toolbar {
 	background-color: #d4d0c8;
-	height: 28px;
 	cursor: default;
 	overflow: hidden;
+	padding: 1px;
 }
 #editor-toolbar .button {
 	float: left;
@@ -64,11 +64,12 @@ body { padding: 0; margin: 0; }
 	background-position: center center;
 	text-indent: -9999px;
 }
-#editor-toolbar .button:hover {
-    border-top-color:    #fff;
-    border-left-color:   #fff;
-    border-right-color:  #808080;
-    border-bottom-color: #808080;
+#editor-toolbar .button:hover { border-color: #fff #808080 #808080 #fff; }
+#editor-toolbar .button.armed { border-color: #808080 #fff #fff #808080; }
+#editor-toolbar .button.pressed {
+	border-color: #808080 #fff #fff #808080;
+	background-color: #eee;
+	/*background: 0 0 repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAF0lEQVQI12O4cuHE////Gf///3/14kkAS/EK11k4g7IAAAAASUVORK5CYII=);*/
 }
 #b-line-numbers { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAALCAYAAACksgdhAAAALElEQVQoz2NkYGD4z4AAjAz4wX8MBpHgPxMDGWBgNP0nkh6WAcFIQoqAqwMADDENBizwvaoAAAAASUVORK5CYII=); }
 #b-comment      { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAMCAYAAACwXJejAAAAP0lEQVQY052QSQ4AMAgCoen/v0yv1kq3OSExRCRmFDSzEDzs2ahSGQYWKQKAhguel+Sa8tBsSaJrunvB/+GWAWT9CBiHRFQ/AAAAAElFTkSuQmCC); }
@@ -87,11 +88,7 @@ body { padding: 0; margin: 0; }
 	height: 24px;
 	background: no-repeat center center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAASCAIAAAD+ApjoAAAAGElEQVQI12NoaGj4//8/EwMDAwMDA70pACyPBKBkf6chAAAAAElFTkSuQmCC);
 }
-#search {
-	float: left;
-	height: 18px;
-	width: 120px;
-}
-.CodeMirror-linenumber { color: blue; }
+#search { float: left; height: 18px; width: 120px; }
+.CodeMirror-linenumber { color: blue; text-align: left; }
 .CodeMirror-gutters { border-right-color: transparent; background-color: transparent; }
 .hidden { display: none; }

@@ -58,11 +58,11 @@ jQuery ($) ->
     firstLineNumber: 0
     lineNumberFormatter: (i) -> "[#{i}]"
     extraKeys:
-      'Esc': ->
+      'Esc': saveAndCloseEditor = ->
         s = winInfos[editorWin].text = cme.getValue()
         socket.emit 'save', editorWin, s
         socket.emit 'close', editorWin
-      'Shift-Esc': ->
+      'Shift-Esc': closeEditor = ->
         socket.emit 'close', editorWin
 
   # language bar
@@ -103,5 +103,12 @@ jQuery ($) ->
   layout.close 'east' # "east:{initOpen:false}" doesn't work---the resizer doesn't get rendered
 
   $('#editor-container').layout north: resizable: 0, spacing_open: 0
+
+  $('.button', '#editor-toolbar')
+    .on('mousedown', (e) -> $(e.target).addClass 'armed'; e.preventDefault(); return)
+    .on('mouseup mouseout', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return)
+
+  $('#b-line-numbers').click -> cme.setOption 'lineNumbers', b = !cme.getOption 'lineNumbers'; $(@).toggleClass 'pressed', !b; false
+  $('#b-save').click -> saveAndCloseEditor(); false
 
   if debug then $.extend window, {socket, cm, cme, layout}
