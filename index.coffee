@@ -137,4 +137,25 @@ jQuery ($) ->
     cme.setSelections a
     false
 
+  $('#b-hid, #b-case').click -> $(@).toggleClass 'pressed'; false
+  $('#b-next').click -> search(); false
+  $('#b-prev').click -> search true; false
+  $('#search').keydown (e) -> if e.which == 13 then search(); false
+
+  search = (backwards) ->
+    if q = $('#search').val()
+      v = cme.getValue()
+      if $('#b-case').hasClass 'pressed' then q = q.toLowerCase(); v = v.toLowerCase()
+      i = cme.indexFromPos cme.getCursor()
+      if backwards
+        if (j = v[...i - 1].lastIndexOf q) < 0 then j = v.lastIndexOf q; wrapped = true
+      else
+        if (j = v[i..].indexOf q) >= 0 then j += i else j = v.indexOf q; wrapped = true
+      if j < 0
+        alert 'No Match'
+      else
+        if wrapped then alert 'Search wrapping'
+        cme.setSelections [anchor: cme.posFromIndex(j), head: cme.posFromIndex j + q.length]
+    false
+
   if debug then $.extend window, {socket, cm, cme, layout}
