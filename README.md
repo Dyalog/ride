@@ -1,10 +1,10 @@
 a web interface to the Dyalog interpreter
 
-                    RIDE  
-    ┌───────────┐ protocol ┌───────┐   HTTP   ┌───────┐
-    │  Dyalog   ├──────────┤ this  ├──────────┤browser│
-    │interpreter│:4502     │ thing │:3000     │       │
-    └───────────┘          └───────┘          └───────┘
+                    RIDE
+    ┌───────────┐ protocol ┌───────┐   HTTPS   ┌───────┐
+    │  Dyalog   ├──────────┤ this  ├───────────┤browser│
+    │interpreter│:4502     │ thing │:8443      │       │
+    └───────────┘          └───────┘           └───────┘
 
 Usage
 =====
@@ -20,4 +20,5 @@ problem](https://stackoverflow.com/questions/25093276/nodejs-windows-error-enoen
 * Configure RIDE through an environment variable: `export RIDE_LISTEN=0.0.0.0:4502`
 * Start the Dyalog interpreter.
 * Start the middleware with `node_modules/coffee-script/bin/coffee a.coffee`
-* Open [http://127.0.0.1:3000](http://127.0.0.1:3000) in your browser.
+* Open [https://127.0.0.1:8443](https://127.0.0.1:8443) in your browser.
+* Accept the server's certificate.

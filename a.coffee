@@ -4,6 +4,7 @@ coffee = require 'coffee-script'
 express = require 'express'
 io = require 'socket.io'
 net = require 'net'
+https = require 'https'
 
 debug = 1
 
@@ -24,29 +25,33 @@ cssFiles = [
 
 log = (s) -> console.info process.uptime().toFixed(3) + ' ' + s
 
-js = css = ''
-do jsPrepare = ->
+html = css = js = ''
+do prepareHTML = ->
+  html = fs.readFileSync 'index.html', 'utf8'
+  log "prepared html: #{html.length} bytes"
+do prepareJS = ->
   js = jsFiles.map((f) -> s = fs.readFileSync f, 'utf8'; if /\.coffee$/.test f then coffee.compile s else s).join '\n'
   log "prepared js: #{js.length} bytes"
-do cssPrepare = ->
+do prepareCSS = ->
   css = cssFiles.map((f) -> fs.readFileSync f, 'utf8').join '\n'
   log "prepared css: #{css.length} bytes"
-jsFiles.forEach (f) -> fs.watch f, jsPrepare
-cssFiles.forEach (f) -> fs.watch f, cssPrepare
+fs.watch 'index.html', prepareHTML
+jsFiles.forEach (f) -> fs.watch f, prepareJS
+cssFiles.forEach (f) -> fs.watch f, prepareCSS
 
 b64 = (s) -> Buffer(s).toString 'base64'
 b64d = (s) -> '' + Buffer s, 'base64'
 getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^]*)</#{tagName}>[^]*$///.exec xml)?[1]
 
 app = express()
-router = express.Router()
-router.use express.static __dirname
-
-app.get '/D.js', (req, res) -> res.header('Content-Type', 'application/x-javascript').send js
+app.get '/', (req, res) -> res.header('Content-Type', 'text/html').send html
 app.get '/D.css', (req, res) -> res.header('Content-Type', 'text/css').send css
-
-app.use '/', router
-server = app.listen 3000, -> log 'HTTP server listening on :3000'
+app.get '/D.js', (req, res) -> res.header('Content-Type', 'application/x-javascript').send js
+httpsOptions =
+  key: fs.readFileSync 'ssl-key.pem'
+  cert: fs.readFileSync 'ssl-cert.pem'
+server = https.createServer(httpsOptions, app).listen (httpsPort = 8443),
+  -> log "HTTPS server listening on :#{httpsPort}"
 
 io.listen(server).on 'connection', (socket) ->
   log 'browser connected'
