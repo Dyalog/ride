@@ -84,7 +84,9 @@ jQuery ($) ->
         """<span class="group">#{g.replace /(.)/g, '<span class="glyph">$1</span>'}</span>"""
   )
   $('#lbar').on 'mousedown', -> false
-  $('.glyph', '#lbar').on 'mousedown', (e) -> cm.replaceRange $(e.target).text(), cm.getCursor(); false
+  $('.glyph', '#lbar').on 'mousedown', (e) ->
+    for cmi in [cm, cme] when cmi.hasFocus() then cmi.replaceRange $(e.target).text(), cmi.getCursor(); break
+    false
   $('#lbar-close').on 'click', -> layout.close 'north'; false
 
   # tooltips
