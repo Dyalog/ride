@@ -20,7 +20,7 @@ process.stdin.on 'end', ->
     else if /<text>/.test line
       text = b64d stripTag line
     else if line == '</LanguageBarElement>'
-      r[chr] = [desc, text]
+      if chr != '\u0000' then r[chr] = [desc, text]
     else if line
       throw Error "error at line #{i + 1}: #{JSON.stringify line}"
   console.info "var help = #{JSON.stringify r};"
