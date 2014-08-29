@@ -19,6 +19,7 @@ jsFiles = [
   'index.coffee'
 ]
 cssFiles = [
+  'apl385.css'
   'node_modules/codemirror/lib/codemirror.css'
   'index.css'
 ]
@@ -39,14 +40,18 @@ fs.watch 'index.html', prepareHTML
 jsFiles.forEach (f) -> fs.watch f, prepareJS
 cssFiles.forEach (f) -> fs.watch f, prepareCSS
 
+ttf = fs.readFileSync 'apl385.ttf'
+
 b64 = (s) -> Buffer(s).toString 'base64'
 b64d = (s) -> '' + Buffer s, 'base64'
 getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^]*)</#{tagName}>[^]*$///.exec xml)?[1]
 
 app = express()
-app.get '/', (req, res) -> res.header('Content-Type', 'text/html').send html
-app.get '/D.css', (req, res) -> res.header('Content-Type', 'text/css').send css
-app.get '/D.js', (req, res) -> res.header('Content-Type', 'application/x-javascript').send js
+app.get '/',           (req, res) -> res.header('Content-Type', 'text/html'               ).send html
+app.get '/D.css',      (req, res) -> res.header('Content-Type', 'text/css'                ).send css
+app.get '/D.js',       (req, res) -> res.header('Content-Type', 'application/x-javascript').send js
+app.get '/apl385.ttf', (req, res) -> res.header('Content-Type', 'application/octet-stream').send ttf
+
 httpsOptions =
   key: fs.readFileSync 'ssl-key.pem'
   cert: fs.readFileSync 'ssl-cert.pem'
