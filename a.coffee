@@ -17,7 +17,6 @@ jsFiles = [
   'index.coffee'
 ]
 cssFiles = [
-  'apl385.css'
   'node_modules/codemirror/lib/codemirror.css'
   'index.css'
 ]

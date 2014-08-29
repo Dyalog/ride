@@ -1,3 +1,4 @@
+@font-face { font-family: apl; src: url(apl385.ttf) format("truetype"); }
 body { padding: 0; margin: 0; }
 .CodeMirror, #lbar, #tip, #editor-toolbar { font-family: apl, "APL385 Unicode", monospace; }
 #lbar { background-color: #d4d0c8; padding: 2px 2px 2px 24px; cursor: default; }
