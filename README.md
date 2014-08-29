@@ -23,4 +23,4 @@ problem](https://stackoverflow.com/questions/25093276/nodejs-windows-error-enoen
 * Open [https://127.0.0.1:8443](https://127.0.0.1:8443) in your browser.
 * Accept the server's certificate.
 
-![Screenshot](https://raw.github.com/Dyalog/RideJS/master/screenshot.png)
+![Screenshot](https://raw.githubusercontent.com/Dyalog/RideJS/master/screenshot.png?token=188463__eyJzY29wZSI6IlJhd0Jsb2I6RHlhbG9nL1JpZGVKUy9tYXN0ZXIvc2NyZWVuc2hvdC5wbmciLCJleHBpcmVzIjoxNDA5OTEyNTU2fQ%3D%3D--8ba09f8a1223cf63ae00863e23d6dbe4976a1568)
