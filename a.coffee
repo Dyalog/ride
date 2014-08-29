@@ -6,8 +6,6 @@ io = require 'socket.io'
 net = require 'net'
 https = require 'https'
 
-debug = 1
-
 jsFiles = [
   'node_modules/socket.io/node_modules/socket.io-client/socket.io.js'
   'node_modules/jquery/dist/cdn/jquery-2.1.1.min.js'
@@ -25,7 +23,11 @@ cssFiles = [
 ]
 
 log = (s) -> console.info process.uptime().toFixed(3) + ' ' + s
+b64 = (s) -> Buffer(s).toString 'base64'
+b64d = (s) -> '' + Buffer s, 'base64'
+getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^]*)</#{tagName}>[^]*$///.exec xml)?[1]
 
+# preload files into memory so we can serve them faster
 html = css = js = ''
 do prepareHTML = ->
   html = fs.readFileSync 'index.html', 'utf8'
@@ -39,12 +41,7 @@ do prepareCSS = ->
 fs.watch 'index.html', prepareHTML
 jsFiles.forEach (f) -> fs.watch f, prepareJS
 cssFiles.forEach (f) -> fs.watch f, prepareCSS
-
 ttf = fs.readFileSync 'apl385.ttf'
-
-b64 = (s) -> Buffer(s).toString 'base64'
-b64d = (s) -> '' + Buffer s, 'base64'
-getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^]*)</#{tagName}>[^]*$///.exec xml)?[1]
 
 app = express()
 app.get '/',           (req, res) -> res.header('Content-Type', 'text/html'               ).send html
@@ -58,17 +55,22 @@ httpsOptions =
 server = https.createServer(httpsOptions, app).listen (httpsPort = 8443),
   -> log "HTTPS server listening on :#{httpsPort}"
 
+client = net.connect {host: '127.0.0.1', port: 4502}, -> log 'interpreter connected'
+
+toInterpreter = (s) ->
+  log 'to interpreter: ' + JSON.stringify(s)[..1000]
+  console.assert /[\x01-\x7f]*/.test s
+  b = Buffer s.length + 8
+  b.writeInt32BE b.length, 0
+  b.write 'RIDE' + s, 4
+  client.write b
+
+toInterpreter 'SupportedProtocols=1'
+toInterpreter 'UsingProtocol=1'
+toInterpreter '<?xml version="1.0" encoding="utf-8"?><Command><cmd>Identify</cmd><id>0</id><args><Identify><Sender><Process>RIDE.EXE</Process><Proxy>0</Proxy></Sender></Identify></args></Command>'
+
 io.listen(server).on 'connection', (socket) ->
   log 'browser connected'
-  client = net.connect {host: '127.0.0.1', port: 4502}, -> log 'interpreter connected'
-
-  toInterpreter = (s) ->
-    log 'to interpreter: ' + JSON.stringify(s)[..1000]
-    console.assert /[\x01-\x7f]*/.test s
-    b = Buffer s.length + 8
-    b.writeInt32BE b.length, 0
-    b.write 'RIDE' + s, 4
-    client.write b
 
   toBrowser = (m...) -> log 'to browser: ' + JSON.stringify(m)[..1000]; socket.emit m...
 
@@ -164,11 +166,7 @@ io.listen(server).on 'connection', (socket) ->
       </Command>
     """
 
-  # Send the first few packets immediately to reduce latency
-  toInterpreter 'SupportedProtocols=1'
-  toInterpreter 'UsingProtocol=1'
-  toInterpreter '<?xml version="1.0" encoding="utf-8"?><Command><cmd>Identify</cmd><id>0</id><args><Identify><Sender><Process>RIDE.EXE</Process><Proxy>0</Proxy></Sender></Identify></args></Command>'
   toInterpreter '<?xml version="1.0" encoding="utf-8"?><Command><cmd>Connect</cmd><id>0</id><args><Connect><Token /></Connect></args></Command>'
 
   client.on 'end', -> log 'interpreter disconnected'; socket.emit 'end'
-  socket.on 'disconnect', -> log 'browser disconnected'; client.end()
+  socket.on 'disconnect', -> log 'browser disconnected'
