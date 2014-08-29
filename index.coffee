@@ -144,6 +144,27 @@ jQuery ($) ->
   $('#b-prev').click -> search true; false
   $('#search').keydown (e) -> if e.which == 13 then search(); false
 
+  $('#b-refac-m').click ->
+    l = cme.getCursor().line
+    s = cme.getLine l
+    if !/^\s*$/.test s
+      cme.replaceRange "∇ #{s}\n\n∇", {line: l, ch: 0}, {line: l, ch: s.length}
+      cme.setCursor line: l + 1, ch: 0
+
+  $('#b-refac-f').click ->
+    l = cme.getCursor().line
+    s = cme.getLine l
+    if !/^\s*$/.test s
+      cme.replaceRange ":field public #{s}", {line: l, ch: 0}, {line: l, ch: s.length}
+      cme.setCursor line: l + 1, ch: 0
+
+  $('#b-refac-p').click ->
+    l = cme.getCursor().line
+    s = cme.getLine l
+    if !/^\s*$/.test s
+      cme.replaceRange ":Property #{s}\n\n∇r←get\nr←0\n∇\n\n∇set args\n∇\n:EndProperty", {line: l, ch: 0}, {line: l, ch: s.length}
+      cme.setCursor line: l + 1, ch: 0
+
   search = (backwards) ->
     if q = $('#search').val()
       v = cme.getValue()
