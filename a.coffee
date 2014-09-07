@@ -49,8 +49,8 @@ app.get '/D.js',       (req, res) -> res.header('Content-Type', 'application/x-j
 app.get '/apl385.ttf', (req, res) -> res.header('Content-Type', 'application/octet-stream').send ttf
 
 httpsOptions =
-  key: fs.readFileSync 'ssl-key.pem'
-  cert: fs.readFileSync 'ssl-cert.pem'
+  key: fs.readFileSync 'ssl/key.pem'
+  cert: fs.readFileSync 'ssl/cert.pem'
 server = https.createServer(httpsOptions, app).listen (httpsPort = 8443),
   -> log "HTTPS server listening on :#{httpsPort}"
 
