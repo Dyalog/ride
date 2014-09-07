@@ -90,6 +90,6 @@ body { padding: 0; margin: 0; }
 	background: no-repeat center center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAASCAIAAAD+ApjoAAAAGElEQVQI12NoaGj4//8/EwMDAwMDA70pACyPBKBkf6chAAAAAElFTkSuQmCC);
 }
 #search { float: left; height: 18px; width: 120px; }
-.CodeMirror-linenumber { color: blue; text-align: left; }
+.CodeMirror-linenumber { color: #00f; text-align: left; }
 .CodeMirror-gutters { border-right-color: transparent; background-color: transparent; }
 .hidden { display: none; }
