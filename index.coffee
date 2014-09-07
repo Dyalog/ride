@@ -41,6 +41,7 @@ jQuery ($) ->
 
   cm = CodeMirror document.getElementById('session'),
     autofocus: true
+    mode: ''
     extraKeys:
       'Enter': ->
         # TODO: exec all modified lines
