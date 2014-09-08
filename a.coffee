@@ -66,7 +66,6 @@ toInterpreter = (s) ->
 
 toInterpreter 'SupportedProtocols=1'
 toInterpreter 'UsingProtocol=1'
-toInterpreter '<?xml version="1.0" encoding="utf-8"?><Command><cmd>Identify</cmd><id>0</id><args><Identify><Sender><Process>RIDE.EXE</Process><Proxy>0</Proxy></Sender></Identify></args></Command>'
 
 io.listen(server).on 'connection', (socket) ->
   log 'browser connected'
@@ -81,7 +80,8 @@ io.listen(server).on 'connection', (socket) ->
       log 'from interpreter: ' + JSON.stringify(m)[..1000]
       if !/^(?:SupportedProtocols|UsingProtocol)=1$/.test m # ignore these
         switch (/^<(\w+)>/.exec m)?[1] or ''
-          when 'ReplyIdentify', 'ReplyConnect', 'ReplyNotAtInputPrompt', 'ReplyEdit', 'ReplySaveChanges' then ; # ignore
+          when 'ReplyConnect', 'ReplyNotAtInputPrompt', 'ReplyEdit', 'ReplySaveChanges' then ; # ignore
+          when 'ReplyIdentify'      then toBrowser 'title', b64d getTag 'Project', m
           when 'ReplyExecute'       then toBrowser 'add', b64d getTag 'result', m
           when 'ReplyEchoInput'     then toBrowser 'add', b64d(getTag 'input', m) + '\n'
           when 'ReplyGetLog'        then toBrowser 'add', b64d getTag 'Log', m
@@ -165,6 +165,7 @@ io.listen(server).on 'connection', (socket) ->
       </Command>
     """
 
+  toInterpreter '<?xml version="1.0" encoding="utf-8"?><Command><cmd>Identify</cmd><id>0</id><args><Identify><Sender><Process>RIDE.EXE</Process><Proxy>0</Proxy></Sender></Identify></args></Command>'
   toInterpreter '<?xml version="1.0" encoding="utf-8"?><Command><cmd>Connect</cmd><id>0</id><args><Connect><Token /></Connect></args></Command>'
   toInterpreter '<?xml version="1.0" encoding="utf-8"?><Command><cmd>GetWindowLayout</cmd><id>0</id><args><GetWindowLayout /></args></Command>'
 

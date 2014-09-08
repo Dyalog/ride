@@ -11,6 +11,9 @@ jQuery ($) ->
   winInfos = {}
   editorWin = null
 
+  socket.on 'title', (s) ->
+    $('title').text s
+
   socket.on 'add', (s) ->
     cm.replaceRange s, line: cm.lineCount() - 1, ch: 0
 
