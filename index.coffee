@@ -24,6 +24,7 @@ jQuery ($) ->
     if editorWin? then winInfos[editorWin].text = cme.getValue()
     editorWin = token
     cme.setValue text
+    cme.setCursor 0, cme.getLine(0).length
     cme.focus()
 
   socket.on 'close', (win) ->
