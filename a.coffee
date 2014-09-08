@@ -166,6 +166,7 @@ io.listen(server).on 'connection', (socket) ->
     """
 
   toInterpreter '<?xml version="1.0" encoding="utf-8"?><Command><cmd>Connect</cmd><id>0</id><args><Connect><Token /></Connect></args></Command>'
+  toInterpreter '<?xml version="1.0" encoding="utf-8"?><Command><cmd>GetWindowLayout</cmd><id>0</id><args><GetWindowLayout /></args></Command>'
 
   client.on 'end', -> log 'interpreter disconnected'; socket.emit 'end'
   socket.on 'disconnect', -> log 'browser disconnected'
