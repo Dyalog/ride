@@ -15,11 +15,13 @@ jQuery ($) ->
     $('title').text s
 
   socket.on 'add', (s) ->
-    cm.replaceRange s, line: cm.lineCount() - 1, ch: 0
+    l = cm.lineCount() - 1
+    cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
 
   socket.on 'prompt', ->
-    cm.replaceRange '      ', line: cm.lineCount() - 1, ch: 0
-    cm.setCursor cm.lineCount() - 1, 6
+    l = cm.lineCount() - 1
+    cm.replaceRange '      ', {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
+    cm.setCursor l, 6
 
   socket.on 'open', (name, text, token) ->
     layout.open 'east'
@@ -43,20 +45,38 @@ jQuery ($) ->
   socket.on 'focus', (win) ->
     if win then cme.focus() else cm.focus()
 
+  # keep track of which lines have been modified and preserve the original content
+  mod = {} # line number -> original content
+
   cm = CodeMirror document.getElementById('session'),
     autofocus: true
     mode: ''
     extraKeys:
       'Enter': ->
-        # TODO: exec all modified lines
-        # TODO: restore all modified lines to their original content
-        s = cm.getLine cm.getCursor().line # current line content
-        l = cm.lineCount() - 1
-        cm.replaceRange '', {line: l, ch: 0}, {line: l, ch: s.length}
-        socket.emit 'exec', s + '\n'
+        a = [] # pairs of [lineNumber, contentToExecute]
+        for l, s of mod # l: line number, s: original content
+          l = +l
+          cm.removeLineClass l, 'background', 'modified'
+          a.push [l, (e = cm.getLine l)]
+          cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: e.length}, 'Dyalog'
+        if !a.length
+          socket.emit 'exec', cm.getLine(cm.getCursor().line) + '\n'
+        else
+          a.sort (x, y) -> x[0] - y[0]
+          for [l, e] in a then socket.emit 'exec', e + '\n'
+        mod = {}
       'Shift-Enter': ->
         c = cm.getCursor()
         socket.emit 'edit', cm.getLine(c.line), c.ch
+
+  cm.on 'beforeChange', (_, c) ->
+    if c.origin != 'Dyalog'
+      if (l = c.from.line) != c.to.line
+        c.cancel()
+      else
+        mod[l] ?= cm.getLine l
+        cm.addLineClass l, 'background', 'modified'
+    return
 
   cme = CodeMirror document.getElementById('editor'),
     lineNumbers: true
@@ -80,7 +100,7 @@ jQuery ($) ->
           h = cme.getLine 0 # header line
           h1 = h.replace ///;#{name}(;|$)///, '$1'
           cme.replaceRange (if h == h1 then h1 += ';' + name else h1),
-            {line: 0, ch: 0}, {line: 0, ch: h.length}
+            {line: 0, ch: 0}, {line: 0, ch: h.length}, 'Dyalog'
 
   # language bar
   $('#lbar').append(
@@ -90,7 +110,10 @@ jQuery ($) ->
   )
   $('#lbar').on 'mousedown', -> false
   $('.glyph', '#lbar').on 'mousedown', (e) ->
-    for cmi in [cm, cme] when cmi.hasFocus() then cmi.replaceRange $(e.target).text(), cmi.getCursor(); break
+    for cmi in [cm, cme] when cmi.hasFocus()
+      c = cmi.getCursor()
+      cmi.replaceRange $(e.target).text(), c, c, 'Dyalog'
+      break
     false
   $('#lbar-close').on 'click', -> layout.close 'north'; false
 
@@ -153,21 +176,21 @@ jQuery ($) ->
     l = cme.getCursor().line
     s = cme.getLine l
     if !/^\s*$/.test s
-      cme.replaceRange "∇ #{s}\n\n∇", {line: l, ch: 0}, {line: l, ch: s.length}
+      cme.replaceRange "∇ #{s}\n\n∇", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
       cme.setCursor line: l + 1, ch: 0
 
   $('#b-refac-f').click ->
     l = cme.getCursor().line
     s = cme.getLine l
     if !/^\s*$/.test s
-      cme.replaceRange ":field public #{s}", {line: l, ch: 0}, {line: l, ch: s.length}
+      cme.replaceRange ":field public #{s}", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
       cme.setCursor line: l + 1, ch: 0
 
   $('#b-refac-p').click ->
     l = cme.getCursor().line
     s = cme.getLine l
     if !/^\s*$/.test s
-      cme.replaceRange ":Property #{s}\n\n∇r←get\nr←0\n∇\n\n∇set args\n∇\n:EndProperty", {line: l, ch: 0}, {line: l, ch: s.length}
+      cme.replaceRange ":Property #{s}\n\n∇r←get\nr←0\n∇\n\n∇set args\n∇\n:EndProperty", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
       cme.setCursor line: l + 1, ch: 0
 
   search = (backwards) ->

@@ -104,3 +104,4 @@ body { padding: 0; margin: 0; }
 .CodeMirror-linenumber { color: #00f; text-align: left; }
 .CodeMirror-gutters { border-right-color: transparent; background-color: transparent; }
 .hidden { display: none; }
+.modified { background-color: #eee; }
