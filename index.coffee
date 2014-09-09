@@ -149,45 +149,46 @@ jQuery ($) ->
     defaults: enableCursorHotkey: 0
     north: resizable: 0, spacing_open: 0
 
-  $('.button', '#editor-toolbar')
+  $tb = $ '#editor-toolbar'
+  $('.button', $tb) # todo
     .on('mousedown', (e) -> $(e.target).addClass 'armed'; e.preventDefault(); return)
     .on('mouseup mouseout', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return)
 
-  $('#b-line-numbers').click -> cme.setOption 'lineNumbers', b = !cme.getOption 'lineNumbers'; $(@).toggleClass 'pressed', !b; false
-  $('#b-save').click -> saveAndCloseEditor(); false
+  $('.b-line-numbers', $tb).click -> cme.setOption 'lineNumbers', b = !cme.getOption 'lineNumbers'; $(@).toggleClass 'pressed', !b; false
+  $('.b-save', $tb).click -> saveAndCloseEditor(); false
 
-  $('#b-comment').click ->
+  $('.b-comment', $tb).click ->
     a = cme.listSelections()
     cme.replaceSelections cme.getSelections().map (s) -> s.replace(/^/gm, '⍝').replace /\n⍝$/, '\n'
     cme.setSelections a
     false
 
-  $('#b-uncomment').click ->
+  $('.b-uncomment', $tb).click ->
     a = cme.listSelections()
     cme.replaceSelections cme.getSelections().map (s) -> s.replace /^⍝/gm, ''
     cme.setSelections a
     false
 
-  $('#b-hid, #b-case').click -> $(@).toggleClass 'pressed'; false
-  $('#b-next').click -> search(); false
-  $('#b-prev').click -> search true; false
-  $('#search').keydown (e) -> if e.which == 13 then search(); false
+  $('.b-hid, .b-case', $tb).click -> $(@).toggleClass 'pressed'; false
+  $('.b-next', $tb).click -> search(); false
+  $('.b-prev', $tb).click -> search true; false
+  $('.search', $tb).keydown (e) -> if e.which == 13 then search(); false
 
-  $('#b-refac-m').click ->
+  $('.b-refac-m').click ->
     l = cme.getCursor().line
     s = cme.getLine l
     if !/^\s*$/.test s
       cme.replaceRange "∇ #{s}\n\n∇", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
       cme.setCursor line: l + 1, ch: 0
 
-  $('#b-refac-f').click ->
+  $('.b-refac-f').click ->
     l = cme.getCursor().line
     s = cme.getLine l
     if !/^\s*$/.test s
       cme.replaceRange ":field public #{s}", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
       cme.setCursor line: l + 1, ch: 0
 
-  $('#b-refac-p').click ->
+  $('.b-refac-p').click ->
     l = cme.getCursor().line
     s = cme.getLine l
     if !/^\s*$/.test s
@@ -195,9 +196,9 @@ jQuery ($) ->
       cme.setCursor line: l + 1, ch: 0
 
   search = (backwards) ->
-    if q = $('#search').val()
+    if q = $('.search', $tb).val()
       v = cme.getValue()
-      if !$('#b-case').hasClass 'pressed' then q = q.toLowerCase(); v = v.toLowerCase()
+      if !$('.b-case', $tb).hasClass 'pressed' then q = q.toLowerCase(); v = v.toLowerCase()
       i = cme.indexFromPos cme.getCursor()
       if backwards
         if (j = v[...i - 1].lastIndexOf q) < 0 then j = v.lastIndexOf q; wrapped = true
