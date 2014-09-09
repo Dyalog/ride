@@ -196,7 +196,7 @@ jQuery ($) ->
   search = (backwards) ->
     if q = $('#search').val()
       v = cme.getValue()
-      if $('#b-case').hasClass 'pressed' then q = q.toLowerCase(); v = v.toLowerCase()
+      if !$('#b-case').hasClass 'pressed' then q = q.toLowerCase(); v = v.toLowerCase()
       i = cme.indexFromPos cme.getCursor()
       if backwards
         if (j = v[...i - 1].lastIndexOf q) < 0 then j = v.lastIndexOf q; wrapped = true
