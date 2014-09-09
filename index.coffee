@@ -17,6 +17,7 @@ jQuery ($) ->
   socket.on 'add', (s) ->
     l = cm.lineCount() - 1
     cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
+    cm.setCursor cm.lineCount() - 1, 0
 
   socket.on 'prompt', ->
     l = cm.lineCount() - 1
