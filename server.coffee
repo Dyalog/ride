@@ -21,7 +21,6 @@ jsFiles = [
 ]
 cssFiles = [
   'node_modules/codemirror/lib/codemirror.css'
-  'node_modules/codemirror/addon/hint/show-hint.css'
   'index.css'
 ]
 

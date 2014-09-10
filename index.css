@@ -1,6 +1,6 @@
 @font-face { font-family: apl; src: url(apl385.ttf) format("truetype"); }
 body { padding: 0; margin: 0; }
-.CodeMirror, #lbar, #tip, .editor-toolbar { font-family: apl, "APL385 Unicode", monospace; }
+.CodeMirror, .CodeMirror-hints, #lbar, #tip, .editor-toolbar { font-family: apl, "APL385 Unicode", monospace; }
 #lbar { background-color: #d4d0c8; padding: 2px 2px 2px 24px; cursor: default; }
 #lbar .glyph { padding: 0; margin-right: -1px; border: solid black 1px; }
 #lbar .glyph:hover { outline: solid black 1px; }
@@ -105,3 +105,22 @@ body { padding: 0; margin: 0; }
 .CodeMirror-gutters { border-right-color: transparent; background-color: transparent; }
 .hidden { display: none; }
 .modified { background-color: #eee; }
+.CodeMirror-hints {
+	position: absolute;
+	z-index: 10;
+	overflow: hidden;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	-webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+	   -moz-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+	        box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+	border: 1px solid black;
+	background: #ffffe1;
+	font-size: 90%;
+	font-family: monospace;
+	max-height: 20em;
+	overflow-y: auto;
+}
+.CodeMirror-hint { margin: 0; padding: 0 2px; max-width: 19em; overflow: hidden; white-space: pre; color: black; cursor: pointer; }
+.CodeMirror-hint-active { background: #0a246a; color: white; }
