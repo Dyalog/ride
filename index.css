@@ -43,7 +43,6 @@ body { padding: 0; margin: 0; }
 }
 #tip-desc { padding: 0 0 0 30px; margin: 0; font-weight: bold; }
 .ui-layout-resizer { background-color: #d4d0c8; }
-.ui-layout-resizer:hover { background-color: #aaf; }
 .ui-layout-toggler { background-color: #808080; }
 .ui-layout-resizer:hover .ui-layout-toggler { background-color: orange; }
 
