@@ -34,7 +34,7 @@ do prepareHTML = ->
   html = fs.readFileSync 'index.html', 'utf8'
   log "prepared html: #{html.length} bytes"
 do prepareJS = ->
-  js = jsFiles.map((f) -> s = fs.readFileSync f, 'utf8'; if /\.coffee$/.test f then coffee.compile s else s).join '\n'
+  js = jsFiles.map((f) -> s = fs.readFileSync f, 'utf8'; if /\.coffee$/.test f then coffee.compile s, bare: 1 else s).join '\n'
   log "prepared js: #{js.length} bytes"
 do prepareCSS = ->
   css = cssFiles.map((f) -> fs.readFileSync f, 'utf8').join '\n'

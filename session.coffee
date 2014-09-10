@@ -1,4 +1,4 @@
-@DyalogSession = (e) ->
+DyalogSession = (e) ->
 
   # keep track of which lines have been modified and preserve the original content
   mod = {} # line number -> original content

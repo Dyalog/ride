@@ -1,4 +1,4 @@
-@DyalogEditor = (e, opts = {}) ->
+DyalogEditor = (e, opts = {}) ->
   ($e = $ e).html '''
     <div class="editor-toolbar">
       <span class="b-line-numbers button" title="Toggle line numbers"      >[⋯]</span>
