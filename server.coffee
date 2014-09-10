@@ -17,6 +17,7 @@ jsFiles = [
   'lbar.js'
   'session.coffee'
   'editor.coffee'
+  'debugger.coffee'
   'index.coffee'
 ]
 cssFiles = [
@@ -89,7 +90,7 @@ io.listen(server).on 'connection', (socket) ->
           when 'ReplyEchoInput'     then toBrowser 'add', b64d(getTag 'input', m) + '\n'
           when 'ReplyGetLog'        then toBrowser 'add', b64d getTag 'Log', m
           when 'ReplyAtInputPrompt' then toBrowser 'prompt'
-          when 'ReplyOpenWindow'    then toBrowser 'open', b64d(getTag 'name', m), b64d(getTag 'text', m), +getTag 'token', m
+          when 'ReplyOpenWindow'    then toBrowser 'open', b64d(getTag 'name', m), b64d(getTag 'text', m), +getTag('token', m), +getTag 'bugger', m
           when 'ReplyFocusWindow'   then toBrowser 'focus', +getTag 'win', m
           when 'ReplyCloseWindow'   then toBrowser 'close', +getTag 'win', m
           when 'ReplyGetAutoComplete'
@@ -103,13 +104,13 @@ io.listen(server).on 'connection', (socket) ->
     log 'from browser: ' + JSON.stringify(packet.data)[..1000]
     onevent.apply socket, [packet]
 
-  socket.on 'exec', (s) ->
+  socket.on 'exec', (s, trace) ->
     toInterpreter """
       <?xml version="1.0" encoding="utf-8"?>
       <Command>
         <cmd>Execute</cmd>
         <id>0</id>
-        <args><Execute><Text>#{b64 s}</Text><Trace>0</Trace></Execute></args>
+        <args><Execute><Text>#{b64 s}</Text><Trace>#{+!!trace}</Trace></Execute></args>
       </Command>
     """
 

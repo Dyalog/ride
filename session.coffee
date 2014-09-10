@@ -9,19 +9,22 @@ DyalogSession = (e, opts = {}) ->
     extraKeys:
       'Ctrl-Space': -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
       'Shift-Enter': -> c = cm.getCursor(); opts.edit?(cm.getLine(c.line), c.ch)
-      'Enter': ->
-        a = [] # pairs of [lineNumber, contentToExecute]
-        for l, s of mod # l: line number, s: original content
-          l = +l
-          cm.removeLineClass l, 'background', 'modified'
-          a.push [l, (e = cm.getLine l)]
-          cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: e.length}, 'Dyalog'
-        if !a.length
-          opts.exec?([cm.getLine cm.getCursor().line])
-        else
-          a.sort (x, y) -> x[0] - y[0]
-          opts.exec?(for [l, e] in a then e)
-        mod = {}
+      Enter: -> exec 0
+      'Ctrl-Enter': -> exec 1
+
+  exec = (trace) ->
+    a = [] # pairs of [lineNumber, contentToExecute]
+    for l, s of mod # l: line number, s: original content
+      l = +l
+      cm.removeLineClass l, 'background', 'modified'
+      a.push [l, (e = cm.getLine l)]
+      cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: e.length}, 'Dyalog'
+    if !a.length
+      opts.exec? [cm.getLine cm.getCursor().line], trace
+    else
+      a.sort (x, y) -> x[0] - y[0]
+      opts.exec? (for [l, e] in a then e), trace
+    mod = {}
 
   cm.on 'beforeChange', (_, c) ->
     if c.origin != 'Dyalog'

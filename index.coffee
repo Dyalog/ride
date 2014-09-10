@@ -10,14 +10,19 @@ jQuery ($) ->
 
   winInfos = {}
   editorWin = null
+  debuggerWin = null
 
   ed = DyalogEditor '#editor',
     close: -> socket.emit 'close', editorWin
     save: (s) -> socket.emit 'save', editorWin, (winInfos[editorWin].text = s)
 
+  db = DyalogDebugger '#debugger',
+    close: -> socket.emit 'close', debuggerWin
+    save: (s) -> socket.emit 'save', debuggerWin, (winInfos[debuggerWin].text = s)
+
   session = DyalogSession '#session',
     edit: (s, i) -> socket.emit 'edit', s, i
-    exec: (lines) -> (for s in lines then socket.emit 'exec', s + '\n'); return
+    exec: (lines, trace) -> (for s in lines then socket.emit 'exec', s + '\n', +!!trace); return
     autocomplete: (s, i) -> socket.emit 'autocomplete', s, i, 0
 
   socket.on 'title', (s) -> $('title').text s
@@ -25,12 +30,18 @@ jQuery ($) ->
   socket.on 'prompt', -> session.prompt()
   socket.on 'focus', (win) -> if win then ed.focus() else session.focus()
 
-  socket.on 'open', (name, text, token) ->
-    layout.open 'east'
+  socket.on 'open', (name, text, token, bugger) ->
     winInfos[token] = {name, text}
-    if editorWin? then winInfos[editorWin].text = ed.getValue()
-    editorWin = token
-    ed.open name, text
+    if bugger
+      layout.open 'south'
+      if debuggerWin? then winInfos[debuggerWin].text = db.getValue()
+      debuggerWin = token
+      db.open name, text
+    else
+      layout.open 'east'
+      if editorWin? then winInfos[editorWin].text = ed.getValue()
+      editorWin = token
+      ed.open name, text
 
   socket.on 'close', (win) ->
     delete winInfos[win]
@@ -78,5 +89,7 @@ jQuery ($) ->
     defaults: enableCursorHotkey: 0
     north: resizable: 0, togglerLength_closed: '100%', togglerTip_closed: 'Show Language Bar', spacing_open: 0
     east: spacing_closed: 0, size: '50%', resizable: 1, togglerClass: 'hidden'
-    center: onresize: -> console.info 'resized'; session.updateSize(); ed.updateSize()
+    south: spacing_closed: 0, size: '50%', resizable: 1, togglerClass: 'hidden'
+    center: onresize: -> console.info 'resized'; for x in [session, ed, db] then x.updateSize()
   layout.close 'east' # "east:{initOpen:false}" doesn't work---the resizer doesn't get rendered
+  layout.close 'south'
