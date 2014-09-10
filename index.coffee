@@ -18,6 +18,7 @@ jQuery ($) ->
   session = DyalogSession '#session',
     edit: (s, i) -> socket.emit 'edit', s, i
     exec: (lines) -> (for s in lines then socket.emit 'exec', s + '\n'); return
+    autocomplete: (s, i) -> socket.emit 'autocomplete', s, i, 0
 
   socket.on 'title', (s) -> $('title').text s
   socket.on 'add', (s) -> session.add s
@@ -40,6 +41,9 @@ jQuery ($) ->
     else
       editorWin = null
       layout.close 'east'
+
+  socket.on 'autocomplete', (token, skip, options) ->
+    if token == 0 then session.autocomplete skip, options
 
   # language bar
   $('#lbar').append(

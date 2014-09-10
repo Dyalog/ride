@@ -7,6 +7,7 @@ DyalogSession = (e, opts = {}) ->
     autofocus: true
     mode: ''
     extraKeys:
+      'Ctrl-Space': -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
       'Shift-Enter': -> c = cm.getCursor(); opts.edit?(cm.getLine(c.line), c.ch)
       'Enter': ->
         a = [] # pairs of [lineNumber, contentToExecute]
@@ -45,3 +46,4 @@ DyalogSession = (e, opts = {}) ->
   hasFocus: -> cm.hasFocus()
   focus: -> cm.focus()
   insert: (ch) -> c = cm.getCursor(); cm.replaceRange ch, c, c, 'Dyalog'
+  autocomplete: (skip, options) -> c = cm.getCursor(); cm.showHint hint: -> list: options, from: {line: c.line, ch: c.ch - skip}, to: c

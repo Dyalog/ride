@@ -11,6 +11,7 @@ jsFiles = [
   'node_modules/jquery/dist/cdn/jquery-2.1.1.min.js'
   'node_modules/codemirror/lib/codemirror.js'
   'node_modules/codemirror/mode/apl/apl.js'
+  'node_modules/codemirror/addon/hint/show-hint.js'
   'jquery-ui.min.js'
   'jquery.layout.js'
   'lbar.js'
@@ -20,13 +21,14 @@ jsFiles = [
 ]
 cssFiles = [
   'node_modules/codemirror/lib/codemirror.css'
+  'node_modules/codemirror/addon/hint/show-hint.css'
   'index.css'
 ]
 
 log = (s) -> console.info process.uptime().toFixed(3) + ' ' + s
 b64 = (s) -> Buffer(s).toString 'base64'
 b64d = (s) -> '' + Buffer s, 'base64'
-getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^]*)</#{tagName}>[^]*$///.exec xml)?[1]
+getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exec xml)?[1]
 
 # preload files into memory so we can serve them faster
 html = css = js = ''
@@ -91,6 +93,7 @@ io.listen(server).on 'connection', (socket) ->
           when 'ReplyOpenWindow'    then toBrowser 'open', b64d(getTag 'name', m), b64d(getTag 'text', m), +getTag 'token', m
           when 'ReplyFocusWindow'   then toBrowser 'focus', +getTag 'win', m
           when 'ReplyCloseWindow'   then toBrowser 'close', +getTag 'win', m
+          when 'ReplyGetAutoComplete' then toBrowser 'autocomplete', +getTag('token', m), +getTag('skip', m), b64d(getTag 'options', m).split '\n'
           else log 'unrecognised'
     return
 
@@ -164,6 +167,22 @@ io.listen(server).on 'connection', (socket) ->
         <cmd>CloseWindow</cmd>
         <id>0</id>
         <args><CloseWindow><win>#{win}</win></CloseWindow></args>
+      </Command>
+    """
+
+  socket.on 'autocomplete', (line, pos, token) ->
+    toInterpreter """
+      <?xml version="1.0" encoding="utf-8"?>
+      <Command>
+        <cmd>GetAutoComplete</cmd>
+        <id>0</id>
+        <args>
+          <GetAutoComplete>
+            <line>#{b64 line}</line>
+            <pos>#{pos}</pos>
+            <token>#{token}</token>
+          </GetAutoComplete>
+        </args>
       </Command>
     """
 
