@@ -14,18 +14,12 @@ jQuery ($) ->
     close: -> socket.emit 'close', editorWin
     save: (s) -> socket.emit 'save', editorWin, (winInfos[editorWin].text = s)
 
-  socket.on 'title', (s) ->
-    $('title').text s
+  session = DyalogSession '#session'
 
-  socket.on 'add', (s) ->
-    l = cm.lineCount() - 1
-    cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
-    cm.setCursor cm.lineCount() - 1, 0
-
-  socket.on 'prompt', ->
-    l = cm.lineCount() - 1
-    cm.replaceRange '      ', {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
-    cm.setCursor l, 6
+  socket.on 'title', (s) -> $('title').text s
+  socket.on 'add', (s) -> session.add s
+  socket.on 'prompt', -> session.prompt()
+  socket.on 'focus', (win) -> if win then ed.focus() else session.focus()
 
   socket.on 'open', (name, text, token) ->
     layout.open 'east'
@@ -44,42 +38,6 @@ jQuery ($) ->
       editorWin = null
       layout.close 'east'
 
-  socket.on 'focus', (win) ->
-    if win then ed.focus() else cm.focus()
-
-  # keep track of which lines have been modified and preserve the original content
-  mod = {} # line number -> original content
-
-  cm = CodeMirror document.getElementById('session'),
-    autofocus: true
-    mode: ''
-    extraKeys:
-      'Enter': ->
-        a = [] # pairs of [lineNumber, contentToExecute]
-        for l, s of mod # l: line number, s: original content
-          l = +l
-          cm.removeLineClass l, 'background', 'modified'
-          a.push [l, (e = cm.getLine l)]
-          cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: e.length}, 'Dyalog'
-        if !a.length
-          socket.emit 'exec', cm.getLine(cm.getCursor().line) + '\n'
-        else
-          a.sort (x, y) -> x[0] - y[0]
-          for [l, e] in a then socket.emit 'exec', e + '\n'
-        mod = {}
-      'Shift-Enter': ->
-        c = cm.getCursor()
-        socket.emit 'edit', cm.getLine(c.line), c.ch
-
-  cm.on 'beforeChange', (_, c) ->
-    if c.origin != 'Dyalog'
-      if (l = c.from.line) != c.to.line
-        c.cancel()
-      else
-        mod[l] ?= cm.getLine l
-        cm.addLineClass l, 'background', 'modified'
-    return
-
   # language bar
   $('#lbar').append(
     '← +-×÷*⍟⌹○!? |⌈⌊⊥⊤⊣⊢ =≠≤<>≥≡≢ ∨∧⍱⍲ ↑↓⊂⊃⌷⍋⍒ ⍳⍷∪∩∊~ /\\⌿⍀ ,⍪⍴⌽⊖⍉ ¨⍨⍣.∘⍤ ⍞⎕⍠⌸⍎⍕ ⋄⍝→⍵⍺∇& ¯⍬'
@@ -88,9 +46,7 @@ jQuery ($) ->
   )
   $('#lbar').on 'mousedown', -> false
   $('.glyph', '#lbar').on 'mousedown', (e) ->
-    ch = $(e.target).text()
-    if cm.hasFocus() then c = cm.getCursor(); cm.replaceRange ch, c, c, 'Dyalog'
-    else if ed.hasFocus() then ed.insert ch
+    for x in [session, ed] when x.hasFocus() then x.insert $(e.target).text()
     false
   $('#lbar-close').on 'click', -> layout.close 'north'; false
 
@@ -115,10 +71,7 @@ jQuery ($) ->
     defaults: enableCursorHotkey: 0
     north: resizable: 0, togglerLength_closed: '100%', togglerTip_closed: 'Show Language Bar', spacing_open: 0
     east: spacing_closed: 0, size: '50%', resizable: 1, togglerClass: 'hidden'
-    center: onresize: ->
-      console.info 'resized'
-      cm.setSize $('#session').width(), $('#session').height()
-      ed.updateSize()
+    center: onresize: -> console.info 'resized'; session.updateSize(); ed.updateSize()
   layout.close 'east' # "east:{initOpen:false}" doesn't work---the resizer doesn't get rendered
 
-  if debug then $.extend window, {socket, cm, layout}
+  if debug then $.extend window, {socket, layout}
