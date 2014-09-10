@@ -1,6 +1,6 @@
 @font-face { font-family: apl; src: url(apl385.ttf) format("truetype"); }
 body { padding: 0; margin: 0; }
-.CodeMirror, #lbar, #tip, #editor-toolbar { font-family: apl, "APL385 Unicode", monospace; }
+.CodeMirror, #lbar, #tip, .editor-toolbar { font-family: apl, "APL385 Unicode", monospace; }
 #lbar { background-color: #d4d0c8; padding: 2px 2px 2px 24px; cursor: default; }
 #lbar .glyph { padding: 0; margin-right: -1px; border: solid black 1px; }
 #lbar .glyph:hover { outline: solid black 1px; }
@@ -47,7 +47,7 @@ body { padding: 0; margin: 0; }
 .ui-layout-toggler { background-color: #808080; }
 .ui-layout-resizer:hover .ui-layout-toggler { background-color: orange; }
 
-#editor-toolbar {
+.editor-toolbar {
 	background-color: #d4d0c8;
 	cursor: default;
 	overflow: hidden;

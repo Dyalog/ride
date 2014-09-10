@@ -10,6 +10,9 @@ jQuery ($) ->
 
   winInfos = {}
   editorWin = null
+  ed = DyalogEditor '#editor',
+    close: -> socket.emit 'close', editorWin
+    save: (s) -> socket.emit 'save', editorWin, (winInfos[editorWin].text = s)
 
   socket.on 'title', (s) ->
     $('title').text s
@@ -27,24 +30,22 @@ jQuery ($) ->
   socket.on 'open', (name, text, token) ->
     layout.open 'east'
     winInfos[token] = {name, text}
-    if editorWin? then winInfos[editorWin].text = cme.getValue()
+    if editorWin? then winInfos[editorWin].text = ed.getValue()
     editorWin = token
-    cme.setValue text
-    cme.setCursor 0, cme.getLine(0).length
-    cme.focus()
+    ed.open name, text
 
   socket.on 'close', (win) ->
     delete winInfos[win]
     for win, v of winInfos then break
     if v
       editorWin = win
-      cme.setValue v.text
+      ed.open v.name, v.text
     else
       editorWin = null
       layout.close 'east'
 
   socket.on 'focus', (win) ->
-    if win then cme.focus() else cm.focus()
+    if win then ed.focus() else cm.focus()
 
   # keep track of which lines have been modified and preserve the original content
   mod = {} # line number -> original content
@@ -79,30 +80,6 @@ jQuery ($) ->
         cm.addLineClass l, 'background', 'modified'
     return
 
-  cme = CodeMirror document.getElementById('editor'),
-    lineNumbers: true
-    firstLineNumber: 0
-    lineNumberFormatter: (i) -> "[#{i}]"
-    extraKeys:
-      'Esc': saveAndCloseEditor = ->
-        s = winInfos[editorWin].text = cme.getValue()
-        socket.emit 'save', editorWin, s
-        socket.emit 'close', editorWin
-      'Shift-Esc': closeEditor = ->
-        socket.emit 'close', editorWin
-      'Ctrl-Up': ->
-        c = cme.getCursor()
-        s = cme.getLine c.line
-        r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*' # regex fragment to match identifiers
-        name = ((///⎕?#{r}$///.exec(s[...c.ch])?[0] ? '') +
-                (///^#{r}///.exec(s[c.ch..])?[0] ? ''))
-                  .replace /^\d+/, ''
-        if name and name[0] != '⎕'
-          h = cme.getLine 0 # header line
-          h1 = h.replace ///;#{name}(;|$)///, '$1'
-          cme.replaceRange (if h == h1 then h1 += ';' + name else h1),
-            {line: 0, ch: 0}, {line: 0, ch: h.length}, 'Dyalog'
-
   # language bar
   $('#lbar').append(
     '← +-×÷*⍟⌹○!? |⌈⌊⊥⊤⊣⊢ =≠≤<>≥≡≢ ∨∧⍱⍲ ↑↓⊂⊃⌷⍋⍒ ⍳⍷∪∩∊~ /\\⌿⍀ ,⍪⍴⌽⊖⍉ ¨⍨⍣.∘⍤ ⍞⎕⍠⌸⍎⍕ ⋄⍝→⍵⍺∇& ¯⍬'
@@ -111,10 +88,9 @@ jQuery ($) ->
   )
   $('#lbar').on 'mousedown', -> false
   $('.glyph', '#lbar').on 'mousedown', (e) ->
-    for cmi in [cm, cme] when cmi.hasFocus()
-      c = cmi.getCursor()
-      cmi.replaceRange $(e.target).text(), c, c, 'Dyalog'
-      break
+    ch = $(e.target).text()
+    if cm.hasFocus() then c = cm.getCursor(); cm.replaceRange ch, c, c, 'Dyalog'
+    else if ed.hasFocus() then ed.insert ch
     false
   $('#lbar-close').on 'click', -> layout.close 'north'; false
 
@@ -142,73 +118,7 @@ jQuery ($) ->
     center: onresize: ->
       console.info 'resized'
       cm.setSize $('#session').width(), $('#session').height()
-      cme.setSize $('#editor').width(), $('#editor').height()
+      ed.updateSize()
   layout.close 'east' # "east:{initOpen:false}" doesn't work---the resizer doesn't get rendered
 
-  $('#editor-container').layout
-    defaults: enableCursorHotkey: 0
-    north: resizable: 0, spacing_open: 0
-
-  $tb = $ '#editor-toolbar'
-  $('.button', $tb) # todo
-    .on('mousedown', (e) -> $(e.target).addClass 'armed'; e.preventDefault(); return)
-    .on('mouseup mouseout', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return)
-
-  $('.b-line-numbers', $tb).click -> cme.setOption 'lineNumbers', b = !cme.getOption 'lineNumbers'; $(@).toggleClass 'pressed', !b; false
-  $('.b-save', $tb).click -> saveAndCloseEditor(); false
-
-  $('.b-comment', $tb).click ->
-    a = cme.listSelections()
-    cme.replaceSelections cme.getSelections().map (s) -> s.replace(/^/gm, '⍝').replace /\n⍝$/, '\n'
-    cme.setSelections a
-    false
-
-  $('.b-uncomment', $tb).click ->
-    a = cme.listSelections()
-    cme.replaceSelections cme.getSelections().map (s) -> s.replace /^⍝/gm, ''
-    cme.setSelections a
-    false
-
-  $('.b-hid, .b-case', $tb).click -> $(@).toggleClass 'pressed'; false
-  $('.b-next', $tb).click -> search(); false
-  $('.b-prev', $tb).click -> search true; false
-  $('.search', $tb).keydown (e) -> if e.which == 13 then search(); false
-
-  $('.b-refac-m').click ->
-    l = cme.getCursor().line
-    s = cme.getLine l
-    if !/^\s*$/.test s
-      cme.replaceRange "∇ #{s}\n\n∇", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
-      cme.setCursor line: l + 1, ch: 0
-
-  $('.b-refac-f').click ->
-    l = cme.getCursor().line
-    s = cme.getLine l
-    if !/^\s*$/.test s
-      cme.replaceRange ":field public #{s}", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
-      cme.setCursor line: l + 1, ch: 0
-
-  $('.b-refac-p').click ->
-    l = cme.getCursor().line
-    s = cme.getLine l
-    if !/^\s*$/.test s
-      cme.replaceRange ":Property #{s}\n\n∇r←get\nr←0\n∇\n\n∇set args\n∇\n:EndProperty", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
-      cme.setCursor line: l + 1, ch: 0
-
-  search = (backwards) ->
-    if q = $('.search', $tb).val()
-      v = cme.getValue()
-      if !$('.b-case', $tb).hasClass 'pressed' then q = q.toLowerCase(); v = v.toLowerCase()
-      i = cme.indexFromPos cme.getCursor()
-      if backwards
-        if (j = v[...i - 1].lastIndexOf q) < 0 then j = v.lastIndexOf q; wrapped = true
-      else
-        if (j = v[i..].indexOf q) >= 0 then j += i else j = v.indexOf q; wrapped = true
-      if j < 0
-        alert 'No Match'
-      else
-        if wrapped then alert 'Search wrapping'
-        cme.setSelections [anchor: cme.posFromIndex(j), head: cme.posFromIndex j + q.length]
-    false
-
-  if debug then $.extend window, {socket, cm, cme, layout}
+  if debug then $.extend window, {socket, cm, layout}

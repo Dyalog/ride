@@ -14,6 +14,7 @@ jsFiles = [
   'jquery-ui.min.js'
   'jquery.layout.js'
   'lbar.js'
+  'editor.coffee'
   'index.coffee'
 ]
 cssFiles = [

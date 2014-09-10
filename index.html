@@ -9,41 +9,23 @@
 	<div id="session" class="ui-layout-center"></div>
 	<div id="lbar" class="ui-layout-north"><a id="lbar-close" title="Hide Language Bar" href="#">×</a></div>
 	<div id="tip" style="display: none"><div id="tip-triangle"></div><div id="tip-inner"><div id="tip-desc"></div><pre id="tip-text"></pre></div></div>
-	<div class="ui-layout-east" id="editor-container" style="display: none">
-		<div id="editor-toolbar" class="ui-layout-north">
-			<span class="b-line-numbers button" title="Toggle line numbers"      >[⋯]</span>
-			<span class="b-comment      button" title="Comment selected text"    >⍝</span>
-			<span class="b-uncomment    button" title="Uncomment selected text"  >/⍝</span>
-			<span class="b-save         button" title="Save changes and return"  >×</span>
-			<span class="separator"></span>
-			<input class="search">
-			<span class="b-next         button" title="Search for next match"    >▶</span>
-			<span class="b-prev         button" title="Search for previous match">◀</span>
-			<span class="b-hid          button" title="Search for hidden text"   >⊞</span>
-			<span class="b-case         button" title="Match case"               >aA</span>
-			<span class="separator"></span>
-			<span class="b-refac-m      button" title="Refactor text as method"  >+m</span>
-			<span class="b-refac-f      button" title="Refactor text as field"   >+f</span>
-			<span class="b-refac-p      button" title="Refactor text as property">+p</span>
-		</div>
-		<!--
-		<div id="editor-toolbar" class="ui-layout-north">
-			<span class="b-execute      button" title="Execute line"                            ></span>
-			<span class="b-trace        button" title="Trace into expression"                   ></span>
-			<span class="b-back         button" title="Go back one line"                        ></span>
-			<span class="b-skip         button" title="Skip current line"                       ></span>
-			<span class="b-cont-trace   button" title="Continue trace"                          ></span>
-			<span class="b-cont-exec    button" title="Continue execution"                      ></span>
-			<span class="b-restart      button" title="Restart all threads"                     ></span>
-			<span class="b-edit-name    button" title="Edit name"                               ></span>
-			<span class="b-quit         button" title="Quit this function"                      ></span>
-			<span class="b-interrupt    button" title="Interrupt"                               ></span>
-			<span class="b-clear-obj    button" title="Clear trace/stop/monitor for this object"></span>
-			<span class="b-line-numbers button" title="Toggle line numbers"                     ></span>
-		</div>
-		-->
-		<div id="editor" class="ui-layout-center"></div>
+	<div class="ui-layout-east" id="editor" style="display: none"></div>
+	<!--
+	<div id="editor-toolbar" class="ui-layout-north">
+		<span class="b-execute      button" title="Execute line"                            ></span>
+		<span class="b-trace        button" title="Trace into expression"                   ></span>
+		<span class="b-back         button" title="Go back one line"                        ></span>
+		<span class="b-skip         button" title="Skip current line"                       ></span>
+		<span class="b-cont-trace   button" title="Continue trace"                          ></span>
+		<span class="b-cont-exec    button" title="Continue execution"                      ></span>
+		<span class="b-restart      button" title="Restart all threads"                     ></span>
+		<span class="b-edit-name    button" title="Edit name"                               ></span>
+		<span class="b-quit         button" title="Quit this function"                      ></span>
+		<span class="b-interrupt    button" title="Interrupt"                               ></span>
+		<span class="b-clear-obj    button" title="Clear trace/stop/monitor for this object"></span>
+		<span class="b-line-numbers button" title="Toggle line numbers"                     ></span>
 	</div>
+	-->
 	<script src="D.js"></script>
 </body>
 </html>
