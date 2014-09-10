@@ -1,4 +1,4 @@
-DyalogSession = (e) ->
+DyalogSession = (e, opts = {}) ->
 
   # keep track of which lines have been modified and preserve the original content
   mod = {} # line number -> original content
@@ -7,6 +7,7 @@ DyalogSession = (e) ->
     autofocus: true
     mode: ''
     extraKeys:
+      'Shift-Enter': -> c = cm.getCursor(); opts.edit?(cm.getLine(c.line), c.ch)
       'Enter': ->
         a = [] # pairs of [lineNumber, contentToExecute]
         for l, s of mod # l: line number, s: original content
@@ -15,14 +16,11 @@ DyalogSession = (e) ->
           a.push [l, (e = cm.getLine l)]
           cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: e.length}, 'Dyalog'
         if !a.length
-          socket.emit 'exec', cm.getLine(cm.getCursor().line) + '\n'
+          opts.exec?([cm.getLine cm.getCursor().line])
         else
           a.sort (x, y) -> x[0] - y[0]
-          for [l, e] in a then socket.emit 'exec', e + '\n'
+          opts.exec?(for [l, e] in a then e)
         mod = {}
-      'Shift-Enter': ->
-        c = cm.getCursor()
-        socket.emit 'edit', cm.getLine(c.line), c.ch
 
   cm.on 'beforeChange', (_, c) ->
     if c.origin != 'Dyalog'

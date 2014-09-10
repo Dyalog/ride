@@ -10,11 +10,14 @@ jQuery ($) ->
 
   winInfos = {}
   editorWin = null
+
   ed = DyalogEditor '#editor',
     close: -> socket.emit 'close', editorWin
     save: (s) -> socket.emit 'save', editorWin, (winInfos[editorWin].text = s)
 
-  session = DyalogSession '#session'
+  session = DyalogSession '#session',
+    edit: (s, i) -> socket.emit 'edit', s, i
+    exec: (lines) -> (for s in lines then socket.emit 'exec', s + '\n'); return
 
   socket.on 'title', (s) -> $('title').text s
   socket.on 'add', (s) -> session.add s
@@ -73,5 +76,3 @@ jQuery ($) ->
     east: spacing_closed: 0, size: '50%', resizable: 1, togglerClass: 'hidden'
     center: onresize: -> console.info 'resized'; session.updateSize(); ed.updateSize()
   layout.close 'east' # "east:{initOpen:false}" doesn't work---the resizer doesn't get rendered
-
-  if debug then $.extend window, {socket, layout}
