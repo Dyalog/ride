@@ -93,7 +93,9 @@ io.listen(server).on 'connection', (socket) ->
           when 'ReplyOpenWindow'    then toBrowser 'open', b64d(getTag 'name', m), b64d(getTag 'text', m), +getTag 'token', m
           when 'ReplyFocusWindow'   then toBrowser 'focus', +getTag 'win', m
           when 'ReplyCloseWindow'   then toBrowser 'close', +getTag 'win', m
-          when 'ReplyGetAutoComplete' then toBrowser 'autocomplete', +getTag('token', m), +getTag('skip', m), b64d(getTag 'options', m).split '\n'
+          when 'ReplyGetAutoComplete'
+            o = b64d getTag 'options', m
+            toBrowser 'autocomplete', +getTag('token', m), +getTag('skip', m), (if o then o.split '\n' else [])
           else log 'unrecognised'
     return
 
