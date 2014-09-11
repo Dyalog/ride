@@ -3,8 +3,8 @@ DyalogEditor = (e, opts = {}) ->
     if opts.debugger
       '''
         <div class="toolbar">
-          <span class="b-execute      button" title="Execute line"                            ></span>
-          <span class="b-trace        button" title="Trace into expression"                   ></span>
+          <span class="b-over         button" title="Execute line"                            ></span>
+          <span class="b-into         button" title="Trace into expression"                   ></span>
           <span class="b-back         button" title="Go back one line"                        ></span>
           <span class="b-skip         button" title="Skip current line"                       ></span>
           <span class="b-cont-trace   button" title="Continue trace"                          ></span>
@@ -58,7 +58,7 @@ DyalogEditor = (e, opts = {}) ->
     lineNumberFormatter: (i) -> "[#{i}]"
     readOnly: !!opts.debugger
     extraKeys:
-      'Enter': -> if opts.debugger then opts.debugExecuteLine?() else cm.execCommand 'newlineAndIndent'
+      'Enter': -> if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'
       'Esc': saveAndClose = -> opts.save?(cm.getValue()); opts.close?()
       'Shift-Esc': -> opts.close?()
       'Ctrl-Up': ->
@@ -79,7 +79,10 @@ DyalogEditor = (e, opts = {}) ->
     .on('mousedown', (e) -> $(e.target).addClass 'armed'; e.preventDefault(); return)
     .on('mouseup mouseout', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return)
 
-  $('.b-execute', $tb).click -> opts.debugExecuteLine?() 
+  $('.b-over', $tb).click -> opts.over?() 
+  $('.b-into', $tb).click -> opts.into?()
+  $('.b-back', $tb).click -> opts.back?()
+  $('.b-skip', $tb).click -> opts.skip?()
 
   $('.b-line-numbers', $tb).click -> cm.setOption 'lineNumbers', b = !cm.getOption 'lineNumbers'; $(@).toggleClass 'pressed', !b; false
   $('.b-save', $tb).click -> saveAndClose(); false

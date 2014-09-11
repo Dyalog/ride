@@ -188,10 +188,28 @@ io.listen(server).on 'connection', (socket) ->
       </Command>
     """
 
-  socket.on 'debugExecuteLine', (win) ->
+  socket.on 'over', (win) ->
     toInterpreter """
       <?xml version="1.0" encoding="utf-8"?>
       <Command><cmd>DebugRunLine</cmd><id>0</id><args><DebugRunLine><win>#{win}</win></DebugRunLine></args></Command>
+    """
+
+  socket.on 'into', (win) ->
+    toInterpreter """
+      <?xml version="1.0" encoding="utf-8"?>
+      <Command><cmd>DebugStepInto</cmd><id>0</id><args><DebugStepInto><win>#{win}</win></DebugStepInto></args></Command>
+    """
+
+  socket.on 'back', (win) ->
+    toInterpreter """
+      <?xml version="1.0" encoding="utf-8"?>
+      <Command><cmd>DebugBackward</cmd><id>0</id><args><DebugBackward><win>#{win}</win></DebugBackward></args></Command>
+    """
+
+  socket.on 'skip', (win) ->
+    toInterpreter """
+      <?xml version="1.0" encoding="utf-8"?>
+      <Command><cmd>DebugForward</cmd><id>0</id><args><DebugForward><win>#{win}</win></DebugForward></args></Command>
     """
 
   toInterpreter '<?xml version="1.0" encoding="utf-8"?><Command><cmd>Identify</cmd><id>0</id><args><Identify><Sender><Process>RIDE.EXE</Process><Proxy>0</Proxy></Sender></Identify></args></Command>'

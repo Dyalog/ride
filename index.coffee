@@ -20,7 +20,10 @@ jQuery ($) ->
     debugger: true
     close: -> socket.emit 'close', debuggerWin
     save: (s) -> socket.emit 'save', debuggerWin, (winInfos[debuggerWin].text = s)
-    debugExecuteLine: -> socket.emit 'debugExecuteLine', debuggerWin
+    over: -> socket.emit 'over', debuggerWin
+    into: -> socket.emit 'into', debuggerWin
+    back: -> socket.emit 'back', debuggerWin
+    skip: -> socket.emit 'skip', debuggerWin
 
   session = DyalogSession '#session',
     edit: (s, i) -> socket.emit 'edit', s, i
