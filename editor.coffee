@@ -33,7 +33,7 @@ DyalogEditor = (e, opts = {}) ->
     else
       '''
         <div class="toolbar">
-          <span class="b-line-numbers button" title="Toggle line numbers"      >[⋯]</span>
+          <span class="b-line-numbers button pressed" title="Toggle line numbers"      >[⋯]</span>
           <span class="b-comment      button" title="Comment selected text"    >⍝</span>
           <span class="b-uncomment    button" title="Uncomment selected text"  >/⍝</span>
           <span class="b-save         button" title="Save changes and return"  >×</span>
@@ -53,10 +53,12 @@ DyalogEditor = (e, opts = {}) ->
   )
 
   cm = CodeMirror $e.find('.cm')[0],
-    lineNumbers: true
+    lineNumbers: !opts.debugger
     firstLineNumber: 0
     lineNumberFormatter: (i) -> "[#{i}]"
+    readOnly: !!opts.debugger
     extraKeys:
+      'Enter': -> if opts.debugger then opts.debugExecuteLine?() else cm.execCommand 'newlineAndIndent'
       'Esc': saveAndClose = -> opts.save?(cm.getValue()); opts.close?()
       'Shift-Esc': -> opts.close?()
       'Ctrl-Up': ->
@@ -76,6 +78,8 @@ DyalogEditor = (e, opts = {}) ->
   $('.button', $tb) # todo
     .on('mousedown', (e) -> $(e.target).addClass 'armed'; e.preventDefault(); return)
     .on('mouseup mouseout', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return)
+
+  $('.b-execute', $tb).click -> opts.debugExecuteLine?() 
 
   $('.b-line-numbers', $tb).click -> cm.setOption 'lineNumbers', b = !cm.getOption 'lineNumbers'; $(@).toggleClass 'pressed', !b; false
   $('.b-save', $tb).click -> saveAndClose(); false
@@ -127,9 +131,14 @@ DyalogEditor = (e, opts = {}) ->
       cm.replaceRange ":Property #{s}\n\n∇r←get\nr←0\n∇\n\n∇set args\n∇\n:EndProperty", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
       cm.setCursor line: l + 1, ch: 0
 
+  hll = null # currently highlighted line
+
   updateSize: -> cm.setSize $e.width(), $e.height()
   open: (name, text) -> cm.setValue text; cm.setCursor 0, cm.getLine(0).length; cm.focus()
   hasFocus: -> cm.hasFocus()
   focus: -> cm.focus()
   insert: (ch) -> c = cm.getCursor(); cm.replaceRange ch, c, c, 'Dyalog'
   getValue: -> cm.getValue()
+  highlight: (l) ->
+    if hll? then cm.removeLineClass hll, 'background', 'highlighted'
+    cm.addLineClass (hll = l), 'background', 'highlighted'

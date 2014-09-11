@@ -20,6 +20,7 @@ jQuery ($) ->
     debugger: true
     close: -> socket.emit 'close', debuggerWin
     save: (s) -> socket.emit 'save', debuggerWin, (winInfos[debuggerWin].text = s)
+    debugExecuteLine: -> socket.emit 'debugExecuteLine', debuggerWin
 
   session = DyalogSession '#session',
     edit: (s, i) -> socket.emit 'edit', s, i
@@ -38,14 +39,19 @@ jQuery ($) ->
       if debuggerWin? then winInfos[debuggerWin].text = db.getValue()
       debuggerWin = token
       db.open name, text
+      winInfos[token] = db
     else
       layout.open 'east'
       if editorWin? then winInfos[editorWin].text = ed.getValue()
       editorWin = token
       ed.open name, text
+      winInfos[token] = ed
 
   socket.on 'close', (win) ->
     delete winInfos[win]
+    if win == debuggerWin
+      debuggerWin = null
+      layout.close 'south'
     for win, v of winInfos then break
     if v
       editorWin = win
@@ -54,8 +60,10 @@ jQuery ($) ->
       editorWin = null
       layout.close 'east'
 
-  socket.on 'autocomplete', (token, skip, options) ->
-    if token == 0 then session.autocomplete skip, options
+  socket.on 'autocomplete', (token, skip, options) -> if token == 0 then session.autocomplete skip, options
+  socket.on 'highlight', (win, line) ->
+    if win == editorWin then ed.highlight line
+    else if win == debuggerWin then db.highlight line
 
   # language bar
   $('#lbar').append(

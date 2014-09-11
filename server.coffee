@@ -95,6 +95,7 @@ io.listen(server).on 'connection', (socket) ->
           when 'ReplyGetAutoComplete'
             o = b64d getTag 'options', m
             toBrowser 'autocomplete', +getTag('token', m), +getTag('skip', m), (if o then o.split '\n' else [])
+          when 'ReplyHighlightLine' then toBrowser 'highlight', +getTag('win', m), +getTag 'line', m
           else log 'unrecognised'
     return
 
@@ -185,6 +186,12 @@ io.listen(server).on 'connection', (socket) ->
           </GetAutoComplete>
         </args>
       </Command>
+    """
+
+  socket.on 'debugExecuteLine', (win) ->
+    toInterpreter """
+      <?xml version="1.0" encoding="utf-8"?>
+      <Command><cmd>DebugRunLine</cmd><id>0</id><args><DebugRunLine><win>#{win}</win></DebugRunLine></args></Command>
     """
 
   toInterpreter '<?xml version="1.0" encoding="utf-8"?><Command><cmd>Identify</cmd><id>0</id><args><Identify><Sender><Process>RIDE.EXE</Process><Proxy>0</Proxy></Sender></Identify></args></Command>'
