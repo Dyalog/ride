@@ -13,6 +13,18 @@ DyalogDebugger = (e, opts = {}) ->
       <span class="b-interrupt    button" title="Interrupt"                               ></span>
       <span class="b-clear-obj    button" title="Clear trace/stop/monitor for this object"></span>
       <span class="b-line-numbers button" title="Toggle line numbers"                     ></span>
+      <span class="separator"></span>
+      <input class="search">
+      <span class="b-next         button" title="Search for next match"    >▶</span>
+      <span class="b-prev         button" title="Search for previous match">◀</span>
+      <span class="b-hid          button" title="Search for hidden text"   >⊞</span>
+      <span class="b-case         button" title="Match case"               >aA</span>
+      <span class="separator"></span>
+      <select class="stack">
+        <option>[1]</option>
+        <option>[2]</option>
+        <option>[3]</option>
+      </select>
     </div>
     <div class="debugger-cm"></div>
   '''
