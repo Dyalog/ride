@@ -212,6 +212,36 @@ io.listen(server).on 'connection', (socket) ->
       <Command><cmd>DebugForward</cmd><id>0</id><args><DebugForward><win>#{win}</win></DebugForward></args></Command>
     """
 
+  socket.on 'continueTrace', (win) ->
+    toInterpreter """
+      <?xml version="1.0" encoding="utf-8"?>
+      <Command><cmd>DebugContinueTrace</cmd><id>0</id><args><DebugContinueTrace><win>#{win}</win></DebugContinueTrace></args></Command>
+    """
+
+  socket.on 'continueExec', (win) ->
+    toInterpreter """
+      <?xml version="1.0" encoding="utf-8"?>
+      <Command><cmd>DebugContinue</cmd><id>0</id><args><DebugContinue><win>#{win}</win></DebugContinue></args></Command>
+    """
+
+  socket.on 'restartThreads', (win) ->
+    toInterpreter """
+      <?xml version="1.0" encoding="utf-8"?>
+      <Command><cmd>DebugRestartThreads</cmd><id>0</id><args><DebugRestartThreads><win>#{win}</win></DebugRestartThreads></args></Command>
+    """
+
+  socket.on 'interrupt', ->
+    toInterpreter """
+      <?xml version="1.0" encoding="utf-8"?>
+      <Command><cmd>WeakInterrupt</cmd><id>0</id><args><WeakInterrupt /></args></Command>
+    """
+
+  socket.on 'cutback', (win) ->
+    toInterpreter """
+      <?xml version="1.0" encoding="utf-8"?>
+      <Command><cmd>DebugCutback</cmd><id>0</id><args><DebugCutback><win>#{win}</win></DebugCutback></args></Command>
+    """
+
   toInterpreter '<?xml version="1.0" encoding="utf-8"?><Command><cmd>Identify</cmd><id>0</id><args><Identify><Sender><Process>RIDE.EXE</Process><Proxy>0</Proxy></Sender></Identify></args></Command>'
   toInterpreter '<?xml version="1.0" encoding="utf-8"?><Command><cmd>Connect</cmd><id>0</id><args><Connect><Token /></Connect></args></Command>'
   toInterpreter '<?xml version="1.0" encoding="utf-8"?><Command><cmd>GetWindowLayout</cmd><id>0</id><args><GetWindowLayout /></args></Command>'

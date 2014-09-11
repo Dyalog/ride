@@ -18,12 +18,17 @@ jQuery ($) ->
 
   db = DyalogEditor '#debugger',
     debugger: true
-    close: -> socket.emit 'close', debuggerWin
-    save: (s) -> socket.emit 'save', debuggerWin, (winInfos[debuggerWin].text = s)
-    over: -> socket.emit 'over', debuggerWin
-    into: -> socket.emit 'into', debuggerWin
-    back: -> socket.emit 'back', debuggerWin
-    skip: -> socket.emit 'skip', debuggerWin
+    close:          -> socket.emit 'close',          debuggerWin
+    save:     (s)   -> socket.emit 'save',           debuggerWin, (winInfos[debuggerWin].text = s)
+    over:           -> socket.emit 'over',           debuggerWin
+    into:           -> socket.emit 'into',           debuggerWin
+    back:           -> socket.emit 'back',           debuggerWin
+    skip:           -> socket.emit 'skip',           debuggerWin
+    continueTrace:  -> socket.emit 'continueTrace',  debuggerWin
+    continueExec:   -> socket.emit 'continueExec',   debuggerWin
+    restartThreads: -> socket.emit 'restartThreads', debuggerWin
+    interrupt:      -> socket.emit 'interrupt'
+    cutback:        -> socket.emit 'cutback',        debuggerWin
 
   session = DyalogSession '#session',
     edit: (s, i) -> socket.emit 'edit', s, i

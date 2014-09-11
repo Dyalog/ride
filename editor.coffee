@@ -13,7 +13,7 @@ DyalogEditor = (e, opts = {}) ->
           <span class="b-edit-name    button" title="Edit name"                               ></span>
           <span class="b-quit         button" title="Quit this function"                      ></span>
           <span class="b-interrupt    button" title="Interrupt"                               ></span>
-          <span class="b-clear-obj    button" title="Clear trace/stop/monitor for this object"></span>
+          <span class="b-cutback      button" title="Clear trace/stop/monitor for this object"></span>
           <span class="b-line-numbers button" title="Toggle line numbers"                     ></span>
           <span class="separator"></span>
           <input class="search">
@@ -79,10 +79,15 @@ DyalogEditor = (e, opts = {}) ->
     .on('mousedown', (e) -> $(e.target).addClass 'armed'; e.preventDefault(); return)
     .on('mouseup mouseout', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return)
 
-  $('.b-over', $tb).click -> opts.over?() 
-  $('.b-into', $tb).click -> opts.into?()
-  $('.b-back', $tb).click -> opts.back?()
-  $('.b-skip', $tb).click -> opts.skip?()
+  $('.b-over',       $tb).click -> opts.over?()
+  $('.b-into',       $tb).click -> opts.into?()
+  $('.b-back',       $tb).click -> opts.back?()
+  $('.b-skip',       $tb).click -> opts.skip?()
+  $('.b-cont-trace', $tb).click -> opts.continueTrace?()
+  $('.b-cont-exec',  $tb).click -> opts.continueExec?()
+  $('.b-restart',    $tb).click -> opts.restartThreads?()
+  $('.b-interrupt',  $tb).click -> opts.interrupt?()
+  $('.b-cutback',    $tb).click -> opts.cutback?()
 
   $('.b-line-numbers', $tb).click -> cm.setOption 'lineNumbers', b = !cm.getOption 'lineNumbers'; $(@).toggleClass 'pressed', !b; false
   $('.b-save', $tb).click -> saveAndClose(); false
