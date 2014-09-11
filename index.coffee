@@ -16,7 +16,8 @@ jQuery ($) ->
     close: -> socket.emit 'close', editorWin
     save: (s) -> socket.emit 'save', editorWin, (winInfos[editorWin].text = s)
 
-  db = DyalogDebugger '#debugger',
+  db = DyalogEditor '#debugger',
+    debugger: true
     close: -> socket.emit 'close', debuggerWin
     save: (s) -> socket.emit 'save', debuggerWin, (winInfos[debuggerWin].text = s)
 

@@ -17,7 +17,6 @@ jsFiles = [
   'lbar.js'
   'session.coffee'
   'editor.coffee'
-  'debugger.coffee'
   'index.coffee'
 ]
 cssFiles = [

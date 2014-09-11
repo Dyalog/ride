@@ -1,31 +1,64 @@
 DyalogEditor = (e, opts = {}) ->
-  ($e = $ e).html '''
-    <div class="toolbar">
-      <span class="b-line-numbers button" title="Toggle line numbers"      >[⋯]</span>
-      <span class="b-comment      button" title="Comment selected text"    >⍝</span>
-      <span class="b-uncomment    button" title="Uncomment selected text"  >/⍝</span>
-      <span class="b-save         button" title="Save changes and return"  >×</span>
-      <span class="separator"></span>
-      <input class="search">
-      <span class="b-next         button" title="Search for next match"    >▶</span>
-      <span class="b-prev         button" title="Search for previous match">◀</span>
-      <span class="b-hid          button" title="Search for hidden text"   >⊞</span>
-      <span class="b-case         button" title="Match case"               >aA</span>
-      <span class="separator"></span>
-      <span class="b-refac-m      button" title="Refactor text as method"  >+m</span>
-      <span class="b-refac-f      button" title="Refactor text as field"   >+f</span>
-      <span class="b-refac-p      button" title="Refactor text as property">+p</span>
-    </div>
-    <div class="editor-cm"></div>
-  '''
+  ($e = $ e).html(
+    if opts.debugger
+      '''
+        <div class="toolbar">
+          <span class="b-execute      button" title="Execute line"                            ></span>
+          <span class="b-trace        button" title="Trace into expression"                   ></span>
+          <span class="b-back         button" title="Go back one line"                        ></span>
+          <span class="b-skip         button" title="Skip current line"                       ></span>
+          <span class="b-cont-trace   button" title="Continue trace"                          ></span>
+          <span class="b-cont-exec    button" title="Continue execution"                      ></span>
+          <span class="b-restart      button" title="Restart all threads"                     ></span>
+          <span class="b-edit-name    button" title="Edit name"                               ></span>
+          <span class="b-quit         button" title="Quit this function"                      ></span>
+          <span class="b-interrupt    button" title="Interrupt"                               ></span>
+          <span class="b-clear-obj    button" title="Clear trace/stop/monitor for this object"></span>
+          <span class="b-line-numbers button" title="Toggle line numbers"                     ></span>
+          <span class="separator"></span>
+          <input class="search">
+          <span class="b-next         button" title="Search for next match"    >▶</span>
+          <span class="b-prev         button" title="Search for previous match">◀</span>
+          <span class="b-hid          button" title="Search for hidden text"   >⊞</span>
+          <span class="b-case         button" title="Match case"               >aA</span>
+          <span class="separator"></span>
+          <select class="stack">
+            <option>[1]</option>
+            <option>[2]</option>
+            <option>[3]</option>
+          </select>
+        </div>
+        <div class="cm"></div>
+      '''
+    else
+      '''
+        <div class="toolbar">
+          <span class="b-line-numbers button" title="Toggle line numbers"      >[⋯]</span>
+          <span class="b-comment      button" title="Comment selected text"    >⍝</span>
+          <span class="b-uncomment    button" title="Uncomment selected text"  >/⍝</span>
+          <span class="b-save         button" title="Save changes and return"  >×</span>
+          <span class="separator"></span>
+          <input class="search">
+          <span class="b-next         button" title="Search for next match"    >▶</span>
+          <span class="b-prev         button" title="Search for previous match">◀</span>
+          <span class="b-hid          button" title="Search for hidden text"   >⊞</span>
+          <span class="b-case         button" title="Match case"               >aA</span>
+          <span class="separator"></span>
+          <span class="b-refac-m      button" title="Refactor text as method"  >+m</span>
+          <span class="b-refac-f      button" title="Refactor text as field"   >+f</span>
+          <span class="b-refac-p      button" title="Refactor text as property">+p</span>
+        </div>
+        <div class="cm"></div>
+      '''
+  )
 
-  cm = CodeMirror $e.find('.editor-cm')[0],
+  cm = CodeMirror $e.find('.cm')[0],
     lineNumbers: true
     firstLineNumber: 0
     lineNumberFormatter: (i) -> "[#{i}]"
     extraKeys:
-      'Esc': saveAndCloseEditor = -> opts.save?(cm.getValue()); opts.close?()
-      'Shift-Esc': closeEditor = -> opts.close?()
+      'Esc': saveAndClose = -> opts.save?(cm.getValue()); opts.close?()
+      'Shift-Esc': -> opts.close?()
       'Ctrl-Up': ->
         c = cm.getCursor()
         s = cm.getLine c.line
@@ -45,7 +78,7 @@ DyalogEditor = (e, opts = {}) ->
     .on('mouseup mouseout', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return)
 
   $('.b-line-numbers', $tb).click -> cm.setOption 'lineNumbers', b = !cm.getOption 'lineNumbers'; $(@).toggleClass 'pressed', !b; false
-  $('.b-save', $tb).click -> saveAndCloseEditor(); false
+  $('.b-save', $tb).click -> saveAndClose(); false
 
   $('.b-comment', $tb).click ->
     a = cm.listSelections()
