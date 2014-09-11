@@ -104,9 +104,10 @@ io.listen(server).on 'connection', (socket) ->
     log 'from browser: ' + JSON.stringify(packet.data)[..1000]
     onevent.apply socket, [packet]
 
+  X = '<?xml version="1.0" encoding="utf-8"?>'
+
   socket.on 'exec', (s, trace) ->
-    toInterpreter """
-      <?xml version="1.0" encoding="utf-8"?>
+    toInterpreter X + """
       <Command>
         <cmd>Execute</cmd>
         <id>0</id>
@@ -115,8 +116,7 @@ io.listen(server).on 'connection', (socket) ->
     """
 
   socket.on 'edit', (s, p) -> # s:current line  p:cursor position in s
-    toInterpreter """
-      <?xml version="1.0" encoding="utf-8"?>
+    toInterpreter X + """
       <Command>
         <cmd>Edit</cmd>
         <id>0</id>
@@ -131,8 +131,7 @@ io.listen(server).on 'connection', (socket) ->
     """
 
   socket.on 'save', (win, text) ->
-    toInterpreter """
-      <?xml version="1.0" encoding="utf-8"?>
+    toInterpreter X + """
       <Command>
         <cmd>SaveChanges</cmd>
         <id>0</id>
@@ -163,8 +162,7 @@ io.listen(server).on 'connection', (socket) ->
     """
 
   socket.on 'close', (win) ->
-    toInterpreter """
-      <?xml version="1.0" encoding="utf-8"?>
+    toInterpreter X + """
       <Command>
         <cmd>CloseWindow</cmd>
         <id>0</id>
@@ -173,8 +171,7 @@ io.listen(server).on 'connection', (socket) ->
     """
 
   socket.on 'autocomplete', (line, pos, token) ->
-    toInterpreter """
-      <?xml version="1.0" encoding="utf-8"?>
+    toInterpreter X + """
       <Command>
         <cmd>GetAutoComplete</cmd>
         <id>0</id>
@@ -189,62 +186,53 @@ io.listen(server).on 'connection', (socket) ->
     """
 
   socket.on 'over', (win) ->
-    toInterpreter """
-      <?xml version="1.0" encoding="utf-8"?>
+    toInterpreter X + """
       <Command><cmd>DebugRunLine</cmd><id>0</id><args><DebugRunLine><win>#{win}</win></DebugRunLine></args></Command>
     """
 
   socket.on 'into', (win) ->
-    toInterpreter """
-      <?xml version="1.0" encoding="utf-8"?>
+    toInterpreter X + """
       <Command><cmd>DebugStepInto</cmd><id>0</id><args><DebugStepInto><win>#{win}</win></DebugStepInto></args></Command>
     """
 
   socket.on 'back', (win) ->
-    toInterpreter """
-      <?xml version="1.0" encoding="utf-8"?>
+    toInterpreter X + """
       <Command><cmd>DebugBackward</cmd><id>0</id><args><DebugBackward><win>#{win}</win></DebugBackward></args></Command>
     """
 
   socket.on 'skip', (win) ->
-    toInterpreter """
-      <?xml version="1.0" encoding="utf-8"?>
+    toInterpreter X + """
       <Command><cmd>DebugForward</cmd><id>0</id><args><DebugForward><win>#{win}</win></DebugForward></args></Command>
     """
 
   socket.on 'continueTrace', (win) ->
-    toInterpreter """
-      <?xml version="1.0" encoding="utf-8"?>
+    toInterpreter X + """
       <Command><cmd>DebugContinueTrace</cmd><id>0</id><args><DebugContinueTrace><win>#{win}</win></DebugContinueTrace></args></Command>
     """
 
   socket.on 'continueExec', (win) ->
-    toInterpreter """
-      <?xml version="1.0" encoding="utf-8"?>
+    toInterpreter X + """
       <Command><cmd>DebugContinue</cmd><id>0</id><args><DebugContinue><win>#{win}</win></DebugContinue></args></Command>
     """
 
   socket.on 'restartThreads', (win) ->
-    toInterpreter """
-      <?xml version="1.0" encoding="utf-8"?>
+    toInterpreter X + """
       <Command><cmd>DebugRestartThreads</cmd><id>0</id><args><DebugRestartThreads><win>#{win}</win></DebugRestartThreads></args></Command>
     """
 
   socket.on 'interrupt', ->
-    toInterpreter """
-      <?xml version="1.0" encoding="utf-8"?>
+    toInterpreter X + """
       <Command><cmd>WeakInterrupt</cmd><id>0</id><args><WeakInterrupt /></args></Command>
     """
 
   socket.on 'cutback', (win) ->
-    toInterpreter """
-      <?xml version="1.0" encoding="utf-8"?>
+    toInterpreter X + """
       <Command><cmd>DebugCutback</cmd><id>0</id><args><DebugCutback><win>#{win}</win></DebugCutback></args></Command>
     """
 
-  toInterpreter '<?xml version="1.0" encoding="utf-8"?><Command><cmd>Identify</cmd><id>0</id><args><Identify><Sender><Process>RIDE.EXE</Process><Proxy>0</Proxy></Sender></Identify></args></Command>'
-  toInterpreter '<?xml version="1.0" encoding="utf-8"?><Command><cmd>Connect</cmd><id>0</id><args><Connect><Token /></Connect></args></Command>'
-  toInterpreter '<?xml version="1.0" encoding="utf-8"?><Command><cmd>GetWindowLayout</cmd><id>0</id><args><GetWindowLayout /></args></Command>'
+  toInterpreter X + '<Command><cmd>Identify</cmd><id>0</id><args><Identify><Sender><Process>RIDE.EXE</Process><Proxy>0</Proxy></Sender></Identify></args></Command>'
+  toInterpreter X + '<Command><cmd>Connect</cmd><id>0</id><args><Connect><Token /></Connect></args></Command>'
+  toInterpreter X + '<Command><cmd>GetWindowLayout</cmd><id>0</id><args><GetWindowLayout /></args></Command>'
 
   client.on 'end', -> log 'interpreter disconnected'; socket.emit 'end'
   socket.on 'disconnect', -> log 'browser disconnected'
