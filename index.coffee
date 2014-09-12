@@ -54,6 +54,7 @@ jQuery ($) ->
       editorWin = token
       ed.open name, text
       winInfos[token] = ed
+    session.scrollCursorIntoView()
 
   socket.on 'close', (win) ->
     delete winInfos[win]
@@ -67,6 +68,7 @@ jQuery ($) ->
     else
       editorWin = null
       layout.close 'east'
+    session.scrollCursorIntoView()
 
   socket.on 'autocomplete', (token, skip, options) -> if token == 0 then session.autocomplete skip, options
   socket.on 'highlight', (win, line) ->
