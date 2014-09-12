@@ -1,10 +1,10 @@
 #!/usr/bin/env coffee
-fs = require 'fs'
-coffee = require 'coffee-script'
+fs      = require 'fs'
+coffee  = require 'coffee-script'
 express = require 'express'
-io = require 'socket.io'
-net = require 'net'
-https = require 'https'
+io      = require 'socket.io'
+net     = require 'net'
+https   = require 'https'
 
 jsFiles = [
   'node_modules/socket.io/node_modules/socket.io-client/socket.io.js'
@@ -104,135 +104,42 @@ io.listen(server).on 'connection', (socket) ->
     log 'from browser: ' + JSON.stringify(packet.data)[..1000]
     onevent.apply socket, [packet]
 
-  X = '<?xml version="1.0" encoding="utf-8"?>'
+  cmd = (name, args) -> toInterpreter """<?xml version="1.0" encoding="utf-8"?><Command><cmd>#{name}</cmd><id>0</id><args><#{name}>#{args}</#{name}></args></Command>"""
 
-  socket.on 'exec', (s, trace) ->
-    toInterpreter X + """
-      <Command>
-        <cmd>Execute</cmd>
-        <id>0</id>
-        <args><Execute><Text>#{b64 s}</Text><Trace>#{+!!trace}</Trace></Execute></args>
-      </Command>
-    """
+  socket.on 'exec', (s, trace) -> cmd 'Execute', "<Text>#{b64 s}</Text><Trace>#{+!!trace}</Trace>"
+  socket.on 'edit', (text, pos) -> cmd 'Edit', "<Text>#{b64 text}</Text><Pos>#{pos}</Pos><Win>0</Win>"
+  socket.on 'save', (win, text) -> cmd 'SaveChanges', """
+    <win>#{win}</win>
+    <Text>#{b64 text}</Text>
+    <attributes>
+      <LineAttribute>
+        <attribute>Stop</attribute>
+        <values>
+          #{
+            (
+              for i in [0...text.split('\n').length] by 1
+                "<LineAttributeValue><row>#{i}</row><value>0</value></LineAttributeValue>"
+            ).join '\n'
+          }
+        </values>
+      </LineAttribute>
+    </attributes>
+  """
+  socket.on 'close',          (win) -> cmd 'CloseWindow',         "<win>#{win}</win>"
+  socket.on 'over',           (win) -> cmd 'DebugRunLine',        "<win>#{win}</win>"
+  socket.on 'into',           (win) -> cmd 'DebugStepInto',       "<win>#{win}</win>"
+  socket.on 'back',           (win) -> cmd 'DebugBackward',       "<win>#{win}</win>"
+  socket.on 'skip',           (win) -> cmd 'DebugForward',        "<win>#{win}</win>"
+  socket.on 'continueTrace',  (win) -> cmd 'DebugContinueTrace',  "<win>#{win}</win>"
+  socket.on 'continueExec',   (win) -> cmd 'DebugContinue',       "<win>#{win}</win>"
+  socket.on 'restartThreads', (win) -> cmd 'DebugRestartThreads', "<win>#{win}</win>"
+  socket.on 'cutback',        (win) -> cmd 'DebugCutback',        "<win>#{win}</win>"
+  socket.on 'interrupt', -> cmd 'WeakInterrupt'
+  socket.on 'autocomplete', (line, pos, token) -> cmd 'GetAutoComplete', "<line>#{b64 line}</line><pos>#{pos}</pos><token>#{token}</token>"
 
-  socket.on 'edit', (s, p) -> # s:current line  p:cursor position in s
-    toInterpreter X + """
-      <Command>
-        <cmd>Edit</cmd>
-        <id>0</id>
-        <args>
-          <Edit>
-            <Text>#{b64 s}</Text>
-            <Pos>#{p}</Pos>
-            <Win>0</Win>
-          </Edit>
-        </args>
-      </Command>
-    """
-
-  socket.on 'save', (win, text) ->
-    toInterpreter X + """
-      <Command>
-        <cmd>SaveChanges</cmd>
-        <id>0</id>
-        <args>
-          <SaveChanges>
-            <win>#{win}</win>
-            <Text>#{b64 text}</Text>
-            <attributes>
-              <LineAttribute>
-                <attribute>Stop</attribute>
-                <values>
-                  #{
-                    (
-                      for i in [0...text.split('\n').length] by 1 then "
-                        <LineAttributeValue>
-                          <row>#{i}</row>
-                          <value>0</value>
-                        </LineAttributeValue>
-                      "
-                    ).join '\n'
-                  }
-                </values>
-              </LineAttribute>
-            </attributes>
-          </SaveChanges>
-        </args>
-      </Command>
-    """
-
-  socket.on 'close', (win) ->
-    toInterpreter X + """
-      <Command>
-        <cmd>CloseWindow</cmd>
-        <id>0</id>
-        <args><CloseWindow><win>#{win}</win></CloseWindow></args>
-      </Command>
-    """
-
-  socket.on 'autocomplete', (line, pos, token) ->
-    toInterpreter X + """
-      <Command>
-        <cmd>GetAutoComplete</cmd>
-        <id>0</id>
-        <args>
-          <GetAutoComplete>
-            <line>#{b64 line}</line>
-            <pos>#{pos}</pos>
-            <token>#{token}</token>
-          </GetAutoComplete>
-        </args>
-      </Command>
-    """
-
-  socket.on 'over', (win) ->
-    toInterpreter X + """
-      <Command><cmd>DebugRunLine</cmd><id>0</id><args><DebugRunLine><win>#{win}</win></DebugRunLine></args></Command>
-    """
-
-  socket.on 'into', (win) ->
-    toInterpreter X + """
-      <Command><cmd>DebugStepInto</cmd><id>0</id><args><DebugStepInto><win>#{win}</win></DebugStepInto></args></Command>
-    """
-
-  socket.on 'back', (win) ->
-    toInterpreter X + """
-      <Command><cmd>DebugBackward</cmd><id>0</id><args><DebugBackward><win>#{win}</win></DebugBackward></args></Command>
-    """
-
-  socket.on 'skip', (win) ->
-    toInterpreter X + """
-      <Command><cmd>DebugForward</cmd><id>0</id><args><DebugForward><win>#{win}</win></DebugForward></args></Command>
-    """
-
-  socket.on 'continueTrace', (win) ->
-    toInterpreter X + """
-      <Command><cmd>DebugContinueTrace</cmd><id>0</id><args><DebugContinueTrace><win>#{win}</win></DebugContinueTrace></args></Command>
-    """
-
-  socket.on 'continueExec', (win) ->
-    toInterpreter X + """
-      <Command><cmd>DebugContinue</cmd><id>0</id><args><DebugContinue><win>#{win}</win></DebugContinue></args></Command>
-    """
-
-  socket.on 'restartThreads', (win) ->
-    toInterpreter X + """
-      <Command><cmd>DebugRestartThreads</cmd><id>0</id><args><DebugRestartThreads><win>#{win}</win></DebugRestartThreads></args></Command>
-    """
-
-  socket.on 'interrupt', ->
-    toInterpreter X + """
-      <Command><cmd>WeakInterrupt</cmd><id>0</id><args><WeakInterrupt /></args></Command>
-    """
-
-  socket.on 'cutback', (win) ->
-    toInterpreter X + """
-      <Command><cmd>DebugCutback</cmd><id>0</id><args><DebugCutback><win>#{win}</win></DebugCutback></args></Command>
-    """
-
-  toInterpreter X + '<Command><cmd>Identify</cmd><id>0</id><args><Identify><Sender><Process>RIDE.EXE</Process><Proxy>0</Proxy></Sender></Identify></args></Command>'
-  toInterpreter X + '<Command><cmd>Connect</cmd><id>0</id><args><Connect><Token /></Connect></args></Command>'
-  toInterpreter X + '<Command><cmd>GetWindowLayout</cmd><id>0</id><args><GetWindowLayout /></args></Command>'
+  cmd 'Identify', '<Sender><Process>RIDE.EXE</Process><Proxy>0</Proxy></Sender>'
+  cmd 'Connect', '<Token />'
+  cmd 'GetWindowLayout', ''
 
   client.on 'end', -> log 'interpreter disconnected'; socket.emit 'end'
   socket.on 'disconnect', -> log 'browser disconnected'
