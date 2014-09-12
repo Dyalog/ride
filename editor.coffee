@@ -57,9 +57,15 @@ DyalogEditor = (e, opts = {}) ->
     firstLineNumber: 0
     lineNumberFormatter: (i) -> "[#{i}]"
     readOnly: !!opts.debugger
+    gutters: ['CodeMirror-linenumbers', 'breakpoints']
     extraKeys:
       'Enter': -> if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'
-      'Esc': saveAndClose = -> opts.save?(cm.getValue()); opts.close?()
+      'Esc': saveAndClose = ->
+        bs = []
+        for l of breakpoints then bs.push +l; cm.setGutterMarker +l, 'breakpoint', null
+        opts.save? cm.getValue(), bs
+        opts.close?()
+        return
       'Shift-Esc': -> opts.close?()
       'Ctrl-Up': ->
         c = cm.getCursor()
@@ -73,6 +79,17 @@ DyalogEditor = (e, opts = {}) ->
           h1 = h.replace ///;#{name}(;|$)///, '$1'
           cm.replaceRange (if h == h1 then h1 += ';' + name else h1),
             {line: 0, ch: 0}, {line: 0, ch: h.length}, 'Dyalog'
+
+  createBreakpointElement = -> $('<div class="breakpoint">●</div>')[0]
+  breakpoints = {}
+  cm.on 'gutterClick', (cm, l) ->
+    if breakpoints[l]
+      delete breakpoints[l]
+      cm.setGutterMarker l, 'breakpoints', null
+    else
+      breakpoints[l] = 1
+      cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
+    return
 
   $tb = $ '.toolbar', $e
   $('.button', $tb) # todo
@@ -142,7 +159,12 @@ DyalogEditor = (e, opts = {}) ->
   hll = null # currently highlighted line
 
   updateSize: -> cm.setSize $e.width(), $e.height()
-  open: (name, text) -> cm.setValue text; cm.setCursor 0, cm.getLine(0).length; cm.focus()
+  open: (name, text, bs) ->
+    cm.setValue text
+    cm.setCursor 0, cm.getLine(0).length
+    cm.focus()
+    for l in bs then cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
+    return
   hasFocus: -> cm.hasFocus()
   focus: -> cm.focus()
   insert: (ch) -> c = cm.getCursor(); cm.replaceRange ch, c, c, 'Dyalog'
@@ -150,3 +172,4 @@ DyalogEditor = (e, opts = {}) ->
   highlight: (l) ->
     if hll? then cm.removeLineClass hll, 'background', 'highlighted'
     cm.addLineClass (hll = l), 'background', 'highlighted'
+    return

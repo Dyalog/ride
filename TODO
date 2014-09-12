@@ -11,5 +11,4 @@
 * tooltips are invisble when too close to the right edge
 * auto pop up completion box (?)
 * inform user when connection to the server is lost
-* breakpoints
 * implement more buttons in the debugger

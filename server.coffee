@@ -83,13 +83,15 @@ io.listen(server).on 'connection', (socket) ->
       log 'from interpreter: ' + JSON.stringify(m)[..1000]
       if !/^(?:SupportedProtocols|UsingProtocol)=1$/.test m # ignore these
         switch (/^<(\w+)>/.exec m)?[1] or ''
-          when 'ReplyConnect', 'ReplyNotAtInputPrompt', 'ReplyEdit', 'ReplySaveChanges' then ; # ignore
+          when 'ReplyConnect', 'ReplyNotAtInputPrompt', 'ReplyEdit', 'ReplySaveChanges', 'ReplySetLineAttributes' then ; # ignore
           when 'ReplyIdentify'      then toBrowser 'title', b64d getTag 'Project', m
           when 'ReplyExecute'       then toBrowser 'add', b64d getTag 'result', m
           when 'ReplyEchoInput'     then toBrowser 'add', b64d(getTag 'input', m) + '\n'
           when 'ReplyGetLog'        then toBrowser 'add', b64d getTag 'Log', m
           when 'ReplyAtInputPrompt' then toBrowser 'prompt'
-          when 'ReplyOpenWindow'    then toBrowser 'open', b64d(getTag 'name', m), b64d(getTag 'text', m), +getTag('token', m), +getTag 'bugger', m
+          when 'ReplyOpenWindow'
+            bs = []; m.replace /<row>(\d+)<\/row><value>1<\/value>/g, (_, l) -> bs.push +l
+            toBrowser 'open', b64d(getTag 'name', m), b64d(getTag 'text', m), +getTag('token', m), +getTag('bugger', m), bs
           when 'ReplyFocusWindow'   then toBrowser 'focus', +getTag 'win', m
           when 'ReplyCloseWindow'   then toBrowser 'close', +getTag 'win', m
           when 'ReplyGetAutoComplete'
@@ -108,7 +110,7 @@ io.listen(server).on 'connection', (socket) ->
 
   socket.on 'exec', (s, trace) -> cmd 'Execute', "<Text>#{b64 s}</Text><Trace>#{+!!trace}</Trace>"
   socket.on 'edit', (text, pos) -> cmd 'Edit', "<Text>#{b64 text}</Text><Pos>#{pos}</Pos><Win>0</Win>"
-  socket.on 'save', (win, text) -> cmd 'SaveChanges', """
+  socket.on 'save', (win, text, breakpoints) -> cmd 'SaveChanges', """
     <win>#{win}</win>
     <Text>#{b64 text}</Text>
     <attributes>
@@ -118,7 +120,7 @@ io.listen(server).on 'connection', (socket) ->
           #{
             (
               for i in [0...text.split('\n').length] by 1
-                "<LineAttributeValue><row>#{i}</row><value>0</value></LineAttributeValue>"
+                "<LineAttributeValue><row>#{i}</row><value>#{+(i in breakpoints)}</value></LineAttributeValue>"
             ).join '\n'
           }
         </values>

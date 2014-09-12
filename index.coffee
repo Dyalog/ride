@@ -13,13 +13,13 @@ jQuery ($) ->
   debuggerWin = null
 
   ed = DyalogEditor '#editor',
+    save: (s, bs) -> socket.emit 'save', editorWin, (winInfos[editorWin].text = s), bs
     close: -> socket.emit 'close', editorWin
-    save: (s) -> socket.emit 'save', editorWin, (winInfos[editorWin].text = s)
 
   db = DyalogEditor '#debugger',
     debugger: true
+    save:   (s, bs) -> socket.emit 'save',           debuggerWin, (winInfos[debuggerWin].text = s), bs
     close:          -> socket.emit 'close',          debuggerWin
-    save:     (s)   -> socket.emit 'save',           debuggerWin, (winInfos[debuggerWin].text = s)
     over:           -> socket.emit 'over',           debuggerWin
     into:           -> socket.emit 'into',           debuggerWin
     back:           -> socket.emit 'back',           debuggerWin
@@ -40,19 +40,19 @@ jQuery ($) ->
   socket.on 'prompt', -> session.prompt()
   socket.on 'focus', (win) -> if win == debuggerWin then db.focus() else if win then ed.focus() else session.focus()
 
-  socket.on 'open', (name, text, token, bugger) ->
+  socket.on 'open', (name, text, token, bugger, breakpoints) ->
     winInfos[token] = {name, text}
     if bugger
       layout.open 'south'
       if debuggerWin? then winInfos[debuggerWin].text = db.getValue()
       debuggerWin = token
-      db.open name, text
+      db.open name, text, breakpoints
       winInfos[token] = db
     else
       layout.open 'east'
       if editorWin? then winInfos[editorWin].text = ed.getValue()
       editorWin = token
-      ed.open name, text
+      ed.open name, text, breakpoints
       winInfos[token] = ed
     session.scrollCursorIntoView()
 
