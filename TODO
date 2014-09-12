@@ -3,7 +3,6 @@
 * history of search fields
 * fetch language bar from server
 * code folding and [+] button
-* get rid of the sneaky "close" buttons in the middle of splitters
 * single click in autocomplete menu
 * inset borders in editors and session
 * SI stack (?)
