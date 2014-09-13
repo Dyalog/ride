@@ -14,7 +14,7 @@ jsFiles = [
   'node_modules/codemirror/addon/hint/show-hint.js'
   'jquery-ui.min.js'
   'jquery.layout.js'
-  'lbar.js'
+  'lbar/lbar.js'
   'session.coffee'
   'editor.coffee'
   'index.coffee'
@@ -32,7 +32,9 @@ getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exe
 # preload files into memory so we can serve them faster
 html = css = js = ''
 do prepareHTML = ->
-  html = fs.readFileSync 'index.html', 'utf8'
+  html = fs.readFileSync('index.html', 'utf8')
+    .replace /<!--\s*include\s+(\S+)\s*-->/g, (_, f) ->
+      fs.readFileSync f, 'utf8'
   log "prepared html: #{html.length} bytes"
 do prepareJS = ->
   js = jsFiles.map((f) -> s = fs.readFileSync f, 'utf8'; if /\.coffee$/.test f then coffee.compile s, bare: 1 else s).join '\n'

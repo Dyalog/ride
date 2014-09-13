@@ -1,9 +1,9 @@
 @font-face { font-family: apl; src: url(apl385.ttf) format("truetype"); }
 body { padding: 0; margin: 0; }
 .CodeMirror, .CodeMirror-hints, #lbar, #tip, .toolbar { font-family: apl, "APL385 Unicode", monospace; }
-#lbar { background-color: #d4d0c8; padding: 2px 2px 2px 24px; cursor: default; }
-#lbar .glyph { padding: 0; margin-right: -1px; border: solid black 1px; }
-#lbar .glyph:hover { outline: solid black 1px; }
+#lbar { background-color: #d4d0c8; padding: 2px 2px 2px 24px; cursor: default; line-height: 22px; }
+#lbar b { padding: 0 1px; margin-right: -1px; border: solid black 1px; font-weight: normal; }
+#lbar b:hover { outline: solid black 1px; }
 #lbar-close {
 	float: right;
 	color: black;

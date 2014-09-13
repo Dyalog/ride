@@ -1,3 +1,5 @@
+timeout = (delay, f) -> setTimeout f, delay
+
 jQuery ($) ->
   debug = 1
 
@@ -75,35 +77,6 @@ jQuery ($) ->
     if win == editorWin then ed.highlight line
     else if win == debuggerWin then db.highlight line
 
-  # language bar
-  $('#lbar').append(
-    '← +-×÷*⍟⌹○!? |⌈⌊⊥⊤⊣⊢ =≠≤<>≥≡≢ ∨∧⍱⍲ ↑↓⊂⊃⌷⍋⍒ ⍳⍷∪∩∊~ /\\⌿⍀ ,⍪⍴⌽⊖⍉ ¨⍨⍣.∘⍤ ⍞⎕⍠⌸⍎⍕ ⋄⍝→⍵⍺∇& ¯⍬'
-      .replace /\S+/g, (g) ->
-        """<span class="group">#{g.replace /(.)/g, '<span class="glyph">$1</span>'}</span>"""
-  )
-  $('#lbar').on 'mousedown', -> false
-  $('.glyph', '#lbar').on 'mousedown', (e) ->
-    for x in [session, ed] when x.hasFocus() then x.insert $(e.target).text()
-    false
-  $('#lbar-close').on 'click', -> layout.close 'north'; false
-
-  # tooltips
-  ttid = null # tooltip timeout id
-  $('.glyph', '#lbar').on 'mouseover focus', (e) ->
-    clearTimeout ttid
-    ttid = setTimeout(
-      ->
-        ttid = null
-        $t = $ e.target; p = $t.position(); x = $t.text()
-        h = help[x] or [x, '']
-        $('#tip-desc').text h[0]
-        $('#tip-text').text h[1]
-        $('#tip').css(left: p.left - 21, top: p.top + $t.height() + 2).show()
-      500
-    )
-  $('.glyph', '#lbar').on 'mouseout blur', ->
-    clearTimeout ttid; ttid = null; $('#tip').hide()
-
   layout = $('body').layout
     defaults: enableCursorHotkey: 0
     north: resizable: 0, togglerLength_closed: '100%', togglerTip_closed: 'Show Language Bar', spacing_open: 0
@@ -112,3 +85,21 @@ jQuery ($) ->
     center: onresize: -> (for x in [session, ed, db] then x.updateSize()); return
 
   session.updateSize()
+
+  # language bar
+  timeout 2000, ->
+    $('#lbar').on 'mousedown', -> false
+    $('b', '#lbar').on 'mousedown', (e) -> for x in [session, ed] when x.hasFocus() then x.insert $(e.target).text(); false
+    $('#lbar-close').on 'click', -> layout.close 'north'; false
+    ttid = null # tooltip timeout id
+    $tip = $ '#tip'; $tipDesc = $ '#tip-desc'; $tipText = $ '#tip-text'
+    $('b', '#lbar').on
+      mouseout: -> clearTimeout ttid; ttid = null; $tip.hide(); return
+      mouseover: (e) ->
+        clearTimeout ttid
+        ttid = timeout 200, ->
+          ttid = null
+          $t = $ e.target; p = $t.position(); x = $t.text()
+          h = lbarTips[x] or [x, '']; $tipDesc.text h[0]; $tipText.text h[1]
+          $tip.css(left: p.left - 21, top: p.top + $t.height() + 2).show()
+        return
