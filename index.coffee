@@ -93,14 +93,21 @@ jQuery ($) ->
     $('b', '#lbar').on 'mousedown', (e) -> for x in [session, ed] when x.hasFocus() then x.insert $(e.target).text(); false
     $('#lbar-close').on 'click', -> layout.close 'north'; false
     ttid = null # tooltip timeout id
-    $tip = $ '#tip'; $tipDesc = $ '#tip-desc'; $tipText = $ '#tip-text'
+    $tip = $ '#tip'; $tipDesc = $ '#tip-desc'; $tipText = $ '#tip-text'; $tipTriangle = $ '#tip-triangle'
     $('b', '#lbar').on
-      mouseout: -> clearTimeout ttid; ttid = null; $tip.hide(); return
+      mouseout: -> clearTimeout ttid; ttid = null; $tip.hide(); $tipTriangle.hide(); return
       mouseover: (e) ->
         clearTimeout ttid
         ttid = timeout 200, ->
           ttid = null
           $t = $ e.target; p = $t.position(); x = $t.text()
           h = lbarTips[x] or [x, '']; $tipDesc.text h[0]; $tipText.text h[1]
-          $tip.css(left: p.left - 21, top: p.top + $t.height() + 2).show()
+          $tipTriangle.css(left: 3 + p.left + ($t.width() - $tipTriangle.width()) / 2, top: p.top + $t.height() + 2).show()
+          x0 = p.left - 21
+          x1 = x0 + $tip.width()
+          y0 = p.top + $t.height()
+          if x1 > $(document).width()
+            $tip.css(left: '', right: 0, top: y0).show()
+          else
+            $tip.css(left: Math.max(0, x0), right: '', top: y0).show()
         return

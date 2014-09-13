@@ -1,7 +1,7 @@
 @font-face { font-family: apl; src: url(apl385.ttf) format("truetype"); }
 body { padding: 0; margin: 0; }
 .CodeMirror, .CodeMirror-hints, #lbar, #tip, .toolbar { font-family: apl, "APL385 Unicode", monospace; }
-#lbar { background-color: #d4d0c8; padding: 2px 2px 2px 24px; cursor: default; line-height: 22px; }
+#lbar { background-color: #d4d0c8; padding: 2px 2px 2px 10px; cursor: default; line-height: 22px; }
 #lbar b { padding: 0 1px; margin-right: -1px; border: solid black 1px; font-weight: normal; }
 #lbar b:hover { outline: solid black 1px; }
 #lbar-close {
@@ -21,25 +21,23 @@ body { padding: 0; margin: 0; }
 	background-color: orange;
 	border-color: black;
 }
+#tip-triangle {
+	position: absolute;
+	z-index: 4;
+	padding: 0;
+	margin: 0;
+	width: 20px;
+	height: 19px;
+	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAUCAYAAACAl21KAAAAcUlEQVQ4y6WTUQ7AMAhCDfe/5E7CvpZsmVVEfmvoA9uIWgxREGa4NZJpWiLykk3R0bzMPKLEgNuyJSoMS+aIKCPoqGCsnBJRdXN1hvDEyojDDfJIpD6+bA7Ov8pSYEpzmnfL/lFhEetDBSdW5rmO9kDcybhABXRYE1UAAAAASUVORK5CYII=) center center no-repeat;
+}
 #tip {
 	position: absolute;
 	z-index: 3;
-	padding: 0;
-	margin: 0;
-}
-#tip-triangle {
-	position: relative;
-	padding: 0;
-	margin: 0;
-	height: 19px;
-	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAUCAYAAACAl21KAAAAcUlEQVQ4y6WTUQ7AMAhCDfe/5E7CvpZsmVVEfmvoA9uIWgxREGa4NZJpWiLykk3R0bzMPKLEgNuyJSoMS+aIKCPoqGCsnBJRdXN1hvDEyojDDfJIpD6+bA7Ov8pSYEpzmnfL/lFhEetDBSdW5rmO9kDcybhABXRYE1UAAAAASUVORK5CYII=) 20px 0 no-repeat;
-	margin-bottom: -1px;
-}
-#tip-inner {
 	background: #ffffe1 url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAsklEQVQoz5VS2xHDIAyTuOyRUZilk2Am6SpkFCZRP0iJC6S96vwDJ/khm1LFGzk/MSGlh39unppSmgUkAVx5pWpmcgDO6CilNKZUw5zSLA8/Mcar4SH9HXqRsULOmUSLZZEweZLmljwC/kQAcBzHT97FGWztnnpn28RmJtXTXQCllC/+mNmHoC/SyxrVs6VKf0sAyL3JYowkzWw4p20YrunJXdLy+Na2SpXD5u4qeM3y2l8gjORluK0/wAAAAABJRU5ErkJggg==) 10px 10px no-repeat;
 	padding: 10px;
 	border-radius: 10px;
 	border: solid black 1px;
+	margin-top: 20px;
 }
 #tip-desc { padding: 0 0 0 30px; margin: 0; font-weight: bold; }
 .ui-layout-resizer { background-color: #d4d0c8; }

@@ -8,7 +8,6 @@
 * SI stack (?)
 * update title when workspace name changes
 * floating windows
-* tooltips are invisble when too close to the right edge
 * auto pop up completion box (?)
 * inform user when connection to the server is lost
 * implement more buttons in the debugger
