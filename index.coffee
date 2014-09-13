@@ -1,15 +1,16 @@
+socket = io()
+
+debug = 1
+if debug
+  t0 = +new Date
+  log = (s, a...) -> console.info (new Date - t0).toFixed(3) + ' ' + s, a...
+  {emit, onevent} = socket
+  socket.emit = (a...) -> log 'send:' + JSON.stringify(a)[..1000]; emit.apply socket, a
+  socket.onevent = (packet) -> log ' recv:' + JSON.stringify(packet.data)[..1000]; onevent.apply socket, [packet]
+
 timeout = (delay, f) -> setTimeout f, delay
 
 jQuery ($) ->
-  debug = 1
-
-  socket = io()
-
-  if debug
-    {emit, onevent} = socket
-    socket.emit = (a...) -> console.info 'send:' + JSON.stringify(a)[..1000]; emit.apply socket, a
-    socket.onevent = (packet) -> console.info 'recv:' + JSON.stringify(packet.data)[..1000]; onevent.apply socket, [packet]
-
   winInfos = {}
   editorWin = null
   debuggerWin = null
