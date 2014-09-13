@@ -5,6 +5,7 @@ express = require 'express'
 io      = require 'socket.io'
 net     = require 'net'
 https   = require 'https'
+uglify  = require 'uglify-js'
 
 jsFiles = [
   'node_modules/socket.io/node_modules/socket.io-client/socket.io.js'
@@ -37,7 +38,20 @@ do prepareHTML = ->
       fs.readFileSync f, 'utf8'
   log "prepared html: #{html.length} bytes"
 do prepareJS = ->
-  js = jsFiles.map((f) -> s = fs.readFileSync f, 'utf8'; if /\.coffee$/.test f then coffee.compile s, bare: 1 else s).join '\n'
+  js = ''
+  for f in jsFiles
+    f1 = "cache/#{f.replace /\//g, '_'}.uglified"
+    if !fs.existsSync(f1) || fs.statSync(f1).mtime < fs.statSync(f).mtime
+      if !fs.existsSync 'cache' then fs.mkdirSync 'cache'
+      s = fs.readFileSync f, 'utf8'
+      if /\.coffee$/.test f then log "compiling #{f}"; s = coffee.compile s, bare: 1
+      log "minifying #{f}"
+      s1 = uglify.minify(s, fromString: true, mangle: false).code
+      try fs.writeFileSync f1, s1 catch # ignore errors
+      log "  #{s.length} -> #{s1.length} bytes"
+    else
+      s = fs.readFileSync f1, 'utf8'
+    js += s + '\n'
   log "prepared js: #{js.length} bytes"
 do prepareCSS = ->
   css = cssFiles.map((f) -> fs.readFileSync f, 'utf8').join '\n'
