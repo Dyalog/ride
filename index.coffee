@@ -81,10 +81,11 @@ jQuery ($) ->
   layout = $('body').layout
     defaults: enableCursorHotkey: 0
     north: resizable: 0, togglerLength_closed: '100%', togglerTip_closed: 'Show Language Bar', spacing_open: 0
-    east:  spacing_closed: 0, size: '50%', resizable: 1, togglerClass: 'hidden', initClosed: true, togglerLength_open: 0
-    south: spacing_closed: 0, size: '50%', resizable: 1, togglerClass: 'hidden', initClosed: true, togglerLength_open: 0
-    center: onresize: -> (for x in [session, ed, db] then x.updateSize()); return
-
+    east:  spacing_closed: 0, size: '0%', resizable: 1, togglerLength_open: 0
+    south: spacing_closed: 0, size: '0%', resizable: 1, togglerLength_open: 0
+    center: onresize: -> (for x in [session, ed, db] then x.updateSize()); session.scrollCursorIntoView(); return
+  layout.close 'east';  layout.sizePane 'east', '50%'
+  layout.close 'south'; layout.sizePane 'south', '50%'
   session.updateSize()
 
   # language bar
