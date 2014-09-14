@@ -62,6 +62,7 @@ cssFiles.forEach (f) -> fs.watch f, prepareCSS
 ttf = fs.readFileSync 'apl385.ttf'
 
 app = express()
+app.disable 'x-powered-by'
 app.get '/',           (req, res) -> res.header('Content-Type', 'text/html'               ).send html
 app.get '/D.css',      (req, res) -> res.header('Content-Type', 'text/css'                ).send css
 app.get '/D.js',       (req, res) -> res.header('Content-Type', 'application/x-javascript').send js
