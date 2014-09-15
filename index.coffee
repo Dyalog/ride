@@ -59,6 +59,15 @@ jQuery ($) ->
       winInfos[token] = ed
     session.scrollCursorIntoView()
 
+  socket.on 'update', (name, text, token, bugger, breakpoints) ->
+    winInfos[token].name = name
+    winInfos[token].text = text
+    if bugger
+      db.open name, text, breakpoints
+    else
+      ed.open name, text, breakpoints
+    session.scrollCursorIntoView()
+
   socket.on 'close', (win) ->
     delete winInfos[win]
     if win == debuggerWin

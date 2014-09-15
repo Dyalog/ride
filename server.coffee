@@ -109,6 +109,9 @@ io.listen(server).on 'connection', (socket) ->
           when 'ReplyOpenWindow'
             bs = []; m.replace /<row>(\d+)<\/row><value>1<\/value>/g, (_, l) -> bs.push +l
             toBrowser 'open', b64d(getTag 'name', m), b64d(getTag 'text', m), +getTag('token', m), +getTag('bugger', m), bs
+          when 'ReplyUpdateWindow'
+            bs = []; m.replace /<row>(\d+)<\/row><value>1<\/value>/g, (_, l) -> bs.push +l
+            toBrowser 'update', b64d(getTag 'name', m), b64d(getTag 'text', m), +getTag('token', m), +getTag('bugger', m), bs
           when 'ReplyFocusWindow'   then toBrowser 'focus', +getTag 'win', m
           when 'ReplyCloseWindow'   then toBrowser 'close', +getTag 'win', m
           when 'ReplyGetAutoComplete'
