@@ -102,6 +102,7 @@ io.listen(server).on 'connection', (socket) ->
         switch (/^<(\w+)>/.exec m)?[1] or ''
           when 'ReplyConnect', 'ReplyNotAtInputPrompt', 'ReplyEdit', 'ReplySaveChanges', 'ReplySetLineAttributes' then ; # ignore
           when 'ReplyIdentify'      then toBrowser 'title', b64d getTag 'Project', m
+          when 'ReplyUpdateWsid'    then toBrowser 'title', b64d getTag 'wsid', m
           when 'ReplyExecute'       then toBrowser 'add', b64d getTag 'result', m
           when 'ReplyEchoInput'     then toBrowser 'add', b64d(getTag 'input', m) + '\n'
           when 'ReplyGetLog'        then toBrowser 'add', b64d getTag 'Log', m
