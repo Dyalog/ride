@@ -87,47 +87,55 @@ toInterpreter = (s) ->
 toInterpreter 'SupportedProtocols=1'
 toInterpreter 'UsingProtocol=1'
 
+cmd = (name, args) -> toInterpreter """<?xml version="1.0" encoding="utf-8"?><Command><cmd>#{name}</cmd><id>0</id><args><#{name}>#{args}</#{name}></args></Command>"""
+
+sockets = [] # list of socket.io connections to browsers
+
+toBrowser = (m...) ->
+  log 'to browser: ' + JSON.stringify(m)[..1000]
+  for socket in sockets then socket.emit m...
+  return
+
+queue = Buffer 0 # a buffer for data received from the server
+client.on 'data', (data) ->
+  queue = Buffer.concat [queue, data]
+  while queue.length >= 4 and (n = queue.readInt32BE 0) <= queue.length
+    m = '' + queue[8...n]; queue = queue[n..]
+    log 'from interpreter: ' + JSON.stringify(m)[..1000]
+    if !/^(?:SupportedProtocols|UsingProtocol)=1$/.test m # ignore these
+      switch (/^<(\w+)>/.exec m)?[1] or ''
+        when 'ReplyConnect', 'ReplyNotAtInputPrompt', 'ReplyEdit', 'ReplySaveChanges', 'ReplySetLineAttributes' then ; # ignore
+        when 'ReplyIdentify'      then toBrowser 'title', b64d getTag 'Project', m
+        when 'ReplyUpdateWsid'    then toBrowser 'title', b64d getTag 'wsid', m
+        when 'ReplyExecute'       then toBrowser 'add', b64d getTag 'result', m
+        when 'ReplyEchoInput'     then toBrowser 'add', b64d(getTag 'input', m) + '\n'
+        when 'ReplyGetLog'        then toBrowser 'set', b64d getTag 'Log', m
+        when 'ReplyAtInputPrompt' then toBrowser 'prompt'
+        when 'ReplyOpenWindow'
+          bs = []; m.replace /<row>(\d+)<\/row><value>1<\/value>/g, (_, l) -> bs.push +l
+          toBrowser 'open', b64d(getTag 'name', m), b64d(getTag 'text', m), +getTag('token', m), +getTag('bugger', m), bs
+        when 'ReplyUpdateWindow'
+          bs = []; m.replace /<row>(\d+)<\/row><value>1<\/value>/g, (_, l) -> bs.push +l
+          toBrowser 'update', b64d(getTag 'name', m), b64d(getTag 'text', m), +getTag('token', m), +getTag('bugger', m), bs
+        when 'ReplyFocusWindow'   then toBrowser 'focus', +getTag 'win', m
+        when 'ReplyCloseWindow'   then toBrowser 'close', +getTag 'win', m
+        when 'ReplyGetAutoComplete'
+          o = b64d getTag 'options', m
+          toBrowser 'autocomplete', +getTag('token', m), +getTag('skip', m), (if o then o.split '\n' else [])
+        when 'ReplyHighlightLine' then toBrowser 'highlight', +getTag('win', m), +getTag 'line', m
+        else log 'unrecognised'; toBrowser 'unrecognised', m
+  return
+
+rm = (a, x) -> i = a.indexOf x; (if i != -1 then a.splice i, 1); return
+
 io.listen(server).on 'connection', (socket) ->
   log 'browser connected'
-
-  toBrowser = (m...) -> log 'to browser: ' + JSON.stringify(m)[..1000]; socket.emit m...
-
-  q = Buffer 0 # a buffer for data received from the server
-  client.on 'data', (data) ->
-    q = Buffer.concat [q, data]
-    while q.length >= 4 and (n = q.readInt32BE 0) <= q.length
-      m = '' + q[8...n]; q = q[n..]
-      log 'from interpreter: ' + JSON.stringify(m)[..1000]
-      if !/^(?:SupportedProtocols|UsingProtocol)=1$/.test m # ignore these
-        switch (/^<(\w+)>/.exec m)?[1] or ''
-          when 'ReplyConnect', 'ReplyNotAtInputPrompt', 'ReplyEdit', 'ReplySaveChanges', 'ReplySetLineAttributes' then ; # ignore
-          when 'ReplyIdentify'      then toBrowser 'title', b64d getTag 'Project', m
-          when 'ReplyUpdateWsid'    then toBrowser 'title', b64d getTag 'wsid', m
-          when 'ReplyExecute'       then toBrowser 'add', b64d getTag 'result', m
-          when 'ReplyEchoInput'     then toBrowser 'add', b64d(getTag 'input', m) + '\n'
-          when 'ReplyGetLog'        then toBrowser 'set', b64d getTag 'Log', m
-          when 'ReplyAtInputPrompt' then toBrowser 'prompt'
-          when 'ReplyOpenWindow'
-            bs = []; m.replace /<row>(\d+)<\/row><value>1<\/value>/g, (_, l) -> bs.push +l
-            toBrowser 'open', b64d(getTag 'name', m), b64d(getTag 'text', m), +getTag('token', m), +getTag('bugger', m), bs
-          when 'ReplyUpdateWindow'
-            bs = []; m.replace /<row>(\d+)<\/row><value>1<\/value>/g, (_, l) -> bs.push +l
-            toBrowser 'update', b64d(getTag 'name', m), b64d(getTag 'text', m), +getTag('token', m), +getTag('bugger', m), bs
-          when 'ReplyFocusWindow'   then toBrowser 'focus', +getTag 'win', m
-          when 'ReplyCloseWindow'   then toBrowser 'close', +getTag 'win', m
-          when 'ReplyGetAutoComplete'
-            o = b64d getTag 'options', m
-            toBrowser 'autocomplete', +getTag('token', m), +getTag('skip', m), (if o then o.split '\n' else [])
-          when 'ReplyHighlightLine' then toBrowser 'highlight', +getTag('win', m), +getTag 'line', m
-          else log 'unrecognised'; toBrowser 'unrecognised', m
-    return
+  sockets.push socket
 
   onevent = socket.onevent
   socket.onevent = (packet) ->
     log 'from browser: ' + JSON.stringify(packet.data)[..1000]
     onevent.apply socket, [packet]
-
-  cmd = (name, args) -> toInterpreter """<?xml version="1.0" encoding="utf-8"?><Command><cmd>#{name}</cmd><id>0</id><args><#{name}>#{args}</#{name}></args></Command>"""
 
   socket.on 'exec', (s, trace) -> cmd 'Execute', "<Text>#{b64 s}</Text><Trace>#{+!!trace}</Trace>"
   socket.on 'edit', (text, pos) -> cmd 'Edit', "<Text>#{b64 text}</Text><Pos>#{pos}</Pos><Win>0</Win>"
@@ -164,5 +172,5 @@ io.listen(server).on 'connection', (socket) ->
   cmd 'Connect', '<Token />'
   cmd 'GetWindowLayout', ''
 
-  client.on 'end', -> log 'interpreter disconnected'; socket.emit 'end'
-  socket.on 'disconnect', -> log 'browser disconnected'
+  client.on 'end', -> log 'interpreter disconnected'; socket.emit 'end'; rm sockets, socket; return
+  socket.on 'disconnect', -> log 'browser disconnected'; rm sockets, socket; return
