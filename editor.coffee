@@ -106,7 +106,7 @@ DyalogEditor = (e, opts = {}) ->
   $('.b-interrupt',  $tb).click -> opts.interrupt?()
   $('.b-cutback',    $tb).click -> opts.cutback?()
 
-  $('.b-line-numbers', $tb).click -> cm.setOption 'lineNumbers', b = !cm.getOption 'lineNumbers'; $(@).toggleClass 'pressed', !b; false
+  $('.b-line-numbers', $tb).click -> cm.setOption 'lineNumbers', b = !cm.getOption 'lineNumbers'; $(@).toggleClass 'pressed', b; false
   $('.b-save', $tb).click -> saveAndClose(); false
 
   $('.b-comment', $tb).click ->
