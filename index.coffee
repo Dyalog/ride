@@ -40,6 +40,7 @@ jQuery ($) ->
 
   socket.on 'title', (s) -> $('title').text s
   socket.on 'add', (s) -> session.add s
+  socket.on 'set', (s) -> session.set s
   socket.on 'prompt', -> session.prompt()
   socket.on 'focus', (win) -> if win == debuggerWin then db.focus() else if win then ed.focus() else session.focus()
 

@@ -105,7 +105,7 @@ io.listen(server).on 'connection', (socket) ->
           when 'ReplyUpdateWsid'    then toBrowser 'title', b64d getTag 'wsid', m
           when 'ReplyExecute'       then toBrowser 'add', b64d getTag 'result', m
           when 'ReplyEchoInput'     then toBrowser 'add', b64d(getTag 'input', m) + '\n'
-          when 'ReplyGetLog'        then toBrowser 'add', b64d getTag 'Log', m
+          when 'ReplyGetLog'        then toBrowser 'set', b64d getTag 'Log', m
           when 'ReplyAtInputPrompt' then toBrowser 'prompt'
           when 'ReplyOpenWindow'
             bs = []; m.replace /<row>(\d+)<\/row><value>1<\/value>/g, (_, l) -> bs.push +l
