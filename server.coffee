@@ -115,7 +115,7 @@ io.listen(server).on 'connection', (socket) ->
             o = b64d getTag 'options', m
             toBrowser 'autocomplete', +getTag('token', m), +getTag('skip', m), (if o then o.split '\n' else [])
           when 'ReplyHighlightLine' then toBrowser 'highlight', +getTag('win', m), +getTag 'line', m
-          else log 'unrecognised'
+          else log 'unrecognised'; toBrowser 'unrecognised', m
     return
 
   onevent = socket.onevent
