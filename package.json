@@ -1,4 +1,5 @@
 {
+	"repository": ".",
 	"dependencies": {
 		"coffee-script": "1.7.1",
 		"express": "4.8.5",
