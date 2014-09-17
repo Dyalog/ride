@@ -88,6 +88,8 @@ jQuery ($) ->
     if win == editorWin then ed.highlight line
     else if win == debuggerWin then db.highlight line
 
+  socket.on 'end', -> alert 'Interpreter disconnected'
+
   layout = $('body').layout
     defaults: enableCursorHotkey: 0
     north: resizable: 0, togglerLength_closed: '100%', togglerTip_closed: 'Show Language Bar', spacing_open: 0
