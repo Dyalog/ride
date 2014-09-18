@@ -53,11 +53,11 @@ DyalogEditor = (e, opts = {}) ->
   )
 
   cm = CodeMirror $e.find('.cm')[0],
-    lineNumbers: !opts.debugger
+    lineNumbers: true
     firstLineNumber: 0
     lineNumberFormatter: (i) -> "[#{i}]"
     readOnly: !!opts.debugger
-    gutters: ['CodeMirror-linenumbers', 'breakpoints']
+    gutters: ['breakpoints', 'CodeMirror-linenumbers']
     extraKeys:
       'Enter': -> if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'
       'Esc': saveAndClose = ->
@@ -79,6 +79,8 @@ DyalogEditor = (e, opts = {}) ->
           h1 = h.replace ///;#{name}(;|$)///, '$1'
           cm.replaceRange (if h == h1 then h1 += ';' + name else h1),
             {line: 0, ch: 0}, {line: 0, ch: h.length}, 'Dyalog'
+
+  setTimeout (-> cm.setOption 'lineNumbers', !opts.debugger), 1
 
   createBreakpointElement = -> $('<div class="breakpoint">●</div>')[0]
   breakpoints = {}
