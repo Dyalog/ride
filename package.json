@@ -4,7 +4,7 @@
 		"coffee-script": "1.7.1",
 		"express": "4.8.5",
 		"jquery": "2.1.1",
-		"codemirror": "4.5.0",
+		"codemirror": "4.6.0",
 		"socket.io": "1.0.6",
 		"uglify-js": "2.4.15"
 	}
