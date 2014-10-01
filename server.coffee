@@ -31,13 +31,17 @@ b64d = (s) -> '' + Buffer s, 'base64'
 getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exec xml)?[1]
 
 # preload files into memory so we can serve them faster
-html = css = js = ''
-do prepareHTML = ->
+
+html = ''
+do preloadHTML = ->
   html = fs.readFileSync('index.html', 'utf8')
     .replace /<!--\s*include\s+(\S+)\s*-->/g, (_, f) ->
       fs.readFileSync f, 'utf8'
-  log "prepared html: #{html.length} bytes"
-do prepareJS = ->
+  log "preloaded html: #{html.length} bytes"
+fs.watch 'index.html', preloadHTML
+
+js = ''
+do preloadJS = ->
   js = ''
   for f in jsFiles
     f1 = "cache/#{f.replace /\//g, '_'}.uglified"
@@ -49,16 +53,19 @@ do prepareJS = ->
       s1 = uglify.minify(s, fromString: true, mangle: false).code
       try fs.writeFileSync f1, s1 catch # ignore errors
       log "  #{s.length} -> #{s1.length} bytes"
+      s = s1
     else
       s = fs.readFileSync f1, 'utf8'
     js += s + '\n'
-  log "prepared js: #{js.length} bytes"
-do prepareCSS = ->
+  log "preloaded js: #{js.length} bytes"
+jsFiles.forEach (f) -> fs.watch f, preloadJS
+
+css = ''
+do preloadCSS = ->
   css = cssFiles.map((f) -> fs.readFileSync f, 'utf8').join '\n'
-  log "prepared css: #{css.length} bytes"
-fs.watch 'index.html', prepareHTML
-jsFiles.forEach (f) -> fs.watch f, prepareJS
-cssFiles.forEach (f) -> fs.watch f, prepareCSS
+  log "preloaded css: #{css.length} bytes"
+cssFiles.forEach (f) -> fs.watch f, preloadCSS
+
 ttf = fs.readFileSync 'apl385.ttf'
 ico = fs.readFileSync 'favicon.ico'
 
