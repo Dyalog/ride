@@ -9,7 +9,7 @@ a web interface to the Dyalog interpreter
 Usage
 =====
 
-* Install [NodeJS](http://nodejs.org/download/).  If using a package manager such as `apt` or `yum`, you may want to search for a `nodejs` package there.  If using `yum`, make sure to also install `npm`, it's in a separate package.
+* Install [NodeJS](http://nodejs.org/download/).  If using a package manager such as `apt` or `yum`, you may want to search for a `nodejs` package there, but please make sure it's no older than v0.10.25.  If using `yum`, you need to install `npm` as well, it's in a separate package.
 * If using Windows, do: `mkdir C:\Users\%USERNAME%\AppData\Roaming\npm` after installing Node.  This is to work around [a known problem](https://stackoverflow.com/questions/25093276/nodejs-windows-error-enoent-stat-c-users-rt-appdata-roaming-npm).
 * Clone this repository: `git clone https://github.com/Dyalog/RideJS.git` and `cd RideJS`
 * Install dependencies: `npm install`.  This only creates a local `node_modules` directory.  No system files are installed.
