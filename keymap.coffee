@@ -4,7 +4,7 @@ do ->
     "'`'": (cm) -> cm.setOption 'keyMap', 'dyalogBackquote'
     F1: (cm) ->
       c = cm.getCursor(); s = cm.getLine c.line
-      x = s[s[...c.ch].replace(/.[áa-z]*$/i, '').length..].replace /^(\)[a-z]+|⎕[áa-z]*|.).*$/i, '$1'
+      x = s[s[...c.ch].replace(/.[áa-z]*$/i, '').length..].replace(/^(\)[a-z]+|⎕[áa-z]*|.).*$/i, '$1').toLowerCase()
       if u = helpURLs[x]
         w = screen.width; h = screen.height
         open "help/#{u}.html", 'help',
