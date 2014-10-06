@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Method 556</tt>SetMethodInfo</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/ocxclass.html">OCXClass</a></td><td class="SpacedPlain"><a href="../objects/oleclient.html">OLEClient</a></td></tr></table><p class="Bold">Description</p><p>This method is used to redefine the arguments or data types associated with a method that is exported by a COM object. SetMethodInfo is used to override the information provided by the object's Type Library.</p><p>The argument to SetMethodInfo is a 2 or 3-element array as follows:</p><table><tr><td><tt>[1]</tt></td><td> Method name</td><td>character vector</td></tr><tr><td><tt>[2]</tt></td><td> Method info</td><td>nested vector (see below)</td></tr><tr><td><tt>[3]</tt></td><td> Method index</td><td>integer</td></tr></table><p>If you wish to describe the method completely, the structure of <span class="Italic">Method info</span> should be identical to the structure returned by GetMethodInfo, although abbreviated formats are also allowed.</p><p>If the object exports the method directly, and not through the standard IDispatch interface, you must also specify <span class="Italic">Method Index</span>, which is the index of the method in the object's virtual table (vtable). This information may be available in printed documentation or in a C-language header file.</p><p>For example, the InchesToPoint method exported by <span class="Italic">Excel.Application</span> takes a single argument whose name is <span class="Italic">Arg1</span> and whose data type is VT_R8. The function returns a result of the same data type. The details provided in the <span class="Italic">Excel.Application</span> Type Library are in fact correct, but if you wanted to redefine them, the following statements could be used to describe the InchesToPoints method.</p><pre>      'EX' ⎕WC 'OLEClient' 'Excel.Application' ('AutoBrowse' 0)
+
+      methodinfo← ('' 'VT_R8')('Arg1' 'VT_R8')
+      EX.SetMethodInfo 'InchesToPoints' methodinfo</pre><p>Note that the structure of variable <tt>methodinfo</tt> is identical to the result of the GetMethodInfo method.</p><pre>      DISPLAY methodinfo
+.→-----------------------------------.
+| .→------------. .→---------------. |
+| | .⊖. .→----. | | .→---. .→----. | |
+| | | | |VT_R8| | | |Arg1| |VT_R8| | |
+| | '-' '-----' | | '----' '-----' | |
+| '∊------------' '∊---------------' |
+'∊-----------------------------------'
+
+      DISPLAY EX.GetMethodInfo 'InchesToPoints'
+.→-----------------------------------.
+| .→------------. .→---------------. |
+| | .⊖. .→----. | | .→---. .→----. | |
+| | | | |VT_R8| | | |Arg1| |VT_R8| | |
+| | '-' '-----' | | '----' '-----' | |
+| '∊------------' '∊---------------' |
+'∊-----------------------------------'</pre><p>Unless you are going to call the method using the names of its arguments, these names are clearly superfluous and may be omitted, for example:</p><pre>      methodinfo← 'VT_R8' 'VT_R8'
+      EX.SetMethodInfo 'InchesToPoints' methodinfo </pre></body>
+</html>

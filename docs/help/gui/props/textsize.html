@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Property</tt>TextSize</h2><p class="Bold"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Applies To</a></span></p><p class="Bold">Description</p><p>This property has been replaced by the <a href="../methodorevents/gettextsize.html">GetTextSize</a> method, which should be used instead. TextSize is retained only for compatibility with previous versions of Dyalog APL.</p><p>TextSize is a "read-only" property that reports the size of the bounding rectangle of a text item in a given font. The result is given in the co-ordinate system of the object in question. This property is useful for positioning <a href="../objects/text.html">Text</a> objects.</p><p>When you query TextSize you give the text item in whose size you are interested and, optionally, the name of a <a href="../objects/font.html">Font</a> object. The text item may be a simple scalar, a vector or a matrix. If the <a href="../objects/font.html">Font</a> is omitted, the result is given using the current font for the object in question. When you query TextSize on its own, you must enclose the argument to <a href="../../lang/sysfns/wg.html"><tt>⎕WG</tt></a>. This is because APL would otherwise not be able to distinguish between the text string and font name associated with <tt>'TextSize'</tt> and other properties with the same name as these items.</p><h4>Examples:</h4><pre>      '.' ⎕WG ⊂'TextSize' 'Hello World'
+2.666666746 9.625
+
+      'FNT1' ⎕WC 'FontObj' 'Arial' 72
+      '.' ⎕WG ⊂'TextSize' 'Hello World' 'FNT1'
+12 41.875
+
+      '.' ⎕WS 'Coord' 'Pixel'
+      '.' ⎕WG ('TextSize' (3 11⍴'Hello World')) 'Coord'
+39 55  Pixel</pre></body>
+</html>

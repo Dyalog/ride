@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="Web_Server"></a>Writing a Web Server</h2><p>A sample Web server is provided in the <tt>SERVER</tt> namespace in the workspace <span class="Code">samples\tcpip\www.dws</span>. This is a deliberately over-simplified example to illustrate the principles involved. It is capable of handling concurrent connections from several clients, but (for simplicity) does not use multi-threading. </p><p>The main function is <tt>SERVER.RUN</tt> which is niladic and initialises the APL Web server using your default IP Address and port number 81.</p><p>To use the server, you must start a Web browser such as Firefox or Microsoft Internet Explorer. You may do this on another PC on your network or on your own PC. If so, you will probably find it most convenient to position your Dyalog APL Session Window and your browser window alongside one another.</p><p>To connect to the server, simply enter your user name (or your IP address, or "127.0.0.1" or “localhost”) followed by 81 in the appropriate field in your browser, and then press Enter. For example:</p><p>http://localhost:81</p><p>When you press Enter, your browser will try to connect with a server whose IP address is your IP address and whose port number is 81; in short, the APL server. Upon connection, the following messages (but with different IP addresses) will appear  in your Session window:</p><pre>      SERVER.RUN
+Connected to 193.32.236.22
+URL Requested:
+Connected to 193.32.236.22
+URL Requested: images/dyalog.gif</pre><p>and the Dyalog APL home page will appear  in your browser. This has in fact been supplied by your APL server.</p><p>The functions in the <tt>SERVER</tt> namespace are as follows:</p><table><tr><td><tt>RUN</tt></td><td>user function to initiate an APL Web server</td></tr><tr><td><tt>ACCEPT</tt></td><td>callback which handles client connections</td></tr><tr><td><tt>RECEIVE</tt></td><td>callback which handles client commands</td></tr><tr><td><tt>ERROR</tt></td><td>callback which handles errors</td></tr></table><h4><a name="RUN"></a>The RUN function</h4><pre>     ∇ RUN;CALLBACKS
+[1]    ⎕EX↑'TCPSocket'⎕WN''
+[2]    CALLBACKS←⊂('Event' 'TCPAccept' 'ACCEPT')
+[3]    CALLBACKS,←⊂('Event' 'TCPRecv' 'RECEIVE')
+[4]    CALLBACKS,←⊂('Event' 'TCPError' 'ERROR')
+[5]    COUNT←0
+[6]    'S0'⎕WC'TCPSocket' '' 81,CALLBACKS
+     ∇</pre><p><tt>RUN[1]</tt>expunges all TCPSocket objects that may be already defined. This is intended only to clear up after a potential error.</p><p><tt>RUN[2-4]</tt>set up a variable <tt>CALLBACKS</tt> which associates various functions with various events.</p><p><tt>RUN[5]</tt>initialises a variable <tt>COUNT</tt> which will be incremented and used to name new TCPSocket objects as each client connects. <tt>COUNT</tt> is global within the <tt>SERVER</tt> namespace.</p><p><tt>RUN[6]</tt>creates the first TCPSocket server using your default IP address and port number 81.</p><p>Once the server has been initiated, the next stage of the process is that a client makes a connection.  This is handled by the <tt>ACCEPT</tt> callback function.</p><h4><a name="ACCEPT"></a>The ACCEPT callback function</h4><pre class="APLCodeSmall">     ∇ ACCEPT MSG;EV
+[1]    COUNT←COUNT+1
+[2]    EV←'Event'((⊃MSG)⎕WG'Event')
+[3]    ('S',⍕COUNT)⎕WC'TCPSocket'('SocketNumber'(3⊃MSG))EV
+[4]    ⎕CS⊃MSG
+[5]    'Connected to ',(⎕WG'RemoteAddr')
+[6]    BUFFER←⎕AV[4 3]
+     ∇</pre><p>The <tt>ACCEPT</tt> function is invoked when the TCPAccept event occurs. This happens when a client connects to the server.</p><p>Its argument <tt>MSG</tt> , supplied by APL, is a 3-element vector containing:</p><table><tr><td class="DyalogPlain">MSG[1]</td><td>The name of the TCPSocket object</td></tr><tr><td class="DyalogPlain">MSG[2]</td><td>The name of the event ('<tt>TCPAccept'</tt>)</td></tr><tr><td class="DyalogPlain">MSG[3]</td><td>The socket handle for the original listening socket</td></tr></table><p><tt>ACCEPT[1]</tt>increments the <tt>COUNT</tt> variable. This variable is global to the <tt>SERVER</tt> namespace and was initialised by the <tt>RUN</tt> function.</p><p><tt>ACCEPT[3]</tt>makes a new TCPSocket object called Sxx, where xx is the new value of <tt>COUNT</tt>. By specifying the socket handle of the original listening socket as the value of the SocketNumber property for the new object, this effectively clones the listening socket. For further discussion of this topic, see Serving Multiple Clients.</p><p><tt>ACCEPT[4]</tt>changes to the namespace of the TCPSocket object, that is now connected to a client.</p><p><tt>ACCEPT[5]</tt>displays the message <tt>Connected to xxx.xxx.xxx.xxx</tt>, the IP address of the client, which is obtained from the value of the RemoteAddr property.</p><p><tt>ACCEPT[6]</tt>initialises a variable <tt>BUFFER</tt> to <tt>⎕AV[4 3]</tt> (CR,LF). This variable is global to the <tt>SERVER</tt> namespace and is used by the <tt>RECEIVE</tt> callback function to accumulate the command that is transmitted by the client. This happens next.</p><h4><a name="RECEIVE"></a>The RECEIVE callback function</h4><pre class="APLCodeSmall">     ∇ RECEIVE MSG;CMD;OLD;URL;FILE;DATA
+[1]    OLD←⎕CS⊃MSG
+[2]    BUFFER,←3⊃MSG
+[3]    :If ⎕AV[4 3 4 3]≢¯4↑BUFFER ⍝ Have we all?
+[4]        :Return
+[5]    :EndIf
+[6]
+[7]    CMD←2↓¨(⎕AV[4 3]⍷BUFFER)⊂BUFFER
+[8]    CMD←⊃CMD ⍝ Ignore everything except client request
+[9]    ⎕CS OLD
+[10]   :If 'GET /'≡5↑CMD
+[11]       URL←5↓CMD
+[12]       URL←(¯1+URL⍳' ')↑URL
+[13]       ⎕←'URL Requested: ',URL
+[14]       :If 0=⍴URL ⋄ URL←'index.htm' ⋄ :EndIf
+[15]       URL←(-'.html'≡¯5↑URL)↓URL
+[16]       FILE←(2 ⎕NQ'.' 'GetEnvironment') 'Dyalog'
+[17]       FILE,←HOME,URL
+[18]       DATA←GETFILE FILE
+[19]       DATA,←(0&lt;⍴DATA)/’File not found’
+[20]       2 ⎕NQ(⊃MSG)'TCPSend'DATA
+[21]   :EndIf
+[22]   
+[23]   :If 9=⎕NC⊃MSG ⋄ (⊃MSG)⎕WS'TargetState' 'Closed' ⋄ :EndIf
+[24]   :If 9=⎕NC⊃MSG ⋄ ⎕DQ⊃MSG ⋄ :EndIf
+     ∇</pre><p>The <tt>RECEIVE</tt> function is invoked whenever a TCPRecv event occurs. This happens when a data packet is received from a client</p><p>Its argument <tt>MSG</tt> , supplied by APL, is a 3-element vector containing:</p><table><tr><td class="DyalogPlain">MSG[1]</td><td>The name of the TCPSocket object</td></tr><tr><td class="DyalogPlain">MSG[2]</td><td>The name of the event ('<tt>TCPRecv'</tt>)</td></tr><tr><td class="DyalogPlain">MSG[3]</td><td>The data</td></tr></table><p><tt>RECEIVE[1]</tt>changes to the namespace of the TCPSocket object. The name of the current namespace is stored in the local variable <tt>OLD</tt>.</p><p><tt>RECEIVE[2]</tt>catenates the newly received data packet to the <tt>BUFFER</tt> variable that is encapsulated in the TCPSocket object and was initialised by the <tt>ACCEPT</tt> function.</p><p><tt>RECEIVE[3-5]</tt>tests whether or not all of the command sent by the client has been received. This is true only if the last 4 characters of <tt>BUFFER</tt> are CR,LF,CR,LF. If there is more data to come, <tt>RECEIVE</tt> exits; otherwise it goes on to process the command.</p><p><tt>RECEIVE[7-8]</tt>splits the command into sub-strings and then discards all but the first one.</p><p><tt>RECEIVE[9]</tt>changes back into the <tt>SERVER</tt> namespace</p><p><tt>RECEIVE[10-11]</tt>parses the client request for a URL. For the sake of simplicity, the request is assumed to begin with the string <tt>'GET /'</tt>. If not, the request is ignored.</p><p><tt>RECEIVE[12]</tt>removes all trailing information that might be supplied by the browser after the URL.</p><p><tt>RECEIVE[14]</tt>checks for a request for an empty URL (which equates to the home page). If so, it substitutes <tt>index.htm</tt> which is the name of the file containing the home page.</p><p><tt>RECEIVE[15]</tt>drops the file extension of the URL if <tt>.html</tt> to <tt>.htm</tt> if required.</p><p><tt>RECEIVE[16]</tt>sets the value of local variable <tt>FILE</tt> to the name of the directory in which Dyalog APL is installed.</p><p><tt>RECEIVE[17]</tt>appends the path-name of the sub-directory <tt>\help</tt> and the name of the URL. <tt>FILE</tt> now contains the full path-name of the requested web page file.</p><p><tt>RECEIVE[18]</tt>uses the utility function <tt>GETFILE</tt> to read the contents of the file into the local variable <tt>DATA</tt>.</p><p><tt>RECEIVE[19]</tt>checks that the result of <tt>GETFILE</tt> was not empty and if so, appends an appropriate message. This would be the case if the file did not exist.</p><p><tt>RECEIVE[20]</tt>uses TCPSend to transmit the contents of the file to the browser.</p><p><tt>RECEIVE[23-24]</tt>closes the TCPSocket object. This is a fundamental part of the HTTP protocol because when the client socket subsequently gets closed, it knows that all of the data transmitted by the server has been received. Notice that the function does not simply expunge the socket which could result in loss of yet untransmitted data. Instead, it closes the socket by setting its TargetState property to <tt>'Closed'</tt>, and then (if necessary) waiting. Once all the buffered data has been transmitted, the socket will be closed and the TCPSocket object will disappear. This causes the <tt>⎕DQ</tt> to terminate.</p><p>For further information on WWW protocol, see the<span class="Italic"> Introduction</span> to this chapter.</p></body>
+</html>

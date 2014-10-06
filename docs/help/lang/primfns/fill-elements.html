@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="_Toc289343226"></a>Fill Elements</h2><p>Some primitive functions may include fill elements in their result.  The fill element for an array is the enclosed type of the disclose of the array (<tt>⊂∊⊃Y</tt> for array <tt>Y</tt>).  The Type function (<tt>∊</tt>) replaces a numeric value with zero and a character value with <tt>' '</tt>.</p><p>The Disclose function (<tt>⊃</tt>) returns the first item of an array.  If the array is empty, <tt>⊃Y</tt> is the PROTOTYPE of <tt>Y</tt>.  The prototype is the type of the first element of the original array.</p><p>Primitive functions which may return an array including fill elements are Expand (<tt>\</tt> or <tt>⍀</tt>), Replicate (<tt>/</tt> or <tt>⌿</tt>), Reshape (<tt>⍴</tt>) and Take (<tt>↑</tt>).</p><h4>Examples</h4><pre>      ∊⍳5
+0 0 0 0 0
+ 
+      ∊⊃(⍳3)('ABC')
+0 0 0
+ 
+      ⊂∊⊃(⍳3)('ABC')
+ 0 0 0
+ 
+      ⊂∊⊃⊂(⍳3)('ABC')
+  0 0 0
+ 
+      A←'ABC' (1 2 3)
+      A←0⍴A
+      ⊂∊⊃A
+ 
+      ' '=⊂∊⊃A
+ 1 1 1</pre><p> </p></body>
+</html>

@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>⎕SHADOW Y</tt>Shadow Name </h2><p><tt>Y</tt> must be a simple character scalar, vector or matrix identifying one or more APL names.  For a vector <tt>Y</tt>, names are separated by one or more blanks.  For a matrix <tt>Y</tt>, each row is taken to be a single name.</p><p>Each valid name in <tt>Y</tt> is shadowed in the most recently invoked defined function or operator, as though it were included in the list of local names in the function or operator header.  The class of the name becomes 0 (undefined).  The name ceases to be shadowed when execution of the shadowing function or operator is completed.  Shadow has no effect when the state indicator is empty.</p><p>If a name is ill-formed, or if it is the name of a system constant or system function, <tt>DOMAIN ERROR</tt> is reported.</p><p>If the name of a top-level GUI object is shadowed, it is made inactive.</p><h4>Example</h4><pre>      ⎕VR'RUN'
+     ∇ NAME RUN FN
+[1]   ⍝ Runs function named &lt;NAME&gt; defined
+[2]   ⍝ from representation form &lt;FN&gt;
+[3]    ⎕SHADOW NAME
+[4]    ⍎⎕FX FN
+     ∇
+ 
+      0 ⎕STOP 'RUN' ⍝ stop prior RUN exiting
+ 
+      'FOO' RUN 'R←FOO' 'R←10'
+10
+ 
+RUN[0]
+ 
+      )SINL
+#.RUN[0]*       FOO     FN      NAME
+ 
+      →⎕LC
+ 
+      FOO
+VALUE ERROR
+      FOO
+      ^</pre></body>
+</html>

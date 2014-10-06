@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←X⊤Y</tt>Encode</h2><p><tt>Y</tt> must be a simple numeric array.  <tt>X</tt> must be a simple numeric array.  <tt>R</tt> is the numeric array which results from the representation of <tt>Y</tt> in the number system defined by <tt>X</tt>.</p><p>The shape of <tt>R</tt> is <tt>(⍴X),⍴Y</tt> (the catenation of the shapes of <tt>X</tt> and <tt>Y</tt>).</p><p>If <tt>X</tt> is a vector or a scalar, the result for each element of <tt>Y</tt> is the value of the element expressed in the number system defined by radix <tt>X</tt>.  If <tt>Y</tt> is greater than can be expressed in the number system, the result is equal to the representation of the residue <tt>(×/X)|Y</tt>.  If the first element of <tt>X</tt> is 0, the value will be fully represented.</p><p>This function is also known as Representation.</p><h4>Examples</h4><pre>      10⊤5 15 125
+5 5 5
+ 
+      0 10⊤5 15 125
+0 1 12
+5 5  5</pre><p>If <tt>X</tt> is a higher-rank array, each of the vectors along the first axis of <tt>X</tt> is used as the radix vector for each element of <tt>Y</tt>.</p><h4>Examples</h4><pre>      A
+2 0  0
+2 0  0
+2 0  0
+2 0  0
+2 8  0
+2 8  0
+2 8 16
+2 8 16
+ 
+      A⊤75
+0 0  0
+1 0  0
+0 0  0
+0 0  0
+1 0  0
+0 1  0
+1 1  4
+1 3 11</pre><p>The example shows binary, octal and hexadecimal representations of the decimal number 75.</p><h4>Examples</h4><pre>      0 1⊤1.25 10.5
+1    10
+0.25  0.5
+ 
+      4 13⊤13?52
+ 3 1 0  2 3 2 0 1  3 1 2 3 1
+12 2 4 12 1 7 6 3 10 1 0 3 8</pre></body>
+</html>

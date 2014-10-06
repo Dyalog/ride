@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../help.css"></head>
+<body><h2>Starting APL</h2><p>By default, to start the non-GUI versions of Dyalog APL, run the mapl script which is in the installation directory of Dyalog APL.</p><h4>Example:</h4><pre class="Code">$ /opt/mdyalog/<span class="TitlePageVersion">14.0</span>/64/unicode/mapl</pre><p>The mapl script is supplied so that the user can start to use Dyalog APL immediately once the terminal environment has been setup. However, it should be treated more as a template for creating a startup script more appropriate for the environment and purposes that Dyalog will be used for.</p><p>The startup script usually sets a number of environment variables, and then calls the interpreter with one or more of its parameters. Although all the examples are written using the Korn shell, any shell can be used.</p><p>Note that under Microsoft Windows parameters appear <span class="Italic">after</span> the name of the executable; this is not supported under UNIX, where values must be passed as environment variables.</p><p>The parameters are listed in the table below; the more frequently used environment variables are included in the following section.</p><p class="TableCaption"><span class="autonumber"><span>Table 64: </span></span>Parameters for the mapl script:</p><table><tr><th class="Left">Parameter                </th><th class="Left">Purpose
+                </th></tr><tr><td>-tty
+                </td><td>Start APL using the terminal development environment. This is not necessary unless the wine (-wine) or MainWin (-mainwin) versions are installed too.
+                </td></tr><tr><td><p class="NoIndent">-c</p><p class="NoIndent">-rt</p><p class="NoIndent">-server</p></td><td>Causes dyalog.rt (the server version) to be started. This parameter is for backwards compatibility; the use of the -rt or -server parameter is recommended. See also the Note at the bottom of this table.
+                </td></tr><tr><td>-*
+                </td><td>Any other parameter that starts with a "-" will be passed to the interpreter; all parameters that start with a "-" will be passed before any parameters that do not start with a "-".
+                </td></tr><tr><td>*
+                </td><td>This is usually the name of the workspace that is to be loaded when the interpreter is started. Unless the "-x" flag is passed to the interpreter, the latent expression in the workspace will be executed once the workspace has been loaded.
+                </td></tr></table><h4 class="Note">Note:</h4><ul class="Note"><li value="1">the -c parameter has different uses depending on whether it is passed to the mapl script, or to the dyalog executable.</li></ul><p class="TableCaption"><span class="autonumber"><span>Table 65: </span></span>Parameters for the Dyalog interpreter:</p><table><tr><th class="Left">Parameter                </th><th class="Left">Purpose
+                </th></tr><tr><td>-a
+                </td><td><p class="NoIndent">Start in "User mode". If not present, then APL will start in "Prog(rammer) mode".</p><p class="NoIndent">This refers to input translate tables, but is primarily meant for backwards compatibility. See the section on I/O for further details.</p></td></tr><tr><td>-b
+                </td><td>Suppress the banner in the session.
+                </td></tr><tr><td>-c
+                </td><td><p class="NoIndent">Comment: the "-c" and anything following it will be treated as a comment, but will show up in a long process listing. By adding a suitable comment the user or system administrator can uniquely identify the individual APL processes.</p><p class="NoIndent">See also the Note above this table.</p></td></tr><tr><td>-Dc</td><td>Check workspace integrity after every callback function.</td></tr><tr><td>-Dw</td><td>Check workspace integrity on return to session input.</td></tr><tr><td>-DW</td><td>Check workspace integrity after every line of APL (application will run slowly as a result)</td></tr><tr><td>-DK</td><td>Log session keystrokes in (binary) file <b>APLLOG</b>.</td></tr><tr><td>-q
+                </td><td>Continue to run even if an error causes a return to the six-space prompt. Used when redirecting input to the session from a pipe or file. If not used, then a return to the six-space prompt will result in a CONTINUE being generated, and the interpreter terminating.
+                </td></tr><tr><td>+q
+                </td><td>suppress this behaviour.
+                </td></tr><tr><td>-s
+                </td><td>Turn off the session: APL acts similarly to a scrolling terminal.
+                </td></tr><tr><td>+s
+                </td><td>forces APL to enable the session.
+                </td></tr><tr><td>-x
+                </td><td>Do not execute the latent expression of any workspace that is <tt>)LOAD</tt>ed or <tt>⎕load</tt>ed. This applies to every <tt>)load</tt> or <tt>⎕load</tt> during the life of the APL session.
+                </td></tr><tr><td>ws </td><td>This is assumed to be a workspace which will be loaded once the interpreter has started. Unless the -x parameter is included on the command line, the latent expression will be run immediately after the load has finished.
+                </td></tr></table><h4>Examples:</h4><pre class="Code">
+mapl dfns
+MAXWS=2G mapl dfns
+MAXWS=2G DEFAULT_IO=0 mapl -x dfns</pre></body>
+</html>

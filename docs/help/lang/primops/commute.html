@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←{X} f⍨Y</tt>Commute</h2><p><tt>f</tt> may be any dyadic function.  <tt>X</tt> and <tt>Y</tt> may be any arrays whose items are appropriate to function <tt>f</tt>.</p><p>The derived function is equivalent to <tt>YfX</tt>.  The derived function need not return a result.</p><p>If left argument <tt>X</tt> is omitted, the right argument <tt>Y</tt> is duplicated in its place, i.e.</p><pre>      f⍨Y ←→ Y f⍨Y</pre><h4>Examples</h4><pre>      N
+3 2 5 4 6 1 3
+ 
+      N/⍨2|N
+3 5 1 3
+
+      ⍴⍨3
+3 3 3
+
+
+      mean←+/∘(÷∘⍴⍨) ⍝ mean of a vector
+      mean ⍳10
+5.5</pre><p>The following statements are equivalent:</p><pre>      F/⍨←I
+      F←F/⍨I
+      F←I/F</pre><p>Commute often eliminates the need for parentheses</p></body>
+</html>

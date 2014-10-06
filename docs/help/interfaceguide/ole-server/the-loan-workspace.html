@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="LOAN_Workspace"></a>The LOAN Workspace</h2><p><tt>LOAN.DWS</tt> contains a single namespace called <tt>Loan</tt> which is used to calculate monthly repayments on a loan. As supplied, LOAN is a pure APL workspace. You will have to turn it into an OLE Server, and declare a method and a property, before you can use it.</p><p>The <tt>Loan</tt> namespace contains a single function <tt>CalcPayments</tt> and a variable <tt>PeriodType</tt>.</p><p>The <tt>CalcPayments</tt> function takes a 5-element numeric vector as an argument whose elements specify:</p><ol><li value="1">loan amount </li><li value="2">maximum number of periods for repayment</li><li value="3">minimum number of periods for repayment</li><li value="4">maximum annual interest rate </li><li value="5">minimum annual interest rate</li></ol><p><tt>CalcPayments</tt> also uses the "global" variable <tt>PeriodType</tt> which specifies whether the periods (above) are years or months.  This is done solely to illustrate how another application can manipulate an APL object via its variables (properties) as well as by calling its functions (methods).</p><p><tt>CalcPayments</tt> returns a matrix.  The first row contains the period numbers (from min to max).  The first column contains the interest rates (from min to max in steps of 0.5%). Other elements contain the monthly repayments for the corresponding number of periods and interest rates.</p><h4><a name="Using_CalcPayments"></a>Using CalcPayments</h4><p>The following session transcript illustrates how the <tt>CalcPayments</tt> function is used.</p><pre>      )LOAD LOAN
+C:\Dyalog101\samples\ole\LOAN saved ...
+ 
+      )OBS
+  Loan
+      )CS Loan
+#.Loan
+      )FNS
+CalcPayments
+      )VARS
+PeriodType</pre><p class="pagebreakafter"> </p><pre>
+      CalcPayments 10000 5 3 6 3
+0     3           4           5        
+3   290.8120963 221.3432699 179.6869066
+3.5 293.0207973 223.5600105 181.9174497
+4   295.2398501 225.7905464 184.1652206
+4.5 297.4692448 228.0348608 186.4301924
+5   299.708971  230.2929357 188.7123364
+5.5 301.959018  232.5647523 191.0116217
+6   304.2193745 234.8502905 193.3280153</pre><h4>The CalcPayments Function</h4><pre class="APLCodeSmall">[0]   PAYMENTS←CalcPayment;X;LoanAmt;LenMin;LenMa;IntrMin;IntrMax                           ;PERIODS;INTEREST;NI;NM;PER;INT
+[1]    ⍝ Calculates loan repayments
+[2]    ⍝ Argument X specifies:
+[3]         ⍝   LoanAmt     Loan amount
+[4]         ⍝   LenMax      Maximum loan period
+[5]         ⍝   LenMin      Minimum loan period
+[6]         ⍝   IntrMax     Maximum interest rate
+[7]         ⍝   IntrMin     Minimum interest rate
+[8]    ⍝ Also uses the following global variable
+[9]    ⍝   PeriodType  1 = years, 2 = months
+[10]
+[11]  LoanAmt LenMax LenMin IntrMax IntrMin←X
+[12]
+[13]  PER←PERIODS←¯1+LenMin+⍳1+LenMax-LenMin
+[14]  PERIODS←PERIODS×12 1[PeriodType]
+[15]  INT←INTEREST←0.5×¯1+(2×IntrMin)+⍳1+2×IntrMax-IntrMin
+[16]  INTEREST←INTEREST÷100×12 1[PeriodType]
+[17]
+[18]  NI←⍴INTEREST
+[19]  NM←⍴PERIODS
+[20]
+[21]  PAYMENTS←(LoanAmt)×((NI,NM)⍴NM/INTEREST)÷
+                         1-1÷(1+INTEREST)∘.*PERIODS
+[22]  PAYMENTS←PER,[1]PAYMENTS
+[23]  PAYMENTS←(0,INT),PAYMENTS</pre><h4><a name="Registering_Loan"></a>Registering Loan as an OLE Server</h4><p>To use this example, you <b>must</b> first </p><ol><li value="1">Convert the <tt>Loan</tt> namespace into an OLEServer object.</li><li value="2">Declare the COM properties for <tt>CalcPayments</tt> and <tt>PeriodType</tt>.</li><li value="3">Create an in-process or out-of-process server and register the Loan object on your system.</li></ol><p>Please perform the following steps:</p><p><tt>)LOAD</tt> the <tt>LOAN</tt> workspace from the <span class="Code">samples\ole</span> sub-directory</p><pre>      )LOAD SAMPLES\OLE\LOAN
+samples\ole\loan saved ...
+      )OBS
+Loan</pre><p>Execute the following statement to make <tt>Loan</tt> an OLEServer object:</p><pre>      Loan.⎕WC 'OLEServer'</pre><p>Now, using the COM Properties tab of the Properties dialog box, define the syntax and data types for the <tt>CalcPayments</tt> function and the <tt>PeriodType</tt> variable so that they are exported as a method and property respectively.</p><p><img src="../images/loan-calcpayments-props.png" /></p><p>The picture above shows the COM properties that are required to export function <tt>CalcPayments</tt> as a method. The function is declared to require 5 parameters of type VT_I4 (integers) and return a result of type VT_ARRAY of VT_R8 (an array of floating-point numbers). </p><p>The names you choose for the parameters will be visible in an object browser and certain other programming environments.</p><p><img src="../images/loan-periodtype-props.png" /></p><p>The picture above shows the COM properties to export variable <tt>PeriodType</tt> as a property. The property is declared to be of type VT_I4 (integer). </p><p>Rename and save the workspace to avoid overwriting the original:</p><pre>      )WSID MYLOAN
+was C:\Program Files\Dyalog\Dyalog APL 13.1 Unicode\Samples\ole\loan
+      )SAVE
+MYLOAN saved ...</pre><p>Finally, to create your OLE Server, choose <span class="Italic">Export</span> from the Session <span class="Name">File</span> menu and complete the <span class="Name">Create bound file</span> dialog box as shown below. In this case, the OLE Server is created as an in-process server, bound to the development version of the Dyalog APL DLL (because the <span class="Name">Runtime application</span> checkbox is cleared)</p><p><img src="../images/loan-create-bound-file.png" /></p><p>Note that appropriate information will be displayed in the Status window to inform you of the success (or failure) of the operation.</p><h4><a name="_Toc289344040"></a>Using Loan from Excel</h4><p>Start Excel and load the spreadsheet Loan.xls from the Dyalog APL sub-directory <span class="Code">samples\ole</span>.</p><p>The <span class="Italic">Payments</span> button fires a simple macro that uses the APL dyalog.Loan object to perform repayment calculations. To run the example enter data into the cells as shown below, then click <span class="Italic">Payments</span>. When you do so, Excel runs the Calc macro and this causes OLE to initialise the dyalog.Loan OLE Server</p><p>The Calc macro actually calculates the repayments matrix by calling the CalcPayments method in the dyalog.Loan object; i.e. it runs the <tt>CalcPayments</tt> function in the <tt>Loan</tt> namespace.</p><p><img src="../images/loan-excel-example-480x230.png" style="width: 480;height: 230;" /></p><h4 class="ExampleNewPage">How it Works</h4><pre class="Code">Sub Calc()
+    Dim APLLoan As Object
+    Dim Payments As Variant
+    Set APLLoan = CreateObject("dyalog.Loan")
+    LoanAmt = Cells(1, 3).Value
+    LenMax = Cells(2, 3).Value
+    LenMin = Cells(3, 3).Value
+    IntrMax = Cells(4, 3).Value
+    IntrMin = Cells(5, 3).Value
+    APLLoan.PeriodType = 1
+    Payments = APLLoan.CalcPayments(LoanAmt, LenMax,
+                           LenMin, IntrMax, IntrMin)
+    For r = 0 To UBound(Payments, 1)
+        For c = 0 To UBound(Payments, 2)
+            Cells(r + 1, c + 5).Value = Payments(r, c)
+        Next c
+    Next r
+End Sub</pre><p>The statement:</p><pre class="Code">Dim APLLoan As Object</pre><p>declares a (local) variable called <span class="Code">APLLoan</span> to be of type Object </p><p>The next statement:</p><pre class="Code">Set APLLoan = CreateObject("dyalog.Loan")</pre><p>creates an instance of dyalog.Loan associated with this variable.</p><p>Effectively, when the macro is run, Excel asks OLE to provide the external object called <span class="Italic">dyalog.Loan</span>.</p><p> If you exported <tt>Loan</tt> as an <span class="Italic">out-of-process</span> OLE Server, OLE starts the appropriate version (development or run-time) of Dyalog APL with your workspace <tt>MYLOAN</tt>. If you exported <tt>Loan</tt> as an<span class="Italic"> in-process</span> OLE Server, OLE loads MYLOAN.DLL into your Visual Basic application which in turn loads the appropriate Dyalog APL DLL. In either case, an instance of the <tt>Loan</tt> namespace is connected to the Excel macro as an Object.</p><p>The next statement to notice is:</p><pre class="Code">APLLoan.PeriodType = 1</pre><p>In Excel terms, this statement sets the PeriodType property of the APLLoan object to the value 1. What actually happens, is that the APL variable <tt>PeriodType</tt> in the corresponding running instance of the <tt>Loan</tt> namespace is set to 1.</p><p>Finally, the following statement:</p><pre class="Code">Payments = APLLoan.CalcPayments(LoanAmt, LenMax, LenMin,
+                                IntrMax, IntrMin)</pre><p>calls the APL function <tt>CalcPayments</tt> and receives the result.</p><p>In Excel terms, this statement invokes the CalcPayments method of the APLLoan object.  In practice, it calls the <tt>CalcPayments</tt> APL function with the specified argument and puts the result in the local variable Payments. Note that the conversion between the result of the function (a Dyalog APL floating-point matrix) and the corresponding Excel data type is performed automatically for you.</p><p>Notice that the APLLoan variable is local to the Calc macro. This means that the dyalog.Loan object is loaded every time that Calc is run and is unloaded when it terminates.</p><h4><a name="_Toc289344042"></a>Using Loan from Dyalog APL</h4><p>It is of course possible to use Dyalog APL as both an OLE Automation client and an OLE Automation Server.</p><p>To use the dyalog.Loan object, start Dyalog APL and then enter the following expressions in the Session window.</p><pre>      'LN'⎕WC'OLEClient' 'dyalog.Loan'
+      )OBS
+LN
+      )CS LN
+#.LN
+      )METHODS
+CalcPayments
+      )PROPS
+PeriodType
+ 
+      CalcPayments 10000 5 3 6 3
+0     3           4           5        
+3   290.8120963 221.3432699 179.6869066
+3.5 293.0207973 223.5600105 181.9174497
+4   295.2398501 225.7905464 184.1652206
+4.5 297.4692448 228.0348608 186.4301924
+5   299.708971  230.2929357 188.7123364
+5.5 301.959018  232.5647523 191.0116217
+6   304.2193745 234.8502905 193.3280153</pre><p>The statement:</p><pre>      'LN'⎕WC'OLEClient' 'dyalog.Loan'</pre><p>causes APL to ask OLE to provide the external object called <span class="Italic">dyalog.Loan</span>. This name will have been recorded in the registry by Dyalog APL when you saved the <tt>MYLOAN</tt> workspace. </p><p>If you exported <tt>Loan</tt> as an <span class="Italic">out-of-process</span> OLE Server, OLE starts a second Dyalog APL process (development or run-time) with your workspace <tt>MYLOAN</tt>. There are now two separate copies of Dyalog APL running; one is the client, the other the server.</p><p> If you exported <tt>Loan</tt> as an<span class="Italic"> in-process</span> OLE Server, OLE loads MYLOAN.DLL into the Dyalog APL program which in turn loads the appropriate Dyalog APL DLL. These DLLs are both are loaded into the same address space as the original APL process. In effect, you have two copies of APL (and two workspaces) running as a single program.</p><p>Note that in both cases, the mapping between the corresponding functions and variables is direct. Effectively, the client namespace <tt>LN</tt> is an instance of the server namespace <tt>Loan</tt>.</p></body>
+</html>

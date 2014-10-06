@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="StandardErrorAcrion"></a>Standard Error Action</h2><p>The standard system action in the event of an error or interrupt whilst executing an expression is to suspend execution and display an error report.  If necessary, the state indicator is cut back to a statement such that there is no halted locked function visible in the state indicator.</p><p>The error report consists of up to three lines</p><ol><li value="1">The error message, preceded by the symbol <tt>⍎</tt> if the error occurred while evaluating the Execute function.</li><li value="2">The statement in which the error occurred (or expression being evaluated by the Execute function), preceded by the name of the function and line number where execution is suspended unless the state indicator has been cut back to immediate execution mode.  If the state indicator has been cut back because of a locked function in execution, the displayed statement is that from which the locked function was invoked.</li><li value="3">The symbol <tt>^</tt> under the last referenced symbol or name when the error occurred.  All code to the right of the <tt>^</tt> symbol in the expression will have been evaluated.</li></ol><h4>Examples</h4><pre>      X PLUS U
+VALUE ERROR
+      X PLUS U
+             ^
+      FOO
+INDEX ERROR
+FOO[2] X←X+A[I]
+           ^
+ 
+      CALC
+⍎DOMAIN ERROR
+CALC[5] ÷0
+        ^
+</pre></body>
+</html>

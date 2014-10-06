@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Object</tt>TCPSocket</h2><table class="GUIMembers"><tr><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Parents</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Children</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Properties</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Methods</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Events</a></span></td></tr></table><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Purpose:</td><td class="SpacedPlain">The TCPSocket object provides an interface to TCP/IP.</td></tr></table><p class="Bold">Description</p><p>The TCPSocket object provides an event-driven mechanism to communicate with
+other programs (including Dyalog APL) running on other computers and with the
+world-wide Web.</p><p>The <a href="../props/sockettype.html">SocketType</a> property is a
+character vector that specifies the type of the TCP/IP socket. This is either '<tt>Stream'</tt>(the
+default), or <tt>'UDP'</tt>. <a href="../props/sockettype.html">SocketType</a> must be defined when the object is created and may not be set or changed using <tt>⎕WS</tt>.</p><p>The Style property is a character vector that specifies the type of data
+transmitted or received by the socket; it may be <tt>'Char'</tt>,
+<tt>'Raw'</tt>, or <tt>'APL'</tt>.
+The value <tt>'APL'</tt> is valid only if the <a href="../props/sockettype.html">SocketType</a> is '<tt>Stream'</tt>.</p><p>The <a href="../props/encoding.html">Encoding</a> property is a character
+vector that specifies how character data are encoded or translated. The possible
+values are <tt>'None'</tt>, <tt>'UTF-8'</tt>, <tt>'Classic'</tt>,
+or <tt>'Unicode',</tt> depending upon the value of the Style
+property.</p><p><a href="../props/localaddr.html">LocalAddr</a> and <a href="../props/localport.html">LocalPort</a> properties identify your end of the connection; <a href="../props/remoteaddr.html">RemoteAddr</a> and <a href="../props/remoteport.html">RemotePort</a> identify the other end of
+the connection. The values of the two sets of properties are clearly
+symmetrical; your <a href="../props/localaddr.html">LocalAddr</a> is your
+partner's <a href="../props/remoteaddr.html">RemoteAddr</a>, and there are
+strict rules concerning which of them you and your partner may set. See the
+individual descriptions of these properties for details.</p><p>The <a href="../props/socketnumber.html">SocketNumber</a> property is the
+Window handle of the socket attached to the TCPSocket object and is generally a
+read-only property. The only time that <a href="../props/socketnumber.html">SocketNumber</a> may be specified is when a server replicates (clones) a listening socket to
+which a client has just connected.</p></body>
+</html>

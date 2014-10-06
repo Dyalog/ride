@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>:Repeat</tt>Repeat Statement</h2><p><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Formal Definition</a></span></p><p>The simplest type of <tt>:Repeat</tt> loop is as follows.  This example executes lines <tt>[3-5]</tt> 100 times.  Notice that as there is no conditional test at the beginning of a <tt>:Repeat</tt> structure, its code statements are executed at least once.</p><pre>[1]   I←0
+[2]   :Repeat
+[3]       expr1
+[4]       expr2
+[5]       I←I+1
+[6]   :Until I=100</pre><p>You can have multiple conditional tests at the end of the loop by adding <tt>:AndIf</tt> or <tt>:OrIf</tt> expressions.  The following example will read data from a native file as 80-character records until it reaches one beginning with the text string <tt>'Widget'</tt> or reaches the end of the file.</p><pre>[1]   :Repeat
+[2]       REC←⎕NREAD ¯1 82 80
+[3]   :Until 'Widget'≡6⍴REC
+[4]   :OrIf 0=⍴REC</pre><p>A <tt>:Repeat</tt> structure may be terminated by an <tt>:EndRepeat</tt> (or <tt>:End</tt>) statement in place of a conditional expression.  If so, your code must explicitly jump out of the loop using a <tt>:Leave</tt> statement or by branching.  For example:</p><pre>[1]   :Repeat
+[2]       REC←⎕NREAD ¯1 82 80
+[3]      :If 0=⍴REC
+[4]      :OrIf 'Widget'≡6⍴REC
+[5]         :Leave
+[6]      :EndIf
+[7]   :EndRepeat</pre><p> </p></body>
+</html>

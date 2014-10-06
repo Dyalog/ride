@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←{X} ⎕UCS Y</tt>Unicode Convert </h2><p><tt>⎕UCS</tt> converts (Unicode) characters into integers and vice versa. </p><p>The optional left argument <tt>X</tt> is a character vector containing the name of a variable-length Unicode encoding scheme which must be one of:</p><ul><li value="1">'UTF-8'</li><li value="2">'UTF-16'</li><li value="3">'UTF-32'</li></ul><p>If not, a <tt>DOMAIN ERROR</tt> is issued.</p><p>If <tt>X</tt> is omitted, <tt>Y</tt> is a simple character or integer array, and the result <tt>R</tt> is a simple integer or character array with the same rank and shape as <tt>Y</tt>.</p><p>If <tt>X</tt> is specified, <tt>Y</tt> must be a simple character or integer vector, and the result <tt>R</tt> is a simple integer or character vector.</p><h4>Monadic <tt>⎕UCS</tt></h4><p>Used monadically, <tt>⎕UCS</tt> simply converts characters to Unicode code points and vice-versa.</p><p>With a few exceptions, the first 256 Unicode code points correspond to the ANSI character set.</p><pre>      ⎕UCS 'Hello World'
+72 101 108 108 111 32 87 111 114 108 100
+ 
+      ⎕UCS 2 11⍴72 101 108 108 111 32 87 111 114 108 100
+Hello World
+Hello World</pre><p>The code points for the Greek alphabet are situated in the 900's:</p><pre>      ⎕UCS 'καλημέρα ελλάδ'
+954 945 955 951 956 941 961 945 32 949 955 955 940 948
+</pre><p>Unicode also contains the APL character set. For example:</p><pre>      ⎕UCS 123 40 43 47 9077 41 247 9076 9077 125
+{(+/⍵)÷⍴⍵}
+</pre><h4>Dyadic <tt>⎕UCS</tt></h4><p>Dyadic <tt>⎕UCS</tt> is used to translate between Unicode characters and one of three standard variable-length Unicode encoding schemes, UTF-8, UTF-16 and UTF-32. These represent a Unicode character string as a vector of 1-byte (UTF-8), 2-byte (UTF-16) and 4-byte (UTF-32) signed integer values respectively.</p><pre>      'UTF-8' ⎕UCS 'ABC'
+65 66 67
+      'UTF-8' ⎕UCS 'ABCÆØÅ'
+65 66 67 195 134 195 152 195 133
+      'UTF-8' ⎕UCS 195 134, 195 152, 195 133
+ÆØÅ
+      'UTF-8' ⎕UCS 'γεια σου'
+206 179 206 181 206 185 206 177 32 207 131 206 191 207 133
+      'UTF-16' ⎕UCS 'γεια σου'
+947 949 953 945 32 963 959 965
+      'UTF-32' ⎕UCS 'γεια σου'
+947 949 953 945 32 963 959 965</pre><p>Because integers are <span class="Italic">signed</span>, numbers greater than 127 will be represented as 2-byte integers (type 163), and are thus not suitable for writing directly to a native file. To write the above data to file, the easiest solution is to use <tt>⎕</tt><tt>UCS</tt> to convert the data to 1-byte characters and append this data to the file:</p><pre>      (⎕UCS 'UTF-8' ⎕UCS 'ABCÆØÅ') ⎕NAPPEND tn</pre><p><b>Note regarding UTF-16:</b> For most characters in the first plane of Unicode (0000-FFFF), UTF-16 and UCS-2 are identical. However, UTF-16 has the potential to encode all Unicode characters, by using more than 2 bytes for characters outside plane 1.</p><pre>      'UTF-16' ⎕UCS 'ABCÆØÅ⍒⍋'
+65 66 67 198 216 197 9042 9035
+      ⎕←unihan←⎕UCS (2×2*16)+⍳3 ⍝ x20001-x20003
+<img src="../images/unihan.png" style="height: 19px;width: 45px;" />
+      'UTF-16' ⎕UCS unihan
+55360 56321 55360 56322 55360 56323</pre><h4>Translation Error</h4><p><tt>⎕UCS</tt> will generate <tt>TRANSLATION ERROR</tt> (event number 92) if the argument cannot be converted. In the Classic Edition, a <tt>TRANSLATION ERROR</tt> is generated if the result is not in <tt>⎕AV</tt> or the numeric argument is not in <tt>⎕AVU</tt>.</p></body>
+</html>

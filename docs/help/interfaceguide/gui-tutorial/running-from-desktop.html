@@ -1,0 +1,9 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="Running_Desktop"></a>Running from Desktop</h2><p>Now that we have a final working application, it would be nice to add it as a shortcut, so that the user can run it from the Start Menu or from the Desktop, like any other application.</p><p>First we need to define <tt>⎕LX</tt> so that the application starts automatically.</p><pre>      ⎕LX ← '⎕DQ''.'''</pre><p>or, to avoid so many confusing quotes...</p><pre>      ⎕LX ← ⍞
+⎕DQ '.'</pre><p>Next, it would be a good idea to clear the edit fields and ensure that the scrollbar is in its default position:</p><pre>      'TEMP.F' ⎕WS 'Text' ''
+      'TEMP.C' ⎕WS 'Text' ''
+      'TEMP.S' ⎕WS 'Thumb' 1</pre><p>Then we must <tt>)SAVE</tt> the workspace...</p><pre>      )SAVE TEMP
+TEMP saved ...</pre><p>... and exit APL</p><pre>      )OFF</pre><p>The next step is to add the application to the Desktop. This is done in the normal way, i.e.</p><p>Right-click on the Desktop and choose "New" followed by "Shortcut".</p><p>Type in the appropriate command line, such as:</p><pre class="Code">"C:\Program Files\Dyalog\Dyalog APL 13.1 Unicode\dyalog.exe" temp.dws</pre><p><img src="../images/temperature-converter-12.png" /></p><p>Select "Next" and give the application a name, then select "Finish".</p><p>The resulting icon is shown below. Note that although by default you will get a standard Dyalog APL icon, you could of course select another one from elsewhere on your system.</p><p><img src="../images/temperature-converter-13.png" style="width: 99px;height: 106px;" /></p><p>Clicking on this icon will start your application. Notice that the APL Session Window will NOT appear at any stage unless there is an error in your code. All the user will see is your "Temperature Converter" dialog box.</p></body>
+</html>

@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>)CLASSES</tt>List Classes </h2><p>This command lists the names of APL Classes in the active workspace.</p><h4>Example:</h4><pre>      )CLEAR
+clear ws
+      )ED ○MyClass
+ 
+:Class MyClass
+    ∇ Make Name
+      :Implements Constructor
+      ⎕DF Name
+    ∇
+:EndClass ⍝ MyClass
+ 
+      )CLASSES
+MyClass
+      )COPY OO YourClass
+.\OO saved Sun Jan 29 18:32:03 2006
+      )CLASSES
+MyClass YourClass
+      ⎕NC 'MyClass' 'YourClass'
+9.4 9.4</pre></body>
+</html>

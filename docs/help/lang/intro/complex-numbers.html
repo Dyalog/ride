@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="ComplexNumbers"></a>Complex Numbers</h2><p>A complex number is a number consisting of a real and an imaginary part which is usually written in the form <b style="font-style: italic;">a+ bi</b>, where <b style="font-style: italic;">a</b> and <b style="font-style: italic;">b</b> are real numbers, and <b style="font-style: italic;">i</b> is the standard imaginary unit with the property<b style="font-style: italic;"> i</b><sup style="font-weight: bold;font-style: italic;">2</sup><b style="font-style: italic;">= −1</b>. </p><p>Dyalog APL adopts the J notation introduced in IBM APL2 to represent the value of a complex number which is written as <tt>aJb</tt> or <tt>ajb</tt> (without spaces). The former representation (with a capital <tt>J</tt>) is always used to display a value.</p><h4>Notation</h4><pre>      2+¯1*.5
+2J1
+      
+      .3j.5
+0.3J0.5
+ 
+      1.2E5J¯4E¯4
+120000J¯0.0004</pre><h4>Arithmetic</h4><p>The arithmetic primitive functions handle complex numbers in the appropriate way.</p><pre>      2j3+.3j.5 ⍝ (a+bi)+(c+di) = (a+c)+(b+d)i
+2.3J3.5
+ 
+      2j3-.3j5  ⍝ (a+bi)-(c+di) = (a-c)+(b-d)i
+1.7J¯2
+ 
+      2j3×.3j.5 ⍝ (a+bi)(c+di)= ac+bci+adi+bdi<sup>2</sup>
+                ⍝             = (ac-bd)+(bc+ad)i
+¯0.9J1.9</pre><p>The absolute value, or magnitude of a complex number is naturally obtained using the Magnitude function</p><pre>      |3j4
+5</pre><p>Monadic <tt>+</tt> of a complex number <b style="font-style: italic;">(a+bi)</b> returns its conjugate <b style="font-style: italic;">(a-bi)</b> ...</p><pre>      +3j4 
+3J¯4</pre><p>... which when multiplied by the complex number itself, produces the square of its magnitude.</p><pre>       3j4×3j¯4
+25</pre><p>Furthermore, adding a complex number and its conjugate produces a real number:</p><pre>       3j4+3j¯4
+6</pre><p>The famous Euler's Identity<img src="../../generatedimages/equations/equation1.png" style="width: 69px;height: 16px;" title="Euler's Identity" alt="Euler's Identity" class="MCEquation mcReset" /> may be expressed as follows:</p><pre>      1+*○0j1 ⍝ Euler Identity
+0</pre><h4>Different Result for Power</h4><p>From Version 13.0 onwards, the implementation of <tt>X*Y</tt> (Power) gives a different answer for negative real <tt>X</tt> than in all previous Versions of Dyalog APL. This change is however in accordance with the ISO/EEC 13751 Standard for Extended APL.</p><p>In Version 13.0 onwards, the result is the principal value; whereas in previous Versions the result is a negative or positive real number or <tt>DOMAIN ERROR</tt>. The following examples illustrate this point:</p><pre>      ¯8 * 1 2 ÷ 3          ⍝ Version 12.1
+¯2 4
+      ¯8 * 1 2 ÷ 3          ⍝ Version 13.0
+1J1.732050808 ¯2J3.464101615
+ 
+      * (1 2 ÷ 3) × ⍟ ¯8    ⍝ Version 13.0
+1J1.732050808 ¯2J3.464101615</pre><h4>Circular functions </h4><p>The basic set of circular functions <tt>X○Y</tt> cater for complex values in <tt>Y</tt>, while the following extended functions provide specific features for complex arguments. Note that <tt>a</tt> and <tt>b</tt> are the real and imaginary parts of <tt>Y</tt> respectively and θ is the phase of <tt>Y</tt>..</p><table><tr><td><tt>(-X) ○ Y</tt></td><td><tt>X
+                </tt></td><td><tt>X ○ Y
+                </tt></td></tr><tr><td><tt>-8○Y</tt></td><td><tt>8
+                </tt></td><td><tt>(-1+Y*2)*0.5
+                </tt></td></tr><tr><td><tt>Y
+                </tt></td><td><tt>9
+                </tt></td><td><tt>a
+                </tt></td></tr><tr><td><tt>+Y
+                </tt></td><td><tt>10
+                </tt></td><td><tt>|Y
+                </tt></td></tr><tr><td><tt>Y×0J1
+                   
+                </tt></td><td><tt>11
+                </tt></td><td><tt>b
+                </tt></td></tr><tr><td><tt>*Y×0J1
+                </tt></td><td><tt>12
+                </tt></td><td><tt>θ
+                </tt></td></tr></table><p>Note that <tt>9○Y</tt> and <tt>11○Y </tt>return the real and imaginary parts of <tt>Y</tt> respectively:</p><pre>      9 11○3.5J¯1.2
+3.5 ¯1.2
+ 
+      9 11∘.○3.5J¯1.2 2J3 3J4
+ 3.5 2 3
+¯1.2 3 4</pre><h4>Comparison</h4><p>In comparing two complex numbers <tt>X</tt> and <tt>Y, </tt><tt>X=Y</tt> is 1 if the magnitude of <tt>X-Y</tt> does not exceed <tt>⎕CT</tt> times the larger of the magnitudes of <tt>X</tt> and <tt>Y</tt>; geometrically, <tt>X=Y</tt> if the number smaller in magnitude lies on or within a circle centred on the one with larger magnitude, having radius <tt>⎕CT</tt> times the larger magnitude.</p><p> </p><p><img src="../images/comparison.png" style="height: 270px;width: 460px;" /> As with real values, complex values sufficiently close to Boolean or integral values are accepted by functions which require Boolean or integral values. For example:</p><pre>      2j1e¯14 ⍴ 12
+12 12
+      0 ⍱ 1j1e¯15
+0</pre><p>Note that Dyalog APL always stores complex numbers as a pair of 64-bit binary floating-point numbers, regardless of the setting of <tt>⎕FR</tt>. Comparisons between complex numbers and decimal floating-point numbers will require conversion of the decimal number to binary to allow the comparison. When <tt>⎕FR=1287</tt>, comparisons are always subject to <tt>⎕DCT</tt>, not <tt>⎕CT</tt> - regardless of the data type used to represent a number.</p><p>This only really comes into play when determining whether the imaginary part of a complex number is so small that it can be considered to be on the real plane. However, Dyalog recommends that you do not mix the use of complex and decimal numbers in the same component of an application.</p></body>
+</html>

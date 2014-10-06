@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←X⍟Y</tt>Logarithm</h2><p><tt>Y</tt> must be a positive numeric array. <tt>X</tt> must be a positive numeric array. <tt>X</tt> cannot be 1 unless <tt>Y</tt> is also 1. <tt>R</tt> is the base <tt>X</tt> logarithm of <tt>Y</tt>.</p><p>Note that Logarithm (dyadic <tt>⍟</tt>) is defined in terms of Natural Logarithm (monadic <tt>⍟</tt>) as:</p><pre>      X⍟Y←→(⍟Y)÷⍟X</pre><h4>Examples</h4><pre>      10⍟100 2
+2 0.3010299957
+ 
+      2 10⍟0J1 1J2
+0J2.266180071 0.3494850022J0.4808285788
+ 
+      1 ⍟ 1
+1
+      2 ⍟ 1
+0</pre></body>
+</html>

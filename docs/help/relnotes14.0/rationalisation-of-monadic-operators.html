@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../help.css"></head>
+<body><h2>Rationalisation of Monadic Operators </h2><h4>Monadic Operators</h4><p>Like primitive functions, monadic operators can be:</p><ul><li value="1">named</li><li value="2">enclosed within parentheses</li><li value="3">displayed in the session</li></ul><h4>Examples</h4><pre>      ⎕ ← each ← (¨)      ⍝ name and display
+¨
+      shape←⍴
+      shape each (1 2) (3 4 5)
+ 2  3 
+      
+      slash←/
+      +slash ⍳10
+55
+      swap←⍨
+      3 -swap 4
+1</pre><p>Note that <span class="Italic">dyadic</span> operators are not promoted to first-class and so may not in general be named or displayed. A dyadic operator may however be bound with its right operand to form a monadic operator, i.e. a first class citizen. See <a href="right-operand-currying.html" class="MCXref_0">Right Operand Currying </a>.</p></body>
+</html>

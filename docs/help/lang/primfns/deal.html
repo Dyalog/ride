@@ -1,0 +1,9 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←X?Y</tt>Deal</h2><p><tt>Y</tt> must be a simple scalar or unit vector containing a non-negative integer.  <tt>X</tt> must be a simple scalar or unit vector containing a non-negative integer and <tt>X≤Y</tt>.</p><p><tt>R</tt> is an integer unit vector obtained by making <tt>X</tt> random selections from <tt>⍳Y</tt> without repetition. </p><h4>Examples</h4><pre>      13?52
+7 40 24 28 12 3 36 49 20 44 2 35 1
+ 
+      13?52
+20 4 22 36 31 49 45 28 5 35 37 48 40</pre><p><tt>⎕IO</tt> and <tt>⎕RL</tt> are implicit arguments of Deal.  A side effect of Deal is to change the value of <tt>⎕RL</tt>. See <a href="../primops/random-number-generator.html#Random_Number_Generator" class="MCXref_0">Random Number Generator</a> and <a href="../sysfns/rl.html#RandomLink:" class="MCXref_0">Examples</a>.</p></body>
+</html>

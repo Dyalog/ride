@@ -1,0 +1,5 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Event 525</tt>WorkspaceLoaded</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="session-object.html">Session</a></td></tr></table><p class="Bold">Description</p><p>If enabled, this event is reported when a workspace is loaded or on a <tt>clear ws</tt>. You may not nullify or modify the event with a 0-returning callback, nor may you generate the event using <tt>⎕NQ</tt>, or call it as a method.</p><p>The event message reported as the result of <tt>⎕DQ</tt>, or supplied as the right argument to your callback function, is a 2-element vector as follows :</p><table class="Event"><tr><td><tt>[1]</tt></td><td>Object</td><td>ref or character vector</td></tr><tr><td><tt>[2]</tt></td><td>Event</td><td><tt>'WorkspaceLoaded'</tt> or 525</td></tr></table><p>This event is fired immediately after a workspace has been loaded and before the execution of <tt>⎕LX</tt>.</p><p>The callback function you attach should be defined in <tt>⎕SE</tt>.</p></body>
+</html>

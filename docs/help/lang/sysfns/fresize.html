@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←{X}⎕FRESIZE Y</tt>File Resize </h2><h4>Access code 1024</h4><p><tt>Y</tt> must be a simple integer scalar or 1 or 2 element vector containing the file tie number followed by an optional passnumber.  If the passnumber is omitted it is assumed to be zero.</p><p><tt>X</tt> is an integer that specifies the maximum permitted size of the file in bytes. The value 0 means the maximum possible size of file.</p><p>An attempt to update a component file that would cause it to exceed its maximum size will fail with a <tt>FILE FULL</tt> error (21).A side effect of <tt>⎕FRESIZE</tt> is to cause the file to be compacted.  Any interrupt entered at the keyboard during the compaction is ignored. Note that if the left argument is omitted, the file is simply compacted and the maximum file size remains unchanged. </p><p>During compaction, the file is restructured by reordering the components and by amalgamating the free areas at the end of the file. The file is then truncated and excess disk space is released back to the operating system. For a large file with many components, this process may take a significant time.</p><p>The shy result of <tt>⎕FRESIZE</tt> is the tie number of the file.</p><h4>Example</h4><pre>      'test'⎕FCREATE 1 ⋄ ⎕FSIZE 1
+1 1 120 1.844674407E19
+      (10 1000⍴1.1)⎕FAPPEND 1 ⋄ ⎕FSIZE 1
+1 2 80288 1.844674407E19
+ 
+      100000 ⎕FRESIZE 1 ⍝ Limit size to 100000 bytes
+ 
+      (10 1000⍴1.1)⎕FAPPEND 1
+FILE FULL
+      (10 1000⍴1.1)⎕FAPPEND 1
+     ∧
+ 
+      ⎕FRESIZE 1      ⍝ Force file compaction.</pre></body>
+</html>

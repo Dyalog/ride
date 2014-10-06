@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h3>Example</h3><p>In this example, Class <tt>Penguin</tt> inherits from <tt>Animal</tt> and includes functions from the plain Namespaces <tt>BirdStuff </tt>and <tt>FishStuff</tt>.</p><pre>:Class Penguin: Animal
+    :Include BirdStuff
+    :Include FishStuff
+:EndClass ⍝ Penguin</pre><p>Namespace <tt>BirdStuff</tt> contains 2 functions, both declared as Public methods.</p><pre>:Namespace BirdStuff
+    ∇ R←Fly
+      :Access Public Instance
+      R←'Fly, Fly ...'
+    ∇
+    ∇ R←Lay
+      :Access Public Instance
+      R←'Lay, Lay ...'
+    ∇
+:EndNamespace ⍝ BirdStuff</pre><p>Namespace <tt>FishStuff </tt>contains a single function, also declared as a Public method.</p><pre>:Namespace FishStuff
+    ∇ R←Swim
+      :Access Public Instance
+      R←'Swim, Swim ...'
+    ∇
+:EndNamespace ⍝ FishStuff
+ 
+      Pingo←⎕NEW Penguin
+      Pingo.Swim
+Swim, Swim ...
+      Pingo.Lay
+Lay, Lay ...
+      Pingo.Fly 
+Fly, Fly ...</pre><p>This is getting silly - we all know that Penguin's can't fly. This problem is simply resolved by overriding the <tt>BirdStuff.Fly</tt> method with <tt>Penguin.Fly</tt>. We can hide <tt>BirdStuff.Fly</tt> with a Private method in <tt>Penguin</tt> that does nothing. For example:</p><pre>:Class Penguin: Animal
+    :Include BirdStuff
+    :Include FishStuff
+    ∇ Fly ⍝ Override BirdStuff.Fly
+    ∇
+:EndClass ⍝ Penguin
+ 
+      Pingo←⎕NEW Penguin  
+      Pingo.Fly
+VALUE ERROR
+      Pingo.Fly
+     ^</pre><p>or we can supersede it with a different Public method, as follows:</p><pre>:Class Penguin: Animal
+    :Include BirdStuff
+    :Include FishStuff
+    ∇ R←Fly ⍝ Override BirdStuff.Fly
+      :Access Public Instance
+      R←'Sadly, I cannot fly'
+    ∇
+:EndClass ⍝ Penguin</pre><p> </p><pre>      Pingo←⎕NEW Penguin  
+      Pingo.Fly
+Sadly, I cannot fly</pre></body>
+</html>

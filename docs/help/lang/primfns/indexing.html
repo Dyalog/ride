@@ -1,0 +1,98 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←X[Y]</tt>Indexing</h2><p><tt>X</tt> may be  any array. <tt>Y</tt> must be a valid index specification. <tt>R</tt> is an array composed of elements indexed from <tt>X</tt> and the shape of <tt>X</tt> is determined by the index specification.</p><p>This form of Indexing, using brackets, does not follow the normal syntax of a dyadic function. For an alternative method of indexing, see <a href="index.html#Index" class="MCXref_0">Index</a>.</p><p><tt>⎕IO</tt> is an implicit argument of Indexing.</p><p>Three forms of indexing are permitted. The form used is determined by context.</p><h4>Simple Indexing</h4><p>For vector <tt>X</tt>, <tt>Y</tt> is a simple integer array composed of items from the set <tt>⍳⍴X</tt>. </p><p><tt>R</tt> consists of elements selected according to index positions in <tt>Y</tt>. <tt>R</tt> has the same shape as <tt>Y</tt>.</p><h4>Examples</h4><pre>      A←10 20 30 40 50
+ 
+      A[2 3⍴1 1 1 2 2 2]
+10 10 10
+20 20 20
+ 
+      A[3]
+30
+ 
+      'ONE' 'TWO' 'THREE'[2]
+ TWO</pre><p>For matrix <tt>X</tt>, <tt>Y</tt> is composed of two simple integer arrays separated by the semicolon character (<tt>;</tt>). The arrays select indices from the rows and columns of <tt>X</tt> respectively.</p><h4>Examples</h4><pre>      +M←2 4⍴10×⍳8
+10 20 30 40
+50 60 70 80
+ 
+      M[2;3]
+70</pre><p>For higher-rank array <tt>X</tt>, <tt>Y</tt> is composed of a simple integer array for each axis of <tt>X</tt> with adjacent arrays separated by a single semicolon character (<tt>;</tt>). The arrays select indices from the respective axes of <tt>X</tt>, taken in row-major order.</p><h4>Examples</h4><pre>      ⊢A←2 3 4⍴10×⍳24
+ 10  20  30  40
+ 50  60  70  80
+ 90 100 110 120
+ 
+130 140 150 160
+170 180 190 200
+210 220 230 240
+ 
+      A[1;1;1]
+10
+ 
+      A[2;3 2;4 1]
+240 210
+200 170</pre><p>If an indexing array is omitted for the <tt>K</tt>th axis, the index vector <tt>⍳(⍴X)[K]</tt> is assumed for that axis.</p><h4>Examples</h4><pre>      A[;2;]
+ 50  60  70  80
+170 180 190 200
+ 
+      M
+10 20 30 40
+50 60 70 80
+ 
+      M[;]
+10 20 30 40
+50 60 70 80
+ 
+      M[1;]
+10 20 30 40
+ 
+      M[;1]
+10 50</pre><h4>Choose Indexing</h4><p>The index specification <tt>Y</tt> is a non-simple array. Each item identifies a single element of <tt>X</tt> by a set of indices with one element per axis of <tt>X</tt> in row-major order.</p><h4>Examples</h4><pre>      M
+10 20 30 40
+50 60 70 80
+ 
+      M[⊂1 2]
+20
+ 
+      M[2 2⍴⊂2 4]
+80 80
+80 80
+ 
+      M[(2 1)(1 2)]
+50 20</pre><p>A scalar may be indexed by the enclosed empty vector:</p><pre>      S←'Z'
+      S[3⍴⊂⍳0]
+ZZZ</pre><p>Simple and Choose indexing are indistinguishable for vector <tt>X</tt>:</p><pre>      V←10 20 30 40
+ 
+      V[⊂2]
+20
+      ⊂2
+2
+      V[2]
+20</pre><h4>Reach Indexing</h4><p>The index specification <tt>Y</tt> is a non-simple integer array, each of whose items reach down to a nested element of <tt>X</tt>. The items of an item of <tt>Y</tt> are simple vectors (or scalars) forming sets of indices that index arrays at successive levels of <tt>X</tt> starting at the top-most level. A set of indices has one element per axis at the respective level of nesting of <tt>X</tt> in row-major order.</p><h4>Examples</h4><pre>      G←('ABC' 1)('DEF' 2)('GHI' 3)('JKL' 4)
+      G←2 3⍴G,('MNO' 5)('PQR' 6)
+      G
+  ABC  1   DEF  2   GHI  3
+  JKL  4   MNO  5   PQR  6
+ 
+      G[((1 2)1)((2 3)2)]
+ DEF  6
+ 
+      G[2 2⍴⊂(2 2)2]
+5 5
+5 5
+      G[⊂⊂1 1]
+  ABC  1
+ 
+      G[⊂1 1]
+  ABC  1
+ 
+      V←,G
+ 
+      V[⊂⊂1]
+  ABC  1
+ 
+      V[⊂1]
+  ABC  1
+ 
+      V[1]
+  ABC  1</pre></body>
+</html>

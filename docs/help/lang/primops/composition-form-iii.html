@@ -1,0 +1,11 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←(f∘B)Y</tt>Composition (Form III)</h2><p><tt>f</tt> may be any dyadic function.  <tt>B</tt> may be any array whose items are appropriate to function <tt>f</tt>.  <tt>Y</tt> may be any array whose items are appropriate to function <tt>f</tt>.</p><p>The derived function is equivalent to <tt>YfB</tt>.  The derived function need not return a result.</p><h4>Examples</h4><pre>      (*∘0.5)4 16 25
+2 4 5
+ 
+      SQRT ← *∘.5
+ 
+      SQRT 4 16 25
+2 4 5</pre><p>The parentheses are required in order to distinguish between the operand <tt>B</tt> and the argument <tt>Y</tt>.</p></body>
+</html>

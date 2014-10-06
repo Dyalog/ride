@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←X\[K]Y</tt>Expand</h2><p><tt>Y</tt> may be any array.  <tt>X</tt> is a simple integer scalar or vector.  The axis specification is optional.  If present, <tt>K</tt> must be a simple integer scalar or unit vector.  The value of <tt>K</tt> must be an axis of <tt>Y</tt>.  If absent, the last axis of <tt>Y</tt> is implied.  The form <tt>R←X⍀Y</tt> implies the first axis.  If <tt>Y</tt> is a scalar, it is treated as a one-element vector.</p><p>If <tt>Y</tt> has length 1 along the <tt>K</tt><sup>th</sup> (or implied) axis, it is extended along that axis to match the number of positive elements in <tt>X</tt>. Otherwise, the number of positive elements in <tt>X</tt> must be the length of the <tt>K</tt><sup>th</sup> (or implied) axis of <tt>Y</tt>.</p><p><tt>R</tt> is composed from the sub-arrays along the <tt>K</tt><sup>th</sup> axis of <tt>Y</tt>. If <tt>X[I]</tt> (an element of <tt>X</tt>) is the <tt>J</tt>th positive element in <tt>X</tt>, then the <tt>J</tt><sup>th</sup> sub-array along the <tt>K</tt><sup>th</sup> axis of <tt>Y</tt> is replicated <tt>X[I]</tt> times. If <tt>X[I]</tt> is negative, then a sub-array of fill elements of <tt>Y</tt> is replicated <tt>|X[I]</tt> times and inserted in relative order along the <tt>K</tt><sup>th</sup> axis of the result. If <tt>X[I]</tt> is zero, it is treated as the value <tt>¯1</tt>. The shape of <tt>R</tt> is the shape of <tt>Y</tt> except that the length of the <tt>K</tt><sup>th</sup> axis is <tt>+/1⌈|X</tt>.</p><h4>Examples</h4><pre>      0\⍳0
+0
+ 
+      1 ¯2 3 ¯4 5\'A'
+A  AAA    AAAAA
+ 
+      M
+1 2 3
+4 5 6
+ 
+      1 ¯2 2 0 1\M
+1 0 0 2 2 0 3
+4 0 0 5 5 0 6
+ 
+      1 0 1⍀M
+1 2 3
+0 0 0
+4 5 6
+ 
+      1 0 1\[1]M
+1 2 3
+0 0 0
+4 5 6
+ 
+      1 ¯2 1\(1 2)(3 4 5)
+ 1 2  0 0  0 0  3 4 5</pre></body>
+</html>

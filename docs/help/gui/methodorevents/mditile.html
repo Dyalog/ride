@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Method 111</tt>MDITile</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/mdiclient.html">MDIClient</a></td></tr></table><p class="Bold">Description</p><p>This method causes the <a href="../objects/mdiclient.html">MDIClient</a> object
+to organise its child <a href="../objects/form.html">Form</a>s as a row or column.
+To permit the user to carry out this action, it is recommended that a suitable
+callback function or expression is attached to a <a href="../objects/menuitem.html">MenuItem</a> or <a href="../objects/button.html">Button</a>. The callback function or expression
+should then call the MDITile method.</p><p>Note that because there are restrictions concerning the minimum height and
+width of a window, MS-Windows does not necessarily respond as requested. If the <a href="../objects/mdiclient.html">MDIClient</a> is itself of insufficient size, or if it contains a large number of child <a href="../objects/form.html">Form</a>s,
+Windows may choose to tile the <a href="../objects/form.html">Form</a>s in a row
+when a column was specified or vice versa. It may also choose to ignore the
+event entirely.</p><p>The argument to MDITile is <tt>⍬</tt>, or
+a single item as follows:</p><table><tr><td><tt>[1]</tt></td><td>Tile Mode</td><td>0 (vertical)<br />1 (horizontal)</td></tr></table><p>If the argument is <tt>⍬</tt>, the <span class="Italic">Tile Mode</span>defaults to 0.</p></body>
+</html>

@@ -1,0 +1,95 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⍕Y</tt>Format (Monadic)</h2><p><tt>Y</tt> may be any array.  <tt>R</tt> is a simple character array which will display identically to the display produced by <tt>Y</tt>.  The result is independent of <tt>⎕PW</tt>.  If <tt>Y</tt> is a simple character array, then <tt>R</tt> is <tt>Y</tt>.</p><h4>Example</h4><pre>      +B←⍕A←2 6⍴'HELLO PEOPLE'
+HELLO
+PEOPLE
+ 
+      B ≡ A
+1</pre><p>If <tt>Y</tt> is a simple numeric scalar, then <tt>R</tt> is a vector containing the formatted number without any spaces.  A floating point number is formatted according to the system variable <tt>⎕PP</tt>.  <tt>⎕PP</tt> is ignored when formatting integers.</p><h4>Examples</h4><pre>      ⎕PP←5
+ 
+      ⍴C←⍕⍳0
+0
+ 
+      ⍴C←⍕10
+2
+ 
+      C
+10
+ 
+      ⍴C←⍕12.34
+5
+ 
+      C
+12.34
+ 
+      ⍕123456789
+123456789
+ 
+      ⍕123.456789
+123.46</pre><p>Scaled notation is used if the magnitude of the non-integer number is too large to represent with <tt>⎕PP</tt> significant digits or if the number requires more than five leading zeroes after the decimal point.</p><h4>Examples</h4><pre>      ⍕123456.7
+1.2346E5
+ 
+      ⍕0.0000001234
+1.234E¯7</pre><p>If <tt>Y</tt> is a simple numeric vector, then <tt>R</tt> is a character vector in which each element of <tt>Y</tt> is independently formatted with a single separating space between formatted elements.</p><h4>Example</h4><pre>      ⍴C←⍕¯123456 1 22.5 ¯0.000000667 5.00001
+27
+ 
+      C
+¯1.2346E5 1 22.5 ¯6.67E¯7 5</pre><p>If <tt>Y</tt> is a simple numeric array rank higher than one, <tt>R</tt> is a character array with the same shape as <tt>Y</tt> except that the last dimension of <tt>Y</tt> is determined by the length of the formatted data.  The format width is determined independently for each column of <tt>Y</tt>, such that:</p><ol style="list-style-type: lower-alpha;"><li value="1">the decimal points for floating point or scaled formats are aligned.</li><li value="2">the <tt>E</tt> characters for scaled formats are aligned, with trailing zeros added to the mantissae if necessary.</li><li value="3">integer formats are aligned to the left of the decimal point column, if any, or right-adjusted in the field otherwise.</li><li value="4">each formatted column is separated from its neighbours by a single blank column.</li><li value="5">the exponent values in scaled formats are left-adjusted to remove any blanks.</li></ol><h4>Examples</h4><pre>      C←22 ¯0.000000123 2.34 ¯212 123456 6.00002 0
+ 
+      ⍴C←⍕2 2 3⍴C
+2 2 29
+ 
+      C
+  22    ¯1.2300E¯7  2.3400E0
+¯212     1.2346E5   6.0000E0
+ 
+   0     2.2000E1  ¯1.2300E¯7
+   2.34 ¯2.1200E2   1.2346E5</pre><p>If <tt>Y</tt> is non-simple, and all items of <tt>Y</tt> at any depth are scalars or vectors, then <tt>R</tt> is a vector.</p><h4>Examples</h4><pre>      B←⍕A←'ABC' 100 (1 2 (3 4 5)) 10
+ 
+      ⍴A
+4
+      ≡A
+¯3
+ 
+      ⍴B
+26
+      ≡B
+1
+ 
+      A
+ ABC  100  1 2  3 4 5   10
+ 
+      B
+ ABC  100  1 2  3 4 5   10</pre><p>By replacing spaces with <tt>^</tt>, it is clearer to see how the result of <tt>⍕</tt> is formed:</p><pre>^ABC^^100^^1^2^^3^4^5^^^10</pre><p>If <tt>Y</tt> is non-simple, and all items of <tt>Y</tt> at any depth are not scalars, then <tt>R</tt> is a matrix.</p><h4>Example</h4><pre>      D←⍕C←1 'AB' (2 2⍴1+⍳4) (2 2 3⍴'CDEFGHIJKLMN')
+ 
+      C
+1  AB  2 3  CDE
+       4 5  FGH
+ 
+            IJK
+            LMN
+ 
+      ⍴C
+4
+ 
+      ≡C
+¯2
+ 
+      D
+1  AB  2 3  CDE
+       4 5  FGH
+ 
+            IJK
+            LMN
+ 
+      ⍴D
+5 16
+ 
+      ≡D
+1</pre><p>By replacing spaces with <tt>^</tt>, it is clearer to see how the result of <tt>⍕</tt> is formed:</p><pre>1^^AB^^2^3^^CDE^
+^^^^^^^4^5^^FGH^
+^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^IJK^
+^^^^^^^^^^^^LMN^</pre><p><tt>⎕PP</tt> is an implicit argument of Monadic Format.</p></body>
+</html>

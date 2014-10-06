@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⎕NEW Y</tt>New Instance </h2><p><tt>⎕NEW</tt> creates a new instance of the Class or .Net Type specified by <tt>Y</tt>.</p><p><tt>Y</tt> must be a 1- or 2-item scalar or vector. The first item is a reference to a Class or to a .Net Type, or a character vector containing the name of a Dyalog GUI object. The second item, if specified, contains the argument to be supplied to the Class or Type <span class="Italic">Constructor</span>.</p><p>The result <tt>R</tt> is a reference to a new instance of Class or Type <tt>Y</tt>.</p><p>For further information, see <span class="Italic">Interface Guide</span>.</p><h4>Class Example</h4><pre>:Class Animal
+    ∇ Name nm
+      :Access Public
+      :Implements Constructor
+      ⎕DF nm
+    ∇
+:EndClass ⍝ Animal
+ 
+      Donkey←⎕NEW Animal 'Eeyore'
+      Donkey
+Eeyore</pre><p>If <tt>⎕NEW</tt> is called with just a Class reference (i.e. without parameters for the Constructor), the default constructor will be called. A default constructor is defined by a niladic function with the :Implements Constructor attribute. For example, the Animal Class may be redefined as:</p><pre>:Class Animal
+    ∇ NoName
+      :Access Public
+      :Implements Constructor
+      ⎕DF 'Noname'
+    ∇
+    ∇ Name nm
+      :Access Public
+      :Implements Constructor
+      ⎕DF nm
+    ∇
+:EndClass ⍝ Animal
+ 
+      Horse←⎕NEW Animal
+      Horse
+Noname</pre><h4>.Net Examples</h4><pre>      ⎕USING←'System' 'System.Web.Mail,System.Web.dll'
+      dt←⎕NEW DateTime (2006 1 1)
+      msg←⎕NEW MailMessage
+      ⎕NC 'dt' 'msg' 'DateTime' 'MailMessage'
+9.2 9.2 9.6 9.6</pre><p>Note that <b>.Net Types</b> are accessed as follows.</p><p>If the name specified by the first item of <tt>Y</tt> would otherwise generate a <tt>VALUE ERROR</tt>, and <tt>⎕USING</tt> has been set, APL attempts to load the Type specified by <tt>Y</tt> from the .Net assemblies (DLLs) specified in <tt>⎕USING</tt>. If successful, the name specified by <tt>Y</tt> is entered into the SYMBOL TABLE with a name-class of <tt>9.6</tt>. Subsequent references to that symbol (in this case <tt>DateTime</tt>) are resolved directly and do not involve any assembly searching.</p><pre>      F←⎕NEW ⊂'Form'
+      F←⎕NEW'Form'(('Caption' 'Hello')('Posn' (10 10)))
+ 
+      ⎕NEW'Form'(('Caption' 'Hello')('Posn' (10 10)))
+#.[Form]</pre></body>
+</html>

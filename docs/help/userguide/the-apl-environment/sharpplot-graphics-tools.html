@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="SharpPlot_Graphics_Tools"></a>SharpPlot Graphics Tools
+        </h2><h4>Introduction</h4><p>Included with Dyalog APL  is the SharpPlot graphics library
+which is part of the RainPro graphics package..</p><p>The Session includes a button which calls SharpPlot to generate
+ graphical pictures of the contents of the Current Object (identified by
+the name under or to the left of the cursor).</p><p>For example, if you have a numerical matrix in a variable called <tt>MAT</tt>,
+you can plot it by first positioning the cursor on the name <tt>MAT</tt>in the Session window, and then clicking the SharpPlot button in the
+Session toolbar.</p><h4>Data Structures</h4><p>The charting function can plot variables with the following data structures:</p><ul><li value="1">a simple numeric vector</li><li value="2">a vector of simple numeric vectors</li><li value="3">a simple numeric matrix</li><li value="4">a matrix whose first row contains simple character vectors and whose other
+    elements are simple numerics. In bar and line charts, the column headings in
+    row 1 are used as x-axis labels.</li><li value="5">a matrix whose first column contains simple character vectors and whose
+    other elements are simple numerics. In bar and line charts, the row headings
+    in column 1 are used as legends to annotate the different series.</li><li value="6">a matrix whose first row and first column both contain simple character
+    vectors and whose other elements are simple numerics. In bar and line
+    charts, the column headings in row 1 are used as x-axis labels, and the row
+    headings in column 1 are used as legends annotate the different series.</li></ul><h4>Example: Bar Chart <img src="../images/barchart-icon.jpg" /></h4><pre>      Wine_Prices
+1961 1964 1966 
+Lafite 8800 1342 1210 
+Latour 15400 2357.5 4600 
+Margaux 5980 672.5 920 
+Mouton Rothschild 6710 713 2070 
+Haut-Brion 13225 1840 1323</pre><p><img src="../images/barchart.gif" /></p><h4>Example: Line Chart <img src="../images/linechart-icon.jpg" /></h4><pre>      First_Growths
+1961 1964 1966 1970 1975 1976 1978 ... 
+Lafite 8800 1342 1210 605 1380 2070 920 ... 
+Latour 15400 2357.5 4600 2760 1552 978 1058 ... 
+Margaux 5980 672.5 920 632 900 800 1208 ... </pre><p><img src="../images/linechart.jpg" /></p><h4>Implementation</h4><p>The SharpPlot Wizard is called by clicking on the SharpPlot button in the Session toolbar.
+The button has a Select callback which runs the function <tt>⎕SE.Chart.DoChart</tt>.
+This runs <tt>⎕SE.Chart.Do</tt> which constructs and then
+runs a function named <tt>⎕SE.Chart.MyChart</tt>.</p><p><tt>⎕SE.Chart.MyChart</tt> uses an instance of the
+SharpPlot graphics class to produce a chart of your data, which it saves as a
+temporary file. It then calls the SharpPlot viewer to display the file on your
+screen. SharpPlot can also be started using the <tt>]chart</tt> user command.</p><p>SharpPlot is a library of graphical subroutines, (originally written in APL
+and machine-translated into C#) which is implemented as a .Net Namespace named
+Causeway and supplied in the <span class="Code">sharpplot.dll</span> in
+the Dyalog program directory.</p><h4>Notes</h4><p>Although <tt>⎕SE.Chart.MyChart</tt> is overwritten by
+successive uses of the graphical button, it is deliberately not erased each
+time. This allows you to use <tt>MyChart</tt> as a simple
+template to develop your own custom graphics function.</p><p>The image is stored in Microsoft Enhanced Metafile Format in a temporary file
+whose name and location are generated automatically. The system does not delete
+the temporary file after use. For further details, See <span class="Code">GetTempFileName</span> in the Windows documentation..</p><p>The default program used to display the EMF file is <span class="Code">SharpView.exe</span>.
+You can opt to use a different EMF viewer by setting the <span class="Code">Charts\ViewCMD</span>registry key to name another program, such as Windows Picture and Fax Viewer.</p><p>An attempt to plot the contents of a variables with an unsupported data
+structure (see above) is handled entirely by error trapping and will result in
+an error message box and perhaps messages in the Status window.</p></body>
+</html>

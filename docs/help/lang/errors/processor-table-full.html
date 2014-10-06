@@ -1,0 +1,8 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>76</tt>PROCESSOR TABLE FULL</h2><p>This report can only occur in a UNIX environment.</p><p>This report is given when the limit on the number of processes (tasks) that the computer system can support would be exceeded.  The limit is installation dependent.  The report is given when an attempt is made to initiate a further process, occurring when an APL session is started.</p><p>It is necessary to wait until active processes are completed before the required task may proceed.  If the condition should occur frequently, the solution is to increase the limit on the number of processes for the computer system.</p><h4>Example</h4><pre>      'prefect' ⎕SH 'prefect'
+PROCESSOR TABLE FULL
+      'prefect' ⎕SH 'prefect'
+      ^</pre></body>
+</html>

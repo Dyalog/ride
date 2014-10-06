@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←X∨Y</tt>Or, Greatest Common Divisor</h2><h4>Case 1: <tt>X</tt> and <tt>Y</tt> are Boolean</h4><p> R is Boolean and is determined as follows:</p><pre>             X   Y     R
+      
+             0   0     0
+             0   1     1
+             1   0     1
+             1   1     1</pre><h4>Example</h4><pre>      0 0 1 1 ∨ 0 1 0 1
+0 1 1 1</pre><h4>Case 2: <tt>X</tt> and <tt>Y</tt> are numeric (non-Boolean)</h4><p>R is the Greatest Common Divisor of <tt>X</tt> and <tt>Y</tt>.</p><h4>Examples</h4><pre>      15 1 2 7 ∨ 35 1 4 0
+5 1 2 7
+ 
+      rational←{↑⍵ 1÷⊂1∨⍵} ⍝ rational (⎕CT) approximation
+                           ⍝ to floating array.
+      rational 0.4321 0.1234 6.66, ÷1 2 3
+ 4321  617 333 1 1 1
+10000 5000  50 1 2 3</pre><p><tt>⎕CT</tt> is an implicit argument in case 2.</p></body>
+</html>

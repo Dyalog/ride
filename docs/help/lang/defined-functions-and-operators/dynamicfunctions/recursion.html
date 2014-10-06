@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h3><a name="Recursion"></a>Recursion</h3><p>A recursive Dynamic Function can refer to itself using its name explicitly, but because we allow unnamed functions, we also need a special symbol for implicit self-reference: <tt>'∇'</tt>. For example:</p><pre>      fact←{          ⍝ Factorial ⍵.
+          ⍵≤1: 1      ⍝ Small ⍵, finished,
+          ⍵×∇ ⍵-1     ⍝ Otherwise recur.
+      }</pre><p>Implicit self-reference using <tt>'∇' </tt>has the further advantage that it incurs less interpretative overhead and is therefore quicker. Tail calls using <tt>'∇'</tt> are particularly efficient.</p><p>Recursive Dynamic Operators refer to their derived functions, that is the operator bound with its operand(s) using <tt>∇</tt> or the operator itself using the compound symbol: <tt>∇∇</tt>. The first form of self reference is by far the more frequently used.</p><pre>      pow←{           ⍝ Function power.
+          ⍺=0:⍵       ⍝ Apply function operand ⍺ times.
+          (⍺-1)∇ ⍺⍺ ⍵ ⍝ ⍺⍺ ⍺⍺ ⍺⍺ ... ⍵
+      }</pre><p>The following example shows a rather contrived use of the second form of (operator) self reference. The <tt>exp</tt> operator composes its function operand with itself on each recursive call. This gives the effect of an exponential application of the original operand function:</p><pre>      exp←{               ⍝ Exponential fn application.
+          ⍺=0:⍺⍺ ⍵        ⍝ Apply operand 2*⍺ times.
+          (⍺-1)⍺⍺∘⍺⍺ ∇∇ ⍵ ⍝ (⍺⍺∘⍺⍺)∘( ... ) ... ⍵
+      }
+      succ←{1+⍵}          ⍝ Successor (increment).
+      10 succ exp 0
+1024</pre><h4>Example: Pythagorean triples</h4><p>The following sequence shows an example of combining Dynamic Functions and Operators in an attempt to find Pythagorean triples: <tt>(3 4 5)(5 12 13)</tt> ...</p><pre> 
+      sqrt←{⍵*0.5}              ⍝ Square root.
+ 
+      sqrt 9 16 25
+3 4 5
+ 
+      hyp←{sqrt+/⊃⍵*2}          ⍝ Hypoteneuse of triangle.
+ 
+      hyp(3 4)(4 5)(5 12)
+5 6.403124237 13
+ 
+      intg←{⍵=⌊⍵}               ⍝ Whole number?
+ 
+      intg 2.5 3 4.5
+0 1 0
+ 
+      pyth←{intg hyp ⍵}         ⍝ Pythagorean pair?
+ 
+      pyth(3 4)(4 9)(5 12)
+1 0 1
+ 
+      pairs←{,⍳⍵ ⍵}             ⍝ Pairs of numbers 1..⍵.
+ 
+      pairs 3
+ 1 1  1 2  1 3  2 1  2 2  2 3  3 1  3 2  3 3
+ 
+      filter←{(⍺⍺ ⍵)/⍵}         ⍝ Op: ⍵ filtered by ⍺⍺.
+ 
+      pyth filter pairs 12      ⍝ Pythagorean pairs 1..12
+ 3 4  4 3  5 12  6 8  8 6  9 12  12 5  12 9</pre><p>So far, so good, but we have some duplicates: <tt>(6 </tt><tt>8)</tt> is just double <tt>(3 </tt><tt>4)</tt>.</p><pre> 
+      rpm←{                    ⍝ Relatively prime?
+          ⍵=0:⍺=1              ⍝ C.f. Euclid's gcd.
+          ⍵ ∇ ⍵|⍺
+      }/¨                      ⍝ Note the /¨
+ 
+      rpm(2 4)(3 4)(6 8)(16 27)
+0 1 0 1
+ 
+      rpm filter pyth filter pairs 20
+ 3 4  4 3  5 12  8 15  12 5  15 8</pre><p>We can use an operator to combine the tests:</p><pre>      and←{                    ⍝ Lazy parallel 'And'.
+          mask←⍺⍺ ⍵            ⍝ Left predicate selects...
+          mask\⍵⍵ mask/⍵       ⍝ args for right predicate.
+      }
+ 
+      pyth and rpm filter pairs 20
+ 3 4  4 3  5 12  8 15  12 5  15 8</pre><p>Better, but we still have some duplicates: <tt>(3 </tt><tt>4) (4 </tt><tt>3).</tt></p><pre>      less←{&lt;/⊃⍵}
+      less(3 4)(4 3)
+1 0
+ 
+      less and pyth and rpm filter pairs 40
+ 3 4  5 12  7 24  8 15  9 40  12 35  20 21</pre><p>And finally, as promised, triples:</p><pre>      {⍵,hyp ⍵}¨less and pyth and rpm filter pairs 35
+ 3 4 5  5 12 13  7 24 25  8 15 17  12 35 37  20 21 29</pre><h4>A Larger Example</h4><p>Function <tt>tokens</tt> uses nested local D-Fns to split an APL expression into its constituent tokens. Note that all calls on the inner functions: <tt>lex</tt>, <tt>acc</tt>, and the unnamed D-Fn in each token case, are <span class="Italic">tail calls</span>. In fact, the <span class="Italic">only </span>stack calls are those on function: <tt>all</tt>, and the unnamed function: <tt>{⍵∨¯1⌽⍵}</tt>, within the ‘Char literal’ case.</p><p class="pagebreakafter"> </p><pre>    tokens←{                        ⍝ Lex of APL src line.
+        alph←⎕A,⎕Á,'_∆⍙',26↑17↓⎕AV  ⍝ Alphabet for names.
+        all←{+/^\⍺∊⍵}               ⍝ No. of leading ⍺∊⍵.
+        acc←{(⍺,↑/⍵)lex⊃↓/⍵}        ⍝ Accumulate tokens.
+        lex←{
+            0=⍴⍵:⍺ ⋄ hd←↑⍵          ⍝ Next char else done.
+ 
+            hd=' ':⍺{               ⍝ White Space.
+                size←⍵ all' '
+                ⍺ acc size ⍵
+            }⍵
+ 
+            hd∊alph:⍺{              ⍝ Name
+                size←⍵ all alph,⎕D
+                ⍺ acc size ⍵
+            }⍵
+ 
+            hd∊'⎕:':⍺{              ⍝ System Name/Keyword
+                size←⍵ all hd,alph
+                ⍺ acc size ⍵
+            }⍵
+ 
+            hd='''':⍺{              ⍝ Char literal
+                size←+/^\{⍵∨¯1⌽⍵}≠\hd=⍵
+                ⍺ acc size ⍵
+            }⍵
+ 
+            hd∊⎕D,'¯':⍺{            ⍝ Numeric literal
+                size←⍵ all ⎕D,'.¯E'
+                ⍺ acc size ⍵
+            }⍵
+ 
+            hd='⍝':⍺ acc(⍴⍵)⍵       ⍝ Comment
+            ⍺ acc 1 ⍵               ⍝ Single char token.
+        }
+        (0⍴⊂'')lex,⍵
+    }
+      display tokens'xtok←size↑srce ⍝ Next token'
+.→-------------------------------------------------.
+| .→---. .→. .→---. .→. .→---. .→-. .→-----------. |
+| |xtok| |←| |size| |↑| |srce| |  | |⍝ Next token| |
+| '----' '-' '----' '-' '----' '--' '------------' |
+'∊-------------------------------------------------'</pre></body>
+</html>

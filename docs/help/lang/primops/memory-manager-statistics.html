@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←{X}(2000⌶)Y</tt>Memory Manager Statistics</h2><p>This function returns information about the state of the workspace and provides a means to reset certain statistics and to control workspace allocation. This I-Beam is provided for performance tuning and is VERY LIKELY to change in the next release.</p><p><tt>Y</tt> is a simple integer scalar or vector containing values listed in the table below.</p><p>If <tt>X</tt> is omitted, the result <tt>R</tt> is an array with the same structure as <tt>Y</tt>, but with values in <tt>Y</tt> replaced by the following statistics.  For any value in <tt>Y</tt> outside those listed below, the result is undefined.</p><table><tr><th class="Left">Value</th><th class="Left">Description</th></tr><tr><td>0</td><td>Workspace available (a "quick" <tt>⎕WA</tt>)</td></tr><tr><td>1</td><td>Workspace used</td></tr><tr><td>2</td><td>Number of compactions since the workspace was loaded</td></tr><tr><td>3</td><td>Number of garbage collections that found garbage</td></tr><tr><td>4</td><td>Current number of garbage pockets in the workspace</td></tr><tr><td>12</td><td>Sediment size</td></tr><tr><td>13</td><td>Current workspace allocation, i.e. the amount of memory that is actually being used</td></tr><tr><td>14</td><td>Workspace allocation high-water mark, i.e. the maximum amount of memory that has been used since the workspace was loaded or since this count was reset</td></tr><tr><td>15</td><td>Limit on minimum workspace allocation</td></tr><tr><td>16</td><td>Limit on maximum workspace allocation</td></tr></table><p>Note that while all other operations are relatively fast, the operation to count the number of garbage pockets (4) may take a noticeable amount of time, depending upon the size and state of the workspace.</p><h4>Examples</h4><pre class="APLCodeSmall">      2000⌶0
+55414796
+      2000⌶0 1 2 3 4 12 13 14 15 16
+55414796 10121204 5 0 0 2120524 34489168 34489168 0 65536000
+</pre><p>If <tt>X</tt> is specified,it must be either a simple integer scalar, or a vector of the same length as <tt>Y</tt>, and the result <tt>R</tt> is <tt>⍬</tt>. In this case, the value in <tt>Y</tt> specifies the item to be set and and <tt>X</tt> its new value according to the table below.</p><table><tr><th class="Left">Value</th><th class="Left">Description</th></tr><tr><td>2</td><td>0 resets the compaction count; no other values allowed</td></tr><tr><td>3</td><td>0 resets the count of garbage collections that found garbage; no other values allowed</td></tr><tr><td>14</td><td>0 resets the workspace allocation high-water mark; no other values allowed</td></tr><tr><td>15</td><td>Sets the minimum workspace allocation to the corresponding value in <tt>X</tt>; must be between 0 and the current workspace allocation</td></tr><tr><td>16</td><td>Sets the maximum workspace allocation to the corresponding value in <tt>X</tt>; 0 implies <span class="Parameter">MAXWS</span> otherwise must be between the current workspace allocation and <span class="Parameter">MAXWS</span>.</td></tr></table><h4 class="Note">Notes:</h4><ul class="Note"><li value="1">Note that the workspace allocation high-water mark indicates a minimum value for <span class="Parameter">MAXWS</span>.</li><li value="2">Limiting the maximum workspace allocation can be used to prevent code which grabs as much workspace as it can from skewing the peak usage result.</li><li value="3">Limiting the minimum workspace allocation can avoid repeatedly committing and releasing memory to the Operating System when memory usage is fluctuating.</li></ul><h4>Examples</h4><pre>      2000⌶2 3
+6 0 33216252
+      0 (2000⌶)2 3 14 ⍝ Reset compaction count
+
+      2000⌶2 3
+0 0
+      30000000 40000000(2000⌶)15 16 ⍝ Restrict min/max ws
+
+      (2000⌶)15 16
+30000000 40000000
+
+      0 (2000⌶)15 16 ⍝ Reset min/max ws
+
+      (2000⌶)15 16
+0 65536000
+</pre><p class="pagebreakafter"> </p><pre>      (2000⌶)13 14 ⍝ Current, peak WS allocation
+4072532 4072532
+
+      a←10e6⍴'x' ⍝ Increase WS allocation
+
+      (2000⌶)13 14 ⍝ Current, peak WS allocation
+15108580 15108580
+
+      ⎕ex 'a' ⋄ {}⎕wa ⍝ Decrease current WS allocation
+
+      (2000⌶)13 14 ⍝ Current, peak WS allocation
+1962856 15108580
+
+      0 (2000⌶) 14 ⍝ Reset High-water mark
+
+      (2000⌶)13 14 ⍝ Current, peak WS allocation
+1962856 1962856
+
+</pre></body>
+</html>

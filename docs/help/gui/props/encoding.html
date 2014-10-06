@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Property</tt>Encoding</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/tcpsocket.html">TCPSocket</a></td></tr></table><p class="Bold">Description</p><p>The Encoding property is a character vector that specifies how character data
+are encoded or translated. The possible values are <tt>'None'</tt>,
+<tt>'UTF-8'</tt>, <tt>'Classic'</tt>, or <tt>'Unicode'</tt>, depending upon the value of the <a href="style.html">Style</a> property. </p><p class="TableCaption"><span class="autonumber"><span>Table 25: </span></span>Unicode Edition</p><table><tr><th class="Left">Style</th><th class="Left">Encoding</th><th class="Left">Description</th></tr><tr><td><tt>'Raw'</tt></td><td class="DyalogDefault">'None'</td><td>Not applicable. Only integer data may be transmitted/received.</td></tr><tr><td class="Dyalog" rowspan="2">'Char'</td><td class="DyalogDefault">'None'</td><td>Transmission is limited to characters with Unicode code points in the
+        range 0-255. Attempting to transmit (or receive) a character outside
+        this range will cause <tt>DOMAIN ERROR</tt>.</td></tr><tr><td><tt>'UTF-8'</tt></td><td>Characters are transmitted/received using the UTF-8 encoding scheme.</td></tr><tr><td class="Dyalog" rowspan="2">'APL'</td><td class="DyalogDefault">'Classic'</td><td>Characters are transmitted/received as indices of <tt>⎕AV</tt>,
+        and translated according to the current value of <tt><a href="../../lang/sysfns/avu.html">⎕AVU</a></tt>.
+        An attempt to transmit or receive a characters not present in <tt><a href="../../lang/sysfns/avu.html">⎕AVU</a></tt> will cause <tt>TRANSLATION ERROR</tt></td></tr><tr><td><tt>'Unicode'</tt></td><td>Characters are transmitted/received <span class="Italic">as is</span> (as Unicode code
+        points).</td></tr></table><p class="TableCaption"><span class="autonumber"><span>Table 26: </span></span>Classic Edition</p><table><tr><th class="Left">Style</th><th class="Left">Encoding</th><th class="Left">Description</th></tr><tr><td><tt>'Raw'</tt></td><td class="DyalogDefault">'None'</td><td>Not applicable. Only integer data may be transmitted/received.</td></tr><tr><td class="Dyalog" rowspan="2">'Char'</td><td class="DyalogDefault">'None'</td><td>Characters (which are represented internally as indices of <tt>⎕AV</tt>)are
+        translated to and from ASCII using the Output Translate Table win.dot.</td></tr><tr><td><tt>'UTF-8'</tt></td><td>Characters are converted to/from Unicode using <tt><a href="../../lang/sysfns/avu.html">⎕AVU</a></tt> and transmitted/received using the UTF-8 encoding scheme. An attempt to
+        transmit or receive a characters not present in <tt><a href="../../lang/sysfns/avu.html">⎕AVU</a></tt> will cause <tt>TRANSLATION ERROR</tt>.</td></tr><tr><td class="Dyalog" rowspan="2">'Raw'</td><td class="DyalogDefault">'Classic'</td><td>Characters are transmitted/received as indices of <tt>⎕AV</tt>.</td></tr><tr><td><tt>'Unicode'</tt></td><td>Characters are converted to/from Unicode using <tt><a href="../../lang/sysfns/avu.html">⎕AVU</a></tt> and transmitted/received as Unicode code points. An attempt to transmit
+        or receive a characters not present in <tt><a href="../../lang/sysfns/avu.html">⎕AVU</a></tt> will cause <tt>TRANSLATION ERROR</tt>.</td></tr></table><p>The default value of Encoding depends upon the value of <a href="style.html">Style</a> as indicated.  Default values are highlighted <span class="DefaultOption">thus</span>.  in the above tables.</p><p>An attempt to set the value of Encoding to a value not valid for the current <a href="style.html">Style</a>,
+as implied by the above tables, will cause <tt>DOMAIN ERROR</tt>.</p><p>If you change the value of the <a href="style.html">Style</a> property, the value of Encoding will remain unchanged if it is valid for the new
+Style. Otherwise it will revert to the default value for the new value of <a href="style.html">Style</a>.</p><pre>      's0'⎕WC'TCPSocket' ('LocalPort' 2001)
+      s0.(Style Encoding)
+Char  None 
+
+      s0.Style←'APL'
+      s0.(Style Encoding)
+Apl  Classic</pre><p>Note that the <tt>'Classic'</tt> encoding is intended for use
+in communicating with the Classic Edition, and with programs designed to
+communicate with Version 11.0 or earlier. This is why it is the default for now.
+However, it is however intended that the default will change to <tt>'Unicode'</tt>in due course.</p></body>
+</html>

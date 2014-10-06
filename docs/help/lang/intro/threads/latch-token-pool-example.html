@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h3>Latch Example</h3><p>A <span class="Italic">latch </span>holds back a number of threads until the coast is clear. At a signal from another thread, the latch is opened so that all of the threads are released. The latch may (or may not) then be closed again to hold up subsequently arriving threads.</p><p>A visual example of a latch might be a ferry terminal, where cars accumulate in the queue until the ferry arrives. The barrier is then opened and all (up to a maximum number) of the cars are allowed through it and on to the ferry. When the last car is through, the barrier is re-closed.</p><pre>    tkt←6                         ⍝ 6-token: ferry ticket.
+ 
+    ∇ car ...
+[1]   ⎕TGET tkt                   ⍝ await ferry.
+[2]   ...
+ 
+    ∇ ferry ...
+[1]   arrives in port
+[2]   ⎕TPUT(↑,/⎕treq ⎕tnums)∩tkt  ⍝ ferry tickets for all.
+[3]   ...</pre><p>Note that it is easy to modify this example to provide a maximum number of ferry places per trip by inserting <tt>max_places↑</tt> between <tt>⎕TPUT</tt> and its argument. If fewer cars than the ferry capacity are waiting, the <tt>↑</tt> will fill with trailing 0s. This will not cause problems because zero tokens are ignored.</p><p>Let us replace the car ferry with a new road bridge. Once the bridge is ready for traffic, the barrier could be opened permanently by putting a <span class="Italic">negative</span> ticket in the pool.</p><pre>    ⎕TPUT -tkt      ⍝ open ferry barrier permananently.</pre><p>Cars could choose to take the last ferry if there are places:</p><pre>    ∇ car ...
+[1]   :Select ⎕TGET tkt
+[2]   :Case  tkt ⋄ take the last ferry.
+[3]   :Case -tkt ⋄ ferry full: take the new bridge.
+[4]   :End</pre><p>The above <tt>:Select</tt> works because by default, <tt>⎕TPUT -tkt</tt> puts a <span class="Italic">value</span> of -<tt>tkt</tt> into the token.</p></body>
+</html>

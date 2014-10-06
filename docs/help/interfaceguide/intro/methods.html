@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="Methods"></a>Methods</h2><h4><a name="_Toc289343816"></a>Calling Methods</h4><p>A method is similar to a function in that it may or may not take an argument, perform some action, and return a result.</p><p>Examples are the Print, NewPage, Setup and Abort methods, all of which cause a Printer object to take a particular action.</p><p>If the system variable <tt>⎕WX</tt> is 1, you may invoke an object's method using exactly the same syntax as you would use to call a function in that object.</p><p>For example, to execute the IDNToDate method of a Calendar object named <tt>F.CAL</tt>, you can use the expression:</p><pre>      F.CAL.IDNToDate 36525
+2000 1 1 5</pre><p>When you call a method in this way, the method name is case-sensitive and if you spell it incorrectly, you will get a  <tt>VALUE ERROR</tt>.</p><pre>      F.CAL.idntodate 36525
+VALUE ERROR
+      F.C.idntodate 36525
+     ^</pre><h4><a name="NQ_Methods"></a>Invoking Methods with <tt>⎕NQ </tt></h4><p>Methods may also be called using <tt>⎕NQ</tt> with a left argument of 2, indeed if <tt>⎕WX</tt> is 0, this is the only way to call a method.</p><p>The result of the method is returned by <tt>⎕NQ</tt>. Note however that the result is <span class="Italic">shy</span>.</p><p>For example, for a TreeView object you can obtain status information about a particular item in the object using the GetItemState method:</p><pre>      ⎕←2 ⎕NQ 'f.tv' 'GetItemState' 6
+96
+ </pre><p>Or you can call the IDNToDate method of a Calendar object <tt>F.C</tt> as follows:</p><pre>     ⎕←2 ⎕NQ 'F.CAL' 'IDNToDate' 36525
+2000 1 1 5</pre><p>When you call a method using <tt>2 ⎕NQ</tt> , the method name is <b>not</b> case-sensitive.</p><pre>     ⎕←2 ⎕NQ 'F.CAL' 'idntodate' 36525
+2000 1 1 5</pre><h4><a name="Events_Methods"></a>Events as Methods</h4><p>Methods and events are closely related and most events can be invoked as methods.</p><p>For example, you can reposition and resize a Form in one step by calling its Configure event as a method. The argument you supply is the same as the event message associated with the event, but with the first two items (Object and Event code) omitted.</p><pre>      F.Configure 10 10 30 20</pre><p>Or, using <tt>2 ⎕NQ</tt></p><pre>     2 ⎕NQ 'F' 'Configure' 10 10 30 20</pre><p>Notice that when you call an event as a method, you are executing the <span class="Italic">default processing</span> associated with the event. The setting for the Event property is ignored and, in particular, any callback associated with the event is not executed.</p></body>
+</html>

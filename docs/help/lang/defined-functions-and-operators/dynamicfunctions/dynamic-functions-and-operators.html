@@ -1,0 +1,10 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h2><a name="DynamicFunctionsAndOperators"></a>Dynamic Functions &amp; Operators</h2><p>A Dynamic Function (operator) is an alternative function definition style suitable for defining small to medium sized functions. It bridges the gap between operator expressions: <tt>rank←⍴∘⍴</tt> and full ‘header style’ definitions such as:</p><pre>    ∇ rslt←larg func rarg;local...</pre><p>In its simplest form, a dynamic function is an APL expression enclosed in curly braces <tt>{}</tt> possibly including the special characters <tt>⍺</tt> and <tt>⍵</tt> to represent the left and right arguments of the function respectively. For example:</p><pre>      {(+/⍵)÷⍴⍵} 1 2 3 4    ⍝ Arithmetic Mean (Average)
+2.5
+      3 {⍵*÷⍺} 64           ⍝ ⍺th root
+4</pre><p>Dynamic functions can be named in the normal fashion:</p><pre>      mean←{(+/⍵)÷⍴⍵}
+      mean¨(2 3)(4 5)
+ 2.5  4.5</pre><p>Dynamic Functions can be defined and used in any context where an APL function may be found, in particular:</p><ul><li value="1">In immediate execution mode as in the examples above.</li><li value="2">Within a defined function or operator.</li><li value="3">As the operand of an operator such as each (<tt>¨</tt>).</li><li value="4">Within another dynamic function.</li><li value="5">The last point means that it is easy to define nested local functions.</li></ul></body>
+</html>

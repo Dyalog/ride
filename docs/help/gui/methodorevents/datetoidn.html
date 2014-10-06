@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Method 264</tt>DateToIDN</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/calendar.html">Calendar</a></td><td class="SpacedPlain"><a href="../objects/datetimepicker.html">DateTimePicker</a></td><td class="SpacedPlain"><a href="../objects/root.html">Root</a></td></tr></table><p class="Bold">Description</p><p>This method is used to convert a date from <tt>⎕TS</tt> format into an <span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">IDN</a></span> suitable for use in a <a href="../objects/calendar.html">Calendar</a> object.</p><p>The argument to DateToIDN is a 3-element array as follows:</p><table><tr><td><tt>[1]</tt></td><td>Year</td><td>Integer</td></tr><tr><td><tt>[2]</tt></td><td>Month</td><td>Integer</td></tr><tr><td><tt>[3]</tt></td><td>Day</td><td>Integer</td></tr></table><p>DateToIDN will also accept a single enclosed argument containing these values. In either case, if you specify more than 3 numbers, excess elements they will be ignored.</p><h4>Examples</h4><pre>      F.C.DateToIDN 1998 9 11
+36048
+      F.C.DateToIDN ⊂1998 9 11
+36048
+      F.C.DateToIDN ⎕TS
+36048
+      F.C.DateToIDN,⎕TS
+36048</pre></body>
+</html>

@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{X}⎕CY Y</tt>Copy Workspace </h2><p><tt>Y</tt> must be a simple character scalar or vector identifying a saved workspace.  <tt>X</tt> is optional.  If present, it must be a simple character scalar, vector or matrix.  A scalar or vector is treated as a single row matrix.  Each (implied) row of <tt>X</tt> is interpreted as an APL name.</p><p>Each (implied) row of <tt>X</tt> is taken to be the name of an active object in the workspace identified by <tt>Y</tt>.  If <tt>X</tt> is omitted, the names of all defined active objects in that workspace are implied (defined functions and operators, variables, labels and namespaces).</p><p>Each object named in <tt>X</tt> (or implied) is copied from the workspace identified by <tt>Y</tt> to become the active object referenced by that name in the active workspace if the object can be copied.  A copied label is re-defined to be a variable of numeric type.  If the name of the copied object has an active referent in the active workspace, the name is disassociated from its value and the copied object becomes the active referent to that name.  In particular, a function in the state indicator which is disassociated may be executed whilst it remains in the state indicator, but it ceases to exist for other purposes, such as editing.</p><p>You may copy an object from a namespace by specifying its full pathname.  The object will be copied to the current namespace in the active workspace, losing its original parent and gaining a new one in the process.  You may only copy a GUI object into a namespace that is a suitable parent for that object.  For example, you could only copy a Group object from a saved workspace if the current namespace in the active workspace is itself a Form, SubForm or Group.</p><p>See <a href="../syscmds/copy.html#CopyWorkspace" class="MCXref_0">Copy Workspace </a> for further information and, in particular, the manner in which dependant objects are copied.</p><p>A <tt>DOMAIN ERROR</tt> is reported in any of the following cases:</p><ul><li value="1"><tt>Y</tt> is ill-formed, or is not the name of a workspace with access authorised for the active user account.</li><li value="2">Any name in <tt>X</tt> is ill-formed.</li><li value="3">An object named in <tt>X</tt> does not exist as an active object in workspace named in <tt>Y</tt>.</li></ul><p>An object being copied has the same name as an active label.</p><p>When copying data between Classic and Unicode Editions, <tt>⎕</tt>CY will fail and a <tt>TRANSLATION ERROR</tt> will be reported if <span class="Italic">any</span> object in workspace <tt>Y</tt> fails conversion between Unicode and <tt>⎕AV</tt> indices, whether or not that object is specified by <tt>X</tt>. See <a href="avu.html#AtomicVectorUnicode:" class="MCXref_0">Note</a> for further details.</p><p>A <tt>WS FULL</tt> is reported if the active workspace becomes full during the copying process.</p><h4>Example</h4><pre>      ⎕VR'FOO'
+     ∇ R←FOO
+[1]    R←10
+     ∇
+      'FOO' ⎕CY 'BACKUP'
+      ⎕VR'FOO'
+     ∇ R←FOO X
+[1]    R←10×X
+     ∇</pre><p>System variables are copied if explicitly included in the left argument, but not if the left argument is omitted.</p><h4>Example</h4><pre>      ⎕LX
+ 
+      (2 3⍴'⎕LX  X')⎕CY'WS/CRASH'
+      ⎕LX
+→RESTART</pre><p>A copied object may have the same name as an object being executed.  If so, the name is disassociated from the existing object, but the existing object remains defined in the workspace until its execution is completed.</p><h4>Example</h4><pre>      )SI
+#.FOO[1]*
+ 
+      ⎕VR'FOO'
+     ∇ R←FOO
+[1]    R←10
+     ∇
+ 
+      'FOO'⎕CY'WS/MYWORK'
+ 
+      FOO
+1 2 3
+      )SI
+#.FOO[1]*
+      →⎕LC
+10
+ </pre></body>
+</html>

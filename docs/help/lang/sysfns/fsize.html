@@ -1,0 +1,6 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⎕FSIZE Y</tt>File Size </h2><p><tt>Y</tt> must be a simple integer scalar or 1 or 2 element vector containing the file tie number followed by an optional passnumber.  If the passnumber is omitted it is assumed to be zero.  The result is a 4 element numeric vector containing the following:</p><table><tr><th class="Left">Element</th><th class="Left">Description</th></tr><tr><td>1</td><td>the number of first component</td></tr><tr><td>2</td><td>1 + the number of the last component, (i.e. the result of the next <tt>⎕FAPPEND</tt>)</td></tr><tr><td>3</td><td>the current size of the file in bytes</td></tr><tr><td>4</td><td>the file size limit in bytes</td></tr></table><h4>Example</h4><pre>      ⎕FSIZE 1
+1 21 65271 4294967295</pre></body>
+</html>

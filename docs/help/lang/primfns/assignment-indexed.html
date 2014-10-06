@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←X[I]←Y</tt>Assignment (Indexed)</h2><p>Indexed Assignment is the Assignment function modified by the Indexing function.  The phrase <tt>[I]←</tt> is treated as the function for descriptive purposes.</p><p><tt>Y</tt> may be any array.  <tt>X</tt> may be the <span class="Italic">name</span> of any array or a selection from a named array <tt>(EXP X)[I]←Y</tt>, see <a href="assignment-selective.html#SelectiveAssignment" class="MCXref_0">Assignment (Selective)</a>.  <tt>I</tt> must be a valid index specification.  The shape of <tt>Y</tt> must conform with the shape (implied) of the indexed structure defined by <tt>I</tt>.  If <tt>Y</tt> is a scalar or a unit vector it will be extended to conform.  A side effect of Indexed Assignment is to change the value of the indexed elements of <tt>X</tt>.</p><p><tt>R</tt> is the value of <tt>Y</tt>.  If the result is not explicitly assigned or used it is suppressed.</p><p><tt>⎕IO</tt> is an implicit argument of Indexed Assignment.</p><p>Three forms of indexing are permitted.</p><h4>Simple Indexed Assignment</h4><p>For vector <tt>X</tt>, <tt>I</tt> is a simple integer array whose items are from the set <tt>⍳⍴R</tt>.  Elements of <tt>X</tt> identified by index positions <tt>I</tt> are replaced by corresponding elements of <tt>Y</tt>.</p><h4>Examples</h4><pre>      +A←⍳5
+1 2 3 4 5
+ 
+      A[2 3]←10 ⋄ A
+1 10 10 4 5
+ </pre><p>The last-most element of <tt>Y</tt> is assigned when an index is repeated in <tt>I</tt>:</p><pre>      A[2 2]←100 101 ⋄ A
+1 101 10 4 5</pre><p>For matrix <tt>X</tt>, <tt>I</tt> is composed of two simple integer arrays separated by the semicolon character (<tt>;</tt>).  The arrays select indices from the rows and columns of <tt>X</tt> respectively.</p><h4 class="ExampleNewPage">Examples</h4><pre>      +B←2 3⍴'REDSUN'
+RED
+SUN
+ 
+      B[2;2]←'O' ⋄ B
+RED
+SON</pre><p>For higher-rank array <tt>X</tt>, <tt>I</tt> is a series of simple integer arrays with adjacent arrays separated by a single semicolon character (<tt>;</tt>).  Each array selects indices from an axis of <tt>X</tt> taken in row-major order.</p><h4>Examples</h4><pre>      C
+11 12 13
+14 15 16
+ 
+21 22 23
+24 25 26
+ 
+      C[1;1;3]←103 ⋄ C
+11 12 103
+14 15  16
+ 
+21 22  23
+24 25  26</pre><p>An indexing array may be ELIDED.  That is, if an indexing array is omitted from the <tt>K</tt>th axis, the indexing vector <tt>⍳(⍴X)[K]</tt> is implied:</p><pre>      C[;1;2 3]←2 2⍴112 113 122 123 ⋄ C
+11 112 113
+14  15  16
+ 
+21 122 123
+24  25  26
+ 
+      C[;;]←0 ⋄ C
+0 0 0
+0 0 0
+ 
+0 0 0
+0 0 0</pre><h4>Choose Indexed Assignment</h4><p>The index specification <tt>I</tt> is a non-simple integer array. Each item identifies a single element of <tt>X</tt> by a set of indices with one element per axis of <tt>X</tt> in row-major order.</p><h4>Examples</h4><pre>      C
+11 12 13 14
+21 22 23 24
+ 
+      C[⊂1 1]←101 ⋄ C
+101 12 13 14
+ 21 22 23 24
+ 
+      C[(1 2) (2 3)]←102 203 ⋄ C
+101 102  13 14
+ 21  22 203 24
+ 
+      C[2 2⍴(1 3)(2 4)(2 1)(1 4)]←2 2⍴103 204 201 104 ⋄ C
+101 102 103 104
+201  22 203 204</pre><p>A scalar may be indexed by the enclosed empty vector: </p><pre>      S
+10
+      S[⊂⍳0]←⊂'VECTOR' ⋄ S
+ VECTOR 
+      S[⊂⍳0]←5 ⋄ S
+5</pre><p>Choose Indexed Assignment may be used very effectively in conjunction with Index Generator (<tt>⍳</tt>) and Structural functions in order to assign into an array:</p><pre>      C
+11 12 13 14
+21 22 23 24
+ 
+      ⍳⍴C
+1 1  1 2  1 3  1 4
+2 1  2 2  2 3  2 4
+ 
+      C[1 1⍉⍳⍴C]←1 2 ⋄ C
+ 1 12 13 14
+21  2 23 24
+ 
+      C[2 ¯1↑⍳⍴C]←99 ⋄ C
+ 1 12 13 99
+21  2 23 99</pre><h4>Reach Indexed Assignment</h4><p>The index specification <tt>I</tt> is a non-simple integer array, each of whose items reach down to a nested element of <tt>X</tt>.  The items of an item of <tt>I</tt> are simple vectors (or scalars) forming sets of indices that index arrays at successive levels of <tt>X</tt> starting at the top-most level.  A set of indices has one element per axis at the respective level of nesting of <tt>X</tt> in row-major order.</p><h4>Examples</h4><pre>      D←(2 3⍴⍳6)(2 2⍴'SMITH' 'JONES' 'SAM' 'BILL')
+ 
+      D
+ 1 2 3   SMITH  JONES
+ 4 5 6   SAM    BILL
+ 
+      ≡J←⊂2 (1 2)
+¯3
+ 
+      D[J]←⊂'WILLIAMS' ⋄ D
+ 1 2 3   SMITH  WILLIAMS
+ 4 5 6   SAM    BILL
+ 
+      D[(1 (1 1))(2 (2 2) 1)]←10 'W' ⋄ D
+ 10 2 3   SMITH  WILLIAMS
+  4 5 6   SAM    WILL
+ 
+      E
+ GREEN  YELLOW  RED
+ 
+      E[⊂2 1]←'M' ⋄ E
+ GREEN  MELLOW  RED</pre><p>The context of indexing is important.  In the last example, the indexing method is determined to be Reach rather than Choose since <tt>E</tt> is a vector, not a matrix as would be required for Choose.  Observe that:</p><pre>      ⊂2 1 ←→ ⊂(⊂2),(⊂1)</pre><p>Note that for any array <tt>A</tt>, <tt>A[⊂⍬]</tt> represents a scalar quantity, which is the whole of <tt>A</tt>, so:</p><pre>      A←5⍴0
+      A
+0 0 0 0 0
+      A[⊂⍬]←1
+      A
+1</pre><h4>Combined Indexed and Selective Assignment</h4><p>Instead of <tt>X</tt> being a name, it may be a selection from a named array, and the statement is of the form <tt>(EXP X)[I]←Y</tt>.</p><pre>      MAT←4 3⍴'Hello' 'World'
+      (2↑¨MAT)[1 2;]←'#'
+      MAT
+ ##llo  ##rld  ##llo 
+ ##rld  ##llo  ##rld 
+ Hello  World  Hello 
+ World  Hello  World</pre><pre>      MAT←4 3⍴'Hello' 'World'
+      ⎕ML←1 ⍝ ∊ is Enlist
+     (∊MAT)[2×⍳⌊0.5×⍴∊MAT]←'#'
+      MAT
+ H#l#o  #o#l#  H#l#o 
+ #o#l#  H#l#o  #o#l# 
+ H#l#o  #o#l#  H#l#o 
+ #o#l#  H#l#o  #o#l# </pre></body>
+</html>

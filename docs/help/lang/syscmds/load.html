@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>)LOAD {ws}</tt>Load Workspace </h2><p>This command causes the named stored workspace to be loaded.  The current active workspace is lost.</p><p>If "<tt>ws</tt>" is a full or relative pathname, only the specified directory is examined.  If not, the APL workspace path (<span class="Code">WSPATH</span> is traversed in search of the named workspace.  A stored workspace is one which has previously been saved with the system command <tt>)SAVE</tt> or the system function <tt>⎕SAVE</tt>.  Under Windows, if  ‘<tt>ws</tt>’ is omitted, the File Open dialog box is displayed.</p><p>If the workspace name is not valid or does not exist or if access to the workspace is not authorised, the system reports "<tt>ws not found</tt>".  If the workspace name identifies a file or directory that is not a workspace, the system reports workspace name "<tt>is not a ws</tt>".  If successfully loaded, the system reports workspace name "<tt>saved</tt>", followed by the date and time when the workspace was last saved.  If the workspace is too large to be loaded into the APL session, the system reports "<tt>ws too large</tt>".  After loading the workspace, the latent expression (<tt>⎕LX</tt>) is executed unless APL was invoked with the -x option.</p><p>If the workspace contains any GUI objects whose <tt>Visible</tt> property is 1, these objects will be displayed.  If the workspace contains a non-empty <tt>⎕SM</tt> but does not contain an SM GUI object, the form defined by <tt>⎕SM</tt> will be displayed in a window on the screen.</p><p>Holding the Ctrl key down while entering a<tt> )LOAD</tt>  command or selecting a workspace from the session file menu now causes the incoming latent expression to be <span class="Italic">traced.</span></p><p>Holding the Shift key down while selecting a workspace from the session file menu will <span class="Italic">prevent</span> execution of the latent expression.</p><h4>Example</h4><pre>
+      )load dfns
+/opt/mdyalog/14.0/64/unicode/ws/dfns saved Thu Jan 16 00:09:55 2014
+
+An assortment of D Functions and Operators.
+
+      tree #                ⍝ Workspace map.
+      ↑¯10↑↓attrib ⎕nl 3 4  ⍝ What's new?
+      notes find 'Word'     ⍝ Apropos "Word".</pre></body>
+</html>

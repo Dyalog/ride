@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←↓[K]Y</tt>Split</h2><p><tt>Y</tt> may be any array.  The axis specification is optional.  If present, <tt>K</tt> must be a simple integer scalar or one-element vector.  The value of <tt>K</tt> must be an axis of <tt>Y</tt>.  If absent, the last axis is implied.</p><p>The items of <tt>R</tt> are the sub-arrays of <tt>Y</tt> along the <tt>K</tt>th axis.  <tt>R</tt> is a scalar if <tt>Y</tt> is a scalar.  Otherwise <tt>R</tt> is an array whose rank is<tt> ¯1+⍴⍴Y</tt> and whose shape is <tt>(K≠⍳⍴⍴Y)/⍴Y</tt>.</p><h4>Examples</h4><pre>      ↓3 4⍴'MINDTHATSTEP'
+ MIND  THAT  STEP
+ 
+      ↓2 5⍴⍳10
+ 1 2 3 4 5  6 7 8 9 10
+ 
+      ↓[1]2 5⍴⍳10
+ 1 6  2 7  3 8  4 9  5 10</pre></body>
+</html>

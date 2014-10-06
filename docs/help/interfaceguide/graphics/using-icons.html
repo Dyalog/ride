@@ -1,0 +1,10 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="Using_Icons"></a>Using Icons</h2><p>You have seen how icons can be displayed using the Picture property. Other uses of icons are described below.</p><p>Firstly, you can associate an icon with a Form or so that the icon is displayed (by Windows) when the Form is minimised. This is done using the IconObj property. For example, the following expressions would associate the UK Flag icon distributed with Visual Basic with the Form <tt>'F1'</tt>. This icon would then be displayed when <tt>'F1'</tt> is minimised.</p><pre>      'star'⎕WC'Icon'('Shell32.dll' ¯43)
+      'F1' ⎕WC 'Form' ('IconObj' star)</pre><p>The IconObj property also applies to the Root object <tt>'.'</tt>. This defines the icon to be displayed for your <b>application</b> as a whole when the user toggles between applications using Alt+Tab. It is used in conjunction with the Caption property which determines the description of your application that is shown alongside the icon, e.g.</p><pre>      'MYIcon' ⎕WC 'Icon' ...
+      '.' ⎕WS ('IconObj' MYIcon) ('Caption' 'My System')</pre><p>An icon can be displayed using the Image object. This object is used to position one or more Icon objects (or Bitmap objects) in a Form or Static. It can also be used to draw an icon on a Printer. If you make the Image dragable, you will be able to drag/drop the icon. The following example displays a dragable Icon at (10,10) in a Form. It also associates the callback function <tt>'Drop'</tt> with the DragDrop event so that this function is called when the user drag/drops the icon.</p><pre>      'F1' ⎕WC 'Form' ('Event' 'DragDrop' 'Drop')
+      'star'⎕WC'Icon'('Shell32.dll' ¯43)
+      'F1.I' ⎕WC 'Image' (10 10) ('Picture' star)
+       F1.I.Dragable←2</pre><p><img src="../images/icon-image.png" /></p><p>Notice that setting <tt>Dragable</tt>to 2 specifies that an object is fully displayed while it is being dragged. Setting <tt>Dragable</tt> to 1 causes only the bounding rectangle around the object to be dragged.</p></body>
+</html>

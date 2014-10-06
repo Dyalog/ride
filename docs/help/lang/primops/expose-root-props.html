@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←2401⌶Y</tt>Expose Root Properties</h2><p>This function is used to expose or hide Root Properties, Event and Methods.</p><p>If <tt>Y</tt> is 1, Root Properties, Events and Methods are exposed.</p><p>If <tt>Y</tt> is 0, no further Root Properties, Events or Methods are exposed; however any that have already been exposed will remain so.</p><p>This functionality is available in Windows versions by selecting or unselecting the <span class="Name">Expose Root Properties</span> MenuItem in the <span class="Name">Options</span> Menu in the Session. Note that deselecting this MenuItem only affects future references to Root Properties, Events or Methods.</p><p>This function is the only mechanism available under non-Windows versions of Dyalog APL; the state of this setting is saved in the workspace, and therefore cannot be controlled by an environment variable.</p><h4>Example</h4><pre>
+      #.GetEnvironment'MAXWS'
+VALUE ERROR
+      #.GetEnvironment'MAXWS'
+     ∧
+      
+      2401⌶1
+0
+      #.GetEnvironment'MAXWS'
+64M
+      
+      2401⌶0
+1
+      #.GetEnvironment'MAXWS'
+64M
+      #.GetCommandLine
+VALUE ERROR
+      #.GetCommandLine
+     ∧
+</pre></body>
+</html>

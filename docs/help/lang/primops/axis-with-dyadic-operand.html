@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←Xf[B]Y</tt>Axis (with Dyadic Operand)</h2><p><tt>f</tt> must be a dyadic primitive scalar function, or a dyadic primitive mixed function taken from <a href="#DyadicMixed" class="MCXref_TableRef_0">Table 16</a> below. <tt>B</tt> must be a numeric scalar or vector. <tt>X</tt> and <tt>Y</tt> may be any arrays whose items are appropriate to function <tt>f</tt>. Axis does not follow the normal syntax of an operator. </p><p class="TableCaption"><span class="autonumber"><span>Table 16: </span></span><a name="DyadicMixed"></a>Primitive dyadic mixed functions with optional axis.</p><table><tr><th class="Left">Function</th><th class="Left">Name</th><th class="Left">Range of B</th></tr><tr><td><tt>/ or ⌿</tt></td><td>Replicate</td><td><tt>B∊⍳⍴⍴Y</tt></td></tr><tr><td><tt>\ or ⍀</tt></td><td>Expand</td><td><tt>B∊⍳⍴⍴Y</tt></td></tr><tr><td><tt>⊂</tt></td><td>Partitioned Enclose</td><td><tt>B∊⍳⍴⍴Y</tt></td></tr><tr><td><tt>⌽ or ⊖</tt></td><td>Rotate</td><td><tt>B∊⍳⍴⍴Y</tt></td></tr><tr><td><tt>, or ⍪</tt></td><td>Catenate</td><td><tt>B∊⍳⍴⍴Y</tt></td></tr><tr><td><tt>, or ⍪</tt></td><td>Laminate</td><td><tt>(0≠1|B)^(B&gt;⎕IO-1)^(B&lt;⎕IO+(⍴⍴X)⌈⍴⍴Y)</tt></td></tr><tr><td><tt>↑</tt></td><td>Take</td><td>zero or more axes of <tt>Y</tt></td></tr><tr><td><tt>↓</tt></td><td>Drop</td><td>zero or more axes of <tt>Y</tt></td></tr></table><p>In most cases, <tt>B</tt> must be an integer value identifying the axis of <tt>X</tt> and <tt>Y</tt> along which function <tt>f</tt> is to be applied.</p><p> Exceptionally, <tt>B</tt> must be a fractional value for the Laminate function (<tt>,</tt>) whose upper and lower integer bounds identify a pair of axes or an extreme axis of <tt>X</tt> and <tt>Y</tt>. For Take (<tt>↑</tt>) and Drop (<tt>↓</tt>) , <tt>B</tt> can be a <b>vector</b> of two or more axes.</p><p><tt>⎕IO</tt> is an implicit argument of the derived function which determines the meaning of <tt>B</tt>.</p><h4 class="ExampleNewPage">Examples</h4><pre>      1 4 5 =[1] 3 2⍴⍳6
+1 0
+0 1
+1 0
+ 
+      2 ¯2 1/[2]2 3⍴'ABCDEF'
+AA  C
+DD  F
+ 
+      'ABC',[1.1]'='
+A=
+B=
+C=
+ 
+      'ABC',[0.1]'='
+ABC
+===
+ 
+      ⎕IO←O
+ 
+      'ABC',[¯0.5]'='
+ABC
+===</pre><h4>Axis with Scalar Dyadic Functions</h4><p>The axis operator <tt>[X]</tt> can take a scalar dyadic function as operand. This has the effect of ‘stretching’ a lower rank array to fit a higher rank one. The arguments must be conformable along the specified axis (or axes) with elements of the lower rank array being replicated along the other axes. </p><p>For example, if <tt>H</tt> is the higher rank array, <tt>L</tt> the lower rank one, <tt>X</tt> is an axis specification, and <tt>f</tt> a scalar dyadic function, then the expressions <tt>Hf[X]L</tt> and <tt>Lf[X]H</tt> are conformable if <tt>(⍴L)←→(⍴H)[X]</tt>. Each element of L is replicated along the remaining <tt>(⍴H)~X</tt> axes of <tt>H</tt>.</p><p>In the special case where both arguments have the same rank, the right one will play the role of the higher rank array. If <tt>R</tt> is the right argument, <tt>L</tt> the left argument, <tt>X</tt> is an axis specification and <tt>f</tt> a scalar dyadic function, then the expression <tt>Lf[X]R</tt> is conformable if <tt>(⍴L)←→(⍴R)[X]</tt>.</p><h4 class="ExampleNewPage">Examples</h4><pre>      mat
+10 20 30
+40 50 60
+ 
+      mat+[1]1 2       ⍝ add along first axis
+11 21 31
+42 52 62
+ 
+      mat+[2]1 2 3     ⍝ add along last axis
+11 22 33
+41 52 63
+ 
+      cube
+ 100  200  300
+ 400  500  600
+              
+ 700  800  900
+1000 1100 1200
+ 
+      cube+[1]1 2 
+ 101  201  301
+ 401  501  601
+              
+ 702  802  902
+1002 1102 1202
+ 
+      cube+[3]1 2 3
+ 101  202  303
+ 401  502  603
+              
+ 701  802  903
+1001 1102 1203
+ 
+      cube+[2 3]mat
+ 110  220  330
+ 440  550  660
+              
+ 710  820  930
+1040 1150 1260
+ 
+      cube+[1 3]mat
+ 110  220  330
+ 410  520  630
+              
+ 740  850  960
+1040 1150 1260</pre></body>
+</html>

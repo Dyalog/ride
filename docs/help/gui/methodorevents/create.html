@@ -1,0 +1,10 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Event 34</tt>Create</h2><p class="Bold"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Applies To</a></span></p><p class="Bold">Description</p><p>If enabled, this event is reported <span class="Italic">after</span> an object has been created.
+You may not nullify or modify the event with a 0-returning callback, nor may you
+generate the event using <tt>⎕NQ</tt>, or call it
+as a method.</p><p>The event message reported as the result of <tt>⎕DQ</tt>,
+or supplied as the right argument to your callback function, is a 3-element
+vector as follows :</p><table class="Event"><tr><td><tt>[1]</tt></td><td>Object</td><td>ref or character vector</td></tr><tr><td><tt>[2]</tt></td><td>Event</td><td><tt>'Create'</tt> or 34</td></tr><tr><td><tt>[3]</tt></td><td>Flag</td><td>1 = object was created by <tt>⎕WC</tt><br />0 = object was created by <tt>)LOAD</tt>, <tt>)COPY</tt> or <tt>⎕OR</tt></td></tr></table><p>This event also applies to the Session object <tt>⎕SE</tt> and may be used to fire a start-up function (in the <tt>⎕SE</tt> namespace) when APL initialises.</p></body>
+</html>

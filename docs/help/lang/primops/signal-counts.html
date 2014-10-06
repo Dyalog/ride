@@ -1,0 +1,5 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←4007⌶Y</tt>Signal Counts (UNIX only)</h2><p><tt>Y</tt> must be a simple empty vector but is ignored.</p><p>The result <tt>R</tt> is an integer vector of signal counts. The length of the vector is system dependent. On AIX 32-bit it is 63 on AIX 64-bit it is 256 but code should not rely on the length.</p><p>Each element is a count of the number of signals that have been generated since the last call to this function, or since the start of the process. <tt>R[1]</tt> is the number of occurrences of signal 1 (SIGHUP), <tt>R[2]</tt> the number of occurrences of signal 2, and so forth.</p><p>Each time the function is called it zeros the counts; it is therefore inadvisable to call it in more than one APL thread.</p><p>Currently, only SIGHUP, SIGINT, SIGQUIT, SIGTERM and SIGWINCH are counted and all other corresponding elements of <tt>R</tt> are 0.</p></body>
+</html>

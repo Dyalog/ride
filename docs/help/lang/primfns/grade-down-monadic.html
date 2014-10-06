@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⍒Y</tt>Grade Down (Monadic)</h2><p><tt>Y</tt> must be a simple character or simple numeric array of rank greater than 0.  <tt>R</tt> is an integer vector being the permutation of <tt>⍳1↑⍴Y</tt> that places the sub-arrays of <tt>Y</tt> along the first axis in descending order.  The indices of any set of identical sub-arrays in <tt>Y</tt> occur in <tt>R</tt> in ascending order.</p><p>If <tt>Y</tt> is a numeric array of rank greater than 1, the elements in each of the sub-arrays along the first axis are compared in ravel order with greatest weight being given to the first element and least weight being given to the last element.</p><h4>Example</h4><pre>      M
+2 5 3 2
+3 4 1 1
+2 5 4 5
+2 5 3 2
+2 5 3 4
+ 
+      ⍒M
+2 3 5 1 4
+ 
+      M[⍒M;]
+3 4 1 1
+2 5 4 5
+2 5 3 4
+2 5 3 2
+2 5 3 2</pre><p>If <tt>Y</tt> is a character array, the implied collating sequence is the numerical order of the corresponding Unicode code points (Unicode Edition) or the ordering of characters in <tt>⎕AV</tt> (Classic Edition).</p><p><tt>⎕IO</tt> is an implicit argument of Grade Down.</p><p class="Bold">Note that character arrays sort differently in the Unicode and Classic Editions.</p><h4>Example</h4><pre>      M
+Goldilocks
+porridge   
+Porridge   
+3 bears   </pre><table><tr><th class="Left">Unicode Edition</th><th class="Left">Classic Edition</th></tr><tr><td><pre>      ⍒M
+2 3 1 4</pre></td><td><pre>      ⍒M
+3 1 4 2</pre></td></tr><tr><td><pre>      M[⍒M;]
+porridge
+Porridge
+Goldilocks
+3 bears</pre></td><td><pre>      M[⍒M;]
+Porridge
+Goldilocks
+3 bears
+porridge</pre></td></tr></table></body>
+</html>

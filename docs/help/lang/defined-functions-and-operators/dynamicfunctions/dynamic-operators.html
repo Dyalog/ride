@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h3>Dynamic Operators</h3><p>The operator equivalent of a dynamic function is distinguished by the presence of  either of the compound symbols <tt>⍺⍺</tt> or <tt>⍵⍵</tt> anywhere in its definition. <tt>⍺⍺</tt> and <tt>⍵⍵</tt> represent the left and right operand of the operator respectively.</p><h4>Example</h4><p>The following monadic <tt>each</tt> operator applies its function operand only to unique elements of its argument. It then distributes the result to match the original argument. This can deliver a performance improvement over the primitive each (<tt>¨</tt>) operator if the operand function is costly and the argument contains a significant number of duplicate elements. Note however, that if the operand function causes side effects, the operation of dynamic and primitive versions will be different.</p><pre>      each←{              ⍝ Fast each:                           
+          shp←⍴⍵          ⍝ Shape and ...                        
+          vec←,⍵          ⍝ ... ravel of arg.                    
+          nub←∪vec        ⍝ Vector of unique elements.           
+          res←⍺⍺¨nub      ⍝ Result for unique elts.              
+          idx←nub⍳vec     ⍝ Indices of arg in nub ...
+          shp⍴idx⊃¨⊂res   ⍝ ... distribute result.
+      }</pre><p>The dyadic <tt>else</tt> operator applies its left (else right) operand to its right argument depending on its left argument.</p><pre>      else←{
+          ⍺: ⍺⍺ ⍵     ⍝ True: apply Left operand
+             ⍵⍵ ⍵     ⍝ Else,  ..   Right   ..
+      }
+      0 1 ⌈else⌊¨ 2.5     ⍝ Try both false and true.
+2 3</pre></body>
+</html>

@@ -1,0 +1,11 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Property</tt>UpperCase</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/root.html">Root</a></td></tr></table><p class="Bold">Description</p><p>This property specifies whether or not property names returned by <a href="../../lang/sysfns/wg.html"><tt>⎕WG</tt></a> and event names supplied by <a href="../../lang/sysfns/dq.html"><tt>⎕DQ</tt></a> and <a href="../../lang/sysfns/nq.html"><tt>⎕NQ</tt></a> are converted to uppercase or not. It is a boolean property where 1 means convert to upper case and 0 means not. The default is 0. For example :</p><pre>      '.' ⎕WG 'Type'
+
+Root
+
+      '.' ⎕WS 'UpperCase' 1
+      '.' ⎕WG 'Type'
+ROOT</pre><p>In Dyalog APL Version 6, property names were always reported in upper case. This was changed in Version 7. The UpperCase property is provided to enable applications developed prior to Dyalog APL/W Version 7 to function with minimal alteration.</p></body>
+</html>

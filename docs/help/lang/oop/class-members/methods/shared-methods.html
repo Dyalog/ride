@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../../help.css"></head>
+<body><h3>Shared Methods</h3><p>A Shared method runs in the Class namespace and may be called via an Instance or via the Class. However, a Shared method that is called via an Instance does not have direct access to the Fields and Properties of that Instance.</p><p>Class <tt>Parrot</tt> has a <tt>Speak</tt> method that does not require any information about the current Instance, so may be declared as Shared.</p><pre>:Class Parrot:Bird
+    
+    ∇ R←Speak times
+      :Access Public Shared
+      R←⍕times⍴⊂'Squark!'
+    ∇
+    
+:EndClass ⍝ Parrot
+ 
+      wild←⎕NEW Parrot
+      wild.Speak 2
+ Squark!  Squark! </pre><p>Note that <tt>Parrot.Speak</tt> may be executed directly from the Class and does not in fact require an Instance.</p><pre>      Parrot.Speak 3
+ Squark!  Squark!  Squark!</pre></body>
+</html>

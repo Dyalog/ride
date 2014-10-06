@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>(EXP X)←Y</tt>Assignment (Selective)</h2><p><tt>X</tt> is the <span class="Italic">name</span> of a variable in the workspace, possibly modified by the indexing function <tt>(EXP X[I])←Y</tt>, see <a href="assignment-indexed.html#Assignment(Indexed)" class="MCXref_0">Assignment (Indexed)</a>.  <tt>EXP</tt> is an expression that <b>selects</b> elements of <tt>X</tt>.  <tt>Y</tt> is an array expression. The result of the expression <tt>Y</tt> is allocated to the elements of <tt>X</tt> selected by <tt>EXP</tt>. </p><p>The following functions may appear in the selection expression. Where appropriate these functions may be used with axis <tt>[]</tt> and with the Each operator ¨.</p><p class="TableCaptionUN"><a name="Selective_Assignment_Functions"></a>Functions for Selective Assignment</p><table><tr><td class="DyalogPlain">↑</td><td>Take</td></tr><tr><td class="DyalogPlain">↓</td><td>Drop</td></tr><tr><td class="DyalogPlain">,</td><td>Ravel</td></tr><tr><td class="DyalogPlain">⍪</td><td>Table</td></tr><tr><td class="DyalogPlain">⌽</td><td>Reverse, Rotate</td></tr><tr><td class="DyalogPlain">⍴</td><td>Reshape</td></tr><tr><td class="DyalogPlain">⊃</td><td>Disclose, Pick</td></tr><tr><td class="DyalogPlain">⍉</td><td>Transpose (Monadic and Dyadic)</td></tr><tr><td class="DyalogPlain">/</td><td>Replicate</td></tr><tr><td class="DyalogPlain">\</td><td>Expand</td></tr><tr><td class="DyalogPlain">⌷</td><td>Index</td></tr><tr><td class="DyalogPlain">∊</td><td>Enlist (<tt>⎕ML≥1</tt>)</td></tr></table><p>Note: Mix and Split (monadic <tt>↑</tt> and <tt>↓</tt>), Type (monadic <tt>∊</tt> when <tt>⎕ML&lt;1</tt>) and Membership (dyadic <tt>∊</tt>) may not be used in the selection expression.</p><h4>Examples </h4><pre>      A←'HELLO'
+      ((A∊'AEIOU')/A)←'*'
+ 
+      A
+H*LL*
+ 
+      Z←3 4⍴⍳12
+      (5↑,Z)←0
+ 
+      Z
+0  0  0  0
+0  6  7  8
+9 10 11 12
+</pre><p class="pagebreakafter">      </p><pre>      MAT←3 3⍴⍳9
+      (1 1⍉MAT)←0
+ 
+      MAT
+0 2 3
+4 0 6
+7 8 0
+       
+      ⎕ML←1⍝ so ∊ is Enlist
+      names←'Andy' 'Karen' 'Liam'
+      (('a'=∊names)/∊names)←'*'
+      names
+ Andy  K*ren  Li*m</pre><h4><a name="Each_Operator"></a>Each Operator</h4><p>The functions listed in the table above may also be used with the Each Operator ¨.</p><h4>Examples</h4><pre>      A←'HELLO' 'WORLD'
+      (2↑¨A)←'*'
+      A
+ **LLO  **RLD
+ 
+      A←'HELLO' 'WORLD'
+      ((A='O')/¨A)←'*'
+      A
+ HELL*  W*RLD
+
+      A←'HELLO' 'WORLD'
+      ((A∊¨⊂'LO')/¨A)←'*'
+      A
+ HE***  W*R*D</pre><h4><a name="Indexing"></a>Bracket Indexing
+</h4><p>Bracket indexing may also be applied to the expression on the left of the assignment arrow. </p><h4>Examples</h4><pre>      MAT←4 3⍴'Hello' 'World'
+      (¯2↑¨MAT[;1 3])←'$'
+      MAT
+ Hel$$  World  Hel$$ 
+ Wor$$  Hello  Wor$$ 
+ Hel$$  World  Hel$$ 
+ Wor$$  Hello  Wor$$ 
+</pre></body>
+</html>

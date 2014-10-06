@@ -1,0 +1,11 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Object</tt>NetClient</h2><table class="GUIMembers"><tr><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Parents</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Children</a></span></td></tr></table><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Purpose:</td><td class="SpacedPlain">The NetClient object represents an instance of a Microsoft .Net class.</td></tr></table><p class="Bold">Description</p><p>The NetClient object represents an instance of a .Net class.</p><p>Normally, you create a NetClient object using the <tt>New</tt> method. For example:</p><pre>      ⎕USING ←'System'
+      DT1←DateTime.New 2002 4 30
+      DT1.Type
+NetClient</pre><p>If, for any reason, you are unable to use the <tt>New</tt> method, you may create a NetClient object using  <tt>⎕WC</tt>. In this case, the ClassName property specifies the <span class="Italic">full</span> name of the .Net class, and the ConstructorArgs property specifies the arguments for the constructor function if required.</p><pre>      ⎕USING ←'System'
+      'DT2'⎕WC'NetClient' 'System.DateTime'(1949 4 30)
+      DT2.(Type ClassName ConstructorArgs)
+ NetClient  System.DateTime  1949 4 30</pre></body>
+</html>

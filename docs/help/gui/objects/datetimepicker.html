@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Object</tt>DateTimePicker</h2><table class="GUIMembers"><tr><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Parents</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Children</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Properties</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Methods</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Events</a></span></td></tr></table><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Purpose:</td><td class="SpacedPlain">The DateTimePicker object is an editable date/time field with an
+        optional drop-down Calendar.</td></tr></table><p class="Bold">Description</p><p>The DateTimePicker object represents the built-in Windows date and time
+picker control. For most purposes, the DateTimePicker supersedes the use of
+Label, Edit and Spinner objects for displaying and entering dates and times.
+Unlike the Edit and Spinner objects, it is not possible for the user to enter an
+invalid date or time into a DateTimePicker.</p><p>The Style property may be either <tt>'Combo'</tt>(the default) or <tt>'UpDown'</tt>. The former
+provides a drop-down calendar that behaves in the same way as the Calendar
+object and whose appearance and behaviour is controlled by a set of properties
+namely CalendarCols, CircleToday, HasToday, MaxDate, MinDate, MonthDelta, Today
+and WeekNumbers that are common to the Calendar. See the Calendar Object for
+further details.</p><p>If Style is <tt>'Combo'</tt>, the Align property
+specifies the horizontal alignment of the drop-down Calendar which may be <tt>'Left'</tt>(the default) or <tt>'Right'</tt>.</p><p>If Style is <tt>'UpDown'</tt>, the
+DateTimePicker includes instead a pair of spinner buttons that allow the user to
+increment and decrement values in the various sub-fields provided by the
+control.</p><p>Note that the Style property may only be set when the object is created.</p><p>The <a href="../props/datetime.html">DateTime</a> property represents the
+date and time value that is currently displayed in the object. This is a
+4-element vector containing the IDN, hour, minutes and seconds respectively.</p><p>The FieldType property specifies one of a set of pre-defined date/time
+formats to be used by the control. This is a character vector that may be empty
+(the default), <tt>'Date'</tt>, <tt>'DateCentury'</tt>,
+<tt>'LongDate'</tt>, <tt>'Time'</tt>or <tt>'Custom'</tt>. Specifying an empty vector is
+the same as specifying <tt>'Date'</tt>. Note that <tt>'DateCentury'</tt>always displays a 4-digit year, regardless of the user's Windows settings.</p><p>If FieldType is set to <tt>'Custom'</tt>, the
+format is defined by the <a href="../props/customformat.html">CustomFormat</a> property. CustomFormat is a character vector that may contain a mixture of
+date/time format elements and body text.</p><p>The <a href="../props/hascheckbox.html">HasCheckBox</a> property is a
+Boolean value (default 0) that specifies whether or not a checkbox is displayed
+in the object. This allows the user to specify whether or not the date/time
+displayed in the DateTimePicker is applicable.</p></body>
+</html>

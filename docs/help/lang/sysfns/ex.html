@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←⎕EX Y</tt>Expunge Object </h2><p><tt>Y</tt> must be a simple character scalar, vector or matrix, or a vector of character vectors containing a list of names. <tt>R</tt> is a simple Boolean vector with one element per name in <tt>Y</tt>.</p><p>Each name in <tt>Y</tt> is disassociated from its value if the active referent for the name is a defined function, operator, variable or namespace.</p><p>The value of an element of <tt>R</tt> is 1 if the corresponding name in <tt>Y</tt> is now available for use.  This does not necessarily mean that the existing value was erased for that name.  A value of  0 is returned for an ill-formed name or for a distinguished name in <tt>Y</tt>.  The result is suppressed if not used or assigned.</p><h4>Examples</h4><pre>      ⎕EX'VAR'
+      +⎕EX'FOO' '⎕IO' 'X' '123'
+1 0 1 0</pre><p>If a named object is being executed the existing value will continue to be used until its execution is completed.  However, the name becomes available immediately for other use.</p><h4>Examples</h4><pre>      )SI
+#.FOO[1]*
+ 
+      ⎕VR'FOO'
+     ∇ R←FOO
+[1]    R←10
+     ∇
+      +⎕EX'FOO'
+1
+      )SI
+#.FOO[1]*
+ 
+     ∇FOO[⎕]
+defn error
+ 
+      FOO←1 2 3
+      →⎕LC
+10
+      FOO
+1 2 3</pre><p>If a named object is an external variable, the external array is disassociated from the name:</p><pre>      ⎕XT'F'
+FILES/COSTS
+      ⎕EX'F' ⋄ ⎕XT'F'</pre><p>If the named object is a GUI object, the object and all its children are deleted and removed from the screen.  The expression <tt>⎕EX'.'</tt> deletes all objects owned by the current thread <b>except</b> for the Root object itself. In addition, if this expression is executed by thread 0, it resets all the properties of  <tt>'.'</tt> to their default values. Furthermore, any unprocessed events in the event queue are discarded.</p><p>If the named object is a shared variable, the variable is retracted.</p><p>If the named object is the last remaining external function of an auxiliary process, the AP is terminated.</p><p>If the named object is the last reference into a dynamic link library, the DLL is freed.</p></body>
+</html>

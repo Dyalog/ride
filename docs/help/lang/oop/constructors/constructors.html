@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h2><a name="Constructors"></a>Constructors</h2><p>A Constructor is a special function defined in the Class script that is to be run when an Instance of the Class is created by <tt>⎕NEW</tt>. Typically, the job of a Constructor is to initialise the new Instance in some way.</p><p>A Constructor is identified by a <tt>:Implements Constructor</tt> statement. This statement may appear anywhere in the body of the function after the function header. The significance of this is discussed below.</p><p>Note that it is also <span class="Italic">essential</span> to define the Constructor to be <span class="Italic">Public</span>, with a <tt>:Access Public</tt> statement, because like all Class members, Constructors default to being <span class="Italic">Private</span>. Private Constructors currently have no use or purpose, but it is intended that they will be supported in a future release of Dyalog APL.</p><p>A Constructor function may be niladic or monadic and must not return a result.</p><p>A Class may specify any number of different Constructors of which one (and only one) may be niladic. This is also referred to as the <span class="Italic">default</span> Constructor.</p><p>There may be any number of monadic Constructors, but each must have a differently defined argument list which specifies the number of items expected in the Constructor argument. See <a href="constructor-overloading.html" class="MCXref_0">Constructor Overloading</a> for details.</p><p>Although possible, a Constructor function should not call another Constructor function. A constructor function may not be called directly from outside the Class. The only way a Constructor function may be invoked is by <tt>⎕NEW</tt>. See <a href="base-constructors.html" class="MCXref_0">Base Constructors</a> for further details.</p><p>When <tt>⎕NEW</tt> is executed <span class="Italic">with a 2-item argument, </span>the appropriate monadic Constructor is called with the second item of the <tt>⎕NEW</tt> argument.</p><p>The niladic (default) Constructor is called when <tt>⎕NEW</tt> is executed with a 1-item argument, a Class reference alone, or whenever APL needs to create a <a href="../../intro/variables/prototypes-and-fill-items.html">fill item</a> for the Class.</p><p>Note that <tt>⎕NEW</tt> first creates a new instance of the specified Class, and then executes the Constructor inside the instance.</p><h4>Example</h4><p>The <tt>DomesticParrot</tt> Class defines a Constructor function <tt>egg</tt> that initialises the Instance by storing its name (supplied as the 2<sup>nd</sup> item of the argument to <tt>⎕NEW</tt>) in a Public Field called <tt>Name</tt>.</p><p class="pagebreakafter"> </p><pre>:Class DomesticParrot:Parrot
+    :Field Public Name
+    
+    ∇ egg name
+      :Implements Constructor
+      :Access Public
+      Name←name
+    ∇
+    ...
+:EndClass ⍝ DomesticParrot</pre><p> </p><pre>      pol←⎕NEW DomesticParrot 'Polly'
+      pol.Name
+Polly</pre></body>
+</html>

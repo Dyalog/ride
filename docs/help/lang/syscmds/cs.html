@@ -1,0 +1,5 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>)CS {nm}</tt>Change Space </h2><p><tt>)CS</tt> changes the current space to the <b>global</b> namespace <tt>nm</tt>.</p><p>If no <tt>nm</tt> is given, the system changes to the top level (Root) namespace. If <tt>nm</tt> is not the name of a global namespace, the system reports the error message <tt>Namespace does not exist</tt>.</p><p><tt>name</tt> may be either a simple name or a compound name separated by '<tt>.</tt>', including one of the special names <tt>'#'</tt> (Root) or <tt>'##'</tt> (Parent).</p><h4>Examples</h4><pre>      )CS<br />#<br />      )CS X<br />#.X<br />      )CS Y.Z<br />#.X.Y.Z<br />      )CS ##<br />#.X.Y<br />      )CS #.UTIL<br />#.UTIL<br /></pre></body>
+</html>

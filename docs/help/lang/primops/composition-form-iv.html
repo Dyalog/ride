@@ -1,0 +1,9 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←Xf∘gY</tt>Composition (Form IV)</h2><p><tt>f</tt> may be any dyadic function.  <tt>g</tt> may be any monadic function which returns a result.  <tt>Y</tt> may be any array whose items are appropriate to function <tt>g</tt>.  Also <tt>gY</tt> must return a result whose items are appropriate as the right argument of function <tt>f</tt>.  <tt>X</tt> may be any array whose items are appropriate to function <tt>f</tt>.</p><p>The derived function is equivalent to <tt>XfgY</tt>.  The derived function need not return a result.</p><h4>Examples</h4><pre>      +∘÷/40⍴1       ⍝ Golden Ratio! (Bob Smith)
+1.618033989
+ 
+      0,∘⍳¨⍳5
+0 1  0 1 2  0 1 2 3  0 1 2 3 4  0 1 2 3 4 5</pre></body>
+</html>

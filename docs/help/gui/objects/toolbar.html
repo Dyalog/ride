@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Object</tt>ToolBar</h2><table class="GUIMembers"><tr><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Parents</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Children</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Properties</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Methods</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Events</a></span></td></tr></table><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Purpose:</td><td class="SpacedPlain">To manage a group of controls such as <a href="button.html">Button</a>s.</td></tr></table><p class="Bold">Description</p><p>The ToolBar object is used to display and manage a set of controls. It is
+typically used to present a set of <a href="button.html">Button</a>s
+which the user can press to perform various actions. However, the ToolBar has
+the ability to manage other controls too.</p><p>By default, the ToolBar is a raised bar stretched across the top of its
+parent form. You can alter its appearance using its <a href="../props/edgestyle.html">EdgeStyle</a> property and you can control its alignment with its <a href="../props/align.html">Align</a> property. <a href="../props/align.html">Align</a> can be set to Top (the
+default), Bottom, Left or Right and causes the ToolBar to be attached to the
+corresponding edge of the <a href="form.html">Form</a>. A ToolBar
+aligned Top or Bottom will automatically stretch or shrink horizontally when its
+parent <a href="form.html">Form</a> is resized, but it will remain fixed
+vertically. A ToolBar aligned Left or Right will stretch vertically but will
+remain fixed horizontally. By default a ToolBar occupies the entire width or
+length of the side of the <a href="form.html">Form</a> to which it is
+attached and is 30 pixels high or wide. You can change these defaults using the <a href="../props/posn.html">Posn</a> and <a href="../props/size.html">Size</a> properties.</p><p>A ToolBar organises its child controls in the order they are created. The way
+this is done is governed by the value of the <a href="../props/align.html">Align</a> property. If <a href="../props/align.html">Align</a> is Top or Bottom, the
+ToolBar arranges its controls in rows across the screen. If <a href="../props/align.html">Align</a> is Left or Right, the ToolBar arranges controls in columns.</p><p>The first control added to a ToolBar is automatically positioned 2 pixels
+down and 2 pixels across from its top left corner. The rule for positioning
+subsequent controls depends upon the value of the <a href="../props/align.html">Align</a> property.</p><p>If <a href="../props/align.html">Align</a> is <tt>'Top'</tt>or <tt>'Bottom'</tt>, controls are positioned so as
+to be horizontally adjacent to one another. Whenever a control is added it is
+positioned relative to the one that immediately preceded it so that its top left
+corner meets the top right corner of the previous one. The <a href="../props/hscroll.html">HScroll</a> property determines what happens when the end of the ToolBar is reached. If <a href="../props/hscroll.html">HScroll</a> is 0 (the default) a control that would otherwise extend beyond the width of the
+ToolBar is instead positioned immediately below the first control in the
+ToolBar, thereby starting a new row. Note however that the ToolBar is not
+automatically resized vertically to accommodate a second row. If you want a
+multi-row ToolBar you have to set its height explicitly. If <a href="../props/hscroll.html">HScroll</a> is <tt>¯1</tt> or <tt>¯2</tt>,
+controls continue to be added along the ToolBar even though they extend beyond
+its right edge and may be scrolled into view using a mini scrollbar. If <a href="../props/hscroll.html">HScroll</a> is <tt>¯1</tt>, the scrollbar is shown whether or
+not any controls extend beyond the width of the ToolBar. If <a href="../props/hscroll.html">HScroll</a> is <tt>¯2</tt>, the scrollbar appears only if
+required and may appear or disappear when the user resizes the parent <a href="form.html">Form</a>.</p><p>If <a href="../props/align.html">Align</a> is <tt>'Left'</tt>or <tt>'Right'</tt>, controls are positioned so as
+to be vertically adjacent to one another. Whenever a control is added, its top
+left corner is positioned against the bottom left corner of the previous
+control. The <a href="../props/vscroll.html">VScroll</a> property determines
+what happens when the bottom of the ToolBar is reached. If <a href="../props/vscroll.html">VScroll</a> is 0 (the default) a control that would otherwise extend beyond the bottom of
+the ToolBar is instead positioned immediately to the right of the first one;
+thereby starting a new column. Note however that the ToolBar is not
+automatically resized horizontally to accommodate a second column. You must set
+the width of the ToolBar explicitly.</p><p>If <a href="../props/vscroll.html">VScroll</a> is <tt>¯1</tt> or <tt>¯2</tt>,
+controls continue to be added down the ToolBar even though they extend beyond
+its bottom edge and may be scrolled into view using a mini scrollbar. If <a href="../props/vscroll.html">VScroll</a> is <tt>¯1</tt>, the scrollbar is shown whether or
+not any controls extend beyond the bottom of the ToolBar. If <a href="../props/vscroll.html">VScroll</a> is <tt>¯2</tt>, the scrollbar appears only if
+required and may appear or disappear when the user resizes the parent <a href="form.html">Form</a>.</p><p><a href="../props/vscroll.html">VScroll</a> and <a href="../props/hscroll.html">HScroll</a> may only be set when the object is created and may not subsequently be changed.</p><p>If you specify a value for its <a href="../props/posn.html">Posn</a> property, a control will be placed at the requested position regardless of the
+value of <a href="../props/style.html">Style</a>, <a href="../props/vscroll.html">VScroll</a> or <a href="../props/hscroll.html">HScroll</a>. However, the next control added
+will take its default position from the previous one according to the value of
+these properties. Thus if you wish to group your controls together with spaces
+between the groups, you need only specify the position of the first one in each
+group.</p><p>The ToolBar object was introduced in Dyalog APL before an appropriate standard Windows control existed. The ToolBar object should be considered as a legacy object and used only in old GUI applications. The <a href="toolcontrol.html">ToolControl</a> object should be used instead.</p></body>
+</html>

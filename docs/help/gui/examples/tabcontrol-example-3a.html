@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Example 3a</tt>TabControl</h2><pre>'F1'⎕WC'Form' 'TabControl: FlatButtons with FlatSeparators'('Size' 25 50)
+'F1.TC'⎕WC'TabControl'('Style' 'FlatButtons')('FlatSeparators' 1)
+
+'F1.TC.IL'⎕WC'ImageList'
+'F1.TC.IL.'⎕WC'Icon'('' 'APLIcon')
+'F1.TC.IL.'⎕WC'Icon'('' 'FUNIcon')
+'F1.TC.IL.'⎕WC'Icon'('' 'EDITIcon')
+
+'F1.TC'⎕WS'ImageListObj' 'F1.TC.IL'
+
+'F1.TC.T1'⎕WC'TabButton' 'One'('ImageIndex' 1)
+'F1.TC.T2'⎕WC'TabButton' 'Two'('ImageIndex' 2)
+'F1.TC.T3'⎕WC'TabButton' 'Three'('ImageIndex' 3)</pre><p><img src="../images/tab3a.gif" /></p></body>
+</html>

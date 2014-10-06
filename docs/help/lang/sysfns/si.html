@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⎕SI</tt>State Indicator </h2><p><tt>R</tt> is a nested vector of vectors giving the names of the functions or operators in the execution stack.</p><h4>Example</h4><pre>      )SI
+#.PLUS[2]*
+.
+#.MATDIV[4]
+#.FOO[1]*
+⍎
+ 
+      ⎕SI
+ PLUS  MATDIV  FOO
+ 
+      (⍴⎕LC)=⍴⎕SI
+1</pre><p>If execution stops in a callback function, <tt>⎕DQ</tt> will appear on the stack, and may occur more than once</p><pre>      )SI
+#.ERRFN[7]*
+⎕DQ
+#.CALC
+⎕DQ
+#.MAIN</pre><p>To edit the function on the top of the stack:</p><pre>      ⎕ED ⊃⎕SI</pre><p>The name of the function which called this one:</p><pre>      ⊃1↓⎕SI</pre><p>To check if the function <tt>∆N</tt> is pendent:</p><pre>     ((⊂∆N)∊1↓⎕SI)/'Warning : ',∆N,' is pendent'</pre><p>See also <a href="xsi.html#ExtendedStateIndicator" class="MCXref_0">Extended State Indicator </a>.</p></body>
+</html>

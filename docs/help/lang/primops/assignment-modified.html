@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←Xf←Y</tt>Assignment (Modified)</h2><p><tt>f</tt> may be any dyadic function which returns an explicit result.  <tt>Y</tt> may be any array whose items are appropriate to function <tt>f</tt>.  <tt>X</tt> must be the <span class="Italic">name</span> of an existing array whose items are appropriate to function <tt>f</tt>.</p><p><tt>R</tt> is the “pass-through” value, that is, the value of <tt>Y</tt>.  If the result of the derived function is not assigned or used, there is no explicit result.</p><p>The effect of the derived function is to reset the value of the array named by <tt>X</tt> to the result of <tt>XfY</tt>.</p><h4>Examples</h4><pre>      A
+1 2 3 4 5
+ 
+      A+←10
+ 
+      A
+11 12 13 14 15
+ 
+      ⎕←A×←2
+2
+      A
+22 24 26 28 30
+ 
+      vec←¯4+9?9 ⋄ vec
+3 5 1 ¯1 ¯2 4 0 ¯3 2
+      vec/⍨←vec&gt;0 ⋄vec
+3 5 1 4 2</pre></body>
+</html>

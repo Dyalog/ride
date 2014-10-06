@@ -1,0 +1,9 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←X!Y</tt>Binomial</h2><p><tt>X</tt> and <tt>Y</tt> may be any numbers except that if <tt>Y</tt> is a negative integer then <tt>X</tt> must be a whole number (integer). <tt>R</tt> is numeric. An element of <tt>R</tt> is integer if corresponding elements of <tt>X</tt> and <tt>Y</tt> are integers. Binomial is defined in terms of the function Factorial for positive integer arguments: </p><pre>      X!Y ←→ (!Y)÷(!X)×!Y-X</pre><p>For other arguments, results are derived smoothly from the Beta function:</p><pre>      Beta(X,Y) ←→ ÷Y×(X-1)!X+Y-1</pre><p>For positive integer arguments, <tt>R</tt> is the number of selections of <tt>X</tt> things from <tt>Y</tt> things.</p><h4>Example</h4><pre>      1 1.2 1.4 1.6 1.8 2!5
+5 6.105689248 7.219424686 8.281104786 9.227916704 10
+ 
+      2!3j2
+1J5</pre></body>
+</html>

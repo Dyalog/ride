@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←X,[K]Y</tt>Catenate/Laminate</h2><p><tt>Y</tt> may be any array.  <tt>X</tt> may be any array.  The axis specification is optional.  If specified, <tt>K</tt> must be a numeric scalar or unit vector which may have a fractional value.  If not specified, the last axis is implied.</p><p>The form <tt>R←X⍪Y</tt> may be used to imply catenation along the first axis.</p><p>Two cases of the function catenate  are permitted:</p><ol><li value="1">With an integer axis specification, or implied axis specification.</li><li value="2">With a fractional axis specification, also called <b>laminate</b>. </li></ol><h4>Catenation with Integer or Implied Axis Specification</h4><p>The arrays <tt>X</tt> and <tt>Y</tt> are joined along the required axis to form array <tt>R</tt>.  A scalar or unit vector is extended to the shape of the other argument except that the required axis is restricted to a unit dimension.  <tt>X</tt> and <tt>Y</tt> must have the same shape (after extension) except along the required axis, or one of the arguments may have rank one less than the other, provided that their shapes conform to the prior rule after augmenting the array of lower rank to have a unit dimension along the required axis. The rank of <tt>R</tt> is the greater of the ranks of the arguments, but not less than 1.</p><h4 class="ExampleNewPage">Examples</h4><pre>      'FUR','LONG'
+FURLONG
+ 
+      1,2
+1 2
+ 
+      (2 4⍴'THISWEEK')⍪'='
+THIS
+WEEK
+====
+ 
+      S,[1]+⌿S←2 3⍴⍳6
+1 2 3
+4 5 6
+5 7 9</pre><p>If, after extension, exactly one of <tt>X</tt> and <tt>Y</tt> have a length of zero along the joined axis, then the data type of <tt>R</tt> will be that of the argument with a non-zero length. Otherwise, the data type of <tt>R</tt> will be that of <tt>X</tt>.</p><h4>Lamination with Fractional Axis Specification</h4><p>The arrays <tt>X</tt> and <tt>Y</tt> are joined along a new axis created before the <tt>⌈K</tt>th axis.  The new axis has a length of 2.  <tt>K</tt> must exceed <tt>⎕IO</tt> (the index origin) minus 1, and <tt>K</tt> must be less than <tt>⎕IO</tt> plus the greater of the ranks of <tt>X</tt> and <tt>Y</tt>.  A scalar or unit vector argument is extended to the shape of the other argument.  Otherwise <tt>X</tt> and <tt>Y</tt> must have the same shape.</p><p>The rank of <tt>R</tt> is one plus the greater of the ranks of <tt>X</tt> and <tt>Y</tt>.</p><h4>Examples</h4><pre>      'HEADING',[0.5]'-'
+HEADING
+-------
+ 
+      'NIGHT',[1.5]'*'
+N*
+I*
+G*
+H*
+T* 
+      ⎕IO←0
+      'HEADING',[¯0.5]'-'
+HEADING
+-------</pre></body>
+</html>

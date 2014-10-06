@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⎕NULL</tt>Null Item</h2><p>This is a reference to a null item, such as may be returned across the COM interface to represent a null value. An example might be the value of an empty cell in a spreadsheet.</p><p><tt>⎕NULL</tt> may be used in any context that accepts a namespace reference, in particular:</p><ul><li value="1">As the argument to a defined function</li><li value="2">As an item of an array.</li><li value="3">As the argument to those primitive functions that take character data arguments, for example: <tt>=, ≠, ≡, ≢, ,, ⍴, ⊃, ⊂</tt></li></ul><h4>Example</h4><pre>      'EX'⎕WC'OLEClient' 'Excel.Application'
+      WB←EX.Workbooks.Open 'simple.xls'
+ 
+      (WB.Sheets.Item 1).UsedRange.Value2
+ [Null]  [Null]  [Null]  [Null]  [Null] 
+ [Null]    Year  [Null]  [Null]  [Null] 
+ [Null]    1999    2000    2001    2002 
+ [Null]  [Null]  [Null]  [Null]  [Null] 
+ Sales      100      76     120     150 
+ [Null]  [Null]  [Null]  [Null]  [Null] 
+ Costs       80      60     100     110 
+ [Null]  [Null]  [Null]  [Null]  [Null] 
+ Margin      20      16      20      40 </pre><p>To determine which of the cells are filled, you can compare the array with <tt>⎕NULL</tt>. </p><pre>      ⎕NULL≢¨(WB.Sheets.Item 1).UsedRange.Value2
+0 0 0 0 0
+0 1 0 0 0
+0 1 1 1 1
+0 0 0 0 0
+1 1 1 1 1
+0 0 0 0 0
+1 1 1 1 1
+0 0 0 0 0
+1 1 1 1 1</pre></body>
+</html>

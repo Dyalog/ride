@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h3><a name="Guards"></a>Guards</h3><p>A Guard is a Boolean-single valued expression followed on the right by a <tt>':'</tt>. For example:</p><pre>      0≡≡⍵:         ⍝ Right arg simple scalar
+      ⍺&lt;0:          ⍝ Left arg negative</pre><p>The guard is followed by a single APL expression: the result of the function.</p><pre>      ⍵≥0: ⍵*0.5    ⍝ Square root if non-negative.</pre><p>A Dynamic function may contain any number of guarded expressions each on a separate line (or collected on the same line separated by diamonds). Guards are evaluated in turn until one of them yields a 1. The corresponding expression to the right of the guard is then evaluated as the result of the function. </p><p>If an expression occurs without a guard, it is evaluated immediately as the default result of the function. For example:</p><pre>      sign←{   
+          ⍵&gt;0: '+ve'      ⍝ Positive
+          ⍵=0: 'zero'     ⍝ zero
+               '-ve'      ⍝ Negative (Default)
+      }</pre><p>Local definitions and guards can be interleaved in any order.</p><p>Note again that any code following the first unguarded expression (which terminates the function) could never be executed and would therefore be redundant.</p><pre>      log←{                   ⍝ Append ⍵ to file ⍺.
+          tie←⍺ ⎕fstie 0      ⍝ tie number for file,
+          cno←⍵ ⎕fappend tie  ⍝ new component number,
+          tie←⎕funtie tie     ⍝ untie file,        
+          1:rslt←cno          ⍝ comp number as shy result.
+      }</pre></body>
+</html>

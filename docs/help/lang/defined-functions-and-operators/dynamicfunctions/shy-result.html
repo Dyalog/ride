@@ -1,0 +1,10 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h3><a name="ShyResult"></a>Shy Result</h3><p>Dynamic Functions are usually 'pure' functions that take arguments and return explicit results. Occasionally, however, the main purpose of the function might be a side-effect such as the display of information in the session, or the updating of a file, and the value of a result, a secondary consideration. In such circumstances, you might want to make the result 'shy', so that it is discarded unless the calling context requires it. This can be achieved by assigning a dummy variable after a (true) guard:</p><pre>      log←{                   ⍝ Append ⍵ to file ⍺.
+          tie←⍺ ⎕fstie 0      ⍝ tie number for file,
+          cno←⍵ ⎕fappend tie  ⍝ new component number,
+          tie←⎕funtie tie     ⍝ untie file,        
+          1:rslt←cno          ⍝ comp number as shy result.
+      }</pre></body>
+</html>

@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Property</tt>FontList</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/printer.html">Printer</a></td><td class="SpacedPlain"><a href="../objects/root.html">Root</a></td></tr></table><p class="Bold">Description</p><p>The FontList property is a read-only property (you cannot set its value) that
+provides a list of available fonts.</p><p>Its value is a vector (1 per font) of 8-element character vectors, each of
+which is as follows :</p><table><tr><td><tt>[1]</tt></td><td>Face name (character vector)</td></tr><tr><td><tt>[2]</tt></td><td>Character height in "points" (integer)</td></tr><tr><td><tt>[3]</tt></td><td>Fixed width or not (boolean)</td></tr><tr><td><tt>[4]</tt></td><td>Italic or not (boolean)</td></tr><tr><td><tt>[5]</tt></td><td>Underline or not (boolean)</td></tr><tr><td><tt>[6]</tt></td><td>Weight (integer)</td></tr><tr><td><tt>[7]</tt></td><td>Angle of rotation (integer)</td></tr><tr><td><tt>[8]</tt></td><td>Character set (see <a href="charset.html">CharSet</a>)</td></tr></table><h4>Example:</h4><pre>       ↑'.'⎕WG'FontList'
+ System                         16 0 0 0 700 0   0
+ Terminal                       12 1 0 0 400 0 255
+ Fixedsys                       15 1 0 0 400 0   0
+ Roman                          37 0 0 0 400 0 255
+ Script                         36 0 0 0 400 0 255
+ Modern                         37 0 0 0 400 0 255
+ Small Fonts                     3 0 0 0 400 0   0
+ Courier                        13 1 0 0 400 0   0
+ Serif                          13 0 0 0 400 0   0
+ Dyalog Alt                     16 1 0 0 400 0   0
+ Dyalog Std                     16 1 0 0 400 0   0</pre><p>Note that the list of fonts obtained from FontList for a <a href="../objects/printer.html">Printer</a> object will include TrueType fonts and printer fonts but will exclude screen
+fonts. FontList for <a href="../objects/root.html">Root</a> will include TrueType
+fonts and screen fonts, but exclude printer-only fonts. The two lists will
+therefore (typically) be different.</p></body>
+</html>

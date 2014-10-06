@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="Using_NEW"></a>Creating Objects using <tt>⎕NEW</tt></h2><p>With the introduction of Classes in Version 11.0, you may manipulate Dyalog GUI objects as Instances of built-in (GUI) Classes. This approach supplements (but does not replace) the use of <tt>⎕WC</tt>, <tt>⎕WS</tt> and so forth.</p><p>To create a GUI object using <tt>⎕NEW</tt>, the Class is given as the GUI Object name and the Constructor Argument as a vector of (Property Name / Property Value) pairs. For example, to create a Form:</p><pre>      F1←⎕NEW 'Form' (⊂'Caption' 'Hello World')</pre><p>Notice however that only perfectly formed name/value pairs are accepted. The highly flexible syntax for specifying Properties by position and omitting levels of enclosure, that is supported by <tt>⎕WC</tt> and <tt>⎕WS</tt>, is not provided with <tt>⎕NEW</tt>.</p><p>Naturally, you may reference and assign Properties in the same way as for objects created using <tt>⎕WC</tt>:</p><pre>      F1.Size
+50 50
+      F1.Size←20 30</pre><p>Callbacks to regular defined functions in the Root or in another space, work in the same way too. If function <tt>FOO</tt> merely displays its argument:</p><pre>     ∇ FOO M
+[1]    ⎕←M
+     ∇
+
+      F1.onMouseUp←'#.FOO'
+#.[Form]  MouseUp  78.57142639 44.62540...</pre><p>Note that the first item in the event message is a ref to the Instance of the Form.</p><p>To create a control such as a Button, it is only necessary to run <tt>⎕NEW</tt> inside a ref to the appropriate parent object. For example:</p><pre>  B1←F1.⎕NEW 'Button' (('Caption' '&amp;OK')('Size' (10 10)))</pre><p>As illustrated in this example, it is not necessary to assign the resulting Button Instance to a name <span class="Italic">inside</span> the Form (<tt>F1</tt> in this case). However, it is a good idea to do so that refs to Instances of controls are expunged when the parent object is expunged. In the example above, expunging <tt>F1</tt> will not remove the Form from the screen because <tt>B1</tt> still exists as a ref to the Button. So, the following is safer:</p><pre> F1.B1←F1.⎕NEW'Button'(('Caption' '&amp;OK')('Size' (10 10)))</pre><p>Or perhaps better still, </p><pre> F1.(B1←⎕NEW 'Button'(('Caption' '&amp;OK')('Size' (10 10))))</pre></body>
+</html>

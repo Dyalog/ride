@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⎕STACK</tt>State Indicator Stack </h2><p><tt>R</tt> is a two-column matrix, with one row per entry in the State Indicator.</p><p>Column 1 :<tt>⎕OR</tt> form of user defined functions or operators on the State Indicator.  Null for entries that are not user defined functions or operators.</p><p>Column 2 :Indication of the type of the item on the stack.</p><table><tbody><tr><td><tt>space</tt></td><td>user defined function or operator</td></tr><tr><td><tt>⍎</tt></td><td>execute level</td></tr><tr><td><tt>⎕</tt></td><td>evaluated input</td></tr><tr><td><tt>*</tt></td><td>desk calculator level</td></tr><tr><td><tt>⎕DQ</tt></td><td>in callback function</td></tr><tr><td><tt>other</tt></td><td>primitive operator</td></tr></tbody></table><h4>Example</h4><pre>      )SI
+#.PLUS[2]*
+.
+#.MATDIV[4]
+#.FOO[1]*
+⍎
+ 
+      ⎕STACK
+         *
+∇PLUS
+         .
+∇MATDIV
+         *
+∇FOO
+         ⍎
+         *
+ 
+      ⍴⎕STACK
+8 2
+ 
+      (⍴⎕LC)=1↑⍴⎕STACK
+0</pre><p>Pendent defined functions and operators may be edited in Dyalog APL with no resulting SI damage.  However, only the visible definition is changed; the pendent version on the stack is retained until its execution is complete.  When the function or operator is displayed, only the visible version is seen.  Hence <tt>⎕STACK</tt> is a tool which allows the user to display the form of the actual function or operator being executed.</p><h4>Example</h4><p>To display the version of <tt>MATDIV</tt> currently pendent on the stack:</p><pre>      ⊃⎕STACK[4;1]
+     ∇ R←A MATDIV B
+[1]   ⍝ Divide matrix A by matrix B
+[2]    C←A⌹B
+[3]   ⍝ Check accuracy
+[4]    D←⌊0.5+A PLUS.TIMES B
+     ∇</pre></body>
+</html>

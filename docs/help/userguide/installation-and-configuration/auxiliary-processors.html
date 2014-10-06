@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="_Toc289335638"></a>Auxiliary Processors</h2><h4><a name="_Toc289335639"></a>Introduction</h4><p>Auxiliary Processors (APs) are non-APL programs which provide Dyalog APL users with additional facilities. They run under the control of Dyalog APL.</p><p>Typically, APs are used where speed of execution is critical, for utility libraries, or as interfaces to other products. APs may be written in any compiled language, although C is preferred and is directly supported.</p><p>Dyalog would recommend that rather than creating APs, customers should now create DLLs (Dynamic Shared Libraries)/shared libraries. If very high performance is required, customers should consider DWA (Direct Workspace Access); contact support@dyalog.com for more information about DWA, including pre-requisite training courses.</p><h4><a name="_Toc289335640"></a>Starting an AP</h4><p>An Auxiliary Processor is invoked using the dyadic form of<tt> ⎕CMD</tt>. The left argument to <tt>⎕CMD</tt> is the name of the program to be executed; the value of the <span class="Parameter">wspath</span> parameter is used to find the named file. In Dyalog APL/W, the right argument to <tt>⎕CMD</tt> is ignored.</p><pre>        'xutils' ⎕CMD ''</pre><p>On locating the specified program, Dyalog APL starts the AP and initialises a memory segment for communication between the workspace and the AP. This communication segment allows data to be passed from the workspace to the other process, and for results to be passed back. The AP then sends APL some information about its external functions (names, code numbers and calling syntax), which APL enters in the symbol table. APL then continues processing while the AP waits for instructions.</p><h4><a name="_Toc289335641"></a>Using the AP</h4><p>Once established, an AP is used by making a reference to one of its external functions. An external function behaves as if it was a locked defined function, but it is in effect an entry point to the AP. When an external function is referenced, APL transmits a code number to the AP, followed by any arguments. The AP then takes over and performs the desired processing before posting the result back.</p><h4><a name="_Toc289335642"></a>Terminating the AP</h4><p>An AP is terminated when all the last of its external functions is expunged from the active workspace. This could occur with the use of <tt>)CLEAR</tt>, <tt>)LOAD</tt>, <tt>)ERASE</tt>, <tt>⎕EX</tt>, <tt>)OFF</tt>, <tt>)CONTINUE</tt> or <tt>⎕OFF</tt>.</p><h4><a name="_Toc289335643"></a>Example:</h4><p>Start an Auxiliary Processor called <tt>EXAMPLE</tt>. This fixes two external functions called <tt>DATE_TO_IDN</tt> and <tt>IDN_TO_DATE</tt> which deal with the conversion of International Day Numbers to Julian Dates.</p><pre>.------------------------.
+|      APL PROCESS       |
+|------------------------|
+|     )CLEAR             |
+|clear ws                |
+|                        |   start AP  .--------------.
+|    'EXAMPLE' ⎕CMD ''   |------------&gt;|  AP EXAMPLE  |
+|                        |             |--------------|
+|                        | info about  |Send info on  |
+|                        |&lt;------------|external fns  |
+|                        |  functions  |              |
+|    )FNS                |             |  wait ...    |
+|DATE_TO_IDN IDN_TO_DATE |             |              |
+|                        |function code|              |
+|    IDN_TO_DATE 19407   |------------&gt;|call relevant |
+|                        |    19407    | subroutine   |
+|    wait ...            |             |              |
+|                        |&lt;-18 Feb 53--| send result  |
+|18 Feb 53               |             |              |
+|                        | terminate   |              |
+|     )CLEAR             |------------&gt;|     EXIT     |
+|clear ws                |  and stop   .--------------.
+|                        |
+.------------------------.
+</pre></body>
+</html>

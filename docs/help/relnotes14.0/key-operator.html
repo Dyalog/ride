@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../help.css"></head>
+<body><h2>Key Operator</h2><p> In the expression <tt>Xf⌸Y</tt> the Key operator <tt>⌸</tt><span class="MCTextPopup"><span class="MCTextPopupBody_0" style="display: none; ">The symbol ⌸ is not available in Classic Edition, and the Key operator is instead represented by ⎕U2338</span><a href="javascript:void(0);" class="MCTextPopupSpot_0" onclick="FMCTextPopup( event, this ); return false;" style="font-size: 0.9em; vertical-align: super">1</a></span> applies the function <tt>f</tt> to the major cells of array <tt>Y</tt><span class="Italic">grouped by</span> a set of keys which are specified by the major cells of array <tt>X</tt>.  For further details, see <a href="../lang/primops/key.html#Key" class="MCXref_0">Key</a>.</p><p>Consider a simple example where <tt>FRUIT</tt> and <tt>QTY</tt> are both vectors that represent sales transactions of fruit. Note that the major cells of a vector are its items.</p><pre>      FRUIT←'oranges' 'pears' 'apples' 'pears' 'oranges'
+      QTY←12 4 5 10 7
+      FRUIT,[1.5]QTY      
+ oranges  12
+ pears     4
+ apples    5
+ pears    10
+ oranges   7
+
+      FRUIT {⍺,+/⍵} ⌸ QTY
+ oranges  19
+ pears    14
+ apples    5
+</pre><p>In the expression <tt>FRUIT<span class="Dyalog">{⍺,+/⍵}</tt>⌸QTY</span>, <tt>⌸</tt> first calculates the set of unique elements of <tt>FRUIT</tt>. It then groups together the elements of<tt> QTY</tt> which relate to the same unique element of <tt>FRUIT</tt>. In this case, <tt>QTY[1 5]</tt> relates to <tt>'oranges'</tt>, <tt>QTY[2 4]</tt> relates to <tt>'pears'</tt> and <tt>QTY[3]</tt> relates to <tt>'apples'</tt>.</p><p>It then pairs each unique <tt>FRUIT</tt> with each corresponding subset of<tt> QTY</tt> and applies the function <tt>{⍺,+/⍵}</tt> between each pair, with each unique <tt>FRUIT</tt> as its left argument and each subset of <tt>QTY</tt> as its right argument. Specifically,  it applies function <tt>{⍺,+/⍵}</tt> three times with arguments as follows:</p><pre>      (⊂'oranges') {⍺,+/⍵} (12 7)
+      (⊂'pears')   {⍺,+/⍵} (4 10)
+      (⊂'apples')  {⍺,+/⍵} (,5)
+</pre></body>
+</html>

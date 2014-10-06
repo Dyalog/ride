@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⌹Y</tt>Matrix Inverse</h2><p><tt>Y</tt> must be a simple array of rank 2 or less.  <tt>Y</tt> must be non-singular.  If <tt>Y</tt> is a scalar, it is treated as a one-element matrix.  If <tt>Y</tt> is a vector, it is treated as a single-column matrix.  <tt>Y</tt> must have at least the same number of rows as columns.</p><p><tt>R</tt> is the inverse of <tt>Y</tt> if <tt>Y</tt> is a square matrix, or the left inverse of <tt>Y</tt> if <tt>Y</tt> is not a square matrix.  That is, <tt>R+.×Y</tt> is an identity matrix.</p><p>The shape of <tt>R</tt> is <tt>⌽⍴Y</tt>.</p><h4>Examples</h4><pre>      M
+2 ¯3
+4 10
+ 
+      +A←⌹M
+ 0.3125 0.09375
+¯0.125  0.0625</pre><p>Within calculation accuracy, <tt>A+.×M</tt> is the identity matrix.</p><pre>      A+.×M
+1 0
+0 1
+ 
+ 
+      j←{⍺←0 ⋄ ⍺+0J1×⍵}
+      x←j⌿¯50+?2 5 5⍴100
+      x
+¯37J¯41  25J015  ¯5J¯09   3J020 ¯29J041
+¯46J026  17J¯24  17J¯46  43J023 ¯12J¯18
+  1J013  33J025 ¯47J049 ¯45J¯14   2J¯26
+ 17J048 ¯50J022 ¯12J025 ¯44J015  ¯9J¯43
+ 18J013   8J038  43J¯23  34J¯07   2J026
+      ⍴x
+5 5
+      id←{∘.=⍨⍳⍵}  ⍝ identity matrix of order ⍵
+      ⌈/,| (id 1↑⍴x) - x+.×⌹x
+3.66384E¯16</pre></body>
+</html>

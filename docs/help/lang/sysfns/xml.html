@@ -1,0 +1,217 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←{X} ⎕XML Y</tt>XML Convert </h2><p><tt>⎕XML</tt> converts an XML string into an APL array or converts an APL array into an XML string.</p><p>Options for <tt>⎕XML</tt> are specified using the Variant operator <tt>⍠</tt> or by the optional left argument <tt>X</tt>. The former is recommended but the older mechanism using the left argument is still supported.</p><p>For conversion <span class="Italic">from</span> XML, <tt>Y</tt> is a character vector containing an XML string. The result <tt>R</tt> is a 5 column matrix whose columns are made up as follows:</p><table><tbody><tr><th class="Left">Column</th><th class="Left">Description</th></tr><tr><td>1</td><td>Numeric value which indicates the level of nesting</td></tr><tr><td>2</td><td>Element name, other markup text, or empty character vector when empty</td></tr><tr><td>3</td><td>Character data or empty character vector when empty</td></tr><tr><td>4</td><td>Attribute name and value pairs, (<tt>0 2⍴⊂''</tt>) when empty</td></tr><tr><td>5</td><td>A numeric value which indicates what the row contains</td></tr></tbody></table><p>The values in column 5 have the following meanings:</p><table><tbody><tr><th class="Left">Value</th><th class="Left">Description</th></tr><tr><td>1</td><td>Element</td></tr><tr><td>2</td><td>Child element</td></tr><tr><td>4</td><td>Character data</td></tr><tr><td>8</td><td>Markup not otherwise defined</td></tr><tr><td>16</td><td>Comment markup</td></tr><tr><td>32</td><td>Processing instruction markup</td></tr></tbody></table><h4>Example</h4><pre>      x←'&lt;xml&gt;&lt;document id="001"&gt;An introduction to XML'
+      x,←'&lt;/document&gt;&lt;/xml&gt;'</pre><pre class="APLCodeSmall">      ]display v←⎕XML x
+┌→───────────────────────────────────────────────────────┐
+↓   ┌→──┐      ┌⊖┐                      ┌→────────┐      │
+│ 0 │xml│      │ │                      ⌽ ┌⊖┐ ┌⊖┐ │    3 │
+│   └───┘      └─┘                      │ │ │ │ │ │      │
+│                                       │ └─┘ └─┘ │      │
+│                                       └∊────────┘      │
+│   ┌→───────┐ ┌→─────────────────────┐ ┌→───────────┐   │
+│ 1 │document│ │An introduction to XML│ ↓ ┌→─┐ ┌→──┐ │ 5 │
+│   └────────┘ └──────────────────────┘ │ │id│ │001│ │   │
+│                                       │ └──┘ └───┘ │   │
+│                                       └∊───────────┘   │
+└∊───────────────────────────────────────────────────────┘</pre><p>For conversion <span class="Italic">to</span> XML, <tt>Y</tt> is a 3, 4 or 5 column matrix and the result <tt>R</tt> is a character vector. The columns of <tt>Y</tt> have the same meaning as those described above for the result of converting <span class="Italic">from</span> XML.:</p><h4>Example</h4><pre>      ⎕XML v
+&lt;xml&gt; 
+  &lt;document id="001"&gt;An introduction to XML&lt;/document&gt;
+&lt;/xml&gt;</pre><h4>Introduction to XML and Glossary of Terms</h4><p>XML is an open standard, designed to allow exchange of data between applications. The full specification<span class="MCTextPopup"><span class="MCTextPopupBody_0" style="display: none; ">http://www.w3.org/TR/2008/REC-xml-20081126/</span><a href="javascript:void(0);" class="MCTextPopupSpot_0" onclick="FMCTextPopup( event, this ); return false;" style="font-size: 0.9em; vertical-align: super">1</a></span> describes functionality, including processing directives and other directives, which can transform XML data as it is read, and which a full XML processor would be expected to handle. </p><p>The <tt>⎕XML</tt> function is designed to handle XML to the extent required to import and export APL data. It favours speed over complexity - some markup is tolerated but largely ignored, and there are no XML query or validation features. APL applications which require processing, querying or validation will need to call external tools for this, and finally call <tt>⎕XML</tt> on the resulting XML to perform the transformation into APL arrays. </p><p>XML grammar such as processing instructions, document type declarations etc may optionally be stored in the APL array, but will not be processed or validated. This is principally to allow regeneration of XML from XML input which contains such structures, but an APL application could process the data if it chose to do so.</p><p>The XML definition uses specific terminology to describe its component parts. The following is a summary of the terms used in this section: </p><h4>Character Data</h4><p>Character data consists of free-form text. The free-form text should not include the characters ‘&gt;’, ‘&lt;’ or ‘&amp;’, so these must be represented by their entity references (‘&amp;gt;’, ‘&amp;lt;’ and ‘&amp;amp;’ respectively), or numeric character references.</p><h4>Entity References and Character References</h4><p>Entity references are named representations of single characters which cannot normally be used in character data because they are used to delimit markup, such as &amp;gt; for ‘&gt;’. Character references are numeric representations of any character, such as &amp;#20; for space. Note that character references always take values in the Unicode code space, regardless of the encoding of the XML text itself.</p><p><tt>⎕XML</tt>converts entity references and all character references which the APL character set is able to represent into their character equivalent when generating APL array data; when generating XML it converts any or all characters to entity references as needed.</p><p>There is a predefined set of entity references, and the XML specification allows others to be defined within the XML using the <span class="Code">&lt;!ENTITY &gt;</span> markup. <tt>⎕XML</tt> does not process these additional declarations and therefore will only convert the predefined types. </p><h4>Whitespace</h4><p>Whitespace sequences consist of one or more spaces, tabs or line-endings. Within character data, sequences of one or more whitespace characters are replaced with a single space when this is enabled by the whitespace option. Line endings are represented differently on different systems (0x0D 0x0A, 0x0A and 0x0D are all used) but are normalized by converting them all to 0x0A before the XML is parsed, regardless of the setting of the whitespace option.</p><h4>Elements</h4><p>An element consists of a balanced pair of tags or a single empty element tag. Tags are given names, and start and end tag names must match.</p><p>An example pair of tags, named TagName is</p><p><span class="Code"> &lt;TagName&gt;&lt;/TagName&gt;</span></p><p>This pair is shown with no content between the tags; this may be abbreviated as an empty element tag as</p><p><span class="Code"> &lt;TagName/&gt;</span></p><p>Tags may be given zero or more attributes, which are specified as name/value pairs; for example</p><p><span class="Code"> &lt;TagName AttName=”AttValue”&gt;</span></p><p>Attribute values may be delimited by either double quotes as shown or single quotes (apostrophes); they may not contain certain characters (the delimiting quote, ‘&amp;’ or ‘&lt;’) and these must be represented by entity or character references.</p><p>The content of elements may be zero or more mixed occurrences of character data and nested elements. Tags and attribute names <span class="Italic">describe</span> data, attribute values and the content within tags contain the data itself. Nesting of elements allows structure to be defined.</p><p>Because certain markup which describes the format of allowable data (such as element type declarations and attribute-list declarations) is not processed, no error will be reported if element contents and attributes do not conform to their restricted declarations, nor are attributes automatically added to tags if not explicitly given.</p><p>Attributes with names beginning <b>xml:</b> are reserved. Only <b>xml:space</b> is treated specially by <tt>⎕XML</tt>. When converting both from and to XML, the value for this attribute has the following effects on space normalization for the character data within this element and child elements within it (unless subsequently overridden):</p><ul><li value="1"><b>default</b> – space normalization is as determined by the <b>whitespace</b> option. </li><li value="2"><b>preserve</b> - space normalization is disabled – all whitespace is preserved as given.</li><li value="3"><b>any other value</b> – rejected.</li></ul><p>Regardless of whether the attribute name and value have a recognised meaning, the attribute will be included in the APL array / generated XML. Note that when the names and values of attributes are examined, the comparisons are case-sensitive and take place after entity references and character references have been expanded. </p><h4>Comments</h4><p>Comments are fully supported markup. They are delimited by ‘&lt;!--‘ and ‘--&gt;’ and all text between these delimiters is ignored. This text is included in the APL array if markup is being preserved, or discarded otherwise.</p><h4>CDATA Sections</h4><p>CDATA Sections are fully supported markup. They are used to delimit text within character data which has, or may have, markup text in it which is not to be processed as such. They and are delimited by ‘&lt;![CDATA[‘ and ‘]]&gt;’. CDATA sections are never recorded in the APL array as markup when XML is processed – instead, that data appears as character data. Note that this means that if you convert XML to an APL array and then convert this back to XML, CDATA sections will not be regenerated. It is, however, <span class="Italic">possible</span> to generate CDATA sections in XML by presenting them as markup.</p><h4>Processing Instructions</h4><p>Processing Instructions are delimited by ‘&lt;&amp;’ and ‘&amp;&gt;’ but are otherwise treated as other markup, below. </p><h4>Other markup</h4><p>The remainder of XML markup, including document type declarations,  XML declarations and text declarations are all delimited by ‘&lt;!’ and ‘&gt;’, and may contain nested markup. If markup is being preserved the text, including nested markup, will appear as a single row in the APL array.  <tt>⎕XML</tt> does not process the contents of such markup. This has varying effects, including but not limited to the following:</p><ul><li value="1">No validation is performed.</li><li value="2">Constraints specified in markup such element type declarations will be ignored and therefore syntactically correct elements which fall outside their constraint will not be rejected.</li><li value="3">Default attributes in attribute-list declarations will not be automatically added to elements.</li><li value="4">Conditional sections will always be ignored.</li><li value="5">Only standard, predefined, entity references will be recognized; entity declarations which define others entity references will have no effect.</li><li value="6">External entities are not processed.</li></ul><h4>Conversion from XML</h4><ul><li value="1">The level number in the first column of the result <tt>R</tt> is 0 for the outermost level and subsequent levels are represented by an increase of 1 for each level. Thus, for</li><li value="2">&lt;xml&gt;&lt;document id="001"&gt;An introduction to XML &lt;/document&gt;&lt;/xml&gt;</li><li value="3">The <span class="Italic">xml</span> element is at level 0 and the <span class="Italic">document id</span> element is at level 1. The text within the <span class="Italic">document id</span> element is at level 2.</li><li value="4">Each tag in the XML contains an element name and zero or more attribute name and value pairs, delimited by ‘&lt;’ and ‘&gt;’ characters. The delimiters are not included in the result matrix. The element name of a tag is stored in column 2 and the attribute(s) in column 4.</li><li value="5">All XML markup other than tags are delimited by either ‘&lt;!’ and ‘&gt;’, or ‘&lt;?’ and ‘&gt;’ characters. By default these are not stored in the result matrix but the <b>markup</b> option may be used to specify that they are. The elements are stored in their entirety, except for the leading and trailing ‘&lt;’ and ‘&gt;’ characters, in column 2. Nested constructs are treated as a single block. Because the leading and trailing ‘&lt;’ and ‘&gt;’ characters are stripped, such entries will always have either ‘!’ or ‘&amp;’ as the first character.</li><li value="6">Character data itself has no tag name or attributes. As an optimisation, when character data is the sole content of an element, it is included with its parent rather than as a separate row in the result. Note that when this happens, the level number stored is that of the parent; the data itself implicitly has a level number one greater.</li><li value="7">Attribute name and value pairs associated with the element name are stored in the fourth column, in an (<span class="Italic">n x 2</span>) matrix of character values, for the <span class="Italic">n</span> (including zero) pairs.</li><li value="8">Each row is further described in the fifth column as a convenience to simplify processing of the array (although this information could be deduced). Any given row may contain an entry for an element, character data, markup not otherwise defined, a comment or a processing instruction. Furthermore, an element will have zero or more of these as children. For all types except elements, the value in the fifth column is as shown above. For elements, the value is computed by adding together the value of the row itself (1) and those of its children. For example, the value for a row for an element which contains one or more sub-elements and character data is 7 – that is 1 (element) + 2 (child element) + 4 (character data). It should be noted that:</li><li value="9">Odd values always represent elements. Odd values other than 1 indicate that there are children.</li><li value="10">Elements which contain just character data (5) are combined into a single row as noted previously.</li><li value="11">Only immediate children are considered when computing the value. For example, an element which contains a sub-element which in turn contains character data does not itself contain the character data.</li><li value="12">The computed value is derived from what is actually preserved in the array. For example, if the source XML contains an element which contains a comment, but comments are being discarded, there will be no entry for the comment in the array and the fifth column for the element will not indicate that it has a child comment.</li></ul><h4>Conversion to XML</h4><p>Conversion to XML takes an array with the format described above and generates XML text from it. There are some simplifications to the array which are accepted:</p><ul><li value="1">The fifth column is not needed for XML generation and is effectively ignored. Any numeric values are accepted, or the column may be omitted altogether.</li><li value="2">If there are no attributes in a particular row then the <tt>(0 2⍴⊂'')</tt> may be abbreviated as  <tt>⍬</tt> (zilde). If the fifth column is omitted then the fourth column may also be omitted altogether.</li><li value="3">Data in the third column and attribute values in the fourth column (if present) may be provided as either character vectors or numeric values. Numeric values are implicitly formatted as if <tt>⎕PP</tt> was set to 17.</li></ul><p>The following validations are performed on the data in the array:</p><ul><li value="1">All elements within the array are checked for type.</li><li value="2">Values in column 1 must be non-negative and start from level 0, and the increment from one row to the next must be ≤ +1. </li><li value="3">Tag names in column 2 and attribute names in column 4 (if present) must conform to the XML name definition.</li></ul><p>Then, character references and entity references are emitted in place of characters where necessary, to ensure that valid XML is generated. However, markup, if present, is <span class="Italic">not</span> validated and it is possible to generate invalid XML if care in not taken with markup constructs.</p><h4>Options</h4><p>There are 3 options which may be specified using the Variant operator <tt>⍠</tt> (recommended) or by the optional left argument <tt>X</tt> (retained for backwards compatibility). The names are different and are case-sensitive; they must be spelled exactly as shown below.</p><table style="width: 100%;"><tr><th class="Left">Option names for Variant</th><th class="Left">Option names for left argument</th></tr><tr><td><li value="1"> Whitespace</li></td><td>whitespace</td></tr><tr><td><li value="1"> Markup</li></td><td>markup</td></tr><tr><td>UnknownEntity</td><td>unknown-entity</td></tr></table><p>The values of each option are tabulated below. In each case the value of the option for Variant is given first, followed by its equivalent for the optional left argument in brackets; e.g.<b> UnknownEntity (unknown-entity)</b>.</p><p>Note that the <span class="DefaultOption">default</span> value is shown first, and that the option names and values are case-sensitive.</p><p>If options are specified using the optional left argument,  <tt>X</tt> specifies a set of option/value pairs, each of which is a character vector. <tt>X</tt> may be a 2-element vector, or a vector of 2-element character vectors. In the examples below, this method is illustrated by the equivalent expression written as a comment, following the recommended approach using the Variant operator <tt>⍠</tt>. i.e. </p><pre>
+      ]display (⎕XML⍠'Whitespace' 'Strip')eg
+      ⍝      'whitespace' 'strip' ⎕XML eg</pre><p>Errors detected in the input arrays or options will all cause <tt>DOMAIN ERROR</tt>.</p><h4>Whitespace (whitespace)</h4><p>When converting from XML <tt>Whitespace</tt> specifies the default handling of white space surrounding and within character data. When converting to XML <tt>Whitespace</tt> specifies the default formatting of the XML. Note that attribute values are not comprised of character data so white space in attribute values is always preserved.</p><table><tr><th colspan="2" class="Left">Converting from XML</th></tr><tr><td class="DyalogDefault">Strip<br />(strip)</td><td>	All leading and trailing whitespace sequences are removed; remaining whitespace sequences are replaced by a single space character</td></tr><tr><td><tt>Trim<br />(trim)</tt></td><td>	All leading and trailing whitespace sequences are removed; all remaining white space sequences are handled as preserve</td></tr><tr><td><tt>Preserve<br />(preserve)</tt></td><td>	Whitespace is preserved as given except that line endings are represented by Linefeed
+				(<tt>⎕UCS 10</tt>)</td></tr><tr><th colspan="2" class="Left">Converting to XML</th></tr><tr><td class="DyalogDefault">Strip<br />(strip)</td><td>	All leading and trailing whitespace sequences are removed; remaining whitespace sequences within the data are replaced by a single space character. XML is generated with formatting and indentation to show the data structure</td></tr><tr><td><tt>Trim<br />(trim)</tt></td><td>Synonymous with <tt>strip</tt></td></tr><tr><td><tt>Preserve<br />(preserve)</tt></td><td>	White space in the data is preserved as given, except that line endings are represented by Linefeed
+				(<tt>⎕UCS 10</tt>). XML is generated with no formatting and indentation other than that which is contained within the data</td></tr></table><p class="pagebreakafter"> </p><pre>
+      ]display eg
+┌→───────────────────┐
+│&lt;xml&gt;               │
+│  &lt;a&gt;               │
+│    Data1           │
+│    &lt;!-- Comment --&gt;│
+│    Data2           │
+│    &lt;b&gt; Data3 &lt;/b&gt;  │
+│    Data4           │
+│    &lt;c att="val"/&gt;  │
+│  &lt;/a&gt;              │
+│&lt;/xml&gt;              │
+└────────────────────┘
+</pre><pre> 
+      ]display (⎕XML⍠'Whitespace' 'Strip')eg
+      ⍝      'whitespace' 'strip' ⎕XML eg
+┌→────────────────────────────────────────┐
+↓   ┌→──┐ ┌⊖┐           ┌→────────┐       │
+│ 0 │xml│ │ │           ⌽ ┌⊖┐ ┌⊖┐ │     3 │
+│   └───┘ └─┘           │ │ │ │ │ │       │
+│                       │ └─┘ └─┘ │       │
+│                       └∊────────┘       │
+│   ┌→┐   ┌⊖┐           ┌→────────┐       │
+│ 1 │a│   │ │           ⌽ ┌⊖┐ ┌⊖┐ │     7 │
+│   └─┘   └─┘           │ │ │ │ │ │       │
+│                       │ └─┘ └─┘ │       │
+│                       └∊────────┘       │
+│   ┌⊖┐   ┌→──────────┐ ┌→────────┐       │
+│ 2 │ │   │Data1 Data2│ ⌽ ┌⊖┐ ┌⊖┐ │     4 │
+│   └─┘   └───────────┘ │ │ │ │ │ │       │
+│                       │ └─┘ └─┘ │       │
+│                       └∊────────┘       │
+│   ┌→┐   ┌→────┐       ┌→────────┐       │
+│ 2 │b│   │Data3│       ⌽ ┌⊖┐ ┌⊖┐ │     5 │
+│   └─┘   └─────┘       │ │ │ │ │ │       │
+│                       │ └─┘ └─┘ │       │
+│                       └∊────────┘       │
+│   ┌⊖┐   ┌→────┐       ┌→────────┐       │
+│ 2 │ │   │Data4│       ⌽ ┌⊖┐ ┌⊖┐ │     4 │
+│   └─┘   └─────┘       │ │ │ │ │ │       │
+│                       │ └─┘ └─┘ │       │
+│                       └∊────────┘       │
+│   ┌→┐   ┌⊖┐           ┌→────────────┐   │
+│ 2 │c│   │ │           ↓ ┌→──┐ ┌→──┐ │ 1 │
+│   └─┘   └─┘           │ │att│ │val│ │   │
+│                       │ └───┘ └───┘ │   │
+│                       └∊────────────┘   │
+└∊────────────────────────────────────────┘
+ 
+</pre><p class="pagebreakafter"> </p><pre>      ]display (⎕XML⍠'Whitespace' 'Preserve')eg
+      ⍝         'whitespace' 'preserve' ⎕XML eg
+┌→──────────────────────────────────────┐
+↓   ┌→──┐ ┌⊖┐         ┌→────────┐       │
+│ 0 │xml│ │ │         ⌽ ┌⊖┐ ┌⊖┐ │     7 │
+│   └───┘ └─┘         │ │ │ │ │ │       │
+│                     │ └─┘ └─┘ │       │
+│                     └∊────────┘       │
+│   ┌⊖┐   ┌→─┐        ┌→────────┐       │
+│ 1 │ │   │  │        ⌽ ┌⊖┐ ┌⊖┐ │     4 │
+│   └─┘   │  │        │ │ │ │ │ │       │
+│         └──┘        │ └─┘ └─┘ │       │
+│                     └∊────────┘       │
+│   ┌→┐   ┌⊖┐         ┌→────────┐       │
+│ 1 │a│   │ │         ⌽ ┌⊖┐ ┌⊖┐ │     7 │
+│   └─┘   └─┘         │ │ │ │ │ │       │
+│                     │ └─┘ └─┘ │       │
+│                     └∊────────┘       │
+│   ┌⊖┐   ┌→────────┐ ┌→────────┐       │
+│ 2 │ │   │         │ ⌽ ┌⊖┐ ┌⊖┐ │     4 │
+│   └─┘   │    Data1│ │ │ │ │ │ │       │
+│         │         │ │ └─┘ └─┘ │       │
+│         │    Data2│ └∊────────┘       │
+│         │         │                   │
+│         └─────────┘                   │
+│   ┌→┐   ┌→──────┐   ┌→────────┐       │
+│ 2 │b│   │ Data3 │   ⌽ ┌⊖┐ ┌⊖┐ │     5 │
+│   └─┘   └───────┘   │ │ │ │ │ │       │
+│                     │ └─┘ └─┘ │       │
+│                     └∊────────┘       │
+│   ┌⊖┐   ┌→────────┐ ┌→────────┐       │
+│ 2 │ │   │         │ ⌽ ┌⊖┐ ┌⊖┐ │     4 │
+│   └─┘   │    Data4│ │ │ │ │ │ │       │
+│         │         │ │ └─┘ └─┘ │       │
+│         └─────────┘ └∊────────┘       │
+│   ┌→┐   ┌⊖┐         ┌→────────────┐   │
+│ 2 │c│   │ │         ↓ ┌→──┐ ┌→──┐ │ 1 │
+│   └─┘   └─┘         │ │att│ │val│ │   │
+│                     │ └───┘ └───┘ │   │
+│                     └∊────────────┘   │
+│   ┌⊖┐   ┌→─┐        ┌→────────┐       │
+│ 2 │ │   │  │        ⌽ ┌⊖┐ ┌⊖┐ │     4 │
+│   └─┘   │  │        │ │ │ │ │ │       │
+│         └──┘        │ └─┘ └─┘ │       │
+│                     └∊────────┘       │
+│   ┌⊖┐   ┌→┐         ┌→────────┐       │
+│ 1 │ │   │ │         ⌽ ┌⊖┐ ┌⊖┐ │     4 │
+│   └─┘   │ │         │ │ │ │ │ │       │
+│         └─┘         │ └─┘ └─┘ │       │
+│                     └∊────────┘       │
+└∊──────────────────────────────────────┘</pre><h4>Markup (markup)</h4><p>When converting from XML, <tt>Markup</tt> determines whether markup (other than entity tags) appears in the output array or not. When converting to XML <tt>Markup</tt> has no effect.</p><table><tr><th colspan="2" class="Left">Converting from XML</th></tr><tr><td class="DyalogDefault">Strip<br />(strip)</td><td>Markup data is not included in the output array</td></tr><tr><td><tt>Preserve<br />(preserve)</tt></td><td>Markup text appears in the output array, without the leading ‘&lt;’ and trailing ‘&gt;’ in the tag (2<sup>nd</sup>) column</td></tr></table><pre>  
+      ]display eg
+┌→───────────────────┐
+│&lt;xml&gt;               │
+│  &lt;a&gt;               │
+│    Data1           │
+│    &lt;!-- Comment --&gt;│
+│    Data2           │
+│    &lt;b&gt; Data3 &lt;/b&gt;  │
+│    Data4           │
+│    &lt;c att="val"/&gt;  │
+│  &lt;/a&gt;              │
+│&lt;/xml&gt;              │
+└────────────────────┘
+ </pre><p class="pagebreakafter"> </p><pre>
+      ]display (⎕XML⍠'Markup' 'Strip')eg
+      ⍝      'markup' 'strip' ⎕XML eg
+┌→────────────────────────────────────────┐
+↓   ┌→──┐ ┌⊖┐           ┌→────────┐       │
+│ 0 │xml│ │ │           ⌽ ┌⊖┐ ┌⊖┐ │     3 │
+│   └───┘ └─┘           │ │ │ │ │ │       │
+│                       │ └─┘ └─┘ │       │
+│                       └∊────────┘       │
+│   ┌→┐   ┌⊖┐           ┌→────────┐       │
+│ 1 │a│   │ │           ⌽ ┌⊖┐ ┌⊖┐ │     7 │
+│   └─┘   └─┘           │ │ │ │ │ │       │
+│                       │ └─┘ └─┘ │       │
+│                       └∊────────┘       │
+│   ┌⊖┐   ┌→──────────┐ ┌→────────┐       │
+│ 2 │ │   │Data1 Data2│ ⌽ ┌⊖┐ ┌⊖┐ │     4 │
+│   └─┘   └───────────┘ │ │ │ │ │ │       │
+│                       │ └─┘ └─┘ │       │
+│                       └∊────────┘       │
+│   ┌→┐   ┌→────┐       ┌→────────┐       │
+│ 2 │b│   │Data3│       ⌽ ┌⊖┐ ┌⊖┐ │     5 │
+│   └─┘   └─────┘       │ │ │ │ │ │       │
+│                       │ └─┘ └─┘ │       │
+│                       └∊────────┘       │
+│   ┌⊖┐   ┌→────┐       ┌→────────┐       │
+│ 2 │ │   │Data4│       ⌽ ┌⊖┐ ┌⊖┐ │     4 │
+│   └─┘   └─────┘       │ │ │ │ │ │       │
+│                       │ └─┘ └─┘ │       │
+│                       └∊────────┘       │
+│   ┌→┐   ┌⊖┐           ┌→────────────┐   │
+│ 2 │c│   │ │           ↓ ┌→──┐ ┌→──┐ │ 1 │
+│   └─┘   └─┘           │ │att│ │val│ │   │
+│                       │ └───┘ └───┘ │   │
+│                       └∊────────────┘   │
+└∊────────────────────────────────────────┘
+</pre><p class="pagebreakafter"> </p><pre>      ]display (⎕XML⍠'Markup' 'Preserve')eg
+      ⍝         'markup' 'preserve' ⎕XML eg
+┌→──────────────────────────────────────────────┐
+↓   ┌→──┐            ┌⊖┐     ┌→────────┐        │
+│ 0 │xml│            │ │     ⌽ ┌⊖┐ ┌⊖┐ │     3  │
+│   └───┘            └─┘     │ │ │ │ │ │        │
+│                            │ └─┘ └─┘ │        │
+│                            └∊────────┘        │
+│   ┌→┐              ┌⊖┐     ┌→────────┐        │
+│ 1 │a│              │ │     ⌽ ┌⊖┐ ┌⊖┐ │     23 │
+│   └─┘              └─┘     │ │ │ │ │ │        │
+│                            │ └─┘ └─┘ │        │
+│                            └∊────────┘        │
+│   ┌⊖┐              ┌→────┐ ┌→────────┐        │
+│ 2 │ │              │Data1│ ⌽ ┌⊖┐ ┌⊖┐ │     4  │
+│   └─┘              └─────┘ │ │ │ │ │ │        │
+│                            │ └─┘ └─┘ │        │
+│                            └∊────────┘        │
+│   ┌→─────────────┐ ┌⊖┐     ┌→────────┐        │
+│ 2 │!-- Comment --│ │ │     ⌽ ┌⊖┐ ┌⊖┐ │     16 │
+│   └──────────────┘ └─┘     │ │ │ │ │ │        │
+│                            │ └─┘ └─┘ │        │
+│                            └∊────────┘        │
+│   ┌⊖┐              ┌→────┐ ┌→────────┐        │
+│ 2 │ │              │Data2│ ⌽ ┌⊖┐ ┌⊖┐ │     4  │
+│   └─┘              └─────┘ │ │ │ │ │ │        │
+│                            │ └─┘ └─┘ │        │
+│                            └∊────────┘        │
+│   ┌→┐              ┌→────┐ ┌→────────┐        │
+│ 2 │b│              │Data3│ ⌽ ┌⊖┐ ┌⊖┐ │     5  │
+│   └─┘              └─────┘ │ │ │ │ │ │        │
+│                            │ └─┘ └─┘ │        │
+│                            └∊────────┘        │
+│   ┌⊖┐              ┌→────┐ ┌→────────┐        │
+│ 2 │ │              │Data4│ ⌽ ┌⊖┐ ┌⊖┐ │     4  │
+│   └─┘              └─────┘ │ │ │ │ │ │        │
+│                            │ └─┘ └─┘ │        │
+│                            └∊────────┘        │
+│   ┌→┐              ┌⊖┐     ┌→────────────┐    │
+│ 2 │c│              │ │     ↓ ┌→──┐ ┌→──┐ │ 1  │
+│   └─┘              └─┘     │ │att│ │val│ │    │
+│                            │ └───┘ └───┘ │    │
+│                            └∊────────────┘    │
+└∊──────────────────────────────────────────────┘</pre><h4>UnknownEntity (unknown-entity)</h4><p>When converting from XML, this option determines what happens when an unknown entity reference, or a character reference for a Unicode character which cannot be represented as an APL character, is encountered. In Classic versions of Dyalog APL that is any Unicode character which does not appear in <tt>⎕AVU</tt>. When converting to XML, this option determines what happens to Esc characters (<tt>⎕UCS 27</tt>) in data.</p><table><tr><th colspan="2" class="Left">Converting from XML</th></tr><tr><td class="DyalogDefault">Replace<br />(replace)</td><td>The reference is replaced by a single ‘?’ character</td></tr><tr><td><tt>Preserve<br />(preserve)</tt></td><td>The reference is included in the output data as given, but with the leading ‘&amp;’ replaced by Esc (<tt>⎕UCS 27</tt>)</td></tr><tr><th colspan="2" class="Left">Converting to XML</th></tr><tr><td class="DyalogDefault">Replace<br />(replace)</td><td>Esc (<tt>⎕UCS 27</tt>) is preserved</td></tr><tr><td><tt>Preserve<br />(preserve)</tt></td><td>Esc (<tt>⎕UCS 27</tt>) is replaced by ‘&amp;’</td></tr></table></body>
+</html>

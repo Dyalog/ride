@@ -1,0 +1,6 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←X ⎕NCREATE Y</tt>Native File Create </h2><p>This function creates a new file. Under Windows the file is opened in compatibility mode.  The name of the new file is specified by the left argument <tt>X</tt> which must be a simple character vector or scalar containing a valid pathname for the file.  <tt>Y</tt> is 0 or a negative integer value that specifies an (unused) tie number by which the file may subsequently be referred.</p><p>The shy result of <tt>⎕NCREATE</tt> is the tie number of the new file.</p><h4>Automatic Tie Number Allocation</h4><p>A tie number of 0 as argument to a create or tie operation, allocates, and returns as an explicit result, the first (closest to zero) available tie number. This allows you to simplify code. For example:</p><p>from:</p><pre>      tie←¯1+⌊/0,⎕NNUMS   ⍝ With next available number,
+      file ⎕NCREATE tie   ⍝ ... create file.</pre><p>to:</p><pre>      tie←file ⎕NCREATE 0 ⍝ Create with first available no.</pre><p>If the specified file already exists, <tt>⎕NCREATE</tt> fails with the error (22):</p><pre>      FILE NAME ERROR: Unable to create file</pre></body>
+</html>

@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←X⊃Y</tt>Pick</h2><p><tt>Y</tt> may be any array.</p><p><tt>X</tt> is a scalar or vector of indices of <tt>Y</tt>, viz. <tt>⍳⍴Y</tt>.</p><p><tt>R</tt> is an item selected from the structure of <tt>Y</tt> according to <tt>X</tt>.</p><p>Elements of <tt>X</tt> select from successively deeper levels in the structure of <tt>Y</tt>.  The items of <tt>X</tt> are simple integer scalars or vectors which identify a set of indices, one per axis at the particular level of nesting of <tt>Y</tt> in row-major order.  Simple scalar items in <tt>Y</tt> may be picked by empty vector items in <tt>X</tt> to any arbitrary depth.</p><p><tt>⎕IO</tt> is an implicit argument of Pick.</p><h4>Examples</h4><pre>      G←('ABC' 1)('DEF' 2)('GHI' 3)('JKL' 4)
+ 
+      G←2 3⍴G,('MNO' 5)('PQR' 6)
+ 
+      G
+  ABC  1   DEF  2   GHI  3
+  JKL  4   MNO  5   PQR  6
+ 
+      ((⊂2 1),1)⊃G
+JKL
+ 
+      (⊂2 1)⊃G
+ JKL  4</pre><p class="pagebreakafter"> </p><pre>      ((2 1)1 2)⊃G
+K
+ 
+      (5⍴⊂⍳0)⊃10
+10
+</pre></body>
+</html>

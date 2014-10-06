@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="Excel_As_Client"></a>Example : Excel as the Client</h2><p>The following instructions will allow you to explore the DDE interface with APL acting as the server to another application; in this case Microsoft Excel.</p><p>Start APL (clear ws) and type the expressions :</p><pre>      )WSID MYWS
+      X←12
+      'DDE:' ⎕SVO 'X SALES'</pre><p>The workspace MUST have a name as this is broadcast as the DDE <b>topic</b>. Note that it is currently essential that <tt>X</tt> contains a value before you make the offer. The result of <tt>⎕SVO</tt> is 1, indicating that no client has yet joined in the conversation.</p><p>Start Excel (empty spreadsheet).</p><p>Size your windows so that both the Excel window and the APL Session window can be viewed comfortably at the same time. Do NOT iconify either one.</p><p>Select the Excel window and type the following formula into the first cell :</p><pre class="Code">=dyalog|myws!sales</pre><p>the value of <tt>X</tt> (12) will now appear in the cell.</p><p>Switch to the APL Session and type :</p><pre>      ⎕SVO'X'
+2</pre><p>Notice that now that Excel has made the connection, the degree of coupling is 2.</p><p>Now type :</p><pre>      X←34</pre><p>You will immediately see the new value appear in your spreadsheet.</p><p>Create the following function in your workspace :</p><pre>     ∇ FOO MSG
+[1]    MSG
+[2]    X←⎕AI[2]
+     ∇</pre><p>Then type the expressions :</p><pre>      '.' ⎕WS 'EVENT' 50 'FOO'
+
+      ⎕DQ '.'</pre><p>The link between Excel and APL is a <span class="Italic">warm</span> link (the type of link is determined by the client, so other applications may behave differently). This means that APL will send the new value of <tt>X</tt> (SALES) to Excel every time it changes. If you have DDESPY.EXE, you can verify what is happening.</p><p>To interrupt <tt>⎕DQ</tt>, type Ctrl+Break or select "Interrupt" from the <span class="Italic">Action</span> menu in the Session Window.</p></body>
+</html>

@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←+Y</tt>Conjugate</h2><p>If <tt>Y</tt>is complex, <tt>R</tt> is <tt>Y</tt> with the imaginary part of all elements negated.</p><p>If <tt>Y</tt> is real or non-numeric, <tt>R</tt> is the same array unchanged.</p><p>Note that if <tt>Y</tt> is nested, the function has to process the entire array in case any item is complex.</p><h4>Examples</h4><pre>      +3j4
+3J¯4
+      +1j2 2j3 3j4
+1J¯2 2J¯3 3J¯4
+ 
+      3j4++3j4
+6
+      3j4×+3j4
+25
+ 
+      +A←⍳5
+1 2 3 4 5
+ 
+      +⎕EX'A'
+1</pre></body>
+</html>

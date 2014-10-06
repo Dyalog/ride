@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="Client_Server"></a>Client/Server Operation</h2><p>We have seen how Dyalog APL may act as a TCP/IP server and as a TCP/IP client. It follows that full client/server operation is possible whereby an APL client workspace can execute code in an APL server workspace on the same or on a different computer. </p><p>A deliberately simple example of client/server operation is provided by the workspace <span class="Code">samples\tcpip\rexec.dws</span> whose operation is described below.</p><p>A more complex example, which implements a client/server APL component file system, is illustrated by the <span class="Code">samples\tcpip\qfiles.dws</span> workspace. See <tt>DESCRIBE</tt> in this workspace for details.</p><p>REXEC contains a small namespace called <tt>SERVER</tt>.</p><p>To start a server session, start Dyalog APL, and type:</p><pre>      )LOAD REXEC
+      SERVER.RUN</pre><p>To use the server from an APL client, start Dyalog APL (on the same computer or on a different computer), and type:</p><pre>      )LOAD REXEC
+      IP SERVER.EXECUTE expr</pre><p>where <tt>IP</tt> is the IP Address of the server computer and <tt>expr</tt> is a character vector containing an expression to be executed.</p><p>If you are testing this workspace using two APL sessions on the same computer, you can use either <tt>'127.0.0.1'</tt> or the result of the expression <tt>(2 ⎕NQ '.' 'TCPGetHostID')</tt> for <tt>IP</tt>. This expression simply obtains the IP Address of your computer. Note however, that you <b>do</b> have to have an IP Address for this to work.</p><h4><a name="RUN"></a>The RUN function</h4><pre>     ∇ RUN;CALLBACKS
+[1]    ⎕EX↑'TCPSocket'⎕WN''
+[2]    CALLBACKS←⊂('Event' 'TCPAccept' 'ACCEPT')
+[3]    CALLBACKS,←⊂('Event' 'TCPRecv' 'RECEIVE')
+[4]    COUNT←0
+[5]    'S0'⎕WC'TCPSocket' ''PORT('Style' 'APL'),CALLBACKS
+     ∇</pre><p><tt>RUN[1]</tt>expunges all TCPSocket objects that may be already defined. This is intended only to clear up after a potential error.</p><p><tt>RUN[2-3]</tt>set up a variable <tt>CALLBACKS</tt> which associates various functions with various events.</p><p><tt>RUN[4]</tt>initialises a variable <tt>COUNT</tt> which will be incremented and used to name new TCPSocket objects as each client connects. <tt>COUNT</tt> is global within the <tt>SERVER</tt> namespace.</p><p><tt>RUN[5]</tt>creates the first TCPSocket server using your default IP address and the port number specified by the <tt>PORT</tt> variable (5001). Note that the <tt>Style</tt> property is set to <tt>'APL'</tt> so that data is transmitted and received in internal APL format. Furthermore, however each message gets fragmented by TCP/IP, it will always appear to be sent and received in an atomic operation. There is no need for the client to do any buffering.</p><p>Once the server has been initiated, the next stage of the process is that a client makes a connection. This is handled by the <tt>ACCEPT</tt> callback function.</p><h4><a name="ACCEPT"></a>The ACCEPT function</h4><pre>     ∇ ACCEPT MSG;SOCK;EV
+[1]    COUNT←COUNT+1
+[2]    SOCK←'SocketNumber'(3⊃MSG)
+[3]    EV←'Event'((⊃MSG)⎕WG'Event')
+[4]    ('S',⍕COUNT)⎕WC'TCPSocket'SOCK EV
+     ∇</pre><p>The <tt>ACCEPT</tt> function is invoked when the TCPAccept event occurs. This happens when a client connects to the server.</p><p>Its argument <tt>MSG</tt>, supplied by APL, is a 3-element vector containing:</p><table><tr><td class="DyalogPlain">MSG[1]</td><td>The name of the TCPSocket object</td></tr><tr><td class="DyalogPlain">MSG[2]</td><td>The name of the event ('<tt>TCPAccept'</tt>)</td></tr><tr><td class="DyalogPlain">MSG[3]</td><td>The socket handle for the original listening socket</td></tr></table><p><tt>ACCEPT[1]</tt>increments the <tt>COUNT</tt> variable. This variable is global to the <tt>SERVER</tt> namespace and was initialised by the <tt>RUN</tt> function.</p><p><tt>ACCEPT[4]</tt>makes a new TCPSocket object called Sxx, where xx is the new value of <tt>COUNT</tt>. By specifying the socket handle of the original listening socket as the value of the SocketNumber property for the new object, this effectively clones the listening socket. Note that the cloned socket inherits <tt>'Style' 'APL'</tt>. For further discussion of this topic, see Serving Multiple Clients.</p><h4><a name="RECEIVE"></a>The RECEIVE function</h4><pre>     ∇ RECEIVE MSG;RSLT
+[1]    :Trap 0
+[2]       RSLT←0('#'⍎(3⊃MSG))
+[3]    :Else
+[4]       RSLT←⎕EN
+[5]    :EndTrap
+[6]    2 ⎕NQ(⊃MSG)'TCPSend'RSLT
+     ∇</pre><p>The <tt>RECEIVE</tt> function is invoked when the TCPRecv event occurs. This happens whenever an APL array is received from a client. Note that it is guaranteed to receive an entire APL array in one shot because the Style property of the TCPSocket object is set to <tt>'APL'</tt>.</p><p>Its argument <tt>MSG</tt> , supplied by APL, is a 5-element vector containing:</p><table><tr><td class="DyalogPlain">MSG[1]</td><td>The name of the TCPSocket object</td></tr><tr><td class="DyalogPlain">MSG[2]</td><td>The name of the event ('<tt>TCPRecv'</tt>)</td></tr><tr><td class="DyalogPlain">MSG[3]</td><td>The data</td></tr><tr><td class="DyalogPlain">MSG[4</td><td>IP address of the client</td></tr><tr><td class="DyalogPlain">MSG[5]</td><td>Port number of the client</td></tr></table><p><tt>RECEIVE[1-5]</tt>executes the expression <tt>(3⊃MSG)</tt> received from the client. Assuming it succeeds, <tt>RSLT</tt> is a 2-element vector containing a zero followed by the result of the expression. If the execute operation fails for any reason, <tt>RSLT</tt> is set to the value of <tt>⎕EN</tt> (the error number).</p><p><tt>RECEIVE[6]</tt>transmits the result back to the client.</p><h4><a name="EXECUTE"></a>The EXECUTE function</h4><pre class="APLCodeSmall">     ∇ RSLT←SERVER_IP EXECUTE EXPR;P;SOCK
+[1]   ⍝ Execute expression in server
+[2]
+[3]   P←⊂'TCPSocket'
+[4]   P,←⊂'RemoteAddr'SERVER_IP  ⍝ IP Address
+[5]   P,←⊂'RemotePort'PORT      ⍝ Port Number
+[6]   P,←⊂'Style' 'APL'
+[7]   P,←⊂'Event'('TCPRecv' 1)('TCPClose' 1)('TCPError' 1)
+[8]   'SOCK'⎕WC P
+[9]
+[10]  2 ⎕NQ'SOCK' 'TCPSend'EXPR ⋄ RSLT←⎕DQ'SOCK'
+[11]
+[12]  :Select 2⊃RSLT
+[13]  :Case 'TCPRecv'
+[14]       RSLT←3⊃RSLT
+[15]       :If 0=⊃RSLT
+[16]          RSLT←2⊃RSLT
+[17]       :Else
+[18]          ('Server: ',⎕EM RSLT)⎕SIGNAL RSLT
+[19]       :EndIf
+[20]  :Case 'TCPError'
+[21]      ('Server Error: ',,⎕FMT 2↓RSLT)⎕SIGNAL 201
+[22]  :Else
+[23]      'Unknown Server Error'⎕SIGNAL 201
+[24]  :EndSelect
+     ∇</pre><p>This function is executed by a client APL session. Its right argument is a character vector containing an expression to be executed. Its left argument is the IP Address of a server APL session in which the expression is to be run. The server session may be running on the same computer or on a different computer on the network.</p><p><tt>EXECUTE[3-8]</tt>makes a client TCPSocket object called <tt>SOCK</tt> for connection to the specified server IP address and port number <tt>PORT</tt>. Note that the <tt>Style</tt> property is set to <tt>'APL'</tt> so that data is transmitted and received in internal APL format. Furthermore, however each message gets fragmented by TCP/IP, it will always appear to be sent and received in an atomic operation. There is no need for the client to do any buffering.</p><p>The Event property is set so that events TCPRecv, TCPClose and TCPError will terminate the <tt>⎕DQ</tt>. In this case, this is easier than using callback functions.</p><p><tt>EXECUTE[10]</tt>transmits the expression to the server for execution and then <tt>⎕DQ</tt>s the socket. As the only events enabled on the socket are TCPRecv, TCPClose and TCPError it effectively <span class="Italic">waits</span> for one of these to occur. When one of these events does happen, the <tt>⎕DQ</tt> terminates, returning the corresponding event message as its result.</p><p>The reason for using a diamond expression is to ensure that the TCPRecv, TCPClose or TCPError event will not be fired before the <tt>⎕DQ</tt> was called.</p><p>A second point worth noting is that the TCPSend request is automatically queued until the socket gets connected. In this case, there is no need to trigger the TCPSend from a callback on the TCPConnect event.</p><p><tt>EXECUTE[12-]</tt>process the TCPRecv, TCPClose or TCPError event that was generated by the socket. If the operation was successful, <tt>RSLT[2]</tt> contains <tt>'TCPRecv'</tt> and <tt>RSLT[3]</tt> contains a zero followed by the result of the expression.</p></body>
+</html>

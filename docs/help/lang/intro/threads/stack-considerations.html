@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h3>Stack Considerations</h3><p>When you start a thread, it begins with the SI stack of the calling function and sees all of the local variables defined in all the functions down the stack. However, unless the calling function specifically waits for the new thread to terminate (see<MadCap:conditionalText><span class="XRef">Language Reference: </span><span class="XRef">Wait forThreads to Terminate</span></MadCap:conditionalText><a href="../../sysfns/tsync.html#Tsync" class="MCXref_0">Wait for Threads to Terminate </a>), the calling functions will (bit by bit, in their turn) continue to execute. The new thread’s view of its calling environment may then change. Consider the following example:</p><p>Suppose that you had the following functions: <tt>RUN[3]</tt> calls <tt>INIT</tt> which in turn calls <tt>GETDATA</tt> but as 3 separate threads with 3 different arguments:</p><pre>     ∇ RUN;A;B
+[1]    A←1
+[2]    B←'Hello World'
+[3]    INIT
+[4]    CALC
+[5]    REPORT
+     ∇</pre><p class="pagebreakafter"> </p><pre>     ∇ INIT;C;D
+[1]    C←D←0
+[2]    GETDATA&amp;'Sales'
+[3]    GETDATA&amp;'Costs'
+[4]    GETDATA&amp;'Expenses'
+     ∇</pre><p>When each <tt>GETDATA</tt> thread starts, it immediately <span class="Italic">sees</span> (via <tt>⎕SI</tt>) that it was called by <tt>INIT</tt> which was in turn called by <tt>RUN</tt>, and it <span class="Italic">sees</span> local variables <tt>A</tt>, <tt>B</tt>, <tt>C</tt> and <tt>D</tt>. However, once <tt>INIT[4]</tt> has been executed, <tt>INIT</tt> terminates, and execution of the root thread continues by calling <tt>CALC</tt>. From then on, each <tt>GETDATA</tt> thread no longer sees <tt>INIT</tt> (it thinks that it was called directly from <tt>RUN</tt>) nor can it see the local variables <tt>C</tt> and <tt>D</tt> that <tt>INIT</tt> had defined. However, it <span class="Italic">does</span> continue to see the locals <tt>A</tt> and <tt>B</tt> defined by <tt>RUN</tt>, until <tt>RUN</tt> itself terminates. </p><p>Note that if <tt>CALC</tt> were also to define locals <tt>A</tt> and <tt>B</tt>, the <tt>GETDATA</tt> threads would still see the values defined by <tt>RUN</tt> and not those defined by <tt>CALC</tt>. However, if <tt>CALC</tt> were to modify <tt>A</tt> and <tt>B</tt> (as globals) without localising them, the <tt>GETDATA</tt> threads would see the modified values of these variables, whatever they happened to be at the time.</p></body>
+</html>

@@ -1,0 +1,8 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Property</tt>TargetState</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/tcpsocket.html">TCPSocket</a></td></tr></table><p class="Bold">Description</p><p>The TargetState property reflects the intended final state of a <a href="../objects/tcpsocket.html">TCPSocket</a> object. Its possible values are as follows:</p><table><tr><td>Stream</td><td>UDP</td></tr><tr><td>Client</td><td>Open</td></tr><tr><td>Server</td><td>Bound</td></tr><tr><td>Closed</td><td>Closed</td></tr></table><p>Setting TargetState to Closed is the recommended way to close a socket. It
+informs APL that you want the socket to be closed, but only when it is safe to
+do so. When all the data has been sent, the <a href="../objects/tcpsocket.html">TCPSocket</a> will generate a <a href="../methodorevents/tcpclose.html">TCPClose</a> event which, unless
+a callback function decides otherwise, will cause the <a href="../objects/tcpsocket.html">TCPSocket</a> object to disappear.</p><p>To control socket closure, you may execute the following steps:</p><ol><li value="1"> Set TargetState to Closed</li><li value="2"><b>Either:</b><ol class="Level2"><li value="1">continue processing <b>or</b></li><li value="2">wait (using <tt>⎕DQ</tt>) for the <a href="../objects/tcpsocket.html">TCPSocket</a>   to disappear <b>or</b></li><li value="3">wait (using <tt>⎕DQ</tt>) for the <a href="../methodorevents/tcpclose.html">TCPClose</a>   event</li></ol></li></ol></body>
+</html>

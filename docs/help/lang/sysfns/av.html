@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⎕AV</tt>Atomic Vector </h2><p><tt>⎕AV</tt> is a deprecated feature and is replaced by <tt>⎕UCS</tt>.</p><p>This is a simple character vector of all 256 characters in the Classic Dyalog APL character.</p><p>In the Classic Edition the contents of <tt>⎕AV</tt> are defined by the Output Translate Table.</p><p>In the Unicode Edition, the contents of <tt>⎕AV</tt> are defined by the system variable <tt>⎕AVU</tt>.</p><h4>Examples</h4><pre>      ⎕AV[48+⍳10]
+0123456789
+ 
+      5 52⍴12↓⎕av
+%'⍺⍵_abcdefghijklmnopqrstuvwxyz__¯.⍬0123456789_¤¥$£¢
+∆ABCDEFGHIJKLMNOPQRSTUVWXYZ__ý·⍙ÁÂÃÇÈÊËÌÍÎÏÐÒÓÔÕÙÚÛ
+ÝÞãìðòõ{€}⊣⌷¨ÀÄÅÆ⍨ÉÑÖØÜßàáâäåæçèéêëíîïñ[/⌿\⍀&lt;≤=≥&gt;≠∨^
+-+÷×?∊⍴~↑↓⍳○*⌈⌊∇∘(⊂⊃∩∪⊥⊤|;,⍱⍲⍒⍋⍉⌽⊖⍟⌹!⍕⍎⍫⍪≡≢óôöø"#_&amp;'
+___________@ùúû^ü`⌷¶:⍷¿¡⋄←→⍝)]§⎕⍞⍣%'⍺⍵_abcdefghijk</pre></body>
+</html>

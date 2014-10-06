@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>⎕PP</tt>Print Precision </h2><p><tt>⎕PP</tt> is the number of significant digits in the display of numeric output.</p><p><tt>⎕PP</tt> may be assigned any integer value in the range 1 to 17. The value in a clear workspace is 10. Note that in all Versions of Dyalog APL prior to Version 11.0, the maximum value for <tt>⎕PP</tt> was 16.</p><p><tt>⎕PP</tt> is used to format numbers displayed directly. It is an implicit argument of monadic function Format (<tt>⍕</tt>), monadic <tt>⎕FMT</tt> and for display of numbers via <tt>⎕</tt> and <tt>⍞</tt> output. <tt>⎕PP</tt> is ignored for the display of integers. </p><h4>Examples:</h4><pre>
+      ⎕PP←10
+ 
+      ÷3 6
+0.3333333333 0.1666666667
+ 
+      ⎕PP←3
+ 
+      ÷3 6
+0.333 0.167</pre><p>If <tt>⎕PP</tt> is set to its maximum value of 17, floating-point numbers may be converted between binary and character representation without loss of precision. In particular, if <tt>⎕PP</tt> is 17 and <tt>⎕CT</tt> is 0 (to ensure exact comparison), for any floating-point number <tt>N</tt> the expression <tt>N=⍎⍕N</tt> is true. Note however that <span class="Italic">denormal</span> numbers are an exception to this rule.</p><p>Numbers, very close to zero, in the range <tt>2.2250738585072009E¯308</tt> to <tt>4.9406564584124654E¯324</tt> are called <span class="Italic">denormal</span> numbers. Such numbers can occur as the result of calculations and are displayed correctly.</p><p>Numbers below the lower end of this range (<tt>4.94E¯324</tt>) are indistinguishable from zero in IEEE double floating point format.</p></body>
+</html>

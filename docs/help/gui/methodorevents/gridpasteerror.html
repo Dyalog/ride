@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Event 194</tt>GridPasteError</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/grid.html">Grid</a></td></tr></table><p class="Bold">Description</p><p>If enabled, this event is reported when the user presses Shift+Insert and
+there is data in the clipboard, but the system is unable to paste the data into
+the <a href="../objects/grid.html">Grid</a>. This occurs if there is a currently
+selected block of cells whose shape does not match the shape of the data in the
+clipboard. It also occurs if there is no selected block of cells, and pasting
+the data in starting at the current cell (CurCell) would overflow the <a href="../objects/grid.html">Grid</a>.
+Setting the action code of this event to <tt>¯1</tt>, or returning a 0 from a callback function attached to it, has no effect.</p><p>The event message reported as the result of <a href="../../lang/sysfns/dq.html"><tt>⎕DQ</tt></a>,
+or supplied as the right argument to your callback function, is a 6-element
+vector as follows:</p><table class="Event"><tr><td><tt>[1]</tt></td><td>Object</td><td>ref or character vector</td></tr><tr><td><tt>[2]</tt></td><td>Event</td><td><tt>'GridPasteError'</tt> or 194</td></tr><tr><td><tt>[3]</tt></td><td>Values</td><td>Contents of the clipboard.</td></tr><tr><td><tt>[4]</tt></td><td>CellSet flags</td><td>Boolean array indicating which elements of the clipboard data are
+        empty.</td></tr><tr><td><tt>[5]</tt></td><td>Start</td><td>2-element integer vector containing the row, column address of the top
+        left cell in the selected block. If there is no selection, this is the
+        address of the current cell (CurCell).</td></tr><tr><td><tt>[6]</tt></td><td>End</td><td>2-element integer vector containing the row, column address of the
+        bottom right cell in the selected block. If there is no selection, this
+        is the address of the bottom right cell of the block starting at the
+        current cell that will be overwritten</td></tr><tr><td><tt>[7]</tt></td><td>Error Number</td><td><tt>4 (RANK ERROR)</tt> or <tt>5
+        (LENGTH ERROR)</tt></td></tr></table></body>
+</html>

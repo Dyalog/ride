@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../help.css"></head>
+<body><h2><a name="Bug Fixes"></a>Bug Fixes
+            </h2><p>A number of bug fixes implemented in Version 14.0 may change the way that existing code operates and are therefore documented in this section.</p><h4>Matrix Inverse with scalar argument</h4><p>If the argument to monadic <tt>⌹</tt> is scalar, the result should be scalar. In previous versions the result was a 1-element vector. This correction may change the way that existing code works, especially as the bug has been there since the earliest implementation of Dyalog.</p><pre>      ⌹2
+0.5
+
+      ⊃⍴ ⌹2 ⍝ Version 13.1 and earlier
+1
+      ⊃⍴ ⌹2 ⍝ Version 14.0
+0
+</pre><h4>Change Data Type</h4><p>Previously, the Unicode Edition of Dyalog APL accepted a left argument of 82 (8-bits character) treating it as if it were 80. It now signals an error.</p><h4>Version 13.2</h4><pre>      82 ⎕DR 65
+A</pre><h4>Version 14.0</h4><pre>      82 ⎕DR 65
+DOMAIN ERROR: Invalid conversion code
+      82 ⎕DR 65
+     ∧</pre><h4>Threads and Error Trapping</h4><p>If a function sets a global (<span class="Italic">catch all</span>) trap, then spawns a thread with the intention that the trap should be in effect for the new thread, and subsequently introduces a new local <tt>:Trap</tt> or dfn error guard, it was possible that an error in the spawned thread would be caught by the second trap and not the first. This  has now been resolved.</p><h4>.Net Object Property Assignment</h4><p>In version 14.0 the interpreter will no longer accept a one element vector as the value of a .Net object Property that is expected to be a single numeric value; only a simple scalar value will be accepted.</p><p>In 13.2 and prior, the interpreter would (incorrectly) pass a scalar rather than a single element vector as the value when assigning to a .Net Property that expected a vector, which lead to unexpected errors. In 14.0 the interpreter (correctly) insists that a vector Property is passed a vector and a scalar Property is passed a scalar value.</p><h4>Example</h4><pre>
+      ⎕using←''
+      s←⎕new System.IO.MemoryStream
+
+      s.Capacity
+0
+      s.Capacity←100
+						
+      s.Capacity←,100  
+DOMAIN ERROR
+      s.Capacity←,100
+     ∧</pre><p>This last assignment will succeed in Version 13.2 and prior.</p></body>
+</html>

@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../help.css"></head>
+<body><h2><tt>R←⎕DMX</tt>Extended Diagnostic Message:</h2><p>Version 13.1 adds significant new error reporting functionality, in the form of a system variable which has been named <tt>⎕DMX</tt>. <tt>⎕DMX</tt> is designed to make error handling simpler, more complete and more accurate.</p><ul><li value="1"><b>More Information:</b><tt>⎕DMX</tt> is a namespace with a number of properties, which provide much more information about errors than did the old variables (in version 13.1, only a few primitives and system functions take advantage of this; full support will evolve over the next several releases). Application code can also provide more error information, as <tt>⎕SIGNAL</tt> has been extended accordingly.</li><li value="2"><b>Thread Safe:</b><tt>⎕DMX</tt> is local to each APL thread: An error occurring in one thread will not change the value of <tt>⎕DMX</tt> in other threads. This is not the case for <tt>⎕DM</tt> and <tt>⎕EN</tt>.</li><li value="3"><b>Isolation of Handled Errors:</b><tt>⎕DMX</tt> is local to the code which is invoked to handle an error, in such a way that successfully handled (trapped) errors will leave no trace of the handled event.</li><li value="4"><b>Backwards compatibility:</b> The behavior of the existing variables <tt>⎕DM</tt> (Diagnostic Message) and <tt>⎕EN</tt> (Event Number) is unchanged. Dyalog recommends that applications which reference the old variables be modified to use <tt>⎕DMX</tt>, as soon as this is convenient</li></ul><h4>More Information</h4><p>The default output following an error has been changed in Version 13.1, to display most of this information. For example:</p><pre class="APLCodeSmall">      'c:\no\such\folder\output.txt' ⎕FCREATE 0
+FILE NAME ERROR: Unable to create file ("The system cannot find the path specified.")
+      'c:\no\such\folder\output.txt'⎕FCREATE 0
+     ∧
+</pre><p>In addition to the <tt>FILE NAME ERROR</tt> which would also have been displayed by earlier versions, Version 13.1 displays the text <tt>Unable to create file</tt>, which is a more detailed message originating in the file system, and in parentheses <tt>(The system cannot find the file specified.)</tt>, which is a message originating in the underlying operating system. </p><p>The menu item <span class="Name">Options|Configure|Help / DMX </span>(See User Guide) allows you to decide whether this additional information should be displayed in the session (as above), and/or in the status window. Note that <tt>⎕DM</tt> is not affected by these settings; it only contains the original APL error message as in previous releases:</p><pre>      ↑⎕DM
+FILE NAME ERROR                               
+      'c:\no\such\folder\output.txt'⎕FCREATE 0
+     ∧                                        
+</pre><p>Thread safe copies of the values of <tt>⎕EN</tt> and <tt>⎕DM</tt> are available as the properties <tt>⎕DMX.EN</tt> and <tt>⎕DMX.DM</tt>.</p><p>A number of properties within the <tt>⎕DMX</tt> space can be inspected, to extract the additional information. The detailed message is in a property called <tt>Message</tt>:</p><pre>      ⎕DMX.Message
+Unable to create file 
+</pre><p>The new messages also have “extended error numbers”, which are unique within each category of errors:</p><pre>      ⎕DMX.(ENX Category Vendor)
+10  Component file system  Dyalog
+</pre><p>At present, <tt>Vendor</tt> will always contain the character vector <tt>'Dyalog'</tt>, but it is envisaged that external components will eventually be able to make use of this mechanism. Finally, if the error was a direct result of a problem reported by the operating system, the <tt>OSError</tt> property will be populated with this information:</p><pre>      ⎕DMX.OSError
+1 3  The system cannot find the path specified. 
+</pre><p>Currently the first item is either 0 or 1:</p><ul><li value="1"> 0 means that the error number is the value of <span class="Code">errno()</span>,</li><li value="2">1 means that the error number is the result of <span class="Code">GetLastError()</span>.</li></ul><p> The second contains the error number and the third element is the corresponding text. </p><p>Finally, the<tt> InternalLocation</tt> property identifies the line of the interpreter source code that issued the error, which may be useful for the Dyalog support team when analyzing particularly tricky errors:</p><pre>      ⎕DMX.InternalLocation
+ qfile1.c  3614
+</pre><h4>Thread Safe</h4><p>The old system variables <tt>⎕EN</tt> and <tt>⎕DM</tt> have workspace scope, which means that they are shared by all threads. This means that, if two (or more) threads encounter errors in rapid succession, error handling code which references these variables might pick up values which are unrelated to the error being handled. <tt>⎕DMX</tt>, on the other hand, has thread scope: Each thread has its own copy of the variable. As server applications become more common, it is rapidly becoming more important to write code which is “thread safe”. Dyalog strongly recommends that all references to <tt>⎕EN</tt> and <tt>⎕DM</tt> in current application code be replaced by references to <tt>⎕DMX.EN</tt> and <tt>⎕DMX.DM</tt>, respectively.</p><h4>Isolation of Handled Errors</h4><p>In version 13.1, <tt>⎕DMX</tt> cannot be explicitly localised in the header of a function. However, for all trapped errors, the interpreter creates an environment which effectively makes the current instance of <tt>⎕DMX</tt> local to, and available only for the duration of, the trap-handling code.</p><p>In particular <tt>⎕DMX</tt> is localised within:</p><ul><li value="1">Any function which explicitly localises <tt>⎕TRAP</tt></li><li value="2">The <tt>:Case[List]</tt> or <tt>:Else</tt> clause of a <tt>:Trap</tt> control structure.</li><li value="3">The right hand side of a D-function Error-Guard.</li></ul><p>This localisation uses the standard shadow/un-shadow mechanism, so that an existing value of <tt>⎕DMX</tt> will be hidden on entry to the trap-handling code (or localisation of <tt>⎕TRAP</tt>) and restored afterwards. The benefit of the localization strategy is that code which uses error trapping as a standard operating procedure (such as a file utility which traps <tt>FILE NAME ERROR</tt> and creates missing files when required) will not pollute the environment with irrelevant error information.</p><p>In particular, it becomes easier to implement tools to handle errors by logging them or displaying additional information to end users, without worrying that trapped errors within the tool code will interfere with current state of the application.</p><h4>Examples</h4><p>The effect of automatic localisation of <tt>⎕DMX</tt> is illustrated by the following examples. In each case, assume the existence of a "Global" value of <tt>⎕DMX</tt>, whose <tt>EN</tt> field is 0, following a <tt>)RESET</tt>.</p><h4>Example[1] :Trap control structure:</h4><pre class="APLCodeSmall">      ⎕DMX.EN=0       ⍝ Global ⎕DMX visible here
+     :Trap 11         ⍝ Catch error 11
+         ⎕DMX.EN=0    ⍝ Global ⎕DMX visible here
+         ÷0           ⍝ Generate error 11
+     :Else            ⍝ Error-handling code:
+         ⎕DMX.EN=11   ⍝ Local ⎕DMX for ÷0 error visible here
+     :EndTrap         ⍝ ⎕DMX unshadowed after Else-clause
+     ⎕DMX.EN=0        ⍝ Global ⎕DMX visible here
+</pre><h4>Example[2] <tt>⎕TRAP</tt> system variable:</h4><pre class="APLCodeSmall">    ∇ foo;⎕TRAP
+[1]  ⍝ ⎕DMX is shadowed and un-shadowed @ the same time as ⎕TRAP  
+[2]  ⍝ The local value of ⎕DMX is initialised to a copy of the  
+[3]  ⍝ calling function's value ("pass-through localisation").  
+[4]  ⍝ This local value will be changed if an error occurs. On 
+[5]  ⍝ exit from the function, the calling environment's value    
+[6]  ⍝ will be restored (along with that of ⎕TRAP) as normal.  
+[7]   ⎕DMX.EN=0           ⍝ passed-through from calling env 
+[8]   ⎕TRAP←0 'c' '→next' ⍝ sets trap; does not change or 
+[9]                       ⍝ localise ⎕DMX  
+[10]  ⎕DMX.EN=0           ⍝ passed-through from calling env 
+[11]  ⍎'÷0'               ⍝ updates local ⎕DMX; jumps to next:  
+[12] next: ⎕DMX.EN=11	   ⍝ Error number has been set to 11  
+[13]  ⎕TRAP←0 'c' '→end'  ⍝ sets trap; does not change or
+[14]                      ⍝ localise  ⎕DMX  
+[15]  ⎕DMX.EN=11          ⍝ Error number is 11, as before  
+[16] end:                 ⍝ on return, calling envt's ⎕DMX.EN 
+[17]                      ⍝ will be 0    
+     ∇
+</pre><h4>Example[3] Dfn Error-guard:</h4><pre class="APLCodeSmall">
+      ⎕←⎕DMX.EN=0          ⍝ Global ⎕DMX visible here
+      {
+          ⎕←⎕DMX.EN=0      ⍝ Global ⎕DMX visible here
+          11               ⍝ trap DOMAIN
+      }⍬::{                ⍝ Error :: Guard
+          ⎕←⎕DMX.EN=11     ⍝ Local ⎕DMX for ÷0 error visible here
+      }⍵
+      ⎕←⎕DMX.EN=0          ⍝ Global ⎕DMX visible here
+      ÷0                   ⍝ Generate error 11 
+</pre><h4 class="ExampleNewPage">Example[4] Nested localisation of <tt>⎕DMX</tt></h4><pre class="APLCodeSmall">     ⎕DMX.EN=0             ⍝ Global ⎕DMX
+     :Trap 11              ⍝ Trap DOMAIN ERROR
+         :Trap 5           ⍝ Trap LENGTH ERROR
+             2 3+4 5 6     ⍝ Generate LENGTH ERROR
+         :Else             ⍝ ⎕DMX localised for following clause:
+             ⎕DMX.EN=5     ⍝ EN set to LENGTH in local ⎕DMX
+             ÷0            ⍝ Generate DOMAIN ERROR
+         :End              ⍝
+     :Else                 ⍝ ⎕DMX localised for following line
+         ⎕DMX.EN=11        ⍝ EN set to DOMAIN in local ⎕DMX
+     :End                  ⍝ ⎕DMX un-shadowed here
+     ⎕DMX.EN=0             ⍝ Global ⎕DMX restored.
+</pre><h4>Clarification</h4><p>Whenever <tt>⎕TRAP </tt>is localised explicitly, <tt>⎕DMX</tt> will be localised at the same time. This means only that any subsequent changes to <tt>⎕DMX</tt> will be reverted as <tt>⎕TRAP</tt> is unshadowed. In particular, the assignment of <tt>⎕TRAP</tt> has no effect on <tt>⎕DMX</tt>; only its localisation. Explicit localisation means the appearance in the header of a trad-fn or as the argument of <tt>⎕SHADOW</tt>. It does not include the implicit localisation, which takes place at <tt>:Trap</tt> or dfn error-guard setting time. The examples above illustrate these cases.</p><p>The timing of the setting of the values within the <tt>⎕DMX</tt> mechanism is important:</p><ol><li value="1">When an error occurs, the values and properties needed to populate <tt>⎕DMX</tt> are collected</li><li value="2">If a trap is in effect, the stack is cut back appropriately.</li><li value="3">Within the error-handling code, <tt>⎕DMX</tt> is populated with the values collected in step 1.</li></ol><p>This means that lexically and dynamically nested error handling code will behave "as expected". See example[4] above.</p><p>For further details, see <a href="../lang/sysfns/dmx.html"><tt>⎕DMX</tt></a></p></body>
+</html>

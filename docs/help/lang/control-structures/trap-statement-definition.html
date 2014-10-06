@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h4>:Trap Statement</h4><pre> 
+       |
+       :Trap &lt;ecode&gt;
+       |
+       code
+       |
+       |&lt;------------------------------------.
+       |                                     |
+       .-------.-------.                     |
+       |       |       |                     |
+       |       :Else   :Case[List] &lt;ecode&gt;   |
+       |       |       |                     |
+       |       |       |                     |
+       |       |       |                     |
+       |       code    code                  |
+       |       |       |                     |
+       |&lt;------'       `---------------------'
+       |
+       :End[Trap]
+       |</pre><p>Where <tt>ecode</tt> is a scalar or vector of <tt>⎕TRAP</tt> event codes (see<MadCap:conditionalText><span class="XRef">Language Reference: </span><span class="XRef">Trappable Event Codes</span></MadCap:conditionalText><a href="../sysfns/trap.html#TrapEvents" class="MCXref_0"> Trappable Event Codes </a>).</p><p>Note that within the <tt>:Trap</tt> control structure, <tt>:Case</tt> is used for a single event code and <tt>:CaseList</tt> for a vector of event codes.</p></body>
+</html>

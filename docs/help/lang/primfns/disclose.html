@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>(⎕ML) 
+ R←⊃Y or R←↑Y</tt>Disclose</h2><p>The symbol chosen to represent Disclose depends on the current Migration Level.</p><p>If  <tt>⎕ML&lt;2</tt>, Disclose is represented by the symbol: <tt>⊃</tt>.</p><p>If  <tt>⎕ML≥2</tt>, Disclose is represented by the symbol: <tt>↑</tt>.</p><p><tt>Y</tt> may be any array.  <tt>R</tt> is an array.  If <tt>Y</tt> is non-empty, <tt>R</tt> is the value of the first item of <tt>Y</tt> taken in ravel order.  If <tt>Y</tt> is empty, <tt>R</tt> is the prototype of <tt>Y</tt>.</p><p>Disclose is the inverse of Enclose.  The identity <tt>R←→⊃⊂R</tt> holds for all <tt>R</tt>.  Disclose is also referred to as First.</p><h4>Examples</h4><pre>      ⊃1
+1
+ 
+      ⊃2 4 6
+2
+ 
+      ⊃'MONDAY' 'TUESDAY'
+MONDAY
+ 
+      ⊃(1 (2 3))(4 (5 6))
+1  2 3
+ 
+      ⊃⍳0
+0
+ 
+      ' '=⊃''
+1
+ 
+      ⊃1↓⊂1,⊂2 3
+0  0 0</pre></body>
+</html>

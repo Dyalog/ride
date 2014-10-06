@@ -1,0 +1,5 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←3002⌶Y</tt>Disable Component Checksum Validation</h2><p>Checksums allow component files to be validated and repaired using <a href="../sysfns/fchk.html#FileCheckandRepair:"><tt>⎕FCHK</tt></a>.</p><p>From Version 13.1 onwards, components which contain checksums are also validated on every component read.</p><p> Although not recommended, applications which favour performance over security may disable checksum validation by <tt><a href="../sysfns/fread.html#FileReadComponent:">⎕FREAD</a></tt> using this function.</p><p><tt>Y</tt> is an integer defined as follows:</p><table><tr><th class="Left">Value</th><th class="Left">Description</th></tr><tr><td>0</td><td><tt>⎕FREAD</tt> will not validate checksums.</td></tr><tr><td>1</td><td><tt>⎕FREAD</tt> will validate checksums when they are present. This is the default.</td></tr></table><p>The shy result <tt>R</tt> is the previous value of this setting.</p></body>
+</html>

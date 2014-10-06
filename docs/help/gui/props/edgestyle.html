@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Property</tt>EdgeStyle</h2><p class="Bold"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Applies To</a></span></p><p class="Bold">Description</p><p class="Bold">Note that EdgeStyle is not honoured for objects which have a natural
+built-in 3-dimensional appearance.</p><p>This property is used to give a 3-dimensional appearance to screen objects.
+This is achieved by drawing the object with a grey or white background colour
+and by drawing a border around it using various combinations of black, white and
+dark grey lines. Note that this border is drawn <span class="Italic">outside</span> a control but <span class="Italic">inside</span> a <a href="../objects/form.html">Form</a> or <a href="../objects/subform.html">SubForm</a>.
+</p><p>The value of the EdgeStyle property is a character vector chosen from the
+following :</p><table><tr><td><tt>'None'</tt></td><td>Object is drawn with no 3-dimensional effects and the EdgeStyle
+      properties of its children are ignored (treated as <tt>None</tt>).</td></tr><tr><td><tt>'Plinth'</tt></td><td>Object is drawn with a light shadow along its top and left edges and a
+      dark shadow along its bottom and right edges. This gives the illusion of a
+      raised effect.</td></tr><tr><td><tt>'Recess'</tt></td><td>Object is drawn with a dark shadow along its top and left edges and a
+      light shadow along its bottom and right edges. This gives the illusion of
+      a sunken effect.</td></tr><tr><td><tt>'Groove'</tt></td><td>Object is drawn with a border that has the appearance of a groove.</td></tr><tr><td><tt>'Ridge'</tt></td><td>Object is drawn with a border that has the appearance of a ridge.</td></tr><tr><td><tt>'Shadow'</tt></td><td>Object is drawn with a dark border line along its top and left edges.</td></tr><tr><td><tt><tt>'Default'</tt></tt></td><td>Object itself is drawn with no 3-dimensional border, but the values of
+      the EdgeStyle properties of its children are observed.</td></tr><tr><td><tt><tt>'Dialog'</tt></tt></td><td>Used in conjunction with (<tt>'Border' 2</tt>),
+      this gives a Form the appearance of a standard 3-dimensional dialog box.
+      This setting applies <b>only</b> to a <a href="../objects/form.html">Form</a>       or a <a href="../objects/subform.html">SubForm</a></td></tr></table><p>For the <a href="../objects/root.html">Root</a> object, the EdgeStyle property
+may be <tt>'None'</tt> or <tt>'Default'</tt>.
+If EdgeStyle is <tt>'None'</tt>, screen objects are
+drawn without 3-dimensional effects of any kind and the value of their EdgeStyle
+property is ignored. If EdgeStyle is <tt>'Default'</tt>,
+all controls are drawn using their default EdgeStyle properties.</p><p>Note that <a href="../objects/msgbox.html">MsgBox</a>, <a href="../objects/filebox.html">FileBox</a> and the set-up dialog box associated with the <a href="../objects/printer.html">Printer</a> object are all drawn with 3-dimensional effects regardless of the value of
+EdgeStyle on <a href="../objects/root.html">Root</a>. These objects do not have
+their own EdgeStyle properties.</p><p>If you set EdgeStyle to <tt>'None'</tt> on the <a href="../objects/root.html">Root</a> object, all your objects will (by default) be drawn without 3-dimensional
+effects.</p></body>
+</html>

@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="Using_Hints"></a>Using Hints</h2><p>All of the GUI objects supported by Dyalog APL that have a visible presence on the screen have a Hint property and a HintObj property. Quite simply, when the user moves the mouse pointer over the object the contents of its Hint property are displayed in the object referenced by its HintObj property. When the user moves the mouse pointer away from the object, its Hint disappears. If an object has a Hint, but its HintObj property is empty, the system uses the HintObj defined for its parent, or for its parent’s parent, and so forth up the tree. If there is no HintObj defined, the Hint is simply not displayed. This mechanism has two useful attributes:</p><ol><li value="1">it allows you to easily define a single region for help messages for all of the controls in a Form, but still provides the flexibility for using different message locations for different controls if appropriate.</li><li value="2">to enable or disable the display of hints all you typically have to do is to set or clear the HintObj property on the parent Form</li></ol><p>The object named by HintObj may be any object with either a Caption property or a Text property. Thus you can use the Caption on a Label, Form, or Button or the text in an Edit object. If you use a StatusField object which has both Caption <span class="Italic">and </span>Text properties, the Text property is employed. If you set HintObj to the name of an object which possesses neither of these properties, the hints will simply not be displayed. The following example illustrates the use of a StatusField for displaying hints.</p><h4><a name="StatusField"></a>Example: Using a StatusField for Hints</h4><p>This example illustrates the use of a StatusField object to display hints. .</p><pre>
+    'Test'⎕WC 'Form' 'Using Hints'('HintObj' 'Test.SB.H')
+ 
+    'Test.MB' ⎕WC 'MenuBar'
+    'Test.MB.F' ⎕WC 'Menu' '&amp;File'
+    HINT ← 'Creates a new empty document'
+    'Test.MB.F.New' ⎕WC 'MenuItem' '&amp;New' ('Hint' HINT)
+ 
+    'Test.SB' ⎕WC 'StatusBar'
+    'Test.SB.H' ⎕WC 'StatusField' ('Size' ⍬ 98)</pre><p><img src="../images/hints-statusbar.png" /></p><p class="ImageCaption">Using a StatusBar to display Hints</p><h4><a name="Edit_Object"></a>Example: Using an Edit Object for Hints</h4><p>You can display a much larger amount of information using a multi-line Edit object as shown in this example.</p><pre>     'Test'⎕WC 'Form' 'Using Hints' ('HintObj' 'Test.ED')
+      'Test.MB' ⎕WC 'MenuBar'
+      'Test.MB.F' ⎕WC 'Menu' '&amp;File'
+      HINT ← 100⍴'Creates a new empty document '
+      'Test.MB.F.New' ⎕WC 'MenuItem' '&amp;New' ('Hint' HINT)</pre><pre>      'Test.ED' ⎕WC 'Edit' ('Style' 'Multi')</pre><p><img src="../images/hints-edit.png" /></p><p class="ImageCaption">Displaying Hints in an Edit object</p></body>
+</html>

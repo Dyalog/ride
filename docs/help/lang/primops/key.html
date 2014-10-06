@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←{X}f⌸Y</tt>Key</h2><p><tt>f</tt> may be any dyadic function that returns a result.</p><p>If <tt>X</tt>is specified, it is an array whose major cells specify keys for corresponding major cells of <tt>Y</tt>.  The Key operator <tt>⌸</tt><span class="MCTextPopup"><span class="MCTextPopupBody_0" style="display: none; ">The symbol ⌸ is not available in Classic Edition, and the Key operator is instead represented by ⎕U2338</span><a href="javascript:void(0);" class="MCTextPopupSpot_0" onclick="FMCTextPopup( event, this ); return false;" style="font-size: 0.9em; vertical-align: super">1</a></span>applies the function <tt>f</tt> to each unique key in <tt>X</tt> and the major cells of <tt>Y</tt> having that key.</p><p>If <tt>X</tt>is omitted,<tt>Y</tt> is an array whose major cells represent keys.</p><p> In this case, the Key operator applies the function <tt>f</tt>to each unique key in  <tt>Y</tt> and the  elements of <tt>⍳≢Y</tt> having that key.  <tt>f⌸Y</tt> is the same as <tt>Y f⌸⍳≢Y</tt>.</p><p>Key is similar to the GROUP BY clause in SQL.</p><h4>Example</h4><pre>      cards←'2' 'Queen' 'Ace' '4' 'Jack'
+      suits←'Spades' 'Hearts' 'Spades' 'Clubs' 'Hearts'
+
+      suits,[1.5]cards
+ Spades  2     
+ Hearts  Queen 
+ Spades  Ace   
+ Clubs   4     
+ Hearts  Jack
+  
+       suits {⍺':'⍵}⌸ cards
+  Spades  : 2 Ace         
+  Hearts  :  Queen  Jack  
+  Clubs   : 4</pre><p>In this example, both arrays are vectors so their major cells are their elements. The function <tt>{⍺':'⍵}</tt> is applied between the unique elements in <tt>suits</tt> (<tt>'Spades' 'Hearts' 'Clubs'</tt>) and the elements in <tt>cards</tt> grouped according to their corresponding elements in <tt>suits</tt>, i.e. (<tt>'2' 'Ace'</tt>), (<tt>'Queen' 'Jack'</tt>) and (<tt>'4'</tt>).</p><h4 class="ExampleNewPage">Monadic Example</h4><pre>
+      {⍺ ⍵} ⌸ suits ⍝ indices of unique major cells
+  Spades   1 3 
+  Hearts   2 5 
+  Clubs    4
+  
+      {⍺,≢⍵} ⌸ suits ⍝ count of unique major cells
+ Spades  2
+ Hearts  2
+ Clubs   1
+</pre><h4>Further Examples</h4><p><tt>x</tt> is a vector of stock codes, <tt>y</tt> is a corresponding matrix of values.</p><pre>      ⍴x
+10
+      ⍴y
+10 2
+     x,y
+ IBM   13 75
+ AAPL  45 53
+ GOOG  21  4
+ GOOG  67 67
+ AAPL  93 38
+ MSFT  51 83
+ IBM    3  5
+ AAPL  52 67
+ AAPL   0 38
+ IBM    6 41
+</pre><p>If we apply the function <tt>{⍺ ⍵}</tt> to <tt>x</tt> and <tt>y</tt> using the <tt>⌸</tt> operator, we can see how the rows (its major cells) of <tt>y</tt> are grouped according to the corresponding elements (its major cells) of <tt>x</tt>.</p><pre>      x{⍺ ⍵}⌸y
+ IBM   13 75 
+        3  5 
+        6 41 
+ AAPL  45 53 
+       93 38 
+       52 67 
+        0 38 
+ GOOG  21  4 
+       67 67 
+ MSFT  51 83       </pre><p>More usefully, we can apply the function <tt>{⍺(+⌿⍵)}</tt>, which delivers the stock codes and the corresponding totals in <tt>y</tt>:</p><pre>      x{⍺(+⌿⍵)}⌸y
+  IBM    22 121  
+  AAPL   190 196 
+  GOOG   88 71   
+  MSFT   51 83   
+</pre><p>There is no need for the function to use its left argument. So to obtain just the totals in <tt>y</tt> grouped by the stock codes in <tt>x</tt>:</p><pre>       x{+⌿⍵}⌸y
+ 22 121
+190 196
+ 88  71
+ 51  83</pre><h4>Defined Function Example</h4><p>This example appends the data for a stock into a component file named by the symbol.</p><pre>     ∇ r←stock foo data;fid;file
+[1]    file←⊃stock
+[2]    :Trap 0
+[3]        fid←file ⎕FTIE 0
+[4]        file ⎕FERASE fid
+[5]    :EndTrap
+[6]    fid←file ⎕FCREATE 0
+[7]    r←data ⎕FAPPEND fid
+[8]    ⎕FUNTIE fid
+     ∇</pre><pre>     x foo⌸y
+1 1 1 1</pre><h4>Example</h4><pre>
+      {⍺ ⍵} ⌸ suits ⍝ indices of unique major cells
+  Spades   1 3 
+  Hearts   2 5 
+  Clubs    4
+  
+      {⍺,≢⍵} ⌸ suits ⍝ count of unique major cells
+ Spades  2
+ Hearts  2
+ Clubs   1
+</pre></body>
+</html>

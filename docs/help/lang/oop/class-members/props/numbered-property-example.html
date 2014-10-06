@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../../help.css"></head>
+<body><h3>Example</h3><p>The <span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">ComponentFile Class</a></span><a href="component-file-class-example.html" class="MCXref_SeePageNumber_0"></a> specifies a Numbered Property named <tt>Component</tt> which represents the contents of a specified component on the file.</p><pre>    :Property <b>Numbered</b> Component
+    :Access Public Instance
+        ∇ r←shape
+          r←¯1+2⊃⎕FSIZE tie
+        ∇
+        ∇ r←get arg
+          r←⎕FREAD tie arg.Indexers
+        ∇
+        ∇ set arg
+          arg.NewValue ⎕FREPLACE tie,arg.Indexers
+        ∇
+    :EndProperty</pre><p class="pagebreakafter"> </p><pre>
+      F1←⎕NEW ComponentFile 'test1'
+      
+      F1.Append¨(⍳5)×⊂⍳4
+1 2 3 4 5
+      
+      F1.Count
+5
+      
+      F1.Component[4]
+ 4 8 12 16 
+      
+      4⊃F1.Component
+4 8 12 16
+      
+      (⊂4 3)⌷F1.Component
+ 4 8 12 16  3 6 9 12 </pre><p>Referencing a Numbered Property in its entirety causes APL to call the <tt>get</tt> function successively for every element.</p><pre>      F1.Component
+ 1 2 3 4  2 4 6 8  3 6 9 12  4 8 12 16  5 10 15 20
+      
+      ((⊂4 3)⌷F1.Component)←'Hello' 'World'
+      
+      F1.Component[3]
+ World</pre><p>Attempting to access a Numbered Property with inappropriate indices generates an error:</p><pre>      F1.Component[6]
+INDEX ERROR
+      F1.Component[6]
+     ^
+      F1.Component[1;2]
+RANK ERROR
+      F1.Component[1;2]
+     ^</pre></body>
+</html>

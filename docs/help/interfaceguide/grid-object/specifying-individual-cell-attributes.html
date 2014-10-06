@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="Cell_Attributes"></a>Specifying Individual Cell Attributes</h2><p>The FCol, BCol, CellFonts and Input properties can be used to specify attributes of individual cells. One possible design would be for these properties to be matrices like the Values property, each of whose elements corresponded to a cell in the Grid. However, although conceptually simple, this design was considered to be wasteful in terms of workspace, especially as it is unlikely that every cell will require a totally individual set of attributes. Instead, FCol, BCol, CellFonts and Input either specify a single attribute to be applied to all cells, or they specify a vector of attributes which are indexed through the CellTypes property. This design is slightly more complex to use, but minimises the workspace needed to represent cell information.</p><p>CellTypes is an integer matrix of the same size as Values. Each number in CellTypes defines the <span class="Italic">type</span> of the corresponding cell, where <span class="Italic">type</span> means a particular set of cell attributes defined by the BCol, FCol, CellFonts and Input properties.</p><p>If an element of CellTypes is 0 or 1, the corresponding cell is displayed using the <span class="Italic">normal</span> value of each of the FCol, BCol, CellFonts and Input properties. The normal value is either the value defined by its first element or, if the property has not been specified, its default value.</p><p>If an element of CellTypes is greater than 1, the corresponding element of each of the FCol, BCol, CellFonts and Input properties is used. However, if a particular property applies to all cells, you need only specify one value; there is no need to repeat it. This mechanism is perhaps best explained by using examples.</p><h4 class="ExampleNewPage">Example 1</h4><p>Suppose that you want to use a Grid to display a numeric matrix <tt>DATA</tt> and you want to show elements whose value exceeds 150 with a  grey background. Effectively, there are 2 different types of cell; normal white ones and dark grey ones. This can be achieved as follows:</p><pre>DATA←?12 3⍴300
+ 'F'⎕WC'Form' 'Example 1'
+ 'F.G'⎕WC'Grid'DATA(0 0)F.Size
+ 'F.G'⎕WS'CellTypes'(1+DATA&gt;150)
+ 'F.G'⎕WS'BCol'(192 192 192)(128 128 128)
+</pre><p><img src="../images/grid-example1.png" /></p><h4 class="ExampleNewPage">Example 2</h4><p>Continuing on from the first example, suppose that in addition, you want to show values that exceed 200 with a white background, but using a bold font. Now you have 3 types of cell; white background with normal font, grey background with normal font, and white background with bold font. This can be done as follows:</p><pre>CT←(DATA&gt;200)+1+DATA&gt;100
+ 'F.G'⎕WS'CellTypes'CT
+ COL←(255 255 255)(192 192 192)(255 255 255)
+ 'F.G'⎕WS'BCol'COL
+ 'Normal'⎕WC'Font' 'Arial' 16
+ 'Bold'⎕WC'Font' 'Arial' 16('Weight' 1000)
+ 'F.G'⎕WS'CellFonts' 'Normal' 'Normal' 'Bold'</pre><p><img src="../images/grid-example2.png" /></p><h4 class="ExampleNewPage">Example 3</h4><p>This is a more complex example that introduces different uses of the Input property to handle numeric and date cells. Suppose that you wish to display the names, date of birth, and salaries of some people. The user may edit the salary and date of birth, but not the name. Salaries in excess of $19,999 are to be shown in bold</p><p>This means that we need 4 types of cell; the "names" cells, the "date of birth" cells, the cells containing salaries below $20,000 and those cells containing $20,000 or more. The Input property must specify 3 different objects; a Label for the protected "names" cells, an Edit object for the "date" cells, and a different Edit object for the salaries. The CellFonts property must specify the two different fonts required; normal and bold.</p><pre> 'F'⎕WC'Form' 'Example 3'
+ 'F.G'⎕WC'Grid'('Posn' 0 0)F.Size
+ 'F.G'⎕WS'Values'(↑[0.5]NAMES BIRTHDATES SALARIES)
+
+ CT←1,2,[1.5]3+SALARIES&gt;19999
+ 'F.G'⎕WS'CellTypes'CT
+
+ 'F.G.Name'⎕WC'Label'('FontObj' 'Normal')
+ 'F.G.Date'⎕WC'Edit'('FieldType' 'Date')
+ 'F.G.Sal'⎕WC'Edit'('FieldType' 'Currency')
+ INPUTS←'F.G.Name' 'F.G.Date',2⍴⊂'F.G.Sal'
+ 'F.G'⎕WS'Input'INPUTS
+
+ 'Normal'⎕WC'Font' 'Arial' 16
+ 'Bold'⎕WC'Font' 'Arial' 16('Weight' 1000)
+ FONTS←(3⍴⊂'Normal'),⊂'Bold'
+ 'F.G'⎕WS'CellFonts'FONTS</pre><p><img src="../../generatedimages/grid-example3.png" /></p></body>
+</html>

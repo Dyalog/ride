@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="OperatorSyntax"></a>Operator Syntax</h2><p>Operators take one or two operands.  An operator with one operand is monadic.  The operand of a monadic operator is to the left of the operator.  An operator with two operands is dyadic.  Both operands are required for a dyadic operator.</p><p>Operators have long scope to the left.  That is, the left operand is the longest function or array expression to its left (see<MadCap:conditionalText><span class="XRef">Programmer's Guide: </span><span class="XRef">Operators</span></MadCap:conditionalText><a href="../intro/operators.html#Operators" class="MCXref_0">Operators</a>).  A dyadic operator has short scope on the right.  Right scope may be extended by the use of parentheses.</p><p>An operand may be an array, a primitive function, a system function, a defined function or a derived function.  An array may be the result of an array expression.</p><p>An operator with its operand(s) forms a DERIVED FUNCTION.  The derived function may be monadic or dyadic and it may or may not return an explicit result.</p><h4>Examples</h4><pre>      +/⍳5
+15
+      (*∘2)⍳3
+1 4 9
+ 
+      PLUS ← + ⋄ TIMES ← ×
+      1 PLUS.TIMES 2
+2
+ 
+      ⎕NL 2
+A
+X
+      ⎕EX¨↓⎕NL 2
+      ⎕NL 2</pre><h4>Monadic Operators</h4><p>Like primitive functions, monadic operators can be:</p><ul><li value="1">named</li><li value="2">enclosed within parentheses</li><li value="3">displayed in the session</li></ul><h4>Examples</h4><pre>      ⎕ ← each ← (¨)      ⍝ name and display
+¨
+      shape←⍴
+      shape each (1 2) (3 4 5)
+ 2  3 
+      
+      slash←/
+      +slash ⍳10
+55
+      swap←⍨
+      3 -swap 4
+1</pre><h4>Right Operand Currying </h4><p> A dyadic operator may be bound or <span class="Italic">curried</span> with its right operand to form a monadic operator:</p><h4>Examples</h4><pre>      ⎕ ← inv ← ⍣¯1  ⍝ produces monadic inverse operator
+⍣ ¯1
+      +\inv 1 2 3    ⍝ scan-inverse
+1 1 1
+      lim ← ⍣≡       ⍝ power-limit
+
+      1 +∘÷lim 1     ⍝ Phi
+1.61803</pre></body>
+</html>

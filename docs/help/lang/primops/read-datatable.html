@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←{X}2011⌶Y</tt>Read DataTable</h2><p>This function performs a <span class="Italic">block </span><span class="Italic">read</span> from an instance of the ADO.NET object System.Data.DataTable. This object may only be read using an explicit row-wise loop, which is slow at the APL level. <tt>2011</tt><tt>⌶</tt> implements an <span class="Italic">internal</span> row-wise loop which is much faster on large arrays. Furthermore, the function handles NULL values and the conversion of .Net datatypes to the appropriate internal APL form in a more efficient manner than can be otherwise achieved. These 3 factors together mean that the function provides a significant improvement in performance compared to calling the row-wise programming interface directly at the APL level.</p><p><tt>Y</tt> is a scalar or a 2-item array containing <tt>dtRef</tt>, and <tt>NullValues</tt> as described in the table below.</p><p>The optional argument <tt>X</tt> is the Boolean vector <tt>ParseFlags</tt> as described in the table below.</p><p>The result <tt>R</tt> is the array <tt>Data</tt> as described in the table below.</p><table><tr><th class="Left">Argument</th><th class="Left">Description</th></tr><tr><td><tt>dtRef</tt></td><td>A reference to an instance of System.Data.DataTable.</td></tr><tr><td><tt>Data</tt></td><td>A matrix with the same number of columns as the table.</td></tr><tr><td><tt>NullValues</tt></td><td>An optional vector with one element per column, containing the value to which a DBNull in the corresponding column of the DataTable should be mapped in the result array <tt>Data</tt>.</td></tr><tr><td><tt>ParseFlags</tt></td><td>A Boolean vector, where a 1 indicates that the corresponding element of <tt>Data</tt> should be converted to a string using the <code>ToString()</code> method of the data type of column in question. It is envisaged that this argument may be extended in the future, to allow other conversions – for example converting Dates to a floating-point format.</td></tr></table><p>First for comparison is shown the type of code that is required to read a DataTable by looping:</p><pre>      t←3⊃⎕AI ⋄ data1←↑(⌷dt.Rows).ItemArray ⋄ (3⊃⎕AI)-t
+191</pre><p>The above expression turns the <tt>dt.Rows</tt> collection into an array using <tt>⌷</tt>, and <span class="Italic">mixes</span> the ItemArray properties to produce the result. Although here there is no explicit loop, involved, there is an implicit loop required to reference each item of the collection in succession. This operation performs at about 200 rows/sec.</p><p><tt>2011⌶</tt> does the looping entirely in compiled code and is significantly faster:</p><pre>      GetDT←2011⌶
+      t←3⊃⎕AI ⋄ data2←GetDT dt ⋄ (3⊃⎕AI)-t
+25</pre><h4>ParseFlags Example</h4><p>In the example shown above, <tt>2011⌶</tt> created 365 instances of System.DateTime objects in the workspace. If we are willing to receive the timestamps in the form of strings, we can read the data almost an order of magnitude faster:</p><pre>      t←3⊃⎕AI ⋄ data3←0 0 0 1 GetDT dt ⋄ (3⊃⎕AI)-t
+3</pre><p>The left argument to <tt>2011⌶</tt> allows you to flag columns which should be returned as the <code>ToString()</code> value of each object in the flagged columns. Although the resulting array looks identical to the original, it is not: The fourth column contains character vectors:</p><pre>      ¯2 4↑data3
+ 364  even  4  18-01-2011 14:03:29
+ 365  odd   5  19-01-2011 14:03:29</pre><p>Depending on your application, you may need to process the text in the fourth column in some way – but the overall performance will probably still be very much better than it would be if DateTime objects were used.</p><h4>Handling Nulls</h4><p>Using the DataTable produced by the corresponding example shown for <tt>2010⌶</tt> it can be shown that by default null values will be read back into the APL workspace as instances of <code>System.DBNull</code>.</p><pre>      GetDT←2011⌶&gt;
+
+      ⎕←z←GetDT dt
+
+        odd  1  21-01-2010 14:50:19
+ two         2  22-01-2010 14:50:19
+ three  odd     23-01-2010 14:50:19
+
+
+
+      (1 1⍉z).GetType
+
+ System.DBNull  System.DBNull  System.DBNull</pre><p>However, by supplying a <tt>NullValues</tt> argument to <tt>2011⌶</tt>, we can request that nulls in each column are mapped to a corresponding value of our choice; in this case, <tt>'&lt;null&gt;'</tt>, <tt>'even'</tt>, and <tt>99</tt> respectively.</p><pre>      GetDT dt ('&lt;null&gt;' 'even' 99 '')
+&lt;null&gt;  odd    1  21-01-2010 14:50:19 
+ two     even   2  22-01-2010 14:50:19 
+ three   odd   99  23-01-2010 14:50:19</pre></body>
+</html>

@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="ExternalVariables"></a>External Variables</h2><p>An external variable is a variable whose contents (value) reside not in the workspace, but in a file.  An external variable is associated with a file by the system function <tt>⎕XT</tt>.  If at the time of association the file exists, the external variable assumes its value from the contents of the file.  If the file does not exist, the external variable is defined but a <tt>VALUE ERROR</tt> occurs if it is referenced before assignment.  Assignment of an array to the external variable or to an indexed element of the external variable has the effect of updating the file.  The value of the external variable or the value of indexed elements of the external variable is made available in the workspace when the external variable occurs in an expression.  No special restrictions are placed on the usage of external variables.</p><p>Normally, the files associated with external variables remain permanent in that they survive the APL session or the erasing of the external variable from the workspace. External variables may be accessed concurrently by several users, or by different nodes on a network, provided that the appropriate file access controls are established.  Multi-user access to an external variable may be controlled with the system function <tt>⎕FHOLD</tt> between co-operating tasks.</p><p>Refer to the sections describing the system functions <tt>⎕XT</tt> and <tt>⎕FHOLD</tt> in <span class="Italic">Chapter 6</span> for further details.</p><h4>Examples</h4><pre>      'ARRAY' ⎕XT 'V'
+ 
+      V←⍳10
+      V[2] + 5
+7
+ 
+      ⎕EX'V'
+ 
+      'ARRAY' ⎕XT 'F'
+      F
+1 2 3 4 5 6 7 8 9 10</pre></body>
+</html>

@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Method 192</tt>GetBuildID</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/root.html">Root</a></td></tr></table><p class="Bold">Description</p><p>This method is used to obtain the Build ID of a Dyalog APL executable.</p><p>The argument to GetBuildID is <tt>⍬</tt> or a
+single item as follows:</p><table><tr><td><tt>[1]</tt></td><td>File name</td><td>character vector</td></tr></table><p>The (shy) result is an 8-element character vector of hexadecimal digits that
+represents the Build ID.</p><p>If the argument is <tt>⍬</tt>, the build id is
+that of the current version of Dyalog APL that is running the expression.</p><p>Note that although this method is designed to uniquely identify different
+versions of Dyalog APL by its checksum, it may be used to obtain a checksum
+for <span class="Italic">any</span> arbitrary file.</p><h4>Examples:</h4><pre>      GetBuildID ⍬
+38091b76
+      GetBuildID 'E:\DYALOG81\DYALOG.EXE'
+cbf0d376
+      GetBuildID 'myfile'
+4a29334d</pre><p>Note that if the file does not exist, the result is 00000000.</p></body>
+</html>

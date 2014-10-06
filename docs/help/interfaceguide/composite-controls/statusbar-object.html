@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="StatusBar"></a>The StatusBar Object</h2><p>Like the Toolbar, the StatusBar object is also a container that manages its children. However, the StatusBar may contain only one type of object, namely StatusFields. By default, the StatusBar is a flat grey object, positioned along the bottom edge of a Form, upon which the StatusFields are drawn as sunken rectangles. StatusFields display textual information and are typically used for help messages and for monitoring the status of an application. They can also be used to automatically report the status of the Caps Lock, Num Lock, Scroll Lock, and Insert keys</p><p>The following example illustrates a default StatusBar containing three StatusFields. Notice how the StatusFields are positioned automatically.</p><pre>'TEST'⎕WC'Form' 'Simple StatusBar'
+'TEST' ⎕WS'BCol' (255 255 255)
+'TEST.SB'⎕WC'StatusBar'
+'TEST.SB.S1'⎕WC'StatusField' 'Field1:' 'text1'
+'TEST.SB.S2'⎕WC'StatusField' 'Field2:' 'text2'
+'TEST.SB.S3'⎕WC'StatusField' 'Field3:' 'text3'</pre><p class="fighead"><img src="../images/statusbar-simple.png" /></p><p class="ImageCaption">A Default StatusBar</p><p>The following example illustrates a scrolling StatusBar. The fourth StatusField extends beyond the right edge of the StatusBar and, because HScroll is <tt>¯2</tt>, a mini scrollbar appears.</p><pre>'TEST'⎕WC'Form' 'Scrolling StatusBar'
+                ('BCol' (255 255 255))
+ 
+'TEST.SB'⎕WC'StatusBar'('HScroll' ¯2)
+ 
+'TEST.SB.S1'⎕WC'StatusField' 'Field1:' 'text1'
+'TEST.SB.S2'⎕WC'StatusField' 'Field2:' 'text2'
+'TEST.SB.S3'⎕WC'StatusField' 'Field3:' 'text3'
+'TEST.SB.S4'⎕WC'StatusField' 'Field4:' 'text4'</pre><p class="fighead"><img src="../images/statusbar-scrolling.png" /></p><p class="ImageCaption">A Scrolling StatusBar</p><p>As an alternative to single-row scrolling StatusBar, you can have a multi-line one. Indeed, this is the default if you omit to specify HScroll. However, you do have to explicitly set the height of the StatusBar to accommodate the second row.</p><pre>'TEST'⎕WC'Form' 'Multi Line StatusBar'
+                ('BCol' (255 255 255))
+ 
+'TEST.SB.S1'⎕WC'StatusField' 'Field1:' 'text1'
+'TEST.SB.S2'⎕WC'StatusField' 'Field2:' 'text2'
+'TEST.SB.S3'⎕WC'StatusField' 'Field3:' 'text3'
+'TEST.SB.S4'⎕WC'StatusField' 'Field4:' 'text4'</pre><p class="fighead"><img src="../images/statusbar-multiline.png" /></p><p class="ImageCaption">A Multi-line StatusBar</p><h4><a name="Using_StatusFields"></a>Using StatusFields</h4><p>There are basically three ways of using StatusFields. Firstly, you can display information in them directly from your program by setting their Caption and/or Text properties. For example, if you are executing a lengthy calculation, you may wish to display the word "Calculating ..." as the Caption of a StatusField and, as the calculations proceed, display (say) "Phase 1" followed in due course by "Phase 2", and so forth. You can also use StatusFields to display application messages, including warning and error messages, where the use of a MsgBox is inappropriate.</p><p>The second major use of a StatusField is to display <b>hints</b> which you do by setting the HintObj property of an object to the name of the StatusField. Used in this way, a StatusField automatically displays context sensitive help when the user places the mouse pointer over an object. This topic is described in Chapter 5.The third use of a Status Field is to monitor the status of the keyboard. This is achieved by setting its Style property to one of the following keywords:</p><table><tr><th class="Left">Keyword</th><th class="Left">Meaning</th></tr><tr><td>CapsLock</td><td>Monitors state of Caps Lock key</td></tr><tr><td>ScrollLock</td><td>Monitors state of Scroll Lock key</td></tr><tr><td>NumLock</td><td>Monitors state of Num Lock key</td></tr><tr><td>KeyMode</td><td>Monitors the keyboard mode (APL/ASCII) (Classic Edition only)</td></tr><tr><td>InsRep</td><td>Monitors the state of the Insert/Replace toggle key</td></tr></table><p>The following example illustrates different uses of the StatusField object. The first StatusField <tt>F.SB.S1</tt> is used for context-sensitive help by making it the HintObj for the Form <tt>F</tt>. The second StatusField <tt>F.SB.S2</tt> is simply used to display application status; in this case "Ready ...". The third and fourth StatusField objects monitor the status of the Insert and Caps Lock keys respectively. Note that whilst the Caps Lock, Num Lock and Scroll Lock keys have a recognised <span class="Italic">state</span>, the Insert key does not. Initially, APL sets the key to "Ins" and then toggles to and from "Rep" whenever the key is pressed. To discover which mode the keyboard is in, you should use <tt>⎕WG</tt> to read the value of the Text property of the StatusField.</p><pre>'F'⎕WC'Form' 'Using StatusFields'('Coord' 'Pixel')
+ 
+'F.SB'⎕WC'StatusBar'
+ 
+'F.SB.S1'⎕WC'StatusField'('Size'⍬ 150)
+'F'⎕WS'HintObj' 'F.SB.S1'
+ 
+'F.SB.S2'⎕WC'StatusField' 'Ready ...'
+'F.SB.S3'⎕WC'StatusField'('Style' 'InsRep')('Size'⍬ 50)
+'F.SB.S4'⎕WC'StatusField'('Style' 'CapsLock')('Size'⍬ 50)
+ 
+'F.L'⎕WC'List'WINES(0 0)(F.Size×0.8 1)('Hint' 'Choose a Wine')</pre><p><img src="../images/statusbar-wines.png" /></p></body>
+</html>

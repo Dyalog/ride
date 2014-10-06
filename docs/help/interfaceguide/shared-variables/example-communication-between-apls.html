@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="APL_APL"></a>Example: Communication Between APLs</h2><p>The following instructions will allow you to explore how the DDE interface can be used to communicate between two Dyalog APL/W workspaces.</p><p>Start two separate APL sessions and arrange their windows one above the other so that they do not overlap.</p><p>Select the top window and type :</p><pre>      )WSID SERVER
+      A←?5 5⍴100 ⋄ A
+      'DDE:' ⎕SVO 'A EXTNAME'
+1</pre><p>The result of <tt>⎕SVO</tt> is 1, indicating that no client has yet joined in the conversation.</p><p>Select the lower window and type :</p><pre>      )WSID CLIENT
+      'DDE:DYALOG|SERVER' ⎕SVO 'B EXTNAME'
+      B</pre><p>The result of <tt>⎕SVO</tt> is 2 indicating that the connection with the SERVER workspace has been successfully made. Now type <tt>B</tt>. It will have the same value as <tt>A</tt> in the upper window.</p><p>Select the top window (SERVER) again and type :</p><pre>      A←⌹A
+      ⎕SVS 'A'
+1 0 1 0</pre><p>Note that the result of <tt>⎕SVS</tt> indicates that the SERVER has set <tt>A</tt>, but the CLIENT has not yet referenced the value.</p><p>Select the lower window (CLIENT) and type :</p><pre>      ⎕SVS 'B'
+0 1 0 1
+      B
+...
+      ⎕SVS 'B'
+0 0 1 1</pre><p>Note how, after referencing the shared variable, its state has changed.</p><p>Still in the CLIENT workspace, write the following function called <tt>FOO</tt>:</p><pre>     ∇ FOO
+[1]   ⍝ This function gets called on event 50 (DDE)
+[2]    →(0 0 1 1≡⎕SVS'B')/0 ⍝ Exit if no change
+[3]    B
+     ∇    </pre><p>Then, to attach <tt>FOO</tt> as a callback and to "wait"...</p><pre>      '.' ⎕WS 'Event' 50 'FOO'
+⎕DQ '.'</pre><p>Now switch to the upper window (SERVER) and type :</p><pre>      A←⌹A</pre><p>Type this expression repeatedly, or experiment with others. Note how changing <tt>A</tt> generates a DDE event (event number 50) on the system object <tt>'.'</tt> in CLIENT, which in turn fires the callback.</p><p>To interrupt <tt>⎕DQ</tt> in the CLIENT, type Ctrl+Break or select "Interrupt" from the <span class="Italic">Action</span> menu in the Session Window.</p></body>
+</html>

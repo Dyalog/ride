@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Property</tt>CharSet</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/font.html">Font</a></td></tr></table><p class="Bold">Description</p><p class="Bold">This property applies to the Classic Edition only. In the Unicode Edition,
+its value is ignored.</p><p>CharSet is an integer that specifies the character encoding of the <a href="../objects/font.html">Font</a> object.</p><p>The following table illustrates some of the character set encodings supported
+by Windows. Note that this set may vary according to the edition of Windows that
+is installed.</p><table><tr><th class="Left">Language</th><th class="Left">CharSet</th></tr><tr><td>Western (Ansi)</td><td>0</td></tr><tr><td>Hebrew</td><td>177</td></tr><tr><td>Arabic</td><td>178</td></tr><tr><td>Greek</td><td>161</td></tr><tr><td>Turkish</td><td>162</td></tr><tr><td>Baltic</td><td>186</td></tr><tr><td>Central European</td><td>238</td></tr><tr><td>Cyrillic</td><td>204</td></tr><tr><td>Vietnamese</td><td>163</td></tr></table><p>Windows fonts typically contain glyphs for the ASCII character set in their
+first 128 positions, and glyphs for the Western European character set in
+positions 129-256. Additional sets of character glyphs are stored in positions
+257 onwards in what are sometimes referred to as codepages.</p><p>When you change the character set encoding, to (say) Greek (161), the set of
+Greek characters are mapped into the top 128 positions of the font.</p><p>For example, if the CharSet is 0 (ANSI), the character code Hex EC is
+displayed as ì (i-grave). However, if you change CharSet to 161 (Greek), the
+same character code is displayed as the Greek µ.</p><p>The following example illustrates how the character string <tt>'ôï
+üíïìá ìïõ Ýéíáé Ðåôå'</tt> appears differently
+according to the value of CharSet.</p><p><img src="../images/charset.gif" /></p><pre>      'F'⎕WC'FORM' 'CharSet Property'('Size' 300 400)('Coord' 'Pixel')
+      F.Coord←'Prop'
+
+      'F.F1'⎕WC'Font' ('Size' 32) ('CharSet' 0)
+      'F.F2'⎕WC'Font' ('Size' 32) ('CharSet' 161)
+      'F.F3'⎕WC'Font' ('Size' 32) ('CharSet' 178)
+
+      STRING←'ôï üíïìá ìïõ Ýéíáé Ðåôå'
+
+      'F.E1'⎕WC'Edit'STRING(10 10)(⍬ 80)('Font' 'F.F1')
+      'F.E2'⎕WC'Edit'STRING(40 10)(⍬ 80)('Font' 'F.F2')('Translate' 'ANSI')
+      'F.E3'⎕WC'Edit'STRING(70 10)(⍬ 80)('Font' 'F.F3')('Translate' 'ANSI')</pre><p>Note that setting Translate to 'ANSI' means that characters entered into the
+Edit fields using a corresponding  National Language keyboard (Greek and
+Arabic) will appear in that language as intended</p></body>
+</html>

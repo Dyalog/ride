@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⍪Y</tt>Table</h2><p><tt>Y</tt> may be any array. <tt>R</tt> is a 2-dimensional matrix of the elements of <tt>Y</tt> taken in row-major order, preserving the shape of the first dimension of <tt>Y</tt> if it exists </p><p><span class="Italic">Table</span> has been implemented according to the Extended APL Standard (<span class="Italic">ISO/IEC 13751:2001).</span></p><h4>Examples</h4><pre>      ]display {⍵ (⍴⍵)} ⍪'a'
+┌→──────────┐
+│ ┌→┐ ┌→──┐ │
+│ ↓a│ │1 1│ │
+│ └─┘ └~──┘ │
+└∊──────────┘
+ 
+      ]display {⍵ (⍴⍵)} ⍪'hello'
+┌→──────────┐
+│ ┌→┐ ┌→──┐ │
+│ ↓h│ │5 1│ │
+│ │e│ └~──┘ │
+│ │l│       │
+│ │l│       │
+│ │o│       │
+│ └─┘       │
+└∊──────────┘
+ 
+      ]display {⍵ (⍴⍵)} ⍪2 3 4⍴⍳24
+┌→─────────────────────────────────────────────┐
+│ ┌→──────────────────────────────────┐ ┌→───┐ │
+│ ↓ 1  2  3  4  5  6  7  8  9 10 11 12│ │2 12│ │
+│ │13 14 15 16 17 18 19 20 21 22 23 24│ └~───┘ │
+│ └~──────────────────────────────────┘        │
+└∊─────────────────────────────────────────────┘</pre></body>
+</html>

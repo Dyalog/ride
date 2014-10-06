@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../../help.css"></head>
+<body><h3>Example</h3><p>A second example of a Keyed Property is provided by the <tt>KeyedFile</tt> Class which is based upon the <span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">ComponentFile Class</a></span></a></span><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot"> </a></span><a href="component-file-class-example.html" class="MCXref_SeePageNumber_0"></a> used previously.</p><pre>:Class KeyedFile: ComponentFile
+    :Field Public Keys
+    ⎕ML←0
+    
+    ∇ Open filename
+      :Implements Constructor :Base filename
+      :Access Public Instance
+      :If Count&gt;0
+          Keys←{⊃⍵⊃⎕BASE.Component}¨⍳Count
+      :Else
+          Keys←0⍴⊂''
+      :EndIf
+    ∇
+    
+    :Property Keyed Component
+    :Access Public Instance
+        ∇ r←get arg;keys;sink
+          keys←⊃arg.Indexers
+          ⎕SIGNAL(~^/keys∊Keys)/3
+          r←{2⊃⍵⊃⎕BASE.Component}¨Keys⍳keys
+        ∇
+        ∇ set arg;new;keys;vals
+          vals←arg.NewValue
+          keys←⊃arg.Indexers
+          ⎕SIGNAL((⍴,keys)≠⍴,vals)/5
+          :If ∨/new←~keys∊Keys
+              sink←Append¨↓⍉↑(⊂new)/¨keys vals
+              Keys,←new/keys
+              keys vals/⍨←⊂~new
+          :EndIf
+          :If 0&lt;⍴,keys
+              Replace¨↓⍉↑(Keys⍳keys)(↓⍉↑keys vals)
+          :EndIf
+        ∇
+    :EndProperty
+    
+:EndClass ⍝ Class KeyedFile</pre><p class="pagebreakafter"> </p><pre>
+ 
+      K1←⎕NEW KeyedFile 'ktest'
+      K1.Count
+0
+      K1.Component[⊂'Pete']←42
+      K1.Count
+1
+      K1.Component['John' 'Geoff']←(⍳10)(3 4⍴⍳12)
+      K1.Count</pre><pre>
+3
+      K1.Component['Geoff' 'Pete']
+ 1  2  3  4  42
+ 5  6  7  8    
+ 9 10 11 12    
+      K1.Component['Pete' 'Morten']←(3 4⍴'∘')(⍳⍳3)
+      K1.Count
+4
+      K1.Component['Morten' 'Pete' 'John']
+  1 1 1  1 1 2  1 1 3   ∘∘∘∘  1 2 3 4 5 6 7 8 9 10 
+  1 2 1  1 2 2  1 2 3   ∘∘∘∘                       
+                        ∘∘∘∘                       </pre></body>
+</html>

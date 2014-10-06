@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h3><a name="MultiLineDynamicFunctions"></a>Multi-Line Dynamic Functions</h3><p>The single expression which provides the result of the Dynamic Function may be preceded by any number of assignment statements. Each such statement introduces a name which is local to the function.</p><p>For example in the following, the expressions <tt>sum←</tt> and <tt>num←</tt> create <b>local</b> variables <tt>sum</tt> and <tt>num</tt>. </p><pre>      mean←{          ⍝ Arithmetic mean
+          sum←+/⍵     ⍝ Sum of elements
+          num←⍴⍵      ⍝ Number of elements
+          sum÷num     ⍝ Mean
+      }</pre><p>Note that Dynamic Functions may be commented in the usual way using <tt>⍝</tt>.</p><p>When the interpreter encounters a local definition, a new local name is created. The name is shadowed dynamically exactly as if the assignment had been preceded by: <tt>⎕shadow </tt><span class="Italic">name </span><tt>⋄</tt>.</p><p>It is <b>important </b>to note the distinction between the two types of statement above. There can be <b>many</b> assignment statements, each introducing a new local variable, but only a <b>single</b> expression where the result is not assigned. As soon as the interpreter encounters such an expression, it is evaluated and the result returned immediately as the result of the function.</p><p>For example, in the following, </p><pre>      mean←{          ⍝ Arithmetic mean
+          sum←+/⍵     ⍝ Sum of elements
+          num←⍴⍵      ⍝ Number of elements
+          sum,num     ⍝ Attempt to show sum,num <b>(wrong)!</b>
+          sum÷num     ⍝ ... and return result.
+      }</pre><p>... as soon as the interpreter encounters the expression <tt>sum,num</tt>, the function terminates with the two element result (<tt>sum,num</tt>) and the following line is not evaluated.</p><p>To display arrays to the session from within a Dynamic function, you can use the explicit display forms <tt>⎕←</tt> or <tt>⍞←</tt> as in:</p><pre>      mean←{          ⍝ Arithmetic mean
+          sum←+/⍵     ⍝ Sum of elements
+          num←⍴⍵      ⍝ Number of elements
+          ⎕←sum,num   ⍝ show sum,num.
+          sum÷num     ⍝ ... and return result.
+      }</pre><p>Note that local definitions can be used to specify local nested Dynamic Functions:</p><pre>      rms←{                   ⍝ Root Mean Square
+          root←{⍵*0.5}        ⍝ ∇ Square root
+          mean←{(+/⍵)÷⍴⍵}     ⍝ ∇ Mean
+          square←{⍵×⍵}        ⍝ ∇ Square
+          root mean square ⍵   
+      }</pre></body>
+</html>

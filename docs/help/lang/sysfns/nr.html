@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⎕NR Y</tt>Nested Representation </h2><p><tt>Y</tt> must be a simple character scalar or vector which represents the name of a function or a defined operator.</p><p>If <tt>Y</tt> is a name of a defined function or defined operator, <tt>R</tt> is a vector of text vectors.  The first element of <tt>R</tt> contains the text of the function or operator header.  Subsequent elements contain lines of the function or operator.  Elements of <tt>R</tt> contain no unnecessary blanks, except for leading indentation of control structures and the blanks which precede comments.</p><p>If <tt>Y</tt> is the name of a variable, a locked function or operator, an external function or a namespace, or is undefined, <tt>R</tt> is an empty vector.</p><h4>Example</h4><pre>      ∇R←MEAN X    ⍝ Average
+[1]   R←(+/X)÷⍴X
+      ∇
+ 
+      +F←⎕NR'MEAN'
+  R←MEAN X    ⍝Average   R←(+/X)÷⍴X
+ 
+      ⍴F
+2
+      ]display F
+.→----------------------------------------.
+| .→---------------------.  .→----------. |
+| | R←MEAN X    ⍝ Average|  | R←(+/X)÷⍴X| |
+| '----------------------'  '-----------' |
+'∊----------------------------------------'</pre><p>The definition of <tt>⎕NR</tt> has been extended to names assigned to functions by specification (<tt>←</tt>), and to local names of functions used as operands to defined operators.  In these cases, the result of <tt>⎕NR</tt> is identical to that of <tt>⎕CR</tt> except that the representation of defined functions and operators is as described above.</p><h4>Example</h4><pre>      AVG←MEAN∘,
+ 
+      +F←⎕NR'AVG'
+   R←MEAN X    ⍝ Average   R←(+/X)÷⍴X  ∘,
+ 
+      ⍴F
+3
+      ]display F
+.→------------------------------------------------.
+| .→----------------------------------------.     |
+| | .→---------------------.  .→----------. | ∘ , |
+| | | R←MEAN X    ⍝ Average|  | R←(+/X)÷⍴X| | - - |
+| | '----------------------'  '-----------' |     |
+| '∊----------------------------------------'     |
+'∊------------------------------------------------'</pre><p> </p></body>
+</html>

@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h3>Niladic Example</h3><p>In the following example, <tt>DomesticParrot</tt> is derived from <tt>Parrot</tt> which is derived from <tt>Bird</tt>. They all share the Field <tt>Desc</tt> (inherited from <tt>Bird</tt>). Each of the 3 Classes has its own <span class="Italic">niladic</span> Constructor called <tt>egg0</tt>.</p><pre>:Class Bird
+    :Field Public Desc
+    ∇ egg0
+      :Access Public
+      :Implements Constructor
+      Desc←'Bird'
+    ∇
+:EndClass ⍝ Bird</pre><p> </p><pre>:Class Parrot: Bird
+    ∇ egg0
+      :Access Public
+      :Implements Constructor
+      Desc,←'→Parrot'
+    ∇
+:EndClass ⍝ Parrot
+ 
+:Class DomesticParrot: Parrot
+    ∇ egg0
+      :Access Public
+      :Implements Constructor
+      Desc,←'→DomesticParrot'
+    ∇
+:EndClass ⍝ DomesticParrot
+ 
+      (⎕NEW DomesticParrot).Desc
+Bird→Parrot→DomesticParrot</pre><h4>Explanation</h4><p><tt>⎕NEW</tt> creates the new instance and runs the niladic Constructor <tt>DomesticParrot.egg0</tt>. As soon as the line:</p><pre>:Implements Constructor</pre><p>is encountered, <tt>⎕NEW</tt> calls the niladic constructor in the Base Class <tt>Parrot.egg0</tt></p><p><tt>Parrot.egg0</tt> starts to execute and as soon as the line:</p><pre>:Implements Constructor</pre><p>is encountered, <tt>⎕NEW</tt> calls the niladic constructor in the Base Class <tt>Bird.egg0. </tt></p><p>When the line:</p><pre>:Implements Constructor</pre><p>is encountered, <tt>⎕NEW</tt> cannot call the niladic constructor in the Base Class (there is none) so the chain of Constructors ends. Then, as the State Indicator unwinds ...</p><table><tr><td>Bird.egg0</td><td>executes</td><td><tt>Desc←'Bird''</tt></td></tr><tr><td>Parrot.egg0 </td><td>executes</td><td><tt>Desc,←'→Parrot''</tt></td></tr><tr><td>DomesticParrot.egg0</td><td>execute</td><td><tt>Desc,←'→DomesticParrot''</tt></td></tr></table></body>
+</html>

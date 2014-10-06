@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>:Trap ecode</tt>Trap Statement</h2><p><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Formal Definition</a></span></p><p><tt>:Trap</tt> is an error trapping mechanism that can be used in conjunction with, or as an alternative to, the <tt>⎕TRAP</tt> system variable. It is equivalent to APL2’s <tt>⎕EA</tt>, except that the code to be executed is not restricted to a single expression and is not contained within quotes (and so is slightly more efficient).</p><p><tt>ecode</tt> is an integer scalar or vector containing the list of event codes which are to be <span class="Italic">handled</span> during execution of the segment of code between the <tt>:Trap</tt> and <tt>:End[Trap]</tt> statements. Note that event codes 0 and 1000 are wildcards that means<span class="Italic"> any</span> event code in a given range. See  Language Reference.</p><h4>Operation</h4><p>The segment of code immediately following the <tt>:Trap</tt> keyword is executed. On completion of this segment, if no error occurs, control passes to the code following <tt>:End[Trap]</tt>. </p><p> If an error occurs which is not specified by <tt>ecode</tt>, it is processed by outer <tt>:Trap</tt>s,   <tt>⎕TRAP</tt>s, or by the default system processing in the normal fashion.</p><p>If an error occurs, whose event code matches <tt>ecode:</tt></p><ul><li value="1">If the error occurred within a sub-function, the system cuts the execution stack back to the function containing the <tt>:Trap</tt> keyword. In this respect, <tt>:Trap</tt> behaves like <tt>⎕TRAP</tt> with a <tt>'C'</tt> qualifier.</li><li value="2">If the <tt>:Trap</tt> segment contains a <tt>:Case[List] ecode</tt> statement whose <tt>ecode</tt> matches the event code of the error that has occurred, execution continues from the statement following that <tt>:Case[List] ecode</tt>.</li><li value="3">Otherwise, if the <tt>:Trap</tt> segment contains a <tt>:Else</tt> statement, execution continues from the first statement following the <tt>:Else</tt> statement. </li><li value="4">Otherwise, execution continues from the first statement following the      <tt>:End[Trap]</tt> and no error processing occurs.</li></ul><p>Note that the error trapping is in effect <b>only</b> during execution of the initial code segment. When a trapped error occurs, further error trapping is immediately disabled (or surrendered to outer level <tt>:Trap</tt>s or <tt>⎕TRAP</tt>s). In particular, the error trap is no longer in effect during processing of <tt>:Case[List]</tt>’s argument or in the code following the <tt>:Case[List]</tt> or <tt>:Else</tt> statement. This avoids the situation sometimes encountered with <tt>⎕TRAP</tt> where an infinite ‘trap loop’ occurs.</p><p>Note that the statement  <tt>:Trap ⍬</tt> results in no errors being trapped.</p><h4 class="ExampleNewPage">Examples</h4><pre class="APLCodeSmall">     ∇ lx
+[1]    :Trap 1000        ⍝ Cutback and exit on interrupt
+[2]        Main ...
+[3]    :EndTrap
+     ∇
+
+     ∇ ftie←Fcreate file        ⍝ Create null component file
+[1]    :Trap 22                 ⍝ Trap FILE NAME ERROR
+[2]        ftie←file ⎕FCREATE 0 ⍝ Try to create file.
+[3]    :Else
+[4]        ftie←file ⎕FTIE 0    ⍝ Tie the file.
+[5]        file ⎕FERASE ftie    ⍝ Drop the file.
+[6]        file ⎕FCREATE ftie   ⍝ Create new file.
+[7]    :EndTrap
+     ∇
+
+ 
+     ∇ lx ⍝ Distinguish various cases
+[1]    :Trap 0 1000 
+[2]        Main ... 
+[3]    :Case 1002 
+[4]        'Interrupted ...' 
+[5]    :CaseList 1 10 72 76 
+[6]        'Not enough resources' 
+[7]    :CaseList 17+⍳20 
+[8]        'File System Problem' 
+[9]    :Else 
+[10]       'Unexpected Error' 
+[11]   :EndTrap 
+     ∇</pre><p>Note that <tt>:Trap</tt>s can be nested:</p><pre class="APLCodeSmall">     ∇ ntie←Ntie file                    ⍝ Tie native file
+[1]    :Trap 22                          ⍝ Trap FILE NAME ERROR
+[2]        ntie←file ⎕NTIE 0             ⍝ Try to tie file
+[3]    :Else
+[4]        :Trap 22                      ⍝ Trap FILE NAME ERROR
+[5]            ntie←(file,'.txt')⎕NTIE 0 ⍝ Try with .txt extn
+[6]        :Else
+[7]            ntie←file ⎕NCREATE 0      ⍝ Create null file.
+[8]        :EndTrap
+[9]    :EndTrap
+     ∇
+</pre></body>
+</html>

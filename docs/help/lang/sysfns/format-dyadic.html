@@ -1,0 +1,74 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←X ⎕FMT Y</tt>Format (Dyadic) </h2><p><tt>Y</tt> must be a simple array of rank not exceeding two, or a non-simple scalar or vector whose items are simple arrays of rank not exceeding two.  The simple arrays in <tt>Y</tt> must be homogeneous, either character or numeric. All numeric values in <tt>Y</tt> must be simple; if <tt>Y</tt> contains any complex numbers, dyadic <tt>⎕FMT</tt> will generate a <tt>DOMAIN ERROR</tt>. <tt>X</tt> must be a simple character vector.  <tt>R</tt> is a simple character matrix.</p><p><tt>X</tt> is a format specification that defines how columns of the simple arrays in <tt>Y</tt> are to appear.  A simple scalar in <tt>Y</tt> is treated as a one-element matrix.  A simple vector in <tt>Y</tt> is treated as a one-column matrix.  Each column of the simple arrays in <tt>Y</tt> is formatted in left-to-right order according to the format specification in <tt>X</tt> taken in left-to-right order and used cyclically if necessary.</p><p><tt>R</tt> has the same number of rows as the longest column (or implied column) in <tt>Y</tt>, and the number of columns is determined from the format specification.</p><p>The <b>format specification</b> consists of a series of control phrases, with adjacent phrases separated by a single comma, selected from the following:</p><table><tbody><tr><td><tt>rAw</tt></td><td>Alphanumeric format</td></tr><tr><td><tt>rEw.s</tt></td><td>Scaled format</td></tr><tr><td><tt>rqFw.d</tt></td><td>Decimal format</td></tr><tr><td><tt>rqG⍞pattern⍞</tt></td><td>Pattern</td></tr><tr><td><tt>rqIw</tt></td><td>Integer format</td></tr><tr><td><tt>Tn</tt></td><td>Absolute tabulation</td></tr><tr><td><tt>Xn</tt></td><td>Relative tabulation</td></tr><tr><td><tt>⍞t⍞</tt></td><td>Text insertion</td></tr></tbody></table><p>(Alternative surrounding pairs for Pattern or Text insertion are   <tt>&lt; &gt;, ⊂ ⊃, ⎕ ⎕</tt>  or<tt> ¨ ¨</tt>.)</p><h4 class="ExampleNewPage">where:</h4><table><tbody><tr><td class="DyalogPlain">r</td><td>is an optional repetition factor indicating that the format phrase is to be applied to r columns of <tt>Y</tt></td></tr><tr><td class="DyalogPlain">q</td><td>is an optional usage of qualifiers or affixtures from those described below.</td></tr><tr><td class="DyalogPlain">w</td><td>is an integer value specifying the total field width per column of <tt>Y</tt>, including any affixtures.</td></tr><tr><td class="DyalogPlain">s</td><td>is an integer value specifying the number of significant digits in Scaled format; <tt>s</tt> must be less than <tt>w-1</tt></td></tr><tr><td class="DyalogPlain">d</td><td>is an integer value specifying the number of places of decimal in Decimal format; <tt>d</tt> must be less than <tt>w</tt>.</td></tr><tr><td class="DyalogPlain">n</td><td>is an integer value specifying a tab position relative to the notional left margin (for <tt>T</tt>-format) or relative to the last formatted position (for <tt>X</tt>-format) at which to begin the next format.</td></tr><tr><td class="DyalogPlain">t</td><td>is any arbitrary text excluding the surrounding character pair.  Double quotes imply a single quote in the result.</td></tr><tr><td class="DyalogPlain">pattern</td><td>see following section <b>G format</b></td></tr></tbody></table><h4>Qualifiers q are as follows:</h4><table><tbody><tr><td class="DyalogPlain">B</td><td>leaves the field blank if the result would otherwise be zero.</td></tr><tr><td class="DyalogPlain">C</td><td>inserts commas between triads of digits starting from the rightmost digit of the integer part of the result.</td></tr><tr><td class="DyalogPlain">Km</td><td>scales numeric values by <tt>1Em</tt> where m is an integer; negation may be indicated by <tt>¯</tt> or - preceding the number.</td></tr><tr><td class="DyalogPlain">L</td><td>left justifies the result in the field width.</td></tr><tr><td class="DyalogPlain">Ov⍞t⍞</td><td>replaces specific numeric value <tt>v</tt> with the text <tt>t</tt>.</td></tr><tr><td class="DyalogPlain">S⍞p⍞</td><td>substitutes standard characters.  p is a string of pairs of symbols enclosed between any of the Text Insertion delimiters.  The first of each pair is the standard symbol and the second is the symbol to be substituted.  Standard symbols are:<br /><tt>*</tt> overflow fill character<br /><tt>.</tt> decimal point<br /><tt>,</tt> triad separator for <tt>C</tt> qualifier<br /><tt>0</tt> fill character for <tt>Z</tt> qualifier<br /><tt>_</tt> loss of precision character<br /></td></tr><tr><td class="DyalogPlain">Z</td><td>fills unused leading positions in the result with zeros (and commas if <tt>C</tt> is also specified).</td></tr><tr><td class="DyalogPlain">9</td><td>digit selector</td></tr></tbody></table><h4 class="ExampleNewPage">Affixtures are as follows:</h4><table><tbody><tr><td class="DyalogPlain">M⍞t⍞</td><td>prefixes negative results with the text t instead of the negative sign.</td></tr><tr><td class="DyalogPlain">N⍞t⍞</td><td>post-fixes negative results with the text <tt>t</tt></td></tr><tr><td class="DyalogPlain">P⍞t⍞</td><td>prefixes positive or zero results with the text <tt>t</tt>.</td></tr><tr><td class="DyalogPlain">Q⍞t⍞</td><td>post-fixes positive or zero results with the text <tt>t</tt>.</td></tr><tr><td class="DyalogPlain">R⍞t⍞</td><td>presets the field with the text <tt>t</tt> which is repeated as necessary to fill the field.  The text will be replaced in parts of the field filled by the result, including the effects of other qualifiers and affixtures except the <tt>B</tt> qualifier</td></tr></tbody></table><p>The surrounding affixture delimiters may be replaced by the alternative pairs described for Text Insertion.</p><h4>Examples</h4><p>A vector is treated as a column:</p><pre>      'I5' ⎕FMT 10 20 30
+   10
+   20
+   30</pre><p>The format specification is used cyclically to format the columns of the right argument:</p><pre>      'I3,F5.2' ⎕FMT 2 4⍴⍳8
+  1 2.00  3 4.00
+  5 6.00  7 8.00</pre><p>The columns of the separate arrays in the items of a non-simple right argument are formatted in order.  Rows in a formatted column beyond the length of the column are left blank:</p><pre>      '2I4,F7.1' ⎕FMT (⍳4)(2 2⍴ 0.1×⍳4)
+   1   0    0.2
+   1   0    0.4
+   3
+   4</pre><p>Characters are right justified within the specified field width, unless the <tt>L</tt> qualifier is specified:</p><pre>      'A2' ⎕FMT 1 6⍴'SPACED'
+ S P A C E D</pre><p>If the result is too wide to fit within the specified width, the field is filled with asterisks:</p><pre>      'F5.2' ⎕FMT 0.1×5 1000 ¯100
+  0.50
+*****
+*****</pre><p>Relative tabulation (<tt>X</tt>-format) identifies the starting position for the next format phrase relative to the finishing position for the previous format, or the notional left margin if none.  Negative values are permitted providing that the starting position is not brought back beyond the left margin.  Blanks are inserted in the result, if necessary:</p><pre>      'I2,X3,3A1' ⎕FMT (⍳3)(2 3⍴'TOPCAT')
+ 1   TOP
+ 2   CAT
+ 3</pre><p>Absolute tabulation (<tt>T</tt>-format) specifies the starting position for the next format relative to the notional left margin.  If position 0 is specified, the next format starts at the next free position as viewed so far.  Blanks are inserted into the result as required.  Over-written columns in the result contain the most recently formatted array columns taken in left-to-right order:</p><pre>      X←'6I1,T5,A1,T1,3A1,T7,F5.1'
+ 
+      X ⎕FMT (1 6⍴⍳6)('*')(1 3⍴'ABC')(22.2)
+ABC4*6 22.2</pre><p>If the number of specified significant digits exceeds the internal precision, low order digits are replaced by the symbol _:</p><pre>      'F20.1' ⎕FMT 1E18÷3
+3333333333333333__._</pre><p>The Text Insertion format phrase inserts the given text repeatedly in all rows of the result:</p><pre>      MEN←3 5⍴'FRED BILL JAMES'
+      WOMEN←2 5⍴'MARY JUNE '
+ 
+      '5A1,&lt;|&gt;' ⎕FMT MEN WOMEN
+FRED |MARY |
+BILL |JUNE |
+JAMES|     |</pre><p>The last example also illustrates that a Text Insertion phrase is used even though the data is exhausted.  The following example illustrates effects of the various qualifiers:</p><pre>      X←'F5.1,BF6.1,X1,ZF5.1,X1,LF5.1,K3CS&lt;.,,.&gt;F10.1'
+ 
+      X ⎕FMT ⍉5 3⍴¯1.5 0 25
+ ¯1.5  ¯1.5 ¯01.5 ¯1.5   ¯1.500,0
+  0.0       000.0 0.0         0,0
+ 25.0  25.0 025.0 25.0   25.000,0</pre><p>Affixtures allow text to be included within a field.  The field width is not extended by the inclusion of affixtures.  <tt>N</tt> and <tt>Q</tt> affixtures shift the result to the left by the number of characters in the text specification.  Affixtures may be used to enclose negative results in parentheses in accordance with common accounting practice: </p><pre>      'M&lt;(&gt;N&lt;)&gt;Q&lt; &gt;F9.2' ⎕FMT 150.3 ¯50.25 0 1114.9
+  150.30
+  (50.25)
+    0.00
+ 1114.90</pre><p>One or more format phrases may be surrounded by parentheses and preceded by an optional repetition factor.  The format phrases within parentheses will be re-used the given number of times before the next format phrase is used.  A Text Insertion  phrase will not be re-used if the last data format phrase is preceded by a closing parenthesis:</p><pre>      'I2,2(&lt;/&gt;,ZI2)' ⎕FMT 1 3⍴⌽100|3↑⎕TS
+20/07/89</pre><h4><a name="GFormat"></a>G  Format</h4><p>Only the <tt>B</tt>, <tt>K</tt>, <tt>S</tt> and <tt>O</tt> qualifiers are valid with the <tt>G</tt> option</p><p><tt>⍞pattern⍞</tt> is an arbitrary string of characters, excluding the delimiter characters.  Characters '9' and '<tt>Z</tt>' (unless altered with the <tt>S</tt> qualifier) are special and are known as <b>digit selectors</b>.</p><p>The result of a <tt>G</tt> format will have length equal to the length of the pattern.</p><p>The data is rounded to the nearest integer (after possible scaling). Each digit of the rounded data replaces one digit selector in the result.  If there are fewer data digits than digit selectors, the data digits are padded with leading zeros.  If there are more data digits than digit selectors, the result will be filled with asterisks.</p><p>A '9' digit selector causes a data digit to be copied to the result.</p><p>A 'Z' digit selector causes a non-zero data digit to be copied to the result.  A zero data digit is copied if and only if digits appear on either side of it.  Otherwise a blank appears.  Similarly text between digit selectors appears only if digits appear on either side of the text.  Text appearing before the first digit selector or after the last will always appear in the result.</p><h4>Examples</h4><pre>      'G⊂99/99/99⊃'⎕FMT 0 100 100 ⊥8 7 89
+08/07/89
+ 
+      'G⊂ZZ/ZZ/ZZ⊃'⎕FMT 80789 + 0 1
+ 8/07/89
+ 8/07/9
+ 
+      'G⊂Andy ZZ Pauline ZZ⊃' ⎕FMT 2721.499 2699.5
+Andy 27 Pauline 21
+Andy 27
+ 
+      ⍴⎕←'K2G⊂DM Z.ZZZ.ZZ9,99⊃' ⎕FMT 1234567.89 1234.56
+DM 1.234.567,89
+DM     1.234,56
+2 15</pre><p>An error will be reported if:</p><ul><li value="1">Numeric data is matched against an <tt>A</tt> control phrase.</li><li value="2">Character data is matched against other than an <tt>A</tt> control phrase.</li><li value="3">The format specification is ill-formed.</li><li value="4">For an F control phrase, <tt>d&gt;w-2</tt></li><li value="5">For an E control phrase, <tt>s&gt;w-2</tt></li></ul><h4>O  Format Qualifier</h4><p>The O format qualifier replaces a specific numeric value with a text string and may be used in conjunction with the E, F, I and G format phrases.</p><p>An O-qualifier consists of the letter "O" followed by the optional numeric value which is to be substituted (if omitted, the default is 0) and then the text string within pairs of  symbols such as "<tt>&lt;&gt;</tt>". For example:</p><table><tbody><tr><td class="DyalogPlain">O - qualifier</td><td>Description</td></tr><tr><td class="DyalogPlain"> O&lt;nil&gt; </td><td>Replaces the value 0 with the text "nil"</td></tr><tr><td class="DyalogPlain">O42&lt;N/A&gt;</td><td>   Replaces the value 42 with the text "N/A"</td></tr><tr><td class="DyalogPlain">O0.001&lt;1/1000&gt;</td><td>Replaces the value 0.001 with the text "1/1000"</td></tr></tbody></table><p>The replacement text is inserted into the field in place of the numeric value. The text is normally right-aligned in the field, but will be left-aligned if the L qualifier is also specified.</p><p>It is permitted to specify more than one O-qualifier within a single phrase.</p><p>The O-qualifier is <tt>⎕CT</tt> sensitive.</p><h4>Examples</h4><pre>      'O&lt;NIL&gt;F7.2'⎕FMT 12.3 0 42.5
+  12.30
+    NIL
+  42.50
+ 
+      'O&lt;NIL&gt;LF7.2'⎕FMT 12.3 0 42.5
+12.30 
+NIL 
+42.50 
+ 
+      'O&lt;NIL&gt;O42&lt;N/A&gt;I6'⎕FMT 12 0 42 13
+    12
+   NIL
+   N/A
+    13
+ 
+      'O99&lt;replace&gt;F20.2'⎕fmt 99 100 101
+             replace
+              100.00
+              101.00</pre><p> </p></body>
+</html>

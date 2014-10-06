@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h3>Numbers</h3><p>Dyalog APL supports both real numbers and complex numbers. </p><h4>Real Numbers</h4><p>Numbers are entered or displayed using conventional decimal notation (e.g. 299792.458) or using a scaled form (e.g. 2.999792458E5).</p><p>On entry, a decimal point is optional if there is no fractional part.  On output, a number with no fractional part (an integer) is displayed without a decimal point. </p><p>The scaled form consists of:</p><ol style="list-style-type: lower-alpha;"><li value="1">an integer or decimal number called the mantissa,</li><li value="2">the letter <tt>E</tt> or <tt>e</tt>,</li><li value="3">an integer called the scale, or exponent.</li></ol><p>The scale specifies the power of 10 by which the mantissa is to be multiplied.</p><h4>Example</h4><pre>      12 23.24 23.0 2.145E2
+12 23.24 23 214.5</pre><p>Negative numbers are preceded by the high minus (<tt>¯</tt>) symbol, not to be confused with the minus (<tt>-</tt>) function.  In scaled form, both the mantissa and the scale may be negative.</p><h4>Example</h4><pre>      ¯22 2.145E¯2 ¯10.25
+¯22 0.02145 ¯10.25</pre><h4>Complex Numbers</h4><p>Complex numbers use the J notation introduced in IBM APL2 and are written as <tt>aJb</tt> or <tt>ajb </tt><tt>(</tt>without spaces) where the real and imaginary parts <tt>a</tt> and <tt>b</tt> are written as described above. The capital <tt>J</tt> is always used to display a value.</p><h4>Examples</h4><pre>      2+¯1*.5
+2J1
+      .3j.5
+0.3J0.5
+	1.2E5J¯4E¯4
+120000J¯0.0004</pre><p>The empty vector (<tt>⍳0</tt>) may be represented by the numeric constant <tt>⍬</tt> called ZILDE.</p></body>
+</html>

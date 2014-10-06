@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h2><a name="StructuringOfArrays"></a>Structuring of Arrays</h2><p>A class of primitive functions re-structures arrays in some way. Arrays may be input only in scalar or vector form. Structural functions may produce arrays with a higher rank. The Structural functions are <a href="../../primfns/reshape.html#Reshape">reshape</a> (<tt>⍴</tt>), <a href="../../primfns/ravel.html#Ravel">ravel</a>, <a href="../../primfns/catenate-laminate.html#Catenate/Laminate">laminate and catenate</a> (<tt>,</tt>), <a href="../../primfns/reverse.html#Reverse">reverse</a> and <a href="../../primfns/rotate.html#Rotate">rotate</a> (<tt>⌽</tt>), <a href="../../primfns/transpose-monadic.html#Transpose(Monadic)">transpose</a> (<tt>⍉</tt>), <a href="../../primfns/mix.html#Mix">mix</a> and <a href="../../primfns/take.html#Take">take</a> (<tt>↑</tt>), <a href="../../primfns/split.html#Split">split</a> and <a href="../../primfns/drop.html#Drop">drop</a> (<tt>↓</tt>), <a href="../../primfns/enlist.html#Enlist">enlist</a> (<tt>∊</tt>), and <a href="../../primfns/enclose.html#Enclose">enclose</a> (<tt>⊂</tt>).</p><h4>Examples</h4><pre>      2 2⍴1 2 3 4
+1 2
+3 4
+ 
+      2 2 4⍴'ABCDEFGHIJKLMNOP'
+ABCD
+EFGH
+ 
+IJKL
+MNOP
+         ↓2 4⍴'COWSHENS'
+ COWS  HENS</pre></body>
+</html>

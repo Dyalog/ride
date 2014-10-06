@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←X⊣Y</tt>Left</h2><p><tt>X</tt> and <tt>Y</tt> may be any arrays.</p><p>The result <tt>R</tt> is the left argument <tt>X</tt>.</p><h4>Example</h4><pre>      42⊣'abc' 1 2 3
+42</pre><p>Note that when <tt>⊣</tt> is applied using reduction, the derived function selects the first sub-array of the array along the specified dimension. This is implemented as an idiom.  </p><h4>Examples</h4><pre>      ⊣/1 2 3
+1
+ 
+      mat←↑'scent' 'canoe' 'arson' 'rouse' 'fleet'
+      ⊣⌿mat  ⍝ first row                          
+scent
+      ⊣/mat  ⍝ first column                       
+scarf</pre><pre>      ⊣/[2]2 3 4⍴⍳24 ⍝ first row from each plane
+ 1  2  3  4
+13 14 15 16</pre><p>Similarly, with expansion:</p><pre>      ⊣\mat
+sssss
+ccccc
+aaaaa
+rrrrr
+fffff
+      ⊣⍀mat
+scent
+scent
+scent
+scent
+scent</pre><p> </p></body>
+</html>

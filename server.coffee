@@ -20,6 +20,7 @@ jsFiles = [
   'session.coffee'
   'editor.coffee'
   'index.coffee'
+  'docs/help-urls.coffee'
 ]
 cssFiles = [
   'node_modules/codemirror/lib/codemirror.css'
@@ -77,6 +78,8 @@ app.get '/D.css',       (req, res) -> res.header('Content-Type', 'text/css'     
 app.get '/D.js',        (req, res) -> res.header('Content-Type', 'application/x-javascript').send js
 app.get '/apl385.ttf',  (req, res) -> res.header('Content-Type', 'application/octet-stream').send ttf
 app.get '/favicon.ico', (req, res) -> res.header('Content-Type', 'image/x-icon'            ).send ico
+app.use '/help',     express.static __dirname + '/docs/help'
+app.use '/help.css', express.static __dirname + '/docs/help.css'
 
 httpsOptions =
   key: fs.readFileSync 'ssl/key.pem'

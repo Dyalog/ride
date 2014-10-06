@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h3>Using Code</h3><p>The functions for this example are provided in the workspace <span class="Code">WPFINtro.dws</span> in the namespace <tt>WPF.UsingCode</tt>. To run the example:</p><pre>      )LOAD WPFINtro<br />      WPF.UsingCode.TempConverter</pre><p>The following function <tt>TempConverter</tt> performs <span class="Italic">exactly</span> the same task of defining and manipulating the user-interface for the Temperature Converter example using XAML which was discussed previously.</p><p>The callback functions it uses are identical.</p><pre>     ∇ TempConverter;⎕USING;win;dp;mnu;mnuFahrenheit;mnuCentigrade;gr;tn;rd1;rd2;rd3;rc1;rc2;rc3;l1;l2;txtFahrenheit;txtCentigrade;btnF2C;btnC2F;btnQuit;sink;mnuScale;scrTemp
+[1]
+[2]    ⎕USING←,⊂'System.Windows.Controls,WPF/PresentationFramework.dll'
+[3]    ⎕USING,←⊂'System.Windows.Controls.Primitives,WPF/PresentationFramework.dll'
+[4]    ⎕USING,←⊂'System.Windows,WPF/PresentationFramework.dll'
+[5]    ⎕USING,←⊂'System.Windows,WPF/PresentationCore.dll'
+[6]
+[7]    win←⎕NEW Window
+[8]    win.SizeToContent←SizeToContent.WidthAndHeight
+[9]    win.Title←'WPF Temperature Converter'
+[10]
+[11]   dp←⎕NEW DockPanel
+[12]   dp.LastChildFill←0
+[13]
+[14]   mnu←⎕NEW Menu
+[15]
+[16]   mnuScale←⎕NEW MenuItem
+[17]   mnuScale.Header←'_Scale'
+[18]   sink←mnu.Items.Add mnuScale
+[19]
+[20]   mnuFahrenheit←⎕NEW MenuItem
+[21]   mnuFahrenheit.Header←'Fahrenheit'
+[22]   mnuFahrenheit.IsCheckable←1
+[23]   mnuFahrenheit.IsChecked←1
+[24]   mnuFahrenheit.onClick←'SET_F'
+[25]   sink←mnuScale.Items.Add mnuFahrenheit
+[26]
+[27]   mnuCentigrade←⎕NEW MenuItem
+[28]   mnuCentigrade.Header←'_Centigrade'
+[29]   mnuCentigrade.IsCheckable←1
+[30]   mnuCentigrade.IsChecked←0
+[31]   mnuCentigrade.onClick←'SET_C'
+[32]   sink←mnuScale.Items.Add mnuCentigrade
+[33]
+[34]   sink←dp.Children.Add mnu
+[35]   dp.SetDock mnu Dock.Top
+[36]
+[37]   gr←⎕NEW Grid
+[38]   gr.Width←230
+[39]   gr.Margin←⎕NEW Thickness(40 10 10 10)
+[40]
+[41]   rd1←⎕NEW RowDefinition
+[42]   rd1.Height←GridLength.Auto
+[43]   rd2←⎕NEW RowDefinition
+[44]   rd2.Height←GridLength.Auto
+[45]   rd3←⎕NEW RowDefinition
+[46]   rd3.Height←GridLength.Auto
+[47]   gr.RowDefinitions.Add¨rd1 rd2 rd3
+[48]
+[49]   rc1←⎕NEW ColumnDefinition
+[50]   rc1.Width←GridLength.Auto
+[51]   rc2←⎕NEW ColumnDefinition
+[52]   rc2.Width←⎕NEW GridLength 80
+[53]   rc3←⎕NEW ColumnDefinition
+[54]   rc3.Width←⎕NEW GridLength 60
+[55]   gr.ColumnDefinitions.Add¨rc1 rc2 rc3
+[56]
+[57]   l1←⎕NEW Label
+[58]   l1.Content←'Fahrenheit'
+[59]   sink←gr.Children.Add l1
+[60]   gr.SetRow l1 0
+[61]   gr.SetColumn l1 0
+[62]
+[63]   l2←⎕NEW Label
+[64]   l2.Content←'Centigrade'
+[65]   sink←gr.Children.Add l2
+[66]   gr.SetRow l2 1
+[67]   gr.SetColumn l2 0
+[68]
+[69]   txtFahrenheit←⎕NEW TextBox
+[70]   txtFahrenheit.Margin←⎕NEW Thickness 5
+[71]   sink←gr.Children.Add txtFahrenheit
+[72]   gr.SetRow txtFahrenheit 0
+[73]   gr.SetColumn txtFahrenheit 1
+[74]
+[75]   txtCentigrade←⎕NEW TextBox
+[76]   txtCentigrade.Margin←⎕NEW Thickness 5
+[77]   sink←gr.Children.Add txtCentigrade
+[78]   gr.SetRow txtCentigrade 1
+[79]   gr.SetColumn txtCentigrade 1
+[80]
+[81]   btnF2C←⎕NEW Button
+[82]   btnF2C.Content←'F&gt;C'
+[83]   btnF2C.Margin←⎕NEW Thickness 5
+[84]   btnF2C.onClick←'f2c'
+[85]   sink←gr.Children.Add btnF2C
+[86]   gr.SetRow btnF2C 0
+[87]   gr.SetColumn btnF2C 2
+[88]
+[89]   btnC2F←⎕NEW Button
+[90]   btnC2F.Content←'C&gt;F'
+[91]   btnC2F.Margin←⎕NEW Thickness 5
+[92]   btnC2F.onClick←'c2f'
+[93]   sink←gr.Children.Add btnC2F
+[94]   gr.SetRow btnC2F 1
+[95]   gr.SetColumn btnC2F 2
+[96]
+[97]   btnQuit←⎕NEW Button
+[98]   btnQuit.Content←'Quit'
+[99]   btnQuit.Margin←⎕NEW Thickness 5
+[100]  btnQuit.onClick←'Quit'
+[101]  sink←gr.Children.Add btnQuit
+[102]  gr.SetRow btnQuit 2
+[103]  gr.SetColumn btnQuit 1
+[104]
+[105]  sink←dp.Children.Add gr
+[106]
+[107]  scrTemp←⎕NEW ScrollBar
+[108]  scrTemp.Width←20
+[109]  scrTemp.Orientation←Orientation.Vertical
+[110]  scrTemp.Minimum←1
+[111]  scrTemp.Maximum←213
+[112]  scrTemp.onScroll←'F2C'
+[113]
+[114]  sink←dp.Children.Add scrTemp
+[115]  dp.SetDock scrTemp Dock.Right
+[116]
+[117]  win.Content←dp
+[118]
+[119]  sink←win.ShowDialog
+     ∇
+</pre><p>Although this approach appears at first sight to be considerably more verbose than  using XAML (a 120-line function compared with a 21-line function and a 44-line block of XAML) each line of code performs only one very simple task, and no attempt has been made to write utility functions to perform the same task for similar controls, as might be done in a real application.</p><p>As before, let us examine the code line-by-line.</p><p><tt>TempConverter[2-5]</tt> define <tt>⎕USING</tt> so that the appropriate .Net assemplies are on the search-path. Note that the <span class="NetType">ScrollBar</span> control is in <span class="Code">System.Windows.Controls.Primitives</span> and not <span class="Code">System.Windows.Controls</span> like the others.</p><pre>
+[2]    ⎕USING←,⊂'System.Windows.Controls,WPF/PresentationFramework.dll'
+[3]    ⎕USING,←⊂'System.Windows.Controls.Primitives,WPF/PresentationFramework.dll'
+[4]    ⎕USING,←⊂'System.Windows,WPF/PresentationFramework.dll'
+[5]    ⎕USING,←⊂'System.Windows,WPF/PresentationCore.dll'</pre><p><tt>TempConverter[8-9]</tt> creates a <span class="NetType">Window</span> and sets its <span class="Member">SizeToContent</span> and <span class="Member">Title</span> properties as in the XAML example. Notice however that whereas using XAML the string  <span class="Code">SizeToContent="WidthandHeight"</span> is sufficient, when using code it is necessary to <span class="Italic">get theType right</span>. In this case, the <span class="Member">SizeToContent</span> property must be set to a specific member (in this case <span class="Member">WidthAndHeight</span>) of the <span class="NetType">System.Windows.SizeToContent</span> enumeration. Other members of this Type are <span class="Member">Width</span>, <span class="Member">Height</span> and <span class="Member">Manual</span> (the default).</p><pre>[7]    win←⎕NEW Window
+[8]    win.SizeToContent←SizeToContent.WidthAndHeight
+[9]    win.Title←'WPF Temperature Converter'</pre><p><tt>TempConverter[11-12]</tt> create a <span class="NetType">DockPanel</span> control ansd set its <span class="Member">LastChildFill</span> property to 0. In this case the APL value 0 is used instead of the string "False" in XAML.</p><pre>
+[11]   dp←⎕NEW DockPanel
+[12]   dp.LastChildFill←0</pre><p><tt>TempConverter[14]</tt> creates a <span class="NetType">Menu</span> control.</p><pre>
+[14]   mnu←⎕NEW Menu</pre><p><tt>TempConverter[16-18]</tt> create a <span class="NetType">MenuItem</span> control with the caption <span class="Name">Scale</span>, and then add the control to the <span class="Member">Items</span> collection of the main <span class="NetType">Menu</span> using its <span class="Member">Add</span> method. This illustrates one significant difference between using XAML and code. In XAML, the parent/child relationships between controls are defined by the structure and order of the XML. Using code, child controls must be explicitly added to the appropriate list of child controls managed by the parent.</p><pre>[16]   mnuScale←⎕NEW MenuItem
+[17]   mnuScale.Header←'_Scale'
+[18]   sink←mnu.Items.Add mnuScale</pre><p><tt>TempConverter[20-25]</tt> create a <span class="NetType">MenuItem</span> control labelled <span class="Name">Fahrenheit</span>.The<span class="Member"> IsCheckable</span> and<span class="Member"> IsChecked</span> properties are set to 1, which is equivalent to "True" in XAML. The callback function <tt>SET_F</tt> is assigned to the <span class="Member">Click</span> event exactly as in the XAML version of this example. The last line in this section makes the <span class="Name">Fahrenheit</span><span class="NetType">MenuItem</span> a child of the <span class="Name">Scale</span><span class="NetType">MenuItem</span>.</p><pre>
+[20]   mnuFahrenheit←⎕NEW MenuItem
+[21]   mnuFahrenheit.Header←'Fahrenheit'
+[22]   mnuFahrenheit.IsCheckable←1
+[23]   mnuFahrenheit.IsChecked←1
+[24]   mnuFahrenheit.onClick←'SET_F'
+[25]   sink←mnuScale.Items.Add mnuFahrenheit</pre><p>The code used to create the <span class="Name">Centigrade</span><span class="NetType">MenuItem</span> is more or less the same.</p><p><tt>TempConverter[34-35]</tt> adds the top-level <span class="NetType">Menu</span>  to the <span class="NetType">DockPanel</span>. Note that in the case of a <span class="NetType">DockPanel</span>, the list of its child controls is represented by its <span class="Member">Children</span> property. Furthermore, to define how it is docked this is done,  using code, by the<span class="Member"> SetDock</span> method of the<span class="NetType"> DockPanel</span>. This contrasts with the way this is achieved using XAML (<span class="Code">DockPanel.Dock="Top"</span>). Note too that the argument to <span class="Member">SetDock</span> is not just a simple string as in XAML, but a member of the <span class="NetType">System.Windows.Controls.Dock</span> enumeration.</p><pre>[34]   sink←dp.Children.Add mnu
+[35]   dp.SetDock mnu Dock.Top</pre><p><tt>TempConverter[37-39]</tt> create the <span class="NetType">Grid</span> control. Its <span class="Member">Width</span> property will accept a simple numeric value, but its <span class="Member">Margin</span> property must be given an instance of a <span class="NetType">System.Windows.Thickness</span> structure. In this case, the <span class="NetType">ThickNess</span> constructor is given a 4-element numeric vector that specifies its<span class="Member"> Left</span>, <span class="Member">Top</span>, <span class="Member">Right</span> and <span class="Member">Bottom</span> members respectively.</p><pre>
+[37]   gr←⎕NEW Grid
+[38]   gr.Width←230
+[39]   gr.Margin←⎕NEW Thickness(40 10 10 10)</pre><p><tt>TempConverter[41-47]</tt> create instances of 3 <span class="NetType">RowDefinition</span> classes and add them to the <span class="Member">RowDefinitions</span> collection of the <span class="NetType">Grid</span>. Note that whereas in XAML the <span class="Member">Height</span> can be specified as a string, using code it is necessary once again to use the correct Type. In this case, <span class="Member">Height</span> must be specified by a member of the <span class="NetType">System.Windows.GridLength</span> structure.</p><pre>[41]   rd1←⎕NEW RowDefinition
+[42]   rd1.Height←GridLength.Auto
+[43]   rd2←⎕NEW RowDefinition
+[44]   rd2.Height←GridLength.Auto
+[45]   rd3←⎕NEW RowDefinition
+[46]   rd3.Height←GridLength.Auto
+[47]   gr.RowDefinitions.Add¨rd1 rd2 rd3</pre><p>Similarly, <tt>TempConverter[49-55]</tt> create instances of 3 <span class="NetType">ColumnDefinition</span> classes and add them to the <span class="Member">ColumnDefinitions</span> collection of the <span class="NetType">Grid</span>. Note that The <span class="Member">Width</span> property will not accept a simple numeric value, it must be a member of the <span class="NetType">GridLength</span> structure. To set the <span class="Member">Width</span> to 80, it is  necessary first to create an instance of a <span class="NetType">GridLength</span> structure giving this value as the argument to its constructor.</p><pre>[49]   rc1←⎕NEW ColumnDefinition
+[50]   rc1.Width←GridLength.Auto
+[51]   rc2←⎕NEW ColumnDefinition
+[52]   rc2.Width←⎕NEW GridLength 80
+[53]   rc3←⎕NEW ColumnDefinition
+[54]   rc3.Width←⎕NEW GridLength 60
+[55]   gr.ColumnDefinitions.Add¨rc1 rc2 rc3</pre><p><tt>TempConverter[57-61]</tt> create a <span class="NetType">Label</span> control with the caption <span class="Name">Fahrenheit</span>. To display the <span class="NetType">Label</span> in a <span class="NetType">Grid</span> it is necessary to first add it to the <span class="Member">Children</span> collection of the <span class="NetType">Grid</span>, and then set its position in the <span class="NetType">Grid</span> using its <span class="Member">SetRow</span> and <span class="Member">SetColumn</span> methods. Similar code is used to create and position the second <span class="NetType">Label</span>.</p><pre>[57]   l1←⎕NEW Label
+[58]   l1.Content←'Fahrenheit'
+[59]   sink←gr.Children.Add l1
+[60]   gr.SetRow l1 0
+[61]   gr.SetColumn l1 0</pre><p><tt>TempConverter[69-73]</tt> create and position a <span class="NetType">TextBox</span> control, in the same way as the <span class="NetType">Label</span> controls. Notice that in this case, the constructor for the Thickness structure is given a single value that specifies all four of its<span class="Member"> Left</span>, <span class="Member">Top</span>, <span class="Member">Right</span> and <span class="Member">Bottom</span> members.</p><pre>
+[69]   txtFahrenheit←⎕NEW TextBox
+[70]   txtFahrenheit.Margin←⎕NEW Thickness 5
+[71]   sink←gr.Children.Add txtFahrenheit
+[72]   gr.SetRow txtFahrenheit 0
+[73]   gr.SetColumn txtFahrenheit 1</pre><p><tt>TempConverter[81-87]</tt> create and position a <span class="NetType">Button</span> control. The callback function <tt>f2c</tt> is attached to the <span class="Member">Click</span> event in the same way as in the XAML version of this example.</p><pre>
+[81]   btnF2C←⎕NEW Button
+[82]   btnF2C.Content←'F&gt;C'
+[83]   btnF2C.Margin←⎕NEW Thickness 5
+[84]   btnF2C.onClick←'f2c'
+[85]   sink←gr.Children.Add btnF2C
+[86]   gr.SetRow btnF2C 0
+[87]   gr.SetColumn btnF2C 2</pre><p><tt>TempConverter[105]</tt> adds the <span class="NetType">Grid</span> to the list of <span class="Member">Children</span> to be managed by the <span class="NetType">DockControl</span>.</p><pre>[105]  sink←dp.Children.Add gr</pre><p><tt>TempConverter[107-112]</tt> create a <span class="NetType">ScrollBar</span> control. Its <span class="Member">Width</span>, <span class="Member">Minimum</span> and <span class="Member">Maximum</span> properties all accept simple numeric values. However, its <span class="Member">Orientation</span> property must be set to a member of the <span class="NetType">System.Windows.Controls.Orientation</span> enumeration.</p><pre>
+[107]  scrTemp←⎕NEW ScrollBar
+[108]  scrTemp.Width←20
+[109]  scrTemp.Orientation←Orientation.Vertical
+[110]  scrTemp.Minimum←1
+[111]  scrTemp.Maximum←213
+[112]  scrTemp.onScroll←'F2C'</pre><p><tt>TempConverter[114-115]</tt> add the <span class="NetType">ScrollBar</span> to the list of <span class="Member">Children</span> managed by the <span class="NetType">DockPanel</span>, and use its <span class="Member">SetDock</span> method to cause it to be right-aligned. </p><pre>[114]  sink←dp.Children.Add scrTemp
+[115]  dp.SetDock scrTemp Dock.Right</pre><p>Finally, the <span class="NetType">DockPanel</span> is assigned to the <span class="Member">Content</span> property of the <span class="NetType">Window</span>, and the <span class="NetType">Window</span> displayed as in the XAML version of this example. Note that a <span class="NetType">Window</span> may contain just one control.</p><pre>
+[117]  win.Content←dp
+[118]
+[119]  sink←win.ShowDialog</pre></body>
+</html>

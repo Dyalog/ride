@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←X⌽[K]Y</tt>Rotate</h2><p><tt>Y</tt> may be any array.  <tt>X</tt> must be a simple integer array.  The axis specification is optional.  If present, <tt>K</tt> must be a simple integer scalar or one-element vector.</p><p>The value of <tt>K</tt> must be an axis of <tt>Y</tt>.  If absent, the last axis of <tt>Y</tt> is implied.  The form <tt>R←X⊖Y</tt> implies the first axis.</p><p>If <tt>Y</tt> is a scalar, it is treated as a one-element vector.  <tt>X</tt> must have the same shape as the rank of <tt>Y</tt> excluding the <tt>K</tt>th dimension.  If <tt>X</tt> is a scalar or one-element vector, it will be extended to conform.  If <tt>Y</tt> is a vector, then <tt>X</tt> may be a scalar or a one-element vector.</p><p><tt>R</tt> is an array with the same shape as <tt>Y</tt>, with the elements of each of the vectors along the <tt>K</tt>th axis of <tt>Y</tt> rotated by the value of the corresponding element of <tt>X</tt>.  If the value is positive, the rotation is in the sense of right to left.  If the value is negative, the rotation is in the sense of left to right.</p><h4>Examples</h4><pre>      3 ⌽ 1 2 3 4 5 6 7
+4 5 6 7 1 2 3
+      ¯2 ⌽ 1 2 3 4 5
+4 5 1 2 3
+ 
+      M
+ 1  2  3  4
+ 5  6  7  8
+ 
+ 9 10 11 12
+13 14 15 16
+ 
+      I
+0 1 ¯1 0
+0 3  2 1
+      I⌽[2]M
+ 1  6  7  4
+ 5  2  3  8
+ 
+ 9 14 11 16
+13 10 15 12
+</pre><p class="pagebreakafter"> </p><pre> 
+      J
+2 ¯3
+3 ¯2
+      J⌽M
+ 3  4  1  2
+ 6  7  8  5
+ 
+12  9 10 11
+15 16 13 14
+ </pre></body>
+</html>

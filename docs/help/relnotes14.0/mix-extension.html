@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../help.css"></head>
+<body><h2>Mix </h2><p>Mix (<tt>↑⍵</tt> if <tt>⎕ml&lt;2</tt>; <tt>⊃⍵</tt> if <tt>⎕ml≥2</tt>) has been extended.</p><p>Previously, if any items in the argument (with the exception of scalars) had different rank, the function would signal a <tt>RANK ERROR</tt>. Now, it automatically extends the rank of non-scalar items in the argument to that of the largest rank by padding their shape with leading ones.</p><h4>Version 13.2</h4><pre>      ↑(2 2)(2 3⍴3)
+RANK ERROR
+      ↑(2 2)(2 3⍴3)
+     ∧
+</pre><h4>Version 14.0</h4><pre>      ↑(2 2)(2 3⍴3)
+2 2 0
+0 0 0
+     
+3 3 3
+3 3 3</pre><p>In this case, the rank of the first item, the vector <tt>(2 2)</tt> is extended to that of the second (a matrix) by prefixing its shape with 1; so it becomes <tt>(1 2⍴2 2)</tt>. The  result then obtains from <tt>↑(1 2⍴2 2)(2 3⍴3)</tt>.</p><p>Note that the extended mix is also exploited in the implementation of the new Rank and Key operators.</p></body>
+</html>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←{X}⎕FIX Y</tt>Fix Script</h2><p><tt>⎕FIX</tt> fixes a Class from the script specified by <tt>Y</tt>.</p><p><tt>Y</tt> must be a vector of character vectors or character scalars that contains a well-formed Class script. If so, the shy result <tt>R</tt> is a reference to the new Class fixed by <tt>⎕FIX</tt>.</p><p>The Class specified by <tt>Y</tt> may be named or unnamed.</p><p>If specified, <tt>X</tt> must be a numeric scalar. If <tt>X</tt> is omitted or non-zero, and the Class script <tt>Y</tt> specifies a name (for the Class), <tt>⎕FIX</tt> establishes that Class in the workspace.</p><p>If <tt>X</tt> is <tt>0</tt> or the Class specified by <tt>Y</tt> is unnamed, the Class is not established <span class="Italic">per se</span>, although it will exist for as long as a reference to it exists.</p><p>In the first example, the Class specified by <tt>Y</tt> is <span class="Italic">named</span> (<tt>MyClass</tt>) but the result of <tt>⎕FIX</tt> is discarded. The end-result is that <tt>MyClass</tt> is established in the workspace as a Class.</p><pre>      ⎕←⎕FIX ':Class MyClass' ':EndClass'
+#.MyClass</pre><p>In the second example, the Class specified by <tt>Y</tt> is <span class="Italic">named</span> (<tt>MyClass</tt>) and the result of <tt>⎕FIX</tt> is assigned to a different name (<tt>MYREF</tt>). The end-result is that a Class named <tt>MyClass</tt> is established in the workspace, and <tt>MYREF</tt> is a reference to it.</p><pre>      MYREF←⎕FIX ':Class MyClass' ':EndClass'
+      )CLASSES
+MyClass MYREF
+      ⎕NC'MyClass' 'MYREF'
+9.4 9.4
+      MYREF
+#.MyClass</pre><p>In the third example, the left-argument of <tt>0</tt> causes the named Class <tt>MyClass</tt> to be visible only via the reference to it (<tt>MYREF</tt>). It is there, but hidden.</p><pre>      MYREF←0 ⎕FIX ':Class MyClass' ':EndClass'
+      )CLASSES
+MYREF
+      MYREF
+#.MyClass</pre><p>The final example illustrates the use of un-named Classes.</p><pre>      src←':Class' '∇Make n'
+      src,←'Access Public' 'Implements Constructor'
+      src,←'⎕DF n' '∇' ':EndClass'
+      MYREF←⎕FIX src
+      )CLASSES
+MYREF
+      MYINST←⎕NEW MYREF'Pete'
+      MYINST
+Pete</pre></body>
+</html>

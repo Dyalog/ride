@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>⍠</tt>Variant
+</h2><h4>The <a href="../primops/variant.html#Variant">Variant</a> operator  specifies the value of an option to be used by its left operand function. </h4><h4>Examples</h4><p>The following derived function returns the location of the word <tt>'variant'</tt> within its right argument using default values for all the options.</p><pre>      f1 ← 'variant' ⎕S 0
+      f1 'The variant Variant operator'
+4</pre><p>It may be modified to perform a case-insensitive search:</p><pre>      (f1 ⍠ 1) 'The variant Variant operator'
+4 12</pre><p>This modified function may be named:</p><pre>      f2 ← f1 ⍠ 1
+      f2 'The variant Variant operator'
+4 12</pre><p>The modified function may itself be modified, in this case to revert to a case sensitive search:</p><pre>      f3 ← f2 ⍠ 0
+      f3 'The variant Variant operator'
+4</pre><p>This is equivalent to:</p><pre>      (f1 ⍠ 1 ⍠ 0) 'The variant Variant operator'
+4</pre><p><a href="../intro/lang-elements.html">Language Elements</a></p></body>
+</html>

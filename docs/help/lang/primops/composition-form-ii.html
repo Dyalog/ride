@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←A∘gY</tt>Composition (Form II)</h2><p><tt>g</tt> may be any dyadic function.  <tt>A</tt> may be any array whose items are appropriate to function g.  <tt>Y</tt> may be any array whose items are appropriate to function <tt>g</tt>.</p><p>The derived function is equivalent to <tt>AgY</tt>.  The derived function need not return a result.</p><h4>Examples</h4><pre>      2 2∘⍴ ¨ 'AB'
+ AA  BB
+ AA  BB
+ 
+      SINE ← 1∘○
+ 
+      SINE 10 20 30
+¯0.5440211109 0.9129452507 ¯0.9880316241</pre><p>The following example uses Composition Forms I and II to list functions in the workspace:</p><pre>      ⎕NL 3
+ADD
+PLUS
+ 
+      ⎕∘←∘⎕VR¨↓⎕NL 3
+     ∇ ADD X
+[1]    →LAB⍴⍨0≠⎕NC'SUM' ⋄ SUM←0
+[2]   LAB:SUM←SUM++/X
+     ∇
+     ∇ R←A PLUS B
+[1]    R←A+B
+     ∇</pre></body>
+</html>

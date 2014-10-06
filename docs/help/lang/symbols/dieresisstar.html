@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>⍣</tt>DieresisStar
+</h2><h4>DieresisStar is a Dyadic operator with an ambivalent
+      left operand and an integer or dyadic right operand
+    </h4><h4>Operator DieresisStar means</h4><p><a href="../primops/power-operator.html">Power Operator  </a></p><pre>     (↓⍣1)  2 2 2 2⍴⎕a                      ⍝ split once.
+ AB  CD 
+ EF  GH 
+        
+ IJ  KL 
+ MN  OP 
+
+      (↓⍣2)  2 2 2 2⍴⎕a                     ⍝ split twice.
+  AB  CD    EF  GH  
+  IJ  KL    MN  OP  
+
+      (↓⍣3)  2 2 2 2⍴⎕a                     ⍝ split thrice
+   AB  CD    EF  GH      IJ  KL    MN  OP   
+    
+      1+∘÷⍣=1                               ⍝ Golden Mean
+1.618033989
+
+      f←(32∘+)∘(×∘1.8)                      ⍝ Fahrenheit from Celsius
+
+      f ¯273 ¯40 0 100
+¯459.4 ¯40 32 212
+
+      c←f⍣¯1                                ⍝ inverse: Celsius from Fahrenheit
+
+      c ¯459.4 ¯40 32 212
+¯273 ¯40 0 100
+
+</pre><p><a href="../intro/lang-elements.html">Language Elements</a></p></body>
+</html>

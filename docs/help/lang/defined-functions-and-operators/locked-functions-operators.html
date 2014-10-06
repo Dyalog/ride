@@ -1,0 +1,5 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="LockedFunctionsAndOperators"></a>Locked Functions &amp; Operators</h2><p>A defined operation may be locked by the system function <tt>⎕LOCK</tt>.  A locked operation may not be displayed or edited.  The system function <tt>⎕CR</tt> returns an empty matrix of shape 0 0 and the system functions <tt>⎕NR</tt> and <tt>⎕VR</tt> return an empty vector for a locked operation.</p><p>Stop, trace and monitor settings may be established by the system functions <tt>⎕STOP</tt>, <tt>⎕TRACE </tt>and <tt>⎕MONITOR </tt>respectively. Existing stop, trace and monitor settings are cancelled when an operation is locked.</p><p>A locked operation may not be suspended, nor may a locked operation remain pendent when execution is suspended.  The state indicator is cut back as described below.</p></body>
+</html>

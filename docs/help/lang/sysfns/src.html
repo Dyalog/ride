@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⎕SRC Y</tt>Source </h2><p><tt>⎕SRC</tt> returns the script that defines the scripted object   <tt>Y</tt>.</p><p><tt>Y</tt> must be a reference to a scripted object. Scripted objects include Classes, Interfaces and scripted Namespaces.</p><p><tt>R</tt> is a vector of character vectors containing the script that was used to define <tt>Y</tt>.</p><pre>
+      )ed ○MyClass</pre><pre>
+:Class MyClass
+∇ r←foo arg
+:Access public shared
+r←1+arg
+∇
+:EndClass
+
+      z←⎕SRC MyClass
+      ⎕z
+6
+      ⍴¨z
+ 14  15  27  13  5  9 
+      ⍪z
+ :Class MyClass
+     ∇ r←foo arg
+       :Access public shared
+       r←1+arg
+     ∇
+ :EndClass</pre><p><p> </p><b>Note:</b> The only two ways to permanently alter the source of a scripted object are to change the object in the editor, or by refixing it using <tt>⎕FIX</tt>. A useful technique to ensure that a scripted object is in sync with its source is to <span>⎕FIX ⎕SRC object_reference</span>.</p></body>
+</html>

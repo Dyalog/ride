@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>⎕CMD</tt>Windows Command</h2><h4>Monadic <tt>⎕CMD</tt> means</h4><p><a href="execute-windows-command.html">Execute Windows Command</a></p><pre>      ⎕cmd 'DIR *.dws'
+ Volume in drive C is OS
+ Volume Serial Number is 6AFE-193E
+
+ Directory of C:\Documents and Settings\Pete
+
+01/12/2011  16:46            25,632 netcontrol.DWS
+15/06/2011  09:39            16,308 ReadTrans.DWS
+25/09/2011  10:34         4,597,592 temp.DWS
+               3 File(s)      4,639,532 bytes
+               0 Dir(s)  166,407,012,352 bytes free</pre><h4>Dyadic <tt>⎕CMD</tt> means</h4><p><a href="start-windows-auxiliary-processor.html">Start Windows Auxiliary Processor</a></p><pre>      )CLEAR
+clear ws
+      'xutils' ⎕CMD ''
+      )fns
+avx     box     dbr     getenv  hex     ltom    ltov    mtol    ss      vtol
+</pre><p><a href="../intro/lang-elements.html">Language Elements</a></p></body>
+</html>

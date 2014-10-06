@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Event 152</tt>AddRow</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/grid.html">Grid</a></td></tr></table><p class="Bold">Description</p><p>If enabled, this event is reported by the <a href="../objects/grid.html">Grid</a> object if the user presses the Cursor Down key, and the current cell (<a href="../props/curcell.html">CurCell</a>)
+is within the last row on the <a href="../objects/grid.html">Grid</a>. The default
+action is to append a new row to the contents of the <a href="../objects/grid.html">Grid</a>.
+If you attach a callback function to this event and have it return a value of 0,
+a new row will not be appended to the <a href="../objects/grid.html">Grid</a>.</p><p>The event message reported as the result of <a href="../../lang/sysfns/dq.html"><tt>⎕DQ</tt></a>,
+or supplied as the right argument to your callback function, is a 3 element
+vector as follows :</p><table class="Event"><tr><td><tt>[1]</tt></td><td>Object</td><td>ref or character vector</td></tr><tr><td><tt>[2]</tt></td><td>Event</td><td><tt>'AddRow'</tt> or 152</td></tr><tr><td class="Dyalog" valign="top">[3]</td><td valign="top">Row number</td><td>integer.</td></tr></table><p>An application may insert a new row into a <a href="../objects/grid.html">Grid</a> by calling AddRow as a method. The argument is a 1 to 7-element array as follows:</p><table><tr><td><tt>[1]</tt></td><td>Row number:</td><td>integer</td></tr><tr><td><tt>[2]</tt></td><td>Row title:</td><td>character vector or matrix</td></tr><tr><td><tt>[3]</tt></td><td>Row height:</td><td>integer</td></tr><tr><td class="Dyalog" valign="top">[4]</td><td valign="top">Undo flag</td><td>0 or 1</td></tr><tr><td class="Dyalog" valign="top">[5]</td><td valign="top">Resize flag</td><td>0 or 1</td></tr><tr><td class="Dyalog" valign="top">[6]</td><td valign="top">Title colour</td><td>negative integer or 3-element RGB vector</td></tr><tr><td class="Dyalog" valign="top">[7]</td><td valign="top">Line type</td><td>integer</td></tr></table><p>If you are using default row titles, <span class="Italic">Row title</span> will be ignored and the
+rows will be re-labelled with default titles. If you <span class="Italic">have</span> set <a href="../props/rowtitles.html">RowTitles</a>,
+the title you specify will be inserted. If you omit <span class="Italic">Row title</span>, a blank
+title will be inserted.</p><p>Similarly, if you have not previously set <a href="../props/cellheights.html">CellHeights</a>,
+<a href="../props/resizerows.html">ResizeRows</a>, <a href="../props/rowtitlefcol.html">RowTitleFCol</a> or <a href="../props/rowlinetypes.html">RowLineTypes</a>, or if you have given
+them a scalar value, the corresponding parameter will be ignored. However, if
+you have specified <a href="../props/cellheights.html">CellHeights</a>, <a href="../props/resizerows.html">ResizeRows</a>,
+<a href="../props/rowtitlefcol.html">RowTitleFCol</a> or <a href="../props/rowlinetypes.html">RowLineTypes</a> to be a <span class="Italic">vector</span>, the number you specify in the corresponding parameter
+will be inserted into the appropriate property vector. If you omit <span class="Italic">Row height</span>,
+it will be assigned a default value; new values for the other properties default
+to 0.</p><p><span class="Italic">Undo flag</span> (default 1) specifies whether or not the addition of the new
+row may subsequently be undone by an <a href="undo.html">Undo</a> event.</p><p>To insert a new row before the first one, you must specify the <span class="Italic">Row number</span>as 1 (or 0 if <tt>⎕IO</tt> is 0). To add a new row
+after the last one, you may specify any number greater than the current number
+of rows. The data in the new row will be set to 0 if the <a href="../props/values.html">Values</a> property is numeric, or to an empty character vector otherwise.</p></body>
+</html>

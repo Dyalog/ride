@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../../help.css"></head>
+<body><h3>Simple Instance Properties</h3><p>A Simple Instance Property is one whose value is accessed (by APL) in its entirety and re-assigned (by APL) in its entirety. The following examples are taken from the <span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">ComponentFile Class</a></span></a></span><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot"> </a></span><a href="component-file-class-example.html" class="MCXref_SeePageNumber_0"></a>.</p><p>The Simple Property <tt>Count</tt> returns the number of components on a file.</p><pre>    :Property Count
+    :Access Public Instance
+        ∇ r←get
+          r←¯1+2⊃⎕FSIZE tie
+        ∇
+    :EndProperty ⍝ Count
+ 
+      F1←⎕NEW ComponentFile 'test1'
+      F1.Append'Hello World'
+1
+      F1.Count
+1
+      F1.Append 42 
+2
+      F1.Count
+2</pre><p>Because there is no <tt>set</tt> function defined, the Property is read-only and attempting to change it causes <tt>SYNTAX ERROR</tt>.</p><pre>      F1.Count←99
+SYNTAX ERROR
+      F1.Count←99
+     ^</pre><p>The <tt>Access </tt>Property has both <tt>get</tt> and <tt>set</tt> functions which are used, in this simple example, to get and set the component file access matrix.</p><pre>    :Property Access
+    :Access Public Instance
+        ∇ r←get
+          r←⎕FRDAC tie
+        ∇
+        ∇ set am;mat;OK
+          mat←am.NewValue
+          :Trap 0
+              OK←(2=⍴⍴mat)^(3=2⊃⍴mat)^^/,mat=⌊mat
+          :Else
+              OK←0
+          :EndTrap
+          'bad arg'⎕SIGNAL(~OK)/11
+          mat ⎕FSTAC tie
+        ∇
+    :EndProperty ⍝ Access</pre><p>Note that the <tt>set</tt> function <b>must</b> be monadic. Its argument, supplied by APL, will be an Instance of <tt>PropertyArguments</tt>. This is an internal Class whose <tt>NewValue</tt> field contains the value that was assigned to the Property.</p><p>Note that the set function does not have to accept the new value that has been assigned. The function may validate the value reject or accept it (as in this example), or perform whatever processing is appropriate.</p><pre>      F1←⎕NEW ComponentFile 'test1'
+      ⍴F1.Access
+0 3
+        F1.Access←3 3⍴28 2105 16385 0 2073 16385 31 ¯1 0
+      F1.Access
+28 2105 16385
+ 0 2073 16385
+31   ¯1     0
+      
+      F1.Access←'junk'
+bad arg
+      F1.Access←'junk'
+     ^
+      
+      F1.Access←1 2⍴10
+bad arg
+      F1.Access←1 2⍴10
+     ^</pre></body>
+</html>

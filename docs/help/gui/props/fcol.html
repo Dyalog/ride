@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Property</tt>FCol</h2><p class="Bold"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Applies To</a></span></p><p class="Bold">Description</p><p>This property defines the foreground colour(s) of an object. For
+non-graphical objects, FCol specifies a single colour. For graphical objects
+with more than one constituent part, it may specify a set of background colours,
+one for each part. A single colour is represented by a single number which
+refers to a standard colour, or by a 3-element vector which defines a colour
+explicitly in terms of its red, green and blue intensities.</p><p>If FCol is 0 (which is the default) the foreground colour is defined by your
+current colour scheme for the object in question. For example, if you select red
+as your MS-Windows "Button Text" colour, you will by default get red
+writing on all your <a href="../objects/button.html">Button</a> objects, simply by
+not specifying FCol or by setting it to 0.</p><table><tr><th class="Left">FCol</th><th class="Left">Colour Element</th><th class="Left">FCol</th><th class="Left">Colour Element</th></tr><tr><td><tt>0</tt></td><td>Default</td><td><tt>¯11</tt></td><td>Active Border</td></tr><tr><td><tt>¯1</tt></td><td>Scroll Bars</td><td><tt>¯12</tt></td><td>Inactive Border</td></tr><tr><td><tt>¯2</tt></td><td>Desktop</td><td><tt>¯13</tt></td><td>Application Workspace</td></tr><tr><td><tt>¯3</tt></td><td>Active Title Bar</td><td><tt>¯14</tt></td><td>Highlight</td></tr><tr><td><tt>¯4</tt></td><td>Inactive Title Bar</td><td><tt>¯15</tt></td><td>Highlighted Text</td></tr><tr><td><tt>¯5</tt></td><td>Menu Bar</td><td><tt>¯16</tt></td><td>Button Face</td></tr><tr><td><tt>¯6</tt></td><td>Window Background</td><td><tt>¯17</tt></td><td>Button Shadow</td></tr><tr><td><tt>¯7</tt></td><td>Window Frame</td><td><tt>¯18</tt></td><td>Disabled Text</td></tr><tr><td><tt>¯8</tt></td><td>Menu Text</td><td><tt>¯19</tt></td><td>Button Text</td></tr><tr><td><tt>¯9</tt></td><td>Window Text</td><td><tt>¯20</tt></td><td>Inactive Title Bar Text</td></tr><tr><td><tt>¯10</tt></td><td>Active Title Bar Text</td><td><tt>¯21</tt></td><td>Button Highlight</td></tr></table><p> </p><p>A negative value of FCol refers to a standard MS-Windows colour as described
+below. Positive values are reserved for a possible future extension.</p><p>If instead, FCol contains a 3-element vector, it specifies the intensity of
+the red, green and blue components of the colour as values in the range 0-255.
+For example, (255 0 0) is red and (255 255 0) is yellow.</p><p>Note that if the colour specified by FCol would normally be rendered as a
+dithered colour, it is instead converted to the nearest pure colour available on
+the device. The actual colour realised also depends upon the capabilities of the
+display adapter and driver, and the current Windows colour map.</p><p>For a <a href="../objects/button.html">Button</a>, <a href="../objects/combo.html">Combo</a>,
+<a href="../objects/edit.html">Edit</a>, <a href="../objects/label.html">Label</a>, <a href="../objects/list.html">List</a>,
+<a href="../objects/menu.html">Menu</a> and <a href="../objects/menuitem.html">MenuItem</a>,
+FCol refers to the colour of the <b>text</b> in the object. <a href="border.html">Border</a>s
+around these objects (where applicable) are drawn using the standard Windows
+colour. For a <a href="../objects/static.html">Static</a> object however, FCol
+specifies the colour of its border.</p><p>For the <a href="../objects/ellipse.html">Ellipse</a>, <a href="../objects/poly.html">Poly</a> and <a href="../objects/rect.html">Rect</a> objects, FCol specifies the colour of
+the line drawn around the perimeter of the object. If a dashed or dotted line is
+used (<a href="lstyle.html">LStyle</a> 1-4) the "gaps" in
+the line are drawn using the colour specified by <a href="bcol.html">BCol</a>,
+or are left undrawn if <a href="bcol.html">BCol</a> is not specified.
+For the <a href="../objects/marker.html">Marker</a> object, FCol specifies the
+colour in which the markers are drawn. For the graphics objects <a href="../objects/ellipse.html">Ellipse</a>,
+<a href="../objects/poly.html">Poly</a>, <a href="../objects/rect.html">Rect</a> and <a href="../objects/text.html">Text</a>,
+FCol may be a vector of 3-element vectors specifying a set of colours for the
+constituent parts of the object. For example, a <a href="../objects/poly.html">Poly</a> object consisting of four polygons, may have a FCol property of four 3-element
+vectors. In addition, for graphics objects, FCol is used in place of <a href="fillcol.html">FillCol</a> if the latter is not specified.</p></body>
+</html>

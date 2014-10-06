@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="Type_Information"></a>Type Information</h2><p>In general, it is a requirement that all COM objects provide <span class="Italic">Type Information</span>. This is commonly provided in a type library file (extension .TLB) or is included in the object's .EXE or .DLL file. Type Information includes the names of the methods, events and properties exported by the object, together with descriptions of the arguments to each method and descriptions of the data types of each property. Type Information is necessary for the COM object to be properly recognised by object browsers and by application development systems.</p><p>When you load a COM object, APL <span class="Italic">by default</span> reads all of the Type Information associated with the top-level object into the workspace. In addition, it reads the Type Information for all other objects in the same object hierarchy, and the Type Information for any other COM objects that are used or referenced by it. This Type Information is retained in the workspace when you <tt>)SAVE</tt> it. When you reattach an OLEClient or OCXClass to the same object, there is no need for the Type Information to be re-read.</p><p>Dyalog APL uses the Type Information to expose the names, data types and arguments of all the methods, events and properties provided by the object, and those of all the other sub-objects in the object hierarchy.</p><p>Dyalog APL also uses the Type Information to validate the arguments you supply to methods (both the number and the data types) and the values you assign to properties. For example, if a method is defined to take an argument VT_I4, Dyalog APL will issue a <tt>DOMAIN ERROR</tt> if you invoke the method with a character argument. Internally, Dyalog APL also uses the Type Information to convert between APL arrays and OLE data types.</p><p>The operation to read the Type Information may take several seconds, possibly minutes, and the Type information may occupy a considerable amount of workspace. Nevertheless, the availability of the Type information in the active workspace greatly assists development and optimises run-time performance.</p><h4><a name="Late_Binding"></a>Late Binding</h4><p>In some circumstances it may  be desirable  to avoid the process of reading the Type information in its entirety (known as <span class="Name">early binding</span>), and instead use a different approach whereby Type information is obtained only when it is needed, i.e. when a particular property, method or event is referenced. This is called<span class="Name"> late binding</span> and is specified by setting the LateBind property of the OLEClient object to 1 when you create it. When this scheme is used, APL only reads the Type information for properties and methods that are actually used, although the benefit of having all the Type information held in the workspace is lost.</p><h4><a name="No_Type_Info"></a>Missing Type Information</h4><p> Not all COM objects provide Type information, or do so in non-standard ways.</p><p>In these cases, if LateBind is set to 0, APL willfail to obtain any Type information , the OLEClient object will be created without it and its associated namespace will be empty. If LateBind is set to 1, the alternative mechanism using late binding will probably not work either.</p><p>There are however other ways in which the methods, properties and events provided by the COM object may be accessed from APL.</p><p>The first approach is to provide APL with the equivalent information using the SetPropertyInfo and SetMethodInfo methods of the OLEClient object. Corresponding mechanisms are provided for defining Events.</p><p>The last resort is to rely on a secondary form of   late binding <span class="MCTextPopup"><span class="MCTextPopupBody_0" style="display: none; "> Prior to Version 14.0, this was the only form of late binding provided by Dyalog APL.</span><a href="javascript:void(0);" class="MCTextPopupSpot_0" onclick="FMCTextPopup( event, this ); return false;" style="font-size: 0.9em; vertical-align: super">1</a></span>in which APL requires only that the COM object confirms the existence of a given name as one that it exports, and then accesses it using a general mechanism . For further information, see <a href="ole-objects-without-type-information.html#OLE_Without_Type" class="MCXref_0">Using OLE Objects without Type Information</a>.</p><h4><a name="Identifying_Members"></a>Identifying Properties, Methods and Events</h4><p>You can obtain the names of all the properties, methods, and events exposed by a COM object by executing the system function <tt>⎕NL</tt>, with the appropriate argument, inside the namespace that is associated with an instance of the object. Note that the result of <tt>⎕NL</tt> is a vector of character vectors. If Type Information is unobtainable, the list of items reported by <tt>⎕NL</tt>will be empty. See the section entitled <span class="Italic">OLE Objects without Type Information</span> later in this Chapter.</p><h4>For example:</h4><pre>     DB←⎕NEW'OleClient' (⊂'ClassName' 'DAO.DBEngine.120')
+     DB.⎕NL ¯2 ⍝ Properties  
+ AutoBrowse  ChildList  ClassID  ClassName  Data
+      DefaultPassword  DefaultType  DefaultUser
+      Errors  Event  EventList  Handle  HelpFile
+      IniPath  InstanceMode  KeepOnClose  LastError
+      Locale  LoginTimeout  MethodList  PropList
+      Properties  QueueEvents  SystemDB  Type
+      TypeList  Version  Workspaces
+
+
+      DB.⎕NL ¯3 ⍝ Methods      
+ BeginTrans  CommitTrans  CompactDatabase  
+      CreateDatabase  CreateWorkspace  ISAMStats  Idle
+      OpenConnection  OpenDatabase  RegisterDatabase
+      RepairDatabase  Rollback  SetOption</pre><h4>Pre-Version 11 Behaviour</h4><p>In previous versions of Dyalog APL, you could obtain this information from the PropList, MethodList and EventList properties of the object. Note that these 3 properties are internally generated by Dyalog APL and are not exported by the object itself. You could also obtain this information by executing the system commands <tt>)PROPS</tt>, <tt>)METHODS</tt> and <tt>)EVENTS</tt> inside the namespace that is associated with an instance of the object.</p><p>For backwards compatibility, these capabilities are retained when <tt>⎕WX</tt> is 0 or 1. </p><h4>For example:</h4><pre>      ⎕WX←1 
+      'DB'⎕WC'OleClient' 'DAO.DBEngine.120'
+      )CS DB
+#.[OLEClient]
+
+      )METHODS
+BeginTrans      CommitTrans     CompactDatabase
+CreateDatabase  CreateWorkspace ISAMStats       Idle
+OpenConnection  OpenDatabase    RegisterDatabase
+RepairDatabase  Rollback        SetOption
+
+      )PROPS   
+AutoBrowse      ChildList       ClassID ClassName
+Data    DefaultPassword DefaultType     DefaultUser
+Errors  Event   EventList       Handle  HelpFile
+IniPath InstanceMode    KeepOnClose     LastError
+Locale  LoginTimeout    MethodList      PropList
+Properties      QueueEvents     SystemDB        Type
+TypeList        Version Workspaces
+</pre><p>Or, for example, using an ActiveX Control:</p><pre>      NAME←'Microsoft Office Chart 11.0'
+      'MOC'⎕WC'OCXClass'NAME
+      'F' ⎕WC'Form'
+      'F.MOC' ⎕WC 'MOC' ⍝ Instance of MOC
+      )CS F.MOC
+#.F.MOC
+      )PROPS
+AllowFiltering  AllowGrouping   AllowLayoutEvents
+AllowPointRenderEvents  AllowPropertyToolbox    AllowRenderEvents
+AllowScreenTipEvents    AllowUISelection        Attach  AutoConf
+Border  Bottom  BuildNumber     CanUndo ChartLayout ...
+</pre><h4><a name="Using_Property_Sheet"></a>Using the Property Sheet</h4><p>The simplest way to obtain further information about an OLE property, method or event is to display its Property Sheet.</p><p>To do this, change space to the namespace that represents the object, type the name (or place the cursor over the name) of the property, method or event in question, press the right mouse button and select Properties from the context menu.</p><p>The information displayed for the OpenDatabase method that is provided by the DAO.DBEngine OLE object is shown below.</p><p><img src="../images/ole-client-opendatabase-props.png" /></p><h4><a name="Using_Workspace_Explorer"></a>Using the Workspace Explorer</h4><p>You can also obtain information using the Workspace Explorer.</p><p>If you have created an instance of an object, you can navigate to it using the Explorer and then browse its Events, Methods and Properties. The picture below illustrates the effect of browsing the object <tt>DB</tt> that is connected to DAO.DBEngine.120.</p><p><img src="../images/ole-client-opendatabase-explorer.png" /></p><p>To obtain detailed information about a specific property, event, or method, just open the appropriate folder and select the name you want. The details will be displayed in the list view pane.</p><p>The same information can be obtained by browsing the <span class="Italic">Loaded Libraries</span> folder. This folder will be displayed if the <span class="Italic">View/Type Libraries</span> menu item is checked and the appropriate library has been loaded. The library will be loaded if you have ever created an instance of the object in this workspace. Alternatively, you may navigate to the information using the <span class="Italic">Registered Library</span> folder.</p><p><img src="../images/ole-client-opendatabase-loaded-libraries.png" /></p><h4><a name="GetPropertyInfo"></a>GetPropertyInfo Method</h4><p>You can also obtain information about the properties exposed by a COM object, using the GetPropertyInfo method. Note that this is a Dyalog APL method, added to the object, and not a native method provided by the object itself.</p><p>For example, the DAO.DBEngine OLE object exposes a property called Version. You can discover the meaning of the Version property as follows:</p><pre>      GetPropertyInfo 'Version'
+  VT_BSTR  </pre><p>Or, using <tt>⎕NQ</tt></p><pre>      +2 ⎕NQ ''  'GetPropertyInfo' 'Version'
+  VT_BSTR  </pre><p>This tells you that the property value is a character string (<span class="Code">VT_BSTR</span>) that contains the version number of the database engine.</p><pre>      Version
+3.51</pre><h4><a name="GetMethodInfo"></a>GetMethodInfo Method</h4><p>You can also obtain information about the methods exposed by an OLE object, using the GetMethodInfo method. Note that this is a Dyalog APL method, added to the object, and not a native method provided by the object itself.</p><p>For example, the DAO.DBEngine OLE object exposes a method called OpenDatabase. You can obtain information about the OpenDatabase method as follows:</p><pre>      ↑GetMethodInfo 'OpenDatabase'
+             Database   
+ Name        VT_BSTR    
+ [Options]   VT_VARIANT 
+ [ReadOnly]  VT_VARIANT 
+ [Connect]   VT_VARIANT </pre><p>This tells you that the method opens a specified database and that the result is of type <span class="Code">Database</span>. Furthermore, the function takes up to four arguments, the first of which (called <tt>Name</tt>) is a character string (<span class="Code">VT_BSTR</span>). The remaining 3 arguments (called <tt>Exclusive</tt>, <tt>ReadOnly</tt> and <tt>Connect</tt>) are optional (their names are surrounded by []) and of type <span class="Code">VT_VARIANT</span>.</p><h4><a name="GetEventInfo"></a>GetEventInfo Method</h4><p>Let’s use the Windows Media Player as an example. First we must load the Control by creating an OCXClass object using <tt>⎕NEW</tt>.</p><pre>  wmp←⎕NEW'OCXClass'(⊂'ClassName' 'Windows Media Player')
+  'f'⎕WC'Form'
+  'f.wmp'⎕WC'wmp'</pre><p>Next we can find out what events it supports using <tt>⎕NL ¯8</tt>.</p><pre>      wmp.⎕NL ¯8
+Buffering  Click  DblClick  Disconnect  DisplayModeChange
+       DVDNotify  EndOfStream  Error  KeyDown  KeyPress
+     KeyUp  MarkerHit  MouseDown  MouseMove  MouseUp  New
+     Stream  OpenStateChange  PlayStateChange  PositionCh
+      ange  ReadyStateChange  ScriptCommand  Warning</pre><p>Then, we can obtain information about a particular event (or events) by invoking a GetEventInfo method. Note that in the case of the Windows Media Control it is necessary to query the instance of the control (<tt>f.wmp</tt>) as opposed to the instance of the OCXClass (<tt>wmp</tt>). For example, you can ask it about its MouseDown event. The result is a vector, each element of which is a 2-element vector of character vectors.</p><pre>      ⍴INFO←⊂f.wmp.GetEventInfo'MouseDown'
+5</pre><p>The first element contains a description of the event and the data type of its result (few events generate results, so this is usually VT_VOID), i.e.</p><pre>      ⊃INFO
+Sent when a mouse button is pressed  VT_VOID </pre><p>Subsequent elements describe the name and data type of each of the parameters to the event. These are the items that will appear as the third and subsequent elements of the event message that is passed as the right argument to a callback function or returned as the result of <tt>⎕DQ</tt>. In this case:</p><pre>      ↑1↓INFO
+ Button      VT_I2    
+ ShiftState  VT_I2    
+ x           VT_COORD 
+ y           VT_COORD</pre><p>This information tells us that the first parameter <span class="Italic">Button</span> is a 2-byte integer value which (presumably) is the number of the mouse button that the user has pressed. The second parameter <span class="Italic">Shift</span> is also a 2-byte integer and (presumably) reports the keyboard shift state. The third and fourth parameters <span class="Italic">X</span> and <span class="Italic">Y</span> are of data type VT_COORD. </p><h4><a name="OnLine_Help"></a>Obtaining On-line Help</h4><p>You can display the help topic  associated with a property, method, or event by selecting Help from its context menu or using the help button in its property sheet.</p><p>Note that the name of the object’s help file is provided by its HelpFile property.</p><p>For example, in the case of the DAO.DBEngine OLE object:</p><pre>      ⎕WG'HelpFile
+'C:\PROGRA~1\COMMON~1\MICROS~1\OFFICE12\dao360.chm
+</pre><p>For Office 2000 applications, you will need to install the MSDN to obtain the appropriate help files.</p></body>
+</html>

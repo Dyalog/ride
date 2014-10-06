@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Property</tt>Handle</h2><p class="Bold"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Applies To</a></span></p><p class="Bold">Description</p><p>This is a read-only property that reports the <span class="Italic">handle</span> associated with an object. For a visual object, such as a <a href="../objects/form.html">Form</a> or a <a href="../objects/button.html">Button</a>, this is the window handle. For a <a href="../objects/printer.html">Printer</a>, it is the <span class="Italic">printer device context</span>.</p><p>This handle allows you to access the corresponding object directly with Windows API functions via <tt>⎕NA</tt>. This facility must be used with care and the responsibility for its behaviour is entirely yours. Do NOT use it to delete an object. This will cause APL to crash.</p><p>An example of the use of the Handle property is to set tab stops in a <a href="../objects/list.html">List</a> object. This is illustrated by the following function:</p><pre class="APLCodeSmall">     ∇ obj TABSTOPS stops;I;LB_SETTABSTOPS;SetTabStops;sink;args
+[1]   ⍝ Sets the tabstops in the List Box OBJ to be at
+[2]   ⍝ stops Horizontal Dialog units.
+[3]   ⍝ Sends LB_SETTABSTOPS (402) to the List Box
+[4]   ⍝ See Windows SDK for Details.
+[5]
+[6]    I←obj ⎕WG'Items'
+[7]
+[8]    LB_SETTABSTOPS←402
+[9]    'SetTabStops'⎕NA'U4 USER32.C32|SendMessageA U4 U4 U4 &lt;U4[]'
+[10]
+[11]   args←(obj ⎕WG'Handle') LB_SETTABSTOPS (⍴,stops)(,stops)
+[12]   sink←SetTabStops args
+[13]
+[14]   obj ⎕WS'Items'I
+     ∇</pre></body>
+</html>

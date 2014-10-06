@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⎕LC</tt>Line Count </h2><p>This is a simple vector of line numbers drawn from the state indicator (See<MadCap:conditionalText><span class="XRef">Programmer's Guide: </span><span class="XRef">The State Indicator</span></MadCap:conditionalText><a href="../defined-functions-and-operators/state-indicator.html#StateIndicator" class="MCXref_0">The State Indicator</a>).  The most recently activated line is shown first.  If a value corresponds to a defined function in the state indicator, it represents the current line number where the function is either suspended or pendent.</p><p>The value of <tt>⎕LC</tt> changes immediately upon completion of the most recently activated line, or upon completion of execution within <tt>⍎</tt> or <tt>⎕</tt>.  If a <tt>⎕STOP</tt> control is set, <tt>⎕LC</tt> identifies the line on which the stop control is effected.  In the case where a stop control is set on line 0 of a defined function, the first entry in <tt>⎕LC</tt> is 0 when the control is effected.</p><p>The value of <tt>⎕LC</tt> in a clear workspace is the null vector.</p><h4>Examples</h4><pre>      )SI
+#.TASK1[5]*
+⍎
+#.BEGIN[3]
+ 
+      ⎕LC
+5 3</pre><p class="pagebreakafter"> </p><pre>
+      →⎕LC
+      ⎕LC
+ 
+      ⍴⎕LC
+0</pre></body>
+</html>

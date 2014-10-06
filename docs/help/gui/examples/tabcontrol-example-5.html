@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Example 5</tt>TabControl</h2><pre>'F'⎕WC'Form' 'TabControl: Align Left'('Size' 40 30)
+'F.TC'⎕WC'TabControl'('Align' 'Left')
+
+'F.TC.IL'⎕WC'ImageList'
+'F.TC.IL.'⎕WC'Icon'('' 'APLIcon')
+'F.TC.IL.'⎕WC'Icon'('' 'FUNIcon')
+'F.TC.IL.'⎕WC'Icon'('' 'EDITIcon')
+
+'F.TC'⎕WS'ImageListObj' 'F.TC.IL'
+
+'F.TC.T1'⎕WC'TabButton' 'One'('ImageIndex' 1)
+'F.TC.T2'⎕WC'TabButton' 'Two'('ImageIndex' 2)
+'F.TC.T3'⎕WC'TabButton' 'Three'('ImageIndex' 3)
+
+'F.TC.S1'⎕WC'SubForm'('TabObj' 'F.TC.T1')
+'F.TC.S2'⎕WC'SubForm'('TabObj' 'F.TC.T2')
+'F.TC.S3'⎕WC'SubForm'('TabObj' 'F.TC.T3')</pre><p><img src="../images/tab5.gif" /></p></body>
+</html>

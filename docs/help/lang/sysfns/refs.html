@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⎕REFS Y</tt>Cross References </h2><p><tt>Y</tt> must be a simple character scalar or vector, identifying the name of a function or operator, or the object representation form of a function or operator (see <a href="or.html#ObjectRepresentation" class="MCXref_0">Object Representation </a>).  <tt>R</tt> is a simple character matrix, with one name per row, of identified names in the function or operator in <tt>Y</tt> excluding distinguished names of system constants, variables or functions.</p><h4>Example</h4><pre>      ⎕VR'OPTIONS'
+     ∇ OPTIONS;OPTS;INP
+[1]   ⍝ REQUESTS AND EXECUTES AN OPTION
+[2]    OPTS ←'INPUT' 'REPORT' 'END'
+[3]   IN:INP←ASK'OPTION:'
+[4]    →EX⍴⍨(⊂INP)∊OPTS
+[5]    'INVALID OPTION. SELECT FROM',OPTS ⋄ →IN
+[6]   EX:→EX+OPTS⍳⊂INP
+[7]    INPUT ⋄ →IN
+[8]    REPORT ⋄ →IN
+[9]   END:
+     ∇
+ 
+    ⎕REFS'OPTIONS'
+ASK
+END
+EX
+IN
+INP
+INPUT
+OPTIONS
+OPTS
+REPORT</pre><p>If <tt>Y</tt> is locked or is an External Function, <tt>R</tt> contains its name only.  For example:</p><pre>      ⎕LOCK 'OPTIONS' ⋄ ⎕REFS 'OPTIONS'
+OPTIONS</pre><p>If <tt>Y</tt> is the name of a primitive, external or derived function, <tt>R</tt> is an empty matrix with shape 0 0.</p></body>
+</html>

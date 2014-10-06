@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>⎕</tt>Evaluated Input/Output </h2><p><tt>⎕</tt> is a variable which communicates between the user’s terminal and APL.  Its behaviour depends on whether it is being assigned or referenced.</p><p>When <tt>⎕</tt> is assigned an array, the array is displayed at the terminal in exactly the same form as is direct output (see<MadCap:conditionalText><span class="XRef">Programmer's Guide: </span><span class="XRef">Display of Arrays</span></MadCap:conditionalText><a href="../intro/variables/display-of-arrays.html" class="MCXref_0">Display of Arrays</a>).</p><h4>Example</h4><pre>      ⎕←2+⍳5
+3 4 5 6 7
+ 
+      ⎕←2 4⍴'WINEMART'
+WINE
+MART</pre><p>When <tt>⎕</tt> is referenced, a prompt (<tt>⎕:</tt>) is displayed at the terminal, and input is requested.  The response is evaluated and an array is returned if the result is valid.  If an error occurs in the evaluation, the error is reported as normal (unless trapped by a <tt>⎕TRAP</tt> definition) and the prompt (<tt>⎕:</tt>) is again displayed for input.  An EOF interrupt reports <tt>INPUT INTERRUPT</tt> and the prompt (<tt>⎕:</tt>) is again displayed for input.  A soft interrupt is ignored and a hard interrupt reports <tt>INTERRUPT</tt> and the prompt (<tt>⎕:</tt>) is redisplayed for input.</p><h4>Examples</h4><pre>      10×⎕+2
+⎕:
+      ⍳3
+30 40 50
+ 
+      2+⎕
+⎕:
+      X
+VALUE ERROR
+      X
+     ^
+⎕:
+      2+⍳3
+5 6 7</pre><p>A system command may be entered.  The system command is effected and the prompt is displayed again (unless the system command changes the environment):</p><pre>      ⍴3,⎕
+⎕:
+      )WSID
+WS/MYWORK
+⎕:
+      )SI
+⎕
+⎕:
+      )CLEAR
+CLEAR WS</pre><p>If the response to a <tt>⎕:</tt> prompt is an abort statement (<tt>→</tt>), the execution will be aborted:</p><pre>      1 2 3 = ⎕
+⎕:
+      →</pre><p>A trap definition on interrupt events set for the system variable <tt>⎕TRAP</tt> in the range 1000-1008 has no effect whilst awaiting input in response to a <tt>⎕:</tt> prompt.</p><h4>Example</h4><pre>      ⎕TRAP←(11 'C' '''ERROR''')(1000 'C' '''STOP''')
+ 
+      2+⎕
+⎕:
+      (Interrupt Signal)
+INTERRUPT
+⎕:
+      'C'+2
+ERROR</pre><p>A time limit set in system variable <tt>⎕RTL</tt> has no effect whilst awaiting input in response to a <tt>⎕:</tt> prompt.</p></body>
+</html>

@@ -1,0 +1,5 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←1111⌶Y</tt>Number of Threads</h2><p>Specifies how many threads are to be used for parallel execution.</p><p>If <tt>Y</tt> has the value <tt>⍬</tt>, <tt>R</tt> is the number of virtual processors in the machine.</p><p>Otherwise, <tt>Y</tt> is an integer that specifies the number of threads that are to be used henceforth for parallel execution. Prior to this call, the default number of threads is specified by the environment variable <tt>APL_MAX_THREADS</tt>. If this variable is not set, the default is the number of virtual processors that the machine is configured to have.</p><p><tt>R</tt> is the previous value.</p><p>To reset the number of threads to be the same as the number of virtual processors run:</p><pre>      {}1111⌶ 1111⌶⍬</pre></body>
+</html>

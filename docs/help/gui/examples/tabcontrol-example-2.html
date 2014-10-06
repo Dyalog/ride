@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Example 2</tt>TabControl</h2><pre>'F'⎕WC'Form' 'TabControl: Buttons Style'('Size' 25 50)
+'F.TC'⎕WC'TabControl'('Style' 'Buttons')
+
+'F.TC.IL'⎕WC'ImageList'
+'F.TC.IL.'⎕WC'Icon'('' 'APLIcon')
+'F.TC.IL.'⎕WC'Icon'('' 'FUNIcon')
+'F.TC.IL.'⎕WC'Icon'('' 'EDITIcon')
+
+'F.TC'⎕WS'ImageListObj' 'F.TC.IL'
+
+'F.TC.T1'⎕WC'TabButton' 'One'('ImageIndex' 1)
+'F.TC.T2'⎕WC'TabButton' 'Two'('ImageIndex' 2)
+'F.TC.T3'⎕WC'TabButton' 'Three'('ImageIndex' 3)</pre><p><img src="../images/tab2.gif" /></p></body>
+</html>

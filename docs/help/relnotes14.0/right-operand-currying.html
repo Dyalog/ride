@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../help.css"></head>
+<body><h4>Right Operand Currying </h4><p> A dyadic operator may be bound or <span class="Italic">curried</span> with its right operand to form a monadic operator:</p><h4>Examples</h4><pre>      ⎕ ← inv ← ⍣¯1  ⍝ produces monadic inverse operator
+⍣ ¯1
+      +\inv 1 2 3    ⍝ scan-inverse
+1 1 1
+      lim ← ⍣≡       ⍝ power-limit
+
+      1 +∘÷lim 1     ⍝ Phi
+1.61803</pre><h4 class="Note">Note:</h4><p>The following restrictions continue to apply to Version 14.0 but may be relaxed in a later release:</p><ul><li value="1">Dyadic operators are not promoted to first-class and so may not in general be named or displayed</li><li value="2">Left operand currying is not supported</li></ul><h4>Examples</h4><pre>      ∘        ⍝ Dyadic operator not first-class
+SYNTAX ERROR
+
+      ⊂⍣       ⍝ No left-operand currying
+SYNTAX ERROR</pre></body>
+</html>

@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h3>Introduction</h3><p>Control Structures are blocks of code in which the execution of APL statements follows certain rules and conditions.  Control structures are implemented using a set of <span class="Italic">control words</span> that all start with the colon symbol (:).  Control Words are case-insensitive.</p><p>There are eight different types of control structures defined by the control words, <tt>:If</tt>, <tt>:While</tt>, <tt>:Repeat</tt>, <tt>:For</tt>, <tt>:Select</tt>, <tt>:With</tt>, <tt>:Trap</tt> and <tt>:Hold</tt> .  Each one of these control words may occur only at the beginning of an APL statement and indicates the start of a particular type of control structure.</p><p>Within a control structure, certain other control words are used as qualifiers.  These are <tt>:Else</tt>, :<tt>ElseIf</tt>, <tt>:AndIf</tt>, <tt>:OrIf</tt>, <tt>:Until</tt>, <tt>:Case</tt> and <tt>:CaseList</tt>.</p><p>A third set of control words is used to identify the end of a particular control structure.  These are <tt>:EndIf</tt>, <tt>:EndWhile</tt>, <tt>:EndRepeat</tt>, <tt>:EndFor</tt>, <tt>:EndSelect</tt>, <tt>:EndWith</tt>, <tt>:EndTrap</tt>  and  <tt>:EndHold</tt>.  Although formally distinct, these control words may all be abbreviated to <tt>:End</tt>.</p><p>Finally, the <tt>:GoTo</tt>, <tt>:Return</tt>, <tt>:Leave</tt> and <tt>:Continue</tt> control words may be used to conditionally alter the flow of execution within a control structure.</p><p>Control words, including qualifiers such as <tt>:Else</tt> and :<tt>ElseIf</tt>, may occur only at the beginning of a line or expression in a diamond-separated statement. The only exceptions are <tt>:In</tt> and <tt>:InEach</tt> which must appear on the same line within a <tt>:For</tt> expression.</p><h4>Key to Notation</h4><p>The following notation is used to describe Control Structures within this section:</p><table><tr><td><tt>aexp</tt></td><td>an expression returning an array,</td></tr><tr><td><tt>bexp</tt></td><td>an expression returning a single Boolean value (0 or 1),</td></tr><tr><td><tt>var</tt></td><td>loop variable used by <tt>:For</tt> control structure,</td></tr><tr><td><tt>code</tt></td><td>0 or more lines of APL code, including other (nested) control structures,</td></tr><tr><td><tt>andor</tt></td><td><span class="Italic">either</span> one or more <tt>:AndIf</tt> statements, <span class="Italic">or</span> one or more <tt>:OrIf</tt> statements.<pre>|
+.-----------------------.
+|                       |
+|&lt;--------------.       |&lt;--------------.
+|               |       |               |
+code            |       code            |
+|               |       |               |
+|               |       |               |
+:AndIf bexp-----'       :OrIf bexp------'
+|                       |
+|&lt;----------------------'
+|
+     </pre></td></tr></table></body>
+</html>

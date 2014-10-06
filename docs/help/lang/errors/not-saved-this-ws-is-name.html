@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2>not saved this ws is name</h2><p>This report is given in the following situations:</p><ul><li value="1">When the system command <tt>)SAVE</tt> is used without a name, and the workspace is not named.  In this case the system reports <tt>not</tt><tt> saved this ws is CLEAR WS</tt>.</li><li value="2">When the system command <tt>)SAVE</tt> is used with a name, and that name is not the current name of the workspace, but is the name of an existing file.</li></ul><p>In neither case is the workspace renamed.</p><h4>Examples</h4><pre>      )CLEAR
+      )SAVE
+not saved this ws is CLEAR WS
+ 
+      )WSID JOHND
+      )SAVE
+      )WSID ANDYS
+      )SAVE JOHND
+not saved this ws is ANDYS</pre></body>
+</html>

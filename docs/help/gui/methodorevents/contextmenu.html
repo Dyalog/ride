@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Event 410</tt>ContextMenu</h2><p class="Bold"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Applies To</a></span></p><p class="Bold">Description</p><p>If enabled, this event is reported when the user performs the standard
+Windows action to display a ContextMenu. These include clicking/releasing the
+right mouse button and pressing F10.</p><p>If the object has its own standard context menu, for example an Edit object,
+the default action is to display this menu. If the object is dockable (see <a href="../props/dockable.html">Docking
+Property</a>), the default action is to display the standard (English) Dyalog
+APL docking menu.</p><p>You may use this event to display your own pop-up context menu, by <tt>⎕DQ</tt>'ing
+it within a callback function. In this case, your callback function should
+return 0 to disable the standard context menu.</p><p>The event message reported as the result of <tt>⎕DQ</tt>,
+or supplied as the right argument to your callback function, is a 5-element
+vector as follows :</p><table class="Event"><tr><td><tt>[1]</tt></td><td>Object</td><td>ref or character vector</td></tr><tr><td><tt>[2]</tt></td><td>Event</td><td><tt>'ContextMenu'</tt> or 410</td></tr><tr><td><tt>[3]</tt></td><td>(reserved)</td><td>Empty character vector</td></tr><tr><td><tt>[4]</tt></td><td>Y</td><td>y-position of the mouse (number)</td></tr><tr><td><tt>[5]</tt></td><td>X</td><td>x-position of the mouse (number)</td></tr></table></body>
+</html>

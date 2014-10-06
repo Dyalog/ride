@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2>warning pendent operation</h2><p>This report is given on opening and closing definition mode when attempting to edit a pendant function or operator.</p><h4>Example</h4><pre>[0]   ∇FOO
+[1]    GOO
+[2]   ∇
+ 
+[0]   ∇GOO
+[1]    ∘
+[2]   ∇
+ 
+      FOO
+SYNTAX ERROR
+GOO[1] ∘
+       ^
+ 
+      ∇FOO
+warning pendent operation
+[0]   ∇FOO
+[1]    GOO
+[2]   ∇
+warning pendent operation</pre></body>
+</html>

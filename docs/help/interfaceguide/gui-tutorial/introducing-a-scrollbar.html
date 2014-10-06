@@ -1,0 +1,10 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="ScrollBar"></a>Introducing a ScrollBar</h2><p>Another way to improve the application would be to allow the user to input using a slider or scrollbar. Let's create one called <tt>'TEMP.S'</tt> ...</p><pre>      SCR←'Scroll' ('Range' 101)('Event' 'Scroll' 'C2F')
+      'TEMP.S' ⎕WC SCR</pre><p><img src="../images/temperature-converter-9.png" /></p><p>The range of a scrollbar goes from 1 to the value of the Range property. Setting Range to 101 will give us a range of 1-101. You will see in a moment why we need to do this. The Scroll event will be generated whenever the user moves the scrollbar. We have associated it with the callback function <tt>'C2F'</tt> which we will define as follows:</p><pre>     ∇ C2F MSG
+[1]   ⍝ Callback for Centigrade input via scrollbar
+[2]    TEMP.C.Value←101-4⊃MSG
+[3]    TEMP.F.Value←32+TEMP.C.Value÷5÷9
+     ∇</pre><p>The Event message <tt>MSG</tt> contains information about the Scroll event. Its 4th element contains the requested thumb position. As we want to go from 0 at the top, to 100 at the bottom, we need to subtract this value from 101. This is done in line 2 of the function. <tt>C2F[3]</tt> calculates the corresponding Fahrenheit value.</p><p>Try moving the scrollbar and see what happens...</p><p><img src="../images/temperature-converter-10.png" /></p></body>
+</html>

@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>)HOLDS</tt>Display Held Tokens</h2><p>System command <tt>)HOLDS</tt> displays a list of tokens which have been acquired or requested by the <tt>:Hold</tt> control structure. </p><p>Each line of the display is of the form:</p><pre>token:  acq  req  req ...</pre><p>Where <tt>acq</tt> is the number of <span class="Italic">the</span> thread that has acquired the token, and <tt>req</tt> is the number of <span class="Italic">a</span> thread which is requesting it. For a token to appear in the display, a thread (and only one thread) must have acquired it, whereas any number of threads can be requesting it.</p><h4>Example</h4><p>Thread <tt>300</tt>’s attempt to acquire token <tt>'blue'</tt> results in a deadlock:</p><pre>300:DEADLOCK
+Sema4[1] :Hold 'blue'
+        ^
+ 
+      )HOLDS
+blue:   100
+green:  200     100
+red:    300     200     100
+ </pre><ul><li value="1"><tt>Blue</tt> has been acquired by thread <tt>100</tt>.</li><li value="2"><tt>Green</tt> has been acquired by <tt>200</tt> and requested by <tt>100</tt>.</li><li value="3"><tt>Red</tt> has been acquired by <tt>300</tt> and requested by <tt>200</tt> and <tt>100</tt>.</li></ul><p>The following cycle of dependencies has caused the deadlock:</p><pre>Thread 300 attempts to acquire blue,      300 → blue
+which is owned by 100,                     ↑      ↓
+which is waiting for red,                 red ←  100
+which is owned by 300.</pre></body>
+</html>

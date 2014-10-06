@@ -1,0 +1,6 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>)ERASE nms</tt>Erase Object </h2><p>This command erases named global defined objects (functions, operators, variables, namespaces and GUI objects) from the active workspace or current namespace.</p><p>If a named object is a function or operator in the state indicator, or the object is an operand of an operator in the state indicator, or the object is a function whose left argument is being executed, the object remains defined until its execution is completed or it is no longer referenced by an operator in the state indicator.  However, the name is available immediately for other uses.</p><p>If a named object is a GUI object, the object and all its children are deleted and removed from the screen.  </p><p>If an object is not erased for any reason, the system reports  <tt>not found</tt>  followed by the name of the object.</p><p>Erasing objects such as external functions may have other implications: see <a href="../sysfns/ex.html#ExpungeObject" class="MCXref_0">Expunge Object </a> for details.</p><h4>Example</h4><pre>      )ERASE FOO A ⎕IO
+not found ⎕IO</pre></body>
+</html>

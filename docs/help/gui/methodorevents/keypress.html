@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Event 22</tt>KeyPress</h2><p class="Bold"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Applies To</a></span></p><p class="Bold">Description</p><p>If enabled, this event is generated when the user presses and releases a key
+on the keyboard. It is reported for whichever object has the keyboard focus at
+the time.</p><p>The event message reported as the result of <a href="../../lang/sysfns/dq.html"><tt>⎕DQ</tt></a>,
+or supplied as the right argument to your callback function, is a 6-element
+vector as follows :</p><table class="Event"><tr><td><tt>[1]</tt></td><td>Object</td><td>ref or character vector</td></tr><tr><td><tt>[2]</tt></td><td>Event</td><td><tt>'KeyPress'</tt> or 22</td></tr><tr><td><tt>[3]</tt></td><td>Input Code</td><td>character scalar or vector</td></tr><tr><td><tt>[4]</tt></td><td>Character code</td><td>integer scalar</td></tr><tr><td><tt>[5]</tt></td><td>Key Number</td><td>integer scalar</td></tr><tr><td><tt>[6]</tt></td><td>Shift state</td><td>integer scalar</td></tr></table><p>If the keystroke resolves to a character, the Input Code is a character
+scalar.</p><p>If the keystroke resolves to a command recognised by Dyalog APL, such as UC
+(Up Cursor) or ER (Enter) the Input Code contains the corresponding 2-element
+character vector.</p><p>In the Classic Edition, the resolution of the keystroke to a character (in <tt>⎕AV</tt>)
+or to a command, is performed using the Input Translate Table.</p><p>In the Unicode Edition, the resolution is performed by the Operating System.
+However, if the keystroke resolves to a navigation or control key (such as
+Cursor Up or Enter), the same 2-character "command" is reported. Note
+however that commands that are purely internal to Dyalog APL (such as Trace,
+commonly Ctrl+Enter) are not reported as such and the Input Code will be empty.</p><p>In the Unicode Edition, the Character Code is the Unicode code point of the
+character that the user entered. In the Classic Edition, it is a number in the
+range 0-255 which specifies the ASCII character that would normally be generated
+by the keystroke, and is independent of the Input Translate Table. If there is
+no corresponding ASCII character, the ASCII code reported is 0.</p><p>The key number is the physical key number reported by Windows when the key is
+pressed.</p><p>The Shift State indicates which (if any) of the Shift, Ctrl and Alt keys are
+down at the same time as the key is pressed. It is the sum of the following
+numbers :</p><p>Thus a Shift State of 3 indicates that the user has pressed the key in
+conjunction with both the Shift and Ctrl keys. A Shift State of 0 indicates that
+the user pressed the key on its own.</p><h4>Example</h4><pre>     ∇ Key;Form1
+[1]    'Form1'⎕WC'Form'('Event' 'KeyPress' 'Keycb')
+[2]    ⎕DQ'Form1'
+     ∇
+
+     ∇ Keycb msg
+[1]    DISPLAY msg
+     ∇</pre><p>On running function Key, the following output will be displayed as a result
+of the user pressing the following 5 keys in succession:</p><ol><li value="1">"a"</li><li value="2">Shift+"a"</li><li value="3">Cursor Up</li><li value="4">β ("b" using a Greek keyboard)</li><li value="5"><tt>⍳</tt> (Ctrl+"i" using a UK APL
+    keyboard)</li></ol><h4>Unicode Edition</h4><pre>.→-----------------------------.
+| .→----. .→-------.           |
+| |Form1| |KeyPress| a 97 65 0 |
+| '-----' '--------' -         |
+'∊-----------------------------'
+.→-----------------------------.
+| .→----. .→-------.           |
+| |Form1| |KeyPress| A 65 65 1 |
+| '-----' '--------' -         |
+'∊-----------------------------'</pre><p class="pagebreakafter"> </p><pre>
+.→-------------------------------.
+| .→----. .→-------. .→-.        |
+| |Form1| |KeyPress| |UC| 0 38 0 |
+| '-----' '--------' '--'        |
+'∊-------------------------------'
+.→------------------------------.
+| .→----. .→-------.            |
+| |Form1| |KeyPress| β 946 66 0 |
+| '-----' '--------'            |
+'∊------------------------------'
+.→-------------------------------.
+| .→----. .→-------.             |
+| |Form1| |KeyPress| ⍳ 9075 73 2 |
+| '-----' '--------' -           |
+'∊-------------------------------'</pre><h4>Classic Edition</h4><pre>.→-----------------------------.
+| .→----. .→-------.           |
+| |Form1| |KeyPress| a 97 65 0 |
+| '-----' '--------' -         |
+'∊-----------------------------'
+.→-----------------------------.
+| .→----. .→-------.           |
+| |Form1| |KeyPress| A 65 65 1 |
+| '-----' '--------' -         |
+'∊-----------------------------'
+.→-------------------------------.
+| .→----. .→-------. .→-.        |
+| |Form1| |KeyPress| |UC| 0 38 0 |
+| '-----' '--------' '--'        |
+'∊-------------------------------'
+.→--------------------------------.
+| .→----. .→-------. .⊖.          |
+| |Form1| |KeyPress| | | 223 66 0 |
+| '-----' '--------' '-'          |
+'∊--------------------------------'
+.→----------------------------.
+| .→----. .→-------.          |
+| |Form1| |KeyPress| ⍳ 9 73 2 |
+| '-----' '--------' -        |
+'∊----------------------------'</pre></body>
+</html>

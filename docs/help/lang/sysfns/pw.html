@@ -1,0 +1,9 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>⎕PW</tt>Print Width </h2><p><tt>⎕PW</tt> is the maximum number of output characters per line before folding the display.</p><p><tt>⎕PW</tt> may be assigned any integer value in the range 42 to 32767. Note that in versions of Dyalog APL prior to 13.0 <tt>⎕PW</tt> had a minimum value of 30; this was increased to support 128-bit decimal values.</p><p>If an attempt is made to display a line wider than <tt>⎕PW</tt>, then the display will be folded at or before the <tt>⎕PW</tt> width and the folded portions indented 6 spaces.  The display of a simple numeric array may be folded at a width less than <tt>⎕PW</tt> so that individual numbers are not split.</p><p><tt>⎕PW</tt> ony affects output, either direct or through <tt>⎕</tt> output.  It does not affect the result of the function Format (<tt>⍕</tt>), of the system function <tt>⎕FMT</tt>, or output through the system functions <tt>⎕ARBOUT</tt> and <tt>⎕ARBIN</tt>, or output through <tt>⍞</tt>.</p><p>Note that if the auto_pw parameter (<span class="Italic">Options/Configure/Session/Auto PW</span>) is set to 1, <tt>⎕PW</tt> is automatically adjusted whenever the Session window is resized. In these circumstances, a value assigned to <tt>⎕PW</tt> will only apply until the Session window is next resized.</p><h4>Examples</h4><pre>      ⎕PW←42
+ 
+      ⎕←3⍴÷3
+0.3333333333 0.3333333333 0.3333333333
+      0.3333333333</pre></body>
+</html>

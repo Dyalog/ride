@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←X≠Y</tt>Not Equal</h2><p><tt>Y</tt> may be any array.  <tt>X</tt> may be any array.  <tt>R</tt> is Boolean.  <tt>R</tt> is 0 if <tt>X=Y</tt>.  Otherwise <tt>R</tt> is 1.</p><p>For Boolean <tt>X</tt> and <tt>Y</tt>, the value of <tt>R</tt> is the “exclusive or”  result, determined as follows:</p><pre>             X   Y     R
+      
+             0   0     0
+             0   1     1
+             1   0     1
+             1   1     0</pre><p><tt>⎕CT</tt> is an implicit argument of Not Equal.</p><h4>Examples</h4><pre>      1 2 3 ≠ 1.1 2 3
+1 0 0
+ 
+      ⎕CT←1E¯10
+ 
+      1≠1 1.00000000001 1.0000001
+0 0 1
+ 
+      1 2 3 ≠'CAT'
+1 1 1</pre></body>
+</html>

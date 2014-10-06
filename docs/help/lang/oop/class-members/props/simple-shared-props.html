@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../../help.css"></head>
+<body><h3>Simple Shared Properties</h3><p>The <span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">ComponentFile Class</a></span><a href="component-file-class-example.html" class="MCXref_SeePageNumber_0"></a> specifies a Simple Shared Property named <tt>Files</tt> which returns the names of all the Component Files in the current directory.</p><p>The previous examples have illustrated the use of Instance Properties. It is also possible to define <span class="Italic">Shared</span> properties.</p><p>A Shared property may be used to handle information that is relevant to the Class as a whole, and which is not specific to any a particular Instance.</p><pre>    :Property Files
+    :Access Public <b>Shared</b>
+        ∇ r←get
+          r←⎕FLIB''
+        ∇
+    :EndProperty</pre><p>Note that <tt>⎕FLIB</tt> (invoked by the <tt>Files </tt><tt>get</tt> function) does not report the names of <span class="Italic">tied</span> files.</p><pre>      F1←⎕NEW ComponentFile 'test1'
+      ⎕EX'F1'      
+      F2←⎕NEW ComponentFile 'test2'
+      F2.Files ⍝ NB ⎕FLIB does not report tied files
+test1
+      ⎕EX'F2'</pre><p>Note that a Shared Property may be accessed from the Class itself. It is not necessary to create an Instance first.</p><pre>      ComponentFile.Files
+test1
+test2</pre></body>
+</html>

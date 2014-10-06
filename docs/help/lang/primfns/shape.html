@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⍴Y</tt>Shape</h2><p><tt>Y</tt> may be any array.  <tt>R</tt> is a non-negative integer vector whose elements are the dimensions of <tt>Y</tt>.  If <tt>Y</tt> is a scalar, then <tt>R</tt> is an empty vector.  The rank of <tt>Y</tt> is given by <tt>⍴⍴Y</tt>.</p><h4>Examples</h4><pre>      ⍴10
+ 
+      ⍴'CAT'
+3
+ 
+      ⍴3 4⍴⍳12
+3 4
+ 
+      +G←(2 3⍴⍳6)('CAT' 'MOUSE' 'FLEA')
+ 1 2 3   CAT  MOUSE  FLEA
+ 4 5 6
+ 
+      ⍴G
+2
+ 
+      ⍴⍴G
+1
+ 
+      ⍴¨G
+ 2 3  3
+ 
+      ⍴¨¨G
+          3  5  4</pre></body>
+</html>

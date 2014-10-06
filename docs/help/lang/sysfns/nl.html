@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←{X}⎕NL Y</tt>Name List </h2><p><tt>Y</tt> must be a simple numeric scalar or vector containing one or more of the values for name-class.  See also<a href="nc.html#NameClassification" class="MCXref_0">Name Classification </a>.</p><p><tt>X</tt> is optional. If present, it must be a simple character scalar or vector. <tt>R</tt> is a list of the names of active objects whose name-class is included in <tt>Y</tt> in standard sorted order.</p><p>If <span class="Italic">any</span> element of <tt>Y</tt> is negative, positive values in <tt>Y</tt> are treated as if they were negative, and R is a vector of character vectors. Otherwise, <tt>R</tt> is simple character matrix. </p><p>Furthermore, if <tt>⎕NL</tt> is being evaluated inside the namespace associated with a Class or an Instance of a Class, and any element of <tt>Y</tt> is negative, <tt>R</tt> includes the Public names exposed by the Base Class (if any) and all other Classes in the Class hierarchy. </p><p>If <tt>X</tt> is supplied, <tt>R</tt> contains only those names which begin with any character of <tt>X</tt>. Standard sorted order is in Unicode point order for Unicode editions, and in the collation order of <tt>⎕AV</tt> for Classic editions.</p><p>If an element of <tt>Y</tt> is an integer, the names of all of the corresponding sub-name-classes are included in <tt>R</tt>. For example, if <tt>Y</tt> contains the value 2, the names of all variables (name-class 2.1), fields (2.2), properties (2.3) and external or shared variables (2.6) are obtained. Otherwise, only the names of members of the corresponding sub-name-class are obtained.</p><h4>Examples:</h4><pre>      ⎕NL 2 3
+A
+FAST
+FIND
+FOO
+V
+ 
+      'AV' ⎕NL 2 3
+A
+V
+ 
+      ⎕NL ¯9
+ Animal  Bird  BirdBehaviour  Coin  Cylinder  DomesticParrot  Eeyore  FishBehaviour  Nickel  Parrot  Penguin  Polly  Robin 
+      ⎕NL ¯9.3 ⍝ Instances
+ Eeyore  Nickel  Polly  Robin 
+      ⎕NL ¯9.4 ⍝ Classes
+ Animal  Bird  Coin  Cylinder  DomesticParrot  Parrot  Penguin
+      ⎕NL ¯9.5 ⍝ Interfaces
+ BirdBehaviour  FishBehaviour</pre><p><tt>⎕NL</tt> can also be used to explore Dyalog GUI Objects, .Net types and COM objects.</p><h4>Dyalog GUI Objects</h4><p><tt>⎕NL</tt> may be used to obtain lists of the Methods, Properties and Events provided by Dyalog APL GUI Objects.</p><pre>     'F' ⎕WC 'Form'
+      F.⎕NL -2 ⍝ Properties
+ Accelerator  AcceptFiles  Active  AlphaBlend  AutoConf  Border  BCol  Caption ...
+ 
+      F.⎕NL -3 ⍝ Methods
+ Animate  ChooseFont  Detach  GetFocus  GetTextSize  ShowSIP  Wait
+ 
+      F.⎕NL -8 ⍝ Events
+Close  Create  DragDrop  Configure  ContextMenu  DropFiles  DropObjects  Expose  Help ...</pre><h4>.Net Classes (Types)</h4><p><tt>⎕NL</tt> can be used to explore .Net types.</p><p>When a reference is made to an undefined name, and <tt>⎕USING</tt> is set, APL attempts to load the Type from the appropriate .Net Assemblies. If successful, the name is entered into the symbol table with name-class 9.6.</p><pre>      ⎕USING←'System'
+      DateTime
+(System.DateTime)
+      ⎕NL -9
+ DateTime
+      ⎕NC,⊂'DateTime'
+9.6</pre><p>The names of the Properties and Methods of a .Net Type may then be obtained using <tt>⎕NL</tt>.</p><pre>      DateTime.⎕NL -2 ⍝ Properties
+<span> </span> MaxValue  MinValue  Now  Today  UtcNow 
+ 
+      DateTime.⎕NL -3 ⍝ Methods
+ get_Now  get_Today  get_UtcNow  op_Addition  op_Equality  ...</pre><p>In fact it is not necessary to make a separate reference first, because the expression <tt>Type.⎕NL</tt> (where <tt>Type</tt> is a .Net Type) is itself a reference to Type. So, (with <tt>⎕USING</tt> still set to <tt>'System'</tt>):</p><pre>      Array.⎕NL -3
+ BinarySearch  Clear  Copy  CreateInstance  IndexOf  LastIndexOf  Reverse  Sort
+ 
+      ⎕NL -9
+ Array  DateTime</pre><p>Another use for <tt>⎕NL</tt> is to examine .Net <span class="Italic">enumerations</span>. For example:</p><pre>      ⎕USING←'System.Windows.Forms,system.windows.forms.dll'
+ 
+      FormBorderStyle.⎕NL -2
+Fixed3D  FixedDialog  FixedSingle  FixedToolWindow  None  Sizable  SizableToolWindow 
+ 
+      FormBorderStyle.FixedDialog.value__
+3
+ 
+      FormBorderStyle.({⍵,[1.5]⍎¨⍵,¨⊂'.value__'}⎕NL -2)
+ Fixed3D            2
+ FixedDialog        3
+ FixedSingle        1
+ FixedToolWindow    5
+ None               0
+ Sizable            4
+ SizableToolWindow  6</pre><h4>COM Objects</h4><p>Once a reference to a COM object has been obtained, <tt>⎕NL</tt> may be used to obtain lists of its Methods, Properties and Events.</p><pre>      xl←⎕NEW'OLEClient'(⊂'ClassName' 'Excel.Application')
+ 
+      xl.⎕NL -2 ⍝ Properties
+ _Default  ActiveCell  ActiveChart  ActiveDialog  ActiveMenuBar  ActivePrinter  ActiveSheet  ActiveWindow ...
+ 
+      xl.⎕NL -3 ⍝ Methods
+ _Evaluate  _FindFile  _Run2  _Wait  _WSFunction  ActivateMicrosoftApp  AddChartAutoFormat  AddCustomList  Browse  Calculate ...
+ 
+      ⎕NL -9
+ xl</pre><p> </p></body>
+</html>

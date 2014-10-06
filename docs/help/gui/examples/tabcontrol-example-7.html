@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Example 7</tt>TabControl</h2><pre>'F'⎕WC'Form' 'TabControl: Default Scrolling'('Size' 25 40)
+'F.TC'⎕WC'TabControl'
+
+'F.TC.IL'⎕WC'ImageList'
+'F.TC.IL.'⎕WC'Icon'('' 'APLIcon')
+'F.TC.IL.'⎕WC'Icon'('' 'FUNIcon')
+'F.TC.IL.'⎕WC'Icon'('' 'EDITIcon')
+
+'F.TC'⎕WS'ImageListObj' 'F.TC.IL'
+
+'F.TC.T1'⎕WC'TabButton' 'First Tab'('ImageIndex' 1)
+'F.TC.T2'⎕WC'TabButton' 'Second Tab'('ImageIndex' 2)
+'F.TC.T3'⎕WC'TabButton' 'Third Tab'('ImageIndex' 3)
+'F.TC.T4'⎕WC'TabButton' 'Fourth Tab'('ImageIndex' 1)
+
+'F.TC.S1'⎕WC'SubForm'('TabObj' 'F.TC.T1')
+'F.TC.S2'⎕WC'SubForm'('TabObj' 'F.TC.T2')
+'F.TC.S3'⎕WC'SubForm'('TabObj' 'F.TC.T3')
+'F.TC.S4'⎕WC'SubForm'('TabObj' 'F.TC.T4')</pre><p><img src="../images/tab7.gif" /></p></body>
+</html>

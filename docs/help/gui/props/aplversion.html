@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Property</tt>APLVersion</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/root.html">Root</a></td></tr></table><p class="Bold">Description</p><p>This is a read-only property that provides information about the Version of Dyalog APL that you are using. It is
+a 4-element vector of character vectors as described in the table below.</p><p><b>Note:</b> In future releases these values may change, be removed, or new ones added.</p><table><tr><th class="Left">Index</th><th class="Left">Description</th><th class="Left">Possible Values</th></tr><tr><td><tt>[1]</tt></td><td>Target Environment</td><td class="Dyalog" valign="middle">Windows<br />Windows-64<br />Windows Mobile<br />Linux<br />Linux-64<br />AIX<br />AIX-64<br />Solaris<br />Solaris-64
+                </td></tr><tr><td><tt>[2]</tt></td><td>Version Number</td><td valign="middle"> 
+    </td></tr><tr><td><tt>[3]</tt></td><td>Version Type</td><td valign="middle"><table><tr><td class="DyalogPlain">W</td><td>Windows</td></tr><tr><td class="DyalogPlain">S</td><td>Server (terminal) version</td></tr><tr><td class="DyalogPlain">M</td><td>Motif</td></tr><tr><td class="DyalogPlain">P</td><td>PocketAPL</td></tr></table></td></tr><tr><td><tt>[4]</tt></td><td>Program Type</td><td valign="middle" class="Dyalog">Development<br />Runtime<br />DLL<br />DLLRT</td></tr></table><h4>Example</h4><pre>      ]display '.'⎕WG 'APLVersion'
+┌→───────────────────────────────────────────┐
+│ ┌→──────┐ ┌→───────────┐ ┌→┐ ┌→──────────┐ │
+│ │Windows│ │13.2.15457.0│ │W│ │Development│ │
+│ └───────┘ └────────────┘ └─┘ └───────────┘ │
+└∊───────────────────────────────────────────┘
+</pre></body>
+</html>

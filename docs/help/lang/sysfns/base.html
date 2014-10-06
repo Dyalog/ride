@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⎕BASE.Y</tt>Base Class </h2><p><tt>⎕BASE</tt> is used to access the base class implementation of the name specified by <tt>Y</tt>.</p><p><tt>Y</tt> must be the name of a Public member (Method, Field or Property) that is provided by the Base Class of the current Class or Instance.</p><p><tt>⎕BASE</tt> is typically used to call a method in the Base Class which has been <span class="Italic">superseded</span> by a Method in the current Class.</p><p>Note that <tt>⎕BASE.Y</tt> is <span class="Italic">special syntax</span> and any direct reference to <tt>⎕BASE</tt> on its own or in any other context, is meaningless and causes <tt>SYNTAX ERROR</tt>.</p><p>In the following example, Class <tt>DomesticParrot</tt> derives from Class <tt>Parrot</tt> and supersedes its <tt>Speak</tt> method. <tt>DomesticParrot.Speak</tt> calls the <tt>Speak</tt> method in its Base Class <tt>Parrot</tt>, via <tt>⎕BASE</tt>.</p><pre>:Class Parrot: Bird
+    ∇ R←Speak
+      :Access Public
+      R←'Squark!'
+    ∇
+:EndClass ⍝ Parrot
+ 
+:Class DomesticParrot: Parrot
+    ∇ R←Speak
+      :Access Public
+      R←⎕BASE.Speak,' Who''s a pretty boy, then!'
+    ∇
+:EndClass ⍝ DomesticParrot</pre><p> </p><pre>      Maccaw←⎕NEW Parrot
+      Maccaw.Speak
+Squark!
+ 
+      Polly←⎕NEW DomesticParrot
+      Polly.Speak
+Squark! Who's a pretty boy, then!</pre></body>
+</html>

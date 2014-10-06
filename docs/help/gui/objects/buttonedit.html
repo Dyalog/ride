@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Object</tt>ButtonEdit</h2><table class="GUIMembers"><tr><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Parents</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Children</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Properties</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Methods</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Events</a></span></td></tr></table><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Purpose:</td><td class="SpacedPlain">Allows user to enter or edit data.</td></tr></table><p class="Bold">Description</p><p>The ButtonEdit object combines a single-line input field with a customisable button. It provides the same user and programmer interfaces as an <a href="edit.html#Edit_Object">Edit</a> object (Style<tt> 'Single'</tt>).</p><p>The appearance of the button, which is displayed to the right of the input field, is determined by the <a href="../props/imagelistobj.html#ImageListObj_Property">ImageListObj</a> property. When clicked, the object generates a <a href="../methodorevents/dropdown.html#DropDown_Event">DropDown</a> event. There is no default processing for this event; it is up to the programmer to take the appropriate action via a callback function.</p><p>The following picture illustrates two ButtonEdit objects</p><pre>     ∇ Example;BK;White
+[1]    'F'⎕WC'Form' 'ButtonEdit'
+[2]    'F.IL1'⎕WC'ImageList'('Size' 16 16)('Masked' 1)
+[3]    'F.IL1.Time'⎕WC'Icon' 'c:\MadCap13.2\ICO\Time.ico'
+[4]    'F.BE1'⎕WC'ButtonEdit' ''(30 20)(⍬ 160)
+[5]    F.BE1.(Cue ShowCueWhenFocused)←'Enter data' 1
+[6]    F.BE1.(ImageListObj ImageIndex)←F.IL1 1
+[7]
+[8]    'F.fnt'⎕WC'Font' 'APL385 Unicode' 16
+[9]    BK←16 16⍴256⊥White←255 255 255
+[10]   'F.Rotate'⎕WC'Bitmap'('CBits'BK)('MaskCol'White)
+[11]   'F.Rotate.'⎕WC'Text' '⌽'(0 3)('FontObj'F.fnt)
+[12]   BK←F.Rotate.CBits
+[13]   'F.IL1.'⎕WC'BitMap'('CBits'BK)('MaskCol'White)
+[14]   'F.BE2'⎕WC'ButtonEdit' 'Hello World'(100 20)(⍬ 160)
+[15]   F.BE2.(ImageListObj ImageIndex)←F.IL1 2
+[16]   F.BE2.onDropDown←'Rotate'
+     ∇
+
+
+     ∇ Rotate msg
+[1]    (⊃msg).Text←⌽(⊃msg).Text
+     ∇
+
+     
+</pre><p><img src="../images/buttonedit.png" /></p></body>
+</html>

@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Property</tt>ColSortImages</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/grid.html">Grid</a></td></tr></table><p class="Bold">Description</p><p>The ColSortImages property identifies the names of, or refs to, up to three <a href="../objects/bitmap.html">Bitmap</a> objects that are used to specify the sort images for a <a href="../objects/grid.html">Grid</a> object. </p><p>If ColSortImages is not specified, default images are used.</p><p>The <a href="../objects/bitmap.html">Bitmap</a> specified by the 1st element of ColSortImages is used to display columns that are sorted down.</p><p>The <a href="../objects/bitmap.html">Bitmap</a> specified by the 2nd element of ColSortImages is used to display columns that are unsorted.</p><p>The <a href="../objects/bitmap.html">Bitmap</a> specified by the 3rd element of ColSortImages is used to display columns that are sorted up.</p><pre>'F'⎕WC'Form' 'Grid: ColSortImages Property'
+ F.(Coord Size)←'Pixel'(313 341)
+ 'F.fnt'⎕WC'Font' 'APL385 Unicode' 16
+ F.FontObj←F.fnt
+ BK←16 16⍴256⊥White←255 255 255
+
+ 'F.gu'⎕WC'Bitmap'('CBits'BK)('MaskCol'White)
+ 'F.gu.'⎕WC'Text' '⍋'(0 3)
+ 'F.gd'⎕WC'Bitmap'('CBits'BK)('MaskCol'White)
+ 'F.gd.'⎕WC'Text' '⍒'(0 3)
+
+ 'F.G'⎕WC'Grid'('Posn' 0 0)F.Size
+ F.G.Values←#.(COUNTRIES,POPULATION,[1.5]AREA)
+ F.G.ColTitles←'Country' 'Population' 'Area'
+ F.G.CellWidths←140 100 100
+ F.G.TitleWidth←0
+
+ F.G.ColSortImages←'F.gd' '' 'F.gu'
+ F.G.(Values←Values[⍋Values[;3];])
+
+ F.G.ColSorted 3 1</pre><p><img src="../images/colsortimages.png" /></p></body>
+</html>

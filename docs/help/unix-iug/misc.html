@@ -1,0 +1,10 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../help.css"></head>
+<body><h2 class="Newpage">Session logfile</h2><p>By default the session logfile is called default.dlf, and if necessary will be created in the current working directory. (The mapl script supplied by Dyalog overrides this).</p><h2>Status window output</h2><p>By default under UNIX what would appear in the status window in the GUI versions appears in the same terminal window as the APL session, but the text is not part of the session. If such text appears, the APL session can be redrawn using the SR command, thus removing the status window text.
+        </p><p>It is possible to redirect the status window output; to do so select an unused stream number as the stream have the status window output appear on, and then redirect that stream. Note that it will be necessary to associate a valid output translate table (usually apltrans/file) with that stream.
+        </p><p>Example:</p><pre>$ export APLSTATUSFD=9
+$ export APLT9=file
+$ mapl 9&gt;/dev/null</pre><p>More useful may be to redirect the status window output into a file, and in another terminal window run <tt>tail -f</tt> on that file.
+        </p></body>
+</html>

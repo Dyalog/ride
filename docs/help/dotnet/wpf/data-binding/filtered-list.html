@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h4>Example 5</h4><p>WPF data binding provides the means to bind controls that display lists of items, such as the <span class="NetType">ListBox</span>, <span class="NetType">ListView</span>, and <span class="NetType">TreeView</span> controls, to collections of data. These controls are all based upon the <span class="NetType">ItemsControl</span> class. To bind an <span class="NetType">ItemsControl</span> to a collection object, you use its <span class="Member">ItemsSource</span> property.  </p><p>If the right argument of <tt>2015⌶</tt> names a variable, or a namespace containing a variable, that is a vector other than a simple character vector, it returns a Binding Source object that provides the necessary interfaces to bind the variable as a collection to the <span class="Member">ItemSource</span> property of an <span class="NetType">ItemsControl</span>.</p><p>The APL variable will normally contain a vector of character vectors, because most <span class="NetType">ItemsControl</span> objects deal with collections of strings. However, any APL vector other than a simple character vector will be treated in this way.</p><p>This example illustrates binding between a variable containing a vector of character vectors, to the items of a <span class="NetType">ListBox</span>.</p><p>Incidentally, the <span class="Member">ItemsSource</span> property overrides the <span class="Member">Items</span> collection as a means to specify the content of the <span class="NetType">ItemsControl</span>. When the<span class="Member"> ItemsSource</span> property is set, the <span class="Member">Items</span> collection becomes read-only and of fixed-size. Note that the <span class="Member">ItemsSource</span> property supports OneWay binding by default.</p><h4>The XAML</h4><p>The variable <tt>XAML_FilteredList</tt>, shown below, contains XAML to specify a Window containing a <span class="NetType">StackPanel</span>. The <span class="NetType">StackPanel</span> control is a WPF layout control that organises child controls in a single line, by default vertically. In this example, the <span class="NetType">StackPanel</span> contains a <span class="NetType">TextBox</span> and, below it, a <span class="NetType">WrapPanel</span>, and below that a <span class="NetType">TextBlock</span>. The <span class="NetType">WrapPanel</span> is also a layout control that organises its child controls sequentially from left to right. The <span class="NetType">WrapPanel</span> contains two <span class="NetType">ListBox</span> controls.</p><pre class="Code">&lt;Window 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="Filtered List Example"
+    SizeToContent="WidthAndHeight"
+    Topmost="true"&gt;
+    &lt;StackPanel&gt;
+        &lt;TextBox Name="filter" Margin="5"
+         Text="{Binding Filter,Mode=TwoWay,
+                UpdateSourceTrigger=PropertyChanged}"/&gt;
+        &lt;WrapPanel&gt;
+            &lt;ListBox Name="all" Width="135" Height="440"
+             Margin="5" ItemsSource="{Binding DyalogNames}"/&gt;
+            &lt;ListBox Name="filtered" Width="135" Height="440"
+             Margin="5" ItemsSource="{Binding FilteredList}"/&gt;
+        &lt;/WrapPanel&gt;   
+        &lt;TextBlock Text="Dyalog WPF Demo" Margin="5"/&gt;
+    &lt;/StackPanel&gt;
+ &lt;/Window&gt;
+
+</pre><h4 class="ExampleNewPage">The Code</h4><pre>     ∇ FilteredList;MySource;win;sink
+[1]
+[2]    MySource←⎕NS''
+[3]    MySource.Filter←''
+[4]    MySource.FilteredList←0⍴⊂''
+[5]    MySource.DyalogNames←DyalogNames
+[6]
+[7]    win←LoadXAML XAML_FilteredList
+[8]    win.DataContext←2015⌶'MySource'
+[9]    (win.FindName⊂'filter').onTextChanged←
+                              'FilteredList_TextChanged'
+[10]   sink←win.ShowDialog
+     ∇
+</pre><p>Like the previous example, this example uses a namespace <tt>MySource</tt> containing the bound variables <tt>Filter</tt>, <tt>FilteredList</tt> and <tt>DyalogNames</tt>.</p><p><tt>FilteredList[8]</tt> creates a Binding Source object and assigns it to the <span class="Member">DataContext</span> property of the <span class="NetType">Window</span><tt>win</tt>. </p><pre>
+[8]    win.DataContext←2015⌶'MySource'</pre><p>The <span class="Member">DataContext</span> property is inherited by all child controls , so they all share the same Binding Source. Their different <span class="Member">Paths</span> to different values in the Binding Source are specified in the XAML as follows.</p><p>The <span class="Member">Text</span> property of the <span class="NetType">TextBox</span> named <span class="Name">filter</span> is bound to the variable <tt>Filter</tt> by the expression <span class="Code">Text="{Binding Filter,...</span></p><pre class="Code">
+        &lt;TextBox Name="filter" Margin="5"
+         Text="{Binding Filter,Mode=TwoWay,</pre><p>The <span class="Member">ItemsSource</span> property of the <span class="NetType">ListBox</span> named <span class="Name">all</span> is bound to the variable <tt>DyalogNames</tt> by the expression <span class="Code">ItemsSource="{Binding DyalogNames}"</span></p><pre class="Code">
+            &lt;ListBox Name="all" Width="135" Height="440"
+             Margin="5" ItemsSource="{Binding DyalogNames}"/&gt;</pre><p>Thirdly, the <span class="Member">ItemsSource</span> property of the <span class="NetType">ListBox</span> named <span class="Name">filtered</span> is bound to the variable <tt>FilteredList</tt> by the expression <span class="Code">ItemsSource="{Binding FilteredList}"</span></p><pre class="Code">
+            &lt;ListBox Name="filtered" Width="135" Height="440"
+             Margin="5" ItemsSource="{Binding FilteredList}"/&gt;</pre><h4 class="ExampleNewPage">Testing the Data Binding</h4><pre>      FilteredList</pre><p><img src="../../images/data-binding-filteredlist-1.png" /></p><p>If the user types a single character, in this case "e", into the <span class="NetType">TextBox</span>, this fires a <span class="Member">TextChanged</span> event which in turn fires the callback function shown below:</p><pre>     ∇ FilteredList_TextChanged a;hits
+[1]    hits←(⊂MySource.Filter){∨/⍺⍷⍵}¨DyalogNames
+[2]    MySource.FilteredList←hits/DyalogNames
+     ∇
+</pre><p>When the callback runs, the variable <tt>MySource.Filter</tt>, which is bound to the <span class="Member">Text</span> property of the <span class="NetType">TextBox</span>, will contain "e". The function calculates a mask <tt>hits</tt> which identifies which members of the variable <tt>DyalogNames</tt>  contain this string. It then assigns that subset to the variable <tt>MySource.FilteredList</tt>. This is bound to the <span class="Member">ItemsSource</span> property of the right-hand <span class="NetType">ListBox</span>, so the result is as follows:</p><p><img src="../../images/data-binding-filteredlist-2.png" /></p><p>Similarly, typing "er" into the <span class="NetType">TexBox</span> reduces the number of hits as shown below:</p><p><img src="../../images/data-binding-filteredlist-3.png" /></p></body>
+</html>

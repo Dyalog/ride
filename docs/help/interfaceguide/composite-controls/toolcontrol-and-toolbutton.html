@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="ToolControl_ToolButton"></a>The ToolControl and ToolButton Objects</h2><p>The ToolControl object is normally used in conjunction with ToolButtons, although it may also act as a parent for other objects, including a MenuBar.</p><p>A ToolButton may display a Caption and an Image, although both are optional. Images for individual ToolButtons are not defined one-by-one, but instead are defined by an ImageList which contains a set of bitmaps or icons.</p><p>The ImageListObj property of the ToolControl specifies the name of one or more ImageList objects to be used. The ImageIndex properties of each of the ToolButtons specifies which of the images in each ImageList object apply to which of the ToolButtons.</p><h4><a name="Standard_Bitmap_Resources"></a>Standard Bitmap Resources</h4><p>Typically, you will want your ToolControls to provide standard Windows buttons and the easiest way to achieve this is to utilise the standard Windows bitmaps that are contained in COMCTL32.DLL. There are three main sets of bitmaps, each of which is provided in two sizes, small (16x16) and large (24 x 24).</p><p>Resource number 120 (<span class="Code">IDB_STD_SMALL_COLOR</span>) and 121 (<span class="Code">IDB_STD_LARGE_COLOR</span>) contain the following set of assorted bitmap images.</p><p><img src="../images/idb-std-bitrmaps.png" /></p><p>Resource number 124 (<span class="Code">IDB_VIEW_SMALL_COLOR</span>) and 125 (<span class="Code">IDB_VIEW_LARGE_COLOR</span>) contain a set of bitmaps relating to different views of information. These are used, for example in the Windows Explorer tool bar</p><p><img src="../images/idb-view-bitmaps.png" /></p><p>Resource number 130 (IDB_HIST_SMALL_COLOR) and 131 (IDB_HIST_LARGE_COLOR) contain another useful set of bitmaps</p><p><img src="../images/idb-hist-bitmaps.png" /></p><p>COMCTL32.DLL also contains individual bitmaps in resources 132-134.</p><h4><a name="Dyalog_Bitmap_Resources"></a>Dyalog Bitmap Resources</h4><p>Another three sets of useful bitmaps are to be found in the DYARES32.DLL file. These bitmaps are used in the Dyalog APL/W Session tool buttons. Note that if you include these bitmaps in a run-time application, you will have to ship DYARES32.DLL with it.</p><p>The <span class="Italic">normal</span> set of bitmaps associated with the Session buttons may be created using the statement:</p><pre>      'bm'⎕wc'Bitmap' ('DYARES32' 'tb_normal')</pre><p><img src="../images/tb-normal-bitmaps.png" /></p><p>The bitmaps used when the buttons are <span class="Italic">highlighted</span> may be created using the statement (note that the file name may be elided)</p><pre>      'bm'⎕wc'Bitmap' ('' 'tb_hot')</pre><p><img src="../images/tb-hot-bitmaps.png" /></p><p>The bitmaps used when the buttons are <span class="Italic">inactive</span> may be created using the statement  </p><pre>      'bm'⎕wc'Bitmap' ('' 'tb_inactive')</pre><p><img src="../images/tb-inactive-bitmaps.png" /></p><h4><a name="Creating_ImageLists"></a>Creating ImageLists for ToolButtons</h4><p>You may use up to three ImageList objects to represent ToolButton images. These will be used to specify the pictures of the ToolButton objects in their normal, highlighted (sometimes termed hot) and inactive states respectively.</p><p>The set of images in each ImageList is then defined by creating unnamed Bitmap or Icon objects as children.</p><p>When creating an ImageList, it is a good idea to set its MapCols property to 1. This means that standard button colours used in the bitmaps will automatically be adjusted to take the user’s colour preferences into account.</p><p>When you create each ToolButton you specify its ImageIndex property, selecting up to three pictures (normal, highlighted and inactive) to be displayed on the button.</p><p>If you specify only a single ImageList, the picture on the ToolButton will be the same in all three cases. However, the appearance of the buttons themselves change when the button is highlighted or pressed, and in many situations this may be sufficient behaviour.</p><p>The following example illustrates how a simple ToolControl can be constructed using standard Windows bitmaps. Notice that the Masked property of the ImageList is set to 0; this is necessary if the ImageList is to contain bitmaps, as opposed to icons. Secondly, because the bitmaps are in this case size 16 x 16, it is unnecessary to specify the Size property of the ImageList which is, by default, also 16 x 16.</p><pre>'F'⎕WC'Form' 'ToolControl'('Size' 10 40)
+'F.TB'⎕WC'ToolControl'
+'F.TB.IL'⎕WC'ImageList'('Masked' 0) ('MapCols' 1)
+'F.TB.IL.'⎕WC'Bitmap'('ComCtl32' 120)⍝ STD_SMALL
+'F.TB'⎕WS'ImageListObj' 'F.TB.IL'
+'F.TB.B1'⎕WC'ToolButton' 'New'('ImageIndex' 7)
+'F.TB.B2'⎕WC'ToolButton' 'Open'('ImageIndex' 8)
+'F.TB.B3'⎕WC'ToolButton' 'Save'('ImageIndex' 9)</pre><p><img src="../images/toolcontrol-style-flatbuttons.png" /></p><h4><a name="Style_Property"></a>The Style Property</h4><p>The overall appearance of the ToolButton objects displayed by the ToolControl is defined by the Style property of the ToolControl itself, rather than by properties of individual ToolButtons.<span class="MCTextPopup"><span class="MCTextPopupBody_0" style="display: none; ">The appearance of the ToolControl is also heavily dependent upon whether or not Native Look and Feel is enabled. The screen-shots in this manual were all taken using Windows XP with Native Look and Feel disabled.. See User Guide for details.</span><a href="javascript:void(0);" class="MCTextPopupSpot_0" onclick="FMCTextPopup( event, this ); return false;" style="font-size: 0.9em; vertical-align: super">1</a></span></p><p>Note that the Style property may only be set when the ToolControl is created using <tt>⎕WC</tt> and may not subsequently be changed using <tt>⎕WS</tt>.</p><p>Style may be <tt>'FlatButtons'</tt>, <tt>'Buttons'</tt>, <tt>'List'</tt> or <tt>'FlatList'</tt>. The default Style is of a ToolControl is <tt>'FlatButtons'</tt>, as is the first example above. The following examples illustrate the other three styles:</p><p><img src="../images/toolcontrol-style-buttons.png" /></p><p><img src="../images/toolcontrol-style-list.png" /></p><p><img src="../images/toolcontrol-style-flatlist.png" /></p><h4><a name="Divider_Property"></a>The Divider Property</h4><p>You will notice that, in the above examples, there is a thin groove drawn above the ToolControl. The presence or absence of this groove is controlled by the Divider property whose default is 1. The following picture illustrates the effect of setting Divider to 0.</p><p><img src="../images/toolcontrol-no-divider.png" /></p><h4><a name="MultiLine_Property"></a>The MultiLine Property</h4><p>The MultiLine property specifies whether or not ToolButtons (and other child controls) are arranged in several rows (or columns) when there are more than would otherwise fit. </p><p>If MultiLine is 0 (the default), the ToolControl object <span class="Italic">clips</span> its children and the user must resize the Form to bring more objects into view.</p><p>Note that you may change MultiLine dynamically, using <tt>⎕WS</tt>.</p><pre>'F'⎕WC'Form' 'ToolControl: MultiLine 0'
+'F.TB'⎕WC'ToolControl'('Style' 'List')
+ 
+'F.TB.IL'⎕WC'ImageList'('Masked' 0)('Size' 24 24)
+'F.TB.IL.'⎕WC'Bitmap'('ComCtl32' 121)⍝ STD_LARGE
+'F.TB'⎕WS'ImageListObj' 'F.TB.IL'
+ 
+'F.TB.B1'⎕WC'ToolButton' 'Cut'('ImageIndex' 1)
+'F.TB.B2'⎕WC'ToolButton' 'Copy'('ImageIndex' 2)
+'F.TB.B3'⎕WC'ToolButton' 'Paste'('ImageIndex' 3)
+'F.TB.B4'⎕WC'ToolButton' 'Undo'('ImageIndex' 4)
+'F.TB.B5'⎕WC'ToolButton' 'Redo'('ImageIndex' 5)
+'F.TB.B6'⎕WC'ToolButton' 'Delete'('ImageIndex' 6)</pre><p><img src="../images/toolcontrol-multiline-0.png" /></p><p>If we set MultiLine to 1, the ToolButtons are instead displayed in several rows:</p><p><img src="../images/toolcontrol-multiline-1.png" /></p><h4><a name="Transparent_property"></a>The Transparent Property</h4><p>The Transparent property (default 0) specifies whether or not the ToolControl is transparent. Note that Transparent must be set when the object is created using <tt>⎕WC</tt> and may not subsequently be changed using <tt>⎕WS</tt>.</p><p>If a ToolControl is created with Transparent set to 1, the visual effect is as if the ToolButtons (and other controls) were drawn directly on the parent Form as shown below.</p><pre>'F'⎕WC'Form' 'ToolControl: Transparent 1)'
+ROOT←'C:\Program Files\Dyalog\Dyalog APL 13.1 Unicode\'
+'F.BM'⎕WC'Bitmap'(ROOT,'\WS\BUBBLES')
+'F'⎕WS'Picture' 'F.BM' 1
+
+'F.TB'⎕WC'ToolControl'('Style' 'Buttons')('Transparent'1)
+'F.TB.IL'⎕WC'ImageList'('Masked' 0)('Size' 24 24)
+'F.TB.IL.'⎕WC'Bitmap'('ComCtl32' 121)⍝ STD_LARGE
+'F.TB'⎕WS'ImageListObj' 'F.TB.IL'
+
+'F.TB.B1'⎕WC'ToolButton' 'New'('ImageIndex' 7)
+'F.TB.B2'⎕WC'ToolButton' 'Open'('ImageIndex' 8)
+'F.TB.B3'⎕WC'ToolButton' 'Save'('ImageIndex' 9)</pre><p><img src="../images/toolcontrol-transparent.png" /></p><h4><a name="_Toc289343877"></a>Radio buttons, Check buttons and Separators</h4><p>The Style property of a ToolButton may be <tt>'Push'</tt>, <tt>'Check'</tt>, <tt>'Radio'</tt>, <tt>'Separator'</tt> or <tt>'DropDown'</tt>.</p><p><span class="Italic">Push</span> buttons (the default) are used to generate actions and pop in and out when clicked.</p><p><span class="Italic">Radio</span> and <span class="Italic">Check</span> buttons are used to select options and have two states, normal (out) and selected (in). Their State property is 0 when the button is in its normal (unselected state) or 1 when it is selected.</p><p>A group of adjacent ToolButtons with Style <tt>'Radio'</tt> defines a set in which only one of the ToolButtons may be selected at any one time. The act of selecting one will automatically deselect any other. Note that a group of Radio buttons must be separated from Check buttons or other groups of Radio buttons by ToolButtons of another Style.</p><p>Separator buttons are a special case as they have no Caption or picture, but appear as a thin vertical grooves that are used only to separate groups of buttons.</p><p>The following example illustrates how two groups of radio buttons are established by inserting a ToolButton with Style <tt>'Separator'</tt> between them. This ToolControl could be used to control the appearance of a ListView object. The first group is used to select the view (Large Icon, Small Icon, List or Report), and the second is used to sort the items by Name, Size or Date. In the picture, the user has selected Small Icon View and Sort by Date.</p><pre class="APLCodeSmall">'F'⎕WC'Form' 'ToolControl: Radio Buttons'
+'F.TB'⎕WC'ToolControl'
+
+'F.TB.IL'⎕WC'ImageList'('Masked' 0)
+'F.TB.IL.'⎕WC'Bitmap'('ComCtl32' 124)⍝ VIEW_SMALL
+'F.TB'⎕WS'ImageListObj' 'F.TB.IL'
+
+'F.TB.B1'⎕WC'ToolButton' 'Large'('ImageIndex' 1)('Style' 'Radio')
+'F.TB.B2'⎕WC'ToolButton' 'Small'('ImageIndex' 2)('Style' 'Radio')
+'F.TB.B3'⎕WC'ToolButton' 'List'('ImageIndex' 3)('Style' 'Radio')
+'F.TB.B4'⎕WC'ToolButton' 'Details'('ImageIndex' 4)('Style' 'Radio')
+
+'F.TB.S1'⎕WC'ToolButton'('Style' 'Separator')
+
+'F.TB.B5'⎕WC'ToolButton' 'Name'('ImageIndex' 5)('Style' 'Radio')
+'F.TB.B6'⎕WC'ToolButton' 'Size'('ImageIndex' 6)('Style' 'Radio')
+'F.TB.B7'⎕WC'ToolButton' 'Date'('ImageIndex' 7)('Style' 'Radio')</pre><p><img src="../images/toolcontrol-radio-buttons.png" /></p><p>Notice that the appearance of the Separator ToolButton is less obvious when the ToolControl Style is Buttons or List, but the radio grouping effect is the same:</p><p><img src="../images/toolcontrol-list-radio-buttons.png" /></p><h4><a name="DropDown_Buttons"></a>Drop-Down buttons</h4><p>It is possible to define ToolButtons that display a drop-down menu from which the user may choose an option. This is done by creating a ToolButton with Style <tt>'DropDown'</tt>.</p><p>A ToolButton with Style <tt>'DropDown'</tt> has an associated popup Menu object which is named by its Popup property. There are two cases to consider.</p><p>If the ShowDropDown property of the parent ToolControl is 0, clicking the ToolButton causes the popup menu to appear. In this case, the ToolButton itself does not itself generate a Select event; you must rely on the user selecting a MenuItem to specify a particular action.</p><p>If the ShowDropDown property of the parent ToolControl is 1, clicking the dropdown button causes the popup menu to appear; clicking the ToolButton itself generates a Select event, but does not display the popup menu.</p><p class="pagebreakafter"> </p><pre class="APLCodeSmall">'F'⎕WC'Form' 'ToolControl: Dropdown Buttons'
+'F.TB'⎕WC'ToolControl'('ShowDropDown' 1)
+
+:With 'F.FMENU'⎕WC'Menu' ⍝ Popup File menu
+    'NEW'⎕WC'MenuItem' '&amp;New'
+    'OPEN'⎕WC'MenuItem' '&amp;Open'
+    'CLOSE'⎕WC'MenuItem' '&amp;Close'
+:EndWith
+
+:With 'F.EMENU'⎕WC'Menu' ⍝ Popup Edit menu
+    'CUT'⎕WC'MenuItem' 'Cu&amp;t'
+    'COPY'⎕WC'MenuItem' '&amp;Copy'
+    'PASTE'⎕WC'MenuItem' '&amp;Paste'
+ :EndWith
+
+'F.TB.B1'⎕WC'ToolButton' 'File'('Style' 'DropDown')('Popup' 'F.FMENU')
+'F.TB.B2'⎕WC'ToolButton' 'Edit'('Style' 'DropDown')('Popup' 'F.EMENU')
+</pre><p><img src="../images/toolcontrol-dropdown-buttons.png" /></p><h4><a name="MenuBar_Child"></a>A MenuBar as the child of a ToolControl</h4><p>As a special case, the ToolControl may contain a MenuBar as its <b>only</b> child. In this case, Dyalog APL/W causes the menu items to be drawn as buttons, even under Windows 95.</p><p>Although nothing is done to prevent it, the use of other objects in a ToolControl containing a MenuBar, is not supported.</p><p class="pagebreakafter"> </p><pre>'F'⎕WC'Form' 'ToolControl with MenuBar'
+'F.TB'⎕WC'ToolControl' 
+ 
+:With 'F.TB.MB'⎕WC'MenuBar' 
+    :With 'File'⎕WC'Menu' 'File' 
+        'New'⎕WC'MenuItem' 'New' 
+        'Open'⎕WC'MenuItem' 'Open' 
+        'Close'⎕WC'MenuItem' 'Close' 
+    :EndWith 
+ 
+    :With 'Edit'⎕WC'Menu' 'Edit'
+        'Cut'⎕WC'MenuItem' 'Cut'
+        'Copy'⎕WC'MenuItem' 'Copy' 
+        'Paste'⎕WC'MenuItem' 'Paste' 
+    :EndWith 
+ 
+:EndWith</pre><p><img src="../images/toolcontrol-menubar.png" /></p><h4><a name="User_Customisation"></a>Providing User Customisation</h4><p>It is common to allow the user to switch the appearance of a ToolControl dynamically. This may be done using a pop-up menu. In addition to providing a choice of styles, the user may switch the text captions on and off.</p><p>The ShowCaptions property specifies whether or not the captions of ToolButton objects are drawn. Its default value is 1 (draw captions).</p><p>ToolButtons drawn without captions occupy much less space and ShowCaptions provides a quick way to turn captions on/off for user customisation.</p><p><img src="../images/toolcontrol-user-options.png" /></p><p>The following functions illustrate how this was achieved.</p><pre>     ∇ Example
+[1]    'F'⎕WC'Form' 'ToolControl: User Options'
+[2]    'F.TB'⎕WC'ToolControl'
+[3]    'F.TB'⎕WS'Event' 'MouseDown' 'TC_POPUP'
+[4]
+[5]    'F.TB.IL'⎕WC'ImageList'('Masked' 0)('Size' 24 24)
+[6]    'F.TB.IL.'⎕WC'Bitmap'('ComCtl32' 121)⍝ STD_LARGE
+[7]    'F.TB'⎕WS'ImageListObj' 'F.TB.IL'
+[8]
+[9]    'F.TB.B1'⎕WC'ToolButton' 'Cut'('ImageIndex' 1)
+[10]   'F.TB.B2'⎕WC'ToolButton' 'Copy'('ImageIndex' 2)
+[11]   'F.TB.B3'⎕WC'ToolButton' 'Paste'('ImageIndex' 3)
+[12]   'F.TB.B4'⎕WC'ToolButton' 'Undo'('ImageIndex' 4)
+[13]   'F.TB.B5'⎕WC'ToolButton' 'Redo'('ImageIndex' 5)
+[14]   'F.TB.B6'⎕WC'ToolButton' 'Delete'('ImageIndex' 6)
+     ∇</pre><p class="pagebreakafter"> </p><pre>
+     ∇ TC_POPUP MSG;popup;TC;STYLE;SHOW;MULTI;OPTION
+[1]    ⍝ Popup menu on ToolControl
+[2]    :If (2≠5⊃MSG) ⍝ Right mouse button ?
+[3]        :Return
+[4]    :EndIf
+[5]
+[6]    TC←'#.',⊃MSG
+[7]    STYLE SHOW MULTI←TC ⎕WG'Style' 'ShowCaptions'
+                              'MultiLine'
+[8]
+[9]    :With 'popup'⎕WC'Menu'
+[10]       'FlatButtons'⎕WC'MenuItem' '&amp;Flat Buttons'
+                          ('Style' 'Radio')
+[11]       'Buttons'⎕WC'MenuItem' '&amp;Buttons'
+                          ('Style' 'Radio')
+[12]       'List'⎕WC'MenuItem' '&amp;List'('Style' 'Radio')
+[13]       'FlatList'⎕WC'MenuItem' 'Fla&amp;t List'
+                          ('Style' 'Radio')
+[14]       STYLE ⎕WS'Checked' 1
+[15]       'sep'⎕WC'Separator'
+[16]       'ShowCaptions'⎕WC'MenuItem' '&amp;Show Text'
+                           ('Checked'SHOW)
+[17]       'MultiLine'⎕WC'MenuItem' '&amp;MultiLine'
+                           ('Checked'MULTI)
+[18]
+[19]       ('MenuItem'⎕WN'')⎕WS¨⊂'Event' 'Select' 1
+[20]
+[21]       :If 0=⍴MSG←⎕DQ''
+[22]           :Return
+[23]       :EndIf
+[24]
+[25]       :Select OPTION←⊃MSG
+[26]       :CaseList 'FlatButtons' 'Buttons' 'List'
+                     'FlatList'
+[27]           TC ⎕WS'Style'OPTION
+[28]       :Else
+[29]           TC ⎕WS OPTION(~TC ⎕WG OPTION)
+[30]       :EndSelect
+[31]
+[32]   :EndWith
+     ∇</pre></body>
+</html>

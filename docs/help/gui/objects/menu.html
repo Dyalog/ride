@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Object</tt>Menu</h2><table class="GUIMembers"><tr><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Parents</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Children</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Properties</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Methods</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Events</a></span></td></tr></table><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Purpose:</td><td class="SpacedPlain">This is a pop-up object which allows the user to initiate an action or
+        to select an option using a "menu".</td></tr></table><p class="Bold">Description</p><p>For a Menu that is owned by a <a href="menubar.html">MenuBar</a> or
+another Menu, the <a href="../props/caption.html">Caption</a> property
+determines the text string that is displayed as the "choice". The Menu
+is then popped up by the user clicking on this text. It is automatically popped
+down when the user chooses an option (by selecting a <a href="menuitem.html">MenuItem</a>)
+or cancels the operation (by clicking elsewhere).</p><p>If a Menu belongs to a <a href="form.html">Form</a>, <a href="subform.html">SubForm</a> or is a top-level object, it must be popped up by the application. This is
+commonly done in response to a <a href="../methodorevents/mousedown.html">MouseDown</a> event. A Menu is popped-up by calling <a href="../../lang/sysfns/dq.html"><tt>⎕DQ</tt></a> with only the name of the Menu as its argument. The user may therefore not
+interact with any other object until a selection is made or until the operation
+is cancelled. When either occurs, the Menu is automatically popped down and
+de-activated, and its <a href="../../lang/sysfns/dq.html"><tt>⎕DQ</tt></a> terminates.</p><p>The Menu object does not have a <a href="../props/size.html">Size</a> property. Instead, its size is determined automatically by its contents.</p><p>If a Menu is owned by a <a href="menubar.html">MenuBar</a> or by
+another Menu, its position within its parent is also calculated automatically,
+dependent on the order in which other related objects are established. The <a href="../props/posn.html">Posn</a> property may however be used to <b>insert</b> a new Menu into an existing
+structure. For example, having defined three Menu objects as children of a <a href="menubar.html">MenuBar</a>,
+you can insert a fourth one between the first and the second by specifying its <a href="../props/posn.html">Posn</a> to be 2. Note that the value of <a href="../props/posn.html">Posn</a> for the
+Menus that were previously second and third will then be reset to 3 and 4
+respectively.</p><p>If a Menu is a child of a <a href="menubar.html">MenuBar</a> which is
+itself a child of a <a href="form.html">Form</a> or <a href="subform.html">SubForm</a>,
+the Align property can be set to <tt>'Right'</tt>.
+This is used to position a single Menu (or <a href="menuitem.html">MenuItem</a>)
+at the rightmost end of a <a href="menubar.html">MenuBar</a>. This does
+not apply if the <a href="menubar.html">MenuBar</a> is owned by a <a href="toolcontrol.html">ToolControl</a>.</p><p>The <a href="../props/btnpix.html">BtnPix</a> property is used to display a
+picture in a Menu. <a href="../props/btnpix.html">BtnPix</a> specifies the
+names of, or refs to, three <a href="bitmap.html">Bitmap</a> objects.
+The first <a href="bitmap.html">Bitmap</a> is displayed when the Menu
+does not have the focus (normal), the second when it does have the focus
+(highlighted). The third <a href="bitmap.html">Bitmap</a> is displayed
+when the Menu is made inactive (<a href="../props/active.html">Active</a> property is 0). If <a href="../props/caption.html">Caption</a> is also defined,
+it is displayed <b>on top of</b> the bitmaps.</p><p>If the Menu is a submenu (owned by a Menu), you may set its <a href="../props/edgestyle.html">EdgeStyle</a> property to <tt>'Plinth'</tt>. This causes the Menu
+to take on an appearance that is similar to a pushbutton and be raised when not
+selected and recessed when selected. Note that to enable 3-dimensional
+appearance, you must set <a href="../props/edgestyle.html">EdgeStyle</a> to
+something other than <tt>'None'</tt> for all the
+objects above the Menu in the tree.</p><p><a href="../props/edgestyle.html">EdgeStyle</a>, <a href="../props/btnpix.html">BtnPix</a>,
+<a href="font.html">Font</a>, <a href="../props/fcol.html">FCol</a> and
+<a href="../props/bcol.html">BCol</a> do not affect the appearance of a Menu if
+it is the direct child of a <a href="menubar.html">MenuBar</a>. However,
+the <a href="../props/edgestyle.html">EdgeStyle</a> property <b>must</b> be set
+to something other than <tt>'None'</tt> if you want
+its children Menu and <a href="menuitem.html">MenuItem</a> objects to
+have a 3-dimensional appearance.</p></body>
+</html>

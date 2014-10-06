@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../../help.css"></head>
+<body><h3><a name="SharedFields"></a>Shared Fields</h3><p>If a Field is declared to be <span class="Italic">Shared</span>, it has the same value for every Instance of the Class. Moreover, the Field may be accessed from the Class itself; an Instance is not required.</p><p>The following example establishes a Shared Field called <tt>Months</tt> that contains abbreviated month names which are appropriate for the user's current International settings. It also shows that an arbitrarily complex statement may be used to initialise a Field.</p><pre>:Class Example
+    :Using System.Globalization
+    :Field Public Shared ReadOnly Months←12↑(⎕NEW DateTimeFormatInfo).AbbreviatedMonthNames
+:EndClass ⍝ Example</pre><p>A Shared Field is not only accessible from an instance...</p><pre>      EG←⎕NEW Example
+      EG.Months
+ Jan  Feb  Mar  Apr  May  Jun  Jul  Aug  Sep  Oct  Nov...</pre><p>... but also, directly from the Class itself.</p><pre>      Example.Months
+Jan  Feb  Mar  Apr  May  Jun  Jul  Aug  Sep  Oct  Nov...</pre><p>Notice that in this case it is necessary to insert a <tt>:Using</tt> statement (or the equivalent assignment to <tt>⎕USING</tt>) in order to specify the .Net search path for the DateTimeFormatInfo type. Without this, the Class would fail to fix.</p><p>You can see how the assignment works by executing the same statements in the Session:</p><pre>      ⎕USING←'System.Globalization'
+    12↑(⎕NEW DateTimeFormatInfo).AbbreviatedMonthNames
+ Jan  Feb  Mar  Apr  May  Jun  Jul  Aug  Sep  Oct  Nov...</pre></body>
+</html>

@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>:With obj</tt>With Statement</h2><p><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Formal Definition</a></span></p><p><tt>:With</tt> is a control structure that may be used to simplify a series of references to an object or namespace. <tt>:With</tt> changes into the specified namespace for the duration of the control structure, and is terminated by <tt>:End[With]</tt>. For example, you could update several properties of a Grid object <tt>F.G</tt> as follows:</p><pre>       :With F.G
+            Values←4 3⍴0
+            RowTitles←'North' 'South' 'East' 'West'
+            ColTitles←'Cakes' 'Buns' 'Biscuits'
+       :EndWith</pre><p><tt>:With</tt> is analogous to <tt>⎕CS</tt> in  the following senses:</p><ul><li value="1">The namespace argument to <tt>:With</tt> is interpreted relative to the current space.</li><li value="2">With the exception of those with name class  9, local names in the containing defined function continue to be visible in the new space.</li><li value="3">Global references from within the <tt>:With</tt> control structure are to names in the new space. </li><li value="4">Exiting the defined function from within a <tt>:With</tt> control structure causes the space to revert to the one from which the function was called.</li></ul><p>On leaving the <tt>:With</tt> control structure, execution reverts to the original namespace. Notice however that the interpreter does not detect branches <tt>(→)</tt> out of the control structure. <tt>:With</tt> control structures can be nested in the normal fashion:</p><pre>[1]   :With 'x'           ⍝ Change to #.x
+[2]       :With 'y'       ⍝ Change to #.x.y
+[3]           :With ⎕SE   ⍝ Change to ⎕SE
+[4]               ...     ⍝ ... in ⎕SE
+[5]           :EndWith    ⍝ Back to #.x.y
+[6]       :EndWith        ⍝ Back to #.x
+[7]   :EndWith            ⍝ Back to #
+
+</pre></body>
+</html>

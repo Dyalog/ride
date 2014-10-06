@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Property</tt>Style</h2><p class="Bold"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Applies To</a></span></p><p class="Bold">Description</p><p>This property determines a particular style of object within the general
+category of <a href="type.html">Type</a>. It is a character vector
+whose value depends upon the type of object.</p><p>For a <a href="../objects/button.html">Button</a>, Style may be <tt>'Push'</tt>,
+<tt>'Radio'</tt>, <tt>'Check'</tt>, <tt>'Toggle'</tt>, <tt>'CommandLink'</tt> or <tt>'Split'</tt>.</p><p><tt>'Push'</tt> specifies that the button
+appears and behaves like a pushbutton (sometimes also called a command button).</p><p><tt>'Radio'</tt> means that the button is
+displayed as a small circle accompanied by a description. When the button is
+selected, the circle is filled in. In a group of buttons with Style <tt>'Radio'</tt>that share the same parent, only one of them may be selected. This style of
+button is generally known as a "radio-button" or an "option
+button".</p><p><tt>'Check'</tt> or <tt>'Toggle'</tt>means that the button is
+displayed as a small box accompanied by a description. When the button is
+selected a cross appears in the box. This style of button is known as a
+"check-box".</p><p><tt>'CommandLink'</tt>means that the button has an icon displayed to the left of its <a href="caption.html">Caption</a>. the appearance of which is controlled by the  <a href="elevated.html">Elevated</a> property. Note that this feature only applies if <span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Native Look and Feel </a></span><a href="../misc/windows-xp-look-and-feel.html#Native_Look_and_Feel" class="MCXref_SeePageNumber_0"></a> is enabled.</p><p><tt>'Split'</tt> specifies a <tt>'Push'</tt> button with an additional drop-down button, similar to that provided by a <a href="../objects/combo.html">Combo</a> object. Note that this feature only applies if <span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Native Look and Feel </a></span><a href="../misc/windows-xp-look-and-feel.html#Native_Look_and_Feel" class="MCXref_SeePageNumber_0"></a> is enabled.</p><p>For a <a href="../objects/calendar.html">Calendar</a> object, The Style property
+may be either <tt>'Single'</tt> (the default) or <tt>'Multi'</tt>.
+If Style is <tt>'Single'</tt>, the user may select
+a single date. If Style is <tt>'Multi</tt>', the
+user may select a contiguous range of dates.</p><p>For a <a href="../objects/combo.html">Combo</a> or <a href="../objects/comboex.html">ComboEx</a> object, Style may be <tt>'Simple'</tt><tt>'DropEdit'</tt>or <tt>'Drop'</tt> (the default). <tt>'Simple'</tt>specifies a simple combo box in which the associated list box is displayed at
+all times. The other two styles provide list boxes which "drop down"
+when the user clicks on a symbol displayed to the right of the <a href="../objects/combo.html">Combo</a>'s
+edit field. A <tt>'DropEdit'</tt> Style allows the
+user to type (anything) in the edit field. </p><p>A <tt>'Drop'</tt>Style does not and forces the contents of the edit field to be either empty or
+one of the choices specified by <a href="items.html">Items</a>.</p><p>For a <a href="../objects/datetimepicker.html">DateTimePicker</a>, Style may be
+either <tt>'Combo'</tt> (the default) or <tt>'UpDown'</tt>.</p><p>For an <a href="../objects/edit.html">Edit</a> object, Style may be <tt>'Single'</tt>or <tt>'Multi'</tt>. If Style is <tt>'Single'</tt>the object displays only a single line of text and the user may not enter any
+more lines. If the Style is <tt>'Multi'</tt> the
+number of lines displayed is governed by the <a href="rows.html">Rows</a> or <a href="size.html">Size</a> property and the user may insert, add
+or delete lines as desired.</p><p>For <a href="../objects/filebox.html">FileBox</a>, <a href="../objects/list.html">List</a>,
+and <a href="../objects/listview.html">ListView</a> objects, Style may be <tt>'Single'</tt>or <tt>'Multi'</tt>. If the Style is <tt>'Single'</tt>only one file or item can be selected. If Style is <tt>'Multi'</tt>,
+several files or items can be selected.</p><p>For an <a href="../objects/icon.html">Icon</a>, Style may be <tt>'Large'</tt>(the default) or <tt>'Small'</tt> and specifies the
+size of the icon (32x32 or 16x16) to be loaded from a file.</p><p>For a <a href="../objects/locator.html">Locator</a>, Style may be <tt>'Point'</tt>,
+<tt>'Rect'</tt> (the default), <tt>'Line'</tt>or <tt>'Ellipse'</tt>. It specifies the shape that
+is drawn as the user moves the mouse.</p><p>For a <a href="../objects/menuitem.html">MenuItem</a>, Style may be <tt>'Check'</tt>(the default) or <tt>'Radio'</tt>. The latter
+specifies that within a contiguous block of such MenuItems, only one may have <a href="checked.html">Checked</a> set to 1. Setting <a href="checked.html">Checked</a> to 1 on any item
+in that group automatically sets <a href="checked.html">Checked</a> to
+0 on the others. A radio style <a href="../objects/menuitem.html">MenuItem</a> that
+is checked has a small radio dot drawn to the left of its Caption.</p><p>For a <a href="../objects/msgbox.html">MsgBox</a>, the Style property determines
+the type of icon which is displayed in it. This is a character vector with one
+of the following values :</p><table><tr><td><tt>'Msg'</tt></td><td>no icon (the default)</td></tr><tr><td><tt>'Info'</tt></td><td>information message icon</td></tr><tr><td><tt>'Query'</tt></td><td>query (question) icon</td></tr><tr><td><tt>'Warn'</tt></td><td>warning icon</td></tr><tr><td><tt>'Error'</tt></td><td>critical error icon</td></tr></table><p>For a <a href="../objects/static.html">Static</a> object, Style defines its
+appearance, and may be one of:</p><table><tr><td><tt>'BlackFrame'</tt></td><td><tt>  'BlackBox'</tt></td></tr><tr><td><tt>'GreyFrame' or 'GrayFrame'</tt></td><td><tt>'GreyBox' or 'GrayBox'</tt></td></tr><tr><td><tt>'WhiteFrame'</tt></td><td><tt>'WhiteBox'</tt></td></tr></table><p>A <a href="../objects/statusfield.html">StatusField</a> may be used to monitor
+the state of a key on the keyboard. If so, its Style property determines the key
+it monitors and may be one of the following:</p><table><tr><td>CapsLock   </td><td>Monitors state of Caps Lock key</td></tr><tr><td>ScrollLock   </td><td>Monitors state of Scroll Lock key</td></tr><tr><td>NumLock   </td><td>Monitors state of Num Lock key</td></tr><tr><td>KeyMode   </td><td>Monitors the keyboard mode (APL/ASCII)</td></tr><tr><td>InsRep   </td><td>Monitors the state of the Insert key</td></tr></table><p>For a <a href="../objects/splitter.html">Splitter</a>, the Style property
+specifies the orientation of the <a href="../objects/splitter.html">Splitter</a> and may be <tt>'Vert'</tt> (the default) or <tt>'Horz'</tt>
+.</p><p>For a <a href="../objects/tabcontrol.html">TabControl</a>, the Style property
+determines the appearance of its <a href="../objects/tabbutton.html">TabButton</a> children, and may be <tt>'Tabs'</tt> (the default),
+<tt>'Buttons'</tt> or <tt>'FlatButtons'</tt>.</p><p>For a<a href="../objects/tcpsocket.html">TCPSocket</a>, Style is a character
+vector that specifies the type of data transmitted or received by the socket; it
+may be <tt>'Char'</tt>, <tt>'Raw'</tt>,
+or <tt>'APL'</tt>. The value APL is valid only if
+the <a href="sockettype.html">SocketType</a> is '<tt>Stream'</tt>.</p><p>For a <a href="../objects/toolbutton.html">ToolButton</a>, the Style property
+specifies the behaviour of the button and may be <tt>'Push'</tt>(the default), <tt>'Check'</tt>, <tt>'Radio'</tt>,
+<tt>'DropDown'</tt>, or <tt>'Separator'</tt>.</p><p>For a <a href="../objects/toolcontrol.html">ToolControl</a>, the Style property
+determines the appearance of its <a href="../objects/toolbutton.html">ToolButton</a> children and may be <tt>'Buttons'</tt>, <tt>'FlatButtons'
+</tt>(the default), <tt>'List'</tt> or <tt>'FlatList'</tt>.</p><p>For a <a href="../objects/trackbar.html">TrackBar</a>, the Style property
+determines the appearance and behaviour of the TrackBar and may be <tt>'Standard'</tt>(the default) or <tt>'Selection'</tt>.</p></body>
+</html>

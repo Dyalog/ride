@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←f\[K]Y</tt>Scan</h2><p><tt>f</tt> may be any dyadic function that returns a result.  <tt>Y</tt> may be any array whose items in the sub-arrays along the <tt>K</tt>th axis are appropriate to the function <tt>f</tt>.</p><p>The axis specification is optional.  If present, <tt>K</tt> must identify an axis of <tt>Y</tt>.  If absent, the last axis of <tt>Y</tt> is implied.  The form <tt>R←f⍀Y</tt> implies the first axis of <tt>Y</tt>.</p><p><tt>R</tt> is an array formed by successive reductions along the <tt>K</tt>th axis of <tt>Y</tt>.  If <tt>V</tt> is a typical vector taken from the <tt>K</tt>th axis of <tt>Y</tt>, then the <tt>I</tt>th element of the result is determined as <tt>f/I↑V</tt>.</p><p>The shape of <tt>R</tt> is the same as the shape of <tt>Y</tt>.  If <tt>Y</tt> is an empty array, then <tt>R</tt> is the same empty array.</p><h4>Examples</h4><pre>      ∨\0 0 1 0 0 1 0
+0 0 1 1 1 1 1
+ 
+      ^\1 1 1 0 1 1 1
+1 1 1 0 0 0 0
+ 
+      +\1 2 3 4 5
+1 3 6 10 15
+ 
+      +\(1 2 3)(4 5 6)(7 8 9)
+ 1 2 3  5 7 9  12 15 18</pre><p class="pagebreakafter"> </p><pre>
+      M
+1 2 3
+4 5 6
+ 
+      +\M
+1 3  6
+4 9 15
+ 
+      +⍀M
+1 2 3
+5 7 9
+ 
+      +\[1]M
+1 2 3
+5 7 9
+ 
+      ,\'ABC'
+A AB  ABC
+ 
+      T←'ONE(TWO) BOOK(S)'
+ 
+      ≠\T∊'()'
+0 0 0 1 1 1 1 0 0 0 0 0 0 1 1 0
+ 
+      ((T∊'()')⍱≠\T∊'()')/T
+ONE BOOK
+ </pre></body>
+</html>

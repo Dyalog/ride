@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←{X}⌷Y</tt>Index</h2><h4>Dyadic case</h4><p><tt>X</tt> must be a scalar or vector of depth <tt>≤2</tt> of integers each <tt>≥⎕IO</tt>. <tt>Y</tt> may be any array. In general, the result <tt>R</tt> is similar to that obtained by square-bracket indexing in that:</p><pre>      (I J ... ⌷ Y) ≡ Y[I;J;...]</pre><p>The length of left argument <tt>X</tt> must be less than or equal to the rank of right argument <tt>Y</tt>. Any missing trailing items of <tt>X</tt> default to the index vector of the corresponding axis of <tt>Y</tt>.</p><p>Note that in common with square-bracket indexing, items of the left argument <tt>X</tt> may be of any rank and that the shape of the result is the concatenation of the shapes of the items of the left argument:</p><pre>      (⍴X⌷Y) ≡ ↑,/⍴¨X</pre><p>Index is sometimes referred to as <span class="Italic">squad indexing</span>.</p><p>Note that index may be used with selective specification.</p><p><tt>⎕IO</tt> is an implicit argument of index.</p><h4>Examples</h4><pre>      ⎕IO←1
+ 
+      VEC←111 222 333 444
+      3⌷VEC
+333
+      (⊂4 3)⌷VEC
+444 333
+      (⊂2 3⍴3 1 4 1 2 3)⌷VEC
+333 111 444
+111 222 333
+ 
+      ⎕←MAT←10⊥¨⍳3 4
+11 12 13 14
+21 22 23 24
+31 32 33 34
+ 
+      2 1⌷MAT
+21
+      2⌷MAT
+21 22 23 24
+ 
+      3(2 1)⌷MAT
+32 31
+      (2 3)1⌷MAT
+21 31
+      (2 3)(,1)⌷MAT
+21
+31
+      ⍴(2 1⍴1)(3 4⍴2)⌷MAT
+2 1 3 4
+      ⍴⍬ ⍬⌷MAT
+0 0
+      (3(2 1)⌷MAT)←0 ⋄ MAT    ⍝ Selective assignment.
+11 12 13 14
+21 22 23 24
+ 0  0 33 34</pre><h4>Monadic case</h4><p>If <tt>Y</tt> is an array, <tt>Y</tt> is returned.</p><p>If <tt>Y</tt> is a ref to an instance of a Class with a Default property, all elements of the Default property are returned. For example, if <tt>Item</tt> is the default property of <tt>MyClass</tt>, and <tt>imc</tt> is an Instance of <tt>MyClass</tt>, then by definition:</p><pre>      imc.Item≡⌷imc</pre><p><tt>NONCE ERROR</tt> is reported if the Default Property is Keyed, because in this case APL has no way to determine the list of all the elements.</p><p>Note that the <span class="Italic">values</span> of the index set are obtained or assigned by calls to the corresponding PropertyGet and PropertySet functions. Furthermore, if there is a sequence of primitive functions to the left of the Index function, that operate on the index set itself (functions such as dyadic <tt>⍴,↑,↓,⊃</tt>) as opposed to functions that operate on the <span class="Italic">values</span> of the index set (functions such as <tt>+,⌈,⌊,⍴¨</tt>), calls to the PropertyGet and PropertySet functions are deferred until the required index set has been completely determined. The full set of functions that cause deferral of calls to the PropertyGet and PropertySet functions is the same as the set of functions that applies to selective specification.</p><p>If for example, <tt>CompFile</tt> is an Instance of a Class with a Default Numbered Property, the expression:</p><pre>       1↑⌽⌷CompFile</pre><p>would only call the PropertyGet function (for <tt>CompFile</tt>) once, to get the value of the last element.</p><p>Note that similarly, the expression </p><pre>      10000⍴⌷CompFile</pre><p>would call the PropertyGet function 10000 times, on repeated indices if <tt>CompFile</tt> has less than 10000 elements. The deferral of access function calls is intended to be an optimisation, but can have the opposite effect. You can avoid unnecessary repetitive calls by assigning the result of <tt>⌷</tt> to a temporary variable.</p></body>
+</html>

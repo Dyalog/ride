@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>⎕PATH</tt>Search Path </h2><p><tt>⎕PATH</tt> is a simple character vector representing a blank-separated list of namespaces.  It is approximately analogous to the PATH variable in Windows or UNIX</p><p>The <tt>⎕PATH</tt> variable can be used to identify a namespace in which commonly used utility functions reside.  Functions or operators (<b>NOT</b> variables) which are copied into this namespace and <span class="Italic">exported</span> (see <a href="export.html#ExportObject" class="MCXref_0">Export Object</a>) can then be used directly from anywhere in the workspace without giving their full path names. </p><h4>Example</h4><p>To make the <tt>DISPLAY</tt> function available directly from within any namespace.</p><pre>      ⍝ Create and reference utility namespace.
+      ⎕PATH←'⎕se.util'⎕ns''
+      ⍝ Copy DISPLAY function from UTIL into it.
+      'DISPLAY'⎕se.util.⎕cy'UTIL'
+      ⍝ (Remember to save the session to file).  </pre><p>In detail, <tt>⎕PATH</tt> works as follows:</p><p>When a reference to a name cannot be found in the current namespace, the system searches for it from left to right in the list of namespaces indicated by <tt>⎕PATH</tt>.  In each namespace, if the name references a defined function (or operator) <span class="Italic">and</span> the export type of that function is non-zero (see <a href="export.html#ExportObject:" class="MCXref_0">⎕EXPORT is used to set or query the export type of a defined function (or operator) referenced by the ⎕PATH mechanism.</a> ), then it is used to satisfy the reference.  If the search exhausts all the namespaces in <tt>⎕PATH</tt> without finding a qualifying reference, the system issues a <tt>VALUE ERROR</tt> in the normal manner.</p><p>The special character <tt>↑</tt> stands for the list of namespace ancestors:</p><pre>       ## ##.## ##.##.## ...</pre><p>In other words, the search is conducted upwards through enclosing namespaces, emulating the static scope rule inherent in modern block-structured languages.</p><p>Note that the <tt>⎕PATH</tt> mechanism is used ONLY if the function reference cannot be satisfied in the current namespace.  This is analogous to the case when the Windows or UNIX PATH variable begins with a <tt>'.'</tt>.</p><h4>Examples</h4><pre>   ⎕PATH               Search in ...</pre><p> </p><pre>1. '⎕se.util'          Current space,   then
+                       ⎕se.util,        then
+                       VALUE ERROR
+ 
+2. '↑'                 Current space
+                       Parent space: ##
+                       Parent's parent space:  ##.##
+                       ...
+                       Root: # (or ⎕se if current space
+                                was inside ⎕se)
+                       VALUE ERROR
+ 
+3. 'util ↑ ⎕se.util'   Current space
+                       util (relative to current space)
+                       Parent space: ##
+                       ...
+                       Root: # or ⎕se
+                       ⎕se.util
+                       VALUE ERROR</pre><p>Note that <tt>⎕PATH</tt> is a <span class="Italic">session</span> variable.  This means that it is workspace-wide and survives <tt>)LOAD</tt> and <tt>)CLEAR</tt>. It can of course, be localised by a defined function or operator.</p></body>
+</html>

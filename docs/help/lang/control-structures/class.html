@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h3>:Class Statement</h3><p><tt>:Class &lt;class name&gt;&lt;:base class name&gt; &lt;,interface name...&gt;</tt></p><pre>:Include &lt;namespace&gt;
+...
+:EndClass</pre><p>A class script begins with a <tt>:Class</tt> statement and ends with a <tt>:EndClass</tt> statement. The elements that comprise the <tt>:Class</tt> statement are as follows:</p><table><col></col><col></col><tr><th class="Left">Element</th><th class="Left">Description</th></tr><tr><td><tt>class name</tt></td><td>Optionally, specifies the name of the Class, which must conform to the rules governing APL names.</td></tr><tr><td><tt><tt>base class name</tt></tt></td><td>Optionally specifies the name of a Class from which this Class is derived and whose members this Class inherits.</td></tr><tr><td><tt>interface name</tt></td><td>The names of one or more Interfaces which this Class supports.</td></tr></table><p>A Class may import methods defined in separate plain Namespaces with one or more <tt>:Include</tt> statements. For further details, see <a href="../oop/including-namespaces-in-classes.html" class="MCXref_0">Including Namespaces in Classes</a>.</p><h4>Examples:</h4><p>The following statements define a Class named <tt>Penguin</tt> that derives from (is based upon) a Class named <tt>Animal</tt> and which supports two Interfaces named <tt>BirdBehaviour</tt> and <tt>FishBehaviour</tt>.</p><pre>:Class Penguin: Animal,BirdBehaviour,FishBehaviour
+...
+:EndClass</pre><p>The following statements define a Class named <tt>Penguin</tt> that derives from (is based upon) a Class named <tt>Animal</tt> and includes methods defined in two separate Namespaces named <tt>BirdStuff</tt> and <tt>FishStuff</tt>.</p><pre>:Class Penguin: Animal
+:Include BirdStuff
+:Include FishStuff
+...
+:EndClass</pre></body>
+</html>

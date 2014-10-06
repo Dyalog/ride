@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⎕FLIB Y</tt>Component File Library </h2><p><tt>Y</tt> must be a simple character scalar or vector which specifies the name of the directory whose APL component files are to be listed.  If <tt>Y</tt> is empty, the current working directory is assumed. </p><p>The result <tt>R</tt> is a character matrix containing the names of the component files in the directory with one row per file.  The number of columns is given by the longest file name.  Each file name is prefixed by <tt>Y</tt> followed by a directory delimiter character.  The ordering of the rows is not defined.  </p><p>If there are no APL component files accessible to the user in the directory in question, the result is an empty character matrix with 0 rows and 0 columns.</p><h4>Examples</h4><pre>      ⎕FLIB ''
+SALESFILE
+COSTS
+ 
+      ⎕FLIB '.'
+./SALESFILE
+./COSTS</pre><p class="pagebreakafter"> </p><pre>
+ 
+      ⎕FLIB '../budget'
+../budget/SALES.85
+../budget/COSTS.85</pre></body>
+</html>

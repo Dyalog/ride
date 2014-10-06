@@ -1,0 +1,255 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⎕NC Y</tt>Name Classification </h2><p><tt>Y</tt> must be a simple  character scalar, vector, matrix, or vector of vectors that specifies a list of names. <tt>R</tt> is a simple numeric vector containing one element per name in <tt>Y</tt>.</p><p>Each element of <tt>R</tt> is the name class of the active referent to the object named in <tt>Y</tt>.</p><p>If <tt>Y</tt> is <b>simple</b>, a name class may be:</p><table><tr><th class="Left">Name Class</th><th class="Left">Description</th></tr><tr><td><tt>¯1</tt></td><td>invalid name</td></tr><tr><td><tt>0</tt></td><td>unused name</td></tr><tr><td><tt>1</tt></td><td>Label</td></tr><tr><td><tt>2</tt></td><td>Variable</td></tr><tr><td><tt>3</tt></td><td>Function</td></tr><tr><td><tt>4</tt></td><td>Operator</td></tr><tr><td><tt>9</tt></td><td>Object (GUI, namespace, COM, .Net)</td></tr></table><p>If <tt>Y</tt> is <b>nested</b> a more precise analysis of name class is obtained whereby different types  are identified by a decimal extension. For example, defined functions have name class 3.1, D-fns have name class 3.2, and so forth. The complete set of name classification is as follows:</p><table><tr><th class="Left"> </th><th class="Left">Array (2)</th><th class="Left">Functions (3)</th><th class="Left">Operators (4)</th><th class="Left">Namespaces (9)</th></tr><tr><td>n.1</td><td>Variable</td><td>Traditional</td><td>Traditional</td><td>Created by <tt>⎕NS</tt>,<tt>)NS</tt> or <tt>:Namespace</tt></td></tr><tr><td>n.2</td><td>Field</td><td>dfns</td><td>dops</td><td>Instance</td></tr><tr><td>n.3</td><td>Property</td><td>Derived<br />Primitive</td><td>Derived<br />Primitive</td><td> </td></tr><tr><td>n.4</td><td> </td><td> </td><td> </td><td>Class</td></tr><tr><td>n.5</td><td> </td><td> </td><td> </td><td>Interface</td></tr><tr><td>n.6</td><td>External<br />Shared</td><td>External</td><td> </td><td>External Class</td></tr><tr><td>n.7</td><td> </td><td> </td><td> </td><td>External Interface</td></tr></table><p>In addition, values in <tt>R</tt> are negative to identify names of methods, properties and events that are inherited through the <span class="Italic">class hierarchy</span> of the current class or instance.</p><h4>Variable (Name-Class 2.1)</h4><p>Conventional APL arrays have name-class 2.1.</p><pre>      NUM←88
+      CHAR←'Hello World'
+ 
+      ⎕NC ↑'NUM' 'CHAR'
+2 2
+ 
+      ⎕NC 'NUM' 'CHAR'
+2.1 2.1
+ 
+      'MYSPACE'⎕NS ''
+      MYSPACE.VAR←10
+      MYSPACE.⎕NC'VAR'
+2
+      MYSPACE.⎕NC⊂'VAR'
+2.1</pre><h4>Field (Name-Class 2.2)</h4><p>Fields defined by APL Classes have name-class 2.2.</p><pre>:Class nctest
+    :Field Public pubFld
+    :Field pvtFld
+ 
+    ∇ r←NameClass x 
+      :Access Public 
+      r←⎕NC x 
+    ∇ 
+...
+:EndClass ⍝ nctest       
+ 
+      ncinst←⎕NEW nctest</pre><p>The name-class of a Field, whether Public or Private, viewed from a Method that is executing within the Instance Space, is 2.2.</p><pre>      ncinst.NameClass'pubFld' 'pvtFld'
+2.2 2.2</pre><p>Note that an internal Method sees both Public and Private Fields in the Class Instance. However, when viewed from <span class="Italic">outside</span> the instance, only public fields are visible</p><pre>      ⎕NC 'ncinst.pubFld' 'ncinst.pvtFld'
+¯2.2 0</pre><p>In this case, the name-class is negative to indicate that the name has been exposed by the class hierarchy, rather than existing in the associated namespace which APL has created to contain the instance. The same result is returned if <tt>⎕NC</tt> is executed inside this space:</p><pre>      ncinst.⎕NC'pubFld' 'pvtFld'
+¯2.2 0</pre><p>Note that the names of Fields are reported as being <span class="Italic">unused</span> if the argument to <tt>⎕NC</tt> is simple.</p><pre>      ncinst.⎕NC 2 6⍴'pubFldpvtFld'
+0 0</pre><h4>Property (Name-Class 2.3)</h4><p>Properties defined by APL Classes have name-class 2.3.</p><pre>:Class nctest
+    :Field pvtFld←99
+    
+    :Property pubProp
+    :Access Public
+        ∇ r←get
+          r←pvtFld
+        ∇
+    :EndProperty
+    
+    :Property pvtProp
+        ∇ r←get
+          r←pvtFld
+        ∇
+    :EndProperty
+    
+    ∇ r←NameClass x
+      :Access Public
+      r←⎕NC x
+    ∇
+...
+:EndClass ⍝ nctest       
+ 
+      ncinst←⎕NEW nctest</pre><p>The name-class of a Property, whether Public or Private, <span class="Italic">viewed from a Method that is executing within the Instance Space</span>, is 2.3.</p><pre>      ncinst.NameClass'pubProp' 'pvtProp'
+2.3 2.3
+ </pre><p>Note that an internal Method sees both Public and Private Properties in the Class Instance. However, when viewed from <span class="Italic">outside</span> the instance, only Public Properties are visible</p><pre>      ⎕NC 'ncinst.pubProp' 'ncinst.pvtProp'
+¯2.3 0</pre><p>In this case, the name-class is negative to indicate that the name has been exposed by the class hierarchy, rather than existing in the associated namespace which APL has created to contain the instance. The same result is returned if <tt>⎕NC</tt> is executed inside this space:</p><pre>      ncinst.⎕NC 'pubProp' 'pvtProp'
+¯2.3 0</pre><p>Note that the names of Properties are reported as being <span class="Italic">unused</span> if the argument to <tt>⎕NC</tt> is simple.</p><pre>      ncinst.⎕NC 2 6⍴'pubProppvtProp'
+0 0</pre><h4>External Properties (Name-Class 2.6)</h4><p>Properties exposed by external objects (.Net and COM and the APL GUI) have name-class <tt>¯2.6</tt>.</p><pre>      ⎕USING←'System'
+      dt←⎕NEW DateTime (2006 1 1)
+      dt.⎕NC 'Day' 'Month' 'Year'
+¯2.6 ¯2.6 ¯2.6
+ 
+      'ex' ⎕WC 'OLEClient' 'Excel.Application'
+      ex.⎕NC 'Caption' 'Version' 'Visible'
+¯2.6 ¯2.6 ¯2.6
+ 
+     'f'⎕WC'Form'
+      f.⎕NC'Caption' 'Size'
+¯2.6 ¯2.6</pre><p>Note that the names of such Properties are reported as being <span class="Italic">unused</span> if the argument to <tt>⎕NC</tt> is simple.</p><pre>      f.⎕NC 2 7⍴'CaptionSize   '
+0 0</pre><h4>Defined Functions (Name-Class 3.1)</h4><p>Traditional APL defined functions have name-class 3.1.</p><pre>     ∇ R←AVG X
+[1]    R←(+/X)÷⍴X
+     ∇
+      AVG ⍳100
+50.5
+ 
+      ⎕NC'AVG'
+3
+      ⎕NC⊂'AVG'
+3.1
+ 
+      'MYSPACE'⎕NS 'AVG'
+       MYSPACE.AVG ⍳100
+50.5
+ 
+      MYSPACE.⎕NC'AVG'
+3
+      ⎕NC⊂'MYSPACE.AVG'
+3.1</pre><p>Note that a function that is simply cloned from a defined function by assignment retains its name-class.</p><pre>      MEAN←AVG
+      ⎕NC'AVG' 'MEAN'
+3.1 3.1</pre><p>Whereas, the name of a function that amalgamates a defined function with any other functions has the name-class of a Derived Function, i.e. 3.3.</p><pre>      VMEAN←AVG∘,
+      ⎕NC'AVG' 'VMEAN'
+3.1 3.3</pre><p> </p><h4>D-Fns (Name-Class 3.2)</h4><p>D-Fns (Dynamic Functions) have name-class 3.2</p><pre>      Avg←{(+/⍵)÷⍴⍵}
+ 
+      ⎕NC'Avg'
+3
+      ⎕NC⊂'Avg'
+3.2</pre><h4>Derived Functions (Name-Class 3.3)</h4><p>Derived Functions and functions created by naming a Primitive function have name-class 3.3.</p><pre>      PLUS←+
+      SUM←+/
+      CUM←PLUS\
+      ⎕NC'PLUS' 'SUM' 'CUM'
+3.3 3.3 3.3
+      ⎕NC 3 4⍴'PLUSSUM CUM '
+3 3 3</pre><p>Note that a function that is simply cloned from a defined function by assignment retains its name-class. Whereas, the name of a function that amalgamates a defined function with any other functions has the name-class of a Derived Function, i.e. 3.3.</p><pre>     ∇ R←AVG X
+[1]    R←(+/X)÷⍴X
+     ∇
+ 
+      MEAN←AVG
+      VMEAN←AVG∘,
+      ⎕NC'AVG' 'MEAN' 'VMEAN'
+3.1 3.1 3.3
+ </pre><h4>External Functions (Name-Class 3.6)</h4><p>Methods exposed by the Dyalog APL GUI and COM and .NET objects have name-class <tt>¯3.6</tt>. Methods exposed by External Functions created using <tt>⎕NA</tt> and <tt>⎕SH</tt> all have name-class <tt>3.6</tt>.</p><pre>      'F'⎕WC'Form'
+ 
+      F.⎕NC'GetTextSize' 'GetFocus'
+¯3.6 ¯3.6
+ 
+      'EX'⎕WC'OLEClient' 'Excel.Application'
+      EX.⎕NC 'Wait' 'Save' 'Quit'
+¯3.6 ¯3.6 ¯3.6
+ 
+      ⎕USING←'System'
+      dt←⎕NEW DateTime (2006 1 1)
+      dt.⎕NC 'AddDays' 'AddHours'
+¯3.6 ¯3.6
+ 
+</pre><p class="pagebreakafter"> </p><pre>      'beep'⎕NA'user32|MessageBeep i'
+ 
+      ⎕NC'beep'
+3
+      ⎕NC⊂'beep'
+3.6
+      'xutils'⎕SH''
+      )FNS
+avx     box     dbr     getenv  hex     ltom    ltov    mtol    ss      vtol
+      ⎕NC'hex' 'ss'
+3.6 3.6
+ </pre><h4>Operators (Name-Class 4.1)</h4><p>Traditional Defined Operators have name-class 4.1.</p><pre>      ∇FILTER∇
+     ∇ VEC←(P FILTER)VEC  ⍝ Select from VEC those elts ..
+[1]    VEC←(P¨VEC)/VEC    ⍝ for which BOOL fn P is true.
+     ∇
+ 
+      ⎕NC'FILTER'
+4
+      ⎕NC⊂'FILTER'
+4.1</pre><h4>D-Ops (Name-Class 4.2</h4><p>D-Ops (Dynamic Operators) have name-class 4.2.</p><pre>     pred←{⎕IO ⎕ML←1 3   ⍝ Partitioned reduction.
+     ⊃⍺⍺/¨(⍺/⍳⍴⍺)⊂⍵
+     }
+ 
+      2 3 3 2 +pred ⍳10
+3 12 21 19
+ 
+      ⎕NC'pred'
+4
+      ⎕NC⊂'pred'
+4.2</pre><h4>External Events (Name-Class 8.6)</h4><p>Events exposed by Dyalog APL GUI objects, COM and .NET objects have name-class <tt>¯8.6</tt>.</p><pre>      f←⎕NEW'Form'('Caption' 'Dyalog GUI Form')
+      f.⎕NC'Close' 'Configure' 'MouseDown'
+¯8.6 ¯8.6 ¯8.6
+ 
+      xl←⎕NEW'OLEClient'(⊂'ClassName' 'Excel.Application')
+      xl.⎕NL -8
+ NewWorkbook  SheetActivate  SheetBeforeDoubleClick ...
+ 
+      xl.⎕NC 'SheetActivate' 'SheetCalculate'
+¯8.6 ¯8.6
+ 
+    ⎕USING←'System.Windows.Forms,system.windows.forms.dll'
+    ⎕NC,⊂'Form'
+9.6
+    Form.⎕NL -8
+ Activated  BackgroundImageChanged  BackColorChanged ...</pre><h4>Namespaces (Name-Class 9.1)</h4><p>Plain namespaces created using <tt>⎕</tt>NS, or fixed from a <tt>:Namespace</tt> script, have name-class 9.1.</p><pre>      'MYSPACE' ⎕NS ''
+      ⎕NC'MYSPACE'
+9
+      ⎕NC⊂'MYSPACE'
+9.1</pre><p>Note however that a namespace created by cloning, where the right argument to <tt>⎕NS</tt> is a <tt>⎕OR</tt> of a namespace, retains the name-class of the original space.</p><pre>      'CopyMYSPACE'⎕NS ⎕OR 'MYSPACE'
+      'CopyF'⎕NS ⎕OR 'F'⎕WC'Form'
+ 
+      ⎕NC'MYSPACE' 'F'
+9.1 9.2
+      ⎕NC'CopyMYSPACE' 'CopyF'
+9.1 9.2</pre><p>The Name-Class of .Net namespaces (visible through <tt>⎕USING</tt>) is also 9.1</p><pre>      ⎕USING←''
+      ⎕NC 'System' 'System.IO'
+9.1 9.1</pre><h4>Instances (Name-Class 9.2)</h4><p>Instances of Classes created using <tt>⎕NEW</tt>, and GUI objects created using <tt>⎕WC</tt> all have name-class 9.2.</p><pre>      MyInst←⎕NEW MyClass
+      ⎕NC'MyInst'
+9
+      ⎕NC⊂'MyInst'
+9.2
+      UrInst←⎕NEW ⎕FIX ':Class'  ':EndClass'
+      ⎕NC 'MyInst' 'UrInst'
+9.2 9.2
+ 
+      'F'⎕WC 'Form'
+      'F.B' ⎕WC 'Button'
+      ⎕NC 2 3⍴'F  F.B'
+9 9
+      ⎕NC'F' 'F.B'
+9.2 9.2
+      F.⎕NC'B'
+9
+      F.⎕NC⊂,'B'
+9.2</pre><p>Instances of COM Objects whether created using <tt>⎕WC</tt> or <tt>⎕NEW</tt> also have name-class 9.2.</p><pre>      xl←⎕NEW'OLEClient'(⊂'ClassName' 'Excel.Application')
+      'XL'⎕WC'OLEClient' 'Excel.Application'
+      ⎕NC'xl' 'XL'
+9.2 9.2</pre><p>The same is true of Instances of .Net Classes (Types) whether created using <tt>⎕NEW</tt> or <tt>.New</tt>.</p><pre>      ⎕USING←'System'
+      dt←⎕NEW DateTime (3↑⎕TS)
+      DT←DateTime.New 3↑⎕TS
+      ⎕NC 'dt' 'DT'
+9.2 9.2</pre><p>Note that if you remove the GUI component of a GUI object, using the Detach method, it reverts to a plain namespace.</p><pre>      F.Detach
+      ⎕NC⊂,'F'
+9.1</pre><p>Correspondingly, if you attach a GUI component to a plain namespace using the monadic form of <tt>⎕WC</tt>, it morphs into a GUI object</p><pre>      F.⎕WC 'PropertySheet'
+      ⎕NC⊂,'F'
+9.2</pre><h4>Classes (Name-Class 9.4)</h4><p>Classes created using the editor or <tt>⎕FIX</tt> have name-class 9.4.</p><pre>      )ED ○MyClass
+ 
+:Class MyClass
+    ∇ r←NameClass x
+      :Access Public Shared
+      r←⎕NC x
+    ∇
+:EndClass ⍝ MyClass
+ 
+      ⎕NC 'MyClass'
+9
+      ⎕NC⊂'MyClass'
+9.4
+ 
+      ⎕FIX ':Class UrClass'  ':EndClass'
+      ⎕NC 'MyClass' 'UrClass'
+9.4 9.4</pre><p>Note that the name of the Class is visible to a Public Method in that Class, or an Instance of that Class.</p><pre>      MyClass.NameClass'MyClass'
+9
+      MyClass.NameClass⊂'MyClass'
+9.4</pre><h4>Interfaces (Name-Class 9.5)</h4><p>Interfaces, defined by <tt>:Interface ... :EndInterface</tt> clauses, have name-class 9.5.</p><pre>:Interface IGolfClub
+:Property Club
+    ∇ r←get
+    ∇
+    ∇ set
+    ∇
+:EndProperty
+ 
+∇ Shank←Swing Params
+∇
+ 
+:EndInterface ⍝ IGolfClub
+ 
+      ⎕NC 'IGolfClub'
+9
+      ⎕NC ⊂'IGolfClub'
+9.5</pre><h4>External Classes (Name-Class 9.6)</h4><p>External Classes (Types) exposed by .Net have name-class 9.6.</p><pre>      ⎕USING←'System' 'System.IO'
+ 
+      ⎕NC 'DateTime' 'File' 'DirectoryInfo'
+9.6 9.6 9.6</pre><p>Note that referencing a .Net class (type) with <tt>⎕NC</tt>, fixes the name of that class in the workspace and obviates the need for APL to repeat the task of searching for and loading the class when the name is next used.</p><h4>External Interfaces (Name-Class 9.7)</h4><p>External Interfaces exposed by .Net have name-class 9.7.</p><pre>      ⎕USING←'System.Web.UI,system.web.dll' 
+ 
+      ⎕NC 'IPostBackDataHandler' 'IPostBackEventHandler' 
+9.7 9.7</pre><p>Note that referencing a .Net Interface with <tt>⎕NC</tt>, fixes the name of that Interface in the workspace and obviates the need for APL to repeat the task of searching for and loading the Interface when the name is next used.</p></body>
+</html>

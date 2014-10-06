@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Property</tt>CheckBoxes</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/listview.html">ListView</a></td><td class="SpacedPlain"><a href="../objects/treeview.html">TreeView</a></td></tr></table><p class="Bold">Description</p><p>The CheckBoxes property specifies whether or not check boxes are displayed
+alongside items in a <a href="../objects/listview.html">ListView</a> or <a href="../objects/treeview.html">TreeView</a> object.</p><p>CheckBoxes is a single number with the value 0 (check boxes are not
+displayed) or 1 (check boxes are displayed); the default is 0.</p><p>For a <a href="../objects/treeview.html">TreeView</a>, CheckBoxes will only be
+honoured if the items have pictures associated with them (via the <a href="imagelistobj.html">ImageListObj</a> and <a href="imageindex.html">ImageIndex</a> properties).</p><p>For a <a href="../objects/listview.html">ListView</a>, CheckBoxes applies to all
+settings of the <a href="view.html">View</a> property.</p><p>The GetItemState method can be used to determine if a specific item in a <a href="../objects/listview.html">ListView</a> or <a href="../objects/treeview.html">TreeView</a> is checked. The result of the
+method will have the 13<sup>th</sup> bit set if the item is checked.</p><pre>      STATE←Form.ListView.GetItemState 11
+      13⊃⌽(32⍴2)⊤STATE
+1</pre><p>The picture below illustrates the effect on the appearance of a <a href="../objects/listview.html">ListView</a> object, of setting CheckBoxes to 1.</p><p><img src="../images/lv-cb.gif" /></p></body>
+</html>

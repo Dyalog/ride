@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h3><a name="PenguinClassExample"></a>Penguin Class Example</h3><p>The Penguin Class example illustrates the use of Interfaces to implement <span class="Italic">multiple inheritance</span>. </p><p><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">FishBehaviour Interface</a></span></p><p><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">BirdBehaviour Interface</a></span></p><p><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Penguin Class</a></span></p><p>In this case, the <tt>Penguin</tt> Class derives from <tt>Animal</tt> but additionally supports the <tt>BirdBehaviour</tt> and <tt>FishBehaviour</tt> Interfaces, thereby inheriting members from both.</p><pre>      Pingo←⎕NEW Penguin
+      ⎕CLASS Pingo
+  #.Penguin  #.FishBehaviour  #.BirdBehaviour    #.Animal
+ 
+      (FishBehaviour ⎕CLASS Pingo).Swim
+I can dive and swim like a fish
+      (BirdBehaviour ⎕CLASS Pingo).Fly
+Although I am a bird, I cannot fly
+      (BirdBehaviour ⎕CLASS Pingo).Lay
+I lay one egg every year          
+      (BirdBehaviour ⎕CLASS Pingo).Sing
+Croak, Croak!           </pre></body>
+</html>

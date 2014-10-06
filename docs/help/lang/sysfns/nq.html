@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←{X}⎕NQ Y</tt>Enqueue Event </h2><p>This system function generates an event or invokes a method.</p><p>While APL is executing, events occur "naturally" as a result of user action or of communication with other applications.  These events are added to the event queue as and when they occur, and are subsequently removed and processed one by one by <tt>⎕DQ</tt>.  <tt>⎕NQ</tt> provides an "artificial" means to generate an event and is analogous to <tt>⎕SIGNAL.</tt></p><p>If the left argument <tt>X</tt> is omitted or is 0, <tt>⎕</tt><tt>NQ</tt> adds the event specified by <tt>Y</tt> to the bottom of the event queue. The event will subsequently be processed by <tt>⎕DQ</tt> when it reaches the top of the queue. </p><p>If <tt>X</tt> is 1, the event is actioned <b>immediately</b> by <tt>⎕NQ</tt> itself and is processed in exactly the same way as it would be processed by <tt>⎕DQ</tt>.  For example, if the event has a callback function attached, <tt>⎕NQ</tt> will invoke it directly.   See <a href="dq.html#DequeueEvents" class="MCXref_0">Dequeue Events </a> for further details.</p><p>Note that it is not possible for one thread to use <tt>1 ⎕NQ</tt> to send an event to another thread.</p><p>If <tt>X</tt> is 2 and the name supplied is the name of an event, <tt>⎕NQ</tt> performs the default processing for the event immediately, but does <b>not</b> invoke a callback function if there is one attached.</p><p>If <tt>X</tt> is 2 and the name supplied is the name of a (Dyalog APL) method, <tt>⎕NQ</tt> invokes the method.  Its (shy) result is the result produced by the method.</p><p>If <tt>X</tt> is 3, <tt>⎕NQ</tt> invokes a method in an OLE Control.  The (shy) result of <tt>⎕NQ</tt> is the result produced by the method.</p><p>If <tt>X</tt> is 4, <tt>⎕NQ</tt> signals an event from an ActiveXControl object to its host application.  The (shy) result of <tt>⎕NQ</tt> is the result returned by the host application and depends upon the syntax of the event. This case is only applicable to ActiveXControl objects.</p><p><tt>Y</tt> is a nested vector containing an event message.  The first two elements of <tt>Y </tt>are:</p><table class="Event"><tr><td><tt>[1]</tt></td><td>Object</td><td>ref or character vector</td></tr><tr><td><tt>[2]</tt></td><td>Event</td><td>numeric scalar or character vector which specifies an event or method</td></tr></table><p><tt>Y[1]</tt> must specify an <span class="Italic">existing</span> object.  If not, <tt>⎕NQ</tt> terminates with a <tt>VALUE ERROR</tt>.  If <tt>Y[2]</tt> specifies a standard event type, subsequent elements must conform to the structure defined for that event type.  If not, <tt>⎕NQ</tt> terminates with a <tt>SYNTAX ERROR</tt>.  If <tt>Y[2]</tt> specifies a non-standard event type, <tt>Y[3]</tt> onwards (if present) may contain arbitrary information.  Although any event type not listed herein may be used, numbers in the range 0-1000 are reserved for future extensions.</p><p> If <tt>⎕NQ</tt> is used monadically, or with a left argument of 0, its (shy) result is always an empty character vector.  If a left argument of 1 is specified, <tt>⎕NQ</tt> returns <tt>Y</tt> unchanged or a modified <tt>Y</tt> if the callback function returns its modified argument as a result.</p><p>  If the left argument is 2, <tt>⎕NQ</tt> returns either the value 1 or a value that is appropriate.</p><h4>Examples</h4><pre>      ⍝ Send a keystroke ("A") to an Edit Field
+      ⎕NQ TEST.ED 'KeyPress' 'A'
+ 
+      ⍝ Iconify all top-level Forms
+      {⎕NQ ⍵ 'StateChange' 1}¨'Form'⎕WN'.'
+ 
+      ⍝ Set the focus to a particular field
+      ⎕NQ TEST.ED3 40
+ 
+      ⍝ Throw a new page on a printer
+      1 ⎕NQ PR1 'NewPage'
+ 
+ 
+      ⍝ Terminate ⎕DQ under program control
+ 
+      'TEST'⎕WC 'Form' ... ('Event' 1001 1)
+      ...
+      ⎕DQ 'TEST'
+      ...
+      ⎕NQ TEST 1001  ⍝ From a callback
+ 
+      ⍝ Call GetItemState method for a TreeView F.TV
+      +2 ⎕NQF.TV 'GetItemState' 6
+96</pre><p> </p><pre>      +2 ⎕NQ'.' 'GetEnvironment' 'Dyalog'
+c:\Z\2\dyalog82</pre></body>
+</html>

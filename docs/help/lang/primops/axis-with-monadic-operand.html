@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←f[B]Y</tt>Axis (with Monadic Operand)</h2><p><tt>f</tt> must be a monadic primitive mixed function taken from those shown in <a href="#MonadicMixed" class="MCXref_TableRef_0">Table 15</a> below, or a function derived from the operators Reduction (<tt>/</tt>) or Scan (<tt>\</tt>). <tt>B</tt> must be a numeric scalar or vector. <tt>Y</tt> may be any array whose items are appropriate to function <tt>f</tt>. Axis does not follow the normal syntax of an operator.</p><p class="TableCaption"><span class="autonumber"><span>Table 15: </span></span><a name="MonadicMixed"></a>Primitive monadic mixed functions with optional axis.</p><table><tr><th class="Left">Function</th><th class="Left">Name</th><th class="Left">Range of B</th></tr><tr><td><tt>⌽ or ⊖</tt></td><td>Reverse</td><td><tt>B∊⍳⍴⍴Y</tt></td></tr><tr><td><tt>↑</tt></td><td>Mix</td><td><tt>(0≠1|B)^(B&gt;⎕IO-1)^(B&lt;⎕IO+⍴⍴Y)</tt></td></tr><tr><td><tt>↓</tt></td><td>Split</td><td><tt>B∊⍳⍴⍴Y</tt></td></tr><tr><td><tt>,</tt></td><td>Ravel</td><td>fraction, or zero or more axes of <tt>Y</tt></td></tr><tr><td><tt>⊂</tt></td><td>Enclose</td><td><tt>(B≡⍳0)∨(^/B∊⍳⍴⍴Y) </tt></td></tr></table><p>In most cases, <tt>B</tt> must be an integer which identifies a specific axis of <tt>Y</tt>. However, when  <tt>f</tt> is the Mix function (<tt>↑</tt>) ,   <tt>B</tt> is a fractional value whose lower and upper integer bounds select an adjacent pair of axes of <tt>Y</tt> or an extreme axis of <tt>Y</tt>.</p><p>For Ravel (<tt>,</tt>) and Enclose (<tt>⊂</tt>) , <tt>B</tt> can be a <b>vector</b> of two or more axes.</p><p><tt>⎕IO</tt> is an implicit argument of the derived function which determines the meaning of <tt>B</tt>.</p><h4>Examples</h4><pre>      ⌽[1]2 3⍴⍳6
+4 5 6
+1 2 3
+ 
+      ↑[.1]'ONE' 'TWO'
+OT
+NW
+EO</pre></body>
+</html>

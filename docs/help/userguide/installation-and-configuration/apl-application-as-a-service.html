@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="A4S"></a>APL Application as a Service</h2><h3>Introduction</h3><p>Dyalog APL provides a mechanism for users to register and manage an application workspace as a Windows service. The application workspace must implement an interface to handle messages from the Windows Service Control Manager (SCM) in addition to the code required to drive the application. </p><p>Windows Services run as background tasks controlled by the SCM. When the computer is started, Windows Services are run before a user logs on to the system and do not normally interact with the desktop. A Dyalog service is run under the auspices of <span class="Name">Local System</span>.</p><h3>Installing and Uninstalling a Dyalog Service</h3><p>To install a Dyalog service it is necessary to run <span class="Code">dyalog.exe</span> from the command line with administrator privileges, specifying the application workspace and the following parameters, where <span class="Name">service_name</span> is a name of your choice.</p><ul><li value="1"><span class="Parameter">APL_ServiceInstall=service_name</span></li></ul><p>The command must specify the full pathname to <span class="Code">dyalog.exe</span> and to the application workspace. A slightly modified version of this  command line will be stored by the SCM and re-executed whenever the service is started. </p><p>Dyalog installs the service with a <span class="Name">Startup Type</span> of <span class="Name">Automatic</span>. This means that it will be started automatically whenever the computer is restarted. However, it is necessary to start it manually (using the SCM) the first time after it is installed.</p><p>The same command must be used to uninstall the service, but with:</p><ul><li value="1"><span class="Parameter">APL_ServiceUninstall=service_name</span></li></ul><p>The following table summarises the parameters that can be specified by the user. Other parameters will appear on the command line in the SCM, but should not be specified by the user.</p><table style="width: 100%;"><thead><tr><th class="Left">Parameter</th><th class="Left">Description</th></tr></thead><tr><td><span class="Parameter">APL_ServiceInstall</span></td><td>Causes Dyalog to register the named service, using the current command line, but with <span class="Parameter">APL_ServiceRun</span> replacing<span class="Parameter"> APL_ServiceInstall</span> in the SCM.</td></tr><tr><td><span class="Parameter">APL_ServiceUninstall</span></td><td>Causes Dyalog to uninstall the named service.</td></tr></table><h3>The Application Workspace</h3><p>The application workspace must be designed to handle and respond (in a timely manner) to notification messages from the SCM as well as to provide the application logic. SCM notifications  include instructions to start, stop, pause and resume. </p><p>SCM notification messages generate a ServiceNotification event on the Root object. To handle these messages, it is necessary to attach a callback function to this event, and to invoke the Wait method or <tt>⎕DQ'.'</tt> to process them. This must be executed in thread 0.</p><p>If the application is designed to be driven from events such as Timer or TCPSocket or user-defined events, it too may be implemented via callbacks in thread 0 under the control of the same Wait method or <tt>⎕DQ'.'</tt>. If the application uses Conga it is recommended that it runs in a separate thread.</p><p>The workspace <span class="Code">samples\aplservice\aplservice.dws</span> is included in the APL release. Its start-up function is as follows:</p><pre class="APLCodeSmall">     ⎕lX←'Start'
+
+
+     ∇ Start;ServiceState;ServiceControl
+[1]    :If 'W'≠3⊃#.⎕WG'APLVersion'
+[2]        ⎕←'This workspace only works using Dyalog APL for
+              Windows version 14.0 or later'
+[3]        :Return
+[4]    :EndIf
+[5]    :If 0∊⍴2 ⎕NQ'.' 'GetEnvironment' 'RunAsService'
+[6]        Describe
+[7]        :Return
+[8]    :EndIf
+[9]    ⍝ Define SCM constants
+[10]   HashDefine
+[11]   ⍝ Set up callback to handle SCM notifications
+[12]   '.'⎕WS'Event' 'ServiceNotification' 'ServiceHandler'
+[13]   ⍝ Global variable defines current state of the service
+[14]   ServiceState←SERVICE_RUNNING
+[15]   ⍝ Global variable defines last SCM notification to the
+         service
+[16]   ServiceControl←0
+[17]   ⍝ Application code runs in a separate thread
+[18]   Main&amp;0
+[19]   ⎕DQ'.'
+[20]   ⎕OFF
+     ∇
+</pre><h4>Handling ServiceNotification Events</h4><p>To give the workspace (which may be busy) time to respond to SCM notifications, Dyalog responds immediately to confirm that the service has entered the appropriate pending state. For example, if the notification is SERVICE_CONTROL_STOP, Dyalog informs the SCM that the service state is SERVICE_STOP_PENDING. It is then up to the callback function to confirm that the state has reached SERVICE_STOPPED.</p><p>The following sample function is provided in <span class="Code">APLService.dws</span>.</p><h4>ServiceHandler Callback Function</h4><pre class="APLCodeSmall">     ∇ r←ServiceHandler(obj event action state);sink
+[1]   ⍝ Callback to handle notifications from the SCM
+[2]
+[3]   ⍝ Note that the interpreter has already responded
+[4]   ⍝ automatically to the SCM with the corresponding
+[5]   ⍝ "_PENDING" message prior to this callback being reached
+[6]
+[7]   ⍝ This callback uses the SetServiceState Method to confirm
+[8]   ⍝ to the SCM that the requested state has been reached
+[9]
+[10]   r←0  ⍝  so returns a 0 result (the event has been handled,
+[11]        ⍝ no further action required)
+[12]
+[13]  ⍝ It stores the desired state in global ServiceState to
+[14]  ⍝ notify the application code which must take appropriate
+[15]  ⍝ action. In particular, it must respond to a "STOP or
+[16]  ⍝ "SHUTDOWN" by terminating the APL session
+[17]
+[18]   :Select ServiceControl←action
+[19]   :CaseList SERVICE_CONTROL_STOP SERVICE_CONTROL_SHUTDOWN
+[20]       ServiceState←SERVICE_STOPPED
+[21]       state[4 5 6 7]←0
+[22]
+[23]   :Case SERVICE_CONTROL_PAUSE
+[24]       ServiceState←SERVICE_PAUSED
+[25]
+[26]   :Case SERVICE_CONTROL_CONTINUE
+[27]       ServiceState←SERVICE_RUNNING
+[28]   :Else
+[29]       :If state[2]=SERVICE_START_PENDING
+[30]           ServiceState←SERVICE_RUNNING
+[31]       :EndIf
+[32]   :EndSelect
+[33]   state[2]←ServiceState
+[34]   sink←2 ⎕NQ'.' 'SetServiceState'state
+     ∇</pre><h4 class="ExampleNewPage">The Application Code</h4><p>The following function illustrates how the applcation code for the service might be structured. It is merely an illustration, but however it is done, it is important that the code handles the instructions to pause, continue and stop in an appropriate manner. In this example, the function <tt>Main</tt> creates a log file and writes to it when the state of the service changes.</p><pre class="APLCodeSmall">     ∇ Main arg;nid;log;LogFile
+[1]    ⎕NUNTIE ⎕NNUMS
+[2]    log←{((⍕⎕TS),' ',⍵,⎕UCS 13 10)⎕NAPPEND ⍺}
+[3]    LogFile←'c:\ProgramData\TEMP\APLServiceLog.txt'
+[4]    :Trap 22
+[5]        nid←LogFile ⎕NCREATE 0
+[6]    :Else
+[7]        :Trap 22
+[8]            nid←LogFile ⎕NTIE 0
+[9]            0 ⎕NRESIZE nid
+[10]       :Else
+[11]           ⎕←'Unable to tie or create logfile'
+[12]       :EndTrap
+[13]   :EndTrap
+[14]   nid log'Starting'
+[15]   :While ServiceState≠SERVICE_STOPPED
+[16]       :If ServiceControl≠0 ⋄
+               nid log'ServiceControl=',⍕ServiceControl ⋄ :EndIf
+[17]       :If ServiceState=SERVICE_RUNNING
+[18]           nid log'Running'
+[19]       :ElseIf ServiceState=SERVICE_PAUSED
+[20]           ⍝  Pause application
+[21]       :EndIf
+[22]       ServiceControl←0 ⍝ Reset (we only want to log changes)
+[23]       ⎕DL 10 ⍝ Just to prevent busy loop
+[24]   :EndWhile
+[25]   ⎕NUNTIE nid
+[26]   ⎕OFF 0
+     ∇
+</pre><h4>Debugging Dyalog Services</h4><p>Services are run in the background under the auspices of <span class="Name">Local System</span>, and not associated with an interactive user. Neither the APL Session nor any GUI components that it creates will be visible on the desktop. This prevents the normal editing and debugging tools from being available.</p><p>However, the Dyalog APL  Remote Integrated Development environment (RIDE) may be connected to any APL session, including one running as a Windows Service, and provide a debugging environment. For more information, see the <span class="XRef">Dyalog RIDE User Guide</span>.</p><h4>Event Logging</h4><p>When a service is installed or removed, Dyalog APL records events in the Dyalog APL section of the<span class="Name"> Applications and Services Logs</span> which can be viewed using the Windows system <span class="Name">Event Viewer</span>.</p><p> </p></body>
+</html>

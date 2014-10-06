@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h4>GetStartingheet Method</h4><pre>    ∇ R←GetStartingSheet ARGS;CODE;COURSE;DATE;COURSECODES
+                             ;COURSES;INDEX;COURSEI;IDN
+                             ;DATES;COMPS;IDATE;TEETIMES
+                             ;GOLFERS;I;T
+      :Access Public
+      CODE DATE←ARGS
+      COURSECODES COURSES INDEX←⎕FREAD GOLFID 1
+      COURSEI←COURSECODES⍳CODE
+      COURSE←⎕NEW GolfCourse(CODE(COURSEI⊃COURSES,⊂''))
+      R←⎕NEW StartingSheet(0 COURSE DATE)
+      :If COURSEI&gt;⍴COURSECODES
+          R.Message←'Invalid course code'
+          :Return
+      :EndIf
+      IDN←2 ⎕NQ'.' 'DateToIDN',DATE.(Year Month Day)
+      DATES COMPS←⎕FREAD GOLFID,COURSEI⊃INDEX
+      IDATE←DATES⍳IDN
+      :If IDATE&gt;⍴DATES
+          R.Message←'No Starting Sheet available'
+          :Return
+      :EndIf
+      TEETIMES GOLFERS←⎕FREAD GOLFID,IDATE⊃COMPS
+      T←DateTime.New¨(⊂DATE.(Year Month Day)),¨↓[1]
+                                   24 60 1⊤TEETIMES
+      R.Slots←{⎕NEW Slot ⍵}¨T,∘⊂¨↓GOLFERS
+      R.OK←1
+    ∇</pre></body>
+</html>

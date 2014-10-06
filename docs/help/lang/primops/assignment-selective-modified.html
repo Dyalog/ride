@@ -1,0 +1,10 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←(EXP X)f←Y</tt>Assignment (Selective Modified)</h2><p><tt>f</tt> may be any dyadic function which returns an explicit result.  <tt>Y</tt> may be any array whose items are appropriate to function <tt>f</tt>.  <tt>X</tt> must be the <span class="Italic">name</span> of an existing array.  <tt>EXP</tt> is an expression that <b>selects</b> elements of <tt>X</tt>. (See <a href="../primfns/assignment-selective.html#SelectiveAssignment" class="MCXref_0">Assignment (Selective)</a> for a list of allowed selection functions.)  The selected elements of <tt>X</tt> must be appropriate to function <tt>f</tt>.</p><p><tt>R</tt> is the “pass-through” value, that is, the value of <tt>Y</tt>.  If the result of the derived function is not assigned or used, there is no explicit result.</p><p>The effect of the derived function is to reset the selected elements of <tt>X</tt> to the result of <tt>X[I]fY</tt> where <tt>X[I]</tt> defines the elements of <tt>X</tt> selected by <tt>EXP</tt>.</p><h4>Example</h4><pre>      A
+12 36 23 78 30
+ 
+      ((A&gt;30)/A) ×← 100
+      A
+12 3600 23 7800 30</pre></body>
+</html>

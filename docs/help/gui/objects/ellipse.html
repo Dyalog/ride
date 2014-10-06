@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Object</tt>Ellipse</h2><table class="GUIMembers"><tr><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Parents</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Children</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Properties</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Methods</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Events</a></span></td></tr></table><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Purpose:</td><td class="SpacedPlain">A Graphical object to draw ellipses, arcs, and pie-slices.</td></tr></table><p class="Bold">Description</p><p>This object duplicates much of the functionality of the <a href="circle.html">Circle</a> object, but differs in two major respects. Firstly, ellipses, circles, and arcs
+are specified in terms of their <b>bounding rectangles</b>, rather than in terms
+of their centre(s) and radii. Secondly, the Ellipse object behaves like any
+other (rectangular) object when it is resized by its parent. The <a href="circle.html">Circle</a> object behaves differently in that when resized by its parent, it maintains a
+constant ratio between its <b>physical</b> height and width.</p><p>The <a href="../props/points.html">Points</a> property specifies one or more
+sets of co-ordinates which define the position(s) of one or more bounding
+rectangles. The position is defined to be the position of the corner that is <b>nearest</b>to the origin of its parent. The default is therefore its top-left corner.</p><p>The <a href="../props/size.html">Size</a> property specifies the height and
+width of each bounding rectangle, measuring away from the origin. To obtain a
+perfect circle, you must take the <b>aspect ratio</b> of the device into
+account. This is available from the <a href="../props/devcaps.html">DevCaps</a> property of the <a href="root.html">Root</a> and <a href="printer.html">Printer</a> objects. Alternatively you can use the <a href="circle.html">Circle</a> object.</p><p>The <a href="../props/start.html">Start</a> and/or <a href="../props/end.html">End</a> properties are used to draw partial ellipses and circles. They specify start and
+end angles respectively, measuring from the x-axis at the centre of the bounding
+rectangle in a counter-clockwise direction and are expressed in radians. The
+type of arc is controlled by <a href="../props/arcmode.html">ArcMode</a> as
+follows.</p><table><tr><th class="Left">Arcmode</th><th class="Left">Effect</th></tr><tr><td>0</td><td>An arc is drawn from <a href="../props/start.html">Start</a> to <a href="../props/end.html">End</a>.</td></tr><tr><td>1</td><td>An arc is drawn from <a href="../props/start.html">Start</a> to <a href="../props/end.html">End</a>.
+      In addition, a single straight line is drawn from one end of the arc to
+      the other, resulting in a segment.</td></tr><tr><td>2</td><td>An arc is drawn from <a href="../props/start.html">Start</a> to <a href="../props/end.html">End</a>.
+      In addition, two lines are drawn from each end of the arc to the centre,
+      resulting in a pie-slice.</td></tr></table><p><a href="../props/lstyle.html">LStyle</a> and <a href="../props/lwidth.html">LWidth</a> define the style and width of the lines used to draw the boundaries of the
+ellipse(s), circle(s) or arc(s). <a href="../props/fcol.html">FCol</a> and <a href="../props/bcol.html">BCol</a> determine the colour of the lines.</p><p><a href="../props/fstyle.html">FStyle</a> specifies whether or not the
+ellipse(s), circle(s) or arc(s) are filled, and if so, how. For a solid fill (<a href="../props/fstyle.html">FStyle</a> 0), <a href="../props/fillcol.html">FillCol</a> defines the fill colour used.
+For a pattern fill (<a href="../props/fstyle.html">FStyle</a> 1-6) <a href="../props/fillcol.html">FillCol</a> defines the colour of the hatch lines and <a href="../props/bcol.html">BCol</a> the colour of the spaces between them.</p><p>The value of <a href="../props/dragable.html">Dragable</a> determines
+whether or not the object can be dragged. The value of <a href="../props/autoconf.html">AutoConf</a> determines whether or not the Ellipse object is resized when its parent is
+resized.</p><p>The structure of the property values is best considered separately for single
+and multiple ellipses, circles or arcs .</p><h4>Single Ellipse, Circle or Arc</h4><p>For a single ellipse, circle or arc, <a href="../props/points.html">Points</a> is a 2-element vector which specifies the y-coordinate and x-coordinate of the
+top-left corner of the bounding rectangle.</p><p><a href="../props/size.html">Size</a> is also a simple 2-element vector
+whose elements specify the height and width of the bounding rectangle.</p><p><a href="../props/lstyle.html">LStyle</a> and <a href="../props/lwidth.html">LWidth</a> are both simple scalar numbers.</p><p><a href="../props/fstyle.html">FStyle</a> is either a single number
+specifying a standard fill pattern, or the name of a <a href="bitmap.html">Bitmap</a> object which is to be used to fill the ellipse, circle or arc.</p><p><a href="../props/fcol.html">FCol</a>, <a href="../props/bcol.html">BCol</a> and <a href="../props/fillcol.html">FillCol</a> are each either single numbers
+representing standard colours, or 3-element vectors which specify colours
+explicitly in terms of their RGB values.</p><p><b>Examples:</b></p><p>First make a <a href="form.html">Form</a> :</p><pre>      'F' ⎕WC 'Form'</pre><p>Draw a complete ellipse within the bounding rectangle located at (y=10, x=5)
+with (height=30, width=50) :</p><pre>      'F.E1' ⎕WC 'Ellipse' (10 5)(30 50)</pre><p>Draw an elliptical arc within the same bounding rectangle as above, occupying
+the upper right quadrant (0 to 90 degrees):</p><pre>      'F.E1' ⎕WC 'Ellipse' (10 5)(30 50)('End'(○0.5))</pre><p>Ditto, but between 45 and 135 degrees :</p><pre>      'F.E1' ⎕WC 'Ellipse' (10 5)(30 50)('Start'(○0.25))('End'(○0.75))</pre><p>Ditto, but join the points of the arc to the centre of the ellipse, making a
+"pie-slice":</p><pre>      'F.E1' ⎕WC 'Ellipse' (10 5)(30 50)('Start'(○0.25))('End'(○0.75))('ArcMode' 2)</pre><p>Ditto, but use a green line and solid red fill :</p><pre>      'F.E1' ⎕WC 'Ellipse' (10 5)(30 50)('Start'(○0.25))('End'(○0.75))('ArcMode' 2)('FCol' 0 0 255)('FStyle' 0)('FillCol' 255 0 0)</pre><h4>Multiple Ellipses, Circles or Arcs</h4><p>To draw a set of ellipses, circles, or arcs with a single name, <a href="../props/points.html">Points</a> may be a simple 2-element vector (specifying the location of all the bounding
+rectangles), <b>or</b> a 2-column matrix whose first column specifies their
+y-coordinates and whose second column specifies their x-coordinates, <b>or</b> a
+2-element nested vector whose first element specifies their y-coordinate(s) and
+whose second element specifies their x-coordinate(s).</p><p>Likewise, <a href="../props/size.html">Size</a> may be a simple 2-element
+vector (applying to all the bounding rectangles), <b>or</b> a 2-column matrix
+whose first column specifies their heights and whose second column specifies
+their widths, <b>or</b> a 2-element nested vector whose first element specifies
+their height(s) and whose second element specifies their width(s).</p><p>If specified, <a href="../props/start.html">Start</a> and/or <a href="../props/end.html">End</a> define arcs in terms of the angles made by drawing a line from the centre of the
+bounding box to the two ends of the arc. Both properties may be simple scalars,
+or vectors containing one element per arc drawn.</p><p>If <a href="../props/start.html">Start</a> is specified, but not <a href="../props/end.html">End</a>,
+end angles default to <tt>(¯1↓+\Start),○2</tt>.
+If <a href="../props/end.html">End</a> is specified, but not <a href="../props/start.html">Start</a>,
+start angles default to <tt>0,¯1↓+\End</tt></p><p>This means that you can draw a pie-chart using either <a href="../props/start.html">Start</a> or <a href="../props/end.html">End</a> angles; you do not have to specify both.</p><p><a href="../props/arcmode.html">ArcMode</a>, <a href="../props/lstyle.html">LStyle</a> and <a href="../props/lwidth.html">LWidth</a> may each be simple scalar values
+(applying to all the ellipses, circles or arcs) or simple vectors whose elements
+refer to each of the corresponding ellipses, circles or arcs in turn.</p><p><a href="../props/fstyle.html">FStyle</a> may be a simple scalar numeric or
+a simple character vector (<a href="bitmap.html">Bitmap</a> name)
+applying to all rectangles, or a vector whose elements refer to each of the
+corresponding ellipses, circles or arcs in turn.</p><p>Similarly, <a href="../props/fcol.html">FCol</a>, <a href="../props/bcol.html">BCol</a> and <a href="../props/fillcol.html">FillCol</a> may each be single numbers or a
+single (enclosed) 3-element vector applying to all the rectangles.
+Alternatively, these properties may contain vectors whose elements refer to each
+of the rectangles in turn. If so, their elements may be single numbers or nested
+RGB triplets, or a combination of the two.</p><p>The <a href="../props/coord.html">Coord</a>, <a href="../props/dragable.html">Dragable</a> and <a href="../props/data.html">Data</a> properties are specified for the
+object as a whole, and may not be allocated different values for each individual
+ellipse, circle or arc that is drawn.</p><h4>Examples</h4><p>First make a <a href="form.html">Form</a> :</p><pre>      'F' ⎕WC 'Form'</pre><p>Draw two ellipses in bounding rectangles located at (y=5, x=10) and (y=5,
+x=60), each of (height=40, width=10)</p><pre>      'F.E1' ⎕WC 'Ellipse' ((5 5)(10 60)) (40 10)</pre><p>Ditto, using scalar extension for (y=5) :</p><pre>      'F.E1' ⎕WC 'Ellipse' (5(10 60)) (40 10)</pre><p>Ditto, but draw the first with (height=40, width=30) and the second with
+(height=20, width=10) :</p><pre>      'F.E1' ⎕WC 'Ellipse' (5(10 60)) ((40 20)(30 10))</pre><p>Draw an elliptical Pie-Chart in a bounding rectangle located at (y=5, x=10)
+with a height and width equal to 40% of the height and width of the parent <a href="form.html">Form</a>.
+Each of the 4 pie-slices is bounded by a black line :</p><pre>      Data ←12 27 21 40
+      ANGLES←0,¯1↓((○2)÷+/Data)×+\Data
+      COLS←(255 0 0)(0 255 0)(255 255 0)(0 0 255)
+      PATS←1 2 3 4
+
+
+      'F.PIE' ⎕WC 'Ellipse'(5 10)(40 40)
+                  ('Start' ANGLES)('ArcMode' 2)
+                  ('FCol' (⊂0 0 0))('FStyle' PATS)
+                  ('FillCol' COLS)</pre></body>
+</html>

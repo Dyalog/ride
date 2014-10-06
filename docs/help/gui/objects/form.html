@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Object</tt>Form</h2><table class="GUIMembers"><tr><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Parents</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Children</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Properties</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Methods</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Events</a></span></td></tr></table><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Purpose:</td><td class="SpacedPlain">This is a top-level window used to contain other objects (controls).</td></tr></table><p class="Bold">Description</p><p>The <a href="../props/posn.html">Posn</a> property specifies the location of
+the <b>internal</b> top-left corner of the window relative to the top-left
+corner of the screen. If the window has a title bar and/or border, you must
+allow sufficient space for them. Similarly, the <a href="../props/size.html">Size</a> property specifies the internal size of the window excluding the title bar and
+border. The default for <a href="../props/size.html">Size</a> is 50% of the
+screen height and width. The default for <a href="../props/posn.html">Posn</a> places the Form in the middle of the screen.</p><p>Normally, a Form has a title bar, a system menu box, a border and maximise
+and minimise buttons. To disable the System Menu box, set <a href="../props/sysmenu.html">SysMenu</a> to 0. To disable one or both of the maximise/minimise buttons, set <a href="../props/maxbutton.html">MaxButton</a> and/or <a href="../props/minbutton.html">MinButton</a> to 0.</p><p>The <a href="../props/helpbutton.html">HelpButton</a> property specifies
+that a Question (?) button appears in the title bar of the Form. However, this
+does not apply if the Form has a maximise or minimise button which both take
+precedence. The user may obtain help by clicking on the Question (?) button and
+then on a control in the Form. It is up to you to provide the help by responding
+to the <a href="../methodorevents/help.html">Help</a> event on the control.</p><p>By default, a Form may be moved and resized using the mouse. These actions
+are achieved by dragging on the title bar and border respectively. It follows
+that a Form that is <a href="../props/moveable.html">Moveable</a><b>must</b>have a title bar, and one that is <a href="../props/sizeable.html">Sizeable</a>
+ <b>must</b> have a border, regardless of the value of other properties. Also, if
+you specify any of <a href="../props/sysmenu.html">SysMenu</a>, <a href="../props/maxbutton.html">MaxButton</a> or <a href="../props/minbutton.html">MinButton</a>, the window must have a
+title bar in which to place these controls. A title bar itself requires a
+border. To obtain a window without a title bar, you must therefore set <a href="../props/moveable.html">Moveable</a>,
+<a href="../props/sysmenu.html">SysMenu</a>, <a href="../props/maxbutton.html">MaxButton</a> and <a href="../props/minbutton.html">MinButton</a> to 0. Note that setting <a href="../props/caption.html">Caption</a> does <b>not</b> force a title bar on the window.</p><p>If <a href="../props/sizeable.html">Sizeable</a> is 1, the window will have
+a double-line border, regardless of the values of other properties. If <a href="../props/sizeable.html">Sizeable</a> is 0, and any one or more of <a href="../props/moveable.html">Moveable</a>, <a href="../props/sysmenu.html">SysMenu</a>,
+<a href="../props/maxbutton.html">MaxButton</a>, <a href="../props/minbutton.html">MinButton</a> or <a href="../props/border.html">Border</a> is 1, the window will have a
+1-pixel border. Only if all these properties are 0 will the window be
+borderless. To obtain a dialog box that may only be moved or closed, set <a href="../props/border.html">Border</a> to 2.</p><p>Note that the default value for <a href="../props/caption.html">Caption</a> is an empty character vector which results in a blank title.</p><p>To obtain a standard dialog box with 3-dimensional appearance, create a Form
+with <a href="../props/border.html">Border</a> set to 2 and <a href="../props/edgestyle.html">EdgeStyle</a> set to <tt>'Dialog'</tt>, for example:</p><pre class="APLCodeSmall">  'F' ⎕WC 'Form' 'Dialog Box' ('EdgeStyle' 'Dialog')('Border' 2)</pre><p>The <a href="../props/state.html">State</a> property has the value 0 if the
+window is currently displayed in its "normal" state, 1 if it is
+currently displayed as an icon, and 2 if it is currently maximised and displayed
+full-screen. This property does not just report the current state, but can be
+used to set the state under program control.</p><p>The <a href="../props/vscroll.html">VScroll</a> and <a href="../props/hscroll.html">HScroll</a> properties determine whether or not a Form has a vertical and horizontal
+scrollbar respectively. These properties are set to <tt>¯1</tt>to obtain a scrollbar. Their default value is 0 (no scrollbar). <a href="../props/vscroll.html">VScroll</a> and <a href="../props/hscroll.html">HScroll</a> may only be set when the object is created and may not subsequently be changed. The <a href="../props/range.html">Range</a> property is a 2-element vector that specifies the maximum value for the vertical
+and horizontal scrollbars respectively. The <a href="../props/pagesize.html">PageSize</a> property is a 2-element vector that specifies the sizes of the thumbs in each scrollbar. The <a href="../props/step.html">Step</a> property is a 4-element vector that specifies the sizes of the small and large
+change. Its first two elements refer to the vertical scrollbar, elements 3 and 4
+refer to the horizontal scrollbar. The <a href="../props/thumb.html">Thumb</a> property is a 2-element vector that both reports and sets the position of the
+thumb in the vertical and horizontal scrollbars respectively. When the user
+attempts to move the thumb in one of the scrollbars, the Form generates a <a href="../methodorevents/vscroll.html">VScroll</a> or <a href="../methodorevents/hscroll.html">HScroll</a> event.</p><p><a href="../methodorevents/vscroll.html">VScroll</a> and <a href="../methodorevents/hscroll.html">HScroll</a> cannot be changed using <a href="../../lang/sysfns/ws.html"><tt>⎕WS</tt></a>.
+However, you can make a scrollbar disappear by setting the corresponding element
+of <a href="../props/range.html">Range</a> to 1, thus allowing you to
+dynamically switch the scrollbar off and on. Note however that doing so will
+change the size of the Form.</p><p>Setting the <a href="../props/fontobj.html">FontObj</a> property on a Form
+does not affect the text in its title bar. However, the value of <a href="../props/fontobj.html">FontObj</a> will (unless over-ridden) be inherited by all of the objects within the Form.</p><p>The background of the Form may be coloured using <a href="../props/bcol.html">BCol</a>.
+The default value for <a href="../props/bcol.html">BCol</a> is the Windows
+Button Face colour unless <a href="../props/edgestyle.html">EdgeStyle</a> is
+set to <tt>'None'</tt> or <tt>'Default'</tt>in which case it is the Windows background colour. Alternatively, the background
+of a Form can be defined using a <a href="bitmap.html">Bitmap</a> or <a href="metafile.html">Metafile</a> object whose name is defined by the <a href="../props/picture.html">Picture</a> property. A <a href="metafile.html">Metafile</a> is automatically scaled
+to fit the Form. A <a href="bitmap.html">Bitmap</a> can be tiled <span class="Italic">or</span>scaled. See <a href="../props/picture.html">Picture</a> property for details.</p><p>The <a href="../props/ontop.html">OnTop</a> property is either 0 or 1. If it
+is 0, the Form assumes its normal position within the stack of windows on the
+screen and is only brought to the front when it receives the input focus. If <a href="../props/ontop.html">OnTop</a> is set to 1, the Form is always brought to the front even when it doesn't have
+the focus. If more than one Form has <a href="../props/ontop.html">OnTop</a> set to 1, the stacking order of this set of Forms is defined by the order in
+which they were created.</p><p>A Form can be created as a child of another Form. If so, it has the following
+characteristics :</p><ul><li value="1">A child Form always appears on top of its parent Form (although it is not
+    constrained by it)</li><li value="2">When you minimize a parent Form, its child Forms disappear.</li><li value="3">Making the parent Form invisible or inactive has no effect on a Child
+    Form.</li></ul><p>Note that the <a href="../props/posn.html">Posn</a> and <a href="../props/size.html">Size</a> properties of a child Form are expressed in screen coordinates and are not given
+relative to its parent.</p></body>
+</html>

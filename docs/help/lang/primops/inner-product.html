@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←Xf.gY</tt>Inner Product</h2><p><tt>f</tt> must be a dyadic function.  <tt>g</tt> may be any dyadic function which returns a result.  The last axis of <tt>X</tt> must have the same length as the first axis of <tt>Y</tt>.</p><p>The result of the derived function has shape <tt>(¯1↓⍴X),1↓⍴Y</tt>.  Each item of <tt>R</tt> is the result of <tt>f/xg¨y</tt> where <tt>x</tt> and <tt>y</tt> are typical vectors taken from all the combinations of vectors along the last axis of <tt>X</tt> and the first axis of <tt>Y</tt> respectively.</p><p>Function <tt>f</tt> (and the derived function) need not return a result in the exceptional case when <tt>2=¯1↑⍴X</tt>.  In all other cases, function <tt>f</tt> must return a result.</p><p>If the result of <tt>xg¨y</tt> is empty, for any <tt>x</tt> and <tt>y</tt>, a <tt>DOMAIN ERROR</tt> will be reported unless function <tt>f</tt> is a primitive scalar dyadic function with an identity element shown in <a href="reduce.html#IdentityElements" class="MCXref_0">Identity Elements</a>.</p><h4>Examples</h4><pre>      1 2 3+.×10 12 14
+76
+ 
+      1 2 3 PLUS.TIMES 10 12 14
+76
+ 
+      +/1 2 3×10 12 14
+76
+ 
+      NAMES
+HENRY
+WILLIAM
+JAMES
+SEBASTIAN
+ 
+      NAMES^.='WILLIAM  '
+0 1 0 0</pre></body>
+</html>

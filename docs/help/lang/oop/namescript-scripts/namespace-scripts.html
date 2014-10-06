@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h2><a name="NamespaceScripts"></a>Namespace Scripts</h2><p>A Namespace Script is a script that begins with a <tt>:Namespace</tt> statement and ends with a <tt>:EndNamespace</tt> statement. When a Namespace Script is fixed, it establishes an entire namespace that may contain other namespaces, functions, variables and classes.</p><p>The names of Classes defined within a Namespace Script which are parents, children, or siblings are visible both to one another and to code and expressions defined in the same script, regardless of the namespace hierarchy within it. Names of Classes which are nieces or nephews and their descendants are however not visible.</p><p>For example:</p><pre>:Namespace a
+
+
+    d←⎕NEW a1
+    e←⎕NEW bb2 
+    
+    :Class a1          
+        ∇ r←foo
+          :Access Shared Public
+          r←⎕NEW¨b1 b2
+        ∇
+    :EndClass ⍝ a1
+    
+    ∇ r←goo
+      r←a1.foo
+    ∇
+    
+    ∇ r←foo
+      r←⎕NEW¨b1 b2
+    ∇
+    
+    :Namespace b
+        :Class b1
+        :EndClass ⍝ b1
+        :Class b2
+            :Class bb2
+            :EndClass ⍝ bb2
+        :EndClass ⍝ b2
+    :EndNamespace ⍝ b
+    
+:EndNamespace ⍝ a</pre><p class="pagebreakafter"> </p><pre>
+      a.d
+#.a.[a1]
+      a.e
+#.a.[bb2]
+      a.foo
+ #.a.[b1]  #.a.[b2]</pre><p>Note that the names of Classes <tt>b1</tt> (<tt>a.b.b1</tt>) and <tt>b2</tt> (<tt>a.b.b2</tt>) are not visible from their “uncle” <tt>a1</tt> (<tt>a.a1</tt>).</p><pre>      a.goo
+VALUE ERROR
+foo[2] r←⎕NEW¨b1 b2</pre><p>Notice that Classes in a Namespace Script are fixed before other objects (hence the assignments to <tt>d</tt> and <tt>e</tt> are evaluated <span class="Italic">after</span> Classes <tt>a1</tt> and <tt>bb2</tt> are fixed), although the order in which Classes themselves are defined is still important if they reference one another during initialisation.</p><p><b>Warning:</b> If you introduce new objects of any type (functions, variables, or classes) into a namespace defined by a script by any other means than editing the script, then these objects will be lost the next time the script is edited and fixed. Also, if you modify a variable which is defined in a script, the script will not be updated.</p><p>A practical example using <tt>:Namespace</tt> is given in the <a href="namespace-script-example.html">next topic</a>.</p></body>
+</html>

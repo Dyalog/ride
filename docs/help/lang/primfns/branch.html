@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>→Y</tt>Branch</h2><p><tt>Y</tt> may be a scalar or vector which, if not empty, has a simple numeric scalar as its first element.  The function has no explicit result.  It is used to modify the normal sequence of execution of expressions or to resume execution after a statement has been interrupted. Branch is not in the function domain of operators.</p><p>The following distinct usages of the branch function occur:</p><table><tr><th> </th><th class="Left">Entered in a Statement in a Defined Function </th><th class="Left">Entered in Immediate Execution Mode</th></tr><tr><td><tt>→LINE</tt></td><td>Continue with the specific line</td><td>Restart execution at the specific line of the most recently suspended function</td></tr><tr><td><tt>→⍳0</tt></td><td>Continue with the next expression</td><td>No effect</td></tr></table><p>In a defined function, if <tt>Y</tt> is non-empty then the first element in <tt>Y</tt> specifies a statement line in the defined function to be executed next.  If the line does not exist, then execution of the function is terminated.  For this purpose, line 0 does not exist.  (Note that statement line numbers are independent of the index origin <tt>⎕IO</tt>).</p><p>If <tt>Y</tt> is empty, the branch function has no effect.  The next expression is executed on the same line, if any, or on the next line if not.  If there is no following line, the function is terminated.</p><p>The <tt>:GoTo</tt> statement may be used in place of Branch in a defined function.</p><h4>Example</h4><pre>     ∇ TEST
+[1]    1
+[2]    →4
+[3]    3
+[4]    4
+     ∇
+ 
+      TEST
+1
+4</pre><p>In general it is better to branch to a LABEL than to a line number.  A label occurs in a statement followed by a colon and is assigned the value of the statement line number when the function is defined.</p><h4 class="ExampleNewPage">Example</h4><pre>     ∇ TEST
+[1]    1
+[2]    →FOUR
+[3]    3
+[4]   FOUR:4
+     ∇
+</pre><p>The previous examples illustrate unconditional branching. There are numerous APL idioms which result in conditional branching. Some popular idioms are identified in the following table:</p><table><tbody><tr><th class="Left">Branch Expression</th><th class="Left">Comment</th></tr><tr><td><tt>→TEST/L1</tt></td><td>Branches to label <tt>L1</tt> if <tt>TEST</tt> results in 1 but not if <tt>TEST</tt> results in 0.</td></tr><tr><td><tt>→TEST⍴L1</tt></td><td>Similar to above.</td></tr><tr><td><tt>TEST↑L1</tt></td><td>Similar to above.</td></tr><tr><td><tt>→L1⍴⍨TEST</tt></td><td>Similar to above.</td></tr><tr><td><tt>→L1⌈⍳TEST</tt></td><td>Similar to above but only if <tt>⎕IO←→1</tt>.</td></tr><tr><td><tt>→L1×⍳TEST</tt></td><td>Similar to above but only if <tt>⎕IO←→1</tt>.</td></tr><tr><td><tt>→(L1,L2,L3)[N]</tt></td><td>Unconditional branch to a selected label.</td></tr><tr><td><tt>→(T1,T2,T3)/L1,L2,L3</tt></td><td>Branches to the first selected label dependent on tests <tt>T1</tt>,<tt>T2</tt>,<tt>T3</tt>. If all tests result in 0, there is no branch.</td></tr><tr><td><tt>→N⌽L1,L2,L3</tt></td><td>Unconditional branch to thefirst label after rotation.</td></tr></tbody></table><p>A branch expression may occur within a statement including <tt>⋄</tt> separators:</p><pre>[5]   →NEXT⍴⍨TEST ⋄ A←A+1 ⋄ →END
+[6]  NEXT:</pre><p>In this example, the expressions <tt>'A←A+1'</tt> and <tt>'→END'</tt> are executed only if <tt>TEST</tt> returns the value 1.  Otherwise control branches to label <tt>NEXT</tt>.</p><p>In immediate execution mode, the branch function permits execution to be continued within the most recently suspended function, if any, in the state indicator.  If the state indicator is empty, or if the argument <tt>Y</tt> is the empty vector, the branch expression has no effect.  If a statement line is specified which does not exist, the function is terminated.  Otherwise, execution is restarted from the beginning of the specified statement line in the most recently suspended function.</p><h4>Example</h4><pre>     ∇ F
+[1]   1
+[2]   2
+[3]   3
+     ∇
+ 
+      2 ⎕STOP'F'
+      F
+1
+ 
+F[2]
+      )SI
+#.F[2]*
+      →2
+2
+3</pre><p>The system constant <tt>⎕LC</tt> returns a vector of the line numbers of statement lines in the state indicator, starting with that in the most recently suspended function.  It is convenient to restart execution in a suspended state by the expression:</p><pre>      →⎕LC</pre></body>
+</html>

@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⊂Y</tt>Enclose</h2><p><tt>Y</tt> may be any array.  <tt>R</tt> is a scalar array whose item is the array <tt>Y</tt>.  If <tt>Y</tt> is a simple scalar, <tt>R</tt> is the simple scalar unchanged.  Otherwise, <tt>R</tt> has a depth whose magnitude is one greater than the magnitude of the depth of <tt>Y</tt>.</p><h4>Examples</h4><pre>      ⊂1
+1
+ 
+      ⊂'A'
+A
+ 
+      ⊂1 2 3
+ 1 2 3
+ 
+      ⊂1,⊂'CAT'
+ 1  CAT
+ 
+      ⊂2 4⍴⍳8
+ 1 2 3 4
+ 5 6 7 8
+ 
+      ⊂⍳0
+ 
+      ⊂⊂⍳0
+ 
+      ⊂⊂10
+10</pre></body>
+</html>

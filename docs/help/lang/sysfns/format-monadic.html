@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⎕FMT Y</tt>Format (Monadic) </h2><p><tt>Y</tt> may be any array.  <tt>R</tt> is a simple character matrix which appears the same as the default display of <tt>Y</tt>.  If <tt>Y</tt> contains control characters from <tt>⎕TC</tt>, they will be resolved.</p><h4>Examples</h4><pre>      A←⎕FMT '∩' ,⎕TC[1],'∘'
+ 
+      ⍴A
+1 1
+      A
+⍝
+ 
+      A←⎕VR 'FOO'
+ 
+      A
+     ∇ R←FOO
+[1]    R←10
+     ∇
+ 
+      ⍴A
+31
+      B←⎕FMT A
+ 
+      B
+     ∇ R←FOO
+[1]    R←10
+     ∇
+ 
+      ⍴B
+3 12</pre></body>
+</html>

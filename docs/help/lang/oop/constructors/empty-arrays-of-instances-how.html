@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h3>Empty Arrays of Instances: How?</h3><p>To cater for the need to handle empty arrays of Instances as easily as non-empty arrays, a reference to an empty array of Class Instances is handled in a special way.</p><p>Whenever a reference or an assignment is made to the content of an <span class="Italic">empty array of Instances</span>, the following steps are performed:</p><ol><li value="1">APL creates a <span class="Italic">new Instance</span> of the same Class of which the empty Instance belongs.</li><li value="2">the default (niladic) Constructor is run in the new Instance</li><li value="3">the appropriate value is obtained or assigned:<ul class="Level2"><li value="1">if it is a reference is to a Field, the value of the Field is obtained</li><li value="2">if it is a reference is to a Property, the PropertyGet function is run</li><li value="3">if it is a reference is to a Method, the method is executed</li><li value="4">if it is an assignment, the assignment is performed or the PropertySet function is run</li></ul></li><li value="4">if it is a reference, the result of step 3 is used to generate an empty result array with a suitable prototype by the application of the function <tt>{0⍴⊂⍵}</tt> to it</li><li value="5">the Class Destructor (if any) is run in the new Instance</li><li value="6">the New Instance is deleted</li></ol><h4>Example</h4><pre>:Class Bird
+    :Field Public Species
+    
+    ∇ egg spec
+      :Access Public Instance
+      :Implements Constructor
+      ⎕DF Species←spec
+    ∇
+    ∇ default
+      :Access Public Instance
+      :Implements Constructor
+      ⎕DF Species←'Default Bird'
+      #.DISPLAY Species
+    ∇
+    ∇ R←Speak
+      :Access Public
+      #.DISPLAY R←'Tweet, Tweet, Tweet'
+    ∇
+    
+:EndClass ⍝ Bird</pre><p>First, we can create an empty array of Instances of Bird using <tt>0⍴</tt>.</p><pre>      Empty←0⍴⎕NEW Bird 'Robin'</pre><p>A reference to <tt>Empty.Species</tt> causes APL to create a new Instance and invoke the niladic Constructor <tt>default</tt>. This function sets <tt>Species</tt> to <tt>'Default Bird'</tt><span class="Italic">and </span>calls <tt>#.DISPLAY</tt> which displays output to the Session.</p><pre>      DISPLAY Empty.Species
+.→-----------.
+|Default Bird|
+'------------'</pre><p>APL then retrieves the value of <tt>Species</tt> (<tt>'Default Bird'</tt>), applies the function <tt>{0⍴⊂⍵}</tt> to it and returns this as the result of the expression.</p><pre>.⊖---------------.
+| .→-----------. |
+| |            | |
+| '------------' |
+'∊---------------'</pre><p>A reference to <tt>Empty.Speak</tt> causes APL to create a new Instance and invoke the niladic Constructor <tt>default</tt>. This function sets <tt>Species</tt> to <tt>'Default Bird'</tt><span class="Italic">and </span>calls <tt>#.DISPLAY</tt> which displays output to the Session.</p><p class="pagebreakafter"> </p><pre>      DISPLAY Empty.Speak
+.→-----------.
+|Default Bird|
+'------------'</pre><p>APL then invokes function <tt>Speak</tt> which displays <tt>'Tweet, Tweet, Tweet'</tt> and returns this as the result of the function.</p><pre>.→------------------.
+|Tweet, Tweet, Tweet|
+'-------------------'</pre><p>APL then applies the function <tt>{0⍴⊂⍵}</tt> to it and returns this as the result of the expression.</p><pre>.⊖----------------------.
+| .→------------------. |
+| |                   | |
+| '-------------------' |
+'∊----------------------'</pre></body>
+</html>

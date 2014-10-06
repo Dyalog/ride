@@ -1,0 +1,5 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←X ⎕NRESIZE Y</tt>Native File Resize</h2><p>This function changes the size of a native file.  </p><p><tt>Y</tt> is a negative integer tie number associated with a tied native file.  </p><p><tt>X</tt> is a single integer value that specifies the new size of the file in bytes.  If <tt>X</tt> is smaller than the current file size, the file is truncated.  If <tt>X</tt> is larger than the current file size, the file is extended and the value of additional bytes is undefined.</p><p>The shy result of <tt>⎕NRESIZE</tt> is the tie number of the resized file.</p></body>
+</html>

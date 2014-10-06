@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←X ⎕NREPLACE Y</tt>Native File Replace</h2><p><tt>⎕NREPLACE</tt> is used to write data to a native file, replacing data which is already there.  </p><p><tt>X</tt> must be a simple homogeneous APL array containing the data to be written.  </p><p><tt>Y</tt> is a 2- or 3-element integer vector whose elements are as follows:</p><table><tbody><tr><td class="DyalogPlain">[1]</td><td> negative tie number,</td></tr><tr><td class="DyalogPlain"> [2]</td><td> start byte, counting from 0, at which the data is to be written,</td></tr><tr><td class="DyalogPlain"> [3]</td><td> conversion code (optional).</td></tr></tbody></table><p>See <a href="nread.html#NativeFileRead" class="MCXref_0">Native File Read </a> for a list of valid conversion codes.</p><p>The shy result is the position within the file of the end of the record, or, equivalently, the start of the following one. Used, for example, in:</p><pre>      ⍝ Replace sequentially from indx.
+      {⍺ ⎕NREPLACE tie ⍵}/vec,indx </pre><h4>Unicode Edition</h4><p>Unless you specify the data type in Y[3], a character array will by default be written using type 80.</p><p>If the data will not fit into the specified character width (bytes) <tt>⎕NREPLACE</tt> will fail with a <tt>DOMAIN ERROR</tt>.</p><p>As a consequence of these two rules, you must specify the data type (either 160 or 320) in order to write Unicode characters whose code-point is in the range 256-65535 and &gt;65535 respectively.</p><h4>Example</h4><pre>      n←'test'⎕NTIE 0 ⍝ See <a href="nappend.html#Example" class="MCXref_0">Example</a>
+ 
+      ⎕NREAD n 80 3 0
+abc
+      ⎕NREAD n 160 7
+ταβέρνα
+ 
+      ⎕←'εστιατόριο'⎕NREPLACE n 3
+DOMAIN ERROR
+      ⎕←'εστιατόριο'⎕NREPLACE n 3
+     ∧
+ 
+      ⎕←'εστιατόριο'⎕NREPLACE n 3 160
+23
+      ⎕NREAD n 80 3 0
+abc
+      ⎕NREAD n 160 10
+εστιατόριο</pre><p>For compatibility with old files, you may specify that the data be converted to type 82 on output. The conversion (to <tt>⎕AV</tt> indices) will be determined by the local value of <tt>⎕AVU</tt>.</p></body>
+</html>

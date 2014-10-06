@@ -1,0 +1,55 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="Error_Trapping"></a>Error Trapping Concepts</h2><p>The purpose of this section is to show some of the ways in which the ideas of error trapping can be used to great effect to change the flow of control in a system.</p><p>Most APLs have error trapping facilities in one form or another, but this section discusses the facilities available to a Dyalog APL programmer.</p><p>First, we must have an idea of what is meant by error trapping. We are all used to entering some duff APL code, and seeing a (sometimes) rather obscure, esoteric error message echoed back:</p><pre>         10÷0
+   DOMAIN ERROR
+         10÷0
+        ^</pre><p>This message is ideal for the APL programmer, but not so for the end user. We need a way to bypass the default action of APL, so that we can take an action of our own, thereby offering the end user a more meaningful message.</p><p>Every error message reported by Dyalog APL has a corresponding error number (for a list of error codes and message, see <tt>⎕TRAP</tt>, Language Reference). Many of these error numbers plus messages are common across all versions of APL. We can see that the code for <tt>DOMAIN ERROR</tt> is 11, whilst <tt>LENGTH ERROR</tt> has code 5.</p><p>Dyalog APL provides two distinct but related mechanisms for the trapping and control of errors. The first is based on the control structure<tt> :Trap ... :EndTrap</tt>, and the second, on the system variable <tt>⎕TRAP</tt>. The control structure is easier to administer and so is recommended for normal use, while the system variable provides slightly finer control and may be necessary for specialist applications.</p><h4><a name="Last_Error_DM"></a>Last Error number and Diagnostic Message</h4><p>Dyalog APL keeps a note of the last error that occurred, and provides this information through system functions: <tt>⎕EN</tt>, <tt>⎕EM</tt> and <tt>⎕DM</tt>.</p><pre>         10÷0
+   DOMAIN ERROR
+         10÷0
+        ^</pre><p>Error Number for last occurring error:</p><pre>         ⎕EN
+   11</pre><p>Error Message associated with code 11:</p><pre>         ⎕EM 11
+   DOMAIN ERROR</pre><p><tt>⎕DM</tt> (Diagnostic Message) is a 3 element nested vector containing error message, expression and caret:</p><pre>         ⎕DM
+    DOMAIN ERROR         10÷0        ^</pre><p>Use function <tt>DISPLAY</tt> to show structure:</p><pre>
+         DISPLAY ⎕DM
+   ┌→─────────────────────────────────────┐
+   │ ┌→───────────┐ ┌→─────────┐ ┌→─────┐ │
+   │ │DOMAIN ERROR│ │      10÷0│ │     ∧│ │
+   │ └────────────┘ └──────────┘ └──────┘ │
+   └∊─────────────────────────────────────┘</pre><p>Mix (<tt>↑</tt>) of this vector produces a matrix that displays the same as the error message produced by APL:</p><pre>         ↑⎕DM
+    DOMAIN ERROR
+         10÷0
+        ^</pre><h4><a name="Trap_Control_Structure"></a>Error Trapping Control Structure</h4><p>You can embed a number of lines of code in a <tt>:Trap</tt> control structure within a defined function.</p><pre>   [1]   ...
+   [2]   :Trap 0
+   [3]       ...
+   [4]       ...
+   [5]   :EndTrap
+   [6]   ...</pre><p>Now, whenever <span class="Italic">any</span> error occurs in one of the enclosed lines, or in a function called from one of the lines, processing stops immediately and control is transferred to the line following the <tt>:EndTrap</tt>. The 0 argument to <tt>:Trap</tt>, in this case represents any error. To trap only specific errors, you could use a vector of error numbers:</p><pre>   [2]   :Trap 11 2 3</pre><p>Notice that in this case, no extra lines are executed after an error. Control is passed to line <tt>[6]</tt> either when an error has occurred, <span class="Italic">or</span> if all the lines have been executed without error. If you want to execute some code <span class="Italic">only</span> after an error, you could re-code the example like this:</p><pre> 
+   [1]   ...
+   [2]   :Trap 0
+   [3]       ...
+   [4]       ...
+   [5]   :Else
+   [6]       ...
+   [7]       ...
+   [8]   :EndTrap
+   [9]   ...</pre><p>Now, if an error occurs in lines <tt>[3-4]</tt>, (or in a function called from those lines), control will be passed immediately to the line following the <tt>:Else</tt> statement. On the other hand, if all the lines between <tt>:Trap</tt> and <tt>:Else</tt> complete successfully, control will pass out of the control structure to (in this case) line <tt>[9]</tt>. </p><p>The final refinement is that specific error cases can be accommodated using <tt>:Case[List]</tt> constructs in the same manner as the <tt>:Select</tt> control structure.</p><pre>   [1]   :Trap 17+⍳21            ⍝ Component file errors.
+   [2]       tie←name ⎕ftie 0    ⍝ Try to tie file
+   [3]       'OK'
+   [4]   :Case 22
+   [5]       'Can''t find ',name
+   [6]   :CaseList 25+⍳13
+   [7]       'Resource Problem'
+   [8]   :Else
+   [9]       'Unexpected Problem'
+   [10]  :EndTrap</pre><p>Note that <tt>:Trap</tt> can be used in conjunction with <tt>⎕SIGNAL</tt> described below.</p><p>Traps can be nested. In the following example, code in the inner trap structure attempts to tie a component file, and if unsuccessful, tries to create one. In either case, the tie number is then passed to function <tt>ProcessFile</tt>. If an error other than 22 (<tt>FILE NAME ERROR</tt>) occurs in the inner trap structure, or an error occurs in function <tt>ProcessFile</tt> (or any of its called function), control passes to line immediately to line <tt>[9]</tt>.</p><pre>   [1]   :Trap 0
+   [2]       :Trap 22
+   [3]           tie←name ⎕ftie 0
+   [4]       :Else
+   [5]           tie←name ⎕fcreate 0
+   [6]       :EndTrap
+   [7]       ProcessFile tie 
+   [8]   :Else
+   [9]       'Unexpected Error'
+   [10]  :EndTrap</pre><h4><a name="Trap_System_Variable"></a>Trap System Variable: <tt>⎕TRAP</tt></h4><p>The second way of trapping errors is to use the system variable: <tt>⎕TRAP</tt>.</p><p><tt>⎕TRAP</tt>, can be assigned a nested vector of <b>trap specifications</b>. Each trap specification is itself a nested vector, of length 3, with each element defined as:</p><table><tr><td class="RowTitle">list of error numbers</td><td>The error numbers we are interested in.</td></tr><tr><td class="RowTitle">action code</td><td>Either <tt>'E'</tt> (Execute) or <tt>'C'</tt> (Cut Back). There are others, but they are seldom used.</td></tr><tr><td class="RowTitle">action to be taken</td><td>APL expression, usually a branch statement or a call to an APL function.</td></tr></table><p>So a single trap specification may be set up as:</p><pre>         ⎕TRAP←5 'E' 'ACTION1'</pre><p>and a multiple trap specification as:</p><pre>         ⎕TRAP←(5 'E' 'ACTION1')((1 2 3) 'C' 'ACTION2')</pre><p>The action code <tt>E</tt> tells APL that you want your action to be taken in the function in which the error occurred, whereas the code <tt>C</tt> indicates that you want your action to be taken in the function where the <tt>⎕TRAP </tt>was <span class="Italic">localised</span>. If necessary, APL must first travel back up the execution stack (cut-back) until it reaches that function.</p></body>
+</html>

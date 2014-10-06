@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h3><a name="GUIClasses"></a>Dyalog GUI Classes</h3><p>You may create user-defined Classes based upon Dyalog GUI objects. The <a href="temperature-converter-example-class.html">Temperature Converter Class</a> and <a href="dual-example-class.html">Dual Class</a> illustrate how this can be done.</p><p>To base a Class on a Dyalog GUI object, you specify the <i>name</i> of the object as its Base Class. For example, the <a href="temperature-converter-example-class.html">Temperature Converter</a> is based upon a Form:</p><pre>:Class Temp: 'Form'</pre><p>and the <a href="dual-example-class.html">Dual Control</a> is based upon a SubForm:</p><pre>:Class Dual: 'SubForm'</pre><p>Being based upon a top-level GUI object, the <a href="temperature-converter-example-class.html">Temperature Converter</a> may be used as follows:</p><pre>      T1←⎕NEW Temp(⊂'Posn'(68 50))</pre><p><img src="../../../images/tempconv.gif" /></p><p>Notice that the <tt>:Implements Constructor</tt> statement of its Constructor <tt>Make</tt>:</p><pre>:Implements Constructor :Base (⊂'Caption' TITLE),pv,⊂('Size' (30 40))</pre><p>passes on the application-specific property list (<tt>pv</tt>) given as its argument, but (in this case) specifies Caption and Size as well. The order in which the properties are specified in the <tt>:Base</tt> call ensures that the former will act as a default (and be overridden by an application-specific Caption requested in <tt>pv</tt>), whereas the specified Size of(30 40) will override whatever value of Size is requested by the host application in <tt>pv</tt>.</p><p>Other Instances can co-exist with the first:</p><pre>      T2←⎕NEW Temp(('Caption' 'My Application')('Posn'(10 10))</pre><p>The <a href="dual-example-class.html">Dual Control</a> requires a GUI parent but several Instances can co-exist, quite independently, in the same parent.</p><p>For example, function <tt>RUN</tt> creates a Form and 3 Instances of <a href="dual-example-class.html">Dual</a>; one to convert Centigrade to Fahrenheit, one to convert Fahrenheit to Centigrade, and the third to convert centimetres to inches.</p><pre>     ∇ RUN;F;D1PROPS;D2PROPS;D3PROPS
+[1]
+[2]    F←⎕NEW'Form'(('Caption' 'Dual Instances')('Coord' 'Pixel')('Size'(320 320)))
+[3]
+[4]    D1PROPS←('Caption1' 'Centigrade')('Caption2' 'Fahrenheit')
+[5]    D1PROPS,←('Intercept' 32)('Gradient'(9÷5))('Value1' 0)('Range'(0 100))
+[6]    F.D1←F.⎕NEW Dual(('Coord' 'Pixel')('Posn'(10 10))('Size'(100 300)),D1PROPS)
+[7]
+[8]    D2PROPS←('Caption1' 'Fahrenheit')('Caption2' 'Centigrade')
+[9]    D2PROPS,←('Intercept'(-32×5÷9))('Gradient'(5÷9))('Value1' 0)('Range'(0 212))
+[10]   F.D2←F.⎕NEW Dual(('Coord' 'Pixel')('Posn'(110 10))('Size'(100 300)),D2PROPS)
+[11]
+[12]   D3PROPS←('Caption1' 'Centimetres')('Caption2' 'Inches')
+[13]   D3PROPS,←('Intercept' 0)('Gradient'(÷2.54))('Value1' 0)('Range'(0 100))
+[14]   F.D3←F.⎕NEW Dual(('Coord' 'Pixel')('Posn'(210 10))('Size'(100 300)),D3PROPS)
+[15]
+[16]   ⎕DQ'F'
+     ∇</pre><p><img src="../../../images/dualinst.gif" /></p><p>Dual's Constructor <tt>Make</tt> first splits its constructor arguments into those that apply to the Dual Class itself and those that apply to the SubForm. Its <tt>:Implements Constructor</tt> statement then passes these on to the Base Constructor, together with an appropriate setting for EdgeStyle.</p><pre>      :Implements Constructor :Base BaseArgs,⊂'EdgeStyle' 'Dialog'</pre></body>
+</html>

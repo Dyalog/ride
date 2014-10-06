@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Object</tt>OLEServer</h2><table class="GUIMembers"><tr><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Parents</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Children</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Properties</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Methods</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Events</a></span></td></tr></table><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Purpose:</td><td class="SpacedPlain">The OLEServer object is used to establish a namespace as an OLE Server
+        object that can be used by an OLE Automation client.</td></tr></table><p class="Bold">Description</p><p>The OLEServer object allows you to export an APL namespace so that its
+functions and variables become directly accessible to an OLE Automation client
+application such as Microsoft Visual Basic or Microsoft Excel.</p><p>An OLEServer may be saved as an <span class="Italic">out-of-process</span> OLE server (in a
+workspace) or as an <span class="Italic">in-process</span> OLE server (in a DLL). See <span class="Italic">Interface
+Guide</span> for details.</p><p>When you create an OLEServer object, APL allocates various OLE attributes to
+it. For example, the CLSID, which uniquely identifies the object, is assigned at
+this stage. However, the object is not actually <span class="Italic">registered</span> until you
+execute )SAVE.</p><p>Registration involves updating the Windows registry with information about
+the object itself, such as its name, the command required to obtain it and so
+forth. Registration also records information about all of the functions and
+variables that your object exposes. Registration is therefore a non-trivial
+operation and should be delayed until the point when you are ready to test your
+OLEServer.</p><p>You may create an empty OLEServer object and then define functions and
+variables within it. Alternatively, you may convert an existing namespace which
+is already populated with functions and variables. The latter method is
+recommended as it implies less registry activity during the development of the
+object.</p><p>The <a href="../props/exportedfns.html">ExportedFns</a> and <a href="../props/exportedvars.html">ExportedVars</a> properties specify the names of the functions and variables that will be exposed
+by the object to OLE clients.</p><p>The <a href="../props/runmode.html">RunMode</a> property is a character
+vector that specifies how the object serves multiple clients. It may be <tt>'MultiUse'</tt>(the default), <tt>'SingleUse'</tt>, or <tt>'RunningObject'</tt>.</p><p>The <a href="../props/showsession.html">ShowSession</a> property is either 0
+(the default) or 1 and specifies whether or not the APL Session window is
+displayed when the first instance of the OLEServer is created.</p><p><a href="../props/runmode.html">RunMode</a> and <a href="../props/showsession.html">ShowSession</a> apply only to <span class="Italic">out-of-process</span> OLEServers.</p></body>
+</html>

@@ -1,0 +1,10 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h3>Threads &amp; Niladic Functions</h3><ul><li value="1">In common with other operators, the spawn operator <tt>&amp;</tt> may accept monadic or dyadic functions as operands, but not niladic functions. This means that, using spawn, you cannot start a thread that consists only of a niladic function </li><li value="2">If you wish to invoke a niladic function asynchronously, you have the following choices:</li><li value="3">Turn your niladic function into a monadic function by giving it a dummy argument which it ignores.</li><li value="4">Call your niladic function with a dynamic function to which you give an argument that is implicitly ignored. For example, if the function <tt>NIL</tt> is niladic, you can call it asynchronously using the expression: <tt>  {NIL}&amp; 0</tt></li><li value="5">Call your function via a dummy monadic function, e.g.
+            <pre>     ∇ NIL_M DUMMY
+[1]    NIL
+     ∇
+     NIL_M&amp; ''
+             </pre></li><li value="6">Use execute, e.g.<pre>⍎&amp; 'NIL'</pre></li></ul><p>Note that niladic functions <span class="Italic">can</span> be invoked asynchronously as callback functions. For example, the statement:</p><pre>      ⎕WS'Event' 'Select' 'NIL&amp;'</pre><p>will execute correctly as a thread, even though <tt>NIL</tt> is niladic. This is because callback functions are invoked directly by <tt>⎕DQ</tt> rather than as an operand to the spawn operator.</p></body>
+</html>

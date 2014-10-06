@@ -1,0 +1,5 @@
+@font-face { font-family: apl; src: url(apl385.ttf) format("truetype"); }
+tt, pre, .DyalogPlain { font-family: apl, "APL385 Unicode", monospace; }
+body { font-family: sans-serif; margin: 20px; }
+h2 { background-color: #ccc; border: solid black 1px; padding: 3px 5px; }
+h2 tt { float: right; }

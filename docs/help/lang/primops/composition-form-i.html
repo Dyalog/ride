@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←f∘gY</tt>Composition (Form I)</h2><p><tt>f</tt> may be any monadic function.  <tt>g</tt> may be any monadic function which returns a result.  <tt>Y</tt> may be any array whose items are appropriate to function <tt>g</tt>.  The items of <tt>gY</tt> must be appropriate to function <tt>f</tt>.</p><p>The derived function is equivalent to <tt>fgY</tt>.  The derived function need not return a result.</p><p>Composition allows functions to be <span class="Italic">glued</span> together to build up more complex functions.</p><h4>Examples</h4><pre>      RANK ← ⍴∘⍴
+      RANK ¨ 'JOANNE' (2 3⍴⍳6)
+ 1  2</pre><p> </p><pre>      +/∘⍳¨2 4 6
+3 10 21
+ 
+ 
+      ⎕VR'SUM'
+     ∇ R←SUM X
+[1]    R←+/X
+     ∇
+ 
+      SUM∘⍳¨2 4 6
+3 10 21</pre></body>
+</html>

@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⎕THIS</tt>This Space</h2><p><tt>⎕THIS</tt> returns a reference to the current namespace, i.e. to the space in which it is referenced.</p><p>If <tt>NC9</tt> is a reference to any object whose name-class is <tt>9</tt>, then:</p><pre>      NC9≡NC9.⎕THIS
+1</pre><h4>Examples</h4><pre>      ⎕THIS
+#
+      'X'⎕NS ''
+      X.⎕THIS
+#.X
+     'F'⎕WC'Form'
+     'F.B'⎕WC'Button'
+      F.B.⎕THIS
+#.F.B
+ 
+      Polly←⎕NEW Parrot
+      Polly.⎕THIS
+#.[Parrot]</pre><p>An Instance may use <tt>⎕THIS</tt> to obtain a reference to its own Class:</p><pre>    Polly.(⊃⊃⎕CLASS ⎕THIS)
+#.Parrot</pre><p>or a function (such as a Constructor or Destructor) may identify or enumerate all other Instances of the same Class:</p><pre>      Polly.(⍴⎕INSTANCES⊃⊃⎕CLASS ⎕THIS)
+1</pre></body>
+</html>

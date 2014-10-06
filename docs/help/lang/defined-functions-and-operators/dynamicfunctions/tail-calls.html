@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h3><a name="TailCalls"></a>Tail Calls</h3><p>A novel feature of the implementation of Dynamic Functions is the way in which tail calls are optimised.</p><p>When a Dynamic Function calls a sub-function, the result of the call may or may not be modified by the calling function before being returned. A call where the result is passed back immediately without modification is termed a tail call.</p><p>For example in the following, the first call on function <tt>fact</tt> is a tail call because the result of  <tt>fact</tt> is the result of the whole expression, whereas the second call isn’t because the result is subsequently multiplied by <tt>⍵</tt>.</p><pre>      (⍺×⍵)fact ⍵-1       ⍝ Tail call on fact.
+      ⍵×fact ⍵-1          ⍝ Embedded call on fact.</pre><p>Tail calls occur frequently in Dynamic Functions, and the interpreter optimises them by re-using the current stack frame instead of creating a new one. This gives a significant saving in both time and workspace usage. It is easy to check whether a call is a tail call by tracing it. An embedded call will pop up a new trace window for the called function, whereas a tail call will re-use the current one. </p><p>Using tail calls can improve code performance considerably, although at first the technique might appear obscure. A simple way to think of a tail call is as a <b>branch with arguments</b>. The tail call, in effect, branches to the first line of the function after installing new values for <tt>⍵</tt> and <tt>⍺</tt>. </p><p class="Bold">Iterative algorithms can almost always be coded using tail calls.</p><p>In general, when coding a loop, we use the following steps; possibly in a different order depending on whether we want to test at the ‘top’ or the ‘bottom’ of the loop. </p><ol><li value="1">Initialise loop control variable(s).<tt>⍝ init</tt></li><li value="2">Test loop control variable.<tt>⍝ test</tt></li><li value="3">Process body of loop.<tt>⍝ proc</tt></li><li value="4">Modify loop control variable for next iteration.<tt>⍝ mod</tt></li><li value="5">Branch to step 2.<tt>⍝ jump</tt></li></ol><p>For example, in classical APL you might find the following:</p><pre>        ∇ value←limit loop value⍝ init
+    [1]  top:→(⎕CT&gt;value-limit)/0⍝ test
+    [2]   value←Next value⍝ proc, mod
+    [3]   →top⍝ jump
+        ∇</pre><p>Control structures help us to package these steps:</p><pre>        ∇ value←limit loop value⍝ init
+    [1]   :While ⎕CT&lt;value-limit⍝ test
+    [2]       value←Next value⍝ proc, mod
+    [3]   :EndWhile⍝ jump
+        ∇</pre><p>Using tail calls:</p><pre>    loop←{⍝ init
+        ⎕CT&gt;⍺-⍵:⍵⍝ test
+        ⍺ ∇ Next ⍵⍝ proc, mod, jump
+    }</pre></body>
+</html>

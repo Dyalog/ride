@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⎕SIZE Y</tt>Size of Object </h2><p><tt>Y</tt> must be a simple character scalar, vector or matrix, or a vector of character vectors containing a list of names. <tt>R</tt> is a simple integer vector of non-negative elements with the same length as the number of names in <tt>Y</tt>.</p><p>If the name in <tt>Y</tt> identifies an object with an active referent, the workspace required in bytes by that object is returned in the corresponding element of <tt>R</tt>.  Otherwise, 0 is returned in that element of <tt>R</tt>.</p><p>The result returned for an external variable is the space required to store the external array.  The result for a system constant, variable or function is 0.  The result returned for a GUI object gives the amount of workspace needed to store it, but excludes the space required for its children.</p><p>Note: Wherever possible, Dyalog APL <span class="Italic">shares</span> the whole or part of a workspace object rather than generates a separate copy; however <tt>⎕SIZE</tt> reports the size as though nothing is shared. <tt>⎕SIZE</tt> also includes the space required for the interpreter's internal information about the object in question.</p><h4>Examples</h4><pre>      ⎕VR 'FOO'
+     ∇ R←FOO
+[1]    R←10
+     ∇
+ 
+      A←⍳10
+ 
+      'EXT/ARRAY' ⎕XT'E' ⋄ E←⍳20
+ 
+      ⎕SIZE 'A' 'FOO' 'E' 'UND'
+28 76 120 0</pre></body>
+</html>

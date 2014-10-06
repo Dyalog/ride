@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h2><a name="Namespaces">Namespaces</a></h2><p>Namespace is a (class 9) object in Dyalog APL. Namespaces are analogous to
+nested workspaces.</p><pre>'Flat' APL Workspace      Workspace with Namespaces
+.OLD-------------------.   .NEW-------------------.
+|                      |   | FOO MAT VEC          |
+| DISPLAY              |   | .Util----------.     |
+|                      |   | |DISPLAY       |     |
+|   FOO MAT VEC        |   | |...           |     |
+|                      |   | '--------------'     |
+|   WsDoc_Init         |   | .WsDoc-------------. |
+|   WsDoc_Xref         |   | |Init .prt-..fmt--.| |
+|   WsDoc_Tree         |   | |     |Init||line || |
+|   WsDoc_prt_init     |   | |Tree |    ||     || |
+|   WsDoc_current_page |   | |Xref |page||     || |
+|   ...                |   | |     '----''-----'| |
+|                      |   | '------------------' |
+'----------------------'   '----------------------'
+	</pre><p>They provide the same sort of facility for workspaces as directories do for
+filesystems. The analogy might prove helpful:</p><table><tr><th class="Left">Operation</th><th class="Left">Windows</th><th class="Left">Namespace</th></tr><tr><td>Create</td><td>MKDIR"apl""Dyalog"
+                </td><td><tt>)NS or ⎕NS</tt></td></tr><tr><td>Change</td><td>CD
+                </td><td><tt>)CS or ⎕CS</tt></td></tr><tr><td>Relative name</td><td>DIR1\DIR2\FILE
+                </td><td><tt>NS1.NS2.OBJ
+                </tt></td></tr><tr><td>Absolute name</td><td>\DIR\FILE
+                </td><td><tt>#.NS.OBJ
+                </tt></td></tr><tr><td>Name separator</td><td>\
+                </td><td><tt>.
+                </tt></td></tr><tr><td>Top (root) object</td><td>\
+                </td><td><tt>#
+                </tt></td></tr><tr><td>Parent object</td><td>..
+                </td><td><tt>##
+                </tt></td></tr></table><h4>Namespaces bring a number of major benefits:</h4><p>They provide static (as opposed to dynamic) local names. This means that a
+defined function can use local variables and functions which persist when it
+exits and which are available next time it is called.</p><p>Just as with the provision of directories in a filing system, namespaces
+allow us to organise the workspace in a tidy fashion. This helps to promote an
+object oriented programming style.</p><h4>APL's traditional name-clash problem is ameliorated in several ways:</h4><ul><li value="1">Workspaces can be arranged so that there are many fewer names at each namespace level. This means that when copying objects from saved workspaces there is a much reduced chance of a clash with existing names. </li><li value="2">Utility functions in a saved workspace may be coded as a single namespace and therefore on being copied into the active workspace consume only a single name. This avoids the complexity and expense of a solution which is sometimes used in 'flat' workspaces, where such utilities dynamically fix local functions on each call.</li><li value="3">In flat APL, workspace administration functions such as <tt>WSDOC</tt> must share names with their subject namespace. This leads to techniques for trying to avoid name clashes such as using obscure name prefixes like <tt>'⍙⍙L1'</tt> This problem is now virtually eliminated because such a utility can operate exclusively in its own namespace.</li></ul><h4>The programming of GUI objects is considerably simplified.</h4><ul><li value="1">An object’s callback functions may be localised in the namespace of the object itself.</li><li value="2">Static variables used by callback functions to maintain information between calls may be localised within the object.</li></ul><p>This means that the object need use only a single name in its namespace.</p></body>
+</html>

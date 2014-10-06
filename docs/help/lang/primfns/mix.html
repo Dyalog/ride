@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>(⎕ML) 
+ R←↑[K]Y or R←⊃[K]Y</tt>Mix</h2><p>The symbol chosen to represent Mix depends on the current Migration Level.</p><p>If <tt>⎕ML&lt;2</tt>, Mix is represented by the symbol: <tt>↑</tt>.</p><p>If <tt>⎕ML≥2</tt>, Mix is represented by the symbol: <tt>⊃</tt>.</p><p><tt>Y</tt> may be any array whose items may be uniform in rank and shape, or differ in rank and shape. If the items of <tt>Y</tt> are non-uniform, they are extended prior to the application of the function as follows:</p><ol><li value="1">If the items of <tt>Y</tt> have different ranks, each item is extended in rank to that of the greatest rank by padding with leading 1s. </li><li value="2">If the items of <tt>Y</tt> have different shapes, each is padded with the corresponding prototype to a shape that represents the greatest length along each axis of all items in <tt>Y</tt>.</li></ol><p>For the purposes of the following narrative,  <tt>y</tt> represents the virtual item in <tt>Y</tt> with the greatest rank and shape, with which all other items are extended to conform.</p><p><tt>R</tt> is an array composed from the items of  <tt>Y</tt> assembled into a higher-rank array with one less level of nesting. <tt>⍴R</tt> will be some permutation of <tt>(⍴Y),⍴y</tt>.</p><p><tt>K</tt> is an optional axis specification whose value(s)  indicate where in the result the axes of <tt>y</tt> appear. There are three cases:</p><ol><li value="1">For all values of <tt>⎕ML</tt>, <tt>K</tt> may be a scalar or unit vector whose value is a fractional number indicating the two axes of <tt>Y</tt> between which new axes are to be inserted for <tt>y</tt>.  The shape of <tt>R</tt> is the shape of <tt>Y</tt> with the shape <tt>⍴y</tt> inserted between the <tt>⌊K</tt>th and the <tt>⌈K</tt>th axes of <tt>Y</tt></li><li value="2">If <tt>⎕ML≥2</tt>, <tt>K</tt> may be a scalar or unit vector integer whose value specifies the position of the first axis of <tt>y</tt> in the result. This case is identical to the fractional case where <tt>K</tt> (in this case) is <tt>⌈K</tt> (in the fractional case).</li><li value="3">If <tt>⎕ML≥2</tt>, <tt>K</tt> may be a vector, with the same length as <tt>⍴y</tt>, each element of which specifies the position in the result of the corresponding axis of the <tt>y</tt>. </li></ol><p>If <tt>K</tt> is absent, the axes of <tt>y</tt> appear as the last axes of the result.</p><h4 class="ExampleNewPage">Simple Vector Examples</h4><p>In this example, the shape of <tt>Y</tt> is 3, and the shape of  <tt>y</tt> is 2. So the shape of the result will be a permutation of 2 and 3, i.e. in this simple example, either <tt>(2 3)</tt> or <tt>(3 2</tt>).</p><p>If <tt>K</tt> is omitted, the shape of the result is <tt>(⍴Y),⍴y</tt>.</p><pre>      ↑(1 2)(3 4)(5 6)
+1 2
+3 4
+5 6</pre><p>If <tt>K</tt> is between 0 and 1, the shape of the result is <tt>(⍴y),⍴Y</tt> because<tt> (⍴y)</tt> is inserted between the 0<sup>th</sup> and the 1<sup>st</sup> axis of the result, i.e. at the beginning.</p><pre>
+      ↑[.5](1 2)(3 4)(5 6)
+1 3 5
+2 4 6</pre><p>If <tt>K</tt> is between 1 and 2, the shape of the result is <tt>(⍴Y),⍴y</tt> because<tt> (⍴y)</tt> is inserted between the 1<sup>st</sup> and 2<sup>nd</sup> axis of the result, i.e. at the end. This is the same as the case when <tt>K</tt> is omitted.</p><pre>
+      ↑[1.5](1 2)(3 4)(5 6)
+1 2
+3 4
+5 6
+</pre><p>If <tt>⎕ML≥2</tt> an integer <tt>K</tt> may be used instead (Note that <tt>⊃</tt> is used instead of <tt>↑</tt>).</p><pre>      ⎕ML←3
+      ⊃(1 2)(3 4)(5 6)
+1 2
+3 4
+5 6
+      ⊃[1](1 2)(3 4)(5 6)
+1 3 5
+2 4 6
+      ⊃[2](1 2)(3 4)(5 6)
+1 2
+3 4
+5 6</pre><h4 class="ExampleNewPage">Shape Extension</h4><p>If the items of <tt>Y</tt> are unequal in shape, the shorter ones are extended:</p><pre>      ⎕ML←3
+      ⊃(1)(3 4)(5)
+1 0
+3 4
+5 0
+       ⊃[1](1)(3 4)(5)
+1 3 5
+0 4 0</pre><h4>More Simple Vector Examples:</h4><pre>      ]box on
+Was OFF
+        ⎕ML←3
+        ⊃('andy' 19)('geoff' 37)('pauline' 21)
+┌───────┬──┐
+│andy   │19│
+├───────┼──┤
+│geoff  │37│
+├───────┼──┤
+│pauline│21│
+└───────┴──┘
+        ⊃[1]('andy' 19)('geoff' 37)('pauline' 21)
+┌────┬─────┬───────┐
+│andy│geoff│pauline│
+├────┼─────┼───────┤
+│19  │37   │21     │
+└────┴─────┴───────┘
+        ⊃('andy' 19)('geoff' 37)(⊂'pauline')
+┌───────┬───────┐
+│andy   │19     │
+├───────┼───────┤
+│geoff  │37     │
+├───────┼───────┤
+│pauline│       │
+└───────┴───────┘
+</pre><p>Notice that in the last statement, the shape of the third item was extended by catenating it with its prototype.</p><h4 class="ExampleNewPage">Example (Matrix of Vectors)</h4><p>In the following examples, <tt>Y</tt> is a matrix of shape <tt>(5 4)</tt> and each item of <tt>Y</tt> (<tt>y</tt>) is a matrix of shape <tt>(3 2)</tt>. The shape of the result will be some permutaion of <tt>(5 4 3 2)</tt>.</p><pre>       Y←5 4⍴(⍳20)×⊂3 2⍴1
+       Y
+┌─────┬─────┬─────┬─────┐
+│1 1  │2 2  │3 3  │4 4  │
+│1 1  │2 2  │3 3  │4 4  │
+│1 1  │2 2  │3 3  │4 4  │
+├─────┼─────┼─────┼─────┤
+│5 5  │6 6  │7 7  │8 8  │
+│5 5  │6 6  │7 7  │8 8  │
+│5 5  │6 6  │7 7  │8 8  │
+├─────┼─────┼─────┼─────┤
+│9 9  │10 10│11 11│12 12│
+│9 9  │10 10│11 11│12 12│
+│9 9  │10 10│11 11│12 12│
+├─────┼─────┼─────┼─────┤
+│13 13│14 14│15 15│16 16│
+│13 13│14 14│15 15│16 16│
+│13 13│14 14│15 15│16 16│
+├─────┼─────┼─────┼─────┤
+│17 17│18 18│19 19│20 20│
+│17 17│18 18│19 19│20 20│
+│17 17│18 18│19 19│20 20│
+└─────┴─────┴─────┴─────┘
+</pre><p>By default, the axes of <tt>y</tt> appear in the last position in the shape of the result, but this position is altered by specifying the axis <tt>K</tt>. Notice where the <tt>(3 2)</tt> appears in the following results:</p><pre>      ⍴⊃Y
+5 4 3 2
+      ⍴⊃[1]Y
+3 2 5 4
+      ⍴⊃[2]Y
+5 3 2 4
+      ⍴⊃[3]Y
+5 4 3 2
+      ⍴⊃[4]Y
+INDEX ERROR
+      ⍴⊃[4]Y
+     ∧
+</pre><p>Note that <tt>⊃[4]Y</tt> generates an <tt>INDEX ERROR</tt> because 4 is greater than the length of the result.</p><h4 class="ExampleNewPage">Example (Vector K)</h4><p> The axes of <tt>y</tt> do not have to be contiguous in the shape of the result. By specifying a vector <tt>K</tt>, they can be distributed. Notice where the <tt>3</tt> and the <tt>2</tt> appear in the following results:</p><pre>      ⍴⊃[1 3]Y
+3 5 2 4
+      ⍴⊃[1 4]Y
+3 5 4 2
+      ⍴⊃[2 4]Y
+5 3 4 2
+      ⍴⊃[4 2]Y
+5 2 4 3
+
+</pre><h4>Rank Extension</h4><p>If the items of <tt>Y</tt> are unequal in rank, the lower rank items are extended in rank by prefixing their shapes with 1s. Each additonal 1 may then be increased to match the maximum shape of the other items along that axis.</p><pre>      ⎕ML←3
+      Y←(1)(2 3 4 5)(2 3⍴10×⍳8)
+      Y
+┌─┬───────┬────────┐
+│1│2 3 4 5│10 20 30│
+│ │       │40 50 60│
+└─┴───────┴────────┘
+       ⍴⊃Y
+3 2 4
+       ⊃Y
+ 1  0  0 0
+ 0  0  0 0
+          
+ 2  3  4 5
+ 0  0  0 0
+          
+10 20 30 0
+40 50 60 0</pre><p>In the above example, the first item (1) becomes (<tt>1 1⍴1</tt>) to conform with the 3rd item which is rank 2. It is then extended in shape to become <tt>(2 4↑1 1⍴1)</tt> to conform with the 2-row 3rd item, and 4-column 2nd item.. Likewise, the 2nd item becomes a 2-row matrix, and the 3rd item gains another column.</p></body>
+</html>

@@ -1,0 +1,13 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←⎕SH Y</tt>Execute (UNIX) Command </h2><p><tt>⎕SH</tt> executes a UNIX shell or a Windows Command Processor.  <tt>⎕SH</tt> is a synonym of <tt>⎕CMD</tt>.  Either function may be used in either environment (UNIX or Windows) with exactly the same effect.  <tt>⎕SH</tt> is probably more natural for the UNIX user.  This section describes the behaviour of <tt>⎕SH</tt> and <tt>⎕CMD</tt> under UNIX.  See <a href="execute-windows-command.html#ExecuteWindowsCommand" class="MCXref_0">Execute Windows Command </a> for a discussion of the behaviour of these system functions under Windows.</p><p>The system commands <a href="../syscmds/sh.html#Execute(UNIX)Command"><tt>)SH</tt></a> and <a href="../syscmds/cmd.html#WindowsCommandProcessor"><tt>)CMD</tt></a> provide similar facilities. </p><p><tt>Y</tt> must be a simple character scalar or vector representing a UNIX shell command.  <tt>R</tt> is a nested vector of character vectors.</p><p><tt>Y</tt> may be any acceptable UNIX command.  It could cause another process to be entered, such as <span class="Code">sed</span> or <span class="Code">vi</span>.  If the command does not return a result, <tt>R</tt> is <tt>⊂''</tt> but the result is suppressed if not explicitly used or assigned.  If the command has a non-zero exit code, then APL will signal a <tt>DOMAIN ERROR</tt>.  If the command returns a result and has a zero exit code, then each element of <tt>R</tt> will be a line from the standard output (stdout) of the command.  Output from standard error (stderr) is not captured unless redirected to stdout.</p><h4>Examples</h4><pre>      ⎕SH'ls'
+FILES WS temp
+ 
+      ⎕SH 'rm WS/TEST'
+ 
+      ⎕SH 'grep bin /etc/passwd ; exit 0'
+bin:!:2:2::/bin:
+ 
+      ⎕SH 'apl MYWS &lt;inputfile &gt;out1 2&gt;out2 &amp;'</pre></body>
+</html>

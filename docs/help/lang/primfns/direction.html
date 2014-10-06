@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←×Y</tt>Direction (Signum)</h2><p><tt>Y</tt> may be any numeric array. </p><p>Where an element of <tt>Y</tt> is real, the corresponding element of <tt>R</tt> is an integer whose value indicates whether the value is negative (<tt>¯1</tt>), zero (<tt>0</tt>) or positive (<tt>1</tt>).</p><p>Where an element of <tt>Y</tt> is complex, the corresponding element of <tt>R</tt> is a number with the same phase but with magnitude (absolute value) 1. It is equivalent to <tt>Y÷|Y</tt>. </p><h4>Examples</h4><pre>      ×¯15.3 0 101
+¯1 0 1
+ 
+      ×3j4 4j5
+0.6J0.8 0.6246950476J0.7808688094
+ 
+      {⍵÷|⍵}3j4 4j5
+0.6J0.8 0.6246950476J0.7808688094
+ 
+      |×3j4 4j5
+1 1</pre></body>
+</html>

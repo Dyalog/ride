@@ -1,0 +1,11 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←X ⎕FTIE Y</tt>Exclusive File Tie </h2><h4>Access code 2</h4><p><tt>Y</tt> must be 0 or a simple 1 or 2 element integer vector containing an available file tie number to be associated with the file for further file operations, and an optional passnumber.  If the passnumber is omitted it is assumed to be zero.  The tie number must not already be associated with a share tied or exclusively tied file.</p><p><tt>X</tt> must be a simple character scalar or vector which specifies the name of the file to be exclusively tied.  The file must be named in accordance with the operating system's conventions, and may be a relative or absolute pathname. </p><p>The file must exist and be accessible by the user.  It may not already be tied by another user.</p><h4>Automatic Tie Number Allocation</h4><p>A tie number of 0 as argument to a create, share tie or exclusive tie operation, allocates the first (closest to zero) available tie number, and returns it as an explicit result. This allows you to simplify code. For example:</p><p>from:</p><pre>      tie←1+⌈/0,⎕FNUMS ⍝ With next available number,
+      file ⎕FTIE tie   ⍝ ... tie file.</pre><p>to:</p><pre>      tie←file ⎕FTIE 0 ⍝ Tie with first available number.</pre><p>The shy result of <tt>⎕FTIE</tt> is the tie number of the file.</p><h4>Examples</h4><pre>      'SALES' ⎕FTIE 1
+ 
+      '../budget/COSTS' ⎕FTIE  2
+ 
+      '../budget/expenses' ⎕FTIE 0
+3</pre></body>
+</html>

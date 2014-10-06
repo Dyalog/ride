@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h3>Arrays of Namespace References </h3><p>You may construct arrays of refs using strand notation, catenate (<tt>,</tt>) and reshape (<tt>⍴</tt>).</p><pre>      EMP←JOHN PAUL
+      ⍴EMP</pre><p>2</p><pre>      EMP
+ #.[Namespace]  #.[Namespace]</pre><p>Like any other array, an array of refs has name class 2:</p><pre>      ⎕NC 'EMP'
+2</pre><p>Expressions such as indexing and pick return refs that may in turn be used as follows:</p><pre>      EMP[1].FirstName
+John
+      (2⊃EMP).Age
+44</pre><p>The each (<tt>¨</tt>) operator may be used to apply a function to an array of refs:</p><pre>      SHOW¨EMP
+ John Smith is 50  Paul Brown is 44</pre><p>An <span class="Italic">array</span> of namespace references (refs) to the left of a ‘<tt>.</tt>’ is expanded according to the following rule, where <tt>x</tt> and <tt>y</tt> are refs, and <tt>exp</tt> is an arbitrary expression:</p><pre>      (x y).exp → (x.exp)(y.exp)</pre><p>If <tt>exp</tt> evaluates to a function, the items of its argument array(s) are <span class="Italic">distributed </span>to each referenced function. In the dyadic case, there is a 3-way distribution among: left argument, referenced functions and right argument.</p><p>Monadic function <tt>f</tt>:</p><pre><tt>      (x y).f d e → (x.f d)(y.f e)</tt></pre><p>Dyadic function <tt>g</tt>:</p><pre><tt>      a b (x y).g  d e → (a x.g d)(b y.g e)</tt></pre><p>An array of refs to the left of an assignment arrow is expanded thus:</p><pre>      (x y).a←c d   →  (x.a←c)(y.a←d)</pre><p>Note that the array of refs can be of any rank. In the limiting case of a simple scalar array, the <i>array</i> construct: <tt>refs.exp</tt> is identical to the <i>scalar</i> construct: <tt>ref.exp</tt>.</p><p>Note that the expression to the right of the ‘<tt>.</tt>’ <i>pervades</i> a nested array of refs to its left:</p><pre>      ((u v)(x y)).exp → ((u.exp)(v.exp))((x.exp)(y.exp))</pre><p>Note also that with <i>successive</i> expansions <tt>(u v).(x y z). </tt>..., the final number of ‘leaf’ terms is the <i>product</i> of the number of refs at each level. </p><h4>Examples:</h4><pre>      JOHN.Children←⎕NS¨'' ''
+      ⍴JOHN.Children
+2
+      JOHN.Children[1].FirstName←'Andy'
+      JOHN.Children[1].Age←23
+      
+      JOHN.Children[2].FirstName←'Katherine'
+      JOHN.Children[2].Age←19               
+ 
+      PAUL.Children←⎕NS¨'' ''
+      PAUL.Children[1].(FirstName Age←'Tom' 25)
+      PAUL.Children[2].(FirstName Age←'Jamie' 22)
+ 
+      ⍴EMP
+2
+      (⊃EMP).Children.(FirstName Age)
+  Andy  23   Katherine  19
+ 
+      ]display (2⊃EMP).Children.(FirstName Age)
+.→----------------------------.
+| .→---------. .→-----------. |
+| | .→--.    | | .→----.    | |
+| | |Tom| 25 | | |Jamie| 22 | |
+| | '---'    | | '-----'    | |
+| '∊---------' '∊-----------' |
+'∊----------------------------'
+ 
+      EMP.Children ⍝ Is an array of refs
+  #.[Namespace]  #.[Namespace]    #.[Namespace]  ...
+ 
+      EMP.Children.(FirstName Age)
+   Andy  23   Katherine  19     Tom  25   Jamie  22</pre></body>
+</html>

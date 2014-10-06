@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←X↓Y</tt>Drop</h2><p><tt>Y</tt> may be any array.  <tt>X</tt> must be a simple scalar or vector of integers. If <tt>X</tt> is a scalar, it is treated as a one-element vector.  If <tt>Y</tt> is a scalar, it is treated as an array whose shape is <tt>(⍴X)⍴1</tt>. After any scalar extensions, the shape of <tt>X</tt> must be less than or equal to the rank of <tt>Y</tt>. Any missing trailing items in <tt>X</tt> default to 0.</p><p><tt>R</tt> is an array with the same rank as <tt>Y</tt> but with elements removed from the vectors along each of the axes of <tt>Y</tt>. For the <tt>I</tt>th axis:</p><ul><li value="1">if <tt>X[I]</tt> is positive, all but the first <tt>X[I]</tt> elements of the vectors result.</li><li value="2">if <tt>X[I]</tt> is negative, all but the last <tt>X[I]</tt> elements of the vectors result.</li></ul><p>If the magnitude of <tt>X[I]</tt> exceeds the length of the <tt>I</tt>th axis, the result is an empty array with zero length along that axis.</p><h4>Examples</h4><pre>      4↓'OVERBOARD'
+BOARD
+ 
+      ¯5↓'OVERBOARD'
+OVER
+ 
+      ⍴10↓'OVERBOARD'
+0
+ 
+      M
+ONE
+FAT
+FLY
+      0 ¯2↓M
+O
+F
+F
+ 
+      ¯2 ¯1↓M
+ON
+      1↓M
+FAT
+FLY
+      M3←2 3 4⍴⎕A
+ 
+      1 1↓M3
+QRST
+UVWX
+      ¯1 ¯1↓M3
+ABCD
+EFGH</pre></body>
+</html>

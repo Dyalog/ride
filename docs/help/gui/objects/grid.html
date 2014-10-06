@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Object</tt>Grid</h2><table class="GUIMembers"><tr><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Parents</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Children</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Properties</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Methods</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Events</a></span></td></tr></table><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Purpose:</td><td class="SpacedPlain">Spreadsheet object for displaying and editing data.</td></tr></table><p class="Bold">Description</p><p>The <a href="../props/values.html">Values</a> property is a matrix whose
+elements are displayed in the cells of the Grid. An element (and therefore a
+cell) may contain a single number, a single character, a character vector or a
+character matrix.</p><p>The <a href="../props/cellheights.html">CellHeights</a> property specifies
+the height of each of the rows of the spreadsheet. It may be a single value
+which applies to all rows, or a vector with one element per row. The <a href="../props/cellwidths.html">CellWidths</a> property determine the width of each column of the spreadsheet. It too may be a
+single value or a vector with one element per column.</p><p>The <a href="../props/rowtitles.html">RowTitles</a> property is either an
+empty character vector (the default) or a vector of character vectors that
+specify row titles displayed to the left of the cells in the Grid. If <a href="../props/rowtitles.html">RowTitles</a> is not specified, the Grid labels each row with its row number. The <a href="../props/coltitles.html">ColTitles</a> property is similar and is used to specify column headings. If <a href="../props/coltitles.html">ColTitles</a> is not specified, the Grid displays "standard" spreadsheet column headings
+A-Z, then AA-AZ and so forth.</p><p>The <a href="../props/titleheight.html">TitleHeight</a> property specifies
+height of the column headers. If this is set to 0, the column titles will not be
+displayed. Similarly, the <a href="../props/titlewidth.html">TitleWidth</a> property specifies the width of the row titles and again a value of zero
+disables the row titles.</p><p>The <a href="../props/fontobj.html">FontObj</a> property may be used to
+specify the font to be used for the Grid as a whole, including the titles. The <a href="../props/cellfonts.html">CellFonts</a> property may be used to specify fonts for individual cells.</p><p>The <a href="../props/fcol.html">FCol</a> and <a href="../props/bcol.html">BCol</a> properties may each specify a single colour for the Grid as a whole, or may
+specify a vector of colours whose elements are mapped to individual cells
+through the <a href="../props/celltypes.html">CellTypes</a> property.</p><p>The <a href="../props/cellfonts.html">CellFonts</a> property is either a
+character vector or a vector of character vectors that specifies the name of a
+single font object to be used for all cells in the Grid, or a vector of
+character vectors that specifies a set of font objects that are mapped to
+individual cells through the <a href="../props/celltypes.html">CellTypes</a> property.</p><p>The <a href="../props/input.html">Input</a> property is a character vector
+that specifies the name of an object which is to be associated with every cell
+in the Grid, or a vector of names whose elements are mapped to individual cells
+through the <a href="../props/celltypes.html">CellTypes</a> property. These
+objects may be of type <a href="button.html">Button</a>, <a href="colorbutton.html">ColorButton</a>,
+<a href="combo.html">Combo</a>, <a href="edit.html">Edit</a>, <a href="label.html">Label</a>,
+<a href="spinner.html">Spinner</a> or <a href="trackbar.html">TrackBar</a>.
+In addition, the <a href="../props/input.html">Input</a> property may specify
+instances of <a href="ocxclass.html">OCXClass</a> objects (ActiveX
+controls) and <a href="nettype.html">NetType</a> objects (.NET classes).</p><p>If the <a href="../props/input.html">Input</a> property is empty (the
+default) the user may browse the data in the spreadsheet but may not alter it.
+Furthermore, no feedback is provided as to which is the current cell. If the <a href="../props/input.html">Input</a> property specifies the name of an object that is the child of the Grid itself,
+this object <span class="Italic">floats</span> from cell to cell as the user moves around the
+spreadsheet, and the current cell is identified by its presence.</p><p>If the <a href="../props/input.html">Input</a> property specifies the name of an external object (that is, an object that is <span class="Italic">not</span>a child of the Grid), the contents of the current cell are copied into that
+object as the user moves around the spreadsheet. In addition, the current cell
+is identified by a thick border. In either case, the associated object is used
+to impose formatting and validation.</p><p>If the <a href="../props/input.html">Input</a> property specifies the name
+of a <a href="label.html">Label</a> object, that object is used to
+impose formatting, but the data is protected and may not be changed. If the <a href="label.html">Label</a> is a child of the Grid, it moves from cell to cell, and its characteristics (<a href="../props/border.html">Border</a>,
+<a href="../props/fcol.html">FCol</a>, <a href="../props/bcol.html">BCol</a> and <a href="../props/fontobj.html">FontObj</a>) can be used to identify the
+current cell. If the <a href="label.html">Label</a> is an external one,
+no visual feedback is provided; even though the current cell (reflected by the <a href="../props/curcell.html">CurCell</a> property) changes as the user moves around the Grid.</p><p>If the Input property specifies one or more instances of OCXClass objects
+(ActiveX controls) and <a href="nettype.html">NetType</a> objects (.NET
+classes), the <a href="../props/inputproperties.html">InputProperties</a> property is used to map the <a href="../props/values.html">Values</a> property
+of the Grid to specific properties of the external object.</p><p>The <a href="../props/celltypes.html">CellTypes</a> property is either an
+empty numeric matrix (the default) or an integer matrix of the same shape as <a href="../props/values.html">Values</a>.
+If specified, each element of <a href="../props/celltypes.html">CellTypes</a> determines the index into various properties, including the <a href="../props/fcol.html">FCol</a>,
+<a href="../props/bcol.html">BCol</a>, <a href="../props/cellfonts.html">CellFonts</a> and <a href="../props/input.html">Input</a> properties, to be used for the
+corresponding cell. For example, if an element in <a href="../props/celltypes.html">CellTypes</a> is 3, the 3rd element of <a href="../props/fcol.html">FCol</a> is used for the
+foreground colour of the corresponding cell, the 3rd element of <a href="../props/bcol.html">BCol</a> specifies the background colour, and so forth.</p><p>The <a href="../props/curcell.html">CurCell</a> property may be used to set
+or query the current cell. The current cell is the cell which the user has
+picked by clicking the mouse over it or by using the cursor keys. <a href="../props/curcell.html">CurCell</a> is a 2-element vector containing the current cell's row number and column
+number respectively and is <tt>⎕IO</tt>dependent. The <a href="../props/index.html">Index</a> property specifies the
+row and column number of the cell in the top-left corner of the Grid. It too is <tt>⎕IO</tt> dependent.</p><p>The <a href="../props/autoexpand.html">AutoExpand</a> property is a
+2-element boolean vector which specifies whether (1) or not (0) new rows and
+columns are added when the user presses the corresponding cursor key when at the
+end of the block of cells. Its default value is (0 0).</p><p>The Grid object reports a <a href="../methodorevents/celldown.html">CellDown</a> event
+when the user depresses a mouse button over a cell. The event message contains
+the row and column address of the cell in question which is <tt>⎕IO</tt> dependent. It also reports a similar <a href="../methodorevents/cellup.html">CellUp</a> event when the mouse button is released and a <a href="../methodorevents/celldblclick.html">CellDblClick</a> event when it is double-clicked. The number of the mouse button and the state of
+the shift keys are also reported.</p><p>When the user moves to another cell, the Grid object reports a <a href="../methodorevents/cellmove.html">CellMove</a> event. This simply reports the address of the new cell and may be used to take
+some appropriate action when a particular cell is picked. If the user alters the
+data in a cell and then attempts to move to another, the Grid reports a <a href="../methodorevents/cellchange.html">CellChange</a> event. This can be used to perform validation.</p><p>Alternatively, the Grid may
+report a <a href="../methodorevents/cellchanged.html">CellChanged</a> event which occurs
+after the <a href="../props/values.html">Values</a> property has been updated
+with the new cell contents. This may be used to perform immediate recalculation.</p><p>The <a href="../methodorevents/addrow.html">AddRow</a> event is generated if the current
+cell is in the last row of the Grid and the user presses Cursor Down. By
+default, this operation adds a new row to the Grid, but you can attach a
+callback to the <a href="../methodorevents/addrow.html">AddRow</a> and selectively disable
+this default action if required. The <a href="../methodorevents/addcol.html">AddCol</a> event works in a similar manner for columns. Although the user has no direct
+means of <span class="Italic">inserting</span> a row or column, your application can do this by
+calling <a href="../methodorevents/addrow.html">AddRow</a> or <a href="../methodorevents/addcol.html">AddCol</a> as a method on the Grid object. Typically this would be done in response to the
+user selecting a <a href="menuitem.html">MenuItem</a> or pressing a <a href="button.html">Button</a>.</p><p>The <a href="../methodorevents/colchange.html">ColChange</a>, <a href="../methodorevents/rowchange.html">RowChange</a>,
+<a href="../methodorevents/delrow.html">DelRow</a>, <a href="../methodorevents/delcol.html">DelCol</a> and <a href="../methodorevents/undo.html">Undo</a> methods allow your application to
+perform these corresponding operations.</p><p>The Grid object maintains a buffer of the most recent 8 changes made by the
+user since the <a href="../props/values.html">Values</a> property was last set
+by <a href="../../lang/sysfns/wc.html"><tt>⎕WC</tt></a> or <a href="../../lang/sysfns/ws.html"><tt>⎕WS</tt></a>.
+Your application can restore these changes one by one by calling the <a href="../methodorevents/undo.html">Undo</a> method. The <a href="../methodorevents/undo.html">Undo</a> method restores the most recent
+change made by the user and removes that change from the undo stack. It is
+therefore not possible to "undo an undo".</p><p>The Grid supports the selection of a block or blocks of cells using the mouse
+and/or the keyboard. The ability to select a range of cells is determined by the
+<a href="../props/cellselect.html">CellSelect</a> property. When the user
+performs a selection , the Grid generates a <a href="../methodorevents/gridselect.html">GridSelect</a> event. The range of cells currently selected is given by the <a href="../props/selitems.html">SelItems</a> property</p><p>If a block of cells has been selected, the user may delete the contents, and
+cut or copy the contents of the cells to the clipboard by pressing Delete,
+Shift+Delete or Ctrl+Insert respectively. These operations also generate <a href="../methodorevents/griddelete.html">GridDelete</a>,
+<a href="../methodorevents/gridcut.html">GridCut</a> and <a href="../methodorevents/gridcopy.html">GridCopy</a> events which you can selectively disable using a callback function. You can
+also perform these operations under program control by calling them as methods.</p><p>If more than one block of cells has been selected, these operations are
+honoured only if the blocks begin and end on the same rows or begin and end on
+the same columns. If so, the data placed in the clipboard is the result of
+joining the blocks horizontally or vertically as appropriate.</p><p>The user may paste data from the clipboard into a Grid by pressing
+Shift+Insert. Data is pasted into the currently selected block of cells, or, if
+there is no selection, data is pasted starting at the current cell (<tt>CurCell</tt>).
+The operation also generates a <a href="../methodorevents/gridpaste.html">GridPaste</a> event, and, if the operation cannot proceed, a <a href="../methodorevents/gridpasteerror.html">GridPasteError</a> event.</p><p>If you move the mouse pointer over any of the four edges of a selected block
+of cells, the cursor changes to an arrow. You may now click and drag the border
+of the selected cells with the mouse.</p><p>If you press the Ctrl key at the same
+time, the contents of the selected cells are <span class="Italic">copied</span> to the new location,
+replacing the values in the block of cells onto which they are dropped.
+Otherwise, the operation is treated as a <span class="Italic">move</span> and the original block of
+cells is emptied. This operation also generates a <a href="../methodorevents/griddropsel.html">GridDropSel</a> event. You may only move or copy a <span class="Italic">single</span> block of cells in this way.</p><p>The user may be permitted to resize the rows and/or columns of a Grid. This
+is controlled by the <a href="../props/resizerows.html">ResizeRows</a> and <a href="../props/resizecols.html">ResizeCols</a> properties whose default values are 0. To allow the user to resize, set either
+or both to 1. You can also specify a boolean vector to allow specific
+rows/columns to be resized while others are fixed. Two additional properties
+named <a href="../props/resizerowtitles.html">ResizeRowTitles</a> and <a href="../props/resizecoltitles.html">ResizeColTitles</a> determine whether or not the user may alter the width of the row titles and the
+height of the column titles.</p><p>If resizable, the cursor changes to a double-heads arrow when the user moves
+the mouse pointer over the lines between the row and/or column titles. The user
+may click and drag with the mouse to the desired size. The user may also
+double-click. This causes the row or column to be resized to fit the data. Both
+operations generate a <a href="../methodorevents/setcolsize.html">SetColSize</a>, or <a href="../methodorevents/setrowsize.html">SetRowSize</a> event.</p><p>When you edit data in a Grid, the editing behaviour and the action of the
+cursor movement keys is determined by the <a href="../props/inputmode.html">InputMode</a> and <a href="../props/inputmodekey.html">InputModeKey</a> properties.</p><p>The <a href="../props/gridfcol.html">GridFCol</a> property specifies the
+colour of all the grid lines. Alternatively, the <a href="../props/gridlinefcol.html">GridLineFCol</a>,
+<a href="../props/gridlinewidth.html">GridLineWidth</a>, <a href="../props/rowlinetypes.html">RowLineTypes</a> and <a href="../props/collinetypes.html">ColLineTypes</a> properties may
+specify the appearance for individual grid lines.</p><p>The <a href="../props/gridbcol.html">GridBCol</a> property specifies the
+colour used to fill the area between the end of the last column of data and the
+right edge of the Grid and between the bottom row of data and the bottom edge of
+the Grid.</p><p>The <a href="../props/rowtitlefcol.html">RowTitleFCol</a> and <a href="../props/coltitlefcol.html">ColTitleFCol</a> properties specify the colours to be used for the row and column titles
+respectively.</p><p>The <a href="../props/clipcells.html">ClipCells</a> property determines
+whether or not the Grid displays partial cells. The default is 1. If you set <a href="../props/clipcells.html">ClipCells</a> to 0, the Grid displays only complete cells and automatically fills the space
+between the last visible cell and the edge of the Grid with the <a href="../props/gridbcol.html">GridBCol</a> colour.</p><p>The <a href="../props/cellset.html">CellSet</a> property is a boolean array
+that marks which cells are <span class="Italic">set</span> (i.e. have values) and which are empty.
+This allows you to edit large numeric matrices which contain empty cells without
+a severe workspace penalty.</p><p>The <a href="../props/hscroll.html">Hscroll</a> and <a href="../props/vscroll.html">Vscroll</a> properties specify whether or not horizontal and vertical scrollbars are
+displayed. Either property may be given the value <tt>¯3</tt> which forces the
+corresponding scrollbar to appear always. <a href="../props/vscroll.html">VScroll</a> and <a href="../props/hscroll.html">HScroll</a> may only be set when the object is created and may not subsequently be changed.</p><p>The Grid object supports <span class="Italic">comments</span> in a manner that is consistent with
+the way that comments are handled by Microsoft Excel.. If a comment is
+associated with a cell, a small red triangle is displayed in its top right
+corner. When the user rests the mouse pointer over a commented cell, the comment
+is displayed as a pop-up with an arrow pointing back to the cell to which it
+refers. The comment disappears when the mouse pointer is moved away. This is
+referred to as <span class="Italic">tip</span> behaviour. Comments may also be associated with row
+and column titles.</p><p>Grid comments are managed by a set of methods, namely <a href="../methodorevents/addcomment.html">AddComment</a>,
+<a href="../methodorevents/delcomment.html">DelComment</a>, <a href="../methodorevents/getcomment.html">GetComment</a>,
+<a href="../methodorevents/showcomment.html">ShowComment</a>, <a href="../methodorevents/hidecomment.html">HideComment</a> and <a href="../methodorevents/clickcomment.html">ClickComment</a>.</p><p>You may lock individual rows and columns using the <a href="../methodorevents/lockrows.html">LockRows</a> and <a href="../methodorevents/lockcolumns.html">LockColumns</a> methods. This facility is
+however not supported in combination with hierarchical rows and/or columns which
+are specified by <a href="../props/rowtitledepth.html">RowTitleDepth</a> and <a href="../props/coltitledepth.html">ColTitleDepth</a>.</p><p>The Grid can display a <span class="Italic">TreeView like</span> interface on the Row titles. In
+this mode, the Grid automatically shows and hides row of data as the end user
+expands and contracts nodes of the tree.</p><p>The <a href="../props/rowtreedepth.html">RowTreeDepth</a> property is used
+to specify the depth of rows in the Grid.</p><p>The appearance of the tree is determined by the <a href="../props/rowtreestyle.html">RowTreeStyle</a> property.</p><p>User defined bitmaps can be used instead of the default Images by setting the
+<a href="../props/rowtreeimages.html">RowTreeImages</a> property.</p><p>The Grid generates <a href="../methodorevents/expanding.html">Expanding</a> and <a href="../methodorevents/retracting.html">Retracting</a> events when the user interacts with the tree.</p><p>The <a href="../methodorevents/rowsetvisibledepth.html">RowSetVisibleDepth</a> method
+can be used to set the visible depth of the tree.</p></body>
+</html>

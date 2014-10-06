@@ -1,0 +1,46 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h3>Distributed Assignment</h3><p>Assignment pervades nested strands of names to the left of the arrow. The conformability rules are the same as for scalar (pervasive) dyadic primitive functions such as ‘<tt>+</tt>’. The mechanism can be viewed as a way of naming the parts of a <i>structure</i>.</p><h4>Examples:</h4><pre>      EMP.(FirstName Age)
+  JOHN  43   PAUL  44
+ 
+      EMP.(FirstName Age)←('Jonathan' 21)('Pauline' 22)
+ 
+      EMP.(FirstName Age)
+  Johnathan  21   Pauline  22
+ 
+⍝ Distributed assignment is pervasive
+      JOHN.Children.(FirstName Age)
+  Andy  23   Katherine  19
+ 
+      JOHN.Children.(FirstName Age)←('Andrew' 21)('Kate' 9)
+ 
+      JOHN.Children.(FirstName Age)
+  Andrew  21   Kate  9</pre><h4>More Examples:</h4><pre>      ((a b)(c d))←(1 2)(3 4)   ⍝ a←1 ⋄ b←2 ⋄ c←3 ⋄ d←4
+ 
+      ((⎕io ⎕ml)vec)←0 ⎕av      ⍝ ⎕io←0 ⋄ ⎕ml←0 ⋄ vec←⎕av
+ 
+      (i (j k))+←1 2            ⍝ i+←1 ⋄ j+←2 ⋄ k+←2
+ 
+⍝ Naming of parts:
+ 
+      ((first last) sex (street city state))←n⊃pvec
+ 
+⍝ Distributed assignment in :For loop:
+ 
+      :For (i j)(k l) :In array
+ 
+⍝ Ref array expansion:
+ 
+      (x y).(first last)←('John' 'Doe')('Joe' 'Blow')
+      (f1 f2).(b1 b2).Caption←⊂'OK' 'Cancel'
+ </pre><p class="pagebreakafter"></p><pre>⍝ Structure rearrangement:
+      rotate1←{       ⍝ Simple binary tree rotation.
+           (a b c)d e←⍵
+           a b(c d e)
+      }
+      rotate3←{       ⍝ Compound binary tree rotation.
+           (a b(c d e))f g←⍵
+           (a b c)d(e f g)
+      }</pre></body>
+</html>

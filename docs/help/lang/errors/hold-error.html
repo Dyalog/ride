@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>12</tt>HOLD ERROR</h2><p>This report is given when an attempt is made to save a workspace using the system function <tt>⎕SAVE</tt> if any external arrays or component files are currently held (as a result of a prior use of the system function <tt>⎕FHOLD</tt>).</p><h4>Example</h4><pre>      ∇HOLD∆SAVE
+[1]    ⎕FHOLD 1
+[2]    ⎕SAVE 'TEST'
+      ∇
+ 
+      'FILE' ⎕FSTIE 1
+ 
+      HOLD∆SAVE
+HOLD ERROR
+HOLD∆SAVE[2] ⎕SAVE'TEST'
+             ^</pre></body>
+</html>

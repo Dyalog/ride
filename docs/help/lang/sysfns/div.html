@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>⎕DIV</tt>Division Method </h2><p>The value of <tt>⎕DIV</tt> determines how division by zero is to be treated.  If <tt>⎕DIV=0</tt>, division by 0 produces a <tt>DOMAIN ERROR</tt> except that the special case of <tt>0÷0</tt> returns 1.</p><p>If <tt>⎕DIV=1</tt>, division by 0 returns 0.</p><p><tt>⎕DIV</tt> may be assigned the value 0 or 1.  The value in a clear workspace is 0.</p><p><tt>⎕DIV</tt> is an implicit argument of the monadic function Reciprocal (<tt>÷</tt>) and the dyadic function Divide (<tt>÷</tt>).</p><h4>Examples</h4><pre>      ⎕DIV←0
+ 
+      1 0 2 ÷ 2 0 1
+0.5 1 2
+ 
+      ÷0 1
+DOMAIN ERROR
+      ÷0 1
+      ^
+ 
+      ⎕DIV←1
+ 
+      ÷0 2
+0 0.5
+ 
+      1 0 2 ÷ 0 0 4
+0 0 0.5</pre></body>
+</html>

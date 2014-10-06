@@ -1,0 +1,16 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><a name="UDP"></a>User Datagram Protocol (UDP) and APL</h2><p>You may communicate with another application with User Datagram Protocol (UDP) by creating a TCPSocket object whose SocketType is <tt>'UDP'</tt>. For two APL applications to exchange data in this way, each one must have a UDP TCPSocket.</p><p>You make a UDP socket by creating a TCPSocket object, specifying the LocalAddr and LocalPort properties, and setting the SocketType to <tt>'UDP'</tt>. Unless your computer has more than one network card (and therefore more than one IP address), it is sufficient to allow LocalAddr to assume its default value, so in practice, only the port number is required. For example:</p><pre>      'S0' ⎕WC 'TCPSocket' ('LocalAddr' '') 2001
+               ('SocketType' 'UDP')
+      'S0'⎕WG'CurrentState'
+Bound</pre><p>Once you have created a UDP TCPSocket, it is ready to send and receive data.</p><p>To send data to a recipient, you use the TCPSend method, specifying its RemoteAddr and RemotePort. The data will only be received if the recipient has a UDP socket open with the corresponding IP address and port number. However, note that there is no <span class="Italic">absolute guarantee</span> that the recipient will ever get the message, nor, if you send several messages, that they will arrive in the order you sent them. </p><p>For example, the following statement might be used to send the character string <tt>'Hello'</tt> to a UDP recipient whose IP address is 123.456.789.1 and whose port number is 2002:</p><pre>      2 ⎕NQ 'S0' 'TCPSend' 'Hello' '123.456.789.1' 2002</pre><p>Note that the maximum length of a UDP data packet depends upon the type of your computer, but is typically about 1500 bytes.</p><p>To receive data from a UDP sender, you must attach a callback to the TCPRecv event. Then, when the data is received, your callback function will be invoked. The event message passed as the argument to your callback will contain not only the data, but also the IP address and port number of the sender.</p><p>For example, if you created a TCPSocket called <tt>S1</tt> as follows:</p><pre>      'S1' ⎕WC 'TCPSocket' ('LocalAddr' '') 2002
+               ('SocketType' 'UDP')
+               ('Event' 'TCPRecv' 'RECEIVE')</pre><p>Where the callback function <tt>RECEIVE</tt> is as follows:</p><pre>     ∇ RECEIVE MSG
+[1]    DISPLAY MSG
+     ∇</pre><p>the following message would be displayed in your Session when the message <tt>'Hello'</tt> was received from a sender whose IP address is 193.32.236.43 and whose port number is 2001.</p><pre>.→--------------------------------------------.
+| .→-. .→------. .→----. .→------------.      |
+| |S1| |TCPRecv| |Hello| |193.32.236.43| 2001 |
+| '--' '-------' '-----' '-------------'      |
+'∊--------------------------------------------'</pre></body>
+</html>

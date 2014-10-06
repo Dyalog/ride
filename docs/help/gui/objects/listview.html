@@ -1,0 +1,48 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Object</tt>ListView</h2><table class="GUIMembers"><tr><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Parents</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Children</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Properties</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Methods</a></span></td><td class="SpacedPlain"><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Events</a></span></td></tr></table><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Purpose:</td><td class="SpacedPlain">The ListView object displays a collection of items.</td></tr></table><p class="Bold">Description</p><p>The ListView object is a window that displays a collection of items, each
+item consisting of an icon and a label. The ListView provides several ways of
+arranging items and displaying individual items. For example, additional
+information about each item can be displayed in columns to the right of the icon
+and label. An example of the use of a ListView object is the "My Computer"
+Windows utility.</p><p>The Items property is a vector of character vectors that specifies the labels
+for the items displayed by the ListView. The <a href="../props/imagelistobj.html">ImageListObj</a> property specifies the names of two <a href="imagelist.html">ImageList</a> objects that define two sets of icons; a large icon (32x32 pixel) set and a
+small icon (16x16 pixel) set. Alternatively, <a href="../props/imagelistobj.html">ImageListObj</a> may be empty (no icons
+displayed) or contain just the name of a single large icon <a href="imagelist.html">ImageList</a>.</p><p>The <a href="../props/view.html">View</a> property contains a character
+vector that determines how the items are displayed. It may have one of the
+following values; <tt>'Icon'</tt> (the default), <tt>'SmallIcon'</tt>,
+<tt>'List'</tt> or <tt>'Report'</tt>.
+When View is <tt>'Icon'</tt> or <tt>'SmallIcon'</tt>,
+the items are arranged <span class="Italic">row-wise</span> with large or small icons as appropriate.
+When View is set to <tt>'List'</tt>, the items are
+arranged <span class="Italic">column-wise</span> using small icons. Examples of <tt>'Icon'</tt>and <tt>'List'</tt> views are illustrated below.</p><p><img src="../images/listview-icon.png" /></p><p><img src="../images/listview-list.png" /></p><p>When View is set to <tt>'Report'</tt>, the items
+are displayed in a single column using small icons but with the matrix specified
+by <a href="../props/reportinfo.html">ReportInfo</a> displayed alongside. In
+this format, the boolean <a href="../props/header.html">Header</a> property
+determines whether or not the object also provides column headings. Its default
+value is 1. The column headings themselves are specified by the ColTitles
+property. Their alignment (and the alignment of the data in the columns beneath
+them) is defined by the <a href="../props/coltitlealign.html">ColTitleAlign</a> property.</p><p>The appearance of the column titles is further controlled by the <a href="../props/coltitle3d.html">ColTitle3D</a> property. This is a boolean value (default 1) which specifies whether or not the
+column titles have a 3-dimensional (plinth) appearance. <a href="../props/header.html">Header</a> and <a href="../props/coltitle3d.html">ColTitle3D</a> may only be set when the
+object is created using <tt>⎕WC</tt> and may
+not subsequently be changed by <tt>⎕WS</tt>.</p><p>In <tt>'Report'</tt> View, columns may be
+resized by the user dragging the bars between the titles, or under program
+control using the SetColSize event. A <tt>'Report'</tt>view example is illustrated below.</p><p><img src="../images/listview-report.png" /></p><p>The <a href="../props/dragitems.html">DragItems</a> property is boolean and
+specifies whether or not the user may drag an item from one position to another.
+Its default value is 1 (dragging is enabled).</p><p>The <a href="../props/autoarrange.html">AutoArrange</a> property is boolean
+and specifies whether or not the items are automatically re-arranged whenever an
+item is repositioned by the user or moved under program control. Its default
+value is 0.</p><p>The <a href="../props/editlabels.html">EditLabels</a> is a boolean property
+(default 0) that determines whether or not the user may edit the labels which
+are specified by the Items property.</p><p>The <a href="../props/style.html">Style</a> property may be <tt>'Single'</tt>,
+which specifies that only one item may be selected at a time, or <tt>'Multi'</tt>which permits multiple selections to be made. The default is <tt>'Multi'</tt>.</p><p>The <a href="../props/checkboxes.html">CheckBoxes</a> property is Boolean
+and specifies whether or not check boxes are drawn to the left of items. Its
+default value is 0.</p><p>The <a href="../props/gridlines.html">GridLines</a> property is Boolean and
+specifies whether or not grid lines are drawn between items. This applies only
+when View is <tt>'Report'</tt>. Its default value
+is 0.</p><p>In <tt>'Report'</tt> View, the <a href="../props/reportimageindex.html">ReportImageIndex</a> property specify images to be displayed alongside each item, and overrides the images specified by <a href="../props/imagelistobj.html">ImageListObj</a>. The <a href="../props/headerimagelist.html">HeaderImageList</a> and <a href="../props/headerimageindex.html"><a href="../props/headerimageindex.html">HeaderImageIndex</a></a>  properties specify images to be displayed alongside each column title.</p><p>The following example illustrates the use of these properties.</p><p><img src="../images/listview-weather.png" /></p><p>The <a href="../props/reportbcol.html">ReportBCol</a> property specifies each item's background colour. </p><p>The <a href="../props/fullrowselect.html">FullRowSelect</a> property is
+Boolean and specifies whether or not the entire row is highlighted to indicate
+selected items. This applies only when View is <tt>'Report'</tt>.
+Its default value is 0.</p><p>The <a href="../props/itemgroups.html">ItemGroups</a> and <a href="../props/itemgroupmetrics.html">ItemGroupMetrics</a> properties allow you to display items in groups as illustrated below.</p><p class="Bold">Note that this feature only applies if <span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Native Look and Feel </a></span><a href="../misc/windows-xp-look-and-feel.html#Native_Look_and_Feel" class="MCXref_SeePageNumber_0"></a> is enabled.</p><p><img src="../images/lvsg1.gif" /></p></body>
+</html>

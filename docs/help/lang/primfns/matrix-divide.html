@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←X⌹Y</tt>Matrix Divide</h2><p><tt>Y</tt> must be a simple numeric array of rank 2 or less.  <tt>X</tt> must be a simple numeric array of rank 2 or less.  <tt>Y</tt> must be non-singular.  A scalar argument is treated as a matrix with one-element.  If <tt>Y</tt> is a vector, it is treated as a single column matrix.  If <tt>X</tt> is a vector, it is treated as a single column matrix.  The number of rows in <tt>X</tt> and <tt>Y</tt> must be the same.  <tt>Y</tt> must have at least the same number of rows as columns.</p><p><tt>R</tt> is the result of matrix division of <tt>X</tt> by <tt>Y</tt>.  That is, the matrix product <tt>Y+.×R</tt> is <tt>X</tt>.  </p><p><tt>R</tt> is determined such that <tt>(X-Y+.×R)*2</tt> is minimised. </p><p>The shape of <tt>R</tt> is <tt>(1↓⍴Y),1↓⍴X</tt>.</p><h4>Examples</h4><pre>      ⎕PP←5
+ 
+      B
+3 1 4
+1 5 9
+2 6 5
+ 
+      35 89 79 ⌹ B
+2.1444 8.2111 5.0889
+ 
+      A
+35 36
+89 88
+79 75
+ 
+      A ⌹ B
+2.1444 2.1889
+8.2111 7.1222
+5.0889 5.5778</pre><p>If there are more rows than columns in the right argument, the least squares solution results.  In the following example, the constants a and b which provide the best fit for the set of equations represented by P = a + bQ  are determined:</p><pre>      Q
+1 1
+1 2
+1 3
+1 4
+1 5
+1 6
+ 
+      P
+12.03 8.78 6.01 3.75 ¯0.31 ¯2.79
+ 
+      P⌹Q
+14.941 ¯2.9609</pre><h4>Example: linear regression on complex numbers</h4><pre>      x←j⌿¯50+?2 13 4⍴100
+      y←(x+.×3 4 5 6) + j⌿0.0001×¯50+?2 13⍴100
+      ⍴x
+13 4
+      ⍴y
+13
+      y ⌹ x
+3J0.000011066 4J¯0.000018499 5J0.000005745 6J0.000050328
+      ⍝ i.e. y⌹x recovered the coefficients 3 4 5 6</pre></body>
+</html>

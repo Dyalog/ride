@@ -1,0 +1,11 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>Method 148</tt>GetCommandLineArgs</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/root.html">Root</a></td></tr></table><p class="Bold">Description</p><p>The GetCommandLineArgs method returns the command and the arguments to the command that was used to start the current Dyalog APL session or application.</p><p>The GetCommandLineArgs method is niladic.</p><p>The result is a vector of character vectors. For example:</p><pre>      GetCommandLineArgs
+ C:\Dyalog10\dyalog.exe  -Dw  YY_WINDOW=-30</pre><pre>      DISPLAY 2 ⎕NQ '.' 'GetCommandLineArgs'
+.→-----------------------------------------------.
+| .→---------------------. .→--. .→------------. |
+| |C:\Dyalog10\dyalog.exe| |-Dw| |YY_WINDOW=-30| |
+| '----------------------' '---' '-------------' |
+'∊-----------------------------------------------'</pre></body>
+</html>

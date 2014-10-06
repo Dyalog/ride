@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>:Select aexp</tt>Select Statement</h2><p><span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">Formal Definition</a></span></p><p>A <tt>:Select</tt> structure is used to execute alternative blocks of code depending upon the value of an array.  For example, the following displays <tt>'I is 1'</tt> if the variable <tt>I</tt> has the value 1, <tt>'I is 2'</tt> if it is 2, or <tt>'I is neither 1 nor 2'</tt> if it has some other value.</p><pre>[1]   :Select I
+[2]   :Case 1
+[3]       'I is 1'
+[4]   :Case 2
+[5]       'I is 2'
+[6]   :Else
+[7]       'I is neither 1 nor 2'
+[8]   :EndSelect</pre><p>In this case, the system compares the value of the array expression to the right of the <tt>:Select</tt> statement with each of the expressions to the right of the <tt>:Case</tt> statements and executes the block of code following the one that matches.  If none match, it executes the code following the <tt>:Else</tt> (which is optional).  Note that comparisons are performed using the <tt>≡</tt> primitive function, so the arrays must match exactly.  Note also that not all of the <tt>:Case</tt> expressions are necessarily evaluated because the process stops as soon as a matching expression is found.</p><p>Instead of a <tt>:Case</tt> statement, you may also use a <tt>:CaseList</tt> statement.  If so, the <span class="Italic">enclose of</span> the array expression to the right of <tt>:Select</tt> is tested for membership of the array expression to the right of the <tt>:CaseList</tt> using the <tt>∊</tt> primitive function. </p><p>Note also that any code placed between the <tt>:Select</tt> and the first <tt>:Case</tt> or <tt>:CaseList</tt> statements are unreachable; future versions of Dyalog APL may generate an error when attempting to fix functions which include such code.</p><h4>Example</h4><pre>[1]   :Select ?6 6
+[2]   :Case 6 6
+[3]       'Box Cars'
+[4]   :Case 1 1
+[5]       'Snake Eyes'
+[6]   :CaseList 2⍴¨⍳6
+[7]       'Pair'
+[8]   :CaseList (⍳6),¨⌽⍳6
+[9]       'Seven'
+[10]  :Else
+[11]      'Unlucky'
+[12]  :EndSelect
+
+
+</pre></body>
+</html>

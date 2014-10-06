@@ -1,0 +1,30 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←X/[K]Y</tt>Replicate</h2><p><tt>Y</tt> may be any array.  <tt>X</tt> is a simple integer vector or scalar.</p><p>The axis specification is optional.  If present, <tt>K</tt> must be a simple integer scalar or unit vector.  The value of <tt>K</tt> must be an axis of <tt>Y</tt>.  If absent, the last axis of <tt>Y</tt> is implied.  The form <tt>R←X⌿Y</tt> implies the first axis of <tt>Y</tt>.</p><p>If <tt>Y</tt> has length 1 along the <tt>K</tt><sup>th</sup> (or implied) axis, it is extended along that axis to match the length of <tt>X</tt>. Otherwise, the length of <tt>X</tt> must be the length of the <tt>K</tt><sup>th</sup> (or implied) axis of <tt>Y</tt>. However, if <tt>X</tt> is a scalar or one-element vector, it will be extended to the length of the <tt>K</tt><sup>th</sup> axis.</p><p><tt>R</tt> is composed from sub-arrays along the <tt>K</tt>th axis of <tt>Y</tt>.  If <tt>X[I]</tt> (an element of <tt>X</tt>) is positive, then the corresponding sub-array is replicated <tt>X[I]</tt> times.  If <tt>X[I]</tt> is zero, then the corresponding sub-array of <tt>Y</tt> is excluded.  If <tt>X[I]</tt> is negative, then the fill element of  <tt>Y</tt> is replicated <tt>|X[I]</tt> times.  Each of the (replicated) sub-arrays and fill items are joined along the <tt>K</tt>th axis in the order of occurrence.  The shape of <tt>R</tt> is the shape of <tt>Y</tt> except that the length of the (implied) <tt>K</tt>th axis is <tt>+/|X</tt> (after possible extension).</p><p>This function is sometimes called Compress when <tt>X</tt> is Boolean.</p><h4>Examples</h4><pre>      1 0 1 0 1/⍳5
+1 3 5
+ 
+      1 ¯2 3 ¯4 5/⍳5
+1 0 0 3 3 3 0 0 0 0 5 5 5 5 5
+ 
+      M
+1 2 3
+4 5 6
+ 
+      2 0 1/M
+1 1 3
+4 4 6
+ 
+      0 1⌿M
+4 5 6
+ 
+      0 1/[1]M
+4 5 6</pre><p>If <tt>Y</tt> is a singleton <tt>(1=×/⍴,Y)</tt> its value is notionally extended to the length of <tt>X</tt> along the specified axis.</p><pre>      1 0 1/4
+4 4
+      1 0 1/,3
+3 3
+      1 0 1/1 1⍴5
+5 5
+ 
+ </pre></body>
+</html>

@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←X ⎕FCREATE Y</tt>File Create </h2><p><tt>Y</tt> must be a simple integer scalar or a 1 or 2 element vector. The first element is the <span class="Italic">file tie number</span>. The second element, if specified, must be 64<span class="MCTextPopup"><span class="MCTextPopupBody_0" style="display: none; ">This element sets the address size of the file which in earlier Versions of Dyalog APL could be 32 or 64. Small-span (32-bit) component files may no longer be created and this element is retained only for backwards compatibility of code.</span><a href="javascript:void(0);" class="MCTextPopupSpot_0" onclick="FMCTextPopup( event, this ); return false;" style="font-size: 0.9em; vertical-align: super">1</a></span>.</p><p>The <span class="Italic">file tie number</span> must not be the tie number associated with another tied file.</p><p><tt>X</tt> must be either</p><ol style="list-style-type: lower-alpha;"><li value="1">a simple character scalar or vector which specifies the name of the file to be created.  See <span class="Italic">User Guide</span> for file naming conventions under UNIX and Windows.</li><li value="2">a vector of length 1 or 2 whose items are:</li></ol><blockquote><ol style="list-style-type: lower-roman;"><li value="1">a simple character scalar or vector as above.</li><li value="2">an integer scalar specifying the file size limit in bytes.</li></ol></blockquote><p>The newly created file is tied for exclusive use.</p><p>The shy result of <tt>⎕FCREATE</tt> is the tie number of the new file.</p><h4>Automatic Tie Number Allocation</h4><p>A tie number of 0 as argument to a create or tie operation, allocates, and returns as an explicit result, the first (closest to zero) available tie number. This allows you to simplify code. For example:</p><p>from:</p><pre>      tie←1+⌈/0,⎕FNUMS    ⍝ With next available number,
+      file ⎕FCREATE tie   ⍝ ... create file.
+</pre><p>to:</p><pre>
+      tie←file ⎕FCREATE 0 ⍝ Create with first available..</pre><h4>Examples</h4><pre>      '..\BUDGET\SALES'    ⎕FCREATE 2    ⍝ Windows
+      '../budget/SALES.85' ⎕FCREATE 2    ⍝ UNIX
+ 
+      'COSTS' 200000 ⎕FCREATE 4          ⍝ max size 200000
+</pre><h4><a name="File_Properties"></a>File Properties</h4><p><tt>⎕FCREATE</tt> allows you to specify propeties for the newly created file via the variant operator <tt>⍠</tt> used with the following options:</p><ul><li value="1"><tt>'J'</tt> - journaling level; a numeric value.</li><li value="2"><tt>'C'</tt> - checksum level; 0 or 1.</li><li value="3"><tt>'Z'</tt> - compression; 0 or 1.</li></ul><p>The Principal Option is neither <tt>'J'</tt> nor <tt>'C'</tt> - but a combination as follows:</p><ul><li value="1">0 - sets <tt>('J' 0) ('C' 0)</tt></li><li value="2">1 - sets <tt>('J' 1) ('C' 1)</tt></li><li value="3">2 - sets <tt>('J' 2) ('C' 1)</tt></li><li value="4">3 - sets <tt>('J' 3) ('C' 1)</tt></li></ul><h4>Examples</h4><pre>      'newfile' (⎕FCREATE⍠3) 0
+1
+      'SEUJCZ' ⎕FPROPS 1
+64 0 1 3 1 0
+</pre><p>Alternatively:</p><pre>      JFCREATE←⎕FCREATE ⍠ 3</pre><p>will name a variant of <tt>⎕FCREATE</tt> which will create component file with level 3 journaling, and checksum enabled. Then:</p><pre>      'newfile'JFCREATE 0
+1</pre></body>
+</html>

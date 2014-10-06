@@ -1,0 +1,23 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←⎕MONITOR Y</tt>Query Monitor </h2><p><tt>Y</tt> must be a simple character scalar or vector which is taken to be the name of a visible defined function or operator.  <tt>R</tt> is a simple non-negative integer matrix of 5 columns with one row for each line in the function or operator <tt>Y</tt> which has the monitor set, giving:</p><table><tbody><tr><td>Column 1 </td><td>Line number</td></tr><tr><td>Column 2 </td><td>Number of times the line was executed</td></tr><tr><td>Column 3 </td><td>CPU time in milliseconds</td></tr><tr><td>Column 4 </td><td>Elapsed time in milliseconds</td></tr><tr><td>Column 5 </td><td>Reserved</td></tr></tbody></table><p>The value of <tt>0</tt> in column one indicates that the monitor is set on the function or operator as a whole. <tt>R</tt> will be empty for dfns and dops.</p><h4>Example</h4><pre>      ∇ FOO
+[1]   A←?25 25⍴100
+[2]   B←⌹A
+[3]   C←⌹B
+[4]   R1←⌊0.5+A+.×B
+[5]   R2←A=C
+      ∇
+ 
+      (0,⍳5) ⎕MONITOR 'FOO' ⍝ Set monitor
+ 
+      FOO                   ⍝ Run function
+ 
+      ⎕MONITOR 'FOO'        ⍝ Monitor query
+0 1 1418 1000 0
+1 1   83    0 0
+2 1  400    0 0
+3 1  397    0 0
+4 1  467 1000 0
+5 1  100    0 0</pre></body>
+</html>

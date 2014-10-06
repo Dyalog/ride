@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>{R}←⎕FDROP Y</tt>File Drop Component </h2><h4>Access code 32</h4><p><tt>Y</tt> must be a simple integer vector of length 2 or 3 whose elements are:</p><table><tbody><tr><td><tt>[1]</tt></td><td>a file tie number</td></tr><tr><td><tt>[2]</tt></td><td>a number specifying the position and number of components to be dropped.  A positive value indicates that components are to be removed from the beginning of the file; a negative value indicates that components are to be removed from the end of the file</td></tr><tr><td><tt>[3]</tt></td><td>an optional passnumber which if omitted is assumed to be zero</td></tr></tbody></table><p>The shy result of a <tt>⎕FDROP</tt> is a vector of the numbers of the dropped components. This is analogous to <tt>⎕FAPPEND</tt> in that the result is potentially useful for updating some sort of dictionary:</p><pre>      cnos,←vec ⎕FAPPEND¨tie ⍝ Append index to dictionary
+      
+      cnos~←⎕FDROP tie,-⍴vec ⍝ Remove index from dict.</pre><p>Note that the result vector, though potentially large, is generated only on request. </p><h4>Examples</h4><pre>      ⎕FSIZE 1
+1 21 5436 4294967295
+ 
+      ⎕FDROP 1 3 ⋄ ⎕FSIZE 1
+4 21 5436 4294967295
+ 
+      ⎕FDROP 1 ¯2 ⋄ ⎕FSIZE 1
+4 19 5436 4294967295
+ </pre></body>
+</html>

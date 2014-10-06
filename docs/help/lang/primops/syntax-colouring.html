@@ -1,0 +1,9 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h2><tt>R←200⌶Y</tt>Syntax Colouring</h2><p>This function obtains syntax colouring information for a function.</p><p><tt>Y</tt> is a vector of character vectors containing the <tt>⎕NR</tt> representation of a function or operator.</p><p><tt>R</tt> is a vector of integer vectors with the same shape and structure of <tt>Y</tt> in which each number identifies the syntax colour element associated with the corresponding character in <tt>Y</tt>.</p><pre>      {(↑⍵),↑ 200⌶⍵}  'foo; local' 'global' 'local←⍴⍴''hello'''
+ 
+foo; local      21 21 21 19  3 31 31 31 31 31 0 0 0 0 0
+global           7  7  7  7  7  7  0  0  0  0 0 0 0 0 0
+local←⍴⍴'hello' 31 31 31 31 31 19 23 23  4  4 4 4 4 4 4</pre><p>In this example:</p><table><tbody><tr><td>21</td><td> is the syntax identifier for “function name”</td></tr><tr><td>19</td><td> is the syntax identifier for “primitive”</td></tr><tr><td>3</td><td> is the syntax identifier for “white space”</td></tr><tr><td>31</td><td> is the syntax identifier for “local name”</td></tr><tr><td>7</td><td> is the syntax identifier for “global name”</td></tr><tr><td>23</td><td> is the syntax identifier for “idiom”</td></tr></tbody></table></body>
+</html>

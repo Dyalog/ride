@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
+<body><h4>:Select Statement</h4><pre> 
+       |
+       :Select aexp
+       |
+       |&lt;----------------------------------------------.
+       |                                               |
+       .-------.-------.---------------.               |
+       |       |       |               |               |
+       |       :Else   :Case aexp      :CaseList aexp  |
+       |       |       |               |               |
+       |       |       |&lt;--------------'               |
+       |       |       |                               |
+       |       code    code                            |
+       |       |       |                               |
+       |&lt;------'       `-------------------------------'
+       |
+       :End[Select]</pre></body>
+</html>

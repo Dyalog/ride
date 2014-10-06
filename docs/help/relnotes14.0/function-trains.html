@@ -1,0 +1,8 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../help.css"></head>
+<body><h2>Function Trains</h2><p>A <span class="Name">Train</span> is a sequence of 2 or 3 items in an expression which bind together to form a function. Each item in a train may be an array or a function but the right-most item must be a function.</p><p>Note that the right-most item  of a function train (which is by definition a function) must be isolated from anything to its right, otherwise it will be bound to that rather than to the items to its left. This is done using parentheses.</p><p>For example, the following expression  comprises a function train <tt>-,÷</tt> that is separated from its argument 2 by parentheses:</p><pre>      (-,÷) 2
+¯2 0.5</pre><p> and means:</p><ol><li value="1">Calculate the reciprocal of 2</li><li value="2">Calculate the negation of 2</li><li value="3">Catenate these 2 results together</li></ol><p>Whereas, without the parentheses to identify the function train, the expression      means (as it did before):</p><ol><li value="1"> Calculate the reciprocal of 2</li><li value="2">Ravel the result of step 1</li><li value="3">Negate the result of step 2</li></ol><pre>
+      -,÷ 2
+¯0.5</pre><p>For further information, see <a href="../lang/intro/trains.html#Function_Trains" class="MCXref_0">Function Trains</a>.</p></body>
+</html>

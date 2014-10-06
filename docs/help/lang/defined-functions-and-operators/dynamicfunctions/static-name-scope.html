@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
+<body><h3><a name="StaticNameScope"></a>Static Name Scope</h3><p>When an inner (nested) Dynamic Function refers to a name, the interpreter searches for it by looking outwards through enclosing Dynamic Functions, rather than searching back along the execution stack. This regime, which is more appropriate for nested functions, is said to employ <b>static scope</b> instead of APL’s usual <b>dynamic scope</b>.  This distinction becomes apparent only if a call is made to a function defined at an outer level. For the more usual inward calls, the two systems are indistinguishable.</p><p>For example, in the following function, variable <tt>type</tt> is defined both within <tt>which</tt>  itself and within the inner function <tt>fn1</tt>. When <tt>fn1</tt> calls outward to <tt>fn2</tt> and <tt>fn2</tt> refers to <tt>type</tt>, it finds the outer one (with value <tt>'static'</tt>) rather than the one defined in <tt>fn1</tt>:</p><pre>      which←{
+ 
+          type←'static' 
+    
+          fn1←{        
+              type←'dynamic'
+              fn2 ⍵
+          }
+    
+          fn2←{    
+              type ⍵ 
+          }
+    
+          fn1 ⍵
+      }
+                     
+      which'scope'
+ static  scope</pre></body>
+</html>
