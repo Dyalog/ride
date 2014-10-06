@@ -19,6 +19,7 @@ simplifyFilename = (s) ->
    .replace(/\bsystem-commands\b/g,                 'syscmds')
    .replace(/\bsystem-functions\b/g,                'sysfns')
    .replace(/\bwindows-presentation-foundation\b/g, 'wpf')
+   .replace(/dieresis/g,                            'diaeresis')
 
 repeat = (s, n) -> Array(n + 1).join s
 
@@ -65,6 +66,7 @@ do walk = (d = 'help', depth = 0) ->
         .replace(/<script type="text\/javascript" src="[\.\/]*skinsupport\/madcapbodyend.js">[^]*$/i, '')
         .replace(/<madcapkeyword[^>\/]*\/>/ig, '')
         .replace(/<madcapkeyword[^>\/]*>[^<]*<\/madcapkeyword>/ig, '')
+        .replace(/([Dd])ieresis/, '$1iaeresis')
         .replace(///
           <div(?:\ class="(?:h3|h3NewPage|NewPage)")?>\n*
           <table\ class="h3">\n*
