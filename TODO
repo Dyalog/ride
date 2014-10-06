@@ -1,5 +1,7 @@
+* integrate a css minifier
+* js strict mode
+* use jquery-ui from npm
 * virtual whitespace
-* keymapping using `
 * history of search fields
 * fetch language bar from server
 * code folding and [+] button
