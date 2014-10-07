@@ -54,11 +54,12 @@ do preloadJS = ->
       if !fs.existsSync 'cache' then fs.mkdirSync 'cache'
       s = fs.readFileSync f, 'utf8'
       if /\.coffee$/.test f then log "compiling #{f}"; s = coffee.compile s, bare: 1
-      log "minifying #{f}"
-      s1 = uglify.minify(s, fromString: true, mangle: false).code
-      try fs.writeFileSync f1, s1 catch # ignore errors
-      log "  #{s.length} -> #{s1.length} bytes"
-      s = s1
+      if !/\.min\.js$/.test f
+        log "minifying #{f}"
+        s1 = uglify.minify(s, fromString: true, mangle: false).code
+        try fs.writeFileSync f1, s1 catch # ignore errors
+        log "  #{s.length} -> #{s1.length} bytes"
+        s = s1
     else
       s = fs.readFileSync f1, 'utf8'
     js += s + '\n'
