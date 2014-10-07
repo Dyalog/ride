@@ -6,6 +6,7 @@ io      = require 'socket.io'
 net     = require 'net'
 https   = require 'https'
 uglify  = require 'uglify-js'
+cleanCSS = new (require 'clean-css')
 
 jsFiles = [
   'node_modules/socket.io/node_modules/socket.io-client/socket.io.js'
@@ -64,7 +65,10 @@ jsFiles.forEach (f) -> fs.watch f, preloadJS
 
 css = ''
 do preloadCSS = ->
-  css = cssFiles.map((f) -> fs.readFileSync f, 'utf8').join '\n'
+  log 'minifying CSS...'
+  css0 = cssFiles.map((f) -> fs.readFileSync f, 'utf8').join '\n'
+  css = cleanCSS.minify css0
+  log "  #{css0.length} -> #{css.length} bytes"
   log "preloaded css: #{css.length} bytes"
 cssFiles.forEach (f) -> fs.watch f, preloadCSS
 

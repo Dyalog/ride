@@ -6,6 +6,7 @@
 		"jquery": "2.1.1",
 		"codemirror": "4.6.0",
 		"socket.io": "1.0.6",
-		"uglify-js": "2.4.15"
+		"uglify-js": "2.4.15",
+		"clean-css": "2.2.16"
 	}
 }
