@@ -23,7 +23,7 @@ DyalogSession = (e, opts = {}) ->
     mode: ''
     keyMap: 'dyalog'
     extraKeys:
-      'Ctrl-Space': -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
+      Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
       'Shift-Enter': -> c = cm.getCursor(); opts.edit?(cm.getLine(c.line), c.ch)
       Enter: -> exec 0
       'Ctrl-Enter': -> exec 1
