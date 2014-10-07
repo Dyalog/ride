@@ -123,5 +123,6 @@ body { padding: 0; margin: 0; }
 }
 .CodeMirror-hint { margin: 0; padding: 0 2px; max-width: 19em; overflow: hidden; white-space: pre; color: black; cursor: pointer; }
 .CodeMirror-hint-active { background: #0a246a; color: white; }
+.CodeMirror-matchingbracket { color: black !important; background-color: #ff8; }
 .breakpoints { width: 10px; }
 .breakpoint { color: #822; }

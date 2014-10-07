@@ -22,6 +22,8 @@ DyalogSession = (e, opts = {}) ->
     autofocus: true
     mode: ''
     keyMap: 'dyalog'
+    matchBrackets: true
+    autoCloseBrackets: true
     extraKeys:
       Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
       'Shift-Enter': -> c = cm.getCursor(); opts.edit?(cm.getLine(c.line), c.ch)

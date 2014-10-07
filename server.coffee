@@ -14,6 +14,8 @@ jsFiles = [
   'node_modules/codemirror/lib/codemirror.js'
   'node_modules/codemirror/mode/apl/apl.js'
   'node_modules/codemirror/addon/hint/show-hint.js'
+  'node_modules/codemirror/addon/edit/matchbrackets.js'
+  'node_modules/codemirror/addon/edit/closebrackets.js'
   'jquery-ui.min.js'
   'jquery.layout.js'
   'lbar/lbar.js'

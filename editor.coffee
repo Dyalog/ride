@@ -57,6 +57,8 @@ DyalogEditor = (e, opts = {}) ->
     firstLineNumber: 0
     lineNumberFormatter: (i) -> "[#{i}]"
     readOnly: !!opts.debugger
+    matchBrackets: true
+    autoCloseBrackets: true
     gutters: ['breakpoints', 'CodeMirror-linenumbers']
     extraKeys:
       'Enter': -> if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'
