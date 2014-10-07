@@ -19,10 +19,10 @@ jsFiles = [
   'jquery-ui.min.js'
   'jquery.layout.js'
   'lbar/lbar.js'
-  'keymap.coffee'
-  'session.coffee'
-  'editor.coffee'
-  'index.coffee'
+  'client/keymap.coffee'
+  'client/session.coffee'
+  'client/editor.coffee'
+  'client/index.coffee'
   'docs/help-urls.coffee'
 ]
 cssFiles = [
