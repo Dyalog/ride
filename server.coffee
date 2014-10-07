@@ -2,6 +2,7 @@
 fs      = require 'fs'
 coffee  = require 'coffee-script'
 express = require 'express'
+compression = require 'compression'
 io      = require 'socket.io'
 net     = require 'net'
 https   = require 'https'
@@ -79,6 +80,7 @@ ttf = fs.readFileSync 'apl385.ttf'
 ico = fs.readFileSync 'favicon.ico'
 
 app = express()
+app.use compression()
 app.disable 'x-powered-by'
 app.get '/',            (req, res) -> res.header('Content-Type', 'text/html'               ).send html
 app.get '/D.css',       (req, res) -> res.header('Content-Type', 'text/css'                ).send css
