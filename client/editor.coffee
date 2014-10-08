@@ -19,7 +19,7 @@ DyalogEditor = (e, opts = {}) ->
           <input class="search">
           <span class="b-next         button" title="Search for next match"    >▶</span>
           <span class="b-prev         button" title="Search for previous match">◀</span>
-          <span class="b-hid          button" title="Search for hidden text"   >⊞</span>
+          <!--<span class="b-hid          button" title="Search for hidden text"   >⊞</span>-->
           <span class="b-case         button" title="Match case"               >aA</span>
           <span class="separator"></span>
           <select class="stack">
@@ -41,7 +41,7 @@ DyalogEditor = (e, opts = {}) ->
           <input class="search">
           <span class="b-next         button" title="Search for next match"    >▶</span>
           <span class="b-prev         button" title="Search for previous match">◀</span>
-          <span class="b-hid          button" title="Search for hidden text"   >⊞</span>
+          <!--<span class="b-hid          button" title="Search for hidden text"   >⊞</span>-->
           <span class="b-case         button" title="Match case"               >aA</span>
           <span class="separator"></span>
           <span class="b-refac-m      button" title="Refactor text as method"  >+m</span>
