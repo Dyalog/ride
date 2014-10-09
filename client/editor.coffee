@@ -60,6 +60,7 @@ DyalogEditor = (e, opts = {}) ->
     matchBrackets: true
     autoCloseBrackets: true
     gutters: ['breakpoints', 'CodeMirror-linenumbers']
+    keyMap: 'dyalog'
     extraKeys:
       'Enter': -> if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'
       'Esc': saveAndClose = ->

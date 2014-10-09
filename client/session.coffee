@@ -21,9 +21,9 @@ DyalogSession = (e, opts = {}) ->
   cm = CodeMirror ($e = $ e)[0],
     autofocus: true
     mode: ''
-    keyMap: 'dyalog'
     matchBrackets: true
     autoCloseBrackets: true
+    keyMap: 'dyalog'
     extraKeys:
       Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
       'Shift-Enter': -> c = cm.getCursor(); opts.edit?(cm.getLine(c.line), c.ch)
