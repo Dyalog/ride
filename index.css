@@ -97,7 +97,7 @@ body { padding: 0; margin: 0; }
 	height: 24px;
 	background: no-repeat center center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAASCAIAAAD+ApjoAAAAGElEQVQI12NoaGj4//8/EwMDAwMDA70pACyPBKBkf6chAAAAAElFTkSuQmCC);
 }
-.search { float: left; height: 18px; width: 120px; }
+.search { float: left; height: 18px; width: 200px; }
 .CodeMirror-linenumber { color: #00f; text-align: left; }
 .CodeMirror-gutters { border-right-color: transparent; background-color: transparent; }
 .hidden { display: none; }
