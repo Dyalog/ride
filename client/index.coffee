@@ -18,6 +18,7 @@ jQuery ($) ->
   ed = DyalogEditor '#editor',
     save: (s, bs) -> socket.emit 'save', editorWin, (winInfos[editorWin].text = s), bs
     close: -> socket.emit 'close', editorWin
+    autocomplete: (s, i) -> socket.emit 'autocomplete', s, i, editorWin
 
   db = DyalogEditor '#debugger',
     debugger: true
@@ -83,7 +84,7 @@ jQuery ($) ->
       layout.close 'east'
     session.scrollCursorIntoView()
 
-  socket.on 'autocomplete', (token, skip, options) -> if token == 0 then session.autocomplete skip, options
+  socket.on 'autocomplete', (token, skip, options) -> (if token then ed else session).autocomplete skip, options
   socket.on 'highlight', (win, line) ->
     if win == editorWin then ed.highlight line
     else if win == debuggerWin then db.highlight line

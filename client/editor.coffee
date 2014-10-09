@@ -62,8 +62,9 @@ DyalogEditor = (e, opts = {}) ->
     gutters: ['breakpoints', 'CodeMirror-linenumbers']
     keyMap: 'dyalog'
     extraKeys:
-      'Enter': -> if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'
-      'Esc': saveAndClose = ->
+      Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
+      Enter: -> if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'
+      Esc: saveAndClose = ->
         bs = []
         for l of breakpoints then bs.push +l; cm.setGutterMarker +l, 'breakpoint', null
         opts.save? cm.getValue(), bs
@@ -173,6 +174,7 @@ DyalogEditor = (e, opts = {}) ->
   hasFocus: -> cm.hasFocus()
   focus: -> cm.focus()
   insert: (ch) -> c = cm.getCursor(); cm.replaceRange ch, c, c, 'Dyalog'
+  autocomplete: (skip, options) -> c = cm.getCursor(); cm.showHint hint: -> list: options, from: {line: c.line, ch: c.ch - skip}, to: c
   getValue: -> cm.getValue()
   highlight: (l) ->
     if hll? then cm.removeLineClass hll, 'background', 'highlighted'
