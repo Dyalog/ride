@@ -1,4 +1,4 @@
-DyalogEditor = (e, opts = {}) ->
+Dyalog.Editor = (e, opts = {}) ->
   ($e = $ e).html(
     if opts.debugger
       '''

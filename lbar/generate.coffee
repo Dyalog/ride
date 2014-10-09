@@ -28,4 +28,4 @@ for line, i in s.split '\n'
   else if line
     throw Error "error at line #{i + 1}: #{JSON.stringify line}"
 fs.writeFileSync "#{__dirname}/lbar.html", lbarHTML
-fs.writeFileSync "#{__dirname}/lbar.js", "var lbarTips = #{JSON.stringify lbarTips};\n"
+fs.writeFileSync "#{__dirname}/lbar.js", "var Dyalog = Dyalog || {}; Dyalog.lbarTips = #{JSON.stringify lbarTips};\n"

@@ -6,14 +6,14 @@ do ->
       c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
       u =
         if m = /^ *(\)[a-z]+).*$/.exec s
-          helpURLs[m[1]] || 'lang/syscmds/intro'
+          Dyalog.helpURLs[m[1]] || 'lang/syscmds/intro'
         else if m = /^ *(\][a-z]+).*$/.exec s
-          helpURLs[m[1]] || 'userguide/the-apl-environment/user-commands'
+          Dyalog.helpURLs[m[1]] || 'userguide/the-apl-environment/user-commands'
         else
           x = s[s[...c.ch].replace(/.[áa-z]*$/i, '').length..]
             .replace(/^([⎕:][áa-z]*|.).*$/i, '$1')
             .replace /^:end/, ':'
-          helpURLs[x] ||
+          Dyalog.helpURLs[x] ||
             if x[0] == '⎕' then 'lang/sysfns/sysfns-categorised'
             else if x[0] == ':' then 'lang/control-structures/control-structures-intro'
             else 'lang/intro/lang-elements'
