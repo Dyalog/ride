@@ -18,9 +18,10 @@ do ->
             else if x[0] == ':' then 'lang/control-structures/control-structures-intro'
             else 'lang/intro/lang-elements'
       w = screen.width; h = screen.height
-      open "help/#{u}.html", 'help',
+      popup = open "help/#{u}.html", 'help',
         "width=#{w / 2},height=#{h / 2},left=#{w / 4},top=#{h / 4}," +
         "scrollbars=1,location=1,toolbar=0,menubar=0,resizable=1"
+      popup.focus?()
       return
 
   window.onhelp = -> false # prevent IE from being silly
