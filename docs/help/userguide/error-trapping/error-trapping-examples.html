@@ -149,5 +149,5 @@ REP1      REP2    REP3    REP4
   [21] ⍝ And repeat
   [22]  →LOOP
   [23] ⍝ End
-  [24] END:</pre><p>Suppose the user runs this version of <tt>REPORT</tt> and chooses <tt>REP3</tt>. When the unexpected error occurs in <tt>DIV</tt>, APL will check its trap specifications, and see that the relevant trap was set in <tt>REPORT</tt> with a cut-back code. APL therefore <b>cuts back the stack to the function in which the trap was localised, THEN takes the specified action</b>. Looking at the SI stack above, we can see that APL must jump out of <tt>DIV</tt>, then<tt> REP3</tt>, then <tt>⍎</tt>, to return to line 7 of <tt>REPORT</tt>; THEN it takes the specified action.</p></body>
+  [24] END:</pre><p>Suppose the user runs this version of <tt>REPORT</tt> and chooses <tt>REP3</tt>. When the unexpected error occurs in <tt>DIV</tt>, APL will check its trap specifications, and see that the relevant trap was set in <tt>REPORT</tt> with a cut-back code. APL therefore <b>cuts back the stack to the function in which the trap was localised, THEN takes the specified action</b>. Looking at the SI stack above, we can see that APL must jump out of <tt>DIV</tt>, then<tt> REP3</tt>, then <tt>⍎</tt>, to return to line 7 of <tt>REPORT</tt>; THEN it takes the specified action.</p><script src="../../../help.js"></script></body>
 </html>

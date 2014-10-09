@@ -89,7 +89,7 @@ do walk = (d = 'help', depth = 0) ->
         <!doctype html>
         <html>
         <head><meta charset="utf-8"><title></title><link rel="stylesheet" href="..#{repeat '/..', depth}/help.css"></head>
-        <body>#{s}</body>
+        <body>#{s}<script src="..#{repeat '/..', depth}/help.js"></script></body>
         </html>
       """
   return

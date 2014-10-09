@@ -5,5 +5,5 @@
       'F.R2' ⎕WC 'Rect' (50 60)(30 30) ('FCol' BLUE)</pre><p>The next statement achieves the same result, but uses only one object:</p><pre>      'F.R' ⎕WC 'Rect' ((10 50)(20 60)) (30 30)
                         ('FCol' RED BLUE)</pre><p>The rectangles drawn by both these sets of statements are shown below (blue and red have been replaced by black for clarity).</p><p><img src="../images/multiple-graphical-items.png" /></p><p>The capability to specify more than one graphical item as a single object is particularly useful with the Text object as it allows you to display or print several text items (at different positions and in different colours if you wish) in a single statement. For example, the following expressions display a set of "labels" in a Form <tt>'F1'</tt>:</p><p class="pagebreakafter"> </p><pre>      LAB←'Name' 'Age' 'Address'
       POS←3 2⍴10 10 10 60 30 10 
-      'F1.LABS' ⎕WC 'Text' LAB POS</pre><p class="TOC2_4"><img src="../images/multiple-text-items.png" /></p></body>
+      'F1.LABS' ⎕WC 'Text' LAB POS</pre><p class="TOC2_4"><img src="../images/multiple-text-items.png" /></p><script src="../../../help.js"></script></body>
 </html>

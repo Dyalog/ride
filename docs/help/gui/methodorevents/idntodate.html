@@ -2,5 +2,5 @@
 <html>
 <head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
 <body><h2><tt>Method 263</tt>IDNToDate</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/calendar.html">Calendar</a></td><td class="SpacedPlain"><a href="../objects/datetimepicker.html">DateTimePicker</a></td><td class="SpacedPlain"><a href="../objects/root.html">Root</a></td></tr></table><p class="Bold">Description</p><p>This method is used to convert a date from an <span class="MCPopup"><a href="javascript:void(0);" onclick="FMCPopup( event, this ); return false;" class="MCPopupSpot">IDN</a></span> into <tt>⎕TS</tt> format (year, month, day). The corresponding day of the week is also obtained.</p><p>The argument to IDNToDate is a single item as follows:</p><table><tr><td><tt>[1]</tt></td><td>IDN</td><td>Integer</td></tr></table><p>The result is a 4-element integer vector containing the year, month, day, and weekday corresponding to the IDN that was specified.</p><p>The value of the 4<sup>th</sup> element, weekday, is an integer in the range 0-6 that specifies on which day of the week the specified date falls (0=Monday).</p><h4>Example</h4><pre>      F.C.IDNToDate 36048
-1998 9 11 4</pre></body>
+1998 9 11 4</pre><script src="../../../help.js"></script></body>
 </html>

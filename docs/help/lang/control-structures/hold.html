@@ -49,5 +49,5 @@
     :End</pre><p>Between obtaining the next available file tie number and using it:</p><pre>    :Hold '⎕FNUMS'
         tie←1+⌈/0,⎕FNUMS
         fname ⎕FSTIE tie
-    :End</pre><p>The above hold is not necessary if the code is combined into a single line:</p><pre>    fname ⎕FSTIE tie←1+⌈/0,⎕FNUMS</pre><p>or,</p><pre>    tie←fname ⎕FSTIE 0</pre><p>Note that <tt>:Hold</tt>, like its component file system counterpart <tt>⎕FHOLD</tt>, is a device to enable <span class="Italic">co-operating </span>threads to synchronise their operation. </p><p><tt>:Hold</tt> does not <span class="Italic">prevent </span>threads from updating the same data structures concurrently, it prevents threads only from <tt>:Hold</tt>-ing the same tokens.</p></body>
+    :End</pre><p>The above hold is not necessary if the code is combined into a single line:</p><pre>    fname ⎕FSTIE tie←1+⌈/0,⎕FNUMS</pre><p>or,</p><pre>    tie←fname ⎕FSTIE 0</pre><p>Note that <tt>:Hold</tt>, like its component file system counterpart <tt>⎕FHOLD</tt>, is a device to enable <span class="Italic">co-operating </span>threads to synchronise their operation. </p><p><tt>:Hold</tt> does not <span class="Italic">prevent </span>threads from updating the same data structures concurrently, it prevents threads only from <tt>:Hold</tt>-ing the same tokens.</p><script src="../../../help.js"></script></body>
 </html>

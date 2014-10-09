@@ -8,5 +8,5 @@
                         ('Event' 'TCPAccept' 'ACCEPT')</pre><p>Then, each time a client connects, the <tt>ACCEPT</tt> function clones the original listening socket with a sequence of new TCPSocket objects using the name <tt>S1</tt>, <tt>S2</tt>, and so forth.</p><pre>     ∇ ACCEPT MSG
 [1]    COUNT+←1
 [2]    ('S',⍕COUNT)⎕WC 'TCPSocket'('SocketNumber'(3⊃MSG))
-     ∇</pre></body>
+     ∇</pre><script src="../../../help.js"></script></body>
 </html>

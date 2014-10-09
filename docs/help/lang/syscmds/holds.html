@@ -12,5 +12,5 @@ red:    300     200     100
  </pre><ul><li value="1"><tt>Blue</tt> has been acquired by thread <tt>100</tt>.</li><li value="2"><tt>Green</tt> has been acquired by <tt>200</tt> and requested by <tt>100</tt>.</li><li value="3"><tt>Red</tt> has been acquired by <tt>300</tt> and requested by <tt>200</tt> and <tt>100</tt>.</li></ul><p>The following cycle of dependencies has caused the deadlock:</p><pre>Thread 300 attempts to acquire blue,      300 → blue
 which is owned by 100,                     ↑      ↓
 which is waiting for red,                 red ←  100
-which is owned by 300.</pre></body>
+which is owned by 300.</pre><script src="../../../help.js"></script></body>
 </html>

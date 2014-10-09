@@ -9,5 +9,5 @@
  Jan  Feb  Mar  Apr  May  Jun  Jul  Aug  Sep  Oct  Nov...</pre><p>... but also, directly from the Class itself.</p><pre>      Example.Months
 Jan  Feb  Mar  Apr  May  Jun  Jul  Aug  Sep  Oct  Nov...</pre><p>Notice that in this case it is necessary to insert a <tt>:Using</tt> statement (or the equivalent assignment to <tt>⎕USING</tt>) in order to specify the .Net search path for the DateTimeFormatInfo type. Without this, the Class would fail to fix.</p><p>You can see how the assignment works by executing the same statements in the Session:</p><pre>      ⎕USING←'System.Globalization'
     12↑(⎕NEW DateTimeFormatInfo).AbbreviatedMonthNames
- Jan  Feb  Mar  Apr  May  Jun  Jul  Aug  Sep  Oct  Nov...</pre></body>
+ Jan  Feb  Mar  Apr  May  Jun  Jul  Aug  Sep  Oct  Nov...</pre><script src="../../../../../help.js"></script></body>
 </html>

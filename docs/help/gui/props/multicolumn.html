@@ -2,5 +2,5 @@
 <html>
 <head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
 <body><h2><tt>Property</tt>MultiColumn</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/list.html">List</a></td></tr></table><p class="Bold">Description</p><p>MultiColumn is boolean and specifies whether or not a List object displays its items in a single column (0, the default) or in multiple columns (1). MultiColumn may only be set by <tt>⎕WC</tt> and cannot be changed using <tt>⎕WS</tt> after the object has been created. Note that a MultiColumn List will use the minimum number of columns that are required to make the items fit within it and will reconfigure itself automatically when resized. </p><p>The following example illustrates its use.</p><pre>      'F'⎕WC'Form' 'MultiColumn List'('Size' 23 32)
-      'F.L'⎕WC'LIST' AIRPORTS (0 0)(100 100)('MultiColumn' 1)</pre><p><img src="../images/multicol.gif" /></p></body>
+      'F.L'⎕WC'LIST' AIRPORTS (0 0)(100 100)('MultiColumn' 1)</pre><p><img src="../images/multicol.gif" /></p><script src="../../../help.js"></script></body>
 </html>

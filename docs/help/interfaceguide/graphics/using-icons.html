@@ -6,5 +6,5 @@
       '.' ⎕WS ('IconObj' MYIcon) ('Caption' 'My System')</pre><p>An icon can be displayed using the Image object. This object is used to position one or more Icon objects (or Bitmap objects) in a Form or Static. It can also be used to draw an icon on a Printer. If you make the Image dragable, you will be able to drag/drop the icon. The following example displays a dragable Icon at (10,10) in a Form. It also associates the callback function <tt>'Drop'</tt> with the DragDrop event so that this function is called when the user drag/drops the icon.</p><pre>      'F1' ⎕WC 'Form' ('Event' 'DragDrop' 'Drop')
       'star'⎕WC'Icon'('Shell32.dll' ¯43)
       'F1.I' ⎕WC 'Image' (10 10) ('Picture' star)
-       F1.I.Dragable←2</pre><p><img src="../images/icon-image.png" /></p><p>Notice that setting <tt>Dragable</tt>to 2 specifies that an object is fully displayed while it is being dragged. Setting <tt>Dragable</tt> to 1 causes only the bounding rectangle around the object to be dragged.</p></body>
+       F1.I.Dragable←2</pre><p><img src="../images/icon-image.png" /></p><p>Notice that setting <tt>Dragable</tt>to 2 specifies that an object is fully displayed while it is being dragged. Setting <tt>Dragable</tt> to 1 causes only the bounding rectangle around the object to be dragged.</p><script src="../../../help.js"></script></body>
 </html>

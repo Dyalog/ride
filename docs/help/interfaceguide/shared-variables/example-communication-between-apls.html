@@ -18,5 +18,5 @@
 [2]    →(0 0 1 1≡⎕SVS'B')/0 ⍝ Exit if no change
 [3]    B
      ∇    </pre><p>Then, to attach <tt>FOO</tt> as a callback and to "wait"...</p><pre>      '.' ⎕WS 'Event' 50 'FOO'
-⎕DQ '.'</pre><p>Now switch to the upper window (SERVER) and type :</p><pre>      A←⌹A</pre><p>Type this expression repeatedly, or experiment with others. Note how changing <tt>A</tt> generates a DDE event (event number 50) on the system object <tt>'.'</tt> in CLIENT, which in turn fires the callback.</p><p>To interrupt <tt>⎕DQ</tt> in the CLIENT, type Ctrl+Break or select "Interrupt" from the <span class="Italic">Action</span> menu in the Session Window.</p></body>
+⎕DQ '.'</pre><p>Now switch to the upper window (SERVER) and type :</p><pre>      A←⌹A</pre><p>Type this expression repeatedly, or experiment with others. Note how changing <tt>A</tt> generates a DDE event (event number 50) on the system object <tt>'.'</tt> in CLIENT, which in turn fires the callback.</p><p>To interrupt <tt>⎕DQ</tt> in the CLIENT, type Ctrl+Break or select "Interrupt" from the <span class="Italic">Action</span> menu in the Session Window.</p><script src="../../../help.js"></script></body>
 </html>

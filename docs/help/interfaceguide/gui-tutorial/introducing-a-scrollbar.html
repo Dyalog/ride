@@ -6,5 +6,5 @@
 [1]   ⍝ Callback for Centigrade input via scrollbar
 [2]    TEMP.C.Value←101-4⊃MSG
 [3]    TEMP.F.Value←32+TEMP.C.Value÷5÷9
-     ∇</pre><p>The Event message <tt>MSG</tt> contains information about the Scroll event. Its 4th element contains the requested thumb position. As we want to go from 0 at the top, to 100 at the bottom, we need to subtract this value from 101. This is done in line 2 of the function. <tt>C2F[3]</tt> calculates the corresponding Fahrenheit value.</p><p>Try moving the scrollbar and see what happens...</p><p><img src="../images/temperature-converter-10.png" /></p></body>
+     ∇</pre><p>The Event message <tt>MSG</tt> contains information about the Scroll event. Its 4th element contains the requested thumb position. As we want to go from 0 at the top, to 100 at the bottom, we need to subtract this value from 101. This is done in line 2 of the function. <tt>C2F[3]</tt> calculates the corresponding Fahrenheit value.</p><p>Try moving the scrollbar and see what happens...</p><p><img src="../images/temperature-converter-10.png" /></p><script src="../../../help.js"></script></body>
 </html>

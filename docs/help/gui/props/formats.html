@@ -3,5 +3,5 @@
 <head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
 <body><h2><tt>Property</tt>Formats</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/clipboard.html">Clipboard</a></td></tr></table><p class="Bold">Description</p><p>This is a "read-only" property that identifies the formats in which data is currently available in the clipboard. It is a vector of character vectors containing the names of the corresponding <a href="../objects/clipboard.html">Clipboard</a> properties for which data may be obtained using <a href="../../lang/sysfns/wg.html"><tt>⎕WG</tt></a>. In the following example data was copied to the Windows clipboard from Microsoft Excel. This product stores data in CF_Text and the older device-dependent CF_Bitmap formats. The latter excludes colour map information, so <a href="cmap.html">CMap</a> is not available.</p><pre>      'CL' ⎕WC 'Clipboard'
       'CL' ⎕WG 'Formats'
- Bits  CMap  Text</pre></body>
+ Bits  CMap  Text</pre><script src="../../../help.js"></script></body>
 </html>

@@ -2,5 +2,5 @@
 <html>
 <head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
 <body><h2><tt>R←⎕SVC Y</tt>Query Access Control </h2><p>This system function queries the access control on one or more shared variables.</p><p><tt>Y</tt> is a character scalar, vector, or matrix containing names of shared variables.  Each name may optionally be paired with its surrogate.  If so, the surrogate must be separated from the name by at least one space.</p><p>If <tt>Y</tt> specifies a single name, the result <tt>R</tt> is a Boolean vector containing the current effective access control vector.  If <tt>Y</tt> is a matrix of names, <tt>R</tt> is a Boolean matrix whose rows contain the current effective access control vectors for the corresponding row in <tt>Y</tt>.</p><p>For further information, see the preceding section on setting the access control vector.</p><h4>Example</h4><pre>      ⎕SVC 'X'
-0 0 0 0</pre></body>
+0 0 0 0</pre><script src="../../../help.js"></script></body>
 </html>

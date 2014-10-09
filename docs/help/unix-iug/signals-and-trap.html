@@ -8,5 +8,5 @@
         </p><h4>Example:</h4><pre>      8↑4007⌶⍬
 1 4 2 0 0 0 0 0</pre><p>This means that since either the start of the current APL process, or since the last invocation of <tt>4007⌶</tt> APL has processed 1<tt>�</tt>SIGHUP, 2<tt>�</tt>SIGINT and 2<tt>�</tt>SIGQUIT.
         </p><p>It is recommended that rather than trapping either event 1002 or 1003, the user traps event 1000, and queries the vector returned by <tt>4007⌶⍬</tt>. In particular if a SIGHUP or a SIGTERM has been received, then the user's code should terminate the application as soon as possible, and should be careful to avoid requiring input. SIGHUP has either been issued using the kill(1) command, or because either the device at the other end of the connection or the connection has terminated. This used to be common with serial or dialup terminals, but is now most frequently seen when terminal emulators or the PCs on which they run are terminated.
-        </p></body>
+        </p><script src="../../help.js"></script></body>
 </html>

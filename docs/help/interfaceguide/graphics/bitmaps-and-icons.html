@@ -8,5 +8,5 @@
 16 3
       'BM' ⎕WC 'Bitmap' ('Bits' PIX)('CMap' CM)</pre><p>The reason that this method is restricted to 256 colours is that the CMap array containing the colour map is, of necessity, the same size as the colour palette. Even for a relatively modest 16-bit colour palette, the size of the array would be 65536 x 3.</p><p>The second method, which applies to all sizes of colour palette, is to use a single array that represents each pixel by a number that is an encoding of the red, green and blue components. The formula used to calculate each pixel value is:</p><pre>      256⊥RED GREEN BLUE</pre><p>where <tt>RED</tt>, <tt>GREEN</tt> and <tt>BLUE</tt> are integers in the range 0-255.</p><p>Thus the example above can be achieved using a single array <tt>CBITS</tt> as follows:</p><pre>      CBITS←(256⊥⍉CMAP)[⎕IO+PIX]
       'BM' ⎕WC 'Bitmap' ('CBits' CBITS)</pre><p>While it is possible to define bitmaps by creating appropriate APL arrays, it is likely that you will load them from file, e.g.</p><pre>      'BM' ⎕WC 'Bitmap' (ROOT,'\WS\CARS')
-      PIX CM ← 'BM' ⎕WG 'Bits' 'CMap'</pre></body>
+      PIX CM ← 'BM' ⎕WG 'Bits' 'CMap'</pre><script src="../../../help.js"></script></body>
 </html>

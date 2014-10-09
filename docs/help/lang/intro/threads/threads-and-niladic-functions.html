@@ -6,5 +6,5 @@
 [1]    NIL
      ∇
      NIL_M&amp; ''
-             </pre></li><li value="6">Use execute, e.g.<pre>⍎&amp; 'NIL'</pre></li></ul><p>Note that niladic functions <span class="Italic">can</span> be invoked asynchronously as callback functions. For example, the statement:</p><pre>      ⎕WS'Event' 'Select' 'NIL&amp;'</pre><p>will execute correctly as a thread, even though <tt>NIL</tt> is niladic. This is because callback functions are invoked directly by <tt>⎕DQ</tt> rather than as an operand to the spawn operator.</p></body>
+             </pre></li><li value="6">Use execute, e.g.<pre>⍎&amp; 'NIL'</pre></li></ul><p>Note that niladic functions <span class="Italic">can</span> be invoked asynchronously as callback functions. For example, the statement:</p><pre>      ⎕WS'Event' 'Select' 'NIL&amp;'</pre><p>will execute correctly as a thread, even though <tt>NIL</tt> is niladic. This is because callback functions are invoked directly by <tt>⎕DQ</tt> rather than as an operand to the spawn operator.</p><script src="../../../../help.js"></script></body>
 </html>

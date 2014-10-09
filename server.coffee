@@ -96,6 +96,7 @@ app.get '/apl385.ttf',  (req, res) -> res.header('Content-Type', 'application/oc
 app.get '/favicon.ico', (req, res) -> res.header('Content-Type', 'image/x-icon'            ).send ico
 app.use '/help',     express.static __dirname + '/docs/help'
 app.use '/help.css', express.static __dirname + '/docs/help.css'
+app.use '/help.js',  express.static __dirname + '/docs/help.js'
 
 httpsOptions =
   key: fs.readFileSync 'ssl/key.pem'

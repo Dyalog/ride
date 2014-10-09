@@ -8,5 +8,5 @@ DCOMREG saved ...
  
       CLSID ←('Loan' ⎕WG 'ClassID')
       reg.RegDCOMServer 'dyalog.Loan' CLSID</pre><h4>RegDCOMClient</h4><p>This function should be run on each of the <span class="Italic">client</span> computers and is called as follows:</p><pre>      machine RegDCOMClient ServerName CLSID</pre><p>Where <tt>machine</tt> is a character vector specifying the name of the (NT) server computer, <tt>ServerName</tt> is a character vector containing the (full) name of the OLEServer (e.g. <tt>dyalog.Loan</tt>) and <tt>CLSID</tt> is a character string containing the CLSID of the server (the value of it <tt>ClassID</tt> property). For example:</p><pre>      CLSID←'{B80E9D40-2090-11D1-8F93-0020AFABD95D}'
-      'NTSVR' reg.RegDCOMClient 'dyalog.Loan' CLSID</pre><h4>Config</h4><p>This niladic function simply invokes the <span class="Code">dcomcnfg.exe</span> utility using <tt>⎕CMD</tt>.</p></body>
+      'NTSVR' reg.RegDCOMClient 'dyalog.Loan' CLSID</pre><h4>Config</h4><p>This niladic function simply invokes the <span class="Code">dcomcnfg.exe</span> utility using <tt>⎕CMD</tt>.</p><script src="../../../help.js"></script></body>
 </html>

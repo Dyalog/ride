@@ -6,5 +6,5 @@
    [1] 'MSG IS ' MSG
    [2] 'X IS' X
       ∇</pre><p>Then type :</p><pre>      '.' ⎕WS 'EVENT' 50 'FOO'
-      ⎕DQ'.'</pre><p>Now switch back to Excel and change the data. Note that every time you change a cell, the DDE event fires your callback function <tt>FOO</tt>. In fact the function is fired twice because it itself alters the STATE of <tt>X</tt> by <span class="Italic">referencing</span> it. This causes a second DDE event.</p><p>Switch back to APL, and type Ctrl+Break or select "Interrupt" from the <span class="Italic">Action</span> menu to interrupt <tt>⎕DQ</tt>.</p></body>
+      ⎕DQ'.'</pre><p>Now switch back to Excel and change the data. Note that every time you change a cell, the DDE event fires your callback function <tt>FOO</tt>. In fact the function is fired twice because it itself alters the STATE of <tt>X</tt> by <span class="Italic">referencing</span> it. This causes a second DDE event.</p><p>Switch back to APL, and type Ctrl+Break or select "Interrupt" from the <span class="Italic">Action</span> menu to interrupt <tt>⎕DQ</tt>.</p><script src="../../../help.js"></script></body>
 </html>

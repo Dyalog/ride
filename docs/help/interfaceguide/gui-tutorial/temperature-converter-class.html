@@ -77,5 +77,5 @@
     ∇
 :EndClass ⍝ Temp</pre><p>Notice that the <tt>:Implements Constructor</tt> statement of its Constructor <tt>Make</tt>:</p><pre>:Implements Constructor :Base (⊂'Caption' TITLE),pv,
                              ⊂('Size' (30 40))</pre><p>passes on the application-specific property list (<tt>pv</tt>) given as its argument, but (in this case) specifies Caption and Size as well. The order in which the properties are specified in the <tt>:Base</tt> call ensures that the former will act as a default (and be overridden by an application-specific Caption requested in <tt>pv</tt>), whereas the specified Size of<tt>(30 40)</tt> will override whatever value of Size is requested by the host application in <tt>pv</tt>.</p><p>Other Instances can co-exist with the first:</p><pre>      T2←⎕NEW Temp(('Caption' 'My Application')
-                   ('Posn'(10 10))</pre></body>
+                   ('Posn'(10 10))</pre><script src="../../../help.js"></script></body>
 </html>

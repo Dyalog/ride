@@ -7,5 +7,5 @@
         'INDEX' ⎕FCREATE 2
         NAMES ⎕FAPPEND 2</pre><p>Then if we want to find Pauline's data record:</p><pre>        NAMES←⎕FREAD 2,1       ⍝ Read index of names
         CMP←NAMES⍳⊂'Pauline'   ⍝ Search for Pauline
-        DATA←⎕FREAD 1,CMP      ⍝ Read relevant record</pre><p>There are many different ways to structure data files; you must design a structure that is the most efficient for your application.</p></body>
+        DATA←⎕FREAD 1,CMP      ⍝ Read relevant record</pre><p>There are many different ways to structure data files; you must design a structure that is the most efficient for your application.</p><script src="../../../help.js"></script></body>
 </html>

@@ -31,5 +31,5 @@ DEADLOCK
 VALUE ERROR
  
       ⎕←⎕tsync {}&amp;0  ⍝ non-result-returning fn: no result.
-VALUE ERROR</pre><p>Coding would normally avoid such an inconvenient <tt>VALUE ERROR</tt> either by arranging that the thread-spawning and <tt>⎕TSYNC</tt> were on the same line:</p><pre>      rslt ← ⎕TYSYNC myfn&amp;¨ argvec</pre><p>or</p><pre>      tnums←myfn&amp;¨ argvec ⋄ rslt←⎕TSYNC tnums</pre><p>or by error-trapping the <tt>VALUE ERROR</tt>.</p></body>
+VALUE ERROR</pre><p>Coding would normally avoid such an inconvenient <tt>VALUE ERROR</tt> either by arranging that the thread-spawning and <tt>⎕TSYNC</tt> were on the same line:</p><pre>      rslt ← ⎕TYSYNC myfn&amp;¨ argvec</pre><p>or</p><pre>      tnums←myfn&amp;¨ argvec ⋄ rslt←⎕TSYNC tnums</pre><p>or by error-trapping the <tt>VALUE ERROR</tt>.</p><script src="../../../help.js"></script></body>
 </html>
