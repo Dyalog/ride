@@ -31,7 +31,14 @@ cssFiles = [
   'index.css'
 ]
 
-log = (s) -> console.info process.uptime().toFixed(3) + ' ' + s
+log = do ->
+  N = 20; T = 1000 # log no more than N log messages per T milliseconds
+  n = t = 0
+  (s) ->
+    if (t1 = +new Date) - t > T then t = t1; n = 1
+    else if ++n < N then console.info process.uptime().toFixed(3) + ' ' + s
+    else if n == N then console.info '... logging temporarily suppressed'
+
 b64 = (s) -> Buffer(s).toString 'base64'
 b64d = (s) -> '' + Buffer s, 'base64'
 getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exec xml)?[1]
