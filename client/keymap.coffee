@@ -36,12 +36,10 @@ do ->
       ctid = setTimeout(
         ->
           c = cm.getCursor()
-          cm.showHint
-            completeOnSingleClick: true
-            hint: ->
-              data = list: completions, from: c, to: c
-              CodeMirror.on data, 'close', -> cm.setOption 'keyMap', 'dyalog'
-              data
+          cm.showHint completeOnSingleClick: true, hint: ->
+            data = list: completions, from: c, to: c
+            CodeMirror.on data, 'close', -> cm.setOption 'keyMap', 'dyalog'
+            data
           clearTimeout ctid; ctid = null
           return
         500
