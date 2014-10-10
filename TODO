@@ -1,3 +1,4 @@
+* bracket addon interferes with `( and `)
 * js strict mode
 * use jquery-ui from npm
 * virtual whitespace
