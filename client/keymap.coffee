@@ -26,7 +26,8 @@ do ->
 
   window.onhelp = -> false # prevent IE from being silly
 
-  CodeMirror.keyMap.dyalogBackquote = bq =
+  Dyalog.reverseKeyMap = {}
+  CodeMirror.keyMap.dyalogBackquote =
     auto: 'dyalog', nofallthrough: true, disableInput: true
 
   ks = ''' `1234567890-=  ~!@#$%^&*()_+
@@ -40,6 +41,7 @@ do ->
            ⊂⊃∩∪⊥⊤|⍝⍀⌿     ⊂⊃∩∪⊥⊤|⍪⍙⍠    '''.split /\ */g
 
   for i in [0...ks.length] by 1
-    bq["'#{ks[i]}'"] = do (v = vs[i]) -> (cm) -> cm.replaceSelection v, 'end'
-
+    Dyalog.reverseKeyMap[vs[i]] = ks[i]
+    CodeMirror.keyMap.dyalogBackquote["'#{ks[i]}'"] = do (v = vs[i]) ->
+      (cm) -> cm.replaceSelection v, 'end'
   return
