@@ -1,12 +1,24 @@
-* bracket addon interferes with `( and `)
-* js strict mode
-* use jquery-ui from npm
-* virtual whitespace
-* history of search fields
-* fetch language bar from server
-* code folding and [+] button
-* inset borders in editors and session
-* SI stack (?)
-* floating windows
-* auto pop up completion box (?)
-* implement more buttons in the debugger
+bracket addon interferes with keybindings for `( and `)
+older browsers: shims for console.info, String.trim, etc
+floating editor windows
+js strict mode
+searchable help files
+use jquery-ui from npm
+search field history
+code folding and [+] button
+inset borders in editors and session
+SI stack in debugger (?)
+automatically pop up completion box after a timeout
+implement more buttons in the debugger
+can Express gzip static files in advance?
+selecting a block of text and pressing ⍝ should comment/uncomment it
+comment alignment
+keybindings for toolbar buttons
+keybinding for toggling a breakpoint
+rewrite syntax highlighting to support Dyalog syntax
+contextual help for items in completion menus
+` keybindings in search box
+highlight non-local names in a different colour
+virtual whitespace after eol and eof (?)
+keybinding to revert a line and not execute it when <Enter> is pressed
+experiment with storing all help content in browser memory
