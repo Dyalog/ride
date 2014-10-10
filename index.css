@@ -117,7 +117,6 @@ body { padding: 0; margin: 0; }
 	border: 1px solid black;
 	background: #ffffe1;
 	font-size: 90%;
-	font-family: monospace;
 	max-height: 20em;
 	overflow-y: auto;
 }
