@@ -1,7 +1,52 @@
 do ->
+  ctid = null # autocompletion timeout id
+
+  window.onhelp = -> false # prevent IE from being silly
+
+  completions = []
+  Dyalog.reverseKeyMap = {}
+  CodeMirror.keyMap.dyalogBackquote =
+    auto: 'dyalog', nofallthrough: true, disableInput: true
+
+  ks = ''' `1234567890-=  ~!@#$%^&*()_+
+           qwertyuiop[]   QWERTYUIOP{}
+           asdfghjkl;\'\\ ASDFGHJKL:"|
+           zxcvbnm,./     ZXCVBNM<>?    '''.replace(/^\s*|\s*$/g, '').split /\s*/g
+
+  vs = ''' `¨¯<≤=≥>≠∨∧×÷  ⋄⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹
+           ?⍵∊⍴~↑↓⍳○*←→   ?⍵⍷⍴⍨↑↓⍸⍥⍣⍞⍬
+           ⍺⌈⌊_∇∆∘\'⎕⍎⍕⊢  ⍺⌈⌊_∇∆⍤⌸⌷≡≢⊣
+           ⊂⊃∩∪⊥⊤|⍝⍀⌿     ⊂⊃∩∪⊥⊤|⍪⍙⍠    '''.replace(/^\s*|\s*$/g, '').split /\s*/g
+
+  if ks.length != vs.length then console.error? 'bad configuration of backquote keymap'
+
+  for k, i in ks when k != (v = vs[i]) || k == '`'
+    completions.push text: v, displayText: v + ' `' + k + '   '
+    Dyalog.reverseKeyMap[v] = k
+    CodeMirror.keyMap.dyalogBackquote["'#{k}'"] = do (v = v) ->
+      (cm) ->
+        clearTimeout ctid; ctid = null; cm.replaceSelection v, 'end'
+        cm.state.completionActive?.close?()
+
   CodeMirror.keyMap.dyalog =
     fallthrough: 'default'
-    "'`'": (cm) -> cm.setOption 'keyMap', 'dyalogBackquote'
+    "'`'": (cm) ->
+      cm.setOption 'keyMap', 'dyalogBackquote'
+      clearTimeout ctid
+      ctid = setTimeout(
+        ->
+          c = cm.getCursor()
+          cm.showHint
+            completeOnSingleClick: true
+            hint: ->
+              data = list: completions, from: c, to: c
+              CodeMirror.on data, 'close', -> cm.setOption 'keyMap', 'dyalog'
+              data
+          clearTimeout ctid; ctid = null
+          return
+        500
+      )
+
     F1: (cm) ->
       c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
       u =
@@ -24,24 +69,4 @@ do ->
       popup.focus?()
       return
 
-  window.onhelp = -> false # prevent IE from being silly
-
-  Dyalog.reverseKeyMap = {}
-  CodeMirror.keyMap.dyalogBackquote =
-    auto: 'dyalog', nofallthrough: true, disableInput: true
-
-  ks = ''' `1234567890-=  ~!@#$%^&*()_+
-           qwertyuiop[]   QWERTYUIOP{}
-           asdfghjkl;\'\\ ASDFGHJKL:"|
-           zxcvbnm,./     ZXCVBNM<>?    '''.split /\ */g
-
-  vs = ''' `¨¯<≤=≥>≠∨∧×÷  ⋄⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹
-           ?⍵∊⍴~↑↓⍳○*←→   ?⍵⍷⍴⍨↑↓⍸⍥⍣⍞⍬
-           ⍺⌈⌊_∇∆∘\'⎕⍎⍕⊢  ⍺⌈⌊_∇∆⍤⌸⌷≡≢⊣
-           ⊂⊃∩∪⊥⊤|⍝⍀⌿     ⊂⊃∩∪⊥⊤|⍪⍙⍠    '''.split /\ */g
-
-  for i in [0...ks.length] by 1
-    Dyalog.reverseKeyMap[vs[i]] = ks[i]
-    CodeMirror.keyMap.dyalogBackquote["'#{ks[i]}'"] = do (v = vs[i]) ->
-      (cm) -> cm.replaceSelection v, 'end'
   return
