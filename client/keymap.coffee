@@ -29,13 +29,13 @@ do ->
     bq = false
     cm.on 'beforeChange', (cm, changeObj) ->
       if bq
-        bq = false
+        bq = false; cm.setOption 'autoCloseBrackets', true
         if changeObj.text.length == 1 && (v = bqKeybindings[changeObj.text[0]])
-          changeObj.cancel()
-          clearTimeout ctid; ctid = null; cm.replaceSelection v, 'end'
+          clearTimeout ctid; ctid = null
+          if v != '`' then changeObj.cancel(); cm.replaceSelection v, 'end'
           cm.state.completionActive?.close?()
       else if changeObj.text.length == 1 && changeObj.text[0] == '`'
-        bq = true
+        bq = true; cm.setOption 'autoCloseBrackets', false
         changeObj.cancel()
         clearTimeout ctid
         ctid = setTimeout(
@@ -43,7 +43,7 @@ do ->
             c = cm.getCursor()
             cm.showHint completeOnSingleClick: true, hint: ->
               data = list: Dyalog.bqCompletions, from: c, to: c
-              CodeMirror.on data, 'close', -> cm.setOption 'keyMap', 'dyalog'
+              CodeMirror.on data, 'close', -> bq = false; cm.setOption 'autoCloseBrackets', true
               data
             clearTimeout ctid; ctid = null
             return

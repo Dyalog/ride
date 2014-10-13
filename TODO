@@ -1,4 +1,3 @@
-bracket addon interferes with keybindings for `( and `)
 older browsers: shims for console.info, String.trim, etc
 floating editor windows
 js strict mode
