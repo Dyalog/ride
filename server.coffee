@@ -23,12 +23,12 @@ jsFiles = [
   'client/keymap.coffee'
   'client/session.coffee'
   'client/editor.coffee'
-  'client/index.coffee'
+  'client/init.coffee'
   'docs/help-urls.coffee'
 ]
 cssFiles = [
   'node_modules/codemirror/lib/codemirror.css'
-  'index.css'
+  'style.css'
 ]
 
 log = do ->
