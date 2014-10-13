@@ -3,10 +3,9 @@ do ->
 
   window.onhelp = -> false # prevent IE from being silly
 
-  completions = []
+  Dyalog.bqCompletions = []
+  bqKeybindings = {}
   Dyalog.reverseKeyMap = {}
-  CodeMirror.keyMap.dyalogBackquote =
-    auto: 'dyalog', nofallthrough: true, disableInput: true
 
   ks = ''' `1234567890-=  ~!@#$%^&*()_+
            qwertyuiop[]   QWERTYUIOP{}
@@ -20,31 +19,40 @@ do ->
 
   if ks.length != vs.length then console.error? 'bad configuration of backquote keymap'
 
-  for k, i in ks when k != (v = vs[i]) || k == '`'
-    completions.push text: v, displayText: v + ' `' + k + '   '
-    Dyalog.reverseKeyMap[v] = k
-    CodeMirror.keyMap.dyalogBackquote["'#{k}'"] = do (v = v) ->
-      (cm) ->
-        clearTimeout ctid; ctid = null; cm.replaceSelection v, 'end'
-        cm.state.completionActive?.close?()
+  do ->
+    for k, i in ks when k != (v = vs[i]) || k == '`'
+      Dyalog.bqCompletions.push text: v, displayText: v + ' `' + k + '   '
+      bqKeybindings[k] = v
+      Dyalog.reverseKeyMap[v] = k
+
+  Dyalog.setUpBackquoteMappings = (cm) ->
+    bq = false
+    cm.on 'beforeChange', (cm, changeObj) ->
+      if bq
+        bq = false
+        if changeObj.text.length == 1 && (v = bqKeybindings[changeObj.text[0]])
+          changeObj.cancel()
+          clearTimeout ctid; ctid = null; cm.replaceSelection v, 'end'
+          cm.state.completionActive?.close?()
+      else if changeObj.text.length == 1 && changeObj.text[0] == '`'
+        bq = true
+        changeObj.cancel()
+        clearTimeout ctid
+        ctid = setTimeout(
+          ->
+            c = cm.getCursor()
+            cm.showHint completeOnSingleClick: true, hint: ->
+              data = list: Dyalog.bqCompletions, from: c, to: c
+              CodeMirror.on data, 'close', -> cm.setOption 'keyMap', 'dyalog'
+              data
+            clearTimeout ctid; ctid = null
+            return
+          500
+        )
+      return
 
   CodeMirror.keyMap.dyalog =
     fallthrough: 'default'
-    "'`'": (cm) ->
-      cm.setOption 'keyMap', 'dyalogBackquote'
-      clearTimeout ctid
-      ctid = setTimeout(
-        ->
-          c = cm.getCursor()
-          cm.showHint completeOnSingleClick: true, hint: ->
-            data = list: completions, from: c, to: c
-            CodeMirror.on data, 'close', -> cm.setOption 'keyMap', 'dyalog'
-            data
-          clearTimeout ctid; ctid = null
-          return
-        500
-      )
-
     F1: (cm) ->
       c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
       u =
