@@ -17,11 +17,28 @@ do ->
            ⍺⌈⌊_∇∆∘\'⎕⍎⍕⊢  ⍺⌈⌊_∇∆⍤⌸⌷≡≢⊣
            ⊂⊃∩∪⊥⊤|⍝⍀⌿     ⊂⊃∩∪⊥⊤|⍪⍙⍠    '''.replace(/^\s*|\s*$/g, '').split /\s*/g
 
+  ds =
+    '¨':'each', '¯':'negative', '∨':'or (GCD)', '∧':'and (LCM)',
+    '×':'sgn/times', '÷':'reciprocal/divide', '?':'roll/deal', '⍵':'right arg',
+    '∊':'enlist/in', '⍴':'shape/reshape', '~':'not/without', '↑':'mix/take',
+    '↓':'split/drop', '⍳':'indices/index of', '○':'pi/trig', '*':'exp/power',
+    '←':'assignment', '→':'branch', '⍺':'left arg', '⌈':'ceil/max', '⌊':'floor/min',
+    '∇':'recur', '∘':'compose', '⎕':'eval\'ed I/O', '⍎':'eval', '⍕':'format',
+    '⊢':'right', '⊂':'enclose/partition', '⊃':'disclose/pick', '∩':'intersect',
+    '∪':'uniq/union', '⊥':'decode (1 2 3→123)', '⊤':'encode (123→1 2 3)', '|':'abs/mod',
+    '⍝':'comment', '⍀':'\\[⎕io]', '⌿':'/[⎕io]', '⋄':'statement sep', '⌶':'I-beam',
+    '⍒':'grade down', '⍋':'grade up', '⌽':'reverse/rotate', '⍉':'transpose',
+    '⊖':'⌽[⎕io]', '⍟':'logarithm', '⍱':'nor', '⍲':'nand', '!':'factorial/binomial',
+    '⌹':'matrix inv/div', '⍷':'find', '⍨':'switch', '⍣':'power operator',
+    '⍞':'char I/O', '⍬':'zilde (⍳0)', '⍤':'rank', '⌸':'key', '⌷':'default/index',
+    '≡':'depth/match', '≢':'tally/not match', '⊣':'left', '⍪':'table / ,[⎕io]',
+    '⍠':'variant'
+
   if ks.length != vs.length then console.error? 'bad configuration of backquote keymap'
 
   do ->
     for k, i in ks when k != (v = vs[i]) || k == '`'
-      Dyalog.bqCompletions.push text: v, displayText: v + ' `' + k + '   '
+      Dyalog.bqCompletions.push text: v, displayText: "#{v} `#{k} #{ds[v] || ''}  "
       bqKeybindings[k] = v
       Dyalog.reverseKeyMap[v] = k
 
