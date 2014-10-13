@@ -84,8 +84,6 @@ Dyalog.Editor = (e, opts = {}) ->
           cm.replaceRange (if h == h1 then h1 += ';' + name else h1),
             {line: 0, ch: 0}, {line: 0, ch: h.length}, 'Dyalog'
 
-  Dyalog.setUpBackquoteMappings cm
-
   setTimeout (-> cm.setOption 'lineNumbers', !opts.debugger), 1
 
   createBreakpointElement = -> $('<div class="breakpoint">●</div>')[0]

@@ -34,8 +34,6 @@ Dyalog.Session = (e, opts = {}) ->
       'Shift-Ctrl-Backspace': -> histMove 1
       'Shift-Ctrl-Enter': -> histMove -1
 
-  Dyalog.setUpBackquoteMappings cm
-
   exec = (trace) ->
     a = [] # pairs of [lineNumber, contentToExecute]
     for l, s of mod # l: line number, s: original content

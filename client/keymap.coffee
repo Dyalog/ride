@@ -1,6 +1,5 @@
 do ->
-  ctid = null # autocompletion timeout id
-
+  ctid = null # backquote autocompletion timeout id
   window.onhelp = -> false # prevent IE from being silly
 
   Dyalog.bqCompletions = []
@@ -36,38 +35,6 @@ do ->
 
   if ks.length != vs.length then console.error? 'bad configuration of backquote keymap'
 
-  do ->
-    for k, i in ks when k != (v = vs[i]) || k == '`'
-      Dyalog.bqCompletions.push text: v, displayText: "#{v} `#{k} #{ds[v] || ''}  "
-      bqKeybindings[k] = v
-      Dyalog.reverseKeyMap[v] = k
-
-  Dyalog.setUpBackquoteMappings = (cm) ->
-    bq = false
-    cm.on 'beforeChange', (cm, changeObj) ->
-      if bq
-        bq = false; cm.setOption 'autoCloseBrackets', true
-        if changeObj.text.length == 1 && (v = bqKeybindings[changeObj.text[0]])
-          clearTimeout ctid; ctid = null
-          if v != '`' then changeObj.cancel(); cm.replaceSelection v, 'end'
-          cm.state.completionActive?.close?()
-      else if changeObj.text.length == 1 && changeObj.text[0] == '`'
-        bq = true; cm.setOption 'autoCloseBrackets', false
-        changeObj.cancel()
-        clearTimeout ctid
-        ctid = setTimeout(
-          ->
-            c = cm.getCursor()
-            cm.showHint completeOnSingleClick: true, hint: ->
-              data = list: Dyalog.bqCompletions, from: c, to: c
-              CodeMirror.on data, 'close', -> bq = false; cm.setOption 'autoCloseBrackets', true
-              data
-            clearTimeout ctid; ctid = null
-            return
-          500
-        )
-      return
-
   CodeMirror.keyMap.dyalog =
     fallthrough: 'default'
     F1: (cm) ->
@@ -90,6 +57,38 @@ do ->
         "width=#{w / 2},height=#{h / 2},left=#{w / 4},top=#{h / 4}," +
         "scrollbars=1,location=1,toolbar=0,menubar=0,resizable=1"
       popup.focus?()
+      return
+    "'`'": (cm) ->
+      cm.setOption 'autoCloseBrackets', false
+      cm.setOption 'keyMap', 'dyalogBackquote'
+      ctid = setTimeout(
+        ->
+          c = cm.getCursor()
+          cm.showHint completeOnSingleClick: true, hint: ->
+            data = list: Dyalog.bqCompletions, from: c, to: c
+            CodeMirror.on data, 'close', ->
+              cm.setOption 'autoCloseBrackets', true
+              cm.setOption 'keyMap', 'dyalog'
+            data
+        500
+      )
+
+  CodeMirror.keyMap.dyalogBackquote = nofallthrough: true, disableInput: true
+
+  for k, i in ks when k != (v = vs[i]) || k == '`'
+    Dyalog.bqCompletions.push text: v, displayText: "#{v} `#{k} #{ds[v] || ''}  "
+    bqKeybindings[k] = v
+    Dyalog.reverseKeyMap[v] = k
+    CodeMirror.keyMap.dyalogBackquote["'#{k}'"] = do (v = v) -> (cm) ->
+      clearTimeout ctid
+      cm.state.completionActive?.close?()
+      cm.replaceSelection v, 'end'
+      cm.setOption 'keyMap', 'dyalog'
+      cm.setOption 'autoCloseBrackets', true
+#       if v == '`' # TODO
+#         c = cm.getCursor()
+#         cm.showHint completeOnSingleClick: true, hint: ->
+#           list: ['times', 'rho', 'iota'], from: {line: c.line, ch: c.ch - 1}, to: c
       return
 
   return
