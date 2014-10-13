@@ -1,8 +1,7 @@
 do ->
   socket = io()
 
-  debug = 1
-  if debug
+  if localStorage?.d
     t0 = +new Date
     log = (s, a...) -> console.info (new Date - t0).toFixed(3) + ' ' + s, a...
     {emit, onevent} = socket
