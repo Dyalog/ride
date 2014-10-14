@@ -80,62 +80,62 @@ do ->
   squiggleNames = '''
     ← leftarrow assign gets
     + plus add conjugate
-    - minus subtract negate
-    × cross times multiply sgn signum
+    - minus hyphen subtract negate
+    × cross times multiply sgn signum direction
     ÷ divide reciprocal obelus
-    * star power exp
-    ⍟ log circlestar starcircle
+    * star asterisk power exponential
+    ⍟ logarithm naturallogarithm circlestar starcircle
     ⌹ domino matrixdivide quaddivide
     ○ pi circular trigonometric
     ! exclamation bang shriek factorial binomial combinations
     ? question roll deal random
-    | stile stroke verticalbar modulo abs
-    ⌈ upstile max ceiling
-    ⌊ downstile min floor
+    | stile stroke verticalline modulo abs magnitude residue
+    ⌈ upstile maximum ceiling
+    ⌊ downstile minimum floor
     ⊥ base decode uptack
     ⊤ encode downtack
     ⊣ left lex lefttack
     ⊢ right rex righttack
     = equal
-    ≠ ne notequal
+    ≠ ne notequal xor logicalxor
     ≤ le lessorequal
     < lessthan
     > greaterthan
     ≥ ge greaterorequal
-    ≡ match equalunderbar
-    ≢ notmatch equalunderbarslash
-    ∧ and conjunction lcm logicaland
-    ∨ or disjunction gcd vel logicalor
-    ⍲ nand andtilde logicalnand
+    ≡ match equalunderbar identical
+    ≢ notmatch equalunderbarslash notidentical tally
+    ∧ and conjunction lcm logicaland lowestcommonmultiple caret
+    ∨ or disjunction gcd vel logicalor greatestcommondivisor
+    ⍲ nand andtilde logicalnand carettilde
     ⍱ nor ortilde logicalnor
     ↑ uparrow mix take
     ↓ downarrow split drop
     ⊂ enclose leftshoe partition
     ⊃ disclose rightshoe pick
-    ⌷ squishquad squad index default
-    ⍋ gradeup
-    ⍒ gradedown
+    ⌷ squishquad squad index default materialise
+    ⍋ gradeup deltastile
+    ⍒ gradedown delstile
     ⍳ iota indices indexof
     ⍷ find epsilonunderbar
-    ∪ cup union unique
-    ∩ cap intersection
+    ∪ cup union unique downshoe
+    ∩ cap intersection upshoe
     ∊ epsilon in membership enlist flatten type
     ~ tilde not without
-    / slash reduce fold insert select compress replicate
-    \\ backslash slope scan
+    / slash reduce fold insert select compress replicate solidus
+    \\ backslash slope scan expand
     ⌿ slashbar reducefirst foldfirst insertfirst
-    ⍀ slopebar backslashbar scanfirst
+    ⍀ slopebar backslashbar scanfirst expandfirst
     , comma catenate laminate ravel
     ⍪ commabar table catenatefirst
     ⍴ rho shape reshape
-    ⌽ reverse rotate
-    ⊖ reversefirst rotatefirst
-    ⍉ transpose
+    ⌽ reverse rotate circlestile
+    ⊖ reversefirst rotatefirst circlebar
+    ⍉ transpose circlebackslash
     ¨ each diaeresis
     ⍨ commute switch selfie tildediaeresis
     ⍣ poweroperator stardiaeresis
     . dot
-    ∘ jot compose
+    ∘ jot compose ring
     ⍤ jotdiaeresis rank
     ⍞ quotequad characterinput rawinput
     ⎕ quad input evaluatedinput
