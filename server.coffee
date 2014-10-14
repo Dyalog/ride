@@ -17,7 +17,17 @@ jsFiles = [
   'node_modules/codemirror/addon/hint/show-hint.js'
   'node_modules/codemirror/addon/edit/matchbrackets.js'
   'node_modules/codemirror/addon/edit/closebrackets.js'
-  'jquery-ui.min.js'
+  'node_modules/jquery-ui/core.js'
+  'node_modules/jquery-ui/widget.js'
+  'node_modules/jquery-ui/mouse.js'
+  'node_modules/jquery-ui/position.js'
+  'node_modules/jquery-ui/draggable.js'
+  'node_modules/jquery-ui/droppable.js'
+  'node_modules/jquery-ui/resizable.js'
+  'node_modules/jquery-ui/button.js'
+  'node_modules/jquery-ui/dialog.js'
+  'node_modules/jquery-ui/effect.js'
+  'node_modules/jquery-ui/effect-slide.js'
   'jquery.layout.js'
   'lbar/lbar.js'
   'client/keymap.coffee'
@@ -64,7 +74,10 @@ do preloadJS = ->
       if /\.coffee$/.test f then log "compiling #{f}"; s = coffee.compile s, bare: 1
       if !/\.min\.js$/.test f
         log "minifying #{f}"
-        s1 = uglify.minify(s, fromString: true, mangle: false).code
+        s1 = uglify.minify(
+          s.replace(/^(?:.*require.*;\n)*/, '')
+          fromString: true, mangle: true
+        ).code
         try fs.writeFileSync f1, s1 catch # ignore errors
         log "  #{s.length} -> #{s1.length} bytes"
         s = s1

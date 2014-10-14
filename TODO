@@ -1,7 +1,6 @@
 floating editor windows
 js strict mode
 searchable help files
-use jquery-ui from npm
 search field history
 code folding and [+] button
 inset borders in editors and session
