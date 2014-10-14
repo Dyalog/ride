@@ -79,7 +79,7 @@ do ->
 
   squiggleNames = '''
     ← leftarrow assign gets
-    + plus add conjugate
+    + plus add conjugate mate
     - minus hyphen subtract negate
     × cross times multiply sgn signum direction
     ÷ divide reciprocal obelus
@@ -89,19 +89,19 @@ do ->
     ○ pi circular trigonometric
     ! exclamation bang shriek factorial binomial combinations
     ? question roll deal random
-    | stile stroke verticalline modulo abs magnitude residue
+    | stile stroke verticalline modulo abs magnitude residue remainder
     ⌈ upstile maximum ceiling
     ⌊ downstile minimum floor
     ⊥ base decode uptack
-    ⊤ encode downtack
+    ⊤ antibase encode downtack
     ⊣ left lev lefttack
     ⊢ right dex righttack
     = equal
     ≠ ne notequal xor logicalxor
-    ≤ le lessorequal
-    < lessthan
-    > greaterthan
-    ≥ ge greaterorequal
+    ≤ le lessorequal fore
+    < lessthan before
+    > greaterthan after
+    ≥ ge greaterorequal aft
     ≡ match equalunderbar identical
     ≢ notmatch equalunderbarslash notidentical tally
     ∧ and conjunction lcm logicaland lowestcommonmultiple caret
@@ -113,11 +113,11 @@ do ->
     ⊂ enclose leftshoe partition
     ⊃ disclose rightshoe pick
     ⌷ squishquad squad index default materialise
-    ⍋ gradeup deltastile
-    ⍒ gradedown delstile
+    ⍋ gradeup deltastile upgrade
+    ⍒ gradedown delstile downgrade
     ⍳ iota indices indexof
     ⍷ find epsilonunderbar
-    ∪ cup union unique downshoe
+    ∪ cup union unique downshoe distinct
     ∩ cap intersection upshoe
     ∊ epsilon in membership enlist flatten type
     ~ tilde not without
@@ -129,8 +129,8 @@ do ->
     ⍪ commabar table catenatefirst
     ⍴ rho shape reshape
     ⌽ reverse rotate circlestile
-    ⊖ reversefirst rotatefirst circlebar
-    ⍉ transpose circlebackslash
+    ⊖ reversefirst rotatefirst circlebar rowel upset
+    ⍉ transpose circlebackslash cant
     ¨ each diaeresis
     ⍨ commute switch selfie tildediaeresis
     ⍣ poweroperator stardiaeresis
