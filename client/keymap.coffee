@@ -94,8 +94,8 @@ do ->
     ⌊ downstile minimum floor
     ⊥ base decode uptack
     ⊤ encode downtack
-    ⊣ left lex lefttack
-    ⊢ right rex righttack
+    ⊣ left lev lefttack
+    ⊢ right dex righttack
     = equal
     ≠ ne notequal xor logicalxor
     ≤ le lessorequal
