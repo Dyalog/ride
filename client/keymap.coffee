@@ -84,7 +84,7 @@ do ->
     × cross times multiply sgn signum direction
     ÷ divide reciprocal obelus
     * star asterisk power exponential
-    ⍟ logarithm naturallogarithm circlestar starcircle
+    ⍟ logarithm naturallogarithm circlestar starcircle splat
     ⌹ domino matrixdivide quaddivide
     ○ pi circular trigonometric
     ! exclamation bang shriek factorial binomial combinations
@@ -105,7 +105,7 @@ do ->
     ≡ match equalunderbar identical
     ≢ notmatch equalunderbarslash notidentical tally
     ∧ and conjunction lcm logicaland lowestcommonmultiple caret
-    ∨ or disjunction gcd vel logicalor greatestcommondivisor
+    ∨ or disjunction gcd vel logicalor greatestcommondivisor hcf highestcommonfactor
     ⍲ nand andtilde logicalnand carettilde
     ⍱ nor ortilde logicalnor
     ↑ uparrow mix take
