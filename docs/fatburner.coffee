@@ -67,7 +67,7 @@ do walk = (d = 'help', depth = 0) ->
         .replace(/<madcapkeyword[^>\/]*\/>/ig, '')
         .replace(/<madcapkeyword[^>\/]*>[^<]*<\/madcapkeyword>/ig, '')
         .replace(/<MadCap:conditionalText>(?:[^]*?)<\/MadCap:conditionalText>/g, ' ')
-        .replace(/([Dd])ieresis/, '$1iaeresis')
+        .replace(/([Dd])ieresis/g, '$1iaeresis')
         .replace(///
           <div(?:\ class="(?:h3|h3NewPage|NewPage)")?>\n*
           <table\ class="h3">\n*
