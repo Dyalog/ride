@@ -1,15 +1,15 @@
 @font-face { font-family: apl; src: url(apl385.ttf) format("truetype"); }
 body { padding: 0; margin: 0; }
 .CodeMirror, .CodeMirror-hints, #lbar, #tip, .toolbar, .search {
-	font-family: apl, "APL385 Unicode", monospace;
+	font-family: apl, monospace;
 }
-#lbar { background-color: #d4d0c8; padding: 2px 2px 2px 10px; cursor: default; line-height: 22px; }
+#lbar { background: #d4d0c8; padding: 2px 2px 2px 10px; cursor: default; line-height: 22px; }
 #lbar b { padding: 0 1px; margin-right: -1px; border: solid black 1px; font-weight: normal; }
 #lbar b:hover { outline: solid black 1px; }
 #lbar-close {
 	float: right;
 	color: black;
-	background-color: #eee;
+	background: #eee;
 	border: solid #ddd 1px;
 	border-radius: 16px;
 	width:         16px;
@@ -20,7 +20,7 @@ body { padding: 0; margin: 0; }
 }
 #lbar-close:hover {
 	font-weight: bolder;
-	background-color: orange;
+	background: orange;
 	border-color: black;
 }
 #tip-triangle {
@@ -42,26 +42,18 @@ body { padding: 0; margin: 0; }
 	margin-top: 20px;
 }
 #tip-desc { padding: 0 0 0 30px; margin: 0; font-weight: bold; }
-.ui-layout-resizer { background-color: #d4d0c8; }
-.ui-layout-toggler { background-color: #808080; }
-.ui-layout-resizer:hover .ui-layout-toggler { background-color: orange; }
-
-.toolbar {
-	background-color: #d4d0c8;
-	cursor: default;
-	overflow: hidden;
-	padding: 1px;
-}
+.ui-layout-resizer { background: #d4d0c8; }
+.ui-layout-toggler { background: #808080; }
+.ui-layout-resizer:hover .ui-layout-toggler { background: orange; }
+.toolbar { background: #d4d0c8; cursor: default; overflow: hidden; padding: 1px; }
 .button {
 	float: left;
 	width: 24px;
 	height: 24px;
-	line-height: 24px;
 	border: solid transparent 1px;
 	text-align: center;
 	font-weight: bold;
-	background-repeat: no-repeat;
-	background-position: center center;
+	background: no-repeat center center;
 	text-indent: -9999px;
 }
 .button:hover { border-color: #fff #808080 #808080 #fff; }
@@ -101,9 +93,9 @@ body { padding: 0; margin: 0; }
 }
 .search { float: left; height: 18px; width: 200px; }
 .CodeMirror-linenumber { color: #00f; text-align: left; }
-.CodeMirror-gutters { border-right-color: transparent; background-color: transparent; }
+.CodeMirror-gutters { border-right-color: transparent; background: transparent; }
 .hidden { display: none; }
-.modified { background-color: #eee; }
+.modified { background: #eee; }
 .highlighted { border: solid red 1px; }
 #debugger .CodeMirror { background: #dfdfdf; }
 .CodeMirror-hints {
@@ -124,6 +116,6 @@ body { padding: 0; margin: 0; }
 }
 .CodeMirror-hint { margin: 0; padding: 0 2px; max-width: 19em; overflow: hidden; white-space: pre; color: black; cursor: pointer; }
 .CodeMirror-hint-active { background: #0a246a; color: white; }
-.CodeMirror-matchingbracket { color: black !important; background-color: #ff8; }
+.CodeMirror-matchingbracket { color: black !important; background: #ff8; }
 .breakpoints { width: 10px; }
 .breakpoint { color: #822; }
