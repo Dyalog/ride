@@ -1,39 +1,171 @@
 do ->
-  ctid = null # backquote autocompletion timeout id
-  window.onhelp = -> false # prevent IE from being silly
+  ks = '''
+                      `1234567890-=  ~!@#$%^&*()_+
+                      qwertyuiop[]   QWERTYUIOP{}
+                      asdfghjkl;'\\  ASDFGHJKL:"|
+                      zxcvbnm,./     ZXCVBNM<>?
+  '''.split /\s*/g
+  vs = '''
+                      `¨¯<≤=≥>≠∨∧×÷  ⋄⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹
+                      ?⍵∊⍴~↑↓⍳○*←→   ?⍵⍷⍴⍨↑↓⍸⍥⍣⍞⍬
+                      ⍺⌈⌊_∇∆∘'⎕⍎⍕⊢   ⍺⌈⌊_∇∆⍤⌸⌷≡≢⊣
+                      ⊂⊃∩∪⊥⊤|⍝⍀⌿     ⊂⊃∩∪⊥⊤|⍪⍙⍠
+  '''.split /\s*/g
 
-  Dyalog.bqCompletions = []
-  bqKeybindings = {}
+  squiggleDescriptions = '''
+    ¨ each
+    ¯ negative
+    ∨ or (GCD)
+    ∧ and (LCM)
+    × signum/times
+    ÷ reciprocal/divide
+    ? roll/deal
+    ⍵ right argument
+    ∊ enlist/membership
+    ⍴ shape/reshape
+    ~ not/without
+    ↑ mix/take
+    ↓ split/drop
+    ⍳ indices/index of
+    ○ pi/trig
+    * exp/power
+    ← assignment
+    → branch
+    ⍺ left argument
+    ⌈ ceil/max
+    ⌊ floor/min
+    ∇ recur
+    ∘ compose
+    ⎕ evaluated input
+    ⍎ execute
+    ⍕ format
+    ⊢ right
+    ⊂ enclose/partition
+    ⊃ disclose/pick
+    ∩ intersection
+    ∪ unique/union
+    ⊥ decode (1 2 3→123)
+    ⊤ encode (123→1 2 3)
+    | abs/modulo
+    ⍝ comment
+    ⍀ \\[⎕io]
+    ⌿ /[⎕io]
+    ⋄ statement sep
+    ⌶ I-beam
+    ⍒ grade down
+    ⍋ grade up
+    ⌽ reverse/rotate
+    ⍉ transpose
+    ⊖ ⌽[⎕io]
+    ⍟ logarithm
+    ⍱ nor
+    ⍲ nand
+    ! factorial/binomial
+    ⌹ matrix inv/div
+    ⍷ find
+    ⍨ commute
+    ⍣ power operator
+    ⍞ char I/O
+    ⍬ zilde (⍳0)
+    ⍤ rank
+    ⌸ key
+    ⌷ default/index
+    ≡ depth/match
+    ≢ tally/not match
+    ⊣ left
+    ⍪ table / ,[⎕io]
+    ⍠ variant
+  '''
+
+  squiggleNames = '''
+    ← leftarrow assign gets
+    + plus add conjugate
+    - minus subtract negate
+    × cross times multiply sgn signum
+    ÷ divide reciprocal obelus
+    * star power exp
+    ⍟ log circlestar starcircle
+    ⌹ domino matrixdivide quaddivide
+    ○ pi circular trigonometric
+    ! exclamation bang shriek factorial binomial combinations
+    ? question roll deal random
+    | stile stroke verticalbar modulo abs
+    ⌈ upstile max ceiling
+    ⌊ downstile min floor
+    ⊥ base decode uptack
+    ⊤ encode downtack
+    ⊣ left lex lefttack
+    ⊢ right rex righttack
+    = equal
+    ≠ ne notequal
+    ≤ le lessorequal
+    < lessthan
+    > greaterthan
+    ≥ ge greaterorequal
+    ≡ match equalunderbar
+    ≢ notmatch equalunderbarslash
+    ∧ and conjunction lcm logicaland
+    ∨ or disjunction gcd vel logicalor
+    ⍲ nand andtilde logicalnand
+    ⍱ nor ortilde logicalnor
+    ↑ uparrow mix take
+    ↓ downarrow split drop
+    ⊂ enclose leftshoe partition
+    ⊃ disclose rightshoe pick
+    ⌷ squishquad squad index default
+    ⍋ gradeup
+    ⍒ gradedown
+    ⍳ iota indices indexof
+    ⍷ find epsilonunderbar
+    ∪ cup union unique
+    ∩ cap intersection
+    ∊ epsilon in membership enlist flatten type
+    ~ tilde not without
+    / slash reduce fold insert select compress replicate
+    \\ backslash slope scan
+    ⌿ slashbar reducefirst foldfirst insertfirst
+    ⍀ slopebar backslashbar scanfirst
+    , comma catenate laminate ravel
+    ⍪ commabar table catenatefirst
+    ⍴ rho shape reshape
+    ⌽ reverse rotate
+    ⊖ reversefirst rotatefirst
+    ⍉ transpose
+    ¨ each diaeresis
+    ⍨ commute switch selfie tildediaeresis
+    ⍣ poweroperator stardiaeresis
+    . dot
+    ∘ jot compose
+    ⍤ jotdiaeresis rank
+    ⍞ quotequad characterinput rawinput
+    ⎕ quad input evaluatedinput
+    ⍠ colonquad quadcolon variant option
+    ⌸ equalsquad quadequals key
+    ⍎ execute eval uptackjot hydrant
+    ⍕ format downtackjot thorn
+    ⋄ diamond statementseparator
+    ⍝ comment lamp
+    → rightarrow branch abort
+    ⍵ omega rightarg
+    ⍺ alpha leftarg
+    ∇ del recur triangledown downtriangle
+    & ampersand spawn et
+    ¯ macron negative highminus
+    ⍬ zilde empty
+    ⌶ ibeam
+    ¤ currency isolate
+    ∥ parallel
+    ∆ delta triangleup uptriangle
+    ⍙ deltaunderbar
+    ⍥ circlediaeresis
+    ⍫ deltilde
+    á aacute
+  '''
+
+  ctid = null # backquote completion timeout id
+  bqc = [] # backquote completions
+  bqbqc = [] # double backquote completions
   Dyalog.reverseKeyMap = {}
-
-  ks = ''' `1234567890-=  ~!@#$%^&*()_+
-           qwertyuiop[]   QWERTYUIOP{}
-           asdfghjkl;\'\\ ASDFGHJKL:"|
-           zxcvbnm,./     ZXCVBNM<>?    '''.replace(/^\s*|\s*$/g, '').split /\s*/g
-
-  vs = ''' `¨¯<≤=≥>≠∨∧×÷  ⋄⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹
-           ?⍵∊⍴~↑↓⍳○*←→   ?⍵⍷⍴⍨↑↓⍸⍥⍣⍞⍬
-           ⍺⌈⌊_∇∆∘\'⎕⍎⍕⊢  ⍺⌈⌊_∇∆⍤⌸⌷≡≢⊣
-           ⊂⊃∩∪⊥⊤|⍝⍀⌿     ⊂⊃∩∪⊥⊤|⍪⍙⍠    '''.replace(/^\s*|\s*$/g, '').split /\s*/g
-
-  ds =
-    '¨':'each', '¯':'negative', '∨':'or (GCD)', '∧':'and (LCM)',
-    '×':'sgn/times', '÷':'reciprocal/divide', '?':'roll/deal', '⍵':'right arg',
-    '∊':'enlist/in', '⍴':'shape/reshape', '~':'not/without', '↑':'mix/take',
-    '↓':'split/drop', '⍳':'indices/index of', '○':'pi/trig', '*':'exp/power',
-    '←':'assignment', '→':'branch', '⍺':'left arg', '⌈':'ceil/max', '⌊':'floor/min',
-    '∇':'recur', '∘':'compose', '⎕':'eval\'ed I/O', '⍎':'eval', '⍕':'format',
-    '⊢':'right', '⊂':'enclose/partition', '⊃':'disclose/pick', '∩':'intersect',
-    '∪':'uniq/union', '⊥':'decode (1 2 3→123)', '⊤':'encode (123→1 2 3)', '|':'abs/mod',
-    '⍝':'comment', '⍀':'\\[⎕io]', '⌿':'/[⎕io]', '⋄':'statement sep', '⌶':'I-beam',
-    '⍒':'grade down', '⍋':'grade up', '⌽':'reverse/rotate', '⍉':'transpose',
-    '⊖':'⌽[⎕io]', '⍟':'logarithm', '⍱':'nor', '⍲':'nand', '!':'factorial/binomial',
-    '⌹':'matrix inv/div', '⍷':'find', '⍨':'switch', '⍣':'power operator',
-    '⍞':'char I/O', '⍬':'zilde (⍳0)', '⍤':'rank', '⌸':'key', '⌷':'default/index',
-    '≡':'depth/match', '≢':'tally/not match', '⊣':'left', '⍪':'table / ,[⎕io]',
-    '⍠':'variant'
-
-  if ks.length != vs.length then console.error? 'bad configuration of backquote keymap'
 
   CodeMirror.keyMap.dyalog =
     fallthrough: 'default'
@@ -61,11 +193,12 @@ do ->
     "'`'": (cm) ->
       cm.setOption 'autoCloseBrackets', false
       cm.setOption 'keyMap', 'dyalogBackquote'
+      c = cm.getCursor()
+      cm.replaceSelection '`', 'end'
       ctid = setTimeout(
         ->
-          c = cm.getCursor()
           cm.showHint completeOnSingleClick: true, hint: ->
-            data = list: Dyalog.bqCompletions, from: c, to: c
+            data = from: c, to: cm.getCursor(), list: bqc
             CodeMirror.on data, 'close', ->
               cm.setOption 'autoCloseBrackets', true
               cm.setOption 'keyMap', 'dyalog'
@@ -74,21 +207,36 @@ do ->
       )
 
   CodeMirror.keyMap.dyalogBackquote = nofallthrough: true, disableInput: true
-
+  ds = {}; for line in squiggleDescriptions.split '\n' then ds[line[0]] = line[2..]
+  if ks.length != vs.length then console.error? 'bad configuration of backquote keymap'
   for k, i in ks when k != (v = vs[i]) || k == '`'
-    Dyalog.bqCompletions.push text: v, displayText: "#{v} `#{k} #{ds[v] || ''}  "
-    bqKeybindings[k] = v
+    bqc.push text: v, displayText: "#{v} `#{k} #{ds[v] || ''}  "
     Dyalog.reverseKeyMap[v] = k
     CodeMirror.keyMap.dyalogBackquote["'#{k}'"] = do (v = v) -> (cm) ->
       clearTimeout ctid
       cm.state.completionActive?.close?()
-      cm.replaceSelection v, 'end'
       cm.setOption 'keyMap', 'dyalog'
       cm.setOption 'autoCloseBrackets', true
-#       if v == '`' # TODO
-#         c = cm.getCursor()
-#         cm.showHint completeOnSingleClick: true, hint: ->
-#           list: ['times', 'rho', 'iota'], from: {line: c.line, ch: c.ch - 1}, to: c
+      c = cm.getCursor()
+      if v == '`' then bqbqHint cm
+      else cm.replaceRange v, {line: c.line, ch: c.ch - 1}, c
       return
 
-  return
+  bqc[0].render = (e) -> e.innerHTML = '  `` <i>completion by name</i>'
+  bqc[0].hint = bqbqHint = (cm) ->
+    c = cm.getCursor(); c0 = line: c.line, ch: c.ch - 1
+    cm.replaceSelection '`', 'end'
+    cm.showHint completeOnSingleClick: true, hint: ->
+      u = cm.getLine(c.line)[c.ch + 1..]
+      a = []; for x in bqbqc when x.name[...u.length] == u then a.push x
+      from: c0, to: cm.getCursor(), list: a
+
+  for line in squiggleNames.split '\n'
+    [squiggle, names...] = line.split ' '
+    bqKey = Dyalog.reverseKeyMap[squiggle]
+    for name in names then bqbqc.push
+      name: name, text: squiggle
+      displayText: "#{squiggle} #{if bqKey then '`' + bqKey else '  '} ``#{name}"
+
+  window.onhelp = -> false # prevent IE from acting silly on F1
+  ks = vs = ds = squiggleDescriptions = squiggleNames = null
