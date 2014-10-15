@@ -46,7 +46,7 @@ log = do ->
   n = t = 0
   (s) ->
     if (t1 = +new Date) - t > T then t = t1; n = 1
-    else if ++n < N then console.info process.uptime().toFixed(3) + ' ' + s
+    if ++n < N then console.info process.uptime().toFixed(3) + ' ' + s
     else if n == N then console.info '... logging temporarily suppressed'
 
 b64 = (s) -> Buffer(s).toString 'base64'
@@ -63,6 +63,13 @@ do preloadHTML = ->
   log "preloaded html: #{html.length} bytes"
 fs.watch 'index.html', preloadHTML
 
+css = ''
+do preloadCSS = ->
+  css0 = cssFiles.map((f) -> fs.readFileSync f, 'utf8').join '\n'
+  css = cleanCSS.minify css0
+  log "preloaded css: #{Buffer(css0).length}→#{Buffer(css).length} bytes"
+cssFiles.forEach (f) -> fs.watch f, preloadCSS
+
 js = ''
 do preloadJS = ->
   js = ''
@@ -70,31 +77,27 @@ do preloadJS = ->
     f1 = "cache/#{f.replace /\//g, '_'}.uglified"
     if !fs.existsSync(f1) || fs.statSync(f1).mtime < fs.statSync(f).mtime
       if !fs.existsSync 'cache' then fs.mkdirSync 'cache'
-      s = fs.readFileSync f, 'utf8'
-      if /\.coffee$/.test f then log "compiling #{f}"; s = coffee.compile s, bare: 1
+      ib = fs.readFileSync f # input buffer
+      sizes = [ib.length]
+      s = ib + ''
+      if /\.coffee$/.test f
+        s = coffee.compile s, bare: 1
+        sizes.push Buffer(s).length
       if !/\.min\.js$/.test f
-        log "minifying #{f}"
         s1 = uglify.minify(
           s.replace(/^(?:.*require.*;\n)*/, '')
           fromString: true, mangle: true
         ).code
-        try fs.writeFileSync f1, s1 catch # ignore errors
-        log "  #{s.length} -> #{s1.length} bytes"
+        ob = Buffer s1 # output buffer
+        sizes.push ob.length
+        try fs.writeFileSync f1, ob catch # ignore errors
         s = s1
+      log "  #{f} #{sizes.join '→'} bytes"
     else
       s = fs.readFileSync f1, 'utf8'
     js += s + '\n'
   log "preloaded js: #{js.length} bytes"
 jsFiles.forEach (f) -> fs.watch f, preloadJS
-
-css = ''
-do preloadCSS = ->
-  log 'minifying CSS...'
-  css0 = cssFiles.map((f) -> fs.readFileSync f, 'utf8').join '\n'
-  css = cleanCSS.minify css0
-  log "  #{css0.length} -> #{css.length} bytes"
-  log "preloaded css: #{css.length} bytes"
-cssFiles.forEach (f) -> fs.watch f, preloadCSS
 
 ttf = fs.readFileSync 'apl385.ttf'
 ico = fs.readFileSync 'favicon.ico'
@@ -115,7 +118,7 @@ httpsOptions =
   key: fs.readFileSync 'ssl/key.pem'
   cert: fs.readFileSync 'ssl/cert.pem'
 server = https.createServer(httpsOptions, app).listen (httpsPort = 8443),
-  -> log "HTTPS server listening on :#{httpsPort}"
+  -> log "https server listening on :#{httpsPort}"
 
 client = net.connect {host: '127.0.0.1', port: 4502}, -> log 'interpreter connected'
 
