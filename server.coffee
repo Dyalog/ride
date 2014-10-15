@@ -152,7 +152,12 @@ client.on 'data', (data) ->
       switch (/^<(\w+)>/.exec m)?[1] or ''
         when 'ReplyConnect', 'ReplyNotAtInputPrompt', 'ReplyEdit', 'ReplySaveChanges', 'ReplySetLineAttributes' then ; # ignore
         when 'ReplyIdentify'      then toBrowser 'title', b64d getTag 'Project', m
-        when 'ReplyUpdateWsid'    then toBrowser 'title', b64d getTag 'wsid', m
+        when 'ReplyUpdateWsid'
+          s = b64d getTag 'wsid', m
+          if s != (s1 = s.replace /\x00/g, '')
+            log 'intepreter sent a wsid containing NUL characters, those will be ignored'
+            s = s1
+          toBrowser 'title', s
         when 'ReplyExecute'       then toBrowser 'add', b64d getTag 'result', m
         when 'ReplyEchoInput'     then toBrowser 'add', b64d(getTag 'input', m) + '\n'
         when 'ReplyGetLog'        then toBrowser 'set', b64d getTag 'Log', m
