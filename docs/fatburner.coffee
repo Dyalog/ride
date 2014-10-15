@@ -3,30 +3,32 @@
 
 fs = require 'fs'
 
-simplifyFilename = (s) ->
-  s.toLowerCase()
-   .replace(/[ _]/g, '-')
-   .replace(/\.htm$/, '.html')
-   .replace(/\bcharacter-input-output\b/g,          'char-io')
-   .replace(/\bevaluated-input-output\b/g,          'eval-io')
-   .replace(/\bintroduction\b/g,                    'intro')
-   .replace(/\blanguage\b/g,                        'lang')
-   .replace(/\bmiscellaneous\b/g,                   'misc')
-   .replace(/\bobject-oriented-programming\b/g,     'oop')
-   .replace(/\bprimitive-functions\b/g,             'primfns')
-   .replace(/\bprimitive-operators\b/g,             'primops')
-   .replace(/\bproperties\b/g,                      'props')
-   .replace(/\bsystem-commands\b/g,                 'syscmds')
-   .replace(/\bsystem-functions\b/g,                'sysfns')
-   .replace(/\bwindows-presentation-foundation\b/g, 'wpf')
-   .replace(/dieresis/g,                            'diaeresis')
+simplifyPath = (s) ->
+  if /^javascript:/.test s then s else
+    s.toLowerCase()
+     .replace(/[\(\)]/g, '')
+     .replace(/[^a-z0-9\-\.\/\\]/g, '-')
+     .replace(/\.htm$/, '.html')
+     .replace(/\bcharacter-input-output\b/g,          'char-io')
+     .replace(/\bevaluated-input-output\b/g,          'eval-io')
+     .replace(/\bintroduction\b/g,                    'intro')
+     .replace(/\blanguage\b/g,                        'lang')
+     .replace(/\bmiscellaneous\b/g,                   'misc')
+     .replace(/\bobject-oriented-programming\b/g,     'oop')
+     .replace(/\bprimitive-functions\b/g,             'primfns')
+     .replace(/\bprimitive-operators\b/g,             'primops')
+     .replace(/\bproperties\b/g,                      'props')
+     .replace(/\bsystem-commands\b/g,                 'syscmds')
+     .replace(/\bsystem-functions\b/g,                'sysfns')
+     .replace(/\bwindows-presentation-foundation\b/g, 'wpf')
+     .replace(/dieresis/g,                            'diaeresis')
 
 repeat = (s, n) -> Array(n + 1).join s
 
 console.info 'Simplifying file names...'
 do walk = (d = 'help') ->
   for f in fs.readdirSync d
-    f1 = simplifyFilename f
+    f1 = simplifyPath f
     df1 = d + '/' + f1
     if f != f1 then fs.renameSync d + '/' + f, df1
     stat = fs.statSync df1
@@ -48,7 +50,7 @@ do walk = (d = 'help', depth = 0) ->
         .replace(/>[\n ]+</g, '>\n<')
         .replace(/&#(\d+);/g, (g, g1) -> r = String.fromCharCode +g1; if r in ['&', '"', '<'] then g else r)
         .replace(/<[^>]+>/g, (u) ->
-          u.replace(/\ (href|src)="([^"#]*)/g, (_, g1, g2) -> " #{g1}=\"#{simplifyFilename g2}")
+          u.replace(/\ (href|src)="([^"#]*)/g, (_, g1, g2) -> " #{g1}=\"#{simplifyPath g2}")
            .replace(/\ class="(Example|Normal|NormalPlain|APLCode|APLCodeNoIndent|leftPlain|NewPage)"/g, '')
            .replace(/\ (xml:space|MadCap:\w+|xrefformat)="[^"]*"/g, '')
            .replace(/\ target="_parent"/g, '')
