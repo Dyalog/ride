@@ -103,6 +103,7 @@ ttf = fs.readFileSync 'apl385-opt.ttf'
 ico = fs.readFileSync 'favicon.ico'
 
 app = express()
+app.use (req, res, next) -> log req.method + ' ' + req.path; next()
 app.use compression()
 app.disable 'x-powered-by'
 app.get '/',               (req, res) -> res.header('Content-Type', 'text/html'               ).send html
