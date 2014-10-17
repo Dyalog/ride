@@ -17,5 +17,4 @@ contextual help for items in completion menus
 ` keybindings in search box
 highlight non-local names in a different colour
 virtual whitespace after eol and eof (?)
-keybinding to revert a line and not execute it when <Enter> is pressed
 experiment with storing all help content in browser memory
