@@ -86,7 +86,7 @@ do preloadJS = ->
         sizes.push ob.length
         try fs.writeFileSync f1, ob catch # ignore errors
         s = s1
-      log "  #{f} #{sizes.join '→'} bytes"
+      if sizes.length > 1 then log "  #{f} #{sizes.join '→'} bytes"
     else
       s = fs.readFileSync f1, 'utf8'
     js += s + '\n'
