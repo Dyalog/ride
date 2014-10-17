@@ -21,12 +21,14 @@ Dyalog.Editor = (e, opts = {}) ->
           <span class="b-prev         button" title="Search for previous match">◀</span>
           <!--<span class="b-hid          button" title="Search for hidden text"   >⊞</span>-->
           <span class="b-case         button" title="Match case"               >aA</span>
+          <!--
           <span class="separator"></span>
           <select class="stack">
             <option>[1]</option>
             <option>[2]</option>
             <option>[3]</option>
           </select>
+          -->
         </div>
         <div class="cm"></div>
       '''
