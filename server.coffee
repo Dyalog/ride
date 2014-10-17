@@ -58,17 +58,11 @@ getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exe
 html = ''
 do preloadHTML = ->
   html = fs.readFileSync('index.html', 'utf8')
-    .replace /<!--\s*include\s+(\S+)\s*-->/g, (_, f) ->
-      fs.readFileSync f, 'utf8'
+    .replace(/<!--\s*include\s+(\S+)\s*-->/g, (_, f) -> fs.readFileSync f, 'utf8')
+    .replace /<!--\s*css\s*-->/g, -> cleanCSS.minify cssFiles.map((f) -> fs.readFileSync f, 'utf8').join '\n'
   log "preloaded html: #{html.length} bytes"
 fs.watch 'index.html', preloadHTML
-
-css = ''
-do preloadCSS = ->
-  css0 = cssFiles.map((f) -> fs.readFileSync f, 'utf8').join '\n'
-  css = cleanCSS.minify css0
-  log "preloaded css: #{Buffer(css0).length}→#{Buffer(css).length} bytes"
-cssFiles.forEach (f) -> fs.watch f, preloadCSS
+cssFiles.forEach (f) -> fs.watch f, preloadHTML
 
 js = ''
 do preloadJS = ->
@@ -107,7 +101,6 @@ app.use (req, res, next) -> log req.method + ' ' + req.path; next()
 app.use compression()
 app.disable 'x-powered-by'
 app.get '/',               (req, res) -> res.header('Content-Type', 'text/html'               ).send html
-app.get '/D.css',          (req, res) -> res.header('Content-Type', 'text/css'                ).send css
 app.get '/D.js',           (req, res) -> res.header('Content-Type', 'application/x-javascript').send js
 app.get '/apl385-opt.ttf', (req, res) -> res.header('Content-Type', 'application/octet-stream').send ttf
 app.get '/favicon.ico',    (req, res) -> res.header('Content-Type', 'image/x-icon'            ).send ico
