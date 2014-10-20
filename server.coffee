@@ -93,16 +93,16 @@ do preloadJS = ->
   log "preloaded js: #{js.length} bytes"
 jsFiles.forEach (f) -> fs.watch f, preloadJS
 
-ttf = fs.readFileSync 'apl385-opt.ttf'
+ttf = fs.readFileSync 'apl385.ttf'
 ico = fs.readFileSync 'favicon.ico'
 
 app = express()
 app.use (req, res, next) -> log req.method + ' ' + req.path; next()
 app.use compression()
 app.disable 'x-powered-by'
-app.get '/',               (req, res) -> res.header('Content-Type', 'text/html'               ).send html
-app.get '/D.js',           (req, res) -> res.header('Content-Type', 'application/x-javascript').send js
-app.get '/apl385-opt.ttf', (req, res) -> res.header('Content-Type', 'application/octet-stream').send ttf
+app.get '/',           (req, res) -> res.header('Content-Type', 'text/html'               ).send html
+app.get '/D.js',       (req, res) -> res.header('Content-Type', 'application/x-javascript').send js
+app.get '/apl385.ttf', (req, res) -> res.header('Content-Type', 'application/octet-stream').send ttf
 app.get '/favicon.ico',    (req, res) -> res.header('Content-Type', 'image/x-icon'            ).send ico
 app.use '/help',     express.static __dirname + '/docs/help'
 app.use '/help.css', express.static __dirname + '/docs/help.css'
