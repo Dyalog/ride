@@ -5,12 +5,14 @@ express = require 'express'
 compression = require 'compression'
 io      = require 'socket.io'
 net     = require 'net'
+http    = require 'http'
 https   = require 'https'
 uglify  = require 'uglify-js'
 cleanCSS = new (require 'clean-css')
 
 opts = require('nomnom').options(
   addr: metavar: 'host:port', position: 0, default: '127.0.0.1:4502', help: 'address of the interpreter to connect to; default: 127.0.0.1:4502'
+  insecure: flag: true, help: 'use http (on port 8000) instead of https (on port 8443)'
 ).parse()
 
 jsFiles = [
@@ -112,11 +114,15 @@ app.use '/help',     express.static __dirname + '/docs/help'
 app.use '/help.css', express.static __dirname + '/docs/help.css'
 app.use '/help.js',  express.static __dirname + '/docs/help.js'
 
-httpsOptions =
-  key: fs.readFileSync 'ssl/key.pem'
-  cert: fs.readFileSync 'ssl/cert.pem'
-server = https.createServer(httpsOptions, app).listen (httpsPort = 8443),
-  -> log "https server listening on :#{httpsPort}"
+if opts.insecure
+  server = http.createServer(app).listen (httpPort = 8000),
+    -> log "http server listening on :#{httpPort}"
+else
+  httpsOptions =
+    key: fs.readFileSync 'ssl/key.pem'
+    cert: fs.readFileSync 'ssl/cert.pem'
+  server = https.createServer(httpsOptions, app).listen (httpsPort = 8443),
+    -> log "https server listening on :#{httpsPort}"
 
 if addrMatch = /^\[([0-9a-f:]+)\]:(\d+)$/i.exec opts.addr
   host = addrMatch[1]; port = addrMatch[2]
