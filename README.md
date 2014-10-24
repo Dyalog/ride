@@ -19,4 +19,4 @@ Usage
 * Open [https://127.0.0.1:8443](https://127.0.0.1:8443) in your browser.
 * Accept the server's certificate.
 
-![Screenshot](https://raw.githubusercontent.com/Dyalog/RideJS/master/screenshot.png?token=188463__eyJzY29wZSI6IlJhd0Jsb2I6RHlhbG9nL1JpZGVKUy9tYXN0ZXIvc2NyZWVuc2hvdC5wbmciLCJleHBpcmVzIjoxNDEzMjc5MTczfQ%3D%3D--4773e4019b7ed3870412d57a19cd306e0a512dad)
+![Screenshot](screenshot.png?raw=true "Screenshot")
