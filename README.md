@@ -15,7 +15,7 @@ Usage
 * Install dependencies: `npm install`.  This only creates a local `node_modules` directory.  No system files are installed.
 * Configure RIDE through an environment variable: `export RIDE_LISTEN=0.0.0.0:4502`
 * Start the Dyalog interpreter.
-* Start the web server with `node_modules/coffee-script/bin/coffee server.coffee`
+* Start the web server with `node node_modules/coffee-script/bin/coffee server.coffee`
 * Open [https://127.0.0.1:8443](https://127.0.0.1:8443) in your browser.
 * Accept the server's certificate.
 
