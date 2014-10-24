@@ -118,9 +118,12 @@ httpsOptions =
 server = https.createServer(httpsOptions, app).listen (httpsPort = 8443),
   -> log "https server listening on :#{httpsPort}"
 
-[host, port] = opts.addr.split ':'
-port ?= 4502
-log "connecting to interpreter at #{host}:#{port}"
+if addrMatch = /^\[([0-9a-f:]+)\]:(\d+)$/i.exec opts.addr
+  host = addrMatch[1]; port = addrMatch[2]
+else
+  [host, port] = opts.addr.split ':'
+port or= 4502
+log "connecting to interpreter, host: #{host}, port: #{port}"
 client = net.connect {host, port}, -> log 'interpreter connected'
 
 toInterpreter = (s) ->
