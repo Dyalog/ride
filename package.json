@@ -9,6 +9,7 @@
 		"jquery"       : "2.1.1",
 		"jquery-ui"    : "1.10.5",
 		"socket.io"    : "1.1.0",
+		"nomnom"       : "1.8.0",
 		"uglify-js"    : "2.4.15"
 	}
 }

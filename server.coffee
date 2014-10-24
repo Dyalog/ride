@@ -9,6 +9,10 @@ https   = require 'https'
 uglify  = require 'uglify-js'
 cleanCSS = new (require 'clean-css')
 
+opts = require('nomnom').options(
+  addr: metavar: 'host:port', position: 0, default: '127.0.0.1:4502', help: 'address of the interpreter to connect to; default: 127.0.0.1:4502'
+).parse()
+
 jsFiles = [
   'node_modules/socket.io/node_modules/socket.io-client/socket.io.js'
   'node_modules/jquery/dist/cdn/jquery-2.1.1.min.js'
@@ -114,7 +118,10 @@ httpsOptions =
 server = https.createServer(httpsOptions, app).listen (httpsPort = 8443),
   -> log "https server listening on :#{httpsPort}"
 
-client = net.connect {host: '127.0.0.1', port: 4502}, -> log 'interpreter connected'
+[host, port] = opts.addr.split ':'
+port ?= 4502
+log "connecting to interpreter at #{host}:#{port}"
+client = net.connect {host, port}, -> log 'interpreter connected'
 
 toInterpreter = (s) ->
   log 'to interpreter: ' + JSON.stringify(s)[..1000]
