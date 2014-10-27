@@ -160,7 +160,7 @@ client.on 'data', (data) ->
     log 'from interpreter: ' + JSON.stringify(m)[..1000]
     if !/^(?:SupportedProtocols|UsingProtocol)=1$/.test m # ignore these
       switch (/^<(\w+)>/.exec m)?[1] or ''
-        when 'ReplyConnect', 'ReplyNotAtInputPrompt', 'ReplyEdit', 'ReplySaveChanges', 'ReplySetLineAttributes' then ; # ignore
+        when 'ReplyConnect', 'ReplyEdit', 'ReplySaveChanges', 'ReplySetLineAttributes' then ; # ignore
         when 'ReplyIdentify'      then toBrowser 'title', b64d getTag 'Project', m
         when 'ReplyUpdateWsid'
           s = b64d getTag 'wsid', m
@@ -171,7 +171,8 @@ client.on 'data', (data) ->
         when 'ReplyExecute'       then toBrowser 'add', b64d getTag 'result', m
         when 'ReplyEchoInput'     then toBrowser 'add', b64d(getTag 'input', m) + '\n'
         when 'ReplyGetLog'        then toBrowser 'set', b64d getTag 'Log', m
-        when 'ReplyAtInputPrompt' then toBrowser 'prompt'
+        when 'ReplyNotAtInputPrompt' then toBrowser 'prompt', null
+        when 'ReplyAtInputPrompt'    then toBrowser 'prompt', getTag 'why', m
         when 'ReplyOpenWindow'
           bs = []; m.replace /<row>(\d+)<\/row><value>1<\/value>/g, (_, l) -> bs.push +l
           toBrowser 'open', b64d(getTag 'name', m), b64d(getTag 'text', m), +getTag('token', m), +getTag('bugger', m), bs
