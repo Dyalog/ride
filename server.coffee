@@ -1,14 +1,14 @@
 #!/usr/bin/env coffee
-fs      = require 'fs'
-coffee  = require 'coffee-script'
-express = require 'express'
+fs          = require 'fs'
+coffee      = require 'coffee-script'
+express     = require 'express'
 compression = require 'compression'
-io      = require 'socket.io'
-net     = require 'net'
-http    = require 'http'
-https   = require 'https'
-uglify  = require 'uglify-js'
-cleanCSS = new (require 'clean-css')
+io          = require 'socket.io'
+net         = require 'net'
+http        = require 'http'
+https       = require 'https'
+uglify      = require 'uglify-js'
+cleanCSS    = new (require 'clean-css')
 
 opts = require('nomnom').options(
   addr: metavar: 'host:port', position: 0, default: '127.0.0.1:4502', help: 'address of the interpreter to connect to; default: 127.0.0.1:4502'
@@ -106,10 +106,10 @@ app = express()
 app.use (req, res, next) -> log req.method + ' ' + req.path; next()
 app.use compression()
 app.disable 'x-powered-by'
-app.get '/',           (req, res) -> res.header('Content-Type', 'text/html'               ).send html
-app.get '/D.js',       (req, res) -> res.header('Content-Type', 'application/x-javascript').send js
-app.get '/apl385.ttf', (req, res) -> res.header('Content-Type', 'application/octet-stream').send ttf
-app.get '/favicon.ico',    (req, res) -> res.header('Content-Type', 'image/x-icon'            ).send ico
+app.get '/',            (req, res) -> res.header('Content-Type', 'text/html'               ).send html
+app.get '/D.js',        (req, res) -> res.header('Content-Type', 'application/x-javascript').send js
+app.get '/apl385.ttf',  (req, res) -> res.header('Content-Type', 'application/octet-stream').send ttf
+app.get '/favicon.ico', (req, res) -> res.header('Content-Type', 'image/x-icon'            ).send ico
 app.use '/help',     express.static __dirname + '/docs/help'
 app.use '/help.css', express.static __dirname + '/docs/help.css'
 app.use '/help.js',  express.static __dirname + '/docs/help.js'
@@ -119,7 +119,7 @@ if opts.insecure
     -> log "http server listening on :#{httpPort}"
 else
   httpsOptions =
-    key: fs.readFileSync 'ssl/key.pem'
+    key:  fs.readFileSync 'ssl/key.pem'
     cert: fs.readFileSync 'ssl/cert.pem'
   server = https.createServer(httpsOptions, app).listen (httpsPort = 8443),
     -> log "https server listening on :#{httpsPort}"
