@@ -43,7 +43,7 @@ do ->
     socket.on 'add', (s) -> session.add s
     socket.on 'set', (s) -> session.set s
     socket.on 'prompt', (why) -> session.prompt why
-    socket.on 'focus', (win) -> if win == debuggerWin then db.focus() else if win then ed.focus() else session.focus()
+    socket.on 'FocusWindow', ({win}) -> if win == debuggerWin then db.focus() else if win then ed.focus() else session.focus()
 
     socket.on 'open', (name, text, token, bugger, breakpoints) ->
       winInfos[token] = {name, text}

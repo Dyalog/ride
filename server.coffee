@@ -179,7 +179,7 @@ client.on 'data', (data) ->
         when 'ReplyUpdateWindow'
           bs = []; m.replace /<row>(\d+)<\/row><value>1<\/value>/g, (_, l) -> bs.push +l
           toBrowser 'update', b64d(getTag 'name', m), b64d(getTag 'text', m), +getTag('token', m), +getTag('bugger', m), bs
-        when 'ReplyFocusWindow'   then toBrowser 'focus', +getTag 'win', m
+        when 'ReplyFocusWindow'   then toBrowser 'FocusWindow', win: +getTag 'win', m
         when 'ReplyCloseWindow'   then toBrowser 'close', +getTag 'win', m
         when 'ReplyGetAutoComplete'
           o = b64d getTag 'options', m
