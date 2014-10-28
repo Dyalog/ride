@@ -74,14 +74,14 @@ Dyalog.Session = (e, opts = {}) ->
     cm.replaceRange s, {line: 0, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
     cm.setCursor cm.lineCount() - 1, 0
 
-  prompt: (why) ->
-    cm.setOption 'readOnly', !why
-    if why
-      l = cm.lineCount() - 1
-      cm.replaceRange (if why == 'QuoteQuadInput' then '' else '      '),
-        {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
-      cm.setCursor l, 6
-    return
+  noPrompt: ->
+    cm.setOption 'readOnly', true
+
+  prompt: (why) -> # 0=Invalid 1=Descalc 2=QuadInput 3=LineEditor 4=QuoteQuadInput 5=Prompt
+    cm.setOption 'readOnly', false
+    l = cm.lineCount() - 1
+    cm.replaceRange (if why == 4 then '' else '      '), {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
+    cm.setCursor l, 6
 
   updateSize: -> cm.setSize $e.width(), $e.height()
   hasFocus: -> cm.hasFocus()

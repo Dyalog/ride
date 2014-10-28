@@ -39,10 +39,11 @@ do ->
       exec: (lines, trace) -> (for s in lines then socket.emit 'Execute', text: (s + '\n'), trace: trace); return
       autocomplete: (s, i) -> socket.emit 'Autocomplete', line: s, pos: i, token: 0
 
-    socket.on 'title', (s) -> $('title').text s
-    socket.on 'add', (s) -> session.add s
-    socket.on 'set', (s) -> session.set s
-    socket.on 'prompt', (why) -> session.prompt why
+    socket.on 'UpdateDisplayName', ({displayName}) -> $('title').text displayName
+    socket.on 'EchoInput', ({input}) -> session.add input
+    socket.on 'AppendSessionOutput', ({result}) -> session.add result
+    socket.on 'NotAtInputPrompt', -> session.prompt null
+    socket.on 'AtInputPrompt', (why) -> session.prompt why
     socket.on 'FocusWindow', ({win}) -> if win == debuggerWin then db.focus() else if win then ed.focus() else session.focus()
 
     socket.on 'open', (name, text, token, bugger, breakpoints) ->
@@ -70,7 +71,7 @@ do ->
         ed.open name, text, breakpoints
       session.scrollCursorIntoView()
 
-    socket.on 'close', (win) ->
+    socket.on 'CloseWindow', ({win}) ->
       delete winInfos[win]
       if win == debuggerWin
         debuggerWin = null

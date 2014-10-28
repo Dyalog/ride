@@ -152,6 +152,8 @@ toBrowser = (m...) ->
   for socket in sockets then socket.emit m...
   return
 
+whies = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' # constants used for ReplyAtInputPrompt
+
 queue = Buffer 0 # a buffer for data received from the server
 client.on 'data', (data) ->
   queue = Buffer.concat [queue, data]
@@ -161,18 +163,18 @@ client.on 'data', (data) ->
     if !/^(?:SupportedProtocols|UsingProtocol)=1$/.test m # ignore these
       switch (/^<(\w+)>/.exec m)?[1] or ''
         when 'ReplyConnect', 'ReplyEdit', 'ReplySaveChanges', 'ReplySetLineAttributes' then ; # ignore
-        when 'ReplyIdentify'      then toBrowser 'title', b64d getTag 'Project', m
+        when 'ReplyIdentify'      then toBrowser 'UpdateDisplayName', displayName: b64d getTag 'Project', m
         when 'ReplyUpdateWsid'
           s = b64d getTag 'wsid', m
           if s != (s1 = s.replace /\x00/g, '')
             log 'intepreter sent a wsid containing NUL characters, those will be ignored'
             s = s1
-          toBrowser 'title', s
-        when 'ReplyExecute'       then toBrowser 'add', b64d getTag 'result', m
-        when 'ReplyEchoInput'     then toBrowser 'add', b64d(getTag 'input', m) + '\n'
-        when 'ReplyGetLog'        then toBrowser 'set', b64d getTag 'Log', m
-        when 'ReplyNotAtInputPrompt' then toBrowser 'prompt', null
-        when 'ReplyAtInputPrompt'    then toBrowser 'prompt', getTag 'why', m
+          toBrowser 'UpdateDisplayName', displayName: s
+        when 'ReplyExecute'       then toBrowser 'AppendSessionOutput', result: b64d getTag 'result', m
+        when 'ReplyEchoInput'     then toBrowser 'EchoInput', input: b64d(getTag 'input', m) + '\n'
+        when 'ReplyGetLog'        then toBrowser 'AppendSessionOutput', result: b64d getTag 'Log', m
+        when 'ReplyNotAtInputPrompt' then toBrowser 'NotAtInputPrompt'
+        when 'ReplyAtInputPrompt' then toBrowser 'AtInputPrompt', why: whies.indexOf getTag 'why', m
         when 'ReplyOpenWindow'
           bs = []; m.replace /<row>(\d+)<\/row><value>1<\/value>/g, (_, l) -> bs.push +l
           toBrowser 'open', b64d(getTag 'name', m), b64d(getTag 'text', m), +getTag('token', m), +getTag('bugger', m), bs
@@ -180,7 +182,7 @@ client.on 'data', (data) ->
           bs = []; m.replace /<row>(\d+)<\/row><value>1<\/value>/g, (_, l) -> bs.push +l
           toBrowser 'update', b64d(getTag 'name', m), b64d(getTag 'text', m), +getTag('token', m), +getTag('bugger', m), bs
         when 'ReplyFocusWindow'   then toBrowser 'FocusWindow', win: +getTag 'win', m
-        when 'ReplyCloseWindow'   then toBrowser 'close', +getTag 'win', m
+        when 'ReplyCloseWindow'   then toBrowser 'CloseWindow', win: +getTag 'win', m
         when 'ReplyGetAutoComplete'
           o = b64d getTag 'options', m
           toBrowser 'autocomplete', +getTag('token', m), +getTag('skip', m), (if o then o.split '\n' else [])
