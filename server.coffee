@@ -199,9 +199,9 @@ io.listen(server).on 'connection', (socket) ->
     log 'from browser: ' + JSON.stringify(packet.data)[..1000]
     onevent.apply socket, [packet]
 
-  socket.on 'exec', (s, trace) -> cmd 'Execute', "<Text>#{b64 s}</Text><Trace>#{+!!trace}</Trace>"
-  socket.on 'edit', (text, pos) -> cmd 'Edit', "<Text>#{b64 text}</Text><Pos>#{pos}</Pos><Win>0</Win>"
-  socket.on 'save', (win, text, breakpoints) -> cmd 'SaveChanges', """
+  socket.on 'Execute', ({text, trace}) -> cmd 'Execute', "<Text>#{b64 text}</Text><Trace>#{+!!trace}</Trace>"
+  socket.on 'Edit', ({win, pos, text}) -> cmd 'Edit', "<Text>#{b64 text}</Text><Pos>#{pos}</Pos><Win>#{win}</Win>"
+  socket.on 'SaveChanges', ({win, text, attributes: {stop, monitor, trace}}) -> cmd 'SaveChanges', """
     <win>#{win}</win>
     <Text>#{b64 text}</Text>
     <attributes>
@@ -211,24 +211,24 @@ io.listen(server).on 'connection', (socket) ->
           #{
             (
               for i in [0...text.split('\n').length] by 1
-                "<LineAttributeValue><row>#{i}</row><value>#{+(i in breakpoints)}</value></LineAttributeValue>"
+                "<LineAttributeValue><row>#{i}</row><value>#{+(i in stop)}</value></LineAttributeValue>"
             ).join '\n'
           }
         </values>
       </LineAttribute>
     </attributes>
   """
-  socket.on 'close',          (win) -> cmd 'CloseWindow',         "<win>#{win}</win>"
-  socket.on 'over',           (win) -> cmd 'DebugRunLine',        "<win>#{win}</win>"
-  socket.on 'into',           (win) -> cmd 'DebugStepInto',       "<win>#{win}</win>"
+  socket.on 'CloseWindow',    ({win}) -> cmd 'CloseWindow',         "<win>#{win}</win>"
+  socket.on 'RunCurrentLine', ({win}) -> cmd 'DebugRunLine',        "<win>#{win}</win>"
+  socket.on 'StepInto',       ({win}) -> cmd 'DebugStepInto',       "<win>#{win}</win>"
   socket.on 'TraceBackward',  ({win}) -> cmd 'DebugBackward',       "<win>#{win}</win>"
-  socket.on 'skip',           (win) -> cmd 'DebugForward',        "<win>#{win}</win>"
-  socket.on 'continueTrace',  (win) -> cmd 'DebugContinueTrace',  "<win>#{win}</win>"
-  socket.on 'continueExec',   (win) -> cmd 'DebugContinue',       "<win>#{win}</win>"
-  socket.on 'restartThreads', (win) -> cmd 'DebugRestartThreads', "<win>#{win}</win>"
-  socket.on 'cutback',        (win) -> cmd 'DebugCutback',        "<win>#{win}</win>"
-  socket.on 'interrupt', -> cmd 'WeakInterrupt'
-  socket.on 'autocomplete', (line, pos, token) -> cmd 'GetAutoComplete', "<line>#{b64 line}</line><pos>#{pos}</pos><token>#{token}</token>"
+  socket.on 'TraceForward',   ({win}) -> cmd 'DebugForward',        "<win>#{win}</win>"
+  socket.on 'ContinueTrace',  ({win}) -> cmd 'DebugContinueTrace',  "<win>#{win}</win>"
+  socket.on 'Continue',       ({win}) -> cmd 'DebugContinue',       "<win>#{win}</win>"
+  socket.on 'RestartThreads', ({win}) -> cmd 'DebugRestartThreads', "<win>#{win}</win>"
+  socket.on 'Cutback',        ({win}) -> cmd 'DebugCutback',        "<win>#{win}</win>"
+  socket.on 'WeakInterrupt', -> cmd 'WeakInterrupt'
+  socket.on 'GetAutoComplete', ({line, pos, token}) -> cmd 'GetAutoComplete', "<line>#{b64 line}</line><pos>#{pos}</pos><token>#{token}</token>"
 
   cmd 'Identify', '<Sender><Process>RIDE.EXE</Process><Proxy>0</Proxy></Sender>'
   cmd 'Connect', '<Token />'

@@ -16,28 +16,28 @@ do ->
     debuggerWin = null
 
     ed = Dyalog.Editor '#editor',
-      save: (s, bs) -> socket.emit 'save', editorWin, (winInfos[editorWin].text = s), bs
-      close: -> socket.emit 'close', editorWin
+      save: (s, bs) -> socket.emit 'SaveChanges', win: editorWin, text: (winInfos[editorWin].text = s), attributes: stop: bs
+      close: -> socket.emit 'CloseWindow', win: editorWin
       autocomplete: (s, i) -> socket.emit 'autocomplete', s, i, editorWin
 
     db = Dyalog.Editor '#debugger',
       debugger: true
-      save:   (s, bs) -> socket.emit 'save',           debuggerWin, (winInfos[debuggerWin].text = s), bs
-      close:          -> socket.emit 'close',          debuggerWin
-      over:           -> socket.emit 'over',           debuggerWin
-      into:           -> socket.emit 'into',           debuggerWin
+      save:   (s, bs) -> socket.emit 'SaveChanges',    win: debuggerWin, text: (winInfos[debuggerWin].text = s), attributes: trace: bs
+      close:          -> socket.emit 'CloseWindow',    win: debuggerWin
+      over:           -> socket.emit 'RunCurrentLine', win: debuggerWin
+      into:           -> socket.emit 'StepInto',       win: debuggerWin
       back:           -> socket.emit 'TraceBackward',  win: debuggerWin
-      skip:           -> socket.emit 'skip',           debuggerWin
-      continueTrace:  -> socket.emit 'continueTrace',  debuggerWin
-      continueExec:   -> socket.emit 'continueExec',   debuggerWin
-      restartThreads: -> socket.emit 'restartThreads', debuggerWin
-      interrupt:      -> socket.emit 'interrupt'
-      cutback:        -> socket.emit 'cutback',        debuggerWin
+      skip:           -> socket.emit 'TraceForward',   win: debuggerWin
+      continueTrace:  -> socket.emit 'ContinueTrace',  win: debuggerWin
+      continueExec:   -> socket.emit 'Continue',       win: debuggerWin
+      restartThreads: -> socket.emit 'RestartThreads', win: debuggerWin
+      interrupt:      -> socket.emit 'WeakInterrupt'
+      cutback:        -> socket.emit 'Cutback',        win: debuggerWin
 
     session = Dyalog.Session '#session',
-      edit: (s, i) -> socket.emit 'edit', s, i
-      exec: (lines, trace) -> (for s in lines then socket.emit 'exec', s + '\n', +!!trace); return
-      autocomplete: (s, i) -> socket.emit 'autocomplete', s, i, 0
+      edit: (s, i) -> socket.emit 'Edit', win: 0, pos: i, text: s
+      exec: (lines, trace) -> (for s in lines then socket.emit 'Execute', text: (s + '\n'), trace: trace); return
+      autocomplete: (s, i) -> socket.emit 'Autocomplete', line: s, pos: i, token: 0
 
     socket.on 'title', (s) -> $('title').text s
     socket.on 'add', (s) -> session.add s
