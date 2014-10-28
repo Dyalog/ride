@@ -26,7 +26,7 @@ do ->
       close:          -> socket.emit 'close',          debuggerWin
       over:           -> socket.emit 'over',           debuggerWin
       into:           -> socket.emit 'into',           debuggerWin
-      back:           -> socket.emit 'back',           debuggerWin
+      back:           -> socket.emit 'TraceBackward',  win: debuggerWin
       skip:           -> socket.emit 'skip',           debuggerWin
       continueTrace:  -> socket.emit 'continueTrace',  debuggerWin
       continueExec:   -> socket.emit 'continueExec',   debuggerWin

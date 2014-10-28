@@ -221,7 +221,7 @@ io.listen(server).on 'connection', (socket) ->
   socket.on 'close',          (win) -> cmd 'CloseWindow',         "<win>#{win}</win>"
   socket.on 'over',           (win) -> cmd 'DebugRunLine',        "<win>#{win}</win>"
   socket.on 'into',           (win) -> cmd 'DebugStepInto',       "<win>#{win}</win>"
-  socket.on 'back',           (win) -> cmd 'DebugBackward',       "<win>#{win}</win>"
+  socket.on 'TraceBackward',  ({win}) -> cmd 'DebugBackward',       "<win>#{win}</win>"
   socket.on 'skip',           (win) -> cmd 'DebugForward',        "<win>#{win}</win>"
   socket.on 'continueTrace',  (win) -> cmd 'DebugContinueTrace',  "<win>#{win}</win>"
   socket.on 'continueExec',   (win) -> cmd 'DebugContinue',       "<win>#{win}</win>"
