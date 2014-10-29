@@ -1,51 +1,16 @@
 #!/usr/bin/env coffee
 fs          = require 'fs'
-coffee      = require 'coffee-script'
 express     = require 'express'
 compression = require 'compression'
 io          = require 'socket.io'
 net         = require 'net'
 http        = require 'http'
 https       = require 'https'
-uglify      = require 'uglify-js'
-cleanCSS    = new (require 'clean-css')
 
 opts = require('nomnom').options(
   'host:port': position: 0, default: '127.0.0.1:4502', help: 'interpreter to connect to; default: 127.0.0.1:4502'
   insecure: flag: true, help: 'use http (on port 8000) instead of https (on port 8443)'
 ).parse()
-
-jsFiles = [
-  'node_modules/socket.io/node_modules/socket.io-client/socket.io.js'
-  'node_modules/jquery/dist/cdn/jquery-2.1.1.min.js'
-  'node_modules/codemirror/lib/codemirror.js'
-  'node_modules/codemirror/mode/apl/apl.js'
-  'node_modules/codemirror/addon/hint/show-hint.js'
-  'node_modules/codemirror/addon/edit/matchbrackets.js'
-  'node_modules/codemirror/addon/edit/closebrackets.js'
-  'node_modules/jquery-ui/core.js'
-  'node_modules/jquery-ui/widget.js'
-  'node_modules/jquery-ui/mouse.js'
-  'node_modules/jquery-ui/position.js'
-  'node_modules/jquery-ui/draggable.js'
-  'node_modules/jquery-ui/droppable.js'
-  'node_modules/jquery-ui/resizable.js'
-  'node_modules/jquery-ui/button.js'
-  'node_modules/jquery-ui/dialog.js'
-  'node_modules/jquery-ui/effect.js'
-  'node_modules/jquery-ui/effect-slide.js'
-  'jquery.layout.js'
-  'lbar/lbar.js'
-  'client/keymap.coffee'
-  'client/session.coffee'
-  'client/editor.coffee'
-  'client/init.coffee'
-  'docs/help-urls.coffee'
-]
-cssFiles = [
-  'node_modules/codemirror/lib/codemirror.css'
-  'style.css'
-]
 
 log = do ->
   N = 20; T = 1000 # log no more than N log messages per T milliseconds
@@ -55,64 +20,32 @@ log = do ->
     if ++n < N then console.info process.uptime().toFixed(3) + ' ' + s
     else if n == N then console.info '... logging temporarily suppressed'
 
+if fs.existsSync 'build.coffee'
+  require 'coffee-script/register'
+  do build = ->
+    console.info 'building...'
+    require './build'
+    console.info 'build done'
+  [
+    'client/editor.coffee'
+    'client/init.coffee'
+    'client/keymap.coffee'
+    'client/session.coffee'
+    'style.css'
+    'index.html'
+  ].forEach (f) -> fs.watch f, build
+
 b64 = (s) -> Buffer(s).toString 'base64'
 b64d = (s) -> '' + Buffer s, 'base64'
 getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exec xml)?[1]
 
 # preload files into memory so we can serve them faster
 
-html = ''
-do preloadHTML = ->
-  html = fs.readFileSync('index.html', 'utf8')
-    .replace(/<!--\s*include\s+(\S+)\s*-->/g, (_, f) -> fs.readFileSync f, 'utf8')
-    .replace /<!--\s*css\s*-->/g, -> cleanCSS.minify cssFiles.map((f) -> fs.readFileSync f, 'utf8').join '\n'
-  log "preloaded html: #{html.length} bytes"
-fs.watch 'index.html', preloadHTML
-cssFiles.forEach (f) -> fs.watch f, preloadHTML
-
-js = ''
-do preloadJS = ->
-  js = ''
-  for f in jsFiles
-    f1 = "cache/#{f.replace /\//g, '_'}.uglified"
-    if !fs.existsSync(f1) || fs.statSync(f1).mtime < fs.statSync(f).mtime
-      if !fs.existsSync 'cache' then fs.mkdirSync 'cache'
-      ib = fs.readFileSync f # input buffer
-      sizes = [ib.length]
-      s = ib + ''
-      if /\.coffee$/.test f
-        s = coffee.compile s, bare: 1
-        sizes.push Buffer(s).length
-      if !/\.min\.js$/.test f
-        s1 = uglify.minify(
-          s.replace(/^(?:.*require.*;\n)*/, '')
-          fromString: true, mangle: true
-        ).code
-        ob = Buffer s1 # output buffer
-        sizes.push ob.length
-        try fs.writeFileSync f1, ob catch # ignore errors
-        s = s1
-      if sizes.length > 1 then log "  #{f} #{sizes.join '→'} bytes"
-    else
-      s = fs.readFileSync f1, 'utf8'
-    js += s + '\n'
-  log "preloaded js: #{js.length} bytes"
-jsFiles.forEach (f) -> fs.watch f, preloadJS
-
-ttf = fs.readFileSync 'apl385.ttf'
-ico = fs.readFileSync 'favicon.ico'
-
 app = express()
+app.disable 'x-powered-by'
 app.use (req, res, next) -> log req.method + ' ' + req.path; next()
 app.use compression()
-app.disable 'x-powered-by'
-app.get '/',            (req, res) -> res.header('Content-Type', 'text/html'               ).send html
-app.get '/D.js',        (req, res) -> res.header('Content-Type', 'application/x-javascript').send js
-app.get '/apl385.ttf',  (req, res) -> res.header('Content-Type', 'application/octet-stream').send ttf
-app.get '/favicon.ico', (req, res) -> res.header('Content-Type', 'image/x-icon'            ).send ico
-app.use '/help',     express.static __dirname + '/docs/help'
-app.use '/help.css', express.static __dirname + '/docs/help.css'
-app.use '/help.js',  express.static __dirname + '/docs/help.js'
+app.use '/', express.static 'static'
 
 if opts.insecure
   server = http.createServer(app).listen (httpPort = 8000),
