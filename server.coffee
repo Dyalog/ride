@@ -11,7 +11,7 @@ uglify      = require 'uglify-js'
 cleanCSS    = new (require 'clean-css')
 
 opts = require('nomnom').options(
-  addr: metavar: 'host:port', position: 0, default: '127.0.0.1:4502', help: 'address of the interpreter to connect to; default: 127.0.0.1:4502'
+  'host:port': position: 0, default: '127.0.0.1:4502', help: 'interpreter to connect to; default: 127.0.0.1:4502'
   insecure: flag: true, help: 'use http (on port 8000) instead of https (on port 8443)'
 ).parse()
 
@@ -124,10 +124,10 @@ else
   server = https.createServer(httpsOptions, app).listen (httpsPort = 8443),
     -> log "https server listening on :#{httpsPort}"
 
-if addrMatch = /^\[([0-9a-f:]+)\]:(\d+)$/i.exec opts.addr
+if addrMatch = /^\[([0-9a-f:]+)\]:(\d+)$/i.exec opts['host:port']
   host = addrMatch[1]; port = addrMatch[2]
 else
-  [host, port] = opts.addr.split ':'
+  [host, port] = opts['host:port'].split ':'
 port or= 4502
 log "connecting to interpreter, host: #{host}, port: #{port}"
 client = net.connect {host, port}, -> log 'interpreter connected'
