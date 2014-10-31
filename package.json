@@ -1,16 +1,34 @@
 {
+	"name": "dyalog",
+	"version": "14.1.0",
+	"main": "index.html",
 	"repository": ".",
 	"dependencies": {
-		"clean-css"    : "2.2.16",
-		"codemirror"   : "4.6.0",
-		"coffee-script": "1.8.0",
-		"compression"  : "1.1.1",
-		"exec-sync"    : "0.1.6",
-		"express"      : "4.9.7",
-		"jquery"       : "2.1.1",
-		"jquery-ui"    : "1.10.5",
-		"socket.io"    : "1.1.0",
-		"nomnom"       : "1.8.0",
-		"uglify-js"    : "2.4.15"
-	}
+		"clean-css"          : "2.2.16",
+		"codemirror"         : "4.6.0",
+		"coffee-script"      : "1.8.0",
+		"compression"        : "1.1.1",
+		"exec-sync"          : "0.1.6",
+		"express"            : "4.9.7",
+		"jquery"             : "2.1.1",
+		"jquery-ui"          : "1.10.5",
+		"socket.io"          : "1.1.0",
+		"node-webkit-builder": "0.2.0",
+		"nomnom"             : "1.8.0",
+		"uglify-js"          : "2.4.15"
+	},
+	"window": {
+		"title": "Dyalog",
+		"icon": "favicon.ico",
+		"toolbar": true,
+		"frame": true,
+		"width": 800,
+		"height": 500,
+		"position": "mouse",
+		"min_width": 400,
+		"min_height": 200,
+		"max_width": 800,
+		"max_height": 600
+	},
+	"webkit": {"plugin": true}
 }
