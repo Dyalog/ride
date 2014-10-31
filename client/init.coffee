@@ -43,7 +43,7 @@ do ->
     socket.on 'EchoInput', ({input}) -> session.add input
     socket.on 'AppendSessionOutput', ({result}) -> session.add result
     socket.on 'NotAtInputPrompt', -> session.prompt null
-    socket.on 'AtInputPrompt', (why) -> session.prompt why
+    socket.on 'AtInputPrompt', ({why}) -> session.prompt why
     socket.on 'FocusWindow', ({win}) -> if win == debuggerWin then db.focus() else if win then ed.focus() else session.focus()
 
     socket.on 'open', (name, text, token, bugger, breakpoints) ->
