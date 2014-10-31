@@ -33,14 +33,14 @@ Dyalog.Session = (e, opts = {}) ->
       "'\uf81f'": -> histMove -1
       'Shift-Ctrl-Backspace': -> histMove 1
       'Shift-Ctrl-Enter': -> histMove -1
-      Esc: ->
-        console.info 'esc'
+      Esc: revertLine = ->
         l = cm.getCursor().line
         if mod[l]?
           cm.replaceRange mod[l], {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
           delete mod[l]
           cm.removeLineClass l, 'background', 'modified'
         return
+      'Shift-Esc': revertLine
 
   exec = (trace) ->
     a = [] # pairs of [lineNumber, contentToExecute]
