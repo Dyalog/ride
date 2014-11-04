@@ -3,3 +3,4 @@ lbar.xml
 cache/
 static/
 dist/
+ssl/*.pem

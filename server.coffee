@@ -9,6 +9,8 @@ https       = require 'https'
 
 opts = require('nomnom').options(
   'host:port': position: 0, default: '127.0.0.1:4502', help: 'interpreter to connect to; default: 127.0.0.1:4502'
+  cert: help: 'PEM-encoded certificate for https; default: self-signed'
+  key: help: 'PEM-encoded private key for https; default: self-signed'
   insecure: flag: true, help: 'use http (on port 8000) instead of https (on port 8443)'
 ).parse()
 
@@ -52,8 +54,38 @@ if opts.insecure
     -> log "http server listening on :#{httpPort}"
 else
   httpsOptions =
-    key:  fs.readFileSync 'ssl/key.pem'
-    cert: fs.readFileSync 'ssl/cert.pem'
+    cert: '''
+      -----BEGIN CERTIFICATE-----
+      MIIBkDCB+gIJAM6hP4awcGLxMA0GCSqGSIb3DQEBCwUAMA0xCzAJBgNVBAYTAlhY
+      MB4XDTE0MTAwNzAwMTUzM1oXDTE0MTEwNjAwMTUzM1owDTELMAkGA1UEBhMCWFgw
+      gZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAL/P04+xRhmFcgknI9kAheK0nQJ0
+      n22yXu375PNA57QXGG9GdfOXD/NWRDh7LoeVI8M+hhOgxx1yIj0C7YDN7wSfxbu4
+      KNvAGrvN5ILXipW+FhES6evEobp8jEd11FFPhGopiRG916QXiCfqp5Dh8NKBD56a
+      wJGTwrjn+g4PzSVvAgMBAAEwDQYJKoZIhvcNAQELBQADgYEAcq1qadZ5z1rDCUZV
+      SpJXqIKTUiVb9oKFiHcvpdPgv65YpgTpN9T3sUREDORFop0Xtutv5zayBuCwoZZG
+      pdEZ/rVvJiK/+9qHlyvvz453Idz5k8QCL3XvO/hOBaDspYCygniNY3Viio567ine
+      spk9XnU9Wl1i2dh23uc++TLnIYc=
+      -----END CERTIFICATE-----
+    '''
+    key: '''
+      -----BEGIN RSA PRIVATE KEY-----
+      MIICXAIBAAKBgQC/z9OPsUYZhXIJJyPZAIXitJ0CdJ9tsl7t++TzQOe0FxhvRnXz
+      lw/zVkQ4ey6HlSPDPoYToMcdciI9Au2Aze8En8W7uCjbwBq7zeSC14qVvhYREunr
+      xKG6fIxHddRRT4RqKYkRvdekF4gn6qeQ4fDSgQ+emsCRk8K45/oOD80lbwIDAQAB
+      AoGAYQIB1GVqt5OW9ewWpDQwglSoJ8rFqtwQSLohs6j6xkj78aMoGlcnGQFjJVGf
+      WbDi0mb3tkuVCF5l1Id7iK4eGE9u+7VS4lqgXHOfr8DG6iV4pU2sBhtzAODqifpi
+      A1wWYuXftvTXSrqvGrHU12xK1Kk2qNDIcri5bDnoOAwHddkCQQDg3qZsNrsBams+
+      RrARVbFmr8rRVYF0P720Mrj+GanFMhDdzVjE3r70WHyQGuD9lU4i7Fku8+ZYNZ9W
+      lKj8l+79AkEA2l2b6tT5Qfg4niqxHmfImlORzHK/6VNNYSC+A9f9pn/dRIPCJNkr
+      cC09v4BH7E+Vm0aPbPLCCginwfGEdkRv2wJAYFPAYtbHIQIfUpwhTCuzRNPFRAsm
+      2096yjh4OpFvwkOCKiGPBzaMAkvtgCWjf713rUolohFk+SBvUz13bkz/WQJBAMHO
+      TzHPMCLi4a1Pir/HsP13qnFgbv/xFT5dRwg2TUPXPFUw88CslqcLIEC05CDSSZ/0
+      shsqIhmxsOKrLrug5f0CQBLGWskxppcYaIwgu2bVHp6gVgERp4ZzIiNqv4D8gzpz
+      vuAJlSpK6SRKrXB1urovULw3NKc8ZPaVb6w811ufxSU=
+      -----END RSA PRIVATE KEY-----
+    '''
+  if opts.key  then httpsOptions.key  = fs.readFileSync opts.key
+  if opts.cert then httpsOptions.cert = fs.readFileSync opts.cert
   server = https.createServer(httpsOptions, app).listen (httpsPort = 8443),
     -> log "https server listening on :#{httpsPort}"
 
