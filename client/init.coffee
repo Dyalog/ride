@@ -2,14 +2,14 @@ do ->
   if window.require? # are we running under node-webkit?
     {spawn} = require 'child_process'
     extend = (a...) -> r = {}; (for x in a then for k, v of x then r[k] = v); r
-    spawn 'apl', [], env: extend process.env, RIDE_LISTEN: '0.0.0.0:4502'
+    spawn 'apl', ['+s'], env: extend process.env, RIDE_LISTEN: '0.0.0.0:4502'
     class FakeSocket
       emit: (e, a...) -> @other.onevent e: e, data: a
       onevent: ({e, data}) -> (for f in @[e] or [] then f data...); return
       on: (e, f) -> (@[e] ?= []).push f; return
     socket = new FakeSocket; socket1 = new FakeSocket; socket.other = socket1; socket1.other = socket
     server = require './server'
-    setTimeout (-> server.serve insecure: true, socket: socket1), 1000 # wait for interpreter to bind to :4502
+    setTimeout (-> server.serve insecure: true, socket: socket1), 2000 # wait for interpreter to bind to :4502
   else
     socket = io()
 
