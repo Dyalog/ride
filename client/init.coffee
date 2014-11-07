@@ -2,7 +2,7 @@ do ->
   if window.require? # are we running under node-webkit?
     {spawn} = require 'child_process'
     extend = (a...) -> r = {}; (for x in a then for k, v of x then r[k] = v); r
-    spawn 'apl', ['+s'], env: extend process.env, RIDE_LISTEN: '0.0.0.0:4502'
+    spawn process.env.APL_EXECUTABLE or 'apl', ['+s'], env: extend process.env, RIDE_LISTEN: '0.0.0.0:4502'
     class FakeSocket
       emit: (e, a...) -> @other.onevent e: e, data: a
       onevent: ({e, data}) -> (for f in @[e] or [] then f data...); return
