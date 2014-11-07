@@ -1,4 +1,4 @@
-#!/usr/bin/env coffee
+#!/usr/bin/env node_modules/coffee-script/bin/coffee
 fs = require 'fs'
 
 DEFAULT_HOST_PORT = '127.0.0.1:4502'

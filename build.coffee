@@ -1,4 +1,4 @@
-#!/usr/bin/env coffee
+#!/usr/bin/env node_modules/coffee-script/bin/coffee
 
 module.exports = ->
   console.info 'building...'
