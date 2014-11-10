@@ -5,7 +5,6 @@ module.exports = ->
   fs          = require 'fs'
   coffee      = require 'coffee-script'
   execSync    = require 'exec-sync'
-  express     = require 'express'
   uglify      = require 'uglify-js'
   cleanCSS    = new (require 'clean-css')
 
