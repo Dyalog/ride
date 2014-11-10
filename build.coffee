@@ -39,7 +39,7 @@ module.exports = ->
   ]
   cssFiles = [
     'node_modules/codemirror/lib/codemirror.css'
-    'style.css'
+    'style/style.css'
   ]
 
   log = (s) -> console.info s
@@ -73,6 +73,6 @@ module.exports = ->
     js += s + '\n'
   fs.writeFileSync 'static/D.js', js
 
-  sh 'cp -uvr apl385.* favicon.ico docs/help docs/help.css docs/help.js package.json static/'
+  sh 'cp -uvr style/apl385.* favicon.ico docs/help docs/help.css docs/help.js package.json static/'
 
 if require.main == module then module.exports()

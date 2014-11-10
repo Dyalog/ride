@@ -1,0 +1,3 @@
+#!/usr/bin/env fontforge
+Open($1)
+Generate($2)
