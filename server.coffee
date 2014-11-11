@@ -157,7 +157,7 @@ if require.main == module
     # we are running on a developer box, invoke the build script first
     require 'coffee-script/register'
     do build = -> console.info 'building...'; require './build'; console.info 'build done'
-    'client/editor.coffee client/init.coffee client/keymap.coffee client/session.coffee style/style.css style/apl385.* index.html'
+    'client/editor.coffee client/init.coffee client/keymap.coffee client/session.coffee style/style.css style/apl385.ttf index.html'
       .split(' ').forEach (f) -> fs.watch f, build
   @serve require('nomnom').options(
     'host:port': position: 0, help: 'interpreter to connect to, default: ' + DEFAULT_HOST_PORT
