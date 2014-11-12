@@ -9,7 +9,7 @@ do ->
       on: (e, f) -> (@[e] ?= []).push f; return
     socket = new FakeSocket; socket1 = new FakeSocket; socket.other = socket1; socket1.other = socket
     server = require './server'
-    setTimeout (-> server.serve insecure: true, socket: socket1), 2000 # wait for interpreter to bind to :4502
+    setTimeout (-> server.serve socket: socket1, 'host:port': '127.0.0.1:4502'), 3000 # give the interpreter some time to start
   else
     socket = io()
 
