@@ -2,14 +2,18 @@ do ->
   if window.require? # are we running under node-webkit?
     {spawn} = require 'child_process'
     extend = (a...) -> r = {}; (for x in a then for k, v of x then r[k] = v); r
-    spawn process.env.APL_EXECUTABLE or 'apl', ['+s'], env: extend process.env, RIDE_LISTEN: '0.0.0.0:4502'
+#     spawn process.env.APL_EXECUTABLE or 'apl', ['+s'], env: extend process.env, RIDE_LISTEN: '0.0.0.0:4502'
     class FakeSocket
       emit: (e, a...) -> @other.onevent e: e, data: a
       onevent: ({e, data}) -> (for f in @[e] or [] then f data...); return
       on: (e, f) -> (@[e] ?= []).push f; return
     socket = new FakeSocket; socket1 = new FakeSocket; socket.other = socket1; socket1.other = socket
     server = require './server'
-    setTimeout (-> server.serve socket: socket1, 'host:port': '127.0.0.1:4502'), 3000 # give the interpreter some time to start
+#     setTimeout (-> server.serve socket: socket1), 3000 # give the interpreter some time to start
+    hostPort = prompt 'Connect to:', localStorage?.hostPort or '127.0.0.1:4502'
+    if !hostPort then return close()
+    localStorage?.hostPort = hostPort
+    server.serve socket: socket1, 'host:port': hostPort
   else
     socket = io()
 
