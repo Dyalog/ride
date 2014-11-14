@@ -1,3 +1,3 @@
 #!/bin/bash
 set -e
-rm -rf cache static dist
+rm -rf build

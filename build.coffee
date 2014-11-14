@@ -44,16 +44,16 @@ module.exports = ->
 
   log = (s) -> console.info s
 
-  sh 'mkdir -p cache static'
+  sh 'mkdir -p build/cache build/static'
 
   html = fs.readFileSync('index.html', 'utf8')
     .replace(/<!--\s*include\s+(\S+)\s*-->/g, (_, f) -> fs.readFileSync f, 'utf8')
     .replace /<!--\s*css\s*-->/g, -> cleanCSS.minify cssFiles.map((f) -> fs.readFileSync f, 'utf8').join '\n'
-  fs.writeFileSync 'static/index.html', html
+  fs.writeFileSync 'build/static/index.html', html
 
   js = ''
   for f in jsFiles
-    f1 = "cache/#{f.replace /\//g, '_'}.uglified"
+    f1 = "build/cache/#{f.replace /\//g, '_'}.uglified"
     if !fs.existsSync(f1) || fs.statSync(f).mtime > fs.statSync(f1).mtime
       ib = fs.readFileSync f # input buffer
       sizes = [ib.length]
@@ -71,8 +71,8 @@ module.exports = ->
     else
       s = fs.readFileSync f1, 'utf8'
     js += s + '\n'
-  fs.writeFileSync 'static/D.js', js
+  fs.writeFileSync 'build/static/D.js', js
 
-  sh 'cp -uvr style/apl385.* favicon.ico docs/help docs/help.css docs/help.js package.json static/'
+  sh 'cp -uvr style/apl385.* favicon.ico docs/help docs/help.css docs/help.js package.json build/static/'
 
 if require.main == module then module.exports()

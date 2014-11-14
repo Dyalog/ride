@@ -142,7 +142,7 @@ getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exe
     app.disable 'x-powered-by'
     app.use (req, res, next) -> log req.method + ' ' + req.path; next()
     app.use do require 'compression'
-    app.use '/', express.static 'static'
+    app.use '/', express.static 'build/static'
     if opts.insecure
       server = require('http').createServer(app).listen (httpPort = 8000),
         -> log "http server listening on :#{httpPort}"
