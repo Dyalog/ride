@@ -3,7 +3,7 @@ set -e
 coffee=node_modules/coffee-script/bin/coffee
 node_version=0.10.5
 
-$coffee ./build.coffee
+./build.sh
 
 if [ server.coffee -nt build/static/server.js ]; then
   echo 'compiling server.coffee'

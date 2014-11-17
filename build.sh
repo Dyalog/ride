@@ -2,6 +2,7 @@
 set -e
 coffee=node_modules/coffee-script/bin/coffee
 uglifyjs=node_modules/uglify-js/bin/uglifyjs
+cleancss=node_modules/clean-css/bin/cleancss
 
 js_files='
   node_modules/socket.io/node_modules/socket.io-client/socket.io.js
@@ -32,18 +33,20 @@ js_files='
   server.coffee
 '
 
+mkdir -p build/{static,tmp}
 
-mkdir -p build/cache build/static build/tmp
-
-$coffee -s <<.
-  fs = require 'fs'
-  cleanCSS = new (require 'clean-css')
-  cssFiles = ['node_modules/codemirror/lib/codemirror.css', 'style/style.css']
-  html = fs.readFileSync('index.html', 'utf8')
-    .replace(/<!--\s*include\s+(\S+)\s*-->/g, (_, f) -> fs.readFileSync f, 'utf8')
-    .replace /<!--\s*css\s*-->/g, -> cleanCSS.minify cssFiles.map((f) -> fs.readFileSync f, 'utf8').join '\n'
-  fs.writeFileSync 'build/static/index.html', html
-.
+css_files='node_modules/codemirror/lib/codemirror.css style/style.css'
+css_combined=build/tmp/D.css
+for f in $css_files; do if [ $f -nt $css_combined ]; then $cleancss -o $css_combined $css_files; break; fi done
+h=build/static/index.html
+if [ index.html -nt $h -o $css_combined -nt $h -o lbar/lbar.html -nt $h ]; then
+  echo 'rendering index.html'
+  <index.html >build/static/index.html \
+    sed -e '/<!--css-->/{r build/tmp/D.css
+                         d}' \
+        -e '/<!--lbar-->/{r lbar/lbar.html
+                         d}'
+fi
 
 us='' # names of uglified files
 changed=0
@@ -52,9 +55,9 @@ for f in $js_files; do
   us="$us $u"
   if [ $f -nt $u ]; then
     changed=1
-    if [ $f != ${f%%.coffee} ]; then echo "compiling and uglifying $f"; $coffee -bcp $f | $uglifyjs -m >$u
+    if [ $f != ${f%%.coffee} ]; then echo "compiling and uglifying $f"; $coffee -bcp $f | $uglifyjs >$u
     elif [ $f != ${f%%.min.js} ]; then echo "copying $f"; cp $f $u
-    else echo "uglifying $f"; echo $uglifyjs -m $f >$u; fi
+    else echo "uglifying $f"; <$f sed '/^\(var \w\+ = \)\?require(/d' | $uglifyjs >$u; fi
   fi
 done
 if [ $changed -ne 0 ]; then echo 'concatenating uglified files'; cat $us >build/static/D.js; fi

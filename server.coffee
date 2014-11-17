@@ -152,7 +152,7 @@ getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exe
         -> log "https server listening on :#{httpsPort}"
     require('socket.io').listen(server).on 'connection', handleSocket
 
-if require.main == module
+if module? and require.main == module
   if fs.existsSync 'build.coffee'
     # we are running on a developer box, invoke the build script first
     require 'coffee-script/register'
