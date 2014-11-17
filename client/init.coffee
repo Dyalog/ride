@@ -10,7 +10,7 @@ do ->
     socket = new FakeSocket; socket1 = new FakeSocket; socket.other = socket1; socket1.other = socket
     server = require './server'
 #     setTimeout (-> server.serve socket: socket1), 3000 # give the interpreter some time to start
-    hostPort = prompt 'Connect to:', localStorage?.hostPort or '127.0.0.1:4502'
+    hostPort = require('nw.gui').App?.argv?[0] or prompt 'Connect to:', localStorage?.hostPort or '127.0.0.1:4502'
     if !hostPort then return close()
     localStorage?.hostPort = hostPort
     server.serve socket: socket1, 'host:port': hostPort
