@@ -19,7 +19,6 @@ contextual help for items in completion menus
 highlight non-local names in a different colour
 virtual whitespace after eol and eof (?)
 experiment with storing all help content in browser memory
-when the interpreter dies, the session should remain visible and copyable
 when connecting, wait for interpreter to start
 listen for connections from the interpreter
 control font size in nw

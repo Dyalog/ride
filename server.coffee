@@ -28,12 +28,13 @@ getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exe
   client = require('net').connect {host, port}, -> log 'interpreter connected'
 
   toInterpreter = (s) ->
-    log 'to interpreter: ' + JSON.stringify(s)[..1000]
-    console.assert /[\x01-\x7f]*/.test s
-    b = Buffer s.length + 8
-    b.writeInt32BE b.length, 0
-    b.write 'RIDE' + s, 4
-    client.write b
+    if client
+      log 'to interpreter: ' + JSON.stringify(s)[..1000]
+      console.assert /[\x01-\x7f]*/.test s
+      b = Buffer s.length + 8
+      b.writeInt32BE b.length, 0
+      b.write 'RIDE' + s, 4
+      client.write b
 
   toInterpreter 'SupportedProtocols=1'
   toInterpreter 'UsingProtocol=1'
@@ -129,7 +130,7 @@ getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exe
     cmd 'Connect', '<Token />'
     cmd 'GetWindowLayout', ''
 
-    client.on 'end', -> log 'interpreter disconnected'; socket.emit 'end'; rm sockets, socket; return
+    client.on 'end', -> log 'interpreter disconnected'; socket.emit 'end'; rm sockets, socket; client = null
     socket.on 'disconnect', -> log 'browser disconnected'; rm sockets, socket; return
 
   if opts.socket
