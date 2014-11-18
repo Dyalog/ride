@@ -23,3 +23,10 @@ when the interpreter dies, the session should remain visible and copyable
 when connecting, wait for interpreter to start
 listen for connections from the interpreter
 control font size in nw
+revert line in session should move cursor to next line
+detect the presence of a popup blocker
+interrupts
+status window and notification about number of messages
+display a "mailto:" link when a SysError happens
+"updateWsid" message will be changed
+re-take screenshot
