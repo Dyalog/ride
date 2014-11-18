@@ -29,5 +29,5 @@
 		"min_height": 200
 	},
 	"webkit": {"plugin": true},
-       	"single-instance": false
+	"single-instance": false
 }

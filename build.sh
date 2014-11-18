@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+npm install
 coffee=node_modules/coffee-script/bin/coffee
 uglifyjs=node_modules/uglify-js/bin/uglifyjs
 cleancss=node_modules/clean-css/bin/cleancss
