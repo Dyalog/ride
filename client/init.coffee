@@ -27,6 +27,12 @@ do ->
   timeout = (delay, f) -> setTimeout f, delay
 
   jQuery ($) ->
+    $('body').append '''
+      <div id="session"  class="ui-layout-center"></div>
+      <div id="editor"   class="ui-layout-east" style="display: none"></div>
+      <div id="debugger" class="ui-layout-south" style="display: none"></div>
+    '''
+
     winInfos = {}
     editorWin = null
     debuggerWin = null
