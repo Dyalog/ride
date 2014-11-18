@@ -1,3 +1,3 @@
 #!/bin/bash
 set -e
-rm -rf build
+if [ -e build ]; then echo 'deleting build directory'; rm -rf build; fi
