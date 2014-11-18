@@ -28,5 +28,6 @@
 		"min_width": 400,
 		"min_height": 200
 	},
-	"webkit": {"plugin": true}
+	"webkit": {"plugin": true},
+       	"single-instance": false
 }
