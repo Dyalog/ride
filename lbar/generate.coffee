@@ -1,5 +1,5 @@
 #!/usr/bin/env coffee
-# This script generates lbar.html and lbar.js from lbar.xml
+# This script generates lbar.js from lbar.xml
 
 fs = require 'fs'
 s = fs.readFileSync "#{__dirname}/lbar.xml", 'utf8'
@@ -27,5 +27,8 @@ for line, i in s.split '\n'
       lbarTips[chr] = [desc, text]
   else if line
     throw Error "error at line #{i + 1}: #{JSON.stringify line}"
-fs.writeFileSync "#{__dirname}/lbar.html", lbarHTML
-fs.writeFileSync "#{__dirname}/lbar.js", "var Dyalog = Dyalog || {}; Dyalog.lbarTips = #{JSON.stringify lbarTips};\n"
+fs.writeFileSync "#{__dirname}/lbar.js", """
+  var Dyalog = Dyalog || {};
+  Dyalog.lbarTips = #{JSON.stringify lbarTips};
+  Dyalog.lbarHTML = #{JSON.stringify lbarHTML};
+"""

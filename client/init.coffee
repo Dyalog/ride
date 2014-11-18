@@ -108,17 +108,15 @@ do ->
 
     socket.on 'end', -> alert 'Interpreter disconnected'
 
-    layout = $('body').layout
-      defaults: enableCursorHotkey: 0
-      north: resizable: 0, togglerLength_closed: '100%', togglerTip_closed: 'Show Language Bar', spacing_open: 0
-      east:  spacing_closed: 0, size: '0%', resizable: 1, togglerLength_open: 0
-      south: spacing_closed: 0, size: '0%', resizable: 1, togglerLength_open: 0
-      center: onresize: -> (for x in [session, ed, db] then x.updateSize()); session.scrollCursorIntoView(); return
-    layout.close 'east';  layout.sizePane 'east', '50%'
-    layout.close 'south'; layout.sizePane 'south', '50%'
-    session.updateSize()
-
     # language bar
+    $('body').prepend """
+      <div id="lbar" class="ui-layout-north" style="display:none">
+        <a id="lbar-close" title="Hide Language Bar" href="#"></a>
+        #{Dyalog.lbarHTML}
+      </div>
+      <div id="tip" style="display:none"><div id="tip-desc"></div><pre id="tip-text"></pre></div>
+      <div id="tip-triangle" style="display:none"></div>
+    """
     timeout 2000, ->
       $('#lbar').on 'mousedown', -> false
       $('b', '#lbar').on 'mousedown', (e) -> for x in [session, ed] when x.hasFocus() then x.insert $(e.target).text(); false
@@ -144,3 +142,13 @@ do ->
             else
               $tip.css(left: Math.max(0, x0), right: '', top: y0).show()
           return
+
+    layout = $('body').layout
+      defaults: enableCursorHotkey: 0
+      north: resizable: 0, togglerLength_closed: '100%', togglerTip_closed: 'Show Language Bar', spacing_open: 0
+      east:  spacing_closed: 0, size: '0%', resizable: 1, togglerLength_open: 0
+      south: spacing_closed: 0, size: '0%', resizable: 1, togglerLength_open: 0
+      center: onresize: -> (for x in [session, ed, db] then x.updateSize()); session.scrollCursorIntoView(); return
+    layout.close 'east';  layout.sizePane 'east', '50%'
+    layout.close 'south'; layout.sizePane 'south', '50%'
+    session.updateSize()

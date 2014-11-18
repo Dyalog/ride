@@ -40,12 +40,10 @@ css_files='node_modules/codemirror/lib/codemirror.css style/style.css'
 css_combined=build/tmp/D.css
 for f in $css_files; do if [ $f -nt $css_combined ]; then $cleancss -o $css_combined $css_files; break; fi done
 h=build/static/index.html
-if [ index.html -nt $h -o $css_combined -nt $h -o lbar/lbar.html -nt $h ]; then
+if [ index.html -nt $h -o $css_combined -nt $h ]; then
   echo 'rendering index.html'
   <index.html >build/static/index.html \
     sed -e '/<!--css-->/{r build/tmp/D.css
-                         d}' \
-        -e '/<!--lbar-->/{r lbar/lbar.html
                          d}'
 fi
 
