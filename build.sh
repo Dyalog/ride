@@ -3,7 +3,6 @@ set -e
 npm install
 coffee=node_modules/coffee-script/bin/coffee
 uglifyjs=node_modules/uglify-js/bin/uglifyjs
-cleancss=node_modules/clean-css/bin/cleancss
 
 js_files='
   node_modules/socket.io/node_modules/socket.io-client/socket.io.js
@@ -38,7 +37,7 @@ mkdir -p build/{static,tmp}
 
 css_files='node_modules/codemirror/lib/codemirror.css style/style.css'
 css_combined=build/tmp/D.css
-for f in $css_files; do if [ $f -nt $css_combined ]; then $cleancss -o $css_combined $css_files; break; fi done
+for f in $css_files; do if [ $f -nt $css_combined ]; then cat $css_files >$css_combined; break; fi done
 h=build/static/index.html
 if [ index.html -nt $h -o $css_combined -nt $h ]; then
   echo 'rendering index.html'

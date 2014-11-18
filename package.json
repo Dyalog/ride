@@ -4,7 +4,6 @@
 	"main": "index.html",
 	"repository": ".",
 	"dependencies": {
-		"clean-css"          : "2.2.17",
 		"codemirror"         : "4.7.0",
 		"coffee-script"      : "1.8.0",
 		"compression"        : "1.2.0",
@@ -20,7 +19,7 @@
 	"window": {
 		"title": "Dyalog",
 		"icon": "favicon.ico",
-		"toolbar": false,
+		"toolbar": true,
 		"frame": true,
 		"width": 800,
 		"height": 500,
