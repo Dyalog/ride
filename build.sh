@@ -59,13 +59,10 @@ js_files='
   node_modules/jquery-ui/effect-slide.js
   jquery.layout.js
   build/tmp/lbar.js
-  client/keymap.coffee
-  client/session.coffee
-  client/editor.coffee
-  client/init.coffee
   docs/help-urls.coffee
   server.coffee
 '
+js_files+=' '$(echo client/*.coffee)
 us='' # names of uglified files
 changed=0
 for f in $js_files; do
