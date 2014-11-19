@@ -1,5 +1,4 @@
 #!/usr/bin/env node_modules/coffee-script/bin/coffee
-fs = require 'fs'
 
 DEFAULT_HOST_PORT = '127.0.0.1:4502'
 
@@ -148,12 +147,14 @@ getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exe
       server = require('http').createServer(app).listen (httpPort = 8000), (if opts.ipv6 then '::' else '0.0.0.0'),
         -> log "http server listening on :#{httpPort}"
     else
+      fs = require 'fs'
       httpsOptions = cert: fs.readFileSync(opts.cert), key: fs.readFileSync(opts.key)
       server = require('https').createServer(httpsOptions, app).listen (httpsPort = 8443), (if opts.ipv6 then '::' else '0.0.0.0'),
         -> log "https server listening on :#{httpsPort}"
     require('socket.io').listen(server).on 'connection', handleSocket
 
-if module? and require.main == module
+if module? and require.main == module then do =>
+  fs = require 'fs'
   if fs.existsSync 'build.coffee'
     # we are running on a developer box, invoke the build script first
     require 'coffee-script/register'
