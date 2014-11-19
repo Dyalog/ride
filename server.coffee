@@ -145,11 +145,11 @@ getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exe
     app.use do require 'compression'
     app.use '/', express.static 'build/static'
     if opts.insecure
-      server = require('http').createServer(app).listen (httpPort = 8000),
+      server = require('http').createServer(app).listen (httpPort = 8000), (if opts.ipv6 then '::' else '0.0.0.0'),
         -> log "http server listening on :#{httpPort}"
     else
       httpsOptions = cert: fs.readFileSync(opts.cert), key: fs.readFileSync(opts.key)
-      server = require('https').createServer(httpsOptions, app).listen (httpsPort = 8443),
+      server = require('https').createServer(httpsOptions, app).listen (httpsPort = 8443), (if opts.ipv6 then '::' else '0.0.0.0'),
         -> log "https server listening on :#{httpsPort}"
     require('socket.io').listen(server).on 'connection', handleSocket
 
@@ -165,4 +165,5 @@ if module? and require.main == module
     cert: help: 'PEM-encoded certificate file for https', default: 'ssl/cert.pem'
     key: help: 'PEM-encoded private key file for https', default: 'ssl/key.pem'
     insecure: flag: true, help: 'use http (on port 8000) instead of https (on port 8443)'
+    ipv6: abbr: '6', flag: true, help: 'use IPv6'
   ).parse()
