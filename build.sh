@@ -4,6 +4,40 @@ npm install
 coffee=node_modules/coffee-script/bin/coffee
 uglifyjs=node_modules/uglify-js/bin/uglifyjs
 
+mkdir -p build/{static,tmp}
+
+if [ lbar.xml -nt build/tmp/lbar.js ]; then
+  echo 'preprocessing language bar'
+  $coffee -s >build/tmp/lbar.js_ <<.
+    b64d = (s) -> Buffer(s, 'base64').toString()
+    stripTag = (s) -> s.replace /^.*<\w+>([^<]*)<\/\w+>.*$/, '\$1'
+    esc = (s) -> s.replace /./g, (x) -> {'&': '&amp;', '<': '&lt;', '>': '&gt;'}[x] or x
+    lbarHTML = ''; lbarTips = {}
+    for line, i in require('fs').readFileSync('lbar.xml', 'utf8').split '\n'
+      if line == '<LanguageBarElement>' then chr = desc = text = ''
+      else if /<chr>/.test line then chr = String.fromCharCode stripTag line
+      else if /<desc>/.test line then desc = b64d stripTag line
+      else if /<text>/.test line then text = b64d stripTag line
+      else if line == '</LanguageBarElement>'
+        if chr == '\0' then lbarHTML += ' '
+        else lbarHTML += "<b>#{esc chr}</b>"; lbarTips[chr] = [desc, text]
+      else if line then throw Error "error at line #{i + 1}: #{JSON.stringify line}"
+    process.stdout.write "var Dyalog=Dyalog||{};Dyalog.lbarTips=#{JSON.stringify lbarTips};Dyalog.lbarHTML=#{JSON.stringify lbarHTML};"
+.
+  mv build/tmp/lbar.js_ build/tmp/lbar.js
+fi
+
+css_files='node_modules/codemirror/lib/codemirror.css style/style.css'
+css_combined=build/tmp/D.css
+for f in $css_files; do if [ $f -nt $css_combined ]; then cat $css_files >$css_combined; break; fi done
+h=build/static/index.html
+if [ index.html -nt $h -o $css_combined -nt $h ]; then
+  echo 'rendering index.html'
+  <index.html >build/static/index.html \
+    sed -e '/<!--css-->/{r build/tmp/D.css
+                         d}'
+fi
+
 js_files='
   node_modules/socket.io/node_modules/socket.io-client/socket.io.js
   node_modules/jquery/dist/cdn/jquery-2.1.1.min.js
@@ -24,7 +58,7 @@ js_files='
   node_modules/jquery-ui/effect.js
   node_modules/jquery-ui/effect-slide.js
   jquery.layout.js
-  lbar/lbar.js
+  build/tmp/lbar.js
   client/keymap.coffee
   client/session.coffee
   client/editor.coffee
@@ -32,20 +66,6 @@ js_files='
   docs/help-urls.coffee
   server.coffee
 '
-
-mkdir -p build/{static,tmp}
-
-css_files='node_modules/codemirror/lib/codemirror.css style/style.css'
-css_combined=build/tmp/D.css
-for f in $css_files; do if [ $f -nt $css_combined ]; then cat $css_files >$css_combined; break; fi done
-h=build/static/index.html
-if [ index.html -nt $h -o $css_combined -nt $h ]; then
-  echo 'rendering index.html'
-  <index.html >build/static/index.html \
-    sed -e '/<!--css-->/{r build/tmp/D.css
-                         d}'
-fi
-
 us='' # names of uglified files
 changed=0
 for f in $js_files; do
