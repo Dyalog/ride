@@ -53,6 +53,7 @@ js_files='
   node_modules/jquery-ui/draggable.js
   node_modules/jquery-ui/droppable.js
   node_modules/jquery-ui/resizable.js
+  node_modules/jquery-ui/sortable.js
   node_modules/jquery-ui/button.js
   node_modules/jquery-ui/dialog.js
   node_modules/jquery-ui/effect.js
