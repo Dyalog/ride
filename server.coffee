@@ -155,11 +155,12 @@ getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exe
 
 if module? and require.main == module then do =>
   fs = require 'fs'
-  if fs.existsSync 'build.coffee'
+  if fs.existsSync 'build.sh'
     # we are running on a developer box, invoke the build script first
     require 'coffee-script/register'
-    do build = -> console.info 'building...'; require './build'; console.info 'build done'
-    'client/editor.coffee client/init.coffee client/keymap.coffee client/session.coffee style/style.css style/apl385.ttf index.html'
+    execSync = require 'exec-sync'
+    do build = -> console.info 'building...'; execSync './build.sh'; console.info 'build done'
+    'client/editor.coffee client/init.coffee client/keymap.coffee client/session.coffee client/welcome.coffee style/style.css style/apl385.ttf index.html'
       .split(' ').forEach (f) -> fs.watch f, build
   @serve require('nomnom').options(
     'host:port': position: 0, help: 'interpreter to connect to, default: ' + DEFAULT_HOST_PORT
