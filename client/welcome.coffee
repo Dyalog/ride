@@ -21,8 +21,10 @@ jQuery ($) =>
         localStorage.favs = JSON.stringify getFavs().concat([x]); renderFavs()
       connect x
     .on 'click', '.connect-add', -> $('.connect-name').closest('label').focus().toggle $(@).is ':checked'
-    .on 'mouseover', '.fav', -> $(@).addClass 'fav-hover'
-    .on 'mouseout', '.fav', -> $(@).removeClass 'fav-hover'
+    .on 'mouseover', '.fav', -> $(@).addClass    'fav-hover'
+    .on 'mouseout',  '.fav', -> $(@).removeClass 'fav-hover'
+    .on 'mousedown', '.fav-addr', -> $(@).closest('.fav').addClass    'fav-active'
+    .on 'mouseup',   '.fav-addr', -> $(@).closest('.fav').removeClass 'fav-active'
   getFavs = -> try JSON.parse localStorage.favs catch then []
   fmtFav = (x) ->
     s = if !x.port? || x.port == DEFAULT_PORT then x.host else if x.host.indexOf(':') < 0 then "#{x.host}:#{x.port}" else "[#{x.host}]:#{x.port}"
@@ -40,6 +42,7 @@ jQuery ($) =>
     x
 
   Dyalog.welcomePage = ->
+    $('title').html 'Dyalog IDE'
     $('body').html """
       <h1 class="dyalog-logo">Dyalog</h1>
       <fieldset>
@@ -55,11 +58,16 @@ jQuery ($) =>
         </div>
       </fieldset>
       <fieldset>
+        <legend>Spawn an interpreter</legend>
+        <p class="spawn-status">
+        <p><label>Port <input class="spawn-port" value="#{DEFAULT_PORT}" size="5"></label> <input class="spawn" type="button" value="Spawn">
+      </fieldset>
+      <fieldset>
         <legend>Listen for connections from interpreter</legend>
         <p><label>Port <input class="listen-port" value="#{DEFAULT_PORT}" size="5"></label> <input class="listen" type="button" value="Listen">
       </fieldset>
     """
     renderFavs()
-    $('.favs').sortable cursor: 'move', revert: true, tolerance: 'pointer', update: saveFavs
+    $('.favs').sortable cursor: 'move', revert: true, tolerance: 'pointer', cancel: '.fav-del', update: saveFavs
     $('.connect-host').focus()
   return
