@@ -1,7 +1,7 @@
 jQuery ($) =>
   connect = (s) -> alert 'connecting to ' + s
   $('body')
-    .on 'keydown', (e) -> if e.which == 113 then welcomePage() # F2
+    .on 'keydown', (e) -> if e.which == 113 then Dyalog.welcomePage() # F2
     .on 'keydown', '.hostPort', (e) -> if e.which == 13 then $('.connect').click()
     .on 'keydown', '.port', (e) -> if e.which == 13 then $('.listen').click()
     .on 'click', '.listen', -> alert 'listen'
@@ -20,7 +20,7 @@ jQuery ($) =>
       (s) -> "<span class='fav'><a class='fav-addr' href='#'>#{s}</a><a class='fav-del' href='#'>×</a></span>"
     ).join ''
   saveFavs = -> localStorage.favs = $('.favs .fav-addr').map(-> $(@).text()).toArray().join ' '
-  @welcomePage = ->
+  Dyalog.welcomePage = ->
     $('body').html '''
       <h1>Dyalog</h1>
       <fieldset>
