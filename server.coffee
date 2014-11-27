@@ -159,7 +159,8 @@ if module? and require.main == module then do =>
     # we are running on a developer box, invoke the build script first
     require 'coffee-script/register'
     execSync = require 'exec-sync'
-    do build = -> console.info 'building...'; execSync './build.sh'; console.info 'build done'
+    throttle = (f) -> tid = null; -> if !tid? then tid = setTimeout (-> f(); tid = null), 200
+    do build = throttle -> console.info 'building...'; execSync './build.sh'; console.info 'build done'
     'client/editor.coffee client/init.coffee client/keymap.coffee client/session.coffee client/welcome.coffee style/style.css style/apl385.ttf index.html'
       .split(' ').forEach (f) -> fs.watch f, build
   @serve require('nomnom').options(
