@@ -141,9 +141,9 @@ body { padding: 0; margin: 0; }
 .fav-del {
 	display: none;
 	float: right;
-	width: 20px;
-	height: 20px;
-	margin-right: -22px;
+	width: 18px;
+	height: 18px;
+	margin-right: -20px;
 	margin-top: -10px;
 	border-radius: 10px;
 	background-color: #92598c;
@@ -157,7 +157,7 @@ body { padding: 0; margin: 0; }
 .fav-hover.ui-sortable-helper .fav-del { display: none; }
 .fav-hover .fav-del:hover { color: #fff; font-weight: bold; }
 .fav-hover .fav-del:active { border-color: #81487b #a36a9d #a36a9d #81487b; background-color: #81487b; }
-.connect-host, .connect-port, .listen-port, .favs { font-family: apl, monospace; }
+.connect-host, .connect-port, .listen-port, .spawn-port, .favs { font-family: apl, monospace; }
 .connect-error { color: red; }
 .dyalog-logo {
 	background: #fc9732 16px center no-repeat url(dyaloglogo.png);

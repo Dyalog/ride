@@ -4,7 +4,7 @@ jQuery ($) =>
   localStorage.favs ?= JSON.stringify [host: '127.0.0.1', port: DEFAULT_PORT]
   $('body')
     .on 'keydown', (e) -> if e.which == 113 then Dyalog.welcomePage() # F2
-    .on 'keydown', '.connect-host, .connect-port', (e) -> if e.which == 13 then $('.connect').click()
+    .on 'keydown', '.connect-host, .connect-port, .connect-name', (e) -> if e.which == 13 then $('.connect').click()
     .on 'keydown', '.listen-port', (e) -> if e.which == 13 then $('.listen').click()
     .on 'click', '.listen', -> alert 'listen'
     .on 'click', '.fav-addr', -> connect $(@).text()
@@ -15,10 +15,12 @@ jQuery ($) =>
       if !x.host then return
       if !/^[a-z0-9\.\-:]+$/i.test x.host then $('.connect-error').html 'Invalid host'; $('.connect-host').focus(); return
       if !/^\d{1,5}$/.test(x.port) || +x.port > 0xffff then $('.connect-error').html 'Invalid port'; $('.connect-port').focus(); return
+      x.port = +x.port
       if x.port == DEFAULT_PORT then delete x.port
       if !x.name then delete x.name
       if $('.connect-add').is(':checked') && getFavs().map(fmtFav).indexOf(fmtFav x) < 0
         localStorage.favs = JSON.stringify getFavs().concat([x]); renderFavs()
+      $('.connect-name').val ''
       connect x
     .on 'click', '.connect-add', -> $('.connect-name').closest('label').focus().toggle $(@).is ':checked'
     .on 'mouseover', '.fav', -> $(@).addClass    'fav-hover'
@@ -27,6 +29,7 @@ jQuery ($) =>
     .on 'mouseup',   '.fav-addr', -> $(@).closest('.fav').removeClass 'fav-active'
   getFavs = -> try JSON.parse localStorage.favs catch then []
   fmtFav = (x) ->
+    console.info 'fmtFav', x
     s = if !x.port? || x.port == DEFAULT_PORT then x.host else if x.host.indexOf(':') < 0 then "#{x.host}:#{x.port}" else "[#{x.host}]:#{x.port}"
     if x.name then "#{x.name} (#{s})" else s
   renderFavs = ->
@@ -37,7 +40,9 @@ jQuery ($) =>
   parseFav = window.parseFav = (s) ->
     x = {}
     if m = /^(.*) \((.*)\)$/.exec s then [_, x.name, s] = m
-    if m = /^\[(.*)\]:(.*)$/.exec s then [_, x.host, x.port] = m else [x.host, x.port] = s.split ':'
+    if m = /^\[(.*)\]:(.*)$/.exec s then [_, x.host, x.port] = m # IPv6 [host]:port
+    else if /:.*:/.test s then x.host = s # IPv6 host without port
+    else [x.host, x.port] = s.split ':' # IPv4 host:port or just host
     x.port = +(x.port or DEFAULT_PORT)
     x
 
