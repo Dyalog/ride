@@ -78,4 +78,4 @@ for f in $js_files; do
 done
 if [ $changed -ne 0 ]; then echo 'concatenating uglified files'; cat $us >build/static/D.js; fi
 
-cp -ur style/apl385.* favicon.ico docs/help docs/help.css docs/help.js package.json build/static/
+cp -ur style/apl385.* style/*.png favicon.ico docs/help docs/help.css docs/help.js package.json build/static/

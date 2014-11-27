@@ -128,13 +128,13 @@ body { padding: 0; margin: 0; }
 	line-height: 20px;
 	margin: 0 8px 8px 0;
 	padding: 2px 12px 2px 28px;
-	border: solid orange 1px;
+	border: solid #fc9732 1px;
 	border-radius: 8px;
-	background: #fd0 6px center no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAAG7AAABuwBHnU4NQAAAAd0SU1FB9kCFgwbOQl+BpIAAAKZSURBVHjajZJLSJRRGIbf7///cRwdmxyLlNTS8VZgUEZEUEhSiJIFSYugRbQocBG1lahlRaBSEdhCKcFwUQa66YaCJCmmWcKgYxfHJvMyM83MP5f/ck4nhcgrPfBwOIv3Ox+HFxsx0VZeMtF2ZDc2QMI6jDbl59kz8wbtWQUDH5tcLqyDgnWwpqU1O8vq7UQSQlPvmwFU4H8ZbXDV/Oy/yTkzFp19d4ePNrpqsQaEfxi4npVidTiqU3N3PdhReS9DSkoFBEyPwfvmaiDhn65Tv3zu2n/je/jvgNGHZ1zqj8G6ZEdGRWpmUWlabhmllxyHkrJ56YeIA4xgqEEEJ14h/G2YqzNudzw491pTjUbqb6juzCk9cNJZcAxkSYZkVUBJMmAhkMwBcHAmAYY4NSY0wDQNoekBeHo7nsmndka8gYW5c1muUpkkEyB9SZ4QaoApNBLgelxcY2CJiPAXhrtbjfDU+EW5fSjirczUfPO+yZrs4nwAujC+NMAUITMmwlERVkUwBBbzo7+jBbNjI5dqW2c6ZQiejqnD5fZIEqfA4a3Z6SBSAQh5BGAiqM3CCH2CNtOHD91P4Onz3D7/fP7Wsh5sL8C16Iz7SmKO2ZQ0CZKNgywGwMWrely8zMRCDJqqGcWFUj1erGhi1d0FBm4ypk2JwwtIPkjJ85DtuvDPQGESQSLw8vvzxqoqtx1ykCCFCCAZkCwEOUWC2AayjRbvkAmKlSztlY7kVVU2rMypKCBuAowB7rdRjLwMc0Pj2HdiExXttQEmBxGgm8gG4Fk2gHPi8YSFjw/FyOeOfw0s6E3pTvmxqTA21OY/O9mtXM7Zk1oYjVhg6tDWrPKjqm1VRlxTHYx6T/f4sZKWo+kHGeNbLvQEu4AlfgO+8jzLe4vNcwAAAABJRU5ErkJggg==);
+	background: #fdb778 6px center no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAAG7AAABuwBHnU4NQAAAAd0SU1FB9kCFgwbOQl+BpIAAAKZSURBVHjajZJLSJRRGIbf7///cRwdmxyLlNTS8VZgUEZEUEhSiJIFSYugRbQocBG1lahlRaBSEdhCKcFwUQa66YaCJCmmWcKgYxfHJvMyM83MP5f/ck4nhcgrPfBwOIv3Ox+HFxsx0VZeMtF2ZDc2QMI6jDbl59kz8wbtWQUDH5tcLqyDgnWwpqU1O8vq7UQSQlPvmwFU4H8ZbXDV/Oy/yTkzFp19d4ePNrpqsQaEfxi4npVidTiqU3N3PdhReS9DSkoFBEyPwfvmaiDhn65Tv3zu2n/je/jvgNGHZ1zqj8G6ZEdGRWpmUWlabhmllxyHkrJ56YeIA4xgqEEEJ14h/G2YqzNudzw491pTjUbqb6juzCk9cNJZcAxkSYZkVUBJMmAhkMwBcHAmAYY4NSY0wDQNoekBeHo7nsmndka8gYW5c1muUpkkEyB9SZ4QaoApNBLgelxcY2CJiPAXhrtbjfDU+EW5fSjirczUfPO+yZrs4nwAujC+NMAUITMmwlERVkUwBBbzo7+jBbNjI5dqW2c6ZQiejqnD5fZIEqfA4a3Z6SBSAQh5BGAiqM3CCH2CNtOHD91P4Onz3D7/fP7Wsh5sL8C16Iz7SmKO2ZQ0CZKNgywGwMWrely8zMRCDJqqGcWFUj1erGhi1d0FBm4ypk2JwwtIPkjJ85DtuvDPQGESQSLw8vvzxqoqtx1ykCCFCCAZkCwEOUWC2AayjRbvkAmKlSztlY7kVVU2rMypKCBuAowB7rdRjLwMc0Pj2HdiExXttQEmBxGgm8gG4Fk2gHPi8YSFjw/FyOeOfw0s6E3pTvmxqTA21OY/O9mtXM7Zk1oYjVhg6tDWrPKjqm1VRlxTHYx6T/f4sZKWo+kHGeNbLvQEu4AlfgO+8jzLe4vNcwAAAABJRU5ErkJggg==);
 	white-space: nowrap;
 }
-.fav-addr { color: black; text-decoration: none; }
-.fav-addr:hover { text-decoration: underline; }
+.fav-addr { color: #034d72; text-decoration: none; }
+.fav-addr:hover { color: black; text-decoration: underline; }
 .fav-del {
 	display: none;
 	float: right;
@@ -143,7 +143,7 @@ body { padding: 0; margin: 0; }
 	margin-right: -20px;
 	margin-top: -10px;
 	border-radius: 10px;
-	background-color: #f88;
+	background-color: #92598c;
 	color: #eee;
 	text-align: center;
 	text-decoration: none;
@@ -153,3 +153,10 @@ body { padding: 0; margin: 0; }
 .fav-hover .fav-del:hover { background-color: #f00; color: #fff; font-weight: bold; }
 .connect-host, .connect-port, .listen-port, .favs { font-family: apl, monospace; }
 .connect-error { color: red; }
+.dyalog-logo {
+	background: #fc9732 16px center no-repeat url(dyaloglogo.png);
+	color: white;
+	text-indent: 10000px;
+	height: 80px;
+	margin: 0;
+}

@@ -41,7 +41,7 @@ jQuery ($) =>
 
   Dyalog.welcomePage = ->
     $('body').html """
-      <h1>Dyalog</h1>
+      <h1 class="dyalog-logo">Dyalog</h1>
       <fieldset>
         <legend>Connect to interpreter</legend>
         <div class="favs"></div>
