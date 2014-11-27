@@ -1,23 +1,30 @@
 jQuery ($) =>
   connect = (s) -> alert 'connecting to ' + s
   $('body')
+    .on 'keydown', (e) -> if e.which == 113 then welcomePage() # F2
     .on 'keydown', '.hostPort', (e) -> if e.which == 13 then $('.connect').click()
     .on 'keydown', '.port', (e) -> if e.which == 13 then $('.listen').click()
     .on 'click', '.listen', -> alert 'listen'
-    .on 'click', '.favs a', -> connect $(@).text()
+    .on 'click', '.fav-addr', -> connect $(@).text()
+    .on 'click', '.fav-del', -> $(@).closest('.fav').animate {width: 0, margin: 0, padding: 0}, -> $(@).remove(); saveFavs()
     .on 'click', '.connect', ->
       s = $('.hostPort').val()
-      if getFavs().indexOf(s) == -1 then localStorage.favs += ' ' + s; renderFavs()
+      if getFavs().indexOf(s) == -1 then localStorage.favs = getFavs().concat([s]).join ' '; renderFavs()
       connect s
-  getFavs = -> (localStorage.favs or= '127.0.0.1:4502').split ' '
-  renderFavs = -> $('.favs').html 'Favourites:' + getFavs().map((s) -> "<a href='#'>#{s}</a>").join ''
-  saveFavs = -> localStorage.favs = $('a', @).map(-> $(@).text()).toArray().join ' '
+    .on 'mouseover', '.fav', -> $(@).addClass 'fav-hover'
+    .on 'mouseout', '.fav', -> $(@).removeClass 'fav-hover'
+  localStorage.favs ?= '127.0.0.1:4502'
+  getFavs = -> if s = localStorage.favs then s.split ' ' else []
+  renderFavs = ->
+    $('.favs').html getFavs().map(
+      (s) -> "<span class='fav'><a class='fav-addr' href='#'>#{s}</a><a class='fav-del' href='#'>×</a></span>"
+    ).join ''
+  saveFavs = -> localStorage.favs = $('.favs .fav-addr').map(-> $(@).text()).toArray().join ' '
   @welcomePage = ->
     $('body').html '''
       <h1>Dyalog</h1>
       <fieldset>
         <legend>Connect to interpreter</legend>
-        <div class="cemetery" style="visibility:hidden">Drop here to delete</div>
         <p><label>Host:port <input class="hostPort" value=""></label> <input class="connect" type="button" value="Connect">
         <p class="favs">
       </fieldset>
@@ -25,16 +32,8 @@ jQuery ($) =>
         <legend>Listen for connections from interpreter</legend>
         <p><label>Port <input class="port" value="4502" size="5"></label> <input class="listen" type="button" value="Listen">
       </fieldset>
-      <style>
-      </style>
     '''
     renderFavs()
-    $('.favs').sortable connectWith: '.cemetery', cursor: 'move', update: saveFavs, remove: saveFavs
-    $('.cemetery').sortable
-      connectWith: '.favs'
-      activate: -> $(@).css visibility: ''
-      deactivate: -> $(@).css visibility: 'hidden'; $('a', @).remove()
-      over: -> $(@).addClass 'cemetery-hover'
-      out: -> $(@).removeClass 'cemetery-hover'
+    $('.favs').sortable cursor: 'move', revert: true, tolerance: 'pointer', update: saveFavs
     $('.hostPort').focus()
   return
