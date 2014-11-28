@@ -4,16 +4,16 @@
 	"main": "index.html",
 	"repository": ".",
 	"dependencies": {
-		"codemirror"         : "4.7.0",
+		"codemirror"         : "4.8.0",
 		"coffee-script"      : "1.8.0",
-		"compression"        : "1.2.0",
+		"compression"        : "1.2.1",
 		"exec-sync"          : "0.1.6",
-		"express"            : "4.10.2",
+		"express"            : "4.10.4",
 		"jquery"             : "2.1.1",
 		"jquery-ui"          : "1.10.5",
 		"node-webkit-builder": "0.3.0",
 		"nomnom"             : "1.8.1",
-		"socket.io"          : "1.2.0",
+		"socket.io"          : "1.2.1",
 		"uglify-js"          : "2.4.15"
 	},
 	"window": {
