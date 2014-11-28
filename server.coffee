@@ -1,6 +1,7 @@
 #!/usr/bin/env node_modules/coffee-script/bin/coffee
 
-DEFAULT_HOST_PORT = '127.0.0.1:4502'
+DEFAULT_HOST = '127.0.0.1'
+DEFAULT_PORT = 4502
 
 log = do ->
   N = 20; T = 1000 # log no more than N log messages per T milliseconds
@@ -16,13 +17,7 @@ b64 = (s) -> Buffer(s).toString 'base64'
 b64d = (s) -> '' + Buffer s, 'base64'
 getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exec xml)?[1]
 
-@serve = (opts = {}) ->
-  opts['host:port'] ?= DEFAULT_HOST_PORT
-  if addrMatch = /^\[([0-9a-f:]+)\]:(\d+)$/i.exec opts['host:port']
-    host = addrMatch[1]; port = addrMatch[2]
-  else
-    [host, port] = opts['host:port'].split ':'
-  port or= 4502
+Proxy = @Proxy = (host, port = DEFAULT_PORT) ->
   log "connecting to interpreter, host: #{host}, port: #{port}"
   client = require('net').connect {host, port}, -> log 'interpreter connected'
 
@@ -85,7 +80,7 @@ getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exe
           else log 'unrecognised'; toBrowser 'unrecognised', m
     return
 
-  handleSocket = (socket) ->
+  (socket) -> # this function is the result from calling Proxy()
     log 'browser connected'
     sockets.push socket
 
@@ -132,27 +127,6 @@ getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exe
     client.on 'end', -> log 'interpreter disconnected'; socket.emit 'end'; rm sockets, socket; client = null
     socket.on 'disconnect', -> log 'browser disconnected'; rm sockets, socket; return
 
-  if opts.socket
-    # we are called from a node-webkit front end
-    handleSocket opts.socket
-  else
-    # standalone http server
-    express = require 'express'
-    app = express()
-    app.disable 'x-powered-by'
-    app.use (req, res, next) -> log req.method + ' ' + req.path; next()
-    app.use do require 'compression'
-    app.use '/', express.static 'build/static'
-    if opts.insecure
-      server = require('http').createServer(app).listen (httpPort = 8000), (if opts.ipv6 then '::' else '0.0.0.0'),
-        -> log "http server listening on :#{httpPort}"
-    else
-      fs = require 'fs'
-      httpsOptions = cert: fs.readFileSync(opts.cert), key: fs.readFileSync(opts.key)
-      server = require('https').createServer(httpsOptions, app).listen (httpsPort = 8443), (if opts.ipv6 then '::' else '0.0.0.0'),
-        -> log "https server listening on :#{httpsPort}"
-    require('socket.io').listen(server).on 'connection', handleSocket
-
 if module? and require.main == module then do =>
   fs = require 'fs'
   if fs.existsSync 'build.sh'
@@ -163,10 +137,25 @@ if module? and require.main == module then do =>
     do build = throttle -> console.info 'building...'; execSync './build.sh'; console.info 'build done'
     'client/editor.coffee client/init.coffee client/keymap.coffee client/session.coffee client/welcome.coffee style/style.css style/apl385.ttf index.html'
       .split(' ').forEach (f) -> fs.watch f, build
-  @serve require('nomnom').options(
-    'host:port': position: 0, help: 'interpreter to connect to, default: ' + DEFAULT_HOST_PORT
+  opts = require('nomnom').options(
+    host: position: 0, help: "interpreter host to connect to, default: #{DEFAULT_HOST}"
+    port: position: 1, help: "interpreter port to connect to, default: #{DEFAULT_PORT}"
     cert: help: 'PEM-encoded certificate file for https', default: 'ssl/cert.pem'
-    key: help: 'PEM-encoded private key file for https', default: 'ssl/key.pem'
+    key:  help: 'PEM-encoded private key file for https', default: 'ssl/key.pem'
     insecure: flag: true, help: 'use http (on port 8000) instead of https (on port 8443)'
     ipv6: abbr: '6', flag: true, help: 'use IPv6'
   ).parse()
+  express = require 'express'
+  app = express()
+  app.disable 'x-powered-by'
+  app.use (req, res, next) -> log req.method + ' ' + req.path; next()
+  app.use do require 'compression'
+  app.use '/', express.static 'build/static'
+  if opts.insecure
+    server = require('http').createServer(app).listen (httpPort = 8000), (if opts.ipv6 then '::' else '0.0.0.0'),
+      -> log "http server listening on :#{httpPort}"
+  else
+    httpsOptions = cert: fs.readFileSync(opts.cert), key: fs.readFileSync(opts.key)
+    server = require('https').createServer(httpsOptions, app).listen (httpsPort = 8443), (if opts.ipv6 then '::' else '0.0.0.0'),
+      -> log "https server listening on :#{httpsPort}"
+  require('socket.io').listen(server).on 'connection', Proxy opts.host, opts.port
