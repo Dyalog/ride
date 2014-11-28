@@ -1,5 +1,6 @@
 jQuery ($) ->
-  Dyalog.idePage = (socket) ->
+  Dyalog.idePage = ->
+    {socket} = Dyalog
     $('body').html '''
       <div id="session"  class="ui-layout-center"></div>
       <div id="editor"   class="ui-layout-east" style="display: none"></div>

@@ -1,13 +1,17 @@
 jQuery ($) =>
   DEFAULT_PORT = 4502
-  connect = (x) -> console.info 'connecting to ', x
+  connect = (x) ->
+    console.info 'connect(', x, ')'
+    Dyalog.socket.emit 'connectToInterpreter', host: x.host, port: x.port
+    Dyalog.idePage()
+    return
   localStorage.favs ?= JSON.stringify [host: '127.0.0.1', port: DEFAULT_PORT]
   $('body')
     .on 'keydown', (e) -> if e.which == 113 then Dyalog.welcomePage() # F2
     .on 'keydown', '.connect-host, .connect-port, .connect-name', (e) -> if e.which == 13 then $('.connect').click()
     .on 'keydown', '.listen-port', (e) -> if e.which == 13 then $('.listen').click()
     .on 'click', '.listen', -> alert 'listen'
-    .on 'click', '.fav-addr', -> connect $(@).text()
+    .on 'click', '.fav-addr', -> connect parseFav $(@).text()
     .on 'click', '.fav-del', -> $(@).closest('.fav').animate {width: 0, margin: 0, padding: 0}, -> $(@).remove(); saveFavs()
     .on 'click', '.connect', ->
       x = host: $('.connect-host').val(), port: $('.connect-port').val(), name: $('.connect-name').val()
@@ -29,7 +33,6 @@ jQuery ($) =>
     .on 'mouseup',   '.fav-addr', -> $(@).closest('.fav').removeClass 'fav-active'
   getFavs = -> try JSON.parse localStorage.favs catch then []
   fmtFav = (x) ->
-    console.info 'fmtFav', x
     s = if !x.port? || x.port == DEFAULT_PORT then x.host else if x.host.indexOf(':') < 0 then "#{x.host}:#{x.port}" else "[#{x.host}]:#{x.port}"
     if x.name then "#{x.name} (#{s})" else s
   renderFavs = ->
@@ -58,7 +61,7 @@ jQuery ($) =>
           <input class="connect" type="button" value="Connect">
           <span class="connect-error"></span>
           <br>
-          <label><input type="checkbox" checked class="connect-add">Add to favourites<label>
+          <label><input type="checkbox" checked class="connect-add">Add to favourites</label>
           <label>as <input class="connect-name"></label>
         </div>
       </fieldset>

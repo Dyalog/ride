@@ -61,9 +61,14 @@ js_files='
   jquery.layout.js
   build/tmp/lbar.js
   docs/help-urls.coffee
-  server.coffee
+  proxy.coffee
+  client/keymap.coffee
+  client/editor.coffee
+  client/session.coffee
+  client/ide.coffee
+  client/welcome.coffee
+  client/init.coffee
 '
-js_files+=' '$(echo client/*.coffee)
 us='' # names of uglified files
 changed=0
 for f in $js_files; do

@@ -5,9 +5,9 @@ node_version=0.10.5
 
 ./build.sh
 
-if [ server.coffee -nt build/static/server.js ]; then
-  echo 'compiling server.coffee'
-  $coffee -o build/static/ -c server.coffee
+if [ proxy.coffee -nt build/static/proxy.js ]; then
+  echo 'compiling proxy.coffee'
+  $coffee -o build/static/ -c proxy.coffee
 fi
 
 desktop_app() {
