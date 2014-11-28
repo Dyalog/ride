@@ -1,8 +1,4 @@
 #!/usr/bin/env node_modules/coffee-script/bin/coffee
-
-DEFAULT_HOST = '127.0.0.1'
-DEFAULT_PORT = 4502
-
 fs = require 'fs'
 if fs.existsSync 'build.sh'
   # we are running on a developer box, invoke the build script first
@@ -14,10 +10,8 @@ if fs.existsSync 'build.sh'
     .split(' ').forEach (f) -> fs.watch f, build
 
 opts = require('nomnom').options(
-  host: position: 0, help: "interpreter host to connect to, default: #{DEFAULT_HOST}"
-  port: position: 1, help: "interpreter port to connect to, default: #{DEFAULT_PORT}"
-  cert: help: 'PEM-encoded certificate file for https', default: 'ssl/cert.pem'
-  key:  help: 'PEM-encoded private key file for https', default: 'ssl/key.pem'
+  cert: metavar: 'FILE', help: 'PEM-encoded certificate for https', default: 'ssl/cert.pem'
+  key:  metavar: 'FILE', help: 'PEM-encoded private key for https', default: 'ssl/key.pem'
   insecure: flag: true, help: 'use http (on port 8000) instead of https (on port 8443)'
   ipv6: abbr: '6', flag: true, help: 'use IPv6'
 ).parse()
@@ -35,4 +29,4 @@ else
   httpsOptions = cert: fs.readFileSync(opts.cert), key: fs.readFileSync(opts.key)
   server = require('https').createServer(httpsOptions, app).listen (httpsPort = 8443), (if opts.ipv6 then '::' else '0.0.0.0'),
     -> console.info "https server listening on :#{httpsPort}"
-require('socket.io').listen(server).on 'connection', require('./proxy').Proxy opts.host, opts.port
+require('socket.io').listen(server).on 'connection', require('./proxy').Proxy()
