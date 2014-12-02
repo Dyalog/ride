@@ -4,7 +4,9 @@ if [ `id -un` != nick -a "$1" != iknow ]; then echo "here be dragons; don't run 
 git stash && ./clean.sh && ./dist.sh && (git stash pop || true)
 if ! mountpoint /devt >/dev/null; then echo 'mounting devt' && sudo mount /devt; fi
 r=/devt/ride/jsride
-d=$r/`date +%Y-%m-%d--%H-%M`
-if [ -e $d ]; then echo "$d already exists, try again later"; exit 2; fi
-echo "copying to $d" && cp -r build/dyalogjs $d
-echo 'all available releases on /devt:' && ls $r
+d=`date +%Y-%m-%d--%H-%M`
+if [ -e $r/$d ]; then echo "$r/$d already exists, try again later"; exit 2; fi
+echo "copying to $r/$d" && cp -r build/dyalogjs $r/$d
+echo 'updating "latest" symlink'
+[ -L $r/latest ] && rm $r/latest && ln -s $d $r/latest
+echo 'all available releases in $r:' && ls $r
