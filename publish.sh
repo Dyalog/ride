@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 if [ `id -un` != nick -a "$1" != iknow ]; then echo "here be dragons; don't run it unless you know what you're doing"; exit 1; fi
-git stash && ./clean.sh && ./dist.sh && git stash pop
+git stash && ./clean.sh && ./dist.sh && (git stash pop || true)
 if ! mountpoint /devt >/dev/null; then echo 'mounting devt' && sudo mount /devt; fi
 r=/devt/ride/jsride
 d=$r/`date +%Y-%m-%d--%H-%M`
