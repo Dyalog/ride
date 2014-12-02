@@ -6,8 +6,7 @@ if fs.existsSync 'build.sh'
   execSync = require 'exec-sync'
   throttle = (f) -> tid = null; -> if !tid? then tid = setTimeout (-> f(); tid = null), 200
   do build = throttle -> console.info 'building...'; execSync './build.sh'; console.info 'build done'
-  'client/editor.coffee client/init.coffee client/keymap.coffee client/session.coffee client/welcome.coffee style/style.css style/apl385.ttf index.html'
-    .split(' ').forEach (f) -> fs.watch f, build
+  'client style index.html proxy.coffee'.split(' ').forEach (f) -> fs.watch f, build
 
 opts = require('nomnom').options(
   cert: metavar: 'FILE', help: 'PEM-encoded certificate for https', default: 'ssl/cert.pem'
