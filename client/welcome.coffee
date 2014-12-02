@@ -23,7 +23,7 @@ jQuery ($) =>
       if $('.connect-add').is(':checked') && getFavs().map(fmtFav).indexOf(fmtFav x) < 0
         localStorage.favs = JSON.stringify getFavs().concat([x]); renderFavs()
       $('.connect-name').val ''
-      Dyalog.socket.emit 'connectToInterpreter', host: x.host, port: x.port
+      Dyalog.socket.emit 'connectToInterpreter', host: x.host, port: x.port or DEFAULT_PORT
       renderFavs()
       $f = $('.fav-addr').filter(-> $(@).text() == fmtFav x).closest '.fav'
       w = $f.width()
