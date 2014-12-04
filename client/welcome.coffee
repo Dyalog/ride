@@ -2,7 +2,10 @@ jQuery ($) =>
   DEFAULT_PORT = 4502
   localStorage.favs ?= JSON.stringify [host: '127.0.0.1', port: DEFAULT_PORT]
   $('body')
-    .on 'keydown', (e) -> if e.which == 113 then Dyalog.welcomePage() # F2
+    .on 'keydown', (e) ->
+      if e.which == 113 then Dyalog.welcomePage(); return false # <F2>
+      if 49 <= e.which <= 57 and e.ctrlKey then $('.fav-addr').eq(e.which - 49).click(); return false # <C-1> ... <C-9>
+      return
     .on 'keydown', '.connect-host, .connect-port, .connect-name', (e) -> if e.which == 13 then $('.connect').click()
     .on 'keydown', '.listen-port', (e) -> if e.which == 13 then $('.listen').click()
     .on 'click', '.fav-addr', ->
