@@ -98,7 +98,7 @@ body { padding: 0; margin: 0; }
 .hidden { display: none; }
 .modified { background: #eee; }
 .highlighted { border: solid red 1px; }
-#debugger .CodeMirror { background: #dfdfdf; }
+.ui-layout-south .CodeMirror { background: #dfdfdf; }
 .CodeMirror-hints {
 	position: absolute;
 	z-index: 10;

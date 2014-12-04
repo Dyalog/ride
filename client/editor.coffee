@@ -186,3 +186,4 @@ Dyalog.Editor = (e, opts = {}) ->
     cm.addLineClass (hll = l), 'background', 'highlighted'
     cm.scrollIntoView line: l, ch: 0
     return
+  getContainer: -> $e
