@@ -22,30 +22,23 @@ jQuery ($) ->
     socket.on 'WindowTypeChanged', ({win, tracer}) -> wins[win].setDebugger tracer
 
     socket.on 'open', (name, text, token, bugger, breakpoints) ->
-      if bugger
-        layout.open 'south'
-        wins[token] = Dyalog.Editor '.ui-layout-south',
-          debugger: true
-          save:   (s, bs) -> socket.emit 'SaveChanges',    win: token, text: s, attributes: trace: bs
-          close:          -> socket.emit 'CloseWindow',    win: token
-          over:           -> socket.emit 'RunCurrentLine', win: token
-          into:           -> socket.emit 'StepInto',       win: token
-          back:           -> socket.emit 'TraceBackward',  win: token
-          skip:           -> socket.emit 'TraceForward',   win: token
-          continueTrace:  -> socket.emit 'ContinueTrace',  win: token
-          continueExec:   -> socket.emit 'Continue',       win: token
-          restartThreads: -> socket.emit 'RestartThreads', win: token
-          edit:    (s, p) -> socket.emit 'Edit',           win: token, text: s, pos: p
-          interrupt:      -> socket.emit 'WeakInterrupt'
-          cutback:        -> socket.emit 'Cutback',        win: token
-        wins[token].open name, text, breakpoints
-      else
-        layout.open 'east'
-        wins[token] = Dyalog.Editor '.ui-layout-east',
-          save: (s, bs)   -> socket.emit 'SaveChanges', win: token, text: s, attributes: stop: bs
-          close:          -> socket.emit 'CloseWindow', win: token
-          autocomplete: (s, i) -> socket.emit 'autocomplete', s, i, token
-        wins[token].open name, text, breakpoints
+      layout.open dir = if bugger then 'south' else 'east'
+      wins[token] = Dyalog.Editor '.ui-layout-' + dir,
+        debugger: bugger
+        save: (s, bs)   -> socket.emit 'SaveChanges',    win: token, text: s, attributes: stop: bs
+        close:          -> socket.emit 'CloseWindow',    win: token
+        over:           -> socket.emit 'RunCurrentLine', win: token
+        into:           -> socket.emit 'StepInto',       win: token
+        back:           -> socket.emit 'TraceBackward',  win: token
+        skip:           -> socket.emit 'TraceForward',   win: token
+        continueTrace:  -> socket.emit 'ContinueTrace',  win: token
+        continueExec:   -> socket.emit 'Continue',       win: token
+        restartThreads: -> socket.emit 'RestartThreads', win: token
+        edit:    (s, p) -> socket.emit 'Edit',           win: token, text: s, pos: p
+        interrupt:      -> socket.emit 'WeakInterrupt'
+        cutback:        -> socket.emit 'Cutback',        win: token
+        autocomplete: (s, i) -> socket.emit 'autocomplete', s, i, token
+      wins[token].open name, text, breakpoints
       session.scrollCursorIntoView()
 
     socket.on 'update', (name, text, token, bugger, breakpoints) ->

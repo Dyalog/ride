@@ -1,64 +1,46 @@
 Dyalog.Editor = (e, opts = {}) ->
-  ($e = $ e).html(
-    if opts.debugger
-      '''
-        <div class="toolbar">
-          <span class="b-over         button" title="Execute line"                            ></span>
-          <span class="b-into         button" title="Trace into expression"                   ></span>
-          <span class="b-back         button" title="Go back one line"                        ></span>
-          <span class="b-skip         button" title="Skip current line"                       ></span>
-          <span class="b-cont-trace   button" title="Continue trace"                          ></span>
-          <span class="b-cont-exec    button" title="Continue execution"                      ></span>
-          <span class="b-restart      button" title="Restart all threads"                     ></span>
-          <span class="b-edit-name    button" title="Edit name"                               ></span>
-          <span class="b-quit         button" title="Quit this function"                      ></span>
-          <span class="b-interrupt    button" title="Interrupt"                               ></span>
-          <span class="b-cutback      button" title="Clear trace/stop/monitor for this object"></span>
-          <span class="b-line-numbers button" title="Toggle line numbers"                     ></span>
-          <span class="separator"></span>
-          <input class="search">
-          <span class="b-next         button" title="Search for next match"    >▶</span>
-          <span class="b-prev         button" title="Search for previous match">◀</span>
-          <!--<span class="b-hid          button" title="Search for hidden text"   >⊞</span>-->
-          <span class="b-case         button" title="Match case"               >aA</span>
-          <!--
-          <span class="separator"></span>
-          <select class="stack">
-            <option>[1]</option>
-            <option>[2]</option>
-            <option>[3]</option>
-          </select>
-          -->
-        </div>
-        <div class="cm"></div>
-      '''
-    else
-      '''
-        <div class="toolbar">
-          <span class="b-line-numbers button pressed" title="Toggle line numbers"      >[⋯]</span>
-          <span class="b-comment      button" title="Comment selected text"    >⍝</span>
-          <span class="b-uncomment    button" title="Uncomment selected text"  >/⍝</span>
-          <span class="b-save         button" title="Save changes and return"  >×</span>
-          <span class="separator"></span>
-          <input class="search">
-          <span class="b-next         button" title="Search for next match"    >▶</span>
-          <span class="b-prev         button" title="Search for previous match">◀</span>
-          <!--<span class="b-hid          button" title="Search for hidden text"   >⊞</span>-->
-          <span class="b-case         button" title="Match case"               >aA</span>
-          <span class="separator"></span>
-          <span class="b-refac-m      button" title="Refactor text as method"  >+m</span>
-          <span class="b-refac-f      button" title="Refactor text as field"   >+f</span>
-          <span class="b-refac-p      button" title="Refactor text as property">+p</span>
-        </div>
-        <div class="cm"></div>
-      '''
-  )
+  ($e = $ e).html '''
+    <div class="toolbar debugger-toolbar">
+      <span class="b-over         button" title="Execute line"             ></span>
+      <span class="b-into         button" title="Trace into expression"    ></span>
+      <span class="b-back         button" title="Go back one line"         ></span>
+      <span class="b-skip         button" title="Skip current line"        ></span>
+      <span class="b-cont-trace   button" title="Continue trace"           ></span>
+      <span class="b-cont-exec    button" title="Continue execution"       ></span>
+      <span class="b-restart      button" title="Restart all threads"      ></span>
+      <span class="b-edit-name    button" title="Edit name"                ></span>
+      <span class="b-quit         button" title="Quit this function"       ></span>
+      <span class="b-interrupt    button" title="Interrupt"                ></span>
+      <span class="b-cutback      button" title="Clear trace/stop/monitor for this object"></span>
+      <span class="b-line-numbers button" title="Toggle line numbers"      ></span>
+      <span class="separator"></span>
+      <input class="search">
+      <span class="b-next         button" title="Search for next match"    >▶</span>
+      <span class="b-prev         button" title="Search for previous match">◀</span>
+      <span class="b-case         button" title="Match case"               >aA</span>
+    </div>
+    <div class="toolbar editor-toolbar">
+      <span class="b-line-numbers button pressed" title="Toggle line numbers"      >[⋯]</span>
+      <span class="b-comment      button" title="Comment selected text"    >⍝</span>
+      <span class="b-uncomment    button" title="Uncomment selected text"  >/⍝</span>
+      <span class="b-save         button" title="Save changes and return"  >×</span>
+      <span class="separator"></span>
+      <input class="search">
+      <span class="b-next         button" title="Search for next match"    >▶</span>
+      <span class="b-prev         button" title="Search for previous match">◀</span>
+      <span class="b-case         button" title="Match case"               >aA</span>
+      <span class="separator"></span>
+      <span class="b-refac-m      button" title="Refactor text as method"  >+m</span>
+      <span class="b-refac-f      button" title="Refactor text as field"   >+f</span>
+      <span class="b-refac-p      button" title="Refactor text as property">+p</span>
+    </div>
+    <div class="cm"></div>
+  '''
 
   cm = CodeMirror $e.find('.cm')[0],
     lineNumbers: true
     firstLineNumber: 0
     lineNumberFormatter: (i) -> "[#{i}]"
-    readOnly: !!opts.debugger
     matchBrackets: true
     autoCloseBrackets: true
     gutters: ['breakpoints', 'CodeMirror-linenumbers']
@@ -165,6 +147,14 @@ Dyalog.Editor = (e, opts = {}) ->
       cm.replaceRange ":Property #{s}\n\n∇r←get\nr←0\n∇\n\n∇set args\n∇\n:EndProperty", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
       cm.setCursor line: l + 1, ch: 0
 
+  setDebugger = (x) ->
+    opts.debugger = x
+    $('.debugger-toolbar', $e).toggle x
+    $('.editor-toolbar', $e).toggle !x
+    cm.setOption 'readOnly', x
+    $('.CodeMirror', $e).css backgroundColor: ['', '#dfdfdf'][+x]
+  setDebugger !!opts.debugger
+
   hll = null # currently highlighted line
 
   updateSize: -> cm.setSize $e.width(), $e.height()
@@ -188,4 +178,4 @@ Dyalog.Editor = (e, opts = {}) ->
     cm.scrollIntoView line: l, ch: 0
     return
   getContainer: -> $e
-  setDebugger: (x) -> alert 'setDebugger ' + x
+  setDebugger: setDebugger
