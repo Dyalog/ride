@@ -2,7 +2,8 @@
 set -e
 npm install
 coffee=node_modules/coffee-script/bin/coffee
-uglifyjs=node_modules/uglify-js/bin/uglifyjs
+#uglifyjs=node_modules/uglify-js/bin/uglifyjs
+uglifyjs=cat
 
 mkdir -p build/{static,tmp}
 
