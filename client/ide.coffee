@@ -57,21 +57,21 @@ jQuery ($) ->
 
     # language bar
     $('body').prepend """
-      <div id="lbar" class="ui-layout-north" style="display:none">
-        <a id="lbar-close" title="Hide Language Bar" href="#"></a>
+      <div class="lbar ui-layout-north" style="display:none">
+        <a class="lbar-close" title="Hide Language Bar" href="#"></a>
         #{Dyalog.lbarHTML}
       </div>
-      <div id="tip" style="display:none"><div id="tip-desc"></div><pre id="tip-text"></pre></div>
-      <div id="tip-triangle" style="display:none"></div>
+      <div class="lbar-tip" style="display:none"><div class="lbar-tip-desc"></div><pre class="lbar-tip-text"></pre></div>
+      <div class="lbar-tip-triangle" style="display:none"></div>
     """
     timeout = (delay, f) -> setTimeout f, delay
     timeout 2000, ->
-      $('#lbar').on 'mousedown', -> false
-      $('b', '#lbar').on 'mousedown', (e) -> (for _, x of wins when x.hasFocus() then x.insert $(e.target).text()); false
-      $('#lbar-close').on 'click', -> layout.close 'north'; false
+      $('.lbar').on 'mousedown', -> false
+      $('.lbar b').on 'mousedown', (e) -> (for _, x of wins when x.hasFocus() then x.insert $(e.target).text()); false
+      $('.lbar-close').on 'click', -> layout.close 'north'; false
       ttid = null # tooltip timeout id
-      $tip = $ '#tip'; $tipDesc = $ '#tip-desc'; $tipText = $ '#tip-text'; $tipTriangle = $ '#tip-triangle'
-      $('b', '#lbar').on
+      $tip = $ '.lbar-tip'; $tipDesc = $ '.lbar-tip-desc'; $tipText = $ '.lbar-tip-text'; $tipTriangle = $ '.lbar-tip-triangle'
+      $('.lbar b').on
         mouseout: -> clearTimeout ttid; ttid = null; $tip.hide(); $tipTriangle.hide(); return
         mouseover: (e) ->
           clearTimeout ttid
