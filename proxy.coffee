@@ -49,6 +49,7 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
         if !/^(?:SupportedProtocols|UsingProtocol)=1$/.test m # ignore these
           switch (/^<(\w+)>/.exec m)?[1] or ''
             when 'ReplyConnect', 'ReplyEdit', 'ReplySaveChanges', 'ReplySetLineAttributes' then ; # ignore
+            when 'ReplyWindowTypeChanged' then toBrowser 'WindowTypeChanged', win: +getTag('Win', m), tracer: !!+getTag 'bugger', m
             when 'ReplyIdentify'      then toBrowser 'UpdateDisplayName', displayName: b64d getTag 'Project', m
             when 'ReplyUpdateWsid'
               s = b64d getTag 'wsid', m
@@ -105,7 +106,7 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
             #{
               (
                 for i in [0...text.split('\n').length] by 1
-                  "<LineAttributeValue><row>#{i}</row><value>#{+(i in stop)}</value></LineAttributeValue>"
+                  "<LineAttributeValue><row>#{i}</row><value>#{+(i in (stop or []))}</value></LineAttributeValue>"
               ).join '\n'
             }
           </values>

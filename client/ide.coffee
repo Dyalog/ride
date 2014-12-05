@@ -19,6 +19,7 @@ jQuery ($) ->
     socket.on 'NotAtInputPrompt', -> session.prompt null
     socket.on 'AtInputPrompt', ({why}) -> session.prompt why
     socket.on 'FocusWindow', ({win}) -> wins[win].focus()
+    socket.on 'WindowTypeChanged', ({win, tracer}) -> wins[win].setDebugger tracer
 
     socket.on 'open', (name, text, token, bugger, breakpoints) ->
       if bugger
@@ -34,6 +35,7 @@ jQuery ($) ->
           continueTrace:  -> socket.emit 'ContinueTrace',  win: token
           continueExec:   -> socket.emit 'Continue',       win: token
           restartThreads: -> socket.emit 'RestartThreads', win: token
+          edit:    (s, p) -> socket.emit 'Edit',           win: token, text: s, pos: p
           interrupt:      -> socket.emit 'WeakInterrupt'
           cutback:        -> socket.emit 'Cutback',        win: token
         wins[token].open name, text, breakpoints

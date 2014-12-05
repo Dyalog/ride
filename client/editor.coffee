@@ -111,6 +111,7 @@ Dyalog.Editor = (e, opts = {}) ->
   $('.b-cont-trace', $tb).click -> opts.continueTrace?()
   $('.b-cont-exec',  $tb).click -> opts.continueExec?()
   $('.b-restart',    $tb).click -> opts.restartThreads?()
+  $('.b-edit-name',  $tb).click -> opts.edit? cm.getValue(), 0
   $('.b-interrupt',  $tb).click -> opts.interrupt?()
   $('.b-cutback',    $tb).click -> opts.cutback?()
 
@@ -187,3 +188,4 @@ Dyalog.Editor = (e, opts = {}) ->
     cm.scrollIntoView line: l, ch: 0
     return
   getContainer: -> $e
+  setDebugger: (x) -> alert 'setDebugger ' + x
