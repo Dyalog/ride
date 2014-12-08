@@ -1,11 +1,17 @@
 jQuery ($) ->
   Dyalog.idePage = ->
     {socket} = Dyalog
-    $('body').html '''
+    $('body').html """
+      <div class="lbar ui-layout-north" style="display:none">
+        <a class="lbar-close" title="Hide Language Bar" href="#"></a>
+        #{Dyalog.lbarHTML}
+      </div>
+      <div class="lbar-tip" style="display:none"><div class="lbar-tip-desc"></div><pre class="lbar-tip-text"></pre></div>
+      <div class="lbar-tip-triangle" style="display:none"></div>
       <div class="ui-layout-center"></div>
       <div class="ui-layout-east"  style="display:none"></div>
       <div class="ui-layout-south" style="display:none"></div>
-    '''
+    """
 
     wins =
       0: session = Dyalog.Session $('.ui-layout-center'),
@@ -56,26 +62,17 @@ jQuery ($) ->
     socket.on 'end', -> alert 'Interpreter disconnected'
 
     # language bar
-    $('body').prepend """
-      <div class="lbar ui-layout-north" style="display:none">
-        <a class="lbar-close" title="Hide Language Bar" href="#"></a>
-        #{Dyalog.lbarHTML}
-      </div>
-      <div class="lbar-tip" style="display:none"><div class="lbar-tip-desc"></div><pre class="lbar-tip-text"></pre></div>
-      <div class="lbar-tip-triangle" style="display:none"></div>
-    """
-    timeout = (delay, f) -> setTimeout f, delay
-    timeout 2000, ->
-      $('.lbar').on 'mousedown', -> false
-      $('.lbar b').on 'mousedown', (e) -> (for _, x of wins when x.hasFocus() then x.insert $(e.target).text()); false
-      $('.lbar-close').on 'click', -> layout.close 'north'; false
-      ttid = null # tooltip timeout id
-      $tip = $ '.lbar-tip'; $tipDesc = $ '.lbar-tip-desc'; $tipText = $ '.lbar-tip-text'; $tipTriangle = $ '.lbar-tip-triangle'
-      $('.lbar b').on
-        mouseout: -> clearTimeout ttid; ttid = null; $tip.hide(); $tipTriangle.hide(); return
-        mouseover: (e) ->
-          clearTimeout ttid
-          ttid = timeout 200, ->
+    $('.lbar').on 'mousedown', -> false
+    $('.lbar b').on 'mousedown', (e) -> (for _, x of wins when x.hasFocus() then x.insert $(e.target).text()); false
+    $('.lbar-close').on 'click', -> layout.close 'north'; false
+    ttid = null # tooltip timeout id
+    $tip = $ '.lbar-tip'; $tipDesc = $ '.lbar-tip-desc'; $tipText = $ '.lbar-tip-text'; $tipTriangle = $ '.lbar-tip-triangle'
+    $('.lbar b').on
+      mouseout: -> clearTimeout ttid; ttid = null; $tip.hide(); $tipTriangle.hide(); return
+      mouseover: (e) ->
+        clearTimeout ttid
+        ttid = setTimeout(
+          ->
             ttid = null
             $t = $ e.target; p = $t.position(); x = $t.text()
             key = Dyalog.reverseKeyMap[x] || ''
@@ -89,7 +86,9 @@ jQuery ($) ->
               $tip.css(left: '', right: 0, top: y0).show()
             else
               $tip.css(left: Math.max(0, x0), right: '', top: y0).show()
-          return
+          200
+        )
+        return
 
     layout = $('body').layout
       defaults: enableCursorHotkey: 0
