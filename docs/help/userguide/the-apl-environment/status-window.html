@@ -1,7 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
-<body><h2><a name="Status_Window"></a>Status Window</h2><p>The Status window is used to display system messages and supplementary information. These include the operations that take place when you register an OLEServer or ActiveXControl.</p><p>The Status window is also used to display supplementary information about errors. For example, if in a <tt>⎕WC</tt> statement you misspell the type of an object, you will get a suitable error message in the Status window, in addition to the <tt>DOMAIN ERROR</tt> message in the Session.</p><h4>Example</h4><pre>      'F'⎕WC'FROM' ⍝ Should be 'FORM'
-DOMAIN ERROR
-      'F'⎕WC'FROM'</pre><p>     ^</p><p><img src="../images/status-window.png" /></p><p>The Status window can be explicitly displayed or hidden using the <tt>[Status]</tt> system operation which is associated with the <span class="Name">Tools/Status</span> menu item.</p><p>There is also an option to have the Status window appear automatically whenever a new message is written to it. This option is selected using the <tt>[AutoStatus]</tt> system operation which is associated with the <span class="Name">Tools/AutoStatus</span> menu item.</p><p>Note that when you close the Status window, all the system messages in it are cleared.</p><script src="../../../help.js"></script></body>
-</html>

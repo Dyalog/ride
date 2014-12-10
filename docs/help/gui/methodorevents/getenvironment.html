@@ -1,7 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
-<body><h2><tt>Method 510</tt>GetEnvironment</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/root.html">Root</a></td></tr></table><p class="Bold">Description</p><p>This method is used to obtain information about one or more parameters that were specified in the APL command line, your Windows registry, or defined as environment variables. If a value is defined in several places (for example, MAXWS in the command line overriding MAXWS in the registry), GetEnvironment follows exactly the same logic as is used by Dyalog APL itself and so obtains the same value.</p><p>The argument to GetEnvironment is a single item as follows:</p><table><tr><td><tt>[1]</tt></td><td>Parameter name(s)</td><td>see below</td></tr></table><p><span class="Italic">Parameter names</span> is simple character vector or vector of character vectors specifying one or more parameters.</p><p>The result is a simple character vector or a vector of character vectors.</p><p>Examples:</p><pre>      GetEnvironment 'MAXWS'
-2G</pre><pre>     GetEnvironment ⊂'LOG_SIZE' 'MAXWS'
- 16  2G</pre><p>Note that you may use GetEnvironment to obtain the values of your own arbitrary parameters given on the APL command line or specified as environment variables.</p><p>GetEnvironment is not supported by DYALOG.DLL because it does not use parameters.</p><script src="../../../help.js"></script></body>
-</html>

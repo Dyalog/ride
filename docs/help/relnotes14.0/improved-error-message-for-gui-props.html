@@ -1,9 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../help.css"></head>
-<body><h3>Error Messages when setting GUI Properties</h3><p>The  message displayed to indicate an error in the right argument to <tt>⎕WC</tt>, <tt>⎕WS</tt> and <tt>⎕NEW</tt> has been improved.</p><p>The following statement may be deemed incorrect for two reasons.</p><pre>      'F'⎕WC'Form' ('Posn' 10 10)('TheCaption' 'andys')</pre><ul><li value="1">the second property specification <tt>('TheCaption' 'andys')</tt> is malformed because there is no such property as <tt>'TheCaption'</tt>.</li><li value="2">In the absence of a valid property name/value pair, the system expects a value for the Size property because Size comes after Posn in the list of Properties that apply to a Form, and a vector of character vectors is an invalid value for Size.</li></ul><p>Previously, APL assumed the second case and displayed the error message:</p><pre>RANK ERROR: There was an error processing the "Size" property
-      'F'⎕WC'Form'('Posn' 10 10)('TheCaption' 'andys')
-     ∧</pre><p>This was confusing because the statement contains no mention of the Size property. </p><p>The system will now generate the following error:</p><pre>RANK ERROR: There was an error processing the property at position 2 of the right argument
-      'F'⎕WC'Form'('Posn' 10 10)('TheCaption' 'andys')
-</pre><script src="../../help.js"></script></body>
-</html>

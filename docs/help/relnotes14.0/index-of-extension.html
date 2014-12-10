@@ -1,8 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../help.css"></head>
-<body><h2>Index Of </h2><p>Dyadic <tt>⍳</tt> has been extended to matrices and higher-rank arrays, so that  sub-arrays specified by the right argument may be located in the left argument.</p><p>Specifically, this applies to major cells of the left argument <tt>x</tt>, where a major cell is  a sub-array on the leading dimension of <tt>x</tt> with shape <tt>1↓⍴x</tt>. The major cells of a matrix are its rows.</p><p>Until now, the idiom <tt>{(↓⍺)⍳↓⍵}</tt> was the best way to look up rows of one matrix in another (often called the <tt>matiota</tt> idiom). This extension to dyadic <tt>⍳</tt> provides a more concise solution that is equally as fast,  so renders the idiom redundant.</p><pre>      (3 4⍴⍳6) {(↓⍺)⍳↓⍵} 10 4⍴⍳6
-1 2 3 1 2 3 1 2 3 1
-      (3 4⍴⍳6) ⍳ 10 4⍴⍳6
-1 2 3 1 2 3 1 2 3 1</pre><p> For further information, see <a href="../lang/primfns/index-of.html#IndexOf" class="MCXref_0">Index Of</a></p><script src="../../help.js"></script></body>
-</html>

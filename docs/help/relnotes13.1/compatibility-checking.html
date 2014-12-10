@@ -1,5 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../help.css"></head>
-<body><h3><a name="Compatibility"></a>Compatibility Checking</h3><p>The mechanism used to avoid backwards compatibilty issues has been improved. Prior to this change, it would have been possible for an older version of Dyalog APL to attempt to fix the <tt>⎕OR</tt> of a function from a later version that contained a "new" system function or idiom. This would typically cause a system error at that point, or worse still, some time later in the application.</p><p>The new mechanism, which has been implemented in Version 13.1, prevents this happening by changing the internal format of a <tt>⎕OR</tt> so that it is unrecognisable by older Versions.  </p><p>This means that henceforth if you attempt to access an incompatible <tt>⎕OR</tt> the operation will fail with a <tt>DOMAIN ERROR</tt>, rather than potentially cause a system error. (Note that builds of Version 12.1 dated before November 11<sup>th</sup> 2011 report <tt>FILE COMPONENT DAMAGED</tt> instead of <tt>DOMAIN ERROR</tt>).</p><script src="../../help.js"></script></body>
-</html>

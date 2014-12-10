@@ -1,5 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
-<body><h2><tt>Method 521</tt>DeleteTypeLib</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/root.html">Root</a></td></tr></table><p class="Bold">Description</p><p>The DeleteTypeLib method removes a loaded Type Library from the workspace.</p><p>The argument to DeleteTypeLib is as follows:</p><table><tr><td><tt>[1]</tt></td><td>TypeLib</td><td>character vector</td></tr></table><p>The Type Library may be identified by its name or by its class id.</p><p>The result is 0, 1 or <tt>¯1</tt>.</p><p>If successful, the specified Type Library, and all dependant Type Libraries not referenced by any other currently loaded Type Libraries, are removed from the active workspace. The result is 1.</p><p>If the specified Type Library is in use, no action is taken and the result is 0.</p><p>If the argument is not the name or CLSID of a loaded Type Library, no action is taken and the result is <tt>¯1</tt>.</p><script src="../../../help.js"></script></body>
-</html>

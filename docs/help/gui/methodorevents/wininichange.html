@@ -1,5 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
-<body><h2><tt>Event 133</tt>WinIniChange</h2><table class="GUIMembers"><tr><td class="SpacedPlainTitle">Applies To:</td><td class="SpacedPlain"><a href="../objects/root.html">Root</a></td></tr></table><p class="Bold">Description</p><p>If enabled, this event is reported when another application changes relevant registry settings using the standard API calls. The event is reported after the change has taken place and cannot be disabled or inhibited in any way. If your application depends upon registry settings, this event gives you the opportunity of refreshing these parameters if they are changed.</p><p>The event message reported as the result of <a href="../../lang/sysfns/dq.html"><tt>⎕DQ</tt></a>, or supplied as the right argument to your callback function, is a 2-element vector as follows :</p><table class="Event"><tr><td><tt>[1]</tt></td><td>Object</td><td>ref or character vector</td></tr><tr><td><tt>[2]</tt></td><td>Event</td><td><tt>'WinIniChange'</tt> or 133</td></tr></table><script src="../../../help.js"></script></body>
-</html>

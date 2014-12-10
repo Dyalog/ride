@@ -1,5 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
-<body><h2><a name="Farenheit_Edit"></a>Adding a Fahrenheit Edit Field</h2><p>Now let's add the edit field for Fahrenheit. We will call it <tt>F</tt> and place it alongside the label, but 40% along. Initially the field will be empty. We will make it 20% wide but let its height default. <tt>⎕WC</tt> will make it just big enough to fit the current font height. As the field is to handle numbers, we will set its FieldType to <tt>'Numeric'</tt>.</p><pre class="APLCodeSmall">'TEMP.F' ⎕WC 'Edit' '' (10 40)(⍬ 20)('FieldType' 'Numeric')</pre><p><img src="../images/temperature-converter-3.png" /></p><script src="../../../help.js"></script></body>
-</html>

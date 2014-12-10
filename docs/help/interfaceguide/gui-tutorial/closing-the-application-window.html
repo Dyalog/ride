@@ -1,7 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
-<body><h2><a name="Closing_Allication"></a>Closing the Application Window</h2><p>Then we need something to allow our user to terminate our application. He will expect the application to terminate when he closes the window. We will implement this by having a callback function called <tt>QUIT</tt> which will simply call <tt>⎕OFF</tt>, i.e.</p><pre>     ∇ QUIT
-[1]   ⎕OFF
-     ∇</pre><p>We can associate this with the Close event on the Form <tt>TEMP</tt>. This event will be generated when the user closes the window from its System Menu</p><pre>      TEMP.onClose←'QUIT'</pre><p>Although here we have used assignment to set the Event property, we could just as easily have defined it when we created the Form by adding <tt>('Event' 'Close' 'QUIT')</tt> to the right argument of <tt>⎕WC</tt>.</p><script src="../../../help.js"></script></body>
-</html>

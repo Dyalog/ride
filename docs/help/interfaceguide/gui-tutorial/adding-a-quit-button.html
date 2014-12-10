@@ -1,7 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
-<body><h2><a name="Quit_Button"></a>Adding a Quit Button</h2><p>Finally, we will add a "Quit" button, attaching the same <tt>QUIT</tt> function as a callback, but this time to the Select event which occurs when the user presses it.</p><p>Instead of having a default sized button, we will make it nice and big, and position it centrally.</p><p>To make the statement fit on the page, it is split into three. The Posn and Size properties are explicitly named for clarity.</p><pre>      QB←'Button' '&amp;Quit' ('Posn' 70 30)
-      QB,←('Size' ⍬ 40)('Event' 'Select' 'QUIT')
-      'TEMP.Q' ⎕WC QB</pre><p><img src="../images/temperature-converter-7.png" /></p><p>Notice how the ampersand (&amp;) in the Caption is used to specify the <span class="Italic">mnemonic</span> (short-cut) key. This can be used to press the button instead of clicking the mouse.</p><script src="../../../help.js"></script></body>
-</html>

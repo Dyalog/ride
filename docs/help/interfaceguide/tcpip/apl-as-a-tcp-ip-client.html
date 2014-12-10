@@ -1,7 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
-<body><h2><a name="TCPIP_Client"></a>APL as a TCP/IP Client</h2><p>A Stream based APL client makes contact with a server by creating a TCPSocket object whose SocketType is <tt>'Stream'</tt> (the default), specifying the RemoteAddr and RemotePort properties which identify the server’s IP Address and port number respectively.  Note that the client must know the identity of the server in advance.</p><p>For example:</p><pre>      IP←'193.32.236.43'
-      'C0'⎕WC'TCPSocket'('RemoteAddr 'IP)
-                        ('RemotePort' 2001)</pre><p>If the values of the RemoteAddr and RemotePort properties match the IP address and port number of any listening socket on the network, the association is made and the client and server sockets are connected.</p><p>When the connection succeeds, the state of the client TCPSocket object (which is reported by the CurrentState property) changes from <tt>'Open'</tt> to <tt>'Connected'</tt> and it generates a TCPConnect event.  Note that the connection cannot be nullified by the return value of a callback function.</p><script src="../../../help.js"></script></body>
-</html>
