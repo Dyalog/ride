@@ -161,7 +161,8 @@ body { padding: 0; margin: 0; }
 .dyalog-logo {
 	background: #fc9732 16px center no-repeat url(dyaloglogo.png);
 	color: white;
-	text-indent: 10000px;
+	text-indent: -9999px;
+	overflow: hidden;
 	height: 80px;
 	margin: 0;
 }
