@@ -117,7 +117,7 @@ Dyalog.Editor = (e, opts = {}) ->
   $('.b-prev', $tb).click -> search true; false
   $('.search', $tb).keydown (e) -> if e.which == 13 then search(); false
   search = (backwards) ->
-    if q = $('.search', $tb).val()
+    if q = $('.search:visible', $tb).val()
       v = cm.getValue()
       if !$('.b-case', $tb).hasClass 'pressed' then q = q.toLowerCase(); v = v.toLowerCase()
       i = cm.indexFromPos cm.getCursor()
