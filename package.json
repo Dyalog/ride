@@ -6,15 +6,15 @@
 	"dependencies": {
 		"codemirror"         : "4.8.0",
 		"coffee-script"      : "1.8.0",
-		"compression"        : "1.2.1",
+		"compression"        : "1.2.2",
 		"exec-sync"          : "0.1.6",
-		"express"            : "4.10.4",
+		"express"            : "4.10.5",
 		"jquery"             : "2.1.1",
 		"jquery-ui"          : "1.10.5",
-		"node-webkit-builder": "0.3.0",
+		"node-webkit-builder": "0.4.0",
 		"nomnom"             : "1.8.1",
 		"socket.io"          : "1.2.1",
-		"uglify-js"          : "2.4.15"
+		"uglify-js"          : "2.4.16"
 	},
 	"window": {
 		"title": "Dyalog",
