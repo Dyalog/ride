@@ -1,4 +1,5 @@
 do ->
+  Dyalog.mapLeader = mapLeader = '`'
   ks = '''
                       `1234567890-=  ~!@#$%^&*()_+
                       qwertyuiop[]   QWERTYUIOP{}
@@ -216,27 +217,28 @@ do ->
         "scrollbars=1,location=1,toolbar=0,menubar=0,resizable=1"
       popup.focus?()
       return
-    "'`'": (cm) ->
-      cm.setOption 'autoCloseBrackets', false
-      cm.setOption 'keyMap', 'dyalogBackquote'
-      c = cm.getCursor()
-      cm.replaceSelection '`', 'end'
-      ctid = setTimeout(
-        ->
-          cm.showHint completeOnSingleClick: true, hint: ->
-            data = from: c, to: cm.getCursor(), list: bqc
-            CodeMirror.on data, 'close', ->
-              cm.setOption 'autoCloseBrackets', true
-              cm.setOption 'keyMap', 'dyalog'
-            data
-        500
-      )
+
+  CodeMirror.keyMap.dyalog["'#{mapLeader}'"] = (cm) ->
+    cm.setOption 'autoCloseBrackets', false
+    cm.setOption 'keyMap', 'dyalogBackquote'
+    c = cm.getCursor()
+    cm.replaceSelection mapLeader, 'end'
+    ctid = setTimeout(
+      ->
+        cm.showHint completeOnSingleClick: true, hint: ->
+          data = from: c, to: cm.getCursor(), list: bqc
+          CodeMirror.on data, 'close', ->
+            cm.setOption 'autoCloseBrackets', true
+            cm.setOption 'keyMap', 'dyalog'
+          data
+      500
+    )
 
   CodeMirror.keyMap.dyalogBackquote = nofallthrough: true, disableInput: true
   ds = {}; for line in squiggleDescriptions.split '\n' then ds[line[0]] = line[2..]
   if ks.length != vs.length then console.error? 'bad configuration of backquote keymap'
-  for k, i in ks when k != (v = vs[i]) || k == '`'
-    bqc.push text: v, displayText: "#{v} `#{k} #{ds[v] || ''}  "
+  for k, i in ks when k != (v = vs[i]) || k == mapLeader
+    bqc.push text: v, displayText: "#{v} #{mapLeader}#{k} #{ds[v] || ''}  "
     Dyalog.reverseKeyMap[v] = k
     CodeMirror.keyMap.dyalogBackquote["'#{k}'"] = do (v = v) -> (cm) ->
       clearTimeout ctid
@@ -244,14 +246,14 @@ do ->
       cm.setOption 'keyMap', 'dyalog'
       cm.setOption 'autoCloseBrackets', true
       c = cm.getCursor()
-      if v == '`' then bqbqHint cm
+      if v == mapLeader then bqbqHint cm
       else cm.replaceRange v, {line: c.line, ch: c.ch - 1}, c
       return
 
-  bqc[0].render = (e) -> e.innerHTML = '  `` <i>completion by name</i>'
+  bqc[0].render = (e) -> e.innerHTML = "  #{mapLeader}#{mapLeader} <i>completion by name</i>"
   bqc[0].hint = bqbqHint = (cm) ->
     c = cm.getCursor(); c0 = line: c.line, ch: c.ch - 1
-    cm.replaceSelection '`', 'end'
+    cm.replaceSelection mapLeader, 'end'
     cm.showHint completeOnSingleClick: true, hint: ->
       u = cm.getLine(c.line)[c.ch + 1..]
       a = []; for x in bqbqc when x.name[...u.length] == u then a.push x
@@ -262,7 +264,7 @@ do ->
     bqKey = Dyalog.reverseKeyMap[squiggle]
     for name in names then bqbqc.push
       name: name, text: squiggle
-      displayText: "#{squiggle} #{if bqKey then '`' + bqKey else '  '} ``#{name}"
+      displayText: "#{squiggle} #{if bqKey then mapLeader + bqKey else '  '} #{mapLeader}#{mapLeader}#{name}"
 
   window.onhelp = -> false # prevent IE from acting silly on F1
   ks = vs = ds = squiggleDescriptions = squiggleNames = null
