@@ -3,7 +3,7 @@ do ->
     class FakeSocket
       emit: (e, a...) -> @other.onevent e: e, data: a
       onevent: ({e, data}) -> (for f in @[e] or [] then f data...); return
-      on: (e, f) -> (@[e] ?= []).push f; return
+      on: (e, f) -> (@[e] ?= []).push f; @
     socket = new FakeSocket; socket1 = new FakeSocket; socket.other = socket1; socket1.other = socket
     require('./proxy').Proxy()(socket1)
   else
