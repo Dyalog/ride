@@ -152,7 +152,7 @@ Dyalog.Editor = (e, opts = {}) ->
 
   hll = null # currently highlighted line
 
-  updateSize: -> cm.setSize $e.width(), $e.parent().height() - $e.position().top - 16
+  updateSize: -> cm.setSize $e.width(), $e.parent().height() - $e.position().top - 28
   open: (name, text, bs) ->
     cm.setValue text
     cm.setCursor 0, cm.getLine(0).length
