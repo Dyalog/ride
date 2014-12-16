@@ -56,7 +56,7 @@ jQuery ($) ->
     $('.lbar-close').on 'click', -> layout.close 'north'; false
     $tip = $ '.lbar-tip'; $tipDesc = $ '.lbar-tip-desc'; $tipText = $ '.lbar-tip-text'; $tipTriangle = $ '.lbar-tip-triangle'
     ttid = null # tooltip timeout id
-    $('.lbar')
+    $ '.lbar'
       .on 'mousedown', -> false
       .on 'mousedown', 'b', (e) -> (for _, x of wins when x.hasFocus() then x.insert $(e.target).text()); false
       .on 'mouseout', 'b', -> clearTimeout ttid; ttid = null; $tip.add($tipTriangle).hide(); return

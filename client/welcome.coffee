@@ -1,7 +1,7 @@
 jQuery ($) =>
   DEFAULT_PORT = 4502
   localStorage.favs ?= JSON.stringify [host: '127.0.0.1', port: DEFAULT_PORT]
-  $('body')
+  $ 'body'
     .on 'keydown', (e) ->
       if e.which == 113 then Dyalog.welcomePage(); return false # <F2>
       if 49 <= e.which <= 57 and e.ctrlKey then $('.fav-addr').eq(e.which - 49).click(); return false # <C-1> ... <C-9>

@@ -20,7 +20,7 @@ Dyalog.Editor = (e, opts = {}) ->
       <span class="b-case         button" title="Match case"               >aA</span>
     </div>
     <div class="toolbar editor-toolbar">
-      <span class="b-line-numbers button pressed" title="Toggle line numbers"      >[⋯]</span>
+      <span class="b-line-numbers button pressed" title="Toggle line numbers">[⋯]</span>
       <span class="b-comment      button" title="Comment selected text"    >⍝</span>
       <span class="b-uncomment    button" title="Uncomment selected text"  >/⍝</span>
       <span class="b-save         button" title="Save changes and return"  >×</span>
@@ -82,9 +82,9 @@ Dyalog.Editor = (e, opts = {}) ->
     return
 
   $tb = $ '.toolbar', $e
-  $('.button', $tb) # todo
-    .on('mousedown', (e) -> $(e.target).addClass 'armed'; e.preventDefault(); return)
-    .on('mouseup mouseout', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return)
+  $ '.button', $tb # todo
+    .on 'mousedown', (e) -> $(e.target).addClass 'armed'; e.preventDefault(); return
+    .on 'mouseup mouseout', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return
 
   $('.b-over',       $tb).click -> opts.over?()
   $('.b-into',       $tb).click -> opts.into?()
