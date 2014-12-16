@@ -64,7 +64,7 @@ jQuery ($) ->
         clearTimeout ttid; $t = $ e.target; p = $t.position(); x = $t.text()
         ttid = setTimeout(
           ->
-            ttid = null; key = Dyalog.reverseKeyMap[x] || ''; keyText = key && "Keyboard: #{Dyalog.mapLeader}#{key}\n\n"
+            ttid = null; key = Dyalog.reverseKeyMap[x] || ''; keyText = key && "Keyboard: #{Dyalog.getMapLeader()}#{key}\n\n"
             h = Dyalog.lbarTips[x] or [x, '']; $tipDesc.text h[0]; $tipText.text keyText + h[1]
             $tipTriangle.css(left: 3 + p.left + ($t.width() - $tipTriangle.width()) / 2, top: p.top + $t.height() + 2).show()
             x0 = p.left - 21; x1 = x0 + $tip.width(); y0 = p.top + $t.height()

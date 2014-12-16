@@ -1,5 +1,19 @@
 do ->
-  Dyalog.mapLeader = mapLeader = '`'
+  window.onhelp = -> false # prevent IE from acting silly on F1
+
+  inherit = (x) -> (F = ->):: = x; new F
+
+  DEFAULT_MAP_LEADER = '`'
+  mapLeaderListeners = []
+  Dyalog.onMapLeaderChange = (f) -> mapLeaderListeners.push f
+  Dyalog.getMapLeader = -> localStorage.mapLeader || DEFAULT_MAP_LEADER
+  Dyalog.setMapLeader = (x = DEFAULT_MAP_LEADER) ->
+    old = Dyalog.getMapLeader()
+    if x != old
+      if x != DEFAULT_MAP_LEADER then localStorage.mapLeader = x else delete localStorage.mapLeader
+      for f in mapLeaderListeners then f x, old
+    1
+
   ks = '''
                       `1234567890-=  ~!@#$%^&*()_+
                       qwertyuiop[]   QWERTYUIOP{}
@@ -194,7 +208,7 @@ do ->
   bqbqc = [] # double backquote completions
   Dyalog.reverseKeyMap = {}
 
-  CodeMirror.keyMap.dyalog =
+  CodeMirror.keyMap.dyalog = inherit
     fallthrough: 'default'
     F1: (cm) ->
       c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
@@ -218,11 +232,11 @@ do ->
       popup.focus?()
       return
 
-  CodeMirror.keyMap.dyalog["'#{mapLeader}'"] = (cm) ->
+  CodeMirror.keyMap.dyalog["'#{Dyalog.getMapLeader()}'"] = (cm) ->
     cm.setOption 'autoCloseBrackets', false
     cm.setOption 'keyMap', 'dyalogBackquote'
     c = cm.getCursor()
-    cm.replaceSelection mapLeader, 'end'
+    cm.replaceSelection Dyalog.getMapLeader(), 'end'
     ctid = setTimeout(
       ->
         cm.showHint completeOnSingleClick: true, hint: ->
@@ -233,38 +247,37 @@ do ->
           data
       500
     )
+  Dyalog.onMapLeaderChange (x, old) -> x = "'#{x}'"; old = "'#{old}'"; m = CodeMirror.keyMap.dyalog; m[x] = m[old]; delete m[old]
 
   CodeMirror.keyMap.dyalogBackquote = nofallthrough: true, disableInput: true
   ds = {}; for line in squiggleDescriptions.split '\n' then ds[line[0]] = line[2..]
   if ks.length != vs.length then console.error? 'bad configuration of backquote keymap'
-  for k, i in ks when k != (v = vs[i]) || k == mapLeader
-    bqc.push text: v, displayText: "#{v} #{mapLeader}#{k} #{ds[v] || ''}  "
+  for k, i in ks then do (k = k) ->
+    v = vs[i]
     Dyalog.reverseKeyMap[v] = k
-    CodeMirror.keyMap.dyalogBackquote["'#{k}'"] = do (v = v) -> (cm) ->
+    bqc.push text: v, render: (e) -> $(e).text "#{v} #{Dyalog.getMapLeader()}#{k} #{ds[v] || ''}  "
+    CodeMirror.keyMap.dyalogBackquote["'#{k}'"] = (cm) ->
       clearTimeout ctid
       cm.state.completionActive?.close?()
       cm.setOption 'keyMap', 'dyalog'
       cm.setOption 'autoCloseBrackets', true
       c = cm.getCursor()
-      if v == mapLeader then bqbqHint cm
-      else cm.replaceRange v, {line: c.line, ch: c.ch - 1}, c
+      if k == Dyalog.getMapLeader() then bqbqHint cm else cm.replaceRange v, {line: c.line, ch: c.ch - 1}, c
       return
 
-  bqc[0].render = (e) -> e.innerHTML = "  #{mapLeader}#{mapLeader} <i>completion by name</i>"
+  bqc[0].render = (e) -> e.innerHTML = "  #{Dyalog.getMapLeader()}#{Dyalog.getMapLeader()} <i>completion by name</i>"
   bqc[0].hint = bqbqHint = (cm) ->
     c = cm.getCursor(); c0 = line: c.line, ch: c.ch - 1
-    cm.replaceSelection mapLeader, 'end'
+    cm.replaceSelection Dyalog.getMapLeader(), 'end'
     cm.showHint completeOnSingleClick: true, hint: ->
       u = cm.getLine(c.line)[c.ch + 1..]
       a = []; for x in bqbqc when x.name[...u.length] == u then a.push x
       from: c0, to: cm.getCursor(), list: a
 
-  for line in squiggleNames.split '\n'
+  for line in squiggleNames.split '\n' then do ->
     [squiggle, names...] = line.split ' '
-    bqKey = Dyalog.reverseKeyMap[squiggle]
-    for name in names then bqbqc.push
-      name: name, text: squiggle
-      displayText: "#{squiggle} #{if bqKey then mapLeader + bqKey else '  '} #{mapLeader}#{mapLeader}#{name}"
+    for name in names then bqbqc.push name: name, text: squiggle, render: do (name = name) -> (e) ->
+      key = Dyalog.reverseKeyMap[squiggle]
+      $(e).text "#{squiggle} #{if key then Dyalog.getMapLeader() + key else '  '} #{Dyalog.getMapLeader()}#{Dyalog.getMapLeader()}#{name}"
 
-  window.onhelp = -> false # prevent IE from acting silly on F1
-  ks = vs = ds = squiggleDescriptions = squiggleNames = null
+  ks = vs = squiggleDescriptions = squiggleNames = null
