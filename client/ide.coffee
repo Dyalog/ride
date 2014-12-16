@@ -13,7 +13,7 @@ jQuery ($) ->
       <div class="ui-layout-east" ><ul></ul></div>
       <div class="ui-layout-south"><ul></ul></div>
     """
-    ['east', 'south'].forEach (d) -> $('.ui-layout-' + d).tabs()
+    $('.ui-layout-east, .ui-layout-south').tabs().find('ul').sortable cursor: 'move', revert: true, tolerance: 'pointer'
 
     wins = # mapping between window ids and widget instances (Dyalog.Session or Dyalog.Editor)
       0: session = Dyalog.Session $('.ui-layout-center'),

@@ -761,6 +761,9 @@ button.ui-button::-moz-focus-inner {
 	text-decoration: none;
 	cursor: default;
 }
+.ui-tabs .ui-tabs-nav li {
+	background: #d4d0c8;
+}
 .ui-tabs .ui-tabs-nav li.ui-tabs-active {
 	border-bottom: solid 1px #d4d0c8;
 	margin-bottom: -1px;
