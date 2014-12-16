@@ -28,7 +28,7 @@ if [ lbar.xml -nt build/tmp/lbar.js ]; then
   mv build/tmp/lbar.js_ build/tmp/lbar.js
 fi
 
-css_files='node_modules/codemirror/lib/codemirror.css node_modules/jquery-ui/themes/smoothness/jquery-ui.min.css style/style.css'
+css_files='node_modules/codemirror/lib/codemirror.css style/style.css style/jquery-ui.css'
 css_combined=build/tmp/D.css
 for f in $css_files; do if [ $f -nt $css_combined ]; then cat $css_files >$css_combined; break; fi done
 h=build/static/index.html
