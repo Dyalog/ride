@@ -59,6 +59,7 @@ js_files='
   node_modules/jquery-ui/dialog.js
   node_modules/jquery-ui/effect.js
   node_modules/jquery-ui/effect-slide.js
+  node_modules/jquery-ui/tabs.js
   jquery.layout.js
   build/tmp/lbar.js
   docs/help-urls.coffee

@@ -6,9 +6,10 @@ jQuery ($) ->
       <div class="lbar-tip" style="display:none"><div class="lbar-tip-desc"></div><pre class="lbar-tip-text"></pre></div>
       <div class="lbar-tip-triangle" style="display:none"></div>
       <div class="ui-layout-center"></div>
-      <div class="ui-layout-east"  style="display:none"></div>
-      <div class="ui-layout-south" style="display:none"></div>
+      <div class="ui-layout-east" ><ul></ul></div>
+      <div class="ui-layout-south"><ul></ul></div>
     """
+    ['east', 'south'].forEach (d) -> $('.ui-layout-' + d).tabs()
 
     wins = # mapping between window ids and widget instances (Dyalog.Session or Dyalog.Editor)
       0: session = Dyalog.Session $('.ui-layout-center'),
@@ -29,12 +30,14 @@ jQuery ($) ->
       .on 'end', -> alert 'Interpreter disconnected'
       .on 'update', (name, text, token, bugger, breakpoints) -> wins[token].open name, text, breakpoints; session.scrollCursorIntoView()
       .on 'CloseWindow', ({win}) ->
-        $c = $ wins[win].getContainer(); delete wins[win]
-        for d in ['east', 'south'] when $c.hasClass 'ui-layout-' + d then layout.close d
-        session.scrollCursorIntoView()
+        $t = $('#wintab' + win).closest '.ui-tabs'; $("#wintab#{win},#win#{win}").remove(); $t.tabs 'refresh'
+        if !$t.find('ul li').length then ['east', 'south'].forEach (d) -> if $t.hasClass 'ui-layout-' + d then layout.close d
+        delete wins[win]; session.scrollCursorIntoView()
       .on 'open', (name, text, token, bugger, breakpoints) ->
         layout.open dir = if bugger then 'south' else 'east'
-        wins[token] = Dyalog.Editor '.ui-layout-' + dir,
+        $("<li id='wintab#{token}'><a href='#win#{token}'></a></li>").appendTo('.ui-layout-' + dir + ' ul').find('a').text name
+        $tabContent = $("<div style='width:100%;height:auto;padding:0' id='win#{token}'></div>").appendTo('.ui-layout-' + dir)
+        wins[token] = Dyalog.Editor $tabContent,
           debugger: bugger
           save: (s, bs)   -> socket.emit 'SaveChanges',    win: token, text: s, attributes: stop: bs
           close:          -> socket.emit 'CloseWindow',    win: token
@@ -50,6 +53,7 @@ jQuery ($) ->
           cutback:        -> socket.emit 'Cutback',        win: token
           autocomplete: (s, i) -> socket.emit 'autocomplete', s, i, token
         wins[token].open name, text, breakpoints
+        $('.ui-layout-' + dir).tabs('refresh').tabs active: -1
         session.scrollCursorIntoView()
 
     # language bar

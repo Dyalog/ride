@@ -38,13 +38,8 @@ Dyalog.Editor = (e, opts = {}) ->
   '''
 
   cm = CodeMirror $e.find('.cm')[0],
-    lineNumbers: true
-    firstLineNumber: 0
-    lineNumberFormatter: (i) -> "[#{i}]"
-    matchBrackets: true
-    autoCloseBrackets: true
-    gutters: ['breakpoints', 'CodeMirror-linenumbers']
-    keyMap: 'dyalog'
+    lineNumbers: true, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
+    keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: true, gutters: ['breakpoints', 'CodeMirror-linenumbers']
     extraKeys:
       Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
       Enter: -> if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'
@@ -82,7 +77,7 @@ Dyalog.Editor = (e, opts = {}) ->
     return
 
   $tb = $ '.toolbar', $e
-  $ '.button', $tb # todo
+  $('.button', $tb) # todo
     .on 'mousedown', (e) -> $(e.target).addClass 'armed'; e.preventDefault(); return
     .on 'mouseup mouseout', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return
 
@@ -157,7 +152,7 @@ Dyalog.Editor = (e, opts = {}) ->
 
   hll = null # currently highlighted line
 
-  updateSize: -> cm.setSize $e.width(), $e.height()
+  updateSize: -> cm.setSize $e.width(), $e.parent().height() - $e.position().top - 16
   open: (name, text, bs) ->
     cm.setValue text
     cm.setCursor 0, cm.getLine(0).length
