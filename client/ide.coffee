@@ -2,7 +2,11 @@ jQuery ($) ->
   Dyalog.idePage = ->
     {socket} = Dyalog
     $('body').html """
-      <div class="lbar ui-layout-north" style="display:none"><a class="lbar-close" title="Hide Language Bar" href="#"></a>#{Dyalog.lbarHTML}</div>
+      <div class="lbar ui-layout-north" style="display:none">
+        <a class="lbar-close" title="Hide Language Bar" href="#"></a>
+        <a class="lbar-prefs" title="Preferences" href="#"></a>
+        #{Dyalog.lbarHTML}
+      </div>
       <div class="lbar-tip" style="display:none"><div class="lbar-tip-desc"></div><pre class="lbar-tip-text"></pre></div>
       <div class="lbar-tip-triangle" style="display:none"></div>
       <div class="ui-layout-center"></div>
@@ -58,6 +62,7 @@ jQuery ($) ->
 
     # language bar
     $('.lbar-close').on 'click', -> layout.close 'north'; false
+    $('.lbar-prefs').on 'click', -> Dyalog.showPrefs(); false
     $tip = $ '.lbar-tip'; $tipDesc = $ '.lbar-tip-desc'; $tipText = $ '.lbar-tip-text'; $tipTriangle = $ '.lbar-tip-triangle'
     ttid = null # tooltip timeout id
     $ '.lbar'
