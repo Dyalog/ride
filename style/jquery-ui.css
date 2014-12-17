@@ -1153,6 +1153,5 @@ body .ui-tooltip {
 /*}*/
 
 /* Overlays */
-.ui-widget-overlay { opacity: .3; filter: Alpha(Opacity=30); }
-.ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; opacity: .3; filter: Alpha(Opacity=30); border-radius: 8px; }
-.ui-widget-overlay, .ui-widget-shadow { /*ui-bg_flat_0_aaaaaa_40x100.png*/ background: #aaaaaa 50% 50% repeat-x url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAABkAgAAAACbvzUHAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAJiS0dEAAMzhHKIAAAAFklEQVQ4y2P4DwcMo8xR5ihzlEkuEwCNQORGPPypIwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNC0wMS0xN1QxMjoyNDoyOC0wNTowMLf8aBIAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTQtMDEtMTdUMTI6MjQ6MjgtMDU6MDDGodCuAAAAAElFTkSuQmCC); }
+.ui-widget-overlay { opacity: .3; filter: Alpha(Opacity=30); background: #aaaaaa; }
+.ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; opacity: .3; filter: Alpha(Opacity=30); border-radius: 8px; background: #aaaaaa; }
