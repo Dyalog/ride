@@ -47,7 +47,6 @@ Dyalog.Editor = (e, opts = {}) ->
         bs = []
         for l of breakpoints then bs.push +l; cm.setGutterMarker +l, 'breakpoint', null
         opts.save? cm.getValue(), bs
-        opts.close?()
         return
       'Shift-Esc': -> opts.close?()
       'Ctrl-Up': ->
@@ -171,3 +170,4 @@ Dyalog.Editor = (e, opts = {}) ->
     return
   getContainer: -> $e
   setDebugger: setDebugger
+  saved: (err) -> (if err then alert 'Cannot save changes' else opts.close?()); return

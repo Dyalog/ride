@@ -48,7 +48,8 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
         log 'from interpreter: ' + JSON.stringify(m)[..1000]
         if !/^(?:SupportedProtocols|UsingProtocol)=1$/.test m # ignore these
           switch (/^<(\w+)>/.exec m)?[1] or ''
-            when 'ReplyConnect', 'ReplyEdit', 'ReplySaveChanges', 'ReplySetLineAttributes' then ; # ignore
+            when 'ReplyConnect', 'ReplyEdit', 'ReplySetLineAttributes' then ; # ignore
+            when 'ReplySaveChanges'       then toBrowser 'ReplySaveChanges', win: +getTag('win', m), err: +getTag 'err', m
             when 'ReplyWindowTypeChanged' then toBrowser 'WindowTypeChanged', win: +getTag('Win', m), tracer: !!+getTag 'bugger', m
             when 'ReplyIdentify'      then toBrowser 'UpdateDisplayName', displayName: b64d getTag 'Project', m
             when 'ReplyUpdateWsid'

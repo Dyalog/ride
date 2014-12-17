@@ -34,6 +34,7 @@ jQuery ($) ->
       .on 'highlight', (win, line) -> wins[win].highlight line
       .on 'end', -> alert 'Interpreter disconnected'
       .on 'update', (name, text, token, bugger, breakpoints) -> wins[token].open name, text, breakpoints; session.scrollCursorIntoView()
+      .on 'ReplySaveChanges', ({win, err}) -> wins[win]?.saved err
       .on 'CloseWindow', ({win}) ->
         $t = $('#wintab' + win).closest '.ui-tabs'; $("#wintab#{win},#win#{win}").remove(); $t.tabs 'refresh'
         if !$t.find('ul li').length then ['east', 'south'].forEach (d) -> if $t.hasClass 'ui-layout-' + d then layout.close d
