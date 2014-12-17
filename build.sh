@@ -13,15 +13,15 @@ if [ lbar.xml -nt build/tmp/lbar.js ]; then
     b64d = (s) -> Buffer(s, 'base64').toString()
     stripTag = (s) -> s.replace /^.*<\w+>([^<]*)<\/\w+>.*$/, '\$1'
     esc = (s) -> s.replace /./g, (x) -> {'&': '&amp;', '<': '&lt;', '>': '&gt;'}[x] or x
-    lbarHTML = ''; lbarTips = {}
+    lbarHTML = ''; lbarTips = {}; isFirst = 1
     for line, i in require('fs').readFileSync('lbar.xml', 'utf8').split '\n'
       if line == '<LanguageBarElement>' then chr = desc = text = ''
       else if /<chr>/.test line then chr = String.fromCharCode stripTag line
       else if /<desc>/.test line then desc = b64d stripTag line
       else if /<text>/.test line then text = b64d stripTag line
       else if line == '</LanguageBarElement>'
-        if chr == '\0' then lbarHTML += ' '
-        else lbarHTML += "<b>#{esc chr}</b>"; lbarTips[chr] = [desc, text]
+        if chr == '\0' then lbarHTML += ' '; isFirst = 1
+        else lbarHTML += "<b#{['', ' class="first"'][isFirst]}>#{esc chr}</b>"; lbarTips[chr] = [desc, text]; isFirst = 0
       else if line then throw Error "error at line #{i + 1}: #{JSON.stringify line}"
     process.stdout.write "var Dyalog=Dyalog||{};Dyalog.lbarTips=#{JSON.stringify lbarTips};Dyalog.lbarHTML=#{JSON.stringify lbarHTML};"
 .
