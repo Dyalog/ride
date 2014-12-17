@@ -51,13 +51,10 @@ Dyalog.Editor = (e, opts = {}) ->
         return
       'Shift-Esc': -> opts.close?()
       'Ctrl-Up': ->
-        c = cm.getCursor()
-        s = cm.getLine c.line
+        c = cm.getCursor(); s = cm.getLine c.line
         r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*' # regex fragment to match identifiers
-        name = ((///⎕?#{r}$///.exec(s[...c.ch])?[0] ? '') +
-                (///^#{r}///.exec(s[c.ch..])?[0] ? ''))
-                  .replace /^\d+/, ''
-        if name and name[0] != '⎕'
+        name = ((///⎕?#{r}$///.exec(s[...c.ch])?[0] or '') + (///^#{r}///.exec(s[c.ch..])?[0] or '')).replace /^\d+/, ''
+        if name
           l = cm.getLine 0; [head, tail...] = l.split ';'
           i = tail.indexOf name; if i < 0 then tail.push name else tail.splice i, 1
           cm.replaceRange [head].concat(tail.sort()).join(';'), {line: 0, ch: 0}, {line: 0, ch: l.length}, 'Dyalog'
