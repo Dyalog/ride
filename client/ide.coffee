@@ -58,7 +58,8 @@ jQuery ($) ->
           cutback:        -> socket.emit 'Cutback',        win: token
           autocomplete: (s, i) -> socket.emit 'autocomplete', s, i, token
         wins[token].open name, text, breakpoints
-        $('.ui-layout-' + dir).tabs('refresh').tabs active: -1
+        $('.ui-layout-' + dir).tabs('refresh').tabs(active: -1)
+          .data('ui-tabs').panels.off 'keydown' # prevent jQueryUI tabs from hijacking our keystrokes, <C-Up> in particular
         session.scrollCursorIntoView()
 
     # language bar
