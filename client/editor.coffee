@@ -58,10 +58,10 @@ Dyalog.Editor = (e, opts = {}) ->
                 (///^#{r}///.exec(s[c.ch..])?[0] ? ''))
                   .replace /^\d+/, ''
         if name and name[0] != '⎕'
-          h = cm.getLine 0 # header line
-          h1 = h.replace ///;#{name}(;|$)///, '$1'
-          cm.replaceRange (if h == h1 then h1 += ';' + name else h1),
-            {line: 0, ch: 0}, {line: 0, ch: h.length}, 'Dyalog'
+          l = cm.getLine 0; [head, tail...] = l.split ';'
+          i = tail.indexOf name; if i < 0 then tail.push name else tail.splice i, 1
+          cm.replaceRange [head].concat(tail.sort()).join(';'), {line: 0, ch: 0}, {line: 0, ch: l.length}, 'Dyalog'
+        return
 
   setTimeout (-> cm.setOption 'lineNumbers', !opts.debugger), 1
 
