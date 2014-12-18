@@ -392,6 +392,9 @@ button.ui-button::-moz-focus-inner {
 	border-left-width: 1px;
 }
 .ui-dialog {
+	border-style: solid;
+	border-width: 1px;
+	border-color: #fff #888 #888 #fff;
 	overflow: hidden;
 	position: absolute;
 	top: 0;
@@ -818,10 +821,7 @@ body .ui-tooltip {
 	font-family: Verdana,Arial,sans-serif;
 	font-size: 1em;
 }
-.ui-widget-content {
-	border: 1px solid #aaaaaa;
-	background: #fff;
-}
+.ui-widget-content { background: #fff; }
 .ui-widget-header {
 	border: 1px solid #aaaaaa;
 	background: #d4d0c8;
@@ -836,12 +836,12 @@ body .ui-tooltip {
 /*	border: 1px solid #d3d3d3;*/
 	/*background: #e6e6e6 url(images/ui-bg_glass_75_e6e6e6_1x400.png) 50% 50% repeat-x;*/
 	font-weight: normal;
-	color: #555555;
+	/*color: #555555;*/
 }
 .ui-state-default a,
 .ui-state-default a:link,
 .ui-state-default a:visited {
-	color: #555555;
+	color: #000;
 	text-decoration: none;
 }
 .ui-state-hover,
@@ -882,7 +882,6 @@ body .ui-tooltip {
 .ui-state-highlight,
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight {
-	border: 1px solid #fcefa1;
 	background: #fbf9ee url(images/ui-bg_glass_55_fbf9ee_1x400.png) 50% 50% repeat-x;
 	color: #363636;
 }

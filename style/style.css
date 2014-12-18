@@ -12,7 +12,7 @@ body { padding: 0; margin: 0; }
 .CodeMirror, .CodeMirror-hints, .lbar, .lbar-tip, .toolbar, .search {
 	font-family: apl, monospace;
 }
-.lbar { background: #d4d0c8; padding: 2px 2px 2px 10px; cursor: default; line-height: 22px; }
+.lbar { background: #d4d0c8; padding: 2px 2px 2px 10px; cursor: default; line-height: 22px; border-bottom: solid #888 1px; }
 .lbar b { border: solid black 1px; border-left: 0; font-weight: normal; }
 .lbar b.first { border-left: solid black 1px; }
 .lbar b:hover { outline: solid black 1px; border-left: solid black 1px; margin-left: -1px; }
@@ -43,9 +43,11 @@ body { padding: 0; margin: 0; }
 }
 .lbar-tip-desc { padding: 0 0 0 30px; margin: 0; font-weight: bold; }
 .ui-layout-resizer { background: #d4d0c8; }
+.ui-layout-resizer-east  { border-left: solid #fff 1px; border-right:  solid #888 1px; padding-top: 1px !important; margin-top: -1px !important; }
+.ui-layout-resizer-south { border-top:  solid #fff 1px; border-bottom: solid #888 1px; }
 .ui-layout-toggler { background: #808080; }
 .ui-layout-resizer:hover .ui-layout-toggler { background: #ace; }
-.toolbar { height: 24px; overflow: hidden; background: #d4d0c8; cursor: default; overflow: hidden; padding: 1px; border-bottom: solid #aaa 1px; }
+.toolbar { height: 24px; overflow: hidden; background: #d4d0c8; cursor: default; overflow: hidden; padding: 2px; border-bottom: solid #aaa 1px; }
 .button {
 	float: left;
 	width: 24px;
@@ -91,9 +93,10 @@ body { padding: 0; margin: 0; }
 	height: 24px;
 	background: no-repeat center center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAASCAIAAAD+ApjoAAAAGElEQVQI12NoaGj4//8/EwMDAwMDA70pACyPBKBkf6chAAAAAElFTkSuQmCC);
 }
-.search { float: left; height: 18px; width: 200px; }
+.search { float: left; height: 18px; width: 200px; border-style: solid; border-width: 2px; border-color: #888 #fff #fff #888; outline: 0; }
 .CodeMirror-linenumber { color: #00f; text-align: left; }
 .CodeMirror-gutters { border-right-color: transparent; background: transparent; }
+.CodeMirror-gutter-wrapper { background-color: white; padding-bottom: 2px; }
 .hidden { display: none; }
 .modified { background: #eee; }
 .highlighted { border: solid red 1px; }
