@@ -75,10 +75,11 @@ Dyalog.Session = (e, opts = {}) ->
     cm.setCursor cm.lineCount() - 1, 0
 
   noPrompt: ->
-    cm.setOption 'readOnly', true
+    cm.setOption 'readOnly', 'nocursor'
 
   prompt: (why) -> # 0=Invalid 1=Descalc 2=QuadInput 3=LineEditor 4=QuoteQuadInput 5=Prompt
     cm.setOption 'readOnly', false
+    cm.focus()
     l = cm.lineCount() - 1
     cm.replaceRange (if why == 4 then '' else '      '), {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
     cm.setCursor l, 6

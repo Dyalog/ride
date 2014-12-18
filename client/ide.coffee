@@ -26,7 +26,7 @@ jQuery ($) ->
       .on 'UpdateDisplayName', ({displayName}) -> $('title').text displayName
       .on 'EchoInput', ({input}) -> session.add input
       .on 'AppendSessionOutput', ({result}) -> session.add result
-      .on 'NotAtInputPrompt', -> session.prompt null
+      .on 'NotAtInputPrompt', -> session.noPrompt()
       .on 'AtInputPrompt', ({why}) -> session.prompt why
       .on 'FocusWindow', ({win}) -> wins[win].focus()
       .on 'WindowTypeChanged', ({win, tracer}) -> wins[win].setDebugger tracer

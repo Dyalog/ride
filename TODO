@@ -28,4 +28,3 @@ status window and notification about number of messages
 display a "mailto:" link when a SysError happens
 "updateWsid" message will be changed
 re-take screenshot
-block input while an expression is being evaluated
