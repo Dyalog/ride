@@ -13,8 +13,23 @@ jQuery ($) ->
       <div class="ui-layout-east" ><ul></ul></div>
       <div class="ui-layout-south"><ul></ul></div>
     """
-    $('.ui-layout-east, .ui-layout-south').tabs(activate: (_, ui) -> wins[+ui.newTab.attr('id').replace /^[a-z\-]*/, ''].updateSize())
-      .find('ul').sortable cursor: 'move', revert: true, tolerance: 'pointer'
+
+    tabOpts = activate: (_, ui) -> wins[+ui.newTab.attr('id').replace /\D+/, ''].updateSize()
+    $tabs = $('.ui-layout-east, .ui-layout-south').tabs tabOpts
+
+    refreshTabs = ->
+      $tabs.each -> $t = $ @; if !$('li', $t).length then ['east', 'south'].forEach (d) -> (if $t.hasClass 'ui-layout-' + d then layout.close d); return
+           .tabs 'refresh'
+      return
+
+    $tabs.find('ul').each ->
+      $(@).sortable
+        cursor: 'move', revert: true, tolerance: 'pointer', connectWith: $tabs.find 'ul'
+        receive: (_, ui) ->
+          $(@).closest('.ui-tabs').append $ '#win' + ui.item.attr('id').replace /\D+/, ''
+          $tabs.tabs('destroy').tabs tabOpts
+          return
+        stop: refreshTabs
 
     wins = # mapping between window ids and widget instances (Dyalog.Session or Dyalog.Editor)
       0: session = Dyalog.Session $('.ui-layout-center'),
@@ -36,9 +51,11 @@ jQuery ($) ->
       .on 'update', (name, text, token, bugger, breakpoints) -> wins[token].open name, text, breakpoints; session.scrollCursorIntoView()
       .on 'ReplySaveChanges', ({win, err}) -> wins[win]?.saved err
       .on 'CloseWindow', ({win}) ->
-        $t = $('#wintab' + win).closest '.ui-tabs'; $("#wintab#{win},#win#{win}").remove(); $t.tabs 'refresh'
-        if !$t.find('ul li').length then ['east', 'south'].forEach (d) -> if $t.hasClass 'ui-layout-' + d then layout.close d
+        $("#wintab#{win},#win#{win}").remove()
+        $tabs.tabs('destroy').tabs tabOpts
+        refreshTabs()
         delete wins[win]; session.scrollCursorIntoView()
+        return
       .on 'open', (name, text, token, bugger, breakpoints) ->
         layout.open dir = if bugger then 'south' else 'east'
         $("<li id='wintab#{token}'><a href='#win#{token}'></a></li>").appendTo('.ui-layout-' + dir + ' ul').find('a').text name
