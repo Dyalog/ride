@@ -166,7 +166,7 @@ Dyalog.Editor = (e, opts = {}) ->
   highlight: (l) ->
     if hll? then cm.removeLineClass hll, 'background', 'highlighted'
     cm.addLineClass (hll = l), 'background', 'highlighted'
-    cm.scrollIntoView line: l, ch: 0
+    cm.setCursor l, 0
     return
   getContainer: -> $e
   setDebugger: setDebugger
