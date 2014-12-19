@@ -1,5 +1,6 @@
 about dialog with version: 0.1. + commit counter, and also build date
 menus (only within the browser window)
+F1 should open the docs at dyalog.com
 floating editor windows
 js strict mode
 searchable help files
