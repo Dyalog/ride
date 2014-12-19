@@ -43,9 +43,8 @@ body { padding: 0; margin: 0; }
 }
 .lbar-tip-desc { padding: 0 0 0 30px; margin: 0; font-weight: bold; }
 .ui-layout-resizer { background: #d4d0c8; }
-.ui-layout-resizer-east  { border-left: solid #fff 1px; border-right:  solid #888 1px; padding-top: 1px !important; margin-top: -1px !important; }
-.ui-layout-resizer-south { border-top:  solid #fff 1px; border-bottom: solid #888 1px; }
-.ui-layout-toggler { background: #808080; }
+.ui-layout-resizer-east { border-left: solid #fff 1px; border-right:  solid #888 1px; padding: 2px 0 !important; margin-top: -1px !important; }
+.ui-layout-resizer-south, .ui-layout-resizer-north { border-top:  solid #fff 1px; border-bottom: solid #888 1px; }
 .ui-layout-resizer:hover .ui-layout-toggler { background: #ace; }
 .toolbar { height: 24px; overflow: hidden; background: #d4d0c8; cursor: default; overflow: hidden; padding: 2px; border-bottom: solid #aaa 1px; }
 .button {
