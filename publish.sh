@@ -6,7 +6,7 @@ if ! mountpoint /devt >/dev/null; then echo 'mounting devt' && sudo mount /devt;
 r=/devt/ride/jsride
 d=`date +%Y-%m-%d--%H-%M`
 if [ -e $r/$d ]; then echo "$r/$d already exists, try again later"; exit 2; fi
-echo "copying to $r/$d" && cp -r build/dyalogjs $r/$d
+echo "copying to $r/$d" && sudo cp -r build/dyalogjs $r/$d
 echo 'updating "latest" symlink'
-[ -L $r/latest ] && rm $r/latest && ln -s $d $r/latest
-echo 'all available releases in $r:' && ls $r
+[ -L $r/latest ] && sudo rm $r/latest && sudo ln -s $d $r/latest
+echo "all available releases in $r:" && ls $r
