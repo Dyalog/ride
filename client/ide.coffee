@@ -29,7 +29,7 @@ jQuery ($) ->
           $(@).closest('.ui-tabs').append $ '#win' + ui.item.attr('id').replace /\D+/, ''
           $tabs.tabs('destroy').tabs tabOpts
           return
-        stop: refreshTabs
+        stop: -> refreshTabs(); $('[role=tab]', @).attr 'style', '' # clean up z-indices after dragging
 
     wins = # mapping between window ids and widget instances (Dyalog.Session or Dyalog.Editor)
       0: session = Dyalog.Session $('.ui-layout-center'),
