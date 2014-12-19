@@ -1,38 +1,38 @@
 Dyalog.Editor = (e, opts = {}) ->
   ($e = $ e).html '''
     <div class="toolbar debugger-toolbar">
-      <a href="#" class="b-over         button" title="Execute line"             ></a>
-      <a href="#" class="b-into         button" title="Trace into expression"    ></a>
-      <a href="#" class="b-back         button" title="Go back one line"         ></a>
-      <a href="#" class="b-skip         button" title="Skip current line"        ></a>
-      <a href="#" class="b-cont-trace   button" title="Continue trace"           ></a>
-      <a href="#" class="b-cont-exec    button" title="Continue execution"       ></a>
-      <a href="#" class="b-restart      button" title="Restart all threads"      ></a>
-      <a href="#" class="b-edit-name    button" title="Edit name"                ></a>
-      <a href="#" class="b-quit         button" title="Quit this function"       ></a>
-      <a href="#" class="b-interrupt    button" title="Interrupt"                ></a>
-      <a href="#" class="b-cutback      button" title="Clear trace/stop/monitor for this object"></a>
-      <a href="#" class="b-line-numbers button" title="Toggle line numbers"      ></a>
+      <a href="#" class="b-over         toolbar-button" title="Execute line"             ></a>
+      <a href="#" class="b-into         toolbar-button" title="Trace into expression"    ></a>
+      <a href="#" class="b-back         toolbar-button" title="Go back one line"         ></a>
+      <a href="#" class="b-skip         toolbar-button" title="Skip current line"        ></a>
+      <a href="#" class="b-cont-trace   toolbar-button" title="Continue trace"           ></a>
+      <a href="#" class="b-cont-exec    toolbar-button" title="Continue execution"       ></a>
+      <a href="#" class="b-restart      toolbar-button" title="Restart all threads"      ></a>
+      <a href="#" class="b-edit-name    toolbar-button" title="Edit name"                ></a>
+      <a href="#" class="b-quit         toolbar-button" title="Quit this function"       ></a>
+      <a href="#" class="b-interrupt    toolbar-button" title="Interrupt"                ></a>
+      <a href="#" class="b-cutback      toolbar-button" title="Clear trace/stop/monitor for this object"></a>
+      <a href="#" class="b-line-numbers toolbar-button" title="Toggle line numbers"      ></a>
       <a href="#" class="separator"></a>
       <input class="search">
-      <a href="#" class="b-next         button" title="Search for next match"    >▶</a>
-      <a href="#" class="b-prev         button" title="Search for previous match">◀</a>
-      <a href="#" class="b-case         button" title="Match case"               >aA</a>
+      <a href="#" class="b-next         toolbar-button" title="Search for next match"    >▶</a>
+      <a href="#" class="b-prev         toolbar-button" title="Search for previous match">◀</a>
+      <a href="#" class="b-case         toolbar-button" title="Match case"               >aA</a>
     </div>
     <div class="toolbar editor-toolbar">
-      <a href="#" class="b-line-numbers button pressed" title="Toggle line numbers">[⋯]</a>
-      <a href="#" class="b-comment      button" title="Comment selected text"    >⍝</a>
-      <a href="#" class="b-uncomment    button" title="Uncomment selected text"  >/⍝</a>
-      <a href="#" class="b-save         button" title="Save changes and return"  >×</a>
+      <a href="#" class="b-line-numbers toolbar-button pressed" title="Toggle line numbers">[⋯]</a>
+      <a href="#" class="b-comment      toolbar-button" title="Comment selected text"    >⍝</a>
+      <a href="#" class="b-uncomment    toolbar-button" title="Uncomment selected text"  >/⍝</a>
+      <a href="#" class="b-save         toolbar-button" title="Save changes and return"  >×</a>
       <a href="#" class="separator"></a>
       <input class="search">
-      <a href="#" class="b-next         button" title="Search for next match"    >▶</a>
-      <a href="#" class="b-prev         button" title="Search for previous match">◀</a>
-      <a href="#" class="b-case         button" title="Match case"               >aA</a>
+      <a href="#" class="b-next         toolbar-button" title="Search for next match"    >▶</a>
+      <a href="#" class="b-prev         toolbar-button" title="Search for previous match">◀</a>
+      <a href="#" class="b-case         toolbar-button" title="Match case"               >aA</a>
       <a class="separator"></a>
-      <a href="#" class="b-refac-m      button" title="Refactor text as method"  >+m</a>
-      <a href="#" class="b-refac-f      button" title="Refactor text as field"   >+f</a>
-      <a href="#" class="b-refac-p      button" title="Refactor text as property">+p</a>
+      <a href="#" class="b-refac-m      toolbar-button" title="Refactor text as method"  >+m</a>
+      <a href="#" class="b-refac-f      toolbar-button" title="Refactor text as field"   >+f</a>
+      <a href="#" class="b-refac-p      toolbar-button" title="Refactor text as property">+p</a>
     </div>
     <div class="cm"></div>
   '''
@@ -73,7 +73,7 @@ Dyalog.Editor = (e, opts = {}) ->
     return
 
   $tb = $ '.toolbar', $e
-  $('.button', $tb) # todo
+  $('.toolbar-button', $tb) # todo
     .on 'mousedown', (e) -> $(e.target).addClass 'armed'; e.preventDefault(); return
     .on 'mouseup mouseout', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return
 

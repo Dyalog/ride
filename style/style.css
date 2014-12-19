@@ -45,7 +45,7 @@ body { padding: 0; margin: 0; }
 .ui-layout-resizer-south, .ui-layout-resizer-north { border-top:  solid #fff 1px; border-bottom: solid #888 1px; }
 .ui-layout-resizer:hover .ui-layout-toggler { background: #ace; }
 .toolbar { height: 24px; overflow: hidden; background: #d4d0c8; cursor: default; overflow: hidden; padding: 2px; border-bottom: solid #aaa 1px; }
-.button {
+.toolbar-button {
 	float: left;
 	width: 24px;
 	height: 24px;
@@ -56,13 +56,9 @@ body { padding: 0; margin: 0; }
 	text-indent: -9999px;
 	cursor: default;
 }
-.button:hover { border-color: #fff #808080 #808080 #fff; }
-.button.armed { border-color: #808080 #fff #fff #808080; }
-.button.pressed {
-	border-color: #808080 #fff #fff #808080;
-	background-color: #eee;
-	/*background: 0 0 repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAACCAIAAAD91JpzAAAAF0lEQVQI12O4cuHE////Gf///3/14kkAS/EK11k4g7IAAAAASUVORK5CYII=);*/
-}
+.toolbar-button:hover { border-color: #fff #888 #888 #fff; }
+.toolbar-button.armed { border-color: #888 #fff #fff #888; }
+.toolbar-button.pressed { border-color: #888 #fff #fff #888; background-color: #eee; }
 .b-line-numbers { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAALCAYAAACksgdhAAAALElEQVQoz2NkYGD4z4AAjAz4wX8MBpHgPxMDGWBgNP0nkh6WAcFIQoqAqwMADDENBizwvaoAAAAASUVORK5CYII=); }
 .b-comment      { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAMCAYAAACwXJejAAAAP0lEQVQY052QSQ4AMAgCoen/v0yv1kq3OSExRCRmFDSzEDzs2ahSGQYWKQKAhguel+Sa8tBsSaJrunvB/+GWAWT9CBiHRFQ/AAAAAElFTkSuQmCC); }
 .b-uncomment    { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAVElEQVQoz5WQSQ7AMAgDB5T/f9m5VBUKOFU5gTVmC+ZQyeMR9BYGHMVlJkSBVcTIoZGDAUj8EQ22hnMNboYBljWoX92+lhd4LNfXzm2C+4Y1/IEBNtT4GBWRRLxNAAAAAElFTkSuQmCC); }
