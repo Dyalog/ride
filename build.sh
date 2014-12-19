@@ -84,6 +84,8 @@ for f in $js_files; do
     else echo "uglifying $f"; <$f sed '/^\(var \w\+ = \)\?require(/d' | $uglifyjs >$u; fi
   fi
 done
-if [ $changed -ne 0 ]; then echo 'concatenating uglified files'; cat $us >build/static/D.js; fi
+version_file=build/tmp/version.js
+echo 'var Dyalog=Dyalog||{}; Dyalog.version="0.1.'$(git rev-list HEAD --count)'"; Dyalog.buildDate="'$(date --iso-8601)'";' > $version_file
+if [ $changed -ne 0 ]; then echo 'concatenating uglified files'; cat $version_file $us >build/static/D.js; fi
 
 cp -ur style/apl385.* style/*.png favicon.ico docs/help docs/help.css docs/help.js package.json build/static/
