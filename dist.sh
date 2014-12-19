@@ -5,6 +5,8 @@ node_version=0.10.5
 
 ./build.sh
 
+ulimit -n $(ulimit -Hn) # Bump open file limit to its hard limit.  OSX build requires a lot.
+
 if [ proxy.coffee -nt build/static/proxy.js ]; then
   echo 'compiling proxy.coffee'
   $coffee -o build/static/ -c proxy.coffee
