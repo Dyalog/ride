@@ -54,6 +54,7 @@ body { padding: 0; margin: 0; }
 	font-weight: bold;
 	background: no-repeat center center;
 	text-indent: -9999px;
+	cursor: default;
 }
 .button:hover { border-color: #fff #808080 #808080 #fff; }
 .button.armed { border-color: #808080 #fff #fff #808080; }

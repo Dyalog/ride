@@ -1,38 +1,38 @@
 Dyalog.Editor = (e, opts = {}) ->
   ($e = $ e).html '''
     <div class="toolbar debugger-toolbar">
-      <span class="b-over         button" title="Execute line"             ></span>
-      <span class="b-into         button" title="Trace into expression"    ></span>
-      <span class="b-back         button" title="Go back one line"         ></span>
-      <span class="b-skip         button" title="Skip current line"        ></span>
-      <span class="b-cont-trace   button" title="Continue trace"           ></span>
-      <span class="b-cont-exec    button" title="Continue execution"       ></span>
-      <span class="b-restart      button" title="Restart all threads"      ></span>
-      <span class="b-edit-name    button" title="Edit name"                ></span>
-      <span class="b-quit         button" title="Quit this function"       ></span>
-      <span class="b-interrupt    button" title="Interrupt"                ></span>
-      <span class="b-cutback      button" title="Clear trace/stop/monitor for this object"></span>
-      <span class="b-line-numbers button" title="Toggle line numbers"      ></span>
-      <span class="separator"></span>
+      <a href="#" class="b-over         button" title="Execute line"             ></a>
+      <a href="#" class="b-into         button" title="Trace into expression"    ></a>
+      <a href="#" class="b-back         button" title="Go back one line"         ></a>
+      <a href="#" class="b-skip         button" title="Skip current line"        ></a>
+      <a href="#" class="b-cont-trace   button" title="Continue trace"           ></a>
+      <a href="#" class="b-cont-exec    button" title="Continue execution"       ></a>
+      <a href="#" class="b-restart      button" title="Restart all threads"      ></a>
+      <a href="#" class="b-edit-name    button" title="Edit name"                ></a>
+      <a href="#" class="b-quit         button" title="Quit this function"       ></a>
+      <a href="#" class="b-interrupt    button" title="Interrupt"                ></a>
+      <a href="#" class="b-cutback      button" title="Clear trace/stop/monitor for this object"></a>
+      <a href="#" class="b-line-numbers button" title="Toggle line numbers"      ></a>
+      <a href="#" class="separator"></a>
       <input class="search">
-      <span class="b-next         button" title="Search for next match"    >▶</span>
-      <span class="b-prev         button" title="Search for previous match">◀</span>
-      <span class="b-case         button" title="Match case"               >aA</span>
+      <a href="#" class="b-next         button" title="Search for next match"    >▶</a>
+      <a href="#" class="b-prev         button" title="Search for previous match">◀</a>
+      <a href="#" class="b-case         button" title="Match case"               >aA</a>
     </div>
     <div class="toolbar editor-toolbar">
-      <span class="b-line-numbers button pressed" title="Toggle line numbers">[⋯]</span>
-      <span class="b-comment      button" title="Comment selected text"    >⍝</span>
-      <span class="b-uncomment    button" title="Uncomment selected text"  >/⍝</span>
-      <span class="b-save         button" title="Save changes and return"  >×</span>
-      <span class="separator"></span>
+      <a href="#" class="b-line-numbers button pressed" title="Toggle line numbers">[⋯]</a>
+      <a href="#" class="b-comment      button" title="Comment selected text"    >⍝</a>
+      <a href="#" class="b-uncomment    button" title="Uncomment selected text"  >/⍝</a>
+      <a href="#" class="b-save         button" title="Save changes and return"  >×</a>
+      <a href="#" class="separator"></a>
       <input class="search">
-      <span class="b-next         button" title="Search for next match"    >▶</span>
-      <span class="b-prev         button" title="Search for previous match">◀</span>
-      <span class="b-case         button" title="Match case"               >aA</span>
-      <span class="separator"></span>
-      <span class="b-refac-m      button" title="Refactor text as method"  >+m</span>
-      <span class="b-refac-f      button" title="Refactor text as field"   >+f</span>
-      <span class="b-refac-p      button" title="Refactor text as property">+p</span>
+      <a href="#" class="b-next         button" title="Search for next match"    >▶</a>
+      <a href="#" class="b-prev         button" title="Search for previous match">◀</a>
+      <a href="#" class="b-case         button" title="Match case"               >aA</a>
+      <a class="separator"></a>
+      <a href="#" class="b-refac-m      button" title="Refactor text as method"  >+m</a>
+      <a href="#" class="b-refac-f      button" title="Refactor text as field"   >+f</a>
+      <a href="#" class="b-refac-p      button" title="Refactor text as property">+p</a>
     </div>
     <div class="cm"></div>
   '''
