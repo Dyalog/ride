@@ -38,7 +38,7 @@ Dyalog.Editor = (e, opts = {}) ->
   '''
 
   cm = CodeMirror $e.find('.cm')[0],
-    lineNumbers: true, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
+    lineNumbers: !opts.debugger, fixedGutter: false, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
     keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: true, gutters: ['breakpoints', 'CodeMirror-linenumbers']
     extraKeys:
       Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
@@ -58,8 +58,6 @@ Dyalog.Editor = (e, opts = {}) ->
           i = tail.indexOf name; if i < 0 then tail.push name else tail.splice i, 1
           cm.replaceRange [head].concat(tail.sort()).join(';'), {line: 0, ch: 0}, {line: 0, ch: l.length}, 'Dyalog'
         return
-
-  setTimeout (-> cm.setOption 'lineNumbers', !opts.debugger), 1
 
   createBreakpointElement = -> $('<div class="breakpoint">●</div>')[0]
   breakpoints = {}
