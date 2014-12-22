@@ -87,7 +87,7 @@ body { padding: 0; margin: 0; }
 	height: 24px;
 	background: no-repeat center center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAASCAIAAAD+ApjoAAAAGElEQVQI12NoaGj4//8/EwMDAwMDA70pACyPBKBkf6chAAAAAElFTkSuQmCC);
 }
-.search { float: left; height: 18px; width: 200px; border-style: solid; border-width: 2px; border-color: #888 #fff #fff #888; outline: 0; }
+.search { float: left; height: 18px; width: 200px; }
 .CodeMirror-linenumber { color: #00f; text-align: left; }
 .CodeMirror-gutters { border-right-color: transparent; background: transparent; }
 .CodeMirror-gutter-wrapper { background-color: white; padding-bottom: 2px; }
@@ -165,3 +165,13 @@ body { padding: 0; margin: 0; }
 .tab-out a { background-color: #ace !important; }
 /* a z-index hack to make the tab (relatively positioned) go on top of resizers and the south pane (absolutely positioned) */
 .dragging .ui-layout-resizer, .dragging .ui-layout-south { z-index: -1 !important; }
+a.button {
+	background-color: #d4d0c8;
+	border-style: solid;
+	border-width: 1px 2px 2px 1px;
+	border-color: #fff #888 #888 #fff;
+	color: black;
+	text-decoration: none;
+	padding: 2px 20px;
+}
+a.button:active { border-color: #888 #fff #fff #888; }

@@ -14,7 +14,7 @@ Dyalog.Editor = (e, opts = {}) ->
       <a href="#" class="b-cutback      toolbar-button" title="Clear trace/stop/monitor for this object"></a>
       <a href="#" class="b-line-numbers toolbar-button" title="Toggle line numbers"      ></a>
       <a href="#" class="separator"></a>
-      <input class="search">
+      <input class="search text-field">
       <a href="#" class="b-next         toolbar-button" title="Search for next match"    >▶</a>
       <a href="#" class="b-prev         toolbar-button" title="Search for previous match">◀</a>
       <a href="#" class="b-case         toolbar-button" title="Match case"               >aA</a>
@@ -25,7 +25,7 @@ Dyalog.Editor = (e, opts = {}) ->
       <a href="#" class="b-uncomment    toolbar-button" title="Uncomment selected text"  >/⍝</a>
       <a href="#" class="b-save         toolbar-button" title="Save changes and return"  >×</a>
       <a href="#" class="separator"></a>
-      <input class="search">
+      <input class="search text-field">
       <a href="#" class="b-next         toolbar-button" title="Search for next match"    >▶</a>
       <a href="#" class="b-prev         toolbar-button" title="Search for previous match">◀</a>
       <a href="#" class="b-case         toolbar-button" title="Match case"               >aA</a>

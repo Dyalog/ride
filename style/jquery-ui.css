@@ -128,62 +128,34 @@
 	padding: 0;
 	line-height: normal;
 	margin-right: .1em;
-	cursor: pointer;
+	cursor: default;
 	vertical-align: middle;
 	text-align: center;
 	overflow: visible; /* removes extra width in IE */
+	border-style: solid;
+	border-width: 1px;
+	border-color: #fff #404040 #404040 #fff;
 }
-.ui-button,
-.ui-button:link,
-.ui-button:visited,
-.ui-button:hover,
-.ui-button:active {
-	text-decoration: none;
-}
+.ui-button, .ui-button:link, .ui-button:visited, .ui-button:hover, .ui-button:active { text-decoration: none; color: #000; }
+.ui-button:active { border-color: #000; }
 /* to make room for the icon, a width needs to be set here */
-.ui-button-icon-only {
-	width: 2.2em;
-}
-/* button elements seem to need a little more width */
-button.ui-button-icon-only {
-	width: 2.4em;
-}
-.ui-button-icons-only {
-	width: 3.4em;
-}
-button.ui-button-icons-only {
-	width: 3.7em;
-}
+.ui-button-icon-only { width: 2.2em; }
+
+button.ui-button-icon-only { width: 2.4em; }
+.ui-button-icons-only { width: 3.4em; }
+button.ui-button-icons-only { width: 3.7em; }
 
 /* button text element */
-.ui-button .ui-button-text {
-	display: block;
-	line-height: normal;
-}
-.ui-button-text-only .ui-button-text {
-	padding: .4em 1em;
-}
-.ui-button-icon-only .ui-button-text,
-.ui-button-icons-only .ui-button-text {
-	padding: .4em;
-	text-indent: -9999999px;
-}
-.ui-button-text-icon-primary .ui-button-text,
-.ui-button-text-icons .ui-button-text {
-	padding: .4em 1em .4em 2.1em;
-}
-.ui-button-text-icon-secondary .ui-button-text,
-.ui-button-text-icons .ui-button-text {
-	padding: .4em 2.1em .4em 1em;
-}
-.ui-button-text-icons .ui-button-text {
-	padding-left: 2.1em;
-	padding-right: 2.1em;
-}
+.ui-button .ui-button-text { display: block; line-height: normal; cursor: normal; }
+.ui-button:active .ui-button-text { border-color: #000; outline: dotted #000 1px; outline-offset: -3px; }
+.ui-button-text-only .ui-button-text { padding: 1px 20px; border-style: solid; border-width: 1px; border-color: transparent #808080 #808080 transparent; }
+.ui-button-text-only:active .ui-button-text { border-color: #808080; }
+.ui-button-icon-only .ui-button-text, .ui-button-icons-only .ui-button-text { padding: 0; text-indent: -9999999px; }
+.ui-button-text-icon-primary .ui-button-text, .ui-button-text-icons .ui-button-text { padding: .4em 1em .4em 2.1em; }
+.ui-button-text-icon-secondary .ui-button-text, .ui-button-text-icons .ui-button-text { padding: .4em 2.1em .4em 1em; }
+.ui-button-text-icons .ui-button-text { padding-left: 2.1em; padding-right: 2.1em; }
 /* no icon support for input elements, provide padding by default */
-input.ui-button {
-	padding: .4em 1em;
-}
+input.ui-button { padding: .4em 1em; }
 
 /* button icon element(s) */
 .ui-button-icon-only .ui-icon,
@@ -193,11 +165,11 @@ input.ui-button {
 .ui-button-icons-only .ui-icon {
 	position: absolute;
 	top: 50%;
-	margin-top: -8px;
+	margin-top: -9px;
 }
 .ui-button-icon-only .ui-icon {
 	left: 50%;
-	margin-left: -8px;
+	margin-left: -9px;
 }
 .ui-button-text-icon-primary .ui-button-icon-primary,
 .ui-button-text-icons .ui-button-icon-primary,
@@ -428,7 +400,7 @@ button.ui-button::-moz-focus-inner {
 .ui-dialog .ui-dialog-content {
 	position: relative;
 	border: 0;
-	padding: .5em 1em;
+	padding: 0;
 	background: none;
 	overflow: auto;
 }
@@ -821,7 +793,7 @@ body .ui-tooltip {
 	font-family: Verdana,Arial,sans-serif;
 	font-size: 1em;
 }
-.ui-widget-content { background: #fff; }
+.ui-widget-content { background: #d4d0c8; }
 .ui-widget-header {
 	border: 1px solid #aaaaaa;
 	background: #d4d0c8;
@@ -1154,3 +1126,4 @@ body .ui-tooltip {
 /* Overlays */
 .ui-widget-overlay { opacity: .3; filter: Alpha(Opacity=30); background: #aaaaaa; }
 .ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; opacity: .3; filter: Alpha(Opacity=30); border-radius: 8px; background: #aaaaaa; }
+.text-field { border-style: solid; border-width: 2px; border-color: #888 #fff #fff #888; outline: 0; }
