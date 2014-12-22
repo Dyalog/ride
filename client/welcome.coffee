@@ -4,7 +4,8 @@ jQuery ($) =>
   $ 'body'
     .on 'keydown', (e) ->
       if e.which == 113 then Dyalog.welcomePage(); return false # <F2>
-      if 49 <= e.which <= 57 and e.ctrlKey then $('.fav-addr').eq(e.which - 49).click(); return false # <C-1> ... <C-9>
+      if 49 <= e.which <= 57 && e.ctrlKey && !e.altKey && !e.shiftKey # <C-1> ... <C-9>
+        $('.fav-addr').eq(e.which - 49).click(); return false
       return
     .on 'keydown', '.connect-host, .connect-port, .connect-name', (e) -> if e.which == 13 then $('.connect').click()
     .on 'keydown', '.listen-port', (e) -> if e.which == 13 then $('.listen').click()

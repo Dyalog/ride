@@ -1,4 +1,3 @@
-Danish kbd on Win: AltGr+top row key doesn't work in Windows. 2=@, 3=£, 4=$, 7={, 8=[, 9=] (that's not unique to this app)
 if two editors are open, the "X" closes both of them (cannot reproduce)
 set focus after closing an editor
 uncomment selected line button doesn't work if nothing is selected
