@@ -1,3 +1,10 @@
+Danish kbd on Win: AltGr+top row key doesn't work in Windows. 2=@, 3=£, 4=$, 7={, 8=[, 9=] (that's not unique to this app)
+if two editors are open, the "X" closes both of them (cannot reproduce)
+set focus after closing an editor
+uncomment selected line button doesn't work if nothing is selected
+continuously update completion list while typing
+save line number display configuration (on/off)
+Shift+Esc while editing a namespace: TypeError: Cannot read property info of undefined
 about dialog with version: 0.1. + commit counter, and also build date
 menus (only within the browser window)
 F1 should open the docs at dyalog.com
