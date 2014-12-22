@@ -1,39 +1,35 @@
-if two editors are open, the "X" closes both of them (cannot reproduce)
-set focus after closing an editor
-uncomment selected line button doesn't work if nothing is selected
-continuously update completion list while typing
-save line number display configuration (on/off)
-Shift+Esc while editing a namespace: TypeError: Cannot read property info of undefined
-about dialog with version: 0.1. + commit counter, and also build date
-menus (only within the browser window)
-F1 should open the docs at dyalog.com
-floating editor windows
-js strict mode
-searchable help files
-search field history
-code folding and [+] button
-inset borders in editors and session
-SI stack in debugger (?)
-automatically pop up completion box after a timeout
-implement more buttons in the debugger
-can Express gzip static files in advance?
-selecting a block of text and pressing ⍝ should comment/uncomment it
-comment alignment
-keybindings for toolbar buttons
-keybinding for toggling a breakpoint
-rewrite syntax highlighting to support Dyalog syntax
-contextual help for items in completion menus
-` keybindings in search box
-highlight non-local names in a different colour
-virtual whitespace after eol and eof (?)
-experiment with storing all help content in browser memory
-when connecting, wait for interpreter to start
-listen for connections from the interpreter
-control font size in nw
-revert line in session should move cursor to next line
-detect the presence of a popup blocker
-interrupts
-status window and notification about number of messages
-display a "mailto:" link when a SysError happens
-"updateWsid" message will be changed
-re-take screenshot
+v14.1:
+  update focus after closing an editor
+  if two editors are open, the "X" closes both of them (cannot reproduce)
+  F1 should open the docs at dyalog.com
+  "uncomment selected line" button doesn't work if nothing is selected
+  continuously update completion list while typing
+  Shift+Esc while editing a namespace: TypeError: Cannot read property info of undefined
+  floating editor windows
+  menus (only within the browser window)
+  about dialog with version: 0.1. + commit counter, and also build date
+  listen for connections from the interpreter
+  control font size in node-webkit
+  selecting a block of text and pressing ⍝ should comment/uncomment it
+  revert line in session should move cursor to next line (suggested by Scholes)
+  re-take screenshot
+
+Later:
+  rewrite syntax highlighting to support Dyalog syntax
+  highlight non-local names in a different colour
+  automatically pop up completion box after a timeout
+  save line number display configuration (on/off)
+  status window and notification about number of messages
+  a shoftcut to align ⍝-s (suggested by Kai)
+  experiment with storing all help content in browser memory
+  searchable help files
+  keybindings for toolbar buttons
+  keybinding for toggling a breakpoint
+  ` keybindings in search box
+  contextual help (F1) for items in completion menus
+  js strict mode
+  display a "mailto:" link when a SysError happens
+  search field history
+  can ExpressJS (the web server) gzip static files in advance?
+  code folding and [+] button
+  SI stack in debugger (?)
