@@ -12,6 +12,7 @@ Apparently fixed (Morten thinks):
   if two editors are open, the "X" closes both of them (cannot reproduce)
 
 v14.1:
+  Catastrophic: Quote-Quad does not display the input prompt
   update focus after closing an editor
   F1 should open the local help for language elements, but this help should have links to help.dyalog.com for the rest
   "uncomment selected line" button doesn't work if nothing is selected
