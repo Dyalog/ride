@@ -79,8 +79,8 @@ Dyalog.Session = (e, opts = {}) ->
     cm.setOption 'readOnly', false
     cm.setOption 'cursorHeight', 1
     l = cm.lineCount() - 1
-    cm.replaceRange (if why == 4 then '' else '      '), {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
-    cm.setCursor l, 6
+    if why != 4 then cm.replaceRange '      ', {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
+    cm.setCursor l, cm.getLine(l).length
     return
 
   updateSize: -> cm.setSize $e.width(), $e.height()
