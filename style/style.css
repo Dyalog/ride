@@ -9,9 +9,9 @@
 	font-style: normal;
 }
 body { padding: 0; margin: 0; }
-.CodeMirror, .CodeMirror-hints, .lbar, .lbar-tip, .toolbar, .search { font-family: apl, monospace; font-size: 18px; }
+.CodeMirror, .CodeMirror-hints, .lbar, .lbar-tip, .lbar-tip-desc, .toolbar, .search { font-family: apl, monospace; font-size: 18px; }
 .lbar { background: #d4d0c8; padding: 2px 2px 2px 10px; cursor: default; line-height: 22px; border-bottom: solid #888 1px; line-height: 26px; }
-.lbar b { border: solid black 1px; border-left: 0; font-weight: normal; margin-bottom: 3px; padding: 0 1px; background: #eeeae2; }
+.lbar b { border: solid #666 1px; border-left: 0; font-weight: normal; margin-bottom: 3px; padding: 0 1px; background: #eeeae2; }
 .lbar b.first { border-left: solid black 1px; }
 .lbar b:hover { outline: solid black 1px; border-left: solid black 1px; margin-left: -1px; }
 .lbar b.first:hover { margin-left: 0; }
