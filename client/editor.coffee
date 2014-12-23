@@ -54,9 +54,15 @@ Dyalog.Editor = (e, opts = {}) ->
         r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*' # regex fragment to match identifiers
         name = ((///⎕?#{r}$///.exec(s[...c.ch])?[0] or '') + (///^#{r}///.exec(s[c.ch..])?[0] or '')).replace /^\d+/, ''
         if name
-          l = cm.getLine 0; [head, tail...] = l.split ';'
-          i = tail.indexOf name; if i < 0 then tail.push name else tail.splice i, 1
-          cm.replaceRange [head].concat(tail.sort()).join(';'), {line: 0, ch: 0}, {line: 0, ch: l.length}, 'Dyalog'
+          # search backwards for a line that looks like a tradfn header (though in theory it might be a dfns's recursive call)
+          l = c.line; while l >= 0 && !/^\s*∇\s*\S/.test cm.getLine l then l--
+          if l < 0 and !/\{\s*$/.test cm.getLine(0).replace /⍝.*/, '' then l = 0
+          if l >= 0 && l != c.line
+            [_, s, comment] = /([^⍝]*)(.*)/.exec cm.getLine l
+            [head, tail...] = s.split ';'; head = head.replace /\s+$/, ''; tail = tail.map (x) -> x.replace /\s+/g, ''
+            i = tail.indexOf name; if i < 0 then tail.push name else tail.splice i, 1
+            s = [head].concat(tail.sort()).join(';') + if comment then ' ' + comment else ''
+            cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
         return
 
   createBreakpointElement = -> $('<div class="breakpoint">●</div>')[0]
