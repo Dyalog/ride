@@ -1,7 +1,19 @@
+New (Nick to move into v14.1 list or discuss with Morten):
+  BS and left cursor should terminate autocomplete dropdown (like ESC). Right cursor/tab should select and continue.
+  Once you start auto-completing a WS name, the drop-down should stay up to allow several path selections.
+  ctrl+TAB should cycle between editors and session windows as in ODE (and in a Web Browser)
+  Highlight non-local names in a different colour (if this is not too hard, this is BY FAR the most useful syntax colouring)
+  Was "toggle localisation" supposed to work?
+  Can you experimentally give language bar boxes a slightly lighter shade, and add a couple of pixels above/below/between?
+  )ed namespace.foo should position cursor at start of foo
+  Toggle localization in a namespace produced:        :Namespace CertTest ;log
+  
+Apparently fixed (Morten thinks):
+  if two editors are open, the "X" closes both of them (cannot reproduce)
+
 v14.1:
   update focus after closing an editor
-  if two editors are open, the "X" closes both of them (cannot reproduce)
-  F1 should open the docs at dyalog.com
+  F1 should open the local help for language elements, but this help should have links to help.dyalog.com for the rest
   "uncomment selected line" button doesn't work if nothing is selected
   continuously update completion list while typing
   Shift+Esc while editing a namespace: TypeError: Cannot read property info of undefined
@@ -10,13 +22,12 @@ v14.1:
   about dialog with version: 0.1. + commit counter, and also build date
   listen for connections from the interpreter
   control font size in node-webkit
-  selecting a block of text and pressing ⍝ should comment/uncomment it
   revert line in session should move cursor to next line (suggested by Scholes)
   re-take screenshot
 
 Later:
   rewrite syntax highlighting to support Dyalog syntax
-  highlight non-local names in a different colour
+  selecting a block of text and pressing ⍝ should comment/uncomment it
   automatically pop up completion box after a timeout
   save line number display configuration (on/off)
   status window and notification about number of messages
