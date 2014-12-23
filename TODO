@@ -1,5 +1,5 @@
 Significant Usibility Issues:
-  update focus after closing an editor
+  Update focus after closing an editor
   )ed namespace.foo should position cursor at start of foo
   Trace namespace.foo should scroll so that traced code is at the TOP of the window
   If an error is encountered in a scripted fn, tracer needs to scroll to line which failed
@@ -7,12 +7,13 @@ Significant Usibility Issues:
   BS and left cursor should terminate autocomplete dropdown (like ESC). Right cursor/tab should select and continue.
   Once you start auto-completing a WS name, the drop-down should stay up to allow several path selections.
 
-Neede by v14.1:
+Needed by v14.1:
+  Floating editor windows
   F1 should open the local help for language elements, but this help should have links to help.dyalog.com for the rest
+  Need a full keyboarding discussion: Whether to report/adapt to IME keystrokes, etc
   "uncomment selected line" button doesn't work if nothing is selected
   continuously update completion list while typing
   Shift+Esc while editing a namespace: TypeError: Cannot read property info of undefined
-  floating editor windows
   menus (only within the browser window)
   about dialog with version: 0.1. + commit counter, and also build date
   listen for connections from the interpreter
