@@ -1,5 +1,5 @@
 log = do ->
-  N = 20; T = 1000 # log no more than N log messages per T milliseconds
+  N = 50; T = 1000 # log no more than N log messages per T milliseconds
   n = t = 0
   (s) ->
     if (t1 = +new Date) - t > T then t = t1; n = 1
