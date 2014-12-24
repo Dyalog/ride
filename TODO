@@ -4,8 +4,9 @@ Significant Usibility Issues:
   Trace namespace.foo should scroll so that traced code is at the TOP of the window
   If an error is encountered in a scripted fn, tracer needs to scroll to line which failed
   ctrl+TAB should cycle between editors and session windows as in ODE (and in a Web Browser)
-  BS and left cursor should terminate autocomplete dropdown (like ESC). Right cursor/tab should select and continue.
-  Once you start auto-completing a WS name, the drop-down should stay up to allow several path selections.
+  BS and left cursor should terminate autocomplete dropdown (like ESC). Right cursor/tab should select and continue
+  Once you start auto-completing a WS name, the drop-down should stay up to allow several path selections
+  If a namespace or class cannot be saved, the "unable to save" popup does not have the focus when it appears
 
 Needed by v14.1:
   Floating editor windows
