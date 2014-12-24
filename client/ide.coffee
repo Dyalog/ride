@@ -115,5 +115,6 @@ jQuery ($) ->
       east:  spacing_closed: 0, size: '0%', resizable: 1, togglerLength_open: 0
       south: spacing_closed: 0, size: '0%', resizable: 1, togglerLength_open: 0
       center: onresize: -> (for _, x of wins then x.updateSize()); session.scrollCursorIntoView(); return
+      fxName: ''
     for d in ['east', 'south'] then layout.close d; layout.sizePane d, '50%'
     session.updateSize()
