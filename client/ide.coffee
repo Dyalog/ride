@@ -14,7 +14,7 @@ jQuery ($) ->
       <div class="ui-layout-south"><ul></ul></div>
     """
 
-    tabOpts = activate: (_, ui) -> wins[+ui.newTab.attr('id').replace /\D+/, ''].updateSize()
+    tabOpts = activate: (_, ui) -> (w = wins[+ui.newTab.attr('id').replace /\D+/, '']).updateSize(); w.focus(); return
     $tabs = $('.ui-layout-east, .ui-layout-south').tabs tabOpts
 
     refreshTabs = ->
@@ -48,7 +48,7 @@ jQuery ($) ->
       .on 'AppendSessionOutput', ({result}) -> session.add result
       .on 'NotAtInputPrompt', -> session.noPrompt()
       .on 'AtInputPrompt', ({why}) -> session.prompt why
-      .on 'FocusWindow', ({win}) -> wins[win].focus()
+      .on 'FocusWindow', ({win}) -> $("#wintab#{win} a").click(); wins[win].focus(); return
       .on 'WindowTypeChanged', ({win, tracer}) -> wins[win].setDebugger tracer
       .on 'autocomplete', (token, skip, options) -> wins[token].autocomplete skip, options
       .on 'highlight', (win, line) -> wins[win].highlight line
