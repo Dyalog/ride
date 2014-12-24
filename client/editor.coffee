@@ -170,7 +170,7 @@ Dyalog.Editor = (e, opts = {}) ->
   highlight: (l) ->
     if hll? then cm.removeLineClass hll, 'background', 'highlighted'
     cm.addLineClass (hll = l), 'background', 'highlighted'
-    cm.setCursor l, 0; cm.scrollIntoView null, $e.height() / 2
+    cm.setCursor l, 0; x = cm.cursorCoords true, 'local'; x.right = x.left; x.bottom = x.top + $e.height(); cm.scrollIntoView x
     return
   getContainer: -> $e
   setDebugger: setDebugger
