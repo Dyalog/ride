@@ -11,6 +11,24 @@ b64 = (s) -> Buffer(s).toString 'base64'
 b64d = (s) -> '' + Buffer s, 'base64'
 getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exec xml)?[1]
 
+parseEditableEntity = (xml) -> # used for OpenWindow and UpdateWindow
+  # v1 sample message:
+  # <ReplyUpdateWindow>\n<entity><name>bnM=</name><text>Ok5hbWVzcGFjZSBucwogICAg4oiHIGYKICAgICAgMQogICAg4oiHCiAgICDiiIcgZwogICAgICAyCiAgICDiiIcKOkVuZE5hbWVzcGFjZQ==</text><cur_pos>4</cur_pos><token>1</token><bugger>0</bugger><sub_offset>0</sub_offset><sub_size>0</sub_size><type>256</type><ReadOnly>0</ReadOnly><tid>0</tid><tid_name>MA==</tid_name><colours>ra2tra2tra2trQMHBwADAwMDtAMVAAMDAwMDAwUAAwMDA7QAAwMDA7QDFQADAwMDAwMFAAMDAwO0AK6urq6urq6urq6urq4A</colours><attributes>\n</attributes></entity>\n</ReplyUpdateWindow>
+  # v2 spec from http://wiki.dyalog.bramley/index.php/Ride_protocol_messages_V2#Extended_types
+  #   EditableEntity => [string name, string text, int token,
+  #                      byte[] colours, int currentRow, int currentColumn,
+  #                      int subOffset, int subSize, bool debugger,
+  #                      int tid, bool readonly, string tidName,
+  #                      entityType type, lineAttributes attributes]
+  #   lineAttributes => lineAttribute[int[] stop, int[] monitor, int[] trace]
+  bs = []; xml.replace /<row>(\d+)<\/row><value>1<\/value>/g, (_, l) -> bs.push +l
+  name: b64d getTag 'name', xml
+  text: b64d getTag 'text', xml
+  token: +getTag 'token', xml
+  currentRow: +getTag('cur_pos', xml) || 0
+  debugger: +getTag 'bugger', xml
+  lineAttributes: stop: bs
+
 WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' # constants used for ReplyAtInputPrompt
 
 @Proxy = ->
@@ -63,12 +81,8 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
             when 'ReplyGetLog'        then toBrowser 'AppendSessionOutput', result: b64d getTag 'Log', m
             when 'ReplyNotAtInputPrompt' then toBrowser 'NotAtInputPrompt'
             when 'ReplyAtInputPrompt' then toBrowser 'AtInputPrompt', why: WHIES.indexOf getTag 'why', m
-            when 'ReplyOpenWindow'
-              bs = []; m.replace /<row>(\d+)<\/row><value>1<\/value>/g, (_, l) -> bs.push +l
-              toBrowser 'open', b64d(getTag 'name', m), b64d(getTag 'text', m), +getTag('token', m), +getTag('bugger', m), bs
-            when 'ReplyUpdateWindow'
-              bs = []; m.replace /<row>(\d+)<\/row><value>1<\/value>/g, (_, l) -> bs.push +l
-              toBrowser 'update', b64d(getTag 'name', m), b64d(getTag 'text', m), +getTag('token', m), +getTag('bugger', m), bs
+            when 'ReplyOpenWindow'    then toBrowser 'OpenWindow',   parseEditableEntity m
+            when 'ReplyUpdateWindow'  then toBrowser 'UpdateWindow', parseEditableEntity m
             when 'ReplyFocusWindow'   then toBrowser 'FocusWindow', win: +getTag 'win', m
             when 'ReplyCloseWindow'   then toBrowser 'CloseWindow', win: +getTag 'win', m
             when 'ReplyGetAutoComplete'

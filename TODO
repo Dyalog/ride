@@ -1,5 +1,4 @@
 Significant Usibility Issues:
-  )ed namespace.foo should position cursor at start of foo
   Trace namespace.foo should scroll so that traced code is at the TOP of the window
   ctrl+TAB should cycle between editors and session windows as in ODE (and in a Web Browser)
   BS and left cursor should terminate autocomplete dropdown (like ESC). Right cursor/tab should select and continue
@@ -44,3 +43,4 @@ Later:
 Done:
   If an error is encountered in a scripted fn, tracer needs to scroll to line which failed
   Update focus after closing an editor
+  )ed namespace.foo should position cursor at start of foo

@@ -154,11 +154,9 @@ Dyalog.Editor = (e, opts = {}) ->
   hll = null # currently highlighted line
 
   updateSize: -> cm.setSize $e.width(), $e.parent().height() - $e.position().top - 28
-  open: (name, text, bs) ->
-    cm.setValue text
-    cm.setCursor 0, cm.getLine(0).length
-    cm.focus()
-    for l in bs then cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
+  open: (ee) ->
+    cm.setValue ee.text; cm.setCursor ee.currentRow, (ee.currentColumn || 0); cm.focus()
+    for l in ee.lineAttributes?.stop then cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
     return
   hasFocus: -> cm.hasFocus()
   focus: -> cm.focus()

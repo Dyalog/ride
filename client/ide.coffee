@@ -53,7 +53,7 @@ jQuery ($) ->
       .on 'autocomplete', (token, skip, options) -> wins[token].autocomplete skip, options
       .on 'highlight', (win, line) -> wins[win].highlight line
       .on 'end', -> alert 'Interpreter disconnected'
-      .on 'update', (name, text, token, bugger, breakpoints) -> wins[token].open name, text, breakpoints; session.scrollCursorIntoView()
+      .on 'UpdateWindow', (ee) -> wins[ee.token].open ee; session.scrollCursorIntoView() # "ee" for EditableEntity
       .on 'ReplySaveChanges', ({win, err}) -> wins[win]?.saved err
       .on 'CloseWindow', ({win}) ->
         $("#wintab#{win},#win#{win}").remove()
@@ -61,26 +61,27 @@ jQuery ($) ->
         refreshTabs()
         delete wins[win]; session.scrollCursorIntoView()
         return
-      .on 'open', (name, text, token, bugger, breakpoints) ->
-        layout.open dir = if bugger then 'south' else 'east'
-        $("<li id='wintab#{token}'><a href='#win#{token}'></a></li>").appendTo('.ui-layout-' + dir + ' ul').find('a').text name
-        $tabContent = $("<div style='width:100%;height:auto;padding:0' id='win#{token}'></div>").appendTo('.ui-layout-' + dir)
-        wins[token] = Dyalog.Editor $tabContent,
-          debugger: bugger
-          save: (s, bs)   -> socket.emit 'SaveChanges',    win: token, text: s, attributes: stop: bs
-          close:          -> socket.emit 'CloseWindow',    win: token
-          over:           -> socket.emit 'RunCurrentLine', win: token
-          into:           -> socket.emit 'StepInto',       win: token
-          back:           -> socket.emit 'TraceBackward',  win: token
-          skip:           -> socket.emit 'TraceForward',   win: token
-          continueTrace:  -> socket.emit 'ContinueTrace',  win: token
-          continueExec:   -> socket.emit 'Continue',       win: token
-          restartThreads: -> socket.emit 'RestartThreads', win: token
-          edit:    (s, p) -> socket.emit 'Edit',           win: token, text: s, pos: p
+      .on 'OpenWindow', (ee) -> # "ee" for EditableEntity
+        layout.open dir = if ee.debugger then 'south' else 'east'
+        w = ee.token
+        $("<li id='wintab#{w}'><a href='#win#{w}'></a></li>").appendTo('.ui-layout-' + dir + ' ul').find('a').text ee.name
+        $tabContent = $("<div style='width:100%;height:auto;padding:0' id='win#{w}'></div>").appendTo('.ui-layout-' + dir)
+        wins[w] = Dyalog.Editor $tabContent,
+          debugger: ee.debugger
+          save: (s, bs)   -> socket.emit 'SaveChanges',    win: w, text: s, attributes: stop: bs
+          close:          -> socket.emit 'CloseWindow',    win: w
+          over:           -> socket.emit 'RunCurrentLine', win: w
+          into:           -> socket.emit 'StepInto',       win: w
+          back:           -> socket.emit 'TraceBackward',  win: w
+          skip:           -> socket.emit 'TraceForward',   win: w
+          continueTrace:  -> socket.emit 'ContinueTrace',  win: w
+          continueExec:   -> socket.emit 'Continue',       win: w
+          restartThreads: -> socket.emit 'RestartThreads', win: w
+          edit:    (s, p) -> socket.emit 'Edit',           win: w, text: s, pos: p
           interrupt:      -> socket.emit 'WeakInterrupt'
-          cutback:        -> socket.emit 'Cutback',        win: token
-          autocomplete: (s, i) -> socket.emit 'autocomplete', s, i, token
-        wins[token].open name, text, breakpoints
+          cutback:        -> socket.emit 'Cutback',        win: w
+          autocomplete: (s, i) -> socket.emit 'autocomplete', s, i, w
+        wins[w].open ee
         $('.ui-layout-' + dir).tabs('refresh').tabs(active: -1)
           .data('ui-tabs').panels.off 'keydown' # prevent jQueryUI tabs from hijacking our keystrokes, <C-Up> in particular
         session.scrollCursorIntoView()
