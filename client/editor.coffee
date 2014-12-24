@@ -155,7 +155,8 @@ Dyalog.Editor = (e, opts = {}) ->
 
   updateSize: -> cm.setSize $e.width(), $e.parent().height() - $e.position().top - 28
   open: (ee) ->
-    cm.setValue ee.text; cm.setCursor ee.currentRow, (ee.currentColumn || 0); cm.focus()
+    cm.setValue ee.text; cm.focus()
+    cm.setCursor ee.currentRow, (ee.currentColumn || 0); cm.scrollIntoView null, $e.height() / 2
     for l in ee.lineAttributes?.stop then cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
     return
   hasFocus: -> cm.hasFocus()
@@ -169,7 +170,7 @@ Dyalog.Editor = (e, opts = {}) ->
   highlight: (l) ->
     if hll? then cm.removeLineClass hll, 'background', 'highlighted'
     cm.addLineClass (hll = l), 'background', 'highlighted'
-    cm.setCursor l, 0
+    cm.setCursor l, 0; cm.scrollIntoView null, $e.height() / 2
     return
   getContainer: -> $e
   setDebugger: setDebugger
