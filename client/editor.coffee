@@ -49,6 +49,7 @@ Dyalog.Editor = (e, opts = {}) ->
         opts.save? cm.getValue(), bs
         return
       'Shift-Esc': -> opts.close?()
+      'Shift-Enter': -> opts.edit? cm.getValue(), cm.indexFromPos cm.getCursor()
       'Ctrl-Up': ->
         c = cm.getCursor(); s = cm.getLine c.line
         r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*' # regex fragment to match identifiers
