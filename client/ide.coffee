@@ -14,6 +14,14 @@ jQuery ($) ->
       <div class="ui-layout-south"><ul></ul></div>
     """
 
+    $(document).keydown (e) ->
+      if e.which == 9 && e.ctrlKey && !e.altKey # <C-Tab> and <C-S-Tab>
+        for w, c of wins when c.hasFocus() then w = +w; break # w: id of old focused window
+        wo = [0].concat $('li[role=tab]').map(-> +$(@).attr('id').replace /\D+/, '').toArray() # wo: window order
+        u = wo[(wo.indexOf(w) + if e.shiftKey then wo.length - 1 else 1) % wo.length] # u: id of new focused window
+        $("#wintab#{u} a").click(); wins[u]?.focus()
+        false
+
     tabOpts = activate: (_, ui) -> (w = wins[+ui.newTab.attr('id').replace /\D+/, '']).updateSize(); w.focus(); return
     $tabs = $('.ui-layout-east, .ui-layout-south').tabs tabOpts
 
