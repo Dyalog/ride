@@ -1,4 +1,7 @@
 Significant Usibility Issues:
+  Update focus after closing an editor (not fixed in Dec 24 version)
+  Need Help|About feature to allow include version information when reporting issues
+  Type something, hit shift enter on function name: Editor opens OK, but session log input is subsequently discarded
   ctrl+TAB should cycle between editors and session windows as in ODE (and in a Web Browser)
   BS and left cursor should terminate autocomplete dropdown (like ESC). Right cursor/tab should select and continue
   Once you start auto-completing a WS name, the drop-down should stay up to allow several path selections
@@ -42,6 +45,5 @@ Later:
 
 Done:
   If an error is encountered in a scripted fn, tracer needs to scroll to line which failed
-  Update focus after closing an editor
   )ed namespace.foo should position cursor at start of foo
   Trace namespace.foo should scroll so that traced code is at the TOP of the window
