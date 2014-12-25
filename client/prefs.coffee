@@ -5,7 +5,7 @@ $ ->
   Dyalog.showPrefs = ->
     if !$d
       $d = $ '''
-        <div>
+        <div id="prefs">
           <p style="text-align:center"><label>Prefix key: <input class="prefs-pk text-field" size="1"></label></p>
           <div style="text-align:center">
             <a href="#" class="prefs-ok" class="button">OK</a>

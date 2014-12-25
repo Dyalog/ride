@@ -55,8 +55,9 @@ button.ui-button-icons-only { width: 3.7em; }
 
 /* button text element */
 .ui-button .ui-button-text { display: block; line-height: normal; cursor: normal; }
-.ui-button:active .ui-button-text { border-color: #000; outline: dotted #000 1px; outline-offset: -3px; }
-.ui-button-text-only .ui-button-text { padding: 1px 20px; border-style: solid; border-width: 1px; border-color: transparent #808080 #808080 transparent; }
+.ui-button:focus { outline: dotted #000 1px; outline-offset: -4px; }
+.ui-button:active .ui-button-text { border-color: #000; }
+.ui-button-text-only .ui-button-text { min-width: 75px; border-style: solid; border-width: 1px; border-color: transparent #808080 #808080 transparent; }
 .ui-button-text-only:active .ui-button-text { border-color: #808080; }
 .ui-button-icon-only .ui-button-text, .ui-button-icons-only .ui-button-text { padding: 0; text-indent: -9999999px; }
 .ui-button-text-icon-primary .ui-button-text, .ui-button-text-icons .ui-button-text { padding: .4em 1em .4em 2.1em; }
@@ -246,7 +247,8 @@ body .ui-tooltip { border-width: 2px; }
 /* Component containers */
 .ui-widget { font-family: Verdana,Arial,sans-serif; font-size: 1.1em; }
 .ui-widget .ui-widget { font-size: 1em; }
-.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Verdana,Arial,sans-serif; font-size: 1em; }
+/*.ui-widget input,*/
+.ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Verdana,Arial,sans-serif; font-size: 1em; }
 .ui-widget-content { background: #d4d0c8; }
 .ui-widget-header { border: 1px solid #aaaaaa; background: #d4d0c8; font-weight: bold; }
 
@@ -285,8 +287,7 @@ body .ui-tooltip { border-width: 2px; }
 	text-decoration: none;
 }
 
-/* Interaction Cues
-----------------------------------*/
+/* Interaction Cues */
 .ui-state-highlight,
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight {
