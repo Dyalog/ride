@@ -57,8 +57,6 @@ js_files='
   node_modules/jquery-ui/sortable.js
   node_modules/jquery-ui/button.js
   node_modules/jquery-ui/dialog.js
-  node_modules/jquery-ui/effect.js
-  node_modules/jquery-ui/effect-slide.js
   node_modules/jquery-ui/tabs.js
   jquery.layout.js
   build/tmp/lbar.js
