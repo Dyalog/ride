@@ -5,10 +5,10 @@ do ->
 
   DEFAULT_MAP_LEADER = '`'
   mapLeaderListeners = []
-  Dyalog.onMapLeaderChange = (f) -> mapLeaderListeners.push f
-  Dyalog.getMapLeader = -> localStorage.mapLeader || DEFAULT_MAP_LEADER
-  Dyalog.setMapLeader = (x = DEFAULT_MAP_LEADER) ->
-    old = Dyalog.getMapLeader()
+  Dyalog.onPrefixKeyChange = (f) -> mapLeaderListeners.push f
+  Dyalog.getPrefixKey = -> localStorage.mapLeader || DEFAULT_MAP_LEADER
+  Dyalog.setPrefixKey = (x = DEFAULT_MAP_LEADER) ->
+    old = Dyalog.getPrefixKey()
     if x != old
       if x != DEFAULT_MAP_LEADER then localStorage.mapLeader = x else delete localStorage.mapLeader
       for f in mapLeaderListeners then f x, old
@@ -232,11 +232,11 @@ do ->
       popup.focus?()
       return
 
-  CodeMirror.keyMap.dyalog["'#{Dyalog.getMapLeader()}'"] = (cm) ->
+  CodeMirror.keyMap.dyalog["'#{Dyalog.getPrefixKey()}'"] = (cm) ->
     cm.setOption 'autoCloseBrackets', false
     cm.setOption 'keyMap', 'dyalogBackquote'
     c = cm.getCursor()
-    cm.replaceSelection Dyalog.getMapLeader(), 'end'
+    cm.replaceSelection Dyalog.getPrefixKey(), 'end'
     ctid = setTimeout(
       ->
         cm.showHint completeOnSingleClick: true, hint: ->
@@ -247,7 +247,7 @@ do ->
           data
       500
     )
-  Dyalog.onMapLeaderChange (x, old) -> x = "'#{x}'"; old = "'#{old}'"; m = CodeMirror.keyMap.dyalog; m[x] = m[old]; delete m[old]
+  Dyalog.onPrefixKeyChange (x, old) -> x = "'#{x}'"; old = "'#{old}'"; m = CodeMirror.keyMap.dyalog; m[x] = m[old]; delete m[old]
 
   CodeMirror.keyMap.dyalogBackquote = nofallthrough: true, disableInput: true
   ds = {}; for line in squiggleDescriptions.split '\n' then ds[line[0]] = line[2..]
@@ -255,20 +255,20 @@ do ->
   for k, i in ks then do (k = k) ->
     v = vs[i]
     Dyalog.reverseKeyMap[v] ?= k
-    bqc.push text: v, render: (e) -> $(e).text "#{v} #{Dyalog.getMapLeader()}#{k} #{ds[v] || ''}  "
+    bqc.push text: v, render: (e) -> $(e).text "#{v} #{Dyalog.getPrefixKey()}#{k} #{ds[v] || ''}  "
     CodeMirror.keyMap.dyalogBackquote["'#{k}'"] = (cm) ->
       clearTimeout ctid
       cm.state.completionActive?.close?()
       cm.setOption 'keyMap', 'dyalog'
       cm.setOption 'autoCloseBrackets', true
       c = cm.getCursor()
-      if k == Dyalog.getMapLeader() then bqbqHint cm else cm.replaceRange v, {line: c.line, ch: c.ch - 1}, c
+      if k == Dyalog.getPrefixKey() then bqbqHint cm else cm.replaceRange v, {line: c.line, ch: c.ch - 1}, c
       return
 
-  bqc[0].render = (e) -> e.innerHTML = "  #{Dyalog.getMapLeader()}#{Dyalog.getMapLeader()} <i>completion by name</i>"
+  bqc[0].render = (e) -> e.innerHTML = "  #{Dyalog.getPrefixKey()}#{Dyalog.getPrefixKey()} <i>completion by name</i>"
   bqc[0].hint = bqbqHint = (cm) ->
     c = cm.getCursor(); c0 = line: c.line, ch: c.ch - 1
-    cm.replaceSelection Dyalog.getMapLeader(), 'end'
+    cm.replaceSelection Dyalog.getPrefixKey(), 'end'
     cm.showHint completeOnSingleClick: true, hint: ->
       u = cm.getLine(c.line)[c.ch + 1..]
       a = []; for x in bqbqc when x.name[...u.length] == u then a.push x
@@ -278,6 +278,6 @@ do ->
     [squiggle, names...] = line.split ' '
     for name in names then bqbqc.push name: name, text: squiggle, render: do (name = name) -> (e) ->
       key = Dyalog.reverseKeyMap[squiggle]
-      $(e).text "#{squiggle} #{if key then Dyalog.getMapLeader() + key else '  '} #{Dyalog.getMapLeader()}#{Dyalog.getMapLeader()}#{name}"
+      $(e).text "#{squiggle} #{if key then Dyalog.getPrefixKey() + key else '  '} #{Dyalog.getPrefixKey()}#{Dyalog.getPrefixKey()}#{name}"
 
   ks = vs = squiggleDescriptions = squiggleNames = null
