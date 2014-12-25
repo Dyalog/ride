@@ -254,7 +254,7 @@ do ->
   if ks.length != vs.length then console.error? 'bad configuration of backquote keymap'
   for k, i in ks then do (k = k) ->
     v = vs[i]
-    Dyalog.reverseKeyMap[v] = k
+    Dyalog.reverseKeyMap[v] ?= k
     bqc.push text: v, render: (e) -> $(e).text "#{v} #{Dyalog.getMapLeader()}#{k} #{ds[v] || ''}  "
     CodeMirror.keyMap.dyalogBackquote["'#{k}'"] = (cm) ->
       clearTimeout ctid
