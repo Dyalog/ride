@@ -3,6 +3,7 @@ Significant Usibility Issues:
   BS and left cursor should terminate autocomplete dropdown (like ESC). Right cursor/tab should select and continue
   Once you start auto-completing a WS name, the drop-down should stay up to allow several path selections
   If a namespace or class cannot be saved, the "unable to save" popup does not have the focus when it appears
+  Typing )off gives an "Uncaught node.js Error" - could we keep the session visible and have a calm notification?
 
 Needed by v14.1:
   Floating editor windows
