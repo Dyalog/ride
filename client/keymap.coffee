@@ -214,19 +214,19 @@ do ->
       c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
       u =
         if m = /^ *(\)[a-z]+).*$/.exec s
-          Dyalog.helpURLs[m[1]] || 'lang/syscmds/intro'
+          Dyalog.helpURLs[m[1]] || Dyalog.helpURLs.WELCOME
         else if m = /^ *(\][a-z]+).*$/.exec s
-          Dyalog.helpURLs[m[1]] || 'userguide/the-apl-environment/user-commands'
+          Dyalog.helpURLs[m[1]] || Dyalog.helpURLs.UCMDS
         else
           x = s[s[...c.ch].replace(/.[áa-z]*$/i, '').length..]
             .replace(/^([⎕:][áa-z]*|.).*$/i, '$1')
             .replace /^:end/, ':'
           Dyalog.helpURLs[x] ||
-            if x[0] == '⎕' then 'lang/sysfns/sysfns-categorised'
-            else if x[0] == ':' then 'lang/control-structures/control-structures-intro'
-            else 'lang/intro/lang-elements'
+            if x[0] == '⎕' then Dyalog.helpURLs.SYSFNS
+            else if x[0] == ':' then Dyalog.helpURLs.CTRLSTRUCTS
+            else Dyalog.helpURLs.LANGELEMENTS
       w = screen.width; h = screen.height
-      popup = open "help/#{u}.html", 'help',
+      popup = open u, 'help',
         "width=#{w / 2},height=#{h / 2},left=#{w / 4},top=#{h / 4}," +
         "scrollbars=1,location=1,toolbar=0,menubar=0,resizable=1"
       popup.focus?()

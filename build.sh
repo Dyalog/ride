@@ -60,9 +60,9 @@ js_files='
   node_modules/jquery-ui/tabs.js
   jquery.layout.js
   build/tmp/lbar.js
-  docs/help-urls.coffee
   proxy.coffee
   client/keymap.coffee
+  client/help-urls.coffee
   client/prefs.coffee
   client/editor.coffee
   client/session.coffee
@@ -86,4 +86,4 @@ version_file=build/tmp/version.js
 echo 'var Dyalog=Dyalog||{}; Dyalog.version="0.1.'$(git rev-list HEAD --count)'"; Dyalog.buildDate="'$(date --iso-8601)'";' > $version_file
 if [ $changed -ne 0 ]; then echo 'concatenating uglified files'; cat $version_file $us >build/static/D.js; fi
 
-cp -ur style/apl385.* style/*.png favicon.ico docs/help docs/help.css docs/help.js package.json build/static/
+cp -ur style/apl385.* style/*.png favicon.ico package.json build/static/
