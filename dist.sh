@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 coffee=node_modules/coffee-script/bin/coffee
-node_version=0.10.5
+node_version=0.11.4
 
 ./build.sh
 
