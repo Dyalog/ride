@@ -3,8 +3,8 @@ log = do ->
   n = t = 0
   (s) ->
     if (t1 = +new Date) - t > T then t = t1; n = 1
-    if ++n < N then console.info process.uptime().toFixed(3) + ' ' + s
-    else if n == N then console.info '... logging temporarily suppressed'
+    if ++n < N then console?.info? process.uptime().toFixed(3) + ' ' + s
+    else if n == N then console?.info? '... logging temporarily suppressed'
 
 rm = (a, x) -> i = a.indexOf x; (if i != -1 then a.splice i, 1); return
 b64 = (s) -> Buffer(s).toString 'base64'
@@ -38,7 +38,7 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
   toInterpreter = (s) ->
     if client
       log 'to interpreter: ' + JSON.stringify(s)[..1000]
-      console.assert /[\x01-\x7f]*/.test s
+      #console.assert? /[\x01-\x7f]*/.test s
       b = Buffer s.length + 8
       b.writeInt32BE b.length, 0
       b.write 'RIDE' + s, 4
