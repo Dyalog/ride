@@ -180,4 +180,4 @@ Dyalog.Editor = (e, opts = {}) ->
   setDebugger: setDebugger
   saved: (err) -> (if err then alert 'Cannot save changes' else opts.close?()); return
   getOpts: -> opts
-  closePopup: -> close()
+  closePopup: -> (if opener then close()); return

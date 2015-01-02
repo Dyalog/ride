@@ -64,12 +64,10 @@ jQuery ($) ->
       .on 'UpdateWindow', (ee) -> wins[ee.token].open ee; session.scrollCursorIntoView() # "ee" for EditableEntity
       .on 'ReplySaveChanges', ({win, err}) -> wins[win]?.saved err
       .on 'CloseWindow', ({win}) ->
-        if wins[win].floating
-          wins[win].closePopup()
-        else
-          $("#wintab#{win},#win#{win}").remove()
-          $tabs.tabs('destroy').tabs tabOpts
-          refreshTabs()
+        $("#wintab#{win},#win#{win}").remove()
+        $tabs.tabs('destroy').tabs tabOpts
+        refreshTabs()
+        wins[win].closePopup?()
         delete wins[win]; session.scrollCursorIntoView()
         return
       .on 'OpenWindow', (ee) -> # "ee" for EditableEntity
