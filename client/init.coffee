@@ -1,4 +1,7 @@
 do ->
+  Dyalog.urlParams = {}
+  for kv in (location + '').replace(/^[^\?]*\?/, '').split '&'
+    [_, k, v] = /^([^=]*)=?(.*)/.exec kv; Dyalog.urlParams[unescape(k or '')] = unescape(v or '')
   if window.require? # are we running under node-webkit?
     class FakeSocket
       emit: (e, a...) -> @other.onevent e: e, data: a

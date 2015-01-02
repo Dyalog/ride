@@ -9,11 +9,10 @@ jQuery ($) =>
       return
     .on 'keydown', '.connect-host, .connect-port, .connect-name', (e) -> if e.which == 13 then $('.connect').click()
     .on 'keydown', '.listen-port', (e) -> if e.which == 13 then $('.listen').click()
-    .on 'click', '.fav-addr', ->
+    .on 'click', '.fav-addr', (event) ->
       x = parseFav $(@).text()
-      Dyalog.socket.emit 'connectToInterpreter', host: x.host, port: x.port
-      Dyalog.idePage()
-      return
+      Dyalog.socket.emit 'connectToInterpreter', host: x.host, port: x.port; Dyalog.idePage()
+      event.preventDefault(); event.stopPropagation(); false
     .on 'click', '.fav-del', -> $(@).closest('.fav').animate {width: 0, margin: 0, padding: 0}, -> $(@).remove(); saveFavs()
     .on 'click', '.connect', ->
       x = host: $('.connect-host').val(), port: $('.connect-port').val(), name: $('.connect-name').val()
@@ -43,9 +42,10 @@ jQuery ($) =>
     s = if !x.port? || x.port == DEFAULT_PORT then x.host else if x.host.indexOf(':') < 0 then "#{x.host}:#{x.port}" else "[#{x.host}]:#{x.port}"
     if x.name then "#{x.name} (#{s})" else s
   renderFavs = ->
-    $('.favs').html getFavs().map(fmtFav).map(
-      (s) -> "<span class='fav'><a class='fav-addr' href='#'>#{s}</a><a class='fav-del' href='#'>×</a></span>"
+    $('.favs').html getFavs().map((x) ->
+      "<span class='fav'><a class='fav-addr' href='?host=#{escape x.host}&port=#{escape(x.port or '')}'>#{fmtFav x}</a><a class='fav-del' href='#'>×</a></span>"
     ).join ''
+
   saveFavs = -> localStorage.favs = JSON.stringify $('.favs .fav-addr').map(-> parseFav $(@).text()).toArray()
   parseFav = window.parseFav = (s) ->
     x = {}
@@ -58,31 +58,36 @@ jQuery ($) =>
 
   Dyalog.welcomePage = ->
     $('title').html 'Dyalog IDE'
-    $('body').html """
-      <h1 class="dyalog-logo">Dyalog</h1>
-      <fieldset>
-        <legend>Connect to interpreter</legend>
-        <div class="favs"></div>
-        <div style="clear:both">
-          <label>Host and port <input class="connect-host" value="">:<input class="connect-port" size="5" value="#{DEFAULT_PORT}">
-          <input class="connect" type="button" value="Connect">
-          <span class="connect-error"></span>
-          <br>
-          <label><input type="checkbox" checked class="connect-add">Add to favourites</label>
-          <label>as <input class="connect-name"></label>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend>Spawn an interpreter</legend>
-        <p class="spawn-status">
-        <p><label>Port <input disabled class="spawn-port" value="#{DEFAULT_PORT}" size="5"></label> <input disabled class="spawn" type="button" value="Spawn">
-      </fieldset>
-      <fieldset>
-        <legend>Listen for connections from interpreter</legend>
-        <p><label>Port <input disabled class="listen-port" value="#{DEFAULT_PORT}" size="5"></label> <input disabled class="listen" type="button" value="Listen">
-      </fieldset>
-    """
-    renderFavs()
-    $('.favs').sortable cursor: 'move', revert: true, tolerance: 'pointer', cancel: '.fav-del', update: saveFavs
-    $('.connect-host').focus()
+    if (u = Dyalog.urlParams).host?
+      Dyalog.socket.emit 'connectToInterpreter', host: u.host, port: +(u.port or DEFAULT_PORT)
+      Dyalog.idePage()
+    else
+      $('body').html """
+        <h1 class="dyalog-logo">Dyalog</h1>
+        <fieldset>
+          <legend>Connect to interpreter</legend>
+          <div class="favs"></div>
+          <div style="clear:both">
+            <label>Host and port <input class="connect-host" value="">:<input class="connect-port" size="5" value="#{DEFAULT_PORT}">
+            <input class="connect" type="button" value="Connect">
+            <span class="connect-error"></span>
+            <br>
+            <label><input type="checkbox" checked class="connect-add">Add to favourites</label>
+            <label>as <input class="connect-name"></label>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend>Spawn an interpreter</legend>
+          <p class="spawn-status">
+          <p><label>Port <input disabled class="spawn-port" value="#{DEFAULT_PORT}" size="5"></label> <input disabled class="spawn" type="button" value="Spawn">
+        </fieldset>
+        <fieldset>
+          <legend>Listen for connections from interpreter</legend>
+          <p><label>Port <input disabled class="listen-port" value="#{DEFAULT_PORT}" size="5"></label> <input disabled class="listen" type="button" value="Listen">
+        </fieldset>
+      """
+      renderFavs()
+      $('.favs').sortable cursor: 'move', revert: true, tolerance: 'pointer', cancel: '.fav-del', update: saveFavs
+      $('.connect-host').focus()
+    return
   return
