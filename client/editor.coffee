@@ -42,14 +42,15 @@ Dyalog.Editor = (e, opts = {}) ->
     keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: true, gutters: ['breakpoints', 'CodeMirror-linenumbers']
     extraKeys:
       Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
+      F4: -> opts.pop?()
       Enter: -> if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'
+      'Shift-Esc': -> opts.close?()
+      'Shift-Enter': -> opts.edit? cm.getValue(), cm.indexFromPos cm.getCursor()
       Esc: saveAndClose = ->
         bs = []
         for l of breakpoints then bs.push +l; cm.setGutterMarker +l, 'breakpoint', null
         opts.save? cm.getValue(), bs
         return
-      'Shift-Esc': -> opts.close?()
-      'Shift-Enter': -> opts.edit? cm.getValue(), cm.indexFromPos cm.getCursor()
       'Ctrl-Up': ->
         c = cm.getCursor(); s = cm.getLine c.line
         r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*' # regex fragment to match identifiers
@@ -167,6 +168,9 @@ Dyalog.Editor = (e, opts = {}) ->
     cm.showHint completeOnSingleClick: true, hint: ->
       list: options, from: {line: c.line, ch: c.ch - skip}, to: c
   getValue: -> cm.getValue()
+  getCursorIndex: -> cm.indexFromPos cm.getCursor()
+  setValue: (x) -> cm.setValue x
+  setCursorIndex: (i) -> cm.setCursor cm.posFromIndex i
   highlight: (l) ->
     if hll? then cm.removeLineClass hll, 'background', 'highlighted'
     cm.addLineClass (hll = l), 'background', 'highlighted'
@@ -175,3 +179,5 @@ Dyalog.Editor = (e, opts = {}) ->
   getContainer: -> $e
   setDebugger: setDebugger
   saved: (err) -> (if err then alert 'Cannot save changes' else opts.close?()); return
+  getOpts: -> opts
+  closePopup: -> close()

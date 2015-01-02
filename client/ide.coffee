@@ -44,7 +44,7 @@ jQuery ($) ->
           $('body').removeClass 'dragging'
           return
 
-    wins = # mapping between window ids and widget instances (Dyalog.Session or Dyalog.Editor)
+    Dyalog.wins = wins = # mapping between window ids and widget instances (Dyalog.Session or Dyalog.Editor)
       0: session = Dyalog.Session $('.ui-layout-center'),
         edit: (s, i) -> socket.emit 'Edit', win: 0, pos: i, text: s
         exec: (lines, trace) -> (for s in lines then socket.emit 'Execute', text: (s + '\n'), trace: trace); return
@@ -64,9 +64,12 @@ jQuery ($) ->
       .on 'UpdateWindow', (ee) -> wins[ee.token].open ee; session.scrollCursorIntoView() # "ee" for EditableEntity
       .on 'ReplySaveChanges', ({win, err}) -> wins[win]?.saved err
       .on 'CloseWindow', ({win}) ->
-        $("#wintab#{win},#win#{win}").remove()
-        $tabs.tabs('destroy').tabs tabOpts
-        refreshTabs()
+        if wins[win].floating
+          wins[win].closePopup()
+        else
+          $("#wintab#{win},#win#{win}").remove()
+          $tabs.tabs('destroy').tabs tabOpts
+          refreshTabs()
         delete wins[win]; session.scrollCursorIntoView()
         return
       .on 'OpenWindow', (ee) -> # "ee" for EditableEntity
@@ -89,6 +92,15 @@ jQuery ($) ->
           interrupt:      -> socket.emit 'WeakInterrupt'
           cutback:        -> socket.emit 'Cutback',        win: w
           autocomplete: (s, i) -> socket.emit 'autocomplete', s, i, w
+          pop: ->
+            if !opener
+              if pw = open "?win=#{w}", '_blank', 'width=500,height=400,left=100,top=100,resizable=1' # pw:popup window
+                $("#wintab#{w},#win#{w}").remove(); $tabs.tabs('destroy').tabs tabOpts; refreshTabs()
+                session.scrollCursorIntoView()
+                # wins[w] will be replaced a bit later by code running in the popup
+              else
+                alert 'Popups are blocked.'
+            return
         wins[w].open ee
         $('.ui-layout-' + dir).tabs('refresh').tabs(active: -1)
           .data('ui-tabs').panels.off 'keydown' # prevent jQueryUI tabs from hijacking our keystrokes, <C-Up> in particular
