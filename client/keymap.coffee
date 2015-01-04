@@ -108,7 +108,7 @@ do ->
     ⌈ upstile maximum ceiling
     ⌊ downstile minimum floor
     ⊥ base decode uptack
-    ⊤ antibase encode downtack
+    ⊤ antibase encode downtack representation
     ⊣ left lev lefttack
     ⊢ right dex righttack
     = equal
