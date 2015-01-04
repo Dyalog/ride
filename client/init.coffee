@@ -33,9 +33,5 @@ do ->
     else
       socket = io()
     Dyalog.socket = socket
-    $ ->
-      $('body').on 'keydown', (e) ->
-        if e.which == 112 && !e.ctrlKey && e.shiftKey && !e.altKey # <S-F1>
-          alert "Version: #{Dyalog.version}\nBuild date: #{Dyalog.buildDate}"; false
-      Dyalog.welcomePage()
+    $ -> Dyalog.welcomePage()
   return

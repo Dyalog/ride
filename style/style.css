@@ -174,3 +174,13 @@ a.button {
 a.button:active { border-color: #888 #fff #fff #888; }
 #prefs p { height: 40px; line-height: 40px; }
 .prefs-pk { width: 1.5em; text-align: center; }
+
+.menu { height: 40px; line-height: 17px; cursor: default; padding: 0; margin: 0; background-color: #d4d0c8; font-family: sans-serif; }
+.menu>li { float: left; text-align: center; border: solid transparent 1px; background-color: #d4d0c8; padding: 0 8px; margin: 0; list-style: none; }
+.menu>li.hover { border-color: #fff #888 #888 #fff; }
+.menu ul { position: absolute; z-index: 1; padding: 1px; margin: 2px 0 0 -8px; background-color: #d4d0c8; width: 125px; display: none; border-style: solid; border-width: 1px 2px 2px 1px; border-color: #fff #888 #888 #fff; }
+.menu ul li { height: 17px; line-height: 17px; list-style: none; text-align: left; padding: 1px 17px; }
+.menu ul li.hover { background-color: #0a246a; color: #fff; }
+.menu li.active { border-color: #888 #fff #fff #888; }
+.menu li.active>ul { display: block; }
+.menu hr { margin: 3px 0 5px 0; }

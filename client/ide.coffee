@@ -1,17 +1,32 @@
 jQuery ($) ->
+  about = -> alert "Version: #{Dyalog.version}\nBuild date: #{Dyalog.buildDate}"; return
+  $('body')
+    .on 'mousedown', '.m-about', about
+    .on 'mouseup', '.m-about', about
+    .on 'keydown', (e) ->
+      if e.which == 112 && !e.ctrlKey && e.shiftKey && !e.altKey # <S-F1>
+        about(); false
+
   Dyalog.idePage = ->
     {socket} = Dyalog
     $('body').html """
-      <div class="lbar ui-layout-north" style="display:none">
-        <a class="lbar-close" title="Hide Language Bar" href="#"></a>
-        <a class="lbar-prefs" title="Preferences" href="#"></a>
-        #{Dyalog.lbarHTML}
+      <ul class="menu">
+        <li>File<ul><li>Open</li><li>Save</li><hr><li>Quit</li></ul>
+        <li>Edit<ul><li>Copy</li><li>Paste</li><li>Cut</li></ul>
+        <li>Help<ul><li class="m-about">About</li></ul>
+      </ul>
+      <div class="ide" style="position:absolute;top:20px;bottom:0;left:0;right:0">
+        <div class="lbar ui-layout-north" style="display:none">
+          <a class="lbar-close" title="Hide Language Bar" href="#"></a>
+          <a class="lbar-prefs" title="Preferences" href="#"></a>
+          #{Dyalog.lbarHTML}
+        </div>
+        <div class="lbar-tip" style="display:none"><div class="lbar-tip-desc"></div><pre class="lbar-tip-text"></pre></div>
+        <div class="lbar-tip-triangle" style="display:none"></div>
+        <div class="ui-layout-center"></div>
+        <div class="ui-layout-east" ><ul></ul></div>
+        <div class="ui-layout-south"><ul></ul></div>
       </div>
-      <div class="lbar-tip" style="display:none"><div class="lbar-tip-desc"></div><pre class="lbar-tip-text"></pre></div>
-      <div class="lbar-tip-triangle" style="display:none"></div>
-      <div class="ui-layout-center"></div>
-      <div class="ui-layout-east" ><ul></ul></div>
-      <div class="ui-layout-south"><ul></ul></div>
     """
 
     $(document).keydown (e) ->
@@ -128,7 +143,7 @@ jQuery ($) ->
         )
         return
 
-    layout = $('body').layout
+    layout = $('.ide').layout
       defaults: enableCursorHotkey: 0
       north: resizable: 0, togglerLength_closed: '100%', togglerTip_closed: 'Show Language Bar', spacing_open: 0
       east:  spacing_closed: 0, size: '0%', resizable: 1, togglerLength_open: 0
@@ -137,3 +152,13 @@ jQuery ($) ->
       fxName: ''
     for d in ['east', 'south'] then layout.close d; layout.sizePane d, '50%'
     session.updateSize()
+
+    do -> # menu
+      $m = $ '.menu'; $l = $m.find '>li'
+      $l.mousedown (e) -> if $(e.target).parent().hasClass('menu') then $(e.target).toggleClass 'active'; $l.not(e.target).removeClass 'active'; false
+      $l.mouseover (e) -> if $(e.target).parent().hasClass('menu') && $l.hasClass 'active' then $l.removeClass('active'); $(e.target).addClass 'active'; return
+      $(document).mousedown (e) -> $l.removeClass 'active'
+      $m.on 'mouseover', 'li', (e) -> $(e.target).addClass    'hover'; return
+        .on 'mouseout',  'li', (e) -> $(e.target).removeClass 'hover'; return
+
+    return
