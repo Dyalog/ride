@@ -128,8 +128,8 @@ do ->
     ⊂ enclose leftshoe partition
     ⊃ disclose rightshoe pick
     ⌷ squishquad squad index default materialise
-    ⍋ gradeup deltastile upgrade
-    ⍒ gradedown delstile downgrade
+    ⍋ gradeup deltastile upgrade pine
+    ⍒ gradedown delstile downgrade spine
     ⍳ iota indices indexof
     ⍷ find epsilonunderbar
     ∪ cup union unique downshoe distinct
@@ -151,7 +151,7 @@ do ->
     ⍣ poweroperator stardiaeresis
     . dot
     ∘ jot compose ring
-    ⍤ jotdiaeresis rank
+    ⍤ jotdiaeresis rank paw
     ⍞ quotequad characterinput rawinput
     ⎕ quad input evaluatedinput
     ⍠ colonquad quadcolon variant option
@@ -172,7 +172,7 @@ do ->
     ∥ parallel
     ∆ delta triangleup uptriangle
     ⍙ deltaunderbar
-    ⍥ circlediaeresis
+    ⍥ circlediaeresis hoof
     ⍫ deltilde
     á aacute
     Ⓐ _a
