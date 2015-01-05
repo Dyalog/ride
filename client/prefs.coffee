@@ -1,26 +1,11 @@
-$ ->
-  $('body').on 'keydown', (e) -> if e.which == 114 then Dyalog.showPrefs(); false # <F3>
-
-  $d = $pk = null # the prefs dialog instance, lazily initialised
-  Dyalog.showPrefs = ->
-    if !$d
-      $d = $ '''
-        <div id="prefs">
-          <p style="text-align:center"><label>Prefix key: <input class="prefs-pk text-field" size="1"></label></p>
-          <div style="text-align:center">
-            <a href="#" class="prefs-ok" class="button">OK</a>
-            <a href="#" class="prefs-cancel" class="button">Cancel</a>
-          </div>
-        </div>
-      '''
-      $pk = $ '.prefs-pk', $d
-      $ok = $ '.prefs-ok', $d
-      $cancel = $ '.prefs-cancel', $d
-      $pk.on 'keydown', (e) -> if e.which == 13 then $ok.click(); false
-      $cancel.button().click -> $d.dialog 'close'; false
-      $ok.button().click ->
-        pk = $pk.val(); if pk.length != 1 then alert 'Invalid prefix key'; $pk.focus(); return false
-        Dyalog.setPrefixKey pk; $d.dialog 'close'; false
-    $pk.val Dyalog.getPrefixKey()
-    $d.dialog modal: true, title: 'Keyboard Preferences'
-    return
+Dyalog.showPrefs = ->
+  ok = ->
+    pk = $pk.val()
+    if pk.length == 1 then Dyalog.setPrefixKey pk; $d.dialog 'close'
+    else $('<p>Invalid prefix key</p>').dialog modal: 1, title: 'Error', buttons: [text: 'OK', click: -> $(@).dialog 'close'; $pk.focus()]
+    false
+  $d = $('<label>Prefix key: <input class="prefs-pk text-field" size="1"></label>').dialog
+    modal: 1, title: 'Keyboard Preferences', buttons: [{text: 'OK', click: ok}, {text: 'Cancel', click: -> $(@).dialog 'close'; return}]
+  $pk = $d.find('.prefs-pk').focus().val Dyalog.getPrefixKey()
+  $d.keydown (e) -> if e.which == 13 then ok()
+  return
