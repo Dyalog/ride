@@ -4,6 +4,7 @@ npm install
 coffee=node_modules/coffee-script/bin/coffee
 #uglifyjs=node_modules/uglify-js/bin/uglifyjs
 uglifyjs=cat
+sass=node_modules/node-sass/bin/node-sass
 
 mkdir -p build/{static,tmp}
 
@@ -28,16 +29,11 @@ if [ lbar.xml -nt build/tmp/lbar.js ]; then
   mv build/tmp/lbar.js_ build/tmp/lbar.js
 fi
 
-css_files='node_modules/codemirror/lib/codemirror.css style/style.css style/jquery-ui.css'
-css_combined=build/tmp/D.css
-for f in $css_files; do if [ $f -nt $css_combined ]; then cat $css_files >$css_combined; break; fi done
-h=build/static/index.html
-if [ index.html -nt $h -o $css_combined -nt $h ]; then
-  echo 'rendering index.html'
-  <index.html >build/static/index.html \
-    sed -e '/<!--css-->/{r build/tmp/D.css
-                         d}'
-fi
+cp -uv node_modules/codemirror/lib/codemirror.css build/static/
+i=style/style.scss     o=build/static/style.css;     if [ $i -nt $o ]; then echo 'preprocessing css'; $sass <$i >$o; fi
+i=style/jquery-ui.scss o=build/static/jquery-ui.css; if [ $i -nt $o ]; then echo 'preprocessing css'; $sass <$i >$o; fi
+
+cp -uv index.html build/static/
 
 js_files='
   node_modules/socket.io/node_modules/socket.io-client/socket.io.js

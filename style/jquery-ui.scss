@@ -211,7 +211,8 @@ input.ui-button::-moz-focus-inner, button.ui-button::-moz-focus-inner { border: 
 
 /* TR overrides */
 .ui-spinner .ui-icon-triangle-1-s { /* need to fix icons sprite */ background-position: -65px -16px; }
-.ui-tabs { padding: 0; position: relative;/* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */ }
+/* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
+.ui-tabs { padding: 0; position: relative; }
 .ui-tabs .ui-tabs-nav { margin: 0; padding: 3px 3px 0; border-width: 0 0 1px 0; border-color: white; }
 .ui-tabs .ui-tabs-nav li { list-style: none; float: left; position: relative; top: 0; margin: 0 1px 0 0; padding: 0; white-space: nowrap; background: #d4d0c8; }
 .ui-tabs .ui-tabs-nav .ui-tabs-anchor {
@@ -232,8 +233,8 @@ input.ui-button::-moz-focus-inner, button.ui-button::-moz-focus-inner { border: 
 	padding-left: 2px; margin-left: -2px;
 	padding-right: 2px; margin-right: -2px;
 	z-index: 1;
-/*	padding-bottom: 1px;*/
 }
+/*	padding-bottom: 1px;*/
 .ui-tabs .ui-tabs-nav a { outline: none; }
 .ui-tabs .ui-tabs-nav li.ui-tabs-active .ui-tabs-anchor,
 .ui-tabs .ui-tabs-nav li.ui-state-disabled .ui-tabs-anchor,
