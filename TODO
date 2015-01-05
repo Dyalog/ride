@@ -1,6 +1,5 @@
 Significant Usibility Issues:
   Update focus after closing an editor (not fixed in Dec 24 version)
-  Need Help|About feature to allow include version information when reporting issues
   Type something, hit shift enter on function name: Editor opens OK, but session log input is subsequently discarded
   ctrl+TAB should cycle between editors and session windows as in ODE (and in a Web Browser)
   BS and left cursor should terminate autocomplete dropdown (like ESC). Right cursor/tab should select and continue
@@ -15,8 +14,6 @@ Needed by v14.1:
   "uncomment selected line" button doesn't work if nothing is selected
   continuously update completion list while typing
   Shift+Esc while editing a namespace: TypeError: Cannot read property info of undefined
-  menus (only within the browser window)
-  about dialog with version: 0.1. + commit counter, and also build date
   listen for connections from the interpreter
   control font size in node-webkit
   revert line in session should move cursor to next line (suggested by Scholes)
@@ -47,3 +44,6 @@ Done:
   If an error is encountered in a scripted fn, tracer needs to scroll to line which failed
   )ed namespace.foo should position cursor at start of foo
   Trace namespace.foo should scroll so that traced code is at the TOP of the window
+  Need Help|About feature to allow include version information when reporting issues
+  about dialog with version: 0.1. + commit counter, and also build date
+  menus (only within the browser window)
