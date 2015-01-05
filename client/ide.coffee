@@ -1,5 +1,7 @@
 jQuery ($) ->
-  about = -> alert "Version: #{Dyalog.version}\nBuild date: #{Dyalog.buildDate}"; return
+  about = ->
+    $("<p>Version: #{Dyalog.version}<br/>Build date: #{Dyalog.buildDate}</p>").dialog
+      modal: 1, title: 'About', buttons: [text: 'Close', click: -> $(@).dialog 'close']
   $('body')
     .on 'mousedown', '.m-about', about
     .on 'mouseup', '.m-about', about
