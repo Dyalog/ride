@@ -1,21 +1,30 @@
 jQuery ($) ->
+
+  # about dialog
   about = ->
     $("<p>Version: #{Dyalog.version}<br/>Build date: #{Dyalog.buildDate}</p>").dialog
       modal: 1, title: 'About', buttons: [text: 'Close', click: -> $(@).dialog 'close']
-  $('body')
-    .on 'mousedown', '.m-about', about
-    .on 'mouseup', '.m-about', about
-    .on 'keydown', (e) ->
-      if e.which == 112 && !e.ctrlKey && e.shiftKey && !e.altKey # <S-F1>
-        about(); false
+  $(document)
+    .on 'menu-select', '.m-about', about
+    .on 'keydown', (e) -> if e.which == 112 && !e.ctrlKey && e.shiftKey && !e.altKey then about(); false # <S-F1>
+
+  # keyboard preferences
+  $(document)
+    .on 'menu-select', '.m-prefs', -> Dyalog.showPrefs(); return
+    .on 'click', '.lbar-prefs', -> Dyalog.showPrefs(); false
+
+  # quit
+  $(document)
+    .on 'menu-select', '.m-quit', Dyalog.quit
+    .on 'keydown', (e) -> if e.which == 81 && e.ctrlKey && !e.shiftKey && !e.altKey then Dyalog.quit(); false # <C-q>
 
   Dyalog.idePage = ->
     {socket} = Dyalog
     $('body').html """
       <ul class="menu">
-        <li>File<ul><li>Open</li><li>Save</li><hr><li>Quit</li></ul>
-        <li>Edit<ul><li>Copy</li><li>Paste</li><li>Cut</li></ul>
-        <li>Help<ul><li class="m-about">About</li></ul>
+        <li>File<ul><li class="m-quit">Quit</li></ul></li>
+        <li>Edit<ul><li class="m-prefs">Keyboard Preferences</li></ul></li>
+        <li>Help<ul><li class="m-about">About</li></ul></li>
       </ul>
       <div class="ide" style="position:absolute;top:20px;bottom:0;left:0;right:0">
         <div class="lbar ui-layout-north" style="display:none">
@@ -123,7 +132,6 @@ jQuery ($) ->
 
     # language bar
     $('.lbar-close').on 'click', -> layout.close 'north'; false
-    $('.lbar-prefs').on 'click', -> Dyalog.showPrefs(); false
     $tip = $ '.lbar-tip'; $tipDesc = $ '.lbar-tip-desc'; $tipText = $ '.lbar-tip-text'; $tipTriangle = $ '.lbar-tip-triangle'
     ttid = null # tooltip timeout id
     $ '.lbar'
@@ -155,12 +163,14 @@ jQuery ($) ->
     for d in ['east', 'south'] then layout.close d; layout.sizePane d, '50%'
     session.updateSize()
 
-    do -> # menu
+    # menu
+    do ->
       $m = $ '.menu'; $l = $m.find '>li'
       $l.mousedown (e) -> if $(e.target).parent().hasClass('menu') then $(e.target).toggleClass 'active'; $l.not(e.target).removeClass 'active'; false
       $l.mouseover (e) -> if $(e.target).parent().hasClass('menu') && $l.hasClass 'active' then $l.removeClass('active'); $(e.target).addClass 'active'; return
-      $(document).mousedown (e) -> $l.removeClass 'active'
-      $m.on 'mouseover', 'li', (e) -> $(e.target).addClass    'hover'; return
+      $(document).mousedown (e) -> if !$(e.target).closest('.menu').length then $l.removeClass 'active'
+      $m.on 'mousedown mouseup', 'li', (e) -> $(e.target).trigger 'menu-select'; false
+        .on 'mouseover', 'li', (e) -> $(e.target).addClass    'hover'; return
         .on 'mouseout',  'li', (e) -> $(e.target).removeClass 'hover'; return
 
     return

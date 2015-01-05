@@ -21,6 +21,7 @@ do ->
       socket = new FakeSocket; socket1 = new FakeSocket; socket.other = socket1; socket1.other = socket
       require('./proxy').Proxy()(socket1)
       nww = require('nw.gui').Window.get()
+      Dyalog.quit = -> nww.close(); return
       $ ->
         $('body').on 'keydown', (e) ->
           if e.which == 187 && e.ctrlKey && !e.altKey # <C-+> or <C-=>
@@ -32,6 +33,7 @@ do ->
           return
     else
       socket = io()
+      Dyalog.quit = close
     Dyalog.socket = socket
     $ -> Dyalog.welcomePage()
   return
