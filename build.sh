@@ -30,7 +30,7 @@ if [ lbar.xml -nt build/tmp/lbar.js ]; then
 fi
 
 cp -uv node_modules/codemirror/lib/codemirror.css build/static/
-i=style/style.scss     o=build/static/style.css;     if [ $i -nt $o ]; then echo 'preprocessing css'; $sass <$i >$o; fi
+i=style/style.sass o=build/static/style.css; if [ $i -nt $o ]; then echo 'preprocessing css'; $sass -i <$i >$o; fi
 
 cp -uv index.html build/static/
 
