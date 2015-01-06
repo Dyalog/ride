@@ -8,7 +8,7 @@ jQuery ($) ->
         <li>View<ul><li class="m-lbar toggle checked">Show Language Bar</li></ul></li>
         <li>Help<ul><li class="m-about">About <span class="shortcut">Shift+F1</span></li></ul></li>
       </ul>
-      <div class="ide" style="position:absolute;top:20px;bottom:0;left:0;right:0">
+      <div class="ide">
         <div class="lbar ui-layout-north" style="display:none">
           #{
             #<a class="lbar-close" title="Hide Language Bar" href="#"></a>

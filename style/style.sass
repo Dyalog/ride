@@ -184,6 +184,7 @@ a.button:active { border-color: $dark $light $light $dark; }
 		&>ul { display: block; }
 	hr { margin: 3px 0 5px 0; }
 
+.ide { position: absolute; top: 20px; bottom: 0; left: 0; right: 0; }
 
 // jQuery UI - v1.10.4 - 2014-01-17,  modified by Dyalog
 
@@ -326,16 +327,14 @@ input.ui-button::-moz-focus-inner, button.ui-button::-moz-focus-inner { border: 
 
 .ui-dialog
 	border-style: solid; border-width: 1px; border-color: $light $dark $dark $light; overflow: hidden; position: absolute; top: 0; left: 0; padding: 0; outline: 0; text-align: center
-	.ui-dialog-titlebar { padding: 2px 8px; margin-bottom: 16px; position: relative; background-color: $sel; }
+	.ui-dialog-titlebar { padding: 0 8px; margin-bottom: 10px; position: relative; background-color: $sel; height: 22px; line-height: 20px; cursor: default; }
 	.ui-dialog-title { float: left; margin: .1em 0; white-space: nowrap; width: 90%; overflow: hidden; text-overflow: ellipsis; color: white; text-align: left; }
-	.ui-dialog-titlebar-close { position: absolute; right: .3em; top: 50%; width: 20px; margin: -10px 0 0 0; padding: 1px; height: 20px; }
+	.ui-dialog-titlebar-close { position: absolute; right: 2px; top: 50%; width: 18px; margin: -9px 0 0 0; padding: 0; height: 18px; }
 	.ui-dialog-content { position: relative; border: 0; padding: 0; background: none; overflow: auto; }
 	.ui-resizable-se { width: 12px; height: 12px; right: -5px; bottom: -5px; background-position: 16px 16px; }
 	.ui-dialog-buttonpane
 		text-align: center; border-width: 1px 0 0 0; background-image: none; margin-top: .5em; padding: .3em 1em .5em .4em
 		.ui-button { margin: 0 5px; background-color: $bg; }
-
-.ui-draggable .ui-dialog-titlebar { cursor: default; }
 
 .ui-menu { list-style: none; padding: 2px; margin: 0; display: block; outline: none; }
 .ui-menu .ui-menu { margin-top: -3px; position: absolute; }
