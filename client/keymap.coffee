@@ -267,12 +267,13 @@ do ->
 
   bqc[0].render = (e) -> e.innerHTML = "  #{Dyalog.getPrefixKey()}#{Dyalog.getPrefixKey()} <i>completion by name</i>"
   bqc[0].hint = bqbqHint = (cm) ->
-    c = cm.getCursor(); c0 = line: c.line, ch: c.ch - 1
+    c = cm.getCursor()
     cm.replaceSelection Dyalog.getPrefixKey(), 'end'
     cm.showHint completeOnSingleClick: true, hint: ->
-      u = cm.getLine(c.line)[c.ch + 1..]
+      u = cm.getLine(c.line)[c.ch + 1...cm.getCursor().ch]
       a = []; for x in bqbqc when x.name[...u.length] == u then a.push x
-      from: c0, to: cm.getCursor(), list: a
+      from: c, to: cm.getCursor(), list: a
+    return
 
   for line in squiggleNames.split '\n' then do ->
     [squiggle, names...] = line.split ' '
