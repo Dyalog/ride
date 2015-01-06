@@ -3,8 +3,8 @@ log = do ->
   n = t = 0
   (s) ->
     if (t1 = +new Date) - t > T then t = t1; n = 1
-    if ++n < N then console?.info? process.uptime().toFixed(3) + ' ' + s
-    else if n == N then console?.info? '... logging temporarily suppressed'
+    if ++n < N then process?.stdout?.write? "#{process.uptime().toFixed 3} #{s}\n"
+    else if n == N then process?.stdout?.write? '... logging temporarily suppressed\n'
 
 rm = (a, x) -> i = a.indexOf x; (if i != -1 then a.splice i, 1); return
 b64 = (s) -> Buffer(s).toString 'base64'
