@@ -176,7 +176,6 @@ Dyalog.Editor = (e, opts = {}) ->
     cm.addLineClass (hll = l), 'background', 'highlighted'
     cm.setCursor l, 0; x = cm.cursorCoords true, 'local'; x.right = x.left; x.bottom = x.top + $e.height(); cm.scrollIntoView x
     return
-  getContainer: -> $e
   setDebugger: setDebugger
   saved: (err) -> (if err then alert 'Cannot save changes' else opts.close?()); return
   getOpts: -> opts

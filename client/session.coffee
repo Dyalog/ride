@@ -4,7 +4,6 @@ Dyalog.Session = (e, opts = {}) ->
   mod = {} # line number -> original content
 
   hist = [null]
-  histLimit = 100
   histIndex = 0
   histAdd = (lines) -> hist = [null].concat lines, hist[1..]
   histMove = (d) ->
