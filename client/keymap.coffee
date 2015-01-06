@@ -3,15 +3,15 @@ do ->
 
   inherit = (x) -> (F = ->):: = x; new F
 
-  DEFAULT_MAP_LEADER = '`'
-  mapLeaderListeners = []
-  Dyalog.onPrefixKeyChange = (f) -> mapLeaderListeners.push f
-  Dyalog.getPrefixKey = -> localStorage.mapLeader || DEFAULT_MAP_LEADER
-  Dyalog.setPrefixKey = (x = DEFAULT_MAP_LEADER) ->
+  DEFAULT_PREFIX_KEY = '`'
+  prefixKeyListeners = []
+  Dyalog.onPrefixKeyChange = (f) -> prefixKeyListeners.push f
+  Dyalog.getPrefixKey = -> localStorage.prefixKey || DEFAULT_PREFIX_KEY
+  Dyalog.setPrefixKey = (x = DEFAULT_PREFIX_KEY) ->
     old = Dyalog.getPrefixKey()
     if x != old
-      if x != DEFAULT_MAP_LEADER then localStorage.mapLeader = x else delete localStorage.mapLeader
-      for f in mapLeaderListeners then f x, old
+      if x != DEFAULT_PREFIX_KEY then localStorage.prefixKey = x else delete localStorage.prefixKey
+      for f in prefixKeyListeners then f x, old
     1
 
   ks = '''
