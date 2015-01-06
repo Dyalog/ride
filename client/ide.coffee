@@ -165,11 +165,11 @@ jQuery ($) ->
 
     # menu
     do ->
-      $m = $ '.menu'; $l = $m.find '>li'
-      $l.mousedown (e) -> if $(e.target).parent().hasClass('menu') then $(e.target).toggleClass 'active'; $l.not(e.target).removeClass 'active'; false
-      $l.mouseover (e) -> if $(e.target).parent().hasClass('menu') && $l.hasClass 'active' then $l.removeClass('active'); $(e.target).addClass 'active'; return
+      $m = $ '.menu'; $l = $m.find('>li').addClass 'm-top'
+      $l.mousedown (e) -> if $(e.target).hasClass 'm-top' then $(e.target).toggleClass 'active'; $l.not(e.target).removeClass 'active'; false
+      $l.mouseover (e) -> if $(e.target).hasClass('m-top') && $l.hasClass 'active' then $l.removeClass('active'); $(e.target).addClass 'active'; return
       $(document).mousedown (e) -> if !$(e.target).closest('.menu').length then $l.removeClass 'active'
-      $m.on 'mousedown mouseup', 'li', (e) -> $(e.target).trigger 'menu-select'; false
+      $m.on 'mousedown mouseup', 'li', (e) -> if !$(e.target).hasClass 'm-top' then $l.removeClass 'active'; $(e.target).trigger 'menu-select'; false
         .on 'mouseover', 'li', (e) -> $(e.target).addClass    'hover'; return
         .on 'mouseout',  'li', (e) -> $(e.target).removeClass 'hover'; return
 
