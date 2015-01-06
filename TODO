@@ -2,7 +2,6 @@ Significant Usibility Issues:
   Update focus after closing an editor (not fixed in Dec 24 version)
   Type something, hit shift enter on function name: Editor opens OK, but session log input is subsequently discarded
   ctrl+TAB should cycle between editors and session windows as in ODE (and in a Web Browser)
-  BS and left cursor should terminate autocomplete dropdown (like ESC). Right cursor/tab should select and continue
   Once you start auto-completing a WS name, the drop-down should stay up to allow several path selections
   If a namespace or class cannot be saved, the "unable to save" popup does not have the focus when it appears
   Typing )off gives an "Uncaught node.js Error" - could we keep the session visible and have a calm notification?
@@ -47,3 +46,4 @@ Done:
   Need Help|About feature to allow include version information when reporting issues
   about dialog with version: 0.1. + commit counter, and also build date
   menus (only within the browser window)
+  BS and left cursor should terminate autocomplete dropdown (like ESC). Right cursor/tab should select and continue

@@ -238,12 +238,15 @@ do ->
     c = cm.getCursor()
     cm.replaceSelection Dyalog.getPrefixKey(), 'end'
     ctid = setTimeout(
-      ->
-        cm.showHint completeOnSingleClick: true, hint: ->
+      -> cm.showHint
+        completeOnSingleClick: true
+        extraKeys:
+          Backspace: (cm, m) -> m.close(); cm.execCommand 'delCharBefore'
+          Left:      (cm, m) -> m.close(); cm.execCommand 'goCharLeft'
+          Right:     (cm, m) -> m.pick()
+        hint: ->
           data = from: c, to: cm.getCursor(), list: bqc
-          CodeMirror.on data, 'close', ->
-            cm.setOption 'autoCloseBrackets', true
-            cm.setOption 'keyMap', 'dyalog'
+          CodeMirror.on data, 'close', -> cm.setOption 'autoCloseBrackets', true; cm.setOption 'keyMap', 'dyalog'
           data
       500
     )
@@ -269,10 +272,13 @@ do ->
   bqc[0].hint = bqbqHint = (cm) ->
     c = cm.getCursor()
     cm.replaceSelection Dyalog.getPrefixKey(), 'end'
-    cm.showHint completeOnSingleClick: true, hint: ->
-      u = cm.getLine(c.line)[c.ch + 1...cm.getCursor().ch]
-      a = []; for x in bqbqc when x.name[...u.length] == u then a.push x
-      from: c, to: cm.getCursor(), list: a
+    cm.showHint
+      completeOnSingleClick: true
+      extraKeys: Right: (cm, m) -> m.pick()
+      hint: ->
+        u = cm.getLine(c.line)[c.ch + 1...cm.getCursor().ch]
+        a = []; for x in bqbqc when x.name[...u.length] == u then a.push x
+        from: {line: c.line, ch: c.ch - 1}, to: cm.getCursor(), list: a
     return
 
   for line in squiggleNames.split '\n' then do ->
