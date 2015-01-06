@@ -1,34 +1,18 @@
 jQuery ($) ->
-
-  # about dialog
-  about = ->
-    $("<p>Version: #{Dyalog.version}<br/>Build date: #{Dyalog.buildDate}</p>").dialog
-      modal: 1, title: 'About', buttons: [text: 'Close', click: -> $(@).dialog 'close']
-  $(document)
-    .on 'menu-select', '.m-about', about
-    .on 'keydown', (e) -> if e.which == 112 && !e.ctrlKey && e.shiftKey && !e.altKey then about(); false # <S-F1>
-
-  # keyboard preferences
-  $(document)
-    .on 'menu-select', '.m-prefs', -> Dyalog.showPrefs(); return
-    .on 'click', '.lbar-prefs', -> Dyalog.showPrefs(); false
-
-  # quit
-  $(document)
-    .on 'menu-select', '.m-quit', Dyalog.quit
-    .on 'keydown', (e) -> if e.which == 81 && e.ctrlKey && !e.shiftKey && !e.altKey then Dyalog.quit(); false # <C-q>
-
   Dyalog.idePage = ->
     {socket} = Dyalog
     $('body').html """
       <ul class="menu">
         <li>File<ul><li class="m-quit">Quit <span class="shortcut">Ctrl+Q</span></li></ul></li>
         <li>Edit<ul><li class="m-prefs">Keyboard Preferences</li></ul></li>
+        <li>View<ul><li class="m-lbar toggle checked">Show Language Bar</li></ul></li>
         <li>Help<ul><li class="m-about">About <span class="shortcut">Shift+F1</span></li></ul></li>
       </ul>
       <div class="ide" style="position:absolute;top:20px;bottom:0;left:0;right:0">
         <div class="lbar ui-layout-north" style="display:none">
-          <a class="lbar-close" title="Hide Language Bar" href="#"></a>
+          #{
+            #<a class="lbar-close" title="Hide Language Bar" href="#"></a>
+          }
           <a class="lbar-prefs" title="Preferences" href="#"></a>
           #{Dyalog.lbarHTML}
         </div>
@@ -155,7 +139,7 @@ jQuery ($) ->
 
     layout = $('.ide').layout
       defaults: enableCursorHotkey: 0
-      north: resizable: 0, togglerLength_closed: '100%', togglerTip_closed: 'Show Language Bar', spacing_open: 0
+      north: spacing_closed: 0, spacing_open: 0, resizable: 0, togglerLength_open: 0
       east:  spacing_closed: 0, size: '0%', resizable: 1, togglerLength_open: 0
       south: spacing_closed: 0, size: '0%', resizable: 1, togglerLength_open: 0
       center: onresize: -> (for _, x of wins then x.updateSize()); session.scrollCursorIntoView(); return
@@ -166,10 +150,28 @@ jQuery ($) ->
     # menu
     do ->
       $m = $ '.menu'; $l = $m.find('>li').addClass 'm-top'
-      $l.mousedown (e) -> if $(e.target).hasClass 'm-top' then $(e.target).toggleClass 'active'; $l.not(e.target).removeClass 'active'; false
-      $l.mouseover (e) -> if $(e.target).hasClass('m-top') && $l.hasClass 'active' then $l.removeClass('active'); $(e.target).addClass 'active'; return
+      $l.mousedown (e) -> if ($t = $ e.target).is '.m-top' then $t.toggleClass 'active'; $l.not($t).removeClass 'active'; false
+      $l.mouseover (e) -> if ($t = $ e.target).is('.m-top') && $l.hasClass 'active' then $l.removeClass 'active'; $t.addClass 'active'; return
       $(document).mousedown (e) -> if !$(e.target).closest('.menu').length then $l.removeClass 'active'
-      $m.on 'mousedown mouseup', 'li', (e) -> if !$(e.target).hasClass 'm-top' then $l.removeClass 'active'; $(e.target).trigger 'menu-select'; false
-        .on 'mouseover mouseout', 'li', (e) -> $(e.target).closest('li').toggleClass 'hover', e.type == 'mouseover'; return
+      $m.on 'mouseover mouseout', 'li', (e) -> $(e.target).closest('li').toggleClass 'hover', e.type == 'mouseover'; return
+        .on 'mousedown mouseup', 'li', (e) ->
+          if !($t = $ e.target).is '.m-top'
+            $l.removeClass 'active'
+            if $t.is '.toggle' then $t.toggleClass 'checked'
+            $t.trigger 'menu-select'
+            false
+
+      about = ->
+        $("<p>Version: #{Dyalog.version}<br/>Build date: #{Dyalog.buildDate}</p>").dialog
+          modal: 1, title: 'About', buttons: [text: 'Close', click: -> $(@).dialog 'close']
+
+      $(document)
+        .on 'menu-select', '.m-quit', Dyalog.quit
+        .on 'menu-select', '.m-prefs', -> Dyalog.showPrefs(); return
+        .on 'menu-select', '.m-lbar', -> layout.toggle 'north'; return
+        .on 'menu-select', '.m-about', about
+        .on 'keydown', (e) -> if e.which == 81  &&  e.ctrlKey && !e.shiftKey && !e.altKey then Dyalog.quit(); false # <C-q>
+        .on 'keydown', (e) -> if e.which == 112 && !e.ctrlKey &&  e.shiftKey && !e.altKey then about(); false # <S-F1>
+        .on 'click', '.lbar-prefs', -> Dyalog.showPrefs(); false
 
     return

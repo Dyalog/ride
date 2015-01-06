@@ -174,9 +174,11 @@ a.button:active { border-color: $dark $light $light $dark; }
 		li
 			height: 17px; line-height: 17px; list-style: none; text-align: left; padding: 1px 17px
 			.shortcut { font-size: small; float: right; margin-left: 20px; color: #666; }
+			&.checked { background-position: 5px center; background-repeat: no-repeat; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMElEQVQI12NgwA3+M+KSYGBgYGCCMdAlYJLIAsgKGRmx6GRgYGBghBPoOnA6AhkAALZJCQIBbmPFAAAAAElFTkSuQmCC); }
 			&.hover
 				background-color: $sel; color: #fff
 				.shortcut { color: #fff }
+				&.checked { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMUlEQVQI13WOQQoAMAjDEv//5+4kiMyeSkOgcCRJvABAddkAoOYwgarbbADgzzhPzDwC8SPwjB0PzgAAAABJRU5ErkJggg==); }
 	li.active
 		border-color: $dark $light $light $dark
 		&>ul { display: block; }
