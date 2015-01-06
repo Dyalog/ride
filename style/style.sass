@@ -168,10 +168,15 @@ a.button:active { border-color: $dark $light $light $dark; }
 		float: left; text-align: center; border: solid transparent 1px; background-color: $bg; padding: 0 8px; margin: 0; list-style: none
 		&.hover { border-color: $light $dark $dark $light; }
 	ul
-		position: absolute; z-index: 1; padding: 1px; margin: 2px 0 0 -8px; background-color: $bg; width: 125px; display: none; border-style: solid; border-width: 1px 2px 2px 1px; border-color: #fff #888 #888 #fff
+		position: absolute; z-index: 1; padding: 1px; margin: 2px 0 0 -8px; background-color: $bg
+		min-width: 125px; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis
+		display: none; border-style: solid; border-width: 1px 2px 2px 1px; border-color: $light $dark $dark $light
 		li
 			height: 17px; line-height: 17px; list-style: none; text-align: left; padding: 1px 17px
-			&.hover { background-color: $sel; color: #fff; }
+			.shortcut { font-size: small; float: right; margin-left: 20px; color: #666; }
+			&.hover
+				background-color: $sel; color: #fff
+				.shortcut { color: #fff }
 	li.active
 		border-color: $dark $light $light $dark
 		&>ul { display: block; }

@@ -22,9 +22,9 @@ jQuery ($) ->
     {socket} = Dyalog
     $('body').html """
       <ul class="menu">
-        <li>File<ul><li class="m-quit">Quit</li></ul></li>
+        <li>File<ul><li class="m-quit">Quit <span class="shortcut">Ctrl+Q</span></li></ul></li>
         <li>Edit<ul><li class="m-prefs">Keyboard Preferences</li></ul></li>
-        <li>Help<ul><li class="m-about">About</li></ul></li>
+        <li>Help<ul><li class="m-about">About <span class="shortcut">Shift+F1</span></li></ul></li>
       </ul>
       <div class="ide" style="position:absolute;top:20px;bottom:0;left:0;right:0">
         <div class="lbar ui-layout-north" style="display:none">
@@ -170,7 +170,6 @@ jQuery ($) ->
       $l.mouseover (e) -> if $(e.target).hasClass('m-top') && $l.hasClass 'active' then $l.removeClass('active'); $(e.target).addClass 'active'; return
       $(document).mousedown (e) -> if !$(e.target).closest('.menu').length then $l.removeClass 'active'
       $m.on 'mousedown mouseup', 'li', (e) -> if !$(e.target).hasClass 'm-top' then $l.removeClass 'active'; $(e.target).trigger 'menu-select'; false
-        .on 'mouseover', 'li', (e) -> $(e.target).addClass    'hover'; return
-        .on 'mouseout',  'li', (e) -> $(e.target).removeClass 'hover'; return
+        .on 'mouseover mouseout', 'li', (e) -> $(e.target).closest('li').toggleClass 'hover', e.type == 'mouseover'; return
 
     return
