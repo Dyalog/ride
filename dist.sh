@@ -16,7 +16,7 @@ desktop_app() {
   echo "building desktop app for $1"
   node node_modules/node-webkit-builder/bin/nwbuild --quiet -p $1 -v $node_version -o build build/static
 }
-for platform in win osx linux32 linux64; do desktop_app $platform; done
+for platform in win osx linux; do desktop_app $platform; done
 
 # https://github.com/rogerwang/node-webkit/wiki/The-solution-of-lacking-libudev.so.0
 for bits in 32 64; do
@@ -29,3 +29,6 @@ for bits in 32 64; do
     desktop_app linux$bits # re-package the app after the libudev dependency has been fixed
   fi
 done
+
+echo 'removing libffmpegsumo from build'
+find build -name '*ffmpegsumo*' -delete
