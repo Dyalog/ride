@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -e -o pipefail
 npm install
 coffee=node_modules/coffee-script/bin/coffee
 #uglifyjs=node_modules/uglify-js/bin/uglifyjs
