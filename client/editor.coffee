@@ -37,35 +37,43 @@ Dyalog.Editor = (e, opts = {}) ->
     <div class="cm"></div>
   '''
 
+  k = # extra keys for CodeMirror
+    Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
+    F4: -> opts.pop?()
+    Enter: -> if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'
+
+  k['"\uf800"'] = k['Shift-Esc'] = -> # QT: Quit (and lose changes)
+    opts.close?()
+
+  k['"\uf804"'] = k.Esc = -> # EP: Exit (and save changes)
+    bs = []
+    for l of breakpoints then bs.push +l; cm.setGutterMarker +l, 'breakpoint', null
+    opts.save? cm.getValue(), bs
+    return
+
+  k['"\uf828"'] = k['Shift-Enter'] = -> # ED: Edit
+    opts.edit? cm.getValue(), cm.indexFromPos cm.getCursor()
+
+  k['"\uf859"'] = k['Ctrl-Up'] = -> # TL: Toggle Localisation
+    c = cm.getCursor(); s = cm.getLine c.line
+    r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*' # regex fragment to match identifiers
+    name = ((///⎕?#{r}$///.exec(s[...c.ch])?[0] or '') + (///^#{r}///.exec(s[c.ch..])?[0] or '')).replace /^\d+/, ''
+    if name
+      # search backwards for a line that looks like a tradfn header (though in theory it might be a dfns's recursive call)
+      l = c.line; while l >= 0 && !/^\s*∇\s*\S/.test cm.getLine l then l--
+      if l < 0 and !/\{\s*$/.test cm.getLine(0).replace /⍝.*/, '' then l = 0
+      if l >= 0 && l != c.line
+        [_, s, comment] = /([^⍝]*)(.*)/.exec cm.getLine l
+        [head, tail...] = s.split ';'; head = head.replace /\s+$/, ''; tail = tail.map (x) -> x.replace /\s+/g, ''
+        i = tail.indexOf name; if i < 0 then tail.push name else tail.splice i, 1
+        s = [head].concat(tail.sort()).join(';') + if comment then ' ' + comment else ''
+        cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
+    return
+
   cm = CodeMirror $e.find('.cm')[0],
     lineNumbers: !opts.debugger, fixedGutter: false, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
     keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: true, gutters: ['breakpoints', 'CodeMirror-linenumbers']
-    extraKeys:
-      Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
-      F4: -> opts.pop?()
-      Enter: -> if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'
-      'Shift-Esc': -> opts.close?()
-      'Shift-Enter': -> opts.edit? cm.getValue(), cm.indexFromPos cm.getCursor()
-      Esc: saveAndClose = ->
-        bs = []
-        for l of breakpoints then bs.push +l; cm.setGutterMarker +l, 'breakpoint', null
-        opts.save? cm.getValue(), bs
-        return
-      'Ctrl-Up': ->
-        c = cm.getCursor(); s = cm.getLine c.line
-        r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*' # regex fragment to match identifiers
-        name = ((///⎕?#{r}$///.exec(s[...c.ch])?[0] or '') + (///^#{r}///.exec(s[c.ch..])?[0] or '')).replace /^\d+/, ''
-        if name
-          # search backwards for a line that looks like a tradfn header (though in theory it might be a dfns's recursive call)
-          l = c.line; while l >= 0 && !/^\s*∇\s*\S/.test cm.getLine l then l--
-          if l < 0 and !/\{\s*$/.test cm.getLine(0).replace /⍝.*/, '' then l = 0
-          if l >= 0 && l != c.line
-            [_, s, comment] = /([^⍝]*)(.*)/.exec cm.getLine l
-            [head, tail...] = s.split ';'; head = head.replace /\s+$/, ''; tail = tail.map (x) -> x.replace /\s+/g, ''
-            i = tail.indexOf name; if i < 0 then tail.push name else tail.splice i, 1
-            s = [head].concat(tail.sort()).join(';') + if comment then ' ' + comment else ''
-            cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
-        return
+    extraKeys: k
 
   createBreakpointElement = -> $('<div class="breakpoint">●</div>')[0]
   breakpoints = {}
