@@ -1,4 +1,4 @@
-Significant Usibility Issues:
+Significant Usability Issues:
   Update focus after closing an editor (not fixed in Dec 24 version)
   Type something, hit shift enter on function name: Editor opens OK, but session log input is subsequently discarded
   ctrl+TAB should cycle between editors and session windows as in ODE (and in a Web Browser)
