@@ -102,14 +102,22 @@ Dyalog.Editor = (e, opts = {}) ->
     .on 'click', '.b-line-numbers', -> cm.setOption 'lineNumbers', b = !cm.getOption 'lineNumbers'; $(@).toggleClass 'pressed', b; false
     .on 'click', '.b-save', -> saveAndClose(); false
     .on 'click', '.b-comment', ->
-      a = cm.listSelections()
-      cm.replaceSelections cm.getSelections().map (s) -> s.replace(/^/gm, '⍝').replace /\n⍝$/, '\n'
-      cm.setSelections a
+      if cm.somethingSelected()
+        a = cm.listSelections()
+        cm.replaceSelections cm.getSelections().map (s) -> s.replace(/^/gm, '⍝').replace /\n⍝$/, '\n'
+        cm.setSelections a
+      else
+        l = cm.getCursor().line; p = line: l, ch: 0; cm.replaceRange '⍝', p, p, 'Dyalog'; cm.setCursor line: l, ch: 1
       false
     .on 'click', '.b-uncomment', ->
-      a = cm.listSelections()
-      cm.replaceSelections cm.getSelections().map (s) -> s.replace /^⍝/gm, ''
-      cm.setSelections a
+      if cm.somethingSelected()
+        a = cm.listSelections()
+        cm.replaceSelections cm.getSelections().map (s) -> s.replace /^⍝/gm, ''
+        cm.setSelections a
+      else
+        l = cm.getCursor().line; s = cm.getLine l
+        cm.replaceRange s.replace(/^( *)⍝/, '$1'), {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
+        cm.setCursor line: l, ch: 0
       false
     .on 'click', '.b-hid, .b-case', -> $(@).toggleClass 'pressed'; false
     .on 'click', '.b-next', -> search(); false
