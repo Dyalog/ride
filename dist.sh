@@ -32,3 +32,6 @@ done
 
 echo 'removing libffmpegsumo from build'
 find build -name '*ffmpegsumo*' -delete
+
+echo 'fixing file permissions'
+chmod -R g+w build/dyalogjs
