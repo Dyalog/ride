@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+false
 npm install
 coffee=node_modules/coffee-script/bin/coffee
 #uglifyjs=node_modules/uglify-js/bin/uglifyjs
@@ -54,6 +55,7 @@ js_files='
   node_modules/jquery-ui/dialog.js
   node_modules/jquery-ui/tabs.js
   jquery.layout.js
+  client/jquery.hotkeys.js
   build/tmp/lbar.js
   proxy.coffee
   client/keymap.coffee
