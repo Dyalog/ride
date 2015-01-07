@@ -87,40 +87,47 @@ Dyalog.Editor = (e, opts = {}) ->
     return
 
   $tb = $ '.toolbar', $e
-  $('.toolbar-button', $tb) # todo
-    .on 'mousedown', (e) -> $(e.target).addClass 'armed'; e.preventDefault(); return
-    .on 'mouseup mouseout', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return
+    .on 'mousedown',        '.toolbar-button', (e) -> $(e.target).addClass    'armed'; e.preventDefault(); return
+    .on 'mouseup mouseout', '.toolbar-button', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return
+    .on 'click', '.b-over',       -> opts.over?()
+    .on 'click', '.b-into',       -> opts.into?()
+    .on 'click', '.b-back',       -> opts.back?()
+    .on 'click', '.b-skip',       -> opts.skip?()
+    .on 'click', '.b-cont-trace', -> opts.continueTrace?()
+    .on 'click', '.b-cont-exec',  -> opts.continueExec?()
+    .on 'click', '.b-restart',    -> opts.restartThreads?()
+    .on 'click', '.b-edit-name',  -> opts.edit? cm.getValue(), 0
+    .on 'click', '.b-interrupt',  -> opts.interrupt?()
+    .on 'click', '.b-cutback',    -> opts.cutback?()
+    .on 'click', '.b-line-numbers', -> cm.setOption 'lineNumbers', b = !cm.getOption 'lineNumbers'; $(@).toggleClass 'pressed', b; false
+    .on 'click', '.b-save', -> saveAndClose(); false
+    .on 'click', '.b-comment', ->
+      a = cm.listSelections()
+      cm.replaceSelections cm.getSelections().map (s) -> s.replace(/^/gm, '⍝').replace /\n⍝$/, '\n'
+      cm.setSelections a
+      false
+    .on 'click', '.b-uncomment', ->
+      a = cm.listSelections()
+      cm.replaceSelections cm.getSelections().map (s) -> s.replace /^⍝/gm, ''
+      cm.setSelections a
+      false
+    .on 'click', '.b-hid, .b-case', -> $(@).toggleClass 'pressed'; false
+    .on 'click', '.b-next', -> search(); false
+    .on 'click', '.b-prev', -> search true; false
+    .on 'keydown', '.search', -> if e.which == 13 then search(); false
+    .on 'click', '.b-refac-m', ->
+      if !/^\s*$/.test s = cm.getLine l = cm.getCursor().line
+        cm.replaceRange "∇ #{s}\n\n∇", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
+        cm.setCursor line: l + 1, ch: 0
+    .on 'click', '.b-refac-f', ->
+      if !/^\s*$/.test s = cm.getLine l = cm.getCursor().line
+        cm.replaceRange ":field public #{s}", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
+        cm.setCursor line: l + 1, ch: 0
+    .on 'click', '.b-refac-p', ->
+      if !/^\s*$/.test s = cm.getLine l = cm.getCursor().line
+        cm.replaceRange ":Property #{s}\n\n∇r←get\nr←0\n∇\n\n∇set args\n∇\n:EndProperty", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
+        cm.setCursor line: l + 1, ch: 0
 
-  $('.b-over',       $tb).click -> opts.over?()
-  $('.b-into',       $tb).click -> opts.into?()
-  $('.b-back',       $tb).click -> opts.back?()
-  $('.b-skip',       $tb).click -> opts.skip?()
-  $('.b-cont-trace', $tb).click -> opts.continueTrace?()
-  $('.b-cont-exec',  $tb).click -> opts.continueExec?()
-  $('.b-restart',    $tb).click -> opts.restartThreads?()
-  $('.b-edit-name',  $tb).click -> opts.edit? cm.getValue(), 0
-  $('.b-interrupt',  $tb).click -> opts.interrupt?()
-  $('.b-cutback',    $tb).click -> opts.cutback?()
-
-  $('.b-line-numbers', $tb).click -> cm.setOption 'lineNumbers', b = !cm.getOption 'lineNumbers'; $(@).toggleClass 'pressed', b; false
-  $('.b-save', $tb).click -> saveAndClose(); false
-
-  $('.b-comment', $tb).click ->
-    a = cm.listSelections()
-    cm.replaceSelections cm.getSelections().map (s) -> s.replace(/^/gm, '⍝').replace /\n⍝$/, '\n'
-    cm.setSelections a
-    false
-
-  $('.b-uncomment', $tb).click ->
-    a = cm.listSelections()
-    cm.replaceSelections cm.getSelections().map (s) -> s.replace /^⍝/gm, ''
-    cm.setSelections a
-    false
-
-  $('.b-hid, .b-case', $tb).click -> $(@).toggleClass 'pressed'; false
-  $('.b-next', $tb).click -> search(); false
-  $('.b-prev', $tb).click -> search true; false
-  $('.search', $tb).keydown (e) -> if e.which == 13 then search(); false
   search = (backwards) ->
     if q = $('.search:visible', $tb).val()
       v = cm.getValue()
@@ -136,21 +143,6 @@ Dyalog.Editor = (e, opts = {}) ->
         if wrapped then alert 'Search wrapping'
         cm.setSelections [anchor: cm.posFromIndex(j), head: cm.posFromIndex j + q.length]
     false
-
-  $('.b-refac-m', $tb).click ->
-    if !/^\s*$/.test s = cm.getLine l = cm.getCursor().line
-      cm.replaceRange "∇ #{s}\n\n∇", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
-      cm.setCursor line: l + 1, ch: 0
-
-  $('.b-refac-f', $tb).click ->
-    if !/^\s*$/.test s = cm.getLine l = cm.getCursor().line
-      cm.replaceRange ":field public #{s}", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
-      cm.setCursor line: l + 1, ch: 0
-
-  $('.b-refac-p', $tb).click ->
-    if !/^\s*$/.test s = cm.getLine l = cm.getCursor().line
-      cm.replaceRange ":Property #{s}\n\n∇r←get\nr←0\n∇\n\n∇set args\n∇\n:EndProperty", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
-      cm.setCursor line: l + 1, ch: 0
 
   setDebugger = (x) ->
     opts.debugger = x
