@@ -50,19 +50,19 @@ Dyalog.Editor = (e, opts = {}) ->
     F4: -> opts.pop?()
     Enter: -> if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'
 
-  k['"\uf800"'] = k['Shift-Esc'] = -> # QT: Quit (and lose changes)
+  k["'\uf800'"] = k['Shift-Esc'] = -> # QT: Quit (and lose changes)
     opts.close?()
 
-  k['"\uf804"'] = k.Esc = -> # EP: Exit (and save changes)
+  k["'\uf804'"] = k.Esc = -> # EP: Exit (and save changes)
     bs = []
     for l of breakpoints then bs.push +l; cm.setGutterMarker +l, 'breakpoint', null
     opts.save? cm.getValue(), bs
     return
 
-  k['"\uf828"'] = k['Shift-Enter'] = -> # ED: Edit
+  k["'\uf828'"] = k['Shift-Enter'] = -> # ED: Edit
     opts.edit? cm.getValue(), cm.indexFromPos cm.getCursor()
 
-  k['"\uf859"'] = k['Ctrl-Up'] = -> # TL: Toggle Localisation
+  k["'\uf859'"] = k['Ctrl-Up'] = -> # TL: Toggle Localisation
     c = cm.getCursor(); s = cm.getLine c.line
     r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*' # regex fragment to match identifiers
     name = ((///⎕?#{r}$///.exec(s[...c.ch])?[0] or '') + (///^#{r}///.exec(s[c.ch..])?[0] or '')).replace /^\d+/, ''
