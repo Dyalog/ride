@@ -1,41 +1,49 @@
 Dyalog.Editor = (e, opts = {}) ->
-  ($e = $ e).html '''
+  b = (name, description) -> "<a href='#' class='b-#{name} toolbar-button' title='#{description}'></a>"
+  ($e = $ e).html """
     <div class="toolbar debugger-toolbar">
-      <a href="#" class="b-over         toolbar-button" title="Execute line"             ></a>
-      <a href="#" class="b-into         toolbar-button" title="Trace into expression"    ></a>
-      <a href="#" class="b-back         toolbar-button" title="Go back one line"         ></a>
-      <a href="#" class="b-skip         toolbar-button" title="Skip current line"        ></a>
-      <a href="#" class="b-cont-trace   toolbar-button" title="Continue trace"           ></a>
-      <a href="#" class="b-cont-exec    toolbar-button" title="Continue execution"       ></a>
-      <a href="#" class="b-restart      toolbar-button" title="Restart all threads"      ></a>
-      <a href="#" class="b-edit-name    toolbar-button" title="Edit name"                ></a>
-      <a href="#" class="b-quit         toolbar-button" title="Quit this function"       ></a>
-      <a href="#" class="b-interrupt    toolbar-button" title="Interrupt"                ></a>
-      <a href="#" class="b-cutback      toolbar-button" title="Clear trace/stop/monitor for this object"></a>
-      <a href="#" class="b-line-numbers toolbar-button" title="Toggle line numbers"      ></a>
-      <a href="#" class="separator"></a>
-      <input class="search text-field">
-      <a href="#" class="b-next         toolbar-button" title="Search for next match"    >▶</a>
-      <a href="#" class="b-prev         toolbar-button" title="Search for previous match">◀</a>
-      <a href="#" class="b-case         toolbar-button" title="Match case"               >aA</a>
+      #{[
+        b 'over',         'Execute line'
+        b 'into',         'Trace into expression'
+        b 'back',         'Go back one line'
+        b 'skip',         'Skip current line'
+        b 'cont-trace',   'Continue trace'
+        b 'cont-exec',    'Continue execution'
+        b 'restart',      'Restart all threads'
+        b 'edit-name',    'Edit name'
+        b 'quit',         'Quit this function'
+        b 'interrupt',    'Interrupt'
+        b 'cutback',      'Clear trace/stop/monitor for this object'
+        b 'line-numbers', 'Toggle line numbers'
+        b 'over',         'Execute line'
+        b 'into',         'Trace into expression'
+        '<a href="#" class="separator"></a>'
+        '<input class="search text-field">'
+        b 'next',         'Search for next match'
+        b 'prev',         'Search for previous match'
+        b 'case',         'Match case'
+      ].join ''}
     </div>
     <div class="toolbar editor-toolbar">
-      <a href="#" class="b-line-numbers toolbar-button pressed" title="Toggle line numbers">[⋯]</a>
-      <a href="#" class="b-comment      toolbar-button" title="Comment selected text"    >⍝</a>
-      <a href="#" class="b-uncomment    toolbar-button" title="Uncomment selected text"  >/⍝</a>
-      <a href="#" class="b-save         toolbar-button" title="Save changes and return"  >×</a>
-      <a href="#" class="separator"></a>
-      <input class="search text-field">
-      <a href="#" class="b-next         toolbar-button" title="Search for next match"    >▶</a>
-      <a href="#" class="b-prev         toolbar-button" title="Search for previous match">◀</a>
-      <a href="#" class="b-case         toolbar-button" title="Match case"               >aA</a>
-      <a class="separator"></a>
-      <a href="#" class="b-refac-m      toolbar-button" title="Refactor text as method"  >+m</a>
-      <a href="#" class="b-refac-f      toolbar-button" title="Refactor text as field"   >+f</a>
-      <a href="#" class="b-refac-p      toolbar-button" title="Refactor text as property">+p</a>
+      #{[
+        b 'line-numbers pressed', 'Toggle line numbers'
+        b 'comment', 'Comment selected text'
+        b 'uncomment', 'Uncomment selected text'
+        b 'save', 'Save changes and return'
+        '<a href="#" class="separator"></a>'
+        '<input class="search text-field">'
+        b 'next', 'Search for next match'
+        b 'prev', 'Search for previous match'
+        b 'case', 'Match case'
+        '<a class="separator"></a>'
+        b 'refac-m', 'Refactor text as method'
+        b 'refac-f', 'Refactor text as field'
+        b 'refac-p', 'Refactor text as property'
+      ].join ''}
     </div>
     <div class="cm"></div>
-  '''
+  """
+  b = null
 
   k = # extra keys for CodeMirror
     Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
