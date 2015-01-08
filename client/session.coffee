@@ -17,25 +17,26 @@ Dyalog.Session = (e, opts = {}) ->
       histIndex = i
     return
 
+  k = # extra keys for CodeMirror
+    Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
+    Enter: -> exec 0
+    'Ctrl-Enter': -> exec 1
+
+  k["'\uf828'"] = k['Shift-Enter'] = -> c = cm.getCursor(); opts.edit?(cm.getLine(c.line), c.ch) # ED: Edit
+  k["'\uf820'"] = k['Shift-Ctrl-Backspace'] = -> histMove 1 # BK: Backward or Undo
+  k["'\uf81f'"] = k['Shift-Ctrl-Enter'] = -> histMove -1 # FD: Forward or Redo
+
+  k["'\uf800'"] = k['Shift-Esc'] = # QT: Quit (and lose changes)
+    k["'\uf804'"] = k.Esc = ->     # EP: Exit (and save changes)
+      l = cm.getCursor().line
+      if mod[l]?
+        cm.replaceRange mod[l], {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
+        delete mod[l]
+        cm.removeLineClass l, 'background', 'modified'
+      return
+
   cm = CodeMirror ($e = $ e)[0],
-    autofocus: true, mode: '', matchBrackets: true, autoCloseBrackets: true, keyMap: 'dyalog', readOnly: true
-    extraKeys:
-      Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
-      'Shift-Enter': -> c = cm.getCursor(); opts.edit?(cm.getLine(c.line), c.ch)
-      Enter: -> exec 0
-      'Ctrl-Enter': -> exec 1
-      "'\uf820'": -> histMove 1
-      "'\uf81f'": -> histMove -1
-      'Shift-Ctrl-Backspace': -> histMove 1
-      'Shift-Ctrl-Enter': -> histMove -1
-      Esc: revertLine = ->
-        l = cm.getCursor().line
-        if mod[l]?
-          cm.replaceRange mod[l], {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
-          delete mod[l]
-          cm.removeLineClass l, 'background', 'modified'
-        return
-      'Shift-Esc': revertLine
+    autofocus: true, mode: '', matchBrackets: true, autoCloseBrackets: true, keyMap: 'dyalog', readOnly: true, extraKeys: k
 
   exec = (trace) ->
     a = [] # pairs of [lineNumber, contentToExecute]
