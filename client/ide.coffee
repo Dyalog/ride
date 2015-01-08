@@ -1,4 +1,7 @@
 jQuery ($) ->
+
+  overlap = (x0, x1, x2, x3) -> x2 < x1 && x0 < x3 # helper: do the segments (x0,x1) and (x2,x3) overlap?
+
   Dyalog.idePage = ->
     {socket} = Dyalog
     $('body').html """
@@ -40,18 +43,30 @@ jQuery ($) ->
            .tabs 'refresh'
       return
 
-    $tabs.find('ul').each ->
+    ($uls = $tabs.find 'ul').each ->
       $(@).sortable
-        cursor: 'move', revert: true, tolerance: 'pointer', connectWith: $tabs.find 'ul'
+        cursor: 'move', tolerance: 'pointer', connectWith: $uls
         receive: (_, ui) ->
           $(@).closest('.ui-tabs').append $ '#win' + ui.item.attr('id').replace /\D+/, ''
           $tabs.tabs('destroy').tabs tabOpts
           return
         start: -> $('body').addClass 'dragging'; return
-        stop: ->
-          refreshTabs()
+        sort: (_, ui) ->
+          # ui.helper is floatable if it doesn't overlap with any <ul>-s (tab containers)
+          hx0 = ui.offset.left; hy0 = ui.offset.top; hx1 = hx0 + $(ui.helper).width(); hy1 = hy0 + $(ui.helper).height()
+          floatable = 1
+          $uls.each ->
+            uo = $(@).offset(); ux0 = uo.left; uy0 = uo.top; ux1 = ux0 + $(@).width(); uy1 = uy0 + $(@).height()
+            floatable &&= !(overlap(ux0, ux1, hx0, hx1) && overlap(uy0, uy1, hy0, hy1))
+            return
+          $(ui.helper).toggleClass 'floatable', floatable
+          return
+        beforeStop: (_, ui) ->
+          if $(ui.helper).is '.floatable' then $(ui.helper).removeClass 'floatable'; popWindow +$(ui.helper).attr('id').replace /\D+/, ''
+          return
+        stop: (_, ui) ->
+          $('body').removeClass 'dragging'; refreshTabs()
           $('[role=tab]', $tabs).attr 'style', '' # clean up tabs' z-indices after dragging, $().sortable screws them up
-          $('body').removeClass 'dragging'
           return
 
     Dyalog.wins = wins = # mapping between window ids and widget instances (Dyalog.Session or Dyalog.Editor)
@@ -59,6 +74,16 @@ jQuery ($) ->
         edit: (s, i) -> socket.emit 'Edit', win: 0, pos: i, text: s
         exec: (lines, trace) -> (for s in lines then socket.emit 'Execute', text: (s + '\n'), trace: trace); return
         autocomplete: (s, i) -> socket.emit 'Autocomplete', line: s, pos: i, token: 0
+
+    popWindow = (w) ->
+      if !opener
+        if pw = open "?win=#{w}", '_blank', 'width=500,height=400,left=100,top=100,resizable=1'
+          $("#wintab#{w},#win#{w}").remove(); $tabs.tabs('destroy').tabs tabOpts; refreshTabs()
+          session.scrollCursorIntoView()
+          # wins[w] will be replaced a bit later by code running in the popup
+        else
+          alert 'Popups are blocked.'
+      return
 
     socket
       .on 'UpdateDisplayName', ({displayName}) -> $('title').text displayName
@@ -100,15 +125,7 @@ jQuery ($) ->
           interrupt:      -> socket.emit 'WeakInterrupt'
           cutback:        -> socket.emit 'Cutback',        win: w
           autocomplete: (s, i) -> socket.emit 'autocomplete', s, i, w
-          pop: ->
-            if !opener
-              if pw = open "?win=#{w}", '_blank', 'width=500,height=400,left=100,top=100,resizable=1' # pw:popup window
-                $("#wintab#{w},#win#{w}").remove(); $tabs.tabs('destroy').tabs tabOpts; refreshTabs()
-                session.scrollCursorIntoView()
-                # wins[w] will be replaced a bit later by code running in the popup
-              else
-                alert 'Popups are blocked.'
-            return
+          pop: -> popWindow w
         wins[w].open ee
         $('.ui-layout-' + dir).tabs('refresh').tabs(active: -1)
           .data('ui-tabs').panels.off 'keydown' # prevent jQueryUI tabs from hijacking our keystrokes, <C-Up> in particular
