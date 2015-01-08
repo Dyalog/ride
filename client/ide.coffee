@@ -45,7 +45,7 @@ jQuery ($) ->
 
     ($uls = $tabs.find 'ul').each ->
       $(@).sortable
-        cursor: 'move', tolerance: 'pointer', connectWith: $uls
+        cursor: 'move', tolerance: 'pointer', connectWith: $uls, containment: '.ide'
         receive: (_, ui) ->
           $(@).closest('.ui-tabs').append $ '#win' + ui.item.attr('id').replace /\D+/, ''
           $tabs.tabs('destroy').tabs tabOpts
