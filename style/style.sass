@@ -6,33 +6,33 @@ $tip:#ffffe1; // yellow, background for tooltips
 
 // http://www.sitepoint.com/how-to-use-cross-browser-web-fonts-part-1/
 @font-face
-	font-family: 'apl'
-	src: url('apl385.eot')
-	src: url('apl385.eot?#iefix') format('embedded-opentype'), url('apl385.woff') format('woff'), url('apl385.ttf') format('truetype'), url('apl385.svg#apl385') format('svg')
+  font-family: 'apl'
+  src: url('apl385.eot')
+  src: url('apl385.eot?#iefix') format('embedded-opentype'), url('apl385.woff') format('woff'), url('apl385.ttf') format('truetype'), url('apl385.svg#apl385') format('svg')
 body { padding: 0; margin: 0; }
 .CodeMirror, .CodeMirror-hints, .lbar, .lbar-tip, .lbar-tip-desc, .lbar-tip-text, .toolbar, input { font-family: apl, monospace; font-size: 18px; }
 .lbar
-	background: $bg; padding: 0 2px 2px 10px; cursor: default; border-bottom: solid #888 1px; line-height: 28px
-	b
-		border: solid #666 1px; border-left: 0; font-weight: normal; margin-bottom: 3px; padding: 1px; background: #eeeae2
-		&.first { border-left: solid $dark 1px; }
-		&:hover { background-color: $light; }
+  background: $bg; padding: 0 2px 2px 10px; cursor: default; border-bottom: solid #888 1px; line-height: 28px
+  b
+    border: solid #666 1px; border-left: 0; font-weight: normal; margin-bottom: 3px; padding: 1px; background: #eeeae2
+    &.first { border-left: solid $dark 1px; }
+    &:hover { background-color: $light; }
 .lbar-prefs, .lbar-close { float: right; width: 24px; height: 24px; }
 .lbar-prefs { background: no-repeat center center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAQCAYAAAAbBi9cAAAA0klEQVQ4y2NgIBM0NDT8b2ho+A/js+BShEWMEV3uwQOEPCOy4gULlsAVHThwh0FBAaLYwUEFw7IDB+4wLFjQANfPxEAlgNVrCQkxaC4lwcQFC5b8xxY2xAJGSjRjeC00NHQ1JYasXr06FB5Gp0+fDyXHEFNTw9UYsRYf7QPHMD42Gp2NEWuNrRPgbAUFFYbG1glYaZhaGBvDoPrqAgYGBgaGhUu3YNgIAwuXboGrhbFplyBhXoN5Axsg6DVTU8PVpqaGyLFBKLYwXbR69epQSr0GAHGlUdeXXZ4mAAAAAElFTkSuQmCC); }
 .lbar-close
-	background: no-repeat center center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAIAAAD9MqGbAAADD0lEQVQ4y22UW0/jRhTHZ8YeO46TlNzZxeTSrCq1qmgrVWxJlnSBb8B+0j5UlZBC1BWVKrZAH/q2uzExCbnhBAfHie2ZM33wbkRRz8PonDPnN1f9D/7n7z/RI+Mc+sPxnT17ePD8IFAVJZmM57Lprc2CJJHHlfLj4ON1z+z2KiXju52d4uazXK5wdzceDQemabbPzqtlo1Yx1sU42pMx9r5jcUA/N5sbGxkOHAA4B0IwIUQikuPMfn/7ViLoRbVEqYwQ+nSA9x0rkdo4Pn6TSKSCMOQcAARCCECEIVuuVrFY/Pj4TSq18cG0IoQghDrdPiby4esDz1uCEAghIUQ0LYSIfMb5fP7w+uCQA+p0+wghwjl0rm8OD4/8IMAYr69BKdV1XVXV9UIAsHDdV/V65/qGcyC3w0m1vK0qCoAQQgAAAFBKZVne29uTZVlRlCjJOfeDMJn6olLavh1OyHhif1mrBUEIny3C6vU6Qqher1NKVVVljAEAY8zzlrUXtfHEJq63LOQL/DOmKMoai6zRaFBKNU1jjDHGVr5fLBRdb0nCkGmaBgCr1QohRAhpNBoR0263I2d/f58QgjF2XTcIAkVRwpARSuXFYjGfO57nqarabDaj6tPTU8dxWq1WFB4dHem6PpvNpra9WC4plUkiro2GA4ngMAzXn9FqtRzHGQwG0+n05OQkSgKA7/uxmGKPR3pcw7/9+stqFey+3L2z79PpdCqVEkLc398Ph0POOee8WCxmMhmE0GQy6Xa733z91dXVVUxV5Oeb+fbZ+cufMMFoNBoNBoPoA6KRc25Zlmma0fsVCzlgYfemf/Bql0gSqZaNs7M/CvksIfgJtg4BQFFopVx6d3FZLRuSRAhCqFYxMBbvLi+3t54ldO1/sXwu8/3Ot+cXF4TgSDGftBKG7INpMS52f/xBkqg9nc3nbhCGBONkUs9lMxiL87+uZAmvtYIfK/ujeWNa/VLJKBtGNpuJx+Oe59n2tNvrWVavWtqqVbef6vM/PeF2NLFnrrf0/UBVlURcy2fTW8+LT3rCvwhB96yKiBgNAAAAAElFTkSuQmCC)
-	&:hover { background: no-repeat center center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAIAAAD9MqGbAAADXElEQVQ4y22U22tcVRTG195zLnPOXM5kQjszIaZFp5lUKaEWaRLTqFSJbRXBx4Lgk00DKj74V/iiUDSIb6IPPhREbAgqbUoaEqG20tJ2ck+Mzkybzi1zbvu2fJhpDcH19O3N/rEWe61vkbu3F2BPhALnt/w7paDclNVApaM0m4wcy0VH+ixTI3tfkr3kzw9aM0veq3lnqJDp70n3HkhvP6ou/VNdKFaurTTG++1zA/H9ZMDV5XstT9CPx5/PpNMeYojUl5pJhE5VgpKH1eoXM/dsTb1zNB4z6H/k9382u53kh2eP1xl6aCCCAkCAtlCICcIPWuTSlds7jcb5wSQAUACYLroc9Mk3Bys+9dDAJ/V0eEREqCt9uQUXzwz6nE4XXQCgocDpovvJWy9WBZU0ggCAoAASOsnZxDEItpMrlBJKLTn5+sB00Q0F0sWt4FTesaNaqHSJIBEEQlwnlgbxoQt2BBM6EQqlUkKpKsOuVOqVvLO4FdBbJX+skGlyIhAFolAY18CKYGLoAgAkhyfiGqR0ZEIwLrmQFY+NFjK3Sj7dbogjPV2u0rgCriChE1uD5PDE099PjUzEdZI2KRMiZKLqq3wuvd0Q1GeQtM0AI7UQIgQiBJyRDvbX7FRbdI9O6hQMCpWm7wahYxk+A2oZUNv1yi4rB5jUSfZUB9ucndpoivXfLrWPh05/1G1pGzvNzZ1mzfUsA2ivoy39XYsh8zlK7HRk7epXq3V+s+QuV/2lmc/bl1LKlh92R9Vqud6T0MiXl69WfDj/2gvXGqmCQ5+JE0RYa7A/Sp7kTPLweNZ6rstCVMVyfX659P6J3A8L61kLtJN90U+vPHpvjKdoePOx+ftDITmXgknOBQ8lZ3MrrVnOpOBKipdydkTyudXdz84eoKZGxvvtqV8fjDqtqAokZ4KHgrE2JjmXT7CkAacLB7+Z2xzvt02NUAA4NxA3qPzuxsq7mVbBbD3NKYWQgksplBQncvbF4UPfzq+ZEdV2TGfiXaZ+vN/yGPlgrE9o1t3HbL3O6j6PE9WXJIPZWJSor69v2Qbu90o7frrv/rLsjuUTJw+nn80kumJGzWVrld3Fjer1ld03jsTePhr7f2e3d8KNDf9OJdhuiN0QEybpdbRjmejLh/fvhH8B8wT/53GkEWAAAAAASUVORK5CYII=); }
+  background: no-repeat center center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAIAAAD9MqGbAAADD0lEQVQ4y22UW0/jRhTHZ8YeO46TlNzZxeTSrCq1qmgrVWxJlnSBb8B+0j5UlZBC1BWVKrZAH/q2uzExCbnhBAfHie2ZM33wbkRRz8PonDPnN1f9D/7n7z/RI+Mc+sPxnT17ePD8IFAVJZmM57Lprc2CJJHHlfLj4ON1z+z2KiXju52d4uazXK5wdzceDQemabbPzqtlo1Yx1sU42pMx9r5jcUA/N5sbGxkOHAA4B0IwIUQikuPMfn/7ViLoRbVEqYwQ+nSA9x0rkdo4Pn6TSKSCMOQcAARCCECEIVuuVrFY/Pj4TSq18cG0IoQghDrdPiby4esDz1uCEAghIUQ0LYSIfMb5fP7w+uCQA+p0+wghwjl0rm8OD4/8IMAYr69BKdV1XVXV9UIAsHDdV/V65/qGcyC3w0m1vK0qCoAQQgAAAFBKZVne29uTZVlRlCjJOfeDMJn6olLavh1OyHhif1mrBUEIny3C6vU6Qqher1NKVVVljAEAY8zzlrUXtfHEJq63LOQL/DOmKMoai6zRaFBKNU1jjDHGVr5fLBRdb0nCkGmaBgCr1QohRAhpNBoR0263I2d/f58QgjF2XTcIAkVRwpARSuXFYjGfO57nqarabDaj6tPTU8dxWq1WFB4dHem6PpvNpra9WC4plUkiro2GA4ngMAzXn9FqtRzHGQwG0+n05OQkSgKA7/uxmGKPR3pcw7/9+stqFey+3L2z79PpdCqVEkLc398Ph0POOee8WCxmMhmE0GQy6Xa733z91dXVVUxV5Oeb+fbZ+cufMMFoNBoNBoPoA6KRc25Zlmma0fsVCzlgYfemf/Bql0gSqZaNs7M/CvksIfgJtg4BQFFopVx6d3FZLRuSRAhCqFYxMBbvLi+3t54ldO1/sXwu8/3Ot+cXF4TgSDGftBKG7INpMS52f/xBkqg9nc3nbhCGBONkUs9lMxiL87+uZAmvtYIfK/ujeWNa/VLJKBtGNpuJx+Oe59n2tNvrWVavWtqqVbef6vM/PeF2NLFnrrf0/UBVlURcy2fTW8+LT3rCvwhB96yKiBgNAAAAAElFTkSuQmCC)
+  &:hover { background: no-repeat center center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABMAAAATCAIAAAD9MqGbAAADXElEQVQ4y22U22tcVRTG195zLnPOXM5kQjszIaZFp5lUKaEWaRLTqFSJbRXBx4Lgk00DKj74V/iiUDSIb6IPPhREbAgqbUoaEqG20tJ2ck+Mzkybzi1zbvu2fJhpDcH19O3N/rEWe61vkbu3F2BPhALnt/w7paDclNVApaM0m4wcy0VH+ixTI3tfkr3kzw9aM0veq3lnqJDp70n3HkhvP6ou/VNdKFaurTTG++1zA/H9ZMDV5XstT9CPx5/PpNMeYojUl5pJhE5VgpKH1eoXM/dsTb1zNB4z6H/k9382u53kh2eP1xl6aCCCAkCAtlCICcIPWuTSlds7jcb5wSQAUACYLroc9Mk3Bys+9dDAJ/V0eEREqCt9uQUXzwz6nE4XXQCgocDpovvJWy9WBZU0ggCAoAASOsnZxDEItpMrlBJKLTn5+sB00Q0F0sWt4FTesaNaqHSJIBEEQlwnlgbxoQt2BBM6EQqlUkKpKsOuVOqVvLO4FdBbJX+skGlyIhAFolAY18CKYGLoAgAkhyfiGqR0ZEIwLrmQFY+NFjK3Sj7dbogjPV2u0rgCriChE1uD5PDE099PjUzEdZI2KRMiZKLqq3wuvd0Q1GeQtM0AI7UQIgQiBJyRDvbX7FRbdI9O6hQMCpWm7wahYxk+A2oZUNv1yi4rB5jUSfZUB9ucndpoivXfLrWPh05/1G1pGzvNzZ1mzfUsA2ivoy39XYsh8zlK7HRk7epXq3V+s+QuV/2lmc/bl1LKlh92R9Vqud6T0MiXl69WfDj/2gvXGqmCQ5+JE0RYa7A/Sp7kTPLweNZ6rstCVMVyfX659P6J3A8L61kLtJN90U+vPHpvjKdoePOx+ftDITmXgknOBQ8lZ3MrrVnOpOBKipdydkTyudXdz84eoKZGxvvtqV8fjDqtqAokZ4KHgrE2JjmXT7CkAacLB7+Z2xzvt02NUAA4NxA3qPzuxsq7mVbBbD3NKYWQgksplBQncvbF4UPfzq+ZEdV2TGfiXaZ+vN/yGPlgrE9o1t3HbL3O6j6PE9WXJIPZWJSor69v2Qbu90o7frrv/rLsjuUTJw+nn80kumJGzWVrld3Fjer1ld03jsTePhr7f2e3d8KNDf9OJdhuiN0QEybpdbRjmejLh/fvhH8B8wT/53GkEWAAAAAASUVORK5CYII=); }
 .lbar-tip-triangle
-	position: absolute; z-index: 4; padding: 0; margin: 0; width: 20px; height: 19px
-	background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAUCAYAAACAl21KAAAAcUlEQVQ4y6WTUQ7AMAhCDfe/5E7CvpZsmVVEfmvoA9uIWgxREGa4NZJpWiLykk3R0bzMPKLEgNuyJSoMS+aIKCPoqGCsnBJRdXN1hvDEyojDDfJIpD6+bA7Ov8pSYEpzmnfL/lFhEetDBSdW5rmO9kDcybhABXRYE1UAAAAASUVORK5CYII=) center center no-repeat
+  position: absolute; z-index: 4; padding: 0; margin: 0; width: 20px; height: 19px
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAUCAYAAACAl21KAAAAcUlEQVQ4y6WTUQ7AMAhCDfe/5E7CvpZsmVVEfmvoA9uIWgxREGa4NZJpWiLykk3R0bzMPKLEgNuyJSoMS+aIKCPoqGCsnBJRdXN1hvDEyojDDfJIpD6+bA7Ov8pSYEpzmnfL/lFhEetDBSdW5rmO9kDcybhABXRYE1UAAAAASUVORK5CYII=) center center no-repeat
 .lbar-tip
-	position: absolute
-	z-index: 3
-	background: $tip url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAsklEQVQoz5VS2xHDIAyTuOyRUZilk2Am6SpkFCZRP0iJC6S96vwDJ/khm1LFGzk/MSGlh39unppSmgUkAVx5pWpmcgDO6CilNKZUw5zSLA8/Mcar4SH9HXqRsULOmUSLZZEweZLmljwC/kQAcBzHT97FGWztnnpn28RmJtXTXQCllC/+mNmHoC/SyxrVs6VKf0sAyL3JYowkzWw4p20YrunJXdLy+Na2SpXD5u4qeM3y2l8gjORluK0/wAAAAABJRU5ErkJggg==) 10px 10px no-repeat
-	padding: 10px
-	border-radius: 10px
-	border: solid black 1px
-	margin-top: 20px
+  position: absolute
+  z-index: 3
+  background: $tip url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAsklEQVQoz5VS2xHDIAyTuOyRUZilk2Am6SpkFCZRP0iJC6S96vwDJ/khm1LFGzk/MSGlh39unppSmgUkAVx5pWpmcgDO6CilNKZUw5zSLA8/Mcar4SH9HXqRsULOmUSLZZEweZLmljwC/kQAcBzHT97FGWztnnpn28RmJtXTXQCllC/+mNmHoC/SyxrVs6VKf0sAyL3JYowkzWw4p20YrunJXdLy+Na2SpXD5u4qeM3y2l8gjORluK0/wAAAAABJRU5ErkJggg==) 10px 10px no-repeat
+  padding: 10px
+  border-radius: 10px
+  border: solid black 1px
+  margin-top: 20px
 .lbar-tip-desc { padding: 0 0 0 30px; margin: 0; font-weight: bold; }
 .ui-layout-resizer { background: $bg; }
 .ui-layout-resizer-east { border-left: solid $light 1px; border-right: solid $dark 1px; padding: 2px 0 !important; margin-top: -1px !important; }
@@ -40,10 +40,10 @@ body { padding: 0; margin: 0; }
 .ui-layout-resizer:hover .ui-layout-toggler { background: #ace; }
 .toolbar { height: 24px; overflow: hidden; background: $bg; cursor: default; overflow: hidden; padding: 2px; border-bottom: solid #aaa 1px; }
 .toolbar-button
-	float: left; width: 24px; height: 24px; border: solid transparent 1px; text-align: center; font-weight: bold; background: no-repeat center center; text-indent: -9999px; cursor: default
-	&:hover { border-color: $light $dark $dark $light; }
-	&.armed { border-color: $dark $light $light $dark; }
-	&.pressed { border-color: $dark $light $light $dark; background-color: #eee; }
+  float: left; width: 24px; height: 24px; border: solid transparent 1px; text-align: center; font-weight: bold; background: no-repeat center center; text-indent: -9999px; cursor: default
+  &:hover { border-color: $light $dark $dark $light; }
+  &.armed { border-color: $dark $light $light $dark; }
+  &.pressed { border-color: $dark $light $light $dark; background-color: #eee; }
 .b-line-numbers { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAALCAYAAACksgdhAAAALElEQVQoz2NkYGD4z4AAjAz4wX8MBpHgPxMDGWBgNP0nkh6WAcFIQoqAqwMADDENBizwvaoAAAAASUVORK5CYII=); }
 .b-comment      { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAMCAYAAACwXJejAAAAP0lEQVQY052QSQ4AMAgCoen/v0yv1kq3OSExRCRmFDSzEDzs2ahSGQYWKQKAhguel+Sa8tBsSaJrunvB/+GWAWT9CBiHRFQ/AAAAAElFTkSuQmCC); }
 .b-uncomment    { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAVElEQVQoz5WQSQ7AMAgDB5T/f9m5VBUKOFU5gTVmC+ZQyeMR9BYGHMVlJkSBVcTIoZGDAUj8EQ22hnMNboYBljWoX92+lhd4LNfXzm2C+4Y1/IEBNtT4GBWRRLxNAAAAAElFTkSuQmCC); }
@@ -67,8 +67,8 @@ body { padding: 0; margin: 0; }
 .b-interrupt    { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAANCAYAAACUwi84AAAAHElEQVQY02NkYGD4z4AAjFAaLsbEQACMKqCbAgBUAgIZzGAL5AAAAABJRU5ErkJggg==); }
 .b-cutback      { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAPCAYAAADUFP50AAAAh0lEQVQoz5VSWw4EMQgCMwf35uxHxw3r1nmQNE1bi4gCM3SuLWIIEABI2hEIgKIHr/i/ROwEcV72z3dgGOMrRJNzZRQy83txNHkEIHJx1D5mlOQO7lM2w2IR0x8f1XuURJIy21+Z8yPV5N/WWw2WIzPlb0UeV42v4r0NfZSm8zw6Fvh0egQAH95HSnaw0XqwAAAAAElFTkSuQmCC); }
 .separator
-	float: left; width: 10px; height: 24px
-	background: no-repeat center center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAASCAIAAAD+ApjoAAAAGElEQVQI12NoaGj4//8/EwMDAwMDA70pACyPBKBkf6chAAAAAElFTkSuQmCC)
+  float: left; width: 10px; height: 24px
+  background: no-repeat center center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAASCAIAAAD+ApjoAAAAGElEQVQI12NoaGj4//8/EwMDAwMDA70pACyPBKBkf6chAAAAAElFTkSuQmCC)
 .search { float: left; height: 18px; width: 200px; }
 .CodeMirror-linenumber { color: #00f; text-align: left; }
 .CodeMirror-gutters { border-right-color: transparent; background: transparent; }
@@ -77,20 +77,20 @@ body { padding: 0; margin: 0; }
 .modified { background: #eee; }
 .highlighted { border: solid red 1px; }
 .CodeMirror-hints
-	position: absolute
-	z-index: 10
-	overflow: hidden
-	list-style: none
-	margin: 0
-	padding: 0
-	-webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2)
-	-moz-box-shadow:    2px 3px 5px rgba(0,0,0,.2)
-	box-shadow:         2px 3px 5px rgba(0,0,0,.2)
-	border: 1px solid black
-	background: $tip
-	font-size: 90%
-	max-height: 20em
-	overflow-y: auto
+  position: absolute
+  z-index: 10
+  overflow: hidden
+  list-style: none
+  margin: 0
+  padding: 0
+  -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2)
+  -moz-box-shadow:    2px 3px 5px rgba(0,0,0,.2)
+  box-shadow:         2px 3px 5px rgba(0,0,0,.2)
+  border: 1px solid black
+  background: $tip
+  font-size: 90%
+  max-height: 20em
+  overflow-y: auto
 
 .CodeMirror-hint { margin: 0; padding: 0 2px; max-width: 19em; overflow: hidden; white-space: pre; color: black; cursor: pointer; }
 .CodeMirror-hint-active { background: $sel; color: white; }
@@ -100,90 +100,90 @@ body { padding: 0; margin: 0; }
 
 // Welcome page
 .fav
-	float: left
-	height: 20px
-	line-height: 20px
-	margin: 0 8px 8px 0
-	padding: 2px 12px 2px 28px
-	border: solid 1px
-	border-color: #fec889 #eca667 #eca667 #fec889
-	border-radius: 8px
-	background: #fdb778 6px center no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAAG7AAABuwBHnU4NQAAAAd0SU1FB9kCFgwbOQl+BpIAAAKZSURBVHjajZJLSJRRGIbf7///cRwdmxyLlNTS8VZgUEZEUEhSiJIFSYugRbQocBG1lahlRaBSEdhCKcFwUQa66YaCJCmmWcKgYxfHJvMyM83MP5f/ck4nhcgrPfBwOIv3Ox+HFxsx0VZeMtF2ZDc2QMI6jDbl59kz8wbtWQUDH5tcLqyDgnWwpqU1O8vq7UQSQlPvmwFU4H8ZbXDV/Oy/yTkzFp19d4ePNrpqsQaEfxi4npVidTiqU3N3PdhReS9DSkoFBEyPwfvmaiDhn65Tv3zu2n/je/jvgNGHZ1zqj8G6ZEdGRWpmUWlabhmllxyHkrJ56YeIA4xgqEEEJ14h/G2YqzNudzw491pTjUbqb6juzCk9cNJZcAxkSYZkVUBJMmAhkMwBcHAmAYY4NSY0wDQNoekBeHo7nsmndka8gYW5c1muUpkkEyB9SZ4QaoApNBLgelxcY2CJiPAXhrtbjfDU+EW5fSjirczUfPO+yZrs4nwAujC+NMAUITMmwlERVkUwBBbzo7+jBbNjI5dqW2c6ZQiejqnD5fZIEqfA4a3Z6SBSAQh5BGAiqM3CCH2CNtOHD91P4Onz3D7/fP7Wsh5sL8C16Iz7SmKO2ZQ0CZKNgywGwMWrely8zMRCDJqqGcWFUj1erGhi1d0FBm4ypk2JwwtIPkjJ85DtuvDPQGESQSLw8vvzxqoqtx1ykCCFCCAZkCwEOUWC2AayjRbvkAmKlSztlY7kVVU2rMypKCBuAowB7rdRjLwMc0Pj2HdiExXttQEmBxGgm8gG4Fk2gHPi8YSFjw/FyOeOfw0s6E3pTvmxqTA21OY/O9mtXM7Zk1oYjVhg6tDWrPKjqm1VRlxTHYx6T/f4sZKWo+kHGeNbLvQEu4AlfgO+8jzLe4vNcwAAAABJRU5ErkJggg==)
-	white-space: nowrap
+  float: left
+  height: 20px
+  line-height: 20px
+  margin: 0 8px 8px 0
+  padding: 2px 12px 2px 28px
+  border: solid 1px
+  border-color: #fec889 #eca667 #eca667 #fec889
+  border-radius: 8px
+  background: #fdb778 6px center no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAAG7AAABuwBHnU4NQAAAAd0SU1FB9kCFgwbOQl+BpIAAAKZSURBVHjajZJLSJRRGIbf7///cRwdmxyLlNTS8VZgUEZEUEhSiJIFSYugRbQocBG1lahlRaBSEdhCKcFwUQa66YaCJCmmWcKgYxfHJvMyM83MP5f/ck4nhcgrPfBwOIv3Ox+HFxsx0VZeMtF2ZDc2QMI6jDbl59kz8wbtWQUDH5tcLqyDgnWwpqU1O8vq7UQSQlPvmwFU4H8ZbXDV/Oy/yTkzFp19d4ePNrpqsQaEfxi4npVidTiqU3N3PdhReS9DSkoFBEyPwfvmaiDhn65Tv3zu2n/je/jvgNGHZ1zqj8G6ZEdGRWpmUWlabhmllxyHkrJ56YeIA4xgqEEEJ14h/G2YqzNudzw491pTjUbqb6juzCk9cNJZcAxkSYZkVUBJMmAhkMwBcHAmAYY4NSY0wDQNoekBeHo7nsmndka8gYW5c1muUpkkEyB9SZ4QaoApNBLgelxcY2CJiPAXhrtbjfDU+EW5fSjirczUfPO+yZrs4nwAujC+NMAUITMmwlERVkUwBBbzo7+jBbNjI5dqW2c6ZQiejqnD5fZIEqfA4a3Z6SBSAQh5BGAiqM3CCH2CNtOHD91P4Onz3D7/fP7Wsh5sL8C16Iz7SmKO2ZQ0CZKNgywGwMWrely8zMRCDJqqGcWFUj1erGhi1d0FBm4ypk2JwwtIPkjJ85DtuvDPQGESQSLw8vvzxqoqtx1ykCCFCCAZkCwEOUWC2AayjRbvkAmKlSztlY7kVVU2rMypKCBuAowB7rdRjLwMc0Pj2HdiExXttQEmBxGgm8gG4Fk2gHPi8YSFjw/FyOeOfw0s6E3pTvmxqTA21OY/O9mtXM7Zk1oYjVhg6tDWrPKjqm1VRlxTHYx6T/f4sZKWo+kHGeNbLvQEu4AlfgO+8jzLe4vNcwAAAABJRU5ErkJggg==)
+  white-space: nowrap
 
 .fav.fav-active { border-color: #eca667 #fec889 #fec889 #eca667; background-color: #eca667; }
 .fav.fav-active.ui-sortable-helper { border-color: #fec889 #eca667 #eca667 #fec889; background-color: #fdb778; }
 .fav-addr
-	color: #034d72; text-decoration: none
-	&:hover { color: black; text-decoration: underline; }
+  color: #034d72; text-decoration: none
+  &:hover { color: black; text-decoration: underline; }
 .fav-del
-	display: none
-	float: right
-	width: 18px
-	height: 18px
-	margin-right: -20px
-	margin-top: -10px
-	border-radius: 10px
-	background-color: #92598c
-	border: solid 1px
-	border-color: #a36a9d #81487b #81487b #a36a9d
-	color: #eee
-	text-align: center
-	text-decoration: none
+  display: none
+  float: right
+  width: 18px
+  height: 18px
+  margin-right: -20px
+  margin-top: -10px
+  border-radius: 10px
+  background-color: #92598c
+  border: solid 1px
+  border-color: #a36a9d #81487b #81487b #a36a9d
+  color: #eee
+  text-align: center
+  text-decoration: none
 
 .fav-hover .fav-del
-	display: inherit
-	&:hover { color: #fff; font-weight: bold; }
-	&:active { border-color: #81487b #a36a9d #a36a9d #81487b; background-color: #81487b; }
+  display: inherit
+  &:hover { color: #fff; font-weight: bold; }
+  &:active { border-color: #81487b #a36a9d #a36a9d #81487b; background-color: #81487b; }
 .fav-hover.ui-sortable-helper .fav-del { display: none; }
 .connect-host, .connect-port, .listen-port, .spawn-port, .favs { font-family: apl, monospace; }
 .connect-error { color: red; }
 .dyalog-logo
-	background: #fc9732 16px center no-repeat url(dyaloglogo.png)
-	color: white
-	text-indent: -9999px
-	overflow: hidden
-	height: 80px
-	margin: 0
+  background: #fc9732 16px center no-repeat url(dyaloglogo.png)
+  color: white
+  text-indent: -9999px
+  overflow: hidden
+  height: 80px
+  margin: 0
 
 .floatable a { background-color: #ace !important; }
 
 // a z-index hack to make the tab (relatively positioned) go on top of resizers and the south pane (absolutely positioned)
 .dragging .ui-layout-resizer, .dragging .ui-layout-south { z-index: -1 !important; }
 a.button
-	background-color: $bg
-	border-style: solid
-	border-width: 1px 2px 2px 1px
-	border-color: $light $dark $dark $light
-	color: black
-	text-decoration: none
-	padding: 2px 20px
+  background-color: $bg
+  border-style: solid
+  border-width: 1px 2px 2px 1px
+  border-color: $light $dark $dark $light
+  color: black
+  text-decoration: none
+  padding: 2px 20px
 
 a.button:active { border-color: $dark $light $light $dark; }
 #prefs p { height: 40px; line-height: 40px; }
 .prefs-pk { width: 1.5em; text-align: center; }
 
 .menu
-	height: 40px; line-height: 17px; cursor: default; padding: 0; margin: 0; background-color: $bg; font-family: sans-serif
-	&>li
-		float: left; text-align: center; border: solid transparent 1px; background-color: $bg; padding: 0 8px; margin: 0; list-style: none
-		&.hover { border-color: $light $dark $dark $light; }
-	ul
-		position: absolute; z-index: 1; padding: 1px; margin: 2px 0 0 -8px; background-color: $bg
-		min-width: 125px; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis
-		display: none; border-style: solid; border-width: 1px 2px 2px 1px; border-color: $light $dark $dark $light
-		li
-			height: 17px; line-height: 17px; list-style: none; text-align: left; padding: 1px 17px
-			.shortcut { font-size: small; float: right; margin-left: 20px; color: #666; }
-			&.checked { background-position: 5px center; background-repeat: no-repeat; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMElEQVQI12NgwA3+M+KSYGBgYGCCMdAlYJLIAsgKGRmx6GRgYGBghBPoOnA6AhkAALZJCQIBbmPFAAAAAElFTkSuQmCC); }
-			&.hover
-				background-color: $sel; color: #fff
-				.shortcut { color: #fff }
-				&.checked { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMUlEQVQI13WOQQoAMAjDEv//5+4kiMyeSkOgcCRJvABAddkAoOYwgarbbADgzzhPzDwC8SPwjB0PzgAAAABJRU5ErkJggg==); }
-	li.active
-		border-color: $dark $light $light $dark
-		&>ul { display: block; }
-	hr { margin: 3px 0 5px 0; }
+  height: 40px; line-height: 17px; cursor: default; padding: 0; margin: 0; background-color: $bg; font-family: sans-serif
+  &>li
+    float: left; text-align: center; border: solid transparent 1px; background-color: $bg; padding: 0 8px; margin: 0; list-style: none
+    &.hover { border-color: $light $dark $dark $light; }
+  ul
+    position: absolute; z-index: 1; padding: 1px; margin: 2px 0 0 -8px; background-color: $bg
+    min-width: 125px; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis
+    display: none; border-style: solid; border-width: 1px 2px 2px 1px; border-color: $light $dark $dark $light
+    li
+      height: 17px; line-height: 17px; list-style: none; text-align: left; padding: 1px 17px
+      .shortcut { font-size: small; float: right; margin-left: 20px; color: #666; }
+      &.checked { background-position: 5px center; background-repeat: no-repeat; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMElEQVQI12NgwA3+M+KSYGBgYGCCMdAlYJLIAsgKGRmx6GRgYGBghBPoOnA6AhkAALZJCQIBbmPFAAAAAElFTkSuQmCC); }
+      &.hover
+        background-color: $sel; color: #fff
+        .shortcut { color: #fff }
+        &.checked { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMUlEQVQI13WOQQoAMAjDEv//5+4kiMyeSkOgcCRJvABAddkAoOYwgarbbADgzzhPzDwC8SPwjB0PzgAAAABJRU5ErkJggg==); }
+  li.active
+    border-color: $dark $light $light $dark
+    &>ul { display: block; }
+  hr { margin: 3px 0 5px 0; }
 
 .ide { position: absolute; top: 20px; bottom: 0; left: 0; right: 0; }
 
@@ -215,18 +215,18 @@ a.button:active { border-color: $dark $light $light $dark; }
 .ui-accordion .ui-accordion-content { padding: 1em 2.2em; border-top: 0; overflow: auto; }
 .ui-autocomplete { position: absolute; top: 0; left: 0; cursor: default; }
 .ui-button
-	display: inline-block
-	position: relative
-	padding: 0
-	line-height: normal
-	margin-right: .1em
-	cursor: default
-	vertical-align: middle
-	text-align: center
-	overflow: visible; // removes extra width in IE
-	border-style: solid
-	border-width: 1px
-	border-color: $light $dark $dark $light
+  display: inline-block
+  position: relative
+  padding: 0
+  line-height: normal
+  margin-right: .1em
+  cursor: default
+  vertical-align: middle
+  text-align: center
+  overflow: visible; // removes extra width in IE
+  border-style: solid
+  border-width: 1px
+  border-color: $light $dark $dark $light
 
 .ui-button, .ui-button:link, .ui-button:visited, .ui-button:hover, .ui-button:active { text-decoration: none; color: #000; }
 .ui-button:active { border-color: #000; }
@@ -256,29 +256,29 @@ input.ui-button { padding: .4em 1em; }
 .ui-button-text-icon-secondary .ui-icon,
 .ui-button-text-icons .ui-icon,
 .ui-button-icons-only .ui-icon
-	position: absolute
-	top: 50%
-	margin-top: -9px
+  position: absolute
+  top: 50%
+  margin-top: -9px
 
 .ui-button-icon-only .ui-icon
-	left: 50%
-	margin-left: -9px
+  left: 50%
+  margin-left: -9px
 
 .ui-button-text-icon-primary .ui-button-icon-primary,
 .ui-button-text-icons .ui-button-icon-primary,
 .ui-button-icons-only .ui-button-icon-primary
-	left: .5em
+  left: .5em
 
 .ui-button-text-icon-secondary .ui-button-icon-secondary,
 .ui-button-text-icons .ui-button-icon-secondary,
 .ui-button-icons-only .ui-button-icon-secondary
-	right: .5em
+  right: .5em
 
 
 // button sets
 .ui-buttonset
-	margin-right: 7px
-	.ui-button { margin-left: 0; margin-right: -.3em; }
+  margin-right: 7px
+  .ui-button { margin-left: 0; margin-right: -.3em; }
 
 // workarounds
 // reset extra padding in Firefox, see h5bp.com/l
@@ -327,15 +327,15 @@ input.ui-button::-moz-focus-inner, button.ui-button::-moz-focus-inner { border: 
 .ui-datepicker-rtl .ui-datepicker-group-last .ui-datepicker-header, .ui-datepicker-rtl .ui-datepicker-group-middle .ui-datepicker-header { border-right-width: 0; border-left-width: 1px; }
 
 .ui-dialog
-	border-style: solid; border-width: 1px; border-color: $light $dark $dark $light; overflow: hidden; position: absolute; top: 0; left: 0; padding: 0; outline: 0; text-align: center
-	.ui-dialog-titlebar { padding: 0 8px; margin-bottom: 10px; position: relative; background-color: $sel; height: 22px; line-height: 20px; cursor: default; }
-	.ui-dialog-title { float: left; margin: .1em 0; white-space: nowrap; width: 90%; overflow: hidden; text-overflow: ellipsis; color: white; text-align: left; }
-	.ui-dialog-titlebar-close { position: absolute; right: 2px; top: 50%; width: 18px; margin: -9px 0 0 0; padding: 0; height: 18px; outline: 0; }
-	.ui-dialog-content { position: relative; border: 0; padding: 0; background: none; overflow: auto; }
-	.ui-resizable-se { width: 12px; height: 12px; right: -5px; bottom: -5px; background-position: 16px 16px; }
-	.ui-dialog-buttonpane
-		text-align: center; border-width: 1px 0 0 0; background-image: none; margin-top: .5em; padding: .3em 1em .5em .4em
-		.ui-button { margin: 0 5px; background-color: $bg; }
+  border-style: solid; border-width: 1px; border-color: $light $dark $dark $light; overflow: hidden; position: absolute; top: 0; left: 0; padding: 0; outline: 0; text-align: center
+  .ui-dialog-titlebar { padding: 0 8px; margin-bottom: 10px; position: relative; background-color: $sel; height: 22px; line-height: 20px; cursor: default; }
+  .ui-dialog-title { float: left; margin: .1em 0; white-space: nowrap; width: 90%; overflow: hidden; text-overflow: ellipsis; color: white; text-align: left; }
+  .ui-dialog-titlebar-close { position: absolute; right: 2px; top: 50%; width: 18px; margin: -9px 0 0 0; padding: 0; height: 18px; outline: 0; }
+  .ui-dialog-content { position: relative; border: 0; padding: 0; background: none; overflow: auto; }
+  .ui-resizable-se { width: 12px; height: 12px; right: -5px; bottom: -5px; background-position: 16px 16px; }
+  .ui-dialog-buttonpane
+    text-align: center; border-width: 1px 0 0 0; background-image: none; margin-top: .5em; padding: .3em 1em .5em .4em
+    .ui-button { margin: 0 5px; background-color: $bg; }
 
 .ui-menu { list-style: none; padding: 2px; margin: 0; display: block; outline: none; }
 .ui-menu .ui-menu { margin-top: -3px; position: absolute; }
@@ -402,45 +402,45 @@ input.ui-button::-moz-focus-inner, button.ui-button::-moz-focus-inner { border: 
 
 // position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed")
 .ui-tabs
-	padding: 0; position: relative
-	.ui-tabs-panel { display: block; border-width: 0; padding: 1em 1.4em; background: none; }
-	.ui-tabs-nav
-		margin: 0; padding: 3px 3px 0; border-width: 0 0 1px 0; border-color: white
-		li { list-style: none; float: left; position: relative; top: 0; margin: 0 1px 0 0; padding: 0; white-space: nowrap; background: $bg; }
-		.ui-tabs-anchor
-			float: left
-			padding: 2px 12px 0 12px
-			border-width: 1px 2px 0 1px
-			border-style: solid
-			border-color: white #666 transparent white
-			border-top-left-radius: 4px
-			border-top-right-radius: 4px
-			text-decoration: none
-			cursor: default
-		.ui-tabs-active .ui-tabs-anchor
-			padding: 4px 15px 0 15px
-			margin: -2px -3px 0 -3px
-			background-color: $bg
-		li.ui-tabs-active
-			border-bottom: solid 1px $bg
-			margin-bottom: -1px
-			padding-left: 2px; margin-left: -2px
-			padding-right: 2px; margin-right: -2px
-			z-index: 1
+  padding: 0; position: relative
+  .ui-tabs-panel { display: block; border-width: 0; padding: 1em 1.4em; background: none; }
+  .ui-tabs-nav
+    margin: 0; padding: 3px 3px 0; border-width: 0 0 1px 0; border-color: white
+    li { list-style: none; float: left; position: relative; top: 0; margin: 0 1px 0 0; padding: 0; white-space: nowrap; background: $bg; }
+    .ui-tabs-anchor
+      float: left
+      padding: 2px 12px 0 12px
+      border-width: 1px 2px 0 1px
+      border-style: solid
+      border-color: white #666 transparent white
+      border-top-left-radius: 4px
+      border-top-right-radius: 4px
+      text-decoration: none
+      cursor: default
+    .ui-tabs-active .ui-tabs-anchor
+      padding: 4px 15px 0 15px
+      margin: -2px -3px 0 -3px
+      background-color: $bg
+    li.ui-tabs-active
+      border-bottom: solid 1px $bg
+      margin-bottom: -1px
+      padding-left: 2px; margin-left: -2px
+      padding-right: 2px; margin-right: -2px
+      z-index: 1
 
-		a { outline: none; }
-		li.ui-tabs-active .ui-tabs-anchor,
-		li.ui-state-disabled .ui-tabs-anchor,
-		li.ui-tabs-loading .ui-tabs-anchor { cursor: default; }
+    a { outline: none; }
+    li.ui-tabs-active .ui-tabs-anchor,
+    li.ui-state-disabled .ui-tabs-anchor,
+    li.ui-tabs-loading .ui-tabs-anchor { cursor: default; }
 
 .ui-tooltip { padding: 8px; position: absolute; z-index: 9999; max-width: 300px; -webkit-box-shadow: 0 0 5px #aaa; box-shadow: 0 0 5px #aaa; }
 body .ui-tooltip { border-width: 2px; }
 
 // Component containers
 .ui-widget
-	font-family: Verdana,Arial,sans-serif; font-size: 1.1em
-	.ui-widget { font-size: 1em; }
-	select, textarea, button { font-family: Verdana,Arial,sans-serif; font-size: 1em; }
+  font-family: Verdana,Arial,sans-serif; font-size: 1.1em
+  .ui-widget { font-size: 1em; }
+  select, textarea, button { font-family: Verdana,Arial,sans-serif; font-size: 1em; }
 .ui-widget-content { background: $bg; }
 .ui-widget-header { border: 1px solid #aaaaaa; background: $bg; font-weight: bold; }
 
@@ -448,10 +448,10 @@ body .ui-tooltip { border-width: 2px; }
 .ui-state-default,
 .ui-widget-content .ui-state-default,
 .ui-widget-header .ui-state-default
-	font-weight: normal
+  font-weight: normal
 
 .ui-state-default
-	a, a:link, a:visited { color: #000; text-decoration: none }
+  a, a:link, a:visited { color: #000; text-decoration: none }
 
 .ui-state-hover,
 .ui-widget-content .ui-state-hover,
@@ -459,63 +459,63 @@ body .ui-tooltip { border-width: 2px; }
 .ui-state-focus,
 .ui-widget-content .ui-state-focus,
 .ui-widget-header .ui-state-focus
-	font-weight: normal
+  font-weight: normal
 
 .ui-state-hover, .ui-state-focus
-	a, a:hover, a:link, a:visited { text-decoration: none; }
+  a, a:hover, a:link, a:visited { text-decoration: none; }
 .ui-state-active
-	a, a:link, a:visited { text-decoration: none; }
+  a, a:link, a:visited { text-decoration: none; }
 
 // Interaction Cues
 .ui-state-highlight,
 .ui-widget-content .ui-state-highlight,
 .ui-widget-header .ui-state-highlight
-	background: #fbf9ee url(images/ui-bg_glass_55_fbf9ee_1x400.png) 50% 50% repeat-x
-	color: #363636
+  background: #fbf9ee url(images/ui-bg_glass_55_fbf9ee_1x400.png) 50% 50% repeat-x
+  color: #363636
 
 .ui-state-highlight a,
 .ui-widget-content .ui-state-highlight a,
 .ui-widget-header .ui-state-highlight a
-	color: #363636
+  color: #363636
 
 .ui-state-error,
 .ui-widget-content .ui-state-error,
 .ui-widget-header .ui-state-error
-	border: 1px solid #cd0a0a
-	background: #fef1ec url(images/ui-bg_glass_95_fef1ec_1x400.png) 50% 50% repeat-x
-	color: #cd0a0a
+  border: 1px solid #cd0a0a
+  background: #fef1ec url(images/ui-bg_glass_95_fef1ec_1x400.png) 50% 50% repeat-x
+  color: #cd0a0a
 
 .ui-state-error a,
 .ui-widget-content .ui-state-error a,
 .ui-widget-header .ui-state-error a
-	color: #cd0a0a
+  color: #cd0a0a
 
 .ui-state-error-text,
 .ui-widget-content .ui-state-error-text,
 .ui-widget-header .ui-state-error-text
-	color: #cd0a0a
+  color: #cd0a0a
 
 .ui-priority-primary,
 .ui-widget-content .ui-priority-primary,
 .ui-widget-header .ui-priority-primary
-	font-weight: bold
+  font-weight: bold
 
 .ui-priority-secondary,
 .ui-widget-content .ui-priority-secondary,
 .ui-widget-header .ui-priority-secondary
-	opacity: .7
-	filter:Alpha(Opacity=70)
-	font-weight: normal
+  opacity: .7
+  filter:Alpha(Opacity=70)
+  font-weight: normal
 
 .ui-state-disabled,
 .ui-widget-content .ui-state-disabled,
 .ui-widget-header .ui-state-disabled
-	opacity: .35
-	filter:Alpha(Opacity=35)
-	background-image: none
+  opacity: .35
+  filter:Alpha(Opacity=35)
+  background-image: none
 
 .ui-state-disabled .ui-icon
-	filter:Alpha(Opacity=35); // For IE8 - See #6059
+  filter:Alpha(Opacity=35); // For IE8 - See #6059
 
 // Icons
 // states and images
