@@ -37,6 +37,15 @@ jQuery ($) =>
     .on 'mouseout',  '.fav', -> $(@).removeClass 'fav-hover'
     .on 'mousedown', '.fav-addr', -> $(@).closest('.fav').addClass    'fav-active'
     .on 'mouseup',   '.fav-addr', -> $(@).closest('.fav').removeClass 'fav-active'
+    .on 'click', '.spawn', ->
+      port = +$('.spawn-port').val()
+      if 0 < port < 65536
+        Dyalog.socket.emit 'spawnInterpreter', {port}
+        $('.spawn-status').text 'Spawning...'; $('.spawn, .spawn-port').attr 'disabled', true
+      else
+        $('.spawn-status').text 'Invalid port'; $('.spawn-port').focus()
+      return
+
   getFavs = -> try JSON.parse localStorage.favs catch then []
   fmtFav = (x) ->
     s = if !x.port? || x.port == DEFAULT_PORT then x.host else if x.host.indexOf(':') < 0 then "#{x.host}:#{x.port}" else "[#{x.host}]:#{x.port}"
@@ -79,7 +88,7 @@ jQuery ($) =>
         <fieldset>
           <legend>Spawn an interpreter</legend>
           <p class="spawn-status">
-          <p><label>Port <input disabled class="spawn-port" value="#{DEFAULT_PORT}" size="5"></label> <input disabled class="spawn" type="button" value="Spawn">
+          <p><label>Port <input class="spawn-port" value="#{DEFAULT_PORT}" size="5"></label> <input class="spawn" type="button" value="Spawn">
         </fieldset>
         <fieldset>
           <legend>Listen for connections from interpreter</legend>
@@ -89,5 +98,12 @@ jQuery ($) =>
       renderFavs()
       $('.favs').sortable cursor: 'move', revert: true, tolerance: 'pointer', cancel: '.fav-del', update: saveFavs
       $('.connect-host').focus()
+      Dyalog.socket.on 'spawnedInterpreter', ({pid}) ->
+        $('.spawn-status').text "PID: #{pid}"; return
+      Dyalog.socket.on 'spawnedInterpreterError', ({err}) ->
+        $('.spawn-status').text err; $('.spawn, .spawn-port').attr 'disabled', false; return
+      Dyalog.socket.on 'spawnedInterpreterExited', ({code, signal}) ->
+        $('.spawn-status').text(if code? then "exited with code #{code}" else "received #{signal}")
+        $('.spawn, .spawn-port').attr 'disabled', false; return
     return
   return

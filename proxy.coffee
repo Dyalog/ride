@@ -142,5 +142,14 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
 
     socket.on 'connectToInterpreter', ({host, port}) -> connectToInterpreter host, port
 
+    extend = (a...) -> r = {}; (for x in a then for k, v of x then r[k] = v); r
+    {spawn} = require 'child_process'
+    socket.on 'spawnInterpreter', ({port}) ->
+      child = spawn 'dyalog', ['+s'], env: extend process.env, RIDE_LISTEN: '0.0.0.0:' + port
+      toBrowser 'spawnedInterpreter', pid: child.pid
+      child.on 'error', (err) -> toBrowser 'spawnedInterpreterError', err: '' + err; return
+      child.on 'exit', (code, signal) -> toBrowser 'spawnedInterpreterExited', {code, signal}; return
+      return
+
     socket.on 'disconnect', -> log 'browser disconnected'; rm sockets, socket; return
     return
