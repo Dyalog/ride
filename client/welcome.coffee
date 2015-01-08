@@ -11,7 +11,7 @@ jQuery ($) =>
     .on 'keydown', '.listen-port', (e) -> if e.which == 13 then $('.listen').click()
     .on 'click', '.fav-addr', (event) ->
       x = parseFav $(@).text()
-      Dyalog.socket.emit 'connectToInterpreter', host: x.host, port: x.port; Dyalog.idePage()
+      Dyalog.socket.emit '*connect', host: x.host, port: x.port; Dyalog.idePage()
       event.preventDefault(); event.stopPropagation(); false
     .on 'click', '.fav-del', -> $(@).closest('.fav').animate {width: 0, margin: 0, padding: 0}, -> $(@).remove(); saveFavs()
     .on 'click', '.connect', ->
@@ -26,7 +26,7 @@ jQuery ($) =>
       if $('.connect-add').is(':checked') && getFavs().map(fmtFav).indexOf(fmtFav x) < 0
         localStorage.favs = JSON.stringify getFavs().concat([x]); renderFavs()
       $('.connect-name').val ''
-      Dyalog.socket.emit 'connectToInterpreter', host: x.host, port: x.port or DEFAULT_PORT
+      Dyalog.socket.emit '*connect', host: x.host, port: x.port or DEFAULT_PORT
       renderFavs()
       $f = $('.fav-addr').filter(-> $(@).text() == fmtFav x).closest '.fav'
       w = $f.width()
@@ -40,7 +40,7 @@ jQuery ($) =>
     .on 'click', '.spawn', ->
       port = +$('.spawn-port').val()
       if 0 < port < 65536
-        Dyalog.socket.emit 'spawnInterpreter', {port}
+        Dyalog.socket.emit '*spawn', {port}
         $('.spawn-status').text 'Spawning...'; $('.spawn, .spawn-port').attr 'disabled', true
       else
         $('.spawn-status').text 'Invalid port'; $('.spawn-port').focus()
@@ -68,7 +68,7 @@ jQuery ($) =>
   Dyalog.welcomePage = ->
     $('title').html 'Dyalog IDE'
     if (u = Dyalog.urlParams).host?
-      Dyalog.socket.emit 'connectToInterpreter', host: u.host, port: +(u.port or DEFAULT_PORT)
+      Dyalog.socket.emit '*connect', host: u.host, port: +(u.port or DEFAULT_PORT)
       Dyalog.idePage()
     else
       $('body').html """
@@ -98,11 +98,11 @@ jQuery ($) =>
       renderFavs()
       $('.favs').sortable cursor: 'move', revert: true, tolerance: 'pointer', cancel: '.fav-del', update: saveFavs
       $('.connect-host').focus()
-      Dyalog.socket.on 'spawnedInterpreter', ({pid}) ->
+      Dyalog.socket.on '*spawned', ({pid}) ->
         $('.spawn-status').text "PID: #{pid}"; return
-      Dyalog.socket.on 'spawnedInterpreterError', ({err}) ->
+      Dyalog.socket.on '*spawnedError', ({err}) ->
         $('.spawn-status').text err; $('.spawn, .spawn-port').attr 'disabled', false; return
-      Dyalog.socket.on 'spawnedInterpreterExited', ({code, signal}) ->
+      Dyalog.socket.on '*spawnedExited', ({code, signal}) ->
         $('.spawn-status').text(if code? then "exited with code #{code}" else "received #{signal}")
         $('.spawn, .spawn-port').attr 'disabled', false; return
     return

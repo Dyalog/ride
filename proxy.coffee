@@ -1,15 +1,17 @@
 log = do ->
   N = 50; T = 1000 # log no more than N log messages per T milliseconds
-  n = t = 0
+  n = t = 0 # at any moment, there have been n messages since time t
   (s) ->
     if (t1 = +new Date) - t > T then t = t1; n = 1
     if ++n < N then process?.stdout?.write? "#{process.uptime().toFixed 3} #{s}\n"
     else if n == N then process?.stdout?.write? '... logging temporarily suppressed\n'
+    return
 
 rm = (a, x) -> i = a.indexOf x; (if i != -1 then a.splice i, 1); return
 b64 = (s) -> Buffer(s).toString 'base64'
 b64d = (s) -> '' + Buffer s, 'base64'
-getTag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exec xml)?[1]
+tag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exec xml)?[1]
+extend = (a...) -> r = {}; (for x in a then for k, v of x then r[k] = v); r
 
 parseEditableEntity = (xml) -> # used for OpenWindow and UpdateWindow
   # v1 sample message:
@@ -22,37 +24,28 @@ parseEditableEntity = (xml) -> # used for OpenWindow and UpdateWindow
   #                      entityType type, lineAttributes attributes]
   #   lineAttributes => lineAttribute[int[] stop, int[] monitor, int[] trace]
   bs = []; xml.replace /<row>(\d+)<\/row><value>1<\/value>/g, (_, l) -> bs.push +l
-  name: b64d getTag 'name', xml
-  text: b64d getTag 'text', xml
-  token: +getTag 'token', xml
-  currentRow: +getTag('cur_pos', xml) || 0
-  debugger: +getTag 'bugger', xml
+  name: b64d tag 'name', xml
+  text: b64d tag 'text', xml
+  token: +tag 'token', xml
+  currentRow: +tag('cur_pos', xml) || 0
+  debugger: +tag 'bugger', xml
   lineAttributes: stop: bs
 
 WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' # constants used for ReplyAtInputPrompt
 
 @Proxy = ->
   client = null # TCP connection to interpreter
-  sockets = [] # list of socket.io connections to browsers
+  sockets = [] # socket.io connections to browsers
 
   toInterpreter = (s) ->
     if client
       log 'to interpreter: ' + JSON.stringify(s)[..1000]
-      #console.assert? /[\x01-\x7f]*/.test s
-      b = Buffer s.length + 8
-      b.writeInt32BE b.length, 0
-      b.write 'RIDE' + s, 4
-      client.write b
+      b = Buffer s.length + 8; b.writeInt32BE b.length, 0; b.write 'RIDE' + s, 4; client.write b
     return
 
-  cmd = (name, args) ->
-    toInterpreter """<?xml version="1.0" encoding="utf-8"?><Command><cmd>#{name}</cmd><id>0</id><args><#{name}>#{args}</#{name}></args></Command>"""
-    return
+  cmd = (c, args) -> toInterpreter "<Command><cmd>#{c}</cmd><id>0</id><args><#{c}>#{args}</#{c}></args></Command>"; return
 
-  toBrowser = (m...) ->
-    log 'to browser: ' + JSON.stringify(m)[..1000]
-    for socket in sockets then socket.emit m...
-    return
+  toBrowser = (m...) -> log 'to browser: ' + JSON.stringify(m)[..1000]; sockets.forEach (x) -> x.emit m...; return
 
   connectToInterpreter = (host, port) ->
     log "connecting to interpreter, host: #{host}, port: #{port}"
@@ -67,28 +60,28 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
         if !/^(?:SupportedProtocols|UsingProtocol)=1$/.test m # ignore these
           switch (/^<(\w+)>/.exec m)?[1] or ''
             when 'ReplyConnect', 'ReplyEdit', 'ReplySetLineAttributes' then ; # ignore
-            when 'ReplySaveChanges'       then toBrowser 'ReplySaveChanges', win: +getTag('win', m), err: +getTag 'err', m
-            when 'ReplyWindowTypeChanged' then toBrowser 'WindowTypeChanged', win: +getTag('Win', m), tracer: !!+getTag 'bugger', m
-            when 'ReplyIdentify'      then toBrowser 'UpdateDisplayName', displayName: b64d getTag 'Project', m
+            when 'ReplySaveChanges'       then toBrowser 'ReplySaveChanges', win: +tag('win', m), err: +tag 'err', m
+            when 'ReplyWindowTypeChanged' then toBrowser 'WindowTypeChanged', win: +tag('Win', m), tracer: !!+tag 'bugger', m
+            when 'ReplyIdentify'      then toBrowser 'UpdateDisplayName', displayName: b64d tag 'Project', m
             when 'ReplyUpdateWsid'
-              s = b64d getTag 'wsid', m
+              s = b64d tag 'wsid', m
               if s != (s1 = s.replace /\x00/g, '')
                 log 'intepreter sent a wsid containing NUL characters, those will be ignored'
                 s = s1
               toBrowser 'UpdateDisplayName', displayName: s
-            when 'ReplyExecute'       then toBrowser 'AppendSessionOutput', result: b64d getTag 'result', m
-            when 'ReplyEchoInput'     then toBrowser 'EchoInput', input: b64d(getTag 'input', m) + '\n'
-            when 'ReplyGetLog'        then toBrowser 'AppendSessionOutput', result: b64d getTag 'Log', m
+            when 'ReplyExecute'       then toBrowser 'AppendSessionOutput', result: b64d tag 'result', m
+            when 'ReplyEchoInput'     then toBrowser 'EchoInput', input: b64d(tag 'input', m) + '\n'
+            when 'ReplyGetLog'        then toBrowser 'AppendSessionOutput', result: b64d tag 'Log', m
             when 'ReplyNotAtInputPrompt' then toBrowser 'NotAtInputPrompt'
-            when 'ReplyAtInputPrompt' then toBrowser 'AtInputPrompt', why: WHIES.indexOf getTag 'why', m
+            when 'ReplyAtInputPrompt' then toBrowser 'AtInputPrompt', why: WHIES.indexOf tag 'why', m
             when 'ReplyOpenWindow'    then toBrowser 'OpenWindow',   parseEditableEntity m
             when 'ReplyUpdateWindow'  then toBrowser 'UpdateWindow', parseEditableEntity m
-            when 'ReplyFocusWindow'   then toBrowser 'FocusWindow', win: +getTag 'win', m
-            when 'ReplyCloseWindow'   then toBrowser 'CloseWindow', win: +getTag 'win', m
+            when 'ReplyFocusWindow'   then toBrowser 'FocusWindow', win: +tag 'win', m
+            when 'ReplyCloseWindow'   then toBrowser 'CloseWindow', win: +tag 'win', m
             when 'ReplyGetAutoComplete'
-              o = b64d getTag 'options', m
-              toBrowser 'autocomplete', +getTag('token', m), +getTag('skip', m), (if o then o.split '\n' else [])
-            when 'ReplyHighlightLine' then toBrowser 'highlight', +getTag('win', m), +getTag 'line', m
+              o = b64d tag 'options', m
+              toBrowser 'autocomplete', +tag('token', m), +tag('skip', m), (if o then o.split '\n' else [])
+            when 'ReplyHighlightLine' then toBrowser 'highlight', +tag('win', m), +tag 'line', m
             else log 'unrecognised'; toBrowser 'unrecognised', m
       return
 
@@ -101,33 +94,14 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
     return
 
   (socket) -> # this function is the result from calling Proxy()
-    log 'browser connected'
+    log 'browser connected from ' + socket?.request?.connection?.remoteAddress
     sockets.push socket
 
-    {onevent} = socket
-    socket.onevent = (packet) ->
-      log 'from browser: ' + JSON.stringify(packet.data)[..1000]
-      onevent.apply socket, [packet]
+    {onevent} = socket # intercept all browser-to-proxy events and log them:
+    socket.onevent = (packet) -> log 'from browser: ' + JSON.stringify(packet.data)[..1000]; onevent.apply socket, [packet]
 
     socket.on 'Execute', ({text, trace}) -> cmd 'Execute', "<Text>#{b64 text}</Text><Trace>#{+!!trace}</Trace>"
     socket.on 'Edit', ({win, pos, text}) -> cmd 'Edit', "<Text>#{b64 text}</Text><Pos>#{pos}</Pos><Win>#{win}</Win>"
-    socket.on 'SaveChanges', ({win, text, attributes: {stop, monitor, trace}}) -> cmd 'SaveChanges', """
-      <win>#{win}</win>
-      <Text>#{b64 text}</Text>
-      <attributes>
-        <LineAttribute>
-          <attribute>Stop</attribute>
-          <values>
-            #{
-              (
-                for i in [0...text.split('\n').length] by 1
-                  "<LineAttributeValue><row>#{i}</row><value>#{+(i in (stop or []))}</value></LineAttributeValue>"
-              ).join '\n'
-            }
-          </values>
-        </LineAttribute>
-      </attributes>
-    """
     socket.on 'CloseWindow',    ({win}) -> cmd 'CloseWindow',         "<win>#{win}</win>"
     socket.on 'RunCurrentLine', ({win}) -> cmd 'DebugRunLine',        "<win>#{win}</win>"
     socket.on 'StepInto',       ({win}) -> cmd 'DebugStepInto',       "<win>#{win}</win>"
@@ -139,17 +113,25 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
     socket.on 'Cutback',        ({win}) -> cmd 'DebugCutback',        "<win>#{win}</win>"
     socket.on 'WeakInterrupt', -> cmd 'WeakInterrupt'
     socket.on 'Autocomplete', ({line, pos, token}) -> cmd 'GetAutoComplete', "<line>#{b64 line}</line><pos>#{pos}</pos><token>#{token}</token>"
+    socket.on 'SaveChanges', ({win, text, attributes: {stop, monitor, trace}}) ->
+      v = []; for i in [0...text.split('\n').length] by 1 then v.push "<LineAttributeValue><row>#{i}</row><value>#{+(i in (stop or []))}</value></LineAttributeValue>"
+      cmd 'SaveChanges', """
+        <win>#{win}</win>
+        <Text>#{b64 text}</Text>
+        <attributes><LineAttribute><attribute>Stop</attribute><values>#{v.join '\n'}</values></LineAttribute></attributes>
+      """
 
-    socket.on 'connectToInterpreter', ({host, port}) -> connectToInterpreter host, port
-
-    extend = (a...) -> r = {}; (for x in a then for k, v of x then r[k] = v); r
-    {spawn} = require 'child_process'
-    socket.on 'spawnInterpreter', ({port}) ->
+    # proxy management events that don't reach the interpreter start with a '*'
+    socket.on '*connect', ({host, port}) -> connectToInterpreter host, port
+    socket.on '*spawn', ({port}) ->
+      {spawn} = require 'child_process'
       child = spawn 'dyalog', ['+s'], env: extend process.env, RIDE_LISTEN: '0.0.0.0:' + port
-      toBrowser 'spawnedInterpreter', pid: child.pid
-      child.on 'error', (err) -> toBrowser 'spawnedInterpreterError', err: '' + err; return
-      child.on 'exit', (code, signal) -> toBrowser 'spawnedInterpreterExited', {code, signal}; return
+      toBrowser '*spawned', pid: child.pid
+      child.on 'error', (err) -> toBrowser '*spawnedError', err: '' + err; return
+      child.on 'exit', (code, signal) -> toBrowser '*spawnedExited', {code, signal}; return
       return
 
+    # "disconnect" is a built-in socket.io event
     socket.on 'disconnect', -> log 'browser disconnected'; rm sockets, socket; return
+
     return
