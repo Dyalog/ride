@@ -79,7 +79,14 @@ for f in $js_files; do
   fi
 done
 version_file=build/tmp/version.js
-echo 'var Dyalog=Dyalog||{}; Dyalog.version="0.1.'$(git rev-list HEAD --count)'"; Dyalog.buildDate="'$(date --iso-8601)'";' > $version_file
+>$version_file cat <<.
+  var Dyalog=Dyalog||{};
+  Dyalog.versionInfo={
+    version:'0.1.$(git rev-list --count HEAD)',
+    built:'$(date --iso-8601)',
+    rev:'$(git rev-parse --short HEAD)'
+  };
+.
 if [ $changed -ne 0 ]; then echo 'concatenating uglified files'; cat $version_file $us >build/static/D.js; fi
 
 cp -ur style/apl385.* style/*.png favicon.ico package.json build/static/

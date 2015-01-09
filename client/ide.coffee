@@ -178,8 +178,10 @@ jQuery ($) ->
             false
 
       about = ->
-        $("<p>Version: #{Dyalog.version}<br/>Build date: #{Dyalog.buildDate}</p>").dialog
+        v = Dyalog.versionInfo
+        $("<p class='about'>Version: #{v.version}\nBuilt on: #{v.built}\nGit commit: #{v.rev}</p>").dialog
           modal: 1, title: 'About', buttons: [text: 'Close', click: -> $(@).dialog 'close']
+        return
 
       $(document)
         .on 'menu-select', '.m-quit', Dyalog.quit

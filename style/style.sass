@@ -331,7 +331,9 @@ input.ui-button::-moz-focus-inner, button.ui-button::-moz-focus-inner { border: 
   .ui-dialog-titlebar { padding: 0 8px; margin-bottom: 10px; position: relative; background-color: $sel; height: 22px; line-height: 20px; cursor: default; }
   .ui-dialog-title { float: left; margin: .1em 0; white-space: nowrap; width: 90%; overflow: hidden; text-overflow: ellipsis; color: white; text-align: left; }
   .ui-dialog-titlebar-close { position: absolute; right: 2px; top: 50%; width: 18px; margin: -9px 0 0 0; padding: 0; height: 18px; outline: 0; }
-  .ui-dialog-content { position: relative; border: 0; padding: 0; background: none; overflow: auto; }
+  .ui-dialog-content
+    position: relative; border: 0; padding: 0; background: none; overflow: auto
+    &.about { text-align: left; padding: 0 50px; white-space: pre; }
   .ui-resizable-se { width: 12px; height: 12px; right: -5px; bottom: -5px; background-position: 16px 16px; }
   .ui-dialog-buttonpane
     text-align: center; border-width: 1px 0 0 0; background-image: none; margin-top: .5em; padding: .3em 1em .5em .4em
