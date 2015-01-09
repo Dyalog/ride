@@ -53,7 +53,7 @@ Dyalog.Editor = (e, opts = {}) ->
   k["'\uf800'"] = k['Shift-Esc'] = -> # QT: Quit (and lose changes)
     opts.close?()
 
-  k["'\uf804'"] = k.Esc = -> # EP: Exit (and save changes)
+  k["'\uf804'"] = k.Esc = saveAndClose -> # EP: Exit (and save changes)
     bs = []
     for l of breakpoints then bs.push +l; cm.setGutterMarker +l, 'breakpoint', null
     opts.save? cm.getValue(), bs
