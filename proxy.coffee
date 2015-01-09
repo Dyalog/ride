@@ -100,38 +100,39 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
     {onevent} = socket # intercept all browser-to-proxy events and log them:
     socket.onevent = (packet) -> log 'from browser: ' + JSON.stringify(packet.data)[..1000]; onevent.apply socket, [packet]
 
-    socket.on 'Execute', ({text, trace}) -> cmd 'Execute', "<Text>#{b64 text}</Text><Trace>#{+!!trace}</Trace>"
-    socket.on 'Edit', ({win, pos, text}) -> cmd 'Edit', "<Text>#{b64 text}</Text><Pos>#{pos}</Pos><Win>#{win}</Win>"
-    socket.on 'CloseWindow',    ({win}) -> cmd 'CloseWindow',         "<win>#{win}</win>"
-    socket.on 'RunCurrentLine', ({win}) -> cmd 'DebugRunLine',        "<win>#{win}</win>"
-    socket.on 'StepInto',       ({win}) -> cmd 'DebugStepInto',       "<win>#{win}</win>"
-    socket.on 'TraceBackward',  ({win}) -> cmd 'DebugBackward',       "<win>#{win}</win>"
-    socket.on 'TraceForward',   ({win}) -> cmd 'DebugForward',        "<win>#{win}</win>"
-    socket.on 'ContinueTrace',  ({win}) -> cmd 'DebugContinueTrace',  "<win>#{win}</win>"
-    socket.on 'Continue',       ({win}) -> cmd 'DebugContinue',       "<win>#{win}</win>"
-    socket.on 'RestartThreads', ({win}) -> cmd 'DebugRestartThreads', "<win>#{win}</win>"
-    socket.on 'Cutback',        ({win}) -> cmd 'DebugCutback',        "<win>#{win}</win>"
-    socket.on 'WeakInterrupt', -> cmd 'WeakInterrupt'
-    socket.on 'Autocomplete', ({line, pos, token}) -> cmd 'GetAutoComplete', "<line>#{b64 line}</line><pos>#{pos}</pos><token>#{token}</token>"
-    socket.on 'SaveChanges', ({win, text, attributes: {stop, monitor, trace}}) ->
-      v = []; for i in [0...text.split('\n').length] by 1 then v.push "<LineAttributeValue><row>#{i}</row><value>#{+(i in (stop or []))}</value></LineAttributeValue>"
-      cmd 'SaveChanges', """
-        <win>#{win}</win>
-        <Text>#{b64 text}</Text>
-        <attributes><LineAttribute><attribute>Stop</attribute><values>#{v.join '\n'}</values></LineAttribute></attributes>
-      """
+    socket
+      .on 'Execute', ({text, trace}) -> cmd 'Execute', "<Text>#{b64 text}</Text><Trace>#{+!!trace}</Trace>"
+      .on 'Edit', ({win, pos, text}) -> cmd 'Edit', "<Text>#{b64 text}</Text><Pos>#{pos}</Pos><Win>#{win}</Win>"
+      .on 'CloseWindow',    ({win}) -> cmd 'CloseWindow',         "<win>#{win}</win>"
+      .on 'RunCurrentLine', ({win}) -> cmd 'DebugRunLine',        "<win>#{win}</win>"
+      .on 'StepInto',       ({win}) -> cmd 'DebugStepInto',       "<win>#{win}</win>"
+      .on 'TraceBackward',  ({win}) -> cmd 'DebugBackward',       "<win>#{win}</win>"
+      .on 'TraceForward',   ({win}) -> cmd 'DebugForward',        "<win>#{win}</win>"
+      .on 'ContinueTrace',  ({win}) -> cmd 'DebugContinueTrace',  "<win>#{win}</win>"
+      .on 'Continue',       ({win}) -> cmd 'DebugContinue',       "<win>#{win}</win>"
+      .on 'RestartThreads', ({win}) -> cmd 'DebugRestartThreads', "<win>#{win}</win>"
+      .on 'Cutback',        ({win}) -> cmd 'DebugCutback',        "<win>#{win}</win>"
+      .on 'WeakInterrupt', -> cmd 'WeakInterrupt'
+      .on 'Autocomplete', ({line, pos, token}) -> cmd 'GetAutoComplete', "<line>#{b64 line}</line><pos>#{pos}</pos><token>#{token}</token>"
+      .on 'SaveChanges', ({win, text, attributes: {stop, monitor, trace}}) ->
+        v = []; for i in [0...text.split('\n').length] by 1 then v.push "<LineAttributeValue><row>#{i}</row><value>#{+(i in (stop or []))}</value></LineAttributeValue>"
+        cmd 'SaveChanges', """
+          <win>#{win}</win>
+          <Text>#{b64 text}</Text>
+          <attributes><LineAttribute><attribute>Stop</attribute><values>#{v.join '\n'}</values></LineAttribute></attributes>
+        """
 
-    # proxy management events that don't reach the interpreter start with a '*'
-    socket.on '*connect', ({host, port}) -> connectToInterpreter host, port
-    socket.on '*spawn', ({port}) ->
-      {spawn} = require 'child_process'
-      child = spawn 'dyalog', ['+s'], env: extend process.env, RIDE_LISTEN: '0.0.0.0:' + port
-      toBrowser '*spawned', pid: child.pid
-      child.on 'error', (err) -> toBrowser '*spawnedError', err: '' + err; return
-      child.on 'exit', (code, signal) -> toBrowser '*spawnedExited', {code, signal}; return
-      return
+      # proxy management events that don't reach the interpreter start with a '*'
+      .on '*connect', ({host, port}) -> connectToInterpreter host, port
+      .on '*spawn', ({port}) ->
+        {spawn} = require 'child_process'
+        child = spawn 'dyalog', ['+s'], env: extend process.env, RIDE_LISTEN: '0.0.0.0:' + port
+        toBrowser '*spawned', pid: child.pid
+        child.on 'error', (err) -> toBrowser '*spawnedError', err: '' + err; return
+        child.on 'exit', (code, signal) -> toBrowser '*spawnedExited', {code, signal}; return
+        return
 
-    # "disconnect" is a built-in socket.io event
-    socket.on 'disconnect', -> log 'browser disconnected'; rm sockets, socket; return
+      # "disconnect" is a built-in socket.io event
+      .on 'disconnect', -> log 'browser disconnected'; rm sockets, socket; return
 
     return
