@@ -147,7 +147,7 @@ Dyalog.Editor = (e, opts = {}) ->
   search = (backwards) ->
     if q = $('.search:visible', $tb).val()
       v = cm.getValue()
-      if !$('.b-case', $tb).hasClass 'pressed' then q = q.toLowerCase(); v = v.toLowerCase()
+      if !$('.b-case', $tb).is '.pressed' then q = q.toLowerCase(); v = v.toLowerCase()
       i = cm.indexFromPos cm.getCursor()
       if backwards
         if (j = v[...i - 1].lastIndexOf q) < 0 then j = v.lastIndexOf q; wrapped = true

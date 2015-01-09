@@ -39,7 +39,7 @@ jQuery ($) ->
     $tabs = $('.ui-layout-east, .ui-layout-south').tabs tabOpts
 
     refreshTabs = ->
-      $tabs.each -> $t = $ @; if !$('li', $t).length then ['east', 'south'].forEach (d) -> (if $t.hasClass 'ui-layout-' + d then layout.close d); return
+      $tabs.each -> $t = $ @; if !$('li', $t).length then ['east', 'south'].forEach (d) -> (if $t.is '.ui-layout-' + d then layout.close d); return
            .tabs 'refresh'
       return
 
@@ -167,7 +167,7 @@ jQuery ($) ->
     do ->
       $m = $ '.menu'; $l = $m.find('>li').addClass 'm-top'
       $l.mousedown (e) -> if ($t = $ e.target).is '.m-top' then $t.toggleClass 'active'; $l.not($t).removeClass 'active'; false
-      $l.mouseover (e) -> if ($t = $ e.target).is('.m-top') && $l.hasClass 'active' then $l.removeClass 'active'; $t.addClass 'active'; return
+      $l.mouseover (e) -> if ($t = $ e.target).is('.m-top') && $l.is '.active' then $l.removeClass 'active'; $t.addClass 'active'; return
       $(document).mousedown (e) -> if !$(e.target).closest('.menu').length then $l.removeClass 'active'
       $m.on 'mouseover mouseout', 'li', (e) -> $(e.target).closest('li').toggleClass 'hover', e.type == 'mouseover'; return
         .on 'mousedown mouseup', 'li', (e) ->
