@@ -5,6 +5,7 @@ Significant Usability Issues:
   Typing )off gives an "Uncaught node.js Error" - could we keep the session visible and have a calm notification?
 
 Needed by v14.1:
+  Redesign Connect page
   Floating editor windows
   F1 should open the local help for language elements, but this help should have links to help.dyalog.com for the rest
   Need a full keyboarding discussion: Whether to report/adapt to IME keystrokes, etc
