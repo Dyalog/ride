@@ -1,62 +1,14 @@
-jQuery ($) =>
+$ ->
   DEFAULT_PORT = 4502
   localStorage.favs ?= JSON.stringify [host: '127.0.0.1', port: DEFAULT_PORT]
-  $ 'body'
-    .on 'keydown', (e) ->
-      if e.which == 113 then Dyalog.connectPage(); return false # <F2>
-      if 49 <= e.which <= 57 && e.ctrlKey && !e.altKey && !e.shiftKey # <C-1> ... <C-9>
-        $('.fav-addr').eq(e.which - 49).click(); return false
-      return
-    .on 'keydown', '.connect-host, .connect-port, .connect-name', (e) -> if e.which == 13 then $('.connect').click()
-    .on 'keydown', '.listen-port', (e) -> if e.which == 13 then $('.listen').click()
-    .on 'click', '.fav-addr', (event) ->
-      x = parseFav $(@).text()
-      Dyalog.socket.emit '*connect', host: x.host, port: x.port
-      event.preventDefault(); event.stopPropagation(); false
-    .on 'click', '.fav-del', -> $(@).closest('.fav').animate {width: 0, margin: 0, padding: 0}, -> $(@).remove(); saveFavs()
-    .on 'click', '.connect', ->
-      x = host: $('.connect-host').val(), port: $('.connect-port').val(), name: $('.connect-name').val()
-      $('.connect-error').html ''
-      if !x.host then return
-      if !/^[a-z0-9\.\-:]+$/i.test x.host then $('.connect-error').html 'Invalid host'; $('.connect-host').focus(); return
-      if !/^\d{1,5}$/.test(x.port) || +x.port > 0xffff then $('.connect-error').html 'Invalid port'; $('.connect-port').focus(); return
-      x.port = +x.port
-      if x.port == DEFAULT_PORT then delete x.port
-      if !x.name then delete x.name
-      if $('.connect-add').is(':checked') && getFavs().map(fmtFav).indexOf(fmtFav x) < 0
-        localStorage.favs = JSON.stringify getFavs().concat([x]); renderFavs()
-      $('.connect-name').val ''
-      Dyalog.socket.emit '*connect', host: x.host, port: x.port or DEFAULT_PORT
-      renderFavs()
-      $f = $('.fav-addr').filter(-> $(@).text() == fmtFav x).closest '.fav'
-      w = $f.width()
-      $f.css(width: 0).animate {width: w}, -> Dyalog.idePage()
-      return
-    .on 'click', '.connect-add', -> $('.connect-name').closest('label').focus().toggle $(@).is ':checked'
-    .on 'mouseover', '.fav', -> $(@).addClass    'fav-hover'
-    .on 'mouseout',  '.fav', -> $(@).removeClass 'fav-hover'
-    .on 'mousedown', '.fav-addr', -> $(@).closest('.fav').addClass    'fav-active'
-    .on 'mouseup',   '.fav-addr', -> $(@).closest('.fav').removeClass 'fav-active'
-    .on 'click', '.spawn', ->
-      port = +$('.spawn-port').val()
-      if 0 < port < 65536
-        Dyalog.socket.emit '*spawn', {port}
-        $('.spawn-status').text 'Spawning...'; $('.spawn, .spawn-port').attr 'disabled', true
-      else
-        $('.spawn-status').text 'Invalid port'; $('.spawn-port').focus()
-      return
-
-  getFavs = -> try JSON.parse localStorage.favs catch then []
   fmtFav = (x) ->
-    s = if !x.port? || x.port == DEFAULT_PORT then x.host else if x.host.indexOf(':') < 0 then "#{x.host}:#{x.port}" else "[#{x.host}]:#{x.port}"
+    s = if !x.port? || +x.port == DEFAULT_PORT then x.host else if /:/.test x.host then "#{x.host}:#{x.port}" else "[#{x.host}]:#{x.port}"
     if x.name then "#{x.name} (#{s})" else s
-  renderFavs = ->
-    $('.favs').html getFavs().map((x) ->
-      "<span class='fav'><a class='fav-addr' href='?host=#{escape x.host}&port=#{escape(x.port or '')}'>#{fmtFav x}</a><a class='fav-del' href='#'>×</a></span>"
-    ).join ''
-
-  saveFavs = -> localStorage.favs = JSON.stringify $('.favs .fav-addr').map(-> parseFav $(@).text()).toArray()
-  parseFav = window.parseFav = (s) ->
+  storeFavs = ->
+    localStorage.favs = JSON.stringify $('.fav').map(->
+      x = parseFav $(@).text(); (if $(@).is '.sel' then x.sel = true); x
+    ).toArray()
+  parseFav = (s) ->
     x = {}
     if m = /^(.*) \((.*)\)$/.exec s then [_, x.name, s] = m
     if m = /^\[(.*)\]:(.*)$/.exec s then [_, x.host, x.port] = m # IPv6 [host]:port
@@ -66,47 +18,157 @@ jQuery ($) =>
     x
 
   Dyalog.connectPage = ->
-    $('title').html 'Dyalog IDE'
     if (u = Dyalog.urlParams).host?
       Dyalog.socket.emit '*connect', host: u.host, port: +(u.port or DEFAULT_PORT)
       Dyalog.idePage()
-    else
-      $('body').html """
-        <h1 class="dyalog-logo">Dyalog</h1>
-        <fieldset>
-          <legend>Connect to interpreter</legend>
-          <div class="favs"></div>
-          <div style="clear:both">
-            <label>Host and port <input class="connect-host" value="">:<input class="connect-port" size="5" value="#{DEFAULT_PORT}">
-            <input class="connect" type="button" value="Connect">
-            <span class="connect-error"></span>
-            <br>
-            <label><input type="checkbox" checked class="connect-add">Add to favourites</label>
-            <label>as <input class="connect-name"></label>
-          </div>
-        </fieldset>
-        <fieldset>
-          <legend>Spawn an interpreter</legend>
-          <p class="spawn-status">
-          <p><label>Port <input class="spawn-port" value="#{DEFAULT_PORT}" size="5"></label> <input class="spawn" type="button" value="Spawn">
-        </fieldset>
-        <fieldset>
-          <legend>Listen for connections from interpreter</legend>
-          <p><label>Port <input disabled class="listen-port" value="#{DEFAULT_PORT}" size="5"></label> <input disabled class="listen" type="button" value="Listen">
-        </fieldset>
-      """
-      renderFavs()
-      $('.favs').sortable cursor: 'move', revert: true, tolerance: 'pointer', cancel: '.fav-del', update: saveFavs
-      $('.connect-host').focus()
+      return
+    $('body').html """
+      <fieldset>
+        <legend>Connect to an interpreter</legend>
+        <div id="fav-buttons">
+          <a href="#" id="fav-connect" accessKey="c"><u>C</u>onnect</a>
+          <a href="#" id="fav-new" accessKey="n"><u>N</u>ew</a>
+          <a href="#" id="fav-delete">Delete</a>
+        </div>
+        <div id="fav-list"></div>
+        <table>
+          <tr>
+            <td><u>A</u>ddress:</td>
+            <td>
+              <input accessKey="a" id="fav-host" class="text-field" value=""> :
+              <input id="fav-port" class="text-field" size="5" value="#{DEFAULT_PORT}">
+            </td>
+          </tr>
+          <tr><td>Na<u>m</u>e:</td><td><input accessKey="m" id="fav-name" class="text-field"></td></tr>
+          <tr>
+            <td></td>
+            <td>
+              <a href="#" id="fav-save" accessKey="s"><u>S</u>ave</a>
+              <a href="#" id="fav-cancel">Cancel</a>
+            </td>
+          </tr>
+        </table>
+      </fieldset>
+      <fieldset>
+        <legend>Spawn an interpreter</legend>
+        <p>
+          <label>Port <input id="spawn-port" class="text-field" value="#{DEFAULT_PORT}" size="5"></label>
+          <a href="#" id="spawn">Spawn</a>
+        </p>
+        <p id="spawn-status"></p>
+      </fieldset>
+      <fieldset>
+        <legend>Listen for connections from interpreter</legend>
+        <p>
+          <label>Port <input disabled id="listen-port" class="text-field" value="#{DEFAULT_PORT}" size="5"></label>
+          <a href="#" id="listen">Listen</a>
+        </p>
+      </fieldset>
+    """
+    $connect     = $ '#fav-connect'  ; $host        = $ '#fav-host'
+    $new         = $ '#fav-new'      ; $port        = $ '#fav-port'
+    $delete      = $ '#fav-delete'   ; $name        = $ '#fav-name'
+    $list        = $ '#fav-list'     ; $save        = $ '#fav-save'
+    $spawn       = $ '#spawn'        ; $cancel      = $ '#fav-cancel'
+    $spawnPort   = $ '#spawn-port'   ; $listen      = $ '#listen'
+    $spawnStatus = $ '#spawn-status' ; $listenPort  = $ '#listen-port'
 
-      Dyalog.socket
-        .on '*connected', -> Dyalog.idePage(); return
-        .on '*disconnected', -> $.alert 'Interpreter disconnected'; return
-        .on '*connectError', ({err}) -> $.alert err, 'Cannot connect'; return
-        .on '*spawned', ({pid}) -> $('.spawn-status').text "PID: #{pid}"; return
-        .on '*spawnedError', ({err}) -> $('.spawn-status').text err; $('.spawn, .spawn-port').attr 'disabled', false; return
-        .on '*spawnedExited', ({code, signal}) ->
-          $('.spawn-status').text(if code? then "exited with code #{code}" else "received #{signal}")
-          $('.spawn, .spawn-port').attr 'disabled', false; return
+    $connect.add($new).add($delete).add($save).add($cancel).add($spawn).add($listen).button()
+    $list
+      .on 'click', '.fav', -> false
+      .on 'dblclick', '.fav', (e) -> $connect.click(); false
+      .on 'mousedown', '.fav', (e) ->
+        if e.ctrlKey
+          $(@).toggleClass 'sel'
+        else if e.shiftKey
+          if (i = $('.fav:focus').index()) >= 0
+            j = $(@).focus().index(); if i > j then h = i; i = j; j = h
+            $('.fav').removeClass('sel').slice(i, j + 1).addClass 'sel'; $list.trigger 'sel'
+        else
+          $('.fav').removeClass 'sel'; $(@).addClass 'sel'
+        $(@).focus()
+        $list.trigger 'sel'
+        return
+      .on 'keydown', '.fav', (e) ->
+        $t = $ @
+        if e.which == 65 && e.ctrlKey && !e.shiftKey && !e.altKey # <C-a>
+          $('.fav').addClass 'sel'; $list.trigger 'sel'; false
+        else if e.which == 32 && !e.shiftKey && !e.altKey # <Space> <C-Space>
+          $t.toggleClass 'sel'; $list.trigger 'sel'; false
+        else if e.which == 13 && !e.ctrlKey && !e.shiftKey && !e.altKey # <Enter>
+          $connect.click(); false
+        else if e.which == 45 && !e.ctrlKey && !e.shiftKey && !e.altKey # <Ins>
+          $new.click(); false
+        else if e.which == 46 && !e.ctrlKey && !e.shiftKey && !e.altKey # <Del>
+          $delete.click(); false
+        else if e.which in [38, 40, 36, 35, 33, 34] # <Up><Down><Home><End><PgUp><PgDown> <C-...> <S-...> <A-...>
+          switch e.which
+            when 38 then $x = $t.prev()         # <Up>
+            when 40 then $x = $t.next()         # <Down>
+            when 36 then $x = $('.fav').first() # <Home>
+            when 35 then $x = $('.fav').last()  # <End>
+            when 33 then $x = $('.fav').eq Math.max 0, $t.index() - Math.floor $list.height() / $t.height() # <PgUp>
+            when 34 then $x = $('.fav').eq Math.max $('.fav').length - 1, $t.index() - Math.floor $list.height() / $t.height() # <PgDown>
+          if $x.length
+            if e.shiftKey
+              i = $t.index(); j = $x.index(); if i > j then h = i; i = j; j = h
+              $('.fav').slice(i, j + 1).addClass 'sel'; $x.focus(); $list.trigger 'sel'
+            else if e.ctrlKey then $x.focus()
+            else if e.altKey
+              if e.which in [38, 36, 33] then $t.insertBefore $x else $t.insertAfter $x # <Up> <Home> <PgUp>: before, otherwise: after
+              $('.fav').removeClass 'sel'; $t.focus().addClass 'sel'; $list.trigger 'sel'
+            else
+              $('.fav').removeClass 'sel'; $x.focus().addClass 'sel'; $list.trigger 'sel'
+          false
+    $connect.click ->
+      x = parseFav $('.fav.sel').text()
+      if !x.host then return
+      if !/^[a-z0-9\.\-:]+$/i.test x.host then $.alert 'Invalid host', 'Error', -> $host.focus()
+      if !/^\d{1,5}$/.test(x.port) || +x.port > 0xffff then $.alert 'Invalid port', 'Error', -> $port.focus()
+      x.port = +x.port
+      if x.port == DEFAULT_PORT then delete x.port
+      if !x.name then delete x.name
+      Dyalog.socket.emit '*connect', host: x.host, port: x.port or DEFAULT_PORT
+      return
+    $new.click ->
+      $('.fav').removeClass 'sel'
+      $list.append('<a class="fav sel" href="#">127.0.0.1</a>').trigger 'sel'
+      $('.fav.sel').focus(); $host.select(); storeFavs(); false
+    $delete.click -> $('.fav.sel').remove(); $list.trigger 'sel'; storeFavs(); false
+    $list.on 'sel', -> # triggered whenever selection changes
+      storeFavs(); $s = $ '.fav.sel'; n = $s.length
+      $name.add($host).add($port).attr 'disabled', n != 1
+      $connect.add($save).add($cancel).button 'option', 'disabled', n != 1
+      $delete.button 'option', 'disabled', !n
+      if n == 1 then x = parseFav $s.text(); $name.val x.name; $host.val x.host; $port.val x.port
+      else $name.add($host).add($port).val ''
+      return
+    $host.add($port).add($name).keydown (e) -> if e.which == 13 then $save.click(); false
+    $save.click -> $('.fav.sel').focus().text fmtFav host: $host.val(), port: $port.val(), name: $name.val(); storeFavs(); return
+    $cancel.click -> x = parseFav $('.fav.sel').text(); $host.val x.host; $port.val x.port; $name.val x.name; return
+    $spawn.click ->
+      port = +$spawnPort.val()
+      if 0 < port < 0x10000
+        $spawnStatus.text 'Spawning...'; $spawn.button 'enable'; $spawnPort.attr 'disabled', false
+        Dyalog.socket.emit '*spawn', {port}
+      else
+        $spawnStatus.text 'Invalid port'; $spawnPort.focus()
+      return
+    $listenPort.keydown (e) -> if e.which == 13 then $listen.click(); false
+    $list.sortable cursor: 'move', revert: true, tolerance: 'pointer', containment: 'parent', axis: 'y', update: storeFavs
+
+    favs = try JSON.parse localStorage.favs catch then []
+    $list.html favs.map((x) -> "<a href='#' class='#{if x.sel then 'sel ' else ''}fav'>#{fmtFav x}</a>").join ''
+    $('.fav').eq(0).focus(); $list.trigger 'sel'
+
+    Dyalog.socket
+      .on '*connected', -> Dyalog.idePage(); return
+      .on '*disconnected', -> $.alert 'Interpreter disconnected'; return
+      .on '*connectError', ({err}) -> $.alert err, 'Cannot connect'; return
+      .on '*spawned', ({pid}) -> $spawnStatus.text "PID: #{pid}"; return
+      .on '*spawnedError', ({err}) -> $spawnStatus.text err; $('#spawn, #spawn-port').button 'disable'; return
+      .on '*spawnedExited', ({code, signal}) ->
+        $spawnStatus.text(if code? then "exited with code #{code}" else "received #{signal}")
+        $('#spawn, #spawn-port').button 'disable'; return
     return
   return

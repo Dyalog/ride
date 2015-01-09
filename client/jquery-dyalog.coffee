@@ -1,3 +1,7 @@
 # jQuery utility plugins
 
-$.alert = (s, t) -> $('<p>').text(s).dialog modal: 1, title: t, buttons: [text: 'OK', click: -> $(@).dialog 'close']; return
+$.alert = (message, title, callback) ->
+  $('<p>').text(message).dialog modal: 1, title: title, buttons: [
+    text: 'OK', click: -> $(@).dialog 'close'; callback?(); return
+  ]
+  return

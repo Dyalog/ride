@@ -9,7 +9,7 @@ $tip:#ffffe1; // yellow, background for tooltips
   font-family: 'apl'
   src: url('apl385.eot')
   src: url('apl385.eot?#iefix') format('embedded-opentype'), url('apl385.woff') format('woff'), url('apl385.ttf') format('truetype'), url('apl385.svg#apl385') format('svg')
-body { padding: 0; margin: 0; }
+body { padding: 0; margin: 0; background-color: $bg; }
 .CodeMirror, .CodeMirror-hints, .lbar, .lbar-tip, .lbar-tip-desc, .lbar-tip-text, .toolbar, input { font-family: apl, monospace; font-size: 18px; }
 .lbar
   background: $bg; padding: 0 2px 2px 10px; cursor: default; border-bottom: solid #888 1px; line-height: 28px
@@ -99,52 +99,17 @@ body { padding: 0; margin: 0; }
 .breakpoint { color: #822; }
 
 // connect page
+#fav-buttons { margin-bottom: 5px; }
+#fav-list
+  float: left; clear: both; width: 300px; height: 150px; overflow: auto; margin: 0 12px 0 0
+  border-style: solid; border-width: 1px; border-color: $dark $light $light $dark; background-color: white
 .fav
-  float: left
-  height: 20px
-  line-height: 20px
-  margin: 0 8px 8px 0
-  padding: 2px 12px 2px 28px
-  border: solid 1px
-  border-color: #fec889 #eca667 #eca667 #fec889
-  border-radius: 8px
-  background: #fdb778 6px center no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAAG7AAABuwBHnU4NQAAAAd0SU1FB9kCFgwbOQl+BpIAAAKZSURBVHjajZJLSJRRGIbf7///cRwdmxyLlNTS8VZgUEZEUEhSiJIFSYugRbQocBG1lahlRaBSEdhCKcFwUQa66YaCJCmmWcKgYxfHJvMyM83MP5f/ck4nhcgrPfBwOIv3Ox+HFxsx0VZeMtF2ZDc2QMI6jDbl59kz8wbtWQUDH5tcLqyDgnWwpqU1O8vq7UQSQlPvmwFU4H8ZbXDV/Oy/yTkzFp19d4ePNrpqsQaEfxi4npVidTiqU3N3PdhReS9DSkoFBEyPwfvmaiDhn65Tv3zu2n/je/jvgNGHZ1zqj8G6ZEdGRWpmUWlabhmllxyHkrJ56YeIA4xgqEEEJ14h/G2YqzNudzw491pTjUbqb6juzCk9cNJZcAxkSYZkVUBJMmAhkMwBcHAmAYY4NSY0wDQNoekBeHo7nsmndka8gYW5c1muUpkkEyB9SZ4QaoApNBLgelxcY2CJiPAXhrtbjfDU+EW5fSjirczUfPO+yZrs4nwAujC+NMAUITMmwlERVkUwBBbzo7+jBbNjI5dqW2c6ZQiejqnD5fZIEqfA4a3Z6SBSAQh5BGAiqM3CCH2CNtOHD91P4Onz3D7/fP7Wsh5sL8C16Iz7SmKO2ZQ0CZKNgywGwMWrely8zMRCDJqqGcWFUj1erGhi1d0FBm4ypk2JwwtIPkjJ85DtuvDPQGESQSLw8vvzxqoqtx1ykCCFCCAZkCwEOUWC2AayjRbvkAmKlSztlY7kVVU2rMypKCBuAowB7rdRjLwMc0Pj2HdiExXttQEmBxGgm8gG4Fk2gHPi8YSFjw/FyOeOfw0s6E3pTvmxqTA21OY/O9mtXM7Zk1oYjVhg6tDWrPKjqm1VRlxTHYx6T/f4sZKWo+kHGeNbLvQEu4AlfgO+8jzLe4vNcwAAAABJRU5ErkJggg==)
-  white-space: nowrap
+  display: block; height: 20px; line-height: 20px; white-space: nowrap; cursor: default; text-decoration: none; color: black
+  &:focus { outline: dotted black 1px; }
+  &.sel { background: $sel; color: white }
+#fav-host, #fav-port, #listen-port, #spawn-port, #fav-list { font-family: apl, monospace; }
 
-.fav.fav-active { border-color: #eca667 #fec889 #fec889 #eca667; background-color: #eca667; }
-.fav.fav-active.ui-sortable-helper { border-color: #fec889 #eca667 #eca667 #fec889; background-color: #fdb778; }
-.fav-addr
-  color: #034d72; text-decoration: none
-  &:hover { color: black; text-decoration: underline; }
-.fav-del
-  display: none
-  float: right
-  width: 18px
-  height: 18px
-  margin-right: -20px
-  margin-top: -10px
-  border-radius: 10px
-  background-color: #92598c
-  border: solid 1px
-  border-color: #a36a9d #81487b #81487b #a36a9d
-  color: #eee
-  text-align: center
-  text-decoration: none
-
-.fav-hover .fav-del
-  display: inherit
-  &:hover { color: #fff; font-weight: bold; }
-  &:active { border-color: #81487b #a36a9d #a36a9d #81487b; background-color: #81487b; }
-.fav-hover.ui-sortable-helper .fav-del { display: none; }
-.connect-host, .connect-port, .listen-port, .spawn-port, .favs { font-family: apl, monospace; }
-.connect-error { color: red; }
-.dyalog-logo
-  background: #fc9732 16px center no-repeat url(dyaloglogo.png)
-  color: white
-  text-indent: -9999px
-  overflow: hidden
-  height: 80px
-  margin: 0
+.dyalog-logo { color: white; text-indent: -9999px; overflow: hidden; height: 80px; margin: 0; background: #fc9732 16px center no-repeat url(dyaloglogo.png); }
 
 .floatable a { background-color: #ace !important; }
 
@@ -215,6 +180,7 @@ a.button:active { border-color: $dark $light $light $dark; }
 .ui-accordion .ui-accordion-content { padding: 1em 2.2em; border-top: 0; overflow: auto; }
 .ui-autocomplete { position: absolute; top: 0; left: 0; cursor: default; }
 .ui-button
+  min-width: 75px
   display: inline-block
   position: relative
   padding: 0
@@ -227,8 +193,9 @@ a.button:active { border-color: $dark $light $light $dark; }
   border-style: solid
   border-width: 1px
   border-color: $light $dark $dark $light
+  background-color: $bg
 
-.ui-button, .ui-button:link, .ui-button:visited, .ui-button:hover, .ui-button:active { text-decoration: none; color: #000; }
+a.ui-button, a.ui-button:link, a.ui-button:visited, a.ui-button:hover, a.ui-button:active { text-decoration: none; color: #000; }
 .ui-button:active { border-color: #000; }
 // to make room for the icon, a width needs to be set here
 .ui-button-icon-only { width: 2.2em; }
@@ -248,7 +215,7 @@ button.ui-button-icons-only { width: 3.7em; }
 .ui-button-text-icon-secondary .ui-button-text, .ui-button-text-icons .ui-button-text { padding: .4em 2.1em .4em 1em; }
 .ui-button-text-icons .ui-button-text { padding-left: 2.1em; padding-right: 2.1em; }
 // no icon support for input elements, provide padding by default
-input.ui-button { padding: .4em 1em; }
+input.ui-button { padding: 0 5px; }
 
 // button icon element(s)
 .ui-button-icon-only .ui-icon,
@@ -330,7 +297,7 @@ input.ui-button::-moz-focus-inner, button.ui-button::-moz-focus-inner { border: 
   border-style: solid; border-width: 1px; border-color: $light $dark $dark $light; overflow: hidden; position: absolute; top: 0; left: 0; padding: 0; outline: 0; text-align: center
   .ui-dialog-titlebar { padding: 0 8px; margin-bottom: 10px; position: relative; background-color: $sel; height: 22px; line-height: 20px; cursor: default; }
   .ui-dialog-title { float: left; margin: .1em 0; white-space: nowrap; width: 90%; overflow: hidden; text-overflow: ellipsis; color: white; text-align: left; }
-  .ui-dialog-titlebar-close { position: absolute; right: 2px; top: 50%; width: 18px; margin: -9px 0 0 0; padding: 0; height: 18px; outline: 0; }
+  .ui-dialog-titlebar-close { position: absolute; right: 2px; top: 50%; min-width: 18px; width: 18px; margin: -9px 0 0 0; padding: 0; height: 18px; outline: 0; }
   .ui-dialog-content
     position: relative; border: 0; padding: 0; background: none; overflow: auto
     &.about { text-align: left; padding: 0 50px; white-space: pre; }
