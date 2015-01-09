@@ -154,9 +154,9 @@ Dyalog.Editor = (e, opts = {}) ->
       else
         if (j = v[i..].indexOf q) >= 0 then j += i else j = v.indexOf q; wrapped = true
       if j < 0
-        alert 'No Match'
+        $.alert 'No Match', 'Dyalog APL Error'
       else
-        if wrapped then alert 'Search wrapping'
+        if wrapped then $.alert 'Search wrapping', 'Dyalog APL Error'
         cm.setSelections [anchor: cm.posFromIndex(j), head: cm.posFromIndex j + q.length]
     false
 
@@ -193,6 +193,6 @@ Dyalog.Editor = (e, opts = {}) ->
     cm.setCursor l, 0; x = cm.cursorCoords true, 'local'; x.right = x.left; x.bottom = x.top + $e.height(); cm.scrollIntoView x
     return
   setDebugger: setDebugger
-  saved: (err) -> (if err then alert 'Cannot save changes' else opts.close?()); return
+  saved: (err) -> (if err then $.alert 'Cannot save changes' else opts.close?()); return
   getOpts: -> opts
   closePopup: -> (if opener then close()); return

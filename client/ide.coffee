@@ -82,7 +82,7 @@ jQuery ($) ->
           session.scrollCursorIntoView()
           # wins[w] will be replaced a bit later by code running in the popup
         else
-          alert 'Popups are blocked.'
+          $.alert 'Popups are blocked.'
       return
 
     socket

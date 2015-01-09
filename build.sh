@@ -56,6 +56,7 @@ js_files='
   jquery.layout.js
   build/tmp/lbar.js
   proxy.coffee
+  client/jquery-dyalog.coffee
   client/keymap.coffee
   client/help-urls.coffee
   client/prefs.coffee

@@ -8,8 +8,8 @@ Dyalog.Session = (e, opts = {}) ->
   histAdd = (lines) -> hist = [null].concat lines, hist[1..]
   histMove = (d) ->
     i = histIndex + d
-    if i < 0 then alert 'There is no next line'
-    else if i >= hist.length then alert 'There is no previous line'
+    if i < 0 then $.alert 'There is no next line', 'Dyalog APL Error'
+    else if i >= hist.length then $.alert 'There is no previous line', 'Dyalog APL Error'
     else
       l = cm.getCursor().line
       if !histIndex then hist[0] = cm.getLine l

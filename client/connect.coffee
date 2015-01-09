@@ -101,8 +101,8 @@ jQuery ($) =>
 
       Dyalog.socket
         .on '*connected', -> Dyalog.idePage(); return
-        .on '*disconnected', -> alert 'Interpreter disconnected'; return
-        .on '*connectError', ({err}) -> alert 'Cannot connect: ' + err; return
+        .on '*disconnected', -> $.alert 'Interpreter disconnected'; return
+        .on '*connectError', ({err}) -> $.alert err, 'Cannot connect'; return
         .on '*spawned', ({pid}) -> $('.spawn-status').text "PID: #{pid}"; return
         .on '*spawnedError', ({err}) -> $('.spawn-status').text err; $('.spawn, .spawn-port').attr 'disabled', false; return
         .on '*spawnedExited', ({code, signal}) ->
