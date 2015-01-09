@@ -1,9 +1,7 @@
 Significant Usability Issues:
   Update focus after closing an editor (not fixed in Dec 24 version)
   Type something, hit shift enter on function name: Editor opens OK, but session log input is subsequently discarded
-  ctrl+TAB should cycle between editors and session windows as in ODE (and in a Web Browser)
   Once you start auto-completing a WS name, the drop-down should stay up to allow several path selections
-  If a namespace or class cannot be saved, the "unable to save" popup does not have the focus when it appears
   Typing )off gives an "Uncaught node.js Error" - could we keep the session visible and have a calm notification?
 
 Needed by v14.1:
@@ -13,7 +11,6 @@ Needed by v14.1:
   continuously update completion list while typing
   Shift+Esc while editing a namespace: TypeError: Cannot read property info of undefined
   listen for connections from the interpreter
-  control font size in node-webkit
   revert line in session should move cursor to next line (suggested by Scholes)
   re-take screenshot
 
@@ -47,3 +44,9 @@ Done:
   menus (only within the browser window)
   BS and left cursor should terminate autocomplete dropdown (like ESC). Right cursor/tab should select and continue
   "uncomment selected line" button doesn't work if nothing is selected
+  If a namespace or class cannot be saved, the "unable to save" popup does not have the focus when it appears
+    NN: Windows-only issue, replaced all alert()-s with $().dialog()-s to dodge it
+  ctrl+TAB should cycle between editors and session windows as in ODE (and in a Web Browser)
+    NN: Done, but Chromium refuses to remap ctrl+tab
+  control font size in node-webkit
+    NN: can't capture scroll events in NW, but I made <C-+> <C--> <C-0> work
