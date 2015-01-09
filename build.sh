@@ -62,7 +62,7 @@ js_files='
   client/editor.coffee
   client/session.coffee
   client/ide.coffee
-  client/welcome.coffee
+  client/connect.coffee
   client/init.coffee
 '
 us='' # names of uglified files

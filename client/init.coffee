@@ -35,5 +35,5 @@ do ->
       socket = io()
       Dyalog.quit = close
     Dyalog.socket = socket
-    $ -> Dyalog.welcomePage()
+    $ -> Dyalog.connectPage()
   return

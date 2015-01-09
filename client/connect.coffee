@@ -3,7 +3,7 @@ jQuery ($) =>
   localStorage.favs ?= JSON.stringify [host: '127.0.0.1', port: DEFAULT_PORT]
   $ 'body'
     .on 'keydown', (e) ->
-      if e.which == 113 then Dyalog.welcomePage(); return false # <F2>
+      if e.which == 113 then Dyalog.connectPage(); return false # <F2>
       if 49 <= e.which <= 57 && e.ctrlKey && !e.altKey && !e.shiftKey # <C-1> ... <C-9>
         $('.fav-addr').eq(e.which - 49).click(); return false
       return
@@ -65,7 +65,7 @@ jQuery ($) =>
     x.port = +(x.port or DEFAULT_PORT)
     x
 
-  Dyalog.welcomePage = ->
+  Dyalog.connectPage = ->
     $('title').html 'Dyalog IDE'
     if (u = Dyalog.urlParams).host?
       Dyalog.socket.emit '*connect', host: u.host, port: +(u.port or DEFAULT_PORT)
