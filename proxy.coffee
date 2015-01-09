@@ -48,10 +48,10 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
   toBrowser = (m...) -> log 'to browser: ' + JSON.stringify(m)[..1000]; sockets.forEach (x) -> x.emit m...; return
 
   connectToInterpreter = (host, port) ->
-    log "connecting to interpreter, host: #{host}, port: #{port}"
-    client = require('net').connect {host, port}, -> log 'interpreter connected'
     queue = Buffer 0 # a buffer for data received from the server
-    client.on 'end', -> log 'interpreter disconnected'; toBrowser 'end'; client = null; return
+    client = require('net').connect {host, port}, -> toBrowser '*connected'
+    client.on 'error', (e) -> toBrowser '*connectError', err: '' + e; client = null; return
+    client.on 'end', -> toBrowser '*disconnected'; client = null; return
     client.on 'data', (data) ->
       queue = Buffer.concat [queue, data]
       while queue.length >= 4 and (n = queue.readInt32BE 0) <= queue.length
@@ -84,7 +84,6 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
             when 'ReplyHighlightLine' then toBrowser 'highlight', +tag('win', m), +tag 'line', m
             else log 'unrecognised'; toBrowser 'unrecognised', m
       return
-
     # Initial batch of commands sent to interpreter:
     toInterpreter 'SupportedProtocols=1'
     toInterpreter 'UsingProtocol=1'

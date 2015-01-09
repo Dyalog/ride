@@ -95,7 +95,6 @@ jQuery ($) ->
       .on 'WindowTypeChanged', ({win, tracer}) -> wins[win].setDebugger tracer
       .on 'autocomplete', (token, skip, options) -> wins[token].autocomplete skip, options
       .on 'highlight', (win, line) -> wins[win].highlight line
-      .on 'end', -> alert 'Interpreter disconnected'
       .on 'UpdateWindow', (ee) -> wins[ee.token].open ee; session.scrollCursorIntoView() # "ee" for EditableEntity
       .on 'ReplySaveChanges', ({win, err}) -> wins[win]?.saved err
       .on 'CloseWindow', ({win}) ->

@@ -11,7 +11,7 @@ jQuery ($) =>
     .on 'keydown', '.listen-port', (e) -> if e.which == 13 then $('.listen').click()
     .on 'click', '.fav-addr', (event) ->
       x = parseFav $(@).text()
-      Dyalog.socket.emit '*connect', host: x.host, port: x.port; Dyalog.idePage()
+      Dyalog.socket.emit '*connect', host: x.host, port: x.port
       event.preventDefault(); event.stopPropagation(); false
     .on 'click', '.fav-del', -> $(@).closest('.fav').animate {width: 0, margin: 0, padding: 0}, -> $(@).remove(); saveFavs()
     .on 'click', '.connect', ->
@@ -98,12 +98,15 @@ jQuery ($) =>
       renderFavs()
       $('.favs').sortable cursor: 'move', revert: true, tolerance: 'pointer', cancel: '.fav-del', update: saveFavs
       $('.connect-host').focus()
-      Dyalog.socket.on '*spawned', ({pid}) ->
-        $('.spawn-status').text "PID: #{pid}"; return
-      Dyalog.socket.on '*spawnedError', ({err}) ->
-        $('.spawn-status').text err; $('.spawn, .spawn-port').attr 'disabled', false; return
-      Dyalog.socket.on '*spawnedExited', ({code, signal}) ->
-        $('.spawn-status').text(if code? then "exited with code #{code}" else "received #{signal}")
-        $('.spawn, .spawn-port').attr 'disabled', false; return
+
+      Dyalog.socket
+        .on '*connected', -> Dyalog.idePage(); return
+        .on '*disconnected', -> alert 'Interpreter disconnected'; return
+        .on '*connectError', ({err}) -> alert 'Cannot connect: ' + err; return
+        .on '*spawned', ({pid}) -> $('.spawn-status').text "PID: #{pid}"; return
+        .on '*spawnedError', ({err}) -> $('.spawn-status').text err; $('.spawn, .spawn-port').attr 'disabled', false; return
+        .on '*spawnedExited', ({code, signal}) ->
+          $('.spawn-status').text(if code? then "exited with code #{code}" else "received #{signal}")
+          $('.spawn, .spawn-port').attr 'disabled', false; return
     return
   return
