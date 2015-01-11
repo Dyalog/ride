@@ -127,7 +127,7 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
         {spawn} = require 'child_process'
         child = spawn 'dyalog', ['+s'], env: extend process.env, RIDE_LISTEN: '0.0.0.0:' + port
         toBrowser '*spawned', pid: child.pid
-        child.on 'error', (err) -> toBrowser '*spawnedError', err: '' + err; return
+        child.on 'error', (err) -> toBrowser '*spawnedError', {message: '' + err, code: err.code}; return
         child.on 'exit', (code, signal) -> toBrowser '*spawnedExited', {code, signal}; return
         return
 

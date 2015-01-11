@@ -2,7 +2,7 @@ $ ->
   DEFAULT_PORT = 4502
   localStorage.favs ?= JSON.stringify [host: '127.0.0.1', port: DEFAULT_PORT]
   fmtFav = (x) ->
-    s = if !x.port? || +x.port == DEFAULT_PORT then x.host else if /:/.test x.host then "#{x.host}:#{x.port}" else "[#{x.host}]:#{x.port}"
+    s = if !x.port? || +x.port == DEFAULT_PORT then x.host else if /:/.test x.host then "[#{x.host}]:#{x.port}" else "#{x.host}:#{x.port}"
     if x.name then "#{x.name} (#{s})" else s
   storeFavs = ->
     localStorage.favs = JSON.stringify $('.fav').map(->
@@ -26,7 +26,7 @@ $ ->
       <fieldset>
         <legend>Connect to an interpreter</legend>
         <div id="fav-buttons">
-          <a href="#" id="fav-connect" accessKey="c"><u>C</u>onnect</a>
+          <a href="#" id="fav-connect" accessKey="o">C<u>o</u>nnect</a>
           <a href="#" id="fav-new" accessKey="n"><u>N</u>ew</a>
           <a href="#" id="fav-delete">Delete</a>
         </div>
@@ -44,7 +44,7 @@ $ ->
             <td></td>
             <td>
               <a href="#" id="fav-save" accessKey="s"><u>S</u>ave</a>
-              <a href="#" id="fav-cancel">Cancel</a>
+              <a href="#" id="fav-cancel" accessKey="c"><u>C</u>ancel</a>
             </td>
           </tr>
         </table>
@@ -61,7 +61,7 @@ $ ->
         <legend>Listen for connections from interpreter</legend>
         <p>
           <label>Port <input disabled id="listen-port" class="text-field" value="#{DEFAULT_PORT}" size="5"></label>
-          <a href="#" id="listen">Listen</a>
+          <a href="#" id="listen" accessKey="l"><u>L</u>isten</a>
         </p>
       </fieldset>
     """
@@ -150,6 +150,7 @@ $ ->
         $spawnStatus.text 'Invalid port'; $spawnPort.focus()
       false
     $spawnPort.on 'keydown', null, 'return', -> $spawn.click(); false
+    $listen.click -> $.alert 'Not yet implemented'
     $listenPort.on 'keydown', null, 'return', -> $listen.click(); false
     $list.sortable cursor: 'move', revert: true, tolerance: 'pointer', containment: 'parent', axis: 'y', update: storeFavs
 
@@ -163,8 +164,8 @@ $ ->
       .on '*disconnected', -> $.alert 'Interpreter disconnected'; return
       .on '*connectError', ({err}) -> $.alert err, 'Cannot connect'; return
       .on '*spawned', ({pid}) -> $spawnStatus.text "PID: #{pid}"; return
-      .on '*spawnedError', ({err}) ->
-        $spawnStatus.text err
+      .on '*spawnedError', ({message, code}) ->
+        $spawnStatus.text if code == 'ENOENT' then 'Cannot find dyalog executable on $PATH' else message
         $spawn.button 'enable'; $spawnPort.attr 'disabled', false; return
       .on '*spawnedExited', ({code, signal}) ->
         $spawnStatus.text(if code? then "exited with code #{code}" else "received #{signal}")
