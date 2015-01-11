@@ -53,9 +53,9 @@ $ ->
         <legend>Spawn an interpreter</legend>
         <p>
           <label>Port <input id="spawn-port" class="text-field" value="#{DEFAULT_PORT}" size="5"></label>
-          <a href="#" id="spawn">Spawn</a>
+          <a href="#" id="spawn" accessKey="w">Spa<u>w</u>n</a>
+          <span id="spawn-status"></span>
         </p>
-        <p id="spawn-status"></p>
       </fieldset>
       <fieldset>
         <legend>Listen for connections from interpreter</legend>
@@ -90,7 +90,7 @@ $ ->
         $list.trigger 'sel'
         return
       .on 'keydown', '.fav', 'ctrl+a', -> $('.fav').addClass 'sel'; $list.trigger 'sel'; false
-      .on 'keydown', '.fav', 'space ctrl+space', -> $t.toggleClass 'sel'; $list.trigger 'sel'; false
+      .on 'keydown', '.fav', 'space ctrl+space', -> $(@).toggleClass 'sel'; $list.trigger 'sel'; false
       .on 'keydown', '.fav', 'return', -> $connect.click(); false
       .on 'keydown', '.fav', 'insert', -> $new.click(); false
       .on 'keydown', '.fav', 'del', -> $delete.click(); false
@@ -139,32 +139,35 @@ $ ->
       else $name.add($host).add($port).val ''
       return
     $host.add($port).add($name).on 'keydown', null, 'return', -> $save.click(); false
-    $save.click -> $('.fav.sel').focus().text fmtFav host: $host.val(), port: $port.val(), name: $name.val(); storeFavs(); return
-    $cancel.click -> x = parseFav $('.fav.sel').text(); $host.val x.host; $port.val x.port; $name.val x.name; return
+    $save.click -> $('.fav.sel').focus().text fmtFav host: $host.val(), port: $port.val(), name: $name.val(); storeFavs(); false
+    $cancel.click -> x = parseFav $('.fav.sel').text(); $host.val x.host; $port.val x.port; $name.val x.name; false
     $spawn.click ->
       port = +$spawnPort.val()
       if 0 < port < 0x10000
-        $spawnStatus.text 'Spawning...'; $spawn.button 'enable'; $spawnPort.attr 'disabled', false
+        $spawnStatus.text 'Spawning...'; $spawn.button 'disable'; $spawnPort.attr 'disabled', true
         Dyalog.socket.emit '*spawn', {port}
       else
         $spawnStatus.text 'Invalid port'; $spawnPort.focus()
-      return
-    $spawnPort.on 'keydown', null, 'return', -> console.info 'port!'; $spawn.click(); false
+      false
+    $spawnPort.on 'keydown', null, 'return', -> $spawn.click(); false
     $listenPort.on 'keydown', null, 'return', -> $listen.click(); false
     $list.sortable cursor: 'move', revert: true, tolerance: 'pointer', containment: 'parent', axis: 'y', update: storeFavs
 
     favs = try JSON.parse localStorage.favs catch then []
     $list.html favs.map((x) -> "<a href='#' class='#{if x.sel then 'sel ' else ''}fav'>#{fmtFav x}</a>").join ''
-    $('.fav').eq(0).focus(); $list.trigger 'sel'
+    if $('.fav.sel').length then $('.fav.sel').eq(0).focus() else $('.fav').eq(0).focus().addClass 'sel'
+    $list.trigger 'sel'
 
     Dyalog.socket
       .on '*connected', -> Dyalog.idePage(); return
       .on '*disconnected', -> $.alert 'Interpreter disconnected'; return
       .on '*connectError', ({err}) -> $.alert err, 'Cannot connect'; return
       .on '*spawned', ({pid}) -> $spawnStatus.text "PID: #{pid}"; return
-      .on '*spawnedError', ({err}) -> $spawnStatus.text err; $('#spawn, #spawn-port').button 'disable'; return
+      .on '*spawnedError', ({err}) ->
+        $spawnStatus.text err
+        $spawn.button 'enable'; $spawnPort.attr 'disabled', false; return
       .on '*spawnedExited', ({code, signal}) ->
         $spawnStatus.text(if code? then "exited with code #{code}" else "received #{signal}")
-        $('#spawn, #spawn-port').button 'disable'; return
+        $spawn.button 'enable'; $spawnPort.attr 'disabled', false; return
     return
   return
