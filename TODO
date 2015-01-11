@@ -3,6 +3,12 @@ Significant Usability Issues:
   Type something, hit shift enter on function name: Editor opens OK, but session log input is subsequently discarded
   Once you start auto-completing a WS name, the drop-down should stay up to allow several path selections
   Typing )off gives an "Uncaught node.js Error" - could we keep the session visible and have a calm notification?
+  Would be nice if captions [titles of floating windows] name the thing being edited
+  Shift-tab should cycle between the windows
+  Focus should go back to the session when you close a window
+  It would be nice with an option to have all editor windows open as floating (WPF Ride and ODE have this)
+  control font size (in all windows)
+  about 0.5-0.75 line of margin at the bottom, below the input line
 
 Needed by v14.1:
   Redesign Connect page
