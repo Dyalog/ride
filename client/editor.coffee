@@ -130,7 +130,7 @@ Dyalog.Editor = (e, opts = {}) ->
     .on 'click', '.b-hid, .b-case', -> $(@).toggleClass 'pressed'; false
     .on 'click', '.b-next', -> search(); false
     .on 'click', '.b-prev', -> search true; false
-    .on 'keydown', '.search', -> if e.which == 13 then search(); false
+    .on 'keydown', '.search', 'enter', -> search(); false
     .on 'click', '.b-refac-m', ->
       if !/^\s*$/.test s = cm.getLine l = cm.getCursor().line
         cm.replaceRange "∇ #{s}\n\n∇", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'

@@ -23,14 +23,10 @@ do ->
       nww = require('nw.gui').Window.get()
       Dyalog.quit = -> nww.close(); return
       $ ->
-        $('body').on 'keydown', (e) ->
-          if e.which == 187 && e.ctrlKey && !e.altKey # <C-+> or <C-=>
-            nww.zoomLevel++; return false
-          else if e.which == 189 && e.ctrlKey && !e.shiftKey && !e.altKey # <C-->
-            nww.zoomLevel--; return false
-          else if e.which == 48 && e.ctrlKey && !e.shiftKey && !e.altKey # <C-0>
-            nww.zoomLevel = 0; return false
-          return
+        $(document)
+          .on 'keydown', '*', 'ctrl++ ctrl+=', -> nww.zoomLevel++;   false
+          .on 'keydown', '*', 'ctrl+-',        -> nww.zoomLevel--;   false
+          .on 'keydown', '*', 'ctrl+0',        -> nww.zoomLevel = 0; false
     else
       socket = io()
       Dyalog.quit = close

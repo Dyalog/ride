@@ -89,19 +89,14 @@ $ ->
         $(@).focus()
         $list.trigger 'sel'
         return
+      .on 'keydown', '.fav', 'ctrl+a', -> $('.fav').addClass 'sel'; $list.trigger 'sel'; false
+      .on 'keydown', '.fav', 'space ctrl+space', -> $t.toggleClass 'sel'; $list.trigger 'sel'; false
+      .on 'keydown', '.fav', 'return', -> $connect.click(); false
+      .on 'keydown', '.fav', 'insert', -> $new.click(); false
+      .on 'keydown', '.fav', 'del', -> $delete.click(); false
       .on 'keydown', '.fav', (e) ->
         $t = $ @
-        if e.which == 65 && e.ctrlKey && !e.shiftKey && !e.altKey # <C-a>
-          $('.fav').addClass 'sel'; $list.trigger 'sel'; false
-        else if e.which == 32 && !e.shiftKey && !e.altKey # <Space> <C-Space>
-          $t.toggleClass 'sel'; $list.trigger 'sel'; false
-        else if e.which == 13 && !e.ctrlKey && !e.shiftKey && !e.altKey # <Enter>
-          $connect.click(); false
-        else if e.which == 45 && !e.ctrlKey && !e.shiftKey && !e.altKey # <Ins>
-          $new.click(); false
-        else if e.which == 46 && !e.ctrlKey && !e.shiftKey && !e.altKey # <Del>
-          $delete.click(); false
-        else if e.which in [38, 40, 36, 35, 33, 34] # <Up><Down><Home><End><PgUp><PgDown> <C-...> <S-...> <A-...>
+        if e.which in [38, 40, 36, 35, 33, 34] # <Up><Down><Home><End><PgUp><PgDown> <C-...> <S-...> <A-...>
           switch e.which
             when 38 then $x = $t.prev()         # <Up>
             when 40 then $x = $t.next()         # <Down>
@@ -143,7 +138,7 @@ $ ->
       if n == 1 then x = parseFav $s.text(); $name.val x.name; $host.val x.host; $port.val x.port
       else $name.add($host).add($port).val ''
       return
-    $host.add($port).add($name).keydown (e) -> if e.which == 13 then $save.click(); false
+    $host.add($port).add($name).on 'keydown', null, 'return', -> $save.click(); false
     $save.click -> $('.fav.sel').focus().text fmtFav host: $host.val(), port: $port.val(), name: $name.val(); storeFavs(); return
     $cancel.click -> x = parseFav $('.fav.sel').text(); $host.val x.host; $port.val x.port; $name.val x.name; return
     $spawn.click ->
@@ -154,7 +149,8 @@ $ ->
       else
         $spawnStatus.text 'Invalid port'; $spawnPort.focus()
       return
-    $listenPort.keydown (e) -> if e.which == 13 then $listen.click(); false
+    $spawnPort.on 'keydown', null, 'return', -> console.info 'port!'; $spawn.click(); false
+    $listenPort.on 'keydown', null, 'return', -> $listen.click(); false
     $list.sortable cursor: 'move', revert: true, tolerance: 'pointer', containment: 'parent', axis: 'y', update: storeFavs
 
     favs = try JSON.parse localStorage.favs catch then []
