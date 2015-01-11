@@ -1,8 +1,11 @@
 Significant Usability Issues:
   Update focus after closing an editor (not fixed in Dec 24 version)
+    NN: debuggers only
   Type something, hit shift enter on function name: Editor opens OK, but session log input is subsequently discarded
   Once you start auto-completing a WS name, the drop-down should stay up to allow several path selections
+    NN: I'm not even getting autocompletion...
   Typing )off gives an "Uncaught node.js Error" - could we keep the session visible and have a calm notification?
+    NN: cannot reproduce (NW Windows), I'm getting an "Interpreter disconnected" as expected
   Would be nice if captions [titles of floating windows] name the thing being edited
   Shift-tab should cycle between the windows
   Focus should go back to the session when you close a window
