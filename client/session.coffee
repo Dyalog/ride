@@ -79,7 +79,8 @@ Dyalog.Session = (e, opts = {}) ->
     cm.setOption 'readOnly', false
     cm.setOption 'cursorHeight', 1
     l = cm.lineCount() - 1
-    if why != 4 then cm.replaceRange '      ', {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
+    if (why == 1 && !mod[l]) || why !in [1, 4]
+      cm.replaceRange '      ', {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
     cm.setCursor l, cm.getLine(l).length
     return
 

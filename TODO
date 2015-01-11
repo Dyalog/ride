@@ -1,7 +1,6 @@
 Significant Usability Issues:
   Update focus after closing an editor (not fixed in Dec 24 version)
     NN: debuggers only
-  Type something, hit shift enter on function name: Editor opens OK, but session log input is subsequently discarded
   Once you start auto-completing a WS name, the drop-down should stay up to allow several path selections
     NN: I'm not even getting autocompletion...
   Typing )off gives an "Uncaught node.js Error" - could we keep the session visible and have a calm notification?
@@ -60,3 +59,4 @@ Done:
     NN: Done, but Chromium refuses to remap ctrl+tab
   control font size in node-webkit
     NN: can't capture scroll events in NW, but I made <C-+> <C--> <C-0> work
+  Type something, hit shift enter on function name: Editor opens OK, but session log input is subsequently discarded
