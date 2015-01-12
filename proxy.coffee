@@ -120,7 +120,7 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
         """
 
       # "disconnect" is a built-in socket.io event
-      .on 'disconnect', (x) -> log "#{addr socket} disconnected"; (if socket == x then socket = null); return
+      .on 'disconnect', (x) -> log "#{addr @} disconnected"; (if socket == @ then socket = null); return
 
       # proxy management events that don't reach the interpreter start with a '*'
       .on '*connect', ({host, port}) -> setUpInterpreterConnection host, port
