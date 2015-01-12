@@ -93,7 +93,7 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
     return
 
   (socket) -> # this function is the result from calling Proxy()
-    log 'browser connected from ' + socket?.request?.connection?.remoteAddress
+    log 'browser connected' + if addr = socket?.request?.connection?.remoteAddress then ' from ' + addr else ''
     sockets.push socket
 
     {onevent} = socket # intercept all browser-to-proxy events and log them:
