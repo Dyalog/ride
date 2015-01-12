@@ -101,12 +101,8 @@ body { padding: 0; margin: 0; background-color: $bg; font-family: sans-serif; }
 // connect page
 #fav-buttons { margin-bottom: 5px; }
 #fav-list
-  float: left; clear: both; width: 300px; height: 150px; overflow: auto; margin: 0 12px 0 0
+  float: left; clear: both; width: 300px; height: 150px; overflow: auto; margin: 0 12px 0 0; outline: 0
   border-style: solid; border-width: 1px; border-color: $dark $light $light $dark; background-color: white
-.fav
-  display: block; height: 20px; line-height: 20px; white-space: nowrap; cursor: default; text-decoration: none; color: black
-  &:focus { outline: dotted black 1px; }
-  &.sel { background: $sel; color: white }
 #fav-host, #fav-port, #listen-port, #spawn-port, #fav-list { font-family: apl, monospace; }
 
 .dyalog-logo { color: white; text-indent: -9999px; overflow: hidden; height: 80px; margin: 0; background: #fc9732 16px center no-repeat url(dyaloglogo.png); }
