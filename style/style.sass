@@ -179,27 +179,18 @@ a.button:active { border-color: $dark $light $light $dark; }
 .ui-accordion .ui-accordion-header .ui-accordion-header-icon { position: absolute; left: .5em; top: 50%; margin-top: -8px; }
 .ui-accordion .ui-accordion-content { padding: 1em 2.2em; border-top: 0; overflow: auto; }
 .ui-autocomplete { position: absolute; top: 0; left: 0; cursor: default; }
-.ui-button
-  min-width: 75px
-  display: inline-block
-  position: relative
-  padding: 0
-  line-height: normal
-  margin-right: .1em
-  cursor: default
-  vertical-align: middle
-  text-align: center
-  overflow: visible; // removes extra width in IE
-  border-style: solid
-  border-width: 1px
-  border-color: $light $dark $dark $light
-  background-color: $bg
 
-a.ui-button, a.ui-button:link, a.ui-button:visited, a.ui-button:hover, a.ui-button:active { text-decoration: none; color: #000; }
-.ui-button:active { border-color: #000; }
+.ui-button
+  min-width: 75px; display: inline-block; position: relative; padding: 0; line-height: normal
+  margin-right: .1em; cursor: default; vertical-align: middle; text-align: center
+  overflow: visible; // removes extra width in IE
+  border-style: solid; border-width: 1px; border-color: $light $dark $dark $light; background-color: $bg
+
+  &, &:link, &:visited, &:hover, &:active { text-decoration: none; color: #000; }
+  &:active { border-color: #000; }
+
 // to make room for the icon, a width needs to be set here
 .ui-button-icon-only { width: 2.2em; }
-
 button.ui-button-icon-only { width: 2.4em; }
 .ui-button-icons-only { width: 3.4em; }
 button.ui-button-icons-only { width: 3.7em; }
@@ -240,7 +231,6 @@ input.ui-button { padding: 0 5px; }
 .ui-button-text-icons .ui-button-icon-secondary,
 .ui-button-icons-only .ui-button-icon-secondary
   right: .5em
-
 
 // button sets
 .ui-buttonset

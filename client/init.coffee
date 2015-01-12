@@ -13,7 +13,7 @@ do ->
   if opener && (win = Dyalog.urlParams.win)? # are we running in a floating editor window?
     $ ->
       wins = opener.Dyalog.wins
-      $('body').html('<div class="ui-layout-center"></div>').css(backgroundColor: 'red').layout
+      $('body').html('<div class="ui-layout-center"></div>').layout
         defaults: enableCursorHotkey: 0
         center: onresize: -> ed?.updateSize(); return
         fxName: ''
