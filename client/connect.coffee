@@ -130,17 +130,27 @@ $ ->
       $list.append('<a class="fav sel" href="#">127.0.0.1</a>').trigger 'sel'
       $('.fav.sel').focus(); $host.select(); storeFavs(); false
     $delete.click -> $('.fav.sel').remove(); $list.trigger 'sel'; storeFavs(); false
-    $list.on 'sel', -> # triggered whenever selection changes
+    $list.on 'sel', -> # triggered after selection changes
       storeFavs(); $s = $ '.fav.sel'; n = $s.length
       $name.add($host).add($port).attr 'disabled', n != 1
       $connect.add($save).add($cancel).button 'option', 'disabled', n != 1
       $delete.button 'option', 'disabled', !n
+      $save.add($cancel).button if n == 1 then 'enable' else 'disable'
       if n == 1 then x = parseFav $s.text(); $name.val x.name; $host.val x.host; $port.val x.port
       else $name.add($host).add($port).val ''
       return
-    $host.add($port).add($name).on 'keydown', null, 'return', -> $save.click(); false
-    $save.click -> $('.fav.sel').focus().text fmtFav host: $host.val(), port: $port.val(), name: $name.val(); storeFavs(); false
-    $cancel.click -> x = parseFav $('.fav.sel').text(); $host.val x.host; $port.val x.port; $name.val x.name; false
+    $host.add($port).add($name)
+      .on 'keydown', null, 'return', -> $save.click(); false
+      .on 'keyup change', ->
+        s0 = $('.fav.sel').text(); s1 = fmtFav host: $host.val(), port: $port.val(), name: $name.val()
+        $save.add($cancel).button if s0 == s1 then 'disable' else 'enable'
+        return
+    $save.click ->
+      $('.fav.sel').focus().text fmtFav host: $host.val(), port: $port.val(), name: $name.val(); storeFavs()
+      $save.add($cancel).button 'disable'; false
+    $cancel.click ->
+      x = parseFav $('.fav.sel').text(); $host.val x.host; $port.val x.port; $name.val x.name
+      $save.add($cancel).button 'disable'; false
     $spawn.click ->
       port = +$spawnPort.val()
       if 0 < port < 0x10000
