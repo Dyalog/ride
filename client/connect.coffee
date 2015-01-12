@@ -170,6 +170,14 @@ $ ->
     $list.trigger 'sel'
 
     Dyalog.socket
+      .on '*confirmHijack', ({addr}) ->
+        $("<p>#{addr || 'An IDE '} is already using this proxy.  Would you like to take it over?</p>").dialog
+          title: 'Confirmation', modal: 1, buttons: [
+            {text: 'Yes', click: -> Dyalog.socket.emit '*hijack'; $(@).dialog 'close'; false}
+            {text: 'No', click: -> $(@).dialog 'close'; $('body').html '<p>Disconnected</p>'; false}
+          ]
+        return
+      .on '*hijacked', ({addr}) -> $.alert "#{addr} has taken over usage of this proxy.", 'Disconnected'; return
       .on '*connected', -> Dyalog.idePage(); return
       .on '*disconnected', -> $.alert 'Interpreter disconnected'; return
       .on '*connectError', ({err}) -> $.alert err, 'Cannot connect'; return

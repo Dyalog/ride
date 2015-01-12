@@ -12,6 +12,7 @@ b64 = (s) -> Buffer(s).toString 'base64'
 b64d = (s) -> '' + Buffer s, 'base64'
 tag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exec xml)?[1]
 extend = (a...) -> r = {}; (for x in a then for k, v of x then r[k] = v); r
+addr = (socket) -> socket?.request?.connection?.remoteAddress || 'an IDE' # format a socket's remote address
 
 parseEditableEntity = (xml) -> # used for OpenWindow and UpdateWindow
   # v1 sample message:
@@ -35,7 +36,7 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
 
 @Proxy = ->
   client = null # TCP connection to interpreter
-  sockets = [] # socket.io connections to browsers
+  socket = null # socket.io connection to the browser that's currently driving
 
   toInterpreter = (s) ->
     if client
@@ -45,9 +46,9 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
 
   cmd = (c, args) -> toInterpreter "<Command><cmd>#{c}</cmd><id>0</id><args><#{c}>#{args}</#{c}></args></Command>"; return
 
-  toBrowser = (m...) -> log 'to browser: ' + JSON.stringify(m)[..1000]; sockets.forEach (x) -> x.emit m...; return
+  toBrowser = (m...) -> log 'to browser: ' + JSON.stringify(m)[..1000]; socket?.emit m...; return
 
-  connectToInterpreter = (host, port) ->
+  setUpInterpreterConnection = (host, port) ->
     queue = Buffer 0 # a buffer for data received from the server
     client = require('net').connect {host, port}, -> toBrowser '*connected'
     client.on 'error', (e) -> toBrowser '*connectError', err: '' + e; client = null; return
@@ -92,13 +93,9 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
     cmd 'GetWindowLayout', ''
     return
 
-  (socket) -> # this function is the result from calling Proxy()
-    log 'browser connected' + if addr = socket?.request?.connection?.remoteAddress then ' from ' + addr else ''
-    sockets.push socket
-
+  setUpBrowserConnection = ->
     {onevent} = socket # intercept all browser-to-proxy events and log them:
     socket.onevent = (packet) -> log 'from browser: ' + JSON.stringify(packet.data)[..1000]; onevent.apply socket, [packet]
-
     socket
       .on 'Execute', ({text, trace}) -> cmd 'Execute', "<Text>#{b64 text}</Text><Trace>#{+!!trace}</Trace>"
       .on 'Edit', ({win, pos, text}) -> cmd 'Edit', "<Text>#{b64 text}</Text><Pos>#{pos}</Pos><Win>#{win}</Win>"
@@ -121,8 +118,11 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
           <attributes><LineAttribute><attribute>Stop</attribute><values>#{v.join '\n'}</values></LineAttribute></attributes>
         """
 
+      # "disconnect" is a built-in socket.io event
+      .on 'disconnect', (x) -> log "#{addr socket} disconnected"; (if socket == x then socket = null); return
+
       # proxy management events that don't reach the interpreter start with a '*'
-      .on '*connect', ({host, port}) -> connectToInterpreter host, port
+      .on '*connect', ({host, port}) -> setUpInterpreterConnection host, port
       .on '*spawn', ({port}) ->
         {spawn} = require 'child_process'
         child = spawn 'dyalog', ['+s'], env: extend process.env, RIDE_LISTEN: '0.0.0.0:' + port
@@ -130,8 +130,17 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
         child.on 'error', (err) -> toBrowser '*spawnedError', {message: '' + err, code: err.code}; return
         child.on 'exit', (code, signal) -> toBrowser '*spawnedExited', {code, signal}; return
         return
+    return
 
-      # "disconnect" is a built-in socket.io event
-      .on 'disconnect', -> log 'browser disconnected'; rm sockets, socket; return
-
+  (newSocket) -> # this function is the result from calling Proxy()
+    log "#{addr newSocket} connected"
+    if socket
+      log "asking #{addr newSocket} to confirm hijacking of #{addr socket}'s session"
+      newSocket.emit '*confirmHijack', addr: addr(socket) || null
+      newSocket.on '*hijack', ->
+        log "#{addr newSocket} hijacked #{addr socket}'s session"
+        socket.emit '*hijacked', addr: addr(newSocket); socket.disconnect(); socket = newSocket; setUpBrowserConnection()
+        return
+    else
+      socket = newSocket; setUpBrowserConnection()
     return
