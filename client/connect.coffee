@@ -182,7 +182,9 @@ $ ->
       .on '*connected', -> Dyalog.idePage(); return
       .on '*disconnected', -> $.alert 'Interpreter disconnected'; return
       .on '*connectError', ({err}) -> $.alert err, 'Cannot connect'; return
-      .on '*spawned', ({pid}) -> $spawnStatus.text "PID: #{pid}"; return
+      .on '*spawned', ({pid}) ->
+        $spawnStatus.text "PID: #{pid}"
+        $spawnPort.attr 'disabled', true; $spawn.button 'disable'; return
       .on '*spawnedError', ({message, code}) ->
         $spawnStatus.text if code == 'ENOENT' then 'Cannot find dyalog executable on $PATH' else message
         $spawn.button 'enable'; $spawnPort.attr 'disabled', false; return

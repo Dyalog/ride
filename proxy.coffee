@@ -38,6 +38,7 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
 @Proxy = ->
   client = null # TCP connection to interpreter
   socket = null # socket.io connection to the browser that's currently driving
+  child = null # a ChildProcess object, the result from spawn()
 
   toInterpreter = (s) ->
     if client
@@ -125,12 +126,12 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
       # proxy management events that don't reach the interpreter start with a '*'
       .on '*connect', ({host, port}) -> setUpInterpreterConnection host, port
       .on '*spawn', ({port}) ->
-        {spawn} = require 'child_process'
-        child = spawn 'dyalog', ['+s'], env: extend process.env, RIDE_LISTEN: '0.0.0.0:' + port
+        child = require('child_process').spawn 'dyalog', ['+s'], env: extend process.env, RIDE_LISTEN: '0.0.0.0:' + port
         toBrowser '*spawned', pid: child.pid
-        child.on 'error', (err) -> toBrowser '*spawnedError', {message: '' + err, code: err.code}; return
-        child.on 'exit', (code, signal) -> toBrowser '*spawnedExited', {code, signal}; return
+        child.on 'error', (err) -> toBrowser '*spawnedError', {message: '' + err, code: err.code}; child = null; return
+        child.on 'exit', (code, signal) -> toBrowser '*spawnedExited', {code, signal}; child = null; return
         return
+    if child then toBrowser '*spawned', pid: child.pid
     return
 
   (newSocket) -> # this function is the result from calling Proxy()
