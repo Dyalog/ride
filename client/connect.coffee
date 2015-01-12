@@ -124,7 +124,7 @@ $ ->
       if x.port == DEFAULT_PORT then delete x.port
       if !x.name then delete x.name
       Dyalog.socket.emit '*connect', host: x.host, port: x.port or DEFAULT_PORT
-      return
+      false
     $new.click ->
       $('.fav').removeClass 'sel'
       $list.append('<a class="fav sel" href="#">127.0.0.1</a>').trigger 'sel'
