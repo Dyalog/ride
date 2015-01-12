@@ -58,7 +58,7 @@ $ ->
         </p>
       </fieldset>
       <fieldset>
-        <legend>Listen for connections from interpreter</legend>
+        <legend>Listen for connections from interpreter (not yet implemented)</legend>
         <p>
           <label>Port <input disabled id="listen-port" class="text-field" value="#{DEFAULT_PORT}" size="5"></label>
           <a href="#" id="listen" accessKey="l"><u>L</u>isten</a>
@@ -74,6 +74,7 @@ $ ->
     $spawnStatus = $ '#spawn-status' ; $listenPort  = $ '#listen-port'
 
     $connect.add($new).add($delete).add($save).add($cancel).add($spawn).add($listen).button()
+    $listen.button 'disable'
     $list
       .on 'click', '.fav', -> false
       .on 'dblclick', '.fav', (e) -> $connect.click(); false
