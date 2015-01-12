@@ -1,9 +1,10 @@
+t0 = +new Date
 log = do ->
   N = 50; T = 1000 # log no more than N log messages per T milliseconds
   n = t = 0 # at any moment, there have been n messages since time t
   (s) ->
     if (t1 = +new Date) - t > T then t = t1; n = 1
-    if ++n < N then process?.stdout?.write? "#{process.uptime().toFixed 3} #{s}\n"
+    if ++n < N then process?.stdout?.write? "#{t1 - t0}: #{s}\n"
     else if n == N then process?.stdout?.write? '... logging temporarily suppressed\n'
     return
 
