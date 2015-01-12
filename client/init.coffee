@@ -1,4 +1,12 @@
 do ->
+  if window.require?
+    nww = require('nw.gui').Window.get()
+    $ -> # font size control in node-webkit
+      $(document)
+        .on 'keydown', '*', 'ctrl++ ctrl+=', -> nww.zoomLevel++;   false
+        .on 'keydown', '*', 'ctrl+-',        -> nww.zoomLevel--;   false
+        .on 'keydown', '*', 'ctrl+0',        -> nww.zoomLevel = 0; false
+      return
   Dyalog.urlParams = {}
   for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
     [_, k, v] = /^([^=]*)=?(.*)$/.exec kv; Dyalog.urlParams[unescape(k or '')] = unescape(v or '')
@@ -20,16 +28,10 @@ do ->
         on: (e, f) -> (@[e] ?= []).push f; @
       socket = new FakeSocket; socket1 = new FakeSocket; socket.other = socket1; socket1.other = socket
       require('./proxy').Proxy()(socket1)
-      nww = require('nw.gui').Window.get()
-      Dyalog.quit = -> nww.close(); return
-      $ ->
-        $(document)
-          .on 'keydown', '*', 'ctrl++ ctrl+=', -> nww.zoomLevel++;   false
-          .on 'keydown', '*', 'ctrl+-',        -> nww.zoomLevel--;   false
-          .on 'keydown', '*', 'ctrl+0',        -> nww.zoomLevel = 0; false
+      Dyalog.quit = -> require('nw.gui').Window.get().close(); return
     else
       socket = io()
       Dyalog.quit = close
     Dyalog.socket = socket
-    $ -> Dyalog.connectPage()
+    $ -> Dyalog.connectPage(); return
   return
