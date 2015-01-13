@@ -2,7 +2,7 @@ Dyalog.about = ->
   v = Dyalog.versionInfo
   info = """
     IDE version: #{v.version}
-    Built on: #{v.built}
+    Date: #{v.date}
     Git commit: #{v.rev}
     Platform: #{navigator.platform}
     User agent: #{navigator.userAgent}

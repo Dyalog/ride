@@ -85,8 +85,8 @@ version_file=build/tmp/version.js
   var Dyalog=Dyalog||{};
   Dyalog.versionInfo={
     version:'0.1.$(git rev-list --count HEAD)',
-    built:'$(date --iso-8601)',
-    rev:'$(git rev-parse --short HEAD)'
+    date:'$(git show -s HEAD --pretty=format:%ci)',
+    rev:'$(git rev-parse HEAD)'
   };
 .
 if [ $changed -ne 0 ]; then echo 'concatenating uglified files'; cat $version_file $us >build/static/D.js; fi
