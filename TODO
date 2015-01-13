@@ -20,7 +20,6 @@ Needed by v14.1:
   Shift+Esc while editing a namespace: TypeError: Cannot read property info of undefined
     NN: cannot reproduce, possibly fixed
   listen for connections from the interpreter
-  revert line in session should move cursor to next line (suggested by Scholes)
   re-take screenshot
   keyboard navigation in menu (Alt+..., F10, arrows, etc)
   Connect page: prompt user to save before selection changes
@@ -63,3 +62,4 @@ Done:
     NN: can't capture scroll events in NW, but I made <C-+> <C--> <C-0> work
   control font size (in all windows)
   Type something, hit shift enter on function name: Editor opens OK, but session log input is subsequently discarded
+  revert line in session should move cursor to next line (suggested by Scholes)

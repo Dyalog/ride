@@ -28,11 +28,10 @@ Dyalog.Session = (e, opts = {}) ->
 
   k["'\uf800'"] = k['Shift-Esc'] = # QT: Quit (and lose changes)
     k["'\uf804'"] = k.Esc = ->     # EP: Exit (and save changes)
-      l = cm.getCursor().line
+      c = cm.getCursor(); l = c.line
       if mod[l]?
         cm.replaceRange mod[l], {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
-        delete mod[l]
-        cm.removeLineClass l, 'background', 'modified'
+        delete mod[l]; cm.removeLineClass l, 'background', 'modified'; cm.setCursor l + 1, c.ch
       return
 
   cm = CodeMirror ($e = $ e)[0],
