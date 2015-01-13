@@ -1,13 +1,13 @@
 Dyalog.about = ->
-  v = Dyalog.versionInfo; i = Dyalog.remoteIdentification || {}
+  v = Dyalog.versionInfo; i = Dyalog.remoteIdentification || {}; u = 'unknown'
   info = """
-    IDE version: #{v.version}
-    IDE date: #{v.date}
-    IDE git commit: #{v.rev}
-    Platform: #{navigator.platform}
-    User agent: #{navigator.userAgent}
-    Interpreter version: #{i.version}
-    Interpreter edition: #{i.arch}
+    IDE version: #{v.version || u}
+    IDE date: #{v.date || u}
+    IDE git commit: #{v.rev || u}
+    Platform: #{navigator.platform || u}
+    User agent: #{navigator.userAgent || u}
+    Interpreter version: #{i.version || u}
+    Interpreter edition: #{i.arch || u}
   """
   buttons = []
   if require? then buttons.push text: 'Copy', click: ->
@@ -17,9 +17,9 @@ Dyalog.about = ->
     <div class="about">
       <div class="logo">
         <div class="contact-info">
-          +44 (0)1256 830030<br>
-          <a href="mailto:support@dyalog.com?body=#{escape info}">support@dyalog.com</a><br>
-          <a href="http://www.dyalog.com/" target="_blank">www.dyalog.com</a>
+          <span title="Dyalog's UK phone number">+44 (0)1256 830030</span><br>
+          <a href="mailto:support@dyalog.com?body=#{escape info}" title="Pre-populate an email draft with the information below">support@dyalog.com</a><br>
+          <a href="http://www.dyalog.com/" target="_blank" title="Open Dyalog's website in a new window">www.dyalog.com</a>
         </div>
       </div>
       <div class="textarea-wrapper">

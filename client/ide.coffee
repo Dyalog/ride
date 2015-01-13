@@ -182,6 +182,5 @@ jQuery ($) ->
         .on 'menu-select', '.m-lbar', -> layout.toggle 'north'; return
         .on 'menu-select', '.m-about', Dyalog.about
         .on 'keydown', '*', 'ctrl+q', -> Dyalog.quit(); false
-        .on 'keydown', '*', 'shift+f1', -> Dyalog.about(); false
         .on 'click', '.lbar-prefs', -> Dyalog.showPrefs(); false
     return

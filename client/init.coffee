@@ -34,4 +34,6 @@ do ->
       Dyalog.quit = close
     Dyalog.socket = socket
     $ -> Dyalog.connectPage(); return
+
+  $ -> $(document).on 'keydown', '*', 'shift+f1', -> Dyalog.about(); false
   return
