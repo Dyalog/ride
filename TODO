@@ -18,9 +18,12 @@ Needed by v14.1:
   Need a full keyboarding discussion: Whether to report/adapt to IME keystrokes, etc
   continuously update completion list while typing
   Shift+Esc while editing a namespace: TypeError: Cannot read property info of undefined
+    NN: cannot reproduce, possibly fixed
   listen for connections from the interpreter
   revert line in session should move cursor to next line (suggested by Scholes)
   re-take screenshot
+  keyboard navigation in menu (Alt+..., F10, arrows, etc)
+  Connect page: prompt user to save before selection changes
 
 Later:
   rewrite syntax highlighting to support Dyalog syntax
