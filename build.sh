@@ -60,6 +60,7 @@ js_files='
   client/jquery-dyalog.coffee
   client/keymap.coffee
   client/help-urls.coffee
+  client/about.coffee
   client/prefs.coffee
   client/editor.coffee
   client/session.coffee

@@ -175,20 +175,12 @@ jQuery ($) ->
             if $t.is '.toggle' then $t.toggleClass 'checked'
             $t.trigger 'menu-select'
             false
-
-      about = ->
-        v = Dyalog.versionInfo
-        $("<p class='about'>Version: #{v.version}\nBuilt on: #{v.built}\nGit commit: #{v.rev}</p>").dialog
-          modal: 1, title: 'About', buttons: [text: 'Close', click: -> $(@).dialog 'close']
-        return
-
       $(document)
         .on 'menu-select', '.m-quit', Dyalog.quit
         .on 'menu-select', '.m-prefs', -> Dyalog.showPrefs(); return
         .on 'menu-select', '.m-lbar', -> layout.toggle 'north'; return
-        .on 'menu-select', '.m-about', about
+        .on 'menu-select', '.m-about', Dyalog.about
         .on 'keydown', '*', 'ctrl+q', -> Dyalog.quit(); false
-        .on 'keydown', '*', 'shift+f1', -> about(); false
+        .on 'keydown', '*', 'shift+f1', -> Dyalog.about(); false
         .on 'click', '.lbar-prefs', -> Dyalog.showPrefs(); false
-
     return
