@@ -1,15 +1,17 @@
 Dyalog.about = ->
-  v = Dyalog.versionInfo
+  v = Dyalog.versionInfo; i = Dyalog.remoteIdentification || {}
   info = """
     IDE version: #{v.version}
-    Date: #{v.date}
-    Git commit: #{v.rev}
+    IDE date: #{v.date}
+    IDE git commit: #{v.rev}
     Platform: #{navigator.platform}
     User agent: #{navigator.userAgent}
+    Interpreter version: #{i.version}
+    Interpreter edition: #{i.arch}
   """
   buttons = []
   if require? then buttons.push text: 'Copy', click: ->
-    require('nw.gui').Clipboard.get().set($('textarea', @).val(), 'text'); return
+    require('nw.gui').Clipboard.get().set $('textarea', @).val(), 'text'; return
   buttons.push text: 'Close', click: -> $(@).dialog 'close'
   $("""
     <div class="about">

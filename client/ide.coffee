@@ -85,6 +85,7 @@ jQuery ($) ->
       return
 
     socket
+      .on '*identify', (i) -> Dyalog.remoteIdentification = i; return
       .on 'UpdateDisplayName', ({displayName}) -> $('title').text displayName
       .on 'EchoInput', ({input}) -> session.add input
       .on 'AppendSessionOutput', ({result}) -> session.add result

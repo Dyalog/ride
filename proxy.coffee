@@ -65,7 +65,9 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
             when 'ReplyConnect', 'ReplyEdit', 'ReplySetLineAttributes' then ; # ignore
             when 'ReplySaveChanges'       then toBrowser 'ReplySaveChanges', win: +tag('win', m), err: +tag 'err', m
             when 'ReplyWindowTypeChanged' then toBrowser 'WindowTypeChanged', win: +tag('Win', m), tracer: !!+tag 'bugger', m
-            when 'ReplyIdentify'      then toBrowser 'UpdateDisplayName', displayName: b64d tag 'Project', m
+            when 'ReplyIdentify'
+              toBrowser 'UpdateDisplayName', displayName: b64d tag 'Project', m
+              toBrowser '*identify', version: tag('Version', m), arch: tag('Architecture', m)
             when 'ReplyUpdateWsid'
               s = b64d tag 'wsid', m
               if s != (s1 = s.replace /\x00/g, '')
