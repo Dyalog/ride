@@ -93,8 +93,8 @@ $ ->
     $new.click ->
       $list.find('option').attr 'selected', false
       $list.append '<option selected>127.0.0.1</option>'
-      $host.select(); storeFavs(); false
-    $delete.click -> $list.find(':selected').remove(); storeFavs(); false
+      $host.select(); storeFavs(); $list.change(); false
+    $delete.click -> $list.find(':selected').remove(); storeFavs(); $list.change(); false
     $list.on 'change', -> # triggered after selection changes
       storeFavs(); $s = $list.find ':selected'; n = $s.length
       $name.add($host).add($port).attr 'disabled', n != 1
