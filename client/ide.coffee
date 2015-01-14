@@ -8,7 +8,22 @@ jQuery ($) ->
       <ul class="menu">
         <li>File<ul><li class="m-quit">Quit <span class="shortcut">Ctrl+Q</span></li></ul></li>
         <li>Edit<ul><li class="m-prefs">Keyboard Preferences</li></ul></li>
-        <li>View<ul><li class="m-lbar toggle checked">Show Language Bar</li></ul></li>
+        <li>
+          View
+          <ul>
+            <li class="m-lbar toggle checked">Show Language Bar</li>
+            #{
+              if require? # nw-only, events are handled in init.coffee
+                '''
+                  <hr>
+                  <li class="m-zi">Zoom In    <span class="shortcut">Ctrl++</span></li>
+                  <li class="m-zo">Zoom Out   <span class="shortcut">Ctrl+-</span></li>
+                  <li class="m-zr">Reset Zoom <span class="shortcut">Ctrl+0</span></li>
+                '''
+              else ''
+            }
+          </ul>
+        </li>
         <li>Help<ul><li class="m-about">About <span class="shortcut">Shift+F1</span></li></ul></li>
       </ul>
       <div class="ide">

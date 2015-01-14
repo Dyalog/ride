@@ -14,7 +14,6 @@ Significant Usability Issues:
   shift+enter doesn't work on a Mac
   app icon, an orange D (14.1?)
   reduce size of the desktop app's executable: we don't need all versions of the font
-  add menu items for zoom in/out
 
 Needed by v14.1:
   Redesign Connect page
@@ -72,3 +71,4 @@ Done:
   the interpreter's +s option (used by "Spawn") causes the interpreter to crash on error in the session
     NN: "+s -q" solves this, thanks Geoff
   listen for connections from the interpreter
+  add menu items for zoom in/out
