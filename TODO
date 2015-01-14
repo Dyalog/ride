@@ -10,6 +10,9 @@ Significant Usability Issues:
   Focus should go back to the session when you close a window
   It would be nice with an option to have all editor windows open as floating (WPF Ride and ODE have this)
   about 0.5-0.75 line of margin at the bottom, below the input line
+  ctrl+enter in debugger should do the same as enter
+  shift+enter doesn't work on a Mac
+  app icon, an orange D (14.1?)
 
 Needed by v14.1:
   Redesign Connect page
@@ -44,6 +47,7 @@ Later:
   can ExpressJS (the web server) gzip static files in advance?
   code folding and [+] button
   SI stack in debugger (?)
+  remember window size and position
 
 Done:
   If an error is encountered in a scripted fn, tracer needs to scroll to line which failed
