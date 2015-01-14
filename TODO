@@ -10,7 +10,6 @@ Significant Usability Issues:
   Focus should go back to the session when you close a window
   It would be nice with an option to have all editor windows open as floating (WPF Ride and ODE have this)
   about 0.5-0.75 line of margin at the bottom, below the input line
-  the interpreter's +s option (used by "Spawn") causes the interpreter to crash on error in the session
 
 Needed by v14.1:
   Redesign Connect page
@@ -64,3 +63,5 @@ Done:
   control font size (in all windows)
   Type something, hit shift enter on function name: Editor opens OK, but session log input is subsequently discarded
   revert line in session should move cursor to next line (suggested by Scholes)
+  the interpreter's +s option (used by "Spawn") causes the interpreter to crash on error in the session
+    NN: "+s -q" solves this, thanks Geoff

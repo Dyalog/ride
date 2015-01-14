@@ -128,7 +128,7 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
       # proxy management events that don't reach the interpreter start with a '*'
       .on '*connect', ({host, port}) -> setUpInterpreterConnection host, port
       .on '*spawn', ({port}) ->
-        child = require('child_process').spawn 'dyalog', ['+s'], env: extend process.env, RIDE_LISTEN: '0.0.0.0:' + port
+        child = require('child_process').spawn 'dyalog', ['+s', '-q'], env: extend process.env, RIDE_LISTEN: '0.0.0.0:' + port
         toBrowser '*spawned', pid: child.pid
         child.on 'error', (err) -> toBrowser '*spawnedError', {message: '' + err, code: err.code}; child = null; return
         child.on 'exit', (code, signal) -> toBrowser '*spawnedExited', {code, signal}; child = null; return
