@@ -13,6 +13,8 @@ Significant Usability Issues:
   ctrl+enter in debugger should do the same as enter
   shift+enter doesn't work on a Mac
   app icon, an orange D (14.1?)
+  reduce size of the desktop app's executable: we don't need all versions of the font
+  add menu items for zoom in/out
 
 Needed by v14.1:
   Redesign Connect page
@@ -48,6 +50,7 @@ Later:
   code folding and [+] button
   SI stack in debugger (?)
   remember window size and position
+  strong interrupt (?)
 
 Done:
   If an error is encountered in a scripted fn, tracer needs to scroll to line which failed
