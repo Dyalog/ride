@@ -51,6 +51,7 @@ $ ->
       </fieldset>
       <fieldset>
         <legend>Spawn an interpreter</legend>
+        <p><i>Linux-only.  Requires a <tt>dyalog</tt> executable on your <tt>$PATH</tt>.</i></p>
         <p>
           <label>Port <input id="spawn-port" class="text-field" value="#{DEFAULT_PORT}" size="5"></label>
           <a href="#" id="spawn" accessKey="w">Spa<u>w</u>n</a>
