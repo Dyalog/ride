@@ -139,15 +139,16 @@ $ ->
             #{
               (
                 for host in (if ipAddresses?.length then ipAddresses else ['host'])
-                  "<div class='tt'>RIDE_CONNECT=#{fmtFav {host, port}}</div>"
+                  "<div class='tt'>RIDE_CONNECT=#{host}:#{port}</div>"
               ).join 'or'
             }
             in its environment, so it connects here.
           </div>
         """
-          .dialog modal: 1, title: 'Waiting for connection', buttons: [
-            text: 'Cancel', click: -> Dyalog.socket.emit '*listenCancel'; $(@).dialog 'close'; false
-          ]
+          .dialog
+            modal: 1, width: 400, title: 'Waiting for connection'
+            close: -> Dyalog.socket.emit '*listenCancel'; return
+            buttons: Cancel: -> $(@).dialog 'close'; false
         Dyalog.socket.on
       false
     $listenPort.on 'keydown', null, 'return', -> $listen.click(); false
