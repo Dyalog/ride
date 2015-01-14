@@ -17,12 +17,13 @@ $ ->
     x.port = +(x.port or DEFAULT_PORT)
     x
 
+  ipAddresses = [] # of the proxy.  Used in the "Waiting for connections" dialogue.
+
   Dyalog.connectPage = ->
     if (u = Dyalog.urlParams).host?
       Dyalog.socket.emit '*connect', host: u.host, port: +(u.port or DEFAULT_PORT)
       Dyalog.idePage()
       return
-    ipAddresses = [] # of the proxy.  Used in the "Waiting for connections" dialogue.
     $('body').html """
       <fieldset>
         <legend>Connect to an interpreter</legend>

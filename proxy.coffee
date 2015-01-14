@@ -59,10 +59,9 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
   toBrowser = (m...) -> log 'to browser: ' + JSON.stringify(m)[..1000]; socket?.emit m...; return
 
   setUpInterpreterConnection = ->
-    toBrowser '*connected'
-    queue = Buffer 0 # a buffer for data received from the server
     client.on 'error', (e) -> toBrowser '*connectError', err: '' + e; client = null; return
     client.on 'end', -> toBrowser '*disconnected'; client = null; return
+    queue = Buffer 0 # a buffer for data received from the server
     client.on 'data', (data) ->
       queue = Buffer.concat [queue, data]
       while queue.length >= 4 and (n = queue.readInt32BE 0) <= queue.length
@@ -135,7 +134,8 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
 
       # proxy management events that don't reach the interpreter start with a '*'
       .on '*connect', ({host, port}) ->
-        client = require('net').connect {host, port}, -> setUpInterpreterConnection(); return
+        client = require('net').connect {host, port}, -> toBrowser '*connected'; return
+        setUpInterpreterConnection()
         return
       .on '*spawn', ({port}) ->
         child = require('child_process').spawn 'dyalog', ['+s', '-q'], env: extend process.env, RIDE_LISTEN: '0.0.0.0:' + port
@@ -144,7 +144,10 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
         child.on 'exit', (code, signal) -> toBrowser '*spawnedExited', {code, signal}; child = null; return
         return
       .on '*listen', ({port}) ->
-        server = require('net').createServer (c) -> server?.close(); server = null; client = c; setUpInterpreterConnection(); return
+        server = require('net').createServer (c) ->
+          log 'interpreter connected from ' + addr c
+          server?.close(); server = null; client = c; setUpInterpreterConnection()
+          return
         server.on 'error', (err) -> server = null; toBrowser '*listenError', err: '' + err; return
         server.listen port, -> log "listening for connections from interpreter on port #{port}"; return
         return

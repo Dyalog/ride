@@ -26,11 +26,11 @@ do ->
   else
     if window.require? # are we running under node-webkit?
       class FakeSocket
-        emit: (e, a...) -> @other.onevent e: e, data: a
-        onevent: ({e, data}) -> (for f in @[e] or [] then f data...); return
+        emit: (a...) -> @other.onevent data: a
+        onevent: ({data}) -> (for f in @[data[0]] or [] then f data[1..]...); return
         on: (e, f) -> (@[e] ?= []).push f; @
       socket = new FakeSocket; socket1 = new FakeSocket; socket.other = socket1; socket1.other = socket
-      require('./proxy').Proxy()(socket1)
+      setTimeout (-> require('./proxy').Proxy() socket1), 1
       Dyalog.quit = -> require('nw.gui').Window.get().close(); return
     else
       socket = io()

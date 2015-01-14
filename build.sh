@@ -56,7 +56,6 @@ js_files='
   jquery.hotkeys.js
   jquery.layout.js
   build/tmp/lbar.js
-  proxy.coffee
   client/jquery-dyalog.coffee
   client/keymap.coffee
   client/help-urls.coffee
@@ -67,6 +66,7 @@ js_files='
   client/ide.coffee
   client/connect.coffee
   client/init.coffee
+  proxy.coffee
 '
 us='' # names of uglified files
 changed=0
