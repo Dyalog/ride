@@ -15,6 +15,13 @@ tag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exec x
 extend = (a...) -> r = {}; (for x in a then for k, v of x then r[k] = v); r
 addr = (socket) -> socket?.request?.connection?.remoteAddress || 'an IDE' # format a socket's remote address
 
+ipAddresses = []
+try
+  for iface, addrs of require('os').networkInterfaces()
+    for a in addrs when a.family == 'IPv4' && !a.internal
+      ipAddresses.push a.address
+catch e then log 'cannot determine ip addresses'; console.info e
+
 parseEditableEntity = (xml) -> # used for OpenWindow and UpdateWindow
   # v1 sample message:
   # <ReplyUpdateWindow>\n<entity><name>bnM=</name><text>Ok5hbWVzcGFjZSBucwogICAg4oiHIGYKICAgICAgMQogICAg4oiHCiAgICDiiIcgZwogICAgICAyCiAgICDiiIcKOkVuZE5hbWVzcGFjZQ==</text><cur_pos>4</cur_pos><token>1</token><bugger>0</bugger><sub_offset>0</sub_offset><sub_size>0</sub_size><type>256</type><ReadOnly>0</ReadOnly><tid>0</tid><tid_name>MA==</tid_name><colours>ra2tra2tra2trQMHBwADAwMDtAMVAAMDAwMDAwUAAwMDA7QAAwMDA7QDFQADAwMDAwMFAAMDAwO0AK6urq6urq6urq6urq4A</colours><attributes>\n</attributes></entity>\n</ReplyUpdateWindow>
@@ -38,7 +45,8 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
 @Proxy = ->
   client = null # TCP connection to interpreter
   socket = null # socket.io connection to the browser that's currently driving
-  child = null # a ChildProcess object, the result from spawn()
+  child  = null # a ChildProcess object, the result from spawn()
+  server = null # used to listen for connections from interpreters
 
   toInterpreter = (s) ->
     if client
@@ -50,9 +58,9 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
 
   toBrowser = (m...) -> log 'to browser: ' + JSON.stringify(m)[..1000]; socket?.emit m...; return
 
-  setUpInterpreterConnection = (host, port) ->
+  setUpInterpreterConnection = ->
+    toBrowser '*connected'
     queue = Buffer 0 # a buffer for data received from the server
-    client = require('net').connect {host, port}, -> toBrowser '*connected'
     client.on 'error', (e) -> toBrowser '*connectError', err: '' + e; client = null; return
     client.on 'end', -> toBrowser '*disconnected'; client = null; return
     client.on 'data', (data) ->
@@ -126,14 +134,23 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
       .on 'disconnect', (x) -> log "#{addr @} disconnected"; (if socket == @ then socket = null); return
 
       # proxy management events that don't reach the interpreter start with a '*'
-      .on '*connect', ({host, port}) -> setUpInterpreterConnection host, port
+      .on '*connect', ({host, port}) ->
+        client = require('net').connect {host, port}, -> setUpInterpreterConnection(); return
+        return
       .on '*spawn', ({port}) ->
         child = require('child_process').spawn 'dyalog', ['+s', '-q'], env: extend process.env, RIDE_LISTEN: '0.0.0.0:' + port
         toBrowser '*spawned', pid: child.pid
         child.on 'error', (err) -> toBrowser '*spawnedError', {message: '' + err, code: err.code}; child = null; return
         child.on 'exit', (code, signal) -> toBrowser '*spawnedExited', {code, signal}; child = null; return
         return
+      .on '*listen', ({port}) ->
+        server = require('net').createServer (c) -> server?.close(); server = null; client = c; setUpInterpreterConnection(); return
+        server.on 'error', (e) -> server = null; toBrowser '*listenError', err: '' + err; return
+        server.listen port, -> log "listening for connections from interpreter on port #{port}"; return
+        return
+      .on '*listenCancel', -> server?.close(); return
     if child then toBrowser '*spawned', pid: child.pid
+    toBrowser '*ipAddresses', ipAddresses
     return
 
   (newSocket) -> # this function is the result from calling Proxy()
