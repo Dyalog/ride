@@ -120,33 +120,35 @@ $ ->
       $save.add($cancel).button 'disable'; false
     $spawn.click ->
       port = +$spawnPort.val()
-      if 0 < port < 0x10000
+      if !(0 < port < 0x10000)
+        $.alert 'Invalid port', 'Error', -> $spawnPort.focus(); return
+      else
         $spawnStatus.text 'Spawning...'; $spawn.button 'disable'; $spawnPort.attr 'disabled', true
         Dyalog.socket.emit '*spawn', {port}
-      else
-        $spawnStatus.text 'Invalid port'; $spawnPort.focus()
       false
     $spawnPort.on 'keydown', null, 'return', -> $spawn.click(); false
     $listen.click ->
-      port = +$listenPort.val(); if !(0 < port < 0x10000) then $.alert 'Invalid port'; return false
-      Dyalog.socket.emit '*listen', {port}
-      $listenDialog = $ """
-        <div class='listen'>
-          Please start the remote interpreter with<br>
-          #{
-            (
-              for host in (if ipAddresses?.length then ipAddresses else ['host'])
-                "<div class='tt'>RIDE_CONNECT=#{fmtFav {host, port}}</div>"
-            ).join 'or'
-          }
-          #{ipAddresses}
-          in its environment, so it connects here.
-        </div>
-      """
-        .dialog modal: 1, title: 'Waiting for connection', buttons: [
-          text: 'Cancel', click: -> Dyalog.socket.emit '*listenCancel'; $(@).dialog 'close'; false
-        ]
-      Dyalog.socket.on
+      port = +$listenPort.val()
+      if !(0 < port < 0x10000)
+        $.alert 'Invalid port', 'Error', -> $listenPort.focus(); return false
+      else
+        Dyalog.socket.emit '*listen', {port}
+        $listenDialog = $ """
+          <div class='listen'>
+            Please start the remote interpreter with<br>
+            #{
+              (
+                for host in (if ipAddresses?.length then ipAddresses else ['host'])
+                  "<div class='tt'>RIDE_CONNECT=#{fmtFav {host, port}}</div>"
+              ).join 'or'
+            }
+            in its environment, so it connects here.
+          </div>
+        """
+          .dialog modal: 1, title: 'Waiting for connection', buttons: [
+            text: 'Cancel', click: -> Dyalog.socket.emit '*listenCancel'; $(@).dialog 'close'; false
+          ]
+        Dyalog.socket.on
       false
     $listenPort.on 'keydown', null, 'return', -> $listen.click(); false
     $list.sortable cursor: 'move', revert: true, tolerance: 'pointer', containment: 'parent', axis: 'y', update: storeFavs
