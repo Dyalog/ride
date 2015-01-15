@@ -1,6 +1,4 @@
 Significant Usability Issues:
-  Update focus after closing an editor (not fixed in Dec 24 version)
-    NN: debuggers only
   Once you start auto-completing a WS name, the drop-down should stay up to allow several path selections
     NN: I'm not even getting autocompletion...
   Typing )off gives an "Uncaught node.js Error" - could we keep the session visible and have a calm notification?
@@ -74,3 +72,5 @@ Done:
   reduce size of the desktop app's executable: we don't need all versions of the font
     NN: binary is still rather large, ~80MB
   app icon, an orange D
+  Update focus after closing an editor (not fixed in Dec 24 version)
+    NN: debuggers only

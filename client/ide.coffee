@@ -116,12 +116,8 @@ jQuery ($) ->
       .on 'UpdateWindow', (ee) -> wins[ee.token].open ee; session.scrollCursorIntoView() # "ee" for EditableEntity
       .on 'ReplySaveChanges', ({win, err}) -> wins[win]?.saved err
       .on 'CloseWindow', ({win}) ->
-        $("#wintab#{win},#win#{win}").remove()
-        $tabs.tabs('destroy').tabs tabOpts
-        refreshTabs()
-        wins[win].closePopup?()
-        delete wins[win]; session.scrollCursorIntoView()
-        return
+        $("#wintab#{win},#win#{win}").remove(); $tabs.tabs('destroy').tabs tabOpts; refreshTabs()
+        wins[win].closePopup?(); delete wins[win]; session.scrollCursorIntoView(); session.focus(); return
       .on 'OpenWindow', (ee) -> # "ee" for EditableEntity
         layout.open dir = if ee.debugger then 'south' else 'east'
         w = ee.token
