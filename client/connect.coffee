@@ -147,7 +147,7 @@ $ ->
           </div>
         """
           .dialog
-            modal: 1, width: 400, title: 'Waiting for connection'
+            modal: 1, width: 400, title: 'Waiting for connection...'
             close: -> Dyalog.socket.emit '*listenCancel'; return
             buttons: Cancel: -> $(@).dialog 'close'; false
         Dyalog.socket.on
@@ -171,7 +171,7 @@ $ ->
       .on '*hijacked', ({addr}) -> $.alert "#{addr} has taken over usage of this proxy.", 'Disconnected'; return
       .on '*connected', -> $listenDialog?.dialog 'close'; Dyalog.idePage(); return
       .on '*disconnected', -> $.alert 'Interpreter disconnected'; return
-      .on '*connectError', ({err}) -> $.alert err, 'Cannot connect'; return
+      .on '*connectError', ({err}) -> $.alert err, 'Error'; return
       .on '*spawned', ({pid}) ->
         $spawnStatus.text "PID: #{pid}"
         $spawnPort.attr 'disabled', true; $spawn.button 'disable'; return
