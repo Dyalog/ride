@@ -66,7 +66,6 @@ js_files='
   client/ide.coffee
   client/connect.coffee
   client/init.coffee
-  proxy.coffee
 '
 us='' # names of uglified files
 changed=0
