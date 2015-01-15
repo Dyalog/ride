@@ -19,7 +19,7 @@
 	},
 	"window": {
 		"title": "Dyalog",
-		"icon": "favicon.ico",
+		"icon": "favicon.png",
 		"toolbar": false,
 		"frame": true,
 		"width": 800,

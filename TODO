@@ -11,7 +11,6 @@ Significant Usability Issues:
   It would be nice with an option to have all editor windows open as floating (WPF Ride and ODE have this)
   about 0.5-0.75 line of margin at the bottom, below the input line
   shift+enter doesn't work on a Mac
-  app icon, an orange D (14.1?)
 
 Needed by v14.1:
   Redesign Connect page
@@ -24,6 +23,7 @@ Needed by v14.1:
   re-take screenshot
   keyboard navigation in menu (Alt+..., F10, arrows, etc)
   Connect page: prompt user to save before selection changes
+  App icon: use a higher-resolution orange D
 
 Later:
   rewrite syntax highlighting to support Dyalog syntax
@@ -73,3 +73,4 @@ Done:
   ctrl+enter in debugger should do the same as enter
   reduce size of the desktop app's executable: we don't need all versions of the font
     NN: binary is still rather large, ~80MB
+  app icon, an orange D
