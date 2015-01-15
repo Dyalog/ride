@@ -12,7 +12,6 @@ Significant Usability Issues:
   about 0.5-0.75 line of margin at the bottom, below the input line
   shift+enter doesn't work on a Mac
   app icon, an orange D (14.1?)
-  reduce size of the desktop app's executable: we don't need all versions of the font
 
 Needed by v14.1:
   Redesign Connect page
@@ -72,3 +71,5 @@ Done:
   listen for connections from the interpreter
   add menu items for zoom in/out
   ctrl+enter in debugger should do the same as enter
+  reduce size of the desktop app's executable: we don't need all versions of the font
+    NN: binary is still rather large, ~80MB
