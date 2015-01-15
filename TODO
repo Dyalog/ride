@@ -21,7 +21,6 @@ Needed by v14.1:
   re-take screenshot
   keyboard navigation in menu (Alt+..., F10, arrows, etc)
   Connect page: prompt user to save before selection changes
-  App icon: use a higher-resolution orange D
 
 Later:
   rewrite syntax highlighting to support Dyalog syntax

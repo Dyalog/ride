@@ -16,8 +16,6 @@ echo 'removing extra font formats'
 rm $b/apl385.{eot,svg,ttf}
 echo 'removing .ico icon'
 rm $b/favicon.ico
-echo 'adding .png icon'
-cp favicon.png $b
 
 desktop_app() {
   echo "building desktop app for $1"
