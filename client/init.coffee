@@ -1,7 +1,7 @@
 do ->
   if window.require?
     nww = require('nw.gui').Window.get()
-    $ -> # font size control in node-webkit
+    $ ->
       $(document)
         .on 'menu-select', '.m-zi', zi = -> nww.zoomLevel++;   false
         .on 'menu-select', '.m-zo', zo = -> nww.zoomLevel--;   false
@@ -9,6 +9,7 @@ do ->
         .on 'keydown', '*', 'ctrl+shift+= ctrl+=', zi
         .on 'keydown', '*', 'ctrl+-',              zo
         .on 'keydown', '*', 'ctrl+0',              zr
+        .on 'keydown', '*', 'f12', -> nww.showDevTools(); false
       return
   Dyalog.urlParams = {}
   for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
