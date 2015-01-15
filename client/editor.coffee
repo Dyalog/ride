@@ -46,9 +46,10 @@ Dyalog.Editor = (e, opts = {}) ->
   b = null
 
   k = # extra keys for CodeMirror
-    Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
-    F4: -> opts.pop?()
-    Enter: -> if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'
+    Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch; return
+    F4: -> opts.pop?(); return
+    Enter: -> (if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'); return
+    'Ctrl-Enter': -> (if opts.debugger then opts.over?()); return
 
   k["'\uf800'"] = k['Shift-Esc'] = -> # QT: Quit (and lose changes)
     opts.close?()
