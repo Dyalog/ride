@@ -6,7 +6,10 @@ jQuery ($) ->
     {socket} = Dyalog
     $('body').html """
       <ul class="menu">
-        <li>File<ul><li class="m-quit">Quit <span class="shortcut">Ctrl+Q</span></li></ul></li>
+        #{
+          # show File menu only in nwjs
+          if require? then '<li>File<ul><li class="m-quit">Quit <span class="shortcut">Ctrl+Q</span></li></ul></li>' else ''
+        }
         <li>Edit<ul><li class="m-prefs">Keyboard Preferences</li></ul></li>
         <li>
           View
@@ -196,6 +199,7 @@ jQuery ($) ->
         .on 'menu-select', '.m-prefs', -> Dyalog.showPrefs(); return
         .on 'menu-select', '.m-lbar', -> layout.toggle 'north'; return
         .on 'menu-select', '.m-about', Dyalog.about
-        .on 'keydown', '*', 'ctrl+q', -> Dyalog.quit(); false
         .on 'click', '.lbar-prefs', -> Dyalog.showPrefs(); false
+      if require?
+        $(document).on 'keydown', '*', 'ctrl+q', -> Dyalog.quit(); false
     return
