@@ -147,8 +147,8 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
         return
       .on '*listen', ({port}) ->
         server = require('net').createServer (c) ->
-          log 'interpreter connected from ' + addr c
-          server?.close(); server = null; client = c; setUpInterpreterConnection()
+          log 'interpreter connected from ' + c?.request?.connection?.remoteAddress
+          server?.close(); server = null; client = c; toBrowser '*connected'; setUpInterpreterConnection()
           return
         server.on 'error', (err) -> server = null; toBrowser '*listenError', err: '' + err; return
         server.listen port, -> log "listening for connections from interpreter on port #{port}"; return
