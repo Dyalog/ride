@@ -89,8 +89,8 @@ jQuery ($) ->
     Dyalog.wins = wins = # mapping between window ids and widget instances (Dyalog.Session or Dyalog.Editor)
       0: session = Dyalog.Session $('.ui-layout-center'),
         edit: (s, i) -> socket.emit 'Edit', win: 0, pos: i, text: s
-        exec: (lines, trace) -> (for s in lines then socket.emit 'Execute', text: (s + '\n'), trace: trace); return
         autocomplete: (s, i) -> socket.emit 'Autocomplete', line: s, pos: i, token: 0
+        exec: (lines, trace) -> (if !trace then execQueue = lines[1..]); socket.emit 'Execute', {trace, text: lines[0] + '\n'}; return
 
     popWindow = (w) ->
       if !opener
@@ -102,13 +102,17 @@ jQuery ($) ->
           $.alert 'Popups are blocked.'
       return
 
+    execQueue = [] # pending lines to execute: AtInputPrompt consumes an item from the queue, HadError empties it
     socket
       .on '*identify', (i) -> Dyalog.remoteIdentification = i; return
       .on 'UpdateDisplayName', ({displayName}) -> $('title').text displayName
       .on 'EchoInput', ({input}) -> session.add input
       .on 'AppendSessionOutput', ({result}) -> session.add result
       .on 'NotAtInputPrompt', -> session.noPrompt()
-      .on 'AtInputPrompt', ({why}) -> session.prompt why
+      .on 'AtInputPrompt', ({why}) ->
+        if execQueue.length then socket.emit 'Execute', trace: 0, text: execQueue.shift() + '\n' else session.prompt why
+        return
+      .on 'HadError', -> execQueue.splice 0, execQueue.length; return
       .on 'FocusWindow', ({win}) -> $("#wintab#{win} a").click(); wins[win].focus(); return
       .on 'WindowTypeChanged', ({win, tracer}) -> wins[win].setDebugger tracer
       .on 'autocomplete', (token, skip, options) -> wins[token].autocomplete skip, options

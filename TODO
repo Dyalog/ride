@@ -9,7 +9,6 @@ Significant Usability Issues:
   It would be nice with an option to have all editor windows open as floating (WPF Ride and ODE have this)
   about 0.5-0.75 line of margin at the bottom, below the input line
   shift+enter doesn't work on a Mac
-  honour ReplyHadError when executing multiple lines
   log file, env var to control its location
 
 Needed by v14.1:
@@ -75,3 +74,4 @@ Done:
   app icon, an orange D
   Update focus after closing an editor (not fixed in Dec 24 version)
     NN: debuggers only
+  honour ReplyHadError when executing multiple lines

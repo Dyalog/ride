@@ -82,6 +82,7 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
                 s = s1
               toBrowser 'UpdateDisplayName', displayName: s
             when 'ReplyExecute'       then toBrowser 'AppendSessionOutput', result: b64d tag 'result', m
+            when 'ReplyHadError'      then toBrowser 'HadError'
             when 'ReplyEchoInput'     then toBrowser 'EchoInput', input: b64d(tag 'input', m) + '\n'
             when 'ReplyGetLog'        then toBrowser 'AppendSessionOutput', result: b64d tag 'Log', m
             when 'ReplyNotAtInputPrompt' then toBrowser 'NotAtInputPrompt'
