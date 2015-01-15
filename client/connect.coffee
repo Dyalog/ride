@@ -177,10 +177,12 @@ $ ->
         $spawnPort.attr 'disabled', true; $spawn.button 'disable'; return
       .on '*spawnedError', ({message, code}) ->
         $spawnStatus.text if code == 'ENOENT' then 'Cannot find dyalog executable on $PATH' else message
-        $spawn.button 'enable'; $spawnPort.attr 'disabled', false; return
+        $('#spawn').button 'enable' # use selector instead of $spawn to prevent errors in $().button() plugin
+        $spawnPort.attr 'disabled', false; return
       .on '*spawnedExited', ({code, signal}) ->
         $spawnStatus.text(if code? then "exited with code #{code}" else "received #{signal}")
-        $spawn.button 'enable'; $spawnPort.attr 'disabled', false; return
+        $('#spawn').button 'enable' # use selector instead of $spawn to prevent errors in $().button() plugin
+        $spawnPort.attr 'disabled', false; return
       .on '*listenError', ({err}) -> $listenDialog?.dialog 'close'; $.alert err, 'Error'; return
     return
   return
