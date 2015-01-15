@@ -1,20 +1,93 @@
-$bg:#d4d0c8;  // grey, background for most UI widgets
-$light:#fff;  // white, top and left border of outset elements
-$dark:#888;   // dark grey, bottom and right border of outset elements
-$sel:#0a246a; // dark blue, selections and title bars
-$tip:#ffffe1; // yellow, background for tooltips
+// colour scheme
+$bg    : #d4d0c8; // grey, background for most UI widgets
+$light : #ffffff; // white, top and left border of outset elements
+$dark  : #888888; // dark grey, bottom and right border of outset elements
+$selbg : #0a246a; // dark blue, selection background
+$selfg : #ffffff; // white, selection foreground
+$tip   : #ffffe1; // yellow, background for tooltips
 
-// http://www.sitepoint.com/how-to-use-cross-browser-web-fonts-part-1/
-@font-face
+// mixins
+=bg     { background-color: $bg; }
+=sel    { background: $selbg; color: $selfg; }
+=inset  { border-color: $dark $light $light $dark; }
+=outset { border-color: $light $dark $dark $light; }
+=tt     { font-family: apl, monospace; font-size: 18px; } // typewriter text
+
+@font-face // http://www.sitepoint.com/how-to-use-cross-browser-web-fonts-part-1/
   font-family: 'apl'
   src: url('apl385.eot')
   src: url('apl385.eot?#iefix') format('embedded-opentype'), url('apl385.woff') format('woff'), url('apl385.ttf') format('truetype'), url('apl385.svg#apl385') format('svg')
-body { padding: 0; margin: 0; background-color: $bg; font-family: sans-serif; }
-.CodeMirror, .CodeMirror-hints, .lbar, .lbar-tip, .lbar-tip-desc, .lbar-tip-text, .toolbar, input, textarea { font-family: apl, monospace; font-size: 18px; }
+
+// general styles
+::selection
+  +sel
+::-moz-selection // must be a separate rule from ::selection
+  +sel
+body
+  +bg; padding: 0; margin: 0; font-family: sans-serif; 
+input, textarea
+  +tt
+.text-field
+  +inset; border-style: solid; border-width: 2px; outline: 0
+
+// connect page
+#fav-buttons { margin-bottom: 5px; } // "Connect", "New", and "Delete"
+#fav-list
+  +inset
+  border-style: solid; border-width: 1px; background-color: white
+  float: left; clear: both; width: 300px; height: 150px; overflow: auto; margin: 0 12px 0 0; outline: 0
+#fav-host, #fav-port, #listen-port, #spawn-port, #fav-list
+  +tt
+
+// IDE page
+//  ┌──────────────────────────────────────┐
+//  │menu: File Edit etc                   │
+//  ├──────────────────────────────────────┤
+//  │language bar: ← +-×÷*⍟⌹○!? |⌈⌊⊥⊤⊣⊢ etc│
+//  ├──────────────────────────┬───────────┤
+//  │                          │(Tab)......│
+//  │          session         │           │
+//  │                          │           │
+//  │                          │           │
+//  ├──────────────────────────┤   editor  │
+//  │(Tab)(Tab)................│           │
+//  │                          │           │
+//  │         debugger         │           │
+//  └──────────────────────────┴───────────┘
+.ide { position: absolute; top: 20px; bottom: 0; left: 0; right: 0; }
+
+.menu
+  +bg; height: 40px; line-height: 17px; cursor: default; padding: 0; margin: 0; font-family: sans-serif
+  &>li
+    +bg; float: left; text-align: center; border: solid transparent 1px; padding: 0 8px; margin: 0; list-style: none
+    &.hover
+      +outset
+  ul
+    +outset
+    +bg
+    display: none; border-style: solid; border-width: 1px 2px 2px 1px
+    position: absolute; z-index: 1; padding: 1px; margin: 2px 0 0 -8px
+    min-width: 125px; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis
+    li
+      height: 17px; line-height: 17px; list-style: none; text-align: left; padding: 1px 17px; overflow: hidden
+      .shortcut { font-size: small; float: right; margin-left: 20px; color: #666; }
+      &.checked { background: transparent 5px center no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMElEQVQI12NgwA3+M+KSYGBgYGCCMdAlYJLIAsgKGRmx6GRgYGBghBPoOnA6AhkAALZJCQIBbmPFAAAAAElFTkSuQmCC); }
+      &.hover
+        +sel
+        .shortcut { color: #fff }
+        &.checked { background: $selbg 5px center no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMUlEQVQI13WOQQoAMAjDEv//5+4kiMyeSkOgcCRJvABAddkAoOYwgarbbADgzzhPzDwC8SPwjB0PzgAAAABJRU5ErkJggg==); }
+  li.active
+    +inset
+    &>ul { display: block; }
+  hr { margin: 3px 0 5px 0; }
+
+// language bar
 .lbar
-  background: $bg; padding: 0 2px 2px 10px; cursor: default; border-bottom: solid #888 1px; line-height: 28px
+  +tt
+  +bg
+  padding: 0 2px 2px 10px; cursor: default; border-bottom: solid #888 1px; line-height: 28px
   b
-    border: solid #666 1px; border-left: 0; font-weight: normal; margin-bottom: 3px; padding: 1px; background: #eeeae2
+    border: solid $dark 1px; border-left: 0; font-weight: normal; margin-bottom: 3px; padding: 1px; background: #eeeae2
     &.first { border-left: solid $dark 1px; }
     &:hover { background-color: $light; }
 .lbar-prefs, .lbar-close { float: right; width: 24px; height: 24px; }
@@ -26,24 +99,60 @@ body { padding: 0; margin: 0; background-color: $bg; font-family: sans-serif; }
   position: absolute; z-index: 4; padding: 0; margin: 0; width: 20px; height: 19px
   background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAUCAYAAACAl21KAAAAcUlEQVQ4y6WTUQ7AMAhCDfe/5E7CvpZsmVVEfmvoA9uIWgxREGa4NZJpWiLykk3R0bzMPKLEgNuyJSoMS+aIKCPoqGCsnBJRdXN1hvDEyojDDfJIpD6+bA7Ov8pSYEpzmnfL/lFhEetDBSdW5rmO9kDcybhABXRYE1UAAAAASUVORK5CYII=) center center no-repeat
 .lbar-tip
-  position: absolute
-  z-index: 3
+  +tt
+  position: absolute; z-index: 3; padding: 10px; border-radius: 10px; border: solid black 1px; margin-top: 20px
   background: $tip url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAsklEQVQoz5VS2xHDIAyTuOyRUZilk2Am6SpkFCZRP0iJC6S96vwDJ/khm1LFGzk/MSGlh39unppSmgUkAVx5pWpmcgDO6CilNKZUw5zSLA8/Mcar4SH9HXqRsULOmUSLZZEweZLmljwC/kQAcBzHT97FGWztnnpn28RmJtXTXQCllC/+mNmHoC/SyxrVs6VKf0sAyL3JYowkzWw4p20YrunJXdLy+Na2SpXD5u4qeM3y2l8gjORluK0/wAAAAABJRU5ErkJggg==) 10px 10px no-repeat
-  padding: 10px
-  border-radius: 10px
-  border: solid black 1px
-  margin-top: 20px
-.lbar-tip-desc { padding: 0 0 0 30px; margin: 0; font-weight: bold; }
-.ui-layout-resizer { background: $bg; }
+.lbar-tip-desc
+  +tt; padding: 0 0 0 30px; margin: 0; font-weight: bold
+.lbar-tip-text
+  +tt
+
+// resizer: splitting line between session and editor/debugger
+.ui-layout-resizer
+  +bg
 .ui-layout-resizer-east { border-left: solid $light 1px; border-right: solid $dark 1px; padding: 2px 0 !important; margin-top: -1px !important; }
 .ui-layout-resizer-south, .ui-layout-resizer-north { border-top:  solid $light 1px; border-bottom: solid #888 1px; }
 .ui-layout-resizer:hover .ui-layout-toggler { background: #ace; }
-.toolbar { height: 24px; overflow: hidden; background: $bg; cursor: default; overflow: hidden; padding: 2px; border-bottom: solid #aaa 1px; }
+
+// CodeMirror is the JS component I use for the session, editor, and debugger.
+// I included its default stylesheet as is (see node_modules/codemirror/lib/codemirror.css)
+// with only the minor overrides below.
+// CodeMirror is themable, might be a good idea to make use of that:
+//   https://codemirror.net/demo/theme.html
+.CodeMirror
+  +tt
+.CodeMirror-linenumber { color: #00f; text-align: left; }
+.CodeMirror-gutters { border-right-color: transparent; background: transparent; }
+.CodeMirror-gutter-wrapper { background-color: white; padding-bottom: 2px; }
+.hidden { display: none; }
+.modified { background: #eee; }
+.highlighted { border: solid red 1px; }
+.CodeMirror-hints
+  +tt
+  position: absolute; z-index: 10; overflow: hidden
+  list-style: none; margin: 0; padding: 0; border: 1px solid black
+  background: $tip; font-size: 90%; max-height: 20em; overflow-y: auto
+  -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2)
+  -moz-box-shadow:    2px 3px 5px rgba(0,0,0,.2)
+  box-shadow:         2px 3px 5px rgba(0,0,0,.2)
+.CodeMirror-hint { margin: 0; padding: 0 2px; max-width: 19em; overflow: hidden; white-space: pre; color: black; cursor: pointer; }
+.CodeMirror-hint-active
+  +sel
+.CodeMirror-matchingbracket { color: black !important; background: #ff8; }
+.breakpoints { width: 10px; }
+.breakpoint { color: #822; }
+
+// toolbar: appears on top of an editor or debugger, looks like  [┈] ⍝ /⍝ X [_______] etc
+.toolbar
+  +bg; height: 24px; overflow: hidden; cursor: default; overflow: hidden; padding: 2px; border-bottom: solid #aaa 1px
 .toolbar-button
   float: left; width: 24px; height: 24px; border: solid transparent 1px; text-align: center; font-weight: bold; background: no-repeat center center; text-indent: -9999px; cursor: default
-  &:hover { border-color: $light $dark $dark $light; }
-  &.armed { border-color: $dark $light $light $dark; }
-  &.pressed { border-color: $dark $light $light $dark; background-color: #eee; }
+  &:hover
+    +outset
+  &.armed
+    +inset
+  &.pressed
+    +inset; background-color: #eee
 .b-line-numbers { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAALCAYAAACksgdhAAAALElEQVQoz2NkYGD4z4AAjAz4wX8MBpHgPxMDGWBgNP0nkh6WAcFIQoqAqwMADDENBizwvaoAAAAASUVORK5CYII=); }
 .b-comment      { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAMCAYAAACwXJejAAAAP0lEQVQY052QSQ4AMAgCoen/v0yv1kq3OSExRCRmFDSzEDzs2ahSGQYWKQKAhguel+Sa8tBsSaJrunvB/+GWAWT9CBiHRFQ/AAAAAElFTkSuQmCC); }
 .b-uncomment    { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAVElEQVQoz5WQSQ7AMAgDB5T/f9m5VBUKOFU5gTVmC+ZQyeMR9BYGHMVlJkSBVcTIoZGDAUj8EQ22hnMNboYBljWoX92+lhd4LNfXzm2C+4Y1/IEBNtT4GBWRRLxNAAAAAElFTkSuQmCC); }
@@ -70,82 +179,24 @@ body { padding: 0; margin: 0; background-color: $bg; font-family: sans-serif; }
   float: left; width: 10px; height: 24px
   background: no-repeat center center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAASCAIAAAD+ApjoAAAAGElEQVQI12NoaGj4//8/EwMDAwMDA70pACyPBKBkf6chAAAAAElFTkSuQmCC)
 .search { float: left; height: 18px; width: 200px; }
-.CodeMirror-linenumber { color: #00f; text-align: left; }
-.CodeMirror-gutters { border-right-color: transparent; background: transparent; }
-.CodeMirror-gutter-wrapper { background-color: white; padding-bottom: 2px; }
-.hidden { display: none; }
-.modified { background: #eee; }
-.highlighted { border: solid red 1px; }
-.CodeMirror-hints
-  position: absolute
-  z-index: 10
-  overflow: hidden
-  list-style: none
-  margin: 0
-  padding: 0
-  -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2)
-  -moz-box-shadow:    2px 3px 5px rgba(0,0,0,.2)
-  box-shadow:         2px 3px 5px rgba(0,0,0,.2)
-  border: 1px solid black
-  background: $tip
-  font-size: 90%
-  max-height: 20em
-  overflow-y: auto
-
-.CodeMirror-hint { margin: 0; padding: 0 2px; max-width: 19em; overflow: hidden; white-space: pre; color: black; cursor: pointer; }
-.CodeMirror-hint-active { background: $sel; color: white; }
-.CodeMirror-matchingbracket { color: black !important; background: #ff8; }
-.breakpoints { width: 10px; }
-.breakpoint { color: #822; }
-
-// connect page
-#fav-buttons { margin-bottom: 5px; }
-#fav-list
-  float: left; clear: both; width: 300px; height: 150px; overflow: auto; margin: 0 12px 0 0; outline: 0
-  border-style: solid; border-width: 1px; border-color: $dark $light $light $dark; background-color: white
-#fav-host, #fav-port, #listen-port, #spawn-port, #fav-list { font-family: apl, monospace; }
 
 .floatable a { background-color: #ace !important; }
 
 // a z-index hack to make the tab (relatively positioned) go on top of resizers and the south pane (absolutely positioned)
 .dragging .ui-layout-resizer, .dragging .ui-layout-south { z-index: -1 !important; }
 a.button
-  background-color: $bg
-  border-style: solid
-  border-width: 1px 2px 2px 1px
-  border-color: $light $dark $dark $light
-  color: black
-  text-decoration: none
-  padding: 2px 20px
+  +outset
+  +bg
+  border-style: solid; border-width: 1px 2px 2px 1px; color: black; text-decoration: none; padding: 2px 20px
 
-a.button:active { border-color: $dark $light $light $dark; }
+a.button:active
+  +inset
+
+// various dialogues
+.ui-widget-overlay { opacity: .3; filter: Alpha(Opacity=30); background: #aaa; }
+.ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; opacity: .3; filter: Alpha(Opacity=30); border-radius: 8px; background: #aaaaaa; }
 #prefs p { height: 40px; line-height: 40px; }
 .prefs-pk { width: 1.5em; text-align: center; }
-
-.menu
-  height: 40px; line-height: 17px; cursor: default; padding: 0; margin: 0; background-color: $bg; font-family: sans-serif
-  &>li
-    float: left; text-align: center; border: solid transparent 1px; background-color: $bg; padding: 0 8px; margin: 0; list-style: none
-    &.hover { border-color: $light $dark $dark $light; }
-  ul
-    position: absolute; z-index: 1; padding: 1px; margin: 2px 0 0 -8px; background-color: $bg
-    min-width: 125px; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis
-    display: none; border-style: solid; border-width: 1px 2px 2px 1px; border-color: $light $dark $dark $light
-    li
-      height: 17px; line-height: 17px; list-style: none; text-align: left; padding: 1px 17px; overflow: hidden
-      .shortcut { font-size: small; float: right; margin-left: 20px; color: #666; }
-      &.checked { background-position: 5px center; background-repeat: no-repeat; background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMElEQVQI12NgwA3+M+KSYGBgYGCCMdAlYJLIAsgKGRmx6GRgYGBghBPoOnA6AhkAALZJCQIBbmPFAAAAAElFTkSuQmCC); }
-      &.hover
-        background-color: $sel; color: #fff
-        .shortcut { color: #fff }
-        &.checked { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMUlEQVQI13WOQQoAMAjDEv//5+4kiMyeSkOgcCRJvABAddkAoOYwgarbbADgzzhPzDwC8SPwjB0PzgAAAABJRU5ErkJggg==); }
-  li.active
-    border-color: $dark $light $light $dark
-    &>ul { display: block; }
-  hr { margin: 3px 0 5px 0; }
-
-.ide { position: absolute; top: 20px; bottom: 0; left: 0; right: 0; }
-
 .ui-dialog-content.about
   padding: 0; margin: 0
   .logo { background: #fc9732 16px center no-repeat url(dyaloglogo.png); height: 80px; }
@@ -154,16 +205,15 @@ a.button:active { border-color: $dark $light $light $dark; }
     a, a:visited, a:active { color: blue }
   .textarea-wrapper { position: absolute; left: 5px; right: 13px; top: 85px; bottom: 15px; width: auto }
   textarea
-    outline: 0; white-space: pre; word-wrap: normal; overflow-x: scroll; width: 100%; height: 100%
-    border-style: solid; border-width: 2px; border-color: $dark $light $light $dark
-
+    +inset
+    border-style: solid; border-width: 2px; outline: 0; white-space: pre; word-wrap: normal; overflow-x: scroll; width: 100%; height: 100%
 .ui-dialog .ui-dialog-content.listen
   padding: 10px 10px 0 10px; text-align: left; width: 500px
-  .tt { font-family: apl, monospace; margin-left: 16px; }
+  .tt
+    +tt; margin-left: 16px
 
-// jQuery UI - v1.10.4 - 2014-01-17,  modified by Dyalog
+// jQuery UI - v1.10.4 - 2014-01-17, heavily customized
 
-// Layout helpers
 .ui-helper-hidden { display: none; }
 .ui-helper-hidden-accessible { border: 0; clip: rect(0 0 0 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; }
 .ui-helper-reset { margin: 0; padding: 0; border: 0; outline: 0; line-height: 1.3; text-decoration: none; font-size: 100%; list-style: none; }
@@ -173,13 +223,10 @@ a.button:active { border-color: $dark $light $light $dark; }
 .ui-helper-zfix { width: 100%; height: 100%; top: 0; left: 0; position: absolute; opacity: 0; filter:Alpha(Opacity=0); }
 .ui-front { z-index: 100; }
 
-// Interaction Cues
 .ui-state-disabled { cursor: default !important; }
 
-// Icons, states and images
 .ui-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }
 
-// Misc visuals, Overlays
 .ui-widget-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; }
 .ui-accordion .ui-accordion-header { display: block; cursor: pointer; position: relative; margin-top: 2px; padding: .5em .5em .5em .7em; min-height: 0; /* support: IE7 */ }
 .ui-accordion .ui-accordion-icons { padding-left: 2.2em; }
@@ -190,14 +237,16 @@ a.button:active { border-color: $dark $light $light $dark; }
 .ui-autocomplete { position: absolute; top: 0; left: 0; cursor: default; }
 
 .ui-button
-  min-width: 75px; display: inline-block; position: relative; padding: 0; line-height: normal
+  +outset
+  +bg
+  border-style: solid; border-width: 1px; min-width: 75px; display: inline-block; position: relative; padding: 0; line-height: normal
   margin-right: .1em; cursor: default; vertical-align: middle; text-align: center
   overflow: visible; // removes extra width in IE
-  border-style: solid; border-width: 1px; border-color: $light $dark $dark $light; background-color: $bg
 
   &, &:link, &:visited, &:hover, &:active { text-decoration: none; color: #000; }
   &:active { border-color: #000; }
-  &.ui-button-disabled:active { border-color: $light $dark $dark $light; }
+  &.ui-button-disabled:active
+    +outset
 
 // to make room for the icon, a width needs to be set here
 .ui-button-icon-only { width: 2.2em; }
@@ -225,13 +274,10 @@ input.ui-button { padding: 0 5px; }
 .ui-button-text-icon-secondary .ui-icon,
 .ui-button-text-icons .ui-icon,
 .ui-button-icons-only .ui-icon
-  position: absolute
-  top: 50%
-  margin-top: -9px
+  position: absolute; top: 50%; margin-top: -9px
 
 .ui-button-icon-only .ui-icon
-  left: 50%
-  margin-left: -9px
+  left: 50%; margin-left: -9px
 
 .ui-button-text-icon-primary .ui-button-icon-primary,
 .ui-button-text-icons .ui-button-icon-primary,
@@ -295,8 +341,10 @@ input.ui-button::-moz-focus-inner, button.ui-button::-moz-focus-inner { border: 
 .ui-datepicker-rtl .ui-datepicker-group-last .ui-datepicker-header, .ui-datepicker-rtl .ui-datepicker-group-middle .ui-datepicker-header { border-right-width: 0; border-left-width: 1px; }
 
 .ui-dialog
-  border-style: solid; border-width: 1px; border-color: $light $dark $dark $light; overflow: hidden; position: absolute; top: 0; left: 0; padding: 0; outline: 0; text-align: center
-  .ui-dialog-titlebar { padding: 0 8px; margin-bottom: 1px; position: relative; background-color: $sel; height: 22px; line-height: 20px; cursor: default; }
+  +outset
+  border-style: solid; border-width: 1px; overflow: hidden; position: absolute; top: 0; left: 0; padding: 0; outline: 0; text-align: center
+  .ui-dialog-titlebar
+    +sel; padding: 0 8px; margin-bottom: 1px; position: relative; height: 22px; line-height: 20px; cursor: default
   .ui-dialog-title { float: left; margin: .1em 0; white-space: nowrap; width: 90%; overflow: hidden; text-overflow: ellipsis; color: white; text-align: left; }
   .ui-dialog-titlebar-close { position: absolute; right: 2px; top: 50%; min-width: 18px; width: 18px; margin: -9px 0 0 0; padding: 0; height: 18px; outline: 0; }
   .ui-dialog-content
@@ -304,7 +352,8 @@ input.ui-button::-moz-focus-inner, button.ui-button::-moz-focus-inner { border: 
   .ui-resizable-se { width: 12px; height: 12px; right: -5px; bottom: -5px; background-position: 16px 16px; }
   .ui-dialog-buttonpane
     text-align: center; border-width: 1px 0 0 0; background-image: none; margin-top: .5em; padding: .3em 1em .5em .4em
-    .ui-button { margin: 0 5px; background-color: $bg; }
+    .ui-button
+      +bg; margin: 0 5px
 
 .ui-menu { list-style: none; padding: 2px; margin: 0; display: block; outline: none; }
 .ui-menu .ui-menu { margin-top: -3px; position: absolute; }
@@ -375,7 +424,8 @@ input.ui-button::-moz-focus-inner, button.ui-button::-moz-focus-inner { border: 
   .ui-tabs-panel { display: block; border-width: 0; padding: 1em 1.4em; background: none; }
   .ui-tabs-nav
     margin: 0; padding: 3px 3px 0; border-width: 0 0 1px 0; border-color: white; height: 26px
-    li { list-style: none; float: left; position: relative; top: 0; margin: 0 1px 0 0; padding: 0; white-space: nowrap; background: $bg; }
+    li
+      +bg; list-style: none; float: left; position: relative; top: 0; margin: 0 1px 0 0; padding: 0; white-space: nowrap
     .ui-tabs-anchor
       float: left
       padding: 2px 12px 0 12px
@@ -387,9 +437,9 @@ input.ui-button::-moz-focus-inner, button.ui-button::-moz-focus-inner { border: 
       text-decoration: none
       cursor: default
     .ui-tabs-active .ui-tabs-anchor
+      +bg
       padding: 4px 15px 0 15px
       margin: -2px -3px 0 -3px
-      background-color: $bg
     li.ui-tabs-active
       border-bottom: solid 1px $bg
       margin-bottom: -1px
@@ -410,8 +460,10 @@ body .ui-tooltip { border-width: 2px; }
   font-family: Verdana,Arial,sans-serif; font-size: 1.1em
   .ui-widget { font-size: 1em; }
   select, button { font-family: Verdana,Arial,sans-serif; font-size: 1em; }
-.ui-widget-content { background: $bg; }
-.ui-widget-header { border: 1px solid #aaaaaa; background: $bg; font-weight: bold; }
+.ui-widget-content
+  +bg
+.ui-widget-header
+  +bg; border: 1px solid #aaaaaa; font-weight: bold
 
 // Interaction states
 .ui-state-default,
@@ -673,8 +725,3 @@ body .ui-tooltip { border-width: 2px; }
 .ui-icon-grip-solid-horizontal  { background-position:  -48px -224px; }
 .ui-icon-gripsmall-diagonal-se  { background-position:  -64px -224px; }
 .ui-icon-grip-diagonal-se       { background-position:  -80px -224px; }
-
-// Overlays
-.ui-widget-overlay { opacity: .3; filter: Alpha(Opacity=30); background: #aaa; }
-.ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; opacity: .3; filter: Alpha(Opacity=30); border-radius: 8px; background: #aaaaaa; }
-.text-field { border-style: solid; border-width: 2px; border-color: $dark $light $light $dark; outline: 0; }
