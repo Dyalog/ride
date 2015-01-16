@@ -14,8 +14,7 @@
 		"node-sass"          : "2.0.0-beta",
 		"node-webkit-builder": "1.0.6",
 		"nomnom"             : "1.8.1",
-		"socket.io"          : "1.2.1",
-		"uglify-js"          : "2.4.16"
+		"socket.io"          : "1.2.1"
 	},
 	"window": {
 		"title": "Dyalog",

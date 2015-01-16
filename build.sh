@@ -2,8 +2,6 @@
 set -e -o pipefail
 npm install
 coffee=node_modules/coffee-script/bin/coffee
-#uglifyjs=node_modules/uglify-js/bin/uglifyjs
-uglifyjs=cat
 sass=node_modules/node-sass/bin/node-sass
 
 mkdir -p build/{static,tmp}
@@ -67,16 +65,16 @@ js_files='
   client/connect.coffee
   client/init.coffee
 '
-us='' # names of uglified files
+us='' # names of compiled files
 changed=0
 for f in $js_files; do
   u=build/tmp/${f//\//_} # replace / with _
   us="$us $u"
   if [ $f -nt $u ]; then
     changed=1
-    if [ $f != ${f%%.coffee} ]; then echo "compiling and uglifying $f"; $coffee -bcp $f | $uglifyjs >$u
+    if [ $f != ${f%%.coffee} ]; then echo "compiling $f"; $coffee -bcp $f >$u
     elif [ $f != ${f%%.min.js} ]; then echo "copying $f"; cp $f $u
-    else echo "uglifying $f"; <$f sed '/^\(var \w\+ = \)\?require(/d' | $uglifyjs >$u; fi
+    else echo "cleaning up $f"; <$f sed '/^\(var \w\+ = \)\?require(/d' >$u; fi
   fi
 done
 version_file=build/tmp/version.js
@@ -88,6 +86,6 @@ version_file=build/tmp/version.js
     rev:'$(git rev-parse HEAD)'
   };
 .
-if [ $changed -ne 0 ]; then echo 'concatenating uglified files'; cat $version_file $us >build/static/D.js; fi
+if [ $changed -ne 0 ]; then echo 'concatenating js files'; cat $version_file $us >build/static/D.js; fi
 
 cp -ur style/apl385.* style/*.png favicon.ico package.json build/static/
