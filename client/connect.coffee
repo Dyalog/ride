@@ -17,6 +17,10 @@ $ ->
     x.port = +(x.port or DEFAULT_PORT)
     x
 
+  sleep = (ms) ->
+    start = new Date().getTime()
+    continue while new Date().getTime() - start < ms
+
   ipAddresses = [] # of the proxy.  Used in the "Waiting for connections" dialogue.
 
   Dyalog.connectPage = ->
@@ -56,7 +60,8 @@ $ ->
         <p><i>Linux-only.  Requires a <tt>dyalog</tt> executable on your <tt>$PATH</tt>.</i></p>
         <p>
           <label>Port <input id="spawn-port" class="text-field" value="#{DEFAULT_PORT}" size="5"></label>
-          <a href="#" id="spawn" accessKey="w">Spa<u>w</u>n</a>
+          <a href="#" id="spawn" accessKey="w">Spa<u>w</u>n</a><br>
+          <label>Connect on spawn <input type="checkbox" id="spawn-connect" checked></label>
           <span id="spawn-status"></span>
         </p>
       </fieldset>
@@ -75,6 +80,7 @@ $ ->
     $spawn       = $ '#spawn'        ; $cancel      = $ '#fav-cancel'
     $spawnPort   = $ '#spawn-port'   ; $listen      = $ '#listen'
     $spawnStatus = $ '#spawn-status' ; $listenPort  = $ '#listen-port'
+    $spawnConn   = $ '#spawn-connect'
     $listenDialog = null
 
     $connect.add($new).add($delete).add($save).add($cancel).add($spawn).add($listen).button()
@@ -126,6 +132,9 @@ $ ->
       else
         $spawnStatus.text 'Spawning...'; $spawn.button 'disable'; $spawnPort.attr 'disabled', true
         Dyalog.socket.emit '*spawn', {port}
+        if $spawnConn.is(':checked')
+          sleep(500)
+          Dyalog.socket.emit '*connect', host: '127.0.0.1', port: port or DEFAULT_PORT
       false
     $spawnPort.on 'keydown', null, 'return', -> $spawn.click(); false
     $listen.click ->
