@@ -1,6 +1,6 @@
 Significant Usability Issues:
   Once you start auto-completing a WS name, the drop-down should stay up to allow several path selections
-    NN: I'm not even getting autocompletion...
+    NN: I'm not even getting autocompletion for WS names...
   Typing )off gives an "Uncaught node.js Error" - could we keep the session visible and have a calm notification?
     NN: cannot reproduce (NW Windows), I'm getting an "Interpreter disconnected" as expected
   Would be nice if captions [titles of floating windows] name the thing being edited
@@ -16,7 +16,6 @@ Needed by v14.1:
   Floating editor windows
   F1 should open the local help for language elements, but this help should have links to help.dyalog.com for the rest
   Need a full keyboarding discussion: Whether to report/adapt to IME keystrokes, etc
-  continuously update completion list while typing
   Shift+Esc while editing a namespace: TypeError: Cannot read property info of undefined
     NN: cannot reproduce, possibly fixed
   re-take screenshot
@@ -75,3 +74,4 @@ Done:
   Update focus after closing an editor (not fixed in Dec 24 version)
     NN: debuggers only
   honour ReplyHadError when executing multiple lines
+  continuously update completion list while typing

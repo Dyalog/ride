@@ -180,10 +180,6 @@ Dyalog.Editor = (e, opts = {}) ->
   hasFocus: -> cm.hasFocus()
   focus: -> cm.focus()
   insert: (ch) -> c = cm.getCursor(); cm.replaceRange ch, c, c, 'Dyalog'
-  autocomplete: (skip, options) ->
-    c = cm.getCursor()
-    cm.showHint completeOnSingleClick: true, hint: ->
-      list: options, from: {line: c.line, ch: c.ch - skip}, to: c
   getValue: -> cm.getValue()
   getCursorIndex: -> cm.indexFromPos cm.getCursor()
   setValue: (x) -> cm.setValue x
@@ -197,3 +193,12 @@ Dyalog.Editor = (e, opts = {}) ->
   saved: (err) -> (if err then $.alert 'Cannot save changes' else opts.close?()); return
   getOpts: -> opts
   closePopup: -> (if opener then close()); return
+  autocomplete: (skip, options) ->
+    c = cm.getCursor(); from = line: c.line, ch: c.ch - skip
+    cm.showHint
+      completeOnSingleClick: true
+      extraKeys: Right: (cm, m) -> m.pick()
+      hint: ->
+        to = cm.getCursor(); u = cm.getLine(from.line)[from.ch...to.ch].toLowerCase() # u: completion prefix
+        {from, to, list: options.filter (o) -> o[...u.length].toLowerCase() == u}
+    return
