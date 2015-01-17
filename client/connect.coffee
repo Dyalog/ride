@@ -17,10 +17,6 @@ $ ->
     x.port = +(x.port or DEFAULT_PORT)
     x
 
-  sleep = (ms) ->
-    start = new Date().getTime()
-    continue while new Date().getTime() - start < ms
-
   ipAddresses = [] # of the proxy.  Used in the "Waiting for connections" dialogue.
 
   Dyalog.connectPage = ->
@@ -132,9 +128,8 @@ $ ->
       else
         $spawnStatus.text 'Spawning...'; $spawn.button 'disable'; $spawnPort.attr 'disabled', true
         Dyalog.socket.emit '*spawn', {port}
-        if $spawnConn.is(':checked')
-          sleep(500)
-          Dyalog.socket.emit '*connect', host: '127.0.0.1', port: port or DEFAULT_PORT
+        if $spawnConn.is ':checked'
+          setTimeout (-> Dyalog.socket.emit '*connect', {host: '127.0.0.1', port}), 1000
       false
     $spawnPort.on 'keydown', null, 'return', -> $spawn.click(); false
     $listen.click ->
