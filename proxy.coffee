@@ -1,13 +1,18 @@
-process.stdout.write "#{new Date}\n"
-t0 = +new Date
+fs = require 'fs'
 log = do ->
+  t0 = +new Date # log timestamps will be number of milliseconds since t0
   N = 50; T = 1000 # log no more than N log messages per T milliseconds
   n = t = 0 # at any moment, there have been n messages since time t
-  (s) ->
-    if (t1 = +new Date) - t > T then t = t1; n = 1
-    if ++n < N then process?.stdout?.write? "#{t1 - t0}: #{s}\n"
-    else if n == N then process?.stdout?.write? '... logging temporarily suppressed\n'
+  # If $DYALOG_IDE_LOG is present, log to stdout and to a file, otherwise only to stdout.
+  if p = process.env.DYALOG_IDE_LOG
+    if h = process.env.HOME || process.env.USERPROFILE then p = require('path').resolve h, p
+    fd = fs.openSync p, 'a'
+  (s) -> # the actual log() function
+    if (t1 = +new Date) - t > T then t = t1; n = 1 # if last message was too long ago, start counting afresh
+    m = if ++n < N then "#{t1 - t0}: #{s}\n" else if n == N then '... logging temporarily suppressed\n'
+    if m then process.stdout?.write? m; if fd then mb = Buffer m; fs.writeSync fd, mb, 0, mb.length
     return
+log new Date().toISOString()
 
 rm = (a, x) -> i = a.indexOf x; (if i != -1 then a.splice i, 1); return
 b64 = (s) -> Buffer(s).toString 'base64'
@@ -21,7 +26,7 @@ try
   for iface, addrs of require('os').networkInterfaces()
     for a in addrs when a.family == 'IPv4' && !a.internal
       ipAddresses.push a.address
-catch e then log 'cannot determine ip addresses'; console.info e
+catch e then log 'cannot determine ip addresses: ' + e
 
 parseEditableEntity = (xml) -> # used for OpenWindow and UpdateWindow
   # v1 sample message:
