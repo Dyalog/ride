@@ -6,27 +6,6 @@ sass=node_modules/node-sass/bin/node-sass
 
 mkdir -p build/{static,tmp}
 
-if [ lbar.xml -nt build/tmp/lbar.js ]; then
-  echo 'preprocessing language bar'
-  $coffee -s >build/tmp/lbar.js_ <<.
-    b64d = (s) -> Buffer(s, 'base64').toString()
-    stripTag = (s) -> s.replace /^.*<\w+>([^<]*)<\/\w+>.*$/, '\$1'
-    esc = (s) -> s.replace /./g, (x) -> {'&': '&amp;', '<': '&lt;', '>': '&gt;'}[x] or x
-    lbarHTML = ''; lbarTips = {}; isFirst = 1
-    for line, i in require('fs').readFileSync('lbar.xml', 'utf8').split '\n'
-      if line == '<LanguageBarElement>' then chr = desc = text = ''
-      else if /<chr>/.test line then chr = String.fromCharCode stripTag line
-      else if /<desc>/.test line then desc = b64d stripTag line
-      else if /<text>/.test line then text = b64d stripTag line
-      else if line == '</LanguageBarElement>'
-        if chr == '\0' then lbarHTML += ' '; isFirst = 1
-        else lbarHTML += "<b#{['', ' class="first"'][isFirst]}>#{esc chr}</b>"; lbarTips[chr] = [desc, text]; isFirst = 0
-      else if line then throw Error "error at line #{i + 1}: #{JSON.stringify line}"
-    process.stdout.write "var Dyalog=Dyalog||{};Dyalog.lbarTips=#{JSON.stringify lbarTips};Dyalog.lbarHTML=#{JSON.stringify lbarHTML};"
-.
-  mv build/tmp/lbar.js_ build/tmp/lbar.js
-fi
-
 cp -uv node_modules/codemirror/lib/codemirror.css build/static/
 i=style/style.sass o=build/static/style.css; if [ $i -nt $o ]; then echo 'preprocessing css'; $sass -i <$i >$o; fi
 
@@ -53,7 +32,7 @@ js_files='
   node_modules/jquery-ui/tabs.js
   jquery.hotkeys.js
   jquery.layout.js
-  build/tmp/lbar.js
+  lbar/lbar.js
   client/jquery-dyalog.coffee
   client/keymap.coffee
   client/help-urls.coffee
