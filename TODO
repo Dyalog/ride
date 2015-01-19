@@ -11,8 +11,6 @@ Significant Usability Issues:
   shift+enter doesn't work on a Mac
 
 Needed by v14.1:
-  Redesign Connect page
-  Floating editor windows
   F1 should open the local help for language elements, but this help should have links to help.dyalog.com for the rest
   Need a full keyboarding discussion: Whether to report/adapt to IME keystrokes, etc
   Shift+Esc while editing a namespace: TypeError: Cannot read property info of undefined
