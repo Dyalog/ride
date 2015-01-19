@@ -1,5 +1,6 @@
 do ->
-  if window.require?
+  Dyalog.nwjs = process?
+  if Dyalog.nwjs
     nww = require('nw.gui').Window.get()
     nww.on 'close', -> window.onbeforeunload?(); window.onbeforeunload = null; nww.close true; return
     $ ->
@@ -27,7 +28,7 @@ do ->
       window.onbeforeunload = -> ed.saveAndClose(); return
       return
   else
-    if window.require? # are we running under node-webkit?
+    if Dyalog.nwjs
       class FakeSocket
         emit: (a...) -> @other.onevent data: a
         onevent: ({data}) -> (for f in @[data[0]] or [] then f data[1..]...); return

@@ -7,8 +7,7 @@ jQuery ($) ->
     $('body').html """
       <ul class="menu">
         #{
-          # show File menu only in nwjs
-          if require? then '<li>File<ul><li class="m-quit">Quit <span class="shortcut">Ctrl+Q</span></li></ul></li>' else ''
+          if Dyalog.nwjs then '<li>File<ul><li class="m-quit">Quit <span class="shortcut">Ctrl+Q</span></li></ul></li>' else ''
         }
         <li>Edit<ul><li class="m-prefs">Keyboard Preferences</li></ul></li>
         <li>
@@ -16,14 +15,12 @@ jQuery ($) ->
           <ul>
             <li class="m-lbar toggle checked">Show Language Bar</li>
             #{
-              if require? # nw-only, events are handled in init.coffee
-                '''
-                  <hr>
-                  <li class="m-zi">Zoom In    <span class="shortcut">Ctrl++</span></li>
-                  <li class="m-zo">Zoom Out   <span class="shortcut">Ctrl+-</span></li>
-                  <li class="m-zr">Reset Zoom <span class="shortcut">Ctrl+0</span></li>
-                '''
-              else ''
+              if Dyalog.nwjs then '''
+                <hr>
+                <li class="m-zi">Zoom In    <span class="shortcut">Ctrl++</span></li>
+                <li class="m-zo">Zoom Out   <span class="shortcut">Ctrl+-</span></li>
+                <li class="m-zr">Reset Zoom <span class="shortcut">Ctrl+0</span></li>
+              ''' else ''
             }
           </ul>
         </li>
@@ -200,6 +197,5 @@ jQuery ($) ->
         .on 'menu-select', '.m-lbar', -> layout.toggle 'north'; return
         .on 'menu-select', '.m-about', Dyalog.about
         .on 'click', '.lbar-prefs', -> Dyalog.showPrefs(); false
-      if require?
-        $(document).on 'keydown', '*', 'ctrl+q', -> Dyalog.quit(); false
+      if Dyalog.nwjs then $(document).on 'keydown', '*', 'ctrl+q', -> Dyalog.quit(); false
     return

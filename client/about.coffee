@@ -11,7 +11,7 @@ Dyalog.about = ->
     Interpreter edition: #{i.arch || u}
   """
   buttons = []
-  if require? then buttons.push text: 'Copy', click: ->
+  if Dyalog.nwjs then buttons.push text: 'Copy', click: ->
     require('nw.gui').Clipboard.get().set $('textarea', @).val(), 'text'; return
   buttons.push text: 'Close', click: -> $(@).dialog 'close'
   $("""
