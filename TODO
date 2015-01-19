@@ -34,6 +34,7 @@ Later:
   ` keybindings in search box
   contextual help (F1) for items in completion menus
   js strict mode
+  source maps
   display a "mailto:" link when a SysError happens
   search field history
   can ExpressJS (the web server) gzip static files in advance?
