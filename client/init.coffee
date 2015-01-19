@@ -1,6 +1,7 @@
 do ->
   if window.require?
     nww = require('nw.gui').Window.get()
+    nww.on 'close', -> window.onbeforeunload?(); window.onbeforeunload = null; nww.close true; return
     $ ->
       $(document)
         .on 'menu-select', '.m-zi', zi = -> nww.zoomLevel++;   false
@@ -22,7 +23,8 @@ do ->
         center: onresize: -> ed?.updateSize(); return
         fxName: ''
       ed0 = wins[win]; ed = wins[win] = Dyalog.Editor $('.ui-layout-center'), ed0.getOpts()
-      ed.setValue ed0.getValue(); ed.setCursorIndex ed0.getCursorIndex(); ed.updateSize(); ed.focus()
+      ed.setValue ed0.getValue(); ed.setCursorIndex ed0.getCursorIndex(); ed.updateSize(); ed.focus(); ed0 = null
+      window.onbeforeunload = -> ed.saveAndClose(); return
       return
   else
     if window.require? # are we running under node-webkit?

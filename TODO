@@ -5,7 +5,6 @@ Significant Usability Issues:
     NN: cannot reproduce (NW Windows), I'm getting an "Interpreter disconnected" as expected
   Would be nice if captions [titles of floating windows] name the thing being edited
   Shift-tab should cycle between the windows
-  Focus should go back to the session when you close a window
   It would be nice with an option to have all editor windows open as floating (WPF Ride and ODE have this)
   about 0.5-0.75 line of margin at the bottom, below the input line
   shift+enter doesn't work on a Mac
@@ -74,3 +73,4 @@ Done:
   honour ReplyHadError when executing multiple lines
   continuously update completion list while typing
   log file, env var to control its location
+  Focus should go back to the session when you close a window
