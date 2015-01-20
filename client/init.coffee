@@ -3,16 +3,10 @@ do ->
   if Dyalog.nwjs
     nww = require('nw.gui').Window.get()
     nww.on 'close', -> window.onbeforeunload?(); window.onbeforeunload = null; nww.close true; return
-    $ ->
-      $(document)
-        .on 'menu-select', '.m-zi', zi = -> nww.zoomLevel++;   false
-        .on 'menu-select', '.m-zo', zo = -> nww.zoomLevel--;   false
-        .on 'menu-select', '.m-zr', zr = -> nww.zoomLevel = 0; false
-        .on 'keydown', '*', 'ctrl+shift+= ctrl+=', zi
-        .on 'keydown', '*', 'ctrl+-',              zo
-        .on 'keydown', '*', 'ctrl+0',              zr
-        .on 'keydown', '*', 'f12', -> nww.showDevTools(); false
-      return
+    Dyalog.zoomIn    = -> nww.zoomLevel++;   return
+    Dyalog.zoomOut   = -> nww.zoomLevel--;   return
+    Dyalog.resetZoom = -> nww.zoomLevel = 0; return
+    $(document).on 'keydown', '*', 'f12', -> nww.showDevTools(); false
   Dyalog.urlParams = {}
   for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
     [_, k, v] = /^([^=]*)=?(.*)$/.exec kv; Dyalog.urlParams[unescape(k or '')] = unescape(v or '')
@@ -41,6 +35,4 @@ do ->
       Dyalog.quit = close
     Dyalog.socket = socket
     $ -> Dyalog.connectPage(); return
-
-  $ -> $(document).on 'keydown', '*', 'shift+f1', -> Dyalog.about(); false
   return

@@ -5,27 +5,6 @@ jQuery ($) ->
   Dyalog.idePage = ->
     {socket} = Dyalog
     $('body').html """
-      <ul class="menu">
-        #{
-          if Dyalog.nwjs then '<li>File<ul><li class="m-quit">Quit <span class="shortcut">Ctrl+Q</span></li></ul></li>' else ''
-        }
-        <li>Edit<ul><li class="m-prefs">Keyboard Preferences</li></ul></li>
-        <li>
-          View
-          <ul>
-            <li class="m-lbar toggle checked">Show Language Bar</li>
-            #{
-              if Dyalog.nwjs then '''
-                <hr>
-                <li class="m-zi">Zoom In    <span class="shortcut">Ctrl++</span></li>
-                <li class="m-zo">Zoom Out   <span class="shortcut">Ctrl+-</span></li>
-                <li class="m-zr">Reset Zoom <span class="shortcut">Ctrl+0</span></li>
-              ''' else ''
-            }
-          </ul>
-        </li>
-        <li>Help<ul><li class="m-about">About <span class="shortcut">Shift+F1</span></li></ul></li>
-      </ul>
       <div class="ide">
         <div class="lbar ui-layout-north" style="display:none">
           #{
@@ -146,7 +125,8 @@ jQuery ($) ->
         session.scrollCursorIntoView()
 
     # language bar
-    $('.lbar-close').on 'click', -> layout.close 'north'; false
+    $('.lbar-close').click -> layout.close 'north'; false
+    $('.lbar-prefs').click Dyalog.showPrefs
     $tip = $ '.lbar-tip'; $tipDesc = $ '.lbar-tip-desc'; $tipText = $ '.lbar-tip-text'; $tipTriangle = $ '.lbar-tip-triangle'
     ttid = null # tooltip timeout id
     $ '.lbar'
@@ -179,23 +159,30 @@ jQuery ($) ->
     session.updateSize()
 
     # menu
-    do ->
-      $m = $ '.menu'; $l = $m.find('>li').addClass 'm-top'
-      $l.mousedown (e) -> if ($t = $ e.target).is '.m-top' then $t.toggleClass 'active'; $l.not($t).removeClass 'active'; false
-      $l.mouseover (e) -> if ($t = $ e.target).is('.m-top') && $l.is '.active' then $l.removeClass 'active'; $t.addClass 'active'; return
-      $(document).mousedown (e) -> if !$(e.target).closest('.menu').length then $l.removeClass 'active'
-      $m.on 'mouseover mouseout', 'li', (e) -> $(e.target).closest('li').toggleClass 'hover', e.type == 'mouseover'; return
-        .on 'mousedown mouseup', 'li', (e) ->
-          if !($t = $ e.target).is '.m-top'
-            $l.removeClass 'active'
-            if $t.is '.toggle' then $t.toggleClass 'checked'
-            $t.trigger 'menu-select'
-            false
-      $(document)
-        .on 'menu-select', '.m-quit', Dyalog.quit
-        .on 'menu-select', '.m-prefs', -> Dyalog.showPrefs(); return
-        .on 'menu-select', '.m-lbar', -> layout.toggle 'north'; return
-        .on 'menu-select', '.m-about', Dyalog.about
-        .on 'click', '.lbar-prefs', -> Dyalog.showPrefs(); false
-      if Dyalog.nwjs then $(document).on 'keydown', '*', 'ctrl+q', -> Dyalog.quit(); false
+    $('<div class="menu"></div>').prependTo('body').dyalogmenu [
+      (
+        if Dyalog.nwjs
+          {'': '_File', items: [
+            {'': '_Quit', key: 'Ctrl+Q', action: Dyalog.quit}
+          ]}
+      )
+      {'': '_Edit', items: [
+        {'': '_Keyboard Preferences', action: Dyalog.showPrefs}
+      ]}
+      {'': '_View', items:
+        [{'': 'Show Language Bar', checked: 1, action: (x) -> layout.toggle 'north'; return}]
+          .concat(
+            if Dyalog.nwjs then [
+              '-'
+              {'': 'Zoom _In',    key: 'Ctrl+=', action: Dyalog.zoomIn}
+              {'': 'Zoom _Out',   key: 'Ctrl+-', action: Dyalog.zoomOut}
+              {'': '_Reset Zoom', key: 'Ctrl+0', action: Dyalog.resetZoom}
+            ] else []
+          )
+      }
+      {'': '_Help', items: [
+        {'': '_About', key: 'Shift+F1', action: Dyalog.about}
+      ]}
+    ]
+    $(document).on 'keydown', '*', 'ctrl+shift+=', -> Dyalog.zoomIn(); false
     return

@@ -15,7 +15,6 @@ Needed by v14.1:
   Shift+Esc while editing a namespace: TypeError: Cannot read property info of undefined
     NN: cannot reproduce, possibly fixed
   re-take screenshot
-  keyboard navigation in menu (Alt+..., F10, arrows, etc)
   Connect page: prompt user to save before selection changes
 
 Later:
@@ -74,3 +73,4 @@ Done:
   continuously update completion list while typing
   log file, env var to control its location
   Focus should go back to the session when you close a window
+  keyboard navigation in menu (Alt+..., F10, arrows, etc)

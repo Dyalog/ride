@@ -57,28 +57,34 @@ input, textarea
 .ide { position: absolute; top: 20px; bottom: 0; left: 0; right: 0; }
 
 .menu
-  +bg; height: 40px; line-height: 17px; cursor: default; padding: 0; margin: 0; font-family: sans-serif
-  &>li
-    +bg; float: left; text-align: center; border: solid transparent 1px; padding: 0 8px; margin: 0; list-style: none
-    &.hover
-      +outset
-  ul
-    +outset
+  +bg
+  height: 40px; line-height: 17px; cursor: default; padding: 0; margin: 0; font-family: sans-serif
+  a { text-decoration: none; color: black; cursor: default; outline: 0; }
+  &>div
     +bg
+    float: left
+    &>a
+      text-align: center; border: solid transparent 1px; padding: 0 5px; margin: 0
+      &:hover
+        +outset
+    &.m-open
+      &>div { display: block; }
+      &>a
+        +inset
+  div div
+    +bg
+    +outset
     display: none; border-style: solid; border-width: 1px 2px 2px 1px
-    position: absolute; z-index: 1; padding: 1px; margin: 2px 0 0 -8px
+    position: absolute; z-index: 1; padding: 1px; margin: 2px 0 0 0
     min-width: 125px; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis
-    li
-      height: 17px; line-height: 17px; list-style: none; text-align: left; padding: 1px 17px; overflow: hidden
+    a
+      height: 17px; line-height: 17px; text-align: left; padding: 1px 17px; overflow: hidden; display: block
       .shortcut { font-size: small; float: right; margin-left: 20px; color: #666; }
       &.checked { background: transparent 5px center no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMElEQVQI12NgwA3+M+KSYGBgYGCCMdAlYJLIAsgKGRmx6GRgYGBghBPoOnA6AhkAALZJCQIBbmPFAAAAAElFTkSuQmCC); }
-      &.hover
+      &:focus
         +sel
         .shortcut { color: #fff }
         &.checked { background: $selbg 5px center no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMUlEQVQI13WOQQoAMAjDEv//5+4kiMyeSkOgcCRJvABAddkAoOYwgarbbADgzzhPzDwC8SPwjB0PzgAAAABJRU5ErkJggg==); }
-  li.active
-    +inset
-    &>ul { display: block; }
   hr { margin: 3px 0 5px 0; }
 
 // language bar
