@@ -2,13 +2,13 @@ do ->
   D.nwjs = process?
   if D.nwjs
     nww = require('nw.gui').Window.get()
-    # restore window state:
-    winProps = 'x y width height isFullscreen'.split ' '
-    do -> if winInfo = (try JSON.parse localStorage.winInfo) then for p in winProps then nww[p] = winInfo[p]
+    if !opener # restore window state:
+      winProps = 'x y width height isFullscreen'.split ' '
+      do -> if winInfo = (try JSON.parse localStorage.winInfo) then for p in winProps then nww[p] = winInfo[p]
     nww.show()
     nww.on 'close', ->
-      # save window state:
-      winInfo = {}; (for p in winProps then winInfo[p] = nww[p]); localStorage.winInfo = JSON.stringify winInfo
+      if !opener # save window state:
+        winInfo = {}; (for p in winProps then winInfo[p] = nww[p]); localStorage.winInfo = JSON.stringify winInfo
       window.onbeforeunload?(); window.onbeforeunload = null; nww.close true; return
     D.zoomIn    = -> nww.zoomLevel++;   return
     D.zoomOut   = -> nww.zoomLevel--;   return
