@@ -63,6 +63,9 @@ $.fn.dyalogmenu = (arg) ->
       $(document)
         .on 'keydown', '*', 'f10', -> $m.children().eq(0).addClass('m-open').find('a').eq(1).focus(); false
         .on 'keyup keypress', (e) -> !isAccessKeyEvent e
-        .keydown (e) -> if isAccessKeyEvent e then $m.find("[accessKey=#{String.fromCharCode(e.which).toLowerCase()}]:visible").mousedown(); false
         .mousedown (e) -> (if !$(e.target).closest('.menu').length then mFocus null); return
+        .keydown (e) ->
+          if isAccessKeyEvent e
+            $x = $m.find "[accessKey=#{String.fromCharCode(e.which).toLowerCase()}]:visible"
+            if $x.length then $x.mousedown(); $x.parent().find('a').eq(1).focus(); false
       return
