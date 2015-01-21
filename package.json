@@ -22,10 +22,11 @@
 		"toolbar": false,
 		"frame": true,
 		"width": 800,
-		"height": 500,
+		"height": 494,
 		"position": "mouse",
-		"min_width": 400,
-		"min_height": 200
+		"min_width": 0,
+		"min_height": 0,
+		"show": false
 	},
 	"webkit": {"plugin": true},
 	"single-instance": false

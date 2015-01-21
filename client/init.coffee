@@ -2,7 +2,14 @@ do ->
   Dyalog.nwjs = process?
   if Dyalog.nwjs
     nww = require('nw.gui').Window.get()
-    nww.on 'close', -> window.onbeforeunload?(); window.onbeforeunload = null; nww.close true; return
+    # restore window state:
+    winProps = 'x y width height isFullscreen'.split ' '
+    do -> if winInfo = (try JSON.parse localStorage.winInfo) then for p in winProps then nww[p] = winInfo[p]
+    nww.show()
+    nww.on 'close', ->
+      # save window state:
+      winInfo = {}; (for p in winProps then winInfo[p] = nww[p]); localStorage.winInfo = JSON.stringify winInfo
+      window.onbeforeunload?(); window.onbeforeunload = null; nww.close true; return
     Dyalog.zoomIn    = -> nww.zoomLevel++;   return
     Dyalog.zoomOut   = -> nww.zoomLevel--;   return
     Dyalog.resetZoom = -> nww.zoomLevel = 0; return
@@ -35,4 +42,5 @@ do ->
       Dyalog.quit = close
     Dyalog.socket = socket
     $ -> Dyalog.connectPage(); return
+
   return

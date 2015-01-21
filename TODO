@@ -38,7 +38,6 @@ Later:
   can ExpressJS (the web server) gzip static files in advance?
   code folding and [+] button
   SI stack in debugger (?)
-  remember window size and position
   strong interrupt (?)
 
 Done:
@@ -74,3 +73,4 @@ Done:
   log file, env var to control its location
   Focus should go back to the session when you close a window
   keyboard navigation in menu (Alt+..., F10, arrows, etc)
+  remember window size and position
