@@ -30,11 +30,11 @@ do ->
       return
   else
     if D.nwjs
-      class FakeSocket
+      class LocalSocket
         emit: (a...) -> @other.onevent data: a
         onevent: ({data}) -> (for f in @[data[0]] or [] then f data[1..]...); return
         on: (e, f) -> (@[e] ?= []).push f; @
-      socket = new FakeSocket; socket1 = new FakeSocket; socket.other = socket1; socket1.other = socket
+      socket = new LocalSocket; socket1 = new LocalSocket; socket.other = socket1; socket1.other = socket
       setTimeout (-> require('./proxy').Proxy() socket1), 1
       D.quit = -> require('nw.gui').Window.get().close(); return
     else
