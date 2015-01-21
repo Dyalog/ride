@@ -1,4 +1,4 @@
-Dyalog.Session = (e, opts = {}) ->
+D.Session = (e, opts = {}) ->
 
   # keep track of which lines have been modified and preserve the original content
   mod = {} # line number -> original content
@@ -13,7 +13,7 @@ Dyalog.Session = (e, opts = {}) ->
     else
       l = cm.getCursor().line
       if !histIndex then hist[0] = cm.getLine l
-      cm.replaceRange hist[i], {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
+      cm.replaceRange hist[i], {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
       histIndex = i
     return
 
@@ -30,7 +30,7 @@ Dyalog.Session = (e, opts = {}) ->
     k["'\uf804'"] = k.Esc = ->     # EP: Exit (and save changes)
       c = cm.getCursor(); l = c.line
       if mod[l]?
-        cm.replaceRange mod[l], {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
+        cm.replaceRange mod[l], {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
         delete mod[l]; cm.removeLineClass l, 'background', 'modified'; cm.setCursor l + 1, c.ch
       return
 
@@ -43,7 +43,7 @@ Dyalog.Session = (e, opts = {}) ->
       l = +l
       cm.removeLineClass l, 'background', 'modified'
       a.push [l, (e = cm.getLine l)]
-      cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: e.length}, 'Dyalog'
+      cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: e.length}, 'D'
     if !a.length then a = [[(l = cm.getCursor().line), cm.getLine l]]
     a.sort (x, y) -> x[0] - y[0]
     opts.exec? (es = for [l, e] in a then e), trace
@@ -51,7 +51,7 @@ Dyalog.Session = (e, opts = {}) ->
     mod = {}
 
   cm.on 'beforeChange', (_, c) ->
-    if c.origin != 'Dyalog'
+    if c.origin != 'D'
       if (l = c.from.line) != c.to.line
         c.cancel()
       else
@@ -61,12 +61,12 @@ Dyalog.Session = (e, opts = {}) ->
 
   add: (s) ->
     l = cm.lineCount() - 1
-    cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
+    cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
     cm.setCursor cm.lineCount() - 1, 0
 
   set: (s) ->
     l = cm.lineCount() - 1
-    cm.replaceRange s, {line: 0, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
+    cm.replaceRange s, {line: 0, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
     cm.setCursor cm.lineCount() - 1, 0
 
   noPrompt: ->
@@ -79,14 +79,14 @@ Dyalog.Session = (e, opts = {}) ->
     cm.setOption 'cursorHeight', 1
     l = cm.lineCount() - 1
     if (why == 1 && !mod[l]) || why !in [1, 4]
-      cm.replaceRange '      ', {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
+      cm.replaceRange '      ', {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
     cm.setCursor l, cm.getLine(l).length
     return
 
   updateSize: -> cm.setSize $e.width(), $e.height()
   hasFocus: -> cm.hasFocus()
   focus: -> cm.focus()
-  insert: (ch) -> c = cm.getCursor(); cm.replaceRange ch, c, c, 'Dyalog'
+  insert: (ch) -> c = cm.getCursor(); cm.replaceRange ch, c, c, 'D'
   scrollCursorIntoView: -> setTimeout (-> cm.scrollIntoView cm.getCursor()), 1
   autocomplete: (skip, options) ->
     c = cm.getCursor(); from = line: c.line, ch: c.ch - skip

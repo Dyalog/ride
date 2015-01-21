@@ -1,4 +1,4 @@
-Dyalog.Editor = (e, opts = {}) ->
+D.Editor = (e, opts = {}) ->
   b = (name, description) -> "<a href='#' class='b-#{name} toolbar-button' title='#{description}'></a>"
   ($e = $ e).html """
     <div class="toolbar debugger-toolbar">
@@ -76,7 +76,7 @@ Dyalog.Editor = (e, opts = {}) ->
         [head, tail...] = s.split ';'; head = head.replace /\s+$/, ''; tail = tail.map (x) -> x.replace /\s+/g, ''
         i = tail.indexOf name; if i < 0 then tail.push name else tail.splice i, 1
         s = [head].concat(tail.sort()).join(';') + if comment then ' ' + comment else ''
-        cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'Dyalog'
+        cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
     return
 
   cm = CodeMirror $e.find('.cm')[0],
@@ -116,7 +116,7 @@ Dyalog.Editor = (e, opts = {}) ->
         cm.replaceSelections cm.getSelections().map (s) -> s.replace(/^/gm, '⍝').replace /\n⍝$/, '\n'
         cm.setSelections a
       else
-        l = cm.getCursor().line; p = line: l, ch: 0; cm.replaceRange '⍝', p, p, 'Dyalog'; cm.setCursor line: l, ch: 1
+        l = cm.getCursor().line; p = line: l, ch: 0; cm.replaceRange '⍝', p, p, 'D'; cm.setCursor line: l, ch: 1
       false
     .on 'click', '.b-uncomment', ->
       if cm.somethingSelected()
@@ -125,7 +125,7 @@ Dyalog.Editor = (e, opts = {}) ->
         cm.setSelections a
       else
         l = cm.getCursor().line; s = cm.getLine l
-        cm.replaceRange s.replace(/^( *)⍝/, '$1'), {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
+        cm.replaceRange s.replace(/^( *)⍝/, '$1'), {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
         cm.setCursor line: l, ch: 0
       false
     .on 'click', '.b-hid, .b-case', -> $(@).toggleClass 'pressed'; false
@@ -134,15 +134,15 @@ Dyalog.Editor = (e, opts = {}) ->
     .on 'keydown', '.search', 'enter', -> search(); false
     .on 'click', '.b-refac-m', ->
       if !/^\s*$/.test s = cm.getLine l = cm.getCursor().line
-        cm.replaceRange "∇ #{s}\n\n∇", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
+        cm.replaceRange "∇ #{s}\n\n∇", {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
         cm.setCursor line: l + 1, ch: 0
     .on 'click', '.b-refac-f', ->
       if !/^\s*$/.test s = cm.getLine l = cm.getCursor().line
-        cm.replaceRange ":field public #{s}", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
+        cm.replaceRange ":field public #{s}", {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
         cm.setCursor line: l + 1, ch: 0
     .on 'click', '.b-refac-p', ->
       if !/^\s*$/.test s = cm.getLine l = cm.getCursor().line
-        cm.replaceRange ":Property #{s}\n\n∇r←get\nr←0\n∇\n\n∇set args\n∇\n:EndProperty", {line: l, ch: 0}, {line: l, ch: s.length}, 'Dyalog'
+        cm.replaceRange ":Property #{s}\n\n∇r←get\nr←0\n∇\n\n∇set args\n∇\n:EndProperty", {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
         cm.setCursor line: l + 1, ch: 0
 
   search = (backwards) ->
@@ -179,7 +179,7 @@ Dyalog.Editor = (e, opts = {}) ->
     return
   hasFocus: -> cm.hasFocus()
   focus: -> cm.focus()
-  insert: (ch) -> c = cm.getCursor(); cm.replaceRange ch, c, c, 'Dyalog'
+  insert: (ch) -> c = cm.getCursor(); cm.replaceRange ch, c, c, 'D'
   getValue: -> cm.getValue()
   getCursorIndex: -> cm.indexFromPos cm.getCursor()
   setValue: (x) -> cm.setValue x

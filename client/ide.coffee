@@ -2,8 +2,8 @@ jQuery ($) ->
 
   overlap = (x0, x1, x2, x3) -> x2 < x1 && x0 < x3 # helper: do the segments (x0,x1) and (x2,x3) overlap?
 
-  Dyalog.idePage = ->
-    {socket} = Dyalog
+  D.idePage = ->
+    {socket} = D
     $('body').html """
       <div class="ide">
         <div class="lbar ui-layout-north" style="display:none">
@@ -11,7 +11,7 @@ jQuery ($) ->
             #<a class="lbar-close" title="Hide Language Bar" href="#"></a>
           }
           <a class="lbar-prefs" title="Preferences" href="#"></a>
-          #{Dyalog.lbarHTML}
+          #{D.lbarHTML}
         </div>
         <div class="lbar-tip" style="display:none"><div class="lbar-tip-desc"></div><pre class="lbar-tip-text"></pre></div>
         <div class="lbar-tip-triangle" style="display:none"></div>
@@ -62,8 +62,8 @@ jQuery ($) ->
           $('[role=tab]', $tabs).attr 'style', '' # clean up tabs' z-indices after dragging, $().sortable screws them up
           return
 
-    Dyalog.wins = wins = # mapping between window ids and widget instances (Dyalog.Session or Dyalog.Editor)
-      0: session = Dyalog.Session $('.ui-layout-center'),
+    D.wins = wins = # mapping between window ids and widget instances (D.Session or D.Editor)
+      0: session = D.Session $('.ui-layout-center'),
         edit: (s, i) -> socket.emit 'Edit', win: 0, pos: i, text: s
         autocomplete: (s, i) -> socket.emit 'Autocomplete', line: s, pos: i, token: 0
         exec: (lines, trace) -> (if !trace then execQueue = lines[1..]); socket.emit 'Execute', {trace, text: lines[0] + '\n'}; return
@@ -80,7 +80,7 @@ jQuery ($) ->
 
     execQueue = [] # pending lines to execute: AtInputPrompt consumes an item from the queue, HadError empties it
     socket
-      .on '*identify', (i) -> Dyalog.remoteIdentification = i; return
+      .on '*identify', (i) -> D.remoteIdentification = i; return
       .on 'UpdateDisplayName', ({displayName}) -> $('title').text displayName
       .on 'EchoInput', ({input}) -> session.add input
       .on 'AppendSessionOutput', ({result}) -> session.add result
@@ -103,7 +103,7 @@ jQuery ($) ->
         w = ee.token
         $("<li id='wintab#{w}'><a href='#win#{w}'></a></li>").appendTo('.ui-layout-' + dir + ' ul').find('a').text ee.name
         $tabContent = $("<div style='width:100%;height:auto;padding:0' id='win#{w}'></div>").appendTo('.ui-layout-' + dir)
-        wins[w] = Dyalog.Editor $tabContent,
+        wins[w] = D.Editor $tabContent,
           debugger: ee.debugger
           save: (s, bs)   -> socket.emit 'SaveChanges',    win: w, text: s, attributes: stop: bs
           close:          -> socket.emit 'CloseWindow',    win: w
@@ -126,7 +126,7 @@ jQuery ($) ->
 
     # language bar
     $('.lbar-close').click -> layout.close 'north'; false
-    $('.lbar-prefs').click Dyalog.showPrefs
+    $('.lbar-prefs').click D.showPrefs
     $tip = $ '.lbar-tip'; $tipDesc = $ '.lbar-tip-desc'; $tipText = $ '.lbar-tip-text'; $tipTriangle = $ '.lbar-tip-triangle'
     ttid = null # tooltip timeout id
     $ '.lbar'
@@ -137,8 +137,8 @@ jQuery ($) ->
         clearTimeout ttid; $t = $ e.target; p = $t.position(); x = $t.text()
         ttid = setTimeout(
           ->
-            ttid = null; key = Dyalog.reverseKeyMap[x] || ''; keyText = key && "Keyboard: #{Dyalog.getPrefixKey()}#{key}\n\n"
-            h = Dyalog.lbarTips[x] or [x, '']; $tipDesc.text h[0]; $tipText.text keyText + h[1]
+            ttid = null; key = D.reverseKeyMap[x] || ''; keyText = key && "Keyboard: #{D.getPrefixKey()}#{key}\n\n"
+            h = D.lbarTips[x] or [x, '']; $tipDesc.text h[0]; $tipText.text keyText + h[1]
             $tipTriangle.css(left: 3 + p.left + ($t.width() - $tipTriangle.width()) / 2, top: p.top + $t.height() + 2).show()
             x0 = p.left - 21; x1 = x0 + $tip.width(); y0 = p.top + $t.height()
             if x1 > $(document).width() then $tip.css(left: '', right: 0, top: y0).show()
@@ -161,28 +161,28 @@ jQuery ($) ->
     # menu
     $('<div class="menu"></div>').prependTo('body').dyalogmenu [
       (
-        if Dyalog.nwjs
+        if D.nwjs
           {'': '_File', items: [
-            {'': '_Quit', key: 'Ctrl+Q', action: Dyalog.quit}
+            {'': '_Quit', key: 'Ctrl+Q', action: D.quit}
           ]}
       )
       {'': '_Edit', items: [
-        {'': '_Keyboard Preferences', action: Dyalog.showPrefs}
+        {'': '_Keyboard Preferences', action: D.showPrefs}
       ]}
       {'': '_View', items:
         [{'': 'Show Language Bar', checked: 1, action: (x) -> layout.toggle 'north'; return}]
           .concat(
-            if Dyalog.nwjs then [
+            if D.nwjs then [
               '-'
-              {'': 'Zoom _In',    key: 'Ctrl+=', action: Dyalog.zoomIn}
-              {'': 'Zoom _Out',   key: 'Ctrl+-', action: Dyalog.zoomOut}
-              {'': '_Reset Zoom', key: 'Ctrl+0', action: Dyalog.resetZoom}
+              {'': 'Zoom _In',    key: 'Ctrl+=', action: D.zoomIn}
+              {'': 'Zoom _Out',   key: 'Ctrl+-', action: D.zoomOut}
+              {'': '_Reset Zoom', key: 'Ctrl+0', action: D.resetZoom}
             ] else []
           )
       }
       {'': '_Help', items: [
-        {'': '_About', key: 'Shift+F1', action: Dyalog.about}
+        {'': '_About', key: 'Shift+F1', action: D.about}
       ]}
     ]
-    $(document).on 'keydown', '*', 'ctrl+shift+=', -> Dyalog.zoomIn(); false
+    $(document).on 'keydown', '*', 'ctrl+shift+=', -> D.zoomIn(); false
     return

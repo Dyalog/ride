@@ -5,10 +5,10 @@ do ->
 
   DEFAULT_PREFIX_KEY = '`'
   prefixKeyListeners = []
-  Dyalog.onPrefixKeyChange = (f) -> prefixKeyListeners.push f
-  Dyalog.getPrefixKey = -> localStorage.prefixKey || DEFAULT_PREFIX_KEY
-  Dyalog.setPrefixKey = (x = DEFAULT_PREFIX_KEY) ->
-    old = Dyalog.getPrefixKey()
+  D.onPrefixKeyChange = (f) -> prefixKeyListeners.push f
+  D.getPrefixKey = -> localStorage.prefixKey || DEFAULT_PREFIX_KEY
+  D.setPrefixKey = (x = DEFAULT_PREFIX_KEY) ->
+    old = D.getPrefixKey()
     if x != old
       if x != DEFAULT_PREFIX_KEY then localStorage.prefixKey = x else delete localStorage.prefixKey
       for f in prefixKeyListeners then f x, old
@@ -206,7 +206,7 @@ do ->
   ctid = null # backquote completion timeout id
   bqc = [] # backquote completions
   bqbqc = [] # double backquote completions
-  Dyalog.reverseKeyMap = {}
+  D.reverseKeyMap = {}
 
   CodeMirror.keyMap.dyalog = inherit
     fallthrough: 'default'
@@ -214,17 +214,17 @@ do ->
       c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
       u =
         if m = /^ *(\)[a-z]+).*$/.exec s
-          Dyalog.helpURLs[m[1]] || Dyalog.helpURLs.WELCOME
+          D.helpURLs[m[1]] || D.helpURLs.WELCOME
         else if m = /^ *(\][a-z]+).*$/.exec s
-          Dyalog.helpURLs[m[1]] || Dyalog.helpURLs.UCMDS
+          D.helpURLs[m[1]] || D.helpURLs.UCMDS
         else
           x = s[s[...c.ch].replace(/.[áa-z]*$/i, '').length..]
             .replace(/^([⎕:][áa-z]*|.).*$/i, '$1')
             .replace /^:end/, ':'
-          Dyalog.helpURLs[x] ||
-            if x[0] == '⎕' then Dyalog.helpURLs.SYSFNS
-            else if x[0] == ':' then Dyalog.helpURLs.CTRLSTRUCTS
-            else Dyalog.helpURLs.LANGELEMENTS
+          D.helpURLs[x] ||
+            if x[0] == '⎕' then D.helpURLs.SYSFNS
+            else if x[0] == ':' then D.helpURLs.CTRLSTRUCTS
+            else D.helpURLs.LANGELEMENTS
       w = screen.width; h = screen.height
       popup = open u, 'help',
         "width=#{w / 2},height=#{h / 2},left=#{w / 4},top=#{h / 4}," +
@@ -232,11 +232,11 @@ do ->
       popup.focus?()
       return
 
-  CodeMirror.keyMap.dyalog["'#{Dyalog.getPrefixKey()}'"] = (cm) ->
+  CodeMirror.keyMap.dyalog["'#{D.getPrefixKey()}'"] = (cm) ->
     cm.setOption 'autoCloseBrackets', false
     cm.setOption 'keyMap', 'dyalogBackquote'
     c = cm.getCursor()
-    cm.replaceSelection Dyalog.getPrefixKey(), 'end'
+    cm.replaceSelection D.getPrefixKey(), 'end'
     ctid = setTimeout(
       -> cm.showHint
         completeOnSingleClick: true
@@ -250,28 +250,28 @@ do ->
           data
       500
     )
-  Dyalog.onPrefixKeyChange (x, old) -> x = "'#{x}'"; old = "'#{old}'"; m = CodeMirror.keyMap.dyalog; m[x] = m[old]; delete m[old]
+  D.onPrefixKeyChange (x, old) -> x = "'#{x}'"; old = "'#{old}'"; m = CodeMirror.keyMap.dyalog; m[x] = m[old]; delete m[old]
 
   CodeMirror.keyMap.dyalogBackquote = nofallthrough: true, disableInput: true
   ds = {}; for line in squiggleDescriptions.split '\n' then ds[line[0]] = line[2..]
   if ks.length != vs.length then console.error? 'bad configuration of backquote keymap'
   for k, i in ks then do (k = k) ->
     v = vs[i]
-    Dyalog.reverseKeyMap[v] ?= k
-    bqc.push text: v, render: (e) -> $(e).text "#{v} #{Dyalog.getPrefixKey()}#{k} #{ds[v] || ''}  "
+    D.reverseKeyMap[v] ?= k
+    bqc.push text: v, render: (e) -> $(e).text "#{v} #{D.getPrefixKey()}#{k} #{ds[v] || ''}  "
     CodeMirror.keyMap.dyalogBackquote["'#{k}'"] = (cm) ->
       clearTimeout ctid
       cm.state.completionActive?.close?()
       cm.setOption 'keyMap', 'dyalog'
       cm.setOption 'autoCloseBrackets', true
       c = cm.getCursor()
-      if k == Dyalog.getPrefixKey() then bqbqHint cm else cm.replaceRange v, {line: c.line, ch: c.ch - 1}, c
+      if k == D.getPrefixKey() then bqbqHint cm else cm.replaceRange v, {line: c.line, ch: c.ch - 1}, c
       return
 
-  bqc[0].render = (e) -> e.innerHTML = "  #{Dyalog.getPrefixKey()}#{Dyalog.getPrefixKey()} <i>completion by name</i>"
+  bqc[0].render = (e) -> e.innerHTML = "  #{D.getPrefixKey()}#{D.getPrefixKey()} <i>completion by name</i>"
   bqc[0].hint = bqbqHint = (cm) ->
     c = cm.getCursor()
-    cm.replaceSelection Dyalog.getPrefixKey(), 'end'
+    cm.replaceSelection D.getPrefixKey(), 'end'
     cm.showHint
       completeOnSingleClick: true
       extraKeys:
@@ -286,7 +286,7 @@ do ->
   for line in squiggleNames.split '\n' then do ->
     [squiggle, names...] = line.split ' '
     for name in names then bqbqc.push name: name, text: squiggle, render: do (name = name) -> (e) ->
-      key = Dyalog.reverseKeyMap[squiggle]
-      $(e).text "#{squiggle} #{if key then Dyalog.getPrefixKey() + key else '  '} #{Dyalog.getPrefixKey()}#{Dyalog.getPrefixKey()}#{name}"
+      key = D.reverseKeyMap[squiggle]
+      $(e).text "#{squiggle} #{if key then D.getPrefixKey() + key else '  '} #{D.getPrefixKey()}#{D.getPrefixKey()}#{name}"
 
   ks = vs = squiggleDescriptions = squiggleNames = null

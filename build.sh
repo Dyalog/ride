@@ -58,8 +58,8 @@ for f in $js_files; do
 done
 version_file=build/tmp/version.js
 >$version_file cat <<.
-  var Dyalog=Dyalog||{};
-  Dyalog.versionInfo={
+  var D=D||{};
+  D.versionInfo={
     version:'0.1.$(git rev-list --count HEAD)',
     date:'$(git show -s HEAD --pretty=format:%ci)',
     rev:'$(git rev-parse HEAD)'

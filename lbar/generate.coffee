@@ -19,9 +19,9 @@ for line, i in fs.readFileSync('lbar.xml', 'utf8').split '\n'
       lbarTips.push "#{JSON.stringify chr}: [#{JSON.stringify desc}, #{JSON.stringify text}]"
   else if line then throw Error "error at line #{i + 1}: #{JSON.stringify line}"
 fs.writeFileSync 'lbar.js', """
-  var Dyalog = Dyalog || {};
-  Dyalog.lbarHTML = #{JSON.stringify lbarHTML};
-  Dyalog.lbarTips = {
+  var D=D||{};
+  D.lbarHTML = #{JSON.stringify lbarHTML};
+  D.lbarTips = {
     #{lbarTips.join ',\n  '}
   };\n
 """

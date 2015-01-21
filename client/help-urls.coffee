@@ -300,7 +300,7 @@ do ->
     ⍬            Language/Symbols/Zilde Symbol
   '''
 
-  h = Dyalog.helpURLs = {}
+  h = D.helpURLs = {}
   for line in s.split('\n') when line
     [_, k, v] = /^(\S+)\s+(.*)$/.exec line
     h[k] = "http://help.dyalog.com/14.0/Content/#{v}.htm"

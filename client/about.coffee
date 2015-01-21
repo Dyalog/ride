@@ -1,5 +1,5 @@
-Dyalog.about = ->
-  v = Dyalog.versionInfo; i = Dyalog.remoteIdentification || {}; u = 'unknown'
+D.about = ->
+  v = D.versionInfo; i = D.remoteIdentification || {}; u = 'unknown'
   info = """
     IDE version: #{v.version || u}
     IDE date: #{v.date || u}
@@ -11,7 +11,7 @@ Dyalog.about = ->
     Interpreter edition: #{i.arch || u}
   """
   buttons = []
-  if Dyalog.nwjs then buttons.push text: 'Copy', click: ->
+  if D.nwjs then buttons.push text: 'Copy', click: ->
     require('nw.gui').Clipboard.get().set $('textarea', @).val(), 'text'; return
   buttons.push text: 'Close', click: -> $(@).dialog 'close'
   $("""

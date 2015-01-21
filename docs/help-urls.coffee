@@ -1,4 +1,4 @@
-Dyalog.helpURLs =
+D.helpURLs =
 
   ')classes':   'lang/syscmds/classes'
   ')clear':     'lang/syscmds/clear'

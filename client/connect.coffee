@@ -19,10 +19,10 @@ $ ->
 
   ipAddresses = [] # of the proxy.  Used in the "Waiting for connections" dialogue.
 
-  Dyalog.connectPage = ->
-    if (u = Dyalog.urlParams).host?
-      Dyalog.socket.emit '*connect', host: u.host, port: +(u.port or DEFAULT_PORT)
-      Dyalog.idePage()
+  D.connectPage = ->
+    if (u = D.urlParams).host?
+      D.socket.emit '*connect', host: u.host, port: +(u.port or DEFAULT_PORT)
+      D.idePage()
       return
     $('body').html """
       <fieldset>
@@ -93,7 +93,7 @@ $ ->
       x.port = +x.port
       if x.port == DEFAULT_PORT then delete x.port
       if !x.name then delete x.name
-      Dyalog.socket.emit '*connect', host: x.host, port: x.port or DEFAULT_PORT
+      D.socket.emit '*connect', host: x.host, port: x.port or DEFAULT_PORT
       false
     $new.click ->
       $list.find('option').attr 'selected', false
@@ -127,9 +127,9 @@ $ ->
         $.alert 'Invalid port', 'Error', -> $spawnPort.focus(); return
       else
         $spawnStatus.text 'Spawning...'; $spawn.button 'disable'; $spawnPort.attr 'disabled', true
-        Dyalog.socket.emit '*spawn', {port}
+        D.socket.emit '*spawn', {port}
         if $spawnConn.is ':checked'
-          setTimeout (-> Dyalog.socket.emit '*connect', {host: '127.0.0.1', port}), 1000
+          setTimeout (-> D.socket.emit '*connect', {host: '127.0.0.1', port}), 1000
       false
     $spawnPort.on 'keydown', null, 'return', -> $spawn.click(); false
     $listen.click ->
@@ -137,7 +137,7 @@ $ ->
       if !(0 < port < 0x10000)
         $.alert 'Invalid port', 'Error', -> $listenPort.focus(); return false
       else
-        Dyalog.socket.emit '*listen', {port}
+        D.socket.emit '*listen', {port}
         $listenDialog = $ """
           <div class='listen'>
             Please start the remote interpreter with<br>
@@ -152,9 +152,8 @@ $ ->
         """
           .dialog
             modal: 1, width: 400, title: 'Waiting for connection...'
-            close: -> Dyalog.socket.emit '*listenCancel'; return
+            close: -> D.socket.emit '*listenCancel'; return
             buttons: Cancel: -> $(@).dialog 'close'; false
-        Dyalog.socket.on
       false
     $listenPort.on 'keydown', null, 'return', -> $listen.click(); false
     $list.sortable cursor: 'move', revert: true, tolerance: 'pointer', containment: 'parent', axis: 'y', update: storeFavs
@@ -163,17 +162,17 @@ $ ->
     $list.html favs.map((x) -> "<option '#{if x.sel then 'selected' else ''}>#{fmtFav x}</option>").join ''
     if !$list.find(':selected').length then $list.focus().find('option').eq(0).attr 'selected', true; $list.change()
 
-    Dyalog.socket
+    D.socket
       .on '*ipAddresses', (x) -> ipAddresses = x; return
       .on '*confirmHijack', ({addr}) ->
         $("<p>#{addr || 'An IDE '} is already using this proxy.  Would you like to take it over?</p>").dialog
           title: 'Confirmation', modal: 1, buttons: [
-            {text: 'Yes', click: -> Dyalog.socket.emit '*hijack'; $(@).dialog 'close'; false}
+            {text: 'Yes', click: -> D.socket.emit '*hijack'; $(@).dialog 'close'; false}
             {text: 'No', click: -> $(@).dialog 'close'; $('body').html '<p>Disconnected</p>'; false}
           ]
         return
       .on '*hijacked', ({addr}) -> $.alert "#{addr} has taken over usage of this proxy.", 'Disconnected'; return
-      .on '*connected', -> $listenDialog?.dialog 'close'; Dyalog.idePage(); return
+      .on '*connected', -> $listenDialog?.dialog 'close'; D.idePage(); return
       .on '*disconnected', -> $.alert 'Interpreter disconnected'; return
       .on '*connectError', ({err}) -> $.alert err, 'Error'; return
       .on '*spawned', ({pid}) ->
