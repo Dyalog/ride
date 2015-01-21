@@ -16,6 +16,7 @@ Needed by v14.1:
     NN: cannot reproduce, possibly fixed
   re-take screenshot
   Connect page: prompt user to save before selection changes
+  add legalese to About dialogue
 
 Later:
   rewrite syntax highlighting to support Dyalog syntax
