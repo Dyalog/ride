@@ -160,7 +160,7 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
         return
       .on '*listenCancel', -> server?.close(); return
     if child then toBrowser '*spawned', pid: child.pid
-    toBrowser '*ipAddresses', ipAddresses
+    toBrowser '*proxyInfo', {ipAddresses, platform: process.platform}
     return
 
   (newSocket) -> # this function is the result from calling Proxy()

@@ -17,6 +17,7 @@ $ ->
     x.port = +(x.port or DEFAULT_PORT)
     x
 
+  proxyInfo = {} # the proxy sends information about itself when the front-end connects to it
   ipAddresses = [] # of the proxy.  Used in the "Waiting for connections" dialogue.
 
   D.connectPage = ->
@@ -51,9 +52,9 @@ $ ->
           </tr>
         </table>
       </fieldset>
-      <fieldset>
+      <fieldset id="spawnSection" style="display:none">
         <legend>Spawn an interpreter</legend>
-        <p><i>Linux-only.  Requires a <tt>dyalog</tt> executable on your <tt>$PATH</tt>.</i></p>
+        <p><i>Requires a <tt>dyalog</tt> executable on your <tt>$PATH</tt>.</i></p>
         <p>
           <label>Port <input id="spawn-port" class="text-field" value="#{DEFAULT_PORT}" size="5"></label>
           <a href="#" id="spawn" accessKey="w">Spa<u>w</u>n</a><br>
@@ -143,7 +144,7 @@ $ ->
             Please start the remote interpreter with<br>
             #{
               (
-                for host in (if ipAddresses?.length then ipAddresses else ['host'])
+                for host in (if proxyInfo.ipAddresses?.length then proxyInfo.ipAddresses else ['host'])
                   "<div class='tt'>RIDE_CONNECT=#{host}:#{port}</div>"
               ).join 'or'
             }
@@ -163,7 +164,9 @@ $ ->
     if !$list.find(':selected').length then $list.focus().find('option').eq(0).attr 'selected', true; $list.change()
 
     D.socket
-      .on '*ipAddresses', (x) -> ipAddresses = x; return
+      .on '*proxyInfo', (x) ->
+        proxyInfo = x; $('#spawnSection').toggle /^(linux|x11|android)/i.test x.platform
+        return
       .on '*confirmHijack', ({addr}) ->
         $("<p>#{addr || 'An IDE '} is already using this proxy.  Would you like to take it over?</p>").dialog
           title: 'Confirmation', modal: 1, buttons: [
