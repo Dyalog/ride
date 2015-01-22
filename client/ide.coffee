@@ -33,6 +33,8 @@ jQuery ($) ->
            .tabs 'refresh'
       return
 
+    execQueue = [] # pending lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
+
     ($uls = $tabs.find 'ul').each ->
       $(@).sortable
         cursor: 'move', tolerance: 'pointer', connectWith: $uls, containment: '.ide'
@@ -75,7 +77,6 @@ jQuery ($) ->
           $.alert 'Popups are blocked.'
       return
 
-    execQueue = [] # pending lines to execute: AtInputPrompt consumes an item from the queue, HadError empties it
     socket
       .on '*identify', (i) -> D.remoteIdentification = i; return
       .on 'UpdateDisplayName', ({displayName}) -> $('title').text displayName
