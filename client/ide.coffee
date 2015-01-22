@@ -7,9 +7,6 @@ jQuery ($) ->
     $('body').html """
       <div class="ide">
         <div class="lbar ui-layout-north" style="display:none">
-          #{
-            #<a class="lbar-close" title="Hide Language Bar" href="#"></a>
-          }
           <a class="lbar-prefs" title="Preferences" href="#"></a>
           #{D.lbarHTML}
         </div>
@@ -125,7 +122,6 @@ jQuery ($) ->
         session.scrollCursorIntoView()
 
     # language bar
-    $('.lbar-close').click -> layout.close 'north'; false
     $('.lbar-prefs').click D.showPrefs
     $tip = $ '.lbar-tip'; $tipDesc = $ '.lbar-tip-desc'; $tipText = $ '.lbar-tip-text'; $tipTriangle = $ '.lbar-tip-triangle'
     ttid = null # tooltip timeout id
