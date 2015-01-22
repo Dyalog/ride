@@ -43,6 +43,7 @@ do ->
     D.socket = socket
     $ -> D.connectPage(); return
 
+  # CSS class to indicate theme
   $ ->
     # https://nodejs.org/api/process.html#process_process_platform
     # https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
@@ -54,6 +55,26 @@ do ->
         else if /^(linux|x11|android)/i.test p then 'freedom'
         else 'redmond'
     }"
+    return
+
+  # external editors (available only under nwjs)
+  if D.nwjs then do ->
+    crypto = require 'crypto'; fs = require 'fs'; {spawn} = require 'child_process'
+    tmpDir = process.env.TMPDIR || process.env.TMP || process.env.TEMP || '/tmp'
+    if editorExe = process.env.DYALOG_IDE_EDITOR || process.env.EDITOR
+      D.openInExternalEditor = (text, line, callback) ->
+        tmpFile = "#{tmpDir}/#{crypto.randomBytes(8).toString 'hex'}.dyalog"
+        callback0 = callback
+        callback = (args...) -> fs.unlink tmpFile, -> callback0 args... # make sure to delete file before calling callback
+        fs.writeFile tmpFile, text, {mode: 0o600}, (err) ->
+          if err then callback err; return
+          child = spawn editorExe, [tmpFile], cwd: tmpDir, env: process.env
+          child.on 'error', callback
+          child.on 'exit', (c, s) ->
+            if c || s then callback('Editor exited with ' + if c then 'code ' + c else 'signal ' + s); return
+            fs.readFile tmpFile, 'utf8', callback; return
+          return
+        return
     return
 
   return

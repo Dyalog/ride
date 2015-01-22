@@ -117,6 +117,7 @@ jQuery ($) ->
           cutback:        -> socket.emit 'Cutback',        win: w
           autocomplete: (s, i) -> socket.emit 'autocomplete', s, i, w
           pop: -> popWindow w
+          openInExternalEditor: D.openInExternalEditor
         wins[w].open ee
         $('.ui-layout-' + dir).tabs('refresh').tabs(active: -1)
           .data('ui-tabs').panels.off 'keydown' # prevent jQueryUI tabs from hijacking our keystrokes, <C-Up> in particular
