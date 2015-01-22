@@ -43,4 +43,14 @@ do ->
     D.socket = socket
     $ -> D.connectPage(); return
 
+  $ ->
+    # https://nodejs.org/api/process.html#process_process_platform
+    # https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
+    p = (process ? navigator).platform
+    $('body').addClass 'theme-' +
+      if /^(darwin|mac|ipad|iphone|ipod)/i.test p then 'cupertino'
+      else if /^(linux|x11|android)/i.test p then 'freedom'
+      else 'redmond'
+    return
+
   return
