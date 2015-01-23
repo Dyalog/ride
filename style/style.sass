@@ -83,7 +83,7 @@ input, textarea
       &.checked { background: transparent 5px center no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMElEQVQI12NgwA3+M+KSYGBgYGCCMdAlYJLIAsgKGRmx6GRgYGBghBPoOnA6AhkAALZJCQIBbmPFAAAAAElFTkSuQmCC); }
       &:focus
         +sel
-        .shortcut { color: #fff }
+        .shortcut { color: $selfg }
         &.checked { background: $selbg 5px center no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMUlEQVQI13WOQQoAMAjDEv//5+4kiMyeSkOgcCRJvABAddkAoOYwgarbbADgzzhPzDwC8SPwjB0PzgAAAABJRU5ErkJggg==); }
   hr { margin: 3px 0 5px 0; }
 
@@ -182,17 +182,11 @@ input, textarea
   background: no-repeat center center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAASCAIAAAD+ApjoAAAAGElEQVQI12NoaGj4//8/EwMDAwMDA70pACyPBKBkf6chAAAAAElFTkSuQmCC)
 .search { float: left; height: 18px; width: 200px; }
 
+// When a tab is dragged away from its siblings, releasing the mouse would cause a floating window to open
 .floatable a { background-color: #ace !important; }
 
 // a z-index hack to make the tab (relatively positioned) go on top of resizers and the south pane (absolutely positioned)
 .dragging .ui-layout-resizer, .dragging .ui-layout-south { z-index: -1 !important; }
-a.button
-  +outset
-  +bg
-  border-style: solid; border-width: 1px 2px 2px 1px; color: black; text-decoration: none; padding: 2px 20px
-
-a.button:active
-  +inset
 
 // various dialogues
 .ui-widget-overlay { opacity: .3; filter: Alpha(Opacity=30); background: #aaa; }

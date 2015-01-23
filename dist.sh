@@ -20,12 +20,21 @@ rm $b/favicon.ico
 desktop_app() {
   echo "building desktop app for $1"
   node node_modules/node-webkit-builder/bin/nwbuild --quiet -p $1 -v $node_version -o build $b
+  $coffee -s <<.
+    sys = require 'sys'; NWB = require 'node-webkit-builder'
+    nwb = new NWB
+      files: '$b/**'
+      version: '$node_version'
+      platforms: '$@'.split ' '
+      macIcns: 'style/DyalogUnicode.icns'
+    nwb.build().catch (e) -> console.error e; process.exit 1
+.
 }
 for platform in ${@:-win osx linux}; do desktop_app $platform; done
 
 # https://github.com/rogerwang/node-webkit/wiki/The-solution-of-lacking-libudev.so.0
 for bits in 32 64; do
-  d=node_modules/node-webkit-builder/cache/$node_version/linux$bits
+  d=cache/$node_version/linux$bits
   if [ -d $d -a ! -e $d/fixed-libudev ]; then
     echo "fixing node-webkit's libudev dependency for ${bits}-bit Linux"
     sed -i 's/udev\.so\.0/udev.so.1/g' $d/nw
