@@ -26,11 +26,16 @@ desktop_app() {
       files: '$b/**'
       version: '$node_version'
       platforms: '$@'.split ' '
-      macIcns: 'style/DyalogUnicode.icns'
+      #macIcns: 'style/DyalogUnicode.icns'
     nwb.build().catch (e) -> console.error e; process.exit 1
 .
 }
 for platform in ${@:-win osx linux}; do desktop_app $platform; done
+
+# workaround for https://github.com/mllrsohn/grunt-node-webkit-builder/issues/125
+for bits in 32 64; do
+  cp -uv style/DyalogUnicode.icns build/dyalogjs/osx64/dyalogjs.app/Contents/Resources/nw.icns
+done
 
 # https://github.com/rogerwang/node-webkit/wiki/The-solution-of-lacking-libudev.so.0
 for bits in 32 64; do
