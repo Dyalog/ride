@@ -51,7 +51,7 @@ D.Editor = (e, opts = {}) ->
     Enter: -> (if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'); return
     'Ctrl-Enter': -> (if opts.debugger then opts.over?()); return
     F6: -> opts.openInExternalEditor? cm.getValue(), cm.getCursor().line, (err, text) ->
-      if err then $.alert '' + err, 'Error' else cm.setValue text
+      if err then $.alert '' + err, 'Error' else c = cm.getCursor().line; cm.setValue text; cm.setCursor c
       return
 
   k["'\uf800'"] = k['Shift-Esc'] = -> # QT: Quit (and lose changes)
