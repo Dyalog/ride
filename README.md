@@ -16,14 +16,14 @@ As a desktop application
     │    └─────┘│     :4502└───────────┘
     └───────────┘
 
-[node-webkit](https://github.com/rogerwang/node-webkit) is an app runtime based on Chromium and NodeJS.
+[NW.js](https://github.com/nwjs/nw.js) is an app runtime based on Chromium and NodeJS.
 It is capable of containing both the proxy and the browser component in the same process, so communication between them can be short-circuited.
 To package apps for the various platforms, run
     ./dist.sh
 and find them under `./build/dyalogjs/`.
 
-The desktop app is envisioned to be able to:
+The desktop app can
 
 * connect to an interpreter at a specified host:port
-* listen for a connection from an interpreter at a specified port (not yet implemented)
-* spawn an interpreter process and connect to it (not yet implemented)
+* spawn an interpreter process and connect to it
+* listen for a connection from an interpreter at a specified port
