@@ -145,7 +145,8 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
         setUpInterpreterConnection()
         return
       .on '*spawn', ({port}) ->
-        child = require('child_process').spawn 'dyalog', ['+s', '-q'], env: extend process.env, RIDE_LISTEN: '0.0.0.0:' + port
+        exe = process.env.DYALOG_IDE_INTERPRETER_EXE || if process.platform == 'darwin' then '../dyalogUnicode/mapl' else 'dyalog'
+        child = require('child_process').spawn exe, ['+s', '-q'], env: extend process.env, RIDE_LISTEN: '0.0.0.0:' + port
         toBrowser '*spawned', pid: child.pid
         child.on 'error', (err) -> toBrowser '*spawnedError', {message: '' + err, code: err.code}; child = null; return
         child.on 'exit', (code, signal) -> toBrowser '*spawnedExited', {code, signal}; child = null; return
