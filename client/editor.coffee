@@ -1,5 +1,5 @@
 D.Editor = (e, opts = {}) ->
-  b = (name, description) -> "<a href='#' class='b-#{name} toolbar-button' title='#{description}'></a>"
+  b = (name, description) -> "<a href='#' class='tb-#{name} tb-button' title='#{description}'></a>"
   ($e = $ e).html """
     <div class="toolbar debugger-toolbar">
       #{[
@@ -17,8 +17,8 @@ D.Editor = (e, opts = {}) ->
         b 'line-numbers', 'Toggle line numbers'
         b 'over',         'Execute line'
         b 'into',         'Trace into expression'
-        '<span class="separator"></span>'
-        '<input class="search text-field">'
+        '<span class="tb-separator"></span>'
+        '<input class="tb-search text-field">'
         b 'next',         'Search for next match'
         b 'prev',         'Search for previous match'
         b 'case',         'Match case'
@@ -30,12 +30,12 @@ D.Editor = (e, opts = {}) ->
         b 'comment', 'Comment selected text'
         b 'uncomment', 'Uncomment selected text'
         b 'save', 'Save changes and return'
-        '<span class="separator"></span>'
-        '<input class="search text-field">'
+        '<span class="tb-separator"></span>'
+        '<input class="tb-search text-field">'
         b 'next', 'Search for next match'
         b 'prev', 'Search for previous match'
         b 'case', 'Match case'
-        '<span class="separator"></span>'
+        '<span class="tb-separator"></span>'
         b 'refac-m', 'Refactor text as method'
         b 'refac-f', 'Refactor text as field'
         b 'refac-p', 'Refactor text as property'
@@ -116,21 +116,21 @@ D.Editor = (e, opts = {}) ->
     return
 
   $tb = $ '.toolbar', $e
-    .on 'mousedown',        '.toolbar-button', (e) -> $(e.target).addClass    'armed'; e.preventDefault(); return
-    .on 'mouseup mouseout', '.toolbar-button', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return
-    .on 'click', '.b-over',       -> opts.over?()
-    .on 'click', '.b-into',       -> opts.into?()
-    .on 'click', '.b-back',       -> opts.back?()
-    .on 'click', '.b-skip',       -> opts.skip?()
-    .on 'click', '.b-cont-trace', -> opts.continueTrace?()
-    .on 'click', '.b-cont-exec',  -> opts.continueExec?()
-    .on 'click', '.b-restart',    -> opts.restartThreads?()
-    .on 'click', '.b-edit-name',  -> opts.edit? cm.getValue(), 0
-    .on 'click', '.b-interrupt',  -> opts.interrupt?()
-    .on 'click', '.b-cutback',    -> opts.cutback?()
-    .on 'click', '.b-line-numbers', -> cm.setOption 'lineNumbers', b = !cm.getOption 'lineNumbers'; $(@).toggleClass 'pressed', b; false
-    .on 'click', '.b-save', -> saveAndClose(); false
-    .on 'click', '.b-comment', ->
+    .on 'mousedown',        '.tb-button', (e) -> $(e.target).addClass    'armed'; e.preventDefault(); return
+    .on 'mouseup mouseout', '.tb-button', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return
+    .on 'click', '.tb-over',       -> opts.over?()
+    .on 'click', '.tb-into',       -> opts.into?()
+    .on 'click', '.tb-back',       -> opts.back?()
+    .on 'click', '.tb-skip',       -> opts.skip?()
+    .on 'click', '.tb-cont-trace', -> opts.continueTrace?()
+    .on 'click', '.tb-cont-exec',  -> opts.continueExec?()
+    .on 'click', '.tb-restart',    -> opts.restartThreads?()
+    .on 'click', '.tb-edit-name',  -> opts.edit? cm.getValue(), 0
+    .on 'click', '.tb-interrupt',  -> opts.interrupt?()
+    .on 'click', '.tb-cutback',    -> opts.cutback?()
+    .on 'click', '.tb-line-numbers', -> cm.setOption 'lineNumbers', b = !cm.getOption 'lineNumbers'; $(@).toggleClass 'pressed', b; false
+    .on 'click', '.tb-save', -> saveAndClose(); false
+    .on 'click', '.tb-comment', ->
       if cm.somethingSelected()
         a = cm.listSelections()
         cm.replaceSelections cm.getSelections().map (s) -> s.replace(/^/gm, '⍝').replace /\n⍝$/, '\n'
@@ -138,7 +138,7 @@ D.Editor = (e, opts = {}) ->
       else
         l = cm.getCursor().line; p = line: l, ch: 0; cm.replaceRange '⍝', p, p, 'D'; cm.setCursor line: l, ch: 1
       false
-    .on 'click', '.b-uncomment', ->
+    .on 'click', '.tb-uncomment', ->
       if cm.somethingSelected()
         a = cm.listSelections()
         cm.replaceSelections cm.getSelections().map (s) -> s.replace /^⍝/gm, ''
@@ -148,36 +148,36 @@ D.Editor = (e, opts = {}) ->
         cm.replaceRange s.replace(/^( *)⍝/, '$1'), {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
         cm.setCursor line: l, ch: 0
       false
-    .on 'click', '.b-hid, .b-case', -> $(@).toggleClass 'pressed'; false
-    .on 'click', '.b-next', -> search(); false
-    .on 'click', '.b-prev', -> search true; false
-    .on 'keydown', '.search', 'enter', -> search(); false
-    .on 'click', '.b-refac-m', ->
+    .on 'click', '.tb-hid, .tb-case', -> $(@).toggleClass 'pressed'; false
+    .on 'click', '.tb-next', -> search(); false
+    .on 'click', '.tb-prev', -> search true; false
+    .on 'keydown', '.tb-search', 'return', -> search(); false
+    .on 'click', '.tb-refac-m', ->
       if !/^\s*$/.test s = cm.getLine l = cm.getCursor().line
         cm.replaceRange "∇ #{s}\n\n∇", {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
         cm.setCursor line: l + 1, ch: 0
-    .on 'click', '.b-refac-f', ->
+    .on 'click', '.tb-refac-f', ->
       if !/^\s*$/.test s = cm.getLine l = cm.getCursor().line
         cm.replaceRange ":field public #{s}", {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
         cm.setCursor line: l + 1, ch: 0
-    .on 'click', '.b-refac-p', ->
+    .on 'click', '.tb-refac-p', ->
       if !/^\s*$/.test s = cm.getLine l = cm.getCursor().line
         cm.replaceRange ":Property #{s}\n\n∇r←get\nr←0\n∇\n\n∇set args\n∇\n:EndProperty", {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
         cm.setCursor line: l + 1, ch: 0
 
   search = (backwards) ->
-    if q = $('.search:visible', $tb).val()
+    if q = $('.tb-search:visible', $tb).val()
       v = cm.getValue()
-      if !$('.b-case', $tb).is '.pressed' then q = q.toLowerCase(); v = v.toLowerCase()
+      if !$('.tb-case', $tb).is '.pressed' then q = q.toLowerCase(); v = v.toLowerCase()
       i = cm.indexFromPos cm.getCursor()
       if backwards
         if (j = v[...i - 1].lastIndexOf q) < 0 then j = v.lastIndexOf q; wrapped = true
       else
         if (j = v[i..].indexOf q) >= 0 then j += i else j = v.indexOf q; wrapped = true
       if j < 0
-        $.alert 'No Match', 'Dyalog APL Error'
+        $.alert 'No Match', 'Dyalog APL Error' # [sic]
       else
-        if wrapped then $.alert 'Search wrapping', 'Dyalog APL Error'
+        if wrapped then $.alert 'Search wrapping', 'Dyalog APL Error' # [sic]
         cm.setSelections [anchor: cm.posFromIndex(j), head: cm.posFromIndex j + q.length]
     false
 

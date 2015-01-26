@@ -147,7 +147,7 @@ input, textarea
 // toolbar: appears on top of an editor or debugger, looks like  [┈] ⍝ /⍝ X [_______] etc
 .toolbar
   +bg; height: 24px; overflow: hidden; cursor: default; overflow: hidden; padding: 2px; border-bottom: solid #aaa 1px
-.toolbar-button
+.tb-button
   float: left; width: 24px; height: 24px; border: solid transparent 1px; text-align: center; font-weight: bold; background: no-repeat center center; text-indent: -9999px; cursor: default
   &:hover
     +outset
@@ -155,32 +155,32 @@ input, textarea
     +inset
   &.pressed
     +inset; background-color: #eee
-.b-line-numbers { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAALCAYAAACksgdhAAAALElEQVQoz2NkYGD4z4AAjAz4wX8MBpHgPxMDGWBgNP0nkh6WAcFIQoqAqwMADDENBizwvaoAAAAASUVORK5CYII=); }
-.b-comment      { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAMCAYAAACwXJejAAAAP0lEQVQY052QSQ4AMAgCoen/v0yv1kq3OSExRCRmFDSzEDzs2ahSGQYWKQKAhguel+Sa8tBsSaJrunvB/+GWAWT9CBiHRFQ/AAAAAElFTkSuQmCC); }
-.b-uncomment    { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAVElEQVQoz5WQSQ7AMAgDB5T/f9m5VBUKOFU5gTVmC+ZQyeMR9BYGHMVlJkSBVcTIoZGDAUj8EQ22hnMNboYBljWoX92+lhd4LNfXzm2C+4Y1/IEBNtT4GBWRRLxNAAAAAElFTkSuQmCC); }
-.b-save         { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAUElEQVQoz62RQRKAMAgDN/z/z/HgpbUC7ShHkg0MCDB3ib4MEM9GB4zpI6AKAKRMqPqqErOgbpVXX2QG22nwL5N2jsGn6x3/qQMWMDaBSb8AqVkXDhpzEQoAAAAASUVORK5CYII=); }
-.b-next         { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAANCAYAAAB2HjRBAAAAlElEQVQoz51SQQ6DMAxzKh7HkcMelAdx4MgTxm1I8B7vAiGkLYy5atVadZwmFZxBt5c7PgUxVBWlgAUeDX4BAZVc7J1J0ruz8iBW0351ba0G8WRic8U5leIT9jXhH7gA3JxJkqrKnbMZx8Ynn946Twj9lMxVjrY9S1uA5fNGtdpXwlhAE6/zhH4YL4XxjuTdu/3bhi/VzVM06LqX9QAAAABJRU5ErkJggg==); }
-.b-prev         { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAANCAYAAAB2HjRBAAAAiklEQVQoz52SQQ6AIAwEW+LDeZAHjz4Bb5jge9aDgK0WRZcDBJimu8CkBbHmt313gcl7bwFyn55hUJeGW2t3EABkcZTWta+GYwkzn5wzQQO6eEeB0evRDoztw9xina1nRU4EaujoUJRiQA4NTvnjP21npRg+Fajwti40TvORZqNAuSNfs5V1629X7aMBT1K30kDCAAAAAElFTkSuQmCC); }
-.b-hid          { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAM0lEQVQY02NkYGD4z0ACIFbxfyZSDGAixQkkKWbBYzUynxGf+/6T4kEGmnmQEZcg0TEIAD52Cgt7bIghAAAAAElFTkSuQmCC); }
-.b-case         { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAJCAYAAAA7KqwyAAAApUlEQVQoz5WRwW1AMQhDX/8kjOJRGIVRMopHySb0kKY/VXNokZBiiGzA8Mco0UCr3Pw37GqhltSofhA8AB7ViqVwVbFxiEwRNuWjb1crqsdXcaSaA+/xIxfOeN/3cUd1oN4qG+e4CzzfxT1+FvMgnDYzhGLhkIhpvD+51FwUN87jNmfuNZ7LCpzkY4ocBvjYOVLMUe8xt8eLeVlWdpf4Zdt7+OXWJzTYkq1y7T79AAAAAElFTkSuQmCC); }
-.b-refac-m      { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAASUlEQVQoz+1QsQ0AIAwC4/8v46itNak6uMgEAwQgOjRwIolilLCNurAp24QAFEbkRpCmgXbW9w8Y2Oj4UpeD2tOJF3bf4Ae8CWiPnwgkRmh7AAAAAABJRU5ErkJggg==); }
-.b-refac-f      { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOCAYAAADwikbvAAAATUlEQVQoz9WRwQoAIAhDXfj/v7yOFWnMOrWTwh6OCRviNMMEtWWjleQJQiWBbxdjjDmMyYI0RQhDLAznwlArTLFTe5XVX3Wd8unyp3AHAtoLJI9gezMAAAAASUVORK5CYII=); }
-.b-refac-p      { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOCAYAAADwikbvAAAATklEQVQoz9VROQ4AMAgS4/+/TMfeLY1TmTRIQIVVsKlhArzraE+IjYRKgpgc17KVAdARnEQ4LRPN+O1gGJP4lhagjFN71aNxZFJmnH8VF0YgDSFe4qzWAAAAAElFTkSuQmCC); }
-.b-over         { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAPCAYAAADtc08vAAAAV0lEQVQoz7WSQQ4AIAjDmP//Mx5VZAoSezImayYokkPtRZM8iwTMHACvDUroY1s+xDKoWpctqMZcAMbRvu8mmcNzg5DEhj0BlXhhJtgkLHwSeDvHl5/XAUiMHgW4AqanAAAAAElFTkSuQmCC); } 
-.b-into         { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAANCAYAAACgu+4kAAAAYElEQVQoz7WSQRKAIAwDN47//3I8cLHaFkbGnBgS2gUqhkwvVcbBz/KMbptgu8DZICq5ThkygB0z0rCrfUB6drB9D0SE6KnEzIpkh9uv8+B+rVcnLLxJ11kTktXs90m8AO06Lv5GZdYVAAAAAElFTkSuQmCC); }
-.b-back         { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAANCAYAAAB2HjRBAAAAR0lEQVQoz53RSQoAMAgDwJj//9mehFLURr2GcUGgLkdfzi0EAG5hhmX44hG88RgGXsHA9sHWYWwbUJlQ5VRXzHJObhRz7X0H0E4QEZoksM0AAAAASUVORK5CYII=); }
-.b-skip         { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAANCAYAAAB2HjRBAAAATElEQVQoz6WSSQ4AIAjE6vz/z3oyMUZWuZYGmAAw8cvkiho8rswEiyu74ourcuPNVQ3p5OqkvLknj0Ae6orW2inxJafFWy6J/LwmwAL/zhARK92qCgAAAABJRU5ErkJggg==); }
-.b-cont-trace   { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAPCAYAAADZCo4zAAAATUlEQVQY04WRwQ4AIAhCkf//Z7pUKxPzoo43cQoAQhOcWT/AQgQASRbaExx0WpQQ88gMsVrshEogInbJTnwssngBlbgapd6eOtw/2m8OVosZE8ulkO0AAAAASUVORK5CYII=); }
-.b-cont-exec    { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAPCAYAAADZCo4zAAAAQUlEQVQY042QMQ4AMAgCwf//mS5NB1uhLMbkIiAACEa1pxIwQtV2JeCCarBWAg7E35qT6AC6C3QWdBnoQhLpKS8tmM4JF2UN3wwAAAAASUVORK5CYII=); }
-.b-restart      { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAPCAYAAADZCo4zAAAASklEQVQY04WRSQ4AMAgCkf//2V7adBGsFzVMRCMAJJrgzPkDLMRHSj/BQLxwAbGYPhDl6gekgdgVO7FaRK3YiatJOUOcGe4f7TcHBQMPFVo2WnYAAAAASUVORK5CYII=); }
-.b-edit-name    { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAOCAIAAAB7HQGFAAAAUUlEQVQoz62QwQoAIAhDm///YXUrqO9Zh0gMjDy0k7LhU1P6K5CM5OQxBgBwtUlajs90Q/5+ylJXIiGHeKOLNUYrx07mUuHW6nvNWtMo+uffmsCkTK6tlFL9AAAAAElFTkSuQmCC); }
-.b-quit         { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAUElEQVQoz62RQRKAMAgDN/z/z/HgpbUC7ShHkg0MCDB3ib4MEM9GB4zpI6AKAKRMqPqqErOgbpVXX2QG22nwL5N2jsGn6x3/qQMWMDaBSb8AqVkXDhpzEQoAAAAASUVORK5CYII=); }
-.b-interrupt    { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAANCAYAAACUwi84AAAAHElEQVQY02NkYGD4z4AAjFAaLsbEQACMKqCbAgBUAgIZzGAL5AAAAABJRU5ErkJggg==); }
-.b-cutback      { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAPCAYAAADUFP50AAAAh0lEQVQoz5VSWw4EMQgCMwf35uxHxw3r1nmQNE1bi4gCM3SuLWIIEABI2hEIgKIHr/i/ROwEcV72z3dgGOMrRJNzZRQy83txNHkEIHJx1D5mlOQO7lM2w2IR0x8f1XuURJIy21+Z8yPV5N/WWw2WIzPlb0UeV42v4r0NfZSm8zw6Fvh0egQAH95HSnaw0XqwAAAAAElFTkSuQmCC); }
-.separator
+.tb-line-numbers { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAALCAYAAACksgdhAAAALElEQVQoz2NkYGD4z4AAjAz4wX8MBpHgPxMDGWBgNP0nkh6WAcFIQoqAqwMADDENBizwvaoAAAAASUVORK5CYII=); }
+.tb-comment      { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAMCAYAAACwXJejAAAAP0lEQVQY052QSQ4AMAgCoen/v0yv1kq3OSExRCRmFDSzEDzs2ahSGQYWKQKAhguel+Sa8tBsSaJrunvB/+GWAWT9CBiHRFQ/AAAAAElFTkSuQmCC); }
+.tb-uncomment    { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAVElEQVQoz5WQSQ7AMAgDB5T/f9m5VBUKOFU5gTVmC+ZQyeMR9BYGHMVlJkSBVcTIoZGDAUj8EQ22hnMNboYBljWoX92+lhd4LNfXzm2C+4Y1/IEBNtT4GBWRRLxNAAAAAElFTkSuQmCC); }
+.tb-save         { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAUElEQVQoz62RQRKAMAgDN/z/z/HgpbUC7ShHkg0MCDB3ib4MEM9GB4zpI6AKAKRMqPqqErOgbpVXX2QG22nwL5N2jsGn6x3/qQMWMDaBSb8AqVkXDhpzEQoAAAAASUVORK5CYII=); }
+.tb-next         { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAANCAYAAAB2HjRBAAAAlElEQVQoz51SQQ6DMAxzKh7HkcMelAdx4MgTxm1I8B7vAiGkLYy5atVadZwmFZxBt5c7PgUxVBWlgAUeDX4BAZVc7J1J0ruz8iBW0351ba0G8WRic8U5leIT9jXhH7gA3JxJkqrKnbMZx8Ynn946Twj9lMxVjrY9S1uA5fNGtdpXwlhAE6/zhH4YL4XxjuTdu/3bhi/VzVM06LqX9QAAAABJRU5ErkJggg==); }
+.tb-prev         { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAANCAYAAAB2HjRBAAAAiklEQVQoz52SQQ6AIAwEW+LDeZAHjz4Bb5jge9aDgK0WRZcDBJimu8CkBbHmt313gcl7bwFyn55hUJeGW2t3EABkcZTWta+GYwkzn5wzQQO6eEeB0evRDoztw9xina1nRU4EaujoUJRiQA4NTvnjP21npRg+Fajwti40TvORZqNAuSNfs5V1629X7aMBT1K30kDCAAAAAElFTkSuQmCC); }
+.tb-hid          { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAM0lEQVQY02NkYGD4z0ACIFbxfyZSDGAixQkkKWbBYzUynxGf+/6T4kEGmnmQEZcg0TEIAD52Cgt7bIghAAAAAElFTkSuQmCC); }
+.tb-case         { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAJCAYAAAA7KqwyAAAApUlEQVQoz5WRwW1AMQhDX/8kjOJRGIVRMopHySb0kKY/VXNokZBiiGzA8Mco0UCr3Pw37GqhltSofhA8AB7ViqVwVbFxiEwRNuWjb1crqsdXcaSaA+/xIxfOeN/3cUd1oN4qG+e4CzzfxT1+FvMgnDYzhGLhkIhpvD+51FwUN87jNmfuNZ7LCpzkY4ocBvjYOVLMUe8xt8eLeVlWdpf4Zdt7+OXWJzTYkq1y7T79AAAAAElFTkSuQmCC); }
+.tb-refac-m      { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAOCAYAAAAmL5yKAAAASUlEQVQoz+1QsQ0AIAwC4/8v46itNak6uMgEAwQgOjRwIolilLCNurAp24QAFEbkRpCmgXbW9w8Y2Oj4UpeD2tOJF3bf4Ae8CWiPnwgkRmh7AAAAAABJRU5ErkJggg==); }
+.tb-refac-f      { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOCAYAAADwikbvAAAATUlEQVQoz9WRwQoAIAhDXfj/v7yOFWnMOrWTwh6OCRviNMMEtWWjleQJQiWBbxdjjDmMyYI0RQhDLAznwlArTLFTe5XVX3Wd8unyp3AHAtoLJI9gezMAAAAASUVORK5CYII=); }
+.tb-refac-p      { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAOCAYAAADwikbvAAAATklEQVQoz9VROQ4AMAgS4/+/TMfeLY1TmTRIQIVVsKlhArzraE+IjYRKgpgc17KVAdARnEQ4LRPN+O1gGJP4lhagjFN71aNxZFJmnH8VF0YgDSFe4qzWAAAAAElFTkSuQmCC); }
+.tb-over         { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAPCAYAAADtc08vAAAAV0lEQVQoz7WSQQ4AIAjDmP//Mx5VZAoSezImayYokkPtRZM8iwTMHACvDUroY1s+xDKoWpctqMZcAMbRvu8mmcNzg5DEhj0BlXhhJtgkLHwSeDvHl5/XAUiMHgW4AqanAAAAAElFTkSuQmCC); } 
+.tb-into         { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAANCAYAAACgu+4kAAAAYElEQVQoz7WSQRKAIAwDN47//3I8cLHaFkbGnBgS2gUqhkwvVcbBz/KMbptgu8DZICq5ThkygB0z0rCrfUB6drB9D0SE6KnEzIpkh9uv8+B+rVcnLLxJ11kTktXs90m8AO06Lv5GZdYVAAAAAElFTkSuQmCC); }
+.tb-back         { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAANCAYAAAB2HjRBAAAAR0lEQVQoz53RSQoAMAgDwJj//9mehFLURr2GcUGgLkdfzi0EAG5hhmX44hG88RgGXsHA9sHWYWwbUJlQ5VRXzHJObhRz7X0H0E4QEZoksM0AAAAASUVORK5CYII=); }
+.tb-skip         { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAANCAYAAAB2HjRBAAAATElEQVQoz6WSSQ4AIAjE6vz/z3oyMUZWuZYGmAAw8cvkiho8rswEiyu74ourcuPNVQ3p5OqkvLknj0Ae6orW2inxJafFWy6J/LwmwAL/zhARK92qCgAAAABJRU5ErkJggg==); }
+.tb-cont-trace   { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAPCAYAAADZCo4zAAAATUlEQVQY04WRwQ4AIAhCkf//Z7pUKxPzoo43cQoAQhOcWT/AQgQASRbaExx0WpQQ88gMsVrshEogInbJTnwssngBlbgapd6eOtw/2m8OVosZE8ulkO0AAAAASUVORK5CYII=); }
+.tb-cont-exec    { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAPCAYAAADZCo4zAAAAQUlEQVQY042QMQ4AMAgCwf//mS5NB1uhLMbkIiAACEa1pxIwQtV2JeCCarBWAg7E35qT6AC6C3QWdBnoQhLpKS8tmM4JF2UN3wwAAAAASUVORK5CYII=); }
+.tb-restart      { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAPCAYAAADZCo4zAAAASklEQVQY04WRSQ4AMAgCkf//2V7adBGsFzVMRCMAJJrgzPkDLMRHSj/BQLxwAbGYPhDl6gekgdgVO7FaRK3YiatJOUOcGe4f7TcHBQMPFVo2WnYAAAAASUVORK5CYII=); }
+.tb-edit-name    { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAOCAIAAAB7HQGFAAAAUUlEQVQoz62QwQoAIAhDm///YXUrqO9Zh0gMjDy0k7LhU1P6K5CM5OQxBgBwtUlajs90Q/5+ylJXIiGHeKOLNUYrx07mUuHW6nvNWtMo+uffmsCkTK6tlFL9AAAAAElFTkSuQmCC); }
+.tb-quit         { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAUElEQVQoz62RQRKAMAgDN/z/z/HgpbUC7ShHkg0MCDB3ib4MEM9GB4zpI6AKAKRMqPqqErOgbpVXX2QG22nwL5N2jsGn6x3/qQMWMDaBSb8AqVkXDhpzEQoAAAAASUVORK5CYII=); }
+.tb-interrupt    { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAANCAYAAACUwi84AAAAHElEQVQY02NkYGD4z4AAjFAaLsbEQACMKqCbAgBUAgIZzGAL5AAAAABJRU5ErkJggg==); }
+.tb-cutback      { background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAPCAYAAADUFP50AAAAh0lEQVQoz5VSWw4EMQgCMwf35uxHxw3r1nmQNE1bi4gCM3SuLWIIEABI2hEIgKIHr/i/ROwEcV72z3dgGOMrRJNzZRQy83txNHkEIHJx1D5mlOQO7lM2w2IR0x8f1XuURJIy21+Z8yPV5N/WWw2WIzPlb0UeV42v4r0NfZSm8zw6Fvh0egQAH95HSnaw0XqwAAAAAElFTkSuQmCC); }
+.tb-separator
   float: left; width: 10px; height: 24px
   background: no-repeat center center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAASCAIAAAD+ApjoAAAAGElEQVQI12NoaGj4//8/EwMDAwMDA70pACyPBKBkf6chAAAAAElFTkSuQmCC)
-.search { float: left; height: 18px; width: 200px; }
+.tb-search { float: left; height: 18px; width: 200px; }
 
 .win { width: 100%; height: auto; padding: 0 !important; } // content of editor and debugger windows
 
