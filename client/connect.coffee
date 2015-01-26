@@ -164,9 +164,7 @@ $ ->
     if !$list.find(':selected').length then $list.focus().find('option').eq(0).attr 'selected', true; $list.change()
 
     D.socket
-      .on '*proxyInfo', (x) ->
-        proxyInfo = x; $('#spawnSection').toggle /^(linux|x11|android)/i.test x.platform
-        return
+      .on '*proxyInfo', (x) -> proxyInfo = x; $('#spawnSection').toggle !/^win/i.test x.platform; return
       .on '*confirmHijack', ({addr}) ->
         $("<p>#{addr || 'An IDE '} is already using this proxy.  Would you like to take it over?</p>").dialog
           title: 'Confirmation', modal: 1, buttons: [
