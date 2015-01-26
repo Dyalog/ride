@@ -34,7 +34,8 @@ for platform in ${@:-win osx linux}; do desktop_app $platform; done
 
 # workaround for https://github.com/mllrsohn/grunt-node-webkit-builder/issues/125
 for bits in 32 64; do
-  cp -uv style/DyalogUnicode.icns build/dyalogjs/osx64/dyalogjs.app/Contents/Resources/nw.icns
+  d=build/dyalogjs/osx$bits/dyalogjs.app/Contents/Resources
+  if [ -d $d ]; then cp -uv style/DyalogUnicode.icns $d/nw.icns; fi
 done
 
 # https://github.com/rogerwang/node-webkit/wiki/The-solution-of-lacking-libudev.so.0
