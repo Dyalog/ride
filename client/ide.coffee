@@ -100,7 +100,7 @@ jQuery ($) ->
         layout.open dir = if ee.debugger then 'south' else 'east'
         w = ee.token
         $("<li id='wintab#{w}'><a href='#win#{w}'></a></li>").appendTo('.ui-layout-' + dir + ' ul').find('a').text ee.name
-        $tabContent = $("<div style='width:100%;height:auto;padding:0' id='win#{w}'></div>").appendTo('.ui-layout-' + dir)
+        $tabContent = $("<div class='win' id='win#{w}'></div>").appendTo('.ui-layout-' + dir)
         wins[w] = D.Editor $tabContent,
           debugger: ee.debugger
           save: (s, bs)   -> socket.emit 'SaveChanges',    win: w, text: s, attributes: stop: bs
