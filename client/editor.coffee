@@ -53,6 +53,23 @@ D.Editor = (e, opts = {}) ->
     F6: -> opts.openInExternalEditor? cm.getValue(), cm.getCursor().line, (err, text) ->
       if err then $.alert '' + err, 'Error' else c = cm.getCursor().line; cm.setValue text; cm.setCursor c
       return
+    F7: -> # align comments
+      if cm.somethingSelected()
+        spc = (n) -> Array(n + 1).join ' '
+        o = cm.listSelections() # original selections
+        sels = o.map (sel) ->
+          p = sel.anchor; q = sel.head
+          if p.line > q.line || p.line == q.line && p.ch > q.ch then h = p; p = q; q = h
+          l = cm.getRange({line: p.line, ch: 0}, q, '\n').split '\n' # lines
+          u = l.map (x) -> x.replace /'[^']*'?/g, (y) -> spc y.length # lines with scrubbed string literals
+          c = u.map (x) -> x.indexOf '⍝' # column index of the '⍝'
+          {p, q, l, u, c}
+        m = Math.max (sels.map (sel) -> Math.max sel.c...)...
+        sels.forEach (sel) ->
+          r = sel.l.map (x, i) -> ci = sel.c[i]; if ci < 0 then x else x[...ci] + spc(m - ci) + x[ci..]
+          r[0] = r[0][sel.p.ch..]; cm.replaceRange r.join('\n'), sel.p, sel.q, 'D'; return
+        cm.setSelections o
+      return
 
   k["'\uf800'"] = k['Shift-Esc'] = -> # QT: Quit (and lose changes)
     opts.close?()

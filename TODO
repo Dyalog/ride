@@ -28,7 +28,6 @@ Later:
   automatically pop up completion box after a timeout
   save line number display configuration (on/off)
   status window and notification about number of messages
-  a shortcut to align ⍝-s (suggested by Kai)
   experiment with storing all help content in browser memory
   searchable help files
   keybindings for toolbar buttons
@@ -79,3 +78,4 @@ Done:
   Focus should go back to the session when you close a window
   keyboard navigation in menu (Alt+..., F10, arrows, etc)
   remember window size and position
+  a shortcut to align ⍝-s (suggested by Kai)
