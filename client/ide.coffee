@@ -20,7 +20,7 @@ jQuery ($) ->
     # "wins" maps window ids, as they appear in the RIDE protocol, to window information objects that have the following properties:
     #   widget: an instance of D.Session or D.editor
     #   id: the key in "wins"
-    D.wins = wins = # mapping between window ids and widget instances (D.Session or D.Editor)
+    D.wins = wins =
       0: id: 0, widget: session = D.Session $('.ui-layout-center'),
         edit: (s, i) -> D.socket.emit 'Edit', win: 0, pos: i, text: s
         autocomplete: (s, i) -> D.socket.emit 'Autocomplete', line: s, pos: i, token: 0
@@ -102,7 +102,7 @@ jQuery ($) ->
         w = ee.token
         $("<li id='wintab#{w}'><a href='#win#{w}'></a></li>").appendTo('.ui-layout-' + dir + ' ul').find('a').text ee.name
         $tabContent = $("<div class='win' id='win#{w}'></div>").appendTo('.ui-layout-' + dir)
-        wins[w] = id: w, widget: D.Editor $tabContent,
+        wins[w] = id: w, name: ee.name, widget: D.Editor $tabContent,
           debugger: ee.debugger
           save: (s, bs)   -> D.socket.emit 'SaveChanges',    win: w, text: s, attributes: stop: bs
           close:          -> D.socket.emit 'CloseWindow',    win: w

@@ -3,7 +3,6 @@ Significant Usability Issues:
     NN: I'm not even getting autocompletion for WS names...
   Typing )off gives an "Uncaught node.js Error" - could we keep the session visible and have a calm notification?
     NN: cannot reproduce (NW Windows), I'm getting an "Interpreter disconnected" as expected
-  Would be nice if captions [titles of floating windows] name the thing being edited
   Shift-tab should cycle between the windows
   It would be nice with an option to have all editor windows open as floating (WPF Ride and ODE have this)
   about 0.5-0.75 line of margin at the bottom, below the input line
@@ -80,3 +79,4 @@ Done:
   keyboard navigation in menu (Alt+..., F10, arrows, etc)
   remember window size and position
   a shortcut to align ⍝-s (suggested by Kai)
+  Would be nice if captions [titles of floating windows] name the thing being edited
