@@ -158,6 +158,7 @@ jQuery ($) ->
       center: onresize: -> (for _, {widget} of wins then widget.updateSize()); session.scrollCursorIntoView(); return
       fxName: ''
     for d in ['east', 'south'] then layout.close d; layout.sizePane d, '50%'
+    localStorage.showLanguageBar ?= 1; if !+localStorage.showLanguageBar then layout.hide 'north'
     session.updateSize()
 
     # menu
@@ -173,8 +174,10 @@ jQuery ($) ->
       ]}
       {'': '_View', items:
         [
-          {'': 'Show Language Bar', checked: 1, action: -> layout.toggle 'north'; return}
-          {'': 'Float New Editors', checked: +localStorage.floatNewEditors || 0, action: (x) -> localStorage.floatNewEditors = +x; return}
+          {'': 'Show Language Bar', checked: +localStorage.showLanguageBar, action: (x) ->
+            localStorage.showLanguageBar = +x; layout[['hide', 'show'][+x]] 'north'; return}
+          {'': 'Float New Editors', checked: +localStorage.floatNewEditors || 0, action: (x) ->
+            localStorage.floatNewEditors = +x; return}
         ]
           .concat(
             if D.nwjs then [
