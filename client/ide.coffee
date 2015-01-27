@@ -123,6 +123,8 @@ jQuery ($) ->
         $('.ui-layout-' + dir).tabs('refresh').tabs(active: -1)
           .data('ui-tabs').panels.off 'keydown' # prevent jQueryUI tabs from hijacking our keystrokes, <C-Up> in particular
         session.scrollCursorIntoView()
+        if +localStorage.floatNewEditors then popWindow w
+        return
 
     # language bar
     $('.lbar-prefs').click D.showPrefs
@@ -170,7 +172,10 @@ jQuery ($) ->
         {'': '_Keyboard Preferences', action: D.showPrefs}
       ]}
       {'': '_View', items:
-        [{'': 'Show Language Bar', checked: 1, action: (x) -> layout.toggle 'north'; return}]
+        [
+          {'': 'Show Language Bar', checked: 1, action: -> layout.toggle 'north'; return}
+          {'': 'Float New Editors', checked: +localStorage.floatNewEditors || 0, action: (x) -> localStorage.floatNewEditors = +x; return}
+        ]
           .concat(
             if D.nwjs then [
               '-'
