@@ -3,7 +3,6 @@ jQuery ($) ->
   overlap = (x0, x1, x2, x3) -> x2 < x1 && x0 < x3 # helper: do the segments (x0,x1) and (x2,x3) overlap?
 
   D.idePage = ->
-    {socket} = D
     $('body').html """
       <div class="ide">
         <div class="lbar ui-layout-north" style="display:none">
@@ -63,9 +62,9 @@ jQuery ($) ->
 
     D.wins = wins = # mapping between window ids and widget instances (D.Session or D.Editor)
       0: session = D.Session $('.ui-layout-center'),
-        edit: (s, i) -> socket.emit 'Edit', win: 0, pos: i, text: s
-        autocomplete: (s, i) -> socket.emit 'Autocomplete', line: s, pos: i, token: 0
-        exec: (lines, trace) -> (if !trace then execQueue = lines[1..]); socket.emit 'Execute', {trace, text: lines[0] + '\n'}; return
+        edit: (s, i) -> D.socket.emit 'Edit', win: 0, pos: i, text: s
+        autocomplete: (s, i) -> D.socket.emit 'Autocomplete', line: s, pos: i, token: 0
+        exec: (lines, trace) -> (if !trace then execQueue = lines[1..]); D.socket.emit 'Execute', {trace, text: lines[0] + '\n'}; return
 
     popWindow = (w) ->
       if !opener
@@ -77,14 +76,14 @@ jQuery ($) ->
           $.alert 'Popups are blocked.'
       return
 
-    socket
+    D.socket
       .on '*identify', (i) -> D.remoteIdentification = i; return
       .on 'UpdateDisplayName', ({displayName}) -> $('title').text displayName
       .on 'EchoInput', ({input}) -> session.add input
       .on 'AppendSessionOutput', ({result}) -> session.add result
       .on 'NotAtInputPrompt', -> session.noPrompt()
       .on 'AtInputPrompt', ({why}) ->
-        if execQueue.length then socket.emit 'Execute', trace: 0, text: execQueue.shift() + '\n' else session.prompt why
+        if execQueue.length then D.socket.emit 'Execute', trace: 0, text: execQueue.shift() + '\n' else session.prompt why
         return
       .on 'HadError', -> execQueue.splice 0, execQueue.length; return
       .on 'FocusWindow', ({win}) -> $("#wintab#{win} a").click(); wins[win].focus(); return
@@ -103,19 +102,19 @@ jQuery ($) ->
         $tabContent = $("<div class='win' id='win#{w}'></div>").appendTo('.ui-layout-' + dir)
         wins[w] = D.Editor $tabContent,
           debugger: ee.debugger
-          save: (s, bs)   -> socket.emit 'SaveChanges',    win: w, text: s, attributes: stop: bs
-          close:          -> socket.emit 'CloseWindow',    win: w
-          over:           -> socket.emit 'RunCurrentLine', win: w
-          into:           -> socket.emit 'StepInto',       win: w
-          back:           -> socket.emit 'TraceBackward',  win: w
-          skip:           -> socket.emit 'TraceForward',   win: w
-          continueTrace:  -> socket.emit 'ContinueTrace',  win: w
-          continueExec:   -> socket.emit 'Continue',       win: w
-          restartThreads: -> socket.emit 'RestartThreads', win: w
-          edit:    (s, p) -> socket.emit 'Edit',           win: w, text: s, pos: p
-          interrupt:      -> socket.emit 'WeakInterrupt'
-          cutback:        -> socket.emit 'Cutback',        win: w
-          autocomplete: (s, i) -> socket.emit 'autocomplete', s, i, w
+          save: (s, bs)   -> D.socket.emit 'SaveChanges',    win: w, text: s, attributes: stop: bs
+          close:          -> D.socket.emit 'CloseWindow',    win: w
+          over:           -> D.socket.emit 'RunCurrentLine', win: w
+          into:           -> D.socket.emit 'StepInto',       win: w
+          back:           -> D.socket.emit 'TraceBackward',  win: w
+          skip:           -> D.socket.emit 'TraceForward',   win: w
+          continueTrace:  -> D.socket.emit 'ContinueTrace',  win: w
+          continueExec:   -> D.socket.emit 'Continue',       win: w
+          restartThreads: -> D.socket.emit 'RestartThreads', win: w
+          edit:    (s, p) -> D.socket.emit 'Edit',           win: w, text: s, pos: p
+          interrupt:      -> D.socket.emit 'WeakInterrupt'
+          cutback:        -> D.socket.emit 'Cutback',        win: w
+          autocomplete: (s, i) -> D.socket.emit 'autocomplete', s, i, w
           pop: -> popWindow w
           openInExternalEditor: D.openInExternalEditor
         wins[w].open ee
