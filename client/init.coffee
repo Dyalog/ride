@@ -24,7 +24,7 @@ do ->
         defaults: enableCursorHotkey: 0
         center: onresize: -> ed?.updateSize(); return
         fxName: ''
-      ed0 = wins[win]; ed = wins[win] = D.Editor $('.ui-layout-center'), ed0.getOpts()
+      ed0 = wins[win].widget; ed = wins[win].widget = D.Editor $('.ui-layout-center'), ed0.getOpts()
       ed.setValue ed0.getValue(); ed.setCursorIndex ed0.getCursorIndex(); ed.updateSize(); ed.focus(); ed0 = null
       window.onbeforeunload = -> ed.saveAndClose(); return
       return
