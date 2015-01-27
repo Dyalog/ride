@@ -7,7 +7,12 @@ sass=node_modules/node-sass/bin/node-sass
 mkdir -p build/{static,tmp}
 
 cp -uv node_modules/codemirror/lib/codemirror.css build/static/
-i=style/style.sass o=build/static/style.css; if [ $i -nt $o ]; then echo 'preprocessing css'; $sass -i <$i >$o; fi
+i=style/style.sass o=build/static/style.css
+if [ $i -nt $o ]; then
+  echo 'preprocessing css'
+  # node-sass generates a bad source map now, but let's be ready for the time it's fixed
+  $sass -i --source-map -o `dirname $o` $i # for compression, add: --output-style=compressed
+fi
 
 cp -uv index.html build/static/
 
