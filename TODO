@@ -15,6 +15,7 @@ Needed by v14.1:
   F1 should open the local help for language elements, but this help should have links to help.dyalog.com for the rest
     NN: I'd like to link to help.dyalog.com for the time being; I may need cooperation from MadCap later
   Need a full keyboarding discussion: Whether to report/adapt to IME keystrokes, etc
+    NN: mentioned at the dev meeting, 2015-01-26
   Shift+Esc while editing a namespace: TypeError: Cannot read property info of undefined
     NN: cannot reproduce, possibly fixed
   re-take screenshot
