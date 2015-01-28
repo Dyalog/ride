@@ -17,6 +17,8 @@ jQuery ($) ->
       </div>
     """
 
+    execQueue = [] # pending lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
+
     # "wins" maps window ids, as they appear in the RIDE protocol, to window information objects that have the following properties:
     #   widget: an instance of D.Session or D.editor
     #   id: the key in "wins"
@@ -39,8 +41,6 @@ jQuery ($) ->
       u = wo[(wo.indexOf(id) + if e.shiftKey then wo.length - 1 else 1) % wo.length] # u: id of new focused window
       $("#wintab#{u} a").click(); wins[u]?.widget?.focus()
       false
-
-    execQueue = [] # pending lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
 
     ($uls = $tabs.find 'ul').each ->
       $(@).sortable
