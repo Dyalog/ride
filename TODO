@@ -11,7 +11,6 @@ Significant Usability Issues:
   the interpreter must refuse to start if $RIDE_LISTEN is given, but the port is already being used
   option to not float windows
   re-dock floating windows
-  multiple debuggers
   z-index issues with dragging the debugger tab
   search and replace
   cmd line arg
@@ -89,3 +88,4 @@ Done:
   Would be nice if captions [titles of floating windows] name the thing being edited
   It would be nice with an option to have all editor windows open as floating (WPF Ride and ODE have this)
   re-take screenshot
+  multiple debuggers (actually: fixed updating of title in *the* debugger)

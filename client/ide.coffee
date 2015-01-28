@@ -92,7 +92,8 @@ jQuery ($) ->
       .on 'WindowTypeChanged', ({win, tracer}) -> wins[win].widget.setDebugger tracer
       .on 'autocomplete', (token, skip, options) -> wins[token].widget.autocomplete skip, options
       .on 'highlight', (win, line) -> wins[win].widget.highlight line
-      .on 'UpdateWindow', (ee) -> wins[ee.token].widget.open ee; session.scrollCursorIntoView() # "ee" for EditableEntity
+      .on 'UpdateWindow', (ee) -> # "ee" for EditableEntity
+        $("#wintab#{ee.token} a").text ee.name; wins[ee.token].widget.open ee; session.scrollCursorIntoView(); return
       .on 'ReplySaveChanges', ({win, err}) -> wins[win]?.widget?.saved err
       .on 'CloseWindow', ({win}) ->
         $("#wintab#{win},#win#{win}").remove(); $tabs.tabs('destroy').tabs tabOpts; refreshTabs()
