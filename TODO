@@ -8,6 +8,15 @@ Significant Usability Issues:
   shift+enter doesn't work on a Mac (observed on John Scholes' Mac)
   app icon for Mac (Jason is on the case)
   history (session log) is not recorded in spawned interpreters; Mantissed for Geoff: 0011841
+  the interpreter must refuse to start if $RIDE_LISTEN is given, but the port is already being used
+  option to not float windows
+  re-dock floating windows
+  multiple debuggers
+  z-index issues with dragging the debugger tab
+  search and replace
+  cmd line arg
+  drag and drop *.dws and *.dyalog files in the session
+  save configuration to the cloud
 
 Needed by v14.1:
   F1 should open the local help for language elements, but this help should have links to help.dyalog.com for the rest
