@@ -1,8 +1,7 @@
 #!/bin/bash
 set -e -o pipefail
 npm install
-coffee=node_modules/coffee-script/bin/coffee
-sass=node_modules/node-sass/bin/node-sass
+export PATH="`dirname $0`/node_modules/.bin:$PATH"
 
 mkdir -p build/{static,tmp}
 
@@ -11,7 +10,7 @@ i=style/style.sass o=build/static/style.css
 if [ $i -nt $o ]; then
   echo 'preprocessing css'
   # node-sass generates a bad source map now, but let's be ready for the time it's fixed
-  $sass -i --source-map -o `dirname $o` $i # for compression, add: --output-style=compressed
+  node-sass -i --source-map -o `dirname $o` $i # for compression, add: --output-style=compressed
 fi
 
 cp -uv index.html build/static/
@@ -56,7 +55,7 @@ for f in $js_files; do
   us="$us $u"
   if [ $f -nt $u ]; then
     changed=1
-    if [ $f != ${f%%.coffee} ]; then echo "compiling $f"; $coffee -bcp $f >$u
+    if [ $f != ${f%%.coffee} ]; then echo "compiling $f"; coffee -bcp $f >$u
     elif [ $f != ${f%%.min.js} ]; then echo "copying $f"; cp $f $u
     else echo "cleaning up $f"; <$f sed '/^\(var \w\+ = \)\?require(/d' >$u; fi
   fi
