@@ -1,14 +1,16 @@
 D.about = ->
   v = D.versionInfo; i = D.remoteIdentification || {}; u = 'unknown'
   info = """
-    IDE version: #{v.version || u}
-    IDE date: #{v.date || u}
+    IDE:
+      Version: #{v.version || u}
+      Platform: #{navigator.platform || u}
+      Date: #{v.date || u}
+      Git commit: #{v.rev || u}
+      User agent: #{navigator.userAgent || u}
 
-    IDE git commit: #{v.rev || u}
-    Platform: #{navigator.platform || u}
-    User agent: #{navigator.userAgent || u}
-    Interpreter version: #{i.version || u}
-    Interpreter edition: #{i.arch || u}
+    Interpreter:
+      Version: #{i.version || u}
+      Edition: #{i.arch || u}
   """
   buttons = []
   if D.nwjs then buttons.push text: 'Copy', click: ->
@@ -31,7 +33,7 @@ D.about = ->
     </div>
   """)
     .dialog
-      modal: 1, title: 'About', width: 500, height: 400, buttons: buttons
+      modal: 1, title: 'About', width: 520, height: 410, buttons: buttons
       open: -> $(@).find('textarea').focus()
     .find('textarea').val(info).select()
   return
