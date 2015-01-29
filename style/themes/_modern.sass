@@ -1,0 +1,136 @@
+/* Modern Theme */
+$modern-bg      : #666; 
+$modern-orange  : #ec7117; 
+$modern-orange-fade  : #db9664; 
+$modern-text    : #fff; 
+$modern-highlight : #a9a9a9
+
+.theme-modern
+  background-color:         $modern-bg
+  color:              $modern-text
+
+  ::selection
+    background-color:       $modern-orange
+
+  fieldset
+    border:           0px
+    padding:          0px
+    margin:           10px
+
+    legend
+      width:          98%
+      padding-left:   18px
+      padding-bottom: 1px
+      margin-bottom:  5px
+      border-bottom:  1px solid $modern-orange
+
+  .ui-button
+    border:           1px solid $modern-orange
+    background-color: $modern-bg
+    color:            $modern-text
+  .ui-button:hover
+    background-color: $modern-orange
+  .ui-state-disabled:hover
+    background-color: $modern-bg
+
+  .text-field
+    border:           1px solid $modern-orange
+  .text-field::selection
+    background-color:       $modern-orange
+
+  #fav-list
+    border:           1px solid $modern-orange
+
+  .menu
+    background-color:       $modern-bg
+    border:           0px
+    a
+      color:          $modern-text
+    > div
+      color:          $modern-text
+      background-color:     $modern-bg              
+      a
+        color:        $modern-text
+        border:       1px solid transparent
+        .shortcut
+          color:      $modern-highlight
+      a:hover
+        background-color:   $modern-orange
+        border:       1px solid $modern-orange
+    div
+      div
+        background-color:   $modern-bg
+        color:        $modern-text
+        border:       1px solid $modern-orange
+        margin-left:  2px
+        margin-right: 2px
+        
+        a
+          color:      $modern-text
+        a:focus
+          background-color: $modern-orange
+
+  .lbar
+    background-color:       $modern-bg
+    border-bottom:    1px solid $modern-orange
+    b
+      background-color:     $modern-bg
+      border:         0px
+      color:          $modern-text
+    b:hover
+      background-color:     $modern-orange
+  .ui-layout-resizer
+    background-color:       $modern-bg
+    top:              32px
+  .ui-layout-resizer-east
+    border:0px;
+  .ui-widget-header
+    background-color:       $modern-bg
+    border:           1px solid $modern-bg
+  .toolbar
+    background-color:       $modern-bg
+  .ui-tabs
+    color:            $modern-text
+    .ui-tabs-nav
+      li
+        background-color:   $modern-bg
+        color:      $modern-text
+      .ui-tabs-anchor
+        border:       0px
+        border-radius:0px
+      .ui-tabs-active
+        border:       0px
+        .ui-tabs-anchor
+          color:      $modern-text
+          background-color: $modern-highlight
+          border:     0px
+  .ui-dialog-titlebar 
+    .ui-button
+      border:           0px
+      background-color: none
+    .ui-button:hover
+      border:           0px
+      background-color: $modern-highlight
+  .ui-widget-content
+    background-color: $modern-highlight
+  
+  .tb-button.pressed
+    background-color: $modern-highlight
+    border:           0px
+
+  .tb-button
+    border:           0px
+  .tb-button:hover
+    background-color: $modern-orange
+    border:           0px
+    
+  hr
+   border:            0px
+   border-top:        1px solid $modern-orange
+  
+  .CodeMirror
+    font-size:        1em
+  .CodeMirror-focused .CodeMirror-selected
+    background-color:       $modern-orange
+  .CodeMirror-selected
+    background-color:       $modern-orange-fade
