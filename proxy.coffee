@@ -14,7 +14,6 @@ log = do ->
     return
 log new Date().toISOString()
 
-rm = (a, x) -> i = a.indexOf x; (if i != -1 then a.splice i, 1); return
 b64 = (s) -> Buffer(s).toString 'base64'
 b64d = (s) -> '' + Buffer s, 'base64'
 tag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exec xml)?[1]
