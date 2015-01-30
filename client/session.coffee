@@ -60,14 +60,10 @@ D.Session = (e, opts = {}) ->
     return
 
   add: (s) ->
-    l = cm.lineCount() - 1
-    cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
+    l = cm.lineCount() - 1; s0 = cm.getLine l
+    cm.replaceRange (if cm.getOption 'readOnly' then s0 + s else s), {line: l, ch: 0}, {line: l, ch: s0.length}, 'D'
     cm.setCursor cm.lineCount() - 1, 0
-
-  set: (s) ->
-    l = cm.lineCount() - 1
-    cm.replaceRange s, {line: 0, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
-    cm.setCursor cm.lineCount() - 1, 0
+    return
 
   noPrompt: ->
     cm.setOption 'readOnly', true
