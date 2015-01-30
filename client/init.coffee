@@ -2,14 +2,20 @@ do ->
   D.nwjs = process?
   if D.nwjs
     nww = require('nw.gui').Window.get()
-    if !opener # restore window state:
-      winProps = 'x y width height isFullscreen'.split ' '
-      do -> if winInfo = (try JSON.parse localStorage.winInfo) then for p in winProps then nww[p] = winInfo[p]
+    if !opener then do -> # restore window state:
+      try i = JSON.parse localStorage.winInfo || null
+      if i
+        if i.x? && i.y? then nww.moveTo i.x, i.y
+        if i.width && i.height then nww.resizeTo i.width, i.height
+      return
     nww.show()
     nww.on 'close', ->
-      if !opener # save window state:
-        winInfo = {}; (for p in winProps then winInfo[p] = nww[p]); localStorage.winInfo = JSON.stringify winInfo
-      window.onbeforeunload?(); window.onbeforeunload = null; nww.close true; return
+      process.nextTick -> nww.close true; return
+      if !opener then do -> # save window state:
+        i = x: nww.x, y: nww.y, width: nww.width, height: nww.height
+        localStorage.winInfo = JSON.stringify i
+        return
+      window.onbeforeunload?(); window.onbeforeunload = null; return
     D.zoomIn    = -> nww.zoomLevel++;   return
     D.zoomOut   = -> nww.zoomLevel--;   return
     D.resetZoom = -> nww.zoomLevel = 0; return
