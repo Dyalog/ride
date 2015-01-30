@@ -82,7 +82,7 @@ D.Session = (e, opts = {}) ->
   updateSize: -> cm.setSize $e.width(), $e.height()
   hasFocus: -> cm.hasFocus()
   focus: -> cm.focus()
-  insert: (ch) -> c = cm.getCursor(); cm.replaceRange ch, c, c, 'D'
+  insert: (ch) -> (if !cm.getOption 'readOnly' then c = cm.getCursor(); cm.replaceRange ch, c, c, 'D'); return
   scrollCursorIntoView: -> setTimeout (-> cm.scrollIntoView cm.getCursor()), 1
   autocomplete: (skip, options) ->
     c = cm.getCursor(); from = line: c.line, ch: c.ch - skip

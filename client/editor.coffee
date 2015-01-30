@@ -199,7 +199,7 @@ D.Editor = (e, opts = {}) ->
     return
   hasFocus: -> cm.hasFocus()
   focus: -> cm.focus()
-  insert: (ch) -> c = cm.getCursor(); cm.replaceRange ch, c, c, 'D'
+  insert: (ch) -> (if !cm.getOption 'readOnly' then c = cm.getCursor(); cm.replaceRange ch, c, c, 'D'); return
   getValue: -> cm.getValue()
   getCursorIndex: -> cm.indexFromPos cm.getCursor()
   setValue: (x) -> cm.setValue x
