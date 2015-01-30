@@ -93,3 +93,4 @@ D.Session = (e, opts = {}) ->
         to = cm.getCursor(); u = cm.getLine(from.line)[from.ch...to.ch].toLowerCase() # u: completion prefix
         {from, to, list: options.filter (o) -> o[...u.length].toLowerCase() == u}
     return
+  die: -> cm.setOption 'readOnly', true; return

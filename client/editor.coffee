@@ -223,3 +223,4 @@ D.Editor = (e, opts = {}) ->
         {from, to, list: options.filter (o) -> o[...u.length].toLowerCase() == u}
     return
   saveAndClose: saveAndClose
+  die: -> cm.setOption 'readOnly', true; return

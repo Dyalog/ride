@@ -17,6 +17,7 @@ jQuery ($) ->
       </div>
     """
 
+    isDead = 0
     execQueue = [] # pending lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
 
     # "wins" maps window ids, as they appear in the RIDE protocol, to window information objects that have the following properties:
@@ -69,7 +70,7 @@ jQuery ($) ->
           return
 
     popWindow = (w) ->
-      if !opener
+      if !opener && !isDead
         if pw = open "?win=#{w}", '_blank', 'width=500,height=400,left=100,top=100,resizable=1'
           $("#wintab#{w},#win#{w}").remove(); $tabs.tabs('destroy').tabs tabOpts; refreshTabs()
           session.scrollCursorIntoView()
@@ -80,6 +81,7 @@ jQuery ($) ->
 
     D.socket
       .on '*identify', (i) -> D.remoteIdentification = i; return
+      .on '*disconnected', -> $('.ide').addClass 'disconnected'; (for _, {widget} of wins then widget.die()); isDead = 1; return
       .on 'UpdateDisplayName', ({displayName}) -> $('title').text displayName
       .on 'EchoInput', ({input}) -> session.add input
       .on 'AppendSessionOutput', ({result}) -> session.add result
