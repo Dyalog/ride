@@ -16,6 +16,7 @@ Significant Usability Issues:
   cmd line arg
   drag and drop *.dws and *.dyalog files in the session
   save configuration to the cloud
+  occasionally at startup parts of the window do not paint
 
 Needed by v14.1:
   F1 should open the local help for language elements, but this help should have links to help.dyalog.com for the rest
