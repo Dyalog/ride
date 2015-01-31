@@ -3,9 +3,9 @@ D.Session = (e, opts = {}) ->
   # keep track of which lines have been modified and preserve the original content
   mod = {} # line number -> original content
 
-  hist = [null]
+  hist = ['']
   histIndex = 0
-  histAdd = (lines) -> hist = [null].concat lines, hist[1..]
+  histAdd = (lines) -> hist[0] = ''; hist[1...1] = lines; histIndex = 0; return
   histMove = (d) ->
     i = histIndex + d
     if i < 0 then $.alert 'There is no next line', 'Dyalog APL Error'
@@ -40,15 +40,10 @@ D.Session = (e, opts = {}) ->
   exec = (trace) ->
     a = [] # pairs of [lineNumber, contentToExecute]
     for l, s of mod # l: line number, s: original content
-      l = +l
-      cm.removeLineClass l, 'background', 'modified'
-      a.push [l, (e = cm.getLine l)]
+      l = +l; cm.removeLineClass l, 'background', 'modified'; a.push [l, (e = cm.getLine l)]
       cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: e.length}, 'D'
     if !a.length then a = [[(l = cm.getCursor().line), cm.getLine l]]
-    a.sort (x, y) -> x[0] - y[0]
-    opts.exec? (es = for [l, e] in a then e), trace
-    histAdd es
-    mod = {}
+    a.sort((x, y) -> x[0] - y[0]); es = (for [_, e] in a when e then e); opts.exec? es, trace; mod = {}; histAdd es; return
 
   cm.on 'beforeChange', (_, c) ->
     if c.origin != 'D'
