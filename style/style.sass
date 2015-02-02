@@ -56,36 +56,34 @@ input, textarea
 //  └──────────────────────────┴───────────┘
 .ide { position: absolute; top: 21px; bottom: 0; left: 0; right: 0; }
 
-.menu
+.menu // see ../client/menu.coffee for the DOM structure
   +bg
   height: 18px; line-height: 17px; cursor: default; padding: 0; margin: 2px 0 0 0; font-family: sans-serif; border-bottom: solid $dark 1px
   a { text-decoration: none; color: black; cursor: default; outline: 0; }
-  &>div
-    +bg
-    float: left
-    &>a
-      text-align: center; border: solid transparent 1px; padding: 0 5px; margin: 0
-      &:hover
-        +outset
-    &.m-open
-      &>div { display: block; }
-      &>a
-        +inset
-  div div
+  .m-opener.m-top
+    text-align: center; border: solid transparent 1px; padding: 0 5px; margin: 0
+  .m-open .m-top
+    +inset
+  .m-open>.m-box { display: block; }
+  &>.m-sub { float: left; }
+  .m-box
     +bg
     +outset
     display: none; border-style: solid; border-width: 1px 2px 2px 1px
     position: absolute; z-index: 1; padding: 1px; margin: 2px 0 0 0
-    min-width: 125px; max-width: 300px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis
+    .m-box { margin-left: 100%; margin-top: -17px; }
+    min-width: 125px; max-width: 300px; white-space: nowrap
     a
-      height: 17px; line-height: 17px; text-align: left; padding: 1px 17px; overflow: hidden; display: block
-      .shortcut { font-size: small; float: right; margin-left: 20px; color: #666; }
-      &.checked { background: transparent 5px center no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMElEQVQI12NgwA3+M+KSYGBgYGCCMdAlYJLIAsgKGRmx6GRgYGBghBPoOnA6AhkAALZJCQIBbmPFAAAAAElFTkSuQmCC); }
+      display: block; height: 17px; line-height: 17px; text-align: left; padding: 1px 17px; overflow: hidden; text-overflow: ellipsis
+      .m-shortcut { font-size: small; float: right; margin-left: 20px; color: #666; }
+      &.m-checked { background: transparent 5px center no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMElEQVQI12NgwA3+M+KSYGBgYGCCMdAlYJLIAsgKGRmx6GRgYGBghBPoOnA6AhkAALZJCQIBbmPFAAAAAElFTkSuQmCC); }
       &:focus
         +sel
-        .shortcut { color: $selfg }
-        &.checked { background: $selbg 5px center no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMUlEQVQI13WOQQoAMAjDEv//5+4kiMyeSkOgcCRJvABAddkAoOYwgarbbADgzzhPzDwC8SPwjB0PzgAAAABJRU5ErkJggg==); }
-  hr { margin: 3px 0 5px 0; }
+        .m-shortcut { color: $selfg }
+        &.m-checked { background: $selbg 5px center no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMUlEQVQI13WOQQoAMAjDEv//5+4kiMyeSkOgcCRJvABAddkAoOYwgarbbADgzzhPzDwC8SPwjB0PzgAAAABJRU5ErkJggg==); }
+      +outset
+  .m-box .m-opener { } // todo: display a triangle near the right edge
+  hr { margin: 3px 0 5px 0; } // used as a separator
 
 // language bar
 .lbar

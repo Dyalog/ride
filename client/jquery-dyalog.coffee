@@ -10,25 +10,34 @@ $.fn.dyalogmenu = (arg) ->
   if typeof arg == 'object' && arg && arg.length?
     @each ->
 
+      # DOM structure:
+      #   ┌.menu───────────────────────────────────────┐
+      #   │┌div.m-sub────────────────────────────┐     │
+      #   ││            ┌div.m-box──────────────┐│     │
+      #   ││┌a.m-opener┐│┌a───┐┌a───┐┌div.m-sub┐││     │
+      #   │││File      │││Open││Save││   ...   │││ ... │
+      #   ││└──────────┘│└────┘└────┘└─────────┘││     │
+      #   ││            └───────────────────────┘│     │
+      #   │└─────────────────────────────────────┘     │
+      #   └────────────────────────────────────────────┘
+      # Top-level ".m-opener"-s also have class ".m-top"
       render = (x) ->
         if !x then return
         if x == '-' then return $ '<hr>'
         acc = null # access key
-        name = x[''].replace /_(.)/g, (_, k) ->
-          if acc || k == '_' then k else acc = k; "<u>#{k}</u>"
+        name = x[''].replace /_(.)/g, (_, k) -> if acc || k == '_' then k else "<u>#{acc = k}</u>"
         $a = $ "<a href='#'>#{name}</a>"
         if acc then $a.attr 'accessKey', acc.toLowerCase()
         if x.key
-          $a.append $('<span class="shortcut">').text x.key
+          $a.append $('<span class="m-shortcut">').text x.key
           $(document).on 'keydown', '*', x.key, -> x.action(); false
         if x.checked?
-          $a.addClass('toggle').toggleClass 'checked', !!x.checked
+          $a.addClass('m-toggle').toggleClass 'm-checked', !!x.checked
             .on 'mousedown mouseup click', (e) -> $(@).toggleClass 'checked'; mFocus null; x.action? $(@).hasClass 'checked'; false
         else
           if x.action then $a.on 'mousedown mouseup click', (e) -> mFocus null; x.action(); false
         if !x.items then return $a
-        $u = $ '<div>'; for y in x.items then $u.append render y
-        $('<div>').append($a).append($u)
+        $('<div class="m-sub">').append $a.addClass('m-opener'), $('<div class="m-box">').append x.items.map(render)...
 
       $o = null # original focused element
       mFocus = (anchor) ->
@@ -49,10 +58,10 @@ $.fn.dyalogmenu = (arg) ->
         false
 
       $m = $(@).empty().addClass('menu').append arg.map render
-      $m.find('>div>a').addClass 'm-top'
+      $m.find('>.m-sub>.m-opener').addClass 'm-top'
       $m.on 'mouseover', 'a', -> $(@).closest('.menu').children().is('.m-open') && mFocus @; return
-        .on 'mousedown', 'a.m-top', -> (if $(@).parentsUntil('.menu').last().is '.m-open' then mFocus null else mFocus @); false
-        .on 'click',     'a.m-top', -> false
+        .on 'mousedown', 'a', -> (if $(@).parentsUntil('.menu').last().is '.m-open' then mFocus null else mFocus @); false
+        .on 'click',     'a', -> false
         .on 'keydown', '*', 'left',  leftRight -1
         .on 'keydown', '*', 'right', leftRight 1
         .on 'keydown', '*', 'up',    upDown -1

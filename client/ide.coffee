@@ -164,6 +164,8 @@ jQuery ($) ->
     localStorage.showLanguageBar ?= 1; if !+localStorage.showLanguageBar then layout.hide 'north'
     session.updateSize()
 
+    themes = ['modern', 'redmond', 'cupertino', 'freedom']
+    allThemeClasses = themes.map((x) -> 'theme-' + x).join ' '
     # menu
     $('<div class="menu"></div>').prependTo('body').dyalogmenu [
       (
@@ -190,6 +192,12 @@ jQuery ($) ->
               {'': '_Reset Zoom', key: 'Ctrl+0', action: D.resetZoom}
             ] else []
           )
+          .concat [
+            '-'
+            {'': 'Theme', items: themes.map (x) ->
+              '': x, action: -> $('body').removeClass(allThemeClasses).addClass "theme-#{x}"; return
+            }
+          ]
       }
       {'': '_Help', items: [
         {'': '_About', key: 'Shift+F1', action: D.about}
