@@ -52,6 +52,6 @@ if process? then do ->
     setTimeout (-> Proxy() socket1), 1
     socket
 
-  D.quit = -> gui.Window.get().close()
-
+  D.quit = -> gui.Window.get().close(); return
+  D.clipboardCopy = (s) -> require('nw.gui').Clipboard.get().set s; return
   return

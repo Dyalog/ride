@@ -13,8 +13,7 @@ D.about = ->
       Edition: #{i.arch || u}
   """
   buttons = []
-  if D.nwjs then buttons.push text: 'Copy', click: ->
-    require('nw.gui').Clipboard.get().set $('textarea', @).val(), 'text'; return
+  if D.clipboardCopy then buttons.push text: 'Copy', click: -> D.clipboardCopy $('textarea', @).val(), 'text'; return
   buttons.push text: 'Close', click: -> $(@).dialog 'close'
   $("""
     <div class="about">
