@@ -164,8 +164,10 @@ jQuery ($) ->
     localStorage.showLanguageBar ?= 1; if !+localStorage.showLanguageBar then layout.hide 'north'
     session.updateSize()
 
-    themes = ['modern', 'redmond', 'cupertino', 'freedom']
-    allThemeClasses = themes.map((x) -> 'theme-' + x).join ' '
+    themes = ['Modern', 'Redmond', 'Cupertino', 'Freedom'] # first one should be the default
+    themeClasses = themes.map (x) -> 'theme-' + x.toLowerCase()
+    allThemeClasses = themeClasses.join ' '
+
     # menu
     $('<div class="menu"></div>').prependTo('body').dyalogmenu [
       (
@@ -194,8 +196,8 @@ jQuery ($) ->
           )
           .concat [
             '-'
-            {'': 'Theme', items: themes.map (x) ->
-              '': x, action: -> $('body').removeClass(allThemeClasses).addClass "theme-#{x}"; return
+            {'': 'Theme', items: themes.map (x, i) ->
+              '': x, group: 'themes', checked: !i, action: -> $('body').removeClass(allThemeClasses).addClass themeClasses[i]; return
             }
           ]
       }

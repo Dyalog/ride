@@ -31,8 +31,14 @@ $.fn.dyalogmenu = (arg) ->
         if x.key
           $a.append $('<span class="m-shortcut">').text x.key
           $(document).on 'keydown', '*', x.key, -> x.action(); false
-        if x.checked?
-          $a.addClass('m-toggle').toggleClass 'm-checked', !!x.checked
+        if x.group
+          $a.addClass "m-group-#{x.group}"
+          $a.toggleClass 'm-checked', !!x.checked
+            .on 'mousedown mouseup click', (e) ->
+              $(@).closest('.menu').find(".m-group-#{x.group}").removeClass 'm-checked'
+              $(@).addClass 'm-checked'; mFocus null; x.action?(); false
+        else if x.checked?
+          $a.toggleClass 'm-checked', !!x.checked
             .on 'mousedown mouseup click', (e) -> $(@).toggleClass 'checked'; mFocus null; x.action? $(@).hasClass 'checked'; false
         else
           if x.action then $a.on 'mousedown mouseup click', (e) -> mFocus null; x.action(); false
