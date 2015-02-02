@@ -164,7 +164,7 @@ jQuery ($) ->
     localStorage.showLanguageBar ?= 1; if !+localStorage.showLanguageBar then layout.hide 'north'
     session.updateSize()
 
-    themes = ['Modern', 'Redmond', 'Cupertino', 'Freedom'] # first one should be the default
+    themes = ['Modern', 'Redmond', 'Cupertino', 'Freedom'] # default is set in init.coffee to prevent FOUC
     themeClasses = themes.map (x) -> 'theme-' + x.toLowerCase()
     allThemeClasses = themeClasses.join ' '
 
@@ -197,7 +197,8 @@ jQuery ($) ->
           .concat [
             '-'
             {'': 'Theme', items: themes.map (x, i) ->
-              '': x, group: 'themes', checked: !i, action: -> $('body').removeClass(allThemeClasses).addClass themeClasses[i]; return
+              '': x, group: 'themes', checked: $('body').hasClass(themeClasses[i]), action: ->
+                localStorage.theme = x.toLowerCase(); $('body').removeClass(allThemeClasses).addClass themeClasses[i]; return
             }
           ]
       }
