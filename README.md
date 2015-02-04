@@ -34,7 +34,7 @@ The desktop app can
 Building
 ========
 
-<h3>Prerequisits</h3>
+<h3>Prerequisites</h3>
 
 <strong>All Operating Systems</strong>
 * [Virtual Box](http://www.virtualbox.org)
