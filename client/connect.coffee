@@ -141,6 +141,7 @@ $ ->
         D.socket.emit '*listen', {port}
         $listenDialog = $ """
           <div class='listen'>
+            <div class="visual-distraction"></div>
             Please start the remote interpreter with<br>
             #{
               (
