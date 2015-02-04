@@ -3,6 +3,7 @@ if process? then do ->
   gui = require 'nw.gui'; crypto = require 'crypto'; fs = require 'fs'
   path = require 'path'; {spawn} = require 'child_process'; {Proxy} = require './proxy'
   D.nwjs = true
+  D.process = process
 
   nww = gui.Window.get()
   if !opener then do -> # restore window state:

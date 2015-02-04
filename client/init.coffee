@@ -24,8 +24,8 @@ do ->
     # https://nodejs.org/api/process.html#process_process_platform
     # https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
     # The theme can be overridden through localStorage.theme or an environment variable $DYALOG_IDE_THEME
-    localStorage.theme ?= process?.env?.DYALOG_IDE_THEME || do ->
-      p = (process ? navigator).platform
+    localStorage.theme ?= D.process?.env?.DYALOG_IDE_THEME || do ->
+      p = (D.process ? navigator).platform
       if /^(darwin|mac|ipad|iphone|ipod)/i.test p then 'cupertino'
       else if /^(linux|x11|android)/i.test p then 'freedom'
       else 'redmond'
