@@ -46,7 +46,7 @@ js_files='
   client/session.coffee
   client/ide.coffee
   client/connect.coffee
-  client/init-nw.coffee
+  init-nw.coffee
   client/init.coffee
 '
 us='' # names of compiled files
