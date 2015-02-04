@@ -1,22 +1,21 @@
 Significant Usability Issues:
   Once you start auto-completing a WS name, the drop-down should stay up to allow several path selections
-    NN: I'm not even getting autocompletion for WS names...
+    NN: I'm not even getting autocompletion for WS names...   JD #11879
   Typing )off gives an "Uncaught node.js Error" - could we keep the session visible and have a calm notification?
     NN: cannot reproduce (NW Windows), I'm getting an "Interpreter disconnected" as expected
   Shift-tab should cycle between the windows
   about 0.5-0.75 line of margin at the bottom, below the input line
   shift+enter doesn't work on a Mac (observed on John Scholes' Mac)
   app icon for Mac (Jason is on the case)
-  history (session log) is not recorded in spawned interpreters; Mantissed for Geoff: 0011841
+  history (session log) is not recorded in spawned interpreters; Geoff #11841
   the interpreter must refuse to start if $RIDE_LISTEN is given, but the port is already being used
-  option to not float windows
+  option to not float windows when a tab is dragged out, could happen by accident when you're only re-ordering tabs
   re-dock floating windows
-  z-index issues with dragging the debugger tab
-  search and replace
-  cmd line arg
+  z-index issues with dragging the debugger tab; I'd like to disable dragging for debugger tabs altogether
+  search and replace; search is there, replace isn't
+  cmd line arguments for bypassing the Connect screen, e.g. --spawn or --connect 1.2.3.4:4502
   drag and drop *.dws and *.dyalog files in the session
-  save configuration to the cloud
-  occasionally at startup parts of the window do not paint
+  make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
 
 Needed by v14.1:
   F1 should open the local help for language elements, but this help should have links to help.dyalog.com for the rest
@@ -90,3 +89,4 @@ Done:
   It would be nice with an option to have all editor windows open as floating (WPF Ride and ODE have this)
   re-take screenshot
   multiple debuggers (actually: fixed updating of title in *the* debugger)
+  occasionally at startup parts of the window do not paint
