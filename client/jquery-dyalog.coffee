@@ -39,7 +39,7 @@ $.fn.dyalogmenu = (arg) ->
               $(@).addClass 'm-checked'; mFocus null; x.action?(); false
         else if x.checked?
           $a.toggleClass 'm-checked', !!x.checked
-            .on 'mousedown mouseup click', (e) -> $(@).toggleClass 'checked'; mFocus null; x.action? $(@).hasClass 'checked'; false
+            .on 'mousedown mouseup click', (e) -> $(@).toggleClass 'm-checked'; mFocus null; x.action? $(@).hasClass 'm-checked'; false
         else
           if x.action then $a.on 'mousedown mouseup click', (e) -> mFocus null; x.action(); false
         if !x.items then return $a
