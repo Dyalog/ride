@@ -11,6 +11,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "ubuntu-14.04-amd64"
+  config.vm.box_url = "https://github.com/jose-lpa/packer-ubuntu_14.04/releases/download/1.0/ubuntu-14.04.box"
   config.vm.provision :shell, path: "vagrantfiles/bootstrap.sh"
 
   # The url from where the 'config.vm.box' box will be fetched if it
