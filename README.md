@@ -52,7 +52,7 @@ You will need to set your Git Shell to `Bash` in the options
 
 * Clone [RideJS](https://www.github.com/dyalog/RideJS) in Github for Windows
 * Right click repository and `Open git Shell`
-* run `./vagrantbuild.gitshell.sh`
+* run `./vagrantbuild.sh`
 
 <strong>Linux/OS X</strong>
 * Clone [RideJS](https://www.github.com/dyalog/RideJS)
