@@ -16,6 +16,18 @@ Significant Usability Issues:
   cmd line arguments for bypassing the Connect screen, e.g. --spawn or --connect 1.2.3.4:4502
   drag and drop *.dws and *.dyalog files in the session
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
+  when spawning an interpreter, make it connect back to the IDE (use RIDE_CONNECT instead of RIDE_LISTEN)
+  js source maps
+  connections box should be 400px wide
+  overflown part of connections box doesn't show
+  handle at the bottom of the session to control the amount of whitespace (?)
+  changing font size doesn't affect floating windows
+  floating windows should be always on top
+  debugger doesn't highlight current line when in a floating window
+  esc shouldn't save when no changes have been made
+  debugger toolbar has extra icons
+  "undefined" appears in the session when you hold the enter key for a while
+  css class to indicate when window is focus
 
 Needed by v14.1:
   F1 should open the local help for language elements, but this help should have links to help.dyalog.com for the rest
@@ -49,6 +61,7 @@ Later:
   native menus in nwjs, including an out-of-window menu on Mac
   start web server from nwjs GUI (?)
   add legalese to About dialogue
+  IDE config in the cloud
 
 Done:
   If an error is encountered in a scripted fn, tracer needs to scroll to line which failed
