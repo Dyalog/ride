@@ -3,6 +3,7 @@ D.Editor = (e, opts = {}) ->
   ($e = $ e).html """
     <div class="toolbar debugger-toolbar">
       #{[
+        b 'quit',         'Quit this function'
         b 'over',         'Execute line'
         b 'into',         'Trace into expression'
         b 'back',         'Go back one line'
@@ -11,7 +12,6 @@ D.Editor = (e, opts = {}) ->
         b 'cont-exec',    'Continue execution'
         b 'restart',      'Restart all threads'
         b 'edit-name',    'Edit name'
-        b 'quit',         'Quit this function'
         b 'interrupt',    'Interrupt'
         b 'cutback',      'Clear trace/stop/monitor for this object'
         b 'line-numbers', 'Toggle line numbers'
@@ -24,10 +24,10 @@ D.Editor = (e, opts = {}) ->
     </div>
     <div class="toolbar editor-toolbar">
       #{[
+        b 'save', 'Save changes and return'
         b 'line-numbers pressed', 'Toggle line numbers'
         b 'comment', 'Comment selected text'
         b 'uncomment', 'Uncomment selected text'
-        b 'save', 'Save changes and return'
         '<span class="tb-separator"></span>'
         '<input class="tb-search text-field">'
         b 'next', 'Search for next match'
