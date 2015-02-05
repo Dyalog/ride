@@ -32,4 +32,7 @@ do ->
     $('body').addClass "theme-#{localStorage.theme}"
     return
 
+  # CSS class for focused window
+  $(window).on 'focus blur', (e) -> $('body').toggleClass 'window-focused', e.type == 'focus'
+
   return
