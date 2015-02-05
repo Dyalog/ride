@@ -51,7 +51,7 @@ You will need to set your Git Shell to `Bash` in the options
 <strong>Windows</strong>
 
 * Clone [RideJS](https://www.github.com/dyalog/RideJS) in Github for Windows
-* Right click repository and `Open git Shell`
+* Right click repository and `Open in git Shell`
 * run `./vagrantbuild.sh`
 
 <strong>Linux/OS X</strong>
@@ -62,5 +62,4 @@ You will need to set your Git Shell to `Bash` in the options
 The build process will automatically launch Ride JS once it has finished building.
 The first build will take a long time.
 
-
-
+When you are finished building, run `vagrant halt` to stop the virtual build machine.
