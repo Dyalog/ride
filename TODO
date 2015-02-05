@@ -12,7 +12,6 @@ Formatting / Rendering Issues
   Overflown part of connections box doesn't show
   CSS class to indicate when window is focus
   App icons for Mac & Windows (Jason is on the case)
-  Debugger toolbar has extra icons
   
 Urgent Usability Issues
   Disable dragging between editor and debugger tabs
@@ -103,3 +102,4 @@ Done:
   re-take screenshot
   multiple debuggers (actually: fixed updating of title in *the* debugger)
   occasionally at startup parts of the window do not paint
+  Debugger toolbar has extra icons

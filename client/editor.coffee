@@ -15,8 +15,6 @@ D.Editor = (e, opts = {}) ->
         b 'interrupt',    'Interrupt'
         b 'cutback',      'Clear trace/stop/monitor for this object'
         b 'line-numbers', 'Toggle line numbers'
-        b 'over',         'Execute line'
-        b 'into',         'Trace into expression'
         '<span class="tb-separator"></span>'
         '<input class="tb-search text-field">'
         b 'next',         'Search for next match'
