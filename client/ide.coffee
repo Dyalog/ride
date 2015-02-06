@@ -27,7 +27,11 @@ jQuery ($) ->
       0: id: 0, widget: session = D.Session $('.ui-layout-center'),
         edit: (s, i) -> D.socket.emit 'Edit', win: 0, pos: i, text: s
         autocomplete: (s, i) -> D.socket.emit 'Autocomplete', line: s, pos: i, token: 0
-        exec: (lines, trace) -> (if !trace then execQueue = lines[1..]); D.socket.emit 'Execute', {trace, text: lines[0] + '\n'}; return
+        exec: (lines, trace) ->
+          if lines && lines.length
+            if !trace then execQueue = lines[1..]
+            D.socket.emit 'Execute', {trace, text: lines[0] + '\n'}
+          return
 
     # Tab management
     tabOpts = activate: (_, ui) -> (widget = wins[+ui.newTab.attr('id').replace /\D+/, ''].widget).updateSize(); widget.focus(); return

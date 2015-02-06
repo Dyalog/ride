@@ -17,7 +17,6 @@ Urgent Usability Issues
   Add button to float windows
   Esc shouldn't save when no changes have been made
   Shift+enter doesn't work on a Mac (observed on John Scholes' Mac)
-  "undefined" appears in the session when you hold the enter key for a while
   Debugger doesn't highlight current line when in a floating window
   When spawning an interpreter, make it connect back to the IDE (use RIDE_CONNECT instead of RIDE_LISTEN)
   Command line arguments for bypassing the Connect screen, e.g. --spawn or --connect 1.2.3.4:4502
@@ -103,3 +102,4 @@ Done:
   occasionally at startup parts of the window do not paint
   Debugger toolbar has extra icons
   CSS class to indicate when window is focus
+  "undefined" appears in the session when you hold the enter key for a while
