@@ -75,9 +75,11 @@ D.Editor = (e, opts = {}) ->
     opts.close?()
 
   k["'\uf804'"] = k.Esc = saveAndClose = -> # EP: Exit (and save changes)
-    bs = []
-    for l of breakpoints then bs.push +l; cm.setGutterMarker +l, 'breakpoint', null
-    opts.save? cm.getValue(), bs
+    if (v = cm.getValue()) != originalValue
+      bs = []; for l of breakpoints then bs.push +l; cm.setGutterMarker +l, 'breakpoint', null
+      opts.save? cm.getValue(), bs
+    else
+      opts.close?()
     return
 
   k["'\uf828'"] = k['Shift-Enter'] = -> # ED: Edit
@@ -191,11 +193,12 @@ D.Editor = (e, opts = {}) ->
     $('.CodeMirror', $e).css backgroundColor: ['', '#dfdfdf'][+x]
   setDebugger !!opts.debugger
 
+  originalValue = null # remember it so that on <esc> we can detect if anything changed
   hll = null # currently highlighted line
 
   updateSize: -> cm.setSize $e.width(), $e.parent().height() - $e.position().top - 28
   open: (ee) ->
-    cm.setValue ee.text; cm.focus()
+    originalValue = ee.text; cm.setValue ee.text; cm.focus()
     cm.setCursor ee.currentRow, (ee.currentColumn || 0); cm.scrollIntoView null, $e.height() / 2
     for l in ee.lineAttributes?.stop then cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
     return
