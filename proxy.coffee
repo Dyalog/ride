@@ -140,7 +140,7 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
 
       # proxy management events that don't reach the interpreter start with a '*'
       .on '*connect', ({host, port}) ->
-        client = require('net').connect {host, port}, -> toBrowser '*connected'; return
+        client = require('net').connect {host, port}, -> toBrowser '*connected', {host, port}; return
         setUpInterpreterConnection()
         return
       .on '*spawn', ({port}) ->
@@ -152,8 +152,8 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
         return
       .on '*listen', ({port}) ->
         server = require('net').createServer (c) ->
-          log 'interpreter connected from ' + c?.request?.connection?.remoteAddress
-          server?.close(); server = null; client = c; toBrowser '*connected'; setUpInterpreterConnection()
+          host = c?.request?.connection?.remoteAddress; log 'interpreter connected from ' + host
+          server?.close(); server = null; client = c; toBrowser '*connected', {host, port}; setUpInterpreterConnection()
           return
         server.on 'error', (err) -> server = null; toBrowser '*listenError', err: '' + err; return
         server.listen port, -> log "listening for connections from interpreter on port #{port}"; return

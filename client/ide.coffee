@@ -2,7 +2,7 @@ jQuery ($) ->
 
   overlap = (x0, x1, x2, x3) -> x2 < x1 && x0 < x3 # helper: do the segments (x0,x1) and (x2,x3) overlap?
 
-  D.idePage = ->
+  D.idePage = (opts = {}) ->
     $('body').html """
       <div class="ide">
         <div class="lbar ui-layout-north" style="display:none">
@@ -86,7 +86,9 @@ jQuery ($) ->
     D.socket
       .on '*identify', (i) -> D.remoteIdentification = i; return
       .on '*disconnected', -> $('.ide').addClass 'disconnected'; (for _, {widget} of wins then widget.die()); isDead = 1; return
-      .on 'UpdateDisplayName', ({displayName}) -> $('title').text displayName
+      .on 'UpdateDisplayName', ({displayName}) ->
+        s = displayName; if opts.host then s += ' - ' + opts.host; if opts.port then s += ':' + opts.port
+        $('title').text s; return
       .on 'EchoInput', ({input}) -> session.add input
       .on 'AppendSessionOutput', ({result}) -> session.add result
       .on 'NotAtInputPrompt', -> session.noPrompt()

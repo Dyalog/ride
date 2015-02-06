@@ -21,10 +21,6 @@ $ ->
   ipAddresses = [] # of the proxy.  Used in the "Waiting for connections" dialogue.
 
   D.connectPage = ->
-    if (u = D.urlParams).host?
-      D.socket.emit '*connect', host: u.host, port: +(u.port or DEFAULT_PORT)
-      D.idePage()
-      return
     $('body').html """
       <fieldset>
         <legend>Connect to an interpreter</legend>
@@ -174,7 +170,7 @@ $ ->
           ]
         return
       .on '*hijacked', ({addr}) -> $.alert "#{addr} has taken over usage of this proxy.", 'Disconnected'; return
-      .on '*connected', -> $listenDialog?.dialog 'close'; D.idePage(); return
+      .on '*connected', ({host, port}) -> $listenDialog?.dialog 'close'; D.idePage {host, port}; return
       .on '*disconnected', -> $.alert 'Interpreter disconnected'; return
       .on '*connectError', ({err}) -> $.alert err, 'Error'; return
       .on '*spawned', ({pid}) ->
