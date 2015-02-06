@@ -25,6 +25,7 @@ Urgent Usability Issues
 Less Urgent (but needed for 14.1):
   Verify there is a standard key to cycle between the windows
   Once you start auto-completing a WS name, the drop-down should stay up to allow several path selections
+  Show host:port and PID in title, along with WS name
 
 Nice to have for v14.1:
   Option to automatically pop up completion box after a timeout OR use a keystroke
