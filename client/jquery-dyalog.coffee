@@ -55,12 +55,20 @@ $.fn.dyalogmenu = (arg) ->
         return
 
       leftRight = (d) -> -> # d: delta, either +1 or -1;   note that this is a higher-order function
-        $t = $m.children(); i = $(@).parentsUntil('.menu').last().index() # Which top-level menu are we under?
-        n = $t.length; mFocus $t.eq((i + d + n) % n).find('a').eq 1; false
+        if $(@).is '.m-opener'
+          mFocus $(@).next('.m-box').find('a').first()
+        else
+          $t = $m.children(); i = $(@).parentsUntil('.menu').last().index() # Which top-level menu are we under?
+          n = $t.length; mFocus $t.eq((i + d + n) % n).find('a').eq 1
+        false
 
       upDown = (d) -> -> # d: delta, either +1 or -1;   note that this is a higher-order function
-        if $(@).is '.m-top' then mFocus $(@).parent().find('a').eq 1
-        else $s = $(@).parent().children 'a'; i = $s.index @; n = $s.length; mFocus $s.eq (i + d + n) % n
+        if $(@).is '.m-top'
+          mFocus $(@).parent().find(':not(hr)').eq 1
+        else
+          $s = $(@).closest('.m-box').children ':not(hr)'
+          i = $s.index @; n = $s.length; $f = $s.eq (i + d + n) % n
+          mFocus if $f.is 'a' then $f else $f.find('a').first()
         false
 
       $m = $(@).empty().addClass('menu').append arg.map render
