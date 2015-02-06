@@ -1,42 +1,44 @@
 D.Editor = (e, opts = {}) ->
-  b = (name, description) -> "<a href='#' class='tb-#{name} tb-button' title='#{description}'></a>"
+  b = (cssClasses, description) -> "<a href='#' class='#{cssClasses} tb-button' title='#{description}'></a>"
   ($e = $ e).html """
     <div class="toolbar debugger-toolbar">
       #{[
-        b 'quit',         'Quit this function'
-        b 'over',         'Execute line'
-        b 'into',         'Trace into expression'
-        b 'back',         'Go back one line'
-        b 'skip',         'Skip current line'
-        b 'cont-trace',   'Continue trace'
-        b 'cont-exec',    'Continue execution'
-        b 'restart',      'Restart all threads'
-        b 'edit-name',    'Edit name'
-        b 'interrupt',    'Interrupt'
-        b 'cutback',      'Clear trace/stop/monitor for this object'
-        b 'line-numbers', 'Toggle line numbers'
+        b 'tb-quit tb-rhs',  'Quit this function'
+        b 'tb-pop tb-rhs',   'Edit in a floating window' # hidden with CSS if this is already a floating window
+        b 'tb-over',         'Execute line'
+        b 'tb-into',         'Trace into expression'
+        b 'tb-back',         'Go back one line'
+        b 'tb-skip',         'Skip current line'
+        b 'tb-cont-trace',   'Continue trace'
+        b 'tb-cont-exec',    'Continue execution'
+        b 'tb-restart',      'Restart all threads'
+        b 'tb-edit-name',    'Edit name'
+        b 'tb-interrupt',    'Interrupt'
+        b 'tb-cutback',      'Clear trace/stop/monitor for this object'
+        b 'tb-line-numbers', 'Toggle line numbers'
         '<span class="tb-separator"></span>'
         '<input class="tb-search text-field">'
-        b 'next',         'Search for next match'
-        b 'prev',         'Search for previous match'
-        b 'case',         'Match case'
+        b 'tb-next',         'Search for next match'
+        b 'tb-prev',         'Search for previous match'
+        b 'tb-case',         'Match case'
       ].join ''}
     </div>
     <div class="toolbar editor-toolbar">
       #{[
-        b 'save', 'Save changes and return'
-        b 'line-numbers pressed', 'Toggle line numbers'
-        b 'comment', 'Comment selected text'
-        b 'uncomment', 'Uncomment selected text'
+        b 'tb-save tb-rhs',  'Save changes and return'
+        b 'tb-pop tb-rhs',   'Edit in a floating window' # hidden with CSS if this is already a floating window
+        b 'tb-line-numbers pressed', 'Toggle line numbers'
+        b 'tb-comment',      'Comment selected text'
+        b 'tb-uncomment',    'Uncomment selected text'
         '<span class="tb-separator"></span>'
         '<input class="tb-search text-field">'
-        b 'next', 'Search for next match'
-        b 'prev', 'Search for previous match'
-        b 'case', 'Match case'
+        b 'tb-next',         'Search for next match'
+        b 'tb-prev',         'Search for previous match'
+        b 'tb-case',         'Match case'
         '<span class="tb-separator"></span>'
-        b 'refac-m', 'Refactor text as method'
-        b 'refac-f', 'Refactor text as field'
-        b 'refac-p', 'Refactor text as property'
+        b 'tb-refac-m',      'Refactor text as method'
+        b 'tb-refac-f',      'Refactor text as field'
+        b 'tb-refac-p',      'Refactor text as property'
       ].join ''}
     </div>
     <div class="cm"></div>
@@ -69,7 +71,7 @@ D.Editor = (e, opts = {}) ->
         cm.setSelections o
       return
 
-  k["'\uf800'"] = k['Shift-Esc'] = -> # QT: Quit (and lose changes)
+  k["'\uf800'"] = k['Shift-Esc'] = QT = -> # QT: Quit (and lose changes)
     opts.close?()
 
   k["'\uf804'"] = k.Esc = saveAndClose = -> # EP: Exit (and save changes)
@@ -116,16 +118,18 @@ D.Editor = (e, opts = {}) ->
   $tb = $ '.toolbar', $e
     .on 'mousedown',        '.tb-button', (e) -> $(e.target).addClass    'armed'; e.preventDefault(); return
     .on 'mouseup mouseout', '.tb-button', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return
-    .on 'click', '.tb-over',       -> opts.over?()
-    .on 'click', '.tb-into',       -> opts.into?()
-    .on 'click', '.tb-back',       -> opts.back?()
-    .on 'click', '.tb-skip',       -> opts.skip?()
-    .on 'click', '.tb-cont-trace', -> opts.continueTrace?()
-    .on 'click', '.tb-cont-exec',  -> opts.continueExec?()
-    .on 'click', '.tb-restart',    -> opts.restartThreads?()
-    .on 'click', '.tb-edit-name',  -> opts.edit? cm.getValue(), 0
-    .on 'click', '.tb-interrupt',  -> opts.interrupt?()
-    .on 'click', '.tb-cutback',    -> opts.cutback?()
+    .on 'click', '.tb-pop',        -> opts.pop?()                 ; false
+    .on 'click', '.tb-quit',       -> QT()                        ; false
+    .on 'click', '.tb-over',       -> opts.over?()                ; false
+    .on 'click', '.tb-into',       -> opts.into?()                ; false
+    .on 'click', '.tb-back',       -> opts.back?()                ; false
+    .on 'click', '.tb-skip',       -> opts.skip?()                ; false
+    .on 'click', '.tb-cont-trace', -> opts.continueTrace?()       ; false
+    .on 'click', '.tb-cont-exec',  -> opts.continueExec?()        ; false
+    .on 'click', '.tb-restart',    -> opts.restartThreads?()      ; false
+    .on 'click', '.tb-edit-name',  -> opts.edit? cm.getValue(), 0 ; false
+    .on 'click', '.tb-interrupt',  -> opts.interrupt?()           ; false
+    .on 'click', '.tb-cutback',    -> opts.cutback?()             ; false
     .on 'click', '.tb-line-numbers', -> cm.setOption 'lineNumbers', b = !cm.getOption 'lineNumbers'; $(@).toggleClass 'pressed', b; false
     .on 'click', '.tb-save', -> saveAndClose(); false
     .on 'click', '.tb-comment', ->
