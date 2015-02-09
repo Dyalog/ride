@@ -187,12 +187,6 @@ input, textarea
 
 .win { width: 100%; height: auto; padding: 0 !important; } // content of editor and debugger windows
 
-// When a tab is dragged away from its siblings, releasing the mouse would cause a floating window to open
-.floatable a { background-color: #ace !important; }
-
-// a z-index hack to make the tab (relatively positioned) go on top of resizers and the south pane (absolutely positioned)
-.dragging .ui-layout-resizer, .dragging .ui-layout-south { z-index: -1 !important; }
-
 // various dialogues
 .ui-widget-overlay { opacity: .3; filter: Alpha(Opacity=30); background: #aaa; }
 .ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; opacity: .3; filter: Alpha(Opacity=30); border-radius: 8px; background: #aaaaaa; }
@@ -337,9 +331,9 @@ input.ui-button { padding: 0 5px; }
   padding: 0; position: relative
   .ui-tabs-panel { display: block; border-width: 0; padding: 1em 1.4em; background: none; }
   .ui-tabs-nav
-    margin: 0; padding: 3px 3px 0; border-width: 0 0 1px 0; border-color: white; height: 26px
+    margin: 0; padding: 0 3px; border-width: 0 0 1px 0; border-color: white
     li
-      +bg; list-style: none; float: left; position: relative; top: 0; margin: 0 1px 0 0; padding: 0; white-space: nowrap
+      +bg; list-style: none; float: left; position: relative; top: 0; margin: 3px 1px 0 0; padding: 0; white-space: nowrap
     .ui-tabs-anchor
       float: left
       padding: 2px 12px 0 12px

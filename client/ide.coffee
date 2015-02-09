@@ -49,29 +49,17 @@ jQuery ($) ->
 
     ($uls = $tabs.find 'ul').each ->
       $(@).sortable
-        cursor: 'move', tolerance: 'pointer', connectWith: $uls, containment: '.ide'
+        cursor: 'move', containment: 'parent', tolerance: 'pointer', axis: 'x', revert: true
         receive: (_, ui) ->
           $(@).closest('.ui-tabs').append $ '#win' + ui.item.attr('id').replace /\D+/, ''
           $tabs.tabs('destroy').tabs tabOpts
           return
-        start: -> $('body').addClass 'dragging'; return
-        sort: (_, ui) ->
-          # ui.helper is floatable if it doesn't overlap with any <ul>-s (tab containers)
-          hx0 = ui.offset.left; hy0 = ui.offset.top; hx1 = hx0 + $(ui.helper).width(); hy1 = hy0 + $(ui.helper).height()
-          floatable = 1
-          $uls.each ->
-            uo = $(@).offset(); ux0 = uo.left; uy0 = uo.top; ux1 = ux0 + $(@).width(); uy1 = uy0 + $(@).height()
-            floatable &&= !(overlap(ux0, ux1, hx0, hx1) && overlap(uy0, uy1, hy0, hy1))
-            return
-          $(ui.helper).toggleClass 'floatable', floatable
-          return
-        beforeStop: (_, ui) ->
-          if $(ui.helper).is '.floatable' then $(ui.helper).removeClass 'floatable'; popWindow +$(ui.helper).attr('id').replace /\D+/, ''
-          return
         stop: (_, ui) ->
-          $('body').removeClass 'dragging'; refreshTabs()
+          refreshTabs()
           $('[role=tab]', $tabs).attr 'style', '' # clean up tabs' z-indices after dragging, $().sortable screws them up
           return
+      .data('ui-sortable').floating = true # workaround for a jQueryUI bug, see http://bugs.jqueryui.com/ticket/6702#comment:20
+      return
 
     popWindow = (w) ->
       if !opener && !isDead

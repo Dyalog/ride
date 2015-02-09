@@ -12,7 +12,6 @@ Formatting / Rendering Issues
   App icons for Mac & Windows (Jason is on the case)
 
 Urgent Usability Issues
-  Disable dragging between editor and debugger tabs
   Add button to float windows
   Shift+enter doesn't work on a Mac (observed on John Scholes' Mac)
   Debugger doesn't highlight current line when in a floating window
@@ -106,3 +105,4 @@ Done:
   Esc shouldn't save when no changes have been made
   When spawning an interpreter, make it connect back to the IDE (use RIDE_CONNECT instead of RIDE_LISTEN)
   Changing font size doesn't affect floating windows
+  Disable dragging between editor and debugger tabs
