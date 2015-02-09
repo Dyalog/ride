@@ -50,11 +50,9 @@ $ ->
       </fieldset>
       <fieldset id="spawnSection" style="display:none">
         <legend>Spawn an interpreter</legend>
-        <p><i>Requires a <tt>dyalog</tt> executable on your <tt>$PATH</tt>.</i></p>
         <p>
           <label>Port <input id="spawn-port" class="text-field" value="#{DEFAULT_PORT}" size="5"></label>
           <a href="#" id="spawn" accessKey="w">Spa<u>w</u>n</a><br>
-          <label>Connect on spawn <input type="checkbox" id="spawn-connect" checked></label>
           <span id="spawn-status"></span>
         </p>
       </fieldset>
@@ -73,8 +71,12 @@ $ ->
     $spawn       = $ '#spawn'        ; $cancel      = $ '#fav-cancel'
     $spawnPort   = $ '#spawn-port'   ; $listen      = $ '#listen'
     $spawnStatus = $ '#spawn-status' ; $listenPort  = $ '#listen-port'
-    $spawnConn   = $ '#spawn-connect'
     $listenDialog = null
+
+    enableSpawnAndListen = (b) ->
+      $('#spawn, #listen').button if b then 'enable' else 'disable'
+      $('#spawn-port, #listen-port').attr 'disabled', !b
+      return
 
     $connect.add($new).add($delete).add($save).add($cancel).add($spawn).add($listen).button()
     $list
@@ -123,10 +125,7 @@ $ ->
       if !(0 < port < 0x10000)
         $.alert 'Invalid port', 'Error', -> $spawnPort.focus(); return
       else
-        $spawnStatus.text 'Spawning...'; $spawn.button 'disable'; $spawnPort.attr 'disabled', true
-        D.socket.emit '*spawn', {port}
-        if $spawnConn.is ':checked'
-          setTimeout (-> D.socket.emit '*connect', {host: '127.0.0.1', port}), 1000
+        enableSpawnAndListen false; $spawnStatus.text 'Spawning...'; D.socket.emit '*spawn', {port}
       false
     $spawnPort.on 'keydown', null, 'return', -> $spawn.click(); false
     $listen.click ->
@@ -175,15 +174,15 @@ $ ->
       .on '*connectError', ({err}) -> $.alert err, 'Error'; return
       .on '*spawned', ({pid}) ->
         $spawnStatus.text "PID: #{pid}"
-        $spawnPort.attr 'disabled', true; $spawn.button 'disable'; return
+        enableSpawnAndListen false; return
       .on '*spawnedError', ({message, code}) ->
         $spawnStatus.text if code == 'ENOENT' then 'Cannot find dyalog executable on $PATH' else message
-        $('#spawn').button 'enable' # use selector instead of $spawn to prevent errors in $().button() plugin
-        $spawnPort.attr 'disabled', false; return
+        enableSpawnAndListen true; return
       .on '*spawnedExited', ({code, signal}) ->
         $spawnStatus.text(if code? then "exited with code #{code}" else "received #{signal}")
-        $('#spawn').button 'enable' # use selector instead of $spawn to prevent errors in $().button() plugin
-        $spawnPort.attr 'disabled', false; return
-      .on '*listenError', ({err}) -> $listenDialog?.dialog 'close'; $.alert err, 'Error'; return
+        enableSpawnAndListen true; return
+      .on '*listenError', ({err}) ->
+        $listenDialog?.dialog 'close'; $.alert err, 'Error'
+        enableSpawnAndListen true; return
     return
   return
