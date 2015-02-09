@@ -8,7 +8,6 @@ Bugs / Issues External to RIDE
 Formatting / Rendering Issues
   We need some white space / margin at the bottom, below the input line
   Connections box should be wide enough for "typical" entries; ideally resizable
-  Changing font size doesn't affect floating windows
   Overflown part of connections box doesn't show
   App icons for Mac & Windows (Jason is on the case)
 
@@ -106,3 +105,4 @@ Done:
   "undefined" appears in the session when you hold the enter key for a while
   Esc shouldn't save when no changes have been made
   When spawning an interpreter, make it connect back to the IDE (use RIDE_CONNECT instead of RIDE_LISTEN)
+  Changing font size doesn't affect floating windows

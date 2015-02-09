@@ -20,10 +20,14 @@ if process? then do ->
       localStorage.winInfo = JSON.stringify i
       return
     window.onbeforeunload?(); window.onbeforeunload = null; return
-  D.zoomIn    = -> nww.zoomLevel++;   return
-  D.zoomOut   = -> nww.zoomLevel--;   return
-  D.resetZoom = -> nww.zoomLevel = 0; return
-  $(document).on 'keydown', '*', 'f12', -> nww.showDevTools(); false
+  nww.zoomLevel = +localStorage.zoom || 0
+  $ ->
+    $(document)
+      .on 'keydown', '*', 'ctrl+= ctrl+shift+=', -> localStorage.zoom = ++nww.zoomLevel;   false
+      .on 'keydown', '*', 'ctrl+-',              -> localStorage.zoom = --nww.zoomLevel;   false
+      .on 'keydown', '*', 'ctrl+0',              -> localStorage.zoom = nww.zoomLevel = 0; false
+      .on 'keydown', '*', 'f12',                 -> nww.showDevTools();                    false
+    return
 
   # external editors (available only under nwjs)
   tmpDir = process.env.TMPDIR || process.env.TMP || process.env.TEMP || '/tmp'

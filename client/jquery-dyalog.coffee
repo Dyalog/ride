@@ -30,7 +30,7 @@ $.fn.dyalogmenu = (arg) ->
         if acc then $a.attr 'accessKey', acc.toLowerCase()
         if x.key
           $a.append $('<span class="m-shortcut">').text x.key
-          $(document).on 'keydown', '*', x.key, -> x.action(); false
+          if x.action then $(document).on 'keydown', '*', x.key, -> x.action(); false
         if x.group
           $a.addClass "m-group-#{x.group}"
           $a.toggleClass 'm-checked', !!x.checked
