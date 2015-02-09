@@ -23,9 +23,9 @@ if process? then do ->
   nww.zoomLevel = +localStorage.zoom || 0
   $ ->
     $(document)
-      .on 'keydown', '*', 'ctrl+= ctrl+shift+=', -> localStorage.zoom = ++nww.zoomLevel;   false
-      .on 'keydown', '*', 'ctrl+-',              -> localStorage.zoom = --nww.zoomLevel;   false
-      .on 'keydown', '*', 'ctrl+0',              -> localStorage.zoom = nww.zoomLevel = 0; false
+      .on 'keydown', '*', 'ctrl+= ctrl+shift+=', D.zoomIn    = -> localStorage.zoom = ++nww.zoomLevel;   false
+      .on 'keydown', '*', 'ctrl+-',              D.zoomOut   = -> localStorage.zoom = --nww.zoomLevel;   false
+      .on 'keydown', '*', 'ctrl+0',              D.resetZoom = -> localStorage.zoom = nww.zoomLevel = 0; false
       .on 'keydown', '*', 'f12',                 -> nww.showDevTools();                    false
     return
 

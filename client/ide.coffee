@@ -195,9 +195,9 @@ jQuery ($) ->
           .concat(
             if D.nwjs then [
               '-'
-              {'': 'Zoom _In',    key: 'Ctrl+='}
-              {'': 'Zoom _Out',   key: 'Ctrl+-'}
-              {'': '_Reset Zoom', key: 'Ctrl+0'}
+              {'': 'Zoom _In',    key: 'Ctrl+=', dontBindKey: 1, action: D.zoomIn}
+              {'': 'Zoom _Out',   key: 'Ctrl+-', dontBindKey: 1, action: D.zoomOut}
+              {'': '_Reset Zoom', key: 'Ctrl+0', dontBindKey: 1, action: D.resetZoom}
             ] else []
           )
           .concat [
