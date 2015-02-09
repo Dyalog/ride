@@ -2,9 +2,9 @@ D.Editor = (e, opts = {}) ->
   b = (cssClasses, description) -> "<a href='#' class='#{cssClasses} tb-button' title='#{description}'></a>"
   ($e = $ e).html """
     <div class="toolbar debugger-toolbar">
-      #{[
+      #{[ # when in a floating window, the first two buttons in each toolbar are hidden through css
         b 'tb-quit tb-rhs',  'Quit this function'
-        b 'tb-pop tb-rhs',   'Edit in a floating window' # hidden with CSS if this is already a floating window
+        b 'tb-pop tb-rhs',   'Edit in a floating window'
         b 'tb-over',         'Execute line'
         b 'tb-into',         'Trace into expression'
         b 'tb-back',         'Go back one line'
@@ -26,7 +26,7 @@ D.Editor = (e, opts = {}) ->
     <div class="toolbar editor-toolbar">
       #{[
         b 'tb-save tb-rhs',  'Save changes and return'
-        b 'tb-pop tb-rhs',   'Edit in a floating window' # hidden with CSS if this is already a floating window
+        b 'tb-pop tb-rhs',   'Edit in a floating window'
         b 'tb-line-numbers pressed', 'Toggle line numbers'
         b 'tb-comment',      'Comment selected text'
         b 'tb-uncomment',    'Uncomment selected text'
