@@ -17,7 +17,6 @@ Urgent Usability Issues
   Add button to float windows
   Shift+enter doesn't work on a Mac (observed on John Scholes' Mac)
   Debugger doesn't highlight current line when in a floating window
-  When spawning an interpreter, make it connect back to the IDE (use RIDE_CONNECT instead of RIDE_LISTEN)
   Command line arguments for bypassing the Connect screen, e.g. --spawn or --connect 1.2.3.4:4502
   Connect page: prompt user to save before selection changes
   Floating windows should be always on top (can add option post v14.1)
@@ -26,6 +25,8 @@ Less Urgent (but needed for 14.1):
   Verify there is a standard key to cycle between the windows
   Once you start auto-completing a WS name, the drop-down should stay up to allow several path selections
   Show host:port and PID in title, along with WS name
+  Pasting multiple lines in the session should be impossible (or pressing Enter should be emulated at every '\n')
+  A menu item to open another instance of the IDE (a quick and dirty replacement for "go back to connect screen" / "multiple sessions")
 
 Nice to have for v14.1:
   Option to automatically pop up completion box after a timeout OR use a keystroke
@@ -104,3 +105,4 @@ Done:
   CSS class to indicate when window is focus
   "undefined" appears in the session when you hold the enter key for a while
   Esc shouldn't save when no changes have been made
+  When spawning an interpreter, make it connect back to the IDE (use RIDE_CONNECT instead of RIDE_LISTEN)
