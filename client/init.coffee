@@ -11,7 +11,8 @@ do ->
         fxName: ''
       $('title').text wins[win].name
       ed0 = wins[win].widget; ed = wins[win].widget = D.Editor $('.ui-layout-center'), ed0.getOpts()
-      ed.setValue ed0.getValue(); ed.setCursorIndex ed0.getCursorIndex(); ed.updateSize(); ed.focus(); ed0 = null
+      ed.setValue ed0.getValue(); ed.setCursorIndex ed0.getCursorIndex(); ed.updateSize(); ed.highlight ed0.getHighlightedLine()
+      ed.focus(); ed0 = null
       window.onbeforeunload = -> ed.saveAndClose(); return
       return
   else
