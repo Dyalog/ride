@@ -12,7 +12,6 @@ Formatting / Rendering Issues
   App icons for Mac & Windows (Jason is on the case)
 
 Urgent Usability Issues
-  Add button to float windows
   Shift+enter doesn't work on a Mac (observed on John Scholes' Mac)
   Connect page: prompt user to save before selection changes
   Floating windows should be always on top (can add option post v14.1)
@@ -30,6 +29,7 @@ Nice to have for v14.1:
   js source maps
   If possible, keyboard shortcuts (`x) to be compatible with Dyalog Hardware keyboards (i.e. positional)
   Re-dock floating windows
+  Import RIDE1 settings from %HOME%\AppData\Local\Ride\Ride.exe_...
 
 Later:
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
@@ -106,3 +106,4 @@ Done:
   Disable dragging between editor and debugger tabs
   Debugger doesn't highlight current line when in a floating window
   Command line arguments for bypassing the Connect screen, e.g. --spawn or --connect 1.2.3.4:4502
+  Add button to float windows
