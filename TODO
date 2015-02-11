@@ -14,7 +14,6 @@ Formatting / Rendering Issues
 Urgent Usability Issues
   Add button to float windows
   Shift+enter doesn't work on a Mac (observed on John Scholes' Mac)
-  Command line arguments for bypassing the Connect screen, e.g. --spawn or --connect 1.2.3.4:4502
   Connect page: prompt user to save before selection changes
   Floating windows should be always on top (can add option post v14.1)
 
@@ -106,3 +105,4 @@ Done:
   Changing font size doesn't affect floating windows
   Disable dragging between editor and debugger tabs
   Debugger doesn't highlight current line when in a floating window
+  Command line arguments for bypassing the Connect screen, e.g. --spawn or --connect 1.2.3.4:4502

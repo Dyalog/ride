@@ -13,6 +13,8 @@ echo 'removing extra font formats'
 rm $b/apl385.{eot,svg,ttf}
 echo 'removing .ico icon'
 rm $b/favicon.ico
+echo 'adding nomnom library'
+mkdir -p $b/node_modules && cp -r node_modules/nomnom $b/node_modules
 
 desktop_app() {
   echo "building desktop app for $1"

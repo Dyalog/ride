@@ -184,5 +184,15 @@ $ ->
       .on '*listenError', ({err}) ->
         $listenDialog?.dialog 'close'; $.alert err, 'Error'
         enableSpawnAndListen true; return
+
+    if o = D.opts # handle command line arguments
+      setTimeout(
+        ->
+          if      o.listen  then (if o._[0] then $listenPort.val o._[0]); $listen.click()
+          else if o.spawn   then (if o._[0] then $spawnPort.val  o._[0]); $spawn.click()
+          else if o.connect then hp = parseFav o.connect; D.socket.emit '*connect', host: hp.host, port: hp.port or DEFAULT_PORT
+          return
+        100 # TODO: race condition?
+      )
     return
   return

@@ -1,6 +1,6 @@
 # NW.js-specific initialisation
 if process? then do ->
-  gui = require 'nw.gui'; crypto = require 'crypto'; fs = require 'fs'
+  gui = require 'nw.gui'; crypto = require 'crypto'; fs = require 'fs'; nomnom = require 'nomnom'
   path = require 'path'; {spawn} = require 'child_process'; {Proxy} = require './proxy'
   D.nwjs = true
   D.process = process
@@ -59,4 +59,9 @@ if process? then do ->
 
   D.quit = -> gui.Window.get().close(); return
   D.clipboardCopy = (s) -> require('nw.gui').Clipboard.get().set s; return
+  D.opts = nomnom.options(
+    connect: abbr: 'c', flag: true, metavar: 'HOST[:PORT]'
+    listen:  abbr: 'l', flag: true
+    spawn:   abbr: 's', flag: true
+  ).parse gui.App.argv
   return
