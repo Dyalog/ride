@@ -88,7 +88,11 @@ input, textarea
         .m-shortcut { color: $selfg }
         &.m-checked { background: $selbg 5px center no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAYAAADEUlfTAAAAMUlEQVQI13WOQQoAMAjDEv//5+4kiMyeSkOgcCRJvABAddkAoOYwgarbbADgzzhPzDwC8SPwjB0PzgAAAABJRU5ErkJggg==); }
       +outset
-  .m-box .m-opener { } // todo: display a triangle near the right edge
+  .m-box .m-opener
+    // "right 5px" might not work in Safari, see
+    // https://stackoverflow.com/questions/3197250/position-a-css-background-image-x-pixels-from-the-right#comment-35531805
+    background: transparent center right 5px no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAHCAYAAAAvZezQAAAAJ0lEQVQI12NgYGD4z4AEmKD0f3QBuCAjLi0wwIgswMiAbiADAwMDAGi8BQeDvdx4AAAAAElFTkSuQmCC)
+    &:focus { background: $selbg center right 5px no-repeat url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAHCAYAAAAvZezQAAAAKklEQVQI122MMQoAMBDCov//s50EOZpJA0qSMBhgpRsq9Z0USfIW7iHAA7hcE/722eQkAAAAAElFTkSuQmCC); }
   hr { margin: 3px 0 5px 0; } // used as a separator
 
 // language bar
