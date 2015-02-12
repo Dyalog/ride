@@ -47,11 +47,10 @@ D.Session = (e, opts = {}) ->
 
   cm.on 'beforeChange', (_, c) ->
     if c.origin != 'D'
-      if (l = c.from.line) != c.to.line
-        c.cancel()
+      if (l = c.from.line) != c.to.line || c.text.length > 1
+        c.cancel(); $.alert 'Cannot make changes across multiple lines in session', 'Error'
       else
-        mod[l] ?= cm.getLine l
-        cm.addLineClass l, 'background', 'modified'
+        mod[l] ?= cm.getLine l; cm.addLineClass l, 'background', 'modified'
     return
 
   add: (s) ->
