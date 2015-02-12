@@ -22,7 +22,7 @@ $ ->
 
   D.connectPage = ->
     $('body').html """
-      <fieldset>
+      <fieldset id="connect-fieldset">
         <legend>Connect to an interpreter</legend>
         <div id="fav-buttons">
           <a href="#" id="fav-connect" accessKey="o">C<u>o</u>nnect</a>
@@ -30,7 +30,7 @@ $ ->
           <a href="#" id="fav-delete">Delete</a>
         </div>
         <select multiple id="fav-list"></select>
-        <table>
+        <table id="fav-details">
           <tr>
             <td><u>A</u>ddress:</td>
             <td>
@@ -184,6 +184,8 @@ $ ->
       .on '*listenError', ({err}) ->
         $listenDialog?.dialog 'close'; $.alert err, 'Error'
         enableSpawnAndListen true; return
+
+    $('#fav-list').resizable handles: 's,e'
 
     if o = D.opts # handle command line arguments
       setTimeout(
