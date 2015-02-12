@@ -113,7 +113,7 @@ jQuery ($) ->
           edit:    (s, p) -> D.socket.emit 'Edit',           win: w, text: s, pos: p
           interrupt:      -> D.socket.emit 'WeakInterrupt'
           cutback:        -> D.socket.emit 'Cutback',        win: w
-          autocomplete: (s, i) -> D.socket.emit 'autocomplete', s, i, w
+          autocomplete: (s, i) -> D.socket.emit 'Autocomplete', line: s, pos: i, token: 0
           pop: -> popWindow w
           openInExternalEditor: D.openInExternalEditor
         wins[w].widget.open ee

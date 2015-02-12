@@ -220,14 +220,6 @@ D.Editor = (e, opts = {}) ->
   saved: (err) -> (if err then $.alert 'Cannot save changes' else opts.close?()); return
   getOpts: -> opts
   closePopup: -> (if opener then close()); return
-  autocomplete: (skip, options) ->
-    c = cm.getCursor(); from = line: c.line, ch: c.ch - skip
-    cm.showHint
-      completeOnSingleClick: true
-      extraKeys: Right: (cm, m) -> m.pick()
-      hint: ->
-        to = cm.getCursor(); u = cm.getLine(from.line)[from.ch...to.ch].toLowerCase() # u: completion prefix
-        {from, to, list: options.filter (o) -> o[...u.length].toLowerCase() == u}
-    return
+  autocomplete: D.setUpAutocompletion cm, opts.autocomplete
   saveAndClose: saveAndClose
   die: -> cm.setOption 'readOnly', true; return

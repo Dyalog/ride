@@ -42,6 +42,7 @@ js_files='
   client/help-urls.coffee
   client/about.coffee
   client/prefs.coffee
+  client/autocompletion.coffee
   client/editor.coffee
   client/session.coffee
   client/ide.coffee

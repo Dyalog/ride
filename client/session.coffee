@@ -78,13 +78,5 @@ D.Session = (e, opts = {}) ->
   focus: -> cm.focus()
   insert: (ch) -> (if !cm.getOption 'readOnly' then c = cm.getCursor(); cm.replaceRange ch, c, c, 'D'); return
   scrollCursorIntoView: -> setTimeout (-> cm.scrollIntoView cm.getCursor()), 1
-  autocomplete: (skip, options) ->
-    c = cm.getCursor(); from = line: c.line, ch: c.ch - skip
-    cm.showHint
-      completeOnSingleClick: true
-      extraKeys: Right: (cm, m) -> m.pick()
-      hint: ->
-        to = cm.getCursor(); u = cm.getLine(from.line)[from.ch...to.ch].toLowerCase() # u: completion prefix
-        {from, to, list: options.filter (o) -> o[...u.length].toLowerCase() == u}
-    return
+  autocomplete: D.setUpAutocompletion cm, opts.autocomplete
   die: -> cm.setOption 'readOnly', true; return
