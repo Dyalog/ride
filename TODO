@@ -32,7 +32,6 @@ Nice to have for v14.1:
   Re-dock floating windows
   Import RIDE1 settings from %HOME%\AppData\Local\Ride\Ride.exe_...
   About dialogue should be accessible somehow from Connect page
-  About: "Copy" should always copy all the text
 
 Later:
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
@@ -113,3 +112,4 @@ Done:
   Show host:port in title, along with WS name
   Floating windows should be always on top (can add option post v14.1)
   Connections box should be wide enough for "typical" entries; ideally resizable
+  About: "Copy" should always copy all the text
