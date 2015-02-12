@@ -14,7 +14,6 @@ Formatting / Rendering Issues
 Urgent Usability Issues
   Shift+enter doesn't work on a Mac (observed on John Scholes' Mac)
   Connect page: prompt user to save before selection changes
-  Floating windows should be always on top (can add option post v14.1)
 
 Less Urgent (but needed for 14.1):
   Verify there is a standard key to cycle between the windows
@@ -110,3 +109,4 @@ Done:
   Command line arguments for bypassing the Connect screen, e.g. --spawn or --connect 1.2.3.4:4502
   Add button to float windows
   Show host:port in title, along with WS name
+  Floating windows should be always on top (can add option post v14.1)

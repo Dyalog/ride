@@ -6,12 +6,14 @@ if process? then do ->
   D.process = process
 
   nww = gui.Window.get()
-  if !opener then do -> # restore window state:
-    try i = JSON.parse localStorage.winInfo || null
-    if i
-      if i.x? && i.y? then nww.moveTo i.x, i.y
-      if i.width && i.height then nww.resizeTo i.width, i.height
-    return
+  if opener
+    nww.setAlwaysOnTop true
+  else
+    # restore window state:
+    try wi = JSON.parse localStorage.winInfo || null
+    if wi
+      if wi.x? && wi.y? then nww.moveTo wi.x, wi.y
+      if wi.width && wi.height then nww.resizeTo wi.width, wi.height
   nww.show()
   nww.on 'close', ->
     process.nextTick -> nww.close true; return
