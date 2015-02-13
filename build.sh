@@ -37,18 +37,7 @@ js_files='
   jquery.hotkeys.js
   jquery.layout.js
   lbar/lbar.js
-  client/jquery-dyalog.coffee
-  client/keymap.coffee
-  client/help-urls.coffee
-  client/about.coffee
-  client/prefs.coffee
-  client/autocompletion.coffee
-  client/editor.coffee
-  client/session.coffee
-  client/ide.coffee
-  client/connect.coffee
   init-nw.coffee
-  client/init.coffee
 '
 us='' # names of compiled files
 changed=0
@@ -62,6 +51,20 @@ for f in $js_files; do
     else echo "cleaning up $f"; <$f sed '/^\(var \w\+ = \)\?require(/d' >$u; fi
   fi
 done
+echo 'browserifying'
+browserify -t coffeeify        \
+  client/jquery-dyalog.coffee  \
+  client/keymap.coffee         \
+  client/help-urls.coffee      \
+  client/about.coffee          \
+  client/prefs.coffee          \
+  client/autocompletion.coffee \
+  client/editor.coffee         \
+  client/session.coffee        \
+  client/ide.coffee            \
+  client/connect.coffee        \
+  client/init.coffee           \
+    >build/tmp/client.js
 version_file=build/tmp/version.js
 >$version_file cat <<.
   var D=D||{};
@@ -71,6 +74,6 @@ version_file=build/tmp/version.js
     rev:'$(git rev-parse HEAD)'
   };
 .
-if [ $changed -ne 0 ]; then echo 'concatenating js files'; cat $version_file $us >build/static/D.js; fi
+if [ $changed -ne 0 ]; then echo 'concatenating js files'; cat $version_file $us build/tmp/client.js >build/static/D.js; fi
 
 cp -ur style/apl385.* style/*.png favicon.ico package.json build/static/

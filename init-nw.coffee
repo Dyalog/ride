@@ -1,4 +1,5 @@
 # NW.js-specific initialisation
+@D ?= {}
 if process? then do ->
   gui = require 'nw.gui'; crypto = require 'crypto'; fs = require 'fs'; nomnom = require 'nomnom'
   path = require 'path'; {spawn} = require 'child_process'; {Proxy} = require './proxy'
