@@ -23,7 +23,7 @@ As a desktop application
 It is capable of containing both the proxy and the browser component in the same process, so communication between them can be short-circuited.
 To package apps for the various platforms, run
     ./dist.sh
-and find them under `./build/dyalogjs/`.
+and find them under `./build/ride/`.
 
 The desktop app can
 

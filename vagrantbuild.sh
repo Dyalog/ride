@@ -18,21 +18,21 @@ case `uname` in
     Linux)
           case `uname -m` in
             x86_64)
-                RIDEBIN=linux64/dyalogjs
+                RIDEBIN=linux64/ride
                 ;;
               x86)
-                RIDEBIN=linux32/dyalogjs
+                RIDEBIN=linux32/ride
                 ;;
           esac
           ;;
     Darwin)
-          RIDEBIN=osx64/dyalogjs.app/Contents/MacOS/node-webkit
+          RIDEBIN=osx64/ride.app/Contents/MacOS/node-webkit
           ;;
     MINGW*)
-          RIDEBIN=win32/dyalogjs.exe
+          RIDEBIN=win32/ride.exe
           ;;
 esac
 
 echo Running RideJS for `uname`
-./build/dyalogjs/${RIDEBIN}
+./build/ride/${RIDEBIN}
 

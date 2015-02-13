@@ -33,7 +33,7 @@ for platform in ${@:-win osx linux}; do desktop_app $platform; done
 
 # workaround for https://github.com/mllrsohn/grunt-node-webkit-builder/issues/125
 for bits in 32 64; do
-  d=build/dyalogjs/osx$bits/dyalogjs.app/Contents/Resources
+  d=build/ride/osx$bits/ride.app/Contents/Resources
   if [ -d $d ]; then cp -uv style/DyalogUnicode.icns $d/nw.icns; fi
 done
 
@@ -53,4 +53,4 @@ echo 'removing libffmpegsumo from build'
 find build -name '*ffmpegsumo*' -delete
 
 echo 'fixing file permissions'
-chmod -R g+w build/dyalogjs
+chmod -R g+w build/ride

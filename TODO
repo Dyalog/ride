@@ -12,7 +12,6 @@ Not yet prioritised
   About dialogue should be accessible somehow from Connect page
   Context menu ("Copy", "Paste", etc) on right mouse click
   On startup, make sure the window fits in the screen (to avoid trouble with multiple screens)
-  Change name of executable from "dyalogjs" to "ride"
   Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
 
 Formatting / Rendering Issues
@@ -119,3 +118,4 @@ Done:
   Connections box should be wide enough for "typical" entries; ideally resizable
   About: "Copy" should always copy all the text
   Pasting multiple lines in the session should be impossible (or pressing Enter should be emulated at every '\n')
+  Change name of executable from "dyalogjs" to "ride"
