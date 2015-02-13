@@ -75,6 +75,6 @@ version_file=build/tmp/version.js
     rev:'$(git rev-parse HEAD)'
   };
 .
-if [ $changed -ne 0 ]; then echo 'concatenating js files'; cat $version_file $us build/tmp/client.js >build/static/D.js; fi
+echo 'concatenating js files'; cat $version_file $us build/tmp/client.js >build/static/D.js
 
 cp -ur style/apl385.* style/*.png favicon.ico package.json build/static/
