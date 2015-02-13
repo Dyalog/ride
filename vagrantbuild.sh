@@ -10,9 +10,16 @@ if ! [ "`vagrant status | grep running |head -1`" ]; then
  ./vagrantfiles/provision.sh
 fi
 
-vagrant ssh -c "cp -Ruv /RideJS \$HOME/RideJS"
+if [ "$1" = "clean" ]; then
+  echo "Cleaning Files"
+  ./clean.sh
+  vagrant ssh -c "rm -Rf \$HOME/RideJS"
+fi
+  echo "Copying Files"
+vagrant ssh -c "cp -Ruv /RideJS \$HOME/"
+  echo "Building"
 vagrant ssh -c "cd \$HOME/RideJS && . dist.sh"
-vagrant ssh -c "cp -Ruv \$HOME/RideJS/build /RideJS/build"
+vagrant ssh -c "cp -Ruv \$HOME/RideJS/build /RideJS/"
 
 case `uname` in
     Linux)
