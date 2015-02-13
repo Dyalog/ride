@@ -1,8 +1,15 @@
+keymap = require './keymap.coffee'
 module.exports = (cm, requestAutocompletion) -> # set up autocompletion, common code between session and editor
   tid = null # timeout id
   cm.on 'change', ->
     clearTimeout tid
-    tid = setTimeout (-> tid = null; c = cm.getCursor(); requestAutocompletion cm.getLine(c.line), c.ch; return), 500
+    tid = setTimeout(
+      ->
+        tid = null; c = cm.getCursor(); s = cm.getLine c.line; i = c.ch
+        if s[i - 1] !in [' ', keymap.getPrefixKey()] then requestAutocompletion s, i
+        return
+      500
+    )
     return
   (skip, options) ->
     c = cm.getCursor(); from = line: c.line, ch: c.ch - skip
