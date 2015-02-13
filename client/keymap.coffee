@@ -5,10 +5,10 @@ inherit = (x) -> (F = ->):: = x; new F
 
 DEFAULT_PREFIX_KEY = '`'
 prefixKeyListeners = []
-D.onPrefixKeyChange = (f) -> prefixKeyListeners.push f
-D.getPrefixKey = -> localStorage.prefixKey || DEFAULT_PREFIX_KEY
-D.setPrefixKey = (x = DEFAULT_PREFIX_KEY) ->
-  old = D.getPrefixKey()
+onPrefixKeyChange = (f) -> prefixKeyListeners.push f
+@getPrefixKey = getPrefixKey = -> localStorage.prefixKey || DEFAULT_PREFIX_KEY
+@setPrefixKey = (x = DEFAULT_PREFIX_KEY) ->
+  old = getPrefixKey()
   if x != old
     if x != DEFAULT_PREFIX_KEY then localStorage.prefixKey = x else delete localStorage.prefixKey
     for f in prefixKeyListeners then f x, old
@@ -232,11 +232,11 @@ CodeMirror.keyMap.dyalog = inherit
     popup.focus?()
     return
 
-CodeMirror.keyMap.dyalog["'#{D.getPrefixKey()}'"] = (cm) ->
+CodeMirror.keyMap.dyalog["'#{getPrefixKey()}'"] = (cm) ->
   cm.setOption 'autoCloseBrackets', false
   cm.setOption 'keyMap', 'dyalogBackquote'
   c = cm.getCursor()
-  cm.replaceSelection D.getPrefixKey(), 'end'
+  cm.replaceSelection getPrefixKey(), 'end'
   ctid = setTimeout(
     -> cm.showHint
       completeOnSingleClick: true
@@ -250,7 +250,7 @@ CodeMirror.keyMap.dyalog["'#{D.getPrefixKey()}'"] = (cm) ->
         data
     500
   )
-D.onPrefixKeyChange (x, old) -> x = "'#{x}'"; old = "'#{old}'"; m = CodeMirror.keyMap.dyalog; m[x] = m[old]; delete m[old]
+onPrefixKeyChange (x, old) -> x = "'#{x}'"; old = "'#{old}'"; m = CodeMirror.keyMap.dyalog; m[x] = m[old]; delete m[old]; return
 
 CodeMirror.keyMap.dyalogBackquote = nofallthrough: true, disableInput: true
 ds = {}; for line in squiggleDescriptions.split '\n' then ds[line[0]] = line[2..]
@@ -258,20 +258,20 @@ if ks.length != vs.length then console.error? 'bad configuration of backquote ke
 for k, i in ks then do (k = k) ->
   v = vs[i]
   D.reverseKeyMap[v] ?= k
-  bqc.push text: v, render: (e) -> $(e).text "#{v} #{D.getPrefixKey()}#{k} #{ds[v] || ''}  "
+  bqc.push text: v, render: (e) -> $(e).text "#{v} #{getPrefixKey()}#{k} #{ds[v] || ''}  "
   CodeMirror.keyMap.dyalogBackquote["'#{k}'"] = (cm) ->
     clearTimeout ctid
     cm.state.completionActive?.close?()
     cm.setOption 'keyMap', 'dyalog'
     cm.setOption 'autoCloseBrackets', true
     c = cm.getCursor()
-    if k == D.getPrefixKey() then bqbqHint cm else cm.replaceRange v, {line: c.line, ch: c.ch - 1}, c
+    if k == getPrefixKey() then bqbqHint cm else cm.replaceRange v, {line: c.line, ch: c.ch - 1}, c
     return
 
-bqc[0].render = (e) -> e.innerHTML = "  #{D.getPrefixKey()}#{D.getPrefixKey()} <i>completion by name</i>"
+bqc[0].render = (e) -> e.innerHTML = "  #{pk = getPrefixKey()}#{pk} <i>completion by name</i>"
 bqc[0].hint = bqbqHint = (cm) ->
   c = cm.getCursor()
-  cm.replaceSelection D.getPrefixKey(), 'end'
+  cm.replaceSelection getPrefixKey(), 'end'
   cm.showHint
     completeOnSingleClick: true
     extraKeys:
@@ -287,6 +287,6 @@ for line in squiggleNames.split '\n' then do ->
   [squiggle, names...] = line.split ' '
   for name in names then bqbqc.push name: name, text: squiggle, render: do (name = name) -> (e) ->
     key = D.reverseKeyMap[squiggle]
-    $(e).text "#{squiggle} #{if key then D.getPrefixKey() + key else '  '} #{D.getPrefixKey()}#{D.getPrefixKey()}#{name}"
+    $(e).text "#{squiggle} #{if key then getPrefixKey() + key else '  '} #{getPrefixKey()}#{getPrefixKey()}#{name}"
 
 ks = vs = squiggleDescriptions = squiggleNames = null

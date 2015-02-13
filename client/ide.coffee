@@ -2,6 +2,7 @@ about = require './about.coffee'
 prefs = require './prefs.coffee'
 Editor = require './editor.coffee'
 Session = require './session.coffee'
+keymap = require './keymap.coffee'
 
 module.exports = (opts = {}) ->
   $('body').html """
@@ -137,7 +138,7 @@ module.exports = (opts = {}) ->
       ttid = setTimeout(
         ->
           ttid = null; key = D.reverseKeyMap[x]
-          keyText = if key && x.charCodeAt(0) > 127 then "Keyboard: #{D.getPrefixKey()}#{key}\n\n" else ''
+          keyText = if key && x.charCodeAt(0) > 127 then "Keyboard: #{keymap.getPrefixKey()}#{key}\n\n" else ''
           h = D.lbarTips[x] or [x, '']; $tipDesc.text h[0]; $tipText.text keyText + h[1]
           $tipTriangle.css(left: 3 + p.left + ($t.width() - $tipTriangle.width()) / 2, top: p.top + $t.height() + 2).show()
           x0 = p.left - 21; x1 = x0 + $tip.width(); y0 = p.top + $t.height()
