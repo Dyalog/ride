@@ -1,4 +1,5 @@
 connect = require './connect.coffee'
+Editor = require './editor.coffee'
 
 D.urlParams = {}
 for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
@@ -11,7 +12,7 @@ if opener && (win = D.urlParams.win)? # are we running in a floating editor wind
       center: onresize: -> ed?.updateSize(); return
       fxName: ''
     $('title').text wins[win].name
-    ed0 = wins[win].widget; ed = wins[win].widget = D.Editor $('.ui-layout-center'), ed0.getOpts()
+    ed0 = wins[win].widget; ed = wins[win].widget = Editor $('.ui-layout-center'), ed0.getOpts()
     ed.setValue ed0.getValue(); ed.setCursorIndex ed0.getCursorIndex(); ed.updateSize(); ed.highlight ed0.getHighlightedLine()
     ed.focus(); ed0 = null
     window.onbeforeunload = -> ed.saveAndClose(); return
