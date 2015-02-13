@@ -7,6 +7,14 @@ Bugs / Issues External to RIDE
   The interpreter ignores $RIDE_CONNECT and $RIDE_LISTEN; reported by Kai, reproduced by Nick, fix by JD or Bjørn pending
   Show PID in title, along with WS name.  It needs to be added to the RIDE protocol
 
+Not yet prioritised
+  Import RIDE1 settings from %HOME%\AppData\Local\Ride\Ride.exe_...
+  About dialogue should be accessible somehow from Connect page
+  Context menu ("Copy", "Paste", etc) on right mouse click
+  On startup, make sure the window fits in the screen (to avoid trouble with multiple screens)
+  Change name of executable from "dyalogjs" to "ride"
+  Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
+
 Formatting / Rendering Issues
   We need some white space / margin at the bottom, below the input line
   Overflown part of connections box doesn't show
@@ -29,8 +37,6 @@ Nice to have for v14.1:
   js source maps
   If possible, keyboard shortcuts (`x) to be compatible with Dyalog Hardware keyboards (i.e. positional)
   Re-dock floating windows
-  Import RIDE1 settings from %HOME%\AppData\Local\Ride\Ride.exe_...
-  About dialogue should be accessible somehow from Connect page
 
 Later:
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
