@@ -53,7 +53,8 @@ for f in $js_files; do
 done
 echo 'browserifying'
 browserify -t coffeeify        \
-  client/jquery-dyalog.coffee  \
+  client/util.coffee           \
+  client/menu.coffee           \
   client/keymap.coffee         \
   client/helpurls.coffee       \
   client/about.coffee          \

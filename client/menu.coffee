@@ -1,11 +1,4 @@
-# jQuery utility plugins
-
-$.alert = (message, title, callback) ->
-  $('<p>').text(message).dialog modal: 1, title: title, buttons: [
-    text: 'OK', click: -> $(@).dialog 'close'; callback?(); return
-  ]
-  return
-
+# This is a generic jQuery plugin to create a menu.  For its concrete usage, see ide.coffee
 $.fn.dyalogmenu = (arg) ->
   if typeof arg == 'object' && arg && arg.length?
     @each ->
