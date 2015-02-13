@@ -55,7 +55,7 @@ echo 'browserifying'
 browserify -t coffeeify        \
   client/jquery-dyalog.coffee  \
   client/keymap.coffee         \
-  client/help-urls.coffee      \
+  client/helpurls.coffee       \
   client/about.coffee          \
   client/prefs.coffee          \
   client/autocompletion.coffee \
