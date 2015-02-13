@@ -1,4 +1,5 @@
-D.Editor = (e, opts = {}) ->
+autocompletion = require './autocompletion.coffee'
+module.exports = (e, opts = {}) ->
   b = (cssClasses, description) -> "<a href='#' class='#{cssClasses} tb-button' title='#{description}'></a>"
   ($e = $ e).html """
     <div class="toolbar debugger-toolbar">
@@ -220,6 +221,6 @@ D.Editor = (e, opts = {}) ->
   saved: (err) -> (if err then $.alert 'Cannot save changes' else opts.close?()); return
   getOpts: -> opts
   closePopup: -> (if opener then close()); return
-  autocomplete: D.setUpAutocompletion cm, opts.autocomplete
+  autocomplete: autocompletion cm, opts.autocomplete
   saveAndClose: saveAndClose
   die: -> cm.setOption 'readOnly', true; return

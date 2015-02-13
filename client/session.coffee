@@ -1,4 +1,5 @@
-D.Session = (e, opts = {}) ->
+autocompletion = require './autocompletion.coffee'
+module.exports = (e, opts = {}) ->
 
   # keep track of which lines have been modified and preserve the original content
   mod = {} # line number -> original content
@@ -78,5 +79,5 @@ D.Session = (e, opts = {}) ->
   focus: -> cm.focus()
   insert: (ch) -> (if !cm.getOption 'readOnly' then c = cm.getCursor(); cm.replaceRange ch, c, c, 'D'); return
   scrollCursorIntoView: -> setTimeout (-> cm.scrollIntoView cm.getCursor()), 1
-  autocomplete: D.setUpAutocompletion cm, opts.autocomplete
+  autocomplete: autocompletion cm, opts.autocomplete
   die: -> cm.setOption 'readOnly', true; return

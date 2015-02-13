@@ -1,4 +1,4 @@
-D.showPrefs = ->
+module.exports = ->
   ok = ->
     pk = $pk.val()
     if pk.length == 1 then D.setPrefixKey pk; $d.dialog 'close'

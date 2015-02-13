@@ -1,4 +1,4 @@
-D.about = ->
+module.exports = ->
   v = D.versionInfo; i = D.remoteIdentification || {}; u = 'unknown'
   info = """
     IDE:

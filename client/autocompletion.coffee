@@ -1,4 +1,4 @@
-D.setUpAutocompletion = (cm, requestAutocompletion) ->
+module.exports = (cm, requestAutocompletion) -> # set up autocompletion, common code between session and editor
   tid = null # timeout id
   cm.on 'change', ->
     clearTimeout tid

@@ -1,3 +1,4 @@
+ide = require './ide.coffee'
 $ ->
   DEFAULT_PORT = 4502
   localStorage.favs ?= JSON.stringify [host: '127.0.0.1', port: DEFAULT_PORT]
@@ -169,7 +170,7 @@ $ ->
           ]
         return
       .on '*hijacked', ({addr}) -> $.alert "#{addr} has taken over usage of this proxy.", 'Disconnected'; return
-      .on '*connected', ({host, port}) -> $listenDialog?.dialog 'close'; D.idePage {host, port}; return
+      .on '*connected', ({host, port}) -> $listenDialog?.dialog 'close'; ide {host, port}; return
       .on '*disconnected', -> $.alert 'Interpreter disconnected'; return
       .on '*connectError', ({err}) -> $.alert err, 'Error'; return
       .on '*spawned', ({pid}) ->
