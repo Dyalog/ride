@@ -2,14 +2,6 @@
 fs = require 'fs'
 t0 = +new Date; log = (s) -> process.stdout.write "#{new Date - t0}: #{s}\n"
 
-if fs.existsSync 'build.sh'
-  # we are running on a developer box, invoke the build script first
-  require 'coffee-script/register'
-  execSync = require 'exec-sync'
-  throttle = (f) -> tid = null; -> if !tid? then tid = setTimeout (-> f(); tid = null), 200
-  do build = throttle -> log 'building...'; execSync './build.sh'; log 'build done'
-  'client style index.html proxy.coffee'.split(' ').forEach (f) -> fs.watch f, build
-
 opts = require('nomnom').options(
   cert: metavar: 'FILE', help: 'PEM-encoded certificate for https', default: 'ssl/cert.pem'
   key:  metavar: 'FILE', help: 'PEM-encoded private key for https', default: 'ssl/key.pem'
