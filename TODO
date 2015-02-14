@@ -8,13 +8,15 @@ Bugs / Issues External to RIDE
   Show PID in title, along with WS name.  It needs to be added to the RIDE protocol
 
 Not yet prioritised
-  Import RIDE1 settings from %HOME%\AppData\Local\Ride\Ride.exe_...
   About dialogue should be accessible somehow from Connect page
   Context menu ("Copy", "Paste", etc) on right mouse click
   On startup, make sure the window fits in the screen (to avoid trouble with multiple screens)
   Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
 
 Formatting / Rendering Issues
+  If you hit quote three times, you end up with first one, then two, then SIX quotes
+  Auto-complete should not happen at quote-quad input
+  Auto-complete should probably not complete on enter, this can cause very bad problems if the user is not carefully looking
   We need some white space / margin at the bottom, below the input line
   Overflown part of connections box doesn't show
   App icons for Mac & Windows (Jason is on the case)
