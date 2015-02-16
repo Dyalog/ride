@@ -20,7 +20,7 @@ module.exports = (opts = {}) ->
   """
 
   isDead = 0
-  execQueue = [] # pending lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
+  pending = [] # pending lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
 
   # "wins" maps window ids, as they appear in the RIDE protocol, to window information objects that have the following properties:
   #   widget: a session or an editor
@@ -31,7 +31,7 @@ module.exports = (opts = {}) ->
       autocomplete: (s, i) -> D.socket.emit 'Autocomplete', line: s, pos: i, token: 0
       exec: (lines, trace) ->
         if lines && lines.length
-          if !trace then execQueue = lines[1..]
+          if !trace then pending = lines[1..]
           D.socket.emit 'Execute', {trace, text: lines[0] + '\n'}
         return
 
@@ -83,9 +83,9 @@ module.exports = (opts = {}) ->
     .on 'AppendSessionOutput', ({result}) -> session.add result
     .on 'NotAtInputPrompt', -> session.noPrompt()
     .on 'AtInputPrompt', ({why}) ->
-      if execQueue.length then D.socket.emit 'Execute', trace: 0, text: execQueue.shift() + '\n' else session.prompt why
+      if pending.length then D.socket.emit 'Execute', trace: 0, text: pending.shift() + '\n' else session.prompt why
       return
-    .on 'HadError', -> execQueue.splice 0, execQueue.length; return
+    .on 'HadError', -> pending.splice 0, pending.length; return
     .on 'FocusWindow', ({win}) -> $("#wintab#{win} a").click(); wins[win].widget.focus(); return
     .on 'WindowTypeChanged', ({win, tracer}) -> wins[win].widget.setDebugger tracer
     .on 'autocomplete', (token, skip, options) -> wins[token].widget.autocomplete skip, options
