@@ -25,11 +25,19 @@ if process? then do ->
     window.onbeforeunload?(); window.onbeforeunload = null; return
   nww.zoomLevel = +localStorage.zoom || 0
   $ ->
+    contextMenu = null
     $(document)
       .on 'keydown', '*', 'ctrl+= ctrl+shift+=', D.zoomIn    = -> localStorage.zoom = ++nww.zoomLevel;   false
       .on 'keydown', '*', 'ctrl+-',              D.zoomOut   = -> localStorage.zoom = --nww.zoomLevel;   false
       .on 'keydown', '*', 'ctrl+0',              D.resetZoom = -> localStorage.zoom = nww.zoomLevel = 0; false
-      .on 'keydown', '*', 'f12',                 -> nww.showDevTools();                    false
+      .on 'keydown', '*', 'f12', -> nww.showDevTools(); false
+      .on 'contextmenu', (e) ->
+        if !contextMenu
+          contextMenu = new gui.Menu
+          ['Cut', 'Copy', 'Paste'].forEach (x) ->
+            contextMenu.append new gui.MenuItem label: x, click: (-> document.execCommand x; return); return
+        contextMenu.popup e.clientX, e.clientY
+        false
     return
 
   # external editors (available only under nwjs)
