@@ -156,7 +156,8 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
           log 'listening for connections from spawned interpreter on port ' + port
           exe = process.env.DYALOG_IDE_INTERPRETER_EXE || if process.platform == 'darwin' then '../dyalogUnicode/mapl' else 'dyalog'
           log "spawning interpreter #{JSON.stringify exe}"
-          child = require('child_process').spawn exe, ['+s', '-q'], env: extend process.env, RIDE_CONNECT: '127.0.0.1:' + port
+          child = require('child_process').spawn exe, ['+s', '-q'], env: extend process.env,
+            RIDE_CONNECT: "127.0.0.1:#{port}", RIDE_INIT: "CONNECT 127.0.0.1:#{port}"
           toBrowser '*spawned', pid: child.pid
           child.on 'error', (err) ->
             server?.close(); server = null; client = null
