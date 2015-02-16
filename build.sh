@@ -52,20 +52,7 @@ for f in $js_files; do
   fi
 done
 echo 'browserifying'
-browserify -t coffeeify        \
-  client/util.coffee           \
-  client/menu.coffee           \
-  client/keymap.coffee         \
-  client/helpurls.coffee       \
-  client/about.coffee          \
-  client/prefs.coffee          \
-  client/autocompletion.coffee \
-  client/editor.coffee         \
-  client/session.coffee        \
-  client/ide.coffee            \
-  client/connect.coffee        \
-  client/init.coffee           \
-    >build/tmp/client.js
+browserify -t coffeeify client/*.coffee >build/tmp/client.js
 version_file=build/tmp/version.js
 >$version_file cat <<.
   var D=D||{};
