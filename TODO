@@ -26,6 +26,7 @@ Urgent Usability Issues
   Connect page: prompt user to save before selection changes
   Connect page: "Save" is enabled although nothing is selected in the favs list; reported by Morten 2015-02-11 over XMPP
   Autocompletion doesn't work; reported by Morten in an email from 2015-02-11, Nick can't reproduce it
+  Autocompletion: Tab/Shift-Tab should cycle through the list (Nick)
 
 Less Urgent (but needed for 14.1):
   Verify there is a standard key to cycle between the windows
