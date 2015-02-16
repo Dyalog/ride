@@ -19,7 +19,7 @@ cat >${JSONTMP} <<-!!EOF
   "target_commitish": "master",
   "name": "v${VERSION}",
   "body": "Pre-Release of Ride 2.0",
-  "draft": true,
+  "draft": false,
   "prerelease": true
 }
 !!EOF
