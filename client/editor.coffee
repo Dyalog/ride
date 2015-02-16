@@ -104,7 +104,7 @@ module.exports = (e, opts = {}) ->
 
   cm = CodeMirror $e.find('.cm')[0],
     lineNumbers: !opts.debugger, fixedGutter: false, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
-    keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: true, gutters: ['breakpoints', 'CodeMirror-linenumbers']
+    keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: {triples: ''}, gutters: ['breakpoints', 'CodeMirror-linenumbers']
     extraKeys: k
 
   createBreakpointElement = -> $('<div class="breakpoint">●</div>')[0]
