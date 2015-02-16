@@ -1,4 +1,5 @@
 ide = require './ide.coffee'
+about = require './about.coffee'
 
 DEFAULT_PORT = 4502
 localStorage.favs ?= JSON.stringify [host: '127.0.0.1', port: DEFAULT_PORT]
@@ -26,6 +27,7 @@ module.exports = ->
     <fieldset id="connect-fieldset">
       <legend>Connect to an interpreter</legend>
       <div id="fav-buttons">
+        <a id="about" href="#">About</a>
         <a href="#" id="fav-connect" accessKey="o">C<u>o</u>nnect</a>
         <a href="#" id="fav-new" accessKey="n"><u>N</u>ew</a>
         <a href="#" id="fav-delete">Delete</a>
@@ -72,6 +74,7 @@ module.exports = ->
   $spawn       = $ '#spawn'        ; $cancel      = $ '#fav-cancel'
   $spawnPort   = $ '#spawn-port'   ; $listen      = $ '#listen'
   $spawnStatus = $ '#spawn-status' ; $listenPort  = $ '#listen-port'
+  $about       = $ '#about'
   $listenDialog = null
 
   enableSpawnAndListen = (b) ->
@@ -79,7 +82,7 @@ module.exports = ->
     $('#spawn-port, #listen-port').attr 'disabled', !b
     return
 
-  $connect.add($new).add($delete).add($save).add($cancel).add($spawn).add($listen).button()
+  $connect.add($about).add($new).add($delete).add($save).add($cancel).add($spawn).add($listen).button()
   $list
     .on 'dblclick', 'option', (e) -> $connect.click(); false
     .on 'keydown', null, 'return', -> $connect.click(); false
@@ -155,6 +158,7 @@ module.exports = ->
     false
   $listenPort.on 'keydown', null, 'return', -> $listen.click(); false
   $list.sortable cursor: 'move', revert: true, tolerance: 'pointer', containment: 'parent', axis: 'y', update: storeFavs
+  $about.click -> about(); false
 
   favs = try JSON.parse localStorage.favs catch then []
   $list.html favs.map((x) -> "<option '#{if x.sel then 'selected' else ''}>#{fmtFav x}</option>").join ''

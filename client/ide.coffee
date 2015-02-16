@@ -199,7 +199,7 @@ module.exports = (opts = {}) ->
         ]
     }
     {'': '_Help', items: [
-      {'': '_About', key: 'Shift+F1', action: about}
+      {'': '_About', key: 'Shift+F1', dontBindKey: 1, action: about}
     ]}
   ]
   return

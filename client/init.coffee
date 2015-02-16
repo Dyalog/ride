@@ -1,5 +1,6 @@
 connect = require './connect.coffee'
 Editor = require './editor.coffee'
+about = require './about.coffee'
 
 D.urlParams = {}
 for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
@@ -33,6 +34,7 @@ $ ->
     else if /^(linux|x11|android)/i.test p then 'freedom'
     else 'redmond'
   $('body').addClass "theme-#{localStorage.theme}"
+  $(document).on 'keydown', '*', 'shift+f1', -> about(); false
   return
 
 # CSS class for focused window
