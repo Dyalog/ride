@@ -16,7 +16,10 @@ module.exports = (cm, requestAutocompletion) -> # set up autocompletion, common 
     cm.showHint
       completeOnSingleClick: true
       completeSingle: false
-      extraKeys: Right: (cm, m) -> m.pick()
+      extraKeys:
+        Right: (cm, m) -> m.pick(); return
+        Tab: (cm, m) -> m.moveFocus 1; return
+        'Shift-Tab': (cm, m) -> m.moveFocus -1; return
       hint: ->
         to = cm.getCursor(); u = cm.getLine(from.line)[from.ch...to.ch].toLowerCase() # u: completion prefix
         {from, to, list: options.filter (o) -> o[...u.length].toLowerCase() == u}
