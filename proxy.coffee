@@ -1,11 +1,15 @@
 fs = require 'fs'
+net = require 'net'
+os = require 'os'
+path = require 'path'
+
 log = do ->
   t0 = +new Date # log timestamps will be number of milliseconds since t0
   N = 50; T = 1000 # log no more than N log messages per T milliseconds
   n = t = 0 # at any moment, there have been n messages since time t
   # If $DYALOG_IDE_LOG is present, log to stdout and to a file, otherwise only to stdout.
   if p = process.env.DYALOG_IDE_LOG
-    if h = process.env.HOME || process.env.USERPROFILE then p = require('path').resolve h, p
+    if h = process.env.HOME || process.env.USERPROFILE then p = path.resolve h, p
     fd = fs.openSync p, 'a'
   (s) -> # the actual log() function
     if (t1 = +new Date) - t > T then t = t1; n = 1 # if last message was too long ago, start counting afresh
@@ -22,7 +26,7 @@ addr = (socket) -> socket?.request?.connection?.remoteAddress || 'an IDE' # form
 
 ipAddresses = []
 try
-  for iface, addrs of require('os').networkInterfaces()
+  for iface, addrs of os.networkInterfaces()
     for a in addrs when a.family == 'IPv4' && !a.internal
       ipAddresses.push a.address
 catch e then log 'cannot determine ip addresses: ' + e
@@ -140,11 +144,11 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
 
       # proxy management events that don't reach the interpreter start with a '*'
       .on '*connect', ({host, port}) ->
-        client = require('net').connect {host, port}, -> toBrowser '*connected', {host, port}; return
+        client = net.connect {host, port}, -> toBrowser '*connected', {host, port}; return
         setUpInterpreterConnection()
         return
       .on '*spawn', ({port}) ->
-        server = require('net').createServer (c) ->
+        server = net.createServer (c) ->
           log 'spawned interpreter connected'
           server?.close(); server = null; client = c
           toBrowser '*connected', {host: '127.0.0.1', port}; setUpInterpreterConnection(); return
@@ -168,7 +172,7 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
           return
         return
       .on '*listen', listen = ({port, callback}) ->
-        server = require('net').createServer (c) ->
+        server = net.createServer (c) ->
           host = c?.request?.connection?.remoteAddress; log 'interpreter connected from ' + host
           server?.close(); server = null; client = c; toBrowser '*connected', {host, port}; setUpInterpreterConnection()
           return

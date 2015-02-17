@@ -69,7 +69,7 @@ if process? then do ->
     socket
 
   D.quit = -> gui.Window.get().close(); return
-  D.clipboardCopy = (s) -> require('nw.gui').Clipboard.get().set s; return
+  D.clipboardCopy = (s) -> gui.Clipboard.get().set s; return
   D.opts = nomnom.options(
     connect: abbr: 'c', flag: true, metavar: 'HOST[:PORT]'
     listen:  abbr: 'l', flag: true
