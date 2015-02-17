@@ -48,8 +48,10 @@ $.fn.dyalogmenu = (arg) ->
         return
 
       leftRight = (d) -> -> # d: delta, either +1 or -1;   note that this is a higher-order function
-        if $(@).is '.m-opener'
+        if d == 1 && $(@).is '.m-opener'
           mFocus $(@).next('.m-box').find('a').first()
+        else if d == -1 && $(@).parents('.m-sub').length > 1
+          mFocus $(@).closest('.m-sub').find('.m-opener').first()
         else
           $t = $m.children(); i = $(@).parentsUntil('.menu').last().index() # Which top-level menu are we under?
           n = $t.length; mFocus $t.eq((i + d + n) % n).find('a').eq 1
