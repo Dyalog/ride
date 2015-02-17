@@ -18,6 +18,9 @@
 		"nomnom"             : "1.8.1",
 		"socket.io"          : "1.3.4"
 	},
+	"devDependencies": {
+		"rcedit"	     : "0.3.0"
+	},
 	"window": {
 		"title": "Dyalog",
 		"icon": "D.png",
@@ -29,6 +32,11 @@
 		"min_width": 0,
 		"min_height": 0,
 		"show": false
+	},
+	"nodewebkit": {
+		"options":{
+			"winIco": "favicon.ico"
+		}
 	},
 	"webkit": {"plugin": true},
 	"single-instance": false
