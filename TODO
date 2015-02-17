@@ -11,6 +11,7 @@ Bugs / Issues External to RIDE
 Not yet prioritised
   On startup, make sure the window fits in the screen (to avoid trouble with multiple screens)
   Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
+    Investigate: http://stackoverflow.com/questions/284258/how-do-i-set-the-version-information-for-an-existing-exe-dll (sent by JD)
   Two highlighted lines in tracer; Morten in an email from 2015-02-14:
     1) You are tracing
     2) You use shift+enter to edit the function
@@ -18,6 +19,7 @@ Not yet prioritised
 
 Formatting / Rendering Issues
   If you hit quote three times, you end up with first one, then two, then SIX quotes
+    Patch submitted.  Will be available with the next release of CodeMirror: https://github.com/codemirror/CodeMirror/pull/3083
   Auto-complete should not happen at quote-quad input
   Auto-complete should probably not complete on enter, this can cause very bad problems if the user is not carefully looking
   We need some white space / margin at the bottom, below the input line
