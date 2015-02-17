@@ -13,13 +13,13 @@ fi
 if [ "$1" = "clean" ]; then
   echo "Cleaning Files"
   ./clean.sh
-  vagrant ssh -c "rm -Rf \$HOME/RideJS"
+  vagrant ssh -c "rm -Rf \$HOME/ride"
 fi
   echo "Copying Files"
-vagrant ssh -c "cp -Ruv /RideJS \$HOME/"
+vagrant ssh -c "cp -Ruv /ride \$HOME/"
   echo "Building"
-vagrant ssh -c "cd \$HOME/RideJS && . dist.sh"
-vagrant ssh -c "cp -Ruv \$HOME/RideJS/build /RideJS/"
+vagrant ssh -c "cd \$HOME/ride && . dist.sh"
+vagrant ssh -c "cp -Ruv \$HOME/ride/build /ride/"
 
 case `uname` in
     Linux)
@@ -40,6 +40,5 @@ case `uname` in
           ;;
 esac
 
-echo Running RideJS for `uname`
+echo "Running RIDE for `uname`"
 ./build/ride/${RIDEBIN}
-

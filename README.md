@@ -37,9 +37,9 @@ Building
 <h3>Prerequisites</h3>
 
 <strong>All Operating Systems</strong>
-* [Virtual Box](http://www.virtualbox.org)
+* [Virtual Box](https://www.virtualbox.org/)
 * [Vagrant](https://www.vagrantup.com/)
-* git (For windows see below)
+* git (for Windows see below)
 
 <strong>Windows</strong>
 * [Github for windows](https://windows.github.com/)
@@ -50,16 +50,16 @@ You will need to set your Git Shell to `Bash` in the options
 
 <strong>Windows</strong>
 
-* Clone [RideJS](https://www.github.com/dyalog/RideJS) in Github for Windows
-* Right click repository and `Open in git Shell`
+* clone [ride](https://www.github.com/dyalog/ride) in Github for Windows
+* right-click repository and `Open in git Shell`
 * run `./vagrantbuild.sh`
 
 <strong>Linux/OS X</strong>
-* Clone [RideJS](https://www.github.com/dyalog/RideJS)
-* cd to RideJS Directory
+* clone [ride](https://www.github.com/dyalog/ride)
+* cd to "ride" directory
 * run `./vagrantbuild.sh`
 
-The build process will automatically launch Ride JS once it has finished building.
+The build process will automatically launch RIDE once it has finished building.
 The first build will take a long time.
 
 When you are finished building, run `vagrant halt` to stop the virtual build machine.
