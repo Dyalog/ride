@@ -12,10 +12,64 @@ Not yet prioritised
   On startup, make sure the window fits in the screen (to avoid trouble with multiple screens)
   Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
     Investigate: http://stackoverflow.com/questions/284258/how-do-i-set-the-version-information-for-an-existing-exe-dll (sent by JD)
-  Two highlighted lines in tracer; Morten in an email from 2015-02-14:
+  Two highlighted lines in tracer; MK email 2015-02-14:
     1) You are tracing
     2) You use shift+enter to edit the function
     3) You then use >> or << before resuming execution
+  Floating editor windows should be always on top of the session but not on top of other applications; MK email 2015-02-17
+  <End> should go to the last non-blank character; MK email 2015-02-17
+  Find an acceptable solution for pasting multiple lines into the session, in particular: single line with a trailing newline; MK email 2015-02-17
+  Flipping twice between edit and trace mode caused an error; MK email 2015-02-17
+
+  MK email 2015-02-17 (in order of priority):
+
+    1) There seems to be no indicator of whether the interpreter is busy or
+    not other than that the RIDE is "unresponsive".
+
+    2) There seems to be no way to issue an interrupt; this is critical.
+    Coupled with 1) this gives a feeling of not quite being in control of the
+    debugging session.
+
+    3) AutoComplete using <ENTER> is a nightmare and causes all sorts of
+    unexpected behaviours. If you have functions FOO and FOOBAR, it is almost
+    impossible to call FOO. You type FOO and hit enter but if you think about it
+    for a split second, the RIDE stuffs the "BAR" in just before you hit <ENTER>
+    and you run the wrong function. Or you type )save and hit <ENTER>, but all
+    that happens is that ")save" becomes ")SAVE" and you have to hit <ENTER>
+    again.
+
+    4) Ctrl+Enter works fine from immediate execution, but doesn't seem to
+    work reliably as a "step into" key once you are already tracing. 
+
+    5) Shift+Enter also seems reluctant to work sometimes, but that is
+    fairly rare.
+
+    6) If you are tracing and encounter an error in a sub-function, you
+    have to explicitly hit CTRL+ENTER to get the tracer to recognise the new
+    stack levels. This may be a configuration option that is off by default in
+    Linux(?). Or perhaps does not even exist in Linux?
+
+    7) When tracing into functions, the window caption doesn't reflect the
+    function name that you have now moved into.
+
+    8) When tracing near the top of a function, the function header needs
+    to be visible. At the moment, the first line displayed is typically the
+    current line, even when you are only on line [1].
+
+    9) Would be good to have a keystroke to go back one line in the tracer.
+
+    10) In the Connect screen, a "Save" is required before Connect uses the
+    parameters that have been entered into the edit boxes. This is quite
+    confusing.
+
+    11) If APL disconnects, it would be VERY nice if there was a way to get
+    back to the connect form other than closing and restarting RIDE.
+
+    12) Setting stops doesn't seem to work, and in one case appeared to crash
+    the interpreter (not reproducible)
+
+    13) I am coming to the conclusion that the editor windows need to be on
+    top of the APL session but not on top of everything in the universe.
 
 Formatting / Rendering Issues
   If you hit quote three times, you end up with first one, then two, then SIX quotes
