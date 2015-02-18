@@ -48,9 +48,9 @@ module.exports = (e, opts = {}) ->
 
   k = # extra keys for CodeMirror
     Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch; return
-    F4: -> opts.pop?(); return
     Enter: -> (if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'); return
     'Ctrl-Enter': -> (if opts.debugger then opts.over?()); return
+  ###
     F6: -> opts.openInExternalEditor? cm.getValue(), cm.getCursor().line, (err, text) ->
       if err then $.alert '' + err, 'Error' else c = cm.getCursor().line; cm.setValue text; cm.setCursor c
       return
@@ -71,6 +71,7 @@ module.exports = (e, opts = {}) ->
           r[0] = r[0][sel.p.ch..]; cm.replaceRange r.join('\n'), sel.p, sel.q, 'D'; return
         cm.setSelections o
       return
+  ###
 
   k["'\uf800'"] = k['Shift-Esc'] = QT = -> # QT: Quit (and lose changes)
     opts.close?()
