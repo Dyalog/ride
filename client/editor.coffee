@@ -103,6 +103,9 @@ module.exports = (e, opts = {}) ->
         cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
     return
 
+  k["'\uf820'"] = k['Shift-Ctrl-Backspace'] = BK = opts.back # BK: Backward or Undo
+  k["'\uf81f'"] = k['Shift-Ctrl-Enter']     = FD = opts.skip # FD: Forward or Redo
+
   cm = CodeMirror $e.find('.cm')[0],
     lineNumbers: !opts.debugger, fixedGutter: false, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
     keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: {triples: ''}, gutters: ['breakpoints', 'CodeMirror-linenumbers']
@@ -126,8 +129,8 @@ module.exports = (e, opts = {}) ->
     .on 'click', '.tb-quit',       -> QT()                        ; false
     .on 'click', '.tb-over',       -> opts.over?()                ; false
     .on 'click', '.tb-into',       -> opts.into?()                ; false
-    .on 'click', '.tb-back',       -> opts.back?()                ; false
-    .on 'click', '.tb-skip',       -> opts.skip?()                ; false
+    .on 'click', '.tb-back',       -> BK()                        ; false
+    .on 'click', '.tb-skip',       -> FD()                        ; false
     .on 'click', '.tb-cont-trace', -> opts.continueTrace?()       ; false
     .on 'click', '.tb-cont-exec',  -> opts.continueExec?()        ; false
     .on 'click', '.tb-restart',    -> opts.restartThreads?()      ; false

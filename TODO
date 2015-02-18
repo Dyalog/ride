@@ -57,7 +57,6 @@ Not yet prioritised
     to be visible. At the moment, the first line displayed is typically the
     current line, even when you are only on line [1].
 
-    9) Would be good to have a keystroke to go back one line in the tracer.
 
     10) In the Connect screen, a "Save" is required before Connect uses the
     parameters that have been entered into the edit boxes. This is quite
@@ -184,3 +183,5 @@ Done:
   Autocompletion: Tab/Shift-Tab should cycle through the list (Nick)
   About dialogue should be accessible somehow from Connect page
   Context menu ("Copy", "Paste", etc) on right mouse click
+  9) Would be good to have a keystroke to go back one line in the tracer.
+    NN: I added Shift-Ctrl-Backspace (BK) and Shift-Ctrl-Enter (FD), as AS suggested
