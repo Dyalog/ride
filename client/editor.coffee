@@ -76,7 +76,7 @@ module.exports = (e, opts = {}) ->
   k["'\uf800'"] = k['Shift-Esc'] = QT = -> # QT: Quit (and lose changes)
     opts.close?()
 
-  k["'\uf804'"] = k.Esc = saveAndClose = -> # EP: Exit (and save changes)
+  k["'\uf804'"] = k.Esc = EP = -> # EP: Exit (and save changes)
     if (v = cm.getValue()) != originalValue
       bs = []; for l of breakpoints then bs.push +l; cm.setGutterMarker +l, 'breakpoint', null
       opts.save? cm.getValue(), bs
@@ -135,7 +135,7 @@ module.exports = (e, opts = {}) ->
     .on 'click', '.tb-interrupt',  -> opts.interrupt?()           ; false
     .on 'click', '.tb-cutback',    -> opts.cutback?()             ; false
     .on 'click', '.tb-line-numbers', -> cm.setOption 'lineNumbers', b = !cm.getOption 'lineNumbers'; $(@).toggleClass 'pressed', b; false
-    .on 'click', '.tb-save', -> saveAndClose(); false
+    .on 'click', '.tb-save', -> EP(); false
     .on 'click', '.tb-comment', ->
       if cm.somethingSelected()
         a = cm.listSelections()
@@ -223,5 +223,5 @@ module.exports = (e, opts = {}) ->
   getOpts: -> opts
   closePopup: -> (if opener then close()); return
   autocomplete: autocompletion cm, opts.autocomplete
-  saveAndClose: saveAndClose
+  saveAndClose: EP
   die: -> cm.setOption 'readOnly', true; return
