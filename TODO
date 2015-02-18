@@ -45,11 +45,6 @@ Not yet prioritised
     5) Shift+Enter also seems reluctant to work sometimes, but that is
     fairly rare.
 
-    6) If you are tracing and encounter an error in a sub-function, you
-    have to explicitly hit CTRL+ENTER to get the tracer to recognise the new
-    stack levels. This may be a configuration option that is off by default in
-    Linux(?). Or perhaps does not even exist in Linux?
-
     7) When tracing into functions, the window caption doesn't reflect the
     function name that you have now moved into.
 
@@ -185,3 +180,5 @@ Done:
   Context menu ("Copy", "Paste", etc) on right mouse click
   9) Would be good to have a keystroke to go back one line in the tracer.
     NN: I added Shift-Ctrl-Backspace (BK) and Shift-Ctrl-Enter (FD), as AS suggested
+  6) If you are tracing and encounter an error in a sub-function, you have to explicitly hit CTRL+ENTER to get the tracer to recognise the new stack levels. This may be a configuration option that is off by default in Linux(?). Or perhaps does not even exist in Linux?
+    NN: Ctrl-Enter now does "step into" instead of "step over"
