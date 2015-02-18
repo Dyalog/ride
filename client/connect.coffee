@@ -28,7 +28,6 @@ module.exports = ->
       <legend>Connect to an interpreter</legend>
       <div id="fav-buttons">
         <a id="about" href="#">About</a>
-        <a href="#" id="fav-connect" accessKey="o">C<u>o</u>nnect</a>
         <a href="#" id="fav-new" accessKey="n"><u>N</u>ew</a>
         <a href="#" id="fav-delete">Delete</a>
       </div>
@@ -45,8 +44,9 @@ module.exports = ->
         <tr>
           <td></td>
           <td>
-            <a href="#" id="fav-save" accessKey="s"><u>S</u>ave</a>
-            <a href="#" id="fav-cancel" accessKey="c"><u>C</u>ancel</a>
+            <a href="#" id="fav-connect" accessKey="o">C<u>o</u>nnect</a>
+            <a href="#" id="fav-save"    accessKey="s"><u>S</u>ave</a>
+            <a href="#" id="fav-cancel"  accessKey="c"><u>C</u>ancel</a>
           </td>
         </tr>
       </table>
@@ -89,14 +89,10 @@ module.exports = ->
     .on 'keydown', null, 'insert', -> $new.click(); false
     .on 'keydown', null, 'del', -> $delete.click(); false
   $connect.click ->
-    x = parseFav $list.find(':selected').text()
-    if !x.host then return
-    if !/^[a-z0-9\.\-:]+$/i.test x.host then $.alert 'Invalid host', 'Error', -> $host.focus()
-    if !/^\d{1,5}$/.test(x.port) || +x.port > 0xffff then $.alert 'Invalid port', 'Error', -> $port.focus()
-    x.port = +x.port
-    if x.port == DEFAULT_PORT then delete x.port
-    if !x.name then delete x.name
-    D.socket.emit '*connect', host: x.host, port: x.port or DEFAULT_PORT
+    host = $host.val(); port = +$port.val()
+    if !/^[a-z0-9\.\-:]+$/i.test host then $.alert 'Invalid host', 'Error', -> $host.focus(); return
+    else if !(0 < port < 0xffff) then $.alert 'Invalid port', 'Error', -> $port.focus(); return
+    else D.socket.emit '*connect', {host, port}
     false
   $new.click ->
     $list.find('option').attr 'selected', false

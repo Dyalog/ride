@@ -52,11 +52,6 @@ Not yet prioritised
     to be visible. At the moment, the first line displayed is typically the
     current line, even when you are only on line [1].
 
-
-    10) In the Connect screen, a "Save" is required before Connect uses the
-    parameters that have been entered into the edit boxes. This is quite
-    confusing.
-
     11) If APL disconnects, it would be VERY nice if there was a way to get
     back to the connect form other than closing and restarting RIDE.
 
@@ -182,3 +177,5 @@ Done:
     NN: I added Shift-Ctrl-Backspace (BK) and Shift-Ctrl-Enter (FD), as AS suggested
   6) If you are tracing and encounter an error in a sub-function, you have to explicitly hit CTRL+ENTER to get the tracer to recognise the new stack levels. This may be a configuration option that is off by default in Linux(?). Or perhaps does not even exist in Linux?
     NN: Ctrl-Enter now does "step into" instead of "step over"
+  10) In the Connect screen, a "Save" is required before Connect uses the parameters that have been entered into the edit boxes. This is quite confusing.
+    NN: fixed and moved Connect button under the text fields
