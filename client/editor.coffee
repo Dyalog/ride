@@ -49,7 +49,7 @@ module.exports = (e, opts = {}) ->
   k = # extra keys for CodeMirror
     Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch; return
     Enter: -> (if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'); return
-    'Ctrl-Enter': -> (if opts.debugger then opts.over?()); return
+    'Ctrl-Enter': -> (if opts.debugger then opts.into?()); return
   ###
     F6: -> opts.openInExternalEditor? cm.getValue(), cm.getCursor().line, (err, text) ->
       if err then $.alert '' + err, 'Error' else c = cm.getCursor().line; cm.setValue text; cm.setCursor c
