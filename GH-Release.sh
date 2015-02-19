@@ -6,6 +6,9 @@ TMP_JSON=/tmp/GH-Publish.json
 BASE_VERSION=`npm show ride version` # parse "version" field from package.json, returned with an extra ".0"
 VERSION="${BASE_VERSION%%.0}.`git rev-list HEAD --count`"  # "%%.0" strips trailing ".0"
 
+GITLOG=`git log --format='%s' $(git tag | tail -n 1).. | grep -v -i "todo" | sed 's/"/\\"/g;:a;N;$!ba;s/\n/\\\\n/g'`
+
+ReleaseNotes="Pre-Release of RIDE2\n\nChangelog:\n $GITLOG"
 if [ -s GHTOKEN ]; then
   TOKEN="`cat GHTOKEN`"
 else
@@ -17,7 +20,7 @@ cat >$TMP_JSON <<.
   "tag_name": "v$VERSION",
   "target_commitish": "master",
   "name": "v$VERSION",
-  "body": "Pre-release of RIDE 2.0",
+  "body": "$ReleaseNotes",
   "draft": false,
   "prerelease": true
 }
