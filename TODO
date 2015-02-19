@@ -10,6 +10,7 @@ Bugs / Issues External to RIDE
 
 Not yet prioritised
   On startup, make sure the window fits in the screen (to avoid trouble with multiple screens)
+  If you maximize RIDE on a Mac, close it, and open it again, it can't be unmaximised; 2015-02-19 JS, JR
   Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
     Investigate: http://stackoverflow.com/questions/284258/how-do-i-set-the-version-information-for-an-existing-exe-dll (sent by JD)
   Two highlighted lines in tracer; MK email 2015-02-14:
