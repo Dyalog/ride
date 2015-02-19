@@ -41,9 +41,6 @@ Not yet prioritised
     that happens is that ")save" becomes ")SAVE" and you have to hit <ENTER>
     again.
 
-    4) Ctrl+Enter works fine from immediate execution, but doesn't seem to
-    work reliably as a "step into" key once you are already tracing. 
-
     5) Shift+Enter also seems reluctant to work sometimes, but that is
     fairly rare.
 
@@ -181,3 +178,4 @@ Done:
     NN: Ctrl-Enter now does "step into" instead of "step over"
   10) In the Connect screen, a "Save" is required before Connect uses the parameters that have been entered into the edit boxes. This is quite confusing.
     NN: fixed and moved Connect button under the text fields
+  4) Ctrl+Enter works fine from immediate execution, but doesn't seem to work reliably as a "step into" key once you are already tracing.
