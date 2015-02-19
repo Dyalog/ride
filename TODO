@@ -21,6 +21,7 @@ Not yet prioritised
   Find an acceptable solution for pasting multiple lines into the session, in particular: single line with a trailing newline; MK email 2015-02-17
   Flipping twice between edit and trace mode caused an error; MK email 2015-02-17
   Autocomplete displays all ⎕names in an unexpected order; GS #11928
+  Change background for search matches; MK email 2015-02-18
 
   MK email 2015-02-17 (in order of priority):
 
