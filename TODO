@@ -22,6 +22,7 @@ Not yet prioritised
   Flipping twice between edit and trace mode caused an error; MK email 2015-02-17
   Autocomplete displays all ⎕names in an unexpected order; GS #11928
   Change background for search matches; MK email 2015-02-18
+  ⎕dl-s in tradfns that call each other: trace into these functions, and while they are waiting on a delay, whack away at the tracer buttons and hit enter in the session. I would be very surprised if this does not lead to crashes; MK email 2015-02-18
 
   MK email 2015-02-17 (in order of priority):
 
