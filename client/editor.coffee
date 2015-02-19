@@ -188,6 +188,8 @@ module.exports = (e, opts = {}) ->
       else
         if wrapped then $.alert 'Search wrapping', 'Dyalog APL Error' # [sic]
         cm.setSelections [anchor: cm.posFromIndex(j), head: cm.posFromIndex j + q.length]
+        h = $e.height(); {left, top} = cm.cursorCoords true, 'local'
+        cm.scrollIntoView left: left, right: left, top: top - h / 3, bottom: top + 2 * h / 3
     false
 
   setDebugger = (x) ->
