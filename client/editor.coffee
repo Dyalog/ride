@@ -206,7 +206,9 @@ module.exports = (e, opts = {}) ->
   updateSize: -> cm.setSize $e.width(), $e.parent().height() - $e.position().top - 28
   open: (ee) ->
     originalValue = ee.text; cm.setValue ee.text; cm.focus()
-    cm.setCursor ee.currentRow, (ee.currentColumn || 0); cm.scrollIntoView null, $e.height() / 2
+    line = ee.currentRow; col = ee.currentColumn || 0
+    cm.setCursor line, if line || col then col else cm.getLine(0).length
+    cm.scrollIntoView null, $e.height() / 2
     for l in ee.lineAttributes?.stop then cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
     return
   hasFocus: -> cm.hasFocus()
