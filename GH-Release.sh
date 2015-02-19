@@ -32,7 +32,7 @@ RELEASE_ID=`grep '"id"' $TMP_RESPONSE | head -1 | sed 's/.*: //;s/,//'`
 echo "created release with id: $RELEASE_ID"
 
 for DIR in `ls build/ride`; do
-  ZIP=ride-${VERSION}-${DIR}.zip
+  ZIP=ride2-${VERSION}-${DIR}.zip
   TMP_ZIP=/tmp/$ZIP
   cd build/ride/$DIR
   echo "creating $TMP_ZIP"
