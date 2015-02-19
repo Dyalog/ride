@@ -17,6 +17,7 @@ module.exports = (cm, requestAutocompletion) -> # set up autocompletion, common 
       completeOnSingleClick: true
       completeSingle: false
       extraKeys:
+        Enter: ->
         Right: (cm, m) -> m.pick(); return
         Tab: (cm, m) -> m.moveFocus 1; return
         'Shift-Tab': (cm, m) -> m.moveFocus -1; return
