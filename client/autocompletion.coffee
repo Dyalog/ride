@@ -12,16 +12,17 @@ module.exports = (cm, requestAutocompletion) -> # set up autocompletion, common 
     )
     return
   (skip, options) ->
-    c = cm.getCursor(); from = line: c.line, ch: c.ch - skip
-    cm.showHint
-      completeOnSingleClick: true
-      completeSingle: false
-      extraKeys:
-        Enter: ->
-        Right: (cm, m) -> m.pick(); return
-        Tab: (cm, m) -> m.moveFocus 1; return
-        'Shift-Tab': (cm, m) -> m.moveFocus -1; return
-      hint: ->
-        to = cm.getCursor(); u = cm.getLine(from.line)[from.ch...to.ch].toLowerCase() # u: completion prefix
-        {from, to, list: options.filter (o) -> o[...u.length].toLowerCase() == u}
+    if options.length
+      c = cm.getCursor(); from = line: c.line, ch: c.ch - skip
+      cm.showHint
+        completeOnSingleClick: true
+        completeSingle: false
+        extraKeys:
+          Enter: ->
+          Right: (cm, m) -> m.pick(); return
+          Tab: (cm, m) -> m.moveFocus 1; return
+          'Shift-Tab': (cm, m) -> m.moveFocus -1; return
+        hint: ->
+          to = cm.getCursor(); u = cm.getLine(from.line)[from.ch...to.ch].toLowerCase() # u: completion prefix
+          {from, to, list: options.filter((o) -> o[...u.length].toLowerCase() == u).sort()}
     return
