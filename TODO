@@ -64,6 +64,20 @@ MK email 2015-02-17 (in order of priority):
   13) I am coming to the conclusion that the editor windows need to be on
   top of the APL session but not on top of everything in the universe.
 
+MK email 2015-02-20
+
+  1) If you scroll up in the session until you find an interesting
+  function name and hit Shift+Enter to edit it, then when you exit from the
+  editor the session scrolls down to the bottom. This is very annoying if you
+  are looking at a list of diffs and need to visually inspect a bunch of
+  function mentioned a few lines apart across 100 lines or so of output :).
+
+  2) Double-click in the session does not open the editor.
+
+  3) If you are editing a function wider than the current window, and you
+  use "cursor left" until you get to (and the pass) the right margin, the
+  window does not scroll, so the cursor walks out of the window :(.
+
 Formatting / Rendering Issues
   If you hit quote three times, you end up with first one, then two, then SIX quotes
     Patch submitted.  Will be available with the next release of CodeMirror: https://github.com/codemirror/CodeMirror/pull/3083
