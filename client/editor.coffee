@@ -167,7 +167,7 @@ module.exports = (e, opts = {}) ->
     .on 'click', '.tb-prev',                     -> search true; false
     .on 'keydown', '.tb-search', 'return',       -> search();    false
     .on 'keydown', '.tb-search', 'shift+return', -> search true; false
-    .on 'keydown', '.tb-search', 'esc', -> clearSearch(); false
+    .on 'keydown', '.tb-search', 'esc', -> clearSearch(); cm.focus(); false
     .on 'click', '.tb-refac-m', ->
       if !/^\s*$/.test s = cm.getLine l = cm.getCursor().line
         cm.replaceRange "∇ #{s}\n\n∇", {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
@@ -181,20 +181,22 @@ module.exports = (e, opts = {}) ->
         cm.replaceRange ":Property #{s}\n\n∇r←get\nr←0\n∇\n\n∇set args\n∇\n:EndProperty", {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
         cm.setCursor line: l + 1, ch: 0
 
-  lastQuery = ''; lastIC = null; overlay = null
-  clearSearch = -> cm.removeOverlay overlay; cm.focus(); return
+  lastQuery = lastIC = overlay = annotation = null
+  clearSearch = -> cm.removeOverlay overlay; overlay = null; annotation?.clear(); annotation = null; return
   highlightSearch = ->
+    window.cm = cm
     ic = !$('.tb-case:visible', $tb).hasClass 'pressed' # ic: ignore case (like in vim)
     q = $('.tb-search:visible', $tb).val(); if ic then q = q.toLowerCase() # q: the query string
     if lastQuery != q || lastIC != ic
-      lastQuery = q; lastIC = ic
-      cm.removeOverlay overlay
-      if q then cm.addOverlay overlay = token: (stream) ->
-        s = stream.string[stream.pos..]; if ic then s = s.toLowerCase()
-        i = s.indexOf q
-        if !i then         stream.pos += q.length; 'searching'
-        else if i > 0 then stream.pos += i;        undefined
-        else               stream.skipToEnd();     undefined
+      lastQuery = q; lastIC = ic; clearSearch()
+      if q
+        annotation = cm.showMatchesOnScrollbar q, ic
+        cm.addOverlay overlay = token: (stream) ->
+          s = stream.string[stream.pos..]; if ic then s = s.toLowerCase()
+          i = s.indexOf q
+          if !i then         stream.pos += q.length; 'searching'
+          else if i > 0 then stream.pos += i;        undefined
+          else               stream.skipToEnd();     undefined
     [q, ic]
   search = (backwards) ->
     [q, ic] = highlightSearch()

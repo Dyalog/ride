@@ -5,12 +5,7 @@ export PATH="`dirname $0`/node_modules/.bin:$PATH"
 
 mkdir -p build/{static,tmp}
 
-cp -uv                                                        \
-  node_modules/codemirror/lib/codemirror.css                  \
-  node_modules/codemirror/addon/dialog/dialog.css             \
-  node_modules/codemirror/addon/search/matchesonscrollbar.css \
-  build/static/
-
+cp -uv node_modules/codemirror/lib/codemirror.css build/static/
 i=style/style.sass o=build/static/style.css
 if [ $i -nt $o ]; then
   echo 'preprocessing css'
