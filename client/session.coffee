@@ -36,7 +36,8 @@ module.exports = (e, opts = {}) ->
       return
 
   cm = CodeMirror ($e = $ e)[0],
-    autofocus: true, mode: '', matchBrackets: true, autoCloseBrackets: true, keyMap: 'dyalog', readOnly: true, extraKeys: k
+    autofocus: true, mode: '', lineWrapping: true, matchBrackets: true, autoCloseBrackets: true, readOnly: true
+    keyMap: 'dyalog', extraKeys: k
 
   exec = (trace) ->
     a = [] # pairs of [lineNumber, contentToExecute]
