@@ -4,19 +4,19 @@ module.exports = (e, opts = {}) ->
   ($e = $ e).html """
     <div class="toolbar debugger-toolbar">
       #{[ # when in a floating window, the first two buttons in each toolbar are hidden through css
-        b 'tb-quit tb-rhs',  'Quit this function'
+        b 'tb-QT tb-rhs',    'Quit this function'
         b 'tb-pop tb-rhs',   'Edit in a floating window'
         b 'tb-over',         'Execute line'
         b 'tb-into',         'Trace into expression'
-        b 'tb-back',         'Go back one line'
-        b 'tb-skip',         'Skip current line'
+        b 'tb-BK',           'Go back one line'
+        b 'tb-FD',           'Skip current line'
         b 'tb-cont-trace',   'Continue trace'
         b 'tb-cont-exec',    'Continue execution'
         b 'tb-restart',      'Restart all threads'
         b 'tb-edit-name',    'Edit name'
         b 'tb-interrupt',    'Interrupt'
         b 'tb-cutback',      'Clear trace/stop/monitor for this object'
-        b 'tb-line-numbers', 'Toggle line numbers'
+        b 'tb-LN',           'Toggle line numbers'
         '<span class="tb-separator"></span>'
         '<input class="tb-search text-field">'
         b 'tb-next',         'Search for next match'
@@ -26,9 +26,9 @@ module.exports = (e, opts = {}) ->
     </div>
     <div class="toolbar editor-toolbar">
       #{[
-        b 'tb-save tb-rhs',  'Save changes and return'
+        b 'tb-EP tb-rhs',    'Save changes and return'
         b 'tb-pop tb-rhs',   'Edit in a floating window'
-        b 'tb-line-numbers pressed', 'Toggle line numbers'
+        b 'tb-LN pressed',   'Toggle line numbers'
         b 'tb-comment',      'Comment selected text'
         b 'tb-uncomment',    'Uncomment selected text'
         '<span class="tb-separator"></span>'
@@ -125,19 +125,19 @@ module.exports = (e, opts = {}) ->
     .on 'mousedown',        '.tb-button', (e) -> $(e.target).addClass    'armed'; e.preventDefault(); return
     .on 'mouseup mouseout', '.tb-button', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return
     .on 'click', '.tb-pop',          -> opts.pop?()                 ; false
-    .on 'click', '.tb-quit',         -> QT()                        ; false
+    .on 'click', '.tb-QT',           -> QT()                        ; false
     .on 'click', '.tb-over',         -> opts.over?()                ; false
     .on 'click', '.tb-into',         -> opts.into?()                ; false
-    .on 'click', '.tb-back',         -> BK()                        ; false
-    .on 'click', '.tb-skip',         -> FD()                        ; false
+    .on 'click', '.tb-BK',           -> BK()                        ; false
+    .on 'click', '.tb-FD',           -> FD()                        ; false
     .on 'click', '.tb-cont-trace',   -> opts.continueTrace?()       ; false
     .on 'click', '.tb-cont-exec',    -> opts.continueExec?()        ; false
     .on 'click', '.tb-restart',      -> opts.restartThreads?()      ; false
     .on 'click', '.tb-edit-name',    -> opts.edit? cm.getValue(), 0 ; false
     .on 'click', '.tb-interrupt',    -> opts.interrupt?()           ; false
     .on 'click', '.tb-cutback',      -> opts.cutback?()             ; false
-    .on 'click', '.tb-line-numbers', -> LN()                        ; false
-    .on 'click', '.tb-save',         -> EP()                        ; false
+    .on 'click', '.tb-LN',           -> LN()                        ; false
+    .on 'click', '.tb-EP',           -> EP()                        ; false
     .on 'click', '.tb-comment', ->
       if cm.somethingSelected()
         a = cm.listSelections()
@@ -214,7 +214,7 @@ module.exports = (e, opts = {}) ->
     cm.setOption 'readOnly', x; $('.CodeMirror', $e).toggleClass 'debugger', x
     p = if x then 'lineNumbersInDebugger' else 'lineNumbersInEditor'
     localStorage[p] ?= +!x; cm.setOption 'lineNumbers', !!+localStorage[p]
-    $tb.find('.tb-line-numbers:visible').toggleClass 'pressed', !!+localStorage[p]
+    $tb.find('.tb-LN:visible').toggleClass 'pressed', !!+localStorage[p]
     return
   setDebugger !!opts.debugger
 
