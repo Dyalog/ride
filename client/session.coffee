@@ -18,26 +18,27 @@ module.exports = (e, opts = {}) ->
       histIndex = i
     return
 
-  k = # extra keys for CodeMirror
-    Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
-    Enter: -> exec 0
-    'Ctrl-Enter': -> exec 1
-
-  k["'\uf828'"] = k['Shift-Enter'] = -> c = cm.getCursor(); opts.edit?(cm.getLine(c.line), c.ch) # ED: Edit
-  k["'\uf820'"] = k['Shift-Ctrl-Backspace'] = -> histMove 1 # BK: Backward or Undo
-  k["'\uf81f'"] = k['Shift-Ctrl-Enter'] = -> histMove -1 # FD: Forward or Redo
-
-  k["'\uf800'"] = k['Shift-Esc'] = # QT: Quit (and lose changes)
-    k["'\uf804'"] = k.Esc = ->     # EP: Exit (and save changes)
-      c = cm.getCursor(); l = c.line
-      if mod[l]?
-        cm.replaceRange mod[l], {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
-        delete mod[l]; cm.removeLineClass l, 'background', 'modified'; cm.setCursor l + 1, c.ch
-      return
+  ED = -> c = cm.getCursor(); opts.edit?(cm.getLine(c.line), c.ch); return # Edit
+  BK = -> histMove 1; return # Backward or Undo
+  FD = -> histMove -1; return # Forward or Redo
+  QT = EP = -> # QT: Quit (and lose changes), EP: Exit (and save changes)
+    c = cm.getCursor(); l = c.line
+    if mod[l]?
+      cm.replaceRange mod[l], {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
+      delete mod[l]; cm.removeLineClass l, 'background', 'modified'; cm.setCursor l + 1, c.ch
+    return
 
   cm = CodeMirror ($e = $ e)[0],
-    autofocus: true, mode: '', lineWrapping: true, matchBrackets: true, autoCloseBrackets: true, readOnly: true
-    keyMap: 'dyalog', extraKeys: k
+    autofocus: true, mode: '', lineWrapping: true, matchBrackets: true, autoCloseBrackets: true, readOnly: true, keyMap: 'dyalog',
+    extraKeys:
+      Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
+      Enter: -> exec 0
+      'Ctrl-Enter': -> exec 1
+      "'\uf800'": QT,   'Shift-Esc':            QT
+      "'\uf804'": EP,   Esc:                    EP
+      "'\uf81f'": FD,   'Shift-Ctrl-Enter':     FD
+      "'\uf820'": BK,   'Shift-Ctrl-Backspace': BK
+      "'\uf828'": ED,   'Shift-Enter':          ED
 
   exec = (trace) ->
     a = [] # pairs of [lineNumber, contentToExecute]

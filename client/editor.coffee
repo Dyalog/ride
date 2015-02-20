@@ -46,15 +46,41 @@ module.exports = (e, opts = {}) ->
   """
   b = null
 
-  k = # extra keys for CodeMirror
-    Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch; return
-    Enter: -> (if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'); return
-    'Ctrl-Enter': -> (if opts.debugger then opts.into?()); return
+  ED = -> opts.edit? cm.getValue(), cm.indexFromPos cm.getCursor(); return # Edit
+  QT = -> opts.close?(); return # Quit (and lose changes)
+  BK = opts.back # Backward or Undo
+  FD = opts.skip # Forward or Redo
+  SC = -> $tb.find('.tb-search:visible').focus(); return # Search
+  EP = -> # Exit (and save changes)
+    if (v = cm.getValue()) != originalValue
+      bs = []; for l of breakpoints then bs.push +l; cm.setGutterMarker +l, 'breakpoint', null
+      opts.save? cm.getValue(), bs
+    else
+      opts.close?()
+    return
+  TL = -> # Toggle Localisation
+    c = cm.getCursor(); s = cm.getLine c.line
+    r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*' # regex fragment to match identifiers
+    name = ((///⎕?#{r}$///.exec(s[...c.ch])?[0] or '') + (///^#{r}///.exec(s[c.ch..])?[0] or '')).replace /^\d+/, ''
+    if name
+      # search backwards for a line that looks like a tradfn header (though in theory it might be a dfns's recursive call)
+      l = c.line; while l >= 0 && !/^\s*∇\s*\S/.test cm.getLine l then l--
+      if l < 0 and !/\{\s*$/.test cm.getLine(0).replace /⍝.*/, '' then l = 0
+      if l >= 0 && l != c.line
+        [_, s, comment] = /([^⍝]*)(.*)/.exec cm.getLine l
+        [head, tail...] = s.split ';'; head = head.replace /\s+$/, ''; tail = tail.map (x) -> x.replace /\s+/g, ''
+        i = tail.indexOf name; if i < 0 then tail.push name else tail.splice i, 1
+        s = [head].concat(tail.sort()).join(';') + if comment then ' ' + comment else ''
+        cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
+    return
+  LN = -> # Toggle Line Numbers
+    p = if opts.debugger then 'lineNumbersInDebugger' else 'lineNumbersInEditor'
+    localStorage[p] = b = 1 - localStorage[p]; cm.setOption 'lineNumbers', !!b; $(@).toggleClass 'pressed', b; return
   ###
-    F6: -> opts.openInExternalEditor? cm.getValue(), cm.getCursor().line, (err, text) ->
+    F6 = -> opts.openInExternalEditor? cm.getValue(), cm.getCursor().line, (err, text) ->
       if err then $.alert '' + err, 'Error' else c = cm.getCursor().line; cm.setValue text; cm.setCursor c
       return
-    F7: -> # align comments
+    F7 = -> # align comments
       if cm.somethingSelected()
         spc = (n) -> Array(n + 1).join ' '
         o = cm.listSelections() # original selections
@@ -73,78 +99,45 @@ module.exports = (e, opts = {}) ->
       return
   ###
 
-  k["'\uf800'"] = k['Shift-Esc'] = QT = -> # QT: Quit (and lose changes)
-    opts.close?()
-
-  k["'\uf804'"] = k.Esc = EP = -> # EP: Exit (and save changes)
-    if (v = cm.getValue()) != originalValue
-      bs = []; for l of breakpoints then bs.push +l; cm.setGutterMarker +l, 'breakpoint', null
-      opts.save? cm.getValue(), bs
-    else
-      opts.close?()
-    return
-
-  k["'\uf828'"] = k['Shift-Enter'] = -> # ED: Edit
-    opts.edit? cm.getValue(), cm.indexFromPos cm.getCursor()
-
-  k["'\uf859'"] = k['Ctrl-Up'] = -> # TL: Toggle Localisation
-    c = cm.getCursor(); s = cm.getLine c.line
-    r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*' # regex fragment to match identifiers
-    name = ((///⎕?#{r}$///.exec(s[...c.ch])?[0] or '') + (///^#{r}///.exec(s[c.ch..])?[0] or '')).replace /^\d+/, ''
-    if name
-      # search backwards for a line that looks like a tradfn header (though in theory it might be a dfns's recursive call)
-      l = c.line; while l >= 0 && !/^\s*∇\s*\S/.test cm.getLine l then l--
-      if l < 0 and !/\{\s*$/.test cm.getLine(0).replace /⍝.*/, '' then l = 0
-      if l >= 0 && l != c.line
-        [_, s, comment] = /([^⍝]*)(.*)/.exec cm.getLine l
-        [head, tail...] = s.split ';'; head = head.replace /\s+$/, ''; tail = tail.map (x) -> x.replace /\s+/g, ''
-        i = tail.indexOf name; if i < 0 then tail.push name else tail.splice i, 1
-        s = [head].concat(tail.sort()).join(';') + if comment then ' ' + comment else ''
-        cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
-    return
-
-  k["'\uf820'"] = k['Shift-Ctrl-Backspace'] = BK = opts.back # BK: Backward or Undo
-  k["'\uf81f'"] = k['Shift-Ctrl-Enter']     = FD = opts.skip # FD: Forward or Redo
-  k['Ctrl-F'] = -> $tb.find('.tb-search:visible').focus(); return
-
   cm = CodeMirror $e.find('.cm')[0],
     fixedGutter: false, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
     keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: {triples: ''}, gutters: ['breakpoints', 'CodeMirror-linenumbers']
-    extraKeys: k
+    extraKeys:
+      Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch; return
+      Enter: -> (if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'); return
+      'Ctrl-Enter': -> (if opts.debugger then opts.into?()); return
+      "'\uf800'": QT,   'Shift-Esc':            QT
+      "'\uf804'": EP,   Esc:                    EP
+      "'\uf81f'": FD,   'Shift-Ctrl-Enter':     FD
+      "'\uf820'": BK,   'Shift-Ctrl-Backspace': BK
+      "'\uf822'": SC,   'Ctrl-F':               SC
+      "'\uf828'": ED,   'Shift-Enter':          ED
+      "'\uf859'": TL,   'Ctrl-Up':              TL
 
   createBreakpointElement = -> $('<div class="breakpoint">●</div>')[0]
   breakpoints = {}
   cm.on 'gutterClick', (cm, l) ->
-    if breakpoints[l]
-      delete breakpoints[l]
-      cm.setGutterMarker l, 'breakpoints', null
-    else
-      breakpoints[l] = 1
-      cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
+    if breakpoints[l] then delete breakpoints[l]; cm.setGutterMarker l, 'breakpoints', null
+    else breakpoints[l] = 1; cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
     return
 
   $tb = $ '.toolbar', $e
     .on 'mousedown',        '.tb-button', (e) -> $(e.target).addClass    'armed'; e.preventDefault(); return
     .on 'mouseup mouseout', '.tb-button', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return
-    .on 'click', '.tb-pop',        -> opts.pop?()                 ; false
-    .on 'click', '.tb-quit',       -> QT()                        ; false
-    .on 'click', '.tb-over',       -> opts.over?()                ; false
-    .on 'click', '.tb-into',       -> opts.into?()                ; false
-    .on 'click', '.tb-back',       -> BK()                        ; false
-    .on 'click', '.tb-skip',       -> FD()                        ; false
-    .on 'click', '.tb-cont-trace', -> opts.continueTrace?()       ; false
-    .on 'click', '.tb-cont-exec',  -> opts.continueExec?()        ; false
-    .on 'click', '.tb-restart',    -> opts.restartThreads?()      ; false
-    .on 'click', '.tb-edit-name',  -> opts.edit? cm.getValue(), 0 ; false
-    .on 'click', '.tb-interrupt',  -> opts.interrupt?()           ; false
-    .on 'click', '.tb-cutback',    -> opts.cutback?()             ; false
-    .on 'click', '.tb-line-numbers', ->
-      p = if opts.debugger then 'lineNumbersInDebugger' else 'lineNumbersInEditor'
-      localStorage[p] = b = 1 - localStorage[p]
-      cm.setOption 'lineNumbers', !!b
-      $(@).toggleClass 'pressed', b
-      false
-    .on 'click', '.tb-save', -> EP(); false
+    .on 'click', '.tb-pop',          -> opts.pop?()                 ; false
+    .on 'click', '.tb-quit',         -> QT()                        ; false
+    .on 'click', '.tb-over',         -> opts.over?()                ; false
+    .on 'click', '.tb-into',         -> opts.into?()                ; false
+    .on 'click', '.tb-back',         -> BK()                        ; false
+    .on 'click', '.tb-skip',         -> FD()                        ; false
+    .on 'click', '.tb-cont-trace',   -> opts.continueTrace?()       ; false
+    .on 'click', '.tb-cont-exec',    -> opts.continueExec?()        ; false
+    .on 'click', '.tb-restart',      -> opts.restartThreads?()      ; false
+    .on 'click', '.tb-edit-name',    -> opts.edit? cm.getValue(), 0 ; false
+    .on 'click', '.tb-interrupt',    -> opts.interrupt?()           ; false
+    .on 'click', '.tb-cutback',      -> opts.cutback?()             ; false
+    .on 'click', '.tb-line-numbers', -> LN()                        ; false
+    .on 'click', '.tb-save',         -> EP()                        ; false
     .on 'click', '.tb-comment', ->
       if cm.somethingSelected()
         a = cm.listSelections()
@@ -217,14 +210,10 @@ module.exports = (e, opts = {}) ->
     false
 
   setDebugger = (x) ->
-    opts.debugger = x
-    $('.debugger-toolbar', $e).toggle x
-    $('.editor-toolbar', $e).toggle !x
-    cm.setOption 'readOnly', x
-    $('.CodeMirror', $e).toggleClass 'debugger', x
+    opts.debugger = x; $('.debugger-toolbar', $e).toggle x; $('.editor-toolbar', $e).toggle !x
+    cm.setOption 'readOnly', x; $('.CodeMirror', $e).toggleClass 'debugger', x
     p = if x then 'lineNumbersInDebugger' else 'lineNumbersInEditor'
-    localStorage[p] ?= +!x
-    cm.setOption 'lineNumbers', !!+localStorage[p]
+    localStorage[p] ?= +!x; cm.setOption 'lineNumbers', !!+localStorage[p]
     $tb.find('.tb-line-numbers:visible').toggleClass 'pressed', !!+localStorage[p]
     return
   setDebugger !!opts.debugger
