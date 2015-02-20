@@ -162,12 +162,12 @@ module.exports = (e, opts = {}) ->
         cm.replaceRange s.replace(/^( *)⍝/, '$1'), {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
         cm.setCursor line: l, ch: 0
       false
-    .on 'click', '.tb-hid, .tb-case', -> $(@).toggleClass 'pressed'; false
+    .on 'click', '.tb-hid, .tb-case', -> $(@).toggleClass 'pressed'; highlightSearch(); false
     .on 'click', '.tb-next',                     -> search();    false
     .on 'click', '.tb-prev',                     -> search true; false
     .on 'keydown', '.tb-search', 'return',       -> search();    false
     .on 'keydown', '.tb-search', 'shift+return', -> search true; false
-    .on 'keydown', '.tb-search', 'esc', -> cm.execCommand 'clearSearch'; cm.focus(); false
+    .on 'keydown', '.tb-search', 'esc', -> clearSearch(); false
     .on 'click', '.tb-refac-m', ->
       if !/^\s*$/.test s = cm.getLine l = cm.getCursor().line
         cm.replaceRange "∇ #{s}\n\n∇", {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
@@ -181,15 +181,36 @@ module.exports = (e, opts = {}) ->
         cm.replaceRange ":Property #{s}\n\n∇r←get\nr←0\n∇\n\n∇set args\n∇\n:EndProperty", {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
         cm.setCursor line: l + 1, ch: 0
 
-  lastSearch = ''
-  cm.openDialog = (template, callback, options) -> # hack needed to make the search addon use our search field and not pop its own dialogue
-    callback $('.tb-search:visible', $tb).val(); return
+  lastQuery = ''; lastIC = null; overlay = null
+  clearSearch = -> cm.removeOverlay overlay; cm.focus(); return
+  highlightSearch = ->
+    ic = !$('.tb-case:visible', $tb).hasClass 'pressed' # ic: ignore case (like in vim)
+    q = $('.tb-search:visible', $tb).val(); if ic then q = q.toLowerCase() # q: the query string
+    if lastQuery != q || lastIC != ic
+      lastQuery = q; lastIC = ic
+      cm.removeOverlay overlay
+      if q then cm.addOverlay overlay = token: (stream) ->
+        s = stream.string[stream.pos..]; if ic then s = s.toLowerCase()
+        i = s.indexOf q
+        if !i then         stream.pos += q.length; 'searching'
+        else if i > 0 then stream.pos += i;        undefined
+        else               stream.skipToEnd();     undefined
+    [q, ic]
   search = (backwards) ->
-    q = $('.tb-search:visible', $tb).val(); if q != lastSearch then cm.execCommand 'clearSearch'; lastSearch = q
-    cm.execCommand if backwards then 'findPrev' else 'findNext'
-    # Try to scroll the current match to 1/3 of editor height, though this might not work near the top or bottom:
-    h = $e.height(); {left, top} = cm.cursorCoords true, 'local'
-    cm.scrollIntoView left: left, right: left, top: top - h / 3, bottom: top + 2 * h / 3
+    [q, ic] = highlightSearch()
+    if q then do ->
+      s = cm.getValue(); if ic then s = s.toLowerCase()
+      if backwards
+        i = cm.indexFromPos cm.getCursor 'anchor'
+        j = s[...i].lastIndexOf q; if j < 0 then j = s[i..].lastIndexOf q; if j >= 0 then j += i
+      else
+        i = cm.indexFromPos cm.getCursor()
+        j = s[i..].indexOf q; if j > 0 then j += i else j = s[...i].indexOf q
+      if j >= 0
+        cm.setSelection cm.posFromIndex(j), cm.posFromIndex j + q.length
+        # Try to scroll the current match to 1/3 of editor height, though this might not work near the top or bottom:
+        h = $e.height(); {left, top} = cm.cursorCoords true, 'local'
+        cm.scrollIntoView left: left, right: left, top: top - h / 3, bottom: top + 2 * h / 3
     false
 
   setDebugger = (x) ->

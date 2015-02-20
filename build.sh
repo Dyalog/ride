@@ -26,7 +26,6 @@ js_files='
   node_modules/codemirror/lib/codemirror.js
   node_modules/codemirror/addon/dialog/dialog.js
   node_modules/codemirror/addon/search/searchcursor.js
-  node_modules/codemirror/addon/search/search.js
   node_modules/codemirror/addon/scroll/annotatescrollbar.js
   node_modules/codemirror/addon/search/matchesonscrollbar.js
   node_modules/codemirror/addon/hint/show-hint.js
