@@ -5,7 +5,12 @@ export PATH="`dirname $0`/node_modules/.bin:$PATH"
 
 mkdir -p build/{static,tmp}
 
-cp -uv node_modules/codemirror/lib/codemirror.css build/static/
+cp -uv                                                        \
+  node_modules/codemirror/lib/codemirror.css                  \
+  node_modules/codemirror/addon/dialog/dialog.css             \
+  node_modules/codemirror/addon/search/matchesonscrollbar.css \
+  build/static/
+
 i=style/style.sass o=build/static/style.css
 if [ $i -nt $o ]; then
   echo 'preprocessing css'
@@ -19,6 +24,11 @@ js_files='
   node_modules/socket.io/node_modules/socket.io-client/socket.io.js
   node_modules/jquery/dist/cdn/jquery-2.1.3.min.js
   node_modules/codemirror/lib/codemirror.js
+  node_modules/codemirror/addon/dialog/dialog.js
+  node_modules/codemirror/addon/search/searchcursor.js
+  node_modules/codemirror/addon/search/search.js
+  node_modules/codemirror/addon/scroll/annotatescrollbar.js
+  node_modules/codemirror/addon/search/matchesonscrollbar.js
   node_modules/codemirror/addon/hint/show-hint.js
   node_modules/codemirror/addon/edit/matchbrackets.js
   node_modules/codemirror/addon/edit/closebrackets.js
