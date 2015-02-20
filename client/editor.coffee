@@ -105,6 +105,7 @@ module.exports = (e, opts = {}) ->
 
   k["'\uf820'"] = k['Shift-Ctrl-Backspace'] = BK = opts.back # BK: Backward or Undo
   k["'\uf81f'"] = k['Shift-Ctrl-Enter']     = FD = opts.skip # FD: Forward or Redo
+  k['Ctrl-F'] = -> $tb.find('.tb-search:visible').focus(); return
 
   cm = CodeMirror $e.find('.cm')[0],
     fixedGutter: false, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
