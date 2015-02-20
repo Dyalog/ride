@@ -94,7 +94,6 @@ Later:
   rewrite syntax highlighting to support Dyalog syntax
   Highlight non-local names in a different colour (this is BY FAR the most useful syntax colouring)
   selecting a block of text and pressing ⍝ should comment/uncomment it
-  save line number display configuration (on/off)
   status window and notification about number of messages
   experiment with storing all help content in browser memory
   searchable help files
@@ -180,3 +179,4 @@ Done:
   10) In the Connect screen, a "Save" is required before Connect uses the parameters that have been entered into the edit boxes. This is quite confusing.
     NN: fixed and moved Connect button under the text fields
   4) Ctrl+Enter works fine from immediate execution, but doesn't seem to work reliably as a "step into" key once you are already tracing.
+  save line number display configuration (on/off)

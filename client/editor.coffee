@@ -107,7 +107,7 @@ module.exports = (e, opts = {}) ->
   k["'\uf81f'"] = k['Shift-Ctrl-Enter']     = FD = opts.skip # FD: Forward or Redo
 
   cm = CodeMirror $e.find('.cm')[0],
-    lineNumbers: !opts.debugger, fixedGutter: false, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
+    fixedGutter: false, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
     keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: {triples: ''}, gutters: ['breakpoints', 'CodeMirror-linenumbers']
     extraKeys: k
 
@@ -137,7 +137,12 @@ module.exports = (e, opts = {}) ->
     .on 'click', '.tb-edit-name',  -> opts.edit? cm.getValue(), 0 ; false
     .on 'click', '.tb-interrupt',  -> opts.interrupt?()           ; false
     .on 'click', '.tb-cutback',    -> opts.cutback?()             ; false
-    .on 'click', '.tb-line-numbers', -> cm.setOption 'lineNumbers', b = !cm.getOption 'lineNumbers'; $(@).toggleClass 'pressed', b; false
+    .on 'click', '.tb-line-numbers', ->
+      p = if opts.debugger then 'lineNumbersInDebugger' else 'lineNumbersInEditor'
+      localStorage[p] = b = 1 - localStorage[p]
+      cm.setOption 'lineNumbers', !!b
+      $(@).toggleClass 'pressed', b
+      false
     .on 'click', '.tb-save', -> EP(); false
     .on 'click', '.tb-comment', ->
       if cm.somethingSelected()
@@ -197,7 +202,12 @@ module.exports = (e, opts = {}) ->
     $('.debugger-toolbar', $e).toggle x
     $('.editor-toolbar', $e).toggle !x
     cm.setOption 'readOnly', x
-    $('.CodeMirror', $e).css backgroundColor: ['', '#dfdfdf'][+x]
+    $('.CodeMirror', $e).toggleClass 'debugger', x
+    p = if x then 'lineNumbersInDebugger' else 'lineNumbersInEditor'
+    localStorage[p] ?= +!x
+    cm.setOption 'lineNumbers', !!+localStorage[p]
+    $tb.find('.tb-line-numbers:visible').toggleClass 'pressed', !!+localStorage[p]
+    return
   setDebugger !!opts.debugger
 
   originalValue = null # remember it so that on <esc> we can detect if anything changed
