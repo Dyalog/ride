@@ -19,8 +19,8 @@ module.exports = (e, opts = {}) ->
         b 'tb-LN',           'Toggle line numbers'
         '<span class="tb-separator"></span>'
         '<input class="tb-search text-field">'
-        b 'tb-next',         'Search for next match'
-        b 'tb-prev',         'Search for previous match'
+        b 'tb-NX',           'Search for next match'
+        b 'tb-PV',           'Search for previous match'
         b 'tb-case',         'Match case'
       ].join ''}
     </div>
@@ -33,8 +33,8 @@ module.exports = (e, opts = {}) ->
         b 'tb-uncomment',    'Uncomment selected text'
         '<span class="tb-separator"></span>'
         '<input class="tb-search text-field">'
-        b 'tb-next',         'Search for next match'
-        b 'tb-prev',         'Search for previous match'
+        b 'tb-NX',           'Search for next match'
+        b 'tb-PV',           'Search for previous match'
         b 'tb-case',         'Match case'
         '<span class="tb-separator"></span>'
         b 'tb-refac-m',      'Refactor text as method'
@@ -76,6 +76,8 @@ module.exports = (e, opts = {}) ->
   LN = -> # Toggle Line Numbers
     p = if opts.debugger then 'lineNumbersInDebugger' else 'lineNumbersInEditor'
     localStorage[p] = b = 1 - localStorage[p]; cm.setOption 'lineNumbers', !!b; $(@).toggleClass 'pressed', b; return
+  PV = -> search true; return
+  NX = -> search(); return
   ###
     F6 = -> opts.openInExternalEditor? cm.getValue(), cm.getCursor().line, (err, text) ->
       if err then $.alert '' + err, 'Error' else c = cm.getCursor().line; cm.setValue text; cm.setCursor c
@@ -111,6 +113,8 @@ module.exports = (e, opts = {}) ->
       "'\uf81f'": FD,   'Shift-Ctrl-Enter':     FD
       "'\uf820'": BK,   'Shift-Ctrl-Backspace': BK
       "'\uf822'": SC,   'Ctrl-F':               SC
+      "'\uf824'": NX
+      "'\uf825'": PV
       "'\uf828'": ED,   'Shift-Enter':          ED
       "'\uf859'": TL,   'Ctrl-Up':              TL
 
@@ -157,10 +161,10 @@ module.exports = (e, opts = {}) ->
         cm.setCursor line: l, ch: 0
       false
     .on 'click', '.tb-hid, .tb-case', -> $(@).toggleClass 'pressed'; highlightSearch(); false
-    .on 'click', '.tb-next',                     -> search();    false
-    .on 'click', '.tb-prev',                     -> search true; false
-    .on 'keydown', '.tb-search', 'return',       -> search();    false
-    .on 'keydown', '.tb-search', 'shift+return', -> search true; false
+    .on 'click', '.tb-NX',                       -> NX(); false
+    .on 'click', '.tb-PV',                       -> PV(); false
+    .on 'keydown', '.tb-search', 'return',       -> NX(); false
+    .on 'keydown', '.tb-search', 'shift+return', -> PV(); false
     .on 'keydown', '.tb-search', 'esc', -> clearSearch(); cm.focus(); false
     .on 'click', '.tb-refac-m', ->
       if !/^\s*$/.test s = cm.getLine l = cm.getCursor().line
