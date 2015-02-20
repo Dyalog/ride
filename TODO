@@ -24,42 +24,45 @@ Not yet prioritised
   Autocomplete displays all ⎕names in an unexpected order; GS #11928
   Change background for search matches; MK email 2015-02-18
   ⎕dl-s in tradfns that call each other: trace into these functions, and while they are waiting on a delay, whack away at the tracer buttons and hit enter in the session. I would be very surprised if this does not lead to crashes; MK email 2015-02-18
+  JS email 2015-02-19:
+    JS5: )load dfns and type )fns - the display doesn’t seem to honour ⎕PW, so I see some of my fns spread over two lines of output.
+    JS6: An auto-⎕PW option (I suggest default) would be very nice.
 
-  MK email 2015-02-17 (in order of priority):
+MK email 2015-02-17 (in order of priority):
 
-    1) There seems to be no indicator of whether the interpreter is busy or
-    not other than that the RIDE is "unresponsive".
+  1) There seems to be no indicator of whether the interpreter is busy or
+  not other than that the RIDE is "unresponsive".
 
-    2) There seems to be no way to issue an interrupt; this is critical.
-    Coupled with 1) this gives a feeling of not quite being in control of the
-    debugging session.
+  2) There seems to be no way to issue an interrupt; this is critical.
+  Coupled with 1) this gives a feeling of not quite being in control of the
+  debugging session.
 
-    3) AutoComplete using <ENTER> is a nightmare and causes all sorts of
-    unexpected behaviours. If you have functions FOO and FOOBAR, it is almost
-    impossible to call FOO. You type FOO and hit enter but if you think about it
-    for a split second, the RIDE stuffs the "BAR" in just before you hit <ENTER>
-    and you run the wrong function. Or you type )save and hit <ENTER>, but all
-    that happens is that ")save" becomes ")SAVE" and you have to hit <ENTER>
-    again.
+  3) AutoComplete using <ENTER> is a nightmare and causes all sorts of
+  unexpected behaviours. If you have functions FOO and FOOBAR, it is almost
+  impossible to call FOO. You type FOO and hit enter but if you think about it
+  for a split second, the RIDE stuffs the "BAR" in just before you hit <ENTER>
+  and you run the wrong function. Or you type )save and hit <ENTER>, but all
+  that happens is that ")save" becomes ")SAVE" and you have to hit <ENTER>
+  again.
 
-    5) Shift+Enter also seems reluctant to work sometimes, but that is
-    fairly rare.
+  5) Shift+Enter also seems reluctant to work sometimes, but that is
+  fairly rare.
 
-    7) When tracing into functions, the window caption doesn't reflect the
-    function name that you have now moved into.
+  7) When tracing into functions, the window caption doesn't reflect the
+  function name that you have now moved into.
 
-    8) When tracing near the top of a function, the function header needs
-    to be visible. At the moment, the first line displayed is typically the
-    current line, even when you are only on line [1].
+  8) When tracing near the top of a function, the function header needs
+  to be visible. At the moment, the first line displayed is typically the
+  current line, even when you are only on line [1].
 
-    11) If APL disconnects, it would be VERY nice if there was a way to get
-    back to the connect form other than closing and restarting RIDE.
+  11) If APL disconnects, it would be VERY nice if there was a way to get
+  back to the connect form other than closing and restarting RIDE.
 
-    12) Setting stops doesn't seem to work, and in one case appeared to crash
-    the interpreter (not reproducible)
+  12) Setting stops doesn't seem to work, and in one case appeared to crash
+  the interpreter (not reproducible)
 
-    13) I am coming to the conclusion that the editor windows need to be on
-    top of the APL session but not on top of everything in the universe.
+  13) I am coming to the conclusion that the editor windows need to be on
+  top of the APL session but not on top of everything in the universe.
 
 Formatting / Rendering Issues
   If you hit quote three times, you end up with first one, then two, then SIX quotes
@@ -180,3 +183,4 @@ Done:
     NN: fixed and moved Connect button under the text fields
   4) Ctrl+Enter works fine from immediate execution, but doesn't seem to work reliably as a "step into" key once you are already tracing.
   save line number display configuration (on/off)
+  JS2: Line numbers: I would prefer the editor to remember my preference for no line numbers between invocations.
