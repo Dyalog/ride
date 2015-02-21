@@ -27,7 +27,7 @@ CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
   token: (stream, state) ->
     if state.isHeader
       delete state.isHeader; stream.skipToEnd(); s = stream.current()
-      if /\{\s*(⍝.*)?$/.test s
+      if /^\s*[:0-9]|\{\s*(⍝.*)?$/.test s
         stream.backUp s.length
       else if /^\s*$/.test s
         delete state.vars
