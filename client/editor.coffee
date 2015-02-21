@@ -6,15 +6,15 @@ module.exports = (e, opts = {}) ->
       #{[ # when in a floating window, the first two buttons in each toolbar are hidden through css
         b 'tb-QT tb-rhs',    'Quit this function'
         b 'tb-pop tb-rhs',   'Edit in a floating window'
-        b 'tb-over',         'Execute line'
-        b 'tb-into',         'Trace into expression'
+        b 'tb-ER',           'Execute line'
+        b 'tb-TC',           'Trace into expression'
         b 'tb-BK',           'Go back one line'
         b 'tb-FD',           'Skip current line'
         b 'tb-cont-trace',   'Continue trace'
         b 'tb-cont-exec',    'Continue execution'
         b 'tb-restart',      'Restart all threads'
-        b 'tb-edit-name',    'Edit name'
-        b 'tb-interrupt',    'Interrupt'
+        b 'tb-ED',           'Edit name'
+        b 'tb-WI',           'Interrupt'
         b 'tb-cutback',      'Clear trace/stop/monitor for this object'
         b 'tb-LN',           'Toggle line numbers'
         '<span class="tb-separator"></span>'
@@ -29,8 +29,8 @@ module.exports = (e, opts = {}) ->
         b 'tb-EP tb-rhs',    'Save changes and return'
         b 'tb-pop tb-rhs',   'Edit in a floating window'
         b 'tb-LN pressed',   'Toggle line numbers'
-        b 'tb-comment',      'Comment selected text'
-        b 'tb-uncomment',    'Uncomment selected text'
+        b 'tb-AO',           'Comment selected text'
+        b 'tb-DO',           'Uncomment selected text'
         '<span class="tb-separator"></span>'
         '<input class="tb-search text-field">'
         b 'tb-NX',           'Search for next match'
@@ -76,28 +76,49 @@ module.exports = (e, opts = {}) ->
   LN = -> # Toggle Line Numbers
     p = if opts.debugger then 'lineNumbersInDebugger' else 'lineNumbersInEditor'
     localStorage[p] = b = 1 - localStorage[p]; cm.setOption 'lineNumbers', !!b; $(@).toggleClass 'pressed', b; return
-  PV = -> search true; return
-  NX = -> search(); return
+  PV = -> search true; return # Previous
+  NX = -> search(); return # Next
+  TC = opts.into # Trace
+  AC = -> # Align Comments (currently inaccessible)
+    if cm.somethingSelected()
+      spc = (n) -> Array(n + 1).join ' '
+      o = cm.listSelections() # original selections
+      sels = o.map (sel) ->
+        p = sel.anchor; q = sel.head
+        if p.line > q.line || p.line == q.line && p.ch > q.ch then h = p; p = q; q = h
+        l = cm.getRange({line: p.line, ch: 0}, q, '\n').split '\n' # lines
+        u = l.map (x) -> x.replace /'[^']*'?/g, (y) -> spc y.length # lines with scrubbed string literals
+        c = u.map (x) -> x.indexOf '⍝' # column index of the '⍝'
+        {p, q, l, u, c}
+      m = Math.max (sels.map (sel) -> Math.max sel.c...)...
+      sels.forEach (sel) ->
+        r = sel.l.map (x, i) -> ci = sel.c[i]; if ci < 0 then x else x[...ci] + spc(m - ci) + x[ci..]
+        r[0] = r[0][sel.p.ch..]; cm.replaceRange r.join('\n'), sel.p, sel.q, 'D'; return
+      cm.setSelections o
+    return
+  AO = -> # Add Comment
+    if cm.somethingSelected()
+      a = cm.listSelections()
+      cm.replaceSelections cm.getSelections().map (s) -> s.replace(/^/gm, '⍝').replace /\n⍝$/, '\n'
+      cm.setSelections a
+    else
+      l = cm.getCursor().line; p = line: l, ch: 0; cm.replaceRange '⍝', p, p, 'D'; cm.setCursor line: l, ch: 1
+    return
+  DO = -> # Delete Comment
+    if cm.somethingSelected()
+      a = cm.listSelections()
+      cm.replaceSelections cm.getSelections().map (s) -> s.replace /^⍝/gm, ''
+      cm.setSelections a
+    else
+      l = cm.getCursor().line; s = cm.getLine l
+      cm.replaceRange s.replace(/^( *)⍝/, '$1'), {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
+      cm.setCursor line: l, ch: 0
+    return
+  WI = opts.interrupt # Weak Interrupt
+  ER = -> (if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'); return
   ###
     F6 = -> opts.openInExternalEditor? cm.getValue(), cm.getCursor().line, (err, text) ->
       if err then $.alert '' + err, 'Error' else c = cm.getCursor().line; cm.setValue text; cm.setCursor c
-      return
-    F7 = -> # align comments
-      if cm.somethingSelected()
-        spc = (n) -> Array(n + 1).join ' '
-        o = cm.listSelections() # original selections
-        sels = o.map (sel) ->
-          p = sel.anchor; q = sel.head
-          if p.line > q.line || p.line == q.line && p.ch > q.ch then h = p; p = q; q = h
-          l = cm.getRange({line: p.line, ch: 0}, q, '\n').split '\n' # lines
-          u = l.map (x) -> x.replace /'[^']*'?/g, (y) -> spc y.length # lines with scrubbed string literals
-          c = u.map (x) -> x.indexOf '⍝' # column index of the '⍝'
-          {p, q, l, u, c}
-        m = Math.max (sels.map (sel) -> Math.max sel.c...)...
-        sels.forEach (sel) ->
-          r = sel.l.map (x, i) -> ci = sel.c[i]; if ci < 0 then x else x[...ci] + spc(m - ci) + x[ci..]
-          r[0] = r[0][sel.p.ch..]; cm.replaceRange r.join('\n'), sel.p, sel.q, 'D'; return
-        cm.setSelections o
       return
   ###
 
@@ -106,9 +127,8 @@ module.exports = (e, opts = {}) ->
     keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: {triples: ''}, gutters: ['breakpoints', 'CodeMirror-linenumbers']
     extraKeys:
       Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch; return
-      Enter: -> (if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'); return
-      'Ctrl-Enter': -> (if opts.debugger then opts.into?()); return
       "'\uf800'": QT,   'Shift-Esc':            QT
+      "'\uf801'": ER,   Enter:                  ER
       "'\uf804'": EP,   Esc:                    EP
       "'\uf81f'": FD,   'Shift-Ctrl-Enter':     FD
       "'\uf820'": BK,   'Shift-Ctrl-Backspace': BK
@@ -116,6 +136,7 @@ module.exports = (e, opts = {}) ->
       "'\uf824'": NX
       "'\uf825'": PV
       "'\uf828'": ED,   'Shift-Enter':          ED
+      "'\uf829'": TC,   'Ctrl-Enter':           TC
       "'\uf859'": TL,   'Ctrl-Up':              TL
 
   createBreakpointElement = -> $('<div class="breakpoint">●</div>')[0]
@@ -128,38 +149,22 @@ module.exports = (e, opts = {}) ->
   $tb = $ '.toolbar', $e
     .on 'mousedown',        '.tb-button', (e) -> $(e.target).addClass    'armed'; e.preventDefault(); return
     .on 'mouseup mouseout', '.tb-button', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return
-    .on 'click', '.tb-pop',          -> opts.pop?()                 ; false
-    .on 'click', '.tb-QT',           -> QT()                        ; false
-    .on 'click', '.tb-over',         -> opts.over?()                ; false
-    .on 'click', '.tb-into',         -> opts.into?()                ; false
-    .on 'click', '.tb-BK',           -> BK()                        ; false
-    .on 'click', '.tb-FD',           -> FD()                        ; false
-    .on 'click', '.tb-cont-trace',   -> opts.continueTrace?()       ; false
-    .on 'click', '.tb-cont-exec',    -> opts.continueExec?()        ; false
-    .on 'click', '.tb-restart',      -> opts.restartThreads?()      ; false
-    .on 'click', '.tb-edit-name',    -> opts.edit? cm.getValue(), 0 ; false
-    .on 'click', '.tb-interrupt',    -> opts.interrupt?()           ; false
-    .on 'click', '.tb-cutback',      -> opts.cutback?()             ; false
-    .on 'click', '.tb-LN',           -> LN()                        ; false
-    .on 'click', '.tb-EP',           -> EP()                        ; false
-    .on 'click', '.tb-comment', ->
-      if cm.somethingSelected()
-        a = cm.listSelections()
-        cm.replaceSelections cm.getSelections().map (s) -> s.replace(/^/gm, '⍝').replace /\n⍝$/, '\n'
-        cm.setSelections a
-      else
-        l = cm.getCursor().line; p = line: l, ch: 0; cm.replaceRange '⍝', p, p, 'D'; cm.setCursor line: l, ch: 1
-      false
-    .on 'click', '.tb-uncomment', ->
-      if cm.somethingSelected()
-        a = cm.listSelections()
-        cm.replaceSelections cm.getSelections().map (s) -> s.replace /^⍝/gm, ''
-        cm.setSelections a
-      else
-        l = cm.getCursor().line; s = cm.getLine l
-        cm.replaceRange s.replace(/^( *)⍝/, '$1'), {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
-        cm.setCursor line: l, ch: 0
-      false
+    .on 'click', '.tb-pop',          -> opts.pop?()            ; false
+    .on 'click', '.tb-QT',           -> QT()                   ; false
+    .on 'click', '.tb-ER',           -> ER()                   ; false
+    .on 'click', '.tb-TC',           -> TC()                   ; false
+    .on 'click', '.tb-BK',           -> BK()                   ; false
+    .on 'click', '.tb-FD',           -> FD()                   ; false
+    .on 'click', '.tb-cont-trace',   -> opts.continueTrace?()  ; false
+    .on 'click', '.tb-cont-exec',    -> opts.continueExec?()   ; false
+    .on 'click', '.tb-restart',      -> opts.restartThreads?() ; false
+    .on 'click', '.tb-ED',           -> ED()                   ; false
+    .on 'click', '.tb-WI',           -> WI()                   ; false
+    .on 'click', '.tb-cutback',      -> opts.cutback?()        ; false
+    .on 'click', '.tb-LN',           -> LN()                   ; false
+    .on 'click', '.tb-EP',           -> EP()                   ; false
+    .on 'click', '.tb-AO',           -> AO()                   ; false
+    .on 'click', '.tb-DO',           -> DO()                   ; false
     .on 'click', '.tb-hid, .tb-case', -> $(@).toggleClass 'pressed'; highlightSearch(); false
     .on 'click', '.tb-NX',                       -> NX(); false
     .on 'click', '.tb-PV',                       -> PV(); false
