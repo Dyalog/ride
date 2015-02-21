@@ -124,7 +124,8 @@ module.exports = (e, opts = {}) ->
 
   cm = CodeMirror $e.find('.cm')[0],
     fixedGutter: false, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
-    keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: {triples: ''}, gutters: ['breakpoints', 'CodeMirror-linenumbers']
+    keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
+    gutters: ['breakpoints', 'CodeMirror-linenumbers']
     extraKeys:
       Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch; return
       "'\uf800'": QT,   'Shift-Esc':            QT

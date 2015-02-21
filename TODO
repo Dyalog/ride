@@ -79,8 +79,6 @@ MK email 2015-02-20
   window does not scroll, so the cursor walks out of the window :(.
 
 Formatting / Rendering Issues
-  If you hit quote three times, you end up with first one, then two, then SIX quotes
-    Patch submitted.  Will be available with the next release of CodeMirror: https://github.com/codemirror/CodeMirror/pull/3083
   Auto-complete should not happen at quote-quad input
   Auto-complete should probably not complete on enter, this can cause very bad problems if the user is not carefully looking
   We need some white space / margin at the bottom, below the input line
@@ -199,3 +197,6 @@ Done:
   save line number display configuration (on/off)
   JS2: Line numbers: I would prefer the editor to remember my preference for no line numbers between invocations.
   line wrapping in the session needs to be optional; MK email 2015-02-21
+  If you hit quote three times, you end up with first one, then two, then SIX quotes
+    NN: Patch submitted.  Will be available with the next release of CodeMirror: https://github.com/codemirror/CodeMirror/pull/3083
+    NN: I decided to disable pairing of '' and "".
