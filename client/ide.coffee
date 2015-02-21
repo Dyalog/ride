@@ -65,9 +65,12 @@ module.exports = (opts = {}) ->
 
   popWindow = (w) ->
     if !opener && !isDead
-      if pw = open "?win=#{w}", '_blank', 'width=500,height=400,left=100,top=100,resizable=1'
-        $("#wintab#{w},#win#{w}").remove(); $tabs.tabs('destroy').tabs tabOpts; refreshTabs()
-        session.scrollCursorIntoView()
+      fwis = try JSON.parse localStorage.floatingWindowInfos catch then {}
+      {width, height, x, y} = fwis[w] || width: 500, height: 400
+      spec = "width=#{width},height=#{height},resizable=1"; if x? then spec += ",left=#{x},top=#{y},screenX=#{x},screenY=#{y}"
+      if pw = open "?win=#{w}", '_blank', spec
+        if x? then pw.moveTo x, y
+        $("#wintab#{w},#win#{w}").remove(); $tabs.tabs('destroy').tabs tabOpts; refreshTabs(); session.scrollCursorIntoView()
         # wins[w].widget will be replaced a bit later by code running in the popup
       else
         $.alert 'Popups are blocked.'

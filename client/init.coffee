@@ -16,7 +16,11 @@ if opener && (win = D.urlParams.win)? # are we running in a floating editor wind
     ed0 = wins[win].widget; ed = wins[win].widget = Editor $('.ui-layout-center'), ed0.getOpts()
     ed.setValue ed0.getValue(); ed.setCursorIndex ed0.getCursorIndex(); ed.updateSize(); ed.highlight ed0.getHighlightedLine()
     ed.focus(); ed0 = null
-    window.onbeforeunload = -> ed.saveAndClose(); return
+    window.onbeforeunload = ->
+      fwis = try JSON.parse localStorage.floatingWindowInfos catch then {}
+      fwis[win] = x: window.screenX, y: window.screenY, width: $(window).width(), height: $(window).height()
+      localStorage.floatingWindowInfos = JSON.stringify fwis
+      ed.saveAndClose(); return
     return
 else
   D.socket = if D.createSocket then D.createSocket() else io()
