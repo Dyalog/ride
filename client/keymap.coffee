@@ -1,98 +1,107 @@
 helpurls = require './helpurls.coffee'
 window.onhelp = -> false # prevent IE from acting silly on F1
 
-inherit = (x) -> (F = ->):: = x; new F
+# utils
+inherit = (x) -> (F = ->):: = x; new F # JavaScript's prototypal inheritance
+join = (x) -> [].concat x... # ⊃,/
+dict = (pairs) -> r = {}; (for [k, v] in pairs then r[k] = v); r # like in Python, build a dictionary from a list of pairs
+chr = (x) -> String.fromCharCode x
+ord = (x) -> x.charCodeAt 0
 
-DEFAULT_PREFIX_KEY = '`'
-prefixKeyListeners = []
-onPrefixKeyChange = (f) -> prefixKeyListeners.push f
-@getPrefixKey = getPrefixKey = -> localStorage.prefixKey || DEFAULT_PREFIX_KEY
-@setPrefixKey = (x = DEFAULT_PREFIX_KEY) ->
-  old = getPrefixKey()
-  if x != old
-    if x != DEFAULT_PREFIX_KEY then localStorage.prefixKey = x else delete localStorage.prefixKey
-    for f in prefixKeyListeners then f x, old
-  1
+PK0 = '`' # default prefix key
+@getPrefixKey = getPrefixKey = -> localStorage.prefixKey || PK0
+@setPrefixKey = (x = PK0) ->
+  if x != old = getPrefixKey()
+    if x == PK0 then delete localStorage.prefixKey else localStorage.prefixKey = x
+    m = CodeMirror.keyMap.dyalog; m["'#{x}'"] = m["'#{old}'"]; delete m["'#{old}'"]
+  return
 
-ks = '''
-                    `1234567890-=  ~!@#$%^&*()_+
-                    qwertyuiop[]   QWERTYUIOP{}
-                    asdfghjkl;'\\  ASDFGHJKL:"|
-                    zxcvbnm,./     ZXCVBNM<>?
-'''.split /\s*/g
-vs = '''
-                    `¨¯<≤=≥>≠∨∧×÷  ⋄⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹
-                    ?⍵∊⍴~↑↓⍳○*←→   ?⍵⍷⍴⍨↑↓⍸⍥⍣⍞⍬
-                    ⍺⌈⌊_∇∆∘'⎕⍎⍕⊢   ⍺⌈⌊_∇∆⍤⌸⌷≡≢⊣
-                    ⊂⊃∩∪⊥⊤|⍝⍀⌿     ⊂⊃∩∪⊥⊤|⍪⍙⍠
-'''.split /\s*/g
-
-squiggleDescriptions = '''
-  ¨ each
-  ¯ negative
-  ∨ or (GCD)
-  ∧ and (LCM)
-  × signum/times
-  ÷ reciprocal/divide
-  ? roll/deal
-  ⍵ right argument
-  ∊ enlist/membership
-  ⍴ shape/reshape
-  ~ not/without
-  ↑ mix/take
-  ↓ split/drop
-  ⍳ indices/index of
-  ○ pi/trig
-  * exp/power
-  ← assignment
-  → branch
-  ⍺ left argument
-  ⌈ ceil/max
-  ⌊ floor/min
-  ∇ recur
-  ∘ compose
-  ⎕ evaluated input
-  ⍎ execute
-  ⍕ format
-  ⊢ right
-  ⊂ enclose/partition
-  ⊃ disclose/pick
-  ∩ intersection
-  ∪ unique/union
-  ⊥ decode (1 2 3→123)
-  ⊤ encode (123→1 2 3)
-  | abs/modulo
-  ⍝ comment
-  ⍀ \\[⎕io]
-  ⌿ /[⎕io]
-  ⋄ statement sep
-  ⌶ I-beam
-  ⍒ grade down
-  ⍋ grade up
-  ⌽ reverse/rotate
-  ⍉ transpose
-  ⊖ ⌽[⎕io]
-  ⍟ logarithm
-  ⍱ nor
-  ⍲ nand
-  ! factorial/binomial
-  ⌹ matrix inv/div
-  ⍷ find
-  ⍨ commute
-  ⍣ power operator
-  ⍞ char I/O
-  ⍬ zilde (⍳0)
-  ⍤ rank
-  ⌸ key
-  ⌷ default/index
-  ≡ depth/match
-  ≢ tally/not match
-  ⊣ left
-  ⍪ table / ,[⎕io]
-  ⍠ variant
+squiggleDescriptions = ((s) -> dict s.split(/\n| *│ */).map (l) -> [l[0], l[2..]]) '''
+  ¨ each              │ ← assignment         │ ⊤ encode (123→1 2 3) │ ⌹ matrix inv/div
+  ¯ negative          │ → branch             │ | abs/modulo         │ ⍷ find
+  ∨ or (GCD)          │ ⍺ left argument      │ ⍝ comment            │ ⍨ commute
+  ∧ and (LCM)         │ ⌈ ceil/max           │ ⍀ \\[⎕io]            │ ⍣ power operator
+  × signum/times      │ ⌊ floor/min          │ ⌿ /[⎕io]             │ ⍞ char I/O
+  ÷ reciprocal/divide │ ∇ recur              │ ⋄ statement sep      │ ⍬ zilde (⍳0)
+  ? roll/deal         │ ∘ compose            │ ⌶ I-beam             │ ⍤ rank
+  ⍵ right argument    │ ⎕ evaluated input    │ ⍒ grade down         │ ⌸ key
+  ∊ enlist/membership │ ⍎ execute            │ ⍋ grade up           │ ⌷ default/index
+  ⍴ shape/reshape     │ ⍕ format             │ ⌽ reverse/rotate     │ ≡ depth/match
+  ~ not/without       │ ⊢ right              │ ⍉ transpose          │ ≢ tally/not match
+  ↑ mix/take          │ ⊂ enclose/partition  │ ⊖ ⌽[⎕io]             │ ⊣ left
+  ↓ split/drop        │ ⊃ disclose/pick      │ ⍟ logarithm          │ ⍪ table / ,[⎕io]
+  ⍳ indices/index of  │ ∩ intersection       │ ⍱ nor                │ ⍠ variant
+  ○ pi/trig           │ ∪ unique/union       │ ⍲ nand
+  * exp/power         │ ⊥ decode (1 2 3→123) │ ! factorial/binomial
 '''
 
-squiggleNames = '''
+ctid = 0 # backquote completion timeout id
+@reverse = reverse = {} # reverse keymap: maps squiggles to their `x keys; used in lbar tooltips
+
+CodeMirror.keyMap.dyalog = inherit fallthrough: 'default', F1: (cm) ->
+  c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
+  u =
+    if      m = /^ *(\)[a-z]+).*$/.exec s then helpurls[m[1]] || helpurls.WELCOME
+    else if m = /^ *(\][a-z]+).*$/.exec s then helpurls[m[1]] || helpurls.UCMDS
+    else
+      x = s[s[...c.ch].replace(/.[áa-z]*$/i, '').length..].replace(/^([⎕:][áa-z]*|.).*$/i, '$1').replace /^:end/, ':'
+      helpurls[x] ||
+        if      x[0] == '⎕' then helpurls.SYSFNS
+        else if x[0] == ':' then helpurls.CTRLSTRUCTS
+        else                     helpurls.LANGELEMENTS
+  w = screen.width / 4; h = screen.height / 4
+  open u, 'help', "width=#{2 * w},height=#{2 * h},left=#{w},top=#{h},scrollbars=1,location=1,toolbar=0,menubar=0,resizable=1"
+    .focus?()
+  return
+
+CodeMirror.keyMap.dyalog["'#{getPrefixKey()}'"] = (cm) ->
+  cm.setOption 'autoCloseBrackets', false; cm.setOption 'keyMap', 'dyalogBackquote'
+  c = cm.getCursor(); cm.replaceSelection getPrefixKey(), 'end'
+  ctid = setTimeout(
+    -> cm.showHint
+      completeOnSingleClick: true
+      extraKeys:
+        Backspace: (cm, m) -> m.close(); cm.execCommand 'delCharBefore'; return
+        Left:      (cm, m) -> m.close(); cm.execCommand 'goCharLeft'; return
+        Right:     (cm, m) -> m.pick(); return
+      hint: ->
+        data = from: c, to: cm.getCursor(), list: bqc
+        CodeMirror.on data, 'close', -> cm.setOption 'autoCloseBrackets', true; cm.setOption 'keyMap', 'dyalog'
+        data
+    500
+  )
+
+# `x completions
+bqc = []
+CodeMirror.keyMap.dyalogBackquote = nofallthrough: true, disableInput: true
+ks = '`1234567890-=qwertyuiop[]asdfghjk l;\'\\zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:"|ZXCVBNM<>?'.split /\s*/g
+vs = '`¨¯<≤=≥>≠∨∧×÷?⍵∊⍴~↑↓⍳○*←→⍺⌈⌊_∇∆∘\'⎕⍎⍕ ⊢ ⊂⊃∩∪⊥⊤|⍝⍀⌿⋄⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹?⍵⍷⍴⍨↑↓⍸⍥⍣⍞⍬⍺⌈⌊_∇∆⍤⌸⌷≡≢⊣⊂⊃∩∪⊥⊤|⍪⍙⍠'.split /\s*/g
+if ks.length != vs.length then console.error? 'bad configuration of backquote keymap'
+ks.forEach (k, i) ->
+  v = vs[i]; reverse[v] ?= k
+  bqc.push text: v, render: (e) -> $(e).text "#{v} #{getPrefixKey()}#{k} #{squiggleDescriptions[v] || ''}  "
+  CodeMirror.keyMap.dyalogBackquote["'#{k}'"] = (cm) ->
+    clearTimeout ctid; cm.state.completionActive?.close?(); cm.setOption 'keyMap', 'dyalog'; cm.setOption 'autoCloseBrackets', true
+    c = cm.getCursor(); if k == getPrefixKey() then bqbqHint cm else cm.replaceRange v, {line: c.line, ch: c.ch - 1}, c
+    return
+ks = vs = null
+
+bqc[0].render = (e) -> e.innerHTML = "  #{pk = getPrefixKey()}#{pk} <i>completion by name</i>"
+bqc[0].hint = bqbqHint = (cm) ->
+  c = cm.getCursor(); cm.replaceSelection getPrefixKey(), 'end'
+  cm.showHint completeOnSingleClick: true, extraKeys: {Right: pick = ((cm, m) -> m.pick()), Space: pick}, hint: ->
+    u = cm.getLine(c.line)[c.ch + 1...cm.getCursor().ch]
+    a = []; for x in bqbqc when x.name[...u.length] == u then a.push x
+    from: {line: c.line, ch: c.ch - 1}, to: cm.getCursor(), list: a
+  return
+
+# ``name completions
+bqbqc = ((s) -> join s.split('\n').map (l) ->
+  [squiggle, names...] = l.split ' '
+  names.map (name) -> name: name, text: squiggle, render: (e) ->
+    key = reverse[squiggle]; pk = getPrefixKey()
+    $(e).text "#{squiggle} #{if key then pk + key else '  '} #{pk}#{pk}#{name}"
+) """
   ← leftarrow assign gets
   + plus add conjugate mate
   - minus hyphen subtract negate
@@ -175,118 +184,4 @@ squiggleNames = '''
   ⍥ circlediaeresis hoof
   ⍫ deltilde
   á aacute
-  Ⓐ _a
-  Ⓑ _b
-  Ⓒ _c
-  Ⓓ _d
-  Ⓔ _e
-  Ⓕ _f
-  Ⓖ _g
-  Ⓗ _h
-  Ⓘ _i
-  Ⓙ _j
-  Ⓚ _k
-  Ⓛ _l
-  Ⓜ _m
-  Ⓝ _n
-  Ⓞ _o
-  Ⓟ _p
-  Ⓠ _q
-  Ⓡ _r
-  Ⓢ _s
-  Ⓣ _t
-  Ⓤ _u
-  Ⓥ _v
-  Ⓦ _w
-  Ⓧ _x
-  Ⓨ _y
-  Ⓩ _z
-'''
-
-ctid = null # backquote completion timeout id
-bqc = [] # backquote completions
-bqbqc = [] # double backquote completions
-D.reverseKeyMap = {}
-
-CodeMirror.keyMap.dyalog = inherit
-  fallthrough: 'default'
-  F1: (cm) ->
-    c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
-    u =
-      if m = /^ *(\)[a-z]+).*$/.exec s
-        helpurls[m[1]] || helpurls.WELCOME
-      else if m = /^ *(\][a-z]+).*$/.exec s
-        helpurls[m[1]] || helpurls.UCMDS
-      else
-        x = s[s[...c.ch].replace(/.[áa-z]*$/i, '').length..]
-          .replace(/^([⎕:][áa-z]*|.).*$/i, '$1')
-          .replace /^:end/, ':'
-        helpurls[x] ||
-          if x[0] == '⎕' then helpurls.SYSFNS
-          else if x[0] == ':' then helpurls.CTRLSTRUCTS
-          else helpurls.LANGELEMENTS
-    w = screen.width; h = screen.height
-    popup = open u, 'help',
-      "width=#{w / 2},height=#{h / 2},left=#{w / 4},top=#{h / 4}," +
-      "scrollbars=1,location=1,toolbar=0,menubar=0,resizable=1"
-    popup.focus?()
-    return
-
-CodeMirror.keyMap.dyalog["'#{getPrefixKey()}'"] = (cm) ->
-  cm.setOption 'autoCloseBrackets', false
-  cm.setOption 'keyMap', 'dyalogBackquote'
-  c = cm.getCursor()
-  cm.replaceSelection getPrefixKey(), 'end'
-  ctid = setTimeout(
-    -> cm.showHint
-      completeOnSingleClick: true
-      extraKeys:
-        Backspace: (cm, m) -> m.close(); cm.execCommand 'delCharBefore'; return
-        Left:      (cm, m) -> m.close(); cm.execCommand 'goCharLeft'; return
-        Right:     (cm, m) -> m.pick(); return
-      hint: ->
-        data = from: c, to: cm.getCursor(), list: bqc
-        CodeMirror.on data, 'close', -> cm.setOption 'autoCloseBrackets', true; cm.setOption 'keyMap', 'dyalog'
-        data
-    500
-  )
-onPrefixKeyChange (x, old) -> x = "'#{x}'"; old = "'#{old}'"; m = CodeMirror.keyMap.dyalog; m[x] = m[old]; delete m[old]; return
-
-CodeMirror.keyMap.dyalogBackquote = nofallthrough: true, disableInput: true
-ds = {}; for line in squiggleDescriptions.split '\n' then ds[line[0]] = line[2..]
-if ks.length != vs.length then console.error? 'bad configuration of backquote keymap'
-for k, i in ks then do (k = k) ->
-  v = vs[i]
-  D.reverseKeyMap[v] ?= k
-  bqc.push text: v, render: (e) -> $(e).text "#{v} #{getPrefixKey()}#{k} #{ds[v] || ''}  "
-  CodeMirror.keyMap.dyalogBackquote["'#{k}'"] = (cm) ->
-    clearTimeout ctid
-    cm.state.completionActive?.close?()
-    cm.setOption 'keyMap', 'dyalog'
-    cm.setOption 'autoCloseBrackets', true
-    c = cm.getCursor()
-    if k == getPrefixKey() then bqbqHint cm else cm.replaceRange v, {line: c.line, ch: c.ch - 1}, c
-    return
-
-bqc[0].render = (e) -> e.innerHTML = "  #{pk = getPrefixKey()}#{pk} <i>completion by name</i>"
-bqc[0].hint = bqbqHint = (cm) ->
-  c = cm.getCursor()
-  cm.replaceSelection getPrefixKey(), 'end'
-  cm.showHint
-    completeOnSingleClick: true
-    extraKeys:
-      Right: (cm, m) -> m.pick(); return
-      Space: (cm, m) -> m.pick(); return
-    hint: ->
-      u = cm.getLine(c.line)[c.ch + 1...cm.getCursor().ch]
-      a = []; for x in bqbqc when x.name[...u.length] == u then a.push x
-      from: {line: c.line, ch: c.ch - 1}, to: cm.getCursor(), list: a
-  return
-
-for line in squiggleNames.split '\n' then do ->
-  [squiggle, names...] = line.split ' '
-  for name in names then bqbqc.push name: name, text: squiggle, render: do (name = name) -> (e) ->
-    key = D.reverseKeyMap[squiggle]
-    $(e).text "#{squiggle} #{if key then getPrefixKey() + key else '  '} #{getPrefixKey()}#{getPrefixKey()}#{name}"
-
-ks = vs = squiggleDescriptions = squiggleNames = null
+""" + [0...26].map((i) -> "\n#{chr i + ord 'Ⓐ'} _#{chr i + ord 'a'}").join '' # underscored alphabet: Ⓐ _a ...
