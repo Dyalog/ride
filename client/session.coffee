@@ -29,7 +29,8 @@ module.exports = (e, opts = {}) ->
     return
 
   cm = CodeMirror ($e = $ e)[0],
-    autofocus: true, mode: '', lineWrapping: true, matchBrackets: true, autoCloseBrackets: true, readOnly: true, keyMap: 'dyalog',
+    autofocus: true, mode: '', matchBrackets: true, autoCloseBrackets: true, readOnly: true, keyMap: 'dyalog',
+    lineWrapping: !!localStorage.sessionLineWrapping
     extraKeys:
       Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
       Enter: -> exec 0
@@ -80,6 +81,10 @@ module.exports = (e, opts = {}) ->
   hasFocus: -> cm.hasFocus()
   focus: -> cm.focus()
   insert: (ch) -> (if !cm.getOption 'readOnly' then c = cm.getCursor(); cm.replaceRange ch, c, c, 'D'); return
-  scrollCursorIntoView: -> setTimeout (-> cm.scrollIntoView cm.getCursor()), 1
+  scrollCursorIntoView: scrollCursorIntoView = -> setTimeout (-> cm.scrollIntoView cm.getCursor()), 1
   autocomplete: autocompletion cm, opts.autocomplete
   die: -> cm.setOption 'readOnly', true; return
+  getLineWrapping: -> cm.getOption 'lineWrapping'
+  setLineWrapping: (x) ->
+    if x then localStorage.sessionLineWrapping = '1' else delete localStorage.sessionLineWrapping
+    cm.setOption 'lineWrapping', !!x; scrollCursorIntoView(); return

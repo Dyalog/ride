@@ -181,6 +181,8 @@ module.exports = (opts = {}) ->
           localStorage.showLanguageBar = +x; layout[['hide', 'show'][+x]] 'north'; return}
         {'': 'Float New Editors', checked: +localStorage.floatNewEditors || 0, action: (x) ->
           localStorage.floatNewEditors = +x; return}
+        {'': 'Session Line Wrapping', checked: session.getLineWrapping(), action: (x) ->
+          session.setLineWrapping x; return}
       ]
         .concat(
           if D.nwjs then [

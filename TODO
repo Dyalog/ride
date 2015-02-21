@@ -24,7 +24,6 @@ Not yet prioritised
   Autocomplete displays all ⎕names in an unexpected order; GS #11928
   Change background for search matches; MK email 2015-02-18
   ⎕dl-s in tradfns that call each other: trace into these functions, and while they are waiting on a delay, whack away at the tracer buttons and hit enter in the session. I would be very surprised if this does not lead to crashes; MK email 2015-02-18
-  line wrapping in the session needs to be optional; MK email 2015-02-21
   JS email 2015-02-19:
     JS5: )load dfns and type )fns - the display doesn’t seem to honour ⎕PW, so I see some of my fns spread over two lines of output.
     JS6: An auto-⎕PW option (I suggest default) would be very nice.
@@ -199,3 +198,4 @@ Done:
   4) Ctrl+Enter works fine from immediate execution, but doesn't seem to work reliably as a "step into" key once you are already tracing.
   save line number display configuration (on/off)
   JS2: Line numbers: I would prefer the editor to remember my preference for no line numbers between invocations.
+  line wrapping in the session needs to be optional; MK email 2015-02-21
