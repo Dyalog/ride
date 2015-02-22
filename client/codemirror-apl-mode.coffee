@@ -26,8 +26,8 @@ CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
   startState: -> isHeader: 1, stack: '', dfnDepth: 0
   token: (stream, state) ->
     if state.isHeader
-      delete state.isHeader; stream.skipToEnd(); s = stream.current()
-      if /^\s*[:0-9]|\{\s*(⍝.*)?$/.test s
+      delete state.isHeader; stream.match /[^⍝\n\r]*/; s = stream.current()
+      if /^\s*[:0-9]|←\s*\{/.test s
         stream.backUp s.length
       else if /^\s*$/.test s
         delete state.vars
@@ -39,7 +39,7 @@ CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
     else
       c = stream.next()
       if !c then null
-      else if /[ \t\r\n]/.test c then stream.eatSpace(); null
+      else if /\s/.test c then stream.eatSpace(); null
       else if c == '⍝' then stream.skipToEnd(); 'apl-comment'
       else if c == '←' then 'apl-assignment'
       else if c == "'" then (if stream.match /^(?:[^'\r\n]|'')*'/ then 'string' else stream.skipToEnd(); 'apl-error')
@@ -51,9 +51,10 @@ CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
       else if c == ']' then (if state.stack[-1..] == '[' then state.stack = state.stack[...-1]; 'apl-bracket' else 'apl-error')
       else if c == '}' then (if state.stack[-1..] == '{' then state.stack = state.stack[...-1]; "apl-dfn apl-dfn#{state.dfnDepth--}"; else 'apl-error')
       else if c == ';' then 'apl-semicolon'
-      else if /[\/⌿\\⍀¨⌸]/.test c then 'apl-monadic-operator'
+      else if c == '⋄' then 'apl-diamond'
+      else if /[\/⌿\\⍀¨⌸⍨]/.test c then 'apl-monadic-operator'
       else if /[\.∘⍤⍣⍠]/.test c then 'apl-dyadic-operator'
-      else if /[\+\-×÷⌈⌊\|⍳\?\⋆⍟○!⌹<≤=>≥≠≡≢∊⍷∪∩∼∨∧⍱⍲⍴,⍪⌽⊖⍉↑↓⊂⊃⌷⍋⍒⊤⊥⍕⍎⊣⊢]/.test c then 'apl-function'
+      else if /[\+\-×÷⌈⌊\|⍳\?\*⍟○!⌹<≤=>≥≠≡≢∊⍷∪∩~∨∧⍱⍲⍴,⍪⌽⊖⍉↑↓⊂⊃⌷⍋⍒⊤⊥⍕⍎⊣⊢]/.test c then 'apl-function'
       else if state.dfnDepth && /[⍺⍵∇:]/.test c then "apl-dfn apl-dfn#{state.dfnDepth}"
       else if c == '∇' then state.isHeader = 1; 'apl-tradfn'
       else if c == ':' then (if stream.match(/\w*/)?[0]?.toLowerCase() in keywords then 'apl-keyword' else 'apl-error')

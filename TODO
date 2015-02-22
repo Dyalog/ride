@@ -21,12 +21,7 @@ Not yet prioritised
   <End> should go to the last non-blank character; MK email 2015-02-17
   Find an acceptable solution for pasting multiple lines into the session, in particular: single line with a trailing newline; MK email 2015-02-17
   Flipping twice between edit and trace mode caused an error; MK email 2015-02-17
-  Autocomplete displays all ⎕names in an unexpected order; GS #11928
-  Change background for search matches; MK email 2015-02-18
   ⎕dl-s in tradfns that call each other: trace into these functions, and while they are waiting on a delay, whack away at the tracer buttons and hit enter in the session. I would be very surprised if this does not lead to crashes; MK email 2015-02-18
-  JS email 2015-02-19:
-    JS5: )load dfns and type )fns - the display doesn’t seem to honour ⎕PW, so I see some of my fns spread over two lines of output.
-    JS6: An auto-⎕PW option (I suggest default) would be very nice.
 
 MK email 2015-02-17 (in order of priority):
 
@@ -36,14 +31,6 @@ MK email 2015-02-17 (in order of priority):
   2) There seems to be no way to issue an interrupt; this is critical.
   Coupled with 1) this gives a feeling of not quite being in control of the
   debugging session.
-
-  3) AutoComplete using <ENTER> is a nightmare and causes all sorts of
-  unexpected behaviours. If you have functions FOO and FOOBAR, it is almost
-  impossible to call FOO. You type FOO and hit enter but if you think about it
-  for a split second, the RIDE stuffs the "BAR" in just before you hit <ENTER>
-  and you run the wrong function. Or you type )save and hit <ENTER>, but all
-  that happens is that ")save" becomes ")SAVE" and you have to hit <ENTER>
-  again.
 
   5) Shift+Enter also seems reluctant to work sometimes, but that is
   fairly rare.
@@ -78,10 +65,8 @@ MK email 2015-02-20
 
 Formatting / Rendering Issues
   Auto-complete should not happen at quote-quad input
-  Auto-complete should probably not complete on enter, this can cause very bad problems if the user is not carefully looking
   We need some white space / margin at the bottom, below the input line
   Overflown part of connections box doesn't show
-  App icons for Mac & Windows (Jason is on the case)
 
 Urgent Usability Issues
   Shift+enter doesn't work on a Mac (observed on John Scholes' Mac)
@@ -199,3 +184,13 @@ Done:
     NN: Patch submitted.  Will be available with the next release of CodeMirror: https://github.com/codemirror/CodeMirror/pull/3083
     NN: I decided to disable pairing of '' and "".
   2) Double-click in the session does not open the editor.
+  JS email 2015-02-19:
+    JS5: )load dfns and type )fns - the display doesn’t seem to honour ⎕PW, so I see some of my fns spread over two lines of output.
+    JS6: An auto-⎕PW option (I suggest default) would be very nice.
+      NN: implemented optional line wrapping instead
+  Autocomplete displays all ⎕names in an unexpected order; GS #11928
+  App icons for Mac & Windows (Jason)
+  Change background for search matches; MK email 2015-02-18
+  3) AutoComplete using <ENTER> is a nightmare and causes all sorts of unexpected behaviours. If you have functions FOO and FOOBAR, it is almost impossible to call FOO. You type FOO and hit enter but if you think about it for a split second, the RIDE stuffs the "BAR" in just before you hit <ENTER> and you run the wrong function. Or you type )save and hit <ENTER>, but all that happens is that ")save" becomes ")SAVE" and you have to hit <ENTER> again.
+  Auto-complete should probably not complete on enter, this can cause very bad problems if the user is not carefully looking
+    NN: fixed by adding an extra invisible item before other completions; pressing <enter> on it does ER
