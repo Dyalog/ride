@@ -54,17 +54,20 @@ for f in $js_files; do
     else echo "cleaning up $f"; <$f sed '/^\(var \w\+ = \)\?require(/d' >$u; fi
   fi
 done
+if [ $changed -eq 1 ]; then echo 'concatenating libs'; cat $us >build/tmp/libs.js; fi
+
 echo 'browserifying'
-browserify -t coffeeify client/*.coffee >build/tmp/client.js
-version_file=build/tmp/version.js
->$version_file cat <<.
-  var D=D||{};
-  D.versionInfo={
-    version:'0.1.$(git rev-list --count HEAD)',
-    date:'$(git show -s HEAD --pretty=format:%ci)',
-    rev:'$(git rev-parse HEAD)'
-  };
+(
+  cat <<.
+    var D=D||{};
+    D.versionInfo={
+      version:'0.1.$(git rev-list --count HEAD)',
+      date:'$(git show -s HEAD --pretty=format:%ci)',
+      rev:'$(git rev-parse HEAD)'
+    };
 .
-echo 'concatenating js files'; cat $version_file $us build/tmp/client.js >build/static/D.js
+  cat build/tmp/libs.js
+  browserify -d -t coffeeify client/*.coffee | exorcist build/static/client.map
+)>build/static/D.js
 
 cp -ur style/apl385.* style/*.png favicon.ico package.json build/static/
