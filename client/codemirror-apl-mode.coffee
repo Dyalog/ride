@@ -60,6 +60,7 @@ CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
       else if c == ':' then (if stream.match(/\w*/)?[0]?.toLowerCase() in keywords then 'apl-keyword' else 'apl-error')
       else if c == '⎕' then (if stream.match(/[áa-z0-9]*/i)?[0].toLowerCase() in quadNames then 'apl-quad-name' else 'apl-error')
       else if c == '⍞' then 'apl-quad-name'
+      else if c == '#' then 'apl-namespace'
       else if rName0.test c
         stream.match rName1; x = stream.current()
         if state.dfnDepth || state.vars && x in state.vars then 'apl-name' else 'apl-global-name'
