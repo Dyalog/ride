@@ -1,8 +1,8 @@
-about = require './about.coffee'
-prefs = require './prefs.coffee'
-Editor = require './editor.coffee'
-Session = require './session.coffee'
-keymap = require './keymap.coffee'
+about = require './about'
+prefs = require './prefs'
+Editor = require './editor'
+Session = require './session'
+keymap = require './keymap'
 
 module.exports = (opts = {}) ->
   $('body').html """

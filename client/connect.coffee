@@ -1,5 +1,5 @@
-ide = require './ide.coffee'
-about = require './about.coffee'
+ide = require './ide'
+about = require './about'
 
 DEFAULT_PORT = 4502
 localStorage.favs ?= JSON.stringify [host: '127.0.0.1', port: DEFAULT_PORT]

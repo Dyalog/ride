@@ -1,6 +1,6 @@
-connect = require './connect.coffee'
-Editor = require './editor.coffee'
-about = require './about.coffee'
+connect = require './connect'
+Editor = require './editor'
+about = require './about'
 
 D.urlParams = {}
 for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'

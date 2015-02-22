@@ -1,4 +1,4 @@
-helpurls = require './helpurls.coffee'
+helpurls = require './helpurls'
 window.onhelp = -> false # prevent IE from acting silly on F1
 
 # utils

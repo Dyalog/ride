@@ -1,4 +1,4 @@
-autocompletion = require './autocompletion.coffee'
+autocompletion = require './autocompletion'
 module.exports = (e, opts = {}) ->
   b = (cssClasses, description) -> "<a href='#' class='#{cssClasses} tb-button' title='#{description}'></a>"
   ($e = $ e).html """

@@ -1,4 +1,4 @@
-keymap = require './keymap.coffee'
+keymap = require './keymap'
 module.exports = ->
   ok = ->
     pk = $pk.val()

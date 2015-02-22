@@ -67,7 +67,7 @@ echo 'browserifying'
     };
 .
   cat build/tmp/libs.js
-  browserify -d -t coffeeify client/*.coffee | exorcist build/static/client.map
+  browserify -d -t coffeeify --extension=.coffee client/*.coffee | exorcist build/static/client.map
 )>build/static/D.js
 
 cp -ur style/apl385.* style/*.png favicon.ico package.json build/static/

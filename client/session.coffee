@@ -1,4 +1,4 @@
-autocompletion = require './autocompletion.coffee'
+autocompletion = require './autocompletion'
 module.exports = (e, opts = {}) ->
 
   # keep track of which lines have been modified and preserve the original content
