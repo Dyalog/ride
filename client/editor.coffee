@@ -46,99 +46,88 @@ module.exports = (e, opts = {}) ->
   """
   b = null
 
-  ED = -> opts.edit? cm.getValue(), cm.indexFromPos cm.getCursor(); return # Edit
-  QT = -> opts.close?(); return # Quit (and lose changes)
-  BK = opts.back # Backward or Undo
-  FD = opts.skip # Forward or Redo
-  SC = -> $tb.find('.tb-search:visible').focus(); return # Search
-  EP = -> # Exit (and save changes)
-    if (v = cm.getValue()) != originalValue
-      bs = []; for l of breakpoints then bs.push +l; cm.setGutterMarker +l, 'breakpoint', null
-      opts.save? cm.getValue(), bs
-    else
-      opts.close?()
-    return
-  TL = -> # Toggle Localisation
-    c = cm.getCursor(); s = cm.getLine c.line
-    r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*' # regex fragment to match identifiers
-    name = ((///⎕?#{r}$///.exec(s[...c.ch])?[0] or '') + (///^#{r}///.exec(s[c.ch..])?[0] or '')).replace /^\d+/, ''
-    if name
-      # search backwards for a line that looks like a tradfn header (though in theory it might be a dfns's recursive call)
-      l = c.line; while l >= 0 && !/^\s*∇\s*\S/.test cm.getLine l then l--
-      if l < 0 and !/\{\s*$/.test cm.getLine(0).replace /⍝.*/, '' then l = 0
-      if l >= 0 && l != c.line
-        [_, s, comment] = /([^⍝]*)(.*)/.exec cm.getLine l
-        [head, tail...] = s.split ';'; head = head.replace /\s+$/, ''; tail = tail.map (x) -> x.replace /\s+/g, ''
-        i = tail.indexOf name; if i < 0 then tail.push name else tail.splice i, 1
-        s = [head].concat(tail.sort()).join(';') + if comment then ' ' + comment else ''
-        cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
-    return
-  LN = -> # Toggle Line Numbers
-    p = if opts.debugger then 'lineNumbersInDebugger' else 'lineNumbersInEditor'
-    localStorage[p] = b = 1 - localStorage[p]; cm.setOption 'lineNumbers', !!b; $(@).toggleClass 'pressed', b; return
-  PV = -> search true; return # Previous
-  NX = -> search(); return # Next
-  TC = opts.into # Trace
-  AC = -> # Align Comments (currently inaccessible)
-    if cm.somethingSelected()
-      spc = (n) -> Array(n + 1).join ' '
-      o = cm.listSelections() # original selections
-      sels = o.map (sel) ->
-        p = sel.anchor; q = sel.head
-        if p.line > q.line || p.line == q.line && p.ch > q.ch then h = p; p = q; q = h
-        l = cm.getRange({line: p.line, ch: 0}, q, '\n').split '\n' # lines
-        u = l.map (x) -> x.replace /'[^']*'?/g, (y) -> spc y.length # lines with scrubbed string literals
-        c = u.map (x) -> x.indexOf '⍝' # column index of the '⍝'
-        {p, q, l, u, c}
-      m = Math.max (sels.map (sel) -> Math.max sel.c...)...
-      sels.forEach (sel) ->
-        r = sel.l.map (x, i) -> ci = sel.c[i]; if ci < 0 then x else x[...ci] + spc(m - ci) + x[ci..]
-        r[0] = r[0][sel.p.ch..]; cm.replaceRange r.join('\n'), sel.p, sel.q, 'D'; return
-      cm.setSelections o
-    return
-  AO = -> # Add Comment
-    if cm.somethingSelected()
-      a = cm.listSelections()
-      cm.replaceSelections cm.getSelections().map (s) -> s.replace(/^/gm, '⍝').replace /\n⍝$/, '\n'
-      cm.setSelections a
-    else
-      l = cm.getCursor().line; p = line: l, ch: 0; cm.replaceRange '⍝', p, p, 'D'; cm.setCursor line: l, ch: 1
-    return
-  DO = -> # Delete Comment
-    if cm.somethingSelected()
-      a = cm.listSelections()
-      cm.replaceSelections cm.getSelections().map (s) -> s.replace /^⍝/gm, ''
-      cm.setSelections a
-    else
-      l = cm.getCursor().line; s = cm.getLine l
-      cm.replaceRange s.replace(/^( *)⍝/, '$1'), {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
-      cm.setCursor line: l, ch: 0
-    return
-  WI = opts.interrupt # Weak Interrupt
-  ER = -> (if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'); return
-  ###
-    F6 = -> opts.openInExternalEditor? cm.getValue(), cm.getCursor().line, (err, text) ->
-      if err then $.alert '' + err, 'Error' else c = cm.getCursor().line; cm.setValue text; cm.setCursor c
-      return
-  ###
-
   cm = CodeMirror $e.find('.cm')[0],
     fixedGutter: false, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
     keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
     gutters: ['breakpoints', 'CodeMirror-linenumbers']
-    extraKeys:
-      Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch; return
-      "'\uf800'": QT,   'Shift-Esc':            QT
-      "'\uf801'": ER,   Enter:                  ER
-      "'\uf804'": EP,   Esc:                    EP
-      "'\uf81f'": FD,   'Shift-Ctrl-Enter':     FD
-      "'\uf820'": BK,   'Shift-Ctrl-Backspace': BK
-      "'\uf822'": SC,   'Ctrl-F':               SC
-      "'\uf824'": NX
-      "'\uf825'": PV
-      "'\uf828'": ED,   'Shift-Enter':          ED
-      "'\uf829'": TC,   'Ctrl-Enter':           TC
-      "'\uf859'": TL,   'Ctrl-Up':              TL
+    extraKeys: Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch; return
+  cm.dyalogCommands =
+    ED: -> opts.edit? cm.getValue(), cm.indexFromPos cm.getCursor(); return # Edit
+    QT: -> opts.close?(); return # Quit (and lose changes)
+    BK: opts.back # Backward or Undo
+    FD: opts.skip # Forward or Redo
+    SC: -> $tb.find('.tb-search:visible').focus(); return # Search
+    EP: -> # Exit (and save changes)
+      if (v = cm.getValue()) != originalValue
+        bs = []; for l of breakpoints then bs.push +l; cm.setGutterMarker +l, 'breakpoint', null
+        opts.save? cm.getValue(), bs
+      else
+        opts.close?()
+      return
+    TL: -> # Toggle Localisation
+      c = cm.getCursor(); s = cm.getLine c.line
+      r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*' # regex fragment to match identifiers
+      name = ((///⎕?#{r}$///.exec(s[...c.ch])?[0] or '') + (///^#{r}///.exec(s[c.ch..])?[0] or '')).replace /^\d+/, ''
+      if name
+        # search backwards for a line that looks like a tradfn header (though in theory it might be a dfns's recursive call)
+        l = c.line; while l >= 0 && !/^\s*∇\s*\S/.test cm.getLine l then l--
+        if l < 0 and !/\{\s*$/.test cm.getLine(0).replace /⍝.*/, '' then l = 0
+        if l >= 0 && l != c.line
+          [_, s, comment] = /([^⍝]*)(.*)/.exec cm.getLine l
+          [head, tail...] = s.split ';'; head = head.replace /\s+$/, ''; tail = tail.map (x) -> x.replace /\s+/g, ''
+          i = tail.indexOf name; if i < 0 then tail.push name else tail.splice i, 1
+          s = [head].concat(tail.sort()).join(';') + if comment then ' ' + comment else ''
+          cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
+      return
+    LN: -> # Toggle Line Numbers
+      p = if opts.debugger then 'lineNumbersInDebugger' else 'lineNumbersInEditor'
+      localStorage[p] = 1 - (localStorage[p] || 0); flag = !!+localStorage[p]
+      cm.setOption 'lineNumbers', flag; $tb.find('.tb-LN:visible').toggleClass 'pressed', flag; return
+    PV: -> search true; return # Previous
+    NX: -> search(); return # Next
+    TC: opts.into # Trace
+    AC: -> # Align Comments (currently inaccessible)
+      if cm.somethingSelected()
+        spc = (n) -> Array(n + 1).join ' '
+        o = cm.listSelections() # original selections
+        sels = o.map (sel) ->
+          p = sel.anchor; q = sel.head
+          if p.line > q.line || p.line == q.line && p.ch > q.ch then h = p; p = q; q = h
+          l = cm.getRange({line: p.line, ch: 0}, q, '\n').split '\n' # lines
+          u = l.map (x) -> x.replace /'[^']*'?/g, (y) -> spc y.length # lines with scrubbed string literals
+          c = u.map (x) -> x.indexOf '⍝' # column index of the '⍝'
+          {p, q, l, u, c}
+        m = Math.max (sels.map (sel) -> Math.max sel.c...)...
+        sels.forEach (sel) ->
+          r = sel.l.map (x, i) -> ci = sel.c[i]; if ci < 0 then x else x[...ci] + spc(m - ci) + x[ci..]
+          r[0] = r[0][sel.p.ch..]; cm.replaceRange r.join('\n'), sel.p, sel.q, 'D'; return
+        cm.setSelections o
+      return
+    AO: -> # Add Comment
+      if cm.somethingSelected()
+        a = cm.listSelections()
+        cm.replaceSelections cm.getSelections().map (s) -> s.replace(/^/gm, '⍝').replace /\n⍝$/, '\n'
+        cm.setSelections a
+      else
+        l = cm.getCursor().line; p = line: l, ch: 0; cm.replaceRange '⍝', p, p, 'D'; cm.setCursor line: l, ch: 1
+      return
+    DO: -> # Delete Comment
+      if cm.somethingSelected()
+        a = cm.listSelections()
+        cm.replaceSelections cm.getSelections().map (s) -> s.replace /^⍝/gm, ''
+        cm.setSelections a
+      else
+        l = cm.getCursor().line; s = cm.getLine l
+        cm.replaceRange s.replace(/^( *)⍝/, '$1'), {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
+        cm.setCursor line: l, ch: 0
+      return
+    WI: opts.interrupt # Weak Interrupt
+    ER: -> (if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'); return
+  ###
+      F6 = -> opts.openInExternalEditor? cm.getValue(), cm.getCursor().line, (err, text) ->
+        if err then $.alert '' + err, 'Error' else c = cm.getCursor().line; cm.setValue text; cm.setCursor c
+        return
+  ###
 
   createBreakpointElement = -> $('<div class="breakpoint">●</div>')[0]
   breakpoints = {}
@@ -150,27 +139,17 @@ module.exports = (e, opts = {}) ->
   $tb = $ '.toolbar', $e
     .on 'mousedown',        '.tb-button', (e) -> $(e.target).addClass    'armed'; e.preventDefault(); return
     .on 'mouseup mouseout', '.tb-button', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return
+    .on 'click',            '.tb-button', (e) ->
+      for c in $(e.target).prop('class').split /\s+/ when m = /^tb-([A-Z]{2})$/.exec c then cm.execCommand m[1]; break
+      return
     .on 'click', '.tb-pop',          -> opts.pop?()            ; false
-    .on 'click', '.tb-QT',           -> QT()                   ; false
-    .on 'click', '.tb-ER',           -> ER()                   ; false
-    .on 'click', '.tb-TC',           -> TC()                   ; false
-    .on 'click', '.tb-BK',           -> BK()                   ; false
-    .on 'click', '.tb-FD',           -> FD()                   ; false
     .on 'click', '.tb-cont-trace',   -> opts.continueTrace?()  ; false
     .on 'click', '.tb-cont-exec',    -> opts.continueExec?()   ; false
     .on 'click', '.tb-restart',      -> opts.restartThreads?() ; false
-    .on 'click', '.tb-ED',           -> ED()                   ; false
-    .on 'click', '.tb-WI',           -> WI()                   ; false
     .on 'click', '.tb-cutback',      -> opts.cutback?()        ; false
-    .on 'click', '.tb-LN',           -> LN()                   ; false
-    .on 'click', '.tb-EP',           -> EP()                   ; false
-    .on 'click', '.tb-AO',           -> AO()                   ; false
-    .on 'click', '.tb-DO',           -> DO()                   ; false
     .on 'click', '.tb-hid, .tb-case', -> $(@).toggleClass 'pressed'; highlightSearch(); false
-    .on 'click', '.tb-NX',                       -> NX(); false
-    .on 'click', '.tb-PV',                       -> PV(); false
-    .on 'keydown', '.tb-search', 'return',       -> NX(); false
-    .on 'keydown', '.tb-search', 'shift+return', -> PV(); false
+    .on 'keydown', '.tb-search', 'return',       -> cm.execCommand 'NX'; false
+    .on 'keydown', '.tb-search', 'shift+return', -> cm.execCommand 'PV'; false
     .on 'keydown', '.tb-search', 'esc', -> clearSearch(); cm.focus(); false
     .on 'click', '.tb-refac-m', ->
       if !/^\s*$/.test s = cm.getLine l = cm.getCursor().line
@@ -258,5 +237,5 @@ module.exports = (e, opts = {}) ->
   getOpts: -> opts
   closePopup: -> (if opener then close()); return
   autocomplete: autocompletion cm, opts.autocomplete
-  saveAndClose: EP
+  saveAndClose: -> cm.execCommand 'EP'; return
   die: -> cm.setOption 'readOnly', true; return

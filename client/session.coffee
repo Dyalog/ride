@@ -18,28 +18,24 @@ module.exports = (e, opts = {}) ->
       histIndex = i
     return
 
-  ED = -> c = cm.getCursor(); opts.edit?(cm.getLine(c.line), c.ch); return # Edit
-  BK = -> histMove 1; return # Backward or Undo
-  FD = -> histMove -1; return # Forward or Redo
-  QT = EP = -> # QT: Quit (and lose changes), EP: Exit (and save changes)
-    c = cm.getCursor(); l = c.line
-    if mod[l]?
-      cm.replaceRange mod[l], {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
-      delete mod[l]; cm.removeLineClass l, 'background', 'modified'; cm.setCursor l + 1, c.ch
-    return
-
   cm = CodeMirror ($e = $ e)[0],
     autofocus: true, mode: '', matchBrackets: true, autoCloseBrackets: true, readOnly: true, keyMap: 'dyalog',
     lineWrapping: !!localStorage.sessionLineWrapping
-    extraKeys:
-      Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
-      Enter: -> exec 0
-      'Ctrl-Enter': -> exec 1
-      "'\uf800'": QT,   'Shift-Esc':            QT
-      "'\uf804'": EP,   Esc:                    EP
-      "'\uf81f'": FD,   'Shift-Ctrl-Enter':     FD
-      "'\uf820'": BK,   'Shift-Ctrl-Backspace': BK
-      "'\uf828'": ED,   'Shift-Enter':          ED
+    extraKeys: Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
+
+  cm.dyalogCommands =
+    ED: -> c = cm.getCursor(); opts.edit?(cm.getLine(c.line), c.ch); return # Edit
+    BK: -> histMove 1; return # Backward or Undo
+    FD: -> histMove -1; return # Forward or Redo
+    QT: QT = -> # Quit (and lose changes)
+      c = cm.getCursor(); l = c.line
+      if mod[l]?
+        cm.replaceRange mod[l], {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
+        delete mod[l]; cm.removeLineClass l, 'background', 'modified'; cm.setCursor l + 1, c.ch
+      return
+    EP: QT # Exit (and save changes); in this case we are deliberately making QT and EP the same; Esc is an easier shortcut to discover than Shift-Esc
+    ER: -> exec 0 # Enter
+    TC: -> exec 1 # Trace
 
   exec = (trace) ->
     a = [] # pairs of [lineNumber, contentToExecute]

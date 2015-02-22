@@ -72,10 +72,10 @@ CodeMirror.keyMap.dyalog["'#{getPrefixKey()}'"] = (cm) ->
   )
 
 # `x completions
+ks = '`1234567890-=qwertyuiop[]asdfghjk l;\'\\zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:"|ZXCVBNM<>?'.split /\s*/
+vs = '`¨¯<≤=≥>≠∨∧×÷?⍵∊⍴~↑↓⍳○*←→⍺⌈⌊_∇∆∘\'⎕⍎⍕ ⊢ ⊂⊃∩∪⊥⊤|⍝⍀⌿⋄⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹?⍵⍷⍴⍨↑↓⍸⍥⍣⍞⍬⍺⌈⌊_∇∆⍤⌸⌷≡≢⊣⊂⊃∩∪⊥⊤|⍪⍙⍠'.split /\s*/
 bqc = []
 CodeMirror.keyMap.dyalogBackquote = nofallthrough: true, disableInput: true
-ks = '`1234567890-=qwertyuiop[]asdfghjk l;\'\\zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:"|ZXCVBNM<>?'.split /\s*/g
-vs = '`¨¯<≤=≥>≠∨∧×÷?⍵∊⍴~↑↓⍳○*←→⍺⌈⌊_∇∆∘\'⎕⍎⍕ ⊢ ⊂⊃∩∪⊥⊤|⍝⍀⌿⋄⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹?⍵⍷⍴⍨↑↓⍸⍥⍣⍞⍬⍺⌈⌊_∇∆⍤⌸⌷≡≢⊣⊂⊃∩∪⊥⊤|⍪⍙⍠'.split /\s*/g
 if ks.length != vs.length then console.error? 'bad configuration of backquote keymap'
 ks.forEach (k, i) ->
   v = vs[i]; reverse[v] ?= k
@@ -185,3 +185,32 @@ bqbqc = ((s) -> join s.split('\n').map (l) ->
   ⍫ deltilde
   á aacute
 """ + [0...26].map((i) -> "\n#{chr i + ord 'Ⓐ'} _#{chr i + ord 'a'}").join '' # underscored alphabet: Ⓐ _a ...
+
+'''
+  [     0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F]
+  [00] QT ER TB BT EP UC DC RC LC US DS RS LS UL DL RL
+  [10] LL HO CT PT IN II DI DP DB RD TG DK OP CP MV FD
+  [20] BK ZM SC RP NX PV RT RA ED TC NB NS ST EN IF HK
+  [30] FX LN MC MR JP D1 D2 D3 D4 D5 U1 U2 U3 U4 U5 Lc
+  [40] Rc LW RW Lw Rw Uc Dc Ll Rl Ul Dl Us Ds DD DH BH
+  [50] BP AB HT TH RM CB PR SR -- TL UA AO DO GL CH PU
+  [60] PA -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+  [70] -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+  [80] -- -- -- -- -- -- TO MO -- -- -- -- -- S1 S2 OS
+'''.replace(/\[.*?\]/g, '').replace(/^\s*|\s*$/g, '').split(/\s+/).forEach (xx, i) ->
+  if xx != '--'
+    CodeMirror.keyMap.dyalog["'#{chr 0xf800 + i}'"] = xx
+    CodeMirror.commands[xx] = (cm) -> (if (h = cm.dyalogCommands) && h[xx] then h[xx]()); return
+  return
+
+'''
+  QT Shift-Esc
+  ER Enter
+  EP Esc
+  FD Shift-Ctrl-Enter
+  BK Shift-Ctrl-Backspace
+  SC Ctrl-F
+  ED Shift-Enter
+  TC Ctrl-Enter
+  TL Ctrl-Up
+'''.split('\n').forEach (l) -> [xx, keys...] = l.split /\s+/; keys.forEach((key) -> CodeMirror.keyMap.dyalog[key] = xx); return
