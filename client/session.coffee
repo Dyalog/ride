@@ -45,6 +45,13 @@ module.exports = (e, opts = {}) ->
     if !a.length then a = [[(l = cm.getCursor().line), cm.getLine l]]
     a.sort((x, y) -> x[0] - y[0]); es = (for [_, e] in a when e then e); opts.exec? es, trace; mod = {}; histAdd es; return
 
+  # CodeMirror supports 'dblclick' events but they are unreliable and seem to require rather a short time between the two clicks
+  # So, let's track clicks manually:
+  lct = lcx = lcy = 0 # last click's timestamp, x, and y
+  cm.on 'mousedown', (cm, e) ->
+    if e.timeStamp - lct < 400 && Math.abs(lcx - e.x) + Math.abs(lcy - e.y) < 10 then cm.execCommand 'ED'
+    lct = e.timeStamp; lcx = e.x; lcy = e.y; return
+
   cm.on 'beforeChange', (_, c) ->
     if c.origin != 'D'
       if (l = c.from.line) != c.to.line || c.text.length > 1

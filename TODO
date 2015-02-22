@@ -72,8 +72,6 @@ MK email 2015-02-20
   are looking at a list of diffs and need to visually inspect a bunch of
   function mentioned a few lines apart across 100 lines or so of output :).
 
-  2) Double-click in the session does not open the editor.
-
   3) If you are editing a function wider than the current window, and you
   use "cursor left" until you get to (and the pass) the right margin, the
   window does not scroll, so the cursor walks out of the window :(.
@@ -200,3 +198,4 @@ Done:
   If you hit quote three times, you end up with first one, then two, then SIX quotes
     NN: Patch submitted.  Will be available with the next release of CodeMirror: https://github.com/codemirror/CodeMirror/pull/3083
     NN: I decided to disable pairing of '' and "".
+  2) Double-click in the session does not open the editor.
