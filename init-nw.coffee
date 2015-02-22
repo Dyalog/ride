@@ -8,8 +8,11 @@ if process? then do ->
 
   nww = gui.Window.get()
   if opener
-    nww.setAlwaysOnTop true
+    opener.D.floatingWindows.push nww
   else
+    D.floatingWindows = []
+    nww.on 'focus', -> D.floatingWindows.forEach((x) -> x.setAlwaysOnTop true ); return
+    nww.on 'blur',  -> D.floatingWindows.forEach((x) -> x.setAlwaysOnTop false); return
     # restore window state:
     try wi = JSON.parse localStorage.winInfo || null
     if wi
@@ -18,7 +21,9 @@ if process? then do ->
   nww.show()
   nww.on 'close', ->
     process.nextTick -> nww.close true; return
-    if !opener then do -> # save window state:
+    if opener
+      (fw = opener.D.floatingWindows).splice fw.indexOf(nww), 1
+    else do -> # save window state:
       i = x: nww.x, y: nww.y, width: nww.width, height: nww.height
       localStorage.winInfo = JSON.stringify i
       return
