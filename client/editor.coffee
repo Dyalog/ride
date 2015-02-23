@@ -4,9 +4,9 @@ module.exports = (e, opts = {}) ->
   ($e = $ e).html """
     <div class="toolbar debugger-toolbar">
       #{[ # the first two buttons are placed on the right-hand side through CSS; in a floating window they are hidden
-        b 'tb-EP',           'Quit this function'
-        b 'tb-pop',          'Edit in a floating window'
-        b 'tb-ER',           'Execute line'
+        b 'tb-EP  first',    'Quit this function'
+        b 'tb-pop last',     'Edit in a floating window'
+        b 'tb-ER  first',    'Execute line'
         b 'tb-TC',           'Trace into expression'
         b 'tb-BK',           'Go back one line'
         b 'tb-FD',           'Skip current line'
@@ -16,30 +16,30 @@ module.exports = (e, opts = {}) ->
         b 'tb-ED',           'Edit name'
         b 'tb-WI',           'Interrupt'
         b 'tb-CBP',          'Clear trace/stop/monitor for this object'
-        b 'tb-LN',           'Toggle line numbers'
+        b 'tb-LN  last',     'Toggle line numbers'
         '<span class="tb-separator"></span>'
         '<input class="tb-search text-field">'
-        b 'tb-NX',           'Search for next match'
+        b 'tb-NX first',     'Search for next match'
         b 'tb-PV',           'Search for previous match'
-        b 'tb-case',         'Match case'
+        b 'tb-case last',    'Match case'
       ].join ''}
     </div>
     <div class="toolbar editor-toolbar">
       #{[
-        b 'tb-EP',           'Save changes and return'
-        b 'tb-pop',          'Edit in a floating window'
-        b 'tb-LN pressed',   'Toggle line numbers'
+        b 'tb-EP  first',    'Save changes and return'
+        b 'tb-pop last',     'Edit in a floating window'
+        b 'tb-LN  first',    'Toggle line numbers'
         b 'tb-AO',           'Comment selected text'
-        b 'tb-DO',           'Uncomment selected text'
+        b 'tb-DO  last',     'Uncomment selected text'
         '<span class="tb-separator"></span>'
         '<input class="tb-search text-field">'
-        b 'tb-NX',           'Search for next match'
+        b 'tb-NX  first',    'Search for next match'
         b 'tb-PV',           'Search for previous match'
-        b 'tb-case',         'Match case'
+        b 'tb-case last',    'Match case'
         '<span class="tb-separator"></span>'
-        b 'tb-refac-m',      'Refactor text as method'
+        b 'tb-refac-m first','Refactor text as method'
         b 'tb-refac-f',      'Refactor text as field'
-        b 'tb-refac-p',      'Refactor text as property'
+        b 'tb-refac-p last', 'Refactor text as property'
       ].join ''}
     </div>
     <div class="cm"></div>
