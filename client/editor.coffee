@@ -4,8 +4,8 @@ module.exports = (e, opts = {}) ->
   ($e = $ e).html """
     <div class="toolbar debugger-toolbar">
       #{[ # the first two buttons are placed on the right-hand side through CSS; in a floating window they are hidden
-        b 'tb-EP  first',    'Quit this function'
-        b 'tb-pop last',     'Edit in a floating window'
+        b 'tb-EP  last',    'Quit this function'
+        b 'tb-pop first',     'Edit in a floating window'
         b 'tb-ER  first',    'Execute line'
         b 'tb-TC',           'Trace into expression'
         b 'tb-BK',           'Go back one line'
@@ -26,8 +26,8 @@ module.exports = (e, opts = {}) ->
     </div>
     <div class="toolbar editor-toolbar">
       #{[
-        b 'tb-EP  first',    'Save changes and return'
-        b 'tb-pop last',     'Edit in a floating window'
+        b 'tb-EP  last',    'Save changes and return'
+        b 'tb-pop first',     'Edit in a floating window'
         b 'tb-LN  first',    'Toggle line numbers'
         b 'tb-AO',           'Comment selected text'
         b 'tb-DO  last',     'Uncomment selected text'
