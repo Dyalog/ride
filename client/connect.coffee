@@ -148,7 +148,7 @@ module.exports = ->
         </div>
       """
         .dialog
-          modal: 1, width: 400, title: 'Waiting for connection...'
+          modal: 1, width: 450, title: 'Waiting for connection...'
           close: -> D.socket.emit '*listenCancel'; return
           buttons: Cancel: -> $(@).dialog 'close'; false
     false
