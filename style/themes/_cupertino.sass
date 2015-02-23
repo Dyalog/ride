@@ -147,19 +147,27 @@ $cupertino-highlight    : #6a6a6a
   .ui-widget-content
     background-color:       $cupertino-highlight
   
-  .tb-button.pressed
-    background-color:       $cupertino-highlight
-    border:                 0px
+  .toolbar
+    .tb-button.pressed
+      background-color:       $cupertino-highlight
 
-  .tb-button
-    border:                 0px
-    background-color:       $cupertino-button-bg
-    padding-left:           2px
-    padding-right:          2px
-    +border-radius-left(4px)
-    +border-radius-right(4px)
-    margin-left:            2px
-    margin-right:           2px
+    .tb-button
+      background-color:       $cupertino-button-bg
+      padding-left:           2px
+      padding-right:          2px
+      border-color:         $cupertino-bg
+      border-bottom-color:  #ccc
+      border-right-color:   #ccc
+
+      border: solid $cupertino-bg 1px
+      border-left: 0
+      &.first 
+        +border-radius-left(4px)
+        margin-left:            2px
+
+      &.last
+        +border-radius-right(4px)
+        margin-right:            2px
 
   hr
    border:                  0px
