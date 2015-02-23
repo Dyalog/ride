@@ -138,13 +138,12 @@ $cupertino-highlight    : #6a6a6a
           color:            $cupertino-text
           background-color: $cupertino-highlight
           border:           0px
+          +border-radius-left(4px)
+          +border-radius-right(4px)
   .ui-dialog-titlebar 
     .ui-button
       border:               0px
       background-color:     none
-    .ui-button:hover
-      border:               0px
-      background-color:     $cupertino-highlight
   .ui-widget-content
     background-color:       $cupertino-highlight
   
@@ -154,9 +153,13 @@ $cupertino-highlight    : #6a6a6a
 
   .tb-button
     border:                 0px
-  .tb-button:hover
-    background-color:       $cupertino-highlight
-    border:                 0px
+    background-color:       $cupertino-button-bg
+    padding-left:           2px
+    padding-right:          2px
+    +border-radius-left(4px)
+    +border-radius-right(4px)
+    margin-left:            2px
+    margin-right:           2px
 
   hr
    border:                  0px
