@@ -217,6 +217,7 @@ module.exports = (e, opts = {}) ->
     cm.setCursor line, if line || col then col else cm.getLine(0).length
     cm.scrollIntoView null, $e.height() / 2
     for l in ee.lineAttributes?.stop then cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
+    if opener then $('title').text ee.name
     return
   hasFocus: -> cm.hasFocus()
   focus: -> cm.focus()
