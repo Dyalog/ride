@@ -17,7 +17,6 @@ Not yet prioritised
     1) You are tracing
     2) You use shift+enter to edit the function
     3) You then use >> or << before resuming execution
-  <End> should go to the last non-blank character; MK email 2015-02-17
   Find an acceptable solution for pasting multiple lines into the session, in particular: single line with a trailing newline; MK email 2015-02-17
   Flipping twice between edit and trace mode caused an error; MK email 2015-02-17
   ⎕dl-s in tradfns that call each other: trace into these functions, and while they are waiting on a delay, whack away at the tracer buttons and hit enter in the session. I would be very surprised if this does not lead to crashes; MK email 2015-02-18
@@ -189,3 +188,4 @@ Done:
   Floating editor windows should be always on top of the session but not on top of other applications; MK email 2015-02-17
   7) When tracing into functions, the window caption doesn't reflect the function name that you have now moved into.
   8) When tracing near the top of a function, the function header needs to be visible. At the moment, the first line displayed is typically the current line, even when you are only on line [1].
+  <End> should go to the last non-blank character; MK email 2015-02-17

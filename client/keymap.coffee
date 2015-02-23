@@ -214,3 +214,14 @@ bqbqc = ((s) -> join s.split('\n').map (l) ->
   TC Ctrl-Enter
   TL Ctrl-Up
 '''.split('\n').forEach (l) -> [xx, keys...] = l.split /\s+/; keys.forEach((key) -> CodeMirror.keyMap.dyalog[key] = xx); return
+
+# CodeMirror provides a goLineStartSmart but not a goLineEndSmart command.
+CodeMirror.keyMap.dyalog.End = 'goLineEndSmart'
+CodeMirror.commands.goLineEndSmart = (cm) ->
+  cm.extendSelectionsBy(
+    ->
+      c = cm.getCursor(); l = c.line; s = cm.getLine l; n = s.length; m = s.replace(/\ +$/, '').length
+      CodeMirror.Pos l, if m <= c.ch < n || !m then n else m
+    origin: "+move", bias: -1
+  )
+  return
