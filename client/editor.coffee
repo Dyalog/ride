@@ -4,7 +4,7 @@ module.exports = (e, opts = {}) ->
   ($e = $ e).html """
     <div class="toolbar debugger-toolbar">
       #{[ # when in a floating window, the first two buttons in each toolbar are hidden through css
-        b 'tb-QT tb-rhs',    'Quit this function'
+        b 'tb-EP tb-rhs',    'Quit this function'
         b 'tb-pop tb-rhs',   'Edit in a floating window'
         b 'tb-ER',           'Execute line'
         b 'tb-TC',           'Trace into expression'
