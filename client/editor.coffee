@@ -3,19 +3,19 @@ module.exports = (e, opts = {}) ->
   b = (cssClasses, description) -> "<a href='#' class='#{cssClasses} tb-button' title='#{description}'></a>"
   ($e = $ e).html """
     <div class="toolbar debugger-toolbar">
-      #{[ # when in a floating window, the first two buttons in each toolbar are hidden through css
-        b 'tb-EP tb-rhs',    'Quit this function'
-        b 'tb-pop tb-rhs',   'Edit in a floating window'
+      #{[ # the first two buttons are placed on the right-hand side through CSS; in a floating window they are hidden
+        b 'tb-EP',           'Quit this function'
+        b 'tb-pop',          'Edit in a floating window'
         b 'tb-ER',           'Execute line'
         b 'tb-TC',           'Trace into expression'
         b 'tb-BK',           'Go back one line'
         b 'tb-FD',           'Skip current line'
-        b 'tb-cont-trace',   'Continue trace'
-        b 'tb-cont-exec',    'Continue execution'
-        b 'tb-restart',      'Restart all threads'
+        b 'tb-BH',           'Continue trace'
+        b 'tb-RM',           'Continue execution'
+        b 'tb-MA',           'Restart all threads'
         b 'tb-ED',           'Edit name'
         b 'tb-WI',           'Interrupt'
-        b 'tb-cutback',      'Clear trace/stop/monitor for this object'
+        b 'tb-CBP',          'Clear trace/stop/monitor for this object'
         b 'tb-LN',           'Toggle line numbers'
         '<span class="tb-separator"></span>'
         '<input class="tb-search text-field">'
@@ -26,8 +26,8 @@ module.exports = (e, opts = {}) ->
     </div>
     <div class="toolbar editor-toolbar">
       #{[
-        b 'tb-EP tb-rhs',    'Save changes and return'
-        b 'tb-pop tb-rhs',   'Edit in a floating window'
+        b 'tb-EP',           'Save changes and return'
+        b 'tb-pop',          'Edit in a floating window'
         b 'tb-LN pressed',   'Toggle line numbers'
         b 'tb-AO',           'Comment selected text'
         b 'tb-DO',           'Uncomment selected text'
@@ -131,6 +131,10 @@ module.exports = (e, opts = {}) ->
       return
     WI: opts.interrupt # Weak Interrupt
     ER: -> (if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'); return
+    BH: opts.continueTrace # Run to exit (in tracer)
+    RM: opts.continueExec # Resume execution (in tracer)
+    MA: opts.restartThreads # Resume all threads (in tracer)
+    CBP: opts.cutback
   ###
       F6 = -> opts.openInExternalEditor? cm.getValue(), cm.getCursor().line, (err, text) ->
         if err then $.alert '' + err, 'Error' else c = cm.getCursor().line; cm.setValue text; cm.setCursor c
@@ -150,11 +154,7 @@ module.exports = (e, opts = {}) ->
     .on 'click',            '.tb-button', (e) ->
       for c in $(e.target).prop('class').split /\s+/ when m = /^tb-([A-Z]{2})$/.exec c then cm.execCommand m[1]; break
       return
-    .on 'click', '.tb-pop',          -> opts.pop?()            ; false
-    .on 'click', '.tb-cont-trace',   -> opts.continueTrace?()  ; false
-    .on 'click', '.tb-cont-exec',    -> opts.continueExec?()   ; false
-    .on 'click', '.tb-restart',      -> opts.restartThreads?() ; false
-    .on 'click', '.tb-cutback',      -> opts.cutback?()        ; false
+    .on 'click', '.tb-pop', -> opts.pop?(); false
     .on 'click', '.tb-hid, .tb-case', -> $(@).toggleClass 'pressed'; highlightSearch(); false
     .on 'keydown', '.tb-search', 'return',       -> cm.execCommand 'NX'; false
     .on 'keydown', '.tb-search', 'shift+return', -> cm.execCommand 'PV'; false
