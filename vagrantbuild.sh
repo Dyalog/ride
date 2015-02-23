@@ -10,9 +10,10 @@ if ! [ "`vagrant status | grep running |head -1`" ]; then
  ./vagrantfiles/provision.sh
 fi
 
+./clean.sh
+
 if [ "$1" = "clean" ]; then
   echo "Cleaning Files"
-  ./clean.sh
   vagrant ssh -c "rm -Rf \$HOME/ride"
 fi
   echo "Copying Files"
