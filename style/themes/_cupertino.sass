@@ -1,3 +1,170 @@
-/* Cupertino Theme */
-body.theme-cupertino 
-  background:$bg;
+/* cupertino Theme */
+
+$cupertino-header-bg    : #dedede
+$cupertino-bg           : #dedede
+$cupertino-button-bg    : #fafafa
+$cupertino-border       : 1px solid #000
+$cupertino-orange       : #ec7117
+$cupertino-orange-fade  : #db9664
+$cupertino-text         : #333
+$cupertino-highlight    : #6a6a6a
+
+.theme-cupertino
+  background-color:     $cupertino-bg
+  color:                $cupertino-text
+
+  ::selection
+    background-color:   $cupertino-orange
+
+  fieldset
+    border:             0px
+    padding:            0px
+    margin:             10px
+
+    legend
+      width:            98%
+      padding-left:     18px
+      padding-bottom:   1px
+      margin-bottom:    5px
+      border-bottom:    $cupertino-border
+
+  .ui-button
+    border-color:           $cupertino-bg
+    border-bottom-color:    #ccc
+    border-right-color:     #ccc
+    background-color:       $cupertino-button-bg
+    color:                  $cupertino-text
+    +border-radius-left(4px)
+    +border-radius-right(4px)
+    padding-left:           4px
+    padding-right:          4px
+
+  .text-field
+    border:                 $cupertino-border
+  .text-field::selection
+    background-color:       $cupertino-orange
+
+  #fav-list
+    border:                 $cupertino-border
+
+  .menu
+    background: #dedede; /* Old browsers */
+    background: -moz-linear-gradient(top,  #dedede 0%, #d9d9d9 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#dedede), color-stop(100%,#d9d9d9)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #dedede 0%,#d9d9d9 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #dedede 0%,#d9d9d9 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #dedede 0%,#d9d9d9 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #dedede 0%,#d9d9d9 100%); /* W3C */
+
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dedede', endColorstr='#d9d9d9',GradientType=0 ); /* IE6-9 */
+
+    border:                 0px
+    a
+      color:                $cupertino-text
+    > div
+      color:                $cupertino-text
+      background-color:     $cupertino-bg
+      a
+        color:              $cupertino-text
+        border:             1px solid transparent
+        .shortcut
+          color:            $cupertino-highlight
+      a:hover
+        background-color:   $cupertino-highlight
+        border:             $cupertino-border
+    div
+      div
+        background-color:   $cupertino-bg
+        color:              $cupertino-text
+        border:             $cupertino-border
+        margin-left:        2px
+        margin-right:       2px
+
+        a
+          color:            $cupertino-text
+        a:focus
+          background-color: $cupertino-highlight
+    .m-sub
+      border:none;
+
+  .lbar
+    background: #dedede; /* Old browsers */
+    background: -moz-linear-gradient(top,  #d9d9d9 0%, #cfcfcf 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d9d9d9), color-stop(100%,#cfcfcf)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  #d9d9d9 0%,#cfcfcf 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  #d9d9d9 0%,#cfcfcf 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  #d9d9d9 0%,#cfcfcf 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  #d9d9d9 0%,#cfcfcf 100%); /* W3C */
+
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d9d9d9', endColorstr='#cfcfcf',GradientType=0 ); /* IE6-9 */
+
+    border-bottom:          $cupertino-border
+    b
+      background-color:     $cupertino-button-bg
+      color:                $cupertino-text
+      border-color:         $cupertino-bg
+      border-bottom-color:  #ccc
+      border-right-color:   #ccc
+      padding-left:         5px
+      padding-right:        5px
+
+    b.first
+      +border-radius-left(4px)
+    b.last
+      +border-radius-right(4px)
+
+  .ui-layout-resizer
+    background-color:       $cupertino-bg
+    top:                    32px
+  .ui-layout-resizer-east
+    border-left:            $cupertino-border
+  .ui-widget-header
+    background-color:       $cupertino-bg
+    border:                 1px solid $cupertino-bg
+  .toolbar
+    background-color:       $cupertino-bg
+  .ui-tabs
+    color:                  $cupertino-text
+    .ui-tabs-nav
+      li
+        background-color:   $cupertino-bg
+        color:              $cupertino-text
+      .ui-tabs-anchor
+        border:             0px
+        border-radius:      0px
+      .ui-tabs-active
+        border:             0px
+        .ui-tabs-anchor
+          color:            $cupertino-text
+          background-color: $cupertino-highlight
+          border:           0px
+  .ui-dialog-titlebar 
+    .ui-button
+      border:               0px
+      background-color:     none
+    .ui-button:hover
+      border:               0px
+      background-color:     $cupertino-highlight
+  .ui-widget-content
+    background-color:       $cupertino-highlight
+  
+  .tb-button.pressed
+    background-color:       $cupertino-highlight
+    border:                 0px
+
+  .tb-button
+    border:                 0px
+  .tb-button:hover
+    background-color:       $cupertino-highlight
+    border:                 0px
+
+  hr
+   border:                  0px
+   border-top:              $cupertino-border
+
+  .CodeMirror
+    font-size:              1em
+  .CodeMirror-focused .CodeMirror-selected
+    background-color:       $cupertino-orange
+  .CodeMirror-selected
+    background-color:       $cupertino-orange-fade
