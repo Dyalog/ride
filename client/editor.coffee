@@ -50,7 +50,15 @@ module.exports = (e, opts = {}) ->
     fixedGutter: false, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
     keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
     gutters: ['breakpoints', 'CodeMirror-linenumbers']
-    extraKeys: Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch; return
+    extraKeys:
+      Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch; return
+      Down: ->
+        l = cm.getCursor().line
+        if l == cm.lineCount() - 1 && cm.getLine l
+          cm.execCommand 'goDocEnd'; cm.execCommand 'newlineAndIndent'
+        else
+          cm.execCommand 'goLineDown'
+        return
   cm.dyalogCommands =
     ED: -> opts.edit? cm.getValue(), cm.indexFromPos cm.getCursor(); return # Edit
     QT: -> opts.close?(); return # Quit (and lose changes)
