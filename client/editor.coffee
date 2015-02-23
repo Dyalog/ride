@@ -200,10 +200,7 @@ module.exports = (e, opts = {}) ->
         i = cm.indexFromPos cm.getCursor()
         j = s[i..].indexOf q; if j > 0 then j += i else j = s[...i].indexOf q
       if j >= 0
-        cm.setSelection cm.posFromIndex(j), cm.posFromIndex j + q.length
-        # Try to scroll the current match to 1/3 of editor height, though this might not work near the top or bottom:
-        h = $e.height(); {left, top} = cm.cursorCoords true, 'local'
-        cm.scrollIntoView left: left, right: left, top: top - h / 3, bottom: top + 2 * h / 3
+        cm.setSelection cm.posFromIndex(j), cm.posFromIndex j + q.length; scrollCursorIntoProminentView()
     false
 
   setDebugger = (x) ->
@@ -214,6 +211,11 @@ module.exports = (e, opts = {}) ->
     $tb.find('.tb-LN:visible').toggleClass 'pressed', !!+localStorage[p]
     return
   setDebugger !!opts.debugger
+
+  scrollCursorIntoProminentView = -> # approximately to 1/3 of editor height; this might not work near the top or bottom
+    h = $e.height(); {left, top} = cm.cursorCoords true, 'local'
+    cm.scrollIntoView left: left, right: left, top: top - h / 3, bottom: top + 2 * h / 3
+    return
 
   originalValue = null # remember it so that on <esc> we can detect if anything changed
   hll = null # currently highlighted line
@@ -236,9 +238,7 @@ module.exports = (e, opts = {}) ->
   setCursorIndex: (i) -> cm.setCursor cm.posFromIndex i
   highlight: (l) ->
     if hll? then cm.removeLineClass hll, 'background', 'highlighted'
-    if (hll = l)?
-      cm.addLineClass (hll = l), 'background', 'highlighted'
-      cm.setCursor l, 0; x = cm.cursorCoords true, 'local'; x.right = x.left; x.bottom = x.top + $e.height(); cm.scrollIntoView x
+    if (hll = l)? then cm.addLineClass l, 'background', 'highlighted'; cm.setCursor l, 0; scrollCursorIntoProminentView()
     return
   getHighlightedLine: -> hll
   setDebugger: setDebugger

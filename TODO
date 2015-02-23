@@ -34,10 +34,6 @@ MK email 2015-02-17 (in order of priority):
   5) Shift+Enter also seems reluctant to work sometimes, but that is
   fairly rare.
 
-  8) When tracing near the top of a function, the function header needs
-  to be visible. At the moment, the first line displayed is typically the
-  current line, even when you are only on line [1].
-
   11) If APL disconnects, it would be VERY nice if there was a way to get
   back to the connect form other than closing and restarting RIDE.
 
@@ -192,3 +188,4 @@ Done:
     NN: fixed by adding an extra invisible item before other completions; pressing <enter> on it does ER
   Floating editor windows should be always on top of the session but not on top of other applications; MK email 2015-02-17
   7) When tracing into functions, the window caption doesn't reflect the function name that you have now moved into.
+  8) When tracing near the top of a function, the function header needs to be visible. At the moment, the first line displayed is typically the current line, even when you are only on line [1].
