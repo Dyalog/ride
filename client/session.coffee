@@ -19,8 +19,8 @@ module.exports = (e, opts = {}) ->
     return
 
   cm = CodeMirror ($e = $ e)[0],
-    autofocus: true, mode: '', matchBrackets: true, autoCloseBrackets: true, readOnly: true, keyMap: 'dyalog',
-    lineWrapping: !!localStorage.sessionLineWrapping
+    autofocus: true, mode: '', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
+    readOnly: true, keyMap: 'dyalog', lineWrapping: !!localStorage.sessionLineWrapping
     extraKeys: Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch
 
   cm.dyalogCommands =
