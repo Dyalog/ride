@@ -19,12 +19,13 @@ module.exports = (cm, requestAutocompletion) -> # set up autocompletion, common 
         completeSingle: false
         extraKeys:
           Enter:       (cm, m) -> (if sel then m.pick() else cm.execCommand 'ER'); return
-          Right:       (cm, m) -> m.pick(); return
+          Right:       (cm, m) -> (if !sel then m.moveFocus 1); m.pick(); return
           Tab:         (cm, m) -> m.moveFocus 1; return
           'Shift-Tab': (cm, m) -> m.moveFocus -1; return
         hint: ->
           to = cm.getCursor(); u = cm.getLine(from.line)[from.ch...to.ch].toLowerCase() # u: completion prefix
-          data = {from, to, list: [''].concat options.filter((o) -> o[...u.length].toLowerCase() == u).sort()}
+          list = options.filter((o) -> o[...u.length].toLowerCase() == u).sort(); if list.length then list.unshift ''
+          data = {from, to, list}
           CodeMirror.on data, 'select', (x) -> sel = x; return
           data
     return
