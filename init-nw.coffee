@@ -80,4 +80,10 @@ if process? then do ->
     listen:  abbr: 'l', flag: true
     spawn:   abbr: 's', flag: true
   ).parse gui.App.argv
+
+  if process.platform == 'darwin'
+    mb = new gui.Menu type: 'menubar'
+    mb.createMacBuiltin 'Dyalog'
+    gui.Window.get().menu = mb
+
   return
