@@ -17,7 +17,6 @@ Not yet prioritised
     1) You are tracing
     2) You use shift+enter to edit the function
     3) You then use >> or << before resuming execution
-  Find an acceptable solution for pasting multiple lines into the session, in particular: single line with a trailing newline; MK email 2015-02-17
   Flipping twice between edit and trace mode caused an error; MK email 2015-02-17
   ⎕dl-s in tradfns that call each other: trace into these functions, and while they are waiting on a delay, whack away at the tracer buttons and hit enter in the session. I would be very surprised if this does not lead to crashes; MK email 2015-02-18
 
@@ -39,9 +38,6 @@ MK email 2015-02-17 (in order of priority):
   12) Setting stops doesn't seem to work, and in one case appeared to crash
   the interpreter (not reproducible)
 
-  13) I am coming to the conclusion that the editor windows need to be on
-  top of the APL session but not on top of everything in the universe.
-
 MK email 2015-02-20
 
   1) If you scroll up in the session until you find an interesting
@@ -61,7 +57,6 @@ Formatting / Rendering Issues
 
 Urgent Usability Issues
   Shift+enter doesn't work on a Mac (observed on John Scholes' Mac)
-  Connect page: prompt user to save before selection changes
   Connect page: "Save" is enabled although nothing is selected in the favs list; reported by Morten 2015-02-11 over XMPP
   Autocompletion doesn't work; reported by Morten in an email from 2015-02-11, Nick can't reproduce it
 
@@ -73,7 +68,6 @@ Less Urgent (but needed for 14.1):
 Nice to have for v14.1:
   Option to automatically pop up completion box after a timeout OR use a keystroke
   search and replace; search is there, replace isn't
-  js source maps
   If possible, keyboard shortcuts (`x) to be compatible with Dyalog Hardware keyboards (i.e. positional)
   Re-dock floating windows
 
@@ -189,3 +183,8 @@ Done:
   7) When tracing into functions, the window caption doesn't reflect the function name that you have now moved into.
   8) When tracing near the top of a function, the function header needs to be visible. At the moment, the first line displayed is typically the current line, even when you are only on line [1].
   <End> should go to the last non-blank character; MK email 2015-02-17
+  Find an acceptable solution for pasting multiple lines into the session, in particular: single line with a trailing newline; MK email 2015-02-17
+  13) I am coming to the conclusion that the editor windows need to be on top of the APL session but not on top of everything in the universe.
+  Connect page: prompt user to save before selection changes
+    NN: this is N/A now that we moved the Connect button below the text fields
+  js source maps
