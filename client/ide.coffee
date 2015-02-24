@@ -21,19 +21,23 @@ module.exports = (opts = {}) ->
 
   isDead = 0
   pending = [] # pending lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
+  promptType = 0 # 0=Invalid 1=Descalc 2=QuadInput 3=LineEditor 4=QuoteQuadInput 5=Prompt
+
+  emit = (x, y) -> (if !+localStorage.silentWhenBusy || promptType then D.socket.emit x, y); return
 
   # "wins" maps window ids, as they appear in the RIDE protocol, to window information objects that have the following properties:
   #   widget: a session or an editor
   #   id: the key in "wins"
   D.wins = wins =
     0: id: 0, widget: session = Session $('.ui-layout-center'),
-      edit: (s, i) -> D.socket.emit 'Edit', win: 0, pos: i, text: s
-      autocomplete: (s, i) -> D.socket.emit 'Autocomplete', line: s, pos: i, token: 0
+      edit: (s, i) -> emit 'Edit', win: 0, pos: i, text: s
+      autocomplete: (s, i) -> emit 'Autocomplete', line: s, pos: i, token: 0
       exec: (lines, trace) ->
         if lines && lines.length
           if !trace then pending = lines[1..]
-          D.socket.emit 'Execute', {trace, text: lines[0] + '\n'}
+          emit 'Execute', {trace, text: lines[0] + '\n'}
         return
+      setPromptType: (x) -> promptType = x
 
   # Tab management
   tabOpts = activate: (_, ui) -> (widget = wins[+ui.newTab.attr('id').replace /\D+/, ''].widget).updateSize(); widget.focus(); return
@@ -86,7 +90,7 @@ module.exports = (opts = {}) ->
     .on 'AppendSessionOutput', ({result}) -> session.add result
     .on 'NotAtInputPrompt', -> session.noPrompt()
     .on 'AtInputPrompt', ({why}) ->
-      if pending.length then D.socket.emit 'Execute', trace: 0, text: pending.shift() + '\n' else session.prompt why
+      if pending.length then emit 'Execute', trace: 0, text: pending.shift() + '\n' else session.prompt why
       return
     .on 'HadError', -> pending.splice 0, pending.length; return
     .on 'FocusWindow', ({win}) -> $("#wintab#{win} a").click(); wins[win].widget.focus(); return
@@ -106,19 +110,19 @@ module.exports = (opts = {}) ->
       $tabContent = $("<div class='win' id='win#{w}'></div>").appendTo('.ui-layout-' + dir)
       wins[w] = id: w, name: ee.name, widget: Editor $tabContent,
         debugger: ee.debugger
-        save: (s, bs)   -> D.socket.emit 'SaveChanges',    win: w, text: s, attributes: stop: bs
-        close:          -> D.socket.emit 'CloseWindow',    win: w
-        over:           -> D.socket.emit 'RunCurrentLine', win: w
-        into:           -> D.socket.emit 'StepInto',       win: w
-        back:           -> D.socket.emit 'TraceBackward',  win: w
-        skip:           -> D.socket.emit 'TraceForward',   win: w
-        continueTrace:  -> D.socket.emit 'ContinueTrace',  win: w
-        continueExec:   -> D.socket.emit 'Continue',       win: w
-        restartThreads: -> D.socket.emit 'RestartThreads', win: w
-        edit:    (s, p) -> D.socket.emit 'Edit',           win: w, text: s, pos: p
-        interrupt:      -> D.socket.emit 'WeakInterrupt'
-        cutback:        -> D.socket.emit 'Cutback',        win: w
-        autocomplete: (s, i) -> D.socket.emit 'Autocomplete', line: s, pos: i, token: w
+        save: (s, bs)   -> emit 'SaveChanges',    win: w, text: s, attributes: stop: bs
+        close:          -> emit 'CloseWindow',    win: w
+        over:           -> emit 'RunCurrentLine', win: w
+        into:           -> emit 'StepInto',       win: w
+        back:           -> emit 'TraceBackward',  win: w
+        skip:           -> emit 'TraceForward',   win: w
+        continueTrace:  -> emit 'ContinueTrace',  win: w
+        continueExec:   -> emit 'Continue',       win: w
+        restartThreads: -> emit 'RestartThreads', win: w
+        edit:    (s, p) -> emit 'Edit',           win: w, text: s, pos: p
+        interrupt:      -> emit 'WeakInterrupt'
+        cutback:        -> emit 'Cutback',        win: w
+        autocomplete: (s, i) -> emit 'Autocomplete', line: s, pos: i, token: w
         pop: -> popWindow w
         openInExternalEditor: D.openInExternalEditor
       wins[w].widget.open ee

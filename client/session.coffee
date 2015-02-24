@@ -22,7 +22,7 @@ module.exports = (e, opts = {}) ->
   cm = CodeMirror ($e = $ e)[0],
     autofocus: true, mode: '', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
     readOnly: true, keyMap: 'dyalog', lineWrapping: !!localStorage.sessionLineWrapping
-    extraKeys: Tab: -> (if promptWhy != 4 then c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch); return # don't autocomplete in ⍞ input
+    extraKeys: Tab: -> (if promptType != 4 then c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch); return # don't autocomplete in ⍞ input
 
   cm.dyalogCommands =
     ED: -> c = cm.getCursor(); opts.edit?(cm.getLine(c.line), c.ch); return # Edit
@@ -83,7 +83,7 @@ module.exports = (e, opts = {}) ->
       for l of dirty then cm.addLineClass +l, 'background', 'modified'
     return
 
-  promptWhy = 0 # 0=Invalid 1=Descalc 2=QuadInput 3=LineEditor 4=QuoteQuadInput 5=Prompt
+  promptType = 0 # 0=Invalid 1=Descalc 2=QuadInput 3=LineEditor 4=QuoteQuadInput 5=Prompt
 
   add: (s) ->
     l = cm.lineCount() - 1; s0 = cm.getLine l
@@ -91,18 +91,18 @@ module.exports = (e, opts = {}) ->
     cm.setCursor cm.lineCount() - 1, 0; return
 
   prompt: (why) ->
-    promptWhy = why; cm.setOption 'readOnly', false; cm.setOption 'cursorHeight', 1; l = cm.lineCount() - 1
+    promptType = why; opts.setPromptType promptType; cm.setOption 'readOnly', false; cm.setOption 'cursorHeight', 1; l = cm.lineCount() - 1
     if (why == 1 && !dirty[l]?) || why !in [1, 4]
       cm.replaceRange '      ', {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
     cm.setCursor l, cm.getLine(l).length; return
 
-  noPrompt: -> promptWhy = 0; cm.setOption 'readOnly', true; cm.setOption 'cursorHeight', 0; return
+  noPrompt: -> promptType = 0; opts.setPromptType promptType; cm.setOption 'readOnly', true; cm.setOption 'cursorHeight', 0; return
   updateSize: -> cm.setSize $e.width(), $e.height()
   hasFocus: -> cm.hasFocus()
   focus: -> cm.focus()
   insert: (ch) -> (if !cm.getOption 'readOnly' then c = cm.getCursor(); cm.replaceRange ch, c, c); return
   scrollCursorIntoView: scrollCursorIntoView = -> setTimeout (-> cm.scrollIntoView cm.getCursor()), 1
-  autocomplete: autocompletion cm, (s, i) -> (if promptWhy != 4 then opts.autocomplete s, i); return # don't autocomplete in ⍞ input
+  autocomplete: autocompletion cm, (s, i) -> (if promptType != 4 then opts.autocomplete s, i); return # don't autocomplete in ⍞ input
   die: -> cm.setOption 'readOnly', true; return
   getLineWrapping: -> cm.getOption 'lineWrapping'
   setLineWrapping: (x) ->
