@@ -51,7 +51,6 @@ MK email 2015-02-20
   window does not scroll, so the cursor walks out of the window :(.
 
 Formatting / Rendering Issues
-  Auto-complete should not happen at quote-quad input
   We need some white space / margin at the bottom, below the input line
   Overflown part of connections box doesn't show
 
@@ -188,3 +187,4 @@ Done:
   Connect page: prompt user to save before selection changes
     NN: this is N/A now that we moved the Connect button below the text fields
   js source maps
+  Auto-complete should not happen at quote-quad input
