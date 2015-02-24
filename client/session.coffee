@@ -1,9 +1,10 @@
 autocompletion = require './autocompletion'
 module.exports = (e, opts = {}) ->
 
-  # keep track of which lines have been modified and preserve the original content
-  mod = {} # line number -> original content
+  dirty = {} # modified lines: line number -> original content
+             # inserted lines: line number -> 0
 
+  # history management ("session log"):
   hist = ['']
   histIndex = 0
   histAdd = (lines) -> hist[0] = ''; hist[1...1] = lines; histIndex = 0; return
@@ -29,21 +30,35 @@ module.exports = (e, opts = {}) ->
     FD: -> histMove -1; return # Forward or Redo
     QT: QT = -> # Quit (and lose changes)
       c = cm.getCursor(); l = c.line
-      if mod[l]?
-        cm.replaceRange mod[l], {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
-        delete mod[l]; cm.removeLineClass l, 'background', 'modified'; cm.setCursor l + 1, c.ch
+      if dirty[l] == 0
+        if l == cm.lineCount() - 1
+          cm.replaceRange '', {line: l - 1, ch: cm.getLine(l - 1).length}, {line: l, ch: cm.getLine(l).length}, 'D'
+        else
+          cm.replaceRange '', {line: l, ch: 0}, {line: l + 1, ch: 0}, 'D'
+        delete dirty[l]; h = dirty; dirty = {}; for x, y of h then dirty[x - (x > l)] = y
+      else if dirty[l]?
+        cm.replaceRange dirty[l], {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
+        delete dirty[l]; cm.removeLineClass l, 'background', 'modified'; cm.setCursor l + 1, c.ch
       return
     EP: QT # Exit (and save changes); in this case we are deliberately making QT and EP the same; Esc is an easier shortcut to discover than Shift-Esc
     ER: -> exec 0 # Enter
     TC: -> exec 1 # Trace
 
   exec = (trace) ->
-    a = [] # pairs of [lineNumber, contentToExecute]
-    for l, s of mod # l: line number, s: original content
-      l = +l; cm.removeLineClass l, 'background', 'modified'; a.push [l, (e = cm.getLine l)]
-      cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: e.length}, 'D'
-    if !a.length then a = [[(l = cm.getCursor().line), cm.getLine l]]
-    a.sort((x, y) -> x[0] - y[0]); es = (for [_, e] in a when e then e); opts.exec? es, trace; mod = {}; histAdd es; return
+    ls = for l of dirty then +l
+    if ls.length
+      ls.sort (x, y) -> x - y
+      es = ls.map (l) -> cm.getLine l # strings to execute
+      ls.reverse().forEach (l) ->
+        cm.removeLineClass l, 'background', 'modified'
+        if dirty[l] == 0
+          cm.replaceRange '', {line: l, ch: 0}, {line: l + 1, ch: 0}, 'D'
+        else
+          cm.replaceRange dirty[l], {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
+        return
+    else
+      es = [cm.getLine cm.getCursor().line]
+    opts.exec es, trace; dirty = {}; histAdd es; return
 
   # CodeMirror supports 'dblclick' events but they are unreliable and seem to require rather a short time between the two clicks
   # So, let's track clicks manually:
@@ -54,10 +69,18 @@ module.exports = (e, opts = {}) ->
 
   cm.on 'beforeChange', (_, c) ->
     if c.origin != 'D'
-      if (l = c.from.line) != c.to.line || c.text.length > 1
-        c.cancel(); $.alert 'Cannot make changes across multiple lines in session', 'Error'
-      else
-        mod[l] ?= cm.getLine l; cm.addLineClass l, 'background', 'modified'
+      l0 = c.from.line; l1 = c.to.line; m = l1 - l0 + 1; n = c.text.length
+      if n < m then c.update c.from, c.to, c.text.concat(for [0...m - n] then ''); n = m # pad shrinking changes with empty lines
+      if m < n then h = dirty; dirty = {}; for x, y of h then dirty[x + (n - m) * (x > l1)] = y
+      l = l0
+      while l <= l1    then dirty[l] ?= cm.getLine l; l++
+      while l < l0 + n then dirty[l] = 0;             l++
+    return
+
+  cm.on 'change', (_, c) ->
+    if c.origin != 'D'
+      l0 = c.from.line; l1 = c.to.line; m = l1 - l0 + 1; n = c.text.length
+      for l of dirty then cm.addLineClass +l, 'background', 'modified'
     return
 
   add: (s) ->
@@ -75,7 +98,7 @@ module.exports = (e, opts = {}) ->
     cm.setOption 'readOnly', false
     cm.setOption 'cursorHeight', 1
     l = cm.lineCount() - 1
-    if (why == 1 && !mod[l]) || why !in [1, 4]
+    if (why == 1 && !dirty[l]?) || why !in [1, 4]
       cm.replaceRange '      ', {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
     cm.setCursor l, cm.getLine(l).length
     return
