@@ -106,7 +106,7 @@ module.exports = (e, opts = {}) ->
   updateSize: -> cm.setSize $e.width(), $e.height()
   hasFocus: -> cm.hasFocus()
   focus: -> cm.focus()
-  insert: (ch) -> (if !cm.getOption 'readOnly' then c = cm.getCursor(); cm.replaceRange ch, c, c, 'D'); return
+  insert: (ch) -> (if !cm.getOption 'readOnly' then c = cm.getCursor(); cm.replaceRange ch, c, c); return
   scrollCursorIntoView: scrollCursorIntoView = -> setTimeout (-> cm.scrollIntoView cm.getCursor()), 1
   autocomplete: autocompletion cm, opts.autocomplete
   die: -> cm.setOption 'readOnly', true; return

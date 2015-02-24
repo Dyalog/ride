@@ -231,7 +231,7 @@ module.exports = (e, opts = {}) ->
     return
   hasFocus: -> cm.hasFocus()
   focus: -> cm.focus()
-  insert: (ch) -> (if !cm.getOption 'readOnly' then c = cm.getCursor(); cm.replaceRange ch, c, c, 'D'); return
+  insert: (ch) -> (if !cm.getOption 'readOnly' then c = cm.getCursor(); cm.replaceRange ch, c, c); return
   getValue: -> cm.getValue()
   getCursorIndex: -> cm.indexFromPos cm.getCursor()
   setValue: (x) -> cm.setValue x
