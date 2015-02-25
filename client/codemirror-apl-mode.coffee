@@ -52,7 +52,7 @@ CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
       else if c == '}' then (if state.stack[-1..] == '{' then state.stack = state.stack[...-1]; "apl-dfn apl-dfn#{state.dfnDepth--}"; else 'apl-error')
       else if c == ';' then 'apl-semicolon'
       else if c == '⋄' then 'apl-diamond'
-      else if /[\/⌿\\⍀¨⌸⍨]/.test c then 'apl-monadic-operator'
+      else if /[\/⌿\\⍀¨⌸⍨⌶]/.test c then 'apl-monadic-operator'
       else if /[\.∘⍤⍣⍠]/.test c then 'apl-dyadic-operator'
       else if /[\+\-×÷⌈⌊\|⍳\?\*⍟○!⌹<≤=>≥≠≡≢∊⍷∪∩~∨∧⍱⍲⍴,⍪⌽⊖⍉↑↓⊂⊃⌷⍋⍒⊤⊥⍕⍎⊣⊢]/.test c then 'apl-function'
       else if state.dfnDepth && /[⍺⍵∇:]/.test c then "apl-dfn apl-dfn#{state.dfnDepth}"
