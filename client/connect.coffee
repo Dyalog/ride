@@ -171,7 +171,6 @@ module.exports = ->
       return
     .on '*hijacked', ({addr}) -> $.alert "#{addr} has taken over usage of this proxy.", 'Disconnected'; return
     .on '*connected', ({host, port}) -> $listenDialog?.dialog 'close'; ide {host, port}; return
-    .on '*disconnected', -> $.alert 'Interpreter disconnected'; return
     .on '*connectError', ({err}) -> $.alert err, 'Error'; return
     .on '*spawned', ({pid}) ->
       $spawnStatus.text "PID: #{pid}"

@@ -12,7 +12,6 @@ P1 (Definitely high priority):
   Add menu items to issue interrupt(s).
   Two menu items to spawn a new IDE: connect page and new session (Cmd+N)
   Rationalize menus for OS X and others
-  clean shutdown of APL should terminate RIDE
 
 P2 (Middle priority):
   Two highlighted lines in tracer; MK email 2015-02-14:
@@ -155,3 +154,4 @@ Done:
   Auto-completion of workspace names not working outside Windows   JD #11879
   The interpreter must refuse to start if $RIDE_LISTEN is given, but the port is already being used  JD #11252
   The interpreter ignores $RIDE_CONNECT and $RIDE_LISTEN; reported by Kai, reproduced by Nick, fix by JD or Bjørn pending
+  clean shutdown of APL should terminate RIDE

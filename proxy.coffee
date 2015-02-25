@@ -105,6 +105,7 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
               toBrowser 'autocomplete', +tag('token', m), +tag('skip', m), (if o then o.split '\n' else [])
             when 'ReplyHighlightLine' then toBrowser 'highlight', +tag('win', m), +tag 'line', m
             when 'ReplyDisconnect'    then toBrowser 'Disconnect', message: b64d tag 'msg', m
+            when 'ReplySysError'      then toBrowser 'SysError', text: b64d tag 'text', m
             else log 'unrecognised'; toBrowser 'unrecognised', m
       return
     # Initial batch of commands sent to interpreter:
