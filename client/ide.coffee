@@ -191,6 +191,9 @@ module.exports = (opts = {}) ->
     (
       if D.nwjs
         {'': '_File', items: [
+          {'': '_Connect...', action: D.rideConnect}
+          {'': '_New Session', key: 'Ctrl+N', action: D.rideNewSession}
+          '-'
           {'': '_Quit', key: 'Ctrl+Q', action: D.quit}
         ]}
     )

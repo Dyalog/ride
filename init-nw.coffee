@@ -73,6 +73,8 @@ if process? then do ->
     setTimeout (-> Proxy() socket1), 1
     socket
 
+  D.rideConnect = -> spawn process.execPath; return
+  D.rideNewSession = -> spawn process.execPath, ['-s']; return
   D.quit = -> gui.Window.get().close(); return
   D.clipboardCopy = (s) -> gui.Clipboard.get().set s; return
   D.opts = nomnom.options(
