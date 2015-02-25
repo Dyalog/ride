@@ -1,76 +1,41 @@
 Bugs / Issues External to RIDE
   Windows not working at all for spawned interpreters
   Intermittent crashes(!)
-  Auto-completion of workspace names not working outside Windows   JD #11879
-  The interpreter must refuse to start if $RIDE_LISTEN is given, but the port is already being used  JD #11252
   History (session log) is not recorded in spawned interpreters; Geoff #11841
-  The interpreter ignores $RIDE_CONNECT and $RIDE_LISTEN; reported by Kai, reproduced by Nick, fix by JD or Bjørn pending
   Yes/No dialogue, needs to be supported in the RIDE protocol; email from Morten 2015-02-14
+  Verify setting stops works and doesn't crash; DB
 
-Not yet prioritised
+P1 (Definitely high priority):
+  ⎕dl-s in tradfns that call each other: trace into these functions, and while they are waiting on a delay, whack away at the tracer buttons and hit enter in the session. I would be very surprised if this does not lead to crashes; MK email 2015-02-18
   On startup, make sure the window fits in the screen (to avoid trouble with multiple screens)
   If you maximize RIDE on a Mac, close it, and open it again, it can't be unmaximised; 2015-02-19 JS, JR
-  Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
-    Investigate: http://stackoverflow.com/questions/284258/how-do-i-set-the-version-information-for-an-existing-exe-dll (sent by JD)
+  Add menu items to issue interrupt(s).
+  Two menu items to spawn a new IDE: connect page and new session (Cmd+N)
+  Rationalize menus for OS X and others
+  clean shutdown of APL should terminate RIDE
+
+P2 (Middle priority):
   Two highlighted lines in tracer; MK email 2015-02-14:
     1) You are tracing
     2) You use shift+enter to edit the function
     3) You then use >> or << before resuming execution
-  Flipping twice between edit and trace mode caused an error; MK email 2015-02-17
-  ⎕dl-s in tradfns that call each other: trace into these functions, and while they are waiting on a delay, whack away at the tracer buttons and hit enter in the session. I would be very surprised if this does not lead to crashes; MK email 2015-02-18
+  Do not scroll session on AtInputPrompt.
+  Scroll editor window if cursor passes right margin.
+  add replace (:%s/A/B/)
+  ` keybindings and/or lbar should work in search box
 
-MK email 2015-02-17 (in order of priority):
-
-  1) There seems to be no indicator of whether the interpreter is busy or
-  not other than that the RIDE is "unresponsive".
-
-  2) There seems to be no way to issue an interrupt; this is critical.
-  Coupled with 1) this gives a feeling of not quite being in control of the
-  debugging session.
-
-  5) Shift+Enter also seems reluctant to work sometimes, but that is
-  fairly rare.
-
-  11) If APL disconnects, it would be VERY nice if there was a way to get
-  back to the connect form other than closing and restarting RIDE.
-
-  12) Setting stops doesn't seem to work, and in one case appeared to crash
-  the interpreter (not reproducible)
-
-MK email 2015-02-20
-
-  1) If you scroll up in the session until you find an interesting
-  function name and hit Shift+Enter to edit it, then when you exit from the
-  editor the session scrolls down to the bottom. This is very annoying if you
-  are looking at a list of diffs and need to visually inspect a bunch of
-  function mentioned a few lines apart across 100 lines or so of output :).
-
-  3) If you are editing a function wider than the current window, and you
-  use "cursor left" until you get to (and the pass) the right margin, the
-  window does not scroll, so the cursor walks out of the window :(.
-
-Formatting / Rendering Issues
-  We need some white space / margin at the bottom, below the input line
+P3 (Can wait):
+  Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
+    NN: Investigate: http://stackoverflow.com/questions/284258/how-do-i-set-the-version-information-for-an-existing-exe-dll (sent by JD)
   Overflown part of connections box doesn't show
-    NN: not much of a problem now that it's resizable
-  Show PID in title, along with WS name.
+    NN: not that much of a problem now that it's resizable
   Customizable window title; Kai email 2015-02-24
-
-Urgent Usability Issues
-  Shift+enter doesn't work on a Mac (observed on John Scholes' Mac)
-  Connect page: "Save" is enabled although nothing is selected in the favs list; reported by Morten 2015-02-11 over XMPP
-  Autocompletion doesn't work; reported by Morten in an email from 2015-02-11, Nick can't reproduce it
-
-Less Urgent (but needed for 14.1):
   Verify there is a standard key to cycle between the windows
-  Once you start auto-completing a WS name, the drop-down should stay up to allow several path selections
-  A menu item to open another instance of the IDE (a quick and dirty replacement for "go back to connect screen" / "multiple sessions")
+  Enable Windows IME if present.
 
-Nice to have for v14.1:
+
+P4 (I will think about it):
   Option to automatically pop up completion box after a timeout OR use a keystroke
-  search and replace; search is there, replace isn't
-  If possible, keyboard shortcuts (`x) to be compatible with Dyalog Hardware keyboards (i.e. positional)
-  Re-dock floating windows
 
 Later:
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
@@ -82,16 +47,12 @@ Later:
   searchable help files
   keybindings for toolbar buttons
   keybinding for toggling a breakpoint
-  ` keybindings in search box
   contextual help (F1) for items in completion menus
   js strict mode
   display a "mailto:" link when a SysError happens
   search field history
   code folding and [+] button
   SI stack in debugger (?)
-  strong interrupt (?)
-  native menus in nwjs, including an out-of-window menu on Mac
-    NN: JR considers this important
   start web server from nwjs GUI (?)
   add legalese to About dialogue
 
@@ -191,3 +152,6 @@ Done:
   source maps
   Highlight non-local names in a different colour (this is BY FAR the most useful syntax colouring)
   Mac not working at all for spawned interpreters
+  Auto-completion of workspace names not working outside Windows   JD #11879
+  The interpreter must refuse to start if $RIDE_LISTEN is given, but the port is already being used  JD #11252
+  The interpreter ignores $RIDE_CONNECT and $RIDE_LISTEN; reported by Kai, reproduced by Nick, fix by JD or Bjørn pending
