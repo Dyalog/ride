@@ -5,7 +5,6 @@ Bugs / Issues External to RIDE
   The interpreter must refuse to start if $RIDE_LISTEN is given, but the port is already being used  JD #11252
   History (session log) is not recorded in spawned interpreters; Geoff #11841
   The interpreter ignores $RIDE_CONNECT and $RIDE_LISTEN; reported by Kai, reproduced by Nick, fix by JD or Bjørn pending
-  Show PID in title, along with WS name.  It needs to be added to the RIDE protocol
   Yes/No dialogue, needs to be supported in the RIDE protocol; email from Morten 2015-02-14
 
 Not yet prioritised
@@ -53,6 +52,9 @@ MK email 2015-02-20
 Formatting / Rendering Issues
   We need some white space / margin at the bottom, below the input line
   Overflown part of connections box doesn't show
+    NN: not much of a problem now that it's resizable
+  Show PID in title, along with WS name.
+  Customizable window title; Kai email 2015-02-24
 
 Urgent Usability Issues
   Shift+enter doesn't work on a Mac (observed on John Scholes' Mac)
@@ -74,7 +76,6 @@ Later:
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
   drag and drop *.dws and *.dyalog files in the session
   rewrite syntax highlighting to support Dyalog syntax
-  Highlight non-local names in a different colour (this is BY FAR the most useful syntax colouring)
   selecting a block of text and pressing ⍝ should comment/uncomment it
   status window and notification about number of messages
   experiment with storing all help content in browser memory
@@ -84,16 +85,15 @@ Later:
   ` keybindings in search box
   contextual help (F1) for items in completion menus
   js strict mode
-  source maps
   display a "mailto:" link when a SysError happens
   search field history
   code folding and [+] button
   SI stack in debugger (?)
   strong interrupt (?)
   native menus in nwjs, including an out-of-window menu on Mac
+    NN: JR considers this important
   start web server from nwjs GUI (?)
   add legalese to About dialogue
-  IDE config in the cloud
 
 Done:
   If an error is encountered in a scripted fn, tracer needs to scroll to line which failed
@@ -188,3 +188,5 @@ Done:
     NN: this is N/A now that we moved the Connect button below the text fields
   js source maps
   Auto-complete should not happen at quote-quad input
+  source maps
+  Highlight non-local names in a different colour (this is BY FAR the most useful syntax colouring)
