@@ -1,5 +1,5 @@
 Bugs / Issues External to RIDE
-  Mac and Windows not working at all for spawned interpreters
+  Windows not working at all for spawned interpreters
   Intermittent crashes(!)
   Auto-completion of workspace names not working outside Windows   JD #11879
   The interpreter must refuse to start if $RIDE_LISTEN is given, but the port is already being used  JD #11252
@@ -190,3 +190,4 @@ Done:
   Auto-complete should not happen at quote-quad input
   source maps
   Highlight non-local names in a different colour (this is BY FAR the most useful syntax colouring)
+  Mac not working at all for spawned interpreters
