@@ -82,7 +82,7 @@ module.exports = (opts = {}) ->
 
   D.socket
     .on '*identify', (i) -> D.remoteIdentification = i; return
-    .on '*disconnected', -> $('.ide').addClass 'disconnected'; (for _, {widget} of wins then widget.die()); isDead = 1; return
+    .on '*disconnected', die = -> $('.ide').addClass 'disconnected'; (for _, {widget} of wins then widget.die()); isDead = 1; return
     .on 'UpdateDisplayName', ({displayName}) ->
       s = displayName; if opts.host then s += ' - ' + opts.host; if opts.port then s += ':' + opts.port
       $('title').text s; return
@@ -103,6 +103,9 @@ module.exports = (opts = {}) ->
     .on 'CloseWindow', ({win}) ->
       $("#wintab#{win},#win#{win}").remove(); $tabs.tabs('destroy').tabs tabOpts; refreshTabs()
       wins[win].widget.closePopup?(); delete wins[win]; session.scrollCursorIntoView(); session.focus(); return
+    .on 'Disconnect', ({message}) ->
+      if message == 'Dyalog session has ended' then window.close() else $.alert message, 'Interpreter disconnected'; die()
+      return
     .on 'OpenWindow', (ee) -> # "ee" for EditableEntity
       layout.open dir = if ee.debugger then 'south' else 'east'
       w = ee.token
