@@ -224,8 +224,8 @@ module.exports = (e, opts = {}) ->
   open: (ee) ->
     originalValue = ee.text; cm.setValue ee.text; cm.focus()
     line = ee.currentRow; col = ee.currentColumn || 0
-    cm.setCursor line, if line || col then col else cm.getLine(0).length
-    cm.scrollIntoView null, $e.height() / 2
+    if line == col == 0 && ee.text.indexOf('\n') < 0 then col = ee.text.length
+    cm.setCursor line, col; cm.scrollIntoView null, $e.height() / 2
     for l in ee.lineAttributes?.stop then cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
     if opener then $('title').text ee.name
     return
