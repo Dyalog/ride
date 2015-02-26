@@ -22,6 +22,7 @@ P2 (Middle priority):
   Scroll editor window if cursor passes right margin.
   add replace (:%s/A/B/)
   ` keybindings and/or lbar should work in search box
+  Don't show connect screen on "New Session" and on "-s" argument
 
 P3 (Can wait):
   Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
