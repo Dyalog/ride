@@ -141,7 +141,7 @@ module.exports = ->
           #{
             (
               for host in (if proxyInfo.ipAddresses?.length then proxyInfo.ipAddresses else ['host'])
-                "<div class='tt'>RIDE_INIT='CONNECT #{host}:#{port}'</div>"
+                "<div class='tt'>RIDE_INIT='CONNECT:#{host}:#{port}'</div>"
             ).join 'or'
           }
           in its environment, so it connects here.
