@@ -23,7 +23,12 @@ module.exports = (opts = {}) ->
   pending = [] # pending lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   promptType = 0 # 0=Invalid 1=Descalc 2=QuadInput 3=LineEditor 4=QuoteQuadInput 5=Prompt
 
-  emit = (x, y) -> (if !+localStorage.silentWhenBusy || promptType then D.socket.emit x, y); return
+  emit = (x, y) ->
+    if !+localStorage.silentWhenBusy || promptType
+      D.socket.emit x, y
+    else
+      console.info 'Silencing message to interpreter:', x, y
+    return
 
   # "wins" maps window ids, as they appear in the RIDE protocol, to window information objects that have the following properties:
   #   widget: a session or an editor
@@ -38,6 +43,7 @@ module.exports = (opts = {}) ->
           emit 'Execute', {trace, text: lines[0] + '\n'}
         return
       setPromptType: (x) -> promptType = x
+      weakInterrupt: -> emit 'WeakInterrupt'; return
 
   # Tab management
   tabOpts = activate: (_, ui) -> (widget = wins[+ui.newTab.attr('id').replace /\D+/, ''].widget).updateSize(); widget.focus(); return
@@ -135,7 +141,7 @@ module.exports = (opts = {}) ->
         continueExec:   -> emit 'Continue',       win: w
         restartThreads: -> emit 'RestartThreads', win: w
         edit:    (s, p) -> emit 'Edit',           win: w, text: s, pos: p
-        interrupt:      -> emit 'WeakInterrupt'
+        weakInterrupt:  -> emit 'WeakInterrupt'
         cutback:        -> emit 'Cutback',        win: w
         autocomplete: (s, i) -> emit 'Autocomplete', line: s, pos: i, token: w
         pop: -> popWindow w

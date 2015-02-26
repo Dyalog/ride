@@ -43,6 +43,7 @@ module.exports = (e, opts = {}) ->
     EP: QT # Exit (and save changes); in this case we are deliberately making QT and EP the same; Esc is an easier shortcut to discover than Shift-Esc
     ER: -> exec 0 # Enter
     TC: -> exec 1 # Trace
+    WI: opts.weakInterrupt
 
   exec = (trace) ->
     ls = for l of dirty then +l

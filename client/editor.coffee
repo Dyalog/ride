@@ -129,7 +129,7 @@ module.exports = (e, opts = {}) ->
         cm.replaceRange s.replace(/^( *)⍝/, '$1'), {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
         cm.setCursor line: l, ch: 0
       return
-    WI: opts.interrupt # Weak Interrupt
+    WI: opts.weakInterrupt
     ER: -> (if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'); return
     BH: opts.continueTrace # Run to exit (in tracer)
     RM: opts.continueExec # Resume execution (in tracer)

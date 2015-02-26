@@ -186,6 +186,8 @@ bqbqc = ((s) -> join s.split('\n').map (l) ->
   á aacute
 """ + [0...26].map((i) -> "\n#{chr i + ord 'Ⓐ'} _#{chr i + ord 'a'}").join '' # underscored alphabet: Ⓐ _a ...
 
+createCommand = (xx) -> CodeMirror.commands[xx] ?= (cm) -> (if (h = cm.dyalogCommands) && h[xx] then h[xx]()); return
+
 '''
   [     0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F]
   [00] QT ER TB BT EP UC DC RC LC US DS RS LS UL DL RL
@@ -198,9 +200,7 @@ bqbqc = ((s) -> join s.split('\n').map (l) ->
   [70] -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
   [80] -- -- -- -- -- -- TO MO -- -- -- -- -- S1 S2 OS
 '''.replace(/\[.*?\]/g, '').replace(/^\s*|\s*$/g, '').split(/\s+/).forEach (xx, i) ->
-  if xx != '--'
-    CodeMirror.keyMap.dyalog["'#{chr 0xf800 + i}'"] = xx
-    CodeMirror.commands[xx] = (cm) -> (if (h = cm.dyalogCommands) && h[xx] then h[xx]()); return
+  if xx != '--' then createCommand xx; CodeMirror.keyMap.dyalog["'#{chr 0xf800 + i}'"] = xx
   return
 
 '''
@@ -213,7 +213,9 @@ bqbqc = ((s) -> join s.split('\n').map (l) ->
   ED Shift-Enter
   TC Ctrl-Enter
   TL Ctrl-Up
-'''.split('\n').forEach (l) -> [xx, keys...] = l.split /\s+/; keys.forEach((key) -> CodeMirror.keyMap.dyalog[key] = xx); return
+  WI Ctrl-Pause
+'''.split('\n').forEach (l) ->
+  [xx, keys...] = l.split /\s+/; createCommand xx; keys.forEach (key) -> CodeMirror.keyMap.dyalog[key] = xx; return
 
 # CodeMirror provides a goLineStartSmart but not a goLineEndSmart command.
 CodeMirror.keyMap.dyalog.End = 'goLineEndSmart'

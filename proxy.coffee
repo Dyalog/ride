@@ -63,7 +63,7 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
       b = Buffer s.length + 8; b.writeInt32BE b.length, 0; b.write 'RIDE' + s, 4; client.write b
     return
 
-  cmd = (c, args) -> toInterpreter "<Command><cmd>#{c}</cmd><id>0</id><args><#{c}>#{args}</#{c}></args></Command>"; return
+  cmd = (c, args = '') -> toInterpreter "<Command><cmd>#{c}</cmd><id>0</id><args><#{c}>#{args}</#{c}></args></Command>"; return
 
   toBrowser = (m...) -> log 'to browser: ' + JSON.stringify(m)[..1000]; socket?.emit m...; return
 
@@ -78,7 +78,7 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
         log 'from interpreter: ' + JSON.stringify(m)[..1000]
         if !/^(?:SupportedProtocols|UsingProtocol)=1$/.test m # ignore these
           switch (/^<(\w+)>/.exec m)?[1] or ''
-            when 'ReplyConnect', 'ReplyEdit', 'ReplySetLineAttributes' then ; # ignore
+            when 'ReplyConnect', 'ReplyEdit', 'ReplySetLineAttributes', 'ReplyWeakInterrupt' then ; # ignore
             when 'ReplySaveChanges'       then toBrowser 'ReplySaveChanges', win: +tag('win', m), err: +tag 'err', m
             when 'ReplyWindowTypeChanged'
               win = +tag 'Win', m
