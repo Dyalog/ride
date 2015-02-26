@@ -1,12 +1,37 @@
 keymap = require './keymap'
+$d = $pk = null 
+
+ok = ->
+  pk = $pk.val()
+  # validate
+  if pk.length != 1 then $.alert('Invalid prefix key', 'Error', -> $pk.focus(); return); return
+  # apply changes
+  keymap.setPrefixKey pk
+  $d.dialog 'close'
+  false
+
 module.exports = ->
-  ok = ->
-    pk = $pk.val()
-    if pk.length == 1 then keymap.setPrefixKey pk; $d.dialog 'close'
-    else $('<p>Invalid prefix key</p>').dialog modal: 1, title: 'Error', buttons: [text: 'OK', click: -> $(@).dialog 'close'; $pk.focus()]
-    false
-  $d = $('<div class="kbd-prefs"><label>Prefix key: <input class="prefs-pk text-field" size="1"></label></div>').dialog
-    modal: 1, title: 'Keyboard Preferences', buttons: [{text: 'OK', click: ok}, {text: 'Cancel', click: -> $(@).dialog 'close'; return}]
-  $pk = $d.find('.prefs-pk').focus().val keymap.getPrefixKey()
-  $d.on 'keydown', 'input', 'return', ok
+  if !$d # the dialogue, lazily initialized
+    $d = $ '''
+      <div id="prefs">
+        <ul id="prefs-tabs-nav">
+          <li><a href="#prefs-kbd">Keyboard</a></li>
+        </ul>
+        <div id="prefs-kbd">
+          <label>Prefix key: <input class="prefs-pk text-field" size="1"></label>
+        </div>
+      </div>
+    '''
+      .tabs()
+      .on 'keydown', 'input', 'return', ok
+      .dialog modal: 1, autoOpen: 0, title: 'Preferences', minWidth: 200, minHeight: 200, buttons: [
+        {text: 'OK', click: ok}
+        {text: 'Cancel', click: -> $d.dialog 'close'; return}
+      ]
+    $pk = $d.find '.prefs-pk'
+
+  $d.dialog 'open'
+
+  # load current values
+  $pk.val keymap.getPrefixKey()
   return
