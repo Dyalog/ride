@@ -59,7 +59,7 @@ module.exports = (e, opts = {}) ->
         return
     else
       es = [cm.getLine cm.getCursor().line]
-    opts.exec es, trace; dirty = {}; histAdd es; return
+    opts.exec es, trace; dirty = {}; histAdd es.filter((x) -> !/^\s*$/.test x); return
 
   # CodeMirror supports 'dblclick' events but they are unreliable and seem to require rather a short time between the two clicks
   # So, let's track clicks manually:
