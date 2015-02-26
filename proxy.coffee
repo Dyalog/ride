@@ -80,7 +80,12 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
           switch (/^<(\w+)>/.exec m)?[1] or ''
             when 'ReplyConnect', 'ReplyEdit', 'ReplySetLineAttributes' then ; # ignore
             when 'ReplySaveChanges'       then toBrowser 'ReplySaveChanges', win: +tag('win', m), err: +tag 'err', m
-            when 'ReplyWindowTypeChanged' then toBrowser 'WindowTypeChanged', win: +tag('Win', m), tracer: !!+tag 'bugger', m
+            when 'ReplyWindowTypeChanged'
+              win = +tag 'Win', m
+              if win
+                toBrowser 'WindowTypeChanged', win: +tag('Win', m), tracer: !!+tag 'bugger', m
+              else
+                log "WARNING: ignoring ReplyWindowTypeChanged message with win=#{win}"
             when 'ReplyIdentify'
               toBrowser 'UpdateDisplayName', displayName: b64d tag 'Project', m
               toBrowser '*identify', version: tag('Version', m), arch: tag('Architecture', m)
