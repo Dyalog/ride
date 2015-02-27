@@ -154,21 +154,20 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
         client = net.connect {host, port}, -> toBrowser '*connected', {host, port}; return
         setUpInterpreterConnection()
         return
-      .on '*spawn', ({port}) ->
+      .on '*spawn', ->
         server = net.createServer (c) ->
-          log 'spawned interpreter connected'
-          server?.close(); server = null; client = c
-          toBrowser '*connected', {host: '127.0.0.1', port}; setUpInterpreterConnection(); return
+          log 'spawned interpreter connected'; server?.close(); server = null; client = c; a = server.address()
+          toBrowser '*connected', {host: a.address, port: a.port}; setUpInterpreterConnection(); return
         server.on 'error', (err) ->
           log 'cannot listen for connections from spawned interpreter: ' + err
-          server = null; client = null
-          toBrowser '*listenError', err: '' + err; return
-        server.listen port, ->
-          log 'listening for connections from spawned interpreter on port ' + port
+          server = client = null; toBrowser '*listenError', err: '' + err; return
+        server.listen 0, '127.0.0.1', -> # pick a random free port
+          a = server.address(); hp = "#{a.address}:#{a.port}"
+          log "listening for connections from spawned interpreter on #{hp}"
           exe = process.env.DYALOG_IDE_INTERPRETER_EXE || if process.platform == 'darwin' then '../Dyalog/mapl' else 'dyalog'
           log "spawning interpreter #{JSON.stringify exe}"
           child = require('child_process').spawn exe, ['+s', '-q'], env: extend process.env,
-            RIDE_CONNECT: "127.0.0.1:#{port}", RIDE_INIT: "CONNECT:127.0.0.1:#{port}"
+            RIDE_CONNECT: hp, RIDE_INIT: "CONNECT:#{hp}"
           toBrowser '*spawned', pid: child.pid
           child.on 'error', (err) ->
             server?.close(); server = null; client = null
