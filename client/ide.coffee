@@ -86,12 +86,18 @@ module.exports = (opts = {}) ->
         $.alert 'Popups are blocked.'
     return
 
+  displayName = ''
+  updateTitle = ->
+    s = displayName; if opts.host then s += ' - ' + opts.host; if opts.port then s += ':' + opts.port
+    i = D.remoteIdentification || {}; if i.pid then s += " (PID: #{i.pid})"
+    $('title').text s; return
+
   die = -> # don't really, just pretend
     if !isDead then isDead = 1; $('.ide').addClass 'disconnected'; for _, {widget} of wins then widget.die()
     return
 
   D.socket
-    .on '*identify', (i) -> D.remoteIdentification = i; return
+    .on '*identify', (i) -> D.remoteIdentification = i; updateTitle(); return
     .on '*disconnected', ->
       if !isDead then $.alert 'Interpreter disconnected', 'Error'; die()
       return
@@ -104,9 +110,7 @@ module.exports = (opts = {}) ->
           $.alert message, 'Interpreter disconnected'
       return
     .on 'SysError', ({text}) -> $.alert text, 'SysError'; die(); return
-    .on 'UpdateDisplayName', ({displayName}) ->
-      s = displayName; if opts.host then s += ' - ' + opts.host; if opts.port then s += ':' + opts.port
-      $('title').text s; return
+    .on 'UpdateDisplayName', (a) -> {displayName} = a; return
     .on 'EchoInput', ({input}) -> session.add input
     .on 'AppendSessionOutput', ({result}) -> session.add result
     .on 'NotAtInputPrompt', -> session.noPrompt()

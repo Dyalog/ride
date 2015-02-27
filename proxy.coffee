@@ -89,7 +89,10 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
                 log "WARNING: ignoring ReplyWindowTypeChanged message with win=#{win}"
             when 'ReplyIdentify'
               toBrowser 'UpdateDisplayName', displayName: b64d tag 'Project', m
-              toBrowser '*identify', version: tag('Version', m), arch: tag('Architecture', m)
+              toBrowser '*identify',
+                version: tag 'Version',      m
+                arch:    tag 'Architecture', m
+                pid:     tag 'pid',          m
             when 'ReplyUpdateWsid'
               s = b64d tag 'wsid', m
               if s != (s1 = s.replace /\x00/g, '')
