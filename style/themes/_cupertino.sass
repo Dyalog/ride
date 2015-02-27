@@ -1,7 +1,7 @@
 /* cupertino Theme */
 
 $cupertino-header-bg    : #dedede
-$cupertino-bg           : #dedede
+$cupertino-bg           : #ececec
 $cupertino-button-bg    : #fafafa
 $cupertino-border       : 1px solid #000
 $cupertino-orange       : #ec7117
@@ -69,8 +69,9 @@ $cupertino-highlight    : #6a6a6a
         border:             1px solid transparent
         .shortcut
           color:            $cupertino-highlight
-      a:hover
+      &:hover
         background-color:   $cupertino-highlight
+        color:              #FFF
         border:             $cupertino-border
     div
       div
@@ -82,7 +83,7 @@ $cupertino-highlight    : #6a6a6a
 
         a
           color:            $cupertino-text
-        a:focus
+        &:focus
           background-color: $cupertino-highlight
     .m-sub
       border:none;
@@ -137,7 +138,7 @@ $cupertino-highlight    : #6a6a6a
       .ui-tabs-active
         border:             0px
         .ui-tabs-anchor
-          color:            $cupertino-text
+          color:            #FFF
           background-color: $cupertino-highlight
           border:           0px
           +border-radius-left(4px)
@@ -152,6 +153,9 @@ $cupertino-highlight    : #6a6a6a
   .toolbar
     .tb-button.pressed
       background-color:       $cupertino-highlight
+      color:                  #FFF
+    .tb-LN.pressed
+       background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAALCAYAAACksgdhAAAANUlEQVQoz2P8////fwYoYGRkZGTAA+BqkTURA/7///+fiYEMMACaYH4jRA/XgGAkNkUgqwMAP8cz5VxYQ3gAAAAASUVORK5CYII=)
 
     .tb-button
       background-color:       $cupertino-button-bg
