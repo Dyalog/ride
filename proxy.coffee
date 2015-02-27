@@ -2,6 +2,7 @@ fs = require 'fs'
 net = require 'net'
 os = require 'os'
 path = require 'path'
+{spawn} = require 'child_process'
 
 log = do ->
   t0 = +new Date # log timestamps will be number of milliseconds since t0
@@ -156,7 +157,7 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
         return
       .on '*spawn', ->
         server = net.createServer (c) ->
-          log 'spawned interpreter connected'; server?.close(); server = null; client = c; a = server.address()
+          log 'spawned interpreter connected'; a = server.address(); server?.close(); server = null; client = c
           toBrowser '*connected', {host: a.address, port: a.port}; setUpInterpreterConnection(); return
         server.on 'error', (err) ->
           log 'cannot listen for connections from spawned interpreter: ' + err
@@ -166,15 +167,12 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
           log "listening for connections from spawned interpreter on #{hp}"
           exe = process.env.DYALOG_IDE_INTERPRETER_EXE || if process.platform == 'darwin' then '../Dyalog/mapl' else 'dyalog'
           log "spawning interpreter #{JSON.stringify exe}"
-          child = require('child_process').spawn exe, ['+s', '-q'], env: extend process.env,
-            RIDE_CONNECT: hp, RIDE_INIT: "CONNECT:#{hp}"
+          child = spawn exe, ['+s', '-q'], env: extend process.env, RIDE_CONNECT: hp, RIDE_INIT: "CONNECT:#{hp}"
           toBrowser '*spawned', pid: child.pid
           child.on 'error', (err) ->
-            server?.close(); server = null; client = null
-            toBrowser '*spawnedError', {message: '' + err, code: err.code}; child = null; return
+            server?.close(); server = client = null; toBrowser '*spawnedError', {message: '' + err, code: err.code}; child = null; return
           child.on 'exit', (code, signal) ->
-            server?.close(); server = null; client = null
-            toBrowser '*spawnedExited', {code, signal}; child = null; return
+            server?.close(); server = client = null; toBrowser '*spawnedExited', {code, signal}; child = null; return
           return
         return
       .on '*listen', listen = ({port, callback}) ->
