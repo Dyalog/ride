@@ -54,7 +54,6 @@ module.exports = ->
     <fieldset id="spawnSection" style="display:none">
       <legend>Spawn an interpreter</legend>
       <p>
-        <label>Port <input id="spawn-port" class="text-field" value="#{DEFAULT_PORT}" size="5"></label>
         <a href="#" id="spawn" accessKey="w">Spa<u>w</u>n</a><br>
         <span id="spawn-status"></span>
       </p>
@@ -72,14 +71,13 @@ module.exports = ->
   $delete      = $ '#fav-delete'   ; $name        = $ '#fav-name'
   $list        = $ '#fav-list'     ; $save        = $ '#fav-save'
   $spawn       = $ '#spawn'        ; $cancel      = $ '#fav-cancel'
-  $spawnPort   = $ '#spawn-port'   ; $listen      = $ '#listen'
-  $spawnStatus = $ '#spawn-status' ; $listenPort  = $ '#listen-port'
-  $about       = $ '#about'
+  $spawnStatus = $ '#spawn-status' ; $listen      = $ '#listen'
+  $about       = $ '#about'        ; $listenPort  = $ '#listen-port'
   $listenDialog = null
 
   enableSpawnAndListen = (b) ->
     $('#spawn, #listen').button if b then 'enable' else 'disable'
-    $('#spawn-port, #listen-port').attr 'disabled', !b
+    $('#listen-port').attr 'disabled', !b
     return
 
   $connect.add($about).add($new).add($delete).add($save).add($cancel).add($spawn).add($listen).button()
@@ -120,14 +118,7 @@ module.exports = ->
   $cancel.click ->
     x = parseFav $list.find(':selected').text(); $host.val x.host; $port.val x.port; $name.val x.name
     $save.add($cancel).button 'disable'; false
-  $spawn.click ->
-    port = +$spawnPort.val()
-    if !(0 < port < 0x10000)
-      $.alert 'Invalid port', 'Error', -> $spawnPort.focus(); return
-    else
-      enableSpawnAndListen false; $spawnStatus.text 'Spawning...'; D.socket.emit '*spawn', {port}
-    false
-  $spawnPort.on 'keydown', null, 'return', -> $spawn.click(); false
+  $spawn.click -> enableSpawnAndListen false; $spawnStatus.text 'Spawning...'; D.socket.emit '*spawn'; false
   $listen.click ->
     port = +$listenPort.val()
     if !(0 < port < 0x10000)
@@ -191,7 +182,7 @@ module.exports = ->
     setTimeout(
       ->
         if      o.listen  then (if o._[0] then $listenPort.val o._[0]); $listen.click()
-        else if o.spawn   then (if o._[0] then $spawnPort.val  o._[0]); $spawn.click()
+        else if o.spawn   then $spawn.click()
         else if o.connect then hp = parseFav o.connect; D.socket.emit '*connect', host: hp.host, port: hp.port or DEFAULT_PORT
         return
       100 # TODO: race condition?
