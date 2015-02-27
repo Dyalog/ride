@@ -4,6 +4,17 @@ os = require 'os'
 path = require 'path'
 {spawn} = require 'child_process'
 
+window.D ?= {}
+
+bbRecord = null
+do -> # black box: store latest n log messages in RAM
+  n = 1000; i = 0; a = Array n
+  window.D.bb = (m) -> # m: limit
+    if typeof m != 'number' || !(0 < m <= n) || m != ~~m then m = n
+    (if m <= n - i then a[i...i + m] else a[i..].concat a[...i + m - n]).join ''
+  bbRecord = (s) -> a[i++] = s; i %= n; return
+  return
+
 log = do ->
   t0 = +new Date # log timestamps will be number of milliseconds since t0
   N = 50; T = 1000 # log no more than N log messages per T milliseconds
@@ -15,7 +26,7 @@ log = do ->
   (s) -> # the actual log() function
     if (t1 = +new Date) - t > T then t = t1; n = 1 # if last message was too long ago, start counting afresh
     m = if ++n < N then "#{t1 - t0}: #{s}\n" else if n == N then '... logging temporarily suppressed\n'
-    if m then process.stdout?.write? m; if fd then mb = Buffer m; fs.writeSync fd, mb, 0, mb.length
+    if m then process.stdout?.write? m; bbRecord m; if fd then mb = Buffer m; fs.writeSync fd, mb, 0, mb.length
     return
 log new Date().toISOString()
 
