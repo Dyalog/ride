@@ -46,6 +46,8 @@ module.exports = (e, opts = {}) ->
   """
   b = null
 
+  volatileLine = null
+
   cm = CodeMirror $e.find('.cm')[0],
     fixedGutter: false, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
     keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
@@ -54,11 +56,21 @@ module.exports = (e, opts = {}) ->
       Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch; return
       Down: ->
         l = cm.getCursor().line
-        if l == cm.lineCount() - 1 && cm.getLine l
-          cm.execCommand 'goDocEnd'; cm.execCommand 'newlineAndIndent'
+        if l == cm.lineCount() - 1 && !/^\s*$/.test cm.getLine l
+          cm.execCommand 'goDocEnd'; cm.execCommand 'newlineAndIndent'; volatileLine = l + 1
         else
           cm.execCommand 'goLineDown'
         return
+
+  cm.on 'cursorActivity', ->
+    if volatileLine != null
+      n = cm.lineCount(); l = cm.getCursor().line
+      if l != volatileLine || l != n - 1 || !/^\s*$/.test cm.getLine n - 1
+        if l < volatileLine && volatileLine == n - 1 && /^\s*$/.test cm.getLine n - 1
+          cm.replaceRange '', {line: n - 2, ch: cm.getLine(n - 2).length}, {line: n - 1, ch: 0}, 'D'
+        volatileLine = null
+    return
+
   cm.dyalogCommands =
     ED: -> opts.edit? cm.getValue(), cm.indexFromPos cm.getCursor(); return # Edit
     QT: -> opts.close?(); return # Quit (and lose changes)
