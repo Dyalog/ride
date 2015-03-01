@@ -36,16 +36,15 @@ for platform in ${@:-win osx linux}; do desktop_app $platform; done
 for bits in 32 64; do
   d=build/ride/osx$bits/ride.app/Contents/Resources
   if [ -d $d ]; then cp -v style/DyalogUnicode.icns $d/nw.icns; fi
-
-  WINE=`which wine`
-  if [ "$WINE" ]; then
-    echo "Replacing ${bits}bit windows icon"
+  if which wine 2>/dev/null; then
     w=build/ride/win$bits/ride.exe
-    if [ -s $w ]; then wine node_modules/rcedit/bin/rcedit.exe $w --set-icon ./favicon.ico; fi
+    if [ -s $w ]; then
+      echo "replacing ${bits}-bit Windows icon"
+      wine node_modules/rcedit/bin/rcedit.exe $w --set-icon ./favicon.ico
+    fi
   else
     echo "Please install wine to set windows icons."
   fi
-  
 done
 
 # https://github.com/rogerwang/node-webkit/wiki/The-solution-of-lacking-libudev.so.0
