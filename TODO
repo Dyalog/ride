@@ -9,8 +9,6 @@ P1 (Definitely high priority):
   ⎕dl-s in tradfns that call each other: trace into these functions, and while they are waiting on a delay, whack away at the tracer buttons and hit enter in the session. I would be very surprised if this does not lead to crashes; MK email 2015-02-18
   On startup, make sure the window fits in the screen (to avoid trouble with multiple screens)
   If you maximize RIDE on a Mac, close it, and open it again, it can't be unmaximised; 2015-02-19 JS, JR
-  Add menu items to issue interrupt(s).
-  Two menu items to spawn a new IDE: connect page and new session (Cmd+N)
   Rationalize menus for OS X and others
 
 P2 (Middle priority):
@@ -156,3 +154,5 @@ Done:
   The interpreter must refuse to start if $RIDE_LISTEN is given, but the port is already being used  JD #11252
   The interpreter ignores $RIDE_CONNECT and $RIDE_LISTEN; reported by Kai, reproduced by Nick, fix by JD or Bjørn pending
   clean shutdown of APL should terminate RIDE
+  Two menu items to spawn a new IDE: connect page and new session (Cmd+N)
+  Add menu items to issue interrupt(s).

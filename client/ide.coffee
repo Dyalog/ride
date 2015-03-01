@@ -30,6 +30,8 @@ module.exports = (opts = {}) ->
       console.info 'Silencing message to interpreter:', x, y
     return
 
+  WI = -> emit 'WeakInterrupt'; return
+
   # "wins" maps window ids, as they appear in the RIDE protocol, to window information objects that have the following properties:
   #   widget: a session or an editor
   #   id: the key in "wins"
@@ -43,7 +45,7 @@ module.exports = (opts = {}) ->
           emit 'Execute', {trace, text: lines[0] + '\n'}
         return
       setPromptType: (x) -> promptType = x
-      weakInterrupt: -> emit 'WeakInterrupt'; return
+      weakInterrupt: WI
 
   # Tab management
   tabOpts = activate: (_, ui) -> (widget = wins[+ui.newTab.attr('id').replace /\D+/, ''].widget).updateSize(); widget.focus(); return
@@ -145,7 +147,7 @@ module.exports = (opts = {}) ->
         continueExec:   -> emit 'Continue',       win: w
         restartThreads: -> emit 'RestartThreads', win: w
         edit:    (s, p) -> emit 'Edit',           win: w, text: s, pos: p
-        weakInterrupt:  -> emit 'WeakInterrupt'
+        weakInterrupt: WI
         cutback:        -> emit 'Cutback',        win: w
         autocomplete: (s, i) -> emit 'Autocomplete', line: s, pos: i, token: w
         pop: -> popWindow w
@@ -209,6 +211,8 @@ module.exports = (opts = {}) ->
     )
     {'': '_Edit', items: [
       {'': '_Keyboard Preferences', action: prefs}
+      '-'
+      {'': 'Weak Interrupt', action: WI}
     ]}
     {'': '_View', items:
       [
