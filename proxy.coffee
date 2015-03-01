@@ -11,7 +11,7 @@ do -> # black box: store latest n log messages in RAM
   n = 1000; i = 0; a = Array n
   window.D.bb = (m) -> # m: limit
     if typeof m != 'number' || !(0 < m <= n) || m != ~~m then m = n
-    (if m <= n - i then a[i...i + m] else a[i..].concat a[...i + m - n]).join ''
+    (if m <= i then a[i - m...i] else a[n - m + i..].concat a[...i]).join ''
   bbRecord = (s) -> a[i++] = s; i %= n; return
   return
 
