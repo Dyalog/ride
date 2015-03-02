@@ -93,7 +93,7 @@ module.exports = (e, opts = {}) ->
 
   prompt: (why) ->
     promptType = why; opts.setPromptType promptType; cm.setOption 'readOnly', false; cm.setOption 'cursorHeight', 1; l = cm.lineCount() - 1
-    if (why == 1 && !dirty[l]?) || why !in [1, 4]
+    if (why == 1 && !dirty[l]?) || why !in [1, 3, 4]
       cm.replaceRange '      ', {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
     cm.setCursor l, cm.getLine(l).length; return
 
