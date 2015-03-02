@@ -166,7 +166,7 @@ module.exports = (e, opts = {}) -> # opts contains callbacks to ide.coffee
     .on 'mousedown',        '.tb-button', (e) -> $(e.target).addClass    'armed'; e.preventDefault(); return
     .on 'mouseup mouseout', '.tb-button', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return
     .on 'click',            '.tb-button', (e) ->
-      for c in $(e.target).prop('class').split /\s+/ when m = /^tb-([A-Z]{2})$/.exec c then cm.execCommand m[1]; break
+      for c in $(e.target).prop('class').split /\s+/ when m = /^tb-([A-Z]{2,3})$/.exec c then cm.execCommand m[1]; break
       return
     .on 'click', '.tb-pop', -> opts.pop(); false
     .on 'click', '.tb-hid, .tb-case', -> $(@).toggleClass 'pressed'; highlightSearch(); false
