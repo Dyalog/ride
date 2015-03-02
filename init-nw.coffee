@@ -42,7 +42,6 @@ if process? then do ->
     if opener
       (fw = opener.D.floatingWindows).splice fw.indexOf(nww), 1
     else # save window state:
-      console.info 'saving win state:', x: nww.x, y: nww.y, width: nww.width, height: nww.height
       localStorage.winInfo = JSON.stringify x: nww.x, y: nww.y, width: nww.width, height: nww.height
     window.onbeforeunload?(); window.onbeforeunload = null; return
   nww.zoomLevel = +localStorage.zoom || 0
