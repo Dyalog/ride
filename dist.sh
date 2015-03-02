@@ -18,7 +18,6 @@ mkdir -p $b/node_modules && cp -r node_modules/nomnom $b/node_modules
 
 desktop_app() {
   echo "building desktop app for $1"
-  node node_modules/node-webkit-builder/bin/nwbuild --quiet -p $1 -v $node_version -o build $b
   coffee -s <<.
     NWB = require 'node-webkit-builder'
     nwb = new NWB
