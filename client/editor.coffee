@@ -54,7 +54,7 @@ module.exports = (e, opts = {}) ->
     keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
     gutters: ['breakpoints', 'CodeMirror-linenumbers']
     extraKeys:
-      Tab: -> c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch; return
+      Tab: -> c = cm.getCursor(); opts.autocomplete cm.getLine(c.line), c.ch; return
       Down: ->
         l = cm.getCursor().line
         if l == cm.lineCount() - 1 && !/^\s*$/.test cm.getLine l
@@ -73,8 +73,8 @@ module.exports = (e, opts = {}) ->
     return
 
   cm.dyalogCommands =
-    ED: -> opts.edit? cm.getValue(), cm.indexFromPos cm.getCursor(); return # Edit
-    QT: -> opts.close?(); return # Quit (and lose changes)
+    ED: -> opts.edit cm.getValue(), cm.indexFromPos cm.getCursor(); return # Edit
+    QT: opts.close # Quit (and lose changes)
     BK: opts.back # Backward or Undo
     FD: opts.skip # Forward or Redo
     SC: -> $tb.find('.tb-search:visible').focus(); return # Search
@@ -84,7 +84,7 @@ module.exports = (e, opts = {}) ->
         for l in breakpoints then cm.setGutterMarker l, 'breakpoint', null
         opts.save cm.getValue(), breakpoints[..].sort (x, y) -> x - y
       else
-        opts.close?()
+        opts.close()
       return
     TL: -> # Toggle Localisation
       c = cm.getCursor(); s = cm.getLine c.line
@@ -144,13 +144,13 @@ module.exports = (e, opts = {}) ->
         cm.setCursor line: l, ch: 0
       return
     WI: opts.weakInterrupt
-    ER: -> (if opts.debugger then opts.over?() else cm.execCommand 'newlineAndIndent'); return
+    ER: -> (if opts.debugger then opts.over() else cm.execCommand 'newlineAndIndent'); return
     BH: opts.continueTrace # Run to exit (in tracer)
     RM: opts.continueExec # Resume execution (in tracer)
     MA: opts.restartThreads # Resume all threads (in tracer)
     CBP: opts.cutback
   ###
-      F6 = -> opts.openInExternalEditor? cm.getValue(), cm.getCursor().line, (err, text) ->
+      F6 = -> opts.openInExternalEditor cm.getValue(), cm.getCursor().line, (err, text) ->
         if err then $.alert '' + err, 'Error' else c = cm.getCursor().line; cm.setValue text; cm.setCursor c
         return
   ###
@@ -168,7 +168,7 @@ module.exports = (e, opts = {}) ->
     .on 'click',            '.tb-button', (e) ->
       for c in $(e.target).prop('class').split /\s+/ when m = /^tb-([A-Z]{2})$/.exec c then cm.execCommand m[1]; break
       return
-    .on 'click', '.tb-pop', -> opts.pop?(); false
+    .on 'click', '.tb-pop', -> opts.pop(); false
     .on 'click', '.tb-hid, .tb-case', -> $(@).toggleClass 'pressed'; highlightSearch(); false
     .on 'keydown', '.tb-search', 'return',       -> cm.execCommand 'NX'; false
     .on 'keydown', '.tb-search', 'shift+return', -> cm.execCommand 'PV'; false
@@ -261,7 +261,7 @@ module.exports = (e, opts = {}) ->
   highlight: highlight
   getHighlightedLine: -> hll
   setDebugger: setDebugger
-  saved: (err) -> (if err then $.alert 'Cannot save changes' else opts.close?()); return
+  saved: (err) -> (if err then $.alert 'Cannot save changes' else opts.close()); return
   getOpts: -> opts
   closePopup: -> (if opener then close()); return
   autocomplete: autocompletion cm, opts.autocomplete

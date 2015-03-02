@@ -22,10 +22,10 @@ module.exports = (e, opts = {}) ->
   cm = CodeMirror ($e = $ e)[0],
     autofocus: true, mode: '', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
     readOnly: true, keyMap: 'dyalog', lineWrapping: !!localStorage.sessionLineWrapping
-    extraKeys: Tab: -> (if promptType != 4 then c = cm.getCursor(); opts.autocomplete? cm.getLine(c.line), c.ch); return # don't autocomplete in ⍞ input
+    extraKeys: Tab: -> (if promptType != 4 then c = cm.getCursor(); opts.autocomplete cm.getLine(c.line), c.ch); return # don't autocomplete in ⍞ input
 
   cm.dyalogCommands =
-    ED: -> c = cm.getCursor(); opts.edit?(cm.getLine(c.line), c.ch); return # Edit
+    ED: -> c = cm.getCursor(); opts.edit cm.getLine(c.line), c.ch; return # Edit
     BK: -> histMove 1; return # Backward or Undo
     FD: -> histMove -1; return # Forward or Redo
     QT: QT = -> # Quit (and lose changes)
