@@ -4,15 +4,14 @@ export PATH="`dirname $0`/node_modules/.bin:$PATH"
 
 mkdir -p build/{static,tmp}
 
-cp -uv node_modules/codemirror/lib/codemirror.css build/static/
+cp -uv index.html node_modules/codemirror/lib/codemirror.css style/apl385.* style/*.png favicon.ico package.json build/static/
+
 i=style/style.sass o=build/static/style.css
 if [ ! -e $o -o $(find `dirname $i` -type f -newer $o | wc -l) -gt 0 ]; then
   echo 'preprocessing css'
   # node-sass generates a bad source map now, but let's be ready for the time it's fixed
   node-sass -i --source-map -o `dirname $o` $i # for compression, add: --output-style=compressed
 fi
-
-cp -uv index.html build/static/
 
 js_files='
   node_modules/socket.io/node_modules/socket.io-client/socket.io.js
@@ -68,5 +67,3 @@ echo 'browserifying'
   cat build/tmp/libs.js
   browserify -d -t coffeeify --extension=.coffee client/*.coffee | exorcist build/static/client.map
 )>build/static/D.js
-
-cp -ur style/apl385.* style/*.png favicon.ico package.json build/static/

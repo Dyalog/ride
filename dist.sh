@@ -17,25 +17,25 @@ echo 'adding nomnom library'
 mkdir -p $b/node_modules && cp -r node_modules/nomnom $b/node_modules
 
 desktop_app() {
-  echo "building desktop app for $1"
-  coffee -s <<.
-    NWB = require 'node-webkit-builder'
-    nwb = new NWB
-      files: '$b/**'
-      version: '$node_version'
-      platforms: '$@'.split ' '
-      #macIcns: 'style/DyalogUnicode.icns'
-    nwb.build().catch (e) -> console.error e; process.exit 1
+  echo "building desktop app for $@"
+  node <<.
+    var NWB = require('node-webkit-builder');
+    var nwb = new NWB({
+      files: '$b/**',
+      version: '$node_version',
+      platforms: '$@'.split(' ')
+    });
+    nwb.build().catch(function (e) {console.error(e); process.exit(1);});
 .
 }
-for platform in ${@:-win osx linux}; do desktop_app $platform; done
+desktop_app ${@:-win osx linux}
 
 # workaround for https://github.com/mllrsohn/grunt-node-webkit-builder/issues/125
 # Replace icons on OS X & Windows
 for bits in 32 64; do
   d=build/ride/osx$bits/ride.app/Contents/Resources
   if [ -d $d ]; then cp -v style/DyalogUnicode.icns $d/nw.icns; fi
-  if which wine 2>/dev/null; then
+  if which wine >/dev/null; then
     w=build/ride/win$bits/ride.exe
     if [ -s $w ]; then
       echo "replacing ${bits}-bit Windows icon"
