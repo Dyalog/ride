@@ -210,7 +210,7 @@ module.exports = (opts = {}) ->
         ]}
     )
     {'': '_Edit', items: [
-      {'': '_Keyboard Preferences', action: prefs}
+      {'': '_Preferences', action: prefs}
       '-'
       {'': 'Weak Interrupt', action: WI}
     ]}
