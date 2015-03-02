@@ -1,12 +1,33 @@
 # NW.js-specific initialisation
 @D ?= {}
+
+segmentsIntersect = (a, b, c, d) -> a < d && c < b
+
+rectanglesIntersect = (r0, r1) -> (
+  segmentsIntersect(r0.x, r0.x + r0.width,  r1.x, r1.x + r1.width) &&
+  segmentsIntersect(r0.y, r0.y + r0.height, r1.y, r1.y + r1.height)
+)
+
+segmentFitWithin = (a, b, A, B) ->
+  if b - a > B - A then [A, B] else if a < A then [A, A + b - a] else if b > B then [B - b + a, B] else [a, b]
+
+rectangleFitWithin = (r, R) ->
+  [x, x1] = segmentFitWithin r.x, r.x + r.width,  R.x, R.x + R.width
+  [y, y1] = segmentFitWithin r.y, r.y + r.height, R.y, R.y + R.height
+  {x, y, width: x1 - x, height: y1 - y}
+
+restoreWindow = (w, r) -> # w: NWJS window, r: rectangle
+  for scr in require('nw.gui').Screen.screens
+    if rectanglesIntersect scr.work_area, r
+      r = rectangleFitWithin r, scr.work_area
+      w.moveTo r.x, r.y; w.resizeTo r.width, r.height
+      break
+  return
+
 if process? then do ->
   gui = require 'nw.gui'; crypto = require 'crypto'; fs = require 'fs'; nomnom = require 'nomnom'
   path = require 'path'; {spawn} = require 'child_process'; {Proxy} = require './proxy'
-  D.nwjs = true
-  D.process = process
-
-  nww = gui.Window.get()
+  D.nwjs = true; D.process = process; gui.Screen.Init(); nww = gui.Window.get()
   if opener
     opener.D.floatingWindows.push nww
   else
@@ -14,19 +35,15 @@ if process? then do ->
     nww.on 'focus', -> D.floatingWindows.forEach((x) -> x.setAlwaysOnTop true ); return
     nww.on 'blur',  -> D.floatingWindows.forEach((x) -> x.setAlwaysOnTop false); return
     # restore window state:
-    try wi = JSON.parse localStorage.winInfo || null
-    if wi
-      if wi.x? && wi.y? then nww.moveTo wi.x, wi.y
-      if wi.width && wi.height then nww.resizeTo wi.width, wi.height
+    if localStorage.winInfo then try restoreWindow nww, JSON.parse localStorage.winInfo
   nww.show()
   nww.on 'close', ->
     process.nextTick -> nww.close true; return
     if opener
       (fw = opener.D.floatingWindows).splice fw.indexOf(nww), 1
-    else do -> # save window state:
-      i = x: nww.x, y: nww.y, width: nww.width, height: nww.height
-      localStorage.winInfo = JSON.stringify i
-      return
+    else # save window state:
+      console.info 'saving win state:', x: nww.x, y: nww.y, width: nww.width, height: nww.height
+      localStorage.winInfo = JSON.stringify x: nww.x, y: nww.y, width: nww.width, height: nww.height
     window.onbeforeunload?(); window.onbeforeunload = null; return
   nww.zoomLevel = +localStorage.zoom || 0
   $ ->
