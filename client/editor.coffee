@@ -158,7 +158,7 @@ module.exports = (e, opts = {}) -> # opts contains callbacks to ide.coffee
   createBreakpointElement = -> $('<div class="breakpoint">●</div>')[0]
   breakpoints = [] # array of line numbers
   cm.on 'gutterClick', (cm, l) ->
-    if breakpoints.indexOf(l) >= 0 then breakpoints.splice l, 1; cm.setGutterMarker l, 'breakpoints', null
+    if (i = breakpoints.indexOf l) >= 0 then breakpoints.splice i, 1; cm.setGutterMarker l, 'breakpoints', null
     else breakpoints.push l; cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
     return
 
