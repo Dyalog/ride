@@ -1,4 +1,5 @@
 autocompletion = require './autocompletion'
+
 module.exports = (e, opts = {}) ->
   b = (cssClasses, description) -> "<a href='#' class='#{cssClasses} tb-button' title='#{description}'></a>"
   ($e = $ e).html """
@@ -78,9 +79,10 @@ module.exports = (e, opts = {}) ->
     FD: opts.skip # Forward or Redo
     SC: -> $tb.find('.tb-search:visible').focus(); return # Search
     EP: -> # Exit (and save changes)
-      if (v = cm.getValue()) != originalValue
-        bs = []; for l of breakpoints then bs.push +l; cm.setGutterMarker +l, 'breakpoint', null
-        opts.save? cm.getValue(), bs
+      v = cm.getValue()
+      if v != originalValue || breakpoints.join() != originalBreakpoints
+        for l in breakpoints then cm.setGutterMarker l, 'breakpoint', null
+        opts.save cm.getValue(), breakpoints[..].sort (x, y) -> x - y
       else
         opts.close?()
       return
@@ -154,10 +156,10 @@ module.exports = (e, opts = {}) ->
   ###
 
   createBreakpointElement = -> $('<div class="breakpoint">●</div>')[0]
-  breakpoints = {}
+  breakpoints = []
   cm.on 'gutterClick', (cm, l) ->
-    if breakpoints[l] then delete breakpoints[l]; cm.setGutterMarker l, 'breakpoints', null
-    else breakpoints[l] = 1; cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
+    if breakpoints.indexOf(l) >= 0 then breakpoints.splice l, 1; cm.setGutterMarker l, 'breakpoints', null
+    else breakpoints.push l; cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
     return
 
   $tb = $ '.toolbar', $e
@@ -216,6 +218,8 @@ module.exports = (e, opts = {}) ->
     false
 
   originalValue = null # remember it so that on <esc> we can detect if anything changed
+  originalBreakpoints = '' # comma-separated string
+
   hll = null # currently highlighted line
 
   highlight = (l) ->
@@ -239,11 +243,12 @@ module.exports = (e, opts = {}) ->
 
   updateSize: -> cm.setSize $e.width(), $e.parent().height() - $e.position().top - 28
   open: (ee) ->
-    originalValue = ee.text; cm.setValue ee.text; cm.focus()
-    line = ee.currentRow; col = ee.currentColumn || 0
-    if line == col == 0 && ee.text.indexOf('\n') < 0 then col = ee.text.length
+    cm.setValue originalValue = ee.text; cm.focus()
+    line = ee.currentRow; col = ee.currentColumn || 0; if line == col == 0 && ee.text.indexOf('\n') < 0 then col = ee.text.length
     cm.setCursor line, col; cm.scrollIntoView null, $e.height() / 2
-    for l in ee.lineAttributes?.stop then cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
+    breakpoints = ee.lineAttributes.stop[..]
+    for l in breakpoints then cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
+    originalBreakpoints = breakpoints.join()
     if opener then $('title').text ee.name
     return
   hasFocus: -> cm.hasFocus()
