@@ -7,15 +7,10 @@ Bugs / Issues External to RIDE
 
 P1 (Definitely high priority):
   ⎕dl-s in tradfns that call each other: trace into these functions, and while they are waiting on a delay, whack away at the tracer buttons and hit enter in the session. I would be very surprised if this does not lead to crashes; MK email 2015-02-18
-  On startup, make sure the window fits in the screen (to avoid trouble with multiple screens)
   If you maximize RIDE on a Mac, close it, and open it again, it can't be unmaximised; 2015-02-19 JS, JR
   Rationalize menus for OS X and others
 
 P2 (Middle priority):
-  Two highlighted lines in tracer; MK email 2015-02-14:
-    1) You are tracing
-    2) You use shift+enter to edit the function
-    3) You then use >> or << before resuming execution
   Do not scroll session on AtInputPrompt.
   Scroll editor window if cursor passes right margin.
   add replace (:%s/A/B/)
@@ -30,7 +25,6 @@ P3 (Can wait):
   Customizable window title; Kai email 2015-02-24
   Verify there is a standard key to cycle between the windows
   Enable Windows IME if present.
-
 
 P4 (I will think about it):
   Option to automatically pop up completion box after a timeout OR use a keystroke
@@ -156,3 +150,9 @@ Done:
   clean shutdown of APL should terminate RIDE
   Two menu items to spawn a new IDE: connect page and new session (Cmd+N)
   Add menu items to issue interrupt(s).
+  On startup, make sure the window fits in the screen (to avoid trouble with multiple screens)
+  Two highlighted lines in tracer; MK email 2015-02-14:
+    1) You are tracing
+    2) You use shift+enter to edit the function
+    3) You then use >> or << before resuming execution
+      NN: I was showing a red border around the current line in edit mode, which was wrong
