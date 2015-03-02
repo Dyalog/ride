@@ -215,9 +215,17 @@ module.exports = (e, opts = {}) ->
         cm.setSelection cm.posFromIndex(j), cm.posFromIndex j + q.length; scrollCursorIntoProminentView()
     false
 
+  originalValue = null # remember it so that on <esc> we can detect if anything changed
+  hll = null # currently highlighted line
+
+  highlight = (l) ->
+    if hll? then cm.removeLineClass hll, 'background', 'highlighted'
+    if (hll = l)? then cm.addLineClass l, 'background', 'highlighted'; cm.setCursor l, 0; scrollCursorIntoProminentView()
+    return
+
   setDebugger = (x) ->
     opts.debugger = x; $('.debugger-toolbar', $e).toggle x; $('.editor-toolbar', $e).toggle !x
-    cm.setOption 'readOnly', x; $('.CodeMirror', $e).toggleClass 'debugger', x
+    cm.setOption 'readOnly', x; $('.CodeMirror', $e).toggleClass 'debugger', x; highlight null
     p = if x then 'lineNumbersInDebugger' else 'lineNumbersInEditor'
     localStorage[p] ?= +!x; cm.setOption 'lineNumbers', !!+localStorage[p]
     $tb.find('.tb-LN:visible').toggleClass 'pressed', !!+localStorage[p]
@@ -228,9 +236,6 @@ module.exports = (e, opts = {}) ->
     h = $e.height(); {left, top} = cm.cursorCoords true, 'local'
     cm.scrollIntoView left: left, right: left, top: top - h / 3, bottom: top + 2 * h / 3
     return
-
-  originalValue = null # remember it so that on <esc> we can detect if anything changed
-  hll = null # currently highlighted line
 
   updateSize: -> cm.setSize $e.width(), $e.parent().height() - $e.position().top - 28
   open: (ee) ->
@@ -248,10 +253,7 @@ module.exports = (e, opts = {}) ->
   getCursorIndex: -> cm.indexFromPos cm.getCursor()
   setValue: (x) -> cm.setValue x
   setCursorIndex: (i) -> cm.setCursor cm.posFromIndex i
-  highlight: (l) ->
-    if hll? then cm.removeLineClass hll, 'background', 'highlighted'
-    if (hll = l)? then cm.addLineClass l, 'background', 'highlighted'; cm.setCursor l, 0; scrollCursorIntoProminentView()
-    return
+  highlight: highlight
   getHighlightedLine: -> hll
   setDebugger: setDebugger
   saved: (err) -> (if err then $.alert 'Cannot save changes' else opts.close?()); return
