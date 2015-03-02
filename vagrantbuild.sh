@@ -19,7 +19,7 @@ fi
   echo "Copying Files"
 vagrant ssh -c "cp -Ruv /ride \$HOME/"
   echo "Building"
-vagrant ssh -c "cd \$HOME/ride && . dist.sh"
+vagrant ssh -c "cd \$HOME/ride && npm i && . dist.sh"
 vagrant ssh -c "cp -Ruv \$HOME/ride/build /ride/"
 
 case `uname` in

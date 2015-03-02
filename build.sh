@@ -1,6 +1,5 @@
 #!/bin/bash
 set -e -o pipefail
-npm install
 export PATH="`dirname $0`/node_modules/.bin:$PATH"
 
 mkdir -p build/{static,tmp}
