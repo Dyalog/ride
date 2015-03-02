@@ -180,7 +180,7 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
           log "listening for connections from spawned interpreter on #{hp}"
           exe = process.env.DYALOG_IDE_INTERPRETER_EXE || if process.platform == 'darwin' then '../Dyalog/mapl' else 'dyalog'
           log "spawning interpreter #{JSON.stringify exe}"
-          child = spawn exe, ['+s', '-q'], env: extend process.env, RIDE_CONNECT: hp, RIDE_INIT: "CONNECT:#{hp}"
+          child = spawn exe, ['+s', '-q'], stdio: ['pipe', 'ignore', 'ignore'], env: extend process.env, RIDE_CONNECT: hp, RIDE_INIT: "CONNECT:#{hp}"
           toBrowser '*spawned', pid: child.pid
           child.on 'error', (err) ->
             server?.close(); server = client = null; toBrowser '*spawnedError', {message: '' + err, code: err.code}; child = null; return
