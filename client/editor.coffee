@@ -1,53 +1,55 @@
 autocompletion = require './autocompletion'
 
-module.exports = (e, opts = {}) ->
+module.exports = (e, opts = {}) -> # opts contains callbacks to ide.coffee
   b = (cssClasses, description) -> "<a href='#' class='#{cssClasses} tb-button' title='#{description}'></a>"
   ($e = $ e).html """
     <div class="toolbar debugger-toolbar">
-      #{[ # the first two buttons are placed on the right-hand side through CSS; in a floating window they are hidden
-        b 'tb-EP  last',    'Quit this function'
+      #{[
+        # The first two buttons are placed on the right-hand side through CSS.  In a floating window they are hidden.
+        # CSS classes "first" and "last" indicate button grouping.
+        b 'tb-EP  last',      'Quit this function'
         b 'tb-pop first',     'Edit in a floating window'
-        b 'tb-ER  first',    'Execute line'
-        b 'tb-TC',           'Trace into expression'
-        b 'tb-BK',           'Go back one line'
-        b 'tb-FD',           'Skip current line'
-        b 'tb-BH',           'Continue trace'
-        b 'tb-RM',           'Continue execution'
-        b 'tb-MA',           'Restart all threads'
-        b 'tb-ED',           'Edit name'
-        b 'tb-WI',           'Interrupt'
-        b 'tb-CBP',          'Clear trace/stop/monitor for this object'
-        b 'tb-LN  last',     'Toggle line numbers'
+        b 'tb-ER  first',     'Execute line'
+        b 'tb-TC',            'Trace into expression'
+        b 'tb-BK',            'Go back one line'
+        b 'tb-FD',            'Skip current line'
+        b 'tb-BH',            'Continue trace'
+        b 'tb-RM',            'Continue execution'
+        b 'tb-MA',            'Restart all threads'
+        b 'tb-ED',            'Edit name'
+        b 'tb-WI',            'Interrupt'
+        b 'tb-CBP',           'Clear trace/stop/monitor for this object'
+        b 'tb-LN  last',      'Toggle line numbers'
         '<span class="tb-separator"></span>'
         '<input class="tb-search text-field">'
-        b 'tb-NX first',     'Search for next match'
-        b 'tb-PV',           'Search for previous match'
-        b 'tb-case last',    'Match case'
+        b 'tb-NX first',      'Search for next match'
+        b 'tb-PV',            'Search for previous match'
+        b 'tb-case last',     'Match case'
       ].join ''}
     </div>
     <div class="toolbar editor-toolbar">
       #{[
-        b 'tb-EP  last',    'Save changes and return'
+        b 'tb-EP  last',      'Save changes and return'
         b 'tb-pop first',     'Edit in a floating window'
-        b 'tb-LN  first',    'Toggle line numbers'
-        b 'tb-AO',           'Comment selected text'
-        b 'tb-DO  last',     'Uncomment selected text'
+        b 'tb-LN  first',     'Toggle line numbers'
+        b 'tb-AO',            'Comment selected text'
+        b 'tb-DO  last',      'Uncomment selected text'
         '<span class="tb-separator"></span>'
         '<input class="tb-search text-field">'
-        b 'tb-NX  first',    'Search for next match'
-        b 'tb-PV',           'Search for previous match'
-        b 'tb-case last',    'Match case'
+        b 'tb-NX  first',     'Search for next match'
+        b 'tb-PV',            'Search for previous match'
+        b 'tb-case last',     'Match case'
         '<span class="tb-separator"></span>'
-        b 'tb-refac-m first','Refactor text as method'
-        b 'tb-refac-f',      'Refactor text as field'
-        b 'tb-refac-p last', 'Refactor text as property'
+        b 'tb-refac-m first', 'Refactor text as method'
+        b 'tb-refac-f',       'Refactor text as field'
+        b 'tb-refac-p last',  'Refactor text as property'
       ].join ''}
     </div>
     <div class="cm"></div>
   """
   b = null
 
-  volatileLine = null
+  volatileLine = null # the line number of the empty line inserted when cursor is at eof and you press <down>
 
   cm = CodeMirror $e.find('.cm')[0],
     fixedGutter: false, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
@@ -57,10 +59,8 @@ module.exports = (e, opts = {}) ->
       Tab: -> c = cm.getCursor(); opts.autocomplete cm.getLine(c.line), c.ch; return
       Down: ->
         l = cm.getCursor().line
-        if l == cm.lineCount() - 1 && !/^\s*$/.test cm.getLine l
-          cm.execCommand 'goDocEnd'; cm.execCommand 'newlineAndIndent'; volatileLine = l + 1
-        else
-          cm.execCommand 'goLineDown'
+        if l != cm.lineCount() - 1 || /^\s*$/.test cm.getLine l then cm.execCommand 'goLineDown'
+        else cm.execCommand 'goDocEnd'; cm.execCommand 'newlineAndIndent'; volatileLine = l + 1
         return
 
   cm.on 'cursorActivity', ->
@@ -80,7 +80,7 @@ module.exports = (e, opts = {}) ->
     SC: -> $tb.find('.tb-search:visible').focus(); return # Search
     EP: -> # Exit (and save changes)
       v = cm.getValue()
-      if v != originalValue || breakpoints.join() != originalBreakpoints
+      if v != originalText || breakpoints.join() != originalBreakpoints
         for l in breakpoints then cm.setGutterMarker l, 'breakpoint', null
         opts.save cm.getValue(), breakpoints[..].sort (x, y) -> x - y
       else
@@ -156,7 +156,7 @@ module.exports = (e, opts = {}) ->
   ###
 
   createBreakpointElement = -> $('<div class="breakpoint">●</div>')[0]
-  breakpoints = []
+  breakpoints = [] # array of line numbers
   cm.on 'gutterClick', (cm, l) ->
     if breakpoints.indexOf(l) >= 0 then breakpoints.splice l, 1; cm.setGutterMarker l, 'breakpoints', null
     else breakpoints.push l; cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
@@ -200,8 +200,8 @@ module.exports = (e, opts = {}) ->
           s = stream.string[stream.pos..]; if ic then s = s.toLowerCase()
           i = s.indexOf q
           if !i then         stream.pos += q.length; 'searching'
-          else if i > 0 then stream.pos += i;        undefined
-          else               stream.skipToEnd();     undefined
+          else if i > 0 then stream.pos += i;        return
+          else               stream.skipToEnd();     return
     [q, ic]
   search = (backwards) ->
     [q, ic] = highlightSearch()
@@ -217,8 +217,8 @@ module.exports = (e, opts = {}) ->
         cm.setSelection cm.posFromIndex(j), cm.posFromIndex j + q.length; scrollCursorIntoProminentView()
     false
 
-  originalValue = null # remember it so that on <esc> we can detect if anything changed
-  originalBreakpoints = '' # comma-separated string
+  # remember original text and breakpoints (comma-separated line numbers) to avoid pointless saving on EP
+  originalText = originalBreakpoints = ''
 
   hll = null # currently highlighted line
 
@@ -238,12 +238,11 @@ module.exports = (e, opts = {}) ->
 
   scrollCursorIntoProminentView = -> # approximately to 1/3 of editor height; this might not work near the top or bottom
     h = $e.height(); {left, top} = cm.cursorCoords true, 'local'
-    cm.scrollIntoView left: left, right: left, top: top - h / 3, bottom: top + 2 * h / 3
-    return
+    cm.scrollIntoView left: left, right: left, top: top - h / 3, bottom: top + 2 * h / 3; return
 
-  updateSize: -> cm.setSize $e.width(), $e.parent().height() - $e.position().top - 28
+  updateSize: -> cm.setSize $e.width(), $e.parent().height() - $e.position().top - 28; return
   open: (ee) ->
-    cm.setValue originalValue = ee.text; cm.focus()
+    cm.setValue originalText = ee.text; cm.focus()
     line = ee.currentRow; col = ee.currentColumn || 0; if line == col == 0 && ee.text.indexOf('\n') < 0 then col = ee.text.length
     cm.setCursor line, col; cm.scrollIntoView null, $e.height() / 2
     breakpoints = ee.lineAttributes.stop[..]
@@ -252,12 +251,12 @@ module.exports = (e, opts = {}) ->
     if opener then $('title').text ee.name
     return
   hasFocus: -> cm.hasFocus()
-  focus: -> cm.focus()
+  focus: -> cm.focus(); return
   insert: (ch) -> (if !cm.getOption 'readOnly' then c = cm.getCursor(); cm.replaceRange ch, c, c); return
   getValue: -> cm.getValue()
   getCursorIndex: -> cm.indexFromPos cm.getCursor()
-  setValue: (x) -> cm.setValue x
-  setCursorIndex: (i) -> cm.setCursor cm.posFromIndex i
+  setValue: (x) -> cm.setValue x; return
+  setCursorIndex: (i) -> cm.setCursor cm.posFromIndex i; return
   highlight: highlight
   getHighlightedLine: -> hll
   setDebugger: setDebugger
