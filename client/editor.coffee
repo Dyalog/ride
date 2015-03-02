@@ -75,8 +75,8 @@ module.exports = (e, opts = {}) -> # opts contains callbacks to ide.coffee
   cm.dyalogCommands =
     ED: -> opts.edit cm.getValue(), cm.indexFromPos cm.getCursor(); return # Edit
     QT: opts.close # Quit (and lose changes)
-    BK: opts.back # Backward or Undo
-    FD: opts.skip # Forward or Redo
+    BK: -> (if opts.debugger then opts.back() else cm.execCommand 'undo'); return # Backward or Undo
+    FD: -> (if opts.debugger then opts.skip() else cm.execCommand 'redo'); return # Forward or Redo
     SC: -> $tb.find('.tb-search:visible').focus(); return # Search
     EP: -> # Exit (and save changes)
       v = cm.getValue()
