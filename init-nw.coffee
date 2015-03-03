@@ -99,9 +99,48 @@ if process? then do ->
     spawn:   abbr: 's', flag: true
   ).parse gui.App.argv
 
+  # Mac menu
   if process.platform == 'darwin'
-    mb = new gui.Menu type: 'menubar'
-    mb.createMacBuiltin 'Dyalog'
-    gui.Window.get().menu = mb
+    groups = {} # group name -> array of MenuItem-s
+    nwwMenu = new gui.Menu type: 'menubar'
+    nwwMenu.createMacBuiltin 'Dyalog'
+    nwwMenu.items[0].submenu.removeAt 0
+    nww.menu = nwwMenu
+    getItemByLabel = (menu, label) -> (for x in menu.items when x.label == label then return x); return
+
+    render = (x) ->
+      if !x then return
+      if x == '-' then return new gui.MenuItem type: 'separator'
+      h = # arguments to MenuItem's constructor
+        label: x[''].replace /_/g, ''
+        type: if x.group || x.checked? then 'checkbox' else 'normal'
+      if x.key && x.action && !x.dontBindKey then $(document).on 'keydown', '*', x.key, -> x.action(); false
+      if x.group
+        h.checked = !!x.checked
+        h.click = ->
+          groups[x.group].forEach (sibling) -> sibling.checked = sibling == mi; return
+          x.action?(); return
+      else if x.checked?
+        h.checked = !!x.checked; h.click = -> x.action? mi.checked; return
+      else
+        h.click = -> x.action?(); return
+      if x.items then h.submenu = new gui.Menu; for y in x.items then h.submenu.append render y
+      mi = new gui.MenuItem h
+      if x.group then (groups[x.group] ?= []).push mi
+      mi
+
+    D.installMenu = (m) ->
+      # try to merge new menu with existing menu:
+      for x, ix in m
+        ourMenu = render x
+        theirMenu = if ix then getItemByLabel nww.menu, ourMenu.label else nww.menu.items[0]
+        nww.menu.append ourMenu
+        if theirMenu
+          i = 0
+          while ourMenu.submenu.items.length
+            y = ourMenu.submenu.items[0]; ourMenu.submenu.remove y; theirMenu.submenu.insert y, i++
+          theirMenu.submenu.insert new gui.MenuItem(type: 'separator'), i
+          nww.menu.remove ourMenu
+      return
 
   return

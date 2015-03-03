@@ -199,15 +199,21 @@ module.exports = (opts = {}) ->
   allThemeClasses = themeClasses.join ' '
 
   # menu
-  $('<div class="menu"></div>').prependTo('body').dyalogmenu [
+  D.installMenu [
     (
       if D.nwjs
-        {'': '_File', items: [
-          {'': '_Connect...', action: D.rideConnect}
-          {'': '_New Session', key: 'Ctrl+N', action: D.rideNewSession}
-          '-'
-          {'': '_Quit', key: 'Ctrl+Q', action: D.quit}
-        ]}
+        {'': '_File', items:
+          [
+            {'': '_Connect...', action: D.rideConnect}
+            {'': '_New Session', key: 'Ctrl+N', action: D.rideNewSession}
+          ]
+            .concat(
+              if D.process?.platform != 'darwin' then [ # Mac's menu already has an item for Quit
+                '-'
+                {'': '_Quit', key: 'Ctrl+Q', action: D.quit}
+              ] else []
+            )
+        }
     )
     {'': '_Edit', items: [
       {'': '_Preferences', action: prefs}

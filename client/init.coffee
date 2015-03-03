@@ -27,8 +27,8 @@ else
   D.quit ?= close
   $ -> connect(); return
 
-# CSS class to indicate theme
 $ ->
+  # CSS class to indicate theme
   # https://nodejs.org/api/process.html#process_process_platform
   # https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
   # The theme can be overridden through localStorage.theme or an environment variable $DYALOG_IDE_THEME
@@ -39,7 +39,12 @@ $ ->
     else 'redmond'
   $('body').addClass "theme-#{localStorage.theme}"
   $(document).on 'keydown', '*', 'shift+f1', -> about(); false
-  return
 
-# CSS class for focused window
-$(window).on 'focus blur', (e) -> $('body').toggleClass 'window-focused', e.type == 'focus'
+  # CSS class to indicate platform (NW.js-only)
+  if D.process
+    if D.process.platform == 'darwin' then $('body').addClass 'platform-mac'
+    else if /^win/i.test D.process.platform then $('body').addClass 'platform-windows'
+
+  # CSS class for focused window
+  $(window).on 'focus blur', (e) -> $('body').toggleClass 'window-focused', e.type == 'focus'
+  return
