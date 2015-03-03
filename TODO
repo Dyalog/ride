@@ -7,8 +7,6 @@ Bugs / Issues External to RIDE
 
 P1 (Definitely high priority):
   ⎕dl-s in tradfns that call each other: trace into these functions, and while they are waiting on a delay, whack away at the tracer buttons and hit enter in the session. I would be very surprised if this does not lead to crashes; MK email 2015-02-18
-  If you maximize RIDE on a Mac, close it, and open it again, it can't be unmaximised; 2015-02-19 JS, JR
-  Rationalize menus for OS X and others
 
 P2 (Middle priority):
   Do not scroll session on AtInputPrompt.
@@ -156,3 +154,6 @@ Done:
     2) You use shift+enter to edit the function
     3) You then use >> or << before resuming execution
       NN: I was showing a red border around the current line in edit mode, which was wrong
+  Rationalize menus for OS X and others
+  If you maximize RIDE on a Mac, close it, and open it again, it can't be unmaximised; 2015-02-19 JS, JR
+    NN: fixed as a side effect of fixing the issue with multiple monitors
