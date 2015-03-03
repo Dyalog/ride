@@ -54,9 +54,16 @@ module.exports = (e, opts = {}) -> # opts contains callbacks to ide.coffee
   cm = CodeMirror $e.find('.cm')[0],
     fixedGutter: false, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
     keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
-    gutters: ['breakpoints', 'CodeMirror-linenumbers']
+    gutters: ['breakpoints', 'CodeMirror-linenumbers'], indentUnit: 4
     extraKeys:
-      Tab: -> c = cm.getCursor(); opts.autocomplete cm.getLine(c.line), c.ch; return
+      'Shift-Tab': 'indentLess'
+      Tab: ->
+        if cm.somethingSelected()
+          cm.execCommand 'indentMore'
+        else
+          c = cm.getCursor(); s = cm.getLine c.line
+          if /^ *$/.test s[...c.ch] then cm.execCommand 'indentMore' else opts.autocomplete s, c.ch
+        return
       Down: ->
         l = cm.getCursor().line
         if l != cm.lineCount() - 1 || /^\s*$/.test cm.getLine l then cm.execCommand 'goLineDown'
