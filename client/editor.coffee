@@ -88,7 +88,7 @@ module.exports = (e, opts = {}) -> # opts contains callbacks to ide.coffee
     EP: -> # Exit (and save changes)
       v = cm.getValue()
       if v != originalText || breakpoints.join() != originalBreakpoints
-        for l in breakpoints then cm.setGutterMarker l, 'breakpoint', null
+        for l in breakpoints then cm.setGutterMarker l, 'breakpoints', null
         opts.save cm.getValue(), breakpoints[..].sort (x, y) -> x - y
       else
         opts.close()
@@ -260,16 +260,17 @@ module.exports = (e, opts = {}) -> # opts contains callbacks to ide.coffee
   hasFocus: -> cm.hasFocus()
   focus: -> cm.focus(); return
   insert: (ch) -> (if !cm.getOption 'readOnly' then c = cm.getCursor(); cm.replaceRange ch, c, c); return
-  getValue: -> cm.getValue()
-  getCursorIndex: -> cm.indexFromPos cm.getCursor()
-  setValue: (x) -> cm.setValue x; return
-  setCursorIndex: (i) -> cm.setCursor cm.posFromIndex i; return
   highlight: highlight
-  getHighlightedLine: -> hll
   setDebugger: setDebugger
   saved: (err) -> (if err then $.alert 'Cannot save changes' else opts.close()); return
-  getOpts: -> opts
   closePopup: -> (if opener then close()); return
   autocomplete: autocompletion cm, opts.autocomplete
   saveAndClose: -> cm.execCommand 'EP'; return
   die: -> cm.setOption 'readOnly', true; return
+  getOpts: -> opts
+  getState: ->
+    {hll, originalText, originalBreakpoints, value: cm.getValue(), cursorIndex: cm.indexFromPos(cm.getCursor()), breakpoints: breakpoints[..]}
+  setState: (h) ->
+    cm.setValue h.value; cm.setCursor cm.posFromIndex h.cursorIndex; {originalText, originalBreakpoints, breakpoints} = h
+    for l in breakpoints then cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
+    highlight h.hll; return
