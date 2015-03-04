@@ -31,6 +31,7 @@ module.exports = (opts = {}) ->
     return
 
   WI = -> emit 'WeakInterrupt'; return
+  SI = -> emit 'StrongInterrupt'; return
 
   # "wins" maps window ids, as they appear in the RIDE protocol, to window information objects that have the following properties:
   #   widget: a session or an editor
@@ -218,7 +219,8 @@ module.exports = (opts = {}) ->
     {'': '_Edit', items: [
       {'': '_Preferences', action: prefs}
       '-'
-      {'': 'Weak Interrupt', action: WI}
+      {'': 'Weak Interrupt',   action: WI}
+      {'': 'Strong Interrupt', action: SI}
     ]}
     {'': '_View', items:
       [

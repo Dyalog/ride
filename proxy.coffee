@@ -89,7 +89,7 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
         log 'from interpreter: ' + JSON.stringify(m)[..1000]
         if !/^(?:SupportedProtocols|UsingProtocol)=1$/.test m # ignore these
           switch (/^<(\w+)>/.exec m)?[1] or ''
-            when 'ReplyConnect', 'ReplyEdit', 'ReplySetLineAttributes', 'ReplyWeakInterrupt' then ; # ignore
+            when 'ReplyConnect', 'ReplyEdit', 'ReplySetLineAttributes', 'ReplyWeakInterrupt', 'ReplyStrongInterrupt' then ; # ignore
             when 'ReplySaveChanges'       then toBrowser 'ReplySaveChanges', win: +tag('win', m), err: +tag 'err', m
             when 'ReplyWindowTypeChanged'
               win = +tag 'Win', m
@@ -150,7 +150,8 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
       .on 'Continue',       ({win}) -> cmd 'DebugContinue',       "<win>#{win}</win>"
       .on 'RestartThreads', ({win}) -> cmd 'DebugRestartThreads', "<win>#{win}</win>"
       .on 'Cutback',        ({win}) -> cmd 'DebugCutback',        "<win>#{win}</win>"
-      .on 'WeakInterrupt', -> cmd 'WeakInterrupt'
+      .on 'WeakInterrupt',   -> cmd 'WeakInterrupt'
+      .on 'StrongInterrupt', -> cmd 'StrongInterrupt'
       .on 'Autocomplete', ({line, pos, token}) -> cmd 'GetAutoComplete', "<line>#{b64 line}</line><pos>#{pos}</pos><token>#{token}</token>"
       .on 'SaveChanges', ({win, text, attributes: {stop, monitor, trace}}) ->
         v = []; for i in [0...text.split('\n').length] by 1 then v.push "<LineAttributeValue><row>#{i}</row><value>#{+(i in (stop or []))}</value></LineAttributeValue>"
