@@ -4,8 +4,6 @@ Bugs / Issues External to RIDE
   Yes/No dialogue, needs to be supported in the RIDE protocol; email from Morten 2015-02-14
   
 P1 (Definitely high priority):
-  "Connect" and "New Session" do not work under OS X
-  Do not start in the connect screen on "New Session" and on "-s" argument
   
 P2 (Middle priority):
   Do not scroll session on AtInputPrompt.
@@ -158,3 +156,5 @@ Done:
   Rationalize menus for OS X and others
   If you maximize RIDE on a Mac, close it, and open it again, it can't be unmaximised; 2015-02-19 JS, JR
     NN: fixed as a side effect of fixing the issue with multiple monitors
+  "Connect" and "New Session" do not work under OS X
+  Do not start in the connect screen on "New Session" and on "-s" argument
