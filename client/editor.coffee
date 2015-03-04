@@ -179,6 +179,7 @@ module.exports = (e, opts = {}) -> # opts contains callbacks to ide.coffee
     .on 'click', '.tb-hid, .tb-case', -> $(@).toggleClass 'pressed'; highlightSearch(); false
     .on 'keydown', '.tb-search', 'return',       -> cm.execCommand 'NX'; false
     .on 'keydown', '.tb-search', 'shift+return', -> cm.execCommand 'PV'; false
+    .on 'keydown', '.tb-search', 'ctrl+return', -> selectAllSearchResults(); false
     .on 'keydown', '.tb-search', 'esc', -> clearSearch(); cm.focus(); false
     .on 'click', '.tb-refac-m', ->
       if !/^\s*$/.test s = cm.getLine l = cm.getCursor().line
@@ -196,7 +197,6 @@ module.exports = (e, opts = {}) -> # opts contains callbacks to ide.coffee
   lastQuery = lastIC = overlay = annotation = null
   clearSearch = -> cm.removeOverlay overlay; overlay = null; annotation?.clear(); annotation = null; return
   highlightSearch = ->
-    window.cm = cm
     ic = !$('.tb-case:visible', $tb).hasClass 'pressed' # ic: ignore case (like in vim)
     q = $('.tb-search:visible', $tb).val(); if ic then q = q.toLowerCase() # q: the query string
     if lastQuery != q || lastIC != ic
@@ -212,7 +212,7 @@ module.exports = (e, opts = {}) -> # opts contains callbacks to ide.coffee
     [q, ic]
   search = (backwards) ->
     [q, ic] = highlightSearch()
-    if q then do ->
+    if q
       s = cm.getValue(); if ic then s = s.toLowerCase()
       if backwards
         i = cm.indexFromPos cm.getCursor 'anchor'
@@ -223,6 +223,16 @@ module.exports = (e, opts = {}) -> # opts contains callbacks to ide.coffee
       if j >= 0
         cm.setSelection cm.posFromIndex(j), cm.posFromIndex j + q.length; scrollCursorIntoProminentView()
     false
+  selectAllSearchResults = ->
+    ic = !$('.tb-case:visible', $tb).hasClass 'pressed' # ic: ignore case (like in vim)
+    q = $('.tb-search:visible', $tb).val(); if ic then q = q.toLowerCase() # q: the query string
+    if q
+      s = cm.getValue(); if ic then s = s.toLowerCase()
+      selections = []; i = 0
+      while (i = s.indexOf q, i) >= 0 then selections.push anchor: cm.posFromIndex(i), head: cm.posFromIndex i + q.length; i++
+      if selections.length then cm.setSelections selections
+    cm.focus()
+    return
 
   # remember original text and breakpoints (comma-separated line numbers) to avoid pointless saving on EP
   originalText = originalBreakpoints = ''
