@@ -113,6 +113,7 @@ module.exports = (opts = {}) ->
           $.alert message, 'Interpreter disconnected'
       return
     .on 'SysError', ({text}) -> $.alert text, 'SysError'; die(); return
+    .on 'InternalError', ({error, dmx}) -> $.alert "error: #{error}, dmx: #{dmx}", 'Internal Error'; die(); return
     .on 'UpdateDisplayName', (a) -> {displayName} = a; return
     .on 'EchoInput', ({input}) -> session.add input
     .on 'AppendSessionOutput', ({result}) -> session.add result
