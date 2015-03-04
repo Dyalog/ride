@@ -21,7 +21,7 @@ cat >$TMP_JSON <<.
     ( echo -e 'Pre-release of RIDE 2.0\n\nChangelog:'; git log --format='%s' $(git tag | tail -n 1).. ) \
       | grep -v -i todo | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
   ),
-  "draft": false,
+  "draft": true,
   "prerelease": true
 }
 .
@@ -35,17 +35,36 @@ RELEASE_ID=`grep '"id"' $TMP_RESPONSE | head -1 | sed 's/.*: //;s/,//'`
 echo "created release with id: $RELEASE_ID"
 
 for DIR in `ls build/ride`; do
-  ZIP=ride2-${VERSION}-${DIR}.zip
+  OS=`echo ${DIR} | sed 's/64//;s/32//'`
+  BITS=`echo ${DIR} | sed 's/linux//;s/osx//;s/win//'`
+
+  case ${OS} in
+    osx)
+      OSNAME="mac${BITS}"
+      ;;
+    win)
+      OSNAME="windows${BITS}"
+      ;;
+    *)
+      OSNAME="${OS}${BITS}"
+      ;;
+  esac
+
+  ZIP=ride2-${VERSION}-${OSNAME}.zip
   TMP_ZIP=/tmp/$ZIP
   cd build/ride/$DIR
   echo "creating $TMP_ZIP"
   zip -q -r "$TMP_ZIP" .
-  echo 'uploading'
+  echo 'uploading to Github'
   curl -o /dev/null -H "Authorization: token $TOKEN" \
     -H 'Accept: application/vnd.github.manifold-preview' \
     -H 'Content-Type: application/zip' \
     --data-binary @"$TMP_ZIP" \
     https://uploads.github.com/repos/$REPO/releases/$RELEASE_ID/assets?name=$ZIP
+  if [ "jason-ubuntu" = "`uname -n`" ]; then
+    echo 'uploading to MyDyalog'
+    scp ${TMP_ZIP} root@gosport-web.dyalog.com:/var/www/my.dyalog.com/files/ride/prebeta/
+  fi
   rm "$TMP_ZIP"
   cd -
 done
