@@ -99,7 +99,7 @@ if process? then do ->
   D.opts = nomnom.options(
     connect: abbr: 'c', flag: true, metavar: 'HOST[:PORT]'
     listen:  abbr: 'l', flag: true
-    spawn:   abbr: 's', flag: true, default: true
+    spawn:   abbr: 's', flag: true, default: !/^win/i.test process.platform
   ).parse gui.App.argv
 
   # Mac menu
