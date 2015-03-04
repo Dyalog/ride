@@ -54,7 +54,7 @@ CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
       else if c == '⋄' then 'apl-diamond'
       else if /[\/⌿\\⍀¨⌸⍨⌶]/.test c then 'apl-monadic-operator'
       else if /[\.∘⍤⍣⍠]/.test c then 'apl-dyadic-operator'
-      else if /[\+\-×÷⌈⌊\|⍳\?\*⍟○!⌹<≤=>≥≠≡≢∊⍷∪∩~∨∧⍱⍲⍴,⍪⌽⊖⍉↑↓⊂⊃⌷⍋⍒⊤⊥⍕⍎⊣⊢]/.test c then 'apl-function'
+      else if /[\+\-×÷⌈⌊\|⍳\?\*⍟○!⌹<≤=>≥≠≡≢∊⍷∪∩~∨∧⍱⍲⍴,⍪⌽⊖⍉↑↓⊂⊃⌷⍋⍒⊤⊥⍕⍎⊣⊢→]/.test c then 'apl-function'
       else if state.dfnDepth && /[⍺⍵∇:]/.test c then "apl-dfn apl-dfn#{state.dfnDepth}"
       else if c == '∇' then state.isHeader = 1; 'apl-tradfn'
       else if c == ':' then (if stream.match(/\w*/)?[0]?.toLowerCase() in keywords then 'apl-keyword' else 'apl-error')
