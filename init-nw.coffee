@@ -89,8 +89,11 @@ if process? then do ->
     setTimeout (-> Proxy() socket1), 1
     socket
 
-  D.rideConnect    = -> spawn process.execPath, ['--no-spawn']; return
-  D.rideNewSession = -> spawn process.execPath, ['-s']; return
+  # These two are overridden for the Mac
+  execPath = if process.platform != 'darwin' then process.execPath else process.execPath.replace /(\/Contents\/).*$/, '$1MacOS/node-webkit'
+  D.rideConnect    = -> spawn execPath, ['--no-spawn']; return
+  D.rideNewSession = -> spawn execPath, ['-s']; return
+
   D.quit = -> gui.Window.get().close(); return
   D.clipboardCopy = (s) -> gui.Clipboard.get().set s; return
   D.opts = nomnom.options(
