@@ -89,14 +89,14 @@ if process? then do ->
     setTimeout (-> Proxy() socket1), 1
     socket
 
-  D.rideConnect = -> spawn process.execPath; return
+  D.rideConnect    = -> spawn process.execPath, ['--no-spawn']; return
   D.rideNewSession = -> spawn process.execPath, ['-s']; return
   D.quit = -> gui.Window.get().close(); return
   D.clipboardCopy = (s) -> gui.Clipboard.get().set s; return
   D.opts = nomnom.options(
     connect: abbr: 'c', flag: true, metavar: 'HOST[:PORT]'
     listen:  abbr: 'l', flag: true
-    spawn:   abbr: 's', flag: true
+    spawn:   abbr: 's', flag: true, default: true
   ).parse gui.App.argv
 
   # Mac menu
