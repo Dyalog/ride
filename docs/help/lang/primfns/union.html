@@ -1,9 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
-<body><h2><tt>R←X∪Y</tt>Union</h2><p><tt>Y</tt> must be a vector.  <tt>X</tt> must be a vector.  If either argument is a scalar, it is treated as a one-element vector.  <tt>R</tt> is a vector of the elements of <tt>X</tt> catenated with the elements of <tt>Y</tt> which are not found in <tt>X</tt>.</p><p>Items in <tt>X</tt> and <tt>Y</tt> are considered the same if <tt>X≡Y</tt> returns 1 for those items.</p><p><tt>⎕CT</tt> is an implicit argument of Union.</p><h4>Examples</h4><pre>      'WASH' ∪ 'SHOUT'
-WASHOUT
- 
-      'ONE' 'TWO' ∪ 'TWO' 'THREE'
- ONE  TWO  THREE</pre><p>For performance information, see  <a href="../defined-functions-and-operators/search-functions-and-hash.html#SearchFunctionsAndHashTables" class="MCXref_0">Search Functions and Hash Tables</a>.</p><script src="../../../help.js"></script></body>
-</html>

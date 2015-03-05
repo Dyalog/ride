@@ -1,9 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
-<body><h2><tt>R←181⌶Y</tt>Unsqueezed Type</h2><p><tt>Y</tt> is any array.</p><p>The result <tt>R</tt> is an integer scalar containing an integer value which indicates the type of the array. For further information see <a href="../sysfns/data-representation-monadic.html#DataRepresentation(Monadic)" class="MCXref_0">Data Representation (Monadic)</a>.</p><p><tt>181⌶</tt> is functionally identical to monadic <tt>⎕DR</tt>, except that no attempt is made to squeeze the data into smaller data types. <tt>⎕DR</tt> always attempts to squeeze the data; <tt>181⌶</tt> does not, but if a workspace compaction occurs during execution of <tt>181⌶</tt>, the data may still be squeezed before the type is identified.</p><h4>Example</h4><pre>
-      ⎕dr 1↑1 1000
-11
-      (181⌶) 1↑1 1000
-163</pre><script src="../../../help.js"></script></body>
-</html>

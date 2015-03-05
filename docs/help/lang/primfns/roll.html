@@ -1,9 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
-<body><h2><tt>R←?Y</tt>Roll</h2><p><tt>Y</tt> may be any non-negative integer array.  <tt>R</tt> has the same shape as <tt>Y</tt> at each depth.</p><p>For each positive element of <tt>Y</tt> the corresponding element of <tt>R</tt> is an integer, pseudo-randomly selected from the integers <tt>⍳Y</tt> with each integer in this population having an equal chance of being selected.</p><p>For each zero element of <tt>Y</tt>, the corresponding element of <tt>R</tt> is a pseudo-random floating-point value in the range 0 - 1, but excluding 0 and 1, i.e. <tt>(0&lt;R[I]&lt;1)</tt>.</p><p><tt>⎕IO</tt> and <tt>⎕RL</tt> are implicit arguments of Roll.  A side effect of Roll is to change the value of <tt>⎕RL</tt>. </p><p>Note that different random number generators are available; see <tt>16807⌶</tt> for more information.</p><h4>Examples</h4><pre>      ?9 9 9
-2 7 5
-      ?3⍴0
-0.3205466592 0.3772891947 0.5456603511
-</pre><script src="../../../help.js"></script></body>
-</html>

@@ -1,9 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../../help.css"></head>
-<body><h3>Keyed Properties</h3><p>A Keyed Property is similar to a Numbered Property except that it may <b>only</b> be accessed by indexing (so-called square-bracket indexing) and indices are not restricted to integers but may be arbitrary arrays.</p><p>To implement a Keyed Property, only a <tt>get</tt> and/or a <tt>set</tt> function are required. APL does not attempt to validate or resolve the specified indices in any way, so does not require the presence of a <tt>shape</tt> function for the Property.</p><p>However, APL <b>does</b> check that the rank and lengths of the indices correspond to the rank and lengths of the array to the right of the assignment (for an indexed assignment) and the array returned by the get function (for an indexed reference). If the rank or shape of these arrays fails to conform to the rank or shape of the indices, APL will issue a <tt>RANK ERROR</tt> or <tt>LENGTH ERROR</tt>.</p><p>Note too that indices <b>may be elided</b>. If <tt>KProp</tt> is a Keyed Property of Instance <tt>I1</tt>, the following expressions are all valid.</p><pre>      I1.KProp
-      I1.KProp[]←10
-      I1.KProp[;]←10
-      I1.KProp['One' 'Two';]←10
-      I1.KProp[;'One' 'Two']←10</pre><p>When APL calls a monadic <tt>get</tt> or a <tt>set</tt> function, it supplies an argument of type PropertyArguments, which identifies which dimensions and indices were specified. See <a href="../../property-section/propertyarguments-class.html#PropertyArguments" class="MCXref_0">PropertyArguments Class</a>.</p><script src="../../../../../help.js"></script></body>
-</html>

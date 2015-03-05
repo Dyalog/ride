@@ -1,7 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
-<body><h2><tt>)ED nms</tt>Edit Object </h2><p><tt>)ED</tt> invokes the Dyalog APL editor and opens an Edit window for each of the objects specified in <tt>nms</tt>.</p><p>If a name specifies a new symbol it is taken to be a function/operator.  However, if a name is localised in a suspended function/operator but is otherwise undefined, it is assumed to be a vector of character vectors.</p><p>The type of a new object may be specified explicitly by preceding its name with an appropriate symbol as follows:</p><table><tr><td><tt>∇</tt></td><td>function/operator</td></tr><tr><td><tt>→</tt></td><td>simple character vector</td></tr><tr><td><tt>∊</tt></td><td>vector of character vectors</td></tr><tr><td><tt>-</tt></td><td>character matrix</td></tr><tr><td><tt>⍟</tt></td><td>Namespace script</td></tr><tr><td><tt>○</tt></td><td>Class script</td></tr><tr><td><tt>∘</tt></td><td>Interface</td></tr></table><p>The first object named becomes the top window on the stack.  See <span class="Italic">User Guide</span> for details. <tt>)ED</tt> ignores names which specify GUI objects.</p><h4>Examples</h4><pre>      )ED MYFUNCTION
- 
-      )ED ∇FOO -MAT ∊VECVEC</pre><script src="../../../help.js"></script></body>
-</html>

@@ -1,7 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
-<body><h2><tt>⎕DCT</tt>Decimal Comparison Tolerance </h2><p>The value of <tt>⎕DCT</tt> determines the precision with which two numbers are judged to be equal when the value of <tt><a href="fr.html#FloatingPointRepresentation">⎕FR</a></tt> is 1287. If <tt>⎕FR</tt> is 645, the system uses <tt><a href="ct.html#ComparisonTolerance">⎕CT</a></tt>.</p><p><tt>⎕DCT</tt> may be assigned any value in the range from <tt>0</tt> to <tt>2*32]</tt> (about <tt>2.3283064365386962890625E¯10</tt>). A value of <tt>0</tt> ensures exact comparison. The value in a clear workspace is <tt>1E¯28</tt>.</p><p>For further information, see <a href="ct.html#ComparisonTolerance" class="MCXref_0">Comparison Tolerance </a>.</p><h4>Examples</h4><pre>      ⎕DCT←1E¯10
-      1.00000000001 1.0000001 = 1
-1 0</pre><script src="../../../help.js"></script></body>
-</html>

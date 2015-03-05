@@ -1,5 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
-<body><h3>Namespace Reference Evaluation</h3><p>When the interpreter encounters a namespace reference, it:</p><ol><li value="1">Switches to the namespace.</li><li value="2">Evaluates the name.</li><li value="3">Switches back to the original namespace.</li></ol><p>If for example, in the following, the current namespace is <tt>#.W</tt>, the interpreter evaluates the line:</p><pre>      A ← X.Y.DUP MAT</pre><p>in the following way:</p><ol><li value="1">Evaluate array <tt>MAT</tt> in current namespace <tt>W</tt> to produce argument for function.</li><li value="2"> Switch to namespace <tt>X.Y</tt> within <tt>W</tt>.</li><li value="3"> Evaluate function <tt>DUP</tt> in namespace <tt>W.X.Y</tt> with argument.</li><li value="4"> Switch back to namespace <tt>W</tt>.</li><li value="5"> Assign variable <tt>A</tt> in namespace <tt>W</tt>.</li></ol><script src="../../../../help.js"></script></body>
-</html>

@@ -1,7 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
-<body><h2><tt>{R}←⎕FUNTIE Y</tt>File Untie </h2><p><tt>Y</tt> must be a simple integer scalar or vector (including Zilde).  Files whose tie numbers occur in <tt>Y</tt> are untied.  Other elements of <tt>Y</tt> have no effect.</p><p>If <tt>Y</tt> is empty, no files are untied, but all the interpreter's internal file buffers are flushed and the operating system is asked to flush all file updates  to disk.  This special facility allows the programmer to add extra security (at the expense of performance) for application data files.</p><p>The shy result of <tt>⎕FUNTIE</tt> is a vector of tie numbers of the files <b>actually untied</b>.</p><h4>Example</h4><pre>      ⎕FUNTIE ⎕FNUMS ⍝ Unties all tied files
- 
-      ⎕FUNTIE ⍬      ⍝ Flushes all buffers to disk</pre><script src="../../../help.js"></script></body>
-</html>

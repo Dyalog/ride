@@ -1,5 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
-<body><h2><tt>{R}←X ⎕NERASE Y</tt>Native File Erase</h2><p>This function erases (deletes) a native file.  <tt>Y</tt> is a negative integer tie number associated with a tied native file.  <tt>X</tt> is a simple character vector or scalar containing the name of the same file and must be <b>identical</b> to the name used when it was opened by <tt>⎕NCREATE</tt> or <tt>⎕NTIE</tt>.</p><p>The shy result of <tt>⎕NERASE</tt> is the tie number that the erased file had. </p><h4>Example</h4><pre>      file ⎕nerase file ⎕ntie 0</pre><script src="../../../help.js"></script></body>
-</html>

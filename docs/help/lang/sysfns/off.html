@@ -1,5 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../help.css"></head>
-<body><h2><tt>⎕OFF</tt>Sign Off APL </h2><p>This niladic system function terminates the APL session, returning to the shell command level.  The active workspace does not replace the last continuation workspace.</p><p>Although <tt>⎕OFF</tt> is niladic, you may specify an optional integer <tt>I</tt> to the right of the system function which will be reported to the Operating System as the exit code. If <tt>I</tt> is an <span class="Name">expression</span> generating an integer, you should put the expression in parentheses. <tt>I</tt> must be in the range 0..255, but note that on UNIX processes use values greater than 127 to indicate the signal number which was used to terminate a process, and that currently APL itself generates values 0..8; this list may be extended in future.</p><script src="../../../help.js"></script></body>
-</html>

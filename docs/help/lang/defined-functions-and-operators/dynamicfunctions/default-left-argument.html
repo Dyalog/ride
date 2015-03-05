@@ -1,8 +1,0 @@
-<!doctype html>
-<html>
-<head><meta charset="utf-8"><title></title><link rel="stylesheet" href="../../../../help.css"></head>
-<body><h3><a name="DefaultLeftArgument"></a>Default Left Argument</h3><p>The special  syntax: <tt>⍺←expr</tt> is used to give a default value to the left argument if a Dynamic Function is called monadically. For example:</p><pre>      root←{      ⍝ ⍺th root
-          ⍺←2     ⍝ default to sqrt
-          ⍵*÷⍺
-      }</pre><p>The expression to the right of  <tt>⍺←</tt> is evaluated <span class="Italic">only</span> if its Dynamic Function is called with no left argument.</p><script src="../../../../help.js"></script></body>
-</html>
