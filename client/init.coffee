@@ -1,6 +1,7 @@
 connect = require './connect'
 Editor = require './editor'
 about = require './about'
+require '../jquery.layout'
 
 D.urlParams = {}
 for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'

@@ -4,6 +4,7 @@ Editor = require './editor'
 Session = require './session'
 keymap = require './keymap'
 require '../lbar/lbar'
+require '../jquery.layout'
 
 module.exports = (opts = {}) ->
   $('body').html """

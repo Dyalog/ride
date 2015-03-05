@@ -36,7 +36,6 @@ js_files='
   node_modules/jquery-ui/dialog.js
   node_modules/jquery-ui/tabs.js
   jquery.hotkeys.js
-  jquery.layout.js
   init-nw.coffee
 '
 us='' # names of compiled files
