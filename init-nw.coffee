@@ -26,7 +26,7 @@ restoreWindow = (w, r) -> # w: NWJS window, r: rectangle
 
 if process? then do ->
   gui = require 'nw.gui'; crypto = require 'crypto'; fs = require 'fs'; nomnom = require 'nomnom'
-  path = require 'path'; {spawn} = require 'child_process'; {Proxy} = require './proxy'
+  path = require 'path'; {spawn} = require 'child_process'; proxy = require './proxy'
 
   if process.env.PWD then process.chdir process.env.PWD # see https://github.com/nwjs/nw.js/issues/648
   D.nwjs = true; D.process = process; gui.Screen.Init(); nww = gui.Window.get()
@@ -88,7 +88,7 @@ if process? then do ->
       onevent: ({data}) -> (for f in @[data[0]] or [] then f data[1..]...); return
       on: (e, f) -> (@[e] ?= []).push f; @
     socket = new LocalSocket; socket1 = new LocalSocket; socket.other = socket1; socket1.other = socket
-    setTimeout (-> Proxy() socket1), 1
+    setTimeout (-> proxy.Proxy() socket1), 1
     socket
 
   # These two are overridden for the Mac
@@ -106,7 +106,6 @@ if process? then do ->
 
   # Debugging utilities
   $(document).on 'keydown', '*', 'ctrl+f12', ->
-    {log} = require './proxy'
     lw = open ''
     lw.document.write '''
       <html>
@@ -124,9 +123,35 @@ if process? then do ->
       b.appendChild lw.document.createTextNode s
       if atEnd then b.scrollTop = b.scrollHeight - b.clientHeight
       return
-    wr log.get().join ''
-    log.listeners.push wr
+    wr proxy.log.get().join ''; proxy.log.listeners.push wr
     false
+
+  # Error handling
+  if !process.env.DYALOG_IDE_USE_ORIGINAL_ERROR_PAGE
+    htmlChars = '&': '&amp;', '<': '&lt;', '>': '&gt;'
+    htmlEsc = (s) -> s.replace /./g, (x) -> htmlChars[x] || x
+    # $(window).on 'error', (e) ->
+    process.on 'uncaughtException', (e) ->
+      window.lastError = e
+      info = """
+        IDE: #{JSON.stringify D.versionInfo}
+        Interpreter: #{JSON.stringify(D.remoteIdentification || null)}
+
+        #{e.stack}
+
+        Proxy log:
+        #{proxy.log.get().join ''}
+      """
+      document.write """
+        <html>
+          <head><title>Error</title></head>
+          <body>
+            <h3>Oops... it broke!</h3>
+            <textarea autofocus id="ta" style="width:100%;height:90%" nowrap>#{htmlEsc info}</textarea>
+          </body>
+        <html>
+      """
+      false
 
   # Mac menu
   if process.platform == 'darwin'
