@@ -30,7 +30,7 @@ module.exports = ->
       ]
     $pk = $d.find '.prefs-pk'
 
-  $d.dialog 'open'
+  $d.dialog('option', 'position', at: 'center').dialog 'open'
 
   # load current values
   $pk.val keymap.getPrefixKey()
