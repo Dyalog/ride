@@ -105,6 +105,7 @@ module.exports = (e, opts = {}) ->
       cm.replaceRange '      ', {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
     cm.setCursor l, cm.getLine(l).length; return
 
+  cm: cm
   noPrompt: -> promptType = 0; opts.setPromptType promptType; cm.setOption 'readOnly', true; cm.setOption 'cursorHeight', 0; return
   updateSize: -> cm.setSize $e.width(), $e.height()
   hasFocus: -> cm.hasFocus()

@@ -257,6 +257,7 @@ module.exports = (e, opts = {}) -> # opts contains callbacks to ide.coffee
     h = $e.height(); {left, top} = cm.cursorCoords true, 'local'
     cm.scrollIntoView left: left, right: left, top: top - h / 3, bottom: top + 2 * h / 3; return
 
+  cm: cm
   updateSize: -> cm.setSize $e.width(), $e.parent().height() - $e.position().top - 28; return
   open: (ee) ->
     cm.setValue originalText = ee.text; cm.focus()

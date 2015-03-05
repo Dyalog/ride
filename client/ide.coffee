@@ -37,7 +37,7 @@ module.exports = (opts = {}) ->
   #   widget: a session or an editor
   #   id: the key in "wins"
   D.wins = wins =
-    0: id: 0, widget: session = Session $('.ui-layout-center'),
+    0: id: 0, widget: D.session = session = Session $('.ui-layout-center'),
       edit: (s, i) -> emit 'Edit', win: 0, pos: i, text: s
       autocomplete: (s, i) -> emit 'Autocomplete', line: s, pos: i, token: 0
       exec: (lines, trace) ->
