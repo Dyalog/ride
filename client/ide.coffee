@@ -3,6 +3,7 @@ prefs = require './prefs'
 Editor = require './editor'
 Session = require './session'
 keymap = require './keymap'
+require '../lbar/lbar'
 
 module.exports = (opts = {}) ->
   $('body').html """

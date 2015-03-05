@@ -37,7 +37,6 @@ js_files='
   node_modules/jquery-ui/tabs.js
   jquery.hotkeys.js
   jquery.layout.js
-  lbar/lbar.js
   init-nw.coffee
 '
 us='' # names of compiled files

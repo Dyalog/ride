@@ -22,7 +22,7 @@ for line, i in fs.readFileSync('lbar.xml', 'utf8').split '\n'
   else if line then throw Error "error at line #{i + 1}: #{JSON.stringify line}"
 
 fs.writeFileSync 'lbar.js', """
-  var D=D||{};
+  D=D||{};
   D.lbarHTML = #{
     JSON.stringify join ' ',
       for g in squiggleGroups when g.length then join '',
