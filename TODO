@@ -2,10 +2,6 @@ Bugs / Issues External to RIDE
   Windows not working at all for spawned interpreters
   History (session log) is not recorded in spawned interpreters; Geoff #11841
   Yes/No dialogue, needs to be supported in the RIDE protocol; email from Morten 2015-02-14
-
-Not yet prioritized:
-  DB email 2015-03-03
-    Save breakpoints the moment you click, not on EP
   
 P1 (Definitely high priority):
   
@@ -162,3 +158,5 @@ Done:
     NN: fixed as a side effect of fixing the issue with multiple monitors
   "Connect" and "New Session" do not work under OS X
   Do not start in the connect screen on "New Session" and on "-s" argument
+  DB email 2015-03-03
+    Save breakpoints the moment you click, not on EP

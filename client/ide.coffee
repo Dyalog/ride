@@ -154,6 +154,7 @@ module.exports = (opts = {}) ->
         autocomplete: (s, i) -> emit 'Autocomplete', line: s, pos: i, token: w
         pop: -> popWindow w
         openInExternalEditor: D.openInExternalEditor
+        setLineAttributes: (n, bs) -> emit 'SetLineAttributes', win: w, nLines: n, lineAttributes: stop: bs
       wins[w].widget.open ee
       $('.ui-layout-' + dir).tabs('refresh').tabs(active: -1)
         .data('ui-tabs').panels.off 'keydown' # prevent jQueryUI tabs from hijacking our keystrokes, <C-Up> in particular

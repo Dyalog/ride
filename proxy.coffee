@@ -65,6 +65,10 @@ parseEditableEntity = (xml) -> # used for OpenWindow and UpdateWindow
 
 WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' # constants used for ReplyAtInputPrompt
 
+fmtLineAttributes = (nLines, stops) ->
+  v = for i in [0...nLines] by 1 then "<LineAttributeValue><row>#{i}</row><value>#{+(i in (stops or []))}</value></LineAttributeValue>"
+  "<attributes><LineAttribute><attribute>Stop</attribute><values>#{v.join '\n'}</values></LineAttribute></attributes>"
+
 @Proxy = ->
   client = null # TCP connection to interpreter
   socket = null # socket.io connection to the browser that's currently driving
@@ -158,12 +162,9 @@ WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' #
       .on 'StrongInterrupt', -> cmd 'StrongInterrupt'
       .on 'Autocomplete', ({line, pos, token}) -> cmd 'GetAutoComplete', "<line>#{b64 line}</line><pos>#{pos}</pos><token>#{token}</token>"
       .on 'SaveChanges', ({win, text, attributes: {stop, monitor, trace}}) ->
-        v = []; for i in [0...text.split('\n').length] by 1 then v.push "<LineAttributeValue><row>#{i}</row><value>#{+(i in (stop or []))}</value></LineAttributeValue>"
-        cmd 'SaveChanges', """
-          <win>#{win}</win>
-          <Text>#{b64 text}</Text>
-          <attributes><LineAttribute><attribute>Stop</attribute><values>#{v.join '\n'}</values></LineAttribute></attributes>
-        """
+        cmd 'SaveChanges', "<win>#{win}</win><Text>#{b64 text}</Text>#{fmtLineAttributes text.split('\n').length, stop}"; return
+      .on 'SetLineAttributes', ({win, nLines, lineAttributes: {stop, monitor, trace}}) ->
+        cmd 'SetLineAttributes', "<win>#{win}</win>#{fmtLineAttributes nLines, stop}"; return
 
       # "disconnect" is a built-in socket.io event
       .on 'disconnect', (x) -> log "#{addr @} disconnected"; (if socket == @ then socket = null); return
