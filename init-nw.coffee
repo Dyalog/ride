@@ -27,6 +27,8 @@ restoreWindow = (w, r) -> # w: NWJS window, r: rectangle
 if process? then do ->
   gui = require 'nw.gui'; crypto = require 'crypto'; fs = require 'fs'; nomnom = require 'nomnom'
   path = require 'path'; {spawn} = require 'child_process'; {Proxy} = require './proxy'
+
+  if process.env.PWD then process.chdir process.env.PWD # see https://github.com/nwjs/nw.js/issues/648
   D.nwjs = true; D.process = process; gui.Screen.Init(); nww = gui.Window.get()
   if opener
     opener.D.floatingWindows.push nww
