@@ -4,29 +4,32 @@ os = require 'os'
 path = require 'path'
 {spawn} = require 'child_process'
 
-bbRecord = ->
-if window? # are we running under NW.js?
-  do -> # black box: store latest n log messages in RAM
-    n = 1000; i = 0; a = Array n
-    window.D.bb = (m) -> # m: limit
-      if typeof m != 'number' || !(0 < m <= n) || m != ~~m then m = n
-      (if m <= i then a[i - m...i] else a[n - m + i..].concat a[...i]).join ''
-    bbRecord = (s) -> a[i++] = s; i %= n; return
-    return
-
-log = do ->
+log = @log = do ->
   t0 = +new Date # log timestamps will be number of milliseconds since t0
   N = 50; T = 1000 # log no more than N log messages per T milliseconds
   n = t = 0 # at any moment, there have been n messages since time t
-  # If $DYALOG_IDE_LOG is present, log to stdout and to a file, otherwise only to stdout.
-  if p = process.env.DYALOG_IDE_LOG
-    if h = process.env.HOME || process.env.USERPROFILE then p = path.resolve h, p
-    fd = fs.openSync p, 'a'
   (s) -> # the actual log() function
     if (t1 = +new Date) - t > T then t = t1; n = 1 # if last message was too long ago, start counting afresh
     m = if ++n < N then "#{t1 - t0}: #{s}\n" else if n == N then '... logging temporarily suppressed\n'
-    if m then process.stdout?.write? m; bbRecord m; if fd then mb = Buffer m; fs.writeSync fd, mb, 0, mb.length
+    if m then process.stdout?.write? m; for l in log.listeners then l m
     return
+
+log.listeners = []
+
+do -> # If $DYALOG_IDE_LOG is present, log to stdout and to a file, otherwise only to stdout.
+  if f = process.env.DYALOG_IDE_LOG
+    if h = process.env.HOME || process.env.USERPROFILE then f = path.resolve h, f
+    fd = fs.openSync f, 'a'
+    log.listeners.push (s) -> b = Buffer m; fs.writeSync fd, b, 0, b.length; return
+  return
+
+do -> # store latest log messages in RAM
+  if window? # are we running under NW.js as opposed to just NodeJS?
+    i = 0; a = Array 1000
+    log.get = -> a[i..].concat a[...i]
+    log.listeners.push (s) -> a[i++] = s; i %= a.length; return
+  return
+
 log new Date().toISOString()
 
 b64 = (s) -> Buffer(s).toString 'base64'

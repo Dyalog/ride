@@ -102,6 +102,30 @@ if process? then do ->
     spawn:   abbr: 's', flag: true, default: !/^win/i.test process.platform
   ).parse gui.App.argv
 
+  # Debugging utilities
+  $(document).on 'keydown', '*', 'ctrl+f12', ->
+    {log} = require './proxy'
+    lw = open ''
+    lw.document.write '''
+      <html>
+        <head>
+          <title>Proxy Log</title>
+          <style>body{font-family:monospace;white-space:pre}</style>
+          <script></script>
+        </head>
+        <body></body>
+      </html>
+    '''
+    b = lw.document.body
+    wr = (s) ->
+      atEnd = b.scrollTop == b.scrollHeight - b.clientHeight
+      b.appendChild lw.document.createTextNode s
+      if atEnd then b.scrollTop = b.scrollHeight - b.clientHeight
+      return
+    wr log.get().join ''
+    log.listeners.push wr
+    false
+
   # Mac menu
   if process.platform == 'darwin'
     groups = {} # group name -> array of MenuItem-s
