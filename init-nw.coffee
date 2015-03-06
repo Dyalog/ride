@@ -38,7 +38,7 @@ if process? then do ->
     nww.on 'blur',  -> D.floatingWindows.forEach((x) -> x.setAlwaysOnTop false); return
     # restore window state:
     if localStorage.winInfo then try restoreWindow nww, JSON.parse localStorage.winInfo
-  nww.show()
+  nww.show(); nww.focus() # focus() is needed for the Mac
   nww.on 'close', ->
     process.nextTick -> nww.close true; return
     if opener
@@ -159,7 +159,7 @@ if process? then do ->
       false
 
   # Mac menu
-  if process.platform == 'darwin'
+  if process.platform == 'darwin' && !opener
     groups = {} # group name -> array of MenuItem-s
     nwwMenu = new gui.Menu type: 'menubar'
     nwwMenu.createMacBuiltin 'Dyalog'
