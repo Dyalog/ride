@@ -23,14 +23,8 @@ module.exports = (opts = {}) ->
 
   isDead = 0
   pending = [] # pending lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
-  promptType = 0 # 0=Invalid 1=Descalc 2=QuadInput 3=LineEditor 4=QuoteQuadInput 5=Prompt
 
-  emit = (x, y) ->
-    if !+localStorage.silentWhenBusy || promptType
-      D.socket.emit x, y
-    else
-      console.info 'Silencing message to interpreter:', x, y
-    return
+  emit = (x, y) -> D.socket.emit x, y; return
 
   WI = -> emit 'WeakInterrupt'; return
   SI = -> emit 'StrongInterrupt'; return
@@ -47,7 +41,6 @@ module.exports = (opts = {}) ->
           if !trace then pending = lines[1..]
           emit 'Execute', {trace, text: lines[0] + '\n'}
         return
-      setPromptType: (x) -> promptType = x
       weakInterrupt: WI
 
   # Tab management
