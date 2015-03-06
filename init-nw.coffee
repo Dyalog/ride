@@ -126,6 +126,8 @@ if process? then do ->
     wr proxy.log.get().join ''; proxy.log.listeners.push wr
     false
 
+  $(document).on 'keydown', '*', 'ctrl+shift+f12', -> foo.bar # cause a crash
+
   # Error handling
   if !process.env.DYALOG_IDE_USE_ORIGINAL_ERROR_PAGE
     htmlChars = '&': '&amp;', '<': '&lt;', '>': '&gt;'
@@ -147,7 +149,10 @@ if process? then do ->
           <head><title>Error</title></head>
           <body>
             <h3>Oops... it broke!</h3>
-            <textarea autofocus id="ta" style="width:100%;height:90%" nowrap>#{htmlEsc info}</textarea>
+            <h3 style="font-family:apl,monospace">
+              <a href="mailto:support@dyalog.com?subject=#{escape 'RIDE crash'}&body=#{escape '\n\n' + info}">support@dyalog.com</a>
+            </h3>
+            <textarea autofocus style="width:100%;height:90%" nowrap>#{htmlEsc info}</textarea>
           </body>
         <html>
       """

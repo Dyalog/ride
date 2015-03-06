@@ -20,7 +20,7 @@ module.exports = ->
       <div class="logo">
         <div class="contact-info">
           <span title="Dyalog's UK phone number">+44 (0)1256 830030</span><br>
-          <a href="mailto:support@dyalog.com?subject=IDE&body=#{escape '\n--\n' + info}"
+          <a href="mailto:support@dyalog.com?subject=RIDE&body=#{escape '\n--\n' + info}"
              title="Populate an email draft with the information below">support@dyalog.com</a><br>
           <a href="http://www.dyalog.com/" target="_blank"
              title="Open Dyalog's website in a new window">www.dyalog.com</a>
