@@ -1,3 +1,4 @@
+CodeMirror = require 'codemirror'
 keymap = require './keymap'
 module.exports = (cm, requestAutocompletion) -> # set up autocompletion, common code between session and editor
   tid = null # timeout id

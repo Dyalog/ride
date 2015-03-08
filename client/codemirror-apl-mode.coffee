@@ -1,3 +1,5 @@
+CodeMirror = require 'codemirror'
+
 rLetter = 'A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ'; rName0 = ///[#{rLetter}]///; rName1 = ///[#{rLetter}\d]*///
 rNotName = ///[^#{rLetter}\d]+///
 keywords = '''

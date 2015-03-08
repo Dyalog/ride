@@ -1,3 +1,4 @@
+CodeMirror = require 'codemirror'
 autocompletion = require './autocompletion'
 module.exports = (e, opts = {}) ->
 
