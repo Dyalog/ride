@@ -55,5 +55,5 @@ echo 'browserifying'
     };
 .
   cat build/tmp/libs.js
-  browserify -d -t coffeeify --extension=.coffee client/*.coffee | exorcist build/static/client.map
+  browserify -d -t coffeeify --extension=.coffee client/init.coffee | exorcist build/static/client.map
 )>build/static/D.js

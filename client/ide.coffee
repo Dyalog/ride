@@ -1,3 +1,4 @@
+require './menu'
 about = require './about'
 prefs = require './prefs'
 Editor = require './editor'

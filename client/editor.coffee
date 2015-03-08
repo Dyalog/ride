@@ -1,4 +1,5 @@
 CodeMirror = require 'codemirror'
+require './codemirror-apl-mode'
 autocompletion = require './autocompletion'
 
 module.exports = (e, opts = {}) -> # opts contains callbacks to ide.coffee
