@@ -10,7 +10,6 @@ P2 (Middle priority):
   Scroll editor window if cursor passes right margin.
   add replace (:%s/A/B/)
   ` keybindings and/or lbar should work in search box
-  Remove brief display of connect screen on "New Session"
   Allow RIDE to be started on Mac OS X as a separate item
   
 P3 (Can wait):
@@ -160,3 +159,4 @@ Done:
   Do not start in the connect screen on "New Session" and on "-s" argument
   DB email 2015-03-03
     Save breakpoints the moment you click, not on EP
+  Remove brief display of connect screen on "New Session"

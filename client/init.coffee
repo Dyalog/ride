@@ -9,6 +9,7 @@ connect = require './connect'
 Editor = require './editor'
 about = require './about'
 require '../jquery.layout'
+ide = require './ide'
 
 D.urlParams = {}
 for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
@@ -32,7 +33,24 @@ if opener && (win = D.urlParams.win)? # are we running in a floating editor wind
 else
   D.socket = if D.createSocket then D.createSocket() else io()
   D.quit ?= close
-  $ -> connect(); return
+  $ ->
+    o = D.opts || {} # handle command line arguments
+    setTimeout(
+      ->
+        if o.listen
+          cp = connect(); cp.listen o._[0]
+        else if o.connect
+          cp = connect(); cp.connect o.connect
+        else if o.spawn
+          ideInstance = ide()
+          D.socket
+            .on '*connected', ({host, port}) -> ideInstance.setHostAndPort host, port; return
+            .emit '*spawn'
+        else
+          connect()
+        return
+      100 # TODO: race condition?
+    )
 
 $ ->
   # CSS class to indicate theme

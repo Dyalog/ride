@@ -7,7 +7,7 @@ keymap = require './keymap'
 require '../lbar/lbar'
 require '../jquery.layout'
 
-module.exports = (opts = {}) ->
+module.exports = ->
   $('body').html """
     <div class="ide">
       <div class="lbar ui-layout-north" style="display:none">
@@ -85,9 +85,10 @@ module.exports = (opts = {}) ->
         $.alert 'Popups are blocked.'
     return
 
+  host = port = null
   displayName = ''
   updateTitle = ->
-    s = displayName; if opts.host then s += ' - ' + opts.host; if opts.port then s += ':' + opts.port
+    s = displayName; if host then s += ' - ' + host; if port then s += ':' + port
     i = D.remoteIdentification || {}; if i.pid then s += " (PID: #{i.pid})"
     $('title').text s; return
 
@@ -249,4 +250,5 @@ module.exports = (opts = {}) ->
       {'': '_About', key: 'Shift+F1', dontBindKey: 1, action: about}
     ]}
   ]
-  return
+
+  setHostAndPort: (host1, port1) -> host = host1; port = port1; updateTitle(); return

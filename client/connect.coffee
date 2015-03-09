@@ -22,7 +22,7 @@ parseFav = (s) ->
 proxyInfo = {} # the proxy sends information about itself when the front-end connects to it
 ipAddresses = [] # of the proxy.  Used in the "Waiting for connections" dialogue.
 
-module.exports = ->
+module.exports = (opts) ->
   $('body').html """
     <fieldset id="connect-fieldset">
       <legend>Connect to an interpreter</legend>
@@ -161,7 +161,7 @@ module.exports = ->
         ]
       return
     .on '*hijacked', ({addr}) -> $.alert "#{addr} has taken over usage of this proxy.", 'Disconnected'; return
-    .on '*connected', ({host, port}) -> $listenDialog?.dialog 'close'; ide {host, port}; return
+    .on '*connected', ({host, port}) -> $listenDialog?.dialog 'close'; ideInstance = ide(); ideInstance.setHostAndPort host, port; return
     .on '*connectError', ({err}) -> $.alert err, 'Error'; return
     .on '*spawned', ({pid}) ->
       $spawnStatus.text "PID: #{pid}"
@@ -178,13 +178,5 @@ module.exports = ->
 
   $('#fav-list').resizable handles: 's,e'
 
-  if o = D.opts # handle command line arguments
-    setTimeout(
-      ->
-        if      o.listen  then (if o._[0] then $listenPort.val o._[0]); $listen.click()
-        else if o.spawn   then $spawn.click()
-        else if o.connect then hp = parseFav o.connect; D.socket.emit '*connect', host: hp.host, port: hp.port or DEFAULT_PORT
-        return
-      100 # TODO: race condition?
-    )
-  return
+  listen: (port) -> (if port then $listenPort.val port); $listen.click(); return
+  connect: (s) -> hp = parseFav s; D.socket.emit '*connect', host: hp.host, port: hp.port or DEFAULT_PORT; return
