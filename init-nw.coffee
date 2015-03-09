@@ -117,11 +117,15 @@ if process? then do ->
         <body></body>
       </html>
     '''
-    b = lw.document.body
     wr = (s) ->
-      atEnd = b.scrollTop == b.scrollHeight - b.clientHeight
-      b.appendChild lw.document.createTextNode s
-      if atEnd then b.scrollTop = b.scrollHeight - b.clientHeight
+      if !lw || lw.closed || !lw.document || !lw.document.createTextNode
+        i = proxy.log.listeners.indexOf wr
+        if i >= 0 then proxy.log.listeners.splice i, 1; lw = null
+      else
+        b = lw.document.body
+        atEnd = b.scrollTop == b.scrollHeight - b.clientHeight
+        b.appendChild lw.document.createTextNode s
+        if atEnd then b.scrollTop = b.scrollHeight - b.clientHeight
       return
     wr proxy.log.get().join ''; proxy.log.listeners.push wr
     false
