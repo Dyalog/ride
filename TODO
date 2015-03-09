@@ -23,6 +23,9 @@ P3 (Can wait):
 P4 (I will think about it):
   Option to automatically pop up completion box after a timeout OR use a keystroke
 
+Not yet prioritized:
+(OS X) - Reported by Mike Powell: Dragging the text to a different point uses the vertical bar cursor. Holding the Option key while doing this changes the cursor to the green and white cross (Implying a copy - but it still moves the text).
+
 Later:
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
   drag and drop *.dws and *.dyalog files in the session
