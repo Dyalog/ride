@@ -8,7 +8,7 @@ require '../lbar/lbar'
 require '../jquery.layout'
 
 module.exports = ->
-  $('body').html """
+  $('body').html $ide = $ """
     <div class="ide">
       <div class="lbar ui-layout-north" style="display:none">
         <a class="lbar-prefs" title="Preferences" href="#"></a>
@@ -93,7 +93,7 @@ module.exports = ->
     $('title').text s; return
 
   die = -> # don't really, just pretend
-    if !isDead then isDead = 1; $('.ide').addClass 'disconnected'; for _, {widget} of wins then widget.die()
+    if !isDead then isDead = 1; $ide.addClass 'disconnected'; for _, {widget} of wins then widget.die()
     return
 
   D.socket
@@ -183,7 +183,7 @@ module.exports = ->
       )
       return
 
-  layout = $('.ide').layout
+  layout = $ide.layout
     defaults: enableCursorHotkey: 0
     north: spacing_closed: 0, spacing_open: 0, resizable: 0, togglerLength_open: 0
     east:  spacing_closed: 0, size: '0%', resizable: 1, togglerLength_open: 0
