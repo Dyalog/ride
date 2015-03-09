@@ -2,9 +2,9 @@ CodeMirror = require 'codemirror'
 require './codemirror-apl-mode'
 autocompletion = require './autocompletion'
 
-module.exports = (e, opts = {}) -> # opts contains callbacks to ide.coffee
+editorHTML = do ->
   b = (cssClasses, description) -> "<a href='#' class='#{cssClasses} tb-button' title='#{description}'></a>"
-  ($e = $ e).html """
+  """
     <div class="toolbar debugger-toolbar">
       #{[
         # The first two buttons are placed on the right-hand side through CSS.  In a floating window they are hidden.
@@ -49,8 +49,9 @@ module.exports = (e, opts = {}) -> # opts contains callbacks to ide.coffee
     </div>
     <div class="cm"></div>
   """
-  b = null
 
+module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
+  ($e = $ e).html editorHTML
   volatileLine = null # the line number of the empty line inserted when cursor is at eof and you press <down>
 
   cm = CodeMirror $e.find('.cm')[0],
