@@ -23,7 +23,7 @@ if opener && (win = D.urlParams.win)? # are we running in a floating editor wind
       center: onresize: -> ed?.updateSize(); return
       fxName: ''
     $('title').text wins[win].name
-    ed0 = wins[win].widget; ed = wins[win].widget = Editor $('.ui-layout-center'), ed0.getOpts()
+    ed0 = wins[win]; ed = wins[win] = Editor $('.ui-layout-center'), ed0.getOpts()
     ed.setState ed0.getState(); ed.updateSize(); ed.focus(); ed0 = null
     window.onbeforeunload = ->
       fwis = try JSON.parse localStorage.floatingWindowInfos catch then {}

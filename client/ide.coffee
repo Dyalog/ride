@@ -23,18 +23,16 @@ module.exports = ->
   """
 
   isDead = 0
-  pending = [] # pending lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
+  pending = [] # lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
 
   emit = (x, y) -> D.socket.emit x, y; return
 
   WI = -> emit 'WeakInterrupt'; return
   SI = -> emit 'StrongInterrupt'; return
 
-  # "wins" maps window ids, as they appear in the RIDE protocol, to window information objects that have the following properties:
-  #   widget: a session or an editor
-  #   id: the key in "wins"
-  D.wins = wins =
-    0: id: 0, widget: D.session = session = Session $('.ui-layout-center'),
+  D.wins = wins = # window id -> instance of Editor or Session
+    0: D.session = session = Session $('.ui-layout-center'),
+      id: 0
       edit: (s, i) -> emit 'Edit', win: 0, pos: i, text: s
       autocomplete: (s, i) -> emit 'Autocomplete', line: s, pos: i, token: 0
       exec: (lines, trace) ->
@@ -45,17 +43,17 @@ module.exports = ->
       weakInterrupt: WI
 
   # Tab management
-  tabOpts = activate: (_, ui) -> (widget = wins[+ui.newTab.attr('id').replace /\D+/, ''].widget).updateSize(); widget.focus(); return
+  tabOpts = activate: (_, ui) -> (widget = wins[+ui.newTab.attr('id').replace /\D+/, '']).updateSize(); widget.focus(); return
   $tabs = $('.ui-layout-east, .ui-layout-south').tabs tabOpts
   refreshTabs = ->
     $tabs.each -> $t = $ @; if !$('li', $t).length then ['east', 'south'].forEach (d) -> (if $t.is '.ui-layout-' + d then layout.close d); return
          .tabs 'refresh'
     return
   $(document).on 'keydown', '*', 'ctrl+tab ctrl+shift+tab', (e) ->
-    for id, {widget} of wins when widget.hasFocus() then id = +id; break # id: id of old focused window
+    for id, widget of wins when widget.hasFocus() then id = +id; break # id: id of old focused window
     wo = [0].concat $('li[role=tab]').map(-> +$(@).attr('id').replace /\D+/, '').toArray() # wo: window order
     u = wo[(wo.indexOf(id) + if e.shiftKey then wo.length - 1 else 1) % wo.length] # u: id of new focused window
-    $("#wintab#{u} a").click(); wins[u]?.widget?.focus()
+    $("#wintab#{u} a").click(); wins[u]?.focus()
     false
 
   ($uls = $tabs.find 'ul').each ->
@@ -80,7 +78,7 @@ module.exports = ->
       if pw = open "?win=#{w}", '_blank', spec
         if x? then pw.moveTo x, y
         $("#wintab#{w},#win#{w}").remove(); $tabs.tabs('destroy').tabs tabOpts; refreshTabs(); session.scrollCursorIntoView()
-        # wins[w].widget will be replaced a bit later by code running in the popup
+        # wins[w] will be replaced a bit later by code running in the popup
       else
         $.alert 'Popups are blocked.'
     return
@@ -93,7 +91,7 @@ module.exports = ->
     $('title').text s; return
 
   die = -> # don't really, just pretend
-    if !isDead then isDead = 1; $ide.addClass 'disconnected'; for _, {widget} of wins then widget.die()
+    if !isDead then isDead = 1; $ide.addClass 'disconnected'; for _, widget of wins then widget.die()
     return
 
   D.socket
@@ -119,22 +117,24 @@ module.exports = ->
       if pending.length then emit 'Execute', trace: 0, text: pending.shift() + '\n' else session.prompt why
       return
     .on 'HadError', -> pending.splice 0, pending.length; return
-    .on 'FocusWindow', ({win}) -> $("#wintab#{win} a").click(); wins[win].widget.focus(); return
-    .on 'WindowTypeChanged', ({win, tracer}) -> wins[win].widget.setDebugger tracer
-    .on 'autocomplete', (token, skip, options) -> wins[token].widget.autocomplete skip, options
-    .on 'highlight', (win, line) -> wins[win].widget.highlight line
+    .on 'FocusWindow', ({win}) -> $("#wintab#{win} a").click(); wins[win].focus(); return
+    .on 'WindowTypeChanged', ({win, tracer}) -> wins[win].setDebugger tracer
+    .on 'autocomplete', (token, skip, options) -> wins[token].autocomplete skip, options
+    .on 'highlight', (win, line) -> wins[win].highlight line
     .on 'UpdateWindow', (ee) -> # "ee" for EditableEntity
-      $("#wintab#{ee.token} a").text ee.name; wins[ee.token].widget.open ee; session.scrollCursorIntoView(); return
-    .on 'ReplySaveChanges', ({win, err}) -> wins[win]?.widget?.saved err
+      $("#wintab#{ee.token} a").text ee.name; wins[ee.token].open ee; session.scrollCursorIntoView(); return
+    .on 'ReplySaveChanges', ({win, err}) -> wins[win]?.saved err
     .on 'CloseWindow', ({win}) ->
       $("#wintab#{win},#win#{win}").remove(); $tabs.tabs('destroy').tabs tabOpts; refreshTabs()
-      wins[win].widget.closePopup?(); delete wins[win]; session.scrollCursorIntoView(); session.focus(); return
+      wins[win].closePopup?(); delete wins[win]; session.scrollCursorIntoView(); session.focus(); return
     .on 'OpenWindow', (ee) -> # "ee" for EditableEntity
       layout.open dir = if ee.debugger then 'south' else 'east'
       w = ee.token
       $("<li id='wintab#{w}'><a href='#win#{w}'></a></li>").appendTo('.ui-layout-' + dir + ' ul').find('a').text ee.name
       $tabContent = $("<div class='win' id='win#{w}'></div>").appendTo('.ui-layout-' + dir)
-      wins[w] = id: w, name: ee.name, widget: Editor $tabContent,
+      wins[w] = Editor $tabContent,
+        id: w
+        name: ee.name
         debugger: ee.debugger
         save: (s, bs)   -> emit 'SaveChanges',    win: w, text: s, attributes: stop: bs
         close:          -> emit 'CloseWindow',    win: w
@@ -152,7 +152,7 @@ module.exports = ->
         pop: -> popWindow w
         openInExternalEditor: D.openInExternalEditor
         setLineAttributes: (n, bs) -> emit 'SetLineAttributes', win: w, nLines: n, lineAttributes: stop: bs
-      wins[w].widget.open ee
+      wins[w].open ee
       $('.ui-layout-' + dir).tabs('refresh').tabs(active: -1)
         .data('ui-tabs').panels.off 'keydown' # prevent jQueryUI tabs from hijacking our keystrokes, <C-Up> in particular
       session.scrollCursorIntoView()
@@ -165,7 +165,7 @@ module.exports = ->
   ttid = null # tooltip timeout id
   $ '.lbar'
     .on 'mousedown', -> false
-    .on 'mousedown', 'b', (e) -> (for _, {widget} of wins when widget.hasFocus() then widget.insert $(e.target).text()); false
+    .on 'mousedown', 'b', (e) -> (for _, widget of wins when widget.hasFocus() then widget.insert $(e.target).text()); false
     .on 'mouseout', 'b', -> clearTimeout ttid; ttid = null; $tip.add($tipTriangle).hide(); return
     .on 'mouseover', 'b', (e) ->
       clearTimeout ttid; $t = $ e.target; p = $t.position(); x = $t.text()
@@ -188,7 +188,7 @@ module.exports = ->
     north: spacing_closed: 0, spacing_open: 0, resizable: 0, togglerLength_open: 0
     east:  spacing_closed: 0, size: '0%', resizable: 1, togglerLength_open: 0
     south: spacing_closed: 0, size: '0%', resizable: 1, togglerLength_open: 0
-    center: onresize: -> (for _, {widget} of wins then widget.updateSize()); session.scrollCursorIntoView(); return
+    center: onresize: -> (for _, widget of wins then widget.updateSize()); session.scrollCursorIntoView(); return
     fxName: ''
   for d in ['east', 'south'] then layout.close d; layout.sizePane d, '50%'
   localStorage.showLanguageBar ?= 1; if !+localStorage.showLanguageBar then layout.hide 'north'
