@@ -54,7 +54,7 @@ module.exports = (e, opts = {}) -> # opts contains callbacks to ide.coffee
   volatileLine = null # the line number of the empty line inserted when cursor is at eof and you press <down>
 
   cm = CodeMirror $e.find('.cm')[0],
-    fixedGutter: false, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
+    firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
     keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
     gutters: ['breakpoints', 'CodeMirror-linenumbers'], indentUnit: 4
     extraKeys:
@@ -164,9 +164,9 @@ module.exports = (e, opts = {}) -> # opts contains callbacks to ide.coffee
         return
   ###
 
-  createBreakpointElement = -> $('<div class="breakpoint">●</div>')[0]
+  createBreakpointElement = -> bp = document.createElement 'div'; bp.setAttribute 'class', 'breakpoint'; bp.innerHTML = '●'; bp
   breakpoints = [] # array of line numbers
-  cm.on 'gutterClick', (cm, l) ->
+  cm.on 'gutterClick', (cm, l, gutter, event) ->
     if (i = breakpoints.indexOf l) >= 0
       breakpoints.splice i, 1; cm.setGutterMarker l, 'breakpoints', null
     else

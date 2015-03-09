@@ -7,7 +7,6 @@ P1 (Definitely high priority):
   
 P2 (Middle priority):
   Do not scroll session on AtInputPrompt.
-  Scroll editor window if cursor passes right margin.
   add replace (:%s/A/B/)
   ` keybindings and/or lbar should work in search box
   Allow RIDE to be started on Mac OS X as a separate item
@@ -160,3 +159,4 @@ Done:
   DB email 2015-03-03
     Save breakpoints the moment you click, not on EP
   Remove brief display of connect screen on "New Session"
+  Scroll editor window if cursor passes right margin.

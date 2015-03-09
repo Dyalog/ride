@@ -139,9 +139,13 @@ input, textarea
   pre { line-height: 20px; }
 .disconnected
   .CodeMirror, .CodeMirror-gutter-wrapper { background-color: #e2d3bb; } // a distasteful shade of beige, pretending to be dead
-.CodeMirror-linenumber { color: #00f; text-align: left; }
+.breakpoints { width: 12px; }
+.breakpoint
+  color: #f00; width: 12px; text-indent: -99px; cursor: pointer
+  background: no-repeat transparent center center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAYAAADED76LAAAALklEQVQY02NkgIIGBob/DEiggYGBEZnz/z8ahmvAJomsiImBAKBcAUFHMhLyJgAAXSjn/zbVBQAAAABJRU5ErkJggg==)
+.CodeMirror-linenumber { color: #00f; padding-left: 0; padding-right: 0; cursor: pointer; }
 .CodeMirror-gutters { border-right-color: transparent; background: transparent; }
-.CodeMirror-gutter-wrapper { background-color: white; }
+.CodeMirror-gutter-wrapper { background-color: white; cursor: pointer; }
 .CodeMirror.debugger { background-color: #dfdfdf; }
 .CodeMirror.debugger .CodeMirror-gutter-wrapper { background-color: #dfdfdf; }
 .hidden { display: none; }
@@ -159,8 +163,6 @@ input, textarea
 .CodeMirror-hint-active
   +sel
 .CodeMirror-matchingbracket { color: black !important; background: #ff8; }
-.breakpoints { width: 10px; }
-.breakpoint { color: #822; }
 .CodeMirror-search-match
   background: gold; border-top: 1px solid orange; border-bottom: 1px solid orange
   -moz-box-sizing: border-box; box-sizing: border-box; opacity: .5
