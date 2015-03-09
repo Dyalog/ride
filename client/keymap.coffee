@@ -56,7 +56,12 @@ CodeMirror.keyMap.dyalog = inherit fallthrough: 'default', F1: (cm) ->
   return
 
 CodeMirror.keyMap.dyalog["'#{getPrefixKey()}'"] = (cm) ->
-  cm.setOption 'autoCloseBrackets', false; cm.setOption 'keyMap', 'dyalogBackquote'
+  # Make it possible to use `( etc -- remember the original value of
+  # autoCloseBrackets, set it temporarily to "false", and restore it when the
+  # menu is closed:
+  cm.setOption 'autoCloseBrackets0', cm.getOption 'autoCloseBrackets'
+  cm.setOption 'autoCloseBrackets', false
+  cm.setOption 'keyMap', 'dyalogBackquote'
   c = cm.getCursor(); cm.replaceSelection getPrefixKey(), 'end'
   ctid = setTimeout(
     -> cm.showHint
@@ -67,7 +72,11 @@ CodeMirror.keyMap.dyalog["'#{getPrefixKey()}'"] = (cm) ->
         Right:     (cm, m) -> m.pick(); return
       hint: ->
         data = from: c, to: cm.getCursor(), list: bqc
-        CodeMirror.on data, 'close', -> cm.setOption 'autoCloseBrackets', true; cm.setOption 'keyMap', 'dyalog'
+        CodeMirror.on data, 'close', ->
+          cm.setOption 'autoCloseBrackets', cm.getOption 'autoCloseBrackets0'
+          cm.setOption 'autoCloseBrackets0', null
+          cm.setOption 'keyMap', 'dyalog'
+          return
         data
     500
   )
@@ -82,7 +91,10 @@ ks.forEach (k, i) ->
   v = vs[i]; reverse[v] ?= k
   bqc.push text: v, render: (e) -> $(e).text "#{v} #{getPrefixKey()}#{k} #{squiggleDescriptions[v] || ''}  "
   CodeMirror.keyMap.dyalogBackquote["'#{k}'"] = (cm) ->
-    clearTimeout ctid; cm.state.completionActive?.close?(); cm.setOption 'keyMap', 'dyalog'; cm.setOption 'autoCloseBrackets', true
+    clearTimeout ctid; cm.state.completionActive?.close?()
+    cm.setOption 'autoCloseBrackets', cm.getOption 'autoCloseBrackets0'
+    cm.setOption 'autoCloseBrackets0', null
+    cm.setOption 'keyMap', 'dyalog'
     c = cm.getCursor(); if k == getPrefixKey() then bqbqHint cm else cm.replaceRange v, {line: c.line, ch: c.ch - 1}, c
     return
 ks = vs = null
