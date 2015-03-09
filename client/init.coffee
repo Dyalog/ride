@@ -10,6 +10,7 @@ Editor = require './editor'
 about = require './about'
 require '../jquery.layout'
 ide = require './ide'
+require './util'
 
 D.urlParams = {}
 for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
