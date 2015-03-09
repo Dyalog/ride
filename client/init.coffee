@@ -41,7 +41,7 @@ else
         if o.listen
           cp = connect(); cp.listen o._[0]
         else if o.connect
-          cp = connect(); cp.connect o.connect
+          cp = connect(); cp.connect o._[0]
         else if o.spawn
           ideInstance = ide()
           D.socket
