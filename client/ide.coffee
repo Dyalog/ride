@@ -133,25 +133,10 @@ module.exports = ->
       $("<li id='wintab#{w}'><a href='#win#{w}'></a></li>").appendTo('.ui-layout-' + dir + ' ul').find('a').text ee.name
       $tabContent = $("<div class='win' id='win#{w}'></div>").appendTo('.ui-layout-' + dir)
       wins[w] = Editor $tabContent,
-        id: w
-        name: ee.name
-        debugger: ee.debugger
-        save: (s, bs)   -> emit 'SaveChanges',    win: w, text: s, attributes: stop: bs
-        close:          -> emit 'CloseWindow',    win: w
-        over:           -> emit 'RunCurrentLine', win: w
-        into:           -> emit 'StepInto',       win: w
-        back:           -> emit 'TraceBackward',  win: w
-        skip:           -> emit 'TraceForward',   win: w
-        continueTrace:  -> emit 'ContinueTrace',  win: w
-        continueExec:   -> emit 'Continue',       win: w
-        restartThreads: -> emit 'RestartThreads', win: w
-        edit:    (s, p) -> emit 'Edit',           win: w, text: s, pos: p
+        id: w, name: ee.name, debugger: ee.debugger, emit: emit
         weakInterrupt: WI
-        cutback:        -> emit 'Cutback',        win: w
-        autocomplete: (s, i) -> emit 'Autocomplete', line: s, pos: i, token: w
         pop: -> popWindow w
         openInExternalEditor: D.openInExternalEditor
-        setLineAttributes: (n, bs) -> emit 'SetLineAttributes', win: w, nLines: n, lineAttributes: stop: bs
       wins[w].open ee
       $('.ui-layout-' + dir).tabs('refresh').tabs(active: -1)
         .data('ui-tabs').panels.off 'keydown' # prevent jQueryUI tabs from hijacking our keystrokes, <C-Up> in particular

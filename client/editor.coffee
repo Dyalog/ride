@@ -51,6 +51,7 @@ editorHTML = do ->
   """
 
 module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
+  {id, emit} = opts
   ($e = $ e).html editorHTML
   volatileLine = null # the line number of the empty line inserted when cursor is at eof and you press <down>
 
@@ -65,7 +66,10 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
           cm.execCommand 'indentMore'
         else
           c = cm.getCursor(); s = cm.getLine c.line
-          if /^ *$/.test s[...c.ch] then cm.execCommand 'indentMore' else opts.autocomplete s, c.ch
+          if /^ *$/.test s[...c.ch]
+            cm.execCommand 'indentMore'
+          else
+            emit 'Autocomplete', line: s, pos: c.ch, token: id
         return
       Down: ->
         l = cm.getCursor().line
@@ -83,18 +87,18 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
     return
 
   cm.dyalogCommands =
-    ED: -> opts.edit cm.getValue(), cm.indexFromPos cm.getCursor(); return # Edit
-    QT: opts.close # Quit (and lose changes)
-    BK: -> (if opts.debugger then opts.back() else cm.execCommand 'undo'); return # Backward or Undo
-    FD: -> (if opts.debugger then opts.skip() else cm.execCommand 'redo'); return # Forward or Redo
+    ED: -> emit 'Edit', win: id, text: cm.getValue(), pos: cm.indexFromPos cm.getCursor(); return
+    QT: -> emit 'CloseWindow', win: id; return
+    BK: -> (if opts.debugger then emit 'TraceBackward', win: id else cm.execCommand 'undo'); return # Backward or Undo
+    FD: -> (if opts.debugger then emit 'TraceForward', win: id else cm.execCommand 'redo'); return # Forward or Redo
     SC: -> $tb.find('.tb-search:visible').focus(); return # Search
     EP: -> # Exit (and save changes)
       v = cm.getValue()
       if v != originalText || breakpoints.join() != originalBreakpoints
         for l in breakpoints then cm.setGutterMarker l, 'breakpoints', null
-        opts.save cm.getValue(), breakpoints[..].sort (x, y) -> x - y
+        emit 'SaveChanges', win: id, text: cm.getValue(), attributes: stop: breakpoints[..].sort (x, y) -> x - y
       else
-        opts.close()
+        emit 'CloseWindow', win: id; return
       return
     TL: -> # Toggle Localisation
       c = cm.getCursor(); s = cm.getLine c.line
@@ -117,7 +121,7 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
       cm.setOption 'lineNumbers', flag; $tb.find('.tb-LN:visible').toggleClass 'pressed', flag; return
     PV: -> search true; return # Previous
     NX: -> search(); return # Next
-    TC: opts.into # Trace
+    TC: -> emit 'StepInto', win: id; return
     AC: -> # Align Comments (currently inaccessible)
       if cm.somethingSelected()
         spc = (n) -> Array(n + 1).join ' '
@@ -154,11 +158,11 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
         cm.setCursor line: l, ch: 0
       return
     WI: opts.weakInterrupt
-    ER: -> (if opts.debugger then opts.over() else cm.execCommand 'newlineAndIndent'); return
-    BH: opts.continueTrace # Run to exit (in tracer)
-    RM: opts.continueExec # Resume execution (in tracer)
-    MA: opts.restartThreads # Resume all threads (in tracer)
-    CBP: opts.cutback
+    ER: -> (if opts.debugger then emit 'RunCurrentLine', win: id else cm.execCommand 'newlineAndIndent'); return
+    BH: -> emit 'ContinueTrace',  win: id; return # Run to exit (in tracer)
+    RM: -> emit 'Continue',       win: id; return # Resume execution (in tracer)
+    MA: -> emit 'RestartThreads', win: id; return # Resume all threads (in tracer)
+    CBP: -> emit 'Cutback',       win: id; return
   ###
       F6 = -> opts.openInExternalEditor cm.getValue(), cm.getCursor().line, (err, text) ->
         if err then $.alert '' + err, 'Error' else c = cm.getCursor().line; cm.setValue text; cm.setCursor c
@@ -172,7 +176,8 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
       breakpoints.splice i, 1; cm.setGutterMarker l, 'breakpoints', null
     else
       breakpoints.push l; cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
-    if opts.debugger then opts.setLineAttributes cm.lineCount(), breakpoints[..].sort (x, y) -> x - y
+    if opts.debugger
+      emit 'SetLineAttributes', win: id, nLines: cm.lineCount(), lineAttributes: stop: breakpoints[..].sort (x, y) -> x - y
     return
 
   $tb = $ '.toolbar', $e
@@ -279,9 +284,9 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
   insert: (ch) -> (if !cm.getOption 'readOnly' then c = cm.getCursor(); cm.replaceRange ch, c, c); return
   highlight: highlight
   setDebugger: setDebugger
-  saved: (err) -> (if err then $.alert 'Cannot save changes' else opts.close()); return
+  saved: (err) -> (if err then $.alert 'Cannot save changes' else emit 'CloseWindow', win: id); return
   closePopup: -> (if opener then close()); return
-  autocomplete: autocompletion cm, opts.autocomplete
+  autocomplete: autocompletion cm, (s, i) -> emit 'Autocomplete', line: s, pos: i, token: id
   saveAndClose: -> cm.execCommand 'EP'; return
   die: -> cm.setOption 'readOnly', true; return
   getOpts: -> opts
