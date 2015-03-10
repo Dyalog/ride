@@ -1,6 +1,6 @@
 CodeMirror = require 'codemirror'
 
-rLetter = 'A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ'; rName0 = ///[#{rLetter}]///; rName1 = ///[#{rLetter}\d]*///
+rLetter = @rLetter = 'A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ'; rName0 = ///[#{rLetter}]///; rName1 = ///[#{rLetter}\d]*///
 rNotName = ///[^#{rLetter}\d]+///
 keywords = '''
   andif access case caselist class continue else elseif end endclass endfor

@@ -1,6 +1,7 @@
 CodeMirror = require 'codemirror'
 require './codemirror-apl-mode'
 autocompletion = require './autocompletion'
+{rLetter} = require './codemirror-apl-mode'
 
 editorHTML = do ->
   b = (cssClasses, description) -> "<a href='#' class='#{cssClasses} tb-button' title='#{description}'></a>"
@@ -102,7 +103,7 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
       return
     TL: -> # Toggle Localisation
       c = cm.getCursor(); s = cm.getLine c.line
-      r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*' # regex fragment to match identifiers
+      r = "[#{rLetter}0-9]*" # regex fragment to match identifiers
       name = ((///⎕?#{r}$///.exec(s[...c.ch])?[0] or '') + (///^#{r}///.exec(s[c.ch..])?[0] or '')).replace /^\d+/, ''
       if name
         # search backwards for a line that looks like a tradfn header (though in theory it might be a dfns's recursive call)
