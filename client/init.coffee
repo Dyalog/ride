@@ -12,10 +12,10 @@ require '../jquery.layout'
 ide = require './ide'
 require './util'
 
-D.urlParams = {}
+urlParams = {}
 for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
-  [_, k, v] = /^([^=]*)=?(.*)$/.exec kv; D.urlParams[unescape(k or '')] = unescape(v or '')
-if opener && (win = D.urlParams.win)? # are we running in a floating editor window?
+  [_, k, v] = /^([^=]*)=?(.*)$/.exec kv; urlParams[unescape(k or '')] = unescape(v or '')
+if opener && (win = urlParams.win)? # are we running in a floating editor window?
   $ ->
     wins = D.wins = opener.D.wins
     $('body').addClass('floating-window').html('<div class="ui-layout-center"></div>').layout
