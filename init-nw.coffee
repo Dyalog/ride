@@ -138,7 +138,7 @@ if process? then do ->
     htmlEsc = (s) -> s.replace /./g, (x) -> htmlChars[x] || x
     # $(window).on 'error', (e) ->
     process.on 'uncaughtException', (e) ->
-      window.lastError = e
+      if window then window.lastError = e
       info = """
         IDE: #{JSON.stringify D.versionInfo}
         Interpreter: #{JSON.stringify(D.remoteIdentification || null)}
