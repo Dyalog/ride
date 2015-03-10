@@ -10,7 +10,9 @@ module.exports = ->
 
     Interpreter:
       Version: #{i.version || u}
+      Platform: #{i.platform || u}
       Edition: #{i.arch || u}
+      Date: #{if i.date then i.date else u}
   """
   buttons = []
   if D.clipboardCopy then buttons.push text: 'Copy', click: -> D.clipboardCopy $('textarea', @).val(), 'text'; return

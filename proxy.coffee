@@ -107,9 +107,11 @@ fmtLineAttributes = (nLines, stops) ->
             when 'ReplyIdentify'
               toBrowser 'UpdateDisplayName', displayName: b64d tag 'Project', m
               toBrowser '*identify',
-                version: tag 'Version',      m
-                arch:    tag 'Architecture', m
-                pid:     tag 'pid',          m
+                version:  tag 'Version',      m
+                platform: tag 'Platform',     m
+                arch:     tag 'Architecture', m
+                pid:      tag 'pid',          m
+                date:     tag 'BuildDate',    m
             when 'ReplyUpdateWsid'
               s = b64d tag 'wsid', m
               if s != (s1 = s.replace /\x00/g, '')
