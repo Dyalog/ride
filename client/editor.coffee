@@ -279,8 +279,8 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
     originalBreakpoints = breakpoints.join()
     if opener then $('title').text ee.name
     return
-  hasFocus: -> cm.hasFocus()
-  focus: -> cm.focus(); return
+  hasFocus: -> window.focused && cm.hasFocus()
+  focus: -> (if !window.focused then window.focus()); cm.focus(); return
   insert: (ch) -> (if !cm.getOption 'readOnly' then c = cm.getCursor(); cm.replaceRange ch, c, c); return
   highlight: highlight
   setDebugger: setDebugger

@@ -49,13 +49,6 @@ module.exports = ->
     $tabs.each -> $t = $ @; if !$('li', $t).length then ['east', 'south'].forEach (d) -> (if $t.is '.ui-layout-' + d then layout.close d); return
          .tabs 'refresh'
     return
-  $(document).on 'keydown', '*', 'ctrl+tab ctrl+shift+tab', (e) ->
-    for id, widget of wins when widget.hasFocus() then id = +id; break # id: id of old focused window
-    wo = [0].concat $('li[role=tab]').map(-> +$(@).attr('id').replace /\D+/, '').toArray() # wo: window order
-    u = wo[(wo.indexOf(id) + if e.shiftKey then wo.length - 1 else 1) % wo.length] # u: id of new focused window
-    $("#wintab#{u} a").click(); wins[u]?.focus()
-    false
-
   ($uls = $tabs.find 'ul').each ->
     $(@).sortable
       cursor: 'move', containment: 'parent', tolerance: 'pointer', axis: 'x', revert: true

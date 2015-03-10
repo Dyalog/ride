@@ -17,7 +17,7 @@ for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
   [_, k, v] = /^([^=]*)=?(.*)$/.exec kv; D.urlParams[unescape(k or '')] = unescape(v or '')
 if opener && (win = D.urlParams.win)? # are we running in a floating editor window?
   $ ->
-    wins = opener.D.wins
+    wins = D.wins = opener.D.wins
     $('body').addClass('floating-window').html('<div class="ui-layout-center"></div>').layout
       defaults: enableCursorHotkey: 0
       center: onresize: -> ed?.updateSize(); return
@@ -64,7 +64,12 @@ $ ->
     else if /^(linux|x11|android)/i.test p then 'freedom'
     else 'redmond'
   $('body').addClass "theme-#{localStorage.theme}"
-  $(document).on 'keydown', '*', 'shift+f1', -> about(); false
+  $(document)
+    .on 'keydown', '*', 'shift+f1', -> about(); false
+    .on 'keydown', '*', 'ctrl+tab ctrl+shift+tab', (e) ->
+      a = []; i = -1; for _, w of D.wins then (if w.hasFocus() then i = a.length); a.push w
+      j = if i < 0 then 0 else if e.shiftKey then (i + a.length - 1) % a.length else (i + 1) % a.length
+      $("#wintab#{a[j].id} a").click(); a[j].focus(); false
 
   # CSS class to indicate platform (NW.js-only)
   if D.process
@@ -72,5 +77,6 @@ $ ->
     else if /^win/i.test D.process.platform then $('body').addClass 'platform-windows'
 
   # CSS class for focused window
-  $(window).on 'focus blur', (e) -> $('body').toggleClass 'window-focused', e.type == 'focus'
+  $(window).on 'focus blur', (e) -> $('body').toggleClass 'window-focused', window.focused = e.type == 'focus'
+  window.focused = true
   return

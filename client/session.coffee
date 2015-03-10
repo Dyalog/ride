@@ -109,8 +109,8 @@ module.exports = (e, opts = {}) ->
   cm: cm
   noPrompt: -> promptType = 0; cm.setOption 'readOnly', true; cm.setOption 'cursorHeight', 0; return
   updateSize: -> cm.setSize $e.width(), $e.height()
-  hasFocus: -> cm.hasFocus()
-  focus: -> cm.focus()
+  hasFocus: -> window.focused && cm.hasFocus()
+  focus: -> (if !window.focused then window.focus()); cm.focus(); return
   insert: (ch) -> (if !cm.getOption 'readOnly' then c = cm.getCursor(); cm.replaceRange ch, c, c); return
   scrollCursorIntoView: scrollCursorIntoView = -> setTimeout (-> cm.scrollIntoView cm.getCursor()), 1
   autocomplete: autocompletion cm, (s, i) -> (if promptType != 4 then opts.autocomplete s, i); return # don't autocomplete in ⍞ input
