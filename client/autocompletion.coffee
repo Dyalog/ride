@@ -7,7 +7,7 @@ module.exports = (cm, requestAutocompletion) -> # set up autocompletion, common 
     tid = setTimeout(
       ->
         tid = null; c = cm.getCursor(); s = cm.getLine c.line; i = c.ch
-        if s[i - 1] !in [' ', keymap.getPrefixKey()] then requestAutocompletion s, i
+        if i && s[i - 1] !in [' ', keymap.getPrefixKey()] then requestAutocompletion s, i
         return
       500
     )
