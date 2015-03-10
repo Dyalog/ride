@@ -134,7 +134,7 @@ module.exports = ->
       $('.ui-layout-' + dir).tabs('refresh').tabs(active: -1)
         .data('ui-tabs').panels.off 'keydown' # prevent jQueryUI tabs from hijacking our keystrokes, <C-Up> in particular
       session.scrollCursorIntoView()
-      if +localStorage.floatNewEditors then popWindow w
+      if +localStorage.floatNewEditors then session.focus(); popWindow w
       return
 
   # language bar
