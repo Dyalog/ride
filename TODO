@@ -24,7 +24,11 @@ P4 (I will think about it):
   Option to automatically pop up completion box after a timeout OR use a keystroke
 
 Not yet prioritized:
-(OS X) - Reported by Mike Powell: Dragging the text to a different point uses the vertical bar cursor. Holding the Option key while doing this changes the cursor to the green and white cross (Implying a copy - but it still moves the text).
+  (OS X) - Reported by Mike Powell: Dragging the text to a different point uses the vertical bar cursor. Holding the Option key while doing this changes the cursor to the green and white cross (Implying a copy - but it still moves the text).
+  Type a couple of chars and hit Alt+Enter, followed by Enter. Uncaught node.js Error; JS email 2015-03-10
+    NN: cannot reproduce on Linux
+  avoid the flashing in a floating trace window when I lean on the trace (Ctrl+Enter) key; JS email 2015-03-10
+    NN: every AtInputPrompt focuses the session; disabling this might result in subtle bugs
 
 Later:
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
