@@ -12,11 +12,11 @@ require '../jquery.layout'
 ide = require './ide'
 require './util'
 
-urlParams = {}
-for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
-  [_, k, v] = /^([^=]*)=?(.*)$/.exec kv; urlParams[unescape(k or '')] = unescape(v or '')
-if opener && (win = urlParams.win)? # are we running in a floating editor window?
-  $ ->
+$ ->
+  urlParams = {}
+  for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
+    [_, k, v] = /^([^=]*)=?(.*)$/.exec kv; urlParams[unescape(k or '')] = unescape(v or '')
+  if opener && (win = urlParams.win)? # are we running in a floating editor window?
     wins = D.wins = opener.D.wins
     $('body').addClass('floating-window').html('<div class="ui-layout-center"></div>').layout
       defaults: enableCursorHotkey: 0
@@ -30,11 +30,9 @@ if opener && (win = urlParams.win)? # are we running in a floating editor window
       fwis[win] = x: window.screenX, y: window.screenY, width: $(window).width(), height: $(window).height()
       localStorage.floatingWindowInfos = JSON.stringify fwis
       ed.saveAndClose(); return
-    return
-else
-  D.socket = if D.createSocket then D.createSocket() else io()
-  D.quit ?= close
-  $ ->
+  else
+    D.socket = (D.createSocket || io)()
+    D.quit ?= close
     o = D.opts || {} # handle command line arguments
     setTimeout(
       ->
@@ -53,7 +51,6 @@ else
       100 # TODO: race condition?
     )
 
-$ ->
   # CSS class to indicate theme
   # https://nodejs.org/api/process.html#process_process_platform
   # https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
