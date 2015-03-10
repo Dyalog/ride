@@ -3,6 +3,8 @@ require './codemirror-apl-mode'
 autocompletion = require './autocompletion'
 {rLetter} = require './codemirror-apl-mode'
 
+createBreakpointElement = -> bp = document.createElement 'div'; bp.setAttribute 'class', 'breakpoint'; bp.innerHTML = '●'; bp
+
 editorHTML = do ->
   b = (cssClasses, description) -> "<a href='#' class='#{cssClasses} tb-button' title='#{description}'></a>"
   """
@@ -164,22 +166,23 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
     RM: -> emit 'Continue',       win: id; return # Resume execution (in tracer)
     MA: -> emit 'RestartThreads', win: id; return # Resume all threads (in tracer)
     CBP: -> emit 'Cutback',       win: id; return
+    BP: -> # Toggle breakpoint
+      for sel in cm.listSelections()
+        l0 = sel.anchor.line; l1 = sel.head.line; if l0 > l1 then tmp = l0; l0 = l1; l1 = tmp
+        for l in [l0..l1] by 1
+          if (i = breakpoints.indexOf l) >= 0 then breakpoints.splice i, 1; cm.setGutterMarker l, 'breakpoints', null
+          else breakpoints.push l; cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
+      if opts.debugger
+        emit 'SetLineAttributes', win: id, nLines: cm.lineCount(), lineAttributes: stop: breakpoints[..].sort (x, y) -> x - y
+      return
   ###
       F6 = -> opts.openInExternalEditor cm.getValue(), cm.getCursor().line, (err, text) ->
         if err then $.alert '' + err, 'Error' else c = cm.getCursor().line; cm.setValue text; cm.setCursor c
         return
   ###
 
-  createBreakpointElement = -> bp = document.createElement 'div'; bp.setAttribute 'class', 'breakpoint'; bp.innerHTML = '●'; bp
   breakpoints = [] # array of line numbers
-  cm.on 'gutterClick', (cm, l, gutter, event) ->
-    if (i = breakpoints.indexOf l) >= 0
-      breakpoints.splice i, 1; cm.setGutterMarker l, 'breakpoints', null
-    else
-      breakpoints.push l; cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
-    if opts.debugger
-      emit 'SetLineAttributes', win: id, nLines: cm.lineCount(), lineAttributes: stop: breakpoints[..].sort (x, y) -> x - y
-    return
+  cm.on 'gutterClick', (cm, l, gutter, event) -> cm.setCursor line: l, ch: 0; cm.execCommand 'BP'; return
 
   $tb = $ '.toolbar', $e
     .on 'mousedown',        '.tb-button', (e) -> $(e.target).addClass    'armed'; e.preventDefault(); return
