@@ -95,8 +95,8 @@ if process? then do ->
 
   # These two are overridden for the Mac
   execPath = if process.platform != 'darwin' then process.execPath else process.execPath.replace /(\/Contents\/).*$/, '$1MacOS/node-webkit'
-  D.rideConnect    = -> spawn execPath, ['--no-spawn'], detached: true; return
-  D.rideNewSession = -> spawn execPath, ['-s'],         detached: true; return
+  D.rideConnect    = -> spawn execPath, ['--no-spawn'], detached: true, stdio: ['ignore', 'ignore', 'ignore']; return
+  D.rideNewSession = -> spawn execPath, ['-s'        ], detached: true, stdio: ['ignore', 'ignore', 'ignore']; return
 
   D.quit = -> gui.Window.get().close(); return
   D.clipboardCopy = (s) -> gui.Clipboard.get().set s; return
