@@ -169,7 +169,7 @@ module.exports = ->
     center: onresize: -> (for _, widget of wins then widget.updateSize()); session.scrollCursorIntoView(); return
     fxName: ''
   for d in ['east', 'south'] then layout.close d; layout.sizePane d, '50%'
-  localStorage.showLanguageBar ?= 1; if !+localStorage.showLanguageBar then layout.hide 'north'
+  if localStorage.showLanguageBar == '0' then layout.hide 'north'
   session.updateSize()
 
   themes = ['Modern', 'Redmond', 'Cupertino', 'Freedom'] # default is set in init.coffee to prevent FOUC
@@ -201,10 +201,12 @@ module.exports = ->
     ]}
     {'': '_View', items:
       [
-        {'': 'Show Language Bar', checked: +localStorage.showLanguageBar, action: (x) ->
-          localStorage.showLanguageBar = +x; layout[['hide', 'show'][+x]] 'north'; return}
+        {'': 'Show Language Bar', checked: localStorage.showLanguageBar != '0', action: (x) ->
+          if x then delete localStorage.showLanguageBar else localStorage.showLanguageBar = '0'
+          layout[['hide', 'show'][+x]] 'north'; return}
         {'': 'Float New Editors', checked: +localStorage.floatNewEditors || 0, action: (x) ->
-          localStorage.floatNewEditors = +x; return}
+          if x then localStorage.floatNewEditors = '1' else delete localStorage.floatNewEditors
+          return}
         {'': 'Line Wrapping in Session', checked: session.getLineWrapping(), action: (x) ->
           session.setLineWrapping x; return}
       ]

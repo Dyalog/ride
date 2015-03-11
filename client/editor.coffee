@@ -119,9 +119,12 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
           cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
       return
     LN: -> # Toggle Line Numbers
-      p = if opts.debugger then 'lineNumbersInDebugger' else 'lineNumbersInEditor'
-      localStorage[p] = 1 - (localStorage[p] || 0); flag = !!+localStorage[p]
-      cm.setOption 'lineNumbers', flag; $tb.find('.tb-LN:visible').toggleClass 'pressed', flag; return
+      p = if opts.debugger then 'lineNumbersInDebugger' else 'lineNumbersInEditor' # property name
+      d = +!opts.debugger # default value (as a number)
+      v = +!+(localStorage[p] ? d) # new value (as a number)
+      if v == d then delete localStorage[p] else localStorage[p] = v
+      cm.setOption 'lineNumbers', !!v; $tb.find('.tb-LN:visible').toggleClass 'pressed', !!v
+      return
     PV: -> search true; return # Previous
     NX: -> search(); return # Next
     TC: -> emit 'StepInto', win: id; return
