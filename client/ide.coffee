@@ -77,11 +77,23 @@ module.exports = ->
     return
 
   host = port = null
-  displayName = ''
+  displayName = '' # apparently this is the WSID
   updateTitle = ->
-    s = displayName; if host then s += ' - ' + host; if port then s += ':' + port
-    i = D.remoteIdentification || {}; if i.pid then s += " (PID: #{i.pid})"
-    $('title').text s; return
+    tt = localStorage.windowTitle || '{WSID} - {HOST}:{PORT} (PID: {PID})'
+    ri = D.remoteIdentification || {}
+    $('title').text tt.replace /\{(\w+)\}/g, (g0, g1) ->
+      switch g1.toUpperCase()
+        when 'WSID'  then displayName
+        when 'HOST'  then host || ''
+        when 'PORT'  then port || ''
+        when 'PID'   then ri.pid || ''
+        when 'CHARS' then (ri.arch || '').split('/')[0] || ''
+        when 'BITS'  then (ri.arch || '').split('/')[1] || ''
+        when 'VER_A' then (ri.version || '').split('.')[0] || ''
+        when 'VER_B' then (ri.version || '').split('.')[1] || ''
+        when 'VER_C' then (ri.version || '').split('.')[2] || ''
+        else g0
+    return
 
   die = -> # don't really, just pretend
     if !isDead then isDead = 1; $ide.addClass 'disconnected'; for _, widget of wins then widget.die()
