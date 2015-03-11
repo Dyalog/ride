@@ -76,14 +76,13 @@ module.exports = ->
         $.alert 'Popups are blocked.'
     return
 
-  host = port = null
-  displayName = '' # apparently this is the WSID
+  host = port = wsid = ''
   updateTitle = ->
     tt = localStorage.windowTitle || '{WSID} - {HOST}:{PORT} (PID: {PID})'
     ri = D.remoteIdentification || {}
     $('title').text tt.replace /\{(\w+)\}/g, (g0, g1) ->
       switch g1.toUpperCase()
-        when 'WSID'  then displayName
+        when 'WSID'  then wsid || ''
         when 'HOST'  then host || ''
         when 'PORT'  then port || ''
         when 'PID'   then ri.pid || ''
@@ -114,7 +113,7 @@ module.exports = ->
       return
     .on 'SysError', ({text}) -> $.alert text, 'SysError'; die(); return
     .on 'InternalError', ({error, dmx}) -> $.alert "error: #{error}, dmx: #{dmx}", 'Internal Error'; die(); return
-    .on 'UpdateDisplayName', (a) -> {displayName} = a; return
+    .on 'UpdateDisplayName', (a) -> wsid = a.displayName; updateTitle(); return
     .on 'EchoInput', ({input}) -> session.add input
     .on 'AppendSessionOutput', ({result}) -> session.add result
     .on 'NotAtInputPrompt', -> session.noPrompt()
