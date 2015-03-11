@@ -7,6 +7,7 @@ module.exports = ->
       Date: #{v.date || u}
       Git commit: #{v.rev || u}
       User agent: #{navigator.userAgent || u}
+      Settings: #{JSON.stringify localStorage}
 
     Interpreter:
       Version: #{i.version || u}

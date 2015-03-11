@@ -142,6 +142,7 @@ if process? then do ->
       info = """
         IDE: #{JSON.stringify D.versionInfo}
         Interpreter: #{JSON.stringify(D.remoteIdentification || null)}
+        localStorage: #{JSON.stringify localStorage}
 
         #{e.stack}
 
