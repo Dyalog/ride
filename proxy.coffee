@@ -186,7 +186,7 @@ fmtLineAttributes = (nLines, stops) ->
         server.listen 0, '127.0.0.1', -> # pick a random free port
           a = server.address(); hp = "#{a.address}:#{a.port}"
           log "listening for connections from spawned interpreter on #{hp}"
-          exe = process.env.DYALOG_IDE_INTERPRETER_EXE || if process.platform == 'darwin' then '../Dyalog/mapl' else 'dyalog'
+          exe = process.env.DYALOG_IDE_INTERPRETER_EXE || 'dyalog'
           log "spawning interpreter #{JSON.stringify exe}"
           child = spawn exe, ['+s', '-q'], stdio: ['pipe', 'ignore', 'ignore'], env: extend process.env, RIDE_CONNECT: hp, RIDE_INIT: "CONNECT:#{hp}"
           toBrowser '*spawned', pid: child.pid
