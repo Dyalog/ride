@@ -3,7 +3,7 @@ set -e
 
 # create JSON
 TMP_JSON=/tmp/GH-Publish.json
-BASE_VERSION=`npm show ride version` # parse "version" field from package.json, returned with an extra ".0"
+BASE_VERSION=`node -pe "($(cat package.json)).version"`
 VERSION="${BASE_VERSION%%.0}.`git rev-list HEAD --count`"  # "%%.0" strips trailing ".0"
 
 if [ -s GHTOKEN ]; then
