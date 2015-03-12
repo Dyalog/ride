@@ -57,6 +57,7 @@ editorHTML = do ->
 module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
   {id, emit} = opts
   ($e = $ e).html editorHTML
+  isDebugger = opts.debugger
   volatileLine = null # the line number of the empty line inserted when cursor is at eof and you press <down>
 
   cm = CodeMirror $e.find('.cm')[0],
@@ -93,8 +94,8 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
   cm.dyalogCommands =
     ED: -> emit 'Edit', win: id, text: cm.getValue(), pos: cm.indexFromPos cm.getCursor(); return
     QT: -> emit 'CloseWindow', win: id; return
-    BK: -> (if opts.debugger then emit 'TraceBackward', win: id else cm.execCommand 'undo'); return # Backward or Undo
-    FD: -> (if opts.debugger then emit 'TraceForward', win: id else cm.execCommand 'redo'); return # Forward or Redo
+    BK: -> (if isDebugger then emit 'TraceBackward', win: id else cm.execCommand 'undo'); return # Backward or Undo
+    FD: -> (if isDebugger then emit 'TraceForward', win: id else cm.execCommand 'redo'); return # Forward or Redo
     SC: -> $tb.find('.tb-search:visible').focus(); return # Search
     EP: -> # Exit (and save changes)
       v = cm.getValue()
@@ -120,7 +121,7 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
           cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
       return
     LN: -> # Toggle Line Numbers
-      v = !!if opts.debugger then prefs.lineNumbersInDebugger.toggle() else prefs.lineNumbersInEditor.toggle()
+      v = !!if isDebugger then prefs.lineNumbersInDebugger.toggle() else prefs.lineNumbersInEditor.toggle()
       cm.setOption 'lineNumbers', v; $tb.find('.tb-LN:visible').toggleClass 'pressed', v; return
     PV: -> search true; return # Previous
     NX: -> search(); return # Next
@@ -161,7 +162,7 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
         cm.setCursor line: l, ch: 0
       return
     WI: opts.weakInterrupt
-    ER: -> (if opts.debugger then emit 'RunCurrentLine', win: id else cm.execCommand 'newlineAndIndent'); return
+    ER: -> (if isDebugger then emit 'RunCurrentLine', win: id else cm.execCommand 'newlineAndIndent'); return
     BH: -> emit 'ContinueTrace',  win: id; return # Run to exit (in tracer)
     RM: -> emit 'Continue',       win: id; return # Resume execution (in tracer)
     MA: -> emit 'RestartThreads', win: id; return # Resume all threads (in tracer)
@@ -172,7 +173,7 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
         for l in [l0..l1] by 1
           if (i = breakpoints.indexOf l) >= 0 then breakpoints.splice i, 1; cm.setGutterMarker l, 'breakpoints', null
           else breakpoints.push l; cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
-      if opts.debugger
+      if isDebugger
         emit 'SetLineAttributes', win: id, nLines: cm.lineCount(), lineAttributes: stop: breakpoints[..].sort (x, y) -> x - y
       return
   ###
@@ -260,11 +261,11 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
     return
 
   setDebugger = (x) ->
-    opts.debugger = x; $('.debugger-toolbar', $e).toggle x; $('.editor-toolbar', $e).toggle !x
+    isDebugger = x; $('.debugger-toolbar', $e).toggle x; $('.editor-toolbar', $e).toggle !x
     cm.setOption 'readOnly', x; $('.CodeMirror', $e).toggleClass 'debugger', x; highlight null
-    ln = !!if opts.debugger then prefs.lineNumbersInDebugger() else prefs.lineNumbersInEditor()
+    ln = !!if isDebugger then prefs.lineNumbersInDebugger() else prefs.lineNumbersInEditor()
     cm.setOption 'lineNumbers', ln; $tb.find('.tb-LN:visible').toggleClass 'pressed', ln; return
-  setDebugger !!opts.debugger
+  setDebugger !!isDebugger
 
   scrollCursorIntoProminentView = -> # approximately to 1/3 of editor height; this might not work near the top or bottom
     h = $e.height(); {left, top} = cm.cursorCoords true, 'local'
