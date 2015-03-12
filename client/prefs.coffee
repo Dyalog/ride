@@ -23,14 +23,20 @@ D.prefs = prefs = module.exports = ->
         <div id="prefs-tab-title">
           Window title:
           <input id="prefs-windowTitle" class="text-field">
-          Available substitutions:
           <pre>#{'''
-            {WSID}                   workspace name
-            {HOST}:{PORT}            interpreter's RIDE address
-            {PID}                    PID of the interpreter process
-            {CHARS}                  "Unicode" or "Classic"
-            {BITS}                   64 or 32
-            {VER_A}.{VER_B}.{VER_C}  version of the interpreter
+            {WSID}            workspace name
+            {HOST}:{PORT}     interpreter's TCP endpoint
+            {PID}             PID of the interpreter process
+            {CHARS}           Unicode or Classic
+            {BITS}            64 or 32
+            {VER}             interpreter version
+              {VER_A}           major
+              {VER_B}           minor
+              {VER_C}           svn revision
+            {RIDE_VER}        RIDE version
+              {RIDE_VER_A}      major
+              {RIDE_VER_B}      minor
+              {RIDE_VER_C}      git commit number
           '''}</pre>
         </div>
       </div>

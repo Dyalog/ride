@@ -77,18 +77,23 @@ module.exports = ->
 
   host = port = wsid = ''
   prefs.windowTitle updateTitle = -> # add updateTitle() as a change listener for preference "windowTitle"
-    ri = D.remoteIdentification || {}
+    ri = D.remoteIdentification || {}; v = D.versionInfo
     $('title').text prefs.windowTitle().replace /\{(\w+)\}/g, (g0, g1) ->
       switch g1.toUpperCase()
-        when 'WSID'  then wsid || ''
-        when 'HOST'  then host || ''
-        when 'PORT'  then port || ''
-        when 'PID'   then ri.pid || ''
-        when 'CHARS' then (ri.arch || '').split('/')[0] || ''
-        when 'BITS'  then (ri.arch || '').split('/')[1] || ''
-        when 'VER_A' then (ri.version || '').split('.')[0] || ''
-        when 'VER_B' then (ri.version || '').split('.')[1] || ''
-        when 'VER_C' then (ri.version || '').split('.')[2] || ''
+        when 'WSID'       then wsid || ''
+        when 'HOST'       then host || ''
+        when 'PORT'       then port || ''
+        when 'PID'        then ri.pid || ''
+        when 'CHARS'      then (ri.arch || '').split('/')[0] || ''
+        when 'BITS'       then (ri.arch || '').split('/')[1] || ''
+        when 'VER_A'      then (ri.version || '').split('.')[0] || ''
+        when 'VER_B'      then (ri.version || '').split('.')[1] || ''
+        when 'VER_C'      then (ri.version || '').split('.')[2] || ''
+        when 'VER'        then ri.version || ''
+        when 'RIDE_VER_A' then (v.version || '').split('.')[0] || ''
+        when 'RIDE_VER_B' then (v.version || '').split('.')[1] || ''
+        when 'RIDE_VER_C' then (v.version || '').split('.')[2] || ''
+        when 'RIDE_VER'   then v.version || ''
         else g0
     return
 
