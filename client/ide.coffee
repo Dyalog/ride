@@ -159,7 +159,7 @@ module.exports = ->
       ttid = setTimeout(
         ->
           ttid = null; key = keymap.reverse[x]
-          keyText = if key && x.charCodeAt(0) > 127 then "Keyboard: #{keymap.getPrefixKey()}#{key}\n\n" else ''
+          keyText = if key && x.charCodeAt(0) > 127 then "Keyboard: #{prefs.prefixKey()}#{key}\n\n" else ''
           h = D.lbarTips[x] or [x, '']; $tipDesc.text h[0]; $tipText.text keyText + h[1]
           $tipTriangle.css(left: 3 + p.left + ($t.width() - $tipTriangle.width()) / 2, top: p.top + $t.height() + 2).show()
           x0 = p.left - 21; x1 = x0 + $tip.width(); y0 = p.top + $t.height()

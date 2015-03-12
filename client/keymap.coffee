@@ -1,5 +1,7 @@
 CodeMirror = require 'codemirror'
 helpurls = require './helpurls'
+prefs = require './prefs'
+
 window.onhelp = -> false # prevent IE from acting silly on F1
 
 # utils
@@ -9,12 +11,8 @@ dict = (pairs) -> r = {}; (for [k, v] in pairs then r[k] = v); r # like in Pytho
 chr = (x) -> String.fromCharCode x
 ord = (x) -> x.charCodeAt 0
 
-PK0 = '`' # default prefix key
-@getPrefixKey = getPrefixKey = -> localStorage.prefixKey || PK0
-@setPrefixKey = (x = PK0) ->
-  if x != old = getPrefixKey()
-    if x == PK0 then delete localStorage.prefixKey else localStorage.prefixKey = x
-    m = CodeMirror.keyMap.dyalog; m["'#{x}'"] = m["'#{old}'"]; delete m["'#{old}'"]
+prefs.prefixKey (x, old) -> # change listener
+  if x != old then m = CodeMirror.keyMap.dyalog; m["'#{x}'"] = m["'#{old}'"]; delete m["'#{old}'"]
   return
 
 squiggleDescriptions = ((s) -> dict s.split(/\n| *│ */).map (l) -> [l[0], l[2..]]) '''
@@ -55,14 +53,14 @@ CodeMirror.keyMap.dyalog = inherit fallthrough: 'default', F1: (cm) ->
     .focus?()
   return
 
-CodeMirror.keyMap.dyalog["'#{getPrefixKey()}'"] = (cm) ->
+CodeMirror.keyMap.dyalog["'#{prefs.prefixKey()}'"] = (cm) ->
   # Make it possible to use `( etc -- remember the original value of
   # autoCloseBrackets, set it temporarily to "false", and restore it when the
   # menu is closed:
   cm.setOption 'autoCloseBrackets0', cm.getOption 'autoCloseBrackets'
   cm.setOption 'autoCloseBrackets', false
   cm.setOption 'keyMap', 'dyalogBackquote'
-  c = cm.getCursor(); cm.replaceSelection getPrefixKey(), 'end'
+  c = cm.getCursor(); cm.replaceSelection prefs.prefixKey(), 'end'
   ctid = setTimeout(
     -> cm.showHint
       completeOnSingleClick: true
@@ -89,19 +87,19 @@ CodeMirror.keyMap.dyalogBackquote = nofallthrough: true, disableInput: true
 if ks.length != vs.length then console.error? 'bad configuration of backquote keymap'
 ks.forEach (k, i) ->
   v = vs[i]; reverse[v] ?= k
-  bqc.push text: v, render: (e) -> $(e).text "#{v} #{getPrefixKey()}#{k} #{squiggleDescriptions[v] || ''}  "
+  bqc.push text: v, render: (e) -> $(e).text "#{v} #{prefs.prefixKey()}#{k} #{squiggleDescriptions[v] || ''}  "
   CodeMirror.keyMap.dyalogBackquote["'#{k}'"] = (cm) ->
     clearTimeout ctid; cm.state.completionActive?.close?()
     cm.setOption 'autoCloseBrackets', cm.getOption 'autoCloseBrackets0'
     cm.setOption 'autoCloseBrackets0', null
     cm.setOption 'keyMap', 'dyalog'
-    c = cm.getCursor(); if k == getPrefixKey() then bqbqHint cm else cm.replaceRange v, {line: c.line, ch: c.ch - 1}, c
+    c = cm.getCursor(); if k == prefs.prefixKey() then bqbqHint cm else cm.replaceRange v, {line: c.line, ch: c.ch - 1}, c
     return
 ks = vs = null
 
-bqc[0].render = (e) -> e.innerHTML = "  #{pk = getPrefixKey()}#{pk} <i>completion by name</i>"
+bqc[0].render = (e) -> e.innerHTML = "  #{pk = prefs.prefixKey()}#{pk} <i>completion by name</i>"
 bqc[0].hint = bqbqHint = (cm) ->
-  c = cm.getCursor(); cm.replaceSelection getPrefixKey(), 'end'
+  c = cm.getCursor(); cm.replaceSelection prefs.prefixKey(), 'end'
   cm.showHint completeOnSingleClick: true, extraKeys: {Right: pick = ((cm, m) -> m.pick()), Space: pick}, hint: ->
     u = cm.getLine(c.line)[c.ch + 1...cm.getCursor().ch]
     a = []; for x in bqbqc when x.name[...u.length] == u then a.push x
@@ -112,7 +110,7 @@ bqc[0].hint = bqbqHint = (cm) ->
 bqbqc = ((s) -> join s.split('\n').map (l) ->
   [squiggle, names...] = l.split ' '
   names.map (name) -> name: name, text: squiggle, render: (e) ->
-    key = reverse[squiggle]; pk = getPrefixKey()
+    key = reverse[squiggle]; pk = prefs.prefixKey()
     $(e).text "#{squiggle} #{if key then pk + key else '  '} #{pk}#{pk}#{name}"
 ) """
   ← leftarrow assign gets

@@ -1,5 +1,3 @@
-keymap = require './keymap'
-
 # Preferences UI
 $d = $pk = null
 
@@ -8,11 +6,11 @@ ok = ->
   # validate
   if pk.length != 1 then $.alert('Invalid prefix key', 'Error', -> $pk.focus(); return); return
   # apply changes
-  keymap.setPrefixKey pk
+  prefs.prefixKey pk
   $d.dialog 'close'
   false
 
-D.prefs = module.exports = ->
+D.prefs = prefs = module.exports = ->
   if !$d # the dialogue, lazily initialized
     $d = $ '''
       <div id="prefs">
@@ -35,7 +33,7 @@ D.prefs = module.exports = ->
   $d.dialog('option', 'position', at: 'center').dialog 'open'
 
   # load current values
-  $pk.val keymap.getPrefixKey()
+  $pk.val prefs.prefixKey()
   return
 
 # Preferences API -- localStorage should be accessed only through it
@@ -64,12 +62,13 @@ prefs = module.exports
   sd = str d               # sd: default value "d" converted to a string
   prefs[k] = p = (x) ->
     if typeof x == 'function'
-      l.push f; return
+      l.push x; return
     else if arguments.length
       if t == 'number' then x = +x else if t == 'string' then x = '' + x # coerce to type "t"
       sx = str x # sx: "x" converted to a string; localStorage values can only be strings
+      if l.length then old = prefs[k]()
       if sx == sd then delete localStorage[k] else localStorage[k] = sx # avoid recording if it's at its default
-      for f in l then f value # notify listeners
+      for f in l then f x, old # notify listeners
       x
     else
       if !(r = localStorage[k])? then d
