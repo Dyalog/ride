@@ -99,7 +99,7 @@ if process? then do ->
       onevent: ({data}) -> (for f in @[data[0]] or [] then f data[1..]...); return
       on: (e, f) -> (@[e] ?= []).push f; @
     socket = new LocalSocket; socket1 = new LocalSocket; socket.other = socket1; socket1.other = socket
-    setTimeout (-> proxy.Proxy() socket1), 1
+    proxy.Proxy() socket1
     socket
 
   # These two are overridden for the Mac

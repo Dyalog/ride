@@ -34,22 +34,17 @@ $ ->
     D.socket = (D.createSocket || io)()
     D.quit ?= close
     o = D.opts || {} # handle command line arguments
-    setTimeout(
-      ->
-        if o.listen
-          cp = connect(); cp.listen o._[0]
-        else if o.connect
-          cp = connect(); cp.connect o._[0]
-        else if o.spawn
-          ideInstance = ide()
-          D.socket
-            .on '*connected', ({host, port}) -> ideInstance.setHostAndPort host, port; return
-            .emit '*spawn'
-        else
-          connect()
-        return
-      100 # TODO: race condition?
-    )
+    if o.listen
+      cp = connect(); cp.listen o._[0]
+    else if o.connect
+      cp = connect(); cp.connect o._[0]
+    else if o.spawn
+      ideInstance = ide()
+      D.socket
+        .on '*connected', ({host, port}) -> ideInstance.setHostAndPort host, port; return
+        .emit '*spawn'
+    else
+      connect()
 
   # CSS class to indicate theme
   if !prefs.theme() then prefs.theme do ->
