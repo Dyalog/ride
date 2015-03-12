@@ -51,10 +51,19 @@ if process? then do ->
   nww.zoomLevel = +localStorage.zoom || 0
   $ ->
     contextMenu = null
+    zoom = (x) ->
+      old = nww.zoomLevel; nww.zoomLevel = x
+      if nww.zoomLevel != x
+        # If nww.zoomLevel is outside of the allowed range, NW.js sets it to a fractonal number.
+        # We don't want that to happen, so let's revert to the original level:
+        nww.zoomLevel = old
+      else
+        if x then localStorage.zoom = x else delete localStorage.zoom
+      false
     $(document)
-      .on 'keydown', '*', 'ctrl+= ctrl+shift+=', D.zoomIn    = -> localStorage.zoom = ++nww.zoomLevel;   false
-      .on 'keydown', '*', 'ctrl+-',              D.zoomOut   = -> localStorage.zoom = --nww.zoomLevel;   false
-      .on 'keydown', '*', 'ctrl+0',              D.resetZoom = -> localStorage.zoom = nww.zoomLevel = 0; false
+      .on 'keydown', '*', 'ctrl+= ctrl+shift+=', D.zoomIn    = -> zoom nww.zoomLevel + 1
+      .on 'keydown', '*', 'ctrl+-',              D.zoomOut   = -> zoom nww.zoomLevel - 1
+      .on 'keydown', '*', 'ctrl+0',              D.resetZoom = -> zoom 0
       .on 'keydown', '*', 'f12', -> nww.showDevTools(); false
       .on 'contextmenu', (e) ->
         if !contextMenu
