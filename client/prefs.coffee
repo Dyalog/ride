@@ -1,39 +1,52 @@
 # Preferences UI
-$d = $pk = null
+$d = null # dialogue instance, lazily initialized
 
 ok = ->
-  pk = $pk.val()
+  pk = $('#prefs-prefixKey').val(); wt = $('#prefs-windowTitle').val()
   # validate
   if pk.length != 1 then $.alert('Invalid prefix key', 'Error', -> $pk.focus(); return); return
   # apply changes
-  prefs.prefixKey pk
-  $d.dialog 'close'
-  false
+  prefs.prefixKey pk; prefs.windowTitle wt
+  $d.dialog 'close'; false
 
 D.prefs = prefs = module.exports = ->
   if !$d # the dialogue, lazily initialized
-    $d = $ '''
+    $d = $ """
       <div id="prefs">
         <ul id="prefs-tabs-nav">
-          <li><a href="#prefs-kbd">Keyboard</a></li>
+          <li><a href="#prefs-tab-keyboard">Keyboard</a></li>
+          <li><a href="#prefs-tab-title">Title</a></li>
         </ul>
-        <div id="prefs-kbd">
-          <label>Prefix key: <input class="prefs-pk text-field" size="1"></label>
+        <div id="prefs-tab-keyboard">
+          <label>Prefix key: <input id="prefs-prefixKey" class="text-field" size="1"></label>
+        </div>
+        <div id="prefs-tab-title">
+          Window title:
+          <input id="prefs-windowTitle" class="text-field">
+          Available substitutions:
+          <pre>#{'''
+            {WSID}                   workspace name
+            {HOST}:{PORT}            interpreter's RIDE address
+            {PID}                    PID of the interpreter process
+            {CHARS}                  "Unicode" or "Classic"
+            {BITS}                   64 or 32
+            {VER_A}.{VER_B}.{VER_C}  version of the interpreter
+          '''}</pre>
         </div>
       </div>
-    '''
+    """
       .tabs()
       .on 'keydown', 'input', 'return', ok
-      .dialog modal: 1, autoOpen: 0, title: 'Preferences', minWidth: 200, minHeight: 200, buttons: [
+      .dialog modal: 1, autoOpen: 0, title: 'Preferences', minWidth: 600, minHeight: 400, buttons: [
         {text: 'OK', click: ok}
         {text: 'Cancel', click: -> $d.dialog 'close'; return}
       ]
-    $pk = $d.find '.prefs-pk'
 
   $d.dialog('option', 'position', at: 'center').dialog 'open'
 
   # load current values
-  $pk.val prefs.prefixKey()
+  $('#prefs-prefixKey').val prefs.prefixKey()
+  $('#prefs-windowTitle').val prefs.windowTitle()
   return
 
 # Preferences API -- localStorage should be accessed only through it

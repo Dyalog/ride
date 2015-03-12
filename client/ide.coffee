@@ -76,7 +76,7 @@ module.exports = ->
     return
 
   host = port = wsid = ''
-  updateTitle = ->
+  prefs.windowTitle updateTitle = -> # add updateTitle() as a change listener for preference "windowTitle"
     ri = D.remoteIdentification || {}
     $('title').text prefs.windowTitle().replace /\{(\w+)\}/g, (g0, g1) ->
       switch g1.toUpperCase()
