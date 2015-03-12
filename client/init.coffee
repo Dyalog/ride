@@ -52,10 +52,10 @@ $ ->
     )
 
   # CSS class to indicate theme
-  # https://nodejs.org/api/process.html#process_process_platform
-  # https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
-  # The theme can be overridden through localStorage.theme or an environment variable $DYALOG_IDE_THEME
-  if !prefs.theme() then prefs.theme D.process?.env?.DYALOG_IDE_THEME || do ->
+  if !prefs.theme() then prefs.theme do ->
+    # Detect platform
+    #   https://nodejs.org/api/process.html#process_process_platform
+    #   https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
     p = (D.process ? navigator).platform
     if /^(darwin|mac|ipad|iphone|ipod)/i.test p then 'cupertino'
     else if /^(linux|x11|android)/i.test p then 'freedom'
