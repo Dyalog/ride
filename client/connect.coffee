@@ -1,13 +1,13 @@
 ide = require './ide'
 about = require './about'
+prefs = require './prefs'
 
-DEFAULT_PORT = 4502
-localStorage.favs ?= JSON.stringify [host: '127.0.0.1', port: DEFAULT_PORT]
+DEFAULT_PORT = prefs.favs.getDefault()[0].port; if typeof DEFAULT_PORT != 'number' then throw Error 'cannot determine DEFAULT_PORT'
 fmtFav = (x) ->
   s = if !x.port? || +x.port == DEFAULT_PORT then x.host else if /:/.test x.host then "[#{x.host}]:#{x.port}" else "#{x.host}:#{x.port}"
   if x.name then "#{x.name} (#{s})" else s
 storeFavs = ->
-  localStorage.favs = JSON.stringify $('#fav-list option').map(->
+  prefs.favs $('#fav-list option').map(->
     x = parseFav $(@).text(); (if $(@).is ':selected' then x.sel = true); x
   ).toArray()
 parseFav = (s) ->
@@ -147,8 +147,7 @@ module.exports = (opts) ->
   $list.sortable cursor: 'move', revert: true, tolerance: 'pointer', containment: 'parent', axis: 'y', update: storeFavs
   $about.click -> about(); false
 
-  favs = try JSON.parse localStorage.favs catch then []
-  $list.html favs.map((x) -> "<option '#{if x.sel then 'selected' else ''}>#{fmtFav x}</option>").join ''
+  $list.html prefs.favs().map((x) -> "<option '#{if x.sel then 'selected' else ''}>#{fmtFav x}</option>").join ''
   if !$list.find(':selected').length then $list.focus().find('option').eq(0).attr 'selected', true; $list.change()
 
   D.socket

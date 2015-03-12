@@ -1,5 +1,7 @@
 CodeMirror = require 'codemirror'
 autocompletion = require './autocompletion'
+prefs = require './prefs'
+
 module.exports = (e, opts = {}) ->
 
   dirty = {} # modified lines: line number -> original content
@@ -22,7 +24,7 @@ module.exports = (e, opts = {}) ->
 
   cm = CodeMirror ($e = $ e)[0],
     autofocus: true, mode: '', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
-    readOnly: true, keyMap: 'dyalog', lineWrapping: !!localStorage.sessionLineWrapping, indentUnit: 4
+    readOnly: true, keyMap: 'dyalog', lineWrapping: !!prefs.sessionLineWrapping(), indentUnit: 4
     extraKeys:
       'Shift-Tab': 'indentLess'
       Tab: ->
@@ -116,6 +118,4 @@ module.exports = (e, opts = {}) ->
   autocomplete: autocompletion cm, (s, i) -> (if promptType != 4 then opts.autocomplete s, i); return # don't autocomplete in ⍞ input
   die: -> cm.setOption 'readOnly', true; return
   getLineWrapping: -> cm.getOption 'lineWrapping'
-  setLineWrapping: (x) ->
-    if x then localStorage.sessionLineWrapping = '1' else delete localStorage.sessionLineWrapping
-    cm.setOption 'lineWrapping', !!x; scrollCursorIntoView(); return
+  setLineWrapping: (x) -> prefs.sessionLineWrapping x; cm.setOption 'lineWrapping', !!x; scrollCursorIntoView(); return

@@ -65,8 +65,7 @@ module.exports = ->
 
   popWindow = (w) ->
     if !opener && !isDead
-      fwis = try JSON.parse localStorage.floatingWindowInfos catch then {}
-      {width, height, x, y} = fwis[w] || width: 500, height: 400
+      {width, height, x, y} = prefs.floatingWindowInfos()[w] || width: 500, height: 400
       spec = "width=#{width},height=#{height},resizable=1"; if x? then spec += ",left=#{x},top=#{y},screenX=#{x},screenY=#{y}"
       if pw = open "?win=#{w}", '_blank', spec
         if x? then pw.moveTo x, y
@@ -78,9 +77,8 @@ module.exports = ->
 
   host = port = wsid = ''
   updateTitle = ->
-    tt = localStorage.windowTitle || '{WSID} - {HOST}:{PORT} (PID: {PID})'
     ri = D.remoteIdentification || {}
-    $('title').text tt.replace /\{(\w+)\}/g, (g0, g1) ->
+    $('title').text prefs.windowTitle().replace /\{(\w+)\}/g, (g0, g1) ->
       switch g1.toUpperCase()
         when 'WSID'  then wsid || ''
         when 'HOST'  then host || ''
@@ -145,7 +143,7 @@ module.exports = ->
       $('.ui-layout-' + dir).tabs('refresh').tabs(active: -1)
         .data('ui-tabs').panels.off 'keydown' # prevent jQueryUI tabs from hijacking our keystrokes, <C-Up> in particular
       session.scrollCursorIntoView()
-      if +localStorage.floatNewEditors then session.focus(); popWindow w
+      if prefs.floatNewEditors() then session.focus(); popWindow w
       return
 
   # language bar
@@ -180,7 +178,7 @@ module.exports = ->
     center: onresize: -> (for _, widget of wins then widget.updateSize()); session.scrollCursorIntoView(); return
     fxName: ''
   for d in ['east', 'south'] then layout.close d; layout.sizePane d, '50%'
-  if localStorage.showLanguageBar == '0' then layout.hide 'north'
+  if !prefs.showLanguageBar() then layout.hide 'north'
   session.updateSize()
 
   themes = ['Modern', 'Redmond', 'Cupertino', 'Freedom'] # default is set in init.coffee to prevent FOUC
@@ -212,12 +210,10 @@ module.exports = ->
     ]}
     {'': '_View', items:
       [
-        {'': 'Show Language Bar', checked: localStorage.showLanguageBar != '0', action: (x) ->
-          if x then delete localStorage.showLanguageBar else localStorage.showLanguageBar = '0'
-          layout[['hide', 'show'][+x]] 'north'; return}
-        {'': 'Float New Editors', checked: +localStorage.floatNewEditors || 0, action: (x) ->
-          if x then localStorage.floatNewEditors = '1' else delete localStorage.floatNewEditors
-          return}
+        {'': 'Show Language Bar', checked: prefs.showLanguageBar(), action: (x) ->
+          prefs.showLanguageBar x; layout[['hide', 'show'][+x]] 'north'; return}
+        {'': 'Float New Editors', checked: prefs.floatNewEditors(), action: (x) ->
+          prefs.floatNewEditors x; return}
         {'': 'Line Wrapping in Session', checked: session.getLineWrapping(), action: (x) ->
           session.setLineWrapping x; return}
       ]
@@ -233,7 +229,7 @@ module.exports = ->
           '-'
           {'': 'Theme', items: themes.map (x, i) ->
             '': x, group: 'themes', checked: $('body').hasClass(themeClasses[i]), action: ->
-              localStorage.theme = x.toLowerCase(); $('body').removeClass(allThemeClasses).addClass themeClasses[i]; return
+              prefs.theme x.toLowerCase(); $('body').removeClass(allThemeClasses).addClass themeClasses[i]; return
           }
         ]
     }

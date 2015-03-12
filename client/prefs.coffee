@@ -12,7 +12,7 @@ ok = ->
   $d.dialog 'close'
   false
 
-module.exports = ->
+D.prefs = module.exports = ->
   if !$d # the dialogue, lazily initialized
     $d = $ '''
       <div id="prefs">

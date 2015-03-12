@@ -1,6 +1,7 @@
 CodeMirror = require 'codemirror'
 require './codemirror-apl-mode'
 autocompletion = require './autocompletion'
+prefs = require './prefs'
 {rLetter} = require './codemirror-apl-mode'
 
 createBreakpointElement = -> bp = document.createElement 'div'; bp.setAttribute 'class', 'breakpoint'; bp.innerHTML = '●'; bp
@@ -119,12 +120,8 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
           cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
       return
     LN: -> # Toggle Line Numbers
-      p = if opts.debugger then 'lineNumbersInDebugger' else 'lineNumbersInEditor' # property name
-      d = +!opts.debugger # default value (as a number)
-      v = +!+(localStorage[p] ? d) # new value (as a number)
-      if v == d then delete localStorage[p] else localStorage[p] = v
-      cm.setOption 'lineNumbers', !!v; $tb.find('.tb-LN:visible').toggleClass 'pressed', !!v
-      return
+      v = !!if opts.debugger then prefs.lineNumbersInDebugger.toggle() else prefs.lineNumbersInEditor.toggle()
+      cm.setOption 'lineNumbers', v; $tb.find('.tb-LN:visible').toggleClass 'pressed', v; return
     PV: -> search true; return # Previous
     NX: -> search(); return # Next
     TC: -> emit 'StepInto', win: id; return
@@ -265,10 +262,8 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
   setDebugger = (x) ->
     opts.debugger = x; $('.debugger-toolbar', $e).toggle x; $('.editor-toolbar', $e).toggle !x
     cm.setOption 'readOnly', x; $('.CodeMirror', $e).toggleClass 'debugger', x; highlight null
-    p = if x then 'lineNumbersInDebugger' else 'lineNumbersInEditor'
-    localStorage[p] ?= +!x; cm.setOption 'lineNumbers', !!+localStorage[p]
-    $tb.find('.tb-LN:visible').toggleClass 'pressed', !!+localStorage[p]
-    return
+    ln = !!if opts.debugger then prefs.lineNumbersInDebugger() else prefs.lineNumbersInEditor()
+    cm.setOption 'lineNumbers', ln; $tb.find('.tb-LN:visible').toggleClass 'pressed', ln; return
   setDebugger !!opts.debugger
 
   scrollCursorIntoProminentView = -> # approximately to 1/3 of editor height; this might not work near the top or bottom

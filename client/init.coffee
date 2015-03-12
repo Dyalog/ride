@@ -11,6 +11,7 @@ about = require './about'
 require '../jquery.layout'
 ide = require './ide'
 require './util'
+prefs = require './prefs'
 
 $ ->
   urlParams = {}
@@ -26,10 +27,9 @@ $ ->
     ed0 = wins[win]; ed = wins[win] = Editor $('.ui-layout-center'), ed0.getOpts()
     ed.setState ed0.getState(); ed.updateSize(); ed.focus(); ed0 = null
     window.onbeforeunload = ->
-      fwis = try JSON.parse localStorage.floatingWindowInfos catch then {}
+      fwis = prefs.floatingWindowInfos()
       fwis[win] = x: window.screenX, y: window.screenY, width: $(window).width(), height: $(window).height()
-      localStorage.floatingWindowInfos = JSON.stringify fwis
-      ed.saveAndClose(); return
+      prefs.floatingWindowInfos fwis; ed.saveAndClose(); return
   else
     D.socket = (D.createSocket || io)()
     D.quit ?= close
@@ -55,12 +55,12 @@ $ ->
   # https://nodejs.org/api/process.html#process_process_platform
   # https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
   # The theme can be overridden through localStorage.theme or an environment variable $DYALOG_IDE_THEME
-  localStorage.theme ?= D.process?.env?.DYALOG_IDE_THEME || do ->
+  if !prefs.theme() then prefs.theme D.process?.env?.DYALOG_IDE_THEME || do ->
     p = (D.process ? navigator).platform
     if /^(darwin|mac|ipad|iphone|ipod)/i.test p then 'cupertino'
     else if /^(linux|x11|android)/i.test p then 'freedom'
     else 'redmond'
-  $('body').addClass "theme-#{localStorage.theme}"
+  $('body').addClass "theme-#{prefs.theme()}"
   $(document)
     .on 'keydown', '*', 'shift+f1', -> about(); false
     .on 'keydown', '*', 'ctrl+tab ctrl+shift+tab', (e) ->
