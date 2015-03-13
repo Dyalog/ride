@@ -275,6 +275,21 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
   updateSize: -> cm.setSize $e.width(), $e.parent().height() - $e.position().top - 28; return
   open: (ee) ->
     cm.setValue originalText = ee.text; cm.focus()
+    # Constants for entityType:
+    # DefinedFunction     1
+    # SimpleCharArray     2
+    # SimpleNumericArray  3
+    # MixedSimpleArray    4
+    # NestedArray         5
+    # QuadORObject        6
+    # NativeFile          7
+    # SimpleCharVector    8
+    # AplNamespace        9
+    # AplClass           10
+    # AplInterface       11
+    # AplSession         12
+    # ExternalFunction   13
+    cm.setOption 'mode', if ee.entityType in [1, 9, 10, 11, 12, 13] then 'apl' else 'text'
     line = ee.currentRow; col = ee.currentColumn || 0; if line == col == 0 && ee.text.indexOf('\n') < 0 then col = ee.text.length
     cm.setCursor line, col; cm.scrollIntoView null, $e.height() / 2
     breakpoints = ee.lineAttributes.stop[..]
@@ -294,8 +309,9 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
   die: -> cm.setOption 'readOnly', true; return
   getOpts: -> opts
   getState: ->
-    {hll, originalText, originalBreakpoints, value: cm.getValue(), cursorIndex: cm.indexFromPos(cm.getCursor()), breakpoints: breakpoints[..]}
+    {hll, originalText, originalBreakpoints, value: cm.getValue(), cursorIndex: cm.indexFromPos(cm.getCursor()), breakpoints: breakpoints[..], mode: cm.getOption 'mode'}
   setState: (h) ->
     cm.setValue h.value; cm.setCursor cm.posFromIndex h.cursorIndex; {originalText, originalBreakpoints, breakpoints} = h
+    cm.setOption 'mode', h.mode
     for l in breakpoints then cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
     highlight h.hll; return

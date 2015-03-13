@@ -27,7 +27,6 @@ Not yet prioritized:
     NN: cannot reproduce on Linux
   avoid the flashing in a floating trace window when I lean on the trace (Ctrl+Enter) key; JS email 2015-03-10
     NN: every AtInputPrompt focuses the session; disabling this might result in subtle bugs
-  editor shouldn't be syntax highlighted if it is editing a text array; JS 2015-03-13
 
 Later:
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
@@ -168,3 +167,4 @@ Done:
   Scroll editor window if cursor passes right margin.
   Verify there is a standard key to cycle between the windows
   Customizable window title; Kai email 2015-02-24
+  editor shouldn't be syntax highlighted if it is editing a text array; JS 2015-03-13

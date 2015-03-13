@@ -45,6 +45,24 @@ try
       ipAddresses.push a.address
 catch e then log 'cannot determine ip addresses: ' + e
 
+# Constants for entityType:
+#                         protocol
+#                          v1  v2
+#   DefinedFunction    =    1   1
+#   SimpleCharArray    =    2   2
+#   SimpleNumericArray =    4   3
+#   MixedSimpleArray   =    8   4
+#   NestedArray        =   16   5
+#   QuadORObject       =   32   6
+#   NativeFile         =   64   7
+#   SimpleCharVector   =  128   8
+#   AplNamespace       =  256   9
+#   AplClass           =  512  10
+#   AplInterface       = 1024  11
+#   AplSession         = 2048  12
+#   ExternalFunction   = 4096  13
+entityTypeTranslation = [0, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096]
+
 parseEditableEntity = (xml) -> # used for OpenWindow and UpdateWindow
   # v1 sample message:
   # <ReplyUpdateWindow>\n<entity><name>bnM=</name><text>Ok5hbWVzcGFjZSBucwogICAg4oiHIGYKICAgICAgMQogICAg4oiHCiAgICDiiIcgZwogICAgICAyCiAgICDiiIcKOkVuZE5hbWVzcGFjZQ==</text><cur_pos>4</cur_pos><token>1</token><bugger>0</bugger><sub_offset>0</sub_offset><sub_size>0</sub_size><type>256</type><ReadOnly>0</ReadOnly><tid>0</tid><tid_name>MA==</tid_name><colours>ra2tra2tra2trQMHBwADAwMDtAMVAAMDAwMDAwUAAwMDA7QAAwMDA7QDFQADAwMDAwMFAAMDAwO0AK6urq6urq6urq6urq4A</colours><attributes>\n</attributes></entity>\n</ReplyUpdateWindow>
@@ -62,6 +80,7 @@ parseEditableEntity = (xml) -> # used for OpenWindow and UpdateWindow
   currentRow: +tag('cur_pos', xml) || 0
   debugger: +tag 'bugger', xml
   lineAttributes: stop: bs
+  entityType: Math.max 0, entityTypeTranslation.indexOf +tag 'type', xml
 
 WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' # constants used for ReplyAtInputPrompt
 
