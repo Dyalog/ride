@@ -24,19 +24,19 @@ D.prefs = prefs = module.exports = ->
           Window title:
           <input id="prefs-windowTitle" class="text-field">
           <pre>#{'''
-            {WSID}            workspace name
-            {HOST}:{PORT}     interpreter's TCP endpoint
-            {PID}             PID of the interpreter process
-            {CHARS}           Unicode or Classic
-            {BITS}            64 or 32
-            {VER}             interpreter version
-              {VER_A}           major
-              {VER_B}           minor
-              {VER_C}           svn revision
-            {RIDE_VER}        RIDE version
-              {RIDE_VER_A}      major
-              {RIDE_VER_B}      minor
-              {RIDE_VER_C}      git commit number
+            <a href='#'>{WSID}</a>            workspace name
+            <a href='#'>{HOST}</a>:<a href='#'>{PORT}</a>     interpreter's TCP endpoint
+            <a href='#'>{PID}</a>             PID of the interpreter process
+            <a href='#'>{CHARS}</a>           Unicode or Classic
+            <a href='#'>{BITS}</a>            64 or 32
+            <a href='#'>{VER}</a>             interpreter version
+              <a href='#'>{VER_A}</a>           major
+              <a href='#'>{VER_B}</a>           minor
+              <a href='#'>{VER_C}</a>           svn revision
+            <a href='#'>{RIDE_VER}</a>        RIDE version
+              <a href='#'>{RIDE_VER_A}</a>      major
+              <a href='#'>{RIDE_VER_B}</a>      minor
+              <a href='#'>{RIDE_VER_C}</a>      git commit number
           '''}</pre>
         </div>
       </div>
@@ -47,6 +47,10 @@ D.prefs = prefs = module.exports = ->
         {text: 'OK', click: ok}
         {text: 'Cancel', click: -> $d.dialog 'close'; return}
       ]
+    $('#prefs-tab-title pre a').attr 'title', 'Insert'
+    $('#prefs-tab-title').on 'click', 'pre a', (e) ->
+      $i = $ '#prefs-windowTitle'; s = $i.val(); p = $i[0].selectionStart; u = $(e.target).text(); $i.val s[...p] + u + s[p..]
+      $i[0].selectionStart = $i[0].selectionEnd = p + u.length; return
 
   $d.dialog('option', 'position', at: 'center').dialog 'open'
 
