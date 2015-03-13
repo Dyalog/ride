@@ -3,14 +3,15 @@ prefs = require './prefs'
 module.exports = (cm, requestAutocompletion) -> # set up autocompletion, common code between session and editor
   tid = null # timeout id
   cm.on 'change', ->
-    clearTimeout tid
-    tid = setTimeout(
-      ->
-        tid = null; c = cm.getCursor(); s = cm.getLine c.line; i = c.ch
-        if i && s[i - 1] !in [' ', prefs.prefixKey()] then requestAutocompletion s, i
-        return
-      500
-    )
+    if cm.getOption('mode') == 'apl'
+      clearTimeout tid
+      tid = setTimeout(
+        ->
+          tid = null; c = cm.getCursor(); s = cm.getLine c.line; i = c.ch
+          if i && s[i - 1] !in [' ', prefs.prefixKey()] then requestAutocompletion s, i
+          return
+        500
+      )
     return
   (skip, options) ->
     if options.length

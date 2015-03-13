@@ -61,7 +61,7 @@ catch e then log 'cannot determine ip addresses: ' + e
 #   AplInterface       = 1024  11
 #   AplSession         = 2048  12
 #   ExternalFunction   = 4096  13
-entityTypeTranslation = [0, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096]
+entityTypeTranslation = [1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048, 4096]
 
 parseEditableEntity = (xml) -> # used for OpenWindow and UpdateWindow
   # v1 sample message:
@@ -80,7 +80,7 @@ parseEditableEntity = (xml) -> # used for OpenWindow and UpdateWindow
   currentRow: +tag('cur_pos', xml) || 0
   debugger: +tag 'bugger', xml
   lineAttributes: stop: bs
-  entityType: Math.max 0, entityTypeTranslation.indexOf +tag 'type', xml
+  entityType: 1 + entityTypeTranslation.indexOf +tag 'type', xml
 
 WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' # constants used for ReplyAtInputPrompt
 
