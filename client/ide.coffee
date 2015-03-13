@@ -152,7 +152,7 @@ module.exports = ->
       return
 
   # language bar
-  $('.lbar-prefs').click prefs
+  $('.lbar-prefs').click -> prefs 'keyboard'; return
   $tip = $ '.lbar-tip'; $tipDesc = $ '.lbar-tip-desc'; $tipText = $ '.lbar-tip-text'; $tipTriangle = $ '.lbar-tip-triangle'
   ttid = null # tooltip timeout id
   $ '.lbar'

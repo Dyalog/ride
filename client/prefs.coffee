@@ -9,7 +9,7 @@ ok = ->
   prefs.prefixKey pk; prefs.windowTitle wt
   $d.dialog 'close'; false
 
-D.prefs = prefs = module.exports = ->
+D.prefs = prefs = module.exports = (tabName) ->
   if !$d # the dialogue, lazily initialized
     $d = $ """
       <div id="prefs">
@@ -53,6 +53,7 @@ D.prefs = prefs = module.exports = ->
       $i[0].selectionStart = $i[0].selectionEnd = p + u.length; return
 
   $d.dialog('option', 'position', at: 'center').dialog 'open'
+  if tabName then $d.tabs active: $("#prefs-tabs-nav a[href='#prefs-tab-#{tabName}']").parent().index()
 
   # load current values
   $('#prefs-prefixKey').val prefs.prefixKey()
