@@ -4,8 +4,6 @@ autocompletion = require './autocompletion'
 prefs = require './prefs'
 {rLetter} = require './codemirror-apl-mode'
 
-createBreakpointElement = -> bp = document.createElement 'div'; bp.setAttribute 'class', 'breakpoint'; bp.innerHTML = '●'; bp
-
 editorHTML = do ->
   b = (cssClasses, description) -> "<a href='#' class='#{cssClasses} tb-button' title='#{description}'></a>"
   """
@@ -90,6 +88,9 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
           cm.replaceRange '', {line: n - 2, ch: cm.getLine(n - 2).length}, {line: n - 1, ch: 0}, 'D'
         volatileLine = null
     return
+
+  createBreakpointElement = ->
+    bp = $e[0].ownerDocument.createElement 'div'; bp.setAttribute 'class', 'breakpoint'; bp.innerHTML = '●'; bp
 
   cm.dyalogCommands =
     ED: -> emit 'Edit', win: id, text: cm.getValue(), pos: cm.indexFromPos cm.getCursor(); return
@@ -295,7 +296,7 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
     breakpoints = ee.lineAttributes.stop[..]
     for l in breakpoints then cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
     originalBreakpoints = breakpoints.join()
-    if opener then $('title').text ee.name
+    if opener then $('title', $e[0].ownerDocument).text ee.name
     return
   hasFocus: -> window.focused && cm.hasFocus()
   focus: -> (if !window.focused then window.focus()); cm.focus(); return
