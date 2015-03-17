@@ -9,7 +9,6 @@ P2 (Middle priority):
   Do not scroll session on AtInputPrompt.
   add replace (:%s/A/B/)
   ` keybindings and/or lbar should work in search box
-  Allow RIDE to be started on Mac OS X as a separate item
   
 P3 (Can wait):
   Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
@@ -173,3 +172,4 @@ Done:
   Verify there is a standard key to cycle between the windows
   Customizable window title; Kai email 2015-02-24
   editor shouldn't be syntax highlighted if it is editing a text array; JS 2015-03-13
+  Allow RIDE to be started on Mac OS X as a separate item
