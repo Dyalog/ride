@@ -190,6 +190,15 @@ module.exports = ->
   themeClasses = themes.map (x) -> 'theme-' + x.toLowerCase()
   allThemeClasses = themeClasses.join ' '
 
+  # zoom
+  $('body').addClass "zoom#{prefs.zoom()}"
+  prefs.zoom (z) ->
+    for _, w of wins
+      $b = $ 'body', w.getDocument()
+      $b.prop 'class', "zoom#{z} " + $b.prop('class').split(/\s+/).filter((s) -> !/^zoom-?\d+$/.test s).join ' '
+      w.refresh()
+    return
+
   # menu
   D.installMenu [
     (

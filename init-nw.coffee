@@ -48,22 +48,9 @@ if process? then do ->
     else # save window state:
       localStorage.winInfo = JSON.stringify x: nww.x, y: nww.y, width: nww.width, height: nww.height
     window.onbeforeunload?(); window.onbeforeunload = null; return
-  nww.zoomLevel = +localStorage.zoom || 0
   $ ->
     contextMenu = null
-    zoom = (x) ->
-      old = nww.zoomLevel; nww.zoomLevel = x
-      if nww.zoomLevel != x
-        # If nww.zoomLevel is outside of the allowed range, NW.js sets it to a fractonal number.
-        # We don't want that to happen, so let's revert to the original level:
-        nww.zoomLevel = old
-      else
-        if x then localStorage.zoom = x else delete localStorage.zoom
-      false
-    $(document)
-      .on 'keydown', '*', 'ctrl+= ctrl+shift+=', D.zoomIn    = -> zoom nww.zoomLevel + 1
-      .on 'keydown', '*', 'ctrl+-',              D.zoomOut   = -> zoom nww.zoomLevel - 1
-      .on 'keydown', '*', 'ctrl+0',              D.resetZoom = -> zoom 0
+    $ document
       .on 'keydown', '*', 'f12', -> nww.showDevTools(); false
       .on 'contextmenu', (e) ->
         if !contextMenu

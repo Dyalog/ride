@@ -79,6 +79,7 @@ prefs = module.exports
   ['showLanguageBar',       1]
   ['theme',                 '']
   ['windowTitle',           '{WSID} - {HOST}:{PORT} (PID: {PID})']
+  ['zoom',                  0]
 ]
 .forEach ([k, d]) ->       # k: preference name, d: default value
   t = typeof d; l = []     # t: type, l: listeners

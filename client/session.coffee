@@ -119,3 +119,5 @@ module.exports = (e, opts = {}) ->
   die: -> cm.setOption 'readOnly', true; return
   getLineWrapping: -> cm.getOption 'lineWrapping'
   setLineWrapping: (x) -> prefs.sessionLineWrapping x; cm.setOption 'lineWrapping', !!x; scrollCursorIntoView(); return
+  getDocument: -> $e[0].ownerDocument
+  refresh: -> cm.refresh(); scrollCursorIntoView(); return

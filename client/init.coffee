@@ -46,6 +46,22 @@ $ ->
     else
       connect()
 
+  if D.nwjs
+    zM = 11 # zoom level magnitude limit
+    $ document
+      .on 'keydown', '*', 'ctrl+=', D.zoomIn    = -> prefs.zoom Math.min  zM, prefs.zoom() + 1; false
+      .on 'keydown', '*', 'ctrl+-', D.zoomOut   = -> prefs.zoom Math.max -zM, prefs.zoom() - 1; false
+      .on 'keydown', '*', 'ctrl+0', D.resetZoom = -> prefs.zoom 0; false
+      .on 'keydown', '*', 'ctrl+shift+=', D.zoomIn
+
+  $ document
+    .on 'keydown', '*', 'ctrl+0',       -> D.zoomIn();    false
+    .on 'keydown', '*', 'shift+f1',     -> about(); false
+    .on 'keydown', '*', 'ctrl+tab ctrl+shift+tab', (e) ->
+      a = []; i = -1; for _, w of D.wins then (if w.hasFocus() then i = a.length); a.push w
+      j = if i < 0 then 0 else if e.shiftKey then (i + a.length - 1) % a.length else (i + 1) % a.length
+      $("#wintab#{a[j].id} a").click(); a[j].focus(); false
+
   # CSS class to indicate theme
   if !prefs.theme() then prefs.theme do ->
     # Detect platform
@@ -56,12 +72,6 @@ $ ->
     else if /^(linux|x11|android)/i.test p then 'freedom'
     else 'redmond'
   $('body').addClass "theme-#{prefs.theme()}"
-  $(document)
-    .on 'keydown', '*', 'shift+f1', -> about(); false
-    .on 'keydown', '*', 'ctrl+tab ctrl+shift+tab', (e) ->
-      a = []; i = -1; for _, w of D.wins then (if w.hasFocus() then i = a.length); a.push w
-      j = if i < 0 then 0 else if e.shiftKey then (i + a.length - 1) % a.length else (i + 1) % a.length
-      $("#wintab#{a[j].id} a").click(); a[j].focus(); false
 
   # CSS class to indicate platform (NW.js-only)
   if D.process

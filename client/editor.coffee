@@ -316,3 +316,5 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
     cm.setOption 'mode', h.mode
     for l in breakpoints then cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
     highlight h.hll; return
+  getDocument: -> $e[0].ownerDocument
+  refresh: -> cm.refresh(); return
