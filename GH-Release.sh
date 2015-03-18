@@ -61,10 +61,6 @@ for DIR in `ls build/ride`; do
     -H 'Content-Type: application/zip' \
     --data-binary @"$TMP_ZIP" \
     https://uploads.github.com/repos/$REPO/releases/$RELEASE_ID/assets?name=$ZIP
-  if [ "jason-ubuntu" = "`uname -n`" ]; then
-    echo 'uploading to MyDyalog'
-    scp ${TMP_ZIP} root@gosport-web.dyalog.com:/var/www/my.dyalog.com/files/ride/prebeta/
-  fi
   rm "$TMP_ZIP"
   cd -
 done
