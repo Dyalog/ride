@@ -11,6 +11,8 @@ r=/devt/ride/jsride
 d=`date +%Y-%m-%d--%H-%M` # append a letter to $d if such a directory already exists
 for suffix in '' {a..z}; do if [ ! -e $r/$d$suffix ]; then d=$d$suffix; break; fi; done
 mkdir -p $r/$d
+echo Copying Directories to $r/$d
+cp -r build/ride $r/$d
 for DIR in `ls build/ride`; do
   OS=`echo ${DIR} | sed 's/64//;s/32//'`
   BITS=`echo ${DIR} | sed 's/linux//;s/osx//;s/win//'`
