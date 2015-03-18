@@ -224,8 +224,8 @@ module.exports = ->
             {'': 'New _Session', key: 'Ctrl+N', action: D.rideNewSession}
             '-'
             {'': '_Load Demo...', action: loadDemo}
-            {'': '_Next Line from Demo',     key: 'Alt+N', action: nextLineFromDemo}
-            {'': '_Previous Line from Demo', key: 'Alt+P', action: prevLineFromDemo}
+            {'': '_Next Line from Demo',     dontBindKey: 1, key: 'Alt+N', action: nextLineFromDemo}
+            {'': '_Previous Line from Demo', dontBindKey: 1, key: 'Alt+P', action: prevLineFromDemo}
           ]
             .concat(
               if D.process?.platform != 'darwin' then [ # Mac's menu already has an item for Quit
