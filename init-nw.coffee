@@ -61,6 +61,8 @@ if process? then do ->
         false
     return
 
+  D.readFile = fs.readFile
+
   # external editors (available only under nwjs)
   tmpDir = process.env.TMPDIR || process.env.TMP || process.env.TEMP || '/tmp'
   if editorExe = process.env.DYALOG_IDE_EDITOR || process.env.EDITOR

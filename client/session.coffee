@@ -121,3 +121,5 @@ module.exports = (e, opts = {}) ->
   setLineWrapping: (x) -> prefs.sessionLineWrapping x; cm.setOption 'lineWrapping', !!x; scrollCursorIntoView(); return
   getDocument: -> $e[0].ownerDocument
   refresh: -> cm.refresh(); scrollCursorIntoView(); return
+  exec: (s) -> 
+    l = cm.lineCount() - 1; cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'; exec(); return

@@ -199,6 +199,20 @@ module.exports = ->
       w.refresh()
     return
 
+  # demo mode
+  demoLines = []; demoIndex = 0
+  loadDemo = ->
+    $ '<input id="loadDemoFile" type="file" style="display:none">'
+      .appendTo 'body'
+      .change ->
+        if @value then D.readFile @value, 'utf8', (err, s) ->
+          if err then console?.error? err; $.alert 'Cannot load demo file' else demoLines = s.split /\r?\n/; demoIndex = 0
+          return
+        return
+      .trigger 'click'
+    return
+  nextLineFromDemo = -> (if demoIndex < demoLines.length then session.exec demoLines[demoIndex++]); return
+
   # menu
   D.installMenu [
     (
@@ -206,7 +220,10 @@ module.exports = ->
         {'': '_File', items:
           [
             {'': '_Connect...', action: D.rideConnect}
-            {'': '_New Session', key: 'Ctrl+N', action: D.rideNewSession}
+            {'': 'New _Session', key: 'Ctrl+N', action: D.rideNewSession}
+            '-'
+            {'': '_Load Demo...', action: loadDemo}
+            {'': '_Next Line from Demo', key: 'Alt+N', action: nextLineFromDemo}
           ]
             .concat(
               if D.process?.platform != 'darwin' then [ # Mac's menu already has an item for Quit
