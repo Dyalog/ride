@@ -200,18 +200,19 @@ module.exports = ->
     return
 
   # demo mode
-  demoLines = []; demoIndex = 0
+  demoLines = []; demoIndex = -1
   loadDemo = ->
     $ '<input id="loadDemoFile" type="file" style="display:none">'
       .appendTo 'body'
       .change ->
         if @value then D.readFile @value, 'utf8', (err, s) ->
-          if err then console?.error? err; $.alert 'Cannot load demo file' else demoLines = s.split /\r?\n/; demoIndex = 0
+          if err then console?.error? err; $.alert 'Cannot load demo file' else demoLines = s.split /\r?\n/; demoIndex = -1
           return
         return
       .trigger 'click'
     return
-  nextLineFromDemo = -> (if demoIndex < demoLines.length then session.exec demoLines[demoIndex++]); return
+  nextLineFromDemo = -> (if demoIndex < demoLines.length - 1 then session.loadLine demoLines[++demoIndex]); return
+  prevLineFromDemo = -> (if demoIndex > 0                    then session.loadLine demoLines[--demoIndex]); return
 
   # menu
   D.installMenu [
@@ -223,7 +224,8 @@ module.exports = ->
             {'': 'New _Session', key: 'Ctrl+N', action: D.rideNewSession}
             '-'
             {'': '_Load Demo...', action: loadDemo}
-            {'': '_Next Line from Demo', key: 'Alt+N', action: nextLineFromDemo}
+            {'': '_Next Line from Demo',     key: 'Alt+N', action: nextLineFromDemo}
+            {'': '_Previous Line from Demo', key: 'Alt+P', action: prevLineFromDemo}
           ]
             .concat(
               if D.process?.platform != 'darwin' then [ # Mac's menu already has an item for Quit
@@ -234,7 +236,7 @@ module.exports = ->
         }
     )
     {'': '_Edit', items: [
-      {'': '_Preferences', action: prefs}
+      {'': 'Preferences', action: prefs}
       '-'
       {'': 'Weak Interrupt',   action: WI}
       {'': 'Strong Interrupt', action: SI}
