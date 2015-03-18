@@ -23,7 +23,7 @@ module.exports = (e, opts = {}) ->
     return
 
   cm = CodeMirror ($e = $ e)[0],
-    autofocus: true, mode: '', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
+    autofocus: true, mode: 'aplsession', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
     readOnly: true, keyMap: 'dyalog', lineWrapping: !!prefs.sessionLineWrapping(), indentUnit: 4
     extraKeys:
       'Shift-Tab': 'indentLess'

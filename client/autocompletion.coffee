@@ -3,7 +3,7 @@ prefs = require './prefs'
 module.exports = (cm, requestAutocompletion) -> # set up autocompletion, common code between session and editor
   tid = null # timeout id
   cm.on 'change', ->
-    if cm.getOption('mode') == 'apl'
+    if cm.getOption('mode') in ['apl', 'aplsession']
       clearTimeout tid
       tid = setTimeout(
         ->
