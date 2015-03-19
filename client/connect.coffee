@@ -73,7 +73,7 @@ module.exports = (opts) ->
   $spawn       = $ '#spawn'        ; $cancel      = $ '#fav-cancel'
   $spawnStatus = $ '#spawn-status' ; $listen      = $ '#listen'
   $about       = $ '#about'        ; $listenPort  = $ '#listen-port'
-  $listenDialog = null
+  $listenDialog = $connectDialog = null
 
   enableSpawnAndListen = (b) ->
     $('#spawn, #listen').button if b then 'enable' else 'disable'
@@ -90,7 +90,10 @@ module.exports = (opts) ->
     host = $host.val(); port = +$port.val()
     if !/^[a-z0-9\.\-:]+$/i.test host then $.alert 'Invalid host', 'Error', -> $host.focus(); return
     else if !(0 < port < 0xffff) then $.alert 'Invalid port', 'Error', -> $port.focus(); return
-    else D.socket.emit '*connect', {host, port}
+    else
+      $connectDialog = $ "<div class='connect-dialog'><div class='visual-distraction'></div></div>"
+        .dialog modal: 1, width: 350, title: 'Connecting...'
+      D.socket.emit '*connect', {host, port}
     false
   $new.click ->
     $list.find('option').attr 'selected', false
@@ -160,8 +163,13 @@ module.exports = (opts) ->
         ]
       return
     .on '*hijacked', ({addr}) -> $.alert "#{addr} has taken over usage of this proxy.", 'Disconnected'; return
-    .on '*connected', ({host, port}) -> $listenDialog?.dialog 'close'; ideInstance = ide(); ideInstance.setHostAndPort host, port; return
-    .on '*connectError', ({err}) -> $.alert err, 'Error'; return
+    .on '*connected', ({host, port}) ->
+      if $listenDialog  then $listenDialog.dialog  'close'; $listenDialog  = null
+      if $connectDialog then $connectDialog.dialog 'close'; $connectDialog = null
+      ideInstance = ide(); ideInstance.setHostAndPort host, port; return
+    .on '*connectError', ({err}) ->
+      if $connectDialog then $connectDialog.dialog 'close'; $connectDialog = null
+      $.alert err, 'Error'; return
     .on '*spawned', ({pid}) ->
       $spawnStatus.text "PID: #{pid}"
       enableSpawnAndListen false; return
@@ -172,8 +180,8 @@ module.exports = (opts) ->
       $spawnStatus.text(if code? then "exited with code #{code}" else "received #{signal}")
       enableSpawnAndListen true; return
     .on '*listenError', ({err}) ->
-      $listenDialog?.dialog 'close'; $.alert err, 'Error'
-      enableSpawnAndListen true; return
+      if $listenDialog then $listenDialog.dialog 'close'; $listenDialog = null
+      $.alert err, 'Error'; enableSpawnAndListen true; return
 
   $('#fav-list').resizable handles: 's,e'
 
