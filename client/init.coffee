@@ -14,6 +14,14 @@ require './util'
 prefs = require './prefs'
 
 $ ->
+  if D.nwjs
+    zM = 11 # zoom level magnitude limit
+    $ document
+      .on 'keydown', '*', 'ctrl+=', D.zoomIn    = -> prefs.zoom Math.min  zM, prefs.zoom() + 1; false
+      .on 'keydown', '*', 'ctrl+-', D.zoomOut   = -> prefs.zoom Math.max -zM, prefs.zoom() - 1; false
+      .on 'keydown', '*', 'ctrl+0', D.resetZoom = -> prefs.zoom 0; false
+      .on 'keydown', '*', 'ctrl+shift+=', D.zoomIn
+
   urlParams = {}
   for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
     [_, k, v] = /^([^=]*)=?(.*)$/.exec kv; urlParams[unescape(k or '')] = unescape(v or '')
@@ -45,14 +53,6 @@ $ ->
         .emit '*spawn'
     else
       connect()
-
-  if D.nwjs
-    zM = 11 # zoom level magnitude limit
-    $ document
-      .on 'keydown', '*', 'ctrl+=', D.zoomIn    = -> prefs.zoom Math.min  zM, prefs.zoom() + 1; false
-      .on 'keydown', '*', 'ctrl+-', D.zoomOut   = -> prefs.zoom Math.max -zM, prefs.zoom() - 1; false
-      .on 'keydown', '*', 'ctrl+0', D.resetZoom = -> prefs.zoom 0; false
-      .on 'keydown', '*', 'ctrl+shift+=', D.zoomIn
 
   $ document
     .on 'keydown', '*', 'ctrl+0',       -> D.zoomIn();    false
