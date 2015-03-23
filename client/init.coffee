@@ -74,8 +74,8 @@ $ ->
   $('body').addClass "theme-#{prefs.theme()}"
 
   # CSS class to indicate platform (NW.js-only)
-  if D.process
-    if D.process.platform == 'darwin' then $('body').addClass 'platform-mac'
+  if D.nwjs
+    if D.mac then $('body').addClass 'platform-mac'
     else if /^win/i.test D.process.platform then $('body').addClass 'platform-windows'
 
   # CSS class for focused window

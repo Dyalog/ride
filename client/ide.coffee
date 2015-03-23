@@ -229,7 +229,7 @@ module.exports = ->
             {'': '_Previous Line from Demo', key: 'Ctrl+Shift+P', action: prevLineFromDemo}
           ]
             .concat(
-              if D.process?.platform != 'darwin' then [ # Mac's menu already has an item for Quit
+              if !D.mac then [ # Mac's menu already has an item for Quit
                 '-'
                 {'': '_Quit', key: 'Ctrl+Q', action: D.quit}
               ] else []

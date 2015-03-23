@@ -1,37 +1,32 @@
 # NW.js-specific initialisation
-@D ?= {}
-
-segmentsIntersect = (a, b, c, d) -> a < d && c < b
-
-rectanglesIntersect = (r0, r1) -> (
-  segmentsIntersect(r0.x, r0.x + r0.width,  r1.x, r1.x + r1.width) &&
-  segmentsIntersect(r0.y, r0.y + r0.height, r1.y, r1.y + r1.height)
-)
-
-segmentFitWithin = (a, b, A, B) ->
-  if b - a > B - A then [A, B] else if a < A then [A, A + b - a] else if b > B then [B - b + a, B] else [a, b]
-
-rectangleFitWithin = (r, R) ->
-  [x, x1] = segmentFitWithin r.x, r.x + r.width,  R.x, R.x + R.width
-  [y, y1] = segmentFitWithin r.y, r.y + r.height, R.y, R.y + R.height
-  {x, y, width: x1 - x, height: y1 - y}
-
-restoreWindow = (w, r) -> # w: NWJS window, r: rectangle
-  for scr in require('nw.gui').Screen.screens
-    if rectanglesIntersect scr.work_area, r
-      r = rectangleFitWithin r, scr.work_area
-      w.moveTo r.x, r.y; w.resizeTo r.width, r.height
-      break
-  return
-
-if process? then do ->
+if process?
   gui = require 'nw.gui'; crypto = require 'crypto'; fs = require 'fs'; nomnom = require 'nomnom'
   path = require 'path'; {spawn} = require 'child_process'; proxy = require './proxy'
 
-  if process.platform == 'darwin'
-    process.env.DYALOG_IDE_INTERPRETER_EXE ||= process.cwd() + '/../Dyalog/mapl'
+  segmentsIntersect = (a, b, c, d) -> a < d && c < b
+
+  rectanglesIntersect = (r0, r1) -> (
+    segmentsIntersect(r0.x, r0.x + r0.width,  r1.x, r1.x + r1.width) &&
+    segmentsIntersect(r0.y, r0.y + r0.height, r1.y, r1.y + r1.height)
+  )
+
+  segmentFitWithin = (a, b, A, B) ->
+    if b - a > B - A then [A, B] else if a < A then [A, A + b - a] else if b > B then [B - b + a, B] else [a, b]
+
+  rectangleFitWithin = (r, R) ->
+    [x, x1] = segmentFitWithin r.x, r.x + r.width,  R.x, R.x + R.width
+    [y, y1] = segmentFitWithin r.y, r.y + r.height, R.y, R.y + R.height
+    {x, y, width: x1 - x, height: y1 - y}
+
+  restoreWindow = (w, r) -> # w: NWJS window, r: rectangle
+    for scr in gui.Screen.screens when rectanglesIntersect scr.work_area, r
+      r = rectangleFitWithin r, scr.work_area; w.moveTo r.x, r.y; w.resizeTo r.width, r.height; break
+    return
+
+  D.nwjs = true; D.mac = process.platform == 'darwin'
+  if D.mac then process.env.DYALOG_IDE_INTERPRETER_EXE ||= process.cwd() + '/../Dyalog/mapl'
   process.chdir process.env.PWD || process.env.HOME || '.' # see https://github.com/nwjs/nw.js/issues/648
-  D.nwjs = true; D.process = process; gui.Screen.Init(); nww = gui.Window.get()
+  D.process = process; gui.Screen.Init(); nww = gui.Window.get()
   if opener
     opener.D.floatingWindows.push nww
   else
@@ -91,8 +86,7 @@ if process? then do ->
     proxy.Proxy() socket1
     socket
 
-  # These two are overridden for the Mac
-  execPath = if process.platform != 'darwin' then process.execPath else process.execPath.replace /(\/Contents\/).*$/, '$1MacOS/node-webkit'
+  {execPath} = process; if D.mac then execPath = execPath.replace /(\/Contents\/).*$/, '$1MacOS/node-webkit'
   D.rideConnect    = -> spawn execPath, ['--no-spawn'], detached: true, stdio: ['ignore', 'ignore', 'ignore']; return
   D.rideNewSession = -> spawn execPath, ['-s'        ], detached: true, stdio: ['ignore', 'ignore', 'ignore']; return
 
@@ -105,32 +99,32 @@ if process? then do ->
   ).parse gui.App.argv
 
   # Debugging utilities
-  $(document).on 'keydown', '*', 'ctrl+f12', ->
-    lw = open ''
-    lw.document.write '''
-      <html>
-        <head>
-          <title>Proxy Log</title>
-          <style>body{font-family:monospace;white-space:pre}</style>
-          <script></script>
-        </head>
-        <body></body>
-      </html>
-    '''
-    wr = (s) ->
-      if !lw || lw.closed || !lw.document || !lw.document.createTextNode
-        i = proxy.log.listeners.indexOf wr
-        if i >= 0 then proxy.log.listeners.splice i, 1; lw = null
-      else
-        b = lw.document.body
-        atEnd = b.scrollTop == b.scrollHeight - b.clientHeight
-        b.appendChild lw.document.createTextNode s
-        if atEnd then b.scrollTop = b.scrollHeight - b.clientHeight
-      return
-    wr proxy.log.get().join ''; proxy.log.listeners.push wr
-    false
-
-  $(document).on 'keydown', '*', 'ctrl+shift+f12', -> foo.bar # cause a crash
+  $ document
+    .on 'keydown', '*', 'ctrl+shift+f12', -> foo.bar # cause a crash
+    .on 'keydown', '*', 'ctrl+f12', ->
+      lw = open ''
+      lw.document.write '''
+        <html>
+          <head>
+            <title>Proxy Log</title>
+            <style>body{font-family:monospace;white-space:pre}</style>
+            <script></script>
+          </head>
+          <body></body>
+        </html>
+      '''
+      wr = (s) ->
+        if !lw || lw.closed || !lw.document || !lw.document.createTextNode
+          i = proxy.log.listeners.indexOf wr
+          if i >= 0 then proxy.log.listeners.splice i, 1; lw = null
+        else
+          b = lw.document.body
+          atEnd = b.scrollTop == b.scrollHeight - b.clientHeight
+          b.appendChild lw.document.createTextNode s
+          if atEnd then b.scrollTop = b.scrollHeight - b.clientHeight
+        return
+      wr proxy.log.get().join ''; proxy.log.listeners.push wr
+      false
 
   # Error handling
   htmlChars = '&': '&amp;', '<': '&lt;', '>': '&gt;'
@@ -162,8 +156,7 @@ if process? then do ->
     """
     false
 
-  # Mac menu
-  if process.platform == 'darwin' && !opener
+  if D.mac && !opener # Mac menu
     groups = {} # group name -> array of MenuItem-s
     nwwMenu = new gui.Menu type: 'menubar'
     nwwMenu.createMacBuiltin 'Dyalog'
@@ -205,5 +198,3 @@ if process? then do ->
           theirMenu.submenu.insert new gui.MenuItem(type: 'separator'), i
           nww.menu.remove ourMenu
       return
-
-  return
