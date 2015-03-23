@@ -133,35 +133,34 @@ if process? then do ->
   $(document).on 'keydown', '*', 'ctrl+shift+f12', -> foo.bar # cause a crash
 
   # Error handling
-  if !process.env.DYALOG_IDE_USE_ORIGINAL_ERROR_PAGE
-    htmlChars = '&': '&amp;', '<': '&lt;', '>': '&gt;'
-    htmlEsc = (s) -> s.replace /./g, (x) -> htmlChars[x] || x
-    # $(window).on 'error', (e) ->
-    process.on 'uncaughtException', (e) ->
-      if window then window.lastError = e
-      info = """
-        IDE: #{JSON.stringify D.versionInfo}
-        Interpreter: #{JSON.stringify(D.remoteIdentification || null)}
-        localStorage: #{JSON.stringify localStorage}
+  htmlChars = '&': '&amp;', '<': '&lt;', '>': '&gt;'
+  htmlEsc = (s) -> s.replace /./g, (x) -> htmlChars[x] || x
+  # $(window).on 'error', (e) ->
+  process.on 'uncaughtException', (e) ->
+    if window then window.lastError = e
+    info = """
+      IDE: #{JSON.stringify D.versionInfo}
+      Interpreter: #{JSON.stringify(D.remoteIdentification || null)}
+      localStorage: #{JSON.stringify localStorage}
 
-        #{e.stack}
+      #{e.stack}
 
-        Proxy log:
-        #{proxy.log.get().join ''}
-      """
-      document.write """
-        <html>
-          <head><title>Error</title></head>
-          <body>
-            <h3>Oops... it broke!</h3>
-            <h3 style="font-family:apl,monospace">
-              <a href="mailto:support@dyalog.com?subject=#{escape 'RIDE crash'}&body=#{escape '\n\n' + info}">support@dyalog.com</a>
-            </h3>
-            <textarea autofocus style="width:100%;height:90%" nowrap>#{htmlEsc info}</textarea>
-          </body>
-        <html>
-      """
-      false
+      Proxy log:
+      #{proxy.log.get().join ''}
+    """
+    document.write """
+      <html>
+        <head><title>Error</title></head>
+        <body>
+          <h3>Oops... it broke!</h3>
+          <h3 style="font-family:apl,monospace">
+            <a href="mailto:support@dyalog.com?subject=#{escape 'RIDE crash'}&body=#{escape '\n\n' + info}">support@dyalog.com</a>
+          </h3>
+          <textarea autofocus style="width:100%;height:90%" nowrap>#{htmlEsc info}</textarea>
+        </body>
+      <html>
+    """
+    false
 
   # Mac menu
   if process.platform == 'darwin' && !opener
