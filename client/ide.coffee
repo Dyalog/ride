@@ -78,7 +78,7 @@ module.exports = ->
   host = port = wsid = ''
   prefs.windowTitle updateTitle = -> # add updateTitle() as a change listener for preference "windowTitle"
     ri = D.remoteIdentification || {}; v = D.versionInfo
-    $('title').text prefs.windowTitle().replace /\{(\w+)\}/g, (g0, g1) ->
+    t = prefs.windowTitle().replace /\{(\w+)\}/g, (g0, g1) ->
       switch g1.toUpperCase()
         when 'WSID'       then wsid || ''
         when 'HOST'       then host || ''
@@ -95,6 +95,7 @@ module.exports = ->
         when 'RIDE_VER_C' then (v.version || '').split('.')[2] || ''
         when 'RIDE_VER'   then v.version || ''
         else g0
+    $('title').text if /^\s*$/.test t then 'Dyalog' else t
     return
 
   die = -> # don't really, just pretend

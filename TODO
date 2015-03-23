@@ -11,6 +11,7 @@ P2 (Middle priority):
   add replace (:%s/A/B/)
   ` keybindings and/or lbar should work in search box
   an empty "Window Title" setting produces "index.html" in the title
+    NN: replaced empty title with "Dyalog"
 
 P3 (Can wait):
   Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
