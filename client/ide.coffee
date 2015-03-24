@@ -64,7 +64,7 @@ module.exports = ->
     return
 
   popWindow = (w) ->
-    if !opener && !isDead
+    if !D.floating && !isDead
       {width, height, x, y} = prefs.floatingWindowInfos()[w] || width: 500, height: 400
       spec = "width=#{width},height=#{height},resizable=1"; if x? then spec += ",left=#{x},top=#{y},screenX=#{x},screenY=#{y}"
       if pw = open "?win=#{w}", '_blank', spec

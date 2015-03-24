@@ -296,7 +296,7 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
     breakpoints = ee.lineAttributes.stop[..]
     for l in breakpoints then cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
     originalBreakpoints = breakpoints.join()
-    if opener then $('title', $e[0].ownerDocument).text ee.name
+    if D.floating then $('title', $e[0].ownerDocument).text ee.name
     return
   hasFocus: -> window.focused && cm.hasFocus()
   focus: -> (if !window.focused then window.focus()); cm.focus(); return
@@ -304,7 +304,7 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
   highlight: highlight
   setDebugger: setDebugger
   saved: (err) -> (if err then $.alert 'Cannot save changes' else emit 'CloseWindow', win: id); return
-  closePopup: -> (if opener then close()); return
+  closePopup: -> (if D.floating then close()); return
   autocomplete: autocompletion cm, (s, i) -> emit 'Autocomplete', line: s, pos: i, token: id
   saveAndClose: -> cm.execCommand 'EP'; return
   die: -> cm.setOption 'readOnly', true; return

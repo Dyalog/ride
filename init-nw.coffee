@@ -20,28 +20,53 @@ if process?
 
   restoreWindow = (w, r) -> # w: NWJS window, r: rectangle
     for scr in gui.Screen.screens when rectanglesIntersect scr.work_area, r
-      r = rectangleFitWithin r, scr.work_area; w.moveTo r.x, r.y; w.resizeTo r.width, r.height; break
+      r = rectangleFitWithin r, scr.work_area
+      w.moveTo r.x, r.y; w.resizeTo r.width, r.height
+      process.nextTick ->
+        w.dx = w.x      - r.x
+        w.dy = w.y      - r.y
+        w.dw = w.width  - r.width
+        w.dh = w.height - r.height
+        return
+      break
     return
 
-  D.nwjs = true; D.mac = process.platform == 'darwin'
+  D.nwjs = true; D.mac = process.platform == 'darwin'; D.floating = !!opener
   if D.mac then process.env.DYALOG_IDE_INTERPRETER_EXE ||= process.cwd() + '/../Dyalog/mapl'
   process.chdir process.env.PWD || process.env.HOME || '.' # see https://github.com/nwjs/nw.js/issues/648
   D.process = process; gui.Screen.Init(); nww = gui.Window.get()
-  if opener
-    opener.D.floatingWindows.push nww
-  else
-    D.floatingWindows = []
-    nww.on 'focus', -> D.floatingWindows.forEach((x) -> x.setAlwaysOnTop true ); return
-    nww.on 'blur',  -> D.floatingWindows.forEach((x) -> x.setAlwaysOnTop false); return
-    # restore window state:
-    if localStorage.winInfo then try restoreWindow nww, JSON.parse localStorage.winInfo
+
+  urlParams = {}
+  for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
+    [_, k, v] = /^([^=]*)=?(.*)$/.exec kv; urlParams[unescape(k or '')] = unescape(v or '')
+
+  do -> # restore window state:
+    if D.floating
+      opener.D.floatingWindows.push nww
+      if localStorage.floatingWindowInfos && (fwi = JSON.parse localStorage.floatingWindowInfos) && fwi[urlParams.win]
+        restoreWindow nww, fwi[urlParams.win]
+    else
+      D.floatingWindows = []
+      nww.on 'focus', -> D.floatingWindows.forEach((x) -> x.setAlwaysOnTop true ); return
+      nww.on 'blur',  -> D.floatingWindows.forEach((x) -> x.setAlwaysOnTop false); return
+      if localStorage.winInfo then try restoreWindow nww, JSON.parse localStorage.winInfo
+    return
   nww.show(); nww.focus() # focus() is needed for the Mac
   nww.on 'close', ->
     process.nextTick -> nww.close true; return
-    if opener
+    info =
+      x:      nww.x      - (nww.dx || 0)
+      y:      nww.y      - (nww.dy || 0)
+      width:  nww.width  - (nww.dw || 0)
+      height: nww.height - (nww.dh || 0)
+    # save window state:
+    if D.floating
       (fw = opener.D.floatingWindows).splice fw.indexOf(nww), 1
-    else # save window state:
-      localStorage.winInfo = JSON.stringify x: nww.x, y: nww.y, width: nww.width, height: nww.height
+      fwi = JSON.parse localStorage.floatingWindowInfos || '{}'
+      fwi[urlParams.win] = info
+      localStorage.floatingWindowInfos = JSON.stringify fwi
+    else
+      localStorage.winInfo = JSON.stringify info
     window.onbeforeunload?(); window.onbeforeunload = null; return
   $ ->
     contextMenu = null
@@ -127,36 +152,34 @@ if process?
       false
 
   # Error handling
-  htmlChars = '&': '&amp;', '<': '&lt;', '>': '&gt;'
-  htmlEsc = (s) -> s.replace /./g, (x) -> htmlChars[x] || x
-  # $(window).on 'error', (e) ->
-  process.on 'uncaughtException', (e) ->
-    if window then window.lastError = e
-    info = """
-      IDE: #{JSON.stringify D.versionInfo}
-      Interpreter: #{JSON.stringify(D.remoteIdentification || null)}
-      localStorage: #{JSON.stringify localStorage}
+  if !D.floating
+    htmlChars = '&': '&amp;', '<': '&lt;', '>': '&gt;'
+    htmlEsc = (s) -> s.replace /./g, (x) -> htmlChars[x] || x
+    process.on 'uncaughtException', (e) ->
+      if window then window.lastError = e
+      info = """
+        IDE: #{JSON.stringify D.versionInfo}
+        Interpreter: #{JSON.stringify(D.remoteIdentification || null)}
+        localStorage: #{JSON.stringify localStorage}
+        \n#{e.stack}\n
+        Proxy log:
+        #{proxy.log.get().join ''}
+      """
+      document.write """
+        <html>
+          <head><title>Error</title></head>
+          <body>
+            <h3>Oops... it broke!</h3>
+            <h3 style="font-family:apl,monospace">
+              <a href="mailto:support@dyalog.com?subject=#{escape 'RIDE crash'}&body=#{escape '\n\n' + info}">support@dyalog.com</a>
+            </h3>
+            <textarea autofocus style="width:100%;height:90%" nowrap>#{htmlEsc info}</textarea>
+          </body>
+        <html>
+      """
+      false
 
-      #{e.stack}
-
-      Proxy log:
-      #{proxy.log.get().join ''}
-    """
-    document.write """
-      <html>
-        <head><title>Error</title></head>
-        <body>
-          <h3>Oops... it broke!</h3>
-          <h3 style="font-family:apl,monospace">
-            <a href="mailto:support@dyalog.com?subject=#{escape 'RIDE crash'}&body=#{escape '\n\n' + info}">support@dyalog.com</a>
-          </h3>
-          <textarea autofocus style="width:100%;height:90%" nowrap>#{htmlEsc info}</textarea>
-        </body>
-      <html>
-    """
-    false
-
-  if D.mac && !opener # Mac menu
+  if D.mac && !D.floating # Mac menu
     groups = {} # group name -> array of MenuItem-s
     nwwMenu = new gui.Menu type: 'menubar'
     nwwMenu.createMacBuiltin 'Dyalog'

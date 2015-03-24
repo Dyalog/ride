@@ -25,7 +25,7 @@ $ ->
   urlParams = {}
   for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
     [_, k, v] = /^([^=]*)=?(.*)$/.exec kv; urlParams[unescape(k or '')] = unescape(v or '')
-  if opener && (win = urlParams.win)? # are we running in a floating editor window?
+  if D.floating && (win = urlParams.win)?
     wins = D.wins = opener.D.wins
     $('body').addClass('floating-window').html('<div class="ui-layout-center"></div>').layout
       defaults: enableCursorHotkey: 0
@@ -34,10 +34,7 @@ $ ->
     $('title').text wins[win].name
     ed0 = wins[win]; ed = wins[win] = Editor $('.ui-layout-center'), ed0.getOpts()
     ed.setState ed0.getState(); ed.updateSize(); ed.focus(); ed0 = null
-    window.onbeforeunload = ->
-      fwis = prefs.floatingWindowInfos()
-      fwis[win] = x: window.screenX, y: window.screenY, width: $(window).width(), height: $(window).height()
-      prefs.floatingWindowInfos fwis; ed.saveAndClose(); return
+    window.onbeforeunload = -> ed.saveAndClose(); return
   else
     D.socket = (D.createSocket || io)()
     D.quit ?= close
