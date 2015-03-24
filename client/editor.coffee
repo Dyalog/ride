@@ -4,7 +4,7 @@ autocompletion = require './autocompletion'
 prefs = require './prefs'
 {rLetter} = require './codemirror-apl-mode'
 
-editorHTML = do ->
+EDITOR_HTML = do ->
   b = (cssClasses, description) -> "<a href='#' class='#{cssClasses} tb-button' title='#{description}'></a>"
   """
     <div class="toolbar debugger-toolbar">
@@ -54,7 +54,7 @@ editorHTML = do ->
 
 module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
   {id, emit} = opts
-  ($e = $ e).html editorHTML
+  ($e = $ e).html EDITOR_HTML
   isDebugger = opts.debugger
   volatileLine = null # the line number of the empty line inserted when cursor is at eof and you press <down>
 
