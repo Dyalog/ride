@@ -59,7 +59,7 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
   volatileLine = null # the line number of the empty line inserted when cursor is at eof and you press <down>
 
   cm = CodeMirror $e.find('.cm')[0],
-    firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]", scrollButtonHeight: 12
+    firstLineNumber: 0, scrollButtonHeight: 12, lineNumberFormatter: (i) -> "[#{i}]"
     keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
     gutters: ['breakpoints', 'CodeMirror-linenumbers'], indentUnit: 4
     extraKeys:
