@@ -4,7 +4,7 @@ prefs = require './prefs'
 module.exports = (cm, requestAutocompletion) -> # set up autocompletion, common code between session and editor
   tid = null # timeout id
   cm.on 'change', ->
-    if cm.getOption('mode') in ['apl', 'aplsession'] and cm.getCursor().line
+    if cm.getOption('mode') in ['apl', 'aplsession'] && cm.getCursor().line
       clearTimeout tid
       tid = setTimeout(
         ->
@@ -15,7 +15,7 @@ module.exports = (cm, requestAutocompletion) -> # set up autocompletion, common 
       )
     return
   (skip, options) ->
-    if options.length
+    if options.length && cm.hasFocus() && cm.getWrapperElement().ownerDocument.hasFocus()
       c = cm.getCursor(); from = line: c.line, ch: c.ch - skip; sel = ''
       cm.showHint
         completeOnSingleClick: true
