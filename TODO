@@ -4,14 +4,12 @@ Bugs / Issues External to RIDE
   Yes/No dialogue, needs to be supported in the RIDE protocol; email from Morten 2015-02-14
 
 P1 (Definitely high priority):
-  size of a floating window is diminished by one line every time it is reopened; Marc Griffiths 2015-03-13
 
 P2 (Middle priority):
   Do not scroll session on AtInputPrompt.
   add replace (:%s/A/B/)
   ` keybindings and/or lbar should work in search box
-  an empty "Window Title" setting produces "index.html" in the title
-    NN: replaced empty title with "Dyalog"
+    NN: implemented for lbar
 
 P3 (Can wait):
   Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
@@ -174,3 +172,6 @@ Done:
   editor shouldn't be syntax highlighted if it is editing a text array; JS 2015-03-13
   Allow RIDE to be started on Mac OS X as a separate item
   keyboard button in the language bar should open the "Keyboard" tab in "Preferences"
+  an empty "Window Title" setting produces "index.html" in the title
+    NN: replaced empty title with "Dyalog"
+  size of a floating window is diminished by one line every time it is reopened; Marc Griffiths 2015-03-13
