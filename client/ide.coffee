@@ -266,7 +266,7 @@ module.exports = ->
         .concat [
           '-'
           {'': 'Theme', items: themes.map (x, i) ->
-            '': x, group: 'themes', checked: $('body').hasClass(themeClasses[i]), action: ->
+            '': x, group: 'themes', checked: prefs.theme() == x.toLowerCase(), action: ->
               prefs.theme x.toLowerCase(); $('body').removeClass(allThemeClasses).addClass themeClasses[i]; return
           }
         ]
