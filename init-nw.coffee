@@ -32,7 +32,7 @@ if process?
     return
 
   D.nwjs = true; D.mac = process.platform == 'darwin'; D.floating = !!opener
-  if D.mac then process.env.DYALOG_IDE_INTERPRETER_EXE ||= process.cwd() + '/../Dyalog/mapl'
+  if D.mac then process.env.DYALOG_IDE_INTERPRETER_EXE ||= path.resolve process.cwd(), '../Dyalog/mapl'
   process.chdir process.env.PWD || process.env.HOME || '.' # see https://github.com/nwjs/nw.js/issues/648
   D.process = process; gui.Screen.Init(); nww = gui.Window.get()
 
