@@ -220,6 +220,8 @@ module.exports = ->
   [demoNext, demoPrev] = [1, -1].map (d) -> ->
     (if 0 <= demoIndex + d < demoLines.length then demoIndex += d; session.loadLine demoLines[demoIndex]); return
 
+  D.editorsOnTop = prefs.editorsOnTop()
+
   # menu
   D.installMenu [
     (
@@ -254,6 +256,7 @@ module.exports = ->
       ]
         .concat(
           if D.nwjs then [
+            {'': 'Editors on Top', checked: prefs.editorsOnTop(), action: (x) -> prefs.editorsOnTop D.editorsOnTop = x; return}
             '-'
             {'': 'Zoom _In',    key: 'Ctrl+=', dontBindKey: 1, action: D.zoomIn}
             {'': 'Zoom _Out',   key: 'Ctrl+-', dontBindKey: 1, action: D.zoomOut}

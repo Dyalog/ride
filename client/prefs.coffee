@@ -81,6 +81,7 @@ D.prefs = prefs = module.exports = (tabName) ->
 #   prefs.foo.getDefault()      # retrieve default value
 prefs = module.exports
 [ # name                    default
+  ['editorsOnTop',          0]
   ['favs',                  [host: '127.0.0.1', port: 4502]]
   ['floatingWindowInfos',   {}]
   ['floatNewEditors',       0]

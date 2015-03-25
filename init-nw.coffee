@@ -46,9 +46,9 @@ if process?
       if localStorage.floatingWindowInfos && (fwi = JSON.parse localStorage.floatingWindowInfos) && fwi[urlParams.win]
         restoreWindow nww, fwi[urlParams.win]
     else
-      D.floatingWindows = []
-      nww.on 'focus', -> D.floatingWindows.forEach((x) -> x.setAlwaysOnTop true ); return
-      nww.on 'blur',  -> D.floatingWindows.forEach((x) -> x.setAlwaysOnTop false); return
+      D.floatingWindows = []; D.editorsOnTop = 0
+      nww.on 'focus', -> (for x in D.floatingWindows then x.setAlwaysOnTop !!D.editorsOnTop; return); return
+      nww.on 'blur',  -> (for x in D.floatingWindows then x.setAlwaysOnTop false;            return); return
       if localStorage.winInfo then try restoreWindow nww, JSON.parse localStorage.winInfo
     return
   nww.show(); nww.focus() # focus() is needed for the Mac
