@@ -47,12 +47,11 @@ if [ $changed -eq 1 ]; then echo 'concatenating libs'; cat $us >build/tmp/libs.j
 echo 'browserifying'
 (
   cat <<.
-    var D=D||{};
-    D.versionInfo={
+    var D={versionInfo:{
       version:'0.1.$(git rev-list --count HEAD)',
       date:'$(git show -s HEAD --pretty=format:%ci)',
       rev:'$(git rev-parse HEAD)'
-    };
+    }};
 .
   cat build/tmp/libs.js
   browserify -d -t coffeeify --extension=.coffee client/init.coffee | exorcist build/static/client.map
