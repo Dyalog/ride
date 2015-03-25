@@ -212,7 +212,9 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
         cm.setCursor line: l + 1, ch: 0
 
   lastQuery = lastIC = overlay = annotation = null
-  clearSearch = -> cm.removeOverlay overlay; overlay = null; annotation?.clear(); annotation = null; return
+  clearSearch = ->
+    $('.CodeMirror-vscrollbar', $e).prop 'title', ''
+    cm.removeOverlay overlay; overlay = null; annotation?.clear(); annotation = null; return
   highlightSearch = ->
     ic = !$('.tb-case:visible', $tb).hasClass 'pressed' # ic: ignore case (like in vim)
     q = $('.tb-search:visible', $tb).val(); if ic then q = q.toLowerCase() # q: the query string
@@ -226,6 +228,7 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
           if !i then         stream.pos += q.length; 'searching'
           else if i > 0 then stream.pos += i;        return
           else               stream.skipToEnd();     return
+        $('.CodeMirror-vscrollbar', $e).prop 'title', 'Lines on scroll bar show match locations'
     [q, ic]
   search = (backwards) ->
     [q, ic] = highlightSearch()
