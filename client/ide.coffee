@@ -209,18 +209,16 @@ module.exports = ->
 
   # demo mode
   demoLines = []; demoIndex = -1
-  loadDemo = ->
-    $ '<input id="loadDemoFile" type="file" style="display:none">'
-      .appendTo 'body'
-      .change ->
-        if @value then D.readFile @value, 'utf8', (err, s) ->
-          if err then console?.error? err; $.alert 'Cannot load demo file' else demoLines = s.split /\r?\n/; demoIndex = -1
-          return
+  demoLoad = ->
+    $('<input type="file" style="display:none">').appendTo('body').trigger('click').change ->
+      if @value then D.readFile @value, 'utf8', (err, s) ->
+        if err then console?.error? err; $.alert 'Cannot load demo file'
+        else demoLines = s.split /\r?\n/; demoIndex = -1
         return
-      .trigger 'click'
+      return
     return
-  nextLineFromDemo = -> (if demoIndex < demoLines.length - 1 then session.loadLine demoLines[++demoIndex]); return
-  prevLineFromDemo = -> (if demoIndex > 0                    then session.loadLine demoLines[--demoIndex]); return
+  [demoNext, demoPrev] = [1, -1].map (d) -> ->
+    (if 0 <= demoIndex + d < demoLines.length then demoIndex += d; session.loadLine demoLines[demoIndex]); return
 
   # menu
   D.installMenu [
@@ -230,10 +228,6 @@ module.exports = ->
           [
             {'': '_Connect...', action: D.rideConnect}
             {'': 'New _Session', key: 'Ctrl+N', action: D.rideNewSession}
-            '-'
-            {'': '_Load Demo...', action: loadDemo}
-            {'': '_Next Line from Demo',     key: 'Ctrl+Shift+N', action: nextLineFromDemo}
-            {'': '_Previous Line from Demo', key: 'Ctrl+Shift+P', action: prevLineFromDemo}
           ]
             .concat(
               if !D.mac then [ # Mac's menu already has an item for Quit
@@ -274,6 +268,14 @@ module.exports = ->
           }
         ]
     }
+    (
+      if D.nwjs
+        {'': '_Tools', items: [
+          {'': '_Load Demo...', action: demoLoad}
+          {'': '_Next Line from Demo',     key: 'Ctrl+Shift+N', action: demoNext}
+          {'': '_Previous Line from Demo', key: 'Ctrl+Shift+P', action: demoPrev}
+        ]}
+    )
     {'': '_Help', items: [
       {'': '_About', key: 'Shift+F1', dontBindKey: 1, action: about}
     ]}

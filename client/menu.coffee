@@ -66,7 +66,7 @@ D.installMenu ?= (arg) ->
       mFocus if $f.is 'a' then $f else $f.find('a').first()
     false
 
-  $m = $('<div class="menu"></div>').prependTo('body').empty().addClass('menu').append arg.map render
+  $m = $('<div class="menu">').prependTo('body').empty().addClass('menu').append arg.map render
   $m.find('>.m-sub>.m-opener').addClass 'm-top'
   $m.on 'mouseover', 'a', -> $(@).closest('.menu').children().is('.m-open') && mFocus @; return
     .on 'mousedown', 'a', -> (if $(@).parentsUntil('.menu').last().is '.m-open' then mFocus null else mFocus @); false
@@ -78,7 +78,7 @@ D.installMenu ?= (arg) ->
     .on 'keydown', '*', 'esc f10', -> mFocus null; false
 
   isAccessKeyEvent = (e) -> e.altKey && !e.ctrlKey && !e.shiftKey && 65 <= e.which <= 90
-  $(document)
+  $ document
     .on 'keydown', '*', 'f10', -> $m.children().eq(0).addClass('m-open').find('a').eq(1).focus(); false
     .on 'keyup keypress', (e) -> !isAccessKeyEvent e
     .mousedown (e) -> (if !$(e.target).closest('.menu').length then mFocus null); return
