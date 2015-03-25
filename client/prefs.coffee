@@ -1,12 +1,53 @@
 # Preferences UI
+
+tabImpls = [
+  do ->
+    $pk = null
+    name: 'Keyboard'
+    init: ($e) -> $e.html '<label>Prefix key: <input class="text-field" size="1"></label>'; $pk = $ 'input', $e; return
+    load: -> $pk.val prefs.prefixKey(); return
+    validate: -> if $pk.val().length != 1 then message: 'Invalid prefix key', element: $pk
+    save: -> prefs.prefixKey $pk.val(); return
+  do ->
+    $wt = null
+    name: 'Title'
+    init: ($e) ->
+      $e.html """
+        Window title:
+        <input class="text-field">
+        <pre>
+        <a href='#'>{WSID}</a>            workspace name
+        <a href='#'>{HOST}</a>:<a href='#'>{PORT}</a>     interpreter's TCP endpoint
+        <a href='#'>{PID}</a>             PID of the interpreter process
+        <a href='#'>{CHARS}</a>           Unicode or Classic
+        <a href='#'>{BITS}</a>            64 or 32
+        <a href='#'>{VER}</a>             interpreter version
+          <a href='#'>{VER_A}</a>           major
+          <a href='#'>{VER_B}</a>           minor
+          <a href='#'>{VER_C}</a>           svn revision
+        <a href='#'>{RIDE_VER}</a>        RIDE version
+          <a href='#'>{RIDE_VER_A}</a>      major
+          <a href='#'>{RIDE_VER_B}</a>      minor
+          <a href='#'>{RIDE_VER_C}</a>      git commit number
+        </pre>
+      """
+      $e.on 'click', 'pre a', (e) ->
+        s = $wt.val(); p = $wt[0].selectionStart; u = $(e.target).text(); $wt.val s[...p] + u + s[p..]
+        $wt[0].selectionStart = $wt[0].selectionEnd = p + u.length; return
+      $('pre a', $e).attr 'title', 'Insert'; $wt = $ 'input', $e; return
+    load: -> $wt.val prefs.windowTitle(); return
+    save: -> prefs.windowTitle $wt.val(); return
+]
+
+safe = (s) -> s.toLowerCase().replace /[^a-z\-]/g, '-' # make a string suitable for a DOM id
+join = (a) -> a.join ''
+
 $d = null # dialogue instance, lazily initialized
 
 ok = ->
-  pk = $('#prefs-prefixKey').val(); wt = $('#prefs-windowTitle').val()
-  # validate
-  if pk.length != 1 then $.alert('Invalid prefix key', 'Error', -> $pk.focus(); return); return
-  # apply changes
-  prefs.prefixKey pk; prefs.windowTitle wt
+  for t in tabImpls when v = t.validate?()
+    $.alert v.message, 'Error', if v.element then do (v = v) -> v.element.focus()
+    return
   $d.dialog 'close'; false
 
 D.prefs = prefs = module.exports = (tabName) ->
@@ -14,50 +55,21 @@ D.prefs = prefs = module.exports = (tabName) ->
     $d = $ """
       <div id="prefs">
         <ul id="prefs-tabs-nav">
-          <li><a href="#prefs-tab-keyboard">Keyboard</a></li>
-          <li><a href="#prefs-tab-title">Title</a></li>
+          #{join tabImpls.map (t) -> "<li><a href='#prefs-tab-#{safe t.name}'>#{t.name}</a></li>"}
         </ul>
-        <div id="prefs-tab-keyboard">
-          <label>Prefix key: <input id="prefs-prefixKey" class="text-field" size="1"></label>
-        </div>
-        <div id="prefs-tab-title">
-          Window title:
-          <input id="prefs-windowTitle" class="text-field">
-          <pre>#{'''
-            <a href='#'>{WSID}</a>            workspace name
-            <a href='#'>{HOST}</a>:<a href='#'>{PORT}</a>     interpreter's TCP endpoint
-            <a href='#'>{PID}</a>             PID of the interpreter process
-            <a href='#'>{CHARS}</a>           Unicode or Classic
-            <a href='#'>{BITS}</a>            64 or 32
-            <a href='#'>{VER}</a>             interpreter version
-              <a href='#'>{VER_A}</a>           major
-              <a href='#'>{VER_B}</a>           minor
-              <a href='#'>{VER_C}</a>           svn revision
-            <a href='#'>{RIDE_VER}</a>        RIDE version
-              <a href='#'>{RIDE_VER_A}</a>      major
-              <a href='#'>{RIDE_VER_B}</a>      minor
-              <a href='#'>{RIDE_VER_C}</a>      git commit number
-          '''}</pre>
-        </div>
+        #{join tabImpls.map (t) -> "<div id='prefs-tab-#{safe t.name}'></div>"}
       </div>
     """
       .tabs()
       .on 'keydown', 'input', 'return', ok
-      .dialog modal: 1, autoOpen: 0, title: 'Preferences', minWidth: 600, minHeight: 400, buttons: [
+      .dialog modal: 1, autoOpen: 0, title: 'Preferences', width: 600, height: 450, buttons: [
         {text: 'OK', click: ok}
         {text: 'Cancel', click: -> $d.dialog 'close'; return}
       ]
-    $('#prefs-tab-title pre a').attr 'title', 'Insert'
-    $('#prefs-tab-title').on 'click', 'pre a', (e) ->
-      $i = $ '#prefs-windowTitle'; s = $i.val(); p = $i[0].selectionStart; u = $(e.target).text(); $i.val s[...p] + u + s[p..]
-      $i[0].selectionStart = $i[0].selectionEnd = p + u.length; return
-
+    for t in tabImpls then t.init $ "#prefs-tab-#{safe t.name}"
   $d.dialog('option', 'position', at: 'center').dialog 'open'
   if tabName then $d.tabs active: $("#prefs-tabs-nav a[href='#prefs-tab-#{tabName}']").parent().index()
-
-  # load current values
-  $('#prefs-prefixKey').val prefs.prefixKey()
-  $('#prefs-windowTitle').val prefs.windowTitle()
+  for t in tabImpls then t.load?()
   return
 
 # Preferences API -- localStorage should be accessed only through it

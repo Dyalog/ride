@@ -264,16 +264,15 @@ input, textarea
 .ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; opacity: .3; filter: Alpha(Opacity=30); border-radius: 8px; background: #aaaaaa; }
 #prefs { height: 80px; }
 #prefs-tabs-nav a { outline: none; }
-#prefs-prefixKey { width: 1.5em; text-align: center; }
+#prefs-tab-keyboard input { width: 1.5em; text-align: center; }
 #prefs-tab-title
   text-align: left
+  input { width: 100%; display: block; margin-bottom: 20px; }
   pre
     overflow: auto
     a
-      text-decoration: none; color: black;
+      text-decoration: none; color: black
       &:hover { text-decoration: underline; color: blue; }
-#prefs-tab-title pre { overflow: auto; }
-#prefs-windowTitle { width: 100%; display: block; margin-bottom: 20px; }
 .ui-dialog-content.about
   padding: 0; margin: 0
   .logo { background: #fc9732 16px center no-repeat url(dyaloglogo.png); height: 80px; }
