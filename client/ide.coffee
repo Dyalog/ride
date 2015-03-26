@@ -198,15 +198,6 @@ module.exports = ->
   themeClasses = themes.map (x) -> 'theme-' + x.toLowerCase()
   allThemeClasses = themeClasses.join ' '
 
-  # zoom
-  $('body').addClass "zoom#{prefs.zoom()}"
-  prefs.zoom (z) ->
-    for _, w of wins
-      $b = $ 'body', w.getDocument()
-      $b.prop 'class', "zoom#{z} " + $b.prop('class').split(/\s+/).filter((s) -> !/^zoom-?\d+$/.test s).join ' '
-      w.refresh()
-    return
-
   # demo mode
   demoLines = []; demoIndex = -1
   demoLoad = ->
@@ -258,9 +249,9 @@ module.exports = ->
           if D.nwjs then [
             {'': 'Editors on Top', checked: prefs.editorsOnTop(), action: (x) -> prefs.editorsOnTop D.editorsOnTop = x; return}
             '-'
-            {'': 'Zoom _In',    key: 'Ctrl+=', dontBindKey: 1, action: D.zoomIn}
-            {'': 'Zoom _Out',   key: 'Ctrl+-', dontBindKey: 1, action: D.zoomOut}
-            {'': '_Reset Zoom', key: 'Ctrl+0', dontBindKey: 1, action: D.resetZoom}
+            {'': 'Zoom _In',    key: 'Ctrl+=', dontBindKey: 1, action: -> D.zoomIn();    return}
+            {'': 'Zoom _Out',   key: 'Ctrl+-', dontBindKey: 1, action: -> D.zoomOut();   return}
+            {'': '_Reset Zoom', key: 'Ctrl+0', dontBindKey: 1, action: -> D.resetZoom(); return}
           ] else []
         )
         .concat [

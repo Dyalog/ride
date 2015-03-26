@@ -21,6 +21,13 @@ $ ->
       .on 'keydown', '*', 'ctrl+-', D.zoomOut   = -> prefs.zoom Math.max -zM, prefs.zoom() - 1; false
       .on 'keydown', '*', 'ctrl+0', D.resetZoom = -> prefs.zoom 0; false
       .on 'keydown', '*', 'ctrl+shift+=', D.zoomIn
+    $('body').addClass "zoom#{prefs.zoom()}"
+    prefs.zoom (z) ->
+      for _, w of wins
+        $b = $ 'body', w.getDocument()
+        $b.prop 'class', "zoom#{z} " + $b.prop('class').split(/\s+/).filter((s) -> !/^zoom-?\d+$/.test s).join ' '
+        w.refresh()
+      return
 
   urlParams = {}
   for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
@@ -52,8 +59,7 @@ $ ->
       connect()
 
   $ document
-    .on 'keydown', '*', 'ctrl+0',       -> D.zoomIn();    false
-    .on 'keydown', '*', 'shift+f1',     -> about(); false
+    .on 'keydown', '*', 'shift+f1', -> about(); false
     .on 'keydown', '*', 'ctrl+tab ctrl+shift+tab', (e) ->
       a = []; i = -1; for _, w of D.wins then (if w.hasFocus() then i = a.length); a.push w
       j = if i < 0 then 0 else if e.shiftKey then (i + a.length - 1) % a.length else (i + 1) % a.length
