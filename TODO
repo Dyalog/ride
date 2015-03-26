@@ -24,6 +24,7 @@ P3 (Can wait):
 
 P4 (I will think about it):
   Option to automatically pop up completion box after a timeout OR use a keystroke
+  Ctrl+Cmd+Space on the Mac starts a "Special Characters" application -- find a way to disable it
 
 Not yet prioritized:
   (OS X) - Reported by Mike Powell: Dragging the text to a different point uses the vertical bar cursor. Holding the Option key while doing this changes the cursor to the green and white cross (Implying a copy - but it still moves the text).
@@ -35,6 +36,8 @@ Not yet prioritized:
   Customizable colours for syntax highlighting
   Disable EP in an editor after it has been pressed once
   Menu items for next/prev line from demo should be disabled when there are no more lines; MK Jabber 2015-03-25
+  Closing the session window should close all open editor windows
+  After opening an editor, focus the next editor instead of the session
 
 Later:
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
