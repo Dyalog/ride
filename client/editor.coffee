@@ -3,6 +3,7 @@ require './codemirror-apl-mode'
 autocompletion = require './autocompletion'
 prefs = require './prefs'
 {rLetter} = require './codemirror-apl-mode'
+{onCodeMirrorDoubleClick} = require './util'
 
 EDITOR_HTML = do ->
   b = (cssClasses, description) -> "<a href='#' class='#{cssClasses} tb-button' title='#{description}'></a>"
@@ -185,6 +186,8 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
 
   breakpoints = [] # array of line numbers
   cm.on 'gutterClick', (cm, l, gutter, event) -> cm.setCursor line: l, ch: 0; cm.execCommand 'BP'; return
+
+  onCodeMirrorDoubleClick cm, -> cm.execCommand 'ED'; return
 
   $tb = $ '.toolbar', $e
     .on 'mousedown',        '.tb-button', (e) -> $(e.target).addClass    'armed'; e.preventDefault(); return

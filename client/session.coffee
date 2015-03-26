@@ -1,6 +1,7 @@
 CodeMirror = require 'codemirror'
 autocompletion = require './autocompletion'
 prefs = require './prefs'
+{onCodeMirrorDoubleClick} = require './util'
 
 module.exports = (e, opts = {}) ->
 
@@ -72,12 +73,7 @@ module.exports = (e, opts = {}) ->
       es = [cm.getLine cm.getCursor().line]
     opts.exec es, trace; dirty = {}; histAdd es.filter((x) -> !/^\s*$/.test x); return
 
-  # CodeMirror supports 'dblclick' events but they are unreliable and seem to require rather a short time between the two clicks
-  # So, let's track clicks manually:
-  lct = lcx = lcy = 0 # last click's timestamp, x, and y
-  cm.on 'mousedown', (cm, e) ->
-    if e.timeStamp - lct < 400 && Math.abs(lcx - e.x) + Math.abs(lcy - e.y) < 10 then cm.execCommand 'ED'
-    lct = e.timeStamp; lcx = e.x; lcy = e.y; return
+  onCodeMirrorDoubleClick cm, -> cm.execCommand 'ED'; return
 
   cm.on 'beforeChange', (_, c) ->
     if c.origin != 'D'
