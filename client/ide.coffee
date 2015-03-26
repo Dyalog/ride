@@ -25,7 +25,7 @@ module.exports = ->
   isDead = 0
   pending = [] # lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
 
-  emit = (x, y) -> D.socket.emit x, y; return
+  emit = (x, y) -> isDead || D.socket.emit x, y; return
 
   WI = -> emit 'WeakInterrupt'; return
   SI = -> emit 'StrongInterrupt'; return
