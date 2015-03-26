@@ -47,8 +47,8 @@ if process?
         restoreWindow nww, fwi[urlParams.win]
     else
       D.floatingWindows = []; D.editorsOnTop = 0
-      nww.on 'focus', -> (for x in D.floatingWindows then x.setAlwaysOnTop !!D.editorsOnTop; return); return
-      nww.on 'blur',  -> (for x in D.floatingWindows then x.setAlwaysOnTop false;            return); return
+      nww.on 'focus', -> (for x in D.floatingWindows then x.setAlwaysOnTop !!D.editorsOnTop); return
+      nww.on 'blur',  -> (for x in D.floatingWindows then x.setAlwaysOnTop false           ); return
       if localStorage.winInfo then try restoreWindow nww, JSON.parse localStorage.winInfo
     return
   nww.show(); nww.focus() # focus() is needed for the Mac
