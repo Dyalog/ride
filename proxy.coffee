@@ -36,7 +36,7 @@ b64 = (s) -> Buffer(s).toString 'base64'
 b64d = (s) -> '' + Buffer s, 'base64'
 tag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exec xml)?[1]
 extend = (a...) -> r = {}; (for x in a then for k, v of x then r[k] = v); r
-addr = (socket) -> socket?.request?.connection?.remoteAddress || 'an IDE' # format a socket's remote address
+addr = (socket) -> socket?.request?.connection?.remoteAddress || 'IDE' # format a socket's remote address
 
 ipAddresses = []
 try
