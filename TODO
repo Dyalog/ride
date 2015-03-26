@@ -38,6 +38,9 @@ Not yet prioritized:
   Menu items for next/prev line from demo should be disabled when there are no more lines; MK Jabber 2015-03-25
   Closing the session window should close all open editor windows
   After opening an editor, focus the next editor instead of the session
+  Double click should work in editors
+  The animation on clicking "Connect" should be shown after some delay
+  If the interpreter fails to spawn initially, show an error message instead of an empty session
 
 Later:
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
