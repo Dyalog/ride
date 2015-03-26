@@ -41,6 +41,7 @@ Not yet prioritized:
   Double click should work in editors
   The animation on clicking "Connect" should be shown after some delay
   If the interpreter fails to spawn initially, show an error message instead of an empty session
+  There is a limit for the number of match locations shown on the scrollbar -- should we change it?
 
 Later:
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
