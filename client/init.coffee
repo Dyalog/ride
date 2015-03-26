@@ -23,7 +23,7 @@ $ ->
       .on 'keydown', '*', 'ctrl+shift+=', D.zoomIn
     $('body').addClass "zoom#{prefs.zoom()}"
     prefs.zoom (z) ->
-      for _, w of wins
+      for _, w of D.wins
         $b = $ 'body', w.getDocument()
         $b.prop 'class', "zoom#{z} " + $b.prop('class').split(/\s+/).filter((s) -> !/^zoom-?\d+$/.test s).join ' '
         w.refresh()
