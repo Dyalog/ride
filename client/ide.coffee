@@ -104,6 +104,9 @@ module.exports = ->
 
   D.socket
     .on '*identify', (i) -> D.remoteIdentification = i; updateTitle(); return
+    .on '*spawnedError', ({message}) ->
+      die(); setTimeout (-> $.alert message, 'Error'; return), 100 # some delay to let the window restore its original dimensions
+      return
     .on '*disconnected', ->
       if !isDead then $.alert 'Interpreter disconnected', 'Error'; die()
       return

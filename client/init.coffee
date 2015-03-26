@@ -55,6 +55,7 @@ $ ->
       D.socket
         .on '*connected', ({host, port}) -> ideInstance.setHostAndPort host, port; return
         .emit '*spawn'
+        # '*spawnedError' is handled in ide.coffee
     else
       connect()
 

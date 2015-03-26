@@ -40,7 +40,6 @@ Not yet prioritized:
   After opening an editor, focus the next editor instead of the session
   Double click should work in editors
   The animation on clicking "Connect" should be shown after some delay
-  If the interpreter fails to spawn initially, show an error message instead of an empty session
   There is a limit for the number of match locations shown on the scrollbar -- should we change it?
 
 Later:
@@ -188,3 +187,4 @@ Done:
   an empty "Window Title" setting produces "index.html" in the title
     NN: replaced empty title with "Dyalog"
   size of a floating window is diminished by one line every time it is reopened; Marc Griffiths 2015-03-13
+  If the interpreter fails to spawn initially, show an error message instead of an empty session

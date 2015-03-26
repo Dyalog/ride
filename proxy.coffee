@@ -210,7 +210,10 @@ fmtLineAttributes = (nLines, stops) ->
           child = spawn exe, ['+s', '-q'], stdio: ['pipe', 'ignore', 'ignore'], env: extend process.env, RIDE_CONNECT: hp, RIDE_INIT: "CONNECT:#{hp}"
           toBrowser '*spawned', pid: child.pid
           child.on 'error', (err) ->
-            server?.close(); server = client = null; toBrowser '*spawnedError', {message: '' + err, code: err.code}; child = null; return
+            server?.close(); server = client = null
+            toBrowser '*spawnedError', code: err.code, message:
+              if err.code == 'ENOENT' then 'Cannot find dyalog executable on $PATH' else '' + err
+            child = null; return
           child.on 'exit', (code, signal) ->
             server?.close(); server = client = null; toBrowser '*spawnedExited', {code, signal}; child = null; return
           return

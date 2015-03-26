@@ -170,12 +170,8 @@ module.exports = (opts) ->
     .on '*connectError', ({err}) ->
       if $connectDialog then $connectDialog.dialog 'close'; $connectDialog = null
       $.alert err, 'Error'; return
-    .on '*spawned', ({pid}) ->
-      $spawnStatus.text "PID: #{pid}"
-      enableSpawnAndListen false; return
-    .on '*spawnedError', ({message, code}) ->
-      $spawnStatus.text if code == 'ENOENT' then 'Cannot find dyalog executable on $PATH' else message
-      enableSpawnAndListen true; return
+    .on '*spawned', ({pid}) -> $spawnStatus.text "PID: #{pid}"; enableSpawnAndListen false; return
+    .on '*spawnedError', ({message}) -> $spawnStatus.text message; enableSpawnAndListen true; return
     .on '*spawnedExited', ({code, signal}) ->
       $spawnStatus.text(if code? then "exited with code #{code}" else "received #{signal}")
       enableSpawnAndListen true; return
