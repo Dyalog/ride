@@ -105,7 +105,7 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
         for l in breakpoints then cm.setGutterMarker l, 'breakpoints', null
         emit 'SaveChanges', win: id, text: cm.getValue(), attributes: stop: breakpoints[..].sort (x, y) -> x - y
       else
-        emit 'CloseWindow', win: id; return
+        emit 'CloseWindow', win: id
       return
     TL: -> # Toggle Localisation
       c = cm.getCursor(); s = cm.getLine c.line
@@ -297,6 +297,7 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
     # AplSession         12
     # ExternalFunction   13
     cm.setOption 'mode', if ee.entityType in [1, 9, 10, 11, 12, 13] then 'apl' else 'text'
+    if ee.entityType in [3] then cm.setOption 'readOnly', true # TODO Which other entityTypes are read-only?
     line = ee.currentRow; col = ee.currentColumn || 0; if line == col == 0 && ee.text.indexOf('\n') < 0 then col = ee.text.length
     cm.setCursor line, col; cm.scrollIntoView null, $e.height() / 2
     breakpoints = ee.lineAttributes.stop[..]
