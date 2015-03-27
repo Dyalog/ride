@@ -268,9 +268,9 @@ module.exports = ->
     (
       if D.nwjs
         {'': '_Tools', items: [
-          {'': '_Load Demo...', action: demoLoad}
-          {'': '_Next Line from Demo',     key: 'Ctrl+Shift+N', action: demoNext}
-          {'': '_Previous Line from Demo', key: 'Ctrl+Shift+P', action: demoPrev}
+          {'': 'Run Demo Script...', action: demoLoad}
+          {'': 'Next Line of Demo',     key: 'Ctrl+Shift+N', action: demoNext}
+          {'': 'Previous Line of Demo', key: 'Ctrl+Shift+P', action: demoPrev}
         ]}
     )
     {'': '_Help', items: [
