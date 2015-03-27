@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e -o pipefail
 export PATH="`dirname $0`/node_modules/.bin:$PATH"
-
+if [ ! -e node_modules ]; then npm i; fi
 mkdir -p build/{static,tmp}
 
 cp -uv index.html node_modules/codemirror/lib/codemirror.css style/apl385.* style/*.png favicon.ico package.json build/static/
