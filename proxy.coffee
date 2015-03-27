@@ -88,6 +88,8 @@ fmtLineAttributes = (nLines, stops) ->
   v = for i in [0...nLines] by 1 then "<LineAttributeValue><row>#{i}</row><value>#{+(i in (stops or []))}</value></LineAttributeValue>"
   "<attributes><LineAttribute><attribute>Stop</attribute><values>#{v.join '\n'}</values></LineAttribute></attributes>"
 
+trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
+
 @Proxy = ->
   client = null # TCP connection to interpreter
   socket = null # socket.io connection to the browser that's currently driving
@@ -96,13 +98,13 @@ fmtLineAttributes = (nLines, stops) ->
 
   toInterpreter = (s) ->
     if client
-      log 'to interpreter: ' + JSON.stringify(s)[..1000]
+      log 'to interpreter: ' + trunc JSON.stringify s
       b = Buffer s.length + 8; b.writeInt32BE b.length, 0; b.write 'RIDE' + s, 4; client.write b
     return
 
   cmd = (c, args = '') -> toInterpreter "<Command><cmd>#{c}</cmd><id>0</id><args><#{c}>#{args}</#{c}></args></Command>"; return
 
-  toBrowser = (m...) -> log 'to browser: ' + JSON.stringify(m)[..1000]; socket?.emit m...; return
+  toBrowser = (m...) -> log 'to browser: ' + trunc JSON.stringify m; socket?.emit m...; return
 
   setUpInterpreterConnection = ->
     client.on 'error', (e) -> toBrowser '*connectError', err: '' + e; client = null; return
@@ -112,7 +114,7 @@ fmtLineAttributes = (nLines, stops) ->
       queue = Buffer.concat [queue, data]
       while queue.length >= 4 and (n = queue.readInt32BE 0) <= queue.length
         m = '' + queue[8...n]; queue = queue[n..]
-        log 'from interpreter: ' + JSON.stringify(m)[..1000]
+        log 'from interpreter: ' + trunc JSON.stringify m
         if !/^(?:SupportedProtocols|UsingProtocol)=1$/.test m # ignore these
           switch (/^<(\w+)>/.exec m)?[1] or ''
             when 'ReplyConnect', 'ReplyEdit', 'ReplySetLineAttributes', 'ReplyWeakInterrupt', 'ReplyStrongInterrupt' then ; # ignore
@@ -166,7 +168,7 @@ fmtLineAttributes = (nLines, stops) ->
 
   setUpBrowserConnection = ->
     {onevent} = socket # intercept all browser-to-proxy events and log them:
-    socket.onevent = (packet) -> log 'from browser: ' + JSON.stringify(packet.data)[..1000]; onevent.apply socket, [packet]
+    socket.onevent = (packet) -> log 'from browser: ' + trunc JSON.stringify packet.data; onevent.apply socket, [packet]
     socket
       .on 'Execute', ({text, trace}) -> cmd 'Execute', "<Text>#{b64 text}</Text><Trace>#{+!!trace}</Trace>"
       .on 'Edit', ({win, pos, text}) -> cmd 'Edit', "<Text>#{b64 text}</Text><Pos>#{pos}</Pos><Win>#{win}</Win>"

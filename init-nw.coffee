@@ -53,7 +53,7 @@ if process?
     return
   nww.show(); nww.focus() # focus() is needed for the Mac
   nww.on 'close', ->
-    process.nextTick -> nww.close true; return
+    if !D.floating then process.nextTick -> nww.close true; return
     info =
       x:      nww.x      - (nww.dx || 0)
       y:      nww.y      - (nww.dy || 0)
