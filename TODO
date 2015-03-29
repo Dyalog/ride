@@ -48,6 +48,7 @@ Not yet prioritized:
   JS: AutoPW option: ⎕PW changes automatically with window width and font size.
   JS: Option for turning off AutoFormatting, please.
   JS: A new floating edit window flashes first in the centre of screen before being removed and redrawn at my preferred position.
+  JS: <Esc> in the session should switch focus to the top edit or trace window.
 
 Later:
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
