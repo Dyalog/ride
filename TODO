@@ -44,6 +44,8 @@ Not yet prioritized:
   There is a limit for the number of match locations shown on the scrollbar -- should we change it?
   JS: Arrange for the banner to appear at the _top_ of a new session.
   JS: Discuss placing the cursor at the _left_ of a recalled line.
+  JS: System command output (fns vars ...) should wrap at ⎕PW, not 80.
+  JS: AutoPW option: ⎕PW changes automatically with window width and font size.
 
 Later:
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
