@@ -46,6 +46,8 @@ Not yet prioritized:
   JS: Discuss placing the cursor at the _left_ of a recalled line.
   JS: System command output (fns vars ...) should wrap at ⎕PW, not 80.
   JS: AutoPW option: ⎕PW changes automatically with window width and font size.
+  JS: Option for turning off AutoFormatting, please.
+  JS: A new floating edit window flashes first in the centre of screen before being removed and redrawn at my preferred position.
 
 Later:
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
