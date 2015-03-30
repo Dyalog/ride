@@ -91,8 +91,8 @@ module.exports = (opts) ->
     if !/^[a-z0-9\.\-:]+$/i.test host then $.alert 'Invalid host', 'Error', -> $host.focus(); return
     else if !(0 < port < 0xffff) then $.alert 'Invalid port', 'Error', -> $port.focus(); return
     else
-      $connectDialog = $ "<div class='connect-dialog'><div class='visual-distraction'></div></div>"
-        .dialog modal: 1, width: 350, title: 'Connecting...'
+      $connectDialog = $ '<div class="connect-dialog"><div class="visual-distraction"></div></div>'
+        .dialog modal: 1, width: 350, title: 'Connecting...', buttons: Cancel: -> $(@).dialog 'close'; false
       D.socket.emit '*connect', {host, port}
     false
   $new.click ->
