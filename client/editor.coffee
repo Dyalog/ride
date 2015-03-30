@@ -201,6 +201,7 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
     .on 'keydown', '.tb-search', 'shift+return', -> cm.execCommand 'PV'; false
     .on 'keydown', '.tb-search', 'ctrl+return', -> selectAllSearchResults(); false
     .on 'keydown', '.tb-search', 'esc', -> clearSearch(); cm.focus(); false
+    .on 'keyup', '.tb-search', (e) -> (if e.which !in [13, 27] then highlightSearch()); return
     .on 'click', '.tb-refac-m', ->
       if !/^\s*$/.test s = cm.getLine l = cm.getCursor().line
         cm.replaceRange "∇ #{s}\n\n∇", {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
