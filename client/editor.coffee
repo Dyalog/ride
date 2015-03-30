@@ -311,9 +311,9 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
   highlight: highlight
   setDebugger: setDebugger
   saved: (err) -> (if err then $.alert 'Cannot save changes' else emit 'CloseWindow', win: id); return
-  closePopup: -> (if D.floating then close()); return
+  closePopup: -> (if D.floating then window.onbeforeunload = null; D.forceClose = 1; close()); return
   autocomplete: autocompletion cm, (s, i) -> emit 'Autocomplete', line: s, pos: i, token: id
-  saveAndClose: -> cm.execCommand 'EP'; return
+  EP: cm.dyalogCommands.EP
   die: -> cm.setOption 'readOnly', true; return
   getOpts: -> opts
   getState: ->

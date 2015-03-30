@@ -53,7 +53,9 @@ if process?
     return
   nww.show(); nww.focus() # focus() is needed for the Mac
   nww.on 'close', ->
-    if !D.floating then process.nextTick -> nww.close true; return
+    if D.forceClose
+      process.nextTick -> nww.close true; return
+      return
     info =
       x:      nww.x      - (nww.dx || 0)
       y:      nww.y      - (nww.dy || 0)
@@ -67,7 +69,9 @@ if process?
       localStorage.floatingWindowInfos = JSON.stringify fwi
     else
       localStorage.winInfo = JSON.stringify info
-    window.onbeforeunload?(); window.onbeforeunload = null; return
+    window.onbeforeunload?()
+    if !D.floating then process.nextTick -> nww.close true; return
+    return
   $ ->
     contextMenu = null
     $ document

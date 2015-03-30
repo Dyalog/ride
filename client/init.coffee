@@ -41,7 +41,7 @@ $ ->
     $('title').text wins[win].name
     ed0 = wins[win]; ed = wins[win] = Editor $('.ui-layout-center'), ed0.getOpts()
     ed.setState ed0.getState(); ed.updateSize(); ed.focus(); ed0 = null
-    window.onbeforeunload = -> ed.saveAndClose(); return
+    window.onbeforeunload = -> ed.EP(); return
   else
     D.socket = (D.createSocket || io)()
     D.quit ?= close
