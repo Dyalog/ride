@@ -111,7 +111,7 @@ module.exports = ->
       if !isDead
         die()
         if message == 'Dyalog session has ended'
-          window.close(); process?.exit? 0
+          (try close()); D.process?.exit? 0
         else
           $.alert message, 'Interpreter disconnected'
       return
