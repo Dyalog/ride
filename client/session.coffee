@@ -20,6 +20,7 @@ module.exports = (e, opts = {}) ->
       l = cm.getCursor().line
       if !histIndex then hist[0] = cm.getLine l
       cm.replaceRange hist[i], {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
+      cm.setCursor line: l, ch: hist[i].replace(/[^ ].*$/, '').length
       histIndex = i
     return
 
