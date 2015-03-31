@@ -199,6 +199,7 @@ bqbqc = ((s) -> join s.split('\n').map (l) ->
 
 createCommand = (xx) -> CodeMirror.commands[xx] ?= (cm) -> (if (h = cm.dyalogCommands) && h[xx] then h[xx]()); return
 createCommand 'CBP'
+createCommand 'MA'
 
 '''
   [     0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F]
