@@ -4,6 +4,7 @@ prefs = require './prefs'
 {onCodeMirrorDoubleClick} = require './util'
 
 module.exports = (e, opts = {}) ->
+  {emit} = opts
 
   dirty = {} # modified lines: line number -> original content
              # inserted lines: line number -> 0
@@ -34,11 +35,11 @@ module.exports = (e, opts = {}) ->
           cm.execCommand 'indentMore'
         else if promptType != 4 # don't autocomplete in ⍞ input
           c = cm.getCursor(); s = cm.getLine c.line
-          if /^ *$/.test s[...c.ch] then cm.execCommand 'indentMore' else opts.autocomplete s, c.ch
+          if /^ *$/.test s[...c.ch] then cm.execCommand 'indentMore' else emit 'Autocomplete', line: s, pos: c.ch, token: 0
         return
 
   cm.dyalogCommands =
-    ED: -> c = cm.getCursor(); opts.edit cm.getLine(c.line), c.ch; return # Edit
+    ED: -> c = cm.getCursor(); emit 'Edit', win: 0, pos: c.ch, text: cm.getLine c.line; return
     BK: -> histMove 1; return # Backward or Undo
     FD: -> histMove -1; return # Forward or Redo
     QT: QT = -> # Quit (and lose changes)
@@ -112,7 +113,9 @@ module.exports = (e, opts = {}) ->
   focus: -> (if !window.focused then window.focus()); cm.focus(); return
   insert: (ch) -> (if !cm.getOption 'readOnly' then c = cm.getCursor(); cm.replaceRange ch, c, c); return
   scrollCursorIntoView: scrollCursorIntoView = -> setTimeout (-> cm.scrollIntoView cm.getCursor()), 1
-  autocomplete: autocompletion cm, (s, i) -> (if promptType != 4 then opts.autocomplete s, i); return # don't autocomplete in ⍞ input
+  autocomplete: autocompletion cm, (s, i) ->
+    if promptType != 4 then emit 'Autocomplete', line: s, pos: i, token: 0 # don't autocomplete in ⍞ input
+    return
   die: -> cm.setOption 'readOnly', true; return
   getLineWrapping: -> cm.getOption 'lineWrapping'
   setLineWrapping: (x) -> prefs.sessionLineWrapping x; cm.setOption 'lineWrapping', !!x; scrollCursorIntoView(); return

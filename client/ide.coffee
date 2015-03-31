@@ -32,15 +32,12 @@ module.exports = ->
 
   D.wins = wins = # window id -> instance of Editor or Session
     0: D.session = session = Session $('.ui-layout-center'),
-      id: 0
-      edit: (s, i) -> emit 'Edit', win: 0, pos: i, text: s
-      autocomplete: (s, i) -> emit 'Autocomplete', line: s, pos: i, token: 0
+      id: 0, emit: emit, weakInterrupt: WI
       exec: (lines, trace) ->
         if lines && lines.length
           if !trace then pending = lines[1..]
           emit 'Execute', {trace, text: lines[0] + '\n'}
         return
-      weakInterrupt: WI
 
   # Tab management
   tabOpts = activate: (_, ui) -> (widget = wins[+ui.newTab.attr('id').replace /\D+/, '']).updateSize(); widget.focus(); return
