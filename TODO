@@ -14,8 +14,6 @@ P2 (Middle priority):
 P3 (Can wait):
   Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
     NN: Investigate: http://stackoverflow.com/questions/284258/how-do-i-set-the-version-information-for-an-existing-exe-dll (sent by JD)
-  Overflown part of connections box doesn't show
-    NN: not that much of a problem now that it's resizable
   Enable Windows IME if present.
   avoid the flashing in a floating trace window when I lean on the trace (Ctrl+Enter) key; JS email 2015-03-10
     NN: every AtInputPrompt focuses the session; disabling this might result in subtle bugs
@@ -201,3 +199,6 @@ Done:
   edit a function, make the header line invalid, close the window with the X button (instead of Esc), edit again -- crash; found by NN 2015-03-27
   Double click should work in editors
   The animation on clicking "Connect" should be shown after some delay
+  Overflown part of connections box doesn't show
+    NN: not that much of a problem now that it's resizable
+    NN: also, I removed the horizontal scrollbar
