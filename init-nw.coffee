@@ -52,16 +52,14 @@ if process?
       if localStorage.winInfo then try restoreWindow nww, JSON.parse localStorage.winInfo
     return
   nww.show(); nww.focus() # focus() is needed for the Mac
-  nww.on 'close', ->
-    if D.forceClose
-      process.nextTick -> nww.close true; return
-      return
+  
+  throttle = (f) -> tid = null; -> tid ?= setTimeout (-> f(); tid = null; return), 500; return
+  saveWindowState = throttle ->
     info =
       x:      nww.x      - (nww.dx || 0)
       y:      nww.y      - (nww.dy || 0)
       width:  nww.width  - (nww.dw || 0)
       height: nww.height - (nww.dh || 0)
-    # save window state:
     if D.floating
       (fw = opener.D.floatingWindows).splice fw.indexOf(nww), 1
       fwi = JSON.parse localStorage.floatingWindowInfos || '{}'
@@ -69,9 +67,17 @@ if process?
       localStorage.floatingWindowInfos = JSON.stringify fwi
     else
       localStorage.winInfo = JSON.stringify info
-    window.onbeforeunload?()
-    if !D.floating then process.nextTick -> nww.close true; return
     return
+  nww.on 'move',   saveWindowState
+  nww.on 'resize', saveWindowState
+
+  nww.on 'close', ->
+    if D.forceClose
+      process.nextTick -> nww.close true; return
+    else
+      window.onbeforeunload?(); if !D.floating then process.nextTick -> nww.close true; return
+    return
+
   $ ->
     contextMenu = null
     $ document
