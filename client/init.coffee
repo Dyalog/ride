@@ -6,7 +6,7 @@ require 'codemirror/addon/hint/show-hint'
 require 'codemirror/addon/edit/matchbrackets'
 require 'codemirror/addon/edit/closebrackets'
 connect = require './connect'
-Editor = require './editor'
+{Editor} = require './editor'
 about = require './about'
 require '../jquery.layout'
 ide = require './ide'
@@ -39,7 +39,7 @@ $ ->
       center: onresize: -> ed?.updateSize(); return
       fxName: ''
     $('title').text wins[win].name
-    ed0 = wins[win]; ed = wins[win] = Editor $('.ui-layout-center'), ed0.getOpts()
+    ed0 = wins[win]; ed = wins[win] = new Editor $('.ui-layout-center'), ed0.getOpts()
     ed.setState ed0.getState(); ed.updateSize(); ed.focus(); ed0 = null
     window.onbeforeunload = -> ed.EP(); return
   else

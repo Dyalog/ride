@@ -1,7 +1,7 @@
 require './menu'
 about = require './about'
 prefs = require './prefs'
-Editor = require './editor'
+{Editor} = require './editor'
 Session = require './session'
 keymap = require './keymap'
 require '../lbar/lbar'
@@ -140,7 +140,7 @@ module.exports = ->
       w = ee.token
       $("<li id='wintab#{w}'><a href='#win#{w}'></a></li>").appendTo('.ui-layout-' + dir + ' ul').find('a').text ee.name
       $tabContent = $("<div class='win' id='win#{w}'></div>").appendTo('.ui-layout-' + dir)
-      wins[w] = Editor $tabContent,
+      wins[w] = new Editor $tabContent,
         id: w, name: ee.name, debugger: ee.debugger, emit: emit
         weakInterrupt: WI
         pop: -> popWindow w
