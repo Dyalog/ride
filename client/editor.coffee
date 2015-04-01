@@ -64,22 +64,7 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
     keyMap: 'dyalog', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
     gutters: ['breakpoints', 'CodeMirror-linenumbers'], indentUnit: 4
     extraKeys:
-      'Shift-Tab': 'indentLess'
-      Tab: ->
-        if cm.somethingSelected()
-          cm.execCommand 'indentMore'
-        else
-          c = cm.getCursor(); s = cm.getLine c.line
-          if /^ *$/.test s[...c.ch]
-            cm.execCommand 'indentMore'
-          else
-            emit 'Autocomplete', line: s, pos: c.ch, token: id
-        return
-      Down: ->
-        l = cm.getCursor().line
-        if l != cm.lineCount() - 1 || /^\s*$/.test cm.getLine l then cm.execCommand 'goLineDown'
-        else cm.execCommand 'goDocEnd'; cm.execCommand 'newlineAndIndent'; xline = l + 1
-        return
+      'Shift-Tab': 'indentLess', Tab: 'tabOrAutocomplete', Down: 'downOrXline'
 
   cm.on 'cursorActivity', ->
     if xline != null
@@ -177,6 +162,21 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
           else breakpoints.push l; cm.setGutterMarker l, 'breakpoints', createBreakpointElement()
       if isDebugger
         emit 'SetLineAttributes', win: id, nLines: cm.lineCount(), lineAttributes: stop: breakpoints[..].sort (x, y) -> x - y
+      return
+    tabOrAutocomplete: ->
+      if cm.somethingSelected()
+        cm.execCommand 'indentMore'
+      else
+        c = cm.getCursor(); s = cm.getLine c.line
+        if /^ *$/.test s[...c.ch]
+          cm.execCommand 'indentMore'
+        else
+          emit 'Autocomplete', line: s, pos: c.ch, token: id
+      return
+    downOrXline: ->
+      l = cm.getCursor().line
+      if l != cm.lineCount() - 1 || /^\s*$/.test cm.getLine l then cm.execCommand 'goLineDown'
+      else cm.execCommand 'goDocEnd'; cm.execCommand 'newlineAndIndent'; xline = l + 1
       return
   ###
       F6 = -> opts.openInExternalEditor cm.getValue(), cm.getCursor().line, (err, text) ->
