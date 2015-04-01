@@ -204,7 +204,7 @@ module.exports = ->
     $('<input type="file" style="display:none">').appendTo('body').trigger('click').change ->
       if @value then D.readFile @value, 'utf8', (err, s) ->
         if err then console?.error? err; $.alert 'Cannot load demo file'
-        else demoLines = s.split /\r?\n/; demoIndex = -1
+        else demoLines = s.replace(/^[\ufeff\ufffe]/, '').split /\r?\n/; demoIndex = -1
         return
       return
     return
