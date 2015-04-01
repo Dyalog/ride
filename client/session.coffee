@@ -3,122 +3,112 @@ autocompletion = require './autocompletion'
 prefs = require './prefs'
 {onCodeMirrorDoubleClick} = require './util'
 
-module.exports = (e, opts = {}) ->
-  {emit} = opts
-
-  dirty = {} # modified lines: line number -> original content
-             # inserted lines: line number -> 0
-
-  # history management ("session log"):
-  hist = ['']
-  histIndex = 0
-  histAdd = (lines) -> hist[0] = ''; hist[1...1] = lines; histIndex = 0; return
-  histMove = (d) ->
-    i = histIndex + d
-    if i < 0 then $.alert 'There is no next line', 'Dyalog APL Error'
-    else if i >= hist.length then $.alert 'There is no previous line', 'Dyalog APL Error'
-    else
-      l = cm.getCursor().line
-      if !histIndex then hist[0] = cm.getLine l
-      cm.replaceRange hist[i], {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
-      cm.setCursor line: l, ch: hist[i].replace(/[^ ].*$/, '').length
-      histIndex = i
-    return
-
-  cm = CodeMirror ($e = $ e)[0],
-    autofocus: true, mode: 'aplsession', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: ''}
-    readOnly: true, keyMap: 'dyalog', lineWrapping: !!prefs.sessionLineWrapping(), indentUnit: 4
-    extraKeys:
-      'Shift-Tab': 'indentLess'
-      Tab: ->
-        if cm.somethingSelected()
-          cm.execCommand 'indentMore'
-        else if promptType != 4 # don't autocomplete in ⍞ input
-          c = cm.getCursor(); s = cm.getLine c.line
-          if /^ *$/.test s[...c.ch] then cm.execCommand 'indentMore' else emit 'Autocomplete', line: s, pos: c.ch, token: 0
-        return
-
-  cm.dyalogCommands =
-    ED: -> c = cm.getCursor(); emit 'Edit', win: 0, pos: c.ch, text: cm.getLine c.line; return
-    BK: -> histMove 1; return # Backward or Undo
-    FD: -> histMove -1; return # Forward or Redo
-    QT: QT = -> # Quit (and lose changes)
-      c = cm.getCursor(); l = c.line
-      if dirty[l] == 0
-        if l == cm.lineCount() - 1
-          cm.replaceRange '', {line: l - 1, ch: cm.getLine(l - 1).length}, {line: l, ch: cm.getLine(l).length}, 'D'
-        else
-          cm.replaceRange '', {line: l, ch: 0}, {line: l + 1, ch: 0}, 'D'
-        delete dirty[l]; h = dirty; dirty = {}; for x, y of h then dirty[x - (x > l)] = y
-      else if dirty[l]?
-        cm.replaceRange dirty[l], {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
-        delete dirty[l]; cm.removeLineClass l, 'background', 'modified'; cm.setCursor l + 1, c.ch
+class @Session
+  constructor: (e, opts = {}) ->
+    {@emit} = @opts = opts
+    @dirty = {} # modified: line number -> original content; inserted: line number -> 0
+    @hist = ['']; @histIndex = 0
+    @cm = new CodeMirror (@$e = $ e)[0],
+      autofocus: true, mode: 'aplsession', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: ''}
+      readOnly: true, keyMap: 'dyalog', lineWrapping: !!prefs.sessionLineWrapping(), indentUnit: 4
+      extraKeys: {'Shift-Tab': 'indentLess', Tab: 'tabOrAutocomplete'}
+    @cm.dyalogCommands = @
+    onCodeMirrorDoubleClick @cm, @ED.bind @
+    @cm.on 'beforeChange', (_, c) =>
+      if c.origin != 'D'
+        l0 = c.from.line; l1 = c.to.line; m = l1 - l0 + 1; n = c.text.length
+        if n < m then c.update c.from, c.to, c.text.concat(for [0...m - n] then ''); n = m # pad shrinking changes with empty lines
+        if m < n then h = @dirty; @dirty = {}; for x, y of h then @dirty[x + (n - m) * (x > l1)] = y
+        l = l0
+        while l <= l1    then @dirty[l] ?= @cm.getLine l; l++
+        while l < l0 + n then @dirty[l] = 0;             l++
       return
-    EP: QT # Exit (and save changes); in this case we are deliberately making QT and EP the same; Esc is an easier shortcut to discover than Shift-Esc
-    ER: -> exec 0 # Enter
-    TC: -> exec 1 # Trace
-    WI: opts.weakInterrupt
+    @cm.on 'change', (_, c) =>
+      if c.origin != 'D'
+        l0 = c.from.line; l1 = c.to.line; m = l1 - l0 + 1; n = c.text.length
+        for l of @dirty then @cm.addLineClass +l, 'background', 'modified'
+      return
+    @promptType = 0 # 0=Invalid 1=Descalc 2=QuadInput 3=LineEditor 4=QuoteQuadInput 5=Prompt
+    @autocomplete = autocompletion @cm, (s, i) =>
+      if @promptType != 4 then @emit 'Autocomplete', line: s, pos: i, token: 0 # don't autocomplete in ⍞ input
+      return
+    return
 
-  exec = (trace) ->
-    ls = for l of dirty then +l
-    if ls.length
-      ls.sort (x, y) -> x - y
-      es = ls.map (l) -> cm.getLine l # strings to execute
-      ls.reverse().forEach (l) ->
-        cm.removeLineClass l, 'background', 'modified'
-        if dirty[l] == 0
-          cm.replaceRange '', {line: l, ch: 0}, {line: l + 1, ch: 0}, 'D'
-        else
-          cm.replaceRange dirty[l], {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
-        return
+  histAdd: (lines) -> @hist[0] = ''; @hist[1...1] = lines; @histIndex = 0; return
+  histMove: (d) ->
+    i = @histIndex + d
+    if i < 0 then $.alert 'There is no next line', 'Dyalog APL Error'
+    else if i >= @hist.length then $.alert 'There is no previous line', 'Dyalog APL Error'
     else
-      es = [cm.getLine cm.getCursor().line]
-    opts.exec es, trace; dirty = {}; histAdd es.filter((x) -> !/^\s*$/.test x); return
-
-  onCodeMirrorDoubleClick cm, -> cm.execCommand 'ED'; return
-
-  cm.on 'beforeChange', (_, c) ->
-    if c.origin != 'D'
-      l0 = c.from.line; l1 = c.to.line; m = l1 - l0 + 1; n = c.text.length
-      if n < m then c.update c.from, c.to, c.text.concat(for [0...m - n] then ''); n = m # pad shrinking changes with empty lines
-      if m < n then h = dirty; dirty = {}; for x, y of h then dirty[x + (n - m) * (x > l1)] = y
-      l = l0
-      while l <= l1    then dirty[l] ?= cm.getLine l; l++
-      while l < l0 + n then dirty[l] = 0;             l++
+      l = @cm.getCursor().line; if !@histIndex then @hist[0] = @cm.getLine l
+      @cm.replaceRange @hist[i], {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}, 'D'
+      @cm.setCursor line: l, ch: @hist[i].replace(/[^ ].*$/, '').length; @histIndex = i
     return
-
-  cm.on 'change', (_, c) ->
-    if c.origin != 'D'
-      l0 = c.from.line; l1 = c.to.line; m = l1 - l0 + 1; n = c.text.length
-      for l of dirty then cm.addLineClass +l, 'background', 'modified'
-    return
-
-  promptType = 0 # 0=Invalid 1=Descalc 2=QuadInput 3=LineEditor 4=QuoteQuadInput 5=Prompt
 
   add: (s) ->
-    l = cm.lineCount() - 1; s0 = cm.getLine l
-    cm.replaceRange (if cm.getOption 'readOnly' then s0 + s else s), {line: l, ch: 0}, {line: l, ch: s0.length}, 'D'
-    cm.setCursor cm.lineCount() - 1, 0; return
+    l = @cm.lineCount() - 1; s0 = @cm.getLine l
+    @cm.replaceRange (if @cm.getOption 'readOnly' then s0 + s else s), {line: l, ch: 0}, {line: l, ch: s0.length}, 'D'
+    @cm.setCursor @cm.lineCount() - 1, 0; return
 
   prompt: (why) ->
-    promptType = why; cm.setOption 'readOnly', false; cm.setOption 'cursorHeight', 1; l = cm.lineCount() - 1
-    if (why == 1 && !dirty[l]?) || why !in [1, 3, 4]
-      cm.replaceRange '      ', {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}, 'D'
-    cm.setCursor l, cm.getLine(l).length; return
+    @promptType = why; @cm.setOption 'readOnly', false; @cm.setOption 'cursorHeight', 1; l = @cm.lineCount() - 1
+    if (why == 1 && !@dirty[l]?) || why !in [1, 3, 4]
+      @cm.replaceRange '      ', {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}, 'D'
+    @cm.setCursor l, @cm.getLine(l).length; return
 
-  cm: cm
-  noPrompt: -> promptType = 0; cm.setOption 'readOnly', true; cm.setOption 'cursorHeight', 0; return
-  updateSize: -> cm.setSize $e.width(), $e.height()
-  hasFocus: -> window.focused && cm.hasFocus()
-  focus: -> (if !window.focused then window.focus()); cm.focus(); return
-  insert: (ch) -> (if !cm.getOption 'readOnly' then c = cm.getCursor(); cm.replaceRange ch, c, c); return
-  scrollCursorIntoView: scrollCursorIntoView = -> setTimeout (-> cm.scrollIntoView cm.getCursor()), 1
-  autocomplete: autocompletion cm, (s, i) ->
-    if promptType != 4 then emit 'Autocomplete', line: s, pos: i, token: 0 # don't autocomplete in ⍞ input
+  noPrompt: -> @promptType = 0; @cm.setOption 'readOnly', true; @cm.setOption 'cursorHeight', 0; return
+  updateSize: -> @cm.setSize @$e.width(), @$e.height(); return
+  hasFocus: -> window.focused && @cm.hasFocus()
+  focus: -> (if !window.focused then window.focus()); @cm.focus(); return
+  insert: (ch) -> (if !@cm.getOption 'readOnly' then c = @cm.getCursor(); @cm.replaceRange ch, c, c); return
+  scrollCursorIntoView: -> setTimeout (=> @cm.scrollIntoView @cm.getCursor(); return), 1; return
+  die: -> @cm.setOption 'readOnly', true; return
+  getLineWrapping: -> @cm.getOption 'lineWrapping'
+  setLineWrapping: (x) -> prefs.sessionLineWrapping x; @cm.setOption 'lineWrapping', !!x; @scrollCursorIntoView(); return
+  getDocument: -> @$e[0].ownerDocument
+  refresh: -> @cm.refresh(); @scrollCursorIntoView(); return
+  loadLine: (s) -> l = @cm.lineCount() - 1; @cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}; return
+
+  exec: (trace) ->
+    ls = []; for l of @dirty then ls.push +l
+    if ls.length
+      ls.sort (x, y) -> x - y
+      es = ls.map (l) => @cm.getLine l # strings to execute
+      ls.reverse().forEach (l) =>
+        @cm.removeLineClass l, 'background', 'modified'
+        if @dirty[l] == 0
+          @cm.replaceRange '', {line: l, ch: 0}, {line: l + 1, ch: 0}, 'D'
+        else
+          @cm.replaceRange @dirty[l], {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}, 'D'
+        return
+    else
+      es = [@cm.getLine @cm.getCursor().line]
+    @opts.exec es, trace; @dirty = {}; @histAdd es.filter((x) -> !/^\s*$/.test x); return
+
+  # Commands:
+  ED: -> c = @cm.getCursor(); @emit 'Edit', win: 0, pos: c.ch, text: @cm.getLine c.line; return
+  BK: -> @histMove 1; return
+  FD: -> @histMove -1; return
+  QT: ->
+    c = @cm.getCursor(); l = c.line
+    if @dirty[l] == 0
+      if l == @cm.lineCount() - 1
+        @cm.replaceRange '', {line: l - 1, ch: @cm.getLine(l - 1).length}, {line: l, ch: @cm.getLine(l).length}, 'D'
+      else
+        @cm.replaceRange '', {line: l, ch: 0}, {line: l + 1, ch: 0}, 'D'
+      delete @dirty[l]; h = @dirty; @dirty = {}; for x, y of h then @dirty[x - (x > l)] = y
+    else if @dirty[l]?
+      @cm.replaceRange @dirty[l], {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}, 'D'
+      delete @dirty[l]; @cm.removeLineClass l, 'background', 'modified'; @cm.setCursor l + 1, c.ch
     return
-  die: -> cm.setOption 'readOnly', true; return
-  getLineWrapping: -> cm.getOption 'lineWrapping'
-  setLineWrapping: (x) -> prefs.sessionLineWrapping x; cm.setOption 'lineWrapping', !!x; scrollCursorIntoView(); return
-  getDocument: -> $e[0].ownerDocument
-  refresh: -> cm.refresh(); scrollCursorIntoView(); return
-  loadLine: (s) -> l = cm.lineCount() - 1; cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: cm.getLine(l).length}; return
+  EP: -> @QT(); return
+  ER: -> @exec 0; return
+  TC: -> @exec 1; return
+  WI: -> @opts.weakInterrupt(); return
+  tabOrAutocomplete: ->
+    if @cm.somethingSelected()
+      @cm.execCommand 'indentMore'
+    else if @promptType != 4 # don't autocomplete in ⍞ input
+      c = @cm.getCursor(); s = @cm.getLine c.line
+      if /^ *$/.test s[...c.ch] then @cm.execCommand 'indentMore' else @emit 'Autocomplete', line: s, pos: c.ch, token: 0
+    return

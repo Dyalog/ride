@@ -2,7 +2,7 @@ require './menu'
 about = require './about'
 prefs = require './prefs'
 {Editor} = require './editor'
-Session = require './session'
+{Session} = require './session'
 keymap = require './keymap'
 require '../lbar/lbar'
 require '../jquery.layout'
@@ -31,7 +31,7 @@ module.exports = ->
   SI = -> emit 'StrongInterrupt'; return
 
   D.wins = wins = # window id -> instance of Editor or Session
-    0: D.session = session = Session $('.ui-layout-center'),
+    0: D.session = session = new Session $('.ui-layout-center'),
       id: 0, emit: emit, weakInterrupt: WI
       exec: (lines, trace) ->
         if lines && lines.length

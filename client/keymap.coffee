@@ -198,7 +198,7 @@ bqbqc = ((s) -> join s.split('\n').map (l) ->
 """ + [0...26].map((i) -> "\n#{chr i + ord 'Ⓐ'} _#{chr i + ord 'a'}").join '' # underscored alphabet: Ⓐ _a ...
 
 createCommand = (xx) -> CodeMirror.commands[xx] ?= (cm) -> (if (h = cm.dyalogCommands) && h[xx] then h[xx]()); return
-['CBP', 'MA', 'tabOrAutocomplete', 'downOrXline'].forEach createCommand
+['CBP', 'MA', 'tabOrAutocomplete', 'downOrXline', 'indentMoreOrAutocomplete'].forEach createCommand
 '''
   [     0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F]
   [00] QT ER TB BT EP UC DC RC LC US DS RS LS UL DL RL
