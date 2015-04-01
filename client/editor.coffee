@@ -57,7 +57,7 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
   {id, emit} = opts
   ($e = $ e).html EDITOR_HTML
   isDebugger = opts.debugger
-  volatileLine = null # the line number of the empty line inserted when cursor is at eof and you press <down>
+  xline = null # the line number of the empty line inserted when cursor is at eof and you press <down>
 
   cm = CodeMirror $e.find('.cm')[0],
     firstLineNumber: 0, scrollButtonHeight: 12, lineNumberFormatter: (i) -> "[#{i}]"
@@ -78,16 +78,16 @@ module.exports = (e, opts) -> # opts contains callbacks to ide.coffee
       Down: ->
         l = cm.getCursor().line
         if l != cm.lineCount() - 1 || /^\s*$/.test cm.getLine l then cm.execCommand 'goLineDown'
-        else cm.execCommand 'goDocEnd'; cm.execCommand 'newlineAndIndent'; volatileLine = l + 1
+        else cm.execCommand 'goDocEnd'; cm.execCommand 'newlineAndIndent'; xline = l + 1
         return
 
   cm.on 'cursorActivity', ->
-    if volatileLine != null
+    if xline != null
       n = cm.lineCount(); l = cm.getCursor().line
-      if l != volatileLine || l != n - 1 || !/^\s*$/.test cm.getLine n - 1
-        if l < volatileLine && volatileLine == n - 1 && /^\s*$/.test cm.getLine n - 1
+      if l != xline || l != n - 1 || !/^\s*$/.test cm.getLine n - 1
+        if l < xline && xline == n - 1 && /^\s*$/.test cm.getLine n - 1
           cm.replaceRange '', {line: n - 2, ch: cm.getLine(n - 2).length}, {line: n - 1, ch: 0}, 'D'
-        volatileLine = null
+        xline = null
     return
 
   createBreakpointElement = ->
