@@ -13,7 +13,7 @@ class @Session
       readOnly: true, keyMap: 'dyalog', lineWrapping: !!prefs.sessionLineWrapping(), indentUnit: 4
       extraKeys: {'Shift-Tab': 'indentLess', Tab: 'tabOrAutocomplete'}
     @cm.dyalogCommands = @
-    onCodeMirrorDoubleClick @cm, @ED.bind @
+    onCodeMirrorDoubleClick @cm, (e) => @ED(); e.stopPropagation(); e.preventDefault(); return
     @cm.on 'beforeChange', (_, c) =>
       if c.origin != 'D'
         l0 = c.from.line; l1 = c.to.line; m = l1 - l0 + 1; n = c.text.length

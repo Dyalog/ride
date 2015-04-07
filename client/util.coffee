@@ -5,7 +5,7 @@
   # So, let's track clicks manually:
   lct = lcx = lcy = 0 # last click's timestamp, x, and y
   cm.on 'mousedown', (cm, e) ->
-    if e.timeStamp - lct < 400 && Math.abs(lcx - e.x) + Math.abs(lcy - e.y) < 10 then f()
+    if e.timeStamp - lct < 400 && Math.abs(lcx - e.x) + Math.abs(lcy - e.y) < 10 then f e
     lct = e.timeStamp; lcx = e.x; lcy = e.y; return
   return
 
