@@ -46,8 +46,14 @@ $d = null # dialogue instance, lazily initialized
 
 ok = ->
   for t in tabImpls when v = t.validate?()
-    $.alert v.message, 'Error', if v.element then do (v = v) -> v.element.focus()
+    setTimeout(
+      ->
+        $.alert v.message, 'Error', if v.element then -> v.element.focus(); return
+        return
+      1
+    )
     return
+  for t in tabImpls then t.save()
   $d.dialog 'close'; false
 
 D.prefs = prefs = module.exports = (tabName) ->
