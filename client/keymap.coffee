@@ -83,7 +83,7 @@ CodeMirror.keyMap.dyalog["'#{prefs.prefixKey()}'"] = (cm) ->
 ks = '`1234567890-=qwertyuiop[]asdfghjk l;\'\\zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:"|ZXCVBNM<>?'.split /\s*/
 vs = '`¨¯<≤=≥>≠∨∧×÷?⍵∊⍴~↑↓⍳○*←→⍺⌈⌊_∇∆∘\'⎕⍎⍕ ⊢ ⊂⊃∩∪⊥⊤|⍝⍀⌿⋄⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹?⍵⍷⍴⍨↑↓⍸⍥⍣⍞⍬⍺⌈⌊_∇∆⍤⌸⌷≡≢⊣⊂⊃∩∪⊥⊤|⍪⍙⍠'.split /\s*/
 bqc = []
-CodeMirror.keyMap.dyalogBackquote = nofallthrough: true, disableInput: true
+CodeMirror.keyMap.dyalogBackquote = fallthrough: 'dyalog', disableInput: true
 if ks.length != vs.length then console.error? 'bad configuration of backquote keymap'
 ks.forEach (k, i) ->
   v = vs[i]; reverse[v] ?= k
