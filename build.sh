@@ -44,7 +44,7 @@ for f in $js_files; do
 done
 if [ $changed -eq 1 ]; then echo 'concatenating libs'; cat $us >build/tmp/libs.js; fi
 
-echo 'browserifying'
+echo 'combining javascript files into one'
 (
   cat <<.
     var D={versionInfo:{
