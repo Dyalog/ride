@@ -79,7 +79,7 @@ class @Editor
         for c in $(e.target).prop('class').split /\s+/ when m = /^tb-([A-Z]{2,3})$/.exec c then @[m[1]](); break
         return
       .on 'click', '.tb-pop', => @opts.pop(); false
-      .on 'click', '.tb-hid, .tb-case', => $(@).toggleClass 'pressed'; @highlightSearch(); false
+      .on 'click', '.tb-hid, .tb-case', (e) => $(e.target).toggleClass 'pressed'; @highlightSearch(); false
       .on 'keydown', '.tb-search', 'return',       => @NX(); false
       .on 'keydown', '.tb-search', 'shift+return', => @PV(); false
       .on 'keydown', '.tb-search', 'ctrl+return', => @selectAllSearchResults(); false
