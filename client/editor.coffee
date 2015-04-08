@@ -110,13 +110,16 @@ class @Editor
   # Search-related functions:
   clearSearch: ->
     $('.CodeMirror-vscrollbar', @$e).prop 'title', ''
-    @cm.removeOverlay @overlay; @overlay = null; @annotation?.clear(); @annotation = null; return
+    $('.tb-search:visible', @$tb).removeClass 'no-matches'
+    @cm.removeOverlay @overlay; @annotation?.clear(); @overlay = @annotation = null; return
   highlightSearch: ->
     ic = !$('.tb-case:visible', @$tb).hasClass 'pressed' # ic: ignore case (like in vim)
     q = $('.tb-search:visible', @$tb).val(); if ic then q = q.toLowerCase() # q: the query string
     if @lastQuery != q || @lastIC != ic
       @lastQuery = q; @lastIC = ic; @clearSearch()
       if q
+        s = @cm.getValue(); if ic then s = s.toLowerCase()
+        $('.tb-search:visible', @$tb).toggleClass 'no-matches', -1 == s.indexOf q
         @annotation = @cm.showMatchesOnScrollbar q, ic
         @cm.addOverlay @overlay = token: (stream) ->
           s = stream.string[stream.pos..]; if ic then s = s.toLowerCase()
