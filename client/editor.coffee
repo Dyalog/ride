@@ -263,14 +263,21 @@ class @Editor
     if @cm.somethingSelected()
       a = @cm.listSelections()
       @cm.replaceSelections @cm.getSelections().map (s) -> s.replace(/^/gm, '⍝').replace /\n⍝$/, '\n'
+      # correct selection ends for inserted characters:
+      for r in a when d = r.head.line - r.anchor.line || r.head.ch - r.anchor.ch
+        (if d > 0 then r.head else r.anchor).ch++
       @cm.setSelections a
     else
       l = @cm.getCursor().line; p = line: l, ch: 0; @cm.replaceRange '⍝', p, p, 'D'; @cm.setCursor line: l, ch: 1
     return
   DO: -> # Delete Comment
     if @cm.somethingSelected()
-      a = @cm.listSelections()
-      @cm.replaceSelections @cm.getSelections().map (s) -> s.replace /^⍝/gm, ''
+      a = @cm.listSelections(); u = @cm.getSelections()
+      @cm.replaceSelections u.map (s) -> s.replace /^⍝/gm, ''
+      # correct selection ends for deleted characters:
+      for r, i in a when d = r.head.line - r.anchor.line || r.head.ch - r.anchor.ch
+        if u[i].split(/^/m)[-1..][0][0] == '⍝' # first character of last line in the selection
+          (if d > 0 then r.head else r.anchor).ch--
       @cm.setSelections a
     else
       l = @cm.getCursor().line; s = @cm.getLine l
