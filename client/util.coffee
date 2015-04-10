@@ -14,3 +14,8 @@ $.alert = (message, title, callback) ->
     text: 'OK', click: -> $(@).dialog 'close'; callback?(); return
   ]
   return
+
+htmlChars = '<': '&lt;', '>': '&gt;', '&': '&amp;'
+@esc = (s) -> s.replace /[<>&]/g, (x) -> htmlChars[x]
+
+@join = (a) -> a.join ''

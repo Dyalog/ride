@@ -35,6 +35,7 @@ squiggleDescriptions = ((s) -> dict s.split(/\n| *│ */).map (l) -> [l[0], l[2.
 '''
 
 ctid = 0 # backquote completion timeout id
+@forward = forward = {} # map 
 @reverse = reverse = {} # reverse keymap: maps squiggles to their `x keys; used in lbar tooltips
 
 CodeMirror.keyMap.dyalog = inherit fallthrough: 'default', F1: (cm) ->
@@ -86,7 +87,7 @@ bqc = []
 CodeMirror.keyMap.dyalogBackquote = fallthrough: 'dyalog', disableInput: true
 if ks.length != vs.length then console.error? 'bad configuration of backquote keymap'
 ks.forEach (k, i) ->
-  v = vs[i]; reverse[v] ?= k
+  v = vs[i]; forward[k] = v; reverse[v] ?= k
   bqc.push text: v, render: (e) -> $(e).text "#{v} #{prefs.prefixKey()}#{k} #{squiggleDescriptions[v] || ''}  "
   CodeMirror.keyMap.dyalogBackquote["'#{k}'"] = (cm) ->
     clearTimeout ctid; cm.state.completionActive?.close?()

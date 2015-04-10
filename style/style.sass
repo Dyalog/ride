@@ -274,6 +274,27 @@ input, textarea
     a
       text-decoration: none; color: black
       &:hover { text-decoration: underline; color: blue; }
+
+#keyboard-layout
+  +tt
+  background-color: #aaa; border-radius: 5px; height: 200px; margin-top: 32px
+  .g1 { color: blue }
+  .g3 { color: red }
+.key
+  float: left; width: 6.2%; height: 45px; border-radius: 5px; margin-left: 0.6%; margin-top: 4px; overflow: hidden; background-color: #fff
+  table { width: 100%; height: 100%; font-size: 18px; }
+#k22, #k23, #k36, #k66, #k50, #k62 { line-height: 45px; } // backspace, tab, enter, caps, lshift, rshift
+#k23, #k66, #k50 { clear: left; } // tab, caps, lshift
+#k22 { font-size: 24px; } // backspace
+#k23, #k36, #k50, #k62 { font-size: 32px; } // tab, enter, lshift, rshift
+#k22, #k23, #k36, #k66, #k50, #k62 { color: #888; } // backspace, tab, enter, caps, lshift, rshift
+#k23 { width: 10%; } // tab
+#k66 { width: 12%; } // caps
+#k50 { width: 15%; } // lshift
+#k22 { width: 10%; } // backspace
+#k36 { width: 11%; } // enter
+#k62 { width: 15%; } // rshift
+
 .ui-dialog-content.about
   padding: 0; margin: 0
   .logo { background: #fc9732 16px center no-repeat url(dyaloglogo.png); height: 80px; }
