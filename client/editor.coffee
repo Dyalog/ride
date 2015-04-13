@@ -10,11 +10,10 @@ EDITOR_HTML = do ->
   """
     <div class="toolbar debugger-toolbar">
       #{[
-        # The first two buttons are placed on the right-hand side through CSS.  In a floating window they are hidden.
+        # The first button is placed on the right-hand side through CSS.  In a floating window it is hidden.
         # CSS classes "first" and "last" indicate button grouping.
-        b 'tb-EP  last',      'Quit this function'
-        b 'tb-pop first',     'Edit in a floating window'
-        b 'tb-ER  first',     'Execute line'
+        b 'tb-EP first last', 'Quit this function'
+        b 'tb-ER first',      'Execute line'
         b 'tb-TC',            'Trace into expression'
         b 'tb-BK',            'Go back one line'
         b 'tb-FD',            'Skip current line'
@@ -34,8 +33,7 @@ EDITOR_HTML = do ->
     </div>
     <div class="toolbar editor-toolbar">
       #{[
-        b 'tb-EP  last',      'Save changes and return'
-        b 'tb-pop first',     'Edit in a floating window'
+        b 'tb-EP first last', 'Save changes and return'
         b 'tb-LN  first',     'Toggle line numbers'
         b 'tb-AO',            'Comment selected text'
         b 'tb-DO  last',      'Uncomment selected text'
@@ -44,10 +42,6 @@ EDITOR_HTML = do ->
         b 'tb-NX  first',     'Search for next match'
         b 'tb-PV',            'Search for previous match'
         b 'tb-case last',     'Match case'
-        '<span class="tb-separator"></span>'
-        b 'tb-refac-m first', 'Refactor text as method'
-        b 'tb-refac-f',       'Refactor text as field'
-        b 'tb-refac-p last',  'Refactor text as property'
       ].join ''}
     </div>
     <div class="cm"></div>
@@ -78,16 +72,12 @@ class @Editor
       .on 'click',            '.tb-button', (e) =>
         for c in $(e.target).prop('class').split /\s+/ when m = /^tb-([A-Z]{2,3})$/.exec c then @[m[1]](); break
         return
-      .on 'click', '.tb-pop', => @opts.pop(); false
       .on 'click', '.tb-hid, .tb-case', (e) => $(e.target).toggleClass 'pressed'; @highlightSearch(); false
       .on 'keydown', '.tb-search', 'return',       => @NX(); false
       .on 'keydown', '.tb-search', 'shift+return', => @PV(); false
       .on 'keydown', '.tb-search', 'ctrl+return', => @selectAllSearchResults(); false
       .on 'keydown', '.tb-search', 'esc', => @clearSearch(); @cm.focus(); false
       .on 'keyup', '.tb-search', (e) => (if e.which !in [13, 27] then @highlightSearch()); return
-      .on 'click', '.tb-refac-m', @refactorM.bind @
-      .on 'click', '.tb-refac-f', @refactorF.bind @
-      .on 'click', '.tb-refac-p', @refactorP.bind @
     @setDebugger !!@isDebugger
     return
 
@@ -313,19 +303,4 @@ class @Editor
     l = @cm.getCursor().line
     if l != @cm.lineCount() - 1 || /^\s*$/.test @cm.getLine l then @cm.execCommand 'goLineDown'
     else @cm.execCommand 'goDocEnd'; @cm.execCommand 'newlineAndIndent'; @xline = l + 1
-    return
-  refactorM: ->
-    if !/^\s*$/.test s = @cm.getLine l = @cm.getCursor().line
-      @cm.replaceRange "∇ #{s}\n\n∇", {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
-      @cm.setCursor line: l + 1, ch: 0
-    return
-  refactorF: ->
-    if !/^\s*$/.test s = @cm.getLine l = @cm.getCursor().line
-      @cm.replaceRange ":field public #{s}", {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
-      @cm.setCursor line: l + 1, ch: 0
-    return
-  refactorP: ->
-    if !/^\s*$/.test s = @cm.getLine l = @cm.getCursor().line
-      @cm.replaceRange ":Property #{s}\n\n∇r←get\nr←0\n∇\n\n∇set args\n∇\n:EndProperty", {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
-      @cm.setCursor line: l + 1, ch: 0
     return

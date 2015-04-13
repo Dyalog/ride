@@ -144,7 +144,6 @@ module.exports = ->
       wins[w] = new Editor $tabContent,
         id: w, name: ee.name, debugger: ee.debugger, emit: emit
         weakInterrupt: WI
-        pop: -> popWindow w
         openInExternalEditor: D.openInExternalEditor
       wins[w].open ee
       $('.ui-layout-' + dir).tabs('refresh').tabs(active: -1)
