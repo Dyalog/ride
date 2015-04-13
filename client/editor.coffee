@@ -216,7 +216,7 @@ class @Editor
   QT: -> @emit 'CloseWindow', win: @id; return
   BK: -> (if @isDebugger then @emit 'TraceBackward', win: @id else @cm.execCommand 'undo'); return
   FD: -> (if @isDebugger then @emit 'TraceForward',  win: @id else @cm.execCommand 'redo'); return
-  SC: -> @$tb.find('.tb-search:visible').focus(); return
+  SC: -> @$tb.find('.tb-search:visible').focus().select(); return
   EP: ->
     v = @cm.getValue()
     if v != @originalText || @breakpoints.join() != @originalBreakpoints
