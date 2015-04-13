@@ -1,5 +1,6 @@
 # Preferences UI
 prefs = require './prefs'
+keymap = require './keymap'
 {join, esc} = require './util'
 
 tabImpls = [
@@ -44,10 +45,10 @@ tabImpls = [
       """
       $pk = $ 'input', $e; return
     load: ->
-      h = require('./keymap').forward
+      bq = keymap.getBQMap()
       $('#keyboard-layout .key').each ->
-        $('.g1', @).text h[$('.g0', @).text()]
-        $('.g3', @).text h[$('.g2', @).text()]
+        $('.g1', @).text bq[$('.g0', @).text()]
+        $('.g3', @).text bq[$('.g2', @).text()]
         return
       $pk.val prefs.prefixKey()
       return

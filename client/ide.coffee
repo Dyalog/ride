@@ -169,7 +169,7 @@ module.exports = ->
       clearTimeout ttid; $t = $ e.target; p = $t.position(); x = $t.text()
       ttid = setTimeout(
         ->
-          ttid = null; key = keymap.reverse[x]
+          ttid = null; key = keymap.getBQKeyFor x
           keyText = if key && x.charCodeAt(0) > 127 then "Keyboard: #{prefs.prefixKey()}#{key}\n\n" else ''
           h = D.lbarTips[x] or [x, '']; $tipDesc.text h[0]; $tipText.text keyText + h[1]
           $tipTriangle.css(left: 3 + p.left + ($t.width() - $tipTriangle.width()) / 2, top: p.top + $t.height() + 2).show()

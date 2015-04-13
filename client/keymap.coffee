@@ -1,7 +1,7 @@
 CodeMirror = require 'codemirror'
 helpurls = require './helpurls'
 prefs = require './prefs'
-{inherit, cat, dict, chr, ord} = require './util'
+{inherit, cat, dict, chr, ord, zip} = require './util'
 
 window.onhelp = -> false # prevent IE from acting silly on F1
 
@@ -28,8 +28,6 @@ squiggleDescriptions =
   '*': 'exp/power',          '⊥': 'decode (1 2 3→123)',  '!': 'factorial/binomial'
 
 ctid = 0 # backquote completion timeout id
-@forward = forward = {} # maps `x keys to squiggles
-@reverse = reverse = {} # maps squiggles to their `x keys; used in lbar tooltips
 
 CodeMirror.keyMap.dyalog = inherit fallthrough: 'default', F1: (cm) ->
   c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
@@ -63,7 +61,12 @@ CodeMirror.keyMap.dyalog["'#{prefs.prefixKey()}'"] = (cm) ->
         Left:      (cm, m) -> m.close(); cm.execCommand 'goCharLeft'; return
         Right:     (cm, m) -> m.pick(); return
       hint: ->
-        data = from: c, to: cm.getCursor(), list: bqc
+        pk = prefs.prefixKey()
+        data = from: c, to: cm.getCursor(), list: KS.map (k) ->
+          if k == pk
+            text: '', hint: bqbqHint, render: (e) -> e.innerHTML = "  #{pk}#{pk} <i>completion by name</i>"; return
+          else
+            v = bq[k]; text: v, render: (e) -> $(e).text "#{v} #{pk}#{k} #{squiggleDescriptions[v] || ''}  "; return
         CodeMirror.on data, 'close', ->
           cm.setOption 'autoCloseBrackets', cm.getOption 'autoCloseBrackets0'
           cm.setOption 'autoCloseBrackets0', null
@@ -74,25 +77,25 @@ CodeMirror.keyMap.dyalog["'#{prefs.prefixKey()}'"] = (cm) ->
   )
 
 # `x completions
-ks = '`1234567890-=qwertyuiop[]asdfghjk l;\'\\zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:"|ZXCVBNM<>?'.split /\s*/
-vs = '`¨¯<≤=≥>≠∨∧×÷?⍵∊⍴~↑↓⍳○*←→⍺⌈⌊_∇∆∘\'⎕⍎⍕ ⊢ ⊂⊃∩∪⊥⊤|⍝⍀⌿⋄⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹?⍵⍷⍴⍨↑↓⍸⍥⍣⍞⍬⍺⌈⌊_∇∆⍤⌸⌷≡≢⊣⊂⊃∩∪⊥⊤|⍪⍙⍠'.split /\s*/
-bqc = []
+KS = '`1234567890-=qwertyuiop[]asdfghjk l;\'\\zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:"|ZXCVBNM<>?'.split /\s*/
+VS = '`¨¯<≤=≥>≠∨∧×÷?⍵∊⍴~↑↓⍳○*←→⍺⌈⌊_∇∆∘\'⎕⍎⍕ ⊢ ⊂⊃∩∪⊥⊤|⍝⍀⌿⋄⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹?⍵⍷⍴⍨↑↓⍸⍥⍣⍞⍬⍺⌈⌊_∇∆⍤⌸⌷≡≢⊣⊂⊃∩∪⊥⊤|⍪⍙⍠'.split /\s*/
+if KS.length != VS.length then console.error? 'bad configuration of backquote keymap'
+bq = dict zip KS, VS
+@getBQMap = -> bq
+@getBQKeyFor = getBQKeyFor = (x) -> (for k, v of bq when v == x then return k); ''
+
 CodeMirror.keyMap.dyalogBackquote = fallthrough: 'dyalog', disableInput: true
-if ks.length != vs.length then console.error? 'bad configuration of backquote keymap'
-ks.forEach (k, i) ->
-  v = vs[i]; forward[k] = v; reverse[v] ?= k
-  bqc.push text: v, render: (e) -> $(e).text "#{v} #{prefs.prefixKey()}#{k} #{squiggleDescriptions[v] || ''}  "
+KS.forEach (k) ->
   CodeMirror.keyMap.dyalogBackquote["'#{k}'"] = (cm) ->
     clearTimeout ctid; cm.state.completionActive?.close?()
     cm.setOption 'autoCloseBrackets', cm.getOption 'autoCloseBrackets0'
     cm.setOption 'autoCloseBrackets0', null
     cm.setOption 'keyMap', 'dyalog'
-    c = cm.getCursor(); if k == prefs.prefixKey() then bqbqHint cm else cm.replaceRange v, {line: c.line, ch: c.ch - 1}, c
+    c = cm.getCursor(); if k == prefs.prefixKey() then bqbqHint cm else cm.replaceRange bq[k], {line: c.line, ch: c.ch - 1}, c
     return
-ks = vs = null
+  return
 
-bqc[0].render = (e) -> e.innerHTML = "  #{pk = prefs.prefixKey()}#{pk} <i>completion by name</i>"
-bqc[0].hint = bqbqHint = (cm) ->
+bqbqHint = (cm) ->
   c = cm.getCursor(); cm.replaceSelection prefs.prefixKey(), 'end'
   cm.showHint completeOnSingleClick: true, extraKeys: {Right: pick = ((cm, m) -> m.pick()), Space: pick}, hint: ->
     u = cm.getLine(c.line)[c.ch + 1...cm.getCursor().ch]
@@ -104,7 +107,7 @@ bqc[0].hint = bqbqHint = (cm) ->
 bqbqc = ((s) -> cat s.split('\n').map (l) ->
   [squiggle, names...] = l.split ' '
   names.map (name) -> name: name, text: squiggle, render: (e) ->
-    key = reverse[squiggle]; pk = prefs.prefixKey()
+    key = getBQKeyFor squiggle; pk = prefs.prefixKey()
     $(e).text "#{squiggle} #{if key then pk + key else '  '} #{pk}#{pk}#{name}"
 ) """
   ← leftarrow assign gets

@@ -5,7 +5,8 @@
 @dict = (pairs) -> r = {}; (for [k, v] in pairs then r[k] = v); r
 @chr = String.fromCharCode
 @ord = (x) -> x.charCodeAt 0
-@join = (a) -> a.join ''
+@join = (a) -> a.join ''                                                           
+@zip = (a, b) -> n = Math.min a.length, b.length; i = -1; while ++i < n then [a[i], b[i]]
 
 htmlChars = '<': '&lt;', '>': '&gt;', '&': '&amp;'
 @esc = (s) -> s.replace /[<>&]/g, (x) -> htmlChars[x]
