@@ -1,6 +1,7 @@
 require './menu'
 about = require './about'
 prefs = require './prefs'
+prefsUI = require './prefs-ui'
 {Editor} = require './editor'
 {Session} = require './session'
 keymap = require './keymap'
@@ -153,7 +154,7 @@ module.exports = ->
       return
 
   # language bar
-  $('.lbar-prefs').click -> prefs 'keyboard'; return
+  $('.lbar-prefs').click -> prefsUI 'keyboard'; return
   $tip = $ '.lbar-tip'; $tipDesc = $ '.lbar-tip-desc'; $tipText = $ '.lbar-tip-text'; $tipTriangle = $ '.lbar-tip-triangle'
   ttid = null # tooltip timeout id
   $ '.lbar'
@@ -228,7 +229,7 @@ module.exports = ->
         }
     )
     {'': '_Edit', items: [
-      {'': 'Preferences', action: prefs}
+      {'': 'Preferences', action: prefsUI}
       '-'
       {'': 'Weak Interrupt',   action: WI}
       {'': 'Strong Interrupt', action: SI}
