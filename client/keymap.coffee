@@ -1,15 +1,9 @@
 CodeMirror = require 'codemirror'
 helpurls = require './helpurls'
 prefs = require './prefs'
+{inherit, cat, dict, chr, ord} = require './util'
 
 window.onhelp = -> false # prevent IE from acting silly on F1
-
-# utils
-inherit = (x) -> (F = ->):: = x; new F # JavaScript's prototypal inheritance
-join = (x) -> [].concat x... # ⊃,/
-dict = (pairs) -> r = {}; (for [k, v] in pairs then r[k] = v); r # like in Python, build a dictionary from a list of pairs
-chr = (x) -> String.fromCharCode x
-ord = (x) -> x.charCodeAt 0
 
 prefs.prefixKey (x, old) -> # change listener
   if x != old then m = CodeMirror.keyMap.dyalog; m["'#{x}'"] = m["'#{old}'"]; delete m["'#{old}'"]
@@ -35,8 +29,8 @@ squiggleDescriptions = ((s) -> dict s.split(/\n| *│ */).map (l) -> [l[0], l[2.
 '''
 
 ctid = 0 # backquote completion timeout id
-@forward = forward = {} # map 
-@reverse = reverse = {} # reverse keymap: maps squiggles to their `x keys; used in lbar tooltips
+@forward = forward = {} # maps `x keys to squiggles
+@reverse = reverse = {} # maps squiggles to their `x keys; used in lbar tooltips
 
 CodeMirror.keyMap.dyalog = inherit fallthrough: 'default', F1: (cm) ->
   c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
@@ -108,7 +102,7 @@ bqc[0].hint = bqbqHint = (cm) ->
   return
 
 # ``name completions
-bqbqc = ((s) -> join s.split('\n').map (l) ->
+bqbqc = ((s) -> cat s.split('\n').map (l) ->
   [squiggle, names...] = l.split ' '
   names.map (name) -> name: name, text: squiggle, render: (e) ->
     key = reverse[squiggle]; pk = prefs.prefixKey()

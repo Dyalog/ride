@@ -82,7 +82,6 @@ tabImpls = [
 ]
 
 safe = (s) -> s.toLowerCase().replace /[^a-z\-]/g, '-' # make a string suitable for a DOM id
-join = (a) -> a.join ''
 
 $d = null # dialogue instance, lazily initialized
 

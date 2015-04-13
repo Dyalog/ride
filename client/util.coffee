@@ -1,4 +1,14 @@
-# a kitchen sink of small functions and jQuery plugins
+# a kitchen sink for small generic functions and jQuery plugins
+
+@inherit = (x) -> (F = ->):: = x; new F # JavaScript's prototypal inheritance
+@cat = (x) -> [].concat x... # ⊃,/
+@dict = (pairs) -> r = {}; (for [k, v] in pairs then r[k] = v); r
+@chr = String.fromCharCode
+@ord = (x) -> x.charCodeAt 0
+@join = (a) -> a.join ''
+
+htmlChars = '<': '&lt;', '>': '&gt;', '&': '&amp;'
+@esc = (s) -> s.replace /[<>&]/g, (x) -> htmlChars[x]
 
 @onCodeMirrorDoubleClick = (cm, f) ->
   # CodeMirror supports 'dblclick' events but they are unreliable and seem to require rather a short time between the two clicks
@@ -15,13 +25,7 @@ $.alert = (message, title, callback) ->
   ]
   return
 
-htmlChars = '<': '&lt;', '>': '&gt;', '&': '&amp;'
-@esc = (s) -> s.replace /[<>&]/g, (x) -> htmlChars[x]
-
-@join = (a) -> a.join ''
-
-$.fn.insert = (s) -> # replace selection in an <input> or <textarea> with "s"
-  @each ->
-    if (x = @selectionStart)? && (y = @selectionEnd)?
-      @value = @value[...x] + s + @value[y..]; @selectionStart = @selectionEnd = x + s.length
-    return # TODO: IE support
+$.fn.insert = (s) -> @each -> # replace selection in an <input> or <textarea> with "s"
+  if (x = @selectionStart)? && (y = @selectionEnd)?
+    @value = @value[...x] + s + @value[y..]; @selectionStart = @selectionEnd = x + s.length
+  return # TODO: IE
