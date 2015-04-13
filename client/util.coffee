@@ -19,3 +19,9 @@ htmlChars = '<': '&lt;', '>': '&gt;', '&': '&amp;'
 @esc = (s) -> s.replace /[<>&]/g, (x) -> htmlChars[x]
 
 @join = (a) -> a.join ''
+
+$.fn.insert = (s) -> # replace selection in an <input> or <textarea> with "s"
+  @each ->
+    if (x = @selectionStart)? && (y = @selectionEnd)?
+      @value = @value[...x] + s + @value[y..]; @selectionStart = @selectionEnd = x + s.length
+    return # TODO: IE support

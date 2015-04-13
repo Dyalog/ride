@@ -193,7 +193,7 @@ class @Editor
     return
   hasFocus: -> window.focused && @cm.hasFocus()
   focus: -> (if !window.focused then window.focus()); @cm.focus(); return
-  insert: (ch) -> (if !@cm.getOption 'readOnly' then c = @cm.getCursor(); @cm.replaceRange ch, c, c); return
+  insert: (ch) -> @cm.getOption('readOnly') || @cm.replaceSelection ch; return
   saved: (err) -> (if err then $.alert 'Cannot save changes' else @emit 'CloseWindow', win: @id); return
   closePopup: -> (if D.floating then window.onbeforeunload = null; D.forceClose = 1; close()); return
   die: -> @cm.setOption 'readOnly', true; return

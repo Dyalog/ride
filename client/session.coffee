@@ -60,7 +60,7 @@ class @Session
   updateSize: -> @cm.setSize @$e.width(), @$e.height(); return
   hasFocus: -> window.focused && @cm.hasFocus()
   focus: -> (if !window.focused then window.focus()); @cm.focus(); return
-  insert: (ch) -> (if !@cm.getOption 'readOnly' then c = @cm.getCursor(); @cm.replaceRange ch, c, c); return
+  insert: (ch) -> @cm.getOption('readOnly') || @cm.replaceSelection ch; return
   scrollCursorIntoView: -> setTimeout (=> @cm.scrollIntoView @cm.getCursor(); return), 1; return
   die: -> @cm.setOption 'readOnly', true; return
   getLineWrapping: -> @cm.getOption 'lineWrapping'

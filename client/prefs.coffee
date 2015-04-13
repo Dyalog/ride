@@ -75,9 +75,7 @@ tabImpls = [
           <a href='#'>{RIDE_VER_C}</a>      git commit number
         </pre>
       """
-      $e.on 'click', 'pre a', (e) ->
-        s = $wt.val(); p = $wt[0].selectionStart; u = $(e.target).text(); $wt.val s[...p] + u + s[p..]
-        $wt[0].selectionStart = $wt[0].selectionEnd = p + u.length; return
+      $e.on 'click', 'pre a', (e) -> $wt.insert $(e.target).text(); return
       $('pre a', $e).attr 'title', 'Insert'; $wt = $ 'input', $e; return
     load: -> $wt.val prefs.windowTitle(); return
     save: -> prefs.windowTitle $wt.val(); return

@@ -160,11 +160,8 @@ module.exports = ->
     .on 'mousedown', -> false
     .on 'mousedown', 'b', (e) ->
       ch = $(e.target).text()
-      # Try to find a focused widget (session/editor) and therefore a focused CodeMirror instance
       for _, widget of wins when widget.hasFocus() then widget.insert ch; return false
-      # Find the focused element, if present.  It's likely the search <input>
-      if (i = $(':focus')[0]) && (x = i.selectionStart)? && (y = i.selectionEnd)? # TODO: we will also need special code for IE
-        i.value = i.value[...x] + ch + i.value[y..]; i.focus(); i.selectionStart = i.selectionEnd = x + ch.length
+      $(':focus').insert ch
       false
     .on 'mouseout', 'b', -> clearTimeout ttid; ttid = null; $tip.add($tipTriangle).hide(); return
     .on 'mouseover', 'b', (e) ->
