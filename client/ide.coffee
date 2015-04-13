@@ -46,7 +46,7 @@ module.exports = ->
     $tabs.each -> $t = $ @; if !$('li', $t).length then ['east', 'south'].forEach (d) -> (if $t.is '.ui-layout-' + d then layout.close d); return
          .tabs 'refresh'
     return
-  ($uls = $tabs.find 'ul').each ->
+  $tabs.find('ul').each ->
     $(@).sortable
       cursor: 'move', containment: 'parent', tolerance: 'pointer', axis: 'x', revert: true
       receive: (_, ui) ->
@@ -138,8 +138,9 @@ module.exports = ->
     .on 'OpenWindow', (ee) -> # "ee" for EditableEntity
       layout.open dir = if ee.debugger then 'south' else 'east'
       w = ee.token
-      $("<li id='wintab#{w}'><a href='#win#{w}'></a></li>").appendTo('.ui-layout-' + dir + ' ul').find('a').text ee.name
-      $tabContent = $("<div class='win' id='win#{w}'></div>").appendTo('.ui-layout-' + dir)
+      $("<li id='wintab#{w}'><a href='#win#{w}'></a></li>").appendTo(".ui-layout-#{dir} ul")
+        .find('a').text(ee.name).click (e) -> e.which == 2 && wins[w].EP(); return # middle click
+      $tabContent = $("<div class='win' id='win#{w}'></div>").appendTo ".ui-layout-#{dir}"
       wins[w] = new Editor $tabContent,
         id: w, name: ee.name, debugger: ee.debugger, emit: emit
         weakInterrupt: WI
