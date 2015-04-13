@@ -9,24 +9,23 @@ prefs.prefixKey (x, old) -> # change listener
   if x != old then m = CodeMirror.keyMap.dyalog; m["'#{x}'"] = m["'#{old}'"]; delete m["'#{old}'"]
   return
 
-squiggleDescriptions = ((s) -> dict s.split(/\n| *│ */).map (l) -> [l[0], l[2..]]) '''
-  ¨ each              │ ← assignment         │ ⊤ encode (123→1 2 3) │ ⌹ matrix inv/div
-  ¯ negative          │ → branch             │ | abs/modulo         │ ⍷ find
-  ∨ or (GCD)          │ ⍺ left argument      │ ⍝ comment            │ ⍨ commute
-  ∧ and (LCM)         │ ⌈ ceil/max           │ ⍀ \\[⎕io]            │ ⍣ power operator
-  × signum/times      │ ⌊ floor/min          │ ⌿ /[⎕io]             │ ⍞ char I/O
-  ÷ reciprocal/divide │ ∇ recur              │ ⋄ statement sep      │ ⍬ zilde (⍳0)
-  ? roll/deal         │ ∘ compose            │ ⌶ I-beam             │ ⍤ rank
-  ⍵ right argument    │ ⎕ evaluated input    │ ⍒ grade down         │ ⌸ key
-  ∊ enlist/membership │ ⍎ execute            │ ⍋ grade up           │ ⌷ default/index
-  ⍴ shape/reshape     │ ⍕ format             │ ⌽ reverse/rotate     │ ≡ depth/match
-  ~ not/without       │ ⊢ right              │ ⍉ transpose          │ ≢ tally/not match
-  ↑ mix/take          │ ⊂ enclose/partition  │ ⊖ ⌽[⎕io]             │ ⊣ left
-  ↓ split/drop        │ ⊃ disclose/pick      │ ⍟ logarithm          │ ⍪ table / ,[⎕io]
-  ⍳ indices/index of  │ ∩ intersection       │ ⍱ nor                │ ⍠ variant
-  ○ pi/trig           │ ∪ unique/union       │ ⍲ nand
-  * exp/power         │ ⊥ decode (1 2 3→123) │ ! factorial/binomial
-'''
+squiggleDescriptions =
+  '¨': 'each',               '←': 'assignment',          '⊤': 'encode (123→1 2 3)',  '⌹': 'matrix inv/div'
+  '¯': 'negative',           '→': 'branch',              '|': 'abs/modulo',          '⍷': 'find'
+  '∨': 'or (GCD)',           '⍺': 'left argument',       '⍝': 'comment',             '⍨': 'commute'
+  '∧': 'and (LCM)',          '⌈': 'ceil/max',            '⍀': '\\[⎕io]',             '⍣': 'power operator'
+  '×': 'signum/times',       '⌊': 'floor/min',           '⌿': '/[⎕io]',              '⍞': 'char I/O'
+  '÷': 'reciprocal/divide',  '∇': 'recur',               '⋄': 'statement sep',       '⍬': 'zilde (⍳0)'
+  '?': 'roll/deal',          '∘': 'compose',             '⌶': 'I-beam',              '⍤': 'rank'
+  '⍵': 'right argument',     '⎕': 'evaluated input',     '⍒': 'grade down',          '⌸': 'key'
+  '∊': 'enlist/membership',  '⍎': 'execute',             '⍋': 'grade up',            '⌷': 'default/index'
+  '⍴': 'shape/reshape',      '⍕': 'format',              '⌽': 'reverse/rotate',      '≡': 'depth/match'
+  '~': 'not/without',        '⊢': 'right',               '⍉': 'transpose',           '≢': 'tally/not match'
+  '↑': 'mix/take',           '⊂': 'enclose/partition',   '⊖': '⌽[⎕io]',              '⊣': 'left'
+  '↓': 'split/drop',         '⊃': 'disclose/pick',       '⍟': 'logarithm',           '⍪': 'table / ,[⎕io]'
+  '⍳': 'indices/index of',   '∩': 'intersection',        '⍱': 'nor',                 '⍠': 'variant'
+  '○': 'pi/trig',            '∪': 'unique/union',        '⍲': 'nand'
+  '*': 'exp/power',          '⊥': 'decode (1 2 3→123)',  '!': 'factorial/binomial'
 
 ctid = 0 # backquote completion timeout id
 @forward = forward = {} # maps `x keys to squiggles
