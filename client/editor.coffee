@@ -157,7 +157,7 @@ class @Editor
   updateSize: -> @cm.setSize @$e.width(), @$e.parent().height() - @$e.position().top - 28; return
 
   open: (ee) ->
-    @cm.setValue @originalText = ee.text; @cm.focus()
+    @cm.setValue @originalText = ee.text; @cm.clearHistory(); @cm.focus()
     # Constants for entityType:
     # DefinedFunction     1
     # SimpleCharArray     2

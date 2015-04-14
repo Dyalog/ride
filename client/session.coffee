@@ -59,7 +59,7 @@ class @Session
     @promptType = why; @cm.setOption 'readOnly', false; @cm.setOption 'cursorHeight', 1; l = @cm.lineCount() - 1
     if (why == 1 && !@dirty[l]?) || why !in [1, 3, 4]
       @cm.replaceRange '      ', {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}, 'D'
-    @cm.setCursor l, @cm.getLine(l).length; return
+    @cm.setCursor l, @cm.getLine(l).length; @cm.clearHistory(); return
 
   noPrompt: -> @promptType = 0; @cm.setOption 'readOnly', true; @cm.setOption 'cursorHeight', 0; return
   updateSize: -> @cm.setSize @$e.width(), @$e.height(); return
@@ -88,7 +88,7 @@ class @Session
         return
     else
       es = [@cm.getLine @cm.getCursor().line]
-    @opts.exec es, trace; @dirty = {}; @histAdd es.filter((x) -> !/^\s*$/.test x); return
+    @opts.exec es, trace; @dirty = {}; @histAdd es.filter ((x) -> !/^\s*$/.test x); @cm.clearHistory(); return
 
   # Commands:
   ED: -> c = @cm.getCursor(); @emit 'Edit', win: 0, pos: c.ch, text: @cm.getLine c.line; return
