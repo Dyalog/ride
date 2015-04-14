@@ -1,7 +1,7 @@
 # Preferences UI
 prefs = require './prefs'
 keymap = require './keymap'
-{join, esc, dict} = require './util'
+{join, esc, dict, hex, ord} = require './util'
 
 tabImpls = [
   do ->
@@ -44,13 +44,14 @@ tabImpls = [
       """
       .on 'focus', '.key input', -> setTimeout (=> $(@).select(); return), 1; return
       .on 'blur', '.key input', -> $(@).val $(@).val()[-1..] || ' '; return
+      .on 'mouseover mouseout', '.key input', (e) -> $(@).toggleClass 'hover', e.type == 'mouseover'; return
       $pk = $ '.pk', $e
       return
     load: ->
       bq = keymap.getBQMap()
       $('#keyboard-layout .key').each ->
-        $('.g1', @).val bq[$('.g0', @).text()]
-        $('.g3', @).val bq[$('.g2', @).text()]
+        v = bq[$('.g0', @).text()] || ' '; $('.g1', @).val(v).prop 'title', "U+#{hex ord(v), 4}"
+        v = bq[$('.g2', @).text()] || ' '; $('.g3', @).val(v).prop 'title', "U+#{hex ord(v), 4}"
         return
       $pk.val prefs.prefixKey()
       return

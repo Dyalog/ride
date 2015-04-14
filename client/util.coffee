@@ -7,6 +7,7 @@
 @ord = (x) -> x.charCodeAt 0
 @join = (a) -> a.join ''                                                           
 @zip = (a, b) -> n = Math.min a.length, b.length; i = -1; while ++i < n then [a[i], b[i]]
+@hex = (x, n = 0) -> s = x.toString 16; (while s.length < n then s = '0' + s); s.toUpperCase()
 
 htmlChars = '<': '&lt;', '>': '&gt;', '&': '&amp;'
 @esc = (s) -> s.replace /[<>&]/g, (x) -> htmlChars[x]
