@@ -17,11 +17,16 @@ class @Session
     @cm.on 'beforeChange', (_, c) =>
       if c.origin != 'D'
         l0 = c.from.line; l1 = c.to.line; m = l1 - l0 + 1; n = c.text.length
-        if n < m then c.update c.from, c.to, c.text.concat(for [0...m - n] then ''); n = m # pad shrinking changes with empty lines
-        if m < n then h = @dirty; @dirty = {}; for x, y of h then @dirty[x + (n - m) * (x > l1)] = y
+        if n < m
+          if c.update
+            c.update c.from, c.to, c.text.concat(for [0...m - n] then ''); n = m # pad shrinking changes with empty lines
+          else
+            c.cancel(); return # the change is probably the result of Undo
+        else if m < n
+          h = @dirty; @dirty = {}; for x, y of h then @dirty[x + (n - m) * (x > l1)] = y
         l = l0
         while l <= l1    then @dirty[l] ?= @cm.getLine l; l++
-        while l < l0 + n then @dirty[l] = 0;             l++
+        while l < l0 + n then @dirty[l] = 0;              l++
       return
     @cm.on 'change', (_, c) =>
       if c.origin != 'D'
