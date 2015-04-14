@@ -7,38 +7,35 @@ $pk = null
 @name = 'Keyboard'
 
 @init = ($e) ->
-  W = 550; H = 350
-  K = [ # keycodes
-    49, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22
-    23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 51
-    66, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 36
-    50, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62
-  ]
+  # Layouts are arranged by scancode.
+  # http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
+  specialKeys = 15: '⟵', 16: '↹', 30: 'Caps', 43: '↲', 44: '⇧', 57: '⇧'
   layout = '''
-    ` 1 2 3 4 5 6 7 8 9 0 - = ⟵
-    ↹ q w e r t y u i o p [ ] \\ 
-    Caps a s d f g h j k l ; ' ↲
-    ⇧ z x c v b n m , . / ⇧
+    ☠ ` 1 2 3 4 5 6 7 8 9 0 - = ☠ ☠
+    ☠ q w e r t y u i o p [ ] \\
+    ☠ a s d f g h j k l ; ' ☠ ☠
+    ☠ ☠ z x c v b n m , . / ☠ ☠
   '''.split /[ \r\n]+/
   shiftLayout = '''
-    ~ ! @ # $ % ^ & * ( ) _ + --
-    -- Q W E R T Y U I O P { } |
-    -- A S D F G H J K L : " --
-    -- Z X C V B N M < > ? --
+    ☠ ~ ! @ # $ % ^ & * ( ) _ + ☠ ☠
+    ☠ Q W E R T Y U I O P { } |
+    ☠ A S D F G H J K L : " ☠ ☠
+    ☠ ☠ Z X C V B N M < > ? ☠ ☠
   '''.split /[ \r\n]+/
   $e.html """
     <label>Prefix key: <input class="text-field pk" size="1"></label>
-    <div id="keyboard-layout">#{
-      join K.map (k, i) ->
-        if shiftLayout[i] == '--'
-          if layout[i] then "<span id='k#{k}' class='key'>#{esc layout[i]}</span>"
+    <div id="keyboard-layout">#{join(
+      for i in [1..57]
+        if s = specialKeys[i]
+          "<span id='k#{i}' class='key'>#{esc s}</span>"
         else
           """
-            <span id='k#{k}' class='key'>
-            <span class='g0'>#{esc layout[i]}</span><input class='g1'><br>
-            <span class='g2'>#{esc shiftLayout[i]}</span><input class='g3'/></span>
+            <span id='k#{i}' class='key'>
+              <span class='g0'>#{esc layout[i]}</span><input class='g1'><br>
+              <span class='g2'>#{esc shiftLayout[i]}</span><input class='g3'/>
+            </span>
           """
-    }</div>
+    )}</div>
   """
   .on 'focus', '.key input', -> setTimeout (=> $(@).select(); return), 1; return
   .on 'blur', '.key input', -> $(@).val $(@).val()[-1..] || ' '; return
