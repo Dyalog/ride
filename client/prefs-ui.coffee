@@ -1,7 +1,7 @@
 # Preferences UI
 prefs = require './prefs'
 keymap = require './keymap'
-{join, esc} = require './util'
+{join, esc, dict} = require './util'
 
 tabImpls = [
   do ->
@@ -29,7 +29,7 @@ tabImpls = [
         -- Z X C V B N M < > ? --
       '''.split /[ \r\n]+/
       $e.html """
-        <label>Prefix key: <input class="text-field" size="1"></label>
+        <label>Prefix key: <input class="text-field pk" size="1"></label>
         <div id="keyboard-layout">#{
           join K.map (k, i) ->
             if shiftLayout[i] == '--'
@@ -37,23 +37,29 @@ tabImpls = [
             else
               """
                 <span id='k#{k}' class='key'>
-                  <span class='g0'>#{esc layout[i]}</span><span class='g1'>&nbsp;</span><br>
-                  <span class='g2'>#{esc shiftLayout[i]}</span><span class='g3'>&nbsp;</span>
-                </span>
+                <span class='g0'>#{esc layout[i]}</span><input class='g1'><br>
+                <span class='g2'>#{esc shiftLayout[i]}</span><input class='g3'/></span>
               """
         }</div>
       """
-      $pk = $ 'input', $e; return
+      .on 'focus', '.key input', -> setTimeout (=> $(@).select(); return), 1; return
+      .on 'blur', '.key input', -> $(@).val $(@).val()[-1..] || ' '; return
+      $pk = $ '.pk', $e
+      return
     load: ->
       bq = keymap.getBQMap()
       $('#keyboard-layout .key').each ->
-        $('.g1', @).text bq[$('.g0', @).text()]
-        $('.g3', @).text bq[$('.g2', @).text()]
+        $('.g1', @).val bq[$('.g0', @).text()]
+        $('.g3', @).val bq[$('.g2', @).text()]
         return
       $pk.val prefs.prefixKey()
       return
     validate: -> if $pk.val().length != 1 then message: 'Invalid prefix key', element: $pk
-    save: -> prefs.prefixKey $pk.val(); return
+    save: ->
+      prefs.prefixKey $pk.val()
+      keymap.setBQMap dict $('#keyboard-layout .key').map ->
+        [[$('.g0', @).text(), $('.g1', @).val()], [$('.g2', @).text(), $('.g3', @).val()]]
+      return
   do ->
     $wt = null
     name: 'Title'

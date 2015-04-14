@@ -14,6 +14,7 @@ prefs = @
   ['lineNumbersInDebugger', 0]
   ['lineNumbersInEditor',   1]
   ['prefixKey',             '`']
+  ['prefixMap',             ''] # pairs of characters; only differences from the default ` map are stored
   ['sessionLineWrapping',   0]
   ['showLanguageBar',       1]
   ['theme',                 '']

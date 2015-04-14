@@ -1,7 +1,7 @@
 CodeMirror = require 'codemirror'
 helpurls = require './helpurls'
 prefs = require './prefs'
-{inherit, cat, dict, chr, ord, zip} = require './util'
+{inherit, cat, dict, chr, ord, zip, join} = require './util'
 
 window.onhelp = -> false # prevent IE from acting silly on F1
 
@@ -80,9 +80,11 @@ CodeMirror.keyMap.dyalog["'#{prefs.prefixKey()}'"] = (cm) ->
 KS = '`1234567890-=qwertyuiop[]asdfghjk l;\'\\zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:"|ZXCVBNM<>?'.split /\s*/
 VS = '`¨¯<≤=≥>≠∨∧×÷?⍵∊⍴~↑↓⍳○*←→⍺⌈⌊_∇∆∘\'⎕⍎⍕ ⊢ ⊂⊃∩∪⊥⊤|⍝⍀⌿⋄⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹?⍵⍷⍴⍨↑↓⍸⍥⍣⍞⍬⍺⌈⌊_∇∆⍤⌸⌷≡≢⊣⊂⊃∩∪⊥⊤|⍪⍙⍠'.split /\s*/
 if KS.length != VS.length then console.error? 'bad configuration of backquote keymap'
-bq = dict zip KS, VS
-@getBQMap = -> bq
-@getBQKeyFor = getBQKeyFor = (x) -> (for k, v of bq when v == x then return k); ''
+BQ = dict zip KS, VS # default ` map
+bq = $.extend {}, BQ; do -> s = prefs.prefixMap(); for i in [0...s.length] by 2 then bq[s[i]] = s[i + 1] # current ` map
+@getBQMap = -> $.extend {}, bq
+@getBQKeyFor = getBQKeyFor = (v) -> (for k in KS when bq[k] == v then return k); ''
+@setBQMap = (bq1) -> $.extend bq, bq1; prefs.prefixMap join(for k, v of bq when v != BQ[k] then k + v); return
 
 CodeMirror.keyMap.dyalogBackquote = fallthrough: 'dyalog', disableInput: true
 KS.forEach (k) ->
