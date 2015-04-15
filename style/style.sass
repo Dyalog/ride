@@ -289,27 +289,26 @@ input, textarea
 #k16, #k43, #k44, #k57 { font-size: 32px; } // tab, enter, lshift, rshift
 #k15, #k16, #k30, #k43, #k44, #k57 { color: #888; } // backspace, tab, caps, enter, lshift, rshift
 #k14, #k42, #k45, #k56 { display: none; }
-#k15 { width: 12.8%; } // backspace
+#k15 { width: 13%; } // backspace
 #k16 { width: 10%; } // tab
+#k29 { width: 9%; } // |\ key on an ANSI layout
 #k30 { width: 12%; } // caps
-#k43 { width: 11%; } // enter
+#k43 { width: 13.6%; } // enter
 #k44 { width: 15%; } // lshift
-#k57 { width: 17.5%; } // rshift
+#k57 { width: 17.2%; } // rshift
 .geometry-iso
   #k29 { display: none; } // the key above enter on an ANSI layout
   #k42 { display: block; } // the key between @' and enter
   #k43 // enter
-    width: 6.8%; height: 94px; line-height: 94px; margin-top: -45px
+    width: 7%; height: 94px; line-height: 94px; margin-top: -45px
     text-indent: -2%; border-radius: 0 5px 5px 5px; overflow: visible
   #k43:before // enter
     content: ""; background-color: #fff; float: left; border-radius: 5px 0 0 5px
     position: relative; left: -30%; width: 30%; height: 45px
-  #k44 { width: 8%; } // lshift
+  #k44 { width: 8.4%; } // lshift
   #k45 { display: block; } // the key between lshift and Z
-// .geometry-ijs
-//   #k43:after // enter
-//     content: ""; background-color: #fff; float: right; border-radius: 5px
-//     position: relative; top: -48px; width: 55%; height: 92px; line-height: 92px
+
+#keyboard-locale { float: right; margin-top: 5px; }
 
 .ui-dialog-content.about
   padding: 0; margin: 0

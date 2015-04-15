@@ -53,16 +53,26 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
             </span>
           """
     )}</div>
+    <select id="keyboard-locale">
+      <option>US
+      <option>GB
+    </select>
   """
   .on 'focus', '.key input', -> setTimeout (=> $(@).select(); return), 1; return
   .on 'blur', '.key input', -> $(@).val $(@).val()[-1..] || ' '; return
   .on 'mouseover mouseout', '.key input', (e) -> $(@).toggleClass 'hover', e.type == 'mouseover'; return
+  if !prefs.keyboardLocale() then prefs.keyboardLocale(if navigator.language == 'en-GB' then 'GB' else 'US')
+  $('#keyboard-locale').val(prefs.keyboardLocale()).change ->
+    prefs.keyboardLocale $(@).val()
+    load dict $('#keyboard-layout .key').map ->
+      [[$('.g0', @).text(), $('.g1', @).val()], [$('.g2', @).text(), $('.g3', @).val()]]
+    return
   $pk = $ '.pk', $e
   return
 
-@load = ->
-  bq = keymap.getBQMap()
-  layout = layouts.GB
+@load = load = (bq) -> # bq: current mappings, possibly not yet saved
+  bq ?= keymap.getBQMap()
+  layout = layouts[prefs.keyboardLocale()] || layouts.US
   $('#keyboard-layout').removeClass('geometry-ansi geometry-iso').addClass "geometry-#{layout.geometry}"
   for i in [1...NK]
     if (g0 = layout.normal[i]) != '☠'

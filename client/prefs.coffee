@@ -11,6 +11,7 @@ prefs = @
   ['favs',                  [host: '127.0.0.1', port: 4502]]
   ['floatingWindowInfos',   {}]
   ['floatNewEditors',       0]
+  ['keyboardLocale',        ''] # e.g. "US", "GB"
   ['lineNumbersInDebugger', 0]
   ['lineNumbersInEditor',   1]
   ['prefixKey',             '`']
