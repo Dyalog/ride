@@ -59,7 +59,7 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
     </select>
   """
   .on 'focus', '.key input', -> setTimeout (=> $(@).select(); return), 1; return
-  .on 'blur', '.key input', -> $(@).val $(@).val()[-1..] || ' '; return
+  .on 'blur', '.key input', -> $(@).val(v = $(@).val()[-1..] || ' ').prop 'title', "U+#{hex ord(v), 4}"; return
   .on 'mouseover mouseout', '.key input', (e) -> $(@).toggleClass 'hover', e.type == 'mouseover'; return
   if !prefs.keyboardLocale() then prefs.keyboardLocale(if navigator.language == 'en-GB' then 'GB' else 'US')
   $('#keyboard-locale').val(prefs.keyboardLocale()).change ->
