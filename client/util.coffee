@@ -1,13 +1,14 @@
 # a kitchen sink for small generic functions and jQuery plugins
 
 @inherit = (x) -> (F = ->):: = x; new F # JavaScript's prototypal inheritance
-@cat = (x) -> [].concat x... # ⊃,/
-@dict = (pairs) -> r = {}; (for [k, v] in pairs then r[k] = v); r
-@chr = String.fromCharCode
-@ord = (x) -> x.charCodeAt 0
-@join = (a) -> a.join ''                                                           
-@zip = (a, b) -> n = Math.min a.length, b.length; i = -1; while ++i < n then [a[i], b[i]]
+@cat = (x) -> [].concat x...            # array  concatenation, like ⊃,/ in APL
+@join = (a) -> a.join ''                # string concatenation, like ⊃,/ in APL
+@dict = (pairs) -> r = {}; (for [k, v] in pairs then r[k] = v); r # construct a dictionary from key-value pairs
+@chr = String.fromCharCode              # convert code point to character, like chr() in Python or ⎕ucs N in APL
+@ord = (x) -> x.charCodeAt 0            # convert character to code point, like ord() in Python or ⎕ucs'' in APL
+@zip = (a, b) -> n = Math.min a.length, b.length; i = -1; while ++i < n then [a[i], b[i]] # like zip() in Python or ,¨ in APL
 @hex = (x, n = 0) -> s = x.toString 16; (while s.length < n then s = '0' + s); s.toUpperCase()
+@qw = (s) -> s.split /[ \r\n]+/         # "quoted words" like in Perl
 
 htmlChars = '<': '&lt;', '>': '&gt;', '&': '&amp;'
 @esc = (s) -> s.replace /[<>&]/g, (x) -> htmlChars[x]

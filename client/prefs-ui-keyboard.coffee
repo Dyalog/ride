@@ -1,38 +1,55 @@
 prefs = require './prefs'
 keymap = require './keymap'
-{join, esc, dict, hex, ord} = require './util'
+{join, esc, dict, hex, ord, qw} = require './util'
 
 $pk = null
+NK = 58 # number of scancodes
+
+layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
+  US:
+    geometry: 'ansi'
+    normal: qw '''
+      ☠ ` 1 2 3 4 5 6 7 8 9 0 - = ☠ ☠
+      ☠ q w e r t y u i o p [ ] \\
+      ☠ a s d f g h j k l ; ' ☠ ☠
+      ☠ ☠ z x c v b n m , . / ☠ ☠
+    '''
+    shifted: qw '''
+      ☠ ~ ! @ # $ % ^ & * ( ) _ + ☠ ☠
+      ☠ Q W E R T Y U I O P { } |
+      ☠ A S D F G H J K L : " ☠ ☠
+      ☠ ☠ Z X C V B N M < > ? ☠ ☠
+    '''
+  GB:
+    geometry: 'iso'
+    normal: qw '''
+      ☠ ` 1 2 3 4 5 6 7 8 9 0 - = ☠ ☠
+      ☠ q w e r t y u i o p [ ] ☠
+      ☠ a s d f g h j k l ; ' # ☠
+      ☠ \\ z x c v b n m , . / ☠ ☠
+    '''
+    shifted: qw '''
+      ☠ ¬ ! " £ $ % ^ & * ( ) _ + ☠ ☠
+      ☠ Q W E R T Y U I O P { } ☠
+      ☠ A S D F G H J K L : @ ~ ☠
+      ☠ | Z X C V B N M < > ? ☠ ☠
+    '''
 
 @name = 'Keyboard'
 
 @init = ($e) ->
-  # Layouts are arranged by scancode.
-  # http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
   specialKeys = 15: '⟵', 16: '↹', 30: 'Caps', 43: '↲', 44: '⇧', 57: '⇧'
-  layout = '''
-    ☠ ` 1 2 3 4 5 6 7 8 9 0 - = ☠ ☠
-    ☠ q w e r t y u i o p [ ] \\
-    ☠ a s d f g h j k l ; ' ☠ ☠
-    ☠ ☠ z x c v b n m , . / ☠ ☠
-  '''.split /[ \r\n]+/
-  shiftLayout = '''
-    ☠ ~ ! @ # $ % ^ & * ( ) _ + ☠ ☠
-    ☠ Q W E R T Y U I O P { } |
-    ☠ A S D F G H J K L : " ☠ ☠
-    ☠ ☠ Z X C V B N M < > ? ☠ ☠
-  '''.split /[ \r\n]+/
   $e.html """
     <label>Prefix key: <input class="text-field pk" size="1"></label>
     <div id="keyboard-layout">#{join(
-      for i in [1..57]
+      for i in [1...NK]
         if s = specialKeys[i]
           "<span id='k#{i}' class='key'>#{esc s}</span>"
         else
           """
             <span id='k#{i}' class='key'>
-              <span class='g0'>#{esc layout[i]}</span><input class='g1'><br>
-              <span class='g2'>#{esc shiftLayout[i]}</span><input class='g3'/>
+              <span class='g2'></span><input class='g3'><br>
+              <span class='g0'></span><input class='g1'>
             </span>
           """
     )}</div>
@@ -45,10 +62,13 @@ $pk = null
 
 @load = ->
   bq = keymap.getBQMap()
-  $('#keyboard-layout .key').each ->
-    v = bq[$('.g0', @).text()] || ' '; $('.g1', @).val(v).prop 'title', "U+#{hex ord(v), 4}"
-    v = bq[$('.g2', @).text()] || ' '; $('.g3', @).val(v).prop 'title', "U+#{hex ord(v), 4}"
-    return
+  layout = layouts.GB
+  $('#keyboard-layout').removeClass('geometry-ansi geometry-iso').addClass "geometry-#{layout.geometry}"
+  for i in [1...NK]
+    if (g0 = layout.normal[i]) != '☠'
+      g1 = bq[g0] || ' '; $("#k#{i} .g0").text g0; $("#k#{i} .g1").val(g1).prop 'title', "U+#{hex ord(g1), 4}"
+    if (g2 = layout.shifted[i]) != '☠'
+      g3 = bq[g2] || ' '; $("#k#{i} .g2").text g2; $("#k#{i} .g3").val(g3).prop 'title', "U+#{hex ord(g3), 4}"
   $pk.val prefs.prefixKey()
   return
 

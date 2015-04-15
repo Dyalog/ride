@@ -277,10 +277,11 @@ input, textarea
   .g1, .g3 { width: 40%; height: 20px; padding: 0; border-width: 0; outline: 0; cursor: pointer; margin-top: 1px; }
   .g1 { color: #00f }
   .g3 { color: #f00 }
-  .g1.hover { outline: solid #88f 1px; background-color: #eee }
-  .g3.hover { outline: solid #f88 1px; background-color: #eee }
+  .g1.hover { outline: solid #bbf 1px; background-color: #eee }
+  .g3.hover { outline: solid #fbb 1px; background-color: #eee }
 .key
-  float: left; width: 6.2%; height: 45px; border-radius: 5px; margin-left: 0.6%; margin-top: 4px; overflow: hidden; background-color: #fff
+  float: left; width: 6%; height: 45px; border-radius: 5px
+  margin-left: 0.6%; margin-top: 4px; background-color: #fff; overflow: hidden
   table { width: 100%; height: 100%; font-size: 18px; }
 #k15, #k16, #k30, #k43, #k44, #k57 { line-height: 45px; } // backspace, tab, caps, enter, lshift, rshift
 #k16, #k30, #k44 { clear: left; } // tab, caps, lshift
@@ -288,12 +289,27 @@ input, textarea
 #k16, #k43, #k44, #k57 { font-size: 32px; } // tab, enter, lshift, rshift
 #k15, #k16, #k30, #k43, #k44, #k57 { color: #888; } // backspace, tab, caps, enter, lshift, rshift
 #k14, #k42, #k45, #k56 { display: none; }
-#k15 { width: 10%; } // backspace
+#k15 { width: 12.8%; } // backspace
 #k16 { width: 10%; } // tab
 #k30 { width: 12%; } // caps
 #k43 { width: 11%; } // enter
 #k44 { width: 15%; } // lshift
-#k57 { width: 15%; } // rshift
+#k57 { width: 17.5%; } // rshift
+.geometry-iso
+  #k29 { display: none; } // the key above enter on an ANSI layout
+  #k42 { display: block; } // the key between @' and enter
+  #k43 // enter
+    width: 6.8%; height: 94px; line-height: 94px; margin-top: -45px
+    text-indent: -2%; border-radius: 0 5px 5px 5px; overflow: visible
+  #k43:before // enter
+    content: ""; background-color: #fff; float: left; border-radius: 5px 0 0 5px
+    position: relative; left: -30%; width: 30%; height: 45px
+  #k44 { width: 8%; } // lshift
+  #k45 { display: block; } // the key between lshift and Z
+// .geometry-ijs
+//   #k43:after // enter
+//     content: ""; background-color: #fff; float: right; border-radius: 5px
+//     position: relative; top: -48px; width: 55%; height: 92px; line-height: 92px
 
 .ui-dialog-content.about
   padding: 0; margin: 0
