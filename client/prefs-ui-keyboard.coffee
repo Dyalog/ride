@@ -34,6 +34,20 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
       ☠ A S D F G H J K L : @ ~ ☠
       ☠ | Z X C V B N M < > ? ☠ ☠
     '''
+  DK:
+    geometry: 'iso'
+    normal: qw '''
+      ☠ ½ 1 2 3 4 5 6 7 8 9 0 + ´ ☠ ☠
+      ☠ q w e r t y u i o p å ^ ☠
+      ☠ a s d f g h j k l æ ø ' ☠
+      ☠ < z x c v b n m , . _ ☠ ☠
+    '''
+    shifted: qw '''
+      ☠ § ! " # ¤ % & / ( ) = ? ` ☠ ☠
+      ☠ Q W E R T Y U I O P Å " ☠
+      ☠ A S D F G H J K L Æ Ø * ☠
+      ☠ > Z X C V B N M ; : - ☠ ☠
+    '''
 
 @name = 'Keyboard'
 
@@ -53,15 +67,18 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
             </span>
           """
     )}</div>
-    <select id="keyboard-locale">
-      <option>US
-      <option>GB
-    </select>
+    <select id="keyboard-locale">#{join((for x, _ of layouts then "<option>#{x}").sort())}</select>
   """
   .on 'focus', '.key input', -> setTimeout (=> $(@).select(); return), 1; return
   .on 'blur', '.key input', -> $(@).val(v = $(@).val()[-1..] || ' ').prop 'title', "U+#{hex ord(v), 4}"; return
   .on 'mouseover mouseout', '.key input', (e) -> $(@).toggleClass 'hover', e.type == 'mouseover'; return
-  if !prefs.keyboardLocale() then prefs.keyboardLocale(if navigator.language == 'en-GB' then 'GB' else 'US')
+  if !prefs.keyboardLocale()
+    prefs.keyboardLocale(
+      switch navigator.language
+        when 'en-GB'       then 'GB'
+        when 'da', 'da_DK' then 'DK'
+        else                    'US'
+    )
   $('#keyboard-locale').val(prefs.keyboardLocale()).change ->
     prefs.keyboardLocale $(@).val()
     load dict $('#keyboard-layout .key').map ->
