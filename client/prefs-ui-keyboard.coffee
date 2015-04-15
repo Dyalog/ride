@@ -38,15 +38,15 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
     geometry: 'iso'
     normal: qw '''
       ☠ ½ 1 2 3 4 5 6 7 8 9 0 + ´ ☠ ☠
-      ☠ q w e r t y u i o p å ^ ☠
+      ☠ q w e r t y u i o p å ¨ ☠
       ☠ a s d f g h j k l æ ø ' ☠
-      ☠ < z x c v b n m , . _ ☠ ☠
+      ☠ < z x c v b n m , . - ☠ ☠
     '''
     shifted: qw '''
       ☠ § ! " # ¤ % & / ( ) = ? ` ☠ ☠
-      ☠ Q W E R T Y U I O P Å " ☠
+      ☠ Q W E R T Y U I O P Å ^ ☠
       ☠ A S D F G H J K L Æ Ø * ☠
-      ☠ > Z X C V B N M ; : - ☠ ☠
+      ☠ > Z X C V B N M ; : _ ☠ ☠
     '''
 
 @name = 'Keyboard'
