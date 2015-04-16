@@ -3,11 +3,11 @@ keymap = require './keymap'
 {join, esc, dict, hex, ord, qw} = require './util'
 
 $pk = null
-NK = 58 # number of scancodes
+NK = 58 # number of scancodes we are concerned with
 
 layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
   US:
-    geometry: 'ansi'
+    geometry: 'ansi' # geometries (or "mechanical layouts") are specified as CSS classes
     normal: qw '''
       ☠ ` 1 2 3 4 5 6 7 8 9 0 - = ☠ ☠
       ☠ q w e r t y u i o p [ ] \\
@@ -54,7 +54,11 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
 @init = ($e) ->
   specialKeys = 15: '⟵', 16: '↹', 30: 'Caps', 43: '↲', 44: '⇧', 57: '⇧'
   $e.html """
-    <label>Prefix key: <input class="text-field pk" size="1"></label>
+    <table id='keyboard-legend' class='key'>
+      <tr><td class='g2'>⇧x</td><td class='g3'><span class='pk-double'>`</span>&nbsp;⇧x</td></tr>
+      <tr><td class='g0'>x</td><td class='g1'><span class='pk-double'>`</span>&nbsp;x</td></tr>
+    </table>
+    <label id='keyboard-pk-label'>Prefix key: <input class="text-field pk" size="1"></label>
     <div id="keyboard-layout">#{join(
       for i in [1...NK]
         if s = specialKeys[i]
@@ -84,7 +88,7 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
     load $.extend {}, keymap.getBQMap(), dict $('#keyboard-layout .key').map ->
       [[$('.g0', @).text(), $('.g1', @).val()], [$('.g2', @).text(), $('.g3', @).val()]]
     return
-  $pk = $ '.pk', $e
+  $pk = $('.pk', $e).on 'change keyup', -> $('#keyboard-legend .pk-double').text $(@).val()[-1..]; return
   return
 
 @load = load = (bq) -> # bq: current mappings, possibly not yet saved

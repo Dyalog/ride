@@ -261,7 +261,6 @@ input, textarea
 .ui-widget-shadow { margin: -8px 0 0 -8px; padding: 8px; opacity: .3; filter: Alpha(Opacity=30); border-radius: 8px; background: #aaaaaa; }
 #prefs { height: 80px; }
 #prefs-tabs-nav a { outline: none; }
-#prefs-tab-keyboard input { width: 1.5em; text-align: center; }
 #prefs-tab-title
   text-align: left
   input { width: 100%; display: block; margin-bottom: 20px; }
@@ -271,18 +270,24 @@ input, textarea
       text-decoration: none; color: black
       &:hover { text-decoration: underline; color: blue; }
 
+#prefs-tab-keyboard .pk { width: 1.5em; text-align: center; }
+#keyboard-pk-label { float: left; }
+#keyboard-legend
+  +tt
+  float: right; width: 90px; border-collapse: collapse; margin: 0 0 10px 0
+  .g0, .g2 { text-align: left; }
+  .g1, .g3 { text-align: right; cursor: default; }
 #keyboard-layout
   +tt
-  background-color: #aaa; border-radius: 5px; height: 200px; margin-top: 32px
+  background-color: #aaa; border-radius: 5px; height: 200px; clear: both
+.key
+  float: left; width: 6%; height: 45px; border-radius: 5px
+  margin-left: 0.6%; margin-top: 4px; background-color: #fff; overflow: hidden
   .g1, .g3 { width: 40%; height: 20px; padding: 0; border-width: 0; outline: 0; cursor: pointer; margin-top: 1px; }
   .g1 { color: #00f }
   .g3 { color: #f00 }
   .g1.hover { outline: solid #bbf 1px; background-color: #eee }
   .g3.hover { outline: solid #fbb 1px; background-color: #eee }
-.key
-  float: left; width: 6%; height: 45px; border-radius: 5px
-  margin-left: 0.6%; margin-top: 4px; background-color: #fff; overflow: hidden
-  table { width: 100%; height: 100%; font-size: 18px; }
 #k15, #k16, #k30, #k43, #k44, #k57 { line-height: 45px; } // backspace, tab, caps, enter, lshift, rshift
 #k16, #k30, #k44 { clear: left; } // tab, caps, lshift
 #k15 { font-size: 24px; } // backspace
