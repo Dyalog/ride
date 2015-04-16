@@ -75,7 +75,7 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
   if !prefs.keyboardLocale()
     prefs.keyboardLocale(
       switch navigator.language
-        when 'en-GB'       then 'GB'
+        when 'en-GB'       then 'UK'
         when 'da', 'da_DK' then 'DK'
         else                    'US'
     )

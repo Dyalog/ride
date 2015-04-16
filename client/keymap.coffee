@@ -46,35 +46,35 @@ CodeMirror.keyMap.dyalog = inherit fallthrough: 'default', F1: (cm) ->
   return
 
 CodeMirror.keyMap.dyalog["'#{prefs.prefixKey()}'"] = (cm) ->
-  # Make it possible to use `( etc -- remember the original value of
-  # autoCloseBrackets, set it temporarily to "false", and restore it when the
-  # menu is closed:
-  cm.setOption 'autoCloseBrackets0', cm.getOption 'autoCloseBrackets'
-  cm.setOption 'autoCloseBrackets', false
-  cm.setOption 'keyMap', 'dyalogBackquote'
-  c = cm.getCursor(); cm.replaceSelection prefs.prefixKey(), 'end'
-  ctid = setTimeout(
-    -> cm.showHint
-      completeOnSingleClick: true
-      extraKeys:
-        Backspace: (cm, m) -> m.close(); cm.execCommand 'delCharBefore'; return
-        Left:      (cm, m) -> m.close(); cm.execCommand 'goCharLeft'; return
-        Right:     (cm, m) -> m.pick(); return
-      hint: ->
-        pk = prefs.prefixKey()
-        data = from: c, to: cm.getCursor(), list: KS.map (k) ->
-          if k == pk
-            text: '', hint: bqbqHint, render: (e) -> e.innerHTML = "  #{pk}#{pk} <i>completion by name</i>"; return
-          else
-            v = bq[k]; text: v, render: (e) -> $(e).text "#{v} #{pk}#{k} #{squiggleDescriptions[v] || ''}  "; return
-        CodeMirror.on data, 'close', ->
-          cm.setOption 'autoCloseBrackets', cm.getOption 'autoCloseBrackets0'
-          cm.setOption 'autoCloseBrackets0', null
-          cm.setOption 'keyMap', 'dyalog'
-          return
-        data
-    500
-  )
+  if cm.dyalogBQ
+    c = cm.getCursor(); cm.replaceSelection prefs.prefixKey(), 'end'
+  else
+    # Make it possible to use `( etc -- remember the original value of
+    # autoCloseBrackets, set it temporarily to "false", and restore it when the
+    # menu is closed:
+    cm.setOption 'autoCloseBrackets0', cm.getOption 'autoCloseBrackets'
+    cm.setOption 'autoCloseBrackets', false
+    cm.on 'change', bqChangeHandler; cm.dyalogBQ = 1
+    c = cm.getCursor(); cm.replaceSelection prefs.prefixKey(), 'end'
+    ctid = setTimeout(
+      -> cm.showHint
+        completeOnSingleClick: true
+        extraKeys:
+          Backspace: (cm, m) -> m.close(); cm.execCommand 'delCharBefore'; return
+          Left:      (cm, m) -> m.close(); cm.execCommand 'goCharLeft'; return
+          Right:     (cm, m) -> m.pick(); return
+        hint: ->
+          pk = prefs.prefixKey()
+          data = from: c, to: cm.getCursor(), list: KS.map (k) ->
+            if k == pk
+              text: '', hint: bqbqHint, render: (e) -> e.innerHTML = "  #{pk}#{pk} <i>completion by name</i>"; return
+            else
+              v = bq[k]; text: v, render: (e) -> $(e).text "#{v} #{pk}#{k} #{squiggleDescriptions[v] || ''}  "; return
+          CodeMirror.on data, 'close', -> bqCleanUp cm; return
+          data
+      500
+    )
+  return
 
 # `x completions
 KS = '`1234567890-=qwertyuiop[]asdfghjk l;\'\\zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:"|ZXCVBNM<>?'.split /\s*/
@@ -86,23 +86,33 @@ bq = $.extend {}, BQ; do -> s = prefs.prefixMap(); for i in [0...s.length] by 2 
 @getBQKeyFor = getBQKeyFor = (v) -> (for k in KS when bq[k] == v then return k); ''
 @setBQMap = (bq1) -> $.extend bq, bq1; prefs.prefixMap join(for k, v of bq when v != BQ[k] then k + v); return
 
-CodeMirror.keyMap.dyalogBackquote = fallthrough: 'dyalog', disableInput: true
-KS.forEach (k) ->
-  CodeMirror.keyMap.dyalogBackquote["'#{k}'"] = (cm) ->
-    clearTimeout ctid; cm.state.completionActive?.close?()
-    cm.setOption 'autoCloseBrackets', cm.getOption 'autoCloseBrackets0'
-    cm.setOption 'autoCloseBrackets0', null
-    cm.setOption 'keyMap', 'dyalog'
-    c = cm.getCursor(); if k == prefs.prefixKey() then bqbqHint cm else cm.replaceRange bq[k], {line: c.line, ch: c.ch - 1}, c
-    return
+bqChangeHandler = (cm, o) -> # o: changeObj
+  l = o.from.line; i = o.from.ch
+  if o.origin == '+input' && l == o.to.line && i == o.to.ch && o.text.length == 1 && o.text[0].length == 1
+    x = o.text[0]; pk = prefs.prefixKey()
+    if x == pk
+      if i && cm.getLine(l)[i - 1] == pk
+        bqCleanUp cm; bqbqHint cm
+    else
+      bq[x] && cm.replaceRange bq[x], {line: l, ch: i - 1}, {line: l, ch: i + 1}, 'D'
+      bqCleanUp cm
+  else
+    bqCleanUp cm
+  return
+
+bqCleanUp = (cm) ->
+  cm.off 'change', bqChangeHandler; delete cm.dyalogBQ
+  clearTimeout ctid; cm.state.completionActive?.close?()
+  cm.setOption 'autoCloseBrackets', cm.getOption 'autoCloseBrackets0'
+  cm.setOption 'autoCloseBrackets0', null
   return
 
 bqbqHint = (cm) ->
-  c = cm.getCursor(); cm.replaceSelection prefs.prefixKey(), 'end'
+  c = cm.getCursor()
   cm.showHint completeOnSingleClick: true, extraKeys: {Right: pick = ((cm, m) -> m.pick()), Space: pick}, hint: ->
-    u = cm.getLine(c.line)[c.ch + 1...cm.getCursor().ch]
+    u = cm.getLine(c.line)[c.ch...cm.getCursor().ch]
     a = []; for x in bqbqc when x.name[...u.length] == u then a.push x
-    from: {line: c.line, ch: c.ch - 1}, to: cm.getCursor(), list: a
+    from: {line: c.line, ch: c.ch - 2}, to: cm.getCursor(), list: a
   return
 
 # ``name completions
