@@ -81,7 +81,7 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
     )
   $('#keyboard-locale').val(prefs.keyboardLocale()).change ->
     prefs.keyboardLocale $(@).val()
-    load dict $('#keyboard-layout .key').map ->
+    load $.extend {}, keymap.getBQMap(), dict $('#keyboard-layout .key').map ->
       [[$('.g0', @).text(), $('.g1', @).val()], [$('.g2', @).text(), $('.g3', @).val()]]
     return
   $pk = $ '.pk', $e
