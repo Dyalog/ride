@@ -34,7 +34,7 @@ module.exports = (tabName) ->
     """
       .tabs()
       .on 'keydown', 'input', 'return', ok
-      .dialog modal: 1, autoOpen: 0, title: 'Preferences', width: 600, height: 450, buttons: [
+      .dialog autoOpen: 0, title: 'Preferences', width: 600, height: 450, buttons: [
         {text: 'OK', click: ok}
         {text: 'Cancel', click: -> $d.dialog 'close'; return}
       ]
