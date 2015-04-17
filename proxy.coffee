@@ -96,6 +96,11 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
   child  = null # a ChildProcess object, the result from spawn()
   server = null # used to listen for connections from interpreters
 
+  # This is a hack to avoid flicker when leaning on TC.
+  # The interpreter sends an extra ReplyFocusWindow with win=0 (the session) after a StepInto or RunCurrentLine.
+  # TODO: Remove it once there's a fix in the interpreter.
+  ignoreNextAttemptsToFocusSession = 0
+
   toInterpreter = (s) ->
     if client
       log 'to interpreter: ' + trunc JSON.stringify s
@@ -147,7 +152,12 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
             when 'ReplyAtInputPrompt' then toBrowser 'AtInputPrompt', why: WHIES.indexOf tag 'why', m
             when 'ReplyOpenWindow'    then toBrowser 'OpenWindow',   parseEditableEntity m
             when 'ReplyUpdateWindow'  then toBrowser 'UpdateWindow', parseEditableEntity m
-            when 'ReplyFocusWindow'   then toBrowser 'FocusWindow', win: +tag 'win', m
+            when 'ReplyFocusWindow'
+              win = +tag 'win', m
+              if !win && ignoreNextAttemptsToFocusSession
+                ignoreNextAttemptsToFocusSession--
+              else
+                toBrowser 'FocusWindow', {win}
             when 'ReplyCloseWindow'   then toBrowser 'CloseWindow', win: +tag 'win', m
             when 'ReplyGetAutoComplete'
               o = b64d tag 'options', m
@@ -173,8 +183,8 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
       .on 'Execute', ({text, trace}) -> cmd 'Execute', "<Text>#{b64 text}</Text><Trace>#{+!!trace}</Trace>"
       .on 'Edit', ({win, pos, text}) -> cmd 'Edit', "<Text>#{b64 text}</Text><Pos>#{pos}</Pos><Win>#{win}</Win>"
       .on 'CloseWindow',    ({win}) -> cmd 'CloseWindow',         "<win>#{win}</win>"
-      .on 'RunCurrentLine', ({win}) -> cmd 'DebugRunLine',        "<win>#{win}</win>"
-      .on 'StepInto',       ({win}) -> cmd 'DebugStepInto',       "<win>#{win}</win>"
+      .on 'RunCurrentLine', ({win}) -> cmd 'DebugRunLine',        "<win>#{win}</win>"; ignoreNextAttemptsToFocusSession++; return
+      .on 'StepInto',       ({win}) -> cmd 'DebugStepInto',       "<win>#{win}</win>"; ignoreNextAttemptsToFocusSession++; return
       .on 'TraceBackward',  ({win}) -> cmd 'DebugBackward',       "<win>#{win}</win>"
       .on 'TraceForward',   ({win}) -> cmd 'DebugForward',        "<win>#{win}</win>"
       .on 'ContinueTrace',  ({win}) -> cmd 'DebugContinueTrace',  "<win>#{win}</win>"

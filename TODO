@@ -15,8 +15,6 @@ P3 (Can wait):
   Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
     NN: Investigate: http://stackoverflow.com/questions/284258/how-do-i-set-the-version-information-for-an-existing-exe-dll (sent by JD)
   Enable Windows IME if present.
-  avoid the flashing in a floating trace window when I lean on the trace (Ctrl+Enter) key; JS email 2015-03-10
-    NN: every AtInputPrompt focuses the session; disabling this might result in subtle bugs
   names of open editors should appear at the bottom of the Window menu; Marc Griffiths 2015-03-13
   View>Theme should change the theme in all existing windows
 
@@ -207,3 +205,6 @@ Done:
   Overflown part of connections box doesn't show
     NN: not that much of a problem now that it's resizable
     NN: also, I removed the horizontal scrollbar
+  avoid the flashing in a floating trace window when I lean on the trace (Ctrl+Enter) key; JS email 2015-03-10
+    NN: there a bug in the interpreter -- it sends an extra ReplyFocusWindow win=0 after a StepInto or RunCurrentLine
+    NN: I added a temporary workaround until JD has a chance to fix it
