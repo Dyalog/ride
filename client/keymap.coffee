@@ -230,6 +230,7 @@ createCommand = (xx) -> CodeMirror.commands[xx] ?= (cm) -> (if (h = cm.dyalogCom
   FD Shift-Ctrl-Enter
   BK Shift-Ctrl-Backspace
   SC Ctrl-F
+  RP Ctrl-G
   ED Shift-Enter
   TC Ctrl-Enter
   TL Ctrl-Up

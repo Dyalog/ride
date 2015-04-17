@@ -39,6 +39,7 @@ EDITOR_HTML = do ->
         b 'tb-DO  last',      'Uncomment selected text'
         '<span class="tb-separator"></span>'
         '<input class="tb-search text-field" placeholder="Search">'
+        '<input class="tb-replace text-field" placeholder="Replace">'
         b 'tb-NX  first',     'Search for next match'
         b 'tb-PV',            'Search for previous match'
         b 'tb-case last',     'Match case'
@@ -76,8 +77,12 @@ class @Editor
       .on 'keydown', '.tb-search', 'return',       => @NX(); false
       .on 'keydown', '.tb-search', 'shift+return', => @PV(); false
       .on 'keydown', '.tb-search', 'ctrl+return', => @selectAllSearchResults(); false
-      .on 'keydown', '.tb-search', 'esc', => @clearSearch(); @cm.focus(); false
-      .on 'keyup', '.tb-search', (e) => (if e.which !in [13, 27] then @highlightSearch()); return
+      .on 'keyup',   '.tb-search', (e) => (if e.which !in [13, 27] then @highlightSearch()); return
+      .on 'keydown', '.tb-replace', 'return',       => @replace(); false
+      .on 'keydown', '.tb-replace', 'shift+return', => @replace true; false
+      .on 'keydown', '.tb-search,.tb-replace', 'down', => @NX(); false
+      .on 'keydown', '.tb-search,.tb-replace', 'up',   => @PV(); false
+      .on 'keydown', '.tb-search,.tb-replace', 'esc', => @clearSearch(); @cm.focus(); false
     @setDebugger !!@isDebugger
     return
 
@@ -102,6 +107,7 @@ class @Editor
     $('.CodeMirror-vscrollbar', @$e).prop 'title', ''
     $('.tb-search:visible', @$tb).removeClass 'no-matches'
     @cm.removeOverlay @overlay; @annotation?.clear(); @overlay = @annotation = null; return
+
   highlightSearch: ->
     ic = !$('.tb-case:visible', @$tb).hasClass 'pressed' # ic: ignore case (like in vim)
     q = $('.tb-search:visible', @$tb).val(); if ic then q = q.toLowerCase() # q: the query string
@@ -119,6 +125,7 @@ class @Editor
           else               stream.skipToEnd();     return
         $('.CodeMirror-vscrollbar', @$e).prop 'title', 'Lines on scroll bar show match locations'
     [q, ic]
+
   search: (backwards) ->
     [q, ic] = @highlightSearch()
     if q
@@ -132,6 +139,7 @@ class @Editor
       if j >= 0
         @cm.setSelection @cm.posFromIndex(j), @cm.posFromIndex j + q.length; @scrollCursorIntoProminentView()
     false
+
   selectAllSearchResults: ->
     ic = !$('.tb-case:visible', @$tb).hasClass 'pressed' # ic: ignore case (like in vim)
     q = $('.tb-search:visible', @$tb).val(); if ic then q = q.toLowerCase() # q: the query string
@@ -143,7 +151,17 @@ class @Editor
     @cm.focus()
     return
 
-  highlight: (l) ->
+  replace: (backwards) -> # replace current occurrence and find next
+    ic = !$('.tb-case:visible', @$tb).hasClass 'pressed' # ic: ignore case (like in vim)
+    q = $('.tb-search:visible', @$tb).val(); if ic then q = q.toLowerCase() # q: the query string
+    s = @cm.getSelection(); if ic then s = s.toLowerCase()
+    if s == q then @cm.replaceSelection $('.tb-replace', @$tb).val(), if backwards then 'start' else 'end'
+    @search backwards
+    v = @cm.getValue(); if ic then v = v.toLowerCase()
+    $('.tb-search:visible', @$tb).toggleClass 'no-matches', -1 == v.indexOf q
+    return
+
+  highlight: (l) -> # current line in debugger
     if @hll? then @cm.removeLineClass @hll, 'background', 'highlighted'
     if (@hll = l)? then @cm.addLineClass l, 'background', 'highlighted'; @cm.setCursor l, 0; @scrollCursorIntoProminentView()
     return
@@ -200,6 +218,9 @@ class @Editor
     @highlight h.hll; return
   getDocument: -> @$e[0].ownerDocument
   refresh: -> @cm.refresh(); return
+  cword: -> # APL identifier under cursor
+    c = @cm.getCursor(); s = @cm.getLine c.line; r = "[#{rLetter}0-9]*" # r: regex fragment to match identifiers
+    ((///⎕?#{r}$///.exec(s[...c.ch])?[0] or '') + (///^#{r}///.exec(s[c.ch..])?[0] or '')).replace /^\d+/, ''
 
   # Commands:
   ED: -> @emit 'Edit', win: @id, text: @cm.getValue(), pos: @cm.indexFromPos @cm.getCursor(); return
@@ -207,8 +228,12 @@ class @Editor
   BK: -> (if @isDebugger then @emit 'TraceBackward', win: @id else @cm.execCommand 'undo'); return
   FD: -> (if @isDebugger then @emit 'TraceForward',  win: @id else @cm.execCommand 'redo'); return
   SC: ->
-    $s = @$tb.find '.tb-search:visible'; s = @cm.getSelection(); if s && '\n' !in s then $s.val s
+    $s = @$tb.find '.tb-search:visible'; v = @cm.getSelection(); if v && '\n' !in v then $s.val v
     $s.focus().select(); return
+  RP: ->
+    $s = @$tb.find '.tb-search:visible'; $r = @$tb.find '.tb-replace:visible'
+    v = @cm.getSelection() || @cword(); if v && '\n' !in v then $s.add($r).val v
+    $r.focus().select(); @highlightSearch(); return
   EP: ->
     v = @cm.getValue()
     if v != @originalText || @breakpoints.join() != @originalBreakpoints
@@ -218,13 +243,11 @@ class @Editor
       @emit 'CloseWindow', win: @id
     return
   TL: -> # Toggle Localisation
-    c = @cm.getCursor(); s = @cm.getLine c.line
-    r = "[#{rLetter}0-9]*" # regex fragment to match identifiers
-    if name = ((///⎕?#{r}$///.exec(s[...c.ch])?[0] or '') + (///^#{r}///.exec(s[c.ch..])?[0] or '')).replace /^\d+/, ''
+    if name = @cword()
       # search backwards for a line that looks like a tradfn header (though in theory it might be a dfns's recursive call)
-      l = c.line; while l >= 0 && !/^\s*∇\s*\S/.test @cm.getLine l then l--
+      l = l0 = @cm.getCursor().line; while l >= 0 && !/^\s*∇\s*\S/.test @cm.getLine l then l--
       if l < 0 and !/\{\s*$/.test @cm.getLine(0).replace /⍝.*/, '' then l = 0
-      if l >= 0 && l != c.line
+      if l >= 0 && l != l0
         [_, s, comment] = /([^⍝]*)(.*)/.exec @cm.getLine l
         [head, tail...] = s.split ';'; head = head.replace /\s+$/, ''; tail = tail.map (x) -> x.replace /\s+/g, ''
         i = tail.indexOf name; if i < 0 then tail.push name else tail.splice i, 1
