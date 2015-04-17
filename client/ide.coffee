@@ -152,6 +152,10 @@ module.exports = ->
       session.scrollCursorIntoView()
       if prefs.floatNewEditors() then session.focus(); popWindow w
       return
+    .on 'ShowHTML', ({title, html}) ->
+      w = open '', '3500⌶', 'width=800,height=500'
+      w.document.body.innerHTML = html
+      return
 
   # language bar
   $('.lbar-prefs').click -> prefsUI 'keyboard'; return

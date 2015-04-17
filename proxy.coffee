@@ -166,6 +166,7 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
             when 'ReplyDisconnect'    then toBrowser 'Disconnect', message: b64d tag 'msg', m
             when 'ReplySysError'      then toBrowser 'SysError', text: b64d tag 'text', m
             when 'ReplyInternalError' then toBrowser 'InternalError', error: +tag('error', m), dmx: +tag('dmx', m)
+            when 'ReplyShowHTML'      then toBrowser 'ShowHTML', title: b64d(tag 'title', m), html: b64d(tag 'html', m)
             else log 'unrecognised'; toBrowser 'unrecognised', m
       return
     # Initial batch of commands sent to interpreter:
