@@ -4,7 +4,7 @@ export PATH="`dirname $0`/node_modules/.bin:$PATH"
 if [ ! -e node_modules ]; then npm i; fi
 mkdir -p build/{static,tmp}
 
-cp -uv index.html node_modules/codemirror/lib/codemirror.css style/apl385.* style/*.png favicon.ico package.json build/static/
+cp -uv index.html empty.html node_modules/codemirror/lib/codemirror.css style/apl385.* style/*.png favicon.ico package.json build/static/
 
 i=style/style.sass o=build/static/style.css
 if [ ! -e $o -o $(find `dirname $i` -type f -newer $o | wc -l) -gt 0 ]; then

@@ -7,6 +7,7 @@ prefsUI = require './prefs-ui'
 keymap = require './keymap'
 require '../lbar/lbar'
 require '../jquery.layout'
+{esc} = require './util'
 
 module.exports = ->
   $('body').html $ide = $ """
@@ -25,6 +26,7 @@ module.exports = ->
 
   isDead = 0
   pending = [] # lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
+  w3500 = null # window for 3500⌶
 
   emit = (x, y) -> isDead || D.socket.emit x, y; return
 
@@ -153,8 +155,14 @@ module.exports = ->
       if prefs.floatNewEditors() then session.focus(); popWindow w
       return
     .on 'ShowHTML', ({title, html}) ->
-      w = open '', '3500⌶', 'width=800,height=500'
-      w.document.body.innerHTML = html
+      init = ->
+        w3500.document.body.innerHTML = html
+        w3500.document.getElementsByTagName('title')[0].innerHTML = esc title || '3500⌶'
+      if !w3500 || w3500.closed
+        w3500 = open 'empty.html', '3500 I-beam', 'width=800,height=500'
+        w3500.onload = init
+      else
+        w3500.focus(); init()
       return
 
   # language bar
