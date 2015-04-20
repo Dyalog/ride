@@ -24,6 +24,18 @@ quadNames = [''].concat qw '''
   using vfi vr wa wc wg wn ws wsid wx x xml xsi xt
 '''
 
+# « and » prevent tolerance for extra whitespace
+# _ stands for «' '» (space as an APL character literal)
+idioms = qw '''
+  ⍴⍴ /⍳ /⍳⍴ ⊃¨⊂ {} {⍺} {⍵} {⍺⍵} {0} {0}¨ ,/ ⍪/ ⊃⌽ ↑⌽ ⊃⌽, ↑⌽, 0=⍴ 0=⍴⍴ 0=≡
+  {(↓⍺)⍳↓⍵} ↓⍉↑ ↓⍉⊃ ∧\\_= +/∧\\_= +/∧\\ {(∨\\_≠⍵)/⍵} {(+/∧\\_=⍵)↓⍵} ~∘_¨↓
+  {(+/∨\\_≠⌽⍵)↑¨↓⍵} ⊃∘⍴¨ ↑∘⍴¨ ,← ⍪← {⍵[⍋⍵]} {⍵[⍒⍵]} {⍵[⍋⍵;]} {⍵[⍒⍵;]} 1=≡
+  1=≡, 0∊⍴ ~0∊⍴ ⊣⌿ ⊣/ ⊢⌿ ⊢/ *○ 0=⊃⍴ 0≠⊃⍴ ⌊«0.5»+ «⎕AV»⍳
+'''
+escRE = (s) -> s.replace /[\(\)\[\]\{\}\.\?\+\*\/\\\^\$\|]/g, (x) -> "\\#{x}"
+escIdiom = (s) -> s.replace(/«(.*?)»|(.)/g, (_, g, g2) -> g ||= g2; ' *' + if g == '_' then "' '" else escRE g)[2..]
+idiomsRE = ///^(?:#{idioms.sort((x, y) -> y.length - x.length).map(escIdiom).join '|'})///i
+
 CodeMirror.defineMIME 'text/apl', 'apl'
 CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
   startState: -> isHeader: 1, stack: '', dfnDepth: 0
@@ -37,6 +49,8 @@ CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
       else
         state.vars = s.split rNotName
       'apl-tradfn'
+    else if stream.match idiomsRE
+      'apl-idiom'
     else if stream.match /^¯?(?:\d*\.)?\d+(?:j¯?(?:\d*\.)?\d+)?/i
       'apl-number'
     else
