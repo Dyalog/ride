@@ -56,7 +56,7 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
   $e.html """
     <table id='keyboard-legend' class='key'
            title='Prefix followed by shift+key produces the character in red.
-                  Prefix followed by a key produces the character in blue.'>
+                  Prefix followed by an unshifted key produces the character in blue.'>
       <tr><td class='g2'>⇧x</td><td class='g3'><span class='pk-double'>`</span>&nbsp;⇧x</td></tr>
       <tr><td class='g0'>x</td><td class='g1'><span class='pk-double'>`</span>&nbsp;x</td></tr>
     </table>
@@ -90,7 +90,9 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
     load $.extend {}, keymap.getBQMap(), dict $('#keyboard-layout .key').map ->
       [[$('.g0', @).text(), $('.g1', @).val()], [$('.g2', @).text(), $('.g3', @).val()]]
     return
-  $pk = $('.pk', $e).on 'change keyup', -> $('#keyboard-legend .pk-double').text $(@).val()[-1..]; return
+  $pk = $ '.pk', $e
+    .on 'change keyup', -> $('#keyboard-legend .pk-double').text $(@).val()[-1..]; return
+    .focus -> setTimeout (=> $(@).select(); return), 1; return
   return
 
 @load = load = (bq) -> # bq: current mappings, possibly not yet saved
