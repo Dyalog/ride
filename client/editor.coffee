@@ -58,6 +58,7 @@ class @Editor
     @hll = null # highlighted line -- currently executed line in tracer
     @lastQuery = @lastIC = @overlay = @annotation = null # search-related state
     @cm = new CodeMirror @$e.find('.cm')[0],
+      lineNumbers: !!if @isDebugger then prefs.lineNumbersInDebugger() else prefs.lineNumbersInEditor()
       firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
       indentUnit: 4, scrollButtonHeight: 12, matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
       gutters: ['breakpoints', 'CodeMirror-linenumbers']
