@@ -213,7 +213,8 @@ class @Editor
       value: @cm.getValue(), cursorIndex: @cm.indexFromPos(@cm.getCursor()), mode: @cm.getOption('mode')
     }
   setState: (h) ->
-    @cm.setValue h.value; @cm.setCursor @cm.posFromIndex h.cursorIndex; {@originalText, @originalBreakpoints, @breakpoints} = h
+    @cm.setValue h.value; @cm.clearHistory()
+    @cm.setCursor @cm.posFromIndex h.cursorIndex; {@originalText, @originalBreakpoints, @breakpoints} = h
     @cm.setOption 'mode', h.mode
     for l in @breakpoints then @cm.setGutterMarker l, 'breakpoints', @createBreakpointElement()
     @highlight h.hll; return
