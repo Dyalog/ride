@@ -7,6 +7,7 @@ https = require 'https'
 io = require 'socket.io'
 nomnom = require 'nomnom'
 {Proxy} = require './proxy'
+{spawn} = require 'child_process'
 
 t0 = +new Date; log = (s) -> process.stdout.write "#{new Date - t0}: #{s}\n"
 
@@ -15,7 +16,20 @@ opts = nomnom.options(
   key:  metavar: 'FILE', help: 'PEM-encoded private key for https', default: 'ssl/key.pem'
   insecure: flag: true, help: 'use http (on port 8000) instead of https (on port 8443)'
   ipv6: abbr: '6', flag: true, help: 'use IPv6'
+  watch: abbr: 'w', flag: true, help: 'watch for changes and rebuild (useful for development)'
 ).parse()
+
+if opts.watch then do ->
+  _d = __dirname; tid = isRunning = 0
+  build = ->
+    if isRunning
+      tid = setTimeout build, 100
+    else
+      log 'building'; tid = 0; isRunning = 1
+      spawn("#{_d}/build.sh", cwd: _d, stdio: 'inherit').on 'close', -> log 'build done'; isRunning = 0; return
+    return
+  for x in ['.', 'client', 'style', 'style/themes'] then fs.watch "#{_d}/#{x}", -> tid ||= setTimeout build, 100; return
+  return
 
 app = express()
 app.disable 'x-powered-by'
