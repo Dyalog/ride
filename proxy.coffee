@@ -154,7 +154,7 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
             when 'ReplyUpdateWindow'  then toBrowser 'UpdateWindow', parseEditableEntity m
             when 'ReplyFocusWindow'
               win = +tag 'win', m
-              if !win && ignoreNextAttemptsToFocusSession
+              if !win && ignoreNextAttemptsToFocusSession && !process.env.DYALOG_IDE_DISABLE_FOCUS_WORKAROUND
                 ignoreNextAttemptsToFocusSession--
               else
                 toBrowser 'FocusWindow', {win}
