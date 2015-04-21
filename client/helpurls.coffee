@@ -249,7 +249,7 @@ prefix = 'http://help.dyalog.com/14.0/Content/'; suffix = '.htm'
   ⍋            Language/Symbols/Grade Up
   ≥            Language/symbols/Greater Than Or Equal To Sign
   >            Language/Symbols/Greater Than Sign
-  ⌶            Language/Symbols/Ibeam
+  ⌶            Language/Symbols/IBeam
   ⌷            Language/Symbols/Index Symbol
   ⍳            Language/Symbols/Iota
   ⍤            Language/Symbols/Jot Diaresis
