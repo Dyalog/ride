@@ -199,6 +199,7 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
         cmd 'SaveChanges', "<win>#{win}</win><Text>#{b64 text}</Text>#{fmtLineAttributes text.split('\n').length, stop}"; return
       .on 'SetLineAttributes', ({win, nLines, lineAttributes: {stop, monitor, trace}}) ->
         cmd 'SetLineAttributes', "<win>#{win}</win>#{fmtLineAttributes nLines, stop}"; return
+      .on 'Exit', ({code}) -> cmd 'Exit', "<code>#{code}</code>"
 
       # "disconnect" is a built-in socket.io event
       .on 'disconnect', (x) -> log "#{addr @} disconnected"; (if socket == @ then socket = null); return
