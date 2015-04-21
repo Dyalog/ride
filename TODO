@@ -28,7 +28,6 @@ Not yet prioritized:
     NN: cannot reproduce on Linux
   Six-space prompt before trace output; JS 2015-03-21
   There should be no flashing cursors in windows that don't have focus; JS 2015-03-21
-  Customizable keymap
   Customizable colours for syntax highlighting
   Disable EP in an editor after it has been pressed once
   Menu items for next/prev line from demo should be disabled when there are no more lines; MK Jabber 2015-03-25
@@ -39,23 +38,20 @@ Not yet prioritized:
   JS: System command output (fns vars ...) should wrap at ⎕PW, not 80.
   JS: AutoPW option: ⎕PW changes automatically with window width and font size.
   JS: Option for turning off AutoFormatting, please.
+    NN: that's an interpreter-side option: export AUTOFORMAT=0
   JS: A new floating edit window flashes first in the centre of screen before being removed and redrawn at my preferred position.
   JS: Floating editors: )ed F G should place F above G and focus F. Then Esc Esc should close F and then G.
   JS: <Esc> in the session should switch focus to the top edit or trace window.
   "Cancel" button in "Connecting..." dialogue; MK Jabber 2015-03-30
     NN: added "Cancel" button, though it doesn't really cancel, just closes the dialogue
-  Syntax highlighting for recognised idioms
   Regular expressions in search
   Sortable language bar
   Lbar may change its size when theme is changed
   Drag and drop to swap pairs of characters in Preferences>Keyboard
-  Add a legend in Preferences>Keyboard to explain the colours
 
 Later:
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
   drag and drop *.dws and *.dyalog files in the session
-  rewrite syntax highlighting to support Dyalog syntax
-    NN: done except for idiom recognition
   selecting a block of text and pressing ⍝ should comment/uncomment it
   status window and notification about number of messages
   experiment with storing all help content in browser memory
@@ -208,3 +204,7 @@ Done:
   avoid the flashing in a floating trace window when I lean on the trace (Ctrl+Enter) key; JS email 2015-03-10
     NN: there a bug in the interpreter -- it sends an extra ReplyFocusWindow win=0 after a StepInto or RunCurrentLine
     NN: I added a temporary workaround until JD has a chance to fix it
+  Add a legend in Preferences>Keyboard to explain the colours
+  Customizable keymap
+  rewrite syntax highlighting to support Dyalog syntax
+  Syntax highlighting for recognised idioms
