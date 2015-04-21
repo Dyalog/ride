@@ -122,7 +122,7 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
         log 'from interpreter: ' + trunc JSON.stringify m
         if !/^(?:SupportedProtocols|UsingProtocol)=1$/.test m # ignore these
           switch (/^<(\w+)>/.exec m)?[1] or ''
-            when 'ReplyConnect', 'ReplyEdit', 'ReplySetLineAttributes', 'ReplyWeakInterrupt', 'ReplyStrongInterrupt' then ; # ignore
+            when 'ReplyConnect', 'ReplyEdit', 'ReplySetLineAttributes', 'ReplyWeakInterrupt', 'ReplyStrongInterrupt', 'ReplyUnknownRIDECommand' then ; # ignore
             when 'ReplySaveChanges'       then toBrowser 'ReplySaveChanges', win: +tag('win', m), err: +tag 'err', m
             when 'ReplyWindowTypeChanged'
               win = +tag 'Win', m
