@@ -189,7 +189,7 @@ if process?
       """
       false
 
-  D.open = (url, opts) -> opts.toolbar ?= false; !!gui.Window.open url, opts
+  D.open = (url, opts) -> opts.icon = 'D.png'; opts.toolbar ?= false; !!gui.Window.open url, opts
 
   if D.mac && !D.floating # Mac menu
     groups = {} # group name -> array of MenuItem-s

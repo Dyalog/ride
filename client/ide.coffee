@@ -246,7 +246,7 @@ class @IDE
     w = ee.token
     editorOpts = id: w, name: ee.name, debugger: ee.debugger, emit: @emit.bind(@), weakInterrupt: @WI.bind(@)
     if prefs.floatNewEditors() && !D.floating && !@isDead
-      if D.open "index.html?win=#{w}", prefs.floatingWindowInfos()[w] || {width: 500, height: 400}
+      if D.open "index.html?win=#{w}", $.extend {width: 500, height: 400, title: ee.name}, prefs.floatingWindowInfos()[w]
         # D.wins[w] will be replaced a bit later by code running in the popup
         (D.pendingEditors ?= {})[w] = {editorOpts, ee}
         done = 1
