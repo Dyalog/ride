@@ -25,11 +25,11 @@ ok = ->
 module.exports = (tabName) ->
   if !$d # the dialogue, lazily initialized
     $d = $ """
-      <div id="prefs">
-        <ul id="prefs-tabs-nav">
-          #{join tabs.map (t) -> "<li><a href='#prefs-tab-#{safe t.name}'>#{t.name}</a></li>"}
+      <div id=prefs>
+        <ul id=prefs-tabs-nav>
+          #{join tabs.map (t) -> "<li><a href=#prefs-tab-#{safe t.name}>#{t.name}</a></li>"}
         </ul>
-        #{join tabs.map (t) -> "<div id='prefs-tab-#{safe t.name}'></div>"}
+        #{join tabs.map (t) -> "<div id=prefs-tab-#{safe t.name}></div>"}
       </div>
     """
       .tabs()

@@ -24,45 +24,45 @@ ipAddresses = [] # of the proxy.  Used in the "Waiting for connections" dialogue
 
 module.exports = (opts) ->
   $('body').html """
-    <fieldset id="connect-fieldset">
+    <fieldset id=connect-fieldset>
       <legend>Connect to an interpreter</legend>
-      <div id="fav-buttons">
-        <a id="about" href="#">About</a>
-        <a href="#" id="fav-new" accessKey="n"><u>N</u>ew</a>
-        <a href="#" id="fav-delete">Delete</a>
+      <div id=fav-buttons>
+        <a id=about href=#>About</a>
+        <a href=# id=fav-new accessKey=n><u>N</u>ew</a>
+        <a href=# id=fav-delete>Delete</a>
       </div>
-      <select multiple id="fav-list"></select>
-      <table id="fav-details">
+      <select multiple id=fav-list></select>
+      <table id=fav-details>
         <tr>
           <td><u>A</u>ddress:</td>
           <td>
-            <input accessKey="a" id="fav-host" class="text-field" value=""> :
-            <input id="fav-port" class="text-field" size="5" value="#{DEFAULT_PORT}">
+            <input accessKey=a id=fav-host class=text-field value=""> :
+            <input id=fav-port class=text-field size=5 value=#{DEFAULT_PORT}>
           </td>
         </tr>
-        <tr><td>Na<u>m</u>e:</td><td><input accessKey="m" id="fav-name" class="text-field"></td></tr>
+        <tr><td>Na<u>m</u>e:</td><td><input accessKey=m id=fav-name class=text-field></td></tr>
         <tr>
           <td></td>
           <td>
-            <a href="#" id="fav-connect" accessKey="o">C<u>o</u>nnect</a>
-            <a href="#" id="fav-save"    accessKey="s"><u>S</u>ave</a>
-            <a href="#" id="fav-cancel"  accessKey="c"><u>C</u>ancel</a>
+            <a href=# id=fav-connect accessKey=o>C<u>o</u>nnect</a>
+            <a href=# id=fav-save    accessKey=s><u>S</u>ave</a>
+            <a href=# id=fav-cancel  accessKey=c><u>C</u>ancel</a>
           </td>
         </tr>
       </table>
     </fieldset>
-    <fieldset id="spawnSection" style="display:none">
+    <fieldset id=spawnSection style=display:none>
       <legend>Spawn an interpreter</legend>
       <p>
-        <a href="#" id="spawn" accessKey="w">Spa<u>w</u>n</a><br>
-        <span id="spawn-status"></span>
+        <a href=# id=spawn accessKey=w>Spa<u>w</u>n</a><br>
+        <span id=spawn-status></span>
       </p>
     </fieldset>
     <fieldset>
       <legend>Listen for connections from interpreter </legend>
       <p>
-        <label>Port <input id="listen-port" class="text-field" value="#{DEFAULT_PORT}" size="5"></label>
-        <a href="#" id="listen" accessKey="l"><u>L</u>isten</a>
+        <label>Port <input id=listen-port class=text-field value=#{DEFAULT_PORT} size=5></label>
+        <a href=# id=listen accessKey=l><u>L</u>isten</a>
       </p>
     </fieldset>
   """
@@ -91,7 +91,7 @@ module.exports = (opts) ->
     if !/^[a-z0-9\.\-:]+$/i.test host then $.alert 'Invalid host', 'Error', -> $host.focus(); return
     else if !(0 < port < 0xffff) then $.alert 'Invalid port', 'Error', -> $port.focus(); return
     else
-      $connectDialog = $ '<div class="connect-dialog"><div class="visual-distraction"></div></div>'
+      $connectDialog = $ '<div class=connect-dialog><div class=visual-distraction></div></div>'
         .dialog modal: 1, width: 350, title: 'Connecting...', buttons: Cancel: -> $(@).dialog 'close'; false
       D.socket.emit '*connect', {host, port}
     false
@@ -129,13 +129,13 @@ module.exports = (opts) ->
     else
       D.socket.emit '*listen', {port}
       $listenDialog = $ """
-        <div class='listen'>
-          <div class="visual-distraction"></div>
+        <div class=listen>
+          <div class=visual-distraction></div>
           Please start the remote interpreter with<br>
           #{
             (
               for host in (if proxyInfo.ipAddresses?.length then proxyInfo.ipAddresses else ['host'])
-                "<div class='tt'>RIDE_INIT='CONNECT:#{host}:#{port}'</div>"
+                "<div class=tt>RIDE_INIT='CONNECT:#{host}:#{port}'</div>"
             ).join 'or'
           }
           in its environment, so it connects here.

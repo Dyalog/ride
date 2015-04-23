@@ -54,26 +54,26 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
 @init = ($e) ->
   specialKeys = 15: '⟵', 16: '↹', 30: 'Caps', 43: '↲', 44: '⇧', 57: '⇧'
   $e.html """
-    <table id='keyboard-legend' class='key'
+    <table id=keyboard-legend class=key
            title='Prefix followed by shift+key produces the character in red.
                   Prefix followed by an unshifted key produces the character in blue.'>
-      <tr><td class='g2'>⇧x</td><td class='g3'><span class='pk-double'>`</span>&nbsp;⇧x</td></tr>
-      <tr><td class='g0'>x</td><td class='g1'><span class='pk-double'>`</span>&nbsp;x</td></tr>
+      <tr><td class=g2>⇧x</td><td class=g3><span class=pk-double>`</span>&nbsp;⇧x</td></tr>
+      <tr><td class=g0>x</td><td class=g1><span class=pk-double>`</span>&nbsp;x</td></tr>
     </table>
-    <label id='keyboard-pk-label'>Prefix: <input class="text-field pk" size="1"></label>
-    <div id="keyboard-layout">#{join(
+    <label id=keyboard-pk-label>Prefix: <input class="text-field pk" size=1></label>
+    <div id=keyboard-layout>#{join(
       for i in [1...NK]
         if s = specialKeys[i]
-          "<span id='k#{i}' class='key'>#{esc s}</span>"
+          "<span id=k#{i} class=key>#{esc s}</span>"
         else
           """
-            <span id='k#{i}' class='key'>
-              <span class='g2'></span><input class='g3'><br>
-              <span class='g0'></span><input class='g1'>
+            <span id=k#{i} class=key>
+              <span class=g2></span><input class=g3><br>
+              <span class=g0></span><input class=g1>
             </span>
           """
     )}</div>
-    <select id="keyboard-locale">#{join((for x, _ of layouts then "<option>#{x}").sort())}</select>
+    <select id=keyboard-locale>#{join((for x, _ of layouts then "<option>#{x}").sort())}</select>
   """
   .on 'focus', '.key input', -> setTimeout (=> $(@).select(); return), 1; return
   .on 'blur', '.key input', -> $(@).val(v = $(@).val()[-1..] || ' ').prop 'title', "U+#{hex ord(v), 4}"; return

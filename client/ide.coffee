@@ -13,16 +13,16 @@ class @IDE
   constructor: ->
     ide = @
     $('body').html @$ide = $ """
-      <div class="ide">
-        <div class="lbar ui-layout-north" style="display:none">
-          <a class="lbar-prefs" title="Preferences" href="#"></a>
+      <div class=ide>
+        <div class="lbar ui-layout-north" style=display:none>
+          <a class=lbar-prefs title=Preferences href=#></a>
           #{D.lbarHTML}
         </div>
-        <div class="lbar-tip" style="display:none"><div class="lbar-tip-desc"></div><pre class="lbar-tip-text"></pre></div>
-        <div class="lbar-tip-triangle" style="display:none"></div>
-        <div class="ui-layout-center"></div>
-        <div class="ui-layout-east" ><ul></ul></div>
-        <div class="ui-layout-south"><ul></ul></div>
+        <div class=lbar-tip style=display:none><div class=lbar-tip-desc></div><pre class=lbar-tip-text></pre></div>
+        <div class=lbar-tip-triangle style=display:none></div>
+        <div class=ui-layout-center></div>
+        <div class=ui-layout-east ><ul></ul></div>
+        <div class=ui-layout-south><ul></ul></div>
       </div>
     """
 
@@ -138,7 +138,7 @@ class @IDE
     # demo mode
     demoLines = []; demoIndex = -1
     demoLoad = ->
-      $('<input type="file" style="display:none">').appendTo('body').trigger('click').change ->
+      $('<input type=file style=display:none>').appendTo('body').trigger('click').change ->
         if @value then D.readFile @value, 'utf8', (err, s) ->
           if err then console?.error? err; $.alert 'Cannot load demo file'
           else demoLines = s.replace(/^[\ufeff\ufffe]/, '').split /\r?\n/; demoIndex = -1
@@ -271,9 +271,9 @@ class @IDE
   openWindow: (ee) -> # "ee" for EditableEntity
     @layout.open dir = if ee.debugger then 'south' else 'east'
     w = ee.token
-    $("<li id='wintab#{w}'><a href='#win#{w}'></a></li>").appendTo(".ui-layout-#{dir} ul")
+    $("<li id=wintab#{w}><a href=#win#{w}></a></li>").appendTo(".ui-layout-#{dir} ul")
       .find('a').text(ee.name).click (e) => e.which == 2 && @wins[w].EP(); return # middle click
-    $tabContent = $("<div class='win' id='win#{w}'></div>").appendTo ".ui-layout-#{dir}"
+    $tabContent = $("<div class=win id=win#{w}></div>").appendTo ".ui-layout-#{dir}"
     @wins[w] = new Editor $tabContent,
       id: w, name: ee.name, debugger: ee.debugger, emit: @emit.bind(@)
       weakInterrupt: @WI.bind(@), openInExternalEditor: D.openInExternalEditor

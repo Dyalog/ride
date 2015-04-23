@@ -34,7 +34,7 @@ $ ->
     [_, k, v] = /^([^=]*)=?(.*)$/.exec kv; urlParams[unescape(k or '')] = unescape(v or '')
   if D.floating && (win = urlParams.win)?
     wins = D.wins = opener.D.wins
-    $('body').addClass('floating-window').html('<div class="ui-layout-center"></div>').layout
+    $('body').addClass('floating-window').html('<div class=ui-layout-center></div>').layout
       defaults: enableCursorHotkey: 0
       center: onresize: -> ed?.updateSize(); return
       fxName: ''
