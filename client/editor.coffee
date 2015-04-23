@@ -6,7 +6,7 @@ prefs = require './prefs'
 {onCodeMirrorDoubleClick} = require './util'
 
 EDITOR_HTML = do ->
-  b = (cssClasses, title) -> "<a href='#' class='#{cssClasses} tb-button' title='#{title}'></a>"
+  b = (cssClasses, title) -> "<a href=# class='#{cssClasses} tb-button' title='#{title}'></a>"
   """
     <div class="toolbar debugger-toolbar">
       #{[
@@ -24,8 +24,8 @@ EDITOR_HTML = do ->
         b 'tb-WI',            'Interrupt'
         b 'tb-CBP',           'Clear trace/stop/monitor for this object'
         b 'tb-LN  last',      'Toggle line numbers'
-        '<span class="tb-separator"></span>'
-        '<input class="tb-search text-field" placeholder="Search">'
+        '<span class=tb-separator></span>'
+        '<input class="tb-search text-field" placeholder=Search>'
         b 'tb-NX first',      'Search for next match'
         b 'tb-PV',            'Search for previous match'
         b 'tb-case last',     'Match case'
@@ -37,15 +37,15 @@ EDITOR_HTML = do ->
         b 'tb-LN  first',     'Toggle line numbers'
         b 'tb-AO',            'Comment selected text'
         b 'tb-DO  last',      'Uncomment selected text'
-        '<span class="tb-separator"></span>'
-        '<input class="tb-search text-field" placeholder="Search">'
-        '<input class="tb-replace text-field" placeholder="Replace">'
+        '<span class=tb-separator></span>'
+        '<input class="tb-search text-field" placeholder=Search>'
+        '<input class="tb-replace text-field" placeholder=Replace>'
         b 'tb-NX  first',     'Search for next match'
         b 'tb-PV',            'Search for previous match'
         b 'tb-case last',     'Match case'
       ].join ''}
     </div>
-    <div class="cm"></div>
+    <div class=cm></div>
   """
 
 class @Editor
