@@ -80,7 +80,7 @@ class @IDE
         if @pending.length then @emit 'Execute', trace: 0, text: @pending.shift() + '\n' else @wins[0].prompt why
         return
       .on 'HadError', => @pending.splice 0, @pending.length; return
-      .on 'FocusWindow', ({win}) => $("#wintab#{win} a").click(); @wins[win].focus(); return
+      .on 'FocusWindow', ({win}) => $("#wintab#{win} a").click(); @wins[win]?.focus(); return
       .on 'WindowTypeChanged', ({win, tracer}) => @wins[win].setDebugger tracer
       .on 'autocomplete', (token, skip, options) => @wins[token].autocomplete skip, options
       .on 'highlight', (win, line) => @wins[win].highlight line; return
@@ -230,18 +230,6 @@ class @IDE
     $('title').text if /^\s*$/.test t then 'Dyalog' else t
     return
 
-  popWindow: (w) ->
-    if !D.floating && !@isDead
-      {width, height, x, y} = prefs.floatingWindowInfos()[w] || width: 500, height: 400
-      spec = "width=#{width},height=#{height},resizable=1"; if x? then spec += ",left=#{x},top=#{y},screenX=#{x},screenY=#{y}"
-      if pw = open "?win=#{w}", '_blank', spec
-        if x? then pw.moveTo x, y
-        $("#wintab#{w},#win#{w}").remove(); @$tabs.tabs('destroy').tabs @tabOpts; @refreshTabs(); @wins[0].scrollCursorIntoView()
-        # wins[w] will be replaced a bit later by code running in the popup
-      else
-        $.alert 'Popups are blocked.'
-    return
-
   showHTML: ({title, html}) ->
     init = =>
       @w3500.document.body.innerHTML = html
@@ -255,19 +243,25 @@ class @IDE
     return
 
   openWindow: (ee) -> # "ee" for EditableEntity
-    @layout.open dir = if ee.debugger then 'south' else 'east'
     w = ee.token
-    $("<li id=wintab#{w}><a href=#win#{w}></a></li>").appendTo(".ui-layout-#{dir} ul")
-      .find('a').text(ee.name).click (e) => e.which == 2 && @wins[w].EP(); return # middle click
-    $tabContent = $("<div class=win id=win#{w}></div>").appendTo ".ui-layout-#{dir}"
-    @wins[w] = new Editor $tabContent,
-      id: w, name: ee.name, debugger: ee.debugger, emit: @emit.bind(@)
-      weakInterrupt: @WI.bind(@), openInExternalEditor: D.openInExternalEditor
-    @wins[w].open ee
-    $(".ui-layout-#{dir}").tabs('refresh').tabs(active: -1)
-      .data('ui-tabs').panels.off 'keydown' # prevent jQueryUI tabs from hijacking our keystrokes, <C-Up> in particular
-    @wins[0].scrollCursorIntoView()
-    if prefs.floatNewEditors() then @wins[0].focus(); @popWindow w
+    editorOpts = id: w, name: ee.name, debugger: ee.debugger, emit: @emit.bind(@), weakInterrupt: @WI.bind(@)
+    if prefs.floatNewEditors() && !D.floating && !@isDead
+      if D.open "index.html?win=#{w}", prefs.floatingWindowInfos()[w] || {width: 500, height: 400}
+        # D.wins[w] will be replaced a bit later by code running in the popup
+        (D.pendingEditors ?= {})[w] = {editorOpts, ee}
+        done = 1
+      else
+        $.alert 'Popups are blocked.'
+    if !done
+      @layout.open dir = if ee.debugger then 'south' else 'east'
+      $("<li id=wintab#{w}><a href=#win#{w}></a></li>").appendTo(".ui-layout-#{dir} ul")
+        .find('a').text(ee.name).click (e) => e.which == 2 && @wins[w].EP(); return # middle click
+      $tabContent = $("<div class=win id=win#{w}></div>").appendTo ".ui-layout-#{dir}"
+      @wins[w] = new Editor $tabContent, editorOpts
+      @wins[w].open ee
+      $(".ui-layout-#{dir}").tabs('refresh').tabs(active: -1)
+        .data('ui-tabs').panels.off 'keydown' # prevent jQueryUI tabs from hijacking our keystrokes, <C-Up> in particular
+      @wins[0].scrollCursorIntoView()
     return
 
   CNC: -> D.rideConnect();    return

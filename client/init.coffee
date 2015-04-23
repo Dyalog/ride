@@ -29,19 +29,22 @@ $ ->
         w.refresh()
       return
 
+  D.open ?= (url, {x, y, width, height}) ->
+    spec = 'resizable=1'
+    if width? && height? then spec += ",width=#{width},height=#{height}"
+    if x? && y? then spec += ",left=#{x},top=#{y},screenX=#{x},screenY=#{y}"
+    !!open url, '_blank', spec
+
   urlParams = {}
   for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
     [_, k, v] = /^([^=]*)=?(.*)$/.exec kv; urlParams[unescape(k or '')] = unescape(v or '')
   if D.floating && (win = urlParams.win)?
-    wins = D.wins = opener.D.wins
     $('body').addClass('floating-window').html('<div class=ui-layout-center></div>').layout
-      defaults: enableCursorHotkey: 0
-      center: onresize: -> ed?.updateSize(); return
-      fxName: ''
-    $('title').text wins[win].name
-    ed0 = wins[win]; ed = wins[win] = new Editor $('.ui-layout-center'), ed0.getOpts()
-    ed.setState ed0.getState(); ed.updateSize(); ed.focus(); ed0 = null
-    window.onbeforeunload = -> ed.EP(); return
+      defaults: {enableCursorHotkey: 0}, fxName: '', center: {onresize: -> ed?.updateSize(); return}
+    {editorOpts, ee} = opener.D.pendingEditors[win]
+    D.wins = opener.D.wins
+    ed = opener.D.wins[win] = new Editor $('.ui-layout-center'), editorOpts; ed.open ee; ed.updateSize()
+    $('title').text ed.name; window.onbeforeunload = -> ed.EP(); return
   else
     D.socket = (D.createSocket || io)()
     D.quit ?= close
