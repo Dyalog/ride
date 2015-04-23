@@ -206,18 +206,6 @@ class @Editor
   saved: (err) -> (if err then $.alert 'Cannot save changes' else @emit 'CloseWindow', win: @id); return
   closePopup: -> (if D.floating then window.onbeforeunload = null; D.forceClose = 1; close()); return
   die: -> @cm.setOption 'readOnly', true; return
-  getOpts: -> @opts
-  getState: ->
-    {
-      hll: @hll, originalText: @originalText, originalBreakpoints: @originalBreakpoints, breakpoints: @breakpoints[..]
-      value: @cm.getValue(), cursorIndex: @cm.indexFromPos(@cm.getCursor()), mode: @cm.getOption('mode')
-    }
-  setState: (h) ->
-    @cm.setValue h.value; @cm.clearHistory()
-    @cm.setCursor @cm.posFromIndex h.cursorIndex; {@originalText, @originalBreakpoints, @breakpoints} = h
-    @cm.setOption 'mode', h.mode
-    for l in @breakpoints then @cm.setGutterMarker l, 'breakpoints', @createBreakpointElement()
-    @highlight h.hll; return
   getDocument: -> @$e[0].ownerDocument
   refresh: -> @cm.refresh(); return
   cword: -> # APL identifier under cursor
