@@ -1,5 +1,5 @@
 prefs = require './prefs'
-{join} = require './util'
+{join, delay} = require './util'
 
 tabs = [
   require './prefs-ui-keyboard'
@@ -12,12 +12,9 @@ $d = null # dialogue instance, lazily initialized
 
 ok = ->
   for t in tabs when v = t.validate?()
-    setTimeout(
-      ->
-        $.alert v.message, 'Error', if v.element then -> v.element.focus(); return
-        return
-      1
-    )
+    delay 1, ->
+      $.alert v.message, 'Error', if v.element then -> v.element.focus(); return
+      return
     return
   for t in tabs then t.save()
   $d.dialog 'close'; false

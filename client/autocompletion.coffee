@@ -1,18 +1,16 @@
 CodeMirror = require 'codemirror'
 prefs = require './prefs'
 {rLetter} = require './codemirror-apl-mode'
+{delay} = require './util'
 module.exports = (cm, requestAutocompletion) -> # set up autocompletion, common code between session and editor
   tid = null # timeout id
   cm.on 'change', ->
     if cm.getOption('mode') in ['apl', 'aplsession'] && cm.getCursor().line
       clearTimeout tid
-      tid = setTimeout(
-        ->
-          tid = null; c = cm.getCursor(); s = cm.getLine c.line; i = c.ch
-          if i && s[i - 1] != ' ' && s[...i].replace(///[#{rLetter}]*$///, '')[-1..] != prefs.prefixKey() then requestAutocompletion s, i
-          return
-        500
-      )
+      tid = delay 500, ->
+        tid = null; c = cm.getCursor(); s = cm.getLine c.line; i = c.ch
+        if i && s[i - 1] != ' ' && s[...i].replace(///[#{rLetter}]*$///, '')[-1..] != prefs.prefixKey() then requestAutocompletion s, i
+        return
     return
   (skip, options) ->
     if options.length && cm.hasFocus() && cm.getWrapperElement().ownerDocument.hasFocus()

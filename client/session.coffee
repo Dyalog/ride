@@ -2,6 +2,7 @@ CodeMirror = require 'codemirror'
 autocompletion = require './autocompletion'
 prefs = require './prefs'
 {onCodeMirrorDoubleClick} = require './util'
+{delay} = require './util'
 
 class @Session
   constructor: (e, opts = {}) ->
@@ -66,7 +67,7 @@ class @Session
   hasFocus: -> window.focused && @cm.hasFocus()
   focus: -> (if !window.focused then window.focus()); @cm.focus(); return
   insert: (ch) -> @cm.getOption('readOnly') || @cm.replaceSelection ch; return
-  scrollCursorIntoView: -> setTimeout (=> @cm.scrollIntoView @cm.getCursor(); return), 1; return
+  scrollCursorIntoView: -> delay 1, (=> @cm.scrollIntoView @cm.getCursor(); return); return
   die: -> @cm.setOption 'readOnly', true; return
   getLineWrapping: -> @cm.getOption 'lineWrapping'
   setLineWrapping: (x) -> prefs.sessionLineWrapping x; @cm.setOption 'lineWrapping', !!x; @scrollCursorIntoView(); return

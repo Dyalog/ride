@@ -9,6 +9,7 @@
 @zip = (a, b) -> n = Math.min a.length, b.length; i = -1; while ++i < n then [a[i], b[i]] # like zip() in Python or ,¨ in APL
 @hex = (x, n = 0) -> s = x.toString 16; (while s.length < n then s = '0' + s); s.toUpperCase()
 @qw = (s) -> s.split /[ \r\n]+/         # "quoted words" like in Perl
+@delay = (n, f) -> setTimeout f, n      # setTimeout⍨ is much more convenient than setTimeout
 
 htmlChars = '<': '&lt;', '>': '&gt;', '&': '&amp;'
 @esc = (s) -> s.replace /[<>&]/g, (x) -> htmlChars[x]

@@ -1,7 +1,7 @@
 CodeMirror = require 'codemirror'
 helpurls = require './helpurls'
 prefs = require './prefs'
-{inherit, cat, dict, chr, ord, zip, join} = require './util'
+{inherit, cat, dict, chr, ord, zip, join, delay} = require './util'
 
 window.onhelp = -> false # prevent IE from acting silly on F1
 
@@ -56,24 +56,21 @@ CodeMirror.keyMap.dyalog["'#{prefs.prefixKey()}'"] = (cm) ->
     cm.setOption 'autoCloseBrackets', false
     cm.on 'change', bqChangeHandler; cm.dyalogBQ = 1
     c = cm.getCursor(); cm.replaceSelection prefs.prefixKey(), 'end'
-    ctid = setTimeout(
-      -> cm.showHint
-        completeOnSingleClick: true
-        extraKeys:
-          Backspace: (cm, m) -> m.close(); cm.execCommand 'delCharBefore'; return
-          Left:      (cm, m) -> m.close(); cm.execCommand 'goCharLeft'; return
-          Right:     (cm, m) -> m.pick(); return
-        hint: ->
-          pk = prefs.prefixKey()
-          data = from: c, to: cm.getCursor(), list: KS.map (k) ->
-            if k == pk
-              text: '', hint: bqbqHint, render: (e) -> e.innerHTML = "  #{pk}#{pk} <i>completion by name</i>"; return
-            else
-              v = bq[k]; text: v, render: (e) -> $(e).text "#{v} #{pk}#{k} #{squiggleDescriptions[v] || ''}  "; return
-          CodeMirror.on data, 'close', -> bqCleanUp cm; return
-          data
-      500
-    )
+    ctid = delay 500, -> cm.showHint
+      completeOnSingleClick: true
+      extraKeys:
+        Backspace: (cm, m) -> m.close(); cm.execCommand 'delCharBefore'; return
+        Left:      (cm, m) -> m.close(); cm.execCommand 'goCharLeft'; return
+        Right:     (cm, m) -> m.pick(); return
+      hint: ->
+        pk = prefs.prefixKey()
+        data = from: c, to: cm.getCursor(), list: KS.map (k) ->
+          if k == pk
+            text: '', hint: bqbqHint, render: (e) -> e.innerHTML = "  #{pk}#{pk} <i>completion by name</i>"; return
+          else
+            v = bq[k]; text: v, render: (e) -> $(e).text "#{v} #{pk}#{k} #{squiggleDescriptions[v] || ''}  "; return
+        CodeMirror.on data, 'close', -> bqCleanUp cm; return
+        data
   return
 
 # `x completions

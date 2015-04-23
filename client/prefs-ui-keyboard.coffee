@@ -1,6 +1,6 @@
 prefs = require './prefs'
 keymap = require './keymap'
-{join, esc, dict, hex, ord, qw} = require './util'
+{join, esc, dict, hex, ord, qw, delay} = require './util'
 
 $pk = null
 NK = 58 # number of scancodes we are concerned with
@@ -75,7 +75,7 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
     )}</div>
     <select id=keyboard-locale>#{join((for x, _ of layouts then "<option>#{x}").sort())}</select>
   """
-  .on 'focus', '.key input', -> setTimeout (=> $(@).select(); return), 1; return
+  .on 'focus', '.key input', -> delay 1, (=> $(@).select(); return); return
   .on 'blur', '.key input', -> $(@).val(v = $(@).val()[-1..] || ' ').prop 'title', "U+#{hex ord(v), 4}"; return
   .on 'mouseover mouseout', '.key input', (e) -> $(@).toggleClass 'hover', e.type == 'mouseover'; return
   if !prefs.keyboardLocale()
@@ -92,7 +92,7 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
     return
   $pk = $ '.pk', $e
     .on 'change keyup', -> $('#keyboard-legend .pk-double').text $(@).val()[-1..]; return
-    .focus -> setTimeout (=> $(@).select(); return), 1; return
+    .focus -> delay 1, (=> $(@).select(); return); return
   return
 
 @load = load = (bq) -> # bq: current mappings, possibly not yet saved

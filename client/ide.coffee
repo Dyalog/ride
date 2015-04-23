@@ -7,7 +7,7 @@ prefsUI = require './prefs-ui'
 keymap = require './keymap'
 require '../lbar/lbar'
 require '../jquery.layout'
-{esc} = require './util'
+{esc, delay} = require './util'
 
 class @IDE
   constructor: ->
@@ -59,7 +59,7 @@ class @IDE
     D.socket
       .on '*identify', (i) => D.remoteIdentification = i; @updateTitle(); return
       .on '*spawnedError', ({message}) =>
-        @die(); setTimeout (-> $.alert message, 'Error'; return), 100 # some delay to let the window restore its original dimensions
+        @die(); delay 100, -> $.alert message, 'Error'; return # give the window a chance to restore its original dimensions
         return
       .on '*disconnected', => (if !@isDead then $.alert 'Interpreter disconnected', 'Error'; @die()); return
       .on 'Disconnect', ({message}) =>
@@ -107,18 +107,15 @@ class @IDE
       .on 'mouseout', 'b', -> clearTimeout ttid; ttid = null; $tip.add($tipTriangle).hide(); return
       .on 'mouseover', 'b', (e) ->
         clearTimeout ttid; $t = $ e.target; p = $t.position(); x = $t.text()
-        ttid = setTimeout(
-          ->
-            ttid = null; key = keymap.getBQKeyFor x
-            keyText = if key && x.charCodeAt(0) > 127 then "Keyboard: #{prefs.prefixKey()}#{key}\n\n" else ''
-            h = D.lbarTips[x] or [x, '']; $tipDesc.text h[0]; $tipText.text keyText + h[1]
-            $tipTriangle.css(left: 3 + p.left + ($t.width() - $tipTriangle.width()) / 2, top: p.top + $t.height() + 2).show()
-            x0 = p.left - 21; x1 = x0 + $tip.width(); y0 = p.top + $t.height()
-            if x1 > $(document).width() then $tip.css(left: '', right: 0, top: y0).show()
-            else $tip.css(left: Math.max(0, x0), right: '', top: y0).show()
-            return
-          200
-        )
+        ttid = delay 200, ->
+          ttid = null; key = keymap.getBQKeyFor x
+          keyText = if key && x.charCodeAt(0) > 127 then "Keyboard: #{prefs.prefixKey()}#{key}\n\n" else ''
+          h = D.lbarTips[x] or [x, '']; $tipDesc.text h[0]; $tipText.text keyText + h[1]
+          $tipTriangle.css(left: 3 + p.left + ($t.width() - $tipTriangle.width()) / 2, top: p.top + $t.height() + 2).show()
+          x0 = p.left - 21; x1 = x0 + $tip.width(); y0 = p.top + $t.height()
+          if x1 > $(document).width() then $tip.css(left: '', right: 0, top: y0).show()
+          else $tip.css(left: Math.max(0, x0), right: '', top: y0).show()
+          return
         return
 
     @layout = @$ide.layout
