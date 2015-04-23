@@ -30,6 +30,7 @@ class @IDE
     @pending = [] # lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
     @w3500 = null # window for 3500⌶
     @host = @port = @wsid = ''; prefs.windowTitle @updateTitle
+    @demoLines = []; @demoIndex = -1
 
     D.wins = @wins = # window id -> instance of Editor or Session
       0: new Session $('.ui-layout-center'),
@@ -135,39 +136,27 @@ class @IDE
     themeClasses = themes.map (x) -> "theme-#{x.toLowerCase()}"
     allThemeClasses = themeClasses.join ' '
 
-    # demo mode
-    demoLines = []; demoIndex = -1
-    demoLoad = ->
-      $('<input type=file style=display:none>').appendTo('body').trigger('click').change ->
-        if @value then D.readFile @value, 'utf8', (err, s) ->
-          if err then console?.error? err; $.alert 'Cannot load demo file'
-          else demoLines = s.replace(/^[\ufeff\ufffe]/, '').split /\r?\n/; demoIndex = -1
-          return
-        return
-      return
-    [demoNext, demoPrev] = [1, -1].map (d) => =>
-      (if 0 <= demoIndex + d < demoLines.length then demoIndex += d; @wins[0].loadLine demoLines[demoIndex]); return
-
     D.editorsOnTop = prefs.editorsOnTop()
+    prefs.showLanguageBar (x) -> ide.layout[if x then 'show' else 'hide'] 'north'; return
 
     D.installMenu [
       (
         if D.nwjs
           {'': '_File', items:
             [
-              {'': '_Connect...', action: D.rideConnect}
-              {'': 'New _Session', key: 'Ctrl+N', action: D.rideNewSession}
+              {'': '_Connect...', action: @CNC.bind @}
+              {'': 'New _Session', key: 'Ctrl+N', action: @NEW.bind @}
             ]
               .concat(
                 if !D.mac then [ # Mac's menu already has an item for Quit
                   '-'
-                  {'': '_Quit', key: 'Ctrl+Q', action: D.quit}
+                  {'': '_Quit', key: 'Ctrl+Q', action: @QIT.bind @}
                 ] else []
               )
           }
       )
       {'': '_Edit', items: [
-        {'': 'Preferences', action: prefsUI}
+        {'': 'Preferences', action: @PRF.bind @}
         '-'
         {'': 'Weak Interrupt',   action: @WI.bind @}
         {'': 'Strong Interrupt', action: @SI.bind @}
@@ -175,7 +164,7 @@ class @IDE
       {'': '_View', items:
         [
           {'': 'Show Language Bar', checked: prefs.showLanguageBar(), action: (x) =>
-            prefs.showLanguageBar x; @layout[['hide', 'show'][+x]] 'north'; return}
+            prefs.showLanguageBar x; return}
           {'': 'Float New Editors', checked: prefs.floatNewEditors(), action: (x) ->
             prefs.floatNewEditors x; return}
           {'': 'Line Wrapping in Session', checked: @wins[0].getLineWrapping(), action: (x) =>
@@ -185,9 +174,9 @@ class @IDE
             if D.nwjs then [
               {'': 'Editors on Top', checked: prefs.editorsOnTop(), action: (x) -> prefs.editorsOnTop D.editorsOnTop = x; return}
               '-'
-              {'': 'Zoom _In',    key: 'Ctrl+=', dontBindKey: 1, action: -> D.zoomIn();    return}
-              {'': 'Zoom _Out',   key: 'Ctrl+-', dontBindKey: 1, action: -> D.zoomOut();   return}
-              {'': '_Reset Zoom', key: 'Ctrl+0', dontBindKey: 1, action: -> D.resetZoom(); return}
+              {'': 'Zoom _In',    key: 'Ctrl+=', dontBindKey: 1, action: @ZMI.bind @}
+              {'': 'Zoom _Out',   key: 'Ctrl+-', dontBindKey: 1, action: @ZMO.bind @}
+              {'': '_Reset Zoom', key: 'Ctrl+0', dontBindKey: 1, action: @ZMR.bind @}
             ] else []
           )
           .concat [
@@ -201,13 +190,13 @@ class @IDE
       (
         if D.nwjs
           {'': '_Tools', items: [
-            {'': 'Run Demo Script...', action: demoLoad}
-            {'': 'Next Line of Demo',     key: 'Ctrl+Shift+N', action: demoNext}
-            {'': 'Previous Line of Demo', key: 'Ctrl+Shift+P', action: demoPrev}
+            {'': 'Run Demo Script...', action: @DMR.bind @}
+            {'': 'Next Line of Demo',     key: 'Ctrl+Shift+N', action: @DMN.bind @}
+            {'': 'Previous Line of Demo', key: 'Ctrl+Shift+P', action: @DMP.bind @}
           ]}
       )
       {'': '_Help', items: [
-        {'': '_About', key: 'Shift+F1', dontBindKey: 1, action: about}
+        {'': '_About', key: 'Shift+F1', dontBindKey: 1, action: @ABT.bind @}
       ]}
     ]
     return
@@ -282,4 +271,30 @@ class @IDE
       .data('ui-tabs').panels.off 'keydown' # prevent jQueryUI tabs from hijacking our keystrokes, <C-Up> in particular
     @wins[0].scrollCursorIntoView()
     if prefs.floatNewEditors() then @wins[0].focus(); @popWindow w
+    return
+
+  CNC: -> D.rideConnect();    return
+  NEW: -> D.rideNewSession(); return
+  QIT: -> D.quit();           return
+  PRF: -> prefsUI();          return
+  ZMI: -> D.zoomIn();         return
+  ZMO: -> D.zoomOut();        return
+  ZMR: -> D.resetZoom();      return
+  ABT: -> about();            return
+
+  DMR: -> # Run Demo Script
+    ide = @
+    $('<input type=file style=display:none>').appendTo('body').trigger('click').change ->
+      if @value then D.readFile @value, 'utf8', (err, s) ->
+        if err then console?.error? err; $.alert 'Cannot load demo file'
+        else ide.demoLines = s.replace(/^[\ufeff\ufffe]/, '').split /\r?\n/; ide.demoIndex = -1
+        return
+      return
+    return
+
+  DMN: -> @demoMove  1; return # demo next
+  DMP: -> @demoMove -1; return # demo prev
+  demoMove: (d) ->
+    if 0 <= @demoIndex + d < @demoLines.length
+      @demoIndex += d; @wins[0].loadLine @demoLines[@demoIndex]
     return
