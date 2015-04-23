@@ -1,4 +1,4 @@
-ide = require './ide'
+{IDE} = require './ide'
 about = require './about'
 prefs = require './prefs'
 
@@ -166,7 +166,7 @@ module.exports = (opts) ->
     .on '*connected', ({host, port}) ->
       if $listenDialog  then $listenDialog.dialog  'close'; $listenDialog  = null
       if $connectDialog then $connectDialog.dialog 'close'; $connectDialog = null
-      ideInstance = ide(); ideInstance.setHostAndPort host, port; return
+      ide = new IDE; ide.setHostAndPort host, port; return
     .on '*connectError', ({err}) ->
       if $connectDialog then $connectDialog.dialog 'close'; $connectDialog = null
       $.alert err, 'Error'; return

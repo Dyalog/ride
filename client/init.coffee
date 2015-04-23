@@ -9,7 +9,7 @@ connect = require './connect'
 {Editor} = require './editor'
 about = require './about'
 require '../jquery.layout'
-ide = require './ide'
+{IDE} = require './ide'
 require './util'
 prefs = require './prefs'
 
@@ -51,9 +51,9 @@ $ ->
     else if o.connect
       cp = connect(); cp.connect o._[0]
     else if o.spawn
-      ideInstance = ide()
+      ide = new IDE
       D.socket
-        .on '*connected', ({host, port}) -> ideInstance.setHostAndPort host, port; return
+        .on '*connected', ({host, port}) -> ide.setHostAndPort host, port; return
         .emit '*spawn'
         # '*spawnedError' is handled in ide.coffee
       window.onbeforeunload = -> D.socket.emit 'Exit', code: 0; return
