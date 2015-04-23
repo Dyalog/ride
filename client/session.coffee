@@ -38,6 +38,7 @@ class @Session
     @autocomplete = autocompletion @cm, (s, i) =>
       if @promptType != 4 then @emit 'Autocomplete', line: s, pos: i, token: 0 # don't autocomplete in ⍞ input
       return
+    prefs.sessionLineWrapping (x) => @cm.setOption 'lineWrapping', !!x; @scrollCursorIntoView(); return
     return
 
   histAdd: (lines) -> @hist[0] = ''; @hist[1...1] = lines; @histIndex = 0; return
@@ -69,8 +70,6 @@ class @Session
   insert: (ch) -> @cm.getOption('readOnly') || @cm.replaceSelection ch; return
   scrollCursorIntoView: -> delay 1, (=> @cm.scrollIntoView @cm.getCursor(); return); return
   die: -> @cm.setOption 'readOnly', true; return
-  getLineWrapping: -> @cm.getOption 'lineWrapping'
-  setLineWrapping: (x) -> prefs.sessionLineWrapping x; @cm.setOption 'lineWrapping', !!x; @scrollCursorIntoView(); return
   getDocument: -> @$e[0].ownerDocument
   refresh: -> @cm.refresh(); @scrollCursorIntoView(); return
   loadLine: (s) -> l = @cm.lineCount() - 1; @cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}; return

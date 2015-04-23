@@ -164,8 +164,8 @@ class @IDE
             prefs.showLanguageBar x; return}
           {'': 'Float New Editors', checked: prefs.floatNewEditors(), action: (x) ->
             prefs.floatNewEditors x; return}
-          {'': 'Line Wrapping in Session', checked: @wins[0].getLineWrapping(), action: (x) =>
-            @wins[0].setLineWrapping x; return}
+          {'': 'Line Wrapping in Session', checked: prefs.sessionLineWrapping(), action: (x) =>
+            prefs.sessionLineWrapping x; return}
         ]
           .concat(
             if D.nwjs then [
