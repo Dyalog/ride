@@ -31,6 +31,7 @@ class @IDE
     @w3500 = null # window for 3500⌶
     @host = @port = @wsid = ''; prefs.windowTitle @updateTitle
     @demoLines = []; @demoIndex = -1
+    @focusedWinId = 0
 
     D.wins = @wins = # window id -> instance of Editor or Session
       0: new Session @, $('.ui-layout-center'),
