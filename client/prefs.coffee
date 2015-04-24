@@ -14,6 +14,35 @@ prefs = @
   ['keyboardLocale',        ''] # e.g. "US", "GB"
   ['lineNumbersInDebugger', 0]
   ['lineNumbersInEditor',   1]
+  ['menu',                  '''
+    _File                           {nw}
+      _Connect...              =CNC
+      New _Session             =NEW
+      -                             {!mac}
+      _Quit                    =QIT {!mac}
+    _Edit
+      Preferences              =PRF
+      -
+      Weak Interrupt           =WI
+      Strong Interrupt         =SI
+    _View
+      Show Language Bar        =LBR
+      Float New Editors        =FLT
+      Line Wrapping in Session =WRP
+      Editors on Top           =TOP {nw}
+      -                             {nw}
+      Zoom _In                 =ZMI {nw}
+      Zoom _Out                =ZMO {nw}
+      _Reset Zoom              =ZMR {nw}
+      -
+      Theme                    =THM
+    _Tools                          {nw}
+      Run Demo Script...       =DMR
+      Next Line of Demo        =DMN
+      Previous Line of Demo    =DMP
+    _Help
+      _About                   =ABT
+  ''']
   ['prefixKey',             '`']
   ['prefixMap',             ''] # pairs of characters; only differences from the default ` map are stored
   ['sessionLineWrapping',   0]
