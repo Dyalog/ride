@@ -30,7 +30,7 @@ class @IDE
     @isDead = 0
     @pending = [] # lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
     @w3500 = null # window for 3500⌶
-    @host = @port = @wsid = ''; prefs.windowTitle @updateTitle
+    @host = @port = @wsid = ''; prefs.windowTitle @updateTitle.bind @
     @demoLines = []; @demoIndex = -1
     @focusedWinId = 0
 
