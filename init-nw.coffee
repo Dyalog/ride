@@ -201,18 +201,19 @@ if process?
 
     render = (x) ->
       if !x then return
-      if x == '-' then return new gui.MenuItem type: 'separator'
+      if x[''] == '-' then return new gui.MenuItem type: 'separator'
       h = # arguments to MenuItem's constructor
         label: x[''].replace /_/g, ''
-        type: if x.group || x.checked? then 'checkbox' else 'normal'
+        type: if x.group || x.checkBoxPref then 'checkbox' else 'normal'
       if x.key && x.action && !x.dontBindKey then $(document).on 'keydown', '*', x.key, -> x.action(); false
       if x.group
         h.checked = !!x.checked
         h.click = ->
           groups[x.group].forEach (sibling) -> sibling.checked = sibling == mi; return
           x.action?(); return
-      else if x.checked?
-        h.checked = !!x.checked; h.click = -> x.action? mi.checked; return
+      else if x.checkBoxPref
+        h.checked = !!x.checkBoxPref(); h.click = -> x.action? mi.checked; return
+        x.checkBoxPref (v) -> mi.checked = !!v; return
       else
         h.click = -> x.action?(); return
       if x.items then h.submenu = new gui.Menu; for y in x.items then h.submenu.append render y

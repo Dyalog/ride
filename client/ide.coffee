@@ -8,10 +8,11 @@ keymap = require './keymap'
 require '../lbar/lbar'
 require '../jquery.layout'
 {esc, delay} = require './util'
+CodeMirror = require 'codemirror'
 
 class @IDE
   constructor: ->
-    ide = @
+    ide = D.ide = @
     $('body').html @$ide = $ """
       <div class=ide>
         <div class="lbar ui-layout-north" style=display:none>
@@ -137,66 +138,128 @@ class @IDE
     D.editorsOnTop = prefs.editorsOnTop()
     prefs.showLanguageBar (x) -> ide.layout[if x then 'show' else 'hide'] 'north'; return
 
-    D.installMenu [
-      (
-        if D.nwjs
-          {'': '_File', items:
-            [
-              {'': '_Connect...', action: @CNC.bind @}
-              {'': 'New _Session', key: 'Ctrl+N', action: @NEW.bind @}
-            ]
-              .concat(
-                if !D.mac then [ # Mac's menu already has an item for Quit
-                  '-'
-                  {'': '_Quit', key: 'Ctrl+Q', action: @QIT.bind @}
-                ] else []
-              )
-          }
-      )
-      {'': '_Edit', items: [
-        {'': 'Preferences', action: @PRF.bind @}
-        '-'
-        {'': 'Weak Interrupt',   action: @WI.bind @}
-        {'': 'Strong Interrupt', action: @SI.bind @}
-      ]}
-      {'': '_View', items:
-        [
-          {'': 'Show Language Bar', checked: prefs.showLanguageBar(), action: (x) =>
-            prefs.showLanguageBar x; return}
-          {'': 'Float New Editors', checked: prefs.floatNewEditors(), action: (x) ->
-            prefs.floatNewEditors x; return}
-          {'': 'Line Wrapping in Session', checked: prefs.sessionLineWrapping(), action: (x) =>
-            prefs.sessionLineWrapping x; return}
-        ]
-          .concat(
-            if D.nwjs then [
-              {'': 'Editors on Top', checked: prefs.editorsOnTop(), action: (x) -> prefs.editorsOnTop D.editorsOnTop = x; return}
-              '-'
-              {'': 'Zoom _In',    key: 'Ctrl+=', dontBindKey: 1, action: @ZMI.bind @}
-              {'': 'Zoom _Out',   key: 'Ctrl+-', dontBindKey: 1, action: @ZMO.bind @}
-              {'': '_Reset Zoom', key: 'Ctrl+0', dontBindKey: 1, action: @ZMR.bind @}
-            ] else []
-          )
-          .concat [
-            '-'
-            {'': 'Theme', items: themes.map (x, i) ->
-              '': x, group: 'themes', checked: prefs.theme() == x.toLowerCase(), action: ->
-                prefs.theme x.toLowerCase(); $('body').removeClass(allThemeClasses).addClass themeClasses[i]; return
-            }
-          ]
-      }
-      (
-        if D.nwjs
-          {'': '_Tools', items: [
-            {'': 'Run Demo Script...', action: @DMR.bind @}
-            {'': 'Next Line of Demo',     key: 'Ctrl+Shift+N', action: @DMN.bind @}
-            {'': 'Previous Line of Demo', key: 'Ctrl+Shift+P', action: @DMP.bind @}
-          ]}
-      )
-      {'': '_Help', items: [
-        {'': '_About', key: 'Shift+F1', dontBindKey: 1, action: @ABT.bind @}
-      ]}
-    ]
+    extraOpts =
+      NEW: key: 'Ctrl+N'
+      QIT: key: 'Ctrl+Q'
+      ZMI: key: 'Ctrl+=', dontBindKey: 1
+      ZMO: key: 'Ctrl+-', dontBindKey: 1
+      ZMR: key: 'Ctrl+0', dontBindKey: 1
+      LBR: checkBoxPref: prefs.showLanguageBar
+      FLT: checkBoxPref: prefs.floatNewEditors
+      WRP: checkBoxPref: prefs.sessionLineWrapping
+      TOP: checkBoxPref: prefs.editorsOnTop
+      DMN: key: 'Ctrl+Shift+N'
+      DMP: key: 'Ctrl+Shift+P'
+      ABT: key: 'Shift+F1', dontBindKey: 1
+      THM: items: themes.map (x, i) ->
+        '': x, group: 'themes', checked: prefs.theme() == x.toLowerCase(), action: ->
+          prefs.theme x.toLowerCase(); $('body').removeClass(allThemeClasses).addClass themeClasses[i]; return
+
+    parseMenuDescription = (md) ->
+      stack = [ind: -1, items: []]
+      for s in md.split '\n' when !/^\s*$/.test s
+        cond = ''; s = s.replace /\{[a-z\|&! ]*\}/, (x) -> cond = x[1...-1]; ''
+        cmd = ''; s = s.replace /\=[A-Z][A-Z0-9]{1,2}\b/, (x) -> cmd = x[1..]; ''
+        h = ind: s.replace(/\S.*$/, '').length, '': s.replace /^\s*|\s*$/g, ''
+        while h.ind <= stack[stack.length - 1].ind then stack.pop()
+        if !cond || do new Function "var nw=#{D.nwjs},mac=#{D.mac};return(#{cond})"
+          (stack[stack.length - 1].items ?= []).push h
+        stack.push h
+        if cmd then h.action = if ide[cmd] then ide[cmd].bind ide else -> $.alert "Unknown command: #{cmd}"; return
+        $.extend h, extraOpts[cmd]
+      stack[0].items
+
+    D.installMenu parseMenuDescription '''
+      _File                           {nw}
+        _Connect...              =CNC
+        New _Session             =NEW
+        -                             {!mac}
+        _Quit                    =QIT {!mac}
+      _Edit
+        Preferences              =PRF
+        -
+        Weak Interrupt           =WI
+        Strong Interrupt         =SI
+      _View
+        Show Language Bar        =LBR
+        Float New Editors        =FLT
+        Line Wrapping in Session =WRP
+        Editors on Top           =TOP {nw}
+        -                             {nw}
+        Zoom _In                 =ZMI {nw}
+        Zoom _Out                =ZMO {nw}
+        _Reset Zoom              =ZMR {nw}
+        -
+        Theme                    =THM
+      _Tools                          {nw}
+        Run Demo Script...       =DMR
+        Next Line of Demo        =DMN
+        Previous Line of Demo    =DMP
+      _Help
+        _About                   =ABT
+    '''
+
+#     D.installMenu [
+#       (
+#         if D.nwjs
+#           {'': '_File', items:
+#             [
+#               {'': '_Connect...', action: @CNC.bind @}
+#               {'': 'New _Session', key: 'Ctrl+N', action: @NEW.bind @}
+#             ]
+#               .concat(
+#                 if !D.mac then [ # Mac's menu already has an item for Quit
+#                   '-'
+#                   {'': '_Quit', key: 'Ctrl+Q', action: @QIT.bind @}
+#                 ] else []
+#               )
+#           }
+#       )
+#       {'': '_Edit', items: [
+#         {'': 'Preferences', action: @PRF.bind @}
+#         '-'
+#         {'': 'Weak Interrupt',   action: @WI.bind @}
+#         {'': 'Strong Interrupt', action: @SI.bind @}
+#       ]}
+#       {'': '_View', items:
+#         [
+#           {'': 'Show Language Bar', checked: prefs.showLanguageBar(), action: (x) =>
+#             prefs.showLanguageBar x; return}
+#           {'': 'Float New Editors', checked: prefs.floatNewEditors(), action: (x) ->
+#             prefs.floatNewEditors x; return}
+#           {'': 'Line Wrapping in Session', checked: prefs.sessionLineWrapping(), action: (x) =>
+#             prefs.sessionLineWrapping x; return}
+#         ]
+#           .concat(
+#             if D.nwjs then [
+#               {'': 'Editors on Top', checked: prefs.editorsOnTop(), action: (x) -> prefs.editorsOnTop D.editorsOnTop = x; return}
+#               '-'
+#               {'': 'Zoom _In',    key: 'Ctrl+=', dontBindKey: 1, action: @ZMI.bind @}
+#               {'': 'Zoom _Out',   key: 'Ctrl+-', dontBindKey: 1, action: @ZMO.bind @}
+#               {'': '_Reset Zoom', key: 'Ctrl+0', dontBindKey: 1, action: @ZMR.bind @}
+#             ] else []
+#           )
+#           .concat [
+#             '-'
+#             {'': 'Theme', items: themes.map (x, i) ->
+#               '': x, group: 'themes', checked: prefs.theme() == x.toLowerCase(), action: ->
+#                 prefs.theme x.toLowerCase(); $('body').removeClass(allThemeClasses).addClass themeClasses[i]; return
+#             }
+#           ]
+#       }
+#       (
+#         if D.nwjs
+#           {'': '_Tools', items: [
+#             {'': 'Run Demo Script...', action: @DMR.bind @}
+#             {'': 'Next Line of Demo',     key: 'Ctrl+Shift+N', action: @DMN.bind @}
+#             {'': 'Previous Line of Demo', key: 'Ctrl+Shift+P', action: @DMP.bind @}
+#           ]}
+#       )
+#       {'': '_Help', items: [
+#         {'': '_About', key: 'Shift+F1', dontBindKey: 1, action: @ABT.bind @}
+#       ]}
+#     ]
+
     return
 
   setHostAndPort: (@host, @port) -> @updateTitle(); return
@@ -289,3 +352,9 @@ class @IDE
     if 0 <= @demoIndex + d < @demoLines.length
       @demoIndex += d; @wins[0].loadLine @demoLines[@demoIndex]
     return
+
+  LBR: -> prefs.showLanguageBar    .toggle(); return
+  FLT: -> prefs.floatNewEditors    .toggle(); return
+  WRP: -> prefs.sessionLineWrapping.toggle(); return
+  TOP: -> prefs.editorsOnTop       .toggle(); return
+  THM: -> # ignore

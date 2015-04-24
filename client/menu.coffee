@@ -16,7 +16,7 @@ D.installMenu ?= (arg) ->
   # Top-level ".m-opener"-s also have class ".m-top"
   render = (x) ->
     if !x then return
-    if x == '-' then return $ '<hr>'
+    if x[''] == '-' then return $ '<hr>'
     acc = null # access key
     name = x[''].replace /_(.)/g, (_, k) -> if acc || k == '_' then k else "<u>#{acc = k}</u>"
     $a = $ "<a href='#'>#{name}</a>"
@@ -30,9 +30,10 @@ D.installMenu ?= (arg) ->
         .on 'mousedown mouseup click', (e) ->
           $(@).closest('.menu').find(".m-group-#{x.group}").removeClass 'm-checked'
           $(@).addClass 'm-checked'; mFocus null; x.action?(); false
-    else if x.checked?
-      $a.toggleClass 'm-checked', !!x.checked
-        .on 'mousedown mouseup click', (e) -> $(@).toggleClass 'm-checked'; mFocus null; x.action? $(@).hasClass 'm-checked'; false
+    else if x.checkBoxPref
+      x.checkBoxPref (v) -> $a.toggleClass 'm-checked', !!v; return
+      $a.toggleClass 'm-checked', !!x.checkBoxPref()
+        .on 'mousedown mouseup click', (e) -> mFocus null; x.action? $(@).hasClass 'm-checked'; false
     else
       if x.action then $a.on 'mousedown mouseup click', (e) -> mFocus null; x.action(); false
     if !x.items then return $a
