@@ -5,8 +5,8 @@ prefs = require './prefs'
 {delay} = require './util'
 
 class @Session
-  constructor: (e, opts = {}) ->
-    {@emit} = @opts = opts
+  constructor: (@ide, e, @opts) ->
+    {@emit} = @opts
     @dirty = {} # modified: line number -> original content; inserted: line number -> 0
     @hist = ['']; @histIndex = 0
     @cm = new CodeMirror (@$e = $ e)[0],

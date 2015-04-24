@@ -49,7 +49,7 @@ EDITOR_HTML = do ->
   """
 
 class @Editor
-  constructor: (e, opts) ->
+  constructor: (@ide, e, opts) ->
     @$e = $(e).html EDITOR_HTML
     {@id, @name, @emit} = @opts = opts; @isDebugger = opts.debugger
     @xline = null # the line number of the empty line inserted when cursor is at eof and you press <down>

@@ -41,9 +41,9 @@ $ ->
   if D.floating && (win = urlParams.win)?
     $('body').addClass('floating-window').html('<div class=ui-layout-center></div>').layout
       defaults: {enableCursorHotkey: 0}, fxName: '', center: {onresize: -> ed?.updateSize(); return}
-    {editorOpts, ee} = opener.D.pendingEditors[win]
+    {editorOpts, ee, ide} = opener.D.pendingEditors[win]
     D.wins = opener.D.wins
-    ed = opener.D.wins[win] = new Editor $('.ui-layout-center'), editorOpts; ed.open ee; ed.updateSize()
+    ed = opener.D.wins[win] = new Editor ide, $('.ui-layout-center'), editorOpts; ed.open ee; ed.updateSize()
     $('title').text ed.name; window.onbeforeunload = -> ed.EP(); return
   else
     D.socket = (D.createSocket || io)()

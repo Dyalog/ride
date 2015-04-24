@@ -33,7 +33,7 @@ class @IDE
     @demoLines = []; @demoIndex = -1
 
     D.wins = @wins = # window id -> instance of Editor or Session
-      0: new Session $('.ui-layout-center'),
+      0: new Session @, $('.ui-layout-center'),
         id: 0, emit: @emit.bind(@), weakInterrupt: @WI.bind(@)
         exec: (lines, trace) =>
           if lines && lines.length
@@ -248,7 +248,7 @@ class @IDE
     if prefs.floatNewEditors() && !D.floating && !@isDead
       if D.open "index.html?win=#{w}", $.extend {width: 500, height: 400, title: ee.name}, prefs.floatingWindowInfos()[w]
         # D.wins[w] will be replaced a bit later by code running in the popup
-        (D.pendingEditors ?= {})[w] = {editorOpts, ee}
+        (D.pendingEditors ?= {})[w] = {editorOpts, ee, ide: @}
         done = 1
       else
         $.alert 'Popups are blocked.'
@@ -257,8 +257,7 @@ class @IDE
       $("<li id=wintab#{w}><a href=#win#{w}></a></li>").appendTo(".ui-layout-#{dir} ul")
         .find('a').text(ee.name).click (e) => e.which == 2 && @wins[w].EP(); return # middle click
       $tabContent = $("<div class=win id=win#{w}></div>").appendTo ".ui-layout-#{dir}"
-      @wins[w] = new Editor $tabContent, editorOpts
-      @wins[w].open ee
+      (@wins[w] = new Editor @, $tabContent, editorOpts).open ee
       $(".ui-layout-#{dir}").tabs('refresh').tabs(active: -1)
         .data('ui-tabs').panels.off 'keydown' # prevent jQueryUI tabs from hijacking our keystrokes, <C-Up> in particular
       @wins[0].scrollCursorIntoView()
