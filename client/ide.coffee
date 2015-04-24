@@ -165,7 +165,11 @@ class @IDE
         if !cond || do new Function "var nw=#{D.nwjs},mac=#{D.mac};return(#{cond})"
           (stack[stack.length - 1].items ?= []).push h
         stack.push h
-        if cmd then h.action = if ide[cmd] then ide[cmd].bind ide else -> $.alert "Unknown command: #{cmd}"; return
+        if cmd then h.action = do (cmd = cmd) -> ->
+          if f = CodeMirror.commands[cmd] then f ide.wins[ide.focusedWinId].cm
+          else if ide[cmd] then ide[cmd]()
+          else $.alert "Unknown command: #{cmd}"
+          return
         $.extend h, extraOpts[cmd]
       stack[0].items
 
