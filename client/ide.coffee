@@ -157,12 +157,12 @@ class @IDE
 
     parseMenuDescription = (md) ->
       stack = [ind: -1, items: []]
-      for s in md.split '\n' when !/^\s*$/.test s
-        cond = ''; s = s.replace /\{[a-z\|&! ]*\}/, (x) -> cond = x[1...-1]; ''
-        cmd = ''; s = s.replace /\=[A-Z][A-Z0-9]{1,2}\b/, (x) -> cmd = x[1..]; ''
-        h = ind: s.replace(/\S.*$/, '').length, '': s.replace /^\s*|\s*$/g, ''
+      for s in md.split '\n' when !/^\s*$/.test s = s.replace /#.*/, ''
+        cond = ''; s = s.replace /\{(.*)\}/, (_, x) -> cond = x; ''
+        cmd = ''; s = s.replace /\=([A-Z][A-Z0-9]{1,2})\b/, (_, x) -> cmd = x; ''
+        h = ind: s.replace(/\S.*/, '').length, '': s.replace /^\s*|\s*$/g, ''
         while h.ind <= stack[stack.length - 1].ind then stack.pop()
-        if !cond || do new Function "var nw=#{D.nwjs},mac=#{D.mac};return(#{cond})"
+        if !cond || do new Function "var browser=!#{D.nwjs},mac=#{D.mac};return(#{cond})"
           (stack[stack.length - 1].items ?= []).push h
         stack.push h
         if cmd then h.action = do (cmd = cmd) -> ->

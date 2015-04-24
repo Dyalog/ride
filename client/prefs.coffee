@@ -15,7 +15,16 @@ prefs = @
   ['lineNumbersInDebugger', 0]
   ['lineNumbersInEditor',   1]
   ['menu',                  '''
-    _File                           {nw}
+    # _x   access key, alt+x
+    # =CMD command code; some are special:
+    #        LBR FLT WRP TOP render as checkboxes
+    #        THM ("Theme") renders its own submenu
+    # {}   conditional display, a boolean expression
+    #        operators: && || ! ( )
+    #        variables: browser mac
+    # -    separator (when alone)
+    # #    comment
+    _File                           {!browser}
       _Connect...              =CNC
       New _Session             =NEW
       -                             {!mac}
@@ -29,14 +38,14 @@ prefs = @
       Show Language Bar        =LBR
       Float New Editors        =FLT
       Line Wrapping in Session =WRP
-      Editors on Top           =TOP {nw}
-      -                             {nw}
-      Zoom _In                 =ZMI {nw}
-      Zoom _Out                =ZMO {nw}
-      _Reset Zoom              =ZMR {nw}
+      Editors on Top           =TOP {!browser}
+      -                             {!browser}
+      Zoom _In                 =ZMI {!browser}
+      Zoom _Out                =ZMO {!browser}
+      _Reset Zoom              =ZMR {!browser}
       -
       Theme                    =THM
-    _Tools                          {nw}
+    _Tools                          {!browser}
       Run Demo Script...       =DMR
       Next Line of Demo        =DMN
       Previous Line of Demo    =DMP
