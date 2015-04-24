@@ -52,7 +52,7 @@ if process?
       if localStorage.winInfo then try restoreWindow nww, JSON.parse localStorage.winInfo
     return
   nww.show(); nww.focus() # focus() is needed for the Mac
-  
+
   throttle = (f) -> tid = null; -> tid ?= setTimeout (-> f(); tid = null; return), 500; return
   saveWindowState = throttle ->
     info =
