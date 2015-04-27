@@ -52,5 +52,5 @@ echo 'combining javascript files into one'
     }};
 .
   cat build/tmp/libs.js
-  browserify -d -t coffeeify --extension=.coffee client/init.coffee | exorcist build/static/client.map
+  browserify -t coffeeify --extension=.coffee client/init.coffee
 )>build/static/D.js
