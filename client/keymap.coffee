@@ -81,7 +81,7 @@ BQ = dict zip KS, VS # default ` map
 bq = $.extend {}, BQ; do -> s = prefs.prefixMap(); for i in [0...s.length] by 2 then bq[s[i]] = s[i + 1] # current ` map
 @getBQMap = -> $.extend {}, bq
 @getBQKeyFor = getBQKeyFor = (v) -> (for k in KS when bq[k] == v then return k); ''
-@setBQMap = (bq1) -> $.extend bq, bq1; prefs.prefixMap join(for k, v of bq when v != BQ[k] then k + v); return
+@setBQMap = (bq1) -> $.extend bq, bq1; prefs.prefixMap join(for k, v of bq when v != (BQ[k] || ' ') then k + v); return
 
 bqChangeHandler = (cm, o) -> # o: changeObj
   l = o.from.line; i = o.from.ch
