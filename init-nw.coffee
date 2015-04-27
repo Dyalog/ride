@@ -190,6 +190,7 @@ if process?
       false
 
   D.open = (url, opts) -> opts.icon = 'D.png'; opts.toolbar ?= false; !!gui.Window.open url, opts
+  D.openExternal = gui.Shell.openExternal
 
   if D.mac && !D.floating # Mac menu
     groups = {} # group name -> array of MenuItem-s
@@ -229,7 +230,7 @@ if process?
         nww.menu.append ourMenu
         if theirMenu
           i = 0
-          while ourMenu.submenu.items.length
+          while ourMenu.submenu.items?.length
             y = ourMenu.submenu.items[0]; ourMenu.submenu.remove y; theirMenu.submenu.insert y, i++
           theirMenu.submenu.insert new gui.MenuItem(type: 'separator'), i
           nww.menu.remove ourMenu

@@ -35,6 +35,8 @@ $ ->
     if x? && y? then spec += ",left=#{x},top=#{y},screenX=#{x},screenY=#{y}"
     !!open url, '_blank', spec
 
+  D.openExternal ?= (url) -> open url, '_blank'; return
+
   urlParams = {}
   for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
     [_, k, v] = /^([^=]*)=?(.*)$/.exec kv; urlParams[unescape(k or '')] = unescape(v or '')

@@ -19,21 +19,23 @@ prefs = @
     # =CMD command code; some are special:
     #        LBR FLT WRP TOP render as checkboxes
     #        THM ("Theme") renders its own submenu
+    # =http://example.com/  open a URL
     # {}   conditional display, a boolean expression
     #        operators: && || ! ( )
     #        variables: browser mac
     # -    separator (when alone)
     # #    comment
+    Dyalog                          {mac}
+      _About Dyalog            =ABT
+      -
+      Preferences              =PRF
     _File                           {!browser}
       _Connect...              =CNC
       New _Session             =NEW
       -                             {!mac}
       _Quit                    =QIT {!mac}
-    _Edit
-      Preferences              =PRF
-      -
-      Weak Interrupt           =WI
-      Strong Interrupt         =SI
+    _Edit                           {!mac}
+      Preferences              =PRF {!mac}
     _View
       Show Language Bar        =LBR
       Float New Editors        =FLT
@@ -45,12 +47,24 @@ prefs = @
       _Reset Zoom              =ZMR {!browser}
       -
       Theme                    =THM
-    _Tools                          {!browser}
-      Run Demo Script...       =DMR
-      Next Line of Demo        =DMN
-      Previous Line of Demo    =DMP
+    _Actions
+      Presentation                  {!browser}
+        Run Demo Script...     =DMR {!browser}
+        Next Line of Demo      =DMN {!browser}
+        Previous Line of Demo  =DMP {!browser}
+      -                             {!browser}
+      Weak Interrupt           =WI
+      Strong Interrupt         =SI
     _Help
-      _About                   =ABT
+      _About                   =ABT {!mac}
+      -                             {!mac}
+      Dyalog Help              =http://help.dyalog.com/
+      Documentation Centre     =http://dyalog.com/documentation.htm
+      -
+      Dyalog Website           =http://dyalog.com/
+      MyDyalog                 =http://my.dyalog.com/
+      -
+      Dyalog Forum             =http://www.dyalog.com/forum
   ''']
   ['prefixKey',             '`']
   ['prefixMap',             ''] # pairs of characters; only differences from the default ` map are stored

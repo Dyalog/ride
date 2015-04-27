@@ -160,16 +160,20 @@ class @IDE
       for s in md.split '\n' when !/^\s*$/.test s = s.replace /#.*/, ''
         cond = ''; s = s.replace /\{(.*)\}/, (_, x) -> cond = x; ''
         cmd = ''; s = s.replace /\=([A-Z][A-Z0-9]{1,2})\b/, (_, x) -> cmd = x; ''
+        url = ''; s = s.replace /\=(http:\/\/\S+)/, (_, x) -> url = x; ''
         h = ind: s.replace(/\S.*/, '').length, '': s.replace /^\s*|\s*$/g, ''
         while h.ind <= stack[stack.length - 1].ind then stack.pop()
         if !cond || do new Function "var browser=!#{D.nwjs},mac=#{D.mac};return(#{cond})"
           (stack[stack.length - 1].items ?= []).push h
         stack.push h
-        if cmd then h.action = do (cmd = cmd) -> ->
-          if f = CodeMirror.commands[cmd] then f ide.wins[ide.focusedWinId].cm
-          else if ide[cmd] then ide[cmd]()
-          else $.alert "Unknown command: #{cmd}"
-          return
+        if cmd
+          h.action = do (cmd = cmd) -> ->
+            if f = CodeMirror.commands[cmd] then f ide.wins[ide.focusedWinId].cm
+            else if ide[cmd] then ide[cmd]()
+            else $.alert "Unknown command: #{cmd}"
+            return
+        else if url
+          h.action = do (url = url) -> -> D.openExternal url; return
         $.extend h, extraOpts[cmd]
       stack[0].items
 
