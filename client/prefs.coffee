@@ -26,7 +26,7 @@ prefs = @
     # -    separator (when alone)
     # #    comment
     Dyalog                          {mac}
-      _About Dyalog            =ABT
+      About Dyalog             =ABT
       -
       Preferences              =PRF
     _File                           {!browser}
@@ -56,7 +56,7 @@ prefs = @
       Weak Interrupt           =WI
       Strong Interrupt         =SI
     _Help
-      _About                   =ABT {!mac}
+      About                    =ABT {!mac}
       -                             {!mac}
       Dyalog Help              =http://help.dyalog.com/
       Documentation Centre     =http://dyalog.com/documentation.htm
