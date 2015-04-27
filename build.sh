@@ -8,9 +8,7 @@ cp -uv index.html empty.html node_modules/codemirror/lib/codemirror.css style/ap
 
 i=style/style.sass o=build/static/style.css
 if [ ! -e $o -o $(find `dirname $i` -type f -newer $o | wc -l) -gt 0 ]; then
-  echo 'preprocessing css'
-  # node-sass generates a bad source map now, but let's be ready for the time it's fixed
-  node-sass -i --source-map -o `dirname $o` $i # for compression, add: --output-style=compressed
+  echo 'preprocessing css'; node-sass -i --output-style=compressed -o `dirname $o` $i
 fi
 
 js_files='
