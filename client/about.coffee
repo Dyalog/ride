@@ -33,7 +33,7 @@ module.exports = ->
     </div>
   """)
     .dialog
-      modal: 1, title: 'About', width: 520, height: 410, buttons: buttons
+      title: 'About', width: 520, height: 410, buttons: buttons
       open: -> $(@).find('textarea').focus(); return
     .find('textarea').val(info).select()
   return
