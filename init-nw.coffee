@@ -197,6 +197,8 @@ if process?
     nwwMenu = new gui.Menu type: 'menubar'
     nwwMenu.createMacBuiltin 'Dyalog'
     nwwMenu.items[0].submenu.removeAt 0
+    # "Special Characters..." and "Start Dictation..." can't be removed
+    # see https://github.com/nwjs/nw.js/issues/2812
     nww.menu = nwwMenu
     getItemByLabel = (menu, label) -> (for x in menu.items when x.label == label then return x); return
 

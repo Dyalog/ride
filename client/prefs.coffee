@@ -30,8 +30,8 @@ prefs = @
       -
       Preferences              =PRF
     _File                           {!browser}
-      _Connect...              =CNC
       New _Session             =NEW
+      _Connect...              =CNC
       -                             {!mac}
       _Quit                    =QIT {!mac}
     _Edit                           {!mac}
@@ -42,9 +42,9 @@ prefs = @
       Line Wrapping in Session =WRP
       Editors on Top           =TOP {!browser}
       -                             {!browser}
-      Zoom _In                 =ZMI {!browser}
-      Zoom _Out                =ZMO {!browser}
-      _Reset Zoom              =ZMR {!browser}
+      Increase Font Size       =ZMI {!browser}
+      Decrease Font Size       =ZMO {!browser}
+      Reset Font Size          =ZMR {!browser}
       -
       Theme                    =THM
     _Actions
