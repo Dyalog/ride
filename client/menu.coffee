@@ -19,10 +19,10 @@ D.installMenu ?= (arg) ->
     if x[''] == '-' then return $ '<hr>'
     acc = null # access key
     name = x[''].replace /_(.)/g, (_, k) -> if acc || k == '_' then k else "<u>#{acc = k}</u>"
-    $a = $ "<a href='#'>#{name}</a>"
+    $a = $ "<a href=#>#{name}</a>"
     if acc then $a.attr 'accessKey', acc.toLowerCase()
     if x.key
-      $a.append $('<span class="m-shortcut">').text x.key
+      $a.append $('<span class=m-shortcut>').text x.key
       if x.action && !x.dontBindKey then $(document).on 'keydown', '*', x.key, -> x.action(); false
     if x.group
       $a.addClass "m-group-#{x.group}"
@@ -37,7 +37,7 @@ D.installMenu ?= (arg) ->
     else
       if x.action then $a.on 'mousedown mouseup click', (e) -> mFocus null; x.action(); false
     if !x.items then return $a
-    $('<div class="m-sub">').append $a.addClass('m-opener'), $('<div class="m-box">').append x.items.map(render)...
+    $('<div class=m-sub>').append $a.addClass('m-opener'), $('<div class=m-box>').append x.items.map(render)...
 
   $o = null # original focused element
   mFocus = (anchor) ->
@@ -67,7 +67,7 @@ D.installMenu ?= (arg) ->
       mFocus if $f.is 'a' then $f else $f.find('a').first()
     false
 
-  $m = $('<div class="menu">').prependTo('body').empty().addClass('menu').append arg.map render
+  $m = $('<div class=menu>').prependTo('body').empty().addClass('menu').append arg.map render
   $m.find('>.m-sub>.m-opener').addClass 'm-top'
   $m.on 'mouseover', 'a', -> $(@).closest('.menu').children().is('.m-open') && mFocus @; return
     .on 'mousedown', 'a', -> (if $(@).parentsUntil('.menu').last().is '.m-open' then mFocus null else mFocus @); false
