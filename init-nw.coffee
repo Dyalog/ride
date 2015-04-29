@@ -194,13 +194,6 @@ if process?
 
   if D.mac && !D.floating # Mac menu
     groups = {} # group name -> array of MenuItem-s
-    nwwMenu = new gui.Menu type: 'menubar'
-    nwwMenu.createMacBuiltin 'Dyalog'
-    nwwMenu.items[0].submenu.removeAt 0
-    # "Special Characters..." and "Start Dictation..." can't be removed
-    # see https://github.com/nwjs/nw.js/issues/2812
-    nww.menu = nwwMenu
-    getItemByLabel = (menu, label) -> (for x in menu.items when x.label == label then return x); return
 
     render = (x) ->
       if !x then return
@@ -225,15 +218,25 @@ if process?
       mi
 
     D.installMenu = (m) ->
-      # try to merge new menu with existing menu:
-      for x, ix in m
+      mb = new gui.Menu type: 'menubar'
+      mb.createMacBuiltin 'Dyalog'
+      mb.items[0].submenu.removeAt 0 # remove built-in "About Dyalog" that doesn't do anything useful
+      # for "Special Characters..." and "Start Dictation..." see https://github.com/nwjs/nw.js/issues/2812
+      for x, ix in m # try to merge new menu with existing menu:
+        if x[''].replace(/_/, '') == 'Help' then x[''] += ' ' # get rid of Help>Search
         ourMenu = render x
-        theirMenu = if ix then getItemByLabel nww.menu, ourMenu.label else nww.menu.items[0]
-        nww.menu.append ourMenu
+        if ix
+          theirMenu = null; for y in mb.items when y.label == ourMenu.label then theirMenu = y; break
+        else
+          theirMenu = mb.items[0]
+        mb.insert ourMenu, ix
         if theirMenu
           i = 0
           while ourMenu.submenu.items?.length
             y = ourMenu.submenu.items[0]; ourMenu.submenu.remove y; theirMenu.submenu.insert y, i++
           theirMenu.submenu.insert new gui.MenuItem(type: 'separator'), i
-          nww.menu.remove ourMenu
+          mb.remove ourMenu
+          mb.remove theirMenu
+          mb.insert theirMenu, ix
+      nww.menu = mb
       return

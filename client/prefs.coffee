@@ -34,7 +34,7 @@ prefs = @
       _Connect...              =CNC
       -                             {!mac}
       _Quit                    =QIT {!mac}
-    _Edit                           {!mac}
+    _Edit
       Preferences              =PRF {!mac}
     _View
       Show Language Bar        =LBR
@@ -55,6 +55,7 @@ prefs = @
       -                             {!browser}
       Weak Interrupt           =WI
       Strong Interrupt         =SI
+    _Window                         {mac}
     _Help
       About                    =ABT {!mac}
       -                             {!mac}

@@ -165,6 +165,7 @@ class @IDE
         while h.ind <= stack[stack.length - 1].ind then stack.pop()
         if !cond || do new Function "var browser=!#{D.nwjs},mac=#{D.mac};return(#{cond})"
           (stack[stack.length - 1].items ?= []).push h
+        if stack.length == 1 then h.items ?= [] # force top-level items to be menus
         stack.push h
         if cmd
           h.action = do (cmd = cmd) -> ->
