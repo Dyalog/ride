@@ -85,7 +85,7 @@ class @Session
         if @dirty[l] == 0
           @cm.replaceRange '', {line: l, ch: 0}, {line: l + 1, ch: 0}, 'D'
         else
-          @cm.replaceRange @dirty[l], {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}, 'D'
+          @cm.replaceRange @dirty[l], {line: l, ch: 0}, {line: l, ch: @cm.getLine(l)?.length || 0}, 'D'
         return
     else
       es = [@cm.getLine @cm.getCursor().line]
