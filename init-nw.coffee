@@ -222,22 +222,21 @@ if process?
       mb = new gui.Menu type: 'menubar'
       mb.createMacBuiltin 'Dyalog'
       mb.items[0].submenu.removeAt 0 # remove built-in "About Dyalog" that doesn't do anything useful
-      # for "Special Characters..." and "Start Dictation..." see https://github.com/nwjs/nw.js/issues/2812
-      for x, ix in m # try to merge new menu with existing menu:
-        if x[''].replace(/_/, '') == 'Help' then x[''] += ' ' # get rid of Help>Search
+      # For "Special Characters..." and "Start Dictation...": see https://github.com/nwjs/nw.js/issues/2812
+      # I discovered that if I remove "Copy" they go away, but then Cmd+C stops working.
+      for x, ix in m
+        if x[''].replace(/_/, '') in ['Edit', 'Help'] then x[''] += ' ' # a hack to get rid of Help>Search
         ourMenu = render x
         if ix
-          theirMenu = null; for y in mb.items when y.label == ourMenu.label then theirMenu = y; break
+          theirMenu = null; for y in mb.items when y.label == ourMenu.label.replace(/\ $/, '') then theirMenu = y; break
         else
           theirMenu = mb.items[0]
-        mb.insert ourMenu, ix
-        if theirMenu
-          i = 0
-          while ourMenu.submenu.items?.length
-            y = ourMenu.submenu.items[0]; ourMenu.submenu.remove y; theirMenu.submenu.insert y, i++
-          theirMenu.submenu.insert new gui.MenuItem(type: 'separator'), i
-          mb.remove ourMenu
+        if theirMenu # try to merge new menu with existing menu
+          ourMenu.submenu.append new gui.MenuItem type: 'separator'
+          while theirMenu.submenu.items.length
+            y = theirMenu.submenu.items[0]; theirMenu.submenu.remove y
+            ourMenu.submenu.append y
           mb.remove theirMenu
-          mb.insert theirMenu, ix
+        mb.insert ourMenu, ix
       nww.menu = mb
       return
