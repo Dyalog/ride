@@ -200,6 +200,7 @@ if process?
       if x[''] == '-' then return new gui.MenuItem type: 'separator'
       h = # arguments to MenuItem's constructor
         label: x[''].replace /_/g, ''
+        key: if (i = x[''].indexOf '_') >= 0 then x[i + 1] # this doesn't work on the Mac but let's keep it anyway in case we use native menus elsewhere
         type: if x.group || x.checkBoxPref then 'checkbox' else 'normal'
       if x.key && x.action && !x.dontBindKey then $(document).on 'keydown', '*', x.key, -> x.action(); false
       if x.group
