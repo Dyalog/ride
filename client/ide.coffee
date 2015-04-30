@@ -16,7 +16,7 @@ class @IDE
     $('body').html @$ide = $ """
       <div class=ide>
         <div class="lbar ui-layout-north" style=display:none>
-          <a class=lbar-prefs title=Preferences href=#></a>
+          <a class=lbar-prefs href=#></a>
           #{D.lbarHTML}
         </div>
         <div class=lbar-tip style=display:none><div class=lbar-tip-desc></div><pre class=lbar-tip-text></pre></div>
@@ -99,6 +99,16 @@ class @IDE
     $('.lbar-prefs').click -> prefsUI 'keyboard'; return
     $tip = $ '.lbar-tip'; $tipDesc = $ '.lbar-tip-desc'; $tipText = $ '.lbar-tip-text'; $tipTriangle = $ '.lbar-tip-triangle'
     ttid = null # tooltip timeout id
+    requestTooltip = (e, desc, text) -> # e: element
+      clearTimeout ttid; $t = $ e.target; p = $t.position()
+      ttid = delay 200, ->
+        ttid = null; $tipDesc.text desc; $tipText.text text
+        $tipTriangle.css(left: 3 + p.left + ($t.width() - $tipTriangle.width()) / 2, top: p.top + $t.height() + 2).show()
+        x0 = p.left - 21; x1 = x0 + $tip.width(); y0 = p.top + $t.height()
+        if x1 > $(document).width() then $tip.css(left: '', right: 0, top: y0).show()
+        else $tip.css(left: Math.max(0, x0), right: '', top: y0).show()
+        return
+      return
     $ '.lbar'
       .on 'mousedown', -> false
       .on 'mousedown', 'b', (e) =>
@@ -106,18 +116,25 @@ class @IDE
         for _, widget of @wins when widget.hasFocus() then widget.insert ch; return false
         $(':focus').insert ch
         false
-      .on 'mouseout', 'b', -> clearTimeout ttid; ttid = null; $tip.add($tipTriangle).hide(); return
+      .on 'mouseout', 'b, .lbar-prefs', -> clearTimeout ttid; ttid = null; $tip.add($tipTriangle).hide(); return
       .on 'mouseover', 'b', (e) ->
-        clearTimeout ttid; $t = $ e.target; p = $t.position(); x = $t.text()
-        ttid = delay 200, ->
-          ttid = null; key = keymap.getBQKeyFor x
-          keyText = if key && x.charCodeAt(0) > 127 then "Keyboard: #{prefs.prefixKey()}#{key}\n\n" else ''
-          h = D.lbarTips[x] or [x, '']; $tipDesc.text h[0]; $tipText.text keyText + h[1]
-          $tipTriangle.css(left: 3 + p.left + ($t.width() - $tipTriangle.width()) / 2, top: p.top + $t.height() + 2).show()
-          x0 = p.left - 21; x1 = x0 + $tip.width(); y0 = p.top + $t.height()
-          if x1 > $(document).width() then $tip.css(left: '', right: 0, top: y0).show()
-          else $tip.css(left: Math.max(0, x0), right: '', top: y0).show()
-          return
+        key = keymap.getBQKeyFor x = $(e.target).text()
+        keyText = if key && x.charCodeAt(0) > 127 then "Keyboard: #{prefs.prefixKey()}#{key}\n\n" else ''
+        h = D.lbarTips[x] or [x, '']; requestTooltip e, h[0], keyText + h[1]; return
+      .on 'mouseover', '.lbar-prefs', (e) ->
+        requestTooltip e, 'Keyboard Shortcuts', '''
+          QT: Quit (and lose changes):  Shift+Esc
+          TB: Tab between windows:      Ctrl+Tab
+          BT: Back Tab between windows: Ctrl+Shift+Tab
+          EP: Exit (and save changes):  Esc
+          FD: Forward or Redo:          Ctrl+Shift+Enter
+          BK: Backward or Undo:         Ctrl+Shift+Backspace
+          SC: Search:                   Ctrl+F
+          RP: Replace:                  Ctrl+G
+          ED: Edit:                     Shift+Enter
+          ТC: Trace:                    Ctrl+Enter
+          TL: Toggle localisation:      Ctrl+Up
+        '''
         return
 
     @layout = @$ide.layout
