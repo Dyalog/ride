@@ -4,6 +4,7 @@ $wt = null
 @name = 'Title'
 @init = ($e) ->
   $e.html """
+    <a href=# class=reset>Reset</a>
     Window title: <input class=text-field>
     <pre>
     <a href=#>{WSID}</a>            workspace name
@@ -22,6 +23,8 @@ $wt = null
     </pre>
   """
   $e.on 'click', 'pre a', (e) -> $wt.insert $(e.target).text(); return
-  $('pre a', $e).attr 'title', 'Insert'; $wt = $ 'input', $e; return
+  $('pre a', $e).attr 'title', 'Insert'; $wt = $ 'input', $e
+  $('.reset', $e).button().click -> $wt.val prefs.windowTitle.getDefault(); false
+  return
 @load = -> $wt.val prefs.windowTitle(); return
 @save = -> prefs.windowTitle $wt.val(); return
