@@ -79,6 +79,7 @@ VS = '`¨¯<≤=≥>≠∨∧×÷?⍵∊⍴~↑↓⍳○*←→⍺⌈⌊_∇∆�
 if KS.length != VS.length then console.error? 'bad configuration of backquote keymap'
 BQ = dict zip KS, VS # default ` map
 bq = $.extend {}, BQ; do -> s = prefs.prefixMap(); for i in [0...s.length] by 2 then bq[s[i]] = s[i + 1] # current ` map
+@getDefaultBQMap = -> $.extend {}, BQ
 @getBQMap = -> $.extend {}, bq
 @getBQKeyFor = getBQKeyFor = (v) -> (for k in KS when bq[k] == v then return k); ''
 @setBQMap = (bq1) -> $.extend bq, bq1; prefs.prefixMap join(for k, v of bq when v != (BQ[k] || ' ') then k + v); return
