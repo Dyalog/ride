@@ -87,7 +87,7 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
         else                    'US'
     )
   $('.reset', $e).button().click ->
-    $pk.val prefs.prefixKey.getDefault()
+    $pk.val(prefs.prefixKey.getDefault()).change() # fire a "change" event to update the legend
     loadBQMap keymap.getDefaultBQMap()
     false
   $lc = $('#keyboard-locale').val(prefs.keyboardLocale()).change ->
