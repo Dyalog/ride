@@ -63,7 +63,7 @@ prefs = @
       Documentation Centre     =http://dyalog.com/documentation.htm
       -
       Dyalog Website           =http://dyalog.com/
-      MyDyalog                 =http://my.dyalog.com/
+      MyDyalog                 =https://my.dyalog.com/
       -
       Dyalog Forum             =http://www.dyalog.com/forum
   ''']
