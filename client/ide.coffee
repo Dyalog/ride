@@ -138,8 +138,8 @@ class @IDE
           EP: Exit (and save changes):  Esc
           FD: Forward or Redo:          Ctrl+Shift+Enter
           BK: Backward or Undo:         Ctrl+Shift+Backspace
-          SC: Search:                   Ctrl+F
-          RP: Replace:                  Ctrl+G
+          SC: Search (in editors):      Ctrl+F
+          RP: Replace (in editors):     Ctrl+G
           ED: Edit:                     Shift+Enter
           ТC: Trace:                    Ctrl+Enter
           TL: Toggle localisation:      Ctrl+Up
