@@ -57,8 +57,7 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
     <label id=keyboard-pk-label>Prefix: <input class="text-field pk" size=1></label>
     <a href=# class=reset>Reset</a>
     <table id=keyboard-legend class=key
-           title='Prefix followed by shift+key produces the character in red.
-                  Prefix followed by an unshifted key produces the character in blue.'>
+           title='Prefix followed by shift+key produces the character in red.\nPrefix followed by an unshifted key produces the character in blue.'>
       <tr><td class=g2>⇧x</td><td class=g3><span class=pk-double>`</span>&nbsp;⇧x</td></tr>
       <tr><td class=g0>x</td><td class=g1><span class=pk-double>`</span>&nbsp;x</td></tr>
     </table>
