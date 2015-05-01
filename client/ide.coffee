@@ -58,13 +58,13 @@ class @IDE
           return
       .data('ui-sortable').floating = true # workaround for a jQueryUI bug, see http://bugs.jqueryui.com/ticket/6702#comment:20
 
-    D.socket
-      .on '*identify', (i) => D.remoteIdentification = i; @updateTitle(); return
-      .on '*spawnedError', ({message}) =>
+    handlers =
+      '*identify': (i) => D.remoteIdentification = i; @updateTitle(); return
+      '*spawnedError': ({message}) =>
         @die(); delay 100, -> $.alert message, 'Error'; return # give the window a chance to restore its original dimensions
         return
-      .on '*disconnected', => (if !@isDead then $.alert 'Interpreter disconnected', 'Error'; @die()); return
-      .on 'Disconnect', ({message}) =>
+      '*disconnected': => (if !@isDead then $.alert 'Interpreter disconnected', 'Error'; @die()); return
+      Disconnect: ({message}) =>
         if !@isDead
           @die()
           if message == 'Dyalog session has ended'
@@ -72,28 +72,37 @@ class @IDE
           else
             $.alert message, 'Interpreter disconnected'
         return
-      .on 'SysError', ({text}) => $.alert text, 'SysError'; @die(); return
-      .on 'InternalError', ({error, dmx}) => $.alert "error: #{error}, dmx: #{dmx}", 'Internal Error'; @die(); return
-      .on 'UpdateDisplayName', (a) => @wsid = a.displayName; @updateTitle(); return
-      .on 'EchoInput', ({input}) => @wins[0].add input; return
-      .on 'AppendSessionOutput', ({result}) => @wins[0].add result; return
-      .on 'NotAtInputPrompt', => @wins[0].noPrompt(); return
-      .on 'AtInputPrompt', ({why}) =>
+      SysError: ({text}) => $.alert text, 'SysError'; @die(); return
+      InternalError: ({error, dmx}) => $.alert "error: #{error}, dmx: #{dmx}", 'Internal Error'; @die(); return
+      UpdateDisplayName: (a) => @wsid = a.displayName; @updateTitle(); return
+      EchoInput: ({input}) => @wins[0].add input; return
+      AppendSessionOutput: ({result}) => @wins[0].add result; return
+      NotAtInputPrompt: => @wins[0].noPrompt(); return
+      AtInputPrompt: ({why}) =>
         if @pending.length then @emit 'Execute', trace: 0, text: @pending.shift() + '\n' else @wins[0].prompt why
         return
-      .on 'HadError', => @pending.splice 0, @pending.length; return
-      .on 'FocusWindow', ({win}) => $("#wintab#{win} a").click(); @wins[win]?.focus(); return
-      .on 'WindowTypeChanged', ({win, tracer}) => @wins[win].setDebugger tracer
-      .on 'autocomplete', (token, skip, options) => @wins[token].autocomplete skip, options
-      .on 'highlight', (win, line) => @wins[win].highlight line; return
-      .on 'UpdateWindow', (ee) => # "ee" for EditableEntity
+      HadError: => @pending.splice 0, @pending.length; return
+      FocusWindow: ({win}) => $("#wintab#{win} a").click(); @wins[win]?.focus(); return
+      WindowTypeChanged: ({win, tracer}) => @wins[win].setDebugger tracer
+      autocomplete: (token, skip, options) => @wins[token].autocomplete skip, options
+      highlight: (win, line) => @wins[win].highlight line; return
+      UpdateWindow: (ee) => # "ee" for EditableEntity
         $("#wintab#{ee.token} a").text ee.name; @wins[ee.token].open ee; @wins[0].scrollCursorIntoView(); return
-      .on 'ReplySaveChanges', ({win, err}) => @wins[win]?.saved err
-      .on 'CloseWindow', ({win}) =>
+      ReplySaveChanges: ({win, err}) => @wins[win]?.saved err
+      CloseWindow: ({win}) =>
         $("#wintab#{win},#win#{win}").remove(); @$tabs.tabs('destroy').tabs @tabOpts; @refreshTabs()
         @wins[win]?.closePopup?(); delete @wins[win]; @wins[0].scrollCursorIntoView(); @wins[0].focus(); return
-      .on 'OpenWindow', @openWindow.bind @
-      .on 'ShowHTML', @showHTML.bind @
+      OpenWindow: @openWindow.bind @
+      ShowHTML: @showHTML.bind @
+
+    # We need to be able to temporarily block the stream of messages coming from socket.io
+    # Creating a floating window can only be done asynchronously and it's possible that a message
+    # for it comes in before the window is ready.
+    handle = (data) -> (f = handlers[data[0]]) && f.apply ide, data[1..]; return
+    mq = []; blocked = 0 # message queue
+    D.socket.onevent = ({data}) -> (if blocked then mq.push data else handle data); return
+    @block = -> blocked = 1; return
+    @unblock = -> (while mq.length then handle mq.shift()); blocked = 0; return
 
     # language bar
     $('.lbar-prefs').click -> prefsUI 'keyboard'; return
@@ -247,7 +256,8 @@ class @IDE
     editorOpts = id: w, name: ee.name, debugger: ee.debugger, emit: @emit.bind(@), weakInterrupt: @WI.bind(@)
     if prefs.floatNewEditors() && !D.floating && !@isDead
       if D.open "index.html?win=#{w}", $.extend {width: 500, height: 400, title: ee.name}, prefs.floatingWindowInfos()[w]
-        # D.wins[w] will be replaced a bit later by code running in the popup
+        # the popup will create D.wins[w] and unblock the message queue
+        @block()
         (D.pendingEditors ?= {})[w] = {editorOpts, ee, ide: @}
         done = 1
       else

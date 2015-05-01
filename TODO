@@ -4,10 +4,6 @@ Bugs / Issues External to RIDE
   Yes/No dialogue, needs to be supported in the RIDE protocol; email from Morten 2015-02-14
 
 P1 (Definitely high priority):
-  Race condition when opening floating windows:
-      Creating a floating window happens asynchronously and takes a certain
-      small amount of time.  If the interpreter sends a command before the
-      window is ready, RIDE is in trouble.
 
 P2 (Middle priority):
   Do not scroll session on AtInputPrompt.
@@ -224,3 +220,4 @@ Done:
   Syntax highlighting for recognised idioms
   Add a Reset button to each tab under Preferences (we want this before the release)
   Show keyboard shortcuts in a tooltip when the keyboard button on the lbar is hovered
+  Race condition when opening floating windows
