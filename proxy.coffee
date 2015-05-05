@@ -222,7 +222,7 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
           exe = process.env.DYALOG_IDE_INTERPRETER_EXE || 'dyalog'
           log "spawning interpreter #{JSON.stringify exe}"
           child = spawn exe, ['+s', '-q'], stdio: ['pipe', 'ignore', 'ignore'], env: extend process.env,
-            RIDE_CONNECT: hp, RIDE_INIT: "CONNECT:#{hp}", DYALOG_NO_SM_SH: '1'
+            RIDE_CONNECT: hp, RIDE_INIT: "CONNECT:#{hp}", RIDE_SPAWNED: '1'
           toBrowser '*spawned', pid: child.pid
           child.on 'error', (err) ->
             server?.close(); server = client = null
