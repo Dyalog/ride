@@ -2,16 +2,16 @@
 set -e -o pipefail
 export PATH="`dirname $0`/node_modules/.bin:$PATH"
 if [ ! -e node_modules ]; then npm i; fi
-mkdir -p build/{static,tmp}
+mkdir -p build/{js,nw,tmp}
 
-cp -uv index.html empty.html node_modules/codemirror/lib/codemirror.css style/apl385.* style/*.png favicon.ico package.json build/static/
+cp -uv index.html empty.html node_modules/codemirror/lib/codemirror.css style/apl385.woff style/*.png favicon.ico package.json build/nw/
 
-i=style/style.sass o=build/static/style.css
-if [ ! -e $o -o $(find `dirname $i` -type f -newer $o | wc -l) -gt 0 ]; then
+i=style/style.sass o=build/nw/style.css
+if [ ! -e $o -o $(find `dirname $i` -type f -newer $o 2>/dev/null | wc -l) -gt 0 ]; then
   echo 'preprocessing css'; node-sass -i --output-style=compressed -o `dirname $o` $i
 fi
 
-js_files='
+lib_files='
   node_modules/socket.io/node_modules/socket.io-client/socket.io.js
   node_modules/jquery/dist/cdn/jquery-2.1.3.min.js
   node_modules/jquery-ui/core.js
@@ -30,7 +30,7 @@ js_files='
 '
 us='' # names of compiled files
 changed=0
-for f in $js_files; do
+for f in $lib_files; do
   u=build/tmp/${f//\//_} # replace / with _
   us="$us $u"
   if [ $f -nt $u ]; then
@@ -42,15 +42,37 @@ for f in $js_files; do
 done
 if [ $changed -eq 1 ]; then echo 'concatenating libs'; cat $us >build/tmp/libs.js; fi
 
-echo 'combining javascript files into one'
-(
-  cat <<.
-    var D={versionInfo:{
-      version:'0.1.$(git rev-list --count HEAD)',
-      date:'$(git show -s HEAD --pretty=format:%ci)',
-      rev:'$(git rev-parse HEAD)'
-    }};
+bfy='browserify -t coffeeify --extension=.coffee'
+if [ ! -e build/js/filelist ]; then
+  echo 'resolving js dependencies'
+  $bfy --list client/init.coffee >build/js/filelist
+fi
+
+for f in `cat build/js/filelist`; do # compile coffee files before running browserify
+  u=build/js/${f##$PWD/} # ${A##B} removes prefix B from $A.  In this case it turns an absolute path into a relative path.
+  mkdir -p `dirname $u`
+  if [ $f != ${f%%.coffee} ]; then
+    u=${u%%.coffee}.js; if [ $f -nt $u ]; then echo "compiling $f"; coffee -bcp $f >$u; fi
+  else
+    if [ $f -nt $u ]; then echo "copying $f"; cp $f $u; fi
+  fi
+done
+
+for f in proxy.coffee init-nw.coffee; do # nw-only coffee files
+  u=build/nw/${f%%.coffee}; if [ $f -nt $u ]; then echo "compiling $f"; coffee -bcp $f >$u; fi
+done
+
+if [ ! -e build/nw/D.js -o $(find build/{js,tmp} -newer build/nw/D.js 2>/dev/null | wc -l) -gt 0 ]; then
+  echo 'combining javascript files into one'
+  (
+    cat <<.
+      var D={versionInfo:{
+        version:'0.1.$(git rev-list --count HEAD)',
+        date:'$(git show -s HEAD --pretty=format:%ci)',
+        rev:'$(git rev-parse HEAD)'
+      }};
 .
-  cat build/tmp/libs.js
-  browserify -t coffeeify --extension=.coffee client/init.coffee
-)>build/static/D.js
+    cat build/tmp/libs.js
+    $bfy build/js/client/init.js
+  )>build/nw/D.js
+fi
