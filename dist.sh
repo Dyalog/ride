@@ -4,7 +4,7 @@ set -e
 node_version=0.11.4
 ulimit -n $(ulimit -Hn) # Bump open file limit to its hard limit.  OSX build requires a lot.
 
-b=build/tmp/nwb
+b=build/nw
 echo 'copying files to a temp dir' ; rm -rf $b; cp -r build/static $b
 echo 'compiling proxy.coffee'      ; coffee -o $b -c proxy.coffee
 echo 'removing redundant files'    ; rm $b/apl385.{eot,svg,ttf} $b/favicon.ico
