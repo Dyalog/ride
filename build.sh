@@ -35,31 +35,30 @@ for f in $lib_files; do
   us="$us $u"
   if [ $f -nt $u ]; then
     changed=1
-    if [ $f != ${f%%.coffee} ]; then echo "compiling $f"; coffee -bcp $f >$u
+    if [ $f != ${f%%.coffee} ]; then echo "compiling $f"; coffee -bcp --no-header $f >$u
     elif [ $f != ${f%%.min.js} ]; then echo "copying $f"; cp $f $u
     else echo "cleaning up $f"; <$f sed '/^\(var \w\+ = \)\?require(/d' >$u; fi
   fi
 done
 if [ $changed -eq 1 ]; then echo 'concatenating libs'; cat $us >build/tmp/libs.js; fi
 
-bfy='browserify -t coffeeify --extension=.coffee'
 if [ ! -e build/js/filelist ]; then
   echo 'resolving js dependencies'
-  $bfy --list client/init.coffee >build/js/filelist
+  browserify -t coffeeify --extension=.coffee --list client/init.coffee >build/js/filelist
 fi
 
 for f in `cat build/js/filelist`; do # compile coffee files before running browserify
   u=build/js/${f##$PWD/} # ${A##B} removes prefix B from $A.  In this case it turns an absolute path into a relative path.
   mkdir -p `dirname $u`
   if [ $f != ${f%%.coffee} ]; then
-    u=${u%%.coffee}.js; if [ $f -nt $u ]; then echo "compiling $f"; coffee -bcp $f >$u; fi
+    u=${u%%.coffee}.js; if [ $f -nt $u ]; then echo "compiling $f"; coffee -bcp --no-header $f >$u; fi
   else
     if [ $f -nt $u ]; then echo "copying $f"; cp $f $u; fi
   fi
 done
 
 for f in proxy.coffee init-nw.coffee; do # nw-only coffee files
-  u=build/nw/${f%%.coffee}; if [ $f -nt $u ]; then echo "compiling $f"; coffee -bcp $f >$u; fi
+  u=build/nw/${f%%.coffee}; if [ $f -nt $u ]; then echo "compiling $f"; coffee -bcp --no-header $f >$u; fi
 done
 
 if [ ! -e build/nw/D.js -o $(find build/{js,tmp} -newer build/nw/D.js 2>/dev/null | wc -l) -gt 0 ]; then
@@ -73,6 +72,6 @@ if [ ! -e build/nw/D.js -o $(find build/{js,tmp} -newer build/nw/D.js 2>/dev/nul
       }};
 .
     cat build/tmp/libs.js
-    $bfy build/js/client/init.js
+    browserify build/js/client/init.js
   )>build/nw/D.js
 fi
