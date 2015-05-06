@@ -64,7 +64,14 @@ class @Session
     @cm.clearHistory(); return
 
   noPrompt: -> @promptType = 0; @cm.setOption 'readOnly', true; @cm.setOption 'cursorHeight', 0; return
-  updateSize: -> @cm.setSize @$e.width(), @$e.height(); return
+
+  updateSize: ->
+    i = @cm.getScrollInfo()
+    b = 5 > Math.abs i.top + i.clientHeight - i.height # are we near the bottom edge?
+    @cm.setSize @$e.width(), @$e.height()
+    b && @scrollCursorIntoView()
+    return
+
   hasFocus: -> window.focused && @cm.hasFocus()
   focus: -> (if !window.focused then window.focus()); @cm.focus(); return
   insert: (ch) -> @cm.getOption('readOnly') || @cm.replaceSelection ch; return
