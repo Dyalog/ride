@@ -1,4 +1,3 @@
-CodeMirror = require 'codemirror'
 prefs = require './prefs'
 {rLetter} = require './codemirror-apl-mode'
 {delay} = require './util'

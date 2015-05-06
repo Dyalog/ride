@@ -1,4 +1,3 @@
-CodeMirror = require 'codemirror'
 {qw} = require './util'
 
 rLetter = @rLetter = 'A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ'; rName0 = ///[#{rLetter}]///; rName1 = ///[#{rLetter}\d]*///

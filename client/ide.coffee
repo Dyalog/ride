@@ -8,7 +8,6 @@ keymap = require './keymap'
 require '../lbar/lbar'
 require '../jquery.layout'
 {esc, delay} = require './util'
-CodeMirror = require 'codemirror'
 
 class @IDE
   constructor: ->

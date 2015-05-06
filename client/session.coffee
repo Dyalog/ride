@@ -1,4 +1,3 @@
-CodeMirror = require 'codemirror'
 autocompletion = require './autocompletion'
 prefs = require './prefs'
 {onCodeMirrorDoubleClick} = require './util'

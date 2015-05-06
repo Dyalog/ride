@@ -25,6 +25,14 @@ lib_files='
   node_modules/jquery-ui/button.js
   node_modules/jquery-ui/dialog.js
   node_modules/jquery-ui/tabs.js
+  node_modules/codemirror/lib/codemirror.js
+  node_modules/codemirror/addon/dialog/dialog.js
+  node_modules/codemirror/addon/search/searchcursor.js
+  node_modules/codemirror/addon/scroll/annotatescrollbar.js
+  node_modules/codemirror/addon/search/matchesonscrollbar.js
+  node_modules/codemirror/addon/hint/show-hint.js
+  node_modules/codemirror/addon/edit/matchbrackets.js
+  node_modules/codemirror/addon/edit/closebrackets.js
   jquery.hotkeys.js
   init-nw.coffee
 '

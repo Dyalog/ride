@@ -1,4 +1,3 @@
-CodeMirror = require 'codemirror'
 require './codemirror-apl-mode'
 autocompletion = require './autocompletion'
 prefs = require './prefs'

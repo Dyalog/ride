@@ -1,4 +1,3 @@
-CodeMirror = require 'codemirror'
 helpurls = require './helpurls'
 prefs = require './prefs'
 {inherit, cat, dict, chr, ord, zip, join, delay} = require './util'
