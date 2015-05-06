@@ -59,6 +59,7 @@ class @IDE
 
     handlers =
       '*identify': (i) => D.remoteIdentification = i; @updateTitle(); return
+      '*connected': ({host, port}) => @setHostAndPort host, port; return
       '*spawnedError': ({message}) =>
         @die(); delay 100, -> $.alert message, 'Error'; return # give the window a chance to restore its original dimensions
         return
