@@ -82,4 +82,10 @@ $ ->
   # CSS class for focused window
   $(window).on 'focus blur', (e) -> $('body').toggleClass 'window-focused', window.focused = e.type == 'focus'
   window.focused = true
+
+  # Some library is doing "localStorage.debug=undefined" instead of "delete localStorage.debug".
+  # It doesn't work that way.  It may work for other objects, but the values in localStorage
+  # are always strings and that leaves us with 'undefined' as a string.  So, let's clean up...
+  delete localStorage.debug
+
   return
