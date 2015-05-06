@@ -61,7 +61,7 @@ class @Session
     @promptType = why; @cm.setOption 'readOnly', false; @cm.setOption 'cursorHeight', 1; l = @cm.lineCount() - 1
     if (why == 1 && !@dirty[l]?) || why !in [1, 3, 4]
       @cm.replaceRange '      ', {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}, 'D'
-    @cm.setCursor l, @cm.getLine(l).length; @cm.clearHistory(); return
+    @cm.clearHistory(); return
 
   noPrompt: -> @promptType = 0; @cm.setOption 'readOnly', true; @cm.setOption 'cursorHeight', 0; return
   updateSize: -> @cm.setSize @$e.width(), @$e.height(); return
@@ -71,7 +71,7 @@ class @Session
   scrollCursorIntoView: -> delay 1, (=> @cm.scrollIntoView @cm.getCursor(); return); return
   die: -> @cm.setOption 'readOnly', true; return
   getDocument: -> @$e[0].ownerDocument
-  refresh: -> @cm.refresh(); @scrollCursorIntoView(); return
+  refresh: -> @cm.refresh(); return
   loadLine: (s) -> l = @cm.lineCount() - 1; @cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}; return
 
   exec: (trace) ->

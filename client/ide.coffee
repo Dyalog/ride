@@ -86,11 +86,11 @@ class @IDE
       autocomplete: (token, skip, options) => @wins[token].autocomplete skip, options
       highlight: (win, line) => @wins[win].highlight line; return
       UpdateWindow: (ee) => # "ee" for EditableEntity
-        $("#wintab#{ee.token} a").text ee.name; @wins[ee.token].open ee; @wins[0].scrollCursorIntoView(); return
+        $("#wintab#{ee.token} a").text ee.name; @wins[ee.token].open ee; return
       ReplySaveChanges: ({win, err}) => @wins[win]?.saved err
       CloseWindow: ({win}) =>
         $("#wintab#{win},#win#{win}").remove(); @$tabs.tabs('destroy').tabs @tabOpts; @refreshTabs()
-        @wins[win]?.closePopup?(); delete @wins[win]; @wins[0].scrollCursorIntoView(); @wins[0].focus(); return
+        @wins[win]?.closePopup?(); delete @wins[win]; @wins[0].focus(); return
       OpenWindow: @openWindow.bind @
       ShowHTML: @showHTML.bind @
 
@@ -150,7 +150,7 @@ class @IDE
       north: spacing_closed: 0, spacing_open: 0, resizable: 0, togglerLength_open: 0
       east:  spacing_closed: 0, size: '0%',      resizable: 1, togglerLength_open: 0
       south: spacing_closed: 0, size: '0%',      resizable: 1, togglerLength_open: 0
-      center: onresize: => (for _, widget of @wins then widget.updateSize()); @wins[0].scrollCursorIntoView(); return
+      center: onresize: => (for _, widget of @wins then widget.updateSize()); return
       fxName: ''
     for d in ['east', 'south'] then @layout.close d; @layout.sizePane d, '50%'
     if !prefs.showLanguageBar() then @layout.hide 'north'
@@ -269,7 +269,6 @@ class @IDE
       (@wins[w] = new Editor @, $tabContent, editorOpts).open ee
       $(".ui-layout-#{dir}").tabs('refresh').tabs(active: -1)
         .data('ui-tabs').panels.off 'keydown' # prevent jQueryUI tabs from hijacking our keystrokes, <C-Up> in particular
-      @wins[0].scrollCursorIntoView()
     return
 
   CNC: -> D.rideConnect();    return
