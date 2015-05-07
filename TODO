@@ -1,6 +1,5 @@
 Bugs / Issues External to RIDE
   Windows not working at all for spawned interpreters
-  History (session log) is not recorded in spawned interpreters; Geoff #11841
   Yes/No dialogue, needs to be supported in the RIDE protocol; email from Morten 2015-02-14
 
 P1 (Definitely high priority):
@@ -223,3 +222,4 @@ Done:
     NN: there's no need for this now that the language bar is accessible from Preferences
   add replace (:%s/A/B/)
   Do not scroll session on AtInputPrompt.
+  History (session log) is not recorded in spawned interpreters; Geoff #11841
