@@ -4,17 +4,13 @@ set -e
 node_version=0.11.4
 ulimit -n $(ulimit -Hn) # Bump open file limit to its hard limit.  OSX build requires a lot.
 
-b=build/nw
-#echo 'copying files to a temp dir' ; rm -rf $b; cp -r build/static $b
-#echo 'compiling proxy.coffee'      ; coffee -o $b -c proxy.coffee
-#echo 'removing redundant files'    ; rm $b/apl385.{eot,svg,ttf} $b/favicon.ico
-echo 'adding nomnom library'       ; mkdir -p $b/node_modules; cp -r node_modules/nomnom $b/node_modules
+echo 'adding nomnom library'; mkdir -p build/nw/node_modules; cp -r node_modules/nomnom build/nw/node_modules
 
 desktop_app() {
   echo "building desktop app for $@"
   node <<.
     var NWB = require('node-webkit-builder');
-    var nwb = new NWB({files: '$b/**', version: '$node_version', platforms: '$@'.split(' ')});
+    var nwb = new NWB({files: 'build/nw/**', version: '$node_version', platforms: '$@'.split(' ')});
     nwb.build().catch(function (e) {console.error(e); process.exit(1);});
 .
 }
