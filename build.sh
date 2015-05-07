@@ -65,8 +65,8 @@ for f in `cat build/js/filelist`; do # compile coffee files before running brows
   fi
 done
 
-for f in proxy.coffee init-nw.coffee; do # nw-only coffee files
-  u=build/nw/${f%%.coffee}; if [ $f -nt $u ]; then echo "compiling $f"; coffee -bcp --no-header $f >$u; fi
+for f in proxy.coffee; do # nw-only coffee files
+  u=build/nw/${f%%.coffee}.js; if [ $f -nt $u ]; then echo "compiling $f"; coffee -bcp --no-header $f >$u; fi
 done
 
 if [ ! -e build/nw/D.js -o $(find build/{js,tmp} -newer build/nw/D.js 2>/dev/null | wc -l) -gt 0 ]; then
