@@ -26,7 +26,7 @@ if opts.watch then do ->
       tid = setTimeout build, 100
     else
       log 'building'; tid = 0; isRunning = 1
-      spawn("#{_d}/build.sh", cwd: _d, stdio: 'inherit').on 'close', -> log 'build done'; isRunning = 0; return
+      spawn("#{_d}/build-server.sh", cwd: _d, stdio: 'inherit').on 'close', -> log 'build done'; isRunning = 0; return
     return
   for x in ['.', 'client', 'style', 'style/themes'] then fs.watch "#{_d}/#{x}", -> tid ||= setTimeout build, 100; return
   return
