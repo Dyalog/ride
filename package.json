@@ -15,6 +15,7 @@
 		"node-sass":           "2.0.0-beta",
 		"node-webkit-builder": "1.0.11",
 		"nomnom":              "1.8.1",
+		"pure-cjs":            "1.18.2",
 		"socket.io":           "1.3.5"
 	},
 	"devDependencies": {

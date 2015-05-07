@@ -80,6 +80,11 @@ if [ ! -e build/nw/D.js -o $(find build/{js,tmp} -newer build/nw/D.js 2>/dev/nul
       }};
 .
     cat build/tmp/libs.js
-    browserify build/js/client/init.js
+    node <<.
+      require('pure-cjs').transform({input: 'build/js/client/init.js', dryRun: true}).then(
+        function (h) { process.stdout.write(h.code); },
+        function (e) { process.stderr.write(e); process.exit(1); }
+      );
+.
   )>build/nw/D.js
 fi
