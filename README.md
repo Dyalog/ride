@@ -1,7 +1,7 @@
 a web interface to the Dyalog interpreter
 
-![Screenshot](screenshot0.png?raw=true "Screenshot")
-![Screenshot](screenshot1.png?raw=true "Screenshot")
+![Screenshot](docs/screenshot0.png?raw=true "Screenshot")
+![Screenshot](docs/screenshot1.png?raw=true "Screenshot")
 
 From a browser
 ==============
