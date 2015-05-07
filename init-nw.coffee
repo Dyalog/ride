@@ -175,15 +175,23 @@ if process?
         Proxy log:
         #{proxy.log.get().join ''}
       """
+      excuses = '''
+        Oops... it broke!
+        Congratulations, you found a ... THE bug.
+        Users-Developers 1:0
+        According to our developers this is impossible.
+        This bug was caused by cosmic radiation randomly flipping bits.
+        You don't find bugs.  Bugs find you.
+      '''.split '\n'
       document.write """
         <html>
           <head><title>Error</title></head>
           <body>
-            <h3>Oops... it broke!</h3>
-            <h3 style="font-family:apl,monospace">
+            <h3>#{excuses[Math.floor excuses.length * Math.random()]}</h3>
+            <h3 style=font-family:apl,monospace>
               <a href="mailto:support@dyalog.com?subject=#{escape 'RIDE crash'}&body=#{escape '\n\n' + info}">support@dyalog.com</a>
             </h3>
-            <textarea autofocus style="width:100%;height:90%" nowrap>#{htmlEsc info}</textarea>
+            <textarea autofocus style=width:100%;height:90% nowrap>#{htmlEsc info}</textarea>
           </body>
         <html>
       """
