@@ -30,7 +30,10 @@ fs.writeFileSync 'lbar.js', """
           c = [] # css classes
           if !i then c.push 'first'
           if i == g.length - 1 then c.push 'last'
-          if c.length then "<b class='#{c.join ' '}'>#{esc x}</b>" else "<b>#{esc x}</b>"
+          switch c.length
+            when 0 then "<b>#{esc x}</b>"
+            when 1 then "<b class=#{c[0]}>#{esc x}</b>"
+            else        "<b class='#{c.join ' '}'>#{esc x}</b>"
   };
   D.lbarTips = {
     #{lbarTips.join ',\n  '}
