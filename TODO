@@ -6,8 +6,6 @@ Bugs / Issues External to RIDE
 P1 (Definitely high priority):
 
 P2 (Middle priority):
-  Do not scroll session on AtInputPrompt.
-  add replace (:%s/A/B/)
   ` keybindings and/or lbar should work in search box
     NN: implemented for lbar
 
@@ -21,6 +19,8 @@ P3 (Can wait):
 P4 (I will think about it):
   Option to automatically pop up completion box after a timeout OR use a keystroke
   Ctrl+Cmd+Space on the Mac starts a "Special Characters" application -- find a way to disable it
+    NN: "Special Characters" and "Start Dictation" are added based on the presence of "Copy" in the menu.
+        But if we don't have "Copy" in the menu, cmd+c doesn't work.
 
 Not yet prioritized:
   Configurable keyboard shortcuts
@@ -42,7 +42,6 @@ Not yet prioritized:
     NN: protocol support needed
   JS: Option for turning off AutoFormatting, please.
     NN: that's an interpreter-side option: export AUTOFORMAT=0
-  JS: A new floating edit window flashes first in the centre of screen before being removed and redrawn at my preferred position.
   JS: Floating editors: )ed F G should place F above G and focus F. Then Esc Esc should close F and then G.
     NN: this is probably one for JD
   JS: <Esc> in the session should switch focus to the top edit or trace window.
@@ -51,8 +50,6 @@ Not yet prioritized:
   Regular expressions in search
   Sortable language bar
   Lbar may change its size when theme is changed
-  Drag and drop to swap pairs of characters in Preferences>Keyboard
-    NN: there's no need for this now that the language bar is accessible from Preferences
   Multiple sessions (i.e. connections to interpreters) as tabs with a green/red dot to indicate error, suggested by Mike Mingaard
   A dropdown with I-beams (Mike Mingaard)
   Detachable language bar (Mike Mingaard)
@@ -221,3 +218,8 @@ Done:
   Add a Reset button to each tab under Preferences (we want this before the release)
   Show keyboard shortcuts in a tooltip when the keyboard button on the lbar is hovered
   Race condition when opening floating windows
+  JS: A new floating edit window flashes first in the centre of screen before being removed and redrawn at my preferred position.
+  Drag and drop to swap pairs of characters in Preferences>Keyboard
+    NN: there's no need for this now that the language bar is accessible from Preferences
+  add replace (:%s/A/B/)
+  Do not scroll session on AtInputPrompt.
