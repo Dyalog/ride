@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e -o pipefail
-export PATH="`dirname $0`/node_modules/.bin:$PATH"
+export PATH="`dirname "$0"`/node_modules/.bin:$PATH"
+cd `dirname "$0"`
 if [ ! -e node_modules ]; then npm i; fi
 mkdir -p build/{js,nw,tmp}
 
