@@ -53,12 +53,12 @@ class @Session
     return
 
   add: (s) ->
-    l = @cm.lineCount() - 1; s0 = @cm.getLine l
+    l = @cm.lastLine(); s0 = @cm.getLine l
     @cm.replaceRange (if @cm.getOption 'readOnly' then s0 + s else s), {line: l, ch: 0}, {line: l, ch: s0.length}, 'D'
-    @cm.setCursor @cm.lineCount() - 1, 0; return
+    @cm.setCursor @cm.lastLine(), 0; return
 
   prompt: (why) ->
-    @promptType = why; @cm.setOption 'readOnly', false; @cm.setOption 'cursorHeight', 1; l = @cm.lineCount() - 1
+    @promptType = why; @cm.setOption 'readOnly', false; @cm.setOption 'cursorHeight', 1; l = @cm.lastLine()
     if (why == 1 && !@dirty[l]?) || why !in [1, 3, 4]
       @cm.replaceRange '      ', {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}, 'D'
     @cm.clearHistory(); return
@@ -79,7 +79,7 @@ class @Session
   die: -> @cm.setOption 'readOnly', true; return
   getDocument: -> @$e[0].ownerDocument
   refresh: -> @cm.refresh(); return
-  loadLine: (s) -> l = @cm.lineCount() - 1; @cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}; return
+  loadLine: (s) -> l = @cm.lastLine(); @cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}; return
 
   exec: (trace) ->
     ls = []; for l of @dirty then ls.push +l
@@ -104,7 +104,7 @@ class @Session
   QT: ->
     c = @cm.getCursor(); l = c.line
     if @dirty[l] == 0
-      if l == @cm.lineCount() - 1
+      if l == @cm.lastLine()
         @cm.replaceRange '', {line: l - 1, ch: @cm.getLine(l - 1).length}, {line: l, ch: @cm.getLine(l).length}, 'D'
       else
         @cm.replaceRange '', {line: l, ch: 0}, {line: l + 1, ch: 0}, 'D'

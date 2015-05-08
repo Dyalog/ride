@@ -316,6 +316,6 @@ class @Editor
     return
   downOrXline: ->
     l = @cm.getCursor().line
-    if l != @cm.lineCount() - 1 || /^\s*$/.test @cm.getLine l then @cm.execCommand 'goLineDown'
+    if l != @cm.lastLine() || /^\s*$/.test @cm.getLine l then @cm.execCommand 'goLineDown'
     else @cm.execCommand 'goDocEnd'; @cm.execCommand 'newlineAndIndent'; @xline = l + 1
     return
