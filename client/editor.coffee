@@ -7,7 +7,7 @@ prefs = require './prefs'
 EDITOR_HTML = do ->
   b = (cssClasses, title) -> "<a href=# class='#{cssClasses} tb-button' title='#{title}'></a>"
   """
-    <div class="toolbar debugger-toolbar">
+    <div class="toolbar tracer-toolbar">
       #{[
         # The first button is placed on the right-hand side through CSS.  In a floating window it is hidden.
         # CSS classes "first" and "last" indicate button grouping.
@@ -50,14 +50,14 @@ EDITOR_HTML = do ->
 class @Editor
   constructor: (@ide, e, opts) ->
     @$e = $(e).html EDITOR_HTML
-    {@id, @name, @emit} = @opts = opts; @isDebugger = opts.debugger
+    {@id, @name, @emit} = @opts = opts; @isTracer = opts.tracer
     @xline = null # the line number of the empty line inserted when cursor is at eof and you press <down>
     @breakpoints = [] # array of line numbers
     @originalText = @originalBreakpoints = '' # remember them to avoid pointless saving on EP; originalBreakpoints is comma-separated line numbers
     @hll = null # highlighted line -- currently executed line in tracer
     @lastQuery = @lastIC = @overlay = @annotation = null # search-related state
     @cm = new CodeMirror @$e.find('.cm')[0],
-      lineNumbers: !!if @isDebugger then prefs.lineNumbersInDebugger() else prefs.lineNumbersInEditor()
+      lineNumbers: !!if @isTracer then prefs.lineNumbersInTracer() else prefs.lineNumbersInEditor()
       firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
       indentUnit: 4, scrollButtonHeight: 12, matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
       gutters: ['breakpoints', 'CodeMirror-linenumbers']
@@ -84,7 +84,7 @@ class @Editor
       .on 'keydown', '.tb-search,.tb-replace', 'down', => @NX(); false
       .on 'keydown', '.tb-search,.tb-replace', 'up',   => @PV(); false
       .on 'keydown', '.tb-search,.tb-replace', 'esc', => @clearSearch(); @cm.focus(); false
-    @setDebugger !!@isDebugger
+    @setTracer !!@isTracer
     return
 
   createBreakpointElement: ->
@@ -162,15 +162,15 @@ class @Editor
     $('.tb-search:visible', @$tb).toggleClass 'no-matches', -1 == v.indexOf q
     return
 
-  highlight: (l) -> # current line in debugger
+  highlight: (l) -> # current line in tracer
     if @hll? then @cm.removeLineClass @hll, 'background', 'highlighted'
     if (@hll = l)? then @cm.addLineClass l, 'background', 'highlighted'; @cm.setCursor l, 0; @scrollCursorIntoProminentView()
     return
 
-  setDebugger: (x) ->
-    @isDebugger = x; $('.debugger-toolbar', @$e).toggle x; $('.editor-toolbar', @$e).toggle !x
-    @cm.setOption 'readOnly', x; $('.CodeMirror', @$e).toggleClass 'debugger', x; @highlight null
-    ln = !!if @isDebugger then prefs.lineNumbersInDebugger() else prefs.lineNumbersInEditor()
+  setTracer: (x) ->
+    @isTracer = x; $('.tracer-toolbar', @$e).toggle x; $('.editor-toolbar', @$e).toggle !x
+    @cm.setOption 'readOnly', x; $('.CodeMirror', @$e).toggleClass 'tracer', x; @highlight null
+    ln = !!if @isTracer then prefs.lineNumbersInTracer() else prefs.lineNumbersInEditor()
     @cm.setOption 'lineNumbers', ln; @$tb.find('.tb-LN:visible').toggleClass 'pressed', ln; return
 
   updateSize: -> @cm.setSize @$e.width(), @$e.parent().height() - @$e.position().top - 28; return
@@ -215,8 +215,8 @@ class @Editor
   # Commands:
   ED: -> @emit 'Edit', win: @id, text: @cm.getValue(), pos: @cm.indexFromPos @cm.getCursor(); return
   QT: -> @emit 'CloseWindow', win: @id; return
-  BK: -> (if @isDebugger then @emit 'TraceBackward', win: @id else @cm.execCommand 'undo'); return
-  FD: -> (if @isDebugger then @emit 'TraceForward',  win: @id else @cm.execCommand 'redo'); return
+  BK: -> (if @isTracer then @emit 'TraceBackward', win: @id else @cm.execCommand 'undo'); return
+  FD: -> (if @isTracer then @emit 'TraceForward',  win: @id else @cm.execCommand 'redo'); return
   SC: ->
     $s = @$tb.find '.tb-search:visible'; v = @cm.getSelection(); if v && '\n' !in v then $s.val v
     $s.focus().select(); return
@@ -245,7 +245,7 @@ class @Editor
         @cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}, 'D'
     return
   LN: -> # Toggle Line Numbers
-    v = !!if @isDebugger then prefs.lineNumbersInDebugger.toggle() else prefs.lineNumbersInEditor.toggle()
+    v = !!if @isTracer then prefs.lineNumbersInTracer.toggle() else prefs.lineNumbersInEditor.toggle()
     @cm.setOption 'lineNumbers', v; @$tb.find('.tb-LN:visible').toggleClass 'pressed', v; return
   PV: -> @search true; return
   NX: -> @search(); return
@@ -293,7 +293,7 @@ class @Editor
       @cm.setCursor line: l, ch: 0
     return
   WI: -> @opts.weakInterrupt(); return
-  ER: -> (if @isDebugger then @emit 'RunCurrentLine', win: @id else @cm.execCommand 'newlineAndIndent'); return
+  ER: -> (if @isTracer then @emit 'RunCurrentLine', win: @id else @cm.execCommand 'newlineAndIndent'); return
   BH: -> @emit 'ContinueTrace',  win: @id; return
   RM: -> @emit 'Continue',       win: @id; return
   MA: -> @emit 'RestartThreads', win: @id; return
@@ -304,7 +304,7 @@ class @Editor
       for l in [l0..l1] by 1
         if (i = @breakpoints.indexOf l) >= 0 then @breakpoints.splice i, 1; @cm.setGutterMarker l, 'breakpoints', null
         else @breakpoints.push l; @cm.setGutterMarker l, 'breakpoints', @createBreakpointElement()
-    if @isDebugger
+    if @isTracer
       @emit 'SetLineAttributes', win: @id, nLines: @cm.lineCount(), lineAttributes: stop: @breakpoints[..].sort (x, y) -> x - y
     return
   tabOrAutocomplete: ->

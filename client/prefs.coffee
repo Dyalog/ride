@@ -12,7 +12,7 @@ prefs = @
   ['floatingWindowInfos',   {}]
   ['floatNewEditors',       0]
   ['keyboardLocale',        ''] # e.g. "US", "GB"
-  ['lineNumbersInDebugger', 0]
+  ['lineNumbersInTracer',   0]
   ['lineNumbersInEditor',   1]
   ['menu',                  '''
     # _x   access key, alt+x

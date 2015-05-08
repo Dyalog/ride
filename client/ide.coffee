@@ -83,7 +83,7 @@ class @IDE
         return
       HadError: => @pending.splice 0, @pending.length; return
       FocusWindow: ({win}) => $("#wintab#{win} a").click(); @wins[win]?.focus(); return
-      WindowTypeChanged: ({win, tracer}) => @wins[win].setDebugger tracer
+      WindowTypeChanged: ({win, tracer}) => @wins[win].setTracer tracer
       autocomplete: (token, skip, options) => @wins[token].autocomplete skip, options
       highlight: (win, line) => @wins[win].highlight line; return
       UpdateWindow: (ee) => # "ee" for EditableEntity
@@ -253,7 +253,7 @@ class @IDE
 
   openWindow: (ee) -> # "ee" for EditableEntity
     w = ee.token
-    editorOpts = id: w, name: ee.name, debugger: ee.debugger, emit: @emit.bind(@), weakInterrupt: @WI.bind(@)
+    editorOpts = id: w, name: ee.name, tracer: ee.debugger, emit: @emit.bind(@), weakInterrupt: @WI.bind(@)
     if prefs.floatNewEditors() && !D.floating && !@isDead
       if D.open "index.html?win=#{w}", $.extend {width: 500, height: 400, title: ee.name}, prefs.floatingWindowInfos()[w]
         # the popup will create D.wins[w] and unblock the message queue

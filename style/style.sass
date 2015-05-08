@@ -63,7 +63,7 @@ input, textarea, select, a { outline: 0; }
 //  ├──────────────────────────┤   editor  │
 //  │(Tab)(Tab)................│           │
 //  │                          │           │
-//  │         debugger         │           │
+//  │         tracer           │           │
 //  └──────────────────────────┴───────────┘
 .ide { position: absolute; top: 21px; bottom: 0; left: 0; right: 0; }
 .platform-mac .ide { top: 0; } // no menu inside window
@@ -122,14 +122,14 @@ input, textarea, select, a { outline: 0; }
 .lbar-tip-text
   +tt
 
-// resizer: splitting line between session and editor/debugger
+// resizer: splitting line between session and editor/tracer
 .ui-layout-resizer
   +bg
 .ui-layout-resizer-east { border-left: solid $light 1px; border-right: solid $dark 1px; padding: 2px 0 !important; margin-top: -1px !important; }
 .ui-layout-resizer-south, .ui-layout-resizer-north { border-top:  solid $light 1px; border-bottom: solid #888 1px; }
 .ui-layout-resizer:hover .ui-layout-toggler { background: #ace; }
 
-// CodeMirror is the JS component I use for the session, editor, and debugger.
+// CodeMirror is the JS component I use for the session, editor, and tracer.
 // I included its default stylesheet as is (see node_modules/codemirror/lib/codemirror.css)
 // with only the minor overrides below.
 // CodeMirror is themable, might be a good idea to make use of that:
@@ -170,8 +170,8 @@ input, textarea, select, a { outline: 0; }
 .CodeMirror-linenumber { color: #00f; padding-left: 0; padding-right: 0; cursor: pointer; }
 .CodeMirror-gutters { border-right-color: transparent; background: transparent; }
 .CodeMirror-gutter-wrapper { background-color: white; cursor: pointer; }
-.CodeMirror.debugger { background-color: #dfdfdf; }
-.CodeMirror.debugger .CodeMirror-gutter-wrapper { background-color: #dfdfdf; }
+.CodeMirror.tracer { background-color: #dfdfdf; }
+.CodeMirror.tracer .CodeMirror-gutter-wrapper { background-color: #dfdfdf; }
 .hidden { display: none; }
 .modified { background: #eee; }
 .highlighted { border: solid red 1px; }
@@ -217,7 +217,7 @@ input, textarea, select, a { outline: 0; }
 .cm-apl-quad-name        { color: #808; }
 .cm-apl-zilde            { color: #008; }
 
-// toolbar: appears on top of an editor or debugger, looks like  [┈] ⍝ /⍝ X [_______] etc
+// toolbar: appears on top of an editor or tracer, looks like  [┈] ⍝ /⍝ X [_______] etc
 .toolbar
   +bg; height: 24px; overflow: hidden; cursor: default; overflow: hidden; padding: 2px; border-bottom: solid #aaa 1px
 .tb-button
@@ -256,7 +256,7 @@ input, textarea, select, a { outline: 0; }
   float: left; height: 18px; width: 100px
   &.no-matches { background-color: #fee; }
 
-.win { width: 100%; height: auto; padding: 0 !important; } // content of editor and debugger windows
+.win { width: 100%; height: auto; padding: 0 !important; } // content of editor and tracer windows
 
 // various dialogues
 .ui-widget-overlay { opacity: .3; filter: Alpha(Opacity=30); background: #aaa; }
