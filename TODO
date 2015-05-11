@@ -60,6 +60,8 @@ Not yet prioritized:
     that limit and it's impossible to scroll beyond a certain offset.  This is
     hard to work around without going deep into CodeMirror's code and rewriting
     parts of it.
+  lbar in floating editor windows
+  "Save? Yes/No/Cancel" dialog when closing a floating editor window?
 
 Later:
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
