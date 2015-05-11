@@ -74,6 +74,7 @@ class @IDE
         return
       SysError: ({text}) => $.alert text, 'SysError'; @die(); return
       InternalError: ({error, dmx}) => $.alert "error: #{error}, dmx: #{dmx}", 'Internal Error'; @die(); return
+      NotificationMessage: ({message}) => $.alert message, 'Notification'; return
       UpdateDisplayName: (a) => @wsid = a.displayName; @updateTitle(); return
       EchoInput: ({input}) => @wins[0].add input; return
       AppendSessionOutput: ({result}) => @wins[0].add result; return
