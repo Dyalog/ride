@@ -166,7 +166,7 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
             when 'ReplyHighlightLine' then toBrowser 'highlight', +tag('win', m), +tag 'line', m
             when 'ReplyDisconnect'    then toBrowser 'Disconnect', message: b64d tag 'msg', m
             when 'ReplySysError'      then toBrowser 'SysError', text: b64d tag 'text', m
-            when 'ReplyInternalError' then toBrowser 'InternalError', error: +tag('error', m), dmx: +tag('dmx', m)
+            when 'ReplyInternalError' then toBrowser 'InternalError', error: +tag('error', m), dmx: +tag('dmx', m), message: tag 'msg', m
             when 'ReplyNotificationMessage' then toBrowser 'NotificationMessage', message: tag 'msg', m
             when 'ReplyShowHTML'      then toBrowser 'ShowHTML', title: b64d(tag 'title', m), html: b64d(tag 'html', m)
             else log 'unrecognised'; toBrowser 'unrecognised', m
