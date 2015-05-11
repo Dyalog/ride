@@ -73,8 +73,8 @@ class @IDE
             $.alert message, 'Interpreter disconnected'
         return
       SysError: ({text}) => $.alert text, 'SysError'; @die(); return
-      InternalError: ({error, dmx, msg}) =>
-        $.alert "An error (#{error}) occurred processing #{msg}", 'Internal Error'; return
+      InternalError: ({error, dmx, message}) =>
+        $.alert "An error (#{error}) occurred processing #{message}", 'Internal Error'; return
       NotificationMessage: ({message}) => $.alert message, 'Notification'; return
       UpdateDisplayName: (a) => @wsid = a.displayName; @updateTitle(); return
       EchoInput: ({input}) => @wins[0].add input; return
