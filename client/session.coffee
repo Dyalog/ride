@@ -57,13 +57,13 @@ class @Session
     @cm.replaceRange (if @cm.getOption 'readOnly' then s0 + s else s), {line: l, ch: 0}, {line: l, ch: s0.length}, 'D'
     @cm.setCursor @cm.lastLine(), 0; return
 
-  prompt: (why) ->
-    @promptType = why; @cm.setOption 'readOnly', false; @cm.setOption 'cursorHeight', 1; l = @cm.lastLine()
-    if (why == 1 && !@dirty[l]?) || why !in [1, 3, 4]
+  prompt: (why) -> # why: 0=NoPrompt 1=Descalc 2=QuadInput 3=LineEditor 4=QuoteQuadInput 5=Prompt
+    @promptType = why; @cm.setOption 'readOnly', !why; @cm.setOption 'cursorHeight', +!!why; l = @cm.lastLine()
+    if (why == 1 && !@dirty[l]?) || why !in [0, 1, 3, 4]
       @cm.replaceRange '      ', {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}, 'D'
-    @cm.clearHistory(); return
-
-  noPrompt: -> @promptType = 0; @cm.setOption 'readOnly', true; @cm.setOption 'cursorHeight', 0; return
+    else if '      ' == @cm.getLine l
+      @cm.replaceRange '', {line: l, ch: 0}, {line: l, ch: 6}, 'D'
+    why && @cm.clearHistory(); return
 
   updateSize: ->
     i = @cm.getScrollInfo()

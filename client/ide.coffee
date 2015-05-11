@@ -77,7 +77,7 @@ class @IDE
       UpdateDisplayName: (a) => @wsid = a.displayName; @updateTitle(); return
       EchoInput: ({input}) => @wins[0].add input; return
       AppendSessionOutput: ({result}) => @wins[0].add result; return
-      NotAtInputPrompt: => @wins[0].noPrompt(); return
+      NotAtInputPrompt: => @wins[0].prompt 0; return
       AtInputPrompt: ({why}) =>
         if @pending.length then @emit 'Execute', trace: 0, text: @pending.shift() + '\n' else @wins[0].prompt why
         return
