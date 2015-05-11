@@ -169,9 +169,13 @@ class @Editor
 
   setTracer: (x) ->
     @isTracer = x; $('.tracer-toolbar', @$e).toggle x; $('.editor-toolbar', @$e).toggle !x
-    @cm.setOption 'readOnly', x; $('.CodeMirror', @$e).toggleClass 'tracer', x; @highlight null
+    $('.CodeMirror', @$e).toggleClass 'tracer', x; @highlight null
     ln = !!if @isTracer then prefs.lineNumbersInTracer() else prefs.lineNumbersInEditor()
-    @cm.setOption 'lineNumbers', ln; @$tb.find('.tb-LN:visible').toggleClass 'pressed', ln; return
+    @cm.setOption 'lineNumbers', ln; @$tb.find('.tb-LN:visible').toggleClass 'pressed', ln
+    @cm.setOption 'readOnly', !!x
+    return
+
+  setReadOnly: (x) -> @cm.setOption 'readOnly', x; return
 
   updateSize: -> @cm.setSize @$e.width(), @$e.parent().height() - @$e.position().top - 28; return
 
@@ -192,7 +196,7 @@ class @Editor
     # AplSession         12
     # ExternalFunction   13
     @cm.setOption 'mode', if ee.entityType in [1, 9, 10, 11, 12, 13] then 'apl' else 'text'
-    if ee.entityType in [3] then @cm.setOption 'readOnly', true # TODO Which other entityTypes are read-only?
+    @cm.setOption 'readOnly', ee.readOnly || ee.debugger
     line = ee.currentRow; col = ee.currentColumn || 0; if line == col == 0 && ee.text.indexOf('\n') < 0 then col = ee.text.length
     @cm.setCursor line, col; @cm.scrollIntoView null, @$e.height() / 2
     @breakpoints = ee.lineAttributes.stop[..]

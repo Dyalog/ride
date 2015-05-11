@@ -79,6 +79,7 @@ parseEditableEntity = (xml) -> # used for OpenWindow and UpdateWindow
   token: +tag 'token', xml
   currentRow: +tag('cur_pos', xml) || 0
   debugger: +tag 'bugger', xml
+  readOnly: !!+tag 'readonly', xml
   lineAttributes: stop: bs
   entityType: 1 + entityTypeTranslation.indexOf +tag 'type', xml
 
