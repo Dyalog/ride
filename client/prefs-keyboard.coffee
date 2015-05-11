@@ -100,7 +100,7 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
   return
 
 @load = load = (bq) -> # bq: current mappings, possibly not yet saved
-  $pk.val prefs.prefixKey()
+  $pk.val(prefs.prefixKey()).change() # fire a "change" event to update the legend
   loadBQMap bq || keymap.getBQMap()
   return
 
