@@ -63,6 +63,8 @@ class @Session
       @cm.replaceRange '      ', {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}, 'D'
     else if '      ' == @cm.getLine l
       @cm.replaceRange '', {line: l, ch: 0}, {line: l, ch: 6}, 'D'
+    else
+      @cm.setCursor l, @cm.getLine(l).length
     why && @cm.clearHistory(); return
 
   updateSize: ->
