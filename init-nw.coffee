@@ -3,24 +3,25 @@ if process?
   gui = require 'nw.gui'; crypto = require 'crypto'; fs = require 'fs'; nomnom = require 'nomnom'
   path = require 'path'; {spawn} = require 'child_process'; proxy = require './proxy'
 
-  segmentsIntersect = (a, b, c, d) -> a < d && c < b
+  segmOverlap = (a, b, c, d) -> a < d && c < b # Do the two segments ab and cd overlap?
 
-  rectanglesIntersect = (r0, r1) -> (
-    segmentsIntersect(r0.x, r0.x + r0.width,  r1.x, r1.x + r1.width) &&
-    segmentsIntersect(r0.y, r0.y + r0.height, r1.y, r1.y + r1.height)
+  rectOverlap = (r0, r1) -> ( # A rectangle is {x,y,width,height}.  Do the two overlap?
+    segmOverlap(r0.x, r0.x + r0.width,  r1.x, r1.x + r1.width) &&
+    segmOverlap(r0.y, r0.y + r0.height, r1.y, r1.y + r1.height)
   )
 
-  segmentFitWithin = (a, b, A, B) ->
+  segmFit = (a, b, A, B) -> # Nudge and/or squeeze "ab" as necessary so it fits into "AB".
     if b - a > B - A then [A, B] else if a < A then [A, A + b - a] else if b > B then [B - b + a, B] else [a, b]
 
-  rectangleFitWithin = (r, R) ->
-    [x, x1] = segmentFitWithin r.x, r.x + r.width,  R.x, R.x + R.width
-    [y, y1] = segmentFitWithin r.y, r.y + r.height, R.y, R.y + R.height
+  rectFit = (r, R) -> # like segmFit but for for rectangles
+    [x, x1] = segmFit r.x, r.x + r.width,  R.x, R.x + R.width
+    [y, y1] = segmFit r.y, r.y + r.height, R.y, R.y + R.height
     {x, y, width: x1 - x, height: y1 - y}
 
   restoreWindow = (w, r) -> # w: NWJS window, r: rectangle
-    for scr in gui.Screen.screens when rectanglesIntersect scr.work_area, r
-      r = rectangleFitWithin r, scr.work_area
+    # Find a screen that overlaps with "r" and fit "w" inside it:
+    for scr in gui.Screen.screens when rectOverlap scr.work_area, r
+      r = rectFit r, scr.work_area
       w.moveTo r.x, r.y; w.resizeTo r.width, r.height
       process.nextTick ->
         w.dx = w.x      - r.x
@@ -38,7 +39,7 @@ if process?
 
   urlParams = {}
   for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
-    [_, k, v] = /^([^=]*)=?(.*)$/.exec kv; urlParams[unescape(k or '')] = unescape(v or '')
+    [_, k, v] = /^([^=]*)=?(.*)$/.exec kv; urlParams[unescape k || ''] = unescape v || ''
 
   do -> # restore window state:
     if D.floating
@@ -58,7 +59,9 @@ if process?
     return
   nww.show(); nww.focus() # focus() is needed for the Mac
 
+  # To "throttle" a function is to make it execute no more often than once every X milliseconds.
   throttle = (f) -> tid = null; -> tid ?= setTimeout (-> f(); tid = null; return), 500; return
+
   saveWindowState = throttle ->
     posStr = JSON.stringify [
       nww.x      - (nww.dx || 0)
@@ -84,19 +87,19 @@ if process?
     return
 
   $ ->
-    contextMenu = null
+    cmenu = null # context menu on right-click, lazily initialized
     $ document
       .on 'keydown', '*', 'f12', -> nww.showDevTools(); false
       .on 'contextmenu', (e) ->
-        if !contextMenu
-          contextMenu = new gui.Menu
+        if !cmenu
+          cmenu = new gui.Menu
           ['Cut', 'Copy', 'Paste'].forEach (x) ->
-            contextMenu.append new gui.MenuItem label: x, click: (-> document.execCommand x; return); return
-        contextMenu.popup e.clientX, e.clientY
+            cmenu.append new gui.MenuItem label: x, click: (-> document.execCommand x; return); return
+        cmenu.popup e.clientX, e.clientY
         false
     return
 
-  D.readFile = fs.readFile
+  D.readFile = fs.readFile # needed for presentation mode
 
   # external editors (available only under nwjs)
   tmpDir = process.env.TMPDIR || process.env.TMP || process.env.TEMP || '/tmp'
@@ -118,7 +121,7 @@ if process?
       return
 
   D.createSocket = ->
-    class LocalSocket
+    class LocalSocket # imitate socket.io's API
       emit: (a...) -> @other.onevent data: a
       onevent: ({data}) -> (for f in @[data[0]] or [] then f data[1..]...); return
       on: (e, f) -> (@[e] ?= []).push f; @
