@@ -1,4 +1,5 @@
 # Preferences API -- localStorage should be accessed only through it
+#   Only ../init-nw.coffee bypasses this API because it can't require() it.
 # Usage:
 #   prefs.foo()                 # getter
 #   prefs.foo(123)              # setter
@@ -9,7 +10,6 @@ prefs = @
 [ # name                    default (type is determined from default value; setter enforces type and handles encoding)
   ['editorsOnTop',          0]
   ['favs',                  [host: '127.0.0.1', port: 4502]]
-  ['floatingWindowInfos',   {}]
   ['floatNewEditors',       0]
   ['keyboardLocale',        ''] # e.g. "US", "GB"
   ['lineNumbersInTracer',   0]
@@ -67,6 +67,9 @@ prefs = @
       -
       Dyalog Forum             =http://www.dyalog.com/forum
   ''']
+  ['pos',                   null] # [x,y,w,h] of the main window, used in ../init-nw.coffee
+  ['posEditor',             [32, 32, 1000, 618]] # [x,y,w,h]
+  ['posTracer',             [32, 32, 1000, 618]] # [x,y,w,h]
   ['prefixKey',             '`']
   ['prefixMap',             ''] # pairs of characters; only differences from the default ` map are stored
   ['sessionLineWrapping',   0]

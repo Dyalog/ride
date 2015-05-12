@@ -43,30 +43,35 @@ if process?
   do -> # restore window state:
     if D.floating
       opener.D.floatingWindows.push nww
-      if localStorage.floatingWindowInfos && (fwi = JSON.parse localStorage.floatingWindowInfos) && fwi[urlParams.win]
-        restoreWindow nww, fwi[urlParams.win]
+      restoreWindow nww,
+        x:      +urlParams.x
+        y:      +urlParams.y
+        width:  +urlParams.width
+        height: +urlParams.height
     else
       D.floatingWindows = []; D.editorsOnTop = 0
       nww.on 'focus', -> (for x in D.floatingWindows then x.setAlwaysOnTop !!D.editorsOnTop); return
       nww.on 'blur',  -> (for x in D.floatingWindows then x.setAlwaysOnTop false           ); return
-      if localStorage.winInfo then try restoreWindow nww, JSON.parse localStorage.winInfo
+      if localStorage.pos then try
+        pos = JSON.parse localStorage.pos
+        restoreWindow nww, x: pos[0], y: pos[1], width: pos[2], height: pos[3]
     return
   nww.show(); nww.focus() # focus() is needed for the Mac
 
   throttle = (f) -> tid = null; -> tid ?= setTimeout (-> f(); tid = null; return), 500; return
   saveWindowState = throttle ->
-    info =
-      x:      nww.x      - (nww.dx || 0)
-      y:      nww.y      - (nww.dy || 0)
-      width:  nww.width  - (nww.dw || 0)
-      height: nww.height - (nww.dh || 0)
+    posStr = JSON.stringify [
+      nww.x      - (nww.dx || 0)
+      nww.y      - (nww.dy || 0)
+      nww.width  - (nww.dw || 0)
+      nww.height - (nww.dh || 0)
+    ]
     if D.floating
       (fw = opener.D.floatingWindows).splice fw.indexOf(nww), 1
-      fwi = JSON.parse localStorage.floatingWindowInfos || '{}'
-      fwi[urlParams.win] = info
-      localStorage.floatingWindowInfos = JSON.stringify fwi
+      if +urlParams.tracer || urlParams.token == '1'
+        if +urlParams.tracer then localStorage.posTracer = posStr else localStorage.posEditor = posStr
     else
-      localStorage.winInfo = JSON.stringify info
+      localStorage.pos = posStr
     return
   nww.on 'move',   saveWindowState
   nww.on 'resize', saveWindowState
