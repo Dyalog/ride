@@ -10,7 +10,7 @@ class @Session
     @hist = ['']; @histIndex = 0
     @cm = new CodeMirror (@$e = $ e)[0],
       autofocus: true, mode: 'aplsession', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: ''}
-      readOnly: true, keyMap: 'dyalog', lineWrapping: !!prefs.sessionLineWrapping(), indentUnit: 4
+      readOnly: true, keyMap: 'dyalog', lineWrapping: !!prefs.wrap(), indentUnit: 4
       extraKeys: {'Shift-Tab': 'indentLess', Tab: 'tabOrAutocomplete'}
     @cm.dyalogCommands = @
     onCodeMirrorDoubleClick @cm, (e) => @ED(); e.stopPropagation(); e.preventDefault(); return
@@ -38,7 +38,7 @@ class @Session
     @autocomplete = autocompletion @cm, (s, i) =>
       if @promptType != 4 then @emit 'Autocomplete', line: s, pos: i, token: 0 # don't autocomplete in ⍞ input
       return
-    prefs.sessionLineWrapping (x) => @cm.setOption 'lineWrapping', !!x; @scrollCursorIntoView(); return
+    prefs.wrap (x) => @cm.setOption 'lineWrapping', !!x; @scrollCursorIntoView(); return
     return
 
   histAdd: (lines) -> @hist[0] = ''; @hist[1...1] = lines; @histIndex = 0; return

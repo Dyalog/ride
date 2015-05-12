@@ -78,8 +78,8 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
   .on 'focus', '.key input', -> delay 1, (=> $(@).select(); return); return
   .on 'blur', '.key input', -> $(@).val(v = $(@).val()[-1..] || ' ').prop 'title', "U+#{hex ord(v), 4}"; return
   .on 'mouseover mouseout', '.key input', (e) -> $(@).toggleClass 'hover', e.type == 'mouseover'; return
-  if !prefs.keyboardLocale()
-    prefs.keyboardLocale(
+  if !prefs.kbdLocale()
+    prefs.kbdLocale(
       switch navigator.language
         when 'en-GB'       then 'UK'
         when 'da', 'da_DK' then 'DK'
@@ -89,8 +89,8 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
     $pk.val(prefs.prefixKey.getDefault()).change() # fire a "change" event to update the legend
     loadBQMap keymap.getDefaultBQMap()
     false
-  $lc = $('#keyboard-locale').val(prefs.keyboardLocale()).change ->
-    prefs.keyboardLocale $(@).val()
+  $lc = $('#keyboard-locale').val(prefs.kbdLocale()).change ->
+    prefs.kbdLocale $(@).val()
     load $.extend {}, keymap.getBQMap(), dict $('#keyboard-layout .key').map ->
       [[$('.g0', @).text(), $('.g1', @).val()], [$('.g2', @).text(), $('.g3', @).val()]]
     return

@@ -24,7 +24,7 @@ $wt = null
   """
   $e.on 'click', 'pre a', (e) -> $wt.insert $(e.target).text(); return
   $('pre a', $e).attr 'title', 'Insert'; $wt = $ 'input', $e
-  $('.reset', $e).button().click -> $wt.val prefs.windowTitle.getDefault(); false
+  $('.reset', $e).button().click -> $wt.val prefs.title.getDefault(); false
   return
-@load = -> $wt.val prefs.windowTitle(); return
-@save = -> prefs.windowTitle $wt.val(); return
+@load = -> $wt.val prefs.title(); return
+@save = -> prefs.title $wt.val(); return

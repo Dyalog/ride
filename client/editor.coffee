@@ -57,7 +57,7 @@ class @Editor
     @hll = null # highlighted line -- currently executed line in tracer
     @lastQuery = @lastIC = @overlay = @annotation = null # search-related state
     @cm = new CodeMirror @$e.find('.cm')[0],
-      lineNumbers: !!if @isTracer then prefs.lineNumbersInTracer() else prefs.lineNumbersInEditor()
+      lineNumbers: !!if @isTracer then prefs.lineNumsTracer() else prefs.lineNumsEditor()
       firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
       indentUnit: 4, scrollButtonHeight: 12, matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
       gutters: ['breakpoints', 'CodeMirror-linenumbers']
@@ -170,7 +170,7 @@ class @Editor
   setTracer: (x) ->
     @isTracer = x; $('.tracer-toolbar', @$e).toggle x; $('.editor-toolbar', @$e).toggle !x
     $('.CodeMirror', @$e).toggleClass 'tracer', x; @highlight null
-    ln = !!if @isTracer then prefs.lineNumbersInTracer() else prefs.lineNumbersInEditor()
+    ln = !!if @isTracer then prefs.lineNumsTracer() else prefs.lineNumsEditor()
     @cm.setOption 'lineNumbers', ln; @$tb.find('.tb-LN:visible').toggleClass 'pressed', ln
     @cm.setOption 'readOnly', !!x
     return
@@ -249,7 +249,7 @@ class @Editor
         @cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}, 'D'
     return
   LN: -> # Toggle Line Numbers
-    v = !!if @isTracer then prefs.lineNumbersInTracer.toggle() else prefs.lineNumbersInEditor.toggle()
+    v = !!if @isTracer then prefs.lineNumsTracer.toggle() else prefs.lineNumsEditor.toggle()
     @cm.setOption 'lineNumbers', v; @$tb.find('.tb-LN:visible').toggleClass 'pressed', v; return
   PV: -> @search true; return
   NX: -> @search(); return

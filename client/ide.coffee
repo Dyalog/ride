@@ -29,7 +29,7 @@ class @IDE
     @isDead = 0
     @pending = [] # lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
     @w3500 = null # window for 3500⌶
-    @host = @port = @wsid = ''; prefs.windowTitle @updateTitle.bind @
+    @host = @port = @wsid = ''; prefs.title @updateTitle.bind @
     @demoLines = []; @demoIndex = -1
     @focusedWinId = 0
 
@@ -156,15 +156,15 @@ class @IDE
       center: onresize: => (for _, widget of @wins then widget.updateSize()); return
       fxName: ''
     for d in ['east', 'south'] then @layout.close d; @layout.sizePane d, '50%'
-    if !prefs.showLanguageBar() then @layout.hide 'north'
+    if !prefs.lbar() then @layout.hide 'north'
     @wins[0].updateSize()
 
     themes = ['Modern', 'Redmond', 'Cupertino', 'Freedom'] # default is set in init.coffee to prevent FOUC
     themeClasses = themes.map (x) -> "theme-#{x.toLowerCase()}"
     allThemeClasses = themeClasses.join ' '
 
-    D.editorsOnTop = prefs.editorsOnTop()
-    prefs.showLanguageBar (x) -> ide.layout[if x then 'show' else 'hide'] 'north'; return
+    D.floatOnTop = prefs.floatOnTop()
+    prefs.lbar (x) -> ide.layout[if x then 'show' else 'hide'] 'north'; return
 
     extraOpts =
       NEW: key: 'Ctrl+N'
@@ -172,10 +172,10 @@ class @IDE
       ZMI: key: 'Ctrl+=', dontBindKey: 1
       ZMO: key: 'Ctrl+-', dontBindKey: 1
       ZMR: key: 'Ctrl+0', dontBindKey: 1
-      LBR: checkBoxPref: prefs.showLanguageBar
-      FLT: checkBoxPref: prefs.floatNewEditors
-      WRP: checkBoxPref: prefs.sessionLineWrapping
-      TOP: checkBoxPref: prefs.editorsOnTop
+      LBR: checkBoxPref: prefs.lbar
+      FLT: checkBoxPref: prefs.floating
+      WRP: checkBoxPref: prefs.wrap
+      TOP: checkBoxPref: prefs.floatOnTop
       DMN: key: 'Ctrl+Shift+N'
       DMP: key: 'Ctrl+Shift+P'
       ABT: key: 'Shift+F1', dontBindKey: 1
@@ -219,9 +219,9 @@ class @IDE
     if !@isDead then @isDead = 1; @$ide.addClass 'disconnected'; for _, widget of @wins then widget.die()
     return
 
-  updateTitle: -> # add updateTitle() as a change listener for preference "windowTitle"
+  updateTitle: -> # add updateTitle() as a change listener for preference "title"
     ri = D.remoteIdentification || {}; v = D.versionInfo
-    t = prefs.windowTitle().replace /\{(\w+)\}/g, (g0, g1) =>
+    t = prefs.title().replace /\{(\w+)\}/g, (g0, g1) =>
       switch g1.toUpperCase()
         when 'WSID'       then @wsid || ''
         when 'HOST'       then @host || ''
@@ -256,7 +256,7 @@ class @IDE
   openWindow: (ee) -> # "ee" for EditableEntity
     w = ee.token
     editorOpts = id: w, name: ee.name, tracer: ee.debugger, emit: @emit.bind(@), weakInterrupt: @WI.bind(@)
-    if prefs.floatNewEditors() && !D.floating && !@isDead
+    if prefs.floating() && !D.floating && !@isDead
       pos = if ee.debugger then prefs.posTracer() else prefs.posEditor()
       delta = 32 * (ee.token - 1); pos[0] += delta; pos[1] += delta
       posH = x: pos[0], y: pos[1], width: pos[2], height: pos[3]
@@ -304,8 +304,8 @@ class @IDE
       @demoIndex += d; @wins[0].loadLine @demoLines[@demoIndex]
     return
 
-  LBR: -> prefs.showLanguageBar    .toggle(); return
-  FLT: -> prefs.floatNewEditors    .toggle(); return
-  WRP: -> prefs.sessionLineWrapping.toggle(); return
-  TOP: -> prefs.editorsOnTop       .toggle(); return
+  LBR: -> prefs.lbar      .toggle(); return
+  FLT: -> prefs.floating  .toggle(); return
+  WRP: -> prefs.wrap      .toggle(); return
+  TOP: -> prefs.floatOnTop.toggle(); return
   THM: -> # ignore

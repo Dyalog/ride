@@ -8,12 +8,12 @@
 #   prefs.foo.getDefault()      # retrieve default value
 prefs = @
 [ # name                    default (type is determined from default value; setter enforces type and handles encoding)
-  ['editorsOnTop',          0]
   ['favs',                  [host: '127.0.0.1', port: 4502]]
-  ['floatNewEditors',       0]
-  ['keyboardLocale',        ''] # e.g. "US", "GB"
-  ['lineNumbersInTracer',   0]
-  ['lineNumbersInEditor',   1]
+  ['floating',              0] # floating editor and tracer windows
+  ['floatOnTop',            0] # try to keep floating windows on top of the session
+  ['kbdLocale',             ''] # e.g. "US", "GB"
+  ['lineNumsTracer',        0]
+  ['lineNumsEditor',        1]
   ['menu',                  '''
     # _x   access key, alt+x
     # =CMD command code; some are special:
@@ -72,10 +72,10 @@ prefs = @
   ['posTracer',             [32, 32, 1000, 618]] # [x,y,w,h]
   ['prefixKey',             '`']
   ['prefixMap',             ''] # pairs of characters; only differences from the default ` map are stored
-  ['sessionLineWrapping',   0]
-  ['showLanguageBar',       1]
+  ['wrap',                  0] # line wrapping in session
+  ['lbar',                  1] # show language bar
   ['theme',                 '']
-  ['windowTitle',           '{WSID} - {HOST}:{PORT} (PID: {PID})']
+  ['title',                 '{WSID} - {HOST}:{PORT} (PID: {PID})'] # a.k.a. "caption"
   ['zoom',                  0]
 ]
 .forEach ([k, d]) ->       # k: preference name, d: default value
