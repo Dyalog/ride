@@ -39,7 +39,7 @@ $ ->
     {editorOpts, ee, ide} = opener.D.pendingEditors[win]
     D.wins = opener.D.wins
     ed = opener.D.wins[win] = new Editor ide, $('.ui-layout-center'), editorOpts; ed.open ee; ed.updateSize()
-    $('title').text ed.name; window.onbeforeunload = -> ed.EP(); return
+    $('title').text ed.name; window.onbeforeunload = -> ed.onbeforeunload()
     opener.D.ide.unblock()
   else
     D.socket = (D.createSocket || io)()
