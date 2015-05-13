@@ -79,5 +79,7 @@ CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
       else if c == '#' then 'apl-namespace'
       else if rName0.test c
         stream.match rName1; x = stream.current()
-        if state.dfnDepth || state.vars && x in state.vars then 'apl-name' else 'apl-global-name'
+        if !state.dfnDepth && stream.match /\s*:/ then 'apl-label'
+        else if state.dfnDepth || state.vars && x in state.vars then 'apl-name'
+        else 'apl-global-name'
       else 'apl-error'
