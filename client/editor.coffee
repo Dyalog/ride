@@ -324,7 +324,7 @@ class @Editor
     else @cm.execCommand 'goDocEnd'; @cm.execCommand 'newlineAndIndent'; @xline = l + 1
     return
   onbeforeunload: -> # called when the user presses [X] on the OS window
-    if v == @originalText && @breakpoints.join() == @originalBreakpoints
+    if @cm.getValue() == @originalText && @breakpoints.join() == @originalBreakpoints
       @EP(); return
     else if !@dialog
       @dialog = $("<p>The object \"#{@name}\" has changed.<br>Do you want to save the changes?</p>").dialog buttons: [
@@ -336,4 +336,4 @@ class @Editor
       #   NW.js prevents the window from closing.
       #   Browsers ask the user "Are you sure you want to close this window?"
       #   In addition, some browsers display the returned string along with the above question.
-      '' 
+      ''
