@@ -159,6 +159,7 @@ class @IDE
     @wins[0].updateSize()
 
     D.floatOnTop = prefs.floatOnTop()
+    prefs.floatOnTop (x) -> D.floatOnTop = x; return
     prefs.lbar (x) -> ide.layout[if x then 'show' else 'hide'] 'north'; return
 
     extraOpts =

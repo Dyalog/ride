@@ -70,7 +70,6 @@ if process?
       nww.height - (nww.dh || 0)
     ]
     if D.floating
-      (fw = opener.D.floatingWindows).splice fw.indexOf(nww), 1
       if +urlParams.tracer || urlParams.token == '1'
         if +urlParams.tracer then localStorage.posTracer = posStr else localStorage.posEditor = posStr
     else
@@ -81,6 +80,7 @@ if process?
 
   nww.on 'close', ->
     if D.forceClose
+      (fw = opener.D.floatingWindows).splice fw.indexOf(nww), 1
       process.nextTick -> nww.close true; return
     else
       window.onbeforeunload?(); if !D.floating then process.nextTick -> nww.close true; return
