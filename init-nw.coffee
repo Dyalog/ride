@@ -50,9 +50,9 @@ if process?
         width:  +urlParams.width
         height: +urlParams.height
     else
-      D.floatingWindows = []; D.editorsOnTop = 0
-      nww.on 'focus', -> (for x in D.floatingWindows then x.setAlwaysOnTop !!D.editorsOnTop); return
-      nww.on 'blur',  -> (for x in D.floatingWindows then x.setAlwaysOnTop false           ); return
+      D.floatingWindows = []; D.floatOnTop = 0
+      nww.on 'focus', -> (for x in D.floatingWindows then x.setAlwaysOnTop !!D.floatOnTop); return
+      nww.on 'blur',  -> (for x in D.floatingWindows then x.setAlwaysOnTop false         ); return
       if localStorage.pos then try
         pos = JSON.parse localStorage.pos
         restoreWindow nww, x: pos[0], y: pos[1], width: pos[2], height: pos[3]
