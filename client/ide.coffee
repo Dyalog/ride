@@ -31,7 +31,6 @@ class @IDE
     @w3500 = null # window for 3500⌶
     @host = @port = @wsid = ''; prefs.title @updateTitle.bind @
     @demoLines = []; @demoIndex = -1
-    @focusedWinId = 0
 
     D.wins = @wins = # window id -> instance of Editor or Session
       0: new Session @, $('.ui-layout-center'),
@@ -41,6 +40,7 @@ class @IDE
             if !trace then @pending = lines[1..]
             @emit 'Execute', {trace, text: lines[0] + '\n'}
           return
+    @focusedWin = @wins[0]
 
     # Tab management
     @tabOpts = activate: (_, ui) => (widget = @wins[+ui.newTab.attr('id').replace /\D+/, '']).updateSize(); widget.focus(); return
@@ -193,7 +193,7 @@ class @IDE
         stack.push h
         if cmd
           h.action = do (cmd = cmd) -> ->
-            if f = CodeMirror.commands[cmd] then f ide.wins[ide.focusedWinId].cm
+            if f = CodeMirror.commands[cmd] then f ide.focusedWin.cm
             else if ide[cmd] then ide[cmd]()
             else $.alert "Unknown command: #{cmd}"
             return

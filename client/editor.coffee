@@ -65,7 +65,7 @@ class @Editor
     @cm.dyalogCommands = @
     @cm.on 'cursorActivity', @cursorActivity.bind @
     @cm.on 'gutterClick', (cm, l, gutter, event) => @cm.setCursor line: l, ch: 0; @BP(); return
-    @cm.on 'focus', => @ide.focusedWinId = @id; return
+    @cm.on 'focus', => @ide.focusedWin = @; return
     onCodeMirrorDoubleClick @cm, (e) => @ED(); e.preventDefault(); e.stopPropagation(); return
     @autocomplete = autocompletion @cm, (s, i) => @emit 'Autocomplete', line: s, pos: i, token: @id; return
     @$tb = $ '.toolbar', @$e

@@ -14,7 +14,7 @@ class @Session
       extraKeys: {'Shift-Tab': 'indentLess', Tab: 'tabOrAutocomplete'}
     @cm.dyalogCommands = @
     onCodeMirrorDoubleClick @cm, (e) => @ED(); e.stopPropagation(); e.preventDefault(); return
-    @cm.on 'focus', => @ide.focusedWinId = 0; return
+    @cm.on 'focus', => @ide.focusedWin = @; return
     @cm.on 'beforeChange', (_, c) =>
       if c.origin != 'D'
         l0 = c.from.line; l1 = c.to.line; m = l1 - l0 + 1; n = c.text.length
