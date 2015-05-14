@@ -6,7 +6,6 @@ prefsUI = require './prefs-ui'
 {Session} = require './session'
 keymap = require './keymap'
 require '../lbar/lbar'
-require '../jquery.layout'
 {esc, delay, qw} = require './util'
 
 class @IDE

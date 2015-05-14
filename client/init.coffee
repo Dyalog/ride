@@ -1,7 +1,6 @@
 connect = require './connect'
 {Editor} = require './editor'
 about = require './about'
-require '../jquery.layout'
 {IDE} = require './ide'
 require './util'
 prefs = require './prefs'
