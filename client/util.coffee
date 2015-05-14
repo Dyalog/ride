@@ -29,7 +29,8 @@ $.alert = (message, title, callback) ->
   ]
   return
 
-$.fn.insert = (s) -> @each -> # replace selection in an <input> or <textarea> with "s"
-  if (x = @selectionStart)? && (y = @selectionEnd)?
-    @value = @value[...x] + s + @value[y..]; @selectionStart = @selectionEnd = x + s.length
-  return # TODO: IE
+$.fn.insert = (s) -> @each -> # replace selection in an <input> or <textarea> with s
+  if !@readOnly
+    if (i = @selectionStart)? && (j = @selectionEnd)? # TODO: IE
+      @value = @value[...i] + s + @value[j..]; @selectionStart = @selectionEnd = i + s.length
+  return
