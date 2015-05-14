@@ -39,8 +39,8 @@ prefs = @
     _View
       Show Language Bar        =LBR
       Float New Editors        =FLT
-      Line Wrapping in Session =WRP
       Editors on Top           =TOP {!browser}
+      Line Wrapping in Session =WRP
       -                             {!browser}
       Increase Font Size       =ZMI {!browser}
       Decrease Font Size       =ZMO {!browser}
