@@ -48,7 +48,6 @@ Not yet prioritized:
     NN: added "Cancel" button, though it doesn't really cancel, just closes the dialogue
   Regular expressions in search
   Sortable language bar
-  Lbar may change its size when theme is changed
   Multiple sessions (i.e. connections to interpreters) as tabs with a green/red dot to indicate error, suggested by Mike Mingaard
   A dropdown with I-beams (Mike Mingaard)
   Detachable language bar (Mike Mingaard)
@@ -231,3 +230,4 @@ Done:
   add replace (:%s/A/B/)
   Do not scroll session on AtInputPrompt.
   History (session log) is not recorded in spawned interpreters; Geoff #11841
+  Lbar may change its size when theme is changed
