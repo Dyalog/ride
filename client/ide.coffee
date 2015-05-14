@@ -7,7 +7,7 @@ prefsUI = require './prefs-ui'
 keymap = require './keymap'
 require '../lbar/lbar'
 require '../jquery.layout'
-{esc, delay} = require './util'
+{esc, delay, qw} = require './util'
 
 class @IDE
   constructor: ->
@@ -159,10 +159,6 @@ class @IDE
     if !prefs.lbar() then @layout.hide 'north'
     @wins[0].updateSize()
 
-    themes = ['Modern', 'Redmond', 'Cupertino', 'Freedom'] # default is set in init.coffee to prevent FOUC
-    themeClasses = themes.map (x) -> "theme-#{x.toLowerCase()}"
-    allThemeClasses = themeClasses.join ' '
-
     D.floatOnTop = prefs.floatOnTop()
     prefs.lbar (x) -> ide.layout[if x then 'show' else 'hide'] 'north'; return
 
@@ -179,9 +175,9 @@ class @IDE
       DMN: key: 'Ctrl+Shift+N'
       DMP: key: 'Ctrl+Shift+P'
       ABT: key: 'Shift+F1', dontBindKey: 1
-      THM: items: themes.map (x, i) ->
+      THM: items: qw('Modern Redmond Cupertino Freedom').map (x, i) ->
         '': x, group: 'themes', checked: prefs.theme() == x.toLowerCase(), action: ->
-          prefs.theme x.toLowerCase(); $('body').removeClass(allThemeClasses).addClass themeClasses[i]; return
+          prefs.theme x.toLowerCase(); return
 
     parseMenuDescription = (md) ->
       stack = [ind: -1, items: []]

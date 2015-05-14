@@ -73,6 +73,7 @@ $ ->
     else if /^(linux|x11|android)/i.test p then 'freedom'
     else 'redmond'
   $('body').addClass "theme-#{prefs.theme()}"
+  prefs.theme (x, old) -> $('body').removeClass("theme-#{old}").addClass("theme-#{x}"); return
 
   # CSS class to indicate platform (NW.js-only)
   if D.nwjs
