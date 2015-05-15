@@ -3,19 +3,13 @@
 ![Screenshot](docs/s2.png?raw=true "Screenshot")
 
 # Architecture
-## As a desktop application
-    ┌────────┐
-    │NW.js   │   RIDE
-    │ ┌─────┐│ protocol ┌───────────┐
-    │ │proxy├┼──────────┤interpreter│
-    │ └─────┘│     :4502└───────────┘
-    └────────┘
-
-## In a browser
-                              RIDE
-    ┌───────┐ HTTPS ┌─────┐ protocol ┌───────────┐
-    │browser├───────┤proxy├──────────┤interpreter│
-    └───────┘  :8443└─────┘     :4502└───────────┘
+    ┌───────┐
+    │NW.js  │  RIDE                                          RIDE
+    │┌─────┐│protocol┌───────────┐   ┌───────┐HTTPS ┌─────┐protocol┌───────────┐
+    ││proxy├┼────────┤interpreter│   │browser├──────┤proxy├────────┤interpreter│
+    │└─────┘│   :4502└───────────┘   └───────┘ :8443└─────┘   :4502└───────────┘
+    └───────┘
+      (as a desktop application)                  (in a browser)
 
 # Building
 ## Prerequisites
