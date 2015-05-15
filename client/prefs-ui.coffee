@@ -9,7 +9,7 @@ tabs = [
 
 safe = (s) -> s.toLowerCase().replace /[^a-z\-]/g, '-' # make a string suitable for a DOM id
 
-$d = null # dialogue instance, lazily initialized
+$d = null # dialog instance, lazily initialized
 
 ok = ->
   for t in tabs when v = t.validate?()
@@ -21,7 +21,7 @@ ok = ->
   $d.dialog 'close'; false
 
 module.exports = (tabName) ->
-  if !$d # the dialogue, lazily initialized
+  if !$d
     $d = $ """
       <div id=prefs>
         <ul id=prefs-tabs-nav>
@@ -32,6 +32,7 @@ module.exports = (tabName) ->
     """
       .tabs()
       .on 'keydown', 'input', 'return', ok
+      .on 'dragstart', -> false
       .dialog autoOpen: 0, title: 'Preferences', width: 600, height: 450, buttons: [
         {text: 'OK', click: ok}
         {text: 'Cancel', click: -> $d.dialog 'close'; return}
