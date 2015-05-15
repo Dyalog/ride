@@ -24,7 +24,7 @@ class @IDE
       </div>
     """
 
-    @isDead = 0
+    @dead = 0
     @pending = [] # lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
     @w3500 = null # window for 3500⌶
     @host = @port = @wsid = ''; prefs.title @updateTitle.bind @
@@ -61,9 +61,9 @@ class @IDE
       '*spawnedError': ({message}) =>
         @die(); delay 100, -> $.alert message, 'Error'; return # give the window a chance to restore its original dimensions
         return
-      '*disconnected': => (if !@isDead then $.alert 'Interpreter disconnected', 'Error'; @die()); return
+      '*disconnected': => (if !@dead then $.alert 'Interpreter disconnected', 'Error'; @die()); return
       Disconnect: ({message}) =>
-        if !@isDead
+        if !@dead
           @die()
           if message == 'Dyalog session has ended'
             (try close()); D.process?.exit? 0
@@ -206,12 +206,12 @@ class @IDE
 
   setHostAndPort: (@host, @port) -> @updateTitle(); return
 
-  emit: (x, y) -> @isDead || D.socket.emit x, y; return
+  emit: (x, y) -> @dead || D.socket.emit x, y; return
   WI: -> @emit 'WeakInterrupt'; return
   SI: -> @emit 'StrongInterrupt'; return
 
   die: -> # don't really, just pretend
-    if !@isDead then @isDead = 1; @$ide.addClass 'disconnected'; for _, widget of @wins then widget.die()
+    if !@dead then @dead = 1; @$ide.addClass 'disconnected'; for _, widget of @wins then widget.die()
     return
 
   updateTitle: -> # add updateTitle() as a change listener for preference "title"
@@ -251,7 +251,7 @@ class @IDE
   openWindow: (ee) -> # "ee" for EditableEntity
     w = ee.token
     editorOpts = id: w, name: ee.name, tracer: ee.debugger, emit: @emit.bind(@), weakInterrupt: @WI.bind(@)
-    if prefs.floating() && !D.floating && !@isDead
+    if prefs.floating() && !D.floating && !@dead
       pos = if ee.debugger then prefs.posTracer() else prefs.posEditor()
       delta = 32 * (ee.token - 1); pos[0] += delta; pos[1] += delta
       posH = x: pos[0], y: pos[1], width: pos[2], height: pos[3]
