@@ -27,12 +27,10 @@ Not yet prioritized:
   (OS X) - Reported by Mike Powell: Dragging the text to a different point uses the vertical bar cursor. Holding the Option key while doing this changes the cursor to the green and white cross (Implying a copy - but it still moves the text).
   Type a couple of chars and hit Alt+Enter, followed by Enter. Uncaught node.js Error; JS email 2015-03-10
     NN: cannot reproduce on Linux
-  Six-space prompt before trace output; JS 2015-03-21
   There should be no flashing cursors in windows that don't have focus; JS 2015-03-21
   Customizable colours for syntax highlighting
   Disable EP in an editor after it has been pressed once
   Menu items for next/prev line from demo should be disabled when there are no more lines; MK Jabber 2015-03-25
-  Closing the session window should close all open editor windows
   After closing an editor, focus the next editor instead of the session
   There is a limit for the number of match locations shown on the scrollbar (1000) -- should we change it?
   JS: Arrange for the banner to appear at the _top_ of a new session.
@@ -42,7 +40,7 @@ Not yet prioritized:
   JS: Option for turning off AutoFormatting, please.
     NN: that's an interpreter-side option: export AUTOFORMAT=0
   JS: Floating editors: )ed F G should place F above G and focus F. Then Esc Esc should close F and then G.
-    NN: this is probably one for JD
+    NN: the interpreter controls the order; that's even beyond JD's code
   JS: <Esc> in the session should switch focus to the top edit or trace window.
   "Cancel" button in "Connecting..." dialogue; MK Jabber 2015-03-30
     NN: added "Cancel" button, though it doesn't really cancel, just closes the dialogue
@@ -60,7 +58,6 @@ Not yet prioritized:
     hard to work around without going deep into CodeMirror's code and rewriting
     parts of it.
   lbar in floating editor windows
-  "Save? Yes/No/Cancel" dialog when closing a floating editor window?
 
 Later:
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
@@ -231,3 +228,6 @@ Done:
   Do not scroll session on AtInputPrompt.
   History (session log) is not recorded in spawned interpreters; Geoff #11841
   Lbar may change its size when theme is changed
+  "Save? Yes/No/Cancel" dialog when closing a floating editor window?
+  Six-space prompt before trace output; JS 2015-03-21
+  Closing the session window should close all open editor windows
