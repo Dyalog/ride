@@ -5,7 +5,6 @@ prefsUI = require './prefs-ui'
 {Editor} = require './editor'
 {Session} = require './session'
 keymap = require './keymap'
-require '../lbar/lbar'
 {esc, delay, qw} = require './util'
 
 class @IDE

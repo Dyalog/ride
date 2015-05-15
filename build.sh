@@ -37,6 +37,7 @@ lib_files='
   lib/jquery.hotkeys.js
   lib/jquery.layout.js
   init-nw.coffee
+  lbar/lbar.js
 '
 us='' # names of compiled files
 changed=0
@@ -52,19 +53,10 @@ for f in $lib_files; do
 done
 if [ $changed -eq 1 ]; then echo 'concatenating libs'; cat $us >build/tmp/libs.js; fi
 
-if [ ! -e build/js/filelist ]; then
-  echo 'resolving js dependencies'
-  browserify -t coffeeify --extension=.coffee --list client/init.coffee >build/js/filelist
-fi
-
-for f in `cat build/js/filelist`; do # compile coffee files before running browserify
-  u=build/js/${f##$PWD/} # ${A##B} removes prefix B from $A.  In this case it turns an absolute path into a relative path.
+for f in client/*.coffee; do # compile coffee files before running browserify
+  u=build/js/$f
   mkdir -p `dirname $u`
-  if [ $f != ${f%%.coffee} ]; then
-    u=${u%%.coffee}.js; if [ $f -nt $u ]; then echo "compiling $f"; coffee -bcp --no-header $f >$u; fi
-  else
-    if [ $f -nt $u ]; then echo "copying $f"; cp $f $u; fi
-  fi
+  u=${u%%.coffee}.js; if [ $f -nt $u ]; then echo "compiling $f"; coffee -bcp --no-header $f >$u; fi
 done
 
 for f in proxy.coffee; do # nw-only coffee files
