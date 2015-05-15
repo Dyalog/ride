@@ -14,7 +14,7 @@ fi
 
 lib_files='
   node_modules/socket.io/node_modules/socket.io-client/socket.io.js
-  node_modules/jquery/dist/cdn/jquery-2.1.3.min.js
+  node_modules/jquery/dist/jquery.min.js
   node_modules/jquery-ui/core.js
   node_modules/jquery-ui/widget.js
   node_modules/jquery-ui/mouse.js
