@@ -1,6 +1,6 @@
 # NW.js-specific initialisation
 if process?
-  gui = require 'nw.gui'; crypto = require 'crypto'; fs = require 'fs'; nomnom = require 'nomnom'
+  gui = require 'nw.gui'; fs = require 'fs'; nomnom = require 'nomnom'
   path = require 'path'; {spawn} = require 'child_process'; proxy = require './proxy'
 
   segmOverlap = (a, b, c, d) -> a < d && c < b # Do the two segments ab and cd overlap?
@@ -100,25 +100,6 @@ if process?
     return
 
   D.readFile = fs.readFile # needed for presentation mode
-
-  # external editors (available only under nwjs)
-  tmpDir = process.env.TMPDIR || process.env.TMP || process.env.TEMP || '/tmp'
-  if editorExe = process.env.DYALOG_IDE_EDITOR || process.env.EDITOR
-    D.openInExternalEditor = (text, line, callback) ->
-      tmpFile = path.join tmpDir, "#{crypto.randomBytes(8).toString 'hex'}.dyalog"
-      callback0 = callback
-      callback = (args...) -> fs.unlink tmpFile, -> callback0 args... # make sure to delete file before calling callback
-      fs.writeFile tmpFile, text, {mode: 0o600}, (err) ->
-        if err then callback err; return
-        child = spawn editorExe, [tmpFile], cwd: tmpDir, env: $.extend {}, process.env,
-          DYALOG_IDE_FILE: tmpFile
-          DYALOG_IDE_LINE_NUMBER: 1 + line
-        child.on 'error', callback
-        child.on 'exit', (c, s) ->
-          if c || s then callback('Editor exited with ' + if c then 'code ' + c else 'signal ' + s); return
-          fs.readFile tmpFile, 'utf8', callback; return
-        return
-      return
 
   D.createSocket = ->
     class LocalSocket # imitate socket.io's API
