@@ -56,6 +56,7 @@ class @Editor
     @originalText = @originalBreakpoints = '' # remember them to avoid pointless saving on EP; originalBreakpoints is comma-separated line numbers
     @hll = null # highlighted line -- currently executed line in tracer
     @lastQuery = @lastIC = @overlay = @annotation = null # search-related state
+    @focusTimestamp = 0
     @cm = new CodeMirror @$e.find('.cm')[0],
       lineNumbers: !!if @isTracer then prefs.lineNumsTracer() else prefs.lineNumsEditor()
       firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
@@ -65,7 +66,7 @@ class @Editor
     @cm.dyalogCommands = @
     @cm.on 'cursorActivity', @cursorActivity.bind @
     @cm.on 'gutterClick', (cm, l, gutter, event) => @cm.setCursor line: l, ch: 0; @BP(); return
-    @cm.on 'focus', => @ide.focusedWin = @; return
+    @cm.on 'focus', => @focusTimestamp = +new Date; @ide.focusedWin = @; return
     onCodeMirrorDoubleClick @cm, (e) => @ED(); e.preventDefault(); e.stopPropagation(); return
     @autocomplete = autocompletion @cm, (s, i) => @emit 'Autocomplete', line: s, pos: i, token: @id; return
     @$tb = $ '.toolbar', @$e

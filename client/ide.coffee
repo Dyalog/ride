@@ -273,6 +273,11 @@ class @IDE
         .data('ui-tabs').panels.off 'keydown' # prevent jQueryUI tabs from hijacking our keystrokes, <C-Up> in particular
     return
 
+  focusMRUWin: ->
+    # w: the most recently used editor or tracer
+    w = null; t = 0; for _, x of @wins when x.id && t <= x.focusTimestamp then w = x; t = x.focusTimestamp
+    w && w.focus(); return
+
   CNC: -> D.rideConnect();    return
   NEW: -> D.rideNewSession(); return
   QIT: -> D.quit();           return

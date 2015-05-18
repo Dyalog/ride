@@ -14,7 +14,8 @@ class @Session
       extraKeys: {'Shift-Tab': 'indentLess', Tab: 'tabOrAutocomplete'}
     @cm.dyalogCommands = @
     onCodeMirrorDoubleClick @cm, (e) => @ED(); e.stopPropagation(); e.preventDefault(); return
-    @cm.on 'focus', => @ide.focusedWin = @; return
+    @focusTimestamp = 0
+    @cm.on 'focus', => @focusTimestamp = +new Date; @ide.focusedWin = @; return
     @cm.on 'beforeChange', (_, c) =>
       if c.origin != 'D'
         l0 = c.from.line; l1 = c.to.line; m = l1 - l0 + 1; n = c.text.length
@@ -115,7 +116,7 @@ class @Session
       @cm.replaceRange @dirty[l], {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}, 'D'
       delete @dirty[l]; @cm.removeLineClass l, 'background', 'modified'; @cm.setCursor l + 1, c.ch
     return
-  EP: -> @QT(); return
+  EP: -> @ide.focusMRUWin(); return
   ER: -> @exec 0; return
   TC: -> @exec 1; return
   WI: -> @opts.weakInterrupt(); return
