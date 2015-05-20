@@ -24,7 +24,7 @@ class @IDE
       </div>
     """
 
-    @dead = 0
+    @dead = 0     # when RIDE dies, the screen turns light brown and RIDE stops responding to certain commands
     @pending = [] # lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
     @w3500 = null # window for 3500⌶
     @host = @port = @wsid = ''; prefs.title @updateTitle.bind @
@@ -55,7 +55,7 @@ class @IDE
           return
       .data('ui-sortable').floating = true # workaround for a jQueryUI bug, see http://bugs.jqueryui.com/ticket/6702#comment:20
 
-    handlers =
+    handlers = # for RIDE protocol messages
       '*identify': (i) => D.remoteIdentification = i; @updateTitle(); return
       '*connected': ({host, port}) => @setHostAndPort host, port; return
       '*spawnedError': ({message}) =>
@@ -214,7 +214,7 @@ class @IDE
     if !@dead then @dead = 1; @$ide.addClass 'disconnected'; for _, widget of @wins then widget.die()
     return
 
-  updateTitle: -> # add updateTitle() as a change listener for preference "title"
+  updateTitle: -> # a change listener for prefs.title
     ri = D.remoteIdentification || {}; v = D.versionInfo
     t = prefs.title().replace /\{(\w+)\}/g, (g0, g1) =>
       switch g1.toUpperCase()

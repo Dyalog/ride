@@ -48,22 +48,22 @@ D.installMenu ?= (arg) ->
       if $o then $o.focus(); $o = null
     return
 
-  leftRight = (d) -> -> # d: delta, either +1 or -1;   note that this is a higher-order function
-    if d == 1 && $(@).is '.m-opener'
-      mFocus $(@).next('.m-box').find('a').first()
-    else if d == -1 && !$(@).is('.m-opener') && $(@).parents('.m-sub').length > 1
-      mFocus $(@).closest('.m-sub').find('.m-opener').first()
+  leftRight = (d, $e) -> # d: +1 or -1, $e: target element
+    if d == 1 && $e.is '.m-opener'
+      mFocus $e.next('.m-box').find('a').first()
+    else if d == -1 && !$e.is('.m-opener') && $e.parents('.m-sub').length > 1
+      mFocus $e.closest('.m-sub').find('.m-opener').first()
     else
-      $t = $m.children(); i = $(@).parentsUntil('.menu').last().index() # Which top-level menu are we under?
+      $t = $m.children(); i = $e.parentsUntil('.menu').last().index() # Which top-level menu are we under?
       n = $t.length; mFocus $t.eq((i + d + n) % n).find('a').eq 1
     false
 
-  upDown = (d) -> -> # d: delta, either +1 or -1;   note that this is a higher-order function
-    if $(@).is '.m-top'
-      mFocus $(@).parent().find(':not(hr)').eq 1
+  upDown = (d, $e) -> # d: +1 or -1, $e: target element
+    if $e.is '.m-top'
+      mFocus $e.parent().find(':not(hr)').eq 1
     else
-      $s = $(@).closest('.m-box').children ':not(hr)'
-      i = $s.index @; n = $s.length; $f = $s.eq (i + d + n) % n
+      $s = $e.closest('.m-box').children ':not(hr)'
+      i = $s.index $e; n = $s.length; $f = $s.eq (i + d + n) % n
       mFocus if $f.is 'a' then $f else $f.find('a').first()
     false
 
@@ -72,16 +72,16 @@ D.installMenu ?= (arg) ->
   $m.on 'mouseover', 'a', -> $(@).closest('.menu').children().is('.m-open') && mFocus @; return
     .on 'mousedown', 'a', -> (if $(@).parentsUntil('.menu').last().is '.m-open' then mFocus null else mFocus @); false
     .on 'click',     'a', -> false
-    .on 'keydown', '*', 'left',  leftRight -1
-    .on 'keydown', '*', 'right', leftRight 1
-    .on 'keydown', '*', 'up',    upDown -1
-    .on 'keydown', '*', 'down',  upDown 1
+    .on 'keydown', '*', 'left',  -> leftRight -1, $ @
+    .on 'keydown', '*', 'right', -> leftRight  1, $ @
+    .on 'keydown', '*', 'up',    -> upDown    -1, $ @
+    .on 'keydown', '*', 'down',  -> upDown     1, $ @
     .on 'keydown', '*', 'esc f10', -> mFocus null; false
 
   isAccessKeyEvent = (e) -> e.altKey && !e.ctrlKey && !e.shiftKey && 65 <= e.which <= 90
   $ document
     .on 'keydown', '*', 'f10', -> $m.children().eq(0).addClass('m-open').find('a').eq(1).focus(); false
-    .on 'keyup keypress', (e) -> !isAccessKeyEvent e
+    .on 'keyup keypress', (e) -> !isAccessKeyEvent e # prevent default action for access key events
     .mousedown (e) -> (if !$(e.target).closest('.menu').length then mFocus null); return
     .keydown (e) ->
       if isAccessKeyEvent e

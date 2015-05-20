@@ -242,6 +242,6 @@ CodeMirror.commands.goLineEndSmart = (cm) ->
     ->
       c = cm.getCursor(); l = c.line; s = cm.getLine l; n = s.length; m = s.replace(/\ +$/, '').length
       CodeMirror.Pos l, if m <= c.ch < n || !m then n else m
-    origin: "+move", bias: -1
+    origin: '+move', bias: -1
   )
   return

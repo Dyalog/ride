@@ -7,7 +7,7 @@ prefs = require './prefs'
 
 $ ->
   if D.nwjs
-    zM = 11 # zoom level magnitude limit
+    zM = 11 # zoom level can be from -zM to zM inclusive
     $ document
       .on 'keydown', '*', 'ctrl+=', D.zoomIn    = -> prefs.zoom Math.min  zM, prefs.zoom() + 1; false
       .on 'keydown', '*', 'ctrl+-', D.zoomOut   = -> prefs.zoom Math.max -zM, prefs.zoom() - 1; false
