@@ -4,10 +4,10 @@
 	"main": "index.html",
 	"repository": ".",
 	"dependencies": {
-		"codemirror":          "5.2.0",
+		"codemirror":          "5.3.0",
 		"coffee-script":       "1.9.2",
 		"compression":         "1.4.4",
-		"express":             "4.12.3",
+		"express":             "4.12.4",
 		"jquery":              "2.1.4",
 		"jquery-ui":           "1.10.5",
 		"node-sass":           "3.1.1",
