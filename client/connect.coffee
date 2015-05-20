@@ -20,7 +20,7 @@ parseFav = (s) ->
   x
 
 proxyInfo = {} # the proxy sends information about itself when the front-end connects to it
-ipAddresses = [] # of the proxy.  Used in the "Waiting for connections" dialogue.
+ipAddresses = [] # of the proxy.  Used in the "Waiting for connections" dialog.
 
 module.exports = (opts) ->
   $('body').html """

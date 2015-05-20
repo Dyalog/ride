@@ -1,6 +1,6 @@
 Bugs / Issues External to RIDE
   Windows not working at all for spawned interpreters
-  Yes/No dialogue, needs to be supported in the RIDE protocol; email from Morten 2015-02-14
+  Yes/No dialog, needs to be supported in the RIDE protocol; email from Morten 2015-02-14
 
 P1 (Definitely high priority):
 
@@ -41,8 +41,8 @@ Not yet prioritized:
     NN: that's an interpreter-side option: export AUTOFORMAT=0
   JS: Floating editors: )ed F G should place F above G and focus F. Then Esc Esc should close F and then G.
     NN: the interpreter controls the order; that's even beyond JD's code
-  "Cancel" button in "Connecting..." dialogue; MK Jabber 2015-03-30
-    NN: added "Cancel" button, though it doesn't really cancel, just closes the dialogue
+  "Cancel" button in "Connecting..." dialog; MK Jabber 2015-03-30
+    NN: added "Cancel" button, though it doesn't really cancel, just closes the dialog
   Regular expressions in search
   Sortable language bar
   Multiple sessions (i.e. connections to interpreters) as tabs with a green/red dot to indicate error, suggested by Mike Mingaard
@@ -74,7 +74,7 @@ Later:
   code folding and [+] button
   SI stack in debugger (?)
   start web server from nwjs GUI (?)
-  add legalese to About dialogue
+  add legalese to About dialog
 
 Done:
   JS: Discuss placing the cursor at the _left_ of a recalled line.
@@ -134,7 +134,7 @@ Done:
   Pasting multiple lines in the session should be impossible (or pressing Enter should be emulated at every '\n')
   Change name of executable from "dyalogjs" to "ride"
   Autocompletion: Tab/Shift-Tab should cycle through the list (Nick)
-  About dialogue should be accessible somehow from Connect page
+  About dialog should be accessible somehow from Connect page
   Context menu ("Copy", "Paste", etc) on right mouse click
   9) Would be good to have a keystroke to go back one line in the tracer.
     NN: I added Shift-Ctrl-Backspace (BK) and Shift-Ctrl-Enter (FD), as AS suggested
