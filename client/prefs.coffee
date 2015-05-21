@@ -36,6 +36,7 @@ prefs = @
       _Quit                    =QIT {!mac}
     _Edit
       Preferences              =PRF {!mac}
+      Select All               =selectAll {mac}
     _View
       Show Language Bar        =LBR
       Float New Editors        =FLT

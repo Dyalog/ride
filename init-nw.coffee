@@ -219,6 +219,7 @@ if process?
       mb = new gui.Menu type: 'menubar'
       mb.createMacBuiltin 'Dyalog'
       mb.items[0].submenu.removeAt 0 # remove built-in "About Dyalog" that doesn't do anything useful
+      mb.items[1].submenu.removeAt 7 # remove "Edit > Select All"
       # For "Special Characters..." and "Start Dictation...": see https://github.com/nwjs/nw.js/issues/2812
       # I discovered that if I remove "Copy" they go away, but then Cmd+C stops working.
       for x, ix in m
@@ -229,10 +230,15 @@ if process?
         else
           theirMenu = mb.items[0]
         if theirMenu # try to merge new menu with existing menu
-          ourMenu.submenu.append new gui.MenuItem type: 'separator'
-          while theirMenu.submenu.items.length
-            y = theirMenu.submenu.items[0]; theirMenu.submenu.remove y
-            ourMenu.submenu.append y
+          if theirMenu.label == 'Edit' # again, a special case...  for "Edit" prepend their items instead of appending
+            ys = for y, iy in theirMenu.submenu.items then y # does not include "Start Dictation" and "Special Characters..."
+            for y in ys then theirMenu.submenu.remove y
+            for y, iy in ys then ourMenu.submenu.insert y, iy
+          else
+            ourMenu.submenu.append new gui.MenuItem type: 'separator'
+            while theirMenu.submenu.items.length
+              y = theirMenu.submenu.items[0]; theirMenu.submenu.remove y
+              ourMenu.submenu.append y
           mb.remove theirMenu
         mb.insert ourMenu, ix
       nww.menu = mb
