@@ -33,10 +33,13 @@ module.exports = (tabName) ->
       .tabs()
       .on 'keydown', 'input', 'return', ok
       .on 'dragstart', -> false
-      .dialog autoOpen: 0, title: 'Preferences', width: 600, height: 450, buttons: [
-        {text: 'OK', click: ok}
-        {text: 'Cancel', click: -> $d.dialog 'close'; return}
-      ]
+      .dialog
+        autoOpen: 0, title: 'Preferences', width: 600, height: 450
+        resize: -> (for t in tabs when t.resize then t.resize()); return
+        buttons: [
+          {text: 'OK', click: ok}
+          {text: 'Cancel', click: -> $d.dialog 'close'; return}
+        ]
     for t in tabs then t.init $ "#prefs-tab-#{safe t.name}"
   $d.dialog('option', 'position', at: 'center').dialog 'open'
   if tabName then $d.tabs active: $("#prefs-tabs-nav a[href='#prefs-tab-#{tabName}']").parent().index()
