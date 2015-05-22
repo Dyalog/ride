@@ -328,11 +328,15 @@ class @Editor
     if @cm.getValue() == @originalText && @breakpoints.join() == @originalBreakpoints
       @EP(); return
     else if !@dialog
-      @dialog = $("<p>The object \"#{@name}\" has changed.<br>Do you want to save the changes?</p>").dialog buttons: [
-        {text: 'Yes',    click: => @dialog.dialog 'close'; @dialog = null; @EP(); return}
-        {text: 'No',     click: => @dialog.dialog 'close'; @dialog = null; @QT(); return}
-        {text: 'Cancel', click: => @dialog.dialog 'close'; @dialog = null; return}
-      ]
+      window.focus()
+      @dialog = $("<p>The object \"#{@name}\" has changed.<br>Do you want to save the changes?</p>").dialog
+        width: 400
+        close: => @dialog.dialog 'close'; @dialog = null; return
+        buttons: [
+          {text: 'Yes',    click: => @dialog.dialog 'close'; @dialog = null; @EP(); return}
+          {text: 'No',     click: => @dialog.dialog 'close'; @dialog = null; @QT(); return}
+          {text: 'Cancel', click: => @dialog.dialog 'close'; @dialog = null; return}
+        ]
       # When a string is returned from onbeforeunload:
       #   NW.js prevents the window from closing.
       #   Browsers ask the user "Are you sure you want to close this window?"
