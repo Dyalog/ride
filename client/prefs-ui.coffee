@@ -5,6 +5,7 @@ tabs = [
   require './prefs-keyboard'
   require './prefs-title'
   require './prefs-menu'
+  require './prefs-colours'
 ]
 
 safe = (s) -> s.toLowerCase().replace /[^a-z\-]/g, '-' # make a string suitable for a DOM id
@@ -30,7 +31,7 @@ module.exports = (tabName) ->
         #{join tabs.map (t) -> "<div id=prefs-tab-#{safe t.name}></div>"}
       </div>
     """
-      .tabs()
+      .tabs(activate: (e, ui) -> tabs[$(ui.newTab).index()].resize?(); return)
       .on 'keydown', 'input', 'return', ok
       .on 'dragstart', -> false
       .dialog

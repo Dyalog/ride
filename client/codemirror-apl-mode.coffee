@@ -58,7 +58,7 @@ CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
       else if /\s/.test c then stream.eatSpace(); null
       else if c == '⍝' then stream.skipToEnd(); 'apl-comment'
       else if c == '←' then 'apl-assignment'
-      else if c == "'" then (if stream.match /^(?:[^'\r\n]|'')*'/ then 'string' else stream.skipToEnd(); 'apl-error')
+      else if c == "'" then (if stream.match /^(?:[^'\r\n]|'')*'/ then 'apl-string' else stream.skipToEnd(); 'apl-error')
       else if c == '⍬' then 'apl-zilde'
       else if c == '(' then state.stack += c; 'apl-paren'
       else if c == '[' then state.stack += c; 'apl-bracket'
