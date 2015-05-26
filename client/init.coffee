@@ -4,6 +4,7 @@ about = require './about'
 {IDE} = require './ide'
 require './util'
 prefs = require './prefs'
+require './prefs-colours' # load it even in floating windows -- syntax highlighting is initialized there
 
 $ ->
   if D.nwjs

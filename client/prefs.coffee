@@ -8,7 +8,7 @@
 #   prefs.foo.getDefault()      # retrieve default value
 prefs = @
 [ # name                    default (type is determined from default value; setter enforces type and handles encoding)
-  ['colours',               {}] # maps syntax group names to '#rrggbb'; only diffs from defaults are stored
+  ['hi',                    {}] # maps syntax group names to {col:'#rrggbb',bold:1,...}; only diffs from defaults are stored
   ['favs',                  [host: '127.0.0.1', port: 4502]]
   ['floating',              0] # floating editor and tracer windows
   ['floatOnTop',            0] # try to keep floating windows on top of the session
