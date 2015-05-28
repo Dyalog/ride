@@ -2,7 +2,6 @@ connect = require './connect'
 {Editor} = require './editor'
 about = require './about'
 {IDE} = require './ide'
-require './util'
 prefs = require './prefs'
 require './prefs-colours' # load it in order to initialize syntax highlighting
 

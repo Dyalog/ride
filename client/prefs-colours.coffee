@@ -4,41 +4,43 @@ prefs = require './prefs'
 @name = 'Colours'
 
 defaults = [
-  ['number',           '#888888']
-  ['string',           '#008888']
-  ['zilde',            '#000088']
-  ['name',             '#888888']
-  ['global-name',      '#000000']
-  ['quad-name',        '#880088']
-  ['function',         '#000088']
-  ['monadic-operator', '#0000ff']
-  ['dyadic-operator',  '#0000ff']
-  ['namespace',        '#888888']
-  ['assignment',       '#0000ff']
-  ['diamond',          '#0000ff']
-  ['paren',            '#0000ff']
-  ['bracket',          '#0000ff']
-  ['semicolon',        '#0000ff']
-  ['dfn',              '#0000ff']
-  ['dfn1',             '#0000ff']
-  ['dfn2',             '#0000ff']
-  ['dfn3',             '#0000ff']
-  ['tradfn',           '#888888']
-  ['keyword',          '#880000']
-  ['label',            '#000000']
-  ['idiom',            '#0000ff']
-  ['comment',          '#008888']
-  ['error',            '#ff0000']
+  ['number',           fg: '#888888']
+  ['string',           fg: '#008888']
+  ['zilde',            fg: '#000088']
+  ['name',             fg: '#888888']
+  ['global-name',      fg: '#000000']
+  ['quad-name',        fg: '#880088']
+  ['function',         fg: '#000088']
+  ['monadic-operator', fg: '#0000ff']
+  ['dyadic-operator',  fg: '#0000ff']
+  ['namespace',        fg: '#888888']
+  ['assignment',       fg: '#0000ff']
+  ['diamond',          fg: '#0000ff']
+  ['paren',            fg: '#0000ff']
+  ['bracket',          fg: '#0000ff']
+  ['semicolon',        fg: '#0000ff']
+  ['dfn',              fg: '#0000ff']
+  ['dfn1',             fg: '#0000ff']
+  ['dfn2',             fg: '#0000ff']
+  ['dfn3',             fg: '#0000ff']
+  ['tradfn',           fg: '#888888']
+  ['keyword',          fg: '#880000']
+  ['label',            fg: '#000000']
+  ['idiom',            fg: '#0000ff']
+  ['comment',          fg: '#008888']
+  ['error',            fg: '#ff0000']
 ]
 
 renderCSS = (v, rp = '') -> # v: the value of localStorage.hi parsed as JSON, rp: rule prefix
-  join defaults.map ([g, d]) -> # g: group name, d: default colour
-    h = v[g] || col: d
+  join defaults.map ([g, d]) -> # g: group name, d: default style
+    h = $.extend {}, d, v[g] # h: effective style
     """
       #{rp} .cm-apl-#{g}{
-        color:#{h.col};
-        #{h.bold && 'font-weight:bold;' || ''}
-        #{h.italic && 'text-decoration:italic;' || ''}
+        color:#{h.fg};
+        #{h.bg         && "background-color:#{h.bg}"   || ''}
+        #{h.bold       && 'font-weight:bold;'          || ''}
+        #{h.italic     && 'font-style:italic;'         || ''}
+        #{h.underlined && 'text-decoration:underline;' || ''}
       }
     """
 
@@ -46,12 +48,12 @@ prefs.hi updateStyle = (v) -> $('#col-style').text renderCSS v; return
 $ -> updateStyle prefs.hi(); return
 
 sampleCode = '''
-  dfn←{
-    0 1j2.3 'string' ⍝ comment
+  dfn←{ ⍝ comment
+    0 ¯1.2e¯3j¯.45 'string' ⍬
     +/-⍣×A:⍺∇⍵[i;j]
-    {{{{nested}}}}
+    {{{nested}}}
   }
-  ∇tradfn;local
+  ∇{R}←{X}tradfn Y;local
     label:
     :if condition
       {⍵[⍋⍵]}
@@ -61,10 +63,10 @@ sampleCode = '''
 '''
 
 $cm = cm = null # DOM element and CodeMirror instance for displaying sample code
-$i = null # <input>-s with type=color
+$fg = null # <input>-s with type=color
 
 @init = ($e) ->
-  u = []; (for [_, c] in defaults when 0 < u.indexOf c then u.push c); u.sort() # u: unique colours from the defaults
+  u = []; (for [_, {fg}] in defaults when 0 < u.indexOf fg then u.push fg); u.sort() # u: unique colours from the defaults
   $e.html """
     <div id=col-settings>
       #{join defaults.map ([g]) -> "<div><input type=color list=col-list> #{g}</div>"}
@@ -73,19 +75,19 @@ $i = null # <input>-s with type=color
     <div id=col-cm></div>
   """
   $cm = $ '#col-cm'; cm = new CodeMirror $cm[0]
-  $i = $('#col-settings input[type=color]').change updateSampleStyle
+  $fg = $('#col-settings input[type=color]').change updateSampleStyle
   return
 
 @load = ->
-  v = prefs.hi(); for [g, d], i in defaults then $i.eq(i).val v[g]?.col || d
+  v = prefs.hi(); for [g, {fg}], i in defaults then $fg.eq(i).val v[g]?.fg || fg
   cm.setSize $cm.width(), $cm.height(); cm.setValue sampleCode; updateSampleStyle(); return
 
 @save = ->
-  prefs.hi dict defaults.map(([g, d], i) -> c = $i.eq(i).val(); if c != d then [g, col: c]).filter (x) -> !!x
+  prefs.hi dict defaults.map(([g, {fg}], i) -> c = $fg.eq(i).val(); if c != fg then [g, {fg}]).filter (x) -> !!x
   return
 
 @resize = -> cm.setSize $cm.width(), $cm.height(); return
 
 updateSampleStyle = ->
-  v = dict defaults.map ([g], i) -> [g, col: $i.eq(i).val()]
+  v = dict defaults.map ([g], i) -> [g, fg: $fg.eq(i).val()]
   $('#col-sample-style').text renderCSS v, '#col-cm'; return
