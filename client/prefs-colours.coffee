@@ -42,10 +42,8 @@ renderCSS = (v, rp = '') -> # v: the value of localStorage.hi parsed as JSON, rp
       }
     """
 
-prefs.hi updateStyle = (v) ->
-  $('#col-style').text renderCSS v; return
-
-updateStyle prefs.hi()
+prefs.hi updateStyle = (v) -> $('#col-style').text renderCSS v; return
+$ -> updateStyle prefs.hi(); return
 
 sampleCode = '''
   dfn←{
