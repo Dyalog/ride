@@ -34,8 +34,6 @@ groups = [ # information about syntax highlighting groups
   {t:'⍝',  c:'cm-apl-comment',          s:'comment',          d:{fg:'#008888'}}
   {t:'!',  c:'cm-apl-error',            s:'error',            d:{fg:'#ff0000'}}
 ]
-hGroups = {} # group info objects, hashed by .t
-for g in groups then hGroups[g.t] = g
 
 renderCSS = (v, rp = '') -> # v: the value of localStorage.hi parsed as JSON, rp: CSS rule prefix
   join groups.map (g) ->
@@ -54,7 +52,7 @@ prefs.hi updateStyle = (v) -> $('#col-style').text renderCSS v; return
 $ -> updateStyle prefs.hi(); return
 
 sampleCode = '''
-  dfn←{ ⍝ comment
+  dfn←{ ⍝ sample
     0 ¯1.2e¯3j¯.45 'string' ⍬
     +/-⍣×A:⍺∇⍵[i;j]
     {{{nested}}}
@@ -74,13 +72,16 @@ $fg = null # <input>-s with type=color
 @init = ($e) ->
   u = []; (for g in groups when 0 < u.indexOf g.d.fg then u.push g.d.fg); u.sort() # u: unique colours from the defaults
   $e.html """
+    <div id=col-cm></div>
     <div id=col-settings>
       #{join groups.map (g) -> "<div><input type=color list=col-list> #{g.s}</div>"}
       <datalist id=col-list>#{join u.map (c) -> "<option value=#{c} />"}</datalist>
     </div>
-    <div id=col-cm></div>
   """
-  $cm = $ '#col-cm'; cm = new CodeMirror $cm[0]
+  $cm = $ '#col-cm'
+  cm = new CodeMirror $cm[0],
+    lineNumbers: true, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
+    indentUnit: 4, scrollButtonHeight: 12, matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
   $fg = $('#col-settings input[type=color]').change updateSampleStyle
   return
 
