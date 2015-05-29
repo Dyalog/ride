@@ -3,39 +3,45 @@ prefs = require './prefs'
 
 @name = 'Colours'
 
-defaults = [
-  ['number',           fg: '#888888']
-  ['string',           fg: '#008888']
-  ['zilde',            fg: '#000088']
-  ['name',             fg: '#888888']
-  ['global-name',      fg: '#000000']
-  ['quad-name',        fg: '#880088']
-  ['function',         fg: '#000088']
-  ['monadic-operator', fg: '#0000ff']
-  ['dyadic-operator',  fg: '#0000ff']
-  ['namespace',        fg: '#888888']
-  ['assignment',       fg: '#0000ff']
-  ['diamond',          fg: '#0000ff']
-  ['paren',            fg: '#0000ff']
-  ['bracket',          fg: '#0000ff']
-  ['semicolon',        fg: '#0000ff']
-  ['dfn',              fg: '#0000ff']
-  ['dfn1',             fg: '#0000ff']
-  ['dfn2',             fg: '#0000ff']
-  ['dfn3',             fg: '#0000ff']
-  ['tradfn',           fg: '#888888']
-  ['keyword',          fg: '#880000']
-  ['label',            fg: '#000000']
-  ['idiom',            fg: '#0000ff']
-  ['comment',          fg: '#008888']
-  ['error',            fg: '#ff0000']
+groups = [ # information about syntax highlighting groups
+  # t: short identifier for the token type, used for storing customisations in localStorage
+  # c: css class
+  # s: name to display in the UI
+  # d: default style
+  {t:'0',  c:'cm-apl-number',           s:'number',           d:{fg:'#888888'}}
+  {t:"'",  c:'cm-apl-string',           s:'string',           d:{fg:'#008888'}}
+  {t:'⍬',  c:'cm-apl-zilde',            s:'zilde',            d:{fg:'#000088'}}
+  {t:'a',  c:'cm-apl-name',             s:'name',             d:{fg:'#888888'}}
+  {t:'A',  c:'cm-apl-global-name',      s:'global name',      d:{fg:'#000000'}}
+  {t:'⎕',  c:'cm-apl-quad-name',        s:'quad name',        d:{fg:'#880088'}}
+  {t:'+',  c:'cm-apl-function',         s:'function',         d:{fg:'#000088'}}
+  {t:'/',  c:'cm-apl-monadic-operator', s:'monadic operator', d:{fg:'#0000ff'}}
+  {t:'.',  c:'cm-apl-dyadic-operator',  s:'dyadic operator',  d:{fg:'#0000ff'}}
+  {t:'#',  c:'cm-apl-namespace',        s:'namespace',        d:{fg:'#888888'}}
+  {t:'←',  c:'cm-apl-assignment',       s:'assignment',       d:{fg:'#0000ff'}}
+  {t:'⋄',  c:'cm-apl-diamond',          s:'diamond',          d:{fg:'#0000ff'}}
+  {t:'(',  c:'cm-apl-paren',            s:'parenthesis',      d:{fg:'#0000ff'}}
+  {t:'[',  c:'cm-apl-bracket',          s:'bracket',          d:{fg:'#0000ff'}}
+  {t:';',  c:'cm-apl-semicolon',        s:'semicolon',        d:{fg:'#0000ff'}}
+  {t:'{',  c:'cm-apl-dfn',              s:'dfn',              d:{fg:'#0000ff'}}
+  {t:'{1', c:'cm-apl-dfn1',             s:'dfn level 1',      d:{fg:'#0000ff'}}
+  {t:'{2', c:'cm-apl-dfn2',             s:'dfn level 2',      d:{fg:'#0000ff'}}
+  {t:'{3', c:'cm-apl-dfn3',             s:'dfn level 3',      d:{fg:'#0000ff'}}
+  {t:'∇',  c:'cm-apl-tradfn',           s:'tradfn',           d:{fg:'#888888'}}
+  {t:':',  c:'cm-apl-keyword',          s:'keyword',          d:{fg:'#880000'}}
+  {t:'l:', c:'cm-apl-label',            s:'label',            d:{fg:'#000000'}}
+  {t:'i',  c:'cm-apl-idiom',            s:'idiom',            d:{fg:'#0000ff'}}
+  {t:'⍝',  c:'cm-apl-comment',          s:'comment',          d:{fg:'#008888'}}
+  {t:'!',  c:'cm-apl-error',            s:'error',            d:{fg:'#ff0000'}}
 ]
+hGroups = {} # group info objects, hashed by .t
+for g in groups then hGroups[g.t] = g
 
-renderCSS = (v, rp = '') -> # v: the value of localStorage.hi parsed as JSON, rp: rule prefix
-  join defaults.map ([g, d]) -> # g: group name, d: default style
-    h = $.extend {}, d, v[g] # h: effective style
+renderCSS = (v, rp = '') -> # v: the value of localStorage.hi parsed as JSON, rp: CSS rule prefix
+  join groups.map (g) ->
+    h = $.extend {}, g.d, v[g.t] # h: effective style
     """
-      #{rp} .cm-apl-#{g}{
+      #{rp} .#{g.c}{
         color:#{h.fg};
         #{h.bg         && "background-color:#{h.bg}"   || ''}
         #{h.bold       && 'font-weight:bold;'          || ''}
@@ -66,10 +72,10 @@ $cm = cm = null # DOM element and CodeMirror instance for displaying sample code
 $fg = null # <input>-s with type=color
 
 @init = ($e) ->
-  u = []; (for [_, {fg}] in defaults when 0 < u.indexOf fg then u.push fg); u.sort() # u: unique colours from the defaults
+  u = []; (for g in groups when 0 < u.indexOf g.d.fg then u.push g.d.fg); u.sort() # u: unique colours from the defaults
   $e.html """
     <div id=col-settings>
-      #{join defaults.map ([g]) -> "<div><input type=color list=col-list> #{g}</div>"}
+      #{join groups.map (g) -> "<div><input type=color list=col-list> #{g.s}</div>"}
       <datalist id=col-list>#{join u.map (c) -> "<option value=#{c} />"}</datalist>
     </div>
     <div id=col-cm></div>
@@ -79,15 +85,15 @@ $fg = null # <input>-s with type=color
   return
 
 @load = ->
-  v = prefs.hi(); for [g, {fg}], i in defaults then $fg.eq(i).val v[g]?.fg || fg
+  v = prefs.hi(); for g, i in groups then $fg.eq(i).val v[g.t]?.fg || g.d.fg
   cm.setSize $cm.width(), $cm.height(); cm.setValue sampleCode; updateSampleStyle(); return
 
 @save = ->
-  prefs.hi dict defaults.map(([g, {fg}], i) -> c = $fg.eq(i).val(); if c != fg then [g, {fg}]).filter (x) -> !!x
+  prefs.hi dict groups.map((g, i) -> c = $fg.eq(i).val(); if c != g.d.fg then [g.t, fg: c]).filter (x) -> !!x
   return
 
 @resize = -> cm.setSize $cm.width(), $cm.height(); return
 
 updateSampleStyle = ->
-  v = dict defaults.map ([g], i) -> [g, fg: $fg.eq(i).val()]
+  v = dict groups.map (g, i) -> [g.t, fg: $fg.eq(i).val()]
   $('#col-sample-style').text renderCSS v, '#col-cm'; return
