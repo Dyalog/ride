@@ -86,6 +86,8 @@ if process?
       window.onbeforeunload?(); if !D.floating then process.nextTick -> nww.close true; return
     return
 
+  D.forceCloseNWWindow = -> nww.close true; return # used to close floating windows after session is dead
+
   $ ->
     cmenu = null # context menu on right-click, lazily initialized
     $ document

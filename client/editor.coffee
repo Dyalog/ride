@@ -325,7 +325,9 @@ class @Editor
     else @cm.execCommand 'goDocEnd'; @cm.execCommand 'newlineAndIndent'; @xline = l + 1
     return
   onbeforeunload: -> # called when the user presses [X] on the OS window
-    if @cm.getValue() == @originalText && @breakpoints.join() == @originalBreakpoints
+    if @ide.dead
+      D.forceCloseNWWindow?(); return
+    else if @cm.getValue() == @originalText && @breakpoints.join() == @originalBreakpoints
       @EP(); return
     else if !@dialog
       window.focus()
