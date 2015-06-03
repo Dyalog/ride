@@ -41,8 +41,8 @@ H = dict G.map (g, i) -> [g.t, i]
 renderCSS = (v, rp = '') -> # v: style objects keyed by token type, rp: css rule prefix
   join G.map (g) ->
     h = $.extend {}, g.d, v[g.t] # h: effective style
-    selector = g.c.split(',').map((x) -> rp + ' ' + x).join ','
-    "#{selector}{color:#{h.fg};" +
+    g.c.split(',').map((x) -> rp + ' ' + x).join(',') + '{' +
+      (h.fg         && "color:#{h.fg};"             || '') +
       (h.bg         && "background-color:#{h.bg};"  || '') +
       (h.bold       && 'font-weight:bold;'          || '') +
       (h.italic     && 'font-style:italic;'         || '') +
@@ -63,8 +63,8 @@ sel = -1 # index of the selected group
     <div id=col-settings>
       <datalist id=col-list>#{join u.map (c) -> "<option value=#{c}>"}</datalist>
       <select id=col-group>#{join G.map (g, i) -> "<option value=#{i}>#{g.s}"}</select>
-      <p><label>Foreground: <input type=color id=col-fg list=col-list></label>
-      <p><label>Background: <input type=color id=col-bg list=col-list></label>
+      <p><input type=checkbox id=col-fg-cb>Foreground <input type=color id=col-fg list=col-list>
+      <p><input type=checkbox id=col-bg-cb>Background <input type=color id=col-bg list=col-list>
       <p><label><input type=checkbox id=col-bold      ><b>B</b></label>
          <label><input type=checkbox id=col-italic    ><i>I</i></label>
          <label><input type=checkbox id=col-underlined><u>U</u></label>
@@ -88,6 +88,8 @@ sel = -1 # index of the selected group
   $('#col-bold      ').click  -> model[sel].bold       = +!!@checked; updateSampleStyle(); return
   $('#col-italic    ').click  -> model[sel].italic     = +!!@checked; updateSampleStyle(); return
   $('#col-underlined').click  -> model[sel].underlined = +!!@checked; updateSampleStyle(); return
+  $('#col-fg-cb').click -> $('#col-fg').toggle @checked; model[sel].fg = @checked && $('#col-fg').val() || ''; updateSampleStyle(); return
+  $('#col-bg-cb').click -> $('#col-bg').toggle @checked; model[sel].bg = @checked && $('#col-bg').val() || ''; updateSampleStyle(); return
   return
 
 @load = ->
@@ -111,7 +113,11 @@ sel = -1 # index of the selected group
 
 props = qw 'fg bg bold italic underlined' # properties in style objects
 getModelAsObject = -> # keyed by token type, contains only diffs from defaults, suitable for putting in localStorage
-  v = {}; (for g, i in G then m = model[i]; for p in props when m[p] != g.d[p] then (v[g.t] ?= {})[p] = m[p]); v
+  v = {}
+  for g, i in G
+    m = model[i]
+    for p in props when m[p] != (g.d[p] || '') then (v[g.t] ?= {})[p] = m[p]
+  v
 
 @save = -> prefs.hi getModelAsObject(); return
 @resize = -> cm.setSize $cm.width(), $cm.height(); return
@@ -120,10 +126,9 @@ updateSampleStyle = -> $('#col-sample-style').text renderCSS dict(G.map (g, i) -
 
 selectGroup = (i, forceRefresh) ->
   if i != sel || forceRefresh
-    h = model[i]
-    $('#col-group').val i
-    $('#col-fg').val h.fg
-    $('#col-bg').val h.bg
+    h = model[i]; $('#col-group').val i
+    $('#col-fg-cb').prop 'checked', !!h.fg; $('#col-fg').val(h.fg).toggle !!h.fg
+    $('#col-bg-cb').prop 'checked', !!h.bg; $('#col-bg').val(h.bg).toggle !!h.bg
     $('#col-bold'      ).prop 'checked', !!h.bold
     $('#col-italic'    ).prop 'checked', !!h.italic
     $('#col-underlined').prop 'checked', !!h.underlined
