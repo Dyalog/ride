@@ -49,7 +49,7 @@ renderCSS = (v, rp = '') -> # v: style objects keyed by token type, rp: css rule
       (h.underlined && 'text-decoration:underline;' || '') +
       '}'
 
-prefs.hi updateStyle = (v) -> $('#col-style').text renderCSS v; return
+prefs.hi updateStyle = (v) -> $('#col-style').text renderCSS v, '.ride-win'; return
 $ -> updateStyle prefs.hi(); return
 
 $cm = cm = null # DOM element and CodeMirror instance for displaying sample code

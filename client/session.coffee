@@ -8,7 +8,8 @@ class @Session
     {@emit} = @opts
     @dirty = {} # modified: line number -> original content; inserted: line number -> 0
     @hist = ['']; @histIndex = 0
-    @cm = new CodeMirror (@$e = $ e)[0],
+    @$e = $(e).addClass 'ride-win'
+    @cm = new CodeMirror @$e[0],
       autofocus: true, mode: 'aplsession', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: ''}
       readOnly: true, keyMap: 'dyalog', lineWrapping: !!prefs.wrap(), indentUnit: 4
       extraKeys: {'Shift-Tab': 'indentLess', Tab: 'tabOrAutocomplete'}

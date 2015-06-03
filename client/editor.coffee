@@ -44,7 +44,7 @@ EDITOR_HTML = do ->
         b 'tb-case last',     'Match case'
       ].join ''}
     </div>
-    <div class=cm></div>
+    <div class=ride-win></div>
   """
 
 class @Editor
@@ -57,7 +57,7 @@ class @Editor
     @hll = null # highlighted line -- currently executed line in tracer
     @lastQuery = @lastIC = @overlay = @annotation = null # search-related state
     @focusTimestamp = 0
-    @cm = new CodeMirror @$e.find('.cm')[0],
+    @cm = new CodeMirror @$e.find('.ride-win')[0],
       lineNumbers: !!if @isTracer then prefs.lineNumsTracer() else prefs.lineNumsEditor()
       firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
       indentUnit: 4, scrollButtonHeight: 12, matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
