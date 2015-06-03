@@ -9,32 +9,32 @@ G = [ # information about syntax highlighting groups
   # s: name to display in the UI
   # d: default style
   {t:' ',  c:'.cm-s-default,.CodeMirror-gutter-wrapper',s:'normal',d:{fg:'#000000',bg:'#ffffff'}}
-  {t:'0',  c:'.cm-apl-number',           s:'number',           d:{fg:'#888888'}}
-  {t:"'",  c:'.cm-apl-string',           s:'string',           d:{fg:'#008888'}}
-  {t:'⍬',  c:'.cm-apl-zilde',            s:'zilde',            d:{fg:'#000088'}}
-  {t:'a',  c:'.cm-apl-name',             s:'name',             d:{fg:'#888888'}}
-  {t:'A',  c:'.cm-apl-global-name',      s:'global name',      d:{fg:'#000000'}}
-  {t:'⎕',  c:'.cm-apl-quad-name',        s:'quad name',        d:{fg:'#880088'}}
-  {t:'+',  c:'.cm-apl-function',         s:'function',         d:{fg:'#000088'}}
-  {t:'/',  c:'.cm-apl-monadic-operator', s:'monadic operator', d:{fg:'#0000ff'}}
-  {t:'.',  c:'.cm-apl-dyadic-operator',  s:'dyadic operator',  d:{fg:'#0000ff'}}
-  {t:'#',  c:'.cm-apl-namespace',        s:'namespace',        d:{fg:'#888888'}}
-  {t:'←',  c:'.cm-apl-assignment',       s:'assignment',       d:{fg:'#0000ff'}}
-  {t:'⋄',  c:'.cm-apl-diamond',          s:'diamond',          d:{fg:'#0000ff'}}
-  {t:'(',  c:'.cm-apl-paren',            s:'parenthesis',      d:{fg:'#0000ff'}}
-  {t:'[',  c:'.cm-apl-bracket',          s:'bracket',          d:{fg:'#0000ff'}}
-  {t:';',  c:'.cm-apl-semicolon',        s:'semicolon',        d:{fg:'#0000ff'}}
-  {t:'{',  c:'.cm-apl-dfn',              s:'dfn',              d:{fg:'#0000ff'}}
-  {t:'{1', c:'.cm-apl-dfn1',             s:'dfn level 1',      d:{fg:'#0000ff'}}
-  {t:'{2', c:'.cm-apl-dfn2',             s:'dfn level 2',      d:{fg:'#0000ff'}}
-  {t:'{3', c:'.cm-apl-dfn3',             s:'dfn level 3',      d:{fg:'#0000ff'}}
-  {t:'∇',  c:'.cm-apl-tradfn',           s:'tradfn',           d:{fg:'#888888'}}
-  {t:':',  c:'.cm-apl-keyword',          s:'keyword',          d:{fg:'#880000'}}
-  {t:'l:', c:'.cm-apl-label',            s:'label',            d:{fg:'#000000'}}
-  {t:'i',  c:'.cm-apl-idiom',            s:'idiom',            d:{fg:'#0000ff'}}
-  {t:'⍝',  c:'.cm-apl-comment',          s:'comment',          d:{fg:'#008888'}}
-  {t:'!',  c:'.cm-apl-error',            s:'error',            d:{fg:'#ff0000'}}
-  {t:'L',  c:'.CodeMirror-linenumber',   s:'line number',      d:{fg:'#000088'}}
+  {t:'0',  c:'.cm-apl-num',            s:'number',           d:{fg:'#888888'}}
+  {t:"'",  c:'.cm-apl-str',            s:'string',           d:{fg:'#008888'}}
+  {t:'⍬',  c:'.cm-apl-zilde',          s:'zilde',            d:{fg:'#000088'}}
+  {t:'a',  c:'.cm-apl-name',           s:'name',             d:{fg:'#888888'}}
+  {t:'A',  c:'.cm-apl-global-name',    s:'global name',      d:{fg:'#000000'}}
+  {t:'⎕',  c:'.cm-apl-quad-name',      s:'quad name',        d:{fg:'#880088'}}
+  {t:'+',  c:'.cm-apl-fn',             s:'function',         d:{fg:'#000088'}}
+  {t:'/',  c:'.cm-apl-op1',            s:'monadic operator', d:{fg:'#0000ff'}}
+  {t:'.',  c:'.cm-apl-op2',            s:'dyadic operator',  d:{fg:'#0000ff'}}
+  {t:'#',  c:'.cm-apl-ns',             s:'namespace',        d:{fg:'#888888'}}
+  {t:'←',  c:'.cm-apl-assignment',     s:'assignment',       d:{fg:'#0000ff'}}
+  {t:'⋄',  c:'.cm-apl-diamond',        s:'diamond',          d:{fg:'#0000ff'}}
+  {t:'(',  c:'.cm-apl-paren',          s:'parenthesis',      d:{fg:'#0000ff'}}
+  {t:'[',  c:'.cm-apl-bracket',        s:'bracket',          d:{fg:'#0000ff'}}
+  {t:';',  c:'.cm-apl-semicolon',      s:'semicolon',        d:{fg:'#0000ff'}}
+  {t:'{',  c:'.cm-apl-dfn',            s:'dfn',              d:{fg:'#0000ff'}}
+  {t:'{1', c:'.cm-apl-dfn1',           s:'dfn level 1',      d:{fg:'#0000ff'}}
+  {t:'{2', c:'.cm-apl-dfn2',           s:'dfn level 2',      d:{fg:'#0000ff'}}
+  {t:'{3', c:'.cm-apl-dfn3',           s:'dfn level 3',      d:{fg:'#0000ff'}}
+  {t:'∇',  c:'.cm-apl-tradfn',         s:'tradfn',           d:{fg:'#888888'}}
+  {t:':',  c:'.cm-apl-kw',             s:'keyword',          d:{fg:'#880000'}}
+  {t:'l:', c:'.cm-apl-label',          s:'label',            d:{fg:'#000000'}}
+  {t:'i',  c:'.cm-apl-idiom',          s:'idiom',            d:{fg:'#0000ff'}}
+  {t:'⍝',  c:'.cm-apl-comment',        s:'comment',          d:{fg:'#008888'}}
+  {t:'!',  c:'.cm-apl-err',            s:'error',            d:{fg:'#ff0000'}}
+  {t:'L',  c:'.CodeMirror-linenumber', s:'line number',      d:{fg:'#000088'}}
 ]
 H = dict G.map (g, i) -> [g.t, i]
 

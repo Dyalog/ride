@@ -51,35 +51,35 @@ CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
     else if stream.match idiomsRE
       'apl-idiom'
     else if stream.match /^¯?(?:\d*\.)?\d+(?:e¯?\d+)?(?:j¯?(?:\d*\.)?\d+(?:e¯?\d+)?)?/i
-      'apl-number'
+      'apl-num'
     else
       c = stream.next()
       if !c then null
       else if /\s/.test c then stream.eatSpace(); null
       else if c == '⍝' then stream.skipToEnd(); 'apl-comment'
       else if c == '←' then 'apl-assignment'
-      else if c == "'" then (if stream.match /^(?:[^'\r\n]|'')*'/ then 'apl-string' else stream.skipToEnd(); 'apl-error')
+      else if c == "'" then (if stream.match /^(?:[^'\r\n]|'')*'/ then 'apl-str' else stream.skipToEnd(); 'apl-err')
       else if c == '⍬' then 'apl-zilde'
       else if c == '(' then state.stack += c; 'apl-paren'
       else if c == '[' then state.stack += c; 'apl-bracket'
       else if c == '{' then state.stack += c; "apl-dfn#{++state.dfnDepth} apl-dfn"
-      else if c == ')' then (if state.stack[-1..] == '(' then state.stack = state.stack[...-1]; 'apl-paren'   else 'apl-error')
-      else if c == ']' then (if state.stack[-1..] == '[' then state.stack = state.stack[...-1]; 'apl-bracket' else 'apl-error')
-      else if c == '}' then (if state.stack[-1..] == '{' then state.stack = state.stack[...-1]; "apl-dfn apl-dfn#{state.dfnDepth--}"; else 'apl-error')
+      else if c == ')' then (if state.stack[-1..] == '(' then state.stack = state.stack[...-1]; 'apl-paren'   else 'apl-err')
+      else if c == ']' then (if state.stack[-1..] == '[' then state.stack = state.stack[...-1]; 'apl-bracket' else 'apl-err')
+      else if c == '}' then (if state.stack[-1..] == '{' then state.stack = state.stack[...-1]; "apl-dfn apl-dfn#{state.dfnDepth--}"; else 'apl-err')
       else if c == ';' then 'apl-semicolon'
       else if c == '⋄' then 'apl-diamond'
-      else if /[\/⌿\\⍀¨⌸⍨⌶]/.test c then 'apl-monadic-operator'
-      else if /[\.∘⍤⍣⍠]/.test c then 'apl-dyadic-operator'
-      else if /[\+\-×÷⌈⌊\|⍳\?\*⍟○!⌹<≤=>≥≠≡≢∊⍷∪∩~∨∧⍱⍲⍴,⍪⌽⊖⍉↑↓⊂⊃⌷⍋⍒⊤⊥⍕⍎⊣⊢→]/.test c then 'apl-function'
+      else if /[\/⌿\\⍀¨⌸⍨⌶]/.test c then 'apl-op1'
+      else if /[\.∘⍤⍣⍠]/.test c then 'apl-op2'
+      else if /[\+\-×÷⌈⌊\|⍳\?\*⍟○!⌹<≤=>≥≠≡≢∊⍷∪∩~∨∧⍱⍲⍴,⍪⌽⊖⍉↑↓⊂⊃⌷⍋⍒⊤⊥⍕⍎⊣⊢→]/.test c then 'apl-fn'
       else if state.dfnDepth && /[⍺⍵∇:]/.test c then "apl-dfn apl-dfn#{state.dfnDepth}"
       else if c == '∇' then state.isHeader = 1; 'apl-tradfn'
-      else if c == ':' then (if stream.match(/\w*/)?[0]?.toLowerCase() in keywords then 'apl-keyword' else 'apl-error')
-      else if c == '⎕' then (if stream.match(/[áa-z0-9]*/i)?[0].toLowerCase() in quadNames then 'apl-quad-name' else 'apl-error')
+      else if c == ':' then (if stream.match(/\w*/)?[0]?.toLowerCase() in keywords then 'apl-kw' else 'apl-err')
+      else if c == '⎕' then (if stream.match(/[áa-z0-9]*/i)?[0].toLowerCase() in quadNames then 'apl-quad-name' else 'apl-err')
       else if c == '⍞' then 'apl-quad-name'
-      else if c == '#' then 'apl-namespace'
+      else if c == '#' then 'apl-ns'
       else if rName0.test c
         stream.match rName1; x = stream.current()
         if !state.dfnDepth && stream.match /\s*:/ then 'apl-label'
         else if state.dfnDepth || state.vars && x in state.vars then 'apl-name'
         else 'apl-global-name'
-      else 'apl-error'
+      else 'apl-err'
