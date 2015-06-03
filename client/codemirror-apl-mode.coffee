@@ -50,7 +50,7 @@ CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
       'apl-tradfn'
     else if stream.match idiomsRE
       'apl-idiom'
-    else if stream.match /^¯?(?:\d*\.)?\d+(?:j¯?(?:\d*\.)?\d+)?/i
+    else if stream.match /^¯?(?:\d*\.)?\d+(?:e¯?\d+)?(?:j¯?(?:\d*\.)?\d+(?:e¯?\d+)?)?/i
       'apl-number'
     else
       c = stream.next()
