@@ -8,6 +8,7 @@ G = [ # information about syntax highlighting groups
   # c: css selector
   # s: name to display in the UI
   # d: default style
+  {t:' ',  c:'.cm-s-default,.CodeMirror-gutter-wrapper',s:'normal',d:{fg:'#000000',bg:'#ffffff'}}
   {t:'0',  c:'.cm-apl-number',           s:'number',           d:{fg:'#888888'}}
   {t:"'",  c:'.cm-apl-string',           s:'string',           d:{fg:'#008888'}}
   {t:'⍬',  c:'.cm-apl-zilde',            s:'zilde',            d:{fg:'#000088'}}
@@ -35,19 +36,20 @@ G = [ # information about syntax highlighting groups
   {t:'!',  c:'.cm-apl-error',            s:'error',            d:{fg:'#ff0000'}}
   {t:'L',  c:'.CodeMirror-linenumber',   s:'line number',      d:{fg:'#000088'}}
 ]
-iLineNumber = G.map((g) -> g.t).indexOf 'L'
+H = dict G.map (g, i) -> [g.t, i]
 
-renderCSS = (v, rp = '') -> # v: style objects keyed by token type
+renderCSS = (v, rp = '') -> # v: style objects keyed by token type, rp: css rule prefix
   join G.map (g) ->
     h = $.extend {}, g.d, v[g.t] # h: effective style
-    "#{rp} #{g.c}{color:#{h.fg};" +
-      (h.bg         && "background-color:#{h.bg}"   || '') +
+    selector = g.c.split(',').map((x) -> rp + ' ' + x).join ','
+    "#{selector}{color:#{h.fg};" +
+      (h.bg         && "background-color:#{h.bg};"  || '') +
       (h.bold       && 'font-weight:bold;'          || '') +
       (h.italic     && 'font-style:italic;'         || '') +
       (h.underlined && 'text-decoration:underline;' || '') +
       '}'
 
-prefs.hi updateStyle = (v) -> $('#col-style').text renderCSS G.map((g) -> $.extend {}, g.d, v[g.t]); return
+prefs.hi updateStyle = (v) -> $('#col-style').text renderCSS v; return
 $ -> updateStyle prefs.hi(); return
 
 $cm = cm = null # DOM element and CodeMirror instance for displaying sample code
@@ -59,7 +61,7 @@ sel = -1 # index of the selected group
   $e.html """
     <div id=col-cm></div>
     <div id=col-settings>
-      <datalist id=col-list>#{join u.map (c) -> "<option value=#{c} />"}</datalist>
+      <datalist id=col-list>#{join u.map (c) -> "<option value=#{c}>"}</datalist>
       <select id=col-group>#{join G.map (g, i) -> "<option value=#{i}>#{g.s}"}</select>
       <p><label>Foreground: <input type=color id=col-fg list=col-list></label>
       <p><label>Background: <input type=color id=col-bg list=col-list></label>
@@ -72,18 +74,20 @@ sel = -1 # index of the selected group
   cm = new CodeMirror $cm[0],
     lineNumbers: true, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
     indentUnit: 4, scrollButtonHeight: 12, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
-  cm.on 'gutterClick', -> selectGroup iLineNumber; return
+  cm.on 'gutterClick', -> selectGroup H.L; return
   cm.on 'cursorActivity', ->
     if t = cm.getTokenTypeAt cm.getCursor(), 1
       c = '.cm-' + t; i = -1; for g, j in G when g.c == c then i = j; break
       i != -1 && selectGroup i
+    else
+      selectGroup H[' ']
     return
   $('#col-group').change -> selectGroup +@value; return
-  $('#col-fg        ').change -> model[sel].fg         = @value;   updateSampleStyle(); return
-  $('#col-bg        ').change -> model[sel].bg         = @value;   updateSampleStyle(); return
-  $('#col-bold      ').click  -> model[sel].bold       = @checked; updateSampleStyle(); return
-  $('#col-italic    ').click  -> model[sel].italic     = @checked; updateSampleStyle(); return
-  $('#col-underlined').click  -> model[sel].underlined = @checked; updateSampleStyle(); return
+  $('#col-fg        ').change -> model[sel].fg         = @value;      updateSampleStyle(); return
+  $('#col-bg        ').change -> model[sel].bg         = @value;      updateSampleStyle(); return
+  $('#col-bold      ').click  -> model[sel].bold       = +!!@checked; updateSampleStyle(); return
+  $('#col-italic    ').click  -> model[sel].italic     = +!!@checked; updateSampleStyle(); return
+  $('#col-underlined').click  -> model[sel].underlined = +!!@checked; updateSampleStyle(); return
   return
 
 @load = ->
@@ -112,9 +116,7 @@ getModelAsObject = -> # keyed by token type, contains only diffs from defaults, 
 @save = -> prefs.hi getModelAsObject(); return
 @resize = -> cm.setSize $cm.width(), $cm.height(); return
 
-updateSampleStyle = ->
-  css = renderCSS dict G.map (g, i) -> [g.t, model[i]]
-  $('#col-sample-style').text css, '#col-cm'; return
+updateSampleStyle = -> $('#col-sample-style').text renderCSS dict(G.map (g, i) -> [g.t, model[i]]), '#col-cm'; return
 
 selectGroup = (i, forceRefresh) ->
   if i != sel || forceRefresh
