@@ -62,7 +62,7 @@ CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
       else if c == '⍬' then 'apl-zilde'
       else if c == '(' then state.stack += c; 'apl-paren'
       else if c == '[' then state.stack += c; 'apl-bracket'
-      else if c == '{' then state.stack += c; "apl-dfn apl-dfn#{++state.dfnDepth}"
+      else if c == '{' then state.stack += c; "apl-dfn#{++state.dfnDepth} apl-dfn"
       else if c == ')' then (if state.stack[-1..] == '(' then state.stack = state.stack[...-1]; 'apl-paren'   else 'apl-error')
       else if c == ']' then (if state.stack[-1..] == '[' then state.stack = state.stack[...-1]; 'apl-bracket' else 'apl-error')
       else if c == '}' then (if state.stack[-1..] == '{' then state.stack = state.stack[...-1]; "apl-dfn apl-dfn#{state.dfnDepth--}"; else 'apl-error')

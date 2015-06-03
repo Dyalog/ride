@@ -77,7 +77,7 @@ sel = -1 # index of the selected group
   cm.on 'gutterClick', -> selectGroup H.L; return
   cm.on 'cursorActivity', ->
     if t = cm.getTokenTypeAt cm.getCursor(), 1
-      c = '.cm-' + t; i = -1; for g, j in G when g.c == c then i = j; break
+      c = '.cm-' + t.split(' ')[0]; i = -1; for g, j in G when g.c == c then i = j; break
       i != -1 && selectGroup i
     else
       selectGroup H[' ']
