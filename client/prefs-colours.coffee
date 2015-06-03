@@ -7,40 +7,62 @@ G = [ # information about syntax highlighting groups
   # t: token type, a short name used as a key for storing customisations in localStorage
   # c: css selector
   # s: name to display in the UI
-  # d: default style
-  {t:' ',  c:'.cm-s-default,.CodeMirror-gutter-wrapper',s:'normal',d:{fg:'#000000',bg:'#ffffff'}}
-  {t:'0',  c:'.cm-apl-num',            s:'number',           d:{fg:'#888888'}}
-  {t:"'",  c:'.cm-apl-str',            s:'string',           d:{fg:'#008888'}}
-  {t:'⍬',  c:'.cm-apl-zilde',          s:'zilde',            d:{fg:'#000088'}}
-  {t:'a',  c:'.cm-apl-name',           s:'name',             d:{fg:'#888888'}}
-  {t:'A',  c:'.cm-apl-global-name',    s:'global name',      d:{fg:'#000000'}}
-  {t:'⎕',  c:'.cm-apl-quad-name',      s:'quad name',        d:{fg:'#880088'}}
-  {t:'+',  c:'.cm-apl-fn',             s:'function',         d:{fg:'#000088'}}
-  {t:'/',  c:'.cm-apl-op1',            s:'monadic operator', d:{fg:'#0000ff'}}
-  {t:'.',  c:'.cm-apl-op2',            s:'dyadic operator',  d:{fg:'#0000ff'}}
-  {t:'#',  c:'.cm-apl-ns',             s:'namespace',        d:{fg:'#888888'}}
-  {t:'←',  c:'.cm-apl-assignment',     s:'assignment',       d:{fg:'#0000ff'}}
-  {t:'⋄',  c:'.cm-apl-diamond',        s:'diamond',          d:{fg:'#0000ff'}}
-  {t:'(',  c:'.cm-apl-paren',          s:'parenthesis',      d:{fg:'#0000ff'}}
-  {t:'[',  c:'.cm-apl-bracket',        s:'bracket',          d:{fg:'#0000ff'}}
-  {t:';',  c:'.cm-apl-semicolon',      s:'semicolon',        d:{fg:'#0000ff'}}
-  {t:'{',  c:'.cm-apl-dfn',            s:'dfn',              d:{fg:'#0000ff'}}
-  {t:'{1', c:'.cm-apl-dfn1',           s:'dfn level 1',      d:{fg:'#0000ff'}}
-  {t:'{2', c:'.cm-apl-dfn2',           s:'dfn level 2',      d:{fg:'#0000ff'}}
-  {t:'{3', c:'.cm-apl-dfn3',           s:'dfn level 3',      d:{fg:'#0000ff'}}
-  {t:'∇',  c:'.cm-apl-tradfn',         s:'tradfn',           d:{fg:'#888888'}}
-  {t:':',  c:'.cm-apl-kw',             s:'keyword',          d:{fg:'#880000'}}
-  {t:'l:', c:'.cm-apl-label',          s:'label',            d:{fg:'#000000'}}
-  {t:'i',  c:'.cm-apl-idiom',          s:'idiom',            d:{fg:'#0000ff'}}
-  {t:'⍝',  c:'.cm-apl-comment',        s:'comment',          d:{fg:'#008888'}}
-  {t:'!',  c:'.cm-apl-err',            s:'error',            d:{fg:'#ff0000'}}
-  {t:'L',  c:'.CodeMirror-linenumber', s:'line number',      d:{fg:'#000088'}}
+  {t:' ',  c:'.cm-s-default,.CodeMirror-gutter-wrapper', s:'normal'}
+  {t:'0',  c:'.cm-apl-num',            s:'number'          }
+  {t:"'",  c:'.cm-apl-str',            s:'string'          }
+  {t:'⍬',  c:'.cm-apl-zilde',          s:'zilde'           }
+  {t:'a',  c:'.cm-apl-name',           s:'name'            }
+  {t:'A',  c:'.cm-apl-global-name',    s:'global name'     }
+  {t:'⎕',  c:'.cm-apl-quad-name',      s:'quad name'       }
+  {t:'+',  c:'.cm-apl-fn',             s:'function'        }
+  {t:'/',  c:'.cm-apl-op1',            s:'monadic operator'}
+  {t:'.',  c:'.cm-apl-op2',            s:'dyadic operator' }
+  {t:'#',  c:'.cm-apl-ns',             s:'namespace'       }
+  {t:'←',  c:'.cm-apl-assignment',     s:'assignment'      }
+  {t:'⋄',  c:'.cm-apl-diamond',        s:'diamond'         }
+  {t:'(',  c:'.cm-apl-paren',          s:'parenthesis'     }
+  {t:'[',  c:'.cm-apl-bracket',        s:'bracket'         }
+  {t:';',  c:'.cm-apl-semicolon',      s:'semicolon'       }
+  {t:'{',  c:'.cm-apl-dfn',            s:'dfn'             }
+  {t:'{1', c:'.cm-apl-dfn1',           s:'dfn level 1'     }
+  {t:'{2', c:'.cm-apl-dfn2',           s:'dfn level 2'     }
+  {t:'{3', c:'.cm-apl-dfn3',           s:'dfn level 3'     }
+  {t:'∇',  c:'.cm-apl-tradfn',         s:'tradfn'          }
+  {t:':',  c:'.cm-apl-kw',             s:'keyword'         }
+  {t:'l:', c:'.cm-apl-label',          s:'label'           }
+  {t:'i',  c:'.cm-apl-idiom',          s:'idiom'           }
+  {t:'⍝',  c:'.cm-apl-comment',        s:'comment'         }
+  {t:'!',  c:'.cm-apl-err',            s:'error'           }
+  {t:'L',  c:'.CodeMirror-linenumber', s:'line number'     }
 ]
 H = dict G.map (g, i) -> [g.t, i]
 
+scheme =
+  '0':fg:'#888888'
+  "'":fg:'#008888'
+  '⍬':fg:'#000088'
+  'a':fg:'#888888'
+  '⎕':fg:'#880088'
+  '+':fg:'#000088'
+  '/':fg:'#0000ff'
+  '.':fg:'#0000ff'
+  '#':fg:'#888888'
+  '←':fg:'#0000ff'
+  '⋄':fg:'#0000ff'
+  '(':fg:'#0000ff'
+  '[':fg:'#0000ff'
+  ';':fg:'#0000ff'
+  '{':fg:'#0000ff'
+  '∇':fg:'#888888'
+  ':':fg:'#880000'
+  'i':fg:'#0000ff'
+  '⍝':fg:'#008888'
+  '!':fg:'#ff0000'
+  'L':fg:'#000088'
+
 renderCSS = (v, rp = '') -> # v: style objects keyed by token type, rp: css rule prefix
   join G.map (g) ->
-    h = $.extend {}, g.d, v[g.t] # h: effective style
+    h = $.extend {}, scheme[g.t], v[g.t] # h: effective style
     g.c.split(',').map((x) -> rp + ' ' + x).join(',') + '{' +
       (h.fg         && "color:#{h.fg};"             || '') +
       (h.bg         && "background-color:#{h.bg};"  || '') +
@@ -57,7 +79,7 @@ model = null # an array of style objects, in the same order as "G", initialised 
 sel = -1 # index of the selected group
 
 @init = ($e) ->
-  u = []; (for g in G when 0 < u.indexOf g.d.fg then u.push g.d.fg); u.sort() # u: unique colours from the defaults
+  u = []; (for _, {fg} of scheme when fg && 0 < u.indexOf fg then u.push fg); u.sort() # u: unique colours
   $e.html """
     <div id=col-cm></div>
     <div id=col-settings>
@@ -93,7 +115,7 @@ sel = -1 # index of the selected group
   return
 
 @load = ->
-  v = prefs.hi(); model = G.map (g) -> $.extend {}, g.d, v[g.t]
+  v = prefs.hi(); model = G.map (g) -> $.extend {}, scheme[g.t], v[g.t]
   updateSampleStyle(); selectGroup 0, 1; cm.setSize $cm.width(), $cm.height()
   cm.setValue '''
     dfn←{ ⍝ sample
@@ -116,7 +138,7 @@ getModelAsObject = -> # keyed by token type, contains only diffs from defaults, 
   v = {}
   for g, i in G
     m = model[i]
-    for p in props when m[p] != (g.d[p] || '') then (v[g.t] ?= {})[p] = m[p]
+    for p in props when m[p] != (scheme[g.t]?[p] || '') then (v[g.t] ?= {})[p] = m[p]
   v
 
 @save = -> prefs.hi getModelAsObject(); return
