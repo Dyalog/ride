@@ -13,7 +13,7 @@ if [ ! -e $o -o $(find `dirname $i` -type f -newer $o 2>/dev/null | wc -l) -gt 0
 fi
 
 lib_files='
-  node_modules/socket.io/node_modules/socket.io-client/socket.io.js
+  node_modules/engine.io-client/engine.io.js
   node_modules/jquery/dist/jquery.min.js
   node_modules/jquery-ui/core.js
   node_modules/jquery-ui/widget.js

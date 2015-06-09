@@ -41,7 +41,7 @@ $ ->
     $('title').text ed.name; window.onbeforeunload = -> ed.onbeforeunload()
     opener.D.ide.unblock()
   else
-    D.socket = (D.createSocket || io)()
+    D.socket = do(D.createSocket || -> eio (if location.protocol == 'https:' then 'wss://' else 'ws://') + location.host)
     D.quit ?= close
     o = D.opts || {} # handle command line arguments
     if o.listen

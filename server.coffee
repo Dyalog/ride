@@ -4,7 +4,7 @@ express = require 'express'
 fs = require 'fs'
 http = require 'http'
 https = require 'https'
-io = require 'socket.io'
+engine = require 'engine.io'
 nomnom = require 'nomnom'
 {Proxy} = require './proxy'
 {spawn} = require 'child_process'
@@ -43,4 +43,4 @@ else
   httpsOptions = cert: fs.readFileSync(opts.cert), key: fs.readFileSync(opts.key)
   server = https.createServer(httpsOptions, app).listen (httpsPort = 8443), (if opts.ipv6 then '::' else '0.0.0.0'),
     -> log "https server listening on :#{httpsPort}"
-io.listen(server).on 'connection', Proxy()
+engine.attach(server).on 'connection', Proxy()
