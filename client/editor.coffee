@@ -52,8 +52,8 @@ class @Editor
     @$e = $(e).html EDITOR_HTML
     {@id, @name, @emit} = @opts = opts; @isTracer = opts.tracer
     @xline = null # the line number of the empty line inserted when cursor is at eof and you press <down>
-    @breakpoints = [] # array of line numbers
-    @originalText = @originalBreakpoints = '' # remember them to avoid pointless saving on EP; originalBreakpoints is comma-separated line numbers
+    @bp = [] # breakpoints, an array of line numbers
+    @otext = @obp = '' # remember original text and bp to avoid pointless saving on EP; obp is comma-separated line numbers
     @hll = null # highlighted line -- currently executed line in tracer
     @lastQuery = @lastIC = @overlay = @annotation = null # search-related state
     @focusTimestamp = 0
@@ -181,7 +181,7 @@ class @Editor
   updateSize: -> @cm.setSize @$e.width(), @$e.parent().height() - @$e.position().top - 28; return
 
   open: (ee) ->
-    @cm.setValue @originalText = ee.text; @cm.clearHistory(); @cm.focus()
+    @cm.setValue @otext = ee.text; @cm.clearHistory(); @cm.focus()
     # Constants for entityType:
     # DefinedFunction     1
     # SimpleCharArray     2
@@ -200,9 +200,9 @@ class @Editor
     @cm.setOption 'readOnly', ee.readOnly || ee.debugger
     line = ee.currentRow; col = ee.currentColumn || 0; if line == col == 0 && ee.text.indexOf('\n') < 0 then col = ee.text.length
     @cm.setCursor line, col; @cm.scrollIntoView null, @$e.height() / 2
-    @breakpoints = ee.lineAttributes.stop[..]
-    for l in @breakpoints then @cm.setGutterMarker l, 'breakpoints', @createBreakpointElement()
-    @originalBreakpoints = @breakpoints.join()
+    @bp = ee.lineAttributes.stop[..]
+    for l in @bp then @cm.setGutterMarker l, 'breakpoints', @createBreakpointElement()
+    @obp = @bp.join()
     if D.floating then $('title', @$e[0].ownerDocument).text ee.name
     return
   hasFocus: -> window.focused && @cm.hasFocus()
@@ -231,9 +231,9 @@ class @Editor
     $r.focus().select(); @highlightSearch(); return
   EP: ->
     v = @cm.getValue()
-    if v != @originalText || @breakpoints.join() != @originalBreakpoints
-      for l in @breakpoints then @cm.setGutterMarker l, 'breakpoints', null
-      @emit 'SaveChanges', win: @id, text: @cm.getValue(), attributes: stop: @breakpoints[..].sort (x, y) -> x - y
+    if v != @otext || @bp.join() != @obp
+      for l in @bp then @cm.setGutterMarker l, 'breakpoints', null
+      @emit 'SaveChanges', win: @id, text: @cm.getValue(), attributes: stop: @bp[..].sort (x, y) -> x - y
     else
       @emit 'CloseWindow', win: @id
     return
@@ -307,10 +307,10 @@ class @Editor
     for sel in @cm.listSelections()
       l0 = sel.anchor.line; l1 = sel.head.line; if l0 > l1 then tmp = l0; l0 = l1; l1 = tmp
       for l in [l0..l1] by 1
-        if (i = @breakpoints.indexOf l) >= 0 then @breakpoints.splice i, 1; @cm.setGutterMarker l, 'breakpoints', null
-        else @breakpoints.push l; @cm.setGutterMarker l, 'breakpoints', @createBreakpointElement()
+        if (i = @bp.indexOf l) >= 0 then @bp.splice i, 1; @cm.setGutterMarker l, 'breakpoints', null
+        else @bp.push l; @cm.setGutterMarker l, 'breakpoints', @createBreakpointElement()
     if @isTracer
-      @emit 'SetLineAttributes', win: @id, nLines: @cm.lineCount(), lineAttributes: stop: @breakpoints[..].sort (x, y) -> x - y
+      @emit 'SetLineAttributes', win: @id, nLines: @cm.lineCount(), lineAttributes: stop: @bp[..].sort (x, y) -> x - y
     return
   tabOrAutocomplete: ->
     if @cm.somethingSelected()
@@ -327,7 +327,7 @@ class @Editor
   onbeforeunload: -> # called when the user presses [X] on the OS window
     if @ide.dead
       D.forceCloseNWWindow?(); return
-    else if @cm.getValue() == @originalText && @breakpoints.join() == @originalBreakpoints
+    else if @cm.getValue() == @otext && @bp.join() == @obp
       @EP(); return
     else if !@dialog
       window.focus()
