@@ -7,7 +7,7 @@ G = [ # information about syntax highlighting groups
   # t: token type, a short key for storing customisations in localStorage
   # c: css selector
   # s: name to display in the UI
-  # showLB: whether to show the "Left border" control
+  # showX: whether to show the control for "X"
   {t:' ',  c:'.cm-s-default,.CodeMirror-gutter-wrapper', s:'normal'}
   {t:'0',  c:'.cm-apl-num',                 s:'number'          }
   {t:"'",  c:'.cm-apl-str',                 s:'string'          }
@@ -35,10 +35,12 @@ G = [ # information about syntax highlighting groups
   {t:'⍝',  c:'.cm-apl-comment',             s:'comment'         }
   {t:'!',  c:'.cm-apl-err',                 s:'error'           }
   {t:'L',  c:'.CodeMirror-linenumber',      s:'line number'     }
-  {t:'cu', c:'div.CodeMirror-cursor',       s:'cursor', showLB:1}
+  {t:'cu', c:'div.CodeMirror-cursor',       s:'cursor',           controls:{lb:1}}
   {t:'mb', c:'.CodeMirror-matchingbracket', s:'matching bracket'}
   {t:'sc', c:'.CodeMirror-search-match',    s:'search match'    }
   {t:'mo', c:'.modified',                   s:'modified (session)'}
+  {t:'s1', c:'.CodeMirror-focused .CodeMirror-selected', s:'selected (focused)',    controls:{fg:0,BIU:0}}
+  {t:'s0', c:'.CodeMirror-selected',                     s:'selected (no focus)',   controls:{fg:0,BIU:0}}
 ]
 H = dict G.map (g, i) -> [g.t, i]
 
@@ -67,6 +69,8 @@ scheme =
   'mb':bg:'#ffff88'
   'sc':bg:'#ff8800'
   'mo':bg:'#eeeeee'
+  's1':bg:'#d7d4f0'
+  's0':bg:'#d9d9d9'
 
 renderCSS = (v, rp = '') -> # v: style objects keyed by token type, rp: css rule prefix
   join G.map (g) ->
@@ -94,13 +98,13 @@ sel = -1 # index of the selected group
     <div id=col-settings>
       <datalist id=col-list>#{join u.map (c) -> "<option value=#{c}>"}</datalist>
       <select id=col-group>#{join G.map (g, i) -> "<option value=#{i}>#{g.s}"}</select>
-      <p><input type=checkbox id=col-fg-cb>Foreground <input type=color id=col-fg list=col-list>
-      <p><input type=checkbox id=col-bg-cb>Background <input type=color id=col-bg list=col-list>
-      <p><label><input type=checkbox id=col-B><b>B</b></label>
-         <label><input type=checkbox id=col-I><i>I</i></label>
-         <label><input type=checkbox id=col-U><u>U</u></label>
-      <p id=col-lb-p>
-         <input type=checkbox id=col-lb-cb>Left border <input type=color id=col-lb>
+      <p id=col-fg-p><label><input type=checkbox id=col-fg-cb>Foreground</label> <input type=color id=col-fg list=col-list>
+      <p id=col-bg-p><label><input type=checkbox id=col-bg-cb>Background</label> <input type=color id=col-bg list=col-list>
+      <p id=col-BIU-p>
+        <label><input type=checkbox id=col-B><b>B</b></label>
+        <label><input type=checkbox id=col-I><i>I</i></label>
+        <label><input type=checkbox id=col-U><u>U</u></label>
+      <p id=col-lb-p><label><input type=checkbox id=col-lb-cb>Left border</label> <input type=color id=col-lb>
     </div>
   """
   $cm = $ '#col-cm'
@@ -109,25 +113,25 @@ sel = -1 # index of the selected group
     indentUnit: 4, scrollButtonHeight: 12, matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
   cm.on 'gutterClick', -> selectGroup H.L; return
   cm.on 'cursorActivity', ->
-    if t = cm.getTokenTypeAt cm.getCursor(), 1
+    if cm.somethingSelected()
+      selectGroup H.s1
+    else if t = cm.getTokenTypeAt cm.getCursor(), 1
       c = '.cm-' + t.split(' ')[0]; i = -1; for g, j in G when g.c == c then i = j; break
       i != -1 && selectGroup i
     else
       selectGroup H[' ']
     return
   $('#col-group').change -> selectGroup +@value; return
-  $('#col-fg').change -> model[sel].fg = @value;     updateSampleStyle(); return
-  $('#col-bg').change -> model[sel].bg = @value;     updateSampleStyle(); return
-  $('#col-lb').change -> model[sel].lb = @value;     updateSampleStyle(); return
-  $('#col-B').click   -> model[sel].B = +!!@checked; updateSampleStyle(); return
-  $('#col-I').click   -> model[sel].I = +!!@checked; updateSampleStyle(); return
-  $('#col-U').click   -> model[sel].U = +!!@checked; updateSampleStyle(); return
-  ['fg', 'bg', 'lb'].forEach (p) ->
+  qw('fg bg lb').forEach (p) ->
+    $("#col-#{p}").change -> model[sel][p] = @value; updateSampleStyle(); return
     $("#col-#{p}-cb").click ->
       $("#col-#{p}").toggle @checked
       model[sel][p] = @checked && $("#col-#{p}").val() || ''
       updateSampleStyle()
       return
+    return
+  qw('B I U').forEach (p) ->
+    $("#col-#{p}").click -> model[sel][p] = +!!@checked; updateSampleStyle(); return
     return
   return
 
@@ -166,12 +170,12 @@ updateSampleStyle = -> $('#col-sample-style').text renderCSS dict(G.map (g, i) -
 selectGroup = (i, forceRefresh) ->
   if i != sel || forceRefresh
     h = model[i]; $('#col-group').val i
-    $('#col-fg-cb').prop 'checked', !!h.fg; $('#col-fg').val(h.fg).toggle !!h.fg
-    $('#col-bg-cb').prop 'checked', !!h.bg; $('#col-bg').val(h.bg).toggle !!h.bg
-    $('#col-lb-cb').prop 'checked', !!h.lb; $('#col-lb').val(h.lb).toggle !!h.lb
-    $('#col-B').prop 'checked', !!h.B
-    $('#col-I').prop 'checked', !!h.I
-    $('#col-U').prop 'checked', !!h.U
-    $('#col-lb-p').toggle !!G[i].showLB
+    qw('fg bg lb').forEach (p) -> $("#col-#{p}-cb").prop 'checked', !!h[p]; $("#col-#{p}").val(h[p]).toggle !!h[p]; return
+    qw('B I U').forEach (p) -> $("#col-#{p}").prop 'checked', !!h[p]; return
+    c = G[i].controls || {}
+    $('#col-fg-p' ).toggle !!(c.fg ? 1)
+    $('#col-bg-p' ).toggle !!(c.bg ? 1)
+    $('#col-BIU-p').toggle !!(c.BIU ? 1)
+    $('#col-lb-p' ).toggle !!c.lb
     sel = i
   return
