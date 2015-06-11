@@ -245,15 +245,15 @@ input, textarea, select, a { outline: 0; }
       text-decoration: none; color: black
       &:hover { text-decoration: underline; color: blue; }
 
-#prefs-tab-keyboard .pk { width: 1.5em; text-align: center; }
-#keyboard-pk-label { float: left; }
-#keyboard-legend
+#kbd-pfx { width: 1.5em; text-align: center; }
+#kbd-pfx-label { float: left; }
+#kbd-legend
   +tt
   width: 90px; border-collapse: collapse; margin: 0 auto 10px auto; float: none
   .g0, .g2 { text-align: left;  cursor: default; }
   .g1, .g3 { text-align: right; cursor: default; }
-#prefs-tab-keyboard .reset { float: right; }
-#keyboard-layout
+#kbd-reset { float: right; }
+#kbd-layout
   +tt
   background-color: #aaa; border-radius: 5px; height: 200px; clear: both
 .key
@@ -289,8 +289,8 @@ input, textarea, select, a { outline: 0; }
     position: relative; left: -30%; width: 30%; height: 45px
   #k44 { width: 8.4%; } // lshift
   #k45 { display: block; } // the key between lshift and Z
+#kbd-lc { float: right; margin-top: 5px; }
 
-#keyboard-locale { float: right; margin-top: 5px; }
 #prefs-tab-menu
   position: absolute; left: 0; right: 0; top: 30px; bottom: 20px;
   .reset { float: right; }
