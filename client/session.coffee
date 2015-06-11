@@ -85,20 +85,22 @@ class @Session
   loadLine: (s) -> l = @cm.lastLine(); @cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}; return
 
   exec: (trace) ->
-    ls = []; for l of @dirty then ls.push +l
-    if ls.length
-      ls.sort (x, y) -> x - y
-      es = ls.map (l) => @cm.getLine l # strings to execute
-      ls.reverse().forEach (l) =>
-        @cm.removeLineClass l, 'background', 'modified'
-        if @dirty[l] == 0
-          @cm.replaceRange '', {line: l, ch: 0}, {line: l + 1, ch: 0}, 'D'
-        else
-          @cm.replaceRange @dirty[l], {line: l, ch: 0}, {line: l, ch: @cm.getLine(l)?.length || 0}, 'D'
-        return
-    else
-      es = [@cm.getLine @cm.getCursor().line]
-    @opts.exec es, trace; @dirty = {}; @histAdd es.filter ((x) -> !/^\s*$/.test x); @cm.clearHistory(); return
+    if @promptType
+      ls = []; for l of @dirty then ls.push +l
+      if ls.length
+        ls.sort (x, y) -> x - y
+        es = ls.map (l) => @cm.getLine l # strings to execute
+        ls.reverse().forEach (l) =>
+          @cm.removeLineClass l, 'background', 'modified'
+          if @dirty[l] == 0
+            @cm.replaceRange '', {line: l, ch: 0}, {line: l + 1, ch: 0}, 'D'
+          else
+            @cm.replaceRange @dirty[l], {line: l, ch: 0}, {line: l, ch: @cm.getLine(l)?.length || 0}, 'D'
+          return
+      else
+        es = [@cm.getLine @cm.getCursor().line]
+      @opts.exec es, trace; @dirty = {}; @histAdd es.filter ((x) -> !/^\s*$/.test x); @cm.clearHistory()
+    return
 
   # Commands:
   ED: -> c = @cm.getCursor(); @emit 'Edit', win: 0, pos: c.ch, text: @cm.getLine c.line; return
