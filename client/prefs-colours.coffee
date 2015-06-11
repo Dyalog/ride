@@ -64,8 +64,7 @@ scheme =
   '⍝':fg:'#008888'
   '!':fg:'#ff0000'
   'L':fg:'#000088'
-  'cu':lb:'#ff0000'
-  'mb':bg:'#ff0000'
+  'mb':bg:'#ffff88'
   'sc':bg:'#ff8800'
   'mo':bg:'#eeeeee'
 
@@ -73,12 +72,12 @@ renderCSS = (v, rp = '') -> # v: style objects keyed by token type, rp: css rule
   join G.map (g) ->
     h = $.extend {}, scheme[g.t], v[g.t] # h: effective style
     g.c.split(',').map((x) -> rp + ' ' + x).join(',') + '{' +
-      (h.fg         && "color:#{h.fg};"             || '') +
-      (h.bg         && "background-color:#{h.bg};"  || '') +
-      (h.bold       && 'font-weight:bold;'          || '') +
-      (h.italic     && 'font-style:italic;'         || '') +
-      (h.underlined && 'text-decoration:underline;' || '') +
-      (h.lb         && "border-left-color:#{h.lb};" || '') +
+      (h.fg && "color:#{h.fg};"             || '') +
+      (h.bg && "background-color:#{h.bg};"  || '') +
+      (h.B  && 'font-weight:bold;'          || '') +
+      (h.I  && 'font-style:italic;'         || '') +
+      (h.U  && 'text-decoration:underline;' || '') +
+      (h.lb && "border-left-color:#{h.lb};" || '') +
       '}'
 
 prefs.hi updateStyle = (v) -> $('#col-style').text renderCSS v, '.ride-win'; return
@@ -97,9 +96,9 @@ sel = -1 # index of the selected group
       <select id=col-group>#{join G.map (g, i) -> "<option value=#{i}>#{g.s}"}</select>
       <p><input type=checkbox id=col-fg-cb>Foreground <input type=color id=col-fg list=col-list>
       <p><input type=checkbox id=col-bg-cb>Background <input type=color id=col-bg list=col-list>
-      <p><label><input type=checkbox id=col-bold      ><b>B</b></label>
-         <label><input type=checkbox id=col-italic    ><i>I</i></label>
-         <label><input type=checkbox id=col-underlined><u>U</u></label>
+      <p><label><input type=checkbox id=col-B><b>B</b></label>
+         <label><input type=checkbox id=col-I><i>I</i></label>
+         <label><input type=checkbox id=col-U><u>U</u></label>
       <p id=col-lb-p>
          <input type=checkbox id=col-lb-cb>Left border <input type=color id=col-lb>
     </div>
@@ -117,11 +116,12 @@ sel = -1 # index of the selected group
       selectGroup H[' ']
     return
   $('#col-group').change -> selectGroup +@value; return
-  $('#col-fg        ').change -> model[sel].fg         = @value;      updateSampleStyle(); return
-  $('#col-bg        ').change -> model[sel].bg         = @value;      updateSampleStyle(); return
-  $('#col-bold      ').click  -> model[sel].bold       = +!!@checked; updateSampleStyle(); return
-  $('#col-italic    ').click  -> model[sel].italic     = +!!@checked; updateSampleStyle(); return
-  $('#col-underlined').click  -> model[sel].underlined = +!!@checked; updateSampleStyle(); return
+  $('#col-fg').change -> model[sel].fg = @value;     updateSampleStyle(); return
+  $('#col-bg').change -> model[sel].bg = @value;     updateSampleStyle(); return
+  $('#col-lb').change -> model[sel].lb = @value;     updateSampleStyle(); return
+  $('#col-B').click   -> model[sel].B = +!!@checked; updateSampleStyle(); return
+  $('#col-I').click   -> model[sel].I = +!!@checked; updateSampleStyle(); return
+  $('#col-U').click   -> model[sel].U = +!!@checked; updateSampleStyle(); return
   ['fg', 'bg', 'lb'].forEach (p) ->
     $("#col-#{p}-cb").click ->
       $("#col-#{p}").toggle @checked
@@ -150,7 +150,7 @@ sel = -1 # index of the selected group
   '''
   return
 
-props = qw 'fg bg bold italic underlined lb' # properties in style objects
+props = qw 'fg bg B I U lb' # properties in style objects
 getModelAsObject = -> # keyed by token type, contains only diffs from defaults, suitable for putting in localStorage
   v = {}
   for g, i in G
@@ -169,9 +169,9 @@ selectGroup = (i, forceRefresh) ->
     $('#col-fg-cb').prop 'checked', !!h.fg; $('#col-fg').val(h.fg).toggle !!h.fg
     $('#col-bg-cb').prop 'checked', !!h.bg; $('#col-bg').val(h.bg).toggle !!h.bg
     $('#col-lb-cb').prop 'checked', !!h.lb; $('#col-lb').val(h.lb).toggle !!h.lb
-    $('#col-bold'      ).prop 'checked', !!h.bold
-    $('#col-italic'    ).prop 'checked', !!h.italic
-    $('#col-underlined').prop 'checked', !!h.underlined
+    $('#col-B').prop 'checked', !!h.B
+    $('#col-I').prop 'checked', !!h.I
+    $('#col-U').prop 'checked', !!h.U
     $('#col-lb-p').toggle !!G[i].showLB
     sel = i
   return
