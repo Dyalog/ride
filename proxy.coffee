@@ -74,14 +74,14 @@ parseEditableEntity = (xml) -> # used for OpenWindow and UpdateWindow
   #                      entityType type, lineAttributes attributes]
   #   lineAttributes => lineAttribute[int[] stop, int[] monitor, int[] trace]
   bs = []; xml.replace /<row>(\d+)<\/row><value>1<\/value>/g, (_, l) -> bs.push +l
-  name: b64d tag 'name', xml
-  text: b64d tag 'text', xml
   token: +tag 'token', xml
+  name: b64d tag 'name', xml
   currentRow: +tag('cur_pos', xml) || 0
   debugger: +tag 'bugger', xml
   readOnly: !!+tag 'readonly', xml
-  lineAttributes: stop: bs
   entityType: 1 + entityTypeTranslation.indexOf +tag 'type', xml
+  lineAttributes: stop: bs
+  text: b64d tag 'text', xml
 
 WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' # constants used for ReplyAtInputPrompt
 
