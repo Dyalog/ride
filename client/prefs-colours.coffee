@@ -35,7 +35,7 @@ G = [ # information about syntax highlighting groups
   {t:'⍝',  c:'.cm-apl-comment',             s:'comment'         }
   {t:'!',  c:'.cm-apl-err',                 s:'error'           }
   {t:'L',  c:'.CodeMirror-linenumber',      s:'line number'     }
-  {t:'cu', c:'div.CodeMirror-cursor',       s:'cursor',           controls:{lb:1}}
+  {t:'cu', c:'div.CodeMirror-cursor',       s:'cursor',           controls:{lb:1,fg:0,bg:0,BIU:0}}
   {t:'mb', c:'.CodeMirror-matchingbracket', s:'matching bracket'}
   {t:'sc', c:'.CodeMirror-search-match',    s:'search match'    }
   {t:'mo', c:'.modified',                   s:'modified (session)'}
@@ -104,7 +104,7 @@ sel = -1 # index of the selected group
         <label><input type=checkbox id=col-B><b>B</b></label>
         <label><input type=checkbox id=col-I><i>I</i></label>
         <label><input type=checkbox id=col-U><u>U</u></label>
-      <p id=col-lb-p><label><input type=checkbox id=col-lb-cb>Left border</label> <input type=color id=col-lb>
+      <p id=col-lb-p><label><input type=checkbox id=col-lb-cb>Cursor colour</label> <input type=color id=col-lb>
     </div>
   """
   $cm = $ '#col-cm'
