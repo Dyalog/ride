@@ -3,6 +3,7 @@ connect = require './connect'
 about = require './about'
 {IDE} = require './ide'
 prefs = require './prefs'
+{delay} = require './util'
 require './prefs-colours' # load it in order to initialize syntax highlighting
 
 $ ->
@@ -39,6 +40,7 @@ $ ->
     D.wins = opener.D.wins
     ed = opener.D.wins[win] = new Editor ide, $('.ui-layout-center'), editorOpts; ed.open ee; ed.updateSize()
     $('title').text ed.name; window.onbeforeunload = -> ed.onbeforeunload()
+    delay 500, -> ed.refresh(); return # work around a rendering issue on Ubuntu
     opener.D.ide.unblock()
   else
     D.socket = do(D.createSocket || -> eio (if location.protocol == 'https:' then 'wss://' else 'ws://') + location.host)
