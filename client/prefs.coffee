@@ -38,6 +38,10 @@ prefs = @
     _Edit
       Preferences              =PRF {!mac}
       Select All               =selectAll {mac}
+      -                             {!mac&&!browser}
+      Cut                      =CUT {!mac&&!browser}
+      Copy                     =CPY {!mac&&!browser}
+      Paste                    =PST {!mac&&!browser}
     _View
       Show Language Bar        =LBR
       Float New Editors        =FLT
