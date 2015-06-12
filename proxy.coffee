@@ -6,7 +6,7 @@ path = require 'path'
 
 log = @log = do ->
   t0 = +new Date # log timestamps will be number of milliseconds since t0
-  N = 50; T = 1000 # log no more than N log messages per T milliseconds
+  N = 500; T = 1000 # log no more than N log messages per T milliseconds
   n = t = 0 # at any moment, there have been n messages since time t
   (s) -> # the actual log() function
     if (t1 = +new Date) - t > T then t = t1; n = 1 # if last message was too long ago, start counting afresh
