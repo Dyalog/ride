@@ -159,7 +159,7 @@ getModelAsObject = -> # keyed by token type, contains only diffs from defaults, 
   v = {}
   for g, i in G
     m = model[i]
-    for p in props when m[p] != (scheme[g.t]?[p] || '') then (v[g.t] ?= {})[p] = m[p]
+    for p in props when (m[p] || '') != (scheme[g.t]?[p] || '') then (v[g.t] ?= {})[p] = m[p]
   v
 
 @save = -> prefs.hi getModelAsObject(); return
