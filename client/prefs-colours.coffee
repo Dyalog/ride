@@ -37,7 +37,7 @@ G = [ # information about syntax highlighting groups
   {t:'L',  c:'.CodeMirror-linenumber',      s:'line number'     }
   {t:'cu', c:'div.CodeMirror-cursor',       s:'cursor',           controls:{lb:1,fg:0,bg:0,BIU:0}}
   {t:'mb', c:'.CodeMirror-matchingbracket', s:'matching bracket'}
-  {t:'sc', c:'.CodeMirror-search-match',    s:'search match'    }
+  {t:'sc', c:'.cm-searching',               s:'search match'    }
   {t:'mo', c:'.modified',                   s:'modified (session)'}
   {t:'s1', c:'.CodeMirror-focused .CodeMirror-selected', s:'selected (focused)',    controls:{fg:0,BIU:0}}
   {t:'s0', c:'.CodeMirror-selected',                     s:'selected (no focus)',   controls:{fg:0,BIU:0}}
@@ -111,10 +111,17 @@ sel = -1 # index of the selected group
   cm = new CodeMirror $cm[0],
     lineNumbers: true, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
     indentUnit: 4, scrollButtonHeight: 12, matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
+  cm.addOverlay token: (stream) ->
+    i = stream.string[stream.pos..].indexOf SEARCH_MATCH
+    if !i then         stream.pos += SEARCH_MATCH.length; 'searching'
+    else if i > 0 then stream.pos += i; return
+    else               stream.skipToEnd(); return
   cm.on 'gutterClick', -> selectGroup H.L; return
   cm.on 'cursorActivity', ->
     if cm.somethingSelected()
       selectGroup H.s1
+    else if 0 <= cm.getLine(cm.getCursor().line).indexOf SEARCH_MATCH
+      selectGroup H.sc
     else if t = cm.getTokenTypeAt cm.getCursor(), 1
       c = '.cm-' + t.split(' ')[0]; i = -1; for g, j in G when g.c == c then i = j; break
       i != -1 && selectGroup i
@@ -135,10 +142,11 @@ sel = -1 # index of the selected group
     return
   return
 
+SEARCH_MATCH = 'search match' # sample text to illustrate a search match
 @load = ->
   v = prefs.hi(); model = G.map (g) -> $.extend {}, scheme[g.t], v[g.t]
   updateSampleStyle(); selectGroup 0, 1; cm.setSize $cm.width(), $cm.height()
-  cm.setValue '''
+  cm.setValue """
     dfn←{ ⍝ sample
       0 ¯1.2e¯3j¯.45 'string' ⍬
       +/-⍣×A:⍺∇⍵[i;j]
@@ -150,8 +158,9 @@ sel = -1 # index of the selected group
         {⍵[⍋⍵]}
         global←0 ⋄ ⎕error
       :endif
+      #{SEARCH_MATCH}
     ∇
-  '''
+  """
   return
 
 props = qw 'fg bg B I U lb' # properties in style objects
