@@ -5,7 +5,7 @@ cd `dirname "$0"`
 if [ ! -e node_modules ]; then npm i; fi
 mkdir -p build/{js,nw,tmp}
 
-cp -uv index.html empty.html node_modules/codemirror/lib/codemirror.css style/apl385.woff style/*.png favicon.ico package.json build/nw/
+cp -uv index.html empty.html style/apl385.woff style/*.png favicon.ico package.json build/nw/
 
 i=style/style.sass o=build/nw/style.css
 if [ ! -e $o -o $(find `dirname $i` -type f -newer $o 2>/dev/null | wc -l) -gt 0 ]; then
