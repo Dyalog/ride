@@ -165,11 +165,7 @@ SEARCH_MATCH = 'search match' # sample text to illustrate a search match
 
 props = qw 'fg bg B I U lb' # properties in style objects
 getModelAsObject = -> # keyed by token type, contains only diffs from defaults, suitable for putting in localStorage
-  v = {}
-  for g, i in G
-    m = model[i]
-    for p in props when (m[p] || '') != (scheme[g.t]?[p] || '') then (v[g.t] ?= {})[p] = m[p]
-  v
+  v = {}; (for g, i in G then for p, x of model[i] when x then (v[g.t] ?= {})[p] = x); v
 
 @save = -> prefs.hi getModelAsObject(); return
 @resize = -> cm.setSize $cm.width(), $cm.height(); return
