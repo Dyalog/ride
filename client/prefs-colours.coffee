@@ -5,42 +5,42 @@ prefs = require './prefs'
 
 G = [ # information about syntax highlighting groups
   # t: token type, a short key for storing customisations in localStorage
-  # c: css selector
   # s: name to display in the UI
+  # c: css selector
   # showX: whether to show the control for "X"
-  {t:' ',  c:'.cm-s-default,.CodeMirror-gutter-wrapper', s:'normal'}
-  {t:'0',  c:'.cm-apl-num',                 s:'number'          }
-  {t:"'",  c:'.cm-apl-str',                 s:'string'          }
-  {t:'⍬',  c:'.cm-apl-zilde',               s:'zilde'           }
-  {t:'a',  c:'.cm-apl-name',                s:'name'            }
-  {t:'A',  c:'.cm-apl-global-name',         s:'global name'     }
-  {t:'⎕',  c:'.cm-apl-quad-name',           s:'quad name'       }
-  {t:'+',  c:'.cm-apl-fn',                  s:'function'        }
-  {t:'/',  c:'.cm-apl-op1',                 s:'monadic operator'}
-  {t:'.',  c:'.cm-apl-op2',                 s:'dyadic operator' }
-  {t:'#',  c:'.cm-apl-ns',                  s:'namespace'       }
-  {t:'←',  c:'.cm-apl-assignment',          s:'assignment'      }
-  {t:'⋄',  c:'.cm-apl-diamond',             s:'diamond'         }
-  {t:'(',  c:'.cm-apl-paren',               s:'parenthesis'     }
-  {t:'[',  c:'.cm-apl-bracket',             s:'bracket'         }
-  {t:';',  c:'.cm-apl-semicolon',           s:'semicolon'       }
-  {t:'{',  c:'.cm-apl-dfn',                 s:'dfn'             }
-  {t:'{1', c:'.cm-apl-dfn1',                s:'dfn level 1'     }
-  {t:'{2', c:'.cm-apl-dfn2',                s:'dfn level 2'     }
-  {t:'{3', c:'.cm-apl-dfn3',                s:'dfn level 3'     }
-  {t:'∇',  c:'.cm-apl-tradfn',              s:'tradfn'          }
-  {t:':',  c:'.cm-apl-kw',                  s:'keyword'         }
-  {t:'l:', c:'.cm-apl-label',               s:'label'           }
-  {t:'i',  c:'.cm-apl-idiom',               s:'idiom'           }
-  {t:'⍝',  c:'.cm-apl-comment',             s:'comment'         }
-  {t:'!',  c:'.cm-apl-err',                 s:'error'           }
-  {t:'L',  c:'.CodeMirror-linenumber',      s:'line number'     }
-  {t:'cu', c:'div.CodeMirror-cursor',       s:'cursor',           controls:{lb:1,fg:0,bg:0,BIU:0}}
-  {t:'mb', c:'.CodeMirror-matchingbracket', s:'matching bracket'}
-  {t:'sc', c:'.cm-searching',               s:'search match'    }
-  {t:'mo', c:'.modified',                   s:'modified (session)'}
-  {t:'s1', c:'.CodeMirror-focused .CodeMirror-selected', s:'selected (focused)',    controls:{fg:0,BIU:0}}
-  {t:'s0', c:'.CodeMirror-selected',                     s:'selected (no focus)',   controls:{fg:0,BIU:0}}
+  {t:' ',  s:'normal',              c:'.cm-s-default,.CodeMirror-gutter-wrapper'}
+  {t:'0',  s:'number',              c:'.cm-apl-num'           }
+  {t:"'",  s:'string',              c:'.cm-apl-str'           }
+  {t:'⍬',  s:'zilde',               c:'.cm-apl-zilde'         }
+  {t:'a',  s:'name',                c:'.cm-apl-name'          }
+  {t:'A',  s:'global name',         c:'.cm-apl-global-name'   }
+  {t:'⎕',  s:'quad name',           c:'.cm-apl-quad-name'     }
+  {t:'+',  s:'function',            c:'.cm-apl-fn'            }
+  {t:'/',  s:'monadic operator',    c:'.cm-apl-op1'           }
+  {t:'.',  s:'dyadic operator',     c:'.cm-apl-op2'           }
+  {t:'#',  s:'namespace',           c:'.cm-apl-ns'            }
+  {t:'←',  s:'assignment',          c:'.cm-apl-assignment'    }
+  {t:'⋄',  s:'diamond',             c:'.cm-apl-diamond'       }
+  {t:'(',  s:'parenthesis',         c:'.cm-apl-paren'         }
+  {t:'[',  s:'bracket',             c:'.cm-apl-bracket'       }
+  {t:';',  s:'semicolon',           c:'.cm-apl-semicolon'     }
+  {t:'{',  s:'dfn',                 c:'.cm-apl-dfn'           }
+  {t:'{1', s:'dfn level 1',         c:'.cm-apl-dfn1'          }
+  {t:'{2', s:'dfn level 2',         c:'.cm-apl-dfn2'          }
+  {t:'{3', s:'dfn level 3',         c:'.cm-apl-dfn3'          }
+  {t:'∇',  s:'tradfn',              c:'.cm-apl-tradfn'        }
+  {t:':',  s:'keyword',             c:'.cm-apl-kw'            }
+  {t:'l:', s:'label',               c:'.cm-apl-label'         }
+  {t:'i',  s:'idiom',               c:'.cm-apl-idiom'         }
+  {t:'⍝',  s:'comment',             c:'.cm-apl-comment'       }
+  {t:'!',  s:'error',               c:'.cm-apl-err'           }
+  {t:'L',  s:'line number',         c:'.CodeMirror-linenumber'}
+  {t:'cu', s:'cursor',              c:'div.CodeMirror-cursor', controls:{lb:1,fg:0,bg:0,BIU:0}}
+  {t:'mb', s:'matching bracket',    c:'.CodeMirror-matchingbracket'}
+  {t:'sc', s:'search match',        c:'.cm-searching'         }
+  {t:'mo', s:'modified (session)',  c:'.modified'             }
+  {t:'s1', s:'selected (focused)',  c:'.CodeMirror-focused .CodeMirror-selected', controls:{fg:0,BIU:0}}
+  {t:'s0', s:'selected (no focus)', c:'.CodeMirror-selected',                     controls:{fg:0,BIU:0}}
 ]
 H = dict G.map (g, i) -> [g.t, i]
 
