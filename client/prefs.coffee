@@ -8,7 +8,8 @@
 #   prefs.foo.getDefault()      # retrieve default value
 prefs = @
 [ # name                    default (type is determined from default value; setter enforces type and handles encoding)
-  ['hi',                    {}] # maps syntax group names to {fg:'#rrggbb',bold:1,...}; only diffs from defaults are stored
+  ['colourScheme',          'Default'] # name of the active colour scheme
+  ['colourSchemes',         []] # objects describing user-defined colour schemes
   ['favs',                  [host: '127.0.0.1', port: 4502]]
   ['floating',              0] # floating editor and tracer windows
   ['floatOnTop',            0] # try to keep floating windows on top of the session

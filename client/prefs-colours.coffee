@@ -1,5 +1,5 @@
 prefs = require './prefs'
-{join, dict, qw} = require './util'
+{join, dict, qw, esc} = require './util'
 
 @name = 'Colours'
 
@@ -44,56 +44,56 @@ G = [ # information about syntax highlighting groups
 ]
 H = dict G.map (g, i) -> [g.t, i]
 
-scheme =
-  '0':fg:'#888888'
-  "'":fg:'#008888'
-  '⍬':fg:'#000088'
-  'a':fg:'#888888'
-  '⎕':fg:'#880088'
-  '+':fg:'#000088'
-  '/':fg:'#0000ff'
-  '.':fg:'#0000ff'
-  '#':fg:'#888888'
-  '←':fg:'#0000ff'
-  '⋄':fg:'#0000ff'
-  '(':fg:'#0000ff'
-  '[':fg:'#0000ff'
-  ';':fg:'#0000ff'
-  '{':fg:'#0000ff'
-  '∇':fg:'#888888'
-  ':':fg:'#880000'
-  'i':fg:'#0000ff'
-  '⍝':fg:'#008888'
-  '!':fg:'#ff0000'
-  'L':fg:'#000088'
-  'mb':bg:'#ffff88'
-  'sc':bg:'#ff8800'
-  'mo':bg:'#eeeeee'
-  's1':bg:'#d7d4f0'
-  's0':bg:'#d9d9d9'
-
-renderCSS = (v, rp = '') -> # v: style objects keyed by token type, rp: css rule prefix
-  join G.map (g) ->
-    h = $.extend {}, scheme[g.t], v[g.t] # h: effective style
-    g.c.split(',').map((x) -> rp + ' ' + x).join(',') + '{' +
-      (h.fg && "color:#{h.fg};"             || '') +
-      (h.bg && "background-color:#{h.bg};"  || '') +
-      (h.B  && 'font-weight:bold;'          || '') +
-      (h.I  && 'font-style:italic;'         || '') +
-      (h.U  && 'text-decoration:underline;' || '') +
-      (h.lb && "border-left-color:#{h.lb};" || '') +
-      '}'
-
-prefs.hi updateStyle = (v) -> $('#col-style').text renderCSS v, '.ride-win'; return
-$ -> updateStyle prefs.hi(); return
-
+builtInSchemes = [
+  {
+    name: 'Default', frozen: 1
+    0:{fg:'#888888'}, "'":{fg:'#008888'}, '⍬':{fg:'#000088'}, a:{fg:'#888888'}, '⎕':{fg:'#880088'},
+    '+':{fg:'#000088'}, '/':{fg:'#0000ff'}, '.':{fg:'#0000ff'}, '#':{fg:'#888888'}, '←':{fg:'#0000ff'},
+    '⋄':{fg:'#0000ff'}, '(':{fg:'#0000ff'}, '[':{fg:'#0000ff'}, ';':{fg:'#0000ff'}, '{':{fg:'#0000ff'},
+    '∇':{fg:'#888888'}, ':':{fg:'#880000'}, i:{fg:'#0000ff'}, '⍝':{fg:'#008888'}, '!':{fg:'#ff0000'},
+    L:{fg:'#000088'}, mb:{bg:'#ffff88'}, sc:{bg:'#ff8800'}, mo:{bg:'#eeeeee'}, s1:{bg:'#d7d4f0'},
+    s0:{bg:'#d9d9d9'}
+  }
+  {
+    name: 'Twilight', frozen: 1
+    ' ':{fg:'#88ff88',bg:'#000000'}, 'cu':{lb:'#ff0000'}
+  }
+]
+schemes  = null # all schemes (built-in and user-defined) as objects
+scheme   = null # the active scheme object
 $cm = cm = null # DOM element and CodeMirror instance for displaying sample code
-model = null # an array of style objects, in the same order as "G", initialised in @load()
-sel = -1 # index of the selected group
+sel      = null # the selected group's token type (.t)
+
+renderCSS = (scheme, rp = '') -> # rp: css rule prefix
+  join G.map (g) ->
+    if h = scheme[g.t]
+      g.c.split(',').map((x) -> rp + ' ' + x).join(',') + '{' +
+        (h.fg && "color:#{h.fg};"             || '') +
+        (h.bg && "background-color:#{h.bg};"  || '') +
+        (h.B  && 'font-weight:bold;'          || '') +
+        (h.I  && 'font-style:italic;'         || '') +
+        (h.U  && 'text-decoration:underline;' || '') +
+        (h.lb && "border-left-color:#{h.lb};" || '') +
+        '}'
+    else
+      ''
+
+$ updateFromPrefs = ->
+  name = prefs.colourScheme()
+  for x in builtInSchemes.concat prefs.colourSchemes() when x.name == name
+    $('#col-style').text renderCSS x, '.ride-win'; break
+  return
+prefs.colourScheme updateFromPrefs
+prefs.colourSchemes updateFromPrefs
 
 @init = ($e) ->
   u = []; (for _, {fg} of scheme when fg && 0 < u.indexOf fg then u.push fg); u.sort() # u: unique colours
   $e.html """
+    <div id=col-top>
+      <label>Scheme: <select id=col-scheme></select></label>
+      <a href=# id=col-clone>Clone</a>
+      <a href=# id=col-delete>Delete</a>
+    </div>
     <div id=col-cm></div>
     <div id=col-settings>
       <datalist id=col-list>#{join u.map (c) -> "<option value=#{c}>"}</datalist>
@@ -107,6 +107,13 @@ sel = -1 # index of the selected group
       <p id=col-lb-p><label><input type=checkbox id=col-lb-cb>Cursor colour</label> <input type=color id=col-lb>
     </div>
   """
+  $('#col-scheme').change ->
+    scheme = schemes[+@selectedIndex]; updateSampleStyle(); $('#col-delete').toggle !scheme.frozen; return
+  $('#col-clone').button().click ->
+    schemes.push x = {}; for k, v of scheme then x[k] = $.extend {}, v # x: the new scheme
+    x.name = scheme.name + ' (copy)'; delete x.frozen; scheme = x; updateSchemes(); false
+  $('#col-delete').button().click ->
+    schemes.splice $('#col-scheme')[0].selectedIndex, 1; [scheme] = schemes; updateSchemes(); false
   $cm = $ '#col-cm'
   cm = new CodeMirror $cm[0],
     lineNumbers: true, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
@@ -116,36 +123,42 @@ sel = -1 # index of the selected group
     if !i then         stream.pos += SEARCH_MATCH.length; 'searching'
     else if i > 0 then stream.pos += i; return
     else               stream.skipToEnd(); return
-  cm.on 'gutterClick', -> selectGroup H.L; return
+  cm.on 'gutterClick', -> selectGroup 'L'; return
   cm.on 'cursorActivity', ->
     if cm.somethingSelected()
-      selectGroup H.s1
+      selectGroup 's1'
     else if 0 <= cm.getLine(cm.getCursor().line).indexOf SEARCH_MATCH
-      selectGroup H.sc
+      selectGroup 'sc'
     else if t = cm.getTokenTypeAt cm.getCursor(), 1
-      c = '.cm-' + t.split(' ')[0]; i = -1; for g, j in G when g.c == c then i = j; break
-      i != -1 && selectGroup i
+      c = '.cm-' + t.split(' ')[0]; for g in G when g.c == c then selectGroup g.t; break
     else
-      selectGroup H[' ']
+      selectGroup ' '
     return
-  $('#col-group').change -> selectGroup +@value; return
+  $('#col-group').change -> selectGroup G[+@value].t; return
   qw('fg bg lb').forEach (p) ->
-    $("#col-#{p}").change -> model[sel][p] = @value; updateSampleStyle(); return
+    $("#col-#{p}").change -> (scheme[sel] ?= {})[p] = @value; updateSampleStyle(); return
     $("#col-#{p}-cb").click ->
       $("#col-#{p}").toggle @checked
-      model[sel][p] = @checked && $("#col-#{p}").val() || ''
+      (scheme[sel] ?= {})[p] = @checked && $("#col-#{p}").val() || ''
       updateSampleStyle()
       return
     return
   qw('B I U').forEach (p) ->
-    $("#col-#{p}").click -> model[sel][p] = +!!@checked; updateSampleStyle(); return
+    $("#col-#{p}").click -> (scheme[sel] ?= {})[p] = +!!@checked; updateSampleStyle(); return
     return
   return
 
-SEARCH_MATCH = 'search match' # sample text to illustrate a search match
+updateSchemes = ->
+  $('#col-scheme').html(join schemes.map (x) -> "<option value='#{esc x.name}'>#{esc x.name}").val scheme.name
+  $('#col-delete').toggle !scheme.frozen; updateSampleStyle(); selectGroup ' ', 1; return
+
+SEARCH_MATCH = 'search match' # sample text to illustrate it
 @load = ->
-  v = prefs.hi(); model = G.map (g) -> $.extend {}, scheme[g.t], v[g.t]
-  updateSampleStyle(); selectGroup 0, 1; cm.setSize $cm.width(), $cm.height()
+  schemes = builtInSchemes.concat prefs.colourSchemes()
+  name = prefs.colourScheme() # name of the active scheme
+  [scheme] = schemes; for x in schemes when x.name == name then scheme = x; break
+  updateSchemes()
+  cm.setSize $cm.width(), $cm.height()
   cm.setValue """
     dfn←{ ⍝ sample
       0 ¯1.2e¯3j¯.45 'string' ⍬
@@ -163,18 +176,14 @@ SEARCH_MATCH = 'search match' # sample text to illustrate a search match
   """
   return
 
-props = qw 'fg bg B I U lb' # properties in style objects
-getModelAsObject = -> # keyed by token type, contains only diffs from defaults, suitable for putting in localStorage
-  v = {}; (for g, i in G then for p, x of model[i] when x then (v[g.t] ?= {})[p] = x); v
-
-@save = -> prefs.hi getModelAsObject(); return
+@save = -> prefs.colourSchemes schemes[builtInSchemes.length..]; prefs.colourScheme scheme.name; return
 @resize = -> cm.setSize $cm.width(), $cm.height(); return
 
-updateSampleStyle = -> $('#col-sample-style').text renderCSS dict(G.map (g, i) -> [g.t, model[i]]), '#col-cm'; return
+updateSampleStyle = -> $('#col-sample-style').text renderCSS scheme, '#col-cm'; return
 
-selectGroup = (i, forceRefresh) ->
-  if i != sel || forceRefresh
-    h = model[i]; $('#col-group').val i
+selectGroup = (t, forceRefresh) ->
+  if sel != t || forceRefresh
+    i = H[t]; h = scheme[t] || {}; $('#col-group').val i
     qw('fg bg lb').forEach (p) -> $("#col-#{p}-cb").prop 'checked', !!h[p]; $("#col-#{p}").val(h[p]).toggle !!h[p]; return
     qw('B I U').forEach (p) -> $("#col-#{p}").prop 'checked', !!h[p]; return
     c = G[i].controls || {}
@@ -182,5 +191,5 @@ selectGroup = (i, forceRefresh) ->
     $('#col-bg-p' ).toggle !!(c.bg ? 1)
     $('#col-BIU-p').toggle !!(c.BIU ? 1)
     $('#col-lb-p' ).toggle !!c.lb
-    sel = i
+    sel = t
   return
