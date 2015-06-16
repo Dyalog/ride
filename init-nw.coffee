@@ -152,6 +152,24 @@ if process?
       wr proxy.log.get().join ''; proxy.log.listeners.push wr
       false
 
+  # expandStackString inserts snippets of code next to each file:///filename.js:123:45
+  expandStackString = (s) -> # s: the string from  new Error().stack
+    C = 2 # how many lines of context above and below
+    s.replace /\(file:\/\/([^\n\r\)]+):(\d+):(\d+)\)/g, (m, f, l, c) ->
+      # m:whole match  f:file  l:line  c:col
+      if !(f.indexOf('/') == f.indexOf('\\') == -1) then try
+        lines = fs.readFileSync(f, 'utf8').split /\r?\n/
+        l-- # make "l" a 0-based line number
+        l0 = Math.max l - C, 0
+        l1 = Math.min l + C, lines.length
+        fr = lines[l0..l1] # fragment to show
+        ok = 1; for x in fr when x.length > 200 then ok = 0; break
+        if ok # if the fragment doesn't contain lines that are too long
+          fr = fr.map (x) -> '            ' + x
+          fr[l - l0] = '>' + fr[l - l0][1..]
+          m += '\n' + fr.join '\n'
+      m
+
   # Error handling
   if !D.floating
     htmlChars = '&': '&amp;', '<': '&lt;', '>': '&gt;'
@@ -162,7 +180,7 @@ if process?
         IDE: #{JSON.stringify D.versionInfo}
         Interpreter: #{JSON.stringify(D.remoteIdentification || null)}
         localStorage: #{JSON.stringify localStorage}
-        \n#{e.stack}\n
+        \n#{expandStackString e.stack}\n
         Proxy log:
         #{proxy.log.get().join ''}
       """
