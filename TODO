@@ -28,7 +28,6 @@ Not yet prioritized:
   Type a couple of chars and hit Alt+Enter, followed by Enter. Uncaught node.js Error; JS email 2015-03-10
     NN: cannot reproduce on Linux
   There should be no flashing cursors in windows that don't have focus; JS 2015-03-21
-  Customizable colours for syntax highlighting
   Disable EP in an editor after it has been pressed once
   Menu items for next/prev line from demo should be disabled when there are no more lines; MK Jabber 2015-03-25
   After closing an editor, focus the next editor instead of the session
@@ -232,3 +231,4 @@ Done:
   Closing the session window should close all open editor windows
   JS: <Esc> in the session should switch focus to the top edit or trace window.
     NN: I did it for the most recently used edit or trace window
+  Customizable colours for syntax highlighting
