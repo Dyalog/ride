@@ -87,12 +87,22 @@ $ updateStyle = -> # update global style from what's in localStorage; do it on "
 prefs.colourScheme  updateStyle
 prefs.colourSchemes updateStyle
 
+pickUniqueSchemeName = (root) ->
+  h = {}; for x in schemes then h[x.name] = 1
+  if !h[root]
+    root
+  else
+    root = root.replace /\ \(\d+\)$/, ''
+    i = 1; (while h[r = "#{root} (#{i})"] then i++); r
+
 @init = ($e) ->
   u = []; (for _, {fg} of scheme when fg && 0 < u.indexOf fg then u.push fg); u.sort() # u: unique colours
   $e.html """
     <div id=col-top>
       <label>Scheme: <select id=col-scheme></select></label>
+      <input id=col-new-name class=text-field>
       <a href=# id=col-clone>Clone</a>
+      <a href=# id=col-rename>Rename</a>
       <a href=# id=col-delete>Delete</a>
     </div>
     <div id=col-cm></div>
@@ -110,13 +120,26 @@ prefs.colourSchemes updateStyle
   """
   $('#col-scheme').change ->
     scheme = schemes[+@selectedIndex]; updateSampleStyle()
-    $('#prefs-tab-colours').toggleClass 'frozen', scheme.frozen
+    $('#prefs-tab-colours').toggleClass 'frozen', !!scheme.frozen
     cm.setSize $cm.width(), $cm.height(); return
+  $('#col-new-name').blur ->
+    if newName = $(@).val()
+      scheme.name = ''; scheme.name = pickUniqueSchemeName newName
+      $('#prefs-tab-colours').removeClass 'renaming'; updateSchemes()
+    return
+  $('#col-new-name').keydown (e) ->
+    switch e.which
+      when 13 then $(@)                 .blur(); false # enter
+      when 27 then $(@).val(scheme.name).blur(); false # esc
   $('#col-clone').button().click ->
     schemes.push x = {}; for k, v of scheme then x[k] = $.extend {}, v # x: the new scheme
-    x.name = scheme.name + ' (copy)'; delete x.frozen; scheme = x; updateSchemes(); false
+    x.name = pickUniqueSchemeName scheme.name; delete x.frozen; scheme = x; updateSchemes(); false
+  $('#col-rename').button().click ->
+    $('#col-new-name').width($('#col-scheme').width()).val(scheme.name).select()
+    $('#prefs-tab-colours').addClass 'renaming'; false
   $('#col-delete').button().click ->
-    schemes.splice $('#col-scheme')[0].selectedIndex, 1; [scheme] = schemes; updateSchemes(); false
+    i = $('#col-scheme')[0].selectedIndex; schemes.splice i, 1
+    scheme = schemes[Math.min i, schemes.length - 1]; updateSchemes(); false
   $cm = $ '#col-cm'
   cm = new CodeMirror $cm[0],
     lineNumbers: true, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
@@ -153,7 +176,8 @@ prefs.colourSchemes updateStyle
 
 updateSchemes = ->
   $('#col-scheme').html(join schemes.map (x) -> "<option value='#{esc x.name}'>#{esc x.name}").val scheme.name
-  $('#col-delete').toggle !scheme.frozen; updateSampleStyle(); selectGroup ' ', 1; return
+  $('#prefs-tab-colours').toggleClass 'frozen', !!scheme.frozen; cm.setSize $cm.width(), $cm.height()
+  updateSampleStyle(); selectGroup ' ', 1; return
 
 SEARCH_MATCH = 'search match' # sample text to illustrate it
 @load = ->
@@ -161,6 +185,7 @@ SEARCH_MATCH = 'search match' # sample text to illustrate it
   name = prefs.colourScheme() # name of the active scheme
   [scheme] = schemes; for x in schemes when x.name == name then scheme = x; break
   updateSchemes()
+  $('#prefs-tab-colours').removeClass 'renaming'
   cm.setSize $cm.width(), $cm.height()
   cm.setValue """
     dfn←{ ⍝ sample
