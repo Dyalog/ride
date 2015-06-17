@@ -78,13 +78,14 @@ renderCSS = (scheme, rp = '') -> # rp: css rule prefix
     else
       ''
 
-$ updateFromPrefs = ->
+$ updateStyle = -> # update global style from what's in localStorage; do it on "document ready"
   name = prefs.colourScheme()
   for x in builtInSchemes.concat prefs.colourSchemes() when x.name == name
     $('#col-style').text renderCSS x, '.ride-win'; break
   return
-prefs.colourScheme updateFromPrefs
-prefs.colourSchemes updateFromPrefs
+# ... and update whenever the values in localStorage change
+prefs.colourScheme  updateStyle
+prefs.colourSchemes updateStyle
 
 @init = ($e) ->
   u = []; (for _, {fg} of scheme when fg && 0 < u.indexOf fg then u.push fg); u.sort() # u: unique colours
@@ -108,7 +109,9 @@ prefs.colourSchemes updateFromPrefs
     </div>
   """
   $('#col-scheme').change ->
-    scheme = schemes[+@selectedIndex]; updateSampleStyle(); $('#col-delete').toggle !scheme.frozen; return
+    scheme = schemes[+@selectedIndex]; updateSampleStyle()
+    $('#prefs-tab-colours').toggleClass 'frozen', scheme.frozen
+    cm.setSize $cm.width(), $cm.height(); return
   $('#col-clone').button().click ->
     schemes.push x = {}; for k, v of scheme then x[k] = $.extend {}, v # x: the new scheme
     x.name = scheme.name + ' (copy)'; delete x.frozen; scheme = x; updateSchemes(); false
