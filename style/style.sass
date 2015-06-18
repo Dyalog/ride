@@ -228,17 +228,16 @@ input, textarea, select, a { outline: 0; }
       text-decoration: none; color: black
       &:hover { text-decoration: underline; color: blue; }
 
-#kbd-pfx { width: 1.5em; text-align: center; }
-#kbd-pfx-label { float: left; }
-#kbd-legend
-  +tt
-  width: 90px; border-collapse: collapse; margin: 0 auto 10px auto; float: none
+#glyphs-pfx { width: 1.5em; text-align: center; }
+#glyphs-pfx-label { float: left; }
+#glyphs-legend
+  +tt ; width: 90px; border-collapse: collapse; margin: 0 auto 10px auto; float: none
   .g0, .g2 { text-align: left;  cursor: default; }
   .g1, .g3 { text-align: right; cursor: default; }
-#kbd-reset { float: right; }
-#kbd-layout
-  +tt
-  background-color: #aaa; border-radius: 5px; height: 200px; clear: both
+#glyphs-reset { float: right; }
+#glyphs-layout
+  +tt ; background-color: #aaa; border-radius: 5px; height: 200px; clear: both
+#glyphs-lc { float: right; margin-top: 5px; }
 .key
   float: left; width: 6%; height: 45px; border-radius: 5px
   margin-left: 0.6%; margin-top: 4px; background-color: #fff; overflow: hidden
@@ -272,7 +271,6 @@ input, textarea, select, a { outline: 0; }
     position: relative; left: -30%; width: 30%; height: 45px
   #k44 { width: 8.4%; } // lshift
   #k45 { display: block; } // the key between lshift and Z
-#kbd-lc { float: right; margin-top: 5px; }
 
 #prefs-tab-menu
   position: absolute; left: 0; right: 0; top: 30px; bottom: 20px;
