@@ -44,7 +44,12 @@ CodeMirror.commands.HLP = (cm) ->
     .focus?()
   return
 
-CodeMirror.keyMap.dyalog = fallthrough: 'dyalogDefault'
+prefs.keys updateKeys = (x) ->
+  CodeMirror.keyMap.dyalog = h = fallthrough: 'dyalogDefault'
+  for c, k of x then h[k] = c
+  return
+updateKeys prefs.keys()
+
 CodeMirror.keyMap.dyalogDefault = fallthrough: 'default', F1: 'HLP', End: 'goLineEndSmart'
 CodeMirror.keyMap.dyalogDefault["'#{prefs.prefixKey()}'"] = (cm) ->
   if cm.dyalogBQ
@@ -234,6 +239,8 @@ createCommand = (xx) -> CodeMirror.commands[xx] ?= (cm) -> (if (h = cm.dyalogCom
   TC Ctrl-Enter
   TL Ctrl-Up
   WI Ctrl-Pause
+  TB Ctrl-Tab
+  BT Ctrl-Shift-Tab
 '''.split('\n').forEach (l) ->
   [xx, keys...] = l.split /\s+/; createCommand xx; keys.forEach (key) -> CodeMirror.keyMap.dyalogDefault[key] = xx; return
 

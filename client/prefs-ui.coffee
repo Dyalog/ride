@@ -6,6 +6,7 @@ tabs = [
   require './prefs-title'
   require './prefs-menu'
   require './prefs-colours'
+  require './prefs-keys'
 ]
 
 safe = (s) -> s.toLowerCase().replace /[^a-z\-]/g, '-' # make a string suitable for a DOM id
