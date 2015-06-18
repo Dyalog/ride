@@ -1,6 +1,15 @@
 prefs = require './prefs'
 {join, delay} = require './util'
 
+# This module implements the Preferences dialog.
+# The actual content of tabs is in separate modules: prefs-*.coffee
+# Each of them can export the following properties:
+#   name     a string used as the tab's title
+#   init()   called only once, when Preferences is opened for the first time
+#   load()   called every time Preferences is opened
+#   save()   called when Save is pressed
+#   resize() called when the Preferences dialog is resized or the tab is selected
+
 tabs = [
   require './prefs-glyphs'
   require './prefs-keys'
@@ -19,7 +28,7 @@ ok = ->
       $.alert v.message, 'Error', if v.element then -> v.element.focus(); return
       return
     return
-  for t in tabs then t.save()
+  for t in tabs then t.save?()
   $d.dialog 'close'; false
 
 module.exports = (tabName) ->
@@ -42,7 +51,7 @@ module.exports = (tabName) ->
           {text: 'OK', click: ok}
           {text: 'Cancel', click: -> $d.dialog 'close'; return}
         ]
-    for t in tabs then t.init $ "#prefs-tab-#{safe t.name}"
+    for t in tabs then t.init? $ "#prefs-tab-#{safe t.name}"
   $d.dialog('option', 'position', at: 'center').dialog 'open'
   if tabName then $d.tabs active: $("#prefs-tabs-nav a[href='#prefs-tab-#{tabName}']").parent().index()
   for t in tabs then t.load?()
