@@ -5,7 +5,7 @@ prefs = require './prefs'
 window.onhelp = -> false # prevent IE from acting silly on F1
 
 prefs.prefixKey (x, old) -> # change listener
-  if x != old then m = CodeMirror.keyMap.dyalog; m["'#{x}'"] = m["'#{old}'"]; delete m["'#{old}'"]
+  if x != old then m = CodeMirror.keyMap.dyalogDefault; m["'#{x}'"] = m["'#{old}'"]; delete m["'#{old}'"]
   return
 
 squiggleDescriptions =
@@ -28,7 +28,7 @@ squiggleDescriptions =
 
 ctid = 0 # backquote completion timeout id
 
-CodeMirror.keyMap.dyalog = inherit fallthrough: 'default', F1: (cm) ->
+CodeMirror.commands.HLP = (cm) ->
   c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
   u =
     if      m = /^ *(\)[a-z]+).*$/.exec s then helpurls[m[1]] || helpurls.WELCOME
@@ -44,7 +44,9 @@ CodeMirror.keyMap.dyalog = inherit fallthrough: 'default', F1: (cm) ->
     .focus?()
   return
 
-CodeMirror.keyMap.dyalog["'#{prefs.prefixKey()}'"] = (cm) ->
+CodeMirror.keyMap.dyalog = fallthrough: 'dyalogDefault'
+CodeMirror.keyMap.dyalogDefault = fallthrough: 'default', F1: 'HLP', End: 'goLineEndSmart'
+CodeMirror.keyMap.dyalogDefault["'#{prefs.prefixKey()}'"] = (cm) ->
   if cm.dyalogBQ
     c = cm.getCursor(); cm.replaceSelection prefs.prefixKey(), 'end'
   else
@@ -217,7 +219,7 @@ createCommand = (xx) -> CodeMirror.commands[xx] ?= (cm) -> (if (h = cm.dyalogCom
   [70] -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
   [80] -- -- -- -- -- -- TO MO -- -- -- -- -- S1 S2 OS
 '''.replace(/\[.*?\]/g, '').replace(/^\s*|\s*$/g, '').split(/\s+/).forEach (xx, i) ->
-  if xx != '--' then createCommand xx; CodeMirror.keyMap.dyalog["'#{chr 0xf800 + i}'"] = xx
+  if xx != '--' then createCommand xx; CodeMirror.keyMap.dyalogDefault["'#{chr 0xf800 + i}'"] = xx
   return
 
 '''
@@ -233,11 +235,9 @@ createCommand = (xx) -> CodeMirror.commands[xx] ?= (cm) -> (if (h = cm.dyalogCom
   TL Ctrl-Up
   WI Ctrl-Pause
 '''.split('\n').forEach (l) ->
-  [xx, keys...] = l.split /\s+/; createCommand xx; keys.forEach (key) -> CodeMirror.keyMap.dyalog[key] = xx; return
+  [xx, keys...] = l.split /\s+/; createCommand xx; keys.forEach (key) -> CodeMirror.keyMap.dyalogDefault[key] = xx; return
 
-# CodeMirror provides a goLineStartSmart but not a goLineEndSmart command.
-CodeMirror.keyMap.dyalog.End = 'goLineEndSmart'
-CodeMirror.commands.goLineEndSmart = (cm) ->
+CodeMirror.commands.goLineEndSmart = (cm) -> # CodeMirror provides a goLineStartSmart but not a goLineEndSmart command.
   cm.extendSelectionsBy(
     ->
       c = cm.getCursor(); l = c.line; s = cm.getLine l; n = s.length; m = s.replace(/\ +$/, '').length
