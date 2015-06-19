@@ -4,11 +4,12 @@ prefs = require './prefs'
 # This module implements the Preferences dialog.
 # The actual content of tabs is in separate modules: prefs-*.coffee
 # Each of them can export the following properties:
-#   name     a string used as the tab's title
-#   init()   called only once, when Preferences is opened for the first time
-#   load()   called every time Preferences is opened
-#   save()   called when Save is pressed
-#   resize() called when the Preferences dialog is resized or the tab is selected
+#   name       a string used as the tab's title
+#   init()     called only once, when Preferences is opened for the first time
+#   load()     called every time Preferences is opened
+#   validate() should return a falsey value on failure, checked before attempting to save() any of the tabs
+#   save()     called when Save is pressed
+#   resize()   called when the Preferences dialog is resized or the tab is selected
 
 tabs = [
   require './prefs-glyphs'
