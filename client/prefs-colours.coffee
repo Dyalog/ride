@@ -174,12 +174,13 @@ pickUniqueSchemeName = (root) ->
     $("#col-#{p}").change -> (scheme[sel] ?= {})[p] = @value; updateSampleStyle(); return
     $("#col-#{p}-cb").click ->
       $("#col-#{p}").toggle @checked
-      (scheme[sel] ?= {})[p] = @checked && $("#col-#{p}").val() || ''
-      updateSampleStyle()
-      return
+      h = scheme[sel] ?= {}; if @checked then h[p] = $("#col-#{p}").val() else delete h[p]
+      updateSampleStyle(); return
     return
   qw('B I U').forEach (p) ->
-    $("#col-#{p}").click -> (scheme[sel] ?= {})[p] = +!!@checked; updateSampleStyle(); return
+    $("#col-#{p}").click ->
+      h = scheme[sel] ?= {}; if @checked then h[p] = 1 else delete h[p]
+      updateSampleStyle(); return
     return
   return
 
@@ -213,7 +214,16 @@ SEARCH_MATCH = 'search match' # sample text to illustrate it
   """
   return
 
-@save = -> prefs.colourSchemes schemes[builtInSchemes.length..]; prefs.colourScheme scheme.name; return
+@save = ->
+  for x in schemes                          # remove empty style objects from each scheme
+    ks = for k of x then k                  # ks: keys in x
+    for k, h of x when typeof h == 'object' # h: the style object
+      e = 1; for _ of h then e = 0; break   # e: is h empty?
+      e && delete x[k]                      # if so, remove it
+  prefs.colourSchemes schemes[builtInSchemes.length..]
+  prefs.colourScheme scheme.name
+  return
+
 @resize = -> cm.setSize $cm.width(), $cm.height(); return
 
 updateSampleStyle = -> $('#col-sample-style').text renderCSS scheme, '#col-cm'; return
