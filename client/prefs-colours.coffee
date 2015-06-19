@@ -46,15 +46,30 @@ H = dict G.map (g, i) -> [g.t, i]
 
 builtInSchemes = [
   {
-    name:'Default', frozen:1
-    num :{fg:'#888888'}, str :{fg:'#008888'}, zld :{fg:'#000088'}, var :{fg:'#888888'}, quad:{fg:'#880088'}
-    fn  :{fg:'#000088'}, op1 :{fg:'#0000ff'}, op2 :{fg:'#0000ff'}, ns  :{fg:'#888888'}, asgn:{fg:'#0000ff'}
-    diam:{fg:'#0000ff'}, par :{fg:'#0000ff'}, brkt:{fg:'#0000ff'}, semi:{fg:'#0000ff'}, dfn :{fg:'#0000ff'}
-    trad:{fg:'#888888'}, kw  :{fg:'#880000'}, idm :{fg:'#0000ff'}, com :{fg:'#008888'}, err :{fg:'#ff0000'}
-    lnum:{fg:'#000088'}, mtch:{bg:'#ffff88'}, srch:{bg:'#ff8800'}, mod :{bg:'#eeeeee'}, sel :{bg:'#d7d4f0'}
-    sel :{bg:'#d9d9d9'}
+    name:'Default',frozen:1
+    num:{fg:'#888888'},str:{fg:'#008888'},zld:{fg:'#000088'},var:{fg:'#888888'},quad:{fg:'#880088'}
+    fn:{fg:'#000088'},op1:{fg:'#0000ff'},op2:{fg:'#0000ff'},ns:{fg:'#888888'},asgn:{fg:'#0000ff'}
+    diam:{fg:'#0000ff'},par:{fg:'#0000ff'},brkt:{fg:'#0000ff'},semi:{fg:'#0000ff'},dfn:{fg:'#0000ff'}
+    trad:{fg:'#888888'},kw:{fg:'#880000'},idm:{fg:'#0000ff'},com:{fg:'#008888'},err:{fg:'#ff0000'}
+    lnum:{fg:'#000088'},mtch:{bg:'#ffff88'},srch:{bg:'#ff8800'},mod:{bg:'#eeeeee'},sel:{bg:'#d7d4f0'}
+    sel:{bg:'#d9d9d9'}
+  }
+  {
+    name:'Goya',frozen:1
+    norm:{fg:'#97d07c',bg:'#000000'},cur:{lb:'#ff0000'},lnum:{fg:'#bb9944',bg:'#101810'},glb:{fg:'#4a86e8'}
+    srch:{bg:'#dd9944',fg:'#000000'},mod:{bg:'#111111'},sel0:{bg:'#112233'},sel:{bg:'#002244'}
+    err:{fg:'#ff3600',bg:'#4d0f0f',B:1},kw:{fg:'#b0b01a'},num:{fg:'#ab8ebe'},op1:{fg:'#ff9900'}
+    fn:{fg:'#00ff00'},op2:{fg:'#ff9900'},brkt:{fg:'#808080'},com:{fg:'#c0c0c0',I:1},semi:{fg:'#808080'}
+    dfn:{fg:'#a938f4'},str:{fg:'#d6b2ef'},zld:{fg:'#d79bff',B:1},lbl:{U:1},idm:{B:1}
+  }
+  {
+    name:'Dürer',frozen:1
+    num:{fg:'#808080'},str:{fg:'#808080'},zld:{fg:'#808080'},quad:{fg:'#880088'},ns:{fg:'#888888'},diam:{B:1}
+    kw:{B:1},idm:{U:1,bg:'#f8f8f8'},com:{I:1},err:{fg:'#cc4444'},mtch:{bg:'#ffff88'},srch:{bg:'#fff09c'}
+    mod:{bg:'#eeeeee'},glb:{I:1}
   }
 ]
+
 schemes  =      # all schemes (built-in and user-defined) as objects
 scheme   =      # the active scheme object
 $cm = cm =      # DOM element and CodeMirror instance for displaying sample code
