@@ -56,17 +56,18 @@ builtInSchemes = [
   }
   {
     name:'Goya',frozen:1
-    norm:{fg:'#97d07c',bg:'#000000'},cur:{lb:'#ff0000'},lnum:{fg:'#bb9944',bg:'#101810'},glb:{fg:'#4a86e8'}
-    srch:{bg:'#dd9944',fg:'#000000'},mod:{bg:'#111111'},sel0:{bg:'#112233'},sel:{bg:'#002244'}
-    err:{fg:'#ff3600',bg:'#4d0f0f',B:1},kw:{fg:'#b0b01a'},num:{fg:'#ab8ebe'},op1:{fg:'#ff9900'}
-    fn:{fg:'#00ff00'},op2:{fg:'#ff9900'},brkt:{fg:'#808080'},com:{fg:'#c0c0c0',I:1},semi:{fg:'#808080'}
-    dfn:{fg:'#a938f4'},str:{fg:'#d6b2ef'},zld:{fg:'#d79bff',B:1},lbl:{U:1},idm:{B:1}
+    norm:{fg:'#97d07c',bg:'#000000'},cur:{lb:'#ff0000'},lnum:{fg:'#bb9944',bg:'#101810'}
+    srch:{bg:'#b99260',fg:'#000000'},mod:{bg:'#111111'},sel0:{bg:'#112233'},sel:{bg:'#002244'}
+    err:{fg:'#ff0000',bg:'#4d0f0f',B:1,U:1},kw:{fg:'#b0b01a'},num:{fg:'#ab8ebe'},op1:{fg:'#d4945f'},fn:{fg:'#00ff00'}
+    op2:{fg:'#fddf59'},brkt:{fg:'#808080'},com:{fg:'#c0c0c0',I:1},semi:{fg:'#808080'},dfn:{fg:'#a277be'}
+    str:{fg:'#d6b2ef'},zld:{fg:'#d79bff',B:1},lbl:{U:1,bg:'#39260a'},idm:{B:1},dfn3:{fg:'#cc739c'},dfn2:{fg:'#e3bd49'}
+    dfn4:{fg:'#000000'}
   }
   {
     name:'Dürer',frozen:1
     num:{fg:'#808080'},str:{fg:'#808080'},zld:{fg:'#808080'},quad:{fg:'#880088'},ns:{fg:'#888888'},diam:{B:1}
-    kw:{B:1},idm:{U:1,bg:'#f8f8f8'},com:{I:1},err:{fg:'#cc4444'},mtch:{bg:'#ffff88'},srch:{bg:'#fff09c'}
-    mod:{bg:'#eeeeee'},glb:{I:1}
+    kw:{B:1},idm:{U:1,bg:'#f8f8f8'},com:{I:1},err:{fg:'#ffffff',bg:'#000000',B:1,I:1,U:1},mtch:{bg:'#cccccc'}
+    srch:{bg:'#cccccc'},mod:{bg:'#eeeeee'},glb:{I:1}
   }
 ]
 
