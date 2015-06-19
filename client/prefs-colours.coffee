@@ -47,27 +47,22 @@ H = dict G.map (g, i) -> [g.t, i]
 builtInSchemes = [
   {
     name:'Default',frozen:1
-    num:{fg:'#888888'},str:{fg:'#008888'},zld:{fg:'#000088'},var:{fg:'#888888'},quad:{fg:'#880088'}
-    fn:{fg:'#000088'},op1:{fg:'#0000ff'},op2:{fg:'#0000ff'},ns:{fg:'#888888'},asgn:{fg:'#0000ff'}
-    diam:{fg:'#0000ff'},par:{fg:'#0000ff'},brkt:{fg:'#0000ff'},semi:{fg:'#0000ff'},dfn:{fg:'#0000ff'}
-    trad:{fg:'#888888'},kw:{fg:'#880000'},idm:{fg:'#0000ff'},com:{fg:'#008888'},err:{fg:'#ff0000'}
-    lnum:{fg:'#000088'},mtch:{bg:'#ffff88'},srch:{bg:'#ff8800'},mod:{bg:'#eeeeee'},sel:{bg:'#d7d4f0'}
-    sel:{bg:'#d9d9d9'}
+    num:{fg:'8'},str:{fg:'088'},zld:{fg:'008'},var:{fg:'8'},quad:{fg:'808'},fn:{fg:'008'},op1:{fg:'00f'},op2:{fg:'00f'}
+    ns:{fg:'8'},asgn:{fg:'00f'},diam:{fg:'00f'},par:{fg:'00f'},brkt:{fg:'00f'},semi:{fg:'00f'},dfn:{fg:'00f'}
+    trad:{fg:'8'},kw:{fg:'800'},idm:{fg:'00f'},com:{fg:'088'},err:{fg:'f00'},lnum:{fg:'008'},mtch:{bg:'ff8'}
+    srch:{bg:'f80'},mod:{bg:'e'},sel:{bg:'ddf'},sel0:{bg:'d'}
   }
   {
     name:'Goya',frozen:1
-    norm:{fg:'#97d07c',bg:'#000000'},cur:{lb:'#ff0000'},lnum:{fg:'#bb9944',bg:'#101810'}
-    srch:{bg:'#b99260',fg:'#000000'},mod:{bg:'#111111'},sel0:{bg:'#112233'},sel:{bg:'#002244'}
-    err:{fg:'#ff0000',bg:'#4d0f0f',B:1,U:1},kw:{fg:'#b0b01a'},num:{fg:'#ab8ebe'},op1:{fg:'#d4945f'},fn:{fg:'#00ff00'}
-    op2:{fg:'#fddf59'},brkt:{fg:'#808080'},com:{fg:'#c0c0c0',I:1},semi:{fg:'#808080'},dfn:{fg:'#a277be'}
-    str:{fg:'#d6b2ef'},zld:{fg:'#d79bff',B:1},lbl:{U:1,bg:'#39260a'},idm:{B:1},dfn3:{fg:'#cc739c'},dfn2:{fg:'#e3bd49'}
-    dfn4:{fg:'#000000'}
+    norm:{fg:'9c7',bg:'0'},cur:{lb:'f00'},lnum:{fg:'b94',bg:'010'},srch:{bg:'b96',fg:'0'},mod:{bg:'1'},sel0:{bg:'123'}
+    sel:{bg:'024'},err:{fg:'f00',bg:'411',B:1,U:1},kw:{fg:'aa2'},num:{fg:'a8b'},op1:{fg:'d95'},fn:{fg:'0f0'}
+    op2:{fg:'fd6'},brkt:{fg:'888'},com:{fg:'b',I:1},semi:{fg:'8'},str:{fg:'dae'},zld:{fg:'d9f',B:1}
+    lbl:{U:1,bg:'321'},idm:{B:1},dfn:{fg:'a7b'},dfn3:{fg:'c79'},dfn2:{fg:'eb4'},dfn4:{fg:'0'}
   }
   {
     name:'Dürer',frozen:1
-    num:{fg:'#808080'},str:{fg:'#808080'},zld:{fg:'#808080'},quad:{fg:'#880088'},ns:{fg:'#888888'},diam:{B:1}
-    kw:{B:1},idm:{U:1,bg:'#f8f8f8'},com:{I:1},err:{fg:'#ffffff',bg:'#000000',B:1,I:1,U:1},mtch:{bg:'#cccccc'}
-    srch:{bg:'#cccccc'},mod:{bg:'#eeeeee'},glb:{I:1}
+    num:{fg:'8'},str:{fg:'8'},zld:{fg:'8'},quad:{fg:'808'},ns:{fg:'8'},diam:{B:1},kw:{B:1},idm:{U:1,bg:'e'},com:{I:1}
+    err:{fg:'f',bg:'0',B:1,I:1,U:1},mtch:{bg:'c'},srch:{bg:'c'},mod:{bg:'e'},glb:{I:1}
   }
 ]
 
@@ -80,15 +75,23 @@ renderCSS = (scheme, rp = '') -> # rp: css rule prefix
   join G.map (g) ->
     if h = scheme[g.t]
       g.c.split(',').map((x) -> rp + ' ' + x).join(',') + '{' +
-        (h.fg && "color:#{h.fg};"             || '') +
-        (h.bg && "background-color:#{h.bg};"  || '') +
-        (h.B  && 'font-weight:bold;'          || '') +
-        (h.I  && 'font-style:italic;'         || '') +
-        (h.U  && 'text-decoration:underline;' || '') +
-        (h.lb && "border-left-color:#{h.lb};" || '') +
+        (h.fg && "color:#{expandColour h.fg};"             || '') +
+        (h.bg && "background-color:#{expandColour h.bg};"  || '') +
+        (h.B  && 'font-weight:bold;'                       || '') +
+        (h.I  && 'font-style:italic;'                      || '') +
+        (h.U  && 'text-decoration:underline;'              || '') +
+        (h.lb && "border-left-color:#{expandColour h.lb};" || '') +
         '}'
     else
       ''
+
+expandColour = (s) ->
+  switch (s || '').length
+    when 6 then '#'+s; when 3 then [r,g,b]=s;'#'+r+r+g+g+b+b; when 1 then '#'+s+s+s+s+s+s; else s
+
+shrinkColour = (s) ->
+  if !/^#.{6}$/.test s then s
+  else [_,r,R,g,G,b,B]=s; if r==R==g==G==b==B then r else if r==R && g==G && b==B then r+g+b else s[1..]
 
 $ updateStyle = -> # update global style from what's in localStorage; do it on "document ready"
   name = prefs.colourScheme()
@@ -175,7 +178,7 @@ pickUniqueSchemeName = (root) ->
     $("#col-#{p}").change -> (scheme[sel] ?= {})[p] = @value; updateSampleStyle(); return
     $("#col-#{p}-cb").click ->
       $("#col-#{p}").toggle @checked
-      h = scheme[sel] ?= {}; if @checked then h[p] = $("#col-#{p}").val() else delete h[p]
+      h = scheme[sel] ?= {}; if @checked then h[p] = shrinkColour $("#col-#{p}").val() else delete h[p]
       updateSampleStyle(); return
     return
   qw('B I U').forEach (p) ->
@@ -232,7 +235,8 @@ updateSampleStyle = -> $('#col-sample-style').text renderCSS scheme, '#col-cm'; 
 selectGroup = (t, forceRefresh) ->
   if sel != t || forceRefresh
     i = H[t]; h = scheme[t] || {}; $('#col-group').val i
-    qw('fg bg lb').forEach (p) -> $("#col-#{p}-cb").prop 'checked', !!h[p]; $("#col-#{p}").val(h[p]).toggle !!h[p]; return
+    qw('fg bg lb').forEach (p) ->
+      $("#col-#{p}-cb").prop 'checked', !!h[p]; $("#col-#{p}").val(expandColour h[p]).toggle !!h[p]; return
     qw('B I U').forEach (p) -> $("#col-#{p}").prop 'checked', !!h[p]; return
     c = (G[i] || G[0]).controls || {}
     $('#col-fg-p' ).toggle !!(c.fg ? 1)
