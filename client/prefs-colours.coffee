@@ -12,7 +12,7 @@ G = [ # information about syntax highlighting groups
   {t:'num',  s:'number',               c:'.cm-apl-num' }
   {t:'str',  s:'string',               c:'.cm-apl-str' }
   {t:'zld',  s:'zilde',                c:'.cm-apl-zld' }
-  {t:'var',  s:'name',                 c:'.cm-apl-var'}
+  {t:'var',  s:'name',                 c:'.cm-apl-var' }
   {t:'glb',  s:'global name',          c:'.cm-apl-glb' }
   {t:'quad', s:'quad name',            c:'.cm-apl-quad'}
   {t:'fn',   s:'function',             c:'.cm-apl-fn'  }
@@ -41,6 +41,7 @@ G = [ # information about syntax highlighting groups
   {t:'mod',  s:'modified line',        c:'.modified'}
   {t:'sel',  s:'selection (focus)',    c:'.CodeMirror-focused .CodeMirror-selected', controls:{fg:0,BIU:0}}
   {t:'sel0', s:'selection (no focus)', c:'.CodeMirror-selected',                     controls:{fg:0,BIU:0}}
+  {t:'tc',   s:'tracer',               c:'.CodeMirror.tracer,.CodeMirror.tracer .CodeMirror-gutter-wrapper'}
 ]
 H = dict G.map (g, i) -> [g.t, i]
 
@@ -50,19 +51,19 @@ builtInSchemes = [
     num:{fg:'8'},str:{fg:'088'},zld:{fg:'008'},var:{fg:'8'},quad:{fg:'808'},fn:{fg:'008'},op1:{fg:'00f'},op2:{fg:'00f'}
     ns:{fg:'8'},asgn:{fg:'00f'},diam:{fg:'00f'},par:{fg:'00f'},brkt:{fg:'00f'},semi:{fg:'00f'},dfn:{fg:'00f'}
     trad:{fg:'8'},kw:{fg:'800'},idm:{fg:'00f'},com:{fg:'088'},err:{fg:'f00'},lnum:{fg:'008'},mtch:{bg:'ff8'}
-    srch:{bg:'f80'},mod:{bg:'e'},sel:{bg:'ddf'},sel0:{bg:'d'}
+    srch:{bg:'f80'},mod:{bg:'e'},sel:{bg:'ddf'},sel0:{bg:'d'},tc:{bg:'d'}
   }
   {
     name:'Goya',frozen:1
     norm:{fg:'9c7',bg:'0'},cur:{lb:'f00'},lnum:{fg:'b94',bg:'010'},srch:{bg:'b96',fg:'0'},mod:{bg:'1'},sel0:{bg:'123'}
     sel:{bg:'024'},err:{fg:'f00',bg:'411',B:1,U:1},kw:{fg:'aa2'},num:{fg:'a8b'},op1:{fg:'d95'},fn:{fg:'0f0'}
     op2:{fg:'fd6'},brkt:{fg:'888'},com:{fg:'b',I:1},semi:{fg:'8'},str:{fg:'dae'},zld:{fg:'d9f',B:1}
-    lbl:{U:1,bg:'321'},idm:{B:1},dfn:{fg:'a7b'},dfn3:{fg:'c79'},dfn2:{fg:'eb4'},dfn4:{fg:'0'}
+    lbl:{U:1,bg:'321'},idm:{B:1},dfn:{fg:'a7b'},dfn3:{fg:'c79'},dfn2:{fg:'eb4'},dfn4:{fg:'0'},tc:{bg:'1'}
   }
   {
     name:'Dürer',frozen:1
     num:{fg:'8'},str:{fg:'8'},zld:{fg:'8'},quad:{fg:'808'},ns:{fg:'8'},diam:{B:1},kw:{B:1},idm:{U:1,bg:'e'},com:{I:1}
-    err:{fg:'f',bg:'0',B:1,I:1,U:1},mtch:{bg:'c'},srch:{bg:'c'},mod:{bg:'e'},glb:{I:1}
+    err:{fg:'f',bg:'0',B:1,I:1,U:1},mtch:{bg:'c'},srch:{bg:'c'},mod:{bg:'e'},glb:{I:1},tc:{bg:'e'}
   }
 ]
 
@@ -91,7 +92,7 @@ expandColour = (s) ->
 
 shrinkColour = (s) ->
   if !/^#.{6}$/.test s then s
-  else [_,r,R,g,G,b,B]=s; if r==R==g==G==b==B then r else if r==R && g==G && b==B then r+g+b else s[1..]
+  else [_,r,r1,g,g1,b,b1]=s; if r==r1==g==g1==b==b1 then r else if r==r1 && g==g1 && b==b1 then r+g+b else s[1..]
 
 $ updateStyle = -> # update global style from what's in localStorage; do it on "document ready"
   name = prefs.colourScheme()
