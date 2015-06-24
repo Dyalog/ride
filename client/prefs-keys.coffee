@@ -4,25 +4,36 @@ prefs = require './prefs'
 @name = 'Keys'
 
 CMDS = [
-  ['QT', 'Quit (and lose changes)' ]
-  ['TB', 'Tab between windows'     ]
-  ['BT', 'Back Tab between windows']
-  ['EP', 'Exit (and save changes)' ]
-  ['FD', 'Forward or Redo'         ]
-  ['BK', 'Backward or Undo'        ]
-  ['SC', 'Search (in editors)'     ]
-  ['RP', 'Replace (in editors)'    ]
-  ['ED', 'Edit'                    ]
-  ['TC', 'Trace'                   ]
-  ['TL', 'Toggle localisation'     ]
+#  code  description                 defaults
+  ['QT', 'Quit (and lose changes)',  ['Shift-Esc']]
+  ['TB', 'Tab between windows',      ['Ctrl-Tab']]
+  ['BT', 'Back Tab between windows', ['Shift-Ctrl-Tab']]
+  ['EP', 'Exit (and save changes)',  ['Esc']]
+  ['FD', 'Forward or Redo',          ['Shift-Ctrl-Enter']]
+  ['BK', 'Backward or Undo',         ['Shift-Ctrl-Backspace']]
+  ['SC', 'Search (in editors)',      ['Ctrl-F']]
+  ['RP', 'Replace (in editors)',     ['Ctrl-G']]
+  ['ED', 'Edit',                     ['Shift-Enter', 'Ctrl-E']]
+  ['TC', 'Trace',                    ['Ctrl-Enter']]
+  ['TL', 'Toggle localisation',      ['Ctrl-Up']]
 ]
 
-@init = ($e) ->
-  $e.html "<table>#{join CMDS.map ([code, desc]) -> "<tr><td>#{desc}<td><input id=keys-#{code}>"}</table>"
-    .on 'focus', 'input', -> $(@).addClass    'focused'; return
-    .on 'blur',  'input', -> $(@).removeClass 'focused'; return
-    .on 'keyup keypress', 'input', -> false
-    .on 'keydown', 'input', (e) ->
+getKeystroke = (callback) ->
+  $d = $ '<p><input class=keys-input placeholder=...>'
+    .dialog title: 'New Key', modal: 1, buttons: Cancel: -> $d.dialog 'close'; callback k; return
+  $ 'input', $d
+    .focus -> $(@).addClass    'keys-input'; return
+    .blur  -> $(@).removeClass 'keys-input'; return
+    .on 'keypress keyup', (e) ->
+      kn = CodeMirror.keyNames[e.which] || ''
+      if kn in ['Shift', 'Ctrl', 'Alt']
+        $(@).val (e.shiftKey && 'Shift-' || '') +
+                 (e.ctrlKey  && 'Ctrl-'  || '') +
+                 (e.altKey   && 'Alt-'   || '')
+      else
+        $d.dialog 'close'; callback @value
+      false
+    .keydown (e) ->
       kn = CodeMirror.keyNames[e.which] || ''
       if kn in ['Shift', 'Ctrl', 'Alt'] then kn = ''
       $(@).val (e.shiftKey && 'Shift-' || '') +
@@ -32,18 +43,36 @@ CMDS = [
       false
   return
 
-getCodeMirrorReverseKeyMap = (name) -> # returns a mapping from command codes to keys
-  h = {}; m = CodeMirror.keyMap[name]
-  while m
-    for k, c of m when k[0] != "'" then h[c] ?= k # ignore commands mapped to characters (as opposed to keys)
-    m = m.fallthrough && CodeMirror.keyMap[m.fallthrough] # follow the "fall through" chain
-  h
+keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-del>×</a></span> "
+
+@init = ($e) ->
+  $e.html "<table>#{join CMDS.map ([code, desc]) -> "<tr><td>#{desc}<td id=keys-#{code}>"}</table>"
+    .on 'click', '.keys-del', -> $(@).parent().remove(); false
+    .on 'click', '.keys-add', ->
+      $b = $ @
+      getKeystroke (k) ->
+        if k then $b.parent().append(keyHTML k).append $b
+        return
+      false
+  return
 
 @load = ->
-  h = $.extend prefs.keys(), getCodeMirrorReverseKeyMap 'dyalog'
-  for [code] in CMDS then $("#keys-#{code}").val h[code] || ''
+  h = prefs.keys()
+  for [code, desc, defaults] in CMDS
+    $ "#keys-#{code}"
+      .html join (h[code] || defaults).map keyHTML
+      .append '<a href=# class=keys-add>+</a>'
   return
 
 @save = ->
-  h = {}; for [c] in CMDS then k = $("#keys-#{c}").val(); if CodeMirror.keyMap.dyalogDefault[k] != c then h[c] = k
+  h = {}
+  for [c, _, d] in CMDS
+    a = $("#keys-#{c} .keys-text").map(-> $(@).text()).toArray()
+    if JSON.stringify(a) != JSON.stringify(d) then h[c] = a
   prefs.keys h; return
+
+do updateKeys = ->
+  h = prefs.keys(); km = CodeMirror.keyMap.dyalog = {}
+  for [c, _, d] in CMDS then for k in h[c] || d then km[k] = c
+  return
+prefs.keys updateKeys

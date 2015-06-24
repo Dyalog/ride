@@ -292,7 +292,19 @@ input, textarea, select, a { outline: 0; }
 #prefs-tab-keys
   position: absolute; left: 0; right: 0; top: 32px; bottom: 0; overflow: auto
   td { text-align: left; }
-  input.focused { background-color: #ace; }
+.keys-text,.keys-del,.keys-add
+  padding: 0 3px; border-radius: 10px; border: solid #799 1px;
+.keys-text
+  background-color: #cff;
+  border-top-right-radius: 0; border-bottom-right-radius: 0; border-right-width: 0
+.keys-del
+  background-color: #799; color: #fff; text-decoration: none;
+  border-top-left-radius: 0; border-bottom-left-radius: 0
+  &:hover { background-color: red; border-color: #800 }
+.keys-add
+  background-color: #799; color: #fff; text-decoration: none;
+  &:hover { background-color: #080; border-color: #040; }
+.keys-input { background-color: #ace; }
 
 .ui-dialog-content.about
   padding: 0; margin: 0
