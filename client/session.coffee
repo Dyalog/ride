@@ -37,9 +37,7 @@ class @Session
         for l of @dirty then @cm.addLineClass +l, 'background', 'modified'
       return
     @promptType = 0 # 0=Invalid 1=Descalc 2=QuadInput 3=LineEditor 4=QuoteQuadInput 5=Prompt
-    @autocomplete = autocompletion @cm, (s, i) =>
-      if @promptType != 4 then @emit 'Autocomplete', line: s, pos: i, token: 0 # don't autocomplete in ⍞ input
-      return
+    @autocomplete = autocompletion.setUp @
     prefs.wrap (x) => @cm.setOption 'lineWrapping', !!x; @scrollCursorIntoView(); return
     return
 
@@ -128,5 +126,6 @@ class @Session
       @cm.execCommand 'indentMore'
     else if @promptType != 4 # don't autocomplete in ⍞ input
       c = @cm.getCursor(); s = @cm.getLine c.line
-      if /^ *$/.test s[...c.ch] then @cm.execCommand 'indentMore' else @emit 'Autocomplete', line: s, pos: c.ch, token: 0
+      if /^ *$/.test s[...c.ch] then @cm.execCommand 'indentMore'
+      else @autocompleteWithTab = 1; @emit 'Autocomplete', line: s, pos: c.ch, token: 0
     return

@@ -68,7 +68,7 @@ class @Editor
     @cm.on 'gutterClick', (cm, l, gutter, event) => @cm.setCursor line: l, ch: 0; @BP(); return
     @cm.on 'focus', => @focusTimestamp = +new Date; @ide.focusedWin = @; return
     onCodeMirrorDoubleClick @cm, (e) => @ED(); e.preventDefault(); e.stopPropagation(); return
-    @autocomplete = autocompletion @cm, (s, i) => @emit 'Autocomplete', line: s, pos: i, token: @id; return
+    @autocomplete = autocompletion.setUp @
     @$tb = $ '.toolbar', @$e
       .on 'mousedown',        '.tb-button', (e) -> $(e.target).addClass    'armed'; e.preventDefault(); return
       .on 'mouseup mouseout', '.tb-button', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return
@@ -317,7 +317,8 @@ class @Editor
       @cm.execCommand 'indentMore'
     else
       c = @cm.getCursor(); s = @cm.getLine c.line
-      if /^ *$/.test s[...c.ch] then @cm.execCommand 'indentMore' else @emit 'Autocomplete', line: s, pos: c.ch, token: @id
+      if /^ *$/.test s[...c.ch] then @cm.execCommand 'indentMore'
+      else @autocompleteWithTab = 1; @emit 'Autocomplete', line: s, pos: c.ch, token: @id
     return
   downOrXline: ->
     l = @cm.getCursor().line
