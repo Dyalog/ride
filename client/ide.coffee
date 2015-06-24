@@ -312,3 +312,5 @@ class @IDE
   CUT: -> document.execCommand 'Cut'  ; return
   CPY: -> document.execCommand 'Copy' ; return
   PST: -> document.execCommand 'Paste'; return
+  UND: -> @focusedWin.cm.undo(); return
+  RDO: -> @focusedWin.cm.redo(); return
