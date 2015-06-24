@@ -46,7 +46,11 @@ getKeystroke = (callback) ->
 keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-del>×</a></span> "
 
 @init = ($e) ->
-  $e.html "<table>#{join CMDS.map ([code, desc]) -> "<tr><td>#{desc}<td id=keys-#{code}>"}</table>"
+  $e.html "<table>#{join CMDS.map ([code, desc]) ->
+    "<tr><td>#{desc}<td class=keys-code>#{code}<td id=keys-#{code}>"
+  }</table>"
+    .on 'mouseover', '.keys-del', -> $(@).parent().addClass    'keys-del-hover'; return
+    .on 'mouseout',  '.keys-del', -> $(@).parent().removeClass 'keys-del-hover'; return
     .on 'click', '.keys-del', -> $(@).parent().remove(); false
     .on 'click', '.keys-add', ->
       $b = $ @

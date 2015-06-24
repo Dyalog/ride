@@ -292,11 +292,14 @@ input, textarea, select, a { outline: 0; }
 #prefs-tab-keys
   position: absolute; left: 0; right: 0; top: 32px; bottom: 0; overflow: auto
   td { text-align: left; }
+.keys-code
+  +tt ; padding: 0 3px; border-left: solid #aaa 1px; border-right: solid #aaa 1px; color: #555
 .keys-text,.keys-del,.keys-add
   padding: 0 3px; border-radius: 10px; border: solid #799 1px;
 .keys-text
-  background-color: #cff;
+  background-color: #cff; color: #255
   border-top-right-radius: 0; border-bottom-right-radius: 0; border-right-width: 0
+  .keys-del-hover & { border-color: red; }
 .keys-del
   background-color: #799; color: #fff; text-decoration: none;
   border-top-left-radius: 0; border-bottom-left-radius: 0
