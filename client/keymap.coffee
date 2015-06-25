@@ -44,12 +44,6 @@ CodeMirror.commands.HLP = (cm) ->
     .focus?()
   return
 
-prefs.keys updateKeys = (x) ->
-  CodeMirror.keyMap.dyalog = h = fallthrough: 'dyalogDefault'
-  for c, k of x then h[k] = c
-  return
-updateKeys prefs.keys()
-
 CodeMirror.keyMap.dyalogDefault = fallthrough: 'default', F1: 'HLP', End: 'goLineEndSmart'
 CodeMirror.keyMap.dyalogDefault["'#{prefs.prefixKey()}'"] = 'BQC'
 
@@ -218,7 +212,7 @@ bqbqc = ((s) -> cat s.split('\n').map (l) ->
 """ + [0...26].map((i) -> "\n#{chr i + ord 'Ⓐ'} _#{chr i + ord 'a'}").join '' # underscored alphabet: Ⓐ _a ...
 
 createCommand = (xx) -> CodeMirror.commands[xx] ?= (cm) -> (if (h = cm.dyalogCommands) && h[xx] then h[xx]()); return
-['CBP', 'MA', 'tabOrAutocomplete', 'downOrXline', 'indentMoreOrAutocomplete'].forEach createCommand
+['CBP', 'MA', 'WI', 'SI', 'tabOrAutocomplete', 'downOrXline', 'indentMoreOrAutocomplete'].forEach createCommand
 '''
   [     0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F]
   [00] QT ER TB BT EP UC DC RC LC US DS RS LS UL DL RL
@@ -233,23 +227,6 @@ createCommand = (xx) -> CodeMirror.commands[xx] ?= (cm) -> (if (h = cm.dyalogCom
 '''.replace(/\[.*?\]/g, '').replace(/^\s*|\s*$/g, '').split(/\s+/).forEach (xx, i) ->
   if xx != '--' then createCommand xx; CodeMirror.keyMap.dyalogDefault["'#{chr 0xf800 + i}'"] = xx
   return
-
-'''
-  QT Shift-Esc
-  ER Enter
-  EP Esc
-  FD Shift-Ctrl-Enter
-  BK Shift-Ctrl-Backspace
-  SC Ctrl-F
-  RP Ctrl-G
-  ED Shift-Enter
-  TC Ctrl-Enter
-  TL Ctrl-Up
-  WI Ctrl-Pause
-  TB Ctrl-Tab
-  BT Ctrl-Shift-Tab
-'''.split('\n').forEach (l) ->
-  [xx, keys...] = l.split /\s+/; createCommand xx; keys.forEach (key) -> CodeMirror.keyMap.dyalogDefault[key] = xx; return
 
 CodeMirror.commands.goLineEndSmart = (cm) -> # CodeMirror provides a goLineStartSmart but not a goLineEndSmart command.
   cm.extendSelectionsBy(

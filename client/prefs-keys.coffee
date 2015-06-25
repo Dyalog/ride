@@ -18,6 +18,23 @@ CMDS = [
   ['TL', 'Toggle localisation',      ['Ctrl-Up']]
 ]
 
+keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-del>×</a></span> "
+
+@init = ($e) ->
+  $e.html "<table>#{join CMDS.map ([code, desc]) ->
+    "<tr><td>#{desc}<td class=keys-code>#{code}<td id=keys-#{code}>"
+  }</table>"
+    .on 'mouseover', '.keys-del', -> $(@).parent().addClass    'keys-del-hover'; return
+    .on 'mouseout',  '.keys-del', -> $(@).parent().removeClass 'keys-del-hover'; return
+    .on 'click', '.keys-del', -> $(@).parent().remove(); false
+    .on 'click', '.keys-add', ->
+      $b = $ @
+      getKeystroke (k) ->
+        if k then $b.parent().append(keyHTML k).append $b
+        return
+      false
+  return
+
 getKeystroke = (callback) ->
   $d = $ '<p><input class=keys-input placeholder=...>'
     .dialog title: 'New Key', modal: 1, buttons: Cancel: -> $d.dialog 'close'; callback k; return
@@ -43,23 +60,6 @@ getKeystroke = (callback) ->
       false
   return
 
-keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-del>×</a></span> "
-
-@init = ($e) ->
-  $e.html "<table>#{join CMDS.map ([code, desc]) ->
-    "<tr><td>#{desc}<td class=keys-code>#{code}<td id=keys-#{code}>"
-  }</table>"
-    .on 'mouseover', '.keys-del', -> $(@).parent().addClass    'keys-del-hover'; return
-    .on 'mouseout',  '.keys-del', -> $(@).parent().removeClass 'keys-del-hover'; return
-    .on 'click', '.keys-del', -> $(@).parent().remove(); false
-    .on 'click', '.keys-add', ->
-      $b = $ @
-      getKeystroke (k) ->
-        if k then $b.parent().append(keyHTML k).append $b
-        return
-      false
-  return
-
 @load = ->
   h = prefs.keys()
   for [code, desc, defaults] in CMDS
@@ -75,8 +75,8 @@ keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-de
     if JSON.stringify(a) != JSON.stringify(d) then h[c] = a
   prefs.keys h; return
 
-do updateKeys = ->
-  h = prefs.keys(); km = CodeMirror.keyMap.dyalog = {}
-  for [c, _, d] in CMDS then for k in h[c] || d then km[k] = c
+prefs.keys updateKeys = (x) ->
+  h = CodeMirror.keyMap.dyalog = fallthrough: 'dyalogDefault'
+  for [c, _, d] in CMDS then for k in x[c] || d then h[k] = c
   return
-prefs.keys updateKeys
+updateKeys prefs.keys()
