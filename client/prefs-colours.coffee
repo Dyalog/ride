@@ -33,7 +33,7 @@ G = [ # information about syntax highlighting groups
   {t:'lbl',  s:'label',                c:'.cm-apl-lbl' }
   {t:'idm',  s:'idiom',                c:'.cm-apl-idm' }
   {t:'com',  s:'comment',              c:'.cm-apl-com' }
-  {t:'err',  s:'error',                c:'.cm-apl-err' }
+  {t:'err',  s:'error',                c:'.cm-apl-err,.CodeMirror-nonmatchingbracket'}
   {t:'lnum', s:'line number',          c:'.CodeMirror-linenumber'}
   {t:'cur',  s:'cursor',               c:'div.CodeMirror-cursor', controls:{lb:1,fg:0,bg:0,BIU:0}}
   {t:'mtch', s:'matching bracket',     c:'.CodeMirror-matchingbracket'}
@@ -47,28 +47,29 @@ H = dict G.map (g, i) -> [g.t, i]
 
 builtInSchemes = [
   {
-    name:'Default',frozen:1
+    name:'Default'
     num:{fg:'8'},str:{fg:'088'},zld:{fg:'008'},var:{fg:'8'},quad:{fg:'808'},fn:{fg:'008'},op1:{fg:'00f'},op2:{fg:'00f'}
     ns:{fg:'8'},asgn:{fg:'00f'},diam:{fg:'00f'},par:{fg:'00f'},brkt:{fg:'00f'},semi:{fg:'00f'},dfn:{fg:'00f'}
     trad:{fg:'8'},kw:{fg:'800'},idm:{fg:'00f'},com:{fg:'088'},err:{fg:'f00'},lnum:{fg:'008'},mtch:{bg:'ff8'}
     srch:{bg:'f80'},mod:{bg:'e'},sel:{bg:'ddf'},sel0:{bg:'d'},tc:{bg:'d'}
   }
   {
-    name:'Goya',frozen:1
+    name:'Francisco Goya'
     norm:{fg:'9c7',bg:'0'},cur:{lb:'f00'},lnum:{fg:'b94',bg:'010'},srch:{bg:'b96',fg:'0'},mod:{bg:'1'},sel0:{bg:'123'}
     sel:{bg:'024'},err:{fg:'f00',bg:'411',B:1,U:1},kw:{fg:'aa2'},num:{fg:'a8b'},op1:{fg:'d95'},fn:{fg:'0f0'}
     op2:{fg:'fd6'},brkt:{fg:'888'},com:{fg:'b',I:1},semi:{fg:'8'},str:{fg:'dae'},zld:{fg:'d9f',B:1}
     lbl:{U:1,bg:'321'},idm:{B:1},dfn:{fg:'a7b'},dfn3:{fg:'c79'},dfn2:{fg:'eb4'},dfn4:{fg:'0'},tc:{bg:'1'}
   }
   {
-    name:'Dürer',frozen:1
+    name:'Albrecht Dürer'
     num:{fg:'8'},str:{fg:'8'},zld:{fg:'8'},quad:{fg:'808'},ns:{fg:'8'},diam:{B:1},kw:{B:1},idm:{U:1,bg:'e'},com:{I:1}
     err:{fg:'f',bg:'0',B:1,I:1,U:1},mtch:{bg:'c'},srch:{bg:'c'},mod:{bg:'e'},glb:{I:1},tc:{bg:'e'}
   }
   {
-    name:'Malevich',frozen:1
+    name:'Kazimir Malevich'
   }
 ]
+do -> (for x in builtInSchemes then x.frozen = 1); return
 
 schemes  =      # all schemes (built-in and user-defined) as objects
 scheme   =      # the active scheme object
