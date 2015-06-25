@@ -4,18 +4,22 @@ prefs = require './prefs'
 @name = 'Keys'
 
 CMDS = [
-#  code  description                 defaults
-  ['QT', 'Quit (and lose changes)',  ['Shift-Esc']]
-  ['TB', 'Tab between windows',      ['Ctrl-Tab']]
-  ['BT', 'Back Tab between windows', ['Shift-Ctrl-Tab']]
-  ['EP', 'Exit (and save changes)',  ['Esc']]
-  ['FD', 'Forward or Redo',          ['Shift-Ctrl-Enter']]
-  ['BK', 'Backward or Undo',         ['Shift-Ctrl-Backspace']]
-  ['SC', 'Search (in editors)',      ['Ctrl-F']]
-  ['RP', 'Replace (in editors)',     ['Ctrl-G']]
-  ['ED', 'Edit',                     ['Shift-Enter', 'Ctrl-E']]
-  ['TC', 'Trace',                    ['Ctrl-Enter']]
-  ['TL', 'Toggle localisation',      ['Ctrl-Up']]
+#  code   description                 defaults
+  ['QT',  'Quit (and lose changes)',  ['Shift-Esc']]
+  ['TB',  'Tab between windows',      ['Ctrl-Tab']]
+  ['BT',  'Back Tab between windows', ['Shift-Ctrl-Tab']]
+  ['EP',  'Exit (and save changes)',  ['Esc']]
+  ['FD',  'Forward or Redo',          ['Shift-Ctrl-Enter']]
+  ['BK',  'Backward or Undo',         ['Shift-Ctrl-Backspace']]
+  ['SC',  'Search (in editors)',      ['Ctrl-F']]
+  ['RP',  'Replace (in editors)',     ['Ctrl-G']]
+  ['ED',  'Edit',                     ['Shift-Enter', 'Ctrl-E']]
+  ['TC',  'Trace',                    ['Ctrl-Enter']]
+  ['TL',  'Toggle localisation',      ['Ctrl-Up']]
+  ['ER',  'Execute line',             ['Enter']]
+  ['WI',  'Weak interrupt',           ['Ctrl-Pause']]
+  ['SI',  'Strong interrupt',         []]
+  ['PRF', 'Show Preferences',         ['Ctrl-P']]
 ]
 
 keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-del>×</a></span> "

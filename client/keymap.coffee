@@ -1,6 +1,7 @@
 helpurls = require './helpurls'
 prefs = require './prefs'
-{inherit, cat, dict, chr, ord, zip, join, delay} = require './util'
+{inherit, cat, dict, chr, ord, zip, join, delay, qw} = require './util'
+prefsUI = require './prefs-ui'
 
 window.onhelp = -> false # prevent IE from acting silly on F1
 
@@ -28,6 +29,11 @@ squiggleDescriptions =
 
 ctid = 0 # backquote completion timeout id
 
+CodeMirror.keyMap.dyalogDefault = fallthrough: 'default', F1: 'HLP', End: 'goLineEndSmart'
+CodeMirror.keyMap.dyalogDefault["'#{prefs.prefixKey()}'"] = 'BQC'
+
+CodeMirror.commands.PRF = -> prefsUI.showDialog(); return
+
 CodeMirror.commands.HLP = (cm) ->
   c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
   u =
@@ -43,9 +49,6 @@ CodeMirror.commands.HLP = (cm) ->
   open u, 'help', "width=#{2 * w},height=#{2 * h},left=#{w},top=#{h},scrollbars=1,location=1,toolbar=0,menubar=0,resizable=1"
     .focus?()
   return
-
-CodeMirror.keyMap.dyalogDefault = fallthrough: 'default', F1: 'HLP', End: 'goLineEndSmart'
-CodeMirror.keyMap.dyalogDefault["'#{prefs.prefixKey()}'"] = 'BQC'
 
 CodeMirror.commands.BQC = (cm) ->
   if cm.dyalogBQ
@@ -212,7 +215,7 @@ bqbqc = ((s) -> cat s.split('\n').map (l) ->
 """ + [0...26].map((i) -> "\n#{chr i + ord 'Ⓐ'} _#{chr i + ord 'a'}").join '' # underscored alphabet: Ⓐ _a ...
 
 createCommand = (xx) -> CodeMirror.commands[xx] ?= (cm) -> (if (h = cm.dyalogCommands) && h[xx] then h[xx]()); return
-['CBP', 'MA', 'WI', 'SI', 'tabOrAutocomplete', 'downOrXline', 'indentMoreOrAutocomplete'].forEach createCommand
+qw('CBP MA WI SI tabOrAutocomplete downOrXline indentMoreOrAutocomplete').forEach createCommand
 '''
   [     0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F]
   [00] QT ER TB BT EP UC DC RC LC US DS RS LS UL DL RL

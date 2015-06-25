@@ -32,7 +32,7 @@ ok = ->
   for t in tabs then t.save?()
   $d.dialog 'close'; false
 
-module.exports = (tabName) ->
+@showDialog = (tabName) ->
   if !$d
     $d = $ """
       <div id=prefs>

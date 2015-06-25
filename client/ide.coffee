@@ -105,7 +105,7 @@ class @IDE
     @unblock = -> (while mq.length then handle mq.shift()); blocked = 0; return
 
     # language bar
-    $('.lbar-prefs').click -> prefsUI 'glyphs'; return
+    $('.lbar-prefs').click -> prefsUI.showDialog 'glyphs'; return
     $tip = $ '.lbar-tip'; $tipDesc = $ '.lbar-tip-desc'; $tipText = $ '.lbar-tip-text'; $tipTriangle = $ '.lbar-tip-triangle'
     ttid = null # tooltip timeout id
     requestTooltip = (e, desc, text) -> # e: element
@@ -281,7 +281,6 @@ class @IDE
   CNC: -> D.rideConnect();    return
   NEW: -> D.rideNewSession(); return
   QIT: -> D.quit();           return
-  PRF: -> prefsUI();          return
   ZMI: -> D.zoomIn();         return
   ZMO: -> D.zoomOut();        return
   ZMR: -> D.resetZoom();      return

@@ -291,9 +291,10 @@ input, textarea, select, a { outline: 0; }
 
 #prefs-tab-keys
   position: absolute; left: 0; right: 0; top: 32px; bottom: 0; overflow: auto
-  td { text-align: left; }
-.keys-code
-  +tt ; padding: 0 3px; border-left: solid #aaa 1px; border-right: solid #aaa 1px; color: #555
+  td
+    text-align: left
+    &.keys-code
+      +tt ; padding: 0 3px; border-left: solid #aaa 1px; border-right: solid #aaa 1px; color: #555; text-align: center
 .keys-text,.keys-del,.keys-add
   padding: 0 3px; border-radius: 10px; border: solid #799 1px;
 .keys-text
