@@ -30,12 +30,9 @@ keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-de
   }</table>"
     .on 'mouseover', '.keys-del', -> $(@).parent().addClass    'keys-del-hover'; return
     .on 'mouseout',  '.keys-del', -> $(@).parent().removeClass 'keys-del-hover'; return
-    .on 'click', '.keys-del', -> $(@).parent().remove(); false
+    .on 'click', '.keys-del', -> $(@).parent().remove(); updateDups(); false
     .on 'click', '.keys-add', ->
-      $b = $ @
-      getKeystroke (k) ->
-        if k then $b.parent().append(keyHTML k).append $b
-        return
+      $b = $ @; getKeystroke (k) -> k && $b.parent().append(keyHTML k).append $b; updateDups(); return
       false
   return
 
@@ -70,6 +67,7 @@ getKeystroke = (callback) ->
     $ "#keys-#{code}"
       .html join (h[code] || defaults).map keyHTML
       .append '<a href=# class=keys-add>+</a>'
+  updateDups()
   return
 
 @save = ->
@@ -84,3 +82,9 @@ prefs.keys updateKeys = (x) ->
   for [c, _, d] in CMDS then for k in x[c] || d then h[k] = c
   return
 updateKeys prefs.keys()
+
+updateDups = ->
+  h = {} # maps keystrokes to DOM objects
+  for [c, _, d] in CMDS then $("#keys-#{c} .keys-text").each ->
+    k = $(@).text(); if h[k] then $(@).add(h[k]).addClass 'keys-dup' else $(@).removeClass 'keys-dup'; h[k] = @
+  return
