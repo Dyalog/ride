@@ -284,7 +284,6 @@ class @IDE
   ZMI: -> D.zoomIn();         return
   ZMO: -> D.zoomOut();        return
   ZMR: -> D.resetZoom();      return
-  ABT: -> about();            return
 
   DMR: -> # Run Demo Script
     ide = @

@@ -58,7 +58,6 @@ $ ->
       connect()
 
   $ document
-    .on 'keydown', '*', 'shift+f1', -> about(); false
     .on 'keydown', '*', 'ctrl+tab ctrl+shift+tab', (e) ->
       a = []; i = -1; for _, w of D.wins then (if w.hasFocus() then i = a.length); a.push w
       j = if i < 0 then 0 else if e.shiftKey then (i + a.length - 1) % a.length else (i + 1) % a.length

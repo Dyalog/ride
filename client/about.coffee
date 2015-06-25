@@ -1,4 +1,4 @@
-module.exports = ->
+@showDialog = ->
   v = D.versionInfo; i = D.remoteIdentification || {}; u = 'unknown'
   info = """
     IDE:

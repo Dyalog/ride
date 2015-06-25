@@ -20,6 +20,8 @@ CMDS = [
   ['WI',  'Weak interrupt',           ['Ctrl-Pause']]
   ['SI',  'Strong interrupt',         []]
   ['PRF', 'Show Preferences',         ['Ctrl-P']]
+  ['HLP', 'Help',                     ['F1']]
+  ['ABT', 'About',                    ['Shift-F1']]
 ]
 
 keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-del>×</a></span> "

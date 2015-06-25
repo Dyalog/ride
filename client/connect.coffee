@@ -148,7 +148,7 @@ module.exports = (opts) ->
     false
   $listenPort.on 'keydown', null, 'return', -> $listen.click(); false
   $list.sortable cursor: 'move', revert: true, tolerance: 'pointer', containment: 'parent', axis: 'y', update: storeFavs
-  $about.click -> about(); false
+  $about.click -> about.showDialog(); false
 
   $list.html prefs.favs().map((x) -> "<option '#{if x.sel then 'selected' else ''}>#{fmtFav x}</option>").join ''
   if !$list.find(':selected').length then $list.focus().find('option').eq(0).attr 'selected', true; $list.change()

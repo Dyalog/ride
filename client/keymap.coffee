@@ -1,5 +1,6 @@
 helpurls = require './helpurls'
 prefs = require './prefs'
+about = require './about'
 {inherit, cat, dict, chr, ord, zip, join, delay, qw} = require './util'
 prefsUI = require './prefs-ui'
 
@@ -33,6 +34,7 @@ CodeMirror.keyMap.dyalogDefault = fallthrough: 'default', F1: 'HLP', End: 'goLin
 CodeMirror.keyMap.dyalogDefault["'#{prefs.prefixKey()}'"] = 'BQC'
 
 CodeMirror.commands.PRF = -> prefsUI.showDialog(); return
+CodeMirror.commands.ABT = -> about.showDialog(); return
 
 CodeMirror.commands.HLP = (cm) ->
   c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
