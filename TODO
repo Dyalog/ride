@@ -22,8 +22,10 @@ P4 (I will think about it):
         But if we don't have "Copy" in the menu, cmd+c doesn't work.
 
 Not yet prioritized:
+  Colour schemes
+    NN: mostly done, needs some real-world testing and a survey about what the default colour schemes should be
   Configurable keyboard shortcuts
-    NN: I think this should high priority for 15.0
+    NN: halfway there; I have a concept about what the UI should look like
   (OS X) - Reported by Mike Powell: Dragging the text to a different point uses the vertical bar cursor. Holding the Option key while doing this changes the cursor to the green and white cross (Implying a copy - but it still moves the text).
   Type a couple of chars and hit Alt+Enter, followed by Enter. Uncaught node.js Error; JS email 2015-03-10
     NN: cannot reproduce on Linux
@@ -33,22 +35,21 @@ Not yet prioritized:
   After closing an editor, focus the next editor instead of the session
   There is a limit for the number of match locations shown on the scrollbar (1000) -- should we change it?
   JS: Arrange for the banner to appear at the _top_ of a new session.
+    NN: I did some experimentation with this.  As of now, I can only get it appear on top about 50% of the time
+         due to a race condition in NW.js's events.
   JS: System command output (fns vars ...) should wrap at ⎕PW, not 80.
   JS: AutoPW option: ⎕PW changes automatically with window width and font size.
     NN: protocol support needed
-  JS: Option for turning off AutoFormatting, please.
-    NN: that's an interpreter-side option: export AUTOFORMAT=0
   JS: Floating editors: )ed F G should place F above G and focus F. Then Esc Esc should close F and then G.
     NN: the interpreter controls the order; that's even beyond JD's code
   "Cancel" button in "Connecting..." dialog; MK Jabber 2015-03-30
     NN: added "Cancel" button, though it doesn't really cancel, just closes the dialog
   Regular expressions in search
-  Sortable language bar
   Multiple sessions (i.e. connections to interpreters) as tabs with a green/red dot to indicate error, suggested by Mike Mingaard
-  A dropdown with I-beams (Mike Mingaard)
-  Detachable language bar (Mike Mingaard)
   Show help next to ` completions (Mike Mingaard)
-  Contextual help (F1) for I-beams: when you type 1234⌶ and press F1, you should be taken to a page about 1234⌶, not the generic ⌶ page
+  A dropdown with I-beams (Mike Mingaard)
+    NN: I'm not sure it's a good idea
+  Contextual help (F1) for I-beams
   https://github.com/codemirror/CodeMirror/issues/3240
     WebKit stores DOM height in 25 bits, ~33 million pixels.  When displaying
     large arrays (~millions of lines, depending on font size), CodeMirror hits
@@ -56,6 +57,12 @@ Not yet prioritized:
     hard to work around without going deep into CodeMirror's code and rewriting
     parts of it.
   lbar in floating editor windows
+  Sortable language bar
+  Detachable language bar (Mike Mingaard)
+  JS: Option for turning off AutoFormatting, please.
+    NN: that's an interpreter-side option: export AUTOFORMAT=0
+  Drag and drop a "finder object" in the Mac RIDE crashes it (Alex Bochannek, 2015-06-25)
+  RIDE on multiple screens on Mac loses its title bar (Alex Bochannek, 2015-06-25)
 
 Later:
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
