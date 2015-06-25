@@ -65,6 +65,9 @@ builtInSchemes = [
     num:{fg:'8'},str:{fg:'8'},zld:{fg:'8'},quad:{fg:'808'},ns:{fg:'8'},diam:{B:1},kw:{B:1},idm:{U:1,bg:'e'},com:{I:1}
     err:{fg:'f',bg:'0',B:1,I:1,U:1},mtch:{bg:'c'},srch:{bg:'c'},mod:{bg:'e'},glb:{I:1},tc:{bg:'e'}
   }
+  {
+    name:'Malevich',frozen:1
+  }
 ]
 
 schemes  =      # all schemes (built-in and user-defined) as objects
