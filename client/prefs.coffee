@@ -68,11 +68,6 @@ prefs = @
       -
       Theme                    =THM
     _Actions
-      Presentation                  {!browser}
-        Run Demo Script...     =DMR {!browser}
-        Next Line of Demo      =DMN {!browser}
-        Previous Line of Demo  =DMP {!browser}
-      -                             {!browser}
       Weak Interrupt           =WI
       Strong Interrupt         =SI
     _Window                         {mac}
