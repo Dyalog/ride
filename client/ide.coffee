@@ -2,6 +2,7 @@ require './menu'
 about = require './about'
 prefs = require './prefs'
 prefsUI = require './prefs-ui'
+{parseMenuDSL} = require './prefs-menu'
 {Editor} = require './editor'
 {Session} = require './session'
 keymap = require './keymap'
@@ -160,48 +161,11 @@ class @IDE
     D.floatOnTop = prefs.floatOnTop()
     prefs.floatOnTop (x) -> D.floatOnTop = x; return
     prefs.lbar (x) -> ide.layout[if x then 'show' else 'hide'] 'north'; return
-
-    extraOpts =
-      NEW: key: 'Ctrl+N'
-      QIT: key: 'Ctrl+Q'
-      ZMI: key: 'Ctrl+=', dontBindKey: 1
-      ZMO: key: 'Ctrl+-', dontBindKey: 1
-      ZMR: key: 'Ctrl+0', dontBindKey: 1
-      LBR: checkBoxPref: prefs.lbar
-      FLT: checkBoxPref: prefs.floating
-      WRP: checkBoxPref: prefs.wrap
-      TOP: checkBoxPref: prefs.floatOnTop
-      DMN: key: 'Ctrl+Shift+N'
-      DMP: key: 'Ctrl+Shift+P'
-      ABT: key: 'Shift+F1', dontBindKey: 1
-      THM: items: qw('Modern Redmond Cupertino Freedom').map (x, i) ->
-        '': x, group: 'themes', checked: prefs.theme() == x.toLowerCase(), action: ->
-          prefs.theme x.toLowerCase(); return
-
-    parseMenuDescription = (md) ->
-      stack = [ind: -1, items: []]
-      for s in md.split '\n' when !/^\s*$/.test s = s.replace /#.*/, ''
-        cond = ''; s = s.replace /\{(.*)\}/, (_, x) -> cond = x; ''
-        url = ''; s = s.replace /\=(https?:\/\/\S+)/, (_, x) -> url = x; ''
-        cmd = ''; s = s.replace /\=([a-z][a-z0-9]+)/i, (_, x) -> cmd = x; ''
-        h = ind: s.replace(/\S.*/, '').length, '': s.replace /^\s*|\s*$/g, ''
-        while h.ind <= stack[stack.length - 1].ind then stack.pop()
-        if !cond || do new Function "var browser=!#{D.nwjs},mac=#{D.mac};return(#{cond})"
-          (stack[stack.length - 1].items ?= []).push h
-        if stack.length == 1 then h.items ?= [] # force top-level items to be menus
-        stack.push h
-        if cmd
-          h.action = do (cmd = cmd) -> ->
-            if f = CodeMirror.commands[cmd] then f ide.focusedWin.cm
-            else if ide[cmd] then ide[cmd]()
-            else $.alert "Unknown command: #{cmd}"
-            return
-        else if url
-          h.action = do (url = url) -> -> D.openExternal url; return
-        $.extend h, extraOpts[cmd]
-      stack[0].items
-
-    D.installMenu parseMenuDescription prefs.menu()
+    try
+      D.installMenu parseMenuDSL prefs.menu()
+    catch e
+      console?.error? e; $.alert 'Invalid menu configuration -- the default menu will be used instead', 'Warning'
+      D.installMenu parseMenuDSL prefs.menu.getDefault()
     return
 
   setHostAndPort: (@host, @port) -> @updateTitle(); return

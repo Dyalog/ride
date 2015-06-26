@@ -27,17 +27,9 @@ prefs = @
   ['theme',          '']
   ['title',          '{WSID} - {HOST}:{PORT} (PID: {PID})'] # a.k.a. "caption"
   ['zoom',           0]
-  ['menu',           '''
-    # _x   access key, alt+x
-    # =CMD command code; some are special:
-    #        LBR FLT WRP TOP render as checkboxes
-    #        THM ("Theme") renders its own submenu
-    # =http://example.com/  open a URL
-    # {}   conditional display, a boolean expression
-    #        operators: && || ! ( )
-    #        variables: browser mac
-    # -    separator (when alone)
-    # #    comment
+  ['menu', '''
+    # see below for syntax
+
     Dyalog                          {mac}
       About Dyalog             =ABT
       -
@@ -81,6 +73,20 @@ prefs = @
       MyDyalog                 =https://my.dyalog.com/
       -
       Dyalog Forum             =http://www.dyalog.com/forum
+
+    # Syntax:
+    #   _x   access key, alt+x
+    #   =CMD command code; some are special:
+    #          LBR FLT WRP TOP render as checkboxes
+    #          THM ("Theme") renders its own submenu
+    #   =http://example.com/  open a URL
+    #   {}   conditional display, a boolean expression
+    #          operators: && || ! ( )
+    #          variables: browser mac
+    #   -    separator (when alone)
+    #   #    comment
+
+    # The =PRF ("Preferences") menu item must be present.
   ''']
 ]
 .forEach ([k, d]) ->       # k: preference name, d: default value

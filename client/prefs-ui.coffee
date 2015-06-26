@@ -7,9 +7,10 @@ prefs = require './prefs'
 #   name       a string used as the tab's title
 #   init()     called only once, when Preferences is opened for the first time
 #   load()     called every time Preferences is opened
-#   validate() should return a falsey value on failure, checked before attempting to save() any of the tabs
+#   validate() should return a {message,element} object on failure
 #   save()     called when Save is pressed
 #   resize()   called when the Preferences dialog is resized or the tab is selected
+# All tabs' validate() methods are invoked, if they exist, before any attempt to call save()
 
 tabs = [
   require './prefs-glyphs'
