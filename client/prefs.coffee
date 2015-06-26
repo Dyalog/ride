@@ -7,17 +7,27 @@
 #   prefs.foo.toggle()          # convenience function for booleans (numbers 0 and 1)
 #   prefs.foo.getDefault()      # retrieve default value
 prefs = @
-[ # name                    default (type is determined from default value; setter enforces type and handles encoding)
-  ['colourScheme',          'Default'] # name of the active colour scheme
-  ['colourSchemes',         []] # objects describing user-defined colour schemes
-  ['favs',                  [host: '127.0.0.1', port: 4502]]
-  ['floating',              0] # floating editor and tracer windows
-  ['floatOnTop',            0] # try to keep floating windows on top of the session
-  ['keys',                  {}] # a mapping between commands and keystrokes, only diffs from the defaults
-  ['kbdLocale',             ''] # e.g. "US", "GB"
-  ['lineNumsTracer',        0]
-  ['lineNumsEditor',        1]
-  ['menu',                  '''
+[ # name             default (type is determined from default value; setter enforces type and handles encoding)
+  ['colourScheme',   'Default'] # name of the active colour scheme
+  ['colourSchemes',  []] # objects describing user-defined colour schemes
+  ['favs',           [host: '127.0.0.1', port: 4502]]
+  ['floating',       0] # floating editor and tracer windows
+  ['floatOnTop',     0] # try to keep floating windows on top of the session
+  ['keys',           {}] # a mapping between commands and keystrokes, only diffs from the defaults
+  ['kbdLocale',      ''] # e.g. "US", "GB"
+  ['lineNumsTracer', 0]
+  ['lineNumsEditor', 1]
+  ['pos',            null] # [x,y,w,h] of the main window, used in ../init-nw.coffee
+  ['posEditor',      [32, 32, 1000, 618]] # [x,y,w,h]
+  ['posTracer',      [32, 32, 1000, 618]] # [x,y,w,h]
+  ['prefixKey',      '`']
+  ['prefixMap',      ''] # pairs of characters; only differences from the default ` map are stored
+  ['wrap',           0] # line wrapping in session
+  ['lbar',           1] # show language bar
+  ['theme',          '']
+  ['title',          '{WSID} - {HOST}:{PORT} (PID: {PID})'] # a.k.a. "caption"
+  ['zoom',           0]
+  ['menu',           '''
     # _x   access key, alt+x
     # =CMD command code; some are special:
     #        LBR FLT WRP TOP render as checkboxes
@@ -77,16 +87,6 @@ prefs = @
       -
       Dyalog Forum             =http://www.dyalog.com/forum
   ''']
-  ['pos',                   null] # [x,y,w,h] of the main window, used in ../init-nw.coffee
-  ['posEditor',             [32, 32, 1000, 618]] # [x,y,w,h]
-  ['posTracer',             [32, 32, 1000, 618]] # [x,y,w,h]
-  ['prefixKey',             '`']
-  ['prefixMap',             ''] # pairs of characters; only differences from the default ` map are stored
-  ['wrap',                  0] # line wrapping in session
-  ['lbar',                  1] # show language bar
-  ['theme',                 '']
-  ['title',                 '{WSID} - {HOST}:{PORT} (PID: {PID})'] # a.k.a. "caption"
-  ['zoom',                  0]
 ]
 .forEach ([k, d]) ->       # k: preference name, d: default value
   t = typeof d; l = []     # t: type, l: listeners
