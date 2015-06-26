@@ -207,16 +207,16 @@ SEARCH_MATCH = 'search match' # sample text to illustrate it
   $('#prefs-tab-colours').removeClass 'renaming'
   cm.setSize $cm.width(), $cm.height()
   cm.setValue """
-    dfn←{ ⍝ sample
+    dfn←{ ⍝ comment
       0 ¯1.2e¯3j¯.45 'string' ⍬
-      +/-⍣×A:⍺∇⍵[i;j]
+      +/-⍣(×A):⍺∇⍵[i;j]
       {{{nested}}}
     }
     ∇{R}←{X}tradfn Y;local
       label:
       :if condition
-        {⍵[⍋⍵]}
-        global←0 ⋄ ⎕error
+        {⍵[⍋⍵]} ⋄ global←local←0
+        ⎕error ) ] } '
       :endif
       #{SEARCH_MATCH}
     ∇
