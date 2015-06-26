@@ -72,7 +72,7 @@ CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
       else if c == '#' then 'apl-ns'
       else if rName0.test c
         stream.match rName1; x = stream.current()
-        if !state.dfnDepth && stream.match /\s*:/ then 'apl-lbl'
+        if !state.dfnDepth && stream.match /:/ then 'apl-lbl'
         else if state.dfnDepth || state.vars && x in state.vars then 'apl-var'
         else 'apl-glb'
       else 'apl-err'
