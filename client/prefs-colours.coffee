@@ -28,12 +28,14 @@ G = [ # information about syntax highlighting groups
   {t:'dfn1', s:'dfn level 1',          c:'.cm-apl-dfn1'}
   {t:'dfn2', s:'dfn level 2',          c:'.cm-apl-dfn2'}
   {t:'dfn3', s:'dfn level 3',          c:'.cm-apl-dfn3'}
+  {t:'dfn4', s:'dfn level 4',          c:'.cm-apl-dfn4'}
+  {t:'dfn5', s:'dfn level 5',          c:'.cm-apl-dfn5'}
   {t:'trad', s:'tradfn',               c:'.cm-apl-trad'}
   {t:'kw',   s:'keyword',              c:'.cm-apl-kw'  }
   {t:'lbl',  s:'label',                c:'.cm-apl-lbl' }
   {t:'idm',  s:'idiom',                c:'.cm-apl-idm' }
   {t:'com',  s:'comment',              c:'.cm-apl-com' }
-  {t:'err',  s:'error',                c:'.cm-apl-err,.CodeMirror-nonmatchingbracket'}
+  {t:'err',  s:'error',                c:'.cm-apl-err' }
   {t:'lnum', s:'line number',          c:'.CodeMirror-linenumber'}
   {t:'cur',  s:'cursor',               c:'div.CodeMirror-cursor', controls:{lb:1,fg:0,bg:0,BIU:0}}
   {t:'mtch', s:'matching bracket',     c:'.CodeMirror-matchingbracket'}
@@ -58,7 +60,8 @@ builtInSchemes = [
     norm:{fg:'9c7',bg:'0'},cur:{lb:'f00'},lnum:{fg:'b94',bg:'010'},srch:{bg:'b96',fg:'0'},mod:{bg:'1'},sel0:{bg:'123'}
     sel:{bg:'024'},err:{fg:'f00',bg:'411',B:1,U:1},kw:{fg:'aa2'},num:{fg:'a8b'},op1:{fg:'d95'},fn:{fg:'0f0'}
     op2:{fg:'fd6'},brkt:{fg:'888'},com:{fg:'b',I:1},semi:{fg:'8'},str:{fg:'dae'},zld:{fg:'d9f',B:1}
-    lbl:{U:1,bg:'321'},idm:{B:1},dfn:{fg:'a7b'},dfn3:{fg:'c79'},dfn2:{fg:'eb4'},dfn4:{fg:'0'},tc:{bg:'1'}
+    lbl:{U:1,bg:'321'},idm:{B:1},tc:{bg:'1'},glob:{B:1}
+    dfn:{fg:'a7b'},dfn2:{fg:'eb4'},dfn3:{fg:'c79'},dfn4:{fg:'cd0'},dfn5:{fg:'a0d'}
   }
   {
     name:'Albrecht Dürer'
@@ -174,7 +177,8 @@ pickUniqueSchemeName = (root) ->
     selectGroup(
       if cm.somethingSelected() then 'sel'
       else if 0 <= cm.getLine(cm.getCursor().line).indexOf SEARCH_MATCH then 'srch'
-      else if t = cm.getTokenTypeAt cm.getCursor(), 1 then t.replace /^apl-(\w+).*$/, '$1'
+      else if t = cm.getTokenTypeAt cm.getCursor(), 1
+        t = t.split(' ').sort((x, y) -> y.length - x.length)[0].replace(/^apl-/, '')
       else 'norm'
     )
     return
@@ -207,16 +211,17 @@ SEARCH_MATCH = 'search match' # sample text to illustrate it
   $('#prefs-tab-colours').removeClass 'renaming'
   cm.setSize $cm.width(), $cm.height()
   cm.setValue """
-    dfn←{ ⍝ comment
-      0 ¯1.2e¯3j¯.45 'string' ⍬
-      +/-⍣(×A):⍺∇⍵[i;j]
-      {{{nested}}}
-    }
-    ∇{R}←{X}tradfn Y;local
+    ∇{R}←{X}tradfn(Y Z);local
+      dfn←{ ⍝ comment
+        0 ¯1.2e¯3j¯.45 'string' ⍬
+        +/-⍣(×A):⍺∇⍵[i;j]
+        {{{{nested ⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}
+      }
       label:
+      :for i :in ⍳X ⋄ :endfor
       :if condition
         {⍵[⍋⍵]} ⋄ global←local←0
-        ⎕error ) ] } '
+        ⎕error ) ] } :error 'unclosed
       :endif
       #{SEARCH_MATCH}
     ∇
