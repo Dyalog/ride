@@ -31,8 +31,8 @@ EDITOR_HTML = do ->
         b 'tb-DO  editor-only last',       'Uncomment selected text'
 
         '<span class=tb-separator></span>'
-        '<input class="tb-search text-field" placeholder=Search>'
-        '<input class="tb-replace text-field editor-only" placeholder=Replace>'
+        '<div class="tb-sc text-field" placeholder=Search></div>'
+        '<div class="tb-rp text-field editor-only" placeholder=Replace></div>'
         b 'tb-NX first',      'Search for next match'
         b 'tb-PV',            'Search for previous match'
         b 'tb-case last',     'Match case'
@@ -64,21 +64,29 @@ class @Editor
     onCodeMirrorDoubleClick @cm, (e) => @ED(); e.preventDefault(); e.stopPropagation(); return
     @autocomplete = autocompletion.setUp @
     @$tb = $ '.toolbar', @$e
+      .on 'click', '.tb-hid,.tb-case', (e) => $(e.target).toggleClass 'pressed'; @highlightSearch(); false
       .on 'mousedown',        '.tb-button', (e) -> $(e.target).addClass    'armed'; e.preventDefault(); return
       .on 'mouseup mouseout', '.tb-button', (e) -> $(e.target).removeClass 'armed'; e.preventDefault(); return
       .on 'click',            '.tb-button', (e) =>
         for c in $(e.target).prop('class').split /\s+/ when m = /^tb-([A-Z]{2,3})$/.exec c then @[m[1]](); break
         return
-      .on 'click', '.tb-hid, .tb-case', (e) => $(e.target).toggleClass 'pressed'; @highlightSearch(); false
-      .on 'keydown', '.tb-search', 'return',       => @NX(); false
-      .on 'keydown', '.tb-search', 'shift+return', => @PV(); false
-      .on 'keydown', '.tb-search', 'ctrl+return', => @selectAllSearchResults(); false
-      .on 'keyup',   '.tb-search', (e) => (if e.which !in [13, 27] then @highlightSearch()); return
-      .on 'keydown', '.tb-replace', 'return',       => @replace(); false
-      .on 'keydown', '.tb-replace', 'shift+return', => @replace true; false
-      .on 'keydown', '.tb-search,.tb-replace', 'down', => @NX(); false
-      .on 'keydown', '.tb-search,.tb-replace', 'up',   => @PV(); false
-      .on 'keydown', '.tb-search,.tb-replace', 'esc', => @clearSearch(); @cm.focus(); false
+    @cmSC = new CodeMirror @$tb.find('.tb-sc')[0], keyMap: 'dyalog', scrollbarStyle: 'null', extraKeys:
+      Enter: => @NX(); return
+      'Shift-Enter': => @PV(); return
+      'Ctrl-Enter': => @selectAllSearchResults(); return
+      Tab: => (if @isTracer then @cm else @cmRP).focus(); return
+      'Shift-Tab': => @cm.focus(); return
+    @cmSC.on 'change', => @highlightSearch(); return
+    @cmRP = new CodeMirror @$tb.find('.tb-rp')[0], keyMap: 'dyalog', scrollbarStyle: 'null', extraKeys:
+      Enter: => @replace(); return
+      'Shift-Enter': => @replace true; return
+      Tab: => @cm.focus(); return
+      'Shift-Tab': => (if @isTracer then @cm else @cmSC).focus(); return
+    for cmx in [@cmSC, @cmRP]
+      cmx.addKeyMap
+        Down: => @NX(); return
+        Up: => @PV(); return
+        Esc: => @clearSearch(); @cm.focus(); return
     @setTracer !!@isTracer
     return
 
@@ -100,21 +108,21 @@ class @Editor
 
   # Search-related functions:
   clearSearch: ->
-    $('.CodeMirror-vscrollbar', @$e).prop 'title', ''
-    $('.tb-search:visible', @$tb).removeClass 'no-matches'
+    $('.ride-win .CodeMirror-vscrollbar', @$e).prop 'title', ''
+    $('.tb-sc', @$tb).removeClass 'no-matches'
     @cm.removeOverlay @overlay; @annotation?.clear(); @overlay = @annotation = null; return
 
   highlightSearch: ->
-    ic = !$('.tb-case:visible', @$tb).hasClass 'pressed' # ic: ignore case (like in vim)
-    q = $('.tb-search:visible', @$tb).val(); if ic then q = q.toLowerCase() # q: the query string
+    ic = !$('.tb-case', @$tb).hasClass 'pressed' # ic: ignore case (like in vim)
+    q = @cmSC.getValue(); ic && q = q.toLowerCase() # q: the query string
     if @lastQuery != q || @lastIC != ic
       @lastQuery = q; @lastIC = ic; @clearSearch()
       if q
-        s = @cm.getValue(); if ic then s = s.toLowerCase()
-        $('.tb-search:visible', @$tb).toggleClass 'no-matches', -1 == s.indexOf q
+        s = @cm.getValue(); ic && s = s.toLowerCase()
+        $('.tb-sc', @$tb).toggleClass 'no-matches', -1 == s.indexOf q
         @annotation = @cm.showMatchesOnScrollbar q, ic
         @cm.addOverlay @overlay = token: (stream) ->
-          s = stream.string[stream.pos..]; if ic then s = s.toLowerCase()
+          s = stream.string[stream.pos..]; ic && s = s.toLowerCase()
           i = s.indexOf q
           if !i then         stream.pos += q.length; 'searching'
           else if i > 0 then stream.pos += i;        return
@@ -125,7 +133,7 @@ class @Editor
   search: (backwards) ->
     [q, ic] = @highlightSearch()
     if q
-      s = @cm.getValue(); if ic then s = s.toLowerCase()
+      s = @cm.getValue(); ic && s = s.toLowerCase()
       if backwards
         i = @cm.indexFromPos @cm.getCursor 'anchor'
         j = s[...i].lastIndexOf q; if j < 0 then j = s[i..].lastIndexOf q; if j >= 0 then j += i
@@ -137,10 +145,10 @@ class @Editor
     false
 
   selectAllSearchResults: ->
-    ic = !$('.tb-case:visible', @$tb).hasClass 'pressed' # ic: ignore case (like in vim)
-    q = $('.tb-search:visible', @$tb).val(); if ic then q = q.toLowerCase() # q: the query string
+    ic = !$('.tb-case', @$tb).hasClass 'pressed' # ic: ignore case (like in vim)
+    q = @cmSC.getValue(); ic && q = q.toLowerCase() # q: the query string
     if q
-      s = @cm.getValue(); if ic then s = s.toLowerCase()
+      s = @cm.getValue(); ic && s = s.toLowerCase()
       selections = []; i = 0
       while (i = s.indexOf q, i) >= 0 then selections.push anchor: @cm.posFromIndex(i), head: @cm.posFromIndex i + q.length; i++
       if selections.length then @cm.setSelections selections
@@ -148,13 +156,13 @@ class @Editor
     return
 
   replace: (backwards) -> # replace current occurrence and find next
-    ic = !$('.tb-case:visible', @$tb).hasClass 'pressed' # ic: ignore case (like in vim)
-    q = $('.tb-search:visible', @$tb).val(); if ic then q = q.toLowerCase() # q: the query string
-    s = @cm.getSelection(); if ic then s = s.toLowerCase()
-    if s == q then @cm.replaceSelection $('.tb-replace', @$tb).val(), if backwards then 'start' else 'end'
+    ic = !$('.tb-case', @$tb).hasClass 'pressed' # ic: ignore case (like in vim)
+    q = @cmSC.getValue(); ic && q = q.toLowerCase() # q: the query string
+    s = @cm.getSelection(); ic && s = s.toLowerCase()
+    if s == q then @cm.replaceSelection @cmRP.getValue(), if backwards then 'start' else 'end'
     @search backwards
-    v = @cm.getValue(); if ic then v = v.toLowerCase()
-    $('.tb-search:visible', @$tb).toggleClass 'no-matches', -1 == v.indexOf q
+    v = @cm.getValue(); ic && v = v.toLowerCase()
+    $('.tb-sc', @$tb).toggleClass 'no-matches', -1 == v.indexOf q
     return
 
   highlight: (l) -> # current line in tracer
@@ -165,7 +173,7 @@ class @Editor
   setTracer: (x) ->
     @isTracer = x; @$e.toggleClass 'tracer', x; @highlight null
     ln = !!if @isTracer then prefs.lineNumsTracer() else prefs.lineNumsEditor()
-    @cm.setOption 'lineNumbers', ln; @$tb.find('.tb-LN:visible').toggleClass 'pressed', ln
+    @cm.setOption 'lineNumbers', ln; @$tb.find('.tb-LN').toggleClass 'pressed', ln
     @cm.setOption 'readOnly', !!x
     return
 
@@ -216,12 +224,11 @@ class @Editor
   BK: -> (if @isTracer then @emit 'TraceBackward', win: @id else @cm.execCommand 'undo'); return
   FD: -> (if @isTracer then @emit 'TraceForward',  win: @id else @cm.execCommand 'redo'); return
   SC: ->
-    $s = @$tb.find '.tb-search:visible'; v = @cm.getSelection(); if v && '\n' !in v then $s.val v
-    $s.focus().select(); return
+    v = @cm.getSelection(); if v && '\n' !in v then @cmSC.setValue v
+    @cmSC.focus(); @cmSC.execCommand 'selectAll'; return
   RP: ->
-    $s = @$tb.find '.tb-search:visible'; $r = @$tb.find '.tb-replace:visible'
-    v = @cm.getSelection() || @cword(); if v && '\n' !in v then $s.add($r).val v
-    $r.focus().select(); @highlightSearch(); return
+    v = @cm.getSelection() || @cword(); if v && '\n' !in v then @cmSC.setValue v; @cmRP.setValue v
+    @cmRP.focus(); @cmRP.execCommand 'selectAll'; @highlightSearch(); return
   EP: ->
     v = @cm.getValue()
     if v != @otext || @bp.join() != @obp
@@ -244,7 +251,7 @@ class @Editor
     return
   LN: -> # Toggle Line Numbers
     v = !!if @isTracer then prefs.lineNumsTracer.toggle() else prefs.lineNumsEditor.toggle()
-    @cm.setOption 'lineNumbers', v; @$tb.find('.tb-LN:visible').toggleClass 'pressed', v; return
+    @cm.setOption 'lineNumbers', v; @$tb.find('.tb-LN').toggleClass 'pressed', v; return
   PV: -> @search true; return
   NX: -> @search(); return
   TC: -> @emit 'StepInto', win: @id; return

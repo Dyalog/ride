@@ -208,10 +208,11 @@ input,textarea,select,a{outline:0}
 .tb-separator
   float:left;width:10px;height:24px
   background:no-repeat center center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAASCAIAAAD+ApjoAAAAGElEQVQI12NoaGj4//8/EwMDAwMDA70pACyPBKBkf6chAAAAAElFTkSuQmCC)
-.tb-search,.tb-replace
-  float:left;height:18px;width:100px
-  &.no-matches{background-color:#fee}
-
+.tb-sc,.tb-rp
+  float:left;width:120px;height:24px;resize:none;overflow:hidden
+  .toolbar & .CodeMirror{font-size:18px}
+  &.no-matches .cm-s-default{background-color:#fee}
+.tb-rp{margin-left:2px}
 .win{width:100%;height:auto;padding:0 !important} // content of editor and tracer windows
 
 // various dialogs
