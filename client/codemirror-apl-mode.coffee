@@ -1,7 +1,23 @@
 {qw} = require './util'
 
-rLetter = @rLetter = 'A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ'; rName0 = ///[#{rLetter}]///; rName1 = ///[#{rLetter}\d]*///
+rLetter = @rLetter = 'A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ'
+rName0 = ///[#{rLetter}]///
+rName1 = ///[#{rLetter}\d]*///
+rName = "(?:[#{rLetter}][#{rLetter}\d]*)"
 rNotName = ///[^#{rLetter}\d]+///
+rEnd = '(?:⍝|$)'
+rDfnHeader = ///
+  ^ \s* #{rName} \s* ← \s* \{ \s* (?:
+    #{rEnd} |
+    [^#{rLetter}⍝\ ] |
+    #{rName} \s* (?:
+      \} \s* #{rEnd} |
+      #{rEnd} |
+      [^\}⍝\ ]
+    )
+  )
+///
+
 keywords = qw '''
   andif access case caselist class continue else elseif end endclass endfor endhold endif endinterface endnamespace
   endproperty endrepeat endsection endselect endtrap endwhile endwith field for in goto hold include if implements
@@ -34,8 +50,8 @@ CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
   token: (stream, state) ->
     if state.isHeader
       delete state.isHeader; stream.match /[^⍝\n\r]*/; s = stream.current()
-      if /^\s*[:0-9]|←\s*\{\s*(?:⍝|$)/.test s
-        stream.backUp s.length
+      if rDfnHeader.test s
+        stream.backUp s.length # re-tokenize without isHeader
       else if /^\s*$/.test s
         delete state.vars
       else
