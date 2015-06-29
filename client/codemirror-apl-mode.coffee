@@ -1,19 +1,19 @@
 {qw} = require './util'
 
-rLetter = @rLetter = 'A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ'
-rName0 = ///[#{rLetter}]///
-rName1 = ///[#{rLetter}\d]*///
-rName = "(?:[#{rLetter}][#{rLetter}\d]*)"
-rNotName = ///[^#{rLetter}\d]+///
-rEnd = '(?:⍝|$)'
-rDfnHeader = ///
-  ^ \s* #{rName} \s* ← \s* \{ \s* (?:
-    #{rEnd} |
-    [^#{rLetter}⍝\ ] |
-    #{rName} \s* (?:
-      \} \s* #{rEnd} |
-      #{rEnd} |
-      [^\}⍝\ ]
+letter = @letter = 'A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ'
+name0 = ///[#{letter}]///
+name1 = ///[#{letter}\d]*///
+name = "(?:[#{letter}][#{letter}\d]*)"
+notName = ///[^#{letter}\d]+///
+end = '(?:⍝|$)'
+dfnHeader = ///
+  ^ \s* #{name} \s* ← \s* \{ \s* (?:
+    #{end} |
+    [^#{letter}⍝\ ] |
+    #{name} \s* (?:
+      \} \s* #{end} |
+      #{end} |
+      [^#{letter}\d\}⍝\ ]
     )
   )
 ///
@@ -50,12 +50,12 @@ CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
   token: (stream, state) ->
     if state.isHeader
       delete state.isHeader; stream.match /[^⍝\n\r]*/; s = stream.current()
-      if rDfnHeader.test s
+      if dfnHeader.test s
         stream.backUp s.length # re-tokenize without isHeader
       else if /^\s*$/.test s
         delete state.vars
       else
-        state.vars = s.split rNotName
+        state.vars = s.split notName
       'apl-trad'
     else if stream.match idiomsRE
       'apl-idm'
@@ -86,8 +86,8 @@ CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
       else if c == '⎕' then (if stream.match(/[áa-z0-9]*/i)?[0].toLowerCase() in quadNames then 'apl-quad' else 'apl-err')
       else if c == '⍞' then 'apl-quad'
       else if c == '#' then 'apl-ns'
-      else if rName0.test c
-        stream.match rName1; x = stream.current()
+      else if name0.test c
+        stream.match name1; x = stream.current()
         if !state.dfnDepth && stream.match /:/ then 'apl-lbl'
         else if state.dfnDepth || state.vars && x in state.vars then 'apl-var'
         else 'apl-glb'

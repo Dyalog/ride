@@ -1,7 +1,7 @@
 require './codemirror-apl-mode'
 autocompletion = require './autocompletion'
 prefs = require './prefs'
-{rLetter} = require './codemirror-apl-mode'
+{letter} = require './codemirror-apl-mode'
 {onCodeMirrorDoubleClick} = require './util'
 
 EDITOR_HTML = do ->
@@ -214,7 +214,7 @@ class @Editor
   getDocument: -> @$e[0].ownerDocument
   refresh: -> @cm.refresh(); return
   cword: -> # APL identifier under cursor
-    c = @cm.getCursor(); s = @cm.getLine c.line; r = "[#{rLetter}0-9]*" # r: regex fragment to match identifiers
+    c = @cm.getCursor(); s = @cm.getLine c.line; r = "[#{letter}0-9]*" # r: regex fragment to match identifiers
     ((///⎕?#{r}$///.exec(s[...c.ch])?[0] or '') + (///^#{r}///.exec(s[c.ch..])?[0] or '')).replace /^\d+/, ''
 
   # Commands:

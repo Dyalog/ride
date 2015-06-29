@@ -1,5 +1,5 @@
 prefs = require './prefs'
-{rLetter} = require './codemirror-apl-mode'
+{letter} = require './codemirror-apl-mode'
 {delay} = require './util'
 
 @setUp = (win) -> # win: an instance of Editor or Session
@@ -10,7 +10,7 @@ prefs = require './prefs'
       clearTimeout tid
       tid = delay 500, ->
         tid = null; c = cm.getCursor(); s = cm.getLine c.line; i = c.ch
-        if i && s[i - 1] != ' ' && s[...i].replace(///[#{rLetter}]*$///, '')[-1..] != prefs.prefixKey() &&
+        if i && s[i - 1] != ' ' && s[...i].replace(///[#{letter}]*$///, '')[-1..] != prefs.prefixKey() &&
               (win.promptType == null or win.promptType != 4) # don't autocomplete in ⍞ input
           win.autocompleteWithTab = 0
           win.emit 'Autocomplete', line: s, pos: i, token: win.id
