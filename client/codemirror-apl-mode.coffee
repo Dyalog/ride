@@ -9,11 +9,12 @@ end = '(?:⍝|$)'
 dfnHeader = ///
   ^ \s* #{name} \s* ← \s* \{ \s* (?:
     #{end} |
-    [^#{letter}⍝\ ] |
+    [^#{letter}⍝\s] |
     #{name} \s* (?:
       \} \s* #{end} |
       #{end} |
-      [^#{letter}\d\}⍝\ ]
+      [^#{letter}\d\}⍝\s] |
+      \s [^\}⍝\s]
     )
   )
 ///
