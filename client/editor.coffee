@@ -7,39 +7,33 @@ prefs = require './prefs'
 EDITOR_HTML = do ->
   b = (cssClasses, title) -> "<a href=# class='#{cssClasses} tb-button' title='#{title}'></a>"
   """
-    <div class="toolbar tracer-toolbar">
+    <div class=toolbar>
       #{[
         # The first button is placed on the right-hand side through CSS.  In a floating window it is hidden.
         # CSS classes "first" and "last" indicate button grouping.
-        b 'tb-EP first last', 'Quit this function'
-        b 'tb-ER first',      'Execute line'
-        b 'tb-TC',            'Trace into expression'
-        b 'tb-BK',            'Go back one line'
-        b 'tb-FD',            'Skip current line'
-        b 'tb-BH',            'Continue trace'
-        b 'tb-RM',            'Continue execution'
-        b 'tb-MA',            'Restart all threads'
-        b 'tb-ED',            'Edit name'
-        b 'tb-WI',            'Interrupt'
-        b 'tb-CBP',           'Clear trace/stop/monitor for this object'
-        b 'tb-LN  last',      'Toggle line numbers'
+
+        b 'tb-EP  tracer-only first last', 'Quit this function'
+        b 'tb-ER  tracer-only first     ', 'Execute line'
+        b 'tb-TC  tracer-only',            'Trace into expression'
+        b 'tb-BK  tracer-only',            'Go back one line'
+        b 'tb-FD  tracer-only',            'Skip current line'
+        b 'tb-BH  tracer-only',            'Continue trace'
+        b 'tb-RM  tracer-only',            'Continue execution'
+        b 'tb-MA  tracer-only',            'Restart all threads'
+        b 'tb-ED  tracer-only',            'Edit name'
+        b 'tb-WI  tracer-only',            'Interrupt'
+        b 'tb-CBP tracer-only',            'Clear trace/stop/monitor for this object'
+        b 'tb-LN  tracer-only last',       'Toggle line numbers'
+
+        b 'tb-EP  editor-only first last', 'Save changes and return'
+        b 'tb-LN  editor-only first',      'Toggle line numbers'
+        b 'tb-AO  editor-only',            'Comment selected text'
+        b 'tb-DO  editor-only last',       'Uncomment selected text'
+
         '<span class=tb-separator></span>'
         '<input class="tb-search text-field" placeholder=Search>'
+        '<input class="tb-replace text-field editor-only" placeholder=Replace>'
         b 'tb-NX first',      'Search for next match'
-        b 'tb-PV',            'Search for previous match'
-        b 'tb-case last',     'Match case'
-      ].join ''}
-    </div>
-    <div class="toolbar editor-toolbar">
-      #{[
-        b 'tb-EP first last', 'Save changes and return'
-        b 'tb-LN  first',     'Toggle line numbers'
-        b 'tb-AO',            'Comment selected text'
-        b 'tb-DO  last',      'Uncomment selected text'
-        '<span class=tb-separator></span>'
-        '<input class="tb-search text-field" placeholder=Search>'
-        '<input class="tb-replace text-field" placeholder=Replace>'
-        b 'tb-NX  first',     'Search for next match'
         b 'tb-PV',            'Search for previous match'
         b 'tb-case last',     'Match case'
       ].join ''}
@@ -169,8 +163,7 @@ class @Editor
     return
 
   setTracer: (x) ->
-    @isTracer = x; $('.tracer-toolbar', @$e).toggle x; $('.editor-toolbar', @$e).toggle !x
-    $('.CodeMirror', @$e).toggleClass 'tracer', x; @highlight null
+    @isTracer = x; @$e.toggleClass 'tracer', x; @highlight null
     ln = !!if @isTracer then prefs.lineNumsTracer() else prefs.lineNumsEditor()
     @cm.setOption 'lineNumbers', ln; @$tb.find('.tb-LN:visible').toggleClass 'pressed', ln
     @cm.setOption 'readOnly', !!x

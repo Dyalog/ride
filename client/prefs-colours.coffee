@@ -43,7 +43,7 @@ G = [ # information about syntax highlighting groups
   {t:'mod',  s:'modified line',        c:'.modified'}
   {t:'sel',  s:'selection (focus)',    c:'.CodeMirror-focused .CodeMirror-selected', controls:{fg:0,BIU:0}}
   {t:'sel0', s:'selection (no focus)', c:'.CodeMirror-selected',                     controls:{fg:0,BIU:0}}
-  {t:'tc',   s:'tracer',               c:'.CodeMirror.tracer,.CodeMirror.tracer .CodeMirror-gutter-wrapper'}
+  {t:'tc',   s:'tracer',               c:'.tracer .CodeMirror,.tracer .CodeMirror .CodeMirror-gutter-wrapper'}
 ]
 H = dict G.map (g, i) -> [g.t, i]
 
