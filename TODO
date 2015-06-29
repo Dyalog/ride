@@ -22,6 +22,7 @@ P4 (I will think about it):
         But if we don't have "Copy" in the menu, cmd+c doesn't work.
 
 Not yet prioritized:
+  if we spawn an interpreter and it failes to connect after X time, please could we have a message box about it? - Andy email 2015-06-29
   Colour schemes
     NN: mostly done, needs some real-world testing and a survey about what the default colour schemes should be
   Configurable keyboard shortcuts
