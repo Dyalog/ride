@@ -2,11 +2,12 @@ require './menu'
 about = require './about'
 prefs = require './prefs'
 prefsUI = require './prefs-ui'
+prefsKeys = require './prefs-keys'
 {parseMenuDSL} = require './prefs-menu'
 {Editor} = require './editor'
 {Session} = require './session'
 keymap = require './keymap'
-{esc, delay, qw} = require './util'
+{esc, delay, qw, join} = require './util'
 
 class @IDE
   constructor: ->
@@ -132,19 +133,12 @@ class @IDE
         keyText = if key && x.charCodeAt(0) > 127 then "Keyboard: #{prefs.prefixKey()}#{key}\n\n" else ''
         h = D.lbarTips[x] or [x, '']; requestTooltip e, h[0], keyText + h[1]; return
       .on 'mouseover', '.lbar-prefs', (e) ->
-        requestTooltip e, 'Keyboard Shortcuts', '''
-          QT: Quit (and lose changes):  Shift+Esc
-          TB: Tab between windows:      Ctrl+Tab
-          BT: Back Tab between windows: Ctrl+Shift+Tab
-          EP: Exit (and save changes):  Esc
-          FD: Forward or Redo:          Ctrl+Shift+Enter
-          BK: Backward or Undo:         Ctrl+Shift+Backspace
-          SC: Search (in editors):      Ctrl+F
-          RP: Replace (in editors):     Ctrl+G
-          ED: Edit:                     Shift+Enter
-          ТC: Trace:                    Ctrl+Enter
-          TL: Toggle localisation:      Ctrl+Up
-        '''
+        h = prefs.keys(); s = ''
+        for [code, desc, defaults, important] in prefsKeys.CMDS when important
+          pad = Array(Math.max 0, 25 - desc.length).join ' '
+          ks = h[code] || defaults
+          s += "#{code}: #{desc}:#{pad} #{ks[ks.length - 1] || 'none'}\n"
+        requestTooltip e, 'Keyboard Shortcuts', s
         return
 
     @layout = @$ide.layout

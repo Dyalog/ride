@@ -3,19 +3,19 @@ prefs = require './prefs'
 
 @name = 'Keys'
 
-CMDS = [
-#  code   description                 defaults
-  ['QT',  'Quit (and lose changes)',  ['Shift-Esc']]
-  ['TB',  'Tab between windows',      ['Ctrl-Tab']]
-  ['BT',  'Back Tab between windows', ['Shift-Ctrl-Tab']]
-  ['EP',  'Exit (and save changes)',  ['Esc']]
-  ['FD',  'Forward or Redo',          ['Shift-Ctrl-Enter']]
-  ['BK',  'Backward or Undo',         ['Shift-Ctrl-Backspace']]
-  ['SC',  'Search (in editors)',      ['Ctrl-F']]
-  ['RP',  'Replace (in editors)',     ['Ctrl-G']]
-  ['ED',  'Edit',                     ['Shift-Enter', 'Ctrl-E']]
-  ['TC',  'Trace',                    ['Ctrl-Enter']]
-  ['TL',  'Toggle localisation',      ['Ctrl-Up']]
+CMDS = @CMDS = [
+#  code   description                 defaults                   important? (show in kbd btn's tooltip)
+  ['QT',  'Quit (and lose changes)',  ['Shift-Esc'],             1]
+  ['TB',  'Tab between windows',      ['Ctrl-Tab'],              1]
+  ['BT',  'Back Tab between windows', ['Shift-Ctrl-Tab'],        1]
+  ['EP',  'Exit (and save changes)',  ['Esc'],                   1]
+  ['FD',  'Forward or Redo',          ['Shift-Ctrl-Enter'],      1]
+  ['BK',  'Backward or Undo',         ['Shift-Ctrl-Backspace'],  1]
+  ['SC',  'Search (in editors)',      ['Ctrl-F'],                1]
+  ['RP',  'Replace (in editors)',     ['Ctrl-G'],                1]
+  ['ED',  'Edit',                     ['Shift-Enter', 'Ctrl-E'], 1]
+  ['TC',  'Trace',                    ['Ctrl-Enter'],            1]
+  ['TL',  'Toggle localisation',      ['Ctrl-Up'],               1]
   ['ER',  'Execute line',             ['Enter']]
   ['WI',  'Weak interrupt',           ['Ctrl-Pause']]
   ['SI',  'Strong interrupt',         []]
