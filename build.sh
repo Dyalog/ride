@@ -34,6 +34,7 @@ lib_files='
   node_modules/codemirror/addon/hint/show-hint.js
   node_modules/codemirror/addon/edit/matchbrackets.js
   node_modules/codemirror/addon/edit/closebrackets.js
+  node_modules/codemirror/addon/display/placeholder.js
   lib/jquery.hotkeys.js
   lib/jquery.layout.js
   init-nw.coffee

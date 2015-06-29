@@ -2,7 +2,7 @@ require './codemirror-apl-mode'
 autocompletion = require './autocompletion'
 prefs = require './prefs'
 {letter} = require './codemirror-apl-mode'
-{onCodeMirrorDoubleClick} = require './util'
+{onCodeMirrorDoubleClick, delay} = require './util'
 
 EDITOR_HTML = do ->
   b = (cssClasses, title) -> "<a href=# class='#{cssClasses} tb-button' title='#{title}'></a>"
@@ -31,8 +31,8 @@ EDITOR_HTML = do ->
         b 'tb-DO  editor-only last',       'Uncomment selected text'
 
         '<span class=tb-separator></span>'
-        '<div class="tb-sc text-field" placeholder=Search></div>'
-        '<div class="tb-rp text-field editor-only" placeholder=Replace></div>'
+        '<div class="tb-sc text-field"></div>'
+        '<div class="tb-rp text-field editor-only"></div>'
         b 'tb-NX first',      'Search for next match'
         b 'tb-PV',            'Search for previous match'
         b 'tb-case last',     'Match case'
@@ -70,23 +70,25 @@ class @Editor
       .on 'click',            '.tb-button', (e) =>
         for c in $(e.target).prop('class').split /\s+/ when m = /^tb-([A-Z]{2,3})$/.exec c then @[m[1]](); break
         return
-    @cmSC = new CodeMirror @$tb.find('.tb-sc')[0], keyMap: 'dyalog', scrollbarStyle: 'null', extraKeys:
+    @cmSC = new CodeMirror @$tb.find('.tb-sc')[0], placeholder: 'Search', extraKeys:
       Enter: => @NX(); return
       'Shift-Enter': => @PV(); return
       'Ctrl-Enter': => @selectAllSearchResults(); return
       Tab: => (if @isTracer then @cm else @cmRP).focus(); return
       'Shift-Tab': => @cm.focus(); return
     @cmSC.on 'change', => @highlightSearch(); return
-    @cmRP = new CodeMirror @$tb.find('.tb-rp')[0], keyMap: 'dyalog', scrollbarStyle: 'null', extraKeys:
+    @cmRP = new CodeMirror @$tb.find('.tb-rp')[0], placeholder: 'Replace', extraKeys:
       Enter: => @replace(); return
       'Shift-Enter': => @replace true; return
       Tab: => @cm.focus(); return
       'Shift-Tab': => (if @isTracer then @cm else @cmSC).focus(); return
     for cmx in [@cmSC, @cmRP]
+      cmx.setOption 'keyMap', 'dyalog'
+      cmx.setOption 'scrollbarStyle', 'null'
       cmx.addKeyMap
         Down: => @NX(); return
         Up: => @PV(); return
-        Esc: => @clearSearch(); @cm.focus(); return
+        Esc: => @clearSearch(); delay 0, @cm.focus.bind @cm; return
     @setTracer !!@isTracer
     return
 
@@ -139,7 +141,7 @@ class @Editor
         j = s[...i].lastIndexOf q; if j < 0 then j = s[i..].lastIndexOf q; if j >= 0 then j += i
       else
         i = @cm.indexFromPos @cm.getCursor()
-        j = s[i..].indexOf q; if j > 0 then j += i else j = s[...i].indexOf q
+        j = s[i..].indexOf q; if j >= 0 then j += i else j = s[...i].indexOf q
       if j >= 0
         @cm.setSelection @cm.posFromIndex(j), @cm.posFromIndex j + q.length; @scrollCursorIntoProminentView()
     false
