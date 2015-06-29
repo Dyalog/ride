@@ -7,6 +7,7 @@ P1 (Definitely high priority):
 P2 (Middle priority):
   ` keybindings and/or lbar should work in search box
     NN: implemented for lbar
+    http://mantis.dyalog.com/view.php?id=12428
 
 P3 (Can wait):
   Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
