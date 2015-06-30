@@ -21,8 +21,8 @@ dfnHeader = ///
 
 keywords = qw '''
   andif access case caselist class continue else elseif end endclass endfor endhold endif endinterface endnamespace
-  endproperty endrepeat endsection endselect endtrap endwhile endwith field for in goto hold include if implements
-  interface leave namespace orif property repeat return section select trap until while with
+  endproperty endrepeat endsection endselect endtrap endwhile endwith field for in ineach goto hold include if
+  implements interface leave namespace orif property repeat return section select trap until while with
 '''
 quadNames = [''].concat qw '''
   á a af ai an arbin arbout arg at av avu base class clear cmd cr cs ct cy d dct df div dl dm dmx dq dr ea ec ed em en
@@ -90,12 +90,14 @@ CodeMirror.defineMode 'apl', (config) -> # https://codemirror.net/doc/manual.htm
           if kw in ['class', 'for', 'hold', 'if', 'interface', 'namespace',
                     'property', 'repeat', 'section', 'select', 'trap', 'while', 'with']
             state.kwStack.push kw; ok = 1
+          else if kw == 'end'
+            ok = state.kwStack.length > 0; ok && state.kwStack.pop()
           else if /^end/.test kw
             kw0 = kw[3..]; i = state.kwStack.lastIndexOf kw0; ok = i == state.kwStack.length - 1
             i >= 0 && state.kwStack.splice i
           else if kw in ['else', 'elseif', 'andif', 'orif']
             ok = state.kwStack[-1..][0] == 'if'
-          else if kw == 'in'
+          else if kw in ['in', 'ineach']
             ok = state.kwStack[-1..][0] == 'for'
           else
             ok = 1
