@@ -47,7 +47,7 @@ idiomsRE = ///^(?:#{idioms.sort((x, y) -> y.length - x.length).map(escIdiom).joi
 
 CodeMirror.defineMIME 'text/apl', 'apl'
 CodeMirror.defineMode 'apl', (config) -> # https://codemirror.net/doc/manual.html#modeapi
-  startState: -> isHeader: 1, stack: '', dfnDepth: 0
+  startState: -> isHeader: 1, stack: '', dfnDepth: 0, kwStack: []
   token: (stream, state) ->
     if state.isHeader
       delete state.isHeader; stream.match /[^⍝\n\r]*/; s = stream.current()
@@ -83,7 +83,23 @@ CodeMirror.defineMode 'apl', (config) -> # https://codemirror.net/doc/manual.htm
       else if /[\+\-×÷⌈⌊\|⍳\?\*⍟○!⌹<≤=>≥≠≡≢∊⍷∪∩~∨∧⍱⍲⍴,⍪⌽⊖⍉↑↓⊂⊃⌷⍋⍒⊤⊥⍕⍎⊣⊢→]/.test c then 'apl-fn'
       else if state.dfnDepth && /[⍺⍵∇:]/.test c then "apl-dfn apl-dfn#{state.dfnDepth}"
       else if c == '∇' then state.isHeader = 1; 'apl-trad'
-      else if c == ':' then (if stream.match(/\w*/)?[0]?.toLowerCase() in keywords then 'apl-kw' else 'apl-err')
+      else if c == ':'
+        kw = stream.match(/\w*/)?[0]?.toLowerCase()
+        ok = 0
+        if kw in keywords
+          if kw in ['class', 'for', 'hold', 'if', 'interface', 'namespace',
+                    'property', 'repeat', 'section', 'select', 'trap', 'while', 'with']
+            state.kwStack.push kw; ok = 1
+          else if /^end/.test kw
+            kw0 = kw[3..]; i = state.kwStack.lastIndexOf kw0; ok = i == state.kwStack.length - 1
+            i >= 0 && state.kwStack.splice i
+          else if kw in ['else', 'elseif', 'andif', 'orif']
+            ok = state.kwStack[-1..][0] == 'if'
+          else if kw == 'in'
+            ok = state.kwStack[-1..][0] == 'for'
+          else
+            ok = 1
+        ok && 'apl-kw' || 'apl-err'
       else if c == '⎕' then (if stream.match(/[áa-z0-9]*/i)?[0].toLowerCase() in quadNames then 'apl-quad' else 'apl-err')
       else if c == '⍞' then 'apl-quad'
       else if c == '#' then 'apl-ns'
@@ -94,4 +110,11 @@ CodeMirror.defineMode 'apl', (config) -> # https://codemirror.net/doc/manual.htm
         else 'apl-glb'
       else 'apl-err'
 
-  indent: (state, textAfter) -> config.indentUnit * (state.dfnDepth - /^\s*\}/.test textAfter)
+  electricInput: /:(?:else|end|andif|orif)$/
+
+  indent: (state, textAfter) ->
+    config.indentUnit *
+      if state.dfnDepth
+        state.dfnDepth - /^\s*\}/.test textAfter
+      else
+        state.kwStack.length - /^\s*:(?:end|else|andif|orif)/i.test textAfter
