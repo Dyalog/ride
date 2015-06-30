@@ -4,7 +4,8 @@ set -e
 
 BASE_VERSION=`node -pe "($(cat package.json)).version"`
 VERSION="${BASE_VERSION%%.0}.`git rev-list HEAD --count`"  # "%%.0" strips trailing ".0"
-CURRENTBRANCH=`git branch | awk '/\*/ {print $2}'`
+echo "Current branch: ${GIT_BRANCH#*/}"
+CURRENTBRANCH=${GIT_BRANCH#*/}
 
 umask 002 # user and group can do everything, others can only read and execute
 mountpoint /devt; echo Devt is mounted: good # make sure it's mounted
