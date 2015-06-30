@@ -46,7 +46,7 @@ escIdiom = (s) -> s.replace(/«(.*?)»|(.)/g, (_, g, g2) -> g ||= g2; ' *' + if 
 idiomsRE = ///^(?:#{idioms.sort((x, y) -> y.length - x.length).map(escIdiom).join '|'})///i
 
 CodeMirror.defineMIME 'text/apl', 'apl'
-CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
+CodeMirror.defineMode 'apl', (config) -> # https://codemirror.net/doc/manual.html#modeapi
   startState: -> isHeader: 1, stack: '', dfnDepth: 0
   token: (stream, state) ->
     if state.isHeader
@@ -93,3 +93,5 @@ CodeMirror.defineMode 'apl', -> # https://codemirror.net/doc/manual.html#modeapi
         else if state.dfnDepth || state.vars && x in state.vars then 'apl-var'
         else 'apl-glb'
       else 'apl-err'
+
+  indent: (state, textAfter) -> config.indentUnit * (state.dfnDepth - /^\s*\}/.test textAfter)
