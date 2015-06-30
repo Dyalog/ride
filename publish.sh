@@ -4,10 +4,11 @@ set -e
 
 BASE_VERSION=`node -pe "($(cat package.json)).version"`
 VERSION="${BASE_VERSION%%.0}.`git rev-list HEAD --count`"  # "%%.0" strips trailing ".0"
+CURRENTBRANCH=`git branch | awk '/\*/ {print $2}'`
 
 umask 002 # user and group can do everything, others can only read and execute
 mountpoint /devt; echo Devt is mounted: good # make sure it's mounted
-r=/devt/ride/jsride
+r=/devt/ride/jsride/${CURRENTBRANCH}
 d=`date +%Y-%m-%d--%H-%M` # append a letter to $d if such a directory already exists
 for suffix in '' {a..z}; do if [ ! -e $r/$d$suffix ]; then d=$d$suffix; break; fi; done
 mkdir -p $r/$d
