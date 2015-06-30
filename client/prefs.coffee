@@ -22,6 +22,8 @@ prefs = @
   ['posTracer',      [32, 32, 1000, 618]] # [x,y,w,h]
   ['prefixKey',      '`']
   ['prefixMap',      ''] # pairs of characters; only differences from the default ` map are stored
+  ['editorWidth',    0] # width of a docked editor
+  ['tracerHeight',   0] # height of a docked tracer
   ['wrap',           0] # line wrapping in session
   ['lbar',           1] # show language bar
   ['theme',          '']

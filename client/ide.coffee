@@ -142,13 +142,17 @@ class @IDE
         return
 
     @layout = @$ide.layout
+      fxName: ''
       defaults: enableCursorHotkey: 0
       north: spacing_closed: 0, spacing_open: 0, resizable: 0, togglerLength_open: 0
       east:  spacing_closed: 0, size: '0%',      resizable: 1, togglerLength_open: 0
       south: spacing_closed: 0, size: '0%',      resizable: 1, togglerLength_open: 0
-      center: onresize: => (for _, widget of @wins then widget.updateSize()); return
-      fxName: ''
-    for d in ['east', 'south'] then @layout.close d; @layout.sizePane d, '50%'
+      center: onresize: =>
+        for _, widget of @wins then widget.updateSize()
+        {state} = @layout
+        if !state.east. isClosed && (x = state.east .innerWidth ) > 1 then prefs.editorWidth  x
+        if !state.south.isClosed && (x = state.south.innerHeight) > 1 then prefs.tracerHeight x
+        return
     if !prefs.lbar() then @layout.hide 'north'
     @wins[0].updateSize()
 
@@ -222,7 +226,9 @@ class @IDE
       else
         $.alert 'Popups are blocked.'
     if !done
-      @layout.open dir = if ee.debugger then 'south' else 'east'
+      dir = if ee.debugger then 'south' else 'east'
+      size = if ee.debugger then prefs.tracerHeight() else prefs.editorWidth()
+      @layout.sizePane dir, size || '50%'; @layout.open dir
       $("<li id=wintab#{w}><a href=#win#{w}></a></li>").appendTo(".ui-layout-#{dir} ul")
         .find('a').text(ee.name).click (e) => e.which == 2 && @wins[w].EP(); return # middle click
       $tabContent = $("<div class=win id=win#{w}></div>").appendTo ".ui-layout-#{dir}"
