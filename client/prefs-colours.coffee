@@ -59,7 +59,7 @@ builtInSchemes = [
     name:'Francisco Goya'
     norm:{fg:'9c7',bg:'0'},cur:{lb:'f00'},lnum:{fg:'b94',bg:'010'},srch:{bg:'b96',fg:'0'},mod:{bg:'1'},sel0:{bg:'123'}
     sel:{bg:'024'},err:{fg:'f00',bg:'411',B:1,U:1},kw:{fg:'aa2'},num:{fg:'a8b'},op1:{fg:'d95'},fn:{fg:'0f0'}
-    op2:{fg:'fd6'},brkt:{fg:'888'},com:{fg:'b',I:1},semi:{fg:'8'},str:{fg:'dae'},zld:{fg:'d9f',B:1}
+    op2:{fg:'fd6'},brkt:{fg:'8'},com:{fg:'b',I:1},semi:{fg:'8'},str:{fg:'dae'},zld:{fg:'d9f',B:1}
     lbl:{U:1,bg:'321'},idm:{B:1},tc:{bg:'1'},glob:{B:1}
     dfn:{fg:'a7b'},dfn2:{fg:'eb4'},dfn3:{fg:'c79'},dfn4:{fg:'cd0'},dfn5:{fg:'a0d'}
   }
@@ -211,26 +211,24 @@ SEARCH_MATCH = 'search match' # sample text to illustrate it
   $('#prefs-tab-colours').removeClass 'renaming'
   cm.setSize $cm.width(), $cm.height()
   cm.setValue """
-    ∇{R}←{X}tradfn(Y Z);local
-      dfn←{ ⍝ comment
-        0 ¯1.2e¯3j¯.45 'string' ⍬
-        +/-⍣(×A):⍺∇⍵[i;j]
-        {{{{nested ⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}
-      }
-      label:
-      :for i :in ⍳X ⋄ :endfor
-      :if condition
-        {⍵[⍋⍵]} ⋄ global←local←0
-        ⎕error ) ] } :error 'unclosed
-      :endif
-      #{SEARCH_MATCH}
-    ∇
+    {R}←{X}tradfn(Y Z);local
+    dfn←{ ⍝ comment
+      0 ¯1.2e¯3j¯.45 'string' ⍬
+      +/-⍣(×A):⍺∇⍵[i;j]
+      {{{{nested ⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}
+    }
+    label:
+    :For i :In ⍳X ⋄ :EndFor
+    :If condition
+      {⍵[⍋⍵]} ⋄ global←local←0
+      ⎕error ) ] } :error 'unclosed
+    :EndIf
+    #{SEARCH_MATCH}
   """
   return
 
 @save = ->
-  for x in schemes                          # remove empty style objects from each scheme
-    ks = for k of x then k                  # ks: keys in x
+  for x in schemes                          # remove empty style objects from each scheme x
     for k, h of x when typeof h == 'object' # h: the style object
       e = 1; for _ of h then e = 0; break   # e: is h empty?
       e && delete x[k]                      # if so, remove it
