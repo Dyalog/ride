@@ -5,9 +5,6 @@ Bugs / Issues External to RIDE
 P1 (Definitely high priority):
 
 P2 (Middle priority):
-  ` keybindings and/or lbar should work in search box
-    NN: implemented for lbar
-    http://mantis.dyalog.com/view.php?id=12428
 
 P3 (Can wait):
   Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
@@ -241,3 +238,6 @@ Done:
   JS: <Esc> in the session should switch focus to the top edit or trace window.
     NN: I did it for the most recently used edit or trace window
   Customizable colours for syntax highlighting
+  ` keybindings and/or lbar should work in search box
+    NN: implemented for lbar
+    http://mantis.dyalog.com/view.php?id=12428
