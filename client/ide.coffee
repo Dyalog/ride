@@ -1,5 +1,4 @@
 require './menu'
-about = require './about'
 prefs = require './prefs'
 prefsUI = require './prefs-ui'
 prefsKeys = require './prefs-keys'
@@ -7,7 +6,7 @@ prefsKeys = require './prefs-keys'
 {Editor} = require './editor'
 {Session} = require './session'
 keymap = require './keymap'
-{esc, delay, qw, join} = require './util'
+{esc, delay, join} = require './util'
 
 class @IDE
   constructor: ->
