@@ -19,11 +19,6 @@ dfnHeader = ///
   )
 ///
 
-keywords = qw '''
-  andif access case caselist class continue else elseif end endclass endfor endhold endif endinterface endnamespace
-  endproperty endrepeat endsection endselect endtrap endwhile endwith field for in ineach goto hold include if
-  implements interface leave namespace orif property repeat return section select trap until while with
-'''
 quadNames = [''].concat qw '''
   á a af ai an arbin arbout arg at av avu base class clear cmd cr cs ct cy d dct df div dl dm dmx dq dr ea ec ed em en
   env es et ex exception export fappend favail fc fchk fcopy fcreate fdrop ferase fhold fix flib fmt fnames fnums fprops
@@ -84,22 +79,22 @@ CodeMirror.defineMode 'apl', (config) -> # https://codemirror.net/doc/manual.htm
       else if state.dfnDepth && /[⍺⍵∇:]/.test c then "apl-dfn apl-dfn#{state.dfnDepth}"
       else if c == '∇' then state.isHeader = 1; 'apl-trad'
       else if c == ':'
-        kw = stream.match(/\w*/)?[0]?.toLowerCase()
-        ok = 0
-        if kw in keywords
-          if kw in ['class', 'for', 'hold', 'if', 'interface', 'namespace',
-                    'property', 'repeat', 'section', 'select', 'trap', 'while', 'with']
-            state.kwStack.push kw; ok = 1
-          else if kw == 'end'
-            ok = state.kwStack.length > 0; ok && state.kwStack.pop()
-          else if /^end/.test kw
-            kw0 = kw[3..]; i = state.kwStack.lastIndexOf kw0; ok = i == state.kwStack.length - 1
-            i >= 0 && state.kwStack.splice i
-          else if kw in ['else', 'elseif', 'andif', 'orif']
-            ok = state.kwStack[-1..][0] == 'if'
-          else if kw in ['in', 'ineach']
-            ok = state.kwStack[-1..][0] == 'for'
-          else
+        a = state.kwStack; ok = 0
+        switch kw = stream.match(/\w*/)?[0]?.toLowerCase()
+          # see https://github.com/jashkenas/coffeescript/issues/2014 for the "multiline when" syntax
+          when 'class', 'for', 'hold', 'if', 'interface', 'namespace', 'property', 'repeat', 'section', 'select'
+          ,    'trap', 'while', 'with'
+            a.push kw; ok = 1
+          when 'end'
+            ok = a.length > 0; ok && a.pop()
+          when 'endclass', 'endfor', 'endhold', 'endif', 'endinterface', 'endnamespace', 'endproperty', 'endrepeat'
+          ,    'endsection', 'endselect', 'endtrap', 'endwhile', 'endwith'
+            i = a.lastIndexOf kw[3..]; ok = i == a.length - 1 >= 0; ok && a.splice i; ok
+          when 'else', 'elseif', 'andif', 'orif'
+            ok = a[-1..][0] == 'if'
+          when 'in', 'ineach'
+            ok = a[-1..][0] == 'for'
+          when 'access', 'case', 'caselist', 'continue', 'field', 'goto', 'include', 'implements', 'leave', 'return', 'until'
             ok = 1
         ok && 'apl-kw' || 'apl-err'
       else if c == '⎕' then (if stream.match(/[áa-z0-9]*/i)?[0].toLowerCase() in quadNames then 'apl-quad' else 'apl-err')
