@@ -31,12 +31,13 @@ keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-de
 
 @init = ($e) ->
   $e.html """
-    <div><input id=keys-search placeholder=Search></p>
+    <div><input id=keys-search placeholder=Search></div>
     <div id=keys-table-wrapper>
       <table>#{join CMDS.map ([code, desc]) ->
         "<tr><td>#{desc}<td class=keys-code>#{code}<td id=keys-#{code}>"
       }</table>
     </div>
+    <div id=keys-no-results style=display:none>No results</div>
   """
     .on 'mouseover', '.keys-del', -> $(@).parent().addClass    'keys-del-hover'; return
     .on 'mouseout',  '.keys-del', -> $(@).parent().removeClass 'keys-del-hover'; return
@@ -46,7 +47,11 @@ keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-de
       false
   $('#keys-search').on 'keyup change', ->
     q = @value.toLowerCase()
-    $('#keys-table-wrapper tr').each -> $(@).toggle 0 <= $(@).text().toLowerCase().indexOf q
+    found = 0
+    $('#keys-table-wrapper tr').each ->
+      $(@).toggle x = 0 <= $(@).text().toLowerCase().indexOf q
+      found ||= x; return
+    $('#keys-no-results').toggle !found
     return
   return
 
