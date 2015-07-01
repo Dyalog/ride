@@ -30,15 +30,24 @@ CMDS = @CMDS = [
 keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-del>×</a></span> "
 
 @init = ($e) ->
-  $e.html "<table>#{join CMDS.map ([code, desc]) ->
-    "<tr><td>#{desc}<td class=keys-code>#{code}<td id=keys-#{code}>"
-  }</table>"
+  $e.html """
+    <div><input id=keys-search placeholder=Search></p>
+    <div id=keys-table-wrapper>
+      <table>#{join CMDS.map ([code, desc]) ->
+        "<tr><td>#{desc}<td class=keys-code>#{code}<td id=keys-#{code}>"
+      }</table>
+    </div>
+  """
     .on 'mouseover', '.keys-del', -> $(@).parent().addClass    'keys-del-hover'; return
     .on 'mouseout',  '.keys-del', -> $(@).parent().removeClass 'keys-del-hover'; return
     .on 'click', '.keys-del', -> $(@).parent().remove(); updateDups(); false
     .on 'click', '.keys-add', ->
       $b = $ @; getKeystroke (k) -> k && $b.parent().append(keyHTML k).append $b; updateDups(); return
       false
+  $('#keys-search').on 'keyup change', ->
+    q = @value.toLowerCase()
+    $('#keys-table-wrapper tr').each -> $(@).toggle 0 <= $(@).text().toLowerCase().indexOf q
+    return
   return
 
 getKeystroke = (callback) ->
