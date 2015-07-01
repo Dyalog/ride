@@ -25,6 +25,9 @@ CMDS = @CMDS = [
   ['BP',  'Toggle breakpoint',        ['Ctrl-B']]
   ['AC',  'Align comments',           []]
   ['LN',  'Toggle line numbers',      []]
+  ['DMR', 'Load demo file',           []]
+  ['DMN', 'Next line in demo',        ['Ctrl-Shift-N']]
+  ['DMP', 'Previous line in demo',    ['Ctrl-Shift-P']]
 ]
 
 keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-del>×</a></span> "

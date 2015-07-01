@@ -29,7 +29,6 @@ class @IDE
     @pending = [] # lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
     @w3500 = null # window for 3500⌶
     @host = @port = @wsid = ''; prefs.title @updateTitle.bind @
-    @demoLines = []; @demoIndex = -1
 
     D.wins = @wins = # window id -> instance of Editor or Session
       0: new Session @, $('.ui-layout-center'),
@@ -247,24 +246,6 @@ class @IDE
   ZMI: -> D.zoomIn();         return
   ZMO: -> D.zoomOut();        return
   ZMR: -> D.resetZoom();      return
-
-  DMR: -> # Run Demo Script
-    ide = @
-    $('<input type=file style=display:none>').appendTo('body').trigger('click').change ->
-      if @value then D.readFile @value, 'utf8', (err, s) ->
-        if err then console?.error? err; $.alert 'Cannot load demo file'
-        else ide.demoLines = s.replace(/^[\ufeff\ufffe]/, '').split /\r?\n/; ide.demoIndex = -1
-        return
-      return
-    return
-
-  DMN: -> @demoMove  1; return # demo next
-  DMP: -> @demoMove -1; return # demo prev
-  demoMove: (d) ->
-    if 0 <= @demoIndex + d < @demoLines.length
-      @demoIndex += d; @wins[0].loadLine @demoLines[@demoIndex]
-    return
-
   LBR: -> prefs.lbar      .toggle(); return
   FLT: -> prefs.floating  .toggle(); return
   WRP: -> prefs.wrap      .toggle(); return

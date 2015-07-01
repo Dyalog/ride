@@ -5,6 +5,7 @@ about = require './about'
 prefs = require './prefs'
 {delay} = require './util'
 require './prefs-colours' # load it in order to initialize syntax highlighting
+require './demo'
 
 $ ->
   if D.nwjs
