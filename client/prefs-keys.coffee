@@ -28,6 +28,7 @@ CMDS = @CMDS = [
   ['DMR', 'Load demo file',           []]
   ['DMN', 'Next line in demo',        ['Ctrl-Shift-N']]
   ['DMP', 'Previous line in demo',    ['Ctrl-Shift-P']]
+  ['DMK', 'Toggle key display mode',  ['Ctrl-Shift-K']]
 ]
 
 keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-del>×</a></span> "
