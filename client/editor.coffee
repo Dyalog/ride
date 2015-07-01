@@ -2,7 +2,7 @@ require './codemirror-apl-mode'
 autocompletion = require './autocompletion'
 prefs = require './prefs'
 {letter} = require './codemirror-apl-mode'
-{onCodeMirrorDoubleClick, delay} = require './util'
+{onCodeMirrorDoubleClick, delay, spc} = require './util'
 
 EDITOR_HTML = do ->
   b = (cssClasses, title) -> "<a href=# class='#{cssClasses} tb-button' title='#{title}'></a>"
@@ -257,22 +257,21 @@ class @Editor
   PV: -> @search true; return
   NX: -> @search(); return
   TC: -> @emit 'StepInto', win: @id; return
-  AC: -> # Align Comments (currently inaccessible)
-    if @cm.somethingSelected()
-      spc = (n) -> Array(n + 1).join ' '
-      o = @cm.listSelections() # original selections
-      sels = o.map (sel) =>
-        p = sel.anchor; q = sel.head
-        if p.line > q.line || p.line == q.line && p.ch > q.ch then h = p; p = q; q = h
-        l = @cm.getRange({line: p.line, ch: 0}, q, '\n').split '\n' # lines
-        u = l.map (x) -> x.replace /'[^']*'?/g, (y) -> spc y.length # lines with scrubbed string literals
-        c = u.map (x) -> x.indexOf '⍝' # column index of the '⍝'
-        {p, q, l, u, c}
-      m = Math.max (sels.map (sel) -> Math.max sel.c...)...
-      sels.forEach (sel) ->
-        r = sel.l.map (x, i) -> ci = sel.c[i]; if ci < 0 then x else x[...ci] + spc(m - ci) + x[ci..]
-        r[0] = r[0][sel.p.ch..]; @cm.replaceRange r.join('\n'), sel.p, sel.q, 'D'; return
-      @cm.setSelections o
+  AC: -> # Align Comments
+    o = @cm.listSelections() # original selections
+    sels = if @cm.somethingSelected() then o else
+      ll = @cm.lastLine(); [anchor: {line: 0, ch: 0}, head: {line: ll, ch: @cm.getLine(ll).length}]
+    a = sels.map (sel) => # info about each individual selection
+      p = sel.anchor; q = sel.head; if (p.line - q.line || p.ch - q.ch) > 0 then [p, q] = [q, p]
+      l = @cm.getRange({line: p.line, ch: 0}, q, '\n').split '\n' # lines
+      u = l.map (x) -> x.replace /'[^']*'?/g, (y) -> spc y.length # lines with scrubbed string literals
+      c = u.map (x) -> x.indexOf '⍝' # column index of the '⍝'
+      {p, q, l, u, c}
+    m = Math.max (a.map (sel) -> Math.max sel.c...)...
+    a.forEach (sel) =>
+      r = sel.l.map (x, i) -> ci = sel.c[i]; if ci < 0 then x else x[...ci] + spc(m - ci) + x[ci..]
+      r[0] = r[0][sel.p.ch..]; @cm.replaceRange r.join('\n'), sel.p, sel.q, 'D'; return
+    @cm.setSelections o
     return
   AO: -> # Add Comment
     if @cm.somethingSelected()

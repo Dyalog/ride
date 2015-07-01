@@ -4,7 +4,7 @@ prefs = require './prefs'
 @name = 'Keys'
 
 CMDS = @CMDS = [
-#  code   description                 defaults                   important? (show in kbd btn's tooltip)
+#  code   description                 defaults                   important? (shown in kbd btn's tooltip)
   ['QT',  'Quit (and lose changes)',  ['Shift-Esc'],             1]
   ['TB',  'Tab between windows',      ['Ctrl-Tab'],              1]
   ['BT',  'Back Tab between windows', ['Shift-Ctrl-Tab'],        1]
@@ -19,9 +19,12 @@ CMDS = @CMDS = [
   ['ER',  'Execute line',             ['Enter']]
   ['WI',  'Weak interrupt',           ['Ctrl-Pause']]
   ['SI',  'Strong interrupt',         []]
-  ['PRF', 'Show Preferences',         ['Ctrl-P']]
+  ['PRF', 'Show preferences',         ['Ctrl-P']]
   ['HLP', 'Help',                     ['F1']]
   ['ABT', 'About',                    ['Shift-F1']]
+  ['BP',  'Toggle breakpoint',        ['Ctrl-B']]
+  ['AC',  'Align comments',           []]
+  ['LN',  'Toggle line numbers',      []]
 ]
 
 keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-del>×</a></span> "

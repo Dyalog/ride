@@ -10,6 +10,7 @@
 @hex = (x, n = 0) -> s = x.toString 16; (while s.length < n then s = '0' + s); s.toUpperCase()
 @qw = (s) -> s.split /[ \r\n]+/         # "quoted words" like in Perl
 @delay = (n, f) -> setTimeout f, n      # setTimeout⍨ is much more convenient than setTimeout
+@spc = (n) -> Array(n + 1).join ' '
 
 htmlChars = '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&amp;', '"': '&quot;'
 @esc = (s) -> s.replace /[<>&'"]/g, (x) -> htmlChars[x]
