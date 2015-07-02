@@ -3,6 +3,10 @@ Bugs / Issues External to RIDE
   Yes/No dialog, needs to be supported in the RIDE protocol; email from Morten 2015-02-14
 
 P1 (Definitely high priority):
+  class explorer
+  code folding
+  cmd to toggle rainbow colouring
+  external editors
 
 P2 (Middle priority):
 
@@ -20,11 +24,10 @@ P4 (I will think about it):
         But if we don't have "Copy" in the menu, cmd+c doesn't work.
 
 Not yet prioritized:
+  autoindent should be based on the prev line's indent, not absolute
   if we spawn an interpreter and it failes to connect after X time, please could we have a message box about it? - Andy email 2015-06-29
   Colour schemes
     NN: mostly done, needs some real-world testing and a survey about what the default colour schemes should be
-  Configurable keyboard shortcuts
-    NN: halfway there; I have a concept about what the UI should look like
   (OS X) - Reported by Mike Powell: Dragging the text to a different point uses the vertical bar cursor. Holding the Option key while doing this changes the cursor to the green and white cross (Implying a copy - but it still moves the text).
   Type a couple of chars and hit Alt+Enter, followed by Enter. Uncaught node.js Error; JS email 2015-03-10
     NN: cannot reproduce on Linux
@@ -71,12 +74,10 @@ Later:
   experiment with storing all help content in browser memory
   searchable help files
   keybindings for toolbar buttons
-  keybinding for toggling a breakpoint
   contextual help (F1) for items in completion menus
   js strict mode
   display a "mailto:" link when a SysError happens
   search field history
-  code folding and [+] button
   SI stack in debugger (?)
   start web server from nwjs GUI (?)
   add legalese to About dialog
@@ -241,3 +242,5 @@ Done:
   ` keybindings and/or lbar should work in search box
     NN: implemented for lbar
     http://mantis.dyalog.com/view.php?id=12428
+  Configurable keyboard shortcuts
+  keybinding for toggling a breakpoint
