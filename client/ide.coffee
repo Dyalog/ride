@@ -105,7 +105,7 @@ class @IDE
     @unblock = -> (while mq.length then handle mq.shift()); blocked = 0; return
 
     # language bar
-    $('.lbar-prefs').click -> prefsUI.showDialog 'glyphs'; return
+    $('.lbar-prefs').click -> prefsUI.showDialog 'keys'; return
     $tip = $ '.lbar-tip'; $tipDesc = $ '.lbar-tip-desc'; $tipText = $ '.lbar-tip-text'; $tipTriangle = $ '.lbar-tip-triangle'
     ttid = null # tooltip timeout id
     requestTooltip = (e, desc, text) -> # e: element
@@ -136,7 +136,7 @@ class @IDE
           pad = Array(Math.max 0, 25 - desc.length).join ' '
           ks = h[code] || defaults
           s += "#{code}: #{desc}:#{pad} #{ks[ks.length - 1] || 'none'}\n"
-        requestTooltip e, 'Keyboard Shortcuts', s
+        requestTooltip e, 'Keyboard Shortcuts', s + '...'
         return
 
     @layout = @$ide.layout
