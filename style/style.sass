@@ -50,13 +50,12 @@ input,textarea,select,a{outline:0}
 
 // IDE page
 //  ┌──────────────────────────────────────┐
-//  │menu:File Edit etc                   │
+//  │menu:File Edit etc                    │
 //  ├──────────────────────────────────────┤
-//  │language bar:← +-×÷*⍟⌹○!? |⌈⌊⊥⊤⊣⊢ etc│
+//  │language bar:← +-×÷*⍟⌹○!? |⌈⌊⊥⊤⊣⊢ etc │
 //  ├────────────────────────┬─────────────┤
 //  │                        │(Tab)(Tab)...│
 //  │        session         │             │
-//  │                        │             │
 //  ├────────────────────────┤    editor   │
 //  │        tracer          │             │
 //  └────────────────────────┴─────────────┘
@@ -766,6 +765,24 @@ body .ui-tooltip{border-width:2px}
 // .ui-icon-grip-solid-horizontal {background-position: -48px -224px}
 // .ui-icon-gripsmall-diagonal-se {background-position: -64px -224px}
 // .ui-icon-grip-diagonal-se      {background-position: -80px -224px}
+
+.ui-slider{position:relative;text-align:left;margin:0 10px}
+.ui-slider .ui-slider-handle{position:absolute;z-index:2;width:10px;height:10px;cursor:pointer}
+.ui-slider .ui-slider-range{position:absolute;z-index:1;display:block;border:0}
+/* For IE8 - See #6727 */
+.ui-slider.ui-state-disabled .ui-slider-handle,.ui-slider.ui-state-disabled .ui-slider-range{filter:inherit}
+.ui-slider-horizontal
+  +inset ;height:1px;border-style:solid;border-width:1px
+.ui-slider-horizontal .ui-slider-handle
+  +outset ;top:-5px;background-color:$bg;margin-left:-5px;border-style:solid;border-width:1px;border-radius:2px
+.ui-slider-horizontal .ui-slider-range{top:0;height:100%}
+.ui-slider-horizontal .ui-slider-range-min{left:0;background-color:#000}
+.ui-slider-horizontal .ui-slider-range-max{right:0;background-color:#000}
+// .ui-slider-vertical{width:2px;height:100px}
+// .ui-slider-vertical .ui-slider-handle {left:-.3em;margin-left:0;margin-bottom:-.6em}
+// .ui-slider-vertical .ui-slider-range{left:0;width:100%}
+// .ui-slider-vertical .ui-slider-range-min{bottom:0}
+// .ui-slider-vertical .ui-slider-range-max{top:0}
 
 // CodeMirror styles
 

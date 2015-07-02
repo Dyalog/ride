@@ -52,21 +52,22 @@ builtInSchemes = [
     name:'Default'
     num:{fg:'8'},str:{fg:'088'},zld:{fg:'008'},var:{fg:'8'},quad:{fg:'808'},fn:{fg:'008'},op1:{fg:'00f'},op2:{fg:'00f'}
     ns:{fg:'8'},asgn:{fg:'00f'},diam:{fg:'00f'},par:{fg:'00f'},brkt:{fg:'00f'},semi:{fg:'00f'},dfn:{fg:'00f'}
-    trad:{fg:'8'},kw:{fg:'800'},idm:{fg:'00f'},com:{fg:'088'},err:{fg:'f00'},lnum:{fg:'008'},mtch:{bg:'ff8'}
-    srch:{bg:'f80'},mod:{bg:'e'},sel:{bg:'ddf'},sel0:{bg:'d'},tc:{bg:'d'}
+    trad:{fg:'8'},kw:{fg:'800'},idm:{fg:'00f'},com:{fg:'088'},err:{fg:'f00'},lnum:{fg:'008'},mtch:{bg:'ff8',bgo:.5}
+    srch:{bg:'f80',bgo:.5},mod:{bg:'e',bgo:1},sel:{bg:'ddf',bgo:.5},sel0:{bg:'d',bgo:.5},tc:{bg:'d',bgo:1}
   }
   {
     name:'Francisco Goya'
-    norm:{fg:'9c7',bg:'0'},cur:{lb:'f00'},lnum:{fg:'b94',bg:'010'},srch:{bg:'b96',fg:'0'},mod:{bg:'1'},sel0:{bg:'123'}
-    sel:{bg:'024'},err:{fg:'f00',bg:'411',B:1,U:1},kw:{fg:'aa2'},num:{fg:'a8b'},op1:{fg:'d95'},fn:{fg:'0f0'}
-    op2:{fg:'fd6'},brkt:{fg:'8'},com:{fg:'b',I:1},semi:{fg:'8'},str:{fg:'dae'},zld:{fg:'d9f',B:1}
-    lbl:{U:1,bg:'321'},idm:{B:1},tc:{bg:'1'},glob:{B:1}
+    norm:{fg:'9c7',bg:'0',bgo:1},cur:{lb:'f00'},lnum:{fg:'b94',bg:'010',bgo:1},srch:{bg:'b96',bgo:.75,fg:'0'}
+    mod:{bg:'1',bgo:1},sel0:{bg:'246',bgo:.5},sel:{bg:'048',bgo:.5},err:{fg:'f00',bg:'822',bgo:.5,B:1,U:1}
+    kw:{fg:'aa2'},num:{fg:'a8b'},op1:{fg:'d95'},fn:{fg:'0f0'},op2:{fg:'fd6'},brkt:{fg:'8'},com:{fg:'b',I:1}
+    semi:{fg:'8'},str:{fg:'dae'},zld:{fg:'d9f',B:1},lbl:{U:1,bg:'642',bgo:.5},idm:{B:1},tc:{bg:'1',bgo:1},glob:{B:1}
     dfn:{fg:'a7b'},dfn2:{fg:'eb4'},dfn3:{fg:'c79'},dfn4:{fg:'cd0'},dfn5:{fg:'a0d'}
   }
   {
     name:'Albrecht Dürer'
-    num:{fg:'8'},str:{fg:'8'},zld:{fg:'8'},quad:{fg:'808'},ns:{fg:'8'},diam:{B:1},kw:{B:1},idm:{U:1,bg:'e'},com:{I:1}
-    err:{fg:'f',bg:'0',B:1,I:1,U:1},mtch:{bg:'c'},srch:{bg:'c'},mod:{bg:'e'},glb:{I:1},tc:{bg:'e'}
+    num:{fg:'8'},str:{fg:'8'},zld:{fg:'8'},quad:{fg:'808'},ns:{fg:'8'},diam:{B:1},kw:{B:1},idm:{U:1,bg:'e',bgo:.5}
+    com:{I:1},err:{fg:'f',bg:'0',bgo:.5,B:1,I:1,U:1},mtch:{bg:'c',bgo:.5},srch:{bg:'c',bgo:.5},mod:{bg:'e',bgo:1}
+    glb:{I:1},tc:{bg:'e',bgo:1}
   }
   {
     name:'Kazimir Malevich'
@@ -89,6 +90,7 @@ renderCSS = (scheme, rp = '') -> # rp: css rule prefix
         (h.I  && 'font-style:italic;'                      || '') +
         (h.U  && 'text-decoration:underline;'              || '') +
         (h.lb && "border-left-color:#{expandColour h.lb};" || '') +
+        (h.bg && "background-color:#{expandColourRGBA h.bg, h.bgo ? .5};" || '') +
         '}'
     else
       ''
@@ -96,6 +98,13 @@ renderCSS = (scheme, rp = '') -> # rp: css rule prefix
 expandColour = (s) ->
   switch (s || '').length
     when 6 then '#'+s; when 3 then [r,g,b]=s;'#'+r+r+g+g+b+b; when 1 then '#'+s+s+s+s+s+s; else s
+
+expandColourRGBA = (s, a) ->
+  s = expandColour s
+  r = +('0x' + s[1..2])
+  g = +('0x' + s[3..4])
+  b = +('0x' + s[5..6])
+  "rgba(#{r},#{g},#{b},#{a})"
 
 shrinkColour = (s) ->
   if !/^#.{6}$/.test s then s
@@ -134,6 +143,7 @@ pickUniqueSchemeName = (root) ->
       <select id=col-group>#{join G.map (g, i) -> "<option value=#{i}>#{g.s}"}</select>
       <p id=col-fg-p><label><input type=checkbox id=col-fg-cb>Foreground</label> <input type=color id=col-fg list=col-list>
       <p id=col-bg-p><label><input type=checkbox id=col-bg-cb>Background</label> <input type=color id=col-bg list=col-list>
+      <div id=col-bgo title=Transparency></div>
       <p id=col-BIU-p>
         <label><input type=checkbox id=col-B><b>B</b></label>
         <label><input type=checkbox id=col-I><i>I</i></label>
@@ -190,6 +200,9 @@ pickUniqueSchemeName = (root) ->
       h = scheme[sel] ?= {}; if @checked then h[p] = shrinkColour $("#col-#{p}").val() else delete h[p]
       updateSampleStyle(); return
     return
+  $('#col-bg-cb').click -> $('#col-bgo').toggle @checked; return
+  $('#col-bgo').slider range: 'min', value: .5, min: 0, max: 1, step: .25, slide: (e, ui) ->
+    (scheme[sel] ?= {}).bgo = ui.value; updateSampleStyle(); return
   qw('B I U').forEach (p) ->
     $("#col-#{p}").click ->
       h = scheme[sel] ?= {}; if @checked then h[p] = 1 else delete h[p]
@@ -246,9 +259,11 @@ selectGroup = (t, forceRefresh) ->
     qw('fg bg lb').forEach (p) ->
       $("#col-#{p}-cb").prop 'checked', !!h[p]; $("#col-#{p}").val(expandColour h[p]).toggle !!h[p]; return
     qw('B I U').forEach (p) -> $("#col-#{p}").prop 'checked', !!h[p]; return
+    $('#col-bgo').slider 'value', h.bgo ? .5
     c = (G[i] || G[0]).controls || {}
     $('#col-fg-p' ).toggle !!(c.fg ? 1)
     $('#col-bg-p' ).toggle !!(c.bg ? 1)
+    $('#col-bgo'  ).toggle !!h.bg
     $('#col-BIU-p').toggle !!(c.BIU ? 1)
     $('#col-lb-p' ).toggle !!c.lb
     sel = t
