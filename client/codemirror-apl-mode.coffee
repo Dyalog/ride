@@ -90,10 +90,14 @@ CodeMirror.defineMode 'apl', (config) -> # https://codemirror.net/doc/manual.htm
           when 'endclass', 'endfor', 'endhold', 'endif', 'endinterface', 'endnamespace', 'endproperty', 'endrepeat'
           ,    'endsection', 'endselect', 'endtrap', 'endwhile', 'endwith'
             i = a.lastIndexOf kw[3..]; ok = i == a.length - 1 >= 0; ok && a.splice i; ok
-          when 'else', 'elseif', 'andif', 'orif'
+          when 'else'
+            ok = a[-1..][0] in ['if', 'select', 'trap']
+          when 'elseif', 'andif', 'orif'
             ok = a[-1..][0] == 'if'
           when 'in', 'ineach'
             ok = a[-1..][0] == 'for'
+          when 'case'
+            ok = a[-1..][0] in ['select', 'trap']
           when 'access', 'case', 'caselist', 'continue', 'field', 'goto', 'include', 'implements', 'leave', 'return', 'until'
             ok = 1
         ok && 'apl-kw' || 'apl-err'
@@ -107,11 +111,11 @@ CodeMirror.defineMode 'apl', (config) -> # https://codemirror.net/doc/manual.htm
         else 'apl-glb'
       else 'apl-err'
 
-  electricInput: /:(?:else|end|andif|orif)$/
+  electricInput: /:(?:else|end|andif|orif|case)$/
 
   indent: (state, textAfter) ->
     config.indentUnit *
       if state.dfnDepth
         state.dfnDepth - /^\s*\}/.test textAfter
       else
-        state.kwStack.length - /^\s*:(?:end|else|andif|orif)/i.test textAfter
+        state.kwStack.length - /^\s*:(?:end|else|andif|orif|case)/i.test textAfter
