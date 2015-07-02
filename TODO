@@ -24,6 +24,7 @@ P4 (I will think about it):
         But if we don't have "Copy" in the menu, cmd+c doesn't work.
 
 Not yet prioritized:
+  indent properly :Trap-:Else and :Select-:Case combinations
   autoindent should be based on the prev line's indent, not absolute
   if we spawn an interpreter and it failes to connect after X time, please could we have a message box about it? - Andy email 2015-06-29
   Colour schemes
