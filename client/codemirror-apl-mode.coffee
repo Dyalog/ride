@@ -66,10 +66,10 @@ CodeMirror.defineMode 'apl', (config) -> # https://codemirror.net/doc/manual.htm
       else if c == "'" then (if stream.match /^(?:[^'\r\n]|'')*'/ then 'apl-str' else stream.skipToEnd(); 'apl-err')
       else if c == '⍬' then 'apl-zld'
       else if c == '(' then state.stack += c; 'apl-par'
-      else if c == '[' then state.stack += c; 'apl-brkt'
+      else if c == '[' then state.stack += c; 'apl-sqbr'
       else if c == '{' then state.stack += c; state.indentStack.push stream.indentation(); "apl-dfn#{++state.dfnDepth} apl-dfn"
       else if c == ')' then (if state.stack[-1..] == '(' then state.stack = state.stack[...-1]; 'apl-par'  else 'apl-err')
-      else if c == ']' then (if state.stack[-1..] == '[' then state.stack = state.stack[...-1]; 'apl-brkt' else 'apl-err')
+      else if c == ']' then (if state.stack[-1..] == '[' then state.stack = state.stack[...-1]; 'apl-sqbr' else 'apl-err')
       else if c == '}'
         if state.stack[-1..] == '{'
           state.stack = state.stack[...-1]; state.indentStack.pop(); "apl-dfn apl-dfn#{state.dfnDepth--}"

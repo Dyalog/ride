@@ -22,7 +22,7 @@ G = [ # information about syntax highlighting groups
   {t:'asgn', s:'assignment',           c:'.cm-apl-asgn'}
   {t:'diam', s:'diamond',              c:'.cm-apl-diam'}
   {t:'par',  s:'parenthesis',          c:'.cm-apl-par' }
-  {t:'brkt', s:'bracket',              c:'.cm-apl-brkt'}
+  {t:'sqbr', s:'bracket',              c:'.cm-apl-sqbr'}
   {t:'semi', s:'semicolon',            c:'.cm-apl-semi'}
   {t:'dfn',  s:'dfn',                  c:'.cm-apl-dfn' }
   {t:'dfn1', s:'dfn level 1',          c:'.cm-apl-dfn1'}
@@ -51,7 +51,7 @@ builtInSchemes = [
   {
     name:'Default'
     num:{fg:'8'},str:{fg:'088'},zld:{fg:'008'},var:{fg:'8'},quad:{fg:'808'},fn:{fg:'008'},op1:{fg:'00f'},op2:{fg:'00f'}
-    ns:{fg:'8'},asgn:{fg:'00f'},diam:{fg:'00f'},par:{fg:'00f'},brkt:{fg:'00f'},semi:{fg:'00f'},dfn:{fg:'00f'}
+    ns:{fg:'8'},asgn:{fg:'00f'},diam:{fg:'00f'},par:{fg:'00f'},sqbr:{fg:'00f'},semi:{fg:'00f'},dfn:{fg:'00f'}
     trad:{fg:'8'},kw:{fg:'800'},idm:{fg:'00f'},com:{fg:'088'},err:{fg:'f00'},lnum:{fg:'008'},mtch:{bg:'ff8',bgo:.5}
     srch:{bg:'f80',bgo:.5},mod:{bg:'e',bgo:1},sel:{bg:'ddf',bgo:.5},sel0:{bg:'d',bgo:.5},tc:{bg:'d',bgo:1}
   }
@@ -59,7 +59,7 @@ builtInSchemes = [
     name:'Francisco Goya'
     norm:{fg:'9c7',bg:'0',bgo:1},cur:{lb:'f00'},lnum:{fg:'b94',bg:'010',bgo:1},srch:{bg:'b96',bgo:.75,fg:'0'}
     mod:{bg:'1',bgo:1},sel0:{bg:'246',bgo:.5},sel:{bg:'048',bgo:.5},err:{fg:'f00',bg:'822',bgo:.5,B:1,U:1}
-    kw:{fg:'aa2'},num:{fg:'a8b'},op1:{fg:'d95'},fn:{fg:'0f0'},op2:{fg:'fd6'},brkt:{fg:'8'},com:{fg:'b',I:1}
+    kw:{fg:'aa2'},num:{fg:'a8b'},op1:{fg:'d95'},fn:{fg:'0f0'},op2:{fg:'fd6'},sqbr:{fg:'8'},com:{fg:'b',I:1}
     semi:{fg:'8'},str:{fg:'dae'},zld:{fg:'d9f',B:1},lbl:{U:1,bg:'642',bgo:.5},idm:{B:1},tc:{bg:'1',bgo:1},glob:{B:1}
     dfn:{fg:'a7b'},dfn2:{fg:'eb4'},dfn3:{fg:'c79'},dfn4:{fg:'cd0'},dfn5:{fg:'a0d'}
   }
