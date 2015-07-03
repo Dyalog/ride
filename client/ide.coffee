@@ -151,6 +151,7 @@ class @IDE
         if !state.east. isClosed && (x = state.east .innerWidth ) > 1 then prefs.editorWidth  x
         if !state.south.isClosed && (x = state.south.innerHeight) > 1 then prefs.tracerHeight x
         return
+    for d in ['east', 'south'] then @layout.close d
     if !prefs.lbar() then @layout.hide 'north'
     @wins[0].updateSize()
 
