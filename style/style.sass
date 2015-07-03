@@ -793,7 +793,6 @@ body .ui-tooltip{border-width:2px}
 .CodeMirror-scrollbar-filler,.CodeMirror-gutter-filler
   background-color:white;// The little square between H and V scrollbars
 
-.CodeMirror-gutters{border-right:1px solid transparent;white-space:nowrap}
 //.CodeMirror-linenumbers{}
 .CodeMirror-linenumber
   padding:0 3px 0 5px;min-width:20px;text-align:right;white-space:nowrap;cursor:pointer
@@ -858,7 +857,9 @@ body .ui-tooltip{border-width:2px}
 .CodeMirror-hscrollbar{bottom:0;left:0;overflow-y:hidden;overflow-x:scroll}
 .CodeMirror-scrollbar-filler{right:0;bottom:0}
 .CodeMirror-gutter-filler   {left: 0;bottom:0}
-.CodeMirror-gutters{position:absolute;left:0;top:0;z-index:3}
+.CodeMirror-gutters
+  position:absolute;left:0;top:0;z-index:3;border-right:1px solid transparent;
+  white-space:nowrap;background-color:transparent
 .CodeMirror-gutter
   white-space:normal;height:100%;display:inline-block;margin-bottom:-30px
   *zoom:1;*display:inline;// Hack to make IE7 behave
