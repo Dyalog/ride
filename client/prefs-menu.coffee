@@ -29,18 +29,10 @@ $ta = null # the textarea
 extraOpts =
   # todo: remove obsolete options
   # todo: update from prefs.keys() dynamically
-  NEW: key: 'Ctrl+N'
-  QIT: key: 'Ctrl+Q'
-  ZMI: key: 'Ctrl+=', dontBindKey: 1
-  ZMO: key: 'Ctrl+-', dontBindKey: 1
-  ZMR: key: 'Ctrl+0', dontBindKey: 1
   LBR: checkBoxPref: prefs.lbar
   FLT: checkBoxPref: prefs.floating
   WRP: checkBoxPref: prefs.wrap
   TOP: checkBoxPref: prefs.floatOnTop
-  DMN: key: 'Ctrl+Shift+N'
-  DMP: key: 'Ctrl+Shift+P'
-  ABT: key: 'Shift+F1', dontBindKey: 1
   THM: items: qw('Modern Redmond Cupertino Freedom').map (x, i) ->
     '': x, group: 'themes', checked: prefs.theme() == x.toLowerCase(), action: ->
       prefs.theme x.toLowerCase(); return

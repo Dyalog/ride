@@ -33,58 +33,74 @@ ctid = 0 # backquote completion timeout id
 CodeMirror.keyMap.dyalogDefault = fallthrough: 'default', F1: 'HLP', End: 'goLineEndSmart'
 CodeMirror.keyMap.dyalogDefault["'#{prefs.prefixKey()}'"] = 'BQC'
 
-CodeMirror.commands.PRF = -> prefsUI.showDialog(); return
-CodeMirror.commands.ABT = -> about.showDialog(); return
+$.extend CodeMirror.commands,
+  PRF: -> prefsUI.showDialog(); return
+  ABT: -> about.showDialog();   return
+  CNC: -> D.rideConnect();      return
+  NEW: -> D.rideNewSession();   return
+  QIT: -> D.quit();             return
+  ZMI: -> D.zoomIn();           return
+  ZMO: -> D.zoomOut();          return
+  ZMR: -> D.resetZoom();        return
 
-CodeMirror.commands.HLP = (cm) ->
-  c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
-  u =
-    if      m = /^ *(\)[a-z]+).*$/.exec s then helpurls[m[1]] || helpurls.WELCOME
-    else if m = /^ *(\][a-z]+).*$/.exec s then helpurls[m[1]] || helpurls.UCMDS
-    else
-      x = s[s[...c.ch].replace(/.[áa-z]*$/i, '').length..].replace(/^([⎕:][áa-z]*|.).*$/i, '$1').replace /^:end/, ':'
-      helpurls[x] ||
-        if      x[0] == '⎕' then helpurls.SYSFNS
-        else if x[0] == ':' then helpurls.CTRLSTRUCTS
-        else                     helpurls.LANGELEMENTS
-  w = screen.width / 4; h = screen.height / 4
-  open u, 'help', "width=#{2 * w},height=#{2 * h},left=#{w},top=#{h},scrollbars=1,location=1,toolbar=0,menubar=0,resizable=1"
-    .focus?()
-  return
-
-CodeMirror.commands.BQC = (cm) ->
-  if cm.dyalogBQ
-    c = cm.getCursor(); cm.replaceSelection prefs.prefixKey(), 'end'
-  else
-    # Make it possible to use `( etc -- remember the original value of
-    # autoCloseBrackets, set it temporarily to "false", and restore it when the
-    # menu is closed:
-    cm.setOption 'autoCloseBrackets0', cm.getOption 'autoCloseBrackets'
-    cm.setOption 'autoCloseBrackets', false
-    cm.on 'change', bqChangeHandler; cm.dyalogBQ = 1
-    c0 = cm.getCursor(); cm.replaceSelection prefs.prefixKey(), 'end'
-    ctid = delay 500, ->
-      c1 = cm.getCursor()
-      if c1.line == c0.line && c1.ch == c0.ch + 1
-        cm.showHint
-          completeOnSingleClick: true
-          extraKeys:
-            Backspace: (cm, m) -> m.close(); cm.execCommand 'delCharBefore'; return
-            Left:      (cm, m) -> m.close(); cm.execCommand 'goCharLeft'; return
-            Right:     (cm, m) -> m.pick(); return
-          hint: ->
-            pk = prefs.prefixKey()
-            data = from: c0, to: cm.getCursor(), list: KS.map (k) ->
-              if k == pk
-                text: '', hint: bqbqHint, render: (e) -> e.innerHTML = "  #{pk}#{pk} <i>completion by name</i>"; return
-              else
-                v = bq[k]; text: v, render: (e) -> $(e).text "#{v} #{pk}#{k} #{squiggleDescriptions[v] || ''}  "; return
-            CodeMirror.on data, 'close', -> bqCleanUp cm; return
-            data
+  HLP: (cm) ->
+    c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
+    u =
+      if      m = /^ *(\)[a-z]+).*$/.exec s then helpurls[m[1]] || helpurls.WELCOME
+      else if m = /^ *(\][a-z]+).*$/.exec s then helpurls[m[1]] || helpurls.UCMDS
       else
-        bqCleanUp cm
-      return
-  return
+        x = s[s[...c.ch].replace(/.[áa-z]*$/i, '').length..].replace(/^([⎕:][áa-z]*|.).*$/i, '$1').replace /^:end/, ':'
+        helpurls[x] ||
+          if      x[0] == '⎕' then helpurls.SYSFNS
+          else if x[0] == ':' then helpurls.CTRLSTRUCTS
+          else                     helpurls.LANGELEMENTS
+    w = screen.width / 4; h = screen.height / 4
+    open u, 'help', "width=#{2 * w},height=#{2 * h},left=#{w},top=#{h},scrollbars=1,location=1,toolbar=0,menubar=0,resizable=1"
+      .focus?()
+    return
+
+  BQC: (cm) ->
+    if cm.dyalogBQ
+      c = cm.getCursor(); cm.replaceSelection prefs.prefixKey(), 'end'
+    else
+      # Make it possible to use `( etc -- remember the original value of
+      # autoCloseBrackets, set it temporarily to "false", and restore it when the
+      # menu is closed:
+      cm.setOption 'autoCloseBrackets0', cm.getOption 'autoCloseBrackets'
+      cm.setOption 'autoCloseBrackets', false
+      cm.on 'change', bqChangeHandler; cm.dyalogBQ = 1
+      c0 = cm.getCursor(); cm.replaceSelection prefs.prefixKey(), 'end'
+      ctid = delay 500, ->
+        c1 = cm.getCursor()
+        if c1.line == c0.line && c1.ch == c0.ch + 1
+          cm.showHint
+            completeOnSingleClick: true
+            extraKeys:
+              Backspace: (cm, m) -> m.close(); cm.execCommand 'delCharBefore'; return
+              Left:      (cm, m) -> m.close(); cm.execCommand 'goCharLeft'; return
+              Right:     (cm, m) -> m.pick(); return
+            hint: ->
+              pk = prefs.prefixKey()
+              data = from: c0, to: cm.getCursor(), list: KS.map (k) ->
+                if k == pk
+                  text: '', hint: bqbqHint, render: (e) -> e.innerHTML = "  #{pk}#{pk} <i>completion by name</i>"; return
+                else
+                  v = bq[k]; text: v, render: (e) -> $(e).text "#{v} #{pk}#{k} #{squiggleDescriptions[v] || ''}  "; return
+              CodeMirror.on data, 'close', -> bqCleanUp cm; return
+              data
+        else
+          bqCleanUp cm
+        return
+    return
+
+  goLineEndSmart: (cm) -> # CodeMirror provides a goLineStartSmart but not a goLineEndSmart command.
+    cm.extendSelectionsBy(
+      ->
+        c = cm.getCursor(); l = c.line; s = cm.getLine l; n = s.length; m = s.replace(/\ +$/, '').length
+        CodeMirror.Pos l, if m <= c.ch < n || !m then n else m
+      origin: '+move', bias: -1
+    )
+    return
 
 # `x completions
 KS = '`1234567890-=qwertyuiop[]asdfghjk l;\'\\zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:"|ZXCVBNM<>?'.split /\s*/
@@ -231,13 +247,4 @@ qw('CBP MA WI SI AC tabOrAutocomplete downOrXline indentMoreOrAutocomplete').for
   [80] -- -- -- -- -- -- TO MO -- -- -- -- -- S1 S2 OS
 '''.replace(/\[.*?\]/g, '').replace(/^\s*|\s*$/g, '').split(/\s+/).forEach (xx, i) ->
   if xx != '--' then createCommand xx; CodeMirror.keyMap.dyalogDefault["'#{chr 0xf800 + i}'"] = xx
-  return
-
-CodeMirror.commands.goLineEndSmart = (cm) -> # CodeMirror provides a goLineStartSmart but not a goLineEndSmart command.
-  cm.extendSelectionsBy(
-    ->
-      c = cm.getCursor(); l = c.line; s = cm.getLine l; n = s.length; m = s.replace(/\ +$/, '').length
-      CodeMirror.Pos l, if m <= c.ch < n || !m then n else m
-    origin: '+move', bias: -1
-  )
   return

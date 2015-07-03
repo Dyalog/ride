@@ -240,12 +240,6 @@ class @IDE
     w = null; t = 0; for _, x of @wins when x.id && t <= x.focusTimestamp then w = x; t = x.focusTimestamp
     w && w.focus(); return
 
-  CNC: -> D.rideConnect();    return
-  NEW: -> D.rideNewSession(); return
-  QIT: -> D.quit();           return
-  ZMI: -> D.zoomIn();         return
-  ZMO: -> D.zoomOut();        return
-  ZMR: -> D.resetZoom();      return
   LBR: -> prefs.lbar      .toggle(); return
   FLT: -> prefs.floating  .toggle(); return
   WRP: -> prefs.wrap      .toggle(); return
