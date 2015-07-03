@@ -1,14 +1,16 @@
 Bugs / Issues External to RIDE
   Windows not working at all for spawned interpreters
   Yes/No dialog, needs to be supported in the RIDE protocol; email from Morten 2015-02-14
+  value tips
+  ws explorer
 
 P1 (Definitely high priority):
-  class explorer
   code folding
-  cmd to toggle rainbow colouring
-  external editors
 
 P2 (Middle priority):
+  class explorer
+  external editors
+  cmd to toggle rainbow colouring
 
 P3 (Can wait):
   Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
@@ -24,11 +26,7 @@ P4 (I will think about it):
         But if we don't have "Copy" in the menu, cmd+c doesn't work.
 
 Not yet prioritized:
-  indent properly :Trap-:Else and :Select-:Case combinations
-  autoindent should be based on the prev line's indent, not absolute
   if we spawn an interpreter and it failes to connect after X time, please could we have a message box about it? - Andy email 2015-06-29
-  Colour schemes
-    NN: mostly done, needs some real-world testing and a survey about what the default colour schemes should be
   (OS X) - Reported by Mike Powell: Dragging the text to a different point uses the vertical bar cursor. Holding the Option key while doing this changes the cursor to the green and white cross (Implying a copy - but it still moves the text).
   Type a couple of chars and hit Alt+Enter, followed by Enter. Uncaught node.js Error; JS email 2015-03-10
     NN: cannot reproduce on Linux
@@ -245,3 +243,4 @@ Done:
     http://mantis.dyalog.com/view.php?id=12428
   Configurable keyboard shortcuts
   keybinding for toggling a breakpoint
+  Colour schemes
