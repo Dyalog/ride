@@ -42,7 +42,7 @@ idiomsRE = ///^(?:#{idioms.sort((x, y) -> y.length - x.length).map(escIdiom).joi
 
 CodeMirror.defineMIME 'text/apl', 'apl'
 CodeMirror.defineMode 'apl', (config) -> # https://codemirror.net/doc/manual.html#modeapi
-  startState: -> isHeader: 1, stack: '', dfnDepth: 0, kwStack: []
+  startState: -> isHeader: 1, stack: '', dfnDepth: 0, kwStack: [], indentStack: []
   token: (stream, state) ->
     if state.isHeader
       delete state.isHeader; stream.match /[^⍝\n\r]*/; s = stream.current()
@@ -67,10 +67,14 @@ CodeMirror.defineMode 'apl', (config) -> # https://codemirror.net/doc/manual.htm
       else if c == '⍬' then 'apl-zld'
       else if c == '(' then state.stack += c; 'apl-par'
       else if c == '[' then state.stack += c; 'apl-brkt'
-      else if c == '{' then state.stack += c; "apl-dfn#{++state.dfnDepth} apl-dfn"
+      else if c == '{' then state.stack += c; state.indentStack.push stream.indentation(); "apl-dfn#{++state.dfnDepth} apl-dfn"
       else if c == ')' then (if state.stack[-1..] == '(' then state.stack = state.stack[...-1]; 'apl-par'  else 'apl-err')
       else if c == ']' then (if state.stack[-1..] == '[' then state.stack = state.stack[...-1]; 'apl-brkt' else 'apl-err')
-      else if c == '}' then (if state.stack[-1..] == '{' then state.stack = state.stack[...-1]; "apl-dfn apl-dfn#{state.dfnDepth--}"; else 'apl-err')
+      else if c == '}'
+        if state.stack[-1..] == '{'
+          state.stack = state.stack[...-1]; state.indentStack.pop(); "apl-dfn apl-dfn#{state.dfnDepth--}"
+        else
+          'apl-err'
       else if c == ';' then 'apl-semi'
       else if c == '⋄' then 'apl-diam'
       else if /[\/⌿\\⍀¨⌸⍨⌶]/.test c then 'apl-op1'
@@ -79,25 +83,26 @@ CodeMirror.defineMode 'apl', (config) -> # https://codemirror.net/doc/manual.htm
       else if state.dfnDepth && /[⍺⍵∇:]/.test c then "apl-dfn apl-dfn#{state.dfnDepth}"
       else if c == '∇' then state.isHeader = 1; 'apl-trad'
       else if c == ':'
-        a = state.kwStack; ok = 0
+        ok = 0
         switch kw = stream.match(/\w*/)?[0]?.toLowerCase()
           # see https://github.com/jashkenas/coffeescript/issues/2014 for the "multiline when" syntax
           when 'class', 'for', 'hold', 'if', 'interface', 'namespace', 'property', 'repeat', 'section', 'select'
           ,    'trap', 'while', 'with'
-            a.push kw; ok = 1
+            state.kwStack.push kw; state.indentStack.push stream.indentation(); ok = 1
           when 'end'
-            ok = a.length > 0; ok && a.pop()
+            ok = state.kwStack.length > 0; (if ok then state.kwStack.pop(); state.indentStack.pop()); ok
           when 'endclass', 'endfor', 'endhold', 'endif', 'endinterface', 'endnamespace', 'endproperty', 'endrepeat'
           ,    'endsection', 'endselect', 'endtrap', 'endwhile', 'endwith'
-            i = a.lastIndexOf kw[3..]; ok = i == a.length - 1 >= 0; ok && a.splice i; ok
+            i = state.kwStack.lastIndexOf kw[3..]; ok = i == state.kwStack.length - 1 >= 0
+            (if ok then state.kwStack.splice i; state.indStack.splice i); ok
           when 'else'
-            ok = a[-1..][0] in ['if', 'select', 'trap']
+            ok = state.kwStack[-1..][0] in ['if', 'select', 'trap']
           when 'elseif', 'andif', 'orif'
-            ok = a[-1..][0] == 'if'
+            ok = state.kwStack[-1..][0] == 'if'
           when 'in', 'ineach'
-            ok = a[-1..][0] == 'for'
+            ok = state.kwStack[-1..][0] == 'for'
           when 'case'
-            ok = a[-1..][0] in ['select', 'trap']
+            ok = state.kwStack[-1..][0] in ['select', 'trap']
           when 'access', 'case', 'caselist', 'continue', 'field', 'goto', 'include', 'implements', 'leave', 'return', 'until'
             ok = 1
         ok && 'apl-kw' || 'apl-err'
@@ -111,11 +116,10 @@ CodeMirror.defineMode 'apl', (config) -> # https://codemirror.net/doc/manual.htm
         else 'apl-glb'
       else 'apl-err'
 
-  electricInput: /:(?:else|end|andif|orif|case)$/
+  electricInput: /(?::else|:end|:andif|:orif|:case|\})$/
 
   indent: (state, textAfter) ->
-    config.indentUnit *
-      if state.dfnDepth
-        state.dfnDepth - /^\s*\}/.test textAfter
-      else
-        state.kwStack.length - /^\s*:(?:end|else|andif|orif|case)/i.test textAfter
+    state.indentStack[state.indentStack.length - 1] + config.indentUnit * !(
+      if state.dfnDepth then /^\s*\}/.test textAfter
+      else /^\s*:(?:end|else|andif|orif|case)/i.test textAfter
+    )
