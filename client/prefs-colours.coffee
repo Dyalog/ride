@@ -7,7 +7,7 @@ G = [ # information about syntax highlighting groups
   # t: token type, a short key for storing customisations in localStorage
   # s: name to display in the UI
   # c: css selector
-  # showX: whether to show the control for "X"
+  # controls: which UI controls are allowed or disallowed for this group (other than the default controls)
   {t:'norm', s:'normal',               c:'.cm-s-default,.CodeMirror-gutter-wrapper'}
   {t:'num',  s:'number',               c:'.cm-apl-num' }
   {t:'str',  s:'string',               c:'.cm-apl-str' }
@@ -45,35 +45,56 @@ G = [ # information about syntax highlighting groups
   {t:'sel0', s:'selection (no focus)', c:'.CodeMirror-selected',                     controls:{fg:0,BIU:0}}
   {t:'tc',   s:'tracer',               c:'.tracer .CodeMirror,.tracer .CodeMirror .CodeMirror-gutter-wrapper'}
 ]
-H = dict G.map (g, i) -> [g.t, i]
+H = dict G.map (g, i) -> [g.t, i] # reverse dict of G
+
+# Colour schemes are represented in one of two ways:
+#   In memory                 In localStorage
+#     {                         {
+#       "name": "MyScheme",       "name": "MyScheme",
+#       "group1": {               "styles": "group1=fg:f00,B group2=bg:f00 ..."
+#         "fg": "f00",          }
+#         "B": 1
+#       },
+#       "group2": {
+#         "bg": "f00"
+#       },
+#       ...
+#     }
+# encodeScheme() and decodeScheme() convert between the two.
+
+encodeScheme = (x) ->
+  s = ''
+  for g, h of x when g != 'name'
+    u = ''; for p, v of h then u += ",#{p}"; if !(p in ['B', 'I', 'U'] && v) then u += ":#{v}"
+    u && s += " #{g}=#{u[1..]}"
+  name: x.name, styles: s[1..]
+
+decodeScheme = (x) ->
+  {name, styles} = x; r = {name}
+  if styles
+    for gh in styles.split /\s+/ when gh
+      [g, s1] = gh.split '='; r[g] = h = {}; for pv in s1.split ',' then [p, v] = pv.split ':'; h[p] = v ? 1
+      h.bgo? && h.bgo = +h.bgo # if .bgo is present, convert it to a number
+  r
 
 builtInSchemes = [
-  {
-    name:'Default'
-    num:{fg:'8'},str:{fg:'088'},zld:{fg:'008'},var:{fg:'8'},quad:{fg:'808'},fn:{fg:'008'},op1:{fg:'00f'},op2:{fg:'00f'}
-    ns:{fg:'8'},asgn:{fg:'00f'},diam:{fg:'00f'},par:{fg:'00f'},sqbr:{fg:'00f'},semi:{fg:'00f'},dfn:{fg:'00f'}
-    trad:{fg:'8'},kw:{fg:'800'},idm:{fg:'00f'},com:{fg:'088'},err:{fg:'f00'},lnum:{fg:'008'},mtch:{bg:'ff8',bgo:.5}
-    srch:{bg:'f80',bgo:.5},mod:{bg:'e',bgo:1},sel:{bg:'ddf',bgo:.5},sel0:{bg:'d',bgo:.5},tc:{bg:'d',bgo:1}
-  }
-  {
-    name:'Francisco Goya'
-    norm:{fg:'9c7',bg:'0',bgo:1},cur:{lb:'f00'},lnum:{fg:'b94',bg:'010',bgo:1},srch:{bg:'b96',bgo:.75,fg:'0'}
-    mod:{bg:'1',bgo:1},sel0:{bg:'246',bgo:.5},sel:{bg:'048',bgo:.5},err:{fg:'f00',bg:'822',bgo:.5,B:1,U:1}
-    kw:{fg:'aa2'},num:{fg:'a8b'},op1:{fg:'d95'},fn:{fg:'0f0'},op2:{fg:'fd6'},sqbr:{fg:'8'},com:{fg:'b',I:1}
-    semi:{fg:'8'},str:{fg:'dae'},zld:{fg:'d9f',B:1},lbl:{U:1,bg:'642',bgo:.5},idm:{B:1},tc:{bg:'1',bgo:1},glob:{B:1}
-    dfn:{fg:'a7b'},dfn2:{fg:'eb4'},dfn3:{fg:'c79'},dfn4:{fg:'cd0'},dfn5:{fg:'a0d'}
-  }
-  {
-    name:'Albrecht Dürer'
-    num:{fg:'8'},str:{fg:'8'},zld:{fg:'8'},quad:{fg:'808'},ns:{fg:'8'},diam:{B:1},kw:{B:1},idm:{U:1,bg:'e',bgo:.5}
-    com:{I:1},err:{fg:'f',bg:'0',bgo:.5,B:1,I:1,U:1},mtch:{bg:'c',bgo:.5},srch:{bg:'c',bgo:.5},mod:{bg:'e',bgo:1}
-    glb:{I:1},tc:{bg:'e',bgo:1}
-  }
-  {
-    name:'Kazimir Malevich'
-  }
-]
-do -> (for x in builtInSchemes then x.frozen = 1); return
+  {name: 'Default', styles: '''
+    num=fg:8 str=fg:088 zld=fg:008 var=fg:8 quad=fg:808 fn=fg:008 op1=fg:00f op2=fg:00f ns=fg:8 asgn=fg:00f
+    diam=fg:00f par=fg:00f sqbr=fg:00f semi=fg:00f dfn=fg:00f trad=fg:8 kw=fg:800 idm=fg:00f com=fg:088 err=fg:f00
+    lnum=fg:008 mtch=bg:ff8,bgo:.5 srch=bg:f80,bgo:.5 mod=bg:e,bgo:1 sel=bg:ddf,bgo:.5 sel0=bg:d,bgo:.5 tc=bg:d,bgo:1
+  '''}
+  {name: 'Francisco Goya', styles: '''
+    norm=fg:9c7,bg:0,bgo:1 cur=lb:f00 lnum=fg:b94,bg:010,bgo:1 srch=bg:b96,bgo:.75,fg:0 mod=bg:1,bgo:1
+    sel0=bg:246,bgo:.5 sel=bg:048,bgo:.5 err=fg:f00,bg:822,bgo:.5,B:1,U:1 kw=fg:aa2 num=fg:a8b op1=fg:d95 fn=fg:0f0
+    op2=fg:fd6 sqbr=fg:8 com=fg:b,I:1 semi=fg:8 str=fg:dae zld=fg:d9f,B:1 lbl=U:1,bg:642,bgo:.5 idm=B:1 tc=bg:1,bgo:1
+    glob=B:1 dfn=fg:a7b dfn2=fg:eb4 dfn3=fg:c79 dfn4=fg:cd0 dfn5=fg:a0d
+  '''}
+  {name:'Albrecht Dürer', styles: '''
+    num=fg:8 str=fg:8 zld=fg:8 quad=fg:808 ns=fg:8 diam=B:1 kw=B:1 idm=U:1,bg:e,bgo:.5 com=I:1
+    err=fg:f,bg:0,bgo:.5,B:1,I:1,U:1 mtch=bg:c,bgo:.5 srch=bg:c,bgo:.5 mod=bg:e,bgo:1 glb=I:1 tc=bg:e,bgo:1
+  '''}
+  {name:'Kazimir Malevich', styles: ''}
+].map(decodeScheme).map (x) -> x.frozen = 1; x
 
 schemes  =      # all schemes (built-in and user-defined) as objects
 scheme   =      # the active scheme object
@@ -99,12 +120,7 @@ expandColour = (s) ->
   switch (s || '').length
     when 6 then '#'+s; when 3 then [r,g,b]=s;'#'+r+r+g+g+b+b; when 1 then '#'+s+s+s+s+s+s; else s
 
-expandColourRGBA = (s, a) ->
-  s = expandColour s
-  r = +('0x' + s[1..2])
-  g = +('0x' + s[3..4])
-  b = +('0x' + s[5..6])
-  "rgba(#{r},#{g},#{b},#{a})"
+expandColourRGBA = (s, a) -> s = expandColour s; "rgba(#{+('0x'+s[1..2])},#{+('0x'+s[3..4])},#{+('0x'+s[5..6])},#{a})"
 
 shrinkColour = (s) ->
   if !/^#.{6}$/.test s then s
@@ -112,20 +128,18 @@ shrinkColour = (s) ->
 
 $ updateStyle = -> # update global style from what's in localStorage; do it on "document ready"
   name = prefs.colourScheme()
-  for x in builtInSchemes.concat prefs.colourSchemes() when x.name == name
+  for x in builtInSchemes.concat prefs.colourSchemes().map decodeScheme when x.name == name
     $('#col-style').text renderCSS x, '.ride-win'; break
   return
 # ... and update whenever the values in localStorage change
 prefs.colourScheme  updateStyle
 prefs.colourSchemes updateStyle
 
-pickUniqueSchemeName = (root) ->
+chooseUniqueSchemeName = (s) -> # s: suggested root
   h = {}; for x in schemes then h[x.name] = 1
-  if !h[root]
-    root
-  else
-    root = root.replace /\ \(\d+\)$/, ''
-    i = 1; (while h[r = "#{root} (#{i})"] then i++); r
+  if !h[s] then s else s = s.replace /\ \(\d+\)$/, ''; i = 1; (while h[r = "#{s} (#{i})"] then i++); r
+
+SEARCH_MATCH = 'search match' # sample text to illustrate it
 
 @init = ($e) ->
   u = []; (for _, {fg} of scheme when fg && 0 < u.indexOf fg then u.push fg); u.sort() # u: unique colours
@@ -157,7 +171,7 @@ pickUniqueSchemeName = (root) ->
     cm.setSize $cm.width(), $cm.height(); return
   $('#col-new-name').blur ->
     if newName = $(@).val()
-      scheme.name = ''; scheme.name = pickUniqueSchemeName newName
+      scheme.name = ''; scheme.name = chooseUniqueSchemeName newName
       $('#prefs-tab-colours').removeClass 'renaming'; updateSchemes()
     return
   $('#col-new-name').keydown (e) ->
@@ -166,7 +180,7 @@ pickUniqueSchemeName = (root) ->
       when 27 then $(@).val(scheme.name).blur(); false # esc
   $('#col-clone').button().click ->
     schemes.push x = {}; for k, v of scheme then x[k] = $.extend {}, v # x: the new scheme
-    x.name = pickUniqueSchemeName scheme.name; delete x.frozen; scheme = x; updateSchemes(); false
+    x.name = chooseUniqueSchemeName scheme.name; delete x.frozen; scheme = x; updateSchemes(); false
   $('#col-rename').button().click ->
     $('#col-new-name').width($('#col-scheme').width()).val(scheme.name).select()
     $('#prefs-tab-colours').addClass 'renaming'; false
@@ -208,21 +222,6 @@ pickUniqueSchemeName = (root) ->
       h = scheme[sel] ?= {}; if @checked then h[p] = 1 else delete h[p]
       updateSampleStyle(); return
     return
-  return
-
-updateSchemes = ->
-  $('#col-scheme').html(join schemes.map (x) -> "<option value='#{esc x.name}'>#{esc x.name}").val scheme.name
-  $('#prefs-tab-colours').toggleClass 'frozen', !!scheme.frozen; cm.setSize $cm.width(), $cm.height()
-  updateSampleStyle(); selectGroup 'norm', 1; return
-
-SEARCH_MATCH = 'search match' # sample text to illustrate it
-@load = ->
-  schemes = builtInSchemes.concat prefs.colourSchemes()
-  name = prefs.colourScheme() # name of the active scheme
-  [scheme] = schemes; for x in schemes when x.name == name then scheme = x; break
-  updateSchemes()
-  $('#prefs-tab-colours').removeClass 'renaming'
-  cm.setSize $cm.width(), $cm.height()
   cm.setValue """
     {R}←{X}tradfn(Y Z);local
     dfn←{ ⍝ comment
@@ -240,12 +239,22 @@ SEARCH_MATCH = 'search match' # sample text to illustrate it
   """
   return
 
+updateSchemes = ->
+  $('#col-scheme').html(join schemes.map (x) -> "<option value='#{esc x.name}'>#{esc x.name}").val scheme.name
+  $('#prefs-tab-colours').toggleClass 'frozen', !!scheme.frozen; cm.setSize $cm.width(), $cm.height()
+  updateSampleStyle(); selectGroup 'norm', 1; return
+
+@load = ->
+  schemes = builtInSchemes.concat prefs.colourSchemes().map decodeScheme
+  name = prefs.colourScheme() # name of the active scheme
+  [scheme] = schemes; for x in schemes when x.name == name then scheme = x; break
+  updateSchemes()
+  $('#prefs-tab-colours').removeClass 'renaming'
+  cm.setSize $cm.width(), $cm.height()
+  return
+
 @save = ->
-  for x in schemes                          # remove empty style objects from each scheme x
-    for k, h of x when typeof h == 'object' # h: the style object
-      e = 1; for _ of h then e = 0; break   # e: is h empty?
-      e && delete x[k]                      # if so, remove it
-  prefs.colourSchemes schemes[builtInSchemes.length..]
+  prefs.colourSchemes schemes.filter((x) -> !x.frozen).map encodeScheme
   prefs.colourScheme scheme.name
   return
 
@@ -254,7 +263,7 @@ SEARCH_MATCH = 'search match' # sample text to illustrate it
 updateSampleStyle = -> $('#col-sample-style').text renderCSS scheme, '#col-cm'; return
 
 selectGroup = (t, forceRefresh) ->
-  if sel != t || forceRefresh
+  if scheme && (sel != t || forceRefresh)
     i = H[t]; h = scheme[t] || {}; $('#col-group').val i
     qw('fg bg lb').forEach (p) ->
       $("#col-#{p}-cb").prop 'checked', !!h[p]; $("#col-#{p}").val(expandColour h[p]).toggle !!h[p]; return
