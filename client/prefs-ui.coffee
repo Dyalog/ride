@@ -47,7 +47,7 @@ ok = ->
       .on 'keydown', 'input', 'return', ok
       .on 'dragstart', -> false
       .dialog
-        autoOpen: 0, title: 'Preferences', width: 600, height: 450
+        autoOpen: 0, title: 'Preferences', width: 600, minWidth: 600, height: 450, minHeight: 450
         resize: -> (for t in tabs when t.resize then t.resize()); return
         buttons: [
           {text: 'OK', click: ok}
