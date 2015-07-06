@@ -55,7 +55,7 @@ class @Editor
       lineNumbers: !!if @isTracer then prefs.lineNumsTracer() else prefs.lineNumsEditor()
       firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
       indentUnit: 4, scrollButtonHeight: 12, matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
-      gutters: ['breakpoints', 'CodeMirror-linenumbers']
+      foldGutter: true, gutters: ['breakpoints', 'CodeMirror-linenumbers', 'CodeMirror-foldgutter']
       keyMap: 'dyalog', extraKeys: {'Shift-Tab': 'indentLess', Tab: 'tabOrAutocomplete', Down: 'downOrXline'}
     @cm.dyalogCommands = @
     @cm.on 'cursorActivity', @cursorActivity.bind @
@@ -313,6 +313,7 @@ class @Editor
     if @isTracer
       @emit 'SetLineAttributes', win: @id, nLines: @cm.lineCount(), lineAttributes: stop: @bp[..].sort (x, y) -> x - y
     return
+  FLD: (cm) -> cm.foldCode cm.getCursor(); return # Toggle fold
   tabOrAutocomplete: ->
     if @cm.somethingSelected()
       @cm.execCommand 'indentMore'

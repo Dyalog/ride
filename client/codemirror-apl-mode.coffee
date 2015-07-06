@@ -129,3 +129,5 @@ CodeMirror.defineMode 'apl', (config) ->
   indent: (state, textAfter) ->
     re = if state.dfnDepth then /^\s*\}/ else /^\s*:(?:end|else|andif|orif|case)/i
     state.inds[-1..][0] + config.indentUnit * !re.test textAfter
+
+  fold: 'indent'

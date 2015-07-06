@@ -26,6 +26,7 @@ CMDS = @CMDS = [
   ['HLP', 'Help',                     ['F1']]
   ['ABT', 'About',                    ['Shift-F1']]
   ['BP',  'Toggle breakpoint',        ['Ctrl-B']]
+  ['FLD', 'Toggle fold',              ['Ctrl-T']]
   ['AO',  'Add comments',             []]
   ['DO',  'Delete comments',          []]
   ['AC',  'Align comments',           []]
