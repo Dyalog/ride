@@ -111,8 +111,10 @@ CodeMirror.defineMode 'apl', (config) ->
             ok = state.kws[-1..][0] == 'for'
           when 'case'
             ok = state.kws[-1..][0] in ['select', 'trap']
-          when 'access', 'case', 'caselist', 'continue', 'field', 'goto', 'include', 'implements', 'leave', 'return', 'until'
+          when 'access', 'base', 'caselist', 'continue', 'field', 'goto', 'include', 'leave', 'return', 'until'
             ok = 1
+          when 'implements'
+            stream.match /\s+\w+/; ok = 1
         ok && 'apl-kw' || 'apl-err'
       else if c == '⎕' then (if stream.match(/[áa-z0-9]*/i)?[0].toLowerCase() in quadNames then 'apl-quad' else 'apl-err')
       else if c == '⍞' then 'apl-quad'
