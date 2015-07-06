@@ -5,8 +5,8 @@
 letter = @letter = 'A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ'
 name0 = ///[#{letter}]///
 name1 = ///[#{letter}\d]*///
-name = "(?:[#{letter}][#{letter}\d]*)"
-notName = ///[^#{letter}\d]+///
+name = "(?:[#{letter}][#{letter}0-9]*)"
+notName = ///[^#{letter}0-9]+///
 end = '(?:⍝|$)'
 dfnHeader = ///
   ^ \s* #{name} \s* ← \s* \{ \s* (?:
