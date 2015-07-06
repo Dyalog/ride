@@ -115,7 +115,7 @@ CodeMirror.defineMode 'apl', (config) ->
             ok = state.kws[-1..][0] in ['select', 'trap']
           when 'leave', 'continue'
             ok = state.kws[-1..][0] in ['for', 'while', 'continue']
-          when 'access', 'base', 'field', 'goto', 'include', 'return'
+          when 'access', 'base', 'field', 'goto', 'include', 'return', 'using'
             ok = 1
           when 'implements'
             stream.match /\s+\w+/; ok = 1
