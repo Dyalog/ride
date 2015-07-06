@@ -20,6 +20,7 @@ $ ->
         $b = $ 'body', w.getDocument()
         $b.prop 'class', "zoom#{z} " + $b.prop('class').split(/\s+/).filter((s) -> !/^zoom-?\d+$/.test s).join ' '
         w.refresh()
+      D.wins[0].scrollCursorIntoView()
       return
 
   D.open ?= (url, {x, y, width, height}) ->
