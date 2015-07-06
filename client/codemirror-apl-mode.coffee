@@ -109,9 +109,9 @@ CodeMirror.defineMode 'apl', (config) ->
             ok = state.kws[-1..][0] == 'if'
           when 'in', 'ineach'
             ok = state.kws[-1..][0] == 'for'
-          when 'case'
+          when 'case', 'caselist'
             ok = state.kws[-1..][0] in ['select', 'trap']
-          when 'access', 'base', 'caselist', 'continue', 'field', 'goto', 'include', 'leave', 'return', 'until'
+          when 'access', 'base', 'continue', 'field', 'goto', 'include', 'leave', 'return', 'until'
             ok = 1
           when 'implements'
             stream.match /\s+\w+/; ok = 1
@@ -129,7 +129,7 @@ CodeMirror.defineMode 'apl', (config) ->
   electricInput: /(?::else|:end|:andif|:orif|:case|\})$/ # when the user enters one of these, a re-indent is triggered
 
   indent: (state, textAfter) ->
-    re = if state.dfnDepth then /^\s*\}/ else /^\s*:(?:end|else|andif|orif|case)/i
+    re = if state.dfnDepth then /^\s*\}/ else /^\s*:(?:end|else|andif|orif|case|caselist)/i
     state.inds[-1..][0] + config.indentUnit * !re.test textAfter
 
   fold: 'indent'
