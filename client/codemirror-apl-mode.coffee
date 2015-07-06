@@ -94,14 +94,16 @@ CodeMirror.defineMode 'apl', (config) ->
         ok = 0
         switch kw = stream.match(/\w*/)?[0]?.toLowerCase()
           # see https://github.com/jashkenas/coffeescript/issues/2014 for the "multiline when" syntax
-          when 'class', 'for', 'hold', 'if', 'interface', 'namespace', 'property', 'repeat', 'section', 'select'
-          ,    'trap', 'while', 'with'
+          when 'class', 'disposable', 'for', 'hold', 'if', 'interface', 'namespace'
+          ,    'property', 'repeat', 'section', 'select', 'trap', 'while', 'with'
             state.kws.push kw; state.inds.push stream.indentation(); ok = 1
           when 'end'
             ok = state.kws.length > 0; (if ok then state.kws.pop(); state.inds.pop()); ok
-          when 'endclass', 'endfor', 'endhold', 'endif', 'endinterface', 'endnamespace', 'endproperty', 'endrepeat'
-          ,    'endsection', 'endselect', 'endtrap', 'endwhile', 'endwith'
-            i = state.kws.lastIndexOf kw[3..]; ok = i == state.kws.length - 1 >= 0
+          when 'endclass', 'enddisposable', 'endfor', 'endhold', 'endif', 'endinterface', 'endnamespace'
+          ,    'endproperty', 'endrepeat', 'endsection', 'endselect', 'endtrap', 'endwhile', 'endwith'
+          ,    'until'
+            kw0 = if kw == 'until' then 'repeat' else kw[3..] # corresponding opening keyword
+            i = state.kws.lastIndexOf kw0; ok = i == state.kws.length - 1 >= 0
             (if ok then state.kws.splice i; state.inds.splice i); ok
           when 'else'
             ok = state.kws[-1..][0] in ['if', 'select', 'trap']
@@ -111,7 +113,9 @@ CodeMirror.defineMode 'apl', (config) ->
             ok = state.kws[-1..][0] == 'for'
           when 'case', 'caselist'
             ok = state.kws[-1..][0] in ['select', 'trap']
-          when 'access', 'base', 'continue', 'field', 'goto', 'include', 'leave', 'return', 'until'
+          when 'leave', 'continue'
+            ok = state.kws[-1..][0] in ['for', 'while', 'continue']
+          when 'access', 'base', 'field', 'goto', 'include', 'return'
             ok = 1
           when 'implements'
             stream.match /\s+\w+/; ok = 1
@@ -126,10 +130,10 @@ CodeMirror.defineMode 'apl', (config) ->
         else 'apl-glb'
       else 'apl-err'
 
-  electricInput: /(?::else|:end|:andif|:orif|:case|\})$/ # when the user enters one of these, a re-indent is triggered
+  electricInput: /:(?:end|else|andif|orif|case|until|\})$/ # when the user enters one of these, a re-indent is triggered
 
   indent: (state, textAfter) ->
-    re = if state.dfnDepth then /^\s*\}/ else /^\s*:(?:end|else|andif|orif|case|caselist)/i
+    re = if state.dfnDepth then /^\s*\}/ else /^\s*:(?:end|else|andif|orif|case|until)/i
     state.inds[-1..][0] + config.indentUnit * !re.test textAfter
 
   fold: 'indent'
