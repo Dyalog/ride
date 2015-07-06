@@ -10,11 +10,10 @@ require './demo'
 $ ->
   if D.nwjs
     zM = 11 # zoom level can be from -zM to zM inclusive
-    $ document
-      .on 'keydown', '*', 'ctrl+=', D.zoomIn    = -> prefs.zoom Math.min  zM, prefs.zoom() + 1; false
-      .on 'keydown', '*', 'ctrl+-', D.zoomOut   = -> prefs.zoom Math.max -zM, prefs.zoom() - 1; false
-      .on 'keydown', '*', 'ctrl+0', D.resetZoom = -> prefs.zoom 0; false
-      .on 'keydown', '*', 'ctrl+shift+=', D.zoomIn
+    $.extend CodeMirror.commands,
+      ZMI: -> prefs.zoom Math.min  zM, prefs.zoom() + 1; return
+      ZMO: -> prefs.zoom Math.max -zM, prefs.zoom() - 1; return
+      ZMR: -> prefs.zoom 0; return
     $('body').addClass "zoom#{prefs.zoom()}"
     prefs.zoom (z) ->
       for _, w of D.wins

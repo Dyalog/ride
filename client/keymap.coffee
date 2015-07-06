@@ -39,9 +39,6 @@ $.extend CodeMirror.commands,
   CNC: -> D.rideConnect();      return
   NEW: -> D.rideNewSession();   return
   QIT: -> D.quit();             return
-  ZMI: -> D.zoomIn();           return
-  ZMO: -> D.zoomOut();          return
-  ZMR: -> D.resetZoom();        return
 
   HLP: (cm) ->
     c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
