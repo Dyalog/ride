@@ -118,7 +118,11 @@ CodeMirror.defineMode 'apl', (config) ->
           when 'access', 'base', 'field', 'goto', 'include', 'return', 'using'
             ok = 1
           when 'implements'
-            stream.match /\s+\w+/; ok = 1
+            if x = stream.match(/\s+(\w+)/)?[1]
+              x = x.toLowerCase()
+              for y in ['constructor', 'destructor', 'method', 'trigger'] when x == y[...x.length] then ok = 1; break
+            else
+              ok = 1
         ok && 'apl-kw' || 'apl-err'
       else if c == '⎕' then (if stream.match(/[áa-z0-9]*/i)?[0].toLowerCase() in quadNames then 'apl-quad' else 'apl-err')
       else if c == '⍞' then 'apl-quad'
