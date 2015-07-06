@@ -35,9 +35,9 @@ CMDS = @CMDS = [
   ['ZMO', 'Decrease font size',       ['Ctrl--']]
   ['ZMR', 'Reset font size',          ['Ctrl-0']]
   ['DMR', 'Load demo file',           []]
-  ['DMN', 'Next line in demo',        ['Ctrl-Shift-N']]
-  ['DMP', 'Previous line in demo',    ['Ctrl-Shift-P']]
-  ['DMK', 'Toggle key display mode',  ['Ctrl-Shift-K']]
+  ['DMN', 'Next line in demo',        ['Shift-Ctrl-N']]
+  ['DMP', 'Previous line in demo',    ['Shift-Ctrl-P']]
+  ['DMK', 'Toggle key display mode',  ['Shift-Ctrl-K']]
 ]
 
 keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-del>×</a></span> "
