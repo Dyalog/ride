@@ -1,44 +1,8 @@
 prefs = require './prefs'
 {esc, join} = require './util'
+{cmds} = require './cmds'
 
 @name = 'Keys'
-
-CMDS = @CMDS = [
-#  code   description                 defaults                   important? (shown in kbd btn's tooltip)
-  ['QT',  'Quit (and lose changes)',  ['Shift-Esc'],             1]
-  ['TB',  'Tab between windows',      ['Ctrl-Tab'],              1]
-  ['BT',  'Back Tab between windows', ['Shift-Ctrl-Tab'],        1]
-  ['EP',  'Exit (and save changes)',  ['Esc'],                   1]
-  ['FD',  'Forward or Redo',          ['Shift-Ctrl-Enter'],      1]
-  ['BK',  'Backward or Undo',         ['Shift-Ctrl-Backspace'],  1]
-  ['SC',  'Search (in editors)',      ['Ctrl-F'],                1]
-  ['RP',  'Replace (in editors)',     ['Ctrl-G'],                1]
-  ['ED',  'Edit',                     ['Shift-Enter', 'Ctrl-E'], 1]
-  ['TC',  'Trace',                    ['Ctrl-Enter'],            1]
-  ['TL',  'Toggle localisation',      ['Ctrl-Up'],               1]
-  ['ER',  'Execute line',             ['Enter']]
-  ['WI',  'Weak interrupt',           ['Ctrl-Pause']]
-  ['SI',  'Strong interrupt',         []]
-  ['PRF', 'Show preferences',         ['Ctrl-P']]
-  ['NEW', 'New session',              ['Ctrl-N']]
-  ['CNC', 'Connect',                  []]
-  ['QIT', 'Quit',                     ['Ctrl-Q']]
-  ['HLP', 'Help',                     ['F1']]
-  ['ABT', 'About',                    ['Shift-F1']]
-  ['BP',  'Toggle breakpoint',        ['Ctrl-B']]
-  ['FLD', 'Toggle fold',              ['Ctrl-T']]
-  ['AO',  'Add comments',             []]
-  ['DO',  'Delete comments',          []]
-  ['AC',  'Align comments',           []]
-  ['LN',  'Toggle line numbers',      []]
-  ['ZMI', 'Increase font size',       ['Ctrl-=', 'Shift-Ctrl-=']]
-  ['ZMO', 'Decrease font size',       ['Ctrl--']]
-  ['ZMR', 'Reset font size',          ['Ctrl-0']]
-  ['DMR', 'Load demo file',           []]
-  ['DMN', 'Next line in demo',        ['Shift-Ctrl-N']]
-  ['DMP', 'Previous line in demo',    ['Shift-Ctrl-P']]
-  ['DMK', 'Toggle key display mode',  ['Shift-Ctrl-K']]
-]
 
 keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-del>×</a></span> "
 
@@ -46,7 +10,7 @@ keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-de
   $e.html """
     <div><input id=keys-search placeholder=Search></div>
     <div id=keys-table-wrapper>
-      <table>#{join CMDS.map ([code, desc]) ->
+      <table>#{join cmds.map ([code, desc]) ->
         "<tr><td>#{desc}<td class=keys-code>#{code}<td id=keys-#{code}>"
       }</table>
     </div>
@@ -95,7 +59,7 @@ getKeystroke = (callback) ->
 
 @load = ->
   h = prefs.keys()
-  for [code, desc, defaults] in CMDS
+  for [code, desc, defaults] in cmds
     $ "#keys-#{code}"
       .html join (h[code] || defaults).map keyHTML
       .append '<a href=# class=keys-add>+</a>'
@@ -104,19 +68,19 @@ getKeystroke = (callback) ->
 
 @save = ->
   h = {}
-  for [c, _, d] in CMDS
+  for [c, _, d] in cmds
     a = $("#keys-#{c} .keys-text").map(-> $(@).text()).toArray()
     if JSON.stringify(a) != JSON.stringify(d) then h[c] = a
   prefs.keys h; return
 
 prefs.keys updateKeys = (x) ->
   h = CodeMirror.keyMap.dyalog = fallthrough: 'dyalogDefault'
-  for [c, _, d] in CMDS then for k in x[c] || d then h[k] = c
+  for [c, _, d] in cmds then for k in x[c] || d then h[k] = c
   return
 updateKeys prefs.keys()
 
 updateDups = ->
   h = {} # maps keystrokes to DOM objects
-  for [c, _, d] in CMDS then $("#keys-#{c} .keys-text").each ->
+  for [c, _, d] in cmds then $("#keys-#{c} .keys-text").each ->
     k = $(@).text(); if h[k] then $(@).add(h[k]).addClass 'keys-dup' else $(@).removeClass 'keys-dup'; h[k] = @
   return

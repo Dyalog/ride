@@ -1,12 +1,12 @@
 require './menu'
 prefs = require './prefs'
 prefsUI = require './prefs-ui'
-prefsKeys = require './prefs-keys'
 {parseMenuDSL} = require './prefs-menu'
 {Editor} = require './editor'
 {Session} = require './session'
 keymap = require './keymap'
 {esc, delay, join} = require './util'
+{cmds} = require './cmds'
 
 class @IDE
   constructor: ->
@@ -132,7 +132,7 @@ class @IDE
         h = D.lbarTips[x] or [x, '']; requestTooltip e, h[0], keyText + h[1]; return
       .on 'mouseover', '.lbar-prefs', (e) ->
         h = prefs.keys(); s = ''
-        for [code, desc, defaults, important] in prefsKeys.CMDS when important
+        for [code, desc, defaults, important] in cmds when important
           pad = Array(Math.max 0, 25 - desc.length).join ' '
           ks = h[code] || defaults
           s += "#{code}: #{desc}:#{pad} #{ks[ks.length - 1] || 'none'}\n"
