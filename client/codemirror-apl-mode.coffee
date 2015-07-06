@@ -54,7 +54,7 @@ CodeMirror.defineMode 'apl', (config) ->
   token: (stream, state) ->
     if state.hdr
       delete state.hdr; stream.match /[^⍝\n\r]*/; s = stream.current()
-      if dfnHeader.test s
+      if /^\s*:/.test(s) || dfnHeader.test s
         stream.backUp s.length # re-tokenize without hdr
       else if /^\s*$/.test s
         delete state.vars
