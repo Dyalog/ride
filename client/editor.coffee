@@ -59,7 +59,9 @@ class @Editor
       keyMap: 'dyalog', extraKeys: {'Shift-Tab': 'indentLess', Tab: 'tabOrAutocomplete', Down: 'downOrXline'}
     @cm.dyalogCommands = @
     @cm.on 'cursorActivity', @cursorActivity.bind @
-    @cm.on 'gutterClick', (cm, l, gutter, event) => @cm.setCursor line: l, ch: 0; @BP(); return
+    @cm.on 'gutterClick', (cm, l, gutter, event) =>
+      if gutter in ['breakpoints', 'CodeMirror-linenumbers'] then @cm.setCursor line: l, ch: 0; @BP()
+      return
     @cm.on 'focus', => @focusTimestamp = +new Date; @ide.focusedWin = @; return
     onCodeMirrorDoubleClick @cm, (e) => @ED(); e.preventDefault(); e.stopPropagation(); return
     @autocomplete = autocompletion.setUp @
