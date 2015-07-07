@@ -30,7 +30,7 @@ squiggleDescriptions =
 
 ctid = 0 # backquote completion timeout id
 
-CodeMirror.keyMap.dyalogDefault = fallthrough: 'default', F1: 'HLP', End: 'goLineEndSmart'
+CodeMirror.keyMap.dyalogDefault = fallthrough: 'default', End: 'goLineEndSmart'
 CodeMirror.keyMap.dyalogDefault["'#{prefs.prefixKey()}'"] = 'BQC'
 
 $.extend CodeMirror.commands,
