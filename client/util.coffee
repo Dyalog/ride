@@ -11,6 +11,7 @@
 @qw = (s) -> s.split /[ \r\n]+/         # "quoted words" like in Perl
 @delay = (n, f) -> setTimeout f, n      # setTimeout⍨ is much more convenient than setTimeout
 @spc = (n) -> Array(n + 1).join ' '
+@last = (a) -> a[a.length - 1]
 
 htmlChars = '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&amp;', '"': '&quot;'
 @esc = (s) -> s.replace /[<>&'"]/g, (x) -> htmlChars[x]
