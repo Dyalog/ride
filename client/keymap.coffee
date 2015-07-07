@@ -117,7 +117,9 @@ bqChangeHandler = (cm, o) -> # o: changeObj
     if x == pk
       if c && cm.getLine(l)[c - 1] == pk then bqCleanUp cm; bqbqHint cm
     else
-      bq[x] && cm.replaceRange bq[x], {line: l, ch: c - 1}, {line: l, ch: c + 1}, 'D'
+      if bq[x]
+        cm.replaceRange bq[x], {line: l, ch: c - 1}, {line: l, ch: c + 1}, 'D'
+        if bq[x] == '∇' && /^\s*∇/.test cm.getLine l then cm.indentLine l, 'smart'
       bqCleanUp cm
   else
     bqCleanUp cm

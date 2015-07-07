@@ -43,6 +43,7 @@ escIdiom = (s) -> s.replace(/«(.*?)»|(.)/g, (_, g, g2) -> g ||= g2; ' *' + if 
 idiomsRE = ///^(?:#{idioms.sort((x, y) -> y.length - x.length).map(escIdiom).join '|'})///i
 
 INDENT_UNIT = 4 # todo: make it configurable
+INDENT_UNIT_FOR_METHODS = 2
 
 CodeMirror.defineMIME 'text/apl', 'apl'
 CodeMirror.defineMode 'apl', (config) ->
@@ -50,12 +51,12 @@ CodeMirror.defineMode 'apl', (config) ->
     hdr: 1      # are we at a location where a tradfn header can be expected?
     br: ''      # a stack of brackets (as a string) consisting of '{', '[', and '('
     dfnDepth: 0 # how many surrounding {} have we got?
-    kw: []      # a stack of keywords, e.g. ['if', 'for']
+    kw: ['']    # a stack of keywords, e.g. ['if', 'for']
     oInd: [0]   # "outer indents" -- a stack of the indents of { :if :for etc
     iInd: [0]   # "inner indents" -- a stack of the indents within the bodies of { :if :for etc
 
   token: (stream, state) ->
-    stream.sol() && state.iInd[state.iInd.length - 1] = stream.indentation()
+    if stream.sol() && !stream.match /\s*$/, false then state.iInd[state.iInd.length - 1] = stream.indentation()
     if state.hdr
       delete state.hdr; stream.match /[^⍝\n\r]*/; s = stream.current()
       if /^\s*:/.test(s) || dfnHeader.test s
@@ -95,7 +96,13 @@ CodeMirror.defineMode 'apl', (config) ->
       else if /[\.∘⍤⍣⍠]/.test c then 'apl-op2'
       else if /[\+\-×÷⌈⌊\|⍳\?\*⍟○!⌹<≤=>≥≠≡≢∊⍷∪∩~∨∧⍱⍲⍴,⍪⌽⊖⍉↑↓⊂⊃⌷⍋⍒⊤⊥⍕⍎⊣⊢→]/.test c then 'apl-fn'
       else if state.dfnDepth && /[⍺⍵∇:]/.test c then "apl-dfn apl-dfn#{state.dfnDepth}"
-      else if c == '∇' then state.hdr = 1; 'apl-trad'
+      else if c == '∇'
+        if (i = state.kw.lastIndexOf '∇') >= 0
+          state.kw.splice i; state.iInd.splice i; state.oInd.splice i
+        else
+          ind = stream.indentation()
+          state.kw.push '∇'; state.oInd.push ind; state.iInd.push ind + INDENT_UNIT_FOR_METHODS
+        state.hdr = 1; 'apl-trad'
       else if c == ':'
         ok = 0
         switch kw = stream.match(/\w*/)?[0]?.toLowerCase()
@@ -105,13 +112,13 @@ CodeMirror.defineMode 'apl', (config) ->
             state.kw.push kw; ind = stream.indentation(); state.oInd.push ind; state.iInd.push ind + INDENT_UNIT
             ok = 1
           when 'end'
-            ok = state.kw.length > 0; (if ok then state.kw.pop(); state.iInd.pop(); state.oInd.pop()); ok
+            ok = state.kw.length > 0; (if ok then state.kw.pop(); state.oInd.pop(); state.iInd.pop()); ok
           when 'endclass', 'enddisposable', 'endfor', 'endhold', 'endif', 'endinterface', 'endnamespace'
           ,    'endproperty', 'endrepeat', 'endsection', 'endselect', 'endtrap', 'endwhile', 'endwith'
           ,    'until'
             kw0 = if kw == 'until' then 'repeat' else kw[3..] # corresponding opening keyword
             i = state.kw.lastIndexOf kw0; ok = i == state.kw.length - 1 >= 0
-            (if ok then state.kw.splice i; state.iInd.splice i; state.oInd.splice i); ok
+            (if ok then state.kw.splice i; state.oInd.splice i; state.iInd.splice i); ok
           when 'else'
             ok = state.kw[-1..][0] in ['if', 'select', 'trap']
           when 'elseif', 'andif', 'orif'
@@ -141,10 +148,14 @@ CodeMirror.defineMode 'apl', (config) ->
         else 'apl-glb'
       else 'apl-err'
 
-  electricInput: /:(?:end|else|andif|orif|case|until|\})$/ # when the user enters one of these, a re-indent is triggered
+  # when the user enters one of these, a re-indent is triggered
+  electricInput: /(?::end|:else|:andif|:orif|:case|:until|\}|∇)$/
 
   indent: (state, textAfter) ->
-    re = if state.dfnDepth then /^\s*\}/ else /^\s*:(?:end|else|andif|orif|case|until)/i
-    if re.test textAfter then state.oInd[-1..][0] else state.iInd[-1..][0]
+    if /^\s*∇/.test textAfter
+      if (i = state.kw.lastIndexOf '∇') >= 0 then state.oInd[i] else state.iInd[-1..][0]
+    else
+      re = if state.dfnDepth then /^\s*\}/ else /^\s*:(?:end|else|andif|orif|case|until)/i
+      if re.test textAfter then state.oInd[-1..][0] else state.iInd[-1..][0]
 
   fold: 'indent'
