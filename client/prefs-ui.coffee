@@ -24,14 +24,16 @@ safe = (s) -> s.toLowerCase().replace /[^a-z\-]/g, '-' # make a string suitable 
 
 $d = null # dialog instance, lazily initialized
 
-ok = ->
+ok = -> apply(); $d.dialog 'close'; false
+
+apply = ->
   for t in tabs when v = t.validate?()
     delay 1, ->
       $.alert v.message, 'Error', if v.element then -> v.element.focus(); return
       return
     return
   for t in tabs then t.save?()
-  $d.dialog 'close'; false
+  false
 
 @showDialog = (tabName) ->
   if !$d
@@ -50,7 +52,8 @@ ok = ->
         autoOpen: 0, title: 'Preferences', width: 600, minWidth: 600, height: 450, minHeight: 450
         resize: -> (for t in tabs when t.resize then t.resize()); return
         buttons: [
-          {text: 'OK', click: ok}
+          {text: 'OK',     click: ok}
+          {text: 'Apply',  click: apply}
           {text: 'Cancel', click: -> $d.dialog 'close'; return}
         ]
     for t in tabs then t.init? $ "#prefs-tab-#{safe t.name}"
