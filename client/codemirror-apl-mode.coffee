@@ -56,7 +56,8 @@ CodeMirror.defineMode 'apl', (config) ->
     iInd: [0]   # "inner indents" -- a stack of the indents within the bodies of { :if :for etc
 
   token: (stream, state) ->
-    if stream.sol() && !stream.match /\s*$/, false then state.iInd[state.iInd.length - 1] = stream.indentation()
+    if stream.sol() && !stream.match /^\s*(:|$)/, false
+      state.iInd[state.iInd.length - 1] = stream.indentation()
     if state.hdr
       delete state.hdr; stream.match /[^⍝\n\r]*/; s = stream.current()
       if /^\s*:/.test(s) || dfnHeader.test s
