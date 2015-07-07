@@ -15,6 +15,7 @@ prefs = require './prefs'
 tabs = [
   require './prefs-glyphs'
   require './prefs-keys'
+  require './prefs-code'
   require './prefs-colours'
   require './prefs-title'
   require './prefs-menu'

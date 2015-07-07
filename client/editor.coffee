@@ -41,6 +41,8 @@ EDITOR_HTML = do ->
     <div class=ride-win></div>
   """
 
+ACB_VALUE = pairs: '()[]{}', explode: '{}' # value for CodeMirror's "autoCloseBrackets" option
+
 class @Editor
   constructor: (@ide, e, opts) ->
     @$e = $(e).html EDITOR_HTML
@@ -54,7 +56,8 @@ class @Editor
     @cm = new CodeMirror @$e.find('.ride-win')[0],
       lineNumbers: !!if @isTracer then prefs.lineNumsTracer() else prefs.lineNumsEditor()
       firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
-      indentUnit: 4, scrollButtonHeight: 12, matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
+      indentUnit: 4, scrollButtonHeight: 12, matchBrackets: true
+      autoCloseBrackets: !!prefs.autoCloseBrackets() && ACB_VALUE
       foldGutter: true, gutters: ['breakpoints', 'CodeMirror-linenumbers', 'CodeMirror-foldgutter']
       keyMap: 'dyalog', extraKeys: {'Shift-Tab': 'indentLess', Tab: 'tabOrAutocomplete', Down: 'downOrXline'}
     @cm.dyalogCommands = @

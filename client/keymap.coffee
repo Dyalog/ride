@@ -3,6 +3,7 @@ prefs = require './prefs'
 about = require './about'
 {inherit, cat, dict, chr, ord, zip, join, delay, qw} = require './util'
 prefsUI = require './prefs-ui'
+{ACB_VALUE} = require './editor'
 
 window.onhelp = -> false # prevent IE from acting silly on F1
 
@@ -63,8 +64,7 @@ $.extend CodeMirror.commands,
       # Make it possible to use `( etc -- remember the original value of
       # autoCloseBrackets, set it temporarily to "false", and restore it when the
       # menu is closed:
-      cm.setOption 'autoCloseBrackets0', cm.getOption 'autoCloseBrackets'
-      cm.setOption 'autoCloseBrackets', false
+      cm.setOption 'autoCloseBrackets', false # this is temporary until bqCleanUp()
       cm.on 'change', bqChangeHandler; cm.dyalogBQ = 1
       c0 = cm.getCursor(); cm.replaceSelection prefs.prefixKey(), 'end'
       ctid = delay 500, ->
@@ -83,7 +83,6 @@ $.extend CodeMirror.commands,
                   text: '', hint: bqbqHint, render: (e) -> e.innerHTML = "  #{pk}#{pk} <i>completion by name</i>"; return
                 else
                   v = bq[k]; text: v, render: (e) -> $(e).text "#{v} #{pk}#{k} #{squiggleDescriptions[v] || ''}  "; return
-              CodeMirror.on data, 'close', -> bqCleanUp cm; return
               data
         else
           bqCleanUp cm
@@ -128,8 +127,7 @@ bqChangeHandler = (cm, o) -> # o: changeObj
 bqCleanUp = (cm) ->
   cm.off 'change', bqChangeHandler; delete cm.dyalogBQ
   clearTimeout ctid; cm.state.completionActive?.close?()
-  cm.setOption 'autoCloseBrackets', cm.getOption 'autoCloseBrackets0'
-  cm.setOption 'autoCloseBrackets0', null
+  cm.setOption 'autoCloseBrackets', !!prefs.autoCloseBrackets() && ACB_VALUE
   return
 
 bqbqHint = (cm) ->

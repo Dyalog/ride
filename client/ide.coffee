@@ -2,7 +2,7 @@ require './menu'
 prefs = require './prefs'
 prefsUI = require './prefs-ui'
 {parseMenuDSL} = require './prefs-menu'
-{Editor} = require './editor'
+{Editor, ACB_VALUE} = require './editor'
 {Session} = require './session'
 keymap = require './keymap'
 {esc, delay, join} = require './util'
@@ -163,6 +163,9 @@ class @IDE
     catch e
       console?.error? e; $.alert 'Invalid menu configuration -- the default menu will be used instead', 'Warning'
       D.installMenu parseMenuDSL prefs.menu.getDefault()
+    prefs.autoCloseBrackets (x) ->
+      for _, widget of ide.wins then widget.cm?.setOption 'autoCloseBrackets', !!x && ACB_VALUE
+      return
     return
 
   setHostAndPort: (@host, @port) -> @updateTitle(); return
