@@ -4,6 +4,8 @@ prefs = require './prefs'
 {letter} = require './codemirror-apl-mode'
 {onCodeMirrorDoubleClick, delay, spc} = require './util'
 
+@ACB_VALUE = ACB_VALUE = pairs: '()[]{}', explode: '{}' # value for CodeMirror's "autoCloseBrackets" option when on
+
 EDITOR_HTML = do ->
   b = (cssClasses, title) -> "<a href=# class='#{cssClasses} tb-button' title='#{title}'></a>"
   """
@@ -40,8 +42,6 @@ EDITOR_HTML = do ->
     </div>
     <div class=ride-win></div>
   """
-
-ACB_VALUE = pairs: '()[]{}', explode: '{}' # value for CodeMirror's "autoCloseBrackets" option
 
 class @Editor
   constructor: (@ide, e, opts) ->
