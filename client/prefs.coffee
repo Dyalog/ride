@@ -50,7 +50,7 @@ prefs = @
       Redo                     =RDO {!mac&&!browser}
       -                             {!mac&&!browser}
       Preferences              =PRF {!mac}
-      Select All               =selectAll {mac}
+      Select All               =SA  {mac}
     _View
       Show Language Bar        =LBR
       Float New Editors        =FLT

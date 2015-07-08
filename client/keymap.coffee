@@ -35,6 +35,7 @@ CodeMirror.keyMap.dyalogDefault = fallthrough: 'default', End: 'goLineEndSmart'
 CodeMirror.keyMap.dyalogDefault["'#{prefs.prefixKey()}'"] = 'BQC'
 
 $.extend CodeMirror.commands,
+  SA: (cm) -> CodeMirror.commands.selectAll cm; return
   PRF: -> prefsUI.showDialog(); return
   ABT: -> about.showDialog();   return
   CNC: -> D.rideConnect();      return
