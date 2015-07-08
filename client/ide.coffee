@@ -166,6 +166,10 @@ class @IDE
     prefs.autoCloseBrackets (x) ->
       for _, widget of ide.wins then widget.cm?.setOption 'autoCloseBrackets', !!x && ACB_VALUE
       return
+    prefs.indent (x) ->
+      for _, widget of ide.wins when widget.id && widget.cm
+        widget.cm.setOption 'smartIndent', x >= 0
+        widget.cm.setOption 'indentUnit', x
     return
 
   setHostAndPort: (@host, @port) -> @updateTitle(); return

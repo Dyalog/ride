@@ -1,4 +1,5 @@
 {qw, last} = require './util'
+prefs = require './prefs'
 
 # https://codemirror.net/doc/manual.html#modeapi
 
@@ -42,8 +43,9 @@ escRE = (s) -> s.replace /[\(\)\[\]\{\}\.\?\+\*\/\\\^\$\|]/g, (x) -> "\\#{x}"
 escIdiom = (s) -> s.replace(/«(.*?)»|(.)/g, (_, g, g2) -> g ||= g2; ' *' + if g == '_' then "' '" else escRE g)[2..]
 idiomsRE = ///^(?:#{idioms.sort((x, y) -> y.length - x.length).map(escIdiom).join '|'})///i
 
-INDENT_UNIT = 4 # todo: make it configurable
-INDENT_UNIT_FOR_METHODS = 2
+sw = 4; swm = 2 # default indent unit and indent unit for methods; keep these in sync with prefs
+do update = -> sw = prefs.indent(); swm = prefs.indentMethods(); swm < 0 && swm = sw; return
+prefs.indent update; prefs.indentMethods update
 
 dfnDepth = (a) -> r = 0; (for x in a when x.t == '{' then r++); r
 
@@ -82,7 +84,7 @@ CodeMirror.defineMode 'apl', (config) ->
         when '⍬' then 'apl-zld'
         when '(' then a.push t: c, oi: la.oi, ii: la.ii; 'apl-par'
         when '[' then a.push t: c, oi: la.oi, ii: la.ii; 'apl-sqbr'
-        when '{' then a.push t: c, oi: n, ii: n + INDENT_UNIT; "apl-dfn#{dfnDepth a} apl-dfn"
+        when '{' then a.push t: c, oi: n, ii: n + sw; "apl-dfn#{dfnDepth a} apl-dfn"
         when ')' then (if la.t == '(' then a.pop(); 'apl-par'  else 'apl-err')
         when ']' then (if la.t == '[' then a.pop(); 'apl-sqbr' else 'apl-err')
         when '}' then (if la.t == '{' then a.pop(); "apl-dfn apl-dfn#{1 + dfnDepth a}" else 'apl-err')
@@ -96,7 +98,7 @@ CodeMirror.defineMode 'apl', (config) ->
             "apl-dfn apl-dfn#{dd}"
           else if c == '∇'
             i = a.length - 1; while i && a[i].t != '∇' then i--
-            if i then a.splice i else a.push t: '∇', oi: n, ii: n + INDENT_UNIT_FOR_METHODS
+            if i then a.splice i else a.push t: '∇', oi: n, ii: n + swm
             h.hdr = 1; 'apl-trad'
           else if c == ':'
             ok = 0
@@ -104,7 +106,7 @@ CodeMirror.defineMode 'apl', (config) ->
               # see https://github.com/jashkenas/coffeescript/issues/2014 for the "multiline when" syntax
               when 'class', 'disposable', 'for', 'hold', 'if', 'interface', 'namespace'
               ,    'property', 'repeat', 'section', 'select', 'trap', 'while', 'with'
-                a.push t: kw, oi: n, ii: n + INDENT_UNIT; ok = 1
+                a.push t: kw, oi: n, ii: n + sw; ok = 1
               when 'end' then ok = a.length > 1 && la.t != '∇'; ok && a.pop()
               when 'endclass', 'enddisposable', 'endfor', 'endhold', 'endif', 'endinterface', 'endnamespace'
               ,    'endproperty', 'endrepeat', 'endsection', 'endselect', 'endtrap', 'endwhile', 'endwith'
