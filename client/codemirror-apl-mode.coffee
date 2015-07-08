@@ -83,12 +83,12 @@ CodeMirror.defineMode 'apl', (config) ->
         when '(' then a.push t: c, oi: la.oi, ii: la.ii; 'apl-par'
         when '[' then a.push t: c, oi: la.oi, ii: la.ii; 'apl-sqbr'
         when '{' then a.push t: c, oi: n, ii: n + INDENT_UNIT; "apl-dfn#{dfnDepth a} apl-dfn"
-        when ')' then (if '(' == la.t then a.pop(); 'apl-par'  else 'apl-err')
-        when ']' then (if '[' == la.t then a.pop(); 'apl-sqbr' else 'apl-err')
-        when '}' then (if '{' == la.t then a.pop(); "apl-dfn apl-dfn#{1 + dfnDepth a}" else 'apl-err')
-        when ';' then 'apl-semi'
-        when '⋄' then 'apl-diam'
-        when '⎕' then (if stream.match(/[áa-z0-9]*/i)?[0].toLowerCase() in quadNames then 'apl-quad' else 'apl-err')
+        when ')' then (if la.t == '(' then a.pop(); 'apl-par'  else 'apl-err')
+        when ']' then (if la.t == '[' then a.pop(); 'apl-sqbr' else 'apl-err')
+        when '}' then (if la.t == '{' then a.pop(); "apl-dfn apl-dfn#{1 + dfnDepth a}" else 'apl-err')
+        when ';' then la.t == '[' && 'apl-semi' || 'apl-err'
+        when '⋄' then la.t !in ['(', '['] && 'apl-diam' || 'apl-err'
+        when '⎕' then stream.match(/[áa-z0-9]*/i)?[0].toLowerCase() in quadNames && 'apl-quad' || 'apl-err'
         when '⍞' then 'apl-quad'
         when '#' then 'apl-ns'
         when '⍺','⍵','∇',':'
