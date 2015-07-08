@@ -45,110 +45,109 @@ idiomsRE = ///^(?:#{idioms.sort((x, y) -> y.length - x.length).map(escIdiom).joi
 INDENT_UNIT = 4 # todo: make it configurable
 INDENT_UNIT_FOR_METHODS = 2
 
+dfnDepth = (a) -> r = 0; (for x in a when x.t == '{' then r++); r
+
 CodeMirror.defineMIME 'text/apl', 'apl'
 CodeMirror.defineMode 'apl', (config) ->
   startState: ->
-    hdr: 1      # are we at a location where a tradfn header can be expected?
-    br: ''      # a stack of brackets (as a string) consisting of '{', '[', and '('
-    dfnDepth: 0 # how many surrounding {} have we got?
-    kw: ['']    # a stack of keywords, e.g. ['if', 'for']
-    oi: [0]     # "outer indents" -- a stack of the indents of { :if :for etc
-    ii: [0]     # "inner indents" -- a stack of the indents within the bodies of { :if :for etc
+    hdr: 1  # are we at a location where a tradfn header can be expected?
+    a: [    # stack of objects with the following properties
+      t: '' #   t:  the opening token -- a keyword (without the colon) or '{', '[', '(', '∇'
+      oi: 0 #   oi: outer indent -- the indent of the opening token's line
+      ii: 0 #   ii: inner indent -- the indent of the block's body; it can be adjusted later
+    ]
+    # vars: # local names in a tradfn
 
   token: (stream, h) -> # h:state
-    if stream.sol() && !stream.match /^\s*(:|$)/, false then h.ii[h.ii.length - 1] = stream.indentation()
+    {a} = h; la = last a; n = stream.indentation()
+    if stream.sol() && !stream.match /^\s*(:|∇|$)/, false then a[a.length - 1] = $.extend {ii: n}, la
     if h.hdr
       delete h.hdr; stream.match /[^⍝\n\r]*/; s = stream.current()
       if /^\s*:/.test(s) || dfnHeader.test s
-        stream.backUp s.length # re-tokenize without hdr
+        stream.backUp s.length
       else if /^\s*$/.test s
         delete h.vars
       else
         h.vars = s.split notName
       'apl-trad'
-    else if stream.match idiomsRE
-      'apl-idm'
-    else if stream.match /^¯?(?:\d*\.)?\d+(?:e¯?\d+)?(?:j¯?(?:\d*\.)?\d+(?:e¯?\d+)?)?/i
-      'apl-num'
+    else if stream.match idiomsRE then 'apl-idm'
+    else if stream.match /^¯?(?:\d*\.)?\d+(?:e¯?\d+)?(?:j¯?(?:\d*\.)?\d+(?:e¯?\d+)?)?/i then 'apl-num'
+    else if !(c = stream.next()) then null
     else
-      c = stream.next()
-      if !c then null
-      else if /\s/.test c then stream.eatSpace(); null
-      else if c == '⍝' then stream.skipToEnd(); 'apl-com'
-      else if c == '←' then 'apl-asgn'
-      else if c == "'" then (if stream.match /^(?:[^'\r\n]|'')*'/ then 'apl-str' else stream.skipToEnd(); 'apl-err')
-      else if c == '⍬' then 'apl-zld'
-      else if c == '(' then h.br += c; 'apl-par'
-      else if c == '[' then h.br += c; 'apl-sqbr'
-      else if c == '{'
-        h.br += c; n = stream.indentation(); h.oi.push n; h.ii.push n + INDENT_UNIT
-        "apl-dfn#{++h.dfnDepth} apl-dfn"
-      else if c == ')' then (if '(' == last h.br then h.br = h.br[...-1]; 'apl-par'  else 'apl-err')
-      else if c == ']' then (if '[' == last h.br then h.br = h.br[...-1]; 'apl-sqbr' else 'apl-err')
-      else if c == '}'
-        if '{' == last h.br
-          h.br = h.br[...-1]; h.oi.pop(); h.ii.pop(); "apl-dfn apl-dfn#{h.dfnDepth--}"
+      switch c
+        when ' ' then stream.eatSpace(); null
+        when '⍝' then stream.skipToEnd(); 'apl-com'
+        when '←' then 'apl-asgn'
+        when "'" then (if stream.match /^(?:[^'\r\n]|'')*'/ then 'apl-str' else stream.skipToEnd(); 'apl-err')
+        when '⍬' then 'apl-zld'
+        when '(' then a.push t: c, oi: la.oi, ii: la.ii; 'apl-par'
+        when '[' then a.push t: c, oi: la.oi, ii: la.ii; 'apl-sqbr'
+        when '{' then a.push t: c, oi: n, ii: n + INDENT_UNIT; "apl-dfn#{dfnDepth a} apl-dfn"
+        when ')' then (if '(' == la.t then a.pop(); 'apl-par'  else 'apl-err')
+        when ']' then (if '[' == la.t then a.pop(); 'apl-sqbr' else 'apl-err')
+        when '}' then (if '{' == la.t then a.pop(); "apl-dfn apl-dfn#{1 + dfnDepth a}" else 'apl-err')
+        when ';' then 'apl-semi'
+        when '⋄' then 'apl-diam'
+        when '⎕' then (if stream.match(/[áa-z0-9]*/i)?[0].toLowerCase() in quadNames then 'apl-quad' else 'apl-err')
+        when '⍞' then 'apl-quad'
+        when '#' then 'apl-ns'
+        when '⍺','⍵','∇',':'
+          if dd = dfnDepth a
+            "apl-dfn apl-dfn#{dd}"
+          else if c == '∇'
+            i = a.length - 1; while i && a[i].t != '∇' then i--
+            if i then a.splice i else a.push t: '∇', oi: n, ii: n + INDENT_UNIT_FOR_METHODS
+            h.hdr = 1; 'apl-trad'
+          else if c == ':'
+            ok = 0
+            switch kw = stream.match(/\w*/)?[0]?.toLowerCase()
+              # see https://github.com/jashkenas/coffeescript/issues/2014 for the "multiline when" syntax
+              when 'class', 'disposable', 'for', 'hold', 'if', 'interface', 'namespace'
+              ,    'property', 'repeat', 'section', 'select', 'trap', 'while', 'with'
+                a.push t: kw, oi: n, ii: n + INDENT_UNIT; ok = 1
+              when 'end' then ok = a.length > 1 && la.t != '∇'; ok && a.pop()
+              when 'endclass', 'enddisposable', 'endfor', 'endhold', 'endif', 'endinterface', 'endnamespace'
+              ,    'endproperty', 'endrepeat', 'endsection', 'endselect', 'endtrap', 'endwhile', 'endwith'
+              ,    'until'
+                kw0 = if kw == 'until' then 'repeat' else kw[3..] # corresponding opening keyword
+                ok = la.t == kw0
+                if ok
+                  a.pop()
+                else
+                  i = a.length - 1; while i && a[i].t != kw0 then i--
+                  if i then a.splice i
+              when 'else'                    then ok = la.t in ['if', 'select', 'trap']
+              when 'elseif', 'andif', 'orif' then ok = la.t == 'if'
+              when 'in', 'ineach'            then ok = la.t == 'for'
+              when 'case', 'caselist'        then ok = la.t in ['select', 'trap']
+              when 'leave', 'continue'       then ok = la.t in ['for', 'while', 'continue']
+              when 'access', 'base', 'field', 'goto', 'include', 'return', 'using' then ok = 1
+              when 'implements'
+                if x = stream.match(/\s+(\w+)/)?[1]
+                  x = x.toLowerCase()
+                  for y in ['constructor', 'destructor', 'method', 'trigger'] when x == y[...x.length] then ok = 1; break
+                else
+                  ok = 1
+            ok && 'apl-kw' || 'apl-err'
         else
-          'apl-err'
-      else if c == ';' then 'apl-semi'
-      else if c == '⋄' then 'apl-diam'
-      else if /[\/⌿\\⍀¨⌸⍨⌶]/.test c then 'apl-op1'
-      else if /[\.∘⍤⍣⍠]/.test c then 'apl-op2'
-      else if /[\+\-×÷⌈⌊\|⍳\?\*⍟○!⌹<≤=>≥≠≡≢∊⍷∪∩~∨∧⍱⍲⍴,⍪⌽⊖⍉↑↓⊂⊃⌷⍋⍒⊤⊥⍕⍎⊣⊢→]/.test c then 'apl-fn'
-      else if h.dfnDepth && /[⍺⍵∇:]/.test c then "apl-dfn apl-dfn#{h.dfnDepth}"
-      else if c == '∇'
-        if (i = h.kw.lastIndexOf '∇') >= 0
-          h.kw.splice i; h.ii.splice i; h.oi.splice i
-        else
-          n = stream.indentation()
-          h.kw.push '∇'; h.oi.push n; h.ii.push n + INDENT_UNIT_FOR_METHODS
-        h.hdr = 1; 'apl-trad'
-      else if c == ':'
-        ok = 0
-        switch kw = stream.match(/\w*/)?[0]?.toLowerCase()
-          # see https://github.com/jashkenas/coffeescript/issues/2014 for the "multiline when" syntax
-          when 'class', 'disposable', 'for', 'hold', 'if', 'interface', 'namespace'
-          ,    'property', 'repeat', 'section', 'select', 'trap', 'while', 'with'
-            h.kw.push kw; n = stream.indentation(); h.oi.push n; h.ii.push n + INDENT_UNIT; ok = 1
-          when 'end'
-            ok = h.kw.length > 1 && last(h.kw) != '∇'; (if ok then h.kw.pop(); h.oi.pop(); h.ii.pop()); ok
-          when 'endclass', 'enddisposable', 'endfor', 'endhold', 'endif', 'endinterface', 'endnamespace'
-          ,    'endproperty', 'endrepeat', 'endsection', 'endselect', 'endtrap', 'endwhile', 'endwith'
-          ,    'until'
-            kw0 = if kw == 'until' then 'repeat' else kw[3..] # corresponding opening keyword
-            i = h.kw.lastIndexOf kw0; ok = i == h.kw.length - 1 >= 0
-            (if ok then h.kw.splice i; h.oi.splice i; h.ii.splice i); ok
-          when 'else'                    then ok = last(h.kw) in ['if', 'select', 'trap']
-          when 'elseif', 'andif', 'orif' then ok = last(h.kw) == 'if'
-          when 'in', 'ineach'            then ok = last(h.kw) == 'for'
-          when 'case', 'caselist'        then ok = last(h.kw) in ['select', 'trap']
-          when 'leave', 'continue'       then ok = last(h.kw) in ['for', 'while', 'continue']
-          when 'access', 'base', 'field', 'goto', 'include', 'return', 'using' then ok = 1
-          when 'implements'
-            if x = stream.match(/\s+(\w+)/)?[1]
-              x = x.toLowerCase()
-              for y in ['constructor', 'destructor', 'method', 'trigger'] when x == y[...x.length] then ok = 1; break
-            else
-              ok = 1
-        ok && 'apl-kw' || 'apl-err'
-      else if c == '⎕' then (if stream.match(/[áa-z0-9]*/i)?[0].toLowerCase() in quadNames then 'apl-quad' else 'apl-err')
-      else if c == '⍞' then 'apl-quad'
-      else if c == '#' then 'apl-ns'
-      else if name0.test c
-        stream.match name1; x = stream.current()
-        if !h.dfnDepth && stream.match /:/ then 'apl-lbl'
-        else if h.dfnDepth || h.vars && x in h.vars then 'apl-var'
-        else 'apl-glb'
-      else 'apl-err'
+          if name0.test c
+            stream.match name1; x = stream.current(); dd = dfnDepth a
+            if !dd && stream.match /:/ then 'apl-lbl' else if dd || h.vars && x in h.vars then 'apl-var' else 'apl-glb'
+          else if /[\+\-×÷⌈⌊\|⍳\?\*⍟○!⌹<≤=≥>≠≡≢∊⍷∪∩~∧∨⍲⍱⍴,⍪⌽⊖⍉↑↓⊂⊃⌷⍋⍒⊤⊥⍕⍎⊣⊢→]/.test c then 'apl-fn'
+          else if /[\/\\⌿⍀¨⍨⌸⌶]/.test c then 'apl-op1'
+          else if /[\.∘⍤⍣⍠]/.test c then 'apl-op2'
+          else 'apl-err'
 
   # when the user enters one of these, a re-indent is triggered
   electricInput: /(?::end|:else|:andif|:orif|:case|:until|\}|∇)$/
 
   indent: (h, s) -> # h:state, s:textAfter
+    {a} = h
     if /^\s*∇/.test s
-      if (i = h.kw.lastIndexOf '∇') >= 0 then h.oi[i] else last h.ii
+      i = a.length - 1; while i && a[i].t != '∇' then i--
+      if i then a[i].oi else last(a).ii
     else
-      re = if h.dfnDepth then /^\s*\}/ else /^\s*:(?:end|else|andif|orif|case|until)/i
-      last if re.test s then h.oi else h.ii
+      re = dfnDepth(a) && /^\s*\}/ || /^\s*:(?:end|else|andif|orif|case|until)/i
+      if re.test s then last(a).oi else last(a).ii
 
   fold: 'indent'
