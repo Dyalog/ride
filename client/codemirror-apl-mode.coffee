@@ -121,7 +121,8 @@ CodeMirror.defineMode 'apl', (config) ->
               when 'in', 'ineach'            then ok = la.t == 'for'
               when 'case', 'caselist'        then ok = la.t in ['select', 'trap']
               when 'leave', 'continue'       then ok = la.t in ['for', 'while', 'continue']
-              when 'access', 'base', 'field', 'goto', 'include', 'return', 'using' then ok = 1
+              when 'access'                  then ok = la.t in ['class', '∇']; stream.match /(?:\s+\w+)+/; ok = 1
+              when 'base', 'field', 'goto', 'include', 'return', 'using' then ok = 1
               when 'implements'
                 if x = stream.match(/\s+(\w+)/)?[1]
                   x = x.toLowerCase()
@@ -139,15 +140,18 @@ CodeMirror.defineMode 'apl', (config) ->
           else 'apl-err'
 
   # when the user enters one of these, a re-indent is triggered
-  electricInput: /(?::end|:else|:andif|:orif|:case|:until|\}|∇)$/
+  electricInput: /(?::end|:else|:andif|:orif|:case|:until|:access|\}|∇)$/
 
   indent: (h, s) -> # h:state, s:textAfter
-    {a} = h
-    if /^\s*∇/.test s
+    {a} = h; la = last a
+    if dfnDepth a
+      if /^\s*\}/.test s then la.oi else la.ii
+    else if /^\s*∇/.test s
       i = a.length - 1; while i && a[i].t != '∇' then i--
-      if i then a[i].oi else last(a).ii
+      if i then a[i].oi else la.ii
+    else if /^\s*:access/i.test s
+      if la.t == 'class' then la.oi else la.ii
     else
-      re = dfnDepth(a) && /^\s*\}/ || /^\s*:(?:end|else|andif|orif|case|until)/i
-      if re.test s then last(a).oi else last(a).ii
+      if /^\s*:(?:end|else|andif|orif|case|until)/i.test s then la.oi else la.ii
 
   fold: 'indent'
