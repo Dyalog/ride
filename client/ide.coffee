@@ -164,12 +164,11 @@ class @IDE
       console?.error? e; $.alert 'Invalid menu configuration -- the default menu will be used instead', 'Warning'
       D.installMenu parseMenuDSL prefs.menu.getDefault()
     prefs.autoCloseBrackets (x) ->
-      for _, widget of ide.wins then widget.cm?.setOption 'autoCloseBrackets', !!x && ACB_VALUE
+      for _, w of ide.wins then w.cm?.setOption 'autoCloseBrackets', !!x && ACB_VALUE
       return
     prefs.indent (x) ->
-      for _, widget of ide.wins when widget.id && widget.cm
-        widget.cm.setOption 'smartIndent', x >= 0
-        widget.cm.setOption 'indentUnit', x
+      for _, w of ide.wins when w.id && w.cm then w.cm.setOption 'smartIndent', x >= 0; w.cm.setOption 'indentUnit', x
+      return
     return
 
   setHostAndPort: (@host, @port) -> @updateTitle(); return

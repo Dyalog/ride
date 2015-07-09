@@ -56,11 +56,11 @@ class @Editor
     @cm = new CodeMirror @$e.find('.ride-win')[0],
       lineNumbers: !!if @isTracer then prefs.lineNumsTracer() else prefs.lineNumsEditor()
       firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
-      smartIndent: prefs.indent >= 0, indentUnit: prefs.indent()
-      scrollButtonHeight: 12, matchBrackets: true
+      smartIndent: prefs.indent() >= 0, indentUnit: prefs.indent(), scrollButtonHeight: 12, matchBrackets: true
       autoCloseBrackets: !!prefs.autoCloseBrackets() && ACB_VALUE
       foldGutter: true, gutters: ['breakpoints', 'CodeMirror-linenumbers', 'CodeMirror-foldgutter']
       keyMap: 'dyalog', extraKeys: {'Shift-Tab': 'indentLess', Tab: 'tabOrAutocomplete', Down: 'downOrXline'}
+      # Some options of @cm can be set from ide.coffee when the corresponding pref changes.
     @cm.dyalogCommands = @
     @cm.on 'cursorActivity', @cursorActivity.bind @
     @cm.on 'gutterClick', (cm, l, gutter, event) =>
