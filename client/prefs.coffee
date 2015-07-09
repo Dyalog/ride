@@ -6,7 +6,7 @@
 #   prefs.foo (newValue) -> ... # add "on change" listener
 #   prefs.foo.toggle()          # convenience function for booleans (numbers 0 and 1)
 #   prefs.foo.getDefault()      # retrieve default value
-prefs = @
+D.prefs = @
 [ # name             default (type is determined from default value; setter enforces type and handles encoding)
   ['autoCloseBrackets', 1] # whether to insert {}[]() in pairs
   ['colourScheme',      'Default'] # name of the active colour scheme
@@ -98,13 +98,13 @@ prefs = @
   t = typeof d; l = []     # t: type, l: listeners
   str = if t == 'object' then JSON.stringify else (x) -> '' + x
   sd = str d               # sd: default value "d" converted to a string
-  prefs[k] = p = (x) ->
+  D.prefs[k] = p = (x) ->
     if typeof x == 'function'
       l.push x; return
     else if arguments.length
       if t == 'number' then x = +x else if t == 'string' then x = '' + x # coerce to type "t"
       sx = str x # sx: "x" converted to a string; localStorage values can only be strings
-      if l.length then old = prefs[k]()
+      if l.length then old = p()
       if sx == sd then delete localStorage[k] else localStorage[k] = sx # avoid recording if it's at its default
       for f in l then f x, old # notify listeners
       x
