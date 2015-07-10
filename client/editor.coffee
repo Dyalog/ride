@@ -325,7 +325,8 @@ class @Editor
           while l1 <= end && /^\s*(?:$|⍝)/.test @cm.getLine l1 then l1++
           s1 = @cm.getLine(l1) || ''; pre1 = s1.replace /\S.*$/, ''
           if pre.length > pre1.length || pre.length == pre1.length && !/^\s*:(?:end|else|andif|orif|case|until|access)/i.test s1
-            @cm.replaceRange ":#{kw}#{post}\n#{pre}:End#{kw}", {line: l, ch: pre.length}, {line: l, ch: s.length}
+            r = ":#{kw}#{post}\n#{pre}:End"; prefs.autoCloseBlocksEnd() || r += kw
+            @cm.replaceRange r, {line: l, ch: pre.length}, {line: l, ch: s.length}
             @cm.execCommand 'indentAuto'; @cm.execCommand 'goLineUp'; @cm.execCommand 'goLineEnd'
       @cm.execCommand 'newlineAndIndent'
     return
