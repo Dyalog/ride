@@ -14,6 +14,7 @@ D.prefs = @
   ['favs',              [host: '127.0.0.1', port: 4502]]
   ['floating',          0] # floating editor and tracer windows
   ['floatOnTop',        0] # try to keep floating windows on top of the session
+  ['fold',              1] # code folding
   ['indent',            4] # -1 disables autoindent
   ['indentMethods',     2] # -1 makes methods use the same indent as all other blocks
   ['keys',              {}] # a mapping between commands and keystrokes, only diffs from the defaults

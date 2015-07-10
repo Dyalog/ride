@@ -171,7 +171,7 @@ CodeMirror.registerHelper 'fold', 'apl', (cm, start) ->
       x = stackStr cm.getStateAfter l - 1 # x: the stackStr at the beginning of the current line
       y = stackStr cm.getStateAfter l     # y: the stackStr at the end of the current line
       if !isPrefix(y0, x) || !isPrefix(y0, y) then break
-    if l <= end && l - l0 > 1 && x0 == y && isPrefix y, x
+    if l <= end && x0 == y && isPrefix y, x
       while l + 1 <= end && /^ *$/.test cm.getLine l + 1 then l++ # skip blank lines
       from: CodeMirror.Pos l0, cm.getLine(l0).length
       to:   CodeMirror.Pos l,  cm.getLine(l ).length

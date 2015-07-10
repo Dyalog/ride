@@ -58,7 +58,7 @@ class @Editor
       firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
       smartIndent: prefs.indent() >= 0, indentUnit: prefs.indent(), scrollButtonHeight: 12, matchBrackets: true
       autoCloseBrackets: !!prefs.autoCloseBrackets() && ACB_VALUE
-      foldGutter: true, gutters: ['breakpoints', 'CodeMirror-linenumbers', 'CodeMirror-foldgutter']
+      foldGutter: !!prefs.fold()
       keyMap: 'dyalog', extraKeys: {'Shift-Tab': 'indentLess', Tab: 'tabOrAutocomplete', Down: 'downOrXline'}
       # Some options of @cm can be set from ide.coffee when the corresponding pref changes.
     @cm.dyalogCommands = @
@@ -96,6 +96,13 @@ class @Editor
         Up: => @PV(); return
         Esc: => @clearSearch(); delay 0, @cm.focus.bind @cm; return
     @setTracer !!@isTracer
+    return
+
+  updateGutters: ->
+    g = ['breakpoints']
+    @cm.getOption('lineNumbers') && g.push 'CodeMirror-linenumbers'
+    @cm.getOption('foldGutter') && g.push 'CodeMirror-foldgutter'
+    @cm.setOption 'gutters', g
     return
 
   createBreakpointElement: ->
@@ -181,7 +188,7 @@ class @Editor
   setTracer: (x) ->
     @isTracer = x; @$e.toggleClass 'tracer', x; @highlight null
     ln = !!if @isTracer then prefs.lineNumsTracer() else prefs.lineNumsEditor()
-    @cm.setOption 'lineNumbers', ln; @$tb.find('.tb-LN').toggleClass 'pressed', ln
+    @cm.setOption 'lineNumbers', ln; @$tb.find('.tb-LN').toggleClass 'pressed', ln; @updateGutters()
     @cm.setOption 'readOnly', !!x
     return
 
@@ -259,7 +266,7 @@ class @Editor
     return
   LN: -> # Toggle Line Numbers
     v = !!if @isTracer then prefs.lineNumsTracer.toggle() else prefs.lineNumsEditor.toggle()
-    @cm.setOption 'lineNumbers', v; @$tb.find('.tb-LN').toggleClass 'pressed', v; return
+    @cm.setOption 'lineNumbers', v; @updateGutters(); @$tb.find('.tb-LN').toggleClass 'pressed', v; return
   PV: -> @search true; return
   NX: -> @search(); return
   TC: -> @emit 'StepInto', win: @id; return
