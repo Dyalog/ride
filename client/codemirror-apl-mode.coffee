@@ -67,8 +67,6 @@ CodeMirror.defineMode 'apl', (config) ->
       delete h.hdr; stream.match /[^⍝\n\r]*/; s = stream.current()
       if /^\s*:/.test(s) || dfnHeader.test s
         stream.backUp s.length
-      else if /^\s*$/.test s
-        delete h.vars
       else
         h.vars = s.split notName
       'apl-trad'
@@ -98,8 +96,8 @@ CodeMirror.defineMode 'apl', (config) ->
             "apl-dfn apl-dfn#{dd}"
           else if c == '∇'
             i = a.length - 1; while i && a[i].t != '∇' then i--
-            if i then a.splice i else a.push t: '∇', oi: n, ii: n + swm
-            h.hdr = 1; 'apl-trad'
+            if i then a.splice i; delete h.vars else a.push t: '∇', oi: n, ii: n + swm; h.hdr = 1
+            'apl-trad'
           else if c == ':'
             ok = 0
             switch kw = stream.match(/\w*/)?[0]?.toLowerCase()
@@ -156,4 +154,24 @@ CodeMirror.defineMode 'apl', (config) ->
     else
       if /^\s*:(?:end|else|andif|orif|case|until)/i.test s then la.oi else la.ii
 
-  fold: 'indent'
+  fold: 'apl'
+
+
+# stackStr(h): a string representation of the block stack in CodeMirror's state object "h"
+stackStr = (h) -> r = ''; (for x in h.a then r += x.t + ' '); r
+
+isPrefix = (x, y) -> x == y[...x.length]
+
+CodeMirror.registerHelper 'fold', 'apl', (cm, start) ->
+  l0 = l = start.line; end = cm.lastLine()
+  x0 = stackStr cm.getStateAfter l0 - 1 # x0: the stackStr at the beginning of start.line
+  y0 = stackStr cm.getStateAfter l0     # y0: the stackStr at the end of start.line
+  if x0 != y0 && isPrefix x0, y0
+    while ++l <= end
+      x = stackStr cm.getStateAfter l - 1 # x: the stackStr at the beginning of the current line
+      y = stackStr cm.getStateAfter l     # y: the stackStr at the end of the current line
+      if !isPrefix(y0, x) || !isPrefix(y0, y) then break
+    if l <= end && l - l0 > 1 && x0 == y && isPrefix y, x
+      while l + 1 <= end && /^ *$/.test cm.getLine l + 1 then l++ # skip blank lines
+      from: CodeMirror.Pos l0, cm.getLine(l0).length
+      to:   CodeMirror.Pos l,  cm.getLine(l ).length
