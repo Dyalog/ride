@@ -8,7 +8,10 @@ keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-de
 
 @init = ($e) ->
   $e.html """
-    <div><input id=keys-search placeholder=Search></div>
+    <div>
+      <input id=keys-search placeholder=Search>
+      <a id=keys-search-clear href=# style=display:none title="Clear search">×</a>
+    </div>
     <div id=keys-table-wrapper>
       <table>#{join cmds.map ([code, desc]) ->
         "<tr><td>#{desc}<td class=keys-code>#{code}<td id=keys-#{code}>"
@@ -23,13 +26,13 @@ keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-de
       $b = $ @; getKeystroke (k) -> k && $b.parent().append(keyHTML k).append $b; updateDups(); return
       false
   $('#keys-search').on 'keyup change', ->
-    q = @value.toLowerCase()
-    found = 0
+    q = @value.toLowerCase(); $('#keys-search-clear').toggle !!q; found = 0
     $('#keys-table-wrapper tr').each ->
       $(@).toggle x = 0 <= $(@).text().toLowerCase().indexOf q
       found ||= x; return
     $('#keys-no-results').toggle !found
     return
+  $('#keys-search-clear').click -> $(@).hide(); $('#keys-search').val('').change().focus(); false
   return
 
 getKeystroke = (callback) ->
