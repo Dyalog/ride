@@ -36,7 +36,6 @@ $.extend CodeMirror.commands,
   DMN: -> move  1; return # next line
   DMP: -> move -1; return # prev line
   DMR: -> # run demo script
-    console.info 'dmr', 'D.nwjs', D.nwjs
     if D.nwjs && !D.floating
       ($i ||= $('<input id=demo-input type=file style=display:none>').appendTo 'body')
       .trigger('click').change ->
