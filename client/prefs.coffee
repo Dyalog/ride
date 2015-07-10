@@ -9,6 +9,7 @@
 D.prefs = @
 [ # name             default (type is determined from default value; setter enforces type and handles encoding)
   ['autoCloseBrackets', 1] # whether to insert {}[]() in pairs
+  ['autoCloseBlocks',   1] # whether to insert :end after :if,:for,etc when Enter is pressed
   ['colourScheme',      'Default'] # name of the active colour scheme
   ['colourSchemes',     []] # objects describing user-defined colour schemes
   ['favs',              [host: '127.0.0.1', port: 4502]]

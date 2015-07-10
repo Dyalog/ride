@@ -1,7 +1,7 @@
 require './codemirror-apl-mode'
 autocompletion = require './autocompletion'
 prefs = require './prefs'
-{letter} = require './codemirror-apl-mode'
+{letter, dfnDepth} = require './codemirror-apl-mode'
 {onCodeMirrorDoubleClick, delay, spc} = require './util'
 
 @ACB_VALUE = ACB_VALUE = pairs: '()[]{}', explode: '{}' # value for CodeMirror's "autoCloseBrackets" option when on
@@ -312,7 +312,23 @@ class @Editor
       @cm.setCursor line: l, ch: 0
     return
   WI: -> @opts.weakInterrupt(); return
-  ER: -> (if @isTracer then @emit 'RunCurrentLine', win: @id else @cm.execCommand 'newlineAndIndent'); return
+  ER: ->
+    if @isTracer
+      @emit 'RunCurrentLine', win: @id
+    else
+      if prefs.autoCloseBlocks()
+        u = @cm.getCursor(); l = u.line; s = @cm.getLine l
+        re = /^(\s*):(class|disposable|for|if|interface|namespace|property|repeat|section|select|trap|while|with)\b([^⋄\{]*)$/i
+        if u.ch == s.length && (m = re.exec s) && !dfnDepth @cm.getStateAfter l - 1
+          [_, pre, kw, post] = m; kw = kw[0].toUpperCase() + kw[1..].toLowerCase()
+          l1 = l + 1; end = @cm.lastLine() # find the next non-blank line
+          while l1 <= end && /^\s*(?:$|⍝)/.test @cm.getLine l1 then l1++
+          s1 = @cm.getLine(l1) || ''; pre1 = s1.replace /\S.*$/, ''
+          if pre.length > pre1.length || pre.length == pre1.length && !/^\s*:(?:end|else|andif|orif|case|until|access)/i.test s1
+            @cm.replaceRange ":#{kw}#{post}\n#{pre}:End#{kw}", {line: l, ch: pre.length}, {line: l, ch: s.length}
+            @cm.execCommand 'indentAuto'; @cm.execCommand 'goLineUp'; @cm.execCommand 'goLineEnd'
+      @cm.execCommand 'newlineAndIndent'
+    return
   BH: -> @emit 'ContinueTrace',  win: @id; return
   RM: -> @emit 'Continue',       win: @id; return
   MA: -> @emit 'RestartThreads', win: @id; return

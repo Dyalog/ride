@@ -47,7 +47,7 @@ sw = 4; swm = 2 # default indent unit and indent unit for methods; keep these in
 do update = -> sw = prefs.indent(); swm = prefs.indentMethods(); swm < 0 && swm = sw; return
 prefs.indent update; prefs.indentMethods update
 
-dfnDepth = (a) -> r = 0; (for x in a when x.t == '{' then r++); r
+@dfnDepth = dfnDepth = (a) -> r = 0; (for x in a when x.t == '{' then r++); r
 
 CodeMirror.defineMIME 'text/apl', 'apl'
 CodeMirror.defineMode 'apl', (config) ->
