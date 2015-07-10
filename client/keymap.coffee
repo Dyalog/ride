@@ -41,6 +41,7 @@ $.extend CodeMirror.commands,
   CNC: -> D.rideConnect();      return
   NEW: -> D.rideNewSession();   return
   QIT: -> D.quit();             return
+  LBR: -> prefs.lbar.toggle();  return
 
   HLP: (cm) ->
     c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
