@@ -88,18 +88,11 @@ if process?
 
   D.forceCloseNWWindow = -> nww.close true; return # used to close floating windows after session is dead
 
-  $ ->
-    cmenu = null # context menu on right-click, lazily initialized
-    $ document
-      .on 'keydown', '*', 'f12', -> nww.showDevTools(); false
-      .on 'contextmenu', (e) ->
-        if !cmenu
-          cmenu = new gui.Menu
-          ['Cut', 'Copy', 'Paste'].forEach (x) ->
-            cmenu.append new gui.MenuItem label: x, click: (-> document.execCommand x; return); return
-        cmenu.popup e.clientX, e.clientY
-        false
-    return
+  CodeMirror.keyMap.default.F12 = -> nww.showDevTools(); false
+  cmenu = new gui.Menu
+  ['Cut', 'Copy', 'Paste'].forEach (x) ->
+    cmenu.append new gui.MenuItem label: x, click: (-> document.execCommand x; return); return
+  $(document).contextmenu (e) -> cmenu.popup e.clientX, e.clientY; false
 
   D.readFile = fs.readFile # needed for presentation mode
 
@@ -125,32 +118,31 @@ if process?
   ).parse gui.App.argv
 
   # Debugging utilities
-  $ document
-    .on 'keydown', '*', 'ctrl+shift+f12', -> foo.bar # cause a crash
-    .on 'keydown', '*', 'ctrl+f12', ->
-      lw = open ''
-      lw.document.write '''
-        <html>
-          <head>
-            <title>Proxy Log</title>
-            <style>body{font-family:monospace;white-space:pre}</style>
-            <script></script>
-          </head>
-          <body></body>
-        </html>
-      '''
-      wr = (s) ->
-        if !lw || lw.closed || !lw.document || !lw.document.createTextNode
-          i = proxy.log.listeners.indexOf wr
-          if i >= 0 then proxy.log.listeners.splice i, 1; lw = null
-        else
-          b = lw.document.body
-          atEnd = b.scrollTop == b.scrollHeight - b.clientHeight
-          b.appendChild lw.document.createTextNode s
-          if atEnd then b.scrollTop = b.scrollHeight - b.clientHeight
-        return
-      wr proxy.log.get().join ''; proxy.log.listeners.push wr
-      false
+  CodeMirror.keyMap.default['Shift-Ctrl-F12'] = -> foo.bar # cause a crash
+  CodeMirror.keyMap.default['Ctrl-F12'] = ->
+    lw = open ''
+    lw.document.write '''
+      <html>
+        <head>
+          <title>Proxy Log</title>
+          <style>body{font-family:monospace;white-space:pre}</style>
+          <script></script>
+        </head>
+        <body></body>
+      </html>
+    '''
+    wr = (s) ->
+      if !lw || lw.closed || !lw.document || !lw.document.createTextNode
+        i = proxy.log.listeners.indexOf wr
+        if i >= 0 then proxy.log.listeners.splice i, 1; lw = null
+      else
+        b = lw.document.body
+        atEnd = b.scrollTop == b.scrollHeight - b.clientHeight
+        b.appendChild lw.document.createTextNode s
+        if atEnd then b.scrollTop = b.scrollHeight - b.clientHeight
+      return
+    wr proxy.log.get().join ''; proxy.log.listeners.push wr
+    false
 
   # expandStackString inserts snippets of code next to each file:///filename.js:123:45
   expandStackString = (s) -> # s: the string from  new Error().stack
@@ -219,7 +211,6 @@ if process?
         label: x[''].replace /_/g, ''
         key: if (i = x[''].indexOf '_') >= 0 then x[i + 1] # this doesn't work on the Mac but let's keep it anyway in case we use native menus elsewhere
         type: if x.group || x.checkBoxPref then 'checkbox' else 'normal'
-      if x.key && x.action && !x.dontBindKey then $(document).on 'keydown', '*', x.key, -> x.action(); false
       if x.group
         h.checked = !!x.checked
         h.click = ->

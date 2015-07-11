@@ -83,9 +83,12 @@ module.exports = (opts) ->
   $connect.add($about).add($new).add($delete).add($save).add($cancel).add($spawn).add($listen).button()
   $list
     .on 'dblclick', 'option', (e) -> $connect.click(); false
-    .on 'keydown', null, 'return', -> $connect.click(); false
-    .on 'keydown', null, 'insert', -> $new.click(); false
-    .on 'keydown', null, 'del', -> $delete.click(); false
+    .keydown (e) ->
+      if !e.shiftKey && !e.ctrlKey && !e.altKey
+        switch CodeMirror.keyNames[e.which]
+          when 'Enter'  then $connect.click(); false
+          when 'Insert' then $new.click(); false
+          when 'Delete' then $delete.click(); false
   $connect.click ->
     host = $host.val(); port = +$port.val()
     if !/^[a-z0-9\.\-:]+$/i.test host then $.alert 'Invalid host', 'Error', -> $host.focus(); return
@@ -110,7 +113,7 @@ module.exports = (opts) ->
     else $name.add($host).add($port).val ''
     return
   $host.add($port).add($name)
-    .on 'keydown', null, 'return', -> $save.click(); false
+    .keydown (e) -> if e.which == 13 && !e.shiftKey && !e.ctrlKey && !e.altKey then $save.click(); false
     .on 'keyup change', ->
       s0 = $list.find(':selected').text(); s1 = fmtFav host: $host.val(), port: $port.val(), name: $name.val()
       $save.add($cancel).button if s0 == s1 then 'disable' else 'enable'
@@ -146,7 +149,6 @@ module.exports = (opts) ->
           close: -> D.socket.emit '*listenCancel'; return
           buttons: Cancel: -> $(@).dialog 'close'; false
     false
-  $listenPort.on 'keydown', null, 'return', -> $listen.click(); false
   $list.sortable cursor: 'move', revert: true, tolerance: 'pointer', containment: 'parent', axis: 'y', update: storeFavs
   $about.click -> about.showDialog(); false
 

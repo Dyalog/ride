@@ -35,7 +35,9 @@ CodeMirror.keyMap.dyalogDefault = fallthrough: 'default', End: 'goLineEndSmart'
 CodeMirror.keyMap.dyalogDefault["'#{prefs.prefixKey()}'"] = 'BQC'
 
 $.extend CodeMirror.commands,
-  SA: (cm) -> CodeMirror.commands.selectAll cm; return
+  TB: -> switchWindows  1; return
+  BT: -> switchWindows -1; return
+  SA: CodeMirror.commands.selectAll
   PRF: -> prefsUI.showDialog(); return
   ABT: -> about.showDialog();   return
   CNC: -> D.rideConnect();      return
@@ -99,6 +101,11 @@ $.extend CodeMirror.commands,
       origin: '+move', bias: -1
     )
     return
+
+switchWindows = (d) -> # d: a step of either 1 or -1
+  a = []; i = -1; for _, w of D.wins then (if w.hasFocus() then i = a.length); a.push w
+  j = if i < 0 then 0 else (i + a.length + d) % a.length
+  $("#wintab#{a[j].id} a").click(); a[j].focus(); false
 
 # `x completions
 KS = '`1234567890-=qwertyuiop[]asdfghjk l;\'\\zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:"|ZXCVBNM<>?'.split /\s*/

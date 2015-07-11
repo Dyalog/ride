@@ -21,9 +21,7 @@ D.installMenu ?= (arg) ->
     name = x[''].replace /_(.)/g, (_, k) -> if acc || k == '_' then k else "<u>#{acc = k}</u>"
     $a = $ "<a href=#>#{name}</a>"
     if acc then $a.attr 'accessKey', acc.toLowerCase()
-    if x.key
-      $a.append $('<span class=m-shortcut>').text x.key
-      if x.action && !x.dontBindKey then $(document).on 'keydown', '*', x.key, -> x.action(); false
+    if x.cmd then $a.append '<span class=m-shortcut>' # todo: keep shortcut in menu in sync with the prefs
     if x.group
       $a.addClass "m-group-#{x.group}"
       $a.toggleClass 'm-checked', !!x.checked
@@ -72,19 +70,23 @@ D.installMenu ?= (arg) ->
   $m.on 'mouseover', 'a', -> $(@).closest('.menu').children().is('.m-open') && mFocus @; return
     .on 'mousedown', 'a', -> (if $(@).parentsUntil('.menu').last().is '.m-open' then mFocus null else mFocus @); false
     .on 'click',     'a', -> false
-    .on 'keydown', '*', 'left',  -> leftRight -1, $ @
-    .on 'keydown', '*', 'right', -> leftRight  1, $ @
-    .on 'keydown', '*', 'up',    -> upDown    -1, $ @
-    .on 'keydown', '*', 'down',  -> upDown     1, $ @
-    .on 'keydown', '*', 'esc f10', -> mFocus null; false
+    .keydown (e) ->
+      switch CodeMirror.keyNames[e.which]
+        when 'Left'  then leftRight -1, $ e.target
+        when 'Right' then leftRight  1, $ e.target
+        when 'Up'    then upDown    -1, $ e.target
+        when 'Down'  then upDown     1, $ e.target
+        when 'Esc', 'F10' then mFocus null; false
 
   isAccessKeyEvent = (e) -> e.altKey && !e.ctrlKey && !e.shiftKey && 65 <= e.which <= 90
   $ document
-    .on 'keydown', '*', 'f10', -> $m.children().eq(0).addClass('m-open').find('a').eq(1).focus(); false
     .on 'keyup keypress', (e) -> !isAccessKeyEvent e # prevent default action for access key events
     .mousedown (e) -> (if !$(e.target).closest('.menu').length then mFocus null); return
     .keydown (e) ->
       if isAccessKeyEvent e
         $x = $m.find "[accessKey=#{String.fromCharCode(e.which).toLowerCase()}]:visible"
         if $x.length then $x.mousedown(); $x.parent().find('a').eq(1).focus(); false
+
+  # todo: is mapping F10 in CodeMirror really necessary?
+#   CodeMirror.keyMap.default.F10 = -> $m.children().eq(0).addClass('m-open').find('a').eq(1).focus(); false
   return

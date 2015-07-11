@@ -39,7 +39,6 @@ lib_files='
   node_modules/codemirror/addon/fold/foldcode.js
   node_modules/codemirror/addon/fold/foldgutter.js
   node_modules/codemirror/addon/fold/indent-fold.js
-  lib/jquery.hotkeys.js
   lib/jquery.layout.js
   init-nw.coffee
   lbar/lbar.js
