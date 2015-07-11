@@ -1,3 +1,6 @@
+prefs = require './prefs'
+{cmds} = require './cmds'
+
 # This is a generic menu for a browser or NW.js
 # There's an alternative implementation for NW.js in ../init-nw.coffee
 # For the concrete content in the menu, see ide.coffee
@@ -21,7 +24,7 @@ D.installMenu ?= (arg) ->
     name = x[''].replace /_(.)/g, (_, k) -> if acc || k == '_' then k else "<u>#{acc = k}</u>"
     $a = $ "<a href=#>#{name}</a>"
     if acc then $a.attr 'accessKey', acc.toLowerCase()
-    if x.cmd then $a.append '<span class=m-shortcut>' # todo: keep shortcut in menu in sync with the prefs
+    if x.cmd then $a.append "<span class=m-shortcut data-cmd=#{x.cmd}>"
     if x.group
       $a.addClass "m-group-#{x.group}"
       $a.toggleClass 'm-checked', !!x.checked
@@ -86,7 +89,12 @@ D.installMenu ?= (arg) ->
       if isAccessKeyEvent e
         $x = $m.find "[accessKey=#{String.fromCharCode(e.which).toLowerCase()}]:visible"
         if $x.length then $x.mousedown(); $x.parent().find('a').eq(1).focus(); false
-
   # todo: is mapping F10 in CodeMirror really necessary?
 #   CodeMirror.keyMap.default.F10 = -> $m.children().eq(0).addClass('m-open').find('a').eq(1).focus(); false
+  updateMenuShortCuts prefs.keys()
+  return
+
+prefs.keys updateMenuShortCuts = (h) ->
+  k = {}; for [code, desc, defaults] in cmds then [k[code]] = h[code] || defaults
+  $('.m-shortcut').each -> $(@).text k[$(@).data 'cmd'] || ''; return
   return
