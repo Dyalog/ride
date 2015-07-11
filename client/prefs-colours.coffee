@@ -87,7 +87,7 @@ builtInSchemes = [
     norm=fg:9c7,bg:0,bgo:1 cur=lb:f00 lnum=fg:b94,bg:010,bgo:1 srch=bg:b96,bgo:.75,fg:0 mod=bg:1,bgo:1
     sel0=bg:246,bgo:.5 sel=bg:048,bgo:.5 err=fg:f00,bg:822,bgo:.5,B:1,U:1 kw=fg:aa2 num=fg:a8b op1=fg:d95 fn=fg:0f0
     op2=fg:fd6 sqbr=fg:8 com=fg:b,I:1 semi=fg:8 str=fg:dae zld=fg:d9f,B:1 lbl=U:1,bg:642,bgo:.5 idm=B:1 tc=bg:1,bgo:1
-    glob=B:1 dfn=fg:a7b dfn2=fg:eb4 dfn3=fg:c79 dfn4=fg:cd0 dfn5=fg:a0d
+    glob=B:1 dfn=fg:a7b dfn2=fg:eb4 dfn3=fg:c79 dfn4=fg:cd0 dfn5=fg:a0d diam=fg:ff0 asgn=fg:ff0
   '''}
   {name:'Albrecht Dürer', styles: '''
     num=fg:8 str=fg:8 zld=fg:8 quad=fg:808 ns=fg:8 diam=B:1 kw=B:1 idm=U:1,bg:e,bgo:.5 com=I:1
