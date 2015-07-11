@@ -33,7 +33,7 @@ D.prefs = @
   ['wrap',              0] # line wrapping in session
   ['lbar',              1] # show language bar
   ['theme',             '']
-  ['title',             '{WSID} - {HOST}:{PORT} (PID: {PID})'] # a.k.a. "caption"
+  ['title',             '{WSID}'] # a.k.a. "caption"
   ['zoom',              0]
   ['menu', '''
     # see below for syntax
