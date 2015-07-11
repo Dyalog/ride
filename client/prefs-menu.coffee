@@ -33,7 +33,7 @@ extraOpts =
   FLT: checkBoxPref: prefs.floating
   WRP: checkBoxPref: prefs.wrap
   TOP: checkBoxPref: prefs.floatOnTop
-  THM: items: qw('Modern Redmond Cupertino Freedom').map (x, i) ->
+  THM: items: qw('Ancient Modern Redmond Cupertino').map (x, i) ->
     '': x, group: 'themes', checked: prefs.theme() == x.toLowerCase(), action: ->
       prefs.theme x.toLowerCase(); return
 

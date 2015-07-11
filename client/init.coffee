@@ -65,7 +65,7 @@ $ ->
     #   https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
     p = (D.process ? navigator).platform
     if /^(darwin|mac|ipad|iphone|ipod)/i.test p then 'cupertino'
-    else if /^(linux|x11|android)/i.test p then 'freedom'
+    else if /^(linux|x11|android)/i.test p then 'ancient'
     else 'redmond'
   $('body').addClass "theme-#{prefs.theme()}"
   prefs.theme (x, old) ->
