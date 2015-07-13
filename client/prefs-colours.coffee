@@ -41,8 +41,7 @@ G = [ # information about syntax highlighting groups
   {t:'mtch', s:'matching bracket',     c:'.CodeMirror-matchingbracket'}
   {t:'srch', s:'search match',         c:'.cm-searching'}
   {t:'mod',  s:'modified line',        c:'.modified'}
-  {t:'sel',  s:'selection (focus)',    c:'.CodeMirror-focused .CodeMirror-selected', controls:{fg:0,BIU:0}}
-  {t:'sel0', s:'selection (no focus)', c:'.CodeMirror-selected',                     controls:{fg:0,BIU:0}}
+  {t:'sel',  s:'selection',            c:'.CodeMirror-selected,.CodeMirror-focused .CodeMirror-selected', controls:{fg:0,BIU:0}}
   {t:'tc',   s:'tracer',               c:'.tracer .CodeMirror,.tracer .CodeMirror .CodeMirror-gutter-wrapper'}
 ]
 H = dict G.map (g, i) -> [g.t, i] # reverse dict of G
@@ -81,11 +80,11 @@ builtInSchemes = [
   {name: 'Default', styles: '''
     num=fg:8 str=fg:088 zld=fg:008 var=fg:8 quad=fg:808 fn=fg:008 op1=fg:00f op2=fg:00f ns=fg:8 asgn=fg:00f
     diam=fg:00f par=fg:00f sqbr=fg:00f semi=fg:00f dfn=fg:00f trad=fg:8 kw=fg:800 idm=fg:00f com=fg:088 err=fg:f00
-    lnum=fg:008 mtch=bg:ff8,bgo:.5 srch=bg:f80,bgo:.5 mod=bg:e,bgo:1 sel=bg:ddf,bgo:.5 sel0=bg:d,bgo:.5 tc=bg:d,bgo:1
+    lnum=fg:008 mtch=bg:ff8,bgo:.5 srch=bg:f80,bgo:.5 mod=bg:e,bgo:1 sel=bg:ddf,bgo:.5 tc=bg:d,bgo:1
   '''}
   {name: 'Francisco Goya', styles: '''
     norm=fg:9c7,bg:0,bgo:1 cur=lb:f00 lnum=fg:b94,bg:010,bgo:1 srch=bg:b96,bgo:.75,fg:0 mod=bg:1,bgo:1
-    sel0=bg:246,bgo:.5 sel=bg:048,bgo:.5 err=fg:f00,bg:822,bgo:.5,B:1,U:1 kw=fg:aa2 num=fg:a8b op1=fg:d95 fn=fg:0f0
+    sel=bg:048,bgo:.5 err=fg:f00,bg:822,bgo:.5,B:1,U:1 kw=fg:aa2 num=fg:a8b op1=fg:d95 fn=fg:0f0
     op2=fg:fd6 sqbr=fg:8 com=fg:b,I:1 semi=fg:8 str=fg:dae zld=fg:d9f,B:1 lbl=U:1,bg:642,bgo:.5 idm=B:1 tc=bg:1,bgo:1
     glob=B:1 dfn=fg:a7b dfn2=fg:eb4 dfn3=fg:c79 dfn4=fg:cd0 dfn5=fg:a0d diam=fg:ff0 asgn=fg:ff0
   '''}
