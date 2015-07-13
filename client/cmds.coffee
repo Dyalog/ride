@@ -24,7 +24,7 @@
   ['HLP', 'Help',                     ['F1']]
   ['ABT', 'About',                    ['Shift-F1']]
   ['BP',  'Toggle breakpoint',        []]
-  ['FLD', 'Toggle fold',              []]
+  ['TO',  'Toggle fold',              []]
   ['AO',  'Add comments',             []]
   ['DO',  'Delete comments',          []]
   ['AC',  'Align comments',           []]

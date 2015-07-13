@@ -41,6 +41,7 @@ $.extend CodeMirror.commands,
   CT: -> document.execCommand 'Cut'  ; return
   CP: -> document.execCommand 'Copy' ; return
   PT: -> document.execCommand 'Paste'; return
+  TO: CodeMirror.commands.toggleFold
   PRF: -> prefsUI.showDialog(); return
   ABT: -> about.showDialog();   return
   CNC: -> D.rideConnect();      return
