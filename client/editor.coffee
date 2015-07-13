@@ -56,7 +56,8 @@ class @Editor
     @cm = new CodeMirror @$e.find('.ride-win')[0],
       lineNumbers: !!if @isTracer then prefs.lineNumsTracer() else prefs.lineNumsEditor()
       firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
-      smartIndent: prefs.indent() >= 0, indentUnit: prefs.indent(), scrollButtonHeight: 12, matchBrackets: true
+      smartIndent: prefs.indent() >= 0, indentUnit: prefs.indent(), scrollButtonHeight: 12
+      matchBrackets: !!prefs.matchBrackets()
       autoCloseBrackets: !!prefs.autoCloseBrackets() && ACB_VALUE
       foldGutter: !!prefs.fold()
       keyMap: 'dyalog', extraKeys: {'Shift-Tab': 'indentLess', Tab: 'tabOrAutocomplete', Down: 'downOrXline'}

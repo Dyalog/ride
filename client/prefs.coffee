@@ -23,6 +23,7 @@ D.prefs = @
   ['kbdLocale',         ''] # e.g. "US", "GB"
   ['lineNumsTracer',    0]
   ['lineNumsEditor',    1]
+  ['matchBrackets',     1] # whether to highlight matching brackets
   ['pos',               null] # [x,y,w,h] of the main window, used in ../init-nw.coffee
   ['posEditor',         [32, 32, 1000, 618]] # [x,y,w,h]
   ['posTracer',         [32, 32, 1000, 618]] # [x,y,w,h]

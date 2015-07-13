@@ -10,7 +10,8 @@ class @Session
     @hist = ['']; @histIndex = 0
     @$e = $(e).addClass 'ride-win'
     @cm = new CodeMirror @$e[0],
-      autofocus: true, mode: 'aplsession', matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: ''}
+      autofocus: true, mode: 'aplsession', matchBrackets: !!prefs.matchBrackets()
+      autoCloseBrackets: {pairs: '()[]{}', explode: ''}
       readOnly: true, keyMap: 'dyalog', lineWrapping: !!prefs.wrap(), indentUnit: 4
       extraKeys: {'Shift-Tab': 'indentLess', Tab: 'tabOrAutocomplete'}
     @cm.dyalogCommands = @
