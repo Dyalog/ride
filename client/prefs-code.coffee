@@ -3,12 +3,7 @@ prefs = require './prefs'
 
 @name = 'Code'
 
-$ai = $sw = $aim = $swm = $mb = $acbr = $acbl = $acbe = $fold = null
-
-updateAutoIndentFields = ->
-  $sw.add($aim).prop 'disabled', !$ai.is ':checked'
-  $swm.prop 'disabled', !$ai.is(':checked') || !$aim.is ':checked'
-  return
+$ai = $sw = $aim = $swm = $mb = $acbr = $acbl = $acbe = $ac = $acd = $fold = null
 
 @init = ($e) ->
   $e.html '''
@@ -21,6 +16,7 @@ updateAutoIndentFields = ->
          <option value=0>:EndIf,:EndFor,...
          <option value=1>just :End
        </select></label>
+    <p><label><input id=code-ac   type=checkbox>Autocompletion</label> <label>after <input id=code-acd size=5>ms</label>
     <p><label><input id=code-fold type=checkbox>Code folding</label>
   '''
   $ai   = $ '#code-ai'
@@ -31,9 +27,16 @@ updateAutoIndentFields = ->
   $acbr = $ '#code-acbr'
   $acbl = $ '#code-acbl'
   $acbe = $ '#code-acbe'
+  $ac   = $ '#code-ac'
+  $acd  = $ '#code-acd'
   $fold = $ '#code-fold'
-  $ai.add($aim).change updateAutoIndentFields
-  $sw.add($swm).click -> $(@).select(); return
+  $ai.add($aim).change ->
+    $sw.add($aim).prop 'disabled', !$ai.is ':checked'
+    $swm.prop 'disabled', !$ai.is(':checked') || !$aim.is ':checked'
+    return
+  $acbl.change -> $acbe.prop 'disabled', !$(@).is ':checked'; return
+  $ac  .change -> $acd .prop 'disabled', !$(@).is ':checked'; return
+  $sw.add($swm).add($acd).click -> $(@).select(); return
   return
 
 @load = ->
@@ -42,17 +45,21 @@ updateAutoIndentFields = ->
   $mb  .prop 'checked', !!prefs.matchBrackets()
   $acbr.prop 'checked', !!prefs.autoCloseBrackets()
   $acbl.prop 'checked', !!prefs.autoCloseBlocks()
-  $acbe.val prefs.autoCloseBlocksEnd()
+  $acbe.val               prefs.autoCloseBlocksEnd()
+  $ac  .prop 'checked', !!prefs.autocompletion()
+  $acd .val               prefs.autocompletionDelay()
   $fold.prop 'checked', !!prefs.fold()
-  updateAutoIndentFields()
+  $ai.add($acbl).add($ac).change()
   return
 
 @save = ->
-  prefs.indent        if $ai .is ':checked' then +$sw .val() || 0 else -1
-  prefs.indentMethods if $aim.is ':checked' then +$swm.val() || 0 else -1
-  prefs.matchBrackets     $mb  .is ':checked'
-  prefs.autoCloseBrackets $acbr.is ':checked'
-  prefs.autoCloseBlocks   $acbl.is ':checked'
-  prefs.autoCloseBlocksEnd $acbe.val()
-  prefs.fold $fold.is ':checked'
+  prefs.indent              if $ai .is ':checked' then +$sw .val() || 0 else -1
+  prefs.indentMethods       if $aim.is ':checked' then +$swm.val() || 0 else -1
+  prefs.matchBrackets       $mb  .is ':checked'
+  prefs.autoCloseBrackets   $acbr.is ':checked'
+  prefs.autoCloseBlocks     $acbl.is ':checked'
+  prefs.autoCloseBlocksEnd  $acbe.val()
+  prefs.autocompletion      $ac  .is ':checked'
+  prefs.autocompletionDelay $acd .val()
+  prefs.fold                $fold.is ':checked'
   return

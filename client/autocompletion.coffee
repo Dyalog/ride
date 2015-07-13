@@ -6,9 +6,9 @@ prefs = require './prefs'
   tid = null # timeout id
   {cm} = win
   cm.on 'change', ->
-    if cm.getOption('mode') in ['apl', 'aplsession'] && cm.getCursor().line
+    if prefs.autocompletion() && cm.getOption('mode') in ['apl', 'aplsession'] && cm.getCursor().line
       clearTimeout tid
-      tid = delay 500, ->
+      tid = delay prefs.autocompletionDelay(), ->
         tid = null; c = cm.getCursor(); s = cm.getLine c.line; i = c.ch
         if i && s[i - 1] != ' ' && s[...i].replace(///[#{letter}]*$///, '')[-1..] != prefs.prefixKey() &&
               (win.promptType == null or win.promptType != 4) # don't autocomplete in ⍞ input
@@ -17,7 +17,7 @@ prefs = require './prefs'
         return
     return
   (skip, options) ->
-    if options.length && cm.hasFocus() && cm.getWrapperElement().ownerDocument.hasFocus()
+    if prefs.autocompletion() && options.length && cm.hasFocus() && cm.getWrapperElement().ownerDocument.hasFocus()
       c = cm.getCursor(); from = line: c.line, ch: c.ch - skip; sel = ''
       if options.length == 1 && win.autocompleteWithTab
         cm.replaceRange options[0], from, c, 'D'
