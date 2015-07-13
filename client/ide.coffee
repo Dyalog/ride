@@ -258,8 +258,5 @@ class @IDE
   WRP: -> prefs.wrap      .toggle(); return
   TOP: -> prefs.floatOnTop.toggle(); return
   THM: -> # ignore
-  CUT: -> document.execCommand 'Cut'  ; return
-  CPY: -> document.execCommand 'Copy' ; return
-  PST: -> document.execCommand 'Paste'; return
   UND: -> @focusedWin.cm.undo(); return
   RDO: -> @focusedWin.cm.redo(); return

@@ -38,6 +38,9 @@ $.extend CodeMirror.commands,
   TB: -> switchWindows  1; return
   BT: -> switchWindows -1; return
   SA: CodeMirror.commands.selectAll
+  CT: -> document.execCommand 'Cut'  ; return
+  CP: -> document.execCommand 'Copy' ; return
+  PT: -> document.execCommand 'Paste'; return
   PRF: -> prefsUI.showDialog(); return
   ABT: -> about.showDialog();   return
   CNC: -> D.rideConnect();      return

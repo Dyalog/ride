@@ -48,9 +48,9 @@ D.prefs = @
       -                             {!mac}
       _Quit                    =QIT {!mac}
     _Edit
-      Cut                      =CUT {!mac&&!browser}
-      Copy                     =CPY {!mac&&!browser}
-      Paste                    =PST {!mac&&!browser}
+      Cut                      =CT {!mac&&!browser}
+      Copy                     =CP {!mac&&!browser}
+      Paste                    =PT {!mac&&!browser}
       Undo                     =UND {!mac&&!browser}
       Redo                     =RDO {!mac&&!browser}
       -                             {!mac&&!browser}
