@@ -47,7 +47,7 @@ apply = ->
       </div>
     """
       .tabs(activate: (e, ui) -> tabs[$(ui.newTab).index()].resize?(); return)
-      .keydown (e) -> if e.which == 13 && !e.shiftKey && !e.ctrlKey && !e.altKey then ok(); false
+      .keydown (e) -> if e.which == 13 && !e.shiftKey && e.ctrlKey && !e.altKey then ok(); false
       .on 'dragstart', -> false
       .dialog
         autoOpen: 0, title: 'Preferences', width: 600, minWidth: 600, height: 450, minHeight: 450
