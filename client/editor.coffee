@@ -344,7 +344,12 @@ class @Editor
     if @isTracer
       @emit 'SetLineAttributes', win: @id, nLines: @cm.lineCount(), lineAttributes: stop: @bp[..].sort (x, y) -> x - y
     return
-  FLD: (cm) -> cm.foldCode cm.getCursor(); return # Toggle fold
+  RD: (cm) ->
+    if cm.somethingSelected()
+      cm.execCommand 'indentAuto'
+    else
+      u = cm.getCursor(); cm.execCommand 'SA'; cm.execCommand 'indentAuto'; cm.setCursor u
+    return
   tabOrAutocomplete: ->
     if @cm.somethingSelected()
       @cm.execCommand 'indentMore'

@@ -28,6 +28,7 @@
   ['AO',  'Add comments',             []]
   ['DO',  'Delete comments',          []]
   ['AC',  'Align comments',           []]
+  ['RD',  'Reformat',                 []]
   ['LN',  'Toggle line numbers',      []]
   ['LBR', 'Toggle language bar',      []]
   ['ZMI', 'Increase font size',       ['Ctrl-=', 'Shift-Ctrl-=']]
