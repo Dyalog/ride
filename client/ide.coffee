@@ -41,7 +41,9 @@ class @IDE
     @focusedWin = @wins[0]
 
     # Tab management
-    @tabOpts = activate: (_, ui) => (widget = @wins[+ui.newTab.attr('id').replace /\D+/, '']).updateSize(); widget.focus(); return
+    @tabOpts = activate: (_, ui) =>
+      widget = @wins[+ui.newTab.attr('id').replace /\D+/, '']
+      widget.updateSize(); widget.focus(); widget.updateGutters(); return
     @$tabs = $('.ui-layout-east, .ui-layout-south').tabs @tabOpts
     @refreshTabs = =>
       for d in ['east', 'south'] when !$(".ui-layout-#{d} li", @$ide).length then @layout.close d
