@@ -11,7 +11,7 @@ $ai = $sw = $aim = $swm = $mb = $acbr = $acbl = $acbe = $ac = $acd = $fold = nul
     <p><label><input id=code-aim  type=checkbox>in methods:</label> <label><input id=code-swm size=1> spaces</label>
     <p><label><input id=code-mb   type=checkbox>Highlight matching brackets</label></p>
     <p><label><input id=code-acbr type=checkbox>Auto-close brackets: <tt>{}[]()</tt></label>
-    <p><label><input id=code-acbl type=checkbox>Auto-close blocks: <tt>:if :for ...</tt></label>
+    <p><label><input id=code-acbl type=checkbox>Auto-close blocks: <tt>:If :For ...</tt></label>
        <label>with <select id=code-acbe>
          <option value=0>:EndIf,:EndFor,...
          <option value=1>just :End
