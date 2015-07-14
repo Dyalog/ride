@@ -112,8 +112,8 @@ switchWindows = (d) -> # d: a step of either 1 or -1
   $("#wintab#{a[j].id} a").click(); a[j].focus(); false
 
 # `x completions
-KS = '`1234567890-=qwertyuiop[]asdfghjk l;\'\\zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:"|ZXCVBNM<>?'.split /\s*/
-VS = '`¨¯<≤=≥>≠∨∧×÷?⍵∊⍴~↑↓⍳○*←→⍺⌈⌊_∇∆∘\'⎕⍎⍕ ⊢ ⊂⊃∩∪⊥⊤|⍝⍀⌿⋄⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹?⍵⍷⍴⍨↑↓⍸⍥⍣⍞⍬⍺⌈⌊_∇∆⍤⌸⌷≡≢⊣⊂⊃∩∪⊥⊤|⍪⍙⍠'.split /\s*/
+KS = '`1234567890-=qwertyuiop[]asdfghjk l;\'\\zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:"|ZXCVBNM<>?£'.split /\s*/
+VS = '`¨¯<≤=≥>≠∨∧×÷?⍵∊⍴~↑↓⍳○*←→⍺⌈⌊_∇∆∘\'⎕⍎⍕ ⊢ ⊂⊃∩∪⊥⊤|⍝⍀⌿⋄⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹?⍵⍷⍴⍨↑↓⍸⍥⍣⍞⍬⍺⌈⌊_∇∆⍤⌸⌷≡≢⊣⊂⊃∩∪⊥⊤|⍪⍙⍠⍒'.split /\s*/
 if KS.length != VS.length then console.error? 'bad configuration of backquote keymap'
 BQ = dict zip KS, VS # default ` map
 bq = $.extend {}, BQ; do -> s = prefs.prefixMap(); for i in [0...s.length] by 2 then bq[s[i]] = s[i + 1] # current ` map
