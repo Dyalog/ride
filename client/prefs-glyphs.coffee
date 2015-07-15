@@ -2,17 +2,23 @@ prefs = require './prefs'
 keymap = require './keymap'
 {join, esc, dict, hex, ord, qw, delay} = require './util'
 
+@name = 'Glyphs'
+
 $pfx = $lc = null # DOM elements for "Prefix" and "Locale"
 NK = 58 # number of scancodes we are concerned with
 
 L = (g, s) -> # layout constructor
   # g: the geometry (aka "mechanical layout"); the precise arrangement of keys is specified as a CSS class
-  a = ['', '']
-  for line in s.split '\n'
-    for chunk, i in line.split /\s{3,}/
-      a[i] += chunk.replace /\s+/g, ''
-  console.assert a[0].length == a[1].length
-  {geometry: g, normal: a[0], shifted: a[1]}
+  # s: a multiline string describing four quadrants, in ravel order:
+  #    0="normal", 1="shifted", 2="APL", and 3="APL shifted".
+  #    "APL" and "APL shifted" are the defaults upon which the user builds customisations.
+  q = ['', '', '', '']
+  for half, i in s.split '\n\n'
+    for line in half.split '\n'
+      for chunk, j in line.split /\s{3,}/
+        q[2 * i + j] += chunk.replace /\s+/g, ''
+  console.assert q[0].length == q[1].length == q[2].length == q[3].length
+  {geometry: g, quadrants: q}
 
 layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
   US: L 'ansi', '''
@@ -20,21 +26,34 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
     ☠ q w e r t y u i o p [ ] \\      ☠ Q W E R T Y U I O P { } |
     ☠ a s d f g h j k l ; ' ☠ ☠       ☠ A S D F G H J K L : " ☠ ☠
     ☠ ☠ z x c v b n m , . / ☠ ☠       ☠ ☠ Z X C V B N M < > ? ☠ ☠
+
+    ☠ ⋄ ¨ ¯ < ≤ = ≥ > ≠ ∨ ∧ × ÷ ☠ ☠   ☠ ¤ ⌶ ⍫ ⍒ ⍋ ⌽ ⍉ ⊖ ⍟ ⍱ ⍲ ! ⌹ ☠ ☠
+    ☠ ? ⍵ ∊ ⍴ ~ ↑ ↓ ⍳ ○ * ← → ⊢       ☠ ⍰ ⍵ ⍷ ⌾ ⍨ ↑ ↓ ⍸ ⍥ ⍣ ⍞ ⍬ ⊣
+    ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕ ⍎ ⍕ ☠ ☠       ☠ ⍺ ⌈ ⌊ _ ⍢ ∆ ⍤ ⌸ ⌷ ≡ ≢ ☠ ☠
+    ☠ ☠ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ☠ ⊂ ⊃ ∩ ∪ ⍭ ⍡ ∥ ⍪ ⍙ ⍠ ☠ ☠
   '''
   UK: L 'iso', '''
     ☠ ` 1 2 3 4 5 6 7 8 9 0 - = ☠ ☠   ☠ ¬ ! " £ $ % ^ & * ( ) _ + ☠ ☠
     ☠ q w e r t y u i o p [ ] ☠       ☠ Q W E R T Y U I O P { } ☠
     ☠ a s d f g h j k l ; ' # ☠       ☠ A S D F G H J K L : @ ~ ☠
-    ☠ \\ z x c v b n m , . / ☠ ☠      ☠ | Z X C V B N M < > ? ☠ ☠
+    ☠ \\z x c v b n m , . / ☠ ☠       ☠ | Z X C V B N M < > ? ☠ ☠
+
+    ☠ ⋄ ¨ ¯ < ≤ = ≥ > ≠ ∨ ∧ × ÷ ☠ ☠   ☠ ¤ ⌶ ⍫ ⍒ ⍋ ⌽ ⍉ ⊖ ⍟ ⍱ ⍲ ! ⌹ ☠ ☠
+    ☠ ? ⍵ ∊ ⍴ ~ ↑ ↓ ⍳ ○ * ← → ☠       ☠ ⍰ ⍵ ⍷ ⌾ ⍨ ↑ ↓ ⍸ ⍥ ⍣ ⍞ ⍬ ☠
+    ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕ ⍎ ⍕ ⊢ ☠       ☠ ⍺ ⌈ ⌊ _ ⍢ ∆ ⍤ ⌸ ⌷ ≡ ≢ ⊣ ☠
+    ☠ ⊢ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ⊣ ⊂ ⊃ ∩ ∪ ⍭ ⍡ ∥ ⍪ ⍙ ⍠ ☠ ☠
   '''
   DK: L 'iso', '''
     ☠ $ 1 2 3 4 5 6 7 8 9 0 + ´ ☠ ☠   ☠ § ! " # € % & / ( ) = ? ` ☠ ☠
     ☠ q w e r t y u i o p å ¨ ☠       ☠ Q W E R T Y U I O P Å ^ ☠
     ☠ a s d f g h j k l æ ø ' ☠       ☠ A S D F G H J K L Æ Ø * ☠
     ☠ < z x c v b n m , . - ☠ ☠       ☠ > Z X C V B N M ; : _ ☠ ☠
-  '''
 
-@name = 'Glyphs'
+    ☠ ⋄ ¨ ¯ < ≤ = ≥ > ≠ ∨ ∧ × ÷ ☠ ☠   ☠ ¤ ⌶ ⍫ ⍒ ⍋ ⌽ ⍉ ⊖ ⍟ ⍱ ⍲ ! ⌹ ☠ ☠
+    ☠ ? ⍵ ∊ ⍴ ~ ↑ ↓ ⍳ ○ * ← → ☠       ☠ ⍰ ⍵ ⍷ ⌾ ⍨ ↑ ↓ ⍸ ⍥ ⍣ ⍞ ⍬ ☠
+    ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕ ⍎ ⍕ ⊢ ☠       ☠ ⍺ ⌈ ⌊ _ ⍢ ∆ ⍤ ⌸ ⌷ ≡ ≢ ⊣ ☠
+    ☠ ⊢ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ⊣ ⊂ ⊃ ∩ ∪ ⍭ ⍡ ∥ ⍪ ⍙ ⍠ ☠ ☠
+  '''
 
 @init = ($e) ->
   specialKeys = 15: '⟵', 16: '↹', 30: 'Caps', 43: '↲', 44: '⇧', 57: '⇧'
@@ -93,9 +112,9 @@ loadBQMap = (bq) ->
   layout = layouts[$lc.val()] || layouts.US
   $('#glyphs-layout').removeClass('geometry-ansi geometry-iso').addClass "geometry-#{layout.geometry}"
   for i in [1...NK]
-    if (g0 = layout.normal[i]) != '☠'
+    if (g0 = layout.quadrants[0][i]) != '☠'
       g1 = bq[g0] || ' '; $("#k#{i} .g0").text g0; $("#k#{i} .g1").val(g1).prop 'title', "U+#{hex ord(g1), 4}"
-    if (g2 = layout.shifted[i]) != '☠'
+    if (g2 = layout.quadrants[1][i]) != '☠'
       g3 = bq[g2] || ' '; $("#k#{i} .g2").text g2; $("#k#{i} .g3").val(g3).prop 'title', "U+#{hex ord(g3), 4}"
   return
 
