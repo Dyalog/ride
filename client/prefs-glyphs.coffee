@@ -7,21 +7,16 @@ keymap = require './keymap'
 $pfx = $lc = null # DOM elements for "Prefix" and "Locale"
 NK = 58 # number of scancodes we are concerned with
 
-L = (g, s) -> # layout constructor
-  # g: the geometry (aka "mechanical layout"); the precise arrangement of keys is specified as a CSS class
-  # s: a multiline string describing four quadrants, in ravel order:
-  #    0="normal", 1="shifted", 2="APL", and 3="APL shifted".
-  #    "APL" and "APL shifted" are the defaults upon which the user builds customisations.
-  q = ['', '', '', '']
-  for half, i in s.split '\n\n'
-    for line in half.split '\n'
-      for chunk, j in line.split /\s{3,}/
-        q[2 * i + j] += chunk.replace /\s+/g, ''
-  console.assert q[0].length == q[1].length == q[2].length == q[3].length
-  {geometry: g, quadrants: q}
+# Every geometry (aka "mechanical layout") has its precise arrangement of keys specified as a CSS class.
+geom = US: 'ansi', UK: 'iso', DK: 'iso'
 
-layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
-  US: L 'ansi', '''
+# The quadrants of each layout entry will be turned into an array of four strings without whitespace.
+#    0:normal  1:shifted
+#    2:APL     3:APL shifted
+# They can be indexed by scancode: http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
+# "APL" and "APL shifted" are the defaults upon which the user can build customisations.
+layoutDesc =
+  US: '''
     ☠ ` 1 2 3 4 5 6 7 8 9 0 - = ☠ ☠   ☠ ~ ! @ # $ % ^ & * ( ) _ + ☠ ☠
     ☠ q w e r t y u i o p [ ] \\      ☠ Q W E R T Y U I O P { } |
     ☠ a s d f g h j k l ; ' ☠ ☠       ☠ A S D F G H J K L : " ☠ ☠
@@ -32,7 +27,7 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
     ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕ ⍎ ⍕ ☠ ☠       ☠ ⍺ ⌈ ⌊ _ ⍢ ∆ ⍤ ⌸ ⌷ ≡ ≢ ☠ ☠
     ☠ ☠ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ☠ ⊂ ⊃ ∩ ∪ ⍭ ⍡ ∥ ⍪ ⍙ ⍠ ☠ ☠
   '''
-  UK: L 'iso', '''
+  UK: '''
     ☠ ` 1 2 3 4 5 6 7 8 9 0 - = ☠ ☠   ☠ ¬ ! " £ $ % ^ & * ( ) _ + ☠ ☠
     ☠ q w e r t y u i o p [ ] ☠       ☠ Q W E R T Y U I O P { } ☠
     ☠ a s d f g h j k l ; ' # ☠       ☠ A S D F G H J K L : @ ~ ☠
@@ -43,7 +38,7 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
     ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕ ⍎ ⍕ ⊢ ☠       ☠ ⍺ ⌈ ⌊ _ ⍢ ∆ ⍤ ⌸ ⌷ ≡ ≢ ⊣ ☠
     ☠ ⊢ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ⊣ ⊂ ⊃ ∩ ∪ ⍭ ⍡ ∥ ⍪ ⍙ ⍠ ☠ ☠
   '''
-  DK: L 'iso', '''
+  DK: '''
     ☠ $ 1 2 3 4 5 6 7 8 9 0 + ´ ☠ ☠   ☠ § ! " # € % & / ( ) = ? ` ☠ ☠
     ☠ q w e r t y u i o p å ¨ ☠       ☠ Q W E R T Y U I O P Å ^ ☠
     ☠ a s d f g h j k l æ ø ' ☠       ☠ A S D F G H J K L Æ Ø * ☠
@@ -54,6 +49,18 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
     ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕ ⍎ ⍕ ⊢ ☠       ☠ ⍺ ⌈ ⌊ _ ⍢ ∆ ⍤ ⌸ ⌷ ≡ ≢ ⊣ ☠
     ☠ ⊢ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ⊣ ⊂ ⊃ ∩ ∪ ⍭ ⍡ ∥ ⍪ ⍙ ⍠ ☠ ☠
   '''
+layouts = {}
+do ->
+  for lc, s of layoutDesc
+    q = layouts[lc] = ['', '', '', '']
+    for half, i in s.split '\n\n'
+      for line in half.split '\n'
+        for chunk, j in line.split /\s{3,}/
+          q[2 * i + j] += chunk.replace /\s+/g, ''
+    console.assert q[0].length == q[1].length == q[2].length == q[3].length
+    console.assert geom[lc]
+  layoutDesc = null
+  return
 
 @init = ($e) ->
   specialKeys = 15: '⟵', 16: '↹', 30: 'Caps', 43: '↲', 44: '⇧', 57: '⇧'
@@ -77,7 +84,7 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
             </span>
           """
     )}</div>
-    <select id=glyphs-lc>#{join((for x, _ of layouts then "<option>#{x}").sort())}</select>
+    <select id=glyphs-lc>#{join((for lc of layouts then "<option>#{lc}").sort())}</select>
   """
   .on 'focus', '.key input', -> delay 1, (=> $(@).select(); return); return
   .on 'blur', '.key input', -> $(@).val(v = $(@).val()[-1..] || ' ').prop 'title', "U+#{hex ord(v), 4}"; return
@@ -110,11 +117,11 @@ layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Producto
 
 loadBQMap = (bq) ->
   layout = layouts[$lc.val()] || layouts.US
-  $('#glyphs-layout').removeClass('geometry-ansi geometry-iso').addClass "geometry-#{layout.geometry}"
+  $('#glyphs-layout').removeClass('geom-ansi geom-iso').addClass "geom-#{geom[$lc.val()]}"
   for i in [1...NK]
-    if (g0 = layout.quadrants[0][i]) != '☠'
+    if (g0 = layout[0][i]) != '☠'
       g1 = bq[g0] || ' '; $("#k#{i} .g0").text g0; $("#k#{i} .g1").val(g1).prop 'title', "U+#{hex ord(g1), 4}"
-    if (g2 = layout.quadrants[1][i]) != '☠'
+    if (g2 = layout[1][i]) != '☠'
       g3 = bq[g2] || ' '; $("#k#{i} .g2").text g2; $("#k#{i} .g3").val(g3).prop 'title', "U+#{hex ord(g3), 4}"
   return
 
