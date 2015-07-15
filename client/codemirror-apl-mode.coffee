@@ -85,7 +85,7 @@ CodeMirror.defineMode 'apl', (config) ->
         when '{' then a.push t: c, oi: n, ii: n + sw; "apl-dfn#{dfnDepth a} apl-dfn"
         when ')' then (if la.t == '(' then a.pop(); 'apl-par'  else 'apl-err')
         when ']' then (if la.t == '[' then a.pop(); 'apl-sqbr' else 'apl-err')
-        when '}' then (if la.t == '{' then a.pop(); "apl-dfn apl-dfn#{1 + dfnDepth a}" else 'apl-err')
+        when '}' then (if la.t == '{' then a.pop(); "apl-dfn#{1 + dfnDepth a} apl-dfn" else 'apl-err')
         when ';' then la.t == '[' && 'apl-semi' || 'apl-err'
         when '⋄' then la.t !in ['(', '['] && 'apl-diam' || 'apl-err'
         when '⎕' then stream.match(/[áa-z0-9]*/i)?[0].toLowerCase() in quadNames && 'apl-quad' || 'apl-err'
