@@ -63,6 +63,9 @@ class @IDE
       '*spawnedError': ({message}) =>
         @die(); delay 100, -> $.alert message, 'Error'; return # give the window a chance to restore its original dimensions
         return
+      '*spawnedExited': ({code}) =>
+        if code then @die(); delay 100, -> $.alert "Interpreter process exited with code #{code}", 'Error'; return
+        return
       '*disconnected': => (if !@dead then $.alert 'Interpreter disconnected', 'Error'; @die()); return
       Disconnect: ({message}) =>
         if !@dead
