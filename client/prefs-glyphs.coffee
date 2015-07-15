@@ -5,49 +5,34 @@ keymap = require './keymap'
 $pfx = $lc = null # DOM elements for "Prefix" and "Locale"
 NK = 58 # number of scancodes we are concerned with
 
+L = (g, s) -> # layout constructor
+  # g: the geometry (aka "mechanical layout"); the precise arrangement of keys is specified as a CSS class
+  a = ['', '']
+  for line in s.split '\n'
+    for chunk, i in line.split /\s{3,}/
+      a[i] += chunk.replace /\s+/g, ''
+  console.assert a[0].length == a[1].length
+  {geometry: g, normal: a[0], shifted: a[1]}
+
 layouts = # indexed by scancode; see http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
-  US:
-    geometry: 'ansi' # geometries (or "mechanical layouts") are specified as CSS classes
-    normal: qw '''
-      ☠ ` 1 2 3 4 5 6 7 8 9 0 - = ☠ ☠
-      ☠ q w e r t y u i o p [ ] \\
-      ☠ a s d f g h j k l ; ' ☠ ☠
-      ☠ ☠ z x c v b n m , . / ☠ ☠
-    '''
-    shifted: qw '''
-      ☠ ~ ! @ # $ % ^ & * ( ) _ + ☠ ☠
-      ☠ Q W E R T Y U I O P { } |
-      ☠ A S D F G H J K L : " ☠ ☠
-      ☠ ☠ Z X C V B N M < > ? ☠ ☠
-    '''
-  UK:
-    geometry: 'iso'
-    normal: qw '''
-      ☠ ` 1 2 3 4 5 6 7 8 9 0 - = ☠ ☠
-      ☠ q w e r t y u i o p [ ] ☠
-      ☠ a s d f g h j k l ; ' # ☠
-      ☠ \\ z x c v b n m , . / ☠ ☠
-    '''
-    shifted: qw '''
-      ☠ ¬ ! " £ $ % ^ & * ( ) _ + ☠ ☠
-      ☠ Q W E R T Y U I O P { } ☠
-      ☠ A S D F G H J K L : @ ~ ☠
-      ☠ | Z X C V B N M < > ? ☠ ☠
-    '''
-  DK:
-    geometry: 'iso'
-    normal: qw '''
-      ☠ $ 1 2 3 4 5 6 7 8 9 0 + ´ ☠ ☠
-      ☠ q w e r t y u i o p å ¨ ☠
-      ☠ a s d f g h j k l æ ø ' ☠
-      ☠ < z x c v b n m , . - ☠ ☠
-    '''
-    shifted: qw '''
-      ☠ § ! " # € % & / ( ) = ? ` ☠ ☠
-      ☠ Q W E R T Y U I O P Å ^ ☠
-      ☠ A S D F G H J K L Æ Ø * ☠
-      ☠ > Z X C V B N M ; : _ ☠ ☠
-    '''
+  US: L 'ansi', '''
+    ☠ ` 1 2 3 4 5 6 7 8 9 0 - = ☠ ☠   ☠ ~ ! @ # $ % ^ & * ( ) _ + ☠ ☠
+    ☠ q w e r t y u i o p [ ] \\      ☠ Q W E R T Y U I O P { } |
+    ☠ a s d f g h j k l ; ' ☠ ☠       ☠ A S D F G H J K L : " ☠ ☠
+    ☠ ☠ z x c v b n m , . / ☠ ☠       ☠ ☠ Z X C V B N M < > ? ☠ ☠
+  '''
+  UK: L 'iso', '''
+    ☠ ` 1 2 3 4 5 6 7 8 9 0 - = ☠ ☠   ☠ ¬ ! " £ $ % ^ & * ( ) _ + ☠ ☠
+    ☠ q w e r t y u i o p [ ] ☠       ☠ Q W E R T Y U I O P { } ☠
+    ☠ a s d f g h j k l ; ' # ☠       ☠ A S D F G H J K L : @ ~ ☠
+    ☠ \\ z x c v b n m , . / ☠ ☠      ☠ | Z X C V B N M < > ? ☠ ☠
+  '''
+  DK: L 'iso', '''
+    ☠ $ 1 2 3 4 5 6 7 8 9 0 + ´ ☠ ☠   ☠ § ! " # € % & / ( ) = ? ` ☠ ☠
+    ☠ q w e r t y u i o p å ¨ ☠       ☠ Q W E R T Y U I O P Å ^ ☠
+    ☠ a s d f g h j k l æ ø ' ☠       ☠ A S D F G H J K L Æ Ø * ☠
+    ☠ < z x c v b n m , . - ☠ ☠       ☠ > Z X C V B N M ; : _ ☠ ☠
+  '''
 
 @name = 'Glyphs'
 
