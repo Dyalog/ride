@@ -3,6 +3,9 @@ if process?
   gui = require 'nw.gui'; fs = require 'fs'; nomnom = require 'nomnom'
   path = require 'path'; {spawn} = require 'child_process'; proxy = require './proxy'
 
+  if /^win/i.test(process.platform) && fs.existsSync setImeExe = process.execPath.replace /[^\\\/]+$/, 'set-ime.exe'
+    spawn setImeExe, [process.pid, 'E0990409'], stdio: ['ignore', 'ignore', 'ignore']
+
   segmOverlap = (a, b, c, d) -> a < d && c < b # Do the two segments ab and cd overlap?
 
   rectOverlap = (r0, r1) -> ( # A rectangle is {x,y,width,height}.  Do the two overlap?
@@ -88,7 +91,6 @@ if process?
 
   D.forceCloseNWWindow = -> nww.close true; return # used to close floating windows after session is dead
 
-  CodeMirror.keyMap.default.F12 = -> nww.showDevTools(); false
   cmenu = new gui.Menu
   ['Cut', 'Copy', 'Paste'].forEach (x) ->
     cmenu.append new gui.MenuItem label: x, click: (-> document.execCommand x; return); return
@@ -118,8 +120,13 @@ if process?
   ).parse gui.App.argv
 
   # Debugging utilities
-  CodeMirror.keyMap.default['Shift-Ctrl-F12'] = -> foo.bar # cause a crash
-  CodeMirror.keyMap.default['Ctrl-F12'] = ->
+  $(document).keydown (e) ->
+    if e.which == 123 && !e.altKey # F12
+      if     !e.ctrlKey && !e.shiftKey then nww.showDevTools(); false
+      else if e.ctrlKey && !e.shiftKey then showProxyLog(); false
+      else if e.ctrlKey &&  e.shiftKey then foo.bar # cause a crash
+
+  showProxyLog = ->
     lw = open ''
     lw.document.write '''
       <html>
@@ -254,6 +261,3 @@ if process?
         mb.insert ourMenu, ix
       nww.menu = mb
       return
-
-  if /^win/i.test(process.platform) && fs.existsSync setImeExe = process.execPath.replace /[^\\\/]+$/, 'set-ime.exe'
-    try spawn setImeExe, ['E0990409'], stdio: ['ignore', 'ignore', 'ignore']
