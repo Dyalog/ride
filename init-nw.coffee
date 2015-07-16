@@ -254,3 +254,6 @@ if process?
         mb.insert ourMenu, ix
       nww.menu = mb
       return
+
+  if /^win/i.test(process.platform) && fs.existsSync setImeExe = process.execPath.replace /[^\\\/]+$/, 'set-ime.exe'
+    try spawn setImeExe, ['E0990409'], stdio: ['ignore', 'ignore', 'ignore']
