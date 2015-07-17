@@ -124,7 +124,7 @@ if process?
   D.opts = nomnom.options(
     connect: abbr: 'c', flag: true, metavar: 'HOST[:PORT]'
     listen:  abbr: 'l', flag: true
-    spawn:   abbr: 's', flag: true, default: !D.win
+    spawn:   abbr: 's', flag: true
   ).parse gui.App.argv
 
   # Debugging utilities
