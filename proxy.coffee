@@ -223,7 +223,9 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
           log "listening for connections from spawned interpreter on #{hp}"
           exe = process.env.DYALOG_IDE_INTERPRETER_EXE || 'dyalog'
           log "spawning interpreter #{JSON.stringify exe}"
-          child = spawn exe, ['+s', '-q'], stdio: ['pipe', 'ignore', 'ignore'], env: extend process.env,
+          args = ['+s', '-q']; stdio = ['pipe', 'ignore', 'ignore']
+          if /^win/i.test process.platform then args = []; stdio[0] = 'ignore'
+          child = spawn exe, args, stdio: stdio, env: extend process.env,
             RIDE_INIT: "CONNECT:#{hp}", RIDE_SPAWNED: '1'
           toBrowser '*spawned', pid: child.pid
           child.on 'error', (err) ->
