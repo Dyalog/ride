@@ -59,14 +59,11 @@ $ ->
       connect()
 
   # CSS class to indicate theme
-  if !prefs.theme() then prefs.theme do ->
-    # Detect platform
-    #   https://nodejs.org/api/process.html#process_process_platform
-    #   https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
-    p = (D.process ? navigator).platform
-    if /^(darwin|mac|ipad|iphone|ipod)/i.test p then 'cupertino'
-    else if /^(linux|x11|android)/i.test p then 'ancient'
-    else 'redmond'
+  if !prefs.theme() then prefs.theme(
+    if D.mac || /^(darwin|mac|ipad|iphone|ipod)/i.test navigator?.platform then 'cupertino'
+    else if D.win || /^win/.test navigator?.platform then 'redmond'
+    else 'ancient'
+  )
   $('body').addClass "theme-#{prefs.theme()}"
   prefs.theme (x, old) ->
     $('body').removeClass("theme-#{old}").addClass("theme-#{x}")
@@ -75,8 +72,8 @@ $ ->
 
   # CSS class to indicate platform (NW.js-only)
   if D.nwjs
-    if D.mac then $('body').addClass 'platform-mac'
-    else if /^win/i.test D.process.platform then $('body').addClass 'platform-windows'
+    D.mac && $('body').addClass 'platform-mac'
+    D.win && $('body').addClass 'platform-windows'
 
   # CSS class for focused window
   $(window).on 'focus blur', (e) -> $('body').toggleClass 'window-focused', window.focused = e.type == 'focus'

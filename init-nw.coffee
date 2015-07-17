@@ -3,7 +3,16 @@ if process?
   gui = require 'nw.gui'; fs = require 'fs'; nomnom = require 'nomnom'
   path = require 'path'; {spawn} = require 'child_process'; proxy = require './proxy'
 
-  if /^win/i.test(process.platform) && fs.existsSync setImeExe = process.execPath.replace /[^\\\/]+$/, 'set-ime.exe'
+  # Detect platform
+  #   https://nodejs.org/api/process.html#process_process_platform
+  #   https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
+  D.nwjs = 1
+  D.win = /^win/i.test process.platform
+  D.mac = process.platform == 'darwin'
+  D.floating = !!opener
+
+  # switch IME locale as early as possible
+  if D.win && fs.existsSync setImeExe = process.execPath.replace /[^\\\/]+$/, 'set-ime.exe'
     spawn setImeExe, [process.pid, 'E0990409'], stdio: ['ignore', 'ignore', 'ignore']
 
   segmOverlap = (a, b, c, d) -> a < d && c < b # Do the two segments ab and cd overlap?
@@ -35,7 +44,6 @@ if process?
       break
     return
 
-  D.nwjs = true; D.mac = process.platform == 'darwin'; D.floating = !!opener
   if D.mac then process.env.DYALOG_IDE_INTERPRETER_EXE ||= path.resolve process.cwd(), '../Dyalog/mapl'
   process.chdir process.env.PWD || process.env.HOME || '.' # see https://github.com/nwjs/nw.js/issues/648
   D.process = process; gui.Screen.Init(); nww = gui.Window.get()
@@ -116,7 +124,7 @@ if process?
   D.opts = nomnom.options(
     connect: abbr: 'c', flag: true, metavar: 'HOST[:PORT]'
     listen:  abbr: 'l', flag: true
-    spawn:   abbr: 's', flag: true, default: !/^win/i.test process.platform
+    spawn:   abbr: 's', flag: true, default: !D.win
   ).parse gui.App.argv
 
   # Debugging utilities
