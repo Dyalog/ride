@@ -58,11 +58,14 @@ CodeMirror.defineMode 'apl', (config) ->
       oi: 0 #   oi: outer indent -- the indent of the opening token's line
       ii: 0 #   ii: inner indent -- the indent of the block's body; it can be adjusted later
     ]
+    # kw:   # current keyword
     # vars: # local names in a tradfn
 
   token: (stream, h) -> # h:state
     {a} = h; la = last a; n = stream.indentation()
-    if stream.sol() && !stream.match /^\s*(:|∇|$)/, false then a[a.length - 1] = $.extend {ii: n}, la
+    if stream.sol()
+      delete h.kw
+      if !stream.match /^\s*(:|∇|$)/, false then a[a.length - 1] = $.extend {ii: n}, la
     if h.hdr
       delete h.hdr; stream.match /[^⍝\n\r]*/; s = stream.current()
       if /^\s*:/.test(s) || dfnHeader.test s
@@ -77,6 +80,7 @@ CodeMirror.defineMode 'apl', (config) ->
       switch c
         when ' ' then stream.eatSpace(); null
         when '⍝' then stream.skipToEnd(); 'apl-com'
+        when '⋄' then delete h.kw; la.t !in ['(', '['] && 'apl-diam' || 'apl-err'
         when '←' then 'apl-asgn'
         when "'" then (if stream.match /^(?:[^'\r\n]|'')*'/ then 'apl-str' else stream.skipToEnd(); 'apl-err')
         when '⍬' then 'apl-zld'
@@ -87,7 +91,6 @@ CodeMirror.defineMode 'apl', (config) ->
         when ']' then (if la.t == '[' then a.pop(); 'apl-sqbr' else 'apl-err')
         when '}' then (if la.t == '{' then a.pop(); "apl-dfn#{1 + dfnDepth a} apl-dfn" else 'apl-err')
         when ';' then la.t == '[' && 'apl-semi' || 'apl-err'
-        when '⋄' then la.t !in ['(', '['] && 'apl-diam' || 'apl-err'
         when '⎕' then stream.match(/[áa-z0-9]*/i)?[0].toLowerCase() in quadNames && 'apl-quad' || 'apl-err'
         when '⍞' then 'apl-quad'
         when '#' then 'apl-ns'
@@ -129,7 +132,8 @@ CodeMirror.defineMode 'apl', (config) ->
                   for y in ['constructor', 'destructor', 'method', 'trigger'] when x == y[...x.length] then ok = 1; break
                 else
                   ok = 1
-            ok && 'apl-kw' || 'apl-err'
+              when '' then ok = h.kw == 'class' # ":" is allowed after ":Class" to specify inheritance
+            if ok then h.kw = kw; 'apl-kw' else delete h.kw; 'apl-err'
         else
           if name0.test c
             stream.match name1; x = stream.current(); dd = dfnDepth a
