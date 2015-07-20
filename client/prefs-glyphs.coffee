@@ -1,66 +1,13 @@
 prefs = require './prefs'
-keymap = require './keymap'
-{join, esc, dict, hex, ord, qw, delay} = require './util'
+{layouts, geom} = require './keymap'
+{join, esc, hex, ord, delay} = require './util'
 
 @name = 'Glyphs'
 
 $pfx = $lc = null # DOM elements for "Prefix" and "Locale"
 NK = 58 # number of scancodes we are concerned with
 
-# Every geometry (aka "mechanical layout") has its precise arrangement of keys specified as a CSS class.
-geom = US: 'ansi', UK: 'iso', DK: 'iso'
-
-# The quadrants of each layout entry will be turned into an array of four strings without whitespace.
-#    0:normal  1:shifted
-#    2:APL     3:APL shifted
-# They can be indexed by scancode: http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
-# "APL" and "APL shifted" are the defaults upon which the user can build customisations.
-layoutDesc =
-  US: '''
-    ☠ ` 1 2 3 4 5 6 7 8 9 0 - = ☠ ☠   ☠ ~ ! @ # $ % ^ & * ( ) _ + ☠ ☠
-    ☠ q w e r t y u i o p [ ] \\      ☠ Q W E R T Y U I O P { } |
-    ☠ a s d f g h j k l ; ' ☠ ☠       ☠ A S D F G H J K L : " ☠ ☠
-    ☠ ☠ z x c v b n m , . / ☠ ☠       ☠ ☠ Z X C V B N M < > ? ☠ ☠
-
-    ☠ ⋄ ¨ ¯ < ≤ = ≥ > ≠ ∨ ∧ × ÷ ☠ ☠   ☠ ¤ ⌶ ⍫ ⍒ ⍋ ⌽ ⍉ ⊖ ⍟ ⍱ ⍲ ! ⌹ ☠ ☠
-    ☠ ? ⍵ ∊ ⍴ ~ ↑ ↓ ⍳ ○ * ← → ⊢       ☠ ⍰ ⍵ ⍷ ⌾ ⍨ ↑ ↓ ⍸ ⍥ ⍣ ⍞ ⍬ ⊣
-    ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕ ⍎ ⍕ ☠ ☠       ☠ ⍺ ⌈ ⌊ _ ⍢ ∆ ⍤ ⌸ ⌷ ≡ ≢ ☠ ☠
-    ☠ ☠ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ☠ ⊂ ⊃ ∩ ∪ ⍭ ⍡ ∥ ⍪ ⍙ ⍠ ☠ ☠
-  '''
-  UK: '''
-    ☠ ` 1 2 3 4 5 6 7 8 9 0 - = ☠ ☠   ☠ ¬ ! " £ $ % ^ & * ( ) _ + ☠ ☠
-    ☠ q w e r t y u i o p [ ] ☠       ☠ Q W E R T Y U I O P { } ☠
-    ☠ a s d f g h j k l ; ' # ☠       ☠ A S D F G H J K L : @ ~ ☠
-    ☠ \\z x c v b n m , . / ☠ ☠       ☠ | Z X C V B N M < > ? ☠ ☠
-
-    ☠ ⋄ ¨ ¯ < ≤ = ≥ > ≠ ∨ ∧ × ÷ ☠ ☠   ☠ ¤ ⌶ ⍫ ⍒ ⍋ ⌽ ⍉ ⊖ ⍟ ⍱ ⍲ ! ⌹ ☠ ☠
-    ☠ ? ⍵ ∊ ⍴ ~ ↑ ↓ ⍳ ○ * ← → ☠       ☠ ⍰ ⍵ ⍷ ⌾ ⍨ ↑ ↓ ⍸ ⍥ ⍣ ⍞ ⍬ ☠
-    ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕ ⍎ ⍕ ⊢ ☠       ☠ ⍺ ⌈ ⌊ _ ⍢ ∆ ⍤ ⌸ ⌷ ≡ ≢ ⊣ ☠
-    ☠ ⊢ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ⊣ ⊂ ⊃ ∩ ∪ ⍭ ⍡ ∥ ⍪ ⍙ ⍠ ☠ ☠
-  '''
-  DK: '''
-    ☠ $ 1 2 3 4 5 6 7 8 9 0 + ´ ☠ ☠   ☠ § ! " # € % & / ( ) = ? ` ☠ ☠
-    ☠ q w e r t y u i o p å ¨ ☠       ☠ Q W E R T Y U I O P Å ^ ☠
-    ☠ a s d f g h j k l æ ø ' ☠       ☠ A S D F G H J K L Æ Ø * ☠
-    ☠ < z x c v b n m , . - ☠ ☠       ☠ > Z X C V B N M ; : _ ☠ ☠
-
-    ☠ ⋄ ¨ ¯ < ≤ = ≥ > ≠ ∨ ∧ × ÷ ☠ ☠   ☠ ¤ ⌶ ⍫ ⍒ ⍋ ⌽ ⍉ ⊖ ⍟ ⍱ ⍲ ! ⌹ ☠ ☠
-    ☠ ? ⍵ ∊ ⍴ ~ ↑ ↓ ⍳ ○ * ← → ☠       ☠ ⍰ ⍵ ⍷ ⌾ ⍨ ↑ ↓ ⍸ ⍥ ⍣ ⍞ ⍬ ☠
-    ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕ ⍎ ⍕ ⊢ ☠       ☠ ⍺ ⌈ ⌊ _ ⍢ ∆ ⍤ ⌸ ⌷ ≡ ≢ ⊣ ☠
-    ☠ ⊢ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ⊣ ⊂ ⊃ ∩ ∪ ⍭ ⍡ ∥ ⍪ ⍙ ⍠ ☠ ☠
-  '''
-layouts = {}
-do ->
-  for lc, s of layoutDesc
-    q = layouts[lc] = ['', '', '', '']
-    for half, i in s.split '\n\n'
-      for line in half.split '\n'
-        for chunk, j in line.split /\s{3,}/
-          q[2 * i + j] += chunk.replace /\s+/g, ''
-    console.assert q[0].length == q[1].length == q[2].length == q[3].length
-    console.assert geom[lc]
-  layoutDesc = null
-  return
+model = window.model = {} # dictionary: locale→[arrayOfAPLGlyphs, arrayOfShiftedAPLGlyphs]
 
 @init = ($e) ->
   specialKeys = 15: '⟵', 16: '↹', 30: 'Caps', 43: '↲', 44: '⇧', 57: '⇧'
@@ -84,10 +31,14 @@ do ->
             </span>
           """
     )}</div>
-    <select id=glyphs-lc>#{join((for lc of layouts then "<option>#{lc}").sort())}</select>
+    <select id=glyphs-lc>#{join (for lc of layouts then "<option>#{lc}").sort()}</select>
   """
   .on 'focus', '.key input', -> delay 1, (=> $(@).select(); return); return
-  .on 'blur', '.key input', -> $(@).val(v = $(@).val()[-1..] || ' ').prop 'title', "U+#{hex ord(v), 4}"; return
+  .on 'blur', '.key input', ->
+    $(@).val(v = $(@).val()[-1..] || ' ').prop 'title', "U+#{hex ord(v), 4}"
+    i = +$(@).hasClass 'g3'; j = +$(@).closest('.key').prop('id').replace /^k/, ''
+    model[$lc.val()][i][j] = v
+    return
   .on 'mouseover mouseout', '.key input', (e) -> $(@).toggleClass 'hover', e.type == 'mouseover'; return
   if !prefs.kbdLocale()
     prefs.kbdLocale(
@@ -97,38 +48,45 @@ do ->
         else                    'US'
     )
   $('#glyphs-reset').button().click ->
+    lc = $lc.val()
     $pfx.val(prefs.prefixKey.getDefault()).change() # fire a "change" event to update the legend
-    loadBQMap keymap.getDefaultBQMap()
+    model[lc] = [layouts[lc][2].split(''), layouts[lc][3].split('')]
+    updateGlyphs()
     false
-  $lc = $('#glyphs-lc').val(prefs.kbdLocale()).change ->
-    prefs.kbdLocale $(@).val()
-    load $.extend {}, keymap.getBQMap(), dict $('#glyphs-layout .key').map ->
-      [[$('.g0', @).text(), $('.g1', @).val()], [$('.g2', @).text(), $('.g3', @).val()]]
-    return
+  $lc = $('#glyphs-lc').change updateGlyphs
   $pfx = $ '#glyphs-pfx'
     .on 'change keyup', -> $('#glyphs-legend .pfx2').text $(@).val()[-1..]; return
     .focus -> delay 1, (=> $(@).select(); return); return
   return
 
-@load = load = (bq) -> # bq: current mappings, possibly not yet saved
+@load = ->
+  $lc.val prefs.kbdLocale()
   $pfx.val(prefs.prefixKey()).change() # fire a "change" event to update the legend
-  loadBQMap bq || keymap.getBQMap()
+  model = {}
+  for lc, l of layouts then model[lc] = [l[2].split(''), l[3].split('')]
+  for lc, v of prefs.prefixMaps() then for i in [0...v.length] by 2
+    x = v[i]; y = v[i + 1]; for j in [0..1] then ix = layouts[lc][j].indexOf x; ix >= 0 && model[lc][j][ix] = y
+  updateGlyphs()
   return
 
-loadBQMap = (bq) ->
-  layout = layouts[$lc.val()] || layouts.US
+updateGlyphs = -> # apply model values to the DOM
+  lc = $lc.val(); l = layouts[lc]; m = model[lc]
   $('#glyphs-layout').removeClass('geom-ansi geom-iso').addClass "geom-#{geom[$lc.val()]}"
   for i in [1...NK]
-    if (g0 = layout[0][i]) != '☠'
-      g1 = bq[g0] || ' '; $("#k#{i} .g0").text g0; $("#k#{i} .g1").val(g1).prop 'title', "U+#{hex ord(g1), 4}"
-    if (g2 = layout[1][i]) != '☠'
-      g3 = bq[g2] || ' '; $("#k#{i} .g2").text g2; $("#k#{i} .g3").val(g3).prop 'title', "U+#{hex ord(g3), 4}"
+    g0 = l[0][i]; g2 = l[1][i]
+    if g0 != '☠' then $("#k#{i} .g0").text g0; g1 = m[0][i]; $("#k#{i} .g1").val(g1).prop 'title', "U+#{hex ord(g1), 4}"
+    if g2 != '☠' then $("#k#{i} .g2").text g2; g3 = m[1][i]; $("#k#{i} .g3").val(g3).prop 'title', "U+#{hex ord(g3), 4}"
   return
 
 @validate = -> if $pfx.val().length != 1 then message: 'Invalid prefix key', element: $pfx
 
 @save = ->
   prefs.prefixKey $pfx.val()
-  keymap.setBQMap dict $('#glyphs-layout .key').map ->
-    [[$('.g0', @).text(), $('.g1', @).val()], [$('.g2', @).text(), $('.g3', @).val()]]
+  prefs.kbdLocale $lc.val()
+  h = {}
+  for lc, m of model
+    l = layouts[lc]; s = ''; xs = l[0] + l[1]; ys = m[0].concat(m[1]).join ''; YS = l[2] + l[3] # YS: the defaults
+    for x, i in xs then y = ys[i]; Y = YS[i]; if x != '☠' && y != '☠' && y != Y then s += x + y
+    s && h[lc] = s
+  prefs.prefixMaps h
   return

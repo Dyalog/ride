@@ -85,8 +85,8 @@ $.extend CodeMirror.commands,
               Left:      (cm, m) -> m.close(); cm.execCommand 'goCharLeft'; return
               Right:     (cm, m) -> m.pick(); return
             hint: ->
-              pk = prefs.prefixKey()
-              data = from: c0, to: cm.getCursor(), list: KS.map (k) ->
+              pk = prefs.prefixKey(); ks = (for x of bq when x != '☠' then x).sort()
+              data = from: c0, to: cm.getCursor(), list: ks.map (k) ->
                 if k == pk
                   text: '', hint: bqbqHint, render: (e) -> e.innerHTML = "  #{pk}#{pk} <i>completion by name</i>"; return
                 else
@@ -111,16 +111,75 @@ switchWindows = (d) -> # d: a step of either 1 or -1
   j = if i < 0 then 0 else (i + a.length + d) % a.length
   $("#wintab#{a[j].id} a").click(); a[j].focus(); false
 
-# `x completions
-KS = '`1234567890-=qwertyuiop[]asdfghjk l;\'\\zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}ASDFGHJKL:"|ZXCVBNM<>?£'.split /\s*/
-VS = '`¨¯<≤=≥>≠∨∧×÷?⍵∊⍴~↑↓⍳○*←→⍺⌈⌊_∇∆∘\'⎕⍎⍕ ⊢ ⊂⊃∩∪⊥⊤|⍝⍀⌿⋄⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹?⍵⍷⍴⍨↑↓⍸⍥⍣⍞⍬⍺⌈⌊_∇∆⍤⌸⌷≡≢⊣⊂⊃∩∪⊥⊤|⍪⍙⍠⍒'.split /\s*/
-if KS.length != VS.length then console.error? 'bad configuration of backquote keymap'
-BQ = dict zip KS, VS # default ` map
-bq = $.extend {}, BQ; do -> s = prefs.prefixMap(); for i in [0...s.length] by 2 then bq[s[i]] = s[i + 1] # current ` map
-@getDefaultBQMap = -> $.extend {}, BQ
-@getBQMap = -> $.extend {}, bq
-@getBQKeyFor = getBQKeyFor = (v) -> (for k in KS when bq[k] == v then return k); ''
-@setBQMap = (bq1) -> $.extend bq, bq1; prefs.prefixMap join(for k, v of bq when v != (BQ[k] || ' ') then k + v); return
+# Every geometry (aka "mechanical layout") has its precise arrangement of keys specified as a CSS class.
+@geom = geom = US: 'ansi', UK: 'iso', DK: 'iso'
+
+# The quadrants of each layout entry will be turned into an array of four strings without whitespace.
+#    0:normal  1:shifted
+#    2:APL     3:APL shifted
+# They can be indexed by scancode: http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
+# "APL" and "APL shifted" are the defaults upon which the user can build customisations.
+layoutDesc =
+  US: '''
+    ☠ ` 1 2 3 4 5 6 7 8 9 0 - = ☠ ☠   ☠ ~ ! @ # $ % ^ & * ( ) _ + ☠ ☠
+    ☠ q w e r t y u i o p [ ] \\      ☠ Q W E R T Y U I O P { } |
+    ☠ a s d f g h j k l ; ' ☠ ☠       ☠ A S D F G H J K L : " ☠ ☠
+    ☠ ☠ z x c v b n m , . / ☠ ☠       ☠ ☠ Z X C V B N M < > ? ☠ ☠
+
+    ☠ ⋄ ¨ ¯ < ≤ = ≥ > ≠ ∨ ∧ × ÷ ☠ ☠   ☠ ¤ ⌶ ⍫ ⍒ ⍋ ⌽ ⍉ ⊖ ⍟ ⍱ ⍲ ! ⌹ ☠ ☠
+    ☠ ? ⍵ ∊ ⍴ ~ ↑ ↓ ⍳ ○ * ← → ⊢       ☠ ⍰ ⍵ ⍷ ⌾ ⍨ ↑ ↓ ⍸ ⍥ ⍣ ⍞ ⍬ ⊣
+    ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕ ⍎ ⍕ ☠ ☠       ☠ ⍺ ⌈ ⌊ _ ⍢ ∆ ⍤ ⌸ ⌷ ≡ ≢ ☠ ☠
+    ☠ ☠ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ☠ ⊂ ⊃ ∩ ∪ ⍭ ⍡ ∥ ⍪ ⍙ ⍠ ☠ ☠
+  '''
+  UK: '''
+    ☠ ` 1 2 3 4 5 6 7 8 9 0 - = ☠ ☠   ☠ ¬ ! " £ $ % ^ & * ( ) _ + ☠ ☠
+    ☠ q w e r t y u i o p [ ] ☠       ☠ Q W E R T Y U I O P { } ☠
+    ☠ a s d f g h j k l ; ' # ☠       ☠ A S D F G H J K L : @ ~ ☠
+    ☠ \\z x c v b n m , . / ☠ ☠       ☠ | Z X C V B N M < > ? ☠ ☠
+
+    ☠ ⋄ ¨ ¯ < ≤ = ≥ > ≠ ∨ ∧ × ÷ ☠ ☠   ☠ ¤ ⌶ ⍫ ⍒ ⍋ ⌽ ⍉ ⊖ ⍟ ⍱ ⍲ ! ⌹ ☠ ☠
+    ☠ ? ⍵ ∊ ⍴ ~ ↑ ↓ ⍳ ○ * ← → ☠       ☠ ⍰ ⍵ ⍷ ⌾ ⍨ ↑ ↓ ⍸ ⍥ ⍣ ⍞ ⍬ ☠
+    ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕ ⍎ ⍕ ⊢ ☠       ☠ ⍺ ⌈ ⌊ _ ⍢ ∆ ⍤ ⌸ ⌷ ≡ ≢ ⊣ ☠
+    ☠ ⊢ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ⊣ ⊂ ⊃ ∩ ∪ ⍭ ⍡ ∥ ⍪ ⍙ ⍠ ☠ ☠
+  '''
+  DK: '''
+    ☠ $ 1 2 3 4 5 6 7 8 9 0 + ´ ☠ ☠   ☠ § ! " # € % & / ( ) = ? ` ☠ ☠
+    ☠ q w e r t y u i o p å ¨ ☠       ☠ Q W E R T Y U I O P Å ^ ☠
+    ☠ a s d f g h j k l æ ø ' ☠       ☠ A S D F G H J K L Æ Ø * ☠
+    ☠ < z x c v b n m , . - ☠ ☠       ☠ > Z X C V B N M ; : _ ☠ ☠
+
+    ☠ ⋄ ¨ ¯ < ≤ = ≥ > ≠ ∨ ∧ × ÷ ☠ ☠   ☠ ¤ ⌶ ⍫ ⍒ ⍋ ⌽ ⍉ ⊖ ⍟ ⍱ ⍲ ! ⌹ ☠ ☠
+    ☠ ? ⍵ ∊ ⍴ ~ ↑ ↓ ⍳ ○ * ← → ☠       ☠ ⍰ ⍵ ⍷ ⌾ ⍨ ↑ ↓ ⍸ ⍥ ⍣ ⍞ ⍬ ☠
+    ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕ ⍎ ⍕ ⊢ ☠       ☠ ⍺ ⌈ ⌊ _ ⍢ ∆ ⍤ ⌸ ⌷ ≡ ≢ ⊣ ☠
+    ☠ ⊢ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ⊣ ⊂ ⊃ ∩ ∪ ⍭ ⍡ ∥ ⍪ ⍙ ⍠ ☠ ☠
+  '''
+@layouts = layouts = {}
+do ->
+  for lc, s of layoutDesc
+    q = layouts[lc] = ['', '', '', '']
+    for half, i in s.split '\n\n'
+      for line in half.split '\n'
+        for chunk, j in line.split /\s{3,}/
+          q[2 * i + j] += chunk.replace /\s+/g, ''
+    console.assert q[0].length == q[1].length == q[2].length == q[3].length
+    console.assert geom[lc]
+  layoutDesc = null
+  return
+
+bq = null # effective ` map as a dictionary, kept in sync with the prefs
+do updateBQ = ->
+  bq = {}; lc = prefs.kbdLocale(); l = layouts[lc]; n = l[0].length
+  for i in [0..1] then for j in [0...n] then bq[l[i][j]] ?= l[2 + i][j]
+  if s = prefs.prefixMaps()[lc] then for i in [0...s.length] by 2 then x = s[i]; y = s[i + 1]; bq[x] = y
+  return
+prefs.prefixMaps updateBQ; prefs.kbdLocale updateBQ
+
+# order: used to measure how "complicated" (for some made-up definition of the word) a shortcut is.
+# Tooltips in the lbar show the simplest one.
+order = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+complexity = (x) -> (1 + order.indexOf x) || (1 + order.length + x.charCodeAt 0)
+@getBQKeyFor = getBQKeyFor = (v) ->
+  r = ''; (for x, y of bq when y == v && (!r || complexity(r) > complexity(x)) then r = x); r
 
 bqChangeHandler = (cm, o) -> # o: changeObj
   l = o.from.line; c = o.from.ch

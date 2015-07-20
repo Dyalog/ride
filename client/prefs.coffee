@@ -30,7 +30,7 @@ D.prefs = @
   ['posEditor',         [32, 32, 1000, 618]] # [x,y,w,h]
   ['posTracer',         [32, 32, 1000, 618]] # [x,y,w,h]
   ['prefixKey',         '`']
-  ['prefixMap',         ''] # pairs of characters; only differences from the default ` map are stored
+  ['prefixMaps',        {}] # per-locale strings of pairs of characters -- diffs from the default ` map for that locale
   ['editorWidth',       0] # width of a docked editor
   ['tracerHeight',      0] # height of a docked tracer
   ['wrap',              0] # line wrapping in session
