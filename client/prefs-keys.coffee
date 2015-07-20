@@ -6,6 +6,8 @@ prefs = require './prefs'
 
 keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-del>×</a></span> "
 
+$sc = null # <input> for search
+
 @init = ($e) ->
   $e.html """
     <div>
@@ -25,14 +27,14 @@ keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-de
     .on 'click', '.keys-add', ->
       $b = $ @; getKeystroke (k) -> k && $b.parent().append(keyHTML k).append $b; updateDups(); return
       false
-  $('#keys-search').on 'keyup change', ->
+  $sc = $('#keys-search').on 'keyup change', ->
     q = @value.toLowerCase(); $('#keys-search-clear').toggle !!q; found = 0
     $('#keys-table-wrapper tr').each ->
       $(@).toggle x = 0 <= $(@).text().toLowerCase().indexOf q
       found ||= x; return
     $('#keys-no-results').toggle !found
     return
-  $('#keys-search-clear').click -> $(@).hide(); $('#keys-search').val('').change().focus(); false
+  $('#keys-search-clear').click -> $(@).hide(); $sc.val('').change().focus(); false
   return
 
 getKeystroke = (callback) ->
@@ -67,6 +69,7 @@ getKeystroke = (callback) ->
       .html join (h[code] || defaults).map keyHTML
       .append '<a href=# class=keys-add>+</a>'
   updateDups()
+  $sc.val() && $sc.val('').change()
   return
 
 @save = ->
