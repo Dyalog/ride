@@ -2,47 +2,47 @@ prefs = require './prefs'
 {esc, join} = require './util'
 {cmds} = require './cmds'
 
-@name = 'Keys'
+@name = 'Shortcuts'
 
-keyHTML = (k) -> "<span><span class=keys-text>#{k}</span><a href=# class=keys-del>×</a></span> "
+keyHTML = (k) -> "<span><span class=shortcuts-text>#{k}</span><a href=# class=shortcuts-del>×</a></span> "
 
 $sc = null # <input> for search
 
 @init = ($e) ->
   $e.html """
     <div>
-      <input id=keys-search placeholder=Search>
-      <a id=keys-search-clear href=# style=display:none title="Clear search">×</a>
+      <input id=shortcuts-search placeholder=Search>
+      <a id=shortcuts-search-clear href=# style=display:none title="Clear search">×</a>
     </div>
-    <div id=keys-table-wrapper>
+    <div id=shortcuts-table-wrapper>
       <table>#{join cmds.map ([code, desc]) ->
-        "<tr><td>#{desc}<td class=keys-code>#{code}<td id=keys-#{code}>"
+        "<tr><td>#{desc}<td class=shortcuts-code>#{code}<td id=shortcuts-#{code}>"
       }</table>
     </div>
-    <div id=keys-no-results style=display:none>No results</div>
+    <div id=shortcuts-no-results style=display:none>No results</div>
   """
-    .on 'mouseover', '.keys-del', -> $(@).parent().addClass    'keys-del-hover'; return
-    .on 'mouseout',  '.keys-del', -> $(@).parent().removeClass 'keys-del-hover'; return
-    .on 'click', '.keys-del', -> $(@).parent().remove(); updateDups(); false
-    .on 'click', '.keys-add', ->
+    .on 'mouseover', '.shortcuts-del', -> $(@).parent().addClass    'shortcuts-del-hover'; return
+    .on 'mouseout',  '.shortcuts-del', -> $(@).parent().removeClass 'shortcuts-del-hover'; return
+    .on 'click', '.shortcuts-del', -> $(@).parent().remove(); updateDups(); false
+    .on 'click', '.shortcuts-add', ->
       $b = $ @; getKeystroke (k) -> k && $b.parent().append(keyHTML k).append $b; updateDups(); return
       false
-  $sc = $('#keys-search').on 'keyup change', ->
-    q = @value.toLowerCase(); $('#keys-search-clear').toggle !!q; found = 0
-    $('#keys-table-wrapper tr').each ->
+  $sc = $('#shortcuts-search').on 'keyup change', ->
+    q = @value.toLowerCase(); $('#shortcuts-search-clear').toggle !!q; found = 0
+    $('#shortcuts-table-wrapper tr').each ->
       $(@).toggle x = 0 <= $(@).text().toLowerCase().indexOf q
       found ||= x; return
-    $('#keys-no-results').toggle !found
+    $('#shortcuts-no-results').toggle !found
     return
-  $('#keys-search-clear').click -> $(@).hide(); $sc.val('').change().focus(); false
+  $('#shortcuts-search-clear').click -> $(@).hide(); $sc.val('').change().focus(); false
   return
 
 getKeystroke = (callback) ->
-  $d = $ '<p><input class=keys-input placeholder=...>'
+  $d = $ '<p><input class=shortcuts-input placeholder=...>'
     .dialog title: 'New Key', modal: 1, buttons: Cancel: -> $d.dialog 'close'; callback k; return
   $ 'input', $d
-    .focus -> $(@).addClass    'keys-input'; return
-    .blur  -> $(@).removeClass 'keys-input'; return
+    .focus -> $(@).addClass    'shortcuts-input'; return
+    .blur  -> $(@).removeClass 'shortcuts-input'; return
     .on 'keypress keyup', (e) ->
       kn = CodeMirror.keyNames[e.which] || ''
       if kn in ['Shift', 'Ctrl', 'Alt']
@@ -65,9 +65,9 @@ getKeystroke = (callback) ->
 @load = ->
   h = prefs.keys()
   for [code, desc, defaults] in cmds
-    $ "#keys-#{code}"
+    $ "#shortcuts-#{code}"
       .html join (h[code] || defaults).map keyHTML
-      .append '<a href=# class=keys-add>+</a>'
+      .append '<a href=# class=shortcuts-add>+</a>'
   updateDups()
   $sc.val() && $sc.val('').change()
   return
@@ -75,7 +75,7 @@ getKeystroke = (callback) ->
 @save = ->
   h = {}
   for [c, _, d] in cmds
-    a = $("#keys-#{c} .keys-text").map(-> $(@).text()).toArray()
+    a = $("#shortcuts-#{c} .shortcuts-text").map(-> $(@).text()).toArray()
     if JSON.stringify(a) != JSON.stringify(d) then h[c] = a
   prefs.keys h; return
 
@@ -87,6 +87,6 @@ updateKeys prefs.keys()
 
 updateDups = ->
   h = {} # maps keystrokes to DOM objects
-  for [c, _, d] in cmds then $("#keys-#{c} .keys-text").each ->
-    k = $(@).text(); if h[k] then $(@).add(h[k]).addClass 'keys-dup' else $(@).removeClass 'keys-dup'; h[k] = @
+  for [c, _, d] in cmds then $("#shortcuts-#{c} .shortcuts-text").each ->
+    k = $(@).text(); if h[k] then $(@).add(h[k]).addClass 'shortcuts-dup' else $(@).removeClass 'shortcuts-dup'; h[k] = @
   return

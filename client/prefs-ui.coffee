@@ -13,8 +13,8 @@ prefs = require './prefs'
 # All tabs' validate() methods are invoked, if they exist, before any attempt to call save()
 
 tabs = [
-  require './prefs-glyphs'
-  require './prefs-keys'
+  require './prefs-layout'
+  require './prefs-shortcuts'
   require './prefs-code'
   require './prefs-colours'
   require './prefs-title'

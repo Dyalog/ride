@@ -2,7 +2,7 @@ prefs = require './prefs'
 {layouts, geom} = require './keymap'
 {join, esc, hex, ord, delay} = require './util'
 
-@name = 'Glyphs'
+@name = 'Layout'
 
 $pfx = $lc = null # DOM elements for "Prefix" and "Locale"
 NK = 58 # number of scancodes we are concerned with
@@ -12,14 +12,14 @@ model = window.model = {} # dictionary: locale→[arrayOfAPLGlyphs, arrayOfShift
 @init = ($e) ->
   specialKeys = 15: '⟵', 16: '↹', 30: 'Caps', 43: '↲', 44: '⇧', 57: '⇧'
   $e.html """
-    <label id=glyphs-pfx-label>Prefix: <input id=glyphs-pfx class=text-field size=1></label>
-    <a href=# id=glyphs-reset>Reset</a>
-    <table id=glyphs-legend class=key
+    <label id=layout-pfx-label>Prefix: <input id=layout-pfx class=text-field size=1></label>
+    <a href=# id=layout-reset>Reset</a>
+    <table id=layout-legend class=key
            title='Prefix followed by shift+key produces the character in red.\nPrefix followed by an unshifted key produces the character in blue.'>
       <tr><td class=g2>⇧x</td><td class=g3><span class=pfx2>`</span>&nbsp;⇧x</td></tr>
       <tr><td class=g0>x</td><td class=g1><span class=pfx2>`</span>&nbsp;x</td></tr>
     </table>
-    <div id=glyphs-layout>#{join(
+    <div id=layout-layout>#{join(
       for i in [1...NK]
         if s = specialKeys[i]
           "<span id=k#{i} class=key>#{esc s}</span>"
@@ -31,7 +31,7 @@ model = window.model = {} # dictionary: locale→[arrayOfAPLGlyphs, arrayOfShift
             </span>
           """
     )}</div>
-    <select id=glyphs-lc>#{join (for lc of layouts then "<option>#{lc}").sort()}</select>
+    <select id=layout-lc>#{join (for lc of layouts then "<option>#{lc}").sort()}</select>
   """
   .on 'focus', '.key input', -> delay 1, (=> $(@).select(); return); return
   .on 'blur', '.key input', ->
@@ -47,15 +47,15 @@ model = window.model = {} # dictionary: locale→[arrayOfAPLGlyphs, arrayOfShift
         when 'da', 'da_DK' then 'DK'
         else                    'US'
     )
-  $('#glyphs-reset').button().click ->
+  $('#layout-reset').button().click ->
     lc = $lc.val()
     $pfx.val(prefs.prefixKey.getDefault()).change() # fire a "change" event to update the legend
     model[lc] = [layouts[lc][2].split(''), layouts[lc][3].split('')]
     updateGlyphs()
     false
-  $lc = $('#glyphs-lc').change updateGlyphs
-  $pfx = $ '#glyphs-pfx'
-    .on 'change keyup', -> $('#glyphs-legend .pfx2').text $(@).val()[-1..]; return
+  $lc = $('#layout-lc').change updateGlyphs
+  $pfx = $ '#layout-pfx'
+    .on 'change keyup', -> $('#layout-legend .pfx2').text $(@).val()[-1..]; return
     .focus -> delay 1, (=> $(@).select(); return); return
   return
 
@@ -71,7 +71,7 @@ model = window.model = {} # dictionary: locale→[arrayOfAPLGlyphs, arrayOfShift
 
 updateGlyphs = -> # apply model values to the DOM
   lc = $lc.val(); l = layouts[lc]; m = model[lc]
-  $('#glyphs-layout').removeClass('geom-ansi geom-iso').addClass "geom-#{geom[$lc.val()]}"
+  $('#layout-layout').removeClass('geom-ansi geom-iso').addClass "geom-#{geom[$lc.val()]}"
   for i in [1...NK]
     g0 = l[0][i]; g2 = l[1][i]
     if g0 != '☠' then $("#k#{i} .g0").text g0; g1 = m[0][i]; $("#k#{i} .g1").val(g1).prop 'title', "U+#{hex ord(g1), 4}"
