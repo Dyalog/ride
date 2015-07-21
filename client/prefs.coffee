@@ -20,7 +20,7 @@ D.prefs = @
   ['floatOnTop',        0] # try to keep floating windows on top of the session
   ['fold',              1] # code folding
   ['indent',            4] # -1 disables autoindent
-  ['indentMethods',     2] # -1 makes methods use the same indent as all other blocks
+  ['indentMethods',     -1] # -1 makes methods use the same indent as all other blocks
   ['keys',              {}] # a mapping between commands and keystrokes, only diffs from the defaults
   ['kbdLocale',         ''] # e.g. "US", "GB"
   ['lineNumsTracer',    0]
