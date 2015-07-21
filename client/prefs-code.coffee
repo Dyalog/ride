@@ -3,10 +3,11 @@ prefs = require './prefs'
 
 @name = 'Code'
 
-$ai = $sw = $aim = $swm = $mb = $acbr = $acbl = $acbe = $ac = $acd = $fold = null
+$fmto = $ai = $sw = $aim = $swm = $mb = $acbr = $acbl = $acbe = $ac = $acd = $fold = null
 
 @init = ($e) ->
   $e.html '''
+    <p><label><input id=code-fmto type=checkbox>Format code on editor open</label></p>
     <p><label><input id=code-ai   type=checkbox>Auto-indent</label> <label><input id=code-sw  size=1> spaces</label>
     <!--<p><label><input id=code-aim  type=checkbox>in methods:</label> <label><input id=code-swm size=1> spaces</label>-->
     <p><label><input id=code-mb   type=checkbox>Highlight matching brackets: <tt>()[]{}</tt></label></p>
@@ -19,6 +20,7 @@ $ai = $sw = $aim = $swm = $mb = $acbr = $acbl = $acbe = $ac = $acd = $fold = nul
     <p><label><input id=code-ac   type=checkbox>Autocompletion</label> <label>after <input id=code-acd size=5>ms</label>
     <p><label><input id=code-fold type=checkbox>Code folding</label>
   '''
+  $fmto = $ '#code-fmto'
   $ai   = $ '#code-ai'
   $sw   = $ '#code-sw'
   $aim  = $ '#code-aim'
@@ -40,6 +42,7 @@ $ai = $sw = $aim = $swm = $mb = $acbr = $acbl = $acbe = $ac = $acd = $fold = nul
   return
 
 @load = ->
+  $fmto.prop 'checked', !!prefs.formatOnOpen()
   sw  = prefs.indent();        $ai .prop 'checked', sw  >= 0; $sw .val sw  < 0 && 4 || sw
   swm = prefs.indentMethods(); $aim.prop 'checked', swm >= 0; $swm.val swm < 0 && 2 || swm
   $mb  .prop 'checked', !!prefs.matchBrackets()
@@ -53,6 +56,7 @@ $ai = $sw = $aim = $swm = $mb = $acbr = $acbl = $acbe = $ac = $acd = $fold = nul
   return
 
 @save = ->
+  prefs.formatOnOpen        $fmto.is ':checked'
   prefs.indent              if $ai .is ':checked' then +$sw .val() || 0 else -1
   prefs.indentMethods       if $aim.is ':checked' then +$swm.val() || 0 else -1
   prefs.matchBrackets       $mb  .is ':checked'
