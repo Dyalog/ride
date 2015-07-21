@@ -72,6 +72,10 @@ getKeystroke = (callback) ->
   $sc.val() && $sc.val('').change()
   return
 
+@validate = ->
+  $dups = $ '#shortcuts-table-wrapper .shortcuts-dup'
+  if $dups.length then message: 'There are duplicate shortcuts.', element: $dups[0]
+
 @save = ->
   h = {}
   for [c, _, d] in cmds
@@ -89,4 +93,4 @@ updateDups = ->
   h = {} # maps keystrokes to DOM objects
   for [c, _, d] in cmds then $("#shortcuts-#{c} .shortcuts-text").each ->
     k = $(@).text(); if h[k] then $(@).add(h[k]).addClass 'shortcuts-dup' else $(@).removeClass 'shortcuts-dup'; h[k] = @
-  return
+    return
