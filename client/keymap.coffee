@@ -168,7 +168,7 @@ do ->
 
 bq = null # effective ` map as a dictionary, kept in sync with the prefs
 do updateBQ = ->
-  bq = {}; lc = prefs.kbdLocale(); l = layouts[lc]; n = l[0].length
+  bq = {}; lc = prefs.kbdLocale() || 'US'; l = layouts[lc]; n = l[0].length
   for i in [0..1] then for j in [0...n] then bq[l[i][j]] ?= l[2 + i][j]
   if s = prefs.prefixMaps()[lc] then for i in [0...s.length] by 2 then x = s[i]; y = s[i + 1]; bq[x] = y
   return
