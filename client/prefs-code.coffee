@@ -18,7 +18,7 @@ $fmto = $ai = $sw = $aim = $swm = $mb = $acbr = $acbl = $acbe = $ac = $acd = $fo
          <option value=1>just :End
        </select></label>
     <p><label><input id=code-ac   type=checkbox>Autocompletion</label> <label>after <input id=code-acd size=5>ms</label>
-    <p><label><input id=code-fold type=checkbox>Code folding</label>
+    <p><label><input id=code-fold type=checkbox>Code folding (outlining)</label>
   '''
   $fmto = $ '#code-fmto'
   $ai   = $ '#code-ai'
