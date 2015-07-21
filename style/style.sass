@@ -908,10 +908,14 @@ span.CodeMirror-selectedtext{background:none}
   color:blue;text-shadow:#b9f 1px 1px 2px,#b9f -1px -1px 2px,#b9f 1px -1px 2px,#b9f -1px 1px 2px
   font-family:arial;line-height:.3;cursor:pointer
 .CodeMirror-foldgutter{width:.7em}
-.CodeMirror-foldgutter-open:after{content:"\229F"}
+.CodeMirror-foldgutter-open:after  {content:"\229F"}
 .CodeMirror-foldgutter-folded:after{content:"\229E"}
+.CodeMirror-foldgutter-cont:after  {content:"\2502"}
+.CodeMirror-foldgutter-end:after   {content:"\2570"}
+.CodeMirror-foldgutter-open,.CodeMirror-foldgutter-folded,.CodeMirror-foldgutter-cont,.CodeMirror-foldgutter-end
+  color:#88f
 .CodeMirror-foldgutter-open,.CodeMirror-foldgutter-folded
-  cursor:pointer;color:#88f
+  cursor:pointer
   &:hover{font-weight:bold;color:#ccf}
 
 @import themes/mixins

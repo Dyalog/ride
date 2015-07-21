@@ -27,9 +27,11 @@ State = (@options) -> @from = @to = 0; return
 
 parseOptions = (opts) ->
   if opts == true then opts = {}
-  if !opts.gutter?          then opts.gutter          = 'CodeMirror-foldgutter'
-  if !opts.indicatorOpen?   then opts.indicatorOpen   = 'CodeMirror-foldgutter-open'
-  if !opts.indicatorFolded? then opts.indicatorFolded = 'CodeMirror-foldgutter-folded'
+  opts.gutter          ?= 'CodeMirror-foldgutter'
+  opts.indicatorOpen   ?= 'CodeMirror-foldgutter-open'
+  opts.indicatorFolded ?= 'CodeMirror-foldgutter-folded'
+  opts.indicatorCont   ?= 'CodeMirror-foldgutter-cont'
+  opts.indicatorEnd    ?= 'CodeMirror-foldgutter-end'
   opts
 
 isFolded = (cm, line) ->
@@ -46,15 +48,20 @@ marker = (spec) ->
 
 updateFoldInfo = (cm, from, to) ->
   opts = cm.state.foldGutter.options; cur = from
-  minSize = cm.foldOption opts, 'minFoldSize'
-  func = cm.foldOption opts, 'rangeFinder'
+  minSize = cm.foldOption opts, 'minFoldSize'; func = cm.foldOption opts, 'rangeFinder'
+  ends = []
   cm.eachLine from, to, (line) ->
     mark = null
     if isFolded cm, cur
       mark = marker opts.indicatorFolded
     else
       pos = Pos cur, 0; range = func && func cm, pos
-      if range && range.to.line - range.from.line >= minSize then mark = marker opts.indicatorOpen
+      if range && range.to.line - range.from.line >= minSize
+        mark = marker opts.indicatorOpen; ends.push range.to.line
+      else if cur in ends
+        mark = marker opts.indicatorEnd; ends = for x in ends when x > cur then x
+      else if ends.length
+        mark = marker opts.indicatorCont
     cm.setGutterMarker line, opts.gutter, mark
     ++cur
     return
