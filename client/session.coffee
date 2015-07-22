@@ -121,7 +121,6 @@ class @Session
   EP: -> @ide.focusMRUWin(); return
   ER: -> @exec 0; return
   TC: -> @exec 1; return
-  WI: -> @opts.weakInterrupt(); return
   tabOrAutocomplete: ->
     if @cm.somethingSelected()
       @cm.execCommand 'indentMore'

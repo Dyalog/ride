@@ -316,7 +316,6 @@ class @Editor
       @cm.replaceRange s.replace(/^( *)⍝/, '$1'), {line: l, ch: 0}, {line: l, ch: s.length}, 'D'
       @cm.setCursor line: l, ch: 0
     return
-  WI: -> @opts.weakInterrupt(); return
   ER: ->
     if @isTracer
       @emit 'RunCurrentLine', win: @id

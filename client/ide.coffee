@@ -32,7 +32,7 @@ class @IDE
 
     D.wins = @wins = # window id -> instance of Editor or Session
       0: new Session @, $('.ui-layout-center'),
-        id: 0, emit: @emit.bind(@), weakInterrupt: @WI.bind(@)
+        id: 0, emit: @emit.bind @
         exec: (lines, trace) =>
           if lines && lines.length
             if !trace then @pending = lines[1..]
@@ -185,8 +185,6 @@ class @IDE
   setHostAndPort: (@host, @port) -> @updateTitle(); return
 
   emit: (x, y) -> @dead || D.socket.emit x, y; return
-  WI: -> @emit 'WeakInterrupt'; return
-  SI: -> @emit 'StrongInterrupt'; return
 
   die: -> # don't really, just pretend
     if !@dead then @dead = 1; @$ide.addClass 'disconnected'; for _, widget of @wins then widget.die()
@@ -228,7 +226,7 @@ class @IDE
 
   openWindow: (ee) -> # "ee" for EditableEntity
     w = ee.token
-    editorOpts = id: w, name: ee.name, tracer: ee.debugger, emit: @emit.bind(@), weakInterrupt: @WI.bind(@)
+    editorOpts = id: w, name: ee.name, tracer: ee.debugger, emit: @emit.bind @
     if prefs.floating() && !D.floating && !@dead
       pos = if ee.debugger then prefs.posTracer() else prefs.posEditor()
       delta = 32 * (ee.token - 1); pos[0] += delta; pos[1] += delta
