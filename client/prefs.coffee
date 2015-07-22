@@ -19,7 +19,6 @@ D.prefs = @
   ['floating',          0] # floating editor and tracer windows
   ['floatOnTop',        0] # try to keep floating windows on top of the session
   ['fold',              1] # code folding
-  ['formatOnOpen',      1] # reformat code according to RIDE's rules when an editor/tracer is opened
   ['indent',            4] # -1 disables autoindent
   ['indentMethods',     -1] # -1 makes methods use the same indent as all other blocks
   ['keys',              {}] # a mapping between commands and keystrokes, only diffs from the defaults

@@ -199,9 +199,7 @@ class @Editor
 
   open: (ee) ->
     @cm.setValue @otext = ee.text; @cm.clearHistory(); @cm.focus()
-    if prefs.formatOnOpen()
-      @cm.execCommand 'selectAll'
-      @cm.execCommand 'indentAuto'
+    @cm.execCommand 'selectAll'; @cm.execCommand 'indentAuto' # reformat according to RIDE's preferences
     # Constants for entityType:
     # DefinedFunction     1
     # SimpleCharArray     2
