@@ -4,7 +4,8 @@ prefs = require './prefs'
 
 @name = 'Shortcuts'
 
-keyHTML = (k) -> "<span><span class=shortcuts-text>#{k}</span><a href=# class=shortcuts-del>×</a></span> "
+keyHTML = (k) ->
+  "<span class=shortcuts-shortcut><span class=shortcuts-text>#{k}</span><a href=# class=shortcuts-del>×</a></span> "
 
 $sc = null # <input> for search
 
@@ -15,9 +16,12 @@ $sc = null # <input> for search
       <a id=shortcuts-search-clear href=# style=display:none title="Clear search">×</a>
     </div>
     <div id=shortcuts-table-wrapper>
-      <table>#{join cmds.map ([code, desc]) ->
-        "<tr><td>#{desc}<td class=shortcuts-code>#{code}<td id=shortcuts-#{code}>"
-      }</table>
+      <table>#{join cmds.map ([code, desc]) -> """
+        <tr data-code=#{code}>
+            <td>#{desc}<td class=shortcuts-code>#{code}
+            <td id=shortcuts-#{code}>
+            <td><a href=# class=shortcuts-revert title=Revert>↶</a>
+      """}</table>
     </div>
     <div id=shortcuts-no-results style=display:none>No results</div>
   """
@@ -27,6 +31,12 @@ $sc = null # <input> for search
     .on 'click', '.shortcuts-add', ->
       $b = $ @; getKeystroke (k) -> k && $b.parent().append(keyHTML k).append $b; updateDups(); return
       false
+    .on 'click', '.shortcuts-revert', ->
+      $tr = $(@).closest 'tr'; c = $tr.data 'code'
+      for [code, desc, defaults] in cmds when code == c
+        $tr.find('.shortcuts-shortcut').remove()
+        $tr.find('.shortcuts-add').parent().prepend join defaults.map keyHTML
+      return
   $sc = $('#shortcuts-search').on 'keyup change', ->
     q = @value.toLowerCase(); $('#shortcuts-search-clear').toggle !!q; found = 0
     $('#shortcuts-table-wrapper tr').each ->
