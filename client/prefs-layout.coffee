@@ -19,7 +19,7 @@ model = window.model = {} # dictionary: locale→[arrayOfAPLGlyphs, arrayOfShift
       <tr><td class=g2>⇧x</td><td class=g3><span class=pfx2>`</span>&nbsp;⇧x</td></tr>
       <tr><td class=g0>x</td><td class=g1><span class=pfx2>`</span>&nbsp;x</td></tr>
     </table>
-    <div id=layout-layout>#{join(
+    <div id=layout-kbd>#{join(
       for i in [1...NK]
         if s = specialKeys[i]
           "<span id=k#{i} class=key>#{esc s}</span>"
@@ -71,7 +71,7 @@ model = window.model = {} # dictionary: locale→[arrayOfAPLGlyphs, arrayOfShift
 
 updateGlyphs = -> # apply model values to the DOM
   lc = $lc.val(); l = layouts[lc]; m = model[lc]
-  $('#layout-layout').removeClass('geom-ansi geom-iso').addClass "geom-#{geom[$lc.val()]}"
+  $('#layout-kbd').removeClass('geom-ansi geom-iso').addClass "geom-#{geom[$lc.val()]}"
   for i in [1...NK]
     g0 = l[0][i]; g2 = l[1][i]
     if g0 != '☠' then $("#k#{i} .g0").text g0; g1 = m[0][i]; $("#k#{i} .g1").val(g1).prop 'title', "U+#{hex ord(g1), 4}"
