@@ -237,13 +237,15 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
             server?.close(); server = client = null; toBrowser '*spawnedExited', {code, signal}; child = null; return
           return
         return
-      .on '*listen', listen = ({port, callback}) ->
+      .on '*listen', listen = ({host, port, callback}) ->
         server = net.createServer (c) ->
-          host = c?.request?.connection?.remoteAddress; log 'interpreter connected from ' + host
-          server?.close(); server = null; client = c; toBrowser '*connected', {host, port}; setUpInterpreterConnection()
+          remoteHost = c?.request?.connection?.remoteAddress; log 'interpreter connected from ' + remoteHost
+          server?.close(); server = null; client = c; toBrowser '*connected', {host: remoteHost, port}
+          setUpInterpreterConnection()
           return
         server.on 'error', (err) -> server = null; toBrowser '*listenError', err: '' + err; return
-        server.listen port, -> log "listening for connections from interpreter on port #{port}"; callback?(); return
+        server.listen port, host || '::', ->
+          log "listening for connections from interpreter on port #{port}"; callback?(); return
         return
       .on '*listenCancel', -> server?.close(); return
     if child then toBrowser '*spawned', pid: child.pid

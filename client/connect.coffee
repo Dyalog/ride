@@ -60,10 +60,9 @@ module.exports = (opts) ->
     </fieldset>
     <fieldset>
       <legend>Listen for connections from interpreter </legend>
-      <p>
-        <label>Port <input id=listen-port class=text-field value=#{DEFAULT_PORT} size=5></label>
-        <a href=# id=listen accessKey=l><u>L</u>isten</a>
-      </p>
+      <p>Address: <input id=listen-host class=text-field value="::"> :
+         <input id=listen-port class=text-field value=#{DEFAULT_PORT} size=5>
+      <p><a href=# id=listen accessKey=l><u>L</u>isten</a>
     </fieldset>
   """
   $connect     = $ '#fav-connect'  ; $host        = $ '#fav-host'
@@ -72,12 +71,12 @@ module.exports = (opts) ->
   $list        = $ '#fav-list'     ; $save        = $ '#fav-save'
   $spawn       = $ '#spawn'        ; $cancel      = $ '#fav-cancel'
   $spawnStatus = $ '#spawn-status' ; $listen      = $ '#listen'
-  $about       = $ '#about'        ; $listenPort  = $ '#listen-port'
+  $about       = $ '#about'        ; $listenHost  = $ '#listen-host'; $listenPort  = $ '#listen-port'
   $listenDialog = $connectDialog = null
 
   enableSpawnAndListen = (b) ->
     $('#spawn, #listen').button if b then 'enable' else 'disable'
-    $('#listen-port').attr 'disabled', !b
+    $('#listen-host,#listen-port').attr 'disabled', !b
     return
 
   $connect.add($about).add($new).add($delete).add($save).add($cancel).add($spawn).add($listen).button()
@@ -126,11 +125,12 @@ module.exports = (opts) ->
     $save.add($cancel).button 'disable'; false
   $spawn.click -> enableSpawnAndListen false; $spawnStatus.text 'Spawning...'; D.socket.emit '*spawn'; false
   $listen.click ->
+    host = $listenHost.val()
     port = +$listenPort.val()
     if !(0 < port < 0x10000)
       $.alert 'Invalid port', 'Error', -> $listenPort.focus(); return false
     else
-      D.socket.emit '*listen', {port}
+      D.socket.emit '*listen', {host, port}
       $listenDialog = $ """
         <div class=listen>
           <div class=visual-distraction></div>
@@ -183,5 +183,5 @@ module.exports = (opts) ->
 
   $('#fav-list').resizable handles: 's,e'
 
-  listen: (port) -> (if port then $listenPort.val port); $listen.click(); return
+  listen: (port) -> $listenHost.val '::'; port && $listenPort.val port; $listen.click(); return
   connect: (s) -> hp = parseFav s; D.socket.emit '*connect', host: hp.host, port: hp.port or DEFAULT_PORT; return
