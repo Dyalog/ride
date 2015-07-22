@@ -39,7 +39,7 @@ $sc = null # <input> for search
 
 getKeystroke = (callback) ->
   $d = $ '<p><input class=shortcuts-input placeholder=...>'
-    .dialog title: 'New Key', modal: 1, buttons: Cancel: -> $d.dialog 'close'; callback k; return
+    .dialog title: 'New Shortcut', modal: 1, buttons: Cancel: -> $d.dialog 'close'; callback k; return
   $ 'input', $d
     .focus -> $(@).addClass    'shortcuts-input'; return
     .blur  -> $(@).removeClass 'shortcuts-input'; return
