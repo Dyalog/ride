@@ -49,8 +49,9 @@ class @Session
     else if i >= @hist.length then $.alert 'There is no previous line', 'Dyalog APL Error'
     else
       l = @cm.getCursor().line; if !@histIndex then @hist[0] = @cm.getLine l
-      @cm.replaceRange @hist[i], {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}, 'D'
-      @cm.setCursor line: l, ch: @hist[i].replace(/[^ ].*$/, '').length; @histIndex = i
+      if @hist[i]?
+        @cm.replaceRange @hist[i], {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}, 'D'
+        @cm.setCursor line: l, ch: @hist[i].replace(/[^ ].*$/, '').length; @histIndex = i
     return
 
   add: (s) ->
