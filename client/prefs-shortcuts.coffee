@@ -20,7 +20,7 @@ $sc = null # <input> for search
         <tr data-code=#{code}>
             <td>#{desc}<td class=shortcuts-code>#{code}
             <td id=shortcuts-#{code}>
-            <td><a href=# class=shortcuts-revert title=Revert>↶</a>
+            <td><a href=# class=shortcuts-reset title=Reset>↶</a>
       """}</table>
     </div>
     <div id=shortcuts-no-results style=display:none>No results</div>
@@ -31,7 +31,7 @@ $sc = null # <input> for search
     .on 'click', '.shortcuts-add', ->
       $b = $ @; getKeystroke (k) -> k && $b.parent().append(keyHTML k).append $b; updateDups(); return
       false
-    .on 'click', '.shortcuts-revert', ->
+    .on 'click', '.shortcuts-reset', ->
       $tr = $(@).closest 'tr'; c = $tr.data 'code'
       for [code, desc, defaults] in cmds when code == c
         $tr.find('.shortcuts-shortcut').remove()
