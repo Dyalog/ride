@@ -110,7 +110,7 @@ class @IDE
     @unblock = -> (while mq.length then handle mq.shift()); blocked = 0; return
 
     # language bar
-    $('.lbar-prefs').click -> prefsUI.showDialog 'keys'; return
+    $('.lbar-prefs').click -> prefsUI.showDialog 'layout'; return
     $tip = $ '.lbar-tip'; $tipDesc = $ '.lbar-tip-desc'; $tipText = $ '.lbar-tip-text'; $tipTriangle = $ '.lbar-tip-triangle'
     ttid = null # tooltip timeout id
     requestTooltip = (e, desc, text) -> # e: element
