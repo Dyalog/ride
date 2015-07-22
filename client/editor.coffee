@@ -199,7 +199,6 @@ class @Editor
 
   open: (ee) ->
     @cm.setValue @otext = ee.text; @cm.clearHistory(); @cm.focus()
-    @cm.execCommand 'selectAll'; @cm.execCommand 'indentAuto' # reformat according to RIDE's preferences
     # Constants for entityType:
     # DefinedFunction     1
     # SimpleCharArray     2
@@ -214,7 +213,11 @@ class @Editor
     # AplInterface       11
     # AplSession         12
     # ExternalFunction   13
-    @cm.setOption 'mode', if ee.entityType in [1, 9, 10, 11, 12, 13] then 'apl' else 'text'
+    if ee.entityType in [1, 9, 10, 11, 12, 13]
+      @cm.setOption 'mode', 'apl'
+      @cm.execCommand 'selectAll'; @cm.execCommand 'indentAuto' # reformat according to RIDE's preferences
+    else
+      @cm.setOption 'mode', 'text'
     @cm.setOption 'readOnly', ee.readOnly || ee.debugger
     line = ee.currentRow; col = ee.currentColumn || 0; if line == col == 0 && ee.text.indexOf('\n') < 0 then col = ee.text.length
     @cm.setCursor line, col; @cm.scrollIntoView null, @$e.height() / 2
