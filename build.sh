@@ -67,11 +67,13 @@ for f in proxy.coffee; do # nw-only coffee files
 done
 
 if [ ! -e build/nw/D.js -o $(find build/{js,tmp} -newer build/nw/D.js 2>/dev/null | wc -l) -gt 0 ]; then
+  v=$(node -e "console.log($(cat package.json).version.replace(/\.0$/,''))").$(git rev-list --count HEAD)
+  echo $v >build/nw/version
   echo 'combining javascript files into one'
   (
     cat <<.
       var D={versionInfo:{
-        version:'0.1.$(git rev-list --count HEAD)',
+        version:'$v',
         date:'$(git show -s HEAD --pretty=format:%ci)',
         rev:'$(git rev-parse HEAD)'
       }};
