@@ -4,6 +4,7 @@ os = require 'os'
 path = require 'path'
 {spawn} = require 'child_process'
 
+stdoutIsGood = 1
 log = @log = do ->
   t0 = +new Date # log timestamps will be number of milliseconds since t0
   N = 500; T = 1000 # log no more than N log messages per T milliseconds
@@ -11,7 +12,9 @@ log = @log = do ->
   (s) -> # the actual log() function
     if (t1 = +new Date) - t > T then t = t1; n = 1 # if last message was too long ago, start counting afresh
     m = if ++n < N then "#{t1 - t0}: #{s}\n" else if n == N then '... logging temporarily suppressed\n'
-    if m then process.stdout?.write? m; for l in log.listeners[..] then l m
+    if m
+      if stdoutIsGood then (try process.stdout?.write? m catch then stdoutIsGood = 0)
+      for l in log.listeners[..] then l m
     return
 
 log.listeners = []

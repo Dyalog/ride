@@ -11,7 +11,7 @@ if process?
   D.mac = process.platform == 'darwin'
   D.floating = !!opener
 
-  console.log = (s) -> process.stdout.write s + '\n'
+  console.log = (s) -> try process.stdout.write s + '\n' catch then console.log = ->
   D.opts = nomnom.options(
     connect: abbr: 'c', flag: true, metavar: 'HOST[:PORT]'
     listen:  abbr: 'l', flag: true
