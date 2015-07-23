@@ -30,8 +30,6 @@ do -> # store latest log messages in RAM
     log.listeners.push (s) -> a[i++] = s; i %= a.length; return
   return
 
-log new Date().toISOString()
-
 b64 = (s) -> Buffer(s).toString 'base64'
 b64d = (s) -> '' + Buffer s, 'base64'
 tag = (tagName, xml) -> (///^[^]*<#{tagName}>([^<]*)</#{tagName}>[^]*$///.exec xml)?[1]
@@ -92,6 +90,8 @@ fmtLineAttributes = (nLines, stops) ->
 trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
 
 @Proxy = ->
+  log new Date().toISOString()
+
   client = null # TCP connection to interpreter
   socket = null # socket.io connection to the browser that's currently driving
   child  = null # a ChildProcess object, the result from spawn()

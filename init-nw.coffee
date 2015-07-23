@@ -11,6 +11,16 @@ if process?
   D.mac = process.platform == 'darwin'
   D.floating = !!opener
 
+  console.log = (s) -> process.stdout.write s + '\n'
+  D.opts = nomnom.options(
+    connect: abbr: 'c', flag: true, metavar: 'HOST[:PORT]'
+    listen:  abbr: 'l', flag: true
+    spawn:   abbr: 's', flag: true, default: !/^win/i.test process.platform
+    version: abbr: 'v', flag: true, help: 'print version and exit'
+  ).parse gui.App.argv
+
+  if D.opts.version then console.log D.versionInfo.version; process.exit 0
+
   # switch IME locale as early as possible
   if D.win && fs.existsSync setImeExe = process.execPath.replace /[^\\\/]+$/, 'set-ime.exe'
     spawn setImeExe, [process.pid, 'E0990409'], stdio: ['ignore', 'ignore', 'ignore']
@@ -121,11 +131,6 @@ if process?
 
   D.quit = -> gui.Window.get().close(); return
   D.clipboardCopy = (s) -> gui.Clipboard.get().set s; return
-  D.opts = nomnom.options(
-    connect: abbr: 'c', flag: true, metavar: 'HOST[:PORT]'
-    listen:  abbr: 'l', flag: true
-    spawn:   abbr: 's', flag: true, default: !/^win/i.test process.platform
-  ).parse gui.App.argv
 
   # Debugging utilities
   $(document).keydown (e) ->
