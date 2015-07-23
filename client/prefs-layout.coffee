@@ -44,6 +44,7 @@ model = window.model = {} # dictionary: locale→[arrayOfAPLGlyphs, arrayOfShift
     prefs.kbdLocale(
       switch navigator.language
         when 'en-GB'       then 'UK'
+        when 'de'          then 'DE'
         when 'da', 'da_DK' then D.mac && 'DK-Mac' || 'DK'
         else                    'US'
     )
@@ -70,7 +71,7 @@ model = window.model = {} # dictionary: locale→[arrayOfAPLGlyphs, arrayOfShift
   return
 
 # Every geometry (aka "mechanical layout") has its precise arrangement of keys specified as a CSS class.
-geom = US: 'ansi', _: 'iso' # _ is treated as the default
+geom = US: 'ansi', _: 'iso' # _ is the default
 
 updateGlyphs = -> # apply model values to the DOM
   lc = $lc.val(); l = layouts[lc]; m = model[lc]

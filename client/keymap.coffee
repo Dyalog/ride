@@ -119,6 +119,17 @@ switchWindows = (d) -> # d: a step of either 1 or -1
 # They can be indexed by scancode: http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
 # "APL" and "APL shifted" are the defaults upon which the user can build customisations.
 layoutDesc =
+  DE: '''
+    ☠ ^ 1 2 3 4 5 6 7 8 9 0 ß ´ ☠ ☠   ☠ ° ! " § $ % & / ( ) = ? ` ☠ ☠
+    ☠ q w e r t y u i o p ü + ☠       ☠ Q W E R T Y U I O P Ü * ☠
+    ☠ a s d f g h j k l ö ä # ☠       ☠ A S D F G H J K L Ö Ä ' ☠
+    ☠ < z x c v b n m , . - ☠ ☠       ☠ > Z X C V B N M ; : _ ☠ ☠
+
+    ☠ ⋄ ¨ ¯ < ≤ = ≥ > ≠ ∨ ∧ × ÷ ☠ ☠   ☠ ¤ ⌶ ⍫ ⍒ ⍋ ⌽ ⍉ ⊖ ⍟ ⍱ ⍲ ! ⌹ ☠ ☠
+    ☠ ? ⍵ ∊ ⍴ ~ ↑ ↓ ⍳ ○ * ← → ☠       ☠ ? ⍵ ⍷ ⍴ ⍨ ↑ ↓ ⍸ ⍥ ⍣ ⍞ ⍬ ☠
+    ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕ ⍎ ⍕ ⊢ ☠       ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ⍤ ⌸ ⌷ ≡ ≢ ⊣ ☠
+    ☠ ⊢ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ⊣ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍪ ⍙ ⍠ ☠ ☠
+  '''
   DK: '''
     ☠ ½ 1 2 3 4 5 6 7 8 9 0 + ´ ☠ ☠   ☠ § ! " # ¤ % & / ( ) = ? ` ☠ ☠
     ☠ q w e r t y u i o p å ¨ ☠       ☠ Q W E R T Y U I O P Å ^ ☠
