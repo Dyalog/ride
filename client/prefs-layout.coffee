@@ -1,5 +1,5 @@
 prefs = require './prefs'
-{layouts, geom} = require './keymap'
+{layouts} = require './keymap'
 {join, esc, hex, ord, delay} = require './util'
 
 @name = 'Layout'
@@ -44,7 +44,7 @@ model = window.model = {} # dictionary: locale→[arrayOfAPLGlyphs, arrayOfShift
     prefs.kbdLocale(
       switch navigator.language
         when 'en-GB'       then 'UK'
-        when 'da', 'da_DK' then 'DK'
+        when 'da', 'da_DK' then D.mac && 'DK-Mac' || 'DK'
         else                    'US'
     )
   $('#layout-reset').button().click ->
@@ -69,9 +69,12 @@ model = window.model = {} # dictionary: locale→[arrayOfAPLGlyphs, arrayOfShift
   updateGlyphs()
   return
 
+# Every geometry (aka "mechanical layout") has its precise arrangement of keys specified as a CSS class.
+geom = US: 'ansi', _: 'iso' # _ is treated as the default
+
 updateGlyphs = -> # apply model values to the DOM
   lc = $lc.val(); l = layouts[lc]; m = model[lc]
-  $('#layout-kbd').removeClass('geom-ansi geom-iso').addClass "geom-#{geom[$lc.val()]}"
+  $('#layout-kbd').removeClass('geom-ansi geom-iso').addClass "geom-#{geom[$lc.val()] || geom._}"
   for i in [1...NK]
     g0 = l[0][i]; g2 = l[1][i]
     if g0 != '☠' then $("#k#{i} .g0").text g0; g1 = m[0][i]; $("#k#{i} .g1").val(g1).prop 'title', "U+#{hex ord(g1), 4}"

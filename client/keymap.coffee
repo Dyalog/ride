@@ -113,9 +113,6 @@ switchWindows = (d) -> # d: a step of either 1 or -1
   j = if i < 0 then 0 else (i + a.length + d) % a.length
   $("#wintab#{a[j].id} a").click(); a[j].focus(); false
 
-# Every geometry (aka "mechanical layout") has its precise arrangement of keys specified as a CSS class.
-@geom = geom = US: 'ansi', UK: 'iso', DK: 'iso'
-
 # The quadrants of each layout entry will be turned into an array of four strings without whitespace.
 #    0:normal  1:shifted
 #    2:APL     3:APL shifted
@@ -145,6 +142,17 @@ layoutDesc =
     ☠ ⊢ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ⊣ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍪ ⍙ ⍠ ☠ ☠
   '''
   DK: '''
+    ☠ ½ 1 2 3 4 5 6 7 8 9 0 + ´ ☠ ☠   ☠ § ! " # ¤ % & / ( ) = ? ` ☠ ☠
+    ☠ q w e r t y u i o p å ¨ ☠       ☠ Q W E R T Y U I O P Å ^ ☠
+    ☠ a s d f g h j k l æ ø ' ☠       ☠ A S D F G H J K L Æ Ø * ☠
+    ☠ < z x c v b n m , . - ☠ ☠       ☠ > Z X C V B N M ; : _ ☠ ☠
+
+    ☠ ⋄ ¨ ¯ < ≤ = ≥ > ≠ ∨ ∧ × ÷ ☠ ☠   ☠ ¤ ⌶ ⍫ ⍒ ⍋ ⌽ ⍉ ⊖ ⍟ ⍱ ⍲ ! ⌹ ☠ ☠
+    ☠ ? ⍵ ∊ ⍴ ~ ↑ ↓ ⍳ ○ * ← → ☠       ☠ ? ⍵ ⍷ ⍴ ⍨ ↑ ↓ ⍸ ⍥ ⍣ ⍞ ⍬ ☠
+    ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕ ⍎ ⍕ ⊢ ☠       ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ⍤ ⌸ ⌷ ≡ ≢ ⊣ ☠
+    ☠ ⊢ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ⊣ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍪ ⍙ ⍠ ☠ ☠
+  '''
+  'DK-Mac': '''
     ☠ $ 1 2 3 4 5 6 7 8 9 0 + ´ ☠ ☠   ☠ § ! " # € % & / ( ) = ? ` ☠ ☠
     ☠ q w e r t y u i o p å ¨ ☠       ☠ Q W E R T Y U I O P Å ^ ☠
     ☠ a s d f g h j k l æ ø ' ☠       ☠ A S D F G H J K L Æ Ø * ☠
@@ -164,7 +172,6 @@ do ->
         for chunk, j in line.split /\s{3,}/
           q[2 * i + j] += chunk.replace /\s+/g, ''
     console.assert q[0].length == q[1].length == q[2].length == q[3].length
-    console.assert geom[lc]
   layoutDesc = null
   return
 
