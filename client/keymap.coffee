@@ -53,7 +53,7 @@ $.extend CodeMirror.commands,
 
   HLP: (cm) ->
     c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
-    u =
+    D.openExternal(
       if      m = /^ *(\)[a-z]+).*$/.exec s then helpurls[m[1]] || helpurls.WELCOME
       else if m = /^ *(\][a-z]+).*$/.exec s then helpurls[m[1]] || helpurls.UCMDS
       else
@@ -62,9 +62,7 @@ $.extend CodeMirror.commands,
           if      x[0] == '⎕' then helpurls.SYSFNS
           else if x[0] == ':' then helpurls.CTRLSTRUCTS
           else                     helpurls.LANGELEMENTS
-    w = screen.width / 4; h = screen.height / 4
-    open u, 'help', "width=#{2 * w},height=#{2 * h},left=#{w},top=#{h},scrollbars=1,location=1,toolbar=0,menubar=0,resizable=1"
-      .focus?()
+    )
     return
 
   BQC: (cm) ->
