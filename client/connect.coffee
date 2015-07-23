@@ -23,6 +23,7 @@ proxyInfo = {} # the proxy sends information about itself when the front-end con
 ipAddresses = [] # of the proxy.  Used in the "Waiting for connections" dialog.
 
 module.exports = (opts) ->
+  document.title = 'RIDE - Connect'
   $('body').html """
     <fieldset id=connect-fieldset>
       <legend>Connect to an interpreter</legend>
