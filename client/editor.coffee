@@ -21,7 +21,7 @@ EDITOR_HTML = do ->
         b 'tb-FD  tracer-only',            'Skip current line'
         b 'tb-BH  tracer-only',            'Continue trace'
         b 'tb-RM  tracer-only',            'Continue execution'
-        b 'tb-MA  tracer-only',            'Restart all threads'
+        b 'tb-MA  tracer-only',            'Resume all threads'
         b 'tb-ED  tracer-only',            'Edit name'
         b 'tb-WI  tracer-only',            'Interrupt'
         b 'tb-CBP tracer-only',            'Clear trace/stop/monitor for this object'
