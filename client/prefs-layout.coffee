@@ -1,5 +1,5 @@
 prefs = require './prefs'
-{layouts} = require './keymap'
+{layouts} = D.kbds
 {join, esc, hex, ord, delay} = require './util'
 
 @name = 'Layout'

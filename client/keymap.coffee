@@ -111,82 +111,22 @@ switchWindows = (d) -> # d: a step of either 1 or -1
   j = if i < 0 then 0 else (i + a.length + d) % a.length
   $("#wintab#{a[j].id} a").click(); a[j].focus(); false
 
-# The quadrants of each layout entry will be turned into an array of four strings without whitespace.
+# D.kbds.layouts[lc] contains four strings describing how keys map to characters:
 #    0:normal  1:shifted
 #    2:APL     3:APL shifted
-# They can be indexed by scancode: http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
+# Each string can be indexed by scancode: http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
 # "APL" and "APL shifted" are the defaults upon which the user can build customisations.
-layoutDesc =
-  DE: '''
-    ☠ ^ 1 2 3 4 5 6 7 8 9 0 ß ´ ☠ ☠   ☠ ° ! " § $ % & / ( ) = ? ` ☠ ☠
-    ☠ q w e r t y u i o p ü + ☠       ☠ Q W E R T Y U I O P Ü * ☠
-    ☠ a s d f g h j k l ö ä # ☠       ☠ A S D F G H J K L Ö Ä ' ☠
-    ☠ < z x c v b n m , . - ☠ ☠       ☠ > Z X C V B N M ; : _ ☠ ☠
 
-    ☠ ⋄ ¨ ¯ < ≤ = ≥ > ≠ ∨ ∧ × ÷ ☠ ☠   ☠ ¤ ⌶ ⍫ ⍒ ⍋ ⌽ ⍉ ⊖ ⍟ ⍱ ⍲ ! ⌹ ☠ ☠
-    ☠ ? ⍵ ∊ ⍴ ~ ↑ ↓ ⍳ ○ * ← → ☠       ☠ ? ⍵ ⍷ ⍴ ⍨ ↑ ↓ ⍸ ⍥ ⍣ ⍞ ⍬ ☠
-    ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕ ⍎ ⍕ ⊢ ☠       ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ⍤ ⌸ ⌷ ≡ ≢ ⊣ ☠
-    ☠ ⊢ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ⊣ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍪ ⍙ ⍠ ☠ ☠
-  '''
-  DK: '''
-    ☠ ½ 1 2 3 4 5 6 7 8 9 0 + ´ ☠ ☠   ☠ § ! " # ¤ % & / ( ) = ? ` ☠ ☠
-    ☠ q w e r t y u i o p å ¨ ☠       ☠ Q W E R T Y U I O P Å ^ ☠
-    ☠ a s d f g h j k l æ ø ' ☠       ☠ A S D F G H J K L Æ Ø * ☠
-    ☠ < z x c v b n m , . - ☠ ☠       ☠ > Z X C V B N M ; : _ ☠ ☠
-
-    ☠ ⋄ ¨ ¯ < ≤ = ≥ > ≠ ∨ ∧ × ÷ ☠ ☠   ☠ ¤ ⌶ ⍫ ⍒ ⍋ ⌽ ⍉ ⊖ ⍟ ⍱ ⍲ ! ⌹ ☠ ☠
-    ☠ ? ⍵ ∊ ⍴ ~ ↑ ↓ ⍳ ○ * ← → ☠       ☠ ? ⍵ ⍷ ⍴ ⍨ ↑ ↓ ⍸ ⍥ ⍣ ⍞ ⍬ ☠
-    ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕ ⍎ ⍕ ⊢ ☠       ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ⍤ ⌸ ⌷ ≡ ≢ ⊣ ☠
-    ☠ ⊢ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ⊣ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍪ ⍙ ⍠ ☠ ☠
-  '''
-  'DK-Mac': '''
-    ☠ $ 1 2 3 4 5 6 7 8 9 0 + ´ ☠ ☠   ☠ § ! " # € % & / ( ) = ? ` ☠ ☠
-    ☠ q w e r t y u i o p å ¨ ☠       ☠ Q W E R T Y U I O P Å ^ ☠
-    ☠ a s d f g h j k l æ ø ' ☠       ☠ A S D F G H J K L Æ Ø * ☠
-    ☠ < z x c v b n m , . - ☠ ☠       ☠ > Z X C V B N M ; : _ ☠ ☠
-
-    ☠ ⋄ ¨ ¯ < ≤ = ≥ > ≠ ∨ ∧ × ÷ ☠ ☠   ☠ ¤ ⌶ ⍫ ⍒ ⍋ ⌽ ⍉ ⊖ ⍟ ⍱ ⍲ ! ⌹ ☠ ☠
-    ☠ ? ⍵ ∊ ⍴ ~ ↑ ↓ ⍳ ○ * ← → ☠       ☠ ? ⍵ ⍷ ⍴ ⍨ ↑ ↓ ⍸ ⍥ ⍣ ⍞ ⍬ ☠
-    ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕ ⍎ ⍕ ⊢ ☠       ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ⍤ ⌸ ⌷ ≡ ≢ ⊣ ☠
-    ☠ ⊢ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ⊣ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍪ ⍙ ⍠ ☠ ☠
-  '''
-  UK: '''
-    ☠ ` 1 2 3 4 5 6 7 8 9 0 - = ☠ ☠   ☠ ¬ ! " £ $ % ^ & * ( ) _ + ☠ ☠
-    ☠ q w e r t y u i o p [ ] ☠       ☠ Q W E R T Y U I O P { } ☠
-    ☠ a s d f g h j k l ; ' # ☠       ☠ A S D F G H J K L : @ ~ ☠
-    ☠ \\z x c v b n m , . / ☠ ☠       ☠ | Z X C V B N M < > ? ☠ ☠
-
-    ☠ ⋄ ¨ ¯ < ≤ = ≥ > ≠ ∨ ∧ × ÷ ☠ ☠   ☠ ¤ ⌶ ⍫ ⍒ ⍋ ⌽ ⍉ ⊖ ⍟ ⍱ ⍲ ! ⌹ ☠ ☠
-    ☠ ? ⍵ ∊ ⍴ ~ ↑ ↓ ⍳ ○ * ← → ☠       ☠ ? ⍵ ⍷ ⍴ ⍨ ↑ ↓ ⍸ ⍥ ⍣ ⍞ ⍬ ☠
-    ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕ ⍎ ⍕ ⊢ ☠       ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ⍤ ⌸ ⌷ ≡ ≢ ⊣ ☠
-    ☠ ⊢ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ⊣ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍪ ⍙ ⍠ ☠ ☠
-  '''
-  US: '''
-    ☠ ` 1 2 3 4 5 6 7 8 9 0 - = ☠ ☠   ☠ ~ ! @ # $ % ^ & * ( ) _ + ☠ ☠
-    ☠ q w e r t y u i o p [ ] \\      ☠ Q W E R T Y U I O P { } |
-    ☠ a s d f g h j k l ; ' ☠ ☠       ☠ A S D F G H J K L : " ☠ ☠
-    ☠ ☠ z x c v b n m , . / ☠ ☠       ☠ ☠ Z X C V B N M < > ? ☠ ☠
-
-    ☠ ⋄ ¨ ¯ < ≤ = ≥ > ≠ ∨ ∧ × ÷ ☠ ☠   ☠ ¤ ⌶ ⍫ ⍒ ⍋ ⌽ ⍉ ⊖ ⍟ ⍱ ⍲ ! ⌹ ☠ ☠
-    ☠ ? ⍵ ∊ ⍴ ~ ↑ ↓ ⍳ ○ * ← → ⊢       ☠ ? ⍵ ⍷ ⍴ ⍨ ↑ ↓ ⍸ ⍥ ⍣ ⍞ ⍬ ⊣
-    ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ∘ ' ⎕ ⍎ ⍕ ☠ ☠       ☠ ⍺ ⌈ ⌊ _ ∇ ∆ ⍤ ⌸ ⌷ ≡ ≢ ☠ ☠
-    ☠ ☠ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍝ ⍀ ⌿ ☠ ☠       ☠ ☠ ⊂ ⊃ ∩ ∪ ⊥ ⊤ | ⍪ ⍙ ⍠ ☠ ☠
-  '''
-@layouts = layouts = {}
-do ->
-  for lc, s of layoutDesc
-    q = layouts[lc] = ['', '', '', '']
-    for half, i in s.split '\n\n'
-      for line in half.split '\n'
-        for chunk, j in line.split /\s{3,}/
-          q[2 * i + j] += chunk.replace /\s+/g, ''
-    console.assert q[0].length == q[1].length == q[2].length == q[3].length
-  layoutDesc = null
-  return
+D.kbds.layouts['DK-Mac'] = [
+  ' $1234567890+´   qwertyuiopå¨  asdfghjklæø\'  <zxcvbnm,.-  '
+  ' §!"#€%&/()=?`   QWERTYUIOPÅ^  ASDFGHJKLÆØ*  >ZXCVBNM;:_  '
+  ' ⋄¨¯<≤=≥>≠∨∧×÷   ?⍵∊⍴~↑↓⍳○*←→  ⍺⌈⌊_∇∆∘\'⎕⍎⍕⊢  ⊢⊂⊃∩∪⊥⊤|⍝⍀⌿  '
+  ' ¤⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹   ?⍵⍷⍴⍨↑↓⍸⍥⍣⍞⍬  ⍺⌈⌊_∇∆⍤⌸⌷≡≢⊣  ⊣⊂⊃∩∪⊥⊤|⍪⍙⍠  '
+]
 
 bq = null # effective ` map as a dictionary, kept in sync with the prefs
 do updateBQ = ->
-  bq = {}; lc = prefs.kbdLocale() || 'US'; l = layouts[lc]; n = l[0].length
+  bq = {}; lc = prefs.kbdLocale() || 'US'; l = D.kbds.layouts[lc]; n = l[0].length
   for i in [0..1] then for j in [0...n] then bq[l[i][j]] ?= l[2 + i][j]
   if s = prefs.prefixMaps()[lc] then for i in [0...s.length] by 2 then x = s[i]; y = s[i + 1]; bq[x] = y
   return

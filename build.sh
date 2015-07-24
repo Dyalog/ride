@@ -41,6 +41,7 @@ lib_files='
   lib/jquery.layout.js
   init-nw.coffee
   lbar/lbar.js
+  kbds/kbds.js
 '
 us='' # names of compiled files
 changed=0
