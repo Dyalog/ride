@@ -120,8 +120,8 @@ switchWindows = (d) -> # d: a step of either 1 or -1
 D.kbds.layouts['DK-Mac'] = [
   ' $1234567890+´   qwertyuiopå¨  asdfghjklæø\'  <zxcvbnm,.-  '
   ' §!"#€%&/()=?`   QWERTYUIOPÅ^  ASDFGHJKLÆØ*  >ZXCVBNM;:_  '
-  ' ⋄¨¯<≤=≥>≠∨∧×÷   ?⍵∊⍴~↑↓⍳○*←→  ⍺⌈⌊_∇∆∘\'⎕⍎⍕⊢  ⊢⊂⊃∩∪⊥⊤|⍝⍀⌿  '
-  ' ¤⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹   ?⍵⍷⍴⍨↑↓⍸⍥⍣⍞⍬  ⍺⌈⌊_∇∆⍤⌸⌷≡≢⊣  ⊣⊂⊃∩∪⊥⊤|⍪⍙⍠  '
+  ' ⋄¨¯<≤=≥>≠∨∧×÷   ?⍵∊⍴~↑↓⍳○*←→  ⍺⌈⌊_∇∆∘\'⎕⍎⍕   ⊢⊂⊃∩∪⊥⊤|⍝⍀⌿  '
+  '  ⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹     ⍷ ⍨  ⍸⍥⍣⍞⍬        ⍤⌸⌷≡≢   ⊣       ⍪⍙⍠  '
 ]
 
 bq = null # effective ` map as a dictionary, kept in sync with the prefs
