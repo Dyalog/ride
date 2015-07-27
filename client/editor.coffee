@@ -252,12 +252,15 @@ class @Editor
     v = @cm.getSelection() || @cword(); if v && '\n' !in v then @cmSC.setValue v; @cmRP.setValue v
     @cmRP.focus(); @cmRP.execCommand 'selectAll'; @highlightSearch(); return
   EP: ->
-    v = @cm.getValue(); bp = @getBreakpoints()
-    if v != @otext || '' + bp != '' + @obp
-      for l in bp then @cm.setGutterMarker l, 'breakpoints', null
-      @emit 'SaveChanges', win: @id, text: @cm.getValue(), attributes: stop: bp
-    else
+    if @isTracer
       @emit 'CloseWindow', win: @id
+    else
+      v = @cm.getValue(); bp = @getBreakpoints()
+      if v != @otext || '' + bp != '' + @obp
+        for l in bp then @cm.setGutterMarker l, 'breakpoints', null
+        @emit 'SaveChanges', win: @id, text: @cm.getValue(), attributes: stop: bp
+      else
+        @emit 'CloseWindow', win: @id
     return
   TL: -> # Toggle Localisation
     if name = @cword()
