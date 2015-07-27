@@ -63,7 +63,7 @@ $ ->
   if !prefs.theme() then prefs.theme(
     if D.mac || /^(darwin|mac|ipad|iphone|ipod)/i.test navigator?.platform then 'cupertino'
     else if D.win || /^win/.test navigator?.platform then 'redmond'
-    else 'ancient'
+    else 'classic'
   )
   $('body').addClass "theme-#{prefs.theme()}"
   prefs.theme (x, old) ->
