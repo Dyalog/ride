@@ -85,6 +85,7 @@ class @IDE
       NotAtInputPrompt: => @wins[0].prompt 0; return
       AtInputPrompt: ({why}) =>
         if @pending.length then @emit 'Execute', trace: 0, text: @pending.shift() + '\n' else @wins[0].prompt why
+        if why == 4 then @wins[0].focus() # ⍞ input
         return
       HadError: => @pending.splice 0, @pending.length; return
       FocusWindow: ({win}) => $("#wintab#{win} a").click(); @wins[win]?.focus(); return
