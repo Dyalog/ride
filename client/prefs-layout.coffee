@@ -10,7 +10,7 @@ NK = 58 # number of scancodes we are concerned with
 model = window.model = {} # dictionary: locale→[arrayOfAPLGlyphs, arrayOfShiftedAPLGlyphs]
 
 @init = ($e) ->
-  specialKeys = 15: '⟵', 16: '↹', 30: 'Caps', 43: '↲', 44: '⇧', 57: '⇧'
+  specialKeys = 15: '←', 16: '↹', 30: 'Caps', 43: '↲', 44: '⇧', 57: '⇧'
   $e.html """
     <label id=layout-pfx-label>Prefix: <input id=layout-pfx class=text-field size=1></label>
     <a href=# id=layout-reset>Reset</a>
