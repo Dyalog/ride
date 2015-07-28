@@ -186,12 +186,12 @@ module.exports = (opts) ->
     .on '*listenError', ({err}) ->
       if $listenDialog then $listenDialog.dialog 'close'; $listenDialog = null
       $.alert err, 'Error'; enableSpawnAndListen true; return
-    .on '*exes', ({exes}) ->
+    .on '*interpreters', ({interpreters}) ->
       $spawnExe.html ''
-      for exe in exes then $('<option>').val(exe).text(exe).appendTo $spawnExe
+      for {exe} in interpreters then $('<option>').val(exe).text(exe).appendTo $spawnExe
       $spawnExe.append '<option value="">Other...'
       return
-    .emit '*exes'
+    .emit '*interpreters'
 
   $('#fav-list').resizable handles: 's,e'
 

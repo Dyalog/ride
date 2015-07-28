@@ -257,7 +257,7 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
           log "listening for connections from interpreter on port #{port}"; callback?(); return
         return
       .on '*listenCancel', -> server?.close(); return
-      .on '*exes', -> # list available interpreter executables
+      .on '*interpreters', -> # list available interpreter executables
         # Possible paths to the interpreter:
         #   C:\Program Files\Dyalog\Dyalog APL $VERSION\dyalog.exe
         #   C:\Program Files\Dyalog\Dyalog APL $VERSION unicode\dyalog.exe
@@ -267,22 +267,23 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
         #   C:\Program Files (x86)\Dyalog\Dyalog APL $VERSION unicode\dyalog.exe
         #   /opt/mdyalog/$VERSION/[64|32]/[classic|unicode]/mapl
         #   /Applications/Dyalog-$VERSION/Contents/Resources/Dyalog/mapl
-        exes = []
+        interpreters = []
         if /^win/.test process.platform
           for a in [process.env.ProgramFiles, process.env['ProgramFiles(x86)']] when a
             try for b in fs.readdirSync "#{a}\\Dyalog" when /^Dyalog APL(-64)? \d+\.\d+( unicode)?$/i.test b
-              if fs.existsSync exe = "#{a}\\Dyalog\\#{b}\\dyalog.exe" then exes.push exe
+              if fs.existsSync exe = "#{a}\\Dyalog\\#{b}\\dyalog.exe"
+                interpreters.push {exe}
         else if process.platform == 'darwin'
           try for b in fs.readdirSync a = '/Applications' when /^Dyalog-\d+\.\d+$/.test(b)
             if fs.existsSync exe = "#{a}/#{b}/Contents/Resources/Dyalog/mapl"
-              exes.push exe
+              interpreters.push {exe}
         else
           try for b in fs.readdirSync a = '/opt/mdyalog' when /^\d+\.\d+/.test b
             try for c in fs.readdirSync "#{a}/#{b}" when c in ['64', '32']
               try for d in fs.readdirSync "#{a}/#{b}/#{c}" when d in ['unicode', 'classic']
                 if fs.existsSync exe = "#{a}/#{b}/#{c}/#{d}/mapl"
-                  exes.push exe
-        toBrowser '*exes', {exes}
+                  interpreters.push {exe}
+        toBrowser '*interpreters', {interpreters}
         return
     if child then toBrowser '*spawned', pid: child.pid
     toBrowser '*proxyInfo', {ipAddresses, platform: process.platform}
