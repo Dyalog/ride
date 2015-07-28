@@ -13,6 +13,7 @@ r=/devt/builds/ride/${CURRENTBRANCH}
 d=`date +%Y-%m-%d--%H-%M` # append a letter to $d if such a directory already exists
 for suffix in '' {a..z}; do if [ ! -e $r/$d$suffix ]; then d=$d$suffix; break; fi; done
 mkdir -p $r/$d
+echo "$VERSION" > $r/$d/version
 echo Copying Directories to $r/$d
 cp -r build/ride/* $r/$d
 for DIR in `ls build/ride`; do
