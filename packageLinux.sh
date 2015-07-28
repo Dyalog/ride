@@ -26,7 +26,8 @@ function checkEnvironment() {
 
 function getVersionInfo() {
 if [ "${TARGET}" != "support" ]; then
-	RIDEVERSION=`${RIDEDIR}/ride --version 2>/dev/null`
+	#RIDEVERSION=`${RIDEDIR}/ride --version 2>/dev/null`
+	RIDEVERSION="2.0.`git rev-list HEAD --count`"
 else
 	RIDEVERSION="1.9.0"
 fi
