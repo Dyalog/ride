@@ -9,7 +9,7 @@ echo 'adding nomnom library'; mkdir -p build/nw/node_modules; cp -r node_modules
 desktop_app() {
   echo "building desktop app for $@"
   node <<.
-    var NWB = require('node-webkit-builder');
+    var NWB = require('nw-builder');
     var nwb = new NWB({files: 'build/nw/**', version: '$node_version', platforms: '$@'.split(' ')});
     nwb.build().catch(function (e) {console.error(e); process.exit(1);});
 .

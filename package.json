@@ -14,7 +14,7 @@
     "jquery": "2.1.4",
     "jquery-ui": "1.10.5",
     "node-sass": "3.1.1",
-    "node-webkit-builder": "1.0.12",
+    "nw-builder": "2.0.1",
     "nomnom": "1.8.1",
     "pure-cjs": "1.18.2"
   },
