@@ -19,6 +19,7 @@ D.prefs = @
   ['floating',          0] # floating editor and tracer windows
   ['floatOnTop',        0] # try to keep floating windows on top of the session
   ['fold',              1] # code folding
+  ['ime',               1]
   ['indent',            4] # -1 disables autoindent
   ['indentMethods',     -1] # -1 makes methods use the same indent as all other blocks
   ['keys',              {}] # a mapping between commands and keystrokes, only diffs from the defaults

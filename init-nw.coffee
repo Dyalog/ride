@@ -22,7 +22,8 @@ if process?
   if D.opts.version then console.log D.versionInfo.version; process.exit 0
 
   # switch IME locale as early as possible
-  if D.win && fs.existsSync setImeExe = process.execPath.replace /[^\\\/]+$/, 'set-ime.exe'
+  if D.win && (!localStorage.ime || localStorage.ime == '1') &&
+        fs.existsSync setImeExe = process.execPath.replace /[^\\\/]+$/, 'set-ime.exe'
     spawn setImeExe, [process.pid, 'E0990409'], stdio: ['ignore', 'ignore', 'ignore']
 
   segmOverlap = (a, b, c, d) -> a < d && c < b # Do the two segments ab and cd overlap?

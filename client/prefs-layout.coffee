@@ -40,6 +40,12 @@ model = window.model = {} # dictionary: locale→[arrayOfAPLGlyphs, arrayOfShift
     model[$lc.val()][i][j] = v
     return
   .on 'mouseover mouseout', '.key input', (e) -> $(@).toggleClass 'hover', e.type == 'mouseover'; return
+  if D.win
+    $e.append """
+      <label id=layout-ime-wrapper>
+        <input type=checkbox id=layout-ime>Also enable Dyalog IME (if available) on start-up
+      </label>
+    """
   if !prefs.kbdLocale()
     prefs.kbdLocale(
       switch navigator.language
@@ -68,6 +74,7 @@ model = window.model = {} # dictionary: locale→[arrayOfAPLGlyphs, arrayOfShift
   for lc, v of prefs.prefixMaps() then for i in [0...v.length] by 2
     x = v[i]; y = v[i + 1]; for j in [0..1] then ix = layouts[lc][j].indexOf x; ix >= 0 && model[lc][j][ix] = y
   updateGlyphs()
+  D.win && $('#layout-ime').prop 'checked', !!prefs.ime()
   return
 
 # Every geometry (aka "mechanical layout") has its precise arrangement of keys specified as a CSS class.
@@ -93,4 +100,5 @@ updateGlyphs = -> # apply model values to the DOM
     for x, i in xs then y = ys[i]; Y = YS[i]; if x != '☠' && y != '☠' && y != Y then s += x + y
     s && h[lc] = s
   prefs.prefixMaps h
+  D.win && prefs.ime $('#layout-ime').is ':checked'
   return
