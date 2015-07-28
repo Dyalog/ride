@@ -40,11 +40,13 @@ extend = (a...) -> r = {}; (for x in a then for k, v of x then r[k] = v); r
 addr = (socket) -> socket?.request?.connection?.remoteAddress || 'IDE' # format a socket's remote address
 
 ipAddresses = []
-try
-  for iface, addrs of os.networkInterfaces()
-    for a in addrs when a.family == 'IPv4' && !a.internal
-      ipAddresses.push a.address
-catch e then log 'cannot determine ip addresses: ' + e
+do ->
+  try
+    for iface, addrs of os.networkInterfaces()
+      for a in addrs when a.family == 'IPv4' && !a.internal
+        ipAddresses.push a.address
+  catch e then log 'cannot determine ip addresses: ' + e
+  return
 
 # Constants for entityType:
 #                         protocol
@@ -214,7 +216,8 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
         client = net.connect {host, port}, -> toBrowser '*connected', {host, port}; return
         setUpInterpreterConnection()
         return
-      .on '*spawn', ->
+      .on '*spawn', ({exe} = {}) ->
+        exe ||= process.env.DYALOG_IDE_INTERPRETER_EXE || 'dyalog'
         server = net.createServer (c) ->
           log 'spawned interpreter connected'; a = server.address(); server?.close(); server = null; client = c
           toBrowser '*connected', {host: a.address, port: a.port}; setUpInterpreterConnection(); return
@@ -222,19 +225,22 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
           log 'cannot listen for connections from spawned interpreter: ' + err
           server = client = null; toBrowser '*listenError', err: '' + err; return
         server.listen 0, '127.0.0.1', -> # pick a random free port
-          a = server.address(); hp = "#{a.address}:#{a.port}"
           log "listening for connections from spawned interpreter on #{hp}"
-          exe = process.env.DYALOG_IDE_INTERPRETER_EXE || 'dyalog'
+          a = server.address(); hp = "#{a.address}:#{a.port}"
           log "spawning interpreter #{JSON.stringify exe}"
           args = ['+s', '-q']; stdio = ['pipe', 'ignore', 'ignore']
           if /^win/i.test process.platform then args = []; stdio[0] = 'ignore'
-          child = spawn exe, args, stdio: stdio, env: extend process.env,
-            RIDE_INIT: "CONNECT:#{hp}", RIDE_SPAWNED: '1'
+          try
+            child = spawn exe, args, stdio: stdio, env: extend process.env,
+              RIDE_INIT: "CONNECT:#{hp}", RIDE_SPAWNED: '1'
+          catch e
+            toBrowser '*spawnedError', code: 0, message: '' + e
+            return
           toBrowser '*spawned', pid: child.pid
           child.on 'error', (err) ->
             server?.close(); server = client = null
             toBrowser '*spawnedError', code: err.code, message:
-              if err.code == 'ENOENT' then 'Cannot find dyalog executable on $PATH' else '' + err
+              if err.code == 'ENOENT' then "Cannot find the interpreter's executable" else '' + err
             child = null; return
           child.on 'exit', (code, signal) ->
             server?.close(); server = client = null; toBrowser '*spawnedExited', {code, signal}; child = null; return
@@ -251,6 +257,33 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
           log "listening for connections from interpreter on port #{port}"; callback?(); return
         return
       .on '*listenCancel', -> server?.close(); return
+      .on '*exes', -> # list available interpreter executables
+        # Possible paths to the interpreter:
+        #   C:\Program Files\Dyalog\Dyalog APL $VERSION\dyalog.exe
+        #   C:\Program Files\Dyalog\Dyalog APL $VERSION unicode\dyalog.exe
+        #   C:\Program Files\Dyalog\Dyalog APL-64 $VERSION\dyalog.exe
+        #   C:\Program Files\Dyalog\Dyalog APL-64 $VERSION unicode\dyalog.exe
+        #   C:\Program Files (x86)\Dyalog\Dyalog APL $VERSION\dyalog.exe
+        #   C:\Program Files (x86)\Dyalog\Dyalog APL $VERSION unicode\dyalog.exe
+        #   /opt/mdyalog/$VERSION/[64|32]/[classic|unicode]/mapl
+        #   /Applications/Dyalog-$VERSION/Contents/Resources/Dyalog/mapl
+        exes = []
+        if /^win/.test process.platform
+          for a in [process.env.ProgramFiles, process.env['ProgramFiles(x86)']] when a
+            try for b in fs.readdirSync "#{a}\\Dyalog" when /^Dyalog APL(-64)? \d+\.\d+( unicode)?$/i.test b
+              if fs.existsSync exe = "#{a}\\Dyalog\\#{b}\\dyalog.exe" then exes.push exe
+        else if process.platform == 'darwin'
+          try for b in fs.readdirSync a = '/Applications' when /^Dyalog-\d+\.\d+$/.test(b)
+            if fs.existsSync exe = "#{a}/#{b}/Contents/Resources/Dyalog/mapl"
+              exes.push exe
+        else
+          try for b in fs.readdirSync a = '/opt/mdyalog' when /^\d+\.\d+/.test b
+            try for c in fs.readdirSync "#{a}/#{b}" when c in ['64', '32']
+              try for d in fs.readdirSync "#{a}/#{b}/#{c}" when d in ['unicode', 'classic']
+                if fs.existsSync exe = "#{a}/#{b}/#{c}/#{d}/mapl"
+                  exes.push exe
+        toBrowser '*exes', {exes}
+        return
     if child then toBrowser '*spawned', pid: child.pid
     toBrowser '*proxyInfo', {ipAddresses, platform: process.platform}
     return

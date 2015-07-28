@@ -54,10 +54,9 @@ module.exports = (opts) ->
     </fieldset>
     <fieldset id=spawnSection>
       <legend>Spawn an interpreter</legend>
-      <p>
-        <a href=# id=spawn accessKey=w>Spa<u>w</u>n</a><br>
-        <span id=spawn-status></span>
-      </p>
+      <p><select id=spawn-exe></select> <input id=spawn-exe-input style=display:none></p>
+      <p><a href=# id=spawn accessKey=w>Spa<u>w</u>n</a></p>
+      <p id=spawn-status></p>
     </fieldset>
     <fieldset>
       <legend>Listen for connections from interpreter </legend>
@@ -66,17 +65,19 @@ module.exports = (opts) ->
       <p><a href=# id=listen accessKey=l><u>L</u>isten</a>
     </fieldset>
   """
-  $connect     = $ '#fav-connect'  ; $host        = $ '#fav-host'
-  $new         = $ '#fav-new'      ; $port        = $ '#fav-port'
-  $delete      = $ '#fav-delete'   ; $name        = $ '#fav-name'
-  $list        = $ '#fav-list'     ; $save        = $ '#fav-save'
-  $spawn       = $ '#spawn'        ; $cancel      = $ '#fav-cancel'
-  $spawnStatus = $ '#spawn-status' ; $listen      = $ '#listen'
-  $about       = $ '#about'        ; $listenHost  = $ '#listen-host'; $listenPort  = $ '#listen-port'
+  $connect       = $ '#fav-connect'  ; $host       = $ '#fav-host'
+  $new           = $ '#fav-new'      ; $port       = $ '#fav-port'
+  $delete        = $ '#fav-delete'   ; $name       = $ '#fav-name'
+  $list          = $ '#fav-list'     ; $save       = $ '#fav-save'
+  $about         = $ '#about'        ; $cancel     = $ '#fav-cancel'
+  $spawn         = $ '#spawn'        ; $listen     = $ '#listen'
+  $spawnStatus   = $ '#spawn-status' ; $listenHost = $ '#listen-host'
+  $spawnExe      = $ '#spawn-exe'    ; $listenPort = $ '#listen-port'
+  $spawnExeInput = $ '#spawn-exe-input'
   $listenDialog = $connectDialog = null
 
   enableSpawnAndListen = (b) ->
-    $('#spawn, #listen').button if b then 'enable' else 'disable'
+    $('#spawn,#listen').button if b then 'enable' else 'disable'
     $('#listen-host,#listen-port').attr 'disabled', !b
     return
 
@@ -124,7 +125,11 @@ module.exports = (opts) ->
   $cancel.click ->
     x = parseFav $list.find(':selected').text(); $host.val x.host; $port.val x.port; $name.val x.name
     $save.add($cancel).button 'disable'; false
-  $spawn.click -> enableSpawnAndListen false; $spawnStatus.text 'Spawning...'; D.socket.emit '*spawn'; false
+  $spawn.click ->
+    enableSpawnAndListen false; $spawnStatus.text 'Spawning...'
+    D.socket.emit '*spawn', exe: $spawnExe.val() || $spawnExeInput.val()
+    false
+  $spawnExe.change -> $spawnExeInput.toggle v = !$(@).val(); v && $spawnExeInput.focus(); return
   $listen.click ->
     host = $listenHost.val()
     port = +$listenPort.val()
@@ -181,6 +186,12 @@ module.exports = (opts) ->
     .on '*listenError', ({err}) ->
       if $listenDialog then $listenDialog.dialog 'close'; $listenDialog = null
       $.alert err, 'Error'; enableSpawnAndListen true; return
+    .on '*exes', ({exes}) ->
+      $spawnExe.html ''
+      for exe in exes then $('<option>').val(exe).text(exe).appendTo $spawnExe
+      $spawnExe.append '<option value="">Other...'
+      return
+    .emit '*exes'
 
   $('#fav-list').resizable handles: 's,e'
 
