@@ -45,7 +45,7 @@ for DIR in `ls build/ride`; do
 done
 
 echo 'updating "latest" symlink'; l=$r/latest; [ -L $l ]; rm $l; ln -s $d $l
-echo 'fixing permissions'; chmod +x `echo echo $r/latest/win{64,32}/{ride.exe,set-ime.exe,libGLESv2.dll,libEGL.dll}`
+echo 'fixing permissions'; chmod +x `echo $r/latest/win{64,32}/{ride.exe,libGLESv2.dll,libEGL.dll}` $r/latest/win64/set-ime.exe
 echo 'cleaning up old releases'
 for x in $(ls $r | grep -P '^\d{4}-\d{2}-\d{2}--\d{2}-\d{2}[a-z]?$' | sort | head -n-10); do
   echo "deleting $x"; rm -rf $r/$x || true
