@@ -4,7 +4,7 @@
 if ! [ "$1" = "" ]; then
         TARGET=$1
 else
-        TARGET="support"
+	TARGET=${GIT_BRANCH#*/}
 fi
 
 RIDEDIR="/devt/builds/ride/${TARGET}/latest/linux64"
