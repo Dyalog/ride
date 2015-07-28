@@ -1,6 +1,7 @@
 {IDE} = require './ide'
 about = require './about'
 prefs = require './prefs'
+{esc} = require './util'
 
 DEFAULT_PORT = prefs.favs.getDefault()[0].port; if typeof DEFAULT_PORT != 'number' then throw Error 'cannot determine DEFAULT_PORT'
 fmtFav = (x) ->
@@ -54,7 +55,7 @@ module.exports = (opts) ->
     </fieldset>
     <fieldset id=spawnSection>
       <legend>Spawn an interpreter</legend>
-      <p><select id=spawn-exe></select> <input id=spawn-exe-input style=display:none></p>
+      <p><select id=spawn-select></select> <input id=spawn-exe size=50></p>
       <p><a href=# id=spawn accessKey=w>Spa<u>w</u>n</a></p>
       <p id=spawn-status></p>
     </fieldset>
@@ -65,15 +66,14 @@ module.exports = (opts) ->
       <p><a href=# id=listen accessKey=l><u>L</u>isten</a>
     </fieldset>
   """
-  $connect       = $ '#fav-connect'  ; $host       = $ '#fav-host'
-  $new           = $ '#fav-new'      ; $port       = $ '#fav-port'
-  $delete        = $ '#fav-delete'   ; $name       = $ '#fav-name'
-  $list          = $ '#fav-list'     ; $save       = $ '#fav-save'
-  $about         = $ '#about'        ; $cancel     = $ '#fav-cancel'
-  $spawn         = $ '#spawn'        ; $listen     = $ '#listen'
-  $spawnStatus   = $ '#spawn-status' ; $listenHost = $ '#listen-host'
-  $spawnExe      = $ '#spawn-exe'    ; $listenPort = $ '#listen-port'
-  $spawnExeInput = $ '#spawn-exe-input'
+  $connect     = $ '#fav-connect'  ; $host       = $ '#fav-host'
+  $new         = $ '#fav-new'      ; $port       = $ '#fav-port'
+  $delete      = $ '#fav-delete'   ; $name       = $ '#fav-name'
+  $list        = $ '#fav-list'     ; $save       = $ '#fav-save'
+  $about       = $ '#about'        ; $cancel     = $ '#fav-cancel'
+  $spawn       = $ '#spawn'        ; $listen     = $ '#listen'
+  $spawnStatus = $ '#spawn-status' ; $listenHost = $ '#listen-host'
+  $listenPort  = $ '#listen-port'
   $listenDialog = $connectDialog = null
 
   enableSpawnAndListen = (b) ->
@@ -93,7 +93,7 @@ module.exports = (opts) ->
   $connect.click ->
     host = $host.val(); port = +$port.val()
     if !/^[a-z0-9\.\-:]+$/i.test host then $.alert 'Invalid host', 'Error', -> $host.focus(); return
-    else if !(0 < port < 0xffff) then $.alert 'Invalid port', 'Error', -> $port.focus(); return
+    else if !(0 < port < 0x10000) then $.alert 'Invalid port', 'Error', -> $port.focus(); return
     else
       $connectDialog = $ '<div class=connect-dialog><div class=visual-distraction></div></div>'
         .dialog modal: 1, width: 350, title: 'Connecting...', buttons: Cancel: -> $(@).dialog 'close'; false
@@ -127,9 +127,10 @@ module.exports = (opts) ->
     $save.add($cancel).button 'disable'; false
   $spawn.click ->
     enableSpawnAndListen false; $spawnStatus.text 'Spawning...'
-    D.socket.emit '*spawn', exe: $spawnExe.val() || $spawnExeInput.val()
+    D.socket.emit '*spawn', exe: $('#spawn-exe').val()
     false
-  $spawnExe.change -> $spawnExeInput.toggle v = !$(@).val(); v && $spawnExeInput.focus(); return
+  $('#spawn-select').change ->
+    v = $(@).val(); $('#spawn-exe').val(v).prop 'readonly', !!v; v || $('#spawn-exe').focus(); return
   $listen.click ->
     host = $listenHost.val()
     port = +$listenPort.val()
@@ -187,9 +188,12 @@ module.exports = (opts) ->
       if $listenDialog then $listenDialog.dialog 'close'; $listenDialog = null
       $.alert err, 'Error'; enableSpawnAndListen true; return
     .on '*interpreters', ({interpreters}) ->
-      $spawnExe.html ''
-      for {exe} in interpreters then $('<option>').val(exe).text(exe).appendTo $spawnExe
-      $spawnExe.append '<option value="">Other...'
+      $('#spawn-select').html(
+        interpreters.map(({exe, version, bits, edition}) ->
+          s = "v#{version}, #{bits}-bit, #{edition[0].toUpperCase() + edition[1..]}"
+          "<option value='#{esc exe}'>#{esc s}").join('') +
+        '<option value="">Other...'
+      ).change()
       return
     .emit '*interpreters'
 
