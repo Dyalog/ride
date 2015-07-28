@@ -1,11 +1,12 @@
 #!/bin/bash
-#set -x
+set -x
 
 if ! [ "$1" = "" ]; then
         TARGET=$1
 else
 	TARGET=${GIT_BRANCH#*/}
 fi
+echo "Packaging for $TARGET"
 
 RIDEDIR="/devt/builds/ride/${TARGET}/latest/linux64"
 ICON="/devt/admin/Dyalog Logos Stationery/Logos/Dyalog-D.svg"
