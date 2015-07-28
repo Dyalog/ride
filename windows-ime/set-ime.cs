@@ -53,7 +53,7 @@ class C {
     int pid = int.Parse(args[0]);
     string lc = args[1]; // locale code
     var w = getWindowByPID(pid);
-    if (w == IntPtr.Zero) { w = getWindowByPID(Parent(Process.GetProcessById(pid)).id); }
+    if (w == IntPtr.Zero) { w = getWindowByPID(Parent(Process.GetProcessById(pid)).Id); }
     PostMessage(w, WM_INPUTLANGCHANGEREQUEST, IntPtr.Zero, LoadKeyboardLayout(lc, KLF_ACTIVATE));
     return 0;
   }

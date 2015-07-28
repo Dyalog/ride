@@ -1,5 +1,6 @@
 set-ime.exe is a utility that sets the input method locale for the foreground window
 To recompile it:
-  %WINDIR%\Microsoft.NET\Framework\v%LATEST_DOTNET_VERSION%\csc.exe set-ime.cs
+  set PATH=%PATH%;%WINDIR%\Microsoft.NET\Framework\v%LATEST_DOTNET_VERSION%
+  build.bat
 To enable Dyalog's locale:
-  set-ime.exe E0990409
+  set-ime.exe PID E0990409
