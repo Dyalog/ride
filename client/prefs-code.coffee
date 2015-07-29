@@ -8,7 +8,7 @@ $ai = $sw = $aim = $swm = $mb = $acbr = $acbl = $acbe = $ac = $acd = $fold = nul
 @init = ($e) ->
   $e.html '''
     <p><label><input id=code-ai   type=checkbox>Auto-indent</label> <label><input id=code-sw  size=1> spaces</label>
-    <!--<p><label><input id=code-aim  type=checkbox>in methods:</label> <label><input id=code-swm size=1> spaces</label>-->
+    <p><label><input id=code-aim  type=checkbox>in methods:</label> <label><input id=code-swm size=1> spaces</label>
     <p><label><input id=code-mb   type=checkbox>Highlight matching brackets: <tt>()[]{}</tt></label></p>
     <p><label><input id=code-acbr type=checkbox>Auto-close brackets</label>
     <p><label><input id=code-acbl type=checkbox>Auto-close blocks: <tt>:If :For ...</tt></label>
