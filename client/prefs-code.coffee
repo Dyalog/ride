@@ -3,14 +3,15 @@ prefs = require './prefs'
 
 @name = 'Code'
 
-$ai = $sw = $aim = $swm = $io = $mb = $acbr = $acbl = $acbe = $ac = $acd = $fold = null
+$ai = $sw = $aim = $icom = $swm = $io = $mb = $acbr = $acbl = $acbe = $ac = $acd = $fold = null
 
 @init = ($e) ->
   $e.html '''
     <div>
       <p><label><input id=code-ai   type=checkbox>Auto-indent</label> <label><input id=code-sw  size=1> spaces</label>
       <p><label><input id=code-aim  type=checkbox>in methods:</label> <label><input id=code-swm size=1> spaces</label>
-      <p><label><input id=code-io   type=checkbox>Indent all code when an editor is opened</label>
+      <p><label><input id=code-icom type=checkbox>Indent lines that contain only a comment</label>
+      <p><label><input id=code-io   type=checkbox>Indent content when an editor is opened</label>
       <p><label><input id=code-mb   type=checkbox>Highlight matching brackets: <tt>()[]{}</tt></label></p>
       <p><label><input id=code-acbr type=checkbox>Auto-close brackets</label>
       <p><label><input id=code-acbl type=checkbox>Auto-close blocks: <tt>:If :For ...</tt></label>
@@ -26,6 +27,7 @@ $ai = $sw = $aim = $swm = $io = $mb = $acbr = $acbl = $acbe = $ac = $acd = $fold
   $sw   = $ '#code-sw'
   $aim  = $ '#code-aim'
   $swm  = $ '#code-swm'
+  $icom = $ '#code-icom'
   $io   = $ '#code-io'
   $mb   = $ '#code-mb'
   $acbr = $ '#code-acbr'
@@ -46,6 +48,7 @@ $ai = $sw = $aim = $swm = $io = $mb = $acbr = $acbl = $acbe = $ac = $acd = $fold
 @load = ->
   sw  = prefs.indent();        $ai .prop 'checked', sw  >= 0; $sw .val sw  < 0 && 4 || sw
   swm = prefs.indentMethods(); $aim.prop 'checked', swm >= 0; $swm.val swm < 0 && 2 || swm
+  $icom.prop 'checked', !!prefs.indentComments()
   $io  .prop 'checked', !!prefs.indentOnOpen()
   $mb  .prop 'checked', !!prefs.matchBrackets()
   $acbr.prop 'checked', !!prefs.autoCloseBrackets()
@@ -60,6 +63,7 @@ $ai = $sw = $aim = $swm = $io = $mb = $acbr = $acbl = $acbe = $ac = $acd = $fold
 @save = ->
   prefs.indent              if $ai .is ':checked' then +$sw .val() || 0 else -1
   prefs.indentMethods       if $aim.is ':checked' then +$swm.val() || 0 else -1
+  prefs.indentComments      $icom.is ':checked'
   prefs.indentOnOpen        $io  .is ':checked'
   prefs.matchBrackets       $mb  .is ':checked'
   prefs.autoCloseBrackets   $acbr.is ':checked'

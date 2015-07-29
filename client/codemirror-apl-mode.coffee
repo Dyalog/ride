@@ -44,8 +44,10 @@ escIdiom = (s) -> s.replace(/«(.*?)»|(.)/g, (_, g, g2) -> g ||= g2; ' *' + if 
 idiomsRE = ///^(?:#{idioms.sort((x, y) -> y.length - x.length).map(escIdiom).join '|'})///i
 
 sw = 4; swm = 2 # default indent unit and indent unit for methods; keep these in sync with prefs
-do update = -> sw = prefs.indent(); swm = prefs.indentMethods(); swm < 0 && swm = sw; return
-prefs.indent update; prefs.indentMethods update
+do updateSW = -> sw = prefs.indent(); swm = prefs.indentMethods(); swm < 0 && swm = sw; return
+prefs.indent updateSW; prefs.indentMethods updateSW
+
+icom = prefs.indentComments(); prefs.indentComments (x) -> icom = x; return
 
 @dfnDepth = dfnDepth = (a) -> r = 0; (for x in a when x.t == '{' then r++); r
 
@@ -148,7 +150,9 @@ CodeMirror.defineMode 'apl', (config) ->
 
   indent: (h, s) -> # h:state, s:textAfter
     {a} = h; la = last a
-    if dfnDepth a
+    if !icom && /^\s*⍝/.test s
+      CodeMirror.Pass
+    else if dfnDepth a
       if /^\s*\}/.test s then la.oi else la.ii
     else if /^\s*∇/.test s
       i = a.length - 1; while i && a[i].t != '∇' then i--
