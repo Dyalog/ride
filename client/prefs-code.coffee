@@ -3,26 +3,30 @@ prefs = require './prefs'
 
 @name = 'Code'
 
-$ai = $sw = $aim = $swm = $mb = $acbr = $acbl = $acbe = $ac = $acd = $fold = null
+$ai = $sw = $aim = $swm = $io = $mb = $acbr = $acbl = $acbe = $ac = $acd = $fold = null
 
 @init = ($e) ->
   $e.html '''
-    <p><label><input id=code-ai   type=checkbox>Auto-indent</label> <label><input id=code-sw  size=1> spaces</label>
-    <p><label><input id=code-aim  type=checkbox>in methods:</label> <label><input id=code-swm size=1> spaces</label>
-    <p><label><input id=code-mb   type=checkbox>Highlight matching brackets: <tt>()[]{}</tt></label></p>
-    <p><label><input id=code-acbr type=checkbox>Auto-close brackets</label>
-    <p><label><input id=code-acbl type=checkbox>Auto-close blocks: <tt>:If :For ...</tt></label>
-       <label>with <select id=code-acbe>
-         <option value=0>:EndIf,:EndFor,...
-         <option value=1>just :End
-       </select></label>
-    <p><label><input id=code-ac   type=checkbox>Autocompletion</label> <label>after <input id=code-acd size=5>ms</label>
-    <p><label><input id=code-fold type=checkbox>Code folding (outlining)</label>
+    <div>
+      <p><label><input id=code-ai   type=checkbox>Auto-indent</label> <label><input id=code-sw  size=1> spaces</label>
+      <p><label><input id=code-aim  type=checkbox>in methods:</label> <label><input id=code-swm size=1> spaces</label>
+      <p><label><input id=code-io   type=checkbox>Indent all code when an editor is opened</label>
+      <p><label><input id=code-mb   type=checkbox>Highlight matching brackets: <tt>()[]{}</tt></label></p>
+      <p><label><input id=code-acbr type=checkbox>Auto-close brackets</label>
+      <p><label><input id=code-acbl type=checkbox>Auto-close blocks: <tt>:If :For ...</tt></label>
+         <label>with <select id=code-acbe>
+           <option value=0>:EndIf,:EndFor,...
+           <option value=1>just :End
+         </select></label>
+      <p><label><input id=code-ac   type=checkbox>Autocompletion</label> <label>after <input id=code-acd size=5>ms</label>
+      <p><label><input id=code-fold type=checkbox>Code folding (outlining)</label>
+    </div>
   '''
   $ai   = $ '#code-ai'
   $sw   = $ '#code-sw'
   $aim  = $ '#code-aim'
   $swm  = $ '#code-swm'
+  $io   = $ '#code-io'
   $mb   = $ '#code-mb'
   $acbr = $ '#code-acbr'
   $acbl = $ '#code-acbl'
@@ -42,6 +46,7 @@ $ai = $sw = $aim = $swm = $mb = $acbr = $acbl = $acbe = $ac = $acd = $fold = nul
 @load = ->
   sw  = prefs.indent();        $ai .prop 'checked', sw  >= 0; $sw .val sw  < 0 && 4 || sw
   swm = prefs.indentMethods(); $aim.prop 'checked', swm >= 0; $swm.val swm < 0 && 2 || swm
+  $io  .prop 'checked', !!prefs.indentOnOpen()
   $mb  .prop 'checked', !!prefs.matchBrackets()
   $acbr.prop 'checked', !!prefs.autoCloseBrackets()
   $acbl.prop 'checked', !!prefs.autoCloseBlocks()
@@ -55,6 +60,7 @@ $ai = $sw = $aim = $swm = $mb = $acbr = $acbl = $acbe = $ac = $acd = $fold = nul
 @save = ->
   prefs.indent              if $ai .is ':checked' then +$sw .val() || 0 else -1
   prefs.indentMethods       if $aim.is ':checked' then +$swm.val() || 0 else -1
+  prefs.indentOnOpen        $io  .is ':checked'
   prefs.matchBrackets       $mb  .is ':checked'
   prefs.autoCloseBrackets   $acbr.is ':checked'
   prefs.autoCloseBlocks     $acbl.is ':checked'

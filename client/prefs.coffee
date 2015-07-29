@@ -22,6 +22,7 @@ D.prefs = @
   ['ime',               1]
   ['indent',            4] # -1 disables autoindent
   ['indentMethods',     -1] # -1 makes methods use the same indent as all other blocks
+  ['indentOnOpen',      1] # whether to re-indent source code on editor open
   ['keys',              {}] # a mapping between commands and keystrokes, only diffs from the defaults
   ['kbdLocale',         ''] # e.g. "US", "GB"
   ['lineNumsTracer',    0]

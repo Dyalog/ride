@@ -216,7 +216,7 @@ class @Editor
     # ExternalFunction   13
     if ee.entityType in [1, 9, 10, 11, 12, 13]
       @cm.setOption 'mode', 'apl'
-      @cm.execCommand 'selectAll'; @cm.execCommand 'indentAuto' # reformat according to RIDE's preferences
+      if prefs.indentOnOpen() then @cm.execCommand 'selectAll'; @cm.execCommand 'indentAuto'
     else
       @cm.setOption 'mode', 'text'
     @cm.setOption 'readOnly', ee.readOnly || ee.debugger
