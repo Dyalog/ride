@@ -21,7 +21,6 @@ parseFav = (s) ->
   x
 
 proxyInfo = {} # the proxy sends information about itself when the front-end connects to it
-ipAddresses = [] # of the proxy.  Used in the "Waiting for connections" dialog.
 
 module.exports = (opts) ->
   document.title = 'RIDE - Connect'
@@ -144,8 +143,8 @@ module.exports = (opts) ->
           Please start the remote interpreter with<br>
           #{
             (
-              for host in (if proxyInfo.ipAddresses?.length then proxyInfo.ipAddresses else ['host'])
-                "<div class=tt>RIDE_INIT='CONNECT:#{host}:#{port}'</div>"
+              for h in (if proxyInfo.ipAddresses?.length then proxyInfo.ipAddresses else ['host'])
+                "<div class=tt>RIDE_INIT='CONNECT:#{h}:#{port}'</div>"
             ).join 'or'
           }
           in its environment, so it connects here.
@@ -163,7 +162,15 @@ module.exports = (opts) ->
   if !$list.find(':selected').length then $list.focus().find('option').eq(0).attr 'selected', true; $list.change()
 
   D.socket
-    .on '*proxyInfo', (x) -> proxyInfo = x; return
+    .on '*proxyInfo', (x) ->
+      proxyInfo = x
+      $('#spawn-select').html(
+        proxyInfo.interpreters.map(({exe, version, bits, edition}) ->
+          s = "v#{version}, #{bits}-bit, #{edition[0].toUpperCase() + edition[1..]}"
+          "<option value='#{esc exe}'>#{esc s}").join('') +
+        '<option value="">Other...'
+      ).change()
+      return
     .on '*confirmHijack', ({addr}) ->
       $("<p>#{addr || 'An IDE '} is already using this proxy.  Would you like to take it over?</p>").dialog
         title: 'Confirmation', modal: 1, buttons: [
@@ -187,15 +194,7 @@ module.exports = (opts) ->
     .on '*listenError', ({err}) ->
       if $listenDialog then $listenDialog.dialog 'close'; $listenDialog = null
       $.alert err, 'Error'; enableSpawnAndListen true; return
-    .on '*interpreters', ({interpreters}) ->
-      $('#spawn-select').html(
-        interpreters.map(({exe, version, bits, edition}) ->
-          s = "v#{version}, #{bits}-bit, #{edition[0].toUpperCase() + edition[1..]}"
-          "<option value='#{esc exe}'>#{esc s}").join('') +
-        '<option value="">Other...'
-      ).change()
-      return
-    .emit '*interpreters'
+    .emit '*proxyInfo'
 
   $('#fav-list').resizable handles: 's,e'
 

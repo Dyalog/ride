@@ -257,8 +257,8 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
           log "listening for connections from interpreter on port #{port}"; callback?(); return
         return
       .on '*listenCancel', -> server?.close(); return
-      .on '*interpreters', -> # list available interpreter executables
-        # Possible paths to the interpreter:
+      .on '*proxyInfo', ->
+        # List available interpreter executables, possible paths are:
         #   C:\Program Files\Dyalog\Dyalog APL $VERSION\dyalog.exe
         #   C:\Program Files\Dyalog\Dyalog APL $VERSION unicode\dyalog.exe
         #   C:\Program Files\Dyalog\Dyalog APL-64 $VERSION\dyalog.exe
@@ -288,10 +288,9 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
               try for edition in fs.readdirSync "#{a}/#{version}/#{bits}" when edition in ['unicode', 'classic']
                 if fs.existsSync exe = "#{a}/#{version}/#{bits}/#{edition}/mapl"
                   interpreters.push {exe, version, bits, edition}
-        toBrowser '*interpreters', {interpreters}
+        toBrowser '*proxyInfo', {ipAddresses, interpreters, platform: process.platform}
         return
     if child then toBrowser '*spawned', pid: child.pid
-    toBrowser '*proxyInfo', {ipAddresses, platform: process.platform}
     return
 
   (newSocket) -> # this function is the result from calling Proxy()
