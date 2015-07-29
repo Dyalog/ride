@@ -43,7 +43,7 @@ model = window.model = {} # dictionary: locale→[arrayOfAPLGlyphs, arrayOfShift
   if D.win
     $e.append """
       <label id=layout-ime-wrapper>
-        <input type=checkbox id=layout-ime>Also enable Dyalog IME (if available) on start-up
+        <input type=checkbox id=layout-ime>Enable the Dyalog IME (if available) on start-up
       </label>
     """
   if !prefs.kbdLocale()
