@@ -21,9 +21,10 @@ htmlChars = '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&amp;', '"': '&quot;'
   # So, let's track clicks manually:
   lct = lcx = lcy = 0 # last click's timestamp, x, and y
   cm.on 'mousedown', (cm, e) ->
-    if e.timeStamp - lct < 400 && Math.abs(lcx - e.x) + Math.abs(lcy - e.y) < 10 then f e
+    if e.timeStamp - lct < 400 && Math.abs(lcx - e.x) + Math.abs(lcy - e.y) < 10 &&
+          !$(e.target).closest('.CodeMirror-gutter-wrapper').length
+      f e
     lct = e.timeStamp; lcx = e.x; lcy = e.y; return
-  return
 
 $.alert = (message, title, callback) ->
   $('<p>').text(message).dialog modal: 1, title: title, buttons: [
