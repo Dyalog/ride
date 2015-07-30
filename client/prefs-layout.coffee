@@ -19,6 +19,9 @@ model = window.model = {} # dictionary: locale→[arrayOfAPLGlyphs, arrayOfShift
       <tr><td class=g2>⇧x</td><td class=g3><span class=pfx2>`</span>&nbsp;⇧x</td></tr>
       <tr><td class=g0>x</td><td class=g1><span class=pfx2>`</span>&nbsp;x</td></tr>
     </table>
+    <label id=layout-lc-label>Locale:
+      <select id=layout-lc>#{join (for lc of layouts then "<option>#{lc}").sort()}</select>
+    </label>
     <div id=layout-kbd>#{join(
       for i in [1...NK]
         if s = specialKeys[i]
@@ -31,7 +34,6 @@ model = window.model = {} # dictionary: locale→[arrayOfAPLGlyphs, arrayOfShift
             </span>
           """
     )}</div>
-    <select id=layout-lc>#{join (for lc of layouts then "<option>#{lc}").sort()}</select>
   """
   .on 'focus', '.key input', -> delay 1, (=> $(@).select(); return); return
   .on 'blur', '.key input', ->
