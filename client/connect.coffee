@@ -167,8 +167,9 @@ module.exports = (opts) ->
       $('#spawn-select').html(
         proxyInfo.interpreters.map(({exe, version, bits, edition}) ->
           s = "v#{version}, #{bits}-bit, #{edition[0].toUpperCase() + edition[1..]}"
-          "<option value='#{esc exe}'>#{esc s}").join('') +
-        '<option value="">Other...'
+          (supported = isSupported version) || s += ' (unsupported)'
+          "<option value='#{esc exe}' #{if supported then '' else 'disabled'}>#{esc s}"
+        ).join('') + '<option value="">Other...'
       ).change()
       return
     .on '*confirmHijack', ({addr}) ->
@@ -200,3 +201,5 @@ module.exports = (opts) ->
 
   listen: (port) -> $listenHost.val '::'; port && $listenPort.val port; $listen.click(); return
   connect: (s) -> hp = parseFav s; D.socket.emit '*connect', host: hp.host, port: hp.port or DEFAULT_PORT; return
+
+isSupported = (version) -> a = version.split('.').map((x) -> +x); a[0] > 14 || a[0] == 14 && a[1] > 1
