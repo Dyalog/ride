@@ -1,11 +1,11 @@
 Bugs / Issues External to RIDE
   Windows not working at all for spawned interpreters
+    NN: now it works but the old IDE's UI is visible
   Yes/No dialog, needs to be supported in the RIDE protocol; email from Morten 2015-02-14
   value tips
   ws explorer
 
 P1 (Definitely high priority):
-  code folding
 
 P2 (Middle priority):
   class explorer
@@ -15,12 +15,10 @@ P2 (Middle priority):
 P3 (Can wait):
   Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
     NN: Investigate: http://stackoverflow.com/questions/284258/how-do-i-set-the-version-information-for-an-existing-exe-dll (sent by JD)
-  Enable Windows IME if present.
   names of open editors should appear at the bottom of the Window menu; Marc Griffiths 2015-03-13
   View>Theme should change the theme in all existing windows
 
 P4 (I will think about it):
-  Option to automatically pop up completion box after a timeout OR use a keystroke
   Ctrl+Cmd+Space on the Mac starts a "Special Characters" application -- find a way to disable it
     NN: "Special Characters" and "Start Dictation" are added based on the presence of "Copy" in the menu.
         But if we don't have "Copy" in the menu, cmd+c doesn't work.
@@ -32,8 +30,6 @@ Not yet prioritized:
     NN: cannot reproduce on Linux
   There should be no flashing cursors in windows that don't have focus; JS 2015-03-21
   Disable EP in an editor after it has been pressed once
-  Menu items for next/prev line from demo should be disabled when there are no more lines; MK Jabber 2015-03-25
-  After closing an editor, focus the next editor instead of the session
   There is a limit for the number of match locations shown on the scrollbar (1000) -- should we change it?
   JS: Arrange for the banner to appear at the _top_ of a new session.
     NN: I did some experimentation with this.  As of now, I can only get it appear on top about 50% of the time
@@ -245,3 +241,9 @@ Done:
   Configurable keyboard shortcuts
   keybinding for toggling a breakpoint
   Colour schemes
+  After closing an editor, focus the next editor instead of the session
+  code folding
+  Enable Windows IME if present.
+  Option to automatically pop up completion box after a timeout OR use a keystroke
+  Menu items for next/prev line from demo should be disabled when there are no more lines; MK Jabber 2015-03-25
+    NN: those menu items have been removed from the menu; they are still available as key-mappable commands
