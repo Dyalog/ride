@@ -58,6 +58,26 @@ $.extend CodeMirror.commands,
       (e.requestFullscreen || e.webkitRequestFullscreen || e.mozRequestFullScreen || e.msRequestFullscreen)?.apply e
     return
 
+  EXP: (cm) ->
+    sels = cm.listSelections()
+    if sels.length == 1
+      {Pos} = CodeMirror; ll = cm.lastLine(); l = cm.getCursor().line
+      cmp = (x, y) -> (x[0] - y[0]) || (x[1] - y[1]) # compare two pairs of numbers
+      ranges = [ # candidates for selection
+        [[l, 0], [l,  cm.getLine(l ).length]] # current line
+        [[0, 0], [ll, cm.getLine(ll).length]] # whole document
+      ]
+      if t = cm.getTokenAt cm.getCursor() then ranges.push [[l, t.start], [l, t.end]] # current token
+      ranges.sort (x, y) -> cmp(y[0], x[0]) || cmp(x[1], y[1]) # inside-out order: desc beginnings, then asc ends
+      sel = sels[0]; s = [[sel.anchor.line, sel.anchor.ch], [sel.head.line, sel.head.ch]].sort cmp
+      for r in ranges
+        d0 = cmp r[0], s[0]
+        d1 = cmp r[1], s[1]
+        if (d0 <= 0 <= d1) && !(d0 == d1 == 0)
+          cm.setSelection Pos(r[0][0], r[0][1]), Pos(r[1][0], r[1][1])
+          break
+    return
+
   HLP: (cm) ->
     c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
     D.openExternal(

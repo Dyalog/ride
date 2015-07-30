@@ -27,6 +27,7 @@
   ['PRF', 'Show preferences',         []]
   ['QIT', 'Quit',                     ['Ctrl-Q']]
   ['QT',  'Quit (and lose changes)',  ['Shift-Esc'],            1]
+  ['EXP', 'Expand selection',         ['Shift-Alt-Up']]
   ['RD',  'Reformat',                 []]
   ['RP',  'Replace (in editors)',     [],                       1]
   ['SC',  'Search (in editors)',      [],                       1]
