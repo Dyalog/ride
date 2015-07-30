@@ -50,6 +50,13 @@ $.extend CodeMirror.commands,
   LBR: -> prefs.lbar.toggle();  return
   WI: -> D.ide.emit 'WeakInterrupt';   return
   SI: -> D.ide.emit 'StrongInterrupt'; return
+  FUL: ->
+    d = document; e = d.body
+    if d.fullscreenElement || d.webkitFullscreenElement || d.mozFullScreenElement || d.msFullscreenElement
+      (d.exitFullscreen    || d.webkitExitFullscreen    || d.mozCancelFullScreen  || d.msExitFullscreen   )?.apply d
+    else
+      (e.requestFullscreen || e.webkitRequestFullscreen || e.mozRequestFullScreen || e.msRequestFullscreen)?.apply e
+    return
 
   HLP: (cm) ->
     c = cm.getCursor(); s = cm.getLine(c.line).toLowerCase()
