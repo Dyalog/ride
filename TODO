@@ -3,7 +3,7 @@ Bugs / Issues External to RIDE
     NN: now it works but the old IDE's UI is visible
   Yes/No dialog, needs to be supported in the RIDE protocol; email from Morten 2015-02-14
   value tips
-  ws explorer
+  protocol extensions for ws explorer
 
 P1 (Definitely high priority):
 
@@ -11,6 +11,7 @@ P2 (Middle priority):
   class explorer
   external editors
   cmd to toggle rainbow colouring
+  ws explorer
 
 P3 (Can wait):
   Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
