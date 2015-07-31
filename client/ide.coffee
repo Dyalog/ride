@@ -49,13 +49,17 @@ class @IDE
       for d in ['east', 'south'] when !$(".ui-layout-#{d} li", @$ide).length then @layout.close d
       @$tabs.tabs 'refresh'; return
     for tab in @$tabs.find 'ul'
-      $(tab).sortable
-        cursor: 'move', containment: 'parent', tolerance: 'pointer', axis: 'x', revert: true
-        stop: (_, ui) =>
-          @refreshTabs()
-          $('[role=tab]', @$tabs).attr 'style', '' # clean up tabs' z-indices after dragging, $().sortable screws them up
-          return
-      .data('ui-sortable').floating = true # workaround for a jQueryUI bug, see http://bugs.jqueryui.com/ticket/6702#comment:20
+      $ tab
+        .on 'mouseover', '.tab-close', -> $(@).addClass    'hover'; return
+        .on 'mouseout',  '.tab-close', -> $(@).removeClass 'hover'; return
+        .on 'click',     '.tab-close', -> ide.wins[$(@).closest('a').prop('href').replace /\D+/, ''].EP(); return
+        .sortable
+          cursor: 'move', containment: 'parent', tolerance: 'pointer', axis: 'x', revert: true
+          stop: (_, ui) =>
+            @refreshTabs()
+            $('[role=tab]', @$tabs).attr 'style', '' # clean up tabs' z-indices after dragging, $().sortable screws them up
+            return
+        .data('ui-sortable').floating = true # workaround for a jQueryUI bug, see http://bugs.jqueryui.com/ticket/6702#comment:20
 
     handlers = # for RIDE protocol messages
       '*identify': (i) => D.remoteIdentification = i; @updateTitle(); return
@@ -244,8 +248,17 @@ class @IDE
       dir = if ee.debugger then 'south' else 'east'
       size = if ee.debugger then prefs.tracerHeight() else prefs.editorWidth()
       @layout.sizePane dir, size || '50%'; @layout.open dir
-      $("<li id=wintab#{w}><a href=#win#{w}></a></li>").appendTo(".ui-layout-#{dir} ul")
-        .find('a').text(ee.name).click (e) => e.which == 2 && @wins[w].EP(); return # middle click
+      $li = $ """
+        <li id=wintab#{w}>
+          <a href=#win#{w}>
+            <span class=tab-name></span>
+            <span class=tab-close title="Save and close">×</span>
+          </a>
+        </li>
+      """
+        .appendTo ".ui-layout-#{dir} ul"
+        .click (e) -> e.which == 2 && D.ide.wins[w].EP(); return # middle click
+      $li.find('.tab-name').text ee.name
       $tabContent = $("<div class=win id=win#{w}></div>").appendTo ".ui-layout-#{dir}"
       (@wins[w] = new Editor @, $tabContent, editorOpts).open ee
       $(".ui-layout-#{dir}").tabs('refresh').tabs(active: -1)

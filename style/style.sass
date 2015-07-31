@@ -186,7 +186,6 @@ input,textarea,select,a{outline:0}
 .tb-LN  {background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAALCAYAAACksgdhAAAALElEQVQoz2NkYGD4z4AAjAz4wX8MBpHgPxMDGWBgNP0nkh6WAcFIQoqAqwMADDENBizwvaoAAAAASUVORK5CYII=)}
 .tb-AO  {background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAMCAYAAACwXJejAAAAP0lEQVQY052QSQ4AMAgCoen/v0yv1kq3OSExRCRmFDSzEDzs2ahSGQYWKQKAhguel+Sa8tBsSaJrunvB/+GWAWT9CBiHRFQ/AAAAAElFTkSuQmCC)}
 .tb-DO  {background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAMCAYAAABWdVznAAAAVElEQVQoz5WQSQ7AMAgDB5T/f9m5VBUKOFU5gTVmC+ZQyeMR9BYGHMVlJkSBVcTIoZGDAUj8EQ22hnMNboYBljWoX92+lhd4LNfXzm2C+4Y1/IEBNtT4GBWRRLxNAAAAAElFTkSuQmCC)}
-.tb-EP  {background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAANCAYAAABy6+R8AAAAUElEQVQoz62RQRKAMAgDN/z/z/HgpbUC7ShHkg0MCDB3ib4MEM9GB4zpI6AKAKRMqPqqErOgbpVXX2QG22nwL5N2jsGn6x3/qQMWMDaBSb8AqVkXDhpzEQoAAAAASUVORK5CYII=)}
 .tb-NX  {background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAANCAYAAAB2HjRBAAAAlElEQVQoz51SQQ6DMAxzKh7HkcMelAdx4MgTxm1I8B7vAiGkLYy5atVadZwmFZxBt5c7PgUxVBWlgAUeDX4BAZVc7J1J0ruz8iBW0351ba0G8WRic8U5leIT9jXhH7gA3JxJkqrKnbMZx8Ynn946Twj9lMxVjrY9S1uA5fNGtdpXwlhAE6/zhH4YL4XxjuTdu/3bhi/VzVM06LqX9QAAAABJRU5ErkJggg==)}
 .tb-PV  {background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAANCAYAAAB2HjRBAAAAiklEQVQoz52SQQ6AIAwEW+LDeZAHjz4Bb5jge9aDgK0WRZcDBJimu8CkBbHmt313gcl7bwFyn55hUJeGW2t3EABkcZTWta+GYwkzn5wzQQO6eEeB0evRDoztw9xina1nRU4EaujoUJRiQA4NTvnjP21npRg+Fajwti40TvORZqNAuSNfs5V1629X7aMBT1K30kDCAAAAAElFTkSuQmCC)}
 .tb-hid {background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAALCAYAAACprHcmAAAAM0lEQVQY02NkYGD4z0ACIFbxfyZSDGAixQkkKWbBYzUynxGf+/6T4kEGmnmQEZcg0TEIAD52Cgt7bIghAAAAAElFTkSuQmCC)}
@@ -201,9 +200,6 @@ input,textarea,select,a{outline:0}
 .tb-ED  {background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAOCAIAAAB7HQGFAAAAUUlEQVQoz62QwQoAIAhDm///YXUrqO9Zh0gMjDy0k7LhU1P6K5CM5OQxBgBwtUlajs90Q/5+ylJXIiGHeKOLNUYrx07mUuHW6nvNWtMo+uffmsCkTK6tlFL9AAAAAElFTkSuQmCC)}
 .tb-WI  {background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAANCAYAAACUwi84AAAAHElEQVQY02NkYGD4z4AAjFAaLsbEQACMKqCbAgBUAgIZzGAL5AAAAABJRU5ErkJggg==)}
 .tb-CBP {background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAPCAYAAADUFP50AAAAh0lEQVQoz5VSWw4EMQgCMwf35uxHxw3r1nmQNE1bi4gCM3SuLWIIEABI2hEIgKIHr/i/ROwEcV72z3dgGOMrRJNzZRQy83txNHkEIHJx1D5mlOQO7lM2w2IR0x8f1XuURJIy21+Z8yPV5N/WWw2WIzPlb0UeV42v4r0NfZSm8zw6Fvh0egQAH95HSnaw0XqwAAAAAElFTkSuQmCC)}
-.tb-EP
-  float:right
-  .floating-window &{display:none}
 .tb-separator
   float:left;width:10px;height:24px
   background:no-repeat center center url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAASCAIAAAD+ApjoAAAAGElEQVQI12NoaGj4//8/EwMDAwMDA70pACyPBKBkf6chAAAAAElFTkSuQmCC)
@@ -501,6 +497,10 @@ input.ui-button{padding:0 5px}
     li.ui-tabs-active .ui-tabs-anchor,
     li.ui-state-disabled .ui-tabs-anchor,
     li.ui-tabs-loading .ui-tabs-anchor{cursor:default}
+
+.tab-close
+  float:right;width:20px;border-radius:12px;text-align:center;cursor:pointer;color:#888;margin:0 -10px 0 5px
+  &.hover{background-color:#d88;color:white}
 
 .ui-tooltip{padding:8px;position:absolute;z-index:9999;max-width:300px;-webkit-box-shadow:0 0 5px #aaa;box-shadow:0 0 5px #aaa}
 body .ui-tooltip{border-width:2px}

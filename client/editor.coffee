@@ -14,7 +14,6 @@ EDITOR_HTML = do ->
         # The first button is placed on the right-hand side through CSS.  In a floating window it is hidden.
         # CSS classes "first" and "last" indicate button grouping.
 
-        b 'tb-EP  tracer-only first last', 'Quit this function'
         b 'tb-ER  tracer-only first     ', 'Execute line'
         b 'tb-TC  tracer-only',            'Trace into expression'
         b 'tb-BK  tracer-only',            'Go back one line'
@@ -27,7 +26,6 @@ EDITOR_HTML = do ->
         b 'tb-CBP tracer-only',            'Clear trace/stop/monitor for this object'
         b 'tb-LN  tracer-only last',       'Toggle line numbers'
 
-        b 'tb-EP  editor-only first last', 'Save changes and return'
         b 'tb-LN  editor-only first',      'Toggle line numbers'
         b 'tb-AO  editor-only',            'Comment selected text'
         b 'tb-DO  editor-only last',       'Uncomment selected text'
