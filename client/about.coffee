@@ -35,5 +35,6 @@
     .dialog
       title: 'About', width: 520, height: 410, buttons: buttons
       open: -> $(@).find('textarea').focus(); return
+    .on 'click', 'a[href^=http]', -> D.openExternal $(@).attr 'href'; false
     .find('textarea').val(info).select()
   return
