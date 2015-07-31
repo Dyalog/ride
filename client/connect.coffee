@@ -202,4 +202,4 @@ module.exports = (opts) ->
   listen: (port) -> $listenHost.val '::'; port && $listenPort.val port; $listen.click(); return
   connect: (s) -> hp = parseFav s; D.socket.emit '*connect', host: hp.host, port: hp.port or DEFAULT_PORT; return
 
-isSupported = (version) -> a = version.split('.').map((x) -> +x); a[0] > 14 || a[0] == 14 && a[1] > 1
+isSupported = (version) -> a = version.split('.').map((x) -> +x); a[0] > 14 || a[0] == 14 && a[1] >= 1
