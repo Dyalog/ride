@@ -24,7 +24,7 @@ if process?
   # switch IME locale as early as possible
   if D.win && (!localStorage.ime || localStorage.ime == '1') &&
         fs.existsSync setImeExe = process.execPath.replace /[^\\\/]+$/, 'set-ime.exe'
-    spawn setImeExe, [process.pid, 'E0990409'], stdio: ['ignore', 'ignore', 'ignore']
+    spawn setImeExe, [process.pid], stdio: ['ignore', 'ignore', 'ignore']
 
   segmOverlap = (a, b, c, d) -> a < d && c < b # Do the two segments ab and cd overlap?
 
