@@ -67,7 +67,12 @@ $.extend CodeMirror.commands,
         [[l, 0], [l,  cm.getLine(l ).length]] # current line
         [[0, 0], [ll, cm.getLine(ll).length]] # whole document
       ]
-      if t = cm.getTokenAt cm.getCursor() then ranges.push [[l, t.start], [l, t.end]] # current token
+      u = cm.getCursor(); t0 = cm.getTokenAt u; t1 = cm.getTokenAt line: u.line, ch: u.ch + 1; t = t0 || t1
+      if t0 && t1 && !(t0.start == t1.start && t0.end == t1.end) # we must decide which token looks more important
+        [x, y] = [t0, t1].map (ti) -> (ti.type || '').replace /^.*\bapl-(\w*)$/, '$1' # x, y: left and right token type
+        I = var:5,glb:5,  quad:4,  str:3,  num:2,  kw:1,  par:-1,sqbr:-1,semi:-1,dfn:-1,  '':-2 # importance
+        t = if (I[x] || 0) > (I[y] || 0) then t0 else t1
+      t && ranges.push [[l, t.start], [l, t.end]] # current token
       ranges.sort (x, y) -> cmp(y[0], x[0]) || cmp(x[1], y[1]) # inside-out order: desc beginnings, then asc ends
       sel = sels[0]; s = [[sel.anchor.line, sel.anchor.ch], [sel.head.line, sel.head.ch]].sort cmp
       for r in ranges
