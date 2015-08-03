@@ -105,7 +105,7 @@ if process?
       (fw = opener.D.floatingWindows).splice fw.indexOf(nww), 1
       process.nextTick -> nww.close true; return
     else
-      window.onbeforeunload?(); if !D.floating then process.nextTick -> nww.close true; return
+      window.onbeforeunload?(); if !D.floating then process.nextTick -> process.exit 0; return
     return
 
   D.forceCloseNWWindow = -> nww.close true; return # used to close floating windows after session is dead
