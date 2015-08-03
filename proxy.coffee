@@ -270,7 +270,9 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
         interpreters = []
         parseVersion = (s) -> s.split('.').map (x) -> +x
         if /^win/.test process.platform
-          for a in [process.env.ProgramFiles, process.env['ProgramFiles(x86)']] when a
+          pf = [] # unique "Program Files" paths
+          for k in ['ProgramFiles', 'ProgramFiles(x86)', 'ProgramW6432'] when (a = process.env[k]) && a !in pf
+            pf.push a
             try for b in fs.readdirSync "#{a}\\Dyalog" when m = /^Dyalog APL(-64)? (\d+\.\d+)( unicode)?$/i.exec b
               [_, bits, version, edition] = m
               bits = if bits then 64 else 32

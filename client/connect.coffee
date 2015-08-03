@@ -175,8 +175,7 @@ module.exports = (opts) ->
             +b.bits - +a.bits ||
             (b.edition == 'unicode') - (a.edition == 'unicode')
           .map ({exe, version, bits, edition}) ->
-            s = "v#{version.join '.'}, #{bits}-bit
-            , #{edition[0].toUpperCase() + edition[1..]}"
+            s = "v#{version.join '.'}, #{bits}-bit, #{edition[0].toUpperCase() + edition[1..]}"
             (supported = isSupported version) || s += ' (unsupported)'
             "<option value='#{esc exe}' #{if supported then '' else 'disabled'}>#{esc s}"
           .join('') +
