@@ -58,7 +58,7 @@ module.exports = (opts) ->
     <fieldset id=spawnSection>
       <legend>Spawn an interpreter</legend>
       <p><select id=spawn-select></select></p>
-      <p><input id=spawn-exe></p>
+      <p>Path: <span id=spawn-exe-w><input id=spawn-exe class=text-field></span></p>
       <p><a href=# id=spawn accessKey=w>Spa<u>w</u>n</a></p>
       <p id=spawn-status></p>
     </fieldset>
