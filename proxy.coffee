@@ -2,7 +2,7 @@ fs = require 'fs'
 net = require 'net'
 os = require 'os'
 path = require 'path'
-{spawn} = require 'child_process'
+{spawn, exec} = cp = require 'child_process'
 
 stdoutIsGood = 1
 log = @log = do ->
@@ -270,20 +270,27 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
         interpreters = []
         parseVersion = (s) -> s.split('.').map (x) -> +x
         if /^win/.test process.platform
-          pf = [] # unique "Program Files" paths
-          for k in ['ProgramFiles', 'ProgramFiles(x86)', 'ProgramW6432'] when (a = process.env[k]) && a !in pf
-            pf.push a
-            try for b in fs.readdirSync "#{a}\\Dyalog" when m = /^Dyalog APL(-64)? (\d+\.\d+)( unicode)?$/i.exec b
-              [_, bits, version, edition] = m
-              bits = if bits then 64 else 32
-              edition = if edition then 'unicode' else 'classic'
-              if fs.existsSync exe = "#{a}\\Dyalog\\#{b}\\dyalog.exe"
-                interpreters.push {exe, version: parseVersion(version), bits, edition}
+          try
+            exec "reg query \"HKEY_CURRENT_USER\\Software\\Dyalog\" /s /v localdyalogdir", {timeout: 2000}, (err, s) ->
+              if !err then for line in s.split '\r\n' when line
+                if m = /^HK.*\\Dyalog APL\/W(-64)? (\d+\.\d+)( Unicode)?$/i.exec line
+                  [_, bits, version, edition] = m
+                  bits = if bits then 64 else 32
+                  edition = if edition then 'unicode' else 'classic'
+                else if m = /^ *localdyalogdir +REG_SZ +(\S.*)$/i.exec line
+                  exe = m[1] + 'dyalog.exe'
+                  interpreters.push {exe, version: parseVersion(version), bits, edition}
+              toBrowser '*proxyInfo', {ipAddresses, interpreters, platform: process.platform}
+              return
+          catch ex
+            console.error ex
+            toBrowser '*proxyInfo', {ipAddresses, interpreters, platform: process.platform}
         else if process.platform == 'darwin'
           try for b in fs.readdirSync a = '/Applications' when m = /^Dyalog-(\d+\.\d+)$/.exec b
             version = m[1]; bits = 64; edition = 'unicode'
             if fs.existsSync exe = "#{a}/#{b}/Contents/Resources/Dyalog/mapl"
               interpreters.push {exe, version: parseVersion(version), bits, edition}
+          toBrowser '*proxyInfo', {ipAddresses, interpreters, platform: process.platform}
         else
           try for version in fs.readdirSync a = '/opt/mdyalog' when /^\d+\.\d+/.test version
             try for bits in fs.readdirSync "#{a}/#{version}" when bits in ['64', '32']
@@ -291,7 +298,7 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
               try for edition in fs.readdirSync "#{a}/#{version}/#{bits}" when edition in ['unicode', 'classic']
                 if fs.existsSync exe = "#{a}/#{version}/#{bits}/#{edition}/mapl"
                   interpreters.push {exe, version: parseVersion(version), bits, edition}
-        toBrowser '*proxyInfo', {ipAddresses, interpreters, platform: process.platform}
+          toBrowser '*proxyInfo', {ipAddresses, interpreters, platform: process.platform}
         return
     if child then toBrowser '*spawned', pid: child.pid
     return
