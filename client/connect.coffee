@@ -133,7 +133,9 @@ module.exports = (opts) ->
     D.socket.emit '*spawn', exe: $('#spawn-exe').val()
     false
   $('#spawn-select').change ->
-    v = $(@).val(); $('#spawn-exe').val(v).prop 'readonly', !!v; v || $('#spawn-exe').focus(); return
+    v = $(@).val(); $('#spawn-exe').val(v || prefs.otherExe()).prop 'readonly', !!v; v || $('#spawn-exe').focus()
+    prefs.selectedExe v; return
+  $('#spawn-exe').on 'change keyup', -> $('#spawn-select').val() || prefs.otherExe $(@).val(); return
   $listen.click ->
     host = $listenHost.val()
     port = +$listenPort.val()
@@ -169,7 +171,7 @@ module.exports = (opts) ->
     .on '*proxyInfo', (x) ->
       proxyInfo = x
       $('#spawn-select').html(
-        proxyInfo.interpreters
+        x.interpreters
           .sort (a, b) ->
             cmpVersions(b.version, a.version) ||
             +b.bits - +a.bits ||
@@ -180,7 +182,7 @@ module.exports = (opts) ->
             "<option value='#{esc exe}' #{if supported then '' else 'disabled'}>#{esc s}"
           .join('') +
         '<option value="">Other...'
-      ).change()
+      ).val(prefs.selectedExe()).change()
       return
     .on '*confirmHijack', ({addr}) ->
       $("<p>#{addr || 'An IDE '} is already using this proxy.  Would you like to take it over?</p>").dialog

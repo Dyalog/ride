@@ -34,6 +34,8 @@ D.prefs = @
   ['posTracer',         [32, 32, 1000, 618]] # [x,y,w,h]
   ['prefixKey',         '`']
   ['prefixMaps',        {}] # per-locale strings of pairs of characters -- diffs from the default ` map for that locale
+  ['selectedExe',       ''] # Which interpreter is selected in the Connect page?
+  ['otherExe',          ''] # What is filled in in the text box when "Other..." is selected in the Connect page?
   ['editorWidth',       0] # width of a docked editor
   ['tracerHeight',      0] # height of a docked tracer
   ['wrap',              0] # line wrapping in session
