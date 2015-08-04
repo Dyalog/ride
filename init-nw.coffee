@@ -136,7 +136,7 @@ if process?
   # Debugging utilities
   $(document).keydown (e) ->
     if e.which == 123 && !e.altKey # F12
-      if     !e.ctrlKey && !e.shiftKey then nww.showDevTools(); false
+      if     !e.ctrlKey && !e.shiftKey then nww.showDevTools().setAlwaysOnTop 1; false
       else if e.ctrlKey && !e.shiftKey then showProxyLog(); false
       else if e.ctrlKey &&  e.shiftKey then foo.bar # cause a crash
 
