@@ -20,7 +20,6 @@
   ['ER',  'Execute line',             ['Enter']]
   ['EXP', 'Expand selection',         ['Shift-Alt-Up']]
   ['FD',  'Forward or Redo',          ['Shift-Ctrl-Enter'],     1]
-  ['FUL', 'Toggle fullscreen',        []]
   ['HLP', 'Help',                     ['F1']]
   ['LBR', 'Toggle language bar',      []]
   ['LN',  'Toggle line numbers',      []]
