@@ -52,7 +52,7 @@ class @IDE
       $ tab
         .on 'mouseover', '.tab-close', -> $(@).addClass    'hover'; return
         .on 'mouseout',  '.tab-close', -> $(@).removeClass 'hover'; return
-        .on 'click',     '.tab-close', -> ide.wins[$(@).closest('a').prop('href').replace /\D+/, ''].EP(); return
+        .on 'click',     '.tab-close', -> ide.wins[$(@).closest('a').prop('href').replace /\D+/, '']?.EP?(); return
         .sortable
           cursor: 'move', containment: 'parent', tolerance: 'pointer', axis: 'x', revert: true
           stop: (_, ui) =>
@@ -257,7 +257,7 @@ class @IDE
         </li>
       """
         .appendTo ".ui-layout-#{dir} ul"
-        .click (e) -> e.which == 2 && D.ide.wins[w].EP(); return # middle click
+        .click (e) -> e.which == 2 && D.ide.wins[w]?.EP?(); return # middle click
       $li.find('.tab-name').text ee.name
       $tabContent = $("<div class=win id=win#{w}></div>").appendTo ".ui-layout-#{dir}"
       (@wins[w] = new Editor @, $tabContent, editorOpts).open ee
