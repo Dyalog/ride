@@ -48,8 +48,11 @@ echo 'removing libffmpegsumo from build' ; find build/ride -name '*ffmpegsumo*' 
 echo 'fixing file permissions'           ; chmod -R g+w build/ride
 
 for bits in 32 64; do
-  if [ -d build/ride/win$bits -a ! -e build/ride/win$bits/set-ime.exe ]; then
-    echo "copying set-ime.exe to win$bits build"
-    cp windows-ime/set-ime.exe build/ride/win$bits/
+  if [ -d build/ride/win$bits ]; then
+    if [ ! -e build/ride/win$bits/set-ime.exe ]; then
+      echo "copying set-ime.exe to win$bits build"
+      cp windows-ime/set-ime.exe build/ride/win$bits/
+    fi
+    cp build/nw/version build/ride/win$bits
   fi
 done
