@@ -253,6 +253,9 @@ if process?
       mb.createMacBuiltin 'Dyalog'
       mb.items[0].submenu.removeAt 0 # remove built-in "About Dyalog" that doesn't do anything useful
       mb.items[1].submenu.removeAt 7 # remove "Edit > Select All"
+      mb.items[1].submenu.removeAt 2 # remove separator
+      mb.items[1].submenu.removeAt 1 # remove "Edit > Undo"
+      mb.items[1].submenu.removeAt 0 # remove "Edit > Redo"
       # For "Special Characters..." and "Start Dictation...": see https://github.com/nwjs/nw.js/issues/2812
       # I discovered that if I remove "Copy" they go away, but then Cmd+C stops working.
       for x, ix in m

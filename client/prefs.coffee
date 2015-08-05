@@ -59,8 +59,8 @@ D.prefs = @
       Cut                      =CT {!mac&&!browser}
       Copy                     =CP {!mac&&!browser}
       Paste                    =PT {!mac&&!browser}
-      Undo                     =UND {!mac&&!browser}
-      Redo                     =RDO {!mac&&!browser}
+      Undo                     =UND {!browser}
+      Redo                     =RDO {!browser}
       -                             {!mac&&!browser}
       Preferences              =PRF {!mac}
       Select All               =SA  {mac}
