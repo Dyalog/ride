@@ -32,17 +32,15 @@ for bits in 32 64; do
   fi
 done
 
-# https://github.com/rogerwang/node-webkit/wiki/The-solution-of-lacking-libudev.so.0
 for bits in 32 64; do
   d=cache/$nw_version/linux$bits
   if [ -d $d -a ! -e $d/ok ]; then
     echo "fixing nw-builder's cache"
-    sed -i 's/udev\.so\.0/udev.so.1/g' $d/nw
     chmod a-x $d/icudtl.dat $d/nw.pak
     rm $d/locales/*
     touch $d/ok
     echo 'must rebuild the app...'
-    desktop_app linux$bits # re-package the app after the libudev dependency has been fixed
+    desktop_app linux$bits
   fi
 done
 
