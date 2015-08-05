@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 . build.sh
-node_version=0.11.4
+nw_version=0.11.4 # https://github.com/nwjs/nw.js/wiki/Downloads-of-old-versions
 ulimit -n $(ulimit -Hn) # Bump open file limit to its hard limit.  OSX build requires a lot.
 
 echo 'adding nomnom library'; mkdir -p build/nw/node_modules; cp -r node_modules/nomnom build/nw/node_modules
@@ -10,7 +10,7 @@ desktop_app() {
   echo "building desktop app for $@"
   node <<.
     var NWB = require('nw-builder');
-    var nwb = new NWB({files: 'build/nw/**', version: '$node_version', platforms: '$@'.split(' ')});
+    var nwb = new NWB({files: 'build/nw/**', version: '$nw_version', platforms: '$@'.split(' ')});
     nwb.build().catch(function (e) {console.error(e); process.exit(1);});
 .
 }
@@ -34,7 +34,7 @@ done
 
 # https://github.com/rogerwang/node-webkit/wiki/The-solution-of-lacking-libudev.so.0
 for bits in 32 64; do
-  d=cache/$node_version/linux$bits
+  d=cache/$nw_version/linux$bits
   if [ -d $d -a ! -e $d/fixed-libudev ]; then
     echo "fixing node-webkit's libudev dependency for ${bits}-bit Linux"
     sed -i 's/udev\.so\.0/udev.so.1/g' $d/nw
