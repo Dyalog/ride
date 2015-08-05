@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 . build.sh
-nw_version=0.11.4 # https://github.com/nwjs/nw.js/wiki/Downloads-of-old-versions
+nw_version=0.12.2 # https://github.com/nwjs/nw.js/wiki/Downloads-of-old-versions
 ulimit -n $(ulimit -Hn) # Bump open file limit to its hard limit.  OSX build requires a lot.
 
 echo 'adding nomnom library'; mkdir -p build/nw/node_modules; cp -r node_modules/nomnom build/nw/node_modules
