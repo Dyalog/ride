@@ -275,3 +275,12 @@ if process?
         mb.insert ourMenu, ix
       nww.menu = mb
       return
+
+  # Hacks to make the window title repaint on Windows.  This is a workaround for:
+  #   https://github.com/nwjs/nw.js/issues/2895
+  #   https://github.com/nwjs/nw.js/issues/2896
+  #   https://github.com/nwjs/nw.js/issues/3589
+  #   https://github.com/nwjs/nw.js/issues/3658
+  if D.win
+    $(window).on 'focus blur', repaintTitle = -> nww.resizeBy 0, 1; nww.resizeBy 0, -1; return
+    D.setTitle = (s) -> document.title = s; repaintTitle(); return

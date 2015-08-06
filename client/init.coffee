@@ -31,6 +31,7 @@ $ ->
     !!open url, '_blank', spec
 
   D.openExternal ?= (url) -> open url, '_blank'; return
+  D.setTitle ?= (s) -> document.title = s; return
 
   urlParams = {}
   for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
@@ -41,7 +42,7 @@ $ ->
     {editorOpts, ee, ide} = opener.D.pendingEditors[win]
     D.wins = opener.D.wins
     ed = opener.D.wins[win] = new Editor ide, $('.ui-layout-center'), editorOpts; ed.open ee; ed.updateSize()
-    $('title').text ed.name; window.onbeforeunload = -> ed.onbeforeunload()
+    D.setTitle ed.name; window.onbeforeunload = -> ed.onbeforeunload()
     delay 500, -> ed.refresh(); return # work around a rendering issue on Ubuntu
     opener.D.ide.unblock()
   else

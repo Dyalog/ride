@@ -214,7 +214,7 @@ class @IDE
         when 'RIDE_VER_C' then (v.version || '').split('.')[2] || ''
         when 'RIDE_VER'   then v.version || ''
         else g0
-    $('title').text if /^\s*$/.test t then 'Dyalog' else t
+    D.setTitle if /^\s*$/.test t then 'Dyalog' else t
     return
 
   showHTML: ({title, html}) ->
