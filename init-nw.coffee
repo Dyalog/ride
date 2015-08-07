@@ -73,8 +73,9 @@ if process?
         height: +urlParams.height
     else
       D.floatingWindows = []; D.floatOnTop = 0
-      nww.on 'focus', -> (for x in D.floatingWindows then x.setAlwaysOnTop !!D.floatOnTop); return
-      nww.on 'blur',  -> (for x in D.floatingWindows then x.setAlwaysOnTop false         ); return
+      aot = (x) -> (for w in D.floatingWindows when w.aot != x then w.aot = x; w.setAlwaysOnTop x); return
+      nww.on 'focus', -> aot !!D.floatOnTop; return
+      nww.on 'blur',  -> aot false; return
       if localStorage.pos then try
         pos = JSON.parse localStorage.pos
         restoreWindow nww, x: pos[0], y: pos[1], width: pos[2], height: pos[3]
