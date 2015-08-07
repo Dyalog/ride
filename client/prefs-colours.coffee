@@ -8,7 +8,7 @@ G = [ # information about syntax highlighting groups
   # s: name to display in the UI
   # c: css selector
   # controls: which UI controls are allowed or disallowed for this group (other than the default controls)
-  {t:'norm', s:'normal',               c:'.cm-s-default,.CodeMirror-gutter-wrapper'}
+  {t:'norm', s:'normal',               c:'.cm-s-default,.CodeMirror-gutters'}
   {t:'num',  s:'number',               c:'.cm-apl-num' }
   {t:'str',  s:'string',               c:'.cm-apl-str' }
   {t:'zld',  s:'zilde',                c:'.cm-apl-zld' }
