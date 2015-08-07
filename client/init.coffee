@@ -35,7 +35,7 @@ $ ->
 
   urlParams = {}
   for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
-    [_, k, v] = /^([^=]*)=?(.*)$/.exec kv; urlParams[unescape(k or '')] = unescape(v or '')
+    [_, k, v] = /^([^=]*)=?(.*)$/.exec kv; urlParams[unescape k || ''] = unescape v || ''
   if D.floating && (win = urlParams.win)?
     $('body').addClass('floating-window').html('<div class=ui-layout-center></div>').layout
       defaults: {enableCursorHotkey: 0}, fxName: '', center: {onresize: -> ed?.updateSize(); return}

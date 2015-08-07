@@ -120,7 +120,7 @@ if process?
   D.createSocket = ->
     class LocalSocket # imitate socket.io's API
       emit: (a...) -> @other.onevent data: a
-      onevent: ({data}) -> (for f in @[data[0]] or [] then f data[1..]...); return
+      onevent: ({data}) -> (for f in @[data[0]] || [] then f data[1..]...); return
       on: (e, f) -> (@[e] ?= []).push f; @
     socket = new LocalSocket; socket1 = new LocalSocket; socket.other = socket1; socket1.other = socket
     proxy.Proxy() socket1

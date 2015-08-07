@@ -139,7 +139,7 @@ class @IDE
       .on 'mouseover', 'b', (e) ->
         key = keymap.getBQKeyFor x = $(e.target).text()
         keyText = if key && x.charCodeAt(0) > 127 then "Keyboard: #{prefs.prefixKey()}#{key}\n\n" else ''
-        h = D.lbarTips[x] or [x, '']; requestTooltip e, h[0], keyText + h[1]; return
+        h = D.lbarTips[x] || [x, '']; requestTooltip e, h[0], keyText + h[1]; return
       .on 'mouseover', '.lbar-prefs', (e) ->
         h = prefs.keys(); s = ''
         for [code, desc, defaults, important] in cmds when important
@@ -259,9 +259,9 @@ class @IDE
         .appendTo ".ui-layout-#{dir} ul"
         .click (e) -> e.which == 2 && D.ide.wins[w]?.EP?(); return # middle click
       $li.find('.tab-name').text ee.name
-      $tabContent = $("<div class=win id=win#{w}></div>").appendTo ".ui-layout-#{dir}"
+      $tabContent = $("<div class=win id=win#{w}>").appendTo ".ui-layout-#{dir}"
       (@wins[w] = new Editor @, $tabContent, editorOpts).open ee
-      $(".ui-layout-#{dir}").tabs('refresh').tabs(active: -1)
+      $(".ui-layout-#{dir}").tabs('refresh').tabs active: -1
         .data('ui-tabs').panels.off 'keydown' # prevent jQueryUI tabs from hijacking our keystrokes, <C-Up> in particular
     return
 

@@ -17,7 +17,7 @@ parseFav = (s) ->
   if m = /^\[(.*)\]:(.*)$/.exec s then [_, x.host, x.port] = m # IPv6 [host]:port
   else if /:.*:/.test s then x.host = s # IPv6 host without port
   else [x.host, x.port] = s.split ':' # IPv4 host:port or just host
-  x.port = +(x.port or DEFAULT_PORT)
+  x.port = +(x.port || DEFAULT_PORT)
   x
 
 proxyInfo = {} # the proxy sends information about itself when the front-end connects to it
@@ -212,4 +212,4 @@ module.exports = (opts) ->
   $('#fav-list').resizable handles: 's,e'
 
   listen: (port) -> $listenHost.val '::'; port && $listenPort.val port; $listen.click(); return
-  connect: (s) -> hp = parseFav s; D.socket.emit '*connect', host: hp.host, port: hp.port or DEFAULT_PORT; return
+  connect: (s) -> hp = parseFav s; D.socket.emit '*connect', host: hp.host, port: hp.port || DEFAULT_PORT; return

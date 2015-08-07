@@ -88,8 +88,9 @@ parseEditableEntity = (xml) -> # used for OpenWindow and UpdateWindow
 
 WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' # constants used for ReplyAtInputPrompt
 
-fmtLineAttributes = (nLines, stops) ->
-  v = for i in [0...nLines] by 1 then "<LineAttributeValue><row>#{i}</row><value>#{+(i in (stops or []))}</value></LineAttributeValue>"
+fmtLineAttrs = (nLines, stops) ->
+  v = for i in [0...nLines] by 1
+    "<LineAttributeValue><row>#{i}</row><value>#{+(i in (stops || []))}</value></LineAttributeValue>"
   "<attributes><LineAttribute><attribute>Stop</attribute><values>#{v.join '\n'}</values></LineAttribute></attributes>"
 
 trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
@@ -97,9 +98,9 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
 @Proxy = ->
   log new Date().toISOString()
 
-  client = null # TCP connection to interpreter
-  socket = null # socket.io connection to the browser that's currently driving
-  child  = null # a ChildProcess object, the result from spawn()
+  client =      # TCP connection to interpreter
+  socket =      # socket.io connection to the browser that's currently driving
+  child  =      # a ChildProcess object, the result from spawn()
   server = null # used to listen for connections from interpreters
 
   # This is a hack to avoid flicker when leaning on TC.
@@ -113,7 +114,8 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
       b = Buffer s.length + 8; b.writeInt32BE b.length, 0; b.write 'RIDE' + s, 4; client.write b
     return
 
-  cmd = (c, args = '') -> toInterpreter "<Command><cmd>#{c}</cmd><id>0</id><args><#{c}>#{args}</#{c}></args></Command>"; return
+  cmd = (c, args = '') ->
+    toInterpreter "<Command><cmd>#{c}</cmd><id>0</id><args><#{c}>#{args}</#{c}></args></Command>"; return
 
   toBrowser = (m...) -> log 'to browser: ' + trunc JSON.stringify m; socket?.emit m...; return
 
@@ -127,8 +129,9 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
         m = '' + queue[8...n]; queue = queue[n..]
         log 'from interpreter: ' + trunc JSON.stringify m
         if !/^(?:SupportedProtocols|UsingProtocol)=1$/.test m # ignore these
-          switch (/^<(\w+)>/.exec m)?[1] or ''
-            when 'ReplyConnect', 'ReplyEdit', 'ReplySetLineAttributes', 'ReplyWeakInterrupt', 'ReplyStrongInterrupt', 'ReplyUnknownRIDECommand' then ; # ignore
+          switch (/^<(\w+)>/.exec m)?[1] || ''
+            when 'ReplyConnect', 'ReplyEdit', 'ReplySetLineAttributes'
+            ,    'ReplyWeakInterrupt', 'ReplyStrongInterrupt', 'ReplyUnknownRIDECommand' then ; # ignore
             when 'ReplySaveChanges'       then toBrowser 'ReplySaveChanges', win: +tag('win', m), err: +tag 'err', m
             when 'ReplyWindowTypeChanged'
               win = +tag 'Win', m
@@ -171,7 +174,8 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
             when 'ReplyHighlightLine' then toBrowser 'highlight', +tag('win', m), +tag 'line', m
             when 'ReplyDisconnect'    then toBrowser 'Disconnect', message: b64d tag 'msg', m
             when 'ReplySysError'      then toBrowser 'SysError', text: b64d tag 'text', m
-            when 'ReplyInternalError' then toBrowser 'InternalError', error: +tag('error', m), dmx: +tag('dmx', m), message: tag 'msg', m
+            when 'ReplyInternalError' then toBrowser 'InternalError',
+                                                   error: +tag('error', m), dmx: +tag('dmx', m), message: tag 'msg', m
             when 'ReplyNotificationMessage' then toBrowser 'NotificationMessage', message: tag 'msg', m
             when 'ReplyShowHTML'      then toBrowser 'ShowHTML', title: b64d(tag 'title', m), html: b64d(tag 'html', m)
             else log 'unrecognised'; toBrowser 'unrecognised', m
@@ -201,15 +205,16 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
       .on 'Cutback',        ({win}) -> cmd 'DebugCutback',        "<win>#{win}</win>"
       .on 'WeakInterrupt',   -> cmd 'WeakInterrupt'
       .on 'StrongInterrupt', -> cmd 'StrongInterrupt'
-      .on 'Autocomplete', ({line, pos, token}) -> cmd 'GetAutoComplete', "<line>#{b64 line}</line><pos>#{pos}</pos><token>#{token}</token>"
+      .on 'Autocomplete', ({line, pos, token}) ->
+        cmd 'GetAutoComplete', "<line>#{b64 line}</line><pos>#{pos}</pos><token>#{token}</token>"
       .on 'SaveChanges', ({win, text, attributes: {stop, monitor, trace}}) ->
-        cmd 'SaveChanges', "<win>#{win}</win><Text>#{b64 text}</Text>#{fmtLineAttributes text.split('\n').length, stop}"; return
+        cmd 'SaveChanges', "<win>#{win}</win><Text>#{b64 text}</Text>#{fmtLineAttrs text.split('\n').length, stop}"; return
       .on 'SetLineAttributes', ({win, nLines, lineAttributes: {stop, monitor, trace}}) ->
-        cmd 'SetLineAttributes', "<win>#{win}</win>#{fmtLineAttributes nLines, stop}"; return
+        cmd 'SetLineAttributes', "<win>#{win}</win>#{fmtLineAttrs nLines, stop}"; return
       .on 'Exit', ({code}) -> cmd 'Exit', "<code>#{code}</code>"
 
       # "disconnect" is a built-in socket.io event
-      .on 'disconnect', (x) -> log "#{addr @} disconnected"; (if socket == @ then socket = null); return
+      .on 'disconnect', (x) -> log "#{addr @} disconnected"; socket == @ && socket = null; return
 
       # proxy management events that don't reach the interpreter start with a '*'
       .on '*connect', ({host, port}) ->

@@ -10,9 +10,8 @@ class @Session
     @hist = ['']; @histIndex = 0
     @$e = $(e).addClass 'ride-win'
     @cm = new CodeMirror @$e[0],
-      autofocus: true, mode: 'aplsession', matchBrackets: !!prefs.matchBrackets()
-      autoCloseBrackets: {pairs: '()[]{}', explode: ''}
-      readOnly: true, keyMap: 'dyalog', lineWrapping: !!prefs.wrap(), indentUnit: 4
+      autofocus: true, mode: 'aplsession', matchBrackets: !!prefs.matchBrackets(), readOnly: true, keyMap: 'dyalog'
+      lineWrapping: !!prefs.wrap(), indentUnit: 4, autoCloseBrackets: {pairs: '()[]{}', explode: ''}
       extraKeys: {'Shift-Tab': 'indentLess', Tab: 'tabOrAutocomplete'}
     @cm.dyalogCommands = @
     onCodeMirrorDoubleClick @cm, (e) => @ED(); e.stopPropagation(); e.preventDefault(); return
@@ -83,7 +82,8 @@ class @Session
   die: -> @cm.setOption 'readOnly', true; return
   getDocument: -> @$e[0].ownerDocument
   refresh: -> @cm.refresh(); return
-  loadLine: (s) -> l = @cm.lastLine(); @cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}; return
+  loadLine: (s) ->
+    l = @cm.lastLine(); @cm.replaceRange s, {line: l, ch: 0}, {line: l, ch: @cm.getLine(l).length}; return
 
   exec: (trace) ->
     if @promptType

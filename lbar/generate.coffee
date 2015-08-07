@@ -5,7 +5,7 @@
 fs = require 'fs'
 b64d = (s) -> Buffer(s, 'base64').toString()
 stripTag = (s) -> s.replace /^.*<\w+>([^<]*)<\/\w+>.*$/, '\$1'
-esc = (s) -> s.replace /./g, (x) -> {'&': '&amp;', '<': '&lt;', '>': '&gt;'}[x] or x
+esc = (s) -> s.replace /./g, (x) -> {'&': '&amp;', '<': '&lt;', '>': '&gt;'}[x] || x
 join = (sep, a) -> a.join sep
 
 squiggleGroups = [[]]; lbarTips = []; isFirst = 1

@@ -11,9 +11,8 @@ prefs = require './prefs'
       tid = delay prefs.autocompletionDelay(), ->
         tid = null; c = cm.getCursor(); s = cm.getLine c.line; i = c.ch
         if i && s[i - 1] != ' ' && s[...i].replace(///[#{letter}]*$///, '')[-1..] != prefs.prefixKey() &&
-              (win.promptType == null or win.promptType != 4) # don't autocomplete in ⍞ input
-          win.autocompleteWithTab = 0
-          win.emit 'Autocomplete', line: s, pos: i, token: win.id
+              win.promptType != 4 # don't autocomplete in ⍞ input
+          win.autocompleteWithTab = 0; win.emit 'Autocomplete', line: s, pos: i, token: win.id
         return
     return
   (skip, options) ->

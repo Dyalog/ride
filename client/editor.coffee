@@ -14,28 +14,28 @@ EDITOR_HTML = do ->
         # The first button is placed on the right-hand side through CSS.  In a floating window it is hidden.
         # CSS classes "first" and "last" indicate button grouping.
 
-        b 'tb-ER  tracer-only first     ', 'Execute line'
-        b 'tb-TC  tracer-only',            'Trace into expression'
-        b 'tb-BK  tracer-only',            'Go back one line'
-        b 'tb-FD  tracer-only',            'Skip current line'
-        b 'tb-BH  tracer-only',            'Continue trace'
-        b 'tb-RM  tracer-only',            'Continue execution'
-        b 'tb-MA  tracer-only',            'Resume all threads'
-        b 'tb-ED  tracer-only',            'Edit name'
-        b 'tb-WI  tracer-only',            'Interrupt'
-        b 'tb-CBP tracer-only',            'Clear trace/stop/monitor for this object'
-        b 'tb-LN  tracer-only last',       'Toggle line numbers'
+        b 'tb-ER  tracer-only first', 'Execute line'
+        b 'tb-TC  tracer-only',       'Trace into expression'
+        b 'tb-BK  tracer-only',       'Go back one line'
+        b 'tb-FD  tracer-only',       'Skip current line'
+        b 'tb-BH  tracer-only',       'Continue trace'
+        b 'tb-RM  tracer-only',       'Continue execution'
+        b 'tb-MA  tracer-only',       'Resume all threads'
+        b 'tb-ED  tracer-only',       'Edit name'
+        b 'tb-WI  tracer-only',       'Interrupt'
+        b 'tb-CBP tracer-only',       'Clear trace/stop/monitor for this object'
+        b 'tb-LN  tracer-only last',  'Toggle line numbers'
 
-        b 'tb-LN  editor-only first',      'Toggle line numbers'
-        b 'tb-AO  editor-only',            'Comment selected text'
-        b 'tb-DO  editor-only last',       'Uncomment selected text'
+        b 'tb-LN  editor-only first', 'Toggle line numbers'
+        b 'tb-AO  editor-only',       'Comment selected text'
+        b 'tb-DO  editor-only last',  'Uncomment selected text'
 
         '<span class=tb-separator></span>'
         '<div class="tb-sc text-field"></div>'
         '<div class="tb-rp text-field editor-only"></div>'
-        b 'tb-NX first',      'Search for next match'
-        b 'tb-PV',            'Search for previous match'
-        b 'tb-case last',     'Match case'
+        b 'tb-NX first',  'Search for next match'
+        b 'tb-PV',        'Search for previous match'
+        b 'tb-case last', 'Match case'
       ].join ''}
     </div>
     <div class=ride-win></div>
@@ -99,7 +99,7 @@ class @Editor
   updateGutters: ->
     g = ['breakpoints']
     @cm.getOption('lineNumbers') && g.push 'CodeMirror-linenumbers'
-    @cm.getOption('foldGutter') && g.push 'CodeMirror-foldgutter'
+    @cm.getOption('foldGutter')  && g.push 'CodeMirror-foldgutter'
     @cm.setOption 'gutters', g
     return
 
@@ -167,7 +167,8 @@ class @Editor
     if q
       s = @cm.getValue(); ic && s = s.toLowerCase()
       selections = []; i = 0
-      while (i = s.indexOf q, i) >= 0 then selections.push anchor: @cm.posFromIndex(i), head: @cm.posFromIndex i + q.length; i++
+      while (i = s.indexOf q, i) >= 0
+        selections.push anchor: @cm.posFromIndex(i), head: @cm.posFromIndex i + q.length; i++
       if selections.length then @cm.setSelections selections
     @cm.focus()
     return
@@ -184,7 +185,8 @@ class @Editor
 
   highlight: (l) -> # current line in tracer
     if @hll? then @cm.removeLineClass @hll, 'background', 'highlighted'
-    if (@hll = l)? then @cm.addLineClass l, 'background', 'highlighted'; @cm.setCursor l, 0; @scrollCursorIntoProminentView()
+    if (@hll = l)?
+      @cm.addLineClass l, 'background', 'highlighted'; @cm.setCursor l, 0; @scrollCursorIntoProminentView()
     return
 
   setTracer: (x) ->
@@ -201,26 +203,27 @@ class @Editor
   open: (ee) ->
     @cm.setValue @otext = ee.text; @cm.clearHistory(); @cm.focus()
     # Constants for entityType:
-    # DefinedFunction     1
-    # SimpleCharArray     2
-    # SimpleNumericArray  3
-    # MixedSimpleArray    4
-    # NestedArray         5
-    # QuadORObject        6
-    # NativeFile          7
-    # SimpleCharVector    8
-    # AplNamespace        9
-    # AplClass           10
-    # AplInterface       11
-    # AplSession         12
-    # ExternalFunction   13
+    # DefinedFunction    1
+    # SimpleCharArray    2
+    # SimpleNumericArray 3
+    # MixedSimpleArray   4
+    # NestedArray        5
+    # QuadORObject       6
+    # NativeFile         7
+    # SimpleCharVector   8
+    # AplNamespace       9
+    # AplClass          10
+    # AplInterface      11
+    # AplSession        12
+    # ExternalFunction  13
     if ee.entityType in [1, 9, 10, 11, 12, 13]
       @cm.setOption 'mode', 'apl'
       if prefs.indentOnOpen() then @cm.execCommand 'selectAll'; @cm.execCommand 'indentAuto'
     else
       @cm.setOption 'mode', 'text'
     @cm.setOption 'readOnly', ee.readOnly || ee.debugger
-    line = ee.currentRow; col = ee.currentColumn || 0; if line == col == 0 && ee.text.indexOf('\n') < 0 then col = ee.text.length
+    line = ee.currentRow; col = ee.currentColumn || 0
+    if line == col == 0 && '\n' !in ee.text then col = ee.text.length
     @cm.setCursor line, col; @cm.scrollIntoView null, @$e.height() / 2
     @obp = ee.lineAttributes.stop[..].sort (x, y) -> x - y
     for l in @obp then @cm.setGutterMarker l, 'breakpoints', @createBreakpointElement()
@@ -236,7 +239,7 @@ class @Editor
   refresh: -> @cm.refresh(); return
   cword: -> # APL identifier under cursor
     c = @cm.getCursor(); s = @cm.getLine c.line; r = "[#{letter}0-9]*" # r: regex fragment to match identifiers
-    ((///⎕?#{r}$///.exec(s[...c.ch])?[0] or '') + (///^#{r}///.exec(s[c.ch..])?[0] or '')).replace /^\d+/, ''
+    ((///⎕?#{r}$///.exec(s[...c.ch])?[0] || '') + (///^#{r}///.exec(s[c.ch..])?[0] || '')).replace /^\d+/, ''
 
   # Commands:
   ED: -> @emit 'Edit', win: @id, text: @cm.getValue(), pos: @cm.indexFromPos @cm.getCursor(); return
