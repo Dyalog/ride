@@ -46,7 +46,7 @@ class @Editor
     @$e = $(e).html EDITOR_HTML
     {@id, @name, @emit} = @opts = opts; @isTracer = opts.tracer
     @xline = null # the line number of the empty line inserted when cursor is at eof and you press <down>
-    @otext = ''; @obp = [] # remember original text and breakpoints to avoid pointless saving on EP
+    @oText = ''; @oStop = [] # remember original text and "stops" to avoid pointless saving on EP
     @hll = null # highlighted line -- currently executed line in tracer
     @lastQuery = @lastIC = @overlay = @annotation = null # search-related state
     @focusTimestamp = 0
@@ -106,7 +106,7 @@ class @Editor
   createBreakpointElement: ->
     bp = @$e[0].ownerDocument.createElement 'div'; bp.setAttribute 'class', 'breakpoint'; bp.innerHTML = '●'; bp
 
-  getBreakpoints: -> # returns an array of line numbers
+  getStops: -> # returns an array of line numbers
     r = []; @cm.eachLine (lh) -> lh.gutterMarkers?.breakpoints && r.push lh.lineNo(); return
     r.sort (x, y) -> x - y
 
@@ -201,7 +201,7 @@ class @Editor
   updateSize: -> @cm.setSize @$e.width(), @$e.parent().height() - @$e.position().top - 28; return
 
   open: (ee) ->
-    @cm.setValue @otext = ee.text; @cm.clearHistory(); @cm.focus()
+    @cm.setValue @oText = ee.text; @cm.clearHistory(); @cm.focus()
     # Constants for entityType:
     # DefinedFunction    1
     # SimpleCharArray    2
@@ -225,8 +225,8 @@ class @Editor
     line = ee.currentRow; col = ee.currentColumn || 0
     if line == col == 0 && '\n' !in ee.text then col = ee.text.length
     @cm.setCursor line, col; @cm.scrollIntoView null, @$e.height() / 2
-    @obp = ee.lineAttributes.stop[..].sort (x, y) -> x - y
-    for l in @obp then @cm.setGutterMarker l, 'breakpoints', @createBreakpointElement()
+    @oStop   = ee.lineAttributes.stop[..].sort (x, y) -> x - y
+    for l in @oStop then @cm.setGutterMarker l, 'breakpoints', @createBreakpointElement()
     if D.floating then $('title', @$e[0].ownerDocument).text ee.name
     return
   hasFocus: -> window.focused && @cm.hasFocus()
@@ -256,10 +256,10 @@ class @Editor
     if @isTracer
       @emit 'CloseWindow', win: @id
     else
-      v = @cm.getValue(); bp = @getBreakpoints()
-      if v != @otext || '' + bp != '' + @obp
-        for l in bp then @cm.setGutterMarker l, 'breakpoints', null
-        @emit 'SaveChanges', win: @id, text: @cm.getValue(), attributes: stop: bp
+      v = @cm.getValue(); stop = @getStops()
+      if v != @oText || '' + stop != '' + @oStop
+        for l in stop then @cm.setGutterMarker l, 'breakpoints', null
+        @emit 'SaveChanges', win: @id, text: @cm.getValue(), attributes: {stop}
       else
         @emit 'CloseWindow', win: @id
     return
@@ -343,7 +343,11 @@ class @Editor
   BH: -> @emit 'ContinueTrace',  win: @id; return
   RM: -> @emit 'Continue',       win: @id; return
   MA: -> @emit 'RestartThreads', win: @id; return
-  CBP: -> @emit 'Cutback',       win: @id; return
+  CBP: ->
+    for l in [0..@cm.lastLine()] then @cm.setGutterMarker l, 'breakpoints', null
+    @isTracer && @emit 'SetLineAttributes',
+      win: @id, nLines: @cm.lineCount(), lineAttributes: {stop: @getStops(), trace: [], monitor: []}
+    return
   BP: -> # Toggle breakpoint
     for sel in @cm.listSelections()
       p0 = sel.anchor; p1 = sel.head; if p0.line > p1.line then [p0, p1] = [p1, p0]
@@ -351,7 +355,7 @@ class @Editor
       for l in [l0..l1] by 1
         @cm.setGutterMarker l, 'breakpoints',
           if !@cm.getLineHandle(l).gutterMarkers?.breakpoints then @createBreakpointElement() else null
-    @isTracer && @emit 'SetLineAttributes', win: @id, nLines: @cm.lineCount(), lineAttributes: stop: @getBreakpoints()
+    @isTracer && @emit 'SetLineAttributes', win: @id, nLines: @cm.lineCount(), lineAttributes: {stop: @getStops()}
     return
   RD: (cm) ->
     if cm.somethingSelected()
@@ -375,7 +379,7 @@ class @Editor
   onbeforeunload: -> # called when the user presses [X] on the OS window
     if @ide.dead
       D.forceCloseNWWindow?(); return
-    else if @cm.getValue() == @otext && '' + @getBreakpoints() == '' + @obp
+    else if @cm.getValue() == @oText && '' + @getStops() == '' + @oStop
       @EP(); return
     else if !@dialog
       window.focus()

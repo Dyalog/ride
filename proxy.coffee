@@ -76,22 +76,34 @@ parseEditableEntity = (xml) -> # used for OpenWindow and UpdateWindow
   #                      int tid, bool readonly, string tidName,
   #                      entityType type, lineAttributes attributes]
   #   lineAttributes => lineAttribute[int[] stop, int[] monitor, int[] trace]
-  bs = []; xml.replace /<row>(\d+)<\/row><value>1<\/value>/g, (_, l) -> bs.push +l
+  las = stop: [], monitor: [], trace: [] # line attributes
+  la = null # one of las.stop, las.monitor, las.trace
+  xml.replace /<attribute>(\w+)<\/attribute>|<row>(\d+)<\/row><value>1<\/value>/g, (_, a, l) ->
+    (if a then la = las[a.toLowerCase()] else la.push +l); ''
   token: +tag 'token', xml
   name: b64d tag 'name', xml
   currentRow: +tag('cur_pos', xml) || 0
   debugger: +tag 'bugger', xml
   readOnly: !!+tag 'readonly', xml
   entityType: 1 + entityTypeTranslation.indexOf +tag 'type', xml
-  lineAttributes: stop: bs
+  lineAttributes: las
   text: b64d tag 'text', xml
 
 WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' # constants used for ReplyAtInputPrompt
 
-fmtLineAttrs = (nLines, stops) ->
-  v = for i in [0...nLines] by 1
-    "<LineAttributeValue><row>#{i}</row><value>#{+(i in (stops || []))}</value></LineAttributeValue>"
-  "<attributes><LineAttribute><attribute>Stop</attribute><values>#{v.join '\n'}</values></LineAttribute></attributes>"
+fmtLineAttrs = (nLines, attrs) ->
+  console.info 'nLines, attrs', nLines, attrs
+  "<attributes>#{
+    (
+      for k in ['Stop', 'Trace', 'Monitor'] when a = attrs[k.toLowerCase()]
+        "<LineAttribute><attribute>#{k}</attribute><values>#{
+          (
+            for i in [0...nLines] by 1 when i in a
+              "<LineAttributeValue><row>#{i}</row><value>1</value></LineAttributeValue>"
+          ).join ''
+        }</values></LineAttribute>"
+    ).join ''}
+  </attributes>"
 
 trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
 
@@ -207,10 +219,10 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
       .on 'StrongInterrupt', -> cmd 'StrongInterrupt'
       .on 'Autocomplete', ({line, pos, token}) ->
         cmd 'GetAutoComplete', "<line>#{b64 line}</line><pos>#{pos}</pos><token>#{token}</token>"
-      .on 'SaveChanges', ({win, text, attributes: {stop, monitor, trace}}) ->
-        cmd 'SaveChanges', "<win>#{win}</win><Text>#{b64 text}</Text>#{fmtLineAttrs text.split('\n').length, stop}"; return
-      .on 'SetLineAttributes', ({win, nLines, lineAttributes: {stop, monitor, trace}}) ->
-        cmd 'SetLineAttributes', "<win>#{win}</win>#{fmtLineAttrs nLines, stop}"; return
+      .on 'SaveChanges', ({win, text, attributes}) ->
+        cmd 'SaveChanges', "<win>#{win}</win><Text>#{b64 text}</Text>#{fmtLineAttrs text.split('\n').length, attributes}"; return
+      .on 'SetLineAttributes', ({win, nLines, lineAttributes}) ->
+        cmd 'SetLineAttributes', "<win>#{win}</win>#{fmtLineAttrs nLines, lineAttributes}"; return
       .on 'Exit', ({code}) -> cmd 'Exit', "<code>#{code}</code>"
 
       # "disconnect" is a built-in socket.io event
