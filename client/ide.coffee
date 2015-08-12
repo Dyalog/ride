@@ -8,6 +8,8 @@ keymap = require './keymap'
 {esc, delay, join} = require './util'
 {cmds} = require './cmds'
 
+parseId = (s) -> +s.replace /^.*?(\d+)$/, '$1'
+
 class @IDE
   constructor: ->
     ide = D.ide = @
@@ -42,8 +44,7 @@ class @IDE
 
     # Tab management
     @tabOpts = activate: (_, ui) =>
-      widget = @wins[+ui.newTab.attr('id').replace /\D+/, '']
-      widget.updateSize(); widget.focus(); widget.updateGutters(); return
+      widget = @wins[parseId ui.newTab.prop 'id']; widget.updateSize(); widget.focus(); widget.updateGutters(); return
     @$tabs = $('.ui-layout-east, .ui-layout-south').tabs @tabOpts
     @refreshTabs = =>
       for d in ['east', 'south'] when !$(".ui-layout-#{d} li", @$ide).length then @layout.close d
@@ -52,7 +53,7 @@ class @IDE
       $ tab
         .on 'mouseover', '.tab-close', -> $(@).addClass    'hover'; return
         .on 'mouseout',  '.tab-close', -> $(@).removeClass 'hover'; return
-        .on 'click',     '.tab-close', -> ide.wins[$(@).closest('a').prop('href').replace /\D+/, '']?.EP?(); return
+        .on 'click',     '.tab-close', -> ide.wins[parseId $(@).closest('a').prop 'href']?.EP?(); return
         .sortable
           cursor: 'move', containment: 'parent', tolerance: 'pointer', axis: 'x', revert: true
           stop: (_, ui) =>
