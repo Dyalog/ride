@@ -12,7 +12,7 @@ class @Session
     @cm = new CodeMirror @$e[0],
       autofocus: true, mode: 'aplsession', matchBrackets: !!prefs.matchBrackets(), readOnly: true, keyMap: 'dyalog'
       lineWrapping: !!prefs.wrap(), indentUnit: 4, autoCloseBrackets: {pairs: '()[]{}', explode: ''}
-      dragDrop: 0, extraKeys: {'Shift-Tab': 'indentLess', Tab: 'tabOrAutocomplete'}
+      extraKeys: {'Shift-Tab': 'indentLess', Tab: 'tabOrAutocomplete'}
     @cm.dyalogCommands = @
     onCodeMirrorDoubleClick @cm, (e) => @ED(); e.stopPropagation(); e.preventDefault(); return
     @focusTimestamp = 0

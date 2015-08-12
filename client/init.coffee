@@ -9,6 +9,9 @@ require './demo'
 require './codemirror-foldgutter'
 
 $ ->
+  CodeMirror.defaults.dragDrop = false
+  window.ondragover = window.ondrop = (e) -> e.preventDefault(); false
+
   if D.nwjs
     zM = 11 # zoom level can be from -zM to zM inclusive
     $.extend CodeMirror.commands,
@@ -85,7 +88,5 @@ $ ->
   # It doesn't work that way.  It may work for other objects, but the values in localStorage
   # are always strings and that leaves us with 'undefined' as a string.  So, let's clean up...
   delete localStorage.debug
-
-  window.ondragover = window.ondrop = (e) -> e.preventDefault(); false
 
   return
