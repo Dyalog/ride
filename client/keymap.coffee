@@ -1,7 +1,7 @@
 helpurls = require './helpurls'
 prefs = require './prefs'
 about = require './about'
-{inherit, cat, dict, chr, ord, zip, join, delay, qw} = require './util'
+{inherit, cat, dict, chr, ord, zip, join, delay, qw, esc} = require './util'
 prefsUI = require './prefs-ui'
 {ACB_VALUE} = require './editor'
 
@@ -136,6 +136,20 @@ $.extend CodeMirror.commands,
         CodeMirror.Pos l, if m <= c.ch < n || !m then n else m
       origin: '+move', bias: -1
     )
+    return
+
+  PRN: (cm) ->
+    pw = open 'print.html', 'Print'
+    pw.onload = ->
+      counter = 3
+      btn = pw.document.getElementById 'ok'
+      btn.value = "OK (#{counter})"
+      btn.onclick = ok = ->
+        pw.document.getElementById('content').innerHTML = esc cm.getValue()
+        setTimeout (-> pw.print(); return), 500
+        clearInterval iid; iid = 0; false
+      iid = setInterval (-> btn.value = "OK (#{--counter})"; counter || ok(); return), 1000
+      return
     return
 
 switchWindows = (d) -> # d: a step of either 1 or -1
