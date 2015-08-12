@@ -188,7 +188,7 @@ SEARCH_MATCH = 'search match' # sample text to illustrate it
     scheme = schemes[Math.min i, schemes.length - 1]; updateSchemes(); false
   $cm = $ '#col-cm'
   cm = new CodeMirror $cm[0],
-    lineNumbers: true, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
+    dragDrop: 0, lineNumbers: true, firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
     indentUnit: 4, scrollButtonHeight: 12, matchBrackets: true, autoCloseBrackets: {pairs: '()[]{}', explode: '{}'}
   cm.addOverlay token: (stream) ->
     i = stream.string[stream.pos..].indexOf SEARCH_MATCH

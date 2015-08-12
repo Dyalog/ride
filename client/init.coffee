@@ -86,4 +86,6 @@ $ ->
   # are always strings and that leaves us with 'undefined' as a string.  So, let's clean up...
   delete localStorage.debug
 
+  window.ondragover = window.ondrop = (e) -> e.preventDefault(); false
+
   return

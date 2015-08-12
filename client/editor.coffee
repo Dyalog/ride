@@ -54,7 +54,7 @@ class @Editor
       lineNumbers: !!if @isTracer then prefs.lineNumsTracer() else prefs.lineNumsEditor()
       firstLineNumber: 0, lineNumberFormatter: (i) -> "[#{i}]"
       smartIndent: prefs.indent() >= 0, indentUnit: prefs.indent(), scrollButtonHeight: 12
-      matchBrackets: !!prefs.matchBrackets()
+      matchBrackets: !!prefs.matchBrackets(), dragDrop: 0
       autoCloseBrackets: !!prefs.autoCloseBrackets() && ACB_VALUE
       foldGutter: !!prefs.fold()
       keyMap: 'dyalog', extraKeys: {'Shift-Tab': 'indentLess', Tab: 'tabOrAutocomplete', Down: 'downOrXline'}
@@ -74,14 +74,14 @@ class @Editor
       .on 'click',            '.tb-button', (e) =>
         for c in $(e.target).prop('class').split /\s+/ when m = /^tb-([A-Z]{2,3})$/.exec c then @[m[1]](); break
         return
-    @cmSC = new CodeMirror @$tb.find('.tb-sc')[0], placeholder: 'Search', extraKeys:
+    @cmSC = new CodeMirror @$tb.find('.tb-sc')[0], placeholder: 'Search', dragDrop: 0, extraKeys:
       Enter: => @NX(); return
       'Shift-Enter': => @PV(); return
       'Ctrl-Enter': => @selectAllSearchResults(); return
       Tab: => (if @isTracer then @cm else @cmRP).focus(); return
       'Shift-Tab': => @cm.focus(); return
     @cmSC.on 'change', => @highlightSearch(); return
-    @cmRP = new CodeMirror @$tb.find('.tb-rp')[0], placeholder: 'Replace', extraKeys:
+    @cmRP = new CodeMirror @$tb.find('.tb-rp')[0], placeholder: 'Replace', dragDrop: 0, extraKeys:
       Enter: => @replace(); return
       'Shift-Enter': => @replace true; return
       Tab: => @cm.focus(); return
