@@ -92,7 +92,6 @@ parseEditableEntity = (xml) -> # used for OpenWindow and UpdateWindow
 WHIES = 'Invalid Descalc QuadInput LineEditor QuoteQuadInput Prompt'.split ' ' # constants used for ReplyAtInputPrompt
 
 fmtLineAttrs = (nLines, attrs) ->
-  console.info 'nLines, attrs', nLines, attrs
   "<attributes>#{
     (
       for k in ['Stop', 'Trace', 'Monitor'] when a = attrs[k.toLowerCase()]
