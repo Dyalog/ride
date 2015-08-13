@@ -202,6 +202,7 @@ class @Editor
 
   open: (ee) ->
     @cm.setValue @oText = ee.text; @cm.clearHistory()
+    if D.mac then @cm.focus(); window.focus()
     # Constants for entityType:
     # DefinedFunction    1
     # SimpleCharArray    2
