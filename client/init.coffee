@@ -89,4 +89,6 @@ $ ->
   # are always strings and that leaves us with 'undefined' as a string.  So, let's clean up...
   delete localStorage.debug
 
+  localStorage.version ||= '[2,0]' # for the sake of migrations to later versions of RIDE
+
   return
