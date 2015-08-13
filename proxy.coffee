@@ -293,9 +293,11 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
                   [_, bits, version, edition] = m
                   bits = if bits then 64 else 32
                   edition = if edition then 'unicode' else 'classic'
-                else if m = /^ *localdyalogdir +REG_SZ +(\S.*)$/i.exec line
+                else if version && (m = /^ *localdyalogdir +REG_SZ +(\S.*)$/i.exec line)
                   exe = m[1] + 'dyalog.exe'
                   interpreters.push {exe, version: parseVersion(version), bits, edition}
+                else if !/^\s*$/.test line
+                  exe = bits = version = edition = null
               toBrowser '*proxyInfo', {ipAddresses, interpreters, platform: process.platform}
               return
           catch ex
