@@ -47,6 +47,7 @@ done
 
 echo 'removing libffmpegsumo from build' ; find build/$app_name -name '*ffmpegsumo*' -delete
 echo 'fixing file permissions'           ; chmod -R g+w build/$app_name
+find build/$app_name -perm /111 -print0 | xargs -0 chmod 755
 
 for bits in 32 64; do
   if [ -d build/$app_name/win$bits ]; then
