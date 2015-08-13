@@ -111,9 +111,14 @@ if process?
 
   D.forceCloseNWWindow = -> nww.close true; return # used to close floating windows after session is dead
 
-  cmenu = new gui.Menu
-  ['Cut', 'Copy', 'Paste'].forEach (x) ->
-    cmenu.append new gui.MenuItem label: x, click: (-> document.execCommand x; return); return
+  # Context menu
+  opener && D.ide = opener.D.ide
+  items = [].concat(
+    ['Cut', 'Copy', 'Paste'].map (x) -> label: x, click: -> document.execCommand x; return
+    [type: 'separator']
+    ['Undo', 'Redo'].map (x) -> label: x, click: -> D.ide?.focusedWin?.cm?[x.toLowerCase()]?(); return
+  )
+  cmenu = new gui.Menu; for item in items then cmenu.append new gui.MenuItem item
   $(document).contextmenu (e) -> cmenu.popup e.clientX, e.clientY; false
 
   D.readFile = fs.readFile # needed for presentation mode
