@@ -6,6 +6,7 @@ BASE_VERSION=`node -pe "($(cat package.json)).version"`
 VERSION="${BASE_VERSION%%.0}.`git rev-list HEAD --count`"  # "%%.0" strips trailing ".0"
 echo "Current branch: ${GIT_BRANCH#*/}"
 CURRENTBRANCH=${GIT_BRANCH#*/}
+APP_NAME=$(node -e "console.log($(cat package.json).name)") # "ride20" or similar
 
 umask 002 # user and group can do everything, others can only read and execute
 mountpoint /devt; echo Devt is mounted: good # make sure it's mounted
@@ -15,8 +16,8 @@ for suffix in '' {a..z}; do if [ ! -e $r/$d$suffix ]; then d=$d$suffix; break; f
 mkdir -p $r/$d
 echo "$VERSION" > $r/$d/version
 echo Copying Directories to $r/$d
-cp -r build/ride/* $r/$d
-for DIR in `ls build/ride`; do
+cp -r build/${APP_NAME}/* $r/$d
+for DIR in `ls build/${APP_NAME}`; do
   OS=`echo ${DIR} | sed 's/64//;s/32//'`
   BITS=`echo ${DIR} | sed 's/linux//;s/osx//;s/win//'`
 
@@ -35,7 +36,7 @@ for DIR in `ls build/ride`; do
   ZIPFILE="ride2-${VERSION}-${OSNAME}.zip"
   TMPZIP=/tmp/$ZIPFILE
 
-  cd build/ride/$DIR
+  cd build/${APP_NAME}/$DIR
   echo "creating $TMPZIP"
   zip -q -r "$TMPZIP" .
   echo Copying to devt
