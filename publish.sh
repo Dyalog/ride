@@ -47,7 +47,7 @@ for DIR in `ls build/${APP_NAME}`; do
 done
 
 echo 'updating "latest" symlink'; l=$r/latest; [ -L $l ]; rm -f $l; ln -s $d $l
-echo 'fixing permissions'; chmod +x $r/latest/win{64,32}/{${APP_NAME},libGLESv2.dll,libEGL.dll} $r/latest/win64/set-ime.exe
+echo 'fixing permissions'; chmod +x $r/latest/win{64,32}/{${APP_NAME}.exe,libGLESv2.dll,libEGL.dll} $r/latest/win64/set-ime.exe
 echo 'cleaning up old releases'
 for x in $(ls $r | grep -P '^\d{4}-\d{2}-\d{2}--\d{2}-\d{2}[a-z]?$' | sort | head -n-10); do
   echo "deleting $x"; rm -rf $r/$x || true
