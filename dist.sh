@@ -20,10 +20,10 @@ desktop_app ${@:-win osx linux}
 # workaround for https://github.com/mllrsohn/grunt-node-webkit-builder/issues/125
 # Replace icons on OS X & Windows
 for bits in 32 64; do
-  d=build/$app_name/osx$bits/ride.app/Contents/Resources
+  d=build/$app_name/osx$bits/${app_name}.app/Contents/Resources
   if [ -d $d ]; then cp -v style/DyalogUnicode.icns $d/nw.icns; fi
   if which wine >/dev/null; then
-    w=build/$app_name/win$bits/ride.exe
+    w=build/$app_name/win$bits/${app_name}.exe
     if [ -s $w ]; then
       echo "replacing ${bits}-bit Windows icon"
       wine node_modules/rcedit/bin/rcedit.exe $w --set-icon ./favicon.ico
