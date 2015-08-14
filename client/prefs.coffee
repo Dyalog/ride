@@ -29,9 +29,9 @@ D.prefs = @
   ['lineNumsTracer',    0]
   ['lineNumsEditor',    1]
   ['matchBrackets',     1] # whether to highlight matching brackets
-  ['pos',               null] # [x,y,w,h] of the main window, used in ../init-nw.coffee
-  ['posEditor',         [32, 32, 1000, 618]] # [x,y,w,h]
-  ['posTracer',         [32, 32, 1000, 618]] # [x,y,w,h]
+  ['pos',               null] # [x,y,w,h,maximized] of the main window, used in ../init-nw.coffee; maximized is optional
+  ['posEditor',         [32, 32, 1000, 618]] # [x,y,w,h,maximized]
+  ['posTracer',         [32, 32, 1000, 618]] # [x,y,w,h,maximized]
   ['prefixKey',         '`']
   ['prefixMaps',        {}] # per-locale strings of pairs of characters -- diffs from the default ` map for that locale
   ['selectedExe',       ''] # Which interpreter is selected in the Connect page?

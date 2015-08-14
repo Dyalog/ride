@@ -237,7 +237,8 @@ class @IDE
       pos = if ee.debugger then prefs.posTracer() else prefs.posEditor()
       delta = 32 * (ee.token - 1); pos[0] += delta; pos[1] += delta
       posH = x: pos[0], y: pos[1], width: pos[2], height: pos[3]
-      url = "index.html?win=#{w}&x=#{pos[0]}&y=#{pos[1]}&width=#{pos[2]}&height=#{pos[3]}&token=#{w}&tracer=#{+!!ee.debugger}"
+      url = "index.html?win=#{w}&x=#{pos[0]}&y=#{pos[1]}&width=#{pos[2]}&" +
+            "height=#{pos[3]}&maximized=#{pos[4] || 0}&token=#{w}&tracer=#{+!!ee.debugger}"
       if D.open url, $.extend {title: ee.name}, posH
         # the popup will create D.wins[w] and unblock the message queue
         @block()

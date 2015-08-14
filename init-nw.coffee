@@ -44,20 +44,21 @@ if process?
   restoreWindow = (w, r) -> # w: NWJS window, r: rectangle
     # Find a screen that overlaps with "r" and fit "w" inside it:
     for scr in gui.Screen.screens when rectOverlap scr.work_area, r
-      r = rectFit r, scr.work_area
+      r.maximized || r = rectFit r, scr.work_area
       w.moveTo r.x, r.y; w.resizeTo r.width, r.height
       process.nextTick ->
         w.dx = w.x      - r.x
         w.dy = w.y      - r.y
         w.dw = w.width  - r.width
         w.dh = w.height - r.height
+        r.maximized && w.maximize()
         return
       break
     return
 
   if D.mac then process.env.DYALOG_IDE_INTERPRETER_EXE ||= path.resolve process.cwd(), '../Dyalog/mapl'
   process.chdir process.env.PWD || process.env.HOME || '.' # see https://github.com/nwjs/nw.js/issues/648
-  D.process = process; gui.Screen.Init(); nww = gui.Window.get()
+  D.process = process; gui.Screen.Init(); nww = D.nww = gui.Window.get()
 
   urlParams = {}
   for kv in (location + '').replace(/^[^\?]*($|\?)/, '').split '&'
@@ -67,10 +68,11 @@ if process?
     if D.floating
       opener.D.floatingWindows.push nww
       restoreWindow nww,
-        x:      +urlParams.x
-        y:      +urlParams.y
-        width:  +urlParams.width
-        height: +urlParams.height
+        x:         +urlParams.x
+        y:         +urlParams.y
+        width:     +urlParams.width
+        height:    +urlParams.height
+        maximized: +urlParams.maximized
     else
       D.floatingWindows = []; D.floatOnTop = 0
       aot = (x) -> (for w in D.floatingWindows when w.aot != x then w.aot = x; w.setAlwaysOnTop x); return
@@ -78,7 +80,7 @@ if process?
       nww.on 'blur',  -> aot false; return
       if localStorage.pos then try
         pos = JSON.parse localStorage.pos
-        restoreWindow nww, x: pos[0], y: pos[1], width: pos[2], height: pos[3]
+        restoreWindow nww, x: pos[0], y: pos[1], width: pos[2], height: pos[3], maximized: pos[4] || 0
     return
   nww.show(); nww.focus() # focus() is needed for the Mac
 
@@ -86,20 +88,24 @@ if process?
   throttle = (f) -> tid = null; -> tid ?= setTimeout (-> f(); tid = null; return), 500; return
 
   saveWindowState = throttle ->
-    posStr = JSON.stringify [
+    posArr = [
       nww.x      - (nww.dx || 0)
       nww.y      - (nww.dy || 0)
       nww.width  - (nww.dw || 0)
       nww.height - (nww.dh || 0)
     ]
-    if D.floating
-      if +urlParams.tracer || urlParams.token == '1'
-        if +urlParams.tracer then localStorage.posTracer = posStr else localStorage.posEditor = posStr
-    else
-      localStorage.pos = posStr
+    nww.maximized && posArr.push 1
+    p =
+      if !D.floating                 then 'pos'
+      else if +urlParams.tracer      then 'posTracer'
+      else if urlParams.token == '1' then 'posEditor'
+      else ''
+    p && localStorage[p] = JSON.stringify posArr
     return
   nww.on 'move',   saveWindowState
   nww.on 'resize', saveWindowState
+  nww.on 'maximize',   -> nww.maximized = 1; saveWindowState(); return
+  nww.on 'unmaximize', -> nww.maximized = 0; saveWindowState(); return
 
   nww.on 'close', ->
     if D.forceClose
