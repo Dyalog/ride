@@ -189,14 +189,6 @@ module.exports = (opts) ->
         '<option value="">Other...'
       ).val(prefs.selectedExe()).change()
       return
-    .on '*confirmHijack', ({addr}) ->
-      $("<p>#{addr || 'An IDE '} is already using this proxy.  Would you like to take it over?</p>").dialog
-        title: 'Confirmation', modal: 1, buttons: [
-          {text: 'Yes', click: -> D.socket.emit '*hijack'; $(@).dialog 'close'; false}
-          {text: 'No', click: -> $(@).dialog 'close'; $('body').html '<p>Disconnected</p>'; false}
-        ]
-      return
-    .on '*hijacked', ({addr}) -> $.alert "#{addr} has taken over usage of this proxy.", 'Disconnected'; return
     .on '*connected', ({host, port}) ->
       if $listenDialog  then $listenDialog.dialog  'close'; $listenDialog  = null
       if $connectDialog then $connectDialog.dialog 'close'; $connectDialog = null

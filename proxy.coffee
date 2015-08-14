@@ -322,14 +322,4 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
     return
 
   (newSocket) -> # this function is the result from calling Proxy()
-    log "#{addr newSocket} connected"
-    if socket
-      log "asking #{addr newSocket} to confirm hijacking of #{addr socket}'s session"
-      newSocket.emit '*confirmHijack', addr: addr(socket) || null
-      newSocket.on '*hijack', ->
-        log "#{addr newSocket} hijacked #{addr socket}'s session"
-        socket.emit '*hijacked', addr: addr(newSocket); socket.disconnect(); socket = newSocket; setUpBrowserConnection()
-        return
-    else
-      socket = newSocket; setUpBrowserConnection()
-    return
+    log "#{addr newSocket} connected"; socket = newSocket; setUpBrowserConnection(); return
