@@ -81,7 +81,7 @@ module.exports = (opts) ->
 
   enableSpawnAndListen = (b) ->
     $('#spawn,#listen').button if b then 'enable' else 'disable'
-    $('#listen-host,#listen-port').attr 'disabled', !b
+    $('#spawn-select,#spawn-exe,#listen-host,#listen-port').attr 'disabled', !b
     return
 
   $connect.add($about).add($new).add($delete).add($save).add($cancel).add($spawn).add($listen).button()
@@ -134,8 +134,13 @@ module.exports = (opts) ->
     false
   $('#spawn-select').change ->
     v = $(@).val(); $('#spawn-exe').val(v || prefs.otherExe()).prop 'readonly', !!v; v || $('#spawn-exe').focus()
-    prefs.selectedExe v; return
-  $('#spawn-exe').on 'change keyup', -> $('#spawn-select').val() || prefs.otherExe $(@).val(); return
+    prefs.selectedExe v
+    $('#spawn').button if v || prefs.otherExe() then 'enable' else 'disable'
+    return
+  $('#spawn-exe').on 'change keyup', ->
+    $('#spawn-select').val() || prefs.otherExe $(@).val()
+    $('#spawn').button if $('#spawn-select').val() || prefs.otherExe() then 'enable' else 'disable'
+    return
   $listen.click ->
     host = $listenHost.val()
     port = +$listenPort.val()
