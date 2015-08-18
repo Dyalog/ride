@@ -31,12 +31,12 @@ function checkEnvironment() {
 }
 
 function getVersionInfo() {
-if [ "${TARGET}" != "support" ]; then
-	#RIDEVERSION=`${RIDEDIR}/ride --version 2>/dev/null`
-	RIDEVERSION=`cat ${RIDEDIR}/../version`
+if [ -s ${RIDEDIR}/../version ]; then
+        RIDEVERSION=`cat ${RIDEDIR}/../version`
 else
-	RIDEVERSION="1.9.0"
+        RIDEVERSION="1.9.0"
 fi
+
 BASE_VERSION=`echo $RIDEVERSION | sed 's/\([0-9]*\.[0-9]*\)\.[0-9]*/\1/'`
 
 }
