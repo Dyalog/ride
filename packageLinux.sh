@@ -6,6 +6,12 @@ if ! [ "$1" = "" ]; then
 else
 	TARGET=${GIT_BRANCH#*/}
 fi
+
+if [ "x$TARGET" = "x" ] {
+	echo "no TARGET set - bailing out"
+	exit 1
+}
+
 echo "Packaging for $TARGET"
 
 RIDEDIR="/devt/builds/ride/${TARGET}/latest/linux64"
