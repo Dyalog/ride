@@ -97,8 +97,8 @@ fmtLineAttrs = (nLines, attrs) ->
       for k in ['Stop', 'Trace', 'Monitor'] when a = attrs[k.toLowerCase()]
         "<LineAttribute><attribute>#{k}</attribute><values>#{
           (
-            for i in [0...nLines] by 1 when i in a
-              "<LineAttributeValue><row>#{i}</row><value>1</value></LineAttributeValue>"
+            for i in [0...nLines] by 1
+              "<LineAttributeValue><row>#{i}</row><value>#{+(i in a)}</value></LineAttributeValue>"
           ).join ''
         }</values></LineAttribute>"
     ).join ''}
