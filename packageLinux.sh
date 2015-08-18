@@ -7,10 +7,10 @@ else
 	TARGET=${GIT_BRANCH#*/}
 fi
 
-if [ "x$TARGET" = "x" ] {
+if [ "x$TARGET" = "x" ]; then
 	echo "no TARGET set - bailing out"
 	exit 1
-}
+fi
 
 echo "Packaging for $TARGET"
 
