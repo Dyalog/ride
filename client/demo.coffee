@@ -14,11 +14,11 @@ move = (d) ->
 $p = null # $p: DOM element for the pending key or null if key display mode is off
 keyInfo = (e) -> # returns a pair of the key name and an "is complete" flag
   s = '' # key name
-  e.shiftKey && s += 'Shift-'
+  e.shiftKey && e.which && s += 'Shift-'
   e.ctrlKey  && s += 'Ctrl-'
   e.altKey   && s += 'Alt-'
   k = CodeMirror.keyNames[e.which] || "[#{e.which}]"
-  c = k !in ['Shift', 'Ctrl', 'Alt'] # c: is the key combination complete?
+  c = !!e.which && k !in ['Shift', 'Ctrl', 'Alt'] # c: is the key combination complete?
   c && s += k
   [s, c]
 keyDownHandler = (e) ->
