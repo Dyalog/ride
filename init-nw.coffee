@@ -150,7 +150,6 @@ if process?
     if e.which == 123 && !e.altKey # F12
       if     !e.ctrlKey && !e.shiftKey then nww.showDevTools().setAlwaysOnTop 1; false
       else if e.ctrlKey && !e.shiftKey then showProtocolLog(); false
-      else if e.ctrlKey &&  e.shiftKey then foo.bar # cause a crash
 
   showProtocolLog = ->
     window.lw = lw = open 'empty.html'
