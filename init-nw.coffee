@@ -149,32 +149,27 @@ if process?
   $(document).keydown (e) ->
     if e.which == 123 && !e.altKey # F12
       if     !e.ctrlKey && !e.shiftKey then nww.showDevTools().setAlwaysOnTop 1; false
-      else if e.ctrlKey && !e.shiftKey then showProxyLog(); false
+      else if e.ctrlKey && !e.shiftKey then showProtocolLog(); false
       else if e.ctrlKey &&  e.shiftKey then foo.bar # cause a crash
 
-  showProxyLog = ->
-    lw = open ''
-    lw.document.write '''
-      <html>
-        <head>
-          <title>Proxy Log</title>
-          <style>body{font-family:monospace;white-space:pre}</style>
-          <script></script>
-        </head>
-        <body></body>
-      </html>
-    '''
+  showProtocolLog = ->
+    window.lw = lw = open 'empty.html'
     wr = (s) ->
       if !lw || lw.closed || !lw.document || !lw.document.createTextNode
-        i = proxy.log.listeners.indexOf wr
-        if i >= 0 then proxy.log.listeners.splice i, 1; lw = null
+        i = proxy.log.listeners.indexOf wr; i >= 0 && proxy.log.listeners.splice i, 1; lw = null
       else
-        b = lw.document.body
-        atEnd = b.scrollTop == b.scrollHeight - b.clientHeight
-        b.appendChild lw.document.createTextNode s
-        if atEnd then b.scrollTop = b.scrollHeight - b.clientHeight
+        b = lw.document.body; atEnd = b.scrollTop == b.scrollHeight - b.clientHeight
+        b.appendChild lw.document.createTextNode s; if atEnd then b.scrollTop = b.scrollHeight - b.clientHeight
       return
-    wr proxy.log.get().join ''; proxy.log.listeners.push wr
+    lw.onload = ->
+      lw.document.body.innerHTML = '''
+        <style>
+          body{font-family:monospace;margin:0;padding:0;white-space:pre;
+               position:absolute;top:0;bottom:0;left:0;right:0;overflow:scroll}
+        </style>
+      '''
+      lw.document.title = 'RIDE Protocol Log'; wr proxy.log.get().join ''; proxy.log.listeners.push wr
+      return
     false
 
   # expandStackString inserts snippets of code next to each file:///filename.js:123:45
