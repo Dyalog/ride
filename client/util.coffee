@@ -37,3 +37,12 @@ $.fn.insert = (s) -> @each -> # replace selection in an <input> or <textarea> wi
     if (i = @selectionStart)? && (j = @selectionEnd)? # TODO: IE
       @value = @value[...i] + s + @value[j..]; @selectionStart = @selectionEnd = i + s.length
   return
+
+@throttle1 = (f, dt = 500) -> # f: a 1-arg function that doesn't return a result; dt: minimum time between invocations
+  next = tid = 0 # next: the earliest time f can be called again; tid: id returned by setTimeout
+  (x) ->
+    if +new Date < next
+      clearTimeout tid; tid = setTimeout (-> tid = 0; next = +new Date + dt; f x; return), dt; next = +new Date + dt
+    else
+      next = +new Date + dt; f x
+    return

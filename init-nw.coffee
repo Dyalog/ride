@@ -75,7 +75,7 @@ if process?
         maximized: +urlParams.maximized
     else
       D.floatingWindows = []; D.floatOnTop = 0
-      aot = (x) -> (for w in D.floatingWindows when w.aot != x then w.aot = x; w.setAlwaysOnTop x); return
+      aot = (x) -> (for w in D.floatingWindows when x != !!w.aot then w.aot = x; w.setAlwaysOnTop x; console.info 'aot', x, w); return
       nww.on 'focus', -> aot !!D.floatOnTop; return
       nww.on 'blur',  -> aot false; return
       if localStorage.pos then try

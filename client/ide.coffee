@@ -5,7 +5,7 @@ prefsUI = require './prefs-ui'
 {Editor, ACB_VALUE} = require './editor'
 {Session} = require './session'
 keymap = require './keymap'
-{esc, delay, join} = require './util'
+{esc, delay, join, throttle1} = require './util'
 {cmds} = require './cmds'
 
 parseId = (s) -> +s.replace /^.*?(\d+)$/, '$1'
@@ -93,7 +93,7 @@ class @IDE
         if why == 4 then @wins[0].focus() # ⍞ input
         return
       HadError: => @pending.splice 0, @pending.length; return
-      FocusWindow: ({win}) => $("#wintab#{win} a").click(); @wins[win]?.focus(); return
+      FocusWindow: throttle1 ({win}) => $("#wintab#{win} a").click(); @wins[win]?.focus(); return
       WindowTypeChanged: ({win, tracer}) => @wins[win].setTracer tracer
       autocomplete: (token, skip, options) => @wins[token].autocomplete skip, options
       highlight: (win, line) => @wins[win].highlight line; return
