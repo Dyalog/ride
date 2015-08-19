@@ -235,7 +235,7 @@ class @IDE
     editorOpts = id: w, name: ee.name, tracer: ee.debugger, emit: @emit.bind @
     if prefs.floating() && !D.floating && !@dead
       pos = if ee.debugger then prefs.posTracer() else prefs.posEditor()
-      delta = 32 * (ee.token - 1); pos[0] += delta; pos[1] += delta
+      if !pos[4] then delta = 32 * (ee.token - 1); pos[0] += delta; pos[1] += delta
       posH = x: pos[0], y: pos[1], width: pos[2], height: pos[3]
       url = "index.html?win=#{w}&x=#{pos[0]}&y=#{pos[1]}&width=#{pos[2]}&" +
             "height=#{pos[3]}&maximized=#{pos[4] || 0}&token=#{w}&tracer=#{+!!ee.debugger}"
