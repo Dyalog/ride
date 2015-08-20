@@ -45,7 +45,7 @@ extraOpts =
     cmd = ''; s = s.replace /\=([a-z][a-z0-9]+)/i, (_, x) -> cmd = x; ''
     h = ind: s.replace(/\S.*/, '').length, '': s.replace /^\s*|\s*$/g, ''
     while h.ind <= stack[stack.length - 1].ind then stack.pop()
-    if !cond || do new Function "var browser=!#{D.nwjs},mac=#{D.mac};return(#{cond})"
+    if !cond || do new Function "var browser=!#{D.nwjs},mac=#{D.mac},win=#{D.win};return(#{cond})"
       (stack[stack.length - 1].items ?= []).push h
     if stack.length == 1 then h.items ?= [] # force top-level items to be menus
     stack.push h

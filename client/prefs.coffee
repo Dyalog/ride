@@ -98,7 +98,7 @@ D.prefs = @
     #   =http://example.com/  open a URL
     #   {}   conditional display, a boolean expression
     #          operators: && || ! ( )
-    #          variables: browser mac
+    #          variables: browser mac win
     #   -    separator (when alone)
     #   #    comment
 
