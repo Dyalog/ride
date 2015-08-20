@@ -38,7 +38,6 @@ for bits in 32 64; do
   if [ -d $d -a ! -e $d/ok ]; then
     echo "fixing nw-builder's cache"
     chmod a-x $d/icudtl.dat $d/nw.pak
-    rm $d/locales/*
     touch $d/ok
     echo 'must rebuild the app...'
     desktop_app linux$bits
