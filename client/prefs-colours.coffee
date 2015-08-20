@@ -264,9 +264,10 @@ updateSampleStyle = -> $('#col-sample-style').text renderCSS scheme, '#col-cm'; 
 selectGroup = (t, forceRefresh) ->
   if scheme && (sel != t || forceRefresh)
     i = H[t]; h = scheme[t] || {}; $('#col-group').val i
-    qw('fg bg lb').forEach (p) ->
-      $("#col-#{p}-cb").prop 'checked', !!h[p]; $("#col-#{p}").val(expandColour h[p]).toggle !!h[p]; return
-    qw('B I U').forEach (p) -> $("#col-#{p}").prop 'checked', !!h[p]; return
+    for p in ['fg', 'bg', 'lb']
+      $("#col-#{p}-cb").prop 'checked', !!h[p]
+      $("#col-#{p}").val(expandColour(h[p]) || '#000000').toggle !!h[p]
+    for p in 'BIU' then $("#col-#{p}").prop 'checked', !!h[p]
     $('#col-bgo').slider 'value', h.bgo ? .5
     c = (G[i] || G[0]).controls || {}
     $('#col-fg-p' ).toggle !!(c.fg ? 1)
