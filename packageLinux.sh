@@ -111,6 +111,7 @@ function createDEB() {
 		-n ride-${BASE_VERSION}			\
 		-v ${RIDEVERSION}			\
 		-a amd64				\
+		--epoch 0				\
 		--description "Remote IDE for Dyalog APL"	\
 		opt usr
 
@@ -134,6 +135,7 @@ function createRPM() {
 		-n ride-${BASE_VERSION}			\
 		-v ${RIDEVERSION}			\
 		-a amd64				\
+		--epoch 0				\
 		--description "Remote IDE for Dyalog APL"	\
 		opt usr
 
