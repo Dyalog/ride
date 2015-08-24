@@ -15,7 +15,10 @@ if process?
   D.opts = nomnom.options(
     connect: abbr: 'c', flag: true, metavar: 'HOST[:PORT]'
     listen:  abbr: 'l', flag: true
-    spawn:   abbr: 's', flag: true, default: !/^win/i.test process.platform
+    spawn:   abbr: 's', flag: true, default: # depends on whether we are a standalone RIDE
+      if D.win then false
+      else if D.mac then fs.existsSync "#{path.dirname process.execPath}/../../mapl"
+      else fs.existsSync "#{path.dirname process.execPath}/../mapl"
     version: abbr: 'v', flag: true, help: 'print version and exit'
   ).parse gui.App.argv
 
