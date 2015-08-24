@@ -17,7 +17,7 @@ if process?
     listen:  abbr: 'l', flag: true
     spawn:   abbr: 's', flag: true, default: # depends on whether we are a standalone RIDE
       if D.win then false
-      else if D.mac then fs.existsSync "#{path.dirname process.execPath}/../../mapl"
+      else if D.mac then fs.existsSync "#{path.dirname process.execPath}/../../../../Resources/Dyalog/mapl"
       else fs.existsSync "#{path.dirname process.execPath}/../mapl"
     version: abbr: 'v', flag: true, help: 'print version and exit'
   ).parse gui.App.argv
