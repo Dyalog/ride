@@ -304,7 +304,7 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
             console.error ex
             toBrowser '*proxyInfo', {ipAddresses, interpreters, platform: process.platform}
         else if process.platform == 'darwin'
-          try for b in fs.readdirSync a = '/Applications' when m = /^Dyalog-(\d+\.\d+)$/.exec b
+          try for b in fs.readdirSync a = '/Applications' when m = /^Dyalog-(\d+\.\d+)\.app$/.exec b
             version = m[1]; bits = 64; edition = 'unicode'
             if fs.existsSync exe = "#{a}/#{b}/Contents/Resources/Dyalog/mapl"
               interpreters.push {exe, version: parseVersion(version), bits, edition}
