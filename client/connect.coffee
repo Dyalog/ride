@@ -56,10 +56,10 @@ module.exports = (opts) ->
       </table>
     </fieldset>
     <fieldset id=spawnSection>
-      <legend>Spawn an interpreter</legend>
+      <legend>Launch an interpreter</legend>
       <p><select id=spawn-select></select></p>
       <p>Path: <span id=spawn-exe-w><input id=spawn-exe class=text-field></span></p>
-      <p><a href=# id=spawn accessKey=w>Spa<u>w</u>n</a></p>
+      <p><a href=# id=spawn>Launch</a></p>
       <p id=spawn-status></p>
     </fieldset>
     <fieldset>
@@ -129,7 +129,7 @@ module.exports = (opts) ->
     x = parseFav $list.find(':selected').text(); $host.val x.host; $port.val x.port; $name.val x.name
     $save.add($cancel).button 'disable'; false
   $spawn.click ->
-    enableSpawnAndListen false; $spawnStatus.text 'Spawning...'
+    enableSpawnAndListen false; $spawnStatus.text 'Launching...'
     D.socket.emit '*spawn', exe: $('#spawn-exe').val()
     false
   $('#spawn-select').change ->
