@@ -380,7 +380,7 @@ class @Editor
   onbeforeunload: -> # called when the user presses [X] on the OS window
     if @ide.dead
       D.forceCloseNWWindow?(); return
-    else if @cm.getValue() == @oText && '' + @getStops() == '' + @oStop
+    else if @isTracer || @cm.getValue() == @oText && '' + @getStops() == '' + @oStop
       @EP(); return
     else if !@dialog
       window.focus()
