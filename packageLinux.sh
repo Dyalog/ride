@@ -107,7 +107,7 @@ function createDEB() {
 		--category "devel"			\
 		--after-install $postinst		\
 		--before-remove $prerm			\
-		-p /devt/builds/ride/${TARGET}/latest/ship/ride-linux-${RIDEVERSION}_amd64.deb	\
+		-p /devt/builds/ride/${TARGET}/latest/ship/ride-${RIDEVERSION}_linux.amd64.deb	\
 		-n ride-${BASE_VERSION}			\
 		-v ${RIDEVERSION}			\
 		-a amd64				\
@@ -131,7 +131,7 @@ function createRPM() {
 		--category "devel"			\
 		--after-install $postinst		\
 		--before-remove $prerm			\
-		-p /devt/builds/ride/${TARGET}/latest/ship/ride-linux-${RIDEVERSION}_amd64.rpm	\
+		-p /devt/builds/ride/${TARGET}/latest/ship/ride-${RIDEVERSION}_linux.amd64.rpm	\
 		-n ride-${BASE_VERSION}			\
 		-v ${RIDEVERSION}			\
 		-a amd64				\
