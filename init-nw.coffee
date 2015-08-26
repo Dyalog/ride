@@ -142,8 +142,11 @@ if process?
     socket
 
   {execPath} = process; if D.mac then execPath = execPath.replace /(\/Contents\/).*$/, '$1MacOS/nwjs'
-  D.rideConnect    = -> spawn execPath, ['--no-spawn'], detached: true, stdio: ['ignore', 'ignore', 'ignore']; return
-  D.rideNewSession = -> spawn execPath, ['-s'        ], detached: true, stdio: ['ignore', 'ignore', 'ignore']; return
+  D.rideConnect = -> spawn execPath, ['--no-spawn'], detached: true, stdio: ['ignore', 'ignore', 'ignore']; return
+  D.rideNewSession = ->
+    env = {}; (for ek, ev of process.env then env[ek] = ev); env.DYALOG_IDE_INTERPRETER_EXE = D.lastSpawnedExe
+    spawn execPath, ['-s'], detached: true, stdio: ['ignore', 'ignore', 'ignore'], env: env
+    return
 
   D.quit = -> gui.Window.get().close(); return
   D.clipboardCopy = (s) -> gui.Clipboard.get().set s; return

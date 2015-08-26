@@ -196,7 +196,8 @@ module.exports = (opts) ->
     .on '*connectError', ({err}) ->
       if $connectDialog then $connectDialog.dialog 'close'; $connectDialog = null
       $.alert err, 'Error'; return
-    .on '*spawned', ({pid}) -> $spawnStatus.text "PID: #{pid}"; enableSpawnAndListen false; return
+    .on '*spawned', ({exe, pid}) ->
+      $spawnStatus.text "PID: #{pid}"; enableSpawnAndListen false; D.lastSpawnedExe = exe; return
     .on '*spawnedError', ({message}) -> $spawnStatus.text message; enableSpawnAndListen true; return
     .on '*spawnedExited', ({code, signal}) ->
       $spawnStatus.text(if code? then "exited with code #{code}" else "received #{signal}")

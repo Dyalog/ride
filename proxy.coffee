@@ -252,7 +252,7 @@ trunc = (s) -> if s.length > 1000 then s[...997] + '...' else s
           catch e
             toBrowser '*spawnedError', code: 0, message: '' + e
             return
-          toBrowser '*spawned', pid: child.pid
+          toBrowser '*spawned', {exe, pid: child.pid}
           child.on 'error', (err) ->
             server?.close(); server = client = null
             toBrowser '*spawnedError', code: err.code, message:
