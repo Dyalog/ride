@@ -144,8 +144,14 @@ if process?
   {execPath} = process; if D.mac then execPath = execPath.replace /(\/Contents\/).*$/, '$1MacOS/nwjs'
   D.rideConnect = -> spawn execPath, ['--no-spawn'], detached: true, stdio: ['ignore', 'ignore', 'ignore']; return
   D.rideNewSession = ->
-    env = {}; (for ek, ev of process.env then env[ek] = ev); env.DYALOG_IDE_INTERPRETER_EXE = D.lastSpawnedExe
-    spawn execPath, ['-s'], detached: true, stdio: ['ignore', 'ignore', 'ignore'], env: env
+    if D.lastSpawnedExe
+      env = {}; (for ek, ev of process.env then env[ek] = ev); env.DYALOG_IDE_INTERPRETER_EXE = D.lastSpawnedExe
+      spawn execPath, ['-s'], detached: true, stdio: ['ignore', 'ignore', 'ignore'], env: env
+    else
+      $.alert(
+        'The current session is remote.  To connect elsewhere or launch a local interpreter, please use "Connect..." instead.',
+        'Cannot Start New Session' # title
+      )
     return
 
   D.quit = -> gui.Window.get().close(); return
