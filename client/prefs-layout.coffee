@@ -52,9 +52,8 @@ model = window.model = {} # dictionary: locale→[arrayOfAPLGlyphs, arrayOfShift
     prefs.kbdLocale(
       switch navigator.language
         when 'en-GB'       then 'UK'
-        when 'de'          then 'DE'
         when 'da', 'da_DK' then D.mac && 'DK-Mac' || 'DK'
-        else                    'US'
+        else (if geom[xx = navigator.language?[...2]?.toUpperCase()] then xx else 'US')
     )
   $('#layout-reset').button().click ->
     lc = $lc.val()
