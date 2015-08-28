@@ -90,7 +90,7 @@ builtInSchemes = [
   '''}
   {name:'Albrecht Dürer', styles: '''
     com=I:1 diam=B:1 err=fg:f,bg:0,bgo:.5,B:1,I:1,U:1 glb=I:1 idm=U:1,bg:e,bgo:.5 kw=B:1 lnum=bg:f,bgo:1 mod=bg:e,bgo:1
-    mtch=bg:c,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 quad=fg:808 srch=bg:c,bgo:.5 str=fg:8 tc=bg:e,bgo:1 zld=fg:8
+    mtch=bg:c,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 quad=fg:8 srch=bg:c,bgo:.5 str=fg:8 tc=bg:e,bgo:1 zld=fg:8
   '''}
   {name:'Kazimir Malevich', styles: ''}
 ].map(decodeScheme).map (x) -> x.frozen = 1; x
