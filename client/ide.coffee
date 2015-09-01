@@ -109,11 +109,13 @@ class @IDE
     # We need to be able to temporarily block the stream of messages coming from socket.io
     # Creating a floating window can only be done asynchronously and it's possible that a message
     # for it comes in before the window is ready.
-    handle = (data) -> (f = handlers[data[0]]) && f.apply ide, data[1..]; return
     mq = []; blocked = 0 # message queue
-    D.socket.onevent = ({data}) -> (if blocked then mq.push data else handle data); return
+    runDownQueue = ->
+      while mq.length && !blocked then data = mq.shift(); (f = handlers[data[0]]) && f.apply ide, data[1..]
+      return
+    D.socket.onevent = ({data}) -> mq.push data; runDownQueue(); return
     @block = -> blocked = 1; return
-    @unblock = -> (while mq.length then handle mq.shift()); blocked = 0; return
+    @unblock = -> blocked = 0; runDownQueue(); return
 
     # language bar
     $('.lbar-prefs').click -> prefsUI.showDialog 'layout'; return
