@@ -12,6 +12,9 @@ $ ->
   CodeMirror.defaults.dragDrop = false
   window.ondragover = window.ondrop = (e) -> e.preventDefault(); false
 
+  # don't use Alt- keystrokes on the Mac (see email from 2015-09-01)
+  h = CodeMirror.keyMap.emacsy; for k of h when /^alt-[a-z]$/i.test k then delete h[k]
+
   if D.nwjs
     zM = 11 # zoom level can be from -zM to zM inclusive
     $.extend CodeMirror.commands,
