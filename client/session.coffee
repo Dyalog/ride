@@ -130,3 +130,8 @@ class @Session
       if /^ *$/.test s[...c.ch] then @cm.execCommand 'indentMore'
       else @autocompleteWithTab = 1; @emit 'Autocomplete', line: s, pos: c.ch, token: 0
     return
+  CLM: -> # Clear "Modified" flag from line
+    for {anchor, head} in @cm.listSelections()
+      for l in [anchor.line..head.line]
+        delete @dirty[l]; @cm.removeLineClass l, 'background', 'modified'
+    return

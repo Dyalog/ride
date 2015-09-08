@@ -9,6 +9,7 @@
   ['BK',  'Backward or Undo',         ['Shift-Ctrl-Backspace'], 1]
   ['BP',  'Toggle breakpoint',        []]
   ['BT',  'Back Tab between windows', ['Shift-Ctrl-Tab'],       1]
+  ['CLM', 'Clear "modified" flag from line (in session)', []]
   ['CNC', 'Connect',                  []]
   ['DMK', 'Toggle key display mode',  []]
   ['DMN', 'Next line in demo',        []]
