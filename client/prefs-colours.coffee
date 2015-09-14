@@ -109,7 +109,7 @@ renderCSS = (scheme, rp = '') -> # rp: css rule prefix
         (h.B  && 'font-weight:bold;'                       || '') +
         (h.I  && 'font-style:italic;'                      || '') +
         (h.U  && 'text-decoration:underline;'              || '') +
-        (h.lb && "border-left-color:#{expandColour h.lb};" || '') +
+        (h.lb && "border-color:#{expandColour h.lb};"      || '') +
         (h.bg && "background-color:#{expandColourRGBA h.bg, h.bgo ? .5};" || '') +
         '}'
     else
