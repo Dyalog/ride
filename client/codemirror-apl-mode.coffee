@@ -53,6 +53,9 @@ icom = prefs.indentComments(); prefs.indentComments (x) -> icom = x; return
 
 CodeMirror.defineMIME 'text/apl', 'apl'
 CodeMirror.defineMode 'apl', (config) ->
+  comMode=CodeMirror.getMode {},'text/apl-comments'
+  if!comMode.token||!comMode.startState then comMode=null
+
   startState: ->
     hdr: 1  # are we at a location where a tradfn header can be expected?
     a: [    # stack of objects with the following properties
@@ -60,8 +63,9 @@ CodeMirror.defineMode 'apl', (config) ->
       oi: 0 #   oi: outer indent -- the indent of the opening token's line
       ii: 0 #   ii: inner indent -- the indent of the block's body; it can be adjusted later
     ]
-    # kw:   # current keyword
-    # vars: # local names in a tradfn
+    # kw:       current keyword
+    # vars:     local names in a tradfn
+    # comState: state of the inner mode for syntax highlighting inside comments
 
   token: (stream, h) -> # h:state
     {a} = h; la = last a; n = stream.indentation()
@@ -75,13 +79,20 @@ CodeMirror.defineMode 'apl', (config) ->
       else
         h.vars = s.split notName
       'apl-trad'
+    else if h.comState
+      if stream.sol()
+        delete h.comState
+      else
+        h1=CodeMirror.copyState h.comState;r=comMode.token stream,h1;h.comState=h1;r+' apl-com'
     else if stream.match idiomsRE then 'apl-idm'
     else if stream.match /^¯?(?:\d*\.)?\d+(?:e¯?\d+)?(?:j¯?(?:\d*\.)?\d+(?:e¯?\d+)?)?/i then 'apl-num'
     else if !(c = stream.next()) then null
     else
       switch c
         when ' ' then stream.eatSpace(); null
-        when '⍝' then stream.skipToEnd(); 'apl-com'
+        when '⍝'
+          if comMode then h.comState=comMode.startState() else stream.skipToEnd()
+          'apl-com'
         when '⋄' then delete h.kw; la.t !in ['(', '['] && 'apl-diam' || 'apl-err'
         when '←' then 'apl-asgn'
         when "'" then (if stream.match /^(?:[^'\r\n]|'')*'/ then 'apl-str' else stream.skipToEnd(); 'apl-err')

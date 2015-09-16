@@ -1,50 +1,52 @@
-prefs = require './prefs'
-{join, dict, qw, esc} = require './util'
+prefs=require './prefs'
+{join,dict,qw,esc}=require './util'
 
-@name = 'Colours'
+@name='Colours'
 
-G = [ # information about syntax highlighting groups
+G=[];H={} # G:syntax highlighting groups {t,s,c,controls}; H:reverse lookup dict for G
+D.addSyntaxGroups=(groups)->G=G.concat groups;H=dict(G.map (g,i)->[g.t,i]);return
+
+D.addSyntaxGroups [
   # t: token type, a short key for storing customisations in localStorage
   # s: name to display in the UI
   # c: css selector
-  # controls: which UI controls are allowed or disallowed for this group (other than the default controls)
-  {t:'norm', s:'normal',               c:'.cm-s-default,.CodeMirror-gutters'}
-  {t:'num',  s:'number',               c:'.cm-apl-num' }
-  {t:'str',  s:'string',               c:'.cm-apl-str' }
-  {t:'zld',  s:'zilde',                c:'.cm-apl-zld' }
-  {t:'var',  s:'name',                 c:'.cm-apl-var' }
-  {t:'glb',  s:'global name',          c:'.cm-apl-glb' }
-  {t:'quad', s:'quad name',            c:'.cm-apl-quad'}
-  {t:'fn',   s:'function',             c:'.cm-apl-fn'  }
-  {t:'op1',  s:'monadic operator',     c:'.cm-apl-op1' }
-  {t:'op2',  s:'dyadic operator',      c:'.cm-apl-op2' }
-  {t:'ns',   s:'namespace',            c:'.cm-apl-ns'  }
-  {t:'asgn', s:'assignment',           c:'.cm-apl-asgn'}
-  {t:'diam', s:'diamond',              c:'.cm-apl-diam'}
-  {t:'par',  s:'parenthesis',          c:'.cm-apl-par' }
-  {t:'sqbr', s:'bracket',              c:'.cm-apl-sqbr'}
-  {t:'semi', s:'semicolon',            c:'.cm-apl-semi'}
-  {t:'dfn',  s:'dfn',                  c:'.cm-apl-dfn' }
-  {t:'dfn1', s:'dfn level 1',          c:'.cm-apl-dfn1'}
-  {t:'dfn2', s:'dfn level 2',          c:'.cm-apl-dfn2'}
-  {t:'dfn3', s:'dfn level 3',          c:'.cm-apl-dfn3'}
-  {t:'dfn4', s:'dfn level 4',          c:'.cm-apl-dfn4'}
-  {t:'dfn5', s:'dfn level 5',          c:'.cm-apl-dfn5'}
-  {t:'trad', s:'tradfn',               c:'.cm-apl-trad'}
-  {t:'kw',   s:'keyword',              c:'.cm-apl-kw'  }
-  {t:'lbl',  s:'label',                c:'.cm-apl-lbl' }
-  {t:'idm',  s:'idiom',                c:'.cm-apl-idm' }
-  {t:'com',  s:'comment',              c:'.cm-apl-com' }
-  {t:'err',  s:'error',                c:'.cm-apl-err' }
-  {t:'lnum', s:'line number',          c:'.CodeMirror-linenumber'}
-  {t:'cur',  s:'cursor',               c:'div.CodeMirror-cursor', controls:{lb:1,fg:0,bg:0,BIU:0}}
-  {t:'mtch', s:'matching bracket',     c:'.CodeMirror-matchingbracket'}
-  {t:'srch', s:'search match',         c:'.cm-searching'}
-  {t:'mod',  s:'modified line',        c:'.modified'}
-  {t:'sel',  s:'selection',            c:'.CodeMirror-selected,.CodeMirror-focused .CodeMirror-selected', controls:{fg:0,BIU:0}}
-  {t:'tc',   s:'tracer',               c:'.tracer .CodeMirror,.tracer .CodeMirror .CodeMirror-gutter-wrapper'}
+  # controls: which UI controls are allowed or disallowed for this group (other than the default ones)
+  {t:'norm',s:'normal',          c:'.cm-s-default,.CodeMirror-gutters'}
+  {t:'num', s:'number',          c:'.cm-apl-num' }
+  {t:'str', s:'string',          c:'.cm-apl-str' }
+  {t:'zld', s:'zilde',           c:'.cm-apl-zld' }
+  {t:'var', s:'name',            c:'.cm-apl-var' }
+  {t:'glb', s:'global name',     c:'.cm-apl-glb' }
+  {t:'quad',s:'quad name',       c:'.cm-apl-quad'}
+  {t:'fn',  s:'function',        c:'.cm-apl-fn'  }
+  {t:'op1', s:'monadic operator',c:'.cm-apl-op1' }
+  {t:'op2', s:'dyadic operator', c:'.cm-apl-op2' }
+  {t:'ns',  s:'namespace',       c:'.cm-apl-ns'  }
+  {t:'asgn',s:'assignment',      c:'.cm-apl-asgn'}
+  {t:'diam',s:'diamond',         c:'.cm-apl-diam'}
+  {t:'par', s:'parenthesis',     c:'.cm-apl-par' }
+  {t:'sqbr',s:'bracket',         c:'.cm-apl-sqbr'}
+  {t:'semi',s:'semicolon',       c:'.cm-apl-semi'}
+  {t:'dfn', s:'dfn',             c:'.cm-apl-dfn' }
+  {t:'dfn1',s:'dfn level 1',     c:'.cm-apl-dfn1'}
+  {t:'dfn2',s:'dfn level 2',     c:'.cm-apl-dfn2'}
+  {t:'dfn3',s:'dfn level 3',     c:'.cm-apl-dfn3'}
+  {t:'dfn4',s:'dfn level 4',     c:'.cm-apl-dfn4'}
+  {t:'dfn5',s:'dfn level 5',     c:'.cm-apl-dfn5'}
+  {t:'trad',s:'tradfn',          c:'.cm-apl-trad'}
+  {t:'kw',  s:'keyword',         c:'.cm-apl-kw'  }
+  {t:'lbl', s:'label',           c:'.cm-apl-lbl' }
+  {t:'idm', s:'idiom',           c:'.cm-apl-idm' }
+  {t:'com', s:'comment',         c:'.cm-apl-com' }
+  {t:'err', s:'error',           c:'.cm-apl-err' }
+  {t:'lnum',s:'line number',     c:'.CodeMirror-linenumber'}
+  {t:'cur', s:'cursor',          c:'div.CodeMirror-cursor', controls:{lb:1,fg:0,bg:0,BIU:0}}
+  {t:'mtch',s:'matching bracket',c:'.CodeMirror-matchingbracket'}
+  {t:'srch',s:'search match',    c:'.cm-searching'}
+  {t:'mod', s:'modified line',   c:'.modified'}
+  {t:'sel', s:'selection',       c:'.CodeMirror-selected,.CodeMirror-focused .CodeMirror-selected', controls:{fg:0,BIU:0}}
+  {t:'tc',  s:'tracer',          c:'.tracer .CodeMirror,.tracer .CodeMirror .CodeMirror-gutter-wrapper'}
 ]
-H = dict G.map (g, i) -> [g.t, i] # reverse dict of G
 
 # Colour schemes are represented in one of two ways:
 #   In memory                 In localStorage
