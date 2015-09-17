@@ -6,7 +6,7 @@ prefs = require './prefs'
 {delay} = require './util'
 require './prefs-colours' # load it in order to initialize syntax highlighting
 require './demo'
-require './codemirror-foldgutter'
+require './cm-foldgutter'
 
 $ ->
   CodeMirror.defaults.dragDrop = false

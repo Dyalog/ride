@@ -1,7 +1,6 @@
-require './codemirror-apl-mode'
 autocompletion = require './autocompletion'
 prefs = require './prefs'
-{letter, dfnDepth} = require './codemirror-apl-mode'
+{letter, dfnDepth} = require './cm-apl-mode'
 {onCodeMirrorDoubleClick, delay, spc} = require './util'
 
 @ACB_VALUE = ACB_VALUE = pairs: '()[]{}', explode: '{}' # value for CodeMirror's "autoCloseBrackets" option when on

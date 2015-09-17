@@ -1,5 +1,5 @@
 prefs = require './prefs'
-{letter} = require './codemirror-apl-mode'
+{letter} = require './cm-apl-mode'
 {delay} = require './util'
 
 @setUp = (win) -> # win: an instance of Editor or Session
