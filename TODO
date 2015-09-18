@@ -25,6 +25,14 @@ P4 (I will think about it):
         But if we don't have "Copy" in the menu, cmd+c doesn't work.
 
 Not yet prioritized:
+  2015-09-10 Toon: easy access to list of / documentation of I-beams
+  2015-09-09 Adam: curly underlines
+  2015-09-08 Ken Mellem: custom syntax highlighting in comments
+  2015-09-07 Adam: ctrl+scroll to zoom in/out
+  2015-09-07 Adam: shortcut to clear the "modified" flag of a line in session without reverting it to original content
+  2015-09-07 Ray: status bar and programmatic access to "current object"
+  2015-09-07 Jim Brown: custom fonts
+  2015-09-07 Callum: completion for idioms and I-beams
   if we spawn an interpreter and it failes to connect after X time, please could we have a message box about it? - Andy email 2015-06-29
   (OS X) - Reported by Mike Powell: Dragging the text to a different point uses the vertical bar cursor. Holding the Option key while doing this changes the cursor to the green and white cross (Implying a copy - but it still moves the text).
   Type a couple of chars and hit Alt+Enter, followed by Enter. Uncaught node.js Error; JS email 2015-03-10
