@@ -106,16 +106,22 @@ class @IDE
       OpenWindow: @openWindow.bind @
       ShowHTML: @showHTML.bind @
 
-    # We need to be able to temporarily block the stream of messages coming from socket.io
-    # Creating a floating window can only be done asynchronously and it's possible that a message
-    # for it comes in before the window is ready.
-    mq=[];blocked=0 # message queue
-    runDownQueue = ->
-      while mq.length&&!blocked then data=mq.shift();(f=handlers[data[0]])&&f.apply ide,data[1..]
-      return
-    D.socket.onevent=({data})->mq.push data;runDownQueue();return
-    @block=->blocked++;return
-    @unblock=->--blocked||runDownQueue();return
+    `
+      // We need to be able to temporarily block the stream of messages coming from socket.io
+      // Creating a floating window can only be done asynchronously and it's possible that a message
+      // for it comes in before the window is ready.
+      var mq=[],blk=0,tid=0,last=0 // mq:message queue, blk:blocked?, tid:timeout id, last:when last rundown finished
+      function rd(){ // run down the queue
+        ide.wins[0].cm.operation(function(){
+          while(mq.length&&!blk){data=mq.shift();(f=handlers[data[0]])&&f.apply(ide,data.slice(1))}
+          last=+new Date;tid=0
+        })
+      }
+      function rrd(){tid||(new Date-last<20?(tid=setTimeout(rd,20)):rd())} // request rundown
+      D.socket.onevent=function(h){mq.push(h.data);rrd()}
+      this.block=function(){blk++}
+      this.unblock=function(){--blk||rrd()}
+    `
 
     # language bar
     $('.lbar-prefs').click -> prefsUI.showDialog 'layout'; return
