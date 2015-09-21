@@ -83,16 +83,17 @@ CodeMirror.defineMode 'apl', (config) ->
       if stream.sol()
         delete h.comState
       else
-        h1=CodeMirror.copyState h.comState;r=comMode.token stream,h1;h.comState=h1;r+' apl-com'
+        h1=CodeMirror.copyState comMode,h.comState
+        r=comMode.token stream,h1
+        h.comState=CodeMirror.copyState comMode,h1
+        r+' apl-com'
     else if stream.match idiomsRE then 'apl-idm'
     else if stream.match /^¯?(?:\d*\.)?\d+(?:e¯?\d+)?(?:j¯?(?:\d*\.)?\d+(?:e¯?\d+)?)?/i then 'apl-num'
     else if !(c = stream.next()) then null
     else
       switch c
         when ' ' then stream.eatSpace(); null
-        when '⍝'
-          if comMode then h.comState=comMode.startState() else stream.skipToEnd()
-          'apl-com'
+        when '⍝' then(if comMode then h.comState=comMode.startState() else stream.skipToEnd());'apl-com'
         when '⋄' then delete h.kw; la.t !in ['(', '['] && 'apl-diam' || 'apl-err'
         when '←' then 'apl-asgn'
         when "'" then (if stream.match /^(?:[^'\r\n]|'')*'/ then 'apl-str' else stream.skipToEnd(); 'apl-err')

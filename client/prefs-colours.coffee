@@ -4,8 +4,7 @@ prefs=require './prefs'
 @name='Colours'
 
 G=[];H={} # G:syntax highlighting groups {t,s,c,controls}; H:reverse lookup dict for G
-D.addSyntaxGroups=(groups)->G=G.concat groups;H=dict(G.map (g,i)->[g.t,i]);return
-
+D.addSyntaxGroups=(groups)->G=G.concat groups;H=dict(G.map (g,i)->[g.t,i]);updateStyle?();return
 D.addSyntaxGroups [
   # t: token type, a short key for storing customisations in localStorage
   # s: name to display in the UI

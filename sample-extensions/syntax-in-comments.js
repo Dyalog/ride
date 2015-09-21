@@ -1,21 +1,37 @@
 // To use this extension:
 //   export DYALOG_IDE_JS=/path/to/file.js
 // before running RIDE.
-
-// For how to write CodeMirror modes, see https://codemirror.net/doc/manual.html#modeapi
 CodeMirror.defineMIME('text/apl-comments','acme')
-CodeMirror.defineMode('acme',function(){
+CodeMirror.defineMode('acme',function(){ // https://codemirror.net/doc/manual.html#modeapi
   return{
-    startState:function(){return{}},
-    token:function(stream,state){
-      var c=stream.next()
-      return /\d/.test(c)?'acme-digit':/[a-z]/i.test(c)?'acme-letter':''
+    startState:function(){return{type:'',stk:''}},
+    token:function(stream,h){ // h:state
+      var c,m
+      if(!h.type){
+        if(m=stream.match(/^[V0-9]:/)){h.type=m[0][0];return'acme-type'}
+        stream.skipToEnd();return''
+      }else if(h.type==='0'||h.type==='V'){
+        stream.skipToEnd();return'acme-comment'
+      }else{
+        if(stream.match(/^ +/))return'acme-ws'
+        if(stream.match(/^\d+/))return'acme-number'
+        if(stream.match(/^\$[234]\b/))return'acme-dollarnumber'
+        if(stream.match(/^As\b/)){h.as=1;return'acme-as'}
+        if(stream.match(/^[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ][A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*/))return'acme-identifier'
+        switch(c=stream.next()){
+          case':':if(h.as){stream.skipToEnd();return'acme-comment'}else{return'acme-colon'}
+          case'(','[','{':h.stk+=c;return'acme-delimiter'
+          case')',']','}':
+            if(['()','[]','{}'].indexOf(h.stk.slice(-1)+c)<0){return'acme-error'}
+            else{h.stk=h.stk.slice(0,-1);return'acme-delimiter'}
+          case';':return'acme-delimiter'
+          default:return''
+        }
+      }
     }
   }
 })
-
-// Dyalog API for adding extra syntax highlighting groups to Preferences>Colours:
-D.addSyntaxGroups([
-  {t:'acme-digit', s:'ACME Digit', c:'.cm-apl-com.cm-acme-digit'},
-  {t:'acme-letter',s:'ACME Letter',c:'.cm-apl-com.cm-acme-letter'}
-])
+D.addSyntaxGroups( // Dyalog API for adding extra syntax highlighting groups to Preferences>Colours:
+  'type comment number dollarnumber as identifier colon delimiter error'
+  .split(' ').map(function(x){return{t:'acme-'+x,s:'ACME '+x,c:'.cm-apl-com.cm-acme-'+x}})
+)
