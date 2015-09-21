@@ -59,7 +59,7 @@ if process?
       break
     return
 
-  if D.mac then process.env.DYALOG_IDE_INTERPRETER_EXE ||= path.resolve process.cwd(), '../Dyalog/mapl'
+  if D.mac then process.env.DYALOG_IDE_INTERPRETER_EXE||=D.lastSpawnedExe=path.resolve process.cwd(),'../Dyalog/mapl'
   process.chdir process.env.PWD || process.env.HOME || '.' # see https://github.com/nwjs/nw.js/issues/648
   D.process = process; gui.Screen.Init(); nww = D.nww = gui.Window.get()
 
