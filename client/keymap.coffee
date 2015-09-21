@@ -1,7 +1,7 @@
 helpurls = require './helpurls'
 prefs = require './prefs'
 about = require './about'
-{inherit, cat, dict, chr, ord, zip, join, delay, qw, esc} = require './util'
+{cat,chr,ord,join,delay,qw,esc}=require './util'
 prefsUI = require './prefs-ui'
 {ACB_VALUE} = require './editor'
 

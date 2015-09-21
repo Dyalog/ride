@@ -1,7 +1,6 @@
 autocompletion = require './autocompletion'
 prefs = require './prefs'
-{onCodeMirrorDoubleClick} = require './util'
-{delay} = require './util'
+{onCodeMirrorDoubleClick,delay}=require './util'
 
 class @Session
   constructor: (@ide, e, @opts) ->

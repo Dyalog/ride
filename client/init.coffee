@@ -1,6 +1,5 @@
 connect = require './connect'
 {Editor} = require './editor'
-about = require './about'
 {IDE} = require './ide'
 prefs = require './prefs'
 {delay} = require './util'
