@@ -3,7 +3,7 @@ set -e -o pipefail
 export PATH="`dirname "$0"`/node_modules/.bin:$PATH"
 cd `dirname "$0"`
 if [ ! -e node_modules ]; then npm i; fi
-mkdir -p build/{js,nw,tmp}
+mkdir -p build/{js/client,nw,tmp}
 
 cp -uv {index,empty,print}.html style/apl385.woff style/*.png favicon.ico package.json build/nw/
 
@@ -57,12 +57,10 @@ for f in $lib_files; do
 done
 if [ $changed -eq 1 ]; then echo 'concatenating libs'; cat $us >build/tmp/libs.js; fi
 
+cp -uv client/*.js build/js/client/
 for f in client/*.coffee; do # compile coffee files before running browserify
-  u=build/js/$f
-  mkdir -p `dirname $u`
-  u=${u%%.coffee}.js; if [ $f -nt $u ]; then echo "compiling $f"; coffee -bcp --no-header $f >$u; fi
+  u=build/js/${f%%.coffee}.js; if [ $f -nt $u ]; then echo "compiling $f"; coffee -bcp --no-header $f >$u; fi
 done
-
 for f in proxy.coffee; do # nw-only coffee files
   u=build/nw/${f%%.coffee}.js; if [ $f -nt $u ]; then echo "compiling $f"; coffee -bcp --no-header $f >$u; fi
 done
