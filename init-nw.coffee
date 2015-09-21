@@ -306,4 +306,6 @@ if process?
     $(window).on 'focus blur', repaintTitle = -> nww.resizeBy 0, 1; nww.resizeBy 0, -1; return
     D.setTitle = (s) -> document.title = s; repaintTitle(); return
 
-  if process.env.DYALOG_IDE_JS then $.getScript 'file://' + path.resolve process.cwd(), process.env.DYALOG_IDE_JS
+  if process.env.DYALOG_IDE_JS
+    for f in process.env.DYALOG_IDE_JS.split path.delimiter when f
+      $.getScript 'file://' + path.resolve process.cwd(), f
