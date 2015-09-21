@@ -20,12 +20,12 @@ CodeMirror.defineMode('acme',function(){ // https://codemirror.net/doc/manual.ht
         if(stream.match(/^[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ][A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*/))return'acme-identifier'
         switch(c=stream.next()){
           case':':if(h.as){stream.skipToEnd();return'acme-comment'}else{return'acme-colon'}
-          case'(','[','{':h.stk+=c;return'acme-delimiter'
-          case')',']','}':
+          case'(':case'[':case'{':h.stk+=c;return'acme-delimiter'
+          case')':case']':case'}':
             if(['()','[]','{}'].indexOf(h.stk.slice(-1)+c)<0){return'acme-error'}
             else{h.stk=h.stk.slice(0,-1);return'acme-delimiter'}
           case';':return'acme-delimiter'
-          default:return''
+          default:return'acme-error'
         }
       }
     }
