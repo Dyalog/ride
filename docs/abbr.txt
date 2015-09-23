@@ -1,0 +1,42 @@
+common abbreviations used throughout the code:
+  bg    background
+  btn   button
+  cb    checkbox
+  cm    CodeMirror
+  cmd   command, a 2-or-3-uppercase-letter code for an IDE action
+  col   colour; column
+  com   comment
+  dlg   dialog
+  D     Dyalog
+  ed    editor
+  eol   end of line
+  esc   escape; usually referring to html characters: &→&amp; <→&lt; etc
+  exe   executable (not necessarily a DOS MZ .exe file)
+  fav   favourite(s), the list of remembered addresses of remote interpreters
+  fg    foreground
+  fmt   format
+  fn    function
+  geom  geometry, the mechanical layout of a keyboard
+  hdr   header
+  kbd   keyboard
+  kw    keyword; sometimes used as a synonym for "control structure"
+  lbar  language bar
+  lbl   label
+  lc    locale
+  msg   message
+  pfx   prefix
+  pos   position
+  pref  preference(s); usually as described in ../client/prefs.js
+  re    regular expression; sometimes used as a prefix to variable names
+  rp    replace (like Dyalog's RP command)
+  rst   reset
+  sc    search (like Dyalog's SC command)
+  sel   selection
+  se    session
+  sfx   suffix
+  sol   start of line (used by CodeMirror)
+  stk   stack
+  tb    toolbar
+  thm   theme
+  tid   id returned by setTimeoutId()
+  win   window (session or editor)
