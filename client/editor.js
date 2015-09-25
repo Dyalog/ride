@@ -5,28 +5,28 @@ var util=require('./util'),onCodeMirrorDoubleClick=util.onCodeMirrorDoubleClick,
 
 var ACB_VALUE=this.ACB_VALUE={pairs:'()[]{}',explode:'{}'} // value for CodeMirror's "autoCloseBrackets" option when on
 
-var b=function(cc,t){return'<a href=# class="'+cc+' tb-button" title="'+t+'""></a>'} // cc:css classes, t:title
+var b=function(cc,t){return'<a href=# class="'+cc+' tb-btn" title="'+t+'""></a>'} // cc:css classes, t:title
 var EDITOR_HTML=
   '<div class=toolbar>'+
     // The first button is placed on the right-hand side through CSS. In a floating window it is hidden.
     // CSS classes "first" and "last" indicate button grouping.
-    b('tb-ER  tracer-only first', 'Execute line')+
-    b('tb-TC  tracer-only',       'Trace into expression')+
-    b('tb-BK  tracer-only',       'Go back one line')+
-    b('tb-FD  tracer-only',       'Skip current line')+
-    b('tb-BH  tracer-only',       'Stop on next line of calling function')+
-    b('tb-RM  tracer-only',       'Continue execution of this thread')+
-    b('tb-MA  tracer-only',       'Continue execution of all threads')+
-    b('tb-ED  tracer-only',       'Edit name')+
-    b('tb-WI  tracer-only',       'Interrupt')+
-    b('tb-CBP tracer-only',       'Clear trace/stop/monitor for this object')+
-    b('tb-LN  tracer-only last',  'Toggle line numbers')+
-    b('tb-LN  editor-only first', 'Toggle line numbers')+
-    b('tb-AO  editor-only',       'Comment selected text')+
-    b('tb-DO  editor-only last',  'Uncomment selected text')+
-    '<span class=tb-separator></span>'+
+    b('tb-ER  tc-only first', 'Execute line')+
+    b('tb-TC  tc-only',       'Trace into expression')+
+    b('tb-BK  tc-only',       'Go back one line')+
+    b('tb-FD  tc-only',       'Skip current line')+
+    b('tb-BH  tc-only',       'Stop on next line of calling function')+
+    b('tb-RM  tc-only',       'Continue execution of this thread')+
+    b('tb-MA  tc-only',       'Continue execution of all threads')+
+    b('tb-ED  tc-only',       'Edit name')+
+    b('tb-WI  tc-only',       'Interrupt')+
+    b('tb-CBP tc-only',       'Clear trace/stop/monitor for this object')+
+    b('tb-LN  tc-only last',  'Toggle line numbers')+
+    b('tb-LN  ed-only first', 'Toggle line numbers')+
+    b('tb-AO  ed-only',       'Comment selected text')+
+    b('tb-DO  ed-only last',  'Uncomment selected text')+
+    '<span class=tb-sep></span>'+
     '<div class="tb-sc text-field"></div>'+
-    '<div class="tb-rp text-field editor-only"></div>'+
+    '<div class="tb-rp text-field ed-only"></div>'+
     b('tb-NX first',              'Search for next match')+
     b('tb-PV',                    'Search for previous match')+
     b('tb-case last',             'Match case')+
@@ -63,9 +63,9 @@ this.Editor=function(ide,e,opts){
   ed.autocomplete=autocompletion.setUp(ed)
   ed.$tb=$('.toolbar',ed.$e)
     .on('click','.tb-hid,.tb-case',function(e){$(e.target).toggleClass('pressed');ed.highlightSearch();return false})
-    .on('mousedown','.tb-button',function(e){$(e.target).addClass('armed');e.preventDefault()})
-    .on('mouseup mouseout','.tb-button',function(e){$(e.target).removeClass('armed');e.preventDefault()})
-    .on('click','.tb-button',function(e){
+    .on('mousedown','.tb-btn',function(e){$(e.target).addClass('armed');e.preventDefault()})
+    .on('mouseup mouseout','.tb-btn',function(e){$(e.target).removeClass('armed');e.preventDefault()})
+    .on('click','.tb-btn',function(e){
       var m,a=$(e.target).prop('class').split(/\s+/)
       for(var i=0;i<a.length;i++)if(m=/^tb-([A-Z]{2,3})$/.exec(a[i])){ed[m[1]](ed.cm);break}
     })
