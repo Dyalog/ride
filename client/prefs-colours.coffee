@@ -1,5 +1,5 @@
 prefs=require './prefs'
-{join,dict,qw,esc}=require './util'
+{join,dict,esc}=require './util'
 
 @name='Colours'
 
@@ -207,7 +207,7 @@ SEARCH_MATCH = 'search match' # sample text to illustrate it
     )
     return
   $('#col-group').change -> selectGroup G[+@value].t; return
-  qw('fg bg lb').forEach (p) ->
+  ['fg','bg','lb'].forEach (p) ->
     $("#col-#{p}").change -> (scheme[sel] ?= {})[p] = @value; updateSampleStyle(); return
     $("#col-#{p}-cb").click ->
       $("#col-#{p}").toggle @checked
@@ -217,7 +217,7 @@ SEARCH_MATCH = 'search match' # sample text to illustrate it
   $('#col-bg-cb').click -> $('#col-bgo').toggle @checked; return
   $('#col-bgo').slider range: 'min', value: .5, min: 0, max: 1, step: .25, slide: (e, ui) ->
     (scheme[sel] ?= {}).bgo = ui.value; updateSampleStyle(); return
-  qw('B I U').forEach (p) ->
+  ['B','I','U'].forEach (p) ->
     $("#col-#{p}").click ->
       h = scheme[sel] ?= {}; if @checked then h[p] = 1 else delete h[p]
       updateSampleStyle(); return

@@ -1,7 +1,5 @@
 // https://codemirror.net/doc/manual.html#modeapi
-
-var prefs=require('./prefs'),util=require('./util'),qw=util.qw,last=util.last
-
+var prefs=require('./prefs')
 var // regexes
   letter=this.letter='A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ',
   name0=RegExp('['+letter+']'),
@@ -71,7 +69,7 @@ CodeMirror.defineMode('apl',function(){
     },
     token:function(stream,h){ // h:state
       var ref4, ref5, s, x, y
-      var a=h.a,la=last(a),n=stream.indentation(),c
+      var a=h.a,la=a[a.length-1],n=stream.indentation(),c
       if(stream.sol()){delete h.kw;if(!stream.match(/^\s*(:|∇|$)/,false)){a[a.length-1]=$.extend({ii:n},la)}}
       if(h.hdr){
         delete h.hdr;stream.match(/[^⍝\n\r]*/);s=stream.current()
@@ -170,7 +168,7 @@ CodeMirror.defineMode('apl',function(){
     },
     electricInput:/(?::end|:else|:andif|:orif|:case|:until|:access|\}|∇)$/, // these trigger a re-indent
     indent:function(h,s){ // h:state, s:textAfter
-      var a=h.a,la=last(a)
+      var a=h.a,la=a[a.length-1]
       if(!icom&&/^\s*⍝/.test(s))return CodeMirror.Pass
       else if(dfnDepth(a))return/^\s*\}/.test(s)?la.oi:la.ii
       else if(/^\s*∇/.test(s)){var i=a.length-1;while(i&&a[i].t!=='∇')i--;return i?a[i].oi:la.ii}

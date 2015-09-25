@@ -399,5 +399,5 @@ this.Proxy=function(){
   }
 
   // this function is the result from calling Proxy()
-  return function(newSocket){log(addr(newSocket)+'connected');socket=newSocket;setUpBrowserConnection()}
+  return function(newSocket){log(addr(newSocket)+' connected');socket=newSocket;setUpBrowserConnection()}
 }

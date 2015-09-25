@@ -1,6 +1,4 @@
 var prefs=require('./prefs')
-var delay=require('./util').delay
-
 var $ai,$sw,$aim,$icom,$swm,$io,$mb,$acbr,$acbl,$acbe,$ac,$acd,$fold
 this.name='Code'
 this.init=function($e){

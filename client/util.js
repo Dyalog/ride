@@ -3,14 +3,9 @@ this.inherit=function(x){var F=function(){};F.prototype=x;return new F} // JavaS
 this.cat=function(x){return[].concat.apply([],x)} // array  concatenation, like ⊃,/ in APL
 this.join=function(a){return a.join('')}          // string concatenation, like ⊃,/ in APL
 this.dict=function(a){var r={};for(var i=0;i<a.length;i++)r[a[i][0]]=a[i][1];return r} // dictionary from key-value pairs
-this.chr=String.fromCharCode                      // convert code point to character, like chr() in Python or ⎕ucs N in APL
-this.ord=function(x){return x.charCodeAt(0)}      // convert character to code point, like ord() in Python or ⎕ucs'' in APL
 this.zip=function(a,b){var n=Math.min(a.length,b.length),r=[];for(var i=0;i<n;i++)r.push([a[i],b[i]]);return r} // like zip() in Python or ,¨ in APL
 this.hex=function(x,n){var s=x.toString(16);if(n)while(s.length<n)s='0'+s;return s.toUpperCase()}
-this.qw=function(s){return s.split(/[ \r\n]+/)}   // "quoted words" like in Perl
-this.delay=function(n,f){return setTimeout(f,n)}  // setTimeout⍨ is much more convenient than setTimeout
 this.spc=function(n){return Array(n+1).join(' ')}
-this.last=function(a){return a[a.length-1]}
 
 var htmlChars={'<':'&lt;','>':'&gt;','&':'&amp;',"'":'&amp;','"':'&quot;'}
 this.esc=function(s){return s.replace(/[<>&'"]/g,function(x){return htmlChars[x]})}

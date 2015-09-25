@@ -93,7 +93,7 @@ D.installMenu=D.installMenu||function(arg){
     .mousedown(function(e){$(e.target).closest('.menu').length||mFocus(null)})
     .keydown(function(e){
       if(isAccessKeyEvent(e)){
-        var $x=$m.find('[accessKey=#{String.fromCharCode(e.which).toLowerCase()}]:visible')
+        var $x=$m.find('[accessKey='+String.fromCharCode(e.which).toLowerCase()+']:visible')
         if($x.length){$x.mousedown();$x.parent().find('a').eq(1).focus();return false}
       }
     })

@@ -1,13 +1,10 @@
 // support for presentations
-var delay=require('./util')
-
 var lines=[],index=-1
-$i=null // the <input type=file>, lazy init
-
+var $i // $i:an <input type=file> used to open the file chooser dialog
 function move(d){if(0<=index+d&&index+d<lines.length){index+=d;D.ide.wins[0].loadLine(lines[index])}}
 
 // Key display mode:
-$p=null // DOM element for the pending key or null if key display mode is off
+var $p // DOM element for the pending key or null if key display mode is off
 function keyInfo(e){ // returns a pair of the key name and an "is complete" flag
   var s='' // key name
   e.shiftKey&&e.which&&(s+='Shift-');e.ctrlKey&&(s+='Ctrl-');e.altKey&&(s+='Alt-')
@@ -18,10 +15,9 @@ function keyInfo(e){ // returns a pair of the key name and an "is complete" flag
 function keyDownHandler(e){$p.text(s=keyInfo(e)[0]).toggle(!!s)}
 function keyUpHandler(e){
   var h=keyInfo(e),s=h[0],c=h[1]
-  if(c){$p.hide();$k=$('<span>').text(s).insertBefore($p);delay(2000,function(){$k.fadeOut(1000)})}
+  if(c){$p.hide();$k=$('<span>').text(s).insertBefore($p);setTimeout(function(){$k.fadeOut(1000)},2000)}
   else{$p.text(s).toggle(!!s)}
 }
-
 $.extend(CodeMirror.commands,{
   DMN:function(){move( 1)}, // next line
   DMP:function(){move(-1)}, // prev line

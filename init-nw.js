@@ -1,5 +1,5 @@
 // NW.js-specific initialisation
-if(process){
+if(typeof process!=='undefined'){
   var gui=require('nw.gui'),fs=require('fs'),nomnom=require('nomnom'),
       path=require('path'),spawn=require('child_process').spawn,proxy=require('./proxy')
 
@@ -181,7 +181,7 @@ if(process){
   // expandStackString inserts snippets of code next to each file:///filename.js:123:45
   function expandStackString(s){ // s: the string from  new Error().stack
     var C=2 // how many lines of context above and below
-    s.replace(/\(file:\/\/([^\n\r\)]+):(\d+):(\d+)\)/g,function(m,f,l,c){ // m:whole match, f:file, l:line, c:column
+    return s.replace(/\(file:\/\/([^\n\r\)]+):(\d+):(\d+)\)/g,function(m,f,l,c){ // m:whole match,f:file,l:line,c:col
       if(f.indexOf('/')>=0||f.indexOf('\\')>=0){
         try{
           l-- // make "l" a 0-based line number
@@ -207,10 +207,10 @@ if(process){
       window&&(window.lastError=e)
       var info=
         'IDE: '+JSON.stringify(D.versionInfo)+
-        'Interpreter: '+JSON.stringify(D.remoteIdentification||null)+
-        'localStorage: '+JSON.stringify(localStorage)+
-        '\n'+expandStackString(e.stack)+
-        '\nProxy log:'+proxy.log.get().join('')
+        '\nInterpreter: '+JSON.stringify(D.remoteIdentification||null)+
+        '\nlocalStorage: '+JSON.stringify(localStorage)+
+        '\n\n'+expandStackString(e.stack)+
+        '\n\nProxy log:'+proxy.log.get().join('')
       var excuses=[
         'Oops... it broke!',
         'Congratulations, you found a ... THE bug.',
@@ -223,10 +223,10 @@ if(process){
         '<html>'+
           '<head><title>Error</title></head>'+
           '<body>'+
-            '<h3>'+excuses[Math.floor(excuses.length * Math.random())]+'</h3>'+
+            '<h3>'+excuses[Math.floor(excuses.length*Math.random())]+'</h3>'+
             '<h3 style=font-family:apl,monospace>'+
-              '<a href="mailto:support@dyalog.com?subject='+escape('RIDE crash')
-                      +'&body='+escape('\n\n'+info)+'">support@dyalog.com</a>'+
+              '<a href="mailto:support@dyalog.com?subject='+escape('RIDE crash')+
+                              '&body='+escape('\n\n'+info)+'">support@dyalog.com</a>'+
             '</h3>'+
             '<textarea autofocus style=width:100%;height:90% nowrap>'+htmlEsc(info)+'</textarea>'+
           '</body>'+
