@@ -39,7 +39,7 @@ lib_files='
   node_modules/codemirror/addon/fold/foldcode.js
   node_modules/codemirror/addon/fold/indent-fold.js
   lib/jquery.layout.js
-  init-nw.coffee
+  init-nw.js
   lbar/lbar.js
   kbds/kbds.js
 '

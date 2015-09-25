@@ -1,7 +1,7 @@
 var prefs=require('./prefs'),cmds=require('./cmds').cmds
 
 // This is a generic menu for a browser or NW.js
-// There's an alternative implementation for NW.js in ../init-nw.coffee
+// There's an alternative implementation for NW.js in ../init-nw.js
 // For the concrete content in the menu, see ide.coffee
 D.installMenu=D.installMenu||function(arg){
   // DOM structure:

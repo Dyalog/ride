@@ -1,5 +1,5 @@
 // Preferences API -- localStorage should be accessed only through it
-//   Only ../init-nw.coffee bypasses this API because it can't require() it.
+//   Only ../init-nw.js bypasses this API because it can't require() it.
 // Usage:
 //   prefs.foo()                 // getter
 //   prefs.foo(123)              // setter
@@ -29,7 +29,7 @@ D.prefs=this;
   ['lineNumsTracer',     0],
   ['lineNumsEditor',     1],
   ['matchBrackets',      1],  // whether to highlight matching brackets
-  ['pos',                null], // [x,y,w,h,maximized] of the main window, used in ../init-nw.coffee; maximized is optional
+  ['pos',                null], // [x,y,w,h,maximized] of the main window, used in ../init-nw.js; maximized is optional
   ['posEditor',          [32,32,1000,618]], // [x,y,w,h,maximized]
   ['posTracer',          [32,32,1000,618]], // [x,y,w,h,maximized]
   ['prefixKey',          '`'],
