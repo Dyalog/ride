@@ -77,7 +77,7 @@ if [ ! -e build/nw/D.js -o $(find build/{js,tmp} -newer build/nw/D.js 2>/dev/nul
       }};
       ;(function(){
         var g=[];for(var x in window)g.push(x) // remember original global names (except for "D")
-        D.pollution=function(){var r=[];for(var x in window)if(g.indexOf(k)<0)r.push(k);return r} // measure pollution
+        D.pollution=function(){var r=[];for(var x in window)if(g.indexOf(x)<0)r.push(x);return r} // measure pollution
       }())
 .
     cat build/tmp/libs.js

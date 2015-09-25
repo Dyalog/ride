@@ -108,7 +108,7 @@ this.IDE=function(){
   var mq=[],blk=0,tid=0,last=0 // mq:message queue, blk:blocked?, tid:timeout id, last:when last rundown finished
   function rd(){ // run down the queue
     ide.wins[0].cm.operation(function(){
-      while(mq.length&&!blk){data=mq.shift();(f=handlers[data[0]])&&f.apply(ide,data.slice(1))}
+      while(mq.length&&!blk){var data=mq.shift(),f=handlers[data[0]];f&&f.apply(ide,data.slice(1))}
       last=+new Date;tid=0
     })
   }
