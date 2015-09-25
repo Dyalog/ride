@@ -88,7 +88,7 @@ this.IDE=function(){
     HadError:function(){ide.pending.splice(0,ide.pending.length)},
     FocusWindow:throttle1(function(x){$('#wintab'+x.win+' a').click();var w=ide.wins[x.win];w&&w.focus()}),
     WindowTypeChanged:function(x){return ide.wins[x.win].setTracer(x.tracer)},
-    autocomplete:function(token,skip,options){return ide.wins[token].autocomplete(skip,options)},
+    autocomplete:function(x){return ide.wins[x.token].autocomplete(x.skip,x.options)},
     highlight:function(win,line){ide.wins[win].highlight(line)},
     UpdateWindow:function(ee){ // "ee" for EditableEntity, see protocol spec
       $('#wintab'+ee.token+' a').text(ee.name);ide.wins[ee.token].open(ee)

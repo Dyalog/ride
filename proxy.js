@@ -136,7 +136,7 @@ function fmtLineAttrs(nLines,attrs){
 function trunc(s){return s.length>1000?s.slice(0,997)+'...':s}
 
 this.Proxy=function(){
-  var cmd, setUpBrowserConnection, setUpInterpreterConnection, socket, toBrowser, toInterpreter
+  var cmd,setUpBrowserConnection,setUpInterpreterConnection,socket,toBrowser,toInterpreter
 
   log(new Date().toISOString())
   var client, // TCP connection to interpreter
@@ -158,14 +158,10 @@ this.Proxy=function(){
   function cmd(c,args){
     toInterpreter('<Command><cmd>'+c+'</cmd><id>0</id><args><'+c+'>'+(args||'')+'</'+c+'></args></Command>')
   }
-  function toBrowser(){
-    var m=1<=arguments.length?slice.call(arguments,0):[]
-    log('to browser:'+trunc(JSON.stringify(m)))
-    socket&&socket.emit.apply(socket,m)
-  }
+  function toBrowser(x,y){log('to browser:'+trunc(JSON.stringify([x,y])));socket&&socket.emit(x,y)}
   function setUpInterpreterConnection(){
     client.on('error',function(e){toBrowser('*connectError',{err:''+e});client=null})
-    client.on('end',function(){toBrowser('*disconnected');client=null})
+    client.on('end',function(){log('interpreter diconnected');toBrowser('*disconnected');client=null})
     var queue=Buffer(0)
     client.on('data',function(data){
       queue=Buffer.concat([queue,data])
@@ -218,7 +214,7 @@ this.Proxy=function(){
             case'ReplyCloseWindow'     :toBrowser('CloseWindow',{win:+tag('win',m)})                       ;break
             case'ReplyGetAutoComplete':
               var o=b64d(tag('options',m))
-              toBrowser('autocomplete',+tag('token',m),+tag('skip',m),(o?o.split('\n'):[]))
+              toBrowser('autocomplete',{token:+tag('token',m),skip:+tag('skip',m),options:o?o.split('\n'):[]})
               break
             case'ReplyHighlightLine'   :toBrowser('highlight',+tag('win',m),+tag('line',m))                ;break
             case'ReplyDisconnect'      :toBrowser('Disconnect',{message:b64d(tag('msg',m))})               ;break
