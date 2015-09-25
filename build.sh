@@ -5,8 +5,7 @@ cd `dirname "$0"`
 if [ ! -e node_modules ]; then npm i; fi
 mkdir -p build/{js/client,nw,tmp}
 
-cp -uv {index,empty,print}.html style/apl385.woff style/*.png favicon.ico package.json build/nw/
-
+cp -uvr {index,empty,print}.html style/apl385.woff style/*.png style/img favicon.ico package.json build/nw/
 i=style/style.sass o=build/nw/style.css
 if [ ! -e $o -o $(find `dirname $i` -type f -newer $o 2>/dev/null | wc -l) -gt 0 ]; then
   echo 'preprocessing css'; node-sass -i --output-style=compressed -o `dirname $o` $i
