@@ -124,7 +124,7 @@ $.extend(CodeMirror.commands,{
   goLineEndSmart:function(cm){ // CodeMirror provides a goLineStartSmart but not a goLineEndSmart command.
     cm.extendSelectionsBy(function(){
       var c=cm.getCursor(),l=c.line,s=cm.getLine(l),n=s.length,m=s.replace(/ +$/,'').length
-      CodeMirror.Pos(l,m<=c.ch&&c.ch<n||!m?n:m)
+      return CodeMirror.Pos(l,m<=c.ch&&c.ch<n||!m?n:m)
     },{origin:'+move',bias:-1})
   },
   PRN:function(cm){
