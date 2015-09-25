@@ -1,81 +1,92 @@
-prefs=require './prefs'
-{join,dict,esc}=require './util'
+`
+var prefs=require('./prefs'),util=require('./util'),join=util.join,dict=util.dict,esc=util.esc
 
-@name='Colours'
+this.name='Colours'
 
-G=[];H={} # G:syntax highlighting groups {t,s,c,controls}; H:reverse lookup dict for G
-D.addSyntaxGroups=(groups)->G=G.concat groups;H=dict(G.map (g,i)->[g.t,i]);updateStyle?();return
-D.addSyntaxGroups [
-  # t: token type, a short key for storing customisations in localStorage
-  # s: name to display in the UI
-  # c: css selector
-  # controls: which UI controls are allowed or disallowed for this group (other than the default ones)
-  {t:'norm',s:'normal',          c:'.cm-s-default,.CodeMirror-gutters'}
-  {t:'num', s:'number',          c:'.cm-apl-num' }
-  {t:'str', s:'string',          c:'.cm-apl-str' }
-  {t:'zld', s:'zilde',           c:'.cm-apl-zld' }
-  {t:'var', s:'name',            c:'.cm-apl-var' }
-  {t:'glb', s:'global name',     c:'.cm-apl-glb' }
-  {t:'quad',s:'quad name',       c:'.cm-apl-quad'}
-  {t:'fn',  s:'function',        c:'.cm-apl-fn'  }
-  {t:'op1', s:'monadic operator',c:'.cm-apl-op1' }
-  {t:'op2', s:'dyadic operator', c:'.cm-apl-op2' }
-  {t:'ns',  s:'namespace',       c:'.cm-apl-ns'  }
-  {t:'asgn',s:'assignment',      c:'.cm-apl-asgn'}
-  {t:'diam',s:'diamond',         c:'.cm-apl-diam'}
-  {t:'par', s:'parenthesis',     c:'.cm-apl-par' }
-  {t:'sqbr',s:'bracket',         c:'.cm-apl-sqbr'}
-  {t:'semi',s:'semicolon',       c:'.cm-apl-semi'}
-  {t:'dfn', s:'dfn',             c:'.cm-apl-dfn' }
-  {t:'dfn1',s:'dfn level 1',     c:'.cm-apl-dfn1'}
-  {t:'dfn2',s:'dfn level 2',     c:'.cm-apl-dfn2'}
-  {t:'dfn3',s:'dfn level 3',     c:'.cm-apl-dfn3'}
-  {t:'dfn4',s:'dfn level 4',     c:'.cm-apl-dfn4'}
-  {t:'dfn5',s:'dfn level 5',     c:'.cm-apl-dfn5'}
-  {t:'trad',s:'tradfn',          c:'.cm-apl-trad'}
-  {t:'kw',  s:'keyword',         c:'.cm-apl-kw'  }
-  {t:'lbl', s:'label',           c:'.cm-apl-lbl' }
-  {t:'idm', s:'idiom',           c:'.cm-apl-idm' }
-  {t:'com', s:'comment',         c:'.cm-apl-com' }
-  {t:'err', s:'error',           c:'.cm-apl-err' }
-  {t:'lnum',s:'line number',     c:'.CodeMirror-linenumber'}
-  {t:'cur', s:'cursor',          c:'div.CodeMirror-cursor', controls:{lb:1,fg:0,bg:0,BIU:0}}
-  {t:'mtch',s:'matching bracket',c:'.CodeMirror-matchingbracket'}
-  {t:'srch',s:'search match',    c:'.cm-searching'}
-  {t:'mod', s:'modified line',   c:'.modified'}
-  {t:'sel', s:'selection',       c:'.CodeMirror-selected,.CodeMirror-focused .CodeMirror-selected', controls:{fg:0,BIU:0}}
+var G=[],H={} // G:syntax highlighting groups {t,s,c,ctrls}; H:reverse lookup dict for G
+D.addSyntaxGroups=function(x){G=G.concat(x);H=dict(G.map(function(g,i){return[g.t,i]}));builtInSchemes&&updateStyle()}
+D.addSyntaxGroups([
+  // t: token type, a short key for storing customisations in localStorage
+  // s: name to display in the UI
+  // c: css selector
+  // ctrls: which UI controls are allowed or disallowed for this group (other than the default ones)
+  {t:'norm',s:'normal',          c:'.cm-s-default,.CodeMirror-gutters'},
+  {t:'num', s:'number',          c:'.cm-apl-num' },
+  {t:'str', s:'string',          c:'.cm-apl-str' },
+  {t:'zld', s:'zilde',           c:'.cm-apl-zld' },
+  {t:'var', s:'name',            c:'.cm-apl-var' },
+  {t:'glb', s:'global name',     c:'.cm-apl-glb' },
+  {t:'quad',s:'quad name',       c:'.cm-apl-quad'},
+  {t:'fn',  s:'function',        c:'.cm-apl-fn'  },
+  {t:'op1', s:'monadic operator',c:'.cm-apl-op1' },
+  {t:'op2', s:'dyadic operator', c:'.cm-apl-op2' },
+  {t:'ns',  s:'namespace',       c:'.cm-apl-ns'  },
+  {t:'asgn',s:'assignment',      c:'.cm-apl-asgn'},
+  {t:'diam',s:'diamond',         c:'.cm-apl-diam'},
+  {t:'par', s:'parenthesis',     c:'.cm-apl-par' },
+  {t:'sqbr',s:'bracket',         c:'.cm-apl-sqbr'},
+  {t:'semi',s:'semicolon',       c:'.cm-apl-semi'},
+  {t:'dfn', s:'dfn',             c:'.cm-apl-dfn' },
+  {t:'dfn1',s:'dfn level 1',     c:'.cm-apl-dfn1'},
+  {t:'dfn2',s:'dfn level 2',     c:'.cm-apl-dfn2'},
+  {t:'dfn3',s:'dfn level 3',     c:'.cm-apl-dfn3'},
+  {t:'dfn4',s:'dfn level 4',     c:'.cm-apl-dfn4'},
+  {t:'dfn5',s:'dfn level 5',     c:'.cm-apl-dfn5'},
+  {t:'trad',s:'tradfn',          c:'.cm-apl-trad'},
+  {t:'kw',  s:'keyword',         c:'.cm-apl-kw'  },
+  {t:'lbl', s:'label',           c:'.cm-apl-lbl' },
+  {t:'idm', s:'idiom',           c:'.cm-apl-idm' },
+  {t:'com', s:'comment',         c:'.cm-apl-com' },
+  {t:'err', s:'error',           c:'.cm-apl-err' },
+  {t:'lnum',s:'line number',     c:'.CodeMirror-linenumber'},
+  {t:'cur', s:'cursor',          c:'div.CodeMirror-cursor', ctrls:{lb:1,fg:0,bg:0,BIU:0}},
+  {t:'mtch',s:'matching bracket',c:'.CodeMirror-matchingbracket'},
+  {t:'srch',s:'search match',    c:'.cm-searching'},
+  {t:'mod', s:'modified line',   c:'.modified'},
+  {t:'sel', s:'selection',       c:'.CodeMirror-selected,.CodeMirror-focused .CodeMirror-selected', ctrls:{fg:0,BIU:0}},
   {t:'tc',  s:'tracer',          c:'.tracer .CodeMirror,.tracer .CodeMirror .CodeMirror-gutter-wrapper'}
-]
+])
 
-# Colour schemes are represented in one of two ways:
-#   In memory                 In localStorage
-#     {                         {
-#       "name": "MyScheme",       "name": "MyScheme",
-#       "group1": {               "styles": "group1=fg:f00,B group2=bg:f00 ..."
-#         "fg": "f00",          }
-#         "B": 1
-#       },
-#       "group2": {
-#         "bg": "f00"
-#       },
-#       ...
-#     }
-# encodeScheme() and decodeScheme() convert between the two.
-
-encodeScheme = (x) ->
-  s = ''
-  for g, h of x when g != 'name'
-    u = ''; for p, v of h then u += ",#{p}"; if !(p in ['B', 'I', 'U'] && v) then u += ":#{v}"
-    u && s += " #{g}=#{u[1..]}"
-  name: x.name, styles: s[1..]
-
-decodeScheme = (x) ->
-  {name, styles} = x; r = {name}
-  if styles
-    for gh in styles.split /\s+/ when gh
-      [g, s1] = gh.split '='; r[g] = h = {}; for pv in s1.split ',' then [p, v] = pv.split ':'; h[p] = v ? 1
-      h.bgo? && h.bgo = +h.bgo # if .bgo is present, convert it to a number
-  r
+// Colour schemes have two representations:
+//   in memory                 in localStorage
+//     {                         {
+//       "name": "MyScheme",       "name": "MyScheme",
+//       "group1": {               "styles": "group1=fg:f00,B group2=bg:f00 ..."
+//         "fg": "f00",          }
+//         "B": 1
+//       },
+//       "group2": {
+//         "bg": "f00"
+//       },
+//       ...
+//     }
+// encodeScheme() and decodeScheme() convert between them
+function encodeScheme(x){
+  var s=''
+  for(var g in x)if(g!=='name'){
+    var u=''
+    for(var p in x[g]){
+      var v=x[g][p]
+      u+=','+p
+      if(!((p==='B'||p==='I'||p==='U')&&v)){u+=':'+v}
+    }
+    u&&(s+=' '+g+'='+u.slice(1))
+  }
+  return{name:x.name,styles:s.slice(1)}
+}
+function decodeScheme(x){           // x:for example "num=fg:345,bg:f,B,U,bgo:.5 str=fg:2,I com=U"
+  var r={name:x.name}               // r:this will be the result
+  var a=(x.styles||'').split(/\s+/) // a:for example ["num=fg:345,bg:f,B,U,bgo:.5","str=fg:2,I","com=U"]
+  for(var i=0;i<a.length;i++)if(a[i]){
+    var b=a[i].split('='),g=b[0],c=b[1].split(','),h=r[g]={}  // b:["num","fg:345,bg:f,B,U,bgo:.5"]  g:"num" (the group)
+    for(var j=0;j<c.length;j++){                              // c:["fg:345","bg:f","B","U","bgo:.5"]
+      var pv=c[j].split(':'),p=pv[0],v=pv[1];h[p]=v!=null?v:1 // p:"fg" v:"345"  or  p:"B" v:undefined
+    }
+    h.bgo!=null&&(h.bgo=+h.bgo)     // if .bgo (background opacity) is present, convert it to a number
+  }
+  return r
+}
+`
 
 builtInSchemes = [
   {name: 'Default', styles: '''
@@ -270,7 +281,7 @@ selectGroup = (t, forceRefresh) ->
       $("#col-#{p}").val(expandColour(h[p]) || '#000000').toggle !!h[p]
     for p in 'BIU' then $("#col-#{p}").prop 'checked', !!h[p]
     $('#col-bgo').slider 'value', h.bgo ? .5
-    c = (G[i] || G[0]).controls || {}
+    c = (G[i] || G[0]).ctrls || {}
     $('#col-fg-p' ).toggle !!(c.fg ? 1)
     $('#col-bg-p' ).toggle !!(c.bg ? 1)
     $('#col-bgo'  ).toggle !!h.bg
