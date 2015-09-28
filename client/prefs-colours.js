@@ -1,4 +1,4 @@
-var prefs=require('./prefs'),util=require('./util'),join=util.join,dict=util.dict,esc=util.esc
+var prefs=require('./prefs'),util=require('./util'),dict=util.dict,esc=util.esc
 
 this.name='Colours'
 
