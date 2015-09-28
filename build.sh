@@ -5,7 +5,9 @@ cd `dirname "$0"`
 if [ ! -e node_modules ]; then npm i; fi
 mkdir -p build/{js/client,nw,tmp}
 
-cp -uvr {index,empty,print}.html style/apl385.woff style/*.png style/img favicon.ico package.json build/nw/
+cp -uvr {index,empty,print}.html proxy.js style/{*.png,apl385.woff,img} favicon.ico package.json build/nw/
+cp -uv client/*.js build/js/client/
+
 i=style/style.sass o=build/nw/style.css
 if [ ! -e $o -o $(find `dirname $i` -type f -newer $o 2>/dev/null | wc -l) -gt 0 ]; then
   echo 'preprocessing css'; node-sass -i --output-style=compressed -o `dirname $o` $i
@@ -55,31 +57,24 @@ for f in $lib_files; do
 done
 if [ $changed -eq 1 ]; then echo 'concatenating libs'; cat $us >build/tmp/libs.js; fi
 
-cp -uv client/*.js build/js/client/
-cp -uv proxy.js build/nw/
-
 if [ ! -e build/nw/D.js -o $(find build/{js,tmp} -newer build/nw/D.js 2>/dev/null | wc -l) -gt 0 ]; then
   v=$(node -e "console.log($(cat package.json).version.replace(/\.0$/,''))").$(git rev-list --count HEAD)
   echo $v >build/nw/version
   echo 'combining javascript files into one'
   (
     cat <<.
-      var D={versionInfo:{
-        version:'$v',
-        date:'$(git show -s HEAD --pretty=format:%ci)',
-        rev:'$(git rev-parse HEAD)'
-      }};
-      ;(function(){
+      D={versionInfo:{version:'$v',date:'$(git show -s HEAD --pretty=format:%ci)',rev:'$(git rev-parse HEAD)'}};
+      (function(){
         var g=[];for(var x in window)g.push(x) // remember original global names (except for "D")
         D.pollution=function(){var r=[];for(var x in window)if(g.indexOf(x)<0)r.push(x);return r} // measure pollution
-      }())
+      }());
 .
     cat build/tmp/libs.js
     node <<.
-      require('pure-cjs').transform({input: 'build/js/client/init.js', dryRun: true}).then(
-        function (h) { process.stdout.write(h.code); },
-        function (e) { process.stderr.write(e); process.exit(1); }
+      require('pure-cjs').transform({input:'build/js/client/init.js',dryRun:1}).then(
+        function(h){process.stdout.write(h.code)}, // success
+        function(e){process.stderr.write(e);process.exit(1)} // failure
       );
 .
-  )>build/nw/D.js
+  )>build/nw/D.js 
 fi
