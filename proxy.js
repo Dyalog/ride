@@ -1,48 +1,40 @@
 var fs=require('fs'),net=require('net'),os=require('os'),path=require('path'),
-    cp=require('child_process'),spawn=cp.spawn,exec=cp.exec,
-    slice=[].slice
+    cp=require('child_process'),spawn=cp.spawn,exec=cp.exec
 
-// logging
-var stdoutIsGood=1
 var log=this.log=(function(){
   var t0=+new Date, // timestamps will be number of milliseconds since t0
       N=500,T=1000, // record no more than N log messages per T milliseconds
-      n=0,t=0       // at any moment, there have been n messages since time t
+      n=0,t=0,      // at any moment, there have been n messages since time t
+      stdoutIsGood=1
   return function(s){ // the actual log() function
     var t1=+new Date;if(t1-t>T){t=t1;n=1} // if last message was too long ago, start counting afresh
     var m= ++n<N ? (t1-t0)+': '+s+'\n' : n===N ? '... logging temporarily suppressed\n' : 0
     if(m){
       if(stdoutIsGood)try{process.stdout&&process.stdout.write&&process.stdout.write(m)}catch(_){stdoutIsGood=0}
       var ls=log.listeners.slice(0) // make a copy of the listeners array, it may get modified as we are processing it
-      for(var i=0;i<ls.length;i++)ls[i](m)
+      for(var i=0;i<ls.length;i++)ls[i](m) // notify listeners
     }
   }
 }())
 log.listeners=[]
 ;(function(){
-  // if $DYALOG_IDE_LOG is present, log to stdout and to a file, otherwise only to stdout
   var f=process.env.DYALOG_IDE_LOG
-  if(f){
+  if(f){ // if $DYALOG_IDE_LOG is present, also log to a file (in addition to stdout)
     var h=process.env.HOME||process.env.USERPROFILE;if(h)f=path.resolve(h,f)
     fd=fs.openSync(f,'a');log.listeners.push(function(s){var b=Buffer(m);fs.writeSync(fd,b,0,b.length)})
   }
-  // store latest log messages in RAM
   if(typeof window!=='undefined'){ // are we running under NW.js as opposed to just NodeJS?
-    var i=0,a=Array(1000)
+    var i=0,a=Array(1000)          // if so, store latest log messages in RAM
     log.get=function(){return a.slice(i).concat(a.slice(0,i))}
     log.listeners.push(function(s){a[i++]=s;i%=a.length})
   }
-})()
+}())
 
-function b64(s){return Buffer(s).toString('base64')}
-function b64d(s){return''+Buffer(s,'base64')}
-function tag(t,xml){return(RegExp('^[^]*<'+t+'>([^<]*)</'+t+'>[^]*$').exec(xml)||[])[1]} // t:tag name
-function addr(x){return x&&(x=x.request)&&(x=x.connection)&&x.remoteAddress||'IDE'} // x:socket to be formatted
-function extend(){
-  var r={}, a=1<=arguments.length?slice.call(arguments,0):[]
-  for(var i=0;i<a.length;i++){var x=a[i];for(var k in x)r[k]=x[k]}
-  return r
-}
+function b64(s){return Buffer(s).toString('base64')} // base64 encode
+function b64d(s){return''+Buffer(s,'base64')}        // base64 decode
+function tag(t,x){return(RegExp('^[^]*<'+t+'>([^<]*)</'+t+'>[^]*$').exec(x)||[])[1]} // extract tag t from xml string x
+function addr(x){return x&&(x=x.request)&&(x=x.connection)&&x.remoteAddress||'IDE'} // human-readable repr of socket x
+function extend(x,y){for(var k in y)x[k]=y[k];return x}
 
 var ipAddresses=[]
 ;(function(){
@@ -136,8 +128,6 @@ function fmtLineAttrs(nLines,attrs){
 function trunc(s){return s.length>1000?s.slice(0,997)+'...':s}
 
 this.Proxy=function(){
-  var cmd,setUpBrowserConnection,setUpInterpreterConnection,socket,toBrowser,toInterpreter
-
   log(new Date().toISOString())
   var client, // TCP connection to interpreter
       socket, // socket.io connection to the browser that's currently driving
@@ -231,7 +221,7 @@ this.Proxy=function(){
     // Initial batch of commands sent to interpreter:
     toInterpreter('SupportedProtocols=1');toInterpreter('UsingProtocol=1')
     cmd('Identify','<Sender><Process>RIDE.EXE</Process><Proxy>0</Proxy></Sender>')
-    cmd('Connect','<Token/>');cmd('GetWindowLayout','')
+    cmd('Connect','<Token/>');cmd('GetWindowLayout')
   }
   function setUpBrowserConnection(){
     var listen
