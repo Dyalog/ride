@@ -49,18 +49,13 @@ for f in $lib_files; do
   us="$us $u"
   if [ $f -nt $u ]; then
     changed=1
-    if [ $f != ${f%%.coffee} ]; then echo "compiling $f"; coffee -bcp --no-header $f >$u
-    elif [ $f != ${f%%.min.js} ]; then echo "copying $f"; cp $f $u
+    if [ $f != ${f%%.min.js} ]; then echo "copying $f"; cp $f $u
     else echo "cleaning up $f"; <$f sed '/^\(var \w\+ = \)\?require(/d' >$u; fi
   fi
 done
 if [ $changed -eq 1 ]; then echo 'concatenating libs'; cat $us >build/tmp/libs.js; fi
 
 cp -uv client/*.js build/js/client/
-for f in client/*.coffee; do # compile coffee files before running browserify
-  u=build/js/${f%%.coffee}.js; if [ $f -nt $u ]; then echo "compiling $f"; coffee -bcp --no-header $f >$u; fi
-done
-
 cp -uv proxy.js build/nw/
 
 if [ ! -e build/nw/D.js -o $(find build/{js,tmp} -newer build/nw/D.js 2>/dev/null | wc -l) -gt 0 ]; then

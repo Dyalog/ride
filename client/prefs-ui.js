@@ -53,6 +53,6 @@ this.showDialog=function(tabName){
     for(var i=0;i<tabs.length;i++)tabs[i].init&&tabs[i].init($('#prefs-tab-'+safe(tabs[i].name)))
   }
   $d.dialog('option','position',{at:'center'}).dialog('open')
-  tabName&&$d.tabs({active:$("#prefs-tabs-nav a[href='#prefs-tab-#{tabName}']").parent().index()})
+  tabName&&$d.tabs({active:$('#prefs-tabs-nav a[href="#prefs-tab-'+tabName+'"]').parent().index()})
   for(var i=0;i<tabs.length;i++)tabs[i].load&&tabs[i].load()
 }

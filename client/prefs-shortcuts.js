@@ -52,7 +52,7 @@ this.init=function($e){
 }
 function getKeystroke(callback){
   var $d=$('<p><input class=shortcuts-input placeholder=...>').dialog({
-    title:'New Shortcut',modal:1,buttons:{Cancel:function(){$d.dialog('close');callback(k)}}
+    title:'New Shortcut',modal:1,buttons:{Cancel:function(){$d.dialog('close');callback()}}
   })
   $('input',$d)
     .focus(function(){$(this).addClass('shortcuts-input')})

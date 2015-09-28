@@ -7,8 +7,8 @@ this.zip=function(a,b){var n=Math.min(a.length,b.length),r=[];for(var i=0;i<n;i+
 this.hex=function(x,n){var s=x.toString(16);if(n)while(s.length<n)s='0'+s;return s.toUpperCase()}
 this.spc=function(n){return Array(n+1).join(' ')}
 
-var htmlChars={'<':'&lt;','>':'&gt;','&':'&amp;',"'":'&amp;','"':'&quot;'}
-this.esc=function(s){return s.replace(/[<>&'"]/g,function(x){return htmlChars[x]})}
+var H={'<':'&lt;','>':'&gt;','&':'&amp;',"'":'&apos;','"':'&quot;'}
+this.esc=function(s){return s.replace(/[<>&'"]/g,function(x){return H[x]})}
 
 this.onCodeMirrorDoubleClick=function(cm,f){
   // CodeMirror supports 'dblclick' events but they are unreliable and seem to require rather a short time between the two clicks
@@ -19,11 +19,17 @@ this.onCodeMirrorDoubleClick=function(cm,f){
     t=e.timeStamp;x=e.x;y=e.y
   })
 }
-
+this.throttle1=function(f,dt){ // f: a 1-arg function that doesn't return a result; dt: minimum time between invocations
+  var next=0,tid=0 // next: the earliest time f can be called again; tid: id returned by setTimeout
+  dt==null&&(dt=500)
+  return function(x){
+    if(+new Date<next){clearTimeout(tid);tid=setTimeout(function(){tid=0;next=+new Date+dt;f(x)},dt);next=+new Date+dt}
+    else{next=+new Date+dt;f(x)}
+  }
+}
 $.alert=function(m,t,f){ // m:message, t:title, f:callback
   $('<p>').text(m).dialog({modal:1,title:t,buttons:[{text:'OK',click:function(){$(this).dialog('close');f&&f()}}]})
 }
-
 $.fn.insert=function(s){ // replace selection in an <input> or <textarea> with s
   return this.each(function(){
     if(!this.readOnly){
@@ -32,13 +38,4 @@ $.fn.insert=function(s){ // replace selection in an <input> or <textarea> with s
       }
     }
   })
-}
-
-this.throttle1=function(f,dt){ // f: a 1-arg function that doesn't return a result; dt: minimum time between invocations
-  var next=0,tid=0 // next: the earliest time f can be called again; tid: id returned by setTimeout
-  dt==null&&(dt=500)
-  return function(x){
-    if(+new Date<next){clearTimeout(tid);tid=setTimeout(function(){tid=0;next=+new Date+dt;f(x)},dt);next=+new Date+dt}
-    else{next=+new Date+dt;f(x)}
-  }
 }
