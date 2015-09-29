@@ -15,10 +15,12 @@ $(function(){
 
   if(D.nwjs){
     var zM=11 // zoom level can be from -zM to zM inclusive
-    $.extend(CodeMirror.commands,{
-      ZMI:function(){prefs.zoom(Math.min( zM,prefs.zoom()+1))},
-      ZMO:function(){prefs.zoom(Math.max(-zM,prefs.zoom()-1))},
-      ZMR:function(){prefs.zoom(0)}
+    function ZMI(){prefs.zoom(Math.min( zM,prefs.zoom()+1))}
+    function ZMO(){prefs.zoom(Math.max(-zM,prefs.zoom()-1))}
+    function ZMR(){prefs.zoom(0)}
+    $.extend(CodeMirror.commands,{ZMI:ZMI,ZMO:ZMO,ZMR:ZMR})
+    $(document).bind('mousewheel',function(e){
+      var d=e.originalEvent.wheelDelta;d&&e.ctrlKey&&!e.shiftKey&&!e.altKey&&(d>0?ZMI:ZMO)()
     })
     $('body').addClass('zoom'+prefs.zoom())
     prefs.zoom(function(z){
