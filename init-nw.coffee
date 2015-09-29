@@ -20,7 +20,7 @@ if process?
       else if D.mac then fs.existsSync "#{path.dirname process.execPath}/../../../../Resources/Dyalog/mapl"
       else fs.existsSync "#{path.dirname process.execPath}/../mapl"
     version: abbr: 'v', flag: true, help: 'print version and exit'
-  ).parse gui.App.argv
+  ).parse(if process.env.DYALOG_IDE_ARGV then process.env.DYALOG_IDE_ARGV.split(' ') else gui.App.argv)
 
   if D.opts.version then console.log D.versionInfo.version; process.exit 0
 
