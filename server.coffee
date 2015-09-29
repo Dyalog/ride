@@ -5,7 +5,7 @@ fs = require 'fs'
 http = require 'http'
 https = require 'https'
 engine = require 'engine.io'
-nomnom = require 'nomnom'
+nomnom = require './nomnom'
 {Proxy} = require './proxy'
 {spawn} = require 'child_process'
 

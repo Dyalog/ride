@@ -1,6 +1,6 @@
 // NW.js-specific initialisation
 if(typeof process!=='undefined'){
-  var gui=require('nw.gui'),fs=require('fs'),nomnom=require('nomnom'),
+  var gui=require('nw.gui'),fs=require('fs'),nomnom=require('./nomnom'),
       path=require('path'),spawn=require('child_process').spawn,proxy=require('./proxy')
 
   // Detect platform

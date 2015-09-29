@@ -5,8 +5,6 @@ app_name=$(node -e "console.log($(cat package.json).name)")
 nw_version=0.12.2 # https://github.com/nwjs/nw.js/wiki/Downloads-of-old-versions
 ulimit -n $(ulimit -Hn) # bump open file limit to its hard limit, OSX build requires a lot of them
 
-echo 'adding nomnom library'; mkdir -p build/nw/node_modules; cp -r node_modules/nomnom build/nw/node_modules
-
 desktop_app() {
   echo "building desktop app for $@"
   node <<.

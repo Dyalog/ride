@@ -5,7 +5,7 @@ cd `dirname "$0"`
 if [ ! -e node_modules ]; then npm i; fi
 mkdir -p build/{js/client,nw,tmp}
 
-cp -uvr {index,empty,print}.html proxy.js style/{*.png,apl385.woff,img} favicon.ico package.json build/nw/
+cp -uvr {index,empty,print}.html {proxy,nomnom}.js style/{*.png,apl385.woff,img} favicon.ico package.json build/nw/
 cp -uv client/*.js build/js/client/
 
 i=style/style.sass o=build/nw/style.css
