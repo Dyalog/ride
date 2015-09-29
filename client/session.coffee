@@ -17,6 +17,7 @@ class @Session
     onCodeMirrorDoubleClick @cm, (e) => @ED(); e.stopPropagation(); e.preventDefault(); return
     @focusTimestamp = 0
     @cm.on 'focus', => @focusTimestamp = +new Date; @ide.focusedWin = @; return
+    if D.mac then setTimeout (=> @cm.focus()), 500
     @cm.on 'beforeChange', (_, c) =>
       if c.origin != 'D'
         l0 = c.from.line; l1 = c.to.line; m = l1 - l0 + 1; n = c.text.length
