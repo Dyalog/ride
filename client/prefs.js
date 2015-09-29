@@ -1,41 +1,41 @@
-// Preferences API -- localStorage should be accessed only through it
-//   Only ../init-nw.js bypasses this API because it can't require() it.
+// Preferences API -- localStorage should be accessed only through here.
+// (../init-nw.js is an exception, it bypasses this API because it can't require() it.)
 // Usage:
-//   prefs.foo()                 // getter
-//   prefs.foo(123)              // setter
-//   prefs.foo (newValue) -> ... // add "on change" listener
-//   prefs.foo.toggle()          // convenience function for booleans (numbers 0 and 1)
-//   prefs.foo.getDefault()      // retrieve default value
+//   prefs.foo()                     // getter
+//   prefs.foo(123)                  // setter
+//   prefs.foo(function(newValue){}) // add "on change" listener
+//   prefs.foo.toggle()              // convenience function for booleans (numbers 0 and 1)
+//   prefs.foo.getDefault()          // retrieve default value
 D.prefs=this;
-[ // name             default (type is determined from default value; setter enforces type and handles encoding)
-  ['autoCloseBrackets',  1],  // whether to insert {}[]() in pairs
-  ['autoCloseBlocks',    1],  // whether to insert :end after :if,:for,etc when Enter is pressed
-  ['autoCloseBlocksEnd', 0],  // 0: close blocks with ":EndIf",":EndFor",etc;  1: close blocks only with ":End"
+[ // name                default (type is determined from default value; setter enforces type and handles encoding)
+  ['autoCloseBrackets',  1], // whether to insert {}[]() in pairs
+  ['autoCloseBlocks',    1], // whether to insert :end after :if,:for,etc when Enter is pressed
+  ['autoCloseBlocksEnd', 0], // 0: close blocks with ":EndIf",":EndFor",etc;  1: close blocks only with ":End"
   ['autocompletion',     1],
   ['autocompletionDelay',500],
   ['colourScheme',       'Default'], // name of the active colour scheme
-  ['colourSchemes',      []], // objects describing user-defined colour schemes
+  ['colourSchemes',      []],// objects describing user-defined colour schemes
   ['favs',               [{host:'127.0.0.1',port:4502}]],
-  ['floating',           0],  // floating editor and tracer windows
-  ['floatOnTop',         0],  // try to keep floating windows on top of the session
-  ['fold',               1],  // code folding
+  ['floating',           0], // floating editor and tracer windows
+  ['floatOnTop',         0], // try to keep floating windows on top of the session
+  ['fold',               1], // code folding
   ['ime',                1],
-  ['indent',             4],  // -1 disables autoindent
-  ['indentComments',     0],  // whether to touch comment-only lines at all
-  ['indentMethods',      -1], // -1 makes methods use the same indent as all other blocks
-  ['indentOnOpen',       1],  // whether to re-indent source code on editor open
-  ['keys',               {}], // a mapping between commands and keystrokes, only diffs from the defaults
-  ['kbdLocale',          ''], // e.g. "US", "GB"
+  ['indent',             4], // -1 disables autoindent
+  ['indentComments',     0], // whether to touch comment-only lines at all
+  ['indentMethods',      -1],// -1 makes methods use the same indent as all other blocks
+  ['indentOnOpen',       1], // whether to re-indent source code on editor open
+  ['keys',               {}],// a mapping between commands and keystrokes, only diffs from the defaults
+  ['kbdLocale',          ''],// e.g. "US", "GB"
   ['lineNumsTracer',     0],
   ['lineNumsEditor',     1],
-  ['matchBrackets',      1],  // whether to highlight matching brackets
+  ['matchBrackets',      1], // whether to highlight matching brackets
   ['pos',                null], // [x,y,w,h,maximized] of the main window, used in ../init-nw.js; maximized is optional
   ['posEditor',          [32,32,1000,618]], // [x,y,w,h,maximized]
   ['posTracer',          [32,32,1000,618]], // [x,y,w,h,maximized]
   ['prefixKey',          '`'],
-  ['prefixMaps',         {}], // per-locale strings of pairs of characters -- diffs from the default ` map for that locale
-  ['selectedExe',        ''], // Which interpreter is selected in the Connect page?
-  ['otherExe',           ''], // What is filled in in the text box when "Other..." is selected in the Connect page?
+  ['prefixMaps',         {}],// per-locale strings of pairs of characters -- diffs from the default map for that locale
+  ['selectedExe',        ''],// Which interpreter is selected in dropdown in the Connect page?
+  ['otherExe',           ''],// content of the "exe" text box "Other..." is selected in the Connect page
   ['editorWidth',        0], // width of a docked editor
   ['tracerHeight',       0], // height of a docked tracer
   ['wrap',               0], // line wrapping in session

@@ -1,4 +1,8 @@
 #!/usr/bin/env coffee
+
+# This script scrapes keyboard descriptions from http://dfns.dyalog.com/n_keyboards.htm
+# and outputs the content of kbds.js
+
 http = require 'http'
 cheerio = require 'cheerio'
 {basename} = require 'path'

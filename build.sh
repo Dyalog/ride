@@ -44,7 +44,7 @@ lib_files='
   lbar/lbar.js
   kbds/kbds.js
 '
-us='' # names of compiled files
+us='' # paths to versions of lib files with "require()" calls removed
 changed=0
 for f in $lib_files; do
   u=build/tmp/${f//\//_} # replace / with _
@@ -59,7 +59,7 @@ if [ $changed -eq 1 ]; then echo 'concatenating libs'; cat $us >build/tmp/libs.j
 
 if [ ! -e build/nw/D.js -o $(find build/{js,tmp} -newer build/nw/D.js 2>/dev/null | wc -l) -gt 0 ]; then
   v=$(node -e "console.log($(cat package.json).version.replace(/\.0$/,''))").$(git rev-list --count HEAD)
-  echo $v >build/nw/version
+  echo $v >build/nw/version # for the benefit of installers, store version in file
   echo 'combining javascript files into one'
   (
     cat <<.
@@ -76,5 +76,5 @@ if [ ! -e build/nw/D.js -o $(find build/{js,tmp} -newer build/nw/D.js 2>/dev/nul
         function(e){process.stderr.write(e);process.exit(1)} // failure
       );
 .
-  )>build/nw/D.js 
+  )>build/nw/D.js
 fi

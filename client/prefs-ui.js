@@ -1,11 +1,11 @@
-// This module implements the Preferences dialog.
-// The actual content of tabs is in separate modules: prefs-*.js
+// This module implements the Preferences dialog as a whole.
+// The content of individual tabs is in separate modules: prefs-*.js
 // Each of them can export the following properties:
 //   name       a string used as the tab's title
-//   init()     called only once, when Preferences is opened for the first time
+//   init()     called only once, before Preferences is opened for the first time
 //   load()     called every time Preferences is opened
-//   validate() should return a {message,element} object on failure
-//   save()     called when Save is pressed
+//   validate() should return a falsey value on success or a {message,element} object on failure
+//   save()     called when OK or Apply is pressed
 //   resize()   called when the Preferences dialog is resized or the tab is selected
 // All tabs' validate() methods are invoked, if they exist, before any attempt to call save()
 var tabs=[
