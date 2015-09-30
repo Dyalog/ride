@@ -38,6 +38,7 @@ else
 fi
 
 BASE_VERSION=`echo $RIDEVERSION | sed 's/\([0-9]*\.[0-9]*\)\.[0-9]*/\1/'`
+BASE_VERSION_ND=`echo $RIDEVERSION | sed 's/\([0-9]*\)\.\([0-9]*\)\.[0-9]*/\1\2/'`
 
 }
 
@@ -51,7 +52,8 @@ if ! [ -L /usr/bin/ride-${BASE_VERSION} ]; then
 fi
 
 if which update-alternatives >/dev/null 2>&1 ; then
-  update-alternatives --install /usr/bin/ride ride /opt/ride-${BASE_VERSION}/ride `echo ${BASE_VERSION} | sed 's/\.//g'`
+  update-alternatives --install /usr/bin/ride ride /opt/ride-${BASE_VERSION}/ride${BASE_VERSION_ND} `echo ${BASE_VERSION} | sed 's/\.//g'`
+  update-alternatives --install /usr/bin/ride-${BASE_VERSION} ride${BASE_VERSION_ND} /opt/ride-${BASE_VERSION}/ride${BASE_VERSION_ND} `echo ${BASE_VERSION} | sed 's/\.//g'`
 fi
 
 
