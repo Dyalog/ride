@@ -141,7 +141,7 @@ CodeMirror.defineMode 'apl', (config) ->
             stream.match name1; x = stream.current(); dd = dfnDepth a
             if !dd && stream.match /:/ then 'apl-lbl' else if dd || h.vars && x in h.vars then 'apl-var' else 'apl-glb'
           else if /[\+\-×÷⌈⌊\|⍳\?\*⍟○!⌹<≤=≥>≠≡≢∊⍷∪∩~∧∨⍲⍱⍴,⍪⌽⊖⍉↑↓⊂⊃⌷⍋⍒⊤⊥⍕⍎⊣⊢→]/.test c then 'apl-fn'
-          else if /[\/\\⌿⍀¨⍨⌸⌶]/.test c then 'apl-op1'
+          else if /[\/\\⌿⍀¨⍨⌸⌶&]/.test c then 'apl-op1'
           else if /[\.∘⍤⍣⍠]/.test c then 'apl-op2'
           else 'apl-err'
 
