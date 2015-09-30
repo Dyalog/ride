@@ -183,7 +183,7 @@ function stackStr(h){var a=h.a,r='';for(var i=0;i<a.length;i++)r+=a[i].t+' ';ret
 
 function isPrefix(x,y){return x===y.slice(0,x.length)}
 
-var sc= // system commands
+var scmd= // system commands
 ('classes clear cmd continue copy cs drop ed erase events fns holds intro lib load methods ns objects obs off'+
 ' ops pcopy props reset save sh sic si sinl tid vars wsid xload').split(' ')
 
@@ -196,7 +196,7 @@ CodeMirror.defineMode('apl-session',function(config,modeConfig){
     blankLine:function(h){h.l++},
     token:function(stream,h){var m
       if(se.dirty[h.l]==null){stream.skipToEnd();h.l++}
-      else if(stream.sol()&&(m=stream.match(/^ *\)(\w*).*/))){h.l++;return !m[1]||sc.indexOf(m[1])<0?'apl-err':'apl-sc'}
+      else if(stream.sol()&&(m=stream.match(/^ *\)(\w+).*/))){h.l++;return !m[1]||scmd.indexOf(m[1])<0?'apl-err':'apl-scmd'}
       else{
         if(stream.sol()){h.h=im.startState();delete h.h.hdr}
         var h1=CodeMirror.copyState(im,h.h), t=im.token(stream,h1)

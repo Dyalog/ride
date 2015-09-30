@@ -174,7 +174,7 @@ module.exports=function(opts){
     .on('*connected',function(x){
       if($listenDlg ){$listenDlg .dialog('close');$listenDlg =null}
       if($connectDlg){$connectDlg.dialog('close');$connectDlg=null}
-      (new IDE).setHostAndPort(x.host,x.port)
+      new IDE().setHostAndPort(x.host,x.port)
     })
     .on('*connectError',function(x){
       if($connectDlg){$connectDlg.dialog('close');$connectDlg=null}
