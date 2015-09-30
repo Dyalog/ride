@@ -206,7 +206,7 @@ this.Proxy=function(){
               var o=b64d(tag('options',m))
               toBrowser('autocomplete',{token:+tag('token',m),skip:+tag('skip',m),options:o?o.split('\n'):[]})
               break
-            case'ReplyHighlightLine'   :toBrowser('highlight',+tag('win',m),+tag('line',m))                ;break
+            case'ReplyHighlightLine'   :toBrowser('highlight',{win:+tag('win',m),line:+tag('line',m)})     ;break
             case'ReplyDisconnect'      :toBrowser('Disconnect',{message:b64d(tag('msg',m))})               ;break
             case'ReplySysError'        :toBrowser('SysError',{text:b64d(tag('text',m))})                   ;break
             case'ReplyInternalError':

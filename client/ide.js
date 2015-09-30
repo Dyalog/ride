@@ -89,7 +89,7 @@ this.IDE=function(){
     FocusWindow:throttle1(function(x){$('#wintab'+x.win+' a').click();var w=ide.wins[x.win];w&&w.focus()}),
     WindowTypeChanged:function(x){return ide.wins[x.win].setTracer(x.tracer)},
     autocomplete:function(x){return ide.wins[x.token].autocomplete(x.skip,x.options)},
-    highlight:function(win,line){ide.wins[win].highlight(line)},
+    highlight:function(x){ide.wins[x.win].highlight(x.line)},
     UpdateWindow:function(ee){ // "ee" for EditableEntity, see protocol spec
       $('#wintab'+ee.token+' a').text(ee.name);ide.wins[ee.token].open(ee)
     },
