@@ -53,7 +53,7 @@ prefs.indentComments(function(x){icom=x})
 var dfnDepth=this.dfnDepth=function(a){var r=0;for(var j=0;j<a.length;j++)a[j].t==='{'&&r++;return r}
 
 CodeMirror.defineMIME('text/apl','apl')
-CodeMirror.defineMode('apl',function(){
+CodeMirror.defineMode('apl',function(config){
   var comMode=CodeMirror.getMode({},'text/apl-comments');if(!comMode.token||!comMode.startState)comMode=null
   return{
     startState:function(){
@@ -68,11 +68,10 @@ CodeMirror.defineMode('apl',function(){
       return{hdr:1,a:[{t:'',oi:0,ii:0}]}
     },
     token:function(stream,h){ // h:state
-      var ref4, ref5, s, x, y
       var a=h.a,la=a[a.length-1],n=stream.indentation(),c
       if(stream.sol()){delete h.kw;if(!stream.match(/^\s*(:|∇|$)/,false)){a[a.length-1]=$.extend({ii:n},la)}}
       if(h.hdr){
-        delete h.hdr;stream.match(/[^⍝\n\r]*/);s=stream.current()
+        delete h.hdr;stream.match(/[^⍝\n\r]*/);var s=stream.current()
         if(/^\s*:/.test(s)||dfnHeader.test(s)){stream.backUp(s.length)}else{h.vars=s.split(notName)}
         return'apl-trad'
       }else if(h.comState){
@@ -184,14 +183,35 @@ function stackStr(h){var a=h.a,r='';for(var i=0;i<a.length;i++)r+=a[i].t+' ';ret
 
 function isPrefix(x,y){return x===y.slice(0,x.length)}
 
+CodeMirror.defineMIME('text/apl-session','apl-session')
+CodeMirror.defineMode('apl-session',function(config,modeConfig){
+  var m=CodeMirror.getMode(config,'text/apl') // inner mode
+  var se=modeConfig.se // the Session object
+  return{
+    startState:function(){return{l:0}}, // .l:line number, .h:inner state
+    copyState:function(h){return{l:h.l,h:h?CodeMirror.copyState(m,h.h):null}},
+    blankLine:function(h){h.l++},
+    token:function(stream,h){
+      if(se.dirty[h.l]==null){
+        stream.skipToEnd();h.l++
+      }else{
+        if(stream.sol()){h.h=m.startState();delete h.h.hdr}
+        var h1=CodeMirror.copyState(m,h.h), t=m.token(stream,h1)
+        if(stream.eol()){h.l++;delete h.h}else{h.h=CodeMirror.copyState(m,h1)}
+        return t
+      }
+    }
+  }
+})
+
 CodeMirror.registerHelper('fold','apl',function(cm,start){
-  var l,l0=l=start.line,end=cm.lastLine(),x,y
-      x0=stackStr(cm.getStateAfter(l0-1)), // x0: the stackStr at the beginning of start.line
-      y0=stackStr(cm.getStateAfter(l0))    // y0: the stackStr at the end of start.line
+  var l,l0=l=start.line,end=cm.lastLine()
+  var x0=stackStr(cm.getStateAfter(l0-1))   // x0: the stackStr at the beginning of start.line
+  var y0=stackStr(cm.getStateAfter(l0))     // y0: the stackStr at the end of start.line
   if(x0!==y0&&isPrefix(x0,y0)){
     while(++l<=end){
-      x=stackStr(cm.getStateAfter(l-1))    // x:  the stackStr at the beginning of the current line
-      y=stackStr(cm.getStateAfter(l))      // y:  the stackStr at the end of the current line
+      var x=stackStr(cm.getStateAfter(l-1)) // x:  the stackStr at the beginning of the current line
+      var y=stackStr(cm.getStateAfter(l))   // y:  the stackStr at the end of the current line
       if(!isPrefix(y0,x)||!isPrefix(y0,y))break
     }
     if(l<=end&&x0===y&&isPrefix(y,x)){
