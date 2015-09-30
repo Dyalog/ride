@@ -2,7 +2,7 @@
 set -e
 . build.sh
 app_name=$(node -e "console.log($(cat package.json).name)")
-nw_version=0.12.2 # https://github.com/nwjs/nw.js/wiki/Downloads-of-old-versions
+nw_version=0.12.3 # https://github.com/nwjs/nw.js/wiki/Downloads-of-old-versions
 ulimit -n $(ulimit -Hn) # bump open file limit to its hard limit, OSX build requires a lot of them
 
 desktop_app() {
