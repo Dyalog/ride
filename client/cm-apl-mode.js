@@ -183,21 +183,24 @@ function stackStr(h){var a=h.a,r='';for(var i=0;i<a.length;i++)r+=a[i].t+' ';ret
 
 function isPrefix(x,y){return x===y.slice(0,x.length)}
 
+var sc= // system commands
+('classes clear cmd continue copy cs drop ed erase events fns holds intro lib load methods ns objects obs off'+
+' ops pcopy props reset save sh sic si sinl tid vars wsid xload').split(' ')
+
 CodeMirror.defineMIME('text/apl-session','apl-session')
 CodeMirror.defineMode('apl-session',function(config,modeConfig){
-  var m=CodeMirror.getMode(config,'text/apl') // inner mode
-  var se=modeConfig.se // the Session object
+  var im=CodeMirror.getMode(config,'text/apl'), se=modeConfig.se // im:inner mode, se:the Session object
   return{
     startState:function(){return{l:0}}, // .l:line number, .h:inner state
-    copyState:function(h){return{l:h.l,h:h?CodeMirror.copyState(m,h.h):null}},
+    copyState:function(h){h=CodeMirror.copyState({},h);h.h=CodeMirror.copyState(im,h.h);return h},
     blankLine:function(h){h.l++},
-    token:function(stream,h){
-      if(se.dirty[h.l]==null){
-        stream.skipToEnd();h.l++
-      }else{
-        if(stream.sol()){h.h=m.startState();delete h.h.hdr}
-        var h1=CodeMirror.copyState(m,h.h), t=m.token(stream,h1)
-        if(stream.eol()){h.l++;delete h.h}else{h.h=CodeMirror.copyState(m,h1)}
+    token:function(stream,h){var m
+      if(se.dirty[h.l]==null){stream.skipToEnd();h.l++}
+      else if(stream.sol()&&(m=stream.match(/^ *\)(\w*).*/))){h.l++;return !m[1]||sc.indexOf(m[1])<0?'apl-err':'apl-sc'}
+      else{
+        if(stream.sol()){h.h=im.startState();delete h.h.hdr}
+        var h1=CodeMirror.copyState(im,h.h), t=im.token(stream,h1)
+        if(stream.eol()){h.l++;delete h.h}else{h.h=CodeMirror.copyState(im,h1)}
         return t
       }
     }
