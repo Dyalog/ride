@@ -2,37 +2,40 @@
 ![Screenshot](docs/s1.png?raw=true "Screenshot")
 ![Screenshot](docs/s2.png?raw=true "Screenshot")
 
-# Architecture
+#Architecture
     ┌───────┐
     │NW.js  │  RIDE                                          RIDE
     │┌─────┐│protocol┌───────────┐   ┌───────┐HTTPS ┌─────┐protocol┌───────────┐
     ││proxy├┼────────┤interpreter│   │browser├──────┤proxy├────────┤interpreter│
     │└─────┘│   :4502└───────────┘   └───────┘ :8443└─────┘   :4502└───────────┘
     └───────┘
-      (as a desktop application)                  (in a browser)
+       as a desktop application                    in a browser
 
-# Building
-## Prerequisites
+#Build
 
-<strong>All Operating Systems</strong>
-* [Virtual Box](https://www.virtualbox.org/)
-* [Vagrant](https://www.vagrantup.com/)
-* git (for Windows see below)
+##Linux
 
-<strong>Windows</strong>
-* [Github for windows](https://windows.github.com/)
+* install Git and NodeJS
+* `git clone https://github.com/dyalog/ride --depth=1`
+* `cd ride`
+* `npm i  # npm is a tool that usually comes with nodejs, it downloads js dependencies`
+* `./dist.sh linux64  # or linux32;  this downloads NW.js on first run, may take a few minutes`
+* `build/ride20/linux64/ride20`
 
-You will need to set your Git Shell to `Bash` in the options
+##Windows
 
-## Build
-
-<strong>Windows</strong>
-
-* clone [ride](https://www.github.com/dyalog/ride) in Github for Windows
+* install [Virtual Box](https://www.virtualbox.org/)
+* install [Vagrant](https://www.vagrantup.com/)
+* install [GitHub for Windows](https://windows.github.com/) &ndash; set your Git Shell to `bash` in the options
+* clone [ride](https://www.github.com/dyalog/ride) in GitHub for Windows
 * right-click repository and `Open in git Shell`
 * run `./vagrantbuild.sh`
 
-<strong>Linux/OS X</strong>
+##OS X
+
+* install [Virtual Box](https://www.virtualbox.org/)
+* install [Vagrant](https://www.vagrantup.com/)
+* install git
 * clone [ride](https://www.github.com/dyalog/ride)
 * cd to "ride" directory
 * run `./vagrantbuild.sh`
