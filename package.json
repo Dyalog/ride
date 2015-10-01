@@ -6,7 +6,6 @@
   "dependencies": {
     "cheerio": "0.19.0",
     "codemirror": "5.6.0",
-    "coffee-script": "1.10.0",
     "compression": "1.5.2",
     "engine.io": "1.5.4",
     "engine.io-client": "1.5.4",
