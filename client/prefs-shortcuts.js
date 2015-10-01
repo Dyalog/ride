@@ -38,6 +38,7 @@ this.init=function($e){
       for(var i=0;i<cmds.length;i++)if(cmds[i][0]===c){
         $tr.find('.shortcuts-shortcut').remove()
         $tr.find('.shortcuts-add').parent().prepend(cmds[i][2].map(keyHTML).join(''))
+        updateDups()
       }
     })
   $sc=$('#shortcuts-search').on('keyup change',function(){
