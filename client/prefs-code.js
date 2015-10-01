@@ -38,8 +38,8 @@ this.init=function($e){
   $sw.add($swm).add($acd).click(function(){$(this).select()})
 }
 this.load=function(){
-  sw =prefs.indent       ();$ai .prop('checked',sw >=0);$sw .val(sw <0&&4||sw )
-  swm=prefs.indentMethods();$aim.prop('checked',swm>=0);$swm.val(swm<0&&2||swm)
+  var sw =prefs.indent       ();$ai .prop('checked',sw >=0);$sw .val(sw <0&&4||sw )
+  var swm=prefs.indentMethods();$aim.prop('checked',swm>=0);$swm.val(swm<0&&2||swm)
   $icom.prop('checked',!!prefs.indentComments     ())
   $io  .prop('checked',!!prefs.indentOnOpen       ())
   $mb  .prop('checked',!!prefs.matchBrackets      ())

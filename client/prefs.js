@@ -117,7 +117,7 @@ D.prefs=this;
         }else if(arguments.length){
           x=t==='number'?(+x):t==='string'?(''+x):x // coerce "x" to type "t"
           var sx=str(x) // sx: "x" converted to a string; localStorage values can only be strings
-          if(l.length)old=p()
+          if(l.length)var old=p()
           sx===sd?delete localStorage[k]:(localStorage[k]=sx) // avoid recording if it's at its default
           for(var i=0;i<l.length;i++)l[i](x,old) // notify listeners
           return x

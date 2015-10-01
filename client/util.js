@@ -32,9 +32,8 @@ $.alert=function(m,t,f){ // m:message, t:title, f:callback
 $.fn.insert=function(s){ // replace selection in an <input> or <textarea> with s
   return this.each(function(){
     if(!this.readOnly){
-      if((i=this.selectionStart)!=null&&(j=this.selectionEnd)!=null){ // TODO: IE
-        this.value=this.value.slice(0,i)+s+this.value.slice(j);this.selectionStart=this.selectionEnd=i+s.length
-      }
+      var e=this,i=e.selectionStart,j=e.selectionEnd  // TODO: IE
+      if(i!=null&&j!=null){e.value=e.value.slice(0,i)+s+e.value.slice(j);e.selectionStart=e.selectionEnd=i+s.length}
     }
   })
 }
