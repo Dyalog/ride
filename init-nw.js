@@ -236,7 +236,7 @@ if(typeof process!=='undefined'){
     })
   }
 
-  D.open=function(url,o){o.icon='D.png';o.toolbar==null&&(o.toolbar=false);!!gui.Window.open(url,o)} // o:options
+  D.open=function(url,o){o.icon='D.png';o.toolbar==null&&(o.toolbar=false);return!!gui.Window.open(url,o)} // o:options
   D.openExternal=gui.Shell.openExternal
 
   if(D.mac&&!D.floating){ // todo: clean this up and test on Mac
