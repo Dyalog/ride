@@ -24,6 +24,7 @@ this.options=function(h){return{parse:function(a){ // h:option descriptions, a:a
       }
     }else{
       var j=s.indexOf('='), k=j<0?s.slice(2):s.slice(2,j), v=j<0?null:s.slice(j+1), inv=k.slice(0,3)==='no-'
+      inv&&(k=k.slice(3))
       if(!h[k]||inv&&!h[k].flag)err('unrecognized option '+JSON.stringify(s))
       r[k]=h[k].flag?(v===null?!inv:err('option '+JSON.stringify('--'+k)+' doesn\'t allow an argument'))
                     :v!==null?v:++i<a.length?a[i]:err('option requires an argument '+JSON.stringify(k))
