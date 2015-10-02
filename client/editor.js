@@ -1,3 +1,4 @@
+'use strict'
 var autocompletion=require('./autocompletion')
 var prefs=require('./prefs')
 var mode=require('./cm-apl-mode'),letter=mode.letter,dfnDepth=mode.dfnDepth

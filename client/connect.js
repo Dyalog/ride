@@ -1,3 +1,4 @@
+'use strict'
 var IDE=require('./ide').IDE,about=require('./about'),prefs=require('./prefs'),esc=require('./util').esc
 
 var DEFAULT_PORT=prefs.favs.getDefault()[0].port

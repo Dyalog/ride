@@ -1,3 +1,4 @@
+'use strict'
 var helpurls=require('./helpurls'),prefs=require('./prefs'),about=require('./about'),esc=require('./util').esc,
     prefsUI=require('./prefs-ui'),ACB_VALUE=require('./editor').ACB_VALUE
 

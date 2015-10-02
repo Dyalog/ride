@@ -1,3 +1,4 @@
+'use strict'
 var connect=require('./connect'),
     Editor=require('./editor').Editor,
     IDE=require('./ide').IDE,

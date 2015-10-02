@@ -1,3 +1,4 @@
+'use strict'
 var prefs=require('./prefs'),util=require('./util'),dict=util.dict,esc=util.esc
 
 this.name='Colours'

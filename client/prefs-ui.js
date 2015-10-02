@@ -1,3 +1,4 @@
+'use strict'
 // This module implements the Preferences dialog as a whole.
 // The content of individual tabs is in separate modules: prefs-*.js
 // Each of them can export the following properties:

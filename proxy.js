@@ -1,3 +1,4 @@
+'use strict'
 var fs=require('fs'),net=require('net'),os=require('os'),path=require('path'),
     cp=require('child_process'),spawn=cp.spawn,exec=cp.exec
 

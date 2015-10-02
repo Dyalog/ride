@@ -1,3 +1,4 @@
+'use strict'
 var prefs=require('./prefs')
 var layouts=D.kbds.layouts
 

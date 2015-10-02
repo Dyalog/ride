@@ -1,3 +1,4 @@
+'use strict'
 var prefs=require('./prefs'),
 esc=require('./util').esc,
 cmds=require('./cmds').cmds

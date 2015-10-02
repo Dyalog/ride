@@ -1,3 +1,4 @@
+'use strict'
 var prefs=require('./prefs'),cmds=require('./cmds').cmds
 
 // This is a generic menu for a browser or NW.js

@@ -1,3 +1,4 @@
+'use strict'
 // a kitchen sink for small generic functions and jQuery plugins
 this.inherit=function(x){var F=function(){};F.prototype=x;return new F} // JavaScript's prototypal inheritance
 this.cat=function(x){return[].concat.apply([],x)} // array concatenation, like ⊃,/ in APL

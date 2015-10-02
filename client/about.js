@@ -1,3 +1,4 @@
+'use strict'
 this.showDialog=function(){
   var v=D.versionInfo,i=D.remoteIdentification||{},u='unknown'
   var info='IDE:'+

@@ -1,3 +1,4 @@
+'use strict'
 var prefs=require('./prefs')
 var $ai,$sw,$aim,$icom,$swm,$io,$mb,$acbr,$acbl,$acbe,$ac,$acd,$fold
 this.name='Code'

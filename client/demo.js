@@ -1,3 +1,4 @@
+'use strict'
 // support for presentations
 var lines=[],index=-1
 var $i // $i:an <input type=file> used to open the file chooser dialog

@@ -1,3 +1,4 @@
+'use strict'
 var autocompletion=require('./autocompletion'),
 prefs=require('./prefs'),
 onCodeMirrorDoubleClick=require('./util').onCodeMirrorDoubleClick
@@ -147,7 +148,7 @@ this.Session.prototype={
     if(cm.somethingSelected()){
       cm.execCommand('indentMore')
     }else if(this.promptType!==4){ // never autocomplete in ⍞ input
-      var c=cm.getCursor();s=cm.getLine(c.line)
+      var c=cm.getCursor(),s=cm.getLine(c.line)
       if(/^ *$/.test(s.slice(0,c.ch))){cm.execCommand('indentMore')}
       else{this.autocompleteWithTab=1;this.emit('Autocomplete',{line:s,pos:c.ch,token:0})}
     }

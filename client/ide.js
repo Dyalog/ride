@@ -1,3 +1,4 @@
+'use strict'
 require('./menu')
 var prefs=require('./prefs'),
     prefsUI=require('./prefs-ui'),

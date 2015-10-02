@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+'use strict'
 var compression=require('compression'),express=require('express'),fs=require('fs'),http=require('http'),
     https=require('https'),engine=require('engine.io'),nomnom=require('./nomnom'),
     Proxy=require('./proxy').Proxy,spawn=require('child_process').spawn

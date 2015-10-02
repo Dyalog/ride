@@ -1,3 +1,4 @@
+'use strict'
 // https://codemirror.net/doc/manual.html#modeapi
 var prefs=require('./prefs')
 var // regexes

@@ -1,3 +1,4 @@
+'use strict'
 var prefs=require('./prefs'),letter=require('./cm-apl-mode').letter
 var re=RegExp('['+letter+']*$')
 this.setUp=function(win){ // win: an instance of Editor or Session

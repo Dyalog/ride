@@ -1,3 +1,4 @@
+'use strict'
 CodeMirror.defineOption('foldGutter',false,function(cm,val,old){
   if(old&&old!==CodeMirror.Init){
     cm.clearGutter(cm.state.foldGutter.options.gutter)

@@ -1,3 +1,4 @@
+'use strict'
 // Preferences API -- localStorage should be accessed only through here.
 // (../init-nw.js is an exception, it bypasses this API because it can't require() it.)
 // Usage:

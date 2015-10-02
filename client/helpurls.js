@@ -1,3 +1,4 @@
+'use strict'
 var p='http://help.dyalog.com/14.0/Content/',q='.htm', // prefix and suffix
 h=D.helpurls=module.exports={
   WELCOME:p+'MiscPages/HelpWelcome'+q,

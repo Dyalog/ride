@@ -1,3 +1,4 @@
+'use strict'
 // Parse command line args
 // This is a replacement for the now abandoned https://github.com/harthur/nomnom
 // It contains only the functionality we need instead of nomnom's 500+ lines of code.
