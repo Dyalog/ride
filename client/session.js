@@ -11,7 +11,7 @@ this.Session=function(ide,e,opts){ // Session constructor
   se.dirty={} // modified lines: lineNumber→originalContent, inserted lines: lineNumber→0 (also used in cm-apl-mode.js)
   se.hist=[''];se.histIdx=0
   se.$e=$(e).addClass('ride-win')
-  var cm=se.cm=new CodeMirror(se.$e[0],{
+  var cm=se.cm=CodeMirror(se.$e[0],{
     autofocus:true,mode:{name:'apl-session',se:se},matchBrackets:!!prefs.matchBrackets(),readOnly:true,keyMap:'dyalog',
     lineWrapping:!!prefs.wrap(),indentUnit:4,autoCloseBrackets:{pairs:'()[]{}',explode:''},
     extraKeys:{'Shift-Tab':'indentLess',Tab:'tabOrAutocomplete'},

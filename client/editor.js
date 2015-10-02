@@ -46,7 +46,7 @@ this.Editor=function(ide,e,opts){
   ed.hll=null // highlighted line -- currently executed line in tracer
   ed.lastQuery=ed.lastIC=ed.overlay=ed.annotation=null // search-related state
   ed.focusTimestamp=0
-  ed.cm=new CodeMirror(ed.$e.find('.ride-win')[0],{
+  ed.cm=CodeMirror(ed.$e.find('.ride-win')[0],{
     lineNumbers:!!(ed.isTracer?prefs.lineNumsTracer():prefs.lineNumsEditor()),
     firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
     smartIndent:prefs.indent()>=0,indentUnit:prefs.indent(),scrollButtonHeight:12,matchBrackets:!!prefs.matchBrackets(),
@@ -70,7 +70,7 @@ this.Editor=function(ide,e,opts){
       var m,a=$(e.target).prop('class').split(/\s+/)
       for(var i=0;i<a.length;i++)if(m=/^tb-([A-Z]{2,3})$/.exec(a[i])){ed[m[1]](ed.cm);break}
     })
-  ed.cmSC=new CodeMirror(ed.$tb.find('.tb-sc')[0],{placeholder:'Search',extraKeys:{
+  ed.cmSC=CodeMirror(ed.$tb.find('.tb-sc')[0],{placeholder:'Search',extraKeys:{
     Enter:ed.NX.bind(ed),
     'Shift-Enter':ed.PV.bind(ed),
     'Ctrl-Enter':ed.selectAllSearchResults.bind(ed),
@@ -78,7 +78,7 @@ this.Editor=function(ide,e,opts){
     'Shift-Tab':ed.cm.focus.bind(ed.cm)
   }})
   ed.cmSC.on('change',function(){ed.highlightSearch()})
-  ed.cmRP=new CodeMirror(ed.$tb.find('.tb-rp')[0],{placeholder:'Replace',extraKeys:{
+  ed.cmRP=CodeMirror(ed.$tb.find('.tb-rp')[0],{placeholder:'Replace',extraKeys:{
     Enter:ed.replace.bind(ed),
     'Shift-Enter':ed.replace.bind(ed,1),
     Tab:ed.cm.focus.bind(ed.cm),

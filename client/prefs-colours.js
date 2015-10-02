@@ -191,7 +191,7 @@ this.init=function($e){
     scheme=schemes[Math.min(i,schemes.length-1)];updateSchemes();return false
   })
   $cm=$('#col-cm')
-  cm=new CodeMirror($cm[0],{
+  cm=CodeMirror($cm[0],{
     lineNumbers:true,firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
     indentUnit:4,scrollButtonHeight:12,matchBrackets:true,autoCloseBrackets:{pairs:'()[]{}',explode:'{}'}
   })
