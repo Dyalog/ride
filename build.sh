@@ -3,7 +3,7 @@ set -e -o pipefail
 export PATH="`dirname "$0"`/node_modules/.bin:$PATH"
 cd `dirname "$0"`
 if [ ! -e node_modules ]; then npm i; fi
-mkdir -p build/{js/client,nw,tmp}
+mkdir -p build/{js/client,nw,tmp,static}
 
 cp -uvr {index,empty,print}.html {proxy,nomnom}.js style/{*.png,apl385.woff,img} favicon.ico package.json build/nw/
 cp -uv client/*.js build/js/client/
@@ -40,7 +40,6 @@ lib_files='
   node_modules/codemirror/addon/fold/foldcode.js
   node_modules/codemirror/addon/fold/indent-fold.js
   lib/jquery.layout.js
-  init-nw.js
   lbar/lbar.js
   kbds/kbds.js
 '
@@ -60,21 +59,26 @@ if [ $changed -eq 1 ]; then echo 'concatenating libs'; cat $us >build/tmp/libs.j
 if [ ! -e build/nw/D.js -o $(find build/{js,tmp} -newer build/nw/D.js 2>/dev/null | wc -l) -gt 0 ]; then
   v=$(node -e "console.log($(cat package.json).version.replace(/\.0$/,''))").$(git rev-list --count HEAD)
   echo $v >build/nw/version # for the benefit of installers, store version in file
-  echo 'combining javascript files into one'
-  (
-    cat <<.
-      D={versionInfo:{version:'$v',date:'$(git show -s HEAD --pretty=format:%ci)',rev:'$(git rev-parse HEAD)'}};
-      (function(){
-        var g=[];for(var x in window)g.push(x) // remember original global names (except for "D")
-        D.pollution=function(){var r=[];for(var x in window)if(g.indexOf(x)<0)r.push(x);return r} // measure pollution
-      }());
+  echo 'generating version info'
+  cat >build/tmp/version-info.js <<.
+    D={versionInfo:{version:'$v',date:'$(git show -s HEAD --pretty=format:%ci)',rev:'$(git rev-parse HEAD)'}};
+    (function(){
+      var g=[];for(var x in window)g.push(x) // remember original global names (except for "D")
+      D.pollution=function(){var r=[];for(var x in window)if(g.indexOf(x)<0)r.push(x);return r} // measure pollution
+    }());
 .
-    cat build/tmp/libs.js
-    node <<.
-      require('pure-cjs').transform({input:'build/js/client/init.js',dryRun:1}).then(
-        function(h){process.stdout.write(h.code)}, // success
-        function(e){process.stderr.write(e);process.exit(1)} // failure
-      );
+  echo 'combining js files into one'
+  node >build/tmp/ride.js <<.
+    require('pure-cjs').transform({input:'build/js/client/init.js',dryRun:1}).then(
+      function(h){process.stdout.write(h.code)}, // success
+      function(e){process.stderr.write(e);process.exit(1)} // failure
+    );
 .
-  )>build/nw/D.js
+  echo 'generating D.js for desktop app'
+  cat build/tmp/version-info.js build/tmp/libs.js init-nw.js build/tmp/ride.js >build/nw/D.js
+  echo 'generating D.js for web app'
+  cp -r build/nw/* build/static/
+  rm build/static/proxy.js
+  cp favicon.ico style/apl385.{eot,svg,ttf} build/static/
+  cat build/tmp/version-info.js build/tmp/libs.js            build/tmp/ride.js >build/static/D.js
 fi

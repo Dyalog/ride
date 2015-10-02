@@ -21,7 +21,7 @@ if(opts.watch){
       tid=setTimeout(build,100)
     }else{
       log('building');tid=0;isRunning=1
-      spawn(_d+'/build-server.sh',{cwd:_d,stdio:'inherit'}).on('close',function(){log('build done');isRunning=0})
+      spawn(_d+'/build.sh',{cwd:_d,stdio:'inherit'}).on('close',function(){log('build done');isRunning=0})
     }
   }
   ;['.','client','style','style/themes'].forEach(function(x){
