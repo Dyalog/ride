@@ -1,6 +1,7 @@
 {
   "name": "ride20",
   "version": "2.0.0",
+  "private": true,
   "main": "index.html",
   "repository": ".",
   "dependencies": {
