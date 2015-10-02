@@ -15,12 +15,12 @@
 
 ##Linux
 
-* install Git and NodeJS
+* install NodeJS (preferably [the latest](https://nodejs.org/en/download/)) and Git
 * `git clone https://github.com/dyalog/ride --depth=1`
 * `cd ride`
-* `npm i  # npm is a tool that usually comes with nodejs, it downloads js dependencies`
-* `./dist.sh linux64  # or linux32;  this downloads NW.js on first run, may take a few minutes`
-* `build/ride20/linux64/ride20`
+* `npm i  # npm is a tool that comes with nodejs, it downloads js dependencies`
+* `./dist.sh linux64  # downloads NW.js on first run, may take a few minutes`
+* `build/ride20/linux64/ride20  # start RIDE`
 
 ##Windows
 
