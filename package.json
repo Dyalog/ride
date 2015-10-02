@@ -14,8 +14,7 @@
     "jquery": "2.1.4",
     "jquery-ui": "1.10.5",
     "node-sass": "3.3.2",
-    "nw-builder": "2.0.2",
-    "pure-cjs": "1.18.2"
+    "nw-builder": "2.0.2"
   },
   "devDependencies": {
     "rcedit": "0.3.0"
