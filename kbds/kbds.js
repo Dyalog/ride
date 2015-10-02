@@ -2,9 +2,9 @@ D.kbds={
  geom:{"_":"iso","US":"ansi"},
  layouts:{
   BE:[
-   " ²&é\"'(§è!çà)-   azertyuiop∧$  qsdfghjklmùμ  <wxcvbn,;:=  ",
+   " ²&é\"'(§è!çà)-   azertyuiop^$  qsdfghjklmùμ  <wxcvbn,;:=  ",
    " ³1234567890°_   AZERTYUIOP¨*  QSDFGHJKLM%£  >WXCVBN?./+  ",
-   " ⋄¨¯<≤=≥>≠∨∧÷×   ⍺⍵∊⍴~↑↓⍳○*←→  ?⌈⌊_∇∆∘'⎕|[]  ⊢⊂⊃∩∪⊥⊤≡≢ ⍀  ",
+   " ⋄¨¯<≤=≥>≠∨^÷×   ⍺⍵∊⍴~↑↓⍳○*←→  ?⌈⌊_∇∆∘'⎕|[]  ⊢⊂⊃∩∪⊥⊤≡≢ ⍀  ",
    "  ⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲⍬⌹     ⍷ ⍨  ⍸⍥⍣⍞⍙        ⍤⌸⌷ ⍎⍕  ⊣      ⍪⍝⌿⍠  ",
   ],
   DE:[
@@ -27,12 +27,12 @@ D.kbds={
   ],
   FI:[
    " §1234567890+'   qwertyuiopå¨  asdfghjklöä'  <zxcvbnm,.-  ",
-   " ⍬!\"#⊢%&/()=?`   QWERTYUIOPÅ∧  ASDFGHJKLÖÄ*  >ZXCVBNM;:_  ",
+   " ⍬!\"#⊢%&/()=?`   QWERTYUIOPÅ^  ASDFGHJKLÖÄ*  >ZXCVBNM;:_  ",
    " ⋄¨¯<≤=≥>≠∨∧×÷   ?⍵∊⍴~↑↓⍳○*←→  ⍺⌈⌊_∇∆∘'⎕⍎⍕≡  ⍙⊂⊃∩∪⊥⊤|⍝⍀⌿  ",
    " ⍪≡⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹     ⍷ ⍨    ⍣⍞⍬         ⌸⌷[]⍷  ⌷       ¢ ⍨  ",
   ],
   FR:[
-   " ²&é\"'(-è_çà)=   azertyuiop∧$  qsdfghjklmù*  <wxcvbn,;:!  ",
+   " ²&é\"'(-è_çà)=   azertyuiop^$  qsdfghjklmù*  <wxcvbn,;:!  ",
    "  1234567890°+   AZERTYUIOP¨£  QSDFGHJKLM%μ  >WXCVBN?./§  ",
    " ⋄¨¯<≤=≥>≠∨∧÷×   ⍺⍵∊⍴~↑↓⍳○*←→  ?⌈⌊_∇∆∘'⎕|[]  ⊢⊂⊃∩∪⊥⊤≡≢ ⍀  ",
    "  ⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲⍬⌹     ⍷ ⍨  ⍸⍥⍣⍞⍙        ⍤⌸⌷ ⍎⍕  ⊣      ⍪⍝⌿⍠  ",
