@@ -28,7 +28,7 @@ Not yet prioritized:
   2015-09-10 Toon: easy access to list of / documentation of I-beams
   2015-09-09 Adam: curly underlines
   2015-09-08 Ken Mellem: custom syntax highlighting in comments
-  2015-09-07 Adam: ctrl+scroll to zoom in/out
+    NN: added an example
   2015-09-07 Adam: shortcut to clear the "modified" flag of a line in session without reverting it to original content
   2015-09-07 Ray: status bar and programmatic access to "current object"
   2015-09-07 Jim Brown: custom fonts
@@ -256,3 +256,4 @@ Done:
   Option to automatically pop up completion box after a timeout OR use a keystroke
   Menu items for next/prev line from demo should be disabled when there are no more lines; MK Jabber 2015-03-25
     NN: those menu items have been removed from the menu; they are still available as key-mappable commands
+  2015-09-07 Adam: ctrl+scroll to zoom in/out
