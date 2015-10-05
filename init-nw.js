@@ -55,7 +55,7 @@ function restoreWindow(w,r){ // w: NWJS window, r: rectangle
 if(D.mac&&!process.env.DYALOG_IDE_INTERPRETER_EXE){
   process.env.DYALOG_IDE_INTERPRETER_EXE=D.lastSpawnedExe=path.resolve(process.cwd(),'../Dyalog/mapl')
 }
-process.chdir(process.env.PWD||process.env.HOME||'.') // see https://github.com/nwjs/nw.js/issues/648
+process.chdir(process.env.PWD||process.env.HOME||process.env.USERPROFILE||'.') // see https://github.com/nwjs/nw.js/issues/648
 D.process=process;gui.Screen.Init();var nww=D.nww=gui.Window.get()
 
 var urlParams={},a=(location+'').replace(/^[^\?]*($|\?)/,'').split('&')
