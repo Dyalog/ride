@@ -306,7 +306,7 @@ this.Proxy=function(){
         })
       })
       .on('*listenCancel',function(){server&&server.close()})
-      .on('*proxyInfo',function(){
+      .on('*getProxyInfo',function(){
         // List available interpreter executables, possible paths are:
         //   C:\Program Files\Dyalog\Dyalog APL $VERSION\dyalog.exe
         //   C:\Program Files\Dyalog\Dyalog APL $VERSION unicode\dyalog.exe

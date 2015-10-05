@@ -190,7 +190,7 @@ module.exports=function(opts){
       if($listenDlg){$listenDlg.dialog('close');$listenDlg=null}
       $.alert(x.err,'Error');enableSpawnAndListen(true)
     })
-    .emit('*proxyInfo')
+    .emit('*getProxyInfo')
   $('#fav-list').resizable({handles:'s,e'})
   return{
     listen:function(port){$listenHost.val('::');port&&$listenPort.val(port);$listen.click()},
