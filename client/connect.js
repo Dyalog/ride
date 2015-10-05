@@ -104,7 +104,7 @@ module.exports=function(opts){
     $connect.add($save).add($cancel).button('option','disabled',n!==1)
     $delete.button('option','disabled',!n)
     $save.add($cancel).button('disable')
-    if(n===1){x=parseFav($s.text());$name.val(x.name);$host.val(x.host);$port.val(x.port)}
+    if(n===1){var x=parseFav($s.text());$name.val(x.name);$host.val(x.host);$port.val(x.port)}
     else{$name.add($host).add($port).val('')}
   })
   $host.add($port).add($name)
