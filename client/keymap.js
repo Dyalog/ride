@@ -186,7 +186,7 @@ function bqChangeHandler(cm,o){ // o: changeObj
     }else{
       if(bq[x]){
         cm.replaceRange(bq[x],{line:l,ch:c-1},{line:l,ch:c+1},'D')
-        bq[x]==='∇'&&/^\s*∇/.test(cm.getLine(l))&&cm.indentLine(l,'smart')
+        bq[x]==='∇'&&/^\s*∇/.test(cm.getLine(l))&&cm.getOption('smartIndent')&&cm.indentLine(l,'smart')
       }
       bqCleanUp(cm)
     }

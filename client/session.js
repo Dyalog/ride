@@ -13,7 +13,7 @@ this.Session=function(ide,e,opts){ // Session constructor
   se.$e=$(e).addClass('ride-win')
   var cm=se.cm=CodeMirror(se.$e[0],{
     autofocus:true,mode:{name:'apl-session',se:se},matchBrackets:!!prefs.matchBrackets(),readOnly:true,keyMap:'dyalog',
-    lineWrapping:!!prefs.wrap(),indentUnit:4,autoCloseBrackets:{pairs:'()[]{}',explode:''},
+    lineWrapping:!!prefs.wrap(),indentUnit:4,smartIndent:0,autoCloseBrackets:{pairs:'()[]{}',explode:''},
     extraKeys:{'Shift-Tab':'indentLess',Tab:'tabOrAutocomplete'},
   })
   cm.dyalogCommands=se
