@@ -142,7 +142,7 @@ this.IDE=function(){
     .on('mouseover','b',function(e){
       var s=$(e.target).text(),
           key=keymap.getBQKeyFor(s),
-          keyText=key&&s.charCodeAt(0)>127?'Keyboard:'+prefs.prefixKey()+key+'\n\n':'',
+          keyText=key&&s.charCodeAt(0)>127?'Keyboard: '+prefs.prefixKey()+key+'\n\n':'',
           h=D.lbarTips[s]||[s,'']
       requestTooltip(e,h[0],keyText+h[1])
     })
