@@ -184,7 +184,9 @@ this.init=function($e){
   })
   $('#col-rename').button().click(function(){
     $('#col-new-name').width($('#col-scheme').width()).val(scheme.name).select()
-    $('#prefs-tab-colours').addClass('renaming');return false
+    $('#prefs-tab-colours').addClass('renaming')
+    setTimeout(function(){$('#col-new-name').focus()},0)
+    return false
   })
   $('#col-delete').button().click(function(){
     var i=$('#col-scheme')[0].selectedIndex;schemes.splice(i,1)
