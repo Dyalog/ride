@@ -25,7 +25,6 @@ P4 (I will think about it):
         But if we don't have "Copy" in the menu, cmd+c doesn't work.
 
 Not yet prioritized:
-  Prefs>Code: validation for numeric fields
   Should arrays shown in the editor be immutable?
   favicon.ico is too large (~120k)
   get rid of jquery.layout.js

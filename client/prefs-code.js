@@ -65,3 +65,9 @@ this.save=function(){
   prefs.autocompletionDelay($acd .val())
   prefs.fold               ($fold.is(':checked'))
 }
+this.validate=function(){
+  if($ai .is(':checked')&&!isInt($sw .val(),0))return{message:'Auto-indent must be a non-negative integer.',element:$ai}
+  if($aim.is(':checked')&&!isInt($swm.val(),0))return{message:'Auto-indent in methods must be a non-negative integer.',element:$aim}
+  if($ac .is(':checked')&&!isInt($acd.val(),1))return{message:'Autocompletion delay must be a positive integer.',element:$acd}
+}
+function isInt(x,minX){x=+x;return x===(x|0)&&x>=minX}
