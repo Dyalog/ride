@@ -389,7 +389,7 @@ this.Editor.prototype={
     }else{
       var c=this.cm.getCursor(),s=this.cm.getLine(c.line)
       if(/^ *$/.test(s.slice(0,c.ch))){this.cm.execCommand('indentMore')}
-      else{this.autocompleteWithTab=1;this.emit('Autocomplete',{line:s,pos:c.ch,token:this.id})}
+      else{this.autocompleteWithTab=1;this.emit('GetAutoComplete',{line:s,pos:c.ch,token:this.id})}
     }
   },
   downOrXline:function(){

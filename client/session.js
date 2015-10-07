@@ -150,7 +150,7 @@ this.Session.prototype={
     }else if(this.promptType!==4){ // never autocomplete in ⍞ input
       var c=cm.getCursor(),s=cm.getLine(c.line)
       if(/^ *$/.test(s.slice(0,c.ch))){cm.execCommand('indentMore')}
-      else{this.autocompleteWithTab=1;this.emit('Autocomplete',{line:s,pos:c.ch,token:0})}
+      else{this.autocompleteWithTab=1;this.emit('GetAutoComplete',{line:s,pos:c.ch,token:0})}
     }
   },
   CLM:function(cm){

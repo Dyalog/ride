@@ -11,7 +11,7 @@ this.setUp=function(win){ // win: an instance of Editor or Session
         tid=null;var c=cm.getCursor(),s=cm.getLine(c.line),i=c.ch
         if(i&&s[i-1]!==' '&&s.slice(0,i).replace(re,'').slice(-1)!==prefs.prefixKey()&&
                   win.promptType!==4){ // don't autocomplete in ⍞ input
-          win.autocompleteWithTab=0;win.emit('Autocomplete',{line:s,pos:i,token:win.id})
+          win.autocompleteWithTab=0;win.emit('GetAutoComplete',{line:s,pos:i,token:win.id})
         }
       },prefs.autocompletionDelay())
     }

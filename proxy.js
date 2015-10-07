@@ -242,7 +242,7 @@ this.Proxy=function(){
       .on('Cutback'       ,function(x){cmd('DebugCutback'       ,'<win>'+x.win+'</win>')})
       .on('WeakInterrupt'  ,function(){cmd('WeakInterrupt'  )})
       .on('StrongInterrupt',function(){cmd('StrongInterrupt')})
-      .on('Autocomplete',function(x){
+      .on('GetAutoComplete',function(x){
         cmd('GetAutoComplete','<line>'+b64(x.line)+'</line><pos>'+x.pos+'</pos><token>'+x.token+'</token>')
       })
       .on('SaveChanges',function(x){
