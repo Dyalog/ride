@@ -21,7 +21,7 @@ var // regexes
     ')'
   )
 
-var quadNames=['á','a','af','ai','an','arbin','arbout','arg','at','av','avu','base','class','clear','cmd','cr','cs',
+var quadNames=['','á','a','af','ai','an','arbin','arbout','arg','at','av','avu','base','class','clear','cmd','cr','cs',
 'ct','cy','d','dct','df','div','dl','dm','dmx','dq','dr','ea','ec','ed','em','en','env','es','et','ex','exception',
 'export','fappend','favail','fc','fchk','fcopy','fcreate','fdrop','ferase','fhold','fix','flib','fmt','fnames','fnums',
 'fprops','fr','frdac','frdci','fread','frename','freplace','fresize','fsize','fstac','fstie','ftie','funtie','fx','inp',
