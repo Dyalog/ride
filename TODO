@@ -33,7 +33,7 @@ Not yet prioritized:
     2015-09-10 Toon: easy access to list of / documentation of I-beams
     2015-09-07 Callum: completion for idioms and I-beams
     A dropdown with I-beams (Mike Mingaard)
-      NN:a completion list of valid I-beams (hard-coded in RIDE) is shown but no description/documentation yet
+      NN:a completion list of I-beams (hard-coded in RIDE) is shown but there's no easy access to documentation yet
   2015-09-09 Adam: curly underlines
   2015-09-08 Ken Mellem: custom syntax highlighting in comments
     NN: added an example
