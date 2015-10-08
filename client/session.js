@@ -88,10 +88,12 @@ this.Session.prototype={
     this.cm.setSize(this.$e.width(),this.$e.height())
     b&&this.scrollCursorIntoView()
   },
+  scrollCursorIntoView:function(){
+    var cm=this.cm;cm.scrollTo(0,cm.getScrollInfo().top);setTimeout(function(){cm.scrollIntoView()},1)
+  },
   hasFocus:function(){return window.focused&&this.cm.hasFocus()},
   focus:function(){window.focused||window.focus();this.cm.focus()},
   insert:function(ch){this.cm.getOption('readOnly')||this.cm.replaceSelection(ch)},
-  scrollCursorIntoView:function(){var cm=this.cm;setTimeout(function(){cm.scrollIntoView(cm.getCursor())},1)},
   die:function(){this.cm.setOption('readOnly',true)},
   getDocument:function(){return this.$e[0].ownerDocument},
   refresh:function(){this.cm.refresh()},
