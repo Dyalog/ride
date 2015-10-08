@@ -69,8 +69,6 @@ Not yet prioritized:
   lbar in floating editor windows
   Sortable language bar
   Detachable language bar (Mike Mingaard)
-  JS: Option for turning off AutoFormatting, please.
-    NN: that's an interpreter-side option: export AUTOFORMAT=0
   Drag and drop a "finder object" in the Mac RIDE crashes it (Alex Bochannek, 2015-06-25)
   RIDE on multiple screens on Mac loses its title bar (Alex Bochannek, 2015-06-25)
   profile selection
@@ -261,3 +259,5 @@ Done:
   Menu items for next/prev line from demo should be disabled when there are no more lines; MK Jabber 2015-03-25
     NN: those menu items have been removed from the menu; they are still available as key-mappable commands
   2015-09-07 Adam: ctrl+scroll to zoom in/out
+  JS: Option for turning off AutoFormatting, please.
+    NN: that's an interpreter-side option: export AUTOFORMAT=0
