@@ -61,7 +61,6 @@ this.setUp=function(win){ // win: an instance of Editor or Session
     }
   })
   return r=function(skip,options){
-    console.info('options',options)
     if(prefs.autocompletion()&&options.length&&cm.hasFocus()&&cm.getWrapperElement().ownerDocument.hasFocus()){
       var c=cm.getCursor(),from={line:c.line,ch:c.ch-skip},sel=''
       if(options.length===1&&win.autocompleteWithTab){

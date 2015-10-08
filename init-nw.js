@@ -9,21 +9,15 @@ var gui=require('nw.gui'),fs=require('fs'),nomnom=require('./nomnom'),
 D.nwjs=1;D.win=/^win/i.test(process.platform);D.mac=process.platform=='darwin';D.floating=!!opener
 
 console.log=function(s){try{process.stdout.write(s+'\n')}catch(_){console.log=function(){}}}
-D.opts=nomnom.options({
-  connect:{abbr:'c',flag:true,metavar:'HOST[:PORT]'},
-  listen:{abbr:'l',flag:true},
-  spawn:{abbr:'s',flag:true,'default': // "default" depends on whether we are a standalone RIDE
-    D.win?false:
-    D.mac?fs.existsSync(path.dirname(process.execPath)+'/../../../../Resources/Dyalog/mapl'):
-    fs.existsSync(path.dirname(process.execPath)+'/../mapl')
-  },
-  version:{abbr:'v',flag:true,help:'print version and exit'}
-}).parse(gui.App.argv)
 
-if(D.opts.version){console.log(D.versionInfo.version);process.exit(0)}
+if(!process.env.DYALOG_IDE_SPAWN){ // the default depends on whether we are a standalone RIDE
+  process.env.DYALOG_IDE_SPAWN=
+    D.win?0:
+    D.mac?+fs.existsSync(path.dirname(process.execPath)+'/../../../../Resources/Dyalog/mapl'):
+          +fs.existsSync(path.dirname(process.execPath)+'/../mapl')
+}
 
-// switch IME locale as early as possible
-if(D.win&&(!localStorage.ime||localStorage.ime==='1')){
+if(D.win&&(!localStorage.ime||localStorage.ime==='1')){ // switch IME locale as early as possible
   var setImeExe=process.execPath.replace(/[^\\\/]+$/,'set-ime.exe')
   fs.existsSync(setImeExe)&&spawn(setImeExe,[process.pid],{stdio:['ignore','ignore','ignore']})
 }
@@ -139,12 +133,15 @@ D.createSocket=function(){
 }
 
 var execPath=process.execPath;D.mac&&(execPath=execPath.replace(/(\/Contents\/).*$/,'$1MacOS/nwjs'))
-D.rideConnect=function(){spawn(execPath,['--no-spawn'],{detached:true,stdio:['ignore','ignore','ignore']})}
+D.rideConnect=function(){
+  var e={};for(var k in process.env)e[k]=process.env[k];e.DYALOG_IDE_SPAWN='0'
+  spawn(execPath,[],{detached:true,stdio:['ignore','ignore','ignore'],env:e})
+}
 D.rideNewSession=function(){
   if(D.lastSpawnedExe){
-    var env={};for(var k in process.env)env[k]=process.env[k]
-    env.DYALOG_IDE_INTERPRETER_EXE=D.lastSpawnedExe
-    spawn(execPath,['-s'],{detached:true,stdio:['ignore','ignore','ignore'],env:env})
+    var e={};for(var k in process.env)e[k]=process.env[k]
+    e.DYALOG_IDE_SPAWN='1';e.DYALOG_IDE_INTERPRETER_EXE=D.lastSpawnedExe
+    spawn(execPath,[],{detached:true,stdio:['ignore','ignore','ignore'],env:e})
   }else{
     $.alert('The current session is remote. To connect elsewhere or launch a local interpreter, '+
             'please use "Connect..." instead.','Cannot Start New Session')

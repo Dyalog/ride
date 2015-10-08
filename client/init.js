@@ -61,11 +61,11 @@ $(function(){
   }else{
     D.socket=(D.createSocket||function(){return eio((location.protocol==='https:'?'wss://':'ws://')+location.host)})()
     if(!D.quit)D.quit=close
-    var o=D.opts||{} // process command line arguments
-    if(o.listen)connect().listen(o._[0])
-    else if(o.connect)connect().connect(o._[0])
-    else if(o.spawn){
-      var ide=new IDE;D.socket.emit('*spawn') // '*spawnedError' is handled in ide.coffee
+    var e=D.process?D.process.env:{}
+    if(e.DYALOG_IDE_LISTEN)connect().listen(e.DYALOG_IDE_LISTEN)
+    else if(e.DYALOG_IDE_CONNECT)connect().connect(e.DYALOG_IDE_CONNECT)
+    else if(+e.DYALOG_IDE_SPAWN){ // the value of this env var should be '0' or '1'
+      new IDE;D.socket.emit('*spawn') // '*spawnedError' is handled in ide.coffee
       window.onbeforeunload=function(){D.socket.emit('Exit',{code:0})}
     }
     else connect()
