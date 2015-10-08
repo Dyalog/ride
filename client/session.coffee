@@ -79,7 +79,7 @@ class @Session
   hasFocus: -> window.focused && @cm.hasFocus()
   focus: -> (if !window.focused then window.focus()); @cm.focus(); return
   insert: (ch) -> @cm.getOption('readOnly') || @cm.replaceSelection ch; return
-  scrollCursorIntoView: -> delay 1, (=> @cm.scrollIntoView @cm.getCursor(); return); return
+  scrollCursorIntoView: -> @cm.scrollTo 0, @cm.getScrollInfo().top; delay 1, (=> @cm.scrollIntoView(); return); return
   die: -> @cm.setOption 'readOnly', true; return
   getDocument: -> @$e[0].ownerDocument
   refresh: -> @cm.refresh(); return
