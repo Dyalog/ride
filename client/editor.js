@@ -298,7 +298,7 @@ this.Editor.prototype={
     })
     var m=Math.max.apply(Math,a.map(function(sel){return Math.max.apply(Math,sel.c)}))
     a.forEach(function(sel){
-      var r=sel.l.map(function(x,i){var ci=sel.c[i];return ci<0?x:x.slice(0,ci)+spc(m-ci)+x.slice(ci)})
+      var r=sel.l.map(function(x,i){var ci=sel.c[i];return ci<0?x:x.slice(0,ci)+' '.repeat(m-ci)+x.slice(ci)})
       r[0]=r[0].slice(sel.p.ch);ed.cm.replaceRange(r.join('\n'),sel.p,sel.q,'D')
     })
     cm.setSelections(o)
