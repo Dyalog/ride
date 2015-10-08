@@ -2,7 +2,7 @@
 var autocompletion=require('./autocompletion')
 var prefs=require('./prefs')
 var mode=require('./cm-apl-mode'),letter=mode.letter,dfnDepth=mode.dfnDepth
-var util=require('./util'),onCodeMirrorDoubleClick=util.onCodeMirrorDoubleClick,spc=util.spc
+var util=require('./util'),onCodeMirrorDoubleClick=util.onCodeMirrorDoubleClick
 
 var ACB_VALUE=this.ACB_VALUE={pairs:'()[]{}',explode:'{}'} // value for CodeMirror's "autoCloseBrackets" option when on
 
@@ -290,10 +290,10 @@ this.Editor.prototype={
     var ed=this,ll=cm.lastLine(),o=cm.listSelections() // o:original selections
     var sels=cm.somethingSelected()?o:[{anchor:{line:0,ch:0},head:{line:ll,ch:cm.getLine(ll).length}}]
     var a=sels.map(function(sel){ // a:info about individual selections (Hey, it's AC; we must align our own comments!)
-      var p=sel.anchor,q=sel.head;if((p.line-q.line||p.ch-q.ch)>0){var h=p;p=q;q=h}             // p:from, q:to
-      var l=ed.cm.getRange({line:p.line,ch:0},q,'\n').split('\n')                               // l:lines
-      var u=l.map(function(x){return x.replace(/'[^']*'?/g,function(y){return spc(y.length)})}) // u:scrubbed strings
-      var c=u.map(function(x){return x.indexOf('⍝')})                                           // c:column index of ⍝
+      var p=sel.anchor,q=sel.head;if((p.line-q.line||p.ch-q.ch)>0){var h=p;p=q;q=h} // p:from, q:to
+      var l=ed.cm.getRange({line:p.line,ch:0},q,'\n').split('\n')                   // l:lines
+      var u=l.map(function(x){return x.replace(/'[^']*'?/g,function(y){return' '.repeat(y.length)})}) // u:scrubbed strings
+      var c=u.map(function(x){return x.indexOf('⍝')})                               // c:column index of ⍝
       return{p:p,q:q,l:l,u:u,c:c}
     })
     var m=Math.max.apply(Math,a.map(function(sel){return Math.max.apply(Math,sel.c)}))

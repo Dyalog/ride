@@ -4,7 +4,7 @@ this.cat=function(x){return[].concat.apply([],x)} // array concatenation, like â
 this.dict=function(a){var r={};for(var i=0;i<a.length;i++)r[a[i][0]]=a[i][1];return r} // dictionary from key-value pairs
 this.zip=function(a,b){var n=Math.min(a.length,b.length),r=[];for(var i=0;i<n;i++)r.push([a[i],b[i]]);return r} // like zip() in Python or ,Â¨ in APL
 this.hex=function(x,n){var s=x.toString(16);if(n)while(s.length<n)s='0'+s;return s.toUpperCase()}
-this.spc=function(n){return Array(n+1).join(' ')}
+''.repeat||(String.prototype.repeat=function(n){return Array(n+1).join(this)})
 
 var H={'<':'&lt;','>':'&gt;','&':'&amp;',"'":'&apos;','"':'&quot;'}
 this.esc=function(s){return s.replace(/[<>&'"]/g,function(x){return H[x]})}
