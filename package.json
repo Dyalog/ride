@@ -13,10 +13,8 @@
     "jquery-ui": "1.10.5",
     "node-sass": "3.3.2",
     "nw-builder": "2.0.2",
+    "rcedit": "0.3.0",
     "ws": "0.8.0"
-  },
-  "devDependencies": {
-    "rcedit": "0.3.0"
   },
   "window": {
     "title": "Dyalog",
