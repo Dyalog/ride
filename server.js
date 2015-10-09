@@ -7,7 +7,7 @@
 
 'use strict'
 var compression=require('compression'),express=require('express'),fs=require('fs'),http=require('http'),
-    https=require('https'),nomnom=require('./nomnom'),WSServer=require('ws').Server,
+    https=require('https'),WSServer=require('ws').Server,
     Proxy=require('./proxy').Proxy,spawn=require('child_process').spawn
 
 var t0=+new Date
