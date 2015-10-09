@@ -9,14 +9,14 @@ var $p // DOM element for the pending key or null if key display mode is off
 function keyInfo(e){ // returns a pair of the key name and an "is complete" flag
   var s='' // key name
   e.shiftKey&&e.which&&(s+='Shift-');e.ctrlKey&&(s+='Ctrl-');e.altKey&&(s+='Alt-')
-  k=CodeMirror.keyNames[e.which]||'['+e.which+']'
-  c=!!e.which&&k!=='Shift'&&k!=='Ctrl'&&k!=='Alt' // c: is the key combination complete?
+  var k=CodeMirror.keyNames[e.which]||'['+e.which+']'
+  var c=!!e.which&&k!=='Shift'&&k!=='Ctrl'&&k!=='Alt' // c: is the key combination complete?
   c&&(s+=k);return[s,c]
 }
-function keyDownHandler(e){$p.text(s=keyInfo(e)[0]).toggle(!!s)}
+function keyDownHandler(e){var s=keyInfo(e)[0];$p.text(s).toggle(!!s)}
 function keyUpHandler(e){
   var h=keyInfo(e),s=h[0],c=h[1]
-  if(c){$p.hide();$k=$('<span>').text(s).insertBefore($p);setTimeout(function(){$k.fadeOut(1000)},2000)}
+  if(c){$p.hide();var $k=$('<span>').text(s).insertBefore($p);setTimeout(function(){$k.fadeOut(1000)},2000)}
   else{$p.text(s).toggle(!!s)}
 }
 $.extend(CodeMirror.commands,{
