@@ -1,35 +1,33 @@
 {
-  "name": "ride20",
-  "version": "2.0.0",
-  "private": true,
-  "main": "index.html",
-  "repository": ".",
-  "dependencies": {
-    "cheerio": "0.19.0",
-    "codemirror": "5.6.0",
-    "compression": "1.5.2",
-    "express": "4.13.3",
-    "jquery": "2.1.4",
-    "jquery-ui": "1.10.5",
-    "node-sass": "3.3.2",
-    "nw-builder": "2.0.2",
-    "rcedit": "0.3.0",
-    "ws": "0.8.0"
+  "name":"ride20",
+  "version":"2.0.0",
+  "private":true,
+  "main":"index.html",
+  "repository":".",
+  "dependencies":{
+    "cheerio":"0.19.0",
+    "codemirror":"5.6.0",
+    "compression":"1.5.2",
+    "express":"4.13.3",
+    "jquery":"2.1.4",
+    "jquery-ui":"1.10.5",
+    "node-sass":"3.3.2",
+    "nw-builder":"2.0.2",
+    "rcedit":"0.3.0",
+    "ws":"0.8.0"
   },
-  "window": {
-    "title": "Dyalog",
-    "icon": "D.png",
-    "toolbar": false,
-    "frame": true,
-    "width": 850,
-    "height": 520,
-    "position": "mouse",
-    "min_width": 0,
-    "min_height": 0,
-    "show": false
+  "window":{
+    "title":"Dyalog",
+    "icon":"D.png",
+    "toolbar":false,
+    "frame":true,
+    "width":850,
+    "height":520,
+    "position":"mouse",
+    "min_width":0,
+    "min_height":0,
+    "show":false
   },
-  "webkit": {
-    "plugin": true
-  },
-  "single-instance": false
+  "webkit":{"plugin":true},
+  "single-instance":false
 }
