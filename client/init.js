@@ -59,7 +59,20 @@ $(function(){
     setTimeout(function(){ed.refresh()},500) // work around a rendering issue on Ubuntu
     opener.D.ide.unblock()
   }else{
-    D.socket=(D.createSocket||function(){return eio((location.protocol==='https:'?'wss://':'ws://')+location.host)})()
+    D.socket=(D.createSocket||function(){
+      var skt=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host)
+      var l={},q=[],io={} // l:listeners, q:send queue, io:socket.io-like API
+      function flush(){while(skt.readyState===1&&q.length)skt.send(q.shift())}
+      var io={
+        emit:function(x,y){q.push(JSON.stringify([x,y]));flush();return this},
+        on:function(e,f){(l[e]=l[e]||[]).push(f);return this},
+        onevent:function(x){var a=l[x.data[0]]||[];for(var i=0;i<a.length;i++)a[i].apply(null,x.data.slice(1))}
+      }
+      skt.onopen=flush
+      skt.onerror=function(e){console.info('ws error:',e)}
+      skt.onmessage=function(m){io.onevent({data:JSON.parse(m.data)})}
+      return io
+    })()
     if(!D.quit)D.quit=close
     var e=D.process?D.process.env:{}
     if(e.DYALOG_IDE_LISTEN)connect().listen(e.DYALOG_IDE_LISTEN)

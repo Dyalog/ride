@@ -8,13 +8,12 @@
     "cheerio": "0.19.0",
     "codemirror": "5.6.0",
     "compression": "1.5.2",
-    "engine.io": "1.5.4",
-    "engine.io-client": "1.5.4",
     "express": "4.13.3",
     "jquery": "2.1.4",
     "jquery-ui": "1.10.5",
     "node-sass": "3.3.2",
-    "nw-builder": "2.0.2"
+    "nw-builder": "2.0.2",
+    "ws": "0.8.0"
   },
   "devDependencies": {
     "rcedit": "0.3.0"

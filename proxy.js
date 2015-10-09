@@ -265,7 +265,8 @@ this.Proxy=function(){
         var exe=(x||{}).exe||process.env.DYALOG_IDE_INTERPRETER_EXE||'dyalog'
         server=net.createServer(function(c){
           log('spawned interpreter connected');var a=server.address();server&&server.close();server=null;client=c
-          toBrowser('*connected',{host:a.address,port:a.port});setUpInterpreterConnection();window.D.lastSpawnedExe=exe
+          toBrowser('*connected',{host:a.address,port:a.port});setUpInterpreterConnection()
+          if(typeof window!=='undefined')window.D.lastSpawnedExe=exe
         })
         server.on('error',function(err){
           log('cannot listen for connections from spawned interpreter: '+err)

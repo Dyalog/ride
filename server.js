@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 'use strict'
 var compression=require('compression'),express=require('express'),fs=require('fs'),http=require('http'),
-    https=require('https'),engine=require('engine.io'),nomnom=require('./nomnom'),
+    https=require('https'),nomnom=require('./nomnom'),WSServer=require('ws').Server,
     Proxy=require('./proxy').Proxy,spawn=require('child_process').spawn
 
 var t0=+new Date
@@ -38,5 +38,13 @@ app.use('/',express.static('build/static'))
 var port=opts.insecure?8000:8443
 var server=opts.insecure?http.createServer(app)
                         :https.createServer({cert:fs.readFileSync(opts.cert),key:fs.readFileSync(opts.key)},app)
-server.listen(port,opts.ipv6?'::':'0.0.0.0',function(){log('server listening on :'+port)})
-engine.attach(server).on('connection',Proxy())
+var proxy=Proxy()
+;(new WSServer({server:server})).on('connection',function(ws){
+  var l={},io={} // l:listeners, io:socket.io-like interface
+  io.emit=function(x,y){ws.send(JSON.stringify([x,y]));return io}
+  io.on=function(e,f){(l[e]=l[e]||[]).push(f);return io}
+  io.onevent=function(x){var a=l[x.data[0]]||[];for(var i=0;i<a.length;i++)a[i].apply(null,x.data.slice(1))}
+  ws.on('message',function(m){io.onevent({data:JSON.parse(m)})})
+  proxy(io)
+})
+server.listen(port,opts.ipv6?'::':'0.0.0.0',function(){log('listening on port '+port)})
