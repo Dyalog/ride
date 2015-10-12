@@ -1,5 +1,5 @@
 'use strict'
-var prefs=require('./prefs'),letter=require('./cm-apl-mode').letter
+var prefs=require('./prefs'),letter=require('./cm-apl-mode').letter,helpurls=require('./helpurls')
 var re=RegExp('['+letter+']*$')
 var ibeams=[
   {text:    '8⌶',displayText:    '8⌶ Inverted Table Index-of'},
@@ -46,11 +46,11 @@ var ibeams=[
 this.setUp=function(win){ // win: an instance of Editor or Session
   var tid,cm=win.cm,r
   cm.on('change',function(){
-    var mode=(cm.getOption('mode')||{}).name
+    var mode=cm.getOption('mode');if(typeof mode==='object'&&mode!=null&&mode.name)mode=mode.name
     if(prefs.autocompletion()&&(mode==='apl'||mode==='apl-session')&&cm.getCursor().line){
       clearTimeout(tid)
       tid=setTimeout(function(){
-        tid=null;var c=cm.getCursor(),s=cm.getLine(c.line),i=c.ch
+        tid=0;var c=cm.getCursor(),s=cm.getLine(c.line),i=c.ch
         if(s[i-1]==='⌶'&&!/\d *$/.test(s.slice(0,i-1))){
           r(1,ibeams)
         }else if(i&&s[i-1]!==' '&&s.slice(0,i).replace(re,'').slice(-1)!==prefs.prefixKey()&&
@@ -72,7 +72,8 @@ this.setUp=function(win){ // win: an instance of Editor or Session
             Enter:function(cm,m){sel?m.pick():cm.execCommand('ER')},
             Right:function(cm,m){sel||m.moveFocus(1);m.pick()},
             'Shift-Tab':function(cm,m){m.moveFocus(-1)},
-            Tab:function(cm,m){m.moveFocus(1);options.length===1&&m.pick()}
+            Tab:function(cm,m){m.moveFocus(1);options.length===1&&m.pick()},
+            F1:function(){sel&&sel.text&&helpurls[sel.text]&&D.openExternal(helpurls[sel.text])}
           },
           hint:function(){
             var to=cm.getCursor(),

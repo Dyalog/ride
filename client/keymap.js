@@ -75,15 +75,16 @@ $.extend(CodeMirror.commands,{
     }
   },
   HLP:function(cm){
-    var c=cm.getCursor(),s=cm.getLine(c.line).toLowerCase(),url
-    if(m=/^ *(\)[a-z]+).*$/.exec(s))url=helpurls[m[1]]||helpurls.WELCOME
-    else if(m=/^ *(\][a-z]+).*$/.exec(s))url=helpurls[m[1]]||helpurls.UCMDS
+    var c=cm.getCursor(),s=cm.getLine(c.line).toLowerCase(),h=helpurls,u // u: the URL
+    if(m=/^ *(\)[a-z]+).*$/.exec(s))u=h[m[1]]||h.WELCOME
+    else if(m=/^ *(\][a-z]+).*$/.exec(s))u=h[m[1]]||h.UCMDS
+    else if(m=/(\d+) *⌶$/.exec(s.slice(0,c.ch)))u=h[m[1]+'⌶']||h['⌶']+'#'+m[1]
     else{
       var x=s.slice(s.slice(0,c.ch).replace(/.[áa-z]*$/i,'').length)
              .replace(/^([⎕:][áa-z]*|.).*$/i,'$1').replace(/^:end/,':')
-      url=helpurls[x]||(x[0]==='⎕'?helpurls.SYSFNS:x[0]===':'?helpurls.CTRLSTRUCTS:helpurls.LANGELEMENTS)
+      u=h[x]||(x[0]==='⎕'?h.SYSFNS:x[0]===':'?h.CTRLSTRUCTS:h.LANGELEMENTS)
     }
-    D.openExternal(url)
+    D.openExternal(u)
   },
   BQC:function(cm){
     if(cm.dyalogBQ){
@@ -96,14 +97,15 @@ $.extend(CodeMirror.commands,{
       cm.on('change',bqChangeHandler);cm.dyalogBQ=1
       var c0=cm.getCursor();cm.replaceSelection(prefs.prefixKey(),'end')
       ctid=setTimeout(function(){
-        var c1=cm.getCursor()
+        var c1=cm.getCursor(),sel // sel: selected completion object
         if(c1.line === c0.line && c1.ch == c0.ch + 1){
           cm.showHint({
             completeOnSingleClick:true,
             extraKeys:{
               Backspace:function(cm,m){m.close();cm.execCommand('delCharBefore')},
               Left:     function(cm,m){m.close();cm.execCommand('goCharLeft')},
-              Right:    function(cm,m){m.pick()}
+              Right:    function(cm,m){m.pick()},
+              F1:function(){sel&&sel.text&&helpurls[sel.text]&&D.openExternal(helpurls[sel.text])}
             },
             hint:function(){
               var pk=prefs.prefixKey(),ks=[];for(var x in bq)if(x!=='☠')ks.push(x);ks.sort()
@@ -113,6 +115,7 @@ $.extend(CodeMirror.commands,{
                   :{text:v,render:function(e){$(e).text(v+' '+pk+k+' '+(squiggleDescriptions[v]||'')+'  ')}}
                 )
               })}
+              CodeMirror.on(data,'select',function(x){sel=x})
               return data
             }
           })
@@ -200,12 +203,18 @@ function bqCleanUp(cm){
   cm.setOption('autoCloseBrackets',!!prefs.autoCloseBrackets()&&ACB_VALUE)
 }
 function bqbqHint(cm){
+  var sel // selected completion object
   var pick=function(cm,m){return m.pick()},c=cm.getCursor()
-  cm.showHint({completeOnSingleClick:true,extraKeys:{Right:pick,Space:pick},hint:function(){
-    var u=cm.getLine(c.line).slice(c.ch,cm.getCursor().ch),a=[]
-    for(var i=0;i<bqbqc.length;i++){var x=bqbqc[i];x.name.slice(0,u.length)===u&&a.push(x)}
-    return{from:{line:c.line,ch:c.ch-2},to:cm.getCursor(),list:a}
-  }})
+  cm.showHint({
+    completeOnSingleClick:true,
+    extraKeys:{Right:pick,Space:pick,F1:function(){sel&&helpurls[sel.text]&&D.openExternal(helpurls[sel.text])}},
+    hint:function(){
+      var u=cm.getLine(c.line).slice(c.ch,cm.getCursor().ch),a=[]
+      for(var i=0;i<bqbqc.length;i++){var x=bqbqc[i];x.name.slice(0,u.length)===u&&a.push(x)}
+      CodeMirror.on('select',function(x){sel=x})
+      return{from:{line:c.line,ch:c.ch-2},to:cm.getCursor(),list:a}
+    }
+  })
 }
 
 // BACKQUOTE BACKQUOTE name completions

@@ -29,11 +29,6 @@ Not yet prioritized:
   Should arrays shown in the editor be immutable?
   favicon.ico is too large (~120k)
   get rid of jquery.layout.js
-  a couple of people asked for I-beam completion:
-    2015-09-10 Toon: easy access to list of / documentation of I-beams
-    2015-09-07 Callum: completion for idioms and I-beams
-    A dropdown with I-beams (Mike Mingaard)
-      NN:a completion list of I-beams (hard-coded in RIDE) is shown but there's no easy access to documentation yet
   2015-09-09 Adam: curly underlines
   2015-09-08 Ken Mellem: custom syntax highlighting in comments
     NN: added an example
@@ -262,3 +257,7 @@ Done:
   JS: Option for turning off AutoFormatting, please.
     NN: that's an interpreter-side option: export AUTOFORMAT=0
   get rid of socket.io/engine.io
+  a couple of people asked for I-beam completion:
+    2015-09-10 Toon: easy access to list of / documentation of I-beams
+    2015-09-07 Callum: completion for idioms and I-beams
+    A dropdown with I-beams (Mike Mingaard)
