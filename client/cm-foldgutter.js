@@ -1,78 +1,46 @@
 'use strict'
 CodeMirror.defineOption('foldGutter',false,function(cm,val,old){
   if(old&&old!==CodeMirror.Init){
-    cm.clearGutter(cm.state.foldGutter.options.gutter)
-    cm.state.foldGutter=null
-    cm.off('gutterClick',   onGutterClick)
-    cm.off('change',        onChange)
-    cm.off('viewportChange',onViewportChange)
-    cm.off('fold',          onFold)
-    cm.off('unfold',        onFold)
-    cm.off('swapDoc',       updateInViewport)
+    cm.clearGutter('CodeMirror-foldgutter');cm.state.foldGutter=null;for(var k in eh)cm.off(k,eh[k])
   }
-  if(val){
-    cm.state.foldGutter=new State(parseOptions(val))
-    updateInViewport(cm)
-    cm.on('gutterClick',   onGutterClick)
-    cm.on('change',        onChange)
-    cm.on('viewportChange',onViewportChange)
-    cm.on('fold',          onFold)
-    cm.on('unfold',        onFold)
-    cm.on('swapDoc',       updateInViewport)
-  }
+  if(val){cm.state.foldGutter={from:0,to:0};updateInViewport(cm);for(var k in eh)cm.on(k,eh[k])}
 })
-var Pos=CodeMirror.Pos
-function State(x){this.options=x;this.from=this.to=0}
-function parseOptions(o) {
-  if(o===true)o={}
-  if(o.gutter         ==null)o.gutter         ='CodeMirror-foldgutter'
-  if(o.indicatorOpen  ==null)o.indicatorOpen  ='CodeMirror-foldgutter-open'
-  if(o.indicatorFolded==null)o.indicatorFolded='CodeMirror-foldgutter-folded'
-  if(o.indicatorCont  ==null)o.indicatorCont  ='CodeMirror-foldgutter-cont'
-  if(o.indicatorEnd   ==null)o.indicatorEnd   ='CodeMirror-foldgutter-end'
-  return o
-}
 function isFolded(cm,line){
-  var m=cm.findMarksAt(Pos(line))
+  var m=cm.findMarksAt(CodeMirror.Pos(line))
   for(var i=0;i<m.length;i++)if(m[i].__isFold&&m[i].find().from.line===line)return m[i]
 }
-function marker(spec){
-  if(typeof spec==='string'){
-    var elt=document.createElement('div');elt.className=spec+' CodeMirror-guttermarker-subtle';return elt
-  }else{
-    return spec.cloneNode(true)
-  }
+function marker(x){
+  var e=document.createElement('div');e.className='CodeMirror-foldgutter-'+x+' CodeMirror-guttermarker-subtle';return e
 }
 function updateFoldInfo(cm,a,b){ // a:from line, b:to line
-  var o=cm.state.foldGutter.options,i=a, // i:current line
-      mfs=cm.foldOption(o,'minFoldSize'),f=cm.foldOption(o,'rangeFinder'),ends=[]
+  var mfs=cm.foldOption({},'minFoldSize'),f=cm.foldOption({},'rangeFinder'),ends=[],i=a // i:current line
   cm.eachLine(a,b,function(l){
-    var m=null
     if(isFolded(cm,i)){
-      m=marker(o.indicatorFolded)
+      var m=marker('folded')
     }else{
-      var range=f&&f(cm,Pos(i,0))
-      if(range&&range.to.line-range.from.line>=mfs){m=marker(o.indicatorOpen);ends.push(range.to.line)}
-      else if(ends.indexOf(i)>=0){m=marker(o.indicatorEnd);ends=ends.filter(function(x){return x>i})}
-      else if(ends.length){m=marker(o.indicatorCont)}
+      var r=f&&f(cm,CodeMirror.Pos(i,0)) // r:range
+      if(r&&r.to.line-r.from.line>=mfs){var m=marker('open');ends.push(r.to.line)}
+      else if(ends.indexOf(i)>=0){var m=marker('end');ends=ends.filter(function(x){return x>i})}
+      else if(ends.length){var m=marker('cont')}
     }
-    cm.setGutterMarker(l,o.gutter,m);++i
+    cm.setGutterMarker(l,'CodeMirror-foldgutter',m);++i
   })
 }
-function updateInViewport(cm){
+var eh={} // event handlers
+var updateInViewport=eh.swapDoc=function(cm){
   var vp=cm.getViewport(),h=cm.state.foldGutter
   if(h){cm.operation(function(){updateFoldInfo(cm,vp.from,vp.to)});h.from=vp.from;h.to=vp.to}
 }
-function onGutterClick(cm,l,gutter){ // l:line
-  var h=cm.state.foldGutter;if(!h||gutter!==h.options.gutter)return
-  var u=isFolded(cm,l);u?u.clear():cm.foldCode(Pos(l,0),h.options.rangeFinder)
+eh.gutterClick=function(cm,l,gutter){ // l:line
+  if(!cm.state.foldGutter||gutter!=='CodeMirror-foldgutter')return
+  var u=isFolded(cm,l);u?u.clear():cm.foldCode(CodeMirror.Pos(l,0))
 }
-function onChange(cm){
+eh.change=function(cm){
   var h=cm.state.foldGutter;if(!h)return
   h.from=h.to=0;clearTimeout(h.changeUpdate)
-  h.changeUpdate=setTimeout(function(){updateInViewport(cm)},h.options.foldOnChangeTimeSpan||600)
+  h.changeUpdate=setTimeout(function(){updateInViewport(cm)},600)
 }
-function onViewportChange(cm){
+eh.viewportChange=function(cm){
   var h=cm.state.foldGutter;if(!h)return
   clearTimeout(h.changeUpdate)
   h.changeUpdate=setTimeout(function(){
@@ -82,12 +50,11 @@ function onViewportChange(cm){
     }else{
       cm.operation(function(){
         if(vp.from<h.from){updateFoldInfo(cm,vp.from,h.from);h.from=vp.from}
-        if(vp.to  >h.to  ){updateFoldInfo(cm,h.to,vp.to);    h.to  =vp.to  }
+        if(vp.to  >h.to  ){updateFoldInfo(cm,h.to   ,vp.to );h.to  =vp.to  }
       })
     }
-  },h.options.updateViewportTimeSpan||400)
+  },100)
 }
-function onFold(cm,a){ // a:from line
-  var h=cm.state.foldGutter;if(!h)return
-  var l=a.line;if(h.from<=l&&l<h.to)updateFoldInfo(cm,l,l+1)
+eh.fold=eh.unfold=function(cm,a){ // a:from line
+  var h=cm.state.foldGutter;if(h){var l=a.line;h.from<=l&&l<h.to&&updateFoldInfo(cm,l,l+1)}
 }
