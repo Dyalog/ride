@@ -383,7 +383,10 @@ this.Editor.prototype={
     if(cm.somethingSelected())cm.execCommand('indentAuto')
     else{var u=cm.getCursor();cm.execCommand('SA');cm.execCommand('indentAuto');cm.setCursor(u)}
   },
-  VAL:function(cm){this.ide.wins[0].opts.exec([this.cword()],0)},
+  VAL:function(cm){
+    var a=cm.getSelections(), s=a.length!==1?'':!a[0]?this.cword():a[0].indexOf('\n')<0?a[0]:''
+    s&&this.ide.wins[0].opts.exec(['      '+s],0)
+  },
   tabOrAutocomplete:function(){
     if(this.cm.somethingSelected()){
       this.cm.execCommand('indentMore')
