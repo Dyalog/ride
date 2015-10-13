@@ -211,8 +211,9 @@ function bqbqHint(cm){
     hint:function(){
       var u=cm.getLine(c.line).slice(c.ch,cm.getCursor().ch),a=[]
       for(var i=0;i<bqbqc.length;i++){var x=bqbqc[i];x.name.slice(0,u.length)===u&&a.push(x)}
-      CodeMirror.on('select',function(x){sel=x})
-      return{from:{line:c.line,ch:c.ch-2},to:cm.getCursor(),list:a}
+      var data={from:{line:c.line,ch:c.ch-2},to:cm.getCursor(),list:a}
+      CodeMirror.on(data,'select',function(x){sel=x})
+      return data
     }
   })
 }
