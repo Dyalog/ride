@@ -158,7 +158,7 @@ this.Session.prototype={
   CLM:function(cm){
     var sels=cm.listSelections()
     for(var i=0;i<sels.length;i++){
-      var a=sels[i].anchor,b=sels[i].head;if(a>b){var c=a;a=b;b=c}
+      var a=sels[i].anchor.line,b=sels[i].head.line;if(a>b){var c=a;a=b;b=c}
       for(var l=a;l<=b;l++){delete this.dirty[l];cm.removeLineClass(l,'background','modified')}
     }
   }
