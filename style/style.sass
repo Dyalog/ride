@@ -34,6 +34,18 @@ input,textarea,select,a{outline:0}
 .text-field
   +inset ;border-style:solid;border-width:2px
 
+// z-indices
+.ui-tooltip                            {z-index:9999}
+.lbar-tip-triangle                     {z-index: 301}
+.lbar-tip                              {z-index: 300}
+.menu .m-box                           {z-index: 200}
+.ui-front                              {z-index: 100}
+.ui-selectable-helper                  {z-index: 100}
+.ui-slider .ui-slider-handle           {z-index:   2}
+.ui-tabs .ui-tabs-nav li.ui-tabs-active{z-index:   1}
+.ui-slider .ui-slider-range            {z-index:   1}
+// CodeMirror uses z-indices 1-10
+
 // connect page
 #connect-fieldset
   .ui-wrapper{float:left;clear:both}
@@ -64,7 +76,7 @@ input,textarea,select,a{outline:0}
 .ide{position:absolute;top:21px;bottom:0;left:0;right:0}
 .platform-mac .ide{top:0} // no menu inside window
 
-.menu // see ../client/menu.coffee for the DOM structure
+.menu // see ../client/menu.js for the DOM structure
   +bg ;height:18px;line-height:17px;cursor:default;padding:0;margin:2px 0 0 0
   font-family:sans-serif;border-bottom:solid $dark 1px
   a{text-decoration:none;color:black;cursor:default}
@@ -78,7 +90,7 @@ input,textarea,select,a{outline:0}
     +bg
     +outset
     display:none;border-style:solid;border-width:1px 2px 2px 1px
-    position:absolute;z-index:1;padding:1px;margin:2px 0 0 0;min-width:125px;white-space:nowrap
+    position:absolute;padding:1px;margin:2px 0 0 0;min-width:125px;white-space:nowrap
     .m-box{margin-left:100%;margin-top:-17px}
     a
       display:block;height:17px;line-height:17px;text-align:left;padding:1px 17px;overflow:hidden;text-overflow:ellipsis
@@ -107,11 +119,11 @@ input,textarea,select,a{outline:0}
     &:hover{background-color:$light}
 .lbar-prefs{float:right;margin-right:4px;width:24px;height:24px;background:no-repeat center center url(img/lbar-prefs.png)}
 .lbar-tip-triangle
-  position:absolute;z-index:4;padding:0;margin:0;width:20px;height:19px
+  position:absolute;padding:0;margin:0;width:20px;height:19px
   background:center center no-repeat url(img/lbar-tip-triangle.png)
 .lbar-tip
   +tt
-  position:absolute;z-index:3;padding:10px;border-radius:10px;border:solid black 1px;margin-top:20px
+  position:absolute;padding:10px;border-radius:10px;border:solid black 1px;margin-top:20px
   background:$tip 10px 10px no-repeat url(img/lbar-tip.png)
 .lbar-tip-desc
   +tt;padding:0 0 0 30px;margin:0;font-weight:bold
@@ -158,9 +170,7 @@ input,textarea,select,a{outline:0}
 .hidden{display:none}
 .highlighted{border:solid red 1px}
 .CodeMirror-hints
-  +tt
-  position:absolute;z-index:10;overflow:hidden
-  list-style:none;margin:0;padding:0;border:1px solid black
+  +tt ;position:absolute;overflow:hidden;list-style:none;margin:0;padding:0;border:1px solid black;z-index:10
   background:$tip;font-size:90%;max-height:20em;overflow-y:auto
   -webkit-box-shadow:2px 3px 5px rgba(0,0,0,.2)
   -moz-box-shadow:   2px 3px 5px rgba(0,0,0,.2)
@@ -373,7 +383,6 @@ input,textarea,select,a{outline:0}
 .ui-helper-clearfix:after{clear:both}
 .ui-helper-clearfix{min-height:0} // support:IE7
 .ui-helper-zfix{width:100%;height:100%;top:0;left:0;position:absolute;opacity:0;filter:Alpha(Opacity=0)}
-.ui-front{z-index:100}
 .ui-state-disabled{cursor:default !important}
 .ui-icon{display:block;text-indent:-99999px;overflow:hidden;background-repeat:no-repeat}
 .ui-widget-overlay{position:fixed;top:0;left:0;width:100%;height:100%}
@@ -459,7 +468,7 @@ input.ui-button{padding:0 5px}
 .ui-resizable-sw{cursor:sw-resize;width:9px;height:9px;left:-5px;bottom:-5px}
 .ui-resizable-nw{cursor:nw-resize;width:9px;height:9px;left:-5px;top:-5px}
 .ui-resizable-ne{cursor:ne-resize;width:9px;height:9px;right:-5px;top:-5px}
-.ui-selectable-helper{position:absolute;z-index:100;border:1px dotted black}
+.ui-selectable-helper{position:absolute;border:1px dotted black}
 
 // position:relative prevents IE scroll bug (element with position:relative inside container with overflow:auto appear as "fixed")
 .ui-tabs
@@ -476,8 +485,7 @@ input.ui-button{padding:0 5px}
     .ui-tabs-active .ui-tabs-anchor
       +bg ;padding:4px 15px 0 15px;margin:-2px -3px 0 -3px
     li.ui-tabs-active
-      border-bottom:solid 1px $bg;margin-bottom:-1px;padding-left:2px;margin-left:-2px
-      padding-right:2px;margin-right:-2px;z-index:1
+      border-bottom:solid 1px $bg;margin-bottom:-1px;padding-left:2px;margin-left:-2px;padding-right:2px;margin-right:-2px
     li.ui-tabs-active    .ui-tabs-anchor,
     li.ui-state-disabled .ui-tabs-anchor,
     li.ui-tabs-loading   .ui-tabs-anchor{cursor:default}
@@ -486,7 +494,7 @@ input.ui-button{padding:0 5px}
   float:right;width:20px;border-radius:12px;text-align:center;cursor:pointer;color:#888;margin:0 -10px 0 5px
   &.hover{background-color:#d88;color:white}
 
-.ui-tooltip{padding:8px;position:absolute;z-index:9999;max-width:300px;-webkit-box-shadow:0 0 5px #aaa;box-shadow:0 0 5px #aaa}
+.ui-tooltip{padding:8px;position:absolute;max-width:300px;-webkit-box-shadow:0 0 5px #aaa;box-shadow:0 0 5px #aaa}
 body .ui-tooltip{border-width:2px}
 
 // Component containers
@@ -541,8 +549,8 @@ body .ui-tooltip{border-width:2px}
 .ui-icon-closethick{background:no-repeat center center url(img/close.png)}
 
 .ui-slider{position:relative;text-align:left;margin:0 10px}
-.ui-slider .ui-slider-handle{position:absolute;z-index:2;width:10px;height:10px;cursor:pointer}
-.ui-slider .ui-slider-range{position:absolute;z-index:1;display:block;border:0}
+.ui-slider .ui-slider-handle{position:absolute;width:10px;height:10px;cursor:pointer}
+.ui-slider .ui-slider-range{position:absolute;display:block;border:0}
 /* For IE8 - See #6727 */
 .ui-slider.ui-state-disabled .ui-slider-handle,.ui-slider.ui-state-disabled .ui-slider-range{filter:inherit}
 .ui-slider-horizontal
