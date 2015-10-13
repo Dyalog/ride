@@ -322,7 +322,7 @@ for(var i=0;i<informal.length;i++){
 }
 
 function defCmd(x){var c=CodeMirror.commands;c[x]||(c[x]=function(cm){var h=cm.dyalogCommands;h&&h[x]&&h[x](cm)})}
-;['CBP','MA','AC','tabOrAutocomplete','downOrXline','indentMoreOrAutocomplete','CLM'].forEach(defCmd)
+;['CBP','MA','AC','VAL','tabOrAutocomplete','downOrXline','indentMoreOrAutocomplete','CLM'].forEach(defCmd)
 
 var C=[
   //0    1    2    3    4    5    6    7    8    9    A    B    C    D    E    F

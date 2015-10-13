@@ -36,6 +36,7 @@ this.cmds=[
   ['TC', 'Trace',                   ['Ctrl-Enter'],          1],
   ['TL', 'Toggle localisation',     ['Ctrl-Up'],             1],
   ['TO', 'Toggle fold',             []],
+  ['VAL','Inspect value of name under cursor (in editors)',[]],
   ['WI', 'Weak interrupt',          ['Ctrl-Pause']],
   ['ZMI','Increase font size',      ['Ctrl-=', 'Shift-Ctrl-=']],
   ['ZMO','Decrease font size',      ['Ctrl--']],

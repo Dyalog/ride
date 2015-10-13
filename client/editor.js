@@ -383,6 +383,7 @@ this.Editor.prototype={
     if(cm.somethingSelected())cm.execCommand('indentAuto')
     else{var u=cm.getCursor();cm.execCommand('SA');cm.execCommand('indentAuto');cm.setCursor(u)}
   },
+  VAL:function(cm){this.ide.wins[0].opts.exec([this.cword()],0)},
   tabOrAutocomplete:function(){
     if(this.cm.somethingSelected()){
       this.cm.execCommand('indentMore')
