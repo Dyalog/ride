@@ -25,29 +25,38 @@ P4 (I will think about it):
         But if we don't have "Copy" in the menu, cmd+c doesn't work.
 
 Not yet prioritized:
-  Check for updates automatically - Jason, 2015-10-12
-  Should arrays shown in the editor be immutable?
-  favicon.ico is too large (~120k)
-  get rid of jquery.layout.js
-  2015-09-09 Adam: curly underlines
-  2015-09-08 Ken Mellem: custom syntax highlighting in comments
-    NN: added an example
+  transition to a JSON-encoded protocol
+  new protocol extensions needed (see http://wiki.dyalog.bramley/index.php/Ride_protocol_messages_V2#Extensions)
+  make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud (Kai)
+  check for updates automatically - Jason, 2015-10-12
   2015-09-07 Adam: shortcut to clear the "modified" flag of a line in session without reverting it to original content
-  2015-09-07 Ray: status bar and programmatic access to "current object"
-  2015-09-07 Jim Brown: custom fonts
-  if we spawn an interpreter and it failes to connect after X time, please could we have a message box about it? - Andy email 2015-06-29
-  (OS X) - Reported by Mike Powell: Dragging the text to a different point uses the vertical bar cursor. Holding the Option key while doing this changes the cursor to the green and white cross (Implying a copy - but it still moves the text).
-  Type a couple of chars and hit Alt+Enter, followed by Enter. Uncaught node.js Error; JS email 2015-03-10
-    NN: cannot reproduce on Linux
-  There should be no flashing cursors in windows that don't have focus; JS 2015-03-21
-  Disable EP in an editor after it has been pressed once
-  There is a limit for the number of match locations shown on the scrollbar (1000) -- should we change it?
+  selecting a block of text and pressing ⍝ should comment/uncomment it
+  Integrate docs in RIDE?  We need fast, searchable, bookmarkable help content!
+  support for user commands
   JS: Arrange for the banner to appear at the _top_ of a new session.
     NN: I did some experimentation with this.  As of now, I can only get it appear on top about 50% of the time
          due to a race condition in NW.js's events.
+  2015-09-08 Ken Mellem: custom syntax highlighting in comments
+    NN: added only a simple example
+  2015-09-07 Ray: status bar and programmatic access to "current object"
+  drag and drop *.dws and *.dyalog files in the session
+  2015-09-07 Jim Brown: custom fonts
+  https://github.com/codemirror/CodeMirror/issues/3240
+    WebKit stores DOM height in 25 bits, ~33 million pixels.  When displaying
+    large arrays (~millions of lines, depending on font size), CodeMirror hits
+    that limit and it's impossible to scroll beyond a certain offset.  This is
+    hard to work around without going deep into CodeMirror's code and rewriting
+    parts of it.
   JS: System command output (fns vars ...) should wrap at ⎕PW, not 80.
   JS: AutoPW option: ⎕PW changes automatically with window width and font size.
     NN: protocol support needed
+  get rid of jquery.layout.js (180k for a splitter plugin is too much)
+  There should be no flashing cursors in windows that don't have focus; JS 2015-03-21
+  if we spawn an interpreter and it fails to connect after X time, please could we have a message box about it? - Andy email 2015-06-29
+  (OS X) - Reported by Mike Powell: Dragging the text to a different point uses the vertical bar cursor. Holding the Option key while doing this changes the cursor to the green and white cross (Implying a copy - but it still moves the text).
+  Type a couple of chars and hit Alt+Enter, followed by Enter. Uncaught node.js Error; JS email 2015-03-10
+    NN: cannot reproduce on Linux
+  There is a limit for the number of match locations shown on the scrollbar (1000) -- should we change it?
   JS: Floating editors: )ed F G should place F above G and focus F. Then Esc Esc should close F and then G.
     NN: the interpreter controls the order; that's even beyond JD's code
   "Cancel" button in "Connecting..." dialog; MK Jabber 2015-03-30
@@ -55,34 +64,19 @@ Not yet prioritized:
   Regular expressions in search
   Multiple sessions (i.e. connections to interpreters) as tabs with a green/red dot to indicate error, suggested by Mike Mingaard
   Show help next to ` completions (Mike Mingaard)
-  https://github.com/codemirror/CodeMirror/issues/3240
-    WebKit stores DOM height in 25 bits, ~33 million pixels.  When displaying
-    large arrays (~millions of lines, depending on font size), CodeMirror hits
-    that limit and it's impossible to scroll beyond a certain offset.  This is
-    hard to work around without going deep into CodeMirror's code and rewriting
-    parts of it.
+    NN: I made F1 open a help page based on selection in the menu
+  2015-09-09 Adam: curly underlines
   lbar in floating editor windows
+  favicon.ico is too large (~120k)
   Sortable language bar
   Detachable language bar (Mike Mingaard)
   Drag and drop a "finder object" in the Mac RIDE crashes it (Alex Bochannek, 2015-06-25)
   RIDE on multiple screens on Mac loses its title bar (Alex Bochannek, 2015-06-25)
   profile selection
-
-Later:
-  make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud
-  drag and drop *.dws and *.dyalog files in the session
-  selecting a block of text and pressing ⍝ should comment/uncomment it
   status window and notification about number of messages
-  experiment with storing all help content in browser memory
-  searchable help files
-  keybindings for toolbar buttons
-  contextual help (F1) for items in completion menus
-  js strict mode
-  display a "mailto:" link when a SysError happens
-  search field history
-  SI stack in debugger (?)
+  search history
+  SI stack in tracer (?)
   start web server from nwjs GUI (?)
-  add legalese to About dialog
 
 Done:
   JS: Discuss placing the cursor at the _left_ of a recalled line.
@@ -261,3 +255,6 @@ Done:
     2015-09-10 Toon: easy access to list of / documentation of I-beams
     2015-09-07 Callum: completion for idioms and I-beams
     A dropdown with I-beams (Mike Mingaard)
+  Disable EP in an editor after it has been pressed once
+  js strict mode
+  contextual help (F1) for items in completion menus
