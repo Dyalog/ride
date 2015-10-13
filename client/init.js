@@ -1,19 +1,10 @@
 'use strict'
-var connect=require('./connect'),
-    Editor=require('./editor').Editor,
-    IDE=require('./ide').IDE,
-    prefs=require('./prefs')
-require('./prefs-colours') // load it in order to initialise syntax highlighting
-require('./demo')
-require('./cm-foldgutter')
-
+var connect=require('./connect'),Editor=require('./editor').Editor,IDE=require('./ide').IDE,prefs=require('./prefs')
+require('./prefs-colours');require('./demo');require('./cm-foldgutter') // require() these to initialise them
 $(function(){
-  CodeMirror.defaults.dragDrop=false
-  window.ondragover=window.ondrop=function(e){e.preventDefault();return false}
-
+  CodeMirror.defaults.dragDrop=false;window.ondragover=window.ondrop=function(e){e.preventDefault();return false}
   // don't use Alt- keystrokes on the Mac (see email from 2015-09-01)
   var h=CodeMirror.keyMap.emacsy;for(var k in h)if(/^alt-[a-z]$/i.test(k))delete h[k]
-
   if(D.nwjs){
     var zM=11 // zoom level can be from -zM to zM inclusive
     function ZMI(){prefs.zoom(Math.min( zM,prefs.zoom()+1))}
@@ -33,13 +24,12 @@ $(function(){
       D.wins[0].scrollCursorIntoView()
     })
   }
-  if(!D.open)
-    D.open=function(url,o){
-      var x=o.x,y=o.y,width=o.width,height=o.height,spec='resizable=1'
-      if(width!=null&&height!=null)spec+=',width='+width+',height='+height
-      if(x!=null&&y!=null)spec+=',left='+x+',top='+y+',screenX='+x+',screenY='+y
-      return!!open(url,'_blank',spec)
-    }
+  D.open=D.open||function(url,o){
+    var x=o.x,y=o.y,width=o.width,height=o.height,spec='resizable=1'
+    if(width!=null&&height!=null)spec+=',width='+width+',height='+height
+    if(x!=null&&y!=null)spec+=',left='+x+',top='+y+',screenX='+x+',screenY='+y
+    return!!open(url,'_blank',spec)
+  }
   D.openExternal||(D.openExternal=function(x){open(x,'_blank')})
   D.setTitle||(D.setTitle=function(s){document.title=s})
   var urlParams={},ref=(location+'').replace(/^[^\?]*($|\?)/,'').split('&')
@@ -52,9 +42,7 @@ $(function(){
     var ref2=opener.D.pendingEditors[win], editorOpts=ref2.editorOpts, ee=ref2.ee, ide=ref2.ide
     D.wins=opener.D.wins
     var ed=opener.D.wins[win]=new Editor(ide,$('.ui-layout-center'),editorOpts)
-    ed.open(ee)
-    ed.updateSize()
-    D.setTitle(ed.name)
+    ed.open(ee);ed.updateSize();D.setTitle(ed.name)
     window.onbeforeunload=function(){return ed.onbeforeunload()}
     setTimeout(function(){ed.refresh()},500) // work around a rendering issue on Ubuntu
     opener.D.ide.unblock()

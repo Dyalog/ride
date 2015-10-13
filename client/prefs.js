@@ -106,10 +106,7 @@ D.prefs=this;
     '\n# The =PRF ("Preferences") menu item must be present.'
   ]
 ].forEach(function(kd){
-  var k=kd[0],    // preference name (key)
-      d=kd[1],    // default value
-      t=typeof d, // type
-      l=[],       // listeners
+  var k=kd[0], d=kd[1], t=typeof d, l=[], // k:preference name (key), d:default value, t:type, l:listeners
       str=t==='object'?JSON.stringify:function(x){return''+x}, // stringifier function
       sd=str(d),  // default value "d" converted to a string
       p=D.prefs[k]=function(x){

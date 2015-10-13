@@ -1,13 +1,8 @@
 'use strict'
 require('./menu')
-var prefs=require('./prefs'),
-    prefsUI=require('./prefs-ui'),
-    parseMenuDSL=require('./prefs-menu').parseMenuDSL,
-    editor=require('./editor'),Editor=editor.Editor,ACB_VALUE=editor.ACB_VALUE,
-    Session=require('./session').Session,
-    keymap=require('./keymap'),
-    util=require('./util'),esc=util.esc,throttle1=util.throttle1,
-    cmds=require('./cmds').cmds
+var prefs=require('./prefs'),prefsUI=require('./prefs-ui'),parseMenuDSL=require('./prefs-menu').parseMenuDSL,
+    editor=require('./editor'),Editor=editor.Editor,ACB_VALUE=editor.ACB_VALUE,Session=require('./session').Session,
+    keymap=require('./keymap'),util=require('./util'),esc=util.esc,throttle1=util.throttle1,cmds=require('./cmds').cmds
 
 function parseId(s){return+s.replace(/^.*?(\d+)$/,'$1')}
 

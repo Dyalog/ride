@@ -9,7 +9,7 @@ this.hex=function(x,n){var s=x.toString(16);if(n)while(s.length<n)s='0'+s;return
 var H={'<':'&lt;','>':'&gt;','&':'&amp;',"'":'&apos;','"':'&quot;'}
 this.esc=function(s){return s.replace(/[<>&'"]/g,function(x){return H[x]})}
 
-this.onCodeMirrorDoubleClick=function(cm,f){
+this.cmOnDblClick=function(cm,f){
   // CodeMirror supports 'dblclick' events but they are unreliable and seem to require rather a short time between the two clicks
   // So, let's track clicks manually:
   var t=0,x=0,y=0 // last click's timestamp and coordinates

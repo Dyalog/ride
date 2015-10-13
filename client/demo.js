@@ -1,7 +1,6 @@
 'use strict'
 // support for presentations
-var lines=[],index=-1
-var $i // $i:an <input type=file> used to open the file chooser dialog
+var lines=[], index=-1, $i // $i:an <input type=file> used to open the file chooser dialog
 function move(d){if(0<=index+d&&index+d<lines.length){index+=d;D.ide.wins[0].loadLine(lines[index])}}
 
 // Key display mode:

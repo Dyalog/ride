@@ -1,10 +1,7 @@
 'use strict'
-var autocompletion=require('./autocompletion')
-var prefs=require('./prefs')
-var mode=require('./cm-apl-mode'),letter=mode.letter,dfnDepth=mode.dfnDepth
-var util=require('./util'),onCodeMirrorDoubleClick=util.onCodeMirrorDoubleClick
-
-var ACB_VALUE=this.ACB_VALUE={pairs:'()[]{}',explode:'{}'} // value for CodeMirror's "autoCloseBrackets" option when on
+var autocompletion=require('./autocompletion'),prefs=require('./prefs'),mode=require('./cm-apl-mode'),
+    letter=mode.letter,dfnDepth=mode.dfnDepth,util=require('./util'),cmOnDblClick=util.cmOnDblClick,
+    ACB_VALUE=this.ACB_VALUE={pairs:'()[]{}',explode:'{}'} // value for CodeMirror's "autoCloseBrackets" option when on
 
 var b=function(cc,t){return'<a href=# class="'+cc+' tb-btn" title="'+t+'""></a>'} // cc:css classes, t:title
 var EDITOR_HTML=
@@ -36,10 +33,7 @@ var EDITOR_HTML=
 b=null
 
 this.Editor=function(ide,e,opts){
-  var ed=this
-  ed.ide=ide
-  ed.$e=$(e).html(EDITOR_HTML)
-  ed.opts=opts;ed.id=opts.id;ed.name=opts.name;ed.emit=opts.emit
+  var ed=this;ed.ide=ide;ed.$e=$(e).html(EDITOR_HTML);ed.opts=opts;ed.id=opts.id;ed.name=opts.name;ed.emit=opts.emit
   ed.isTracer=opts.tracer
   ed.xline=null // the line number of the empty line inserted at eof when cursor is there and you press <down>
   ed.oText='';ed.oStop=[] // remember original text and "stops" to avoid pointless saving on EP
@@ -60,7 +54,7 @@ this.Editor=function(ide,e,opts){
     if(g==='breakpoints'||g==='CodeMirror-linenumbers'){cm.setCursor({line:l,ch:0});ed.BP(ed.cm)}
   })
   ed.cm.on('focus',function(){ed.focusTimestamp=+new Date;ide.focusedWin=ed})
-  onCodeMirrorDoubleClick(ed.cm,function(e){ed.ED(ed.cm);e.preventDefault();e.stopPropagation()})
+  cmOnDblClick(ed.cm,function(e){ed.ED(ed.cm);e.preventDefault();e.stopPropagation()})
   ed.autocomplete=autocompletion.setUp(ed)
   ed.$tb=$('.toolbar',ed.$e)
     .on('click','.tb-hid,.tb-case',function(e){$(e.target).toggleClass('pressed');ed.highlightSearch();return false})

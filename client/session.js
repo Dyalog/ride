@@ -1,15 +1,8 @@
 'use strict'
-var autocompletion=require('./autocompletion'),
-prefs=require('./prefs'),
-onCodeMirrorDoubleClick=require('./util').onCodeMirrorDoubleClick
-
+var autocompletion=require('./autocompletion'),prefs=require('./prefs'),cmOnDblClick=require('./util').cmOnDblClick
 this.Session=function(ide,e,opts){ // Session constructor
-  var se=this
-  se.ide=ide
-  se.opts=opts
-  se.emit=opts.emit
+  var se=this;se.ide=ide;se.opts=opts;se.emit=opts.emit;se.hist=[''];se.histIdx=0;se.focusTimestamp=0
   se.dirty={} // modified lines: lineNumber→originalContent, inserted lines: lineNumber→0 (also used in cm-apl-mode.js)
-  se.hist=[''];se.histIdx=0
   se.$e=$(e).addClass('ride-win')
   var cm=se.cm=CodeMirror(se.$e[0],{
     autofocus:true,mode:{name:'apl-session',se:se},matchBrackets:!!prefs.matchBrackets(),readOnly:true,keyMap:'dyalog',
@@ -17,8 +10,7 @@ this.Session=function(ide,e,opts){ // Session constructor
     extraKeys:{'Shift-Tab':'indentLess',Tab:'tabOrAutocomplete'},
   })
   cm.dyalogCommands=se
-  onCodeMirrorDoubleClick(cm,function(e){se.ED(cm);e.stopPropagation();e.preventDefault()})
-  se.focusTimestamp=0
+  cmOnDblClick(cm,function(e){se.ED(cm);e.stopPropagation();e.preventDefault()})
   cm.on('focus',function(){se.focusTimestamp=+new Date;ide.focusedWin=se})
   cm.on('beforeChange',function(_,c){
     if(c.origin!=='D'){
@@ -48,7 +40,6 @@ this.Session=function(ide,e,opts){ // Session constructor
   se.autocomplete=autocompletion.setUp(se)
   prefs.wrap(function(x){se.cm.setOption('lineWrapping',!!x);se.scrollCursorIntoView()})
 }
-
 this.Session.prototype={
   histAdd:function(lines){this.hist[0]='';[].splice.apply(this.hist,[1,0].concat(lines));this.histIdx=0},
   histMove:function(d){
@@ -109,18 +100,13 @@ this.Session.prototype={
         ls.reverse().forEach(function(l){
           var ref1
           se.cm.removeLineClass(l,'background','modified')
-          if(se.dirty[l]===0){
-            se.cm.replaceRange('',{line:l,ch:0},{line:l+1,ch:0},'D')
-          }else{
-            se.cm.replaceRange(se.dirty[l],{line:l,ch:0},{line:l,ch:(se.cm.getLine(l)||'').length||0},'D')
-          }
+          se.dirty[l]===0?se.cm.replaceRange('',{line:l,ch:0},{line:l+1,ch:0},'D')
+                         :se.cm.replaceRange(se.dirty[l],{line:l,ch:0},{line:l,ch:(se.cm.getLine(l)||'').length||0},'D')
         })
       }else{
         es=[this.cm.getLine(this.cm.getCursor().line)]
       }
-      this.opts.exec(es,trace)
-      this.dirty={}
-      this.histAdd(es.filter(function(x){return!/^\s*$/.test(x)}))
+      this.opts.exec(es,trace);this.dirty={};this.histAdd(es.filter(function(x){return!/^\s*$/.test(x)}))
       this.cm.clearHistory()
     }
   },
@@ -130,17 +116,12 @@ this.Session.prototype={
   QT:function(cm){
     var c=cm.getCursor(),l=c.line
     if(this.dirty[l]===0){
-      if(l===cm.lastLine()){
-        cm.replaceRange('',{line:l,ch:0},{line:l+1,ch:0},'D')
-      }else{
-        cm.replaceRange('',{line:l-1,ch:cm.getLine(l-1).length},{line:l,ch:cm.getLine(l).length},'D')
-      }
+      l===cm.lastLine()?cm.replaceRange('',{line:l,ch:0},{line:l+1,ch:0},'D')
+                       :cm.replaceRange('',{line:l-1,ch:cm.getLine(l-1).length},{line:l,ch:cm.getLine(l).length},'D')
       delete this.dirty[l];var h=this.dirty;this.dirty={};for(var x in h)this.dirty[x-(x>l)]=h[x]
     }else if(this.dirty[l]!=null){
       cm.replaceRange(this.dirty[l],{line:l,ch:0},{line:l,ch:cm.getLine(l).length},'D')
-      delete this.dirty[l]
-      cm.removeLineClass(l,'background','modified')
-      cm.setCursor(l+1,c.ch)
+      cm.removeLineClass(l,'background','modified');cm.setCursor(l+1,c.ch);delete this.dirty[l]
     }
   },
   EP:function(){this.ide.focusMRUWin()},
