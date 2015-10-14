@@ -159,7 +159,9 @@ this.Proxy=function(){
       var n
       while(queue.length>=4&&(n=queue.readInt32BE(0))<=queue.length){
         var m=''+queue.slice(8,n);queue=queue.slice(n);log('from interpreter:'+trunc(JSON.stringify(m)))
-        if(!/^(?:SupportedProtocols|UsingProtocol)=1$/.test(m)){ // ignore these
+        if(m[0]==='{'){ // let JSON-encoded messages through
+          log('to browser (JSON):'+trunc(m));socket&&socket.emit(x,y)
+        }else if(!/^(?:SupportedProtocols|UsingProtocol)=1$/.test(m)){ // ignore the handshake (SupportedProtocols, etc)
           switch(m.slice(1,m.indexOf('>'))){
             case'ReplyConnect':case'ReplyEdit':case'ReplySetLineAttributes':case'ReplyWeakInterrupt':
             case'ReplyStrongInterrupt':case'ReplyUnknownRIDECommand':
