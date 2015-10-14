@@ -1,4 +1,4 @@
-prefix = 'http://help.dyalog.com/14.0/Content/'; suffix = '.htm'
+prefix = 'http://help.dyalog.com/14.1/Content/'; suffix = '.htm'
 '''
   WELCOME      MiscPages/HelpWelcome
   UCMDS        UserGuide/The APL Environment/User Commands
@@ -18,7 +18,6 @@ prefix = 'http://help.dyalog.com/14.0/Content/'; suffix = '.htm'
   )events      Language/System Commands/events
   )fns         Language/System Commands/fns
   )holds       Language/System Commands/holds
-  )intro       Language/System Commands/intro
   )lib         Language/System Commands/lib
   )load        Language/System Commands/load
   )methods     Language/System Commands/methods
