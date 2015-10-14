@@ -222,7 +222,7 @@ this.Editor.prototype={
   saved:function(err){err?$.alert('Cannot save changes'):this.emit('CloseWindow',{win:this.id})},
   closePopup:function(){if(D.floating){window.onbeforeunload=null;D.forceClose=1;close()}},
   die:function(){this.cm.setOption('readOnly',true)},
-  getDocument:function(){returnthis.$e[0].ownerDocument},
+  getDocument:function(){return this.$e[0].ownerDocument},
   refresh:function(){this.cm.refresh()},
   cword:function(){ // apl identifier under cursor
     var c=this.cm.getCursor(),s=this.cm.getLine(c.line),r='['+letter+'0-9]*' // r:regex fragment used for identifiers
