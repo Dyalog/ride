@@ -1,10 +1,10 @@
 'use strict'
-var prefs=require('./prefs'),util=require('./util'),dict=util.dict,esc=util.esc
+var prefs=require('./prefs'),esc=require('./util').esc
 
 this.name='Colours'
 
 var G=[],H={} // G:syntax highlighting groups {t,s,c,ctrls}; H:reverse lookup dict for G
-D.addSyntaxGroups=function(x){G=G.concat(x);H=dict(G.map(function(g,i){return[g.t,i]}));builtInSchemes&&updateStyle()}
+D.addSyntaxGroups=function(x){G=G.concat(x);H={};for(var i=0;i<G.length;i++)H[G[i].t]=i;builtInSchemes&&updateStyle()}
 D.addSyntaxGroups([
   // t: token type, a short key for storing customisations in localStorage
   // s: string to display in the UI
