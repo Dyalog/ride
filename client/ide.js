@@ -8,16 +8,17 @@ function parseId(s){return+s.replace(/^.*?(\d+)$/,'$1')}
 
 this.IDE=function(){
   var ide=D.ide=this
-  $('body').html(this.$ide=$(
+  $('body').html(
+    '<div class=lbar style=display:none><a class=lbar-prefs href=#></a>'+D.lbarHTML+'</div>'+
+    '<div class=lbar-tip style=display:none><div class=lbar-tip-desc></div><pre class=lbar-tip-text></pre></div>'+
+    '<div class=lbar-tip-triangle style=display:none></div>'+
     '<div class=ide>'+
-      '<div class="lbar ui-layout-north" style=display:none><a class=lbar-prefs href=#></a>'+D.lbarHTML+'</div>'+
-      '<div class=lbar-tip style=display:none><div class=lbar-tip-desc></div><pre class=lbar-tip-text></pre></div>'+
-      '<div class=lbar-tip-triangle style=display:none></div>'+
       '<div class=ui-layout-center></div>'+
       '<div class=ui-layout-east ><ul></ul></div>'+
       '<div class=ui-layout-south><ul></ul></div>'+
     '</div>'
-  ))
+  )
+  ide.$ide=$('.ide')
   ide.dead=0     // when RIDE dies, the screen turns light brown and RIDE stops responding to certain commands
   ide.pending=[] // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.w3500=null // window for 3500⌶
@@ -154,9 +155,7 @@ this.IDE=function(){
       requestTooltip(e,'Keyboard Shortcuts',s+'...')
     })
   var layout=ide.layout=ide.$ide.layout({
-    fxName:'',
-    defaults:{enableCursorHotkey:0},
-    north:{spacing_closed:0,resizable:0,togglerLength_open:0,spacing_open:0},
+    fxName:'',defaults:{enableCursorHotkey:0},
     east: {spacing_closed:0,resizable:1,togglerLength_open:0,size:'0%'},
     south:{spacing_closed:0,resizable:1,togglerLength_open:0,size:'0%'},
     center:{onresize:function(){
@@ -166,11 +165,11 @@ this.IDE=function(){
       var h=st.south.innerHeight;!st.south.isClosed&&h>1&&prefs.tracerHeight(h)
     }}
   })
-  layout.close('east');layout.close('south');prefs.lbar()||layout.hide('north');ide.wins[0].updateSize()
-
-  D.floatOnTop=prefs.floatOnTop()
-  prefs.floatOnTop(function(x){D.floatOnTop=x})
-  prefs.lbar(function(x){ide.layout[x?'show':'hide']('north')})
+  var updateTop=function(){$('.ide').css({top:(prefs.lbar()?$('.lbar').height():0)+(D.mac?5:22)})
+  layout&&layout.resizeAll()};$('.lbar').toggle(!!prefs.lbar());updateTop();$(window).resize(updateTop)
+  layout.close('east');layout.close('south');ide.wins[0].updateSize()
+  D.floatOnTop=prefs.floatOnTop();prefs.floatOnTop(function(x){D.floatOnTop=x})
+  prefs.lbar(function(x){$('.lbar').toggle(!!x);updateTop()})
   try{
     D.installMenu(parseMenuDSL(prefs.menu()))
   }catch(e){
