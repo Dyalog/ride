@@ -1,32 +1,32 @@
-Bugs / Issues External to RIDE
-  Windows not working at all for spawned interpreters
-    NN: now it works but the old IDE's UI is visible
-  Yes/No dialog, needs to be supported in the RIDE protocol; email from Morten 2015-02-14
-  value tips
-  protocol extensions for ws explorer
+Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nice)
+  M1 adoption of the new protocol
+       http://wiki.dyalog.bramley/index.php/Ride_protocol_messages_V2#Extensions
+  M2 awareness of Process Manager
+  M3 launch server-side processes using ssh
+  M4 minimal workspace explorer
+  M5 edit "external" source files
+  M6 support external editors
+  M7 add meta-information to Windows exe
+       from JD: http://stackoverflow.com/questions/284258/how-do-i-set-the-version-information-for-an-existing-exe-dll
+  S1 export and import preferences
+  S2 config file for interpreter
+  S3 yes/no/cancel and other ultra-simple dialogs
+  S4 value tips
+  S5 enhanced navigation of classes and functions
+  W1 show stack
+  W2 show threads
+  W3 status bar
+  W4 drag/drop workspaces or source files to session
+  W5 autopw support
 
-P1 (Definitely high priority):
-
-P2 (Middle priority):
-  class explorer
-  external editors
+Not prioritized:
   cmd to toggle rainbow colouring
-  ws explorer
-
-P3 (Can wait):
-  Add meta-information to Windows executable: author, version, etc, accessible through Right click > Properties
-    NN: Investigate: http://stackoverflow.com/questions/284258/how-do-i-set-the-version-information-for-an-existing-exe-dll (sent by JD)
   names of open editors should appear at the bottom of the Window menu; Marc Griffiths 2015-03-13
+    NN: not convinced that would be useful
   View>Theme should change the theme in all existing windows
-
-P4 (I will think about it):
   Ctrl+Cmd+Space on the Mac starts a "Special Characters" application -- find a way to disable it
     NN: "Special Characters" and "Start Dictation" are added based on the presence of "Copy" in the menu.
         But if we don't have "Copy" in the menu, cmd+c doesn't work.
-
-Not yet prioritized:
-  transition to a JSON-encoded protocol
-  new protocol extensions needed (see http://wiki.dyalog.bramley/index.php/Ride_protocol_messages_V2#Extensions)
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud (Kai)
   check for updates automatically - Jason, 2015-10-12
   2015-09-07 Adam: shortcut to clear the "modified" flag of a line in session without reverting it to original content
@@ -39,7 +39,6 @@ Not yet prioritized:
   2015-09-08 Ken Mellem: custom syntax highlighting in comments
     NN: added only a simple example
   2015-09-07 Ray: status bar and programmatic access to "current object"
-  drag and drop *.dws and *.dyalog files in the session
   2015-09-07 Jim Brown: custom fonts
   https://github.com/codemirror/CodeMirror/issues/3240
     WebKit stores DOM height in 25 bits, ~33 million pixels.  When displaying
@@ -47,9 +46,6 @@ Not yet prioritized:
     that limit and it's impossible to scroll beyond a certain offset.  This is
     hard to work around without going deep into CodeMirror's code and rewriting
     parts of it.
-  JS: System command output (fns vars ...) should wrap at ⎕PW, not 80.
-  JS: AutoPW option: ⎕PW changes automatically with window width and font size.
-    NN: protocol support needed
   get rid of jquery.layout.js (180k for a splitter plugin is too much)
   There should be no flashing cursors in windows that don't have focus; JS 2015-03-21
   if we spawn an interpreter and it fails to connect after X time, please could we have a message box about it? - Andy email 2015-06-29
@@ -73,9 +69,7 @@ Not yet prioritized:
   Drag and drop a "finder object" in the Mac RIDE crashes it (Alex Bochannek, 2015-06-25)
   RIDE on multiple screens on Mac loses its title bar (Alex Bochannek, 2015-06-25)
   profile selection
-  status window and notification about number of messages
   search history
-  SI stack in tracer (?)
   start web server from nwjs GUI (?)
 
 Done:
@@ -152,10 +146,6 @@ Done:
     NN: Patch submitted.  Will be available with the next release of CodeMirror: https://github.com/codemirror/CodeMirror/pull/3083
     NN: I decided to disable pairing of '' and "".
   2) Double-click in the session does not open the editor.
-  JS email 2015-02-19:
-    JS5: )load dfns and type )fns - the display doesn’t seem to honour ⎕PW, so I see some of my fns spread over two lines of output.
-    JS6: An auto-⎕PW option (I suggest default) would be very nice.
-      NN: implemented optional line wrapping instead
   Autocomplete displays all ⎕names in an unexpected order; GS #11928
   App icons for Mac & Windows (Jason)
   Change background for search matches; MK email 2015-02-18
@@ -229,7 +219,6 @@ Done:
   Do not scroll session on AtInputPrompt.
   History (session log) is not recorded in spawned interpreters; Geoff #11841
   Lbar may change its size when theme is changed
-  "Save? Yes/No/Cancel" dialog when closing a floating editor window?
   Six-space prompt before trace output; JS 2015-03-21
   Closing the session window should close all open editor windows
   JS: <Esc> in the session should switch focus to the top edit or trace window.
