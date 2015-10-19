@@ -35,6 +35,7 @@ function b64(s){return Buffer(s).toString('base64')} // base64 encode
 function b64d(s){return''+Buffer(s,'base64')}        // base64 decode
 function tag(t,x){return(RegExp('^[^]*<'+t+'>([^<]*)</'+t+'>[^]*$').exec(x)||[])[1]} // extract tag t from xml string x
 function addr(x){return x&&(x=x.request)&&(x=x.connection)&&x.remoteAddress||'IDE'} // human-readable repr of socket x
+function extend(x,y){for(var k in y)x[k]=y[k];return x}
 
 var ipAddresses=[]
 ;(function(){
@@ -280,7 +281,7 @@ this.Proxy=function(){
           var args=['+s','-q'],stdio=['pipe','ignore','ignore']
           if(/^win/i.test(process.platform)){args=[];stdio[0]='ignore'}
           try{
-            child=spawn(exe,args,{stdio:stdio,nv:Object.assign({},process.env,{RIDE_INIT:'CONNECT:'+hp,RIDE_SPAWNED:'1'})})
+            child=spawn(exe,args,{stdio:stdio,env:extend(process.env,{RIDE_INIT:'CONNECT:'+hp,RIDE_SPAWNED:'1'})})
           }catch(e){
             toBrowser('*spawnedError',{code:0,message:''+e});return
           }
