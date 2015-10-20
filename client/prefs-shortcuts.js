@@ -96,6 +96,7 @@ this.save=function(){
   }
   prefs.keys(h)
 }
+this.activate=function(){$sc.focus()}
 
 function updateKeys(x){
   var h=CodeMirror.keyMap.dyalog={fallthrough:'dyalogDefault'}

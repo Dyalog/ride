@@ -8,6 +8,7 @@
 //   validate() should return a falsey value on success or a {message,element} object on failure
 //   save()     called when OK or Apply is pressed
 //   resize()   called when the Preferences dialog is resized or the tab is selected
+//   activate() called when the tab is selected ("activated")
 // All tabs' validate() methods are invoked, if they exist, before any attempt to call save()
 var tabs=[
   require('./prefs-layout'   ),
@@ -39,7 +40,7 @@ this.showDialog=function(tabName){
         tabs.map(function(t){return'<div id=prefs-tab-'+safe(t.name)+'></div>'}).join('')+
       '</div>'
     )
-      .tabs({activate:function(e,ui){var t=tabs[$(ui.newTab).index()];t.resize&&t.resize()}})
+      .tabs({activate:function(e,ui){var t=tabs[$(ui.newTab).index()];t.resize&&t.resize();t.activate&&t.activate()}})
       .keydown(function(e){if(e.which===13&&!e.shiftKey&&e.ctrlKey&&!e.altKey){ok();return false}})
       .on('dragstart',function(){return false})
       .dialog({
