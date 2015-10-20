@@ -31,7 +31,7 @@ this.IDE=function(){
   ide.focusedWin=ide.wins[0]
 
   // tab management
-  ide.tabOpts={activate:(function(_,ui){
+  ide.tabOpts={heightStyle:'fill',activate:(function(_,ui){
     var w=ide.wins[parseId(ui.newTab.prop('id'))];w.updateSize();w.focus();w.updateGutters()
   })}
   ide.$tabs=$('.ui-layout-east,.ui-layout-south').tabs(ide.tabOpts)

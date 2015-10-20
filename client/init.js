@@ -36,12 +36,11 @@ $(function(){
   for(var i=0;i<ref.length;i++){var m=/^([^=]*)=?(.*)$/.exec(ref[i]);urlParams[unescape(m[1]||'')]=unescape(m[2]||'')}
   var win=urlParams.win
   if(D.floating&&win){
-    $('body').addClass('floating-window').html('<div class=ui-layout-center></div>').layout({
-      fxName:'',defaults:{enableCursorHotkey:0},center:{onresize:function(){ed&&ed.updateSize()}}
-    })
+    $('body').addClass('floating-window')
+    $(window).resize(function(){ed&&ed.updateSize()})
     var ref2=opener.D.pendingEditors[win], editorOpts=ref2.editorOpts, ee=ref2.ee, ide=ref2.ide
     D.wins=opener.D.wins
-    var ed=opener.D.wins[win]=new Editor(ide,$('.ui-layout-center'),editorOpts)
+    var ed=opener.D.wins[win]=new Editor(ide,$(document.body),editorOpts)
     ed.open(ee);ed.updateSize();D.setTitle(ed.name)
     window.onbeforeunload=function(){return ed.onbeforeunload()}
     setTimeout(function(){ed.refresh()},500) // work around a rendering issue on Ubuntu

@@ -197,7 +197,7 @@ this.Editor.prototype={
     this.updateGutters();this.cm.setOption('readOnly',!!x)
   },
   setReadOnly:function(x){this.cm.setOption('readOnly',x)},
-  updateSize:function(){this.cm.setSize(this.$e.width(),this.$e.parent().height()-this.$e.position().top-28)},
+  updateSize:function(){this.cm.setSize(this.$e.width(),this.$e.height()-30)},
   open:function(ee){ // ee:editable entity
     var cm=this.cm;cm.setValue(this.oText=ee.text);cm.clearHistory()
     if(D.mac){cm.focus();window.focus()}
