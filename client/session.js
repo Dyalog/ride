@@ -96,7 +96,7 @@ this.Session.prototype={
       for(l in this.dirty)ls.push(+l)
       if(ls.length){
         ls.sort(function(x,y){return x-y})
-        es=ls.map(function(l){return se.cm.getLine(l)}) // strings to execute
+        es=ls.map(function(l){return se.cm.getLine(l)||''}) // strings to execute
         ls.reverse().forEach(function(l){
           var ref1
           se.cm.removeLineClass(l,'background','modified')
