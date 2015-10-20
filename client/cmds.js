@@ -34,6 +34,7 @@ this.cmds=[
   ['SI', 'Strong interrupt',        []],
   ['TB', 'Tab between windows',     ['Ctrl-Tab'],            1],
   ['TC', 'Trace',                   ['Ctrl-Enter'],          1],
+  ['TGC','Toggle comment',          []],
   ['TL', 'Toggle localisation',     ['Ctrl-Up'],             1],
   ['TO', 'Toggle fold',             []],
   ['VAL','Inspect value of name under cursor (in editors)',[]],

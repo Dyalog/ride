@@ -327,6 +327,11 @@ this.Editor.prototype={
       cm.setCursor({line:l,ch:0})
     }
   },
+  TGC:function(cm){ // toggle comment
+    var b=cm.somethingSelected()?cm.getSelections().join('\n').split('\n').every(function(y){return !y||y[0]==='⍝'})
+                                :cm.getLine(cm.getCursor().line)[0]==='⍝'
+    this[b?'DO':'AO'](cm)
+  },
   ER:function(cm){
     if(this.isTracer){
       this.emit('RunCurrentLine',{win:this.id})
