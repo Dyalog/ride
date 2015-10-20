@@ -71,6 +71,11 @@ Not prioritized:
   profile selection
   search history
   start web server from nwjs GUI (?)
+  invert cursor colour (Alex Bochannek, 2015-10-20)
+  support Mac's "Cmd" key (Alex Bochannek & Alexey Veretennikov, 2015-10-20)
+  custom themes (Alexey Veretennikov, 2015-10-20)
+  remove invisible scrollbars on Mac (Alexey Veretennikov, 2015-10-20)
+  tooltips for built-in functions and operators (Alexey Veretennikov, 2015-10-20)
 
 Done:
   JS: Discuss placing the cursor at the _left_ of a recalled line.
