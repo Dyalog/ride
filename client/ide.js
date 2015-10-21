@@ -232,6 +232,14 @@ this.IDE.prototype={
     else{ide.w3500=open('empty.html','3500 I-beam','width=800,height=500');ide.w3500.onload=init}
   },
   openWindow:function(ee){
+    var ide=this
+    if(!ee['debugger']&&D.openInExternalEditor){
+      D.openInExternalEditor(ee,function(s){
+        ide.emit('SaveChanges',{win:ee.token,text:s,attributes:ee.lineAttributes})
+        ide.emit('CloseWindow',{win:ee.token})
+      })
+      return
+    }
     var w=ee.token, done, editorOpts={id:w,name:ee.name,tracer:ee['debugger'],emit:this.emit.bind(this)}
     if(prefs.floating()&&!D.floating&&!this.dead){
       var p=ee['debugger']?prefs.posTracer():prefs.posEditor()
