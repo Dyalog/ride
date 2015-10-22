@@ -384,10 +384,10 @@
 
   var editor=process.env.DYALOG_IDE_EDITOR
   if(editor){
-    var d=os.tmpDir()+'/dyalog';fs.existsSync(d)||fs.mkdirSync(d,0700)
+    var d=os.tmpDir()+'/dyalog';fs.existsSync(d)||fs.mkdirSync(d,0o700)
     D.openInExternalEditor=function(ee,callback){ // ee: EditableEntity from RIDE protocol
       var f=d+'/'+ee.name+'.dyalog'
-      fs.writeFileSync(f,ee.text,{encoding:'utf8',mode:0600})
+      fs.writeFileSync(f,ee.text,{encoding:'utf8',mode:0o600})
       var env={};for(var k in process.env)env[k]=process.env[k];env.LINE=''+(1+(ee.currentRow||0))
       var p=spawn(editor,[f],{env:env})
       p.on('error',function(err){throw err})
