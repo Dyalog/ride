@@ -12,12 +12,6 @@ function keyInfo(e){ // returns a pair of the key name and an "is complete" flag
   var c=!!e.which&&k!=='Shift'&&k!=='Ctrl'&&k!=='Alt' // c: is the key combination complete?
   c&&(s+=k);return[s,c]
 }
-function keyDownHandler(e){var s=keyInfo(e)[0];$p.text(s).toggle(!!s)}
-function keyUpHandler(e){
-  var h=keyInfo(e),s=h[0],c=h[1]
-  if(c){$p.hide();var $k=$('<span>').text(s).insertBefore($p);setTimeout(function(){$k.fadeOut(1000)},2000)}
-  else{$p.text(s).toggle(!!s)}
-}
 $.extend(CodeMirror.commands,{
   DMN:function(){move( 1)}, // next line
   DMP:function(){move(-1)}, // prev line
@@ -37,7 +31,13 @@ $.extend(CodeMirror.commands,{
   DMK:function(){ // toggle key display mode
     if(!$p){
       $('body').append($('<div id=demo-keys>').append($p=$('<span>').hide()))
-      $(document).on('keyup.demo',keyUpHandler).on('keydown.demo',keyDownHandler)
+      $(document)
+        .on('keydown.demo',function(e){var s=keyInfo(e)[0];$p.text(s).toggle(!!s)})
+        .on('keyup.demo',function(e){
+          var h=keyInfo(e),s=h[0],c=h[1]
+          if(c){$p.hide();var $k=$('<span>').text(s).insertBefore($p);setTimeout(function(){$k.fadeOut(1000)},2000)}
+          else{$p.text(s).toggle(!!s)}
+        })
     }else{
       $(document).off('.demo');$('#demo-keys').remove();$p=null
     }
