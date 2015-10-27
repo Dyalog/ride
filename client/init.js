@@ -38,7 +38,7 @@ $(function(){
   if(D.floating&&win){
     $('body').addClass('floating-window')
     $(window).resize(function(){ed&&ed.updateSize()})
-    var ref2=opener.D.pendingEditors[win], editorOpts=ref2.editorOpts, ee=ref2.ee, ide=ref2.ide
+    var pe=opener.D.pendingEditors[win], editorOpts=pe.editorOpts, ee=pe.ee, ide=pe.ide
     D.wins=opener.D.wins
     var ed=opener.D.wins[win]=new Editor(ide,$(document.body),editorOpts)
     ed.open(ee);ed.updateSize();D.setTitle(ed.name)

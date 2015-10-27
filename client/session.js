@@ -98,7 +98,6 @@ this.Session.prototype={
         ls.sort(function(x,y){return x-y})
         es=ls.map(function(l){return se.cm.getLine(l)||''}) // strings to execute
         ls.reverse().forEach(function(l){
-          var ref1
           se.cm.removeLineClass(l,'background','modified')
           se.dirty[l]===0?se.cm.replaceRange('',{line:l,ch:0},{line:l+1,ch:0},'D')
                          :se.cm.replaceRange(se.dirty[l],{line:l,ch:0},{line:l,ch:(se.cm.getLine(l)||'').length||0},'D')
