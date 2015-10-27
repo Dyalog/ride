@@ -175,7 +175,7 @@ this.Proxy=function(){
               break
             case'ReplyIdentify':
               toBrowser('UpdateDisplayName',{displayName:b64d(tag('Project',m))})
-              toBrowser('*identify',{
+              toBrowser('*identify',{ // should be "Identify"
                 version: tag('Version'     ,m),
                 platform:tag('Platform'    ,m),
                 arch:    tag('Architecture',m),
@@ -189,9 +189,9 @@ this.Proxy=function(){
               toBrowser('UpdateDisplayName',{displayName:s})
               break
             case'ReplyExecute'         :toBrowser('AppendSessionOutput',{result:b64d(tag('result',m))})    ;break
+            case'ReplyGetLog'          :toBrowser('AppendSessionOutput',{result:b64d(tag('Log',m))})       ;break
             case'ReplyHadError'        :toBrowser('HadError')                                              ;break
             case'ReplyEchoInput'       :toBrowser('EchoInput',{input:b64d(tag('input',m))+'\n'})           ;break
-            case'ReplyGetLog'          :toBrowser('AppendSessionOutput',{result:b64d(tag('Log',m))})       ;break
             case'ReplyNotAtInputPrompt':toBrowser('NotAtInputPrompt')                                      ;break
             case'ReplyAtInputPrompt'   :toBrowser('AtInputPrompt',{why:WHIES.indexOf(tag('why',m))})       ;break
             case'ReplyOpenWindow'      :toBrowser('OpenWindow',parseEditableEntity(m))                     ;break
