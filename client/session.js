@@ -75,9 +75,11 @@ this.Session.prototype={
     why&&cm.clearHistory()
   },
   updateSize:function(){
-    var i=this.cm.getScrollInfo(),b=5>Math.abs(i.top+i.clientHeight-i.height) // b:are we at the bottom edge?
-    this.cm.setSize(this.$e.width(),this.$e.height())
-    b&&this.scrollCursorIntoView()
+    var cm=this.cm,$e=this.$e,w=$e.width(),h=$e.height()
+    var i=cm.getScrollInfo(),b=5>Math.abs(i.top+i.clientHeight-i.height) // b:are we at the bottom edge?
+    cm.setSize(w,h);b&&this.scrollCursorIntoView()
+    var pw=Math.max(42,Math.floor((w-cm.display.scrollbarFiller.clientWidth)/cm.defaultCharWidth()))
+    if(pw!==this.pw){this.emit('SetPW',{pw:pw});this.pw=pw}
   },
   scrollCursorIntoView:function(){
     var cm=this.cm;cm.scrollTo(0,cm.getScrollInfo().top);setTimeout(function(){cm.scrollIntoView()},1)
