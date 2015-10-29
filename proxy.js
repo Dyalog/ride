@@ -253,6 +253,7 @@ this.Proxy=function(){
       .on('SetLineAttributes',function(x){
         cmd('SetLineAttributes','<win>'+x.win+'</win>'+fmtLineAttrs(x.nLines,x.lineAttributes))
       })
+      .on('SetPW',function(x){cmd('SetPW','<pw>'+x.pw+'</pw>')})
       .on('Exit',function(x){cmd('Exit','<code>'+x.code+'</code>')})
 
       // "disconnect" is a built-in socket.io event
