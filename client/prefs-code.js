@@ -66,8 +66,8 @@ this.save=function(){
   prefs.fold               ($fold.is(':checked'))
 }
 this.validate=function(){
-  if($ai .is(':checked')&&!isInt($sw .val(),0))return{message:'Auto-indent must be a non-negative integer.',element:$ai}
-  if($aim.is(':checked')&&!isInt($swm.val(),0))return{message:'Auto-indent in methods must be a non-negative integer.',element:$aim}
-  if($ac .is(':checked')&&!isInt($acd.val(),1))return{message:'Autocompletion delay must be a positive integer.',element:$acd}
+  if($ai .is(':checked')&&!isInt($sw .val(),0))return{msg:'Auto-indent must be a non-negative integer.',el:$ai}
+  if($aim.is(':checked')&&!isInt($swm.val(),0))return{msg:'Auto-indent in methods must be a non-negative integer.',el:$aim}
+  if($ac .is(':checked')&&!isInt($acd.val(),1))return{msg:'Autocompletion delay must be a positive integer.',el:$acd}
 }
 function isInt(x,minX){x=+x;return x===(x|0)&&x>=minX}

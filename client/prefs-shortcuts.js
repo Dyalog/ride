@@ -85,7 +85,7 @@ this.load=function(){
 }
 this.validate=function(){
   var $dups=$('#shortcuts-table-wrapper .shortcuts-dup')
-  if($dups.length)return{message:'There are duplicate shortcuts.',element:$dups[0]}
+  if($dups.length)return{msg:'There are duplicate shortcuts.',el:$dups[0]}
 }
 this.save=function(){
   var h={}

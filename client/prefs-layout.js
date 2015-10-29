@@ -90,7 +90,7 @@ function updateGlyphs(){ // apply model values to the DOM
     var g2=l[1][i];if(g2!=='☠'){$('#k'+i+' .g2').text(g2);var g3=m[1][i];$('#k'+i+' .g3').val(g3).prop('title',U(g3))}
   }
 }
-this.validate=function(){if($pfx.val().length!==1)return{message:'Invalid prefix key',element:$pfx}}
+this.validate=function(){if($pfx.val().length!==1)return{msg:'Invalid prefix key',el:$pfx}}
 this.save=function(){
   prefs.prefixKey($pfx.val());prefs.kbdLocale($lc.val())
   var h={}

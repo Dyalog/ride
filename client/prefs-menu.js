@@ -16,9 +16,9 @@ this.validate=function(){
       if(x.items)for(var i=0;i<x.items.length;i++)if(visit(x.items[i]))return 1
     }
     var ok=0,a=this.parseMenuDSL($ta.val());for(var i=0;i<a.length;i++)if(visit(a[i])){ok=1;break}
-    if(!ok)return{message:'Menu must contain the PRF (Preferences) command',element:$ta}
+    if(!ok)return{msg:'Menu must contain the PRF (Preferences) command',el:$ta}
   }catch(e){
-    return{message:e.message,element:$ta}
+    return{msg:e.message,el:$ta}
   }
 }
 var extraOpts={

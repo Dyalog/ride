@@ -10,6 +10,7 @@ com   comment
 dlg   dialog
 D     Dyalog
 ed    editor
+el    element
 eol   end of line
 esc   escape; usually referring to html characters: &→&amp; <→&lt; etc
 exe   executable (not necessarily a DOS MZ .exe file)

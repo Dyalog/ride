@@ -5,7 +5,7 @@
 //   name       a string used as the tab's title
 //   init()     called only once, before Preferences is opened for the first time
 //   load()     called every time Preferences is opened
-//   validate() should return a falsey value on success or a {message,element} object on failure
+//   validate() should return a falsey value on success or a {msg,el} object on failure
 //   save()     called when OK or Apply is pressed
 //   resize()   called when the Preferences dialog is resized or the tab is selected
 //   activate() called when the tab is selected ("activated")
@@ -24,7 +24,7 @@ function ok(){apply()&&$d.dialog('close')}
 function apply(){ // returns 0 on failure and 1 on success
   var v
   for(var i=0;i<tabs.length;i++)if(v=tabs[i].validate&&tabs[i].validate()){
-    setTimeout(function(){$.alert(v.message,'Error',v.element?function(){v.element.focus()}:null)},1)
+    setTimeout(function(){$.alert(v.msg,'Error',v.el?function(){v.el.focus()}:null)},1)
     return 0
   }
   for(var i=0;i<tabs.length;i++)tabs[i].save&&tabs[i].save()
