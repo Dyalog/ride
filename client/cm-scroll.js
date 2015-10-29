@@ -28,28 +28,22 @@ function Bar(o,scroll){ // o:orientation(0=vertical,1=horizontal)
   return{node:node,moveTo:moveTo,update:update}
 }
 CM.scrollbarModel.simple=function(place,scroll){
-  var ssb,h=Bar(1,scroll),v=Bar(0,scroll);place(h.node);place(v.node)
-  return ssb={
+  var h=Bar(1,scroll),v=Bar(0,scroll),width;place(h.node);place(v.node)
+  return{
     setScrollTop :function(p){v.moveTo(p,1)},
     setScrollLeft:function(p){h.moveTo(p,1)},
     clear:function(){var p=h.node.parentNode;p.removeChild(h.node);p.removeChild(v.node)},
     update:function(m){ // m:measure
-      if(ssb.width==null){
+      if(!width){
         var style=window.getComputedStyle?window.getComputedStyle(h.node):h.node.currentStyle
-        if(style)ssb.width=parseInt(style.height)
+        if(style)width=parseInt(style.height)
       }
-      var w=ssb.width||0
-      var bh=m.scrollWidth >m.clientWidth +1;v.node.style.display=bv?'':'none' // bh:needs horizontal bar?
-      var bv=m.scrollHeight>m.clientHeight+1;h.node.style.display=bh?'':'none' // bv:needs vertical bar?
-      if(bv){
-        v.update(m.scrollHeight,m.clientHeight,m.viewHeight-(bh?w:0))
-        v.node.style.display='';v.node.style.bottom=bh?w+'px':'0'
-      }
-      if(bh){
-        h.update(m.scrollWidth,m.clientWidth,m.viewWidth-(bv?w:0)-m.barLeft)
-        h.node.style.right=bv?w+'px':'0';h.node.style.left=m.barLeft+'px'
-      }
-      return{right:bv?w:0,bottom:bh?w:0}
+      var w=width||0,vs=v.node.style,hs=h.node.style
+      var hb=m.scrollWidth >m.clientWidth +1;vs.display=vb?'':'none' // hb:needs horizontal bar?
+      var vb=m.scrollHeight>m.clientHeight+1;hs.display=hb?'':'none' // vb:needs vertical bar?
+      if(vb){v.update(m.scrollHeight,m.clientHeight,m.viewHeight-(hb?w:0));vs.display='';vs.bottom=hb?w+'px':'0'}
+      if(hb){h.update(m.scrollWidth,m.clientWidth,m.viewWidth-(vb?w:0)-m.barLeft);hs.right=vb?w+'px':'0';hs.left=m.barLeft+'px'}
+      return{right:vb?w:0,bottom:hb?w:0}
     }
   }
 }
