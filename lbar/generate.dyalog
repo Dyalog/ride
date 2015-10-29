@@ -1,10 +1,14 @@
 #!/bin/bash
 (echo '∇M';tail -n+3 "$0";echo -e '∇\nM\n⎕off')|dyalog -script;exit $?
 
-⍝ This script generates lbar.js from lbar.xml
-⍝
-⍝ lbar.xml can be obtained from trunk/apl/svn/tools/languagebar/out/lbar_unicode.xml
-⍝ after building the interpreter
+⍝ This script takes an lbar_unicode.xml as input and
+⍝ generates JavaScript constants with information about the language bar.
+
+⍝ Usage from bash:
+⍝   # fetch the latest .xml
+⍝   svn cat http://svn.dyalog.bramley/svn/dyalog/trunk/apl/svn/tools/languagebar/out/lbar_unicode.xml >lbar.xml
+⍝   # generate the .js
+⍝   ./generate.dyalog >../client/lbar.js
 
 ⎕io←⎕ct←0 ⋄ ⎕pw←32767
 'base64'⎕cy'dfns'
@@ -23,8 +27,9 @@ h←⊃,¨/(⊂'<b')cl(⊂'>')(esc¨chr)(⊂'</b>')
 ((~m)/h)←' '
 
 ⍝ output
-'D=D||{};D.lbarHTML=',json⊃,/h
-'D.lbarTips={'
+'// generated code, do not edit'
+'this.html=',json⊃,/h
+'this.tips={'
 ¯2↓⊃,/⊃,¨/(json¨,¨m/chr)(⊂':[')(json¨m/desc)','(json¨m/text)(⊂'],',⎕ucs 10)
 '};'
 ⎕off

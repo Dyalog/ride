@@ -2,14 +2,15 @@
 require('./menu')
 var prefs=require('./prefs'),prefsUI=require('./prefs-ui'),parseMenuDSL=require('./prefs-menu').parseMenuDSL,
     editor=require('./editor'),Editor=editor.Editor,ACB_VALUE=editor.ACB_VALUE,Session=require('./session').Session,
-    keymap=require('./keymap'),util=require('./util'),esc=util.esc,throttle1=util.throttle1,cmds=require('./cmds').cmds
+    keymap=require('./keymap'),util=require('./util'),esc=util.esc,throttle1=util.throttle1,
+    cmds=require('./cmds').cmds,lbar=require('./lbar')
 
 function parseId(s){return+s.replace(/^.*?(\d+)$/,'$1')}
 
 this.IDE=function(){
   var ide=D.ide=this
   $('body').html(
-    '<div class=lbar style=display:none><a class=lbar-prefs href=#></a>'+D.lbarHTML+'</div>'+
+    '<div class=lbar style=display:none><a class=lbar-prefs href=#></a>'+lbar.html+'</div>'+
     '<div class=lbar-tip style=display:none><div class=lbar-tip-desc></div><pre class=lbar-tip-text></pre></div>'+
     '<div class=lbar-tip-triangle style=display:none></div>'+
     '<div class=ide>'+
@@ -139,7 +140,7 @@ this.IDE=function(){
       var s=$(e.target).text(),
           key=keymap.getBQKeyFor(s),
           keyText=key&&s.charCodeAt(0)>127?'Keyboard: '+prefs.prefixKey()+key+'\n\n':'',
-          h=D.lbarTips[s]||[s,'']
+          h=lbar.tips[s]||[s,'']
       requestTooltip(e,h[0],keyText+h[1])
     })
     .on('mouseover','.lbar-prefs',function(e){
