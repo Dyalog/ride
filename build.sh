@@ -89,7 +89,12 @@ if [ ! -e build/nw/D.js -o $(find build/{js,tmp} -newer build/nw/D.js 2>/dev/nul
       'load('+JSON.stringify(p0)+')\n'+
       '}());\n'
     )}
-    process.stdout.write(combine(fs.readdirSync('client').map(function(x){return'client/'+x}),'client/init.js'))
+    process.stdout.write(combine(
+      fs.readdirSync('client')
+        .filter(function(x){return x.slice(-3)==='.js'&&x.indexOf('\bgen\b')<0})
+        .map(function(x){return'client/'+x}),
+      'client/init.js'
+    ))
 .
   echo 'generating D.js for desktop app'
   cat build/tmp/version-info.js build/tmp/libs.js init-nw.js build/tmp/ride.js >build/nw/D.js

@@ -8,11 +8,9 @@
 ⍝   # fetch the latest .xml
 ⍝   svn cat http://svn.dyalog.bramley/svn/dyalog/trunk/apl/svn/tools/languagebar/out/lbar_unicode.xml >lbar.xml
 ⍝   # generate the .js
-⍝   ./generate.dyalog >../client/lbar.js
+⍝   ./lbar-gen.dyalog >lbar.js
 
-⎕io←⎕ct←0 ⋄ ⎕pw←32767
-'base64'⎕cy'dfns'
-json←7160⌶
+⎕io←⎕ct←0 ⋄ ⎕pw←32767 ⋄ json←7160⌶ ⋄ 'base64'⎕cy'dfns'
 esc←(,¨'&<>')⎕r'\&amp;' '\&lt;' '\&gt;'
 
 ⍝ parse xml and extract tags
