@@ -17,12 +17,13 @@ $(function(){
     })
     $('body').addClass('zoom'+prefs.zoom())
     prefs.zoom(function(z){
-      for (var x in D.wins){
-        var $b=$('body',D.wins[x].getDocument())
+      var wins=D.ide.wins
+      for (var x in wins){
+        var $b=$('body',wins[x].getDocument())
         $b.prop('class','zoom'+z+' '+$b.prop('class').split(/\s+/).filter(function(s){return!/^zoom-?\d+$/.test(s)}).join(' '))
-        D.wins[x].refresh()
+        wins[x].refresh()
       }
-      D.wins[0].scrollCursorIntoView()
+      wins[0].scrollCursorIntoView()
     })
   }
   D.open=D.open||function(url,o){
@@ -40,12 +41,12 @@ $(function(){
     $('body').addClass('floating-window')
     $(window).resize(function(){ed&&ed.updateSize()})
     var pe=opener.D.pendingEditors[win], editorOpts=pe.editorOpts, ee=pe.ee, ide=pe.ide
-    D.wins=opener.D.wins
-    var ed=opener.D.wins[win]=new Editor(ide,$(document.body),editorOpts)
+    D.ide=opener.D.ide
+    var ed=D.ide.wins[win]=new Editor(ide,$(document.body),editorOpts)
     ed.open(ee);ed.updateSize();D.setTitle(ed.name)
     window.onbeforeunload=function(){return ed.onbeforeunload()}
     setTimeout(function(){ed.refresh()},500) // work around a rendering issue on Ubuntu
-    opener.D.ide.unblock()
+    D.ide.unblock()
   }else{
     D.socket=(D.createSocket||function(){
       var skt=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host)

@@ -145,7 +145,7 @@ $.extend(CodeMirror.commands,{
 })
 
 function switchWindows(d){ // d: a step of either 1 or -1
-  var a=[],i=-1;for(var k in D.wins){D.wins[k].hasFocus()&&(i=a.length);a.push(D.wins[k])}
+  var a=[],i=-1,wins=D.ide.wins;for(var k in wins){wins[k].hasFocus()&&(i=a.length);a.push(wins[k])}
   var j=i<0?0:(i+a.length+d)%a.length;$('#wintab'+a[j].id+' a').click();a[j].focus();return false
 }
 
