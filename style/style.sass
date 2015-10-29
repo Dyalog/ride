@@ -682,6 +682,16 @@ span.CodeMirror-selectedtext{background:none}
   cursor:pointer
   &:hover{font-weight:bold;color:#ccf}
 
+// scrollbars
+.cm-scroll-h div,
+.cm-scroll-v div{position:absolute;background:#ccc;-moz-box-sizing:border-box;box-sizing:border-box;border:1px solid #bbb;border-radius:2px}
+.cm-scroll-h,
+.cm-scroll-v{position:absolute;z-index:6;background:#eee}
+.cm-scroll-h{bottom:0;left:0;height:16px}
+.cm-scroll-v{right :0;top :0;width :16px}
+.cm-scroll-h div{bottom:0;height:100%}
+.cm-scroll-v div{right :0;width :100%}
+
 @import themes/mixins
 @import themes/classic
 @import themes/redmond

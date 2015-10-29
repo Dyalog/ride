@@ -1,5 +1,6 @@
 'use strict'
 var autocompletion=require('./autocompletion'),prefs=require('./prefs'),cmOnDblClick=require('./util').cmOnDblClick
+require('./cm-scroll')
 this.Session=function(ide,e,opts){ // Session constructor
   var se=this;se.ide=ide;se.opts=opts;se.emit=opts.emit;se.hist=[''];se.histIdx=0;se.focusTimestamp=0
   se.dirty={} // modified lines: lineNumber→originalContent, inserted lines: lineNumber→0 (also used in cm-apl-mode.js)
@@ -7,7 +8,7 @@ this.Session=function(ide,e,opts){ // Session constructor
   var cm=se.cm=CodeMirror(se.$e[0],{
     autofocus:true,mode:{name:'apl-session',se:se},matchBrackets:!!prefs.matchBrackets(),readOnly:true,keyMap:'dyalog',
     lineWrapping:!!prefs.wrap(),indentUnit:4,smartIndent:0,autoCloseBrackets:{pairs:'()[]{}',explode:''},
-    extraKeys:{'Shift-Tab':'indentLess',Tab:'tabOrAutocomplete'},
+    scrollbarStyle:'simple',extraKeys:{'Shift-Tab':'indentLess',Tab:'tabOrAutocomplete'},
   })
   cm.dyalogCommands=se
   cmOnDblClick(cm,function(e){se.ED(cm);e.stopPropagation();e.preventDefault()})

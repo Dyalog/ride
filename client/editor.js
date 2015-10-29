@@ -2,6 +2,7 @@
 var autocompletion=require('./autocompletion'),prefs=require('./prefs'),mode=require('./cm-apl-mode'),
     letter=mode.letter,dfnDepth=mode.dfnDepth,util=require('./util'),cmOnDblClick=util.cmOnDblClick,
     ACB_VALUE=this.ACB_VALUE={pairs:'()[]{}',explode:'{}'} // value for CodeMirror's "autoCloseBrackets" option when on
+require('./cm-scroll')
 
 var b=function(cc,t){return'<a href=# class="'+cc+' tb-btn" title="'+t+'""></a>'} // cc:css classes, t:title
 var EDITOR_HTML=
@@ -45,6 +46,7 @@ this.Editor=function(ide,e,opts){
     firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
     smartIndent:prefs.indent()>=0,indentUnit:prefs.indent(),scrollButtonHeight:12,matchBrackets:!!prefs.matchBrackets(),
     autoCloseBrackets:!!prefs.autoCloseBrackets()&&ACB_VALUE,foldGutter:!!prefs.fold(),
+    scrollbarStyle:'simple',
     keyMap:'dyalog',extraKeys:{'Shift-Tab':'indentLess',Tab:'tabOrAutocomplete',Down:'downOrXline'}
     // Some options of this.cm can be set from ide.coffee when the corresponding pref changes.
   })
