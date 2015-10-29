@@ -6,10 +6,11 @@ $(function(){
   // don't use Alt- keystrokes on the Mac (see email from 2015-09-01)
   var h=CodeMirror.keyMap.emacsy;for(var k in h)if(/^alt-[a-z]$/i.test(k))delete h[k]
   if(D.nwjs){
-    var zM=11 // zoom level can be from -zM to zM inclusive
-    function ZMI(){prefs.zoom(Math.min( zM,prefs.zoom()+1))}
-    function ZMO(){prefs.zoom(Math.max(-zM,prefs.zoom()-1))}
-    function ZMR(){prefs.zoom(0)}
+    var zM=11 // zoom level can be between -zM and zM inclusive
+    function ZMI(){prefs.zoom(Math.min( zM,prefs.zoom()+1));updatePW()}
+    function ZMO(){prefs.zoom(Math.max(-zM,prefs.zoom()-1));updatePW()}
+    function ZMR(){prefs.zoom(0);updatePW()}
+    function updatePW(){D.ide&&D.ide.wins&&D.ide.wins[0]&&D.ide.wins[0].updatePW()}
     $.extend(CodeMirror.commands,{ZMI:ZMI,ZMO:ZMO,ZMR:ZMR})
     $(document).bind('mousewheel',function(e){
       var d=e.originalEvent.wheelDelta;d&&e.ctrlKey&&!e.shiftKey&&!e.altKey&&(d>0?ZMI:ZMO)()
