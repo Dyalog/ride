@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 var http=require('http')
-D={};require('./client/helpurls');var h=D.helpurls
+D={};require('../client/helpurls');var h=D.helpurls
 var a=Object.keys(h).map(function(k){return h[k]}).sort()
 var o={host:'help.dyalog.com',port:80,path:''}
 function rec(i){
