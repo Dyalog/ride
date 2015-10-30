@@ -13,35 +13,23 @@ if [ ! -e $o -o $(find `dirname $i` -type f -newer $o 2>/dev/null | wc -l) -gt 0
   echo 'preprocessing css'; node-sass -i --output-style=compressed -o `dirname $o` $i
 fi
 
-lib_files='
-  node_modules/jquery/dist/jquery.min.js
-  node_modules/jquery-ui/core.js
-  node_modules/jquery-ui/widget.js
-  node_modules/jquery-ui/mouse.js
-  node_modules/jquery-ui/position.js
-  node_modules/jquery-ui/draggable.js
-  node_modules/jquery-ui/droppable.js
-  node_modules/jquery-ui/resizable.js
-  node_modules/jquery-ui/sortable.js
-  node_modules/jquery-ui/button.js
-  node_modules/jquery-ui/dialog.js
-  node_modules/jquery-ui/tabs.js
-  node_modules/jquery-ui/slider.js
-  node_modules/codemirror/lib/codemirror.js
-  node_modules/codemirror/addon/dialog/dialog.js
-  node_modules/codemirror/addon/search/searchcursor.js
-  node_modules/codemirror/addon/scroll/annotatescrollbar.js
-  node_modules/codemirror/addon/search/matchesonscrollbar.js
-  node_modules/codemirror/addon/hint/show-hint.js
-  node_modules/codemirror/addon/edit/matchbrackets.js
-  node_modules/codemirror/addon/edit/closebrackets.js
-  node_modules/codemirror/addon/display/placeholder.js
-  node_modules/codemirror/addon/fold/foldcode.js
-  node_modules/codemirror/addon/fold/indent-fold.js
+nm=node_modules cm=$nm/codemirror cma=$cm/addon
+lib_files="$(echo                            \
+  $nm/jquery/dist/jquery.min.js              \
+  $nm/jquery-ui/{core,widget,mouse,position,draggable,droppable,resizable,sortable,button,dialog,tabs,slider}.js \
+  $cm/lib/codemirror.js                      \
+  $cma/dialog/dialog.js                      \
+  $cma/search/searchcursor.js                \
+  $cma/scroll/annotatescrollbar.js           \
+  $cma/search/matchesonscrollbar.js          \
+  $cma/hint/show-hint.js                     \
+  $cma/edit/{matchbrackets,closebrackets}.js \
+  $cma/display/placeholder.js                \
+  $cma/fold/{foldcode,indent-fold}.js        \
   lib/jquery.layout.js
-'
-us='' # paths to versions of lib files with "require()" calls removed
-changed=0
+)"
+
+us='' changed=0 # us:paths to versions of lib files with "require()" calls removed
 for f in $lib_files; do
   u=build/tmp/${f//\//_} # replace / with _
   us="$us $u"
@@ -65,41 +53,12 @@ if [ ! -e build/nw/D.js -o $(find build/{js,tmp} -newer build/nw/D.js 2>/dev/nul
     }());
 .
   echo 'combining js files into one'
-  node >build/tmp/ride.js <<.
-    // Combine a bunch of CommonJS modules into a single js file,
-    // similar to Browserify (http://browserify.org/) or pure-cjs (https://github.com/RReverser/pure-cjs)
-    var path=require('path'),fs=require('fs')
-    function combine(ps,p0){return(
-      ';(function(){\n'+
-      'var m={\n'+
-        ps.map(function(p){return(
-          JSON.stringify(p)+':{_:function(module,require){\n'+fs.readFileSync(p,'utf8')+';return module.exports}}'
-        )}).join(',\n')+'\n'+
-      '}\n'+
-      'function load(k){\n'+
-      '  if(!m[k])throw Error("no module named "+JSON.stringify(k))\n'+
-      '  if(m[k]._){m[k]=m[k]._.apply(m[k],[{exports:m[k]},function(x){\n'+
-      '    x=k.split("/").slice(0,-1).concat(x.split("/"))\n'+
-      '    var i=0;while(i<x.length)x[i]==="."?x.splice(i,1):x[i]===".."?x.splice(--i,2):i++\n'+
-      '    return load(x.join("/")+".js")\n'+
-      '  }]);delete m[k]._}\n'+
-      '  return m[k]\n'+
-      '}\n'+
-      'load('+JSON.stringify(p0)+')\n'+
-      '}());\n'
-    )}
-    process.stdout.write(combine(
-      fs.readdirSync('client')
-        .filter(function(x){return x.slice(-3)==='.js'&&x.indexOf('\bgen\b')<0})
-        .map(function(x){return'client/'+x}),
-      'client/init.js'
-    ))
-.
+  tools/bfy.js client/*.js -m client/init.js >build/tmp/ride.js
   echo 'generating D.js for desktop app'
-  cat build/tmp/version-info.js build/tmp/libs.js init-nw.js build/tmp/ride.js >build/nw/D.js
+  cat build/tmp/{version-info,libs}.js init-nw.js build/tmp/ride.js >build/nw/D.js
   echo 'generating D.js for web app'
   cp -r build/nw/* build/static/
   rm build/static/proxy.js
   cp favicon.ico style/apl385.{eot,svg,ttf} build/static/
-  cat build/tmp/version-info.js build/tmp/libs.js            build/tmp/ride.js >build/static/D.js
+  cat build/tmp/version-info.js build/tmp/libs.js build/tmp/ride.js >build/static/D.js
 fi
