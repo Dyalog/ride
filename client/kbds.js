@@ -1,6 +1,6 @@
-D.kbds={
- geom:{"_":"iso","US":"ansi"},
- layouts:{
+// generated code, do not edit
+this.geom={"_":"iso","US":"ansi"}
+this.layouts={
   BE:[
    " ²&é\"'(§è!çà)-   azertyuiop^$  qsdfghjklmùμ  <wxcvbn,;:=  ",
    " ³1234567890°_   AZERTYUIOP¨*  QSDFGHJKLM%£  >WXCVBN?./+  ",
@@ -55,5 +55,4 @@ D.kbds={
    " ⋄¨¯<≤=≥>≠∨∧×÷   ?⍵∊⍴~↑↓⍳○*←→⊢ ⍺⌈⌊_∇∆∘'⎕⍎⍕    ⊂⊃∩∪⊥⊤|⍝⍀⌿  ",
    "  ⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹     ⍷ ⍨  ⍸⍥⍣⍞⍬⊣       ⍤⌸⌷≡≢           ⍪⍙⍠  ",
   ]
- }
 };

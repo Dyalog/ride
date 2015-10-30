@@ -1,6 +1,5 @@
 'use strict'
-var prefs=require('./prefs')
-var layouts=D.kbds.layouts
+var prefs=require('./prefs'),layouts=require('./kbds').layouts
 
 this.name='Layout'
 

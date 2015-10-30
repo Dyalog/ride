@@ -39,7 +39,6 @@ lib_files='
   node_modules/codemirror/addon/fold/foldcode.js
   node_modules/codemirror/addon/fold/indent-fold.js
   lib/jquery.layout.js
-  kbds/kbds.js
 '
 us='' # paths to versions of lib files with "require()" calls removed
 changed=0

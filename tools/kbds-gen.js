@@ -1,21 +1,15 @@
 #!/usr/bin/env node
-
-// This script scrapes keyboard descriptions from http://dfns.dyalog.com/n_keyboards.htm
-// and outputs the content of kbds.js
-
-var http=require('http'),cheerio=require('cheerio'),basename=require('path').basename
-
+// This script scrapes keyboard definitions from http://dfns.dyalog.com/n_keyboards.htm
+// and generates ../client/kbds.js
+var fs=require('fs'),http=require('http'),cheerio=require('cheerio')
+process.chdir(__dirname)
 function log(s){process.stderr.write(s+'\n')}
 function err(s){log('ERROR: '+s);process.exit(1)}
-
-function get(host,path,callback){
+function get(host,path,f){ // f:callback
   http.get({host:host,path:path},function(res){
-    var data='';res.setEncoding('utf8')
-    res.on('data',function(chunk){data+=chunk})
-    res.on('end',function(){callback(data)})
+    var s='';res.setEncoding('utf8');res.on('data',function(x){s+=x}).on('end',function(){f(s)})
   }).on('error',function(e){console.error(e);process.exit(1)})
 }
-
 var G={ // geometries http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
   iso:{
     re:RegExp('^'+
@@ -64,15 +58,13 @@ var G={ // geometries http://www.abreojosensamblador.net/Productos/AOE/html/Pags
     ]
   }
 }
-
-var result={geom:{_:'iso'},layouts:{}}
-
-function processContent(data){
+get('dfns.dyalog.com','/n_keyboards.htm',function(data){
+  var geom={_:'iso'},layouts={}
   cheerio.load(data)('pre').text()
     .replace(/\r\n/g,'\n')
     .replace(/\nDyalog APL\/([A-Z]{2}).*\n¯*\n(┌(?:.*\n){12}.*)/gm,function(_,lc,desc){
-      var l=result.layouts[lc]=[];for(var i=0;i<4;i++){l.push([]);for(var j=0;j<58;j++)l[i].push(' ')}
-      var g;for(var g1 in G)if(desc.match(G[g1].re)){g=g1;g!=='iso'&&(result.geom[lc]=g);break}
+      var l=layouts[lc]=[];for(var i=0;i<4;i++){l.push([]);for(var j=0;j<58;j++)l[i].push(' ')}
+      var g;for(var g1 in G)if(desc.match(G[g1].re)){g=g1;g!=='iso'&&(geom[lc]=g);break}
       g||err('unrecognized geometry for '+lc+' layout')
       var lines=desc.split('\n')
       // r,c: coords of the key in the keyboard    x,y: coords of the symbol on the key
@@ -87,20 +79,13 @@ function processContent(data){
       for(var i=0;i<4;i++)l[i]=l[i].join('')
       console.assert(l[0].length==l[1].length&&l[0].length==l[2].length&&l[0].length==l[3].length)
     })
-}
-
-function writeOutput(){
-  var lcs=[];for(var lc in result.layouts)lcs.push(lc)
-  process.stdout.write(
-    'D.kbds={\n'+
-    ' geom:'+JSON.stringify(result.geom)+',\n'+
-    ' layouts:{\n'+
-    '  '+lcs.sort().map(function(lc){
-            var l=result.layouts[lc];return lc+':[\n   '+l.map(JSON.stringify).join(',\n   ')+',\n  ]'
+  fs.writeFileSync('../client/kbds.js',
+    '// generated code, do not edit\n'+
+    'this.geom='+JSON.stringify(geom)+'\n'+
+    'this.layouts={\n'+
+    '  '+Object.keys(layouts).sort().map(function(lc){
+           var l=layouts[lc];return lc+':[\n   '+l.map(JSON.stringify).join(',\n   ')+',\n  ]'
          }).join(',\n  ')+'\n'+
-    ' }\n'+
     '};\n'
   )
-}
-
-get('dfns.dyalog.com','/n_keyboards.htm',function(data){processContent(data);writeOutput()})
+})

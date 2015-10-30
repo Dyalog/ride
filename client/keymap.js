@@ -1,6 +1,6 @@
 'use strict'
 var helpurls=require('./helpurls'),prefs=require('./prefs'),about=require('./about'),esc=require('./util').esc,
-    prefsUI=require('./prefs-ui'),ACB_VALUE=require('./editor').ACB_VALUE
+    prefsUI=require('./prefs-ui'),ACB_VALUE=require('./editor').ACB_VALUE,kbds=require('./kbds')
 
 window.onhelp=function(){return false} // prevent IE from acting silly on F1
 prefs.prefixKey(function(x,old){
@@ -149,12 +149,12 @@ function switchWindows(d){ // d: a step of either 1 or -1
   var j=i<0?0:(i+a.length+d)%a.length;$('#wintab'+a[j].id+' a').click();a[j].focus();return false
 }
 
-// D.kbds.layouts[lc] contains four strings describing how keys map to characters:
+// kbds.layouts[lc] contains four strings describing how keys map to characters:
 //    0:normal  1:shifted
 //    2:APL     3:APL shifted
 // Each string can be indexed by scancode: http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
 // "APL" and "APL shifted" are the defaults upon which the user can build customisations.
-D.kbds.layouts['DK-Mac']=[
+kbds.layouts['DK-Mac']=[
   ' $1234567890+´   qwertyuiopå¨  asdfghjklæø\'  <zxcvbnm,.-  ',
   ' §!"#€%&/()=?\`   QWERTYUIOPÅ^  ASDFGHJKLÆØ*  >ZXCVBNM;:_  ',
   ' ⋄¨¯<≤=≥>≠∨∧×÷   ?⍵∊⍴~↑↓⍳○*←→  ⍺⌈⌊_∇∆∘\'⎕⍎⍕   ⊢⊂⊃∩∪⊥⊤|⍝⍀⌿  ',
@@ -163,7 +163,7 @@ D.kbds.layouts['DK-Mac']=[
 
 var bq // effective ` map as a dictionary, kept in sync with the prefs
 function updateBQ(){
-  bq={};var lc=prefs.kbdLocale()||'US',l=D.kbds.layouts[lc],n=l[0].length
+  bq={};var lc=prefs.kbdLocale()||'US',l=kbds.layouts[lc],n=l[0].length
   for(var i=0;i<2;i++)for(var j=0;j<n;j++){var name=l[i][j];bq[name]||(bq[name]=l[2+i][j])}
   var s=prefs.prefixMaps()[lc];if(s)for(var i=0;i<s.length;i+=2)bq[s[i]]=s[i+1]
 }
