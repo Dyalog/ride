@@ -1,14 +1,19 @@
 'use strict'
 var CM=CodeMirror
+function addClass(e,c){e.className+=' '+c}
+function rmClass(e,c){e.className=e.className.replace(RegExp(' *\\b'+c+'\\b','gi'),'')}
 function Bar(o,scroll){ // o:orientation(0=vertical,1=horizontal)
   var scrn=1,total=1,size=1,pos=0,node=document.createElement('div');node.className='cm-scroll-'+'vh'[o]
   var inner=node.appendChild(document.createElement('div'))
+  CM.on(inner,'mouseover',function(){addClass(inner,'hover')})
+  CM.on(inner,'mouseout',function(){rmClass(inner,'hover')})
   CM.on(inner,'mousedown',function(e){
     if(e.which!==1)return
     CM.e_preventDefault(e);var axis=o?'pageX':'pageY',start=e[axis],pos0=pos
-    function done(){CM.off(document,'mousemove',move);CM.off(document,'mouseup',done)}
+    function done(){CM.off(document,'mousemove',move);CM.off(document,'mouseup',done);rmClass(inner,'drag')}
     function move(e){e.which!==1?done():moveTo(pos0+(e[axis]-start)*total/size)}
     CM.on(document,'mousemove',move);CM.on(document,'mouseup',done)
+    addClass(inner,'drag')
   })
   CM.on(node,'click',function(e){
     CM.e_preventDefault(e);var x=e.clientX,y=e.clientY,r=inner.getBoundingClientRect()
