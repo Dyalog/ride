@@ -682,19 +682,25 @@ span.CodeMirror-selectedtext{background:none}
   cursor:pointer
   &:hover{font-weight:bold;color:#ccf}
 
-// scrollbars
-.cm-scroll-h,
-.cm-scroll-v{position:absolute;z-index:6;background:#eee}
+// scrollbars, see ../client/cm-scroll.js
+.cm-scroll{position:absolute;z-index:6;background:#eee}
 .cm-scroll-h{bottom:0;left:0;height:16px}
 .cm-scroll-v{right :0;top :0;width :16px}
-.cm-scroll-h div,
-.cm-scroll-v div{position:absolute;background:#ccc;-moz-box-sizing:border-box;box-sizing:border-box;border:1px solid #bbb;border-radius:2px}
-.cm-scroll-h div{bottom:0;height:100%}
-.cm-scroll-v div{right :0;width :100%}
-.cm-scroll-h div.hover,
-.cm-scroll-v div.hover{background:#aaa}
-.cm-scroll-h div.drag,
-.cm-scroll-v div.drag{background:#888!important}
+.cm-scroll   a{position:absolute;background:#ccc;color:#444}
+.cm-scroll   a:hover{background:#aaa;color:#222}
+.cm-scroll   a.press{background:#888!important;color:#000!important}
+.cm-scroll   .thumb{box-sizing:border-box;border:1px solid #bbb;border-radius:2px}
+.cm-scroll-h .thumb{bottom:0;height:100%}
+.cm-scroll-v .thumb{right :0;width :100%}
+.cm-scroll   .btn{width:16px;height:16px;line-height:16px;text-align:center;font-size:10px;cursor:pointer;color:#444}
+.cm-scroll-h .btn0{bottom:0;left:0}
+.cm-scroll-h .btn1{bottom:0;right:0}
+.cm-scroll-v .btn0{right:0;top:0}
+.cm-scroll-v .btn1{right:0;bottom:0}
+.cm-scroll-h .btn0:after{content:"\25c0"}
+.cm-scroll-h .btn1:after{content:"\25b6"}
+.cm-scroll-v .btn0:after{content:"\25b2"}
+.cm-scroll-v .btn1:after{content:"\25bc"}
 
 @import themes/mixins
 @import themes/classic
