@@ -1,27 +1,41 @@
-tUniversalDelay=1
+tUniversalDelay=200
 
-// language bar tooltips
+// lbar tooltips
 mouseover ⍤
 200
 find Jot Diaeresis (⍤)
 mouseout ⍤
 
-// about dialog
-mousedown Help
-click About
-find support@dyalog.com
-click Close
+// toggle lbar
+mousedown View
+click Show Language Bar
+100
+assert(!$(':t(⍤)').length)
+mousedown View
+click Show Language Bar
+assert($(':t(⍤)').length===1)
 
-// preferences dialog
+// prefs dialog
 mousedown Edit
 click Preferences
 click Colours
 $('select:visible').val('Francisco Goya').change()
 click Clone
 click Apply
-1
 click Delete
 $('select:visible').val('Default').change()
 click OK
+
+// strong interrupt
+mousedown Actions
+click Strong Interrupt
+100
+assert(lastSessionLines(2)[0]==='INTERRUPT')
+
+// about dialog
+mousedown Help
+click About
+find support@dyalog.com
+click Close
 
 $.alert('Done!','Test Runner')

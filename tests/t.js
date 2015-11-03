@@ -20,19 +20,21 @@ function mousedown(x){find(x).mousedown()}
 function mouseup  (x){find(x).mouseup  ()}
 function mouseover(x){find(x).mouseover()}
 function mouseout (x){find(x).mouseout ()}
-$(D.test=function(){
-  var tUniversalDelay=200
-  var tIndex=0,tLines=fs.readFileSync(process.env.DYALOG_IDE_JS.replace(/\.js$/,'.txt'),'utf8').split('\n')
-  function tStep(){
-    var tLine=tLines[tIndex++],tDone
-    try{
-      console.info('['+tIndex+']',tLine)
-      if(/^\d+$/.test(tLine)){setTimeout(tStep,+tLine);tDone=1}
-      else{eval(tLine.replace(/^([a-z]+) +(.+)$/i,function(_,x,y){return x+'('+JSON.stringify(y)+')'}))}
-    }catch(ex){
-      fail(ex)
-    }
-    tDone||tIndex>=tLines.length||setTimeout(tStep,tUniversalDelay)
+function assert(x,y){console.assert(x,y)}
+function lastSessionLines(n){return D.ide.wins[0].cm.getValue().split('\n').slice(-n)}
+
+var tUniversalDelay=200,tIndex=0,tLines=[]
+function tStep(){
+  var tLine=tLines[tIndex++],tDone
+  try{
+    console.info('['+tIndex+']',tLine)
+    if(/^\d+$/.test(tLine)){setTimeout(tStep,+tLine);tDone=1}
+    else{eval(tLine.replace(/^([a-z]+) +(.+)$/i,function(_,x,y){return x+'('+JSON.stringify(y)+')'}))}
+  }catch(tException){
+    fail(tException)
   }
-  tStep()
+  tDone||tIndex>=tLines.length||setTimeout(tStep,tUniversalDelay)
+}
+$(D.test=function(){
+  tLines=fs.readFileSync(process.env.DYALOG_IDE_JS.replace(/\.js$/,'.txt'),'utf8').split('\n');tIndex=0;tStep()
 })
