@@ -1,0 +1,27 @@
+tUniversalDelay=1
+
+// language bar tooltips
+mouseover ⍤
+200
+find Jot Diaeresis (⍤)
+mouseout ⍤
+
+// about dialog
+mousedown Help
+click About
+find support@dyalog.com
+click Close
+
+// preferences dialog
+mousedown Edit
+click Preferences
+click Colours
+$('select:visible').val('Francisco Goya').change()
+click Clone
+click Apply
+1
+click Delete
+$('select:visible').val('Default').change()
+click OK
+
+$.alert('Done!','Test Runner')
