@@ -6,22 +6,24 @@ var prefs=require('./prefs'),cmds=require('./cmds').cmds
 // For the concrete content in the menu, see ide.coffee
 D.installMenu=D.installMenu||function(arg){
   // DOM structure:
-  //   ┌.menu───────────────────────────────────────┐
-  //   │┌div.m-sub────────────────────────────┐     │
-  //   ││            ┌div.m-box──────────────┐│     │
-  //   ││┌a.m-opener┐│┌a───┐┌a───┐┌div.m-sub┐││     │
-  //   │││File      │││Open││Save││   ...   │││ ... │
-  //   ││└──────────┘│└────┘└────┘└─────────┘││     │
-  //   ││            └───────────────────────┘│     │
-  //   │└─────────────────────────────────────┘     │
-  //   └────────────────────────────────────────────┘
+  // ┌.menu───────────────────────────────────────────┐
+  // │┌div.m-sub────────────────────────────────┐     │
+  // ││            ┌div.m-box──────────────────┐│     │
+  // ││┌a.m-opener┐│┌a─────┐┌a─────┐┌div.m-sub┐││     │
+  // │││┌span┐    │││┌span┐││┌span┐││         │││     │
+  // ││││File│    ││││Open││││Save│││   ...   │││ ... │
+  // │││└────┘    │││└────┘││└────┘││         │││     │
+  // ││└──────────┘│└──────┘└──────┘└─────────┘││     │
+  // ││            └───────────────────────────┘│     │
+  // │└─────────────────────────────────────────┘     │
+  // └────────────────────────────────────────────────┘
   // Top-level ".m-opener"-s also have class ".m-top"
   function render(x){
     if(!x)return
     if(x['']==='-')return $('<hr>')
     var acc // access key
     var name=x[''].replace(/_(.)/g,function(_,k){return acc||k==='_'?k:'<u>'+(acc=k)+'</u>'})
-    var $a=$('<a href=#>'+name+'</a>')
+    var $a=$('<a href=#><span>'+name+'</span></a>')
     acc&&$a.attr('accessKey',acc.toLowerCase())
     x.cmd&&$a.append('<span class=m-shortcut data-cmd='+x.cmd+'>')
     if(x.group){
