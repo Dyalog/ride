@@ -3,7 +3,7 @@ var prefs=require('./prefs')
 var $ta // the textarea
 this.name='Menu'
 this.init=function($e){
-  $e.html('<a href=# class=reset>Reset</a><p>Takes effect on restart</p><textarea wrap=off></textarea>')
+  $e[0].innerHTML='<a href=# class=reset>Reset</a><p>Takes effect on restart</p><textarea wrap=off></textarea>'
   $ta=$('textarea',$e)
   $('.reset',$e).button().click(function(){$ta.val(prefs.menu.getDefault());return false})
 }

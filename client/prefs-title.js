@@ -1,11 +1,12 @@
 'use strict'
 var prefs=require('./prefs')
-var $wt
+var wt // <input> element for Window Title
 this.name='Title'
 this.init=function($e){
-  $e.html(
+  var e=$e[0]
+  e.innerHTML=
     '<a href=# class=reset>Reset</a>'+
-    'Window title: <input class=text-field>'+
+    'Window title: <input id=title-input class=text-field>'+
     '<pre>'+
     '\n<a href=#>{WSID}</a>            workspace name'+
     '\n<a href=#>{HOST}</a>:<a href=#>{PORT}</a>     interpreter\'s TCP endpoint'+
@@ -21,10 +22,10 @@ this.init=function($e){
     '\n  <a href=#>{RIDE_VER_B}</a>      minor'+
     '\n  <a href=#>{RIDE_VER_C}</a>      git commit number'+
     '</pre>'
-  )
-  $e.on('click','pre a',function(e){$wt.insert($(e.target).text())})
-  $('pre a',$e).attr('title','Insert');$wt=$('input',$e)
-  $('.reset',$e).button().click(function(){$wt.val(prefs.title.getDefault());return false})
+  wt=document.getElementById('title-input')
+  $e.on('click','pre a',function(e){$(wt).insert($(e.target).text())})
+  $('pre a',e).attr('title','Insert')
+  $('.reset',e).button().click(function(){wt.value=prefs.title.getDefault();return false})
 }
-this.load=function(){$wt.val(prefs.title())}
-this.save=function(){prefs.title($wt.val())}
+this.load=function(){wt.value=prefs.title()}
+this.save=function(){prefs.title(wt.value)}

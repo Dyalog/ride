@@ -9,7 +9,7 @@ function parseId(s){return+s.replace(/^.*?(\d+)$/,'$1')}
 
 this.IDE=function(){
   var ide=D.ide=this
-  $('body').html(
+  document.body.innerHTML=
     '<div class=lbar style=display:none><a class=lbar-prefs href=#></a>'+lbar.html+'</div>'+
     '<div class=lbar-tip style=display:none><div class=lbar-tip-desc></div><pre class=lbar-tip-text></pre></div>'+
     '<div class=lbar-tip-triangle style=display:none></div>'+
@@ -18,7 +18,6 @@ this.IDE=function(){
       '<div class=ui-layout-east ><ul></ul></div>'+
       '<div class=ui-layout-south><ul></ul></div>'+
     '</div>'
-  )
   ide.$ide=$('.ide')
   ide.dead=0     // when RIDE dies, the screen turns light brown and RIDE stops responding to certain commands
   ide.pending=[] // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
