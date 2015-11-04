@@ -6,7 +6,7 @@ mouseover ⍤
 find Jot Diaeresis (⍤)
 mouseout ⍤
 
-// toggle lbar
+// lbar toggle through menu
 mousedown View
 click Show Language Bar
 100
@@ -14,6 +14,10 @@ assert(!$(':t(⍤)').length)
 mousedown View
 click Show Language Bar
 assert($(':t(⍤)').length===1)
+
+// lbar insert char
+mousedown ⍣
+assert(lastSessionLines(1)[0].slice(-1)==='⍣')
 
 // prefs dialog
 mousedown Edit
@@ -24,6 +28,34 @@ click Clone
 click Apply
 click Delete
 $('select:visible').val('Default').change()
+click OK
+
+// prefs>layout: reset button
+mousedown Edit
+click Preferences
+click Layout
+$(':t(Prefix: ) input').val('%').change()
+assert($('#layout-legend').only().text().includes('%'))
+click Reset
+assert($(':t(Prefix: ) input').val()!=='%')
+assert(!$('#layout-legend').only().text().includes('%'))
+click Cancel
+
+// prefs>title
+mousedown Edit
+click Preferences
+click Title
+$('#title-input').val('TestRunner was here').change()
+click Apply
+assert(document.title.includes('TestRunner was here'))
+$('#title-input').val('Edition=').change()
+click {CHARS}
+click Apply
+assert(document.title.includes('Edition'))
+assert(/unicode|clasic/i.test(document.title))
+click Reset
+click Apply
+assert(!document.title.includes('Edition'))
 click OK
 
 // strong interrupt
@@ -37,5 +69,3 @@ mousedown Help
 click About
 find support@dyalog.com
 click Close
-
-$.alert('Done!','Test Runner')

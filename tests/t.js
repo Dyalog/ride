@@ -1,7 +1,15 @@
 // to run the tests: export DYALOG_IDE_JS=/path/to/t.js and start RIDE
 var fs=require('fs')
-require('nw.gui').Window.get().showDevTools()
-function fail(x){console.error(x)}
+
+;(function(){
+  var gui=require('nw.gui'),m=gui.Window.get(),t=m.showDevTools() // m:main window, t:developer tools window
+  var a=gui.Screen.screens[0].work_area,x=a.width-m.width,dy=52
+  t.moveTo(x,m.height+dy);t.resizeTo(m.width,a.height-m.height-dy);m.moveTo(x,0);m.focus()
+}())
+
+var nFailures=0
+function fail(x){nFailures++;console.error(x)}
+function assert(x,y){x||fail(y||'assertion failed')}
 $.expr[':'].t=function(e,i,m){ // custom selector, finds innermost elements by exact text, e.g. $(':t(OK)').click()
   // https://code.google.com/p/aost/wiki/CustomJQuerySelectorInTellurium#:te_text
   var r=(e.offsetWidth>0||e.offsetHeight>0)&&e.textContent===m[3]
@@ -20,7 +28,6 @@ function mousedown(x){find(x).mousedown()}
 function mouseup  (x){find(x).mouseup  ()}
 function mouseover(x){find(x).mouseover()}
 function mouseout (x){find(x).mouseout ()}
-function assert(x,y){console.assert(x,y)}
 function lastSessionLines(n){return D.ide.wins[0].cm.getValue().split('\n').slice(-n)}
 
 var tUniversalDelay=200,tIndex=0,tLines=[]
@@ -33,7 +40,8 @@ function tStep(){
   }catch(tException){
     fail(tException)
   }
-  tDone||tIndex>=tLines.length||setTimeout(tStep,tUniversalDelay)
+  if(tIndex>=tLines.length)console.info(nFailures?nFailures+' failures':'brilliant')
+  else if(!tDone)setTimeout(tStep,tUniversalDelay)
 }
 $(D.test=function(){
   tLines=fs.readFileSync(process.env.DYALOG_IDE_JS.replace(/\.js$/,'.txt'),'utf8').split('\n');tIndex=0;tStep()
