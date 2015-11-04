@@ -1,7 +1,7 @@
 // to run the tests: export DYALOG_IDE_JS=/path/to/t.js and start RIDE
 var fs=require('fs')
 
-;(function(){
+;(function(){ // place windows near the right edge of the screen, try to avoid overlap
   var gui=require('nw.gui'),m=gui.Window.get(),t=m.showDevTools() // m:main window, t:developer tools window
   var a=gui.Screen.screens[0].work_area,x=a.width-m.width,dy=52
   t.moveTo(x,m.height+dy);t.resizeTo(m.width,a.height-m.height-dy);m.moveTo(x,0);m.focus()
@@ -12,22 +12,29 @@ function fail(x){nFailures++;console.error(x)}
 function assert(x,y){x||fail(y||'assertion failed')}
 $.expr[':'].t=function(e,i,m){ // custom selector, finds innermost elements by exact text, e.g. $(':t(OK)').click()
   // https://code.google.com/p/aost/wiki/CustomJQuerySelectorInTellurium#:te_text
-  var r=(e.offsetWidth>0||e.offsetHeight>0)&&e.textContent===m[3]
+  function norm(x){return x.trim().replace(/:$/,'')}
+  var q=norm(m[3]),r=(e.offsetWidth>0||e.offsetHeight>0)&&norm(e.innerText)===q
   // none of e's child elements must have the exact same text content
-  if(r)for(var c=e.firstElementChild;c;c=c.nextElementSibling)if(c.textContent===m[3]){r=0;break}
+  if(r)for(var c=e.firstElementChild;c;c=c.nextElementSibling)if(norm(c.innerText)===q){r=0;break}
   return!!r
 }
-$.fn.only=function(){
-  if(!this.length){console.info(this);fail('selector returned an empty result')}
-  if(this.length>1){console.info(this);fail('selector returned a non-unique result')}
+$.fn.assertUnique=function(){
+  assert(this.length,'selector returned an empty result')
+  assert(this.length<=1,'selector returned a non-unique result')
   return this
 }
-function find(x){return(x.constructor===$?x:$(x[0]==='$'?x.slice(1):':t("'+x+'")')).only()}
+$.fn.dereferenceLabels=function(){
+  if(!this.length||this[0].tagName.toLowerCase()!=='label')return this
+  var id=this.attr('for');return(id?$('#'+id):this.find(':input')).assertUnique()
+}
+function testcase(x){}
+function find(x){return $(':t('+JSON.stringify(x)+')').assertUnique().dereferenceLabels()}
 function click    (x){find(x).click    ()}
 function mousedown(x){find(x).mousedown()}
 function mouseup  (x){find(x).mouseup  ()}
 function mouseover(x){find(x).mouseover()}
 function mouseout (x){find(x).mouseout ()}
+function fillIn(x,y){find(x).val(y).change()}
 function lastSessionLines(n){return D.ide.wins[0].cm.getValue().split('\n').slice(-n)}
 
 var tUniversalDelay=200,tIndex=0,tLines=[]
@@ -36,11 +43,11 @@ function tStep(){
   try{
     console.info('['+tIndex+']',tLine)
     if(/^\d+$/.test(tLine)){setTimeout(tStep,+tLine);tDone=1}
-    else{eval(tLine.replace(/^([a-z]+) +(.+)$/i,function(_,x,y){return x+'('+JSON.stringify(y)+')'}))}
+    else{eval(tLine.replace(/^ *([a-z]+) +(.+)$/i,function(_,x,y){return x+'('+JSON.stringify(y)+')'}))}
   }catch(tException){
     fail(tException)
   }
-  if(tIndex>=tLines.length)console.info(nFailures?nFailures+' failures':'brilliant')
+  if(tIndex>=tLines.length){var n=nFailures;console.info(!n?'brilliant':n>1?n+' failures':'1 failure')}
   else if(!tDone)setTimeout(tStep,tUniversalDelay)
 }
 $(D.test=function(){

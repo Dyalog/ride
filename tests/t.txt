@@ -1,71 +1,71 @@
 tUniversalDelay=200
 
-// lbar tooltips
-mouseover ⍤
-200
-find Jot Diaeresis (⍤)
-mouseout ⍤
+testcase lbar tooltips
+  mouseover ⍤
+  200
+  find Jot Diaeresis (⍤)
+  mouseout ⍤
 
-// lbar toggle through menu
-mousedown View
-click Show Language Bar
-100
-assert(!$(':t(⍤)').length)
-mousedown View
-click Show Language Bar
-assert($(':t(⍤)').length===1)
+testcase lbar toggle through menu
+  mousedown View
+  click Show Language Bar
+  100
+  assert(!$(':t(⍤)').length)
+  mousedown View
+  click Show Language Bar
+  find ⍤
 
-// lbar insert char
-mousedown ⍣
-assert(lastSessionLines(1)[0].slice(-1)==='⍣')
+testcase lbar insert char
+  mousedown ⍣
+  assert(lastSessionLines(1)[0].slice(-1)==='⍣')
 
-// prefs dialog
-mousedown Edit
-click Preferences
-click Colours
-$('select:visible').val('Francisco Goya').change()
-click Clone
-click Apply
-click Delete
-$('select:visible').val('Default').change()
-click OK
+testcase prefs dialog
+  mousedown Edit
+  click Preferences
+  click Colours
+  fillIn('Scheme','Francisco Goya')
+  click Clone
+  click Apply
+  click Delete
+  fillIn('Scheme','Default')
+  click OK
 
-// prefs>layout: reset button
-mousedown Edit
-click Preferences
-click Layout
-$(':t(Prefix: ) input').val('%').change()
-assert($('#layout-legend').only().text().includes('%'))
-click Reset
-assert($(':t(Prefix: ) input').val()!=='%')
-assert(!$('#layout-legend').only().text().includes('%'))
-click Cancel
+testcase prefs>layout: reset button
+  mousedown Edit
+  click Preferences
+  click Layout
+  fillIn('Prefix','%')
+  assert($(':visible[title^="Prefix followed by"]').assertUnique().text().includes('%'))
+  click Reset
+  assert(find('Prefix').val()!=='%')
+  assert(!$(':visible[title^="Prefix followed by"]').assertUnique().text().includes('%'))
+  click Cancel
 
-// prefs>title
-mousedown Edit
-click Preferences
-click Title
-$('#title-input').val('TestRunner was here').change()
-click Apply
-assert(document.title.includes('TestRunner was here'))
-$('#title-input').val('Edition=').change()
-click {CHARS}
-click Apply
-assert(document.title.includes('Edition'))
-assert(/unicode|clasic/i.test(document.title))
-click Reset
-click Apply
-assert(!document.title.includes('Edition'))
-click OK
+testcase prefs>title
+  mousedown Edit
+  click Preferences
+  click Title
+  $('#title-input').val('TestRunner was here').change()
+  click Apply
+  assert(document.title.includes('TestRunner was here'))
+  $('#title-input').val('Edition=').change()
+  click {CHARS}
+  click Apply
+  assert(document.title.includes('Edition'))
+  assert(/unicode|clasic/i.test(document.title))
+  click Reset
+  click Apply
+  assert(!document.title.includes('Edition'))
+  click OK
 
-// strong interrupt
-mousedown Actions
-click Strong Interrupt
-100
-assert(lastSessionLines(2)[0]==='INTERRUPT')
+testcase strong interrupt
+  mousedown Actions
+  click Strong Interrupt
+  100
+  assert(lastSessionLines(2)[0]==='INTERRUPT')
 
-// about dialog
-mousedown Help
-click About
-find support@dyalog.com
-click Close
+testcase about dialog
+  mousedown Help
+  click About
+  find support@dyalog.com
+  click Close
