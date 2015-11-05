@@ -1,4 +1,4 @@
-tUniversalDelay=200
+tUniversalDelay=0
 
 testcase lbar tooltips
   mouseover ⍤
@@ -61,7 +61,7 @@ testcase prefs>title
 testcase strong interrupt
   mousedown Actions
   click Strong Interrupt
-  100
+  200
   assert(lastSessionLines(2)[0]==='INTERRUPT')
 
 testcase about dialog

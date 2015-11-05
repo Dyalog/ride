@@ -39,10 +39,10 @@ function lastSessionLines(n){return D.ide.wins[0].cm.getValue().split('\n').slic
 
 var tUniversalDelay=200,tIndex=0,tLines=[]
 function tStep(){
-  var tLine=tLines[tIndex++],tDone
+  var tLine=tLines[tIndex++],tDone,tMatch
   try{
     console.info('['+tIndex+']',tLine)
-    if(/^\d+$/.test(tLine)){setTimeout(tStep,+tLine);tDone=1}
+    if(tMatch=/^\s*(\d+)\s*$/.exec(tLine)){setTimeout(tStep,+tMatch[1]);tDone=1}
     else{eval(tLine.replace(/^ *([a-z]+) +(.+)$/i,function(_,x,y){return x+'('+JSON.stringify(y)+')'}))}
   }catch(tException){
     fail(tException)
