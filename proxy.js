@@ -229,7 +229,7 @@ this.Proxy=function(){
   function setUpBrowserConnection(){
     var listen
     var onevent=socket.onevent // intercept all browser-to-proxy events and log them:
-    socket.onevent=function(x){log('from browser: '+trunc(JSON.stringify(x.data)));return onevent.apply(socket,[x])}
+    socket.onevent=function(x){log('from browser:'+trunc(JSON.stringify(x.data)));return onevent.apply(socket,[x])}
     socket
       .on('Execute',function(x){cmd('Execute','<Text>'+b64(x.text)+'</Text><Trace>'+(+!!x.trace)+'</Trace>')})
       .on('Edit',function(x){cmd('Edit','<Text>'+b64(x.text)+'</Text><Pos>'+x.pos+'</Pos><Win>'+x.win+'</Win>')})
