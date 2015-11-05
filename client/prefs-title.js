@@ -6,7 +6,8 @@ this.init=function($e){
   var e=$e[0]
   e.innerHTML=
     '<a href=# class=reset>Reset</a>'+
-    'Window title: <input id=title-input class=text-field>'+
+    '<label for=title-input>Window title:</label>'+
+    '<input id=title-input class=text-field>'+
     '<pre>'+
     '\n<a href=#>{WSID}</a>            workspace name'+
     '\n<a href=#>{HOST}</a>:<a href=#>{PORT}</a>     interpreter\'s TCP endpoint'+

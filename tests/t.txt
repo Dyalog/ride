@@ -45,10 +45,10 @@ testcase prefs>title
   mousedown Edit
   click Preferences
   click Title
-  $('#title-input').val('TestRunner was here').change()
+  fillIn('Window title','TestRunner was here')
   click Apply
   assert(document.title.includes('TestRunner was here'))
-  $('#title-input').val('Edition=').change()
+  fillIn('Window title','Edition=')
   click {CHARS}
   click Apply
   assert(document.title.includes('Edition'))
