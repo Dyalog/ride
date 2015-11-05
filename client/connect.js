@@ -157,7 +157,8 @@ module.exports=function(opts){
   $about.click(function(){about.showDialog();return false})
 
   $list.html(prefs.favs().map(function(x){return'<option '+(x.sel?'selected':'')+'>'+esc(fmtFav(x))}).join(''))
-  if(!$list.find(':selected').length){$list.focus().find('option').eq(0).attr('selected',true);$list.change()}
+  $list.find(':selected').length||$list.focus().find('option').eq(0).prop('selected',1)
+  $list.change()
 
   D.socket
     .on('*proxyInfo',function(x){

@@ -20,7 +20,6 @@ Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nic
   W5 autopw support
 
 Not prioritized:
-  form on Connect screen isn't populated initially, so dblclick doesn't work before changing the selection; DB email 2015-11-04
   re-word description of VAL command
   cmd to toggle rainbow colouring
   names of open editors should appear at the bottom of the Window menu; Marc Griffiths 2015-03-13
@@ -254,3 +253,4 @@ Done:
   Disable EP in an editor after it has been pressed once
   js strict mode
   contextual help (F1) for items in completion menus
+  form on Connect screen isn't populated initially, so dblclick doesn't work before changing the selection; DB email 2015-11-04
