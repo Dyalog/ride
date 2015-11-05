@@ -1,5 +1,3 @@
-tUniversalDelay=0
-
 testcase lbar tooltips
   mouseover ⍤
   200
@@ -17,7 +15,7 @@ testcase lbar toggle through menu
 
 testcase lbar insert char
   mousedown ⍣
-  assert(lastSessionLines(1)[0].slice(-1)==='⍣')
+  assert(sessionLastLines(1)[0].slice(-1)==='⍣')
 
 testcase prefs dialog
   mousedown Edit
@@ -62,7 +60,7 @@ testcase strong interrupt
   mousedown Actions
   click Strong Interrupt
   200
-  assert(lastSessionLines(2)[0]==='INTERRUPT')
+  assert(sessionLastLines(2)[0]==='INTERRUPT')
 
 testcase about dialog
   mousedown Help
