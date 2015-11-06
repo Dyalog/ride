@@ -8,14 +8,14 @@ testcase lbar toggle through menu
   mousedown View
   click Show Language Bar
   100
-  assert(!$(':t(⍤)').length)
+  assert !$(':t(⍤)').length
   mousedown View
   click Show Language Bar
   find ⍤
 
 testcase lbar insert char
   mousedown ⍣
-  assert(sessionLastLines(1)[0].slice(-1)==='⍣')
+  assert sessionLastLines(1)[0].slice(-1)==='⍣'
 
 testcase prefs dialog
   mousedown Edit
@@ -33,10 +33,10 @@ testcase prefs>layout: reset button
   click Preferences
   click Layout
   fillIn('Prefix','%')
-  assert($(':visible[title^="Prefix followed by"]').assertUnique().text().includes('%'))
+  assert $(':visible[title^="Prefix followed by"]').assertUnique().text().includes('%')
   click Reset
-  assert(find('Prefix').val()!=='%')
-  assert(!$(':visible[title^="Prefix followed by"]').assertUnique().text().includes('%'))
+  assert find('Prefix').val()!=='%'
+  assert !$(':visible[title^="Prefix followed by"]').assertUnique().text().includes('%')
   click Cancel
 
 testcase prefs>title
@@ -45,22 +45,22 @@ testcase prefs>title
   click Title
   fillIn('Window title','TestRunner was here')
   click Apply
-  assert(document.title.includes('TestRunner was here'))
+  assert document.title.includes('TestRunner was here')
   fillIn('Window title','Edition=')
   click {CHARS}
   click Apply
-  assert(document.title.includes('Edition'))
-  assert(/unicode|clasic/i.test(document.title))
+  assert document.title.includes('Edition')
+  assert /unicode|clasic/i.test(document.title)
   click Reset
   click Apply
-  assert(!document.title.includes('Edition'))
+  assert !document.title.includes('Edition')
   click OK
 
 testcase strong interrupt
   mousedown Actions
   click Strong Interrupt
   200
-  assert(sessionLastLines(2)[0]==='INTERRUPT')
+  assert sessionLastLines(2)[0]==='INTERRUPT'
 
 testcase about dialog
   mousedown Help

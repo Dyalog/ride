@@ -9,7 +9,7 @@ var fs=require('fs'),CM=CodeMirror
 
 var nFailures=0
 function fail(x){nFailures++;console.error(x)}
-function assert(x,y){x||fail(y||'assertion failed')}
+function assert(x,y){(typeof x==='string'?eval(x):x)||fail(y||'assertion failed')}
 $.expr[':'].t=function(e,i,m){ // custom selector, finds innermost elements by exact text, e.g. $(':t(OK)').click()
   // https://code.google.com/p/aost/wiki/CustomJQuerySelectorInTellurium#:te_text
   function norm(x){return x.trim().replace(/:$/,'')}
