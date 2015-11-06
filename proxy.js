@@ -31,6 +31,8 @@ log.listeners=[]
   }
 }())
 
+var json=process.env.DYALOG_IDE_PROTOCOL==='JSON'
+
 function b64(s){return Buffer(s).toString('base64')} // base64 encode
 function b64d(s){return''+Buffer(s,'base64')}        // base64 decode
 function tag(t,x){return(RegExp('^[^]*<'+t+'>([^<]*)</'+t+'>[^]*$').exec(x)||[])[1]} // extract tag t from xml string x
@@ -146,8 +148,12 @@ this.Proxy=function(){
       var b=Buffer(s.length+8);b.writeInt32BE(b.length,0);b.write('RIDE'+s,4);client.write(b)
     }
   }
-  function cmd(c,args){
-    toInterpreter('<Command><cmd>'+c+'</cmd><id>0</id><args><'+c+'>'+(args||'')+'</'+c+'></args></Command>')
+  function cmd(c,h){ // c:command name, h:arguments as a JS object
+    if(json){
+      toInterpreter(JSON.stringify([c,h||{}]))
+    }else{
+      toInterpreter('<Command><cmd>'+c+'</cmd><id>0</id><args><'+c+'>'+(h||'')+'</'+c+'></args></Command>')
+    }
   }
   function toBrowser(x,y){log('to browser:'+trunc(JSON.stringify([x,y])));socket&&socket.emit(x,y)}
   function setUpInterpreterConnection(){
@@ -223,14 +229,19 @@ this.Proxy=function(){
     })
     // Initial batch of commands sent to interpreter:
     toInterpreter('SupportedProtocols=1');toInterpreter('UsingProtocol=1')
-    cmd('Identify','<Sender><Process>RIDE.EXE</Process><Proxy>0</Proxy></Sender>')
-    cmd('Connect','<Token/>');cmd('GetWindowLayout')
+    cmd('Identify',json?{identity:1}:'<Sender><Process>RIDE.EXE</Process><Proxy>0</Proxy></Sender>')
+    cmd('Connect',json?{remoteId:2}:'<Token/>')
+    cmd('GetWindowLayout')
   }
   function setUpBrowserConnection(){
     var listen
     var onevent=socket.onevent // intercept all browser-to-proxy events and log them:
-    socket.onevent=function(x){log('from browser:'+trunc(JSON.stringify(x.data)));return onevent.apply(socket,[x])}
-    socket
+    socket.onevent=function(x){
+      log('from browser:'+trunc(JSON.stringify(x.data)))
+      json&&cmd(x[0],x[1])
+      return onevent.apply(socket,[x])
+    }
+    json&&socket
       .on('Execute',function(x){cmd('Execute','<Text>'+b64(x.text)+'</Text><Trace>'+(+!!x.trace)+'</Trace>')})
       .on('Edit',function(x){cmd('Edit','<Text>'+b64(x.text)+'</Text><Pos>'+x.pos+'</Pos><Win>'+x.win+'</Win>')})
       .on('CloseWindow'   ,function(x){cmd('CloseWindow'        ,'<win>'+x.win+'</win>')})
@@ -258,8 +269,7 @@ this.Proxy=function(){
 
       // "disconnect" is a built-in socket.io event
       .on('disconnect',function(x){log(addr(this)+' disconnected');socket===this&&(socket=null)})
-
-      // proxy management events that don't reach the interpreter start with a '*'
+    socket // proxy management events that don't reach the interpreter start with a '*'
       .on('*connect',function(x){
         client=net.connect({host:x.host,port:x.port},function(){toBrowser('*connected',{host:x.host,port:x.port})})
         setUpInterpreterConnection()
