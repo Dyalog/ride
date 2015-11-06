@@ -32,7 +32,7 @@ selects an element by text and returns it as a jQuery wrapper.  The text must ma
 ##`click(x)`, `mousedown(x)`, `mouseup(x)`, `mouseover(x)`, `mouseout(x)`
 use `find(x)` to select an element and trigger an event.
 
-Note: top level menu items require a `mousedown` instead of `click`, e.g.: `mousedown('Edit');click('Preferences')
+Note: top level menu items require a `mousedown` instead of `click`, e.g.: `mousedown('Edit');click('Preferences')`
 
 ##`fillIn(x,value)`
 uses `find(x)` to select an element, set its value to `value`, and trigger a `change` event.
