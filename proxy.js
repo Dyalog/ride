@@ -238,10 +238,9 @@ this.Proxy=function(){
     var onevent=socket.onevent // intercept all browser-to-proxy events and log them:
     socket.onevent=function(x){
       log('from browser:'+trunc(JSON.stringify(x.data)))
-      json&&cmd(x[0],x[1])
-      return onevent.apply(socket,[x])
+      return json?cmd(x.data[0],x.data[1]||{}):onevent.apply(socket,[x])
     }
-    json&&socket
+    json||socket
       .on('Execute',function(x){cmd('Execute','<Text>'+b64(x.text)+'</Text><Trace>'+(+!!x.trace)+'</Trace>')})
       .on('Edit',function(x){cmd('Edit','<Text>'+b64(x.text)+'</Text><Pos>'+x.pos+'</Pos><Win>'+x.win+'</Win>')})
       .on('CloseWindow'   ,function(x){cmd('CloseWindow'        ,'<win>'+x.win+'</win>')})
