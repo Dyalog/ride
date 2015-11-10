@@ -12,20 +12,23 @@ function keyInfo(e){ // returns a pair of the key name and an "is complete" flag
   var c=!!e.which&&k!=='Shift'&&k!=='Ctrl'&&k!=='Alt' // c: is the key combination complete?
   c&&(s+=k);return[s,c]
 }
+function loadDemoScript(f){ // f:path to file, ignored if empty
+  f&&D.readFile(f,'utf8',function(err,s){
+    if(err){console.error(err);$.alert('Cannot load demo file');return}
+    index=-1
+    lines=s.replace(/^[\ufeff\ufffe]/,'').split(/\r?\n/)
+           .filter(function(x){return!/^\s*⍝⍝/.test(x)})
+           .map(function(x){return'      '+x})
+  })
+}
+D.process&&loadDemoScript(D.process.env.DYALOG_IDE_DEMO_SCRIPT)
 $.extend(CodeMirror.commands,{
   DMN:function(){move( 1)}, // next line
   DMP:function(){move(-1)}, // prev line
-  DMR:function(){ // run demo script
+  DMR:function(){ // load demo script
     if(D.nwjs&&!D.floating){
       ($i=$i||$('<input id=demo-input type=file style=display:none>').appendTo('body'))
-        .trigger('click').change(function(){
-          if(this.value){
-            D.readFile(this.value,'utf8',function(err,s){
-              if(err){console&&console.error&&console.error(err);$.alert('Cannot load demo file')}
-              else{lines=s.replace(/^[\ufeff\ufffe]/,'').split(/\r?\n/);index=-1}
-            })
-          }
-        })
+        .trigger('click').change(function(){loadDemoScript(this.value)})
     }
   },
   DMK:function(){ // toggle key display mode
