@@ -17,7 +17,7 @@ function loadDemoScript(f){ // f:path to file, ignored if empty
     if(err){console.error(err);$.alert('Cannot load demo file');return}
     index=-1
     lines=s.replace(/^[\ufeff\ufffe]/,'').split(/\r?\n/)
-           .filter(function(x){return!/^\s*⍝⍝/.test(x)})
+           .filter(function(x){return!/^\s*(?:$|⍝⍝)/.test(x)})
            .map(function(x){return'      '+x})
   })
 }
