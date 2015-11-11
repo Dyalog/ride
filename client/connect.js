@@ -84,7 +84,7 @@ module.exports=function(opts){
     }})
   $connect.click(function(){
     var host=$host.val(),port=+$port.val()
-    if(!/^[a-z0-9\.\-:]+$/i.test(host)){$.alert('Invalid host','Error',function(){$host.focus()})}
+    if(!/^[a-z0-9\.\-:%]+$/i.test(host)){$.alert('Invalid host','Error',function(){$host.focus()})}
     else if(port<1||0xffff<port){$.alert('Invalid port','Error',function(){$port.focus()})}
     else{
       $connectDlg=$('<div class=connect-dialog><div class=visual-distraction></div></div>')
