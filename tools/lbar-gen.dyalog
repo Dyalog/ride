@@ -12,6 +12,7 @@
 
 ⎕io←⎕ct←0 ⋄ ⎕pw←32767 ⋄ json←7160⌶ ⋄ 'base64'⎕cy'dfns'
 esc←(,¨'&<>')⎕r'\&amp;' '\&lt;' '\&gt;'
+rmTrailingWS←' +$'⎕r''
 
 ⍝ parse xml and extract tags
 x←⎕xml'UTF-8'⎕ucs 83 ¯1⎕map'lbar.xml'
@@ -28,6 +29,6 @@ h←⊃,¨/(⊂'<b')cl(⊂'>')(esc¨chr)(⊂'</b>')
 '// generated code, do not edit'
 'this.html=',json⊃,/h
 'this.tips={'
-¯2↓⊃,/⊃,¨/(json¨,¨m/chr)(⊂':[')(json¨m/desc)','(json¨m/text)(⊂'],',⎕ucs 10)
+¯2↓⊃,/⊃,¨/(json¨,¨m/chr)(⊂':[')(json¨m/desc)','(json¨rmTrailingWS¨m/text)(⊂'],',⎕ucs 10)
 '};'
 ⎕off
