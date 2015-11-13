@@ -133,6 +133,9 @@ module.exports=function(opts){
     $('#spawn-select').val()||prefs.otherExe($(this).val())
     $('#spawn').button($('#spawn-select').val()||prefs.otherExe()?'enable':'disable')
   })
+  $('#spawn-exe').keyup(function(e){
+    if(e.keyCode===13&&!e.shiftKey&&!e.ctrlKey&&!e.altKey){$spawn.click();return false}
+  })
   $listen.click(function(){
     var host=$listenHost.val(),port=+$listenPort.val()
     if(port<1||0xffff<port){
