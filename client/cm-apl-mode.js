@@ -138,7 +138,9 @@ CodeMirror.defineMode('apl',function(config){
                 case'elseif':case'andif':case'orif': ok=la.t==='if';break
                 case'in':case'ineach':               ok=la.t==='for';break
                 case'case':case'caselist':           ok=la.t==='select'||la.t==='trap';break
-                case'leave':case'continue':          ok=la.t==='for'||la.t==='while'||la.t==='continue';break
+                case'leave':case'continue':
+                  ok=0;for(var i=0;i<a.length;i++)if(/^(?:for|repeat|while)$/.test(a[i].t)){ok=1;break}
+                  break
                 case'access': ok=la.t==='class'||la.t==='∇';stream.match(/(?:\s+\w+)+/);ok=1;break
                 case'base':case'field':case'goto':case'include':case'return':case'using': ok=1;break
                 case'implements':
