@@ -24,6 +24,7 @@ this.cmds=[
   ['HLP','Help',                    ['F1']],
   ['LBR','Toggle language bar',     []],
   ['LN', 'Toggle line numbers',     []],
+  ['MA', 'Continue execution of all threads',[]],
   ['NEW','New session',             ['Ctrl-N']],
   ['PRF','Show preferences',        []],
   ['QIT','Quit',                    ['Ctrl-Q']],
