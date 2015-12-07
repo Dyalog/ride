@@ -224,11 +224,11 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
   & .CodeMirror-lines{padding:0}
   & .CodeMirror-empty{color:#888}
 .tb-rp{margin-left:2px}
-.win{width:100%;height:auto;padding:0 !important} // content of editor and tracer windows
+.win,.floating-window{position:absolute;left:0;right:0;top:32px;bottom:0;overflow:hidden!important;padding:0!important;height:auto!important}
 
 // various dialogs
 .ui-widget-overlay{opacity:.3;filter:Alpha(Opacity=30);background:#aaa}
-.ui-widget-shadow{margin:-8px 0 0 -8px;padding:8px;opacity:.3;filter:Alpha(Opacity=30);border-radius:8px;background:#aaaaaa}
+.ui-widget-shadow{margin:-8px 0 0 -8px;padding:8px;opacity:.3;filter:Alpha(Opacity=30);border-radius:8px;background:#aaa}
 #prefs{height:80px}
 #prefs-tab-title
   text-align:left
