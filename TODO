@@ -20,6 +20,7 @@ Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nic
   W5 autopw support
 
 Not prioritized:
+  on a Mac esc closes the session instead of the editor, JS 2015-12-03
   re-word description of VAL command
   cmd to toggle rainbow colouring
   names of open editors should appear at the bottom of the Window menu; Marc Griffiths 2015-03-13
