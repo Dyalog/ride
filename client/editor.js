@@ -91,6 +91,21 @@ this.Editor=function(ide,e,opts){
     })
   }
   ed.setTracer(!!ed.isTracer)
+
+  // value tips:
+  var vtTID,vtLine,vtStart,vtEnd,vtString // timeout id, position, ant text of pending value tip request
+  ed.$e.mouseover(function(e){
+    var p=ed.cm.coordsChar({left:e.clientX,top:e.clientY},'page'), t=ed.cm.getTokenAt(p)
+    if(p.outside||!t.string||!t.type){
+      vtTID&&clearTimeout(vtTID);vtTID=0
+    }else if(!vtTID||vtLine!==p.line||vtStart!==t.start||vtString!==t.string){
+      vtLine=p.line;vtStart=t.start;vtString=t.string;vtTID&&clearTimeout(vtTID)
+      vtTID=setTimeout(function(){
+        vtTID=0
+        ed.emit('ValueTip',{win:ed.id,line:ed.cm.getLine(vtLine),pos:vtStart,token:0})
+      },500)
+    }
+  })
 }
 
 this.Editor.prototype={
