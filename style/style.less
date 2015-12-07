@@ -1,38 +1,37 @@
 // colour scheme
-$bg   :#d4d0c8; // grey, background for most UI widgets
-$light:#ffffff; // white, top and left border of outset elements
-$dark :#888888; // dark grey, bottom and right border of outset elements
-$selbg:#0a246a; // dark blue, selection background
-$selfg:#ffffff; // white, selection foreground
-$tip  :#ffffe1; // yellow, background for tooltips
+@bg   :#d4d0c8; // grey, background for most UI widgets
+@light:#ffffff; // white, top and left border of outset elements
+@dark :#888888; // dark grey, bottom and right border of outset elements
+@selbg:#0a246a; // dark blue, selection background
+@selfg:#ffffff; // white, selection foreground
+@tip  :#ffffe1; // yellow, background for tooltips
 
 // mixins
-=bg     {background-color:$bg}
-=sel    {background:$selbg;color:$selfg}
-=inset  {border-color:$dark $light $light $dark}
-=outset {border-color:$light $dark $dark $light}
-=tt     {font-family:apl,monospace;font-size:18px} // typewriter text
+.bg    {background-color:@bg}
+.sel   {background:@selbg;color:@selfg}
+.inset {border-color:@dark @light @light @dark}
+.outset{border-color:@light @dark @dark @light}
+.tt    {font-family:apl,monospace;font-size:18px}
 
-@font-face // http://www.sitepoint.com/how-to-use-cross-browser-web-fonts-part-1/
-  font-family:'apl'
-  src:url('apl385.eot')
-  src:url('apl385.eot?#iefix') format('embedded-opentype'),url('apl385.woff') format('woff'),url('apl385.ttf') format('truetype'),url('apl385.svg#apl385') format('svg')
+@font-face{ // http://www.sitepoint.com/how-to-use-cross-browser-web-fonts-part-1/
+  font-family:'apl';
+  src:url('apl385.eot');
+  src:url('apl385.eot?#iefix') format('embedded-opentype'),
+      url('apl385.woff')       format('woff'),
+      url('apl385.ttf')        format('truetype'),
+      url('apl385.svg#apl385') format('svg')
+}
 
 // general styles
-::selection
-  +sel
-::-moz-selection // must be a separate rule from ::selection
-  +sel
-body
-  +bg ;padding:0;margin:0;font-family:sans-serif
-  // Uncomment the following lines to disable selection of UI elements:
-  // // https://stackoverflow.com/questions/826782/css-rule-to-disable-text-selection-highlighting/4358620#answer-4407335
-  // -webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none
-input,textarea
-  +tt
+::selection{.sel}
+::-moz-selection{.sel} // must be a separate rule from ::selection
+body{.bg;padding:0;margin:0;font-family:sans-serif}
+// The following lines disable selection of UI elements:
+// https://stackoverflow.com/questions/826782/css-rule-to-disable-text-selection-highlighting/4358620#answer-4407335
+// -webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none
+input,textarea{.tt}
 input,textarea,select,a{outline:0}
-.text-field
-  +inset ;border-style:solid;border-width:2px
+.text-field{.inset;border-style:solid;border-width:2px}
 
 // z-indices
 .ui-tooltip                            {z-index:9999}
@@ -47,17 +46,18 @@ input,textarea,select,a{outline:0}
 // CodeMirror uses z-indices 1-10
 
 // connect page
-#connect-fieldset
+#connect-fieldset{
   .ui-wrapper{float:left;clear:both}
   .ui-resizable-e{right:0}
   .ui-resizable-s{bottom:0}
+}
 #fav-buttons{margin-bottom:5px} // "About", "Connect", "New", and "Delete"
 #about{float:right}
-#fav-list
-  +inset ;border-style:solid;border-width:1px;background-color:white
+#fav-list{
+  .inset;border-style:solid;border-width:1px;background-color:white
   width:400px;height:150px;overflow-x:hidden;overflow-y:auto;margin:0 12px 0 0
-#fav-host,#fav-port,#listen-port,#spawn-port,#fav-list,#spawn-exe
-  +tt
+}
+#fav-host,#fav-port,#listen-port,#spawn-port,#fav-list,#spawn-exe{.tt}
 #spawn-exe-w{position:absolute;left:60px;right:20px;margin-top:-5px}
 #spawn-exe{width:100%}
 #fav-details{display:inline-block}
@@ -77,65 +77,64 @@ input,textarea,select,a{outline:0}
 body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hidden}
 .platform-mac .ide{top:0} // no menu inside window
 
-.menu // see ../client/menu.js for the DOM structure
-  +bg ;height:18px;line-height:17px;cursor:default;padding:0;margin:2px 0 0 0
-  font-family:sans-serif;border-bottom:solid $dark 1px
+.menu{ // see ../client/menu.js for the DOM structure
+  .bg;height:18px;line-height:17px;cursor:default;padding:0;margin:2px 0 0 0;
+  font-family:sans-serif;border-bottom:solid @dark 1px;
   a{text-decoration:none;color:black;cursor:default}
-  .m-opener.m-top
-    text-align:center;border:solid transparent 1px;padding:0 5px;margin:0
-  .m-open .m-top
-    +inset
+  .m-opener.m-top{text-align:center;border:solid transparent 1px;padding:0 5px;margin:0}
+  .m-open .m-top{.inset}
   .m-open>.m-box{display:block}
   &>.m-sub{float:left}
-  .m-box
-    +bg
-    +outset
-    display:none;border-style:solid;border-width:1px 2px 2px 1px
-    position:absolute;padding:1px;margin:2px 0 0 0;min-width:125px;white-space:nowrap
+  .m-box{
+    .bg;.outset;display:none;border-style:solid;border-width:1px 2px 2px 1px;
+    position:absolute;padding:1px;margin:2px 0 0 0;min-width:125px;white-space:nowrap;
     .m-box{margin-left:100%;margin-top:-17px}
-    a
-      display:block;height:17px;line-height:17px;text-align:left;padding:1px 17px;overflow:hidden;text-overflow:ellipsis
+    a{
+      display:block;height:17px;line-height:17px;text-align:left;padding:1px 17px;overflow:hidden;text-overflow:ellipsis;
       .m-shortcut{font-size:small;float:right;margin-left:20px;color:#666}
       &.m-checked{background:transparent 5px center no-repeat url(img/menu-check.png)}
-      &:focus
-        +sel
-        .m-shortcut{color:$selfg}
-        &.m-checked{background:$selbg 5px center no-repeat url(img/menu-check-white.png)}
-      +outset
-  .m-box .m-opener
+      &:focus{
+        .sel;
+        .m-shortcut{color:@selfg}
+        &.m-checked{background:@selbg 5px center no-repeat url(img/menu-check-white.png)}
+      }
+      .outset
+    }
+  }
+  .m-box .m-opener{
     // "right 5px" might not work in Safari, see
     // https://stackoverflow.com/questions/3197250/position-a-css-background-image-x-pixels-from-the-right#comment-35531805
-    background:transparent center right 5px no-repeat url(img/menu-right-triangle.png)
-    &:focus{background:$selbg center right 5px no-repeat url(img/menu-right-triangle-white.png)}
+    background:transparent center right 5px no-repeat url(img/menu-right-triangle.png);
+    &:focus{background:@selbg center right 5px no-repeat url(img/menu-right-triangle-white.png)}
+  }
   hr{margin:3px 0 5px 0} // used as a separator
+}
 
 // language bar
-.lbar
-  +tt
-  +bg
-  padding:0 2px 0 10px;cursor:default;border-bottom:solid #888 1px;line-height:28px
-  b
-    border:solid $dark 1px;border-left:0;font-weight:normal;margin-bottom:3px;padding:1px;background:#eeeae2
-    &.first{border-left:solid $dark 1px}
-    &:hover{background-color:$light}
+.lbar{
+  .tt;.bg;padding:0 2px 0 10px;cursor:default;border-bottom:solid #888 1px;line-height:28px;
+  b{
+    border:solid @dark 1px;border-left:0;font-weight:normal;margin-bottom:3px;padding:1px;background:#eeeae2;
+    &.first{border-left:solid @dark 1px};
+    &:hover{background-color:@light}
+  }
+}
 .lbar-prefs{float:right;margin-right:4px;width:24px;height:24px;background:no-repeat center center url(img/lbar-prefs.png)}
-.lbar-tip-triangle
-  position:absolute;padding:0;margin:0;width:20px;height:19px
+.lbar-tip-triangle{
+  position:absolute;padding:0;margin:0;width:20px;height:19px;
   background:center center no-repeat url(img/lbar-tip-triangle.png)
-.lbar-tip
-  +tt
-  position:absolute;padding:10px;border-radius:10px;border:solid black 1px;margin-top:20px
-  background:$tip 10px 10px no-repeat url(img/lbar-tip.png)
-.lbar-tip-desc
-  +tt;padding:0 0 0 30px;margin:0;font-weight:bold
-.lbar-tip-text
-  +tt
+}
+.lbar-tip{
+  .tt;position:absolute;padding:10px;border-radius:10px;border:solid black 1px;margin-top:20px;
+  background:@tip 10px 10px no-repeat url(img/lbar-tip.png)
+}
+.lbar-tip-desc{.tt;padding:0 0 0 30px;margin:0;font-weight:bold}
+.lbar-tip-text{.tt}
 
 // resizer:splitting line between session and editor/tracer
-.ui-layout-resizer
-  +bg
-.ui-layout-resizer-east{border-left:solid $light 1px;border-right:solid $dark 1px;padding:2px 0 !important;margin-top:-1px !important}
-.ui-layout-resizer-south,.ui-layout-resizer-north{border-top: solid $light 1px;border-bottom:solid #888 1px}
+.ui-layout-resizer{.bg}
+.ui-layout-resizer-east{border-left:solid @light 1px;border-right:solid @dark 1px;padding:2px 0 !important;margin-top:-1px !important}
+.ui-layout-resizer-south,.ui-layout-resizer-north{border-top:solid @light 1px;border-bottom:solid #888 1px}
 .ui-layout-resizer:hover .ui-layout-toggler{background:#ace}
 
 .zoom11  .CodeMirror{font-size:48px}
@@ -162,43 +161,41 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 .zoom-10 .CodeMirror{font-size: 7px}
 .zoom-11 .CodeMirror{font-size: 6px}
 
-.disconnected
-  .CodeMirror,.CodeMirror-gutter-wrapper{background-color:#e2d3bb} // a distasteful shade of beige, pretending to be dead
+.disconnected{.CodeMirror,.CodeMirror-gutter-wrapper{background-color:#e2d3bb}} // beige
 .breakpoints{width:12px}
-.breakpoint
-  color:#f00;width:12px;text-indent:-99px;cursor:pointer
+.breakpoint{
+  color:#f00;width:12px;text-indent:-99px;cursor:pointer;
   background:no-repeat transparent center center url(img/breakpoint.png)
+}
 .hidden{display:none}
 .highlighted{border:solid red 1px}
-.CodeMirror-hints
-  +tt ;position:absolute;overflow:hidden;list-style:none;margin:0;padding:0;border:1px solid black;z-index:10
-  background:$tip;font-size:90%;max-height:20em;overflow-y:auto
-  -webkit-box-shadow:2px 3px 5px rgba(0,0,0,.2)
-  -moz-box-shadow:   2px 3px 5px rgba(0,0,0,.2)
-  box-shadow:        2px 3px 5px rgba(0,0,0,.2)
+.CodeMirror-hints{
+  .tt;position:absolute;overflow:hidden;list-style:none;margin:0;padding:0;border:1px solid black;z-index:10;
+  background:@tip;font-size:90%;max-height:20em;overflow-y:auto;
+  -webkit-box-shadow:2px 3px 5px rgba(0,0,0,.2);
+     -moz-box-shadow:2px 3px 5px rgba(0,0,0,.2);
+          box-shadow:2px 3px 5px rgba(0,0,0,.2);
+}
 .CodeMirror-hint{margin:0;padding:0 2px;max-width:19em;overflow:hidden;white-space:pre;color:black;cursor:pointer}
-.CodeMirror-hint-active
-  +sel
-.CodeMirror-search-match
-  background:gold;border-top:1px solid orange;border-bottom:1px solid orange
+.CodeMirror-hint-active{.sel}
+.CodeMirror-search-match{
+  background:gold;border-top:1px solid orange;border-bottom:1px solid orange;
   -moz-box-sizing:border-box;box-sizing:border-box;opacity:.5
+}
 
-.toolbar // the one on top of an editor or tracer
-  +bg;height:24px;overflow:hidden;cursor:default;overflow:hidden;padding:2px;border-bottom:solid #aaa 1px
+.toolbar{.bg;height:24px;overflow:hidden;cursor:default;overflow:hidden;padding:2px;border-bottom:solid #aaa 1px}
 
 // editor-only and tracer-only styles:
 .tracer .toolbar .ed-only{display:none}
 .toolbar .tc-only{display:none}
 .tracer .toolbar .tc-only{display:block}
 
-.tb-btn // toolbar button
-  float:left;width:24px;height:24px;border:solid transparent 1px;text-align:center;font-weight:bold;background:no-repeat center center;text-indent:-9999px;cursor:default
-  &:hover
-    +outset
-  &.armed
-    +inset
-  &.pressed
-    +inset;background-color:#eee
+.tb-btn{ // toolbar button
+  float:left;width:24px;height:24px;border:solid transparent 1px;text-align:center;font-weight:bold;background:no-repeat center center;text-indent:-9999px;cursor:default;
+  &:hover{.outset}
+  &.armed{.inset}
+  &.pressed{.inset;background-color:#eee}
+}
 .tb-LN  {background-image:url(img/tb-LN.png)}
 .tb-AO  {background-image:url(img/tb-AO.png)}
 .tb-DO  {background-image:url(img/tb-DO.png)}
@@ -217,12 +214,13 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 .tb-WI  {background-image:url(img/tb-WI.png)}
 .tb-CBP {background-image:url(img/tb-CBP.png)}
 .tb-sep{float:left;width:10px;height:24px;background:no-repeat center center url(img/tb-sep.png)} // separator
-.tb-sc,.tb-rp // search and replace
-  float:left;width:120px;height:24px;resize:none;overflow:hidden
+.tb-sc,.tb-rp{ // search and replace
+  float:left;width:120px;height:24px;resize:none;overflow:hidden;
   .toolbar & .CodeMirror{font-size:18px}
   &.no-matches .cm-s-default{background-color:#fee}
   & .CodeMirror-lines{padding:0}
   & .CodeMirror-empty{color:#888}
+}
 .tb-rp{margin-left:2px}
 .win,.floating-window{position:absolute;left:0;right:0;top:32px;bottom:0;overflow:hidden!important;padding:0!important;height:auto!important}
 
@@ -230,36 +228,34 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 .ui-widget-overlay{opacity:.3;filter:Alpha(Opacity=30);background:#aaa}
 .ui-widget-shadow{margin:-8px 0 0 -8px;padding:8px;opacity:.3;filter:Alpha(Opacity=30);border-radius:8px;background:#aaa}
 #prefs{height:80px}
-#prefs-tab-title
-  text-align:left
+#prefs-tab-title{
+  text-align:left;
   input{width:100%;display:block;margin-bottom:20px;margin-top:10px}
   .reset{float:right}
-  pre
-    overflow:auto
-    a
-      text-decoration:none;color:black
-      &:hover{text-decoration:underline;color:blue}
+  pre{overflow:auto;a{text-decoration:none;color:black;&:hover{text-decoration:underline;color:blue}}}
+}
 
 #layout-pfx{width:1.5em;text-align:center}
 #layout-pfx-label{float:left;margin-top:12px}
-#layout-legend
-  +tt ;width:90px;border-collapse:collapse;margin:0 auto 10px auto;float:none;color:#000
-  .g0,.g2{text-align:left; cursor:default}
+#layout-legend{
+  .tt;width:90px;border-collapse:collapse;margin:0 auto 10px auto;float:none;color:#000;
+  .g0,.g2{text-align:left ;cursor:default}
   .g1,.g3{text-align:right;cursor:default}
+}
 #layout-reset{float:right}
-#layout-kbd
-  +tt ;background-color:#aaa;border-radius:5px;height:200px;clear:both;color:#000
+#layout-kbd{.tt;background-color:#aaa;border-radius:5px;height:200px;clear:both;color:#000}
 #layout-ime-wrapper{float:left;margin-top:5px}
 #layout-lc-label{float:left;margin-bottom:5px}
-.key
-  float:left;width:6%;height:45px;border-radius:5px
-  margin-left:0.6%;margin-top:4px;background-color:#fff;overflow:hidden
+.key{
+  float:left;width:6%;height:45px;border-radius:5px;
+  margin-left:0.6%;margin-top:4px;background-color:#fff;overflow:hidden;
   .g1,.g3{width:40%;height:20px;padding:0;border-width:0;cursor:pointer;margin-top:1px}
   .g1{color:#00f}
   .g3{color:#f00}
   .g1.hover{outline:solid #bbf 1px;background-color:#eee}
   .g3.hover{outline:solid #fbb 1px;background-color:#eee}
   input{text-align:center}
+}
 #k15,#k16,#k30,#k43,#k44,#k57{line-height:45px} // backspace, tab, caps, enter, lshift, rshift
 #k16,#k30,#k44{clear:left} // tab, caps, lshift
 #k15,#k16,#k43,#k44,#k57{font-size:32px} // backspace, tab, enter, lshift, rshift
@@ -272,23 +268,25 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 #k43{width:13.6%} // enter
 #k44{width:15%  } // lshift
 #k57{width:17.2%} // rshift
-.geom-iso
+.geom-iso{
   #k29{display:none} // the key above enter on an ANSI layout
   #k42{display:block} // the key between @' and enter
-  #k43 // enter
-    width:7%;height:94px;line-height:94px;margin-top:-45px
-    text-indent:-2%;border-radius:0 5px 5px 5px;overflow:visible
-  #k43:before // enter
-    content:"";background-color:#fff;float:left;border-radius:5px 0 0 5px
-    position:relative;left:-30%;width:30%;height:45px
+  #k43{ // enter
+    width:7%;height:94px;line-height:94px;margin-top:-45px;text-indent:-2%;border-radius:0 5px 5px 5px;overflow:visible
+  }
+  #k43:before{ // enter
+    content:"";background-color:#fff;float:left;border-radius:5px 0 0 5px;position:relative;left:-30%;width:30%;height:45px
+  }
   #k44{width:8.4%} // lshift
   #k45{display:block} // the key between lshift and Z
+}
 
-#prefs-tab-menu
-  position:absolute;left:0;right:4px;top:30px;bottom:30px
+#prefs-tab-menu{
+  position:absolute;left:0;right:4px;top:30px;bottom:30px;
   .reset{float:right}
   p{margin:4px;text-align:left}
   textarea{width:100%;height:100%}
+}
 
 #prefs-tab-code{text-align:left}
 
@@ -298,82 +296,92 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 #col-settings{width:200px;right:8px;overflow:auto;padding-top:5px}
 #col-fg,#col-bg{width:48px;padding:0;cursor:pointer}
 #col-settings,#col-cm{text-align:left;position:absolute;top:70px;bottom:0}
-#prefs-tab-colours.frozen
+#prefs-tab-colours.frozen{
   #col-rename,#col-delete,#col-settings{display:none}
   #col-cm{right:8px}
-#prefs-tab-colours.renaming
+}
+#prefs-tab-colours.renaming{
   #col-scheme{display:none}
   #col-new-name{display:inline}
+}
 
-#prefs-tab-shortcuts
-  position:absolute;left:0;right:0;top:32px;bottom:0;overflow:auto;text-align:left
-  td
-    text-align:left
-    &.shortcuts-code
-      +tt ;padding:0 3px;border-left:solid #aaa 1px;border-right:solid #aaa 1px;color:#555;text-align:center
+#prefs-tab-shortcuts{
+  position:absolute;left:0;right:0;top:32px;bottom:0;overflow:auto;text-align:left;
+  td{
+    text-align:left;
+    &.shortcuts-code{
+      .tt;padding:0 3px;border-left:solid #aaa 1px;border-right:solid #aaa 1px;color:#555;text-align:center
+    }
+  }
+}
 #shortcuts-table-wrapper{position:absolute;top:40px;left:3px;right:3px;bottom:0;overflow:auto}
 #shortcuts-table-wrapper table{width:100%}
 #shortcuts-search-clear{width:24px;margin-left:-24px;color:#888;text-decoration:none}
 #shortcuts-search-clear:hover{color:#000}
 #shortcuts-no-results{font-style:italic;padding:20px;color:#888}
-.shortcuts-text,.shortcuts-del,.shortcuts-add,.shortcuts-reset
+.shortcuts-text,.shortcuts-del,.shortcuts-add,.shortcuts-reset{
   padding:0 3px;border-radius:10px;border:solid #799 1px
-.shortcuts-text
-  background-color:#cff;color:#255
-  border-top-right-radius:0;border-bottom-right-radius:0;border-right-width:0
+}
+.shortcuts-text{
+  background-color:#cff;color:#255;border-top-right-radius:0;border-bottom-right-radius:0;border-right-width:0;
   .shortcuts-del-hover &{border-color:red}
   &.shortcuts-dup{border-color:red;background-color:red;color:white}
-.shortcuts-del
-  background-color:#799;color:#fff;text-decoration:none
-  border-top-left-radius:0;border-bottom-left-radius:0
+}
+.shortcuts-del{
+  background-color:#799;color:#fff;text-decoration:none;border-top-left-radius:0;border-bottom-left-radius:0
   &:hover{background-color:red;border-color:#800}
-.shortcuts-add
-  background-color:#799;color:#fff;text-decoration:none
+}
+.shortcuts-add{
+  background-color:#799;color:#fff;text-decoration:none;
   &:hover{background-color:#080;border-color:#040}
-.shortcuts-reset
-  background-color:#799;color:#fff;text-decoration:none
+}
+.shortcuts-reset{
+  background-color:#799;color:#fff;text-decoration:none;
   &:hover{background-color:#a80;border-color:#540}
+}
 .shortcuts-input{background-color:#ace}
 
 #code-aim{margin-left:48px}
 #prefs-tab-code{overflow:auto;position:absolute;left:0;right:0;top:32px;bottom:0}
 
-.ui-dialog-content.about
-  padding:0;margin:0
+.ui-dialog-content.about{
+  padding:0;margin:0;
   .logo{background:#fc9732 16px center no-repeat url(dyaloglogo.png);height:80px}
-  .contact-info
-    float:right;text-align:right;margin:8px 8px 0 0;cursor:default
+  .contact-info{
+    float:right;text-align:right;margin:8px 8px 0 0;cursor:default;
     a,a:visited,a:active{color:blue}
+  }
   .textarea-wrapper{position:absolute;left:5px;right:13px;top:85px;bottom:15px;width:auto}
-  textarea
-    +inset
-    border-style:solid;border-width:2px;white-space:pre;word-wrap:normal;overflow-x:scroll;width:100%;height:100%
-.ui-dialog .ui-dialog-content.listen
-  padding:10px 10px 0 10px;text-align:left;width:500px
-  .tt
-    +tt;margin-left:16px
+  textarea{
+    .inset;border-style:solid;border-width:2px;white-space:pre;word-wrap:normal;overflow-x:scroll;width:100%;height:100%
+  }
+}
+.ui-dialog .ui-dialog-content.listen{
+  padding:10px 10px 0 10px;text-align:left;width:500px;
+  .tt{.tt;margin-left:16px}
+}
 
-.visual-distraction
-  position:relative;width:30%;height:10px;margin-bottom:10px;background:$selbg
-  -webkit-animation-name:Waiting             ;animation-name:Waiting
-  -webkit-animation-duration:1s              ;animation-duration:1s
-  -webkit-animation-timing-function:linear   ;animation-timing-function:linear
-  -webkit-animation-iteration-count:infinite ;animation-iteration-count:infinite
-  -webkit-animation-direction:alternate      ;animation-direction:alternate
-  -webkit-animation-play-state:running       ;animation-play-state:running
+.visual-distraction{
+  position:relative;width:30%;height:10px;margin-bottom:10px;background:@selbg;
+  -webkit-animation-name:Waiting             ;animation-name:Waiting;
+  -webkit-animation-duration:1s              ;animation-duration:1s;
+  -webkit-animation-timing-function:linear   ;animation-timing-function:linear;
+  -webkit-animation-iteration-count:infinite ;animation-iteration-count:infinite;
+  -webkit-animation-direction:alternate      ;animation-direction:alternate;
+  -webkit-animation-play-state:running       ;animation-play-state:running;
   background:linear-gradient(90deg,transparent 0%,blue 50%,transparent 100%)
+}
 .connect-dialog .visual-distraction{margin:50px}
 
-#demo-keys
-  position:fixed;top:10px;right:10px
-  span
-    +tt ;font-size:48px;border:solid #333 1px;background-color:#888;color:white;margin:10px
-    border-radius:10px;padding:5px
+#demo-keys{
+  position:fixed;top:10px;right:10px;
+  span{
+    .tt;font-size:48px;border:solid #333 1px;background-color:#888;color:white;margin:10px;border-radius:10px;padding:5px
+  }
+}
 
-@-webkit-keyframes Waiting
-  0%{margin-left:0} 100%{margin-left:70%}
-@keyframes         Waiting
-  0%{margin-left:0} 100%{margin-left:70%}
+@-webkit-keyframes Waiting{0%{margin-left:0};100%{margin-left:70%}}
+@keyframes         Waiting{0%{margin-left:0};100%{margin-left:70%}}
 
 // jQuery UI - v1.10.4 - 2014-01-17, heavily customized
 
@@ -384,19 +392,17 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 .ui-helper-clearfix:after{clear:both}
 .ui-helper-clearfix{min-height:0} // support:IE7
 .ui-helper-zfix{width:100%;height:100%;top:0;left:0;position:absolute;opacity:0;filter:Alpha(Opacity=0)}
-.ui-state-disabled{cursor:default !important}
+.ui-state-disabled{cursor:default!important}
 .ui-icon{display:block;text-indent:-99999px;overflow:hidden;background-repeat:no-repeat}
 .ui-widget-overlay{position:fixed;top:0;left:0;width:100%;height:100%}
-.ui-button
-  +outset
-  +bg
-  border-style:solid;border-width:1px;min-width:75px;display:inline-block;position:relative;padding:0;line-height:normal
-  margin-right:.1em;cursor:default;vertical-align:middle;text-align:center
-  overflow:visible;// removes extra width in IE
+.ui-button{
+  .outset;.bg;border-style:solid;border-width:1px;min-width:75px;display:inline-block;position:relative;padding:0;
+  line-height:normal;margin-right:.1em;cursor:default;vertical-align:middle;text-align:center;
+  overflow:visible; // removes extra width in IE
   &,&:link,&:visited,&:hover,&:active{text-decoration:none;color:#000}
   &:active{border-color:#000}
-  &.ui-button-disabled:active
-    +outset
+  &.ui-button-disabled:active{.outset}
+}
 
 // to make room for the icon, a width needs to be set here
 .ui-button-icon-only {width:2.2em} button.ui-button-icon-only {width:2.4em}
@@ -417,45 +423,46 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 input.ui-button{padding:0 5px}
 
 // button icon element(s)
-.ui-button-icon-only .ui-icon,
-.ui-button-text-icon-primary .ui-icon,
+.ui-button-icon-only           .ui-icon,
+.ui-button-text-icon-primary   .ui-icon,
 .ui-button-text-icon-secondary .ui-icon,
-.ui-button-text-icons .ui-icon,
-.ui-button-icons-only .ui-icon
+.ui-button-text-icons          .ui-icon,
+.ui-button-icons-only          .ui-icon{
   position:absolute;top:50%;margin-top:-9px
+}
 
-.ui-button-icon-only .ui-icon
-  left:50%;margin-left:-9px
+.ui-button-icon-only .ui-icon{left:50%;margin-left:-9px}
 
 .ui-button-text-icon-primary .ui-button-icon-primary,
-.ui-button-text-icons .ui-button-icon-primary,
-.ui-button-icons-only .ui-button-icon-primary
+.ui-button-text-icons        .ui-button-icon-primary,
+.ui-button-icons-only        .ui-button-icon-primary{
   left:.5em
+}
 
 .ui-button-text-icon-secondary .ui-button-icon-secondary,
-.ui-button-text-icons .ui-button-icon-secondary,
-.ui-button-icons-only .ui-button-icon-secondary
+.ui-button-text-icons          .ui-button-icon-secondary,
+.ui-button-icons-only          .ui-button-icon-secondary{
   right:.5em
+}
 
 // button sets
-.ui-buttonset
-  margin-right:7px
+.ui-buttonset{
+  margin-right:7px;
   .ui-button{margin-left:0;margin-right:-.3em}
+}
 
-.ui-dialog
-  +outset
-  border-style:solid;border-width:1px;overflow:hidden;position:absolute;top:0;left:0;padding:0;outline:0;text-align:center
-  .ui-dialog-titlebar
-    +sel;padding:0 8px;margin-bottom:1px;position:relative;height:22px;line-height:20px;cursor:default
+.ui-dialog{
+  .outset;border-style:solid;border-width:1px;overflow:hidden;position:absolute;top:0;left:0;padding:0;outline:0;text-align:center;
+  .ui-dialog-titlebar{.sel;padding:0 8px;margin-bottom:1px;position:relative;height:22px;line-height:20px;cursor:default}
   .ui-dialog-title{float:left;margin:.1em 0;white-space:nowrap;width:90%;overflow:hidden;text-overflow:ellipsis;color:white;text-align:left}
   .ui-dialog-titlebar-close{position:absolute;right:2px;top:50%;min-width:18px;width:18px;margin:-9px 0 0 0;padding:0;height:18px;outline:0}
-  .ui-dialog-content
-    position:relative;border:0;padding:0;background:none;overflow:auto
+  .ui-dialog-content{position:relative;border:0;padding:0;background:none;overflow:auto}
   .ui-resizable-se{width:12px;height:12px;right:-5px;bottom:-5px;background-position:16px 16px}
-  .ui-dialog-buttonpane
-    text-align:center;border-width:1px 0 0 0;background-image:none;margin-top:.5em;padding:.3em 1em .5em .4em
-    .ui-button
-      +bg;margin:0 5px
+  .ui-dialog-buttonpane{
+    text-align:center;border-width:1px 0 0 0;background-image:none;margin-top:.5em;padding:.3em 1em .5em .4em;
+    .ui-button{.bg;margin:0 5px}
+  }
+}
 
 // right-aligned
 .ui-resizable{position:relative}
@@ -472,79 +479,75 @@ input.ui-button{padding:0 5px}
 .ui-selectable-helper{position:absolute;border:1px dotted black}
 
 // position:relative prevents IE scroll bug (element with position:relative inside container with overflow:auto appear as "fixed")
-.ui-tabs
-  padding:0;position:relative
+.ui-tabs{
+  padding:0;position:relative;
   .ui-tabs-panel{display:block;border-width:0;padding:8px;background:none}
-  .ui-tabs-nav
-    margin:0;padding:0 3px;border-width:0 0 1px 0;border-color:white
-    li
-      +bg
-      list-style:none;float:left;position:relative;top:0;margin:3px 1px 0 0;padding:0;white-space:nowrap;outline:none
-    .ui-tabs-anchor
-      float:left;padding:2px 12px 0 12px;border-width:1px 2px 0 1px;border-style:solid;text-decoration:none
+  .ui-tabs-nav{
+    margin:0;padding:0 3px;border-width:0 0 1px 0;border-color:white;
+    li{.bg;list-style:none;float:left;position:relative;top:0;margin:3px 1px 0 0;padding:0;white-space:nowrap;outline:none}
+    .ui-tabs-anchor{
+      float:left;padding:2px 12px 0 12px;border-width:1px 2px 0 1px;border-style:solid;text-decoration:none;
       border-color:white #666 transparent white;border-top-left-radius:4px;border-top-right-radius:4px;cursor:default
-    .ui-tabs-active .ui-tabs-anchor
-      +bg ;padding:4px 15px 0 15px;margin:-2px -3px 0 -3px
-    li.ui-tabs-active
-      border-bottom:solid 1px $bg;margin-bottom:-1px;padding-left:2px;margin-left:-2px;padding-right:2px;margin-right:-2px
+    }
+    .ui-tabs-active .ui-tabs-anchor{.bg;padding:4px 15px 0 15px;margin:-2px -3px 0 -3px}
+    li.ui-tabs-active{
+      border-bottom:solid 1px @bg;margin-bottom:-1px;padding-left:2px;margin-left:-2px;padding-right:2px;margin-right:-2px
+    }
     li.ui-tabs-active    .ui-tabs-anchor,
     li.ui-state-disabled .ui-tabs-anchor,
     li.ui-tabs-loading   .ui-tabs-anchor{cursor:default}
+  }
+}
 
-.tab-close
-  float:right;width:20px;border-radius:12px;text-align:center;cursor:pointer;color:#888;margin:0 -10px 0 5px
+.tab-close{
+  float:right;width:20px;border-radius:12px;text-align:center;cursor:pointer;color:#888;margin:0 -10px 0 5px;
   &.hover{background-color:#d88;color:white}
+}
 
 .ui-tooltip{padding:8px;position:absolute;max-width:300px;-webkit-box-shadow:0 0 5px #aaa;box-shadow:0 0 5px #aaa}
 body .ui-tooltip{border-width:2px}
 
 // Component containers
-.ui-widget
-  font-family:Verdana,Arial,sans-serif;font-size:1.1em
+.ui-widget{
+  font-family:Verdana,Arial,sans-serif;font-size:1.1em;
   .ui-widget{font-size:1em}
   select,button{font-family:Verdana,Arial,sans-serif;font-size:1em}
-.ui-widget-content
-  +bg
-.ui-widget-header
-  +bg;border:1px solid #aaaaaa;font-weight:bold
+}
+.ui-widget-content{.bg}
+.ui-widget-header{.bg;border:1px solid #aaaaaa;font-weight:bold}
 
 // Interaction states
-.ui-state-default,
-.ui-widget-content .ui-state-default,
-.ui-widget-header .ui-state-default
-  font-weight:normal
+.ui-state-default,.ui-widget-content .ui-state-default,.ui-widget-header .ui-state-default{font-weight:normal}
 
-.ui-state-default
-  a,a:link,a:visited{color:#000;text-decoration:none}
+.ui-state-default{a,a:link,a:visited{color:#000;text-decoration:none}}
 
 .ui-state-hover,.ui-widget-content .ui-state-hover,.ui-widget-header .ui-state-hover,
-.ui-state-focus,.ui-widget-content .ui-state-focus,.ui-widget-header .ui-state-focus
+.ui-state-focus,.ui-widget-content .ui-state-focus,.ui-widget-header .ui-state-focus{
   font-weight:normal
+}
 
-.ui-state-hover,.ui-state-focus
-  a,a:hover,a:link,a:visited{text-decoration:none}
-.ui-state-active
-  a,a:link,a:visited{text-decoration:none}
+.ui-state-hover,.ui-state-focus{a,a:hover,a:link,a:visited{text-decoration:none}}
+.ui-state-active{a,a:link,a:visited{text-decoration:none}}
 
 // Interaction Cues
 .ui-state-highlight,.ui-widget-content .ui-state-highlight,.ui-widget-header .ui-state-highlight
-  background-color:#fbf9ee;color:#363636
+  {background-color:#fbf9ee;color:#363636}
 .ui-state-highlight a,.ui-widget-content .ui-state-highlight a,.ui-widget-header .ui-state-highlight a
-  color:#363636
+  {color:#363636}
 .ui-state-error,.ui-widget-content .ui-state-error,.ui-widget-header .ui-state-error
-  border:1px solid #cd0a0a;background-color:#fef1ec;color:#cd0a0a
+  {border:1px solid #cd0a0a;background-color:#fef1ec;color:#cd0a0a}
 .ui-state-error a,.ui-widget-content .ui-state-error a,.ui-widget-header .ui-state-error a
-  color:#cd0a0a
+  {color:#cd0a0a}
 .ui-state-error-text,.ui-widget-content .ui-state-error-text,.ui-widget-header .ui-state-error-text
-  color:#cd0a0a
+  {color:#cd0a0a}
 .ui-priority-primary,.ui-widget-content .ui-priority-primary,.ui-widget-header .ui-priority-primary
-  font-weight:bold
+  {font-weight:bold}
 .ui-priority-secondary,.ui-widget-content .ui-priority-secondary,.ui-widget-header .ui-priority-secondary
-  opacity:.7;filter:Alpha(Opacity=70);font-weight:normal
+  {opacity:.7;filter:Alpha(Opacity=70);font-weight:normal}
 .ui-state-disabled,.ui-widget-content .ui-state-disabled,.ui-widget-header .ui-state-disabled
-  opacity:.35;filter:Alpha(Opacity=35);background-image:none
+  {opacity:.35;filter:Alpha(Opacity=35);background-image:none}
 .ui-state-disabled .ui-icon
-  filter:Alpha(Opacity=35);// For IE8 - See #6059
+  {filter:Alpha(Opacity=35)} // For IE8 - See #6059
 
 .ui-icon{width:16px;height:16px}
 .ui-icon-closethick{background:no-repeat center center url(img/close.png)}
@@ -552,37 +555,37 @@ body .ui-tooltip{border-width:2px}
 .ui-slider{position:relative;text-align:left;margin:0 10px}
 .ui-slider .ui-slider-handle{position:absolute;width:10px;height:10px;cursor:pointer}
 .ui-slider .ui-slider-range{position:absolute;display:block;border:0}
-/* For IE8 - See #6727 */
+// For IE8 - See #6727
 .ui-slider.ui-state-disabled .ui-slider-handle,.ui-slider.ui-state-disabled .ui-slider-range{filter:inherit}
-.ui-slider-horizontal
-  +inset ;height:1px;border-style:solid;border-width:1px
-.ui-slider-horizontal .ui-slider-handle
-  +outset ;top:-5px;background-color:$bg;margin-left:-5px;border-style:solid;border-width:1px;border-radius:2px
+.ui-slider-horizontal{.inset;height:1px;border-style:solid;border-width:1px}
+.ui-slider-horizontal .ui-slider-handle{
+  .outset;top:-5px;background-color:$bg;margin-left:-5px;border-style:solid;border-width:1px;border-radius:2px
+}
 .ui-slider-horizontal .ui-slider-range{top:0;height:100%}
 .ui-slider-horizontal .ui-slider-range-min{left:0;background-color:#000}
 .ui-slider-horizontal .ui-slider-range-max{right:0;background-color:#000}
 
 // CodeMirror styles
-.CodeMirror
-  +tt ;height:300px;color:black
+.CodeMirror{.tt;height:300px;color:black}
 .CodeMirror-lines{padding:4px 0} // Vertical padding around content
 .CodeMirror pre{padding:0 4px} // Horizontal padding of content
-.CodeMirror-scrollbar-filler,.CodeMirror-gutter-filler
-  background-color:white;// The little square between H and V scrollbars
-.CodeMirror-gutter-elt.CodeMirror-linenumber
+.CodeMirror-scrollbar-filler,.CodeMirror-gutter-filler{background-color:white}// the square between H and V scrollbars
+.CodeMirror-gutter-elt.CodeMirror-linenumber{
   padding:0 3px 0 5px;min-width:20px;text-align:right;white-space:nowrap;cursor:pointer!important
   // the "color" property is generated by JS code
+}
 .CodeMirror-guttermarker{color:black}
 .CodeMirror-guttermarker-subtle{color:#999}
 .CodeMirror div.CodeMirror-cursor{border-left:1px solid black}
 .CodeMirror div.CodeMirror-secondarycursor{border-left:1px solid silver} // Shown when moving in bi-directional text
 .CodeMirror.cm-fat-cursor div.CodeMirror-cursor{width:auto;border:0;background:#7e7}
 .CodeMirror.cm-fat-cursor div.CodeMirror-cursors{z-index:1}
-.cm-animate-fat-cursor
-  width:auto;border:0
-  -webkit-animation:blink 1.06s steps(1) infinite
-  -moz-animation:   blink 1.06s steps(1) infinite
-  animation:        blink 1.06s steps(1) infinite
+.cm-animate-fat-cursor{
+  width:auto;border:0;
+  -webkit-animation:blink 1.06s steps(1) infinite;
+     -moz-animation:blink 1.06s steps(1) infinite;
+          animation:blink 1.06s steps(1) infinite;
+}
 
 @-moz-keyframes    blink{0%{background:#7e7} 50%{background:none} 100%{background:#7e7}}
 @-webkit-keyframes blink{0%{background:#7e7} 50%{background:none} 100%{background:#7e7}}
@@ -609,47 +612,51 @@ div.CodeMirror-overwrite div.CodeMirror-cursor{border-style:solid;border-width:1
 
 .CodeMirror{position:relative;overflow:hidden;background:white}
 
-.CodeMirror-scroll
-  overflow:scroll !important;// Things will break if this is overridden
+.CodeMirror-scroll{
+  overflow:scroll!important; // Things will break if this is overridden
   // 30px is the magic margin used to hide the element's real scrollbars
   // See overflow:hidden in .CodeMirror
-  margin-bottom:-30px;margin-right:-30px;padding-bottom:30px;height:100%
-  outline:none;// Prevent dragging from highlighting the element
-  position:relative
+  margin-bottom:-30px;margin-right:-30px;padding-bottom:30px;height:100%;position:relative;
+  outline:none // Prevent dragging from highlighting the element
+}
 
 .CodeMirror-sizer{position:relative;border-right:30px solid transparent}
 
 // The fake, visible scrollbars. Used to force redraw during scrolling
 // before actuall scrolling happens, thus preventing shaking and
 // flickering artifacts.
-.CodeMirror-vscrollbar,.CodeMirror-hscrollbar,.CodeMirror-scrollbar-filler,.CodeMirror-gutter-filler
+.CodeMirror-vscrollbar,.CodeMirror-hscrollbar,.CodeMirror-scrollbar-filler,.CodeMirror-gutter-filler{
   position:absolute;z-index:6;display:none
+}
 .CodeMirror-vscrollbar{right: 0;top: 0;overflow-x:hidden;overflow-y:scroll}
 .CodeMirror-hscrollbar{bottom:0;left:0;overflow-y:hidden;overflow-x:scroll}
 .CodeMirror-scrollbar-filler{right:0;bottom:0}
 .CodeMirror-gutter-filler   {left: 0;bottom:0}
-.CodeMirror-gutters
-  position:absolute;left:0;top:0;z-index:3;border-right:1px solid transparent;
-  white-space:nowrap;background-color:transparent
-.CodeMirror-gutter
-  white-space:normal;height:100%;display:inline-block;margin-bottom:-30px
+.CodeMirror-gutters{
+  position:absolute;left:0;top:0;z-index:3;border-right:1px solid transparent;white-space:nowrap;background-color:transparent
+}
+.CodeMirror-gutter{
+  white-space:normal;height:100%;display:inline-block;margin-bottom:-30px;
   *zoom:1;*display:inline;// Hack to make IE7 behave
+}
 .CodeMirror-gutter-wrapper{position:absolute;z-index:4;height:100%;cursor:pointer}
 .CodeMirror-gutter-elt{position:absolute;cursor:default;z-index:4}
 .CodeMirror-gutter-wrapper{-webkit-user-select:none;-moz-user-select:none;user-select:none}
 .CodeMirror-lines{cursor:text;min-height:1px} // prevents collapsing before first draw
-.CodeMirror pre
+.CodeMirror pre{
   // Reset some styles that the rest of the page might have set
-  -moz-border-radius:0;-webkit-border-radius:0;border-radius:0
-  border-width:0;background:transparent;font-family:inherit;font-size:inherit
-  margin:0;white-space:pre;word-wrap:normal;line-height:inherit;color:inherit
+  -moz-border-radius:0;-webkit-border-radius:0;border-radius:0;
+  border-width:0;background:transparent;font-family:inherit;font-size:inherit;
+  margin:0;white-space:pre;word-wrap:normal;line-height:inherit;color:inherit;
   z-index:2;position:relative;overflow:visible;-webkit-tap-highlight-color:transparent
+}
 .CodeMirror-wrap pre{word-wrap:break-word;white-space:pre-wrap;word-break:normal}
 .CodeMirror-linebackground{position:absolute;left:0;right:0;top:0;bottom:0;z-index:0}
 .CodeMirror-linewidget{position:relative;z-index:2;overflow:auto}
 .CodeMirror-code{outline:none}
 // Force content-box sizing for the elements where we expect it
-.CodeMirror-scroll,.CodeMirror-sizer,.CodeMirror-gutter,.CodeMirror-gutters,.CodeMirror-linenumber{-moz-box-sizing:content-box;box-sizing:content-box}
+.CodeMirror-scroll,.CodeMirror-sizer,.CodeMirror-gutter,.CodeMirror-gutters,.CodeMirror-linenumber
+  {-moz-box-sizing:content-box;box-sizing:content-box}
 .CodeMirror-measure{position:absolute;width:100%;height:0;overflow:hidden;visibility:hidden}
 .CodeMirror-measure pre{position:static}
 .CodeMirror div.CodeMirror-cursor{position:absolute;border-right:none;width:0}
@@ -668,19 +675,18 @@ div.CodeMirror-cursors{visibility:hidden;position:relative;z-index:3}
 // Help users use markselection to safely style text background
 span.CodeMirror-selectedtext{background:none}
 
-.CodeMirror-foldmarker
-  color:blue;text-shadow:#b9f 1px 1px 2px,#b9f -1px -1px 2px,#b9f 1px -1px 2px,#b9f -1px 1px 2px
+.CodeMirror-foldmarker{
+  color:blue;text-shadow:#b9f 1px 1px 2px,#b9f -1px -1px 2px,#b9f 1px -1px 2px,#b9f -1px 1px 2px;
   font-family:arial;line-height:.3;cursor:pointer
+}
 .CodeMirror-foldgutter{width:.7em}
 .CodeMirror-foldgutter-open:after  {content:"\229F"}
 .CodeMirror-foldgutter-folded:after{content:"\229E"}
 .CodeMirror-foldgutter-cont:after  {content:"\2502"}
 .CodeMirror-foldgutter-end:after   {content:"\2514"}
 .CodeMirror-foldgutter-open,.CodeMirror-foldgutter-folded,.CodeMirror-foldgutter-cont,.CodeMirror-foldgutter-end
-  color:#88f
-.CodeMirror-foldgutter-open,.CodeMirror-foldgutter-folded
-  cursor:pointer
-  &:hover{font-weight:bold;color:#ccf}
+  {color:#88f}
+.CodeMirror-foldgutter-open,.CodeMirror-foldgutter-folded{cursor:pointer;&:hover{font-weight:bold;color:#ccf}}
 
 // scrollbars, see ../client/cm-scroll.js
 .cm-scroll{position:absolute;z-index:6;background:#eee}
@@ -702,7 +708,7 @@ span.CodeMirror-selectedtext{background:none}
 .cm-scroll-v .btn0:after{content:"\25b2"}
 .cm-scroll-v .btn1:after{content:"\25bc"}
 
-@import themes/mixins
-@import themes/classic
-@import themes/redmond
-@import themes/cupertino
+@import 'themes/mixins';
+@import 'themes/classic';
+@import 'themes/redmond';
+@import 'themes/cupertino';

@@ -11,7 +11,7 @@
     "express":"4.13.3",
     "jquery":"2.1.4",
     "jquery-ui":"1.10.5",
-    "node-sass":"3.3.3",
+    "less":"2.5.3",
     "nw-builder":"2.1.0",
     "rcedit":"0.3.0",
     "ws":"0.8.1"

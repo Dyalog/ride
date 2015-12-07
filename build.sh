@@ -8,9 +8,9 @@ mkdir -p build/{js/client,nw,tmp,static}
 cp -uvr {index,empty,print}.html proxy.js style/{*.png,apl385.woff,img} favicon.ico package.json build/nw/
 cp -uv client/*.js build/js/client/
 
-i=style/style.sass o=build/nw/style.css
+i=style/style.less o=build/nw/style.css
 if [ ! -e $o -o $(find `dirname $i` -type f -newer $o 2>/dev/null | wc -l) -gt 0 ]; then
-  echo 'preprocessing css'; node-sass -i --output-style=compressed -o `dirname $o` $i
+  echo 'preprocessing css'; lessc $i >$o
 fi
 
 nm=node_modules cm=$nm/codemirror cma=$cm/addon
