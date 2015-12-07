@@ -6,15 +6,15 @@
   "repository":".",
   "dependencies":{
     "cheerio":"0.19.0",
-    "codemirror":"5.8.0",
+    "codemirror":"5.9.0",
     "compression":"1.6.0",
     "express":"4.13.3",
     "jquery":"2.1.4",
     "jquery-ui":"1.10.5",
     "node-sass":"3.3.3",
-    "nw-builder":"2.0.2",
+    "nw-builder":"2.1.0",
     "rcedit":"0.3.0",
-    "ws":"0.8.0"
+    "ws":"0.8.1"
   },
   "window":{
     "title":"Dyalog",
