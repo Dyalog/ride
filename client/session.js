@@ -2,7 +2,7 @@
 var autocompletion=require('./autocompletion'),prefs=require('./prefs'),cmOnDblClick=require('./util').cmOnDblClick
 require('./cm-scroll')
 this.Session=function(ide,e,opts){ // Session constructor
-  var se=this;se.ide=ide;se.opts=opts;se.emit=opts.emit;se.hist=[''];se.histIdx=0;se.focusTimestamp=0
+  var se=this;se.ide=ide;se.opts=opts;se.emit=opts.emit;se.hist=[''];se.histIdx=0;se.focusTimestamp=0;se.id=0
   se.dirty={} // modified lines: lineNumber→originalContent, inserted lines: lineNumber→0 (also used in cm-apl-mode.js)
   se.$e=$(e).addClass('ride-win')
   var cm=se.cm=CodeMirror(se.$e[0],{
