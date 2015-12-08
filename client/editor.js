@@ -248,7 +248,7 @@ this.Editor.prototype={
         ((RegExp('^'+r     ).exec(s.slice(  c.ch))||[])[0]||'')  // match right of cursor
     ).replace(/^\d+/,'') // trim leading digits
   },
-  ED:function(cm){this.emit('Edit',{win:this.id,text:cm.getValue(),pos:cm.indexFromPos(cm.getCursor())})},
+  ED:function(cm){this.emit('Edit',{win:this.id,pos:cm.indexFromPos(cm.getCursor()),text:cm.getValue()})},
   QT:function(){this.emit('CloseWindow',{win:this.id})},
   BK:function(cm){this.isTracer?this.emit('TraceBackward',{win:this.id}):cm.execCommand('undo')},
   FD:function(cm){this.isTracer?this.emit('TraceForward' ,{win:this.id}):cm.execCommand('redo')},
