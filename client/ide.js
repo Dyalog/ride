@@ -56,7 +56,7 @@ this.IDE=function(){
       .data('ui-sortable').floating=true // workaround for http://bugs.jqueryui.com/ticket/6702#comment:20
   }
 
-  var handlers={ // for RIDE protocol messages
+  var handlers=this.handlers={ // for RIDE protocol messages
     '*identify':function(i){D.remoteIdentification=i;ide.updateTitle()},
     '*connected':function(x){ide.setHostAndPort(x.host,x.port)},
     '*spawnedError':function(x){ide.die();setTimeout(function(){$.alert(x.message,'Error')},100)},
@@ -96,7 +96,14 @@ this.IDE=function(){
       var w=ide.wins[x.win];w&&w.closePopup&&w.closePopup();delete ide.wins[x.win];ide.wins[0].focus()
     },
     OpenWindow:ide.openWindow.bind(ide),
-    ShowHTML:ide.showHTML.bind(ide)
+    ShowHTML:ide.showHTML.bind(ide),
+    ShowDialog:function(x){
+      var i=-1;function f(e){i=$(e.target).closest('.ui-button').index();$(this).dialog('close')} // i:clicked index
+      $('<p>').text(x.text).dialog({
+        modal:1,title:x.title,buttons:x.options.map(function(s){return{text:s,click:f}}),
+        close:function(){ide.emit('DialogResult',{index:i,token:x.token})}
+      })
+    }
   }
 
   // We need to be able to temporarily block the stream of messages coming from socket.io
