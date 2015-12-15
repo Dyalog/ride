@@ -1,5 +1,5 @@
 'use strict'
-var connect=require('./connect'),Editor=require('./editor').Editor,IDE=require('./ide').IDE,prefs=require('./prefs')
+var conn=require('./conn'),Editor=require('./editor').Editor,IDE=require('./ide').IDE,prefs=require('./prefs')
 require('./prefs-colours');require('./demo');require('./cm-foldgutter') // require() these to initialise them
 $(function(){
   CodeMirror.defaults.dragDrop=false;window.ondragover=window.ondrop=function(e){e.preventDefault();return false}
@@ -64,13 +64,13 @@ $(function(){
     })()
     if(!D.quit)D.quit=close
     var e=D.process?D.process.env:{}
-    if(e.DYALOG_IDE_LISTEN)connect().listen(e.DYALOG_IDE_LISTEN)
-    else if(e.DYALOG_IDE_CONNECT)connect().connect(e.DYALOG_IDE_CONNECT)
+    if(e.DYALOG_IDE_LISTEN)conn().listen(e.DYALOG_IDE_LISTEN)
+    else if(e.DYALOG_IDE_CONNECT)conn().connect(e.DYALOG_IDE_CONNECT)
     else if(+e.DYALOG_IDE_SPAWN){ // the value of this env var should be '0' or '1'
       new IDE;D.socket.emit('*spawn') // '*spawnedError' is handled in ide.coffee
       window.onbeforeunload=function(){D.socket.emit('Exit',{code:0})}
     }
-    else connect()
+    else conn()
   }
 
   if(!prefs.theme()){
@@ -91,4 +91,11 @@ $(function(){
   delete localStorage.debug
 
   localStorage.version||(localStorage.version='[2,0]') // for migrations to later versions of RIDE
+
+  // Implement access keys (Alt-X) using a custom attribute: data-accesskey=X
+  // The built-in accesskey=X doesn't handle duplicates well -- it doesn't always focus the visible one.
+  $(document).keydown(function(e){
+    if(e.altKey&&!e.ctrlKey&&!e.metaKey&&64<e.which&&e.which<91) // Alt-A...Alt-Z or Alt-Shift-A...Alt-Shift-Z
+      {$('[data-accesskey='+String.fromCharCode(e.which).toLowerCase()+']:visible').focus().click();return!1}
+  })
 })

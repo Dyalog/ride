@@ -1,7 +1,7 @@
 // colour scheme
 @bg   :#d4d0c8; // grey, background for most UI widgets
 @light:#ffffff; // white, top and left border of outset elements
-@dark :#888888; // dark grey, bottom and right border of outset elements
+@dark :#808080; // dark grey, bottom and right border of outset elements
 @selbg:#0a246a; // dark blue, selection background
 @selfg:#ffffff; // white, selection foreground
 @tip  :#ffffe1; // yellow, background for tooltips
@@ -46,21 +46,22 @@ input,textarea,select,a{outline:0}
 // CodeMirror uses z-indices 1-10
 
 // connect page
-#connect-fieldset{
-  .ui-wrapper{float:left;clear:both}
-  .ui-resizable-e{right:0}
-  .ui-resizable-s{bottom:0}
+@p:5px; // padding
+#cn-page button{font-size:18px;min-width:75px;.tt}
+#cn-lhs,#cn-rhs{position:absolute;top:@p;bottom:@p}
+#cn-lhs{left:@p;width:250px;border-right:solid #888 1px;overflow:hidden}
+#cn-rhs{right:@p;left:2*@p+250px;overflow:auto}
+#cn-fav-btns{position:absolute;top:0;left:0;right:@p;height:32px;overflow:hidden;width:9999px}
+#cn-dialog .visual-distraction{margin:50px}
+#cn-fav-cb-wr{line-height:32px}
+#cn-favs{
+  .inset;border-width:2px;border-style:solid;overflow:auto;position:absolute;left:0;right:@p;top:32px;bottom:0;padding:2px;
+  &>*{padding:2px 2px 2px 16px;margin-bottom:1px;background-color:#fff;cursor:default}
+  .list-selection{&,& a{.sel}}
+  .list-focus{outline:dotted #000 1px}
+  .go{padding:0 2px}
+  .go:hover{background-color:orange;color:#000;cursor:pointer}
 }
-#fav-buttons{margin-bottom:5px} // "About", "Connect", "New", and "Delete"
-#about{float:right}
-#fav-list{
-  .inset;border-style:solid;border-width:1px;background-color:white
-  width:400px;height:150px;overflow-x:hidden;overflow-y:auto;margin:0 12px 0 0
-}
-#fav-host,#fav-port,#listen-port,#spawn-port,#fav-list,#spawn-exe{.tt}
-#spawn-exe-w{position:absolute;left:60px;right:20px;margin-top:-5px}
-#spawn-exe{width:100%}
-#fav-details{display:inline-block}
 
 // IDE page
 //  ┌──────────────────────────────────────┐
@@ -328,17 +329,11 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
   &.shortcuts-dup{border-color:red;background-color:red;color:white}
 }
 .shortcuts-del{
-  background-color:#799;color:#fff;text-decoration:none;border-top-left-radius:0;border-bottom-left-radius:0
+  background-color:#799;color:#fff;text-decoration:none;border-top-left-radius:0;border-bottom-left-radius:0;
   &:hover{background-color:red;border-color:#800}
 }
-.shortcuts-add{
-  background-color:#799;color:#fff;text-decoration:none;
-  &:hover{background-color:#080;border-color:#040}
-}
-.shortcuts-reset{
-  background-color:#799;color:#fff;text-decoration:none;
-  &:hover{background-color:#a80;border-color:#540}
-}
+.shortcuts-add  {background-color:#799;color:#fff;text-decoration:none;&:hover{background-color:#080;border-color:#040}}
+.shortcuts-reset{background-color:#799;color:#fff;text-decoration:none;&:hover{background-color:#a80;border-color:#540}}
 .shortcuts-input{background-color:#ace}
 
 #code-aim{margin-left:48px}
@@ -371,7 +366,6 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
   -webkit-animation-play-state:running       ;animation-play-state:running;
   background:linear-gradient(90deg,transparent 0%,blue 50%,transparent 100%)
 }
-.connect-dialog .visual-distraction{margin:50px}
 
 #demo-keys{
   position:fixed;top:10px;right:10px;

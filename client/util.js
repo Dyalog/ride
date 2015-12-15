@@ -34,3 +34,9 @@ $.fn.insert=function(s){ // replace selection in an <input> or <textarea> with s
     }
   })
 }
+$.fn.elastic=function(){ // as you type in an <input>, it stretches as much as necessary
+  return this.each(function(){
+    var e=this, n, m=+e.size||1 // n:current size, m:min size
+    $(e).on('keypress keyup change',function(){var l=e.value.length+1;l=l<m?m:l;if(n!==l)e.size=n=l}).change()
+  })
+}

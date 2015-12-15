@@ -8,5 +8,68 @@
 	<style id=col-style></style>
 	<style id=col-sample-style></style>
 </head>
-<body><noscript>JavaScript is not enabled.</noscript></body>
+<body>
+<noscript>JavaScript is not enabled.</noscript>
+
+<div id=cn-page>
+	<div id=cn-lhs>
+		<div id=cn-fav-btns>
+			<button id=cn-new   data-accesskey=n><u>N</u>ew</button>
+			<button id=cn-clone data-accesskey=c><u>C</u>lone</button>
+			<button id=cn-del   data-accesskey=d><u>D</u>elete</button>
+		</div>
+		<div id=cn-favs></div>
+	</div>
+	<div id=cn-rhs>
+		<p><label id=cn-fav-cb-wr><input id=cn-fav-cb type=checkbox data-accesskey=r><u>R</u>emember connection</label>
+			<label id=cn-fav-name-wr data-accesskey=a> <u>a</u>s <input id=cn-fav-name placeholder='connection name'></label>
+		<p>Connection <u>t</u>ype:
+			<select id=cn-type data-accesskey=t>
+				<option value=ssl>Connect to an interpreter using SSL (encrypted)
+				<option value=tcp>Connect to an interpreter (unencrypted)
+				<option value=spawn>Start a local interpreter
+				<option value=ssh>Start a remote interpreter through ssh
+				<option value=listen>Listen for connections from interpreters
+			</select>
+		<hr>
+		<div id=cn-detail>
+			<div id=cn-ssl style=display:none>
+				<p><u>H</u>ost and <u>p</u>ort:
+					<input name=host data-accesskey=h placeholder=host size=12> :
+					<input name=port data-accesskey=p placeholder=port size=4 value=443>
+				<p>C<u>e</u>rtificate:
+					<input name=cert data-accesskey=e type=file>
+			</div>
+			<div id=cn-tcp style=display:none>
+				<p><u>H</u>ost and <u>p</u>ort:
+					<input name=host data-accesskey=h placeholder=host size=12> :
+					<input name=port data-accesskey=p placeholder=port size=4 value=4502>
+			</div>
+			<div id=cn-spawn style=display:none>
+				<p><u>I</u>nterpreter:
+					<select id=cn-exes name=exes data-accesskey=i></select>
+					<input id=cn-exe name=exe placeholder='path to executable'>
+				<p>Environment variables:
+					<table>
+						<tr><td><input value=AUTOPW><td><input value=1 >
+						<tr><td><input value=MAXWS ><td><input value=4G>
+						<tr><td><input value=      ><td><input value=  >
+					</table>
+			</div>
+			<div id=cn-ssh style=display:none>
+				<p><u>U</u>ser, <u>h</u>ost and <u>p</u>ort:
+					<input name=user data-accesskey=u placeholder=user size=8> @
+					<input name=host data-accesskey=h placeholder=host size=12> :
+					<input name=port data-accesskey=p placeholder=port size=4 value=22>
+			</div>
+			<div id=cn-listen style=display:none>
+				<p><u>P</u>ort:
+					<input name=port data-accesskey=p placeholder=port size=4 value=22>
+			</div>
+		</div>
+		<p><button id=cn-go data-accesskey=g><u>G</u>o</button>
+	</div>
+</div>
+
+</body>
 </html>

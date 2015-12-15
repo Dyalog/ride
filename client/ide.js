@@ -252,7 +252,7 @@ this.IDE.prototype={
       var p=ee['debugger']?prefs.posTracer():prefs.posEditor()
       if(!p[4]){var delta=32*(ee.token-1);p[0]+=delta;p[1]+=delta}
       var ph={x:p[0],y:p[1],width:p[2],height:p[3]}
-      var url='index.html?win='+w+'&x='+p[0]+'&y='+p[1]+'&width='+p[2]+
+      var url='ed.html?win='+w+'&x='+p[0]+'&y='+p[1]+'&width='+p[2]+
               '&height='+p[3]+'&maximized='+(p[4]||0)+'&token='+w+'&tracer='+(+!!ee['debugger'])
       if(D.open(url,$.extend({title:ee.name},ph))){
         this.block() // the popup will create D.wins[w] and unblock the message queue
