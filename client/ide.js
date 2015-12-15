@@ -76,7 +76,7 @@ this.IDE=function(){
     NotificationMessage:function(x){$.alert(x.message,'Notification')},
     UpdateDisplayName:function(a){ide.wsid=a.displayName;ide.updateTitle()},
     EchoInput:function(x){ide.wins[0].add(x.input)},
-    AppendSessionOutput:function(x){ide.wins[0].add(x.result)},
+    AppendSessionOutput:function(x){var r=x.result;ide.wins[0].add(typeof r==='string'?r:r.join('\n'))},
     NotAtInputPrompt:function(){ide.wins[0].prompt(0)},
     AtInputPrompt:function(x){
       ide.pending.length?ide.emit('Execute',{trace:0,text:ide.pending.shift()+'\n'}):ide.wins[0].prompt(x.why)
