@@ -141,7 +141,7 @@ module.exports=function(opts){
     if(port<1||0xffff<port){
       $.alert('Invalid port','Error',function(){$listenPort.focus();return false})
     }else{
-      D.socket.emit('*listen',{host:host||'::',port:port})
+      D.socket.emit('*listen',{host:host,port:port})
       $listenDlg=$(
         '<div class=listen>'+
           '<div class=visual-distraction></div>'+
@@ -151,9 +151,9 @@ module.exports=function(opts){
                 ?((proxyInfo.ipAddresses||[]).length?proxyInfo.ipAddresses||[]:['host']).map(function(h){
                   if(h.includes(':'))h='['+h+']'
                   return'<div class=tt>RIDE_INIT=\'CONNECT:'+h+':'+port+'\'</div>'
-                }).join('or')+
-                :"<div class=tt>RIDE_INIT='CONNECT:"+host+":"+port+"'"
-            )
+                }).join('or')
+                :"<div class=tt>RIDE_INIT='CONNECT:"+(host.includes(':')?'['+host+']':host)+":"+port+"'"
+            )+
           ' in its environment, so it connects here.'+
         '</div>'
       ).dialog({modal:1,width:450,title:'Waiting for connection...',close:function(){D.socket.emit('*listenCancel')},
@@ -202,7 +202,7 @@ module.exports=function(opts){
     .emit('*getProxyInfo')
   $('#fav-list').resizable({handles:'s,e'})
   return{
-    listen:function(port){$listenHost.val('::');port&&$listenPort.val(port);$listen.click()},
+    listen:function(port){port&&$listenPort.val(port);$listen.click()},
     connect:function(s){hp=parseFav(s);D.socket.emit('*connect',{host:hp.host,port:hp.port||DEFAULT_PORT})}
   }
 }

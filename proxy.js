@@ -314,7 +314,7 @@ this.Proxy=function(){
           toBrowser('*connected',{host:remoteHost,port:x.port});setUpInterpreterConnection()
         })
         server.on('error',function(err){server=null;toBrowser('*listenError',{err:''+err})})
-        server.listen(x.port,x.host||'::',function(){
+        server.listen(x.port,x.host||'',function(){
           log('listening for connections from interpreter on port '+x.port);x.callback&&x.callback()
         })
       })
