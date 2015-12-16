@@ -216,7 +216,8 @@ this.Editor.prototype={
   setReadOnly:function(x){this.cm.setOption('readOnly',x)},
   updateSize:function(){var $p=this.$e;this.cm.setSize($p.width(),$p.height()-28)},
   open:function(ee){ // ee:editable entity
-    var cm=this.cm;cm.setValue(this.oText=ee.text);cm.clearHistory()
+    this.oText=typeof ee.text==='string'?ee.text:ee.text.join('\n') // todo: clean up after transition to json protocol
+    var cm=this.cm;cm.setValue(this.oText);cm.clearHistory()
     if(D.mac){cm.focus();window.focus()}
     // entityType:             5 NestedArray        10 AplClass
     //  1 DefinedFunction      6 QuadORObject       11 AplInterface
@@ -229,7 +230,7 @@ this.Editor.prototype={
     var line=ee.currentRow,col=ee.currentColumn||0
     if(line===0&&col===0&&ee.text.indexOf('\n')<0)col=ee.text.length
     cm.setCursor(line,col);cm.scrollIntoView(null,this.$e.height()/2)
-    this.oStop=ee.lineAttributes.stop.slice(0).sort(function(x,y){return x-y})
+    this.oStop=((ee.lineAttributes||{}).stop||[]).slice(0).sort(function(x,y){return x-y})
     for(var k=0;k<this.oStop.length;k++)cm.setGutterMarker(this.oStop[k],'breakpoints',this.createBPElement())
     D.floating&&$('title',this.$e[0].ownerDocument).text(ee.name)
   },

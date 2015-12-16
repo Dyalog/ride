@@ -99,7 +99,7 @@ this.IDE=function(){
     ShowHTML:ide.showHTML.bind(ide),
     ShowDialog:function(x){
       var i=-1;function f(e){i=$(e.target).closest('.ui-button').index();$(this).dialog('close')} // i:clicked index
-      $('<p>').text(x.text).dialog({
+      $('<p>').text(typeof x.text==='string'?x.text:x.text.join('\n')).dialog({ // todo: clean up after transition to json protocol
         modal:1,title:x.title,buttons:x.options.map(function(s){return{text:s,click:f}}),
         close:function(){ide.emit('DialogResult',{index:i,token:x.token})}
       })
