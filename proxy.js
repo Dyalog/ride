@@ -258,7 +258,8 @@ this.Proxy=function(){
         cmd('GetAutoComplete','<line>'+b64(x.line)+'</line><pos>'+x.pos+'</pos><token>'+x.token+'</token>')
       })
       .on('SaveChanges',function(x){
-        cmd('SaveChanges','<win>'+x.win+'</win><Text>'+b64(x.text)+'</Text>'+fmtLineAttrs(x.text.split('\n').length,x.attributes))
+        var s=typeof x.text==='string'?x.text:x.text.join('\n')
+        cmd('SaveChanges','<win>'+x.win+'</win><Text>'+b64(s)+'</Text>'+fmtLineAttrs(x.text.split('\n').length,x.attributes))
       })
       .on('SetLineAttributes',function(x){
         cmd('SetLineAttributes','<win>'+x.win+'</win>'+fmtLineAttrs(x.nLines,x.lineAttributes))

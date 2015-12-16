@@ -269,7 +269,7 @@ this.Editor.prototype={
       var v=cm.getValue(),stop=this.getStops()
       if(v!==this.oText||''+stop!==''+this.oStop){
         for(var i=0;i<stop.length;i++)cm.setGutterMarker(stop[i],'breakpoints',null)
-        this.emit('SaveChanges',{win:this.id,text:cm.getValue(),attributes:{stop:stop}})
+        this.emit('SaveChanges',{win:this.id,text:cm.getValue().split('\n'),attributes:{stop:stop}})
       }else{
         this.emit('CloseWindow',{win:this.id})
       }
