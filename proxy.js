@@ -145,7 +145,7 @@ this.Proxy=function(){
   function toInterpreter(s){
     if(client){
       log('to interpreter:'+trunc(JSON.stringify(s)))
-      var b=Buffer(s.length+8);b.writeInt32BE(b.length,0);b.write('RIDE'+s,4);client.write(b)
+      var b=Buffer('xxxxRIDE'+s,'utf8');b.writeInt32BE(b.length-8,0);client.write(b)
     }
   }
   function cmd(c,h){ // c:command name, h:arguments as a JS object
