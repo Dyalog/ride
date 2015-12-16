@@ -58,7 +58,7 @@ module.exports=function(opts){
     '</fieldset>'+
     '<fieldset>'+
       '<legend>Listen for connections from interpreter </legend>'+
-      '<p>Address: <input id=listen-host class=text-field value="::"> :'+
+      '<p>Address: <input id=listen-host class=text-field> :'+
          '<input id=listen-port class=text-field value='+DEFAULT_PORT+' size=5>'+
       '<p><a href=# id=listen accessKey=l><u>L</u>isten</a>'+
     '</fieldset>'
@@ -141,14 +141,19 @@ module.exports=function(opts){
     if(port<1||0xffff<port){
       $.alert('Invalid port','Error',function(){$listenPort.focus();return false})
     }else{
-      D.socket.emit('*listen',{host:host,port:port})
+      D.socket.emit('*listen',{host:host||'::',port:port})
       $listenDlg=$(
         '<div class=listen>'+
           '<div class=visual-distraction></div>'+
           'Please start the remote interpreter with<br>'+
-            ((proxyInfo.ipAddresses||[]).length?proxyInfo.ipAddresses||[]:['host']).map(function(h){
-              return'<div class=tt>RIDE_INIT=\'CONNECT:'+h+':'+port+'\'</div>' // todo: ipv6?
-            }).join('or')+
+            (
+              !host||host==='::'||host==='0.0.0.0'
+                ?((proxyInfo.ipAddresses||[]).length?proxyInfo.ipAddresses||[]:['host']).map(function(h){
+                  if(h.includes(':'))h='['+h+']'
+                  return'<div class=tt>RIDE_INIT=\'CONNECT:'+h+':'+port+'\'</div>'
+                }).join('or')+
+                :"<div class=tt>RIDE_INIT='CONNECT:"+host+":"+port+"'"
+            )
           ' in its environment, so it connects here.'+
         '</div>'
       ).dialog({modal:1,width:450,title:'Waiting for connection...',close:function(){D.socket.emit('*listenCancel')},
