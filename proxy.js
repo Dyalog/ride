@@ -259,7 +259,7 @@ this.Proxy=function(){
       })
       .on('SaveChanges',function(x){
         var s=typeof x.text==='string'?x.text:x.text.join('\n')
-        cmd('SaveChanges','<win>'+x.win+'</win><Text>'+b64(s)+'</Text>'+fmtLineAttrs(x.text.split('\n').length,x.attributes))
+        cmd('SaveChanges','<win>'+x.win+'</win><Text>'+b64(s)+'</Text>'+fmtLineAttrs(s.split('\n').length,x.attributes))
       })
       .on('SetLineAttributes',function(x){
         cmd('SetLineAttributes','<win>'+x.win+'</win>'+fmtLineAttrs(x.nLines,x.lineAttributes))
