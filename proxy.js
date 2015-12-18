@@ -150,6 +150,8 @@ this.Proxy=function(){
   }
   function cmd(c,h){ // c:command name, h:arguments as a JS object
     if(json){
+      if(h&&h.attributes    ){for(var k in h.attributes    ){h[k]=h.attributes[k]};delete h.attributes    } // todo
+      if(h&&h.lineAttributes){for(var k in h.lineAttributes){h[k]=h.attributes[k]};delete h.lineAttributes} // todo
       toInterpreter(JSON.stringify([c,h||{}]))
     }else{
       toInterpreter('<Command><cmd>'+c+'</cmd><id>0</id><args><'+c+'>'+(h||'')+'</'+c+'></args></Command>')
@@ -166,7 +168,12 @@ this.Proxy=function(){
       while(queue.length>=4&&(n=queue.readInt32BE(0))<=queue.length){
         var m=''+queue.slice(8,n);queue=queue.slice(n);log('from interpreter:'+trunc(JSON.stringify(m)))
         if(m[0]==='{'||m[0]==='['){ // let JSON-encoded messages through
-          log('to browser (JSON):'+trunc(m));var u=JSON.parse(m);socket&&socket.emit(u[0],u[1])
+          log('to browser (JSON):'+trunc(m));var u=JSON.parse(m)
+          var h=u[1] // todo
+          if(h&&(h.stop||h.monitor||h.trace)){
+            h.attributes=h.lineAttributes={stop:h.stop||[],monitor:h.monitor||[],trace:h.trace||[]}
+          }
+          socket&&socket.emit(u[0],u[1])
         }else if(!/^(?:SupportedProtocols|UsingProtocol)=1$/.test(m)){ // ignore the handshake (SupportedProtocols, etc)
           switch(m.slice(1,m.indexOf('>'))){
             case'ReplyConnect':case'ReplyEdit':case'ReplySetLineAttributes':case'ReplyWeakInterrupt':
