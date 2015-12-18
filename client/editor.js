@@ -230,7 +230,7 @@ this.Editor.prototype={
     var line=ee.currentRow,col=ee.currentColumn||0
     if(line===0&&col===0&&ee.text.indexOf('\n')<0)col=ee.text.length
     cm.setCursor(line,col);cm.scrollIntoView(null,this.$e.height()/2)
-    this.oStop=((ee.lineAttributes||{}).stop||[]).slice(0).sort(function(x,y){return x-y})
+    this.oStop=(ee.stop||[]).slice(0).sort(function(x,y){return x-y})
     for(var k=0;k<this.oStop.length;k++)cm.setGutterMarker(this.oStop[k],'breakpoints',this.createBPElement())
     D.floating&&$('title',this.$e[0].ownerDocument).text(ee.name)
   },
@@ -269,7 +269,7 @@ this.Editor.prototype={
       var v=cm.getValue(),stop=this.getStops()
       if(v!==this.oText||''+stop!==''+this.oStop){
         for(var i=0;i<stop.length;i++)cm.setGutterMarker(stop[i],'breakpoints',null)
-        this.emit('SaveChanges',{win:this.id,text:cm.getValue().split('\n'),attributes:{stop:stop}})
+        this.emit('SaveChanges',{win:this.id,text:cm.getValue().split('\n'),stop:stop})
       }else{
         this.emit('CloseWindow',{win:this.id})
       }
@@ -379,9 +379,7 @@ this.Editor.prototype={
   MA:function(){this.emit('RestartThreads',{win:this.id})},
   CBP:function(){ // Clear trace/stop/monitor for this object
     var n=this.cm.lineCount();for(var i=0;i<n;i++)this.cm.setGutterMarker(i,'breakpoints',null)
-    this.isTracer&&this.emit('SetLineAttributes',{
-      win:this.id,nLines:n,lineAttributes:{stop:this.getStops(),trace:[],monitor:[]}
-    })
+    this.isTracer&&this.emit('SetLineAttributes',{win:this.id,nLines:n,stop:this.getStops(),trace:[],monitor:[]})
   },
   BP:function(cm){ // toggle breakpoint
     var sels=cm.listSelections()
@@ -392,9 +390,7 @@ this.Editor.prototype={
         (cm.getLineHandle(l).gutterMarkers||{}).breakpoints?null:this.createBPElement()
       )
     }
-    this.isTracer&&this.emit('SetLineAttributes',{
-      win:this.id,nLines:cm.lineCount(),lineAttributes:{stop:this.getStops()}
-    })
+    this.isTracer&&this.emit('SetLineAttributes',{win:this.id,nLines:cm.lineCount(),stop:this.getStops()})
   },
   RD:function(cm){
     if(cm.somethingSelected())cm.execCommand('indentAuto')

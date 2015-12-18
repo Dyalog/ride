@@ -242,7 +242,7 @@ this.IDE.prototype={
     var ide=this
     if(!ee['debugger']&&D.openInExternalEditor){
       D.openInExternalEditor(ee,function(s){
-        ide.emit('SaveChanges',{win:ee.token,text:s.split('\n'),attributes:ee.lineAttributes})
+        ide.emit('SaveChanges',{win:ee.token,text:s.split('\n'),stop:ee.stop,trace:ee.trace,monitor:ee.monitor})
         ide.emit('CloseWindow',{win:ee.token})
       })
       return

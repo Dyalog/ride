@@ -55,8 +55,6 @@ this.Proxy=function(){
     }
   }
   function cmd(c,h){ // c:command name, h:arguments as a JS object
-    if(h&&h.attributes    ){for(var k in h.attributes    ){h[k]=h.attributes    [k]};delete h.attributes    } // todo
-    if(h&&h.lineAttributes){for(var k in h.lineAttributes){h[k]=h.lineAttributes[k]};delete h.lineAttributes} // todo
     toInterpreter(JSON.stringify([c,h||{}]))
   }
   function toBrowser(x,y){log('to browser:'+trunc(JSON.stringify([x,y])));socket&&socket.emit(x,y)}
@@ -71,10 +69,6 @@ this.Proxy=function(){
         var m=''+queue.slice(8,n);queue=queue.slice(n);log('from interpreter:'+trunc(JSON.stringify(m)))
         if(m[0]!=='[')continue // ignore handshake
         log('to browser:'+trunc(m));var u=JSON.parse(m)
-        var h=u[1] // todo
-        if(h&&(h.stop||h.monitor||h.trace)){
-          h.attributes=h.lineAttributes={stop:h.stop||[],monitor:h.monitor||[],trace:h.trace||[]}
-        }
         socket&&socket.emit(u[0],u[1])
       }
     })
