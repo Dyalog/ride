@@ -1,15 +1,15 @@
 #!/bin/bash
 set -e -o pipefail
-export PATH="`dirname "$0"`/node_modules/.bin:$PATH"
-cd `dirname "$0"`
+export PATH="$(dirname "$0")/node_modules/.bin:$PATH"
+cd "$(dirname "$0")"
 if [ ! -e node_modules ]; then npm i; fi
 mkdir -p build/{js/client,nw,tmp,static}
 
-cp -uvr {index,empty,print}.html proxy.js style/{*.png,apl385.woff,img} favicon.ico package.json build/nw/
-cp -uv client/*.js build/js/client/
+cp -uvr *.html proxy.js style/{*.png,apl385.woff,img} favicon.ico package.json build/nw/
+cp -uvr client build/js/
 
 i=style/style.less o=build/nw/style.css
-if [ ! -e $o -o $(find `dirname $i` -type f -newer $o 2>/dev/null | wc -l) -gt 0 ]; then
+if [ ! -e $o -o $(find "$(dirname $i)" -type f -newer $o 2>/dev/null | wc -l) -gt 0 ]; then
   echo 'preprocessing css'; lessc $i >$o
 fi
 
