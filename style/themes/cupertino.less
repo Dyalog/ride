@@ -8,6 +8,25 @@
 @cupertino-text       :#333;
 @cupertino-highlight  :#6a6a6a;
 @cupertino-titlebar   :#cfcfcf;
+
+// mixins
+.border-radius-left(@r){
+  -webkit-border-top-left-radius    :@r;
+  -webkit-border-bottom-left-radius :@r;
+  -moz-border-radius-topleft        :@r;
+  -moz-border-radius-bottomleft     :@r;
+  border-top-left-radius            :@r;
+  border-bottom-left-radius         :@r;
+}
+.border-radius-right(@r){
+  -webkit-border-top-right-radius   :@r;
+  -webkit-border-bottom-right-radius:@r;
+  -moz-border-radius-topright       :@r;
+  -moz-border-radius-bottomright    :@r;
+  border-top-right-radius           :@r;
+  border-bottom-right-radius        :@r;
+}
+
 .theme-cupertino{
   background-color:@cupertino-bg;color:@cupertino-text;
   ::selection{background-color:@cupertino-orange}
