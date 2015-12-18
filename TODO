@@ -1,3 +1,5 @@
+* The StrongInterrupt test is failing.
+
 Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nice)
   M1 adoption of the new protocol
        http://wiki.dyalog.bramley/index.php/Ride_protocol_messages_V2#Extensions
