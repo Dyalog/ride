@@ -12,7 +12,7 @@ desktop_app() {
       .build().catch(function(e){console.error(e);process.exit(1)})
 .
 }
-desktop_app ${@:-win osx linux}
+desktop_app ${@:-win32 win64 osx64 linux64}
 
 # workaround for https://github.com/mllrsohn/grunt-node-webkit-builder/issues/125
 # Replace icons on OS X & Windows
