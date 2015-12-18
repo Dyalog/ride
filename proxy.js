@@ -150,8 +150,8 @@ this.Proxy=function(){
   }
   function cmd(c,h){ // c:command name, h:arguments as a JS object
     if(json){
-      if(h&&h.attributes    ){for(var k in h.attributes    ){h[k]=h.attributes[k]};delete h.attributes    } // todo
-      if(h&&h.lineAttributes){for(var k in h.lineAttributes){h[k]=h.attributes[k]};delete h.lineAttributes} // todo
+      if(h&&h.attributes    ){for(var k in h.attributes    ){h[k]=h.attributes    [k]};delete h.attributes    } // todo
+      if(h&&h.lineAttributes){for(var k in h.lineAttributes){h[k]=h.lineAttributes[k]};delete h.lineAttributes} // todo
       toInterpreter(JSON.stringify([c,h||{}]))
     }else{
       toInterpreter('<Command><cmd>'+c+'</cmd><id>0</id><args><'+c+'>'+(h||'')+'</'+c+'></args></Command>')
