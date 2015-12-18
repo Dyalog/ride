@@ -1,7 +1,5 @@
 'use strict'
-var fs=require('fs'),net=require('net'),os=require('os'),path=require('path'),
-    cp=require('child_process'),spawn=cp.spawn,exec=cp.exec
-
+var fs=require('fs'),net=require('net'),os=require('os'),path=require('path'),cp=require('child_process')
 var log=this.log=(function(){
   var t0=+new Date, // timestamps will be number of milliseconds since t0
       N=500,T=1000, // record no more than N log messages per T milliseconds
@@ -30,15 +28,8 @@ log.listeners=[]
     log.listeners.push(function(s){a[i++]=s;i%=a.length})
   }
 }())
-
-var json=process.env.DYALOG_IDE_PROTOCOL==='JSON'
-
-function b64(s){return Buffer(s).toString('base64')} // base64 encode
-function b64d(s){return''+Buffer(s,'base64')}        // base64 decode
-function tag(t,x){return(RegExp('^[^]*<'+t+'>([^<]*)</'+t+'>[^]*$').exec(x)||[])[1]} // extract tag t from xml string x
 function addr(x){return x&&(x=x.request)&&(x=x.connection)&&x.remoteAddress||'IDE'} // human-readable repr of socket x
-function extend(x,y){for(var k in y)x[k]=y[k];return x}
-
+function trunc(s){return s.length>1000?s.slice(0,997)+'...':s}
 var ipAddresses=[]
 ;(function(){
   try{
@@ -51,97 +42,12 @@ var ipAddresses=[]
     log('cannot determine ip addresses: '+e)
   }
 })()
-
-// Constants for entityType:
-//                       protocol
-//                        v1  v2
-//   DefinedFunction       1   1
-//   SimpleCharArray       2   2
-//   SimpleNumericArray    4   3
-//   MixedSimpleArray      8   4
-//   NestedArray          16   5
-//   QuadORObject         32   6
-//   NativeFile           64   7
-//   SimpleCharVector    128   8
-//   AplNamespace        256   9
-//   AplClass            512  10
-//   AplInterface       1024  11
-//   AplSession         2048  12
-//   ExternalFunction   4096  13
-var entityTypeTranslation=[1,2,4,8,16,32,64,128,256,512,1024,2048,4096]
-function parseEditableEntity(xml){ // used for OpenWindow and UpdateWindow
-  // v1 sample message:
-  //   <ReplyUpdateWindow>
-  //     <entity>
-  //       <name>bnM=</name>
-  //       <text>Ok5hbWVzcGFjZSBucwogICAg4oiHIGYKICAgICAgMQogICAg4oiHCiAgICDiiIcgZwogICAgICAyCiAgICDiiIcKOkVuZE5hbWVzcGFjZQ==</text>
-  //       <cur_pos>4</cur_pos>
-  //       <token>1</token>
-  //       <bugger>0</bugger>
-  //       <sub_offset>0</sub_offset>
-  //       <sub_size>0</sub_size>
-  //       <type>256</type>
-  //       <ReadOnly>0</ReadOnly>
-  //       <tid>0</tid>
-  //       <tid_name>MA==</tid_name>
-  //       <colours>ra2tra2tra2trQMHBwADAwMDtAMVAAMDAwMDAwUAAwMDA7QAAwMDA7QDFQADAwMDAwMFAAMDAwO0AK6urq6urq6urq6urq4A</colours>
-  //       <attributes></attributes>
-  //     </entity>
-  //   </ReplyUpdateWindow>
-  // v2 spec from http://wiki.dyalog.bramley/index.php/Ride_protocol_messages_V2#Extended_types
-  //   EditableEntity => [string name, string text, int token,
-  //                      byte[] colours, int currentRow, int currentColumn,
-  //                      int subOffset, int subSize, bool debugger,
-  //                      int tid, bool readonly, string tidName,
-  //                      entityType type, lineAttributes attributes]
-  //   lineAttributes => lineAttribute[int[] stop, int[] monitor, int[] trace]
-  var las={stop:[],monitor:[],trace:[]} // line attributes
-  var la // one of las.stop, las.monitor, las.trace
-  xml.replace(/<attribute>(\w+)<\/attribute>|<row>(\d+)<\/row><value>1<\/value>/g,
-              function(_,a,l){a?(la=las[a.toLowerCase()]):la.push(+l);return''})
-  return{
-    token:+tag('token',xml),
-    name:b64d(tag('name',xml)),
-    currentRow:+tag('cur_pos',xml)||0,
-    "debugger":+tag('bugger',xml),
-    readOnly:!!+tag('readonly',xml),
-    entityType:1+entityTypeTranslation.indexOf(+tag('type',xml)),
-    lineAttributes:las,
-    text:b64d(tag('text',xml))
-  }
-}
-
-var WHIES=['Invalid','Descalc','QuadInput','LineEditor','QuoteQuadInput','Prompt'] // consts used in ReplyAtInputPrompt
-
-var STM=['Stop','Trace','Monitor']
-function fmtLineAttrs(nLines,attrs){
-  var r='<attributes>'
-  for(var i=0;i<STM.length;i++){
-    var k=STM[i],a=attrs[k.toLowerCase()]
-    if(a){
-      r+='<LineAttribute><attribute>'+k+'</attribute><values>'
-      for(var l=0;l<nLines;l++)
-        r+='<LineAttributeValue><row>'+l+'</row><value>'+(+(a.indexOf(l)>=0))+'</value></LineAttributeValue>'
-      r+='</values></LineAttribute>'
-    }
-  }
-  return r+='</attributes>'
-}
-
-function trunc(s){return s.length>1000?s.slice(0,997)+'...':s}
-
 this.Proxy=function(){
   log(new Date().toISOString())
   var client, // TCP connection to interpreter
       socket, // socket.io connection to the browser that's currently driving
       child,  // a ChildProcess object, the result from spawn()
       server  // used to listen for connections from interpreters
-
-  // This is a hack to avoid flicker when leaning on TC.
-  // The interpreter sends an extra ReplyFocusWindow with win=0 (the session) after a StepInto or RunCurrentLine.
-  // TODO: Remove it once there's a fix in the interpreter.
-  var ignoreNextAttemptsToFocusSession=0
-
   function toInterpreter(s){
     if(client){
       log('to interpreter:'+trunc(JSON.stringify(s)))
@@ -149,13 +55,9 @@ this.Proxy=function(){
     }
   }
   function cmd(c,h){ // c:command name, h:arguments as a JS object
-    if(json){
-      if(h&&h.attributes    ){for(var k in h.attributes    ){h[k]=h.attributes    [k]};delete h.attributes    } // todo
-      if(h&&h.lineAttributes){for(var k in h.lineAttributes){h[k]=h.lineAttributes[k]};delete h.lineAttributes} // todo
-      toInterpreter(JSON.stringify([c,h||{}]))
-    }else{
-      toInterpreter('<Command><cmd>'+c+'</cmd><id>0</id><args><'+c+'>'+(h||'')+'</'+c+'></args></Command>')
-    }
+    if(h&&h.attributes    ){for(var k in h.attributes    ){h[k]=h.attributes    [k]};delete h.attributes    } // todo
+    if(h&&h.lineAttributes){for(var k in h.lineAttributes){h[k]=h.lineAttributes[k]};delete h.lineAttributes} // todo
+    toInterpreter(JSON.stringify([c,h||{}]))
   }
   function toBrowser(x,y){log('to browser:'+trunc(JSON.stringify([x,y])));socket&&socket.emit(x,y)}
   function setUpInterpreterConnection(){
@@ -167,115 +69,26 @@ this.Proxy=function(){
       var n
       while(queue.length>=4&&(n=queue.readInt32BE(0))<=queue.length){
         var m=''+queue.slice(8,n);queue=queue.slice(n);log('from interpreter:'+trunc(JSON.stringify(m)))
-        if(m[0]==='{'||m[0]==='['){ // let JSON-encoded messages through
-          log('to browser (JSON):'+trunc(m));var u=JSON.parse(m)
-          var h=u[1] // todo
-          if(h&&(h.stop||h.monitor||h.trace)){
-            h.attributes=h.lineAttributes={stop:h.stop||[],monitor:h.monitor||[],trace:h.trace||[]}
-          }
-          socket&&socket.emit(u[0],u[1])
-        }else if(!/^(?:SupportedProtocols|UsingProtocol)=1$/.test(m)){ // ignore the handshake (SupportedProtocols, etc)
-          switch(m.slice(1,m.indexOf('>'))){
-            case'ReplyConnect':case'ReplyEdit':case'ReplySetLineAttributes':case'ReplyWeakInterrupt':
-            case'ReplyStrongInterrupt':case'ReplyUnknownRIDECommand':
-              break // ignore the above commands
-            case'ReplySaveChanges':
-              toBrowser('ReplySaveChanges',{win:+tag('win',m),err:+tag('err',m)});break
-            case'ReplyWindowTypeChanged':
-              var win=+tag('Win',m)
-              win?toBrowser('WindowTypeChanged',{win:win,tracer:!!+tag('bugger',m)})
-                 :log("WARNING:ignoring ReplyWindowTypeChanged message with win="+win)
-              break
-            case'ReplyIdentify':
-              toBrowser('UpdateDisplayName',{displayName:b64d(tag('Project',m))})
-              toBrowser('*identify',{ // should be "Identify"
-                version: tag('Version'     ,m),
-                platform:tag('Platform'    ,m),
-                arch:    tag('Architecture',m),
-                pid:     tag('pid'         ,m),
-                date:    tag('BuildDate'   ,m)
-              })
-              break
-            case'ReplyUpdateWsid':
-              var s=b64d(tag('wsid',m)),s1=s.replace(/\0/g,'')
-              if(s!==s1){log('intepreter sent a wsid containing NUL characters, those will be ignored');s=s1}
-              toBrowser('UpdateDisplayName',{displayName:s})
-              break
-            case'ReplyExecute'         :toBrowser('AppendSessionOutput',{result:b64d(tag('result',m))})    ;break
-            case'ReplyGetLog'          :toBrowser('AppendSessionOutput',{result:b64d(tag('Log',m))})       ;break
-            case'ReplyHadError'        :toBrowser('HadError')                                              ;break
-            case'ReplyEchoInput'       :toBrowser('EchoInput',{input:b64d(tag('input',m))+'\n'})           ;break
-            case'ReplyNotAtInputPrompt':toBrowser('NotAtInputPrompt')                                      ;break
-            case'ReplyAtInputPrompt'   :toBrowser('AtInputPrompt',{why:WHIES.indexOf(tag('why',m))})       ;break
-            case'ReplyOpenWindow'      :toBrowser('OpenWindow',parseEditableEntity(m))                     ;break
-            case'ReplyUpdateWindow'    :toBrowser('UpdateWindow',parseEditableEntity(m))                   ;break
-            case'ReplyFocusWindow':
-              var win=+tag('win',m)
-              if(!win&&ignoreNextAttemptsToFocusSession&&!process.env.DYALOG_IDE_DISABLE_FOCUS_WORKAROUND){
-                ignoreNextAttemptsToFocusSession--
-              } else {
-                toBrowser('FocusWindow',{win:win})
-              }
-              break
-            case'ReplyCloseWindow'     :toBrowser('CloseWindow',{win:+tag('win',m)})                       ;break
-            case'ReplyGetAutoComplete':
-              var o=b64d(tag('options',m))
-              toBrowser('autocomplete',{token:+tag('token',m),skip:+tag('skip',m),options:o?o.split('\n'):[]})
-              break
-            case'ReplyHighlightLine'   :toBrowser('highlight',{win:+tag('win',m),line:+tag('line',m)})     ;break
-            case'ReplyDisconnect'      :toBrowser('Disconnect',{message:b64d(tag('msg',m))})               ;break
-            case'ReplySysError'        :toBrowser('SysError',{text:b64d(tag('text',m))})                   ;break
-            case'ReplyInternalError':
-              toBrowser('InternalError',{error:+tag('error',m),dmx:+tag('dmx',m),message:tag('msg',m)})    ;break
-            case'ReplyNotificationMessage':toBrowser('NotificationMessage',{message:tag('msg',m)})         ;break
-            case'ReplyShowHTML':toBrowser('ShowHTML',{title:b64d(tag('title',m)),html:b64d(tag('html',m))});break
-            default:log('unrecognised');toBrowser('unrecognised',m)
-          }
+        if(m[0]!=='[')continue // ignore handshake
+        log('to browser:'+trunc(m));var u=JSON.parse(m)
+        var h=u[1] // todo
+        if(h&&(h.stop||h.monitor||h.trace)){
+          h.attributes=h.lineAttributes={stop:h.stop||[],monitor:h.monitor||[],trace:h.trace||[]}
         }
+        socket&&socket.emit(u[0],u[1])
       }
     })
     // Initial batch of commands sent to interpreter:
     toInterpreter('SupportedProtocols=1');toInterpreter('UsingProtocol=1')
-    cmd('Identify',json?{identity:1}:'<Sender><Process>RIDE.EXE</Process><Proxy>0</Proxy></Sender>')
-    cmd('Connect',json?{remoteId:2}:'<Token/>')
-    cmd('GetWindowLayout')
+    cmd('Identify',{identity:1});cmd('Connect',{remoteId:2});cmd('GetWindowLayout')
   }
   function setUpBrowserConnection(){
     var listen
     var onevent=socket.onevent // intercept all browser-to-proxy events and log them:
     socket.onevent=function(x){
       log('from browser:'+trunc(JSON.stringify(x.data)))
-      return json&&x.data[0][0]!=='*'?cmd(x.data[0],x.data[1]||{}):onevent.apply(socket,[x])
+      return x.data[0][0]!=='*'?cmd(x.data[0],x.data[1]||{}):onevent.apply(socket,[x])
     }
-    json||socket
-      .on('Execute',function(x){cmd('Execute','<Text>'+b64(x.text)+'</Text><Trace>'+(+!!x.trace)+'</Trace>')})
-      .on('Edit',function(x){cmd('Edit','<Text>'+b64(x.text)+'</Text><Pos>'+x.pos+'</Pos><Win>'+x.win+'</Win>')})
-      .on('CloseWindow'   ,function(x){cmd('CloseWindow'        ,'<win>'+x.win+'</win>')})
-      .on('RunCurrentLine',function(x){cmd('DebugRunLine'       ,'<win>'+x.win+'</win>');ignoreNextAttemptsToFocusSession++})
-      .on('StepInto'      ,function(x){cmd('DebugStepInto'      ,'<win>'+x.win+'</win>');ignoreNextAttemptsToFocusSession++})
-      .on('TraceBackward' ,function(x){cmd('DebugBackward'      ,'<win>'+x.win+'</win>')})
-      .on('TraceForward'  ,function(x){cmd('DebugForward'       ,'<win>'+x.win+'</win>')})
-      .on('ContinueTrace' ,function(x){cmd('DebugContinueTrace' ,'<win>'+x.win+'</win>')})
-      .on('Continue'      ,function(x){cmd('DebugContinue'      ,'<win>'+x.win+'</win>')})
-      .on('RestartThreads',function(x){cmd('DebugRestartThreads','<win>'+x.win+'</win>')})
-      .on('Cutback'       ,function(x){cmd('DebugCutback'       ,'<win>'+x.win+'</win>')})
-      .on('WeakInterrupt'  ,function(){cmd('WeakInterrupt'  )})
-      .on('StrongInterrupt',function(){cmd('StrongInterrupt')})
-      .on('GetAutoComplete',function(x){
-        cmd('GetAutoComplete','<line>'+b64(x.line)+'</line><pos>'+x.pos+'</pos><token>'+x.token+'</token>')
-      })
-      .on('SaveChanges',function(x){
-        var s=typeof x.text==='string'?x.text:x.text.join('\n')
-        cmd('SaveChanges','<win>'+x.win+'</win><Text>'+b64(s)+'</Text>'+fmtLineAttrs(s.split('\n').length,x.attributes))
-      })
-      .on('SetLineAttributes',function(x){
-        cmd('SetLineAttributes','<win>'+x.win+'</win>'+fmtLineAttrs(x.nLines,x.lineAttributes))
-      })
-      .on('SetPW',function(x){cmd('SetPW','<pw>'+x.pw+'</pw>')})
-      .on('Exit',function(x){cmd('Exit','<code>'+x.code+'</code>')})
-
-      // "disconnect" is a built-in socket.io event
-      .on('disconnect',function(x){log(addr(this)+' disconnected');socket===this&&(socket=null)})
     socket // proxy management events that don't reach the interpreter start with a '*'
       .on('*connect',function(x){
         client=net.connect({host:x.host,port:x.port},function(){toBrowser('*connected',{host:x.host,port:x.port})})
@@ -299,7 +112,8 @@ this.Proxy=function(){
           var args=['+s','-q'],stdio=['pipe','ignore','ignore']
           if(/^win/i.test(process.platform)){args=[];stdio[0]='ignore'}
           try{
-            child=spawn(exe,args,{stdio:stdio,env:extend(process.env,{RIDE_INIT:'CONNECT:'+hp,RIDE_SPAWNED:'1'})})
+            var h={},H=process.env;for(var k in H)h[k]=H[k];h.RIDE_INIT='CONNECT:'+hp;h.RIDE_SPAWNED='1'
+            child=cp.spawn(exe,args,{stdio:stdio,env:h})
           }catch(e){
             toBrowser('*spawnedError',{code:0,message:''+e});return
           }
@@ -341,7 +155,7 @@ this.Proxy=function(){
         function parseVersion(s){return s.split('.').map(function(x){return+x})}
         if(/^win/.test(process.platform)){
           try {
-            exec('reg query "HKEY_CURRENT_USER\\Software\\Dyalog" /s /v localdyalogdir',{timeout:2000},
+            cp.exec('reg query "HKEY_CURRENT_USER\\Software\\Dyalog" /s /v localdyalogdir',{timeout:2000},
               function(err,s){
                 var bits,edition,version,m
                 if(!err){
@@ -407,5 +221,5 @@ this.Proxy=function(){
   }
 
   // this function is the result from calling Proxy()
-  return function(newSocket){log(addr(newSocket)+' connected');socket=newSocket;setUpBrowserConnection()}
+  return function(x){log(addr(x)+' connected');socket=x;setUpBrowserConnection()}
 }
