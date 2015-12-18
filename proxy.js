@@ -50,7 +50,7 @@ this.Proxy=function(){
       server  // used to listen for connections from interpreters
   function toInterpreter(s){
     if(client){
-      log('to interpreter:'+trunc(JSON.stringify(s)))
+      log('to interpreter:'+trunc(s))
       var b=Buffer('xxxxRIDE'+s);b.writeInt32BE(b.length,0);client.write(b)
     }
   }
@@ -66,7 +66,7 @@ this.Proxy=function(){
       queue=Buffer.concat([queue,data])
       var n
       while(queue.length>=4&&(n=queue.readInt32BE(0))<=queue.length){
-        var m=''+queue.slice(8,n);queue=queue.slice(n);log('from interpreter:'+trunc(JSON.stringify(m)))
+        var m=''+queue.slice(8,n);queue=queue.slice(n);log('from interpreter:'+trunc(m))
         if(m[0]!=='[')continue // ignore handshake
         log('to browser:'+trunc(m));var u=JSON.parse(m)
         socket&&socket.emit(u[0],u[1])
