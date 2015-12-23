@@ -1,32 +1,32 @@
 'use strict'
 require('./jq-list')
 var IDE=require('./ide').IDE,prefs=require('./prefs'),esc=require('./util').esc
+var $sel=$(),sel // sel:selected item, sel: .data('cn') of the selected item (only if it's unique)
+var $d // dialog
 function cmpVersions(x,y){return x[0]-y[0]||x[1]-y[1]||0}
 function isSupported(v){return cmpVersions(v,[14,1])>=0}
-var $sel=$(),sel // sel:selected item, sel: .data('cn') of the selected item (only if it's unique)
-function saveFavs(){prefs.favs($('#cn-favs>*').map(function(){var h=$(this).data('cn');return h.tmp?null:h}).toArray())}
+function save(){prefs.favs($('#cn-favs>*').map(function(){var h=$(this).data('cn');return h.tmp?null:h}).toArray())}
 function favText(x){return x.tmp?'temp':x.name||'new'}
-function renderFav(x){return $('<div><a href=# class=go>'+esc(favText(x))+'</a></div>').data('cn',x)}
+function favDOM(x){return $('<div><a href=# class=go>'+esc(favText(x))+'</a></div>').data('cn',x)}
 function updateFormDetail(){$('#cn-detail>*').hide();$('#cn-'+$('#cn-type').val()).show()}
-var $d // dialog
 module.exports=function(){
   $('#cn-page').show();document.title='RIDE - Connect'
   $('#cn-fav-cb').change(function(){
     var c=this.checked;c?delete sel.tmp:(sel.tmp=1);$sel.find('a').text(favText(sel))
-    $('#cn-fav-name-wr').toggle(c);c&&$('#cn-fav-name').focus();saveFavs()
+    $('#cn-fav-name-wr').toggle(c);c&&$('#cn-fav-name').focus();save()
   })
   $('#cn-fav-name').on('change keyup',function(e){
-    if(sel.name!==this.value){sel.name=this.value;$sel.find('a').text(favText(sel));saveFavs()}
+    if(sel.name!==this.value){sel.name=this.value;$sel.find('a').text(favText(sel));save()}
   })
-  $('#cn-type').change(function(){sel.type=this.value;updateFormDetail();saveFavs()})
+  $('#cn-type').change(function(){sel.type=this.value;updateFormDetail();save()})
   updateFormDetail()
   $('#cn-ssh [name=user]').val(process.env.USER||'')
   $('#cn-exe').on('change keyup',function(){$('#cn-exes').val()||prefs.otherExe($(this).val())})
   $('#cn-exes').change(function(){
     var v=$(this).val(),$e=$('#cn-exe').val(v||prefs.otherExe()).prop('readonly',!!v);v||$e.focus();prefs.selectedExe(v)
   })
-  prefs.favs().forEach(function(x){$('#cn-favs').append(renderFav(x))})
-  $('#cn-favs').list().sortable({cursor:'move',revert:true,axis:'y',stop:saveFavs})
+  prefs.favs().forEach(function(x){$('#cn-favs').append(favDOM(x))})
+  $('#cn-favs').list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
     .on('click','.go',function(e){$('#cn-go').click()}) // todo: setTimeout?
     .keydown(function(e){
       var k=[e.modKey?'Cmd-':'',e.ctrlKey?'Ctrl-':'',e.altKey?'Alt-':'',e.shiftKey?'Shift-':'',
@@ -47,17 +47,18 @@ module.exports=function(){
         $('#cn-type').val(sel.type||'tcp');updateFormDetail()
         $('#cn-fav-cb').prop('checked',!sel.tmp);$('#cn-fav-name').val(sel.name);$('#cn-fav-name-wr').toggle(!sel.tmp)
         $('#cn-rhs [name]').each(function(){$(this).val(sel[this.name])})
+        $('#cn-rhs :text').elastic()
       }
     })
     .list('select',0).find('a').eq(0).focus()
   $('#cn-new').click(function(){
-    var $e=renderFav({});$('#cn-favs').append($e).list('select',$e.index());$('#cn-fav-name').focus()
+    var $e=favDOM({});$('#cn-favs').append($e).list('select',$e.index());$('#cn-fav-name').focus()
   })
   $('#cn-clone').click(function(){
-    renderFav($.extend({},sel)).insertBefore($sel);$sel.find('a').focus();saveFavs();$('#cn-fav-name').focus()
+    favDOM($.extend({},sel)).insertBefore($sel);$sel.find('a').focus();save();$('#cn-fav-name').focus()
   })
   $('#cn-del').click(function(){
-    $('#cn-favs .list-selection').remove();$('#cn-favs').list('select',0,1);$('#cn-favs a').eq(0).focus();saveFavs()
+    $('#cn-favs .list-selection').remove();$('#cn-favs').list('select',0,1);$('#cn-favs a').eq(0).focus();save()
   })
   $('#cn-go').click(go)
   $('#cn-lhs').resizable({handles:'e',resize:function(e,ui){$('#cn-rhs').css({left:ui.size.width+10})}})

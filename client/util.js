@@ -34,9 +34,10 @@ $.fn.insert=function(s){ // replace selection in an <input> or <textarea> with s
     }
   })
 }
-$.fn.elastic=function(){ // as you type in an <input>, it stretches as much as necessary
+$.fn.elastic=function(){ // as you type in an <input>, it stretches as necessary to accommodate the text
   return this.each(function(){
-    var e=this, n, m=+e.size||1 // n:current size, m:min size
-    $(e).on('keypress keyup change',function(){var l=e.value.length+1;l=l<m?m:l;if(n!==l)e.size=n=l}).change()
+    var m=$(this).data('minSize')
+    m||$(this).data('minSize',m=+this.size||1).on('keyup keypress change',function(){$(this).elastic()})
+    this.size=Math.max(m,this.value.length+1)
   })
 }
