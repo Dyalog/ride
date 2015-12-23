@@ -1,14 +1,14 @@
 'use strict'
-require('./jq-list')
-var IDE=require('./ide').IDE,prefs=require('./prefs'),esc=require('./util').esc
-var $sel=$(),sel // sel:selected item, sel: .data('cn') of the selected item (only if it's unique)
-var $d // dialog
-function cmpVersions(x,y){return x[0]-y[0]||x[1]-y[1]||0}
-function isSupported(v){return cmpVersions(v,[14,1])>=0}
+require('./jq-list');var IDE=require('./ide').IDE,prefs=require('./prefs'),esc=require('./util').esc
+var $sel=$(),sel,$d // sel:selected item, sel: .data('cn') of the selected item (only if it's unique), $d:dialog
+var MIN_VER=[14,1] // minimum supported version
+function cmpVer(x,y){return x[0]-y[0]||x[1]-y[1]||0} // compare two versions of the form [major,minor]
 function save(){prefs.favs($('#cn-favs>*').map(function(){var h=$(this).data('cn');return h.tmp?null:h}).toArray())}
 function favText(x){return x.tmp?'temp':x.name||'new'}
 function favDOM(x){return $('<div><a href=# class=go>'+esc(favText(x))+'</a></div>').data('cn',x)}
-function updateFormDetail(){$('#cn-detail>*').hide();$('#cn-'+$('#cn-type').val()).show()}
+function updateFormDetail(){$('#cn-detail>*').hide();$('#cn-'+$('#cn-type').val()).show()} // the part below "Type"
+function fmtKey(e){return[e.modKey?'Cmd-':'',e.ctrlKey?'Ctrl-':'',e.altKey?'Alt-':'',e.shiftKey?'Shift-':'',
+                          CodeMirror.keyNames[e.which]||''].join('')}
 module.exports=function(){
   $('#cn-page').show();document.title='RIDE - Connect'
   $('#cn-fav-cb').change(function(){
@@ -28,16 +28,12 @@ module.exports=function(){
   prefs.favs().forEach(function(x){$('#cn-favs').append(favDOM(x))})
   $('#cn-favs').list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
     .on('click','.go',function(e){$('#cn-go').click()}) // todo: setTimeout?
-    .keydown(function(e){
-      var k=[e.modKey?'Cmd-':'',e.ctrlKey?'Ctrl-':'',e.altKey?'Alt-':'',e.shiftKey?'Shift-':'',
-             CodeMirror.keyNames[e.which]||''].join('')
-      switch(k){
-        case'Enter':$('#cn-go:visible').click();return!1
-        case'Insert':case'Ctrl-N':$('#cn-new').click();return!1
-        case'Delete':$('#cn-del').click();return!1
-        case'Ctrl-D':$('#cn-clone').click();return!1
-      }
-    })
+    .keydown(function(e){switch(fmtKey(e)){
+      case'Enter':$('#cn-go:visible').click();return!1
+      case'Insert':case'Ctrl-N':$('#cn-new').click();return!1
+      case'Delete':$('#cn-del').click();return!1
+      case'Ctrl-D':$('#cn-clone').click();return!1
+    }})
     .on('list-selection-changed',function(){
       $sel=$('#cn-favs .list-selection')
       var u=$sel.length===1 // is selection unique?
@@ -55,10 +51,10 @@ module.exports=function(){
     var $e=favDOM({});$('#cn-favs').append($e).list('select',$e.index());$('#cn-fav-name').focus()
   })
   $('#cn-clone').click(function(){
-    favDOM($.extend({},sel)).insertBefore($sel);$sel.find('a').focus();save();$('#cn-fav-name').focus()
+    if(sel){favDOM($.extend({},sel)).insertBefore($sel);$sel.find('a').focus();save();$('#cn-fav-name').focus()}
   })
   $('#cn-del').click(function(){
-    $('#cn-favs .list-selection').remove();$('#cn-favs').list('select',0,1);$('#cn-favs a').eq(0).focus();save()
+    var $a=$('#cn-favs .list-selection'),i=$a.eq(0).index();$a.remove();$('#cn-favs').list('select',i,1);save()
   })
   $('#cn-go').click(go)
   $('#cn-lhs').resizable({handles:'e',resize:function(e,ui){$('#cn-rhs').css({left:ui.size.width+10})}})
@@ -67,10 +63,10 @@ module.exports=function(){
     .on('*proxyInfo',function(x){
       $('#cn-exes').html(
         x.interpreters.sort(function(a,b){
-          return cmpVersions(b.version,a.version)||+b.bits-+a.bits||(b.edition==='unicode')-(a.edition==='unicode')
+          return cmpVer(b.version,a.version)||+b.bits-+a.bits||(b.edition==='unicode')-(a.edition==='unicode')
         }).map(function(x){
           var s='v'+x.version.join('.')+', '+x.bits+'-bit, '+x.edition[0].toUpperCase()+x.edition.slice(1)
-          var supported=isSupported(x.version);supported||(s+=' (unsupported)')
+          var supported=cmpVer(x.version,MIN_VER)>=0;supported||(s+=' (unsupported)')
           return'<option value="'+esc(x.exe)+'"'+(supported?'':' disabled')+'>'+esc(s)
         }).join('')+'<option>Other...'
       ).val(prefs.selectedExe()).change()
@@ -88,7 +84,7 @@ module.exports=function(){
   }
 }
 function go(){
-  var h={};$('[name]:visible').each(function(){h[this.name]=this.value}) // form data as a hash
+  var h={};$('#cn-rhs [name]:visible').each(function(){h[this.name]=this.value}) // form data as a hash
   var t=$('#cn-type').val()
   $d&&$d.dialog('close')
   try{
