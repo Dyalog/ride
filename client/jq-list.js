@@ -4,10 +4,12 @@
   var S='list-selection'         // css class
   var F='list-focus'             // css class
   var E='list-selection-changed' // event name
+  function pg($l){var $c=$('>',$l);return~~($l.height()/($c.eq(1).position().top-$c.position().top))} // page size
+  function idx($l){return $('>.'+F,$l).index()} // index of focused item
   var methods={
     init:function(){
       return(this.addClass(L)
-        .on('click','>*:not(.ui-sortable-helper)',function(e){
+        .on('click','>:not(.ui-sortable-helper)',function(e){
           var $a=$(this),$l=$a.parent()
           e.ctrlKey?$a.toggleClass(S):$l.list('select',$a.index(),e.ctrlKey,e.shiftKey)
           $l.trigger(E)
@@ -16,15 +18,16 @@
         .on('focus','*',function(){$(this).parentsUntil('.'+L).andSelf().eq(0).   addClass(F)})
         .on('blur' ,'*',function(){$(this).parentsUntil('.'+L).andSelf().eq(0).removeClass(F)})
         .keydown(function(e){
-          if(e.altKey||e.modKey)return
-          var $l=$(this)
+          var $l=$(this),ck=e.ctrlKey,sk=e.shiftKey;if(e.altKey||e.modKey)return
           switch(e.which){
-            /*C-a */case 65:if(e.ctrlKey){$l.children().addClass(S).eq(0).focus();$l.trigger(E);return!1};break
-            /*spc */case 32:$l.children('.list-focus').toggleClass(S);$l.trigger(E);return!1
-            /*up  */case 38:case 63232:$l.list('select',$l.children('.list-focus').index()-1,e.ctrlKey,e.shiftKey);return!1
-            /*down*/case 40:case 63233:$l.list('select',$l.children('.list-focus').index()+1,e.ctrlKey,e.shiftKey);return!1
-            /*home*/case 36:case 63273:$l.list('select',0                                   ,e.ctrlKey,e.shiftKey);return!1
-            /*end */case 35:case 63275:$l.list('select',$l.children().length-1              ,e.ctrlKey,e.shiftKey);return!1
+            /*C-a */case 65:if(ck){$l.children().addClass(S).eq(0).focus();$l.trigger(E);return!1};break
+            /*spc */case 32:$('>.'+F,$l).toggleClass(S);$l.trigger(E);return!1
+            /*up  */case 38:case 63232:$l.list('select',idx($l)-1         ,ck,sk);return!1
+            /*down*/case 40:case 63233:$l.list('select',idx($l)+1         ,ck,sk);return!1
+            /*home*/case 36:case 63273:$l.list('select',0                 ,ck,sk);return!1
+            /*end */case 35:case 63275:$l.list('select',$('>',$l).length-1,ck,sk);return!1
+            /*pgup*/case 33:case 63276:$l.list('select',idx($l)-pg($l)    ,ck,sk);return!1
+            /*pgdn*/case 34:case 63277:$l.list('select',idx($l)+pg($l)    ,ck,sk);return!1
           }
         })
       )
