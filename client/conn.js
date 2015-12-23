@@ -4,7 +4,7 @@ var IDE=require('./ide').IDE,prefs=require('./prefs'),esc=require('./util').esc
 function cmpVersions(x,y){return x[0]-y[0]||x[1]-y[1]||0}
 function isSupported(v){return cmpVersions(v,[14,1])>=0}
 var $sel=$(),sel // sel:selected item, sel: .data('cn') of the selected item (only if it's unique)
-function saveFavs(){prefs.favs($('#cn-favs>*').map(function(){return $(this).data('cn')}).toArray())}
+function saveFavs(){prefs.favs($('#cn-favs>*').map(function(){var h=$(this).data('cn');return h.tmp?null:h}).toArray())}
 function favText(x){return x.tmp?'temp':x.name||'new'}
 function renderFav(x){return $('<div><a href=# class=go>'+esc(favText(x))+'</a></div>').data('cn',x)}
 function updateFormDetail(){$('#cn-detail>*').hide();$('#cn-'+$('#cn-type').val()).show()}
@@ -13,7 +13,7 @@ module.exports=function(){
   $('#cn-page').show();document.title='RIDE - Connect'
   $('#cn-fav-cb').change(function(){
     var c=this.checked;c?delete sel.tmp:(sel.tmp=1);$sel.find('a').text(favText(sel))
-    $('#cn-fav-name-wr').toggle(c);c&&$('#cn-fav-name').focus()
+    $('#cn-fav-name-wr').toggle(c);c&&$('#cn-fav-name').focus();saveFavs()
   })
   $('#cn-fav-name').on('change keyup',function(e){
     if(sel.name!==this.value){sel.name=this.value;$sel.find('a').text(favText(sel));saveFavs()}
