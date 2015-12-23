@@ -10,10 +10,10 @@
     init:function(){
       return(this.addClass(L)
         .on('click','>:not(.ui-sortable-helper)',function(e){
+          if(e.altKey||e.modKey)return
           var $a=$(this),$l=$a.parent()
-          e.ctrlKey?$a.toggleClass(S):$l.list('select',$a.index(),e.ctrlKey,e.shiftKey)
-          $l.trigger(E)
-          return!1
+          e.ctrlKey&&!e.shiftKey ? $a.toggleClass(S) : $l.list('select',$a.index(),e.ctrlKey,e.shiftKey)
+          $l.trigger(E);return!1
         })
         .on('focus','*',function(){$(this).parentsUntil('.'+L).andSelf().eq(0).   addClass(F)})
         .on('blur' ,'*',function(){$(this).parentsUntil('.'+L).andSelf().eq(0).removeClass(F)})
@@ -37,7 +37,7 @@
         var $l=$(this),$a=$l.children(),n=$a.length
         i=i<0?0:i>=n?n-1:i
         if(!ctrl){$a.removeClass(S).eq(i).addClass(S)}
-        if(shift){var an=$l.data('list-anchor')||0,m=i<an?i:an,M=i+an-m;$a.removeClass(S).slice(m,M+1).addClass(S)}
+        if(shift){var an=$l.data('list-anchor')||0,m=i<an?i:an,M=i+an-m;$a.slice(m,M+1).addClass(S)}
         else{$l.data('list-anchor',i)}
         var $f=$a.eq(i),q='a,:input';($f.is(q)?$f:$f.find(q).eq(0)).focus() // q:query for focusable elements
         $(this).trigger(E)
