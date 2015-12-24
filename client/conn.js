@@ -54,7 +54,10 @@ module.exports=function(){
     if(sel){favDOM($.extend({},sel)).insertBefore($sel);$sel.find('a').focus();save();$('#cn-fav-name').focus()}
   })
   $('#cn-del').click(function(){
-    var $a=$('#cn-favs .list-selection'),i=$a.eq(0).index();$a.remove();$('#cn-favs').list('select',i,1);save()
+    var n=$sel.length
+    if(n&&confirm('Are you sure you want to delete the selected connection'+(n>1?'s':'')+'?')){
+      var $a=$('#cn-favs .list-selection'),i=$a.eq(0).index();$a.remove();$('#cn-favs').list('select',i,1);save()
+    }
   })
   $('#cn-go').click(go)
   $('#cn-lhs').resizable({handles:'e',resize:function(e,ui){$('#cn-rhs').css({left:ui.size.width+10})}})
