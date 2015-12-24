@@ -22,7 +22,7 @@
 	</div>
 	<div id=cn-rhs>
 		<p><label id=cn-fav-cb-wr><input id=cn-fav-cb type=checkbox data-accesskey=r><u>R</u>emember connection</label>
-			<label id=cn-fav-name-wr data-accesskey=a> <u>a</u>s <input id=cn-fav-name placeholder='connection name'></label>
+			<label id=cn-fav-name-wr data-accesskey=a> <u>a</u>s <input id=cn-fav-name></label>
 		<p>Connection <u>t</u>ype:
 			<select id=cn-type data-accesskey=t>
 				<option value=spawn>Start a local interpreter
@@ -35,15 +35,15 @@
 		<div id=cn-detail>
 			<div id=cn-ssl style=display:none>
 				<p><u>H</u>ost and <u>p</u>ort:
-					<input name=host data-accesskey=h placeholder=host size=12> :
-					<input name=port data-accesskey=p placeholder=port size=4 value=443>
+					<input name=host data-accesskey=h size=12> :
+					<input name=port data-accesskey=p placeholder=443 size=4>
 				<p>C<u>e</u>rtificate:
 					<input name=cert data-accesskey=e type=file>
 			</div>
 			<div id=cn-tcp style=display:none>
 				<p><u>H</u>ost and <u>p</u>ort:
-					<input name=host data-accesskey=h placeholder=host size=12> :
-					<input name=port data-accesskey=p placeholder=port size=4 value=4502>
+					<input name=host data-accesskey=h size=12> :
+					<input name=port data-accesskey=p placeholder=4502 size=4>
 			</div>
 			<div id=cn-spawn style=display:none>
 				<p><u>I</u>nterpreter:
@@ -55,13 +55,13 @@
 			</div>
 			<div id=cn-ssh style=display:none>
 				<p><u>U</u>ser, <u>h</u>ost and <u>p</u>ort:
-					<input name=user data-accesskey=u placeholder=user size=8> @
-					<input name=host data-accesskey=h placeholder=host size=12> :
-					<input name=port data-accesskey=p placeholder=port size=4 value=22>
+					<input name=user data-accesskey=u size=8> @
+					<input name=host data-accesskey=h size=12> :
+					<input name=port data-accesskey=p placeholder=22 size=4>
 			</div>
 			<div id=cn-listen style=display:none>
 				<p><u>P</u>ort:
-					<input name=port data-accesskey=p placeholder=port size=4 value=22>
+					<input name=port data-accesskey=p placeholder=4502 size=4>
 			</div>
 		</div>
 		<p><button id=cn-go data-accesskey=g><u>G</u>o</button>

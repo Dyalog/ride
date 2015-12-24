@@ -2,9 +2,10 @@
 require('./jq-list');var IDE=require('./ide').IDE,prefs=require('./prefs'),esc=require('./util').esc
 var $sel=$(),sel,$d // sel:selected item, sel: .data('cn') of the selected item (only if it's unique), $d:dialog
 var MIN_VER=[14,1] // minimum supported version
+var DFLT_NAME='[New Connection]',TMP_NAME='[Temporary Connection]'
 function cmpVer(x,y){return x[0]-y[0]||x[1]-y[1]||0} // compare two versions of the form [major,minor]
 function save(){prefs.favs($('#cn-favs>*').map(function(){var h=$(this).data('cn');return h.tmp?null:h}).toArray())}
-function favText(x){return x.tmp?'temp':x.name||'new'}
+function favText(x){return x.tmp?TMP_NAME:x.name||DFLT_NAME}
 function favDOM(x){return $('<div><a href=# class=go>'+esc(favText(x))+'</a></div>').data('cn',x)}
 function updateFormDetail(){$('#cn-detail>*').hide();$('#cn-'+$('#cn-type').val()).show()} // the part below "Type"
 function fmtKey(e){return[e.modKey?'Cmd-':'',e.ctrlKey?'Ctrl-':'',e.altKey?'Alt-':'',e.shiftKey?'Shift-':'',
@@ -15,12 +16,12 @@ module.exports=function(){
     var c=this.checked;c?delete sel.tmp:(sel.tmp=1);$sel.find('a').text(favText(sel))
     $('#cn-fav-name-wr').toggle(c);c&&$('#cn-fav-name').focus();save()
   })
-  $('#cn-fav-name').on('change keyup',function(e){
+  $('#cn-fav-name').prop('placeholder',DFLT_NAME).on('change keyup',function(e){
     if(sel.name!==this.value){sel.name=this.value;$sel.find('a').text(favText(sel));save()}
   })
   $('#cn-type').change(function(){sel.type=this.value;updateFormDetail();save()})
   updateFormDetail()
-  $('#cn-ssh [name=user]').val(process.env.USER||'')
+  $('#cn-ssh [name=user]').prop('placeholder',process.env.USER||'')
   $('#cn-exe').on('change keyup',function(){$('#cn-exes').val()||prefs.otherExe($(this).val())})
   $('#cn-exes').change(function(){
     var v=$(this).val(),$e=$('#cn-exe').val(v||prefs.otherExe()).prop('readonly',!!v).change();v||$e.focus()
@@ -88,8 +89,8 @@ module.exports=function(){
     .on('*connected',function(x){if($d){$d.dialog('close');$d=null};new IDE().setHostAndPort(x.host,x.port)})
     .on('*connectError',function(x){if($d){$d.dialog('close');$d=null};$.alert(x.err,'Error')})
     .on('*spawned',function(x){D.lastSpawnedExe=x.exe})
-    .on('*spawnedError',function(x){alert(x.message)})
-    .on('*spawnedExited',function(x){alert(x.code!=null?'exited with code '+x.code:'received '+x.signal)})
+    .on('*spawnedError',function(x){$.alert(x.message,'Error')})
+    .on('*spawnedExited',function(x){$.alert(x.code!=null?'exited with code '+x.code:'received '+x.signal)})
     .on('*listenError',function(x){if($d){$d.dialog('close');$d=null};$.alert(x.err,'Error')})
     .emit('*getProxyInfo')
   return{
@@ -98,33 +99,36 @@ module.exports=function(){
   }
 }
 function go(){
-  var h={};$('#cn-rhs [name]:visible').each(function(){h[this.name]=this.value}) // form data as a hash
-  var t=$('#cn-type').val()
-  $d&&$d.dialog('close')
+  $d&&$d.dialog('close');var t=$('#cn-type').val()
   try{
     if(t==='spawn'){
-      D.socket.emit('*spawn',{exe:$('#cn-exe').val()})
+      D.socket.emit('*spawn',{exe:sel.exe})
     }else if(t==='tcp'){
       $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
         .dialog({modal:1,width:350,title:'Connecting...',buttons:{Cancel:function(){$(this).dialog('close')}}})
       D.socket.emit('*connect',{host:sel.host,port:+sel.port})
     }else if(t==='listen'){
+      console.info('sel.port',sel.port)
+      if(sel.port&&(!/^\d+$/.test(sel.port)||+sel.port<1||+sel.port>0xffff)){
+        $.alert('Invalid port','Error',function(){$('[name=port]:visible').select()});return
+      }
+      var port=sel.port||4502
       $d=$(
         '<div class=listen>'+
           '<div class=visual-distraction></div>'+
           'Please start the remote interpreter with'+
-          '<div class=tt>RIDE_INIT=\'CONNECT:host:port\'</div>'+
+          '<div class=tt>RIDE_INIT=\'CONNECT:<i>host</i>:'+port+'\'</div>'+
           ' in its environment, so it connects here.'+
         '</div>'
       ).dialog({modal:1,width:450,title:'Waiting for connection...',
                 buttons:{Cancel:function(){$d.dialog('close')}},
                 close:function(){D.socket.emit('*listenCancel')}})
-      D.socket.emit('*listen',{host:sel.host,port:+sel.port})
+      D.socket.emit('*listen',{host:sel.host,port:port})
     }else{
-      alert('nyi')
+      $.alert('nyi')
     }
   }catch(e){
-    alert(e)
+    $.alert(e,'Error')
   }
   return!1
 }
