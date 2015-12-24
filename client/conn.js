@@ -109,7 +109,6 @@ function go(){
         .dialog({modal:1,width:350,title:'Connecting...',buttons:{Cancel:function(){$(this).dialog('close')}}})
       D.socket.emit('*connect',{host:sel.host,port:+sel.port})
     }else if(t==='listen'){
-      D.socket.emit('*listen',{host:h.host,port:h.port})
       $d=$(
         '<div class=listen>'+
           '<div class=visual-distraction></div>'+
@@ -117,8 +116,10 @@ function go(){
           '<div class=tt>RIDE_INIT=\'CONNECT:host:port\'</div>'+
           ' in its environment, so it connects here.'+
         '</div>'
-      ).dialog({modal:1,width:450,title:'Waiting for connection...',close:function(){D.socket.emit('*listenCancel')},
-                buttons:{Cancel:function(){$d.dialog('close')}}})
+      ).dialog({modal:1,width:450,title:'Waiting for connection...',
+                buttons:{Cancel:function(){$d.dialog('close')}},
+                close:function(){D.socket.emit('*listenCancel')}})
+      D.socket.emit('*listen',{host:sel.host,port:+sel.port})
     }else{
       alert('nyi')
     }
