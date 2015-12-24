@@ -23,7 +23,14 @@ module.exports=function(){
   $('#cn-ssh [name=user]').val(process.env.USER||'')
   $('#cn-exe').on('change keyup',function(){$('#cn-exes').val()||prefs.otherExe($(this).val())})
   $('#cn-exes').change(function(){
-    var v=$(this).val(),$e=$('#cn-exe').val(v||prefs.otherExe()).prop('readonly',!!v);v||$e.focus();prefs.selectedExe(v)
+    var v=$(this).val(),$e=$('#cn-exe').val(v||prefs.otherExe()).prop('readonly',!!v).change();v||$e.focus()
+    prefs.selectedExe(v) // todo: do we still need this pref?
+  })
+  $('#cn-env-add').on('click','a',function(e){
+    var t=$(this).text(), e=$('#cn-env')[0], k=t.split('=')[0], s=e.value, m=RegExp('^'+k+'=(.*)$','m').exec(s)
+    if(m){e.setSelectionRange(m.index+k.length+1,m.index+m[0].length)}
+    else{e.value=s=s.replace(/([^\n])$/,'$1\n')+t+'\n';e.setSelectionRange(s.length-t.length+k.length,s.length-1)}
+    return!1
   })
   prefs.favs().forEach(function(x){$('#cn-favs').append(favDOM(x))})
   $('#cn-favs').list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
@@ -43,6 +50,7 @@ module.exports=function(){
         $('#cn-type').val(sel.type||'tcp');updateFormDetail()
         $('#cn-fav-cb').prop('checked',!sel.tmp);$('#cn-fav-name').val(sel.name);$('#cn-fav-name-wr').toggle(!sel.tmp)
         $('#cn-rhs [name]').each(function(){$(this).val(sel[this.name])})
+        $('#cn-exes').val(sel.exe).val()||$('#cn-exes').val('') // use sel.exe if available, otherwise use "Other..."
         $('#cn-rhs :text').elastic()
       }
     })
@@ -62,17 +70,20 @@ module.exports=function(){
   $('#cn-go').click(go)
   $('#cn-lhs').resizable({handles:'e',resize:function(e,ui){$('#cn-rhs').css({left:ui.size.width+10})}})
   $('#cn-rhs :text').elastic()
+    .on('keyup change',function(){if(sel[this.name]!==this.value){sel[this.name]=this.value;save()}})
   D.socket
     .on('*proxyInfo',function(x){
       $('#cn-exes').html(
-        x.interpreters.sort(function(a,b){
-          return cmpVer(b.version,a.version)||+b.bits-+a.bits||(b.edition==='unicode')-(a.edition==='unicode')
-        }).map(function(x){
-          var s='v'+x.version.join('.')+', '+x.bits+'-bit, '+x.edition[0].toUpperCase()+x.edition.slice(1)
-          var supported=cmpVer(x.version,MIN_VER)>=0;supported||(s+=' (unsupported)')
-          return'<option value="'+esc(x.exe)+'"'+(supported?'':' disabled')+'>'+esc(s)
-        }).join('')+'<option>Other...'
-      ).val(prefs.selectedExe()).change()
+        x.interpreters
+         .sort(function(a,b){
+            return cmpVer(b.version,a.version)||+b.bits-+a.bits||(b.edition==='unicode')-(a.edition==='unicode')
+         })
+         .map(function(x){
+           var s='v'+x.version.join('.')+', '+x.bits+'-bit, '+x.edition[0].toUpperCase()+x.edition.slice(1)
+           var supported=cmpVer(x.version,MIN_VER)>=0;supported||(s+=' (unsupported)')
+           return'<option value="'+esc(x.exe)+'"'+(supported?'':' disabled')+'>'+esc(s)
+         }).join('')+'<option value="">Other...'
+      ).val($('#cn-exe').val()).val()||$('#cn-exes').val('')
     })
     .on('*connected',function(x){if($d){$d.dialog('close');$d=null};new IDE().setHostAndPort(x.host,x.port)})
     .on('*connectError',function(x){if($d){$d.dialog('close');$d=null};$.alert(x.err,'Error')})
@@ -91,12 +102,12 @@ function go(){
   var t=$('#cn-type').val()
   $d&&$d.dialog('close')
   try{
-    if(t==='tcp'){
+    if(t==='spawn'){
+      D.socket.emit('*spawn',{exe:$('#cn-exe').val()})
+    }else if(t==='tcp'){
       $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
         .dialog({modal:1,width:350,title:'Connecting...',buttons:{Cancel:function(){$(this).dialog('close')}}})
       D.socket.emit('*connect',{host:sel.host,port:+sel.port})
-    }else if(t==='spawn'){
-      D.socket.emit('*spawn',{exe:$('#cn-exe').val()})
     }else if(t==='listen'){
       D.socket.emit('*listen',{host:h.host,port:h.port})
       $d=$(

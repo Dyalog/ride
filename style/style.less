@@ -53,6 +53,7 @@ input,textarea,select,a{outline:0}
 #cn-rhs{right:@p;left:2*@p+250px;overflow:auto}
 #cn-fav-btns{position:absolute;top:0;left:0;right:@p;height:32px;overflow:hidden;width:9999px}
 #cn-dialog .visual-distraction{margin:50px}
+#cn-env-add{padding-left:32px;a{.tt}}
 #cn-fav-cb-wr{line-height:32px}
 #cn-favs{
   .inset;border-width:2px;border-style:solid;overflow:auto;position:absolute;left:0;right:@p;top:32px;bottom:0;padding:2px;
@@ -404,7 +405,7 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 
 // button text element
 .ui-button .ui-button-text{display:block;line-height:normal;cursor:normal}
-.ui-button:focus{outline:dotted #000 1px;outline-offset:-4px}
+.ui-button:focus,button:focus{outline:dotted #000 1px;outline-offset:-4px}
 .ui-button:active .ui-button-text{border-color:#000}
 .ui-button-text-only .ui-button-text{min-width:75px;border-width:0;padding:1px 0}
 .ui-button-text-only:active .ui-button-text{border-color:#808080}

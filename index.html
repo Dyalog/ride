@@ -49,12 +49,9 @@
 				<p><u>I</u>nterpreter:
 					<select id=cn-exes name=exes data-accesskey=i></select>
 					<input id=cn-exe name=exe placeholder='path to executable'>
-				<p>Environment variables:
-					<table>
-						<tr><td><input value=AUTOPW><td><input value=1 >
-						<tr><td><input value=MAXWS ><td><input value=4G>
-						<tr><td><input value=      ><td><input value=  >
-					</table>
+				<p><u>E</u>nvironment variables:<br>
+					<textarea id=cn-env name=env data-accesskey=e cols=40 rows=4></textarea><br>
+					<span id=cn-env-add>For instance: <a href=#>MAXWS=4G</a>, <a href=#>AUTOPW=1</a>, ...</span>
 			</div>
 			<div id=cn-ssh style=display:none>
 				<p><u>U</u>ser, <u>h</u>ost and <u>p</u>ort:
