@@ -64,9 +64,8 @@ module.exports=function(){
   })
   $('#cn-del').click(function(){
     var n=$sel.length
-    if(n&&confirm('Are you sure you want to delete the selected connection'+(n>1?'s':'')+'?')){
-      var $a=$('#cn-favs .list-selection'),i=$a.eq(0).index();$a.remove();$('#cn-favs').list('select',i,1);save()
-    }
+    n&&$.confirm('Are you sure you want to delete the selected connection'+(n>1?'s':'')+'?','Confirmation',
+      function(r){if(r){var i=$sel.eq(0).index();$sel.remove();$('#cn-favs').list('select',i,1);save()}})
   })
   $('#cn-go').click(go)
   $('#cn-lhs').resizable({handles:'e',resize:function(e,ui){$('#cn-rhs').css({left:ui.size.width+10})}})
@@ -108,7 +107,6 @@ function go(){
         .dialog({modal:1,width:350,title:'Connecting...',buttons:{Cancel:function(){$(this).dialog('close')}}})
       D.socket.emit('*connect',{host:sel.host,port:+sel.port})
     }else if(t==='listen'){
-      console.info('sel.port',sel.port)
       if(sel.port&&(!/^\d+$/.test(sel.port)||+sel.port<1||+sel.port>0xffff)){
         $.alert('Invalid port','Error',function(){$('[name=port]:visible').select()});return
       }

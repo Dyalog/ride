@@ -24,7 +24,15 @@ this.throttle1=function(f,dt){ // f: a 1-arg function that doesn't return a resu
   }
 }
 $.alert=function(m,t,f){ // m:message, t:title, f:callback
-  $('<p>').text(m).dialog({modal:1,title:t,buttons:[{text:'OK',click:function(){$(this).dialog('close');f&&f()}}]})
+  $('<p>').text(m).dialog({modal:1,title:t,buttons:[
+    {html:'<u>O</u>K',accesskey:'o',click:function(){$(this).dialog('close');f&&f()}}
+  ]})
+}
+$.confirm=function(m,t,f){ // m:message, t:title, f:callback
+  var r;$('<p>').text(m).dialog({modal:1,title:t,close:function(){f&&f(r)},buttons:[
+    {html:'<u>Y</u>es',accesskey:'y',click:function(){r=1;$(this).dialog('close')}},
+    {html:'<u>N</u>o' ,accesskey:'n',click:function(){r=0;$(this).dialog('close')}},
+  ]})
 }
 $.fn.insert=function(s){ // replace selection in an <input> or <textarea> with s
   return this.each(function(){
