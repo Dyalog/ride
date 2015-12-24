@@ -35,7 +35,10 @@ module.exports=function(){
   })
   prefs.favs().forEach(function(x){$('#cn-favs').append(favDOM(x))})
   $('#cn-favs').list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
-    .on('click','.go',function(e){$('#cn-go').click()}) // todo: setTimeout?
+    .on('click','.go',function(e){
+      $('#conn-favs').list('select',$(this).parentsUntil('#conn-favs').last().index())
+      setTimeout(function(){$('#cn-go').click()},1) // todo
+    })
     .keydown(function(e){switch(fmtKey(e)){
       case'Enter':$('#cn-go:visible').click();return!1
       case'Insert':case'Ctrl-N':$('#cn-new').click();return!1
