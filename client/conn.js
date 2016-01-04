@@ -103,6 +103,13 @@ module.exports=function(){
 function go(){
   $d&&$d.dialog('close');var t=$('#cn-type').val()
   try{
+    // validate host&port if present
+    var $host=$('[name=host]:visible'),$port=$('[name=port]:visible')
+    if($host.length&&!sel.host){$.alert('"host" is required','Error',function(){$host.select()});return}
+    if($port.length&&sel.port&&(!/^\d*$/.test(sel.port)||+sel.port<1||+sel.port>0xffff)){
+      $.alert('Invalid port','Error',function(){$port.select()});return
+    }
+    // validate rest of the form
     if(t==='spawn'){
       D.socket.emit('*spawn',{exe:sel.exe})
     }else if(t==='tcp'){
@@ -110,10 +117,7 @@ function go(){
         .dialog({modal:1,width:350,title:'Connecting...',buttons:{Cancel:function(){$(this).dialog('close')}}})
       D.socket.emit('*connect',{host:sel.host,port:+sel.port})
     }else if(t==='listen'){
-      if(sel.port&&(!/^\d+$/.test(sel.port)||+sel.port<1||+sel.port>0xffff)){
-        $.alert('Invalid port','Error',function(){$('[name=port]:visible').select()});return
-      }
-      var port=sel.port||4502
+      var port=sel.port||4502;if(!validatePort())return
       $d=$(
         '<div class=listen>'+
           '<div class=visual-distraction></div>'+
