@@ -1,8 +1,7 @@
 'use strict'
 require('./jq-list');var IDE=require('./ide').IDE,prefs=require('./prefs'),esc=require('./util').esc
-var $sel=$(),sel,$d // sel:selected item, sel: .data('cn') of the selected item (only if it's unique), $d:dialog
-var MIN_VER=[14,1] // minimum supported version
-var DFLT_NAME='[New Connection]',TMP_NAME='[Temporary Connection]'
+var $sel=$(),sel,$d // $sel:selected item(s), sel: .data('cn') of the selected item (only if it's unique), $d:dialog
+var DFLT_NAME='[New Connection]',TMP_NAME='[Temporary Connection]',MIN_VER=[14,1] // minimum supported version
 function cmpVer(x,y){return x[0]-y[0]||x[1]-y[1]||0} // compare two versions of the form [major,minor]
 function save(){prefs.favs($('#cn-favs>*').map(function(){var h=$(this).data('cn');return h.tmp?null:h}).toArray())}
 function favText(x){return x.tmp?TMP_NAME:x.name||DFLT_NAME}
@@ -74,7 +73,8 @@ module.exports=function(){
   $('#cn-go').click(go)
   $('#cn-lhs').resizable({handles:'e',resize:function(e,ui){$('#cn-rhs').css({left:ui.size.width+10})}})
   $('#cn-rhs :text').elastic()
-    .on('keyup change',function(){if(sel[this.name]!==this.value){sel[this.name]=this.value;save()}})
+  $('#cn-rhs :text,#cn-rhs textarea')
+    .on('keyup change',function(){var k=this.name,v=this.value;if(sel[k]!==v){sel[k]=v;save()}})
   D.socket
     .on('*proxyInfo',function(x){
       $('#cn-exes').html(
@@ -111,8 +111,9 @@ function go(){
       $.alert('Invalid port','Error',function(){$port.select()});return
     }
     // validate rest of the form
-    if(t==='spawn'){
-      D.socket.emit('*spawn',{exe:sel.exe})
+    if(t==='local'){
+      var h={};sel.env.replace(/^([^=\n]+)=(.*)$/mg,function(_,x,y){h[x]=y})
+      D.socket.emit('*launch',{exe:sel.exe,env:h})
     }else if(t==='tcp'){
       $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
         .dialog({modal:1,width:350,title:'Connecting...',buttons:{Cancel:function(){$(this).dialog('close')}}})

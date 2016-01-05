@@ -25,7 +25,7 @@
 			<label id=cn-fav-name-wr data-accesskey=a> <u>a</u>s <input id=cn-fav-name></label>
 		<p>Connection <u>t</u>ype:
 			<select id=cn-type data-accesskey=t>
-				<option value=spawn>Start a local interpreter
+				<option value=local>Start a local interpreter
 				<option value=ssl>Connect to an interpreter using SSL (encrypted)
 				<option value=tcp>Connect to an interpreter (unencrypted)
 				<option value=ssh>Start a remote interpreter through ssh
@@ -45,7 +45,7 @@
 					<input name=host data-accesskey=h size=12> :
 					<input name=port data-accesskey=p placeholder=4502 size=4>
 			</div>
-			<div id=cn-spawn style=display:none>
+			<div id=cn-local style=display:none>
 				<p><u>I</u>nterpreter:
 					<select id=cn-exes name=exes data-accesskey=i></select>
 					<input id=cn-exe name=exe placeholder='path to executable'>

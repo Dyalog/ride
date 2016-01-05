@@ -88,7 +88,7 @@ this.Proxy=function(){
         client=net.connect({host:x.host,port:x.port},function(){toBrowser('*connected',{host:x.host,port:x.port})})
         setUpInterpreterConnection()
       })
-      .on('*spawn',function(x){
+      .on('*launch',function(x){
         var exe=(x||{}).exe||process.env.DYALOG_IDE_INTERPRETER_EXE||'dyalog'
         server=net.createServer(function(c){
           log('spawned interpreter connected');var a=server.address();server&&server.close();server=null;client=c
@@ -106,7 +106,7 @@ this.Proxy=function(){
           var args=['+s','-q'],stdio=['pipe','ignore','ignore']
           if(/^win/i.test(process.platform)){args=[];stdio[0]='ignore'}
           try{
-            var h={},H=process.env;for(var k in H)h[k]=H[k];h.RIDE_INIT='CONNECT:'+hp;h.RIDE_SPAWNED='1'
+            var h=x.env||{},H=process.env;for(var k in H)h[k]=H[k];h.RIDE_INIT='CONNECT:'+hp;h.RIDE_SPAWNED='1'
             child=cp.spawn(exe,args,{stdio:stdio,env:h})
           }catch(e){
             toBrowser('*spawnedError',{code:0,message:''+e});return
