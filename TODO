@@ -2,24 +2,33 @@
 
 Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nice)
   M1 adoption of the new protocol
-       http://wiki.dyalog.bramley/index.php/Ride_protocol_messages_V2#Extensions
+        http://wiki.dyalog.bramley/index.php/Ride_protocol_messages_V2#Extensions
+        NN: JD merged interpreter support into trunk on 2016-01-04
+            Mostly works.  StrongInterrupt is broken.
   M2 awareness of Process Manager
   M3 launch server-side processes using ssh
+        NN: UI in development
   M4 minimal workspace explorer
   M5 edit "external" source files
   M6 support external editors
+        NN: implemented in its simplest form
   M7 add meta-information to Windows exe
        from JD: http://stackoverflow.com/questions/284258/how-do-i-set-the-version-information-for-an-existing-exe-dll
+          NN: First answer talks about VisualStudio options
+          NN: Second answer recommends a tool called "StampVer".  I tried it, got infected, and reinstalled Windows.
   S1 export and import preferences
   S2 config file for interpreter
   S3 yes/no/cancel and other ultra-simple dialogs
+        NN: RIDE support implemented, interpreter support pending
   S4 value tips
+        NN: half-way RIDE support implemented
   S5 enhanced navigation of classes and functions
   W1 show stack
   W2 show threads
   W3 status bar
   W4 drag/drop workspaces or source files to session
   W5 autopw support
+        NN: RIDE support implemented
 
 Not prioritized:
   on a Mac esc closes the session instead of the editor, JS 2015-12-03
