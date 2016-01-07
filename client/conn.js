@@ -112,7 +112,7 @@ function go(){
     }
     // validate rest of the form
     if(t==='local'){
-      var h={};sel.env.replace(/^([^=\n]+)=(.*)$/mg,function(_,x,y){h[x]=y})
+      var h={};$('#cn-env').val().replace(/^([^=\n]+)=(.*)$/mg,function(_,x,y){h[x]=y})
       D.socket.emit('*launch',{exe:sel.exe,env:h})
     }else if(t==='tcp'){
       $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
