@@ -117,7 +117,7 @@ function go(){
     }else if(t==='tcp'){
       $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
         .dialog({modal:1,width:350,title:'Connecting...',buttons:{Cancel:function(){$(this).dialog('close')}}})
-      D.socket.emit('*connect',{host:sel.host,port:+sel.port})
+      D.socket.emit('*connect',{host:sel.host,port:+sel.port||4502})
     }else if(t==='listen'){
       var port=sel.port||4502;if(!validatePort())return
       $d=$(
