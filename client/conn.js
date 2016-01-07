@@ -131,6 +131,8 @@ function go(){
                 buttons:{Cancel:function(){$d.dialog('close')}},
                 close:function(){D.socket.emit('*listenCancel')}})
       D.socket.emit('*listen',{host:sel.host,port:port})
+    }else if(t==='ssh'){
+      D.socket.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||process.env.USER,pass:$('#ssh-pass').val()})
     }else{
       $.alert('nyi')
     }

@@ -77,8 +77,7 @@ this.Proxy=function(){
     cmd('Identify',{identity:1});cmd('Connect',{remoteId:2});cmd('GetWindowLayout')
   }
   function setUpBrowserConnection(){
-    var listen
-    var onevent=socket.onevent // intercept all browser-to-proxy events and log them:
+    var listen,onevent=socket.onevent // intercept all browser-to-proxy events and log them:
     socket.onevent=function(x){
       log('from browser:'+trunc(JSON.stringify(x.data)))
       return x.data[0][0]!=='*'?cmd(x.data[0],x.data[1]||{}):onevent.apply(socket,[x])
@@ -122,6 +121,28 @@ this.Proxy=function(){
             server&&server.close();server=client=null;toBrowser('*spawnedExited',{code:code,signal:signal});child=null
           })
         })
+      })
+      .on('*ssh',function(x){
+        var ssh=new(require('ssh2').Client)
+        ssh.on('ready',function(){
+          console.info('ssh ready')
+          ssh.exec('/bin/bash',function(err,sm){
+            if(err)throw err
+            console.info('bash running')
+            sm.on('close',function(code,signal){toBrowser('*sshExited',{code:code,signal:signal});c.end()})
+              .on       ('data',function(x){console.info('ssh stdout:'+JSON.stringify(''+x))})
+              .stderr.on('data',function(x){console.info('ssh stderr:'+JSON.stringify(''+x))})
+            ssh.forwardIn('',0,function(err,remotePort){
+              if(err)throw err
+              console.info('fwding')
+              sm.write('export RIDE_INIT=CONNECT:127.0.0.1:'+remotePort+'\ndyalog +s -q\n')
+              console.info('dyalog started')
+            })
+          })
+        }).on('tcp connection',function(info,accept,reject){
+          console.info('incoming connection')
+          client=accept();toBrowser('*connected',{host:'',port:0});setUpInterpreterConnection()
+        }).connect({host:x.host,port:x.port,username:x.user,password:x.pass})
       })
       .on('*listen',listen=function(x){
         server=net.createServer(function(c){
