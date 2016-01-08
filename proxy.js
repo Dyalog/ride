@@ -30,15 +30,6 @@ function addr(x){return x&&(x=x.request)&&(x=x.connection)&&x.remoteAddress||'ID
 function trunc(s){return s.length>1000?s.slice(0,997)+'...':s}
 function ls(x){return fs.readdirSync(x)}
 function sil(f){return function(x){try{f(x)}catch(_){}}} // exception silencer
-var ipAddresses=[]
-;(function(){
-  try{
-    var ni=os.networkInterfaces()
-    for(var k in ni)ni[k].forEach(function(x){if(x.family==='IPv4'&&!x.internal)ipAddresses.push(x.address)})
-  }catch(e){
-    log('cannot determine ip addresses: '+e)
-  }
-})()
 
 var client, // TCP connection to interpreter
     socket, // websocket or other connection-like object communicating with the browser
@@ -166,12 +157,12 @@ var handlers={
                 }
               }
             }
-            toBrowser('*proxyInfo',{ipAddresses:ipAddresses,interpreters:interpreters,platform:process.platform})
+            toBrowser('*proxyInfo',{interpreters:interpreters,platform:process.platform})
           }
         )
       }catch(ex){
         console.error(ex)
-        toBrowser('*proxyInfo',{ipAddresses:ipAddresses,interpreters:interpreters,platform:process.platform})
+        toBrowser('*proxyInfo',{interpreters:interpreters,platform:process.platform})
       }
     }else if(process.platform==='darwin'){
       try{
@@ -181,7 +172,7 @@ var handlers={
           fs.existsSync(exe)&&interpreters.push({exe:exe,version:parseVersion(m[1]),bits:64,edition:'unicode'})
         }
       }catch(_){}
-      toBrowser('*proxyInfo',{ipAddresses:ipAddresses,interpreters:interpreters,platform:process.platform})
+      toBrowser('*proxyInfo',{interpreters:interpreters,platform:process.platform})
     }else{
       try{
         var a='/opt/mdyalog'
@@ -194,7 +185,7 @@ var handlers={
           }))
         }))
       }catch(_){}
-      toBrowser('*proxyInfo',{ipAddresses:ipAddresses,interpreters:interpreters,platform:process.platform})
+      toBrowser('*proxyInfo',{interpreters:interpreters,platform:process.platform})
     }
   }
 }
