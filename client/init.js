@@ -95,7 +95,9 @@ $(function(){
   // Implement access keys (Alt-X) using a custom attribute: data-accesskey=X
   // The built-in accesskey=X doesn't handle duplicates well -- it doesn't always focus the visible one.
   $(document).keydown(function(e){
-    if(e.altKey&&!e.ctrlKey&&!e.metaKey&&64<e.which&&e.which<91) // Alt-A...Alt-Z or Alt-Shift-A...Alt-Shift-Z
-      {$('[data-accesskey='+String.fromCharCode(e.which).toLowerCase()+']:visible').focus().click();return!1}
+    if(e.altKey&&!e.ctrlKey&&!e.metaKey&&64<e.which&&e.which<91){ // Alt-A...Alt-Z or Alt-Shift-A...Alt-Shift-Z
+      var $a=$('[data-accesskey='+String.fromCharCode(e.which).toLowerCase()+']:visible'), n=$a.length
+      $a.eq(($a.index(':focus')+1)%$a.length).focus();n===1&&$a.click();return!1
+    }
   })
 })
