@@ -5,7 +5,7 @@ this.name='Menu'
 this.init=function($e){
   $e[0].innerHTML='<a href=# class=reset>Reset</a><p>Takes effect on restart</p><textarea wrap=off></textarea>'
   $ta=$('textarea',$e)
-  $('.reset',$e).button().click(function(){$ta.val(prefs.menu.getDefault());return false})
+  $('.reset',$e).button().click(function(){$ta.val(prefs.menu.getDefault());return!1})
 }
 this.load=function(){$ta.val(prefs.menu())}
 this.save=function(){prefs.menu($ta.val())}

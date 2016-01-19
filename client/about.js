@@ -32,6 +32,6 @@ this.showDialog=function(){
     '</div>'
   )
     .dialog({title:'About',width:520,height:410,buttons:btns,open:function(){$(this).find('textarea').focus()}})
-    .on('click','a[href^=http]',function(){D.openExternal($(this).attr('href'));return false})
+    .on('click','a[href^=http]',function(){D.openExternal($(this).attr('href'));return!1})
     .find('textarea').val(info).select()
 }

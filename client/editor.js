@@ -59,7 +59,7 @@ this.Editor=function(ide,e,opts){
   cmOnDblClick(ed.cm,function(e){ed.ED(ed.cm);e.preventDefault();e.stopPropagation()})
   ed.autocomplete=autocompletion.setUp(ed)
   ed.$tb=$('.toolbar',ed.$e)
-    .on('click','.tb-hid,.tb-case',function(e){$(e.target).toggleClass('pressed');ed.highlightSearch();return false})
+    .on('click','.tb-hid,.tb-case',function(e){$(e.target).toggleClass('pressed');ed.highlightSearch();return!1})
     .on('mousedown','.tb-btn',function(e){$(e.target).addClass('armed');e.preventDefault()})
     .on('mouseup mouseout','.tb-btn',function(e){$(e.target).removeClass('armed');e.preventDefault()})
     .on('click','.tb-btn',function(e){
@@ -178,7 +178,7 @@ this.Editor.prototype={
         this.scrollCursorIntoProminentView()
       }
     }
-    return false
+    return!1
   },
   selectAllSearchResults:function(){
     var cm=this.cm

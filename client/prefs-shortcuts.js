@@ -30,9 +30,9 @@ this.init=function($e){
   )
     .on('mouseover','.shortcuts-del',function(){$(this).parent().addClass('shortcuts-del-hover')})
     .on('mouseout','.shortcuts-del',function(){$(this).parent().removeClass('shortcuts-del-hover')})
-    .on('click','.shortcuts-del',function(){$(this).parent().remove();updateDups();return false})
+    .on('click','.shortcuts-del',function(){$(this).parent().remove();updateDups();return!1})
     .on('click','.shortcuts-add',function(){
-      var $b=$(this);getKeystroke(function(k){k&&$b.parent().append(keyHTML(k)).append($b);updateDups()});return false
+      var $b=$(this);getKeystroke(function(k){k&&$b.parent().append(keyHTML(k)).append($b);updateDups()});return!1
     })
     .on('click','.shortcuts-reset',function(){
       var $tr=$(this).closest('tr'),c=$tr.data('code')
@@ -50,7 +50,7 @@ this.init=function($e){
     })
     $('#shortcuts-no-results').toggle(!found)
   })
-  $('#shortcuts-search-clear').click(function(){$(this).hide();$sc.val('').change().focus();return false})
+  $('#shortcuts-search-clear').click(function(){$(this).hide();$sc.val('').change().focus();return!1})
 }
 function getKeystroke(callback){
   var $d=$('<p><input class=shortcuts-input placeholder=...>').dialog({
@@ -66,13 +66,13 @@ function getKeystroke(callback){
       }else{
         $d.dialog('close');callback(this.value)
       }
-      return false
+      return!1
     })
     .keydown(function(e){
       var kn=CodeMirror.keyNames[e.which]||''
       if(kn==='Shift'||kn==='Ctrl'||kn==='Alt')kn=''
       $(this).val((e.shiftKey?'Shift-':'')+(e.ctrlKey?'Ctrl-':'')+(e.altKey?'Alt-':'')+kn)
-      return false
+      return!1
     })
 }
 this.load=function(){

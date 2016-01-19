@@ -31,16 +31,16 @@ D.installMenu=D.installMenu||function(arg){
       $a.toggleClass('m-checked',!!x.checked)
         .on('mousedown mouseup click',function(e){
           $(this).closest('.menu').find('.m-group-'+x.group).removeClass('m-checked')
-          $(this).addClass('m-checked');mFocus(null);x.action&&x.action();return false
+          $(this).addClass('m-checked');mFocus(null);x.action&&x.action();return!1
         })
     }else if(x.checkBoxPref){
       x.checkBoxPref(function(v){$a.toggleClass('m-checked',!!v)})
       $a.toggleClass('m-checked',!!x.checkBoxPref())
         .on('mousedown mouseup click',function(e){
-          mFocus(null);x.action&&x.action($(this).hasClass('m-checked'));return false
+          mFocus(null);x.action&&x.action($(this).hasClass('m-checked'));return!1
         })
     }else{
-      x.action&&$a.on('mousedown mouseup click',function(e){mFocus(null);x.action();return false})
+      x.action&&$a.on('mousedown mouseup click',function(e){mFocus(null);x.action();return!1})
     }
     if(!x.items)return $a
     var $b=$('<div class=m-box>');
@@ -65,7 +65,7 @@ D.installMenu=D.installMenu||function(arg){
       var $t=$m.children(),i=$e.parentsUntil('.menu').last().index() // Which top-level menu are we under?
       var n=$t.length;mFocus($t.eq((i+d+n)%n).find('a').eq(1))
     }
-    return false
+    return!1
   }
   function upDown(d,$e){ // d: +1 or -1, $e: target element
     if($e.is('.m-top')){
@@ -74,20 +74,20 @@ D.installMenu=D.installMenu||function(arg){
       var $s=$e.closest('.m-box').children(':not(hr)'),i=$s.index($e),n=$s.length,$f=$s.eq((i+d+n)%n)
       mFocus($f.is('a')?$f:$f.find('a').first())
     }
-    return false
+    return!1
   }
   var $m=$('<div class=menu>').prependTo('body').empty().addClass('menu').append(arg.map(render))
   $m.find('>.m-sub>.m-opener').addClass('m-top')
   $m.on('mouseover','a',function(){$(this).closest('.menu').children().is('.m-open')&&mFocus(this)})
-    .on('mousedown','a',function(){mFocus($(this).parentsUntil('.menu').last().is('.m-open')?null:this);return false})
-    .on('click',    'a',function(){return false})
+    .on('mousedown','a',function(){mFocus($(this).parentsUntil('.menu').last().is('.m-open')?null:this);return!1})
+    .on('click',    'a',function(){return!1})
     .keydown(function(e){
       switch(CodeMirror.keyNames[e.which]){
         case'Left' :leftRight(-1,$(e.target));break
         case'Right':leftRight( 1,$(e.target));break
         case'Up'   :upDown   (-1,$(e.target));break
         case'Down' :upDown   ( 1,$(e.target));break
-        case'Esc':case'F10':mFocus(null);return false
+        case'Esc':case'F10':mFocus(null);return!1
       }
     })
   function isAccessKeyEvent(e){return e.altKey&&!e.ctrlKey&&!e.shiftKey&&65<=e.which&&e.which<=90}
@@ -97,7 +97,7 @@ D.installMenu=D.installMenu||function(arg){
     .keydown(function(e){
       if(isAccessKeyEvent(e)){
         var $x=$m.find('[accessKey='+String.fromCharCode(e.which).toLowerCase()+']:visible')
-        if($x.length){$x.mousedown();$x.parent().find('a').eq(1).focus();return false}
+        if($x.length){$x.mousedown();$x.parent().find('a').eq(1).focus();return!1}
       }
     })
   // todo: is mapping F10 in CodeMirror really necessary?

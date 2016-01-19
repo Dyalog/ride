@@ -57,7 +57,7 @@ this.init=function($e){
     $pfx.val(prefs.prefixKey.getDefault()).change()
     model[lc]=[layouts[lc][2].split(''),layouts[lc][3].split('')]
     updateGlyphs()
-    return false
+    return!1
   })
   $lc=$('#layout-lc').change(updateGlyphs)
   $pfx=$('#layout-pfx')

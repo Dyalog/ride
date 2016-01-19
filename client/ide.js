@@ -135,11 +135,11 @@ this.IDE=function(){
     },200)
   }
   $('.lbar')
-    .on('mousedown',function(){return false})
+    .on('mousedown',function(){return!1})
     .on('mousedown','b',function(e){
       var ch=$(e.target).text()
-      for(var k in ide.wins){var w=ide.wins[k];if(w.hasFocus()){w.insert(ch);return false}}
-      $(':focus').insert(ch);return false
+      for(var k in ide.wins){var w=ide.wins[k];if(w.hasFocus()){w.insert(ch);return!1}}
+      $(':focus').insert(ch);return!1
     })
     .on('mouseout','b,.lbar-prefs',function(){clearTimeout(ttid);ttid=null;$tip.add($tipTriangle).hide()})
     .on('mouseover','b',function(e){

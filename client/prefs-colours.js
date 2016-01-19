@@ -173,24 +173,24 @@ this.init=function($e){
     }
   }).keydown(function(e){ // todo
     switch(e.which){
-      case 13:$(this)                 .blur();return false // enter
-      case 27:$(this).val(scheme.name).blur();return false // esc
+      case 13:$(this)                 .blur();return!1 // enter
+      case 27:$(this).val(scheme.name).blur();return!1 // esc
     }
   })
   $('#col-clone').button().click(function(){
     var x={};schemes.push(x);for(var k in scheme)x[k]=$.extend({},scheme[k]) // x:the new scheme
     x.name=chooseUniqueSchemeName(scheme.name);delete x.frozen;scheme=x;updateSchemes()
-    return false
+    return!1
   })
   $('#col-rename').button().click(function(){
     $('#col-new-name').width($('#col-scheme').width()).val(scheme.name).select()
     $('#prefs-tab-colours').addClass('renaming')
     setTimeout(function(){$('#col-new-name').focus()},0)
-    return false
+    return!1
   })
   $('#col-delete').button().click(function(){
     var i=$('#col-scheme')[0].selectedIndex;schemes.splice(i,1)
-    scheme=schemes[Math.min(i,schemes.length-1)];updateSchemes();return false
+    scheme=schemes[Math.min(i,schemes.length-1)];updateSchemes();return!1
   })
   $cm=$('#col-cm')
   cm=CodeMirror($cm[0],{

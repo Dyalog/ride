@@ -119,7 +119,7 @@
     }}})
   )
   var cmenu=new gui.Menu;for(var i=0;i<items.length;i++)cmenu.append(new gui.MenuItem(items[i]))
-  $(document).contextmenu(function(e){cmenu.popup(e.clientX,e.clientY);return false})
+  $(document).contextmenu(function(e){cmenu.popup(e.clientX,e.clientY);return!1})
 
   D.readFile=fs.readFile // needed for presentation mode
 
@@ -155,7 +155,7 @@
   // Debugging utilities
   $(document).keydown(function(e){
     if(e.which===123&&!e.altKey&&!e.shiftKey){ // F12
-      e.ctrlKey?showProtocolLog():nww.showDevTools().setAlwaysOnTop(1);return false
+      e.ctrlKey?showProtocolLog():nww.showDevTools().setAlwaysOnTop(1);return!1
     }
   })
   function showProtocolLog(){
@@ -173,7 +173,7 @@
                                              'position:absolute;top:0;bottom:0;left:0;right:0;overflow:scroll}</style>'
       lw.document.title='RIDE Protocol Log';wr(proxy.log.get().join(''));proxy.log.listeners.push(wr)
     }
-    return false
+    return!1
   }
 
   // expandStackString inserts snippets of code next to each file:///filename.js:123:45
@@ -230,7 +230,7 @@
           '</body>'+
         '<html>'
       )
-      return false
+      return!1
     })
   }
 

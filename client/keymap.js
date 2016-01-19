@@ -2,7 +2,7 @@
 var helpurls=require('./helpurls'),prefs=require('./prefs'),about=require('./about'),esc=require('./util').esc,
     prefsUI=require('./prefs-ui'),ACB_VALUE=require('./editor').ACB_VALUE,kbds=require('./kbds')
 
-window.onhelp=function(){return false} // prevent IE from acting silly on F1
+window.onhelp=function(){return!1} // prevent IE from acting silly on F1
 prefs.prefixKey(function(x,old){
   if(x!==old){var m=CodeMirror.keyMap.dyalogDefault;m["'"+x+"'"]=m["'"+old+"'"];delete m["'"+old+"'"]}
 })
@@ -137,7 +137,7 @@ $.extend(CodeMirror.commands,{
       var counter=3,btn=pw.document.getElementById('ok');btn.value='OK ('+counter+')'
       var ok=btn.onclick=function(){
         pw.document.getElementById('content').innerHTML=esc(cm.getValue())
-        setTimeout(function(){pw.print()},500);clearInterval(iid);iid=0;return false
+        setTimeout(function(){pw.print()},500);clearInterval(iid);iid=0;return!1
       }
       var iid=setInterval(function(){btn.value='OK ('+(--counter)+')';counter||ok()},1000)
     }
@@ -146,7 +146,7 @@ $.extend(CodeMirror.commands,{
 
 function switchWindows(d){ // d: a step of either 1 or -1
   var a=[],i=-1,wins=D.ide.wins;for(var k in wins){wins[k].hasFocus()&&(i=a.length);a.push(wins[k])}
-  var j=i<0?0:(i+a.length+d)%a.length;$('#wintab'+a[j].id+' a').click();a[j].focus();return false
+  var j=i<0?0:(i+a.length+d)%a.length;$('#wintab'+a[j].id+' a').click();a[j].focus();return!1
 }
 
 // kbds.layouts[lc] contains four strings describing how keys map to characters:

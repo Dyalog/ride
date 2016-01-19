@@ -2,7 +2,7 @@
 var conn=require('./conn'),Editor=require('./editor').Editor,IDE=require('./ide').IDE,prefs=require('./prefs')
 require('./prefs-colours');require('./demo');require('./cm-foldgutter') // require() these to initialise them
 $(function(){
-  CodeMirror.defaults.dragDrop=false;window.ondragover=window.ondrop=function(e){e.preventDefault();return false}
+  CodeMirror.defaults.dragDrop=false;window.ondragover=window.ondrop=function(e){e.preventDefault();return!1}
   // don't use Alt- keystrokes on the Mac (see email from 2015-09-01)
   var h=CodeMirror.keyMap.emacsy;for(var k in h)if(/^alt-[a-z]$/i.test(k))delete h[k]
   if(D.nwjs){

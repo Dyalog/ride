@@ -26,7 +26,7 @@ this.init=function($e){
   wt=document.getElementById('title-input')
   $e.on('click','pre a',function(e){$(wt).insert($(e.target).text())})
   $('pre a',e).attr('title','Insert')
-  $('.reset',e).button().click(function(){wt.value=prefs.title.getDefault();return false})
+  $('.reset',e).button().click(function(){wt.value=prefs.title.getDefault();return!1})
 }
 this.load=function(){wt.value=prefs.title()}
 this.save=function(){prefs.title(wt.value)}
