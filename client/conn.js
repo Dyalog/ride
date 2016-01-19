@@ -36,6 +36,7 @@ module.exports=function(){
   $('#cn-ssl-cb').change(function(){$('#cn-ssl-detail').toggle(this.checked)})
   $('#cn-cert-cb').change(function(){$('#cn-cert').prop('disabled',!this.checked).val('')})
   $('#cn-subj-cb').change(function(){$('#cn-subj').prop('disabled',!this.checked).val('')})
+                  .click(function(){this.checked&&$('#cn-subj').focus()})
   prefs.favs().forEach(function(x){$('#cn-favs').append(favDOM(x))})
   $('#cn-favs').list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
     .on('click','.go',function(e){
