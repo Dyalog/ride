@@ -33,6 +33,9 @@ module.exports=function(){
     else{e.value=s=s.replace(/([^\n])$/,'$1\n')+t+'\n';e.setSelectionRange(s.length-t.length+k.length,s.length-1)}
     return!1
   })
+  $('#cn-ssl-cb').change(function(){$('#cn-ssl-detail').toggle(this.checked)})
+  $('#cn-cert-cb').change(function(){$('#cn-cert').prop('disabled',!this.checked).val('')})
+  $('#cn-subj-cb').change(function(){$('#cn-subj').prop('disabled',!this.checked).val('')})
   prefs.favs().forEach(function(x){$('#cn-favs').append(favDOM(x))})
   $('#cn-favs').list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
     .on('click','.go',function(e){
@@ -40,10 +43,10 @@ module.exports=function(){
       setTimeout(function(){$('#cn-go').click()},1) // todo
     })
     .keydown(function(e){switch(fmtKey(e)){
-      case'Enter':$('#cn-go:visible').click();return!1
-      case'Insert':case'Ctrl-N':$('#cn-new').click();return!1
-      case'Delete':$('#cn-del').click();return!1
-      case'Ctrl-D':$('#cn-clone').click();return!1
+      case'Enter' :$('#cn-go:visible').click();return!1
+      case'Ctrl-N':$('#cn-new       ').click();return!1
+      case'Delete':$('#cn-del       ').click();return!1
+      case'Ctrl-D':$('#cn-clone     ').click();return!1
     }})
     .on('list-selection-changed',function(){
       $sel=$('#cn-favs .list-selection')
@@ -53,9 +56,13 @@ module.exports=function(){
       if(u){
         $('#cn-type').val(sel.type||'tcp');updateFormDetail()
         $('#cn-fav-cb').prop('checked',!sel.tmp);$('#cn-fav-name').val(sel.name);$('#cn-fav-name-wr').toggle(!sel.tmp)
-        $('#cn-rhs [name]').each(function(){$(this).val(sel[this.name])})
+        $('#cn-rhs :text[name],#cn-rhs textarea[name]').each(function(){$(this).val(sel[this.name])})
+        $('#cn-rhs :checkbox[name]').each(function(){$(this).prop('checked',+sel[this.name])})
         $('#cn-exes').val(sel.exe).val()||$('#cn-exes').val('') // use sel.exe if available, otherwise use "Other..."
         $('#cn-rhs :text').elastic()
+        $('#cn-ssl-detail').toggle(!!sel.ssl)
+        $('#cn-cert-cb').prop('checked',!!sel.cert);$('#cn-cert').prop('disabled',!sel.cert)
+        $('#cn-subj-cb').prop('checked',!!sel.subj);$('#cn-subj').prop('disabled',!sel.subj)
       }
     })
     .list('select',0).find('a').eq(0).focus()
@@ -73,8 +80,9 @@ module.exports=function(){
   $('#cn-go').click(go)
   $('#cn-lhs').resizable({handles:'e',resize:function(e,ui){$('#cn-rhs').css({left:ui.size.width+10})}})
   $('#cn-rhs :text').elastic()
-  $('#cn-rhs :text,#cn-rhs textarea')
+  $('#cn-rhs :text[name],#cn-rhs textarea[name]')
     .on('keyup change',function(){var k=this.name,v=this.value;if(sel[k]!==v){sel[k]=v;save()}})
+  $('#cn-rhs :checkbox[name]').change(function(){var k=this.name,v=+this.checked;if(sel[k]!==v){sel[k]=v;save()}})
   D.socket
     .on('*proxyInfo',function(x){
       $('#cn-exes').html(

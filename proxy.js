@@ -141,7 +141,7 @@ var handlers={
     var interpreters=[]
     function parseVersion(s){return s.split('.').map(function(x){return+x})}
     if(/^win/.test(process.platform)){
-      try {
+      try{
         cp.exec('reg query "HKEY_CURRENT_USER\\Software\\Dyalog" /s /v localdyalogdir',{timeout:2000},
           function(err,s){
             var bits,edition,version,m

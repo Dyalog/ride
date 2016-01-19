@@ -21,29 +21,30 @@
 		<div id=cn-favs></div>
 	</div>
 	<div id=cn-rhs>
-		<p><label id=cn-fav-cb-wr><input id=cn-fav-cb type=checkbox data-accesskey=r><u>R</u>emember connection</label>
+		<p><label id=cn-fav-cb-wr><input id=cn-fav-cb type=checkbox data-accesskey=r><u>R</u>emember cnection</label>
 			<label id=cn-fav-name-wr data-accesskey=a> <u>a</u>s <input id=cn-fav-name></label>
 		<p>Connection <u>t</u>ype:
 			<select id=cn-type data-accesskey=t>
-				<option value=local>Start a local interpreter
-				<option value=ssl>Connect to an interpreter using SSL (encrypted)
-				<option value=tcp>Connect to an interpreter (unencrypted)
-				<option value=ssh>Start a remote interpreter through ssh
+				<option value=tcp   >Connect to an interpreter
+				<option value=local >Start a local interpreter
+				<option value=ssh   >Start an interpreter through ssh
 				<option value=listen>Listen for connections from interpreters
 			</select>
 		<hr>
 		<div id=cn-detail>
-			<div id=cn-ssl style=display:none>
-				<p><u>H</u>ost and <u>p</u>ort:
-					<input name=host data-accesskey=h size=12> :
-					<input name=port data-accesskey=p placeholder=443 size=4>
-				<p>C<u>e</u>rtificate:
-					<input name=cert data-accesskey=e type=file>
-			</div>
 			<div id=cn-tcp style=display:none>
 				<p><u>H</u>ost and <u>p</u>ort:
 					<input name=host data-accesskey=h size=12> :
 					<input name=port data-accesskey=p placeholder=4502 size=4>
+					<p><label><input name=ssl type=checkbox id=cn-ssl-cb data-accesskey=s><u>S</u>ecure connection (SSL)</label>
+				<div id=cn-ssl-detail class=indent>
+					<p>
+						<label><input type=checkbox id=cn-cert-cb data-accesskey=e>Provide c<u>e</u>rtificate</label>
+						<input id=cn-cert name=cert type=file>
+					<p>
+						<label><input type=checkbox id=cn-subj-cb data-accesskey=v><u>V</u>alidate server subject name</label>
+						<input id=cn-subj name=subj>
+				</div>
 			</div>
 			<div id=cn-local style=display:none>
 				<p><u>I</u>nterpreter:
