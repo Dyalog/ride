@@ -3,6 +3,7 @@ common abbreviations used throughout the code:
 bg    background
 btn   button
 cb    checkbox
+clt   client (like in Conga)
 cm    CodeMirror
 cmd   command, a 2-or-3-uppercase-letter code for an IDE action
 col   colour; column
@@ -36,7 +37,9 @@ sc    search (like Dyalog's SC command)
 sel   selection
 se    session
 sfx   suffix
+skt   socket
 sol   start of line (used by CodeMirror)
+srv   server (like in Conga)
 stk   stack
 tb    toolbar
 thm   theme
