@@ -1,32 +1,42 @@
-#Overview
-The RIDE protocol consists of messages sent in both directions over a TCP connection.
+The RIDE protocol consists of messages sent in either direction over a TCP connection.
 
-A message starts with the ASCII bytes for `"RIDE"`, followed by a 4-byte big-endian length field and a payload.
-The length field is 8 + the length of the payload.
-The payload is a UTF-8-encoded 2-element JSON array of a command name and key/value pairs:
+A message starts with a 4-byte big-endian *total length* field, followed by the ASCII bytes for `"RIDE"` and a
+UTF-8-encoded JSON payload:
+```
+    8+len(payload)   "RIDE" magic number   payload
+┌───────────────────┬───────────────────┬───────────┐
+│0x00 0x00 0x00 0x0b│0x52 0x49 0x44 0x45│    ...    │
+└───────────────────┴───────────────────┴───────────┘
+```
+*Total length* is 8 + the payload's length in bytes.
+The payload is a 2-element JSON array of a command name and key/value pairs:
 ```json
 ["CommandName",{"key1":value1,"key2":value2,...}]
 ```
 
 Messages are independent and after the initial connection setup can be sent/received in any order. Some messages infer that the other end will send a reply, but that reply may not be the next message to be received, or even ever be sent.
 
-Message names and properties are case-sensitive. <s>(was: case-insensitive)</s>
+Message names and properties are case-sensitive.
 
-Messages that are not understood should be ignored.
+:x: was: case-insensitive
+
+If the receiver of a message does not recognise it, it should ignore it.
 
 The connection may be closed at any time, leaving some messages undelivered or unprocessed.
 
 #Initial connection setup
 After the connection has been established and a protocol agreed, all applications immediately send an `Identify` message to indicate what type of application they are.
-They should then check the type of application they are connected to, and if not happy to continue close the connection.
+They should then check the type of application they are connected to, and if not happy to continue, close the connection.
 
 E.g. a RIDE should send an `Identify` message and then check that the application it's connected to is an interpreter or a process manager. If it finds the peer is another RIDE, it should close the connection.
 
-After a RIDE connects to an interpreter it can get the current state of the interpreter by sending `GetCurrentSession` and `UpdateAllWindows` messages. <s>It can also request a language bar if required.</s>
+After a RIDE connects to an interpreter it can get the current state of the interpreter by sending `GetCurrentSession` and `UpdateAllWindows` messages.
 
-<s>In general the client (end that initiated the connection) should request the information it needs. The server (end receiving the connection) should not assume the information that is required. Rather it should just reply to requests for information and send appropriate messages when its state changes.</s>
+:x: <s>It can also request a language bar if required.</s>
 
-#Message set V2
+:x: <s>In general the client (end that initiated the connection) should request the information it needs. The server (end receiving the connection) should not assume the information that is required. Rather, it should just reply to requests for information and send appropriate messages when its state changes.</s>
+
+#Message set
 
 ##Sent from RIDE to interpreters
 
@@ -112,12 +122,15 @@ Request opening an editor on the term at the given position in edit.
 ```json
 ["GetAutoComplete",{"line":"r←1+ind","pos":7,"token":234}]
 ```
-The `token` is used by `ReplyGetAutoComplete` to identify which `AutoComplete` request it is a response to. The RIDE may send multiple `GetAutoComplete` requests and the interpreter may only reply to some of them. Similarly, the RIDE may ignore some of the replies if the state of the editor has changed since the `GetAutoComplete` request was sent.
+The `token` is used by `ReplyGetAutoComplete` to identify which `AutoComplete` request it is a response to. RIDE may send multiple `GetAutoComplete` requests and the interpreter may only reply to some of them. Similarly, RIDE may ignore some of the replies if the state of the editor has changed since the `GetAutoComplete` request was sent.
 
-`line` => Text containing term to get autocomplete data for.
-`pos` => Position in the line to use for autocomplete information.
+* `line`: text containing term to get autocomplete data for
+* `pos`: position in the line to use for autocomplete information
+
 :exclamation: The interpreter requires that "token" is the id of the window, so perhaps it should be renamed "win".
+
 :exclamation: If RIDE sends a different token, the interpreter doesn't respond.
+
 :exclamation: I think the C in AutoComplete shouldn't be capitalised as "autocomplete" is one word
 
 ```json
@@ -219,6 +232,7 @@ Sent if evaluating an expression generates an error. If RIDE has any pending exp
 ["HighlightLine",{"lineInfo":...}]
 ```
 :exclamation: RIDE2+ supports this command in a slightly different format, legacy from before I switched to RIDE protocol v2.
+
 Request that RIDE sets the position of the current line marker in a trace window.
 
 ```json
