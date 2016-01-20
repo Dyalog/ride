@@ -19,7 +19,6 @@ module.exports=function(){
     if(sel.name!==this.value){sel.name=this.value;$sel.find('a').text(favText(sel));save()}
   })
   $('#cn-type').change(function(){sel.type=this.value;updateFormDetail();save()})
-    .mouseup(function(){$('#cn-detail :input:visible').eq(0).focus()})
   updateFormDetail()
   $('#cn-ssh [name=user]').prop('placeholder',process.env.USER||'')
   $('#cn-exe').on('change keyup',function(){$('#cn-exes').val()||prefs.otherExe($(this).val())})
