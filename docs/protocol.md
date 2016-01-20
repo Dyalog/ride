@@ -40,6 +40,7 @@ After a RIDE connects to an interpreter it can get the current state of the inte
 
 ##Sent from RIDE to interpreters
 
+<a name=CanSessionAcceptInput></a>
 ```json
 ["CanSessionAcceptInput",{}]
 ```
@@ -47,11 +48,13 @@ After a RIDE connects to an interpreter it can get the current state of the inte
 
 Establish if the session can accept input.
 
+<a name=TraceBackward></a>
 ```json
 ["TraceBackward",{"win":123}]
 ```
 Request the current line in a trace window be moved back.
 
+<a name=ClearTraceStopMonitor></a>
 ```json
 ["ClearTraceStopMonitor",{"win":123}]
 ```
@@ -59,16 +62,19 @@ Request the current line in a trace window be moved back.
 
 Request it clears all breakpoints, stops, and monitors for a trace window.
 
+<a name=Continue></a>
 ```json
 ["Continue",{"win":123}]
 ```
 Request restart of the APL program. (Black arrow in ODE)
 
+<a name=ContinueTrace></a>
 ```json
 ["ContinueTrace",{"win":123}]
 ```
 Request resumption of tracing an APL program. (White arrow in ODE)
 
+<a name=ContinueAllThreads></a>
 ```json
 ["ContinueAllThreads",{"win":123}]
 ```
@@ -76,31 +82,37 @@ Request resumption of tracing an APL program. (White arrow in ODE)
 
 Request resumption of all threads. (Green arrow in ODE)
 
+<a name=Cutback></a>
 ```json
 ["Cutback",{"win":123}]
 ```
 Request the stack is cut back one level.
 
+<a name=TraceForward></a>
 ```json
 ["TraceForward",{"win":123}]
 ```
 Request the current line in a trace window be moved forward.
 
+<a name=RestartThreads></a>
 ```json
 ["RestartThreads",{"win":123}]
 ```
 Request all suspended threads are restarted.
 
+<a name=RunCurrentLine></a>
 ```json
 ["RunCurrentLine",{"win":123}]
 ```
 Request the current line in a trace window is executed. (Step over)
 
+<a name=StepInto></a>
 ```json
 ["StepInto",{"win":123}]
 ```
 Request the current line in a trace window is executed. (Step into)
 
+<a name=UnpauseThreads></a>
 ```json
 ["UnpauseThreads",{"win":123}]
 ```
@@ -108,17 +120,20 @@ Request the current line in a trace window is executed. (Step into)
 
 Request all suspended threads are resumed from their current position.
 
+<a name=Edit></a>
 ```json
 ["Edit",{"win":123,"pos":4,"text":"a←b+c×d"}]
 ```
 Request opening an editor on the term at the given position in edit.
 
+<a name=Execute></a>
 ```json
 ["Execute",{"text":"      1 2 3+4 5 6","trace":true}]
 ```
-`text` => to evaluate
-`trace` => the expression should be evaluated in the tracer
+* `text`: to evaluate
+* `trace`: the expression should be evaluated in the tracer
 
+<a name=GetAutoComplete></a>
 ```json
 ["GetAutoComplete",{"line":"r←1+ind","pos":7,"token":234}]
 ```
@@ -133,16 +148,19 @@ The `token` is used by `ReplyGetAutoComplete` to identify which `AutoComplete` r
 
 :exclamation: I think the C in AutoComplete shouldn't be capitalised as "autocomplete" is one word
 
+<a name=SaveChanges></a>
 ```json
 ["SaveChanges",{"win":123,"text":"r←avg a\nr←(+⌿÷≢)a","lineAttributes":...}]
 ```
 Request that the contents of an editor are fixed.
 
+<a name=WeakInterrupt></a>
 ```json
 ["WeakInterrupt",{}]
 ```
 Request a weak interrupt.
 
+<a name=GetLanguageBar></a>
 ```json
 ["GetLanguageBar",{}]
 ```
@@ -150,6 +168,7 @@ Request a weak interrupt.
 
 Request that the interpreter sends a language bar.
 
+<a name=GetSessionContent></a>
 ```json
 ["GetSessionContent",{}]
 ```
@@ -157,30 +176,35 @@ Request that the interpreter sends a language bar.
 
 Request the current content of the session.
 
+<a name=UpdateAllWindows></a>
 ```json
 ["UpdateAllWindows",{}]
 ```
 :x: Not used in RIDE2+
 
-Request the interpreter sends UpdateWindow messages for all currently open windows.
+Request the interpreter sends `UpdateWindow` messages for all currently open windows.
 
+<a name=StrongInterrupt></a>
 ```json
 ["StrongInterrupt",{}]
 ```
 The interpreter message queue should check for strong interrupts and handle them immediately without needing to fully parse messages.
 
+<a name=Exit></a>
 ```json
 ["Exit",{"code":0}]
 ```
 Request that the interpreter process exits. This is useful for cleanly shutting down a locally spawned interpreter.
 
 ##Sent from the interpreter to RIDE
+<a name=AtInputPrompt></a>
 ```json
 ["AtInputPrompt",{"inputModeState":5}]
 ```
 Inform RIDE that session input should be allowed, and the reason why. RIDE uses this information to determine when to display the six space prompt.
 TODO: describe constants for "why"
 
+<a name=ReplyCanSessionAcceptInput></a>
 ```json
 ["ReplyCanSessionAcceptInput",{"canAcceptInput":true}]
 ```
@@ -188,28 +212,33 @@ Inform RIDE whether or not the session can currently accept input.
 
 :x: Note: This is a hack and should go away...
 
+<a name=EchoInput></a>
 ```json
 ["EchoInput",{"input":"      1 2 3+4 5 6\n"}]
 ```
 Note that RIDE will append a newline before displaying the input.
 Note: RIDE can’t assume that everything entered in the session should be echoed. e.g. quote quad input.
 
+<a name=OpenWindow></a>
 ```json
 ["OpenWindow",{"editableEntity":...}]
 ```
 Request a new editor or tracer window.
 
+<a name=AppendSessionOutput></a>
 ```json
 ["AppendSessionOutput",{"result":"5 7 9\n"}]
 ```
 Display text in the session.
 Should be used for initial display of the session log, as well as other output.
 
+<a name=FocusWindow></a>
 ```json
 ["FocusWindow",{"win":123}]
 ```
 Request that RIDE puts the focus into a particular window.
 
+<a name=ReplyGetAutoComplete></a>
 ```json
 ReplyGetAutoComplete [int skip, string[] options, int token]
 ```
@@ -217,17 +246,20 @@ ReplyGetAutoComplete [int skip, string[] options, int token]
 
 Sent in response to a `GetAutoComplete` message.
 
+<a name=LanguageBar></a>
 ```json
 ["LanguageBar",{"elements":[languageBarElement0,...]}]
 ```
 :x: not used in RIDE2+
 Sent if the language bar is requested or updated.
 
+<a name=HadError></a>
 ```json
 ["HadError",{}]
 ```
 Sent if evaluating an expression generates an error. If RIDE has any pending expressions to evaluate it should discard them.
 
+<a name=HighlightLine></a>
 ```json
 ["HighlightLine",{"lineInfo":...}]
 ```
@@ -235,22 +267,26 @@ Sent if evaluating an expression generates an error. If RIDE has any pending exp
 
 Request that RIDE sets the position of the current line marker in a trace window.
 
+<a name=NotAtInputPrompt></a>
 ```json
 ["NotAtInputPrompt",{}]
 ```
 Tell RIDE to disable session input.
 
+<a name=ReplySaveChanges></a>
 ```json
 ["ReplySaveChanges",{"win":123,"err":0}]
 ```
 Sent in response to a `SaveChanges` message.
 If `err` is 0, save succeeded; otherwise it failed.
 
+<a name=ShowHTML></a>
 ```json
 ["ShowHTML",{"title":"Example","html":"<i>Hell</i><b>o</b> world"}]
 ```
 Request RIDE shows some HTML.  See `3500⌶`.
 
+<a name=StatusOutput></a>
 ```json
 ["StatusOutput",{"statusInfo":"..."}]
 ```
@@ -258,32 +294,38 @@ Request RIDE shows some HTML.  See `3500⌶`.
 
 Status information that should be displayed to the user.
 
+<a name=SysError></a>
 ```json
 ["SysError",{"text":"We accidentally replaced your heart with a baked potato","stack":"..."}]
 ```
 Sent after a syserror before the interpreter terminates.
 
+<a name=UpdateWindow></a>
 ```json
 ["UpdateWindow",{"editableEntity":...}]
 ```
 Tell RIDE to update the contents of a window. Typically used when a window switches from tracer mode to editor mode, or tracing up/down the stack.
 
+<a name=UpdateDisplayName></a>
 ```json
 ["UpdateDisplayName",{"displayName":"CLEAR WS"}]
 ```
 Sent when the display name changes.
 
+<a name=WindowTypeChanged></a>
 ```json
 ["WindowTypeChanged",{"win":123,"tracer":true}]
 ```
 Tell RIDE to switch a window between debugger and editor modes.
 
 #Sent from either RIDE or interpreter
+<a name=SetLineAttributes></a>
 ```json
 ["SetLineAttributes",{"win":123,"lineAttributes":...}]
 ```
 Update the breakpoints, Trace points and monitors in an editor.
 
+<a name=CloseWindow></a>
 ```json
 ["CloseWindow",{"win":123}]
 ```
@@ -291,28 +333,33 @@ If sent from the interpreter, tell RIDE to close an open editor window.
 If sent from RIDE, request that a window be closed.
 
 #Sent from either a RIDE, Interpreter or Process Manager
+<a name=Identify></a>
 ```json
 ["Identify",{"identity":...}]
 ```
 Sent as part of the initial connection setup.
 
+<a name=Disconnect></a>
 ```json
 ["Disconnect",{"msg":"..."}]
 ```
 Sent to shut down the connection cleanly.
 
 #Sent from a RIDE or Interpreter to a Process Manager
+<a name=GetAvailableConnections></a>
 ```json
 ["GetAvailableConnections",{"connections":[c0,c1,...]}]
 ```
 Request a list of availabe connections.
 
+<a name=ConnectTo></a>
 ```json
 ["ConnectTo",{"remoteId":123}]
 ```
 Request a connection to a specific item (RIDE or interpreter).
 
 #Sent from a Process manager to a RIDE or Interpreter
+<a name=ConnectToSucceded></a>
 ```json
 ["ConnectToSucceded",{"remoteId":123,"identity":...,"protocolNumber":...}]
 ```
@@ -320,20 +367,23 @@ Tell the client that the ProcessManager is handing off the connection to a RIDE 
 The process manager knows the supported protocols so it can pick a supported protocol for the clients to switch to.
 Once this is received the client is no longer connected to the PM, but rather is connected to the specified process.
 
+<a name=ConnectToFailed></a>
 ```json
 ConnectToFailed [int remoteId, string reason]
   Tell the client that the attempt to connect to a particular process failed.
 ```
 
 #Sent from anything to anything
+<a name=GetDetailedInformation></a>
 ```json
-["GetDetailedInformation",{remoteId:[3,4,5,...]}]
+["GetDetailedInformation",{"remoteId":[12,34,...]}]
 ```
 If sent to a Process manager, `remoteId` is a list of remote IDs returned by `GetAvailableConnections`. Otherwise it's
 an empty list.
 
+<a name=ReplyGetDetailedInformation></a>
 ```json
-["ReplyGetDetailedInformation",{information:[i0,i1,...]}]
+["ReplyGetDetailedInformation",{"information":[i0,i1,...]}]
 ```
 Sent in reply to `GetDetailedInformation`.
 
