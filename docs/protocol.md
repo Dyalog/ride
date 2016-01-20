@@ -1,3 +1,5 @@
+> Note: I used :x: and :exclamation: as temporary markers for text that should be removed or corrected -Nick
+
 The RIDE protocol consists of messages sent in either direction over a TCP connection.
 
 A message starts with a 4-byte big-endian *total length* field, followed by the ASCII bytes for `"RIDE"` and a
@@ -25,16 +27,21 @@ If the receiver of a message does not recognise it, it should ignore it.
 The connection may be closed at any time, leaving some messages undelivered or unprocessed.
 
 #Initial connection setup
-After the connection has been established and a protocol agreed, all applications immediately send an `Identify` message to indicate what type of application they are.
+
+:exclamation: TODO: describe handshake (or, preferably, get rid of it in the implementation...)
+
+After the connection has been established and a protocol agreed, all applications immediately send an [`Identify`](#Identify) message to indicate what type of application they are.
 They should then check the type of application they are connected to, and if not happy to continue, close the connection.
 
-E.g. a RIDE should send an `Identify` message and then check that the application it's connected to is an interpreter or a process manager. If it finds the peer is another RIDE, it should close the connection.
+E.g. a RIDE should send an [`Identify`](#Identify) message and then check that the application it's connected to is an interpreter or a process manager. If it finds the peer is another RIDE, it should close the connection.
 
-After a RIDE connects to an interpreter it can get the current state of the interpreter by sending `GetCurrentSession` and `UpdateAllWindows` messages.
+After a RIDE connects to an interpreter it can get the current state of the interpreter by sending [`GetCurrentSession`](#GetCurrentSession) and [`UpdateAllWindows`](#UpdateAllWindows) messages.
 
-:x: <s>It can also request a language bar if required.</s>
+:x: TODO: is the above paragraph outdated?
 
-:x: <s>In general the client (end that initiated the connection) should request the information it needs. The server (end receiving the connection) should not assume the information that is required. Rather, it should just reply to requests for information and send appropriate messages when its state changes.</s>
+:x: It can also request a language bar if required.
+
+:x: In general the client (end that initiated the connection) should request the information it needs. The server (end receiving the connection) should not assume the information that is required. Rather, it should just reply to requests for information and send appropriate messages when its state changes.
 
 #Message set
 
@@ -44,7 +51,7 @@ After a RIDE connects to an interpreter it can get the current state of the inte
 ```json
 ["CanSessionAcceptInput",{}]
 ```
-:x: Not used in RIDE2+. This information is already available through `AtInputPrompt`.
+:x: Not used in RIDE2+. This information is already available through [`AtInputPrompt`](#AtInputPrompt).
 
 Establish if the session can accept input.
 
@@ -78,7 +85,7 @@ Request resumption of tracing an APL program. (White arrow in ODE)
 ```json
 ["ContinueAllThreads",{"win":123}]
 ```
-:x: Not used in RIDE2+.  The green arrow actually corresponds to `RestartThreads`.
+:x: Not used in RIDE2+.  The green arrow actually corresponds to [`RestartThreads`](#RestartThreads).
 
 Request resumption of all threads. (Green arrow in ODE)
 
@@ -137,7 +144,7 @@ Request opening an editor on the term at the given position in edit.
 ```json
 ["GetAutoComplete",{"line":"r←1+ind","pos":7,"token":234}]
 ```
-The `token` is used by `ReplyGetAutoComplete` to identify which `AutoComplete` request it is a response to. RIDE may send multiple `GetAutoComplete` requests and the interpreter may only reply to some of them. Similarly, RIDE may ignore some of the replies if the state of the editor has changed since the `GetAutoComplete` request was sent.
+The `token` is used by [`ReplyGetAutoComplete`](#ReplyGetAutoComplete) to identify which request it is a response to. RIDE may send multiple `GetAutoComplete` requests and the interpreter may only reply to some of them. Similarly, RIDE may ignore some of the replies if the state of the editor has changed since the `GetAutoComplete` request was sent.
 
 * `line`: text containing term to get autocomplete data for
 * `pos`: position in the line to use for autocomplete information
@@ -182,7 +189,7 @@ Request the current content of the session.
 ```
 :x: Not used in RIDE2+
 
-Request the interpreter sends `UpdateWindow` messages for all currently open windows.
+Request the interpreter sends [`UpdateWindow`](#UpdateWindow) messages for all currently open windows.
 
 <a name=StrongInterrupt></a>
 ```json
@@ -227,10 +234,11 @@ Request a new editor or tracer window.
 
 <a name=AppendSessionOutput></a>
 ```json
-["AppendSessionOutput",{"result":"5 7 9\n"}]
+["AppendSessionOutput",{"result":["5 7 9"]}]
 ```
 Display text in the session.
 Should be used for initial display of the session log, as well as other output.
+`result` is an array of strings -- lines without `"\n"`-s.
 
 <a name=FocusWindow></a>
 ```json
@@ -244,7 +252,7 @@ ReplyGetAutoComplete [int skip, string[] options, int token]
 ```
 :exclamation: RIDE2+ supports this command in a slightly different format, legacy from before I switched to RIDE protocol v2.
 
-Sent in response to a `GetAutoComplete` message.
+Sent in response to a [`GetAutoComplete`](#GetAutoComplete) message.
 
 <a name=LanguageBar></a>
 ```json
@@ -277,7 +285,7 @@ Tell RIDE to disable session input.
 ```json
 ["ReplySaveChanges",{"win":123,"err":0}]
 ```
-Sent in response to a `SaveChanges` message.
+Sent in response to a [`SaveChanges`](#SaveChanges) message.
 If `err` is 0, save succeeded; otherwise it failed.
 
 <a name=ShowHTML></a>
@@ -335,7 +343,7 @@ If sent from RIDE, request that a window be closed.
 #Sent from either a RIDE, Interpreter or Process Manager
 <a name=Identify></a>
 ```json
-["Identify",{"identity":...}]
+["Identify",{"identity":1}]
 ```
 Sent as part of the initial connection setup.
 
@@ -361,7 +369,7 @@ Request a connection to a specific item (RIDE or interpreter).
 #Sent from a Process manager to a RIDE or Interpreter
 <a name=ConnectToSucceded></a>
 ```json
-["ConnectToSucceded",{"remoteId":123,"identity":...,"protocolNumber":...}]
+["ConnectToSucceded",{"remoteId":123,"identity":1,"protocolNumber":...}]
 ```
 Tell the client that the ProcessManager is handing off the connection to a RIDE or Interpreter (as requested).
 The process manager knows the supported protocols so it can pick a supported protocol for the clients to switch to.
@@ -378,14 +386,13 @@ ConnectToFailed [int remoteId, string reason]
 ```json
 ["GetDetailedInformation",{"remoteId":[12,34,...]}]
 ```
-If sent to a Process manager, `remoteId` is a list of remote IDs returned by `GetAvailableConnections`. Otherwise it's
-an empty list.
+If sent to a Process manager, `remoteId` is a list of remote IDs returned by [`GetAvailableConnections`](#GetAvailableConnections). Otherwise it's an empty list.
 
 <a name=ReplyGetDetailedInformation></a>
 ```json
 ["ReplyGetDetailedInformation",{"information":[i0,i1,...]}]
 ```
-Sent in reply to `GetDetailedInformation`.
+Sent in reply to [`GetDetailedInformation`](#GetDetailedInformation).
 
 #Extended types
 This section describes types used in the messages that extend the simple types used in the message encoding.
