@@ -48,6 +48,7 @@ module.exports=function(){
       case'Delete':$('#cn-del       ').click();return!1
       case'Ctrl-D':$('#cn-clone     ').click();return!1
     }})
+    .on('list-order-changed',save)
     .on('list-selection-changed',function(){
       $sel=$('#cn-favs .list-selection')
       var u=$sel.length===1 // is selection unique?
