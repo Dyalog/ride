@@ -206,7 +206,16 @@ Request that the interpreter process exits. This is useful for cleanly shutting 
 ["AtInputPrompt",{"inputModeState":5}]
 ```
 Inform RIDE that session input should be allowed, and the reason why. RIDE uses this information to determine when to display the six space prompt.
-TODO: describe constants for "why"
+
+Constants for `inputModeState`:
+* `0` Invalid
+* `1` Descalc ("desktop calculator")
+* `2` QuadInput
+* `3` LineEditor
+* `4` QuoteQuadInput
+* `5` Prompt
+
+:exclamation: These modes need explaining with expected behaviour
 
 <a name=ReplyCanSessionAcceptInput></a>
 ```json
@@ -266,9 +275,11 @@ Sent if evaluating an expression generates an error. If RIDE has any pending exp
 
 <a name=HighlightLine></a>
 ```json
-["HighlightLine",{"lineInfo":...}]
+["HighlightLine",{"lineInfo":{"win":123,"line":45}}]
 ```
 :exclamation: RIDE2+ supports this command in a slightly different format, legacy from before I switched to RIDE protocol v2.
+
+:exclamation: `["highlight",{"win":123,"line":45}]`
 
 Request that RIDE sets the position of the current line marker in a trace window.
 
@@ -289,7 +300,7 @@ If `err` is 0, save succeeded; otherwise it failed.
 ```json
 ["ShowHTML",{"title":"Example","html":"<i>Hell</i><b>o</b> world"}]
 ```
-Request RIDE shows some HTML.  See `3500⌶`.
+Request RIDE shows some HTML.  See [`3500⌶`](http://help.dyalog.com/14.1/Content/Language/Primitive%20Operators/Send%20Text%20to%20RIDE-embedded%20Browser.htm)
 
 <a name=StatusOutput></a>
 ```json
@@ -303,7 +314,9 @@ Status information that should be displayed to the user.
 ```json
 ["SysError",{"text":"We accidentally replaced your heart with a baked potato","stack":"..."}]
 ```
-Sent after a syserror before the interpreter terminates.
+Sent after a
+[syserror](http://help.dyalog.com/14.1/Content/UserGuide/Installation%20and%20Configuration/System%20Errors.htm)
+before the interpreter terminates.
 
 <a name=UpdateWindow></a>
 ```json
@@ -328,7 +341,7 @@ Tell RIDE to switch a window between debugger and editor modes.
 ```json
 ["SetLineAttributes",{"win":123,"lineAttributes":...}]
 ```
-Update the breakpoints, Trace points and monitors in an editor.
+Update the breakpoints, trace points, and monitors in an editor.
 
 <a name=CloseWindow></a>
 ```json
@@ -357,6 +370,8 @@ Sent to shut down the connection cleanly.
 ```
 Request a list of availabe connections.
 
+:exclamation: Specify what c0,c1,... look like
+
 <a name=ConnectTo></a>
 ```json
 ["ConnectTo",{"remoteId":123}]
@@ -374,9 +389,9 @@ Once this is received the client is no longer connected to the PM, but rather is
 
 <a name=ConnectToFailed></a>
 ```json
-ConnectToFailed [int remoteId, string reason]
-  Tell the client that the attempt to connect to a particular process failed.
+["ConnectToFailed",{"remoteId":123,"reason":""}]
 ```
+Tell the client that the attempt to connect to a particular process failed.
 
 ##Sent from anything to anything
 <a name=GetDetailedInformation></a>
@@ -401,9 +416,6 @@ Note: If an enumeration is sent with any undefined value it is considered invali
 ```
 Bool => enumeration [0 false, 1 true]
 Identity => enumeration [0 invalid, 1 RIDE, 2 Interpreter, 3 PM]
-InputModeState => [0 Invalid, 1	Descalc,
-                   2 QuadInput, 3 LineEditor,
-                   4 QuoteQuadInput, 5 Prompt]  // These modes need explaining with expected behaviour
 
 EditableEntity => [string name, string text, int token,
                    byte[] colours, int currentRow, int currentColumn,    //REVIEW
@@ -432,8 +444,6 @@ EntityType => enumeration [0 invalid,
                            13 ExternalFunction]
 
 LanguageBarElement => [string desc, character chr, string text]
-
-LineInfo => [int win, int line]
 
 StatusInfo => [string text, int flags]
 
