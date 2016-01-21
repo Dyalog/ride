@@ -1,9 +1,8 @@
-> Note: I used :x: and :exclamation: as temporary markers for text that should be removed or corrected -Nick
+> Note: :x: :exclamation: :question: mark internal notes and won't appear in the final version -Nick
 
-The RIDE protocol consists of messages sent in either direction over a TCP connection.
+The RIDE protocol is formed of messages sent in either direction over a TCP connection.
 
-A message starts with a 4-byte big-endian *total length* field, followed by the ASCII bytes for `"RIDE"` and a
-UTF-8-encoded JSON payload:
+A message starts with a 4-byte big-endian *total length* field, followed by the ASCII bytes for `"RIDE"` and a UTF-8-encoded payload:
 ```
     8+len(payload)   "RIDE" magic number   payload
 ┌───────────────────┬───────────────────┬───────────┐
@@ -11,37 +10,35 @@ UTF-8-encoded JSON payload:
 └───────────────────┴───────────────────┴───────────┘
 ```
 *Total length* is 8 + the payload's length in bytes.
-The payload is a 2-element JSON array of a command name and key/value pairs:
+The payload is usually a 2-element JSON array consisting of a command name and arguments as key/value pairs:
 ```json
 ["CommandName",{"key1":value1,"key2":value2,...}]
 ```
+The only exception are the first two messages that each side sends upon establishing a connection.
+These constitute the *handshake* and are not JSON-encoded.  Their payloads are:
+```
+SupportedProtocols=1
+UsingProtocol=1
+```
 
-Messages are independent and after the initial connection setup can be sent/received in any order. Some messages infer that the other end will send a reply, but that reply may not be the next message to be received, or even ever be sent.
+Messages are independent and after the handshake can be sent/received in any order. Some messages infer that the other end will send a reply, but that reply may not be the next message to be received, or even ever be sent.
 
-Message names and properties are case-sensitive.
+Command names and their arguments are case-sensitive.
 
-:x: was: case-insensitive
+:exclamation: was: case-insensitive
 
 If the receiver of a message does not recognise it, it should ignore it.
 
 The connection may be closed at any time, leaving some messages undelivered or unprocessed.
 
-#Initial connection setup
+:question: Why say the above?  Isn't it obvious?
 
-:exclamation: TODO: describe handshake (or, preferably, get rid of it in the implementation...)
+#Initial connection setup
 
 After the connection has been established and a protocol agreed, all applications immediately send an [`Identify`](#Identify) message to indicate what type of application they are.
 They should then check the type of application they are connected to, and if not happy to continue, close the connection.
 
 E.g. a RIDE should send an [`Identify`](#Identify) message and then check that the application it's connected to is an interpreter or a process manager. If it finds the peer is another RIDE, it should close the connection.
-
-After a RIDE connects to an interpreter it can get the current state of the interpreter by sending [`GetCurrentSession`](#GetCurrentSession) and [`UpdateAllWindows`](#UpdateAllWindows) messages.
-
-:x: TODO: is the above paragraph outdated?
-
-:x: It can also request a language bar if required.
-
-:x: In general the client (end that initiated the connection) should request the information it needs. The server (end receiving the connection) should not assume the information that is required. Rather, it should just reply to requests for information and send appropriate messages when its state changes.
 
 #Message set
 
@@ -248,7 +245,7 @@ Request that RIDE puts the focus into a particular window.
 
 <a name=ReplyGetAutoComplete></a>
 ```json
-ReplyGetAutoComplete [int skip, string[] options, int token]
+["ReplyGetAutoComplete",{"skip":2,"options":["ab","abc","abde"],"token":123}]
 ```
 :exclamation: RIDE2+ supports this command in a slightly different format, legacy from before I switched to RIDE protocol v2.
 
@@ -296,7 +293,7 @@ Request RIDE shows some HTML.  See `3500⌶`.
 
 <a name=StatusOutput></a>
 ```json
-["StatusOutput",{"statusInfo":"..."}]
+["StatusOutput",{"statusInfo":"Bla-blah"}]
 ```
 :exclamation: Not supported in RIDE but likely will be in the future.
 
