@@ -42,7 +42,7 @@ E.g. a RIDE should send an [`Identify`](#Identify) message and then check that t
 
 #Message set
 
-##Sent from RIDE to interpreters
+##Sent from RIDE to an interpreter
 
 <a name=CanSessionAcceptInput></a>
 ```json
@@ -200,7 +200,7 @@ The interpreter message queue should check for strong interrupts and handle them
 ```
 Request that the interpreter process exits. This is useful for cleanly shutting down a locally spawned interpreter.
 
-##Sent from the interpreter to RIDE
+##Sent from an interpreter to RIDE
 <a name=AtInputPrompt></a>
 ```json
 ["AtInputPrompt",{"inputModeState":5}]
@@ -323,7 +323,7 @@ Sent when the display name changes.
 ```
 Tell RIDE to switch a window between debugger and editor modes.
 
-#Sent from either RIDE or interpreter
+##Sent from either RIDE or an interpreter
 <a name=SetLineAttributes></a>
 ```json
 ["SetLineAttributes",{"win":123,"lineAttributes":...}]
@@ -337,7 +337,7 @@ Update the breakpoints, Trace points and monitors in an editor.
 If sent from the interpreter, tell RIDE to close an open editor window.
 If sent from RIDE, request that a window be closed.
 
-#Sent from either a RIDE, Interpreter or Process Manager
+##Sent from either RIDE, an interpreter, or a process manager
 <a name=Identify></a>
 ```json
 ["Identify",{"identity":1}]
@@ -350,7 +350,7 @@ Sent as part of the initial connection setup.
 ```
 Sent to shut down the connection cleanly.
 
-#Sent from a RIDE or Interpreter to a Process Manager
+##Sent from RIDE or an interpreter to a process manager
 <a name=GetAvailableConnections></a>
 ```json
 ["GetAvailableConnections",{"connections":[c0,c1,...]}]
@@ -363,7 +363,7 @@ Request a list of availabe connections.
 ```
 Request a connection to a specific item (RIDE or interpreter).
 
-#Sent from a Process manager to a RIDE or Interpreter
+##Sent from a process manager to RIDE or an interpreter
 <a name=ConnectToSucceded></a>
 ```json
 ["ConnectToSucceded",{"remoteId":123,"identity":1,"protocolNumber":...}]
@@ -378,7 +378,7 @@ ConnectToFailed [int remoteId, string reason]
   Tell the client that the attempt to connect to a particular process failed.
 ```
 
-#Sent from anything to anything
+##Sent from anything to anything
 <a name=GetDetailedInformation></a>
 ```json
 ["GetDetailedInformation",{"remoteId":[12,34,...]}]
