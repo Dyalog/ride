@@ -31,7 +31,7 @@ If the receiver of a message does not recognise it, it should ignore it.
 
 The connection may be closed at any time, leaving some messages undelivered or unprocessed.
 
-:question: Why say the above?  Isn't it obvious?
+:question: Why say the above?  Isn't it obvious for anything to do with networking?
 
 #Initial connection setup
 
@@ -41,6 +41,7 @@ They should then check the type of application they are connected to, and if not
 E.g. a RIDE should send an [`Identify`](#Identify) message and then check that the application it's connected to is an interpreter or a process manager. If it finds the peer is another RIDE, it should close the connection.
 
 #Message set
+Each message type is described by an example.
 
 ##Sent from RIDE to an interpreter
 
@@ -71,6 +72,8 @@ Request it clears all breakpoints, stops, and monitors for a trace window.
 ["Continue",{"win":123}]
 ```
 Request restart of the APL program. (Black arrow in ODE)
+
+:exclamation: "Continue" to restart? -- that doesn't sounds right...
 
 <a name=ContinueTrace></a>
 ```json
@@ -132,14 +135,14 @@ Request opening an editor on the term at the given position in edit.
 
 <a name=Execute></a>
 ```json
-["Execute",{"text":"      1 2 3+4 5 6","trace":true}]
+["Execute",{"text":"      1 2 3+4 5 6","trace":1}]
 ```
 * `text`: to evaluate
-* `trace`: the expression should be evaluated in the tracer
+* `trace`: a boolean, whether the expression should be evaluated in the tracer
 
 <a name=GetAutoComplete></a>
 ```json
-["GetAutoComplete",{"line":"r←1+ind","pos":7,"token":234}]
+["GetAutoComplete",{"line":"r←1+ab","pos":6,"token":234}]
 ```
 The `token` is used by [`ReplyGetAutoComplete`](#ReplyGetAutoComplete) to identify which request it is a response to. RIDE may send multiple `GetAutoComplete` requests and the interpreter may only reply to some of them. Similarly, RIDE may ignore some of the replies if the state of the editor has changed since the `GetAutoComplete` request was sent.
 
@@ -154,9 +157,11 @@ The `token` is used by [`ReplyGetAutoComplete`](#ReplyGetAutoComplete) to identi
 
 <a name=SaveChanges></a>
 ```json
-["SaveChanges",{"win":123,"text":"r←avg a\nr←(+⌿÷≢)a","lineAttributes":...}]
+["SaveChanges",{"win":123,"text":"r←avg a\ns←+⌿a\nn←≢a\nr←s÷n","stop":[2,3]}]
 ```
 Request that the contents of an editor are fixed.
+
+`stop` is an array of 0-based line numbers
 
 <a name=WeakInterrupt></a>
 ```json
@@ -200,6 +205,17 @@ The interpreter message queue should check for strong interrupts and handle them
 ```
 Request that the interpreter process exits. This is useful for cleanly shutting down a locally spawned interpreter.
 
+<a name=GetValueTip></a>
+```json
+["GetValueTip",{"win":123,"line":"a←b+c","pos":2,"token":456}]
+```
+
+<a name=SetPW></a>
+```json
+["SetPW",{"pw":79}]
+```
+Set the interpreter's [`⎕PW`](http://help.dyalog.com/14.1/Content/Language/System%20Functions/pw.htm).
+
 ##Sent from an interpreter to RIDE
 <a name=AtInputPrompt></a>
 ```json
@@ -219,7 +235,7 @@ Constants for `inputModeState`:
 
 <a name=ReplyCanSessionAcceptInput></a>
 ```json
-["ReplyCanSessionAcceptInput",{"canAcceptInput":true}]
+["ReplyCanSessionAcceptInput",{"canAcceptInput":1}]
 ```
 Inform RIDE whether or not the session can currently accept input.
 
@@ -254,7 +270,7 @@ Request that RIDE puts the focus into a particular window.
 
 <a name=ReplyGetAutoComplete></a>
 ```json
-["ReplyGetAutoComplete",{"skip":2,"options":["ab","abc","abde"],"token":123}]
+["ReplyGetAutoComplete",{"skip":3,"options":["ab","abc","abde"],"token":123}]
 ```
 :exclamation: RIDE2+ supports this command in a slightly different format, legacy from before I switched to RIDE protocol v2.
 
@@ -262,7 +278,10 @@ Sent in response to a [`GetAutoComplete`](#GetAutoComplete) message.
 
 <a name=LanguageBar></a>
 ```json
-["LanguageBar",{"elements":[languageBarElement0,...]}]
+["LanguageBar",{"elements":[
+  {"desc":"Left Arrow",chr:"←",text:"Dyadic function: Assignment\n..."},
+  ...
+]}]
 ```
 :x: not used in RIDE2+
 Sent if the language bar is requested or updated.
@@ -304,7 +323,7 @@ Request RIDE shows some HTML.  See [`3500⌶`](http://help.dyalog.com/14.1/Conte
 
 <a name=StatusOutput></a>
 ```json
-["StatusOutput",{"statusInfo":"Bla-blah"}]
+["StatusOutput",{"text":"Bla-blah"}]
 ```
 :exclamation: Not supported in RIDE but likely will be in the future.
 
@@ -312,7 +331,7 @@ Status information that should be displayed to the user.
 
 <a name=SysError></a>
 ```json
-["SysError",{"text":"We accidentally replaced your heart with a baked potato","stack":"..."}]
+["SysError",{"text":"We accidentally replaced your heart with a baked potato","stack":""}]
 ```
 Sent after a
 [syserror](http://help.dyalog.com/14.1/Content/UserGuide/Installation%20and%20Configuration/System%20Errors.htm)
@@ -332,16 +351,21 @@ Sent when the display name changes.
 
 <a name=WindowTypeChanged></a>
 ```json
-["WindowTypeChanged",{"win":123,"tracer":true}]
+["WindowTypeChanged",{"win":123,"tracer":1}]
 ```
 Tell RIDE to switch a window between debugger and editor modes.
+
+<a name=ValueTip></a>
+["ValueTip",{"tip":"0 1 2 3...","token":456}]
 
 ##Sent from either RIDE or an interpreter
 <a name=SetLineAttributes></a>
 ```json
-["SetLineAttributes",{"win":123,"lineAttributes":...}]
+["SetLineAttributes",{"win":123,"stop":[2,3,5]}]
 ```
-Update the breakpoints, trace points, and monitors in an editor.
+Update the breakpoints.
+
+`stop` is an array of 0-based line numbers.
 
 <a name=CloseWindow></a>
 ```json
@@ -356,6 +380,12 @@ If sent from RIDE, request that a window be closed.
 ["Identify",{"identity":1}]
 ```
 Sent as part of the initial connection setup.
+
+Constants for `identity`
+* `0` invalid
+* `1` RIDE
+* `2` interpreter
+* `3` process manager
 
 <a name=Disconnect></a>
 ```json
@@ -387,6 +417,8 @@ Tell the client that the ProcessManager is handing off the connection to a RIDE 
 The process manager knows the supported protocols so it can pick a supported protocol for the clients to switch to.
 Once this is received the client is no longer connected to the PM, but rather is connected to the specified process.
 
+`identity`: see [Identify](#Identify)
+
 <a name=ConnectToFailed></a>
 ```json
 ["ConnectToFailed",{"remoteId":123,"reason":""}]
@@ -407,26 +439,13 @@ If sent to a Process manager, `remoteId` is a list of remote IDs returned by [`G
 Sent in reply to [`GetDetailedInformation`](#GetDetailedInformation).
 
 #Extended types
-This section describes types used in the messages that extend the simple types used in the message encoding.
-
-Note: Check if these are only used in one place. If so flatten out to properties of the message its used in
-
-Note: If an enumeration is sent with any undefined value it is considered invalid.
-
 ```
-Bool => enumeration [0 false, 1 true]
-Identity => enumeration [0 invalid, 1 RIDE, 2 Interpreter, 3 PM]
-
 EditableEntity => [string name, string text, int token,
                    byte[] colours, int currentRow, int currentColumn,    //REVIEW
                    int subOffset, int subSize, bool debugger,
                    int tid, bool readonly, string tidName,
-                   entityType type, lineAttributes attributes]  // colours for syntax highlighting - probably shouldn't be here?
+                   entityType type, int[] stop]  // colours for syntax highlighting - probably shouldn't be here?
                                                                 //   NN: RIDE2+ ignores colours, subOffset, subSize, tid, and tidName
-
-lineAttributes => lineAttribute[int[] stop, int[] monitor, int[] trace] // vector of lines with the given attribute. If a line is not mentioned it
-                                                                        // has no attributes
-                                                                        //   NN: RIDE2+ uses only "stop"
 
 EntityType => enumeration [0 invalid,
                            1 definedFunction,
@@ -443,9 +462,6 @@ EntityType => enumeration [0 invalid,
                            12 AplSession,
                            13 ExternalFunction]
 
-LanguageBarElement => [string desc, character chr, string text]
-
-StatusInfo => [string text, int flags]
 
 AvailableConnection => [
     int remoteID,       // Unique ID
@@ -465,25 +481,15 @@ DetailedInterpreterInformation => [] // Placeholder - add any more information
 DetailedProcessManagerInformation => [] // Placeholder - add any more information
 ```
 
-#Extensions
+#Proposed extensions
 NN: We should add support for:
-* value tips.  Needs design with JD -- window content might have changed, the name might be context-dependent
-```
-    RIDE→Interpreter:  GetValueTip [int win, string line, int pos, int token]
-    Interpreter→RIDE:  ValueTip [string tip, int token]
-```
 * `⎕PFKEY`
-* `⎕PW` and `AUTO_PW`
-```
-    RIDE→Interpreter:  SetPW [int pw]
-```
 * programmatic access to "current object"
 ```
     RIDE→Interpreter:  SetCurrentObject [string s]
 ```
 * workspace explorer
 ```
-    NB. use ids (of type "Something") instead of string[] path
     RIDE→Interpreter:  TreeGetNameList [Something nodeId]
     Interpreter→RIDE:  TreeNameList [Something nodeId, NodeInfo[] children]
                             NodeInfo [

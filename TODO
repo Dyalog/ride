@@ -6,7 +6,6 @@ Meeting with Morten and Jay, 2016-01-08. Morten said:
 
 Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nice)
   M1 adoption of the new protocol
-        http://wiki.dyalog.bramley/index.php/Ride_protocol_messages_V2#Extensions
         NN: JD merged interpreter support into trunk on 2016-01-04
   M2 awareness of Process Manager
   M3 launch server-side processes using ssh
