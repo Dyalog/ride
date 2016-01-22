@@ -445,23 +445,22 @@ EditableEntity => [string name, string text, int token,
                    int subOffset, int subSize, bool debugger,
                    int tid, bool readonly, string tidName,
                    entityType type, int[] stop]  // colours for syntax highlighting - probably shouldn't be here?
-                                                                //   NN: RIDE2+ ignores colours, subOffset, subSize, tid, and tidName
+                                                 //   NN: RIDE2+ ignores colours, subOffset, subSize, tid, and tidName
 
-EntityType => enumeration [0 invalid,
-                           1 definedFunction,
-                           2 simpleCharArray,
-                           3 simpleNumericArray,
-                           4 mixedSimpleArray,
-                           5 nestedArray,
-                           6 QuadORObject,
-                           7 NativeFile,
-                           8 SimpleCharVector,
-                           9 AplNamespace,
-                           10 AplClass,
-                           11 AplInterface,
-                           12 AplSession,
-                           13 ExternalFunction]
-
+EntityType:
+     1 definedFunction
+     2 simpleCharArray
+     4 simpleNumericArray
+     8 mixedSimpleArray
+    16 nestedArray
+    32 QuadORObject
+    64 NativeFile
+   128 SimpleCharVector
+   256 AplNamespace
+   512 AplClass
+  1024 AplInterface
+  2048 AplSession
+  4096 ExternalFunction
 
 AvailableConnection => [
     int remoteID,       // Unique ID

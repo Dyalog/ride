@@ -219,12 +219,12 @@ this.Editor.prototype={
     this.oText=typeof ee.text==='string'?ee.text:ee.text.join('\n') // todo: clean up after transition to json protocol
     var cm=this.cm;cm.setValue(this.oText);cm.clearHistory()
     if(D.mac){cm.focus();window.focus()}
-    // entityType:             5 NestedArray        10 AplClass
-    //  1 DefinedFunction      6 QuadORObject       11 AplInterface
-    //  2 SimpleCharArray      7 NativeFile         12 AplSession
-    //  3 SimpleNumericArray   8 SimpleCharVector   13 ExternalFunction
-    //  4 MixedSimpleArray     9 AplNamespace
-    if([1,9,10,11,12,13].indexOf(ee.entityType)<0){cm.setOption('mode','text')}
+    // entityType:             16 NestedArray        512 AplClass
+    //  1 DefinedFunction      32 QuadORObject      1024 AplInterface
+    //  2 SimpleCharArray      64 NativeFile        2048 AplSession
+    //  4 SimpleNumericArray  128 SimpleCharVector  4096 ExternalFunction
+    //  8 MixedSimpleArray    256 AplNamespace
+    if([1,256,512,1024,2048,4096].indexOf(ee.entityType)<0){cm.setOption('mode','text')}
     else{cm.setOption('mode','apl');if(prefs.indentOnOpen()){cm.execCommand('selectAll');cm.execCommand('indentAuto')}}
     cm.setOption('readOnly',ee.readOnly||ee['debugger'])
     var line=ee.currentRow,col=ee.currentColumn||0
