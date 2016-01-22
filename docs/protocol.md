@@ -1,4 +1,4 @@
-> Note: :x: :exclamation: :question: mark internal notes and won't appear in the final version -Nick
+> Note: :red_circle: marks internal notes and won't appear in the final version.
 
 The RIDE protocol is formed of messages sent in either direction over a TCP connection.
 
@@ -25,13 +25,13 @@ Messages are independent and after the handshake can be sent/received in any ord
 
 Command names and their arguments are case-sensitive.
 
-:exclamation: was: case-insensitive
+:red_circle: was: case-insensitive
 
 If the receiver of a message does not recognise it, it should ignore it.
 
 The connection may be closed at any time, leaving some messages undelivered or unprocessed.
 
-:question: Why say the above?  Isn't it obvious for anything to do with networking?
+:red_circle: Why say the above?  Isn't it obvious for anything to do with networking?
 
 #Connection setup and teardown
 
@@ -47,7 +47,7 @@ Constants for `identity`
 * `2` interpreter
 * `3` process manager
 
-:exclamation: The interpreter sends `*identify` instead of `Identify`.
+:red_circle: The interpreter sends `*identify` instead of `Identify`.
 
 They should then check the type of application they are connected to, and if not happy to continue, close the
 connection.
@@ -55,7 +55,7 @@ connection.
 E.g. RIDE should check that the application it's connected to is an interpreter or a process manager. If it finds the
 peer is another RIDE, it should close the connection.
 
-:exclamation: In reality RIDE doesn't bother with this.
+:red_circle: In reality RIDE doesn't bother with this.
 
 If at any time the interpreter crashes with a
 [syserror](http://help.dyalog.com/14.1/Content/UserGuide/Installation%20and%20Configuration/System%20Errors.htm), it
@@ -98,9 +98,9 @@ Constants for `inputModeState`:
 * `4` QuoteQuadInput
 * `5` Prompt
 
-:exclamation: These modes need explaining with expected behaviour
+:red_circle: These modes need explaining with expected behaviour
 
-:question: Is "Invalid" a valid inputModeState?
+:red_circle: Is "Invalid" a valid inputModeState?
 
 In addition to `AtInputPrompt`, RIDE can request information about the interpreter's ability to accept input at any time
 through
@@ -154,7 +154,7 @@ The interpreter will parse that and may respond later with one of
 It may also send these in response to `)ed name` or `⎕ed'name'`, as well as when tracing into an object that is not
 currently being traced.
 
-:exclamation: TODO: describe editableEntity
+:red_circle: TODO: describe editableEntity
 
 RIDE should let the OS do its own focus management of editor/tracer windows except that when it receives
 <a name=FocusWindow></a>
@@ -204,7 +204,7 @@ Request the current line in a trace window be moved back.
 ```json
 ["ClearTraceStopMonitor",{"win":123}] // RIDE -> Interpreter
 ```
-:x: Not used in RIDE2+
+:red_circle: Not used in RIDE2+
 
 Request it clears all breakpoints, stops, and monitors for a trace window.
 
@@ -214,7 +214,7 @@ Request it clears all breakpoints, stops, and monitors for a trace window.
 ```
 Request restart of the APL program. (Black arrow in ODE)
 
-:exclamation: "Continue" to restart? -- that doesn't sounds right...
+:red_circle: "Continue" to restart? -- that doesn't sounds right...
 
 <a name=ContinueTrace></a>
 ```json
@@ -226,7 +226,7 @@ Request resumption of tracing an APL program. (White arrow in ODE)
 ```json
 ["ContinueAllThreads",{"win":123}] // RIDE -> Interpreter
 ```
-:x: Not used in RIDE2+.  The green arrow actually corresponds to [`RestartThreads`](#RestartThreads).
+:red_circle: Not used in RIDE2+.  The green arrow actually corresponds to [`RestartThreads`](#RestartThreads).
 
 Request resumption of all threads. (Green arrow in ODE)
 
@@ -264,7 +264,7 @@ Request the current line in a trace window is executed. (Step into)
 ```json
 ["UnpauseThreads",{"win":123}] // RIDE -> Interpreter
 ```
-:x: Not used in RIDE2+
+:red_circle: Not used in RIDE2+
 
 Request all suspended threads are resumed from their current position.
 
@@ -278,7 +278,7 @@ APL supports two kinds of interrupts
 The interpreter message queue should check for strong interrupts and handle them immediately without needing to fully
 parse messages.
 
-:question: I've no idea what the above sentence means -Nick
+:red_circle: I've no idea what the above sentence means -Nick
 
 #Autocompletion
 RIDE can request autocompletion with
@@ -294,11 +294,11 @@ ignore some of the replies if the state of the editor has changed since the `Get
 In order to remain responsive, RIDE should throttle its autocompletion requests (no more than N per second) and it
 shouldn't block while it's waiting for the response.
 
-:exclamation: The interpreter requires that "token" is the id of the window, so perhaps it should be renamed "win".
+:red_circle: The interpreter requires that "token" is the id of the window, so perhaps it should be renamed "win".
 
-:exclamation: If RIDE sends a different token, the interpreter doesn't respond.
+:red_circle: If RIDE sends a different token, the interpreter doesn't respond.
 
-:exclamation: I think the C in AutoComplete shouldn't be capitalised as "autocomplete" is one word
+:red_circle: I think the C in AutoComplete shouldn't be capitalised as "autocomplete" is one word
 
 <a name=ReplyGetAutoComplete></a>
 ```json
@@ -306,7 +306,7 @@ shouldn't block while it's waiting for the response.
 ```
 * `skip`: how many characters before the request's `pos` to replace with an element of `options`
 
-:exclamation: RIDE2+ supports this command in a slightly different format, legacy from before I switched to RIDE protocol v2.
+:red_circle: RIDE2+ supports this command in a slightly different format, legacy from before I switched to RIDE protocol v2.
 
 #Value tips
 When the user hovers a name with the mouse, RIDE should ask for a short textual representation of the current value:
@@ -323,14 +323,14 @@ arrive in the same order, if ever.
 ```json
 ["GetLanguageBar",{}] // RIDE -> Interpreter
 ```
-:x: Not used in RIDE2+.  Information about the language bar is known in advance, there's no need to send it through the protocol.
+:red_circle: Not used in RIDE2+.  Information about the language bar is known in advance, there's no need to send it through the protocol.
 
 Request that the interpreter sends a language bar.
 <a name=GetSessionContent></a>
 ```json
 ["GetSessionContent",{}] // RIDE -> Interpreter
 ```
-:x: Not used in RIDE2+. The interpreter side sends the session content automatically on connection.
+:red_circle: Not used in RIDE2+. The interpreter side sends the session content automatically on connection.
 
 Request the current content of the session.
 
@@ -338,7 +338,7 @@ Request the current content of the session.
 ```json
 ["UpdateAllWindows",{}] // RIDE -> Interpreter
 ```
-:x: Not used in RIDE2+
+:red_circle: Not used in RIDE2+
 
 Request the interpreter sends [`UpdateWindow`](#UpdateWindow) messages for all currently open windows.
 
@@ -351,16 +351,16 @@ Request the interpreter sends [`UpdateWindow`](#UpdateWindow) messages for all c
   ...
 ]}]
 ```
-:x: not used in RIDE2+
+:red_circle: not used in RIDE2+
 Sent if the language bar is requested or updated.
 
 <a name=HighlightLine></a>
 ```json
 ["HighlightLine",{"lineInfo":{"win":123,"line":45}}]
 ```
-:exclamation: RIDE2+ supports this command in a slightly different format, legacy from before I switched to RIDE protocol v2.
+:red_circle: RIDE2+ supports this command in a slightly different format, legacy from before I switched to RIDE protocol v2.
 
-:exclamation: `["highlight",{"win":123,"line":45}]`
+:red_circle: `["highlight",{"win":123,"line":45}]`
 
 Request that RIDE sets the position of the current line marker in a trace window.
 
@@ -381,7 +381,7 @@ Request RIDE shows some HTML.  See [`3500⌶`](http://help.dyalog.com/14.1/Conte
 ```json
 ["StatusOutput",{"text":"Bla-blah"}] // Interpreter -> RIDE
 ```
-:exclamation: Not supported in RIDE but likely will be in the future.
+:red_circle: Not supported in RIDE but likely will be in the future.
 
 Status information that should be displayed to the user.
 
@@ -405,7 +405,7 @@ Sent to shut down the connection cleanly.
 ```
 Request a list of availabe connections.
 
-:exclamation: Specify what c0,c1,... look like
+:red_circle: Specify what c0,c1,... look like
 
 <a name=ConnectTo></a>
 ```json
