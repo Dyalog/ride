@@ -49,16 +49,20 @@ Constants for `identity`
 
 :exclamation: The interpreter sends `*identify` instead of `Identify`.
 
-They should then check the type of application they are connected to, and if not happy to continue, close the connection.
+They should then check the type of application they are connected to, and if not happy to continue, close the
+connection.
 
-E.g. RIDE should check that the application it's connected to is an interpreter or a process manager. If it finds the peer is another RIDE, it should close the connection.
+E.g. RIDE should check that the application it's connected to is an interpreter or a process manager. If it finds the
+peer is another RIDE, it should close the connection.
 
 :exclamation: In reality RIDE doesn't bother with this.
 
-If at any time the interpreter crashes with a [syserror](http://help.dyalog.com/14.1/Content/UserGuide/Installation%20and%20Configuration/System%20Errors.htm), it sends
+If at any time the interpreter crashes with a
+[syserror](http://help.dyalog.com/14.1/Content/UserGuide/Installation%20and%20Configuration/System%20Errors.htm), it
+sends
 <a name=SysError></a>
 ```json
-["SysError",{"text":"We accidentally replaced your heart with a baked potato","stack":""}]
+["SysError",{"text":"apl: sys error 123 errno 456","stack":""}]
 ```
 
 If the interpreter is not running remotely, when the user closes the main application window (the session window) RIDE
@@ -75,9 +79,8 @@ The initial content of the session and any output or echoed input are sent to RI
 ["EchoInput",{"input":"      1 2 3+4 5 6\n"}] // Interpreter -> RIDE
 ["AppendSessionOutput",{"result":["5 7 9"]}]  // Interpreter -> RIDE
 ```
-These two perform essentially the same job except that in the second case a `"\n"` must be added to every element of `result`.
-
-Note that RIDE can't assume that everything entered in the session should be echoed. e.g. quote quad input.
+These two perform essentially the same task except that `AppendSessionOutput` needs extra `"\n"`-s to be appended to
+each element of `result`.
 
 The interpreter informs RIDE about changes in its ability to accept user input with
 <a name=NotAtInputPrompt></a><a name=AtInputPrompt></a>
@@ -97,7 +100,10 @@ Constants for `inputModeState`:
 
 :exclamation: These modes need explaining with expected behaviour
 
-In addition to `AtInputPrompt`, RIDE can request information about the interpreter's ability to accept input at any time through
+:question: Is "Invalid" a valid inputModeState?
+
+In addition to `AtInputPrompt`, RIDE can request information about the interpreter's ability to accept input at any time
+through
 <a name=CanSessionAcceptInput></a><a name=ReplyCanSessionAcceptInput></a>
 ```json
 ["CanSessionAcceptInput",{}]                        // RIDE -> Interpreter
@@ -112,6 +118,9 @@ When the user presses `<ER>` (Enter) or `<TC>` (Ctrl-Enter), RIDE sends
 ```
 * `text`: the APL code to evaluate
 * `trace`: a boolean, whether the expression should be evaluated in the tracer (`<TC>`)
+
+Note that RIDE can't assume that everything entered in the session should be echoed. e.g. quote quad input.  Therefore,
+RIDE should wait for the [`EchoInput`](#EchoInput) message described earlier.
 
 If multiple lines have been modified in the session, RIDE should queue them up and send them one by one, waiting for
 a response of either `AtInputPrompt` or
@@ -167,6 +176,13 @@ The interpreter may decide to change the type of a window (editor vs tracer) wit
 Request that the contents of an editor are fixed.
 
 `stop` is an array of 0-based line numbers
+
+<a name=CloseWindow></a>
+```json
+["CloseWindow",{"win":123}] // RIDE -> Interpreter  or  Interpreter -> RIDE
+```
+If sent from the interpreter, tell RIDE to close an open editor window.
+If sent from RIDE, request that a window be closed.
 
 #Debugging
 
@@ -259,19 +275,24 @@ APL supports two kinds of interrupts
 ["WeakInterrupt",  {}] // RIDE -> Interpreter
 ["StrongInterrupt",{}] // RIDE -> Interpreter
 ```
-The interpreter message queue should check for strong interrupts and handle them immediately without needing to fully parse messages.
+The interpreter message queue should check for strong interrupts and handle them immediately without needing to fully
+parse messages.
 
 :question: I've no idea what the above sentence means -Nick
 
 #Autocompletion
+RIDE can request autocompletion with
 <a name=GetAutoComplete></a>
 ```json
-["GetAutoComplete",{"line":"r←1+ab","pos":6,"token":234}]
+["GetAutoComplete",{"line":"r←1+ab","pos":6,"token":234}] // RIDE -> Interpreter
 ```
-The `token` is used by [`ReplyGetAutoComplete`](#ReplyGetAutoComplete) to identify which request it is a response to. RIDE may send multiple `GetAutoComplete` requests and the interpreter may only reply to some of them. Similarly, RIDE may ignore some of the replies if the state of the editor has changed since the `GetAutoComplete` request was sent.
-
-* `line`: text containing term to get autocomplete data for
-* `pos`: position in the line to use for autocomplete information
+* `line`: text containing the name that's being completed
+* `pos`: position of cursor within `line`
+* `token` is used by [`ReplyGetAutoComplete`](#ReplyGetAutoComplete) to identify which request it is a response to. RIDE
+may send multiple `GetAutoComplete` requests and the interpreter may only reply to some of them. Similarly, RIDE may
+ignore some of the replies if the state of the editor has changed since the `GetAutoComplete` request was sent.
+In order to remain responsive, RIDE should throttle its autocompletion requests (no more than N per second) and it
+shouldn't block while it's waiting for the response.
 
 :exclamation: The interpreter requires that "token" is the id of the window, so perhaps it should be renamed "win".
 
@@ -281,18 +302,21 @@ The `token` is used by [`ReplyGetAutoComplete`](#ReplyGetAutoComplete) to identi
 
 <a name=ReplyGetAutoComplete></a>
 ```json
-["ReplyGetAutoComplete",{"skip":3,"options":["ab","abc","abde"],"token":123}]
+["ReplyGetAutoComplete",{"skip":2,"options":["ab","abc","abde"],"token":234}]
 ```
+* `skip`: how many characters before the request's `pos` to replace with an element of `options`
+
 :exclamation: RIDE2+ supports this command in a slightly different format, legacy from before I switched to RIDE protocol v2.
 
-Sent in response to a [`GetAutoComplete`](#GetAutoComplete) message.
-
 #Value tips
+When the user hovers a name with the mouse, RIDE should ask for a short textual representation of the current value:
 <a name=GetValueTip></a><a name=ValueTip></a>
 ```json
 ["GetValueTip",{"win":123,"line":"a←b+c","pos":2,"token":456}] // RIDE -> Interpreter
 ["ValueTip",{"tip":"0 1 2 3...","token":456}]                  // Interpreter -> RIDE
 ```
+Like with autocompletion, `token` is used to correlate requests and responses, and there is no guarantee that they will
+arrive in the same order, if ever.
 
 #Other
 <a name=GetLanguageBar></a>
@@ -366,14 +390,6 @@ Status information that should be displayed to the user.
 ["UpdateDisplayName",{"displayName":"CLEAR WS"}] // Interpreter -> RIDE
 ```
 Sent when the display name changes.
-
-##Sent from either RIDE or an interpreter
-<a name=CloseWindow></a>
-```json
-["CloseWindow",{"win":123}]
-```
-If sent from the interpreter, tell RIDE to close an open editor window.
-If sent from RIDE, request that a window be closed.
 
 ##Sent from either RIDE, an interpreter, or a process manager
 <a name=Disconnect></a>
