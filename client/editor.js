@@ -4,36 +4,36 @@ var autocompletion=require('./autocompletion'),prefs=require('./prefs'),mode=req
     ACB_VALUE=this.ACB_VALUE={pairs:'()[]{}',explode:'{}'} // value for CodeMirror's "autoCloseBrackets" option when on
 require('./cm-scroll')
 
-var b=function(cc,t){return'<a href=# class="'+cc+' tb-btn" title="'+t+'""></a>'} // cc:css classes, t:title
+var b=function(cc,t){return'<a href=# class="'+cc+' tb-btn" title="'+t+'"></a>'} // cc:css classes, t:title
 var EDITOR_HTML=
   '<div class=toolbar>'+
     // The first button is placed on the right-hand side through CSS. In a floating window it is hidden.
     // CSS classes "first" and "last" indicate button grouping.
-    b('tb-ER  tc-only first', 'Execute line')+
-    b('tb-TC  tc-only',       'Trace into expression')+
-    b('tb-BK  tc-only',       'Go back one line')+
-    b('tb-FD  tc-only',       'Skip current line')+
-    b('tb-BH  tc-only',       'Stop on next line of calling function')+
-    b('tb-RM  tc-only',       'Continue execution of this thread')+
-    b('tb-MA  tc-only',       'Continue execution of all threads')+
-    b('tb-ED  tc-only',       'Edit name')+
-    b('tb-WI  tc-only',       'Interrupt')+
-    b('tb-CBP tc-only',       'Clear trace/stop/monitor for this object')+
-    b('tb-LN  tc-only last',  'Toggle line numbers')+
-    b('tb-LN  ed-only first', 'Toggle line numbers')+
-    b('tb-AO  ed-only',       'Comment selected text')+
-    b('tb-DO  ed-only last',  'Uncomment selected text')+
+    b('tb-ER  tc-only first','Execute line'                            )+
+    b('tb-TC  tc-only'      ,'Trace into expression'                   )+
+    b('tb-BK  tc-only'      ,'Go back one line'                        )+
+    b('tb-FD  tc-only'      ,'Skip current line'                       )+
+    b('tb-BH  tc-only'      ,'Stop on next line of calling function'   )+
+    b('tb-RM  tc-only'      ,'Continue execution of this thread'       )+
+    b('tb-MA  tc-only'      ,'Continue execution of all threads'       )+
+    b('tb-ED  tc-only'      ,'Edit name'                               )+
+    b('tb-WI  tc-only'      ,'Interrupt'                               )+
+    b('tb-CBP tc-only'      ,'Clear trace/stop/monitor for this object')+
+    b('tb-LN  tc-only last' ,'Toggle line numbers'                     )+
+    b('tb-LN  ed-only first','Toggle line numbers'                     )+
+    b('tb-AO  ed-only'      ,'Comment selected text'                   )+
+    b('tb-DO  ed-only last' ,'Uncomment selected text'                 )+
     '<span class=tb-sep></span>'+
     '<div class="tb-sc text-field"></div>'+
     '<div class="tb-rp text-field ed-only"></div>'+
-    b('tb-NX first',              'Search for next match')+
-    b('tb-PV',                    'Search for previous match')+
-    b('tb-case last',             'Match case')+
+    b('tb-NX first'         ,'Search for next match'                   )+
+    b('tb-PV'               ,'Search for previous match'               )+
+    b('tb-case last'        ,'Match case'                              )+
   '</div>'+
   '<div class=ride-win></div>'
 b=null
 
-this.Editor=function(ide,e,opts){
+this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
   var ed=this;ed.ide=ide;ed.$e=$(e).html(EDITOR_HTML);ed.opts=opts;ed.id=opts.id;ed.name=opts.name;ed.emit=opts.emit
   ed.isTracer=opts.tracer
   ed.xline=null // the line number of the empty line inserted at eof when cursor is there and you press <down>
@@ -41,6 +41,7 @@ this.Editor=function(ide,e,opts){
   ed.hll=null // highlighted line -- currently executed line in tracer
   ed.lastQuery=ed.lastIC=ed.overlay=ed.annotation=null // search-related state
   ed.focusTimestamp=0
+  ed.jumps=[]
   ed.cm=CodeMirror(ed.$e.find('.ride-win')[0],{
     lineNumbers:!!(ed.isTracer?prefs.lineNumsTracer():prefs.lineNumsEditor()),
     firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
@@ -400,6 +401,10 @@ this.Editor.prototype={
     var a=cm.getSelections(), s=a.length!==1?'':!a[0]?this.cword():a[0].indexOf('\n')<0?a[0]:''
     s&&this.ide.wins[0].opts.exec(['      '+s],0)
   },
+  addJump:function(){
+    var cm=this.cm,j=this.jumps,u=cm.getCursor();j.push({lh:cm.getLineHandle(u.line),ch:u.ch})>10&&j.shift()
+  },
+  JBK:function(){var p=this.jumps.pop();p&&this.cm.setCursor({line:p.lh.lineNo(),ch:p.ch})},
   tabOrAutocomplete:function(){
     if(this.cm.somethingSelected()){
       this.cm.execCommand('indentMore')
