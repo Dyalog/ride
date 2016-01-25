@@ -49,7 +49,7 @@ function initInterpreterConn(){
       if(m[0]==='['){log('to browser:'+trunc(m));var u=JSON.parse(m);skt&&skt.emit(u[0],u[1])}
     }
   })
-  clt.on('error',function(e){toBrowser('*connectError',{err:''+e});clt=null})
+  clt.on('error',function(e){toBrowser('*error',{msg:''+e});clt=null})
   clt.on('end',function(){log('interpreter diconnected');toBrowser('*disconnected');clt=null})
   toInterpreter('SupportedProtocols=1');toInterpreter('UsingProtocol=1')
   cmd('Identify',{identity:1});cmd('Connect',{remoteId:2});cmd('GetWindowLayout')
@@ -68,7 +68,7 @@ var handlers={
     })
     srv.on('error',function(err){
       log('cannot listen for connections from spawned interpreter: '+err)
-      srv=clt=null;toBrowser('*listenError',{err:''+err})
+      srv=clt=null;toBrowser('*error',{msg:''+err})
     })
     srv.listen(0,'127.0.0.1',function(){
       var a=srv.address(),hp=a.address+':'+a.port
@@ -80,14 +80,12 @@ var handlers={
         var h=x.env||{},H=process.env;for(var k in H)h[k]=H[k];h.RIDE_INIT='CONNECT:'+hp;h.RIDE_SPAWNED='1'
         child=cp.spawn(exe,args,{stdio:stdio,env:h})
       }catch(e){
-        toBrowser('*spawnedError',{code:0,message:''+e});return
+        toBrowser('*error',{code:0,msg:''+e});return
       }
       toBrowser('*spawned',{exe:exe,pid:child.pid})
       child.on('error',function(err){
         srv&&srv.close();srv=clt=child=null
-        toBrowser('*spawnedError',{
-          code:err.code,message:err.code==='ENOENT'?"Cannot find the interpreter's executable":''+err
-        })
+        toBrowser('*error',{code:err.code,msg:err.code==='ENOENT'?"Cannot find the interpreter's executable":''+err})
       })
       child.on('exit',function(code,sig){
         srv&&srv.close();srv=clt=null;toBrowser('*spawnedExited',{code:code,signal:sig});child=null
@@ -109,7 +107,7 @@ var handlers={
     .on('tcp connection',function(info,accept,reject){
       clt=accept();toBrowser('*connected',{host:'',port:0});initInterpreterConn()
     })
-    .on('error',function(x){toBrowser('*sshError',{msg:x.message||''+x})})
+    .on('error',function(x){toBrowser('*error',{msg:x.message||''+x})})
     .connect({host:x.host,port:x.port,username:x.user,password:x.pass})
   },
   '*listen':function(x){
@@ -118,7 +116,7 @@ var handlers={
       log('interpreter connected from '+remoteHost);srv&&srv.close();srv=null;clt=c
       toBrowser('*connected',{host:remoteHost,port:x.port});initInterpreterConn()
     })
-    srv.on('error',function(err){srv=null;toBrowser('*listenError',{err:''+err})})
+    srv.on('error',function(err){srv=null;toBrowser('*error',{msg:''+err})})
     srv.listen(x.port,x.host||'',function(){
       log('listening for connections from interpreter on port '+x.port);x.callback&&x.callback()
     })

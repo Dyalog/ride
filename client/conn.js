@@ -99,12 +99,9 @@ module.exports=function(){
       ).val($('#cn-exe').val()).val()||$('#cn-exes').val('')
     })
     .on('*connected',function(x){if($d){$d.dialog('close');$d=null};new IDE().setHostAndPort(x.host,x.port)})
-    .on('*connectError',function(x){if($d){$d.dialog('close');$d=null};$.alert(x.err,'Error')})
     .on('*spawned',function(x){D.lastSpawnedExe=x.exe})
-    .on('*spawnedError',function(x){$.alert(x.message,'Error')})
     .on('*spawnedExited',function(x){$.alert(x.code!=null?'exited with code '+x.code:'received '+x.signal)})
-    .on('*listenError',function(x){if($d){$d.dialog('close');$d=null};$.alert(x.err,'Error')})
-    .on('*sshError',function(x){$.alert(x.msg,'ssh error')})
+    .on('*error',function(x){$d&&$d.dialog('close');$d=null;$.alert(x.msg,'Error')})
     .emit('*getProxyInfo')
   return{
     listen:function(port){port&&$listenPort.val(port);$listen.click()},
@@ -129,7 +126,7 @@ function go(){
         .dialog({modal:1,width:350,title:'Connecting...',buttons:{Cancel:function(){$(this).dialog('close')}}})
       D.socket.emit('*connect',{host:sel.host,port:+sel.port||4502})
     }else if(t==='listen'){
-      var port=sel.port||4502;if(!validatePort())return
+      var port=sel.port||4502
       $d=$(
         '<div class=listen>'+
           '<div class=visual-distraction></div>'+
