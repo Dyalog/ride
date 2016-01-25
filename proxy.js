@@ -96,25 +96,21 @@ var handlers={
   },
   '*ssh':function(x){
     var c=new(require('ssh2').Client)
-    c.on('ready',function(){
-      console.info('ssh ready')
+    c.on('ready',function(x){
       c.exec('/bin/bash',function(err,sm){
         if(err)throw err
-        console.info('bash running')
         sm.on('close',function(code,sig){toBrowser('*sshExited',{code:code,signal:sig});c.end()})
-          .on       ('data',function(x){console.info('ssh stdout:'+JSON.stringify(''+x))})
-          .stderr.on('data',function(x){console.info('ssh stderr:'+JSON.stringify(''+x))})
         c.forwardIn('',0,function(err,remotePort){
           if(err)throw err
-          console.info('fwding')
           sm.write('export RIDE_INIT=CONNECT:127.0.0.1:'+remotePort+'\ndyalog +s -q\n')
-          console.info('dyalog started')
         })
       })
-    }).on('tcp connection',function(info,accept,reject){
-      console.info('incoming connection')
+    })
+    .on('tcp connection',function(info,accept,reject){
       clt=accept();toBrowser('*connected',{host:'',port:0});initInterpreterConn()
-    }).connect({host:x.host,port:x.port,username:x.user,password:x.pass})
+    })
+    .on('error',function(x){toBrowser('*sshError',{msg:x.message||''+x})})
+    .connect({host:x.host,port:x.port,username:x.user,password:x.pass})
   },
   '*listen':function(x){
     srv=net.createServer(function(c){

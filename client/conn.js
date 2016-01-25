@@ -104,6 +104,7 @@ module.exports=function(){
     .on('*spawnedError',function(x){$.alert(x.message,'Error')})
     .on('*spawnedExited',function(x){$.alert(x.code!=null?'exited with code '+x.code:'received '+x.signal)})
     .on('*listenError',function(x){if($d){$d.dialog('close');$d=null};$.alert(x.err,'Error')})
+    .on('*sshError',function(x){$.alert(x.msg,'ssh error')})
     .emit('*getProxyInfo')
   return{
     listen:function(port){port&&$listenPort.val(port);$listen.click()},
@@ -141,7 +142,9 @@ function go(){
                 close:function(){D.socket.emit('*listenCancel')}})
       D.socket.emit('*listen',{host:sel.host,port:port})
     }else if(t==='ssh'){
-      D.socket.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||process.env.USER,pass:$('#ssh-pass').val()})
+      var pw=$('#ssh-pass').val()
+      if(!pw){$.alert('"password" is required','Error',function(){$('#ssh-pass').focus()});return}
+      D.socket.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||process.env.USER,pass:pw})
     }else{
       $.alert('nyi')
     }
