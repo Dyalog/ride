@@ -140,7 +140,14 @@ function go(){
                 close:function(){D.socket.emit('*listenCancel')}})
       D.socket.emit('*listen',{host:sel.host,port:port})
     }else if(t==='start'){
-      var env={};$('#cn-env').val().replace(/^([^=\n]+)=(.*)$/mg,function(_,x,y){env[x]=y})
+      var env={},a=$('#cn-env').val().split('\n'),m
+      for(var i=0;i<a.length;i++){
+        if(m=/^([a-z_]\w*)=(.*)$/i.exec(a[i])){
+          env[m[1]]=m[2]
+        }else if(!/^\s*$/.test(a[i])){
+          $.alert('Invalid environment variables','Error',function(){$('#cn-env').focus()});return
+        }
+      }
       if(sel.ssh){
         var pw=$('#cn-ssh-pass').val()
         if(!pw){$.alert('"password" is required','Error',function(){$('#cn-ssh-pass').focus()});return}

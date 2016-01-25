@@ -30,6 +30,7 @@ function addr(x){return x&&(x=x.request)&&(x=x.connection)&&x.remoteAddress||'ID
 function trunc(s){return s.length>1000?s.slice(0,997)+'...':s}
 function ls(x){return fs.readdirSync(x)}
 function sil(f){return function(x){try{f(x)}catch(_){}}} // exception silencer
+function shEsc(x){return"'"+x.replace(/'/g,"'\\''")+"'"}
 
 var clt,   // client, TCP connection to interpreter
     skt,   // websocket or other connection-like object communicating with the browser
@@ -95,13 +96,11 @@ var handlers={
   '*ssh':function(x){
     var c=new(require('ssh2').Client)
     c.on('ready',function(){
-      c.exec('/bin/bash',function(err,sm){
-        if(err)throw err
+      c.exec('/bin/sh',function(err,sm){if(err)throw err
         sm.on('close',function(code,sig){toBrowser('*sshExited',{code:code,signal:sig});c.end()})
-        c.forwardIn('',0,function(err,remotePort){
-          if(err)throw err
-          var s='';for(var k in x.env)s+=k+"='"+x.env[k].replace(/'/g,"'\\''")+"' "
-          sm.write('export RIDE_INIT=CONNECT:127.0.0.1:'+remotePort+' '+s+'\ndyalog +s -q\n')
+        c.forwardIn('',0,function(err,remotePort){if(err)throw err
+          var s='';for(var k in x.env)s+=k+'='+shEsc(x.env[k])+' '
+          sm.write(s+'RIDE_INIT=CONNECT:127.0.0.1:'+remotePort+' '+shEsc(x.exe||'dyalog')+' +s -q\n')
         })
       })
     })
