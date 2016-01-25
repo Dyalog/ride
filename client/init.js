@@ -17,6 +17,7 @@ $(function(){
     })
     $('body').addClass('zoom'+prefs.zoom())
     prefs.zoom(function(z){
+      if(!D.ide)return
       var wins=D.ide.wins
       for (var x in wins){
         var $b=$('body',wins[x].getDocument())
