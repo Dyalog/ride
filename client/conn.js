@@ -123,7 +123,7 @@ function go(){
       D.socket.emit('*launch',{exe:sel.exe,env:h})
     }else if(t==='tcp'){
       $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
-        .dialog({modal:1,width:350,title:'Connecting...',buttons:{Cancel:function(){$(this).dialog('close')}}})
+        .dialog({modal:1,width:350,title:'Connecting...'})
       D.socket.emit('*connect',{host:sel.host,port:+sel.port||4502})
     }else if(t==='listen'){
       var port=sel.port||4502
@@ -141,6 +141,8 @@ function go(){
     }else if(t==='ssh'){
       var pw=$('#ssh-pass').val()
       if(!pw){$.alert('"password" is required','Error',function(){$('#ssh-pass').focus()});return}
+      $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
+        .dialog({modal:1,width:350,title:'Connecting...'})
       D.socket.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||process.env.USER,pass:pw})
     }else{
       $.alert('nyi')
