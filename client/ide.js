@@ -59,7 +59,7 @@ this.IDE=function(){
   var handlers=this.handlers={ // for RIDE protocol messages
     '*identify':function(i){D.remoteIdentification=i;ide.updateTitle()},
     '*connected':function(x){ide.setHostAndPort(x.host,x.port)},
-    '*spawnedError':function(x){ide.die();setTimeout(function(){$.alert(x.message,'Error')},100)},
+    '*error':function(x){ide.die();setTimeout(function(){$.alert(x.msg,'Error')},100)},
     '*spawnedExited':function(x){
       if(x.code){ide.die();setTimeout(function(){$.alert('Interpreter process exited with code '+x.code,'Error')},100)}
     },

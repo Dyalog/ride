@@ -67,7 +67,7 @@ $(function(){
     if(e.DYALOG_IDE_LISTEN)conn().listen(e.DYALOG_IDE_LISTEN)
     else if(e.DYALOG_IDE_CONNECT)conn().connect(e.DYALOG_IDE_CONNECT)
     else if(+e.DYALOG_IDE_SPAWN){ // the value of this env var should be '0' or '1'
-      new IDE;D.socket.emit('*spawn') // '*spawnedError' is handled in ide.coffee
+      new IDE;D.socket.emit('*spawn') // '*error' is handled in ide.coffee
       window.onbeforeunload=function(){D.socket.emit('Exit',{code:0})}
     }
     else conn()
