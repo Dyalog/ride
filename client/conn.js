@@ -20,7 +20,8 @@ module.exports=function(){
   })
   $('#cn-type').change(function(){sel.type=this.value;updateFormDetail();save()})
   updateFormDetail()
-  $('#cn-ssh [name=user]').prop('placeholder',process.env.USER||'')
+  $('#cn-ssh').change(function(){$('#cn-ssh-detail').toggle(this.checked)})
+  $('#cn-ssh-detail [name=user]').prop('placeholder',process.env.USER||'')
   $('#cn-exe').on('change keyup',function(){$('#cn-exes').val()||prefs.otherExe($(this).val())})
   $('#cn-exes').change(function(){
     var v=$(this).val(),$e=$('#cn-exe').val(v||prefs.otherExe()).prop('readonly',!!v).change();v||$e.focus()
@@ -62,6 +63,7 @@ module.exports=function(){
         $('#cn-exes').val(sel.exe).val()||$('#cn-exes').val('') // use sel.exe if available, otherwise use "Other..."
         $('#cn-rhs :text').elastic()
         $('#cn-ssl-detail').toggle(!!sel.ssl)
+        $('#cn-ssh-detail').toggle(!!sel.ssh)
         $('#cn-cert-cb').prop('checked',!!sel.cert);$('#cn-cert').prop('disabled',!sel.cert)
         $('#cn-subj-cb').prop('checked',!!sel.subj);$('#cn-subj').prop('disabled',!sel.subj)
       }
@@ -109,7 +111,7 @@ module.exports=function(){
   }
 }
 function go(){
-  $d&&$d.dialog('close');var t=$('#cn-type').val()
+  $d&&$d.dialog('close')
   try{
     // validate host&port if present
     var $host=$('[name=host]:visible'),$port=$('[name=port]:visible')
@@ -118,13 +120,12 @@ function go(){
       $.alert('Invalid port','Error',function(){$port.select()});return
     }
     // validate rest of the form
-    if(t==='local'){
-      var h={};$('#cn-env').val().replace(/^([^=\n]+)=(.*)$/mg,function(_,x,y){h[x]=y})
-      D.socket.emit('*launch',{exe:sel.exe,env:h})
-    }else if(t==='tcp'){
+    var t=$('#cn-type').val()
+    if(t==='tcp'){
       $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
         .dialog({modal:1,width:350,title:'Connecting...'})
       D.socket.emit('*connect',{host:sel.host,port:+sel.port||4502})
+      // TODO: SSL
     }else if(t==='listen'){
       var port=sel.port||4502
       $d=$(
@@ -138,12 +139,17 @@ function go(){
                 buttons:{Cancel:function(){$d.dialog('close')}},
                 close:function(){D.socket.emit('*listenCancel')}})
       D.socket.emit('*listen',{host:sel.host,port:port})
-    }else if(t==='ssh'){
-      var pw=$('#ssh-pass').val()
-      if(!pw){$.alert('"password" is required','Error',function(){$('#ssh-pass').focus()});return}
-      $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
-        .dialog({modal:1,width:350,title:'Connecting...'})
-      D.socket.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||process.env.USER,pass:pw})
+    }else if(t==='start'){
+      var env={};$('#cn-env').val().replace(/^([^=\n]+)=(.*)$/mg,function(_,x,y){env[x]=y})
+      if(sel.ssh){
+        var pw=$('#cn-ssh-pass').val()
+        if(!pw){$.alert('"password" is required','Error',function(){$('#cn-ssh-pass').focus()});return}
+        $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
+          .dialog({modal:1,width:350,title:'Connecting...'})
+        D.socket.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||process.env.USER,pass:pw,env:env})
+      }else{
+        D.socket.emit('*launch',{exe:sel.exe,env:env})
+      }
     }else{
       $.alert('nyi')
     }

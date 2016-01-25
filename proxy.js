@@ -94,13 +94,14 @@ var handlers={
   },
   '*ssh':function(x){
     var c=new(require('ssh2').Client)
-    c.on('ready',function(x){
+    c.on('ready',function(){
       c.exec('/bin/bash',function(err,sm){
         if(err)throw err
         sm.on('close',function(code,sig){toBrowser('*sshExited',{code:code,signal:sig});c.end()})
         c.forwardIn('',0,function(err,remotePort){
           if(err)throw err
-          sm.write('export RIDE_INIT=CONNECT:127.0.0.1:'+remotePort+'\ndyalog +s -q\n')
+          var s='';for(var k in x.env)s+=k+"='"+x.env[k].replace(/'/g,"'\\''")+"' "
+          sm.write('export RIDE_INIT=CONNECT:127.0.0.1:'+remotePort+' '+s+'\ndyalog +s -q\n')
         })
       })
     })
