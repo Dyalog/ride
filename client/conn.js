@@ -2,13 +2,28 @@
 require('./jq-list');var IDE=require('./ide').IDE,prefs=require('./prefs'),esc=require('./util').esc
 var $sel=$(),sel,$d // $sel:selected item(s), sel: .data('cn') of the selected item (only if it's unique), $d:dialog
 var DFLT_NAME='[New Connection]',TMP_NAME='[Temporary Connection]',MIN_VER=[14,1] // minimum supported version
+var proxyInfo={interpreters:[]}
 function cmpVer(x,y){return x[0]-y[0]||x[1]-y[1]||0} // compare two versions of the form [major,minor]
 function save(){prefs.favs($('#cn-favs>*').map(function(){var h=$(this).data('cn');return h.tmp?null:h}).toArray())}
 function favText(x){return x.tmp?TMP_NAME:x.name||DFLT_NAME}
 function favDOM(x){return $('<div><a href=# class=go>'+esc(favText(x))+'</a></div>').data('cn',x)}
-function updateFormDetail(){$('#cn-detail>*').hide();$('#cn-'+$('#cn-type').val()).show()} // the part below "Type"
 function fmtKey(e){return[e.modKey?'Cmd-':'',e.ctrlKey?'Ctrl-':'',e.altKey?'Alt-':'',e.shiftKey?'Shift-':'',
                           CodeMirror.keyNames[e.which]||''].join('')}
+function updateFormDetail(){$('#cn-detail>*').hide();$('#cn-'+$('#cn-type').val()).show()} // the part below "Type"
+function updateExes(){
+  var h=$('#cn-ssh')[0].checked?'':
+    proxyInfo.interpreters
+      .sort(function(a,b){
+         return cmpVer(b.version,a.version)||+b.bits-+a.bits||(b.edition==='unicode')-(a.edition==='unicode')
+      })
+      .map(function(x){
+        var s='v'+x.version.join('.')+', '+x.bits+'-bit, '+x.edition[0].toUpperCase()+x.edition.slice(1)
+        var supported=cmpVer(x.version,MIN_VER)>=0;supported||(s+=' (unsupported)')
+        return'<option value="'+esc(x.exe)+'"'+(supported?'':' disabled')+'>'+esc(s)
+      }).join('')
+  $('#cn-exes').html(h+'<option value="">Other...').val($('#cn-exe').val()).val()||$('#cn-exes').val('')
+  $('#cn-exe').prop('readonly',!!$('#cn-exes').val())
+}
 module.exports=function(){
   $('#cn-page').show();document.title='RIDE - Connect'
   $('#cn-fav-cb').change(function(){
@@ -20,7 +35,7 @@ module.exports=function(){
   })
   $('#cn-type').change(function(){sel.type=this.value;updateFormDetail();save()})
   updateFormDetail()
-  $('#cn-ssh').change(function(){$('#cn-ssh-detail').toggle(this.checked)})
+  $('#cn-ssh').change(function(){$('#cn-ssh-detail').toggle(this.checked);updateExes()})
   $('#cn-ssh-detail [name=user]').prop('placeholder',process.env.USER||'')
   $('#cn-exe').on('change keyup',function(){$('#cn-exes').val()||prefs.otherExe($(this).val())})
   $('#cn-exes').change(function(){
@@ -87,19 +102,7 @@ module.exports=function(){
     .on('keyup change',function(){var k=this.name,v=this.value;if(sel[k]!==v){sel[k]=v;save()}})
   $('#cn-rhs :checkbox[name]').change(function(){var k=this.name,v=+this.checked;if(sel[k]!==v){sel[k]=v;save()}})
   D.socket
-    .on('*proxyInfo',function(x){
-      $('#cn-exes').html(
-        x.interpreters
-         .sort(function(a,b){
-            return cmpVer(b.version,a.version)||+b.bits-+a.bits||(b.edition==='unicode')-(a.edition==='unicode')
-         })
-         .map(function(x){
-           var s='v'+x.version.join('.')+', '+x.bits+'-bit, '+x.edition[0].toUpperCase()+x.edition.slice(1)
-           var supported=cmpVer(x.version,MIN_VER)>=0;supported||(s+=' (unsupported)')
-           return'<option value="'+esc(x.exe)+'"'+(supported?'':' disabled')+'>'+esc(s)
-         }).join('')+'<option value="">Other...'
-      ).val($('#cn-exe').val()).val()||$('#cn-exes').val('')
-    })
+    .on('*proxyInfo',function(x){proxyInfo=x;updateExes()})
     .on('*connected',function(x){if($d){$d.dialog('close');$d=null};new IDE().setHostAndPort(x.host,x.port)})
     .on('*spawned',function(x){D.lastSpawnedExe=x.exe})
     .on('*spawnedExited',function(x){$.alert(x.code!=null?'exited with code '+x.code:'received '+x.signal)})
