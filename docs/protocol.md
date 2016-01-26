@@ -23,8 +23,6 @@ UsingProtocol=1
 
 Messages are independent and after the handshake can be sent/received in any order. Some messages infer that the other end will send a reply, but that reply may not be the next message to be received, or even ever be sent.
 
-Command names and their arguments are case-sensitive.
-
 :red_circle: was: case-insensitive
 
 If the receiver of a message does not recognise it, it should ignore it.
@@ -32,6 +30,10 @@ If the receiver of a message does not recognise it, it should ignore it.
 The connection may be closed at any time, leaving some messages undelivered or unprocessed.
 
 :red_circle: Why say the above?  Isn't it obvious for anything to do with networking?
+
+Command names and their arguments are case-sensitive.
+
+JSON booleans `true` and `false` can be freely substituted with and should be treated as equivalent to `1` and `0`.
 
 #Connection setup and teardown
 
@@ -42,7 +44,6 @@ After the connection has been established and a protocol agreed, both peers imme
 ["Identify",{"identity":1}]
 ```
 Constants for `identity`
-* `0` invalid
 * `1` RIDE
 * `2` interpreter
 * `3` process manager
@@ -100,7 +101,9 @@ Constants for `inputModeState`:
 
 :red_circle: These modes need explaining with expected behaviour
 
-:red_circle: Is "Invalid" a valid inputModeState?
+:red_circle: Is "Invalid" a valid inputModeState?  Does the interpreter ever send it?
+
+:red_circle: Currently interpreter sends `ReplyNotAtInputPrompt` instead of `NotAtInputPrompt`
 
 In addition to `AtInputPrompt`, RIDE can request information about the interpreter's ability to accept input at any time
 through
@@ -119,8 +122,8 @@ When the user presses `<ER>` (Enter) or `<TC>` (Ctrl-Enter), RIDE sends
 * `text`: the APL code to evaluate
 * `trace`: a boolean, whether the expression should be evaluated in the tracer (`<TC>`)
 
-Note that RIDE can't assume that everything entered in the session should be echoed. e.g. quote quad input.  Therefore,
-RIDE should wait for the [`EchoInput`](#EchoInput) message described earlier.
+Note that RIDE can't assume that everything entered in the session will be echoed, e.g. quote quad input (`⍞`) doesn't
+echo.  Therefore, RIDE should wait for the [`EchoInput`](#EchoInput) message.
 
 If multiple lines have been modified in the session, RIDE should queue them up and send them one by one, waiting for
 a response of either `AtInputPrompt` or
@@ -128,7 +131,7 @@ a response of either `AtInputPrompt` or
 ```json
 ["HadError",{}]
 ```
-The queue of pending lines should be cleared upon `HadError`.
+The queue of pending lines should be cleared on `HadError`.
 
 RIDE can optionally inform the interpreter about the session's width in characters with
 <a name=SetPW></a>
@@ -366,7 +369,7 @@ Request that RIDE sets the position of the current line marker in a trace window
 
 <a name=ReplySaveChanges></a>
 ```json
-["ReplySaveChanges",{"win":123,"err":0}]
+["ReplySaveChanges",{"win":123,"err":0}] // Interpreter -> RIDE
 ```
 Sent in response to a [`SaveChanges`](#SaveChanges) message.
 If `err` is 0, save succeeded; otherwise it failed.
@@ -375,7 +378,8 @@ If `err` is 0, save succeeded; otherwise it failed.
 ```json
 ["ShowHTML",{"title":"Example","html":"<i>Hell</i><b>o</b> world"}] // Interpreter -> RIDE
 ```
-Request RIDE shows some HTML.  See [`3500⌶`](http://help.dyalog.com/14.1/Content/Language/Primitive%20Operators/Send%20Text%20to%20RIDE-embedded%20Browser.htm)
+Request RIDE shows some HTML.
+See [`3500⌶`](http://help.dyalog.com/14.1/Content/Language/Primitive%20Operators/Send%20Text%20to%20RIDE-embedded%20Browser.htm)
 
 <a name=StatusOutput></a>
 ```json
@@ -389,7 +393,10 @@ Status information that should be displayed to the user.
 ```json
 ["UpdateDisplayName",{"displayName":"CLEAR WS"}] // Interpreter -> RIDE
 ```
-Sent when the display name changes.
+RIDE can use the display name as the title of its application window.
+
+:red_circle: The interpreter used to send displayName-s with '\0'-s in them.  TODO: make sure this is not the case
+anymore.
 
 ##Sent from either RIDE, an interpreter, or a process manager
 <a name=Disconnect></a>
@@ -397,6 +404,8 @@ Sent when the display name changes.
 ["Disconnect",{"msg":"..."}]
 ```
 Sent to shut down the connection cleanly.
+
+:red_circle: This is pointless.
 
 ##Sent from RIDE or an interpreter to a process manager
 <a name=GetAvailableConnections></a>
