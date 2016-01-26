@@ -37,6 +37,7 @@ sc    search (like Dyalog's SC command)
 sel   selection
 se    session
 sfx   suffix
+sig   signal
 skt   socket
 sol   start of line (used by CodeMirror)
 srv   server (like in Conga)

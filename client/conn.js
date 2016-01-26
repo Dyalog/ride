@@ -71,7 +71,7 @@ module.exports=function(){
       $('#cn-clone').attr('disabled',!u);$('#cn-del').attr('disabled',!$sel.length);$('#cn-rhs').toggle(u)
       sel=u?$sel.data('cn'):null
       if(u){
-        $('#cn-type').val(sel.type||'tcp');updateFormDetail()
+        $('#cn-type').val(sel.type||'tcp');updateFormDetail();updateExes()
         $('#cn-fav-cb').prop('checked',!sel.tmp);$('#cn-fav-name').val(sel.name);$('#cn-fav-name-wr').toggle(!sel.tmp)
         $('#cn-rhs :text[name],#cn-rhs textarea[name]').each(function(){$(this).val(sel[this.name])})
         $('#cn-rhs :checkbox[name]').each(function(){$(this).prop('checked',+sel[this.name])})
@@ -105,7 +105,7 @@ module.exports=function(){
     .on('*proxyInfo',function(x){proxyInfo=x;updateExes()})
     .on('*connected',function(x){if($d){$d.dialog('close');$d=null};new IDE().setHostAndPort(x.host,x.port)})
     .on('*spawned',function(x){D.lastSpawnedExe=x.exe})
-    .on('*spawnedExited',function(x){$.alert(x.code!=null?'exited with code '+x.code:'received '+x.signal)})
+    .on('*spawnedExited',function(x){$.alert(x.code!=null?'exited with code '+x.code:'received '+x.sig)})
     .on('*error',function(x){$d&&$d.dialog('close');$d=null;$.alert(x.msg,'Error')})
     .emit('*getProxyInfo')
   return{

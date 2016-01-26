@@ -391,7 +391,7 @@
       var env={};for(var k in process.env)env[k]=process.env[k];env.LINE=''+(1+(ee.currentRow||0))
       var p=spawn(editor,[f],{env:env})
       p.on('error',function(err){throw err})
-      p.on('exit',function(code,signal){var s=fs.readFileSync(f,'utf8');fs.unlinkSync(f);callback(s)})
+      p.on('exit',function(){var s=fs.readFileSync(f,'utf8');fs.unlinkSync(f);callback(s)})
     }
   }
 }())
