@@ -1,12 +1,12 @@
 'use strict'
 var helpurls=require('./helpurls'),prefs=require('./prefs'),about=require('./about'),esc=require('./util').esc,
-    prefsUI=require('./prefs-ui'),ACB_VALUE=require('./editor').ACB_VALUE,kbds=require('./kbds')
+    prefsUI=require('./prefs-ui'),ACB_VALUE=require('./editor').ACB_VALUE,kbds=require('./kbds'),CM=CodeMirror
 
 window.onhelp=function(){return!1} // prevent IE from acting silly on F1
 prefs.prefixKey(function(x,old){
-  if(x!==old){var m=CodeMirror.keyMap.dyalogDefault;m["'"+x+"'"]=m["'"+old+"'"];delete m["'"+old+"'"]}
+  if(x!==old){var m=CM.keyMap.dyalogDefault;m["'"+x+"'"]=m["'"+old+"'"];delete m["'"+old+"'"]}
 })
-var squiggleDescriptions={
+var sqglDesc={
   '¨':'each'             ,'←':'assignment'        ,'⊤':'encode (123→1 2 3)','⌹':'matrix inv/div' ,
   '¯':'negative'         ,'→':'branch'            ,'|':'abs/modulo'        ,'⍷':'find'           ,
   '∨':'or (GCD)'         ,'⍺':'left argument'     ,'⍝':'comment'           ,'⍨':'commute'        ,
@@ -26,16 +26,16 @@ var squiggleDescriptions={
 }
 
 var ctid=0 // backquote completion timeout id
-CodeMirror.keyMap.dyalogDefault={fallthrough:'default',End:'goLineEndSmart'}
-CodeMirror.keyMap.dyalogDefault["'"+prefs.prefixKey()+"'"]='BQC'
-$.extend(CodeMirror.commands,{
+CM.keyMap.dyalogDefault={fallthrough:'default',End:'goLineEndSmart'}
+CM.keyMap.dyalogDefault["'"+prefs.prefixKey()+"'"]='BQC'
+$.extend(CM.commands,{
   TB:function(){switchWindows( 1)},
   BT:function(){switchWindows(-1)},
-  SA:CodeMirror.commands.selectAll,
+  SA:CM.commands.selectAll,
   CT:function(){document.execCommand('Cut'  )},
   CP:function(){document.execCommand('Copy' )},
   PT:function(){document.execCommand('Paste')},
-  TO:CodeMirror.commands.toggleFold,
+  TO:CM.commands.toggleFold,
   PRF:function(){prefsUI.showDialog()},
   ABT:function(){about.showDialog()},
   CNC:function(){D.rideConnect()},
@@ -67,7 +67,7 @@ $.extend(CodeMirror.commands,{
       }
       t&&ranges.push([[l,t.start],[l,t.end]]) // current token
       ranges.sort(function(x,y){return cmp(y[0],x[0])||cmp(x[1],y[1])}) // inside-out order: desc beginnings, then asc ends
-      var sel=sels[0], s=[[sel.anchor.line,sel.anchor.ch],[sel.head.line,sel.head.ch]].sort(cmp), Pos=CodeMirror.Pos
+      var sel=sels[0], s=[[sel.anchor.line,sel.anchor.ch],[sel.head.line,sel.head.ch]].sort(cmp), Pos=CM.Pos
       for(var i=0;i<ranges.length;i++){
         var r=ranges[i], d0=cmp(r[0],s[0]), d1=cmp(r[1],s[1])
         if(d0<=0&&0<=d1&&(d0||d1)){cm.setSelection(Pos(r[0][0],r[0][1]),Pos(r[1][0],r[1][1]));break}
@@ -112,10 +112,10 @@ $.extend(CodeMirror.commands,{
               var data={from:c0,to:cm.getCursor(),list:ks.map(function(k){
                 var v=bq[k];return(k===pk
                   ?{text:'',hint:bqbqHint,render:function(e){e.innerHTML='  '+pk+pk+' <i>completion by name</i>'}}
-                  :{text:v,render:function(e){$(e).text(v+' '+pk+k+' '+(squiggleDescriptions[v]||'')+'  ')}}
+                  :{text:v,render:function(e){$(e).text(v+' '+pk+k+' '+(sqglDesc[v]||'')+'  ')}}
                 )
               })}
-              CodeMirror.on(data,'select',function(x){sel=x})
+              CM.on(data,'select',function(x){sel=x})
               return data
             }
           })
@@ -128,7 +128,7 @@ $.extend(CodeMirror.commands,{
   goLineEndSmart:function(cm){ // CodeMirror provides a goLineStartSmart but not a goLineEndSmart command.
     cm.extendSelectionsBy(function(){
       var c=cm.getCursor(),l=c.line,s=cm.getLine(l),n=s.length,m=s.replace(/ +$/,'').length
-      return CodeMirror.Pos(l,m<=c.ch&&c.ch<n||!m?n:m)
+      return CM.Pos(l,m<=c.ch&&c.ch<n||!m?n:m)
     },{origin:'+move',bias:-1})
   },
   PRN:function(cm){
@@ -212,7 +212,7 @@ function bqbqHint(cm){
       var u=cm.getLine(c.line).slice(c.ch,cm.getCursor().ch),a=[]
       for(var i=0;i<bqbqc.length;i++){var x=bqbqc[i];x.name.slice(0,u.length)===u&&a.push(x)}
       var data={from:{line:c.line,ch:c.ch-2},to:cm.getCursor(),list:a}
-      CodeMirror.on(data,'select',function(x){sel=x})
+      CM.on(data,'select',function(x){sel=x})
       return data
     }
   })
@@ -321,7 +321,7 @@ for(var i=0;i<informal.length;i++){
   }
 }
 
-function defCmd(x){var c=CodeMirror.commands;c[x]||(c[x]=function(cm){var h=cm.dyalogCommands;h&&h[x]&&h[x](cm)})}
+function defCmd(x){var c=CM.commands;c[x]||(c[x]=function(cm){var h=cm.dyalogCmds;h&&h[x]&&h[x](cm)})}
 'CBP MA AC VAL tabOrAutocomplete downOrXline indentMoreOrAutocomplete CLM TGC JBK'.split(' ').forEach(defCmd)
 
 var C=[
@@ -336,6 +336,4 @@ var C=[
   null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null, // 70
   null,null,null,null,null,null,'TO','MO',null,null,null,null,null,'S1','S2','OS'  // 80
 ]
-for(var i=0;i<C.length;i++)if(C[i]){
-  defCmd(C[i]);CodeMirror.keyMap.dyalogDefault["'"+String.fromCharCode(0xf800+i)+"'"]=C[i]
-}
+for(var i=0;i<C.length;i++)if(C[i]){defCmd(C[i]);CM.keyMap.dyalogDefault["'"+String.fromCharCode(0xf800+i)+"'"]=C[i]}

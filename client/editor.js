@@ -5,7 +5,7 @@ var autocompletion=require('./autocompletion'),prefs=require('./prefs'),mode=req
 require('./cm-scroll')
 
 var b=function(cc,t){return'<a href=# class="'+cc+' tb-btn" title="'+t+'"></a>'} // cc:css classes, t:title
-var EDITOR_HTML=
+var ED_HTML=
   '<div class=toolbar>'+
     // The first button is placed on the right-hand side through CSS. In a floating window it is hidden.
     // CSS classes "first" and "last" indicate button grouping.
@@ -34,7 +34,7 @@ var EDITOR_HTML=
 b=null
 
 this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
-  var ed=this;ed.ide=ide;ed.$e=$(e).html(EDITOR_HTML);ed.opts=opts;ed.id=opts.id;ed.name=opts.name;ed.emit=opts.emit
+  var ed=this;ed.ide=ide;ed.$e=$(e).html(ED_HTML);ed.opts=opts;ed.id=opts.id;ed.name=opts.name;ed.emit=opts.emit
   ed.isTracer=opts.tracer
   ed.xline=null // the line number of the empty line inserted at eof when cursor is there and you press <down>
   ed.oText='';ed.oStop=[] // remember original text and "stops" to avoid pointless saving on EP
@@ -51,7 +51,7 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
     keyMap:'dyalog',extraKeys:{'Shift-Tab':'indentLess',Tab:'tabOrAutocomplete',Down:'downOrXline'}
     // Some options of this.cm can be set from ide.coffee when the corresponding pref changes.
   })
-  ed.cm.dyalogCommands=ed
+  ed.cm.dyalogCmds=ed
   ed.cm.on('cursorActivity',ed.cursorActivity.bind(ed))
   ed.cm.on('gutterClick',function(cm,l,g){ // g:gutter
     if(g==='breakpoints'||g==='CodeMirror-linenumbers'){cm.setCursor({line:l,ch:0});ed.BP(ed.cm)}
@@ -394,30 +394,23 @@ this.Editor.prototype={
     this.isTracer&&this.emit('SetLineAttributes',{win:this.id,nLines:cm.lineCount(),stop:this.getStops()})
   },
   RD:function(cm){
-    if(cm.somethingSelected())cm.execCommand('indentAuto')
+    if(cm.somethingSelected()){cm.execCommand('indentAuto')}
     else{var u=cm.getCursor();cm.execCommand('SA');cm.execCommand('indentAuto');cm.setCursor(u)}
   },
   VAL:function(cm){
     var a=cm.getSelections(), s=a.length!==1?'':!a[0]?this.cword():a[0].indexOf('\n')<0?a[0]:''
     s&&this.ide.wins[0].opts.exec(['      '+s],0)
   },
-  addJump:function(){
-    var cm=this.cm,j=this.jumps,u=cm.getCursor();j.push({lh:cm.getLineHandle(u.line),ch:u.ch})>10&&j.shift()
+  addJump:function(cm){var j=this.jumps,u=cm.getCursor();j.push({lh:cm.getLineHandle(u.line),ch:u.ch})>10&&j.shift()},
+  JBK:function(cm){var p=this.jumps.pop();p&&cm.setCursor({line:p.lh.lineNo(),ch:p.ch})},
+  tabOrAutocomplete:function(cm){
+    if(cm.somethingSelected()){cm.execCommand('indentMore');return}
+    var c=cm.getCursor(),s=cm.getLine(c.line);if(/^ *$/.test(s.slice(0,c.ch))){cm.execCommand('indentMore');return}
+    this.autocompleteWithTab=1;this.emit('GetAutoComplete',{line:s,pos:c.ch,token:this.id})
   },
-  JBK:function(){var p=this.jumps.pop();p&&this.cm.setCursor({line:p.lh.lineNo(),ch:p.ch})},
-  tabOrAutocomplete:function(){
-    if(this.cm.somethingSelected()){
-      this.cm.execCommand('indentMore')
-    }else{
-      var c=this.cm.getCursor(),s=this.cm.getLine(c.line)
-      if(/^ *$/.test(s.slice(0,c.ch))){this.cm.execCommand('indentMore')}
-      else{this.autocompleteWithTab=1;this.emit('GetAutoComplete',{line:s,pos:c.ch,token:this.id})}
-    }
-  },
-  downOrXline:function(){
-    var l=this.cm.getCursor().line
-    if(l!==this.cm.lastLine()||/^\s*$/.test(this.cm.getLine(l))){this.cm.execCommand('goLineDown')}
-    else{this.cm.execCommand('goDocEnd');this.cm.execCommand('newlineAndIndent');this.xline=l+1}
+  downOrXline:function(cm){
+    var l=cm.getCursor().line;if(l!==cm.lastLine()||/^\s*$/.test(cm.getLine(l))){cm.execCommand('goLineDown');return}
+    cm.execCommand('goDocEnd');cm.execCommand('newlineAndIndent');this.xline=l+1
   },
   onbeforeunload:function(){ // called when the user presses [X] on the OS window
     var ed=this

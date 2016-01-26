@@ -311,33 +311,26 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 
 #prefs-tab-shortcuts{
   position:absolute;left:0;right:0;top:32px;bottom:0;overflow:auto;text-align:left;
-  td{
-    text-align:left;
-    &.shortcuts-code{
-      .tt;padding:0 3px;border-left:solid #aaa 1px;border-right:solid #aaa 1px;color:#555;text-align:center
-    }
-  }
+  td{text-align:left}
+  td.shc-code{.tt;padding:0 3px;border-left:solid #aaa 1px;border-right:solid #aaa 1px;color:#555;text-align:center}
 }
-#shortcuts-table-wrapper{position:absolute;top:40px;left:3px;right:3px;bottom:0;overflow:auto}
-#shortcuts-table-wrapper table{width:100%}
-#shortcuts-search-clear{width:24px;margin-left:-24px;color:#888;text-decoration:none}
-#shortcuts-search-clear:hover{color:#000}
-#shortcuts-no-results{font-style:italic;padding:20px;color:#888}
-.shortcuts-text,.shortcuts-del,.shortcuts-add,.shortcuts-reset{
-  padding:0 3px;border-radius:10px;border:solid #799 1px
-}
-.shortcuts-text{
+#shc-tbl-wr{position:absolute;top:40px;left:3px;right:3px;bottom:0;overflow:auto}
+#shc-tbl-wr table{width:100%}
+#shc-search-clear{width:24px;margin-left:-20px;color:#888;text-decoration:none;&:hover{color:#000}}
+#shc-no-results{font-style:italic;padding:20px;color:#888}
+.shc-text,.shc-del,.shc-add,.shc-rst{padding:0 3px;border-radius:10px;border:solid#799 1px}
+.shc-text{
   background-color:#cff;color:#255;border-top-right-radius:0;border-bottom-right-radius:0;border-right-width:0;
-  .shortcuts-del-hover &{border-color:red}
-  &.shortcuts-dup{border-color:red;background-color:red;color:white}
+  .shc-del-hover &{border-color:red}
+  &.shc-dup{border-color:red;background-color:red;color:white}
 }
-.shortcuts-del{
+.shc-del{
   background-color:#799;color:#fff;text-decoration:none;border-top-left-radius:0;border-bottom-left-radius:0;
   &:hover{background-color:red;border-color:#800}
 }
-.shortcuts-add  {background-color:#799;color:#fff;text-decoration:none;&:hover{background-color:#080;border-color:#040}}
-.shortcuts-reset{background-color:#799;color:#fff;text-decoration:none;&:hover{background-color:#a80;border-color:#540}}
-.shortcuts-input{background-color:#ace}
+.shc-add{background-color:#799;color:#fff;text-decoration:none;&:hover{background-color:#080;border-color:#040}}
+.shc-rst{background-color:#799;color:#fff;text-decoration:none;&:hover{background-color:#a80;border-color:#540}}
+.shc-input{background-color:#ace}
 
 #code-aim{margin-left:48px}
 #prefs-tab-code{overflow:auto;position:absolute;left:0;right:0;top:32px;bottom:0}

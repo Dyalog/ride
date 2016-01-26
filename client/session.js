@@ -10,7 +10,7 @@ this.Session=function(ide,e,opts){ // Session constructor
     lineWrapping:!!prefs.wrap(),indentUnit:4,smartIndent:0,autoCloseBrackets:{pairs:'()[]{}',explode:''},
     scrollbarStyle:'simple',extraKeys:{'Shift-Tab':'indentLess',Tab:'tabOrAutocomplete'},
   })
-  cm.dyalogCommands=se
+  cm.dyalogCmds=se
   cmOnDblClick(cm,function(e){se.ED(cm);e.stopPropagation();e.preventDefault()})
   cm.on('focus',function(){se.focusTimestamp=+new Date;ide.focusedWin=se})
   cm.on('beforeChange',function(_,c){

@@ -32,17 +32,14 @@ $.extend(CodeMirror.commands,{
     }
   },
   DMK:function(){ // toggle key display mode
-    if(!$p){
-      $('body').append($('<div id=demo-keys>').append($p=$('<span>').hide()))
-      $(document)
-        .on('keydown.demo',function(e){var s=keyInfo(e)[0];$p.text(s).toggle(!!s)})
-        .on('keyup.demo',function(e){
-          var h=keyInfo(e),s=h[0],c=h[1]
-          if(c){$p.hide();var $k=$('<span>').text(s).insertBefore($p);setTimeout(function(){$k.fadeOut(1000)},2000)}
-          else{$p.text(s).toggle(!!s)}
-        })
-    }else{
-      $(document).off('.demo');$('#demo-keys').remove();$p=null
-    }
+    if($p){$(document).off('.demo');$('#demo-keys').remove();$p=null;return}
+    $('body').append($('<div id=demo-keys>').append($p=$('<span>').hide()))
+    $(document)
+      .on('keydown.demo',function(e){var s=keyInfo(e)[0];$p.text(s).toggle(!!s)})
+      .on('keyup.demo',function(e){
+        var h=keyInfo(e),s=h[0],c=h[1]
+        if(c){$p.hide();var $k=$('<span>').text(s).insertBefore($p);setTimeout(function(){$k.fadeOut(1000)},2000)}
+        else{$p.text(s).toggle(!!s)}
+      })
   }
 })
