@@ -1,8 +1,6 @@
 'use strict'
 var prefs=require('./prefs'),esc=require('./util').esc
-
 this.name='Colours'
-
 var G=[],H={} // G:syntax highlighting groups {t,s,c,ctrls}; H:reverse lookup dict for G
 D.addSyntaxGroups=function(x){G=G.concat(x);H={};for(var i=0;i<G.length;i++)H[G[i].t]=i;builtInSchemes&&updateStyle()}
 D.addSyntaxGroups([
@@ -47,7 +45,6 @@ D.addSyntaxGroups([
   {t:'sel', s:'selection',       c:'.CodeMirror-selected,.CodeMirror-focused .CodeMirror-selected', ctrls:{fg:0,BIU:0}},
   {t:'tc',  s:'tracer',          c:'.tracer .CodeMirror,.tracer .CodeMirror .CodeMirror-gutter-wrapper'}
 ])
-
 // Colour schemes have two representations:
 //   in memory                 in localStorage
 //     {                         {
@@ -82,7 +79,6 @@ function decodeScheme(x){           // x:for example "num=fg:345,bg:f,B,U,bgo:.5
   }
   return r
 }
-
 var builtInSchemes=[
   {name:'Default',styles:'asgn=fg:00f com=fg:088 dfn=fg:00f diam=fg:00f err=fg:f00 fn=fg:008 idm=fg:00f kw=fg:800 '+
     'lnum=fg:008,bg:f,bgo:1 mod=bg:e,bgo:1 mtch=bg:ff8,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 op1=fg:00f op2=fg:00f '+
@@ -98,12 +94,10 @@ var builtInSchemes=[
     'str=fg:8 tc=bg:e,bgo:1 zld=fg:8'},
   {name:'Kazimir Malevich',styles:''}
 ].map(decodeScheme).map(function(x){x.frozen=1;return x})
-
 var schemes // all schemes (built-in and user-defined) as objects
 var scheme  // the active scheme object
 var $cm,cm  // DOM element and CodeMirror instance for displaying sample code
 var sel     // the selected group's token type (.t)
-
 function renderCSS(scheme,rp){ // rp: css rule prefix
   return G.map(function(g){var h=scheme[g.t];return!h?'':
     g.c.split(',').map(function(x){return(rp||'')+' '+x}).join(',')+'{'+
@@ -122,20 +116,16 @@ function shrinkRGB(s){
   if(!/^#.{6}$/.test(s))return s
   var r=s[1],R=s[2],g=s[3],G=s[4],b=s[5],B=s[6];return r!==R||g!==G||b!==B?s.slice(1):r===g&&g===b?r:r+g+b
 }
-
 function updateStyle(){ // update global style from what's in localStorage
   var name=prefs.colourScheme(),a=builtInSchemes.concat(prefs.colourSchemes().map(decodeScheme))
   for(var i=0;i<a.length;i++)if(a[i].name===name){$('#col-style').text(renderCSS(a[i],'.ride-win'));break}
 }
 $(updateStyle);prefs.colourScheme(updateStyle);prefs.colourSchemes(updateStyle)
-
 function chooseUniqueSchemeName(s){ // s: suggested root
   var h={};for(var i=0;i<schemes.length;i++)h[schemes[i].name]=1
   var r=s;if(h[s]){s=s.replace(/ \(\d+\)$/,'');var i=1;while(h[r=s+' ('+i+')'])i++};return r
 }
-
 var SEARCH_MATCH='search match' // sample text to illustrate it
-
 this.init=function($e){
   var u=[],fg;for(var g in scheme)(fg=scheme[g].fg)&&u.indexOf(fg)<0&&u.push(fg);u.sort() // u: unique colours
   $e.html(
@@ -162,21 +152,16 @@ this.init=function($e){
   )
   $('#col-scheme').change(function(){
     scheme=schemes[+this.selectedIndex];updateSampleStyle()
-    $('#prefs-tab-colours').toggleClass('frozen',!!scheme.frozen)
-    cm.setSize($cm.width(),$cm.height())
+    $('#prefs-tab-colours').toggleClass('frozen',!!scheme.frozen);cm.setSize($cm.width(),$cm.height())
   })
   $('#col-new-name').blur(function(){
-    var newName=$(this).val()
-    if(newName){
-      scheme.name='';scheme.name=chooseUniqueSchemeName(newName)
-      $('#prefs-tab-colours').removeClass('renaming');updateSchemes()
-    }
-  }).keydown(function(e){ // todo
-    switch(e.which){
-      case 13:$(this)                 .blur();return!1 // enter
-      case 27:$(this).val(scheme.name).blur();return!1 // esc
-    }
-  })
+    var newName=$(this).val();if(!newName)return
+    scheme.name='';scheme.name=chooseUniqueSchemeName(newName)
+    $('#prefs-tab-colours').removeClass('renaming');updateSchemes()
+  }).keydown(function(e){switch(e.which){ // todo
+    case 13:$(this)                 .blur();return!1 // enter
+    case 27:$(this).val(scheme.name).blur();return!1 // esc
+  }})
   $('#col-clone').button().click(function(){
     var x={};schemes.push(x);for(var k in scheme)x[k]=$.extend({},scheme[k]) // x:the new scheme
     x.name=chooseUniqueSchemeName(scheme.name);delete x.frozen;scheme=x;updateSchemes()
@@ -266,9 +251,9 @@ function updateSampleStyle(){$('#col-sample-style').text(renderCSS(scheme,'#col-
 function selectGroup(t,forceRefresh){
   if(scheme&&(sel!==t||forceRefresh)){
     var i=H[t],h=scheme[t]||{};$('#col-group').val(i)
-    var ps=['fg','bg','lb'];for(var i=0;i<ps.length;i++){var p=ps[i]
-      $('#col-'+p+'-cb').prop('checked',!!h[p])
-      $('#col-'+p).val(expandRGB(h[p])||'#000000').toggle(!!h[p])
+    var ps=['fg','bg','lb']
+    for(var i=0;i<ps.length;i++){
+      var p=ps[i];$('#col-'+p+'-cb').prop('checked',!!h[p]);$('#col-'+p).val(expandRGB(h[p])||'#000000').toggle(!!h[p])
     }
     var ps='BIU';for(var i=0;i<ps.length;i++){var p=ps[i];$('#col-'+p).prop('checked',!!h[p])}
     $('#col-bgo').slider('value',h.bgo==null?.5:h.bgo)

@@ -19,9 +19,7 @@ this.IDE=function(){
       '<div class=ui-layout-south><ul></ul></div>'+
     '</div>'
   ide.$ide=$('.ide')
-  ide.dead=0     // when RIDE dies, the screen turns light brown and RIDE stops responding to certain commands
   ide.pending=[] // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
-  ide.w3500=null // window for 3500⌶
   ide.host=ide.port=ide.wsid='';prefs.title(ide.updateTitle.bind(ide))
   D.wins=ide.wins={ // window id -> instance of Editor or Session
     0:new Session(ide,$('.ui-layout-center'),{id:0,emit:ide.emit.bind(ide),exec:function(lines,trace){
@@ -48,10 +46,8 @@ this.IDE=function(){
       .on('click','.tab-close',function(){var w=ide.wins[parseId($(this).closest('a').prop('href'))];w&&w.EP(w.cm)})
       .sortable({
         cursor:'move',containment:'parent',tolerance:'pointer',axis:'x',revert:true,
-        stop:function(_,ui){
-          ide.refreshTabs()
-          $('[role=tab]',ide.$tabs).attr('style','') // $().sortable screws tabs' z-indices after dragging
-        }
+        stop:function(_,ui){ide.refreshTabs();$('[role=tab]',ide.$tabs).attr('style','')}
+        // $().sortable changes z-indices after dragging, so we fix those in stop()
       })
       .data('ui-sortable').floating=true // workaround for http://bugs.jqueryui.com/ticket/6702#comment:20
   }
@@ -87,9 +83,7 @@ this.IDE=function(){
     WindowTypeChanged:function(x){return ide.wins[x.win].setTracer(x.tracer)},
     autocomplete:function(x){return ide.wins[x.token].autocomplete(x.skip,x.options)},
     highlight:function(x){ide.wins[x.win].highlight(x.line)},
-    UpdateWindow:function(ee){ // "ee" for EditableEntity, see protocol spec
-      $('#wintab'+ee.token+' a').text(ee.name);ide.wins[ee.token].open(ee)
-    },
+    UpdateWindow:function(x){$('#wintab'+x.token+' a').text(x.name);ide.wins[x.token].open(x)},
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
     CloseWindow:function(x){
       $('#wintab'+x.win+',#win'+x.win).remove();ide.$tabs.tabs('destroy').tabs(ide.tabOpts);ide.refreshTabs()
@@ -180,9 +174,8 @@ this.IDE=function(){
   try{
     D.installMenu(parseMenuDSL(prefs.menu()))
   }catch(e){
-    console.error(e)
     $.alert('Invalid menu configuration -- the default menu will be used instead','Warning')
-    D.installMenu(parseMenuDSL(prefs.menu.getDefault()))
+    console.error(e);D.installMenu(parseMenuDSL(prefs.menu.getDefault()))
   }
   prefs.autoCloseBrackets(function(x){
     for(var k in ide.wins){var w=ide.wins[k];w.cm&&w.cm.setOption('autoCloseBrackets',!!x&&ACB_VALUE)}
@@ -262,15 +255,11 @@ this.IDE.prototype={
       }
     }
     if(!done){
-      var dir=ee['debugger']?'south':'east',
-          size=ee['debugger']?prefs.tracerHeight():prefs.editorWidth()
+      var dir=ee['debugger']?'south':'east', size=ee['debugger']?prefs.tracerHeight():prefs.editorWidth()
       this.layout.sizePane(dir,size||'50%');this.layout.open(dir)
       var $li=$(
         '<li id=wintab'+w+'>'+
-          '<a href=#win'+w+'>'+
-            '<span class=tab-name></span>'+
-            '<span class=tab-close title="Save and close">×</span>'+
-          '</a>'+
+          '<a href=#win'+w+'><span class=tab-name></span><span class=tab-close title="Save and close">×</span></a>'+
         '</li>'
       )
         .appendTo('.ui-layout-'+dir+' ul')

@@ -1,14 +1,10 @@
 'use strict'
 var prefs=require('./prefs'),layouts=require('./kbds').layouts
-
 this.name='Layout'
-
 var $pfx,$lc // DOM elements for "Prefix" and "Locale"
 var NK=58    // number of scancodes we are concerned with
 var model={} // dictionary: locale→[arrayOfAPLGlyphs,arrayOfShiftedAPLGlyphs]
-
 function U(c){return'U+'+('000'+c.charCodeAt(0).toString(16).toUpperCase()).slice(-4)} // fmt Unicode char as "U+0123"
-
 this.init=function($e){
   var sk={15:'←',16:'↹',30:'Caps',43:'↲',44:'⇧',57:'⇧'} // special keys
   $e.html(
@@ -48,21 +44,16 @@ this.init=function($e){
   )
   if(!prefs.kbdLocale()){
     var l=navigator.language||'',xx=l.slice(0,2).toUpperCase()
-    prefs.kbdLocale(l==='en-GB'?'UK':
-                    l==='da'||l==='da_DK'?(D.mac?'DK-Mac':'DK'):
-                    geom[xx]?xx:'US')
+    prefs.kbdLocale(l==='en-GB'?'UK':l==='da'||l==='da_DK'?(D.mac?'DK-Mac':'DK'):geom[xx]?xx:'US')
   }
   $('#layout-reset').button().click(function(){
-    var lc=$lc.val()
-    $pfx.val(prefs.prefixKey.getDefault()).change()
-    model[lc]=[layouts[lc][2].split(''),layouts[lc][3].split('')]
-    updateGlyphs()
-    return!1
+    var lc=$lc.val();$pfx.val(prefs.prefixKey.getDefault()).change()
+    model[lc]=[layouts[lc][2].split(''),layouts[lc][3].split('')];updateGlyphs();return!1
   })
   $lc=$('#layout-lc').change(updateGlyphs)
   $pfx=$('#layout-pfx')
     .on('change keyup',function(){$('#layout-legend .pfx2').text($(this).val().slice(-1))})
-    .focus(function(){setTimeout(((function(_this){return function(){$(_this).select()}})(this)),1)})
+    .focus(function(){var t=this;setTimeout(function(){$(t).select()},1)})
 }
 this.load=function(){
   $lc.val(prefs.kbdLocale());$pfx.val(prefs.prefixKey()).change();model={}
@@ -74,13 +65,10 @@ this.load=function(){
       var ix=layouts[lc][j].indexOf(v[i]);ix>=0&&(model[lc][j][ix]=v[i+1])
     }
   }
-  updateGlyphs()
-  D.win&&$('#layout-ime').prop('checked',!!prefs.ime())
+  updateGlyphs();D.win&&$('#layout-ime').prop('checked',!!prefs.ime())
 }
-
 // Every geometry (aka "mechanical layout") has a CSS class specifying the precise key arrangement.
 var geom={US:'ansi',_:'iso'} // _ is the default
-
 function updateGlyphs(){ // apply model values to the DOM
   var lc=$lc.val(),l=layouts[lc],m=model[lc]
   $('#layout-kbd').removeClass('geom-ansi geom-iso').addClass('geom-'+(geom[$lc.val()]||geom._))

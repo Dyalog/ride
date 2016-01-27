@@ -14,28 +14,23 @@ this.Session=function(ide,e,opts){ // Session constructor
   cmOnDblClick(cm,function(e){se.ED(cm);e.stopPropagation();e.preventDefault()})
   cm.on('focus',function(){se.focusTimestamp=+new Date;ide.focusedWin=se})
   cm.on('beforeChange',function(_,c){
-    if(c.origin!=='D'){
-      var l0=c.from.line,l1=c.to.line,m=l1-l0+1,n=c.text.length
-      if(n<m){
-        if(c.update){
-          var text=c.text.slice(0);for(var j=n;j<m;j++)text.push('') // pad shrinking changes with empty lines
-          c.update(c.from,c.to,text);n=m
-        }else{
-          c.cancel();return // the change is probably the result of Undo
-        }
-      }else if(m<n){
-        var h=se.dirty;se.dirty={};for(var x in h)se.dirty[x+(n-m)*(x>l1)]=h[x]
-      }
-      var l=l0
-      while(l<=l1){var base=se.dirty;base[l]==null&&(base[l]=se.cm.getLine(l));l++}
-      while(l<l0+n)se.dirty[l++]=0
+    if(c.origin==='D')return
+    var l0=c.from.line,l1=c.to.line,m=l1-l0+1,n=c.text.length
+    if(n<m){
+      if(!c.update){c.cancel();return} // the change is probably the result of Undo
+      var text=c.text.slice(0);for(var j=n;j<m;j++)text.push('') // pad shrinking changes with empty lines
+      c.update(c.from,c.to,text);n=m
+    }else if(m<n){
+      var h=se.dirty;se.dirty={};for(var x in h)se.dirty[x+(n-m)*(x>l1)]=h[x]
     }
+    var l=l0
+    while(l<=l1){var base=se.dirty;base[l]==null&&(base[l]=se.cm.getLine(l));l++}
+    while(l<l0+n)se.dirty[l++]=0
   })
   cm.on('change',function(_,c){
-    if(c.origin!=='D'){
-      var l0=c.from.line,l1=c.to.line,m=l1-l0+1,n=c.text.length
-      for(var l in se.dirty)se.cm.addLineClass(+l,'background','modified')
-    }
+    if(c.origin==='D')return
+    var l0=c.from.line,l1=c.to.line,m=l1-l0+1,n=c.text.length
+    for(var l in se.dirty)se.cm.addLineClass(+l,'background','modified')
   })
   se.promptType=0 // 0=Invalid 1=Descalc 2=QuadInput 3=LineEditor 4=QuoteQuadInput 5=Prompt
   se.autocomplete=autocompletion.setUp(se)
@@ -44,35 +39,26 @@ this.Session=function(ide,e,opts){ // Session constructor
 this.Session.prototype={
   histAdd:function(lines){this.hist[0]='';[].splice.apply(this.hist,[1,0].concat(lines));this.histIdx=0},
   histMove:function(d){
-    var i=this.histIdx+d
-    if(i<0)$.alert('There is no next line','Dyalog APL Error')
-    else if(i>=this.hist.length)$.alert('There is no previous line','Dyalog APL Error')
-    else{
-      var l=this.cm.getCursor().line
-      if(!this.histIdx)this.hist[0]=this.cm.getLine(l)
-      if(this.hist[i]!=null){
-        this.cm.replaceRange(this.hist[i],{line:l,ch:0},{line:l,ch:this.cm.getLine(l).length},'D')
-        this.cm.setCursor({line:l,ch:this.hist[i].replace(/[^ ].*$/,'').length})
-        this.histIdx=i
-      }
-    }
+    var i=this.histIdx+d, l=this.cm.getCursor().line
+    if(i<0                ){$.alert('There is no next line'    ,'Dyalog APL Error');return}
+    if(i>=this.hist.length){$.alert('There is no previous line','Dyalog APL Error');return}
+    if(!this.histIdx)this.hist[0]=this.cm.getLine(l)
+    if(this.hist[i]==null)return
+    this.cm.replaceRange(this.hist[i],{line:l,ch:0},{line:l,ch:this.cm.getLine(l).length},'D')
+    this.cm.setCursor({line:l,ch:this.hist[i].replace(/[^ ].*$/,'').length})
+    this.histIdx=i
   },
   add:function(s){
     var cm=this.cm,l=cm.lastLine(),s0=cm.getLine(l)
     cm.replaceRange((cm.getOption('readOnly')?(s0+s):s),{line:l,ch:0},{line:l,ch:s0.length},'D')
     cm.setCursor(cm.lastLine(),0)
   },
-  prompt:function(why){ // why: 0=NoPrompt 1=Descalc 2=QuadInput 3=LineEditor 4=QuoteQuadInput 5=Prompt
-    var cm=this.cm
-    this.promptType=why;cm.setOption('readOnly',!why);cm.setOption('cursorHeight',+!!why)
-    var l=cm.lastLine()
-    if(why===1&&this.dirty[l]==null||[0,1,3,4].indexOf(why)<0){
+  prompt:function(why){ // 0=NoPrompt 1=Descalc 2=QuadInput 3=LineEditor 4=QuoteQuadInput 5=Prompt
+    var cm=this.cm,l=cm.lastLine();this.promptType=why;cm.setOption('readOnly',!why);cm.setOption('cursorHeight',+!!why)
+    if(why===1&&this.dirty[l]==null||[0,1,3,4].indexOf(why)<0)
       cm.replaceRange('      ',{line:l,ch:0},{line:l,ch:cm.getLine(l).length},'D')
-    }else if('      '===cm.getLine(l)){
-      cm.replaceRange('',{line:l,ch:0},{line:l,ch:6},'D')
-    }else{
-      cm.setCursor(l,cm.getLine(l).length)
-    }
+    else if('      '===cm.getLine(l))cm.replaceRange('',{line:l,ch:0},{line:l,ch:6},'D')
+    else cm.setCursor(l,cm.getLine(l).length)
     why&&cm.clearHistory()
   },
   updateSize:function(){
@@ -82,7 +68,7 @@ this.Session.prototype={
   updatePW:function(force){ // force:emit a SetPW message even if the width hasn't changed
     // discussion about CodeMirror's width in chars: https://github.com/codemirror/CodeMirror/issues/3618
     var pw=Math.max(42,Math.floor((this.$e.width()-this.cm.display.scrollbarFiller.clientWidth)/this.cm.defaultCharWidth()))
-    if(pw!==this.pw&&this.host&&!this.ide.dead||force){this.emit('SetPW',{pw:pw});this.pw=pw}
+    if(pw!==this.pw&&this.host&&!this.ide.dead||force)this.emit('SetPW',{pw:this.pw=pw})
   },
   scrollCursorIntoView:function(){
     var cm=this.cm;cm.scrollTo(0,cm.getScrollInfo().top);setTimeout(function(){cm.scrollIntoView()},1)
@@ -97,8 +83,7 @@ this.Session.prototype={
   exec:function(trace){
     var es,l,ls,se=this
     if(this.promptType){
-      ls=[]
-      for(l in this.dirty)ls.push(+l)
+      ls=[];for(l in this.dirty)ls.push(+l)
       if(ls.length){
         ls.sort(function(x,y){return x-y})
         es=ls.map(function(l){return se.cm.getLine(l)||''}) // strings to execute
@@ -132,18 +117,16 @@ this.Session.prototype={
   ER:function(){this.exec(0)},
   TC:function(){this.exec(1)},
   tabOrAutocomplete:function(cm){
-    if(cm.somethingSelected()){
-      cm.execCommand('indentMore')
-    }else if(this.promptType!==4){ // never autocomplete in ⍞ input
-      var c=cm.getCursor(),s=cm.getLine(c.line)
-      if(/^ *$/.test(s.slice(0,c.ch))){cm.execCommand('indentMore')}
-      else{this.autocompleteWithTab=1;this.emit('GetAutoComplete',{line:s,pos:c.ch,token:0})}
-    }
+    if(cm.somethingSelected()){cm.execCommand('indentMore');return}
+    if(this.promptType!==4)return // never autocomplete in ⍞ input
+    var c=cm.getCursor(),s=cm.getLine(c.line)
+    if(/^ *$/.test(s.slice(0,c.ch))){cm.execCommand('indentMore');return}
+    this.autocompleteWithTab=1;this.emit('GetAutoComplete',{line:s,pos:c.ch,token:0})
   },
   CLM:function(cm){
     var sels=cm.listSelections()
     for(var i=0;i<sels.length;i++){
-      var a=sels[i].anchor.line,b=sels[i].head.line;if(a>b){var c=a;a=b;b=c}
+      var a=sels[i].anchor.line,b=sels[i].head.line,c;if(a>b){c=a;a=b;b=c}
       for(var l=a;l<=b;l++){delete this.dirty[l];cm.removeLineClass(l,'background','modified')}
     }
   }
