@@ -1,17 +1,16 @@
 'use strict'
 var fs=require('fs'),net=require('net'),os=require('os'),path=require('path'),cp=require('child_process')
-var log=this.log=(function(){
+var log
+;(function(){
   // record no more than N log messages per T milliseconds; at any moment, there have been n messages since time t
   var stdoutOK=1,N=500,T=1000,n=0,t=0,t0=+new Date
-  return function(s){ // the actual log() function
+  log=exports.log=function(s){
     var t1=+new Date;if(t1-t>T){t=t1;n=1} // if last message was too long ago, start counting afresh
-    var m= ++n<N ? (t1-t0)+': '+s+'\n' : n===N ? '... logging temporarily suppressed\n' : 0; if(!m)return
+    var m= ++n<N ? (t1-t0)+' '+s+'\n' : n===N ? '... logging temporarily suppressed\n' : 0; if(!m)return
     if(stdoutOK)try{process.stdout&&process.stdout.write&&process.stdout.write(m)}catch(_){stdoutOK=0}
     var l=log.listeners.slice(0);for(var i=0;i<l.length;i++)l[i](m) // call listeners; prevent concurrent modification
   }
-}())
-log.listeners=[]
-;(function(){
+  log.listeners=[]
   var f=process.env.DYALOG_IDE_LOG
   if(f){ // if $DYALOG_IDE_LOG is present, also log to a file (in addition to stdout)
     var h=process.env.HOME||process.env.USERPROFILE;if(h)f=path.resolve(h,f)
@@ -22,8 +21,8 @@ log.listeners=[]
     log.get=function(){return a.slice(i).concat(a.slice(0,i))}
     log.listeners.push(function(s){a[i++]=s;i%=a.length})
   }
+  log(new Date().toISOString())
 }())
-function addr(x){return x&&(x=x.request)&&(x=x.connection)&&x.remoteAddress||'IDE'} // human-readable repr of socket x
 function trunc(s){return s.length>1000?s.slice(0,997)+'...':s}
 function ls(x){return fs.readdirSync(x)}
 function sil(f){return function(x){try{f(x)}catch(_){}}} // exception silencer
@@ -181,9 +180,8 @@ var handlers={
   }
 }
 this.Proxy=function(){
-  log(new Date().toISOString())
   return function(x){
-    log(addr(x)+' connected')
+    log('browser connected')
     ;(skt=x).onevent=function(x){
       log('from browser:'+trunc(JSON.stringify(x.data)))
       var f=handlers[x.data[0]];f?f(x.data[1]):cmd(x.data[0],x.data[1]||{})
