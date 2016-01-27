@@ -522,6 +522,11 @@ NN: We should add support for:
     2015-12-15 NN: This is now supported except that "type" is ignored.
       When the user closes the dialog without choosing an option, RIDE responds with index:-1
 ```
+* string input dialogs
+```
+    Interpreter→RIDE:  ShowInputDialog [string title, string text, string defaultValue, int token]
+    RIDE→Interpreter:  InputDialogResult [string value, int token]
+```
 * list of valid I-beams and their descriptions
 * `ShowStack` and `ShowThreads`
 * drop workspace in RIDE
