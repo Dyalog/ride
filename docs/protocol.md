@@ -193,6 +193,16 @@ If sent from the interpreter, tell RIDE to close an open editor window.
 If sent from RIDE, request that a window be closed.
 
 #Debugging
+<a name=HighlightLine></a>
+```json
+["HighlightLine",{"lineInfo":{"win":123,"line":45}}]
+```
+:red_circle: RIDE2+ supports this command in a slightly different format, legacy from before I switched to RIDE protocol
+v2.
+
+:red_circle: `["highlight",{"win":123,"line":45}]`
+
+Request that RIDE sets the position of the current line marker in a trace window.
 
 <a name=SetLineAttributes></a>
 ```json
@@ -327,15 +337,23 @@ When the user hovers a name with the mouse, RIDE should ask for a short textual 
 Like with autocompletion, `token` is used to correlate requests and responses, and there is no guarantee that they will
 arrive in the same order, if ever.
 
-#Other
+#Language bar
+RIDE can request information about the language bar with
 <a name=GetLanguageBar></a>
 ```json
 ["GetLanguageBar",{}] // RIDE -> Interpreter
 ```
-:red_circle: Not used in RIDE2+.  Information about the language bar is known in advance, there's no need to send it
-through the protocol.
+The interpreter sends the `LanguageBar` after such a request and every time there's a change in it.
+<a name=LanguageBar></a>
+```json
+["LanguageBar",{"elements":[ // Interpreter -> RIDE
+  {"desc":"Left Arrow","chr":"←","text":"Dyadic function: Assignment\n..."},
+  ...
+]}]
+```
+:red_circle: RIDE2+ has built-in information about the language bar.  It doesn't use the messages described here.
 
-Request that the interpreter sends a language bar.
+#Other
 <a name=GetSessionContent></a>
 ```json
 ["GetSessionContent",{}] // RIDE -> Interpreter
@@ -352,29 +370,6 @@ Request the current content of the session.
 
 Request the interpreter sends [`UpdateWindow`](#UpdateWindow) messages for all currently open windows.
 
-##Sent from an interpreter to RIDE
-
-<a name=LanguageBar></a>
-```json
-["LanguageBar",{"elements":[
-  {"desc":"Left Arrow",chr:"←",text:"Dyadic function: Assignment\n..."},
-  ...
-]}]
-```
-:red_circle: not used in RIDE2+
-Sent if the language bar is requested or updated.
-
-<a name=HighlightLine></a>
-```json
-["HighlightLine",{"lineInfo":{"win":123,"line":45}}]
-```
-:red_circle: RIDE2+ supports this command in a slightly different format, legacy from before I switched to RIDE protocol
-v2.
-
-:red_circle: `["highlight",{"win":123,"line":45}]`
-
-Request that RIDE sets the position of the current line marker in a trace window.
-
 <a name=ReplySaveChanges></a>
 ```json
 ["ReplySaveChanges",{"win":123,"err":0}] // Interpreter -> RIDE
@@ -388,7 +383,7 @@ If `err` is 0, save succeeded; otherwise it failed.
 ```
 Request RIDE shows some HTML.
 See
-[`3500⌶`](http://help.dyalog.com/14.1/Content/Language/Primitive%20Operators/Send%20Text%20to%20RIDE-embedded%20Browser.htm)
+[`3500⌶`](http://help.dyalog.com/14.1/Content/Language/Primitive%20Operators/Send%20Text%20to%20RIDE-embedded%20Browser.htm).
 
 <a name=StatusOutput></a>
 ```json
@@ -407,14 +402,16 @@ RIDE can use the display name as the title of its application window.
 :red_circle: The interpreter used to send displayName-s with '\0'-s in them.  TODO: make sure this is not the case
 anymore.
 
-##Sent from either RIDE, an interpreter, or a process manager
 <a name=Disconnect></a>
 ```json
 ["Disconnect",{"msg":"..."}]
 ```
-Sent to shut down the connection cleanly.
+Sent from any peer to shut down the connection cleanly.
 
-:red_circle: This is pointless.
+:red_circle: This is pointless -Nick
+
+#Process manager
+:red_circle: No such beast exists.
 
 ##Sent from RIDE or an interpreter to a process manager
 <a name=GetAvailableConnections></a>
