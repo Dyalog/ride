@@ -151,13 +151,22 @@ to request opening an editor.  `pos` is the 0-based position of the cursor in `t
 The interpreter will parse that and may respond later with one of
 <a name=OpenWindow></a><a name=UpdateWindow></a>
 ```json
-["OpenWindow",  {...}] // Interpreter -> RIDE
-["UpdateWindow",{...}] // Interpreter -> RIDE
+["OpenWindow",{"name":"f","text":["r←f a","r←(+⌿÷≢)a"],"token":123,"currentRow":0,"debugger":0,
+               "entityType":1,"offset":0,"readOnly":0,"size":0,"stop":[1],
+               "tid":0,"tname":"Tid:0","token":1}]
+["UpdateWindow",...] // Interpreter -> RIDE
 ```
 It may also send these in response to `)ed name` or `⎕ed'name'`, as well as when tracing into an object that is not
 currently being traced.
 
-:red_circle: TODO: describe editableEntity
+The arguments for `UpdateWindow` are the same as those to `OpenWindow`.
+
+Constants for `entityType`: `1` defined function, `2` simple character array, `4` simple numeric array, `8` mixed simple
+array, `16` nested array, `32` [`⎕OR`](http://help.dyalog.com/14.1/Content/Language/System%20Functions/or.htm) object,
+`64` native file, `128` simple character vector, `256` APL namespace, `512` APL class, `1024` APL interface, `2048` APL
+session, `4096` external function.
+
+:red_circle: TODO: describe the other arguments
 
 RIDE should let the OS do its own focus management of editor/tracer windows except that when it receives
 <a name=FocusWindow></a>
@@ -452,48 +461,22 @@ If sent to a Process manager, `remoteId` is a list of remote IDs returned by [`G
 ```
 Sent in reply to [`GetDetailedInformation`](#GetDetailedInformation).
 
-#Extended types
+#Proposed extensions
+* related to the process manager
 ```
-EditableEntity => [string name, string text, int token,
-                   byte[] colours, int currentRow, int currentColumn,    //REVIEW
-                   int subOffset, int subSize, bool debugger,
-                   int tid, bool readonly, string tidName,
-                   entityType type, int[] stop]  // colours for syntax highlighting - probably shouldn't be here?
-                                                 //   NN: RIDE2+ ignores colours, subOffset, subSize, tid, and tidName
-
-EntityType:
-     1 definedFunction
-     2 simpleCharArray
-     4 simpleNumericArray
-     8 mixedSimpleArray
-    16 nestedArray
-    32 QuadORObject
-    64 NativeFile
-   128 SimpleCharVector
-   256 AplNamespace
-   512 AplClass
-  1024 AplInterface
-  2048 AplSession
-  4096 ExternalFunction
-
 AvailableConnection => [
     int remoteID,       // Unique ID
     string displayName  // Display name for the entry.
 ]
-
 DetailedInformation => [
   int remoteID,    // Unique ID if sent from a Process Manager, otherwise 0
   identity identity,
   (DetailedRideInformation|DetailedInterpreterInformation|DetailedProcessInformation) Information
 ]
-
 DetailedRideInformation => [] // Placeholder - add any more information
 DetailedInterpreterInformation => [] // Placeholder - add any more information
 DetailedProcessManagerInformation => [] // Placeholder - add any more information
 ```
-
-#Proposed extensions
-NN: We should add support for:
 * `⎕PFKEY`
 * programmatic access to "current object"
 ```json
