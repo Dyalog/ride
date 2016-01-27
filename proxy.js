@@ -55,8 +55,19 @@ function initInterpreterConn(){
 }
 var handlers={
   '*connect':function(x){
-    clt=net.connect({host:x.host,port:x.port},function(){toBrowser('*connected',{host:x.host,port:x.port})})
-    initInterpreterConn()
+    var m=net,o={host:x.host,port:x.port}
+    if(x.ssl){m=require('tls');o.rejectUnauthorized=false} // todo: client certificate
+    clt=m.connect(o,function(){
+      if(x.ssl&&x.subj){
+        var s=clt.getPeerCertificate().subject.O // todo: which field of the subject is its "name"?
+        if(s!==x.subj){
+          toBrowser('*error',{msg:
+            'Wrong server certificate name.  Expected:'+JSON.stringify(x.subj)+', actual:'+JSON.stringify(s)})
+          return
+        }
+      }
+      toBrowser('*connected',x);initInterpreterConn()
+    })
   },
   '*launch':function(x){
     var exe=(x||{}).exe||process.env.DYALOG_IDE_INTERPRETER_EXE||'dyalog'
@@ -65,10 +76,7 @@ var handlers={
       toBrowser('*connected',{host:a.address,port:a.port});initInterpreterConn()
       if(typeof window!=='undefined')window.D.lastSpawnedExe=exe
     })
-    srv.on('error',function(err){
-      log('cannot listen for connections from spawned interpreter: '+err)
-      srv=clt=null;toBrowser('*error',{msg:''+err})
-    })
+    srv.on('error',function(err){log('listen failed: '+err);srv=clt=null;toBrowser('*error',{msg:''+err})})
     srv.listen(0,'127.0.0.1',function(){
       var a=srv.address(),hp=a.address+':'+a.port
       log('listening for connections from spawned interpreter on '+hp)

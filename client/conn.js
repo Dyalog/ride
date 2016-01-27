@@ -127,8 +127,7 @@ function go(){
     if(t==='tcp'){
       $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
         .dialog({modal:1,width:350,title:'Connecting...'})
-      D.socket.emit('*connect',{host:sel.host,port:+sel.port||4502})
-      // TODO: SSL
+      D.socket.emit('*connect',{host:sel.host,port:+sel.port||4502,ssl:sel.ssl,subj:sel.subj})
     }else if(t==='listen'){
       var port=sel.port||4502
       $d=$(
