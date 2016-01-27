@@ -58,7 +58,7 @@ var handlers={
     if(x.ssl){m=require('tls');o.rejectUnauthorized=false} // todo: client certificate
     clt=m.connect(o,function(){
       if(x.ssl&&x.subj){
-        var s=clt.getPeerCertificate().subject.O // todo: which field of the subject is its "name"?
+        var s=clt.getPeerCertificate().subject.CN
         if(s!==x.subj){
           toBrowser('*error',{msg:
             'Wrong server certificate name.  Expected:'+JSON.stringify(x.subj)+', actual:'+JSON.stringify(s)})
