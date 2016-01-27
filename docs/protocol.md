@@ -488,9 +488,7 @@ DetailedInformation => [
 ]
 
 DetailedRideInformation => [] // Placeholder - add any more information
-
 DetailedInterpreterInformation => [] // Placeholder - add any more information
-
 DetailedProcessManagerInformation => [] // Placeholder - add any more information
 ```
 
@@ -498,34 +496,29 @@ DetailedProcessManagerInformation => [] // Placeholder - add any more informatio
 NN: We should add support for:
 * `⎕PFKEY`
 * programmatic access to "current object"
-```
-    RIDE→Interpreter:  SetCurrentObject [string s]
+```json
+["SetCurrentObject",{text:""}] // RIDE -> Interpreter
 ```
 * workspace explorer
-```
-    RIDE→Interpreter:  TreeGetNameList [Something nodeId]
-    Interpreter→RIDE:  TreeNameList [Something nodeId, NodeInfo[] children]
-                            NodeInfo [
-                                Something id
-                                int type
-                                string name
-                            ]
-    Interpreter→RIDE:  TreeOpenEditor [Something nodeId]
+```json
+["TreeGetNameList",{"nodeId":123}] // RIDE -> Interpreter
+["TreeNameList",{"nodeId":123,"children":[{"id":234,"type":1,"name":"Abc"},...]}] // Interpreter -> RIDE
+["TreeOpenEditor",{"nodeId":123}] // RIDE -> Interpreter
 ```
 * compiler information
 * yes/no dialogs
-```
-    Interpreter→RIDE:  ShowDialog [string title, string text, int type, string[] options, int token]
-                            type: one of 1=info 2=warning 3=err ...
-    RIDE→Interpreter:  DialogResult [int index, int token]
+```json
+["ShowDialog",{"title":"","text":"","type":1,"options":["Yes","No","Cancel"],"token":123}] // Interpreter -> RIDE
+  type: 1=info 2=warning 3=error
+["DialogResult",{"index":-1,"token":123}] // RIDE -> Interpreter
 
-    2015-12-15 NN: This is now supported except that "type" is ignored.
-      When the user closes the dialog without choosing an option, RIDE responds with index:-1
+2015-12-15 NN: This is now supported except that "type" is ignored.
+  When the user closes the dialog without choosing an option, RIDE responds with index:-1
 ```
 * string input dialogs
-```
-    Interpreter→RIDE:  ShowInputDialog [string title, string text, string defaultValue, int token]
-    RIDE→Interpreter:  InputDialogResult [string value, int token]
+```json
+["ShowInputDialog",{"title":"","text":"","defaultValue":"abc","token":123}] // Interpreter -> RIDE
+["InputDialogResult",{"value":"abcd","token":123}] // RIDE -> Interpreter
 ```
 * list of valid I-beams and their descriptions
 * `ShowStack` and `ShowThreads`
