@@ -2,7 +2,8 @@
 
 The RIDE protocol is formed of messages sent in either direction over a TCP connection.
 
-A message starts with a 4-byte big-endian *total length* field, followed by the ASCII bytes for `"RIDE"` and a UTF-8-encoded payload:
+A message starts with a 4-byte big-endian *total length* field, followed by the ASCII bytes for `"RIDE"` and a
+UTF-8-encoded payload:
 ```
     8+len(payload)   "RIDE" magic number   payload
 ┌───────────────────┬───────────────────┬───────────┐
@@ -12,7 +13,7 @@ A message starts with a 4-byte big-endian *total length* field, followed by the 
 *Total length* is 8 + the payload's length in bytes.
 The payload is usually a 2-element JSON array consisting of a command name and arguments as key/value pairs:
 ```json
-["CommandName",{"key1":value1,"key2":value2,...}]
+["CommandName",{"key1":"value1","key2":222,"key3":[3,4,5]}]
 ```
 The only exception are the first two messages that each side sends upon establishing a connection.
 These constitute the *handshake* and are not JSON-encoded.  Their payloads are:
@@ -21,9 +22,8 @@ SupportedProtocols=1
 UsingProtocol=1
 ```
 
-Messages are independent and after the handshake can be sent/received in any order. Some messages infer that the other end will send a reply, but that reply may not be the next message to be received, or even ever be sent.
-
-:red_circle: was: case-insensitive
+Messages are independent and after the handshake can be sent/received in any order. Some messages infer that the other
+end will send a reply, but that reply may not be the next message to be received, or even ever be sent.
 
 If the receiver of a message does not recognise it, it should ignore it.
 
@@ -37,24 +37,20 @@ JSON booleans `true` and `false` can be freely substituted with and should be tr
 
 #Connection setup and teardown
 
-After the connection has been established and a protocol agreed, both peers immediately send an `Identify` message to indicate what type of application they are.
+After the connection has been established and a protocol agreed, both peers immediately send an `Identify` message to
+indicate what type of application they are.
 
 <a name=Identify></a>
 ```json
 ["Identify",{"identity":1}]
 ```
-Constants for `identity`
-* `1` RIDE
-* `2` interpreter
-* `3` process manager
+Constants for `identity`: `1` RIDE, `2` interpreter, `3` process manager.
 
 :red_circle: The interpreter sends `*identify` instead of `Identify`.
 
 They should then check the type of application they are connected to, and if not happy to continue, close the
-connection.
-
-E.g. RIDE should check that the application it's connected to is an interpreter or a process manager. If it finds the
-peer is another RIDE, it should close the connection.
+connection.  For instance, RIDE may check that the application it's connected to is an interpreter or a process
+manager. If it finds the peer is another RIDE, it should close the connection.
 
 :red_circle: In reality RIDE doesn't bother with this.
 
@@ -91,17 +87,18 @@ The interpreter informs RIDE about changes in its ability to accept user input w
 ```
 RIDE should display the appropriate prompt in accordance with `inputModeState`
 
-Constants for `inputModeState`:
-* `0` Invalid
-* `1` Descalc ("desktop calculator")
-* `2` QuadInput
-* `3` LineEditor
-* `4` QuoteQuadInput
-* `5` Prompt
+Constants for `inputModeState`: `1` the usual 6-space APL prompt (a.k.a. Descalc or "desktop calculator"), `2`
+[Quad(`⎕`)](http://help.dyalog.com/14.1/Content/Language/System%20Functions/Evaluated%20Input%20Output.htm) input, `3`
+line editor, `4`
+[Quote-Quad(`⍞`)](http://help.dyalog.com/14.1/Content/Language/System%20Functions/Character%20Input%20Output.htm) input,
+`5` prompt.
 
 :red_circle: These modes need explaining with expected behaviour
 
-:red_circle: Is "Invalid" a valid inputModeState?  Does the interpreter ever send it?
+:red_circle: What is inputModeState=5 "prompt"?
+
+:red_circle: Wouldn't it be better if we presented NotAtInputPrompt as an AtInputPrompt with inputModeState=0?  And
+perhaps rename this to `["SetPrompt",{"type":...}]`?
 
 :red_circle: Currently interpreter sends `ReplyNotAtInputPrompt` instead of `NotAtInputPrompt`
 
@@ -109,18 +106,17 @@ In addition to `AtInputPrompt`, RIDE can request information about the interpret
 through
 <a name=CanSessionAcceptInput></a><a name=ReplyCanSessionAcceptInput></a>
 ```json
-["CanSessionAcceptInput",{}]                        // RIDE -> Interpreter
-["ReplyCanSessionAcceptInput",{"canAcceptInput":1}] // Interpreter -> RIDE
+["CanSessionAcceptInput",{}]                           // RIDE -> Interpreter
+["ReplyCanSessionAcceptInput",{"canAcceptInput":true}] // Interpreter -> RIDE
 ```
-`canAcceptInput` is a boolean.
 
 When the user presses `<ER>` (Enter) or `<TC>` (Ctrl-Enter), RIDE sends
 <a name=Execute></a>
 ```json
-["Execute",{"text":"      1 2 3+4 5 6","trace":1}] // RIDE -> Interpreter
+["Execute",{"text":"      1 2 3+4 5 6","trace":true}] // RIDE -> Interpreter
 ```
 * `text`: the APL code to evaluate
-* `trace`: a boolean, whether the expression should be evaluated in the tracer (`<TC>`)
+* `trace`: whether the expression should be evaluated in the tracer (`<TC>`)
 
 Note that RIDE can't assume that everything entered in the session will be echoed, e.g. quote quad input (`⍞`) doesn't
 echo.  Therefore, RIDE should wait for the [`EchoInput`](#EchoInput) message.
@@ -151,7 +147,7 @@ to request opening an editor.  `pos` is the 0-based position of the cursor in `t
 The interpreter will parse that and may respond later with one of
 <a name=OpenWindow></a><a name=UpdateWindow></a>
 ```json
-["OpenWindow",{"name":"f","text":["r←f a","r←(+⌿÷≢)a"],"token":123,"currentRow":0,"debugger":0,
+["OpenWindow",{"name":"f","text":["r←f a","r←(+⌿÷≢)a"],"token":123,"currentRow":0,"debugger":false,
                "entityType":1,"offset":0,"readOnly":0,"size":0,"stop":[1],
                "tid":0,"tname":"Tid:0","token":1}]
 ["UpdateWindow",...] // Interpreter -> RIDE
@@ -178,7 +174,7 @@ it should set the focus accordingly.
 The interpreter may decide to change the type of a window (editor vs tracer) with
 <a name=WindowTypeChanged></a>
 ```json
-["WindowTypeChanged",{"win":123,"tracer":1}] // Interpreter -> RIDE
+["WindowTypeChanged",{"win":123,"tracer":true}] // Interpreter -> RIDE
 ```
 
 <a name=SaveChanges></a>
@@ -318,7 +314,8 @@ shouldn't block while it's waiting for the response.
 ```
 * `skip`: how many characters before the request's `pos` to replace with an element of `options`
 
-:red_circle: RIDE2+ supports this command in a slightly different format, legacy from before I switched to RIDE protocol v2.
+:red_circle: RIDE2+ supports this command in a slightly different format, legacy from before I switched to RIDE protocol
+v2.
 
 #Value tips
 When the user hovers a name with the mouse, RIDE should ask for a short textual representation of the current value:
@@ -335,7 +332,8 @@ arrive in the same order, if ever.
 ```json
 ["GetLanguageBar",{}] // RIDE -> Interpreter
 ```
-:red_circle: Not used in RIDE2+.  Information about the language bar is known in advance, there's no need to send it through the protocol.
+:red_circle: Not used in RIDE2+.  Information about the language bar is known in advance, there's no need to send it
+through the protocol.
 
 Request that the interpreter sends a language bar.
 <a name=GetSessionContent></a>
@@ -370,7 +368,8 @@ Sent if the language bar is requested or updated.
 ```json
 ["HighlightLine",{"lineInfo":{"win":123,"line":45}}]
 ```
-:red_circle: RIDE2+ supports this command in a slightly different format, legacy from before I switched to RIDE protocol v2.
+:red_circle: RIDE2+ supports this command in a slightly different format, legacy from before I switched to RIDE protocol
+v2.
 
 :red_circle: `["highlight",{"win":123,"line":45}]`
 
@@ -388,7 +387,8 @@ If `err` is 0, save succeeded; otherwise it failed.
 ["ShowHTML",{"title":"Example","html":"<i>Hell</i><b>o</b> world"}] // Interpreter -> RIDE
 ```
 Request RIDE shows some HTML.
-See [`3500⌶`](http://help.dyalog.com/14.1/Content/Language/Primitive%20Operators/Send%20Text%20to%20RIDE-embedded%20Browser.htm)
+See
+[`3500⌶`](http://help.dyalog.com/14.1/Content/Language/Primitive%20Operators/Send%20Text%20to%20RIDE-embedded%20Browser.htm)
 
 <a name=StatusOutput></a>
 ```json
@@ -453,7 +453,8 @@ Tell the client that the attempt to connect to a particular process failed.
 ```json
 ["GetDetailedInformation",{"remoteId":[12,34,...]}]
 ```
-If sent to a Process manager, `remoteId` is a list of remote IDs returned by [`GetAvailableConnections`](#GetAvailableConnections). Otherwise it's an empty list.
+If sent to a Process manager, `remoteId` is a list of remote IDs returned by
+[`GetAvailableConnections`](#GetAvailableConnections). Otherwise it's an empty list.
 
 <a name=ReplyGetDetailedInformation></a>
 ```json
