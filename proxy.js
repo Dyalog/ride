@@ -103,7 +103,7 @@ var handlers={
         sm.on('close',function(code,sig){toBrowser('*sshExited',{code:code,sig:sig});c.end()})
         c.forwardIn('',0,function(err,remotePort){if(err)throw err
           var s='';for(var k in x.env)s+=k+'='+shEsc(x.env[k])+' '
-          sm.write(s+'RIDE_INIT=CONNECT:127.0.0.1:'+remotePort+' '+shEsc(x.exe||'dyalog')+' +s -q\n')
+          sm.write(s+'RIDE_INIT=CONNECT:127.0.0.1:'+remotePort+' '+shEsc(x.exe||'dyalog')+' +s -q >/dev/null\n')
         })
       })
     })
