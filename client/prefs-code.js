@@ -18,12 +18,8 @@ this.init=function($e){
     '</div>'
   var a=['ai','sw','aim','swm','icom','io','mb','acbr','acbl','acbe','ac','acd','fold']
   for(var i=0;i<a.length;i++)h[a[i]]=document.getElementById('code-'+a[i])
-  ;[h.ai,h.aim].forEach(function(x){
-    on(x,'change',function(){
-      h.sw.disabled=h.aim.disabled=!h.ai.checked
-      h.swm.disabled=!h.ai.checked||!h.aim.checked
-    })
-  })
+  $(h.ai).add(h.aim)
+    .change(function(x){h.sw.disabled=h.aim.disabled=!h.ai.checked;h.swm.disabled=!h.ai.checked||!h.aim.checked})
   on(h.acbl,'change',function(){h.acbe.disabled=!this.checked})
   on(h.ac  ,'change',function(){h.acd .disabled=!this.checked})
   ;[h.sw,h.swm,h.acd].forEach(function(x){on(x,'change',function(){$(this).select()})})
