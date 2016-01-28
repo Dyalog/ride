@@ -153,12 +153,7 @@
   D.clipboardCopy=function(s){gui.Clipboard.get().set(s)}
 
   // Debugging utilities
-  $(document).keydown(function(e){
-    if(e.which===123&&!e.altKey&&!e.shiftKey){ // F12
-      e.ctrlKey?showProtocolLog():nww.showDevTools().setAlwaysOnTop(1);return!1
-    }
-  })
-  function showProtocolLog(){
+  D.showProtocolLog=function(){
     var lw=window.lw=open('empty.html')
     function wr(s){
       if(!lw||lw.closed||!lw.document||!lw.document.createTextNode){

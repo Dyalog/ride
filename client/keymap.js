@@ -141,7 +141,9 @@ $.extend(CM.commands,{
       }
       var iid=setInterval(function(){btn.value='OK ('+(--counter)+')';counter||ok()},1000)
     }
-  }
+  },
+  JSC:function(){D.nww&&D.nww.showDevTools().setAlwaysOnTop(1)},
+  LOG:function(){D.showProtocolLog&&D.showProtocolLog()}
 })
 
 function switchWindows(d){ // d: a step of either 1 or -1
@@ -322,7 +324,7 @@ for(var i=0;i<informal.length;i++){
 }
 
 function defCmd(x){var c=CM.commands;c[x]||(c[x]=function(cm){var h=cm.dyalogCmds;h&&h[x]&&h[x](cm)})}
-'CBP MA AC VAL tabOrAutocomplete downOrXline indentMoreOrAutocomplete CLM TGC JBK'.split(' ').forEach(defCmd)
+'CBP MA AC VAL tabOrAutocomplete downOrXline indentMoreOrAutocomplete CLM TGC JBK JSC LOG'.split(' ').forEach(defCmd)
 
 var C=[
   //0    1    2    3    4    5    6    7    8    9    A    B    C    D    E    F
