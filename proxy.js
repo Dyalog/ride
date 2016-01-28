@@ -1,7 +1,6 @@
 'use strict'
 var fs=require('fs'),net=require('net'),os=require('os'),path=require('path'),cp=require('child_process')
-var log
-;(function(){
+var log;(function(){
   // record no more than N log messages per T milliseconds; at any moment, there have been n messages since time t
   var stdoutOK=1,N=500,T=1000,n=0,t=0,t0=+new Date
   log=exports.log=function(s){
@@ -23,16 +22,15 @@ var log
   }
   log(new Date().toISOString())
 }())
+var clt,   // client, TCP connection to interpreter
+    skt,   // websocket or other connection-like object for communicating with the browser
+    child, // a ChildProcess instance, the result from spawn()
+    srv    // server, used to listen for connections from interpreters
 function trunc(s){return s.length>1000?s.slice(0,997)+'...':s}
 function ls(x){return fs.readdirSync(x)}
 function sil(f){return function(x){try{f(x)}catch(_){}}} // exception silencer
 function shEsc(x){return"'"+x.replace(/'/g,"'\\''")+"'"} // shell escape
 function parseVer(s){return s.split('.').map(function(x){return+x})}
-
-var clt,   // client, TCP connection to interpreter
-    skt,   // websocket or other connection-like object for communicating with the browser
-    child, // a ChildProcess instance, the result from spawn()
-    srv    // server, used to listen for connections from interpreters
 function toInterpreter(s){
   if(clt){log('to interpreter:'+trunc(s));var b=Buffer('xxxxRIDE'+s);b.writeInt32BE(b.length,0);clt.write(b)}
 }
@@ -44,7 +42,7 @@ function initInterpreterConn(){
     q=Buffer.concat([q,x]);var n
     while(q.length>=4&&(n=q.readInt32BE(0))<=q.length){
       var m=''+q.slice(8,n);q=q.slice(n);log('from interpreter:'+trunc(m))
-      if(m[0]==='['){log('to browser:'+trunc(m));var u=JSON.parse(m);skt&&skt.emit(u[0],u[1])}
+      if(m[0]==='['){var u=JSON.parse(m);skt&&skt.emit(u[0],u[1])}
     }
   })
   clt.on('error',function(e){toBrowser('*error',{msg:''+e});clt=null})
@@ -183,7 +181,7 @@ this.Proxy=function(){
   return function(x){
     log('browser connected')
     ;(skt=x).onevent=function(x){
-      log('from browser:'+trunc(JSON.stringify(x.data)))
+      x.data[0][0]==='*'&&log('from browser:'+trunc(JSON.stringify(x.data)))
       var f=handlers[x.data[0]];f?f(x.data[1]):cmd(x.data[0],x.data[1]||{})
     }
     child&&toBrowser('*spawned',{pid:child.pid})
