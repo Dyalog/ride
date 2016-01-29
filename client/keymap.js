@@ -131,17 +131,6 @@ $.extend(CM.commands,{
       return CM.Pos(l,m<=c.ch&&c.ch<n||!m?n:m)
     },{origin:'+move',bias:-1})
   },
-  PRN:function(cm){
-    var pw=open('print.html','Print')
-    pw.onload=function(){
-      var counter=3,btn=pw.document.getElementById('ok');btn.value='OK ('+counter+')'
-      var ok=btn.onclick=function(){
-        pw.document.getElementById('content').innerHTML=esc(cm.getValue())
-        setTimeout(function(){pw.print()},500);clearInterval(iid);iid=0;return!1
-      }
-      var iid=setInterval(function(){btn.value='OK ('+(--counter)+')';counter||ok()},1000)
-    }
-  },
   JSC:function(){D.nww&&D.nww.showDevTools().setAlwaysOnTop(1)},
   LOG:function(){D.showProtocolLog&&D.showProtocolLog()}
 })
