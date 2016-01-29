@@ -1,4 +1,4 @@
-> Note: :red_circle: marks internal notes and won't appear in the final version.
+> Note: A red circle :red_circle: marks internal notes which won't appear in the final version.
 
 The RIDE protocol is formed of messages sent in either direction over a TCP connection.
 
@@ -6,9 +6,9 @@ A message starts with a 4-byte big-endian *total length* field, followed by the 
 UTF-8-encoded payload:
 ```
     8+len(payload)   "RIDE" magic number   payload
-┌───────────────────┬───────────────────┬───────────┐
+┌───────────────────┬───────────────────┬─────~─────┐
 │0x00 0x00 0x00 0x0b│0x52 0x49 0x44 0x45│    ...    │
-└───────────────────┴───────────────────┴───────────┘
+└───────────────────┴───────────────────┴─────~─────┘
 ```
 *Total length* is 8 + the payload's length in bytes.
 The payload is usually a 2-element JSON array consisting of a command name and arguments as key/value pairs:
@@ -26,6 +26,8 @@ Messages are independent and after the handshake can be sent/received in any ord
 end will send a reply, but that reply may not be the next message to be received, or even ever be sent.
 
 If the receiver of a message does not recognise it, it should ignore it.
+
+:red_circle: This may need discussion.  Currently the interpreter complains with `UnknwonRIDECommand`.
 
 The connection may be closed at any time, leaving some messages undelivered or unprocessed.
 
@@ -62,8 +64,8 @@ sends
 ["SysError",{"text":"apl: sys error 123 errno 456","stack":""}]
 ```
 
-If the interpreter is not running remotely, when the user closes the main application window (the session window) RIDE
-should shut down the interpreter cleanly with
+If the interpreter has been started by RIDE, RIDE should shut it down cleanly when the user closes the main application
+window (the session window):
 <a name=Exit></a>
 ```json
 ["Exit",{"code":0}]
@@ -85,7 +87,7 @@ The interpreter informs RIDE about changes in its ability to accept user input w
 ["NotAtInputPrompt",{}]                // Interpreter -> RIDE
 ["AtInputPrompt",{"inputModeState":5}] // Interpreter -> RIDE
 ```
-RIDE should display the appropriate prompt in accordance with `inputModeState`
+RIDE should display the appropriate prompt in accordance with `inputModeState`.
 
 Constants for `inputModeState`: `1` the usual 6-space APL prompt (a.k.a. Descalc or "desktop calculator"), `2`
 [Quad(`⎕`)](http://help.dyalog.com/14.1/Content/Language/System%20Functions/Evaluated%20Input%20Output.htm) input, `3`
@@ -93,14 +95,14 @@ line editor, `4`
 [Quote-Quad(`⍞`)](http://help.dyalog.com/14.1/Content/Language/System%20Functions/Character%20Input%20Output.htm) input,
 `5` prompt.
 
-:red_circle: These modes need explaining with expected behaviour
+:red_circle: These modes need explaining with expected behaviour.
 
-:red_circle: What is inputModeState=5 "prompt"?
+:red_circle: What's inputModeState 5?
 
 :red_circle: Wouldn't it be better if we presented NotAtInputPrompt as an AtInputPrompt with inputModeState=0?  And
 perhaps rename this to `["SetPrompt",{"type":...}]`?
 
-:red_circle: Currently interpreter sends `ReplyNotAtInputPrompt` instead of `NotAtInputPrompt`
+:red_circle: Currently the interpreter sends `ReplyNotAtInputPrompt` instead of `NotAtInputPrompt`.
 
 In addition to `AtInputPrompt`, RIDE can request information about the interpreter's ability to accept input at any time
 through
@@ -109,6 +111,9 @@ through
 ["CanSessionAcceptInput",{}]                           // RIDE -> Interpreter
 ["ReplyCanSessionAcceptInput",{"canAcceptInput":true}] // Interpreter -> RIDE
 ```
+
+:red_circle: Why ReplyCanSessionAcceptInput? Can't we reuse (Not)AtInputPrompt above.  RIDE is not using
+CanSessionAcceptInput anyway...
 
 When the user presses `<ER>` (Enter) or `<TC>` (Ctrl-Enter), RIDE sends
 <a name=Execute></a>
@@ -127,9 +132,9 @@ a response of either `AtInputPrompt` or
 ```json
 ["HadError",{}]
 ```
-The queue of pending lines should be cleared on `HadError`.
+RIDE should clear its queue of pending lines on `HadError`.
 
-RIDE can optionally inform the interpreter about the session's width in characters with
+RIDE can optionally advise the interpreter about the session's width in characters with
 <a name=SetPW></a>
 ```json
 ["SetPW",{"pw":79}]
@@ -152,7 +157,10 @@ The interpreter will parse that and may respond later with one of
                "tid":0,"tname":"Tid:0","token":1}]
 ["UpdateWindow",...] // Interpreter -> RIDE
 ```
-It may also send these in response to `)ed name` or `⎕ed'name'`, as well as when tracing into an object that is not
+It may also send these in response to [`)ed
+name`](http://help.dyalog.com/14.1/Content/Language/System%20Commands/ed.htm) or
+[`⎕ed'name'`](http://help.dyalog.com/14.1/Content/Language/System%20Functions/ed.htm), as well as when tracing into an
+object that is not
 currently being traced.
 
 The arguments for `UpdateWindow` are the same as those to `OpenWindow`.
@@ -177,32 +185,39 @@ The interpreter may decide to change the type of a window (editor vs tracer) wit
 ["WindowTypeChanged",{"win":123,"tracer":true}] // Interpreter -> RIDE
 ```
 
+When the user presses `<EP>` (Esc), RIDE should request that the editor contents are fixed through
 <a name=SaveChanges></a>
 ```json
 ["SaveChanges",{"win":123,"text":"r←avg a\ns←+⌿a\nn←≢a\nr←s÷n","stop":[2,3]}] // RIDE -> Interpreter
 ```
-Request that the contents of an editor are fixed.
+`stop` is an array of 0-based line numbers.
 
-`stop` is an array of 0-based line numbers
+The interpreter responds with
+<a name=ReplySaveChanges></a>
+```json
+["ReplySaveChanges",{"win":123,"err":0}] // Interpreter -> RIDE
+```
+If `err` is 0, save succeeded; otherwise it failed.
 
+When the user presses `<EP>` (Esc) and saving is successful or presses `<QT>` (Shift-Esc), RIDE sends
 <a name=CloseWindow></a>
 ```json
-["CloseWindow",{"win":123}] // RIDE -> Interpreter  or  Interpreter -> RIDE
+["CloseWindow",{"win":123}] // RIDE -> Interpreter  and  Interpreter -> RIDE
 ```
-If sent from the interpreter, tell RIDE to close an open editor window.
-If sent from RIDE, request that a window be closed.
+but does not close the UI window until the interpreter replies with the same message.
 
 #Debugging
+The following messages are used in relation to trace windows.
 <a name=HighlightLine></a>
 ```json
-["HighlightLine",{"lineInfo":{"win":123,"line":45}}]
+["HighlightLine",{"lineInfo":{"win":123,"line":45}}] // Interpreter -> RIDE
 ```
+tells RIDE where the currently executed line is.  Traditionally that's indicated by a red border around it.
+
 :red_circle: RIDE2+ supports this command in a slightly different format, legacy from before I switched to RIDE protocol
 v2.
 
 :red_circle: `["highlight",{"win":123,"line":45}]`
-
-Request that RIDE sets the position of the current line marker in a trace window.
 
 <a name=SetLineAttributes></a>
 ```json
@@ -222,9 +237,9 @@ Request the current line in a trace window be moved back.
 ```json
 ["ClearTraceStopMonitor",{"win":123}] // RIDE -> Interpreter
 ```
-:red_circle: Not used in RIDE2+
-
 Request it clears all breakpoints, stops, and monitors for a trace window.
+
+:red_circle: Not used in RIDE2+
 
 <a name=Continue></a>
 ```json
@@ -253,6 +268,8 @@ Request resumption of all threads. (Green arrow in ODE)
 ["Cutback",{"win":123}] // RIDE -> Interpreter
 ```
 Request the stack is cut back one level.
+
+:red_circle: "Step out"?
 
 <a name=TraceForward></a>
 ```json
@@ -358,6 +375,7 @@ The interpreter can ask RIDE to interact with the user by showing a modal dialog
 Two types of dialogs are supported:
 
 * Multiple choice
+<a name=ShowDialog></a><a name=DialogResult></a>
 ```json
 ["ShowDialog",{"title":"","text":"","type":1,"options":["Yes","No","Cancel"],"token":123}] // Interpreter -> RIDE
   type: 1=info 2=warning 3=error
@@ -369,6 +387,7 @@ Two types of dialogs are supported:
 :exclamation: Rename this to `ShowMultipleChoiceDialog`/`MultipleChoiceDialogResult` for symmetry with `StringInput`?
 
 * String input
+<a name=ShowStringInputDialog></a><a name=StringInputDialogResult></a>
 ```json
 ["ShowStringInputDialog",{"title":"Name","text":"Please enter a name:","initialValue":"abc","defaultValue":null,"token":123}] // Interpreter -> RIDE
 ["StringInputDialogResult",{"value":"abcd","token":123}] // RIDE -> Interpreter
@@ -390,13 +409,6 @@ Request the current content of the session.
 :red_circle: Not used in RIDE2+
 
 Request the interpreter sends [`UpdateWindow`](#UpdateWindow) messages for all currently open windows.
-
-<a name=ReplySaveChanges></a>
-```json
-["ReplySaveChanges",{"win":123,"err":0}] // Interpreter -> RIDE
-```
-Sent in response to a [`SaveChanges`](#SaveChanges) message.
-If `err` is 0, save succeeded; otherwise it failed.
 
 <a name=ShowHTML></a>
 ```json
@@ -432,7 +444,7 @@ Sent from any peer to shut down the connection cleanly.
 :red_circle: This is pointless -Nick
 
 #Process manager
-:red_circle: No such beast exists.
+:red_circle: No such beast exists as of Jan 2016.
 
 ##Sent from RIDE or an interpreter to a process manager
 <a name=GetAvailableConnections></a>
