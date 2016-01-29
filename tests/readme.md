@@ -4,7 +4,7 @@ Use a 64-bit Linux Unicode interpreter.  Clear the session log (e.g. `rm "$OBJDI
 
 Build RIDE (`./dist.sh linux64`) and run it with autospawning and load the test framework:
 
-    DYALOG_IDE_SPAWN=1 DYALOG_IDE_JS=tests/t.js build/ride20/linux64/ride20
+    RIDE_SPAWN=1 RIDE_JS=tests/t.js build/ride20/linux64/ride20
 
 RIDE's main window and a devtools window should appear near the right edge of your screen.
 The latter will print test actions as they are being executed (lines from `test/t.txt`)

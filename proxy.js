@@ -10,8 +10,8 @@ var log;(function(){
     var l=log.listeners.slice(0);for(var i=0;i<l.length;i++)l[i](m) // call listeners; prevent concurrent modification
   }
   log.listeners=[]
-  var f=process.env.DYALOG_IDE_LOG
-  if(f){ // if $DYALOG_IDE_LOG is present, also log to a file (in addition to stdout)
+  var f=process.env.RIDE_LOG
+  if(f){ // if $RIDE_LOG is present, also log to a file (in addition to stdout)
     var h=process.env.HOME||process.env.USERPROFILE;if(h)f=path.resolve(h,f)
     fd=fs.openSync(f,'a');log.listeners.push(function(s){var b=Buffer(m);fs.writeSync(fd,b,0,b.length)})
   }
@@ -67,7 +67,7 @@ var handlers={
     })
   },
   '*launch':function(x){
-    var exe=(x||{}).exe||process.env.DYALOG_IDE_INTERPRETER_EXE||'dyalog'
+    var exe=(x||{}).exe||process.env.RIDE_INTERPRETER_EXE||'dyalog'
     srv=net.createServer(function(c){
       log('spawned interpreter connected');var a=srv.address();srv&&srv.close();srv=null;clt=c
       toBrowser('*connected',{host:a.address,port:a.port});initInterpreterConn()

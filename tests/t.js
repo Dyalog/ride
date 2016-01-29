@@ -1,4 +1,4 @@
-// to run the tests: export DYALOG_IDE_JS=/path/to/t.js and start RIDE
+// to run the tests: export RIDE_JS=/path/to/t.js and start RIDE
 var fs=require('fs'),CM=CodeMirror
 
 ;(function(){ // place windows near the right edge of the screen, try to avoid overlap
@@ -71,7 +71,7 @@ function tStep(){
   else if(!tDone)setTimeout(tStep,tUniversalDelay)
 }
 function tRun(){
-  tLines=fs.readFileSync(process.env.DYALOG_IDE_JS.replace(/\.js$/,'.txt'),'utf8').split('\n')
+  tLines=fs.readFileSync(process.env.RIDE_JS.replace(/\.js$/,'.txt'),'utf8').split('\n')
   tIndex=0;focus();tStep()
 }
 $(tRun)

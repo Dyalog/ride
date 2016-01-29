@@ -1,5 +1,5 @@
 // To use this extension:
-//   export DYALOG_IDE_JS=/path/to/file.js
+//   export RIDE_JS=/path/to/file.js
 // before running RIDE.
 CodeMirror.defineMIME('text/apl-comments','acme')
 CodeMirror.defineMode('acme',function(){ // https://codemirror.net/doc/manual.html#modeapi

@@ -11,8 +11,8 @@
 
   console.log=function(s){try{process.stdout.write(s+'\n')}catch(_){console.log=function(){}}}
 
-  if(!process.env.DYALOG_IDE_SPAWN){ // the default depends on whether we are a standalone RIDE
-    process.env.DYALOG_IDE_SPAWN=
+  if(!process.env.RIDE_SPAWN){ // the default depends on whether we are a standalone RIDE
+    process.env.RIDE_SPAWN=
       D.win?0:
       D.mac?+fs.existsSync(path.dirname(process.execPath)+'/../../../../Resources/Dyalog/mapl'):
             +fs.existsSync(path.dirname(process.execPath)+'/../mapl')
@@ -47,8 +47,8 @@
     }
   }
 
-  if(D.mac&&!process.env.DYALOG_IDE_INTERPRETER_EXE){
-    process.env.DYALOG_IDE_INTERPRETER_EXE=D.lastSpawnedExe=path.resolve(process.cwd(),'../Dyalog/mapl')
+  if(D.mac&&!process.env.RIDE_INTERPRETER_EXE){
+    process.env.RIDE_INTERPRETER_EXE=D.lastSpawnedExe=path.resolve(process.cwd(),'../Dyalog/mapl')
   }
   process.chdir(process.env.PWD||process.env.HOME||process.env.USERPROFILE||'.') // see https://github.com/nwjs/nw.js/issues/648
   D.process=process;gui.Screen.Init();var nww=D.nww=gui.Window.get()
@@ -135,13 +135,13 @@
 
   var execPath=process.execPath;D.mac&&(execPath=execPath.replace(/(\/Contents\/).*$/,'$1MacOS/nwjs'))
   D.rideConnect=function(){
-    var e={};for(var k in process.env)e[k]=process.env[k];e.DYALOG_IDE_SPAWN='0'
+    var e={};for(var k in process.env)e[k]=process.env[k];e.RIDE_SPAWN='0'
     spawn(execPath,[],{detached:true,stdio:['ignore','ignore','ignore'],env:e})
   }
   D.rideNewSession=function(){
     if(D.lastSpawnedExe){
       var e={};for(var k in process.env)e[k]=process.env[k]
-      e.DYALOG_IDE_SPAWN='1';e.DYALOG_IDE_INTERPRETER_EXE=D.lastSpawnedExe
+      e.RIDE_SPAWN='1';e.RIDE_INTERPRETER_EXE=D.lastSpawnedExe
       spawn(execPath,[],{detached:true,stdio:['ignore','ignore','ignore'],env:e})
     }else{
       $.alert('The current session is remote. To connect elsewhere or launch a local interpreter, '+
@@ -372,12 +372,12 @@
   }
 
   // support loading extra js
-  if(process.env.DYALOG_IDE_JS){
-    var js=process.env.DYALOG_IDE_JS.split(path.delimiter)
+  if(process.env.RIDE_JS){
+    var js=process.env.RIDE_JS.split(path.delimiter)
     for(var i=0;i<js.length;i++)js[i]&&$.getScript('file://'+path.resolve(process.cwd(),js[i]))
   }
 
-  var editor=process.env.DYALOG_IDE_EDITOR
+  var editor=process.env.RIDE_EDITOR
   if(editor){
     var d=os.tmpDir()+'/dyalog';fs.existsSync(d)||fs.mkdirSync(d,0o700)
     D.openInExternalEditor=function(ee,callback){ // ee: EditableEntity from RIDE protocol

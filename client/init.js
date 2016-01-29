@@ -65,9 +65,9 @@ $(function(){
     })()
     if(!D.quit)D.quit=close
     var e=D.process?D.process.env:{}
-    if(e.DYALOG_IDE_LISTEN)conn().listen(e.DYALOG_IDE_LISTEN)
-    else if(e.DYALOG_IDE_CONNECT)conn().connect(e.DYALOG_IDE_CONNECT)
-    else if(+e.DYALOG_IDE_SPAWN){ // the value of this env var should be '0' or '1'
+    if(e.RIDE_LISTEN)conn().listen(e.RIDE_LISTEN)
+    else if(e.RIDE_CONNECT)conn().connect(e.RIDE_CONNECT)
+    else if(+e.RIDE_SPAWN){ // the value of this env var should be '0' or '1'
       new IDE;D.socket.emit('*spawn') // '*error' is handled in ide.coffee
       window.onbeforeunload=function(){D.socket.emit('Exit',{code:0})}
     }

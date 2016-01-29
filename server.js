@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 // Environment variables:
-//   DYALOG_IDE_SERVER_WATCH=1     watch for changes and rebuild automatically (useful for development)
-//   DYALOG_IDE_SERVER_INSECURE=1  use http (on port 8000) instead of https (on port 8443)
-//   DYALOG_IDE_SERVER_IPV6=1      use IPv6
+//   RIDE_SERVER_WATCH=1     watch for changes and rebuild automatically (useful for development)
+//   RIDE_SERVER_INSECURE=1  use http (on port 8000) instead of https (on port 8443)
+//   RIDE_SERVER_IPV6=1      use IPv6
 
 'use strict'
 var compression=require('compression'),express=require('express'),fs=require('fs'),http=require('http'),
@@ -13,7 +13,7 @@ var compression=require('compression'),express=require('express'),fs=require('fs
 var t0=+new Date
 function log(s){process.stdout.write((new Date-t0)+': '+s+'\n')}
 
-if(process.env.DYALOG_IDE_SERVER_WATCH){
+if(process.env.RIDE_SERVER_WATCH){
   var _d=__dirname, tid, isRunning
   function build(){
     if(isRunning){
@@ -34,7 +34,7 @@ app.disable('x-powered-by')
 app.use(function(req,res,next){log(req.method+' '+req.path);next()})
 app.use(compression())
 app.use('/',express.static('build/static'))
-var insecure=process.env.DYALOG_IDE_SERVER_INSECURE
+var insecure=process.env.RIDE_SERVER_INSECURE
 var port=insecure?8000:8443
 var server=insecure?http.createServer(app)
              :https.createServer({cert:fs.readFileSync('ssl/cert.pem'),key:fs.readFileSync('ssl/key.pem')},app)
@@ -47,4 +47,4 @@ var proxy=Proxy()
   ws.on('message',function(m){io.onevent({data:JSON.parse(m)})})
   proxy(io)
 })
-server.listen(port,process.env.DYALOG_IDE_SERVER_IPV6?'::':'0.0.0.0',function(){log('server started on port '+port)})
+server.listen(port,process.env.RIDE_SERVER_IPV6?'::':'0.0.0.0',function(){log('server started on port '+port)})

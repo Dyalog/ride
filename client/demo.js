@@ -21,7 +21,7 @@ function loadDemoScript(f){ // f:path to file, ignored if empty
            .map(function(x){return'      '+x})
   })
 }
-D.process&&loadDemoScript(D.process.env.DYALOG_IDE_DEMO_SCRIPT)
+D.process&&loadDemoScript(D.process.env.RIDE_DEMO_SCRIPT)
 $.extend(CodeMirror.commands,{
   DMN:function(){move( 1)}, // next line
   DMP:function(){move(-1)}, // prev line
