@@ -353,6 +353,27 @@ The interpreter sends the `LanguageBar` after such a request and every time ther
 ```
 :red_circle: RIDE2+ has built-in information about the language bar.  It doesn't use the messages described here.
 
+#Dialogs
+The interpreter can ask RIDE to interact with the user by showing a modal dialog.
+Two types of dialogs are supported:
+
+* Multiple choice
+```json
+["ShowDialog",{"title":"","text":"","type":1,"options":["Yes","No","Cancel"],"token":123}] // Interpreter -> RIDE
+  type: 1=info 2=warning 3=error
+["DialogResult",{"index":-1,"token":123}] // RIDE -> Interpreter
+  When the user closes the dialog without choosing an option, RIDE responds with index:-1
+```
+:exclamation: "type" is not supported
+
+:exclamation: Rename this to `ShowMultipleChoiceDialog`/`MultipleChoiceDialogResult` for symmetry with `StringInput`?
+
+* String input
+```json
+["ShowStringInputDialog",{"title":"Name","text":"Please enter a name:","initialValue":"abc","defaultValue":null,"token":123}] // Interpreter -> RIDE
+["StringInputDialogResult",{"value":"abcd","token":123}] // RIDE -> Interpreter
+```
+
 #Other
 <a name=GetSessionContent></a>
 ```json
@@ -487,20 +508,6 @@ DetailedProcessManagerInformation => [] // Placeholder - add any more informatio
 ["TreeOpenEditor",{"nodeId":123}] // RIDE -> Interpreter
 ```
 * compiler information
-* yes/no dialogs
-```json
-["ShowDialog",{"title":"","text":"","type":1,"options":["Yes","No","Cancel"],"token":123}] // Interpreter -> RIDE
-  type: 1=info 2=warning 3=error
-["DialogResult",{"index":-1,"token":123}] // RIDE -> Interpreter
-
-2015-12-15 NN: This is now supported except that "type" is ignored.
-  When the user closes the dialog without choosing an option, RIDE responds with index:-1
-```
-* string input dialogs
-```json
-["ShowStringInputDialog",{"title":"Name","text":"Please enter a name:","initialValue":"abc","defaultValue":null,"token":123}] // Interpreter -> RIDE
-["StringInputDialogResult",{"value":"abcd","token":123}] // RIDE -> Interpreter
-```
 * list of valid I-beams and their descriptions
 * `ShowStack` and `ShowThreads`
 * drop workspace in RIDE
