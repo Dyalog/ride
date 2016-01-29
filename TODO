@@ -8,7 +8,7 @@ Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nic
   M4 minimal workspace explorer
         NN: protocol extensions proposed, see docs/protocol.md
   M5 edit "external" source files
-        NN: email 2016-01-20, must add a "string input dialog" to the protocol, maybe more later
+        NN: email 2016-01-20, added a "string input dialog" to the protocol
         NN: email 2016-01-28, "format on open" should be off by default for external source files
   M6 support external editors
         NN: implemented in its simplest form -- execute a command with a tmp file as argument
