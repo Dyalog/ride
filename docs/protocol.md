@@ -471,25 +471,21 @@ The interpreter should ignore silently any invalid and outdated node ids.
 #Process manager
 :red_circle: No such beast exists as of Jan 2016.
 
-##Sent from RIDE or an interpreter to a process manager
 <a name=GetAvailableConnections></a>
 ```json
-["GetAvailableConnections",{"connections":[c0,c1,...]}]
+["GetAvailableConnections",{"connections":[c0,c1,...]}] // RIDE or Interpreter -> PM
 ```
-Request a list of availabe connections.
-
 :red_circle: Specify what c0,c1,... look like
 
 <a name=ConnectTo></a>
 ```json
-["ConnectTo",{"remoteId":123}]
+["ConnectTo",{"remoteId":123}] // RIDE or Interpreter -> PM
 ```
 Request a connection to a specific item (RIDE or interpreter).
 
-##Sent from a process manager to RIDE or an interpreter
 <a name=ConnectToSucceded></a>
 ```json
-["ConnectToSucceded",{"remoteId":123,"identity":1,"protocolNumber":...}]
+["ConnectToSucceded",{"remoteId":123,"identity":1,"protocolNumber":...}] // PM -> RIDE or Interpreter
 ```
 Tell the client that the ProcessManager is handing off the connection to a RIDE or Interpreter (as requested).
 The process manager knows the supported protocols so it can pick a supported protocol for the clients to switch to.
@@ -499,23 +495,21 @@ Once this is received the client is no longer connected to the PM, but rather is
 
 <a name=ConnectToFailed></a>
 ```json
-["ConnectToFailed",{"remoteId":123,"reason":""}]
+["ConnectToFailed",{"remoteId":123,"reason":""}] // PM -> RIDE or Interpreter
 ```
 Tell the client that the attempt to connect to a particular process failed.
 
-##Sent from anything to anything
 <a name=GetDetailedInformation></a>
 ```json
-["GetDetailedInformation",{"remoteId":[12,34,...]}]
+["GetDetailedInformation",{"remoteId":[12,34,...]}] // anything -> anything
 ```
 If sent to a Process manager, `remoteId` is a list of remote IDs returned by
 [`GetAvailableConnections`](#GetAvailableConnections). Otherwise it's an empty list.
 
 <a name=ReplyGetDetailedInformation></a>
 ```json
-["ReplyGetDetailedInformation",{"information":[i0,i1,...]}]
+["ReplyGetDetailedInformation",{"information":[i0,i1,...]}] // anything -> anything
 ```
-Sent in reply to [`GetDetailedInformation`](#GetDetailedInformation).
 
 #Proposed extensions
 * related to the process manager
