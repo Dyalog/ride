@@ -354,6 +354,10 @@ When the user hovers a name with the mouse, RIDE should ask for a short textual 
 Like with autocompletion, `token` is used to correlate requests and responses, and there is no guarantee that they will
 arrive in the same order, if ever.
 
+:red_circle: The interpreter doesn't support these
+
+:red_circle: RIDE sends `GetValueTip`-s but doesn't process the responses.
+
 #Language bar
 RIDE can request information about the language bar with
 <a name=GetLanguageBar></a>
@@ -382,9 +386,9 @@ Two types of dialogs are supported:
 ["DialogResult",{"index":-1,"token":123}] // RIDE -> Interpreter
   When the user closes the dialog without choosing an option, RIDE responds with index:-1
 ```
-:exclamation: "type" is not supported
+:red_circle: "type" is not supported
 
-:exclamation: Rename this to `ShowMultipleChoiceDialog`/`MultipleChoiceDialogResult` for symmetry with `StringInput`?
+:red_circle: Rename this to `ShowMultipleChoiceDialog`/`MultipleChoiceDialogResult` for symmetry with `StringInput`?
 
 * String input
 <a name=ShowStringInputDialog></a><a name=StringInputDialogResult></a>
