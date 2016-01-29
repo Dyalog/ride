@@ -447,6 +447,27 @@ Sent from any peer to shut down the connection cleanly.
 
 :red_circle: This is pointless -Nick
 
+#Workspace explorer
+:red_circle: This is a draft.  Not implemented yet.
+Optionally, RIDE can display a tree representation of the objects in the current session.
+It can query the interpreter for this information in a uniform way for all types of nodes:
+<a name=TreeList></a>
+```json
+["TreeList",{"nodeId":123}] // RIDE -> Interpreter
+["TreeList",{"nodeId":123,"children":[{"id":234,"type":1,"name":"Abc"},...]}] // Interpreter -> RIDE
+```
+The root of the tree is assumed to have node id 0.
+`type` is a hint about the icon and style for the node.
+
+RIDE should query information only about the visible parts of the tree as they get expanded.
+
+When the user presses Enter or clicks on a node, RIDE should send
+<a name=TreeAction></a>
+```json
+["TreeAction",{"nodeId":123}] // RIDE -> Interpreter
+```
+The interpreter should ignore silently any invalid and outdated node ids.
+
 #Process manager
 :red_circle: No such beast exists as of Jan 2016.
 
@@ -516,12 +537,6 @@ DetailedProcessManagerInformation => [] // Placeholder - add any more informatio
 * programmatic access to "current object"
 ```json
 ["SetCurrentObject",{text:""}] // RIDE -> Interpreter
-```
-* workspace explorer
-```json
-["TreeGetNameList",{"nodeId":123}] // RIDE -> Interpreter
-["TreeNameList",{"nodeId":123,"children":[{"id":234,"type":1,"name":"Abc"},...]}] // Interpreter -> RIDE
-["TreeOpenEditor",{"nodeId":123}] // RIDE -> Interpreter
 ```
 * compiler information
 * list of valid I-beams and their descriptions
