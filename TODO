@@ -7,6 +7,7 @@ Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nic
         NN: it works
   M4 minimal workspace explorer
         NN: protocol extensions proposed, see docs/protocol.md
+        NN: this tree component looks good and popular: https://www.jstree.com/ unfortunately it's 7-8kloc
   M5 edit "external" source files
         NN: email 2016-01-20, added a "string input dialog" to the protocol
         NN: email 2016-01-28, "format on open" should be off by default for external source files
@@ -20,7 +21,7 @@ Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nic
   S1 export and import preferences
   S2 config file for interpreter
   S3 yes/no/cancel and other ultra-simple dialogs
-        NN: RIDE support implemented
+        NN: RIDE support implemented, see docs/protocol.md
   S4 value tips
         NN: half-way RIDE support implemented, see docs/protocol.md
   S5 enhanced navigation of classes and functions
@@ -31,7 +32,7 @@ Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nic
   W3 status bar
   W4 drag/drop workspaces or source files to session
   W5 autopw support
-        NN: RIDE sends the information but currently the interpreter ignores it
+        NN: RIDE sends the information but currently the interpreter ignores it, see docs/protocol.md
 
 Not prioritized:
   on a Mac esc closes the session instead of the editor, JS 2015-12-03
@@ -92,187 +93,3 @@ Not prioritized:
   custom themes (Alexey Veretennikov, 2015-10-20)
   remove invisible scrollbars on Mac (Alexey Veretennikov, 2015-10-20)
   tooltips for built-in functions and operators (Alexey Veretennikov, 2015-10-20)
-
-Done:
-  JS: Discuss placing the cursor at the _left_ of a recalled line.
-  If an error is encountered in a scripted fn, tracer needs to scroll to line which failed
-  )ed namespace.foo should position cursor at start of foo
-  Trace namespace.foo should scroll so that traced code is at the TOP of the window
-  Need Help|About feature to allow include version information when reporting issues
-  about dialog with version: 0.1. + commit counter, and also build date
-  menus (only within the browser window)
-  BS and left cursor should terminate autocomplete dropdown (like ESC). Right cursor/tab should select and continue
-  "uncomment selected line" button doesn't work if nothing is selected
-  If a namespace or class cannot be saved, the "unable to save" popup does not have the focus when it appears
-    NN: Windows-only issue, replaced all alert()-s with $().dialog()-s to dodge it
-  ctrl+TAB should cycle between editors and session windows as in ODE (and in a Web Browser)
-    NN: Done, but Chromium refuses to remap ctrl+tab
-  control font size in nwjs
-    NN: can't capture scroll events in NW, but I made <C-+> <C--> <C-0> work
-  control font size (in all windows)
-  Type something, hit shift enter on function name: Editor opens OK, but session log input is subsequently discarded
-  revert line in session should move cursor to next line (suggested by Scholes)
-  the interpreter's +s option (used by "Spawn") causes the interpreter to crash on error in the session
-    NN: "+s -q" solves this, thanks Geoff
-  listen for connections from the interpreter
-  add menu items for zoom in/out
-  ctrl+enter in debugger should do the same as enter
-  reduce size of the desktop app's executable: we don't need all versions of the font
-    NN: binary is still rather large, ~80MB
-  app icon, an orange D
-  Update focus after closing an editor (not fixed in Dec 24 version)
-    NN: debuggers only
-  honour ReplyHadError when executing multiple lines
-  continuously update completion list while typing
-  log file, env var to control its location
-  Focus should go back to the session when you close a window
-  keyboard navigation in menu (Alt+..., F10, arrows, etc)
-  remember window size and position
-  a shortcut to align ⍝-s (suggested by Kai)
-  Would be nice if captions [titles of floating windows] name the thing being edited
-  It would be nice with an option to have all editor windows open as floating (WPF Ride and ODE have this)
-  re-take screenshot
-  multiple debuggers (actually: fixed updating of title in *the* debugger)
-  occasionally at startup parts of the window do not paint
-  Debugger toolbar has extra icons
-  CSS class to indicate when window is focus
-  "undefined" appears in the session when you hold the enter key for a while
-  Esc shouldn't save when no changes have been made
-  When spawning an interpreter, make it connect back to the IDE (use RIDE_CONNECT instead of RIDE_LISTEN)
-  Changing font size doesn't affect floating windows
-  Disable dragging between editor and debugger tabs
-  Debugger doesn't highlight current line when in a floating window
-  Command line arguments for bypassing the Connect screen, e.g. --spawn or --connect 1.2.3.4:4502
-  Add button to float windows
-  Show host:port in title, along with WS name
-  Floating windows should be always on top (can add option post v14.1)
-  Connections box should be wide enough for "typical" entries; ideally resizable
-  About: "Copy" should always copy all the text
-  Pasting multiple lines in the session should be impossible (or pressing Enter should be emulated at every '\n')
-  Change name of executable from "dyalogjs" to "ride"
-  Autocompletion: Tab/Shift-Tab should cycle through the list (Nick)
-  About dialog should be accessible somehow from Connect page
-  Context menu ("Copy", "Paste", etc) on right mouse click
-  9) Would be good to have a keystroke to go back one line in the tracer.
-    NN: I added Shift-Ctrl-Backspace (BK) and Shift-Ctrl-Enter (FD), as AS suggested
-  6) If you are tracing and encounter an error in a sub-function, you have to explicitly hit CTRL+ENTER to get the tracer to recognise the new stack levels. This may be a configuration option that is off by default in Linux(?). Or perhaps does not even exist in Linux?
-    NN: Ctrl-Enter now does "step into" instead of "step over"
-  10) In the Connect screen, a "Save" is required before Connect uses the parameters that have been entered into the edit boxes. This is quite confusing.
-    NN: fixed and moved Connect button under the text fields
-  4) Ctrl+Enter works fine from immediate execution, but doesn't seem to work reliably as a "step into" key once you are already tracing.
-  save line number display configuration (on/off)
-  JS2: Line numbers: I would prefer the editor to remember my preference for no line numbers between invocations.
-  line wrapping in the session needs to be optional; MK email 2015-02-21
-  If you hit quote three times, you end up with first one, then two, then SIX quotes
-    NN: Patch submitted.  Will be available with the next release of CodeMirror: https://github.com/codemirror/CodeMirror/pull/3083
-    NN: I decided to disable pairing of '' and "".
-  2) Double-click in the session does not open the editor.
-  Autocomplete displays all ⎕names in an unexpected order; GS #11928
-  App icons for Mac & Windows (Jason)
-  Change background for search matches; MK email 2015-02-18
-  3) AutoComplete using <ENTER> is a nightmare and causes all sorts of unexpected behaviours. If you have functions FOO and FOOBAR, it is almost impossible to call FOO. You type FOO and hit enter but if you think about it for a split second, the RIDE stuffs the "BAR" in just before you hit <ENTER> and you run the wrong function. Or you type )save and hit <ENTER>, but all that happens is that ")save" becomes ")SAVE" and you have to hit <ENTER> again.
-  Auto-complete should probably not complete on enter, this can cause very bad problems if the user is not carefully looking
-    NN: fixed by adding an extra invisible item before other completions; pressing <enter> on it does ER
-  Floating editor windows should be always on top of the session but not on top of other applications; MK email 2015-02-17
-  7) When tracing into functions, the window caption doesn't reflect the function name that you have now moved into.
-  8) When tracing near the top of a function, the function header needs to be visible. At the moment, the first line displayed is typically the current line, even when you are only on line [1].
-  <End> should go to the last non-blank character; MK email 2015-02-17
-  Find an acceptable solution for pasting multiple lines into the session, in particular: single line with a trailing newline; MK email 2015-02-17
-  13) I am coming to the conclusion that the editor windows need to be on top of the APL session but not on top of everything in the universe.
-  Connect page: prompt user to save before selection changes
-    NN: this is N/A now that we moved the Connect button below the text fields
-  js source maps
-  Auto-complete should not happen at quote-quad input
-  source maps
-  Highlight non-local names in a different colour (this is BY FAR the most useful syntax colouring)
-  Mac not working at all for spawned interpreters
-  Auto-completion of workspace names not working outside Windows   JD #11879
-  The interpreter must refuse to start if $RIDE_LISTEN is given, but the port is already being used  JD #11252
-  The interpreter ignores $RIDE_CONNECT and $RIDE_LISTEN; reported by Kai, reproduced by Nick, fix by JD or Bjørn pending
-  clean shutdown of APL should terminate RIDE
-  Two menu items to spawn a new IDE: connect page and new session (Cmd+N)
-  Add menu items to issue interrupt(s).
-  On startup, make sure the window fits in the screen (to avoid trouble with multiple screens)
-  Don't show connect screen on "New Session" and on "-s" argument
-  Two highlighted lines in tracer; MK email 2015-02-14:
-    1) You are tracing
-    2) You use shift+enter to edit the function
-    3) You then use >> or << before resuming execution
-      NN: I was showing a red border around the current line in edit mode, which was wrong
-  Rationalize menus for OS X and others
-  If you maximize RIDE on a Mac, close it, and open it again, it can't be unmaximised; 2015-02-19 JS, JR
-    NN: fixed as a side effect of fixing the issue with multiple monitors
-  "Connect" and "New Session" do not work under OS X
-  Do not start in the connect screen on "New Session" and on "-s" argument
-  DB email 2015-03-03
-    Save breakpoints the moment you click, not on EP
-  Remove brief display of connect screen on "New Session"
-  Scroll editor window if cursor passes right margin.
-  Verify there is a standard key to cycle between the windows
-  Customizable window title; Kai email 2015-02-24
-  editor shouldn't be syntax highlighted if it is editing a text array; JS 2015-03-13
-  Allow RIDE to be started on Mac OS X as a separate item
-  keyboard button in the language bar should open the "Keyboard" tab in "Preferences"
-  an empty "Window Title" setting produces "index.html" in the title
-    NN: replaced empty title with "Dyalog"
-  size of a floating window is diminished by one line every time it is reopened; Marc Griffiths 2015-03-13
-  If the interpreter fails to spawn initially, show an error message instead of an empty session
-  edit a function, make the header line invalid, close the window with the X button (instead of Esc), edit again -- crash; found by NN 2015-03-27
-  Double click should work in editors
-  The animation on clicking "Connect" should be shown after some delay
-  Overflown part of connections box doesn't show
-    NN: not that much of a problem now that it's resizable
-    NN: also, I removed the horizontal scrollbar
-  avoid the flashing in a floating trace window when I lean on the trace (Ctrl+Enter) key; JS email 2015-03-10
-    NN: there a bug in the interpreter -- it sends an extra ReplyFocusWindow win=0 after a StepInto or RunCurrentLine
-    NN: I added a temporary workaround until JD has a chance to fix it
-  Add a legend in Preferences>Keyboard to explain the colours
-  Customizable keymap
-  rewrite syntax highlighting to support Dyalog syntax
-  Syntax highlighting for recognised idioms
-  Add a Reset button to each tab under Preferences (we want this before the release)
-  Show keyboard shortcuts in a tooltip when the keyboard button on the lbar is hovered
-  Race condition when opening floating windows
-  JS: A new floating edit window flashes first in the centre of screen before being removed and redrawn at my preferred position.
-  Drag and drop to swap pairs of characters in Preferences>Keyboard
-    NN: there's no need for this now that the language bar is accessible from Preferences
-  add replace (:%s/A/B/)
-  Do not scroll session on AtInputPrompt.
-  History (session log) is not recorded in spawned interpreters; Geoff #11841
-  Lbar may change its size when theme is changed
-  Six-space prompt before trace output; JS 2015-03-21
-  Closing the session window should close all open editor windows
-  JS: <Esc> in the session should switch focus to the top edit or trace window.
-    NN: I did it for the most recently used edit or trace window
-  Customizable colours for syntax highlighting
-  ` keybindings and/or lbar should work in search box
-    NN: implemented for lbar
-    http://mantis.dyalog.com/view.php?id=12428
-  Configurable keyboard shortcuts
-  keybinding for toggling a breakpoint
-  Colour schemes
-  After closing an editor, focus the next editor instead of the session
-  code folding
-  Enable Windows IME if present.
-  Option to automatically pop up completion box after a timeout OR use a keystroke
-  Menu items for next/prev line from demo should be disabled when there are no more lines; MK Jabber 2015-03-25
-    NN: those menu items have been removed from the menu; they are still available as key-mappable commands
-  2015-09-07 Adam: ctrl+scroll to zoom in/out
-  JS: Option for turning off AutoFormatting, please.
-    NN: that's an interpreter-side option: export AUTOFORMAT=0
-  get rid of socket.io/engine.io
-  a couple of people asked for I-beam completion:
-    2015-09-10 Toon: easy access to list of / documentation of I-beams
-    2015-09-07 Callum: completion for idioms and I-beams
-    A dropdown with I-beams (Mike Mingaard)
-  Disable EP in an editor after it has been pressed once
-  js strict mode
-  contextual help (F1) for items in completion menus
-  form on Connect screen isn't populated initially, so dblclick doesn't work before changing the selection; DB email 2015-11-04
-  "Start a local interpreter" and "start an interpreter over ssh" should be merged into the same connection
-    type with a checkbox to control whether to show the form for ssh credentials
-  SSL should not be presented as a separate connection type but as an option to "Connect to an interpreter":
-    UI should look roughly like
-                [X] Make secure connection
-                  [X] Provide Certificate [Browse...]
-                  [X] Validate Server Subject Name [_____________]
