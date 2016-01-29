@@ -1,36 +1,21 @@
-;(function(){
-  'use strict'
-  // NW.js-specific initialisation
-  var gui=require('nw.gui'),fs=require('fs'),os=require('os'),
-      path=require('path'),spawn=require('child_process').spawn,proxy=require('./proxy')
-
-  // Detect platform
-  //   https://nodejs.org/api/process.html#process_process_platform
-  //   https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
-  D.nwjs=1;D.win=/^win/i.test(process.platform);D.mac=process.platform=='darwin';D.floating=!!opener
-
-  console.log=function(s){try{process.stdout.write(s+'\n')}catch(_){console.log=function(){}}}
-
-  if(!process.env.RIDE_SPAWN){ // the default depends on whether we are a standalone RIDE
-    process.env.RIDE_SPAWN=
-      D.win?0:
-      D.mac?+fs.existsSync(path.dirname(process.execPath)+'/../../../../Resources/Dyalog/mapl'):
-            +fs.existsSync(path.dirname(process.execPath)+'/../mapl')
-  }
-
+;(function(){'use strict'
+  var gui=require('nw.gui'),fs=require('fs'),os=require('os'),path=require('path'),spawn=require('child_process').spawn,
+      proxy=require('./proxy'),ps=process,env=ps.env
+  // Detect platform: https://nodejs.org/api/process.html#process_process_platform
+  // https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
+  D.nwjs=1;D.win=/^win/i.test(ps.platform);D.mac=ps.platform=='darwin';D.floating=!!opener
+  console.log=function(s){try{ps.stdout.write(s+'\n')}catch(_){console.log=function(){}}}
+  env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a standalone RIDE
+    (D.win?0:+fs.existsSync(path.dirname(ps.execPath)+(D.mac?'/../../../../Resources/Dyalog/mapl':'/../mapl')))
   if(D.win&&(!localStorage.ime||localStorage.ime==='1')){ // switch IME locale as early as possible
-    var setImeExe=process.execPath.replace(/[^\\\/]+$/,'set-ime.exe')
-    fs.existsSync(setImeExe)&&spawn(setImeExe,[process.pid],{stdio:['ignore','ignore','ignore']})
+    var setImeExe=ps.execPath.replace(/[^\\\/]+$/,'set-ime.exe')
+    fs.existsSync(setImeExe)&&spawn(setImeExe,[ps.pid],{stdio:['ignore','ignore','ignore']})
   }
-
-  function segmOverlap(a,b,c,d){return a<d&&c<b} // do the two segments ab and cd overlap?
-  function rectOverlap(r0,r1){ // a rectangle is {x,y,width,height}; do the two overlap?
-    return segmOverlap(r0.x,r0.x+r0.width, r1.x,r1.x+r1.width)&&
-           segmOverlap(r0.y,r0.y+r0.height,r1.y,r1.y+r1.height)
+  function segmOvlp(a,b,c,d){return a<d&&c<b} // do the two segments ab and cd overlap?
+  function rectOvlp(r0,r1){ // a rectangle is {x,y,width,height}; do the two overlap?
+    return segmOvlp(r0.x,r0.x+r0.width, r1.x,r1.x+r1.width)&&segmOvlp(r0.y,r0.y+r0.height,r1.y,r1.y+r1.height)
   }
-  function segmFit(a,b,A,B){ // nudge and/or squeeze "ab" as necessary so it fits into "AB"
-    return(b-a>B-A)?[A,B]:a<A?[A,A+b-a]:b>B?[B-b+a,B]:[a,b]
-  }
+  function segmFit(a,b,A,B){return(b-a>B-A)?[A,B]:a<A?[A,A+b-a]:b>B?[B-b+a,B]:[a,b]} // nudge/squeeze ab to fit into AB
   function rectFit(r,R){ // like segmFit() but for for rectangles
     var u=segmFit(r.x,r.x+r.width ,R.x,R.x+R.width ),x=u[0],x1=u[1]
     var v=segmFit(r.y,r.y+r.height,R.y,R.y+R.height),y=v[0],y1=v[1]
@@ -38,34 +23,25 @@
   }
   function restoreWindow(w,r){ // w: NWJS window, r: rectangle
     var a=gui.Screen.screens // find a screen that overlaps with "r" and fit "w" inside it:
-    for(var i=0;i<a.length;i++)if(rectOverlap(a[i].work_area,r)){
+    for(var i=0;i<a.length;i++)if(rectOvlp(a[i].work_area,r)){
       r.maximized||(r=rectFit(r,a[i].work_area));w.moveTo(r.x,r.y);w.resizeTo(r.width,r.height)
-      process.nextTick(function(){
+      ps.nextTick(function(){
         w.dx=w.x-r.x;w.dy=w.y-r.y;w.dw=w.width-r.width;w.dh=w.height-r.height;r.maximized&&w.maximize()
       })
       break
     }
   }
-
-  if(D.mac&&!process.env.RIDE_INTERPRETER_EXE){
-    process.env.RIDE_INTERPRETER_EXE=D.lastSpawnedExe=path.resolve(process.cwd(),'../Dyalog/mapl')
+  if(D.mac&&!env.RIDE_INTERPRETER_EXE){
+    env.RIDE_INTERPRETER_EXE=D.lastSpawnedExe=path.resolve(ps.cwd(),'../Dyalog/mapl')
   }
-  process.chdir(process.env.PWD||process.env.HOME||process.env.USERPROFILE||'.') // see https://github.com/nwjs/nw.js/issues/648
-  D.process=process;gui.Screen.Init();var nww=D.nww=gui.Window.get()
-
-  var urlParams={},a=(location+'').replace(/^[^\?]*($|\?)/,'').split('&')
-  for(var i=0;i<a.length;i++){var kv=/^([^=]*)=?(.*)$/.exec(a[i]);urlParams[unescape(kv[1]||'')]=unescape(kv[2]||'')}
-
+  ps.chdir(env.PWD||env.HOME||env.USERPROFILE||'.') // github.com/nwjs/nw.js/issues/648
+  D.process=ps;gui.Screen.Init();var nww=D.nww=gui.Window.get()
+  var urlp={},a=(location+'').replace(/^[^\?]*($|\?)/,'').split('&') // urlp:URL parameters
+  for(var i=0;i<a.length;i++){var kv=/^([^=]*)=?(.*)$/.exec(a[i]);urlp[unescape(kv[1]||'')]=unescape(kv[2]||'')}
   ;(function(){ // restore window state:
     if(D.floating){
       opener.D.floatingWindows.push(nww)
-      restoreWindow(nww,{
-        x:        +urlParams.x,
-        y:        +urlParams.y,
-        width:    +urlParams.width,
-        height:   +urlParams.height,
-        maximized:+urlParams.maximized
-      })
+      restoreWindow(nww,{x:+urlp.x,y:+urlp.y,width:+urlp.width,height:+urlp.height,maximized:+urlp.maximized})
     }else{
       D.floatingWindows=[];D.floatOnTop=0
       var aot=function(x){ // aot(x) sets "always on top" for all windows to x
@@ -82,34 +58,24 @@
     }
   }())
   nww.show();nww.focus() // focus() is needed for the Mac
-
-  // To "throttle" a function is to make it execute no more often than once every X milliseconds.
   function throttle(f){var t;return function(){t=t||setTimeout(function(){f();t=0},500)}}
-
-  var saveWindowState=throttle(function(){
+  var saveWinState=throttle(function(){
     var posArr=[nww.x-(nww.dx||0),nww.y-(nww.dy||0),nww.width-(nww.dw||0),nww.height-(nww.dh||0)]
     nww.maximized&&posArr.push(1)
-    var p=!D.floating?'pos':+urlParams.tracer?'posTracer':urlParams.token==='1'?'posEditor':'' // name of pref
+    var p=!D.floating?'pos':+urlp.tracer?'posTracer':urlp.token==='1'?'posEditor':'' // name of pref
     p&&(localStorage[p]=JSON.stringify(posArr))
   })
-  nww.on('move',  saveWindowState)
-  nww.on('resize',saveWindowState)
-  nww.on('maximize',  function(){nww.maximized=1;saveWindowState()})
-  nww.on('unmaximize',function(){nww.maximized=0;saveWindowState()})
-
+  nww.on('move',saveWinState);nww.on('resize',saveWinState)
+  nww.on('maximize',  function(){nww.maximized=1;saveWinState()})
+  nww.on('unmaximize',function(){nww.maximized=0;saveWinState()})
   nww.on('close',function(){
     if(D.forceClose){
-      var fw=opener.D.floatingWindows;fw.splice(fw.indexOf(nww),1)
-      process.nextTick(function(){nww.close(true)})
+      var fw=opener.D.floatingWindows;fw.splice(fw.indexOf(nww),1);ps.nextTick(function(){nww.close(true)})
     }else{
-      var f=window.onbeforeunload;f&&f()
-      D.floating||process.nextTick(function(){process.exit(0)})
+      var f=window.onbeforeunload;f&&f();D.floating||ps.nextTick(function(){ps.exit(0)})
     }
   })
-
   D.forceCloseNWWindow=function(){nww.close(true)} // used to close floating windows after session is dead
-
-  // Context menu
   opener&&(D.ide=opener.D.ide)
   var items=[].concat(
     ['Cut','Copy','Paste'].map(function(x){return{label:x,click:function(){document.execCommand(x)}}}),
@@ -120,9 +86,7 @@
   )
   var cmenu=new gui.Menu;for(var i=0;i<items.length;i++)cmenu.append(new gui.MenuItem(items[i]))
   $(document).contextmenu(function(e){cmenu.popup(e.clientX,e.clientY);return!1})
-
   D.readFile=fs.readFile // needed for presentation mode
-
   D.createSocket=function(){
     function LS(){} // local socket, imitating socket.io's API
     LS.prototype={
@@ -132,15 +96,14 @@
     }
     var x=new LS,y=new LS;x.other=y;y.other=x;proxy.Proxy()(y);return x
   }
-
-  var execPath=process.execPath;D.mac&&(execPath=execPath.replace(/(\/Contents\/).*$/,'$1MacOS/nwjs'))
+  var execPath=ps.execPath;D.mac&&(execPath=execPath.replace(/(\/Contents\/).*$/,'$1MacOS/nwjs'))
   D.rideConnect=function(){
-    var e={};for(var k in process.env)e[k]=process.env[k];e.RIDE_SPAWN='0'
+    var e={};for(var k in env)e[k]=env[k];e.RIDE_SPAWN='0'
     spawn(execPath,[],{detached:true,stdio:['ignore','ignore','ignore'],env:e})
   }
   D.rideNewSession=function(){
     if(D.lastSpawnedExe){
-      var e={};for(var k in process.env)e[k]=process.env[k]
+      var e={};for(var k in env)e[k]=env[k]
       e.RIDE_SPAWN='1';e.RIDE_INTERPRETER_EXE=D.lastSpawnedExe
       spawn(execPath,[],{detached:true,stdio:['ignore','ignore','ignore'],env:e})
     }else{
@@ -148,11 +111,8 @@
               'please use "Connect..." instead.','Cannot Start New Session')
     }
   }
-
   D.quit=function(){gui.Window.get().close()}
   D.clipboardCopy=function(s){gui.Clipboard.get().set(s)}
-
-  // Debugging utilities
   D.showProtocolLog=function(){
     var lw=window.lw=open('empty.html')
     function wr(s){
@@ -170,9 +130,7 @@
     }
     return!1
   }
-
-  // expandStackString inserts snippets of code next to each file:///filename.js:123:45
-  function expandStackString(s){ // s: the string from  new Error().stack
+  function expandStackString(s){ // s:the string from new Error().stack, we'll insert code snippets there
     var C=2 // how many lines of context above and below
     return s.replace(/\(file:\/\/([^\n\r\)]+):(\d+):(\d+)\)/g,function(m,f,l,c){ // m:whole match,f:file,l:line,c:col
       if(f.indexOf('/')>=0||f.indexOf('\\')>=0){
@@ -191,12 +149,10 @@
       return m
     })
   }
-
-  // Error handling
   if(!D.floating){
-    var htmlChars={'&':'&amp;','<':'&lt;','>':'&gt;'}
-    var htmlEsc=function(s){return s.replace(/./g,function(x){return htmlChars[x]||x})}
-    process.on('uncaughtException',function(e){
+    var H={'&':'&amp;','<':'&lt;','>':'&gt;'}
+    var htmlEsc=function(s){return s.replace(/./g,function(x){return H[x]||x})} // todo: can we require('util') ?
+    ps.on('uncaughtException',function(e){
       window&&(window.lastError=e)
       var info=
         'IDE: '+JSON.stringify(D.versionInfo)+
@@ -228,10 +184,8 @@
       return!1
     })
   }
-
   D.open=function(url,o){o.icon='D.png';o.toolbar==null&&(o.toolbar=false);return!!gui.Window.open(url,o)} // o:options
   D.openExternal=gui.Shell.openExternal
-
   if(D.mac&&!D.floating){ // todo: clean this up and test on Mac
     var groups,render
     groups={}
@@ -359,32 +313,21 @@
       nww.menu=mb
     }
   }
-
-  // Hacks to make the window title repaint on Windows. This is a workaround for:
-  //   https://github.com/nwjs/nw.js/issues/2895
-  //   https://github.com/nwjs/nw.js/issues/2896
-  //   https://github.com/nwjs/nw.js/issues/3589
-  //   https://github.com/nwjs/nw.js/issues/3658
-  if(D.win){
+  if(D.win){ // Hacks to make the window title repaint on Windows. This is a workaround for:
+    // github.com/nwjs/nw.js/issues/2895
+    // github.com/nwjs/nw.js/issues/2896
+    // github.com/nwjs/nw.js/issues/3589
+    // github.com/nwjs/nw.js/issues/3658
     var repaintTitle=function(){nww.resizeBy(0,1);nww.resizeBy(0,-1)}
-    $(window).on('focus blur',repaintTitle)
-    D.setTitle=function(s){document.title=s;repaintTitle()}
+    $(window).on('focus blur',repaintTitle);D.setTitle=function(s){document.title=s;repaintTitle()}
   }
-
-  // support loading extra js
-  if(process.env.RIDE_JS){
-    var js=process.env.RIDE_JS.split(path.delimiter)
-    for(var i=0;i<js.length;i++)js[i]&&$.getScript('file://'+path.resolve(process.cwd(),js[i]))
-  }
-
-  var editor=process.env.RIDE_EDITOR
-  if(editor){
+  ;(env.RIDE_JS||'').split(path.delimiter).forEach(function(x){x&&$.getScript('file://'+path.resolve(ps.cwd(),x))})
+  if(env.RIDE_EDITOR){
     var d=os.tmpDir()+'/dyalog';fs.existsSync(d)||fs.mkdirSync(d,0o700)
     D.openInExternalEditor=function(ee,callback){ // ee: EditableEntity from RIDE protocol
-      var f=d+'/'+ee.name+'.dyalog'
-      fs.writeFileSync(f,ee.text,{encoding:'utf8',mode:0o600})
-      var env={};for(var k in process.env)env[k]=process.env[k];env.LINE=''+(1+(ee.currentRow||0))
-      var p=spawn(editor,[f],{env:env})
+      var f=d+'/'+ee.name+'.dyalog';fs.writeFileSync(f,ee.text,{encoding:'utf8',mode:0o600})
+      var e={};for(var k in env)e[k]=env[k];e.LINE=''+(1+(ee.currentRow||0))
+      var p=spawn(env.RIDE_EDITOR,[f],{env:e})
       p.on('error',function(err){throw err})
       p.on('exit',function(){var s=fs.readFileSync(f,'utf8');fs.unlinkSync(f);callback(s)})
     }
