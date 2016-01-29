@@ -97,9 +97,18 @@ this.IDE=function(){
         modal:1,title:x.title,buttons:x.options.map(function(s){return{text:s,click:f}}),
         close:function(){ide.emit('DialogResult',{index:i,token:x.token})}
       })
+    },
+    ShowStringInputDialog:function(x){
+      var ok,$i=$('<input>').val(x.initialValue||'')
+      $('<p>').text(x.text||'').append('<br>').append($i).dialog({
+        modal:1,title:x.title,buttons:[
+          {html:'<u>O</u>K'    ,accesskey:'o',click:function(){ok=1;$(this).dialog('close')}},
+          {html:'<u>C</u>ancel',accesskey:'c',click:function(){     $(this).dialog('close')}}
+        ],
+        close:function(){ide.emit('StringInputDialogResult',{value:ok?$i.val():x.defaultValue||null,token:x.token})}
+      })
     }
   }
-
   // We need to be able to temporarily block the stream of messages coming from socket.io
   // Creating a floating window can only be done asynchronously and it's possible that a message
   // for it comes in before the window is ready.

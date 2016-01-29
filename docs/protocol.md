@@ -498,8 +498,8 @@ DetailedProcessManagerInformation => [] // Placeholder - add any more informatio
 ```
 * string input dialogs
 ```json
-["ShowInputDialog",{"title":"","text":"","defaultValue":"abc","token":123}] // Interpreter -> RIDE
-["InputDialogResult",{"value":"abcd","token":123}] // RIDE -> Interpreter
+["ShowStringInputDialog",{"title":"Name","text":"Please enter a name:","initialValue":"abc","defaultValue":null,"token":123}] // Interpreter -> RIDE
+["StringInputDialogResult",{"value":"abcd","token":123}] // RIDE -> Interpreter
 ```
 * list of valid I-beams and their descriptions
 * `ShowStack` and `ShowThreads`
