@@ -132,9 +132,9 @@ this.init=function($e){
     '<div id=col-top>'+
       '<label>Scheme: <select id=col-scheme></select></label>'+
       '<input id=col-new-name class=text-field>'+
-      '<a href=# id=col-clone>Clone</a>'+
-      '<a href=# id=col-rename>Rename</a>'+
-      '<a href=# id=col-delete>Delete</a>'+
+      '<button id=col-clone  data-accesskey=c><u>C</u>lone</button>'+
+      '<button id=col-rename data-accesskey=r><u>R</u>ename</button>'+
+      '<button id=col-delete data-accesskey=d><u>D</u>elete</button>'+
     '</div>'+
     '<div id=col-cm></div>'+
     '<div id=col-settings>'+
@@ -162,18 +162,16 @@ this.init=function($e){
     case 13:$(this)                 .blur();return!1 // enter
     case 27:$(this).val(scheme.name).blur();return!1 // esc
   }})
-  $('#col-clone').button().click(function(){
+  $('#col-clone').click(function(){
     var x={};schemes.push(x);for(var k in scheme)x[k]=$.extend({},scheme[k]) // x:the new scheme
     x.name=chooseUniqueSchemeName(scheme.name);delete x.frozen;scheme=x;updateSchemes()
-    return!1
   })
-  $('#col-rename').button().click(function(){
+  $('#col-rename').click(function(){
     $('#col-new-name').width($('#col-scheme').width()).val(scheme.name).select()
     $('#prefs-tab-colours').addClass('renaming')
     setTimeout(function(){$('#col-new-name').focus()},0)
-    return!1
   })
-  $('#col-delete').button().click(function(){
+  $('#col-delete').click(function(){
     var i=$('#col-scheme')[0].selectedIndex;schemes.splice(i,1)
     scheme=schemes[Math.min(i,schemes.length-1)];updateSchemes();return!1
   })

@@ -5,7 +5,7 @@ this.name='Title'
 this.init=function($e){
   var e=$e[0]
   e.innerHTML=
-    '<a href=# class=reset>Reset</a>'+
+    '<button class=rst><u>R</u>eset</button>'+
     '<label for=title-input>Window title:</label>'+
     '<input id=title-input class=text-field>'+
     '<pre>'+
@@ -26,7 +26,7 @@ this.init=function($e){
   wt=document.getElementById('title-input')
   $e.on('click','pre a',function(e){$(wt).insert($(e.target).text())})
   $('pre a',e).attr('title','Insert')
-  $('.reset',e).button().click(function(){wt.value=prefs.title.getDefault();return!1})
+  $('.rst',e).click(function(){wt.value=prefs.title.getDefault()})
 }
 this.load=function(){wt.value=prefs.title()}
 this.save=function(){prefs.title(wt.value)}
