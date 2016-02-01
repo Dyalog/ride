@@ -13,16 +13,12 @@ var compression=require('compression'),express=require('express'),fs=require('fs
 var t0=+new Date
 function log(s){process.stdout.write((new Date-t0)+': '+s+'\n')}
 
+var _d=__dirname,tid,busy
+function build(){
+  if(busy){tid=setTimeout(build,100);return}
+  log('building');tid=0;busy=1;spawn(_d+'/build.sh',{cwd:_d,stdio:'inherit'}).on('close',function(){log('done');busy=0})
+}
 if(process.env.RIDE_SERVER_WATCH){
-  var _d=__dirname, tid, isRunning
-  function build(){
-    if(isRunning){
-      tid=setTimeout(build,100)
-    }else{
-      log('building');tid=0;isRunning=1
-      spawn(_d+'/build.sh',{cwd:_d,stdio:'inherit'}).on('close',function(){log('build done');isRunning=0})
-    }
-  }
   ;['.','client','style','style/img','style/themes'].forEach(function(x){
     fs.watch(_d+'/'+x,function(){tid=tid||setTimeout(build,100)})
   })
