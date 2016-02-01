@@ -93,12 +93,16 @@ $(function(){
 
   localStorage.version||(localStorage.version='[2,0]') // for migrations to later versions of RIDE
 
-  // Implement access keys (Alt-X) using a custom attribute: data-accesskey=X
+  // Implement access keys (Alt-X) using <u></u>.
   // The built-in accesskey=X doesn't handle duplicates well -- it doesn't always focus the visible one.
   $(document).keydown(function(e){
+    if(e.which===123)D.nww.showDevTools()
     if(e.altKey&&!e.ctrlKey&&!e.metaKey&&64<e.which&&e.which<91){ // Alt-A...Alt-Z or Alt-Shift-A...Alt-Shift-Z
-      var $a=$('[data-accesskey='+String.fromCharCode(e.which).toLowerCase()+']:visible'), n=$a.length
-      $a.eq(($a.index(':focus')+1)%$a.length).focus();n===1&&$a.click();return!1
+      var c=String.fromCharCode(e.which).toLowerCase(),C=c.toUpperCase()
+      var $a=$('u:visible').filter(function(){var h=this.innerHTML;return h===c||h===C}).closest(':input,label')
+      $a=$a.map(function(){return $(this).is('label')?$(this).find(':input').eq(0):this})
+      var $b=$a.filter('.ui-dialog *');$b.length&&($a=$b)
+      $a.eq(($a.index(':focus')+1)%$a.length).focus();$a.length===1&&$a.click();return!1
     }
   })
 })

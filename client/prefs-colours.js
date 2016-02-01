@@ -132,9 +132,9 @@ this.init=function($e){
     '<div id=col-top>'+
       '<label>Scheme: <select id=col-scheme></select></label>'+
       '<input id=col-new-name class=text-field>'+
-      '<button id=col-clone  data-accesskey=c><u>C</u>lone</button>'+
-      '<button id=col-rename data-accesskey=r><u>R</u>ename</button>'+
-      '<button id=col-delete data-accesskey=d><u>D</u>elete</button>'+
+      '<button id=col-clone ><u>C</u>lone</button>  '+
+      '<button id=col-rename><u>R</u>ename</button> '+
+      '<button id=col-delete><u>D</u>elete</button> '+
     '</div>'+
     '<div id=col-cm></div>'+
     '<div id=col-settings>'+

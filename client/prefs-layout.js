@@ -9,7 +9,7 @@ this.init=function($e){
   var sk={15:'←',16:'↹',30:'Caps',43:'↲',44:'⇧',57:'⇧'} // special keys
   $e.html(
     '<label id=layout-pfx-label>Prefix: <input id=layout-pfx class=text-field size=1></label>'+
-    '<button id=layout-rst data-accesskey=r><u>R</u>eset</button>'+
+    '<button id=layout-rst><u>R</u>eset</button>'+
     '<table id=layout-legend class=key'+
           ' title="Prefix followed by shift+key produces the character in red.\n'+
                   'Prefix followed by an unshifted key produces the character in blue.">'+
