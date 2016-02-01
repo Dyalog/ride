@@ -1,7 +1,7 @@
 'use strict'
 var prefs=require('./prefs'),on=CodeMirror.on
 var h={} // various input elements
-this.name='Code'
+this.tabTitle='Code'
 this.init=function($e){
   $e[0].innerHTML=
     '<div>'+

@@ -1,6 +1,6 @@
 'use strict'
 var prefs=require('./prefs'),esc=require('./util').esc,cmds=require('./cmds').cmds
-this.name='Shortcuts'
+this.tabTitle='Shortcuts'
 var $sc // <input> for search
 function keyHTML(k){
   return'<span class=shc-key><span class=shc-text>'+k+'</span><a href=# class=shc-del>×</a></span> '

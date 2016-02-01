@@ -1,7 +1,7 @@
 'use strict'
 var prefs=require('./prefs')
 var wt // <input> element for Window Title
-this.name='Title'
+this.tabTitle='Title'
 this.init=function($e){
   var e=$e[0]
   e.innerHTML=

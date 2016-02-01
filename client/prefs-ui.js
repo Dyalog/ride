@@ -1,8 +1,8 @@
 'use strict'
 // This module implements the Preferences dialog as a whole.
-// The content of individual tabs is in separate modules: prefs-*.js
+// The contents of individual tabs are in separate modules: prefs-*.js
 // Each of them can export the following properties:
-//   name       a string used as the tab's title
+//   tabTitle
 //   init()     called only once, before Preferences is opened for the first time
 //   load()     called every time Preferences is opened
 //   validate() should return a falsey value on success or a {msg,el} object on failure
@@ -35,9 +35,9 @@ this.showDialog=function(tabName){
     $d=$(
       '<div id=prefs>'+
         '<ul id=prefs-tabs-nav>'+
-          tabs.map(function(t){return'<li><a href=#prefs-tab-'+safe(t.name)+'>'+t.name+'</a></li>'}).join('')+
+          tabs.map(function(t){return'<li><a href=#prefs-tab-'+safe(t.tabTitle)+'>'+t.tabTitle+'</a></li>'}).join('')+
         '</ul>'+
-        tabs.map(function(t){return'<div id=prefs-tab-'+safe(t.name)+'></div>'}).join('')+
+        tabs.map(function(t){return'<div id=prefs-tab-'+safe(t.tabTitle)+'></div>'}).join('')+
       '</div>'
     )
       .tabs({activate:function(e,ui){var t=tabs[$(ui.newTab).index()];t.resize&&t.resize();t.activate&&t.activate()}})
@@ -52,7 +52,7 @@ this.showDialog=function(tabName){
           {text:'Cancel',click:function(){$d.dialog('close')}}
         ]
       })
-    for(var i=0;i<tabs.length;i++)tabs[i].init&&tabs[i].init($('#prefs-tab-'+safe(tabs[i].name)))
+    for(var i=0;i<tabs.length;i++)tabs[i].init&&tabs[i].init($('#prefs-tab-'+safe(tabs[i].tabTitle)))
   }
   $d.dialog('option','position',{at:'center'}).dialog('open')
   tabName&&$d.tabs({active:$('#prefs-tabs-nav a[href="#prefs-tab-'+tabName+'"]').parent().index()})

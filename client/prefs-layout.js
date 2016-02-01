@@ -1,6 +1,6 @@
 'use strict'
 var prefs=require('./prefs'),layouts=require('./kbds').layouts
-this.name='Layout'
+this.tabTitle='Layout'
 var $pfx,$lc // DOM elements for "Prefix" and "Locale"
 var NK=58    // number of scancodes we are concerned with
 var model={} // dictionary: locale→[arrayOfAPLGlyphs,arrayOfShiftedAPLGlyphs]

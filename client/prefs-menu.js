@@ -1,7 +1,7 @@
 'use strict'
 var prefs=require('./prefs')
 var $ta // the textarea
-this.name='Menu'
+this.tabTitle='Menu'
 this.init=function($e){
   $e[0].innerHTML='<button class=rst><u>R</u>eset</button>'+
                   '<p>Takes effect on restart</p><textarea wrap=off></textarea>'

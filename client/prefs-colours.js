@@ -1,6 +1,6 @@
 'use strict'
 var prefs=require('./prefs'),esc=require('./util').esc
-this.name='Colours'
+this.tabTitle='Colours'
 var G=[],H={} // G:syntax highlighting groups {t,s,c,ctrls}; H:reverse lookup dict for G
 D.addSyntaxGroups=function(x){G=G.concat(x);H={};for(var i=0;i<G.length;i++)H[G[i].t]=i;builtInSchemes&&updateStyle()}
 D.addSyntaxGroups([
