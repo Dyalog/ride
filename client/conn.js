@@ -138,7 +138,7 @@ function go(){
           ' in its environment, so it connects here.'+
         '</div>'
       ).dialog({modal:1,width:450,title:'Waiting for connection...',
-                buttons:{Cancel:function(){$d.dialog('close')}},
+                buttons:[{html:'<u>C</u>ancel',click:function(){$d.dialog('close')}}],
                 close:function(){D.socket.emit('*listenCancel')}})
       D.socket.emit('*listen',{host:sel.host,port:port})
     }else if(t==='start'){

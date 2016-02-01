@@ -422,9 +422,9 @@ this.Editor.prototype={
         width:400,
         close:function(){ed.dialog.dialog('close');ed.dialog=null},
         buttons:[
-          {text:'Yes'   ,click:function(){ed.dialog.dialog('close');ed.dialog=null;ed.EP(ed.cm)}},
-          {text:'No'    ,click:function(){ed.dialog.dialog('close');ed.dialog=null;ed.QT(ed.cm)}},
-          {text:'Cancel',click:function(){ed.dialog.dialog('close');ed.dialog=null}}
+          {html:'<u>Y</u>es'   ,click:function(){ed.dialog.dialog('close');ed.dialog=null;ed.EP(ed.cm)}},
+          {html:'<u>N</u>o'    ,click:function(){ed.dialog.dialog('close');ed.dialog=null;ed.QT(ed.cm)}},
+          {html:'<u>C</u>ancel',click:function(){ed.dialog.dialog('close');ed.dialog=null}}
         ]
       })
       // When a string is returned from onbeforeunload:

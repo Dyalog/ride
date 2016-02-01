@@ -47,9 +47,9 @@ this.showDialog=function(tabName){
         autoOpen:0,title:'Preferences',width:600,minWidth:600,height:450,minHeight:450,
         resize:function(){for(var i=0;i<tabs.length;i++)tabs[i].resize&&tabs[i].resize()},
         buttons:[
-          {text:'OK',    click:function(){ok();return!1}},
-          {text:'Apply', click:function(){apply();return!1}},
-          {text:'Cancel',click:function(){$d.dialog('close')}}
+          {html:'<u>O</u>K'    ,click:function(){ok();return!1}},
+          {html:'<u>A</u>pply' ,click:function(){apply();return!1}},
+          {html:'<u>C</u>ancel',click:function(){$d.dialog('close')}}
         ]
       })
     for(var i=0;i<tabs.length;i++)tabs[i].init&&tabs[i].init($('#prefs-tab-'+safe(tabs[i].tabTitle)))
