@@ -53,7 +53,10 @@ function initInterpreterConn(){
 var handlers={
   '*connect':function(x){
     var m=net,o={host:x.host,port:x.port}
-    if(x.ssl){m=require('tls');o.rejectUnauthorized=false} // todo: client certificate
+    if(x.ssl){
+      m=require('tls');o.rejectUnauthorized=false
+      if(x.cert)try{o.key=fs.readFileSync(x.cert)}catch(e){toBrowser('*error',{msg:e.message});return}
+    }
     clt=m.connect(o,function(){
       if(x.ssl&&x.subj){
         var s=clt.getPeerCertificate().subject.CN

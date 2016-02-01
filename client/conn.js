@@ -51,9 +51,11 @@ module.exports=function(){
     return!1
   })
   q.ssl_cb.change(function(){q.ssl_detail.toggle(this.checked)})
-  q.cert_cb.change(function(){q.cert.prop('disabled',!this.checked).val('')})
+  q.cert_cb.change(function(){q.cert.add(q.cert_dots).prop('disabled',!this.checked).val('');q.cert.elastic()})
   q.subj_cb.change(function(){q.subj.prop('disabled',!this.checked).val('')})
-                  .click(function(){this.checked&&q.subj.focus()})
+           .click(function(){this.checked&&q.subj.focus()})
+  q.cert_dots.click(function(){q.cert_file.click()})
+  q.cert_file.change(function(){q.cert.val(this.value).elastic()})
   prefs.favs().forEach(function(x){q.favs.append(favDOM(x))})
   q.favs.list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
     .on('click','.go',function(e){q.favs.list('select',$(this).parentsUntil(q.favs).last().index());q.go.click()})
@@ -76,9 +78,8 @@ module.exports=function(){
         $(':checkbox[name]',q.rhs).each(function(){$(this).prop('checked',+sel[this.name])})
         q.exes.val(sel.exe).val()||q.exes.val('') // use sel.exe if available, otherwise use "Other..."
         $(':text',q.rhs).elastic()
-        q.ssl_detail.toggle(!!sel.ssl)
-        q.ssh_detail.toggle(!!sel.ssh)
-        q.cert_cb.prop('checked',!!sel.cert);q.cert.prop('disabled',!sel.cert)
+        q.ssl_detail.toggle(!!sel.ssl);q.ssh_detail.toggle(!!sel.ssh)
+        q.cert_cb.prop('checked',!!sel.cert);q.cert.add(q.cert_dots).prop('disabled',!sel.cert)
         q.subj_cb.prop('checked',!!sel.subj);q.subj.prop('disabled',!sel.subj)
       }
     })
@@ -124,7 +125,7 @@ function go(){
     if(t==='tcp'){
       $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
         .dialog({modal:1,width:350,title:'Connecting...'})
-      D.socket.emit('*connect',{host:sel.host,port:+sel.port||4502,ssl:sel.ssl,subj:sel.subj})
+      D.socket.emit('*connect',{host:sel.host,port:+sel.port||4502,ssl:sel.ssl,cert:sel.cert,subj:sel.subj})
     }else if(t==='listen'){
       var port=sel.port||4502
       $d=$(

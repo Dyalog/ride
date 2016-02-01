@@ -23,7 +23,7 @@
   <div id=cn-rhs>
     <p><label id=cn-fav-cb-wr><input id=cn-fav-cb type=checkbox><u>R</u>emember connection</label>
       <label id=cn-fav-name-wr> <u>a</u>s <input id=cn-fav-name></label>
-    <p>Connection <u>t</u>ype:
+    <p><label for=cn-type>Connection <u>t</u>ype:</label>
       <select id=cn-type>
         <option value=tcp   >Connect to an interpreter
         <option value=start >Start an interpreter
@@ -38,7 +38,8 @@
         <p><label><input name=ssl type=checkbox id=cn-ssl-cb><u>S</u>ecure connection (TLS/SSL)</label>
         <div id=cn-ssl-detail class=indent>
           <p><label><input type=checkbox id=cn-cert-cb>Provide c<u>e</u>rtificate</label>
-             <input id=cn-cert name=cert type=file>
+             <input id=cn-cert name=cert><button id=cn-cert-dots>...</button> <span class=cn-hint>(PEM file)</span>
+             <input id=cn-cert-file type=file style=display:none>
           <p><label><input type=checkbox id=cn-subj-cb><u>V</u>alidate server subject name</label>
              <input id=cn-subj name=subj>
         </div>

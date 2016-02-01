@@ -100,7 +100,7 @@ $(function(){
     if(e.altKey&&!e.ctrlKey&&!e.metaKey&&64<e.which&&e.which<91){ // Alt-A...Alt-Z or Alt-Shift-A...Alt-Shift-Z
       var c=String.fromCharCode(e.which).toLowerCase(),C=c.toUpperCase()
       var $a=$('u:visible').filter(function(){var h=this.innerHTML;return h===c||h===C}).closest(':input,label')
-      $a=$a.map(function(){return $(this).is('label')?$(this).find(':input').eq(0):this})
+      $a=$a.map(function(){var $t=$(this),id=$t.attr('for');return!$t.is('label')?$t:id?$('#'+id):$(':input',$t).eq(0)})
       var $b=$a.filter('.ui-dialog *');$b.length&&($a=$b)
       $a.eq(($a.index(':focus')+1)%$a.length).focus();$a.length===1&&$a.click();return!1
     }
