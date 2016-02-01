@@ -78,8 +78,8 @@ $(function(){
     prefs.theme(D.mac||/^(darwin|mac|ipad|iphone|ipod)/i.test(navigator?navigator.platform:'')?'cupertino':
                 D.win||/^win/.test(navigator?navigator.platform:'')?'redmond':'classic')
   }
-  $('body').addClass('theme-'+prefs.theme())
-  prefs.theme(function(x,old){$('body').removeClass('theme-'+old).addClass('theme-'+x);D.ide&&D.ide.layout.resizeAll()})
+  function updThm(){$('#thm').html('@import url(themes/'+prefs.theme()+'.css);')}
+  prefs.theme(function(){updThm();D.ide&&D.ide.layout.resizeAll()});updThm()
 
   D.nwjs&&$('body').addClass(D.mac?'platform-mac':D.win?'platform-windows':'')
 

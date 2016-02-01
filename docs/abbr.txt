@@ -48,4 +48,5 @@ stk   stack
 tb    toolbar
 thm   theme
 tid   id returned by setTimeoutId()
+upd   update
 win   window (session or editor)

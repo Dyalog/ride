@@ -3,7 +3,7 @@ set -e -o pipefail
 export PATH="$(dirname "$0")/node_modules/.bin:$PATH"
 cd "$(dirname "$0")"
 if [ ! -e node_modules ]; then npm i; fi
-mkdir -p build/{js/client,nw,tmp,static}
+mkdir -p build/{js/client,nw,nw/themes,tmp,static}
 
 cp -uvr *.html proxy.js style/{*.png,apl385.woff,img} favicon.ico package.json build/nw/
 cp -uvr client build/js/
@@ -11,6 +11,7 @@ cp -uvr client build/js/
 i=style/style.less o=build/nw/style.css
 if [ ! -e $o -o $(find "$(dirname $i)" -type f -newer $o 2>/dev/null | wc -l) -gt 0 ]; then
   echo 'preprocessing css'; lessc $i >$o
+  for t in classic redmond cupertino; do lessc style/themes/${t}.less >build/nw/themes/${t}.css; done
 fi
 
 nm=node_modules cm=$nm/codemirror cma=$cm/addon
