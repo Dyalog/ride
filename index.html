@@ -44,7 +44,7 @@
         </div>
       </div>
       <div id=cn-start style=display:none>
-        <p><label><input id=cn-ssh name=ssh type=checkbox> Do this over <u>s</u>sh</label>
+        <p><label><input id=cn-ssh name=ssh type=checkbox> Do that over <u>s</u>sh</label>
         <div id=cn-ssh-detail class=indent>
           <p><label for=cn-ssh-user><u>U</u>ser</label> @
              <label for=cn-ssh-host><u>h</u>ost</label> :
@@ -53,12 +53,12 @@
              <input id=cn-ssh-host name=host size=12> :
              <input id=cn-ssh-port name=port size=4 placeholder=22>
           <p><label>Pass<u>w</u>ord: <input id=cn-ssh-pass type=password></label>
-             <span class=cn-explanation>(not remembered)</span>
+             <span class=cn-hint>(not remembered)</span>
         </div>
         <p><label><u>I</u>nterpreter: <select id=cn-exes name=exes></select></label>
            <input id=cn-exe name=exe placeholder='path to executable'>
         <p><label for=cn-env><u>E</u>nvironment variables:</label><br>
-           <span class=cn-explanation>(key=value, one pair per line, no extra spaces, no quoting or escaping of value)</span>
+           <span class=cn-hint>(key=value, one pair per line, no extra spaces, no quoting or escaping of value)</span>
            <textarea id=cn-env name=env cols=40 rows=4></textarea><br>
            <span id=cn-env-add>For example: <a href=#>MAXWS=4G</a>, <a href=#>AUTOPW=1</a>, ...</span>
       </div>
