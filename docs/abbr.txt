@@ -26,11 +26,13 @@ kw    keyword; sometimes used as a synonym for "control structure"
 lbar  language bar
 lbl   label
 lc    locale
+lhs   left-hand side
 msg   message
 pfx   prefix
 pos   position
 pref  preference(s); usually as described in ../client/prefs.js
 re    regular expression; sometimes used as a prefix to variable names
+rhs   right-hand side
 rp    replace (like Dyalog's RP command)
 rst   reset
 sc    search (like Dyalog's SC command)
