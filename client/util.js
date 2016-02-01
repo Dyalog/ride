@@ -34,12 +34,11 @@ $.confirm=function(m,t,f){ // m:message, t:title, f:callback
     {html:'<u>N</u>o' ,accesskey:'n',click:function(){r=0;$(this).dialog('close')}},
   ]})
 }
-$.fn.insert=function(s){ // replace selection in an <input> or <textarea> with s
-  return this.each(function(){
-    if(!this.readOnly){
-      var e=this,i=e.selectionStart,j=e.selectionEnd  // TODO: IE
-      if(i!=null&&j!=null){e.value=e.value.slice(0,i)+s+e.value.slice(j);e.selectionStart=e.selectionEnd=i+s.length}
-    }
+$.fn.insert=function(s){
+  return this.each(function(){ // replace selection in an <input> or <textarea> with s
+    if(!$(this).is(':text,textarea')||this.readOnly)return
+    var e=this,i=e.selectionStart,j=e.selectionEnd  // TODO: IE
+    if(i!=null&&j!=null){e.value=e.value.slice(0,i)+s+e.value.slice(j);e.selectionStart=e.selectionEnd=i+s.length}
   })
 }
 $.fn.elastic=function(){ // as you type in an <input>, it stretches as necessary to accommodate the text
