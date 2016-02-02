@@ -4,6 +4,7 @@ var q={} // mapping between ids and jQuery objects
 var $sel=$(),sel,$d // $sel:selected item(s), sel: .data('cn') of the selected item (only if it's unique), $d:dialog
 var DFLT_NAME='[New Connection]',TMP_NAME='[Temporary Connection]',MIN_VER=[14,1] // minimum supported version
 var proxyInfo={interpreters:[]}
+var user=D.process?D.process.env.USER:''
 function cmpVer(x,y){return x[0]-y[0]||x[1]-y[1]||0} // compare two versions of the form [major,minor]
 function save(){prefs.favs($('>*',q.favs).map(function(){var h=$(this).data('cn');return h.tmp?null:h}).toArray())}
 function favText(x){return x.tmp?TMP_NAME:x.name||DFLT_NAME}
@@ -38,7 +39,7 @@ module.exports=function(){
   q.type.change(function(){sel.type=this.value;updateFormDetail();save()})
   updateFormDetail()
   q.ssh.change(function(){q.ssh_detail.toggle(this.checked);updateExes()})
-  q.ssh_detail.find('[name=user]').prop('placeholder',process.env.USER||'')
+  q.ssh_detail.find('[name=user]').prop('placeholder',user)
   q.exe.on('change keyup',function(){q.exes.val()||prefs.otherExe($(this).val())})
   q.exes.change(function(){
     var v=$(this).val(),$e=q.exe.val(v||prefs.otherExe()).prop('readonly',!!v).change();v||$e.focus()
@@ -153,7 +154,7 @@ function go(){
         if(!pw){$.alert('"password" is required','Error',function(){q.ssh_pass.focus()});return}
         $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
           .dialog({modal:1,width:350,title:'Connecting...'})
-        D.socket.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||process.env.USER,pass:pw,env:env})
+        D.socket.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||user,pass:pw,env:env})
       }else{
         D.socket.emit('*launch',{exe:sel.exe,env:env})
       }
