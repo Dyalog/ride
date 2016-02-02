@@ -85,6 +85,5 @@ $.fn.splitter=function(args){ // methvin.com/splitter
       resplit(!isNaN(size)?size:(!(o.sizeRight||o.sizeBottom)?$a[0][o.pxSplit]:$s._DA-$b[0][o.pxSplit]-$m._DA))
     }).trigger('resize',[p0])
     $(window).bind('resize',function(e){e.target===window&&$s.trigger('resize')})
-    D.nww.showDevTools()
   })
 }
