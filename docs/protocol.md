@@ -267,9 +267,8 @@ Request resumption of all threads. (Green arrow in ODE)
 ```json
 ["Cutback",{"win":123}] // RIDE -> Interpreter
 ```
-Request the stack is cut back one level.
-
-:red_circle: "Step out"?
+Request the stack is cut back one level.  This is equivalent to returning to the caller without executing the rest of
+the current function.
 
 <a name=TraceForward></a>
 ```json
@@ -337,7 +336,7 @@ shouldn't block while it's waiting for the response.
 
 <a name=ReplyGetAutoComplete></a>
 ```json
-["ReplyGetAutoComplete",{"skip":2,"options":["ab","abc","abde"],"token":234}]
+["ReplyGetAutoComplete",{"skip":2,"options":["ab","abc","abde"],"token":234}] // Interpreter -> RIDE
 ```
 * `skip`: how many characters before the request's `pos` to replace with an element of `options`
 
@@ -357,22 +356,6 @@ arrive in the same order, if ever.
 :red_circle: The interpreter doesn't support these
 
 :red_circle: RIDE sends `GetValueTip`-s but doesn't process the responses.
-
-#Language bar
-RIDE can request information about the language bar with
-<a name=GetLanguageBar></a>
-```json
-["GetLanguageBar",{}] // RIDE -> Interpreter
-```
-The interpreter sends the `LanguageBar` after such a request and every time there's a change in it.
-<a name=LanguageBar></a>
-```json
-["LanguageBar",{"elements":[ // Interpreter -> RIDE
-  {"desc":"Left Arrow","chr":"←","text":"Dyadic function: Assignment\n..."},
-  ...
-]}]
-```
-:red_circle: RIDE2+ has built-in information about the language bar.  It doesn't use the messages described here.
 
 #Dialogs
 The interpreter can ask RIDE to interact with the user by showing a modal dialog.
@@ -398,22 +381,6 @@ Two types of dialogs are supported:
 ```
 
 #Other
-<a name=GetSessionContent></a>
-```json
-["GetSessionContent",{}] // RIDE -> Interpreter
-```
-:red_circle: Not used in RIDE2+. The interpreter side sends the session content automatically on connection.
-
-Request the current content of the session.
-
-<a name=UpdateAllWindows></a>
-```json
-["UpdateAllWindows",{}] // RIDE -> Interpreter
-```
-:red_circle: Not used in RIDE2+
-
-Request the interpreter sends [`UpdateWindow`](#UpdateWindow) messages for all currently open windows.
-
 <a name=ShowHTML></a>
 ```json
 ["ShowHTML",{"title":"Example","html":"<i>Hell</i><b>o</b> world"}] // Interpreter -> RIDE
@@ -424,8 +391,9 @@ See
 
 <a name=StatusOutput></a>
 ```json
-["StatusOutput",{"text":"Bla-blah"}] // Interpreter -> RIDE
+["StatusOutput",{"text":"Bla-blah","flags":4}] // Interpreter -> RIDE
 ```
+Constants for `flags`: `1` information message, `2` error message, `4` warning message
 :red_circle: Not supported in RIDE but likely will be in the future.
 
 Status information that should be displayed to the user.
