@@ -1,5 +1,6 @@
 'use strict'
-require('./jq-list');var IDE=require('./ide').IDE,prefs=require('./prefs'),esc=require('./util').esc
+require('./jq-list');require('./jq-splitter')
+var IDE=require('./ide').IDE,prefs=require('./prefs'),esc=require('./util').esc
 var q={} // mapping between ids and jQuery objects
 var $sel=$(),sel,$d // $sel:selected item(s), sel: .data('cn') of the selected item (only if it's unique), $d:dialog
 var DFLT_NAME='[New Connection]',TMP_NAME='[Temporary Connection]',MIN_VER=[14,1] // minimum supported version
@@ -28,7 +29,8 @@ function updateExes(){
 }
 module.exports=function(){
   document.title='RIDE - Connect'
-  $('#cn').show().find('[id^=cn-]').each(function(){q[this.id.replace(/^cn-/,'').replace(/-/g,'_')]=$(this)})
+  $('#cn').show().css({position:'absolute',left:0,right:0,top:0,bottom:0}).splitter()
+    .find('[id^=cn-]').each(function(){q[this.id.replace(/^cn-/,'').replace(/-/g,'_')]=$(this)})
   q.fav_cb.change(function(){
     var c=this.checked;c?delete sel.tmp:(sel.tmp=1);$sel.find('a').text(favText(sel))
     q.fav_name_wr.toggle(c);c&&q.fav_name.focus();save()
@@ -95,7 +97,7 @@ module.exports=function(){
       function(r){if(r){var i=$sel.eq(0).index();$sel.remove();q.favs.list('select',i,1);save()}})
   })
   q.go.click(go)
-  q.lhs.resizable({handles:'e',resize:function(e,ui){q.rhs.css({left:ui.size.width+10})}})
+//  q.lhs.resizable({handles:'e',resize:function(e,ui){q.rhs.css({left:ui.size.width+10})}})
   $(':text',q.rhs).elastic()
   $(':text[name],textarea[name]',q.rhs).change(function(){var k=this.name,v=this.value;v?(sel[k]=v):delete sel[k];save()})
   $(':checkbox[name]',q.rhs).change(function(){this.checked?(sel[this.name]=1):delete sel[this.name];save()})

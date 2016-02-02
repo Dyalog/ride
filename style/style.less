@@ -25,7 +25,7 @@
 // general styles
 ::selection{.sel}
 ::-moz-selection{.sel} // must be a separate rule from ::selection
-body{.bg;padding:0;margin:0;font-family:sans-serif}
+body{.bg;padding:0;margin:0;font-family:sans-serif;overflow:hidden}
 // The following lines disable selection of UI elements:
 // https://stackoverflow.com/questions/826782/css-rule-to-disable-text-selection-highlighting/4358620#answer-4407335
 // -webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none
@@ -46,13 +46,13 @@ input,textarea,select,a{outline:0}
 // CodeMirror uses z-indices 1-10
 
 // connect page
-@p:5px; // padding
+#cn-lhs,#cn-rhs{position:absolute;top:0;bottom:0}
+#cn-lhs{left:0;width:250px;overflow:hidden}
+#cn-rhs{right:0;left:250px;padding:0;overflow:auto}
+#cn-rhs-inner{padding:0 8px}
+#cn-fav-btns{position:absolute;top:0;left:0;right:0;height:32px;overflow:hidden;width:9999px;padding:3px}
 #cn-fav-btns button,#cn-go{font-size:18px;min-width:75px}
 #cn .indent{margin-left:24px}
-#cn-lhs,#cn-rhs{position:absolute;top:@p;bottom:@p}
-#cn-lhs{left:@p;width:250px;border-right:solid #888 1px;overflow:hidden}
-#cn-rhs{right:@p;left:@p+250px;overflow:auto;padding:0 10px}
-#cn-fav-btns{position:absolute;top:0;left:0;right:@p;height:32px;overflow:hidden;width:9999px}
 #cn-dialog .visual-distraction{margin:50px}
 #cn-exe{width:100%;margin-top:2px}
 #cn-env{width:100%}
@@ -60,7 +60,7 @@ input,textarea,select,a{outline:0}
 #cn-cert-dots{width:32px}
 #cn-fav-cb-wr{line-height:32px}
 #cn-favs{
-  .inset;border-width:2px;border-style:solid;overflow:auto;position:absolute;left:0;right:@p;top:32px;bottom:0;padding:2px;
+  position:absolute;left:0;right:0;top:32px;bottom:0;.inset;border-width:2px;border-style:solid;overflow:auto;
   &>*{padding:2px 2px 2px 16px;margin-bottom:1px;background-color:#fff;cursor:default}
   .list-selection{&,& a{.sel}}
   .list-focus{outline:dotted #000 1px}
@@ -68,6 +68,7 @@ input,textarea,select,a{outline:0}
   .go:hover{background-color:orange;color:#000;cursor:pointer}
 }
 .cn-hint{font-size:14px;color:#666;font-style:italic}
+#cn .hsplitbar{width:6px;border-right:solid #888 1px}
 
 // IDE page
 //  ┌──────────────────────────────────────┐
