@@ -34,7 +34,7 @@ module.exports=function(){
     q.fav_name_wr.toggle(c);c&&q.fav_name.focus();save()
   })
   q.fav_name.prop('placeholder',DFLT_NAME).on('change keyup',function(e){
-    if(sel.name!==this.value){sel.name=this.value;$sel.find('a').text(favText(sel));save()}
+    var u=sel.name,v=this.value;if(u!==v){v?(sel.name=v):delete sel.name;$sel.find('a').text(favText(sel));save()}
   })
   q.type.change(function(){sel.type=this.value;updateFormDetail();save()})
   updateFormDetail()
@@ -56,7 +56,7 @@ module.exports=function(){
   q.subj_cb.change(function(){q.subj.prop('disabled',!this.checked).val('')})
            .click(function(){this.checked&&q.subj.focus()})
   q.cert_dots.click(function(){q.cert_file.click()})
-  q.cert_file.change(function(){q.cert.val(this.value).elastic()})
+  q.cert_file.change(function(){q.cert.val(this.value).elastic().change()})
   prefs.favs().forEach(function(x){q.favs.append(favDOM(x))})
   q.favs.list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
     .on('click','.go',function(e){q.favs.list('select',$(this).parentsUntil(q.favs).last().index());q.go.click()})
@@ -97,9 +97,8 @@ module.exports=function(){
   q.go.click(go)
   q.lhs.resizable({handles:'e',resize:function(e,ui){q.rhs.css({left:ui.size.width+10})}})
   $(':text',q.rhs).elastic()
-  $(':text[name],textarea[name]',q.rhs)
-    .on('keyup change',function(){var k=this.name,v=this.value;if(sel[k]!==v){sel[k]=v;save()}})
-  $(':checkbox[name]',q.rhs).change(function(){var k=this.name,v=+this.checked;if(sel[k]!==v){sel[k]=v;save()}})
+  $(':text[name],textarea[name]',q.rhs).change(function(){var k=this.name,v=this.value;v?(sel[k]=v):delete sel[k];save()})
+  $(':checkbox[name]',q.rhs).change(function(){this.checked?(sel[this.name]=1):delete sel[this.name];save()})
   D.socket
     .on('*proxyInfo',function(x){proxyInfo=x;updateExes()})
     .on('*connected',function(x){if($d){$d.dialog('close');$d=null};new IDE().setHostAndPort(x.host,x.port)})
