@@ -96,7 +96,6 @@ $(function(){
   // Implement access keys (Alt-X) using <u></u>.
   // The built-in accesskey=X doesn't handle duplicates well -- it doesn't always focus the visible one.
   $(document).keydown(function(e){
-    if(e.which===123)D.nww.showDevTools()
     if(e.altKey&&!e.ctrlKey&&!e.metaKey&&64<e.which&&e.which<91){ // Alt-A...Alt-Z or Alt-Shift-A...Alt-Shift-Z
       var c=String.fromCharCode(e.which).toLowerCase(),C=c.toUpperCase()
       var $a=$('u:visible').filter(function(){var h=this.innerHTML;return h===c||h===C}).closest(':input,label')
