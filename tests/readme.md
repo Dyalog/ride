@@ -1,10 +1,10 @@
 #Running the test suite
 
-Use a 64-bit Linux Unicode interpreter.  Clear the session log (e.g. `rm "$OBJDIR"/default.dlf` if the interpreter is from a development version) and reset RIDE's preferences to factory defaults (`rm -r ~/.config/ride20`).
+Use a 64-bit Linux Unicode interpreter.  Clear the session log (e.g. `rm "$OBJDIR"/default.dlf` if the interpreter is from a development version) and reset RIDE's preferences to factory defaults (`rm -r ~/.config/ride30`).
 
 Build RIDE (`./dist.sh linux64`) and run it with autospawning and load the test framework:
 
-    RIDE_SPAWN=1 RIDE_JS=tests/t.js build/ride20/linux64/ride20
+    RIDE_SPAWN=1 RIDE_JS=tests/t.js build/ride30/linux64/ride30
 
 RIDE's main window and a devtools window should appear near the right edge of your screen.
 The latter will print test actions as they are being executed (lines from `test/t.txt`)

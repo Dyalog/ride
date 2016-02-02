@@ -26,18 +26,18 @@ case `uname` in
     Linux)
           case `uname -m` in
             x86_64)
-                RIDEBIN=linux64/ride20
+                RIDEBIN=linux64/ride30
                 ;;
               x86)
-                RIDEBIN=linux32/ride20
+                RIDEBIN=linux32/ride30
                 ;;
           esac
           ;;
     Darwin)
-          RIDEBIN=osx64/ride20.app/Contents/MacOS/node-webkit
+          RIDEBIN=osx64/ride30.app/Contents/MacOS/node-webkit
           ;;
     MINGW*)
-          RIDEBIN=win32/ride20.exe
+          RIDEBIN=win32/ride30.exe
           ;;
 esac
 

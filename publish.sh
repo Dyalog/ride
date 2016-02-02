@@ -6,7 +6,7 @@ BASE_VERSION=`node -pe "($(cat package.json)).version"`
 VERSION="${BASE_VERSION%%.0}.`git rev-list HEAD --count`"  # "%%.0" strips trailing ".0"
 echo "Current branch: ${GIT_BRANCH#*/}"
 CURRENTBRANCH=${GIT_BRANCH#*/}
-APP_NAME=$(node -e "console.log($(cat package.json).name)") # "ride20" or similar
+APP_NAME=$(node -e "console.log($(cat package.json).name)") # "ride30" or similar
 
 umask 002 # user and group can do everything, others can only read and execute
 mountpoint /devt; echo Devt is mounted: good # make sure it's mounted

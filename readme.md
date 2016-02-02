@@ -14,7 +14,7 @@
 * `cd ride`
 * `npm i  # npm is a tool that comes with nodejs, it downloads js dependencies`
 * `./dist.sh linux64  # downloads NW.js on first run, may take a few minutes`
-* `build/ride20/linux64/ride20  # start RIDE`
+* `build/ride30/linux64/ride30  # start RIDE`
 
 ##Windows
 * install [Virtual Box](https://www.virtualbox.org/), [Vagrant](https://www.vagrantup.com/),
