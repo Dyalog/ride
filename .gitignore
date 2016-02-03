@@ -4,5 +4,6 @@ cache/
 .vagrant
 aplcore
 CONTINUE
+CONTINUE.dws
 GHTOKEN
 npm-debug.log
