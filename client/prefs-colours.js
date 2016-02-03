@@ -130,9 +130,9 @@ this.init=function($e){
   var u=[],fg;for(var g in scm)(fg=scm[g].fg)&&u.indexOf(fg)<0&&u.push(fg);u.sort() // u: unique colours
   $e.html(
     '<div id=col-top>'+
-      '<label>Scheme: <select id=col-scm></select></label>'+
+      '<label><u>S</u>cheme: <select id=col-scm></select></label>'+
       '<input id=col-new-name class=text-field>'+
-      '<button id=col-clone ><u>C</u>lone</button>  '+
+      '<button id=col-clone >C<u>l</u>one</button>  '+
       '<button id=col-rename><u>R</u>ename</button> '+
       '<button id=col-delete><u>D</u>elete</button> '+
     '</div>'+
@@ -140,8 +140,8 @@ this.init=function($e){
     '<div id=col-settings>'+
       '<datalist id=col-list>'+u.map(function(c){return'<option value='+c+'>'}).join('')+'</datalist>'+
       '<select id=col-group>'+G.map(function(g,i){return'<option value='+i+'>'+g.s}).join('')+'</select>'+
-      '<p id=col-fg-p><label><input type=checkbox id=col-fg-cb>Foreground</label> <input type=color id=col-fg list=col-list>'+
-      '<p id=col-bg-p><label><input type=checkbox id=col-bg-cb>Background</label> <input type=color id=col-bg list=col-list>'+
+      '<p id=col-fg-p><label><input type=checkbox id=col-fg-cb><u>F</u>oreground</label> <input type=color id=col-fg list=col-list>'+
+      '<p id=col-bg-p><label><input type=checkbox id=col-bg-cb><u>B</u>ackground</label> <input type=color id=col-bg list=col-list>'+
       '<div id=col-bgo title=Transparency></div>'+
       '<p id=col-BIU-p>'+
         '<label><input type=checkbox id=col-B><b>B</b></label>'+
@@ -159,8 +159,8 @@ this.init=function($e){
     scm.name='';scm.name=uniqScmName(newName)
     $('#prefs-tab-colours').removeClass('renaming');updScms()
   }).keydown(function(e){switch(e.which){ // todo
-    case 13:$(this)                 .blur();return!1 // enter
-    case 27:$(this).val(scm.name).blur();return!1 // esc
+    /*enter*/case 13:$(this)              .blur();return!1
+    /*esc  */case 27:$(this).val(scm.name).blur();return!1
   }})
   $('#col-clone').click(function(){
     var x={};scms.push(x);for(var k in scm)x[k]=$.extend({},scm[k]) // x:the new scheme

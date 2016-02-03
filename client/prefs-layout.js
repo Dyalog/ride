@@ -8,7 +8,7 @@ function U(c){return'U+'+('000'+c.charCodeAt(0).toString(16).toUpperCase()).slic
 this.init=function($e){
   var sk={15:'←',16:'↹',30:'Caps',43:'↲',44:'⇧',57:'⇧'} // special keys
   $e.html(
-    '<label id=layout-pfx-label>Prefix: <input id=layout-pfx class=text-field size=1></label>'+
+    '<label id=layout-pfx-label><u>P</u>refix: <input id=layout-pfx class=text-field size=1></label>'+
     '<button id=layout-rst><u>R</u>eset</button>'+
     '<table id=layout-legend class=key'+
           ' title="Prefix followed by shift+key produces the character in red.\n'+
@@ -16,7 +16,7 @@ this.init=function($e){
       '<tr><td class=g2>⇧x</td><td class=g3><span class=pfx2>`</span>&nbsp;⇧x</td></tr>'+
       '<tr><td class=g0>x</td><td class=g1><span class=pfx2>`</span>&nbsp;x</td></tr>'+
     '</table>'+
-    '<label id=layout-lc-label>Locale:'+
+    '<label id=layout-lc-label><u>L</u>ocale:'+
     '  <select id=layout-lc>'+
         ((function(){var r=[];for(var lc in layouts)r.push('<option>'+lc);return r})()).sort().join('')+
     '  </select>'+

@@ -5,19 +5,18 @@ var h={} // various input elements
 this.init=function($e){
   $e[0].innerHTML=
     '<div>'+
-      '<p><label><input id=code-ai   type=checkbox>Auto-indent</label> <label><input id=code-sw  size=1> spaces</label>'+
-      '<p><label><input id=code-aim  type=checkbox>in methods:</label> <label><input id=code-swm size=1> spaces</label>'+
-      '<p><label><input id=code-icom type=checkbox>Indent lines that contain only a comment</label>'+
-      '<p><label><input id=code-io   type=checkbox>Indent content when an editor is opened</label>'+
-      '<p><label><input id=code-mb   type=checkbox>Highlight matching brackets: <tt>()[]{}</tt></label></p>'+
-      '<p><label><input id=code-acbr type=checkbox>Auto-close brackets</label>'+
-      '<p><label><input id=code-acbl type=checkbox>Auto-close blocks: <tt>:If :For ...</tt></label>'+
-         '<label>with <select id=code-acbe><option value=0>:EndIf,:EndFor,...<option value=1>just :End</select></label>'+
-      '<p><label><input id=code-ac   type=checkbox>Autocompletion</label> <label>after <input id=code-acd size=5>ms</label>'+
-      '<p><label><input id=code-fold type=checkbox>Code folding (outlining)</label>'+
+      '<p><label><input id=code-ai   type=checkbox>A<u>u</u>to-indent</label> <label><input id=code-sw  size=1> spaces</label>'+
+      '<p><label><input id=code-aim  type=checkbox>in <u>m</u>ethods:</label> <label><input id=code-swm size=1> spaces</label>'+
+      '<p><label><input id=code-icom type=checkbox><u>I</u>ndent lines that contain only a comment</label>'+
+      '<p><label><input id=code-io   type=checkbox>I<u>n</u>dent content when an editor is opened</label>'+
+      '<p><label><input id=code-mb   type=checkbox><u>H</u>ighlight matching brackets: <tt>()[]{}</tt></label></p>'+
+      '<p><label><input id=code-acbr type=checkbox>Au<u>t</u>o-close brackets</label>'+
+      '<p><label><input id=code-acbl type=checkbox>Auto-c<u>l</u>ose blocks: <tt>:If :For ...</tt></label>'+
+         '<label><u>w</u>ith <select id=code-acbe><option value=0>:EndIf,:EndFor,...<option value=1>just :End</select></label>'+
+      '<p><label><input id=code-ac   type=checkbox>Autocom<u>p</u>letion</label> <label>a<u>f</u>ter <input id=code-acd size=5>ms</label>'+
+      '<p><label><input id=code-fold type=checkbox>Co<u>d</u>e folding (outlining)</label>'+
     '</div>'
-  var a=['ai','sw','aim','swm','icom','io','mb','acbr','acbl','acbe','ac','acd','fold']
-  for(var i=0;i<a.length;i++)h[a[i]]=document.getElementById('code-'+a[i])
+  $('[id^=code-]',$e).each(function(){h[this.id.replace(/^code-/,'')]=this})
   $(h.ai).add(h.aim)
     .change(function(x){h.sw.disabled=h.aim.disabled=!h.ai.checked;h.swm.disabled=!h.ai.checked||!h.aim.checked})
   on(h.acbl,'change',function(){h.acbe.disabled=!this.checked})
