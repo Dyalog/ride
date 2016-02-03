@@ -378,7 +378,6 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 @keyframes         Waiting{0%{margin-left:0};100%{margin-left:70%}}
 
 // jQuery UI - v1.10.4 - 2014-01-17, heavily customized
-
 .ui-helper-hidden{display:none}
 .ui-helper-hidden-accessible{border:0;clip:rect(0 0 0 0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}
 .ui-helper-reset{margin:0;padding:0;border:0;outline:0;line-height:1.3;text-decoration:none;font-size:100%;list-style:none}
@@ -390,61 +389,19 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 .ui-icon{display:block;text-indent:-99999px;overflow:hidden;background-repeat:no-repeat}
 .ui-widget-overlay{position:fixed;top:0;left:0;width:100%;height:100%}
 .ui-button{
-  .outset;.bg;border-style:solid;border-width:1px;min-width:75px;display:inline-block;position:relative;padding:0;
-  line-height:normal;margin-right:.1em;cursor:default;vertical-align:middle;text-align:center;
-  overflow:visible; // removes extra width in IE
+  min-width:75px;display:inline-block;position:relative;overflow:visible; // removes extra width in IE
   &,&:link,&:visited,&:hover,&:active{text-decoration:none;color:#000}
   &:active{border-color:#000}
   &.ui-button-disabled:active{.outset}
 }
-
-// to make room for the icon, a width needs to be set here
-.ui-button-icon-only {width:2.2em} button.ui-button-icon-only {width:2.4em}
-.ui-button-icons-only{width:3.4em} button.ui-button-icons-only{width:3.7em}
-
-// button text element
 .ui-button .ui-button-text{display:block;line-height:normal;cursor:normal}
 .ui-button:focus,button:focus{outline:dotted #000 1px;outline-offset:-4px}
 .ui-button:active .ui-button-text{border-color:#000}
 .ui-button-text-only .ui-button-text{min-width:75px;border-width:0;padding:1px 0}
 .ui-button-text-only:active .ui-button-text{border-color:#808080}
 .ui-button-text-only.ui-button-disabled:active .ui-button-text{border-color:transparent #808080 #808080 transparent}
-.ui-button-icon-only .ui-button-text,.ui-button-icons-only .ui-button-text{padding:0;text-indent:-9999999px}
-.ui-button-text-icon-primary .ui-button-text,.ui-button-text-icons .ui-button-text{padding:.4em 1em .4em 2.1em}
-.ui-button-text-icon-secondary .ui-button-text,.ui-button-text-icons .ui-button-text{padding:.4em 2.1em .4em 1em}
-.ui-button-text-icons .ui-button-text{padding-left:2.1em;padding-right:2.1em}
-// no icon support for input elements, provide padding by default
 input.ui-button{padding:0 5px}
-
-// button icon element(s)
-.ui-button-icon-only           .ui-icon,
-.ui-button-text-icon-primary   .ui-icon,
-.ui-button-text-icon-secondary .ui-icon,
-.ui-button-text-icons          .ui-icon,
-.ui-button-icons-only          .ui-icon{
-  position:absolute;top:50%;margin-top:-9px
-}
-
-.ui-button-icon-only .ui-icon{left:50%;margin-left:-9px}
-
-.ui-button-text-icon-primary .ui-button-icon-primary,
-.ui-button-text-icons        .ui-button-icon-primary,
-.ui-button-icons-only        .ui-button-icon-primary{
-  left:.5em
-}
-
-.ui-button-text-icon-secondary .ui-button-icon-secondary,
-.ui-button-text-icons          .ui-button-icon-secondary,
-.ui-button-icons-only          .ui-button-icon-secondary{
-  right:.5em
-}
-
-// button sets
-.ui-buttonset{
-  margin-right:7px;
-  .ui-button{margin-left:0;margin-right:-.3em}
-}
-
+.ui-buttonset{margin-right:7px;.ui-button{margin-left:0;margin-right:-.3em}}
 .ui-dialog{
   .outset;border-style:solid;border-width:1px;overflow:hidden;position:absolute;top:0;left:0;padding:0;outline:0;text-align:center;
   .ui-dialog-titlebar{.sel;padding:0 8px;margin-bottom:1px;position:relative;height:22px;line-height:20px;cursor:default}
@@ -454,7 +411,7 @@ input.ui-button{padding:0 5px}
   .ui-resizable-se{width:12px;height:12px;right:-5px;bottom:-5px;background-position:16px 16px}
   .ui-dialog-buttonpane{
     text-align:center;border-width:1px 0 0 0;background-image:none;margin-top:.5em;padding:.3em 1em .5em .4em;
-    .ui-button{.bg;margin:0 5px}
+    .ui-button{margin:0 5px}
   }
 }
 
