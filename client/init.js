@@ -98,7 +98,8 @@ $(function(){
   $(document).keydown(function(e){
     if(e.altKey&&!e.ctrlKey&&!e.metaKey&&64<e.which&&e.which<91){ // Alt-A...Alt-Z or Alt-Shift-A...Alt-Shift-Z
       var c=String.fromCharCode(e.which).toLowerCase(),C=c.toUpperCase()
-      var $a=$('u:visible').map(function(){
+      var $ctx=$('.ui-widget-overlay').length?$('.ui-dialog').last():$('body') // modal dialogs take priority
+      var $a=$('u:visible',$ctx).map(function(){
         var h=this.innerHTML;if(h!==c&&h!==C)return
         var $i=$(this).closest(':input,label').eq(0)
         if($i.is('label'))$i=$('#'+$i.attr('for')).add($i.find(':input')).eq(0)
