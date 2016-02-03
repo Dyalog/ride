@@ -75,7 +75,7 @@ module.exports=function(){
       q.clone.attr('disabled',!u);q.del.attr('disabled',!$sel.length);q.rhs.toggle(u)
       sel=u?$sel.data('cn'):null
       if(u){
-        q.type.val(sel.type||'tcp');updateFormDetail();updateExes()
+        q.type.val(sel.type||'connect');updateFormDetail();updateExes()
         q.fav_cb.prop('checked',!sel.tmp);q.fav_name.val(sel.name);q.fav_name_wr.toggle(!sel.tmp)
         $(':text[name],textarea[name]',q.rhs).each(function(){$(this).val(sel[this.name])})
         $(':checkbox[name]',q.rhs).each(function(){$(this).prop('checked',+sel[this.name])})
@@ -124,7 +124,7 @@ function go(){
     }
     // validate rest of the form
     var t=q.type.val()
-    if(t==='tcp'){
+    if(t==='connect'){
       $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
         .dialog({modal:1,width:350,title:'Connecting...'})
       D.socket.emit('*connect',{host:sel.host,port:+sel.port||4502,ssl:sel.ssl,cert:sel.cert,subj:sel.subj})

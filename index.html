@@ -25,13 +25,13 @@
       <label id=cn-fav-name-wr> <u>a</u>s <input id=cn-fav-name></label>
     <p><label for=cn-type>Connection <u>t</u>ype:</label>
       <select id=cn-type>
-        <option value=tcp   >Connect to an interpreter
-        <option value=start >Start an interpreter
-        <option value=listen>Listen for connections from interpreters
+        <option value=connect>Connect to an interpreter
+        <option value=start  >Start an interpreter
+        <option value=listen >Listen for connections from interpreters
       </select>
     <hr>
     <div id=cn-detail>
-      <div id=cn-tcp style=display:none>
+      <div id=cn-connect style=display:none>
         <p><label for=cn-tcp-host><u>H</u>ost</label> and <label for=cn-tcp-port><u>p</u>ort:</label>
           <input id=cn-tcp-host name=host size=12> :
           <input id=cn-tcp-port name=port size=4 placeholder=4502>
