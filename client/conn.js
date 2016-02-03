@@ -140,7 +140,7 @@ function go(){
       ).dialog({modal:1,width:450,title:'Waiting for connection...',
                 buttons:[{html:'<u>C</u>ancel',click:function(){$d.dialog('close')}}],
                 close:function(){D.socket.emit('*listenCancel')}})
-      D.socket.emit('*listen',{host:sel.host,port:port})
+      D.socket.emit('*listen',{port:port})
     }else if(t==='start'){
       var env={},a=q.env.val().split('\n'),m
       for(var i=0;i<a.length;i++){
