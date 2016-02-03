@@ -32,7 +32,7 @@ this.Session=function(ide,e,opts){ // Session constructor
     var l0=c.from.line,l1=c.to.line,m=l1-l0+1,n=c.text.length
     for(var l in se.dirty)se.cm.addLineClass(+l,'background','modified')
   })
-  se.promptType=0 // 0=Invalid 1=Descalc 2=QuadInput 3=LineEditor 4=QuoteQuadInput 5=Prompt
+  se.promptType=0 // see ../docs/protocol.md #SetPromptType
   se.autocomplete=autocompletion.setUp(se)
   prefs.wrap(function(x){se.cm.setOption('lineWrapping',!!x);se.scrollCursorIntoView()})
 }
@@ -53,13 +53,13 @@ this.Session.prototype={
     cm.replaceRange((cm.getOption('readOnly')?(s0+s):s),{line:l,ch:0},{line:l,ch:s0.length},'D')
     cm.setCursor(cm.lastLine(),0)
   },
-  prompt:function(why){ // 0=NoPrompt 1=Descalc 2=QuadInput 3=LineEditor 4=QuoteQuadInput 5=Prompt
-    var cm=this.cm,l=cm.lastLine();this.promptType=why;cm.setOption('readOnly',!why);cm.setOption('cursorHeight',+!!why)
-    if(why===1&&this.dirty[l]==null||[0,1,3,4].indexOf(why)<0)
+  prompt:function(x){
+    var cm=this.cm,l=cm.lastLine();this.promptType=x;cm.setOption('readOnly',!x);cm.setOption('cursorHeight',+!!x)
+    if(x===1&&this.dirty[l]==null||[0,1,3,4].indexOf(x)<0)
       cm.replaceRange('      ',{line:l,ch:0},{line:l,ch:cm.getLine(l).length},'D')
     else if('      '===cm.getLine(l))cm.replaceRange('',{line:l,ch:0},{line:l,ch:6},'D')
     else cm.setCursor(l,cm.getLine(l).length)
-    why&&cm.clearHistory()
+    x&&cm.clearHistory()
   },
   updateSize:function(){
     var i=this.cm.getScrollInfo(),b=5>Math.abs(i.top+i.clientHeight-i.height) // b:are we at the bottom edge?
@@ -81,23 +81,20 @@ this.Session.prototype={
   refresh:function(){this.cm.refresh()},
   loadLine:function(s){var cm=this.cm,l=cm.lastLine();cm.replaceRange(s,{line:l,ch:0},{line:l,ch:cm.getLine(l).length})},
   exec:function(trace){
-    var es,l,ls,se=this
-    if(this.promptType){
-      ls=[];for(l in this.dirty)ls.push(+l)
-      if(ls.length){
-        ls.sort(function(x,y){return x-y})
-        es=ls.map(function(l){return se.cm.getLine(l)||''}) // strings to execute
-        ls.reverse().forEach(function(l){
-          se.cm.removeLineClass(l,'background','modified')
-          se.dirty[l]===0?se.cm.replaceRange('',{line:l,ch:0},{line:l+1,ch:0},'D')
-                         :se.cm.replaceRange(se.dirty[l],{line:l,ch:0},{line:l,ch:(se.cm.getLine(l)||'').length||0},'D')
-        })
-      }else{
-        es=[this.cm.getLine(this.cm.getCursor().line)]
-      }
-      this.opts.exec(es,trace);this.dirty={};this.histAdd(es.filter(function(x){return!/^\s*$/.test(x)}))
-      this.cm.clearHistory()
+    var es,l,ls=[],se=this;if(!se.promptType)return
+    for(l in se.dirty)ls.push(+l)
+    if(ls.length){
+      ls.sort(function(x,y){return x-y})
+      es=ls.map(function(l){return se.cm.getLine(l)||''}) // strings to execute
+      ls.reverse().forEach(function(l){
+        se.cm.removeLineClass(l,'background','modified')
+        se.dirty[l]===0?se.cm.replaceRange('',{line:l,ch:0},{line:l+1,ch:0},'D')
+                       :se.cm.replaceRange(se.dirty[l],{line:l,ch:0},{line:l,ch:(se.cm.getLine(l)||'').length||0},'D')
+      })
+    }else{
+      es=[se.cm.getLine(se.cm.getCursor().line)]
     }
+    se.opts.exec(es,trace);se.dirty={};se.histAdd(es.filter(function(x){return!/^\s*$/.test(x)}));se.cm.clearHistory()
   },
   ED:function(cm){var c=cm.getCursor();this.emit('Edit',{win:0,pos:c.ch,text:cm.getLine(c.line)})},
   BK:function(){this.histMove(1)},
