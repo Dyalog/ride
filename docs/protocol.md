@@ -27,7 +27,7 @@ end will send a reply, but that reply may not be the next message to be received
 
 If the receiver of a message does not recognise it, it should ignore it.
 
-:red_circle: This may need discussion.  Currently the interpreter complains with `UnknwonRIDECommand`.
+:red_circle: This may need discussion.  Currently the interpreter complains with `UnknownRIDECommand`.
 
 The connection may be closed at any time, leaving some messages undelivered or unprocessed.
 
@@ -82,38 +82,27 @@ These two perform essentially the same task except that `AppendSessionOutput` ne
 each element of `result`.
 
 The interpreter informs RIDE about changes in its ability to accept user input with
-<a name=NotAtInputPrompt></a><a name=AtInputPrompt></a>
+<a name=SetPromptType></a>
 ```json
-["NotAtInputPrompt",{}]                // Interpreter -> RIDE
-["AtInputPrompt",{"inputModeState":5}] // Interpreter -> RIDE
+["SetPromptType",{"type":5}] // Interpreter -> RIDE
 ```
-RIDE should display the appropriate prompt in accordance with `inputModeState`.
-
-Constants for `inputModeState`: `1` the usual 6-space APL prompt (a.k.a. Descalc or "desktop calculator"), `2`
+Constants for `type`: `0` no prompt, `1` the usual 6-space APL prompt (a.k.a. Descalc or "desktop calculator"), `2`
 [Quad(`⎕`)](http://help.dyalog.com/14.1/Content/Language/System%20Functions/Evaluated%20Input%20Output.htm) input, `3`
 line editor, `4`
 [Quote-Quad(`⍞`)](http://help.dyalog.com/14.1/Content/Language/System%20Functions/Character%20Input%20Output.htm) input,
-`5` prompt.
+`5` any prompt type unforeseen here.
 
 :red_circle: These modes need explaining with expected behaviour.
 
-:red_circle: What's inputModeState 5?
-
-:red_circle: Wouldn't it be better if we presented NotAtInputPrompt as an AtInputPrompt with inputModeState=0?  And
-perhaps rename this to `["SetPrompt",{"type":...}]`?
-
-:red_circle: Currently the interpreter sends `ReplyNotAtInputPrompt` instead of `NotAtInputPrompt`.
-
-In addition to `AtInputPrompt`, RIDE can request information about the interpreter's ability to accept input at any time
-through
+In addition to passively processing `SetPromptType` messages, RIDE can request information about the interpreter's
+ability to accept input at any time through
 <a name=CanSessionAcceptInput></a><a name=ReplyCanSessionAcceptInput></a>
 ```json
 ["CanSessionAcceptInput",{}]                           // RIDE -> Interpreter
 ["ReplyCanSessionAcceptInput",{"canAcceptInput":true}] // Interpreter -> RIDE
 ```
 
-:red_circle: Why ReplyCanSessionAcceptInput? Can't we reuse (Not)AtInputPrompt above.  RIDE is not using
-CanSessionAcceptInput anyway...
+:red_circle: RIDE2+ doesn't use these.
 
 When the user presses `<ER>` (Enter) or `<TC>` (Ctrl-Enter), RIDE sends
 <a name=Execute></a>
@@ -127,7 +116,7 @@ Note that RIDE can't assume that everything entered in the session will be echoe
 echo.  Therefore, RIDE should wait for the [`EchoInput`](#EchoInput) message.
 
 If multiple lines have been modified in the session, RIDE should queue them up and send them one by one, waiting for
-a response of either `AtInputPrompt` or
+a response of either `SetPromptType` with `type>0` or
 <a name=HadError></a>
 ```json
 ["HadError",{}]

@@ -73,10 +73,11 @@ this.IDE=function(){
     UpdateDisplayName:function(a){ide.wsid=a.displayName;ide.updateTitle()},
     EchoInput:function(x){ide.wins[0].add(x.input)},
     AppendSessionOutput:function(x){var r=x.result;ide.wins[0].add(typeof r==='string'?r:r.join('\n'))},
-    NotAtInputPrompt:function(){ide.wins[0].prompt(0)},
-    AtInputPrompt:function(x){
-      ide.pending.length?ide.emit('Execute',{trace:0,text:ide.pending.shift()+'\n'}):ide.wins[0].prompt(x.why)
-      x.why===4&&ide.wins[0].focus() // ⍞ input
+    NotAtInputPrompt:function(){handlers.SetPromptType({type:0})}, // todo: remove
+    AtInputPrompt:function(x){handlers.SetPromptType({type:x.why})}, // todo: remove
+    SetPromptType:function(x){
+      var t=x.type;t&&ide.pending.length?ide.emit('Execute',{trace:0,text:ide.pending.shift()+'\n'}):ide.wins[0].prompt(t)
+      t===4&&ide.wins[0].focus() // ⍞ input
     },
     HadError:function(){ide.pending.splice(0,ide.pending.length)},
     FocusWindow:throttle1(function(x){$('#wintab'+x.win+' a').click();var w=ide.wins[x.win];w&&w.focus()}),
