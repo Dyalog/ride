@@ -101,7 +101,8 @@ body{
       }
     }
   }
-  .ui-dialog-titlebar .ui-button{border:0;background-color:none}
+  .ui-dialog .ui-dialog-titlebar{background-color:transparent}
+  .ui-dialog .ui-dialog-titlebar .ui-button{border:0;background-color:none}
   .ui-widget-content{background-color:@cupertino-highlight}
   .toolbar{
     .tb-btn.pressed{background-color:@cupertino-highlight;color:#fff}
@@ -113,7 +114,7 @@ body{
       &.last{.border-radius-right(4px);margin-right:2px}
     }
   }
-  .ui-dialog .ui-dialog-title{color:#000;font-weight:normal}
+  .ui-dialog .ui-dialog-title{color:#000;font-weight:normal;text-align:center}
   .ui-widget-header{
     background-color:@cupertino-titlebar;
     .ui-dialog-titlebar-close .ui-icon{
@@ -126,8 +127,7 @@ body{
   }
   .ui-widget-content{background-color:@cupertino-bg;.border-radius-left(8px);.border-radius-right(8px)}
   ul#prefs-tabs-nav{background-color:@cupertino-bg}
-  .ui-dialog-titlebar .ui-button{position:absolute;left:2px;background-color:transparent}
-  .ui-dialog-title{text-align:center}
+  .ui-dialog .ui-dialog-titlebar .ui-button{position:absolute;left:2px;background-color:transparent}
   hr{border:0;border-top:@cupertino-border}
   .CodeMirror-focused .CodeMirror-selected{background-color:@cupertino-orange}
   .CodeMirror-selected{background-color:@cupertino-orange-fade}
