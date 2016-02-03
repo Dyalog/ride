@@ -1,8 +1,7 @@
 'use strict'
 // https://codemirror.net/doc/manual.html#modeapi
-var prefs=require('./prefs')
-var // regexes
-  letter=this.letter='A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ',
+var prefs=require('./prefs'),CM=CodeMirror
+var letter=this.letter='A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ',
   name0=RegExp('['+letter+']'),
   name1=RegExp('['+letter+'\\d]*'),
   name='(?:['+letter+']['+letter+'\\d]*)',
@@ -45,17 +44,16 @@ function escIdiom(s){
 var idiomsRE=RegExp('^(?:'+(idioms.sort(function(x,y){return y.length-x.length}).map(escIdiom).join('|'))+')','i')
 
 var sw=4,swm=2 // default indent unit and indent unit for methods; these are kept in sync with prefs
-function updateSW(){sw=prefs.indent();swm=prefs.indentMethods();swm<0&&(swm=sw)}
-updateSW();prefs.indent(updateSW);prefs.indentMethods(updateSW)
+function updSW(){sw=prefs.indent();swm=prefs.indentMethods();swm<0&&(swm=sw)}
+updSW();prefs.indent(updSW);prefs.indentMethods(updSW)
 
-var icom=prefs.indentComments()
-prefs.indentComments(function(x){icom=x})
+var icom=prefs.indentComments();prefs.indentComments(function(x){icom=x})
 
 var dfnDepth=this.dfnDepth=function(a){var r=0;for(var j=0;j<a.length;j++)a[j].t==='{'&&r++;return r}
 
-CodeMirror.defineMIME('text/apl','apl')
-CodeMirror.defineMode('apl',function(config){
-  var comMode=CodeMirror.getMode({},'text/apl-comments');if(!comMode.token||!comMode.startState)comMode=null
+CM.defineMIME('text/apl','apl')
+CM.defineMode('apl',function(config){
+  var comMode=CM.getMode({},'text/apl-comments');if(!comMode.token||!comMode.startState)comMode=null
   return{
     startState:function(){
       // hdr       are we at a location where a tradfn header can be expected?
@@ -79,9 +77,9 @@ CodeMirror.defineMode('apl',function(config){
         if(stream.sol()){
           return delete h.comState
         }else{
-          var h1=CodeMirror.copyState(comMode,h.comState)
+          var h1=CM.copyState(comMode,h.comState)
           var r=comMode.token(stream,h1)
-          h.comState=CodeMirror.copyState(comMode,h1)
+          h.comState=CM.copyState(comMode,h1)
           return r+' apl-com'
         }
       }else if(stream.match(idiomsRE)){
@@ -171,7 +169,7 @@ CodeMirror.defineMode('apl',function(config){
     electricInput:/(?::end|:else|:andif|:orif|:case|:until|:access|\}|∇)$/, // these trigger a re-indent
     indent:function(h,s){ // h:state, s:textAfter
       var a=h.a,la=a[a.length-1]
-      if(!icom&&/^\s*⍝/.test(s))return CodeMirror.Pass
+      if(!icom&&/^\s*⍝/.test(s))return CM.Pass
       else if(dfnDepth(a))return/^\s*\}/.test(s)?la.oi:la.ii
       else if(/^\s*∇/.test(s)){var i=a.length-1;while(i&&a[i].t!=='∇')i--;return i?a[i].oi:la.ii}
       else if(/^\s*:access/i.test(s))return la.t==='class'?la.oi:la.ii
@@ -185,32 +183,29 @@ CodeMirror.defineMode('apl',function(config){
 function stackStr(h){var a=h.a,r='';for(var i=0;i<a.length;i++)r+=a[i].t+' ';return r}
 
 function isPrefix(x,y){return x===y.slice(0,x.length)}
+var scmd=('classes clear cmd continue copy cs drop ed erase events fns holds intro lib load methods ns objects obs off'+
+          ' ops pcopy props reset save sh sic si sinl tid vars wsid xload').split(' ') // system commands
 
-var scmd= // system commands
-('classes clear cmd continue copy cs drop ed erase events fns holds intro lib load methods ns objects obs off'+
-' ops pcopy props reset save sh sic si sinl tid vars wsid xload').split(' ')
-
-CodeMirror.defineMIME('text/apl-session','apl-session')
-CodeMirror.defineMode('apl-session',function(config,modeConfig){
-  var im=CodeMirror.getMode(config,'text/apl'), se=modeConfig.se // im:inner mode, se:the Session object
+CM.defineMIME('text/apl-session','apl-session')
+CM.defineMode('apl-session',function(config,modeConfig){
+  var im=CM.getMode(config,'text/apl'), se=modeConfig.se // im:inner mode, se:the Session object
   return{
     startState:function(){return{l:0}}, // .l:line number, .h:inner state
-    copyState:function(h){h=CodeMirror.copyState({},h);h.h=CodeMirror.copyState(im,h.h);return h},
+    copyState:function(h){h=CM.copyState({},h);h.h=CM.copyState(im,h.h);return h},
     blankLine:function(h){h.l++},
     token:function(stream,h){var m
       if(se.dirty[h.l]==null){stream.skipToEnd();h.l++}
       else if(stream.sol()&&(m=stream.match(/^ *\)(\w+).*/))){h.l++;return !m[1]||scmd.indexOf(m[1])<0?'apl-err':'apl-scmd'}
       else{
         if(stream.sol()){h.h=im.startState();delete h.h.hdr}
-        var h1=CodeMirror.copyState(im,h.h), t=im.token(stream,h1)
-        if(stream.eol()){h.l++;delete h.h}else{h.h=CodeMirror.copyState(im,h1)}
+        var h1=CM.copyState(im,h.h), t=im.token(stream,h1)
+        if(stream.eol()){h.l++;delete h.h}else{h.h=CM.copyState(im,h1)}
         return t
       }
     }
   }
 })
-
-CodeMirror.registerHelper('fold','apl',function(cm,start){
+CM.registerHelper('fold','apl',function(cm,start){
   var l,l0=l=start.line,end=cm.lastLine()
   var x0=stackStr(cm.getStateAfter(l0-1))   // x0: the stackStr at the beginning of start.line
   var y0=stackStr(cm.getStateAfter(l0))     // y0: the stackStr at the end of start.line
@@ -222,7 +217,7 @@ CodeMirror.registerHelper('fold','apl',function(cm,start){
     }
     if(l<=end&&x0===y&&isPrefix(y,x)){
       while(l+1<=end&&/^ *$/.test(cm.getLine(l+1)))l++
-      return{from:CodeMirror.Pos(l0,cm.getLine(l0).length),to:CodeMirror.Pos(l,cm.getLine(l).length)}
+      return{from:CM.Pos(l0,cm.getLine(l0).length),to:CM.Pos(l,cm.getLine(l).length)}
     }
   }
 })

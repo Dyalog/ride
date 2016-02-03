@@ -23,16 +23,16 @@ this.init=function($e){
   )
     .on('mouseover','.shc-del',function(){$(this).parent().addClass   ('shc-del-hover')})
     .on('mouseout' ,'.shc-del',function(){$(this).parent().removeClass('shc-del-hover')})
-    .on('click','.shc-del',function(){$(this).parent().remove();updateDups();return!1})
+    .on('click','.shc-del',function(){$(this).parent().remove();updDups();return!1})
     .on('click','.shc-add',function(){
-      var $b=$(this);getKeystroke(function(k){k&&$b.parent().append(keyHTML(k)).append($b);updateDups()});return!1
+      var $b=$(this);getKeystroke(function(k){k&&$b.parent().append(keyHTML(k)).append($b);updDups()});return!1
     })
     .on('click','.shc-rst',function(){
       var $tr=$(this).closest('tr'),c=$tr.data('code')
       for(var i=0;i<cmds.length;i++)if(cmds[i][0]===c){
         $tr.find('.shc-key').remove()
         $tr.find('.shc-add').parent().prepend(cmds[i][2].map(keyHTML).join(''))
-        updateDups()
+        updDups()
       }
     })
   $sc=$('#shc-search').on('keyup change',function(){
@@ -68,7 +68,7 @@ this.load=function(){
     var c=cmds[i][0],d=cmds[i][2]
     $('#shc-'+c).html((h[c]||d).map(keyHTML).join('')).append('<a href=# class=shc-add>+</a>')
   }
-  updateDups();$sc.val()&&$sc.val('').change()
+  updDups();$sc.val()&&$sc.val('').change()
 }
 this.validate=function(){var $d=$('#shc-tbl-wr .shc-dup');if($d.length)return{msg:'Duplicate shortcuts',el:$d[0]}}
 this.save=function(){
@@ -80,11 +80,11 @@ this.save=function(){
   prefs.keys(h)
 }
 this.activate=function(){$sc.focus()}
-function updateKeys(x){
+function updKeys(x){
   var h=CodeMirror.keyMap.dyalog={fallthrough:'dyalogDefault'}
   for(var i=0;i<cmds.length;i++){var c=cmds[i][0],d=cmds[i][2],ks=x[c]||d;for(var j=0;j<ks.length;j++)h[ks[j]]=c}
 }
-prefs.keys(updateKeys);updateKeys(prefs.keys())
-function updateDups(){var h={} // h: maps keystrokes to jQuery objects
+prefs.keys(updKeys);updKeys(prefs.keys())
+function updDups(){var h={} // h: maps keystrokes to jQuery objects
   $('#shc-tbl-wr .shc-text').each(function(){var $t=$(this),k=$t.text();$t.add(h[k]).toggleClass('shc-dup',!!h[k]);h[k]=$t})
 }

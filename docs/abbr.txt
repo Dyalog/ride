@@ -36,6 +36,7 @@ rhs   right-hand side
 rp    replace (like Dyalog's RP command)
 rst   reset
 sc    search (like Dyalog's SC command)
+scm   scheme (like the typical extension for files containing mostly parens)
 sel   selection
 se    session
 sfx   suffix

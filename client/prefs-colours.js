@@ -1,8 +1,8 @@
 'use strict'
-var prefs=require('./prefs'),esc=require('./util').esc
 this.tabTitle='Colours'
+var prefs=require('./prefs'),esc=require('./util').esc
 var G=[],H={} // G:syntax highlighting groups {t,s,c,ctrls}; H:reverse lookup dict for G
-D.addSyntaxGroups=function(x){G=G.concat(x);H={};for(var i=0;i<G.length;i++)H[G[i].t]=i;builtInSchemes&&updateStyle()}
+D.addSyntaxGroups=function(x){G=G.concat(x);H={};for(var i=0;i<G.length;i++)H[G[i].t]=i;SCMS&&updStyle()}
 D.addSyntaxGroups([
   // t: token type, a short key for storing customisations in localStorage
   // s: string to display in the UI
@@ -58,8 +58,8 @@ D.addSyntaxGroups([
 //       },
 //       ...
 //     }
-// encodeScheme() and decodeScheme() convert between them
-function encodeScheme(x){
+// encodeScm() and decodeScm() convert between them
+function encodeScm(x){
   var s=''
   for(var g in x)if(g!=='name'){
     var u='';for(var p in x[g]){var v=x[g][p];u+=','+p;if('BIU'.indexOf(p)<0||!v)u+=':'+v}
@@ -67,7 +67,7 @@ function encodeScheme(x){
   }
   return{name:x.name,styles:s.slice(1)}
 }
-function decodeScheme(x){           // x:for example "num=fg:345,bg:f,B,U,bgo:.5 str=fg:2,I com=U"
+function decodeScm(x){              // x:for example "num=fg:345,bg:f,B,U,bgo:.5 str=fg:2,I com=U"
   var r={name:x.name}               // r:this will be the result
   var a=(x.styles||'').split(/\s+/) // a:for example ["num=fg:345,bg:f,B,U,bgo:.5","str=fg:2,I","com=U"]
   for(var i=0;i<a.length;i++)if(a[i]){
@@ -79,7 +79,7 @@ function decodeScheme(x){           // x:for example "num=fg:345,bg:f,B,U,bgo:.5
   }
   return r
 }
-var builtInSchemes=[
+var SCMS=[ // built-in schemes
   {name:'Default',styles:'asgn=fg:00f com=fg:088 dfn=fg:00f diam=fg:00f err=fg:f00 fn=fg:008 idm=fg:00f kw=fg:800 '+
     'lnum=fg:008,bg:f,bgo:1 mod=bg:e,bgo:1 mtch=bg:ff8,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 op1=fg:00f op2=fg:00f '+
     'par=fg:00f quad=fg:808 sel=bg:ddf,bgo:.5 semi=fg:00f sqbr=fg:00f srch=bg:f80,bgo:.5 str=fg:088 tc=bg:d,bgo:1 '+
@@ -93,13 +93,13 @@ var builtInSchemes=[
     'lnum=bg:f,bgo:1 mod=bg:e,bgo:1 mtch=bg:c,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 quad=fg:8 srch=bg:c,bgo:.5 '+
     'str=fg:8 tc=bg:e,bgo:1 zld=fg:8'},
   {name:'Kazimir Malevich',styles:''}
-].map(decodeScheme).map(function(x){x.frozen=1;return x})
-var schemes // all schemes (built-in and user-defined) as objects
-var scheme  // the active scheme object
+].map(decodeScm).map(function(x){x.frozen=1;return x})
+var scms    // all schemes (built-in and user-defined) as objects
+var scm     // the active scheme object
 var $cm,cm  // DOM element and CodeMirror instance for displaying sample code
 var sel     // the selected group's token type (.t)
-function renderCSS(scheme,rp){ // rp: css rule prefix
-  return G.map(function(g){var h=scheme[g.t];return!h?'':
+function renderCSS(scm,rp){ // rp: css rule prefix
+  return G.map(function(g){var h=scm[g.t];return!h?'':
     g.c.split(',').map(function(x){return(rp||'')+' '+x}).join(',')+'{'+
       (h.fg?'color:'+expandRGB(h.fg)+';'           :'')+
       (h.bg?'background-color:'+expandRGB(h.bg)+';':'')+
@@ -116,18 +116,18 @@ function shrinkRGB(s){
   if(!/^#.{6}$/.test(s))return s
   var r=s[1],R=s[2],g=s[3],G=s[4],b=s[5],B=s[6];return r!==R||g!==G||b!==B?s.slice(1):r===g&&g===b?r:r+g+b
 }
-function updateStyle(){ // update global style from what's in localStorage
-  var name=prefs.colourScheme(),a=builtInSchemes.concat(prefs.colourSchemes().map(decodeScheme))
+function updStyle(){ // update global style from what's in localStorage
+  var name=prefs.colourScheme(),a=SCMS.concat(prefs.colourSchemes().map(decodeScm))
   for(var i=0;i<a.length;i++)if(a[i].name===name){$('#col-style').text(renderCSS(a[i],'.ride-win'));break}
 }
-$(updateStyle);prefs.colourScheme(updateStyle);prefs.colourSchemes(updateStyle)
-function chooseUniqueSchemeName(s){ // s: suggested root
-  var h={};for(var i=0;i<schemes.length;i++)h[schemes[i].name]=1
+$(updStyle);prefs.colourScheme(updStyle);prefs.colourSchemes(updStyle)
+function uniqScmName(s){ // s: suggested root
+  var h={};for(var i=0;i<scms.length;i++)h[scms[i].name]=1
   var r=s;if(h[s]){s=s.replace(/ \(\d+\)$/,'');var i=1;while(h[r=s+' ('+i+')'])i++};return r
 }
 var SEARCH_MATCH='search match' // sample text to illustrate it
 this.init=function($e){
-  var u=[],fg;for(var g in scheme)(fg=scheme[g].fg)&&u.indexOf(fg)<0&&u.push(fg);u.sort() // u: unique colours
+  var u=[],fg;for(var g in scm)(fg=scm[g].fg)&&u.indexOf(fg)<0&&u.push(fg);u.sort() // u: unique colours
   $e.html(
     '<div id=col-top>'+
       '<label>Scheme: <select id=col-scheme></select></label>'+
@@ -151,29 +151,29 @@ this.init=function($e){
     '</div>'
   )
   $('#col-scheme').change(function(){
-    scheme=schemes[+this.selectedIndex];updateSampleStyle()
-    $('#prefs-tab-colours').toggleClass('frozen',!!scheme.frozen);cm.setSize($cm.width(),$cm.height())
+    scm=scms[+this.selectedIndex];updSampleStyle()
+    $('#prefs-tab-colours').toggleClass('frozen',!!scm.frozen);cm.setSize($cm.width(),$cm.height())
   })
   $('#col-new-name').blur(function(){
     var newName=$(this).val();if(!newName)return
-    scheme.name='';scheme.name=chooseUniqueSchemeName(newName)
-    $('#prefs-tab-colours').removeClass('renaming');updateSchemes()
+    scm.name='';scm.name=uniqScmName(newName)
+    $('#prefs-tab-colours').removeClass('renaming');updScms()
   }).keydown(function(e){switch(e.which){ // todo
     case 13:$(this)                 .blur();return!1 // enter
-    case 27:$(this).val(scheme.name).blur();return!1 // esc
+    case 27:$(this).val(scm.name).blur();return!1 // esc
   }})
   $('#col-clone').click(function(){
-    var x={};schemes.push(x);for(var k in scheme)x[k]=$.extend({},scheme[k]) // x:the new scheme
-    x.name=chooseUniqueSchemeName(scheme.name);delete x.frozen;scheme=x;updateSchemes()
+    var x={};scms.push(x);for(var k in scm)x[k]=$.extend({},scm[k]) // x:the new scheme
+    x.name=uniqScmName(scm.name);delete x.frozen;scm=x;updScms()
   })
   $('#col-rename').click(function(){
-    $('#col-new-name').width($('#col-scheme').width()).val(scheme.name).select()
+    $('#col-new-name').width($('#col-scheme').width()).val(scm.name).select()
     $('#prefs-tab-colours').addClass('renaming')
     setTimeout(function(){$('#col-new-name').focus()},0)
   })
   $('#col-delete').click(function(){
-    var i=$('#col-scheme')[0].selectedIndex;schemes.splice(i,1)
-    scheme=schemes[Math.min(i,schemes.length-1)];updateSchemes();return!1
+    var i=$('#col-scheme')[0].selectedIndex;scms.splice(i,1)
+    scm=scms[Math.min(i,scms.length-1)];updScms();return!1
   })
   $cm=$('#col-cm')
   cm=CodeMirror($cm[0],{
@@ -187,8 +187,7 @@ this.init=function($e){
   }})
   cm.on('gutterClick',function(){selectGroup('lnum')})
   cm.on('cursorActivity',function(){
-    var t
-    selectGroup(
+    var t;selectGroup(
       cm.somethingSelected()?'sel':
       cm.getLine(cm.getCursor().line).indexOf(SEARCH_MATCH)>=0?'srch':
       (t=cm.getTokenTypeAt(cm.getCursor(),1))?
@@ -198,21 +197,19 @@ this.init=function($e){
   })
   $('#col-group').change(function(){selectGroup(G[+this.value].t)})
   ;['fg','bg','lb'].forEach(function(p){
-    $('#col-'+p).change(function(){(scheme[sel]||(scheme[sel]={}))[p]=this.value;updateSampleStyle()})
+    $('#col-'+p).change(function(){(scm[sel]||(scm[sel]={}))[p]=this.value;updSampleStyle()})
     $('#col-'+p+'-cb').click(function(){
       $('#col-'+p).toggle(this.checked)
-      var h=scheme[sel]||(scheme[sel]={});this.checked?h[p]=shrinkRGB($('#col-'+p).val()):delete h[p]
-      updateSampleStyle()
+      var h=scm[sel]||(scm[sel]={});this.checked?h[p]=shrinkRGB($('#col-'+p).val()):delete h[p]
+      updSampleStyle()
     })
   })
   $('#col-bg-cb').click(function(){$('#col-bgo').toggle(this.checked)})
   $('#col-bgo').slider({range:'min',value:.5,min:0,max:1,step:.25,slide:function(e,ui){
-    (scheme[sel]||(scheme[sel]={})).bgo=ui.value;updateSampleStyle()
+    (scm[sel]||(scm[sel]={})).bgo=ui.value;updSampleStyle()
   }})
   ;['B','I','U'].forEach(function(p){
-    $('#col-'+p).click(function(){
-      var h=scheme[sel]||(scheme[sel]={});this.checked?h[p]=1:delete h[p];updateSampleStyle()
-    })
+    $('#col-'+p).click(function(){var h=scm[sel]||(scm[sel]={});this.checked?h[p]=1:delete h[p];updSampleStyle()})
   })
   cm.setValue(
     '{R}←{X}tradfn(Y Z);local\n'+
@@ -230,37 +227,34 @@ this.init=function($e){
     SEARCH_MATCH+'\n'
   )
 }
-function updateSchemes(){
-  $('#col-scheme').html(schemes.map(function(x){x=esc(x.name);return'<option value="'+x+'">'+x}).join('')).val(scheme.name)
-  $('#prefs-tab-colours').toggleClass('frozen',!!scheme.frozen);cm.setSize($cm.width(),$cm.height())
-  updateSampleStyle();selectGroup('norm',1)
+function updScms(){ // update schemes
+  $('#col-scheme').html(scms.map(function(x){x=esc(x.name);return'<option value="'+x+'">'+x}).join('')).val(scm.name)
+  $('#prefs-tab-colours').toggleClass('frozen',!!scm.frozen);cm.setSize($cm.width(),$cm.height())
+  updSampleStyle();selectGroup('norm',1)
 }
 this.load=function(){
-  var a=schemes=builtInSchemes.concat(prefs.colourSchemes().map(decodeScheme))
-  var s=prefs.colourScheme();scheme=a[0];for(var i=0;i<a.length;i++)if(a[i].name===s){scheme=a[i];break}
-  updateSchemes();$('#prefs-tab-colours').removeClass('renaming');cm.setSize($cm.width(),$cm.height())
+  var a=scms=SCMS.concat(prefs.colourSchemes().map(decodeScm)), s=prefs.colourScheme()
+  scm=a[0];for(var i=0;i<a.length;i++)if(a[i].name===s){scm=a[i];break}
+  updScms();$('#prefs-tab-colours').removeClass('renaming');cm.setSize($cm.width(),$cm.height())
 }
 this.save=function(){
-  prefs.colourSchemes(schemes.filter(function(x){return!x.frozen}).map(encodeScheme))
-  prefs.colourScheme(scheme.name)
+  prefs.colourSchemes(scms.filter(function(x){return!x.frozen}).map(encodeScm));prefs.colourScheme(scm.name)
 }
 this.resize=function(){cm.setSize($cm.width(),$cm.height())}
-function updateSampleStyle(){$('#col-sample-style').text(renderCSS(scheme,'#col-cm'))}
+function updSampleStyle(){$('#col-sample-style').text(renderCSS(scm,'#col-cm'))}
 function selectGroup(t,forceRefresh){
-  if(scheme&&(sel!==t||forceRefresh)){
-    var i=H[t],h=scheme[t]||{};$('#col-group').val(i)
-    var ps=['fg','bg','lb']
-    for(var i=0;i<ps.length;i++){
-      var p=ps[i];$('#col-'+p+'-cb').prop('checked',!!h[p]);$('#col-'+p).val(expandRGB(h[p])||'#000000').toggle(!!h[p])
-    }
-    var ps='BIU';for(var i=0;i<ps.length;i++){var p=ps[i];$('#col-'+p).prop('checked',!!h[p])}
-    $('#col-bgo').slider('value',h.bgo==null?.5:h.bgo)
-    var c=(G[i]||G[0]).ctrls||{}
-    $('#col-fg-p' ).toggle(c.fg==null||!!c.fg)
-    $('#col-bg-p' ).toggle(c.bg==null||!!c.bg)
-    $('#col-bgo'  ).toggle(!!h.bg)
-    $('#col-BIU-p').toggle(c.BIU==null||!!c.BIU)
-    $('#col-lb-p' ).toggle(!!c.lb)
-    sel=t
-  }
+  if(!scm||sel===t&&!forceRefresh)return
+  var i=H[t],h=scm[t]||{};$('#col-group').val(i)
+  ;['fg','bg','lb'].forEach(function(p){
+    $('#col-'+p+'-cb').prop('checked',!!h[p]);$('#col-'+p).val(expandRGB(h[p])||'#000000').toggle(!!h[p])
+  })
+  var ps='BIU';for(var i=0;i<ps.length;i++){var p=ps[i];$('#col-'+p).prop('checked',!!h[p])}
+  $('#col-bgo').slider('value',h.bgo==null?.5:h.bgo)
+  var c=(G[i]||G[0]).ctrls||{}
+  $('#col-fg-p' ).toggle(c.fg==null||!!c.fg)
+  $('#col-bg-p' ).toggle(c.bg==null||!!c.bg)
+  $('#col-bgo'  ).toggle(!!h.bg)
+  $('#col-BIU-p').toggle(c.BIU==null||!!c.BIU)
+  $('#col-lb-p' ).toggle(!!c.lb)
+  sel=t
 }

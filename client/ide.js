@@ -4,9 +4,7 @@ var prefs=require('./prefs'),prefsUI=require('./prefs-ui'),parseMenuDSL=require(
     editor=require('./editor'),Editor=editor.Editor,ACB_VALUE=editor.ACB_VALUE,Session=require('./session').Session,
     keymap=require('./keymap'),util=require('./util'),esc=util.esc,throttle1=util.throttle1,
     cmds=require('./cmds').cmds,lbar=require('./lbar')
-
 function parseId(s){return+s.replace(/^.*?(\d+)$/,'$1')}
-
 this.IDE=function(){
   var ide=D.ide=this
   document.body.innerHTML=
@@ -51,7 +49,6 @@ this.IDE=function(){
       })
       .data('ui-sortable').floating=true // workaround for http://bugs.jqueryui.com/ticket/6702#comment:20
   }
-
   var handlers=this.handlers={ // for RIDE protocol messages
     '*connected':function(x){ide.setHostAndPort(x.host,x.port)},
     '*error':function(x){ide.die();setTimeout(function(){$.alert(x.msg,'Error')},100)},
