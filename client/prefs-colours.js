@@ -130,7 +130,7 @@ this.init=function($e){
   var u=[],fg;for(var g in scm)(fg=scm[g].fg)&&u.indexOf(fg)<0&&u.push(fg);u.sort() // u: unique colours
   $e.html(
     '<div id=col-top>'+
-      '<label>Scheme: <select id=col-scheme></select></label>'+
+      '<label>Scheme: <select id=col-scm></select></label>'+
       '<input id=col-new-name class=text-field>'+
       '<button id=col-clone ><u>C</u>lone</button>  '+
       '<button id=col-rename><u>R</u>ename</button> '+
@@ -150,7 +150,7 @@ this.init=function($e){
       '<p id=col-lb-p><label><input type=checkbox id=col-lb-cb>Cursor colour</label> <input type=color id=col-lb>'+
     '</div>'
   )
-  $('#col-scheme').change(function(){
+  $('#col-scm').change(function(){
     scm=scms[+this.selectedIndex];updSampleStyle()
     $('#prefs-tab-colours').toggleClass('frozen',!!scm.frozen);cm.setSize($cm.width(),$cm.height())
   })
@@ -167,12 +167,12 @@ this.init=function($e){
     x.name=uniqScmName(scm.name);delete x.frozen;scm=x;updScms()
   })
   $('#col-rename').click(function(){
-    $('#col-new-name').width($('#col-scheme').width()).val(scm.name).select()
+    $('#col-new-name').width($('#col-scm').width()).val(scm.name).select()
     $('#prefs-tab-colours').addClass('renaming')
     setTimeout(function(){$('#col-new-name').focus()},0)
   })
   $('#col-delete').click(function(){
-    var i=$('#col-scheme')[0].selectedIndex;scms.splice(i,1)
+    var i=$('#col-scm')[0].selectedIndex;scms.splice(i,1)
     scm=scms[Math.min(i,scms.length-1)];updScms();return!1
   })
   $cm=$('#col-cm')
@@ -228,7 +228,7 @@ this.init=function($e){
   )
 }
 function updScms(){ // update schemes
-  $('#col-scheme').html(scms.map(function(x){x=esc(x.name);return'<option value="'+x+'">'+x}).join('')).val(scm.name)
+  $('#col-scm').html(scms.map(function(x){x=esc(x.name);return'<option value="'+x+'">'+x}).join('')).val(scm.name)
   $('#prefs-tab-colours').toggleClass('frozen',!!scm.frozen);cm.setSize($cm.width(),$cm.height())
   updSampleStyle();selectGroup('norm',1)
 }
