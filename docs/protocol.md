@@ -143,7 +143,7 @@ The interpreter will parse that and may respond later with one of
 ```json
 ["OpenWindow",{"name":"f","text":["r←f a","r←(+⌿÷≢)a"],"token":123,"currentRow":0,"debugger":false,
                "entityType":1,"offset":0,"readOnly":0,"size":0,"stop":[1],
-               "tid":0,"tname":"Tid:0","token":1}]
+               "tid":0,"tname":"Tid:0"}]
 ["UpdateWindow",...] // Interpreter -> RIDE
 ```
 It may also send these in response to [`)ed
