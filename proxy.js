@@ -32,7 +32,7 @@ function sil(f){return function(x){try{f(x)}catch(_){}}} // exception silencer
 function shEsc(x){return"'"+x.replace(/'/g,"'\\''")+"'"} // shell escape
 function parseVer(s){return s.split('.').map(function(x){return+x})}
 function toInterpreter(s){
-  if(clt){log('to interpreter:'+trunc(s));var b=Buffer('xxxxRIDE'+s);b.writeInt32BE(b.length,0);clt.write(b)}
+  if(clt){log('send '+trunc(s));var b=Buffer('xxxxRIDE'+s);b.writeInt32BE(b.length,0);clt.write(b)}
 }
 function cmd(c,h){toInterpreter(JSON.stringify([c,h||{}]))} // c:command name, h:arguments as a JS object
 function toBrowser(x,y){log('to browser:'+trunc(JSON.stringify([x,y])));skt&&skt.emit(x,y)}
@@ -41,7 +41,7 @@ function initInterpreterConn(){
   clt.on('data',function(x){
     q=Buffer.concat([q,x]);var n
     while(q.length>=4&&(n=q.readInt32BE(0))<=q.length){
-      var m=''+q.slice(8,n);q=q.slice(n);log('from interpreter:'+trunc(m))
+      var m=''+q.slice(8,n);q=q.slice(n);log('recv '+trunc(m))
       if(m[0]==='['){var u=JSON.parse(m);skt&&skt.emit(u[0],u[1])}
     }
   })
