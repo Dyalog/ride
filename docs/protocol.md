@@ -61,14 +61,14 @@ If at any time the interpreter crashes with a
 sends
 <a name=SysError></a>
 ```json
-["SysError",{"text":"apl: sys error 123 errno 456","stack":""}]
+["SysError",{"text":"apl: sys error 123 errno 456","stack":""}] // Interpreter -> RIDE
 ```
 
 If the interpreter has been started by RIDE, RIDE should shut it down cleanly when the user closes the main application
 window (the session window):
 <a name=Exit></a>
 ```json
-["Exit",{"code":0}]
+["Exit",{"code":0}] // RIDE -> Interpreter
 ```
 
 #Session control
@@ -119,14 +119,14 @@ If multiple lines have been modified in the session, RIDE should queue them up a
 a response of either `SetPromptType` with `type>0` or
 <a name=HadError></a>
 ```json
-["HadError",{}]
+["HadError",{}] // Interpreter -> RIDE
 ```
 RIDE should clear its queue of pending lines on `HadError`.
 
 RIDE can optionally advise the interpreter about the session's width in characters with
 <a name=SetPW></a>
 ```json
-["SetPW",{"pw":79}]
+["SetPW",{"pw":79}] // RIDE -> Interpreter
 ```
 Further output will wrap at that width (with a few exceptions).
 See [`⎕PW`](http://help.dyalog.com/14.1/Content/Language/System%20Functions/pw.htm).
@@ -143,7 +143,7 @@ The interpreter will parse that and may respond later with one of
 ```json
 ["OpenWindow",{"name":"f","text":["r←f a","r←(+⌿÷≢)a"],"token":123,"currentRow":0,"debugger":false,
                "entityType":1,"offset":0,"readOnly":0,"size":0,"stop":[1],
-               "tid":0,"tname":"Tid:0"}]
+               "tid":0,"tname":"Tid:0"}] // Interpreter -> RIDE
 ["UpdateWindow",...] // Interpreter -> RIDE
 ```
 It may also send these in response to [`)ed
@@ -164,7 +164,7 @@ session, `4096` external function.
 RIDE should let the OS do its own focus management of editor/tracer windows except that when it receives
 <a name=FocusWindow></a>
 ```json
-["FocusWindow",{"win":123}]
+["FocusWindow",{"win":123}] // Interpreter -> RIDE
 ```
 it should set the focus accordingly.
 
