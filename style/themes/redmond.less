@@ -7,10 +7,6 @@
 body{
   background-color:@redmond-bg;color:@redmond-text;
   ::selection{background-color:@redmond-orange}
-  fieldset{
-    border:0;padding:0;margin:10px;
-    legend{width:98%;padding-left:18px;padding-bottom:1px;margin-bottom:5px;border-bottom:@redmond-border}
-  }
   .ui-button{border:@redmond-border;background-color:@redmond-bg;color:@redmond-text}
   .ui-button:hover{background-color:@redmond-highlight}
   .ui-state-disabled:hover{background-color:@redmond-bg}
@@ -22,10 +18,7 @@ body{
     a{color:@redmond-text}
     > div{
       color:@redmond-text;background-color:@redmond-bg;
-      a{
-        color:@redmond-text;border:1px solid transparent
-        .shortcut{color:@redmond-highlight}
-      }
+      a{color:@redmond-text;border:1px solid transparent;.shortcut{color:@redmond-highlight}}
       a:hover{background-color:@redmond-highlight;border:@redmond-border}
     }
     div div{
@@ -58,6 +51,7 @@ body{
   .ui-dialog{border:solid #888 1px}
   .ui-dialog-title{color:#888}
   .ui-dialog-titlebar{
+    background-color:none;
     .ui-button{border:0;background-color:none}
     .ui-button:hover{border:0;background-color:@redmond-highlight}
   }
