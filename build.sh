@@ -3,9 +3,9 @@ set -e -o pipefail
 export PATH="$(dirname "$0")/node_modules/.bin:$PATH"
 cd "$(dirname "$0")"
 if [ ! -e node_modules ]; then npm i; fi
-mkdir -p build/{js/client,nw,nw/themes,tmp,static}
+mkdir -p build/{js/client,nw,nw/themes,nw/jstree,tmp,static}
 
-cp -uvr *.html proxy.js style/{*.png,apl385.woff,img} favicon.ico package.json build/nw/
+cp -uvr *.html proxy.js style/{*.png,apl385.woff,img,jstree} favicon.ico package.json build/nw/
 cp -uvr client build/js/
 
 i=style/style.less o=build/nw/style.css
@@ -27,7 +27,8 @@ lib_files="$(echo                            \
   $cma/edit/{matchbrackets,closebrackets}.js \
   $cma/display/placeholder.js                \
   $cma/fold/{foldcode,indent-fold}.js        \
-  lib/jquery.layout.js
+  lib/jquery.layout.js                       \
+  lib/jstree.min.js
 )"
 
 us='' changed=0 # us:paths to versions of lib files with "require()" calls removed

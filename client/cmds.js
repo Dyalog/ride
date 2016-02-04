@@ -43,6 +43,7 @@ this.cmds=[
   ['TO', 'Toggle fold',             []],
   ['VAL','Inspect value of name under cursor (in editors)',[]],
   ['WI', 'Weak interrupt',          ['Ctrl-Pause']],
+  ['WSE','Toggle workspace explorer',[]],
   ['ZMI','Increase font size',      ['Ctrl-=', 'Shift-Ctrl-=']],
   ['ZMO','Decrease font size',      ['Ctrl--']],
   ['ZMR','Reset font size',         ['Ctrl-0']]
