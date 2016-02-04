@@ -84,7 +84,7 @@ get('dfns.dyalog.com','/n_keyboards.htm',function(data){
     'this.geom='+JSON.stringify(geom)+'\n'+
     'this.layouts={\n'+
     '  '+Object.keys(layouts).sort().map(function(lc){
-           var l=layouts[lc];return lc+':[\n   '+l.map(JSON.stringify).join(',\n   ')+',\n  ]'
+           var l=layouts[lc];return lc+':[\n   '+l.map(JSON.stringify).join(',\n   ')+'\n  ]'
          }).join(',\n  ')+'\n'+
     '};\n'
   )
