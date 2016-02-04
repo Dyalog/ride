@@ -7,7 +7,7 @@ this.init=function($e){
   e.innerHTML=
     '<button class=rst><u>R</u>eset</button>'+
     '<label for=title-input>Window title:</label>'+
-    '<input id=title-input class=text-field>'+
+    '<input id=title-input>'+
     '<pre>'+
     '\n<a href=#>{WSID}</a>            workspace name'+
     '\n<a href=#>{HOST}</a>:<a href=#>{PORT}</a>     interpreter\'s TCP endpoint'+

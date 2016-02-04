@@ -131,8 +131,8 @@ this.init=function($e){
   $e.html(
     '<div id=col-top>'+
       '<label><u>S</u>cheme: <select id=col-scm></select></label>'+
-      '<input id=col-new-name class=text-field>'+
-      '<button id=col-clone >C<u>l</u>one</button>  '+
+      '<input id=col-new-name>'+
+      '<button id=col-clone>C<u>l</u>one</button>  '+
       '<button id=col-rename><u>R</u>ename</button> '+
       '<button id=col-delete><u>D</u>elete</button> '+
     '</div>'+
