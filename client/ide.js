@@ -17,7 +17,7 @@ this.IDE=function(){
       '<div class=ui-layout-south><ul></ul></div>'+
     '</div>'
   ide.$ide=$('.ide')
-  ide.pending=[] // lines to execute: SetPromptType with type>0 consumes an item from the queue, HadError empties it
+  ide.pending=[] // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.host=ide.port=ide.wsid='';prefs.title(ide.updateTitle.bind(ide))
   D.wins=ide.wins={ // window id -> instance of Editor or Session
     0:new Session(ide,$('.ui-layout-center'),{id:0,emit:ide.emit.bind(ide),exec:function(lines,trace){
@@ -70,6 +70,8 @@ this.IDE=function(){
     UpdateDisplayName:function(a){ide.wsid=a.displayName;ide.updateTitle()},
     EchoInput:function(x){ide.wins[0].add(x.input)},
     AppendSessionOutput:function(x){var r=x.result;ide.wins[0].add(typeof r==='string'?r:r.join('\n'))},
+    NotAtInputPrompt:function(){handlers.SetPromptType({type:0})}, // todo: remove
+    AtInputPrompt:function(x){handlers.SetPromptType({type:x.why})}, // todo: remove
     SetPromptType:function(x){
       var t=x.type;t&&ide.pending.length?ide.emit('Execute',{trace:0,text:ide.pending.shift()+'\n'}):ide.wins[0].prompt(t)
       t===4&&ide.wins[0].focus() // ⍞ input
