@@ -350,19 +350,21 @@ arrive in the same order, if ever.
 The interpreter can ask RIDE to interact with the user by showing a modal dialog.
 Two types of dialogs are supported:
 
-* Multiple choice
+##Multiple choice
 <a name=ShowDialog></a><a name=DialogResult></a>
 ```json
 ["ShowDialog",{"title":"","text":"","type":1,"options":["Yes","No","Cancel"],"token":123}] // Interpreter -> RIDE
-  type: 1=info 2=warning 3=error
-["DialogResult",{"index":-1,"token":123}] // RIDE -> Interpreter
-  When the user closes the dialog without choosing an option, RIDE responds with index:-1
+["DialogResult",{"index":0,"token":123}] // RIDE -> Interpreter
 ```
+Constants for type: `1` info, `2` warning, `3` error.
+
+If the user closes the dialog without choosing an option, RIDE responds with an `index` of -1.
+
 :red_circle: "type" is not supported
 
 :red_circle: Rename this to `ShowMultipleChoiceDialog`/`MultipleChoiceDialogResult` for symmetry with `StringInput`?
 
-* String input
+##String input
 <a name=ShowStringInputDialog></a><a name=StringInputDialogResult></a>
 ```json
 ["ShowStringInputDialog",{"title":"Name","text":"Please enter a name:","initialValue":"abc","defaultValue":null,"token":123}] // Interpreter -> RIDE
