@@ -1,19 +1,18 @@
 Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nice)
   M1 adoption of the new protocol
-        NN: JD merged interpreter support into trunk on 2016-01-04
-        NN: many issues to clean up, see docs/protocol.md
+        NN: some issues to clean up, see docs/protocol.md
   M2 awareness of Process Manager
   M3 launch server-side processes using ssh
         NN: it works
+        NN: remember password in localStorage?
   M4 minimal workspace explorer
-        NN: protocol extensions proposed, see docs/protocol.md
-        NN: this tree component looks good and popular: https://www.jstree.com/ unfortunately it's 7-8kloc
+        NN: need support from interpreter
   M5 edit "external" source files
         NN: email 2016-01-20, added a "string input dialog" to the protocol
         NN: email 2016-01-28, "format on open" should be off by default for external source files
   M6 support external editors
         NN: implemented in its simplest form -- execute a command with a tmp file as argument
-            Emacs works fine.  Vim requires a script to run in a terminal.  Gvim will probably work, though.
+            Emacs works fine.  Vim requires a script to run in a terminal.  Gvim will probably work.
   M7 add meta-information to Windows exe
        from JD: http://stackoverflow.com/questions/284258/how-do-i-set-the-version-information-for-an-existing-exe-dll
           NN: First answer talks about VisualStudio options
@@ -21,7 +20,7 @@ Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nic
   S1 export and import preferences
   S2 config file for interpreter
   S3 yes/no/cancel and other ultra-simple dialogs
-        NN: RIDE support implemented, see docs/protocol.md
+        NN: implemented in RIDE, see docs/protocol.md
   S4 value tips
         NN: half-way RIDE support implemented, see docs/protocol.md
   S5 enhanced navigation of classes and functions
