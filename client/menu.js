@@ -24,11 +24,10 @@ D.installMenu=D.installMenu||function(arg){
     var $a=$('<a href=#><span>'+name+'</span></a>').attr('accessKey',(acc||'').toLowerCase())
     x.cmd&&$a.append('<span class=m-shortcut data-cmd='+x.cmd+'>')
     if(x.group){
-      $a.addClass('m-group-'+x.group).toggleClass('m-checked',!!x.checked)
-        .on('mousedown mouseup click',function(e){
-          $(this).closest('.menu').find('.m-group-'+x.group).removeClass('m-checked')
-          $(this).addClass('m-checked');mFocus(null);x.action&&x.action();return!1
-        })
+      $a.addClass('m-group-'+x.group).toggleClass('m-checked',!!x.checked).on('mousedown mouseup click',function(e){
+        $(this).addClass('m-checked').closest('.menu').find('.m-group-'+x.group).removeClass('m-checked')
+        mFocus(null);x.action&&x.action();return!1
+      })
     }else if(x.checkBoxPref){
       x.checkBoxPref(function(v){$a.toggleClass('m-checked',!!v)})
       $a.toggleClass('m-checked',!!x.checkBoxPref()).on('mousedown mouseup click',function(e){
@@ -69,8 +68,9 @@ D.installMenu=D.installMenu||function(arg){
   var $m=$('<div class=menu>').prependTo('body').empty().addClass('menu').append(arg.map(render))
   $m.find('>.m-sub>.m-opener').addClass('m-top')
   $m.on('mouseover','a',function(){$(this).closest('.menu').children().is('.m-open')&&mFocus(this)})
-    .on('mousedown','a',function(){mFocus($(this).parentsUntil('.menu').last().is('.m-open')?null:this);return!1})
-    .on('click',    'a',function(){return!1})
+    .on('mousedown click','a',function(e){
+      mFocus($(this).parentsUntil('.menu').last().is('.m-open')&&(e.type==='mousedown')?null:this);return!1
+    })
     .keydown(function(e){
       switch(CodeMirror.keyNames[e.which]){
         case'Left' :leftRight(-1,$(e.target));break
@@ -80,19 +80,9 @@ D.installMenu=D.installMenu||function(arg){
         case'Esc':case'F10':mFocus(null);return!1
       }
     })
-  $(document)
-    .on('keyup keypress',function(e){return !isAccessKeyEvent(e)}) // prevent default action for access key events
-    .mousedown(function(e){$(e.target).closest('.menu').length||mFocus(null)})
-    .keydown(function(e){
-      if(!isAccessKeyEvent(e))return
-      var $x=$m.find('[accessKey='+String.fromCharCode(e.which).toLowerCase()+']:visible')
-      if($x.length){$x.mousedown();$x.parent().find('a').eq(1).focus();return!1}
-    })
-  // todo: is mapping F10 in CodeMirror really necessary?
-  //   CodeMirror.keyMap.default.F10 = -> $m.children().eq(0).addClass('m-open').find('a').eq(1).focus(); false
+  $(document).mousedown(function(e){$(e.target).closest('.menu').length||mFocus(null)})
   updMenuShcs(prefs.keys())
 }
-function isAccessKeyEvent(e){return e.altKey&&!e.ctrlKey&&!e.shiftKey&&65<=e.which&&e.which<=90}
 function updMenuShcs(h){
   var k={};for(var i=0;i<cmds.length;i++){var c=cmds[i][0],d=cmds[i][2];k[c]=(h[c]||d)[0]} // c:code, d:defaults
   $('.m-shortcut').each(function(){$(this).text(k[$(this).data('cmd')]||'')})
