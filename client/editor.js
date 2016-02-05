@@ -217,8 +217,7 @@ this.Editor.prototype={
   setReadOnly:function(x){this.cm.setOption('readOnly',x)},
   updateSize:function(){var $p=this.$e;this.cm.setSize($p.width(),$p.height()-28)},
   open:function(ee){ // ee:editable entity
-    this.oText=typeof ee.text==='string'?ee.text:ee.text.join('\n') // todo: clean up after transition to json protocol
-    var cm=this.cm;cm.setValue(this.oText);cm.clearHistory()
+    var cm=this.cm;cm.setValue(this.oText=ee.text.join('\n'));cm.clearHistory()
     if(D.mac){cm.focus();window.focus()}
     // entityType:             16 NestedArray        512 AplClass
     //  1 DefinedFunction      32 QuadORObject      1024 AplInterface
