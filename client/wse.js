@@ -1,19 +1,17 @@
 'use strict'
 // workspace explorer
-var $t // $t:jstree instance, $d:dialog instance
+var $t,h={} // $t:jstree instance, h:pending callbacks indexed by node id
+this.replyTreeList=function(x){
+  var i=x.nodeId;if(!h[i])return
+  h[i](x.children.map(function(c){return{id:c.id,text:c.name,children:true}}))
+  delete h[i]
+}
 CodeMirror.commands.WSE=function(){
   if($t){$t.dialog($t.dialog('isOpen')?'close':'open');return}
   $t=$('<div class=wse>').dialog({title:'Workspace Explorer'}).jstree({
     core:{
-      animation:0,
-      check_callback:true,
-      data:function(x,f){
-        var p=x.id==='#'?1:x.id
-        f.call(this,[
-          {id:2*p  ,text:'node'+(2*p  ),children:true},
-          {id:2*p+1,text:'node'+(2*p+1),children:true}
-        ])
-      }
+      animation:0,check_callback:true,
+      data:function(x,f){var i=x.id==='#'?0:x.id;h[i]=f.bind(this);D.ide.emit('TreeList',{nodeId:i})}
     },
     plugins:[]
   })

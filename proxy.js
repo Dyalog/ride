@@ -178,6 +178,14 @@ var handlers={
       }catch(_){}
       toBrowser('*proxyInfo',r)
     }
+  },
+
+  // todo: remove fake tree events after the real ones are implemented in the interpreter
+  TreeList:function(x){
+    setTimeout(function(){
+      var n=2*(x.nodeId||1)
+      toBrowser('ReplyTreeList',{nodeId:x.nodeId,children:[{id:n,name:'a'+n,type:1},{id:n+1,name:'a'+(n+1),type:1}]})
+    },Math.random()*2000)
   }
 }
 this.Proxy=function(){

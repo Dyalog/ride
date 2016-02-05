@@ -3,7 +3,7 @@ require('./menu')
 var prefs=require('./prefs'),prefsUI=require('./prefs-ui'),parseMenuDSL=require('./prefs-menu').parseMenuDSL,
     editor=require('./editor'),Editor=editor.Editor,ACB_VALUE=editor.ACB_VALUE,Session=require('./session').Session,
     keymap=require('./keymap'),util=require('./util'),esc=util.esc,throttle1=util.throttle1,
-    cmds=require('./cmds').cmds,lbar=require('./lbar')
+    cmds=require('./cmds').cmds,lbar=require('./lbar'),wse=require('./wse')
 function parseId(s){return+s.replace(/^.*?(\d+)$/,'$1')}
 this.IDE=function(){
   var ide=D.ide=this
@@ -105,7 +105,8 @@ this.IDE=function(){
         ],
         close:function(){ide.emit('StringInputDialogResult',{value:ok?$i.val():x.defaultValue||null,token:x.token})}
       })
-    }
+    },
+    ReplyTreeList:function(x){wse.replyTreeList(x)}
   }
   // We need to be able to temporarily block the stream of messages coming from socket.io
   // Creating a floating window can only be done asynchronously and it's possible that a message
