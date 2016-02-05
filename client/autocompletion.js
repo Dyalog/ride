@@ -54,7 +54,7 @@ this.setUp=function(win){ // win: an instance of Editor or Session
         tid=0;var c=cm.getCursor(),s=cm.getLine(c.line),i=c.ch
         if(s[i-1]==='⌶'&&!/\d *$/.test(s.slice(0,i-1))){
           r(1,ibeamOptions)
-        }else if(i&&RegExp('['+letter+'\)]$').test(s)&&s.slice(0,i).replace(re,'').slice(-1)!==prefs.prefixKey()&&
+        }else if(i&&RegExp('['+letter+'\)\.]$').test(s)&&s.slice(0,i).replace(re,'').slice(-1)!==prefs.prefixKey()&&
                   win.promptType!==4){ // don't autocomplete in ⍞ input
           win.autocompleteWithTab=0;win.emit('GetAutoComplete',{line:s,pos:i,token:win.id})
         }
