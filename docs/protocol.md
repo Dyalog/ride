@@ -411,7 +411,7 @@ It can query the interpreter for this information in a uniform way for all types
 <a name=TreeList></a>
 ```json
 ["TreeList",{"nodeId":123}] // RIDE -> Interpreter
-["TreeList",{"nodeId":123,"children":[{"id":234,"type":1,"name":"Abc"},...]}] // Interpreter -> RIDE
+["ReplyTreeList",{"nodeId":123,"children":[{"id":234,"type":1,"name":"Abc"},...]}] // Interpreter -> RIDE
 ```
 The root of the tree is assumed to have node id 0.
 `type` is a hint about the icon and style for the node.
