@@ -7,7 +7,6 @@ CodeMirror.commands.WSE=function(){
     core:{
       animation:0,
       check_callback:true,
-      themes:{stripes:true},
       data:function(x,f){
         var p=x.id==='#'?1:x.id
         f.call(this,[
@@ -16,12 +15,6 @@ CodeMirror.commands.WSE=function(){
         ])
       }
     },
-    types:{
-      '#':{max_children:2,'max_depth':10,'valid_children':['root']},
-      root:{icon:'/static/3.2.1/assets/images/tree_icon.png',valid_children:['default']},
-      'default':{valid_children:['default','file']},
-      file:{icon:'glyphicon glyphicon-file',valid_children:[]}
-    },
-    plugins:['contextmenu','dnd','search','state','types','wholerow']
+    plugins:[]
   })
 }
