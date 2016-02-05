@@ -192,8 +192,8 @@ this.Proxy=function(){
   return function(x){
     log('browser connected')
     ;(skt=x).onevent=function(x){
-      x.data[0][0]==='*'&&log('from browser:'+trunc(JSON.stringify(x.data)))
-      var f=handlers[x.data[0]];f?f(x.data[1]):cmd(x.data[0],x.data[1]||{})
+      var f=handlers[x.data[0]];f&&log('from browser:'+trunc(JSON.stringify(x.data)))
+      f?f(x.data[1]):cmd(x.data[0],x.data[1]||{})
     }
     child&&toBrowser('*spawned',{pid:child.pid})
   }
