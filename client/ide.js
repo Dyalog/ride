@@ -94,8 +94,8 @@ this.IDE=function(){
       var ok,$i=$('<input>').val(x.initialValue||'')
       $('<p>').text(x.text||'').append('<br>').append($i).dialog({
         modal:1,title:x.title,buttons:[
-          {html:'<u>O</u>K'    ,accesskey:'o',click:function(){ok=1;$(this).dialog('close')}},
-          {html:'<u>C</u>ancel',accesskey:'c',click:function(){     $(this).dialog('close')}}
+          {html:'<u>O</u>K'    ,click:function(){ok=1;$(this).dialog('close')}},
+          {html:'<u>C</u>ancel',click:function(){     $(this).dialog('close')}}
         ],
         close:function(){ide.emit('StringInputDialogResult',{value:ok?$i.val():x.defaultValue||null,token:x.token})}
       })

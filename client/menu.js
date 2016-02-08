@@ -21,7 +21,7 @@ D.installMenu=D.installMenu||function(arg){
     if(!x)return
     if(x['']==='-')return $('<hr>')
     var acc,name=x[''].replace(/_(.)/g,function(_,k){return acc||k==='_'?k:'<u>'+(acc=k)+'</u>'}) // acc:access key
-    var $a=$('<a href=#><span>'+name+'</span></a>').attr('accessKey',(acc||'').toLowerCase())
+    var $a=$('<a href=#><span>'+name+'</span></a>')
     x.cmd&&$a.append('<span class=m-shortcut data-cmd='+x.cmd+'>')
     if(x.group){
       $a.addClass('m-group-'+x.group).toggleClass('m-checked',!!x.checked).on('mousedown mouseup click',function(e){
@@ -42,9 +42,9 @@ D.installMenu=D.installMenu||function(arg){
   }
   var $o // original focused element
   function mFocus(anchor){
-    $m.find('.m-open').removeClass('m-open')
-    if(anchor){$o||($o=$(':focus'));var $a=$(anchor);$a.parentsUntil('.menu').addClass('m-open');$a.focus()}
-    else if($o){$o.focus();$o=null}
+    $m.find('.m-open').removeClass('m-open');if(!anchor){$o&&$o.focus();$o=null;return}
+    $o||($o=$(':focus'));var $a=$(anchor);$a.parentsUntil('.menu').addClass('m-open')
+    $a.is('.m-top')?$a.closest('.m-sub').find('a').eq(1).focus():$a.focus()
   }
   function leftRight(d,$e){ // d: +1 or -1, $e: target element
     if(d>0&&$e.is('.m-opener')){
@@ -69,7 +69,7 @@ D.installMenu=D.installMenu||function(arg){
   $m.find('>.m-sub>.m-opener').addClass('m-top')
   $m.on('mouseover','a',function(){$(this).closest('.menu').children().is('.m-open')&&mFocus(this)})
     .on('mousedown click','a',function(e){
-      mFocus($(this).parentsUntil('.menu').last().is('.m-open')&&(e.type==='mousedown')?null:this);return!1
+      mFocus($(this).parentsUntil('.menu').last().is('.m-open')&&e.type==='mousedown'?null:this);return!1
     })
     .keydown(function(e){
       switch(CodeMirror.keyNames[e.which]){
