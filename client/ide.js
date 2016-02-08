@@ -51,7 +51,7 @@ this.IDE=function(){
       if(x.code){ide.die();setTimeout(function(){$.alert('Interpreter process exited with code '+x.code,'Error')},100)}
     },
     '*disconnected':function(){if(!ide.dead){$.alert('Interpreter disconnected','Error');ide.die()}},
-    Identify:function(i){D.remoteIdentification=i;ide.updTitle()},
+    '*identify':function(x){D.remoteIdentification=x;ide.updTitle()},
     Disconnect:function(x){
       if(ide.dead)return
       ide.die()
