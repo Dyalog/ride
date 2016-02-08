@@ -15,7 +15,8 @@ this.IDE=function(){
       '<div class=ui-layout-center></div>'+
       '<div class=ui-layout-east ><ul></ul></div>'+
       '<div class=ui-layout-south><ul></ul></div>'+
-    '</div>'
+    '</div>'+
+    '<div class=sbar>Status bar</div>'
   ide.$ide=$('.ide')
   ide.pending=[] // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.host=ide.port=ide.wsid='';prefs.title(ide.updTitle.bind(ide))
@@ -100,7 +101,8 @@ this.IDE=function(){
         close:function(){ide.emit('StringInputDialogResult',{value:ok?$i.val():x.defaultValue||null,token:x.token})}
       })
     },
-    ReplyTreeList:function(x){wse.replyTreeList(x)}
+    ReplyTreeList:function(x){wse.replyTreeList(x)},
+    StatusOutput:function(x){$('.sbar').text(x.text)}
   }
   // We need to be able to temporarily block the stream of messages coming from socket.io
   // Creating a floating window can only be done asynchronously and it's possible that a message
@@ -160,11 +162,15 @@ this.IDE=function(){
       var h=st.south.innerHeight;!st.south.isClosed&&h>1&&prefs.tracerHeight(h)
     }}
   })
-  var updTop=function(){$('.ide').css({top:(prefs.lbar()?$('.lbar').height():0)+(D.mac?5:22)})
-  layout&&layout.resizeAll()};$('.lbar').toggle(!!prefs.lbar());updTop();$(window).resize(updTop)
+  function updTopBtm(){
+    ide.$ide.css({top:(prefs.lbar()?$('.lbar').height():0)+(D.mac?5:22),bottom:prefs.sbar()?$('.sbar').height():0})
+    layout&&layout.resizeAll()
+  }
+  $('.lbar').toggle(!!prefs.lbar());$('.sbar').toggle(!!prefs.sbar());updTopBtm();$(window).resize(updTopBtm)
   layout.close('east');layout.close('south');ide.wins[0].updateSize()
   D.floatOnTop=prefs.floatOnTop();prefs.floatOnTop(function(x){D.floatOnTop=x})
-  prefs.lbar(function(x){$('.lbar').toggle(!!x);updTop()})
+  prefs.lbar(function(x){$('.lbar').toggle(!!x);updTopBtm()})
+  prefs.sbar(function(x){$('.sbar').toggle(!!x);updTopBtm()})
   try{
     D.installMenu(parseMenuDSL(prefs.menu()))
   }catch(e){

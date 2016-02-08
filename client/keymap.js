@@ -42,6 +42,7 @@ $.extend(CM.commands,{
   NEW:function(){D.rideNewSession()},
   QIT:function(){D.quit()},
   LBR:function(){prefs.lbar.toggle()},
+  SBR:function(){prefs.sbar.toggle()},
   WI:function(){D.ide.emit('WeakInterrupt')},
   SI:function(){D.ide.emit('StrongInterrupt')},
   FUL:function(){

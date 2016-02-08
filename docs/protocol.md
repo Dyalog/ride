@@ -385,7 +385,8 @@ See
 ["StatusOutput",{"text":"Bla-blah","flags":4}] // Interpreter -> RIDE
 ```
 Constants for `flags`: `1` information message, `2` error message, `4` warning message
-:red_circle: Not supported in RIDE but likely will be in the future.
+
+:red_circle: RIDE3 doesn't support `flags`.
 
 Status information that should be displayed to the user.
 

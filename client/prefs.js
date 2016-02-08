@@ -9,13 +9,14 @@
 //   prefs.foo.getDefault()          // retrieve default value
 D.prefs=this;
 [ // name                default (type is determined from default value; setter enforces type and handles encoding)
-  ['autoCloseBrackets',  1], // whether to insert {}[]() in pairs
   ['autoCloseBlocks',    1], // whether to insert :end after :if,:for,etc when Enter is pressed
   ['autoCloseBlocksEnd', 0], // 0: close blocks with ":EndIf",":EndFor",etc;  1: close blocks only with ":End"
+  ['autoCloseBrackets',  1], // whether to insert {}[]() in pairs
   ['autocompletion',     1],
   ['autocompletionDelay',500],
   ['colourScheme',       'Default'], // name of the active colour scheme
   ['colourSchemes',      []],// objects describing user-defined colour schemes
+  ['editorWidth',        0], // width of a docked editor
   ['favs',               [{type:'connect'}]],
   ['floating',           0], // floating editor and tracer windows
   ['floatOnTop',         0], // try to keep floating windows on top of the session
@@ -25,24 +26,24 @@ D.prefs=this;
   ['indentComments',     0], // whether to touch comment-only lines at all
   ['indentMethods',      -1],// -1 makes methods use the same indent as all other blocks
   ['indentOnOpen',       1], // whether to re-indent source code on editor open
-  ['keys',               {}],// a mapping between commands and keystrokes, only diffs from the defaults
   ['kbdLocale',          ''],// e.g. "US", "GB"
-  ['lineNumsTracer',     0],
+  ['keys',               {}],// a mapping between commands and keystrokes, only diffs from the defaults
+  ['lbar',               1], // show language bar
   ['lineNumsEditor',     1],
+  ['lineNumsTracer',     0],
   ['matchBrackets',      1], // whether to highlight matching brackets
+  ['otherExe',           ''],// content of the "exe" text box "Other..." is selected in the Connect page
   ['pos',                null], // [x,y,w,h,maximized] of the main window, used in ../init-nw.js; maximized is optional
   ['posEditor',          [32,32,1000,618]], // [x,y,w,h,maximized]
   ['posTracer',          [32,32,1000,618]], // [x,y,w,h,maximized]
   ['prefixKey',          '`'],
   ['prefixMaps',         {}],// per-locale strings of pairs of characters -- diffs from the default map for that locale
+  ['sbar',               0], // status bar
   ['selectedExe',        ''],// Which interpreter is selected in dropdown in the Connect page?
-  ['otherExe',           ''],// content of the "exe" text box "Other..." is selected in the Connect page
-  ['editorWidth',        0], // width of a docked editor
-  ['tracerHeight',       0], // height of a docked tracer
-  ['wrap',               0], // line wrapping in session
-  ['lbar',               1], // show language bar
   ['theme',              ''],
   ['title',              '{WSID}'], // a.k.a. "caption"
+  ['tracerHeight',       0], // height of a docked tracer
+  ['wrap',               0], // line wrapping in session
   ['zoom',               0],
   ['menu',
     '# see below for syntax'+
@@ -67,6 +68,7 @@ D.prefs=this;
     '\n  Select All               =SA  {mac}'+
     '\n_View'+
     '\n  Show Language Bar        =LBR'+
+    '\n  Show Status Bar          =SBR'+
     '\n  Floating Edit Windows    =FLT'+
     '\n  Editors on Top           =TOP {!browser}'+
     '\n  Line Wrapping in Session =WRP'+

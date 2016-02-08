@@ -121,11 +121,9 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 // language bar
 .lbar{
   .tt;.bg;padding:0 2px 0 10px;cursor:default;border-bottom:solid #888 1px;line-height:28px;
-  b{
-    border:solid @dark 1px;border-left:0;font-weight:normal;margin-bottom:3px;padding:1px;background:#eeeae2;
-    &.first{border-left:solid @dark 1px};
-    &:hover{background-color:@light}
-  }
+  b{border:solid @dark 1px;border-left:0;font-weight:normal;margin-bottom:3px;padding:1px;background:#eeeae2}
+  b.first{border-left:solid @dark 1px}
+  b:hover{background-color:@light}
 }
 .lbar-prefs{float:right;margin-right:4px;width:24px;height:24px;background:no-repeat center center url(img/lbar-prefs.png)}
 .lbar-tip-triangle{
@@ -138,6 +136,9 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 }
 .lbar-tip-desc{.tt;padding:0 0 0 30px;margin:0;font-weight:bold}
 .lbar-tip-text{.tt}
+
+// status bar
+.sbar{position:absolute;left:0;right:0;bottom:0;height:20px;line-height:20px;padding:0 2px}
 
 // resizer:splitting line between session and editor/tracer
 .ui-layout-resizer{.bg}
