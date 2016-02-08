@@ -19,7 +19,6 @@ var letter=this.letter='A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ',
       ')'+
     ')'
   )
-
 var quadNames=['','á','a','af','ai','an','arbin','arbout','arg','at','av','avu','base','class','clear','cmd','cr','cs',
 'ct','cy','d','dct','df','div','dl','dm','dmx','dq','dr','ea','ec','ed','em','en','env','es','et','ex','exception',
 'export','fappend','favail','fc','fchk','fcopy','fcreate','fdrop','ferase','fhold','fix','flib','fmt','fnames','fnums',
@@ -30,7 +29,6 @@ var quadNames=['','á','a','af','ai','an','arbin','arbout','arg','at','av','avu'
 'save','sd','se','sh','shadow','si','signal','size','sm','sr','src','stack','state','stop','svc','sve','svo','svq',
 'svr','svs','syl','tc','tcnums','tf','tget','this','tid','tkill','tname','tnums','tpool','tput','treq','trace','trap',
 'ts','tsync','tz','ucs','ul','using','vfi','vr','wa','wc','wg','wn','ws','wsid','wx','x','xml','xsi','xt']
-
 // « and » prevent tolerance for extra whitespace
 // _ stands for «' '» (space as an APL character literal)
 var idioms=['⍴⍴','/⍳','/⍳⍴','⊃¨⊂','{}','{⍺}','{⍵}','{⍺⍵}','{0}','{0}¨',',/','⍪/','⊃⌽','↑⌽','⊃⌽,','↑⌽,','0=⍴','0=⍴⍴',
@@ -42,17 +40,13 @@ function escIdiom(s){
   return s.replace(/«(.*?)»|(.)/g,function(_,g,g2){g||(g=g2);return' *'+(g==='_'?"' '":escRE(g))}).slice(2)
 }
 var idiomsRE=RegExp('^(?:'+(idioms.sort(function(x,y){return y.length-x.length}).map(escIdiom).join('|'))+')','i')
-
 var sw=4,swm=2 // default indent unit and indent unit for methods; these are kept in sync with prefs
 function updSW(){sw=prefs.indent();swm=prefs.indentMethods();swm<0&&(swm=sw)}
 updSW();prefs.indent(updSW);prefs.indentMethods(updSW)
-
 var icom=prefs.indentComments();prefs.indentComments(function(x){icom=x})
-
 var dfnDepth=this.dfnDepth=function(a){var r=0;for(var j=0;j<a.length;j++)a[j].t==='{'&&r++;return r}
-
 CM.defineMIME('text/apl','apl')
-CM.defineMode('apl',function(config){
+CM.defineMode('apl',function(){
   var comMode=CM.getMode({},'text/apl-comments');if(!comMode.token||!comMode.startState)comMode=null
   return{
     startState:function(){
@@ -66,35 +60,35 @@ CM.defineMode('apl',function(config){
       // comState  state of the inner mode for syntax highlighting inside comments
       return{hdr:1,a:[{t:'',oi:0,ii:0}]}
     },
-    token:function(stream,h){ // h:state
-      var a=h.a,la=a[a.length-1],n=stream.indentation(),c
-      if(stream.sol()){delete h.kw;if(!stream.match(/^\s*(:|∇|$)/,false)){a[a.length-1]=$.extend({ii:n},la)}}
+    token:function(sm,h){ // sm:stream, h:state
+      var a=h.a,la=a[a.length-1],n=sm.indentation(),c
+      if(sm.sol()){delete h.kw;if(!sm.match(/^\s*(:|∇|$)/,false)){a[a.length-1]=$.extend({ii:n},la)}}
       if(h.hdr){
-        delete h.hdr;stream.match(/[^⍝\n\r]*/);var s=stream.current()
-        if(/^\s*:/.test(s)||dfnHeader.test(s)){stream.backUp(s.length)}else{h.vars=s.split(notName)}
+        delete h.hdr;sm.match(/[^⍝\n\r]*/);var s=sm.current()
+        if(/^\s*:/.test(s)||dfnHeader.test(s)){sm.backUp(s.length)}else{h.vars=s.split(notName)}
         return'apl-trad'
       }else if(h.comState){
-        if(stream.sol()){
+        if(sm.sol()){
           return delete h.comState
         }else{
           var h1=CM.copyState(comMode,h.comState)
-          var r=comMode.token(stream,h1)
+          var r=comMode.token(sm,h1)
           h.comState=CM.copyState(comMode,h1)
           return r+' apl-com'
         }
-      }else if(stream.match(idiomsRE)){
+      }else if(sm.match(idiomsRE)){
         return'apl-idm'
-      }else if(stream.match(/^¯?(?:\d*\.)?\d+(?:e¯?\d+)?(?:j¯?(?:\d*\.)?\d+(?:e¯?\d+)?)?/i)){
+      }else if(sm.match(/^¯?(?:\d*\.)?\d+(?:e¯?\d+)?(?:j¯?(?:\d*\.)?\d+(?:e¯?\d+)?)?/i)){
         return'apl-num'
-      }else if(!(c=stream.next())){
+      }else if(!(c=sm.next())){
         return null
       }else{
         switch(c){
-          case' ':stream.eatSpace();return null
-          case'⍝':comMode?(h.comState=comMode.startState()):stream.skipToEnd();return'apl-com'
+          case' ':sm.eatSpace();return null
+          case'⍝':comMode?(h.comState=comMode.startState()):sm.skipToEnd();return'apl-com'
           case'⋄':delete h.kw;return la.t!=='('&&la.t!=='['?'apl-diam':'apl-err'
           case'←':return'apl-asgn'
-          case"'":if(stream.match(/^(?:[^'\r\n]|'')*'/)){return'apl-str'}else{stream.skipToEnd();return'apl-err'}
+          case"'":if(sm.match(/^(?:[^'\r\n]|'')*'/)){return'apl-str'}else{sm.skipToEnd();return'apl-err'}
           case'⍬':return'apl-zld'
           case'(':a.push({t:c,oi:la.oi,ii:la.ii});return'apl-par'
           case'[':a.push({t:c,oi:la.oi,ii:la.ii});return'apl-sqbr'
@@ -103,8 +97,7 @@ CM.defineMode('apl',function(config){
           case']':if(la.t==='['){a.pop();return'apl-sqbr'}else{return'apl-err'}
           case'}':if(la.t==='{'){a.pop();return'apl-dfn'+(1+dfnDepth(a))+' apl-dfn'}else{return'apl-err'}
           case';':return la.t==='['?'apl-semi':'apl-err'
-          case'⎕':
-            var m=stream.match(/[áa-z0-9]*/i);return m&&quadNames.indexOf(m[0].toLowerCase())>=0?'apl-quad':'apl-err'
+          case'⎕':var m=sm.match(/[áa-z0-9]*/i);return m&&quadNames.indexOf(m[0].toLowerCase())>=0?'apl-quad':'apl-err'
           case'⍞':return'apl-quad'
           case'#':return'apl-ns'
           case'⍺':case'⍵':case'∇':case':':
@@ -116,7 +109,7 @@ CM.defineMode('apl',function(config){
               if(i){a.splice(i);delete h.vars}else{a.push({t:'∇',oi:n,ii:n+swm});h.hdr=1}
               return'apl-trad'
             }else if(c===':'){
-              var ok=0,m=stream.match(/^\w*/),kw=m?m[0].toLowerCase():''
+              var ok=0,m=sm.match(/^\w*/),kw=m?m[0].toLowerCase():''
               switch(kw){
                 case'class':case'disposable':case'for':case'hold':case'if':case'interface':case'namespace':
                 case'property':case'repeat':case'section':case'select':case'trap':case'while':case'with':
@@ -139,10 +132,10 @@ CM.defineMode('apl',function(config){
                 case'leave':case'continue':
                   ok=0;for(var i=0;i<a.length;i++)if(/^(?:for|repeat|while)$/.test(a[i].t)){ok=1;break}
                   break
-                case'access': ok=la.t==='class'||la.t==='∇';stream.match(/(?:\s+\w+)+/);ok=1;break
+                case'access': ok=la.t==='class'||la.t==='∇';sm.match(/(?:\s+\w+)+/);ok=1;break
                 case'base':case'field':case'goto':case'include':case'return':case'using': ok=1;break
                 case'implements':
-                  var m=stream.match(/\s+(\w+)/)
+                  var m=sm.match(/\s+(\w+)/)
                   if(m){
                     var x=m[1].toLowerCase(),ys=['constructor','destructor','method','trigger']
                     for(var j=0;j<ys.length;j++)if(x===ys[j].slice(0,x.length)){ok=1;break}
@@ -157,9 +150,9 @@ CM.defineMode('apl',function(config){
             break
           default:
             if(name0.test(c)){
-              stream.match(name1)
-              var x=stream.current(),dd=dfnDepth(a)
-              return !dd&&stream.match(/:/) ? 'apl-lbl' : dd||h.vars&&h.vars.indexOf(x)>=0 ? 'apl-var' : 'apl-glb'
+              sm.match(name1)
+              var x=sm.current(),dd=dfnDepth(a)
+              return !dd&&sm.match(/:/) ? 'apl-lbl' : dd||h.vars&&h.vars.indexOf(x)>=0 ? 'apl-var' : 'apl-glb'
             }
             return/[\+\-×÷⌈⌊\|⍳\?\*⍟○!⌹<≤=≥>≠≡≢∊⍷∪∩~∧∨⍲⍱⍴,⍪⌽⊖⍉↑↓⊂⊃⌷⍋⍒⊤⊥⍕⍎⊣⊢→]/.test(c)?'apl-fn':
                   /[\/\\⌿⍀¨⍨⌸⌶&]/.test(c)?'apl-op1':/[\.∘⍤⍣⍠]/.test(c)?'apl-op2':'apl-err'
@@ -178,14 +171,11 @@ CM.defineMode('apl',function(config){
     fold:'apl'
   }
 })
-
 // stackStr(h): a string representation of the block stack in CodeMirror's state object "h"
 function stackStr(h){var a=h.a,r='';for(var i=0;i<a.length;i++)r+=a[i].t+' ';return r}
-
 function isPrefix(x,y){return x===y.slice(0,x.length)}
 var scmd=('classes clear cmd continue copy cs drop ed erase events fns holds intro lib load methods ns objects obs off'+
           ' ops pcopy props reset save sh sic si sinl tid vars wsid xload').split(' ') // system commands
-
 CM.defineMIME('text/apl-session','apl-session')
 CM.defineMode('apl-session',function(config,modeConfig){
   var im=CM.getMode(config,'text/apl'), se=modeConfig.se // im:inner mode, se:the Session object
@@ -193,15 +183,14 @@ CM.defineMode('apl-session',function(config,modeConfig){
     startState:function(){return{l:0}}, // .l:line number, .h:inner state
     copyState:function(h){h=CM.copyState({},h);h.h=CM.copyState(im,h.h);return h},
     blankLine:function(h){h.l++},
-    token:function(stream,h){var m
-      if(se.dirty[h.l]==null){stream.skipToEnd();h.l++}
-      else if(stream.sol()&&(m=stream.match(/^ *\)(\w+).*/))){h.l++;return !m[1]||scmd.indexOf(m[1])<0?'apl-err':'apl-scmd'}
-      else{
-        if(stream.sol()){h.h=im.startState();delete h.h.hdr}
-        var h1=CM.copyState(im,h.h), t=im.token(stream,h1)
-        if(stream.eol()){h.l++;delete h.h}else{h.h=CM.copyState(im,h1)}
-        return t
-      }
+    token:function(sm,h){ // sm:stream, h:state
+      var sol=sm.sol(),m // sol:start of line? m:regex match object
+      if(se.dirty[h.l]==null){sm.skipToEnd();h.l++;return}
+      if(sol&&(m=sm.match(/^ *\)(\w+).*/))){h.l++;return!m[1]||scmd.indexOf(m[1])<0?'apl-err':'apl-scmd'}
+      if(sol&&(m=sm.match(/^ *\].*/))){h.l++;return'apl-ucmd'}
+      if(sol){h.h=im.startState();delete h.h.hdr}
+      var h1=CM.copyState(im,h.h),t=im.token(sm,h1);if(sm.eol()){h.l++;delete h.h}else{h.h=CM.copyState(im,h1)}
+      return t
     }
   }
 })
