@@ -31,7 +31,7 @@ Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nic
   W3 status bar
   W4 drag/drop workspaces or source files to session
   W5 autopw support
-        NN: RIDE sends the information but currently the interpreter ignores it, see docs/protocol.md
+        NN: done
 
 Not prioritized:
   on a Mac esc closes the session instead of the editor, JS 2015-12-03
@@ -48,7 +48,7 @@ Not prioritized:
   2015-09-07 Adam: shortcut to clear the "modified" flag of a line in session without reverting it to original content
   selecting a block of text and pressing ⍝ should comment/uncomment it
   Integrate docs in RIDE?  We need fast, searchable, bookmarkable help content!
-  support for user commands
+  support for user commands (syntax highlighting)
   JS: Arrange for the banner to appear at the _top_ of a new session.
     NN: I did some experimentation with this.  As of now, I can only get it appear on top about 50% of the time
          due to a race condition in NW.js's events.
