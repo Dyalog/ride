@@ -18,13 +18,13 @@ this.IDE=function(){
     '</div>'
   ide.$ide=$('.ide')
   ide.pending=[] // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
-  ide.host=ide.port=ide.wsid='';prefs.title(ide.updateTitle.bind(ide))
+  ide.host=ide.port=ide.wsid='';prefs.title(ide.updTitle.bind(ide))
   D.wins=ide.wins={ // window id -> instance of Editor or Session
     0:new Session(ide,$('.ui-layout-center'),{id:0,emit:ide.emit.bind(ide),exec:function(lines,trace){
       if(lines&&lines.length){trace||(ide.pending=lines.slice(1));ide.emit('Execute',{trace:trace,text:lines[0]+'\n'})}
     }})
   }
-  ide.focusedWin=ide.wins[0]
+  ide.focusedWin=ide.wins[0] // last focused window, it might not have the focus right now
 
   // tab management
   ide.tabOpts={heightStyle:'fill',activate:(function(_,ui){
@@ -36,19 +36,14 @@ this.IDE=function(){
     $('.ui-layout-south li',ide.$ide).length||ide.layout.close('south')
     ide.$tabs.tabs('refresh')
   }
-  var $uls=ide.$tabs.find('ul')
-  for(var j=0;j<$uls.length;j++){
-    $($uls[j])
-      .on('mouseover','.tab-close',function(){$(this).addClass('hover')})
-      .on('mouseout','.tab-close',function(){$(this).removeClass('hover')})
-      .on('click','.tab-close',function(){var w=ide.wins[parseId($(this).closest('a').prop('href'))];w&&w.EP(w.cm)})
-      .sortable({
-        cursor:'move',containment:'parent',tolerance:'pointer',axis:'x',revert:true,
-        stop:function(_,ui){ide.refreshTabs();$('[role=tab]',ide.$tabs).attr('style','')}
-        // $().sortable changes z-indices after dragging, so we fix those in stop()
-      })
-      .data('ui-sortable').floating=true // workaround for http://bugs.jqueryui.com/ticket/6702#comment:20
-  }
+  ide.$tabs.find('ul')
+    .on('mouseover','.tab-close',function(){$(this).addClass   ('hover')})
+    .on('mouseout' ,'.tab-close',function(){$(this).removeClass('hover')})
+    .on('click','.tab-close',function(){var w=ide.wins[parseId($(this).closest('a').prop('href'))];w&&w.EP(w.cm)})
+    .sortable({cursor:'move',containment:'parent',tolerance:'pointer',axis:'x',revert:true,
+               // $().sortable changes z-indices after dragging, so we fix those in stop()
+               stop:function(_,ui){ide.refreshTabs();$('[role=tab]',ide.$tabs).attr('style','')}})
+    .each(function(){$(this).data('ui-sortable').floating=true}) // workaround bugs.jqueryui.com/ticket/6702#comment:20
   var handlers=this.handlers={ // for RIDE protocol messages
     '*connected':function(x){ide.setHostAndPort(x.host,x.port)},
     '*error':function(x){ide.die();setTimeout(function(){$.alert(x.msg,'Error')},100)},
@@ -56,18 +51,17 @@ this.IDE=function(){
       if(x.code){ide.die();setTimeout(function(){$.alert('Interpreter process exited with code '+x.code,'Error')},100)}
     },
     '*disconnected':function(){if(!ide.dead){$.alert('Interpreter disconnected','Error');ide.die()}},
-    Identify:function(i){D.remoteIdentification=i;ide.updateTitle()},
+    Identify:function(i){D.remoteIdentification=i;ide.updTitle()},
     Disconnect:function(x){
-      if(!ide.dead){
-        ide.die()
-        if(x.message==='Dyalog session has ended'){try{close()}catch(e){};D.process&&D.process.exit&&D.process.exit(0)}
-        else $.alert(x.message,'Interpreter disconnected')
-      }
+      if(ide.dead)return
+      ide.die()
+      if(x.message==='Dyalog session has ended'){try{close()}catch(e){};(D.process||{}).exit&&D.process.exit(0)}
+      else $.alert(x.message,'Interpreter disconnected')
     },
     SysError:function(x){$.alert(x.text,'SysError');ide.die()},
     InternalError:function(x){$.alert('An error ('+x.error+') occurred processing '+x.message,'Internal Error')},
     NotificationMessage:function(x){$.alert(x.message,'Notification')},
-    UpdateDisplayName:function(a){ide.wsid=a.displayName;ide.updateTitle()},
+    UpdateDisplayName:function(a){ide.wsid=a.displayName;ide.updTitle()},
     EchoInput:function(x){ide.wins[0].add(x.input)},
     AppendSessionOutput:function(x){var r=x.result;ide.wins[0].add(typeof r==='string'?r:r.join('\n'))},
     NotAtInputPrompt:function(){handlers.SetPromptType({type:0})}, // todo: remove
@@ -138,26 +132,18 @@ this.IDE=function(){
   }
   $('.lbar')
     .on('mousedown',function(){return!1})
-    .on('mousedown','b',function(e){
-      var ch=$(e.target).text()
-      for(var k in ide.wins){var w=ide.wins[k];if(w.hasFocus()){w.insert(ch);return!1}}
-      $(':focus').insert(ch);return!1
-    })
+    .on('mousedown','b',function(e){var c=$(this).text(),w=ide.focusedWin;(w.hasFocus()?w:$(':focus')).insert(c);return!1})
     .on('mouseout','b,.lbar-prefs',function(){clearTimeout(ttid);ttid=null;$tip.add($tipTriangle).hide()})
     .on('mouseover','b',function(e){
-      var s=$(e.target).text(),
-          key=keymap.getBQKeyFor(s),
-          keyText=key&&s.charCodeAt(0)>127?'Keyboard: '+prefs.prefixKey()+key+'\n\n':'',
-          h=lbar.tips[s]||[s,'']
-      requestTooltip(e,h[0],keyText+h[1])
+      var c=$(this).text(),k=keymap.getBQKeyFor(c),s=k&&c.charCodeAt(0)>127?'Keyboard: '+prefs.prefixKey()+k+'\n\n':''
+      var h=lbar.tips[c]||[c,''];requestTooltip(e,h[0],s+h[1])
     })
     .on('mouseover','.lbar-prefs',function(e){
       var h=prefs.keys(),s=''
       for(var i=0;i<cmds.length;i++){
         var code=cmds[i][0],desc=cmds[i][1],defaults=cmds[i][2],important=cmds[i][3]
         if(important){
-          var pad=Array(Math.max(0,25-desc.length)).join(' ')
-          var ks=h[code]||defaults
+          var pad=Array(Math.max(0,25-desc.length)).join(' '),ks=h[code]||defaults
           s+=code+':'+desc+':'+pad+' '+(ks[ks.length-1]||'none')+'\n'
         }
       }
@@ -174,61 +160,48 @@ this.IDE=function(){
       var h=st.south.innerHeight;!st.south.isClosed&&h>1&&prefs.tracerHeight(h)
     }}
   })
-  var updateTop=function(){$('.ide').css({top:(prefs.lbar()?$('.lbar').height():0)+(D.mac?5:22)})
-  layout&&layout.resizeAll()};$('.lbar').toggle(!!prefs.lbar());updateTop();$(window).resize(updateTop)
+  var updTop=function(){$('.ide').css({top:(prefs.lbar()?$('.lbar').height():0)+(D.mac?5:22)})
+  layout&&layout.resizeAll()};$('.lbar').toggle(!!prefs.lbar());updTop();$(window).resize(updTop)
   layout.close('east');layout.close('south');ide.wins[0].updateSize()
   D.floatOnTop=prefs.floatOnTop();prefs.floatOnTop(function(x){D.floatOnTop=x})
-  prefs.lbar(function(x){$('.lbar').toggle(!!x);updateTop()})
+  prefs.lbar(function(x){$('.lbar').toggle(!!x);updTop()})
   try{
     D.installMenu(parseMenuDSL(prefs.menu()))
   }catch(e){
     $.alert('Invalid menu configuration -- the default menu will be used instead','Warning')
     console.error(e);D.installMenu(parseMenuDSL(prefs.menu.getDefault()))
   }
-  prefs.autoCloseBrackets(function(x){
-    for(var k in ide.wins){var w=ide.wins[k];w.cm&&w.cm.setOption('autoCloseBrackets',!!x&&ACB_VALUE)}
-  })
-  prefs.indent(function(x){
-    for(var k in ide.wins){
-      var w=ide.wins[k];w.cm&&w.id&&(w.cm.setOption('smartIndent',x>=0),w.cm.setOption('indentUnit',x))
-    }
-  })
-  prefs.fold(function(x){
-    for(var k in ide.wins){var w=ide.wins[k];w.cm&&w.id&&(w.cm.setOption('foldGutter',!!x),w.updateGutters())}
-  })
-  prefs.matchBrackets(function(x){
-    for(var k in ide.wins){var w=ide.wins[k];w.cm&&w.cm.setOption('matchBrackets',!!x)}
-  })
+  function eachWin(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
+  prefs.autoCloseBrackets(function(x){eachWin(function(w){w.cm.setOption('autoCloseBrackets',!!x&&ACB_VALUE)})})
+  prefs.indent(function(x){eachWin(function(w){if(w.id){w.cm.setOption('smartIndent',x>=0);w.cm.setOption('indentUnit',x)}})})
+  prefs.fold(function(x){eachWin(function(w){if(w.id){w.cm.setOption('foldGutter',!!x);w.updateGutters()}})})
+  prefs.matchBrackets(function(x){eachWin(function(w){w.cm.setOption('matchBrackets',!!x)})})
 }
-
 this.IDE.prototype={
-  setHostAndPort:function(h,p){this.host=h;this.port=p;this.updateTitle()},
+  setHostAndPort:function(h,p){this.host=h;this.port=p;this.updTitle()},
   emit:function(x,y){this.dead||D.socket.emit(x,y)},
   die:function(){ // don't really, just pretend
     if(!this.dead){this.dead=1;this.$ide.addClass('disconnected');for(var k in this.wins)this.wins[k].die()}
   },
-  updateTitle:function(){ // change listener for prefs.title
+  updTitle:function(){ // change listener for prefs.title
     var ide=this,ri=D.remoteIdentification||{},v=D.versionInfo
-    var t=prefs.title().replace(/\{\w+\}/g,function(x){
-      var X=x.toUpperCase();return(
-        X==='{WSID}'?ide.wsid:
-        X==='{HOST}'?ide.host:
-        X==='{PORT}'?ide.port:
-        X==='{PID}'?ri.pid:
-        X==='{CHARS}'?(ri.arch||'').split('/')[0]:
-        X==='{BITS}' ?(ri.arch||'').split('/')[1]:
-        X==='{VER_A}'?(ri.version||'').split('.')[0]:
-        X==='{VER_B}'?(ri.version||'').split('.')[1]:
-        X==='{VER_C}'?(ri.version||'').split('.')[2]:
-        X==='{VER}'?ri.version:
-        X==='{RIDE_VER_A}'?(v.version||'').split('.')[0]:
-        X==='{RIDE_VER_B}'?(v.version||'').split('.')[1]:
-        X==='{RIDE_VER_C}'?(v.version||'').split('.')[2]:
-        X==='{RIDE_VER}'?v.version:
-        x
-      )||''
-    })
-    D.setTitle(/^\s*$/.test(t)?'Dyalog':t)
+    D.setTitle(prefs.title().replace(/\{\w+\}/g,function(x){var X=x.toUpperCase();return(
+      X==='{WSID}'?ide.wsid:
+      X==='{HOST}'?ide.host:
+      X==='{PORT}'?ide.port:
+      X==='{PID}'?ri.pid:
+      X==='{CHARS}'?(ri.arch||'').split('/')[0]:
+      X==='{BITS}' ?(ri.arch||'').split('/')[1]:
+      X==='{VER_A}'?(ri.version||'').split('.')[0]:
+      X==='{VER_B}'?(ri.version||'').split('.')[1]:
+      X==='{VER_C}'?(ri.version||'').split('.')[2]:
+      X==='{VER}'?ri.version:
+      X==='{RIDE_VER_A}'?(v.version||'').split('.')[0]:
+      X==='{RIDE_VER_B}'?(v.version||'').split('.')[1]:
+      X==='{RIDE_VER_C}'?(v.version||'').split('.')[2]:
+      X==='{RIDE_VER}'?v.version:
+      x
+    )||'Dyalog'}))
   },
   showHTML:function(x){
     var ide=this
@@ -265,11 +238,8 @@ this.IDE.prototype={
     if(!done){
       var dir=ee['debugger']?'south':'east', size=ee['debugger']?prefs.tracerHeight():prefs.editorWidth()
       this.layout.sizePane(dir,size||'50%');this.layout.open(dir)
-      var $li=$(
-        '<li id=wintab'+w+'>'+
-          '<a href=#win'+w+'><span class=tab-name></span><span class=tab-close title="Save and close">×</span></a>'+
-        '</li>'
-      )
+      var $li=$('<li id=wintab'+w+'><a href=#win'+w+'><span class=tab-name></span>'+
+                                   '<span class=tab-close title="Save and close">×</span></a>')
         .appendTo('.ui-layout-'+dir+' ul')
         .click(function(e){var win=D.ide.wins[w];e.which===2&&win&&win.EP&&win.EP(win.cm)}) // middle click
       $li.find('.tab-name').text(ee.name)
