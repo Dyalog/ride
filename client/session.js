@@ -114,11 +114,9 @@ this.Session.prototype={
   ER:function(){this.exec(0)},
   TC:function(){this.exec(1)},
   tabOrAutocomplete:function(cm){
-    if(cm.somethingSelected()){cm.execCommand('indentMore');return}
-    if(this.promptType!==4)return // never autocomplete in ⍞ input
-    var c=cm.getCursor(),s=cm.getLine(c.line)
-    if(/^ *$/.test(s.slice(0,c.ch))){cm.execCommand('indentMore');return}
-    this.autocompleteWithTab=1;this.emit('GetAutoComplete',{line:s,pos:c.ch,token:0})
+    var u=cm.getCursor(),s=cm.getLine(u.line)
+    if(cm.somethingSelected()||this.promptType===4||/^ *$/.test(s.slice(0,u.ch))){cm.execCommand('indentMore');return}
+    this.autocompleteWithTab=1;this.emit('GetAutoComplete',{line:s,pos:u.ch,token:0})
   },
   CLM:function(cm){
     var sels=cm.listSelections()
