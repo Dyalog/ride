@@ -2,23 +2,24 @@
 var fs=require('fs'),net=require('net'),os=require('os'),path=require('path'),cp=require('child_process')
 var log;(function(){
   // record no more than N log messages per T milliseconds; at any moment, there have been n messages since time t
-  var stdoutOK=1,N=500,T=1000,n=0,t=0,t0=+new Date
+  var stdoutOK=1,N=500,T=1000,n=0,t=0,t0=+new Date,l=[] // l:listeners
   log=function(s){
     var t1=+new Date;if(t1-t>T){t=t1;n=1} // if last message was too long ago, start counting afresh
     var m= ++n<N ? (t1-t0)+' '+s+'\n' : n===N ? '... logging temporarily suppressed\n' : 0; if(!m)return
     if(stdoutOK)try{process.stdout&&process.stdout.write&&process.stdout.write(m)}catch(_){stdoutOK=0}
-    var l=log.listeners.slice(0);for(var i=0;i<l.length;i++)l[i](m) // call listeners; prevent concurrent modification
+    var l1=l.slice(0);for(var i=0;i<l1.length;i++)l1[i](m) // notify listeners, prevent concurrent modification
   }
-  log.listeners=[]
+  log.addListener=function(x){l.push(x)}
+  log.rmListener=function(x){var i=l.indexOf(x);i>=0&&l.splice(i,1)}
   var f=process.env.RIDE_LOG
   if(f){ // if $RIDE_LOG is present, also log to a file (in addition to stdout)
     var h=process.env.HOME||process.env.USERPROFILE;if(h)f=path.resolve(h,f)
-    fd=fs.openSync(f,'a');log.listeners.push(function(s){var b=Buffer(m);fs.writeSync(fd,b,0,b.length)})
+    fd=fs.openSync(f,'a');l.push(function(s){var b=Buffer(m);fs.writeSync(fd,b,0,b.length)})
   }
   if(typeof window!=='undefined'){ // are we running under NW.js as opposed to just NodeJS?
     var i=0,a=Array(1000)          // if so, store latest log messages in RAM
     log.get=function(){return a.slice(i).concat(a.slice(0,i))}
-    log.listeners.push(function(s){a[i++]=s;i%=a.length})
+    l.push(function(s){a[i++]=s;i%=a.length})
   }
   log(new Date().toISOString())
 }())
@@ -31,10 +32,8 @@ function ls(x){return fs.readdirSync(x)}
 function sil(f){return function(x){try{f(x)}catch(_){}}} // exception silencer
 function shEsc(x){return"'"+x.replace(/'/g,"'\\''")+"'"} // shell escape
 function parseVer(s){return s.split('.').map(function(x){return+x})}
-function toInterpreter(s){
-  if(clt){log('send '+trunc(s));var b=Buffer('xxxxRIDE'+s);b.writeInt32BE(b.length,0);clt.write(b)}
-}
-function cmd(c,h){toInterpreter(JSON.stringify([c,h||{}]))} // c:command name, h:arguments as a JS object
+function send(s){if(clt){log('send '+trunc(s));var b=Buffer('xxxxRIDE'+s);b.writeInt32BE(b.length,0);clt.write(b)}}
+function cmd(c,h){send(JSON.stringify([c,h||{}]))} // c:command name, h:arguments as a JS object
 function toBrowser(x,y){log('to browser:'+trunc(JSON.stringify([x,y])));skt&&skt.emit(x,y)}
 function initInterpreterConn(){
   var q=Buffer(0)
@@ -47,12 +46,12 @@ function initInterpreterConn(){
   })
   clt.on('error',function(e){toBrowser('*error',{msg:''+e});clt=null})
   clt.on('end',function(){log('interpreter diconnected');toBrowser('*disconnected');clt=null})
-  toInterpreter('SupportedProtocols=1');toInterpreter('UsingProtocol=1')
+  send('SupportedProtocols=1');send('UsingProtocol=1')
   cmd('Identify',{identity:1});cmd('Connect',{remoteId:2});cmd('GetWindowLayout')
 }
 var handlers={
   '*connect':function(x){
-    var m=net,o={host:x.host,port:x.port}
+    var m=net,o={host:x.host,port:x.port} // m:module used to create connection; o:options for .connect()
     if(x.ssl){
       m=require('tls');o.rejectUnauthorized=false
       if(x.cert)try{o.key=fs.readFileSync(x.cert)}catch(e){toBrowser('*error',{msg:e.message});return}
@@ -179,9 +178,7 @@ var handlers={
       toBrowser('*proxyInfo',r)
     }
   },
-
-  // todo: remove fake tree events after the real ones are implemented in the interpreter
-  TreeList:function(x){
+  TreeList:function(x){ // todo: remove fake tree events after the real ones are implemented in the interpreter
     setTimeout(function(){
       var n=2*(x.nodeId||1)
       toBrowser('ReplyTreeList',{nodeId:x.nodeId,children:[{id:n,name:'a'+n,type:1},{id:n+1,name:'a'+(n+1),type:1}]})

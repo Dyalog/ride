@@ -116,17 +116,14 @@
   D.showProtocolLog=function(){
     var lw=window.lw=open('empty.html')
     function wr(s){
-      if(!lw||lw.closed||!lw.document||!lw.document.createTextNode){
-        var i=proxy.log.listeners.indexOf(wr);i>=0&&proxy.log.listeners.splice(i,1);lw=null
-      }else{
-        var b=lw.document.body,atEnd=b.scrollTop==b.scrollHeight-b.clientHeight
-        b.appendChild(lw.document.createTextNode(s));atEnd&&(b.scrollTop=b.scrollHeight-b.clientHeight)
-      }
+      if(!lw||lw.closed||!lw.document||!lw.document.createTextNode){proxy.log.rmListener(wr);lw=null;return}
+      var b=lw.document.body,atEnd=b.scrollTop==b.scrollHeight-b.clientHeight
+      b.appendChild(lw.document.createTextNode(s));atEnd&&(b.scrollTop=b.scrollHeight-b.clientHeight)
     }
     lw.onload=function(){
       lw.document.body.innerHTML='<style>body{font-family:monospace;margin:0;padding:0;white-space:pre;'+
                                              'position:absolute;top:0;bottom:0;left:0;right:0;overflow:scroll}</style>'
-      lw.document.title='RIDE Protocol Log';wr(proxy.log.get().join(''));proxy.log.listeners.push(wr)
+      lw.document.title='RIDE Protocol Log';wr(proxy.log.get().join(''));proxy.log.addListener(wr)
     }
     return!1
   }
