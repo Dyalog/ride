@@ -74,7 +74,8 @@ this.IDE=function(){
     HadError:function(){ide.pending.splice(0,ide.pending.length)},
     FocusWindow:throttle1(function(x){$('#wintab'+x.win+' a').click();var w=ide.wins[x.win];w&&w.focus()}),
     WindowTypeChanged:function(x){return ide.wins[x.win].setTracer(x.tracer)},
-    autocomplete:function(x){return ide.wins[x.token].autocomplete(x.skip,x.options)},
+    ReplyGetAutocomplete:function(x){return ide.wins[x.token].autocomplete(x.skip,x.options)},
+    ReplyGetAutoComplete:function(x){handlers.ReplyGetAutocomplete(x)}, // todo
     highlight:function(x){ide.wins[x.win].highlight(x.line)},
     UpdateWindow:function(x){$('#wintab'+x.token+' a').text(x.name);ide.wins[x.token].open(x)},
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
