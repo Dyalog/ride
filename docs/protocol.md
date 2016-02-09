@@ -396,9 +396,6 @@ Status information that should be displayed to the user.
 ```
 RIDE can use the display name as the title of its application window.
 
-:red_circle: The interpreter used to send displayName-s with '\0'-s in them.  TODO: make sure this is not the case
-anymore.
-
 <a name=Disconnect></a>
 ```json
 ["Disconnect",{"msg":"..."}]
