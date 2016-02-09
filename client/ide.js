@@ -207,7 +207,7 @@ this.IDE.prototype={
       X==='{RIDE_VER_C}'?(v.version||'').split('.')[2]:
       X==='{RIDE_VER}'?v.version:
       x
-    )||'Dyalog'}))
+    )||''})||'Dyalog')
   },
   showHTML:function(x){
     var ide=this
