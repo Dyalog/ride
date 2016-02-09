@@ -15,7 +15,7 @@ no unnecessary ; at the eol
   seriously, the dreaded ASI (automatic semicolon insertion) isn't as evil as people think
   one exception: when a line begins with ( or [ you must put a ; before it
 'singly-quoted strings' unless "there's an apostrophe inside"
-=== instead of ==
+=== instead of == (here's why: https://dorey.github.io/JavaScript-Equality-Table)
   ==null can be fine, it captures both ===null and ===undefined.
   same for !== and !=
 single-letter names are good, ideally with a comment on declaration
