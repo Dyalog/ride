@@ -94,7 +94,7 @@
       onevent:function(x){var a=this[x.data[0]]||[];for(var i=0;i<a.length;i++)a[i].apply(null,x.data.slice(1))},
       on:function(e,f){(this[e]=this[e]||[]).push(f);return this}
     }
-    var x=new LS,y=new LS;x.other=y;y.other=x;proxy.Proxy()(y);return x
+    var x=new LS,y=new LS;x.other=y;y.other=x;proxy(y);return x
   }
   var execPath=ps.execPath;D.mac&&(execPath=execPath.replace(/(\/Contents\/).*$/,'$1MacOS/nwjs'))
   D.rideConnect=function(){

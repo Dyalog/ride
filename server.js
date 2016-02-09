@@ -7,8 +7,7 @@
 
 'use strict'
 var compression=require('compression'),express=require('express'),fs=require('fs'),http=require('http'),
-    https=require('https'),WSServer=require('ws').Server,
-    Proxy=require('./proxy').Proxy,spawn=require('child_process').spawn
+    https=require('https'),WSServer=require('ws').Server,proxy=require('./proxy'),spawn=require('child_process').spawn
 
 var t0=+new Date
 function log(s){process.stdout.write((new Date-t0)+': '+s+'\n')}
@@ -34,7 +33,6 @@ var insecure=process.env.RIDE_SERVER_INSECURE
 var port=insecure?8000:8443
 var server=insecure?http.createServer(app)
              :https.createServer({cert:fs.readFileSync('ssl/cert.pem'),key:fs.readFileSync('ssl/key.pem')},app)
-var proxy=Proxy()
 ;(new WSServer({server:server})).on('connection',function(ws){
   var l={},io={} // l:listeners, io:socket.io-like interface
   io.emit=function(x,y){ws.send(JSON.stringify([x,y]));return io}

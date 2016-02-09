@@ -3,7 +3,7 @@ var fs=require('fs'),net=require('net'),os=require('os'),path=require('path'),cp
 var log;(function(){
   // record no more than N log messages per T milliseconds; at any moment, there have been n messages since time t
   var stdoutOK=1,N=500,T=1000,n=0,t=0,t0=+new Date
-  log=exports.log=function(s){
+  log=function(s){
     var t1=+new Date;if(t1-t>T){t=t1;n=1} // if last message was too long ago, start counting afresh
     var m= ++n<N ? (t1-t0)+' '+s+'\n' : n===N ? '... logging temporarily suppressed\n' : 0; if(!m)return
     if(stdoutOK)try{process.stdout&&process.stdout.write&&process.stdout.write(m)}catch(_){stdoutOK=0}
@@ -188,13 +188,12 @@ var handlers={
     },Math.random()*2000)
   }
 }
-this.Proxy=function(){
-  return function(x){
-    log('browser connected')
-    ;(skt=x).onevent=function(x){
-      var f=handlers[x.data[0]];f&&log('from browser:'+trunc(JSON.stringify(x.data)))
-      f?f(x.data[1]):cmd(x.data[0],x.data[1]||{})
-    }
-    child&&toBrowser('*spawned',{pid:child.pid})
+module.exports=function(x){
+  log('browser connected')
+  ;(skt=x).onevent=function(x){
+    var f=handlers[x.data[0]];f&&log('from browser:'+trunc(JSON.stringify(x.data)))
+    f?f(x.data[1]):cmd(x.data[0],x.data[1]||{})
   }
+  child&&toBrowser('*spawned',{pid:child.pid})
 }
+module.exports.log=log
