@@ -68,7 +68,7 @@ $(function(){
     if(e.RIDE_LISTEN)conn().listen(e.RIDE_LISTEN)
     else if(e.RIDE_CONNECT)conn().connect(e.RIDE_CONNECT)
     else if(+e.RIDE_SPAWN){ // the value of this env var should be '0' or '1'
-      new IDE;D.socket.emit('*spawn') // '*error' is handled in ide.coffee
+      new IDE;D.socket.emit('*launch',{}) // '*error' is handled in ide.coffee
       window.onbeforeunload=function(){D.socket.emit('Exit',{code:0})}
     }
     else conn()
