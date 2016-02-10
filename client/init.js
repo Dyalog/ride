@@ -89,9 +89,15 @@ $(function(){
   // Some library is doing "localStorage.debug=undefined" instead of "delete localStorage.debug".
   // It doesn't work that way.  It may work for other objects, but the values in localStorage
   // are always strings and that leaves us with 'undefined' as a string.  So, let's clean up...
-  delete localStorage.debug
+  var ls=localStorage;delete ls.debug
 
-  localStorage.version||(localStorage.version='[2,0]') // for migrations to later versions of RIDE
+  // migrations
+  ls.version=ls.version||'['+D.versionInfo.replace(/\./g,',')+']' // localStorage.version defaults to current version
+  var v=JSON.parse(ls.version)
+  if(v[0]<3&&ls.favs){
+    try{ls.favs=JSON.strigify(JSON.parse(ls.favs).map(function(x){x.type='connect';x.port===4502&&delete x.port}))}
+    catch(_){delete ls.favs}
+  }
 
   // Implement access keys (Alt-X) using <u></u>.
   // The built-in accesskey=X doesn't handle duplicates well -- it doesn't always focus the visible one.
