@@ -203,8 +203,6 @@ The following messages are used in relation to trace windows.
 ```
 tells RIDE where the currently executed line is.  Traditionally that's indicated by a red border around it.
 
-:red_circle: "highlight" (what the interpreter currently sends) can be renamed to "HighlightLine" now.  RIDE accepts both.
-
 <a name=SetLineAttributes></a>
 ```json
 ["SetLineAttributes",{"win":123,"stop":[2,3,5]}] // RIDE -> Interpreter  or  Interpreter -> RIDE
@@ -302,15 +300,15 @@ parse messages.
 
 #Autocompletion
 RIDE can request autocompletion with
-<a name=GetAutoComplete></a>
+<a name=GetAutocomplete></a>
 ```json
-["GetAutoComplete",{"line":"r←1+ab","pos":6,"token":234}] // RIDE -> Interpreter
+["GetAutocomplete",{"line":"r←1+ab","pos":6,"token":234}] // RIDE -> Interpreter
 ```
 * `line`: text containing the name that's being completed
 * `pos`: position of cursor within `line`
-* `token` is used by [`ReplyGetAutoComplete`](#ReplyGetAutoComplete) to identify which request it is a response to. RIDE
-may send multiple `GetAutoComplete` requests and the interpreter may only reply to some of them. Similarly, RIDE may
-ignore some of the replies if the state of the editor has changed since the `GetAutoComplete` request was sent.
+* `token` is used by [`ReplyGetAutocomplete`](#ReplyGetAutocomplete) to identify which request it is a response to. RIDE
+may send multiple `GetAutocomplete` requests and the interpreter may only reply to some of them. Similarly, RIDE may
+ignore some of the replies if the state of the editor has changed since the `GetAutocomplete` request was sent.
 In order to remain responsive, RIDE should throttle its autocompletion requests (no more than N per second) and it
 shouldn't block while it's waiting for the response.
 
@@ -318,16 +316,11 @@ shouldn't block while it's waiting for the response.
 
 :red_circle: If RIDE sends a different token, the interpreter doesn't respond.
 
-:red_circle: I think the C in AutoComplete shouldn't be capitalised as "autocomplete" is one word
-
-<a name=ReplyGetAutoComplete></a>
+<a name=ReplyGetAutocomplete></a>
 ```json
-["ReplyGetAutoComplete",{"skip":2,"options":["ab","abc","abde"],"token":234}] // Interpreter -> RIDE
+["ReplyGetAutocomplete",{"skip":2,"options":["ab","abc","abde"],"token":234}] // Interpreter -> RIDE
 ```
 * `skip`: how many characters before the request's `pos` to replace with an element of `options`
-
-:red_circle: RIDE2+ supports this command in a slightly different format, legacy from before I switched to RIDE protocol
-v2.
 
 #Value tips
 When the user hovers a name with the mouse, RIDE should ask for a short textual representation of the current value:

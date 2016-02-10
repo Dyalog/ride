@@ -118,7 +118,7 @@ this.Session.prototype={
   tabOrAutocomplete:function(cm){
     var u=cm.getCursor(),s=cm.getLine(u.line)
     if(cm.somethingSelected()||this.promptType===4||/^ *$/.test(s.slice(0,u.ch))){cm.execCommand('indentMore');return}
-    this.autocompleteWithTab=1;this.emit('GetAutoComplete',{line:s,pos:u.ch,token:0})
+    this.autocompleteWithTab=1;this.emit('GetAutocomplete',{line:s,pos:u.ch,token:0})
   },
   CLM:function(cm){
     var sels=cm.listSelections()
