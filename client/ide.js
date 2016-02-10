@@ -52,7 +52,7 @@ this.IDE=function(){
       if(x.code){ide.die();setTimeout(function(){$.alert('Interpreter process exited with code '+x.code,'Error')},100)}
     },
     '*disconnected':function(){if(!ide.dead){$.alert('Interpreter disconnected','Error');ide.die()}},
-    '*identify':function(x){D.remoteIdentification=x;ide.updTitle()},
+    Identify:function(x){D.remoteIdentification=x;ide.updTitle();ide.connected=1},
     Disconnect:function(x){
       if(ide.dead)return
       ide.die()
@@ -188,7 +188,8 @@ this.IDE.prototype={
   setHostAndPort:function(h,p){this.host=h;this.port=p;this.updTitle()},
   emit:function(x,y){this.dead||D.socket.emit(x,y)},
   die:function(){ // don't really, just pretend
-    if(!this.dead){this.dead=1;this.$ide.addClass('disconnected');for(var k in this.wins)this.wins[k].die()}
+    if(this.dead)return
+    this.dead=1;this.connected=0;this.$ide.addClass('disconnected');for(var k in this.wins)this.wins[k].die()
   },
   updTitle:function(){ // change listener for prefs.title
     var ide=this,ri=D.remoteIdentification||{},v=D.versionInfo

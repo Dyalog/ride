@@ -68,7 +68,7 @@ this.Session.prototype={
   updatePW:function(force){ // force:emit a SetPW message even if the width hasn't changed
     // discussion about CodeMirror's width in chars: https://github.com/codemirror/CodeMirror/issues/3618
     var pw=Math.max(42,Math.floor((this.$e.width()-this.cm.display.scrollbarFiller.clientWidth)/this.cm.defaultCharWidth()))
-    if(pw!==this.pw&&this.host&&!this.ide.dead||force)this.emit('SetPW',{pw:this.pw=pw})
+    if(pw!==this.pw&&this.ide.connected||force)this.emit('SetPW',{pw:this.pw=pw})
   },
   scrollCursorIntoView:function(){
     var cm=this.cm;cm.scrollTo(0,cm.getScrollInfo().top);setTimeout(function(){cm.scrollIntoView()},1)
