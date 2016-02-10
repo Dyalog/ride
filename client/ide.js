@@ -52,7 +52,7 @@ this.IDE=function(){
       if(x.code){ide.die();setTimeout(function(){$.alert('Interpreter process exited with code '+x.code,'Error')},100)}
     },
     '*disconnected':function(){if(!ide.dead){$.alert('Interpreter disconnected','Error');ide.die()}},
-    Identify:function(x){D.remoteIdentification=x;ide.updTitle();ide.connected=1},
+    Identify:function(x){D.remoteIdentification=x;ide.updTitle();ide.connected=1;ide.wins[0].updatePW(1)},
     Disconnect:function(x){
       if(ide.dead)return
       ide.die()
