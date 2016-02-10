@@ -36,12 +36,16 @@ function send(s){if(clt){log('send '+trunc(s));var b=Buffer('xxxxRIDE'+s);b.writ
 function cmd(c,h){send(JSON.stringify([c,h||{}]))} // c:command name, h:arguments as a JS object
 function toBrowser(x,y){log('to browser:'+trunc(JSON.stringify([x,y])));skt&&skt.emit(x,y)}
 function initInterpreterConn(){
-  var q=Buffer(0)
+  var q=Buffer(0), old // old: have we warned the user that we're talking to an old interpreter
   clt.on('data',function(x){
     q=Buffer.concat([q,x]);var n
     while(q.length>=4&&(n=q.readInt32BE(0))<=q.length){
       var m=''+q.slice(8,n);q=q.slice(n);log('recv '+trunc(m))
-      if(m[0]==='['){var u=JSON.parse(m);skt&&skt.emit(u[0],u[1])}
+      if(/^<ReplyUnknownRIDECommand>/.test(m)&&!old){
+        old=1;toBrowser('*error',{msg:'This version of RIDE cannot talk to interpreters older than v15.0'})
+      }else if(m[0]==='['){ // ignore handshake ("SupportedProtocols=1" and "UsingProtocol=1")
+        var u=JSON.parse(m);skt&&skt.emit(u[0],u[1])
+      }
     }
   })
   clt.on('error',function(e){toBrowser('*error',{msg:''+e});clt=null})
