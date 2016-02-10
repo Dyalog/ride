@@ -97,6 +97,7 @@ $(function(){
   if(v[0]<3&&ls.favs){
     try{ls.favs=JSON.strigify(JSON.parse(ls.favs).map(function(x){x.type='connect';x.port===4502&&delete x.port}))}
     catch(_){delete ls.favs}
+    ls.version='[3,0]'
   }
 
   // Implement access keys (Alt-X) using <u></u>.
