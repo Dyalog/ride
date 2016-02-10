@@ -199,14 +199,11 @@ but does not close the UI window until the interpreter replies with the same mes
 The following messages are used in relation to trace windows.
 <a name=HighlightLine></a>
 ```json
-["HighlightLine",{"lineInfo":{"win":123,"line":45}}] // Interpreter -> RIDE
+["HighlightLine",{"win":123,"line":45}] // Interpreter -> RIDE
 ```
 tells RIDE where the currently executed line is.  Traditionally that's indicated by a red border around it.
 
-:red_circle: RIDE2+ supports this command in a slightly different format, legacy from before I switched to RIDE protocol
-v2.
-
-:red_circle: `["highlight",{"win":123,"line":45}]`
+:red_circle: "highlight" (what the interpreter currently sends) can be renamed to "HighlightLine" now.  RIDE accepts both.
 
 <a name=SetLineAttributes></a>
 ```json

@@ -76,7 +76,8 @@ this.IDE=function(){
     WindowTypeChanged:function(x){return ide.wins[x.win].setTracer(x.tracer)},
     ReplyGetAutocomplete:function(x){return ide.wins[x.token].autocomplete(x.skip,x.options)},
     ReplyGetAutoComplete:function(x){handlers.ReplyGetAutocomplete(x)}, // todo
-    highlight:function(x){ide.wins[x.win].highlight(x.line)},
+    highlight:function(x){handlers.SetHighlightLine(x)}, // todo
+    SetHighlightLine:function(x){ide.wins[x.win].highlight(x.line)},
     UpdateWindow:function(x){$('#wintab'+x.token+' a').text(x.name);ide.wins[x.token].open(x)},
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
     CloseWindow:function(x){
