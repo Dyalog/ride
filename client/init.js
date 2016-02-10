@@ -92,7 +92,7 @@ $(function(){
   var ls=localStorage;delete ls.debug
 
   // migrations
-  ls.version=ls.version||'['+D.versionInfo.replace(/\./g,',')+']' // localStorage.version defaults to current version
+  ls.version=ls.version||'[3,0]' // localStorage.version defaults to current version
   var v=JSON.parse(ls.version)
   if(v[0]<3&&ls.favs){
     try{ls.favs=JSON.strigify(JSON.parse(ls.favs).map(function(x){x.type='connect';x.port===4502&&delete x.port}))}
