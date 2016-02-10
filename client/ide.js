@@ -65,8 +65,6 @@ this.IDE=function(){
     UpdateDisplayName:function(a){ide.wsid=a.displayName;ide.updTitle()},
     EchoInput:function(x){ide.wins[0].add(x.input)},
     AppendSessionOutput:function(x){var r=x.result;ide.wins[0].add(typeof r==='string'?r:r.join('\n'))},
-    NotAtInputPrompt:function(){handlers.SetPromptType({type:0})}, // todo: remove
-    AtInputPrompt:function(x){handlers.SetPromptType({type:x.why})}, // todo: remove
     SetPromptType:function(x){
       var t=x.type;t&&ide.pending.length?ide.emit('Execute',{trace:0,text:ide.pending.shift()+'\n'}):ide.wins[0].prompt(t)
       t===4&&ide.wins[0].focus() // ⍞ input
@@ -75,8 +73,6 @@ this.IDE=function(){
     FocusWindow:throttle1(function(x){$('#wintab'+x.win+' a').click();var w=ide.wins[x.win];w&&w.focus()}),
     WindowTypeChanged:function(x){return ide.wins[x.win].setTracer(x.tracer)},
     ReplyGetAutocomplete:function(x){return ide.wins[x.token].autocomplete(x.skip,x.options)},
-    ReplyGetAutoComplete:function(x){handlers.ReplyGetAutocomplete(x)}, // todo
-    highlight:function(x){handlers.SetHighlightLine(x)}, // todo
     SetHighlightLine:function(x){ide.wins[x.win].highlight(x.line)},
     UpdateWindow:function(x){$('#wintab'+x.token+' a').text(x.name);ide.wins[x.token].open(x)},
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
