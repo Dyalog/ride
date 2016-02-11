@@ -61,6 +61,6 @@ if [ ! -e build/nw/D.js -o $(find build/{js,tmp} -newer build/nw/D.js 2>/dev/nul
   echo 'generating D.js for web app'
   cp -r build/nw/* build/static/
   rm build/static/proxy.js
-  cp favicon.ico style/apl385.{eot,svg,ttf} build/static/
+  cp favicon.ico style/apl385.ttf build/static/
   cat build/tmp/version-info.js build/tmp/libs.js build/tmp/ride.js >build/static/D.js
 fi

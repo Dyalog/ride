@@ -1,21 +1,4 @@
 #!/bin/bash
-# convert ttf to eot, woff, and svg
 set -e
-f=apl385
-
-# eot
-if [ $f.ttf -nt $f.eot ]; then
-  if [ ! -x ttf2eot/ttf2eot ]; then
-    [ ! -d ttf2eot ] && git clone https://github.com/JasonRivers/ttf2eot.git --depth 1
-    make -C ttf2eot
-  fi
-  ttf2eot/ttf2eot $f.ttf >$f.eot
-fi
-
-# woff
-[ $f.ttf -nt $f.woff ] && sfnt2woff $f.ttf
-
-# svg
-[ $f.ttf -nt $f.svg ] && ./ttf2svg.pe $f.ttf $f.svg
-
+[ apl385.ttf -nt apl385.woff ] && sfnt2woff apl385.ttf
 :
