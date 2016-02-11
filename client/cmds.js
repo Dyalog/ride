@@ -42,7 +42,7 @@ this.cmds=[
   ['TGC','Toggle comment',          []],
   ['TL', 'Toggle localisation',     ['Ctrl-Up'],             1],
   ['TO', 'Toggle fold',             []],
-  ['VAL','Inspect value of name under cursor (in editors)',[]],
+  ['VAL','Evaluate selection or name under cursor',[]],
   ['WI', 'Weak interrupt',          ['Ctrl-Pause']],
   ['WSE','Toggle workspace explorer',[]],
   ['ZMI','Increase font size',      ['Ctrl-=', 'Shift-Ctrl-=']],
