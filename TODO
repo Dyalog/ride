@@ -17,6 +17,7 @@ Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nic
        from JD: http://stackoverflow.com/questions/284258/how-do-i-set-the-version-information-for-an-existing-exe-dll
           NN: First answer talks about VisualStudio options
           NN: Second answer recommends a tool called "StampVer".  I tried it, got infected, and reinstalled Windows.
+       NN: This looks promising: https://github.com/atom/rcedit/ (requires VS to compile itself)
   S1 export and import preferences
   S2 config file for interpreter
   S3 yes/no/cancel and other ultra-simple dialogs
