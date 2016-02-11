@@ -35,7 +35,7 @@ this.parseMenuDSL=function(md){ // md:menu description
   var stk=[{ind:-1,items:[]}],lines=md.split('\n')
   for(var i=0;i<lines.length;i++){
     var s=lines[i]
-    if(!(!/^\s*$/.test(s=s.replace(/#.*/,''))))continue
+    if(/^\s*$/.test(s=s.replace(/#.*/,'')))continue
     var cond='';s=s.replace(/\{(.*)\}/,function(_,x){cond=x;return''})
     var url='';s=s.replace(/\=(https?:\/\/\S+)/,function(_,x){url=x;return''})
     var cmd='';s=s.replace(/\=([a-z][a-z0-9]+)/i,function(_,x){cmd=x;return''})
@@ -48,16 +48,14 @@ this.parseMenuDSL=function(md){ // md:menu description
     stk.push(h)
     if(cmd){
       h.cmd=cmd
-      h.action=(function(cmd){
+      h.action=function(cmd){
         return function(){
-          var f
-          if(f=CodeMirror.commands[cmd])f(D.ide.focusedWin.cm)
-          else if(D.ide[cmd])D.ide[cmd]()
-          else $.alert('Unknown command: '+cmd)
+          var f=CodeMirror.commands[cmd]
+          f?f(D.ide.focusedWin.cm):D.ide[cmd]?D.ide[cmd]():$.alert('Unknown command: '+cmd)
         }
-      })(cmd)
+      }(cmd)
     }else if(url){
-      h.action=(function(url){return function(){D.openExternal(url)}})(url)
+      h.action=D.openExternal.bind(D,url)
     }
     $.extend(h,extraOpts[cmd])
   }
