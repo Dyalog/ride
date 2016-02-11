@@ -71,6 +71,7 @@ var handlers={
       }
       toBrowser('*connected',x);initInterpreterConn()
     })
+    clt.on('error',function(err){log('connect failed: '+err);clt=null;toBrowser('*error',{msg:err.message})})
   },
   '*launch':function(x){
     var exe=(x||{}).exe||process.env.RIDE_INTERPRETER_EXE||'dyalog'
@@ -79,7 +80,7 @@ var handlers={
       toBrowser('*connected',{host:a.address,port:a.port});initInterpreterConn()
       if(typeof window!=='undefined')window.D.lastSpawnedExe=exe
     })
-    srv.on('error',function(err){log('listen failed: '+err);srv=clt=null;toBrowser('*error',{msg:''+err})})
+    srv.on('error',function(err){log('listen failed: '+err);srv=clt=null;toBrowser('*error',{msg:err.message})})
     srv.listen(0,'127.0.0.1',function(){
       var a=srv.address(),hp=a.address+':'+a.port
       log('listening for connections from spawned interpreter on '+hp)
