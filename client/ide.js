@@ -19,12 +19,11 @@ this.IDE=function(){
     '<div class=sbar>Status bar</div>'
   ide.$ide=$('.ide')
   ide.pending=[] // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
-  ide.host=ide.port=ide.wsid='';prefs.title(ide.updTitle.bind(ide))
-  D.wins=ide.wins={ // window id -> instance of Editor or Session
-    0:new Session(ide,$('.ui-layout-center'),{id:0,emit:ide.emit.bind(ide),exec:function(lines,trace){
-      if(lines&&lines.length){trace||(ide.pending=lines.slice(1));ide.emit('Execute',{trace:trace,text:lines[0]+'\n'})}
-    }})
+  ide.exec=function(l,tc){ // l:lines, tc:trace
+    if(l&&l.length){tc||(ide.pending=l.slice(1));ide.emit('Execute',{trace:tc,text:l[0]+'\n'})}
   }
+  ide.host=ide.port=ide.wsid='';prefs.title(ide.updTitle.bind(ide))
+  D.wins=ide.wins={0:new Session(ide,$('.ui-layout-center'),{id:0,emit:ide.emit.bind(ide),exec:ide.exec.bind(ide)})}
   ide.focusedWin=ide.wins[0] // last focused window, it might not have the focus right now
 
   // tab management

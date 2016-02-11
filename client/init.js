@@ -2,7 +2,6 @@
 var conn=require('./conn'),Editor=require('./editor').Editor,IDE=require('./ide').IDE,prefs=require('./prefs')
 require('./prefs-colours');require('./demo');require('./cm-foldgutter');require('./wse')
 $(function(){
-  CodeMirror.defaults.dragDrop=false;window.ondragover=window.ondrop=function(e){e.preventDefault();return!1}
   // don't use Alt- keystrokes on the Mac (see email from 2015-09-01)
   var h=CodeMirror.keyMap.emacsy;for(var k in h)if(/^alt-[a-z]$/i.test(k))delete h[k]
   if(D.nwjs){
@@ -119,4 +118,11 @@ $(function(){
       return!1
     }
   })
+
+  // drag and drop
+  CodeMirror.defaults.dragDrop=0;window.ondragover=window.ondrop=function(e){e.preventDefault();return!1}
+  window.ondrop=function(e){
+    var a=e.dataTransfer.files;if(a.length===1&&/\.dws$/i.test(a[0].path))D.ide.exec(['      )load '+a[0].path+'\n'],0)
+    e.preventDefault();return!1
+  }
 })

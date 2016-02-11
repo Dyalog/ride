@@ -32,6 +32,7 @@ Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nic
   W3 status bar
         NN: implemented in RIDE, except for "flags" (warning, error, etc)
   W4 drag/drop workspaces or source files to session
+        NN: dropping of a .dws file now types )load ...
   W5 autopw support
         NN: done
 
