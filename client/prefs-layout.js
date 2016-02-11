@@ -48,9 +48,9 @@ this.init=function($e){
   }
   $('#layout-rst').click(function(){
     var lc=$lc.val();$pfx.val(prefs.prefixKey.getDefault()).change()
-    model[lc]=[layouts[lc][2].split(''),layouts[lc][3].split('')];updateGlyphs()
+    model[lc]=[layouts[lc][2].split(''),layouts[lc][3].split('')];updGlyphs()
   })
-  $lc=$('#layout-lc').change(updateGlyphs)
+  $lc=$('#layout-lc').change(updGlyphs)
   $pfx=$('#layout-pfx')
     .on('change keyup',function(){$('#layout-legend .pfx2').text($(this).val().slice(-1))})
     .focus(function(){var t=this;setTimeout(function(){$(t).select()},1)})
@@ -65,11 +65,11 @@ this.load=function(){
       var ix=layouts[lc][j].indexOf(v[i]);ix>=0&&(model[lc][j][ix]=v[i+1])
     }
   }
-  updateGlyphs();D.win&&$('#layout-ime').prop('checked',!!prefs.ime())
+  updGlyphs();D.win&&$('#layout-ime').prop('checked',!!prefs.ime())
 }
 // Every geometry (aka "mechanical layout") has a CSS class specifying the precise key arrangement.
 var geom={US:'ansi',_:'iso'} // _ is the default
-function updateGlyphs(){ // apply model values to the DOM
+function updGlyphs(){ // apply model values to the DOM
   var lc=$lc.val(),l=layouts[lc],m=model[lc]
   $('#layout-kbd').removeClass('geom-ansi geom-iso').addClass('geom-'+(geom[$lc.val()]||geom._))
   for(var i=1;i<NK;i++){

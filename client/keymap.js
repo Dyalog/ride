@@ -154,14 +154,14 @@ kbds.layouts['DK-Mac']=[
 ]
 
 var bq // effective ` map as a dictionary, kept in sync with the prefs
-function updateBQ(){
+function updBQ(){
   bq={};var lc=prefs.kbdLocale()||'US',l=kbds.layouts[lc],n=l[0].length
   for(var i=0;i<2;i++)for(var j=0;j<n;j++){var name=l[i][j];bq[name]||(bq[name]=l[2+i][j])}
   var s=prefs.prefixMaps()[lc];if(s)for(var i=0;i<s.length;i+=2)bq[s[i]]=s[i+1]
 }
-updateBQ()
+updBQ()
 
-prefs.prefixMaps(updateBQ);prefs.kbdLocale(updateBQ)
+prefs.prefixMaps(updBQ);prefs.kbdLocale(updBQ)
 
 // order: used to measure how "complicated" (for some made-up definition of the word) a shortcut is.
 // Tooltips in the lbar show the simplest one.

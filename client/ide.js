@@ -28,7 +28,7 @@ this.IDE=function(){
 
   // tab management
   ide.tabOpts={heightStyle:'fill',activate:(function(_,ui){
-    var w=ide.wins[parseId(ui.newTab.prop('id'))];w.updateSize();w.focus();w.updateGutters()
+    var w=ide.wins[parseId(ui.newTab.prop('id'))];w.updSize();w.focus();w.updGutters()
   })}
   ide.$tabs=$('.ui-layout-east,.ui-layout-south').tabs(ide.tabOpts)
   ide.refreshTabs=function(){
@@ -51,7 +51,7 @@ this.IDE=function(){
       if(x.code){ide.die();setTimeout(function(){$.alert('Interpreter process exited with code '+x.code,'Error')},100)}
     },
     '*disconnected':function(){if(!ide.dead){$.alert('Interpreter disconnected','Error');ide.die()}},
-    Identify:function(x){D.remoteIdentification=x;ide.updTitle();ide.connected=1;ide.wins[0].updatePW(1)},
+    Identify:function(x){D.remoteIdentification=x;ide.updTitle();ide.connected=1;ide.wins[0].updPW(1)},
     Disconnect:function(x){
       if(ide.dead)return
       ide.die()
@@ -153,7 +153,7 @@ this.IDE=function(){
     east: {spacing_closed:0,resizable:1,togglerLength_open:0,size:'0%'},
     south:{spacing_closed:0,resizable:1,togglerLength_open:0,size:'0%'},
     center:{onresize:function(){
-      for(var k in ide.wins)ide.wins[k].updateSize()
+      for(var k in ide.wins)ide.wins[k].updSize()
       var st=ide.layout.state
       var w=st.east .innerWidth ;!st.east .isClosed&&w>1&&prefs.editorWidth (w)
       var h=st.south.innerHeight;!st.south.isClosed&&h>1&&prefs.tracerHeight(h)
@@ -164,7 +164,7 @@ this.IDE=function(){
     layout&&layout.resizeAll()
   }
   $('.lbar').toggle(!!prefs.lbar());$('.sbar').toggle(!!prefs.sbar());updTopBtm();$(window).resize(updTopBtm)
-  layout.close('east');layout.close('south');ide.wins[0].updateSize()
+  layout.close('east');layout.close('south');ide.wins[0].updSize()
   D.floatOnTop=prefs.floatOnTop();prefs.floatOnTop(function(x){D.floatOnTop=x})
   prefs.lbar(function(x){$('.lbar').toggle(!!x);updTopBtm()})
   prefs.sbar(function(x){$('.sbar').toggle(!!x);updTopBtm()})
@@ -177,7 +177,7 @@ this.IDE=function(){
   function eachWin(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
   prefs.autoCloseBrackets(function(x){eachWin(function(w){w.cm.setOption('autoCloseBrackets',!!x&&ACB_VALUE)})})
   prefs.indent(function(x){eachWin(function(w){if(w.id){w.cm.setOption('smartIndent',x>=0);w.cm.setOption('indentUnit',x)}})})
-  prefs.fold(function(x){eachWin(function(w){if(w.id){w.cm.setOption('foldGutter',!!x);w.updateGutters()}})})
+  prefs.fold(function(x){eachWin(function(w){if(w.id){w.cm.setOption('foldGutter',!!x);w.updGutters()}})})
   prefs.matchBrackets(function(x){eachWin(function(w){w.cm.setOption('matchBrackets',!!x)})})
 }
 this.IDE.prototype={

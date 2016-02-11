@@ -61,11 +61,11 @@ this.Session.prototype={
     else cm.setCursor(l,cm.getLine(l).length)
     x&&cm.clearHistory()
   },
-  updateSize:function(){
+  updSize:function(){
     var i=this.cm.getScrollInfo(),b=5>Math.abs(i.top+i.clientHeight-i.height) // b:are we at the bottom edge?
-    this.cm.setSize(this.$e.width(),this.$e.height());b&&this.scrollCursorIntoView();this.updatePW()
+    this.cm.setSize(this.$e.width(),this.$e.height());b&&this.scrollCursorIntoView();this.updPW()
   },
-  updatePW:function(force){ // force:emit a SetPW message even if the width hasn't changed
+  updPW:function(force){ // force:emit a SetPW message even if the width hasn't changed
     // discussion about CodeMirror's width in chars: https://github.com/codemirror/CodeMirror/issues/3618
     // We can get the scrollbar's width through cm.display.scrollbarFiller.clientWidth, it's 0 if not present.
     // But it's better to reserve a hard-coded width for it regardless of its presence.

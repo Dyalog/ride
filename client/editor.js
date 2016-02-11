@@ -102,15 +102,13 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
     }else if(!vtTID||vtLine!==p.line||vtStart!==t.start||vtString!==t.string){
       vtLine=p.line;vtStart=t.start;vtString=t.string;vtTID&&clearTimeout(vtTID)
       vtTID=setTimeout(function(){
-        vtTID=0
-        ed.emit('ValueTip',{win:ed.id,line:ed.cm.getLine(vtLine),pos:vtStart,token:0})
+        vtTID=0;ed.emit('ValueTip',{win:ed.id,line:ed.cm.getLine(vtLine),pos:vtStart,token:0})
       },500)
     }
   })
 }
-
 this.Editor.prototype={
-  updateGutters:function(){
+  updGutters:function(){
     var g=['breakpoints'],cm=this.cm
     cm.getOption('lineNumbers')&&g.push('CodeMirror-linenumbers')
     cm.getOption('foldGutter') &&g.push('CodeMirror-foldgutter')
@@ -212,10 +210,10 @@ this.Editor.prototype={
     this.isTracer=x;this.$e.toggleClass('tracer',x);this.highlight(null)
     var ln=!!(this.isTracer?prefs.lineNumsTracer():prefs.lineNumsEditor())
     this.cm.setOption('lineNumbers',ln);this.$tb.find('.tb-LN').toggleClass('pressed',ln)
-    this.updateGutters();this.cm.setOption('readOnly',!!x)
+    this.updGutters();this.cm.setOption('readOnly',!!x)
   },
   setReadOnly:function(x){this.cm.setOption('readOnly',x)},
-  updateSize:function(){var $p=this.$e;this.cm.setSize($p.width(),$p.height()-28)},
+  updSize:function(){var $p=this.$e;this.cm.setSize($p.width(),$p.height()-28)},
   open:function(ee){ // ee:editable entity
     var cm=this.cm;cm.setValue(this.oText=ee.text.join('\n'));cm.clearHistory()
     if(D.mac){cm.focus();window.focus()}
@@ -293,7 +291,7 @@ this.Editor.prototype={
   },
   LN:function(cm){ // toggle line numbers
     var v=!!(this.isTracer?prefs.lineNumsTracer.toggle():prefs.lineNumsEditor.toggle())
-    cm.setOption('lineNumbers',v);this.updateGutters();this.$tb.find('.tb-LN').toggleClass('pressed',v)
+    cm.setOption('lineNumbers',v);this.updGutters();this.$tb.find('.tb-LN').toggleClass('pressed',v)
   },
   PV:function(){this.search(1)},
   NX:function(){this.search()},

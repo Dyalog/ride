@@ -6,10 +6,10 @@ $(function(){
   var h=CodeMirror.keyMap.emacsy;for(var k in h)if(/^alt-[a-z]$/i.test(k))delete h[k]
   if(D.nwjs){
     var zM=11 // zoom level can be between -zM and zM inclusive
-    function ZMI(){prefs.zoom(Math.min( zM,prefs.zoom()+1));updatePW()}
-    function ZMO(){prefs.zoom(Math.max(-zM,prefs.zoom()-1));updatePW()}
-    function ZMR(){prefs.zoom(0);updatePW()}
-    function updatePW(){D.ide&&D.ide.wins&&D.ide.wins[0]&&D.ide.wins[0].updatePW()}
+    function ZMI(){prefs.zoom(Math.min( zM,prefs.zoom()+1));updPW()}
+    function ZMO(){prefs.zoom(Math.max(-zM,prefs.zoom()-1));updPW()}
+    function ZMR(){prefs.zoom(0);updPW()}
+    function updPW(){D.ide&&D.ide.wins&&D.ide.wins[0]&&D.ide.wins[0].updPW()}
     $.extend(CodeMirror.commands,{ZMI:ZMI,ZMO:ZMO,ZMR:ZMR})
     $(document).bind('mousewheel',function(e){
       var d=e.originalEvent.wheelDelta;d&&e.ctrlKey&&!e.shiftKey&&!e.altKey&&(d>0?ZMI:ZMO)()
@@ -39,11 +39,11 @@ $(function(){
   var win=urlParams.win
   if(D.floating&&win){
     $('body').addClass('floating-window')
-    $(window).resize(function(){ed&&ed.updateSize()})
+    $(window).resize(function(){ed&&ed.updSize()})
     var pe=opener.D.pendingEditors[win], editorOpts=pe.editorOpts, ee=pe.ee, ide=pe.ide
     D.ide=opener.D.ide
     var ed=D.ide.wins[win]=new Editor(ide,$(document.body),editorOpts)
-    ed.open(ee);ed.updateSize();D.setTitle(ed.name)
+    ed.open(ee);ed.updSize();D.setTitle(ed.name)
     window.onbeforeunload=function(){return ed.onbeforeunload()}
     setTimeout(function(){ed.refresh()},500) // work around a rendering issue on Ubuntu
     D.ide.unblock()

@@ -149,7 +149,7 @@ var handlers={
             if(m=/^HK.*\\Dyalog APL\/W(-64)? (\d+\.\d+)( Unicode)?$/i.exec(l)){
               b=m[1]?64:32;v=m[2];u=m[3]?'unicode':'classic'
             }else if(v&&(m=/^ *localdyalogdir +REG_SZ +(\S.*)$/i.exec(l))){
-              r.interpreters.push({exe:m[1]+'dyalog.exe',version:parseVer(v),bits:b,edition:u})
+              r.interpreters.push({exe:m[1]+'dyalog.exe',ver:parseVer(v),bits:b,edition:u})
             }else if(!/^\s*$/.test(l)){
               b=v=u=null
             }
@@ -164,7 +164,7 @@ var handlers={
         var a='/Applications'
         ls(a).forEach(function(x){
           var m=/^Dyalog-(\d+\.\d+)\.app$/.exec(x), exe=a+'/'+x+'/Contents/Resources/Dyalog/mapl'
-          m&&fs.existsSync(exe)&&r.interpreters.push({exe:exe,version:parseVer(m[1]),bits:64,edition:'unicode'})
+          m&&fs.existsSync(exe)&&r.interpreters.push({exe:exe,ver:parseVer(m[1]),bits:64,edition:'unicode'})
         })
       }catch(_){}
       toBrowser('*proxyInfo',r)
@@ -175,7 +175,7 @@ var handlers={
           ls(a+'/'+v).forEach(sil(function(b){if(b==='32'||b==='64')
             ls(a+'/'+v+'/'+b).forEach(sil(function(u){if(u==='unicode'||u==='classic'){
               var exe=a+'/'+v+'/'+b+'/'+u+'/mapl'
-              fs.existsSync(exe)&&r.interpreters.push({exe:exe,version:parseVer(v),bits:+b,edition:u})
+              fs.existsSync(exe)&&r.interpreters.push({exe:exe,ver:parseVer(v),bits:+b,edition:u})
             }}))
           }))
         }))

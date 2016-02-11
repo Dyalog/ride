@@ -12,16 +12,14 @@ function favText(x){return x.tmp?TMP_NAME:x.name||DFLT_NAME}
 function favDOM(x){return $('<div><a href=# class=go>'+esc(favText(x))+'</a></div>').data('cn',x)}
 function fmtKey(e){return[e.modKey?'Cmd-':'',e.ctrlKey?'Ctrl-':'',e.altKey?'Alt-':'',e.shiftKey?'Shift-':'',
                           CodeMirror.keyNames[e.which]||''].join('')}
-function updateFormDetail(){$('>*',q.detail).hide();q[q.type.val()].show()} // the part below "Type"
-function updateExes(){
+function updFormDetail(){$('>*',q.detail).hide();q[q.type.val()].show()} // the part below "Type"
+function updExes(){
   var h=q.ssh[0].checked?'':
     proxyInfo.interpreters
-      .sort(function(x,y){
-         return cmpVer(y.version,x.version)||+y.bits-+x.bits||(y.edition==='unicode')-(x.edition==='unicode')
-      })
+      .sort(function(x,y){return cmpVer(y.ver,x.ver)||+y.bits-+x.bits||(y.edition==='unicode')-(x.edition==='unicode')})
       .map(function(x){
-        var s='v'+x.version.join('.')+', '+x.bits+'-bit, '+x.edition[0].toUpperCase()+x.edition.slice(1)
-        var supported=cmpVer(x.version,MIN_VER)>=0;supported||(s+=' (unsupported)')
+        var s='v'+x.ver.join('.')+', '+x.bits+'-bit, '+x.edition[0].toUpperCase()+x.edition.slice(1)
+        var supported=cmpVer(x.ver,MIN_VER)>=0;supported||(s+=' (unsupported)')
         return'<option value="'+esc(x.exe)+'"'+(supported?'':' disabled')+'>'+esc(s)
       }).join('')
   q.exes.html(h+'<option value="">Other...').val(q.exe.val()).val()||q.exes.val('')
@@ -38,9 +36,9 @@ module.exports=function(){
   q.fav_name.prop('placeholder',DFLT_NAME).on('change keyup',function(e){
     var u=sel.name,v=this.value;if(u!==v){v?(sel.name=v):delete sel.name;$sel.find('a').text(favText(sel));save()}
   })
-  q.type.change(function(){sel.type=this.value;updateFormDetail();save()})
-  updateFormDetail()
-  q.ssh.change(function(){q.ssh_detail.toggle(this.checked);updateExes()})
+  q.type.change(function(){sel.type=this.value;updFormDetail();save()})
+  updFormDetail()
+  q.ssh.change(function(){q.ssh_detail.toggle(this.checked);updExes()})
   q.ssh_detail.find('[name=user]').prop('placeholder',user)
   q.exe.on('change keyup',function(){q.exes.val()||prefs.otherExe($(this).val())})
   q.exes.change(function(){
@@ -75,7 +73,7 @@ module.exports=function(){
       q.clone.attr('disabled',!u);q.del.attr('disabled',!$sel.length);q.rhs.toggle(u)
       sel=u?$sel.data('cn'):null
       if(u){
-        q.type.val(sel.type||'connect');updateFormDetail();updateExes()
+        q.type.val(sel.type||'connect');updFormDetail();updExes()
         q.fav_cb.prop('checked',!sel.tmp);q.fav_name.val(sel.name);q.fav_name_wr.toggle(!sel.tmp)
         $(':text[name],textarea[name]',q.rhs).each(function(){$(this).val(sel[this.name])})
         $(':checkbox[name]',q.rhs).each(function(){$(this).prop('checked',+sel[this.name])})
@@ -97,12 +95,11 @@ module.exports=function(){
       function(r){if(r){var i=$sel.eq(0).index();$sel.remove();q.favs.list('select',i,1);save()}})
   })
   q.go.click(go)
-//  q.lhs.resizable({handles:'e',resize:function(e,ui){q.rhs.css({left:ui.size.width+10})}})
   $(':text',q.rhs).elastic()
   $(':text[name],textarea[name]',q.rhs).change(function(){var k=this.name,v=this.value;v?(sel[k]=v):delete sel[k];save()})
   $(':checkbox[name]',q.rhs).change(function(){this.checked?(sel[this.name]=1):delete sel[this.name];save()})
   D.socket
-    .on('*proxyInfo',function(x){proxyInfo=x;updateExes()})
+    .on('*proxyInfo',function(x){proxyInfo=x;updExes()})
     .on('*connected',function(x){if($d){$d.dialog('close');$d=null};new IDE().setHostAndPort(x.host,x.port)})
     .on('*spawned',function(x){D.lastSpawnedExe=x.exe})
     .on('*spawnedExited',function(x){$.alert(x.code!=null?'exited with code '+x.code:'received '+x.sig)})
@@ -144,11 +141,8 @@ function go(){
     }else if(t==='start'){
       var env={},a=q.env.val().split('\n'),m
       for(var i=0;i<a.length;i++){
-        if(m=/^([a-z_]\w*)=(.*)$/i.exec(a[i])){
-          env[m[1]]=m[2]
-        }else if(!/^\s*$/.test(a[i])){
-          $.alert('Invalid environment variables','Error',function(){q.env.focus()});return
-        }
+        if(m=/^([a-z_]\w*)=(.*)$/i.exec(a[i])){env[m[1]]=m[2]}
+        else if(!/^\s*$/.test(a[i])){$.alert('Invalid environment variables','Error',function(){q.env.focus()});return}
       }
       if(sel.ssh){
         var pw=q.ssh_pass.val()
