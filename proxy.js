@@ -104,21 +104,21 @@ var handlers={
     })
   },
   '*ssh':function(x){
-    var c=new(require('ssh2').Client)
-    c.on('ready',function(){
-      c.exec('/bin/sh',function(err,sm){if(err)throw err
-        sm.on('close',function(code,sig){toBrowser('*sshExited',{code:code,sig:sig});c.end()})
-        c.forwardIn('',0,function(err,remotePort){if(err)throw err
-          var s='';for(var k in x.env)s+=k+'='+shEsc(x.env[k])+' '
-          sm.write(s+'RIDE_INIT=CONNECT:127.0.0.1:'+remotePort+' '+shEsc(x.exe||'dyalog')+' +s -q >/dev/null\n')
+    try{
+      var c=new(require('ssh2').Client) // c:ssh client
+      c.on('ready',function(){
+        c.exec('/bin/sh',function(err,sm){if(err)throw err // sm:stream
+          sm.on('close',function(code,sig){toBrowser('*sshExited',{code:code,sig:sig});c.end()})
+          c.forwardIn('',0,function(err,remotePort){if(err)throw err
+            var s='';for(var k in x.env)s+=k+'='+shEsc(x.env[k])+' '
+            sm.write(s+'RIDE_INIT=CONNECT:127.0.0.1:'+remotePort+' '+shEsc(x.exe||'dyalog')+' +s -q >/dev/null\n')
+          })
         })
       })
-    })
-    .on('tcp connection',function(info,accept){
-      clt=accept();toBrowser('*connected',{host:'',port:0});initInterpreterConn()
-    })
-    .on('error',function(x){toBrowser('*error',{msg:x.message||''+x})})
-    .connect({host:x.host,port:x.port,username:x.user,password:x.pass})
+      .on('tcp connection',function(_,accept){clt=accept();toBrowser('*connected',{host:'',port:0});initInterpreterConn()})
+      .on('error',function(x){toBrowser('*error',{msg:x.message||''+x})})
+      .connect({host:x.host,port:x.port,username:x.user,privateKey:x.key?fs.readFileSync(x.key):null})
+    }catch(e){toBrowser('*error',{msg:e.message})}
   },
   '*listen':function(x){
     srv=net.createServer(function(c){

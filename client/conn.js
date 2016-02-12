@@ -57,6 +57,8 @@ module.exports=function(){
            .click(function(){this.checked&&q.subj.focus()})
   q.cert_dots.click(function(){q.cert_file.click()})
   q.cert_file.change(function(){q.cert.val(this.value).elastic().change()})
+  q.ssh_key_dots.click(function(){q.ssh_key_file.click()})
+  q.ssh_key_file.change(function(){q.ssh_key.val(this.value).change()})
   prefs.favs().forEach(function(x){q.favs.append(favDOM(x))})
   q.favs.list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
     .on('click','.go',function(e){q.favs.list('select',$(this).parentsUntil(q.favs).last().index());q.go.click()})
@@ -145,11 +147,12 @@ function go(){
         else if(!/^\s*$/.test(a[i])){$.alert('Invalid environment variables','Error',function(){q.env.focus()});return}
       }
       if(sel.ssh){
-        var pw=q.ssh_pass.val()
-        if(!pw){$.alert('"password" is required','Error',function(){q.ssh_pass.focus()});return}
+        var pw=q.ssh_pass.val(),kf=q.ssh_key.val()
+        if(!pw&&!kf){$.alert('"password" or "key file" is required','Error',function(){q.ssh_pass.focus()});return}
+        if(pw&&kf){$.alert('Only one of "password" or "key file" must be present.','Error',function(){q.ssh_pass.focus()});return}
         $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
           .dialog({modal:1,width:350,title:'Connecting...'})
-        D.socket.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||user,pass:pw,env:env})
+        D.socket.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||user,pass:pw,key:kf,env:env})
       }else{
         D.socket.emit('*launch',{exe:sel.exe,env:env})
       }
