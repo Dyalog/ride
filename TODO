@@ -1,3 +1,9 @@
+Things that must be done before releasing RIDE3:
+  * once the new docs are online, change help URLs from 14.1 to 15.0
+  * rm WS status bar and the fake ws explorer if there still isn't interpreter support
+  * address all issues in docs/protocol.md, particularly those about the handshake
+  * make sure there's some script that copies ~/.config/ride20 to ~/.config/ride30, it must run before RIDE
+
 Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nice)
   M1 adoption of the new protocol
         NN: some issues to clean up, see docs/protocol.md
