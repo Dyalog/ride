@@ -22,8 +22,8 @@ var ED_HTML=
     b('tb-AO  ed-only'      ,'Comment selected text'                   )+
     b('tb-DO  ed-only last' ,'Uncomment selected text'                 )+
     '<span class=tb-sep></span>'+
-    '<div class="tb-sc text-field"></div>'+
-    '<div class="tb-rp text-field ed-only"></div>'+
+    '<div class=tb-sc></div>'+
+    '<div class="tb-rp ed-only"></div>'+
     b('tb-NX first'         ,'Search for next match'                   )+
     b('tb-PV'               ,'Search for previous match'               )+
     b('tb-case last'        ,'Match case'                              )+

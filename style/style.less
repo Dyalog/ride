@@ -23,7 +23,6 @@ input,textarea{.tt}
 input,textarea,select,a{outline:0}
 select:focus{outline:dotted #000 1px}
 input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
-.text-field{.inset;border-style:solid;border-width:2px}
 
 // z-indices (except for CodeMirror which uses 1-10)
 .ui-tooltip                            {z-index:9999}
@@ -217,7 +216,7 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 .tb-CBP {background-image:url(img/tb-CBP.png)}
 .tb-sep{float:left;width:10px;height:24px;background:no-repeat center center url(img/tb-sep.png)} // separator
 .tb-sc,.tb-rp{ // search and replace
-  float:left;width:120px;height:24px;resize:none;overflow:hidden;
+  .inset;border-style:solid;border-width:2px;float:left;width:120px;height:24px;resize:none;overflow:hidden;
   .toolbar & .CodeMirror{font-size:18px}
   &.no-matches .cm-s-default{background-color:#fee}
   & .CodeMirror-lines{padding:0}
