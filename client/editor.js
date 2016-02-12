@@ -6,9 +6,7 @@ require('./cm-scroll')
 
 var b=function(c,t){return'<a href=# class="'+c+' tb-btn" title="'+t+'"></a>'} // cc:css classes, t:title
 var ED_HTML=
-  '<div class=toolbar>'+
-    // The first button is placed on the right-hand side through CSS. In a floating window it is hidden.
-    // CSS classes "first" and "last" indicate button grouping.
+  '<div class=toolbar>'+ // CSS classes "first" and "last" indicate button grouping.
     b('tb-ER  tc-only first','Execute line'                            )+
     b('tb-TC  tc-only'      ,'Trace into expression'                   )+
     b('tb-BK  tc-only'      ,'Go back one line'                        )+
