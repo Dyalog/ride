@@ -4,7 +4,7 @@ var autocompletion=require('./autocompletion'),prefs=require('./prefs'),mode=req
     ACB_VALUE=this.ACB_VALUE={pairs:'()[]{}',explode:'{}'} // value for CodeMirror's "autoCloseBrackets" option when on
 require('./cm-scroll')
 
-var b=function(cc,t){return'<a href=# class="'+cc+' tb-btn" title="'+t+'"></a>'} // cc:css classes, t:title
+var b=function(c,t){return'<a href=# class="'+c+' tb-btn" title="'+t+'"></a>'} // cc:css classes, t:title
 var ED_HTML=
   '<div class=toolbar>'+
     // The first button is placed on the right-hand side through CSS. In a floating window it is hidden.
@@ -35,7 +35,7 @@ b=null
 
 this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
   var ed=this;ed.ide=ide;ed.$e=$(e).html(ED_HTML);ed.opts=opts;ed.id=opts.id;ed.name=opts.name;ed.emit=opts.emit
-  ed.isTracer=opts.tracer
+  ed.tc=opts.tracer
   ed.xline=null // the line number of the empty line inserted at eof when cursor is there and you press <down>
   ed.oText='';ed.oStop=[] // remember original text and "stops" to avoid pointless saving on EP
   ed.hll=null // highlighted line -- currently executed line in tracer
@@ -43,7 +43,7 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
   ed.focusTimestamp=0
   ed.jumps=[]
   ed.cm=CodeMirror(ed.$e.find('.ride-win')[0],{
-    lineNumbers:!!(ed.isTracer?prefs.lineNumsTracer():prefs.lineNumsEditor()),
+    lineNumbers:!!(ed.tc?prefs.lineNumsTracer():prefs.lineNumsEditor()),
     firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
     smartIndent:prefs.indent()>=0,indentUnit:prefs.indent(),scrollButtonHeight:12,matchBrackets:!!prefs.matchBrackets(),
     autoCloseBrackets:!!prefs.autoCloseBrackets()&&ACB_VALUE,foldGutter:!!prefs.fold(),
@@ -71,7 +71,7 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
     Enter:ed.NX.bind(ed),
     'Shift-Enter':ed.PV.bind(ed),
     'Ctrl-Enter':ed.selectAllSearchResults.bind(ed),
-    Tab:function(){(ed.isTracer?ed.cm:ed.cmRP).focus()},
+    Tab:function(){(ed.tc?ed.cm:ed.cmRP).focus()},
     'Shift-Tab':ed.cm.focus.bind(ed.cm)
   }})
   ed.cmSC.on('change',function(){ed.highlightSearch()})
@@ -79,7 +79,7 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
     Enter:ed.replace.bind(ed),
     'Shift-Enter':ed.replace.bind(ed,1),
     Tab:ed.cm.focus.bind(ed.cm),
-    'Shift-Tab':function(){(ed.isTracer?ed.cm:ed.cmSC).focus()}
+    'Shift-Tab':function(){(ed.tc?ed.cm:ed.cmSC).focus()}
   }})
   var cms=[ed.cmSC,ed.cmRP]
   for(var i=0;i<cms.length;i++){
@@ -91,20 +91,15 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
       Esc:function(){ed.clearSearch();setTimeout(ed.cm.focus.bind(ed.cm),0)}
     })
   }
-  ed.setTracer(!!ed.isTracer)
-
+  ed.setTracer(!!ed.tc)
   // value tips:
   var vtTID,vtLine,vtStart,vtEnd,vtString // timeout id, position, ant text of pending value tip request
   ed.$e.mouseover(function(e){
     var p=ed.cm.coordsChar({left:e.clientX,top:e.clientY},'page'), t=ed.cm.getTokenAt(p)
-    if(p.outside||!t.string||!t.type){
-      vtTID&&clearTimeout(vtTID);vtTID=0
-    }else if(!vtTID||vtLine!==p.line||vtStart!==t.start||vtString!==t.string){
-      vtLine=p.line;vtStart=t.start;vtString=t.string;vtTID&&clearTimeout(vtTID)
-      vtTID=setTimeout(function(){
-        vtTID=0;ed.emit('ValueTip',{win:ed.id,line:ed.cm.getLine(vtLine),pos:vtStart,token:0})
-      },500)
-    }
+    if(p.outside||!t.string||!t.type){vtTID&&clearTimeout(vtTID);vtTID=0;return}
+    if(vtTID&&vtLine===p.line&&vtStart===t.start&&vtString===t.string)return
+    vtLine=p.line;vtStart=t.start;vtString=t.string;vtTID&&clearTimeout(vtTID)
+    vtTID=setTimeout(function(){vtTID=0;ed.emit('ValueTip',{win:ed.id,line:ed.cm.getLine(vtLine),pos:vtStart,token:0})},500)
   })
 }
 this.Editor.prototype={
@@ -114,49 +109,46 @@ this.Editor.prototype={
     cm.getOption('foldGutter') &&g.push('CodeMirror-foldgutter')
     cm.setOption('gutters',g)
   },
-  createBPElement:function(){
-    var e=this.$e[0].ownerDocument.createElement('div');e.setAttribute('class','breakpoint');e.innerHTML='●';return e
+  createBPEl:function(){
+    var e=this.$e[0].ownerDocument.createElement('div');e.className='breakpoint';e.innerHTML='●';return e
   },
   getStops:function(){ // returns an array of line numbers
-    var r=[];this.cm.eachLine(function(lh){var gm=lh.gutterMarkers;if(gm&&gm.breakpoints)r.push(lh.lineNo())})
+    var r=[];this.cm.eachLine(function(lh){var m=lh.gutterMarkers;m&&m.breakpoints&&r.push(lh.lineNo())})
     return r.sort(function(x,y){return x-y})
   },
   cursorActivity:function(){
-    if(this.xline!==null){
-      var n=this.cm.lineCount(),l=this.cm.getCursor().line
-      if(l!==this.xline||l!==n-1||!/^\s*$/.test(this.cm.getLine(n-1))){
-        if(l<this.xline&&this.xline===n-1&&/^\s*$/.test(this.cm.getLine(n-1))){
-          this.cm.replaceRange('',{line:n-2,ch:this.cm.getLine(n-2).length},{line:n-1,ch:0},'D')
-        }
-        this.xline=null
-      }
+    if(this.xline==null)return
+    var ed=this,n=ed.cm.lineCount(),l=ed.cm.getCursor().line
+    if(l===ed.xline&&l===n-1&&/^\s*$/.test(ed.cm.getLine(n-1)))return
+    if(l<ed.xline&&ed.xline===n-1&&/^\s*$/.test(ed.cm.getLine(n-1))){
+      ed.cm.replaceRange('',{line:n-2,ch:ed.cm.getLine(n-2).length},{line:n-1,ch:0},'D')
     }
+    ed.xline=null
   },
   scrollCursorIntoProminentView:function(){ // approx. to 1/3 of editor height; might not work near the top or bottom
     var h=this.$e.height(),cc=this.cm.cursorCoords(true,'local'),x=cc.left,y=cc.top
     this.cm.scrollIntoView({left:x,right:x,top:y-h/3,bottom:y+2*h/3})
   },
   clearSearch:function(){
-    $('.ride-win .CodeMirror-vscrollbar',this.$e).prop('title','')
-    $('.tb-sc',this.$tb).removeClass('no-matches')
-    this.cm.removeOverlay(this.overlay);this.annotation&&this.annotation.clear();this.overlay=this.annotation=null
+    var ed=this;$('.ride-win .CodeMirror-vscrollbar',ed.$e).prop('title','');$('.tb-sc',ed.$tb).removeClass('no-matches')
+    ed.cm.removeOverlay(ed.overlay);ed.annotation&&ed.annotation.clear();ed.overlay=ed.annotation=null
   },
   highlightSearch:function(){
-    var ic=!$('.tb-case',this.$tb).hasClass('pressed'),q=this.cmSC.getValue() // ic:ignore case?, q:query string
+    var ed=this,ic=!$('.tb-case',ed.$tb).hasClass('pressed'),q=ed.cmSC.getValue() // ic:ignore case?, q:query string
     ic&&(q=q.toLowerCase())
-    if(this.lastQuery!==q||this.lastIC!==ic){
-      this.lastQuery=q;this.lastIC=ic;this.clearSearch()
+    if(ed.lastQuery!==q||ed.lastIC!==ic){
+      ed.lastQuery=q;ed.lastIC=ic;ed.clearSearch()
       if(q){
-        var s=this.cm.getValue()
+        var s=ed.cm.getValue()
         ic&&(s=s.toLowerCase())
-        $('.tb-sc',this.$tb).toggleClass('no-matches',s.indexOf(q)<0)
-        this.annotation=this.cm.showMatchesOnScrollbar(q,ic)
-        this.cm.addOverlay(this.overlay={token:function(stream){
+        $('.tb-sc',ed.$tb).toggleClass('no-matches',s.indexOf(q)<0)
+        ed.annotation=ed.cm.showMatchesOnScrollbar(q,ic)
+        ed.cm.addOverlay(ed.overlay={token:function(stream){
           s=stream.string.slice(stream.pos);ic&&(s=s.toLowerCase())
           var i=s.indexOf(q)
           if(!i){stream.pos+=q.length;return'searching'}else if(i>0){stream.pos+=i}else{stream.skipToEnd()}
         }})
-        $('.CodeMirror-vscrollbar',this.$e).prop('title','Lines on scroll bar show match locations')
+        $('.CodeMirror-vscrollbar',ed.$e).prop('title','Lines on scroll bar show match locations')
       }
     }
     return[q,ic]
@@ -169,23 +161,17 @@ this.Editor.prototype={
         var i=cm.indexFromPos(cm.getCursor('anchor')),j=s.slice(0,i).lastIndexOf(q)
         if(j<0){j=s.slice(i).lastIndexOf(q);if(j>=0)j+=i}
       }else{
-        var i=cm.indexFromPos(cm.getCursor()),j=s.slice(i).indexOf(q)
-        j= j>=0?(j+i):s.slice(0,i).indexOf(q)
+        var i=cm.indexFromPos(cm.getCursor()),j=s.slice(i).indexOf(q);j=j>=0?(j+i):s.slice(0,i).indexOf(q)
       }
-      if(j>=0){
-        cm.setSelection(cm.posFromIndex(j),cm.posFromIndex(j+q.length))
-        this.scrollCursorIntoProminentView()
-      }
+      if(j>=0){cm.setSelection(cm.posFromIndex(j),cm.posFromIndex(j+q.length));this.scrollCursorIntoProminentView()}
     }
     return!1
   },
   selectAllSearchResults:function(){
-    var cm=this.cm
-    var ic=!$('.tb-case',this.$tb).hasClass('pressed') // ic:ignore case?, q:query string
+    var cm=this.cm,ic=!$('.tb-case',this.$tb).hasClass('pressed') // ic:ignore case?, q:query string
     var q=this.cmSC.getValue();ic&&(q=q.toLowerCase())
     if(q){
-      var s=cm.getValue();ic&&(s=s.toLowerCase())
-      var sels=[],i=0
+      var s=cm.getValue(),sels=[],i=0;ic&&(s=s.toLowerCase())
       while((i=s.indexOf(q,i))>=0){sels.push({anchor:cm.posFromIndex(i),head:cm.posFromIndex(i+q.length)});i++}
       sels.length&&cm.setSelections(sels)
     }
@@ -201,21 +187,21 @@ this.Editor.prototype={
     $('.tb-sc',this.$tb).toggleClass('no-matches',v.indexOf(q)<0)
   },
   highlight:function(l){ // current line in tracer
-    this.hll!=null&&this.cm.removeLineClass(this.hll,'background','highlighted')
-    if((this.hll=l)!=null){
-      this.cm.addLineClass(l,'background','highlighted');this.cm.setCursor(l,0);this.scrollCursorIntoProminentView()
+    var ed=this;ed.hll!=null&&ed.cm.removeLineClass(ed.hll,'background','highlighted')
+    if((ed.hll=l)!=null){
+      ed.cm.addLineClass(l,'background','highlighted');ed.cm.setCursor(l,0);ed.scrollCursorIntoProminentView()
     }
   },
   setTracer:function(x){
-    this.isTracer=x;this.$e.toggleClass('tracer',x);this.highlight(null)
-    var ln=!!(this.isTracer?prefs.lineNumsTracer():prefs.lineNumsEditor())
-    this.cm.setOption('lineNumbers',ln);this.$tb.find('.tb-LN').toggleClass('pressed',ln)
-    this.updGutters();this.cm.setOption('readOnly',!!x)
+    var ed=this;ed.tc=x;ed.$e.toggleClass('tracer',x);ed.highlight(null)
+    var ln=!!(ed.tc?prefs.lineNumsTracer():prefs.lineNumsEditor())
+    ed.cm.setOption('lineNumbers',ln);ed.$tb.find('.tb-LN').toggleClass('pressed',ln)
+    ed.updGutters();ed.cm.setOption('readOnly',!!x)
   },
   setReadOnly:function(x){this.cm.setOption('readOnly',x)},
   updSize:function(){var $p=this.$e;this.cm.setSize($p.width(),$p.height()-28)},
   open:function(ee){ // ee:editable entity
-    var cm=this.cm;cm.setValue(this.oText=ee.text.join('\n'));cm.clearHistory()
+    var ed=this,cm=ed.cm;cm.setValue(ed.oText=ee.text.join('\n'));cm.clearHistory()
     if(D.mac){cm.focus();window.focus()}
     // entityType:             16 NestedArray        512 AplClass
     //  1 DefinedFunction      32 QuadORObject      1024 AplInterface
@@ -227,10 +213,10 @@ this.Editor.prototype={
     cm.setOption('readOnly',ee.readOnly||ee['debugger'])
     var line=ee.currentRow,col=ee.currentColumn||0
     if(line===0&&col===0&&ee.text.indexOf('\n')<0)col=ee.text.length
-    cm.setCursor(line,col);cm.scrollIntoView(null,this.$e.height()/2)
-    this.oStop=(ee.stop||[]).slice(0).sort(function(x,y){return x-y})
-    for(var k=0;k<this.oStop.length;k++)cm.setGutterMarker(this.oStop[k],'breakpoints',this.createBPElement())
-    D.floating&&$('title',this.$e[0].ownerDocument).text(ee.name)
+    cm.setCursor(line,col);cm.scrollIntoView(null,ed.$e.height()/2)
+    ed.oStop=(ee.stop||[]).slice(0).sort(function(x,y){return x-y})
+    for(var k=0;k<ed.oStop.length;k++)cm.setGutterMarker(ed.oStop[k],'breakpoints',ed.createBPEl())
+    D.floating&&$('title',ed.$e[0].ownerDocument).text(ee.name)
   },
   hasFocus:function(){return window.focused&&this.cm.hasFocus()},
   focus:function(){if(!window.focused){window.focus()};this.cm.focus()},
@@ -249,8 +235,8 @@ this.Editor.prototype={
   },
   ED:function(cm){this.emit('Edit',{win:this.id,pos:cm.indexFromPos(cm.getCursor()),text:cm.getValue()})},
   QT:function(){this.emit('CloseWindow',{win:this.id})},
-  BK:function(cm){this.isTracer?this.emit('TraceBackward',{win:this.id}):cm.execCommand('undo')},
-  FD:function(cm){this.isTracer?this.emit('TraceForward' ,{win:this.id}):cm.execCommand('redo')},
+  BK:function(cm){this.tc?this.emit('TraceBackward',{win:this.id}):cm.execCommand('undo')},
+  FD:function(cm){this.tc?this.emit('TraceForward' ,{win:this.id}):cm.execCommand('redo')},
   SC:function(cm){
     var v=cm.getSelection();/^[ -\uffff]+$/.test(v)&&this.cmSC.setValue(v)
     this.cmSC.focus();this.cmSC.execCommand('selectAll')
@@ -261,36 +247,25 @@ this.Editor.prototype={
     this.cmRP.focus();this.cmRP.execCommand('selectAll');this.highlightSearch()
   },
   EP:function(cm){
-    if(this.isTracer){
-      this.emit('CloseWindow',{win:this.id})
-    }else{
-      var v=cm.getValue(),stop=this.getStops()
-      if(v!==this.oText||''+stop!==''+this.oStop){
-        for(var i=0;i<stop.length;i++)cm.setGutterMarker(stop[i],'breakpoints',null)
-        this.emit('SaveChanges',{win:this.id,text:cm.getValue().split('\n'),stop:stop})
-      }else{
-        this.emit('CloseWindow',{win:this.id})
-      }
-    }
+    var ed=this,v=cm.getValue(),stop=ed.getStops()
+    if(ed.tc||v===ed.oText&&''+stop===''+ed.oStop){ed.emit('CloseWindow',{win:ed.id});return} // if tracer or unchanged
+    for(var i=0;i<stop.length;i++)cm.setGutterMarker(stop[i],'breakpoints',null)
+    ed.emit('SaveChanges',{win:ed.id,text:cm.getValue().split('\n'),stop:stop})
   },
   TL:function(cm){ // toggle localisation
-    var name=this.cword()
-    if(name){ // search back for a line that looks like a tradfn header (though in theory it might be a dfns's recur: ∇)
-      var l,l0=l=cm.getCursor().line
-      while(l>=0&&!/^\s*∇\s*\S/.test(cm.getLine(l)))l--
-      if(l<0&&!/\{\s*$/.test(cm.getLine(0).replace(/⍝.*/,'')))l=0
-      if(l>=0&&l!==l0){
-        var m=/([^⍝]*)(.*)/.exec(cm.getLine(l)), s=m[1], com=m[2]
-        var a=s.split(';'), head=a[0].replace(/\s+$/,''), tail=a.length>1?a.slice(1):[]
-        tail=tail.map(function(x){return x.replace(/\s+/g,'')})
-        var i=tail.indexOf(name);i<0?tail.push(name):tail.splice(i,1)
-        s=[head].concat(tail.sort()).join(';')+(com?(' '+com):'')
-        cm.replaceRange(s,{line:l,ch:0},{line:l,ch:cm.getLine(l).length},'D')
-      }
-    }
+    var name=this.cword(),l,l0=l=cm.getCursor().line;if(!name)return
+    while(l>=0&&!/^\s*∇\s*\S/.test(cm.getLine(l)))l-- // search back for tradfn header (might find a dfns's ∇ instead)
+    if(l<0&&!/\{\s*$/.test(cm.getLine(0).replace(/⍝.*/,'')))l=0
+    if(l<0||l===l0)return
+    var m=/([^⍝]*)(.*)/.exec(cm.getLine(l)), s=m[1], com=m[2]
+    var a=s.split(';'), head=a[0].replace(/\s+$/,''), tail=a.length>1?a.slice(1):[]
+    tail=tail.map(function(x){return x.replace(/\s+/g,'')})
+    var i=tail.indexOf(name);i<0?tail.push(name):tail.splice(i,1)
+    s=[head].concat(tail.sort()).join(';')+(com?(' '+com):'')
+    cm.replaceRange(s,{line:l,ch:0},{line:l,ch:cm.getLine(l).length},'D')
   },
   LN:function(cm){ // toggle line numbers
-    var v=!!(this.isTracer?prefs.lineNumsTracer.toggle():prefs.lineNumsEditor.toggle())
+    var v=!!(this.tc?prefs.lineNumsTracer.toggle():prefs.lineNumsEditor.toggle())
     cm.setOption('lineNumbers',v);this.updGutters();this.$tb.find('.tb-LN').toggleClass('pressed',v)
   },
   PV:function(){this.search(1)},
@@ -349,35 +324,30 @@ this.Editor.prototype={
     this[b?'DO':'AO'](cm)
   },
   ER:function(cm){
-    if(this.isTracer){
-      this.emit('RunCurrentLine',{win:this.id})
-    }else{
-      if(prefs.autoCloseBlocks()){
-        var u=cm.getCursor(),l=u.line,s=cm.getLine(l)
-        var m,re=/^(\s*):(class|disposable|for|if|interface|namespace|property|repeat|section|select|trap|while|with)\b([^⋄\{]*)$/i
-        if(u.ch===s.length&&(m=re.exec(s))&&!dfnDepth(cm.getStateAfter(l-1))){
-          var pre=m[1],kw=m[2],post=m[3]
-          kw=kw[0].toUpperCase()+kw.slice(1).toLowerCase()
-          var l1=l+1,end=cm.lastLine() // find the next non-blank line
-          while(l1<=end&&/^\s*(?:$|⍝)/.test(cm.getLine(l1)))l1++
-          var s1=cm.getLine(l1)||'',pre1=s1.replace(/\S.*$/,'')
-          if(pre.length>pre1.length||pre.length===pre1.length&&!/^\s*:(?:end|else|andif|orif|case|until|access)/i.test(s1)){
-            var r=':'+kw+post+'\n'+pre+':End'
-            prefs.autoCloseBlocksEnd()||(r+=kw)
-            cm.replaceRange(r,{line:l,ch:pre.length},{line:l,ch:s.length})
-            cm.execCommand('indentAuto');cm.execCommand('goLineUp');cm.execCommand('goLineEnd')
-          }
+    if(this.tc){this.emit('RunCurrentLine',{win:this.id});return}
+    if(prefs.autoCloseBlocks()){
+      var u=cm.getCursor(),l=u.line,s=cm.getLine(l),m
+      var re=/^(\s*):(class|disposable|for|if|interface|namespace|property|repeat|section|select|trap|while|with)\b([^⋄\{]*)$/i
+      if(u.ch===s.length&&(m=re.exec(s))&&!dfnDepth(cm.getStateAfter(l-1))){
+        var pre=m[1],kw=m[2],post=m[3],l1=l+1,end=cm.lastLine();kw=kw[0].toUpperCase()+kw.slice(1).toLowerCase()
+        while(l1<=end&&/^\s*(?:$|⍝)/.test(cm.getLine(l1)))l1++ // find the next non-blank line
+        var s1=cm.getLine(l1)||'',pre1=s1.replace(/\S.*$/,'')
+        if(pre.length>pre1.length||pre.length===pre1.length&&!/^\s*:(?:end|else|andif|orif|case|until|access)/i.test(s1)){
+          var r=':'+kw+post+'\n'+pre+':End'
+          prefs.autoCloseBlocksEnd()||(r+=kw)
+          cm.replaceRange(r,{line:l,ch:pre.length},{line:l,ch:s.length})
+          cm.execCommand('indentAuto');cm.execCommand('goLineUp');cm.execCommand('goLineEnd')
         }
       }
-      cm.execCommand('newlineAndIndent')
     }
+    cm.execCommand('newlineAndIndent')
   },
   BH:function(){this.emit('ContinueTrace' ,{win:this.id})},
   RM:function(){this.emit('Continue'      ,{win:this.id})},
   MA:function(){this.emit('RestartThreads',{win:this.id})},
   CBP:function(){ // Clear trace/stop/monitor for this object
-    var n=this.cm.lineCount();for(var i=0;i<n;i++)this.cm.setGutterMarker(i,'breakpoints',null)
-    this.isTracer&&this.emit('SetLineAttributes',{win:this.id,nLines:n,stop:this.getStops(),trace:[],monitor:[]})
+    var ed=this,n=ed.cm.lineCount();for(var i=0;i<n;i++)ed.cm.setGutterMarker(i,'breakpoints',null)
+    ed.tc&&ed.emit('SetLineAttributes',{win:ed.id,nLines:n,stop:ed.getStops(),trace:[],monitor:[]})
   },
   BP:function(cm){ // toggle breakpoint
     var sels=cm.listSelections()
@@ -385,10 +355,10 @@ this.Editor.prototype={
       var p=sels[i].anchor,q=sels[i].head;if(p.line>q.line){var h=p;p=q;q=h}
       var l1=q.line-(p.line<q.line&&!q.ch)
       for(var l=p.line;l<=l1;l++)cm.setGutterMarker(l,'breakpoints',
-        (cm.getLineHandle(l).gutterMarkers||{}).breakpoints?null:this.createBPElement()
+        (cm.getLineHandle(l).gutterMarkers||{}).breakpoints?null:this.createBPEl()
       )
     }
-    this.isTracer&&this.emit('SetLineAttributes',{win:this.id,nLines:cm.lineCount(),stop:this.getStops()})
+    this.tc&&this.emit('SetLineAttributes',{win:this.id,nLines:cm.lineCount(),stop:this.getStops()})
   },
   RD:function(cm){
     if(cm.somethingSelected()){cm.execCommand('indentAuto')}
@@ -412,7 +382,7 @@ this.Editor.prototype={
   onbeforeunload:function(){ // called when the user presses [X] on the OS window
     var ed=this
     if(ed.ide.dead){var f=D.forceCloseNWWindow;f&&f()}
-    else if(ed.isTracer||ed.cm.getValue()===ed.oText&&''+ed.getStops()===''+ed.oStop){ed.EP(ed.cm)}
+    else if(ed.tc||ed.cm.getValue()===ed.oText&&''+ed.getStops()===''+ed.oStop){ed.EP(ed.cm)}
     else if(!ed.dialog){
       window.focus()
       ed.dialog=$('<p>The object "'+ed.name+'" has changed.<br>Do you want to save the changes?').dialog({
