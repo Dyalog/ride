@@ -48,13 +48,13 @@ indicate what type of application they are.
 ```
 Constants for `identity`: `1` RIDE, `2` interpreter, `3` process manager.
 
-:red_circle: The interpreter sends `*identify` instead of `Identify`.
+:red_circle: The interpreter sends an `Identify` that means something else and has different args.
 
 They should then check the type of application they are connected to, and if not happy to continue, close the
 connection.  For instance, RIDE may check that the application it's connected to is an interpreter or a process
 manager. If it finds the peer is another RIDE, it should close the connection.
 
-:red_circle: In reality RIDE doesn't bother with this.
+:red_circle: In reality RIDE doesn't bother verifying that it's not talking to another RIDE.
 
 If at any time the interpreter crashes with a
 [syserror](http://help.dyalog.com/14.1/Content/UserGuide/Installation%20and%20Configuration/System%20Errors.htm), it
@@ -72,7 +72,7 @@ window (the session window):
 ```
 
 #Session control
-The initial content of the session and any output or echoed input are sent to RIDE using
+Any echoed input or interpreter output or the initial content of the session are sent to RIDE using
 <a name=AppendSessionOutput></a><a name=EchoInput></a>
 ```json
 ["EchoInput",{"input":"      1 2 3+4 5 6\n"}] // Interpreter -> RIDE
