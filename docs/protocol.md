@@ -25,13 +25,12 @@ UsingProtocol=1
 Messages are independent and after the handshake can be sent/received in any order. Some messages infer that the other
 end will send a reply, but that reply may not be the next message to be received, or even ever be sent.
 
-If the receiver of a message does not recognise it, it should ignore it.
-
-:red_circle: This may need discussion.  Currently the interpreter complains with `UnknownRIDECommand`.
+If the receiver of a message does not recognise it, it should not take any action apart from optionally responding with
+```json
+["UnknownRIDECommand",{"message":"NameOfTheCommand"}]
+```
 
 The connection may be closed at any time, leaving some messages undelivered or unprocessed.
-
-:red_circle: Why say the above?  Isn't it obvious for anything to do with networking?
 
 Command names and their arguments are case-sensitive.
 
@@ -142,17 +141,15 @@ The interpreter will parse that and may respond later with one of
 <a name=OpenWindow></a><a name=UpdateWindow></a>
 ```json
 ["OpenWindow",{"name":"f","text":["r←f a","r←(+⌿÷≢)a"],"token":123,"currentRow":0,"debugger":false,
-               "entityType":1,"offset":0,"readOnly":0,"size":0,"stop":[1],
+               "entityType":1,"offset":0,"readOnly":false,"size":0,"stop":[1],
                "tid":0,"tname":"Tid:0"}] // Interpreter -> RIDE
-["UpdateWindow",...] // Interpreter -> RIDE
+["UpdateWindow",...] // Interpreter -> RIDE (same args as OpenWindow)
 ```
 It may also send these in response to [`)ed
 name`](http://help.dyalog.com/14.1/Content/Language/System%20Commands/ed.htm) or
 [`⎕ed'name'`](http://help.dyalog.com/14.1/Content/Language/System%20Functions/ed.htm), as well as when tracing into an
 object that is not
 currently being traced.
-
-The arguments for `UpdateWindow` are the same as those to `OpenWindow`.
 
 Constants for `entityType`: `1` defined function, `2` simple character array, `4` simple numeric array, `8` mixed simple
 array, `16` nested array, `32` [`⎕OR`](http://help.dyalog.com/14.1/Content/Language/System%20Functions/or.htm) object,
@@ -348,7 +345,7 @@ Two types of dialogs are supported:
 ```
 Constants for type: `1` info, `2` warning, `3` error.
 
-If the user closes the dialog without choosing an option, RIDE responds with an `index` of -1.
+If the user closes the dialog without choosing an option, RIDE responds with an `index` of `-1`.
 
 :red_circle: "type" is not supported
 
@@ -364,7 +361,7 @@ If the user closes the dialog without choosing an option, RIDE responds with an 
 #Other
 <a name=ShowHTML></a>
 ```json
-["ShowHTML",{"title":"Example","html":"<i>Hell</i><b>o</b> world"}] // Interpreter -> RIDE
+["ShowHTML",{"title":"Example","html":"<i>Hello</i> <b>world</b>"}] // Interpreter -> RIDE
 ```
 Request RIDE shows some HTML.
 See
