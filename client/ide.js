@@ -100,7 +100,8 @@ this.IDE=function(){
     },
     ReplyTreeList:function(x){wse.replyTreeList(x)},
     StatusOutput:function(x){$('.sbar').text(x.text)},
-    UnknownCommand:function(){} // ignore
+    UnknownRIDECommand:function(){}, // todo
+    UnknownCommand:function(){}
   }
   // We need to be able to temporarily block the stream of messages coming from socket.io
   // Creating a floating window can only be done asynchronously and it's possible that a message
