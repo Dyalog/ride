@@ -27,7 +27,7 @@ end will send a reply, but that reply may not be the next message to be received
 
 If the receiver of a message does not recognise it, it should not take any action apart from optionally responding with
 ```json
-["UnknownRIDECommand",{"message":"NameOfTheCommand"}]
+["UnknownCommand",{"name":"Xyz"}]
 ```
 
 The connection may be closed at any time, leaving some messages undelivered or unprocessed.

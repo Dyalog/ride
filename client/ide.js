@@ -100,7 +100,7 @@ this.IDE=function(){
     },
     ReplyTreeList:function(x){wse.replyTreeList(x)},
     StatusOutput:function(x){$('.sbar').text(x.text)},
-    UnknownRIDECommand:function(){} // ignore
+    UnknownCommand:function(){} // ignore
   }
   // We need to be able to temporarily block the stream of messages coming from socket.io
   // Creating a floating window can only be done asynchronously and it's possible that a message
@@ -109,7 +109,7 @@ this.IDE=function(){
   function rd(){ // run down the queue
     ide.wins[0].cm.operation(function(){
       while(mq.length&&!blk){
-        var a=mq.shift(),f=handlers[a[0]];f?f.apply(ide,a.slice(1)):ide.emit('UnknownRIDECommand',{message:a[0]})
+        var a=mq.shift(),f=handlers[a[0]];f?f.apply(ide,a.slice(1)):ide.emit('UnknownCommand',{name:a[0]})
       }
       last=+new Date;tid=0
     })
