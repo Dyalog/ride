@@ -392,7 +392,6 @@ Sent from any peer to shut down the connection cleanly.
 :red_circle: This is pointless -Nick
 
 #Workspace explorer
-:red_circle: This is a draft.  Not implemented yet.
 Optionally, RIDE can display a tree representation of the objects in the current session.
 It can query the interpreter for this information in a uniform way for all types of nodes:
 <a name=TreeList></a>
@@ -413,7 +412,7 @@ When the user presses Enter or clicks on a node, RIDE should send
 The interpreter should ignore silently any invalid and outdated node ids.
 
 #Process manager
-:red_circle: No such beast exists as of Jan 2016.
+:red_circle: As of Feb 2016 there is no process manager.
 
 <a name=GetAvailableConnections></a>
 ```json

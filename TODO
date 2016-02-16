@@ -1,11 +1,14 @@
 Things to be done in the interpreter:
-  * workspace explorer, see M4 below
-  * implement "StatusOutput" message, see W3 below
-  * define protocol messages for transferring a file to the interpreter's host (e.g. for drag&drop of a .dws)
-  * fix "Identify" message and/or redefine its semantics in docs/protocol.md
+  * implement GetValueTip, see S4 below
+  * implement TreeList, TreeAction (names can be changed) for the ws explorer, see M4 below
+  * implement StatusOutput, see W3 below
+  * fix Identify message and/or redefine its semantics in docs/protocol.md
+  * remove handshake or at least the second part of it ("UsingProtocol=1"), this may be in Bjørn's code
+  * in GetAutocomplete either rename "token" to "win" or don't require them to be the same
   * don't send a ReplyConnect message
   * interpreter can start using Show(MultipleChoice)Dialog and ShowStringInputDialog for external files, see M5,S3 below
   * define and implement protocol messages for "show stack" and "show threads", see W1,W2 below
+  * define protocol messages for transferring a file to the interpreter, e.g. for drag&drop of a .dws
   * don't crash when receiving JSON that's not structured as expected
   * dev version of interpreter doesn't honour "+s -q" over ssh (probably one for Geoff), see email from 2016-01-28
 
