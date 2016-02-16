@@ -1,4 +1,15 @@
-Things that must be done before releasing RIDE3:
+Things to be done in the interpreter:
+  * workspace explorer, see M4 below
+  * implement "StatusOutput" message, see W3 below
+  * define protocol messages for transferring a file to the interpreter's host (e.g. for drag&drop of a .dws)
+  * fix "Identify" message and/or redefine its semantics in docs/protocol.md
+  * don't send a ReplyConnect message
+  * interpreter can start using Show(MultipleChoice)Dialog and ShowStringInputDialog for external files, see M5,S3 below
+  * define and implement protocol messages for "show stack" and "show threads", see W1,W2 below
+  * don't crash when receiving JSON that's not structured as expected
+  * dev version of interpreter doesn't honour "+s -q" over ssh (probably one for Geoff), see email from 2016-01-28
+
+Things to be done in RIDE before releasing:
   * once the new docs are online, change help URLs from 14.1 to 15.0
   * rm WS status bar and the fake ws explorer if there still isn't interpreter support
   * address all issues in docs/protocol.md, particularly those about the handshake
@@ -12,7 +23,7 @@ Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nic
         NN: it works
         NN: remember password in localStorage?
   M4 minimal workspace explorer
-        NN: need support from interpreter
+        NN: need support from interpreter; RIDE has an implementation of a tree with fake data
   M5 edit "external" source files
         NN: email 2016-01-20, added a "string input dialog" to the protocol
         NN: email 2016-01-28, "format on open" should be off by default for external source files
@@ -20,10 +31,7 @@ Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nic
         NN: implemented in its simplest form -- execute a command with a tmp file as argument
             Emacs works fine.  Vim requires a script to run in a terminal.  Gvim will probably work.
   M7 add meta-information to Windows exe
-       from JD: http://stackoverflow.com/questions/284258/how-do-i-set-the-version-information-for-an-existing-exe-dll
-          NN: First answer talks about VisualStudio options
-          NN: Second answer recommends a tool called "StampVer".  I tried it, got infected, and reinstalled Windows.
-       NN: This looks promising: https://github.com/atom/rcedit/ (requires VS to compile itself)
+        NN: This looks promising: https://github.com/atom/rcedit/ (requires VS to compile)
   S1 export and import preferences
   S2 config file for interpreter
   S3 yes/no/cancel and other ultra-simple dialogs
