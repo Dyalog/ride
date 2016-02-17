@@ -28,6 +28,7 @@ this.cmds=[
   ['LN', 'Toggle line numbers',     []],
   ['LOG','Show RIDE protocol log',  ['Ctrl-F12']],
   ['MA', 'Continue execution of all threads',[]],
+  ['MNU','Open menu',               ['F10']],
   ['NEW','New session',             ['Ctrl-N']],
   ['PRF','Show preferences',        []],
   ['QIT','Quit',                    ['Ctrl-Q']],

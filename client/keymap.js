@@ -133,7 +133,8 @@ $.extend(CM.commands,{
     },{origin:'+move',bias:-1})
   },
   JSC:function(){var w=D.nww;if(w){var t=w.showDevTools();t.x=w.x+w.width-w.dx;t.y=w.y-w.dy;t.height=w.height}},
-  LOG:function(){D.showProtocolLog&&D.showProtocolLog()}
+  LOG:function(){D.showProtocolLog&&D.showProtocolLog()},
+  MNU:function(){$('.menu .m-opener').eq(0).click()}
 })
 
 function switchWindows(d){ // d: a step of either 1 or -1
