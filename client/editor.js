@@ -1,7 +1,8 @@
 'use strict'
 var autocompletion=require('./autocompletion'),prefs=require('./prefs'),mode=require('./cm-apl-mode'),
     letter=mode.letter,dfnDepth=mode.dfnDepth,util=require('./util'),cmOnDblClick=util.cmOnDblClick,
-    ACB_VALUE=this.ACB_VALUE={pairs:'()[]{}',explode:'{}'} // value for CodeMirror's "autoCloseBrackets" option when on
+    ACB_VALUE=this.ACB_VALUE={pairs:'()[]{}',explode:'{}'}, // value for CodeMirror's "autoCloseBrackets" option when on
+    vtips=require('./vtips')
 require('./cm-scroll')
 
 var b=function(c,t){return'<a href=# class="'+c+' tb-btn" title="'+t+'"></a>'} // cc:css classes, t:title
@@ -90,15 +91,7 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
     })
   }
   ed.setTracer(!!ed.tc)
-  // value tips:
-  var vtTID,vtLine,vtStart,vtEnd,vtString // timeout id, position, ant text of pending value tip request
-  ed.$e.mouseover(function(e){
-    var p=ed.cm.coordsChar({left:e.clientX,top:e.clientY},'page'), t=ed.cm.getTokenAt(p)
-    if(p.outside||!t.string||!t.type){vtTID&&clearTimeout(vtTID);vtTID=0;return}
-    if(vtTID&&vtLine===p.line&&vtStart===t.start&&vtString===t.string)return
-    vtLine=p.line;vtStart=t.start;vtString=t.string;vtTID&&clearTimeout(vtTID)
-    vtTID=setTimeout(function(){vtTID=0;ed.emit('ValueTip',{win:ed.id,line:ed.cm.getLine(vtLine),pos:vtStart,token:0})},500)
-  })
+  vtips.init(this)
 }
 this.Editor.prototype={
   updGutters:function(){

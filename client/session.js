@@ -1,6 +1,6 @@
 'use strict'
 var autocompletion=require('./autocompletion'),prefs=require('./prefs'),cmOnDblClick=require('./util').cmOnDblClick
-require('./cm-scroll')
+var vtips=require('./vtips');require('./cm-scroll')
 this.Session=function(ide,e,opts){ // Session constructor
   var se=this;se.ide=ide;se.opts=opts;se.emit=opts.emit;se.hist=[''];se.histIdx=0;se.focusTimestamp=0;se.id=0
   se.dirty={} // modified lines: lineNumber→originalContent, inserted lines: lineNumber→0 (also used in cm-apl-mode.js)
@@ -35,6 +35,7 @@ this.Session=function(ide,e,opts){ // Session constructor
   se.promptType=0 // see ../docs/protocol.md #SetPromptType
   se.autocomplete=autocompletion.setUp(se)
   prefs.wrap(function(x){se.cm.setOption('lineWrapping',!!x);se.scrollCursorIntoView()})
+  vtips.init(this)
 }
 this.Session.prototype={
   histAdd:function(lines){this.hist[0]='';[].splice.apply(this.hist,[1,0].concat(lines));this.histIdx=0},
