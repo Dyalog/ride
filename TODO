@@ -3,7 +3,8 @@ Things to be done in the interpreter:
   * implement TreeList, TreeAction (names can be changed) for the ws explorer, see M4 below
   * implement StatusOutput, see W3 below
   * fix Identify message and/or redefine its semantics in docs/protocol.md
-  * remove handshake or at least the second part of it ("UsingProtocol=1"), this may be in Bjørn's code
+  * remove the second part of the handshake (UsingProtocol=1), this may be in Bjørn's code
+  * bump the first part of the handshake (SupportedProtocols=1 -> 2) and maybe format it as JSON (needs discussion)
   * in GetAutocomplete either rename "token" to "win" or don't require them to be the same
   * don't send a ReplyConnect message
   * interpreter can start using Show(MultipleChoice)Dialog and ShowStringInputDialog for external files, see M5,S3 below
