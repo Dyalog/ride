@@ -22,10 +22,7 @@ for bits in 32 64; do
   if which wine >/dev/null; then
     w=build/$app_name/win$bits/${app_name}.exe
     if [ -s $w ]; then
-      echo "replacing ${bits}-bit Windows icon and version"
-      v=$(cat build/nw/version)
-      wine node_modules/rcedit/bin/rcedit.exe $w \
-        --set-icon ./favicon.ico --set-file-version $v --set-product-version $v
+      echo "replacing ${bits}-bit Windows icon"; wine node_modules/rcedit/bin/rcedit.exe $w --set-icon ./favicon.ico
     fi
   else
     echo 'please install wine to set windows icons'
