@@ -122,7 +122,12 @@ $(function(){
   // drag and drop
   CodeMirror.defaults.dragDrop=0;window.ondragover=window.ondrop=function(e){e.preventDefault();return!1}
   window.ondrop=function(e){
-    var a=e.dataTransfer.files;if(a.length===1&&/\.dws$/i.test(a[0].path))D.ide.exec(['      )load '+a[0].path+'\n'],0)
+    var a=e.dataTransfer.files,f=a[0].path
+    if(!D.lastSpawnedExe){$.alert('Drag and drop of workspaces works only for locally started interpreters.','Error')}
+    else if(!/\.dws$/i.test(f)){$.alert('RIDE supports drag and drop only for .dws files.','Error')}
+    else if(a.length!==1){$.alert('RIDE does not support dropping of multiple files.','Error')}
+    else{$.confirm('Are you sure you want to )load '+f.replace(/^.*[\\\/]/,'')+'?','Load workspace',
+              function(x){x&&D.ide.exec(['      )load '+f+'\n'],0)})}
     e.preventDefault();return!1
   }
 })
