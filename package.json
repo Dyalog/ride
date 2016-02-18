@@ -30,6 +30,5 @@
     "show":false
   },
   "webkit":{"plugin":true},
-  "chromium-args":"--remote-debugging-port=14502",
   "single-instance":false
 }
