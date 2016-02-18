@@ -132,6 +132,11 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 // status bar
 .sbar{position:absolute;left:0;right:0;bottom:0;height:20px;line-height:20px;padding:0 2px}
 
+// value tips
+#vtip{.tt;position:absolute;background:#000;border-radius:5px;color:#fff;padding:8px;width:200px}
+#vtip:before{border:solid;border-color:#000 transparent;border-width:6px 6px 0 6px;bottom:-6px;content:"";
+             left:100px;position:absolute}
+
 // resizer:splitting line between session and editor/tracer
 .ui-layout-resizer{.bg}
 .ui-layout-resizer-east{border-left:solid @light 1px;border-right:solid @dark 1px;padding:2px 0 !important;margin-top:-1px !important}

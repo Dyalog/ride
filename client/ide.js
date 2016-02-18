@@ -3,7 +3,7 @@ require('./menu')
 var prefs=require('./prefs'),prefsUI=require('./prefs-ui'),parseMenuDSL=require('./prefs-menu').parseMenuDSL,
     editor=require('./editor'),Editor=editor.Editor,ACB_VALUE=editor.ACB_VALUE,Session=require('./session').Session,
     keymap=require('./keymap'),util=require('./util'),esc=util.esc,throttle1=util.throttle1,
-    cmds=require('./cmds').cmds,lbar=require('./lbar'),wse=require('./wse')
+    cmds=require('./cmds').cmds,lbar=require('./lbar'),wse=require('./wse'),vtips=require('./vtips')
 function parseId(s){return+s.replace(/^.*?(\d+)$/,'$1')}
 this.IDE=function(){
   var ide=D.ide=this
@@ -100,6 +100,7 @@ this.IDE=function(){
     },
     ReplyTreeList:function(x){wse.replyTreeList(x)},
     StatusOutput:function(x){$('.sbar').text(x.text)},
+    ValueTip:vtips.processReply,
     UnknownRIDECommand:function(){}, // todo
     UnknownCommand:function(){}
   }
