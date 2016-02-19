@@ -323,8 +323,8 @@ shouldn't block while it's waiting for the response.
 When the user hovers a name with the mouse, RIDE should ask for a short textual representation of the current value:
 <a name=GetValueTip></a><a name=ValueTip></a>
 ```json
-["GetValueTip",{"win":123,"line":"a←b+c","pos":2,"token":456}] // RIDE -> Interpreter
-["ValueTip",{"tip":"0 1 2 3...","token":456}]                  // Interpreter -> RIDE
+["GetValueTip",{"win":123,"line":"a←b+c","pos":2,"maxWidth":50,"maxHeight":20,"token":456}] // RIDE -> Interpreter
+["ValueTip",{"tip":"0 1 2 3...","token":456}] // Interpreter -> RIDE
 ```
 Like with autocompletion, `token` is used to correlate requests and responses, and there is no guarantee that they will
 arrive in the same order, if ever.
