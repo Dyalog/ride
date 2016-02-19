@@ -325,12 +325,16 @@ When the user hovers a name with the mouse, RIDE should ask for a short textual 
 ```json
 ["GetValueTip",{"win":123,"line":"a←b+c","pos":2,
                 "maxWidth":50,"maxHeight":20,"token":456}] // RIDE -> Interpreter
-["ValueTip",{"tip":["0 1 2","3 4 5"],"token":456}] // Interpreter -> RIDE
+["ValueTip",{"tip":["0 1 2","3 4 5"],"class":1,"token":456}] // Interpreter -> RIDE
 ```
 Like with autocompletion, `token` is used to correlate requests and responses, and there is no guarantee that they will
 arrive in the same order, if ever.
 
 `maxHeight` and `maxWidth` can be used to limit the number of lines and columns in the result.
+
+In the response, `class` indicates the
+[nameclass](http://help.dyalog.com/14.1/Content/Language/System%20Functions/nc.htm) of the object.
+This information can be used to syntax-highlight the tooltip.
 
 #Dialogs
 The interpreter can ask RIDE to interact with the user by showing a modal dialog.
