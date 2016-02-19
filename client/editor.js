@@ -364,7 +364,7 @@ this.Editor.prototype={
   tabOrAutocomplete:function(cm){
     if(cm.somethingSelected()){cm.execCommand('indentMore');return}
     var c=cm.getCursor(),s=cm.getLine(c.line);if(/^ *$/.test(s.slice(0,c.ch))){cm.execCommand('indentMore');return}
-    this.autocompleteWithTab=1;this.emit('GetAutocomplete',{line:s,pos:c.ch,token:this.id})
+    this.autocompleteWithTab=1;this.emit('GetAutocomplete',{line:s,pos:c.ch,token:this.id,win:this.id})
   },
   downOrXline:function(cm){
     var l=cm.getCursor().line;if(l!==cm.lastLine()||/^\s*$/.test(cm.getLine(l))){cm.execCommand('goLineDown');return}
