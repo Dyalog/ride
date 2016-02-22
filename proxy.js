@@ -106,6 +106,8 @@ var handlers={
   '*ssh':function(x){
     try{
       var c=new(require('ssh2').Client) // c:ssh client
+      var o={host:x.host,port:x.port,username:x.user} // connect() options
+      x.key?(o.privateKey=fs.readFileSync(x.key)):(o.password=x.pass)
       c.on('ready',function(){
         c.exec('/bin/sh',function(err,sm){if(err)throw err // sm:stream
           sm.on('close',function(code,sig){toBrowser('*sshExited',{code:code,sig:sig});c.end()})
@@ -117,7 +119,7 @@ var handlers={
       })
       .on('tcp connection',function(_,accept){clt=accept();toBrowser('*connected',{host:'',port:0});initInterpreterConn()})
       .on('error',function(x){toBrowser('*error',{msg:x.message||''+x})})
-      .connect({host:x.host,port:x.port,username:x.user,privateKey:x.key?fs.readFileSync(x.key):null})
+      .connect(o)
     }catch(e){toBrowser('*error',{msg:e.message})}
   },
   '*listen':function(x){
