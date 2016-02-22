@@ -323,9 +323,8 @@ shouldn't block while it's waiting for the response.
 When the user hovers a name with the mouse, RIDE should ask for a short textual representation of the current value:
 <a name=GetValueTip></a><a name=ValueTip></a>
 ```json
-["GetValueTip",{"win":123,"line":"a←b+c","pos":2,
-                "maxWidth":50,"maxHeight":20,"token":456}] // RIDE -> Interpreter
-["ValueTip",{"tip":["0 1 2","3 4 5"],"class":1,"token":456}] // Interpreter -> RIDE
+["GetValueTip",{"win":123,"line":"a←b+c","pos":2,"maxWidth":50,"maxHeight":20,"token":456}] // RIDE -> Interpreter
+["ValueTip",{"tip":["0 1 2","3 4 5"],"class":2,"startCol":2,"endCol":3,"token":456}] // Interpreter -> RIDE
 ```
 Like with autocompletion, `token` is used to correlate requests and responses, and there is no guarantee that they will
 arrive in the same order, if ever.
@@ -335,6 +334,9 @@ arrive in the same order, if ever.
 In the response, `class` indicates the
 [nameclass](http://help.dyalog.com/14.1/Content/Language/System%20Functions/nc.htm) of the object.
 This information can be used to syntax-highlight the tooltip.
+
+`startCol` and `endCol` describe the position of the whole name to which the value tip pertains.
+`startCol` is inclusive and `endCol` is exclusive.
 
 #Dialogs
 The interpreter can ask RIDE to interact with the user by showing a modal dialog.
