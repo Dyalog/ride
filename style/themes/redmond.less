@@ -15,21 +15,17 @@ body{
   .menu{
     background-color:@redmond-bg;border:0;
     a{color:@redmond-text}
-    > div{
-      color:@redmond-text;background-color:@redmond-bg;
-      a{color:@redmond-text;border:1px solid transparent;.shortcut{color:@redmond-highlight}}
-      a:hover{background-color:@redmond-highlight;border:@redmond-border}
-    }
-    div div{
+    .m-box{
       background-color:@redmond-bg;color:@redmond-text;border:@redmond-border;margin-left:2px;margin-right:2px;
       a{color:@redmond-text}
-      a:focus{background-color:@redmond-highlight}
+      a:focus,a:focus.m-checked,a:focus.m-opener{background-color:@redmond-highlight}
     }
     .m-sub{border:none}
   }
   .lbar{
     background-color:@redmond-bg;border-bottom:@redmond-border;
     b{background-color:@redmond-bg;border:0;color:@redmond-text}
+    b.first{border-left-color:transparent}
     b:hover{background-color:@redmond-highlight}
   }
   .ui-layout-resizer{background-color:@redmond-bg} // top:32px
