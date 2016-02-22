@@ -8,7 +8,7 @@
     init:function(){
       return(this.addClass(L)
         .on('click','>:not(.ui-sortable-helper)',function(e){
-          if(e.altKey||e.modKey)return
+          if(e.altKey||e.metaKey)return
           var $a=$(this),$l=$a.parent()
           e.ctrlKey&&!e.shiftKey ? $a.toggleClass(S) : $l.list('select',$a.index(),e.ctrlKey,e.shiftKey)
           $l.trigger(ES);return!1
@@ -16,7 +16,7 @@
         .on('focus','*',function(){$(this).parentsUntil('.'+L).andSelf().eq(0).   addClass(F)})
         .on('blur' ,'*',function(){$(this).parentsUntil('.'+L).andSelf().eq(0).removeClass(F)})
         .keydown(function(e){
-          var $l=$(this),ck=e.ctrlKey,sk=e.shiftKey,ak=e.altKey;if(e.modKey)return
+          var $l=$(this),ck=e.ctrlKey,sk=e.shiftKey,ak=e.altKey;if(e.metaKey)return
           if(!ak){
             switch(e.which){
               /*C-a */case 65:if(ck){$l.children().addClass(S).eq(0).focus();$l.trigger(ES);return!1};break
