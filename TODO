@@ -42,6 +42,7 @@ Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nic
         NN: done in RIDE, see docs/protocol.md
   S4 value tips
         NN: done
+        NN: must make colours configurable
   S5 enhanced navigation of classes and functions
         e.g. provide a way to jump to the last edited position in the same editor, like '' or `` in vim
         (meeting with Morten and Jay, 2016-01-08)

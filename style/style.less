@@ -135,8 +135,9 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 .sbar{position:absolute;left:0;right:0;bottom:0;height:20px;line-height:20px;padding:0 2px}
 
 // value tips
-#vtip-balloon{.tt;position:absolute;background:#000;border-radius:8px;color:#fff;padding:8px;white-space:pre}
-#vtip-triangle{border:solid;border-color:#000 transparent;border-width:6px 6px 0 6px;height:6px;
+@vtbg:#444;
+#vtip-balloon{.tt;position:absolute;background:@vtbg;border-radius:8px;color:#fff;padding:8px;white-space:pre}
+#vtip-triangle{border:solid;border-color:@vtbg transparent;border-width:6px 6px 0 6px;height:6px;
                bottom:-6px;content:"";position:absolute}
 #vtip-triangle.inv{border-width:0 6px 6px 6px;margin-top:-6px;bottom:auto}
 #vtip-rect{position:absolute;outline:dotted orange 2px}
