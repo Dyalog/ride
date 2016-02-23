@@ -24,7 +24,7 @@ Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nic
         NN: some issues to clean up, see docs/protocol.md
   M2 awareness of Process Manager
   M3 launch server-side processes using ssh
-        NN: interpreter dies with a syserror
+        NN: it works
         NN: remember password in localStorage?
   M4 minimal workspace explorer
         NN: need support from interpreter; RIDE has an implementation of a tree with fake data
