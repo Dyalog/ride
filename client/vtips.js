@@ -13,11 +13,11 @@ this.init=function(w){ // .init(w) gets called for every window w (session or ed
   function cl(){clearTimeout(i);$($b).add($t).add($r).remove();i=p=$b=$t=$r=null} // clear everything
   $(w.cm.display.wrapper).mouseout(cl).mousemove(function(e){
     cl();var p0=w.cm.coordsChar({left:e.clientX,top:e.clientY})
-    p0.outside||(i=setTimeout(function(){
+    p0.outside||(i=setTimeout(function(){ // send a request (not too often)
       i=0;p=p0;w.emit('GetValueTip',{win:w.id,line:w.cm.getLine(p.line),pos:p.ch,token:w.id,maxWidth:MW,maxHeight:MH})
     },500))
   })
-  w.vtReply=function(x){
+  return function(x){ // return a function that processes the reply
     if(!p)return
     var d=w.getDocument()
     var r0=w.cm.charCoords({line:p.line,ch:x.startCol})        // bounding rectangle for start of token

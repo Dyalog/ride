@@ -44,7 +44,7 @@ var ibeams=[ // source: http://help.dyalog.com/14.1/Content/Language/Primitive%2
   [50100,'Line Count']
 ]
 var ibeamOptions=ibeams.map(function(x){return{text:x[0]+'⌶',displayText:x[0]+'⌶ '+x[1]}})
-this.setUp=function(win){ // win: an instance of Editor or Session
+this.init=function(win){ // win: an instance of Editor or Session
   var tid,cm=win.cm,r
   cm.on('change',function(){
     var mode=cm.getOption('mode');if(typeof mode==='object'&&mode!=null&&mode.name)mode=mode.name
@@ -62,11 +62,11 @@ this.setUp=function(win){ // win: an instance of Editor or Session
       },prefs.autocompletionDelay())
     }
   })
-  return r=function(skip,options){
-    if(prefs.autocompletion()&&options.length&&cm.hasFocus()&&cm.getWrapperElement().ownerDocument.hasFocus()){
-      var c=cm.getCursor(),from={line:c.line,ch:c.ch-skip},sel=''
-      if(options.length===1&&win.autocompleteWithTab){
-        cm.replaceRange(options[0],from,c,'D')
+  return r=function(x){
+    if(prefs.autocompletion()&&x.options.length&&cm.hasFocus()&&cm.getWrapperElement().ownerDocument.hasFocus()){
+      var c=cm.getCursor(),from={line:c.line,ch:c.ch-x.skip},sel=''
+      if(x.options.length===1&&win.autocompleteWithTab){
+        cm.replaceRange(x.options[0],from,c,'D')
       }else{
         cm.showHint({
           completeOnSingleClick:true,completeSingle:false,
@@ -74,15 +74,15 @@ this.setUp=function(win){ // win: an instance of Editor or Session
             Enter:function(cm,m){sel?m.pick():cm.execCommand('ER')},
             Right:function(cm,m){sel||m.moveFocus(1);m.pick()},
             'Shift-Tab':function(cm,m){m.moveFocus(-1)},
-            Tab:function(cm,m){m.moveFocus(1);options.length===1&&m.pick()},
+            Tab:function(cm,m){m.moveFocus(1);x.options.length===1&&m.pick()},
             F1:function(){sel&&sel.text&&helpurls[sel.text]&&D.openExternal(helpurls[sel.text])}
           },
           hint:function(){
             var to=cm.getCursor(),
                 u=cm.getLine(from.line).slice(from.ch,to.ch).toLowerCase(), // completion prefix
-                list=u==='⌶'?options
-                            :options.filter(
-                                function(x){return typeof x==='string'&&x.slice(0,u.length).toLowerCase()===u}
+                list=u==='⌶'?x.options
+                            :x.options.filter(
+                                function(s){return typeof s==='string'&&s.slice(0,u.length).toLowerCase()===u}
                              ).sort()
             list.length&&list.unshift('')
             var data={from:from,to:to,list:list};CodeMirror.on(data,'select',function(x){sel=x});return data
