@@ -100,7 +100,7 @@ this.IDE=function(){
     },
     ReplyTreeList:function(x){wse.replyTreeList(x)},
     StatusOutput:function(x){$('.sbar').text(x.text)},
-    ValueTip:vtips.processReply,
+    ValueTip:function(x){ide.wins[x.token].vtReply(x)},
     UnknownRIDECommand:function(){}, // todo
     UnknownCommand:function(){}
   }
