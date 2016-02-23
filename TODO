@@ -24,8 +24,8 @@ Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nic
         NN: some issues to clean up, see docs/protocol.md
   M2 awareness of Process Manager
   M3 launch server-side processes using ssh
-        NN: it works
-        NN: remember password in localStorage?
+        NN: done
+        NN: remember password/key?
   M4 minimal workspace explorer
         NN: need support from interpreter; RIDE has an implementation of a tree with fake data
   M5 edit "external" source files
@@ -39,18 +39,18 @@ Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nic
   S1 export and import preferences
   S2 config file for interpreter
   S3 yes/no/cancel and other ultra-simple dialogs
-        NN: implemented in RIDE, see docs/protocol.md
+        NN: done in RIDE, see docs/protocol.md
   S4 value tips
-        NN: almost done; a few issues -- e.g. floating windows
+        NN: done
   S5 enhanced navigation of classes and functions
         e.g. provide a way to jump to the last edited position in the same editor, like '' or `` in vim
         (meeting with Morten and Jay, 2016-01-08)
   W1 show stack
   W2 show threads
   W3 status bar
-        NN: implemented in RIDE, except for "flags" (warning, error, etc)
+        NN: done in RIDE, except for "flags" (warning, error, etc)
   W4 drag/drop workspaces or source files to session
-        NN: dropping of a .dws file now types )load ...
+        NN: done, dropping of a .dws file now types )load ...
   W5 autopw support
         NN: done
 
