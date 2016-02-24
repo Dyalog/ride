@@ -192,7 +192,11 @@ this.Editor.prototype={
   setReadOnly:function(x){this.cm.setOption('readOnly',x)},
   updSize:function(){var $p=this.$e;this.cm.setSize($p.width(),$p.height()-28)},
   open:function(ee){ // ee:editable entity
-    var ed=this,cm=ed.cm;cm.setValue(ed.oText=ee.text.join('\n'));cm.clearHistory()
+    var ed=this,cm=ed.cm
+    this.jumps.forEach(function(x){x.n=x.lh.lineNo()}) // to preserve jumps, convert LineHandle-s to line numbers
+    cm.setValue(ed.oText=ee.text.join('\n')) // .setValue() invalidates old LineHandle-s
+    this.jumps.forEach(function(x){x.lh=cm.getLineHandle(x.n);delete x.n}) // look up new LineHandle-s, forget numbers
+    cm.clearHistory()
     if(D.mac){cm.focus();window.focus()}
     // entityType:             16 NestedArray        512 AplClass
     //  1 DefinedFunction      32 QuadORObject      1024 AplInterface
@@ -224,7 +228,7 @@ this.Editor.prototype={
         ((RegExp('^'+r     ).exec(s.slice(  c.ch))||[])[0]||'')  // match right of cursor
     ).replace(/^\d+/,'') // trim leading digits
   },
-  ED:function(cm){this.emit('Edit',{win:this.id,pos:cm.indexFromPos(cm.getCursor()),text:cm.getValue()})},
+  ED:function(cm){this.addJump();this.emit('Edit',{win:this.id,pos:cm.indexFromPos(cm.getCursor()),text:cm.getValue()})},
   QT:function(){this.emit('CloseWindow',{win:this.id})},
   BK:function(cm){this.tc?this.emit('TraceBackward',{win:this.id}):cm.execCommand('undo')},
   FD:function(cm){this.tc?this.emit('TraceForward' ,{win:this.id}):cm.execCommand('redo')},
@@ -359,7 +363,7 @@ this.Editor.prototype={
     var a=cm.getSelections(), s=a.length!==1?'':!a[0]?this.cword():a[0].indexOf('\n')<0?a[0]:''
     s&&this.ide.wins[0].opts.exec(['      '+s],0)
   },
-  addJump:function(cm){var j=this.jumps,u=cm.getCursor();j.push({lh:cm.getLineHandle(u.line),ch:u.ch})>10&&j.shift()},
+  addJump:function(){var j=this.jumps,u=this.cm.getCursor();j.push({lh:this.cm.getLineHandle(u.line),ch:u.ch})>10&&j.shift()},
   JBK:function(cm){var p=this.jumps.pop();p&&cm.setCursor({line:p.lh.lineNo(),ch:p.ch})},
   tabOrAutocomplete:function(cm){
     if(cm.somethingSelected()){cm.execCommand('indentMore');return}
