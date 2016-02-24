@@ -39,12 +39,13 @@ D.addSyntaxGroups([
   {t:'ucmd',s:'user command',    c:'.cm-apl-ucmd'},
   {t:'err', s:'error',           c:'.cm-apl-err' },
   {t:'lnum',s:'line number',     c:'.CodeMirror-linenumber'},
-  {t:'cur', s:'cursor',          c:'div.CodeMirror-cursor', ctrls:{lb:1,fg:0,bg:0,BIU:0}},
+  {t:'cur', s:'cursor',          c:'div.CodeMirror-cursor',ctrls:{bc:1,fg:0,bg:0,BIU:0}},
   {t:'mtch',s:'matching bracket',c:'.CodeMirror-matchingbracket'},
   {t:'srch',s:'search match',    c:'.cm-searching'},
   {t:'mod', s:'modified line',   c:'.modified'},
-  {t:'sel', s:'selection',       c:'.CodeMirror-selected,.CodeMirror-focused .CodeMirror-selected', ctrls:{fg:0,BIU:0}},
-  {t:'tc',  s:'tracer',          c:'.tracer .CodeMirror,.tracer .CodeMirror .CodeMirror-gutter-wrapper'}
+  {t:'sel', s:'selection',       c:'.CodeMirror-selected,.CodeMirror-focused .CodeMirror-selected',ctrls:{fg:0,BIU:0}},
+  {t:'tc',  s:'tracer',          c:'.tracer .CodeMirror,.tracer .CodeMirror .CodeMirror-gutter-wrapper'},
+  {t:'vtip',s:'value tip',       c:'#vtip-balloon,#vtip-triangle',ctrls:{bc:1}}
 ])
 // Colour schemes have two representations:
 //   in memory                 in localStorage
@@ -85,11 +86,11 @@ var SCMS=[ // built-in schemes
     'lnum=fg:008,bg:f,bgo:1 mod=bg:e,bgo:1 mtch=bg:ff8,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 op1=fg:00f op2=fg:00f '+
     'par=fg:00f quad=fg:808 sel=bg:ddf,bgo:.5 semi=fg:00f sqbr=fg:00f srch=bg:f80,bgo:.5 str=fg:088 tc=bg:d,bgo:1 '+
     'trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f'},
-  {name:'Francisco Goya',styles:'asgn=fg:ff0 com=fg:b,I:1 cur=lb:f00 dfn2=fg:eb4 dfn3=fg:c79 dfn4=fg:cd0 dfn5=fg:a0d '+
+  {name:'Francisco Goya',styles:'asgn=fg:ff0 com=fg:b,I:1 cur=bc:f00 dfn2=fg:eb4 dfn3=fg:c79 dfn4=fg:cd0 dfn5=fg:a0d '+
     'dfn=fg:a7b diam=fg:ff0 err=fg:f00,bg:822,bgo:.5,B:1,U:1 fn=fg:0f0 glob=B:1 idm=B:1 kw=fg:aa2 '+
     'lbl=U:1,bg:642,bgo:.5 lnum=fg:b94,bg:010,bgo:1 mod=bg:1,bgo:1 mtch=fg:0,bg:ff8,bgo:.75 norm=fg:9c7,bg:0,bgo:1 '+
     'num=fg:a8b op1=fg:d95 op2=fg:fd6 sel=bg:048,bgo:.5 semi=fg:8 sqbr=fg:8 srch=bg:b96,bgo:.75,fg:0 str=fg:dae '+
-    'tc=bg:1,bgo:1 zld=fg:d9f,B:1 scmd=fg:0ff ucmd=fg:f80,B:1'},
+    'tc=bg:1,bgo:1 zld=fg:d9f,B:1 scmd=fg:0ff ucmd=fg:f80,B:1 vtip=bg:733,fg:ff0,bgo:1,bc:900'},
   {name:'Albrecht Dürer',styles:'com=I:1 diam=B:1 err=fg:f,bg:0,bgo:.5,B:1,I:1,U:1 glb=I:1 idm=U:1,bg:e,bgo:.5 kw=B:1 '+
     'lnum=bg:f,bgo:1 mod=bg:e,bgo:1 mtch=bg:c,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 quad=fg:8 srch=bg:c,bgo:.5 '+
     'str=fg:8 tc=bg:e,bgo:1 zld=fg:8'},
@@ -107,7 +108,7 @@ function renderCSS(scm,rp){ // rp: css rule prefix
       (h.B ?'font-weight:bold;'                    :'')+
       (h.I ?'font-style:italic;'                   :'')+
       (h.U ?'text-decoration:underline;'           :'')+
-      (h.lb?'border-color:'+expandRGB(h.lb)+';'    :'')+
+      (h.bc?'border-color:'+expandRGB(h.bc)+';'    :'')+
       (h.bg?'background-color:'+expandRGBA(h.bg,h.bgo==null?.5:h.bgo):'')+'}'
   }).join('')
 }
@@ -148,7 +149,7 @@ this.init=function($e){
         '<label><input type=checkbox id=col-B><b>B</b></label>'+
         '<label><input type=checkbox id=col-I><i>I</i></label>'+
         '<label><input type=checkbox id=col-U><u>U</u></label>'+
-      '<p id=col-lb-p><label><input type=checkbox id=col-lb-cb>Cursor colour</label> <input type=color id=col-lb>'+
+      '<p id=col-bc-p><label><input type=checkbox id=col-bc-cb>Border colour</label> <input type=color id=col-bc list=col-list>'+
     '</div>'
   )
   $('#col-scm').change(function(){
@@ -186,9 +187,9 @@ this.init=function($e){
     if(!i){stream.pos+=SEARCH_MATCH.length;return'searching'}
     i>0?(stream.pos+=i):stream.skipToEnd()
   }})
-  cm.on('gutterClick',function(){selectGroup('lnum')})
+  cm.on('gutterClick',function(){selGroup('lnum')})
   cm.on('cursorActivity',function(){
-    var t;selectGroup(
+    var t;selGroup(
       cm.somethingSelected()?'sel':
       cm.getLine(cm.getCursor().line).indexOf(SEARCH_MATCH)>=0?'srch':
       (t=cm.getTokenTypeAt(cm.getCursor(),1))?
@@ -196,8 +197,8 @@ this.init=function($e){
       'norm'
     )
   })
-  $('#col-group').change(function(){selectGroup(G[+this.value].t)})
-  ;['fg','bg','lb'].forEach(function(p){
+  $('#col-group').change(function(){selGroup(G[+this.value].t)})
+  ;['fg','bg','bc'].forEach(function(p){
     $('#col-'+p).change(function(){(scm[sel]||(scm[sel]={}))[p]=this.value;updSampleStyle()})
     $('#col-'+p+'-cb').click(function(){
       $('#col-'+p).toggle(this.checked)
@@ -231,7 +232,7 @@ this.init=function($e){
 function updScms(){ // update schemes
   $('#col-scm').html(scms.map(function(x){x=esc(x.name);return'<option value="'+x+'">'+x}).join('')).val(scm.name)
   $('#prefs-tab-colours').toggleClass('frozen',!!scm.frozen);cm.setSize($cm.width(),$cm.height())
-  updSampleStyle();selectGroup('norm',1)
+  updSampleStyle();selGroup('norm',1)
 }
 this.load=function(){
   var a=scms=SCMS.concat(prefs.colourSchemes().map(decodeScm)), s=prefs.colourScheme()
@@ -243,19 +244,19 @@ this.save=function(){
 }
 this.resize=function(){cm.setSize($cm.width(),$cm.height())}
 function updSampleStyle(){$('#col-sample-style').text(renderCSS(scm,'#col-cm'))}
-function selectGroup(t,forceRefresh){
+function selGroup(t,forceRefresh){
   if(!scm||sel===t&&!forceRefresh)return
   var i=H[t],h=scm[t]||{};$('#col-group').val(i)
-  ;['fg','bg','lb'].forEach(function(p){
+  ;['fg','bg','bc'].forEach(function(p){
     $('#col-'+p+'-cb').prop('checked',!!h[p]);$('#col-'+p).val(expandRGB(h[p])||'#000000').toggle(!!h[p])
   })
-  var ps='BIU';for(var i=0;i<ps.length;i++){var p=ps[i];$('#col-'+p).prop('checked',!!h[p])}
+  var ps='BIU';for(var j=0;j<ps.length;j++){var p=ps[j];$('#col-'+p).prop('checked',!!h[p])}
   $('#col-bgo').slider('value',h.bgo==null?.5:h.bgo)
   var c=(G[i]||G[0]).ctrls||{}
   $('#col-fg-p' ).toggle(c.fg==null||!!c.fg)
   $('#col-bg-p' ).toggle(c.bg==null||!!c.bg)
-  $('#col-bgo'  ).toggle(!!h.bg)
+  $('#col-bgo'  ).toggle(!!c.bg)
   $('#col-BIU-p').toggle(c.BIU==null||!!c.BIU)
-  $('#col-lb-p' ).toggle(!!c.lb)
+  $('#col-bc-p' ).toggle(!!c.bc)
   sel=t
 }

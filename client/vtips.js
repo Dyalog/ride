@@ -20,14 +20,16 @@ this.init=function(w){ // .init(w) gets called for every window w (session or ed
   return function(x){ // return a function that processes the reply
     if(!p)return
     var d=w.getDocument()
-    var r0=w.cm.charCoords({line:p.line,ch:x.startCol})        // bounding rectangle for start of token
-    var r1=w.cm.charCoords({line:p.line,ch:x.endCol-1})        //                        end   of token
-    var rx=r0.left, ry=r0.top, rw=r1.right-rx, rh=r1.bottom-ry //                        whole token
+    var r0=w.cm.charCoords({line:p.line,ch:x.startCol})    // bounding rectangle for start of token
+    var r1=w.cm.charCoords({line:p.line,ch:x.endCol-1})    //                        end   of token
+    var rx=r0.left, ry=r0.top, rw=r1.right-rx, rh=r1.bottom-ry  // whole token
+    rx-=$(w.cm.display.wrapper).offset().left              // correct for CodeMirror's own offset
+    ry-=$(w.cm.display.wrapper).offset().top
     var dw=w.cm.display.wrapper.clientWidth, dx=$(w.cm.display.wrapper).offset().left // CodeMirror's width and x coord
     var s=(x.tip.length<MH?x.tip:x.tip.slice(0,MH-1).concat('...'))
             .map(function(s){return s.length<MW?s:s.slice(0,MW-3)+'...'}).join('\n')
     cl();$b=$('<div id=vtip-balloon>',d).text(s);$t=$('<div id=vtip-triangle>',d);$r=$('<div id=vtip-rect>',d)
-    $b.add($t).add($r).hide().appendTo(d.body)
+    $b.add($t).add($r).hide().appendTo(w.cm.display.wrapper)
     var th=6,tw=2*th                                       // triangle dimensions
     var bp=8,bw=$b.width(),bh=$b.height()                  // balloon padding and dimensions
     var bx=Math.max(dx,Math.min(dx+dw-bw,rx+(rw-bw)/2-bp)) // bx,by:balloon coordinates

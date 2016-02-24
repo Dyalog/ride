@@ -134,11 +134,12 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 // status bar
 .sbar{position:absolute;left:0;right:0;bottom:0;height:20px;line-height:20px;padding:0 2px}
 
-// value tips
-@vtbg:#444;
-#vtip-balloon{.tt;position:absolute;background:@vtbg;border-radius:8px;color:#fff;padding:8px;white-space:pre}
-#vtip-triangle{border:solid;border-color:@vtbg transparent;border-width:6px 6px 0 6px;height:6px;
-               bottom:-6px;content:"";position:absolute}
+// value tips (also styled via Prefs>Colours)
+#vtip-balloon{.tt;position:absolute;border-radius:8px;border:solid black 1px;padding:7px;white-space:pre;
+  background-color:#000;color:#fff}
+#vtip-triangle{position:absolute;border:solid;border-color:#000;border-width:6px 6px 0 6px;height:6px;bottom:-6px;
+  border-left-color:transparent!important;border-right-color:transparent!important;
+  background-color:transparent!important;content:""}
 #vtip-triangle.inv{border-width:0 6px 6px 6px;margin-top:-6px;bottom:auto}
 #vtip-rect{position:absolute;outline:dotted orange 2px}
 

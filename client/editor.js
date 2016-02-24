@@ -57,7 +57,7 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
   })
   ed.cm.on('focus',function(){ed.focusTimestamp=+new Date;ide.focusedWin=ed})
   cmOnDblClick(ed.cm,function(e){ed.ED(ed.cm);e.preventDefault();e.stopPropagation()})
-  ed.autocomplete=autocompletion.init(ed)
+  ed.processAutocompleteReply=autocompletion.init(ed)
   ed.$tb=$('.toolbar',ed.$e)
     .on('click','.tb-hid,.tb-case',function(e){$(e.target).toggleClass('pressed');ed.highlightSearch();return!1})
     .on('mousedown','.tb-btn',function(e){$(e.target).addClass('armed');e.preventDefault()})
