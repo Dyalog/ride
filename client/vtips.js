@@ -14,10 +14,13 @@ this.init=function(w){ // .init(w) gets called for every window w (session or ed
   function cl(){clearTimeout(i);$($b).add($t).add($r).remove();i=p=$b=$t=$r=null} // clear everything
   $(w.cm.display.wrapper).mouseout(cl).mousemove(function(e){
     cl();var p0=w.cm.coordsChar({left:e.clientX,top:e.clientY})
-    p0.outside||(i=setTimeout(function(){ // send a request (not too often)
-      i=0;p=p0;var s=w.cm.getLine(p.line),lbt=lbar.tips[s[p.ch]]
-      if(lbt){rf({tip:lbt.join('\n\n').split('\n'),startCol:p.ch,endCol:p.ch+1})}
-      else{w.emit('GetValueTip',{win:w.id,line:s,pos:p.ch,token:w.id,maxWidth:MW,maxHeight:MH})}
+    p0.outside||(i=setTimeout(function(){                                         // send a request (not too often)
+      i=0;p=p0;var s=w.cm.getLine(p.line),c=s[p.ch],lbt=lbar.tips[c]
+      if(lbt&&!(c==='⎕'&&/[áa-z]/i.test(s[p.ch+1]||''))){                         // are we on a squiggle?
+        rf({tip:lbt.join('\n\n').split('\n'),startCol:p.ch,endCol:p.ch+1})        // show tooltip from lbar
+      }else{
+        w.emit('GetValueTip',{win:w.id,line:s,pos:p.ch,token:w.id,maxWidth:MW,maxHeight:MH}) // ask interpreter
+      }
     },500))
   })
   return rf=function(x){ // return a function that processes the reply
