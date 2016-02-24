@@ -36,10 +36,10 @@ this.init=function(w){ // .init(w) gets called for every window w (session or ed
     $b.add($t).add($r).hide().appendTo(w.cm.display.wrapper)
     var th=6,tw=2*th                                             // triangle dimensions
     var bp=8,bw=$b.width(),bh=$b.height()                        // balloon padding and dimensions
-    var bx=Math.max(cx,Math.min(cx+cw-bw,rx+(rw-bw)/2-bp))-cx    // bx,by:balloon coordinates
+    var bx=Math.max(0,Math.min(cw-bw,rx+(rw-bw)/2-bp))           // bx,by:balloon coordinates
     var by=ry-bh-2*bp-th, inv=by<0;if(inv)by=ry+rh+th            // inv:is the tooltip upside-down?
     var tx=rx+(rw-tw)/2, ty=inv?ry+rh:ry-th                      // triangle coordinates
     $b.css({left:bx,top:by});$t.css({left:tx,top:ty});$b.add($t).toggleClass('inv',inv).show()
-    $r.css({left:rx,width:rw,top:ry,height:rh}).show()
+    $r.css({left:rx,top:ry,width:rw,height:rh}).show()
   }
 }
