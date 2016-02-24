@@ -30,8 +30,8 @@ this.init=function(w){ // .init(w) gets called for every window w (session or ed
     var r0=w.cm.charCoords({line:p.line,ch:x.startCol})          // bounding rectangle for start of token
     var r1=w.cm.charCoords({line:p.line,ch:x.endCol-1})          //                        end   of token
     var rx=r0.left-cx,ry=r0.top-cy,rw=r1.right-r0.left,rh=r1.bottom-r0.top // whole token
-    var s=(x.tip.length<MH?x.tip:x.tip.slice(0,MH-1).concat('...'))
-            .map(function(s){return s.length<MW?s:s.slice(0,MW-3)+'...'}).join('\n')
+    var s=(x.tip.length<MH?x.tip:x.tip.slice(0,MH-1).concat('…'))
+            .map(function(s){return s.length<MW?s:s.slice(0,MW-1)+'…'}).join('\n')
     cl();$b=$('<div id=vtip-balloon>',d).text(s);$t=$('<div id=vtip-triangle>',d);$r=$('<div id=vtip-rect>',d)
     $b.add($t).add($r).hide().appendTo(w.cm.display.wrapper)
     var th=6,tw=2*th                                             // triangle dimensions
