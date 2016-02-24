@@ -11,9 +11,10 @@ this.init=function(w){ // .init(w) gets called for every window w (session or ed
   //   ┌ ─ ─ ─ ┐
   //    n a m e     rectangle around the name ($r)
   //   └ ─ ─ ─ ┘
-  function cl(){clearTimeout(i);$($b).add($t).add($r).remove();i=p=$b=$t=$r=null} // clear everything
-  $(w.cm.display.wrapper).mouseout(cl).mousemove(function(e){
-    cl();var p0=w.cm.coordsChar({left:e.clientX,top:e.clientY})
+  function cl(){i&&clearTimeout(i);$b&&$b.remove();$t&&$t.remove();$r&&$r.remove();i=p=$b=$t=$r=null} // clear everything
+  w.cm.on('cursorActivity',cl)
+  $(w.cm.display.wrapper).mouseout(cl).mousemove(function(e,p0){
+    cl();p0=p0||w.cm.coordsChar({left:e.clientX,top:e.clientY})
     p0.outside||(i=setTimeout(function(){                                         // send a request (not too often)
       i=0;p=p0;var s=w.cm.getLine(p.line),c=s[p.ch],lbt=lbar.tips[c]
       if(lbt&&!(c==='⎕'&&/[áa-z]/i.test(s[p.ch+1]||''))){                         // are we on a squiggle?

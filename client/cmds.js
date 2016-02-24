@@ -41,6 +41,7 @@ this.cmds=[
   ['TB', 'Tab between windows',     ['Ctrl-Tab'],            1],
   ['TC', 'Trace',                   ['Ctrl-Enter'],          1],
   ['TGC','Toggle comment',          []],
+  ['TIP','Show value tip',          []],
   ['TL', 'Toggle localisation',     ['Ctrl-Up'],             1],
   ['TO', 'Toggle fold',             []],
   ['VAL','Evaluate selection or name under cursor',[]],
