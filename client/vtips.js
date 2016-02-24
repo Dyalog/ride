@@ -1,8 +1,9 @@
 'use strict'
 // value tips: hover over a name to see a pop-up with its current value
-var MW=50,MH=10 // maxWidth and maxHeight for the character matrix displayed in the tooltip
+var lbar=require('./lbar')
+var MW=64,MH=32 // maxWidth and maxHeight for the character matrix displayed in the tooltip
 this.init=function(w){ // .init(w) gets called for every window w (session or editor)
-  var i,p,$b,$t,$r // i:timeout id, p:position as {line,ch}
+  var i,p,$b,$t,$r,rf // i:timeout id, p:position as {line,ch}, rf:function that processes the reply
   // ╭───────────╮
   // │           │  balloon ($b)
   // ╰──.  .─────╯
@@ -14,10 +15,12 @@ this.init=function(w){ // .init(w) gets called for every window w (session or ed
   $(w.cm.display.wrapper).mouseout(cl).mousemove(function(e){
     cl();var p0=w.cm.coordsChar({left:e.clientX,top:e.clientY})
     p0.outside||(i=setTimeout(function(){ // send a request (not too often)
-      i=0;p=p0;w.emit('GetValueTip',{win:w.id,line:w.cm.getLine(p.line),pos:p.ch,token:w.id,maxWidth:MW,maxHeight:MH})
+      i=0;p=p0;var s=w.cm.getLine(p.line),lbt=lbar.tips[s[p.ch]]
+      if(lbt){rf({tip:lbt.join('\n\n').split('\n'),startCol:p.ch,endCol:p.ch+1})}
+      else{w.emit('GetValueTip',{win:w.id,line:s,pos:p.ch,token:w.id,maxWidth:MW,maxHeight:MH})}
     },500))
   })
-  return function(x){ // return a function that processes the reply
+  return rf=function(x){ // return a function that processes the reply
     if(!p)return
     var d=w.getDocument()
     var r0=w.cm.charCoords({line:p.line,ch:x.startCol})    // bounding rectangle for start of token
