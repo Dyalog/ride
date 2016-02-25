@@ -169,9 +169,9 @@ this.Editor.prototype={
     cm.focus()
   },
   replace:function(backwards){ // replace current occurrence and move to next
-    var ic=!$('.tb-case',this.$tb).hasClass('pressed'),   // ignore case?
-        q=this.cmSC.getValue()  ;ic&&(q=q.toLowerCase()), // query string
-        s=this.cm.getSelection();ic&&(s=s.toLowerCase())  // selection
+    var ic=!$('.tb-case',this.$tb).hasClass('pressed')   // ignore case?
+    var q=this.cmSC.getValue()  ;ic&&(q=q.toLowerCase()) // query string
+    var s=this.cm.getSelection();ic&&(s=s.toLowerCase()) // selection
     s===q&&this.cm.replaceSelection(this.cmRP.getValue(),backwards?'start':'end')
     this.search(backwards)
     var v=this.cm.getValue();ic&&(v=v.toLowerCase())
