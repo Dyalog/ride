@@ -16,10 +16,10 @@ this.init=function(w){ // .init(w) gets called for every window w (session or ed
   $(w.cm.display.wrapper).mouseout(cl).mousemove(function(e,p0){
     cl();p0=p0||w.cm.coordsChar({left:e.clientX,top:e.clientY})
     p0.outside||(i=setTimeout(function(){                                         // send a request (not too often)
-      i=0;p=p0;var s=w.cm.getLine(p.line),c=s[p.ch],lbt=lbar.tips[c]
+      i=0;p=p0;var s=w.cm.getLine(p.line),c=s[p.ch]||' ',lbt=lbar.tips[c]
       if(lbt&&!(c==='⎕'&&/[áa-z]/i.test(s[p.ch+1]||''))){                         // are we on a squiggle?
         rf({tip:lbt.join('\n\n').split('\n'),startCol:p.ch,endCol:p.ch+1})        // show tooltip from lbar
-      }else{
+      }else if(/[^ \(\)\[\]\{\}':;]/.test(c)){
         w.emit('GetValueTip',{win:w.id,line:s,pos:p.ch,token:w.id,maxWidth:MW,maxHeight:MH}) // ask interpreter
       }
     },500))
