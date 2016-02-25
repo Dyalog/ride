@@ -137,6 +137,10 @@ When the user presses `<ED>` (Shift-Enter), RIDE should send
 ["Edit",{"win":123,"text":"a←b+c×d","pos":4}] // RIDE -> Interpreter
 ```
 to request opening an editor.  `pos` is the 0-based position of the cursor in `text`.
+
+:red_circle: "Edit" must be extended to submit the current content of all dirty windows, otherwise jumping from one
+method to another in a class will obliterate the current changes.
+
 The interpreter will parse that and may respond later with one of
 <a name=OpenWindow></a><a name=UpdateWindow></a>
 ```json
