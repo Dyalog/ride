@@ -48,10 +48,7 @@ $.fn.splitter=function(args){ // methvin.com/splitter
       .bind('mousedown',startSplit)
     // Cache several dimensions for speed, rather than re-querying constantly
     $m._DA=$m[0][o.offsetWidthOrHeight]
-    $s._PBF=$.boxModel?dimSum($s,['border'+o.side3+'Width','border'+o.side4+'Width']):0
-    $s._PBA=$.boxModel?dimSum($s,['border'+o.side1+'Width','border'+o.side2+'Width']):0
-    $a._pane=o.side1
-    $b._pane=o.side2
+    $s._PBF=$s._PBA=0;$a._pane=o.side1;$b._pane=o.side2
     $.each([$a,$b],function(){
       this._min=o['min'+this._pane]||dimSum(this,['min-'+o.widthOrHeight])
       this._max=o['max'+this._pane]||dimSum(this,['max-'+o.widthOrHeight])||9999
