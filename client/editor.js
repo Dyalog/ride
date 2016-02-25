@@ -378,15 +378,14 @@ this.Editor.prototype={
     var ed=this
     if(ed.ide.dead){var f=D.forceCloseNWWindow;f&&f()}
     else if(ed.tc||ed.cm.getValue()===ed.oText&&''+ed.getStops()===''+ed.oStop){ed.EP(ed.cm)}
-    else if(!ed.dialog){
+    else if(!ed.dlg){
       window.focus()
-      ed.dialog=$('<p>The object "'+ed.name+'" has changed.<br>Do you want to save the changes?').dialog({
-        width:400,
-        close:function(){ed.dialog.dialog('close');ed.dialog=null},
+      ed.dlg=$('<p>The object "'+ed.name+'" has changed.<br>Do you want to save the changes?</p>').dialog({
+        width:400,title:'Save?',close:function(){ed.dlg.dialog('close');ed.dlg=null},
         buttons:[
-          {html:'<u>Y</u>es'   ,click:function(){ed.dialog.dialog('close');ed.dialog=null;ed.EP(ed.cm)}},
-          {html:'<u>N</u>o'    ,click:function(){ed.dialog.dialog('close');ed.dialog=null;ed.QT(ed.cm)}},
-          {html:'<u>C</u>ancel',click:function(){ed.dialog.dialog('close');ed.dialog=null}}
+          {html:'<u>Y</u>es'   ,click:function(){ed.dlg.dialog('close');ed.dlg=null;ed.EP(ed.cm)}},
+          {html:'<u>N</u>o'    ,click:function(){ed.dlg.dialog('close');ed.dlg=null;ed.QT(ed.cm)}},
+          {html:'<u>C</u>ancel',click:function(){ed.dlg.dialog('close');ed.dlg=null}}
         ]
       })
       // When a string is returned from onbeforeunload:
