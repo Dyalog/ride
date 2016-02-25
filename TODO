@@ -97,14 +97,14 @@ Not prioritized:
   "Cancel" button in "Connecting..." dialog; MK Jabber 2015-03-30
     NN: added "Cancel" button, though it doesn't really cancel, just closes the dialog
   Regular expressions in search
-  Multiple sessions (i.e. connections to interpreters) as tabs with a green/red dot to indicate error, suggested by Mike Mingaard
-  Show help next to ` completions (Mike Mingaard)
+  Multiple sessions (i.e. connections to interpreters) as tabs with a green/red dot to indicate error, suggested by Mike Mingard
+  Show help next to ` completions (Mike Mingard)
     NN: I made F1 open a help page based on selection in the menu
   2015-09-09 Adam: curly underlines
   lbar in floating editor windows
   favicon.ico is too large (~120k)
   Sortable language bar
-  Detachable language bar (Mike Mingaard)
+  Detachable language bar (Mike Mingard)
   Drag and drop a "finder object" in the Mac RIDE crashes it (Alex Bochannek, 2015-06-25)
   RIDE on multiple screens on Mac loses its title bar (Alex Bochannek, 2015-06-25)
   profile selection
