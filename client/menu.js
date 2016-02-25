@@ -25,7 +25,7 @@ D.installMenu=D.installMenu||function(arg){
     x.cmd&&$a.append('<span class=m-shortcut data-cmd='+x.cmd+'>')
     if(x.group){
       $a.addClass('m-group-'+x.group).toggleClass('m-checked',!!x.checked).on('mousedown mouseup click',function(e){
-        $(this).addClass('m-checked').closest('.menu').find('.m-group-'+x.group).removeClass('m-checked')
+        $(this).closest('.menu').find('.m-group-'+x.group).removeClass('m-checked');$(this).addClass('m-checked')
         mFocus(null);x.action&&x.action();return!1
       })
     }else if(x.checkBoxPref){
