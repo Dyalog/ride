@@ -98,6 +98,7 @@ this.Session.prototype={
       es=[se.cm.getLine(se.cm.getCursor().line)]
     }
     se.opts.exec(es,trace);se.dirty={};se.histAdd(es.filter(function(x){return!/^\s*$/.test(x)}));se.cm.clearHistory()
+    se.cm.setOption('cursorHeight',0) // avoid flicker at column 0 when leaning on <ER>
   },
   ED:function(cm){
     var c=cm.getCursor();this.emit('Edit',{win:0,pos:c.ch,text:cm.getLine(c.line),unsaved:this.ide.getUnsaved()})
