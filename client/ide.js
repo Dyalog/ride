@@ -268,5 +268,9 @@ this.IDE.prototype={
   TOP:prefs.floatOnTop.toggle,
   THM:function(){},
   UND:function(){this.focusedWin.cm.undo()},
-  RDO:function(){this.focusedWin.cm.redo()}
+  RDO:function(){this.focusedWin.cm.redo()},
+  getUnsaved:function(){
+    var r={};for(var k in this.wins){var cm=this.wins[k].cm,v=cm.getValue();if(+k&&v!==cm.oText)r[k]=v}
+    return r
+  }
 }

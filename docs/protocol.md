@@ -134,9 +134,10 @@ See [`⎕PW`](http://help.dyalog.com/14.1/Content/Language/System%20Functions/pw
 When the user presses `<ED>` (Shift-Enter), RIDE should send
 <a name=Edit></a>
 ```json
-["Edit",{"win":123,"text":"a←b+c×d","pos":4}] // RIDE -> Interpreter
+["Edit",{"win":123,"text":"a←b+c×d","pos":4,"unsaved":{"124":"f"}}] // RIDE -> Interpreter
 ```
 to request opening an editor.  `pos` is the 0-based position of the cursor in `text`.
+`unsaved` is a mapping from window ids to unsaved content.
 
 :red_circle: "Edit" must be extended to submit the current content of all dirty windows, otherwise jumping from one
 method to another in a class will obliterate the current changes.

@@ -99,7 +99,9 @@ this.Session.prototype={
     }
     se.opts.exec(es,trace);se.dirty={};se.histAdd(es.filter(function(x){return!/^\s*$/.test(x)}));se.cm.clearHistory()
   },
-  ED:function(cm){var c=cm.getCursor();this.emit('Edit',{win:0,pos:c.ch,text:cm.getLine(c.line)})},
+  ED:function(cm){
+    var c=cm.getCursor();this.emit('Edit',{win:0,pos:c.ch,text:cm.getLine(c.line),unsaved:this.ide.getUnsaved()})
+  },
   BK:function(){this.histMove(1)},
   FD:function(){this.histMove(-1)},
   QT:function(cm){
