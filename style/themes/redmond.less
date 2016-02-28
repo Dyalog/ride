@@ -28,6 +28,7 @@ body{
     b.first{border-left-color:transparent}
     b:hover{background-color:@redmond-highlight}
   }
+  .sbar{border-top:@redmond-border}
   .ui-layout-resizer{background-color:@redmond-bg} // top:32px
   .ui-layout-resizer-east{border-left:@redmond-border}
   .ui-widget-header{background-color:@redmond-bg;border:1px solid @redmond-bg}
@@ -49,6 +50,9 @@ body{
     background-color:none;
     .ui-button{border:0;background-color:none}
     .ui-button:hover{border:0;background-color:@redmond-highlight}
+    .ui-dialog-titlebar-close .ui-button-icon-primary{margin:0;background-color:transparent}
+    .ui-dialog-titlebar-close:hover{background-color:@redmond-bg}
+    .ui-dialog-titlebar-close:hover .ui-button-icon-primary{margin:0;background-color:@redmond-bg}
   }
   .ui-widget-content{background-color:@redmond-highlight}
   .tb-btn{border:0}
