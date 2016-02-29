@@ -15,10 +15,10 @@ this.init=function(w){ // .init(w) gets called for every window w (session or ed
   w.cm.on('cursorActivity',cl)
   $(w.cm.display.wrapper).mouseout(cl).mousemove(function(e,p0){
     cl();p0=p0||w.cm.coordsChar({left:e.clientX,top:e.clientY})
-    p0.outside||(i=setTimeout(function(){                                         // send a request (not too often)
+    p0.outside||(i=setTimeout(function(){                                  // send a request (not too often)
       i=0;p=p0;var s=w.cm.getLine(p.line),c=s[p.ch]||' ',lbt=lbar.tips[c]
-      if(lbt&&!(c==='⎕'&&/[áa-z]/i.test(s[p.ch+1]||''))){                         // are we on a squiggle?
-        rf({tip:lbt.join('\n\n').split('\n'),startCol:p.ch,endCol:p.ch+1})        // show tooltip from lbar
+      if(lbt&&!(c==='⎕'&&/[áa-z]/i.test(s[p.ch+1]||''))){                  // are we on a squiggle?
+        rf({tip:lbt.join('\n\n').split('\n'),startCol:p.ch,endCol:p.ch+1}) // show tooltip from lbar
       }else if(/[^ \(\)\[\]\{\}':;]/.test(c)){
         w.emit('GetValueTip',{win:w.id,line:s,pos:p.ch,token:w.id,maxWidth:MW,maxHeight:MH}) // ask interpreter
       }
@@ -26,21 +26,22 @@ this.init=function(w){ // .init(w) gets called for every window w (session or ed
   })
   return rf=function(x){ // return a function that processes the reply
     if(!p)return
-    var d=w.getDocument(),ce=w.cm.display.wrapper                // ce:CodeMirror element
-    var cw=ce.clientWidth,co=$(ce).offset(),cx=co.left,cy=co.top // CodeMirror's dimensions and coords
-    var r0=w.cm.charCoords({line:p.line,ch:x.startCol})          // bounding rectangle for start of token
-    var r1=w.cm.charCoords({line:p.line,ch:x.endCol-1})          //                        end   of token
-    var rx=r0.left-cx,ry=r0.top-cy,rw=r1.right-r0.left,rh=r1.bottom-r0.top // whole token
+    var d=w.getDocument(),ce=w.cm.display.wrapper                 // ce:CodeMirror element
+    var cw=ce.clientWidth,co=$(ce).offset(),cx=co.left,cy=co.top  // CodeMirror's dimensions and coords
+    var de=d.documentElement,ww=de.clientWidth,wh=de.clientHeight // window dimensions
+    var r0=w.cm.charCoords({line:p.line,ch:x.startCol})           // bounding rectangle for start of token
+    var r1=w.cm.charCoords({line:p.line,ch:x.endCol-1})           //                        end   of token
+    var rx=r0.left,ry=r0.top,rw=r1.right-r0.left,rh=r1.bottom-r0.top // bounding rectangle for whole token
     var s=(x.tip.length<MH?x.tip:x.tip.slice(0,MH-1).concat('…'))
             .map(function(s){return s.length<MW?s:s.slice(0,MW-1)+'…'}).join('\n')
     cl();$b=$('<div id=vtip-balloon>',d).text(s);$t=$('<div id=vtip-triangle>',d);$r=$('<div id=vtip-rect>',d)
-    $b.add($t).add($r).hide().appendTo(w.cm.display.wrapper)
-    var th=6,tw=2*th                                             // triangle dimensions
-    var bp=8,bw=$b.width(),bh=$b.height()                        // balloon padding and dimensions
-    var bx=Math.max(0,Math.min(cw-bw,rx+(rw-bw)/2-bp))           // bx,by:balloon coordinates
-    var by=ry-bh-2*bp-th, inv=by<0;if(inv)by=ry+rh+th            // inv:is the tooltip upside-down?
-    var tx=rx+(rw-tw)/2, ty=inv?ry+rh:ry-th                      // triangle coordinates
-    $b.css({left:bx,top:by});$t.css({left:tx,top:ty});$b.add($t).toggleClass('inv',inv).show()
+    $b.add($t).add($r).hide().appendTo(d.body)
+    var th=6,tw=2*th                                              // triangle dimensions
+    var bp=8,bw=$b.width(),bh=$b.height()                         // balloon padding and dimensions
+    var bx=Math.max(0,Math.min(ww-bw,rx+(rw-bw)/2-bp))            // bx,by:balloon coordinates
+    var by=ry-bh-2*bp-th, inv=by<0;if(inv)by=ry+rh+th             // inv:is the tooltip upside-down?
+    var tx=rx+(rw-tw)/2, ty=inv?ry+rh:ry-th                       // triangle coordinates
+    $b.css({left:bx,top:by}).show();$t.css({left:tx,top:ty}).toggleClass('inv',inv).show()
     $r.css({left:rx,top:ry,width:rw,height:rh}).show()
   }
 }

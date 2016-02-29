@@ -6,7 +6,7 @@ D.addSyntaxGroups=function(x){G=G.concat(x);H={};for(var i=0;i<G.length;i++)H[G[
 D.addSyntaxGroups([
   // t: token type, a short key for storing customisations in localStorage
   // s: string to display in the UI
-  // c: css selector
+  // c: css selector -- will be prefixed with "#col-cm" or ".ride-win" unless .skipCSSPrefix is true
   // ctrls: what UI controls should be shown or hidden for this group (other than the default ones)
   {t:'norm',s:'normal',          c:'.cm-s-default,.CodeMirror-gutters'},
   {t:'num', s:'number',          c:'.cm-apl-num' },
@@ -45,7 +45,7 @@ D.addSyntaxGroups([
   {t:'mod', s:'modified line',   c:'.modified'},
   {t:'sel', s:'selection',       c:'.CodeMirror-selected,.CodeMirror-focused .CodeMirror-selected',ctrls:{fg:0,BIU:0}},
   {t:'tc',  s:'tracer',          c:'.tracer .CodeMirror,.tracer .CodeMirror .CodeMirror-gutter-wrapper'},
-  {t:'vtip',s:'value tip',       c:'#vtip-balloon,#vtip-triangle',ctrls:{bc:1}}
+  {t:'vtip',s:'value tip',       c:'#vtip-balloon,#vtip-triangle',ctrls:{bc:1},skipCSSPrefix:1}
 ])
 // Colour schemes have two representations:
 //   in memory                 in localStorage
@@ -100,9 +100,10 @@ var scms    // all schemes (built-in and user-defined) as objects
 var scm     // the active scheme object
 var $cm,cm  // DOM element and CodeMirror instance for displaying sample code
 var sel     // the selected group's token type (.t)
-function renderCSS(scm,rp){ // rp: css rule prefix
+function renderCSS(scm,isSample){
+  var rp=isSample?'#col-cm':'.ride-win' // css rule prefix, ignored when .skipCSSPrefix is true
   return G.map(function(g){var h=scm[g.t];return!h?'':
-    g.c.split(',').map(function(x){return(rp||'')+' '+x}).join(',')+'{'+
+    g.c.split(',').map(function(x){return!g.skipCSSPrefix?rp+' '+x:isSample?'':x}).join(',')+'{'+
       (h.fg?'color:'+expandRGB(h.fg)+';'           :'')+
       (h.bg?'background-color:'+expandRGB(h.bg)+';':'')+
       (h.B ?'font-weight:bold;'                    :'')+
@@ -120,7 +121,7 @@ function shrinkRGB(s){
 }
 function updStyle(){ // update global style from what's in localStorage
   var name=prefs.colourScheme(),a=SCMS.concat(prefs.colourSchemes().map(decodeScm))
-  for(var i=0;i<a.length;i++)if(a[i].name===name){$('#col-style').text(renderCSS(a[i],'.ride-win'));break}
+  for(var i=0;i<a.length;i++)if(a[i].name===name){$('#col-style').text(renderCSS(a[i]));break}
 }
 $(updStyle);prefs.colourScheme(updStyle);prefs.colourSchemes(updStyle)
 function uniqScmName(s){ // s: suggested root
@@ -243,7 +244,7 @@ this.save=function(){
   prefs.colourSchemes(scms.filter(function(x){return!x.frozen}).map(encodeScm));prefs.colourScheme(scm.name)
 }
 this.resize=function(){cm.setSize($cm.width(),$cm.height())}
-function updSampleStyle(){$('#col-sample-style').text(renderCSS(scm,'#col-cm'))}
+function updSampleStyle(){$('#col-sample-style').text(renderCSS(scm,1))}
 function selGroup(t,forceRefresh){
   if(!scm||sel===t&&!forceRefresh)return
   var i=H[t],h=scm[t]||{};$('#col-group').val(i)
