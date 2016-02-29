@@ -16,7 +16,7 @@ this.IDE=function(){
       '<div class=ui-layout-east ><ul></ul></div>'+
       '<div class=ui-layout-south><ul></ul></div>'+
     '</div>'+
-    '<div class=sbar>Status bar</div>'
+    '<div class=sbar></div>'
   ide.$ide=$('.ide')
   ide.pending=[] // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.exec=function(l,tc){ // l:lines, tc:trace
