@@ -8,45 +8,45 @@ D.addSyntaxGroups([
   // s: string to display in the UI
   // c: css selector -- will be prefixed with "#col-cm" or ".ride-win" unless .skipCSSPrefix is true
   // ctrls: what UI controls should be shown or hidden for this group (other than the default ones)
-  {t:'norm',s:'normal',          c:'.cm-s-default,.CodeMirror-gutters'},
-  {t:'num', s:'number',          c:'.cm-apl-num' },
-  {t:'str', s:'string',          c:'.cm-apl-str' },
-  {t:'zld', s:'zilde',           c:'.cm-apl-zld' },
-  {t:'var', s:'name',            c:'.cm-apl-var' },
-  {t:'glb', s:'global name',     c:'.cm-apl-glb' },
-  {t:'quad',s:'quad name',       c:'.cm-apl-quad'},
-  {t:'fn',  s:'function',        c:'.cm-apl-fn'  },
-  {t:'op1', s:'monadic operator',c:'.cm-apl-op1' },
-  {t:'op2', s:'dyadic operator', c:'.cm-apl-op2' },
-  {t:'ns',  s:'namespace',       c:'.cm-apl-ns'  },
-  {t:'asgn',s:'assignment',      c:'.cm-apl-asgn'},
-  {t:'diam',s:'diamond',         c:'.cm-apl-diam'},
-  {t:'par', s:'parenthesis',     c:'.cm-apl-par' },
-  {t:'sqbr',s:'bracket',         c:'.cm-apl-sqbr'},
-  {t:'semi',s:'semicolon',       c:'.cm-apl-semi'},
-  {t:'dfn', s:'dfn',             c:'.cm-apl-dfn' },
-  {t:'dfn1',s:'dfn level 1',     c:'.cm-apl-dfn1'},
-  {t:'dfn2',s:'dfn level 2',     c:'.cm-apl-dfn2'},
-  {t:'dfn3',s:'dfn level 3',     c:'.cm-apl-dfn3'},
-  {t:'dfn4',s:'dfn level 4',     c:'.cm-apl-dfn4'},
-  {t:'dfn5',s:'dfn level 5',     c:'.cm-apl-dfn5'},
-  {t:'trad',s:'tradfn',          c:'.cm-apl-trad'},
-  {t:'kw',  s:'keyword',         c:'.cm-apl-kw'  },
-  {t:'lbl', s:'label',           c:'.cm-apl-lbl' },
-  {t:'idm', s:'idiom',           c:'.cm-apl-idm' },
-  {t:'com', s:'comment',         c:'.cm-apl-com' },
-  {t:'scmd',s:'system command',  c:'.cm-apl-scmd'},
-  {t:'ucmd',s:'user command',    c:'.cm-apl-ucmd'},
-  {t:'err', s:'error',           c:'.cm-apl-err' },
-  {t:'lnum',s:'line number',     c:'.CodeMirror-linenumber'},
-  {t:'cur', s:'cursor',          c:'div.CodeMirror-cursor',ctrls:{bc:1,fg:0,bg:0,BIU:0}},
+  {t:'norm',s:'normal'          ,c:'.cm-s-default,.CodeMirror-gutters'},
+  {t:'num' ,s:'number'          ,c:'.cm-apl-num' },
+  {t:'str' ,s:'string'          ,c:'.cm-apl-str' },
+  {t:'zld' ,s:'zilde'           ,c:'.cm-apl-zld' },
+  {t:'var' ,s:'name'            ,c:'.cm-apl-var' },
+  {t:'glb' ,s:'global name'     ,c:'.cm-apl-glb' },
+  {t:'quad',s:'quad name'       ,c:'.cm-apl-quad'},
+  {t:'fn'  ,s:'function'        ,c:'.cm-apl-fn'  },
+  {t:'op1' ,s:'monadic operator',c:'.cm-apl-op1' },
+  {t:'op2' ,s:'dyadic operator' ,c:'.cm-apl-op2' },
+  {t:'ns'  ,s:'namespace'       ,c:'.cm-apl-ns'  },
+  {t:'asgn',s:'assignment'      ,c:'.cm-apl-asgn'},
+  {t:'diam',s:'diamond'         ,c:'.cm-apl-diam'},
+  {t:'par' ,s:'parenthesis'     ,c:'.cm-apl-par' },
+  {t:'sqbr',s:'bracket'         ,c:'.cm-apl-sqbr'},
+  {t:'semi',s:'semicolon'       ,c:'.cm-apl-semi'},
+  {t:'dfn' ,s:'dfn'             ,c:'.cm-apl-dfn' },
+  {t:'dfn1',s:'dfn level 1'     ,c:'.cm-apl-dfn1'},
+  {t:'dfn2',s:'dfn level 2'     ,c:'.cm-apl-dfn2'},
+  {t:'dfn3',s:'dfn level 3'     ,c:'.cm-apl-dfn3'},
+  {t:'dfn4',s:'dfn level 4'     ,c:'.cm-apl-dfn4'},
+  {t:'dfn5',s:'dfn level 5'     ,c:'.cm-apl-dfn5'},
+  {t:'trad',s:'tradfn'          ,c:'.cm-apl-trad'},
+  {t:'kw'  ,s:'keyword'         ,c:'.cm-apl-kw'  },
+  {t:'lbl' ,s:'label'           ,c:'.cm-apl-lbl' },
+  {t:'idm' ,s:'idiom'           ,c:'.cm-apl-idm' },
+  {t:'com' ,s:'comment'         ,c:'.cm-apl-com' },
+  {t:'scmd',s:'system command'  ,c:'.cm-apl-scmd'},
+  {t:'ucmd',s:'user command'    ,c:'.cm-apl-ucmd'},
+  {t:'err' ,s:'error'           ,c:'.cm-apl-err' },
+  {t:'lnum',s:'line number'     ,c:'.CodeMirror-linenumber'},
+  {t:'cur' ,s:'cursor'          ,c:'div.CodeMirror-cursor',ctrls:{bc:1,fg:0,bg:0,BIU:0}},
   {t:'mtch',s:'matching bracket',c:'.CodeMirror-matchingbracket'},
-  {t:'srch',s:'search match',    c:'.cm-searching'},
-  {t:'mod', s:'modified line',   c:'.modified'},
-  {t:'sel', s:'selection',       c:'.CodeMirror-selected,.CodeMirror-focused .CodeMirror-selected',ctrls:{fg:0,BIU:0}},
-  {t:'tc',  s:'tracer',          c:'.tracer .CodeMirror,.tracer .CodeMirror .CodeMirror-gutter-wrapper'},
-  {t:'vtip',s:'value tip',       c:'#vtip-balloon,#vtip-triangle',ctrls:{bc:1},skipCSSPrefix:1},
-  {t:'vtt', s:'value tip target',c:'#vtip-rect',ctrls:{bc:1,fg:0,BIU:0},skipCSSPrefix:1}
+  {t:'srch',s:'search match'    ,c:'.cm-searching'},
+  {t:'mod' ,s:'modified line'   ,c:'.modified'},
+  {t:'sel' ,s:'selection'       ,c:'.CodeMirror-selected,.CodeMirror-focused .CodeMirror-selected',ctrls:{fg:0,BIU:0}},
+  {t:'tc'  ,s:'tracer'          ,c:'.tracer .CodeMirror,.tracer .CodeMirror .CodeMirror-gutter-wrapper'},
+  {t:'vtip',s:'value tip'       ,c:'#vtip-balloon,#vtip-triangle',ctrls:{bc:1},skipCSSPrefix:1},
+  {t:'vtt' ,s:'value tip target',c:'#vtip-rect',ctrls:{bc:1,fg:0,BIU:0},skipCSSPrefix:1}
 ])
 // Colour schemes have two representations:
 //   in memory                 in localStorage
@@ -71,7 +71,7 @@ function encodeScm(x){
   return{name:x.name,styles:s.slice(1)}
 }
 function decodeScm(x){              // x:for example "num=fg:345,bg:f,B,U,bgo:.5 str=fg:2,I com=U"
-  var r={name:x.name}               // r:this will be the result
+  var r={name:x.name}               // r:the result
   var a=(x.styles||'').split(/\s+/) // a:for example ["num=fg:345,bg:f,B,U,bgo:.5","str=fg:2,I","com=U"]
   for(var i=0;i<a.length;i++)if(a[i]){
     var b=a[i].split('='),g=b[0],c=b[1].split(','),h=r[g]={}  // b:["num","fg:345,bg:f,B,U,bgo:.5"]  g:"num" (the group)
@@ -135,7 +135,7 @@ this.init=function($e){
   $e.html(
     '<div id=col-top>'+
       '<label><u>S</u>cheme: <select id=col-scm></select></label>'+
-      '<input id=col-new-name>'+
+      '<input id=col-new-name> '+
       '<button id=col-clone>C<u>l</u>one</button>  '+
       '<button id=col-rename><u>R</u>ename</button> '+
       '<button id=col-delete><u>D</u>elete</button> '+
@@ -148,9 +148,9 @@ this.init=function($e){
       '<p id=col-bg-p><label><input type=checkbox id=col-bg-cb><u>B</u>ackground</label> <input type=color id=col-bg list=col-list>'+
       '<div id=col-bgo title=Transparency></div>'+
       '<p id=col-BIU-p>'+
-        '<label><input type=checkbox id=col-B><b>B</b></label>'+
-        '<label><input type=checkbox id=col-I><i>I</i></label>'+
-        '<label><input type=checkbox id=col-U><u>U</u></label>'+
+        '<label><input type=checkbox id=col-B><b>B</b></label> '+
+        '<label><input type=checkbox id=col-I><i>I</i></label> '+
+        '<label><input type=checkbox id=col-U><u>U</u></label> '+
       '<p id=col-bc-p><label><input type=checkbox id=col-bc-cb>Border colour</label> <input type=color id=col-bc list=col-list>'+
     '</div>'
   )
@@ -209,7 +209,7 @@ this.init=function($e){
     })
   })
   $('#col-bg-cb').click(function(){$('#col-bgo').toggle(this.checked)})
-  $('#col-bgo').slider({range:'min',value:.5,min:0,max:1,step:.25,slide:function(e,ui){
+  $('#col-bgo').slider({range:'min',value:.5,min:0,max:1,step:.25,animate:false,slide:function(e,ui){
     (scm[sel]||(scm[sel]={})).bgo=ui.value;updSampleStyle()
   }})
   ;['B','I','U'].forEach(function(p){
@@ -257,7 +257,7 @@ function selGroup(t,forceRefresh){
   var c=(G[i]||G[0]).ctrls||{}
   $('#col-fg-p' ).toggle(c.fg==null||!!c.fg)
   $('#col-bg-p' ).toggle(c.bg==null||!!c.bg)
-  $('#col-bgo'  ).toggle(!!c.bg)
+  $('#col-bgo'  ).toggle((c.bg==null||!!c.bg)&&!!h.bg)
   $('#col-BIU-p').toggle(c.BIU==null||!!c.BIU)
   $('#col-bc-p' ).toggle(!!c.bc)
   sel=t
