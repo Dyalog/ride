@@ -184,6 +184,7 @@ this.IDE=function(){
   prefs.indent(function(x){eachWin(function(w){if(w.id){w.cm.setOption('smartIndent',x>=0);w.cm.setOption('indentUnit',x)}})})
   prefs.fold(function(x){eachWin(function(w){if(w.id){w.cm.setOption('foldGutter',!!x);w.updGutters()}})})
   prefs.matchBrackets(function(x){eachWin(function(w){w.cm.setOption('matchBrackets',!!x)})})
+  D.mac&&setTimeout(function(){ide.wins[0].focus()},500) // OSX is stealing our focus.  Let's steal it back!  Bug #5
 }
 this.IDE.prototype={
   setHostAndPort:function(h,p){this.host=h;this.port=p;this.updTitle()},
