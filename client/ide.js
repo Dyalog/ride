@@ -49,6 +49,7 @@ this.IDE=function(){
     '*error':function(x){ide.die();setTimeout(function(){$.alert(x.msg,'Error')},100)},
     '*spawnedExited':function(x){
       if(x.code){ide.die();setTimeout(function(){$.alert('Interpreter process exited with code '+x.code,'Error')},100)}
+      if(D.process&&!x.code){D.process.exit(0)}
     },
     '*disconnected':function(){if(!ide.dead){$.alert('Interpreter disconnected','Error');ide.die()}},
     Identify:function(x){D.remoteIdentification=x;ide.updTitle();ide.connected=1;ide.wins[0].updPW(1)},
