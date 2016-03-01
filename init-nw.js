@@ -184,129 +184,63 @@
   D.open=function(url,o){o.icon='D.png';o.toolbar==null&&(o.toolbar=false);return!!gui.Window.open(url,o)} // o:options
   D.openExternal=gui.Shell.openExternal
   if(D.mac&&!D.floating){ // todo: clean this up and test on Mac
-    var groups,render
-    groups={}
-    render=function(x){
-      var h, i, j, len, mi, name, ref, y;
-      if (!x) {
-        return;
+    var groups={}
+    var render=function(x){
+      if(!x)return
+      if(x['']==='-')return new gui.MenuItem({type:'separator'})
+      var i=x[''].indexOf('_')
+      var h={
+        label:x[''].replace(/_/g,''),
+        key:i<0?void 0:x[i+1],
+        type:x.group||x.checkBoxPref?'checkbox':'normal'
       }
-      if (x[''] === '-') {
-        return new gui.MenuItem({
-          type: 'separator'
-        });
-      }
-      h = {
-        label: x[''].replace(/_/g, ''),
-        key: (i = x[''].indexOf('_')) >= 0 ? x[i + 1] : void 0,
-        type: x.group || x.checkBoxPref ? 'checkbox' : 'normal'
-      };
-      if (x.group) {
-        h.checked = !!x.checked;
-        h.click = function() {
-          groups[x.group].forEach(function(sibling) {
-            sibling.checked = sibling === mi;
-          });
-          if (typeof x.action === "function") {
-            x.action();
-          }
-        };
-      } else if (x.checkBoxPref) {
-        h.checked = !!x.checkBoxPref();
-        h.click = function() {
-          if (typeof x.action === "function") {
-            x.action(mi.checked);
-          }
-        };
-        x.checkBoxPref(function(v) {
-          mi.checked = !!v;
-        });
-      } else {
-        h.click = function() {
-          if (typeof x.action === "function") {
-            x.action();
-          }
-        };
-      }
-      if (x.items) {
-        h.submenu = new gui.Menu;
-        ref = x.items;
-        for (j = 0, len = ref.length; j < len; j++) {
-          y = ref[j];
-          h.submenu.append(render(y));
+      if(x.group){
+        h.checked=!!x.checked
+        h.click=function(){
+          groups[x.group].forEach(function(sibling){sibling.checked=sibling===mi})
+          typeof x.action==='function'&&x.action()
         }
+      }else if(x.checkBoxPref){
+        h.checked=!!x.checkBoxPref()
+        h.click=function(){typeof x.action==='function'&&x.action(mi.checked)}
+        x.checkBoxPref(function(v){mi.checked=!!v})
+      }else{
+        h.click=function(){typeof x.action==='function'&&x.action()}
       }
-      mi = new gui.MenuItem(h);
-      if (x.group) {
-        (groups[name = x.group] != null ? groups[name] : groups[name] = []).push(mi);
-      }
-      return mi;
+      if(x.items){h.submenu=new gui.Menu;x.items.forEach(function(y){h.submenu.append(render(y))})}
+      var mi=new gui.MenuItem(h);x.group&&(groups[x.group]=groups[x.group]||[]).push(mi);return mi
     }
     D.installMenu=function(m){
-      var ix, iy, j, k, l, len, len1, len2, len3, mb, n, ourMenu, ref, ref1, theirMenu, x, y, ys;
-      mb = new gui.Menu({
-        type: 'menubar'
-      });
-      mb.createMacBuiltin('Dyalog');
-      mb.items[0].submenu.removeAt(0);
-      mb.items[1].submenu.removeAt(7);
-      mb.items[1].submenu.removeAt(2);
-      mb.items[1].submenu.removeAt(1);
-      mb.items[1].submenu.removeAt(0);
-      for (ix = j = 0, len = m.length; j < len; ix = ++j) {
-        x = m[ix];
-        if ((ref = x[''].replace(/_/, '')) === 'Edit' || ref === 'Help') {
-          x[''] += ' ';
+      var mb=new gui.Menu({type:'menubar'})
+      mb.createMacBuiltin('Dyalog')
+      mb.items[0].submenu.removeAt(0)
+      mb.items[1].submenu.removeAt(7)
+      mb.items[1].submenu.removeAt(2)
+      mb.items[1].submenu.removeAt(1)
+      mb.items[1].submenu.removeAt(0)
+      m.forEach(function(x,i){
+        /^(?:Edit|Help)$/.test(x[''].replace(/_/,''))&&(x['']+=' ')
+        var ourMenu=render(x),theirMenu=null
+        if(i){
+          mb.items.some(function(y){if(y.label===ourMenu.label.replace(/\ $/,'')){theirMenu=y;return 1}})
+        }else{
+          theirMenu=mb.items[0]
         }
-        ourMenu = render(x);
-        if (ix) {
-          theirMenu = null;
-          ref1 = mb.items;
-          for (k = 0, len1 = ref1.length; k < len1; k++) {
-            y = ref1[k];
-            if (!(y.label === ourMenu.label.replace(/\ $/, ''))) {
-              continue;
-            }
-            theirMenu = y;
-            break;
-          }
-        } else {
-          theirMenu = mb.items[0];
-        }
-        if (theirMenu) {
-          if (theirMenu.label === 'Edit') {
-            ys = (function() {
-              var l, len2, ref2, results;
-              ref2 = theirMenu.submenu.items;
-              results = [];
-              for (iy = l = 0, len2 = ref2.length; l < len2; iy = ++l) {
-                y = ref2[iy];
-                results.push(y);
-              }
-              return results;
-            })();
-            for (l = 0, len2 = ys.length; l < len2; l++) {
-              y = ys[l];
-              theirMenu.submenu.remove(y);
-            }
-            for (iy = n = 0, len3 = ys.length; n < len3; iy = ++n) {
-              y = ys[iy];
-              ourMenu.submenu.insert(y, iy);
-            }
-          } else {
-            ourMenu.submenu.append(new gui.MenuItem({
-              type: 'separator'
-            }));
-            while (theirMenu.submenu.items.length) {
-              y = theirMenu.submenu.items[0];
-              theirMenu.submenu.remove(y);
-              ourMenu.submenu.append(y);
+        if(theirMenu){
+          if(theirMenu.label==='Edit'){
+            var ys=theirMenu.submenu.items.map(function(y){return y})
+            ys.forEach(function(y){theirMenu.submenu.remove(y)})
+            ys.forEach(function(y,j){ourMenu.submenu.insert(y,j)})
+          }else{
+            ourMenu.submenu.append(new gui.MenuItem({type:'separator'}))
+            while(theirMenu.submenu.items.length){
+              var y=theirMenu.submenu.items[0];theirMenu.submenu.remove(y);ourMenu.submenu.append(y)
             }
           }
-          mb.remove(theirMenu);
+          mb.remove(theirMenu)
         }
-        mb.insert(ourMenu, ix);
-      }
+        mb.insert(ourMenu,i)
+      })
       nww.menu=mb
     }
   }
