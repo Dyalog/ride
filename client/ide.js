@@ -37,8 +37,6 @@ this.IDE=function(){
     ide.$tabs.tabs('refresh')
   }
   ide.$tabs.find('ul')
-    .on('mouseover','.tab-close',function(){$(this).addClass   ('hover')})
-    .on('mouseout' ,'.tab-close',function(){$(this).removeClass('hover')})
     .on('click','.tab-close',function(){var w=ide.wins[parseId($(this).closest('a').prop('href'))];w&&w.EP(w.cm)})
     .sortable({cursor:'move',containment:'parent',tolerance:'pointer',axis:'x',revert:true,
                // $().sortable changes z-indices after dragging, so we fix those in stop()
