@@ -74,7 +74,8 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
     'Shift-Tab':ed.cm.focus.bind(ed.cm)
   }})
   ed.cmSC.on('change',function(){ed.highlightSearch()})
-  ed.cmRP=CodeMirror(ed.$tb.find('.tb-rp')[0],{placeholder:'Replace',extraKeys:{
+  ed.$rp=ed.$tb.find('.tb-rp')
+  ed.cmRP=CodeMirror(ed.$rp[0],{placeholder:'Replace',extraKeys:{
     Enter:ed.replace.bind(ed),
     'Shift-Enter':ed.replace.bind(ed,1),
     Tab:ed.cm.focus.bind(ed.cm),
@@ -187,9 +188,9 @@ this.Editor.prototype={
     var ed=this;ed.tc=x;ed.$e.toggleClass('tracer',x);ed.highlight(null)
     var ln=!!(ed.tc?prefs.lineNumsTracer():prefs.lineNumsEditor())
     ed.cm.setOption('lineNumbers',ln);ed.$tb.find('.tb-LN').toggleClass('pressed',ln)
-    ed.updGutters();ed.cm.setOption('readOnly',!!x)
+    ed.updGutters();ed.setReadOnly(x)
   },
-  setReadOnly:function(x){this.cm.setOption('readOnly',x)},
+  setReadOnly:function(x){this.cm.setOption('readOnly',x);this.$rp.toggle(!x)},
   updSize:function(){var $p=this.$e;this.cm.setSize($p.width(),$p.height()-28)},
   open:function(ee){ // ee:editable entity
     var ed=this,cm=ed.cm
@@ -205,7 +206,7 @@ this.Editor.prototype={
     //  8 MixedSimpleArray    256 AplNamespace
     if([1,256,512,1024,2048,4096].indexOf(ee.entityType)<0){cm.setOption('mode','text')}
     else{cm.setOption('mode','apl');if(prefs.indentOnOpen()){cm.execCommand('selectAll');cm.execCommand('indentAuto')}}
-    cm.setOption('readOnly',ee.readOnly||ee['debugger'])
+    ed.setReadOnly(ee.readOnly||ee['debugger'])
     var line=ee.currentRow,col=ee.currentColumn||0
     if(line===0&&col===0&&ee.text.indexOf('\n')<0)col=ee.text.length
     cm.setCursor(line,col);cm.scrollIntoView(null,ed.$e.height()/2)
@@ -218,7 +219,7 @@ this.Editor.prototype={
   insert:function(ch){this.cm.getOption('readOnly')||this.cm.replaceSelection(ch)},
   saved:function(err){err?$.alert('Cannot save changes'):this.emit('CloseWindow',{win:this.id})},
   closePopup:function(){if(D.floating){window.onbeforeunload=null;D.forceClose=1;close()}},
-  die:function(){this.cm.setOption('readOnly',true)},
+  die:function(){this.setReadOnly(true)},
   getDocument:function(){return this.$e[0].ownerDocument},
   refresh:function(){this.cm.refresh()},
   cword:function(){ // apl identifier under cursor
@@ -240,6 +241,7 @@ this.Editor.prototype={
     this.cmSC.focus();this.cmSC.execCommand('selectAll')
   },
   RP:function(cm){
+    if(this.cm.getOption('readOnly'))return
     var v=cm.getSelection()||this.cword()
     if(v&&v.indexOf('\n')<0){this.cmSC.setValue(v);this.cmRP.setValue(v)}
     this.cmRP.focus();this.cmRP.execCommand('selectAll');this.highlightSearch()
