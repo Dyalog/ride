@@ -6,10 +6,10 @@ $(function(){
   var h=CodeMirror.keyMap.emacsy;for(var k in h)if(/^alt-[a-z]$/i.test(k))delete h[k]
   if(D.nwjs){
     var zM=11 // zoom level can be between -zM and zM inclusive
-    function ZMI(){prefs.zoom(Math.min( zM,prefs.zoom()+1));updPW()}
-    function ZMO(){prefs.zoom(Math.max(-zM,prefs.zoom()-1));updPW()}
-    function ZMR(){prefs.zoom(0);updPW()}
-    function updPW(){D.ide&&D.ide.wins&&D.ide.wins[0]&&D.ide.wins[0].updPW()}
+    var ZMI=function(){prefs.zoom(Math.min( zM,prefs.zoom()+1));updPW()}
+    var ZMO=function(){prefs.zoom(Math.max(-zM,prefs.zoom()-1));updPW()}
+    var ZMR=function(){prefs.zoom(0);updPW()}
+    var updPW=function(){D.ide&&D.ide.wins&&D.ide.wins[0]&&D.ide.wins[0].updPW()}
     $.extend(CodeMirror.commands,{ZMI:ZMI,ZMO:ZMO,ZMR:ZMR})
     $(document).bind('mousewheel',function(e){
       var d=e.originalEvent.wheelDelta;d&&e.ctrlKey&&!e.shiftKey&&!e.altKey&&(d>0?ZMI:ZMO)()
@@ -51,7 +51,7 @@ $(function(){
     D.socket=(D.createSocket||function(){
       var skt=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host)
       var l={},q=[],io={} // l:listeners, q:send queue, io:socket.io-like API
-      function flush(){while(skt.readyState===1&&q.length)skt.send(q.shift())}
+      var flush=function(){while(skt.readyState===1&&q.length)skt.send(q.shift())}
       var io={
         emit:function(x,y){q.push(JSON.stringify([x,y]));flush();return this},
         on:function(e,f){(l[e]=l[e]||[]).push(f);return this},
@@ -77,7 +77,7 @@ $(function(){
     prefs.theme(D.mac||/^(darwin|mac|ipad|iphone|ipod)/i.test(navigator?navigator.platform:'')?'cupertino':
                 D.win||/^win/.test(navigator?navigator.platform:'')?'redmond':'classic')
   }
-  function updThm(){$('#thm').html('@import url(themes/'+prefs.theme()+'.css);')}
+  var updThm=function(){$('#thm').html('@import url(themes/'+prefs.theme()+'.css);')}
   prefs.theme(function(){updThm();D.ide&&D.ide.layout.resizeAll()});updThm()
 
   D.nwjs&&$('body').addClass(D.mac?'platform-mac':D.win?'platform-windows':'')

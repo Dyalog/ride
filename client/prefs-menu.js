@@ -11,7 +11,7 @@ this.load=function(){$ta.val(prefs.menu())}
 this.save=function(){prefs.menu($ta.val())}
 this.validate=function(){
   try {
-    function visit(x){
+    var visit=function(x){
       if(x.cmd==='PRF')return 1
       if(x.items)for(var i=0;i<x.items.length;i++)if(visit(x.items[i]))return 1
     }

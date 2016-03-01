@@ -55,7 +55,7 @@ $.extend(CM.commands,{
     var sels=cm.listSelections()
     if(sels.length===1){
       var ll=cm.lastLine(), u=cm.getCursor(), l=u.line
-      function cmp(x,y){return(x[0]-y[0])||(x[1]-y[1])} // compare two pairs of numbers
+      var cmp=function(x,y){return(x[0]-y[0])||(x[1]-y[1])} // compare two pairs of numbers
       var ranges=[ // candidates for selection
         [[l,0],[l, cm.getLine(l) .length]], // current line
         [[0,0],[ll,cm.getLine(ll).length]]  // whole document
