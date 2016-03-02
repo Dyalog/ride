@@ -123,7 +123,7 @@ $(function(){
   // drag and drop
   CodeMirror.defaults.dragDrop=0;window.ondragover=window.ondrop=function(e){e.preventDefault();return!1}
   window.ondrop=function(e){
-    var a=e.dataTransfer.files,f=a[0].path
+    var a=e.dataTransfer.files,f=(a[0]||{}).path
     if(!D.lastSpawnedExe){$.alert('Drag and drop of workspaces works only for locally started interpreters.','Error')}
     else if(!/\.dws$/i.test(f)){$.alert('RIDE supports drag and drop only for .dws files.','Error')}
     else if(a.length!==1){$.alert('RIDE does not support dropping of multiple files.','Error')}
