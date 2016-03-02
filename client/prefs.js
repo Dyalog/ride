@@ -1,5 +1,5 @@
 'use strict'
-// Preferences API -- localStorage should be accessed only through here.
+// Preferences API
 // (../init-nw.js is an exception, it bypasses this API because it can't require() it.)
 // Usage:
 //   prefs.foo()                     // getter
@@ -7,8 +7,8 @@
 //   prefs.foo(function(newValue){}) // add "on change" listener
 //   prefs.foo.toggle()              // convenience function for booleans (numbers 0 and 1)
 //   prefs.foo.getDefault()          // retrieve default value
-D.prefs=this;
-[ // name                default (type is determined from default value; setter enforces type and handles encoding)
+D.prefs=this
+;[ // name                default (type is determined from default value; setter enforces type and handles encoding)
   ['autoCloseBlocks',    1], // whether to insert :end after :if,:for,etc when Enter is pressed
   ['autoCloseBlocksEnd', 0], // 0: close blocks with ":EndIf",":EndFor",etc;  1: close blocks only with ":End"
   ['autoCloseBrackets',  1], // whether to insert {}[]() in pairs
@@ -112,17 +112,18 @@ D.prefs=this;
       str=t==='object'?JSON.stringify:function(x){return''+x}, // stringifier function
       sd=str(d),  // default value "d" converted to a string
       p=D.prefs[k]=function(x){
+        var db=D.db||localStorage
         if(typeof x==='function'){
           l.push(x)
         }else if(arguments.length){
           x=t==='number'?(+x):t==='string'?(''+x):x // coerce "x" to type "t"
-          var sx=str(x) // sx: "x" converted to a string; localStorage values can only be strings
+          var sx=str(x) // sx: "x" converted to a string; values can only be strings
           if(l.length)var old=p()
-          sx===sd?delete localStorage[k]:(localStorage[k]=sx) // avoid recording if it's at its default
+          sx===sd?db.removeItem(k):db.setItem(k,sx) // avoid recording if it's at its default
           for(var i=0;i<l.length;i++)l[i](x,old) // notify listeners
           return x
         }else{
-          var r=localStorage[k];return r==null?d:t==='number'?(+r):t==='object'?JSON.parse(r):r
+          var r=db.getItem(k);return r==null?d:t==='number'?(+r):t==='object'?JSON.parse(r):r
         }
       }
   p.getDefault=function(){return d}

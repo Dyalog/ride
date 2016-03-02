@@ -88,15 +88,16 @@ $(function(){
   // Some library is doing "localStorage.debug=undefined" instead of "delete localStorage.debug".
   // It doesn't work that way.  It may work for other objects, but the values in localStorage
   // are always strings and that leaves us with 'undefined' as a string.  So, let's clean up...
-  var ls=localStorage;delete ls.debug
+  delete localStorage.debug
 
   // migrations
-  ls.version=ls.version||'[3,0]' // localStorage.version defaults to current version
-  var v=JSON.parse(ls.version)
-  if(v[0]<3&&ls.favs){
-    try{ls.favs=JSON.strigify(JSON.parse(ls.favs).map(function(x){x.type='connect';x.port===4502&&delete x.port}))}
-    catch(_){delete ls.favs}
-    ls.version='[3,0]'
+  var db=D.db||localStorage
+  db.version=db.version||'[3,0]' // localStorage.version defaults to current version
+  var v=JSON.parse(db.version)
+  if(v[0]<3&&db.favs){
+    try{db.favs=JSON.strigify(JSON.parse(db.favs).map(function(x){x.type='connect';x.port===4502&&delete x.port}))}
+    catch(_){delete db.favs}
+    db.version='[3,0]'
   }
 
   // Implement access keys (Alt-X) using <u></u>.

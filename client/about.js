@@ -1,19 +1,20 @@
 'use strict'
+var repr=JSON.stringify
 this.showDialog=function(){
-  var v=D.versionInfo,i=D.remoteIdentification||{},u='unknown'
+  var v=D.versionInfo,ri=D.remoteIdentification||{},u='unknown',db=D.db||localStorage
+  var s='';for(var i=0;i<db.length;i++){var x=db.key(i);s+=(i?',\n':'')+'    '+repr(x)+':'+repr(db.getItem(x))}
   var info='IDE:'+
     '\n  Version: '   +(v.version          ||u)+
     '\n  Platform: '  +(navigator.platform ||u)+
     '\n  Date: '      +(v.date             ||u)+
     '\n  Git commit: '+(v.rev              ||u)+
     '\n  User agent: '+(navigator.userAgent||u)+
-    '\n  Settings: '  +(JSON.stringify(localStorage))+
-    '\n'              +
+    '\n  Settings:{\n'+s+'\n  }\n'+
     '\nInterpreter:'  +
-    '\n  Version: '   +(i.version          ||u)+
-    '\n  Platform: '  +(i.platform         ||u)+
-    '\n  Edition: '   +(i.arch             ||u)+
-    '\n  Date: '      +(i.date             ||u)
+    '\n  Version: '   +(ri.version         ||u)+
+    '\n  Platform: '  +(ri.platform        ||u)+
+    '\n  Edition: '   +(ri.arch            ||u)+
+    '\n  Date: '      +(ri.date            ||u)
   var btns=[]
   D.clipboardCopy&&btns.push({html:'<u>C</u>opy',click:function(){D.clipboardCopy($('textarea',this).val(),'text')}})
   btns.push({html:'C<u>l</u>ose',click:function(){$(this).dialog('close')}})

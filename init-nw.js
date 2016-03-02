@@ -1,13 +1,37 @@
 ;(function(){'use strict'
   var gui=require('nw.gui'),fs=require('fs'),os=require('os'),path=require('path'),spawn=require('child_process').spawn,
-      proxy=require('./proxy'),ps=process,env=ps.env
+      proxy=require('./proxy'),ps=process,env=ps.env,repr=JSON.stringify
   // Detect platform: https://nodejs.org/api/process.html#process_process_platform
   // https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
   D.nwjs=1;D.win=/^win/i.test(ps.platform);D.mac=ps.platform=='darwin';D.floating=!!opener
   console.log=function(s){try{ps.stdout.write(s+'\n')}catch(_){console.log=function(){}}}
   env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a standalone RIDE
     (D.win?0:+fs.existsSync(path.dirname(ps.execPath)+(D.mac?'/../../../../Resources/Dyalog/mapl':'/../mapl')))
-  if(D.win&&(!localStorage.ime||localStorage.ime==='1')){ // switch IME locale as early as possible
+
+  ;(function(){
+    var k=[],v=[] // keys and values
+    D.db={ // file-backed storage with an API similar to that of localStorage
+      key:function(i){return k[i]},
+      getItem   :function(x)  {var i=k.indexOf(x);return i<0?null:v[i]},
+      setItem   :function(x,y){var i=k.indexOf(x);if(i<0){k.push(x);v.push(y)}else{v[i]=y};dbSync()},
+      removeItem:function(x)  {var i=k.indexOf(x);if(i>=0){k.splice(i,1);dbSync()}},
+      _getAll:function(){var r={};for(var i=0;i<k.length;i++)r[k[i]]=v[i];return r}
+    }
+    Object.defineProperty(D.db,'length',{get:function(){return k.length}})
+    var f=gui.App.dataPath+'/prefs.json'
+    try{if(fs.existsSync(f)){var h=JSON.parse(fs.readFileSync(f,'utf8'));for(var x in h){k.push(x);v.push(h[x])}}}
+    catch(e){console.error(e)}
+    var st=0,dbSync=function(){ // st: state 0=initial, 1=write pending, 2=write in progress
+      if(st===2){st=1;return}
+      var s='{\n'+k.map(function(x,i){return'  '+repr(x)+':'+repr(v[i])}).sort().join(',\n')+'\n}\n'
+      st=2;fs.writeFile(f,s,function(err){
+        if(err){console.error(err);dbSync=function(){};return} // make dbSync() a nop
+        if(st===1){setTimeout(function(){dbSync()},1000)}else{st=0}
+      })
+    }
+  }())
+
+  if(D.win&&(!db.ime||db.ime==='1')){ // switch IME locale as early as possible
     var setImeExe=ps.execPath.replace(/[^\\\/]+$/,'set-ime.exe')
     fs.existsSync(setImeExe)&&spawn(setImeExe,[ps.pid],{stdio:['ignore','ignore','ignore']})
   }
@@ -49,9 +73,9 @@
       }
       nww.on('focus',function(){aot(!!D.floatOnTop)})
       nww.on('blur',function(){aot(false)})
-      if(localStorage.pos){
+      if(D.db.getItem('pos')){
         try{
-          var p=JSON.parse(localStorage.pos)
+          var p=JSON.parse(D.db.getItem('pos'))
           restoreWindow(nww,{x:p[0],y:p[1],width:p[2],height:p[3],maximized:p[4]||0})
         }catch(_){}
       }
@@ -63,7 +87,7 @@
     var posArr=[nww.x-(nww.dx||0),nww.y-(nww.dy||0),nww.width-(nww.dw||0),nww.height-(nww.dh||0)]
     nww.maximized&&posArr.push(1)
     var p=!D.floating?'pos':+urlp.tracer?'posTracer':urlp.token==='1'?'posEditor':'' // name of pref
-    p&&(localStorage[p]=JSON.stringify(posArr))
+    p&&D.db.setItem(p,repr(posArr))
   })
   nww.on('move',saveWinState);nww.on('resize',saveWinState)
   nww.on('maximize',  function(){nww.maximized=1;saveWinState()})
@@ -152,9 +176,9 @@
     ps.on('uncaughtException',function(e){
       window&&(window.lastError=e)
       var info=
-        'IDE: '+JSON.stringify(D.versionInfo)+
-        '\nInterpreter: '+JSON.stringify(D.remoteIdentification||null)+
-        '\nlocalStorage: '+JSON.stringify(localStorage)+
+        'IDE: '+repr(D.versionInfo)+
+        '\nInterpreter: '+repr(D.remoteIdentification||null)+
+        '\nIDE prefs: '+repr(D.db._getAll())+
         '\n\n'+expandStackString(e.stack)+
         '\n\nProxy log:'+proxy.log.get().join('')
       var excuses=[
