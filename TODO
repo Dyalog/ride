@@ -1,17 +1,20 @@
+Decision pending regarding initial handshake:
+  * fix Identify message and/or redefine its semantics in docs/protocol.md
+  * remove the second part of the handshake (UsingProtocol=1), this may be in Bjørn's code
+  * bump the first part of the handshake (SupportedProtocols=1 -> 2) and maybe format it as JSON (needs discussion)
+  * don't send a ReplyConnect message
+
 Things to be done in the interpreter:
   * implement GetValueTip, see S4 below
   * implement TreeList, TreeAction (names can be changed) for the ws explorer, see M4 below
   * implement StatusOutput, see W3 below
-  * fix Identify message and/or redefine its semantics in docs/protocol.md
-  * remove the second part of the handshake (UsingProtocol=1), this may be in Bjørn's code
-  * bump the first part of the handshake (SupportedProtocols=1 -> 2) and maybe format it as JSON (needs discussion)
   * in GetAutocomplete either rename "token" to "win" or don't require them to be the same
-  * don't send a ReplyConnect message
   * interpreter can start using Show(MultipleChoice)Dialog and ShowStringInputDialog for external files, see M5,S3 below
   * define and implement protocol messages for "show stack" and "show threads", see W1,W2 below
   * define protocol messages for transferring a file to the interpreter, e.g. for drag&drop of a .dws
   * don't crash when receiving JSON that's not structured as expected
   * dev version of interpreter doesn't honour "+s -q" over ssh (probably one for Geoff), see email from 2016-01-28
+  * take into account modified editor content in Edit message
 
 Things to be done in RIDE before releasing:
   * once the new docs are online, change help URLs from 14.1 to 15.0
