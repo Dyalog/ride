@@ -31,7 +31,7 @@
     }
   }())
 
-  if(D.win&&(!db.ime||db.ime==='1')){ // switch IME locale as early as possible
+  if(D.win&&(!D.db.ime||D.db.ime==='1')){ // switch IME locale as early as possible
     var setImeExe=ps.execPath.replace(/[^\\\/]+$/,'set-ime.exe')
     fs.existsSync(setImeExe)&&spawn(setImeExe,[ps.pid],{stdio:['ignore','ignore','ignore']})
   }
