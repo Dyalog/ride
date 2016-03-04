@@ -92,7 +92,7 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
     })
   }
   ed.setTracer(!!ed.tc)
-  this.processValueTipReply=vtips.init(this)
+  this.vt=vtips.init(this)
 }
 this.Editor.prototype={
   updGutters:function(){

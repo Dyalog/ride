@@ -35,7 +35,7 @@ this.Session=function(ide,e,opts){ // Session constructor
   se.promptType=0 // see ../docs/protocol.md #SetPromptType
   se.processAutocompleteReply=autocompletion.init(se)
   prefs.wrap(function(x){se.cm.setOption('lineWrapping',!!x);se.scrollCursorIntoView()})
-  this.processValueTipReply=vtips.init(this)
+  this.vt=vtips.init(this)
 }
 this.Session.prototype={
   histAdd:function(lines){this.hist[0]='';[].splice.apply(this.hist,[1,0].concat(lines));this.histIdx=0},

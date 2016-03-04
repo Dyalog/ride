@@ -71,13 +71,14 @@ this.IDE=function(){
     FocusWindow:throttle1(function(x){$('#wintab'+x.win+' a').click();var w=ide.wins[x.win];w&&w.focus()}),
     WindowTypeChanged:function(x){return ide.wins[x.win].setTracer(x.tracer)},
     ReplyGetAutocomplete:function(x){return ide.wins[x.token].processAutocompleteReply(x)},
-    ValueTip:function(x){ide.wins[x.token].processValueTipReply(x)},
+    ValueTip:function(x){ide.wins[x.token].vt.processReply(x)},
     SetHighlightLine:function(x){ide.wins[x.win].highlight(x.line)},
     UpdateWindow:function(x){$('#wintab'+x.token+' a').text(x.name);ide.wins[x.token].open(x)},
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
     CloseWindow:function(x){
       $('#wintab'+x.win+',#win'+x.win).remove();ide.$tabs.tabs('destroy').tabs(ide.tabOpts);ide.refreshTabs()
-      var w=ide.wins[x.win];w&&w.closePopup&&w.closePopup();delete ide.wins[x.win];ide.wins[0].focus()
+      var w=ide.wins[x.win];if(w){w.closePopup&&w.closePopup();w.vt.clear()}
+      delete ide.wins[x.win];ide.wins[0].focus()
     },
     OpenWindow:ide.openWindow.bind(ide),
     ShowHTML:ide.showHTML.bind(ide),
