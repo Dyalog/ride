@@ -70,7 +70,7 @@ this.IDE=function(){
     HadError:function(){ide.pending.splice(0,ide.pending.length)},
     FocusWindow:throttle1(function(x){$('#wintab'+x.win+' a').click();var w=ide.wins[x.win];w&&w.focus()}),
     WindowTypeChanged:function(x){return ide.wins[x.win].setTracer(x.tracer)},
-    ReplyGetAutocomplete:function(x){return ide.wins[x.token].processAutocompleteReply(x)},
+    ReplyGetAutocomplete:function(x){var w=ide.wins[x.token];w&&w.processAutocompleteReply(x)},
     ValueTip:function(x){ide.wins[x.token].vt.processReply(x)},
     SetHighlightLine:function(x){ide.wins[x.win].highlight(x.line)},
     UpdateWindow:function(x){$('#wintab'+x.token+' a').text(x.name);ide.wins[x.token].open(x)},
