@@ -14,7 +14,7 @@
       key:function(i){return k[i]},
       getItem   :function(x)  {var i=k.indexOf(x);return i<0?null:v[i]},
       setItem   :function(x,y){var i=k.indexOf(x);if(i<0){k.push(x);v.push(y)}else{v[i]=y};dbSync()},
-      removeItem:function(x)  {var i=k.indexOf(x);if(i>=0){k.splice(i,1);dbSync()}},
+      removeItem:function(x)  {var i=k.indexOf(x);if(i>=0){k.splice(i,1);v.splice(i,1);dbSync()}},
       _getAll:function(){var r={};for(var i=0;i<k.length;i++)r[k[i]]=v[i];return r}
     }
     Object.defineProperty(D.db,'length',{get:function(){return k.length}})
