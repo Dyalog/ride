@@ -21,6 +21,7 @@ this.cmds=[
   ['ER', 'Execute line',            ['Enter']],
   ['EXP','Expand selection',        ['Shift-Alt-Up']],
   ['FD', 'Forward or Redo',         ['Shift-Ctrl-Enter'],    1],
+  ['FX', 'Fix the current function',[]],
   ['HLP','Help',                    ['F1']],
   ['JBK','Jump back',               ['Shift-Ctrl-J']],
   ['JSC','Show JavaScript console', ['F12']],

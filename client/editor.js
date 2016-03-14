@@ -217,7 +217,9 @@ this.Editor.prototype={
   hasFocus:function(){return window.focused&&this.cm.hasFocus()},
   focus:function(){if(!window.focused){window.focus()};this.cm.focus()},
   insert:function(ch){this.cm.getOption('readOnly')||this.cm.replaceSelection(ch)},
-  saved:function(err){err?$.alert('Cannot save changes'):this.emit('CloseWindow',{win:this.id})},
+  saved:function(err){
+    if(err){this.isClosing=0;$.alert('Cannot save changes')}else{this.isClosing&&this.emit('CloseWindow',{win:this.id})}
+  },
   closePopup:function(){if(D.floating){window.onbeforeunload=null;D.forceClose=1;close()}},
   die:function(){this.setReadOnly(true)},
   getDocument:function(){return this.$e[0].ownerDocument},
@@ -246,7 +248,8 @@ this.Editor.prototype={
     if(v&&v.indexOf('\n')<0){this.cmSC.setValue(v);this.cmRP.setValue(v)}
     this.cmRP.focus();this.cmRP.execCommand('selectAll');this.highlightSearch()
   },
-  EP:function(cm){
+  EP:function(cm){this.isClosing=1;this.FX(cm)},
+  FX:function(cm){
     var ed=this,v=cm.getValue(),stop=ed.getStops()
     if(ed.tc||v===ed.oText&&''+stop===''+ed.oStop){ed.emit('CloseWindow',{win:ed.id});return} // if tracer or unchanged
     for(var i=0;i<stop.length;i++)cm.setGutterMarker(stop[i],'breakpoints',null)
