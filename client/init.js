@@ -102,7 +102,7 @@ $(function(){
 
   // Implement access keys (Alt-X) using <u></u>.
   // The built-in accesskey=X doesn't handle duplicates well -- it doesn't always focus the visible one.
-  $(document).keydown(function(e){
+  D.mac||$(document).keydown(function(e){
     if(e.altKey&&!e.ctrlKey&&!e.metaKey&&64<e.which&&e.which<91){ // Alt-A...Alt-Z or Alt-Shift-A...Alt-Shift-Z
       var c=String.fromCharCode(e.which).toLowerCase(),C=c.toUpperCase()
       var $ctx=$('.ui-widget-overlay').length?$('.ui-dialog:visible').last():$('body') // modal dialogs take priority
