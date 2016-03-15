@@ -277,6 +277,9 @@
     $(window).on('focus blur',repaintTitle);D.setTitle=function(s){document.title=s;repaintTitle()}
   }
   ;(env.RIDE_JS||'').split(path.delimiter).forEach(function(x){x&&$.getScript('file://'+path.resolve(ps.cwd(),x))})
+  if(env.RIDE_CSS){
+    $('<style>').text(env.RIDE_CSS.split(path.delimiter).map(function(x){return'@import url("'+x+'");'})).appendTo('head')
+  }
   if(env.RIDE_EDITOR){
     var d=os.tmpDir()+'/dyalog';fs.existsSync(d)||fs.mkdirSync(d,0o700)
     D.openInExternalEditor=function(ee,callback){ // ee: EditableEntity from RIDE protocol
