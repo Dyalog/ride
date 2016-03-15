@@ -61,6 +61,11 @@ Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nic
         NN: done
 
 Not prioritized:
+  configurable list for ``
+  ``idiomname
+  $RIDE_CSS
+  <AC> on <RD>
+  programmable menu items
   on a Mac esc closes the session instead of the editor, JS 2015-12-03
   cmd to toggle rainbow colouring
   names of open editors should appear at the bottom of the Window menu; Marc Griffiths 2015-03-13
