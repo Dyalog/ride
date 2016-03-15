@@ -15,6 +15,8 @@ this.init=function($e){
          '<label><u>w</u>ith <select id=code-acbe><option value=0>:EndIf,:EndFor,...<option value=1>just :End</select></label>'+
       '<p><label><input id=code-ac   type=checkbox>Autocom<u>p</u>letion</label> <label>a<u>f</u>ter <input id=code-acd size=5>ms</label>'+
       '<p><label><input id=code-fold type=checkbox>Co<u>d</u>e folding (outlining)</label>'+
+      '<p><label><input id=code-vt   type=checkbox>Show <u>v</u>alue tips</label>'+
+      '<p><label><input id=code-sqt  type=checkbox>Show tips for s<u>q</u>uiggles</label>'+
     '</div>'
   $('[id^=code-]',$e).each(function(){h[this.id.replace(/^code-/,'')]=this})
   $(h.ai).add(h.aim)
@@ -35,6 +37,8 @@ this.load=function(){
   h.ac  .checked=!!prefs.autocompletion     ()
   h.acd .value  =  prefs.autocompletionDelay()
   h.fold.checked=!!prefs.fold               ()
+  h.vt  .checked=!!prefs.valueTips          ()
+  h.sqt .checked=!!prefs.squiggleTips       ()
   $(h.ai).add(h.acbl).add(h.ac).change()
 }
 this.save=function(){
@@ -49,6 +53,8 @@ this.save=function(){
   prefs.autocompletion     (h.ac  .checked)
   prefs.autocompletionDelay(h.acd .value)
   prefs.fold               (h.fold.checked)
+  prefs.valueTips          (h.vt  .checked)
+  prefs.squiggleTips       (h.sqt .checked)
 }
 this.validate=function(){
   if(h.ai .checked&&!isInt(h.sw .value,0))return{msg:'Auto-indent must be a non-negative integer.'           ,h:h.ai}

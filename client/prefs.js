@@ -43,6 +43,8 @@ D.prefs=this
   ['theme',              ''],
   ['title',              '{WSID}'], // a.k.a. "caption"
   ['tracerHeight',       0], // height of a docked tracer
+  ['valueTips',          1], // value tips
+  ['squiggleTips',       1],
   ['wrap',               0], // line wrapping in session
   ['zoom',               0],
   ['menu',

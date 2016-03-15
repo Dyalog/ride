@@ -1,6 +1,6 @@
 'use strict'
 // value tips: hover over a name to see a pop-up with its current value
-var lbar=require('./lbar')
+var lbar=require('./lbar'),prefs=require('./prefs')
 var MW=64,MH=32 // maxWidth and maxHeight for the character matrix displayed in the tooltip
 this.init=function(w){ // .init(w) gets called for every window w (session or editor)
   var i,p,$b,$t,$r,rf // i:timeout id, p:position as {line,ch}, rf:function that processes the reply
@@ -17,9 +17,9 @@ this.init=function(w){ // .init(w) gets called for every window w (session or ed
     cl();p0=p0||w.cm.coordsChar({left:e.clientX,top:e.clientY})
     p0.outside||(i=setTimeout(function(){                                  // send a request (not too often)
       i=0;p=p0;var s=w.cm.getLine(p.line),c=s[p.ch]||' ',lbt=lbar.tips[c]
-      if(lbt&&!(c==='⎕'&&/[áa-z]/i.test(s[p.ch+1]||''))){                  // are we on a squiggle?
+      if(prefs.squiggleTips()&&lbt&&!(c==='⎕'&&/[áa-z]/i.test(s[p.ch+1]||''))){
         rf({tip:lbt.join('\n\n').split('\n'),startCol:p.ch,endCol:p.ch+1}) // show tooltip from lbar
-      }else if(/[^ \(\)\[\]\{\}':;]/.test(c)){
+      }else if(prefs.valueTips()&&/[^ \(\)\[\]\{\}':;]/.test(c)){
         w.emit('GetValueTip',{win:w.id,line:s,pos:p.ch,token:w.id,maxWidth:MW,maxHeight:MH}) // ask interpreter
       }
     },500))
