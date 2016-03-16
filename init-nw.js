@@ -9,6 +9,7 @@
     (D.win?0:+fs.existsSync(path.dirname(ps.execPath)+(D.mac?'/../../../../Resources/Dyalog/mapl':'/../mapl')))
 
   ;(function(){
+    if(D.floating){D.db=opener.D.db;return}
     var k=[],v=[] // keys and values
     D.db={ // file-backed storage with an API similar to that of localStorage
       key:function(i){return k[i]},
