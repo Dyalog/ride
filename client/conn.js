@@ -3,7 +3,7 @@ require('./jq-list');require('./jq-splitter')
 var IDE=require('./ide').IDE,prefs=require('./prefs'),esc=require('./util').esc
 var q={} // mapping between ids and jQuery objects
 var $sel=$(),sel,$d // $sel:selected item(s), sel: .data('cn') of the selected item (only if it's unique), $d:dialog
-var DFLT_NAME='[New Connection]',TMP_NAME='[Temporary Connection]',MIN_VER=[15,0] // minimum supported version
+var DFLT_NAME='[anonymous]',TMP_NAME='[temp]',MIN_VER=[15,0] // minimum supported version
 var proxyInfo={interpreters:[]}
 var user=D.process?D.process.env.USER:''
 function cmpVer(x,y){return x[0]-y[0]||x[1]-y[1]||0} // compare two versions of the form [major,minor]
@@ -93,7 +93,7 @@ module.exports=function(){
   })
   q.del.click(function(){
     var n=$sel.length
-    n&&$.confirm('Are you sure you want to delete the selected connection'+(n>1?'s':'')+'?','Confirmation',
+    n&&$.confirm('Are you sure you want to delete the selected configuration'+(n>1?'s':'')+'?','Confirmation',
       function(r){if(r){var i=$sel.eq(0).index();$sel.remove();q.favs.list('select',i,1);save()}})
   })
   q.go.click(go)

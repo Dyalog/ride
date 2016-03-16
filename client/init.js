@@ -114,7 +114,7 @@ $(function(){
       })
       if($a.length>1){$a.eq(($a.index(':focus')+1)%$a.length).focus()}
       else if($a.is(':checkbox')){$a.focus().prop('checked',!$a.prop('checked')).change()}
-      else if($a.is(':text,select')){$a.focus()}
+      else if($a.is(':text,:password,textarea,select')){$a.focus()}
       else{$a.click()}
       return!1
     }

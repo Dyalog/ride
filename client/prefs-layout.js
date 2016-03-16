@@ -39,9 +39,8 @@ this.init=function($e){
       $(this).val(v).prop('title',U(v))
     })
     .on('mouseover mouseout','.key input',function(e){$(this).toggleClass('hover',e.type==='mouseover')})
-  D.win&&$e.append(
-    '<label id=layout-ime-wrapper><input type=checkbox id=layout-ime>Select Dyalog IME as the active keyboard</label>'
-  )
+  D.win&&$e.append('<label id=layout-ime-wrapper><input type=checkbox id=layout-ime> '+
+                   'Also enable Dyalog IME (requires RIDE restart)</label>')
   if(!prefs.kbdLocale()){
     var l=navigator.language||'',xx=l.slice(0,2).toUpperCase()
     prefs.kbdLocale(l==='en-GB'?'UK':l==='da'||l==='da_DK'?(D.mac?'DK-Mac':'DK'):geom[xx]?xx:'US')
