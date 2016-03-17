@@ -288,6 +288,17 @@ Request the current line in a trace window is executed. (Step into)
 
 Request all suspended threads are resumed from their current position.
 
+<a name=GetSIStack></a>
+<a name=ReplyGetSIStack></a>
+```json
+["GetSIStack",{}] // RIDE -> Interpreter
+["ReplyGetSIStack",{"stack":["#.f[12]*","#.g[34]"],"tid":tid}] // Interpreter -> RIDE
+```
+
+Request information about the current stack.
+
+:red_circle: Not used in RIDE3 yet.
+
 #Interrupts
 APL supports two kinds of interrupts
 <a name=WeakInterrupt></a><a name=StrongInterrupt></a>
