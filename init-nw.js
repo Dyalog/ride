@@ -32,7 +32,7 @@
     }
   }())
 
-  if(D.win&&(!D.db.ime||D.db.ime==='1')){ // switch IME locale as early as possible
+  if(D.win&&D.db.getItem('ime')!=='0'){ // switch IME locale as early as possible; '1' or '' means yes
     var setImeExe=ps.execPath.replace(/[^\\\/]+$/,'set-ime.exe')
     fs.existsSync(setImeExe)&&spawn(setImeExe,[ps.pid],{stdio:['ignore','ignore','ignore']})
   }
@@ -68,11 +68,12 @@
       opener.D.floatingWindows.push(nww)
       restoreWindow(nww,{x:+urlp.x,y:+urlp.y,width:+urlp.width,height:+urlp.height,maximized:+urlp.maximized})
     }else{
-      D.floatingWindows=[];D.floatOnTop=0
-      var aot=function(x){ // aot(x) sets "always on top" for all windows to x
-        var w=D.floatingWindows;for(var i=0;i<w.length;i++)if(x!==!!w[i].aot){w[i].aot=x;w[i].setAlwaysOnTop(x)}
+      D.floatingWindows=[]
+      var aot=function(x){ // aot(x) sets "always on top" for all floating windows to x
+        var w=D.floatingWindows.slice(0) // put focused at the end
+        for(var i=0;i<w.length;i++)if(x!==!!w[i].aot){w[i].aot=x;w[i].setAlwaysOnTop(x)}
       }
-      nww.on('focus',function(){aot(!!D.floatOnTop)})
+      nww.on('focus',function(){aot(!!D.db.getItem('floatOnTop'))})
       nww.on('blur',function(){aot(false)})
       if(D.db.getItem('pos')){
         try{

@@ -170,7 +170,6 @@ this.IDE=function(){
   }
   $('.lbar').toggle(!!prefs.lbar());$('.sbar').toggle(!!prefs.sbar());updTopBtm();$(window).resize(updTopBtm)
   layout.close('east');layout.close('south');ide.wins[0].updSize()
-  D.floatOnTop=prefs.floatOnTop();prefs.floatOnTop(function(x){D.floatOnTop=x})
   prefs.lbar(function(x){$('.lbar').toggle(!!x);updTopBtm()})
   prefs.sbar(function(x){$('.sbar').toggle(!!x);updTopBtm()})
   try{
