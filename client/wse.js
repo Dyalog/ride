@@ -2,8 +2,9 @@
 // workspace explorer
 var $t,h={} // $t:jstree instance, h:pending callbacks indexed by node id
 this.replyTreeList=function(x){
-  var id=x.nodeId;if(!h[id])return
-  h[id](x.names.map(function(y,i){return{text:y,children:true,id:'wse-'+(x.nodeIds[i]||(id+'-'+i))}}));delete h[id]
+  var p=x.nodeId;if(!h[p])return // p:parent node id, c:child node id
+  h[p](x.nodeIds.map(function(c,i){return{text:x.names[i],children:!!c,id:'wse-'+(c||(p+'-'+i))}}))
+  delete h[p]
 }
 CodeMirror.commands.WSE=function(){
   if($t){var op=$t.dialog('isOpen');$t.dialog(op?'close':'open');op||$t.jstree('refresh');return}
