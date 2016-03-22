@@ -420,7 +420,7 @@ It can query information about the children of a particular node with
 ```json
 ["TreeList",{"nodeId":12}] // RIDE -> Interpreter
 ["ReplyTreeList",{"nodeId":12,"nodeIds":[34,0],"names":["ab","cde"],
-                  "classes":[9.4,3.2],"err":""}]}] // Interpreter -> RIDE
+                  "classes":[9.4,3.2],"err":""}] // Interpreter -> RIDE
 ```
 The root of the tree is assumed to have a node id of 0.
 * `nodeId` is the requested parent id.
