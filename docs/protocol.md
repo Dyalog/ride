@@ -413,15 +413,19 @@ Sent from any peer to shut down the connection cleanly.
 :red_circle: This is pointless -Nick
 
 #Workspace explorer
-Optionally, RIDE can display a tree representation of the objects in the current session.
-It can query the interpreter for this information in a uniform way for all types of nodes:
+Optionally, RIDE can display a tree of the objects in the current session.
+It can query information abouth the children of a particular node with
 <a name=TreeList></a>
 ```json
-["TreeList",{"nodeId":123}] // RIDE -> Interpreter
-["ReplyTreeList",{"nodeId":123,"children":[{"id":234,"type":1,"name":"Abc"},...]}] // Interpreter -> RIDE
+["TreeList",{"nodeId":12}] // RIDE -> Interpreter
+["ReplyTreeList",{"nodeId":12,"nodeIds":[34,56],"names":["ab","cde"],
+                  "classes":[9.4,3.2],"err":""}]}] // Interpreter -> RIDE
 ```
-The root of the tree is assumed to have node id 0.
-`type` is a hint about the icon and style for the node.
+The root of the tree is assumed to have a node id of 0.
+* `nodeId` is the requested parent id.
+* `nodeIds` are the ids of the children; some of them can be 0 -- those children can't themselves have children.
+* `classes` are [name classes](http://help.dyalog.com/14.1/Content/Language/System%20Functions/nc.htm#NameClassification) that can serve as node types
+* `err` is a non-empty string only when an interpreter-side error has occurred
 
 RIDE should query information only about the visible parts of the tree as they get expanded.
 
