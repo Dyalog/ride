@@ -413,31 +413,28 @@ Sent from any peer to shut down the connection cleanly.
 :red_circle: This is pointless -Nick
 
 #Workspace explorer
-Optionally, RIDE can display a tree of the objects in the current session.
+Optionally, RIDE can display a tree representing session content.
 It can query information abouth the children of a particular node with
 <a name=TreeList></a>
+<a name=ReplyTreeList></a>
 ```json
 ["TreeList",{"nodeId":12}] // RIDE -> Interpreter
-["ReplyTreeList",{"nodeId":12,"nodeIds":[34,56],"names":["ab","cde"],
+["ReplyTreeList",{"nodeId":12,"nodeIds":[34,0],"names":["ab","cde"],
                   "classes":[9.4,3.2],"err":""}]}] // Interpreter -> RIDE
 ```
 The root of the tree is assumed to have a node id of 0.
 * `nodeId` is the requested parent id.
 * `nodeIds` are the ids of the children; some of them can be 0 -- those children can't themselves have children.
 * `classes` are [name classes](http://help.dyalog.com/14.1/Content/Language/System%20Functions/nc.htm#NameClassification) that can serve as node types
-* `err` is a non-empty string only when an interpreter-side error has occurred
+* `err` is non-empty only when an interpreter-side error has occurred
 
 RIDE should query information only about the visible parts of the tree as they get expanded.
 
-When the user presses Enter or clicks on a node, RIDE should send
-<a name=TreeAction></a>
-```json
-["TreeAction",{"nodeId":123}] // RIDE -> Interpreter
-```
-The interpreter should ignore silently any invalid and outdated node ids.
+When the user presses Enter or clicks on an editable node, RIDE should use the [Edit](#Edit) command to notify the
+interpreter.  Then it can send back commands to open or focus an editor window.
 
 #Process manager
-:red_circle: As of Feb 2016 there is no process manager.
+:red_circle: As of April 2016 there is no process manager.
 
 <a name=GetAvailableConnections></a>
 ```json
