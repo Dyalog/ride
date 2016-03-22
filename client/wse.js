@@ -11,5 +11,5 @@ CodeMirror.commands.WSE=function(){
   if($t){var op=$t.dialog('isOpen');$t.dialog(op?'close':'open');op||$t.jstree('refresh');return}
   $t=$('<div class=wse>').dialog({title:'Workspace Explorer'})
                          .jstree({core:{animation:0,check_callback:true,data:fData},plugins:[]})
-  $t.on('dblclick','.jstree-anchor',function(e){D.ide.emit('TreeAction',{nodeId:+this.id.replace(/\D+/g,'')});return!1})
+  $t.on('click','.jstree-anchor',function(){D.ide.emit('Edit',{win:0,pos:0,text:$t.jstree('get_path',this,'.')})})
 }
