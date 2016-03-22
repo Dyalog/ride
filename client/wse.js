@@ -11,7 +11,7 @@ this.WSE=function($e,ide){
 this.WSE.prototype={
   replyTreeList:function(x){
     var f=this.pending[x.nodeId];if(!f)return
-    f(x.nodeIds.map(function(c,i){return{text:x.names[i],children:!!c,id:'wse-'+(c||(p+'-'+i))}}))
+    f(x.nodeIds.map(function(c,i){return{text:x.names[i],children:!!c,id:'wse-'+(c||(x.nodeId+'-'+i))}}))
     delete this.pending[x.nodeId]
   },
   refresh:function(){this.$e.jstree('refresh')}
