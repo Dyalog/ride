@@ -12,6 +12,7 @@ this.IDE=function(){
     '<div class=lbar-tip style=display:none><div class=lbar-tip-desc></div><pre class=lbar-tip-text></pre></div>'+
     '<div class=lbar-tip-triangle style=display:none></div>'+
     '<div class=ide>'+
+      '<div class="ui-layout-west wse"></div>'+
       '<div class=ui-layout-center></div>'+
       '<div class=ui-layout-east ><ul></ul></div>'+
       '<div class=ui-layout-south><ul></ul></div>'+
@@ -99,7 +100,7 @@ this.IDE=function(){
         close:function(){ide.emit('StringInputDialogResult',{value:ok?$i.val():x.defaultValue||null,token:x.token})}
       })
     },
-    ReplyTreeList:function(x){wse.replyTreeList(x)},
+    ReplyTreeList:function(x){ide.wse.replyTreeList(x)},
     StatusOutput:function(x){$('.sbar').text(x.text)},
     UnknownRIDECommand:function(){}, // todo
     UnknownCommand:function(){}
@@ -155,6 +156,7 @@ this.IDE=function(){
     })
   var layout=ide.layout=ide.$ide.layout({
     fxName:'',defaults:{enableCursorHotkey:0},
+    west: {spacing_closed:0,resizable:1,togglerLength_open:0,size:'0%'},
     east: {spacing_closed:0,resizable:1,togglerLength_open:0,size:'0%'},
     south:{spacing_closed:0,resizable:1,togglerLength_open:0,size:'0%'},
     center:{onresize:function(){
@@ -169,7 +171,7 @@ this.IDE=function(){
     layout&&layout.resizeAll()
   }
   $('.lbar').toggle(!!prefs.lbar());$('.sbar').toggle(!!prefs.sbar());updTopBtm();$(window).resize(updTopBtm)
-  layout.close('east');layout.close('south');ide.wins[0].updSize()
+  layout.close('west');layout.close('east');layout.close('south');ide.wins[0].updSize()
   prefs.lbar(function(x){$('.lbar').toggle(!!x);updTopBtm()})
   prefs.sbar(function(x){$('.sbar').toggle(!!x);updTopBtm()})
   try{
@@ -273,4 +275,8 @@ this.IDE.prototype={
     var r={};for(var k in this.wins){var cm=this.wins[k].cm,v=cm.getValue();if(+k&&v!==cm.oText)r[k]=v}
     return r
   }
+}
+CodeMirror.commands.WSE=function(){
+  var ide=D.ide;ide.wse||(ide.wse=new wse.WSE($('.wse'),ide))
+  ide.layout.sizePane('west','20%');ide.layout.toggle('west');ide.wse.refresh()
 }
