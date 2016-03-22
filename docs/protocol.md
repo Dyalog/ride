@@ -414,7 +414,7 @@ Sent from any peer to shut down the connection cleanly.
 
 #Workspace explorer
 Optionally, RIDE can display a tree representing session content.
-It can query information abouth the children of a particular node with
+It can query information about the children of a particular node with
 <a name=TreeList></a>
 <a name=ReplyTreeList></a>
 ```json
@@ -425,8 +425,9 @@ It can query information abouth the children of a particular node with
 The root of the tree is assumed to have a node id of 0.
 * `nodeId` is the requested parent id.
 * `nodeIds` are the ids of the children; some of them can be 0 -- those children can't themselves have children.
-* `classes` are [name classes](http://help.dyalog.com/14.1/Content/Language/System%20Functions/nc.htm#NameClassification) that can serve as node types
-* `err` is non-empty only when an interpreter-side error has occurred
+* `classes` are [name classes](http://help.dyalog.com/14.1/Content/Language/System%20Functions/nc.htm#NameClassification)
+  that can be used to choose appropriate styling
+* `err` is non-empty only when an error has occurred in the interpreter, e.g. when `nodeId` is no longer invalid
 
 RIDE should query information only about the visible parts of the tree as they get expanded.
 
