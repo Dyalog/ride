@@ -100,6 +100,17 @@ this.IDE=function(){
         close:function(){ide.emit('StringInputDialogResult',{value:ok?$i.val():x.defaultValue||null,token:x.token})}
       })
     },
+    ShowTaskDialog:function(x){
+      var i=-1 // the result
+      var $d=$('<div class=task-dialog><p>'+esc(x.text)+'<p class=subtext>'+esc(x.subtext)+'<div>'+
+                 x.buttontext.map(function(s){return'<button class=task>'+esc(s)+'</button>'}).join('')+
+               '</div><p class=footer>'+esc(x.footer)+'</div>')
+      $d.on('click','.task',function(e){i=100+$(e.target).index();$d.dialog('close')})
+        .dialog({modal:1,title:x.title,close:function(){ide.emit('TaskDialogResult',{index:i,token:x.token})},
+                 buttons:x.options.map(function(s){return{text:s,click:function(e){
+                   i=$(e.target).closest('.ui-button').index();$d.dialog('close')
+                 }}})})
+    },
     ReplyTreeList:function(x){ide.wse.replyTreeList(x)},
     StatusOutput:function(x){$('.sbar').text(x.text)},
     UnknownRIDECommand:function(){}, // todo
