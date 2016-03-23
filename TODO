@@ -1,7 +1,7 @@
 Decision pending regarding initial handshake:
   * fix Identify message and/or redefine its semantics in docs/protocol.md
-  * remove the second part of the handshake (UsingProtocol=1), this may be in Bjørn's code
   * bump the first part of the handshake (SupportedProtocols=1 -> 2) and maybe format it as JSON (needs discussion)
+  * remove the second part of the handshake (UsingProtocol=1), this may be in Bjørn's code
   * don't send a ReplyConnect message
 
 Things to be done in the interpreter:
