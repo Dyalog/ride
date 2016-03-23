@@ -12,7 +12,7 @@ this.IDE=function(){
     '<div class=lbar-tip style=display:none><div class=lbar-tip-desc></div><pre class=lbar-tip-text></pre></div>'+
     '<div class=lbar-tip-triangle style=display:none></div>'+
     '<div class=ide>'+
-      '<div class="ui-layout-west wse"></div>'+
+      '<div class="ui-layout-west wse">Workspace Explorer</div>'+
       '<div class=ui-layout-center></div>'+
       '<div class=ui-layout-east ><ul></ul></div>'+
       '<div class=ui-layout-south><ul></ul></div>'+
@@ -185,6 +185,12 @@ this.IDE=function(){
   prefs.indent(function(x){eachWin(function(w){if(w.id){w.cm.setOption('smartIndent',x>=0);w.cm.setOption('indentUnit',x)}})})
   prefs.fold(function(x){eachWin(function(w){if(w.id){w.cm.setOption('foldGutter',!!x);w.updGutters()}})})
   prefs.matchBrackets(function(x){eachWin(function(w){w.cm.setOption('matchBrackets',!!x)})})
+  var updWSE=function(){
+    if(!prefs.wse()){ide.layout.close('west');return}
+    ide.layout.sizePane('west','20%');ide.layout.open('west')
+    ide.wse||(ide.wse=new wse.WSE($('.wse'),ide));ide.wse.refresh()
+  }
+  prefs.wse(updWSE);prefs.wse()&&setTimeout(updWSE,500)
   D.mac&&setTimeout(function(){ide.wins[0].focus()},500) // OSX is stealing our focus.  Let's steal it back!  Bug #5
 }
 this.IDE.prototype={
@@ -276,7 +282,4 @@ this.IDE.prototype={
     return r
   }
 }
-CodeMirror.commands.WSE=function(){
-  var ide=D.ide;ide.wse||(ide.wse=new wse.WSE($('.wse'),ide))
-  ide.layout.sizePane('west','20%');ide.layout.toggle('west');ide.wse.refresh()
-}
+CodeMirror.commands.WSE=function(){prefs.wse.toggle()}

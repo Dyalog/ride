@@ -27,6 +27,7 @@ var extraOpts={
   FLT:{checkBoxPref:prefs.floating  },
   WRP:{checkBoxPref:prefs.wrap      },
   TOP:{checkBoxPref:prefs.floatOnTop},
+  WSE:{checkBoxPref:prefs.wse       },
   THM:{items:['Classic','Redmond','Cupertino'].map(function(x,i){
     return{'':x,group:'themes',checked:prefs.theme()===x.toLowerCase(),action:function(){prefs.theme(x.toLowerCase())}}
   })}

@@ -46,6 +46,7 @@ D.prefs=this
   ['valueTips',          1], // value tips
   ['squiggleTips',       1],
   ['wrap',               0], // line wrapping in session
+  ['wse',                0], // show workspace explorer?
   ['zoom',               0],
   ['menu',
     '# see below for syntax'+
@@ -71,6 +72,7 @@ D.prefs=this
     '\n_View'+
     '\n  Show Language Bar        =LBR'+
     '\n  Show Status Bar          =SBR'+
+    '\n  Show Workspace Explorer  =WSE'+
     '\n  Floating Edit Windows    =FLT'+
     '\n  Editors on Top           =TOP {!browser}'+
     '\n  Line Wrapping in Session =WRP'+
@@ -98,7 +100,7 @@ D.prefs=this
     '\n# Syntax:'+
     '\n#   _x   access key, alt+x'+
     '\n#   =CMD command code; some are special:'+
-    '\n#          LBR FLT WRP TOP render as checkboxes'+
+    '\n#          LBR FLT WRP TOP WSE render as checkboxes'+
     '\n#          THM ("Theme") renders its own submenu'+
     '\n#   =http://example.com/  open a URL'+
     '\n#   {}   conditional display, a boolean expression'+
