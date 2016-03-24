@@ -18,8 +18,8 @@ The payload is usually a 2-element JSON array consisting of a command name and a
 The only exception are the first two messages that each side sends upon establishing a connection.
 These constitute the *handshake* and are not JSON-encoded.  Their payloads are:
 ```
-SupportedProtocols=1
-UsingProtocol=1
+SupportedProtocols=2
+UsingProtocol=2
 ```
 
 Messages are independent and after the handshake can be sent/received in any order. Some messages infer that the other
