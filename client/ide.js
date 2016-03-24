@@ -102,9 +102,9 @@ this.IDE=function(){
     },
     TaskDialog:function(x){
       var i=-1 // the result
-      var $d=$('<div class=task-dialog><p>'+esc(x.text)+'<p class=subtext>'+esc(x.subtext)+'<div>'+
+      var $d=$('<div class=task-dialog><p>'+esc(x.text||'')+'<p class=subtext>'+esc(x.subtext||'')+'<div>'+
                  x.buttonText.map(function(s){return'<button class=task>'+esc(s)+'</button>'}).join('')+
-               '</div><p class=footer>'+esc(x.footer)+'</div>')
+               '</div><p class=footer>'+esc(x.footer||'')+'</div>')
       $d.on('click','.task',function(e){i=100+$(e.target).index();$d.dialog('close')})
         .dialog({modal:1,title:x.title,close:function(){ide.emit('ReplyTaskDialog',{index:i,token:x.token})},
                  buttons:x.options.map(function(s){return{text:s,click:function(e){
