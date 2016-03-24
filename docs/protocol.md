@@ -356,28 +356,42 @@ This information can be used to syntax-highlight the tooltip.
 
 #Dialogs
 The interpreter can ask RIDE to interact with the user by showing a modal dialog.
-Two types of dialogs are supported:
+Several kinds of dialogs are supported:
 
-##Multiple choice
-<a name=ShowDialog></a><a name=DialogResult></a>
+##Options dialog
+<a name=OptionsDialog></a><a name=ReplyOptionsDialog></a>
 ```json
-["ShowDialog",{"title":"","text":"","type":1,"options":["Yes","No","Cancel"],"token":123}] // Interpreter -> RIDE
-["DialogResult",{"index":0,"token":123}] // RIDE -> Interpreter
+["OptionsDialog",{"title":"","text":"","type":1,"options":["Yes","No","Cancel"],"token":123}] // Interpreter -> RIDE
+["ReplyOptionsDialog",{"index":0,"token":123}] // RIDE -> Interpreter
 ```
 Constants for type: `1` info, `2` warning, `3` error.
 
+:red_circle: "type" is not supported in RIDE
+
 If the user closes the dialog without choosing an option, RIDE responds with an `index` of `-1`.
 
-:red_circle: "type" is not supported
-
-:red_circle: Rename this to `ShowMultipleChoiceDialog`/`MultipleChoiceDialogResult` for symmetry with `StringInput`?
-
-##String input
-<a name=ShowStringInputDialog></a><a name=StringInputDialogResult></a>
+##String dialog
+<a name=StringDialog></a><a name=ReplyStringDialog></a>
 ```json
-["ShowStringInputDialog",{"title":"Name","text":"Please enter a name:","initialValue":"abc","defaultValue":null,"token":123}] // Interpreter -> RIDE
-["StringInputDialogResult",{"value":"abcd","token":123}] // RIDE -> Interpreter
+["StringDialog",{"title":"Name","text":"Please enter a name:","initialValue":"abc","defaultValue":null,"token":123}] // Interpreter -> RIDE
+["ReplyStringDialog",{"value":"abcd","token":123}] // RIDE -> Interpreter
 ```
+
+##Task dialog
+A "task dialog" shows two sets of buttons -- vertically aligned `buttonText` and below them the horizontally aligned
+`options`.
+```json
+["TaskDialog",{"title":"Save document","text":"Save document options",
+               "subtext":"Do you want to save the changes to the document?",
+               "buttonText":["Save in XML base format","Save in binary format"],
+               "options":["No","Cancel"],
+               "footer":"Note: If you don't choose to save, your changes will be lost"}] // Interpreter -> RIDE
+["ReplyTaskDialog",{"index":"101","token":123}] // RIDE -> Interpreter
+```
+In the response `index` can be:
+* `100+i` where `i` is the index of a `buttonText` button
+* the index of an `options` button
+* `-1` if the user closes the dialog
 
 #Other
 <a name=ShowHTML></a>
