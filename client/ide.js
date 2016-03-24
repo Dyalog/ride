@@ -198,7 +198,7 @@ this.IDE=function(){
   prefs.matchBrackets(function(x){eachWin(function(w){w.cm.setOption('matchBrackets',!!x)})})
   var updWSE=function(){
     if(!prefs.wse()){ide.layout.close('west');return}
-    ide.layout.sizePane('west','20%');ide.layout.open('west')
+    ide.layout.sizePane('west',180);ide.layout.open('west')
     ide.wse||(ide.wse=new wse.WSE($('.wse'),ide));ide.wse.refresh()
   }
   prefs.wse(updWSE);prefs.wse()&&setTimeout(updWSE,500)

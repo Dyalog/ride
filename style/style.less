@@ -143,9 +143,10 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 #vtip-triangle.inv{border-width:0 6px 6px 6px;margin-top:-6px;bottom:auto}
 #vtip-rect{position:absolute;border:dotted transparent 2px;margin:-1px}
 
-// resizer:splitting line between session and editor/tracer
+// splitting lines between session and editor,tracer,wsexplorer
 .ui-layout-resizer{.bg}
-.ui-layout-resizer-east{border-left:solid @light 1px;border-right:solid @dark 1px;padding:2px 0 !important;margin-top:-1px !important}
+.ui-layout-resizer-east,.ui-layout-resizer-west
+  {border-left:solid @light 1px;border-right:solid @dark 1px;padding:2px 0 !important;margin-top:-1px !important}
 .ui-layout-resizer-south,.ui-layout-resizer-north{border-top:solid @light 1px;border-bottom:solid #888 1px}
 .ui-layout-resizer:hover .ui-layout-toggler{background:#ace}
 
@@ -372,7 +373,7 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
   background:linear-gradient(90deg,transparent 0%,blue 50%,transparent 100%)
 }
 
-.wse{text-align:left;background-color:#fff!important}
+.wse{.tt;text-align:left;background-color:#fff!important}
 
 #demo-keys{
   position:fixed;top:10px;right:10px;
