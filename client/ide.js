@@ -83,30 +83,30 @@ this.IDE=function(){
     },
     OpenWindow:ide.openWindow.bind(ide),
     ShowHTML:ide.showHTML.bind(ide),
-    ShowDialog:function(x){
+    OptionsDialog:function(x){
       var i=-1;function f(e){i=$(e.target).closest('.ui-button').index();$(this).dialog('close')} // i:clicked index
       $('<p>').text(typeof x.text==='string'?x.text:x.text.join('\n')).dialog({ // todo: clean up after transition to json protocol
         modal:1,title:x.title,buttons:x.options.map(function(s){return{text:s,click:f}}),
-        close:function(){ide.emit('DialogResult',{index:i,token:x.token})}
+        close:function(){ide.emit('ReplyOptionsDialog',{index:i,token:x.token})}
       })
     },
-    ShowStringInputDialog:function(x){
+    StringDialog:function(x){
       var ok,$i=$('<input>').val(x.initialValue||'')
       $('<p>').text(x.text||'').append('<br>').append($i).dialog({
         modal:1,title:x.title,buttons:[
           {html:'<u>O</u>K'    ,click:function(){ok=1;$(this).dialog('close')}},
           {html:'<u>C</u>ancel',click:function(){     $(this).dialog('close')}}
         ],
-        close:function(){ide.emit('StringInputDialogResult',{value:ok?$i.val():x.defaultValue||null,token:x.token})}
+        close:function(){ide.emit('ReplyStringDialog',{value:ok?$i.val():x.defaultValue||null,token:x.token})}
       })
     },
-    ShowTaskDialog:function(x){
+    TaskDialog:function(x){
       var i=-1 // the result
       var $d=$('<div class=task-dialog><p>'+esc(x.text)+'<p class=subtext>'+esc(x.subtext)+'<div>'+
-                 x.buttontext.map(function(s){return'<button class=task>'+esc(s)+'</button>'}).join('')+
+                 x.buttonText.map(function(s){return'<button class=task>'+esc(s)+'</button>'}).join('')+
                '</div><p class=footer>'+esc(x.footer)+'</div>')
       $d.on('click','.task',function(e){i=100+$(e.target).index();$d.dialog('close')})
-        .dialog({modal:1,title:x.title,close:function(){ide.emit('TaskDialogResult',{index:i,token:x.token})},
+        .dialog({modal:1,title:x.title,close:function(){ide.emit('ReplyTaskDialog',{index:i,token:x.token})},
                  buttons:x.options.map(function(s){return{text:s,click:function(e){
                    i=$(e.target).closest('.ui-button').index();$d.dialog('close')
                  }}})})
