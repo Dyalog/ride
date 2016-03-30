@@ -52,27 +52,24 @@ $.extend(CM.commands,{
       :(x=e.requestFullscreen||e.webkitRequestFullscreen||e.mozRequestFullScreen||e.msRequestFullscreen)&&x.apply(e)
   },
   EXP:function(cm){
-    var sels=cm.listSelections()
-    if(sels.length===1){
-      var ll=cm.lastLine(), u=cm.getCursor(), l=u.line
-      var cmp=function(x,y){return(x[0]-y[0])||(x[1]-y[1])} // compare two pairs of numbers
-      var ranges=[ // candidates for selection
-        [[l,0],[l, cm.getLine(l) .length]], // current line
-        [[0,0],[ll,cm.getLine(ll).length]]  // whole document
-      ]
-      var t0=cm.getTokenAt(u), t1=cm.getTokenAt({line:u.line,ch:u.ch+1}), t=t0||t1
-      if(t0&&t1&&(t0.start!==t1.start||t0.end!==t1.end)){ // we must decide which token looks more important
-        var lr=[t0,t1].map(function(ti){return(ti.type||'').replace(/^.*\bapl-(\w*)$/,'$1')}) // lft and rgt token type
-        var I={'var':5,glb:5, quad:4, str:3, num:2, kw:1, par:-1,sqbr:-1,semi:-1,dfn:-1, '':-2} // importance table
-        t=(I[lr[0]]||0)>(I[lr[1]]||0)?t0:t1 // t is the more important of t0 t1
-      }
-      t&&ranges.push([[l,t.start],[l,t.end]]) // current token
-      ranges.sort(function(x,y){return cmp(y[0],x[0])||cmp(x[1],y[1])}) // inside-out order: desc beginnings, then asc ends
-      var sel=sels[0], s=[[sel.anchor.line,sel.anchor.ch],[sel.head.line,sel.head.ch]].sort(cmp), Pos=CM.Pos
-      for(var i=0;i<ranges.length;i++){
-        var r=ranges[i], d0=cmp(r[0],s[0]), d1=cmp(r[1],s[1])
-        if(d0<=0&&0<=d1&&(d0||d1)){cm.setSelection(Pos(r[0][0],r[0][1]),Pos(r[1][0],r[1][1]));break}
-      }
+    var sels=cm.listSelections(),ll=cm.lastLine(),u=cm.getCursor(),l=u.line;if(sels.length!==1)return
+    var cmp=function(x,y){return(x[0]-y[0])||(x[1]-y[1])} // compare two pairs of numbers
+    var ranges=[ // candidates for selection (more will be added later)
+      [[l,0],[l, cm.getLine(l) .length]], // current line
+      [[0,0],[ll,cm.getLine(ll).length]]  // whole document
+    ]
+    var t0=cm.getTokenAt(u),t1=cm.getTokenAt({line:u.line,ch:u.ch+1}),t=t0||t1
+    if(t0&&t1&&(t0.start!==t1.start||t0.end!==t1.end)){ // we must decide which token looks more important
+      var lr=[t0,t1].map(function(ti){return(ti.type||'').replace(/^.*\bapl-(\w*)$/,'$1')}) // lft and rgt token type
+      var I={'var':5,glb:5, quad:4, str:3, num:2, kw:1, par:-1,sqbr:-1,semi:-1,dfn:-1, '':-2} // importance table
+      t=(I[lr[0]]||0)>(I[lr[1]]||0)?t0:t1 // t is the more important of t0 t1
+    }
+    t&&ranges.push([[l,t.start],[l,t.end]]) // current token
+    ranges.sort(function(x,y){return cmp(y[0],x[0])||cmp(x[1],y[1])}) // inside-out order: desc beginnings, then asc ends
+    var sel=sels[0],s=[[sel.anchor.line,sel.anchor.ch],[sel.head.line,sel.head.ch]].sort(cmp)
+    for(var i=0;i<ranges.length;i++){
+      var r=ranges[i],d0=cmp(r[0],s[0]),d1=cmp(r[1],s[1])
+      if(d0<=0&&0<=d1&&(d0||d1)){cm.setSelection(CM.Pos(r[0][0],r[0][1]),CM.Pos(r[1][0],r[1][1]));break}
     }
   },
   HLP:function(cm){
