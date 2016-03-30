@@ -47,6 +47,7 @@ D.prefs=this
   ['squiggleTips',       1],
   ['wrap',               0], // line wrapping in session
   ['wse',                0], // show workspace explorer?
+  ['wseWidth',           200], // workspace explorer width in pixels
   ['zoom',               0],
   ['menu',
     '# see below for syntax'+

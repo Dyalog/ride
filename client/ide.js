@@ -172,9 +172,10 @@ this.IDE=function(){
     south:{spacing_closed:0,resizable:1,togglerLength_open:0,size:'0%'},
     center:{onresize:function(){
       for(var k in ide.wins)ide.wins[k].updSize()
-      var st=ide.layout.state
-      var w=st.east .innerWidth ;!st.east .isClosed&&w>1&&prefs.editorWidth (w)
-      var h=st.south.innerHeight;!st.south.isClosed&&h>1&&prefs.tracerHeight(h)
+      var h=ide.layout.state,d
+      d=h.west .innerWidth ;!h.west .isClosed&&d>1&&prefs.wseWidth    (d)
+      d=h.east .innerWidth ;!h.east .isClosed&&d>1&&prefs.editorWidth (d)
+      d=h.south.innerHeight;!h.south.isClosed&&d>1&&prefs.tracerHeight(d)
     }}
   })
   function updTopBtm(){
@@ -198,7 +199,7 @@ this.IDE=function(){
   prefs.matchBrackets(function(x){eachWin(function(w){w.cm.setOption('matchBrackets',!!x)})})
   var updWSE=function(){
     if(!prefs.wse()){ide.layout.close('west');return}
-    ide.layout.sizePane('west',180);ide.layout.open('west')
+    ide.layout.sizePane('west',prefs.wseWidth());ide.layout.open('west')
     ide.wse||(ide.wse=new wse.WSE($('.wse'),ide));ide.wse.refresh()
   }
   prefs.wse(updWSE);prefs.wse()&&setTimeout(updWSE,500)
