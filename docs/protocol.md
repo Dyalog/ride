@@ -11,7 +11,7 @@ UTF-8-encoded payload:
 └───────────────────┴───────────────────┴─────~─────┘
 ```
 *Total length* is 8 + the payload's length in bytes.
-The payload is usually a 2-element JSON array consisting of a command name and arguments as key/value pairs:
+The payload is almost always a 2-element JSON array consisting of a command name and arguments as key/value pairs:
 ```json
 ["CommandName",{"key1":"value1","key2":222,"key3":[3,4,5]}]
 ```
@@ -25,7 +25,7 @@ UsingProtocol=2
 Messages are independent and after the handshake can be sent/received in any order. Some messages infer that the other
 end will send a reply, but that reply may not be the next message to be received, or even ever be sent.
 
-If the receiver of a message does not recognise it, it should not take any action apart from optionally responding with
+If the receiver of a message does not recognise it, it should respond with
 ```json
 ["UnknownCommand",{"name":"Xyz"}]
 ```
@@ -77,8 +77,8 @@ Any echoed input or interpreter output or the initial content of the session are
 ["EchoInput",{"input":"      1 2 3+4 5 6\n"}] // Interpreter -> RIDE
 ["AppendSessionOutput",{"result":["5 7 9"]}]  // Interpreter -> RIDE
 ```
-These two perform essentially the same task except that `AppendSessionOutput` needs extra `"\n"`-s to be appended to
-each element of `result`.
+These two perform essentially the same task except that `AppendSessionOutput` doesn't have trailing `"\n"`-s at the end
+of each element of `result`.
 
 The interpreter informs RIDE about changes in its ability to accept user input with
 <a name=SetPromptType></a>
@@ -101,7 +101,7 @@ ability to accept input at any time through
 ["ReplyCanSessionAcceptInput",{"canAcceptInput":true}] // Interpreter -> RIDE
 ```
 
-:red_circle: RIDE2+ doesn't use these.
+:red_circle: RIDE doesn't use these.
 
 When the user presses `<ER>` (Enter) or `<TC>` (Ctrl-Enter), RIDE sends
 <a name=Execute></a>
@@ -153,8 +153,7 @@ The interpreter will parse that and may respond later with one of
 It may also send these in response to [`)ed
 name`](http://help.dyalog.com/14.1/Content/Language/System%20Commands/ed.htm) or
 [`⎕ed'name'`](http://help.dyalog.com/14.1/Content/Language/System%20Functions/ed.htm), as well as when tracing into an
-object that is not
-currently being traced.
+object that is not currently being traced.
 
 Constants for `entityType`: `1` defined function, `2` simple character array, `4` simple numeric array, `8` mixed simple
 array, `16` nested array, `32` [`⎕OR`](http://help.dyalog.com/14.1/Content/Language/System%20Functions/or.htm) object,
@@ -225,7 +224,7 @@ Request the current line in a trace window be moved back.
 ```
 Request it clears all breakpoints, stops, and monitors for a trace window.
 
-:red_circle: Not used in RIDE2+
+:red_circle: Not used in RIDE
 
 <a name=Continue></a>
 ```json
@@ -245,7 +244,7 @@ Request resumption of tracing an APL program. (White arrow in ODE)
 ```json
 ["ContinueAllThreads",{"win":123}] // RIDE -> Interpreter
 ```
-:red_circle: Not used in RIDE2+.  The green arrow actually corresponds to [`RestartThreads`](#RestartThreads).
+:red_circle: Not used in RIDE.  The green arrow actually corresponds to [`RestartThreads`](#RestartThreads).
 
 Request resumption of all threads. (Green arrow in ODE)
 
@@ -284,7 +283,7 @@ Request the current line in a trace window is executed. (Step into)
 ```json
 ["UnpauseThreads",{"win":123}] // RIDE -> Interpreter
 ```
-:red_circle: Not used in RIDE2+
+:red_circle: Not used in RIDE
 
 Request all suspended threads are resumed from their current position.
 
@@ -297,7 +296,7 @@ Request all suspended threads are resumed from their current position.
 
 Request information about the current stack.
 
-:red_circle: Not used in RIDE3 yet.
+:red_circle: Not used in RIDE yet.
 
 #Interrupts
 APL supports two kinds of interrupts
@@ -408,7 +407,7 @@ See
 ```
 Constants for `flags`: `1` information message, `2` error message, `4` warning message
 
-:red_circle: RIDE3 doesn't support `flags`.
+:red_circle: RIDE doesn't support `flags`.
 
 Status information that should be displayed to the user.
 
@@ -424,7 +423,7 @@ RIDE can use the display name as the title of its application window.
 ```
 Sent from any peer to shut down the connection cleanly.
 
-:red_circle: This is pointless -Nick
+:red_circle: Why do we need "Disconnect"?  Why not just close the TCP connection?  That shouldn't be any less "clean".
 
 #Workspace explorer
 Optionally, RIDE can display a tree representing session content.
