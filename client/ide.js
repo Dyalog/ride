@@ -253,7 +253,7 @@ this.IDE.prototype={
     var w=ee.token, done, editorOpts={id:w,name:ee.name,tracer:ee['debugger'],emit:this.emit.bind(this)}
     if(prefs.floating()&&!D.floating&&!this.dead){
       var p=ee['debugger']?prefs.posTracer():prefs.posEditor()
-      if(!p[4]){var delta=32*(ee.token-1);p[0]+=delta;p[1]+=delta}
+      if(!p[4]){var d=ee.token-1;p[0]+=d*(process.env.RIDE_XOFFSET||32);p[1]+=d*(process.env.RIDE_YOFFSET||32)}
       var ph={x:p[0],y:p[1],width:p[2],height:p[3]}
       var url='ed.html?win='+w+'&x='+p[0]+'&y='+p[1]+'&width='+p[2]+
               '&height='+p[3]+'&maximized='+(p[4]||0)+'&token='+w+'&tracer='+(+!!ee['debugger'])
