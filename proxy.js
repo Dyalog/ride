@@ -43,14 +43,14 @@ function initInterpreterConn(){
       var m=''+q.slice(8,n);q=q.slice(n);log('recv '+trunc(m))
       if(/^<ReplyUnknownRIDECommand>/.test(m)&&!old){
         old=1;toBrowser('*error',{msg:'This version of RIDE cannot talk to interpreters older than v15.0'})
-      }else if(m[0]==='['){ // ignore handshake ("SupportedProtocols=1" and "UsingProtocol=1")
+      }else if(m[0]==='['){ // ignore handshake ("SupportedProtocols=" and "UsingProtocol=")
         var u=JSON.parse(m);skt&&skt.emit(u[0],u[1])
       }
     }
   })
   clt.on('error',function(e){toBrowser('*error',{msg:''+e});clt=null})
   clt.on('end',function(){log('interpreter diconnected');toBrowser('*disconnected');clt=null})
-  send('SupportedProtocols=1');send('UsingProtocol=1')
+  send('SupportedProtocols=2');send('UsingProtocol=2')
   cmd('Identify',{identity:1});cmd('Connect',{remoteId:2});cmd('GetWindowLayout')
 }
 var handlers={
