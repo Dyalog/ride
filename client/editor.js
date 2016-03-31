@@ -208,7 +208,7 @@ this.Editor.prototype={
     else{cm.setOption('mode','apl');if(prefs.indentOnOpen()){cm.execCommand('selectAll');cm.execCommand('indentAuto')}}
     ed.setReadOnly(ee.readOnly||ee['debugger'])
     var line=ee.currentRow,col=ee.currentColumn||0
-    if(line===0&&col===0&&ee.text.indexOf('\n')<0)col=ee.text.length
+    if(line===0&&col===0&&ee.text.length===1)col=ee.text[0].length
     cm.setCursor(line,col);cm.scrollIntoView(null,ed.$e.height()/2)
     ed.oStop=(ee.stop||[]).slice(0).sort(function(x,y){return x-y})
     for(var k=0;k<ed.oStop.length;k++)cm.setGutterMarker(ed.oStop[k],'breakpoints',ed.createBPEl())
