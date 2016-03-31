@@ -53,24 +53,37 @@ $.extend(CM.commands,{
   },
   EXP:function(cm){
     var sels=cm.listSelections(),ll=cm.lastLine(),u=cm.getCursor(),l=u.line;if(sels.length!==1)return
-    var cmp=function(x,y){return(x[0]-y[0])||(x[1]-y[1])} // compare two pairs of numbers
-    var ranges=[ // candidates for selection (more will be added later)
-      [[l,0],[l, cm.getLine(l) .length]], // current line
-      [[0,0],[ll,cm.getLine(ll).length]]  // whole document
+    var ranges=[ // candidates for selection as [line0,ch0,line1,ch1], more candidates will be added later
+      [l,0,l, cm.getLine(l) .length], // current line
+      [0,0,ll,cm.getLine(ll).length]  // whole document
     ]
-    var t0=cm.getTokenAt(u),t1=cm.getTokenAt({line:u.line,ch:u.ch+1}),t=t0||t1
+    // choose token on the left or right based on how important it looks, and add it to "ranges"
+    var t0=cm.getTokenAt(u),t1=cm.getTokenAt({line:u.line,ch:u.ch+1}),tu=t0||t1
     if(t0&&t1&&(t0.start!==t1.start||t0.end!==t1.end)){ // we must decide which token looks more important
       var lr=[t0,t1].map(function(ti){return(ti.type||'').replace(/^.*\bapl-(\w*)$/,'$1')}) // lft and rgt token type
       var I={'var':5,glb:5, quad:4, str:3, num:2, kw:1, par:-1,sqbr:-1,semi:-1,dfn:-1, '':-2} // importance table
-      t=(I[lr[0]]||0)>(I[lr[1]]||0)?t0:t1 // t is the more important of t0 t1
+      tu=(I[lr[0]]||0)>(I[lr[1]]||0)?t0:t1 // tu is the more important of t0 t1
     }
-    t&&ranges.push([[l,t.start],[l,t.end]]) // current token
-    ranges.sort(function(x,y){return cmp(y[0],x[0])||cmp(x[1],y[1])}) // inside-out order: desc beginnings, then asc ends
-    var sel=sels[0],s=[[sel.anchor.line,sel.anchor.ch],[sel.head.line,sel.head.ch]].sort(cmp)
-    for(var i=0;i<ranges.length;i++){
-      var r=ranges[i],d0=cmp(r[0],s[0]),d1=cmp(r[1],s[1])
-      if(d0<=0&&0<=d1&&(d0||d1)){cm.setSelection(CM.Pos(r[0][0],r[0][1]),CM.Pos(r[1][0],r[1][1]));break}
+    tu&&ranges.push([l,tu.start,l,tu.end])
+    // look for surrounding pairs of balanced brackets and add them to "ranges"
+    var ts=cm.getLineTokens(l),tl=[],tr=[] // tl,tr: tokens for closest op. and cl. brackets, indexed by stack height
+    for(var i=0;i<ts.length;i++){
+      var t=ts[i],h=(t.state.a||[]).length // stack height
+      if(t.end  <=u.ch&&'([{'.indexOf(t.string)>=0)tl[h]=t
+      if(t.start>=u.ch&&')]}'.indexOf(t.string)>=0)tr[h+1]=tr[h+1]||t
     }
+    var mh=(tu.state.a||[]).length // stack height at current token
+    for(var h=Math.min(mh,Math.min(tl.length,tr.length)-1);h>=0;h--){
+      tl[h]&&tr[h]&&ranges.push([l,tl[h].end,l,tr[h].start],[l,tl[h].start,l,tr[h].end])
+    }
+    var sA=sels[0].anchor,sH=sels[0].head,s=[sA.line,sA.ch,sH.line,sH.ch]
+    if((s[0]-s[2]||s[1]-s[3])>0)s=[s[2],s[3],s[0],s[1]] // anchor and head could be in reverse order
+    var b=ranges[0] // best candidate for new selection
+    for(var i=0;i<ranges.length;i++){ // choose candidate that wraps tightest around current selection
+      var r=ranges[i],d0=r[0]-s[0]||r[1]-s[1]||0,d1=r[2]-s[2]||r[3]-s[3]||0
+      if(d0<=0&&0<=d1&&(d0||d1)&&((b[0]-r[0]||b[1]-r[1]||0)<=0||0<=(b[2]-r[2]||b[3]-r[3]||0)))b=r
+    }
+    cm.setSelection(CM.Pos(b[0],b[1]),CM.Pos(b[2],b[3]))
   },
   HLP:function(cm){
     var c=cm.getCursor(),s=cm.getLine(c.line).toLowerCase(),h=helpurls,u // u: the URL
