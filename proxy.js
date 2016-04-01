@@ -50,7 +50,7 @@ function initInterpreterConn(){
   })
   clt.on('error',function(e){toBrowser('*error',{msg:''+e});clt=null})
   clt.on('end',function(){log('interpreter diconnected');toBrowser('*disconnected');clt=null})
-  send('SupportedProtocols=2');send('UsingProtocol=2')
+  var p=process.env.RIDE_PROTOCOL||2;send('SupportedProtocols='+p);send('UsingProtocol='+p)
   cmd('Identify',{identity:1});cmd('Connect',{remoteId:2});cmd('GetWindowLayout')
 }
 var handlers={
