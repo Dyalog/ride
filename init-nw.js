@@ -101,7 +101,6 @@
       var f=window.onbeforeunload;f&&f();D.floating||ps.nextTick(function(){ps.exit(0)})
     }
   })
-  D.forceCloseNWWindow=function(){nww.close(true)} // used to close floating windows after session is dead
   opener&&(D.ide=opener.D.ide)
   var items=[].concat(
     ['Cut','Copy','Paste'].map(function(x){return{label:x,click:function(){document.execCommand(x)}}}),

@@ -384,7 +384,7 @@ this.Editor.prototype={
   },
   onbeforeunload:function(){ // called when the user presses [X] on the OS window
     var ed=this
-    if(ed.ide.dead){var f=D.forceCloseNWWindow;f&&f()}
+    if(ed.ide.dead){D.nww&&D.nww.close(true)} // force close window
     else if(ed.tc||ed.cm.getValue()===ed.oText&&''+ed.getStops()===''+ed.oStop){ed.EP(ed.cm)}
     else if(!ed.dlg){
       window.focus()
