@@ -6,7 +6,7 @@ D.addSyntaxGroups=function(x){G=G.concat(x);H={};for(var i=0;i<G.length;i++)H[G[
 D.addSyntaxGroups([
   // t: token type, a short key for storing customisations in localStorage
   // s: string to display in the UI
-  // c: css selector -- will be prefixed with "#col-cm" or ".ride-win" unless .skipCSSPrefix is true
+  // c: css selector -- will be prefixed with "#col-cm" or ".ride-win" unless /*noprefix*/ is present
   // ctrls: what UI controls should be shown or hidden for this group (other than the default ones)
   {s:'assignment'      ,t:'asgn',c:'.cm-apl-asgn'},
   {s:'bracket'         ,t:'sqbr',c:'.cm-apl-sqbr'},
@@ -32,7 +32,7 @@ D.addSyntaxGroups([
   {s:'monadic operator',t:'op1' ,c:'.cm-apl-op1' },
   {s:'namespace'       ,t:'ns'  ,c:'.cm-apl-ns'  },
   {s:'name'            ,t:'var' ,c:'.cm-apl-var' },
-  {s:'normal'          ,t:'norm',c:'.ride-win .cm-s-default,.CodeMirror-gutters,.wse.jstree-default',skipCSSPrefix:1},
+  {s:'normal'          ,t:'norm',c:'.cm-s-default,.CodeMirror-gutters,/*noprefix*/#wse'},
   {s:'number'          ,t:'num' ,c:'.cm-apl-num' },
   {s:'parenthesis'     ,t:'par' ,c:'.cm-apl-par' },
   {s:'quad name'       ,t:'quad',c:'.cm-apl-quad'},
@@ -44,8 +44,8 @@ D.addSyntaxGroups([
   {s:'tracer'          ,t:'tc'  ,c:'.tracer .CodeMirror,.tracer .CodeMirror .CodeMirror-gutter-wrapper'},
   {s:'tradfn'          ,t:'trad',c:'.cm-apl-trad'},
   {s:'user command'    ,t:'ucmd',c:'.cm-apl-ucmd'},
-  {s:'value tip target',t:'vtt' ,c:'#vtip-rect',ctrls:{bc:1,fg:0,BIU:0},skipCSSPrefix:1},
-  {s:'value tip'       ,t:'vtip',c:'#vtip-balloon,#vtip-triangle',ctrls:{bc:1},skipCSSPrefix:1},
+  {s:'value tip target',t:'vtt' ,c:'/*noprefix*/#vtip-rect',ctrls:{bc:1,fg:0,BIU:0}},
+  {s:'value tip'       ,t:'vtip',c:'/*noprefix*/#vtip-balloon,/*noprefix*/#vtip-triangle',ctrls:{bc:1}},
   {s:'zilde'           ,t:'zld' ,c:'.cm-apl-zld' }
 ])
 // Colour schemes have two representations:
@@ -102,9 +102,9 @@ var scm     // the active scheme object
 var $cm,cm  // DOM element and CodeMirror instance for displaying sample code
 var sel     // the selected group's token type (.t)
 function renderCSS(scm,isSample){
-  var rp=isSample?'#col-cm':'.ride-win' // css rule prefix, ignored when .skipCSSPrefix is true
+  var rp=isSample?'#col-cm':'.ride-win' // css rule prefix, ignored when there's a "/*noprefix*/"
   return G.map(function(g){var h=scm[g.t];return!h?'':
-    g.c.split(',').map(function(x){return!g.skipCSSPrefix?rp+' '+x:isSample?'':x}).join(',')+'{'+
+    g.c.split(',').map(function(x){return!/^\/\*noprefix\*\//.test(x)?rp+' '+x:isSample?'#nonexistent':x}).join(',')+'{'+
       (h.fg?'color:'+expandRGB(h.fg)+';'           :'')+
       (h.bg?'background-color:'+expandRGB(h.bg)+';':'')+
       (h.B ?'font-weight:bold;'                    :'')+

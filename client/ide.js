@@ -12,7 +12,7 @@ this.IDE=function(){
     '<div class=lbar-tip style=display:none><div class=lbar-tip-desc></div><pre class=lbar-tip-text></pre></div>'+
     '<div class=lbar-tip-triangle style=display:none></div>'+
     '<div class=ide>'+
-      '<div class="ui-layout-west wse">Workspace Explorer</div>'+
+      '<div id=wse class="ui-layout-west wse">Workspace Explorer</div>'+
       '<div class=ui-layout-center></div>'+
       '<div class=ui-layout-east ><ul></ul></div>'+
       '<div class=ui-layout-south><ul></ul></div>'+
