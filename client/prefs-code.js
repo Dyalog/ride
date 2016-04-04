@@ -16,7 +16,7 @@ this.init=function($e){
       '<p><label><input id=code-ac   type=checkbox>Autocom<u>p</u>letion</label> <label>a<u>f</u>ter <input id=code-acd size=5>ms</label>'+
       '<p><label><input id=code-fold type=checkbox>Co<u>d</u>e folding (outlining)</label>'+
       '<p><label><input id=code-vt   type=checkbox>Show <u>v</u>alue tips</label>'+
-      '<p><label><input id=code-sqt  type=checkbox>Show tips for s<u>q</u>uiggles</label>'+
+      '<p><label><input id=code-sqt  type=checkbox>Show tips for <u>g</u>lyphs</label>'+
     '</div>'
   $('[id^=code-]',$e).each(function(){h[this.id.replace(/^code-/,'')]=this})
   $(h.ai).add(h.aim)
