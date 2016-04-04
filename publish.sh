@@ -33,7 +33,7 @@ for DIR in `ls build/${APP_NAME}`; do
       ;;
   esac
 
-  ZIPFILE="ride2-${VERSION}-${OSNAME}.zip"
+  ZIPFILE="ride-${VERSION}-${OSNAME}.zip"
   TMPZIP=/tmp/$ZIPFILE
 
   cd build/${APP_NAME}/$DIR
