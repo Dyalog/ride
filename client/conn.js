@@ -26,7 +26,7 @@ function updExes(){
   q.exe.prop('readonly',!!q.exes.val())
 }
 module.exports=function(){
-  document.title='RIDE - Connect'
+  D.setTitle('RIDE - Connect')
   $('#cn').show().css({position:'absolute',left:0,right:0,top:0,bottom:0}).splitter()
     .find('[id^=cn-]').each(function(){q[this.id.replace(/^cn-/,'').replace(/-/g,'_')]=$(this)})
   q.fav_cb.change(function(){
