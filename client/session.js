@@ -123,12 +123,5 @@ this.Session.prototype={
     var u=cm.getCursor(),s=cm.getLine(u.line)
     if(cm.somethingSelected()||this.promptType===4||/^ *$/.test(s.slice(0,u.ch))){cm.execCommand('indentMore');return}
     this.autocompleteWithTab=1;this.emit('GetAutocomplete',{line:s,pos:u.ch,token:0,win:0})
-  },
-  CLM:function(cm){
-    var sels=cm.listSelections()
-    for(var i=0;i<sels.length;i++){
-      var a=sels[i].anchor.line,b=sels[i].head.line,c;if(a>b){c=a;a=b;b=c}
-      for(var l=a;l<=b;l++){delete this.dirty[l];cm.removeLineClass(l,'background','modified')}
-    }
   }
 }
