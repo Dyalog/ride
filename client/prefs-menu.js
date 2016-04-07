@@ -23,7 +23,6 @@ this.validate=function(){
 }
 var extraOpts={
   LBR:{checkBoxPref:prefs.lbar      },
-  SBR:{checkBoxPref:prefs.sbar      },
   FLT:{checkBoxPref:prefs.floating  },
   WRP:{checkBoxPref:prefs.wrap      },
   TOP:{checkBoxPref:prefs.floatOnTop},

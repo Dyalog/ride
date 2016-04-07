@@ -38,7 +38,6 @@ D.prefs=this
   ['posTracer',          [32,32,1000,618]], // [x,y,w,h,maximized]
   ['prefixKey',          '`'],
   ['prefixMaps',         {}],// per-locale strings of pairs of characters -- diffs from the default map for that locale
-  ['sbar',               0], // status bar
   ['selectedExe',        ''],// Which interpreter is selected in dropdown in the Connect page?
   ['theme',              ''],
   ['title',              '{WSID}'], // a.k.a. "caption"
@@ -72,7 +71,6 @@ D.prefs=this
     '\n  Select All               =SA  {mac}'+
     '\n_View'+
     '\n  Show Language Bar        =LBR'+
-    '\n  Show Status Bar          =SBR'+
     '\n  Show Workspace Explorer  =WSE'+
     '\n  Floating Edit Windows    =FLT'+
     '\n  Editors on Top           =TOP {!browser}'+

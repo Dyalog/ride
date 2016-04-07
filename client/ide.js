@@ -16,8 +16,7 @@ this.IDE=function(){
       '<div class=ui-layout-center></div>'+
       '<div class=ui-layout-east ><ul></ul></div>'+
       '<div class=ui-layout-south><ul></ul></div>'+
-    '</div>'+
-    '<div class=sbar></div>'
+    '</div>'
   ide.$ide=$('.ide')
   ide.pending=[] // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.exec=function(l,tc){ // l:lines, tc:trace
@@ -112,7 +111,6 @@ this.IDE=function(){
                  }}})})
     },
     ReplyTreeList:function(x){ide.wse.replyTreeList(x)},
-    StatusOutput:function(x){$('.sbar').text(x.text)},
     UnknownRIDECommand:function(){}, // todo
     UnknownCommand:function(){}
   }
@@ -179,13 +177,12 @@ this.IDE=function(){
     }}
   })
   function updTopBtm(){
-    ide.$ide.css({top:(prefs.lbar()?$('.lbar').height():0)+(D.mac?5:22),bottom:prefs.sbar()?$('.sbar').height():0})
+    ide.$ide.css({top:(prefs.lbar()?$('.lbar').height():0)+(D.mac?5:22)})
     layout&&layout.resizeAll()
   }
-  $('.lbar').toggle(!!prefs.lbar());$('.sbar').toggle(!!prefs.sbar());updTopBtm();$(window).resize(updTopBtm)
+  $('.lbar').toggle(!!prefs.lbar());updTopBtm();$(window).resize(updTopBtm)
   layout.close('west');layout.close('east');layout.close('south');ide.wins[0].updSize()
   prefs.lbar(function(x){$('.lbar').toggle(!!x);updTopBtm()})
-  prefs.sbar(function(x){$('.sbar').toggle(!!x);updTopBtm()})
   try{
     D.installMenu(parseMenuDSL(prefs.menu()))
   }catch(e){

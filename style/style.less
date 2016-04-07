@@ -72,9 +72,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 // │        session         │             │
 // ├────────────────────────┤    editor   │
 // │        tracer          │             │
-// ├────────────────────────┴─────────────┤
-// │status bar                            │
-// └──────────────────────────────────────┘
+// └────────────────────────┴─────────────┘
 .ide{position:absolute;top:0;bottom:0;left:0;right:0} // "top" will be computed in JS
 body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hidden}
 .platform-mac .ide{top:0} // no menu inside window
@@ -130,9 +128,6 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 }
 .lbar-tip-desc{.tt;padding:0 0 0 30px;margin:0;font-weight:bold}
 .lbar-tip-text{.tt}
-
-// status bar
-.sbar{position:absolute;left:0;right:0;bottom:0;height:20px;line-height:20px;padding:0 2px}
 
 // value tips (also styled via Prefs>Colours)
 #vtip-balloon{.tt;position:absolute;border-radius:8px;border:solid black 1px;padding:7px;white-space:pre;

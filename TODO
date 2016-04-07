@@ -5,7 +5,7 @@ Decision pending regarding initial handshake:
   * don't send a ReplyConnect message
 
 Things to be done in the interpreter:
-  * implement StatusOutput, see W3 below
+  * status bar, see W3 below
   * in GetAutocomplete either rename "token" to "win" or don't require them to be the same
   * interpreter can start using Show(MultipleChoice)Dialog and ShowStringInputDialog for external files, see M5,S3 below
   * define and implement protocol messages for "show stack" and "show threads", see W1,W2 below
@@ -51,6 +51,7 @@ Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nic
   W2 show threads
   W3 status bar
         NN: done in RIDE, except for "flags" (warning, error, etc)
+        NN: it turns out no content is available for the status bar, therefore I removed it, see email 2016-04-07
   W4 drag/drop workspaces or source files to session
         NN: done, dropping of a .dws file now types )load ...
   W5 autopw support

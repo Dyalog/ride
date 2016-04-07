@@ -35,7 +35,6 @@ this.cmds=[
   ['QT', 'Quit (and lose changes)', ['Shift-Esc'],           1],
   ['RD', 'Reformat',                []],
   ['RP', 'Replace (in editors)',    [],                      1],
-  ['SBR','Toggle status bar',       []],
   ['SC', 'Search (in editors)',     [],                      1],
   ['SI', 'Strong interrupt',        []],
   ['TB', 'Tab between windows',     ['Ctrl-Tab'],            1],

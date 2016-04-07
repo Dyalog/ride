@@ -401,16 +401,6 @@ Request RIDE shows some HTML.
 See
 [`3500⌶`](http://help.dyalog.com/14.1/Content/Language/Primitive%20Operators/Send%20Text%20to%20RIDE-embedded%20Browser.htm).
 
-<a name=StatusOutput></a>
-```json
-["StatusOutput",{"text":"Bla-blah","flags":4}] // Interpreter -> RIDE
-```
-Constants for `flags`: `1` information message, `2` error message, `4` warning message
-
-:red_circle: RIDE doesn't support `flags`.
-
-Status information that should be displayed to the user.
-
 <a name=UpdateDisplayName></a>
 ```json
 ["UpdateDisplayName",{"displayName":"CLEAR WS"}] // Interpreter -> RIDE
