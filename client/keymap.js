@@ -144,7 +144,42 @@ $.extend(CM.commands,{
   JSC:function(){var w=D.nww;if(w){var t=w.showDevTools();t.x=w.x+w.width-w.dx;t.y=w.y-w.dy;t.height=w.height}},
   LOG:function(){D.showProtocolLog&&D.showProtocolLog()},
   MNU:function(){$('.menu .m-opener').eq(0).click()},
-  TIP:function(){var w=D.ide.focusedWin,u=w.cm.getCursor();w.vt.show({line:u.line,ch:Math.max(0,u.ch-1)},1)}
+  TIP:function(){var w=D.ide.focusedWin,u=w.cm.getCursor();w.vt.show({line:u.line,ch:Math.max(0,u.ch-1)},1)},
+  AO:function(cm){ // add comment
+    if(cm.somethingSelected()){
+      var a=cm.listSelections()
+      cm.replaceSelections(cm.getSelections().map(function(s){return s.replace(/^/gm,'⍝').replace(/\n⍝$/,'\n')}))
+      for(var i=0;i<a.length;i++){ // correct selection ends for inserted characters:
+        var r=a[i],d=r.head.line-r.anchor.line||r.head.ch-r.anchor.ch
+        d&&(d>0?r.head:r.anchor).ch++
+      }
+      cm.setSelections(a)
+    }else{
+      var l=cm.getCursor().line,p={line:l,ch:0};cm.replaceRange('⍝',p,p,'D');cm.setCursor({line:l,ch:1})
+    }
+  },
+  DO:function(cm){ // delete comment
+    if(cm.somethingSelected()){
+      var a=cm.listSelections(),u=cm.getSelections()
+      cm.replaceSelections(u.map(function(s){return s.replace(/^⍝/gm,'')}))
+      for(var i=0;i<a.length;i++){
+        var r=a[i],d=r.head.line-r.anchor.line||r.head.ch-r.anchor.ch // d:direction of selection
+        if(d&&u[i].split(/^/m).slice(-1)[0][0]==='⍝'){ // if the first character of last line in the selection is ⍝
+          (d>0?r.head:r.anchor).ch-- // ... shrink the selection end to compensate for it
+        }
+      }
+      cm.setSelections(a)
+    }else{
+      var l=cm.getCursor().line,s=cm.getLine(l)
+      cm.replaceRange(s.replace(/^( *)⍝/,'$1'),{line:l,ch:0},{line:l,ch:s.length},'D')
+      cm.setCursor({line:l,ch:0})
+    }
+  },
+  TGC:function(cm){ // toggle comment
+    var b=cm.somethingSelected()?cm.getSelections().join('\n').split('\n').every(function(y){return !y||y[0]==='⍝'})
+                                :cm.getLine(cm.getCursor().line)[0]==='⍝'
+    cm.execCommand(b?'DO':'AO')
+  }
 })
 
 function switchWindows(d){ // d: a step of either 1 or -1

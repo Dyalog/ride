@@ -291,41 +291,6 @@ this.Editor.prototype={
     })
     cm.setSelections(o)
   },
-  AO:function(cm){ // add comment
-    if(cm.somethingSelected()){
-      var a=cm.listSelections()
-      cm.replaceSelections(cm.getSelections().map(function(s){return s.replace(/^/gm,'⍝').replace(/\n⍝$/,'\n')}))
-      for(var i=0;i<a.length;i++){ // correct selection ends for inserted characters:
-        var r=a[i],d=r.head.line-r.anchor.line||r.head.ch-r.anchor.ch
-        d&&(d>0?r.head:r.anchor).ch++
-      }
-      cm.setSelections(a)
-    }else{
-      var l=cm.getCursor().line,p={line:l,ch:0};cm.replaceRange('⍝',p,p,'D');cm.setCursor({line:l,ch:1})
-    }
-  },
-  DO:function(cm){ // delete comment
-    if(cm.somethingSelected()){
-      var a=cm.listSelections(),u=cm.getSelections()
-      cm.replaceSelections(u.map(function(s){return s.replace(/^⍝/gm,'')}))
-      for(var i=0;i<a.length;i++){
-        var r=a[i],d=r.head.line-r.anchor.line||r.head.ch-r.anchor.ch // d:direction of selection
-        if(d&&u[i].split(/^/m).slice(-1)[0][0]==='⍝'){ // if the first character of last line in the selection is ⍝
-          (d>0?r.head:r.anchor).ch-- // ... shrink the selection end to compensate for it
-        }
-      }
-      cm.setSelections(a)
-    }else{
-      var l=cm.getCursor().line,s=cm.getLine(l)
-      cm.replaceRange(s.replace(/^( *)⍝/,'$1'),{line:l,ch:0},{line:l,ch:s.length},'D')
-      cm.setCursor({line:l,ch:0})
-    }
-  },
-  TGC:function(cm){ // toggle comment
-    var b=cm.somethingSelected()?cm.getSelections().join('\n').split('\n').every(function(y){return !y||y[0]==='⍝'})
-                                :cm.getLine(cm.getCursor().line)[0]==='⍝'
-    this[b?'DO':'AO'](cm)
-  },
   ER:function(cm){
     if(this.tc){this.emit('RunCurrentLine',{win:this.id});return}
     if(prefs.autoCloseBlocks()){
