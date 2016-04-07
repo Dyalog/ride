@@ -11,21 +11,21 @@ this.init=function(w){ // .init(w) gets called for every window w (session or ed
   //  ┌ ─ ─ ─ ─ ┐
   //   t o k e n     $r: rectangle around the token
   //  └ ─ ─ ─ ─ ┘
-  function cl(){i&&clearTimeout(i);$b&&$b.remove();$t&&$t.remove();$r&&$r.remove();i=p=$b=$t=$r=null} // clear everything
+  var cl=function(){i&&clearTimeout(i);$b&&$b.remove();$t&&$t.remove();$r&&$r.remove();i=p=$b=$t=$r=null} // clear all
   w.cm.on('cursorActivity',cl)
-  $(w.cm.display.wrapper).mouseout(cl).mousemove(function(e,p0){
-    cl();p0=p0||w.cm.coordsChar({left:e.clientX,top:e.clientY})
-    p0.outside||(i=setTimeout(function(){                                  // send a request (not too often)
+  var show=function(p0,force){ // p0:{line,ch}
+    cl();p0.outside||(i=setTimeout(function(){                                  // send a request (not too often)
       i=0;p=p0;var s=w.cm.getLine(p.line),c=s[p.ch]||' ',lbt=lbar.tips[c]
-      if(prefs.squiggleTips()&&lbt&&!(c==='⎕'&&/[áa-z]/i.test(s[p.ch+1]||''))){
+      if((force||prefs.squiggleTips())&&lbt&&!(c==='⎕'&&/[áa-z]/i.test(s[p.ch+1]||''))){
         rf({tip:lbt.join('\n\n').split('\n'),startCol:p.ch,endCol:p.ch+1}) // show tooltip from lbar
-      }else if(prefs.valueTips()&&/[^ \(\)\[\]\{\}':;]/.test(c)){
+      }else if((force||prefs.valueTips())&&/[^ \(\)\[\]\{\}':;]/.test(c)){
         w.emit('GetValueTip',{win:w.id,line:s,pos:p.ch,token:w.id,maxWidth:MW,maxHeight:MH}) // ask interpreter
       }
     },500))
-  })
+  }
+  $(w.cm.display.wrapper).mouseout(cl).mousemove(function(e){show(w.cm.coordsChar({left:e.clientX,top:e.clientY}))})
   return{
-    clear:cl,
+    clear:cl,show:show,
     processReply:rf=function(x){ // return a function that processes the reply
       if(!p)return
       var d=w.getDocument(),ce=w.cm.display.wrapper                    // ce:CodeMirror element

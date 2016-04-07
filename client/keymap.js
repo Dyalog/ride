@@ -145,10 +145,7 @@ $.extend(CM.commands,{
   JSC:function(){var w=D.nww;if(w){var t=w.showDevTools();t.x=w.x+w.width-w.dx;t.y=w.y-w.dy;t.height=w.height}},
   LOG:function(){D.showProtocolLog&&D.showProtocolLog()},
   MNU:function(){$('.menu .m-opener').eq(0).click()},
-  TIP:function(){
-    var cm=D.ide.focusedWin.cm,u=cm.getCursor()
-    $(cm.display.wrapper).trigger('mousemove',{line:u.line,ch:Math.max(0,u.ch-1)})
-  }
+  TIP:function(){var w=D.ide.focusedWin,u=w.cm.getCursor();w.vt.show({line:u.line,ch:Math.max(0,u.ch-1)},1)}
 })
 
 function switchWindows(d){ // d: a step of either 1 or -1
