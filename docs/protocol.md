@@ -120,7 +120,7 @@ a response of either `SetPromptType` with `type>0` or
 ```json
 ["HadError",{}] // Interpreter -> RIDE
 ```
-RIDE should clear its queue of pending lines on `HadError`.
+RIDE should clear its queue of pending lines on `HadError` and focus the session.
 
 RIDE can optionally advise the interpreter about the session's width in characters with
 <a name=SetPW></a>
@@ -162,12 +162,12 @@ session, `4096` external function.
 
 :red_circle: TODO: describe the other arguments
 
-RIDE should let the OS do its own focus management of editor/tracer windows except that when it receives
-<a name=FocusWindow></a>
+The interpreter can request transferring the focus to a particular window with
+<a name=GotoWindow></a>
 ```json
-["FocusWindow",{"win":123}] // Interpreter -> RIDE
+["GotoWindow",{"win":123}] // Interpreter -> RIDE
 ```
-it should set the focus accordingly.
+This could happen as a result of `)ED` or `⎕ED`.
 
 The interpreter may decide to change the type of a window (editor vs tracer) with
 <a name=WindowTypeChanged></a>

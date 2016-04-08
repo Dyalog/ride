@@ -67,8 +67,8 @@ this.IDE=function(){
       var t=x.type;t&&ide.pending.length?ide.emit('Execute',{trace:0,text:ide.pending.shift()+'\n'}):ide.wins[0].prompt(t)
       t===4&&ide.wins[0].focus() // ⍞ input
     },
-    HadError:function(){ide.pending.splice(0,ide.pending.length)},
-    FocusWindow:throttle1(function(x){$('#wintab'+x.win+' a').click();var w=ide.wins[x.win];w&&w.focus()}),
+    HadError:function(){ide.pending.splice(0,ide.pending.length);ide.wins[0].focus()},
+    GotoWindow:function(x){$('#wintab'+x.win+' a').click();var w=ide.wins[x.win];w&&w.focus()},
     WindowTypeChanged:function(x){return ide.wins[x.win].setTracer(x.tracer)},
     ReplyGetAutocomplete:function(x){var w=ide.wins[x.token];w&&w.processAutocompleteReply(x)},
     ValueTip:function(x){ide.wins[x.token].vt.processReply(x)},
