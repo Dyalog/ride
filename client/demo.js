@@ -7,9 +7,9 @@ function move(d){if(0<=index+d&&index+d<lines.length){index+=d;D.ide.wins[0].loa
 var $p // DOM element for the pending key or null if key display mode is off
 function keyInfo(e){ // returns a pair of the key name and an "is complete" flag
   var s='' // key name
-  e.shiftKey&&e.which&&(s+='Shift-');e.ctrlKey&&(s+='Ctrl-');e.altKey&&(s+='Alt-')
+  e.shiftKey&&e.which&&(s+='Shift-');e.ctrlKey&&(s+='Ctrl-');e.altKey&&(s+='Alt-');e.metaKey&&(s+='Cmd-')
   var k=CodeMirror.keyNames[e.which]||'['+e.which+']'
-  var c=!!e.which&&k!=='Shift'&&k!=='Ctrl'&&k!=='Alt' // c: is the key combination complete?
+  var c=!!e.which&&k!=='Shift'&&k!=='Ctrl'&&k!=='Alt'&&k!=='Cmd' // c: is the key combination complete?
   c&&(s+=k);return[s,c]
 }
 function loadDemoScript(f){ // f:path to file, ignored if empty
