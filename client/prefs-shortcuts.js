@@ -53,13 +53,13 @@ function getKeystroke(callback){
     .blur (function(){$(this).removeClass('shc-input')})
     .on('keypress keyup',function(e){
       var kn=CodeMirror.keyNames[e.which]||''
-      if(kn!=='Shift'&&kn!=='Ctrl'&&kn!=='Alt'){$d.dialog('close');callback(this.value);return!1}
-      $(this).val((e.shiftKey?'Shift-':'')+(e.ctrlKey?'Ctrl-':'')+(e.altKey&&'Alt-'||''));return!1
+      if(kn!=='Shift'&&kn!=='Ctrl'&&kn!=='Alt'&&kn!=='Cmd'){$d.dialog('close');callback(this.value);return!1}
+      $(this).val((e.shiftKey?'Shift-':'')+(e.ctrlKey?'Ctrl-':'')+(e.altKey&&'Alt-'||'')+(e.metaKey&&'Cmd-'||''));return!1
     })
     .keydown(function(e){
       var kn=CodeMirror.keyNames[e.which]||''
-      if(kn==='Shift'||kn==='Ctrl'||kn==='Alt')kn=''
-      $(this).val((e.shiftKey?'Shift-':'')+(e.ctrlKey?'Ctrl-':'')+(e.altKey?'Alt-':'')+kn);return!1
+      if(kn==='Shift'||kn==='Ctrl'||kn==='Alt'||kn==='Cmd')kn=''
+      $(this).val((e.shiftKey?'Shift-':'')+(e.ctrlKey?'Ctrl-':'')+(e.altKey?'Alt-':'')+(e.metaKey?'Cmd-':'')+kn);return!1
     })
 }
 this.load=function(){

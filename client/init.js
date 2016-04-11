@@ -12,7 +12,7 @@ $(function(){
     var updPW=function(){D.ide&&D.ide.wins&&D.ide.wins[0]&&D.ide.wins[0].updPW()}
     $.extend(CodeMirror.commands,{ZMI:ZMI,ZMO:ZMO,ZMR:ZMR})
     $(document).bind('mousewheel',function(e){
-      var d=e.originalEvent.wheelDelta;d&&e.ctrlKey&&!e.shiftKey&&!e.altKey&&(d>0?ZMI:ZMO)()
+      var d=e.originalEvent.wheelDelta;d&&(e.ctrlKey||e.metaKey)&&!e.shiftKey&&!e.altKey&&(d>0?ZMI:ZMO)()
     })
     $('body').addClass('zoom'+prefs.zoom())
     prefs.zoom(function(z){

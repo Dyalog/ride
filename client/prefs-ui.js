@@ -41,7 +41,7 @@ this.showDialog=function(tabName){
       '</div>'
     )
       .tabs({activate:function(e,ui){var t=tabs[$(ui.newTab).index()];t.resize&&t.resize();t.activate&&t.activate()}})
-      .keydown(function(e){if(e.which===13&&!e.shiftKey&&e.ctrlKey&&!e.altKey){ok();return!1}})
+      .keydown(function(e){if(e.which===13&&!e.shiftKey&&e.ctrlKey&&!e.altKey&&!e.metaKey){ok();return!1}})
       .on('dragstart',function(){return!1})
       .dialog({
         autoOpen:0,title:'Preferences',width:600,minWidth:600,height:450,minHeight:450,
