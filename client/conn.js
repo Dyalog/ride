@@ -9,7 +9,7 @@ var user=D.process?D.process.env.USER:''
 function cmpVer(x,y){return x[0]-y[0]||x[1]-y[1]||0} // compare two versions of the form [major,minor]
 function save(){prefs.favs($('>*',q.favs).map(function(){var h=$(this).data('cn');return h.tmp?null:h}).toArray())}
 function favText(x){return x.tmp?TMP_NAME:x.name||DFLT_NAME}
-function favDOM(x){return $('<div><a href=# class=go>'+esc(favText(x))+'</a></div>').data('cn',x)}
+function favDOM(x){return $('<div>'+esc(favText(x))+'<button class=go>Go</button>').data('cn',x)}
 function fmtKey(e){return[e.metaKey?'Cmd-':'',e.ctrlKey?'Ctrl-':'',e.altKey?'Alt-':'',e.shiftKey?'Shift-':'',
                           CodeMirror.keyNames[e.which]||''].join('')}
 function updFormDetail(){$('>*',q.detail).hide();q[q.type.val()].show()} // the part below "Type"
