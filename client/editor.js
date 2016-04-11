@@ -2,7 +2,7 @@
 var autocompletion=require('./autocompletion'),prefs=require('./prefs'),mode=require('./cm-apl-mode'),
     letter=mode.letter,dfnDepth=mode.dfnDepth,util=require('./util'),cmOnDblClick=util.cmOnDblClick,
     ACB_VALUE=this.ACB_VALUE={pairs:'()[]{}',explode:'{}'}, // value for CodeMirror's "autoCloseBrackets" option when on
-    vtips=require('./vtips')
+    vtips=require('./vtips'),CM=CodeMirror
 require('./cm-scroll')
 
 var b=function(c,t){return'<a href=# class="'+c+' tb-btn" title="'+t+'"></a>'} // cc:css classes, t:title
@@ -41,7 +41,7 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
   ed.lastQuery=ed.lastIC=ed.overlay=ed.annotation=null // search-related state
   ed.focusTimestamp=0
   ed.jumps=[]
-  ed.cm=CodeMirror(ed.$e.find('.ride-win')[0],{
+  ed.cm=CM(ed.$e.find('.ride-win')[0],{
     lineNumbers:!!(ed.tc?prefs.lineNumsTracer():prefs.lineNumsEditor()),
     firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
     smartIndent:prefs.indent()>=0,indentUnit:prefs.indent(),scrollButtonHeight:12,matchBrackets:!!prefs.matchBrackets(),
@@ -64,9 +64,10 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
     .on('mouseup mouseout','.tb-btn',function(e){$(e.target).removeClass('armed');e.preventDefault()})
     .on('click','.tb-btn',function(e){
       var m,a=$(e.target).prop('class').split(/\s+/)
-      for(var i=0;i<a.length;i++)if(m=/^tb-([A-Z]{2,3})$/.exec(a[i])){ed[m[1]](ed.cm);break}
+      for(var i=0;i<a.length;i++)if(m=/^tb-([A-Z]{2,3})$/.exec(a[i]))
+        {(ed[m[1]]||CM.commands[m[1]])(ed.cm);break}
     })
-  ed.cmSC=CodeMirror(ed.$tb.find('.tb-sc')[0],{placeholder:'Search',extraKeys:{
+  ed.cmSC=CM(ed.$tb.find('.tb-sc')[0],{placeholder:'Search',extraKeys:{
     Enter:ed.NX.bind(ed),
     'Shift-Enter':ed.PV.bind(ed),
     'Ctrl-Enter':ed.selectAllSearchResults.bind(ed),
@@ -75,7 +76,7 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
   }})
   ed.cmSC.on('change',function(){ed.highlightSearch()})
   ed.$rp=ed.$tb.find('.tb-rp')
-  ed.cmRP=CodeMirror(ed.$rp[0],{placeholder:'Replace',extraKeys:{
+  ed.cmRP=CM(ed.$rp[0],{placeholder:'Replace',extraKeys:{
     Enter:ed.replace.bind(ed),
     'Shift-Enter':ed.replace.bind(ed,1),
     Tab:ed.cm.focus.bind(ed.cm),
