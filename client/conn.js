@@ -30,7 +30,7 @@ module.exports=function(){
   $('#cn').show().css({position:'absolute',left:0,right:0,top:0,bottom:0}).splitter()
     .find('[id^=cn-]').each(function(){q[this.id.replace(/^cn-/,'').replace(/-/g,'_')]=$(this)})
   q.fav_cb.change(function(){
-    var c=this.checked;c?delete sel.tmp:(sel.tmp=1);$sel.find('a').text(favText(sel))
+    var c=this.checked;c?delete sel.tmp:(sel.tmp=1);$sel.find('.name').text(favText(sel))
     q.fav_name_wr.toggle(c);c&&q.fav_name.focus();save()
   })
   q.fav_name.prop('placeholder',DFLT_NAME).on('change keyup',function(e){
