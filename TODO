@@ -13,7 +13,6 @@ Things to be done in the interpreter:
   * take into account modified editor content in Edit message
 
 Things to be done in RIDE before releasing:
-  * once the new docs are online, change help URLs from 14.1 to 15.0
   * address all issues in docs/protocol.md, particularly those about the handshake
 
 Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nice)

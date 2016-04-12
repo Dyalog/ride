@@ -56,7 +56,7 @@ manager. If it finds the peer is another RIDE, it should close the connection.
 :red_circle: In reality RIDE doesn't bother verifying that it's not talking to another RIDE.
 
 If at any time the interpreter crashes with a
-[syserror](http://help.dyalog.com/14.1/Content/UserGuide/Installation%20and%20Configuration/System%20Errors.htm), it
+[syserror](http://help.dyalog.com/15.0/Content/UserGuide/Installation%20and%20Configuration/System%20Errors.htm), it
 sends
 <a name=SysError></a>
 ```json
@@ -86,9 +86,9 @@ The interpreter informs RIDE about changes in its ability to accept user input w
 ["SetPromptType",{"type":5}] // Interpreter -> RIDE
 ```
 Constants for `type`: `0` no prompt, `1` the usual 6-space APL prompt (a.k.a. Descalc or "desktop calculator"), `2`
-[Quad(`⎕`)](http://help.dyalog.com/14.1/Content/Language/System%20Functions/Evaluated%20Input%20Output.htm) input, `3`
+[Quad(`⎕`)](http://help.dyalog.com/15.0/Content/Language/System%20Functions/Evaluated%20Input%20Output.htm) input, `3`
 line editor, `4`
-[Quote-Quad(`⍞`)](http://help.dyalog.com/14.1/Content/Language/System%20Functions/Character%20Input%20Output.htm) input,
+[Quote-Quad(`⍞`)](http://help.dyalog.com/15.0/Content/Language/System%20Functions/Character%20Input%20Output.htm) input,
 `5` any prompt type unforeseen here.
 
 :red_circle: These modes need explaining with expected behaviour.
@@ -128,7 +128,7 @@ RIDE can optionally advise the interpreter about the session's width in characte
 ["SetPW",{"pw":79}] // RIDE -> Interpreter
 ```
 Further output will wrap at that width (with a few exceptions).
-See [`⎕PW`](http://help.dyalog.com/14.1/Content/Language/System%20Functions/pw.htm).
+See [`⎕PW`](http://help.dyalog.com/15.0/Content/Language/System%20Functions/pw.htm).
 
 #Window management
 When the user presses `<ED>` (Shift-Enter), RIDE should send
@@ -151,12 +151,12 @@ The interpreter will parse that and may respond later with one of
 ["UpdateWindow",...] // Interpreter -> RIDE (same args as OpenWindow)
 ```
 It may also send these in response to [`)ed
-name`](http://help.dyalog.com/14.1/Content/Language/System%20Commands/ed.htm) or
-[`⎕ed'name'`](http://help.dyalog.com/14.1/Content/Language/System%20Functions/ed.htm), as well as when tracing into an
+name`](http://help.dyalog.com/15.0/Content/Language/System%20Commands/ed.htm) or
+[`⎕ed'name'`](http://help.dyalog.com/15.0/Content/Language/System%20Functions/ed.htm), as well as when tracing into an
 object that is not currently being traced.
 
 Constants for `entityType`: `1` defined function, `2` simple character array, `4` simple numeric array, `8` mixed simple
-array, `16` nested array, `32` [`⎕OR`](http://help.dyalog.com/14.1/Content/Language/System%20Functions/or.htm) object,
+array, `16` nested array, `32` [`⎕OR`](http://help.dyalog.com/15.0/Content/Language/System%20Functions/or.htm) object,
 `64` native file, `128` simple character vector, `256` APL namespace, `512` APL class, `1024` APL interface, `2048` APL
 session, `4096` external function.
 
@@ -347,7 +347,7 @@ arrive in the same order, if ever.
 `maxHeight` and `maxWidth` can be used to limit the number of lines and columns in the result.
 
 In the response, `class` indicates the
-[nameclass](http://help.dyalog.com/14.1/Content/Language/System%20Functions/nc.htm) of the object.
+[nameclass](http://help.dyalog.com/15.0/Content/Language/System%20Functions/nc.htm) of the object.
 This information can be used to syntax-highlight the tooltip.
 
 `startCol` and `endCol` describe the position of the whole name to which the value tip pertains.
@@ -399,7 +399,7 @@ In the response `index` can be:
 ```
 Request RIDE shows some HTML.
 See
-[`3500⌶`](http://help.dyalog.com/14.1/Content/Language/Primitive%20Operators/Send%20Text%20to%20RIDE-embedded%20Browser.htm).
+[`3500⌶`](http://help.dyalog.com/15.0/Content/Language/Primitive%20Operators/Send%20Text%20to%20RIDE-embedded%20Browser.htm).
 
 <a name=UpdateDisplayName></a>
 ```json
@@ -428,7 +428,7 @@ It can query information about the children of a particular node with
 The root of the tree is assumed to have a node id of 0.
 * `nodeId` is the requested parent id.
 * `nodeIds` are the ids of the children; some of them can be 0 -- those children can't themselves have children.
-* `classes` are [name classes](http://help.dyalog.com/14.1/Content/Language/System%20Functions/nc.htm#NameClassification)
+* `classes` are [name classes](http://help.dyalog.com/15.0/Content/Language/System%20Functions/nc.htm#NameClassification)
   that can be used to choose appropriate styling
 * `err` is non-empty only when an error has occurred in the interpreter, e.g. when `nodeId` is no longer invalid
 

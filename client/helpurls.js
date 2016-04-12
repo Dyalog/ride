@@ -1,5 +1,5 @@
 'use strict'
-var p='http://help.dyalog.com/14.1/Content/',q='.htm', // prefix and suffix
+var p='http://help.dyalog.com/15.0/Content/',q='.htm', // prefix and suffix
 h=D.helpurls=module.exports={
   WELCOME:p+'MiscPages/HelpWelcome'+q,
   UCMDS:p+'UserGuide/The APL Environment/User Commands'+q,
