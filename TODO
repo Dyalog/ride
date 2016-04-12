@@ -1,13 +1,11 @@
 Decision pending regarding initial handshake:
   * fix Identify message and/or redefine its semantics in docs/protocol.md
-  * bump the first part of the handshake (SupportedProtocols=1 -> 2) and maybe format it as JSON (needs discussion)
   * remove the second part of the handshake (UsingProtocol=1), this may be in Bjørn's code
   * don't send a ReplyConnect message
 
 Things to be done in the interpreter:
-  * status bar, see W3 below
   * in GetAutocomplete either rename "token" to "win" or don't require them to be the same
-  * interpreter can start using Show(MultipleChoice)Dialog and ShowStringInputDialog for external files, see M5,S3 below
+  * interpreter can start using OptionsDialog/StringDialog/TaskDialog for external files, see M5,S3 below
   * define and implement protocol messages for "show stack" and "show threads", see W1,W2 below
   * define protocol messages for transferring a file to the interpreter, e.g. for drag&drop of a .dws
   * don't crash when receiving JSON that's not structured as expected
