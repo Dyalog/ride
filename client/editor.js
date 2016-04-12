@@ -77,10 +77,12 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
   ed.cmSC.on('change',function(){ed.highlightSearch()})
   ed.$rp=ed.$tb.find('.tb-rp')
   ed.cmRP=CM(ed.$rp[0],{placeholder:'Replace',extraKeys:{
-    Enter:ed.replace.bind(ed),
-    'Shift-Enter':ed.replace.bind(ed,1),
-    Tab:ed.cm.focus.bind(ed.cm),
-    'Shift-Tab':function(){(ed.tc?ed.cm:ed.cmSC).focus()}
+    Enter            :function(){ed.replace()},
+    'Shift-Enter'    :function(){ed.replace(1)},
+    'Alt-Enter'      :function(){ed.search()},
+    'Shift-Alt-Enter':function(){ed.search(1)},
+    Tab              :function(){ed.cm.focus()},
+    'Shift-Tab'      :function(){(ed.tc?ed.cm:ed.cmSC).focus()}
   }})
   var cms=[ed.cmSC,ed.cmRP]
   for(var i=0;i<cms.length;i++){
@@ -171,6 +173,7 @@ this.Editor.prototype={
     cm.focus()
   },
   replace:function(backwards){ // replace current occurrence and move to next
+    console.info('replace backwards='+backwards)
     var ic=!$('.tb-case',this.$tb).hasClass('pressed')   // ignore case?
     var q=this.cmSC.getValue()  ;ic&&(q=q.toLowerCase()) // query string
     var s=this.cm.getSelection();ic&&(s=s.toLowerCase()) // selection
@@ -244,9 +247,8 @@ this.Editor.prototype={
     this.cmSC.focus();this.cmSC.execCommand('selectAll')
   },
   RP:function(cm){
-    if(this.cm.getOption('readOnly'))return
-    var v=cm.getSelection()||this.cword()
-    if(v&&v.indexOf('\n')<0){this.cmSC.setValue(v);this.cmRP.setValue(v)}
+    if(cm.getOption('readOnly'))return
+    var v=cm.getSelection()||this.cword();if(v&&v.indexOf('\n')<0){this.cmSC.setValue(v);this.cmRP.setValue(v)}
     this.cmRP.focus();this.cmRP.execCommand('selectAll');this.highlightSearch()
   },
   EP:function(cm){this.isClosing=1;this.FX(cm)},
