@@ -9,7 +9,7 @@ var user=D.process?D.process.env.USER:''
 function cmpVer(x,y){return x[0]-y[0]||x[1]-y[1]||0} // compare two versions of the form [major,minor]
 function save(){prefs.favs($('>*',q.favs).map(function(){var h=$(this).data('cn');return h.tmp?null:h}).toArray())}
 function favText(x){return x.tmp?TMP_NAME:x.name||DFLT_NAME}
-function favDOM(x){return $('<div>'+esc(favText(x))+'<button class=go>Go</button>').data('cn',x)}
+function favDOM(x){return $('<div><span class=name>'+esc(favText(x))+'</span><button class=go>Go</button>').data('cn',x)}
 function fmtKey(e){return[e.metaKey?'Cmd-':'',e.ctrlKey?'Ctrl-':'',e.altKey?'Alt-':'',e.shiftKey?'Shift-':'',
                           CodeMirror.keyNames[e.which]||''].join('')}
 function updFormDetail(){$('>*',q.detail).hide();q[q.type.val()].show()} // the part below "Type"
@@ -34,7 +34,7 @@ module.exports=function(){
     q.fav_name_wr.toggle(c);c&&q.fav_name.focus();save()
   })
   q.fav_name.prop('placeholder',DFLT_NAME).on('change keyup',function(e){
-    var u=sel.name,v=this.value;if(u!==v){v?(sel.name=v):delete sel.name;$sel.find('a').text(favText(sel));save()}
+    var u=sel.name,v=this.value;if(u!==v){v?(sel.name=v):delete sel.name;$sel.find('.name').text(favText(sel));save()}
   })
   q.type.change(function(){sel.type=this.value;updFormDetail();save()})
   updFormDetail()
@@ -47,8 +47,12 @@ module.exports=function(){
   })
   q.env_add.on('click','a',function(e){
     var t=$(this).text(), e=q.env[0], k=t.split('=')[0], s=e.value, m=RegExp('^'+k+'=(.*)$','m').exec(s)
-    if(m){e.setSelectionRange(m.index+k.length+1,m.index+m[0].length)}
-    else{e.value=s=s.replace(/([^\n])$/,'$1\n')+t+'\n';e.setSelectionRange(s.length-t.length+k.length,s.length-1)}
+    if(m){
+      e.setSelectionRange(m.index+k.length+1,m.index+m[0].length)
+    }else{
+      e.value=s=s.replace(/([^\n])$/,'$1\n')+t+'\n';$(e).change()
+      e.setSelectionRange(s.length-t.length+k.length,s.length-1)
+    }
     return!1
   })
   q.ssl_cb.change(function(){q.ssl_detail.toggle(this.checked)})
@@ -149,7 +153,8 @@ function go(){
       if(sel.ssh){
         var pw=q.ssh_pass.val(),kf=q.ssh_key.val()
         if(!pw&&!kf){$.alert('"password" or "key file" is required','Error',function(){q.ssh_pass.focus()});return}
-        if(pw&&kf){$.alert('Only one of "password" or "key file" must be present.','Error',function(){q.ssh_pass.focus()});return}
+        if(pw&&kf){$.alert('Only one of "password" or "key file" must be present.','Error',
+                           function(){q.ssh_pass.focus()});return}
         $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
           .dialog({modal:1,width:350,title:'Connecting...'})
         D.socket.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||user,pass:pw,key:kf,env:env})
