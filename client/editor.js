@@ -65,7 +65,7 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
     .on('click','.tb-btn',function(e){
       var m,a=$(e.target).prop('class').split(/\s+/)
       for(var i=0;i<a.length;i++)if(m=/^tb-([A-Z]{2,3})$/.exec(a[i]))
-        {(ed[m[1]]||CM.commands[m[1]])(ed.cm);break}
+        {ed[m[1]]?ed[m[1]](ed.cm):CM.commands[m[1]]?CM.commands[m[1]](ed.cm):0;break}
     })
   ed.cmSC=CM(ed.$tb.find('.tb-sc')[0],{placeholder:'Search',extraKeys:{
     Enter:ed.NX.bind(ed),
