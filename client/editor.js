@@ -101,7 +101,7 @@ this.Editor.prototype={
   updGutters:function(){
     var g=['breakpoints'],cm=this.cm
     cm.getOption('lineNumbers')&&g.push('CodeMirror-linenumbers')
-    cm.getOption('foldGutter') &&g.push('CodeMirror-foldgutter')
+    cm.getOption('foldGutter') &&g.push('cm-foldgutter')
     cm.setOption('gutters',g)
   },
   createBPEl:function(){

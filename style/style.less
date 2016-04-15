@@ -632,18 +632,15 @@ div.CodeMirror-cursors{visibility:hidden;position:relative;z-index:3}
 // Help users use markselection to safely style text background
 span.CodeMirror-selectedtext{background:none}
 
-.CodeMirror-foldmarker{
-  color:blue;text-shadow:#b9f 1px 1px 2px,#b9f -1px -1px 2px,#b9f 1px -1px 2px,#b9f -1px 1px 2px;
-  font-family:arial;line-height:.3;cursor:pointer
-}
-.CodeMirror-foldgutter{width:.7em}
-.CodeMirror-foldgutter-open:after  {content:"\229F"}
-.CodeMirror-foldgutter-folded:after{content:"\229E"}
-.CodeMirror-foldgutter-cont:after  {content:"\2502"}
-.CodeMirror-foldgutter-end:after   {content:"\2514"}
-.CodeMirror-foldgutter-open,.CodeMirror-foldgutter-folded,.CodeMirror-foldgutter-cont,.CodeMirror-foldgutter-end
-  {color:#88f}
-.CodeMirror-foldgutter-open,.CodeMirror-foldgutter-folded{cursor:pointer;&:hover{font-weight:bold;color:#ccf}}
+.CodeMirror-foldmarker{color:blue;text-shadow:#b9f 1px 1px 2px,#b9f -1px -1px 2px,#b9f 1px -1px 2px,#b9f -1px 1px 2px;
+                       font-family:arial;line-height:.3;cursor:pointer}
+.cm-foldgutter{width:.7em}
+.cm-foldgutter-open:after  {content:"\229F"}
+.cm-foldgutter-folded:after{content:"\229E"}
+.cm-foldgutter-cont:after  {content:"\2502"}
+.cm-foldgutter-end:after   {content:"\2514"}
+.cm-foldgutter-open,.cm-foldgutter-folded,.cm-foldgutter-cont,.cm-foldgutter-end{color:#88f}
+.cm-foldgutter-open,.cm-foldgutter-folded{cursor:pointer;&:hover{font-weight:bold;color:#ccf}}
 
 // scrollbars, see ../client/cm-scroll.js
 .cm-scroll{position:absolute;z-index:6;background:#eee}
