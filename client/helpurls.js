@@ -16,13 +16,7 @@ h.SYSFNS=u+'System Functions Categorised'+q
 h['⍞']=u+'Character Input Output'+q
 h['⎕']=u+'Evaluated Input Output'+q
 h['⎕á']=h['⎕ⓐ']=u+'Underscored Alphabetic Characters'+q
-var a=('a ai an arbin arbout at av avu base class clear cmd cr cs ct cy dct df div d dl dm dmx dq dr ed em en'+
-' exception ex export fappend favail fchk fcopy fcreate fdrop ferase fhist fhold fix flib fmt fnames fnums fprops'+
-' frdac frdci fread frename freplace fresize fr fsize fstac fstie ftie funtie fx instances io kl lc load lock lx map'+
-' ml monitor na nappend nc ncreate nerase new nl nlock nnames nnums nq nread nrename nreplace nresize nr nsi nsize ns'+
-' ntie null nuntie nxlate off opt or path pfkey pp profile pw refs r rl rsi rtl save sd se shadow sh signal si size s'+
-' sm src sr stack state stop svc svo svq svr svs tc tcnums tget this tid tkill tname tnums tpool tput trace trap treq'+
-' ts tsync ucs using vfi vr wa wc wg wn wsid ws wx xml xsi xt').split(' ')
+var a='a ai an arbin arbout at av avu base class clear cmd cr cs ct cy d dct df div dl dm dmx dq dr ed em en ex exception export fappend favail fchk fcopy fcreate fdrop ferase fhist fhold fix flib fmt fnames fnums fprops fr frdac frdci fread frename freplace fresize fsize fstac fstie ftie funtie fx instances io kl lc load lock lx map mkdir ml monitor na nappend nc ncreate ndelete nerase new nexists nget ninfo nl nlock nnames nnums nparts nput nq nr nread nrename nreplace nresize ns nsi nsize ntie null nuntie nxlate off opt or path pfkey pp profile pw r refs rl rsi rtl s save sd se sh shadow si signal size sm sr src stack state stop svc svo svq svr svs tc tcnums tget this tid tkill tname tnums tpool tput trace trap treq ts tsync ucs using vfi vr wa wc wg wn ws wsid wx xml xsi xt'.split(' ')
 for(var i=0;i<a.length;i++)h['⎕'+a[i]]=u+a[i]+q
 
 var u=p+'Language/Control Structures/'
