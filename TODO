@@ -12,34 +12,21 @@ Things to be done in the interpreter:
   * dev version of interpreter doesn't honour "+s -q" over ssh (probably one for Geoff), see email from 2016-01-28
   * take into account modified editor content in Edit message
 
-Things to be done in RIDE before releasing:
-  * address all issues in docs/protocol.md, particularly those about the handshake
-
-Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nice)
-  M1 adoption of the new protocol
-        NN: some issues to clean up, see docs/protocol.md
+Leftover from RIDE3 (M:major, S:significant, W:wouldn't it be nice)
   M2 awareness of Process Manager
-  M3 launch server-side processes using ssh
-        NN: done
-        NN: remember password/key?
-  M4 minimal workspace explorer
-        NN: need support from interpreter; RIDE has an implementation of a tree with fake data
   M5 edit "external" source files
         NN: email 2016-01-20, added a "string input dialog" to the protocol
         NN: email 2016-01-28, "format on open" should be off by default for external source files
   M6 support external editors
-        NN: implemented in its simplest form -- execute a command with a tmp file as argument
+        NN: implemented in its simplest form -- execute a command with a tmp file as argument.
             Emacs works fine.  Gvim will probably work, too.  Vim requires a wrapper script to run in a terminal, e.g.:
                 #!/bin/bash
                 xterm -e vim "$1"
+        NN: Do we need GUI for this?
   M7 add meta-information to Windows exe
-        NN: This looks promising: https://github.com/atom/rcedit/ (requires VS to compile)
   S1 export and import preferences
+        NN: not needed because preferences are already in a file in human-readable form
   S2 config file for interpreter
-  S3 yes/no/cancel and other ultra-simple dialogs
-        NN: done in RIDE, see docs/protocol.md
-  S4 value tips
-        NN: done
   S5 enhanced navigation of classes and functions
         e.g. provide a way to jump to the last edited position in the same editor, like '' or `` in vim
         (meeting with Morten and Jay, 2016-01-08)
@@ -49,10 +36,6 @@ Planning with Morten, 2015-10-15:  (M:major, S:significant, W:wouldn't it be nic
   W3 status bar
         NN: done in RIDE, except for "flags" (warning, error, etc)
         NN: it turns out no content is available for the status bar, therefore I removed it, see email 2016-04-07
-  W4 drag/drop workspaces or source files to session
-        NN: done, dropping of a .dws file now types )load ...
-  W5 autopw support
-        NN: done
 
 Not prioritized:
   configurable list for ``
