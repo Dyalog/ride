@@ -98,7 +98,8 @@
     if(D.forceClose){
       var fw=opener.D.floatingWindows;fw.splice(fw.indexOf(nww),1);ps.nextTick(function(){nww.close(true)})
     }else if(!D.floating){
-      $.confirm('Are you sure you want to close this window?','Close?',function(r){r&&nww.close(true)})
+      D.lastError?nww.close(true):$.confirm('Are you sure you want to close this window?','Close?',
+                                            function(r){r&&nww.close(true)})
     }else{
       var f=window.onbeforeunload;f&&f();D.floating||ps.nextTick(function(){ps.exit(0)})
     }
@@ -177,7 +178,7 @@
     var H={'&':'&amp;','<':'&lt;','>':'&gt;'}
     var htmlEsc=function(s){return s.replace(/./g,function(x){return H[x]||x})} // todo: can we require('util') ?
     ps.on('uncaughtException',function(e){
-      window&&(window.lastError=e)
+      window&&(D.lastError=e)
       var info=
         'IDE: '+repr(D.versionInfo)+
         '\nInterpreter: '+repr(D.remoteIdentification||null)+
