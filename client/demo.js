@@ -28,7 +28,7 @@ $.extend(CodeMirror.commands,{
   DMR:function(){ // load demo script
     if(D.nwjs&&!D.floating){
       ($i=$i||$('<input id=demo-input type=file style=display:none>').appendTo('body'))
-        .trigger('click').change(function(){loadDemoScript(this.value)})
+        .val('').click().change(function(){loadDemoScript(this.value)})
     }
   },
   DMK:function(){ // toggle key display mode
