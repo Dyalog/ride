@@ -63,14 +63,14 @@ $(function(){
       return io
     })()
     if(!D.quit)D.quit=close
-    var e=D.process?D.process.env:{}
-    if(e.RIDE_LISTEN)conn().listen(e.RIDE_LISTEN)
-    else if(e.RIDE_CONNECT)conn().connect(e.RIDE_CONNECT)
-    else if(+e.RIDE_SPAWN){ // the value of this env var should be '0' or '1'
-      new IDE;D.socket.emit('*launch',{}) // '*error' is handled in ide.coffee
-      window.onbeforeunload=function(){D.socket.emit('Exit',{code:0})}
-    }
-    else conn()
+    var e=(D.process||{}).env||{}
+    var c=(D.args||{})['-c']||e.RIDE_CONNECT
+    if(c){var m=/^([^:]+|\[[^\]]+\])(?::(\d+))?$/.exec(c) // parse host and port
+          if(m){new IDE;D.socket.emit('*connect',{host:m[1],port:+m[2]||4502})}
+          else{$.alert('Invalid $RIDE_CONNECT')}}
+    else if(+e.RIDE_SPAWN){new IDE;D.socket.emit('*launch',{}) // '*error' is handled in ide.coffee
+                           window.onbeforeunload=function(){D.socket.emit('Exit',{code:0})}}
+    else{conn()}
   }
 
   if(!prefs.theme()){

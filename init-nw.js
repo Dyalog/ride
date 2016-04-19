@@ -294,4 +294,7 @@
       p.on('exit',function(){var s=fs.readFileSync(f,'utf8');fs.unlinkSync(f);callback(s)})
     }
   }
+  ;(function(){ // parse command-line arguments in a really simple way
+    var a=gui.App.argv,h=D.args={};for(var i=0;i<a.length;i++)if(a[i][0]==='-'){h[a[i]]=a[i+1];i++}
+  }())
 }())

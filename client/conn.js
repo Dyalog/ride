@@ -111,10 +111,6 @@ module.exports=function(){
     .on('*spawnedExited',function(x){$.alert(x.code!=null?'exited with code '+x.code:'received '+x.sig)})
     .on('*error',function(x){$d&&$d.dialog('close');$d=null;$.alert(x.msg,'Error')})
     .emit('*getProxyInfo')
-  return{
-    listen:function(port){port&&$listenPort.val(port);$listen.click()},
-    connect:function(s){hp=parseFav(s);D.socket.emit('*connect',{host:hp.host,port:hp.port||4502})}
-  }
 }
 function go(){
   $d&&$d.dialog('close')
