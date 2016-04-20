@@ -127,7 +127,7 @@ this.IDE=function(){
     })
   }
   function rrd(){tid||(new Date-last<20?(tid=setTimeout(rd,20)):rd())} // request rundown
-  D.socket.onevent=function(h){mq.push(h.data);rrd()}
+  D.skt.onevent=function(h){mq.push(h.data);rrd()}
   ide.block=function(){blk++}
   ide.unblock=function(){--blk||rrd()}
 
@@ -204,7 +204,7 @@ this.IDE=function(){
 }
 this.IDE.prototype={
   setHostAndPort:function(h,p){this.host=h;this.port=p;this.updTitle()},
-  emit:function(x,y){this.dead||D.socket.emit(x,y)},
+  emit:function(x,y){this.dead||D.skt.emit(x,y)},
   die:function(){ // don't really, just pretend
     if(this.dead)return
     this.dead=1;this.connected=0;this.$ide.addClass('disconnected');for(var k in this.wins)this.wins[k].die()

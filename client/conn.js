@@ -44,7 +44,7 @@ module.exports=function(){
   q.fetch.click(function(){
     if(!validate())return
     var pw=q.ssh_pass.val(),kf=q.ssh_key.val();q.fetch[0].disabled=1
-    D.socket.emit('*sshFetchListOfInterpreters',{host:sel.host,port:+sel.port||22,user:sel.user||user,pass:pw,key:kf})
+    D.skt.emit('*sshFetchListOfInterpreters',{host:sel.host,port:+sel.port||22,user:sel.user||user,pass:pw,key:kf})
   })
   q.exe.on('change keyup',function(){q.exes.val()||prefs.otherExe($(this).val())})
   q.exes.change(function(){
@@ -107,7 +107,7 @@ module.exports=function(){
   $(':text',q.rhs).elastic()
   $(':text[name],textarea[name]',q.rhs).change(function(){var k=this.name,v=this.value;v?(sel[k]=v):delete sel[k];save()})
   $(':checkbox[name]',q.rhs).change(function(){this.checked?(sel[this.name]=1):delete sel[this.name];save()})
-  D.socket
+  D.skt
     .on('*connected',function(x){if($d){$d.dialog('close');$d=null};new IDE().setHostAndPort(x.host,x.port)})
     .on('*spawned',function(x){D.lastSpawnedExe=x.exe})
     .on('*spawnedExited',function(x){$.alert(x.code!=null?'exited with code '+x.code:'received '+x.sig)})
@@ -140,7 +140,7 @@ function go(){
       case'connect':
         $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
           .dialog({modal:1,width:350,title:'Connecting...'})
-        D.socket.emit('*connect',{host:sel.host,port:+sel.port||4502,ssl:sel.ssl,cert:sel.cert,subj:sel.subj});break
+        D.skt.emit('*connect',{host:sel.host,port:+sel.port||4502,ssl:sel.ssl,cert:sel.cert,subj:sel.subj});break
       case'listen':
         var port=sel.port||4502
         $d=$(
@@ -152,8 +152,8 @@ function go(){
           '</div>'
         ).dialog({modal:1,width:450,title:'Waiting for connection...',
                   buttons:[{html:'<u>C</u>ancel',click:function(){$d.dialog('close')}}],
-                  close:function(){D.socket.emit('*listenCancel')}})
-        D.socket.emit('*listen',{port:port});break
+                  close:function(){D.skt.emit('*listenCancel')}})
+        D.skt.emit('*listen',{port:port});break
       case'start':
         var env={},a=q.env.val().split('\n'),m
         for(var i=0;i<a.length;i++)if(m=KV.exec(a[i]))env[m[1]]=m[2]
@@ -161,9 +161,9 @@ function go(){
           var pw=q.ssh_pass.val(),kf=q.ssh_key.val()
           $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
             .dialog({modal:1,width:350,title:'Connecting...'})
-          D.socket.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||user,pass:pw,key:kf,env:env})
+          D.skt.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||user,pass:pw,key:kf,env:env})
         }else{
-          D.socket.emit('*launch',{exe:sel.exe,env:env})
+          D.skt.emit('*launch',{exe:sel.exe,env:env})
         }
         break
       default:$.alert('nyi')

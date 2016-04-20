@@ -48,7 +48,7 @@ $(function(){
     setTimeout(function(){ed.refresh()},500) // work around a rendering issue on Ubuntu
     D.ide.unblock()
   }else{
-    D.socket=(D.createSocket||function(){
+    D.skt=(D.createSocket||function(){
       var skt=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host)
       var l={},q=[],io={} // l:listeners, q:send queue, io:socket.io-like API
       var flush=function(){while(skt.readyState===1&&q.length)skt.send(q.shift())}
@@ -66,10 +66,10 @@ $(function(){
     var e=(D.process||{}).env||{}
     var c=(D.args||{})['-c']||e.RIDE_CONNECT
     if(c){var m=/^([^:]+|\[[^\]]+\])(?::(\d+))?$/.exec(c) // parse host and port
-          if(m){new IDE;D.socket.emit('*connect',{host:m[1],port:+m[2]||4502})}
+          if(m){new IDE;D.skt.emit('*connect',{host:m[1],port:+m[2]||4502})}
           else{$.alert('Invalid $RIDE_CONNECT')}}
-    else if(+e.RIDE_SPAWN){new IDE;D.socket.emit('*launch',{}) // '*error' is handled in ide.coffee
-                           window.onbeforeunload=function(){D.socket.emit('Exit',{code:0})}}
+    else if(+e.RIDE_SPAWN){new IDE;D.skt.emit('*launch',{}) // '*error' is handled in ide.coffee
+                           window.onbeforeunload=function(){D.skt.emit('Exit',{code:0})}}
     else{conn()}
   }
 
