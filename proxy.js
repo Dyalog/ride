@@ -103,10 +103,37 @@ var handlers={
       })
     })
   },
+  '*sshFetchListOfInterpreters':function(x){
+    try{
+      var c=new(require('ssh2').Client),o={host:x.host,port:x.port,username:x.user} // o:options for .connect()
+      x.key?(o.privateKey=fs.readFileSync(x.key)):(o.password=x.pass)
+      c.on('ready',function(){
+        var s=''
+        c.exec('/bin/ls /opt/mdyalog/*/*/*/mapl /Applications/Dyalog-*/Contents/Resources/Dyalog/mapl',
+          function(err,sm){if(err)throw err // sm:stream
+            sm.on('data',function(x){s+=x})
+              .on('close',function(){
+                toBrowser('*sshInterpreters',{interpreters:
+                  s.split('\n').filter(function(x){return x})
+                   .map(function(x){
+                     var a=x.split('/')
+                     return(a[1]==='opt'
+                       ?{exe:x,ver:parseVer(a[3]),bits:+a[4],edition:a[5]}
+                       :{exe:x,ver:parseVer(a[2].replace(/^Dyalog-/,'')),bits:64,edition:'unicode'})
+                   })
+                })
+                c.end()
+              })
+          })
+      })
+      .on('error',function(x){toBrowser('*error',{msg:x.message||''+x})
+                              toBrowser('*sshInterpreters',{interpreters:[]})})
+      .connect(o)
+    }catch(e){toBrowser('*error',{msg:e.message})}
+  },
   '*ssh':function(x){
     try{
-      var c=new(require('ssh2').Client) // c:ssh client
-      var o={host:x.host,port:x.port,username:x.user} // connect() options
+      var c=new(require('ssh2').Client),o={host:x.host,port:x.port,username:x.user} // o:options for .connect()
       x.key?(o.privateKey=fs.readFileSync(x.key)):(o.password=x.pass)
       c.on('ready',function(){
         c.exec('/bin/sh',function(err,sm){if(err)throw err // sm:stream
