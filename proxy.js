@@ -110,20 +110,15 @@ var handlers={
       c.on('ready',function(){
         var s=''
         c.exec('/bin/ls /opt/mdyalog/*/*/*/mapl /Applications/Dyalog-*/Contents/Resources/Dyalog/mapl',
-          function(err,sm){if(err)throw err // sm:stream
-            sm.on('data',function(x){s+=x})
-              .on('close',function(){
-                toBrowser('*sshInterpreters',{interpreters:
-                  s.split('\n').filter(function(x){return x})
-                   .map(function(x){
-                     var a=x.split('/')
-                     return(a[1]==='opt'
-                       ?{exe:x,ver:parseVer(a[3]),bits:+a[4],edition:a[5]}
-                       :{exe:x,ver:parseVer(a[2].replace(/^Dyalog-/,'')),bits:64,edition:'unicode'})
-                   })
-                })
-                c.end()
-              })
+          function(err,sm){if(err)return // sm:stream
+            sm.on('data',function(x){s+=x}).on('close',function(){
+              toBrowser('*sshInterpreters',{interpreters:s.split('\n').filter(function(x){return x}).map(function(x){
+                var a=x.split('/')
+                return a[1]==='opt'?{exe:x,ver:parseVer(a[3]),bits:+a[4],edition:a[5]}
+                                   :{exe:x,ver:parseVer(a[2].replace(/^Dyalog-|\.app$/g,'')),bits:64,edition:'unicode'}
+              })})
+              c.end()
+            })
           })
       })
       .on('error',function(x){toBrowser('*error',{msg:x.message||''+x})
