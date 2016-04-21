@@ -111,7 +111,7 @@ module.exports=function(){
     .on('*connected',function(x){if($d){$d.dialog('close');$d=null};new IDE().setHostAndPort(x.host,x.port)})
     .on('*spawned',function(x){D.lastSpawnedExe=x.exe})
     .on('*spawnedExited',function(x){$.alert(x.code!=null?'exited with code '+x.code:'received '+x.sig)})
-    .on('*error',function(x){$d&&$d.dialog('close');$d=null;$.alert(x.msg,'Error')})
+    .on('*error',function(x){$d&&$d.dialog('close');$d=null;$.alert(x.msg,'Error');q.fetch[0].disabled=0})
     .on('*proxyInfo',function(x){interpreters=x.interpreters;updExes()})
     .on('*sshInterpreters',function(x){interpretersSSH=x.interpreters;updExes();q.fetch[0].disabled=0})
     .emit('*getProxyInfo')
