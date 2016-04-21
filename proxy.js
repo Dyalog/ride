@@ -104,45 +104,27 @@ var handlers={
     })
   },
   '*sshFetchListOfInterpreters':function(x){
-    try{
-      var c=new(require('ssh2').Client),o={host:x.host,port:x.port,username:x.user} // o:options for .connect()
-      x.key?(o.privateKey=fs.readFileSync(x.key)):(o.password=x.pass)
-      c.on('ready',function(){
-        var s=''
-        c.exec('/bin/ls /opt/mdyalog/*/*/*/mapl /Applications/Dyalog-*/Contents/Resources/Dyalog/mapl',
-          function(err,sm){if(err)return // sm:stream
-            sm.on('data',function(x){s+=x}).on('close',function(){
-              toBrowser('*sshInterpreters',{interpreters:s.split('\n').filter(function(x){return x}).map(function(x){
-                var a=x.split('/')
-                return a[1]==='opt'?{exe:x,ver:parseVer(a[3]),bits:+a[4],edition:a[5]}
-                                   :{exe:x,ver:parseVer(a[2].replace(/^Dyalog-|\.app$/g,'')),bits:64,edition:'unicode'}
-              })})
-              c.end()
-            })
-          })
+    var c=sshExec(x,'/bin/ls /opt/mdyalog/*/*/*/mapl /Applications/Dyalog-*/Contents/Resources/Dyalog/mapl',function(sm){
+      var s=''
+      sm.on('data',function(x){s+=x}).on('close',function(){
+        toBrowser('*sshInterpreters',{interpreters:s.split('\n').filter(function(x){return x}).map(function(x){
+          var a=x.split('/')
+          return a[1]==='opt'?{exe:x,ver:parseVer(a[3]),bits:+a[4],edition:a[5]}
+                             :{exe:x,ver:parseVer(a[2].replace(/^Dyalog-|\.app$/g,'')),bits:64,edition:'unicode'}
+        })})
+        c.end()
       })
-      .on('error',function(x){toBrowser('*error',{msg:x.message||''+x})
+    }).on('error',function(x){toBrowser('*error',{msg:x.message||''+x})
                               toBrowser('*sshInterpreters',{interpreters:[]})})
-      .connect(o)
-    }catch(e){toBrowser('*error',{msg:e.message})}
   },
   '*ssh':function(x){
-    try{
-      var c=new(require('ssh2').Client),o={host:x.host,port:x.port,username:x.user} // o:options for .connect()
-      x.key?(o.privateKey=fs.readFileSync(x.key)):(o.password=x.pass)
-      c.on('ready',function(){
-        c.exec('/bin/sh',function(err,sm){if(err)throw err // sm:stream
-          sm.on('close',function(code,sig){toBrowser('*sshExited',{code:code,sig:sig});c.end()})
-          c.forwardIn('',0,function(err,remotePort){if(err)throw err
-            var s='';for(var k in x.env)s+=k+'='+shEsc(x.env[k])+' '
-            sm.write(s+'RIDE_INIT=CONNECT:127.0.0.1:'+remotePort+' '+shEsc(x.exe||'dyalog')+' +s -q >/dev/null\n')
-          })
-        })
+    var c=sshExec(x,'/bin/sh',function(sm){
+      sm.on('close',function(code,sig){toBrowser('*sshExited',{code:code,sig:sig});c.end()})
+      c.forwardIn('',0,function(err,remotePort){if(err)throw err
+        var s='';for(var k in x.env)s+=k+'='+shEsc(x.env[k])+' '
+        sm.write(s+'RIDE_INIT=CONNECT:127.0.0.1:'+remotePort+' '+shEsc(x.exe||'dyalog')+' +s -q >/dev/null\n')
       })
-      .on('tcp connection',function(_,accept){clt=accept();toBrowser('*connected',{host:'',port:0});initInterpreterConn()})
-      .on('error',function(x){toBrowser('*error',{msg:x.message||''+x})})
-      .connect(o)
-    }catch(e){toBrowser('*error',{msg:e.message})}
+    }).on('error',function(x){toBrowser('*error',{msg:x.message||''+x})})
   },
   '*listen':function(x){
     srv=net.createServer(function(c){
@@ -207,6 +189,17 @@ var handlers={
       toBrowser('*proxyInfo',r)
     }
   }
+}
+function sshExec(x,cmd,callback){
+  try{ // see https://github.com/mscdex/ssh2/issues/238#issuecomment-87495628 for why we use tryKeyboard:true
+    var c=new(require('ssh2').Client),o={host:x.host,port:x.port,username:x.user,tryKeyboard:true}
+    x.key?(o.privateKey=fs.readFileSync(x.key)):(o.password=x.pass)
+    c.on('ready',function(){c.exec(cmd,function(err,sm){err||callback(sm)})})
+     .on('tcp connection',function(_,acc){clt=acc();toBrowser('*connected',{host:'',port:0});initInterpreterConn()})
+     .on('keyboard-interactive',function(_,_1,_2,_3,finish){finish([x.pass])})
+     .connect(o)
+  }catch(e){toBrowser('*error',{msg:e.message})}
+  return c
 }
 module.exports=function(x){
   log('browser connected')
