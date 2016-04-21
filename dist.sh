@@ -7,8 +7,9 @@ ulimit -n $(ulimit -Hn) # bump open file limit to its hard limit, OSX build requ
 
 desktop_app() {
   echo "building desktop app for $@"
-  node <<.
-    new (require('nw-builder'))({files:'build/nw/**',version:'$nw_version',platforms:'$@'.split(' ')})
+  node<<.
+    new(require('nw-builder'))({files:['build/nw/**','node_modules/ssh2/**'],
+                                version:'$nw_version',platforms:'$@'.split(' ')})
       .build().catch(function(e){console.error(e);process.exit(1)})
 .
 }
