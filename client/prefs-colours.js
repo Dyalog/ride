@@ -1,6 +1,6 @@
 'use strict'
 this.tabTitle='Colours'
-var prefs=require('./prefs'),esc=require('./util').esc
+var prefs=require('./prefs'),util=require('./util'),esc=util.esc
 var G=[],H={} // G:syntax highlighting groups {t,s,c,ctrls}; H:reverse lookup dict for G
 D.addSyntaxGroups=function(x){G=G.concat(x);H={};for(var i=0;i<G.length;i++)H[G[i].t]=i;SCMS&&updStyle()}
 D.addSyntaxGroups([
@@ -180,10 +180,10 @@ this.init=function($e){
     scm=scms[Math.min(i,scms.length-1)];updScms();return!1
   })
   $cm=$('#col-cm')
-  cm=CodeMirror($cm[0],{
+  cm=CodeMirror($cm[0],$.extend({},util.cmOpts,{
     lineNumbers:true,firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
     indentUnit:4,scrollButtonHeight:12,matchBrackets:true,autoCloseBrackets:{pairs:'()[]{}',explode:'{}'}
-  })
+  }))
   cm.addOverlay({token:function(stream){
     var i=stream.string.slice(stream.pos).indexOf(SEARCH_MATCH)
     if(!i){stream.pos+=SEARCH_MATCH.length;return'searching'}

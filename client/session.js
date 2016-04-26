@@ -1,15 +1,16 @@
 'use strict'
-var autocompletion=require('./autocompletion'),prefs=require('./prefs'),cmOnDblClick=require('./util').cmOnDblClick
-var vtips=require('./vtips');require('./cm-scroll')
+var autocompletion=require('./autocompletion'),prefs=require('./prefs'),util=require('./util'),
+    cmOnDblClick=util.cmOnDblClick,vtips=require('./vtips')
+require('./cm-scroll')
 this.Session=function(ide,e,opts){ // Session constructor
   var se=this;se.ide=ide;se.opts=opts;se.emit=opts.emit;se.hist=[''];se.histIdx=0;se.focusTimestamp=0;se.id=0
   se.dirty={} // modified lines: lineNumber→originalContent, inserted lines: lineNumber→0 (also used in cm-apl-mode.js)
   se.$e=$(e).addClass('ride-win')
-  var cm=se.cm=CodeMirror(se.$e[0],{
+  var cm=se.cm=CodeMirror(se.$e[0],$.extend({},util.cmOpts,{
     autofocus:true,mode:{name:'apl-session',se:se},matchBrackets:!!prefs.matchBrackets(),readOnly:true,keyMap:'dyalog',
     lineWrapping:!!prefs.wrap(),indentUnit:4,smartIndent:0,autoCloseBrackets:{pairs:'()[]{}',explode:''},
     scrollbarStyle:'simple',extraKeys:{'Shift-Tab':'indentLess',Tab:'tabOrAutocomplete'},
-  })
+  }))
   cm.dyalogCmds=se
   cmOnDblClick(cm,function(e){se.ED(cm);e.stopPropagation();e.preventDefault()})
   cm.on('focus',function(){se.focusTimestamp=+new Date;ide.focusedWin=se})

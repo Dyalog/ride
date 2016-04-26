@@ -48,3 +48,6 @@ $.fn.elastic=function(){ // as you type in an <input>, it stretches as necessary
     this.size=Math.max(m,this.value.length+1)
   })
 }
+this.cmOpts={ // default CodeMirror options in RIDE
+  specialChars:/[\0-\x1f\x7f\xad\u200b-\u200f\u2028\u2029\ufeff]/g
+}

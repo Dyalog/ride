@@ -41,7 +41,7 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
   ed.lastQuery=ed.lastIC=ed.overlay=ed.annotation=null // search-related state
   ed.focusTimestamp=0
   ed.jumps=[]
-  ed.cm=CM(ed.$e.find('.ride-win')[0],{
+  ed.cm=CM(ed.$e.find('.ride-win')[0],$.extend({},util.cmOpts,{
     lineNumbers:!!(ed.tc?prefs.lineNumsTracer():prefs.lineNumsEditor()),
     firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
     smartIndent:prefs.indent()>=0,indentUnit:prefs.indent(),scrollButtonHeight:12,matchBrackets:!!prefs.matchBrackets(),
@@ -49,7 +49,7 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
     scrollbarStyle:'simple',
     keyMap:'dyalog',extraKeys:{'Shift-Tab':'indentLess',Tab:'tabOrAutocomplete',Down:'downOrXline'}
     // Some options of this.cm can be set from ide.coffee when the corresponding pref changes.
-  })
+  }))
   ed.cm.dyalogCmds=ed
   ed.cm.on('cursorActivity',ed.cursorActivity.bind(ed))
   ed.cm.on('gutterClick',function(cm,l,g){ // g:gutter
@@ -67,23 +67,23 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
       for(var i=0;i<a.length;i++)if(m=/^tb-([A-Z]{2,3})$/.exec(a[i]))
         {ed[m[1]]?ed[m[1]](ed.cm):CM.commands[m[1]]?CM.commands[m[1]](ed.cm):0;break}
     })
-  ed.cmSC=CM(ed.$tb.find('.tb-sc')[0],{placeholder:'Search',extraKeys:{
+  ed.cmSC=CM(ed.$tb.find('.tb-sc')[0],$.extend({},util.cmOpts,{placeholder:'Search',extraKeys:{
     Enter:ed.NX.bind(ed),
     'Shift-Enter':ed.PV.bind(ed),
     'Ctrl-Enter':ed.selectAllSearchResults.bind(ed),
     Tab:function(){(ed.tc?ed.cm:ed.cmRP).focus()},
     'Shift-Tab':ed.cm.focus.bind(ed.cm)
-  }})
+  }}))
   ed.cmSC.on('change',function(){ed.highlightSearch()})
   ed.$rp=ed.$tb.find('.tb-rp')
-  ed.cmRP=CM(ed.$rp[0],{placeholder:'Replace',extraKeys:{
+  ed.cmRP=CM(ed.$rp[0],$.extend({},util.cmOpts,{placeholder:'Replace',extraKeys:{
     Enter            :function(){ed.replace()},
     'Shift-Enter'    :function(){ed.replace(1)},
     'Alt-Enter'      :function(){ed.search()},
     'Shift-Alt-Enter':function(){ed.search(1)},
     Tab              :function(){ed.cm.focus()},
     'Shift-Tab'      :function(){(ed.tc?ed.cm:ed.cmSC).focus()}
-  }})
+  }}))
   var cms=[ed.cmSC,ed.cmRP]
   for(var i=0;i<cms.length;i++){
     cms[i].setOption('keyMap','dyalog')
