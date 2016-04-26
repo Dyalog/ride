@@ -38,7 +38,7 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
   ed.xline=null // the line number of the empty line inserted at eof when cursor is there and you press <down>
   ed.oText='';ed.oStop=[] // remember original text and "stops" to avoid pointless saving on EP
   ed.hll=null // highlighted line -- currently executed line in tracer
-  ed.lastQuery=ed.lastIC=ed.overlay=ed.annotation=null // search-related state
+  ed.lastQuery=ed.lastIC=ed.lastGen=ed.overlay=ed.annotation=null // search-related state
   ed.focusTimestamp=0
   ed.jumps=[]
   ed.cm=CM(ed.$e.find('.ride-win')[0],$.extend({},util.cmOpts,{
@@ -129,19 +129,15 @@ this.Editor.prototype={
     ed.cm.removeOverlay(ed.overlay);ed.annotation&&ed.annotation.clear();ed.overlay=ed.annotation=null
   },
   highlightSearch:function(){
-    var ed=this,ic=!$('.tb-case',ed.$tb).hasClass('pressed'),q=ed.cmSC.getValue() // ic:ignore case?, q:query string
-    ic&&(q=q.toLowerCase())
-    if(ed.lastQuery!==q||ed.lastIC!==ic){
-      ed.lastQuery=q;ed.lastIC=ic;ed.clearSearch()
+    var ed=this,ic=!$('.tb-case',ed.$tb).hasClass('pressed'),g=ed.cm.changeGeneration(),q=ed.cmSC.getValue()
+    if(ic)q=q.toLowerCase() // ic:ignore case?, q:query string
+    if(ed.lastQuery!==q||ed.lastIC!==ic||ed.lastGen!==g){
+      ed.lastQuery=q;ed.lastIC=ic;ed.lastGen=g;ed.clearSearch()
       if(q){
-        var s=ed.cm.getValue()
-        ic&&(s=s.toLowerCase())
-        $('.tb-sc',ed.$tb).toggleClass('no-matches',s.indexOf(q)<0)
         ed.annotation=ed.cm.showMatchesOnScrollbar(q,ic)
-        ed.cm.addOverlay(ed.overlay={token:function(stream){
-          s=stream.string.slice(stream.pos);ic&&(s=s.toLowerCase())
-          var i=s.indexOf(q)
-          if(!i){stream.pos+=q.length;return'searching'}else if(i>0){stream.pos+=i}else{stream.skipToEnd()}
+        ed.cm.addOverlay(ed.overlay={token:function(x){ // x:stream
+          var s=ed.cm.getValue();if(ic)s=s.toLowerCase();$('.tb-sc',ed.$tb).toggleClass('no-matches',s.indexOf(q)<0)
+          s=x.string.slice(x.pos);var i=s.indexOf(q);if(!i){x.pos+=q.length;return'searching'};i>0?x.pos+=i:x.skipToEnd()
         }})
         $('.CodeMirror-vscrollbar',ed.$e).prop('title','Lines on scroll bar show match locations')
       }
@@ -173,7 +169,6 @@ this.Editor.prototype={
     cm.focus()
   },
   replace:function(backwards){ // replace current occurrence and move to next
-    console.info('replace backwards='+backwards)
     var ic=!$('.tb-case',this.$tb).hasClass('pressed')   // ignore case?
     var q=this.cmSC.getValue()  ;ic&&(q=q.toLowerCase()) // query string
     var s=this.cm.getSelection();ic&&(s=s.toLowerCase()) // selection
