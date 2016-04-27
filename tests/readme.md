@@ -1,9 +1,10 @@
 #Running the test suite
 
-Use a 64-bit Linux Unicode interpreter.  Clear the session log (e.g. `rm "$OBJDIR"/default.dlf` if the interpreter is from a development version) and reset RIDE's preferences to factory defaults (`rm -r ~/.config/ride30`).
+Install a 64-bit Unicode interpreter on Linux and in RIDE's git root do:
 
-Build RIDE (`./dist.sh linux64`) and run it with autospawning and load the test framework:
-
+    ./dist.sh linux64        # package RIDE as an executable
+    rm -r ~/.config/ride30   # reset prefs to factory defaults
+    rm "$OBJDIR"/default.dlf # delete interpreter's session log
     RIDE_SPAWN=1 RIDE_JS=tests/t.js build/ride30/linux64/ride30
 
 RIDE's main window and a devtools window should appear near the right edge of your screen.
