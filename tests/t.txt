@@ -61,9 +61,42 @@ testcase strong interrupt
   click Strong Interrupt
   200
   assert sessionLastLines(2)[0]==='INTERRUPT'
+  inSession <Up><QT><Down>
 
 testcase about dialog
   mousedown Help
   click About
   find support@dyalog.com
   click Close
+
+testcase simple expressions
+  inSession 1 2 3+4 5 6<ER>
+  500
+  assert sessionLastLines(2)[0]==='5 7 9'
+
+testcase call function
+  inSession f<ED>
+  100
+  inEditor <Home>r←<End> a<Enter>r←1+2×a<EP>
+  100
+  inSession(' ')
+  inSession 123<ER>
+  100
+  assert sessionLastLines(2)[0]==='247'
+
+testcase trace into function and cutback
+  // depends on the previous test case
+  inSession f 123<TC>
+  100
+  inSession a<ER>
+  100
+  assert sessionLastLines(2)[0]==='123'
+  100
+  inSession )si<ER>
+  100
+  assert sessionLastLines(3).join('\n').replace(/ /g,'')===')si\n#.f[1]*\n'
+  inEditor <EP>
+  100
+  inSession )si<ER>
+  100
+  assert sessionLastLines(2).join('\n').replace(/ /g,'')===')si\n'
