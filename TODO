@@ -55,7 +55,6 @@ Not prioritized:
   2015-09-07 Adam: shortcut to clear the "modified" flag of a line in session without reverting it to original content
   selecting a block of text and pressing ⍝ should comment/uncomment it
   Integrate docs in RIDE?  We need fast, searchable, bookmarkable help content!
-  support for user commands (syntax highlighting)
   JS: Arrange for the banner to appear at the _top_ of a new session.
     NN: I did some experimentation with this.  As of now, I can only get it appear on top about 50% of the time
          due to a race condition in NW.js's events.
