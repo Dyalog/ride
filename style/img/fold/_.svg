@@ -1,0 +1,17 @@
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16">
+  <g id="minus">
+    <path fill="#00f" d="M1,1l14,0l0,14l-14,0 M2,2l0,12l12,0l0,-12"/><!--square-->
+    <path fill="#00f" d="M3,7l10,0l0,2l-10,0"/><!--short horizontal bar-->
+  </g>
+  <g id="plus">
+    <use xlink:href="#minus"/>
+    <path fill="#00f" d="M7,3l0,10l2,0l0,-10"/><!--short vertical bar-->
+  </g>
+  <g id="cont">
+    <rect x="8" y="0" width="1" height="16" style="fill:#00f"/><!--full-height vertical bar-->
+  </g>
+  <g id="last">
+    <rect x="8" y="0" width="1" height="8" style="fill:#00f"/><!--L shape-->
+    <rect x="8" y="8" width="8" height="1" style="fill:#00f"/>
+  </g>
+</svg>
