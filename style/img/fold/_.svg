@@ -1,17 +1,21 @@
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" style="fill:#00f">
-  <g id="minus">
-    <path d="M1,1l14,0l0,14l-14,0 M2,2l0,12l12,0l0,-12"/><!--square-->
-    <path d="M3,7l10,0l0,2l-10,0"/><!--short horizontal bar-->
+<svg xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="48" style="fill:#88f">
+  <path id="sqr" d="M1,17l14,0l0,14l-14,0 M2,18l0,12l12,0l0,-12"/><!--square-->
+  <rect id="hrz" x="3" y="23" width="10" height="2"/><!--short horizontal bar-->
+  <g id="open">
+    <use xlink:href="#sqr"/>
+    <use xlink:href="#hrz"/>
+    <rect x="8" y="31" width="1" height="17"/><!--connecting line below-->
   </g>
-  <g id="plus">
-    <use xlink:href="#minus"/>
-    <path d="M7,3l0,10l2,0l0,-10"/><!--short vertical bar-->
+  <g id="folded">
+    <use xlink:href="#sqr"/>
+    <use xlink:href="#hrz"/>
+    <rect x="7" y="19" width="2" height="10"/><!--short vertical bar-->
   </g>
   <g id="cont">
-    <rect x="8" y="0" width="1" height="16"/><!--full-height vertical bar-->
+    <rect x="8" y="0" width="1" height="48"/><!--full-height vertical bar-->
   </g>
-  <g id="last">
-    <rect x="8" y="0" width="1" height="8"/><!--L shape-->
-    <rect x="8" y="8" width="8" height="1"/>
+  <g id="end">
+    <rect x="8" y="0" width="1" height="24"/><!--L shape-->
+    <rect x="8" y="24" width="8" height="1"/><!--L shape-->
   </g>
 </svg>
