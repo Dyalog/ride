@@ -192,22 +192,14 @@ function switchWindows(d){ // d: a step of either 1 or -1
 //    2:APL     3:APL shifted
 // Each string can be indexed by scancode: http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
 // "APL" and "APL shifted" are the defaults upon which the user can build customisations.
-kbds.layouts['DK-Mac']=[
-  ' $1234567890+´   qwertyuiopå¨  asdfghjklæø\'  <zxcvbnm,.-  ',
-  ' §!"#€%&/()=?\`   QWERTYUIOPÅ^  ASDFGHJKLÆØ*  >ZXCVBNM;:_  ',
-  ' ⋄¨¯<≤=≥>≠∨∧×÷   ?⍵∊⍴~↑↓⍳○*←→  ⍺⌈⌊_∇∆∘\'⎕⍎⍕   ⊢⊂⊃∩∪⊥⊤|⍝⍀⌿  ',
-  '  ⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹     ⍷ ⍨  ⍸⍥⍣⍞⍬        ⍤⌸⌷≡≢   ⊣       ⍪⍙⍠  '
-]
 
 var bq // effective ` map as a dictionary, kept in sync with the prefs
 function updBQ(){
-  bq={};var lc=prefs.kbdLocale()||'US',l=kbds.layouts[lc],n=l[0].length
+  bq={};var lc=prefs.kbdLocale(), l=kbds.layouts[lc]||kbds.layouts.en_US, n=l[0].length
   for(var i=0;i<2;i++)for(var j=0;j<n;j++){var name=l[i][j];bq[name]||(bq[name]=l[2+i][j])}
   var s=prefs.prefixMaps()[lc];if(s)for(var i=0;i<s.length;i+=2)bq[s[i]]=s[i+1]
 }
-updBQ()
-
-prefs.prefixMaps(updBQ);prefs.kbdLocale(updBQ)
+updBQ();prefs.prefixMaps(updBQ);prefs.kbdLocale(updBQ)
 
 // order: used to measure how "complicated" (for some made-up definition of the word) a shortcut is.
 // Tooltips in the lbar show the simplest one.
@@ -223,7 +215,12 @@ function bqChangeHandler(cm,o){ // o: changeObj
   if(o.origin==='+input'&&o.text.length===1&&o.text[0].length===1){
     var x=o.text[0],pk=prefs.prefixKey()
     if(x===pk){
-      if(c&&cm.getLine(l)[c-1]===pk){bqCleanUp(cm);bqbqHint(cm)}
+      var s=cm.getLine(l)
+      if(s.slice(c-2,c)===pk+pk){
+        cm.replaceRange(bq[pk]||'',{line:l,ch:c-2},{line:l,ch:c+1},'D') // ``` for ⋄
+      }else if(s[c-1]===pk){
+        bqCleanUp(cm);bqbqHint(cm)
+      }
     }else{
       if(bq[x]){
         cm.replaceRange(bq[x],{line:l,ch:c-1},{line:l,ch:c+1},'D')

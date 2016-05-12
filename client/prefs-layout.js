@@ -1,5 +1,5 @@
 'use strict'
-var prefs=require('./prefs'),layouts=require('./kbds').layouts
+var prefs=require('./prefs'),layouts=require('./kbds').layouts,geom=require('./kbds').geom
 this.tabTitle='Layout'
 var $pfx,$lc // DOM elements for "Prefix" and "Locale"
 var NK=58    // number of scancodes we are concerned with
@@ -41,9 +41,10 @@ this.init=function($e){
     .on('mouseover mouseout','.key input',function(e){$(this).toggleClass('hover',e.type==='mouseover')})
   D.win&&$e.append('<label id=layout-ime-wrapper><input type=checkbox id=layout-ime> '+
                    'Also enable Dyalog IME (requires RIDE restart)</label>')
-  if(!prefs.kbdLocale()){
-    var l=navigator.language||'',xx=l.slice(0,2).toUpperCase()
-    prefs.kbdLocale(l==='en-GB'?'UK':l==='da'||l==='da_DK'?(D.mac?'DK-Mac':'DK'):geom[xx]?xx:'US')
+  if(!layouts[prefs.kbdLocale()]){
+    var s=navigator.language, l=s.slice(0,2).toLowerCase(), c=s.slice(3,5).toUpperCase() // language&country
+    var d=Object.keys(layouts).filter(function(x){return x.slice(3,5)===c}).sort()[0] // default layout for country c
+    prefs.kbdLocale(D.mac&&layouts[l+'_'+c+'_Mac']?l+'_'+c+'_Mac':layouts[l+'_'+c]?l+'_'+c:d?d:'en_US')
   }
   $('#layout-rst').click(function(){
     var lc=$lc.val();$pfx.val(prefs.prefixKey.getDefault()).change()
@@ -60,16 +61,15 @@ this.load=function(){
   var pm=prefs.prefixMaps()
   for(var lc in pm){
     var v=pm[lc]
-    for(var i=0;i<v.length;i+=2)for(var j=0;j<2;j++){
+    if(layouts[lc])for(var i=0;i<v.length;i+=2)for(var j=0;j<2;j++){
       var ix=layouts[lc][j].indexOf(v[i]);ix>=0&&(model[lc][j][ix]=v[i+1])
     }
   }
   updGlyphs();D.win&&$('#layout-ime').prop('checked',!!prefs.ime())
 }
 // Every geometry (aka "mechanical layout") has a CSS class specifying the precise key arrangement.
-var geom={US:'ansi',_:'iso'} // _ is the default
 function updGlyphs(){ // apply model values to the DOM
-  var lc=$lc.val(),l=layouts[lc],m=model[lc]
+  var lc=$lc.val(),l=layouts[lc],m=model[lc]; if(!l)return
   $('#layout-kbd').removeClass('geom-ansi geom-iso').addClass('geom-'+(geom[$lc.val()]||geom._))
   for(var i=1;i<NK;i++){
     var g0=l[0][i];if(g0!=='☠'){$('#k'+i+' .g0').text(g0);var g1=m[0][i];$('#k'+i+' .g1').val(g1).prop('title',U(g1))}

@@ -24,8 +24,7 @@ var G={ // geometries http://www.abreojosensamblador.net/Productos/AOE/html/Pags
       '│........│....│....│....│....│....│....│....│....│....│....│....│....│.....│.*\n'+
       '├──────┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴────┴─────┤.*\n'+
       '│......│....│....│....│....│....│....│....│....│....│....│....│............│.*\n'+
-      '│......│....│....│....│....│....│....│....│....│....│....│....│............│.*\n'+
-      '├──────┴┬───┴─┬──┴───┬┴────┴────┴────┴────┴────┴┬───┴──┬─┴────┼─────┬──────┤.*'+
+      '│......│....│....│....│....│....│....│....│....│....│....│....│............│.*'+
     '$'),
     sc:[
       [1,2,3,4,5,6,7,8,9,10,11,12,13,0],
@@ -47,8 +46,7 @@ var G={ // geometries http://www.abreojosensamblador.net/Productos/AOE/html/Pags
       '│........│....│....│....│....│....│....│....│....│....│....│....│..........│.*\n'+
       '├────────┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──────────┤.*\n'+
       '│...........│....│....│....│....│....│....│....│....│....│....│............│.*\n'+
-      '│...........│....│....│....│....│....│....│....│....│....│....│............│.*\n'+
-      '├───────┬───┴─┬──┴───┬┴────┴────┴────┴────┴────┴┬───┴──┬─┴────┼─────┬──────┤.*'+
+      '│...........│....│....│....│....│....│....│....│....│....│....│............│.*'+
     '$'),
     sc:[
       [1,2,3,4,5,6,7,8,9,10,11,12,13,0],
@@ -58,11 +56,14 @@ var G={ // geometries http://www.abreojosensamblador.net/Productos/AOE/html/Pags
     ]
   }
 }
-get('dfns.dyalog.com','/n_keyboards.htm',function(data){
-  var geom={_:'iso'},layouts={}
+
+var geom={_:'iso'},layouts={}
+function processData(data){
   cheerio.load(data)('pre').text()
     .replace(/\r\n/g,'\n')
-    .replace(/\nDyalog APL\/([A-Z]{2}).*\n¯*\n(┌(?:.*\n){12}.*)/gm,function(_,lc,desc){
+    .replace(/\nDyalog( Mac)? APL\/([a-z]{2}-[A-Z]{2}) .*\n¯+\n(┌(?:.*\n){11}.*)/gm,function(_,mac,lc,desc){
+      lc=lc.replace('-','_')+(mac?'_Mac':'')
+      console.info('  '+lc)
       var l=layouts[lc]=[];for(var i=0;i<4;i++){l.push([]);for(var j=0;j<58;j++)l[i].push(' ')}
       var g;for(var g1 in G)if(desc.match(G[g1].re)){g=g1;g!=='iso'&&(geom[lc]=g);break}
       g||err('unrecognized geometry for '+lc+' layout')
@@ -79,6 +80,11 @@ get('dfns.dyalog.com','/n_keyboards.htm',function(data){
       for(var i=0;i<4;i++)l[i]=l[i].join('')
       console.assert(l[0].length==l[1].length&&l[0].length==l[2].length&&l[0].length==l[3].length)
     })
+}
+
+var paths=['/n_keyboards.htm','/n_kbmac.htm']
+var rec=(function(){
+  var u=paths.shift();if(u){console.info(u);get('dfns.dyalog.com',u,function(data){processData(data);rec()});return}
   fs.writeFileSync('../client/kbds.js',
     '// generated code, do not edit\n'+
     'this.geom='+JSON.stringify(geom)+'\n'+
@@ -89,3 +95,4 @@ get('dfns.dyalog.com','/n_keyboards.htm',function(data){
     '};\n'
   )
 })
+rec()
