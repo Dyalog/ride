@@ -43,7 +43,7 @@ this.init=function($e){
                    'Also enable Dyalog IME (requires RIDE restart)</label>')
   if(!prefs.kbdLocale()){
     var l=navigator.language||'',xx=l.slice(0,2).toUpperCase()
-    prefs.kbdLocale(l==='en-GB'?'UK':l==='da'||l==='da_DK'?(D.mac?'DK-Mac':'DK'):geom[xx]?xx:'US')
+    prefs.kbdLocale(l==='en-GB'?'UK':l==='da'||l==='da_DK'?(D.mac?'DK-Mac':'DK'):geom[xx]?xx:'en_US')
   }
   $('#layout-rst').click(function(){
     var lc=$lc.val();$pfx.val(prefs.prefixKey.getDefault()).change()
@@ -60,7 +60,7 @@ this.load=function(){
   var pm=prefs.prefixMaps()
   for(var lc in pm){
     var v=pm[lc]
-    for(var i=0;i<v.length;i+=2)for(var j=0;j<2;j++){
+    if(layouts[lc])for(var i=0;i<v.length;i+=2)for(var j=0;j<2;j++){
       var ix=layouts[lc][j].indexOf(v[i]);ix>=0&&(model[lc][j][ix]=v[i+1])
     }
   }
@@ -69,7 +69,7 @@ this.load=function(){
 // Every geometry (aka "mechanical layout") has a CSS class specifying the precise key arrangement.
 var geom={US:'ansi',_:'iso'} // _ is the default
 function updGlyphs(){ // apply model values to the DOM
-  var lc=$lc.val(),l=layouts[lc],m=model[lc]
+  var lc=$lc.val(),l=layouts[lc],m=model[lc]; if(!l)return
   $('#layout-kbd').removeClass('geom-ansi geom-iso').addClass('geom-'+(geom[$lc.val()]||geom._))
   for(var i=1;i<NK;i++){
     var g0=l[0][i];if(g0!=='☠'){$('#k'+i+' .g0').text(g0);var g1=m[0][i];$('#k'+i+' .g1').val(g1).prop('title',U(g1))}

@@ -201,13 +201,11 @@ kbds.layouts['DK-Mac']=[
 
 var bq // effective ` map as a dictionary, kept in sync with the prefs
 function updBQ(){
-  bq={};var lc=prefs.kbdLocale()||'US',l=kbds.layouts[lc],n=l[0].length
+  bq={};var lc=prefs.kbdLocale(), l=kbds.layouts[lc]||kbds.layouts.en_US, n=l[0].length
   for(var i=0;i<2;i++)for(var j=0;j<n;j++){var name=l[i][j];bq[name]||(bq[name]=l[2+i][j])}
   var s=prefs.prefixMaps()[lc];if(s)for(var i=0;i<s.length;i+=2)bq[s[i]]=s[i+1]
 }
-updBQ()
-
-prefs.prefixMaps(updBQ);prefs.kbdLocale(updBQ)
+updBQ();prefs.prefixMaps(updBQ);prefs.kbdLocale(updBQ)
 
 // order: used to measure how "complicated" (for some made-up definition of the word) a shortcut is.
 // Tooltips in the lbar show the simplest one.
@@ -225,7 +223,7 @@ function bqChangeHandler(cm,o){ // o: changeObj
     if(x===pk){
       var s=cm.getLine(l)
       if(s.slice(c-2,c)===pk+pk){
-        cm.replaceRange(bq[pk],{line:l,ch:c-2},{line:l,ch:c+1},'D') // ``` for ⋄
+        cm.replaceRange(bq[pk]||'',{line:l,ch:c-2},{line:l,ch:c+1},'D') // ``` for ⋄
       }else if(s[c-1]===pk){
         bqCleanUp(cm);bqbqHint(cm)
       }
