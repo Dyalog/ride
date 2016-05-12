@@ -192,12 +192,6 @@ function switchWindows(d){ // d: a step of either 1 or -1
 //    2:APL     3:APL shifted
 // Each string can be indexed by scancode: http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
 // "APL" and "APL shifted" are the defaults upon which the user can build customisations.
-kbds.layouts['DK-Mac']=[
-  ' $1234567890+´   qwertyuiopå¨  asdfghjklæø\'  <zxcvbnm,.-  ',
-  ' §!"#€%&/()=?\`   QWERTYUIOPÅ^  ASDFGHJKLÆØ*  >ZXCVBNM;:_  ',
-  ' ⋄¨¯<≤=≥>≠∨∧×÷   ?⍵∊⍴~↑↓⍳○*←→  ⍺⌈⌊_∇∆∘\'⎕⍎⍕   ⊢⊂⊃∩∪⊥⊤|⍝⍀⌿  ',
-  '  ⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹     ⍷ ⍨  ⍸⍥⍣⍞⍬        ⍤⌸⌷≡≢   ⊣       ⍪⍙⍠  '
-]
 
 var bq // effective ` map as a dictionary, kept in sync with the prefs
 function updBQ(){
