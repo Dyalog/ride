@@ -186,12 +186,13 @@
         '\n\n'+expandStackString(e.stack)+
         '\n\nProxy log:'+proxy.log.get().join('')
       var excuses=[
-        'Oops... it broke!',
-        'Congratulations, you found a ... THE bug.',
-        'Users-Developers 1:0',
-        'According to our developers this is impossible.',
-        'This bug was caused by cosmic radiation randomly flipping bits.',
-        'You don\'t find bugs. Bugs find you.'
+        '',
+//        'Oops... it broke!',
+//        'Congratulations, you found a ... THE bug.',
+//        'Users-Developers 1:0',
+//        'According to our developers this is impossible.',
+//        'This bug was caused by cosmic radiation randomly flipping bits.',
+//        'You don\'t find bugs. Bugs find you.'
       ]
       document.write(
         '<html>'+
