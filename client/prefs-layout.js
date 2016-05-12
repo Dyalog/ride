@@ -1,5 +1,5 @@
 'use strict'
-var prefs=require('./prefs'),layouts=require('./kbds').layouts
+var prefs=require('./prefs'),layouts=require('./kbds').layouts,geom=require('./kbds').geom
 this.tabTitle='Layout'
 var $pfx,$lc // DOM elements for "Prefix" and "Locale"
 var NK=58    // number of scancodes we are concerned with
@@ -68,7 +68,6 @@ this.load=function(){
   updGlyphs();D.win&&$('#layout-ime').prop('checked',!!prefs.ime())
 }
 // Every geometry (aka "mechanical layout") has a CSS class specifying the precise key arrangement.
-var geom={US:'ansi',_:'iso'} // _ is the default
 function updGlyphs(){ // apply model values to the DOM
   var lc=$lc.val(),l=layouts[lc],m=model[lc]; if(!l)return
   $('#layout-kbd').removeClass('geom-ansi geom-iso').addClass('geom-'+(geom[$lc.val()]||geom._))
