@@ -41,9 +41,10 @@ this.init=function($e){
     .on('mouseover mouseout','.key input',function(e){$(this).toggleClass('hover',e.type==='mouseover')})
   D.win&&$e.append('<label id=layout-ime-wrapper><input type=checkbox id=layout-ime> '+
                    'Also enable Dyalog IME (requires RIDE restart)</label>')
-  if(!prefs.kbdLocale()){
-    var l=navigator.language||'',xx=l.slice(0,2).toUpperCase()
-    prefs.kbdLocale(l==='en-GB'?'UK':l==='da'||l==='da_DK'?(D.mac?'DK-Mac':'DK'):geom[xx]?xx:'en_US')
+  if(!layouts[prefs.kbdLocale()]){
+    var s=navigator.language, l=s.slice(0,2).toLowerCase(), c=s.slice(3,5).toUpperCase() // language&country
+    var d=Object.keys(layouts).filter(function(x){return x.slice(3,5)===c}).sort()[0] // default layout for country c
+    prefs.kbdLocale(D.mac&&layouts[l+'_'+c+'_Mac']?l+'_'+c+'_Mac':layouts[l+'_'+c]?l+'_'+c:d?d:'en_US')
   }
   $('#layout-rst').click(function(){
     var lc=$lc.val();$pfx.val(prefs.prefixKey.getDefault()).change()
