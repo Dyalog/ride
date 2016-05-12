@@ -19,15 +19,15 @@ this.layouts={
    " ⋄¨¯<≤=≥>≠∨∧×÷   ?⍵∊⍴~↑↓⍳○*←→  ⍺⌈⌊_∇∆∘'⎕()⌷  ⊢⊂⊃∩∪⊥⊤|⍝\\/  ",
    " ⍬⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹     ⍷ ⍨  ⍸⍥⍣≡≢      ⍫⍙⍤⍞⍠[]   ⊣    ⍎⍕ ⍪⍀⌿  "
   ],
-  en_GB_Mac:[
-   " §1234567890-=   qwertyuiop[]  asdfghjkl;'\\  `zxcvbnm,./  ",
-   " ±!@£$%^&*()_+   QWERTYUIOP{}  ASDFGHJKL:\"|  ~ZXCVBNM<>?  ",
+  en_GB:[
+   " `1234567890-=   qwertyuiop[]  asdfghjkl;'#  \\zxcvbnm,./  ",
+   " ¬!\"£$%^&*()_+   QWERTYUIOP{}  ASDFGHJKL:@~  |ZXCVBNM<>?  ",
    " ⋄¨¯<≤=≥>≠∨∧×÷   ?⍵∊⍴~↑↓⍳○*←→  ⍺⌈⌊_∇∆∘'⎕⍎⍕   ⊢⊂⊃∩∪⊥⊤|⍝⍀⌿  ",
    "  ⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹     ⍷ ⍨  ⍸⍥⍣⍞⍬        ⍤⌸⌷≡≢   ⊣       ⍪⍙⍠  "
   ],
-  en_UK:[
-   " `1234567890-=   qwertyuiop[]  asdfghjkl;'#  \\zxcvbnm,./  ",
-   " ¬!\"£$%^&*()_+   QWERTYUIOP{}  ASDFGHJKL:@~  |ZXCVBNM<>?  ",
+  en_GB_Mac:[
+   " §1234567890-=   qwertyuiop[]  asdfghjkl;'\\  `zxcvbnm,./  ",
+   " ±!@£$%^&*()_+   QWERTYUIOP{}  ASDFGHJKL:\"|  ~ZXCVBNM<>?  ",
    " ⋄¨¯<≤=≥>≠∨∧×÷   ?⍵∊⍴~↑↓⍳○*←→  ⍺⌈⌊_∇∆∘'⎕⍎⍕   ⊢⊂⊃∩∪⊥⊤|⍝⍀⌿  ",
    "  ⌶⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹     ⍷ ⍨  ⍸⍥⍣⍞⍬        ⍤⌸⌷≡≢   ⊣       ⍪⍙⍠  "
   ],
