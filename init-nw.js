@@ -14,20 +14,24 @@
     D.db={ // file-backed storage with an API similar to that of localStorage
       key:function(i){return k[i]},
       getItem   :function(x)  {var i=k.indexOf(x);return i<0?null:v[i]},
-      setItem   :function(x,y){var i=k.indexOf(x);if(i<0){k.push(x);v.push(y)}else{v[i]=y};dbSync()},
-      removeItem:function(x)  {var i=k.indexOf(x);if(i>=0){k.splice(i,1);v.splice(i,1);dbSync()}},
+      setItem   :function(x,y){var i=k.indexOf(x);if(i<0){k.push(x);v.push(y)}else{v[i]=y};dbWrite()},
+      removeItem:function(x)  {var i=k.indexOf(x);if(i>=0){k.splice(i,1);v.splice(i,1);dbWrite()}},
       _getAll:function(){var r={};for(var i=0;i<k.length;i++)r[k[i]]=v[i];return r}
     }
     Object.defineProperty(D.db,'length',{get:function(){return k.length}})
     var f=gui.App.dataPath+'/prefs.json'
     try{if(fs.existsSync(f)){var h=JSON.parse(fs.readFileSync(f,'utf8'));for(var x in h){k.push(x);v.push(h[x])}}}
     catch(e){console.error(e)}
-    var st=0,dbSync=function(){ // st: state 0=initial, 1=write pending, 2=write in progress
-      if(st===2){st=1;return}
+    var st=0,dbWrite=function(){ // st: state 0=initial, 1=write pending, 2=write in progress
+      if(st===2){st=1;return}else{st=2}
       var s='{\n'+k.map(function(x,i){return'  '+repr(x)+':'+repr(v[i])}).sort().join(',\n')+'\n}\n'
-      st=2;fs.writeFile(f,s,function(err){
-        if(err){console.error(err);dbSync=function(){};return} // make dbSync() a nop
-        if(st===1){setTimeout(function(){dbSync()},1000)}else{st=0}
+      fs.writeFile(f+'1',s,function(err){
+        if(err){console.error(err);dbWrite=function(){};return} // make dbWrite() a nop
+        fs.unlink(f,function(){
+          fs.rename(f+'1',f,function(){
+            if(st===1){setTimeout(function(){dbWrite()},1000)}else{st=0}
+          })
+        })
       })
     }
   }())
