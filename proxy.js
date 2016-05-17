@@ -36,21 +36,25 @@ function send(s){if(clt){log('send '+trunc(s));var b=Buffer('xxxxRIDE'+s);b.writ
 function cmd(c,h){send(JSON.stringify([c,h||{}]))} // c:command name, h:arguments as a JS object
 function toBrowser(x,y){log('to browser:'+trunc(JSON.stringify([x,y])));skt&&skt.emit(x,y)}
 function initInterpreterConn(){
+  var P=process.env.RIDE_PROTOCOL||'2'
   var q=Buffer(0), old // old: have we warned the user that we're talking to an old interpreter
   clt.on('data',function(x){
     q=Buffer.concat([q,x]);var n
     while(q.length>=4&&(n=q.readInt32BE(0))<=q.length){
+      if(n<=8){toBrowser('*error',{msg:''});break}
       var m=''+q.slice(8,n);q=q.slice(n);log('recv '+trunc(m))
-      if(/^<ReplyUnknownRIDECommand>/.test(m)&&!old){
-        old=1;toBrowser('*error',{msg:'This version of RIDE cannot talk to interpreters older than v15.0'})
-      }else if(m[0]==='['){ // ignore handshake ("SupportedProtocols=" and "UsingProtocol=")
+      if(m[0]==='['){
         var u=JSON.parse(m);skt&&skt.emit(u[0],u[1])
+      }else if(/^<ReplyUnknownRIDECommand>/.test(m)&&!old){
+        old=1;toBrowser('*error',{msg:'This version of RIDE cannot talk to interpreters older than v15.0'})
+      }else if(/^UsingProtocol=/.test(m)&&m.slice(m.indexOf('=')+1)!==P){
+        toBrowser('*error',{msg:'Unsupported RIDE protocol version'});break
       }
     }
   })
   clt.on('error',function(e){toBrowser('*error',{msg:''+e});clt=null})
   clt.on('end',function(){log('interpreter diconnected');toBrowser('*disconnected');clt=null})
-  var p=process.env.RIDE_PROTOCOL||2;send('SupportedProtocols='+p);send('UsingProtocol='+p)
+  send('SupportedProtocols='+P);send('UsingProtocol='+P)
   cmd('Identify',{identity:1});cmd('Connect',{remoteId:2});cmd('GetWindowLayout')
 }
 var handlers={
