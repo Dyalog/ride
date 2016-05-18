@@ -21,7 +21,7 @@ postinst=/tmp/postinst$$
 prerm=/tmp/prerm$$
 
 function checkEnvironment() {
-	local binaries=(fpm dpkg tar fakeroot)
+	local binaries=(fpm dpkg tar fakeroot rpmbuild)
 	for bin in "${binaries[@]}"; do
 		if ! which "$bin" > /dev/null; then
 			>&2 echo $bin is not available, Please install and try again
