@@ -159,7 +159,7 @@ var handlers={
             if(m=/^HK.*\\Dyalog APL\/W(-64)? (\d+\.\d+)( Unicode)?$/i.exec(l)){
               b=m[1]?64:32;v=m[2];u=m[3]?'unicode':'classic'
             }else if(v&&(m=/^ *localdyalogdir +REG_SZ +(\S.*)$/i.exec(l))){
-              r.interpreters.push({exe:m[1]+'dyalog.exe',ver:parseVer(v),bits:b,edition:u})
+              r.interpreters.push({exe:m[1]+'\\dyalog.exe',ver:parseVer(v),bits:b,edition:u})
             }else if(!/^\s*$/.test(l)){
               b=v=u=null
             }
