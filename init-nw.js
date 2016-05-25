@@ -113,7 +113,7 @@
     ['Cut','Copy','Paste'].map(function(x){return{label:x,click:function(){document.execCommand(x)}}}),
     [{type:'separator'}],
     ['Undo','Redo'].map(function(x){return{label:x,click:function(){
-      var u=D.ide;u&&(u=u.focusedWin)&&(u=u.cm)&&(u=u[x.toLowerCase()])&&u()
+      var u=D.ide;u&&(u=u.focusedWin)&&(u=u.cm)&&u[x.toLowerCase()]&&u[x.toLowerCase()]()
     }}})
   )
   var cmenu=new gui.Menu;for(var i=0;i<items.length;i++)cmenu.append(new gui.MenuItem(items[i]))
