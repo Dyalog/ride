@@ -3,11 +3,13 @@
   "version":"3.0.0",
   "private":true,
   "main":"index.html",
+  "scripts":{"start":"electron init-el.js"},
   "repository":".",
   "dependencies":{
     "cheerio":"0.20.0",
     "codemirror":"5.12.0",
     "compression":"1.6.1",
+    "electron-prebuilt":"1.1.2",
     "express":"4.13.4",
     "jquery":"2.2.0",
     "jquery-ui":"1.10.5",
