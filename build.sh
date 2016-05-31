@@ -57,7 +57,7 @@ if [ ! -e build/nw/D.js -o $(find build/{js,tmp} -newer build/nw/D.js 2>/dev/nul
   echo 'combining js files into one'
   tools/bfy.js client/*.js -m client/init.js >build/tmp/ride.js
   echo 'generating D.js for desktop app'
-  cat build/tmp/{version-info,libs}.js init-nw.js build/tmp/ride.js >build/nw/D.js
+  cat build/tmp/{version-info,libs}.js build/tmp/ride.js >build/nw/D.js
   echo 'generating D.js for web app'
   cp -r build/nw/* build/static/
   rm build/static/proxy.js
