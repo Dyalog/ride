@@ -5,7 +5,7 @@ require('./prefs-colours');require('./demo');require('./cm-foldgutter');require(
 $(function(){
   // don't use Alt- keystrokes on the Mac (see email from 2015-09-01)
   var h=CodeMirror.keyMap.emacsy;for(var k in h)if(/^alt-[a-z]$/i.test(k))delete h[k]
-  if(D.nwjs){
+  if(D.el){
     var zM=11 // zoom level can be between -zM and zM inclusive
     var ZMI=function(){prefs.zoom(Math.min( zM,prefs.zoom()+1));updPW()}
     var ZMO=function(){prefs.zoom(Math.max(-zM,prefs.zoom()-1));updPW()}
@@ -90,7 +90,7 @@ $(function(){
     prefs.theme(D.mac||/^(darwin|mac|ipad|iphone|ipod)/i.test(navigator?navigator.platform:'')?'cupertino':
                 D.win||/^win/.test(navigator?navigator.platform:'')?'redmond':'classic')
   }
-  var updThm=function(){$('#thm').html('@import url(themes/'+prefs.theme()+'.css);')}
+  var updThm=function(){$('#thm').html('@import url(build/static/themes/'+prefs.theme()+'.css);')}
   prefs.theme(function(){updThm();D.ide&&D.ide.layout.resizeAll()});updThm()
 
   D.nwjs&&$('body').addClass(D.mac?'platform-mac':D.win?'platform-windows':'')

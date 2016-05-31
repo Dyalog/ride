@@ -26,7 +26,7 @@ $.extend(CodeMirror.commands,{
   DMN:function(){move( 1)}, // next line
   DMP:function(){move(-1)}, // prev line
   DMR:function(){ // load demo script
-    if(D.nwjs&&!D.floating){
+    if(D.el&&!D.floating){
       ($i=$i||$('<input id=demo-input type=file style=display:none>').appendTo('body'))
         .val('').click().change(function(){loadDemoScript(this.value)})
     }

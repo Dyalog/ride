@@ -41,7 +41,7 @@ this.parseMenuDSL=function(md){ // md:menu description
     var cmd='';s=s.replace(/\=([a-z][a-z0-9]+)/i,function(_,x){cmd=x;return''})
     var h={ind:s.replace(/\S.*/,'').length,'':s.replace(/^\s*|\s*$/g,'')}
     while(h.ind<=stk[stk.length-1].ind)stk.pop()
-    if(!cond||new Function('var browser=!'+D.nwjs+',mac='+D.mac+',win='+D.win+';return('+cond+')')()){
+    if(!cond||new Function('var browser='+!D.el+',mac='+D.mac+',win='+D.win+';return('+cond+')')()){
       var base=stk[stk.length-1];(base.items||(base.items=[])).push(h)
     }
     stk.length!==1||h.items||(h.items=[]) // force top-level items to be menus
