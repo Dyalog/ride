@@ -141,7 +141,7 @@ $.extend(CM.commands,{
       return CM.Pos(l,m<=c.ch&&c.ch<n||!m?n:m)
     },{origin:'+move',bias:-1})
   },
-  JSC:function(){var w=D.nww;if(w){var t=w.showDevTools();t.x=w.x+w.width-w.dx;t.y=w.y-w.dy;t.height=w.height}},
+  JSC:function(){D.elw&&D.elw.webContents.toggleDevTools()},
   LOG:function(){D.showProtocolLog&&D.showProtocolLog()},
   MNU:function(){$('.menu .m-opener').eq(0).click()},
   TIP:function(){var w=D.ide.focusedWin,u=w.cm.getCursor();w.vt.show({line:u.line,ch:Math.max(0,u.ch-1)},1)},
