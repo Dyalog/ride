@@ -1,5 +1,5 @@
 'use strict'
-window.D=node_require('electron').remote.getGlobal('D')
+if(typeof node_require!=='undefined')D=$.extend(node_require('electron').remote.getGlobal('D'),D)
 var conn=require('./conn'),Editor=require('./editor').Editor,IDE=require('./ide').IDE,prefs=require('./prefs')
 require('./prefs-colours');require('./demo');require('./cm-foldgutter');require('./wse')
 $(function(){
