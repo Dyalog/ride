@@ -86,7 +86,41 @@
   'require exports module'.split(' ').forEach(function(x){window['node_'+x]=window[x];delete window[x]});
 </script>
 <script src=node_modules/jquery/dist/jquery.min.js></script>
-<script src=build/tmp/libs.js></script>
-<script src=build/static/D.js></script>
+<script src=build/tmp/libs.js        ></script>
+<script src=build/tmp/version-info.js></script>
+<script src=modules.js               ></script>
+
+<script src=client/about.js          ></script>
+<script src=client/autocompletion.js ></script>
+<script src=client/cm-apl-mode.js    ></script>
+<script src=client/cmds.js           ></script>
+<script src=client/cm-foldgutter.js  ></script>
+<script src=client/cm-scroll.js      ></script>
+<script src=client/conn.js           ></script>
+<script src=client/demo.js           ></script>
+<script src=client/editor.js         ></script>
+<script src=client/helpurls.js       ></script>
+<script src=client/ide.js            ></script>
+<script src=client/init.js           ></script>
+<script src=client/jq-list.js        ></script>
+<script src=client/jq-splitter.js    ></script>
+<script src=client/kbds.js           ></script>
+<script src=client/keymap.js         ></script>
+<script src=client/lbar.js           ></script>
+<script src=client/menu.js           ></script>
+<script src=client/prefs-code.js     ></script>
+<script src=client/prefs-colours.js  ></script>
+<script src=client/prefs.js          ></script>
+<script src=client/prefs-layout.js   ></script>
+<script src=client/prefs-menu.js     ></script>
+<script src=client/prefs-shortcuts.js></script>
+<script src=client/prefs-title.js    ></script>
+<script src=client/prefs-ui.js       ></script>
+<script src=client/session.js        ></script>
+<script src=client/util.js           ></script>
+<script src=client/vtips.js          ></script>
+<script src=client/wse.js            ></script>
+
+<script>D.load('./init')</script>
 </body>
 </html>

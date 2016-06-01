@@ -1,4 +1,5 @@
-'use strict'
+D.modules.ide=function(require){'use strict'
+
 require('./menu')
 var prefs=require('./prefs'),prefsUI=require('./prefs-ui'),parseMenuDSL=require('./prefs-menu').parseMenuDSL,
     editor=require('./editor'),Editor=editor.Editor,ACB_VALUE=editor.ACB_VALUE,Session=require('./session').Session,
@@ -292,3 +293,5 @@ this.IDE.prototype={
   }
 }
 CodeMirror.commands.WSE=function(){prefs.wse.toggle()}
+
+}

@@ -1,4 +1,5 @@
-'use strict'
+D.modules['cm-foldgutter']=function(require){'use strict'
+
 var CM=CodeMirror
 CM.defineOption('foldGutter',false,function(cm,v,o){ // v:new value, o:old value
   if(o&&o!==CM.Init){cm.clearGutter('cm-foldgutter');cm.state.foldGutter=null;for(var k in eh)cm.off(k,eh[k])}
@@ -40,3 +41,5 @@ eh.viewportChange=function(cm){
   },100)
 }
 eh.fold=eh.unfold=function(cm,lh){var h=cm.state.foldGutter;if(h){var l=lh.line;h.from<=l&&l<h.to&&updMarkers(cm,l,l+1)}}
+
+}

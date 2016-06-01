@@ -1,4 +1,5 @@
-'use strict'
+D.modules.conn=function(require,module){'use strict'
+
 require('./jq-list');require('./jq-splitter')
 var IDE=require('./ide').IDE,prefs=require('./prefs'),esc=require('./util').esc
 var q={} // mapping between ids and jQuery objects
@@ -103,7 +104,7 @@ module.exports=function(){
     n&&$.confirm('Are you sure you want to delete the selected configuration'+(n>1?'s':'')+'?','Confirmation',
       function(r){if(r){var i=$sel.eq(0).index();$sel.remove();q.favs.list('select',i,1);save()}})
   })
-  q.about.click(function(){require('about').showDialog()})
+  q.about.click(function(){require('./about').showDialog()})
   q.go.click(go)
   $(':text',q.rhs).elastic()
   $(':text[name],textarea[name]',q.rhs).change(function(){var k=this.name,v=this.value;v?(sel[k]=v):delete sel[k];save()})
@@ -171,4 +172,6 @@ function go(){
     }
   }catch(e){$.alert(e,'Error')}
   return!1
+}
+
 }

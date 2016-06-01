@@ -1,4 +1,5 @@
-'use strict'
+D.modules['prefs-shortcuts']=function(require){'use strict'
+
 var prefs=require('./prefs'),esc=require('./util').esc,cmds=require('./cmds').cmds
 this.tabTitle='Shortcuts'
 var $sc // <input> for search
@@ -87,4 +88,6 @@ function updKeys(x){
 prefs.keys(updKeys);updKeys(prefs.keys())
 function updDups(){var h={} // h: maps keystrokes to jQuery objects
   $('#shc-tbl-wr .shc-text').each(function(){var $t=$(this),k=$t.text();$t.add(h[k]).toggleClass('shc-dup',!!h[k]);h[k]=$t})
+}
+
 }

@@ -27,8 +27,10 @@ h←⊃,¨/(⊂'<b')cl(⊂'>')(esc¨chr)(⊂'</b>')
 
 ⍝ output
 '// generated code, do not edit'
+'D.modules.lbar=function(){'
 'this.html=',json⊃,/h
 'this.tips={'
 ¯2↓⊃,/⊃,¨/(json¨,¨m/chr)(⊂':[')(json¨m/desc)','(json¨rmTrailingWS¨m/text)(⊂'],',⎕ucs 10)
-'};'
+'}'
+'}'
 ⎕off

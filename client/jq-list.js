@@ -1,3 +1,5 @@
+D.modules['jq-list']=function(require){'use strict'
+
 // generic jQuery list with accessible selectable items
 ;(function($){'use strict'
   var L='list',S='list-selection',F='list-focus' // css classes
@@ -62,4 +64,6 @@
     if(methods[x])return methods[x].apply(this,[].slice.call(arguments,1))
     console.error('Method '+x+' does not exist on jQuery.list')
   }
-}(jQuery));
+}(jQuery))
+
+}

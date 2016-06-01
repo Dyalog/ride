@@ -1,4 +1,5 @@
-'use strict'
+D.modules['cm-apl-mode']=function(require){'use strict'
+
 // https://codemirror.net/doc/manual.html#modeapi
 var prefs=require('./prefs'),CM=CodeMirror
 var letter=this.letter='A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ',
@@ -201,3 +202,5 @@ CM.registerHelper('fold','apl',function(cm,start){
     }
   }
 })
+
+}

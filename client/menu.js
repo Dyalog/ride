@@ -1,4 +1,5 @@
-'use strict'
+D.modules.menu=function(require){'use strict'
+
 // Generic menu for a browser or NW.js
 // There's an alternative implementation for NW.js in ../init-nw.js
 // For the concrete content in the menu, see prefs.js
@@ -88,3 +89,5 @@ function updMenuShcs(h){
   $('.m-shortcut').each(function(){$(this).text(k[$(this).data('cmd')]||'')})
 }
 prefs.keys(updMenuShcs)
+
+}

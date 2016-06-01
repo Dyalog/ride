@@ -1,4 +1,5 @@
-'use strict'
+D.modules.util=function(require){'use strict'
+
 // a kitchen sink for small generic functions and jQuery plugins
 this.dict=function(a){var r={};for(var i=0;i<a.length;i++)r[a[i][0]]=a[i][1];return r} // dictionary from key-value pairs
 ''.repeat||(String.prototype.repeat=function(n){return Array(n+1).join(this)})
@@ -50,4 +51,6 @@ $.fn.elastic=function(){ // as you type in an <input>, it stretches as necessary
 }
 this.cmOpts={ // default CodeMirror options in RIDE
   specialChars:/[\0-\x1f\x7f\xad\u200b-\u200f\u2028\u2029\ufeff]/g
+}
+
 }

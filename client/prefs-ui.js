@@ -1,4 +1,5 @@
-'use strict'
+D.modules['prefs-ui']=function(require){'use strict'
+
 // This module implements the Preferences dialog as a whole.
 // The contents of individual tabs are in separate modules: prefs-*.js
 // Each of them can export the following properties:
@@ -57,4 +58,6 @@ this.showDialog=function(tabName){
   $d.dialog('option','position',{at:'center'}).dialog('open')
   tabName&&$d.tabs({active:$('#prefs-tabs-nav a[href="#prefs-tab-'+tabName+'"]').parent().index()})
   for(var i=0;i<tabs.length;i++)tabs[i].load&&tabs[i].load()
+}
+
 }

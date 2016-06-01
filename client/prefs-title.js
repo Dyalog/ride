@@ -1,4 +1,5 @@
-'use strict'
+D.modules['prefs-title']=function(require){'use strict'
+
 var prefs=require('./prefs')
 var wt // <input> element for Window Title
 this.tabTitle='Title'
@@ -30,3 +31,5 @@ this.init=function($e){
 }
 this.load=function(){wt.value=prefs.title()}
 this.save=function(){prefs.title(wt.value)}
+
+}

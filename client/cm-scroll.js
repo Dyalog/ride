@@ -1,4 +1,5 @@
-'use strict'
+D.modules['cm-scroll']=function(require){'use strict'
+
 var CM=CodeMirror
 function addClass(e,c){e.className+=' '+c}
 function rmClass(e,c){e.className=e.className.replace(RegExp(' *\\b'+c+'\\b','gi'),'')}
@@ -65,4 +66,6 @@ CM.scrollbarModel.simple=function(place,scroll){
       return{right:vb?w:0,bottom:hb?w:0}
     }
   }
+}
+
 }

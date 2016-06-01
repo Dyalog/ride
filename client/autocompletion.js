@@ -1,4 +1,5 @@
-'use strict'
+D.modules.autocompletion=function(require){'use strict'
+
 var prefs=require('./prefs'),letter=require('./cm-apl-mode').letter,helpurls=require('./helpurls')
 var re=RegExp('['+letter+']*$')
 var ibeams=[ // source: http://help.dyalog.com/15.0/Content/Language/Primitive%20Operators/I%20Beam.htm
@@ -101,4 +102,6 @@ this.init=function(win){ // win: an instance of Editor or Session
       }
     }
   }
+}
+
 }

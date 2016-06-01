@@ -1,4 +1,5 @@
-'use strict'
+D.modules.keymap=function(require){'use strict'
+
 var helpurls=require('./helpurls'),prefs=require('./prefs'),about=require('./about'),esc=require('./util').esc,
     prefsUI=require('./prefs-ui'),ACB_VALUE=require('./editor').ACB_VALUE,kbds=require('./kbds'),CM=CodeMirror
 
@@ -372,3 +373,5 @@ var C=[
   null,null,null,null,null,null,'TO','MO',null,null,null,null,null,'S1','S2','OS'  // 80
 ]
 for(var i=0;i<C.length;i++)if(C[i]){defCmd(C[i]);CM.keyMap.dyalogDefault["'"+String.fromCharCode(0xf800+i)+"'"]=C[i]}
+
+}

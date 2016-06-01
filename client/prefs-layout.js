@@ -1,4 +1,5 @@
-'use strict'
+D.modules['prefs-layout']=function(require){'use strict'
+
 var prefs=require('./prefs'),layouts=require('./kbds').layouts,geom=require('./kbds').geom
 this.tabTitle='Layout'
 var $pfx,$lc // DOM elements for "Prefix" and "Locale"
@@ -86,4 +87,6 @@ this.save=function(){
     s&&(h[lc]=s)
   }
   prefs.prefixMaps(h);D.win&&prefs.ime($('#layout-ime').is(':checked'))
+}
+
 }

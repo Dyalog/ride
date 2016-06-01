@@ -1,4 +1,5 @@
 // generated code, do not edit
+D.modules.lbar=function(){
 this.html="<b class='first last'>←</b> <b class=first>+</b><b>-</b><b>×</b><b>÷</b><b>*</b><b>⍟</b><b>⌹</b><b>○</b><b>!</b><b class=last>?</b> <b class=first>|</b><b>⌈</b><b>⌊</b><b>⊥</b><b>⊤</b><b>⊣</b><b class=last>⊢</b> <b class=first>=</b><b>≠</b><b>≤</b><b>&lt;</b><b>&gt;</b><b>≥</b><b>≡</b><b class=last>≢</b> <b class=first>∨</b><b>∧</b><b>⍲</b><b class=last>⍱</b> <b class=first>↑</b><b>↓</b><b>⊂</b><b>⊃</b><b>⌷</b><b>⍋</b><b class=last>⍒</b> <b class=first>⍳</b><b>⍷</b><b>∪</b><b>∩</b><b>∊</b><b class=last>~</b> <b class=first>/</b><b>\\</b><b>⌿</b><b class=last>⍀</b> <b class=first>,</b><b>⍪</b><b>⍴</b><b>⌽</b><b>⊖</b><b class=last>⍉</b> <b class=first>¨</b><b>⍨</b><b>⍣</b><b>.</b><b>∘</b><b class=last>⍤</b> <b class=first>⍞</b><b>⎕</b><b>⍠</b><b>⌸</b><b>⌶</b><b>⍎</b><b class=last>⍕</b> <b class=first>⋄</b><b>⍝</b><b>→</b><b>⍵</b><b>⍺</b><b>∇</b><b class=last>&amp;</b> <b class=first>¯</b><b class=last>⍬</b>"
 this.tips={
 "←":["Left Arrow (←)","Dyadic function:   Assignment\n\n      X←3 5⍴'ABCDEFG'\n      X\nABCDE\nFGABC\nDEFGA\n\n      X,←3 4 5\n      X\nABCDE 3\nFGABC 4\nDEFGA 5\n"],
@@ -76,4 +77,5 @@ this.tips={
 "&":["Ampersand (&)","Monadic operator:  Spawn\n\n      ⍎& '÷2 4'\n0.5 0.25\n\n      20÷&2 4\n10 5\n"],
 "¯":["High Minus (¯)","If a number is prefixed by the ¯ symbol (also known as\n\"high minus\") it means that the number is negative.\n\n      1+¯1 0 1 ¯3\n0 1 2 ¯2\n"],
 "⍬":["Zilde (⍬)","Niladic array:     Empty Numeric Vector\n\n      ⍬≡⍳0\n1\n      ⍬≢''\n1\n      ⍬≡0⍴0\n1\n"]
-};
+}
+}

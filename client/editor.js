@@ -1,4 +1,5 @@
-'use strict'
+D.modules.editor=function(require){'use strict'
+
 var autocompletion=require('./autocompletion'),prefs=require('./prefs'),mode=require('./cm-apl-mode'),
     letter=mode.letter,dfnDepth=mode.dfnDepth,util=require('./util'),cmOnDblClick=util.cmOnDblClick,
     ACB_VALUE=this.ACB_VALUE={pairs:'()[]{}',explode:'{}'}, // value for CodeMirror's "autoCloseBrackets" option when on
@@ -366,4 +367,6 @@ this.Editor.prototype={
       return''
     }
   }
+}
+
 }

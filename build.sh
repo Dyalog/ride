@@ -54,13 +54,4 @@ if [ ! -e build/nw/D.js -o $(find build/{js,tmp} -newer build/nw/D.js 2>/dev/nul
       D.pollution=function(){var r=[];for(var x in window)if(g.indexOf(x)<0)r.push(x);return r} // measure pollution
     }());
 .
-  echo 'combining js files into one'
-  tools/bfy.js client/*.js -m client/init.js >build/tmp/ride.js
-  echo 'generating D.js for desktop app'
-  cat build/tmp/{version-info,libs}.js build/tmp/ride.js >build/nw/D.js
-  echo 'generating D.js for web app'
-  cp -r build/nw/* build/static/
-  rm build/static/proxy.js
-  cp favicon.ico style/apl385.ttf build/static/
-  cat build/tmp/version-info.js build/tmp/libs.js build/tmp/ride.js >build/static/D.js
 fi

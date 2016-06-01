@@ -1,3 +1,5 @@
+D.modules['jq-splitter']=function(require){'use strict'
+
 $.fn.splitter=function(args){'strict mode' // methvin.com/splitter
   args=args||{}
   var A='active' // css class
@@ -50,4 +52,6 @@ $.fn.splitter=function(args){'strict mode' // methvin.com/splitter
     }).trigger('resize',[p0])
     $(window).resize(function(e){e.target===window&&$s.resize()})
   })
+}
+
 }

@@ -1,4 +1,5 @@
-'use strict'
+D.modules.wse=function(require){'use strict'
+
 // workspace explorer
 this.WSE=function($e,ide){
   var pending=this.pending={}
@@ -22,4 +23,6 @@ this.WSE.prototype={
     delete this.pending[x.nodeId]
   },
   refresh:function(){this.$e.jstree('refresh')}
+}
+
 }

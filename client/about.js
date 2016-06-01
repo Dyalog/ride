@@ -1,4 +1,5 @@
-'use strict'
+D.modules.about=function(require){'use strict'
+
 var repr=JSON.stringify
 this.showDialog=function(){
   var v=D.versionInfo,ri=D.remoteIdentification||{},u='unknown',db=D.db||localStorage
@@ -35,4 +36,6 @@ this.showDialog=function(){
     .dialog({title:'About',width:520,height:410,buttons:btns,open:function(){$(this).find('textarea').focus()}})
     .on('click','a[href^=http]',function(){D.openExternal($(this).attr('href'));return!1})
     .find('textarea').val(info).select()
+}
+
 }

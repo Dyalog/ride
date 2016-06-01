@@ -1,4 +1,5 @@
-'use strict'
+D.modules.helpurls=function(require,module){'use strict'
+
 var p='http://help.dyalog.com/15.0/Content/',q='.htm', // prefix and suffix
 h=D.helpurls=module.exports={
   WELCOME:p+'MiscPages/HelpWelcome'+q,
@@ -81,3 +82,5 @@ var a={
 50100:'Line Count'+q+'#Line_Count'
 }
 for(var k in a)h[k+'⌶']=u+a[k]
+
+}

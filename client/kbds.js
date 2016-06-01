@@ -1,4 +1,5 @@
 // generated code, do not edit
+D.modules.kbds=function(){
 this.geom={"_":"iso","en_US":"ansi","en_US_Mac":"ansi"}
 this.layouts={
   da_DK:[
@@ -73,4 +74,5 @@ this.layouts={
    " ⋄¨¯<≤=≥>≠∨∧×÷   ?⍵∊⍴~↑↓⍳○*←→  ⍺⌈⌊_∇∆∘'⎕⍎⍕⊢  ≡    ⊥⊤∣⍝⍀/  ",
    " ⍪⍨⍫⍒⍋⌽⍉⊖⍟⍱⍲!⌹     ⍷  ⍸ ⌶⍥⍣⍞⍬       ⍙⍤⌸⌷()⊣  ≢⊂⊃∩∪    ⍠\\  "
   ]
-};
+}
+}

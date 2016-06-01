@@ -1,4 +1,5 @@
-'use strict'
+D.modules.prefs=function(require){'use strict'
+
 // Preferences API
 // (../init-nw.js is an exception, it bypasses this API because it can't require() it.)
 // Usage:
@@ -132,3 +133,5 @@ D.prefs=this
   p.getDefault=function(){return d}
   p.toggle=function(){return p(!p())}
 })
+
+}

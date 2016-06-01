@@ -1,4 +1,5 @@
-'use strict'
+D.modules.session=function(require){'use strict'
+
 var autocompletion=require('./autocompletion'),prefs=require('./prefs'),util=require('./util'),
     cmOnDblClick=util.cmOnDblClick,vtips=require('./vtips')
 require('./cm-scroll')
@@ -125,4 +126,6 @@ this.Session.prototype={
     if(cm.somethingSelected()||this.promptType===4||/^ *$/.test(s.slice(0,u.ch))){cm.execCommand('indentMore');return}
     this.autocompleteWithTab=1;this.emit('GetAutocomplete',{line:s,pos:u.ch,token:0,win:0})
   }
+}
+
 }

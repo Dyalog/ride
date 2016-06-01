@@ -1,4 +1,5 @@
-'use strict'
+D.modules['prefs-colours']=function(require){'use strict'
+
 this.tabTitle='Colours'
 var prefs=require('./prefs'),util=require('./util'),esc=util.esc
 var G=[],H={} // G:syntax highlighting groups {t,s,c,ctrls}; H:reverse lookup dict for G
@@ -261,4 +262,6 @@ function selGroup(t,forceRefresh){
   $('#col-BIU-p').toggle(c.BIU==null||!!c.BIU)
   $('#col-bc-p' ).toggle(!!c.bc)
   sel=t
+}
+
 }

@@ -1,4 +1,5 @@
-'use strict'
+D.modules['prefs-code']=function(require){'use strict'
+
 this.tabTitle='Code'
 var prefs=require('./prefs'),on=CodeMirror.on
 var h={} // various input elements
@@ -62,3 +63,5 @@ this.validate=function(){
   if(h.ac .checked&&!isInt(h.acd.value,1))return{msg:'Autocompletion delay must be a positive integer.'      ,h:h.acd}
 }
 function isInt(x,minX){x=+x;return x===(x|0)&&x>=minX}
+
+}

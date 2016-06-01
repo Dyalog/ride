@@ -1,4 +1,5 @@
-'use strict'
+D.modules['prefs-menu']=function(require){'use strict'
+
 var prefs=require('./prefs')
 var $ta // the textarea
 this.tabTitle='Menu'
@@ -60,4 +61,6 @@ this.parseMenuDSL=function(md){ // md:menu description
     $.extend(h,extraOpts[cmd])
   }
   return stk[0].items
+}
+
 }

@@ -1,4 +1,5 @@
-'use strict'
+D.modules.init=function(require){'use strict'
+
 if(typeof node_require!=='undefined')D=$.extend(node_require('electron').remote.getGlobal('D'),D)
 var conn=require('./conn'),Editor=require('./editor').Editor,IDE=require('./ide').IDE,prefs=require('./prefs')
 require('./prefs-colours');require('./demo');require('./cm-foldgutter');require('./wse')
@@ -145,3 +146,5 @@ $(function(){
     e.preventDefault();return!1
   }
 })
+
+}

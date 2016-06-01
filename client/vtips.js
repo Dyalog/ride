@@ -1,4 +1,5 @@
-'use strict'
+D.modules.vtips=function(require){'use strict'
+
 // value tips: hover over a name to see a pop-up with its current value
 var lbar=require('./lbar'),prefs=require('./prefs')
 var MW=64,MH=32 // maxWidth and maxHeight for the character matrix displayed in the tooltip
@@ -49,4 +50,6 @@ this.init=function(w){ // .init(w) gets called for every window w (session or ed
       $r.css({left:rx,top:ry,width:rw,height:rh}).show()
     }
   }
+}
+
 }

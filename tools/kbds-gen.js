@@ -87,12 +87,14 @@ let rec=()=>{
   let u=paths.shift();if(u){console.info(u);get('dfns.dyalog.com',u,(data)=>{processData(data);rec()});return}
   fs.writeFileSync('../client/kbds.js',
     '// generated code, do not edit\n'+
+    'D.modules.kbds=function(){\n'+
     'this.geom='+JSON.stringify(geom)+'\n'+
     'this.layouts={\n'+
     '  '+Object.keys(layouts).sort().map((lc)=>{
            let l=layouts[lc];return lc+':[\n   '+l.map(JSON.stringify).join(',\n   ')+'\n  ]'
          }).join(',\n  ')+'\n'+
-    '};\n'
+    '}\n'+
+    '}\n'
   )
 }
 rec()
