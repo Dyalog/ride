@@ -299,6 +299,12 @@ var mkdirs=(x)=>{if(!fs.existsSync(x)){mkdirs(path.dirname(x));fs.mkdirSync(x)}}
 //}())
 
 var el=require('electron')
-var init=()=>{D.elw=new el.BrowserWindow({width:800,height:600});D.elw.loadURL(`file://${__dirname}/index.html`)
-  D.elw.webContents.openDevTools();D.elw.on('closed',()=>D.elw=null)}
-el.app.on('ready',init);el.app.on('window-all-closed',()=>el.app.quit());el.app.on('activate',()=>w||init())
+el.app.on('ready',()=>{ // todo: maximized state
+  var p=D.db.getItem('pos'),dx=0,dy=0
+  var w=D.elw=new el.BrowserWindow({x:p&&p[0],y:p&&p[1],width:p&&p[2],height:p&&p[3],show:0})
+  var savePos=()=>{var b=w.getBounds();D.db.setItem('pos',[b.x-dx,b.y-dy,b.width,b.height])}
+  w.loadURL(`file://${__dirname}/index.html`)
+  w.on('closed',()=>{w=D.elw=0}).on('moved',savePos).on('resize',savePos)
+   .on('show',()=>{if(p){var q=w.getPosition();dx=q[0]-p[0];dy=q[1]-p[1]}}).show()
+})
+el.app.on('window-all-closed',()=>el.app.quit())
