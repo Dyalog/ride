@@ -14,23 +14,7 @@
     "jquery":"2.2.0",
     "jquery-ui":"1.10.5",
     "less":"2.7.1",
-    "nw-builder":"2.2.0",
-    "rcedit":"0.3.0",
     "ssh2":"0.5.0",
     "ws":"1.0.1"
-  },
-  "window":{
-    "title":"Dyalog",
-    "icon":"D.png",
-    "toolbar":false,
-    "frame":true,
-    "width":850,
-    "height":520,
-    "position":"mouse",
-    "min_width":0,
-    "min_height":0,
-    "show":false
-  },
-  "webkit":{"plugin":true},
-  "single-instance":false
+  }
 }
