@@ -3,14 +3,14 @@ set -e -o pipefail
 export PATH="$(dirname "$0")/node_modules/.bin:$PATH"
 cd "$(dirname "$0")"
 if [ ! -e node_modules ]; then npm i; fi
-mkdir -p build/{nw,nw/themes,nw/jstree,tmp,static}
+mkdir -p build/{style,style/themes,style/jstree,tmp}
 
-cp -uvr *.html proxy.js style/{*.png,apl385.woff,img,jstree} favicon.ico package.json build/nw/
+cp -uvr style/{*.png,apl385.woff,img,jstree} build/style/
 
-i=style/style.less o=build/nw/style.css
+i=style/style.less o=build/style/style.css
 if [ ! -e $o -o $(find "$(dirname $i)" -type f -newer $o 2>/dev/null | wc -l) -gt 0 ]; then
   echo 'preprocessing css'; lessc $i >$o
-  for t in classic redmond cupertino; do lessc style/themes/${t}.less >build/nw/themes/${t}.css; done
+  for t in classic redmond cupertino; do lessc style/themes/${t}.less >build/style/themes/${t}.css; done
 fi
 
 nm=node_modules cm=$nm/codemirror cma=$cm/addon
@@ -40,17 +40,15 @@ for f in $lib_files; do
     else echo "cleaning up $f"; <$f sed '/^\(var \w\+ = \)\?require(/d' >$u; fi
   fi
 done
-if [ $changed -eq 1 ]; then echo 'concatenating libs'; cat $us >build/tmp/libs.js; fi
+if [ $changed -eq 1 ]; then echo 'concatenating libs'; cat $us >build/libs.js; fi
 
-if [ ! -e build/nw/D.js -o $(find build/{js,tmp} -newer build/nw/D.js 2>/dev/null | wc -l) -gt 0 ]; then
-  v=$(node -e "console.log($(cat package.json).version.replace(/\.0$/,''))").$(git rev-list --count HEAD)
-  echo $v >build/nw/version # for the benefit of installers, store version in file
-  echo 'generating version info'
-  cat >build/tmp/version-info.js <<.
-    D={versionInfo:{version:'$v',date:'$(git show -s HEAD --pretty=format:%ci)',rev:'$(git rev-parse HEAD)'}};
-    (function(){
-      var g=[];for(var x in window)g.push(x) // remember original global names (except for "D")
-      D.pollution=function(){var r=[];for(var x in window)if(g.indexOf(x)<0)r.push(x);return r} // measure pollution
-    }());
+echo 'generating version info'
+v=$(node -e "console.log($(cat package.json).version.replace(/\.0$/,''))").$(git rev-list --count HEAD)
+echo $v >build/version # plain text file for the benefit of installers, store version in a file
+cat >build/version.js <<-.
+	D={versionInfo:{version:'$v',date:'$(git show -s HEAD --pretty=format:%ci)',rev:'$(git rev-parse HEAD)'}}
+	;(function(){
+	  var g=[];for(var x in window)g.push(x) // remember original global names (except for "D")
+	  D.pollution=function(){var r=[];for(var x in window)if(g.indexOf(x)<0)r.push(x);return r} // measure pollution
+	}());
 .
-fi
