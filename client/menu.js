@@ -25,7 +25,7 @@ if(D.el){
   D.installMenu=function(x){
     var groups={},m=new D.el.Menu
     x.forEach(function(y){m.append(renderMenu(y,groups))})
-    D.el.Menu.setApplicationMenu(m)
+    D.elw.setMenu(m)
   }
 }else{
   D.installMenu=function(arg){
