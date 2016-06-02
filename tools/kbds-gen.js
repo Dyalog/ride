@@ -3,12 +3,12 @@
 // and generates ../client/kbds.js
 const fs=require('fs'),http=require('http'),cheerio=require('cheerio')
 process.chdir(__dirname)
-const log=(s)=>{process.stderr.write(s+'\n')}
-const err=(s)=>{log('ERROR: '+s);process.exit(1)}
+const log=s=>{process.stderr.write(s+'\n')}
+const err=s=>{log('ERROR: '+s);process.exit(1)}
 const get=(host,path,f)=>{ // f:callback
-  http.get({host:host,path:path},(res)=>{
-    let s='';res.setEncoding('utf8');res.on('data',(x)=>{s+=x}).on('end',()=>{f(s)})
-  }).on('error',(e)=>{console.error(e);process.exit(1)})
+  http.get({host:host,path:path},res=>{
+    let s='';res.setEncoding('utf8');res.on('data',x=>{s+=x}).on('end',()=>{f(s)})
+  }).on('error',e=>{console.error(e);process.exit(1)})
 }
 const G={ // geometries http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
   iso:{
@@ -58,7 +58,7 @@ const G={ // geometries http://www.abreojosensamblador.net/Productos/AOE/html/Pa
 }
 
 const geom={_:'iso'},layouts={}
-const processData=(data)=>{
+const processData=data=>{
   cheerio.load(data)('pre').text()
     .replace(/\r\n/g,'\n')
     .replace(/\nDyalog( Mac)? APL\/([a-z]{2}-[A-Z]{2}) .*\n¯+\n(┌(?:.*\n){11}.*)/gm,(_,mac,lc,desc)=>{
@@ -84,13 +84,13 @@ const processData=(data)=>{
 
 const paths=['/n_keyboards.htm','/n_kbmac.htm']
 const rec=()=>{
-  const u=paths.shift();if(u){console.info(u);get('dfns.dyalog.com',u,(data)=>{processData(data);rec()});return}
+  const u=paths.shift();if(u){console.info(u);get('dfns.dyalog.com',u,data=>{processData(data);rec()});return}
   fs.writeFileSync('../client/kbds.js',
     '// generated code, do not edit\n'+
     'D.modules.kbds=function(){\n'+
     'this.geom='+JSON.stringify(geom)+'\n'+
     'this.layouts={\n'+
-    '  '+Object.keys(layouts).sort().map((lc)=>{
+    '  '+Object.keys(layouts).sort().map(lc=>{
            const l=layouts[lc];return lc+':[\n   '+l.map(JSON.stringify).join(',\n   ')+'\n  ]'
          }).join(',\n  ')+'\n'+
     '}\n'+

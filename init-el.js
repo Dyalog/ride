@@ -12,14 +12,14 @@ env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a stan
   if(D.floating){D.db=opener.D.db;return}
   const k=[],v=[] // keys and values
   D.db={ // file-backed storage with an API similar to that of localStorage
-    key:(i)=>k[i],
+    key:i=>k[i],
     getItem(x)   {const i=k.indexOf(x);return i<0?null:v[i]},
     setItem(x,y) {const i=k.indexOf(x);if(i<0){k.push(x);v.push(y)}else{v[i]=y};dbWrite()},
     removeItem(x){const i=k.indexOf(x);if(i>=0){k.splice(i,1);v.splice(i,1);dbWrite()}},
     _getAll()    {const r={};for(let i=0;i<k.length;i++)r[k[i]]=v[i];return r}
   }
   Object.defineProperty(D.db,'length',{get:()=>k.length})
-  const mkdirs=(x)=>{if(!fs.existsSync(x)){mkdirs(path.dirname(x));fs.mkdirSync(x)}}
+  const mkdirs=x=>{if(!fs.existsSync(x)){mkdirs(path.dirname(x));fs.mkdirSync(x)}}
   const d=env.HOME+'/.config/ride'+fs.readFileSync('build/version','utf8').replace(/^(\d+)\.(\d+)\..*$/,'$1$2')
   const f=d+'/prefs.json';mkdirs(d)
   try{if(fs.existsSync(f)){const h=JSON.parse(fs.readFileSync(f,'utf8'));for(let x in h){k.push(x);v.push(h[x])}}}
@@ -27,7 +27,7 @@ env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a stan
   let st=0,dbWrite=()=>{ // st: state 0=initial, 1=write pending, 2=write in progress
     if(st===2){st=1;return}else{st=2}
     const s='{\n'+k.map((x,i)=>'  '+repr(x)+':'+repr(v[i])).sort().join(',\n')+'\n}\n'
-    fs.writeFile(f+'1',s,(err)=>{
+    fs.writeFile(f+'1',s,err=>{
       if(err){console.error(err);dbWrite=()=>{};return} // make dbWrite() a nop
       fs.unlink(f,()=>{
         fs.rename(f+'1',f,()=>{
@@ -233,15 +233,15 @@ D.openExternal=el.shell.openExternal
 //    $(window).on('focus blur',repaintTitle);D.setTitle=function(s){document.title=s;repaintTitle()}
 //  }
 
-;(env.RIDE_JS||'').split(path.delimiter).forEach((x)=>{x&&$.getScript('file://'+path.resolve(ps.cwd(),x))})
-if(env.RIDE_CSS)$('<style>').text(env.RIDE_CSS.split(path.delimiter).map((x)=>`@import url("${x}");`)).appendTo('head')
+;(env.RIDE_JS||'').split(path.delimiter).forEach(x=>{x&&$.getScript('file://'+path.resolve(ps.cwd(),x))})
+if(env.RIDE_CSS)$('<style>').text(env.RIDE_CSS.split(path.delimiter).map(x=>`@import url("${x}");`)).appendTo('head')
 if(env.RIDE_EDITOR){
   const d=os.tmpDir()+'/dyalog';fs.existsSync(d)||fs.mkdirSync(d,0o700)
   D.openInExternalEditor=(ee,callback)=>{ // ee: EditableEntity from RIDE protocol
     const f=d+'/'+ee.name+'.dyalog';fs.writeFileSync(f,ee.text,{encoding:'utf8',mode:0o600})
     const e={};for(let k in env)e[k]=env[k];e.LINE=''+(1+(ee.currentRow||0))
     const p=spawn(env.RIDE_EDITOR,[f],{env:e})
-    p.on('error',(x)=>{throw x})
+    p.on('error',x=>{throw x})
     p.on('exit',()=>{const s=fs.readFileSync(f,'utf8');fs.unlinkSync(f);callback(s)})
   }
 }
