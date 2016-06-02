@@ -116,22 +116,21 @@ $(function(){
 
   // Implement access keys (Alt-X) using <u></u>.
   // The built-in accesskey=X doesn't handle duplicates well -- it doesn't always focus the visible one.
-  D.mac||$(document).keydown(function(e){
-    if(e.altKey&&!e.ctrlKey&&!e.metaKey&&64<e.which&&e.which<91){ // Alt-A...Alt-Z or Alt-Shift-A...Alt-Shift-Z
-      var c=String.fromCharCode(e.which).toLowerCase(),C=c.toUpperCase()
-      var $ctx=$('.ui-widget-overlay').length?$('.ui-dialog:visible').last():$('body') // modal dialogs take priority
-      var $a=$('u:visible',$ctx).map(function(){
-        var h=this.innerHTML;if(h!==c&&h!==C)return
-        var $i=$(this).closest(':input,label,a').eq(0)
-        if($i.is('label'))$i=$('#'+$i.attr('for')).add($i.find(':input')).eq(0)
-        return $i[0]
-      })
-      if($a.length>1){$a.eq(($a.index(':focus')+1)%$a.length).focus()}
-      else if($a.is(':checkbox')){$a.focus().prop('checked',!$a.prop('checked')).change()}
-      else if($a.is(':text,:password,textarea,select')){$a.focus()}
-      else{$a.click()}
-      return!1
-    }
+  D.mac||$(document).keydown(function(e){ // Alt-A...Alt-Z or Alt-Shift-A...Alt-Shift-Z
+    if(!e.altKey||e.ctrlKey||e.metaKey||e.which<65||e.which>90)return
+    var c=String.fromCharCode(e.which).toLowerCase(),C=c.toUpperCase()
+    var $ctx=$('.ui-widget-overlay').length?$('.ui-dialog:visible').last():$('body') // modal dialogs take priority
+    var $a=$('u:visible',$ctx).map(function(){
+      var h=this.innerHTML;if(h!==c&&h!==C)return
+      var $i=$(this).closest(':input,label,a').eq(0)
+      if($i.is('label'))$i=$('#'+$i.attr('for')).add($i.find(':input')).eq(0)
+      return $i[0]
+    })
+    if($a.length>1){$a.eq(($a.index(':focus')+1)%$a.length).focus()}
+    else if($a.is(':checkbox')){$a.focus().prop('checked',!$a.prop('checked')).change()}
+    else if($a.is(':text,:password,textarea,select')){$a.focus()}
+    else{$a.click()}
+    return!$a.length
   })
 
   // drag and drop
