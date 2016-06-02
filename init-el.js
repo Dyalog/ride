@@ -1,8 +1,8 @@
-const fs=require('fs'),os=require('os'),path=require('path'),spawn=require('child_process').spawn,
-    proxy=require('./proxy'),ps=process,env=ps.env,repr=JSON.stringify,el=require('electron')
+const fs=require('fs'),os=require('os'),path=require('path'),{spawn}=require('child_process'),
+    proxy=require('./proxy'),ps=process,{env}=ps,repr=JSON.stringify,el=require('electron')
 // Detect platform: https://nodejs.org/api/process.html#process_process_platform
 // https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
-const D=global.D={};D.el=el;D.win=/^win/i.test(ps.platform);D.mac=ps.platform=='darwin';D.floating=0
+const D=global.D={};D.el=el;D.win=/^win/i.test(ps.platform);D.mac=ps.platform=='darwin'
 //  console.log=function(s){try{ps.stdout.write(s+'\n')}catch(_){console.log=function(){}}}
 env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a standalone RIDE
   (D.win?0:+fs.existsSync(path.dirname(ps.execPath)+(D.mac?'/../../../../Resources/Dyalog/mapl':'/../mapl')))
@@ -13,10 +13,10 @@ env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a stan
   const k=[],v=[] // keys and values
   D.db={ // file-backed storage with an API similar to that of localStorage
     key:(i)=>k[i],
-    getItem   :(x)=>  {const i=k.indexOf(x);return i<0?null:v[i]},
-    setItem   :(x,y)=>{const i=k.indexOf(x);if(i<0){k.push(x);v.push(y)}else{v[i]=y};dbWrite()},
-    removeItem:(x)=>  {const i=k.indexOf(x);if(i>=0){k.splice(i,1);v.splice(i,1);dbWrite()}},
-    _getAll:()=>{const r={};for(let i=0;i<k.length;i++)r[k[i]]=v[i];return r}
+    getItem(x)   {const i=k.indexOf(x);return i<0?null:v[i]},
+    setItem(x,y) {const i=k.indexOf(x);if(i<0){k.push(x);v.push(y)}else{v[i]=y};dbWrite()},
+    removeItem(x){const i=k.indexOf(x);if(i>=0){k.splice(i,1);v.splice(i,1);dbWrite()}},
+    _getAll()    {const r={};for(let i=0;i<k.length;i++)r[k[i]]=v[i];return r}
   }
   Object.defineProperty(D.db,'length',{get:()=>k.length})
   const mkdirs=(x)=>{if(!fs.existsSync(x)){mkdirs(path.dirname(x));fs.mkdirSync(x)}}
@@ -222,31 +222,6 @@ el.app.on('window-all-closed',()=>el.app.quit())
 
 //D.open=(url,o)=>{o.icon='D.png';o.toolbar==null&&(o.toolbar=false);return!!gui.Window.open(url,o)} // o:options
 D.openExternal=el.shell.openExternal
-
-//const renderMenu=(x,groups)=>{
-//  if(!x)return
-//  if(x['']==='-')return new el.MenuItem({type:'separator'})
-//  const h={label:x[''].replace(/_/g,'&')}
-//  if(x.group){
-//    h.type='checkbox';h.checked=!!x.checked
-//    h.click=()=>{groups[x.group].forEach((y)=>{y.checked=y===mi});x.action&&x.action()}
-//  }else if(x.checkBoxPref){
-//    console.info('cbpref',x.checkBoxPref)
-//    console.info('checked=',!!x.checkBoxPref())
-//    h.type='checkbox';h.checked=!!x.checkBoxPref()
-//    if(x.action)h.click=()=>{x.action(mi.checked)}
-//    x.checkBoxPref((v)=>{mi.checked=!!v})
-//  }else{
-//    h.click=x.action
-//  }
-//  if(x.items){h.submenu=new el.Menu;x.items.forEach((y)=>{h.submenu.append(renderMenu(y,groups))})}
-//  const mi=new el.MenuItem(h);x.group&&(groups[x.group]=groups[x.group]||[]).push(mi);return mi
-//}
-//D.installMenu=(x)=>{
-//  const groups={},m=new el.Menu
-//  x.forEach((y)=>{m.append(renderMenu(y,groups))})
-//  el.Menu.setApplicationMenu(m)
-//}
 
 //  if(D.win){ // Hacks to make the window title repaint on Windows. This is a workaround for:
 //    // github.com/nwjs/nw.js/issues/2895
