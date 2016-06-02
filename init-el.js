@@ -1,8 +1,8 @@
-let fs=require('fs'),os=require('os'),path=require('path'),spawn=require('child_process').spawn,
+const fs=require('fs'),os=require('os'),path=require('path'),spawn=require('child_process').spawn,
     proxy=require('./proxy'),ps=process,env=ps.env,repr=JSON.stringify,el=require('electron')
 // Detect platform: https://nodejs.org/api/process.html#process_process_platform
 // https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
-let D=global.D={};D.el=el;D.win=/^win/i.test(ps.platform);D.mac=ps.platform=='darwin';D.floating=0
+const D=global.D={};D.el=el;D.win=/^win/i.test(ps.platform);D.mac=ps.platform=='darwin';D.floating=0
 //  console.log=function(s){try{ps.stdout.write(s+'\n')}catch(_){console.log=function(){}}}
 env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a standalone RIDE
   (D.win?0:+fs.existsSync(path.dirname(ps.execPath)+(D.mac?'/../../../../Resources/Dyalog/mapl':'/../mapl')))
@@ -10,22 +10,22 @@ env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a stan
 //storage
 ;(()=>{
   if(D.floating){D.db=opener.D.db;return}
-  let k=[],v=[] // keys and values
+  const k=[],v=[] // keys and values
   D.db={ // file-backed storage with an API similar to that of localStorage
     key:(i)=>k[i],
-    getItem   :(x)=>  {let i=k.indexOf(x);return i<0?null:v[i]},
-    setItem   :(x,y)=>{let i=k.indexOf(x);if(i<0){k.push(x);v.push(y)}else{v[i]=y};dbWrite()},
-    removeItem:(x)=>  {let i=k.indexOf(x);if(i>=0){k.splice(i,1);v.splice(i,1);dbWrite()}},
-    _getAll:()=>{let r={};for(let i=0;i<k.length;i++)r[k[i]]=v[i];return r}
+    getItem   :(x)=>  {const i=k.indexOf(x);return i<0?null:v[i]},
+    setItem   :(x,y)=>{const i=k.indexOf(x);if(i<0){k.push(x);v.push(y)}else{v[i]=y};dbWrite()},
+    removeItem:(x)=>  {const i=k.indexOf(x);if(i>=0){k.splice(i,1);v.splice(i,1);dbWrite()}},
+    _getAll:()=>{const r={};for(let i=0;i<k.length;i++)r[k[i]]=v[i];return r}
   }
   Object.defineProperty(D.db,'length',{get:()=>k.length})
-  let mkdirs=(x)=>{if(!fs.existsSync(x)){mkdirs(path.dirname(x));fs.mkdirSync(x)}}
-  let d=env.HOME+'/.config/ride40',f=d+'/prefs.json';mkdirs(d)
-  try{if(fs.existsSync(f)){let h=JSON.parse(fs.readFileSync(f,'utf8'));for(let x in h){k.push(x);v.push(h[x])}}}
+  const mkdirs=(x)=>{if(!fs.existsSync(x)){mkdirs(path.dirname(x));fs.mkdirSync(x)}}
+  const d=env.HOME+'/.config/ride40',f=d+'/prefs.json';mkdirs(d)
+  try{if(fs.existsSync(f)){const h=JSON.parse(fs.readFileSync(f,'utf8'));for(let x in h){k.push(x);v.push(h[x])}}}
   catch(e){console.error(e)}
   let st=0,dbWrite=()=>{ // st: state 0=initial, 1=write pending, 2=write in progress
     if(st===2){st=1;return}else{st=2}
-    let s='{\n'+k.map((x,i)=>'  '+repr(x)+':'+repr(v[i])).sort().join(',\n')+'\n}\n'
+    const s='{\n'+k.map((x,i)=>'  '+repr(x)+':'+repr(v[i])).sort().join(',\n')+'\n}\n'
     fs.writeFile(f+'1',s,(err)=>{
       if(err){console.error(err);dbWrite=()=>{};return} // make dbWrite() a nop
       fs.unlink(f,()=>{
@@ -38,7 +38,7 @@ env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a stan
 })()
 
 if(D.win&&D.db.getItem('ime')!=='0'){ // switch IME locale as early as possible; '1' or '' means yes
-  let setImeExe=ps.execPath.replace(/[^\\\/]+$/,'set-ime.exe')
+  const setImeExe=ps.execPath.replace(/[^\\\/]+$/,'set-ime.exe')
   fs.existsSync(setImeExe)&&spawn(setImeExe,[ps.pid],{stdio:['ignore','ignore','ignore']})
 }
 
@@ -113,13 +113,13 @@ if(D.win&&D.db.getItem('ime')!=='0'){ // switch IME locale as early as possible;
 //  opener&&(D.ide=opener.D.ide)
 
 el.app.on('ready',()=>{
-  let p=D.db.getItem('pos'),dx=0,dy=0
+  const p=D.db.getItem('pos');let dx=0,dy=0
   let w=D.elw=new el.BrowserWindow({x:p&&p[0],y:p&&p[1],width:p&&p[2],height:p&&p[3],show:0,icon:'favicon.png'})
-  let savePos=()=>{let b=w.getBounds();D.db.setItem('pos',[b.x-dx,b.y-dy,b.width,b.height])}
+  const savePos=()=>{const b=w.getBounds();D.db.setItem('pos',[b.x-dx,b.y-dy,b.width,b.height])}
   el.Menu.setApplicationMenu(null)
   w.loadURL(`file://${__dirname}/index.html`)
   w.on('closed',()=>{w=D.elw=0}).on('moved',savePos).on('resize',savePos)
-   .on('show',()=>{if(p){let q=w.getPosition();dx=q[0]-p[0];dy=q[1]-p[1]}}).show()
+   .on('show',()=>{if(p){const q=w.getPosition();dx=q[0]-p[0];dy=q[1]-p[1]}}).show()
 })
 el.app.on('window-all-closed',()=>el.app.quit())
 
@@ -260,15 +260,15 @@ D.openExternal=el.shell.openExternal
 ;(env.RIDE_JS||'').split(path.delimiter).forEach((x)=>{x&&$.getScript('file://'+path.resolve(ps.cwd(),x))})
 if(env.RIDE_CSS)$('<style>').text(env.RIDE_CSS.split(path.delimiter).map((x)=>`@import url("${x}");`)).appendTo('head')
 if(env.RIDE_EDITOR){
-  let d=os.tmpDir()+'/dyalog';fs.existsSync(d)||fs.mkdirSync(d,0o700)
+  const d=os.tmpDir()+'/dyalog';fs.existsSync(d)||fs.mkdirSync(d,0o700)
   D.openInExternalEditor=(ee,callback)=>{ // ee: EditableEntity from RIDE protocol
-    let f=d+'/'+ee.name+'.dyalog';fs.writeFileSync(f,ee.text,{encoding:'utf8',mode:0o600})
-    let e={};for(let k in env)e[k]=env[k];e.LINE=''+(1+(ee.currentRow||0))
-    let p=spawn(env.RIDE_EDITOR,[f],{env:e})
+    const f=d+'/'+ee.name+'.dyalog';fs.writeFileSync(f,ee.text,{encoding:'utf8',mode:0o600})
+    const e={};for(let k in env)e[k]=env[k];e.LINE=''+(1+(ee.currentRow||0))
+    const p=spawn(env.RIDE_EDITOR,[f],{env:e})
     p.on('error',(x)=>{throw x})
-    p.on('exit',()=>{let s=fs.readFileSync(f,'utf8');fs.unlinkSync(f);callback(s)})
+    p.on('exit',()=>{const s=fs.readFileSync(f,'utf8');fs.unlinkSync(f);callback(s)})
   }
 }
 
 // cmd line args
-;(()=>{let a=ps.argv,h=D.args={};for(let i=2;i<a.length;i++)if(a[i][0]==='-'){h[a[i]]=a[i+1];i++}})()
+;(()=>{const a=ps.argv,h=D.args={};for(let i=2;i<a.length;i++)if(a[i][0]==='-'){h[a[i]]=a[i+1];i++}})()

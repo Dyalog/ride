@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 // This script scrapes keyboard definitions from http://dfns.dyalog.com/n_keyboards.htm
 // and generates ../client/kbds.js
-let fs=require('fs'),http=require('http'),cheerio=require('cheerio')
+const fs=require('fs'),http=require('http'),cheerio=require('cheerio')
 process.chdir(__dirname)
-let log=(s)=>{process.stderr.write(s+'\n')}
-let err=(s)=>{log('ERROR: '+s);process.exit(1)}
-let get=(host,path,f)=>{ // f:callback
+const log=(s)=>{process.stderr.write(s+'\n')}
+const err=(s)=>{log('ERROR: '+s);process.exit(1)}
+const get=(host,path,f)=>{ // f:callback
   http.get({host:host,path:path},(res)=>{
     let s='';res.setEncoding('utf8');res.on('data',(x)=>{s+=x}).on('end',()=>{f(s)})
   }).on('error',(e)=>{console.error(e);process.exit(1)})
 }
-let G={ // geometries http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
+const G={ // geometries http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
   iso:{
     re:RegExp('^'+
       '┌────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬─────────┐.*\n'+
@@ -57,22 +57,22 @@ let G={ // geometries http://www.abreojosensamblador.net/Productos/AOE/html/Pags
   }
 }
 
-let geom={_:'iso'},layouts={}
-let processData=(data)=>{
+const geom={_:'iso'},layouts={}
+const processData=(data)=>{
   cheerio.load(data)('pre').text()
     .replace(/\r\n/g,'\n')
     .replace(/\nDyalog( Mac)? APL\/([a-z]{2}-[A-Z]{2}) .*\n¯+\n(┌(?:.*\n){11}.*)/gm,(_,mac,lc,desc)=>{
       lc=lc.replace('-','_')+(mac?'_Mac':'')
       console.info('  '+lc)
-      let l=layouts[lc]=[];for(let i=0;i<4;i++){l.push([]);for(let j=0;j<58;j++)l[i].push(' ')}
+      const l=layouts[lc]=[];for(let i=0;i<4;i++){l.push([]);for(let j=0;j<58;j++)l[i].push(' ')}
       let g,g1;for(g1 in G)if(desc.match(G[g1].re)){g=g1;g!=='iso'&&(geom[lc]=g);break}
       g||err('unrecognized geometry for '+lc+' layout')
-      let lines=desc.split('\n')
+      const lines=desc.split('\n')
       // r,c: coords of the key in the keyboard    x,y: coords of the symbol on the key
       for(let r=0;r<4;r++)for(let y=0;y<2;y++){
-        let chunks=lines[1+y+3*r].slice(1,74).split(/[─│┌┬┐├┼┤└┴┘]+/g)
+        const chunks=lines[1+y+3*r].slice(1,74).split(/[─│┌┬┐├┼┤└┴┘]+/g)
         for(let c=0;c<chunks.length;c++)if(G[g1].sc[r][c]){
-          let chunk=chunks[c]
+          const chunk=chunks[c]
           if(chunk[1]!==' '||chunk[3]!==' ')err('bad key in '+lc+' layout -- '+JSON.stringify(chunk))
           for(let x=0;x<2;x++)l[2*x+1-y][G[g1].sc[r][c]]=chunk[2*x]
         }
@@ -82,16 +82,16 @@ let processData=(data)=>{
     })
 }
 
-let paths=['/n_keyboards.htm','/n_kbmac.htm']
-let rec=()=>{
-  let u=paths.shift();if(u){console.info(u);get('dfns.dyalog.com',u,(data)=>{processData(data);rec()});return}
+const paths=['/n_keyboards.htm','/n_kbmac.htm']
+const rec=()=>{
+  const u=paths.shift();if(u){console.info(u);get('dfns.dyalog.com',u,(data)=>{processData(data);rec()});return}
   fs.writeFileSync('../client/kbds.js',
     '// generated code, do not edit\n'+
     'D.modules.kbds=function(){\n'+
     'this.geom='+JSON.stringify(geom)+'\n'+
     'this.layouts={\n'+
     '  '+Object.keys(layouts).sort().map((lc)=>{
-           let l=layouts[lc];return lc+':[\n   '+l.map(JSON.stringify).join(',\n   ')+'\n  ]'
+           const l=layouts[lc];return lc+':[\n   '+l.map(JSON.stringify).join(',\n   ')+'\n  ]'
          }).join(',\n  ')+'\n'+
     '}\n'+
     '}\n'
