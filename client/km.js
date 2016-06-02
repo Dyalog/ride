@@ -1,7 +1,7 @@
-D.modules.keymap=function(require){'use strict'
+D.modules.km=function(require){'use strict'
 
-var helpurls=require('./helpurls'),prefs=require('./prefs'),about=require('./about'),esc=require('./util').esc,
-    prefsUI=require('./prefs-ui'),ACB_VALUE=require('./editor').ACB_VALUE,kbds=require('./kbds'),CM=CodeMirror
+var hlp=require('./hlp'),prefs=require('./prefs'),abt=require('./abt'),esc=require('./util').esc,
+    prefsUI=require('./prefs-ui'),ACB_VALUE=require('./ed').ACB_VALUE,kbds=require('./kbds'),CM=CodeMirror
 
 window.onhelp=function(){return!1} // prevent IE from acting silly on F1
 prefs.prefixKey(function(x,old){
@@ -38,7 +38,7 @@ $.extend(CM.commands,{
   PT:function(){document.execCommand('Paste')},
   TO:CM.commands.toggleFold,
   PRF:function(){prefsUI.showDialog()},
-  ABT:function(){about.showDialog()},
+  ABT:function(){abt.showDialog()},
   CNC:function(){D.rideConnect()},
   NEW:function(){D.rideNewSession()},
   QIT:function(){D.quit()},
@@ -86,7 +86,7 @@ $.extend(CM.commands,{
     cm.setSelection(CM.Pos(b[0],b[1]),CM.Pos(b[2],b[3]))
   },
   HLP:function(cm){
-    var c=cm.getCursor(),s=cm.getLine(c.line).toLowerCase(),h=helpurls,u // u: the URL
+    var c=cm.getCursor(),s=cm.getLine(c.line).toLowerCase(),h=hlp,u // u: the URL
     if(m=/^ *(\)[a-z]+).*$/.exec(s))u=h[m[1]]||h.WELCOME
     else if(m=/^ *(\][a-z]+).*$/.exec(s))u=h[m[1]]||h.UCMDS
     else if(m=/(\d+) *⌶$/.exec(s.slice(0,c.ch)))u=h[m[1]+'⌶']||h['⌶']+'#'+m[1]
@@ -116,7 +116,7 @@ $.extend(CM.commands,{
               Backspace:function(cm,m){m.close();cm.execCommand('delCharBefore')},
               Left:     function(cm,m){m.close();cm.execCommand('goCharLeft')},
               Right:    function(cm,m){m.pick()},
-              F1:function(){sel&&sel.text&&helpurls[sel.text]&&D.openExternal(helpurls[sel.text])}
+              F1:function(){sel&&sel.text&&hlp[sel.text]&&D.openExternal(hlp[sel.text])}
             },
             hint:function(){
               var pk=prefs.prefixKey(),ks=[];for(var x in bq)if(x!=='☠')ks.push(x);ks.sort()
@@ -243,7 +243,7 @@ function bqbqHint(cm){
   var pick=function(cm,m){return m.pick()},c=cm.getCursor()
   cm.showHint({
     completeOnSingleClick:true,
-    extraKeys:{Right:pick,Space:pick,F1:function(){sel&&helpurls[sel.text]&&D.openExternal(helpurls[sel.text])}},
+    extraKeys:{Right:pick,Space:pick,F1:function(){sel&&hlp[sel.text]&&D.openExternal(hlp[sel.text])}},
     hint:function(){
       var u=cm.getLine(c.line).slice(c.ch,cm.getCursor().ch),a=[]
       for(var i=0;i<bqbqc.length;i++){var x=bqbqc[i];x.name.slice(0,u.length)===u&&a.push(x)}

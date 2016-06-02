@@ -1,11 +1,12 @@
-D.modules.session=function(require){'use strict'
+D.modules.se=function(require){'use strict'
 
-var autocompletion=require('./autocompletion'),prefs=require('./prefs'),util=require('./util'),
-    cmOnDblClick=util.cmOnDblClick,vtips=require('./vtips')
-require('./cm-scroll')
+//session
+var ac=require('./ac'),prefs=require('./prefs'),util=require('./util'),
+    cmOnDblClick=util.cmOnDblClick,vt=require('./vt')
+require('./scrl')
 this.Session=function(ide,e,opts){ // Session constructor
   var se=this;se.ide=ide;se.opts=opts;se.emit=opts.emit;se.hist=[''];se.histIdx=0;se.focusTimestamp=0;se.id=0
-  se.dirty={} // modified lines: lineNumber→originalContent, inserted lines: lineNumber→0 (also used in cm-apl-mode.js)
+  se.dirty={} // modified lines: lineNumber→originalContent, inserted lines: lineNumber→0 (also used in syn.js)
   se.$e=$(e).addClass('ride-win')
   var cm=se.cm=CodeMirror(se.$e[0],$.extend({},util.cmOpts,{
     autofocus:true,mode:{name:'apl-session',se:se},matchBrackets:!!prefs.matchBrackets(),readOnly:true,keyMap:'dyalog',
@@ -35,9 +36,9 @@ this.Session=function(ide,e,opts){ // Session constructor
     for(var l in se.dirty)se.cm.addLineClass(+l,'background','modified')
   })
   se.promptType=0 // see ../docs/protocol.md #SetPromptType
-  se.processAutocompleteReply=autocompletion.init(se)
+  se.processAutocompleteReply=ac.init(se)
   prefs.wrap(function(x){se.cm.setOption('lineWrapping',!!x);se.scrollCursorIntoView()})
-  this.vt=vtips.init(this)
+  this.vt=vt.init(this)
 }
 this.Session.prototype={
   histAdd:function(lines){this.hist[0]='';[].splice.apply(this.hist,[1,0].concat(lines));this.histIdx=0},

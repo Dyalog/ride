@@ -1,6 +1,7 @@
-D.modules.autocompletion=function(require){'use strict'
+D.modules.ac=function(require){'use strict'
 
-var prefs=require('./prefs'),letter=require('./cm-apl-mode').letter,helpurls=require('./helpurls')
+//autocompletion
+var prefs=require('./prefs'),letter=require('./syn').letter,hlp=require('./hlp')
 var re=RegExp('['+letter+']*$')
 var ibeams=[ // source: http://help.dyalog.com/15.0/Content/Language/Primitive%20Operators/I%20Beam.htm
   [    8,'Inverted Table Index-of'],
@@ -86,7 +87,7 @@ this.init=function(win){ // win: an instance of Editor or Session
             Right:function(cm,m){sel||m.moveFocus(1);m.pick()},
             'Shift-Tab':function(cm,m){m.moveFocus(-1)},
             Tab:function(cm,m){m.moveFocus(1);x.options.length===1&&m.pick()},
-            F1:function(){sel&&sel.text&&helpurls[sel.text]&&D.openExternal(helpurls[sel.text])}
+            F1:function(){sel&&sel.text&&hlp[sel.text]&&D.openExternal(hlp[sel.text])}
           },
           hint:function(){
             var to=cm.getCursor(),

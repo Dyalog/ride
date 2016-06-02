@@ -1,6 +1,6 @@
-D.modules['cm-apl-mode']=function(require){'use strict'
+D.modules.syn=function(require){'use strict'
 
-// https://codemirror.net/doc/manual.html#modeapi
+//syntax highlighting using https://codemirror.net/doc/manual.html#modeapi
 var prefs=require('./prefs'),CM=CodeMirror
 var letter=this.letter='A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ',
   name0=RegExp('['+letter+']'),

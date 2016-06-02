@@ -1,8 +1,8 @@
 D.modules.init=function(require){'use strict'
 
 if(typeof node_require!=='undefined')D=$.extend(node_require('electron').remote.getGlobal('D'),D)
-var conn=require('./conn'),Editor=require('./editor').Editor,IDE=require('./ide').IDE,prefs=require('./prefs')
-require('./prefs-colours');require('./demo');require('./cm-foldgutter');require('./wse')
+var cn=require('./cn'),Editor=require('./ed').Editor,IDE=require('./ide').IDE,prefs=require('./prefs')
+require('./prefs-colours');require('./demo');require('./fld');require('./wse')
 $(function(){
   // don't use Alt- keystrokes on the Mac (see email from 2015-09-01)
   var h=CodeMirror.keyMap.emacsy;for(var k in h)if(/^alt-[a-z]$/i.test(k))delete h[k]
@@ -84,7 +84,7 @@ $(function(){
           else{$.alert('Invalid $RIDE_CONNECT')}}
     else if(+e.RIDE_SPAWN){new IDE;D.skt.emit('*launch',{}) // '*error' is handled in ide.coffee
                            window.onbeforeunload=function(){D.skt.emit('Exit',{code:0})}}
-    else{conn()}
+    else{cn()}
   }
 
   if(!prefs.theme()){

@@ -1,5 +1,6 @@
-D.modules.about=function(require){'use strict'
+D.modules.abt=function(require){'use strict'
 
+//"about" dialog
 var repr=JSON.stringify
 this.showDialog=function(){
   var v=D.versionInfo,ri=D.remoteIdentification||{},u='unknown',db=D.db||localStorage

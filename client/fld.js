@@ -1,4 +1,4 @@
-D.modules['cm-foldgutter']=function(require){'use strict'
+D.modules.fld=function(require){'use strict'
 
 var CM=CodeMirror
 CM.defineOption('foldGutter',false,function(cm,v,o){ // v:new value, o:old value

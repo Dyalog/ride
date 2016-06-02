@@ -1,10 +1,11 @@
-D.modules.editor=function(require){'use strict'
+D.modules.ed=function(require){'use strict'
 
-var autocompletion=require('./autocompletion'),prefs=require('./prefs'),mode=require('./cm-apl-mode'),
-    letter=mode.letter,dfnDepth=mode.dfnDepth,util=require('./util'),cmOnDblClick=util.cmOnDblClick,
+//editor
+var ac=require('./ac'),prefs=require('./prefs'),syn=require('./syn'),
+    letter=syn.letter,dfnDepth=syn.dfnDepth,util=require('./util'),cmOnDblClick=util.cmOnDblClick,
     ACB_VALUE=this.ACB_VALUE={pairs:'()[]{}',explode:'{}'}, // value for CodeMirror's "autoCloseBrackets" option when on
-    vtips=require('./vtips'),CM=CodeMirror
-require('./cm-scroll')
+    vt=require('./vt'),CM=CodeMirror
+require('./scrl')
 
 var b=function(c,t){return'<a href=# class="'+c+' tb-btn" title="'+t+'"></a>'} // cc:css classes, t:title
 var ED_HTML=
@@ -58,7 +59,7 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
   })
   ed.cm.on('focus',function(){ed.focusTimestamp=+new Date;ide.focusedWin=ed})
   cmOnDblClick(ed.cm,function(e){ed.ED(ed.cm);e.preventDefault();e.stopPropagation()})
-  ed.processAutocompleteReply=autocompletion.init(ed)
+  ed.processAutocompleteReply=ac.init(ed)
   ed.$tb=$('.toolbar',ed.$e)
     .on('click','.tb-hid,.tb-case',function(e){$(e.target).toggleClass('pressed');ed.highlightSearch();return!1})
     .on('mousedown','.tb-btn',function(e){$(e.target).addClass('armed');e.preventDefault()})
@@ -96,7 +97,7 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
     })
   }
   ed.setTracer(!!ed.tc)
-  this.vt=vtips.init(this)
+  this.vt=vt.init(this)
 }
 this.Editor.prototype={
   updGutters:function(){

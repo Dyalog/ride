@@ -1,5 +1,6 @@
-D.modules['cm-scroll']=function(require){'use strict'
+D.modules.scrl=function(require){'use strict'
 
+//scrollbars for CodeMirror
 var CM=CodeMirror
 function addClass(e,c){e.className+=' '+c}
 function rmClass(e,c){e.className=e.className.replace(RegExp(' *\\b'+c+'\\b','gi'),'')}

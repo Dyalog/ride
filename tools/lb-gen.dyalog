@@ -6,16 +6,16 @@
 
 ⍝ Usage from bash:
 ⍝   # fetch the latest .xml
-⍝   svn cat http://svn.dyalog.bramley/svn/dyalog/trunk/apl/svn/tools/languagebar/out/lbar_unicode.xml >lbar.xml
+⍝   svn cat http://svn.dyalog.bramley/svn/dyalog/trunk/apl/svn/tools/languagebar/out/lbar_unicode.xml >lb.xml
 ⍝   # generate the .js
-⍝   ./lbar-gen.dyalog >lbar.js
+⍝   ./lb-gen.dyalog >../client/lb.js
 
 ⎕io←⎕ct←0 ⋄ ⎕pw←32767 ⋄ json←7160⌶ ⋄ 'base64'⎕cy'dfns'
 esc←(,¨'&<>')⎕r'\&amp;' '\&lt;' '\&gt;'
 rmTrailingWS←' +$'⎕r''
 
 ⍝ parse xml and extract tags
-x←⎕xml'UTF-8'⎕ucs 83 ¯1⎕map'lbar.xml'
+x←⎕xml'UTF-8'⎕ucs 83 ¯1⎕map'lb.xml'
 tag val←↓⍉x[;1 2]
 chr←⎕ucs⍎¨val/⍨tag≡¨⊂'chr'
 text desc←↓(⊂'UTF-8')⎕ucs¨ base64¨↑(⊂val)/⍨¨↓'text' 'desc'∘.≡tag
@@ -27,7 +27,7 @@ h←⊃,¨/(⊂'<b')cl(⊂'>')(esc¨chr)(⊂'</b>')
 
 ⍝ output
 '// generated code, do not edit'
-'D.modules.lbar=function(){'
+'D.modules.lb=function(){'
 'this.html=',json⊃,/h
 'this.tips={'
 ¯2↓⊃,/⊃,¨/(json¨,¨m/chr)(⊂':[')(json¨m/desc)','(json¨rmTrailingWS¨m/text)(⊂'],',⎕ucs 10)

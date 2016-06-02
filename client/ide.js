@@ -2,14 +2,14 @@ D.modules.ide=function(require){'use strict'
 
 require('./menu')
 var prefs=require('./prefs'),prefsUI=require('./prefs-ui'),parseMenuDSL=require('./prefs-menu').parseMenuDSL,
-    editor=require('./editor'),Editor=editor.Editor,ACB_VALUE=editor.ACB_VALUE,Session=require('./session').Session,
-    keymap=require('./keymap'),util=require('./util'),esc=util.esc,throttle1=util.throttle1,
-    cmds=require('./cmds').cmds,lbar=require('./lbar'),wse=require('./wse'),vtips=require('./vtips')
+    ed=require('./ed'),Editor=ed.Editor,ACB_VALUE=ed.ACB_VALUE,Session=require('./se').Session,
+    km=require('./km'),util=require('./util'),esc=util.esc,throttle1=util.throttle1,
+    cmds=require('./cmds').cmds,lb=require('./lb'),wse=require('./wse'),vt=require('./vt')
 function parseId(s){return+s.replace(/^.*?(\d+)$/,'$1')}
 this.IDE=function(){
   var ide=D.ide=this
   document.body.innerHTML=
-    '<div class=lbar style=display:none><a class=lbar-prefs href=#></a>'+lbar.html+'</div>'+
+    '<div class=lbar style=display:none><a class=lbar-prefs href=#></a>'+lb.html+'</div>'+
     '<div class=lbar-tip style=display:none><div class=lbar-tip-desc></div><pre class=lbar-tip-text></pre></div>'+
     '<div class=lbar-tip-triangle style=display:none></div>'+
     '<div class=ide>'+
@@ -150,8 +150,8 @@ this.IDE=function(){
     .on('mousedown','b',function(e){var c=$(this).text(),w=ide.focusedWin;(w.hasFocus()?w:$(':focus')).insert(c);return!1})
     .on('mouseout','b,.lbar-prefs',function(){clearTimeout(ttid);ttid=null;$tip.add($tipTriangle).hide()})
     .on('mouseover','b',function(e){
-      var c=$(this).text(),k=keymap.getBQKeyFor(c),s=k&&c.charCodeAt(0)>127?'Keyboard: '+prefs.prefixKey()+k+'\n\n':''
-      var h=lbar.tips[c]||[c,''];requestTooltip(e,h[0],s+h[1])
+      var c=$(this).text(),k=km.getBQKeyFor(c),s=k&&c.charCodeAt(0)>127?'Keyboard: '+prefs.prefixKey()+k+'\n\n':''
+      var h=lb.tips[c]||[c,''];requestTooltip(e,h[0],s+h[1])
     })
     .on('mouseover','.lbar-prefs',function(e){
       var h=prefs.keys(),s=''
