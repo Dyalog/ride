@@ -20,7 +20,7 @@ env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a stan
   }
   Object.defineProperty(D.db,'length',{get:()=>k.length})
   const mkdirs=x=>{if(!fs.existsSync(x)){mkdirs(path.dirname(x));fs.mkdirSync(x)}}
-  const d=env.HOME+'/.config/ride'+fs.readFileSync('build/version','utf8').replace(/^(\d+)\.(\d+)\..*$/,'$1$2')
+  const d=env.HOME+'/.config/ride'+fs.readFileSync('build/version','utf8').replace(/^(\d+)\.(\d+)\.[^]*$/,'$1$2')
   const f=d+'/prefs.json';mkdirs(d)
   try{if(fs.existsSync(f)){const h=JSON.parse(fs.readFileSync(f,'utf8'));for(let x in h){k.push(x);v.push(h[x])}}}
   catch(e){console.error(e)}
