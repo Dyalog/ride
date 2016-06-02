@@ -91,7 +91,7 @@ $(function(){
     prefs.theme(D.mac||/^(darwin|mac|ipad|iphone|ipod)/i.test(navigator?navigator.platform:'')?'cupertino':
                 D.win||/^win/.test(navigator?navigator.platform:'')?'redmond':'classic')
   }
-  var updThm=function(){$('#thm').html('@import url(build/style/themes/'+prefs.theme()+'.css);')}
+  var updThm=function(){$('#thm').html('@import url(build/themes/'+prefs.theme()+'.css);')}
   prefs.theme(function(){updThm();D.ide&&D.ide.layout.resizeAll()});updThm()
 
   D.nwjs&&$('body').addClass(D.mac?'platform-mac':D.win?'platform-windows':'')

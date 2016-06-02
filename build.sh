@@ -3,15 +3,12 @@ set -e -o pipefail
 export PATH="$(dirname "$0")/node_modules/.bin:$PATH"
 cd "$(dirname "$0")"
 if [ ! -e node_modules ]; then npm i; fi
-mkdir -p build/{style,style/themes,style/jstree,tmp}
 
-cp -uvr style/{*.png,apl385.woff,img,jstree} build/style/
-
-i=style/style.less o=build/style/style.css
-if [ ! -e $o -o $(find "$(dirname $i)" -type f -newer $o 2>/dev/null | wc -l) -gt 0 ]; then
-  echo 'preprocessing css'; lessc $i >$o
-  for t in classic redmond cupertino; do lessc style/themes/${t}.less >build/style/themes/${t}.css; done
-fi
+mkdir -p build/themes
+for f in style themes/classic themes/redmond themes/cupertino; do
+  i=style/${f}.less o=build/${f}.css
+  if [ ! -e $o -o $i -nt $o ]; then echo "preprocessing $i"; lessc $i $o; fi
+done
 
 nm=node_modules cm=$nm/codemirror cma=$cm/addon
 lib_files="$(echo                            \
@@ -30,6 +27,7 @@ lib_files="$(echo                            \
   lib/jstree.min.js
 )"
 
+mkdir -p build/tmp
 us='' changed=0 # us:paths to versions of lib files with "require()" calls removed
 for f in $lib_files; do
   u=build/tmp/${f//\//_} # replace / with _

@@ -12,7 +12,7 @@
 .outset{border-color:@light @dark @dark @light}
 .tt    {font-family:apl,monospace;font-size:18px}
 
-@font-face{font-family:'apl';src:url('apl385.woff')format('woff'),url('apl385.ttf')format('truetype')}
+@font-face{font-family:'apl';src:url('../style/apl385.woff')format('woff'),url('../style/apl385.ttf')format('truetype')}
 
 ::selection{.sel} ::-moz-selection{.sel} // these two must be separate rules
 body{.bg;padding:0;margin:0;font-family:sans-serif;overflow:hidden}
@@ -94,11 +94,11 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
     a{
       display:block;height:17px;line-height:17px;text-align:left;padding:1px 17px;overflow:hidden;text-overflow:ellipsis;
       .m-shortcut{font-size:small;float:right;margin-left:20px;color:#666}
-      &.m-checked{background:transparent 5px center no-repeat url(img/menu-check.png)}
+      &.m-checked{background:transparent 5px center no-repeat url(../style/img/menu-check.png)}
       &:focus{
         .sel;
         .m-shortcut{color:@selfg}
-        &.m-checked{background:@selbg 5px center no-repeat url(img/menu-check-white.png)}
+        &.m-checked{background:@selbg 5px center no-repeat url(../style/img/menu-check-white.png)}
       }
       .outset
     }
@@ -106,8 +106,8 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
   .m-box .m-opener{
     // "right 5px" might not work in Safari, see
     // https://stackoverflow.com/questions/3197250/position-a-css-background-image-x-pixels-from-the-right#comment-35531805
-    background:transparent center right 5px no-repeat url(img/menu-right-triangle.png);
-    &:focus{background:@selbg center right 5px no-repeat url(img/menu-right-triangle-white.png)}
+    background:transparent center right 5px no-repeat url(../style/img/menu-right-triangle.png);
+    &:focus{background:@selbg center right 5px no-repeat url(../style/img/menu-right-triangle-white.png)}
   }
   hr{margin:3px 0 5px 0} // used as a separator
 }
@@ -119,14 +119,14 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
   b.first{border-left:solid @dark 1px}
   b:hover{background-color:@light}
 }
-.lbar-prefs{float:right;margin-right:4px;width:24px;height:24px;background:no-repeat center center url(img/lbar-prefs.png)}
+.lbar-prefs{float:right;margin-right:4px;width:24px;height:24px;background:no-repeat center center url(../style/img/lbar-prefs.png)}
 .lbar-tip-triangle{
   position:absolute;padding:0;margin:0;width:20px;height:19px;
-  background:center center no-repeat url(img/lbar-tip-triangle.png)
+  background:center center no-repeat url(../style/img/lbar-tip-triangle.png)
 }
 .lbar-tip{
   .tt;position:absolute;padding:10px;border-radius:10px;border:solid black 1px;margin-top:20px;
-  background:@tip 10px 10px no-repeat url(img/lbar-tip.png)
+  background:@tip 10px 10px no-repeat url(../style/img/lbar-tip.png)
 }
 .lbar-tip-desc{.tt;padding:0 0 0 30px;margin:0;font-weight:bold}
 .lbar-tip-text{.tt}
@@ -175,7 +175,7 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 .breakpoints{width:12px}
 .breakpoint{
   color:#f00;width:12px;text-indent:-99px;cursor:pointer;
-  background:no-repeat transparent center center url(img/breakpoint.png)
+  background:no-repeat transparent center center url(../style/img/breakpoint.png)
 }
 .hidden{display:none}
 .highlighted{border:solid red 1px}
@@ -206,24 +206,24 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
   &.armed{.inset}
   &.pressed{.inset;background-color:#eee}
 }
-.tb-LN  {background-image:url(img/tb-LN.png)}
-.tb-AO  {background-image:url(img/tb-AO.png)}
-.tb-DO  {background-image:url(img/tb-DO.png)}
-.tb-NX  {background-image:url(img/tb-NX.png)}
-.tb-PV  {background-image:url(img/tb-PV.png)}
-.tb-hid {background-image:url(img/tb-hid.png)}
-.tb-case{background-image:url(img/tb-case.png)}
-.tb-ER  {background-image:url(img/tb-ER.png)}
-.tb-TC  {background-image:url(img/tb-TC.png)}
-.tb-BK  {background-image:url(img/tb-BK.png)}
-.tb-FD  {background-image:url(img/tb-FD.png)}
-.tb-BH  {background-image:url(img/tb-BH.png)}
-.tb-RM  {background-image:url(img/tb-RM.png)}
-.tb-MA  {background-image:url(img/tb-MA.png)}
-.tb-ED  {background-image:url(img/tb-ED.png)}
-.tb-WI  {background-image:url(img/tb-WI.png)}
-.tb-CBP {background-image:url(img/tb-CBP.png)}
-.tb-sep{float:left;width:10px;height:24px;background:no-repeat center center url(img/tb-sep.png)} // separator
+.tb-LN  {background-image:url(../style/img/tb-LN.png)}
+.tb-AO  {background-image:url(../style/img/tb-AO.png)}
+.tb-DO  {background-image:url(../style/img/tb-DO.png)}
+.tb-NX  {background-image:url(../style/img/tb-NX.png)}
+.tb-PV  {background-image:url(../style/img/tb-PV.png)}
+.tb-hid {background-image:url(../style/img/tb-hid.png)}
+.tb-case{background-image:url(../style/img/tb-case.png)}
+.tb-ER  {background-image:url(../style/img/tb-ER.png)}
+.tb-TC  {background-image:url(../style/img/tb-TC.png)}
+.tb-BK  {background-image:url(../style/img/tb-BK.png)}
+.tb-FD  {background-image:url(../style/img/tb-FD.png)}
+.tb-BH  {background-image:url(../style/img/tb-BH.png)}
+.tb-RM  {background-image:url(../style/img/tb-RM.png)}
+.tb-MA  {background-image:url(../style/img/tb-MA.png)}
+.tb-ED  {background-image:url(../style/img/tb-ED.png)}
+.tb-WI  {background-image:url(../style/img/tb-WI.png)}
+.tb-CBP {background-image:url(../style/img/tb-CBP.png)}
+.tb-sep{float:left;width:10px;height:24px;background:no-repeat center center url(../style/img/tb-sep.png)} // separator
 .tb-sc,.tb-rp{ // search and replace
   .inset;border-style:solid;border-width:2px;float:left;width:120px;height:24px;resize:none;overflow:hidden;
   .toolbar & .CodeMirror{font-size:18px}
@@ -344,7 +344,7 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 
 .ui-dialog-content.about{
   padding:0;margin:0;
-  .logo{background:#fc9732 16px center no-repeat url(dyaloglogo.png);height:80px}
+  .logo{background:#fc9732 16px center no-repeat url(../style/dyaloglogo.png);height:80px}
   .contact-info{
     float:right;text-align:right;margin:8px 8px 0 0;cursor:default;
     a,a:visited,a:active{color:blue}
@@ -509,7 +509,7 @@ body .ui-tooltip{border-width:2px}
   {filter:Alpha(Opacity=35)} // For IE8 - See #6059
 
 .ui-icon{width:16px;height:16px}
-.ui-icon-closethick{background:no-repeat center center url(img/close.png)}
+.ui-icon-closethick{background:no-repeat center center url(../style/img/close.png)}
 
 .ui-slider{position:relative;text-align:left;margin:0 10px}
 .ui-slider .ui-slider-handle{position:absolute;width:10px;height:10px;cursor:pointer}
@@ -641,10 +641,10 @@ span.CodeMirror-selectedtext{background:none}
   background-position:center center;background-repeat:no-repeat}
 .cm-foldgutter-open:after,.cm-foldgutter-folded:after,.cm-foldgutter-cont:after,.cm-foldgutter-end:after{
   content:"\00a0"}
-.cm-foldgutter-open  {background-image:url(img/fold/open.png)}
-.cm-foldgutter-folded{background-image:url(img/fold/folded.png)}
-.cm-foldgutter-cont  {background-image:url(img/fold/cont.png)}
-.cm-foldgutter-end   {background-image:url(img/fold/end.png)}
+.cm-foldgutter-open  {background-image:url(../style/img/fold/open.png)}
+.cm-foldgutter-folded{background-image:url(../style/img/fold/folded.png)}
+.cm-foldgutter-cont  {background-image:url(../style/img/fold/cont.png)}
+.cm-foldgutter-end   {background-image:url(../style/img/fold/end.png)}
 .cm-foldgutter-open,.cm-foldgutter-folded{cursor:pointer}
 
 // scrollbars, see ../client/cm-scroll.js
@@ -667,4 +667,4 @@ span.CodeMirror-selectedtext{background:none}
 .cm-scroll-v .btn0:after{content:"\25b2"}
 .cm-scroll-v .btn1:after{content:"\25bc"}
 
-@import url(jstree/style.css);
+@import url(../style/jstree/style.css);
