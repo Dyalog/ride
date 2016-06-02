@@ -85,7 +85,6 @@
   // https://github.com/electron/electron/blob/master/docs/faq/electron-faq.md#i-can-not-use-jqueryrequirejsmeteorangularjs-in-electron
   'require exports module'.split(' ').forEach(function(x){window['node_'+x]=window[x];delete window[x]});
 </script>
-<script src=node_modules/jquery/dist/jquery.min.js></script>
 <script src=build/libs.js            ></script>
 <script src=build/version.js         ></script>
 <script src=modules.js               ></script>
