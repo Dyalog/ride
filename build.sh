@@ -10,43 +10,9 @@ for f in style themes/classic themes/redmond themes/cupertino; do
   if [ ! -e $o -o $i -nt $o ]; then echo "preprocessing $i"; lessc $i $o; fi
 done
 
-nm=node_modules cm=$nm/codemirror cma=$cm/addon
-lib_files="$(echo                            \
-  $nm/jquery/dist/jquery.min.js              \
-  $nm/jquery-ui/{core,widget,mouse,position,draggable,droppable,resizable,sortable,button,dialog,tabs,slider}.js \
-  $cm/lib/codemirror.js                      \
-  $cma/dialog/dialog.js                      \
-  $cma/search/searchcursor.js                \
-  $cma/scroll/annotatescrollbar.js           \
-  $cma/search/matchesonscrollbar.js          \
-  $cma/hint/show-hint.js                     \
-  $cma/edit/{matchbrackets,closebrackets}.js \
-  $cma/display/placeholder.js                \
-  $cma/fold/{foldcode,indent-fold}.js        \
-  lib/jquery.layout.js                       \
-  lib/jstree.min.js
-)"
-
-mkdir -p build/tmp
-us='' changed=0 # us:paths to versions of lib files with "require()" calls removed
-for f in $lib_files; do
-  u=build/tmp/${f//\//_} # replace / with _
-  us="$us $u"
-  if [ $f -nt $u ]; then
-    changed=1
-    if [ $f != ${f%%.min.js} ]; then echo "copying $f"; cp $f $u
-    else echo "cleaning up $f"; <$f sed '/^\(var \w\+ = \)\?require(/d' >$u; fi
-  fi
-done
-if [ $changed -eq 1 ]; then echo 'concatenating libs'; cat $us >build/libs.js; fi
-
 echo 'generating version info'
 v=$(node -e "console.log($(cat package.json).version.replace(/\.0$/,''))").$(git rev-list --count HEAD)
-echo $v >build/version # plain text file for the benefit of installers, store version in a file
-cat >build/version.js <<-.
-	D={versionInfo:{version:'$v',date:'$(git show -s HEAD --pretty=format:%ci)',rev:'$(git rev-parse HEAD)'}}
-	;(function(){
-	  var g=[];for(var x in window)g.push(x) // remember original global names (except for "D")
-	  D.pollution=function(){var r=[];for(var x in window)if(g.indexOf(x)<0)r.push(x);return r} // measure pollution
-	}());
+echo $v >build/version # for the benefit of installers
+cat >build/version.js <<.
+D={versionInfo:{version:'$v',date:'$(git show -s HEAD --pretty=format:%ci)',rev:'$(git rev-parse HEAD)'}}
 .
