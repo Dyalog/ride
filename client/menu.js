@@ -13,8 +13,6 @@ if(D.el){
       h.type='checkbox';h.checked=!!x.checked
       h.click=function(){groups[x.group].forEach(function(y){y.checked=y===mi});x.action&&x.action()}
     }else if(x.checkBoxPref){
-      console.info('cbpref',x.checkBoxPref)
-      console.info('checked=',!!x.checkBoxPref())
       h.type='checkbox';h.checked=!!x.checkBoxPref()
       if(x.action)h.click=function(){x.action(mi.checked)}
       x.checkBoxPref(function(v){mi.checked=!!v})
