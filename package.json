@@ -4,7 +4,7 @@
   "private": true,
   "main": "index.html",
   "scripts": {
-    "start": "electron init-el.js"
+    "start": "electron main.js"
   },
   "repository": ".",
   "dependencies": {
