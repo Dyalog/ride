@@ -18,4 +18,5 @@ const pkg=(x,y,f)=>{
       e=>{if(e)throw e;f&&f()}
   )
 }
-pkg('linux','x64',()=>pkg('win32','ia32',()=>pkg('darwin','x64')))
+//pkg('linux','x64',()=>pkg('win32','ia32',()=>pkg('darwin','x64')))
+pkg('win32','ia32')

@@ -3,12 +3,11 @@ const fs=require('fs'),os=require('os'),path=require('path'),{spawn}=require('ch
 // Detect platform: https://nodejs.org/api/process.html#process_process_platform
 // https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
 const D=global.D={};D.el=el;D.win=/^win/i.test(ps.platform);D.mac=ps.platform=='darwin'
-//  console.log=function(s){try{ps.stdout.write(s+'\n')}catch(_){console.log=function(){}}}
 env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a standalone RIDE
   (D.win?0:+fs.existsSync(path.dirname(ps.execPath)+(D.mac?'/../../../../Resources/Dyalog/mapl':'/../mapl')))
 
 //storage
-;(()=>{
+{
   if(D.floating){D.db=opener.D.db;return}
   const k=[],v=[] // keys and values
   D.db={ // file-backed storage with an API similar to that of localStorage
@@ -36,33 +35,13 @@ env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a stan
       })
     })
   }
-})()
+}
 
 if(D.win&&D.db.getItem('ime')!=='0'){ // switch IME locale as early as possible; '1' or '' means yes
   const setImeExe=ps.execPath.replace(/[^\\\/]+$/,'set-ime.exe')
   fs.existsSync(setImeExe)&&spawn(setImeExe,[ps.pid],{stdio:['ignore','ignore','ignore']})
 }
 
-//  function segmOvlp(a,b,c,d){return a<d&&c<b} // do the two segments ab and cd overlap?
-//  function rectOvlp(r0,r1){ // a rectangle is {x,y,width,height}; do the two overlap?
-//    return segmOvlp(r0.x,r0.x+r0.width, r1.x,r1.x+r1.width)&&segmOvlp(r0.y,r0.y+r0.height,r1.y,r1.y+r1.height)
-//  }
-//  function segmFit(a,b,A,B){return(b-a>B-A)?[A,B]:a<A?[A,A+b-a]:b>B?[B-b+a,B]:[a,b]} // nudge/squeeze ab to fit into AB
-//  function rectFit(r,R){ // like segmFit() but for for rectangles
-//    let u=segmFit(r.x,r.x+r.width ,R.x,R.x+R.width ),x=u[0],x1=u[1]
-//    let v=segmFit(r.y,r.y+r.height,R.y,R.y+R.height),y=v[0],y1=v[1]
-//    return{x:x,y:y,width:x1-x,height:y1-y}
-//  }
-//  function restoreWindow(w,r){ // w: NWJS window, r: rectangle
-//    let a=gui.Screen.screens // find a screen that overlaps with "r" and fit "w" inside it:
-//    for(let i=0;i<a.length;i++)if(rectOvlp(a[i].work_area,r)){
-//      r.maximized||(r=rectFit(r,a[i].work_area));w.moveTo(r.x,r.y);w.resizeTo(r.width,r.height)
-//      ps.nextTick(function(){
-//        w.dx=w.x-r.x;w.dy=w.y-r.y;w.dw=w.width-r.width;w.dh=w.height-r.height;r.maximized&&w.maximize()
-//      })
-//      break
-//    }
-//  }
 //  if(D.mac&&!env.RIDE_INTERPRETER_EXE){
 //    env.RIDE_INTERPRETER_EXE=D.lastSpawnedExe=path.resolve(ps.cwd(),'../Dyalog/mapl')
 //  }
@@ -70,26 +49,6 @@ if(D.win&&D.db.getItem('ime')!=='0'){ // switch IME locale as early as possible;
 //  D.process=ps;gui.Screen.Init();let nww=D.nww=gui.Window.get()
 //  let urlp={},a=(location+'').replace(/^[^\?]*($|\?)/,'').split('&') // urlp:URL parameters
 //  for(let i=0;i<a.length;i++){let kv=/^([^=]*)=?(.*)$/.exec(a[i]);urlp[unescape(kv[1]||'')]=unescape(kv[2]||'')}
-//  ;(function(){ // restore window state:
-//    if(D.floating){
-//      opener.D.floatingWindows.push(nww)
-//      restoreWindow(nww,{x:+urlp.x,y:+urlp.y,width:+urlp.width,height:+urlp.height,maximized:+urlp.maximized})
-//    }else{
-//      D.floatingWindows=[]
-//      let aot=function(x){ // aot(x) sets "always on top" for all floating windows to x
-//        let w=D.floatingWindows.slice(0) // put focused at the end
-//        for(let i=0;i<w.length;i++)if(x!==!!w[i].aot){w[i].aot=x;w[i].setAlwaysOnTop(x)}
-//      }
-//      nww.on('focus',function(){aot(!!D.db.getItem('floatOnTop'))})
-//      nww.on('blur',function(){aot(false)})
-//      if(D.db.getItem('pos')){
-//        try{
-//          let p=JSON.parse(D.db.getItem('pos'))
-//          restoreWindow(nww,{x:p[0],y:p[1],width:p[2],height:p[3],maximized:p[4]||0})
-//        }catch(_){}
-//      }
-//    }
-//  }())
 //  nww.show();nww.focus() // focus() is needed for the Mac
 //  function throttle(f){let t;return function(){t=t||setTimeout(function(){f();t=0},500)}}
 //  let saveWinState=throttle(function(){
@@ -121,6 +80,10 @@ el.app.on('ready',()=>{
   w.loadURL(`file://${__dirname}/index.html`)
   w.on('closed',()=>{w=D.elw=0}).on('moved',savePos).on('resize',savePos)
    .on('show',()=>{if(p){const q=w.getPosition();dx=q[0]-p[0];dy=q[1]-p[1]}}).show()
+  if(D.win){
+    const repaintTitle=()=>{setTimeout(()=>{const a=w.getSize();w.setSize(a[0],a[1]-1);w.setSize(a[0],a[1])},100)}
+    w.on('page-title-updated',repaintTitle).on('blur',repaintTitle)
+  }
 })
 el.app.on('window-all-closed',()=>el.app.quit())
 
@@ -224,15 +187,6 @@ el.app.on('window-all-closed',()=>el.app.quit())
 //D.open=(url,o)=>{o.icon='D.png';o.toolbar==null&&(o.toolbar=false);return!!gui.Window.open(url,o)} // o:options
 D.openExternal=el.shell.openExternal
 
-//  if(D.win){ // Hacks to make the window title repaint on Windows. This is a workaround for:
-//    // github.com/nwjs/nw.js/issues/2895
-//    // github.com/nwjs/nw.js/issues/2896
-//    // github.com/nwjs/nw.js/issues/3589
-//    // github.com/nwjs/nw.js/issues/3658
-//    let repaintTitle=function(){nww.resizeBy(0,1);nww.resizeBy(0,-1)}
-//    $(window).on('focus blur',repaintTitle);D.setTitle=function(s){document.title=s;repaintTitle()}
-//  }
-
 ;(env.RIDE_JS||'').split(path.delimiter).forEach(x=>{x&&$.getScript('file://'+path.resolve(ps.cwd(),x))})
 if(env.RIDE_CSS)$('<style>').text(env.RIDE_CSS.split(path.delimiter).map(x=>`@import url("${x}");`)).appendTo('head')
 if(env.RIDE_EDITOR){
@@ -247,4 +201,4 @@ if(env.RIDE_EDITOR){
 }
 
 // cmd line args
-;(()=>{const a=ps.argv,h=D.args={};for(let i=2;i<a.length;i++)if(a[i][0]==='-'){h[a[i]]=a[i+1];i++}})()
+{const a=ps.argv,h=D.args={};for(let i=2;i<a.length;i++)if(a[i][0]==='-'){h[a[i]]=a[i+1];i++}}
