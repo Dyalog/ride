@@ -29,7 +29,9 @@ function updExes(){
 module.exports=function(){
   D.setTitle('RIDE - Connect')
   $('#cn').show().splitter()
-    .keyup(function(x){if(x.which===123&&!x.ctrlKey&&!x.shiftKey&&!x.altKey&&!x.metaKey){D.nww.showDevTools();return!1}})
+    .keyup(function(x){
+      if(x.which===123&&!x.ctrlKey&&!x.shiftKey&&!x.altKey&&!x.metaKey){D.elw.webContents.toggleDevTools();return!1}
+    })
     .find('[id^=cn-]').each(function(){q[this.id.replace(/^cn-/,'').replace(/-/g,'_')]=$(this)})
   q.fav_cb.change(function(){
     var c=this.checked;c?delete sel.tmp:(sel.tmp=1);$sel.find('.name').text(favText(sel))

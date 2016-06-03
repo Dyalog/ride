@@ -121,7 +121,6 @@ el.app.on('ready',()=>{
   w.loadURL(`file://${__dirname}/index.html`)
   w.on('closed',()=>{w=D.elw=0}).on('moved',savePos).on('resize',savePos)
    .on('show',()=>{if(p){const q=w.getPosition();dx=q[0]-p[0];dy=q[1]-p[1]}}).show()
-  D.elw.webContents.openDevTools()
 })
 el.app.on('window-all-closed',()=>el.app.quit())
 
