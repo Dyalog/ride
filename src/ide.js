@@ -211,7 +211,7 @@ this.IDE.prototype={
   },
   updTitle:function(){ // change listener for prf.title
     var ide=this,ri=D.remoteIdentification||{},v=D.versionInfo
-    D.setTitle(prf.title().replace(/\{\w+\}/g,function(x){var X=x.toUpperCase();return(
+    document.title=prf.title().replace(/\{\w+\}/g,function(x){var X=x.toUpperCase();return(
       X==='{WSID}'?ide.wsid:
       X==='{HOST}'?ide.host:
       X==='{PORT}'?ide.port:
@@ -227,7 +227,7 @@ this.IDE.prototype={
       X==='{RIDE_VER_C}'?(v.version||'').split('.')[2]:
       X==='{RIDE_VER}'?v.version:
       x
-    )||''})||'Dyalog')
+    )||''})||'Dyalog'
   },
   showHTML:function(x){
     var ide=this

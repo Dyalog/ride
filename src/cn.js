@@ -27,7 +27,7 @@ function updExes(){
   q.exe.prop('readonly',!!q.exes.val())
 }
 module.exports=function(){
-  D.setTitle('RIDE - Connect')
+  document.title='RIDE - Connect'
   $('#cn').show().splitter()
     .keyup(function(x){
       if(x.which===123&&!x.ctrlKey&&!x.shiftKey&&!x.altKey&&!x.metaKey){D.elw.webContents.toggleDevTools();return!1}
