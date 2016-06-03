@@ -5,7 +5,7 @@ var IDE=rq('./ide').IDE,prf=rq('./prf'),esc=rq('./util').esc
 var q={} // mapping between ids and jQuery objects
 var $sel=$(),sel,$d // $sel:selected item(s), sel: .data('cn') of the selected item (only if it's unique), $d:dialog
 var DFLT_NAME='[anonymous]',TMP_NAME='[temp]',MIN_VER=[15,0] // minimum supported version
-var interpreters=[], interpretersSSH=[], user=D.process?D.process.env.USER:''
+var interpreters=[], interpretersSSH=[], user=D.el?process.env.USER:''
 var KV=/^([a-z_]\w*)=(.*)$/i,WS=/^\s*$/ // regexes for parsing env vars
 function cmpVer(x,y){return x[0]-y[0]||x[1]-y[1]||0} // compare two versions of the form [major,minor]
 function save(){prf.favs($('>*',q.favs).map(function(){var h=$(this).data('cn');return h.tmp?null:h}).toArray())}

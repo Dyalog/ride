@@ -77,7 +77,7 @@ if(D.floating&&win){
     }())
   }
   if(!D.quit)D.quit=close
-  var e=(D.process||{}).env||{}
+  var e=D.el?process.env:{}
   var c=(D.args||{})['-c']||e.RIDE_CONNECT
   if(c){var m=/^([^:]+|\[[^\]]+\])(?::(\d+))?$/.exec(c) // parse host and port
         if(m){new IDE;D.skt.emit('*connect',{host:m[1],port:+m[2]||4502})}

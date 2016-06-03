@@ -1,5 +1,5 @@
 // https://github.com/electron/electron/blob/master/docs/faq/electron-faq.md#i-can-not-use-jqueryrequirejsmeteorangularjs-in-electron
-var node_require=require;delete require;delete exports;delete module
+if(typeof require!=='undefined'){var node_require=require;delete require;delete exports;delete module}
 
 // a simple way for src/*.js to require() each other, without resorting to a preprocessor like Browserify
 D.modules={}

@@ -65,7 +65,7 @@ this.init=function(win){ // win: an instance of Editor or Session
       tid=setTimeout(function(){
         tid=0;var c=cm.getCursor(),s=cm.getLine(c.line),i=c.ch
         if(s[i-1]==='⌶'&&!/\d *$/.test(s.slice(0,i-1))){
-          r({skip:1,options:D.process&&+D.process.env.RIDE_IBEAM?ibeamOptions:[]})
+          r({skip:1,options:D.el&&+process.env.RIDE_IBEAM?ibeamOptions:[]})
         }else if(i&&(win.autocompleteWithTab||RegExp('['+letter+'\\)\\]\\.]$').test(s.slice(0,i)))
                   &&s.slice(0,i).replace(re,'').slice(-1)!==prf.prefixKey()
                   &&win.promptType!==4){ // don't autocomplete in ⍞ input

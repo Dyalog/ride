@@ -14,7 +14,7 @@ function keyInfo(e){ // returns a pair of the key name and an "is complete" flag
   c&&(s+=k);return[s,c]
 }
 function loadDemoScript(f){ // f:path to file, ignored if empty
-  f&&D.readFile(f,'utf8',function(err,s){
+  f&&node_require('fs').readFile(f,'utf8',function(err,s){
     if(err){console.error(err);$.alert('Cannot load demo file');return}
     index=-1
     lines=s.replace(/^[\ufeff\ufffe]/,'').split(/\r?\n/)
@@ -22,7 +22,7 @@ function loadDemoScript(f){ // f:path to file, ignored if empty
            .map(function(x){return'      '+x})
   })
 }
-D.process&&loadDemoScript(D.process.env.RIDE_DEMO_SCRIPT)
+D.el&&loadDemoScript(process.env.RIDE_DEMO_SCRIPT)
 $.extend(CodeMirror.commands,{
   DMN:function(){move( 1)}, // next line
   DMP:function(){move(-1)}, // prev line

@@ -1,8 +1,9 @@
+global.D={}
 const fs=require('fs'),os=require('os'),path=require('path'),{spawn}=require('child_process'),
-    proxy=require('./proxy'),ps=process,{env}=ps,repr=JSON.stringify,el=require('electron')
+      proxy=require('./proxy'),ps=process,{env}=ps,repr=JSON.stringify,el=D.el=require('electron')
 // Detect platform: https://nodejs.org/api/process.html#process_process_platform
 // https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
-const D=global.D={};D.el=el;D.win=/^win/i.test(ps.platform);D.mac=ps.platform=='darwin'
+D.win=/^win/i.test(ps.platform);D.mac=ps.platform=='darwin'
 env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a standalone RIDE
   (D.win?0:+fs.existsSync(path.dirname(ps.execPath)+(D.mac?'/../../../../Resources/Dyalog/mapl':'/../mapl')))
 
@@ -42,11 +43,9 @@ if(D.win&&D.db.getItem('ime')!=='0'){ // switch IME locale as early as possible;
   fs.existsSync(setImeExe)&&spawn(setImeExe,[ps.pid],{stdio:['ignore','ignore','ignore']})
 }
 
-//  if(D.mac&&!env.RIDE_INTERPRETER_EXE){
-//    env.RIDE_INTERPRETER_EXE=D.lastSpawnedExe=path.resolve(ps.cwd(),'../Dyalog/mapl')
-//  }
+if(D.mac&&!env.RIDE_INTERPRETER_EXE){env.RIDE_INTERPRETER_EXE=D.lastSpawnedExe=path.resolve(ps.cwd(),'../Dyalog/mapl')}
 //  ps.chdir(env.PWD||env.HOME||env.USERPROFILE||'.') // github.com/nwjs/nw.js/issues/648
-//  D.process=ps;gui.Screen.Init();let nww=D.nww=gui.Window.get()
+//  gui.Screen.Init();let nww=D.nww=gui.Window.get()
 //  let urlp={},a=(location+'').replace(/^[^\?]*($|\?)/,'').split('&') // urlp:URL parameters
 //  for(let i=0;i<a.length;i++){let kv=/^([^=]*)=?(.*)$/.exec(a[i]);urlp[unescape(kv[1]||'')]=unescape(kv[2]||'')}
 //  nww.show();nww.focus() // focus() is needed for the Mac
@@ -96,7 +95,6 @@ el.app.on('window-all-closed',()=>el.app.quit())
 //  )
 //  let cmenu=new gui.Menu;for(let i=0;i<items.length;i++)cmenu.append(new gui.MenuItem(items[i]))
 //  $(document).contextmenu(function(e){cmenu.popup(e.clientX,e.clientY);return!1})
-//  D.readFile=fs.readFile // needed for presentation mode
 //  let execPath=ps.execPath;D.mac&&(execPath=execPath.replace(/(\/Contents\/).*$/,'$1MacOS/nwjs'))
 //  D.rideConnect=function(){
 //    let e={};for(let k in env)e[k]=env[k];e.RIDE_SPAWN='0'
