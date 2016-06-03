@@ -1,7 +1,7 @@
 D.modules.km=function(rq){'use strict'
 
 var hlp=rq('./hlp'),prf=rq('./prf'),esc=rq('./util').esc,
-    prf_ui=rq('./prf_ui'),ACB_VALUE=rq('./ed').ACB_VALUE,kbds=rq('./kbds'),CM=CodeMirror
+    prf_ui=rq('./prf_ui'),ACB_VALUE=rq('./ed').ACB_VALUE,CM=CodeMirror
 
 window.onhelp=function(){return!1} // prevent IE from acting silly on F1
 prf.prefixKey(function(x,old){
@@ -188,7 +188,7 @@ function switchWindows(d){ // d: a step of either 1 or -1
   var j=i<0?0:(i+a.length+d)%a.length;$('#wintab'+a[j].id+' a').click();a[j].focus();return!1
 }
 
-// kbds.layouts[lc] contains four strings describing how keys map to characters:
+// D.kbds.layouts[lc] contains four strings describing how keys map to characters:
 //    0:normal  1:shifted
 //    2:APL     3:APL shifted
 // Each string can be indexed by scancode: http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
@@ -196,7 +196,7 @@ function switchWindows(d){ // d: a step of either 1 or -1
 
 var bq // effective ` map as a dictionary, kept in sync with the prf
 function updBQ(){
-  bq={};var lc=prf.kbdLocale(), l=kbds.layouts[lc]||kbds.layouts.en_US, n=l[0].length
+  bq={};var lc=prf.kbdLocale(), l=D.kbds.layouts[lc]||D.kbds.layouts.en_US, n=l[0].length
   for(var i=0;i<2;i++)for(var j=0;j<n;j++){var name=l[i][j];bq[name]||(bq[name]=l[2+i][j])}
   var s=prf.prefixMaps()[lc];if(s)for(var i=0;i<s.length;i+=2)bq[s[i]]=s[i+1]
 }

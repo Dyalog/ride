@@ -87,13 +87,13 @@ const rec=()=>{
   const u=paths.shift();if(u){console.info(u);get('dfns.dyalog.com',u,data=>{processData(data);rec()});return}
   fs.writeFileSync('../src/kbds.js',
     '// generated code, do not edit\n'+
-    'D.modules.kbds=function(){\n'+
-    'this.geom='+JSON.stringify(geom)+'\n'+
-    'this.layouts={\n'+
-    '  '+Object.keys(layouts).sort().map(lc=>{
-           const l=layouts[lc];return lc+':[\n   '+l.map(JSON.stringify).join(',\n   ')+'\n  ]'
-         }).join(',\n  ')+'\n'+
-    '}\n'+
+    'D.kbds={\n'+
+    '  geom:'+JSON.stringify(geom)+',\n'+
+    '  layouts:{\n'+
+    '    '+Object.keys(layouts).sort().map(lc=>{
+           const l=layouts[lc];return lc+':[\n      '+l.map(JSON.stringify).join(',\n      ')+'\n    ]'
+         }).join(',\n    ')+'\n'+
+    '  }\n'+
     '}\n'
   )
 }

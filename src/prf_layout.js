@@ -1,6 +1,6 @@
 D.modules.prf_layout=function(rq){'use strict'
 
-var prf=rq('./prf'),layouts=rq('./kbds').layouts,geom=rq('./kbds').geom
+var prf=rq('./prf'),layouts=D.kbds.layouts,geom=D.kbds.geom
 this.tabTitle='Layout'
 var $pfx,$lc // DOM elements for "Prefix" and "Locale"
 var NK=58    // number of scancodes we are concerned with
