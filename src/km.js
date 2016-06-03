@@ -1,6 +1,6 @@
 D.modules.km=function(rq){'use strict'
 
-var hlp=rq('./hlp'),prf=rq('./prf'),abt=rq('./abt'),esc=rq('./util').esc,
+var hlp=rq('./hlp'),prf=rq('./prf'),esc=rq('./util').esc,
     prf_ui=rq('./prf_ui'),ACB_VALUE=rq('./ed').ACB_VALUE,kbds=rq('./kbds'),CM=CodeMirror
 
 window.onhelp=function(){return!1} // prevent IE from acting silly on F1
@@ -38,7 +38,7 @@ $.extend(CM.commands,{
   PT:function(){document.execCommand('Paste')},
   TO:CM.commands.toggleFold,
   PRF:function(){prf_ui.showDialog()},
-  ABT:function(){abt.showDialog()},
+  ABT:function(){D.abt()},
   CNC:function(){D.rideConnect()},
   NEW:function(){D.rideNewSession()},
   QIT:function(){D.quit()},

@@ -1,9 +1,6 @@
-D.modules.abt=function(){'use strict'
-
-//"about" dialog
-var repr=JSON.stringify
-this.showDialog=function(){
-  var v=D.versionInfo,ri=D.remoteIdentification||{},u='unknown',db=D.db||localStorage
+//About dialog
+D.abt=function(){
+  var v=D.versionInfo,ri=D.remoteIdentification||{},u='unknown',db=D.db||localStorage,repr=JSON.stringify
   var s='';for(var i=0;i<db.length;i++){var x=db.key(i);s+=(i?',\n':'')+'    '+repr(x)+':'+repr(db.getItem(x))}
   var info='IDE:'+
     '\n  Version: '   +(v.version          ||u)+
@@ -37,6 +34,4 @@ this.showDialog=function(){
     .dialog({title:'About',width:520,height:410,buttons:btns,open:function(){$(this).find('textarea').focus()}})
     .on('click','a[href^=http]',function(){D.openExternal($(this).attr('href'));return!1})
     .find('textarea').val(info).select()
-}
-
 }
