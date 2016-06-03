@@ -111,7 +111,6 @@ el.app.on('window-all-closed',()=>el.app.quit())
 //    }
 //  }
 //  D.quit=function(){gui.Window.get().close()}
-//  D.clipboardCopy=function(s){gui.Clipboard.get().set(s)}
 //  D.showProtocolLog=function(){
 //    let lw=window.lw=open('empty.html')
 //    function wr(s){

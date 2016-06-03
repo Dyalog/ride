@@ -16,9 +16,9 @@ this.showDialog=function(){
     '\n  Version: '   +(ri.version         ||u)+
     '\n  Platform: '  +(ri.platform        ||u)+
     '\n  Edition: '   +(ri.arch            ||u)+
-    '\n  Date: '      +(ri.date            ||u)
+    '\n  Date: '      +(ri.date            ||u)+'\n'
   var btns=[]
-  D.clipboardCopy&&btns.push({html:'<u>C</u>opy',click:function(){D.clipboardCopy($('textarea',this).val(),'text')}})
+  D.el&&btns.push({html:'<u>C</u>opy',click:function(){D.el.clipboard.writeText($('textarea',this).val())}})
   btns.push({html:'C<u>l</u>ose',click:function(){$(this).dialog('close')}})
   $(
     '<div class=about>'+
