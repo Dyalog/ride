@@ -30,7 +30,7 @@ lhs   left-hand side
 msg   message
 pfx   prefix
 pos   position
-pref  preference(s); usually as described in ../client/prefs.js
+pref  preference(s); usually as described in ../src/prf.js
 re    regular expression; sometimes used as a prefix to variable names
 rhs   right-hand side
 rp    replace (like Dyalog's RP command)

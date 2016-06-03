@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // This script scrapes keyboard definitions from http://dfns.dyalog.com/n_keyboards.htm
-// and generates ../client/kbds.js
+// and generates ../src/kbds.js
 const fs=require('fs'),http=require('http'),cheerio=require('cheerio')
 process.chdir(__dirname)
 const log=s=>{process.stderr.write(s+'\n')}
@@ -85,7 +85,7 @@ const processData=data=>{
 const paths=['/n_keyboards.htm','/n_kbmac.htm']
 const rec=()=>{
   const u=paths.shift();if(u){console.info(u);get('dfns.dyalog.com',u,data=>{processData(data);rec()});return}
-  fs.writeFileSync('../client/kbds.js',
+  fs.writeFileSync('../src/kbds.js',
     '// generated code, do not edit\n'+
     'D.modules.kbds=function(){\n'+
     'this.geom='+JSON.stringify(geom)+'\n'+

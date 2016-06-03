@@ -79,7 +79,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hidden}
 .platform-mac .ide{top:0} // no menu inside window
 
-.menu{ // see ../client/menu.js for the DOM structure
+.menu{ // see ../src/menu.js for the DOM structure
   .bg;height:18px;line-height:17px;cursor:default;padding:0;margin:2px 0 0 0;
   font-family:sans-serif;border-bottom:solid @dark 1px;
   a{text-decoration:none;color:black;cursor:default}
@@ -647,7 +647,7 @@ span.CodeMirror-selectedtext{background:none}
 .cm-foldgutter-end   {background-image:url(../style/img/fold/end.png)}
 .cm-foldgutter-open,.cm-foldgutter-folded{cursor:pointer}
 
-// scrollbars, see ../client/cm-scroll.js
+// scrollbars; see ../src/scrl.js
 .cm-scroll{position:absolute;z-index:6;background:#eee}
 .cm-scroll-h{bottom:0;left:0;height:16px}
 .cm-scroll-v{right :0;top :0;width :16px}
