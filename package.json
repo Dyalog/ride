@@ -2,15 +2,16 @@
   "name": "ride30",
   "version": "3.0.0",
   "private": true,
-  "main": "index.html",
+  "main": "main.js",
   "scripts": {
-    "start": "electron main.js"
+    "start": "electron ."
   },
   "repository": ".",
   "dependencies": {
     "cheerio": "0.20.0",
     "codemirror": "5.15.2",
     "compression": "1.6.2",
+    "electron-packager": "7.0.3",
     "electron-prebuilt": "1.2.0",
     "express": "4.13.4",
     "jquery": "2.2.4",

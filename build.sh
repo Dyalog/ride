@@ -10,8 +10,8 @@ for f in style themes/classic themes/redmond themes/cupertino; do
   if [ ! -e $o -o $i -nt $o ]; then echo "preprocessing $i"; lessc $i $o; fi
 done
 
-echo 'generating version info'
 v=$(node -e "console.log($(cat package.json).version.replace(/\.0$/,''))").$(git rev-list --count HEAD)
+echo "v$v"
 echo $v >build/version # for the benefit of installers
 cat >build/version.js <<.
 D={versionInfo:{version:'$v',date:'$(git show -s HEAD --pretty=format:%ci)',rev:'$(git rev-parse HEAD)'}}
