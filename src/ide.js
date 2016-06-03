@@ -155,8 +155,8 @@ this.IDE=function(){
     .on('mouseover','.lbar-prefs',function(e){
       var h=prf.keys(),s=''
       for(var i=0;i<cmds.length;i++){
-        var code=cmds[i][0],desc=cmds[i][1],defaults=cmds[i][2],important=cmds[i][3]
-        if(important){
+        var code=cmds[i][0],desc=cmds[i][1],defaults=cmds[i][2]
+        if(/^(BK|BT|ED|EP|FD|QT|RP|SC|TB|TC|TL)$/.test(code)){
           var pad=Array(Math.max(0,25-desc.length)).join(' '),ks=h[code]||defaults
           s+=code+':'+desc+':'+pad+' '+(ks[ks.length-1]||'none')+'\n'
         }
