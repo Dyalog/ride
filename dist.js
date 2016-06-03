@@ -7,6 +7,7 @@ const v=rf('build/version').replace(/\n$/,'')
 const pkg=(x,y,f)=>{
   packager(
       {dir:'.',platform:x,arch:y,out:'build/ride',overwrite:true,'download.cache':'cache',icon:'favicon.ico',
+        ignore:'cache',
         'app-copyright':`(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
         'app-version':v,
         'build-version':v,
