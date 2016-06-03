@@ -1,8 +1,8 @@
-D.modules.init=function(require){'use strict'
+D.modules.init=function(rq){'use strict'
 
 if(typeof node_require!=='undefined')D=$.extend(node_require('electron').remote.getGlobal('D'),D)
-var cn=require('./cn'),Editor=require('./ed').Editor,IDE=require('./ide').IDE,prf=require('./prf')
-require('./prf_col');require('./demo');require('./fld');require('./wse')
+var cn=rq('./cn'),Editor=rq('./ed').Editor,IDE=rq('./ide').IDE,prf=rq('./prf')
+rq('./prf_col');rq('./demo');rq('./fld');rq('./wse')
 $(function(){
   // don't use Alt- keystrokes on the Mac (see email from 2015-09-01)
   var h=CodeMirror.keyMap.emacsy;for(var k in h)if(/^alt-[a-z]$/i.test(k))delete h[k]

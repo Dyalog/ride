@@ -1,7 +1,7 @@
-D.modules.vt=function(require){'use strict'
+D.modules.vt=function(rq){'use strict'
 
 // value tips: hover over a name to see a pop-up with its current value
-var lb=require('./lb'),prf=require('./prf')
+var lb=rq('./lb'),prf=rq('./prf')
 var MW=64,MH=32 // maxWidth and maxHeight for the character matrix displayed in the tooltip
 this.init=function(w){ // .init(w) gets called for every window w (session or editor)
   var i,p,$b,$t,$r,rf // i:timeout id, p:position as {line,ch}, rf:function that processes the reply

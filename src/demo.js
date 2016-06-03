@@ -1,4 +1,4 @@
-D.modules.demo=function(require){'use strict'
+D.modules.demo=function(){'use strict'
 
 // support for presentations
 var lines=[], index=-1, $i // $i:an <input type=file> used to open the file chooser dialog

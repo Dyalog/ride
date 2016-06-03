@@ -1,11 +1,10 @@
-D.modules.ed=function(require){'use strict'
+D.modules.ed=function(rq){'use strict'
 
 //editor
-var ac=require('./ac'),prf=require('./prf'),syn=require('./syn'),
-    letter=syn.letter,dfnDepth=syn.dfnDepth,util=require('./util'),cmOnDblClick=util.cmOnDblClick,
-    ACB_VALUE=this.ACB_VALUE={pairs:'()[]{}',explode:'{}'}, // value for CodeMirror's "autoCloseBrackets" option when on
-    vt=require('./vt'),CM=CodeMirror
-require('./scrl')
+var ac=rq('./ac'),prf=rq('./prf'),syn=rq('./syn'),vt=rq('./vt'),CM=CodeMirror,
+    letter=syn.letter,dfnDepth=syn.dfnDepth,util=rq('./util'),cmOnDblClick=util.cmOnDblClick,
+    ACB_VALUE=this.ACB_VALUE={pairs:'()[]{}',explode:'{}'} // value for CodeMirror's "autoCloseBrackets" option when on
+rq('./scrl')
 
 var b=function(c,t){return'<a href=# class="'+c+' tb-btn" title="'+t+'"></a>'} // cc:css classes, t:title
 var ED_HTML=

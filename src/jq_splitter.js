@@ -1,4 +1,4 @@
-D.modules.jq_splitter=function(require){'use strict'
+D.modules.jq_splitter=function(){'use strict'
 
 $.fn.splitter=function(args){'strict mode' // methvin.com/splitter
   args=args||{}

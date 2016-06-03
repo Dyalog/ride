@@ -1,4 +1,4 @@
-D.modules.hlp=function(require,module){'use strict'
+D.modules.hlp=function(_,module){'use strict'
 
 var p='http://help.dyalog.com/15.0/Content/',q='.htm', // prefix and suffix
 h=D.hlp=module.exports={

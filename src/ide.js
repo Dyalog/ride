@@ -1,10 +1,9 @@
-D.modules.ide=function(require){'use strict'
+D.modules.ide=function(rq){'use strict'
 
-require('./menu')
-var prf=require('./prf'),prf_ui=require('./prf_ui'),parseMenuDSL=require('./prf_menu').parseMenuDSL,
-    ed=require('./ed'),Editor=ed.Editor,ACB_VALUE=ed.ACB_VALUE,Session=require('./se').Session,
-    km=require('./km'),util=require('./util'),esc=util.esc,throttle1=util.throttle1,
-    cmds=require('./cmds').cmds,lb=require('./lb'),wse=require('./wse'),vt=require('./vt')
+rq('./menu')
+var prf=rq('./prf'),prf_ui=rq('./prf_ui'),parseMenuDSL=rq('./prf_menu').parseMenuDSL,ed=rq('./ed'),
+    Editor=ed.Editor,ACB_VALUE=ed.ACB_VALUE,Session=rq('./se').Session,km=rq('./km'),util=rq('./util'),esc=util.esc,
+    throttle1=util.throttle1,cmds=rq('./cmds').cmds,lb=rq('./lb'),wse=rq('./wse'),vt=rq('./vt')
 function parseId(s){return+s.replace(/^.*?(\d+)$/,'$1')}
 this.IDE=function(){
   var ide=D.ide=this

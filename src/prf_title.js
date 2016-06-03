@@ -1,6 +1,6 @@
-D.modules.prf_title=function(require){'use strict'
+D.modules.prf_title=function(rq){'use strict'
 
-var prf=require('./prf')
+var prf=rq('./prf')
 var wt // <input> element for Window Title
 this.tabTitle='Title'
 this.init=function($e){

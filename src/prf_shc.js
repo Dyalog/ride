@@ -1,6 +1,6 @@
-D.modules.prf_shc=function(require){'use strict'
+D.modules.prf_shc=function(rq){'use strict'
 
-var prf=require('./prf'),esc=require('./util').esc,cmds=require('./cmds').cmds
+var prf=rq('./prf'),esc=rq('./util').esc,cmds=rq('./cmds').cmds
 this.tabTitle='Shortcuts'
 var $sc // <input> for search
 function keyHTML(k){

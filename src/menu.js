@@ -1,9 +1,9 @@
-D.modules.menu=function(require){'use strict'
+D.modules.menu=function(rq){'use strict'
 
 // Generic menu for a browser or NW.js
 // There's an alternative implementation for NW.js in ../init-nw.js
 // For the concrete content in the menu, see prf.js
-var prf=require('./prf'),cmds=require('./cmds').cmds
+var prf=rq('./prf'),cmds=rq('./cmds').cmds
 if(D.el){
   var renderMenu=function(x,groups){
     if(!x)return

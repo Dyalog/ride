@@ -1,7 +1,7 @@
-D.modules.cn=function(require,module){'use strict'
+D.modules.cn=function(rq,module){'use strict'
 
-require('./jq_list');require('./jq_splitter')
-var IDE=require('./ide').IDE,prf=require('./prf'),esc=require('./util').esc
+rq('./jq_list');rq('./jq_splitter')
+var IDE=rq('./ide').IDE,prf=rq('./prf'),esc=rq('./util').esc
 var q={} // mapping between ids and jQuery objects
 var $sel=$(),sel,$d // $sel:selected item(s), sel: .data('cn') of the selected item (only if it's unique), $d:dialog
 var DFLT_NAME='[anonymous]',TMP_NAME='[temp]',MIN_VER=[15,0] // minimum supported version
@@ -104,7 +104,7 @@ module.exports=function(){
     n&&$.confirm('Are you sure you want to delete the selected configuration'+(n>1?'s':'')+'?','Confirmation',
       function(r){if(r){var i=$sel.eq(0).index();$sel.remove();q.favs.list('select',i,1);save()}})
   })
-  q.about.click(function(){require('./abt').showDialog()})
+  q.about.click(function(){rq('./abt').showDialog()})
   q.go.click(go)
   $(':text',q.rhs).elastic()
   $(':text[name],textarea[name]',q.rhs).change(function(){var k=this.name,v=this.value;v?(sel[k]=v):delete sel[k];save()})

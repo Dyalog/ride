@@ -1,4 +1,4 @@
-D.modules.scrl=function(require){'use strict'
+D.modules.scrl=function(){'use strict'
 
 //scrollbars for CodeMirror
 var CM=CodeMirror

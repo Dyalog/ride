@@ -1,4 +1,4 @@
-D.modules.cmds=function(require){'use strict'
+D.modules.cmds=function(){'use strict'
 
 // This is the list of command-to-keystroke mappings that are configurable in Preferences>Keys.
 // The list does not necessarily contain all commands and all keystrokes in RIDE, only those in Preferences>Keys.

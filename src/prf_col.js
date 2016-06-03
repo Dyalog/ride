@@ -1,7 +1,7 @@
-D.modules.prf_col=function(require){'use strict'
+D.modules.prf_col=function(rq){'use strict'
 
 this.tabTitle='Colours'
-var prf=require('./prf'),util=require('./util'),esc=util.esc
+var prf=rq('./prf'),util=rq('./util'),esc=util.esc
 var G=[],H={} // G:syntax highlighting groups {t,s,c,ctrls}; H:reverse lookup dict for G
 D.addSyntaxGroups=function(x){G=G.concat(x);H={};for(var i=0;i<G.length;i++)H[G[i].t]=i;SCMS&&updStyle()}
 D.addSyntaxGroups([

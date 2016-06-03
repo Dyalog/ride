@@ -1,4 +1,4 @@
-D.modules.util=function(require){'use strict'
+D.modules.util=function(){'use strict'
 
 // a kitchen sink for small generic functions and jQuery plugins
 this.dict=function(a){var r={};for(var i=0;i<a.length;i++)r[a[i][0]]=a[i][1];return r} // dictionary from key-value pairs

@@ -1,4 +1,4 @@
-D.modules.wse=function(require){'use strict'
+D.modules.wse=function(){'use strict'
 
 // workspace explorer
 this.WSE=function($e,ide){

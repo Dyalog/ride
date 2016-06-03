@@ -1,7 +1,7 @@
-D.modules.prf_code=function(require){'use strict'
+D.modules.prf_code=function(rq){'use strict'
 
 this.tabTitle='Code'
-var prf=require('./prf'),on=CodeMirror.on
+var prf=rq('./prf'),on=CodeMirror.on
 var h={} // various input elements
 this.init=function($e){
   $e[0].innerHTML=

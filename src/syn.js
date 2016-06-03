@@ -1,7 +1,7 @@
-D.modules.syn=function(require){'use strict'
+D.modules.syn=function(rq){'use strict'
 
 //syntax highlighting using https://codemirror.net/doc/manual.html#modeapi
-var prf=require('./prf'),CM=CodeMirror
+var prf=rq('./prf'),CM=CodeMirror
 var letter=this.letter='A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ',
   name0=RegExp('['+letter+']'),
   name1=RegExp('['+letter+'\\d]*'),

@@ -1,7 +1,7 @@
-D.modules.ac=function(require){'use strict'
+D.modules.ac=function(rq){'use strict'
 
 //autocompletion
-var prf=require('./prf'),letter=require('./syn').letter,hlp=require('./hlp')
+var prf=rq('./prf'),letter=rq('./syn').letter,hlp=rq('./hlp')
 var re=RegExp('['+letter+']*$')
 var ibeams=[ // source: http://help.dyalog.com/15.0/Content/Language/Primitive%20Operators/I%20Beam.htm
   [    8,'Inverted Table Index-of'],

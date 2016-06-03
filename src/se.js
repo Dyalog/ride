@@ -1,9 +1,7 @@
-D.modules.se=function(require){'use strict'
+D.modules.se=function(rq){'use strict'
 
 //session
-var ac=require('./ac'),prf=require('./prf'),util=require('./util'),
-    cmOnDblClick=util.cmOnDblClick,vt=require('./vt')
-require('./scrl')
+var ac=rq('./ac'),prf=rq('./prf'),util=rq('./util'),cmOnDblClick=util.cmOnDblClick,vt=rq('./vt');rq('./scrl')
 this.Session=function(ide,e,opts){ // Session constructor
   var se=this;se.ide=ide;se.opts=opts;se.emit=opts.emit;se.hist=[''];se.histIdx=0;se.focusTimestamp=0;se.id=0
   se.dirty={} // modified lines: lineNumber→originalContent, inserted lines: lineNumber→0 (also used in syn.js)

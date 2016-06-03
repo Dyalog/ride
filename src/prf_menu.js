@@ -1,6 +1,6 @@
-D.modules.prf_menu=function(require){'use strict'
+D.modules.prf_menu=function(rq){'use strict'
 
-var prf=require('./prf')
+var prf=rq('./prf')
 var $ta // the textarea
 this.tabTitle='Menu'
 this.init=function($e){

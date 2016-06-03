@@ -1,4 +1,4 @@
-D.modules.abt=function(require){'use strict'
+D.modules.abt=function(){'use strict'
 
 //"about" dialog
 var repr=JSON.stringify

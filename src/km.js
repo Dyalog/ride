@@ -1,7 +1,7 @@
-D.modules.km=function(require){'use strict'
+D.modules.km=function(rq){'use strict'
 
-var hlp=require('./hlp'),prf=require('./prf'),abt=require('./abt'),esc=require('./util').esc,
-    prf_ui=require('./prf_ui'),ACB_VALUE=require('./ed').ACB_VALUE,kbds=require('./kbds'),CM=CodeMirror
+var hlp=rq('./hlp'),prf=rq('./prf'),abt=rq('./abt'),esc=rq('./util').esc,
+    prf_ui=rq('./prf_ui'),ACB_VALUE=rq('./ed').ACB_VALUE,kbds=rq('./kbds'),CM=CodeMirror
 
 window.onhelp=function(){return!1} // prevent IE from acting silly on F1
 prf.prefixKey(function(x,old){

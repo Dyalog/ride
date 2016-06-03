@@ -1,4 +1,4 @@
-D.modules.prf_ui=function(require){'use strict'
+D.modules.prf_ui=function(rq){'use strict'
 
 // This module implements the Preferences dialog as a whole.
 // The contents of individual tabs are in separate modules: prf_*.js
@@ -11,14 +11,7 @@ D.modules.prf_ui=function(require){'use strict'
 //   resize()   called when the Preferences dialog is resized or the tab is selected
 //   activate() called when the tab is selected ("activated")
 // All tabs' validate() methods are invoked, if they exist, before any attempt to call save()
-var tabs=[
-  require('./prf_layout'),
-  require('./prf_shc'   ),
-  require('./prf_code'  ),
-  require('./prf_col'   ),
-  require('./prf_title' ),
-  require('./prf_menu'  )
-]
+var tabs=[rq('./prf_layout'),rq('./prf_shc'),rq('./prf_code'),rq('./prf_col'),rq('./prf_title'),rq('./prf_menu')]
 function safe(s){return s.toLowerCase().replace(/[^a-z\-]/g,'-')} // make a string suitable for a DOM id
 var $d // dialog instance, lazily initialized
 function ok(){apply()&&$d.dialog('close')}
