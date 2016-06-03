@@ -1,6 +1,5 @@
 D.modules.cn=function(rq,module){'use strict'
 
-rq('./jq_list');rq('./jq_splitter')
 var IDE=rq('./ide').IDE,prf=rq('./prf'),esc=rq('./util').esc
 var q={} // mapping between ids and jQuery objects
 var $sel=$(),sel,$d // $sel:selected item(s), sel: .data('cn') of the selected item (only if it's unique), $d:dialog
