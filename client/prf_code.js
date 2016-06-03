@@ -1,7 +1,7 @@
-D.modules['prefs-code']=function(require){'use strict'
+D.modules.prf_code=function(require){'use strict'
 
 this.tabTitle='Code'
-var prefs=require('./prefs'),on=CodeMirror.on
+var prf=require('./prf'),on=CodeMirror.on
 var h={} // various input elements
 this.init=function($e){
   $e[0].innerHTML=
@@ -27,35 +27,35 @@ this.init=function($e){
   ;[h.sw,h.swm,h.acd].forEach(function(x){on(x,'change',function(){$(this).select()})})
 }
 this.load=function(){
-  var sw =prefs.indent       ();h.ai .checked=sw >=0;h.sw .value=sw <0&&4||sw
-  var swm=prefs.indentMethods();h.aim.checked=swm>=0;h.swm.value=swm<0&&2||swm
-  h.icom.checked=!!prefs.indentComments     ()
-  h.io  .checked=!!prefs.indentOnOpen       ()
-  h.mb  .checked=!!prefs.matchBrackets      ()
-  h.acbr.checked=!!prefs.autoCloseBrackets  ()
-  h.acbl.checked=!!prefs.autoCloseBlocks    ()
-  h.acbe.value  =  prefs.autoCloseBlocksEnd ()
-  h.ac  .checked=!!prefs.autocompletion     ()
-  h.acd .value  =  prefs.autocompletionDelay()
-  h.fold.checked=!!prefs.fold               ()
-  h.vt  .checked=!!prefs.valueTips          ()
-  h.sqt .checked=!!prefs.squiggleTips       ()
+  var sw =prf.indent       ();h.ai .checked=sw >=0;h.sw .value=sw <0&&4||sw
+  var swm=prf.indentMethods();h.aim.checked=swm>=0;h.swm.value=swm<0&&2||swm
+  h.icom.checked=!!prf.indentComments     ()
+  h.io  .checked=!!prf.indentOnOpen       ()
+  h.mb  .checked=!!prf.matchBrackets      ()
+  h.acbr.checked=!!prf.autoCloseBrackets  ()
+  h.acbl.checked=!!prf.autoCloseBlocks    ()
+  h.acbe.value  =  prf.autoCloseBlocksEnd ()
+  h.ac  .checked=!!prf.autocompletion     ()
+  h.acd .value  =  prf.autocompletionDelay()
+  h.fold.checked=!!prf.fold               ()
+  h.vt  .checked=!!prf.valueTips          ()
+  h.sqt .checked=!!prf.squiggleTips       ()
   $(h.ai).add(h.acbl).add(h.ac).change()
 }
 this.save=function(){
-  prefs.indent             (h.ai .checked?(+h.sw .value||0):-1)
-  prefs.indentMethods      (h.aim.checked?(+h.swm.value||0):-1)
-  prefs.indentComments     (h.icom.checked)
-  prefs.indentOnOpen       (h.io  .checked)
-  prefs.matchBrackets      (h.mb  .checked)
-  prefs.autoCloseBrackets  (h.acbr.checked)
-  prefs.autoCloseBlocks    (h.acbl.checked)
-  prefs.autoCloseBlocksEnd (h.acbe.value)
-  prefs.autocompletion     (h.ac  .checked)
-  prefs.autocompletionDelay(h.acd .value)
-  prefs.fold               (h.fold.checked)
-  prefs.valueTips          (h.vt  .checked)
-  prefs.squiggleTips       (h.sqt .checked)
+  prf.indent             (h.ai .checked?(+h.sw .value||0):-1)
+  prf.indentMethods      (h.aim.checked?(+h.swm.value||0):-1)
+  prf.indentComments     (h.icom.checked)
+  prf.indentOnOpen       (h.io  .checked)
+  prf.matchBrackets      (h.mb  .checked)
+  prf.autoCloseBrackets  (h.acbr.checked)
+  prf.autoCloseBlocks    (h.acbl.checked)
+  prf.autoCloseBlocksEnd (h.acbe.value)
+  prf.autocompletion     (h.ac  .checked)
+  prf.autocompletionDelay(h.acd .value)
+  prf.fold               (h.fold.checked)
+  prf.valueTips          (h.vt  .checked)
+  prf.squiggleTips       (h.sqt .checked)
 }
 this.validate=function(){
   if(h.ai .checked&&!isInt(h.sw .value,0))return{msg:'Auto-indent must be a non-negative integer.'           ,h:h.ai}

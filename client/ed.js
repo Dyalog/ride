@@ -1,7 +1,7 @@
 D.modules.ed=function(require){'use strict'
 
 //editor
-var ac=require('./ac'),prefs=require('./prefs'),syn=require('./syn'),
+var ac=require('./ac'),prf=require('./prf'),syn=require('./syn'),
     letter=syn.letter,dfnDepth=syn.dfnDepth,util=require('./util'),cmOnDblClick=util.cmOnDblClick,
     ACB_VALUE=this.ACB_VALUE={pairs:'()[]{}',explode:'{}'}, // value for CodeMirror's "autoCloseBrackets" option when on
     vt=require('./vt'),CM=CodeMirror
@@ -44,10 +44,10 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
   ed.focusTimestamp=0
   ed.jumps=[]
   ed.cm=CM(ed.$e.find('.ride-win')[0],$.extend({},util.cmOpts,{
-    lineNumbers:!!(ed.tc?prefs.lineNumsTracer():prefs.lineNumsEditor()),
+    lineNumbers:!!(ed.tc?prf.lineNumsTracer():prf.lineNumsEditor()),
     firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
-    smartIndent:prefs.indent()>=0,indentUnit:prefs.indent(),scrollButtonHeight:12,matchBrackets:!!prefs.matchBrackets(),
-    autoCloseBrackets:!!prefs.autoCloseBrackets()&&ACB_VALUE,foldGutter:!!prefs.fold(),
+    smartIndent:prf.indent()>=0,indentUnit:prf.indent(),scrollButtonHeight:12,matchBrackets:!!prf.matchBrackets(),
+    autoCloseBrackets:!!prf.autoCloseBrackets()&&ACB_VALUE,foldGutter:!!prf.fold(),
     scrollbarStyle:'simple',
     keyMap:'dyalog',extraKeys:{'Shift-Tab':'indentLess',Tab:'tabOrAutocomplete',Down:'downOrXline'}
     // Some options of this.cm can be set from ide.coffee when the corresponding pref changes.
@@ -187,7 +187,7 @@ this.Editor.prototype={
   },
   setTracer:function(x){
     var ed=this;ed.tc=x;ed.$e.toggleClass('tracer',x);ed.highlight(null)
-    var ln=!!(ed.tc?prefs.lineNumsTracer():prefs.lineNumsEditor())
+    var ln=!!(ed.tc?prf.lineNumsTracer():prf.lineNumsEditor())
     ed.cm.setOption('lineNumbers',ln);ed.$tb.find('.tb-LN').toggleClass('pressed',ln)
     ed.updGutters();ed.setReadOnly(x)
   },
@@ -206,7 +206,7 @@ this.Editor.prototype={
     //  4 SimpleNumericArray  128 SimpleCharVector  4096 ExternalFunction
     //  8 MixedSimpleArray    256 AplNamespace
     if([1,256,512,1024,2048,4096].indexOf(ee.entityType)<0){cm.setOption('mode','text')}
-    else{cm.setOption('mode','apl');if(prefs.indentOnOpen()){cm.execCommand('selectAll');cm.execCommand('indentAuto')}}
+    else{cm.setOption('mode','apl');if(prf.indentOnOpen()){cm.execCommand('selectAll');cm.execCommand('indentAuto')}}
     ed.setReadOnly(ee.readOnly||ee['debugger'])
     var line=ee.currentRow,col=ee.currentColumn||0
     if(line===0&&col===0&&ee.text.length===1)col=ee.text[0].length
@@ -268,7 +268,7 @@ this.Editor.prototype={
     cm.replaceRange(s,{line:l,ch:0},{line:l,ch:cm.getLine(l).length},'D')
   },
   LN:function(cm){ // toggle line numbers
-    var v=!!(this.tc?prefs.lineNumsTracer.toggle():prefs.lineNumsEditor.toggle())
+    var v=!!(this.tc?prf.lineNumsTracer.toggle():prf.lineNumsEditor.toggle())
     cm.setOption('lineNumbers',v);this.updGutters();this.$tb.find('.tb-LN').toggleClass('pressed',v)
   },
   PV:function(){this.search(1)},
@@ -293,7 +293,7 @@ this.Editor.prototype={
   },
   ER:function(cm){
     if(this.tc){this.emit('RunCurrentLine',{win:this.id});return}
-    if(prefs.autoCloseBlocks()){
+    if(prf.autoCloseBlocks()){
       var u=cm.getCursor(),l=u.line,s=cm.getLine(l),m
       var re=/^(\s*):(class|disposable|for|if|interface|namespace|property|repeat|section|select|trap|while|with)\b([^⋄\{]*)$/i
       if(u.ch===s.length&&(m=re.exec(s))&&!dfnDepth(cm.getStateAfter(l-1))){
@@ -302,7 +302,7 @@ this.Editor.prototype={
         var s1=cm.getLine(l1)||'',pre1=s1.replace(/\S.*$/,'')
         if(pre.length>pre1.length||pre.length===pre1.length&&!/^\s*:(?:end|else|andif|orif|case|until|access)/i.test(s1)){
           var r=':'+kw+post+'\n'+pre+':End'
-          prefs.autoCloseBlocksEnd()||(r+=kw)
+          prf.autoCloseBlocksEnd()||(r+=kw)
           cm.replaceRange(r,{line:l,ch:pre.length},{line:l,ch:s.length})
           cm.execCommand('indentAuto');cm.execCommand('goLineUp');cm.execCommand('goLineEnd')
         }

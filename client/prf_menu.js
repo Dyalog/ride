@@ -1,15 +1,15 @@
-D.modules['prefs-menu']=function(require){'use strict'
+D.modules.prf_menu=function(require){'use strict'
 
-var prefs=require('./prefs')
+var prf=require('./prf')
 var $ta // the textarea
 this.tabTitle='Menu'
 this.init=function($e){
   $e[0].innerHTML='<button class=rst><u>R</u>eset</button>'+
                   '<p>Takes effect on restart</p><textarea wrap=off></textarea>'
-  $ta=$('textarea',$e);$('.rst',$e).click(function(){$ta.val(prefs.menu.getDefault())})
+  $ta=$('textarea',$e);$('.rst',$e).click(function(){$ta.val(prf.menu.getDefault())})
 }
-this.load=function(){$ta.val(prefs.menu())}
-this.save=function(){prefs.menu($ta.val())}
+this.load=function(){$ta.val(prf.menu())}
+this.save=function(){prf.menu($ta.val())}
 this.validate=function(){
   try {
     var visit=function(x){
@@ -23,13 +23,13 @@ this.validate=function(){
   }
 }
 var extraOpts={
-  LBR:{checkBoxPref:prefs.lbar      },
-  FLT:{checkBoxPref:prefs.floating  },
-  WRP:{checkBoxPref:prefs.wrap      },
-  TOP:{checkBoxPref:prefs.floatOnTop},
-  WSE:{checkBoxPref:prefs.wse       },
+  LBR:{checkBoxPref:prf.lbar      },
+  FLT:{checkBoxPref:prf.floating  },
+  WRP:{checkBoxPref:prf.wrap      },
+  TOP:{checkBoxPref:prf.floatOnTop},
+  WSE:{checkBoxPref:prf.wse       },
   THM:{items:['Classic','Redmond','Cupertino'].map(function(x,i){
-    return{'':x,group:'themes',checked:prefs.theme()===x.toLowerCase(),action:function(){prefs.theme(x.toLowerCase())}}
+    return{'':x,group:'themes',checked:prf.theme()===x.toLowerCase(),action:function(){prf.theme(x.toLowerCase())}}
   })}
 }
 this.parseMenuDSL=function(md){ // md:menu description

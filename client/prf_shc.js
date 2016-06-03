@@ -1,6 +1,6 @@
-D.modules['prefs-shortcuts']=function(require){'use strict'
+D.modules.prf_shc=function(require){'use strict'
 
-var prefs=require('./prefs'),esc=require('./util').esc,cmds=require('./cmds').cmds
+var prf=require('./prf'),esc=require('./util').esc,cmds=require('./cmds').cmds
 this.tabTitle='Shortcuts'
 var $sc // <input> for search
 function keyHTML(k){
@@ -64,7 +64,7 @@ function getKeystroke(callback){
     })
 }
 this.load=function(){
-  var h=prefs.keys()
+  var h=prf.keys()
   for(var i=0;i<cmds.length;i++){
     var c=cmds[i][0],d=cmds[i][2]
     $('#shc-'+c).html((h[c]||d).map(keyHTML).join('')).append('<a href=# class=shc-add>+</a>')
@@ -78,14 +78,14 @@ this.save=function(){
     var c=cmds[i][0],d=cmds[i][2],a=$('#shc-'+c+' .shc-text').map(function(){return $(this).text()}).toArray()
     if(JSON.stringify(a)!==JSON.stringify(d))h[c]=a
   }
-  prefs.keys(h)
+  prf.keys(h)
 }
 this.activate=function(){$sc.focus()}
 function updKeys(x){
   var h=CodeMirror.keyMap.dyalog={fallthrough:'dyalogDefault'}
   for(var i=0;i<cmds.length;i++){var c=cmds[i][0],d=cmds[i][2],ks=x[c]||d;for(var j=0;j<ks.length;j++)h[ks[j]]=c}
 }
-prefs.keys(updKeys);updKeys(prefs.keys())
+prf.keys(updKeys);updKeys(prf.keys())
 function updDups(){var h={} // h: maps keystrokes to jQuery objects
   $('#shc-tbl-wr .shc-text').each(function(){var $t=$(this),k=$t.text();$t.add(h[k]).toggleClass('shc-dup',!!h[k]);h[k]=$t})
 }

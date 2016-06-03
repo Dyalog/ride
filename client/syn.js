@@ -1,7 +1,7 @@
 D.modules.syn=function(require){'use strict'
 
 //syntax highlighting using https://codemirror.net/doc/manual.html#modeapi
-var prefs=require('./prefs'),CM=CodeMirror
+var prf=require('./prf'),CM=CodeMirror
 var letter=this.letter='A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ',
   name0=RegExp('['+letter+']'),
   name1=RegExp('['+letter+'\\d]*'),
@@ -32,10 +32,10 @@ function escIdiom(s){
   return s.replace(/«(.*?)»|(.)/g,function(_,g,g2){g||(g=g2);return' *'+(g==='_'?"' '":escRE(g))}).slice(2)
 }
 var idiomsRE=RegExp('^(?:'+(idioms.sort(function(x,y){return y.length-x.length}).map(escIdiom).join('|'))+')','i')
-var sw=4,swm=2 // default indent unit and indent unit for methods; these are kept in sync with prefs
-function updSW(){sw=prefs.indent();swm=prefs.indentMethods();swm<0&&(swm=sw)}
-updSW();prefs.indent(updSW);prefs.indentMethods(updSW)
-var icom=prefs.indentComments();prefs.indentComments(function(x){icom=x})
+var sw=4,swm=2 // default indent unit and indent unit for methods; these are kept in sync with prf
+function updSW(){sw=prf.indent();swm=prf.indentMethods();swm<0&&(swm=sw)}
+updSW();prf.indent(updSW);prf.indentMethods(updSW)
+var icom=prf.indentComments();prf.indentComments(function(x){icom=x})
 var dfnDepth=this.dfnDepth=function(a){var r=0;for(var j=0;j<a.length;j++)a[j].t==='{'&&r++;return r}
 CM.defineMIME('text/apl','apl')
 CM.defineMode('apl',function(){

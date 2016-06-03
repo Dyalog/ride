@@ -1,4 +1,4 @@
-D.modules['jq-list']=function(require){'use strict'
+D.modules.jq_list=function(require){'use strict'
 
 // generic jQuery list with accessible selectable items
 ;(function($){'use strict'

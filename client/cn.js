@@ -1,14 +1,14 @@
 D.modules.cn=function(require,module){'use strict'
 
-require('./jq-list');require('./jq-splitter')
-var IDE=require('./ide').IDE,prefs=require('./prefs'),esc=require('./util').esc
+require('./jq_list');require('./jq_splitter')
+var IDE=require('./ide').IDE,prf=require('./prf'),esc=require('./util').esc
 var q={} // mapping between ids and jQuery objects
 var $sel=$(),sel,$d // $sel:selected item(s), sel: .data('cn') of the selected item (only if it's unique), $d:dialog
 var DFLT_NAME='[anonymous]',TMP_NAME='[temp]',MIN_VER=[15,0] // minimum supported version
 var interpreters=[], interpretersSSH=[], user=D.process?D.process.env.USER:''
 var KV=/^([a-z_]\w*)=(.*)$/i,WS=/^\s*$/ // regexes for parsing env vars
 function cmpVer(x,y){return x[0]-y[0]||x[1]-y[1]||0} // compare two versions of the form [major,minor]
-function save(){prefs.favs($('>*',q.favs).map(function(){var h=$(this).data('cn');return h.tmp?null:h}).toArray())}
+function save(){prf.favs($('>*',q.favs).map(function(){var h=$(this).data('cn');return h.tmp?null:h}).toArray())}
 function favText(x){return x.tmp?TMP_NAME:x.name||DFLT_NAME}
 function favDOM(x){return $('<div><span class=name>'+esc(favText(x))+'</span><button class=go>Go</button>').data('cn',x)}
 function fmtKey(e){return[e.metaKey?'Cmd-':'',e.ctrlKey?'Ctrl-':'',e.altKey?'Alt-':'',e.shiftKey?'Shift-':'',
@@ -47,10 +47,10 @@ module.exports=function(){
     var pw=q.ssh_pass.val(),kf=q.ssh_key.val();q.fetch[0].disabled=1
     D.skt.emit('*sshFetchListOfInterpreters',{host:sel.host,port:+sel.port||22,user:sel.user||user,pass:pw,key:kf})
   })
-  q.exe.on('change keyup',function(){q.exes.val()||prefs.otherExe($(this).val())})
+  q.exe.on('change keyup',function(){q.exes.val()||prf.otherExe($(this).val())})
   q.exes.change(function(){
-    var v=$(this).val(),$e=q.exe.val(v||prefs.otherExe()).prop('readonly',!!v).change();v||$e.focus()
-    prefs.selectedExe(v) // todo: do we still need this pref?
+    var v=$(this).val(),$e=q.exe.val(v||prf.otherExe()).prop('readonly',!!v).change();v||$e.focus()
+    prf.selectedExe(v) // todo: do we still need this pref?
   })
   q.env_add.on('click','a',function(e){
     var t=$(this).text(), e=q.env[0], k=t.split('=')[0], s=e.value, m=RegExp('^'+k+'=(.*)$','m').exec(s)
@@ -67,7 +67,7 @@ module.exports=function(){
   q.cert_file.change(function(){q.cert.val(this.value).elastic().change()})
   q.ssh_key_dots.click(function(){q.ssh_key_file.click()})
   q.ssh_key_file.change(function(){q.ssh_key.val(this.value).change()})
-  prefs.favs().forEach(function(x){q.favs.append(favDOM(x))})
+  prf.favs().forEach(function(x){q.favs.append(favDOM(x))})
   q.favs.list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
     .on('click','.go',function(e){q.favs.list('select',$(this).parentsUntil(q.favs).last().index());q.go.click()})
     .keydown(function(e){switch(fmtKey(e)){

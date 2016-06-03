@@ -2,8 +2,8 @@ D.modules.menu=function(require){'use strict'
 
 // Generic menu for a browser or NW.js
 // There's an alternative implementation for NW.js in ../init-nw.js
-// For the concrete content in the menu, see prefs.js
-var prefs=require('./prefs'),cmds=require('./cmds').cmds
+// For the concrete content in the menu, see prf.js
+var prf=require('./prf'),cmds=require('./cmds').cmds
 if(D.el){
   var renderMenu=function(x,groups){
     if(!x)return
@@ -106,13 +106,13 @@ if(D.el){
         }
       })
     $(document).mousedown(function(e){$(e.target).closest('.menu').length||mFocus(null)})
-    updMenuShcs(prefs.keys())
+    updMenuShcs(prf.keys())
   }
 }
 function updMenuShcs(h){
   var k={};for(var i=0;i<cmds.length;i++){var c=cmds[i][0],d=cmds[i][2];k[c]=(h[c]||d)[0]} // c:code, d:defaults
   $('.m-shortcut').each(function(){$(this).text(k[$(this).data('cmd')]||'')})
 }
-prefs.keys(updMenuShcs)
+prf.keys(updMenuShcs)
 
 }

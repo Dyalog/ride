@@ -1,7 +1,7 @@
-D.modules['prefs-ui']=function(require){'use strict'
+D.modules.prf_ui=function(require){'use strict'
 
 // This module implements the Preferences dialog as a whole.
-// The contents of individual tabs are in separate modules: prefs-*.js
+// The contents of individual tabs are in separate modules: prf_*.js
 // Each of them can export the following properties:
 //   tabTitle
 //   init()     called only once, before Preferences is opened for the first time
@@ -12,12 +12,12 @@ D.modules['prefs-ui']=function(require){'use strict'
 //   activate() called when the tab is selected ("activated")
 // All tabs' validate() methods are invoked, if they exist, before any attempt to call save()
 var tabs=[
-  require('./prefs-layout'   ),
-  require('./prefs-shortcuts'),
-  require('./prefs-code'     ),
-  require('./prefs-colours'  ),
-  require('./prefs-title'    ),
-  require('./prefs-menu'     )
+  require('./prf_layout'),
+  require('./prf_shc'   ),
+  require('./prf_code'  ),
+  require('./prf_col'   ),
+  require('./prf_title' ),
+  require('./prf_menu'  )
 ]
 function safe(s){return s.toLowerCase().replace(/[^a-z\-]/g,'-')} // make a string suitable for a DOM id
 var $d // dialog instance, lazily initialized

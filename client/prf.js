@@ -1,4 +1,4 @@
-D.modules.prefs=function(require){'use strict'
+D.modules.prf=function(require){'use strict'
 
 // Preferences API
 // (../init-nw.js is an exception, it bypasses this API because it can't require() it.)

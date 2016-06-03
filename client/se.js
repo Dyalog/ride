@@ -1,7 +1,7 @@
 D.modules.se=function(require){'use strict'
 
 //session
-var ac=require('./ac'),prefs=require('./prefs'),util=require('./util'),
+var ac=require('./ac'),prf=require('./prf'),util=require('./util'),
     cmOnDblClick=util.cmOnDblClick,vt=require('./vt')
 require('./scrl')
 this.Session=function(ide,e,opts){ // Session constructor
@@ -9,8 +9,8 @@ this.Session=function(ide,e,opts){ // Session constructor
   se.dirty={} // modified lines: lineNumber→originalContent, inserted lines: lineNumber→0 (also used in syn.js)
   se.$e=$(e).addClass('ride-win')
   var cm=se.cm=CodeMirror(se.$e[0],$.extend({},util.cmOpts,{
-    autofocus:true,mode:{name:'apl-session',se:se},matchBrackets:!!prefs.matchBrackets(),readOnly:true,keyMap:'dyalog',
-    lineWrapping:!!prefs.wrap(),indentUnit:4,smartIndent:0,autoCloseBrackets:{pairs:'()[]{}',explode:''},
+    autofocus:true,mode:{name:'apl-session',se:se},matchBrackets:!!prf.matchBrackets(),readOnly:true,keyMap:'dyalog',
+    lineWrapping:!!prf.wrap(),indentUnit:4,smartIndent:0,autoCloseBrackets:{pairs:'()[]{}',explode:''},
     scrollbarStyle:'simple',extraKeys:{'Shift-Tab':'indentLess',Tab:'tabOrAutocomplete'},
   }))
   cm.dyalogCmds=se
@@ -37,7 +37,7 @@ this.Session=function(ide,e,opts){ // Session constructor
   })
   se.promptType=0 // see ../docs/protocol.md #SetPromptType
   se.processAutocompleteReply=ac.init(se)
-  prefs.wrap(function(x){se.cm.setOption('lineWrapping',!!x);se.scrollCursorIntoView()})
+  prf.wrap(function(x){se.cm.setOption('lineWrapping',!!x);se.scrollCursorIntoView()})
   this.vt=vt.init(this)
 }
 this.Session.prototype={

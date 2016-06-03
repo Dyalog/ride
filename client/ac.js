@@ -1,7 +1,7 @@
 D.modules.ac=function(require){'use strict'
 
 //autocompletion
-var prefs=require('./prefs'),letter=require('./syn').letter,hlp=require('./hlp')
+var prf=require('./prf'),letter=require('./syn').letter,hlp=require('./hlp')
 var re=RegExp('['+letter+']*$')
 var ibeams=[ // source: http://help.dyalog.com/15.0/Content/Language/Primitive%20Operators/I%20Beam.htm
   [    8,'Inverted Table Index-of'],
@@ -60,22 +60,22 @@ this.init=function(win){ // win: an instance of Editor or Session
   var tid,cm=win.cm,r
   cm.on('change',function(){
     var mode=cm.getOption('mode');if(typeof mode==='object'&&mode!=null&&mode.name)mode=mode.name
-    if(prefs.autocompletion()&&(mode==='apl'||mode==='apl-session')&&cm.getCursor().line){
+    if(prf.autocompletion()&&(mode==='apl'||mode==='apl-session')&&cm.getCursor().line){
       clearTimeout(tid)
       tid=setTimeout(function(){
         tid=0;var c=cm.getCursor(),s=cm.getLine(c.line),i=c.ch
         if(s[i-1]==='⌶'&&!/\d *$/.test(s.slice(0,i-1))){
           r({skip:1,options:D.process&&+D.process.env.RIDE_IBEAM?ibeamOptions:[]})
         }else if(i&&(win.autocompleteWithTab||RegExp('['+letter+'\\)\\]\\.]$').test(s.slice(0,i)))
-                  &&s.slice(0,i).replace(re,'').slice(-1)!==prefs.prefixKey()
+                  &&s.slice(0,i).replace(re,'').slice(-1)!==prf.prefixKey()
                   &&win.promptType!==4){ // don't autocomplete in ⍞ input
           win.autocompleteWithTab=0;win.emit('GetAutocomplete',{line:s,pos:i,token:win.id})
         }
-      },prefs.autocompletionDelay())
+      },prf.autocompletionDelay())
     }
   })
   return r=function(x){
-    if(prefs.autocompletion()&&x.options.length&&cm.hasFocus()&&cm.getWrapperElement().ownerDocument.hasFocus()){
+    if(prf.autocompletion()&&x.options.length&&cm.hasFocus()&&cm.getWrapperElement().ownerDocument.hasFocus()){
       var c=cm.getCursor(),from={line:c.line,ch:c.ch-x.skip},sel=''
       if(x.options.length===1&&win.autocompleteWithTab){
         var v=x.options[0];cm.replaceRange(typeof v==='string'?v:v.text,from,c,'D')

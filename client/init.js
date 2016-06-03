@@ -1,23 +1,23 @@
 D.modules.init=function(require){'use strict'
 
 if(typeof node_require!=='undefined')D=$.extend(node_require('electron').remote.getGlobal('D'),D)
-var cn=require('./cn'),Editor=require('./ed').Editor,IDE=require('./ide').IDE,prefs=require('./prefs')
-require('./prefs-colours');require('./demo');require('./fld');require('./wse')
+var cn=require('./cn'),Editor=require('./ed').Editor,IDE=require('./ide').IDE,prf=require('./prf')
+require('./prf_col');require('./demo');require('./fld');require('./wse')
 $(function(){
   // don't use Alt- keystrokes on the Mac (see email from 2015-09-01)
   var h=CodeMirror.keyMap.emacsy;for(var k in h)if(/^alt-[a-z]$/i.test(k))delete h[k]
   if(D.el){
     var zM=11 // zoom level can be between -zM and zM inclusive
-    var ZMI=function(){prefs.zoom(Math.min( zM,prefs.zoom()+1));updPW()}
-    var ZMO=function(){prefs.zoom(Math.max(-zM,prefs.zoom()-1));updPW()}
-    var ZMR=function(){prefs.zoom(0);updPW()}
+    var ZMI=function(){prf.zoom(Math.min( zM,prf.zoom()+1));updPW()}
+    var ZMO=function(){prf.zoom(Math.max(-zM,prf.zoom()-1));updPW()}
+    var ZMR=function(){prf.zoom(0);updPW()}
     var updPW=function(){D.ide&&D.ide.wins&&D.ide.wins[0]&&D.ide.wins[0].updPW()}
     $.extend(CodeMirror.commands,{ZMI:ZMI,ZMO:ZMO,ZMR:ZMR})
     $(document).bind('mousewheel',function(e){
       var d=e.originalEvent.wheelDelta;d&&(e.ctrlKey||e.metaKey)&&!e.shiftKey&&!e.altKey&&(d>0?ZMI:ZMO)()
     })
-    $('body').addClass('zoom'+prefs.zoom())
-    prefs.zoom(function(z){
+    $('body').addClass('zoom'+prf.zoom())
+    prf.zoom(function(z){
       if(!D.ide)return
       var wins=D.ide.wins
       for (var x in wins){
@@ -87,12 +87,12 @@ $(function(){
     else{cn()}
   }
 
-  if(!prefs.theme()){
-    prefs.theme(D.mac||/^(darwin|mac|ipad|iphone|ipod)/i.test(navigator?navigator.platform:'')?'cupertino':
-                D.win||/^win/.test(navigator?navigator.platform:'')?'redmond':'classic')
+  if(!prf.theme()){
+    prf.theme(D.mac||/^(darwin|mac|ipad|iphone|ipod)/i.test(navigator?navigator.platform:'')?'cupertino':
+              D.win||/^win/.test(navigator?navigator.platform:'')?'redmond':'classic')
   }
-  var updThm=function(){$('#thm').html('@import url(build/themes/'+prefs.theme()+'.css);')}
-  prefs.theme(function(){updThm();D.ide&&D.ide.layout.resizeAll()});updThm()
+  var updThm=function(){$('#thm').html('@import url(build/themes/'+prf.theme()+'.css);')}
+  prf.theme(function(){updThm();D.ide&&D.ide.layout.resizeAll()});updThm()
 
   D.nwjs&&$('body').addClass(D.mac?'platform-mac':D.win?'platform-windows':'')
 

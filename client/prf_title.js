@@ -1,6 +1,6 @@
-D.modules['prefs-title']=function(require){'use strict'
+D.modules.prf_title=function(require){'use strict'
 
-var prefs=require('./prefs')
+var prf=require('./prf')
 var wt // <input> element for Window Title
 this.tabTitle='Title'
 this.init=function($e){
@@ -27,9 +27,9 @@ this.init=function($e){
   wt=document.getElementById('title-input')
   $e.on('click','pre a',function(e){$(wt).insert($(e.target).text())})
   $('pre a',e).attr('title','Insert')
-  $('.rst',e).click(function(){wt.value=prefs.title.getDefault()})
+  $('.rst',e).click(function(){wt.value=prf.title.getDefault()})
 }
-this.load=function(){wt.value=prefs.title()}
-this.save=function(){prefs.title(wt.value)}
+this.load=function(){wt.value=prf.title()}
+this.save=function(){prf.title(wt.value)}
 
 }

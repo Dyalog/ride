@@ -1,7 +1,7 @@
-D.modules['prefs-colours']=function(require){'use strict'
+D.modules.prf_col=function(require){'use strict'
 
 this.tabTitle='Colours'
-var prefs=require('./prefs'),util=require('./util'),esc=util.esc
+var prf=require('./prf'),util=require('./util'),esc=util.esc
 var G=[],H={} // G:syntax highlighting groups {t,s,c,ctrls}; H:reverse lookup dict for G
 D.addSyntaxGroups=function(x){G=G.concat(x);H={};for(var i=0;i<G.length;i++)H[G[i].t]=i;SCMS&&updStyle()}
 D.addSyntaxGroups([
@@ -122,10 +122,10 @@ function shrinkRGB(s){
   var r=s[1],R=s[2],g=s[3],G=s[4],b=s[5],B=s[6];return r!==R||g!==G||b!==B?s.slice(1):r===g&&g===b?r:r+g+b
 }
 function updStyle(){ // update global style from what's in localStorage
-  var name=prefs.colourScheme(),a=SCMS.concat(prefs.colourSchemes().map(decodeScm))
+  var name=prf.colourScheme(),a=SCMS.concat(prf.colourSchemes().map(decodeScm))
   for(var i=0;i<a.length;i++)if(a[i].name===name){$('#col-style').text(renderCSS(a[i]));break}
 }
-$(updStyle);prefs.colourScheme(updStyle);prefs.colourSchemes(updStyle)
+$(updStyle);prf.colourScheme(updStyle);prf.colourSchemes(updStyle)
 function uniqScmName(s){ // s: suggested root
   var h={};for(var i=0;i<scms.length;i++)h[scms[i].name]=1
   var r=s;if(h[s]){s=s.replace(/ \(\d+\)$/,'');var i=1;while(h[r=s+' ('+i+')'])i++};return r
@@ -238,12 +238,12 @@ function updScms(){ // update schemes
   updSampleStyle();selGroup('norm',1)
 }
 this.load=function(){
-  var a=scms=SCMS.concat(prefs.colourSchemes().map(decodeScm)), s=prefs.colourScheme()
+  var a=scms=SCMS.concat(prf.colourSchemes().map(decodeScm)),s=prf.colourScheme()
   scm=a[0];for(var i=0;i<a.length;i++)if(a[i].name===s){scm=a[i];break}
   updScms();$('#prefs-tab-colours').removeClass('renaming');cm.setSize($cm.width(),$cm.height())
 }
 this.save=function(){
-  prefs.colourSchemes(scms.filter(function(x){return!x.frozen}).map(encodeScm));prefs.colourScheme(scm.name)
+  prf.colourSchemes(scms.filter(function(x){return!x.frozen}).map(encodeScm));prf.colourScheme(scm.name)
 }
 this.resize=function(){cm.setSize($cm.width(),$cm.height())}
 function updSampleStyle(){$('#col-sample-style').text(renderCSS(scm,1))}
