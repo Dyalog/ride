@@ -5,9 +5,9 @@ function parseId(s){return+s.replace(/^.*?(\d+)$/,'$1')}
 D.IDE=function(){
   var ide=D.ide=this
   document.body.innerHTML=
-    '<div class=lbar style=display:none><a class=lbar-prefs href=#></a>'+D.lb.html+'</div>'+
-    '<div class=lbar-tip style=display:none><div class=lbar-tip-desc></div><pre class=lbar-tip-text></pre></div>'+
-    '<div class=lbar-tip-triangle style=display:none></div>'+
+    '<div class=lb style=display:none><a class=lb-prf href=#></a>'+D.lb.html+'</div>'+
+    '<div class=lb-tip style=display:none><div class=lb-tip-desc></div><pre class=lb-tip-text></pre></div>'+
+    '<div class=lb-tip-triangle style=display:none></div>'+
     '<div class=ide>'+
       '<div id=wse class="ui-layout-west wse">Workspace Explorer</div>'+
       '<div class=ui-layout-center></div>'+
@@ -129,8 +129,8 @@ D.IDE=function(){
   ide.unblock=function(){--blk||rrd()}
 
   // language bar
-  $('.lbar-prefs').click(function(){D.prf_ui('layout')})
-  var $tip=$('.lbar-tip'),$tipDesc=$('.lbar-tip-desc'),$tipText=$('.lbar-tip-text'),$tipTriangle=$('.lbar-tip-triangle')
+  $('.lb-prf').click(function(){D.prf_ui('layout')})
+  var $tip=$('.lb-tip'),$tipDesc=$('.lb-tip-desc'),$tipText=$('.lb-tip-text'),$tipTriangle=$('.lb-tip-triangle')
   var ttid=null // tooltip timeout id
   function requestTooltip(e,desc,text){ // e:element
     clearTimeout(ttid);var $t=$(e.target),p=$t.position()
@@ -141,15 +141,15 @@ D.IDE=function(){
       $tip.css(x1>$(document).width()?{left:'',right:0,top:y0}:{left:Math.max(0,x0),right:'',top:y0}).show()
     },200)
   }
-  $('.lbar')
+  $('.lb')
     .on('mousedown',function(){return!1})
     .on('mousedown','b',function(e){var c=$(this).text(),w=ide.focusedWin;(w.hasFocus()?w:$(':focus')).insert(c);return!1})
-    .on('mouseout','b,.lbar-prefs',function(){clearTimeout(ttid);ttid=null;$tip.add($tipTriangle).hide()})
+    .on('mouseout','b,.lb-prf',function(){clearTimeout(ttid);ttid=null;$tip.add($tipTriangle).hide()})
     .on('mouseover','b',function(e){
       var c=$(this).text(),k=D.getBQKeyFor(c),s=k&&c.charCodeAt(0)>127?'Keyboard: '+D.prf.prefixKey()+k+'\n\n':''
       var h=D.lb.tips[c]||[c,''];requestTooltip(e,h[0],s+h[1])
     })
-    .on('mouseover','.lbar-prefs',function(e){
+    .on('mouseover','.lb-prf',function(e){
       var h=D.prf.keys(),s=''
       for(var i=0;i<D.cmds.length;i++){
         var cmd=D.cmds[i],code=cmd[0],desc=cmd[1],defaults=cmd[2]
@@ -174,12 +174,12 @@ D.IDE=function(){
     }}
   })
   function updTopBtm(){
-    ide.$ide.css({top:(D.prf.lbar()?$('.lbar').height():0)+(D.mac?5:22)})
+    ide.$ide.css({top:(D.prf.lbar()?$('.lb').height():0)+(D.mac?5:22)})
     layout&&layout.resizeAll()
   }
-  $('.lbar').toggle(!!D.prf.lbar());updTopBtm();$(window).resize(updTopBtm)
+  $('.lb').toggle(!!D.prf.lbar());updTopBtm();$(window).resize(updTopBtm)
   layout.close('west');layout.close('east');layout.close('south');ide.wins[0].updSize()
-  D.prf.lbar(function(x){$('.lbar').toggle(!!x);updTopBtm()})
+  D.prf.lbar(function(x){$('.lb').toggle(!!x);updTopBtm()})
   try{
     D.installMenu(D.parseMenuDSL(D.prf.menu()))
   }catch(e){

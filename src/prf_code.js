@@ -3,7 +3,7 @@
 var on=CodeMirror.on
 var h={} // various input elements
 D.prf_tabs.push({
-  tabTitle:'Code',
+  name:'Code',id:'code',
   init:function($e){
     $e[0].innerHTML=
       '<div>'+

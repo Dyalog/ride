@@ -2,7 +2,7 @@
 
 var $ta // the textarea
 D.prf_tabs.push({
-  tabTitle:'Menu',
+  name:'Menu',id:'menu',
   init:function($e){
     $e[0].innerHTML='<button class=rst><u>R</u>eset</button>'+
                     '<p>Takes effect on restart</p><textarea wrap=off></textarea>'
@@ -31,7 +31,7 @@ D.parseMenuDSL=function(md){ // md:menu description
     TOP:{checkBoxPref:D.prf.floatOnTop},
     WSE:{checkBoxPref:D.prf.wse       },
     THM:{items:['Classic','Redmond','Cupertino'].map(function(x,i){
-      return{'':x,group:'themes',checked:D.prf.theme()===x.toLowerCase(),action:function(){D.prf.theme(x.toLowerCase())}}
+      return{'':x,group:'thm',checked:D.prf.theme()===x.toLowerCase(),action:function(){D.prf.theme(x.toLowerCase())}}
     })}
   }
   var stk=[{ind:-1,items:[]}],lines=md.split('\n')

@@ -1,10 +1,9 @@
 ;(function(){'use strict'
-
 // This file implements the Preferences dialog.
-
 // The contents of individual tabs are in separate files: prf_*.js
 // Each of them can export the following properties:
-//   tabTitle
+//   name       tab title
+//   id         a string used to construct DOM ids, CSS classes, etc
 //   init()     called only once, before Preferences is opened for the first time
 //   load()     called every time Preferences is opened
 //   validate() should return a falsey value on success or a {msg,el} object on failure
@@ -14,7 +13,6 @@
 // All tabs' validate() methods are invoked, if they exist, before any attempt to call save()
 var tabs=D.prf_tabs=[] // tab implementations self-register here
 
-function safe(s){return s.toLowerCase().replace(/[^a-z\-]/g,'-')} // make a string suitable for a DOM id
 var $d // dialog instance, lazily initialized
 function ok(){apply()&&$d.dialog('close')}
 function apply(){ // returns 0 on failure and 1 on success
@@ -29,11 +27,11 @@ function apply(){ // returns 0 on failure and 1 on success
 D.prf_ui=function(tabName){
   if(!$d){
     $d=$(
-      '<div id=prefs>'+
-        '<ul id=prefs-tabs-nav>'+
-          tabs.map(function(t){return'<li><a href=#prefs-tab-'+safe(t.tabTitle)+'>'+t.tabTitle+'</a></li>'}).join('')+
+      '<div id=prf>'+
+        '<ul id=prf-tabs-nav>'+
+          tabs.map(function(t){return'<li><a href=#prf-tab-'+t.id+'>'+t.name+'</a></li>'}).join('')+
         '</ul>'+
-        tabs.map(function(t){return'<div id=prefs-tab-'+safe(t.tabTitle)+'></div>'}).join('')+
+        tabs.map(function(t){return'<div id=prf-tab-'+t.id+'></div>'}).join('')+
       '</div>'
     )
       .tabs({activate:function(e,ui){var t=tabs[$(ui.newTab).index()];t.resize&&t.resize();t.activate&&t.activate()}})
@@ -48,10 +46,10 @@ D.prf_ui=function(tabName){
           {html:'<u>C</u>ancel',click:function(){$d.dialog('close')}}
         ]
       })
-    for(var i=0;i<tabs.length;i++)tabs[i].init&&tabs[i].init($('#prefs-tab-'+safe(tabs[i].tabTitle)))
+    for(var i=0;i<tabs.length;i++)tabs[i].init&&tabs[i].init($('#prf-tab-'+tabs[i].id))
   }
   $d.dialog('option','position',{at:'center',of:window}).dialog('open')
-  tabName&&$d.tabs({active:$('#prefs-tabs-nav a[href="#prefs-tab-'+tabName+'"]').parent().index()})
+  tabName&&$d.tabs({active:$('#prf-tabs-nav a[href="#prf-tab-'+tabName+'"]').parent().index()})
   for(var i=0;i<tabs.length;i++)tabs[i].load&&tabs[i].load()
 }
 

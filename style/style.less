@@ -26,8 +26,8 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 
 // z-indices (except for CodeMirror which uses 1-10)
 .ui-tooltip                            {z-index:9999}
-.lbar-tip-triangle                     {z-index: 301}
-.lbar-tip                              {z-index: 300}
+.lb-tip-triangle                       {z-index: 301}
+.lb-tip                                {z-index: 300}
 #vtip-balloon,#vtip-triangle,#vtip-rect{z-index: 300}
 .menu .m-box                           {z-index: 200}
 .ui-front                              {z-index: 100}
@@ -93,11 +93,11 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
     .m-box{margin-left:100%;margin-top:-17px}
     a{
       display:block;height:17px;line-height:17px;text-align:left;padding:1px 17px;overflow:hidden;text-overflow:ellipsis;
-      .m-shortcut{font-size:small;float:right;margin-left:20px;color:#666}
+      .m-shc{font-size:small;float:right;margin-left:20px;color:#666}
       &.m-checked{background:transparent 5px center no-repeat url(../style/img/menu-check.png)}
       &:focus{
         .sel;
-        .m-shortcut{color:@selfg}
+        .m-shc{color:@selfg}
         &.m-checked{background:@selbg 5px center no-repeat url(../style/img/menu-check-white.png)}
       }
       .outset
@@ -113,23 +113,23 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 }
 
 // language bar
-.lbar{
+.lb{
   .tt;.bg;padding:0 2px 0 10px;cursor:default;border-bottom:solid #888 1px;line-height:28px;
   b{border:solid @dark 1px;border-left:0;font-weight:normal;margin-bottom:3px;padding:1px;background:#eeeae2}
   b.first{border-left:solid @dark 1px}
   b:hover{background-color:@light}
 }
-.lbar-prefs{float:right;margin-right:4px;width:24px;height:24px;background:no-repeat center center url(../style/img/lbar-prefs.png)}
-.lbar-tip-triangle{
+.lb-prf{float:right;margin-right:4px;width:24px;height:24px;background:no-repeat center center url(../style/img/lb-prf.png)}
+.lb-tip-triangle{
   position:absolute;padding:0;margin:0;width:20px;height:19px;
-  background:center center no-repeat url(../style/img/lbar-tip-triangle.png)
+  background:center center no-repeat url(../style/img/lb-tip-triangle.png)
 }
-.lbar-tip{
+.lb-tip{
   .tt;position:absolute;padding:10px;border-radius:10px;border:solid black 1px;margin-top:20px;
-  background:@tip 10px 10px no-repeat url(../style/img/lbar-tip.png)
+  background:@tip 10px 10px no-repeat url(../style/img/lb-tip.png)
 }
-.lbar-tip-desc{.tt;padding:0 0 0 30px;margin:0;font-weight:bold}
-.lbar-tip-text{.tt}
+.lb-tip-desc{.tt;padding:0 0 0 30px;margin:0;font-weight:bold}
+.lb-tip-text{.tt}
 
 // value tips (also styled via Prefs>Colours)
 #vtip-balloon{.tt;position:absolute;border-radius:8px;border:solid black 1px;padding:7px;white-space:pre;
@@ -237,8 +237,8 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 // various dialogs
 .ui-widget-overlay{opacity:.3;filter:Alpha(Opacity=30);background:#aaa}
 .ui-widget-shadow{margin:-8px 0 0 -8px;padding:8px;opacity:.3;filter:Alpha(Opacity=30);border-radius:8px;background:#aaa}
-#prefs{height:80px}
-#prefs-tab-title{
+#prf{height:80px}
+#prf-tab-title{
   text-align:left;
   input{width:100%;display:block;margin-bottom:20px;margin-top:10px}
   .rst{float:right}
@@ -291,14 +291,14 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
   #k45{display:block} // the key between lshift and Z
 }
 
-#prefs-tab-menu{
+#prf-tab-menu{
   position:absolute;left:0;right:4px;top:30px;bottom:30px;
   .rst{float:right}
   p{margin:4px;text-align:left}
   textarea{width:100%;height:100%;resize:none}
 }
 
-#prefs-tab-code{text-align:left}
+#prf-tab-code{text-align:left}
 
 #col-top{text-align:left}
 #col-new-name{display:none}
@@ -306,10 +306,10 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 #col-settings{width:200px;right:8px;overflow:auto;padding-top:5px}
 #col-fg,#col-bg{width:48px;padding:0;cursor:pointer}
 #col-settings,#col-cm{text-align:left;position:absolute;top:70px;bottom:0}
-#prefs-tab-colours.frozen{#col-rename,#col-delete,#col-settings{display:none};#col-cm{right:8px}}
-#prefs-tab-colours.renaming{#col-scm{display:none};#col-new-name{display:inline}}
+#prf-tab-colours.frozen{#col-rename,#col-delete,#col-settings{display:none};#col-cm{right:8px}}
+#prf-tab-colours.renaming{#col-scm{display:none};#col-new-name{display:inline}}
 
-#prefs-tab-shortcuts{
+#prf-tab-shc{
   position:absolute;left:0;right:0;top:32px;bottom:0;overflow:auto;text-align:left;
   td{text-align:left}
   td.shc-code{.tt;padding:0 3px;border-left:solid #aaa 1px;border-right:solid #aaa 1px;color:#555;text-align:center}
@@ -333,7 +333,7 @@ body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hi
 .shc-input{background-color:#ace}
 
 #code-aim{margin-left:48px}
-#prefs-tab-code{overflow:auto;position:absolute;left:0;right:0;top:32px;bottom:0}
+#prf-tab-code{overflow:auto;position:absolute;left:0;right:0;top:32px;bottom:0}
 
 .ui-dialog .ui-dialog-content.task-dialog{
   padding:8px;

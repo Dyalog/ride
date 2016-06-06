@@ -23,14 +23,14 @@ geom  geometry, the mechanical layout of a keyboard
 hdr   header
 kbd   keyboard
 kw    keyword; sometimes used as a synonym for "control structure"
-lbar  language bar
+lb    language bar
 lbl   label
 lc    locale
 lhs   left-hand side
 msg   message
 pfx   prefix
 pos   position
-pref  preference(s); usually as described in ../src/prf.js
+prf   preference(s)
 re    regular expression; sometimes used as a prefix to variable names
 rhs   right-hand side
 rp    replace (like Dyalog's RP command)

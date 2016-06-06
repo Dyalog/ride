@@ -2,7 +2,7 @@
 
 var $sc // <input> for search
 D.prf_tabs.push({
-  tabTitle:'Shortcuts',
+  name:'Shortcuts',id:'shc',
   init:function($e){
     $e.html(
       '<div>'+

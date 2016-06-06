@@ -14,12 +14,12 @@ const rq=require,fs=rq('fs'),path=rq('path'),less=rq('less'),{execSync}=rq('chil
 ,tasks={}
 
 tasks.build=f=>{
-  md('_/themes')
+  md('_/thm')
   console.info('v'+v)
   wf('_/version',v)
   wf('_/version.js','D='+JSON.stringify({versionInfo:{
        version:v,date:sh('git show -s HEAD --pretty=format:%ci'),rev:sh('git rev-parse HEAD')}}))
-  async.each(['style','themes/classic','themes/redmond','themes/cupertino'],
+  async.each(['style','thm/classic','thm/redmond','thm/cupertino'],
     (x,f)=>{
       const i=`style/${x}.less`,o=`_/${x}.css`
       if(!nt(i,o)){f();return}

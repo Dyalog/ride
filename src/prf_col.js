@@ -130,7 +130,7 @@ function uniqScmName(s){ // s: suggested root
 }
 var SEARCH_MATCH='search match' // sample text to illustrate it
 D.prf_tabs.push({
-  tabTitle:'Colours',
+  name:'Colours',id:'col',
   init:function($e){
     var u=[],fg;for(var g in scm)(fg=scm[g].fg)&&u.indexOf(fg)<0&&u.push(fg);u.sort() // u: unique colours
     $e.html(
@@ -157,12 +157,12 @@ D.prf_tabs.push({
     )
     $('#col-scm').change(function(){
       scm=scms[+this.selectedIndex];updSampleStyle()
-      $('#prefs-tab-colours').toggleClass('frozen',!!scm.frozen);cm.setSize($cm.width(),$cm.height())
+      $('#prf-tab-colours').toggleClass('frozen',!!scm.frozen);cm.setSize($cm.width(),$cm.height())
     })
     $('#col-new-name').blur(function(){
       var newName=$(this).val();if(!newName)return
       scm.name='';scm.name=uniqScmName(newName)
-      $('#prefs-tab-colours').removeClass('renaming');updScms()
+      $('#prf-tab-colours').removeClass('renaming');updScms()
     }).keydown(function(e){switch(e.which){ // todo
       /*enter*/case 13:$(this)              .blur();return!1
       /*esc  */case 27:$(this).val(scm.name).blur();return!1
@@ -173,7 +173,7 @@ D.prf_tabs.push({
     })
     $('#col-rename').click(function(){
       $('#col-new-name').width($('#col-scm').width()).val(scm.name).select()
-      $('#prefs-tab-colours').addClass('renaming')
+      $('#prf-tab-colours').addClass('renaming')
       setTimeout(function(){$('#col-new-name').focus()},0)
     })
     $('#col-delete').click(function(){
@@ -235,7 +235,7 @@ D.prf_tabs.push({
   load:function(){
     var a=scms=SCMS.concat(D.prf.colourSchemes().map(decodeScm)),s=D.prf.colourScheme()
     scm=a[0];for(var i=0;i<a.length;i++)if(a[i].name===s){scm=a[i];break}
-    updScms();$('#prefs-tab-colours').removeClass('renaming');cm.setSize($cm.width(),$cm.height())
+    updScms();$('#prf-tab-colours').removeClass('renaming');cm.setSize($cm.width(),$cm.height())
   },
   save:function(){
     D.prf.colourSchemes(scms.filter(function(x){return!x.frozen}).map(encodeScm));D.prf.colourScheme(scm.name)
@@ -244,7 +244,7 @@ D.prf_tabs.push({
 })
 function updScms(){ // update schemes
   $('#col-scm').html(scms.map(function(x){x=D.util.esc(x.name);return'<option value="'+x+'">'+x}).join('')).val(scm.name)
-  $('#prefs-tab-colours').toggleClass('frozen',!!scm.frozen);cm.setSize($cm.width(),$cm.height())
+  $('#prf-tab-colours').toggleClass('frozen',!!scm.frozen);cm.setSize($cm.width(),$cm.height())
   updSampleStyle();selGroup('norm',1)
 }
 function updSampleStyle(){$('#col-sample-style').text(renderCSS(scm,1))}

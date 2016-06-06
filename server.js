@@ -12,7 +12,7 @@ const build=()=>{
   log('building');tid=0;busy=1;spawn(_d+'/mk',{cwd:_d,stdio:'inherit'}).on('close',()=>{log('done');busy=0})
 }
 if(process.env.RIDE_SERVER_WATCH){
-  ;['.','src','style','style/img','style/themes']
+  ;['.','src','style','style/img','style/thm']
     .forEach((x)=>{fs.watch(_d+'/'+x,()=>{tid=tid||setTimeout(build,100)})})
   build()
 }

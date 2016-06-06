@@ -6,7 +6,7 @@ var NK=58    // number of scancodes we are concerned with
 var model={} // dictionary: locale→[arrayOfAPLGlyphs,arrayOfShiftedAPLGlyphs]
 function U(c){return'U+'+('000'+c.charCodeAt(0).toString(16).toUpperCase()).slice(-4)} // fmt Unicode char as "U+0123"
 D.prf_tabs.push({
-  tabTitle:'Layout',
+  name:'Layout',id:'layout',
   init:function($e){
     var sk={15:'←',16:'↹',30:'Caps',43:'↲',44:'⇧',57:'⇧'} // special keys
     $e.html(

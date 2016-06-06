@@ -42,7 +42,7 @@ D.installMenu=function(x){
       if(x['']==='-')return $('<hr>')
       var acc,name=x[''].replace(/_(.)/g,function(_,k){return acc||k==='_'?k:'<u>'+(acc=k)+'</u>'}) // acc:access key
       var $a=$('<a href=#><span>'+name+'</span></a>')
-      x.cmd&&$a.append('<span class=m-shortcut data-cmd='+x.cmd+'>')
+      x.cmd&&$a.append('<span class=m-shc data-cmd='+x.cmd+'>')
       if(x.group){
         $a.addClass('m-group-'+x.group).toggleClass('m-checked',!!x.checked).on('mousedown mouseup click',function(e){
           $(this).closest('.menu').find('.m-group-'+x.group).removeClass('m-checked');$(this).addClass('m-checked')
@@ -104,7 +104,7 @@ D.installMenu=function(x){
     updMenuShcs(D.prf.keys())
     function updMenuShcs(h){
       var k={};for(var i=0;i<D.cmds.length;i++){var c=D.cmds[i][0],d=D.cmds[i][2];k[c]=(h[c]||d)[0]} // c:code, d:defaults
-      $('.m-shortcut').each(function(){$(this).text(k[$(this).data('cmd')]||'')})
+      $('.m-shc').each(function(){$(this).text(k[$(this).data('cmd')]||'')})
     }
     D.prf.keys(updMenuShcs)
   }

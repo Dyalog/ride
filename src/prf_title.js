@@ -2,7 +2,7 @@
 
 var wt // <input> element for Window Title
 D.prf_tabs.push({
-  tabTitle:'Title',
+  name:'Title',id:'title',
   init:function($e){
     var e=$e[0]
     e.innerHTML=
