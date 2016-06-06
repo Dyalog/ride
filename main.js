@@ -181,7 +181,6 @@ el.app.on('window-all-closed',()=>el.app.quit())
 //  }
 
 //D.open=(url,o)=>{o.icon='D.png';o.toolbar==null&&(o.toolbar=false);return!!gui.Window.open(url,o)} // o:options
-D.openExternal=el.shell.openExternal
 
 ;(env.RIDE_JS||'').split(path.delimiter).forEach(x=>{x&&$.getScript('file://'+path.resolve(ps.cwd(),x))})
 if(env.RIDE_CSS)$('<style>').text(env.RIDE_CSS.split(path.delimiter).map(x=>`@import url("${x}");`)).appendTo('head')

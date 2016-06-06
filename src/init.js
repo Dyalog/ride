@@ -34,7 +34,7 @@ D.open=D.open||function(url,o){
   if(x!=null&&y!=null)spec+=',left='+x+',top='+y+',screenX='+x+',screenY='+y
   return!!open(url,'_blank',spec)
 }
-D.openExternal||(D.openExternal=function(x){open(x,'_blank')})
+D.openExternal=D.el?D.el.shell.openExternal:function(x){open(x,'_blank')}
 var urlParams={},ref=(location+'').replace(/^[^\?]*($|\?)/,'').split('&')
 for(var i=0;i<ref.length;i++){var m=/^([^=]*)=?(.*)$/.exec(ref[i]);urlParams[unescape(m[1]||'')]=unescape(m[2]||'')}
 var win=urlParams.win
