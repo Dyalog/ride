@@ -1,7 +1,8 @@
-D.modules.prf_ui=function(rq){'use strict'
+;(function(){'use strict'
 
-// This module implements the Preferences dialog as a whole.
-// The contents of individual tabs are in separate modules: prf_*.js
+// This file implements the Preferences dialog.
+
+// The contents of individual tabs are in separate files: prf_*.js
 // Each of them can export the following properties:
 //   tabTitle
 //   init()     called only once, before Preferences is opened for the first time
@@ -11,7 +12,8 @@ D.modules.prf_ui=function(rq){'use strict'
 //   resize()   called when the Preferences dialog is resized or the tab is selected
 //   activate() called when the tab is selected ("activated")
 // All tabs' validate() methods are invoked, if they exist, before any attempt to call save()
-var tabs=[rq('./prf_layout'),rq('./prf_shc'),rq('./prf_code'),rq('./prf_col'),rq('./prf_title'),rq('./prf_menu')]
+var tabs=D.prf_tabs=[] // tab implementations self-register here
+
 function safe(s){return s.toLowerCase().replace(/[^a-z\-]/g,'-')} // make a string suitable for a DOM id
 var $d // dialog instance, lazily initialized
 function ok(){apply()&&$d.dialog('close')}
@@ -24,7 +26,7 @@ function apply(){ // returns 0 on failure and 1 on success
   for(var i=0;i<tabs.length;i++)tabs[i].save&&tabs[i].save()
   return 1
 }
-this.showDialog=function(tabName){
+D.prf_ui=function(tabName){
   if(!$d){
     $d=$(
       '<div id=prefs>'+
@@ -53,4 +55,4 @@ this.showDialog=function(tabName){
   for(var i=0;i<tabs.length;i++)tabs[i].load&&tabs[i].load()
 }
 
-}
+}())

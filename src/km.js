@@ -1,10 +1,8 @@
-D.modules.km=function(rq){'use strict'
+//various stuff related to keymapping
+;(function(){'use strict'
 
-var hlp=rq('./hlp'),prf=rq('./prf'),esc=rq('./util').esc,
-    prf_ui=rq('./prf_ui'),ACB_VALUE=rq('./ed').ACB_VALUE,CM=CodeMirror
-
-window.onhelp=function(){return!1} // prevent IE from acting silly on F1
-prf.prefixKey(function(x,old){
+var CM=CodeMirror
+D.prf.prefixKey(function(x,old){
   if(x!==old){var m=CM.keyMap.dyalogDefault;m["'"+x+"'"]=m["'"+old+"'"];delete m["'"+old+"'"]}
 })
 var sqglDesc={
@@ -28,7 +26,7 @@ var sqglDesc={
 
 var ctid=0 // backquote completion timeout id
 CM.keyMap.dyalogDefault={fallthrough:'default',End:'goLineEndSmart'}
-CM.keyMap.dyalogDefault["'"+prf.prefixKey()+"'"]='BQC'
+CM.keyMap.dyalogDefault["'"+D.prf.prefixKey()+"'"]='BQC'
 $.extend(CM.commands,{
   TB:function(){switchWindows( 1)},
   BT:function(){switchWindows(-1)},
@@ -37,12 +35,12 @@ $.extend(CM.commands,{
   CP:function(){document.execCommand('Copy' )},
   PT:function(){document.execCommand('Paste')},
   TO:CM.commands.toggleFold,
-  PRF:function(){prf_ui.showDialog()},
+  PRF:function(){D.prf_ui()},
   ABT:function(){D.abt()},
   CNC:function(){D.rideConnect()},
   NEW:function(){D.rideNewSession()},
   QIT:function(){D.quit()},
-  LBR:function(){prf.lbar.toggle()},
+  LBR:function(){D.prf.lbar.toggle()},
   WI:function(){D.ide.emit('WeakInterrupt')},
   SI:function(){D.ide.emit('StrongInterrupt')},
   FUL:function(){
@@ -86,7 +84,7 @@ $.extend(CM.commands,{
     cm.setSelection(CM.Pos(b[0],b[1]),CM.Pos(b[2],b[3]))
   },
   HLP:function(cm){
-    var c=cm.getCursor(),s=cm.getLine(c.line).toLowerCase(),h=hlp,u // u: the URL
+    var c=cm.getCursor(),s=cm.getLine(c.line).toLowerCase(),h=D.hlp,u,m // u: the URL, m: match object
     if(m=/^ *(\)[a-z]+).*$/.exec(s))u=h[m[1]]||h.WELCOME
     else if(m=/^ *(\][a-z]+).*$/.exec(s))u=h[m[1]]||h.UCMDS
     else if(m=/(\d+) *⌶$/.exec(s.slice(0,c.ch)))u=h[m[1]+'⌶']||h['⌶']+'#'+m[1]
@@ -99,14 +97,14 @@ $.extend(CM.commands,{
   },
   BQC:function(cm){
     if(cm.dyalogBQ){
-      var c=cm.getCursor();cm.replaceSelection(prf.prefixKey(),'end')
+      var c=cm.getCursor();cm.replaceSelection(D.prf.prefixKey(),'end')
     }else{
       // Make it possible to use pfxkey( etc -- remember the original value of
       // autoCloseBrackets, set it temporarily to false, and restore it when the
       // menu is closed:
       cm.setOption('autoCloseBrackets',false) // this is temporary until bqCleanUp()
       cm.on('change',bqChangeHandler);cm.dyalogBQ=1
-      var c0=cm.getCursor();cm.replaceSelection(prf.prefixKey(),'end')
+      var c0=cm.getCursor();cm.replaceSelection(D.prf.prefixKey(),'end')
       ctid=setTimeout(function(){
         var c1=cm.getCursor(),sel // sel: selected completion object
         if(c1.line === c0.line && c1.ch == c0.ch + 1){
@@ -116,10 +114,10 @@ $.extend(CM.commands,{
               Backspace:function(cm,m){m.close();cm.execCommand('delCharBefore')},
               Left:     function(cm,m){m.close();cm.execCommand('goCharLeft')},
               Right:    function(cm,m){m.pick()},
-              F1:function(){sel&&sel.text&&hlp[sel.text]&&D.openExternal(hlp[sel.text])}
+              F1:function(){sel&&sel.text&&D.hlp[sel.text]&&D.openExternal(D.hlp[sel.text])}
             },
             hint:function(){
-              var pk=prf.prefixKey(),ks=[];for(var x in bq)if(x!=='☠')ks.push(x);ks.sort()
+              var pk=D.prf.prefixKey(),ks=[];for(var x in bq)if(x!=='☠')ks.push(x);ks.sort()
               var data={from:c0,to:cm.getCursor(),list:ks.map(function(k){
                 var v=bq[k];return(k===pk
                   ?{text:'',hint:bqbqHint,render:function(e){e.innerHTML='  '+pk+pk+' <i>completion by name</i>'}}
@@ -196,25 +194,22 @@ function switchWindows(d){ // d: a step of either 1 or -1
 
 var bq // effective ` map as a dictionary, kept in sync with the prf
 function updBQ(){
-  bq={};var lc=prf.kbdLocale(), l=D.kbds.layouts[lc]||D.kbds.layouts.en_US, n=l[0].length
+  bq={};var lc=D.prf.kbdLocale(), l=D.kbds.layouts[lc]||D.kbds.layouts.en_US, n=l[0].length
   for(var i=0;i<2;i++)for(var j=0;j<n;j++){var name=l[i][j];bq[name]||(bq[name]=l[2+i][j])}
-  var s=prf.prefixMaps()[lc];if(s)for(var i=0;i<s.length;i+=2)bq[s[i]]=s[i+1]
+  var s=D.prf.prefixMaps()[lc];if(s)for(var i=0;i<s.length;i+=2)bq[s[i]]=s[i+1]
 }
-updBQ();prf.prefixMaps(updBQ);prf.kbdLocale(updBQ)
+updBQ();D.prf.prefixMaps(updBQ);D.prf.kbdLocale(updBQ)
 
 // order: used to measure how "complicated" (for some made-up definition of the word) a shortcut is.
 // Tooltips in the lbar show the simplest one.
 var order='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-
 function complexity(x){return(1+order.indexOf(x))||(1+order.length+x.charCodeAt(0))}
+D.getBQKeyFor=function(v){var r='',x,y;for(x in bq){y=bq[x];if(y===v&&(!r||complexity(r)>complexity(x)))r=x};return r}
 
-var getBQKeyFor=this.getBQKeyFor=function(v){
-  var r='',x,y;for(x in bq){y=bq[x];if(y===v&&(!r||complexity(r)>complexity(x)))r=x};return r
-}
 function bqChangeHandler(cm,o){ // o: changeObj
   var l=o.from.line,c=o.from.ch
   if(o.origin==='+input'&&o.text.length===1&&o.text[0].length===1){
-    var x=o.text[0],pk=prf.prefixKey()
+    var x=o.text[0],pk=D.prf.prefixKey()
     if(x===pk){
       var s=cm.getLine(l)
       if(s.slice(c-2,c)===pk+pk){
@@ -236,14 +231,14 @@ function bqChangeHandler(cm,o){ // o: changeObj
 function bqCleanUp(cm){
   cm.off('change',bqChangeHandler);delete cm.dyalogBQ;clearTimeout(ctid)
   var ca=cm.state.completionActive;ca&&ca.close&&ca.close()
-  cm.setOption('autoCloseBrackets',!!prf.autoCloseBrackets()&&ACB_VALUE)
+  cm.setOption('autoCloseBrackets',!!D.prf.autoCloseBrackets()&&D.Ed.ACB_VALUE)
 }
 function bqbqHint(cm){
   var sel // selected completion object
   var pick=function(cm,m){return m.pick()},c=cm.getCursor()
   cm.showHint({
     completeOnSingleClick:true,
-    extraKeys:{Right:pick,Space:pick,F1:function(){sel&&hlp[sel.text]&&D.openExternal(hlp[sel.text])}},
+    extraKeys:{Right:pick,Space:pick,F1:function(){sel&&D.hlp[sel.text]&&D.openExternal(D.hlp[sel.text])}},
     hint:function(){
       var u=cm.getLine(c.line).slice(c.ch,cm.getCursor().ch),a=[]
       for(var i=0;i<bqbqc.length;i++){var x=bqbqc[i];x.name.slice(0,u.length)===u&&a.push(x)}
@@ -349,7 +344,7 @@ for(var i=0;i<informal.length;i++){
     bqbqc.push({name:a[j],text:a[0],render:
       (function(squiggle,name){ // bind squiggle=a[0] and name=a[j]
         return function(e){ // the actual render() function
-          var key=getBQKeyFor(squiggle),pk=prf.prefixKey()
+          var key=D.getBQKeyFor(squiggle),pk=D.prf.prefixKey()
           $(e).text(squiggle+' '+(key?pk+key:'  ')+' '+pk+pk+name)
         }
       }(a[0],a[j]))
@@ -374,4 +369,4 @@ var C=[
 ]
 for(var i=0;i<C.length;i++)if(C[i]){defCmd(C[i]);CM.keyMap.dyalogDefault["'"+String.fromCharCode(0xf800+i)+"'"]=C[i]}
 
-}
+}())

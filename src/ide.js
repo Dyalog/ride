@@ -1,14 +1,11 @@
-D.modules.ide=function(rq){'use strict'
+;(function(){'use strict'
 
-rq('./menu')
-var prf=rq('./prf'),prf_ui=rq('./prf_ui'),parseMenuDSL=rq('./prf_menu').parseMenuDSL,ed=rq('./ed'),
-    Editor=ed.Editor,ACB_VALUE=ed.ACB_VALUE,Session=rq('./se').Session,km=rq('./km'),util=rq('./util'),esc=util.esc,
-    throttle1=util.throttle1,cmds=rq('./cmds').cmds,lb=rq('./lb'),wse=rq('./wse'),vt=rq('./vt')
+var esc=D.util.esc
 function parseId(s){return+s.replace(/^.*?(\d+)$/,'$1')}
-this.IDE=function(){
+D.IDE=function(){
   var ide=D.ide=this
   document.body.innerHTML=
-    '<div class=lbar style=display:none><a class=lbar-prefs href=#></a>'+lb.html+'</div>'+
+    '<div class=lbar style=display:none><a class=lbar-prefs href=#></a>'+D.lb.html+'</div>'+
     '<div class=lbar-tip style=display:none><div class=lbar-tip-desc></div><pre class=lbar-tip-text></pre></div>'+
     '<div class=lbar-tip-triangle style=display:none></div>'+
     '<div class=ide>'+
@@ -22,8 +19,8 @@ this.IDE=function(){
   ide.exec=function(l,tc){ // l:lines, tc:trace
     if(l&&l.length){tc||(ide.pending=l.slice(1));ide.emit('Execute',{trace:tc,text:l[0]+'\n'})}
   }
-  ide.host=ide.port=ide.wsid='';prf.title(ide.updTitle.bind(ide))
-  D.wins=ide.wins={0:new Session(ide,$('.ui-layout-center'),{id:0,emit:ide.emit.bind(ide),exec:ide.exec.bind(ide)})}
+  ide.host=ide.port=ide.wsid='';D.prf.title(ide.updTitle.bind(ide))
+  D.wins=ide.wins={0:new D.Se(ide,$('.ui-layout-center'),{id:0,emit:ide.emit.bind(ide),exec:ide.exec.bind(ide)})}
   ide.focusedWin=ide.wins[0] // last focused window, it might not have the focus right now
 
   // tab management
@@ -132,7 +129,7 @@ this.IDE=function(){
   ide.unblock=function(){--blk||rrd()}
 
   // language bar
-  $('.lbar-prefs').click(function(){prf_ui.showDialog('layout')})
+  $('.lbar-prefs').click(function(){D.prf_ui('layout')})
   var $tip=$('.lbar-tip'),$tipDesc=$('.lbar-tip-desc'),$tipText=$('.lbar-tip-text'),$tipTriangle=$('.lbar-tip-triangle')
   var ttid=null // tooltip timeout id
   function requestTooltip(e,desc,text){ // e:element
@@ -149,13 +146,13 @@ this.IDE=function(){
     .on('mousedown','b',function(e){var c=$(this).text(),w=ide.focusedWin;(w.hasFocus()?w:$(':focus')).insert(c);return!1})
     .on('mouseout','b,.lbar-prefs',function(){clearTimeout(ttid);ttid=null;$tip.add($tipTriangle).hide()})
     .on('mouseover','b',function(e){
-      var c=$(this).text(),k=km.getBQKeyFor(c),s=k&&c.charCodeAt(0)>127?'Keyboard: '+prf.prefixKey()+k+'\n\n':''
-      var h=lb.tips[c]||[c,''];requestTooltip(e,h[0],s+h[1])
+      var c=$(this).text(),k=D.getBQKeyFor(c),s=k&&c.charCodeAt(0)>127?'Keyboard: '+D.prf.prefixKey()+k+'\n\n':''
+      var h=D.lb.tips[c]||[c,''];requestTooltip(e,h[0],s+h[1])
     })
     .on('mouseover','.lbar-prefs',function(e){
-      var h=prf.keys(),s=''
-      for(var i=0;i<cmds.length;i++){
-        var code=cmds[i][0],desc=cmds[i][1],defaults=cmds[i][2]
+      var h=D.prf.keys(),s=''
+      for(var i=0;i<D.cmds.length;i++){
+        var cmd=D.cmds[i],code=cmd[0],desc=cmd[1],defaults=cmd[2]
         if(/^(BK|BT|ED|EP|FD|QT|RP|SC|TB|TC|TL)$/.test(code)){
           var pad=Array(Math.max(0,25-desc.length)).join(' '),ks=h[code]||defaults
           s+=code+':'+desc+':'+pad+' '+(ks[ks.length-1]||'none')+'\n'
@@ -171,47 +168,47 @@ this.IDE=function(){
     center:{onresize:function(){
       for(var k in ide.wins)ide.wins[k].updSize()
       var h=ide.layout.state,d
-      d=h.west .innerWidth ;!h.west .isClosed&&d>1&&prf.wseWidth    (d)
-      d=h.east .innerWidth ;!h.east .isClosed&&d>1&&prf.editorWidth (d)
-      d=h.south.innerHeight;!h.south.isClosed&&d>1&&prf.tracerHeight(d)
+      d=h.west .innerWidth ;!h.west .isClosed&&d>1&&D.prf.wseWidth    (d)
+      d=h.east .innerWidth ;!h.east .isClosed&&d>1&&D.prf.editorWidth (d)
+      d=h.south.innerHeight;!h.south.isClosed&&d>1&&D.prf.tracerHeight(d)
     }}
   })
   function updTopBtm(){
-    ide.$ide.css({top:(prf.lbar()?$('.lbar').height():0)+(D.mac?5:22)})
+    ide.$ide.css({top:(D.prf.lbar()?$('.lbar').height():0)+(D.mac?5:22)})
     layout&&layout.resizeAll()
   }
-  $('.lbar').toggle(!!prf.lbar());updTopBtm();$(window).resize(updTopBtm)
+  $('.lbar').toggle(!!D.prf.lbar());updTopBtm();$(window).resize(updTopBtm)
   layout.close('west');layout.close('east');layout.close('south');ide.wins[0].updSize()
-  prf.lbar(function(x){$('.lbar').toggle(!!x);updTopBtm()})
+  D.prf.lbar(function(x){$('.lbar').toggle(!!x);updTopBtm()})
   try{
-    D.installMenu(parseMenuDSL(prf.menu()))
+    D.installMenu(D.parseMenuDSL(D.prf.menu()))
   }catch(e){
     $.alert('Invalid menu configuration -- the default menu will be used instead','Warning')
-    console.error(e);D.installMenu(parseMenuDSL(prf.menu.getDefault()))
+    console.error(e);D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()))
   }
   function eachWin(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
-  prf.autoCloseBrackets(function(x){eachWin(function(w){w.cm.setOption('autoCloseBrackets',!!x&&ACB_VALUE)})})
-  prf.indent(function(x){eachWin(function(w){if(w.id){w.cm.setOption('smartIndent',x>=0);w.cm.setOption('indentUnit',x)}})})
-  prf.fold(function(x){eachWin(function(w){if(w.id){w.cm.setOption('foldGutter',!!x);w.updGutters()}})})
-  prf.matchBrackets(function(x){eachWin(function(w){w.cm.setOption('matchBrackets',!!x)})})
+  D.prf.autoCloseBrackets(function(x){eachWin(function(w){w.cm.setOption('autoCloseBrackets',!!x&&D.Ed.ACB_VALUE)})})
+  D.prf.indent(function(x){eachWin(function(w){if(w.id){w.cm.setOption('smartIndent',x>=0);w.cm.setOption('indentUnit',x)}})})
+  D.prf.fold(function(x){eachWin(function(w){if(w.id){w.cm.setOption('foldGutter',!!x);w.updGutters()}})})
+  D.prf.matchBrackets(function(x){eachWin(function(w){w.cm.setOption('matchBrackets',!!x)})})
   var updWSE=function(){
-    if(!prf.wse()){ide.layout.close('west');return}
-    ide.layout.sizePane('west',prf.wseWidth());ide.layout.open('west')
-    ide.wse||(ide.wse=new wse.WSE($('.wse'),ide));ide.wse.refresh()
+    if(!D.prf.wse()){ide.layout.close('west');return}
+    ide.layout.sizePane('west',D.prf.wseWidth());ide.layout.open('west')
+    ide.wse||(ide.wse=new D.WSE($('.wse'),ide));ide.wse.refresh()
   }
-  prf.wse(updWSE);prf.wse()&&setTimeout(updWSE,500)
+  D.prf.wse(updWSE);D.prf.wse()&&setTimeout(updWSE,500)
   D.mac&&setTimeout(function(){ide.wins[0].focus()},500) // OSX is stealing our focus.  Let's steal it back!  Bug #5
 }
-this.IDE.prototype={
+D.IDE.prototype={
   setHostAndPort:function(h,p){this.host=h;this.port=p;this.updTitle()},
   emit:function(x,y){this.dead||D.skt.emit(x,y)},
   die:function(){ // don't really, just pretend
     if(this.dead)return
     this.dead=1;this.connected=0;this.$ide.addClass('disconnected');for(var k in this.wins)this.wins[k].die()
   },
-  updTitle:function(){ // change listener for prf.title
+  updTitle:function(){ // change listener for D.prf.title
     var ide=this,ri=D.remoteIdentification||{},v=D.versionInfo
-    document.title=prf.title().replace(/\{\w+\}/g,function(x){var X=x.toUpperCase();return(
+    document.title=D.prf.title().replace(/\{\w+\}/g,function(x){var X=x.toUpperCase();return(
       X==='{WSID}'?ide.wsid:
       X==='{HOST}'?ide.host:
       X==='{PORT}'?ide.port:
@@ -248,8 +245,8 @@ this.IDE.prototype={
       return
     }
     var w=ee.token, done, editorOpts={id:w,name:ee.name,tracer:ee['debugger'],emit:this.emit.bind(this)}
-    if(prf.floating()&&!D.floating&&!this.dead){
-      var p=ee['debugger']?prf.posTracer():prf.posEditor()
+    if(D.prf.floating()&&!D.floating&&!this.dead){
+      var p=ee['debugger']?D.prf.posTracer():D.prf.posEditor()
       if(!p[4]){var d=ee.token-1;p[0]+=d*(process.env.RIDE_XOFFSET||32);p[1]+=d*(process.env.RIDE_YOFFSET||32)}
       var ph={x:p[0],y:p[1],width:p[2],height:p[3]}
       var url='ed.html?win='+w+'&x='+p[0]+'&y='+p[1]+'&width='+p[2]+
@@ -262,7 +259,7 @@ this.IDE.prototype={
       }
     }
     if(!done){
-      var dir=ee['debugger']?'south':'east', size=ee['debugger']?prf.tracerHeight():prf.editorWidth()
+      var dir=ee['debugger']?'south':'east', size=ee['debugger']?D.prf.tracerHeight():D.prf.editorWidth()
       this.layout.sizePane(dir,size||'50%');this.layout.open(dir)
       var $li=$('<li id=wintab'+w+'><a href=#win'+w+'><span class=tab-name></span>'+
                                    '<span class=tab-close title="Save and close">×</span></a>')
@@ -270,7 +267,7 @@ this.IDE.prototype={
         .click(function(e){var win=D.ide.wins[w];e.which===2&&win&&win.EP&&win.EP(win.cm)}) // middle click
       $li.find('.tab-name').text(ee.name)
       var $tabContent=$('<div class=win id=win'+w+'>').appendTo('.ui-layout-'+dir)
-      ;(this.wins[w]=new Editor(this,$tabContent,editorOpts)).open(ee)
+      ;(this.wins[w]=new D.Ed(this,$tabContent,editorOpts)).open(ee)
       $('.ui-layout-'+dir).tabs('refresh').tabs({active:-1})
         .data('ui-tabs').panels.off('keydown') // prevent jQueryUI tabs from hijacking <C-Up>
     }
@@ -279,10 +276,10 @@ this.IDE.prototype={
     var t=0,w;for(var k in this.wins){var x=this.wins[k];if(x.id&&t<=x.focusTimestamp){w=x;t=x.focusTimestamp}}
     w&&w.focus()
   },
-  LBR:prf.lbar      .toggle,
-  FLT:prf.floating  .toggle,
-  WRP:prf.wrap      .toggle,
-  TOP:prf.floatOnTop.toggle,
+  LBR:D.prf.lbar      .toggle,
+  FLT:D.prf.floating  .toggle,
+  WRP:D.prf.wrap      .toggle,
+  TOP:D.prf.floatOnTop.toggle,
   THM:function(){},
   UND:function(){this.focusedWin.cm.undo()},
   RDO:function(){this.focusedWin.cm.redo()},
@@ -291,6 +288,6 @@ this.IDE.prototype={
     return r
   }
 }
-CodeMirror.commands.WSE=function(){prf.wse.toggle()}
+CodeMirror.commands.WSE=function(){D.prf.wse.toggle()}
 
-}
+}())

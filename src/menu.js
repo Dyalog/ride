@@ -1,34 +1,29 @@
-D.modules.menu=function(rq){'use strict'
-
-// Generic menu for a browser or NW.js
-// There's an alternative implementation for NW.js in ../init-nw.js
-// For the concrete content in the menu, see prf.js
-var prf=rq('./prf'),cmds=rq('./cmds').cmds
-if(D.el){
-  var renderMenu=function(x,groups){
-    if(!x)return
-    if(x['']==='-')return new D.el.MenuItem({type:'separator'})
-    var h={label:x[''].replace(/_/g,'&')}
-    if(x.group){
-      h.type='checkbox';h.checked=!!x.checked
-      h.click=function(){groups[x.group].forEach(function(y){y.checked=y===mi});x.action&&x.action()}
-    }else if(x.checkBoxPref){
-      h.type='checkbox';h.checked=!!x.checkBoxPref()
-      if(x.action)h.click=function(){x.action(mi.checked)}
-      x.checkBoxPref(function(v){mi.checked=!!v})
-    }else{
-      h.click=x.action
+//two menu implementations -- one native and one in html
+'use strict'
+D.installMenu=function(x){
+  if(D.el){
+    var render=function(x,groups){
+      if(!x)return
+      if(x['']==='-')return new D.el.MenuItem({type:'separator'})
+      var h={label:x[''].replace(/_/g,'&')}
+      if(x.group){
+        h.type='checkbox';h.checked=!!x.checked
+        h.click=function(){groups[x.group].forEach(function(y){y.checked=y===mi});x.action&&x.action()}
+      }else if(x.checkBoxPref){
+        h.type='checkbox';h.checked=!!x.checkBoxPref()
+        if(x.action)h.click=function(){x.action(mi.checked)}
+        x.checkBoxPref(function(v){mi.checked=!!v})
+      }else{
+        h.click=x.action
+      }
+      if(x.items){h.submenu=new D.el.Menu;x.items.forEach(function(y){h.submenu.append(render(y,groups))})}
+      var mi=new D.el.MenuItem(h);x.group&&(groups[x.group]=groups[x.group]||[]).push(mi);return mi
     }
-    if(x.items){h.submenu=new D.el.Menu;x.items.forEach(function(y){h.submenu.append(renderMenu(y,groups))})}
-    var mi=new D.el.MenuItem(h);x.group&&(groups[x.group]=groups[x.group]||[]).push(mi);return mi
-  }
-  D.installMenu=function(x){
     var groups={},m=new D.el.Menu
-    x.forEach(function(y){m.append(renderMenu(y,groups))})
+    x.forEach(function(y){m.append(render(y,groups))})
     D.elw.setMenu(m)
-  }
-}else{
-  D.installMenu=function(arg){
+  }else{
+    var arg=x
     // DOM structure:
     // ┌.menu───────────────────────────────────────────┐
     // │┌div.m-sub────────────────────────────────┐     │
@@ -106,13 +101,11 @@ if(D.el){
         }
       })
     $(document).mousedown(function(e){$(e.target).closest('.menu').length||mFocus(null)})
-    updMenuShcs(prf.keys())
+    updMenuShcs(D.prf.keys())
+    function updMenuShcs(h){
+      var k={};for(var i=0;i<D.cmds.length;i++){var c=D.cmds[i][0],d=D.cmds[i][2];k[c]=(h[c]||d)[0]} // c:code, d:defaults
+      $('.m-shortcut').each(function(){$(this).text(k[$(this).data('cmd')]||'')})
+    }
+    D.prf.keys(updMenuShcs)
   }
-}
-function updMenuShcs(h){
-  var k={};for(var i=0;i<cmds.length;i++){var c=cmds[i][0],d=cmds[i][2];k[c]=(h[c]||d)[0]} // c:code, d:defaults
-  $('.m-shortcut').each(function(){$(this).text(k[$(this).data('cmd')]||'')})
-}
-prf.keys(updMenuShcs)
-
 }

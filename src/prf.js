@@ -1,15 +1,12 @@
-D.modules.prf=function(){'use strict'
-
-// Preferences API
-// (../init-nw.js is an exception, it bypasses this API because it can't require() it.)
-// Usage:
-//   prf.foo()                     // getter
-//   prf.foo(123)                  // setter
-//   prf.foo(function(newValue){}) // add "on change" listener
-//   prf.foo.toggle()              // convenience function for booleans (numbers 0 and 1)
-//   prf.foo.getDefault()          // retrieve default value
-var prf=this
-;[ // name                default (type is determined from default value; setter enforces type and handles encoding)
+//Preferences API:
+//  D.prf.foo()                              // getter
+//  D.prf.foo(123)                           // setter
+//  D.prf.foo(function(newValue,oldValue){}) // add "on change" listener
+//  D.prf.foo.toggle()                       // convenience function for booleans (numbers 0 and 1)
+//  D.prf.foo.getDefault()                   // retrieve default value
+'use strict'
+D.prf={}
+;[//name                 default (type is determined from default value; setter enforces type and handles encoding)
   ['autoCloseBlocks',    1], // whether to insert :end after :if,:for,etc when Enter is pressed
   ['autoCloseBlocksEnd', 0], // 0: close blocks with ":EndIf",":EndFor",etc;  1: close blocks only with ":End"
   ['autoCloseBrackets',  1], // whether to insert {}[]() in pairs
@@ -115,7 +112,7 @@ var prf=this
   var k=kd[0], d=kd[1], t=typeof d, l=[], // k:preference name (key), d:default value, t:type, l:listeners
       str=t==='object'?JSON.stringify:function(x){return''+x}, // stringifier function
       sd=str(d),  // default value "d" converted to a string
-      p=prf[k]=function(x){
+      p=D.prf[k]=function(x){
         var db=D.db||localStorage
         if(typeof x==='function'){
           l.push(x)
@@ -133,5 +130,3 @@ var prf=this
   p.getDefault=function(){return d}
   p.toggle=function(){return p(!p())}
 })
-
-}

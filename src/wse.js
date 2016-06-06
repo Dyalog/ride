@@ -1,7 +1,6 @@
-D.modules.wse=function(){'use strict'
-
 // workspace explorer
-this.WSE=function($e,ide){
+'use strict'
+D.WSE=function($e,ide){
   var pending=this.pending={}
   this.$e=$e
     .jstree({plugins:[],core:{animation:true,check_callback:true,data:function(x,f){
@@ -12,7 +11,7 @@ this.WSE=function($e,ide){
       ;/^wse-leaf-/.test(this.id)||$e.jstree('refresh_node',this)
     })
 }
-this.WSE.prototype={
+D.WSE.prototype={
   replyTreeList:function(x){
     var f=this.pending[x.nodeId];if(!f)return
     f((x.nodeIds||[]).map(function(c,i){
@@ -23,6 +22,4 @@ this.WSE.prototype={
     delete this.pending[x.nodeId]
   },
   refresh:function(){this.$e.jstree('refresh')}
-}
-
 }

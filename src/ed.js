@@ -1,10 +1,8 @@
-D.modules.ed=function(rq){'use strict'
+;(function(){'use strict'
 
 //editor
-var ac=rq('./ac'),prf=rq('./prf'),syn=rq('./syn'),vt=rq('./vt'),CM=CodeMirror,
-    letter=syn.letter,dfnDepth=syn.dfnDepth,util=rq('./util'),cmOnDblClick=util.cmOnDblClick,
-    ACB_VALUE=this.ACB_VALUE={pairs:'()[]{}',explode:'{}'} // value for CodeMirror's "autoCloseBrackets" option when on
-rq('./scrl')
+var CM=CodeMirror,
+    ACB_VALUE={pairs:'()[]{}',explode:'{}'} // value for CodeMirror's "autoCloseBrackets" option when on
 
 var b=function(c,t){return'<a href=# class="'+c+' tb-btn" title="'+t+'"></a>'} // cc:css classes, t:title
 var ED_HTML=
@@ -33,7 +31,7 @@ var ED_HTML=
   '<div class=ride-win></div>'
 b=null
 
-this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
+D.Ed=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
   var ed=this;ed.ide=ide;ed.$e=$(e).html(ED_HTML);ed.opts=opts;ed.id=opts.id;ed.name=opts.name;ed.emit=opts.emit
   ed.tc=opts.tracer
   ed.xline=null // the line number of the empty line inserted at eof when cursor is there and you press <down>
@@ -42,11 +40,11 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
   ed.lastQuery=ed.lastIC=ed.lastGen=ed.overlay=ed.annotation=null // search-related state
   ed.focusTimestamp=0
   ed.jumps=[]
-  ed.cm=CM(ed.$e.find('.ride-win')[0],$.extend({},util.cmOpts,{
-    lineNumbers:!!(ed.tc?prf.lineNumsTracer():prf.lineNumsEditor()),
+  ed.cm=CM(ed.$e.find('.ride-win')[0],$.extend({},D.util.cmOpts,{
+    lineNumbers:!!(ed.tc?D.prf.lineNumsTracer():D.prf.lineNumsEditor()),
     firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
-    smartIndent:prf.indent()>=0,indentUnit:prf.indent(),scrollButtonHeight:12,matchBrackets:!!prf.matchBrackets(),
-    autoCloseBrackets:!!prf.autoCloseBrackets()&&ACB_VALUE,foldGutter:!!prf.fold(),
+    smartIndent:D.prf.indent()>=0,indentUnit:D.prf.indent(),scrollButtonHeight:12,matchBrackets:!!D.prf.matchBrackets(),
+    autoCloseBrackets:!!D.prf.autoCloseBrackets()&&ACB_VALUE,foldGutter:!!D.prf.fold(),
     scrollbarStyle:'simple',
     keyMap:'dyalog',extraKeys:{'Shift-Tab':'indentLess',Tab:'tabOrAutocomplete',Down:'downOrXline'}
     // Some options of this.cm can be set from ide.coffee when the corresponding pref changes.
@@ -57,8 +55,8 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
     if(g==='breakpoints'||g==='CodeMirror-linenumbers'){cm.setCursor({line:l,ch:0});ed.BP(ed.cm)}
   })
   ed.cm.on('focus',function(){ed.focusTimestamp=+new Date;ide.focusedWin=ed})
-  cmOnDblClick(ed.cm,function(e){ed.ED(ed.cm);e.preventDefault();e.stopPropagation()})
-  ed.processAutocompleteReply=ac.init(ed)
+  D.util.cmOnDblClick(ed.cm,function(e){ed.ED(ed.cm);e.preventDefault();e.stopPropagation()})
+  ed.processAutocompleteReply=D.ac(ed)
   ed.$tb=$('.toolbar',ed.$e)
     .on('click','.tb-hid,.tb-case',function(e){$(e.target).toggleClass('pressed');ed.highlightSearch();return!1})
     .on('mousedown','.tb-btn',function(e){$(e.target).addClass('armed');e.preventDefault()})
@@ -68,7 +66,7 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
       for(var i=0;i<a.length;i++)if(m=/^tb-([A-Z]{2,3})$/.exec(a[i]))
         {ed[m[1]]?ed[m[1]](ed.cm):CM.commands[m[1]]?CM.commands[m[1]](ed.cm):0;break}
     })
-  ed.cmSC=CM(ed.$tb.find('.tb-sc')[0],$.extend({},util.cmOpts,{placeholder:'Search',extraKeys:{
+  ed.cmSC=CM(ed.$tb.find('.tb-sc')[0],$.extend({},D.util.cmOpts,{placeholder:'Search',extraKeys:{
     Enter:ed.NX.bind(ed),
     'Shift-Enter':ed.PV.bind(ed),
     'Ctrl-Enter':ed.selectAllSearchResults.bind(ed),
@@ -77,7 +75,7 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
   }}))
   ed.cmSC.on('change',function(){ed.highlightSearch()})
   ed.$rp=ed.$tb.find('.tb-rp')
-  ed.cmRP=CM(ed.$rp[0],$.extend({},util.cmOpts,{placeholder:'Replace',extraKeys:{
+  ed.cmRP=CM(ed.$rp[0],$.extend({},D.util.cmOpts,{placeholder:'Replace',extraKeys:{
     Enter            :function(){ed.replace()},
     'Shift-Enter'    :function(){ed.replace(1)},
     'Alt-Enter'      :function(){ed.search()},
@@ -96,9 +94,9 @@ this.Editor=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
     })
   }
   ed.setTracer(!!ed.tc)
-  this.vt=vt.init(this)
+  this.vt=D.vt(this)
 }
-this.Editor.prototype={
+D.Ed.prototype={
   updGutters:function(){
     var g=['breakpoints'],cm=this.cm
     cm.getOption('lineNumbers')&&g.push('CodeMirror-linenumbers')
@@ -186,7 +184,7 @@ this.Editor.prototype={
   },
   setTracer:function(x){
     var ed=this;ed.tc=x;ed.$e.toggleClass('tracer',x);ed.highlight(null)
-    var ln=!!(ed.tc?prf.lineNumsTracer():prf.lineNumsEditor())
+    var ln=!!(ed.tc?D.prf.lineNumsTracer():D.prf.lineNumsEditor())
     ed.cm.setOption('lineNumbers',ln);ed.$tb.find('.tb-LN').toggleClass('pressed',ln)
     ed.updGutters();ed.setReadOnly(x)
   },
@@ -205,7 +203,7 @@ this.Editor.prototype={
     //  4 SimpleNumericArray  128 SimpleCharVector  4096 ExternalFunction
     //  8 MixedSimpleArray    256 AplNamespace
     if([1,256,512,1024,2048,4096].indexOf(ee.entityType)<0){cm.setOption('mode','text')}
-    else{cm.setOption('mode','apl');if(prf.indentOnOpen()){cm.execCommand('selectAll');cm.execCommand('indentAuto')}}
+    else{cm.setOption('mode','apl');if(D.prf.indentOnOpen()){cm.execCommand('selectAll');cm.execCommand('indentAuto')}}
     ed.setReadOnly(ee.readOnly||ee['debugger'])
     var line=ee.currentRow,col=ee.currentColumn||0
     if(line===0&&col===0&&ee.text.length===1)col=ee.text[0].length
@@ -225,7 +223,7 @@ this.Editor.prototype={
   getDocument:function(){return this.$e[0].ownerDocument},
   refresh:function(){this.cm.refresh()},
   cword:function(){ // apl identifier under cursor
-    var c=this.cm.getCursor(),s=this.cm.getLine(c.line),r='['+letter+'0-9]*' // r:regex fragment used for identifiers
+    var c=this.cm.getCursor(),s=this.cm.getLine(c.line),r='['+D.syn.letter+'0-9]*' // r:regex fragment used for a name
     return(
         ((RegExp('⎕?'+r+'$').exec(s.slice(0,c.ch))||[])[0]||'')+ // match left  of cursor
         ((RegExp('^'+r     ).exec(s.slice(  c.ch))||[])[0]||'')  // match right of cursor
@@ -267,7 +265,7 @@ this.Editor.prototype={
     cm.replaceRange(s,{line:l,ch:0},{line:l,ch:cm.getLine(l).length},'D')
   },
   LN:function(cm){ // toggle line numbers
-    var v=!!(this.tc?prf.lineNumsTracer.toggle():prf.lineNumsEditor.toggle())
+    var v=!!(this.tc?D.prf.lineNumsTracer.toggle():D.prf.lineNumsEditor.toggle())
     cm.setOption('lineNumbers',v);this.updGutters();this.$tb.find('.tb-LN').toggleClass('pressed',v)
   },
   PV:function(){this.search(1)},
@@ -292,16 +290,16 @@ this.Editor.prototype={
   },
   ER:function(cm){
     if(this.tc){this.emit('RunCurrentLine',{win:this.id});return}
-    if(prf.autoCloseBlocks()){
+    if(D.prf.autoCloseBlocks()){
       var u=cm.getCursor(),l=u.line,s=cm.getLine(l),m
       var re=/^(\s*):(class|disposable|for|if|interface|namespace|property|repeat|section|select|trap|while|with)\b([^⋄\{]*)$/i
-      if(u.ch===s.length&&(m=re.exec(s))&&!dfnDepth(cm.getStateAfter(l-1))){
+      if(u.ch===s.length&&(m=re.exec(s))&&!D.syn.dfnDepth(cm.getStateAfter(l-1))){
         var pre=m[1],kw=m[2],post=m[3],l1=l+1,end=cm.lastLine();kw=kw[0].toUpperCase()+kw.slice(1).toLowerCase()
         while(l1<=end&&/^\s*(?:$|⍝)/.test(cm.getLine(l1)))l1++ // find the next non-blank line
         var s1=cm.getLine(l1)||'',pre1=s1.replace(/\S.*$/,'')
         if(pre.length>pre1.length||pre.length===pre1.length&&!/^\s*:(?:end|else|andif|orif|case|until|access)/i.test(s1)){
           var r=':'+kw+post+'\n'+pre+':End'
-          prf.autoCloseBlocksEnd()||(r+=kw)
+          D.prf.autoCloseBlocksEnd()||(r+=kw)
           cm.replaceRange(r,{line:l,ch:pre.length},{line:l,ch:s.length})
           cm.execCommand('indentAuto');cm.execCommand('goLineUp');cm.execCommand('goLineEnd')
         }
@@ -368,5 +366,6 @@ this.Editor.prototype={
     }
   }
 }
+D.Ed.ACB_VALUE=ACB_VALUE
 
-}
+}())

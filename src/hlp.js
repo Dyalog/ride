@@ -1,15 +1,12 @@
-D.modules.hlp=function(_,module){'use strict'
+;(function(){'use strict'
 
-var p='http://help.dyalog.com/15.0/Content/',q='.htm', // prefix and suffix
-h=D.hlp=module.exports={
-  WELCOME:p+'MiscPages/HelpWelcome'+q,
-  UCMDS:p+'UserGuide/The APL Environment/User Commands'+q,
-  LANGELEMENTS:p+'Language/Introduction/Language Elements'+q
-}
+var p='http://help.dyalog.com/15.0/Content/',q='.htm' // prefix and suffix
+var h=D.hlp={WELCOME:p+'MiscPages/HelpWelcome'+q,
+             UCMDS:p+'UserGuide/The APL Environment/User Commands'+q,
+             LANGELEMENTS:p+'Language/Introduction/Language Elements'+q}
 
 var u=p+'Language/System Commands/'
-var a=('classes clear cmd continue copy cs drop ed erase events fns holds lib load methods ns objects obs off'+
-' ops pcopy props reset save sh sic si sinl tid vars wsid xload').split(' ')
+var a=('classes clear cmd continue copy cs drop ed erase events fns holds lib load methods ns objects obs off ops pcopy props reset save sh sic si sinl tid vars wsid xload').split(' ')
 for(var i=0;i<a.length;i++)h[')'+a[i]]=u+a[i]+q
 
 var u=p+'Language/System Functions/'
@@ -27,14 +24,7 @@ var a=('access attribute class continue for goto hold if implements interface le
 for(var i=0;i<a.length;i++)h[':'+a[i]]=u+a[i]+q
 
 var u=p+'Language/Symbols/'
-var a=('&Ampersand ]Brackets ⊖Circle_Bar ○Circle ⌽Circle_Stile ⍪Comma_Bar ,Comma ⊥Decode_Symbol ¨Dieresis'+
-' ⍣DieresisStar ⍨Dieresis_Tilde ÷Divide_Sign ⌹Domino .Dot ↓Down_Arrow ⌊Downstile ⊤Encode_Symbol ∊Epsilon'+
-' ⍷Epsilon_Underbar =Equal_Sign ≡Equal_Underbar ≢Equal_Underbar_Slash !Exclamation_Mark ⍎Execute_Symbol ⍒Grade_Down'+
-' ⍋Grade_Up ≥Greater_Than_Or_Equal_To_Sign >Greater_Than_Sign ⌶IBeam ⌷Index_Symbol ⍳Iota ⍤Jot_Diaresis ∘Jot ⊂Left_Shoe'+
-' ⊣Left_Tack ≤Less_Than_Or_Equal_To_Sign <Less_Than_Sign ⍟Log ∧Logical_And ∨Logical_Or -Minus_Sign ⍲Nand_Symbol'+
-' ⍱Nor_Symbol ≠Not_Equal_To +Plus_Sign ⌸Quad_Equal ?Question_Mark ⍴Rho →Right_Arrow ⊃Right_Shoe ⊢Right_Tack'+
-' ∩Set_Intersection ∪Set_Union ⌿Slash_Bar /Slash ⍀Slope_Bar \\Slope *Star |Stile ⍕Thorn_Symbol ~Tilde ×Times_Sign'+
-' ⍉Transpose ↑Up_Arrow ⌈Upstile ⍠Variant ⍬Zilde_Symbol').split(' ')
+var a=('&Ampersand ]Brackets ⊖Circle_Bar ○Circle ⌽Circle_Stile ⍪Comma_Bar ,Comma ⊥Decode_Symbol ¨Dieresis ⍣DieresisStar ⍨Dieresis_Tilde ÷Divide_Sign ⌹Domino .Dot ↓Down_Arrow ⌊Downstile ⊤Encode_Symbol ∊Epsilon ⍷Epsilon_Underbar =Equal_Sign ≡Equal_Underbar ≢Equal_Underbar_Slash !Exclamation_Mark ⍎Execute_Symbol ⍒Grade_Down ⍋Grade_Up ≥Greater_Than_Or_Equal_To_Sign >Greater_Than_Sign ⌶IBeam ⌷Index_Symbol ⍳Iota ⍤Jot_Diaresis ∘Jot ⊂Left_Shoe ⊣Left_Tack ≤Less_Than_Or_Equal_To_Sign <Less_Than_Sign ⍟Log ∧Logical_And ∨Logical_Or -Minus_Sign ⍲Nand_Symbol ⍱Nor_Symbol ≠Not_Equal_To +Plus_Sign ⌸Quad_Equal ?Question_Mark ⍴Rho →Right_Arrow ⊃Right_Shoe ⊢Right_Tack ∩Set_Intersection ∪Set_Union ⌿Slash_Bar /Slash ⍀Slope_Bar \\Slope *Star |Stile ⍕Thorn_Symbol ~Tilde ×Times_Sign ⍉Transpose ↑Up_Arrow ⌈Upstile ⍠Variant ⍬Zilde_Symbol').split(' ')
 for(var i=0;i<a.length;i++)h[a[i][0]]=u+a[i].slice(1).replace(/_/g,' ')+q
 var b="#⍺⍵∇'⋄⍝:;¯";for(var i=0;i<b.length;i++)h[b[i][0]]=u+'Special Symbols'+q
 
@@ -83,4 +73,4 @@ var a={
 }
 for(var k in a)h[k+'⌶']=u+a[k]
 
-}
+}());

@@ -1,7 +1,5 @@
-D.modules.prf_col=function(rq){'use strict'
+;(function(){'use strict'
 
-this.tabTitle='Colours'
-var prf=rq('./prf'),util=rq('./util'),esc=util.esc
 var G=[],H={} // G:syntax highlighting groups {t,s,c,ctrls}; H:reverse lookup dict for G
 D.addSyntaxGroups=function(x){G=G.concat(x);H={};for(var i=0;i<G.length;i++)H[G[i].t]=i;SCMS&&updStyle()}
 D.addSyntaxGroups([
@@ -122,130 +120,133 @@ function shrinkRGB(s){
   var r=s[1],R=s[2],g=s[3],G=s[4],b=s[5],B=s[6];return r!==R||g!==G||b!==B?s.slice(1):r===g&&g===b?r:r+g+b
 }
 function updStyle(){ // update global style from what's in localStorage
-  var name=prf.colourScheme(),a=SCMS.concat(prf.colourSchemes().map(decodeScm))
+  var name=D.prf.colourScheme(),a=SCMS.concat(D.prf.colourSchemes().map(decodeScm))
   for(var i=0;i<a.length;i++)if(a[i].name===name){$('#col-style').text(renderCSS(a[i]));break}
 }
-$(updStyle);prf.colourScheme(updStyle);prf.colourSchemes(updStyle)
+$(updStyle);D.prf.colourScheme(updStyle);D.prf.colourSchemes(updStyle)
 function uniqScmName(s){ // s: suggested root
   var h={};for(var i=0;i<scms.length;i++)h[scms[i].name]=1
   var r=s;if(h[s]){s=s.replace(/ \(\d+\)$/,'');var i=1;while(h[r=s+' ('+i+')'])i++};return r
 }
 var SEARCH_MATCH='search match' // sample text to illustrate it
-this.init=function($e){
-  var u=[],fg;for(var g in scm)(fg=scm[g].fg)&&u.indexOf(fg)<0&&u.push(fg);u.sort() // u: unique colours
-  $e.html(
-    '<div id=col-top>'+
-      '<label><u>S</u>cheme: <select id=col-scm></select></label>'+
-      '<input id=col-new-name> '+
-      '<button id=col-clone>C<u>l</u>one</button>  '+
-      '<button id=col-rename><u>R</u>ename</button> '+
-      '<button id=col-delete><u>D</u>elete</button> '+
-    '</div>'+
-    '<div id=col-cm></div>'+
-    '<div id=col-settings>'+
-      '<datalist id=col-list>'+u.map(function(c){return'<option value='+c+'>'}).join('')+'</datalist>'+
-      '<select id=col-group>'+G.map(function(g,i){return'<option value='+i+'>'+g.s}).join('')+'</select>'+
-      '<p id=col-fg-p><label><input type=checkbox id=col-fg-cb><u>F</u>oreground</label> <input type=color id=col-fg list=col-list>'+
-      '<p id=col-bg-p><label><input type=checkbox id=col-bg-cb><u>B</u>ackground</label> <input type=color id=col-bg list=col-list>'+
-      '<div id=col-bgo title=Transparency></div>'+
-      '<p id=col-BIU-p>'+
-        '<label><input type=checkbox id=col-B><b>B</b></label> '+
-        '<label><input type=checkbox id=col-I><i>I</i></label> '+
-        '<label><input type=checkbox id=col-U><u>U</u></label> '+
-      '<p id=col-bc-p><label><input type=checkbox id=col-bc-cb>Border colour</label> <input type=color id=col-bc list=col-list>'+
-    '</div>'
-  )
-  $('#col-scm').change(function(){
-    scm=scms[+this.selectedIndex];updSampleStyle()
-    $('#prefs-tab-colours').toggleClass('frozen',!!scm.frozen);cm.setSize($cm.width(),$cm.height())
-  })
-  $('#col-new-name').blur(function(){
-    var newName=$(this).val();if(!newName)return
-    scm.name='';scm.name=uniqScmName(newName)
-    $('#prefs-tab-colours').removeClass('renaming');updScms()
-  }).keydown(function(e){switch(e.which){ // todo
-    /*enter*/case 13:$(this)              .blur();return!1
-    /*esc  */case 27:$(this).val(scm.name).blur();return!1
-  }})
-  $('#col-clone').click(function(){
-    var x={};scms.push(x);for(var k in scm)x[k]=$.extend({},scm[k]) // x:the new scheme
-    x.name=uniqScmName(scm.name);delete x.frozen;scm=x;updScms()
-  })
-  $('#col-rename').click(function(){
-    $('#col-new-name').width($('#col-scm').width()).val(scm.name).select()
-    $('#prefs-tab-colours').addClass('renaming')
-    setTimeout(function(){$('#col-new-name').focus()},0)
-  })
-  $('#col-delete').click(function(){
-    var i=$('#col-scm')[0].selectedIndex;scms.splice(i,1)
-    scm=scms[Math.min(i,scms.length-1)];updScms();return!1
-  })
-  $cm=$('#col-cm')
-  cm=CodeMirror($cm[0],$.extend({},util.cmOpts,{
-    lineNumbers:true,firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
-    indentUnit:4,scrollButtonHeight:12,matchBrackets:true,autoCloseBrackets:{pairs:'()[]{}',explode:'{}'}
-  }))
-  cm.addOverlay({token:function(stream){
-    var i=stream.string.slice(stream.pos).indexOf(SEARCH_MATCH)
-    if(!i){stream.pos+=SEARCH_MATCH.length;return'searching'}
-    i>0?(stream.pos+=i):stream.skipToEnd()
-  }})
-  cm.on('gutterClick',function(){selGroup('lnum')})
-  cm.on('cursorActivity',function(){
-    var t;selGroup(
-      cm.somethingSelected()?'sel':
-      cm.getLine(cm.getCursor().line).indexOf(SEARCH_MATCH)>=0?'srch':
-      (t=cm.getTokenTypeAt(cm.getCursor(),1))?
-        (t=t.split(' ').sort(function(x,y){return y.length-x.length})[0].replace(/^apl-/,'')):
-      'norm'
+D.prf_tabs.push({
+  tabTitle:'Colours',
+  init:function($e){
+    var u=[],fg;for(var g in scm)(fg=scm[g].fg)&&u.indexOf(fg)<0&&u.push(fg);u.sort() // u: unique colours
+    $e.html(
+      '<div id=col-top>'+
+        '<label><u>S</u>cheme: <select id=col-scm></select></label>'+
+        '<input id=col-new-name> '+
+        '<button id=col-clone>C<u>l</u>one</button>  '+
+        '<button id=col-rename><u>R</u>ename</button> '+
+        '<button id=col-delete><u>D</u>elete</button> '+
+      '</div>'+
+      '<div id=col-cm></div>'+
+      '<div id=col-settings>'+
+        '<datalist id=col-list>'+u.map(function(c){return'<option value='+c+'>'}).join('')+'</datalist>'+
+        '<select id=col-group>'+G.map(function(g,i){return'<option value='+i+'>'+g.s}).join('')+'</select>'+
+        '<p id=col-fg-p><label><input type=checkbox id=col-fg-cb><u>F</u>oreground</label> <input type=color id=col-fg list=col-list>'+
+        '<p id=col-bg-p><label><input type=checkbox id=col-bg-cb><u>B</u>ackground</label> <input type=color id=col-bg list=col-list>'+
+        '<div id=col-bgo title=Transparency></div>'+
+        '<p id=col-BIU-p>'+
+          '<label><input type=checkbox id=col-B><b>B</b></label> '+
+          '<label><input type=checkbox id=col-I><i>I</i></label> '+
+          '<label><input type=checkbox id=col-U><u>U</u></label> '+
+        '<p id=col-bc-p><label><input type=checkbox id=col-bc-cb>Border colour</label> <input type=color id=col-bc list=col-list>'+
+      '</div>'
     )
-  })
-  $('#col-group').change(function(){selGroup(G[+this.value].t)})
-  ;['fg','bg','bc'].forEach(function(p){
-    $('#col-'+p).change(function(){(scm[sel]||(scm[sel]={}))[p]=this.value;updSampleStyle()})
-    $('#col-'+p+'-cb').click(function(){
-      $('#col-'+p).toggle(this.checked)
-      var h=scm[sel]||(scm[sel]={});this.checked?h[p]=shrinkRGB($('#col-'+p).val()):delete h[p]
-      updSampleStyle()
+    $('#col-scm').change(function(){
+      scm=scms[+this.selectedIndex];updSampleStyle()
+      $('#prefs-tab-colours').toggleClass('frozen',!!scm.frozen);cm.setSize($cm.width(),$cm.height())
     })
-  })
-  $('#col-bg-cb').click(function(){$('#col-bgo').toggle(this.checked)})
-  $('#col-bgo').slider({range:'min',value:.5,min:0,max:1,step:.25,animate:false,slide:function(e,ui){
-    (scm[sel]||(scm[sel]={})).bgo=ui.value;updSampleStyle()
-  }})
-  ;['B','I','U'].forEach(function(p){
-    $('#col-'+p).click(function(){var h=scm[sel]||(scm[sel]={});this.checked?h[p]=1:delete h[p];updSampleStyle()})
-  })
-  cm.setValue(
-    '{R}←{X}tradfn(Y Z);local\n'+
-    'dfn←{ ⍝ comment\n'+
-    '  0 ¯1.2e¯3j¯.45 \'string\' ⍬\n'+
-    '  +/-⍣(×A):⍺∇⍵[i;j]\n'+
-    '  {{{{nested ⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}\n'+
-    '}\n'+
-    'label:\n'+
-    ':For i :In ⍳X ⋄ :EndFor\n'+
-    ':If condition\n'+
-    '  {⍵[⍋⍵]} ⋄ global←local←0\n'+
-    '  ⎕error ) ] } :error \'unclosed\n'+
-    ':EndIf\n'+
-    SEARCH_MATCH+'\n'
-  )
-}
+    $('#col-new-name').blur(function(){
+      var newName=$(this).val();if(!newName)return
+      scm.name='';scm.name=uniqScmName(newName)
+      $('#prefs-tab-colours').removeClass('renaming');updScms()
+    }).keydown(function(e){switch(e.which){ // todo
+      /*enter*/case 13:$(this)              .blur();return!1
+      /*esc  */case 27:$(this).val(scm.name).blur();return!1
+    }})
+    $('#col-clone').click(function(){
+      var x={};scms.push(x);for(var k in scm)x[k]=$.extend({},scm[k]) // x:the new scheme
+      x.name=uniqScmName(scm.name);delete x.frozen;scm=x;updScms()
+    })
+    $('#col-rename').click(function(){
+      $('#col-new-name').width($('#col-scm').width()).val(scm.name).select()
+      $('#prefs-tab-colours').addClass('renaming')
+      setTimeout(function(){$('#col-new-name').focus()},0)
+    })
+    $('#col-delete').click(function(){
+      var i=$('#col-scm')[0].selectedIndex;scms.splice(i,1)
+      scm=scms[Math.min(i,scms.length-1)];updScms();return!1
+    })
+    $cm=$('#col-cm')
+    cm=CodeMirror($cm[0],$.extend({},D.util.cmOpts,{
+      lineNumbers:true,firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
+      indentUnit:4,scrollButtonHeight:12,matchBrackets:true,autoCloseBrackets:{pairs:'()[]{}',explode:'{}'}
+    }))
+    cm.addOverlay({token:function(stream){
+      var i=stream.string.slice(stream.pos).indexOf(SEARCH_MATCH)
+      if(!i){stream.pos+=SEARCH_MATCH.length;return'searching'}
+      i>0?(stream.pos+=i):stream.skipToEnd()
+    }})
+    cm.on('gutterClick',function(){selGroup('lnum')})
+    cm.on('cursorActivity',function(){
+      var t;selGroup(
+        cm.somethingSelected()?'sel':
+        cm.getLine(cm.getCursor().line).indexOf(SEARCH_MATCH)>=0?'srch':
+        (t=cm.getTokenTypeAt(cm.getCursor(),1))?
+          (t=t.split(' ').sort(function(x,y){return y.length-x.length})[0].replace(/^apl-/,'')):
+        'norm'
+      )
+    })
+    $('#col-group').change(function(){selGroup(G[+this.value].t)})
+    ;['fg','bg','bc'].forEach(function(p){
+      $('#col-'+p).change(function(){(scm[sel]||(scm[sel]={}))[p]=this.value;updSampleStyle()})
+      $('#col-'+p+'-cb').click(function(){
+        $('#col-'+p).toggle(this.checked)
+        var h=scm[sel]||(scm[sel]={});this.checked?h[p]=shrinkRGB($('#col-'+p).val()):delete h[p]
+        updSampleStyle()
+      })
+    })
+    $('#col-bg-cb').click(function(){$('#col-bgo').toggle(this.checked)})
+    $('#col-bgo').slider({range:'min',value:.5,min:0,max:1,step:.25,animate:false,slide:function(e,ui){
+      (scm[sel]||(scm[sel]={})).bgo=ui.value;updSampleStyle()
+    }})
+    ;['B','I','U'].forEach(function(p){
+      $('#col-'+p).click(function(){var h=scm[sel]||(scm[sel]={});this.checked?h[p]=1:delete h[p];updSampleStyle()})
+    })
+    cm.setValue(
+      '{R}←{X}tradfn(Y Z);local\n'+
+      'dfn←{ ⍝ comment\n'+
+      '  0 ¯1.2e¯3j¯.45 \'string\' ⍬\n'+
+      '  +/-⍣(×A):⍺∇⍵[i;j]\n'+
+      '  {{{{nested ⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}\n'+
+      '}\n'+
+      'label:\n'+
+      ':For i :In ⍳X ⋄ :EndFor\n'+
+      ':If condition\n'+
+      '  {⍵[⍋⍵]} ⋄ global←local←0\n'+
+      '  ⎕error ) ] } :error \'unclosed\n'+
+      ':EndIf\n'+
+      SEARCH_MATCH+'\n'
+    )
+  },
+  load:function(){
+    var a=scms=SCMS.concat(D.prf.colourSchemes().map(decodeScm)),s=D.prf.colourScheme()
+    scm=a[0];for(var i=0;i<a.length;i++)if(a[i].name===s){scm=a[i];break}
+    updScms();$('#prefs-tab-colours').removeClass('renaming');cm.setSize($cm.width(),$cm.height())
+  },
+  save:function(){
+    D.prf.colourSchemes(scms.filter(function(x){return!x.frozen}).map(encodeScm));D.prf.colourScheme(scm.name)
+  },
+  resize:function(){cm.setSize($cm.width(),$cm.height())}
+})
 function updScms(){ // update schemes
-  $('#col-scm').html(scms.map(function(x){x=esc(x.name);return'<option value="'+x+'">'+x}).join('')).val(scm.name)
+  $('#col-scm').html(scms.map(function(x){x=D.util.esc(x.name);return'<option value="'+x+'">'+x}).join('')).val(scm.name)
   $('#prefs-tab-colours').toggleClass('frozen',!!scm.frozen);cm.setSize($cm.width(),$cm.height())
   updSampleStyle();selGroup('norm',1)
 }
-this.load=function(){
-  var a=scms=SCMS.concat(prf.colourSchemes().map(decodeScm)),s=prf.colourScheme()
-  scm=a[0];for(var i=0;i<a.length;i++)if(a[i].name===s){scm=a[i];break}
-  updScms();$('#prefs-tab-colours').removeClass('renaming');cm.setSize($cm.width(),$cm.height())
-}
-this.save=function(){
-  prf.colourSchemes(scms.filter(function(x){return!x.frozen}).map(encodeScm));prf.colourScheme(scm.name)
-}
-this.resize=function(){cm.setSize($cm.width(),$cm.height())}
 function updSampleStyle(){$('#col-sample-style').text(renderCSS(scm,1))}
 function selGroup(t,forceRefresh){
   if(!scm||sel===t&&!forceRefresh)return
@@ -264,4 +265,4 @@ function selGroup(t,forceRefresh){
   sel=t
 }
 
-}
+}())

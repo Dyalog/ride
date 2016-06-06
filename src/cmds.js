@@ -1,8 +1,7 @@
-D.modules.cmds=function(){'use strict'
-
 // This is the list of command-to-keystroke mappings that are configurable in Preferences>Keys.
 // The list does not necessarily contain all commands and all keystrokes in RIDE, only those in Preferences>Keys.
-this.cmds=[
+'use strict'
+D.cmds=[
   //code description                default keys
   ['ABT','About',                   ['Shift-F1']],
   ['AC', 'Align comments',          []],
@@ -51,5 +50,3 @@ this.cmds=[
   ['ZMO','Decrease font size',      ['Ctrl--'].concat(D.mac?'Cmd--':[])],
   ['ZMR','Reset font size',         ['Ctrl-0'].concat(D.mac?'Cmd-0':[])]
 ]
-
-}

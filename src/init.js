@@ -1,23 +1,21 @@
-D.modules.init=function(rq){'use strict'
+;(function(){'use strict'
 
 if(typeof node_require!=='undefined')D=$.extend(node_require('electron').remote.getGlobal('D'),D)
-var cn=rq('./cn'),Editor=rq('./ed').Editor,IDE=rq('./ide').IDE,prf=rq('./prf')
-rq('./prf_col');rq('./demo');rq('./fld');rq('./wse')
 
 // don't use Alt- keystrokes on the Mac (see email from 2015-09-01)
 var h=CodeMirror.keyMap.emacsy;for(var k in h)if(/^alt-[a-z]$/i.test(k))delete h[k]
 if(D.el){
   var zM=11 // zoom level can be between -zM and zM inclusive
-  var ZMI=function(){prf.zoom(Math.min( zM,prf.zoom()+1));updPW()}
-  var ZMO=function(){prf.zoom(Math.max(-zM,prf.zoom()-1));updPW()}
-  var ZMR=function(){prf.zoom(0);updPW()}
+  var ZMI=function(){D.prf.zoom(Math.min( zM,D.prf.zoom()+1));updPW()}
+  var ZMO=function(){D.prf.zoom(Math.max(-zM,D.prf.zoom()-1));updPW()}
+  var ZMR=function(){D.prf.zoom(0);updPW()}
   var updPW=function(){D.ide&&D.ide.wins&&D.ide.wins[0]&&D.ide.wins[0].updPW()}
   $.extend(CodeMirror.commands,{ZMI:ZMI,ZMO:ZMO,ZMR:ZMR})
   $(document).bind('mousewheel',function(e){
     var d=e.originalEvent.wheelDelta;d&&(e.ctrlKey||e.metaKey)&&!e.shiftKey&&!e.altKey&&(d>0?ZMI:ZMO)()
   })
-  $('body').addClass('zoom'+prf.zoom())
-  prf.zoom(function(z){
+  $('body').addClass('zoom'+D.prf.zoom())
+  D.prf.zoom(function(z){
     if(!D.ide)return
     var wins=D.ide.wins
     for (var x in wins){
@@ -43,7 +41,7 @@ if(D.floating&&win){
   $(window).resize(function(){ed&&ed.updSize()})
   var pe=opener.D.pendingEditors[win], editorOpts=pe.editorOpts, ee=pe.ee, ide=pe.ide
   D.ide=opener.D.ide
-  var ed=D.ide.wins[win]=new Editor(ide,$(document.body),editorOpts)
+  var ed=D.ide.wins[win]=new D.Ed(ide,$(document.body),editorOpts)
   ed.open(ee);ed.updSize();document.title=ed.name
   window.onbeforeunload=function(){return ed.onbeforeunload()}
   setTimeout(function(){ed.refresh()},500) // work around a rendering issue on Ubuntu
@@ -79,19 +77,19 @@ if(D.floating&&win){
   var e=D.el?process.env:{}
   var c=(D.args||{})['-c']||e.RIDE_CONNECT
   if(c){var m=/^([^:]+|\[[^\]]+\])(?::(\d+))?$/.exec(c) // parse host and port
-        if(m){new IDE;D.skt.emit('*connect',{host:m[1],port:+m[2]||4502})}
+        if(m){new D.IDE;D.skt.emit('*connect',{host:m[1],port:+m[2]||4502})}
         else{$.alert('Invalid $RIDE_CONNECT')}}
-  else if(+e.RIDE_SPAWN){new IDE;D.skt.emit('*launch',{}) // '*error' is handled in ide.coffee
+  else if(+e.RIDE_SPAWN){new D.IDE;D.skt.emit('*launch',{}) // '*error' is handled in ide.coffee
                          window.onbeforeunload=function(){D.skt.emit('Exit',{code:0})}}
-  else{cn()}
+  else{D.cn()}
 }
 
-if(!prf.theme()){
-  prf.theme(D.mac||/^(darwin|mac|ipad|iphone|ipod)/i.test(navigator?navigator.platform:'')?'cupertino':
-            D.win||/^win/.test(navigator?navigator.platform:'')?'redmond':'classic')
+if(!D.prf.theme()){
+  D.prf.theme(D.mac||/^(darwin|mac|ipad|iphone|ipod)/i.test(navigator?navigator.platform:'')?'cupertino':
+              D.win||/^win/.test(navigator?navigator.platform:'')?'redmond':'classic')
 }
-var updThm=function(){$('#thm').html('@import url(build/themes/'+prf.theme()+'.css);')}
-prf.theme(function(){updThm();D.ide&&D.ide.layout.resizeAll()});updThm()
+var updThm=function(){$('#thm').html('@import url(build/themes/'+D.prf.theme()+'.css);')}
+D.prf.theme(function(){updThm();D.ide&&D.ide.layout.resizeAll()});updThm()
 
 D.el&&$('body').addClass(D.mac?'platform-mac':D.win?'platform-windows':'')
 
@@ -140,4 +138,4 @@ window.ondrop=function(e){
   e.preventDefault();return!1
 }
 
-}
+}())

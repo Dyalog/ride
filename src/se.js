@@ -1,18 +1,16 @@
-D.modules.se=function(rq){'use strict'
-
 //session
-var ac=rq('./ac'),prf=rq('./prf'),util=rq('./util'),cmOnDblClick=util.cmOnDblClick,vt=rq('./vt');rq('./scrl')
-this.Session=function(ide,e,opts){ // Session constructor
+'use strict'
+D.Se=function(ide,e,opts){ // Session constructor
   var se=this;se.ide=ide;se.opts=opts;se.emit=opts.emit;se.hist=[''];se.histIdx=0;se.focusTimestamp=0;se.id=0
   se.dirty={} // modified lines: lineNumber→originalContent, inserted lines: lineNumber→0 (also used in syn.js)
   se.$e=$(e).addClass('ride-win')
-  var cm=se.cm=CodeMirror(se.$e[0],$.extend({},util.cmOpts,{
-    autofocus:true,mode:{name:'apl-session',se:se},matchBrackets:!!prf.matchBrackets(),readOnly:true,keyMap:'dyalog',
-    lineWrapping:!!prf.wrap(),indentUnit:4,smartIndent:0,autoCloseBrackets:{pairs:'()[]{}',explode:''},
+  var cm=se.cm=CodeMirror(se.$e[0],$.extend({},D.util.cmOpts,{
+    autofocus:true,mode:{name:'apl-session',se:se},matchBrackets:!!D.prf.matchBrackets(),readOnly:true,keyMap:'dyalog',
+    lineWrapping:!!D.prf.wrap(),indentUnit:4,smartIndent:0,autoCloseBrackets:{pairs:'()[]{}',explode:''},
     scrollbarStyle:'simple',extraKeys:{'Shift-Tab':'indentLess',Tab:'tabOrAutocomplete'},
   }))
   cm.dyalogCmds=se
-  cmOnDblClick(cm,function(e){se.ED(cm);e.stopPropagation();e.preventDefault()})
+  D.util.cmOnDblClick(cm,function(e){se.ED(cm);e.stopPropagation();e.preventDefault()})
   cm.on('focus',function(){se.focusTimestamp=+new Date;ide.focusedWin=se})
   cm.on('beforeChange',function(_,c){
     if(c.origin==='D')return
@@ -34,11 +32,11 @@ this.Session=function(ide,e,opts){ // Session constructor
     for(var l in se.dirty)se.cm.addLineClass(+l,'background','modified')
   })
   se.promptType=0 // see ../docs/protocol.md #SetPromptType
-  se.processAutocompleteReply=ac.init(se)
-  prf.wrap(function(x){se.cm.setOption('lineWrapping',!!x);se.scrollCursorIntoView()})
-  this.vt=vt.init(this)
+  se.processAutocompleteReply=D.ac(se)
+  D.prf.wrap(function(x){se.cm.setOption('lineWrapping',!!x);se.scrollCursorIntoView()})
+  this.vt=D.vt(this)
 }
-this.Session.prototype={
+D.Se.prototype={
   histAdd:function(lines){this.hist[0]='';[].splice.apply(this.hist,[1,0].concat(lines));this.histIdx=0},
   histMove:function(d){
     var i=this.histIdx+d, l=this.cm.getCursor().line
@@ -125,6 +123,4 @@ this.Session.prototype={
     if(cm.somethingSelected()||this.promptType===4||/^ *$/.test(s.slice(0,u.ch))){cm.execCommand('indentMore');return}
     this.autocompleteWithTab=1;this.emit('GetAutocomplete',{line:s,pos:u.ch,token:0,win:0})
   }
-}
-
 }

@@ -1,8 +1,7 @@
-D.modules.ac=function(rq){'use strict'
+;(function(){'use strict'
 
 //autocompletion
-var prf=rq('./prf'),letter=rq('./syn').letter,hlp=rq('./hlp')
-var re=RegExp('['+letter+']*$')
+var re=RegExp('['+D.syn.letter+']*$')
 var ibeams=[ // source: http://help.dyalog.com/15.0/Content/Language/Primitive%20Operators/I%20Beam.htm
   [    8,'Inverted Table Index-of'],
   [   85,'Execute Expression'],
@@ -56,26 +55,26 @@ var ibeams=[ // source: http://help.dyalog.com/15.0/Content/Language/Primitive%2
   [50100,'Line Count']
 ]
 var ibeamOptions=ibeams.map(function(x){return{text:x[0]+'⌶',displayText:x[0]+'⌶ '+x[1]}})
-this.init=function(win){ // win: an instance of Editor or Session
+D.ac=function(win){ // win: an instance of Editor or Session
   var tid,cm=win.cm,r
   cm.on('change',function(){
     var mode=cm.getOption('mode');if(typeof mode==='object'&&mode!=null&&mode.name)mode=mode.name
-    if(prf.autocompletion()&&(mode==='apl'||mode==='apl-session')&&cm.getCursor().line){
+    if(D.prf.autocompletion()&&(mode==='apl'||mode==='apl-session')&&cm.getCursor().line){
       clearTimeout(tid)
       tid=setTimeout(function(){
         tid=0;var c=cm.getCursor(),s=cm.getLine(c.line),i=c.ch
         if(s[i-1]==='⌶'&&!/\d *$/.test(s.slice(0,i-1))){
           r({skip:1,options:D.el&&+process.env.RIDE_IBEAM?ibeamOptions:[]})
-        }else if(i&&(win.autocompleteWithTab||RegExp('['+letter+'\\)\\]\\.]$').test(s.slice(0,i)))
-                  &&s.slice(0,i).replace(re,'').slice(-1)!==prf.prefixKey()
+        }else if(i&&(win.autocompleteWithTab||RegExp('['+D.syn.letter+'\\)\\]\\.]$').test(s.slice(0,i)))
+                  &&s.slice(0,i).replace(re,'').slice(-1)!==D.prf.prefixKey()
                   &&win.promptType!==4){ // don't autocomplete in ⍞ input
           win.autocompleteWithTab=0;win.emit('GetAutocomplete',{line:s,pos:i,token:win.id})
         }
-      },prf.autocompletionDelay())
+      },D.prf.autocompletionDelay())
     }
   })
   return r=function(x){
-    if(prf.autocompletion()&&x.options.length&&cm.hasFocus()&&cm.getWrapperElement().ownerDocument.hasFocus()){
+    if(D.prf.autocompletion()&&x.options.length&&cm.hasFocus()&&cm.getWrapperElement().ownerDocument.hasFocus()){
       var c=cm.getCursor(),from={line:c.line,ch:c.ch-x.skip},sel=''
       if(x.options.length===1&&win.autocompleteWithTab){
         var v=x.options[0];cm.replaceRange(typeof v==='string'?v:v.text,from,c,'D')
@@ -87,7 +86,7 @@ this.init=function(win){ // win: an instance of Editor or Session
             Right:function(cm,m){sel||m.moveFocus(1);m.pick()},
             'Shift-Tab':function(cm,m){m.moveFocus(-1)},
             Tab:function(cm,m){m.moveFocus(1);x.options.length===1&&m.pick()},
-            F1:function(){sel&&sel.text&&hlp[sel.text]&&D.openExternal(hlp[sel.text])}
+            F1:function(){sel&&sel.text&&D.hlp[sel.text]&&D.openExternal(D.hlp[sel.text])}
           },
           hint:function(){
             var to=cm.getCursor(),
@@ -105,4 +104,4 @@ this.init=function(win){ // win: an instance of Editor or Session
   }
 }
 
-}
+}())

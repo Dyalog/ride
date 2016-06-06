@@ -1,13 +1,14 @@
-D.modules.cn=function(rq,module){'use strict'
+//Connect page
+;(function(){'use strict'
 
-var IDE=rq('./ide').IDE,prf=rq('./prf'),esc=rq('./util').esc
+var esc=D.util.esc
 var q={} // mapping between ids and jQuery objects
 var $sel=$(),sel,$d // $sel:selected item(s), sel: .data('cn') of the selected item (only if it's unique), $d:dialog
 var DFLT_NAME='[anonymous]',TMP_NAME='[temp]',MIN_VER=[15,0] // minimum supported version
 var interpreters=[], interpretersSSH=[], user=D.el?process.env.USER:''
 var KV=/^([a-z_]\w*)=(.*)$/i,WS=/^\s*$/ // regexes for parsing env vars
 function cmpVer(x,y){return x[0]-y[0]||x[1]-y[1]||0} // compare two versions of the form [major,minor]
-function save(){prf.favs($('>*',q.favs).map(function(){var h=$(this).data('cn');return h.tmp?null:h}).toArray())}
+function save(){D.prf.favs($('>*',q.favs).map(function(){var h=$(this).data('cn');return h.tmp?null:h}).toArray())}
 function favText(x){return x.tmp?TMP_NAME:x.name||DFLT_NAME}
 function favDOM(x){return $('<div><span class=name>'+esc(favText(x))+'</span><button class=go>Go</button>').data('cn',x)}
 function fmtKey(e){return[e.metaKey?'Cmd-':'',e.ctrlKey?'Ctrl-':'',e.altKey?'Alt-':'',e.shiftKey?'Shift-':'',
@@ -25,7 +26,7 @@ function updExes(){
   q.exes.html(h+'<option value="">Other...').val(q.exe.val()).val()||q.exes.val('')
   q.exe.prop('readonly',!!q.exes.val())
 }
-module.exports=function(){
+D.cn=function(){
   document.title='RIDE - Connect'
   $('#cn').show().splitter()
     .keyup(function(x){
@@ -48,10 +49,10 @@ module.exports=function(){
     var pw=q.ssh_pass.val(),kf=q.ssh_key.val();q.fetch[0].disabled=1
     D.skt.emit('*sshFetchListOfInterpreters',{host:sel.host,port:+sel.port||22,user:sel.user||user,pass:pw,key:kf})
   })
-  q.exe.on('change keyup',function(){q.exes.val()||prf.otherExe($(this).val())})
+  q.exe.on('change keyup',function(){q.exes.val()||D.prf.otherExe($(this).val())})
   q.exes.change(function(){
-    var v=$(this).val(),$e=q.exe.val(v||prf.otherExe()).prop('readonly',!!v).change();v||$e.focus()
-    prf.selectedExe(v) // todo: do we still need this pref?
+    var v=$(this).val(),$e=q.exe.val(v||D.prf.otherExe()).prop('readonly',!!v).change();v||$e.focus()
+    D.prf.selectedExe(v) // todo: do we still need this pref?
   })
   q.env_add.on('click','a',function(e){
     var t=$(this).text(), e=q.env[0], k=t.split('=')[0], s=e.value, m=RegExp('^'+k+'=(.*)$','m').exec(s)
@@ -68,7 +69,7 @@ module.exports=function(){
   q.cert_file.change(function(){q.cert.val(this.value).elastic().change()})
   q.ssh_key_dots.click(function(){q.ssh_key_file.click()})
   q.ssh_key_file.change(function(){q.ssh_key.val(this.value).change()})
-  prf.favs().forEach(function(x){q.favs.append(favDOM(x))})
+  D.prf.favs().forEach(function(x){q.favs.append(favDOM(x))})
   q.favs.list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
     .on('click','.go',function(e){q.favs.list('select',$(this).parentsUntil(q.favs).last().index());q.go.click()})
     .keydown(function(e){switch(fmtKey(e)){
@@ -111,7 +112,7 @@ module.exports=function(){
   $(':text[name],textarea[name]',q.rhs).change(function(){var k=this.name,v=this.value;v?(sel[k]=v):delete sel[k];save()})
   $(':checkbox[name]',q.rhs).change(function(){this.checked?(sel[this.name]=1):delete sel[this.name];save()})
   D.skt
-    .on('*connected',function(x){if($d){$d.dialog('close');$d=null};new IDE().setHostAndPort(x.host,x.port)})
+    .on('*connected',function(x){if($d){$d.dialog('close');$d=null};new D.IDE().setHostAndPort(x.host,x.port)})
     .on('*spawned',function(x){D.lastSpawnedExe=x.exe})
     .on('*spawnedExited',function(x){$.alert(x.code!=null?'exited with code '+x.code:'received '+x.sig)})
     .on('*error',function(x){$d&&$d.dialog('close');$d=null;$.alert(x.msg,'Error');q.fetch[0].disabled=0})
@@ -175,4 +176,4 @@ function go(){
   return!1
 }
 
-}
+}())

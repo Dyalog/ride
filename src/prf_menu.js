@@ -1,38 +1,39 @@
-D.modules.prf_menu=function(rq){'use strict'
+;(function(){'use strict'
 
-var prf=rq('./prf')
 var $ta // the textarea
-this.tabTitle='Menu'
-this.init=function($e){
-  $e[0].innerHTML='<button class=rst><u>R</u>eset</button>'+
-                  '<p>Takes effect on restart</p><textarea wrap=off></textarea>'
-  $ta=$('textarea',$e);$('.rst',$e).click(function(){$ta.val(prf.menu.getDefault())})
-}
-this.load=function(){$ta.val(prf.menu())}
-this.save=function(){prf.menu($ta.val())}
-this.validate=function(){
-  try {
-    var visit=function(x){
-      if(x.cmd==='PRF')return 1
-      if(x.items)for(var i=0;i<x.items.length;i++)if(visit(x.items[i]))return 1
+D.prf_tabs.push({
+  tabTitle:'Menu',
+  init:function($e){
+    $e[0].innerHTML='<button class=rst><u>R</u>eset</button>'+
+                    '<p>Takes effect on restart</p><textarea wrap=off></textarea>'
+    $ta=$('textarea',$e);$('.rst',$e).click(function(){$ta.val(D.prf.menu.getDefault())})
+  },
+  load:function(){$ta.val(D.prf.menu())},
+  save:function(){D.prf.menu($ta.val())},
+  validate:function(){
+    try {
+      var visit=function(x){
+        if(x.cmd==='PRF')return 1
+        if(x.items)for(var i=0;i<x.items.length;i++)if(visit(x.items[i]))return 1
+      }
+      var ok=0,a=D.parseMenuDSL($ta.val());for(var i=0;i<a.length;i++)if(visit(a[i])){ok=1;break}
+      if(!ok)return{msg:'Menu must contain the PRF (Preferences) command',el:$ta}
+    }catch(e){
+      return{msg:e.message,el:$ta}
     }
-    var ok=0,a=this.parseMenuDSL($ta.val());for(var i=0;i<a.length;i++)if(visit(a[i])){ok=1;break}
-    if(!ok)return{msg:'Menu must contain the PRF (Preferences) command',el:$ta}
-  }catch(e){
-    return{msg:e.message,el:$ta}
   }
-}
-var extraOpts={
-  LBR:{checkBoxPref:prf.lbar      },
-  FLT:{checkBoxPref:prf.floating  },
-  WRP:{checkBoxPref:prf.wrap      },
-  TOP:{checkBoxPref:prf.floatOnTop},
-  WSE:{checkBoxPref:prf.wse       },
-  THM:{items:['Classic','Redmond','Cupertino'].map(function(x,i){
-    return{'':x,group:'themes',checked:prf.theme()===x.toLowerCase(),action:function(){prf.theme(x.toLowerCase())}}
-  })}
-}
-this.parseMenuDSL=function(md){ // md:menu description
+})
+D.parseMenuDSL=function(md){ // md:menu description
+  var extraOpts={
+    LBR:{checkBoxPref:D.prf.lbar      },
+    FLT:{checkBoxPref:D.prf.floating  },
+    WRP:{checkBoxPref:D.prf.wrap      },
+    TOP:{checkBoxPref:D.prf.floatOnTop},
+    WSE:{checkBoxPref:D.prf.wse       },
+    THM:{items:['Classic','Redmond','Cupertino'].map(function(x,i){
+      return{'':x,group:'themes',checked:D.prf.theme()===x.toLowerCase(),action:function(){D.prf.theme(x.toLowerCase())}}
+    })}
+  }
   var stk=[{ind:-1,items:[]}],lines=md.split('\n')
   for(var i=0;i<lines.length;i++){
     var s=lines[i]
@@ -63,4 +64,4 @@ this.parseMenuDSL=function(md){ // md:menu description
   return stk[0].items
 }
 
-}
+}())

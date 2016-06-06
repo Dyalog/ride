@@ -82,6 +82,7 @@ el.app.on('ready',()=>{
     const repaintTitle=()=>{setTimeout(()=>{const a=w.getSize();w.setSize(a[0],a[1]-1);w.setSize(a[0],a[1])},100)}
     w.on('page-title-updated',repaintTitle).on('blur',repaintTitle)
   }
+  w.webContents.openDevTools()
 })
 el.app.on('window-all-closed',()=>el.app.quit())
 

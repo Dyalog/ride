@@ -1,4 +1,7 @@
-D.modules.fld=function(){'use strict'
+// custom code folding (aka "outlining") for CodeMirror
+// The built-in implementation doesn't show continuation lines, it only shows [▼] or [▶] at fold start.
+// https://codemirror.net/demo/folding.html
+;(function(){'use strict'
 
 var CM=CodeMirror
 CM.defineOption('foldGutter',false,function(cm,v,o){ // v:new value, o:old value
@@ -42,4 +45,4 @@ eh.viewportChange=function(cm){
 }
 eh.fold=eh.unfold=function(cm,lh){var h=cm.state.foldGutter;if(h){var l=lh.line;h.from<=l&&l<h.to&&updMarkers(cm,l,l+1)}}
 
-}
+}())
