@@ -19,7 +19,7 @@ env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a stan
     _getAll()    {const r={};for(let i=0;i<k.length;i++)r[k[i]]=v[i];return r}
   }
   Object.defineProperty(D.db,'length',{get:()=>k.length})
-  const ver=fs.readFileSync(__dirname+'/build/version','utf8').replace(/^(\d+)\.(\d+)\.[^]*$/,'$1$2')
+  const ver=fs.readFileSync(__dirname+'/_/version','utf8').replace(/^(\d+)\.(\d+)\.[^]*$/,'$1$2')
   const d=el.app.getPath('userData'),f=d+'/prefs.json'
   try{if(fs.existsSync(f)){const h=JSON.parse(fs.readFileSync(f,'utf8'));for(let x in h){k.push(x);v.push(h[x])}}}
   catch(e){console.error(e)}

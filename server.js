@@ -9,7 +9,7 @@ const _d=__dirname,t0=+new Date,log=(s)=>{process.stdout.write((new Date-t0)+': 
 let tid,busy
 const build=()=>{
   if(busy){tid=setTimeout(build,100);return}
-  log('building');tid=0;busy=1;spawn(_d+'/build.sh',{cwd:_d,stdio:'inherit'}).on('close',()=>{log('done');busy=0})
+  log('building');tid=0;busy=1;spawn(_d+'/mk',{cwd:_d,stdio:'inherit'}).on('close',()=>{log('done');busy=0})
 }
 if(process.env.RIDE_SERVER_WATCH){
   ;['.','src','style','style/img','style/themes']

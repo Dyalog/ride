@@ -16,8 +16,8 @@ for suffix in '' {a..z}; do if [ ! -e $r/$d$suffix ]; then d=$d$suffix; break; f
 mkdir -p $r/$d
 echo "$VERSION" > $r/$d/version
 echo Copying Directories to $r/$d
-cp -r build/${APP_NAME}/* $r/$d
-for DIR in `ls build/${APP_NAME}`; do
+cp -r _/${APP_NAME}/* $r/$d
+for DIR in `ls _/${APP_NAME}`; do
   OS=`echo ${DIR} | sed 's/64//;s/32//'`
   BITS=`echo ${DIR} | sed 's/linux//;s/osx//;s/win//'`
 
@@ -36,7 +36,7 @@ for DIR in `ls build/${APP_NAME}`; do
   ZIPFILE="ride-${VERSION}-${OSNAME}.zip"
   TMPZIP=/tmp/$ZIPFILE
 
-  cd build/${APP_NAME}/$DIR
+  cd _/${APP_NAME}/$DIR
   echo "creating $TMPZIP"
   zip -q -r "$TMPZIP" .
   echo Copying to devt

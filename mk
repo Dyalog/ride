@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+//instead of a Makefile
 'use strict'
 const rq=require,fs=rq('fs'),path=rq('path'),less=rq('less'),{execSync}=rq('child_process'),async=rq('async')
 ,sh=x=>execSync(x,{encoding:'utf8'}).replace(/[\r\n]/g,'')      // shell
@@ -13,14 +14,14 @@ const rq=require,fs=rq('fs'),path=rq('path'),less=rq('less'),{execSync}=rq('chil
 ,tasks={}
 
 tasks.build=f=>{
-  md('build/themes')
+  md('_/themes')
   console.info('v'+v)
-  wf('build/version',v)
-  wf('build/version.js','D='+JSON.stringify({versionInfo:{
+  wf('_/version',v)
+  wf('_/version.js','D='+JSON.stringify({versionInfo:{
        version:v,date:sh('git show -s HEAD --pretty=format:%ci'),rev:sh('git rev-parse HEAD')}}))
   async.each(['style','themes/classic','themes/redmond','themes/cupertino'],
     (x,f)=>{
-      const i=`style/${x}.less`,o=`build/${x}.css`
+      const i=`style/${x}.less`,o=`_/${x}.css`
       if(!nt(i,o)){f();return}
       console.info('preprocessing '+i)
       less.render(rf(i),(e,{css})=>{if(e)throw e;wf(o,css);f()})
@@ -31,7 +32,7 @@ tasks.build=f=>{
 
 const pkg=(x,y,f)=>{
   rq('electron-packager')(
-    {dir:'.',platform:x,arch:y,out:'build/ride',overwrite:true,'download.cache':'cache',icon:'favicon.ico',
+    {dir:'.',platform:x,arch:y,out:'_/ride',overwrite:true,'download.cache':'cache',icon:'favicon.ico',
       ignore:'cache',
       'app-copyright':`(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
       'app-version':v,
@@ -49,7 +50,7 @@ tasks.w=tasks.win  =f=>{pkg('win32' ,'ia32',f)}
 tasks.o=tasks.osx  =f=>{pkg('darwin','x64' ,f)}
 tasks.dist=f=>{tasks.build(e=>{e?f(e):async.parallel([tasks.l,tasks.w,tasks.o],e=>{f(e)})})}
 
-tasks.clean=f=>{rm('build')}
+tasks.clean=f=>{rm('_');f()}
 
 async.each(process.argv.length>2?process.argv.slice(2):['build'],
            (x,f)=>{if(tasks[x]){tasks[x](f)}

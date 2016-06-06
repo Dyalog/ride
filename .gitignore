@@ -1,7 +1,5 @@
 node_modules
-build/
-cache/
-.vagrant
+_/
 aplcore
 CONTINUE
 CONTINUE.dws

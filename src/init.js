@@ -88,7 +88,7 @@ if(!D.prf.theme()){
   D.prf.theme(D.mac||/^(darwin|mac|ipad|iphone|ipod)/i.test(navigator?navigator.platform:'')?'cupertino':
               D.win||/^win/.test(navigator?navigator.platform:'')?'redmond':'classic')
 }
-var updThm=function(){$('#thm').html('@import url(build/themes/'+D.prf.theme()+'.css);')}
+var updThm=function(){$('#thm').html('@import url(_/themes/'+D.prf.theme()+'.css);')}
 D.prf.theme(function(){updThm();D.ide&&D.ide.layout.resizeAll()});updThm()
 
 D.el&&$('body').addClass(D.mac?'platform-mac':D.win?'platform-windows':'')
