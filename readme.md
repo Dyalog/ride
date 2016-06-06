@@ -6,10 +6,10 @@
     └────────┘
        as a desktop application                    in a browser
 
-* install [Git](https://git-scm.com/downloads)
+* install [Git](https://git-scm.com/downloads) and [NodeJS v6.1.0](https://nodejs.org/download/release/v6.1.0/)
 * `git clone https://github.com/dyalog/ride --depth=1`
 * `cd ride`
-* install [NodeJS v6.1.0](https://nodejs.org/download/release/v6.1.0/)
 * `npm i         # download dependencies`
-* `node build.js # build RIDE`
-* `npm start     # start RIDE`
+* `node mk       # build RIDE`
+* `npm start     # start RIDE (without building native apps)`
+* `node mk dist  # build native apps`

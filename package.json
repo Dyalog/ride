@@ -8,15 +8,18 @@
   },
   "repository": ".",
   "dependencies": {
-    "cheerio": "0.20.0",
     "codemirror": "5.15.2",
+    "jquery": "2.2.4",
+    "ssh2": "0.5.0"
+  },
+  "devDependencies": {
+    "async": "2.0.0-rc.5",
+    "cheerio": "0.20.0",
     "compression": "1.6.2",
     "electron-packager": "7.0.3",
     "electron-prebuilt": "1.2.0",
     "express": "4.13.4",
-    "jquery": "2.2.4",
     "less": "2.7.1",
-    "ssh2": "0.5.0",
     "ws": "1.1.0"
   }
 }
