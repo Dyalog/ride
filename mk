@@ -13,7 +13,7 @@ const rq=require,fs=rq('fs'),path=rq('path'),less=rq('less'),{execSync}=rq('chil
 ,v=JSON.parse(rf('package.json')).version.replace(/\.0$/,'')+'.'+sh('git rev-list --count HEAD') // version string
 ,tasks={}
 
-tasks.build=f=>{
+tasks.b=tasks.build=f=>{
   md('_/thm')
   console.info('v'+v)
   wf('_/version',v)
@@ -33,7 +33,36 @@ tasks.build=f=>{
 const pkg=(x,y,f)=>{
   rq('electron-packager')(
     {dir:'.',platform:x,arch:y,out:'_/ride',overwrite:true,'download.cache':'cache',icon:'favicon.ico',
-      ignore:'cache',
+      ignore:x=>
+        !/^\/[^\/\.]+\.(html|js|json)$/.test(x)&&
+        !/^\/(src|style|lib|_)(\/|$)/.test(x)&&
+        !['/node_modules',
+          '/node_modules/jquery',
+          '/node_modules/jquery/dist',
+          '/node_modules/jquery/dist/jquery.min.js',
+          '/node_modules/codemirror',
+          '/node_modules/codemirror/lib',
+          '/node_modules/codemirror/lib/codemirror.js',
+          '/node_modules/codemirror/addon',
+          '/node_modules/codemirror/addon/dialog',
+          '/node_modules/codemirror/addon/dialog/dialog.js',
+          '/node_modules/codemirror/addon/search',
+          '/node_modules/codemirror/addon/search/searchcursor.js',
+          '/node_modules/codemirror/addon/scroll',
+          '/node_modules/codemirror/addon/scroll/annotatescrollbar.js',
+          '/node_modules/codemirror/addon/search',
+          '/node_modules/codemirror/addon/search/matchesonscrollbar.js',
+          '/node_modules/codemirror/addon/hint',
+          '/node_modules/codemirror/addon/hint/show-hint.js',
+          '/node_modules/codemirror/addon/edit',
+          '/node_modules/codemirror/addon/edit/matchbrackets.js',
+          '/node_modules/codemirror/addon/edit/closebrackets.js',
+          '/node_modules/codemirror/addon/display',
+          '/node_modules/codemirror/addon/display/placeholder.js',
+          '/node_modules/codemirror/addon/fold',
+          '/node_modules/codemirror/addon/fold/foldcode.js',
+          '/node_modules/codemirror/addon/fold/indent-fold.js',
+          ''].includes(x),
       'app-copyright':`(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
       'app-version':v,
       'build-version':v,
@@ -48,9 +77,9 @@ const pkg=(x,y,f)=>{
 tasks.l=tasks.linux=f=>{pkg('linux' ,'x64' ,f)}
 tasks.w=tasks.win  =f=>{pkg('win32' ,'ia32',f)}
 tasks.o=tasks.osx  =f=>{pkg('darwin','x64' ,f)}
-tasks.dist=f=>{tasks.build(e=>{e?f(e):async.parallel([tasks.l,tasks.w,tasks.o],e=>{f(e)})})}
+tasks.d=tasks.dist=f=>{tasks.build(e=>{e?f(e):async.parallel([tasks.l,tasks.w,tasks.o],e=>{f(e)})})}
 
-tasks.clean=f=>{rm('_');f()}
+tasks.c=tasks.clean=f=>{rm('_');f()}
 
 async.each(process.argv.length>2?process.argv.slice(2):['build'],
            (x,f)=>{if(tasks[x]){tasks[x](f)}
