@@ -93,7 +93,7 @@ D.prf.theme(function(){updThm();D.ide&&D.ide.layout.resizeAll()});updThm()
 
 D.el&&$('body').addClass(D.mac?'platform-mac':D.win?'platform-windows':'')
 
-$(window).on('focus blur',function(e){$('body').toggleClass('window-focused',window.focused=e.type==='focus')})
+$(window).on('focus blur',function(e){window.focused=e.type==='focus'})
 window.focused=true
 
 // migrations
