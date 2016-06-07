@@ -5,7 +5,7 @@ D.installMenu=function(x){
     var render=function(x,groups){
       if(!x)return
       if(x['']==='-')return new D.el.MenuItem({type:'separator'})
-      var h={label:x[''].replace(/_/g,'&')}
+      var h={label:x['']}
       if(x.group){
         h.type='checkbox';h.checked=!!x.checked
         h.click=function(){groups[x.group].forEach(function(y){y.checked=y===mi});x.action&&x.action()}

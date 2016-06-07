@@ -53,12 +53,12 @@ D.prf={}
     '\n  About Dyalog             =ABT'+
     '\n  -'+
     '\n  Preferences              =PRF'+
-    '\n_File                           {!browser}'+
-    '\n  New _Session             =NEW'+
-    '\n  _Connect...              =CNC'+
+    '\n&File                           {!browser}'+
+    '\n  New &Session             =NEW'+
+    '\n  &Connect...              =CNC'+
     '\n  -                             {!mac}'+
-    '\n  _Quit                    =QIT {!mac}'+
-    '\n_Edit'+
+    '\n  &Quit                    =QIT {!mac}'+
+    '\n&Edit'+
     '\n  Cut                      =CT  {!mac&&!browser}'+
     '\n  Copy                     =CP  {!mac&&!browser}'+
     '\n  Paste                    =PT  {!mac&&!browser}'+
@@ -67,7 +67,7 @@ D.prf={}
     '\n  -                             {!mac&&!browser}'+
     '\n  Preferences              =PRF {!mac}'+
     '\n  Select All               =SA  {mac}'+
-    '\n_View'+
+    '\n&View'+
     '\n  Show Language Bar        =LBR'+
     '\n  Show Workspace Explorer  =WSE'+
     '\n  Floating Edit Windows    =FLT'+
@@ -79,11 +79,11 @@ D.prf={}
     '\n  Reset Font Size          =ZMR {!browser}'+
     '\n  -'+
     '\n  Theme                    =THM'+
-    '\n_Actions'+
+    '\n&Actions'+
     '\n  Weak Interrupt           =WI'+
     '\n  Strong Interrupt         =SI'+
-    '\n_Window                         {mac}'+
-    '\n_Help'+
+    '\n&Window                         {mac}'+
+    '\n&Help'+
     '\n  About                    =ABT {!mac}'+
     '\n  -                             {!mac}'+
     '\n  Dyalog Help              =http://help.dyalog.com/'+
@@ -95,7 +95,7 @@ D.prf={}
     '\n  Dyalog Forum             =http://www.dyalog.com/forum'+
     '\n'+
     '\n# Syntax:'+
-    '\n#   _x   access key, alt+x'+
+    '\n#   &x   access key, alt+x'+
     '\n#   =CMD command code; some are special:'+
     '\n#          LBR FLT WRP TOP WSE render as checkboxes'+
     '\n#          THM ("Theme") renders its own submenu'+
