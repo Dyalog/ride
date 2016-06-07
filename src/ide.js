@@ -136,7 +136,7 @@ D.IDE=function(){
     clearTimeout(ttid);var $t=$(e.target),p=$t.position()
     ttid=setTimeout(function(){
       ttid=null;$tipDesc.text(desc);$tipText.text(text)
-      $tipTriangle.css({left:3+p.left+($t.width()-$tipTriangle.width())/2,top:p.top+$t.height()+2}).show()
+      $tipTriangle.css({left:3+p.left+($t.width()-$tipTriangle.width())/2,top:p.top+$t.height()+3}).show()
       var x0=p.left-21,x1=x0+$tip.width(),y0=p.top+$t.height()
       $tip.css(x1>$(document).width()?{left:'',right:0,top:y0}:{left:Math.max(0,x0),right:'',top:y0}).show()
     },200)
