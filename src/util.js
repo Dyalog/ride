@@ -1,6 +1,5 @@
 // a kitchen sink for small generic functions and jQuery plugins
 'use strict'
-''.repeat||(String.prototype.repeat=function(n){return Array(n+1).join(this)})
 D.util={
   dict:function(x){var r={};for(var i=0;i<x.length;i++)r[x[i][0]]=x[i][1];return r}, // dictionary from key-value pairs
   ESC:{'<':'&lt;','>':'&gt;','&':'&amp;',"'":'&apos;','"':'&quot;'},
