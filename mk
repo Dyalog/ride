@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 //instead of a Makefile
-'use strict'
+'use strict';process.chdir(__dirname)
 const rq=require,fs=rq('fs'),path=rq('path'),less=rq('less'),{execSync}=rq('child_process'),async=rq('async')
 ,sh=x=>execSync(x,{encoding:'utf8'}).replace(/[\r\n]/g,'')      // shell
 ,rf=x=>fs.readFileSync(x,'utf8')                                // read file
