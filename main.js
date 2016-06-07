@@ -43,21 +43,6 @@ if(D.win&&D.db.getItem('ime')!=='0'){ // switch IME locale as early as possible;
 }
 
 if(D.mac&&!env.RIDE_INTERPRETER_EXE){env.RIDE_INTERPRETER_EXE=D.lastSpawnedExe=path.resolve(ps.cwd(),'../Dyalog/mapl')}
-//  ps.chdir(env.PWD||env.HOME||env.USERPROFILE||'.') // github.com/nwjs/nw.js/issues/648
-//  gui.Screen.Init();let nww=D.nww=gui.Window.get()
-//  let urlp={},a=(location+'').replace(/^[^\?]*($|\?)/,'').split('&') // urlp:URL parameters
-//  for(let i=0;i<a.length;i++){let kv=/^([^=]*)=?(.*)$/.exec(a[i]);urlp[unescape(kv[1]||'')]=unescape(kv[2]||'')}
-//  nww.show();nww.focus() // focus() is needed for the Mac
-//  function throttle(f){let t;return function(){t=t||setTimeout(function(){f();t=0},500)}}
-//  let saveWinState=throttle(function(){
-//    let posArr=[nww.x-(nww.dx||0),nww.y-(nww.dy||0),nww.width-(nww.dw||0),nww.height-(nww.dh||0)]
-//    nww.maximized&&posArr.push(1)
-//    let p=!D.floating?'pos':+urlp.tracer?'posTracer':urlp.token==='1'?'posEditor':'' // name of pref
-//    p&&D.db.setItem(p,repr(posArr))
-//  })
-//  nww.on('move',saveWinState);nww.on('resize',saveWinState)
-//  nww.on('maximize',  function(){nww.maximized=1;saveWinState()})
-//  nww.on('unmaximize',function(){nww.maximized=0;saveWinState()})
 //  nww.on('close',function(){
 //    if(D.forceClose){
 //      let fw=opener.D.floatingWindows;fw.splice(fw.indexOf(nww),1);ps.nextTick(function(){nww.close(true)})
