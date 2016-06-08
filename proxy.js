@@ -1,5 +1,5 @@
 'use strict'
-const fs=require('fs'),net=require('net'),os=require('os'),path=require('path'),cp=require('child_process')
+const rq=require,fs=rq('fs'),net=rq('net'),os=rq('os'),path=rq('path'),cp=rq('child_process')
 let log
 {
   // record no more than N log messages per T milliseconds; at any moment, there have been n messages since time t
@@ -29,16 +29,16 @@ let clt,   // client, TCP connection to interpreter
     child, // a ChildProcess instance, the result from spawn()
     srv    // server, used to listen for connections from interpreters
 const trunc=s=>s.length>1000?s.slice(0,997)+'...':s
-const ls=x=>fs.readdirSync(x)
-const sil=f=>x=>{try{f(x)}catch(_){}} // exception silencer
-const shEsc=x=>"'"+x.replace(/'/g,"'\\''")+"'" // shell escape
-const parseVer=s=>s.split('.').map(x=>+x)
-const send=s=>{if(clt){log('send '+trunc(s));const b=Buffer('xxxxRIDE'+s);b.writeInt32BE(b.length,0);clt.write(b)}}
-const cmd=(c,h)=>{send(JSON.stringify([c,h||{}]))} // c:command name, h:arguments as a JS object
-const toBrowser=(x,y)=>{log('to browser:'+trunc(JSON.stringify([x,y])));skt&&skt.emit(x,y)}
-const initInterpreterConn=()=>{
+,ls=x=>fs.readdirSync(x)
+,sil=f=>x=>{try{f(x)}catch(_){}} // exception silencer
+,shEsc=x=>"'"+x.replace(/'/g,"'\\''")+"'" // shell escape
+,parseVer=s=>s.split('.').map(x=>+x)
+,send=s=>{if(clt){log('send '+trunc(s));const b=Buffer('xxxxRIDE'+s);b.writeInt32BE(b.length,0);clt.write(b)}}
+,cmd=(c,h)=>{send(JSON.stringify([c,h||{}]))} // c:command name, h:arguments as a JS object
+,toBrowser=(x,y)=>{log('to browser:'+trunc(JSON.stringify([x,y])));skt&&skt.emit(x,y)}
+,initInterpreterConn=()=>{
   const P=process.env.RIDE_PROTOCOL||'2'
-  let q=Buffer(0), old // old: have we warned the user that we're talking to an old interpreter
+  let q=Buffer(0),old // old: have we warned the user that we're talking to an old interpreter
   clt.on('data',x=>{
     q=Buffer.concat([q,x]);let n
     while(q.length>=4&&(n=q.readInt32BE(0))<=q.length){
@@ -195,7 +195,7 @@ const handlers={
     }
   }
 }
-const sshExec=(x,cmd,callback)=>{
+,sshExec=(x,cmd,callback)=>{
   try{ // see https://github.com/mscdex/ssh2/issues/238#issuecomment-87495628 for why we use tryKeyboard:true
     const c=new(require('ssh2').Client),o={host:x.host,port:x.port,username:x.user,tryKeyboard:true}
     x.key?(o.privateKey=fs.readFileSync(x.key)):(o.password=x.pass)

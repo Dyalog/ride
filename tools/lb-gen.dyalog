@@ -12,7 +12,7 @@
 
 ⎕io←⎕ct←0 ⋄ ⎕pw←32767 ⋄ json←7160⌶ ⋄ 'base64'⎕cy'dfns'
 esc←(,¨'&<>')⎕r'\&amp;' '\&lt;' '\&gt;'
-rmTrailingWS←' +$'⎕r''
+rtrim←' +$'⎕r''
 
 ⍝ parse xml and extract tags
 x←⎕xml'UTF-8'⎕ucs 83 ¯1⎕map'lb.xml'
@@ -27,10 +27,10 @@ h←⊃,¨/(⊂'<b')cl(⊂'>')(esc¨chr)(⊂'</b>')
 
 ⍝ output
 '//generated code, do not edit'
-'D.lb={'
+'D.lb={//language bar information'
 'html:',(json⊃,/h),','
 'tips:{'
-¯2↓⊃,/⊃,¨/(json¨,¨m/chr)(⊂':[')(json¨m/desc)','(json¨rmTrailingWS¨m/text)(⊂'],',⎕ucs 10)
+¯2↓⊃,/⊃,¨/(json¨,¨m/chr)(⊂':[')(json¨m/desc)','(json¨rtrim¨m/text)(⊂'],',⎕ucs 10)
 '}'
 '}'
 ⎕off

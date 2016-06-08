@@ -2,13 +2,11 @@
 // This script scrapes keyboard definitions from http://dfns.dyalog.com/n_keyboards.htm
 // and generates ../src/kbds.js
 process.chdir(__dirname)
-const fs=require('fs'),http=require('http'),cheerio=require('cheerio')
-,log=s=>{process.stderr.write(s+'\n')}
-,err=s=>{log('ERROR: '+s);process.exit(1)}
+const rq=require,fs=rq('fs'),http=rq('http'),cheerio=rq('cheerio')
+,err=s=>{process.stderr.write(`ERROR: ${s}\n`);process.exit(1)}
 ,get=(host,path,f)=>{ // f:callback
-  http.get({host:host,path:path},res=>{
-    let s='';res.setEncoding('utf8');res.on('data',x=>{s+=x}).on('end',()=>{f(s)})
-  }).on('error',e=>{console.error(e);process.exit(1)})
+  http.get({host,path},res=>{let s='';res.setEncoding('utf8');res.on('data',x=>{s+=x}).on('end',()=>{f(s)})})
+      .on('error',e=>{console.error(e);process.exit(1)})
 }
 ,G={ // geometries http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
   iso:{
@@ -46,8 +44,7 @@ const fs=require('fs'),http=require('http'),cheerio=require('cheerio')
       '│........│....│....│....│....│....│....│....│....│....│....│....│..........│.*\n'+
       '├────────┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──┬─┴──────────┤.*\n'+
       '│...........│....│....│....│....│....│....│....│....│....│....│............│.*\n'+
-      '│...........│....│....│....│....│....│....│....│....│....│....│............│.*'+
-    '$'),
+      '│...........│....│....│....│....│....│....│....│....│....│....│............│.*$'),
     sc:[
       [1,2,3,4,5,6,7,8,9,10,11,12,13,0],
       [0,17,18,19,20,21,22,23,24,25,26,27,28,29],
@@ -82,17 +79,16 @@ const fs=require('fs'),http=require('http'),cheerio=require('cheerio')
 }
 ,paths=['/n_keyboards.htm','/n_kbmac.htm']
 ,rec=()=>{
-  const u=paths.shift();if(u){console.info(u);get('dfns.dyalog.com',u,data=>{processData(data);rec()});return}
+  const u=paths.shift();if(u){console.info(u);get('dfns.dyalog.com',u,x=>{processData(x);rec()});return}
   fs.writeFileSync('../src/kbds.js',
     '// generated code, do not edit\n'+
     'D.kbds={\n'+
-    '  geom:'+JSON.stringify(geom)+',\n'+
+    `  geom:${JSON.stringify(geom)},\n`+
     '  layouts:{\n'+
-    '    '+Object.keys(layouts).sort().map(lc=>{
-           const l=layouts[lc];return lc+':[\n      '+l.map(JSON.stringify).join(',\n      ')+'\n    ]'
-         }).join(',\n    ')+'\n'+
+    '    '+Object.keys(layouts).sort()
+                 .map(x=>`${x}:[\n      ${layouts[x].map(JSON.stringify).join(',\n      ')}\n    ]`)
+                 .join(',\n    ')+'\n'+
     '  }\n'+
-    '}\n'
-  )
+    '}\n')
 }
 rec()

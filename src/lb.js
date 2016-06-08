@@ -1,5 +1,5 @@
 //generated code, do not edit
-D.lb={
+D.lb={//language bar information
 html:"<b class='first last'>←</b> <b class=first>+</b><b>-</b><b>×</b><b>÷</b><b>*</b><b>⍟</b><b>⌹</b><b>○</b><b>!</b><b class=last>?</b> <b class=first>|</b><b>⌈</b><b>⌊</b><b>⊥</b><b>⊤</b><b>⊣</b><b class=last>⊢</b> <b class=first>=</b><b>≠</b><b>≤</b><b>&lt;</b><b>&gt;</b><b>≥</b><b>≡</b><b class=last>≢</b> <b class=first>∨</b><b>∧</b><b>⍲</b><b class=last>⍱</b> <b class=first>↑</b><b>↓</b><b>⊂</b><b>⊃</b><b>⌷</b><b>⍋</b><b class=last>⍒</b> <b class=first>⍳</b><b>⍷</b><b>∪</b><b>∩</b><b>∊</b><b class=last>~</b> <b class=first>/</b><b>\\</b><b>⌿</b><b class=last>⍀</b> <b class=first>,</b><b>⍪</b><b>⍴</b><b>⌽</b><b>⊖</b><b class=last>⍉</b> <b class=first>¨</b><b>⍨</b><b>⍣</b><b>.</b><b>∘</b><b class=last>⍤</b> <b class=first>⍞</b><b>⎕</b><b>⍠</b><b>⌸</b><b>⌶</b><b>⍎</b><b class=last>⍕</b> <b class=first>⋄</b><b>⍝</b><b>→</b><b>⍵</b><b>⍺</b><b>∇</b><b class=last>&amp;</b> <b class=first>¯</b><b class=last>⍬</b>",
 tips:{
 "←":["Left Arrow (←)","Dyadic function:   Assignment\n\n      X←3 5⍴'ABCDEFG'\n      X\nABCDE\nFGABC\nDEFGA\n\n      X,←3 4 5\n      X\nABCDE 3\nFGABC 4\nDEFGA 5\n"],
