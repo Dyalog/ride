@@ -8,7 +8,7 @@ const rq=require,fs=rq('fs'),path=rq('path'),less=rq('less'),{execSync}=rq('chil
 ,md=x=>{if(!fs.existsSync(x)){md(path.dirname(x));fs.mkdir(x)}} // mkdir -p
 ,nt=(x,y)=>!fs.existsSync(y)||fs.statSync(x)>fs.statSync(y)     // newer than
 ,rm=x=>{if(!fs.existsSync(x))return
-        fs.readdirSync(x).forEach(y=>{y=x+'/'+y;fs.lstatSync(y).isDirectory()?rm(y):fs.unlinkSync(y)})
+        fs.readdirSync(x).map(y=>{y=x+'/'+y;fs.lstatSync(y).isDirectory()?rm(y):fs.unlinkSync(y)})
         fs.rmdirSync(x)}
 ,v=JSON.parse(rf('package.json')).version.replace(/\.0$/,'')+'.'+sh('git rev-list --count HEAD') // version string
 ,tasks={}
@@ -30,39 +30,25 @@ tasks.b=tasks.build=f=>{
   )
 }
 
+const incl={
+  '/node_modules/jquery/dist/jquery.min.js'                    :1,
+  '/node_modules/codemirror/lib/codemirror.js'                 :1,
+  '/node_modules/codemirror/addon/dialog/dialog.js'            :1,
+  '/node_modules/codemirror/addon/search/searchcursor.js'      :1,
+  '/node_modules/codemirror/addon/scroll/annotatescrollbar.js' :1,
+  '/node_modules/codemirror/addon/search/matchesonscrollbar.js':1,
+  '/node_modules/codemirror/addon/hint/show-hint.js'           :1,
+  '/node_modules/codemirror/addon/edit/matchbrackets.js'       :1,
+  '/node_modules/codemirror/addon/edit/closebrackets.js'       :1,
+  '/node_modules/codemirror/addon/display/placeholder.js'      :1,
+  '/node_modules/codemirror/addon/fold/foldcode.js'            :1,
+  '/node_modules/codemirror/addon/fold/indent-fold.js'         :1}
+Object.keys(incl).map(x=>{const a=x.split('/');a.map((_,i)=>incl[a.slice(0,i).join('/')]=1)}) // include ancestors
+
 const pkg=(x,y,f)=>{
   rq('electron-packager')(
     {dir:'.',platform:x,arch:y,out:'_/ride',overwrite:true,'download.cache':'cache',icon:'favicon.ico',
-      ignore:x=>
-        !/^\/[^\/\.]+\.(html|js|json)$/.test(x)&&
-        !/^\/(src|style|lib|_)(\/|$)/.test(x)&&
-        !['/node_modules',
-          '/node_modules/jquery',
-          '/node_modules/jquery/dist',
-          '/node_modules/jquery/dist/jquery.min.js',
-          '/node_modules/codemirror',
-          '/node_modules/codemirror/lib',
-          '/node_modules/codemirror/lib/codemirror.js',
-          '/node_modules/codemirror/addon',
-          '/node_modules/codemirror/addon/dialog',
-          '/node_modules/codemirror/addon/dialog/dialog.js',
-          '/node_modules/codemirror/addon/search',
-          '/node_modules/codemirror/addon/search/searchcursor.js',
-          '/node_modules/codemirror/addon/scroll',
-          '/node_modules/codemirror/addon/scroll/annotatescrollbar.js',
-          '/node_modules/codemirror/addon/search',
-          '/node_modules/codemirror/addon/search/matchesonscrollbar.js',
-          '/node_modules/codemirror/addon/hint',
-          '/node_modules/codemirror/addon/hint/show-hint.js',
-          '/node_modules/codemirror/addon/edit',
-          '/node_modules/codemirror/addon/edit/matchbrackets.js',
-          '/node_modules/codemirror/addon/edit/closebrackets.js',
-          '/node_modules/codemirror/addon/display',
-          '/node_modules/codemirror/addon/display/placeholder.js',
-          '/node_modules/codemirror/addon/fold',
-          '/node_modules/codemirror/addon/fold/foldcode.js',
-          '/node_modules/codemirror/addon/fold/indent-fold.js',
-          ''].includes(x),
+      ignore:x=>!(incl[x]||/^\/[^\/\.]+\.(html|js|json)$/.test(x)||/^\/(src|style|lib|_)(\/|$)/.test(x)),
       'app-copyright':`(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
       'app-version':v,
       'build-version':v,
