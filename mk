@@ -31,6 +31,10 @@ tasks.b=tasks.build=f=>{
 }
 
 const incl={
+  '/index.html'                                                :1,
+  '/main.js'                                                   :1,
+  '/package.json'                                              :1,
+  '/proxy.js'                                                  :1,
   '/node_modules/jquery/dist/jquery.min.js'                    :1,
   '/node_modules/codemirror/lib/codemirror.js'                 :1,
   '/node_modules/codemirror/addon/dialog/dialog.js'            :1,
@@ -45,10 +49,16 @@ const incl={
   '/node_modules/codemirror/addon/fold/indent-fold.js'         :1}
 Object.keys(incl).map(x=>{const a=x.split('/');a.map((_,i)=>incl[a.slice(0,i).join('/')]=1)}) // include ancestors
 
+const excl={
+  '/style/apl385.ttf'        :1,
+  '/style/DyalogUnicode.icns':1,
+  '/style/style.less'        :1,
+  '/style/thm'               :1}
+
 const pkg=(x,y,f)=>{
   rq('electron-packager')(
     {dir:'.',platform:x,arch:y,out:'_/ride',overwrite:true,'download.cache':'cache',icon:'favicon.ico',
-      ignore:x=>!(incl[x]||/^\/[^\/\.]+\.(html|js|json)$/.test(x)||/^\/(src|style|lib|_)(\/|$)/.test(x)),
+      ignore:x=>!incl[x]&&!/^\/(src|style|lib|_)(\/|$)/.test(x)||excl[x],
       'app-copyright':`(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
       'app-version':v,
       'build-version':v,
