@@ -17,7 +17,7 @@ let log
     const h=process.env.HOME||process.env.USERPROFILE;if(h)f=path.resolve(h,f)
     fd=fs.openSync(f,'a');l.push(s=>{const b=Buffer(m);fs.writeSync(fd,b,0,b.length)})
   }
-  if(typeof window!=='undefined'){ // are we running under NW.js as opposed to just NodeJS?
+  if(D.el){ // are we running under Electron as opposed to just NodeJS?
     let i=0,a=Array(1000)          // if so, store latest log messages in RAM
     log.get=()=>a.slice(i).concat(a.slice(0,i))
     l.push(s=>{a[i++]=s;i%=a.length})
@@ -83,7 +83,7 @@ const handlers={
     srv=net.createServer(c=>{
       log('spawned interpreter connected');const a=srv.address();srv&&srv.close();srv=null;clt=c
       toBrowser('*connected',{host:a.address,port:a.port});initInterpreterConn()
-      if(typeof window!=='undefined')window.D.lastSpawnedExe=exe
+      if(D.el)D.lastSpawnedExe=exe
     })
     srv.on('error',err=>{log('listen failed: '+err);srv=clt=null;toBrowser('*error',{msg:err.message})})
     srv.listen(0,'127.0.0.1',()=>{
