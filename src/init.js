@@ -2,6 +2,8 @@
 
 if(typeof node_require!=='undefined')D=$.extend(node_require('electron').remote.getGlobal('D'),D)
 
+var env=D.el?process.env:{}
+
 // don't use Alt- keystrokes on the Mac (see email from 2015-09-01)
 var h=CodeMirror.keyMap.emacsy;for(var k in h)if(/^alt-[a-z]$/i.test(k))delete h[k]
 if(D.el){
@@ -74,12 +76,11 @@ if(D.floating&&win){
     }())
   }
   if(!D.quit)D.quit=close
-  var e=D.el?process.env:{}
-  var c=(D.args||{})['-c']||e.RIDE_CONNECT
+  var c=(D.args||{})['-c']||env.RIDE_CONNECT
   if(c){var m=/^([^:]+|\[[^\]]+\])(?::(\d+))?$/.exec(c) // parse host and port
         if(m){new D.IDE;D.skt.emit('*connect',{host:m[1],port:+m[2]||4502})}
         else{$.alert('Invalid $RIDE_CONNECT')}}
-  else if(+e.RIDE_SPAWN){new D.IDE;D.skt.emit('*launch',{}) // '*error' is handled in ide.coffee
+  else if(+env.RIDE_SPAWN){new D.IDE;D.skt.emit('*launch',{}) // '*error' is handled in ide.coffee
                          window.onbeforeunload=function(){D.skt.emit('Exit',{code:0})}}
   else{D.cn()}
 }
@@ -136,6 +137,16 @@ window.ondrop=function(e){
   else{$.confirm('Are you sure you want to )load '+f.replace(/^.*[\\\/]/,'')+'?','Load workspace',
             function(x){x&&D.ide.exec(['      )load '+f+'\n'],0)})}
   e.preventDefault();return!1
+}
+
+if(D.el){
+  var path=node_require('path')
+  if(env.RIDE_JS){
+    env.RIDE_JS.split(path.delimiter).forEach(function(x){x&&$.getScript('file://'+path.resolve(process.cwd(),x),function(y){console.info('done',y)})})
+  }
+  if(env.RIDE_CSS){
+    $('<style>').text(env.RIDE_CSS.split(path.delimiter).map(function(x){return'@import url("'+x+'");'})).appendTo('head')
+  }
 }
 
 }())
