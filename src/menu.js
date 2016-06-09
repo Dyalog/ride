@@ -2,9 +2,11 @@
 'use strict'
 D.installMenu=function(x){
   if(D.el){
+    var pk=D.prf.keys(), k={} // k:a map of all keyboard shortcuts
+    for(var i=0;i<D.cmds.length;i++){var c=D.cmds[i][0],d=D.cmds[i][2];k[c]=(pk[c]||d)[0]} // c:code, d:defaults
     var render=function(x){
       if(x['']==='-')return new D.el.MenuItem({type:'separator'})
-      var h={label:x[''],click:x.action}
+      var h={label:x[''],click:x.action,accelerator:x.cmd&&k[x.cmd]?k[x.cmd].replace(/-(.)/g,'+$1'):null}
       if(x.group){
         h.type='radio';h.checked=!!x.checked
       }else if(x.checkBoxPref){
