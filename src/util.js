@@ -13,12 +13,14 @@ D.util={
       t=e.timeStamp;x=e.x;y=e.y})},
   cmOpts:{specialChars:/[\0-\x1f\x7f\xad\u200b-\u200f\u2028\u2029\ufeff]/g}} // default CodeMirror options in RIDE
 $.alert=function(m,t,f){ // m:message, t:title, f:callback
-  $('<p>').text(m).dialog({modal:1,title:t,buttons:[
-    {html:'<u>O</u>K',click:function(){$(this).dialog('close');f&&f()}}]})},
+  if(D.el){D.el.dialog.showMessageBox(D.elw,{message:m,title:t,buttons:['OK']});f&&f()}
+  else{$('<p>').text(m)
+         .dialog({modal:1,title:t,buttons:[{html:'<u>O</u>K',click:function(){$(this).dialog('close');f&&f()}}]})}}
 $.confirm=function(m,t,f){ // m:message, t:title, f:callback
-  var r;$('<p>').text(m).dialog({modal:1,title:t,close:function(){f&&f(r)},buttons:[
-    {html:'<u>Y</u>es',click:function(){r=1;$(this).dialog('close')}},
-    {html:'<u>N</u>o' ,click:function(){r=0;$(this).dialog('close')}}]})}
+  if(D.el){f(1-D.el.dialog.showMessageBox(D.elw,{message:m,title:t,buttons:['Yes','No'],cancelId:1}))}
+  else{var r;$('<p>').text(m).dialog({modal:1,title:t,close:function(){f&&f(r)},buttons:[
+                                        {html:'<u>Y</u>es',click:function(){r=1;$(this).dialog('close')}},
+                                        {html:'<u>N</u>o' ,click:function(){r=0;$(this).dialog('close')}}]})}}
 $.fn.insert=function(s){ // replace selection in an <input> or <textarea> with s
   return this.each(function(){
     if(!$(this).is(':text,textarea')||this.readOnly)return
