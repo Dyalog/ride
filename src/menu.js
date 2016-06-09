@@ -31,10 +31,10 @@ D.installMenu=function(x){
     // │└─────────────────────────────────────────┘     │
     // └────────────────────────────────────────────────┘
     // Top-level ".m-opener"-s also have class ".m-top"
-    function render(x){
+    var render=function(x){
       if(!x)return
       if(x['']==='-')return $('<hr>')
-      var acc,name=x[''].replace(/_(.)/g,function(_,k){return acc||k==='_'?k:'<u>'+(acc=k)+'</u>'}) // acc:access key
+      var acc,name=x[''].replace(/&(.)/g,function(_,k){return acc||k==='&'?k:'<u>'+(acc=k)+'</u>'}) // acc:access key
       var $a=$('<a href=#><span>'+name+'</span></a>')
       x.cmd&&$a.append('<span class=m-shc data-cmd='+x.cmd+'>')
       if(x.group){
@@ -55,12 +55,12 @@ D.installMenu=function(x){
       return $('<div class=m-sub>').append($a.addClass('m-opener'),$b.append.apply($b,x.items.map(render)))
     }
     var $o // original focused element
-    function mFocus(anchor){
+    var mFocus=function(anchor){
       $m.find('.m-open').removeClass('m-open');if(!anchor){$o&&$o.focus();$o=null;return}
       $o||($o=$(':focus'));var $a=$(anchor);$a.parentsUntil('.menu').addClass('m-open')
       $a.is('.m-top')?$a.closest('.m-sub').find('a').eq(1).focus():$a.focus()
     }
-    function leftRight(d,$e){ // d: +1 or -1, $e: target element
+    var leftRight=function(d,$e){ // d: +1 or -1, $e: target element
       if(d>0&&$e.is('.m-opener')){
         mFocus($e.next('.m-box').find('a').first())
       }else if(d<0&&!$e.is('.m-opener')&&$e.parents('.m-sub').length>1){
@@ -70,7 +70,7 @@ D.installMenu=function(x){
       }
       return!1
     }
-    function upDown(d,$e){ // d: +1 or -1, $e: target element
+    var upDown=function(d,$e){ // d: +1 or -1, $e: target element
       if($e.is('.m-top')){
         mFocus($e.parent().find(':not(hr)').eq(1))
       }else{
@@ -95,11 +95,10 @@ D.installMenu=function(x){
         }
       })
     $(document).mousedown(function(e){$(e.target).closest('.menu').length||mFocus(null)})
-    updMenuShcs(D.prf.keys())
-    function updMenuShcs(h){
+    var updShcs=function(h){
       var k={};for(var i=0;i<D.cmds.length;i++){var c=D.cmds[i][0],d=D.cmds[i][2];k[c]=(h[c]||d)[0]} // c:code, d:defaults
       $('.m-shc').each(function(){$(this).text(k[$(this).data('cmd')]||'')})
     }
-    D.prf.keys(updMenuShcs)
+    updShcs(D.prf.keys());D.prf.keys(updShcs)
   }
 }
