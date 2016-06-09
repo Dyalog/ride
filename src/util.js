@@ -11,12 +11,6 @@ D.util={
     cm.on('mousedown',function(cm,e){
       e.timeStamp-t<400&&Math.abs(x-e.x)+Math.abs(y-e.y)<10&&!$(e.target).closest('.CodeMirror-gutter-wrapper').length&&f(e)
       t=e.timeStamp;x=e.x;y=e.y})},
-  throttle1:function(f,dt){ // f: a 1-arg function that doesn't return a result; dt: minimum time between invocations
-    var next=0,tid=0 // next: the earliest time f can be called again; tid: id returned by setTimeout
-    dt==null&&(dt=500)
-    return function(x){
-      if(+new Date<next){clearTimeout(tid);tid=setTimeout(function(){tid=0;next=+new Date+dt;f(x)},dt);next=+new Date+dt}
-      else{next=+new Date+dt;f(x)}}},
   cmOpts:{specialChars:/[\0-\x1f\x7f\xad\u200b-\u200f\u2028\u2029\ufeff]/g}} // default CodeMirror options in RIDE
 $.alert=function(m,t,f){ // m:message, t:title, f:callback
   $('<p>').text(m).dialog({modal:1,title:t,buttons:[
