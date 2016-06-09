@@ -7,8 +7,8 @@ D.installMenu=function(x){
       if(x['']==='-')return new D.el.MenuItem({type:'separator'})
       var h={label:x['']}
       if(x.group){
-        h.type='checkbox';h.checked=!!x.checked
-        h.click=function(){groups[x.group].forEach(function(y){y.checked=y===mi});x.action&&x.action()}
+        h.type='radio';h.checked=!!x.checked
+        if(x.action)h.click=x.action
       }else if(x.checkBoxPref){
         h.type='checkbox';h.checked=!!x.checkBoxPref()
         if(x.action)h.click=function(){x.action(mi.checked)}
