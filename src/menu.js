@@ -2,26 +2,20 @@
 'use strict'
 D.installMenu=function(x){
   if(D.el){
-    var render=function(x,groups){
-      if(!x)return
+    var render=function(x){
       if(x['']==='-')return new D.el.MenuItem({type:'separator'})
-      var h={label:x['']}
+      var h={label:x[''],click:x.action}
       if(x.group){
         h.type='radio';h.checked=!!x.checked
-        if(x.action)h.click=x.action
       }else if(x.checkBoxPref){
         h.type='checkbox';h.checked=!!x.checkBoxPref()
         if(x.action)h.click=function(){x.action(mi.checked)}
         x.checkBoxPref(function(v){mi.checked=!!v})
-      }else{
-        h.click=x.action
       }
-      if(x.items){h.submenu=new D.el.Menu;x.items.forEach(function(y){h.submenu.append(render(y,groups))})}
-      var mi=new D.el.MenuItem(h);x.group&&(groups[x.group]=groups[x.group]||[]).push(mi);return mi
+      if(x.items){h.submenu=new D.el.Menu;x.items.forEach(function(y){h.submenu.append(render(y))})}
+      var mi=new D.el.MenuItem(h);return mi
     }
-    var groups={},m=new D.el.Menu
-    x.forEach(function(y){m.append(render(y,groups))})
-    D.elw.setMenu(m)
+    var m=new D.el.Menu;x.forEach(function(y){m.append(render(y))});D.elw.setMenu(m)
   }else{
     var arg=x
     // DOM structure:
