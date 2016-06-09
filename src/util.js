@@ -11,7 +11,7 @@ D.util={
     cm.on('mousedown',function(cm,e){
       e.timeStamp-t<400&&Math.abs(x-e.x)+Math.abs(y-e.y)<10&&!$(e.target).closest('.CodeMirror-gutter-wrapper').length&&f(e)
       t=e.timeStamp;x=e.x;y=e.y})},
-  cmOpts:{specialChars:/[\0-\x1f\x7f\xad\u200b-\u200f\u2028\u2029\ufeff]/g}} // default CodeMirror options in RIDE
+  cmOpts:{}} // default CodeMirror options in RIDE
 $.alert=function(m,t,f){ // m:message, t:title, f:callback
   if(D.el){D.el.dialog.showMessageBox(D.elw,{message:m,title:t,buttons:['OK']});f&&f()}
   else{$('<p>').text(m)
