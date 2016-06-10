@@ -62,11 +62,12 @@ const pkg=(x,y,f)=>{
       'app-copyright':`(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
       'app-version':v,
       'build-version':v,
-      'version-string.CompanyName':'Dyalog Ltd',
-      'version-string.FileDescription':'Remote Integrated Development Environment for Dyalog APL',
-      'version-string.OriginalFilename':'ride.exe',
-      'version-string.ProductName':'RIDE',
-      'version-string.InternalName':'RIDE'},
+      'version-string':{
+        CompanyName:'Dyalog Ltd',
+        FileDescription:'Remote Integrated Development Environment for Dyalog APL',
+        OriginalFilename:'ride'+v.split('.').slice(0,2).join('')+'.exe',
+        ProductName:'RIDE',
+        InternalName:'RIDE'}},
     e=>{f&&f(e)}
   )
 }
