@@ -38,7 +38,17 @@ $.extend(CM.commands,{
   PRF:function(){D.prf_ui()},
   ABT:function(){D.abt()},
   CNC:function(){D.rideConnect()},
-  NEW:function(){D.rideNewSession()},
+  NEW:function(){
+    if(!D.el)return
+    if(D.lastSpawnedExe){
+      let e={};for(let k in process.env)e[k]=process.env[k]
+      e.RIDE_SPAWN='1';e.RIDE_INTERPRETER_EXE=D.lastSpawnedExe
+      node_require('child_process').spawn(process.execPath,[],{detached:true,stdio:['ignore','ignore','ignore'],env:e})
+    }else{
+      $.alert('The current session is remote. To connect elsewhere or launch a local interpreter, '+
+              'please use "Connect..." instead.','Cannot Start New Session')
+    }
+  },
   QIT:function(){D.quit()},
   LBR:function(){D.prf.lbar.toggle()},
   WI:function(){D.ide.emit('WeakInterrupt')},

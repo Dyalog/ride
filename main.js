@@ -86,16 +86,6 @@ D.rideConnect=()=>{
   let e={};for(let k in env)e[k]=env[k];e.RIDE_SPAWN='0'
   spawn(execPath,[],{detached:true,stdio:['ignore','ignore','ignore'],env:e})
 }
-D.rideNewSession=function(){
-  if(D.lastSpawnedExe){
-    let e={};for(let k in env)e[k]=env[k]
-    e.RIDE_SPAWN='1';e.RIDE_INTERPRETER_EXE=D.lastSpawnedExe
-    spawn(execPath,[],{detached:true,stdio:['ignore','ignore','ignore'],env:e})
-  }else{
-//    $.alert('The current session is remote. To connect elsewhere or launch a local interpreter, '+
-//            'please use "Connect..." instead.','Cannot Start New Session')
-  }
-}
 //  D.quit=function(){gui.Window.get().close()}
 //  D.showProtocolLog=function(){
 //    let lw=window.lw=open('empty.html')
