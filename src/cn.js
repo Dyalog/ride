@@ -103,7 +103,7 @@ D.cn=function(){
   })
   q.del.click(function(){
     var n=$sel.length
-    n&&$.confirm('Are you sure you want to delete the selected configuration'+(n>1?'s':'')+'?','Confirmation',
+    n&&$.confirm('Are you sure you want to delete\nthe selected configuration'+(n>1?'s':'')+'?','Confirmation',
       function(r){if(r){var i=$sel.eq(0).index();$sel.remove();q.favs.list('select',i,1);save()}})
   })
   q.about.click(function(){D.abt()})

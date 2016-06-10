@@ -17,7 +17,7 @@ $.alert=function(m,t,f){ // m:message, t:title, f:callback
   else{$('<p>').text(m)
          .dialog({modal:1,title:t,buttons:[{html:'<u>O</u>K',click:function(){$(this).dialog('close');f&&f()}}]})}}
 $.confirm=function(m,t,f){ // m:message, t:title, f:callback
-  if(D.el){f(1-D.el.dialog.showMessageBox(D.elw,{message:m,title:t,buttons:['Yes','No'],cancelId:1}))}
+  if(D.el){f(1-D.el.dialog.showMessageBox(D.elw,{message:m,title:t,type:'question',buttons:['Yes','No'],cancelId:1}))}
   else{var r;$('<p>').text(m).dialog({modal:1,title:t,close:function(){f&&f(r)},buttons:[
                                         {html:'<u>Y</u>es',click:function(){r=1;$(this).dialog('close')}},
                                         {html:'<u>N</u>o' ,click:function(){r=0;$(this).dialog('close')}}]})}}
