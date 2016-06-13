@@ -55,9 +55,10 @@ const excl={
   '/style/style.less'        :1,
   '/style/thm'               :1}
 
+const namev='ride'+v.split('.').slice(0,2).join('')
 const pkg=(x,y,f)=>{
   rq('electron-packager')(
-    {dir:'.',platform:x,arch:y,out:'_/ride',overwrite:true,'download.cache':'cache',icon:'favicon.ico',tmpdir:false,
+    {dir:'.',platform:x,arch:y,out:'_/'+namev,overwrite:true,'download.cache':'cache',icon:'favicon.ico',tmpdir:false,
       ignore:x=>!incl[x]&&!/^\/(src|style|lib|_)(\/|$)/.test(x)||excl[x],
       'app-copyright':`(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
       'app-version':v,
@@ -65,7 +66,7 @@ const pkg=(x,y,f)=>{
       'version-string':{
         CompanyName:'Dyalog Ltd',
         FileDescription:'Remote Integrated Development Environment for Dyalog APL',
-        OriginalFilename:'ride'+v.split('.').slice(0,2).join('')+'.exe',
+        OriginalFilename:namev+'.exe',
         ProductName:'RIDE',
         InternalName:'RIDE'}},
     e=>{f&&f(e)}
