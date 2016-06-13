@@ -1,5 +1,6 @@
 #!/bin/bash
 # This script is for Jenkins (continuous integration) to run.
+set -x
 set -e
 
 BASE_VERSION=`node -pe "($(cat package.json)).version"`
@@ -16,22 +17,28 @@ for suffix in '' {a..z}; do if [ ! -e $r/$d$suffix ]; then d=$d$suffix; break; f
 mkdir -p $r/$d
 echo "$VERSION" > $r/$d/version
 echo Copying Directories to $r/$d
-cp -r _/${APP_NAME}/* $r/$d
+#cp -r _/${APP_NAME}/* $r/$d
 for DIR in `ls _/${APP_NAME}`; do
-  OS=`echo ${DIR} | sed 's/64//;s/32//'`
-  BITS=`echo ${DIR} | sed 's/linux//;s/osx//;s/win//'`
+
+  OS=`echo ${DIR#${APP_NAME}-} | awk -F"-" '{print $1}'`
+  BITS=`echo ${DIR#${APP_NAME}-} | awk -F"-" '{print $2}' | sed 's/[a-zA-Z]//g'`
+	echo "DEBUG: \$DIR=$DIR"
+	echo "DEBUG: \$OS=$OS"
+	echo "DEBUG: \$BITS=$BITS"
 
   case ${OS} in
-    osx)
+    darwin)
       OSNAME="mac${BITS}"
       ;;
-    win)
-      OSNAME="windows${BITS}"
+    win32)
+      OSNAME="win${BITS}"
       ;;
     *)
       OSNAME="${OS}${BITS}"
       ;;
   esac
+	echo "DEBUG: \$OSNAME=$OSNAME"
+cp -r _/${APP_NAME}/${DIR} $r/$d/${OSNAME}
 
   ZIPFILE="ride-${VERSION}-${OSNAME}.zip"
   TMPZIP=/tmp/$ZIPFILE
@@ -47,7 +54,7 @@ for DIR in `ls _/${APP_NAME}`; do
 done
 
 echo 'updating "latest" symlink'; l=$r/latest; [ -L $l ]; rm -f $l; ln -s $d $l
-echo 'fixing permissions'; chmod +x $r/latest/win{64,32}/{${APP_NAME}.exe,libGLESv2.dll,libEGL.dll} $r/latest/win64/set-ime.exe
+echo 'fixing permissions'; chmod +x $r/latest/win32/{*.exe,*.dll}
 echo 'cleaning up old releases'
 for x in $(ls $r | grep -P '^\d{4}-\d{2}-\d{2}--\d{2}-\d{2}[a-z]?$' | sort | head -n-10); do
   echo "deleting $x"; rm -rf $r/$x || true
