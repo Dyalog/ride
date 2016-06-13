@@ -57,7 +57,7 @@ const excl={
 
 const pkg=(x,y,f)=>{
   rq('electron-packager')(
-    {dir:'.',platform:x,arch:y,out:'_/ride',overwrite:true,'download.cache':'cache',icon:'favicon.ico',
+    {dir:'.',platform:x,arch:y,out:'_/ride',overwrite:true,'download.cache':'cache',icon:'favicon.ico',tmpdir:false,
       ignore:x=>!incl[x]&&!/^\/(src|style|lib|_)(\/|$)/.test(x)||excl[x],
       'app-copyright':`(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
       'app-version':v,
