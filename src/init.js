@@ -127,19 +127,27 @@ D.mac||$(document).keydown(function(e){ // Alt-A...Alt-Z or Alt-Shift-A...Alt-Sh
   return!$a.length
 })
 
-// drag and drop
-CodeMirror.defaults.dragDrop=0;window.ondragover=window.ondrop=function(e){e.preventDefault();return!1}
-window.ondrop=function(e){
-  var a=e.dataTransfer.files,f=(a[0]||{}).path
-  if(!D.lastSpawnedExe){$.alert('Drag and drop of workspaces works only for locally started interpreters.','Error')}
-  else if(!/\.dws$/i.test(f)){$.alert('RIDE supports drag and drop only for .dws files.','Error')}
-  else if(a.length!==1){$.alert('RIDE does not support dropping of multiple files.','Error')}
-  else{$.confirm('Are you sure you want to )load '+f.replace(/^.*[\\\/]/,'')+'?','Load workspace',
-            function(x){x&&D.ide.exec(['      )load '+f+'\n'],0)})}
-  e.preventDefault();return!1
-}
-
+// context menu
 if(D.el){
+  let cmenu=D.el.Menu.buildFromTemplate(
+    ['Cut','Copy','Paste'].map(function(x){return{label:x,role:x.toLowerCase()}})
+    .concat({type:'separator'})
+    .concat(['Undo','Redo'].map(function(x){return{label:x,click:function(){
+      let u=D.ide;u&&(u=u.focusedWin)&&(u=u.cm)&&u[x.toLowerCase()]&&u[x.toLowerCase()]()}}})))
+  window.oncontextmenu=function(e){e.preventDefault();cmenu.popup(D.elw)}
+
+  // drag and drop
+  CodeMirror.defaults.dragDrop=0;window.ondragover=window.ondrop=function(e){e.preventDefault();return!1}
+  window.ondrop=function(e){
+    var a=e.dataTransfer.files,f=(a[0]||{}).path
+    if(!D.lastSpawnedExe){$.alert('Drag and drop of workspaces works only for locally started interpreters.','Error')}
+    else if(!/\.dws$/i.test(f)){$.alert('RIDE supports drag and drop only for .dws files.','Error')}
+    else if(a.length!==1){$.alert('RIDE does not support dropping of multiple files.','Error')}
+    else{$.confirm('Are you sure you want to )load '+f.replace(/^.*[\\\/]/,'')+'?','Load workspace',
+              function(x){x&&D.ide.exec(['      )load '+f+'\n'],0)})}
+    e.preventDefault();return!1
+  }
+
   var path=node_require('path')
   if(env.RIDE_JS){
     env.RIDE_JS.split(path.delimiter).forEach(function(x){x&&$.getScript('file://'+path.resolve(process.cwd(),x),function(y){console.info('done',y)})})

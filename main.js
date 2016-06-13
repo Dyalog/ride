@@ -71,16 +71,6 @@ el.app.on('ready',()=>{
 })
 el.app.on('window-all-closed',()=>el.app.quit())
 
-//  let items=[].concat(
-//    ['Cut','Copy','Paste'].map(function(x){return{label:x,click:function(){document.execCommand(x)}}}),
-//    [{type:'separator'}],
-//    ['Undo','Redo'].map(function(x){return{label:x,click:function(){
-//      let u=D.ide;u&&(u=u.focusedWin)&&(u=u.cm)&&u[x.toLowerCase()]&&u[x.toLowerCase()]()
-//    }}})
-//  )
-//  let cmenu=new gui.Menu;for(let i=0;i<items.length;i++)cmenu.append(new gui.MenuItem(items[i]))
-//  $(document).contextmenu(function(e){cmenu.popup(e.clientX,e.clientY);return!1})
-
 let execPath=ps.execPath // todo: D.mac&&(execPath=execPath.replace(/(\/Contents\/).*$/,'$1MacOS/nwjs'))
 D.rideConnect=()=>{
   let e={};for(let k in env)e[k]=env[k];e.RIDE_SPAWN='0'
