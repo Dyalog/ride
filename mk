@@ -75,6 +75,7 @@ const pkg=(x,y,f)=>{
 tasks.l=tasks.linux=f=>{pkg('linux' ,'x64' ,f)}
 tasks.w=tasks.win  =f=>{pkg('win32' ,'ia32',f)}
 tasks.o=tasks.osx  =f=>{pkg('darwin','x64' ,f)}
+tasks.a=tasks.osx  =f=>{pkg('linux' ,'arm' ,f)} // waiting for https://github.com/electron-userland/electron-packager/pull/107
 tasks.d=tasks.dist=f=>{tasks.build(e=>{e?f(e):async.parallel([tasks.l,tasks.w,tasks.o],e=>{f(e)})})}
 
 tasks.c=tasks.clean=f=>{rm('_');f()}
