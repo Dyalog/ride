@@ -2,11 +2,11 @@
 //instead of a Makefile
 'use strict';process.chdir(__dirname)
 const rq=require,fs=rq('fs'),path=rq('path'),less=rq('less'),{execSync}=rq('child_process'),async=rq('async')
-,sh=x=>execSync(x,{encoding:'utf8'}).replace(/[\r\n]/g,'')      // shell
-,rf=x=>fs.readFileSync(x,'utf8')                                // read file
-,wf=(x,y)=>fs.writeFileSync(x,y)                                // write file
-,md=x=>{if(!fs.existsSync(x)){md(path.dirname(x));fs.mkdir(x)}} // mkdir -p
-,nt=(x,y)=>!fs.existsSync(y)||fs.statSync(x)>fs.statSync(y)     // newer than
+,sh=x=>execSync(x,{encoding:'utf8'}).replace(/[\r\n]/g,'')          // shell
+,rf=x=>fs.readFileSync(x,'utf8')                                    // read file
+,wf=(x,y)=>fs.writeFileSync(x,y)                                    // write file
+,md=x=>{if(!fs.existsSync(x)){md(path.dirname(x));fs.mkdirSync(x)}} // mkdir -p
+,nt=(x,y)=>!fs.existsSync(y)||fs.statSync(x)>fs.statSync(y)         // newer than
 ,rm=x=>{if(!fs.existsSync(x))return
         fs.readdirSync(x).map(y=>{y=x+'/'+y;fs.lstatSync(y).isDirectory()?rm(y):fs.unlinkSync(y)})
         fs.rmdirSync(x)}
