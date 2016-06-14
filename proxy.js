@@ -20,7 +20,7 @@ let log
   if(typeof D!=='undefined'&&D.el){ // are we running under Electron as opposed to just NodeJS?
     let i=0,a=Array(1000)          // if so, store latest log messages in RAM
     log.get=()=>a.slice(i).concat(a.slice(0,i))
-    l.push(s=>{a[i++]=s;i%=a.length})
+    l.push(x=>{a[i++]=x;i%=a.length})
   }
   log(new Date().toISOString())
 }
@@ -76,7 +76,7 @@ const handlers={
       }
       toBrowser('*connected',x);initInterpreterConn()
     })
-    clt.on('error',err=>{log('connect failed: '+err);clt=null;toBrowser('*error',{msg:err.message})})
+    clt.on('error',e=>{log('connect failed: '+e);clt=null;toBrowser('*error',{msg:e.message})})
   },
   '*launch':x=>{
     const exe=(x||{}).exe||process.env.RIDE_INTERPRETER_EXE||'dyalog'
@@ -85,7 +85,7 @@ const handlers={
       toBrowser('*connected',{host:a.address,port:a.port});initInterpreterConn()
       if(typeof D!=='undefined'&&D.el)D.lastSpawnedExe=exe
     })
-    srv.on('error',err=>{log('listen failed: '+err);srv=clt=null;toBrowser('*error',{msg:err.message})})
+    srv.on('error',e=>{log('listen failed: '+e);srv=clt=null;toBrowser('*error',{msg:e.message})})
     srv.listen(0,'127.0.0.1',()=>{
       const a=srv.address(),hp=a.address+':'+a.port
       log('listening for connections from spawned interpreter on '+hp)
@@ -99,9 +99,9 @@ const handlers={
         toBrowser('*error',{code:0,msg:''+e});return
       }
       toBrowser('*spawned',{exe:exe,pid:child.pid})
-      child.on('error',err=>{
+      child.on('error',e=>{
         srv&&srv.close();srv=clt=child=null
-        toBrowser('*error',{code:err.code,msg:err.code==='ENOENT'?"Cannot find the interpreter's executable":''+err})
+        toBrowser('*error',{code:e.code,msg:e.code==='ENOENT'?"Cannot find the interpreter's executable":''+e})
       })
       child.on('exit',(code,sig)=>{
         srv&&srv.close();srv=clt=null;toBrowser('*spawnedExited',{code:code,sig:sig});child=null
@@ -125,7 +125,7 @@ const handlers={
   '*ssh':x=>{
     const c=sshExec(x,'/bin/sh',sm=>{
       sm.on('close',(code,sig)=>{toBrowser('*sshExited',{code:code,sig:sig});c.end()})
-      c.forwardIn('',0,(err,remotePort)=>{if(err)throw err
+      c.forwardIn('',0,(e,remotePort)=>{if(e)throw e
         let s='';for(let k in x.env)s+=`${k}=${shEsc(x.env[k])} `
         sm.write(`${s}RIDE_INIT=CONNECT:127.0.0.1:${remotePort} ${shEsc(x.exe||'dyalog')} +s -q >/dev/null\n`)
       })
@@ -137,7 +137,7 @@ const handlers={
       log('interpreter connected from '+rhost);srv&&srv.close();srv=null;clt=c
       toBrowser('*connected',{host:rhost,port:x.port});initInterpreterConn()
     })
-    srv.on('error',err=>{srv=null;toBrowser('*error',{msg:''+err})})
+    srv.on('error',e=>{srv=null;toBrowser('*error',{msg:''+e})})
     srv.listen(x.port,x.host||'',()=>{log('listening on port '+x.port);x.callback&&x.callback()})
   },
   '*listenCancel':()=>{srv&&srv.close()},
@@ -154,9 +154,9 @@ const handlers={
     const r={interpreters:[],platform:process.platform} // proxy info (the result)
     if(/^win/.test(r.platform)){
       try{
-        cp.exec('reg query "HKEY_CURRENT_USER\\Software\\Dyalog" /s /v localdyalogdir',{timeout:2000},(err,s)=>{
+        cp.exec('reg query "HKEY_CURRENT_USER\\Software\\Dyalog" /s /v localdyalogdir',{timeout:2000},(e,s)=>{
           let b,v,u,m // b:bits,v:version,u:edition,m:match object
-          err||s.split('\r\n').forEach(l=>{if(l){ // l:current line
+          e||s.split('\r\n').forEach(l=>{if(l){ // l:current line
             if(m=/^HK.*\\Dyalog APL\/W(-64)? (\d+\.\d+)( Unicode)?$/i.exec(l)){
               b=m[1]?64:32;v=m[2];u=m[3]?'unicode':'classic'
             }else if(v&&(m=/^ *localdyalogdir +REG_SZ +(\S.*)$/i.exec(l))){
@@ -195,13 +195,13 @@ const handlers={
     }
   }
 }
-,sshExec=(x,cmd,callback)=>{
+,sshExec=(x,cmd,f)=>{ // f:callback
   try{ // see https://github.com/mscdex/ssh2/issues/238#issuecomment-87495628 for why we use tryKeyboard:true
     const c=new(require('ssh2').Client),o={host:x.host,port:x.port,username:x.user,tryKeyboard:true}
     x.key?(o.privateKey=fs.readFileSync(x.key)):(o.password=x.pass)
-    c.on('ready',()=>{c.exec(cmd,(err,sm)=>{err||callback(sm)})})
+    c.on('ready',()=>{c.exec(cmd,(e,sm)=>{e||f(sm)})})
      .on('tcp connection',(_,acc)=>{clt=acc();toBrowser('*connected',{host:'',port:0});initInterpreterConn()})
-     .on('keyboard-interactive',(_,_1,_2,_3,finish)=>{finish([x.pass])})
+     .on('keyboard-interactive',(_,_1,_2,_3,fin)=>{fin([x.pass])})
      .connect(o)
   }catch(e){toBrowser('*error',{msg:e.message})}
   return c

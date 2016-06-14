@@ -26,8 +26,8 @@ env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a stan
   let st=0,dbWrite=()=>{ // st: state 0=initial, 1=write pending, 2=write in progress
     if(st===2){st=1;return}else{st=2}
     const s='{\n'+k.map((x,i)=>'  '+repr(x)+':'+repr(v[i])).sort().join(',\n')+'\n}\n'
-    fs.writeFile(f+'1',s,err=>{
-      if(err){console.error(err);dbWrite=()=>{};return} // make dbWrite() a nop
+    fs.writeFile(f+'1',s,e=>{
+      if(e){console.error(e);dbWrite=()=>{};return} // make dbWrite() a nop
       fs.unlink(f,()=>{
         fs.rename(f+'1',f,()=>{
           if(st===1){setTimeout(()=>{dbWrite()},1000)}else{st=0}
