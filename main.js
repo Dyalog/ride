@@ -1,17 +1,17 @@
 global.D={}
 const fs=require('fs'),os=require('os'),path=require('path'),{spawn}=require('child_process'),
-      proxy=require('./proxy'),ps=process,{env}=ps,repr=JSON.stringify,el=D.el=require('electron')
+      ps=process,{env}=ps,repr=JSON.stringify,el=D.el=require('electron')
 // Detect platform: https://nodejs.org/api/process.html#process_process_platform
 // https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
 D.win=/^win/i.test(ps.platform);D.mac=ps.platform=='darwin'
 env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a standalone RIDE
   (D.win?0:+fs.existsSync(path.dirname(ps.execPath)+(D.mac?'/../../../../Resources/Dyalog/mapl':'/../mapl')))
 
-//storage
+//file-backed storage with an API similar to that of localStorage
 {
   if(D.floating){D.db=opener.D.db;return}
   const k=[],v=[] // keys and values
-  D.db={ // file-backed storage with an API similar to that of localStorage
+  D.db={
     key:i=>k[i],
     getItem(x)   {const i=k.indexOf(x);return i<0?null:v[i]},
     setItem(x,y) {const i=k.indexOf(x);if(i<0){k.push(x);v.push(y)}else{v[i]=y};dbWrite()},
@@ -28,11 +28,7 @@ env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a stan
     const s='{\n'+k.map((x,i)=>'  '+repr(x)+':'+repr(v[i])).sort().join(',\n')+'\n}\n'
     fs.writeFile(f+'1',s,e=>{
       if(e){console.error(e);dbWrite=()=>{};return} // make dbWrite() a nop
-      fs.unlink(f,()=>{
-        fs.rename(f+'1',f,()=>{
-          if(st===1){setTimeout(()=>{dbWrite()},1000)}else{st=0}
-        })
-      })
+      fs.unlink(f,()=>{fs.rename(f+'1',f,()=>{if(st===1){setTimeout(()=>{dbWrite()},1000)}else{st=0}})})
     })
   }
 }

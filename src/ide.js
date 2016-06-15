@@ -177,9 +177,11 @@ D.IDE=function(){
   $('.lb').toggle(!!D.prf.lbar());updTopBtm();$(window).resize(updTopBtm)
   layout.close('west');layout.close('east');layout.close('south');ide.wins[0].updSize()
   D.prf.lbar(function(x){$('.lb').toggle(!!x);updTopBtm()})
-  try{D.installMenu(D.parseMenuDSL(D.prf.menu()))}
-  catch(e){$.alert('Invalid menu configuration -- the default menu will be used instead','Warning')
-           console.error(e);D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()))}
+  setTimeout(function(){
+    try{D.installMenu(D.parseMenuDSL(D.prf.menu()))}
+    catch(e){$.alert('Invalid menu configuration -- the default menu will be used instead','Warning')
+             console.error(e);D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()))}
+  },100)
   var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
   D.prf.autoCloseBrackets(function(x){eachWin(function(w){w.cm.setOption('autoCloseBrackets',!!x&&D.Ed.ACB_VALUE)})})
   D.prf.indent(function(x){eachWin(function(w){if(w.id){w.cm.setOption('smartIndent',x>=0);w.cm.setOption('indentUnit',x)}})})

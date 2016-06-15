@@ -1,6 +1,6 @@
 ;(function(){'use strict'
 
-if(typeof node_require!=='undefined')D=$.extend(node_require('electron').remote.getGlobal('D'),D)
+if(typeof node_require!=='undefined')D=$.extend(D,node_require('electron').remote.getGlobal('D'))
 
 var env=D.el?process.env:{}
 
