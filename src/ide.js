@@ -173,20 +173,14 @@ D.IDE=function(){
       d=h.south.innerHeight;!h.south.isClosed&&d>1&&D.prf.tracerHeight(d)
     }}
   })
-  function updTopBtm(){
-    ide.$ide.css({top:(D.prf.lbar()?$('.lb').height():0)+(D.mac?5:22)})
-    layout&&layout.resizeAll()
-  }
+  var updTopBtm=function(){ide.$ide.css({top:(D.prf.lbar()?$('.lb').height():0)+(D.el?1:22)});layout&&layout.resizeAll()}
   $('.lb').toggle(!!D.prf.lbar());updTopBtm();$(window).resize(updTopBtm)
   layout.close('west');layout.close('east');layout.close('south');ide.wins[0].updSize()
   D.prf.lbar(function(x){$('.lb').toggle(!!x);updTopBtm()})
-  try{
-    D.installMenu(D.parseMenuDSL(D.prf.menu()))
-  }catch(e){
-    $.alert('Invalid menu configuration -- the default menu will be used instead','Warning')
-    console.error(e);D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()))
-  }
-  function eachWin(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
+  try{D.installMenu(D.parseMenuDSL(D.prf.menu()))}
+  catch(e){$.alert('Invalid menu configuration -- the default menu will be used instead','Warning')
+           console.error(e);D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()))}
+  var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
   D.prf.autoCloseBrackets(function(x){eachWin(function(w){w.cm.setOption('autoCloseBrackets',!!x&&D.Ed.ACB_VALUE)})})
   D.prf.indent(function(x){eachWin(function(w){if(w.id){w.cm.setOption('smartIndent',x>=0);w.cm.setOption('indentUnit',x)}})})
   D.prf.fold(function(x){eachWin(function(w){if(w.id){w.cm.setOption('foldGutter',!!x);w.updGutters()}})})
