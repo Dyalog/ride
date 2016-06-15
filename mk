@@ -24,7 +24,7 @@ tasks.b=tasks.build=f=>{
       const i=`style/${x}.less`,o=`_/${x}.css`
       if(!nt(i,o)){f();return}
       console.info('preprocessing '+i)
-      less.render(rf(i),(e,{css})=>{if(e)throw e;wf(o,css);f()})
+      less.render(rf(i),(e,r)=>{if(e)throw e;wf(o,r.css);f()})
     },
     e=>{f&&f(e)}
   )
