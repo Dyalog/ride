@@ -90,7 +90,7 @@ if(!D.prf.theme()){
               D.win||/^win/.test(navigator?navigator.platform:'')?'redmond':'classic')
 }
 var updThm=function(){$('#thm').html('@import url(_/thm/'+D.prf.theme()+'.css);')}
-D.prf.theme(function(){updThm();D.ide&&D.ide.layout.resizeAll()});updThm()
+D.prf.theme(function(){updThm()/*;D.ide&&D.ide.layout.resizeAll() todo*/});updThm()
 
 D.el&&$('body').addClass(D.mac?'platform-mac':D.win?'platform-windows':'')
 

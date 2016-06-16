@@ -9,10 +9,10 @@ D.IDE=function(){
     '<div class=lb-tip style=display:none><div class=lb-tip-desc></div><pre class=lb-tip-text></pre></div>'+
     '<div class=lb-tip-triangle style=display:none></div>'+
     '<div class=ide>'+
-      '<div id=wse class="ui-layout-west wse">Workspace Explorer</div>'+
-      '<div class=ui-layout-center></div>'+
-      '<div class=ui-layout-east ><ul></ul></div>'+
-      '<div class=ui-layout-south><ul></ul></div>'+
+//      '<div id=wse class="ui-layout-west wse">Workspace Explorer</div>'+
+//      '<div class=ui-layout-center></div>'+
+//      '<div class=ui-layout-east ><ul></ul></div>'+
+//      '<div class=ui-layout-south><ul></ul></div>'+
     '</div>'
   ide.$ide=$('.ide')
   ide.pending=[] // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
@@ -20,25 +20,25 @@ D.IDE=function(){
     if(l&&l.length){tc||(ide.pending=l.slice(1));ide.emit('Execute',{trace:tc,text:l[0]+'\n'})}
   }
   ide.host=ide.port=ide.wsid='';D.prf.title(ide.updTitle.bind(ide))
-  D.wins=ide.wins={0:new D.Se(ide,$('.ui-layout-center'),{id:0,emit:ide.emit.bind(ide),exec:ide.exec.bind(ide)})}
+  D.wins=ide.wins={0:new D.Se(ide,{id:0,emit:ide.emit.bind(ide),exec:ide.exec.bind(ide)})}
   ide.focusedWin=ide.wins[0] // last focused window, it might not have the focus right now
 
   // tab management
-  ide.tabOpts={heightStyle:'fill',activate:(function(_,ui){
-    var w=ide.wins[parseId(ui.newTab.prop('id'))];w.updSize();w.focus();w.updGutters()
-  })}
-  ide.$tabs=$('.ui-layout-east,.ui-layout-south').tabs(ide.tabOpts)
-  ide.refreshTabs=function(){
-    $('.ui-layout-east  li',ide.$ide).length||ide.layout.close('east')
-    $('.ui-layout-south li',ide.$ide).length||ide.layout.close('south')
-    ide.$tabs.tabs('refresh')
-  }
-  ide.$tabs.find('ul')
-    .on('click','.tab-close',function(){var w=ide.wins[parseId($(this).closest('a').prop('href'))];w&&w.EP(w.cm)})
-    .sortable({cursor:'move',containment:'parent',tolerance:'pointer',axis:'x',revert:true,
-               // $().sortable changes z-indices after dragging, so we fix those in stop()
-               stop:function(_,ui){ide.refreshTabs();$('[role=tab]',ide.$tabs).attr('style','')}})
-    .each(function(){$(this).data('ui-sortable').floating=true}) // workaround bugs.jqueryui.com/ticket/6702#comment:20
+//  ide.tabOpts={heightStyle:'fill',activate:(function(_,ui){
+//    var w=ide.wins[parseId(ui.newTab.prop('id'))];w.updSize();w.focus();w.updGutters()
+//  })}
+//  ide.$tabs=$('.ui-layout-east,.ui-layout-south').tabs(ide.tabOpts)
+//  ide.refreshTabs=function(){
+//    $('.ui-layout-east  li',ide.$ide).length||ide.layout.close('east')
+//    $('.ui-layout-south li',ide.$ide).length||ide.layout.close('south')
+//    ide.$tabs.tabs('refresh')
+//  }
+//  ide.$tabs.find('ul')
+//    .on('click','.tab-close',function(){var w=ide.wins[parseId($(this).closest('a').prop('href'))];w&&w.EP(w.cm)})
+//    .sortable({cursor:'move',containment:'parent',tolerance:'pointer',axis:'x',revert:true,
+//               // $().sortable changes z-indices after dragging, so we fix those in stop()
+//               stop:function(_,ui){ide.refreshTabs();$('[role=tab]',ide.$tabs).attr('style','')}})
+//    .each(function(){$(this).data('ui-sortable').floating=true}) // workaround bugs.jqueryui.com/ticket/6702#comment:20
   var handlers=this.handlers={ // for RIDE protocol messages
     '*connected':function(x){ide.setHostAndPort(x.host,x.port)},
     '*error':function(x){ide.die();setTimeout(function(){$.alert(x.msg,'Error')},100)},
@@ -73,11 +73,39 @@ D.IDE=function(){
     UpdateWindow:function(x){$('#wintab'+x.token+' .tab-name').text(x.name);ide.wins[x.token].open(x)},
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
     CloseWindow:function(x){
-      $('#wintab'+x.win+',#win'+x.win).remove();ide.$tabs.tabs('destroy').tabs(ide.tabOpts);ide.refreshTabs()
+//      $('#wintab'+x.win+',#win'+x.win).remove();ide.$tabs.tabs('destroy').tabs(ide.tabOpts);ide.refreshTabs()
       var w=ide.wins[x.win];if(w){w.closePopup&&w.closePopup();w.vt.clear()}
       delete ide.wins[x.win];ide.wins[0].focus()
     },
-    OpenWindow:ide.openWindow.bind(ide),
+    OpenWindow:function(ee){
+      if(!ee['debugger']&&D.openInExternalEditor){
+        D.openInExternalEditor(ee,function(s){
+          ide.emit('SaveChanges',{win:ee.token,text:s.split('\n'),stop:ee.stop,trace:ee.trace,monitor:ee.monitor})
+          ide.emit('CloseWindow',{win:ee.token})
+        })
+        return
+      }
+      var w=ee.token, done, editorOpts={id:w,name:ee.name,tracer:ee['debugger'],emit:this.emit.bind(this)}
+      if(D.prf.floating()&&!D.floating&&!this.dead){
+        var p=ee['debugger']?D.prf.posTracer():D.prf.posEditor()
+        if(!p[4]){var d=ee.token-1;p[0]+=d*(process.env.RIDE_XOFFSET||32);p[1]+=d*(process.env.RIDE_YOFFSET||32)}
+        var ph={x:p[0],y:p[1],width:p[2],height:p[3]}
+        var url='ed.html?win='+w+'&x='+p[0]+'&y='+p[1]+'&width='+p[2]+
+                '&height='+p[3]+'&maximized='+(p[4]||0)+'&token='+w+'&tracer='+(+!!ee['debugger'])
+        if(D.open(url,$.extend({title:ee.name},ph))){
+          this.block() // the popup will create D.wins[w] and unblock the message queue
+          ;(D.pendingEditors=D.pendingEditors||{})[w]={editorOpts:editorOpts,ee:ee,ide:this};done=1
+        }else{
+          $.alert('Popups are blocked.')
+        }
+      }
+      if(!done){
+        var dir=ee['debugger']?'south':'east', size=ee['debugger']?D.prf.tracerHeight():D.prf.editorWidth()
+        ;(this.wins[w]=new D.Ed(this,editorOpts)).open(ee)
+        ide.gl.root.contentItems[0]
+          .addChild({type:'component',componentName:'w',componentState:{id:ee.token},title:ee.name})
+      }
+    },
     ShowHTML:ide.showHTML.bind(ide),
     OptionsDialog:function(x){
       var i=-1;function f(e){i=$(e.target).closest('.ui-button').index();$(this).dialog('close')} // i:clicked index
@@ -160,36 +188,31 @@ D.IDE=function(){
       }
       requestTooltip(e,'Keyboard Shortcuts',s+'...')
     })
-  var layout=ide.layout=ide.$ide.layout({
-    fxName:'',defaults:{enableCursorHotkey:0},
-    west: {spacing_closed:0,resizable:1,togglerLength_open:0,size:'0%'},
-    east: {spacing_closed:0,resizable:1,togglerLength_open:0,size:'0%'},
-    south:{spacing_closed:0,resizable:1,togglerLength_open:0,size:'0%'},
-    center:{onresize:function(){
-      for(var k in ide.wins)ide.wins[k].updSize()
-      var h=ide.layout.state,d
-      d=h.west .innerWidth ;!h.west .isClosed&&d>1&&D.prf.wseWidth    (d)
-      d=h.east .innerWidth ;!h.east .isClosed&&d>1&&D.prf.editorWidth (d)
-      d=h.south.innerHeight;!h.south.isClosed&&d>1&&D.prf.tracerHeight(d)
-    }}
+
+  var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
+  ide.gl=new GoldenLayout({
+    content:[{type:'row',content:[
+      {type:'component',componentName:'w',componentState:{id:0},isClosable:false,title:'Session'}
+    ]}]
   })
-  var updTopBtm=function(){ide.$ide.css({top:(D.prf.lbar()?$('.lb').height():0)+(D.el?1:22)});layout&&layout.resizeAll()}
+  ide.gl.registerComponent('w',function(container,state){container.getElement().append(ide.wins[state.id].$e)})
+  ide.gl.on('stateChanged',function(){eachWin(function(w){w.updSize()})})
+  ide.gl.init()
+  var updTopBtm=function(){ide.$ide.css({top:(D.prf.lbar()?$('.lb').height():0)+(D.el?1:22)})/*;layout&&layout.resizeAll()*/}
   $('.lb').toggle(!!D.prf.lbar());updTopBtm();$(window).resize(updTopBtm)
-  layout.close('west');layout.close('east');layout.close('south');ide.wins[0].updSize()
   D.prf.lbar(function(x){$('.lb').toggle(!!x);updTopBtm()})
   setTimeout(function(){
     try{D.installMenu(D.parseMenuDSL(D.prf.menu()))}
     catch(e){$.alert('Invalid menu configuration -- the default menu will be used instead','Warning')
              console.error(e);D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()))}
   },100)
-  var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
   D.prf.autoCloseBrackets(function(x){eachWin(function(w){w.cm.setOption('autoCloseBrackets',!!x&&D.Ed.ACB_VALUE)})})
   D.prf.indent(function(x){eachWin(function(w){if(w.id){w.cm.setOption('smartIndent',x>=0);w.cm.setOption('indentUnit',x)}})})
   D.prf.fold(function(x){eachWin(function(w){if(w.id){w.cm.setOption('foldGutter',!!x);w.updGutters()}})})
   D.prf.matchBrackets(function(x){eachWin(function(w){w.cm.setOption('matchBrackets',!!x)})})
   var updWSE=function(){
-    if(!D.prf.wse()){ide.layout.close('west');return}
-    ide.layout.sizePane('west',D.prf.wseWidth());ide.layout.open('west')
+//    if(!D.prf.wse()){ide.layout.close('west');return}
+//    ide.layout.sizePane('west',D.prf.wseWidth());ide.layout.open('west')
     ide.wse||(ide.wse=new D.WSE($('.wse'),ide));ide.wse.refresh()
   }
   D.prf.wse(updWSE);D.prf.wse()&&setTimeout(updWSE,500)
@@ -230,43 +253,6 @@ D.IDE.prototype={
     }
     if(ide.w3500&&!ide.w3500.closed){ide.w3500.focus();init()}
     else{ide.w3500=open('empty.html','3500 I-beam','width=800,height=500');ide.w3500.onload=init}
-  },
-  openWindow:function(ee){
-    var ide=this
-    if(!ee['debugger']&&D.openInExternalEditor){
-      D.openInExternalEditor(ee,function(s){
-        ide.emit('SaveChanges',{win:ee.token,text:s.split('\n'),stop:ee.stop,trace:ee.trace,monitor:ee.monitor})
-        ide.emit('CloseWindow',{win:ee.token})
-      })
-      return
-    }
-    var w=ee.token, done, editorOpts={id:w,name:ee.name,tracer:ee['debugger'],emit:this.emit.bind(this)}
-    if(D.prf.floating()&&!D.floating&&!this.dead){
-      var p=ee['debugger']?D.prf.posTracer():D.prf.posEditor()
-      if(!p[4]){var d=ee.token-1;p[0]+=d*(process.env.RIDE_XOFFSET||32);p[1]+=d*(process.env.RIDE_YOFFSET||32)}
-      var ph={x:p[0],y:p[1],width:p[2],height:p[3]}
-      var url='ed.html?win='+w+'&x='+p[0]+'&y='+p[1]+'&width='+p[2]+
-              '&height='+p[3]+'&maximized='+(p[4]||0)+'&token='+w+'&tracer='+(+!!ee['debugger'])
-      if(D.open(url,$.extend({title:ee.name},ph))){
-        this.block() // the popup will create D.wins[w] and unblock the message queue
-        ;(D.pendingEditors=D.pendingEditors||{})[w]={editorOpts:editorOpts,ee:ee,ide:this};done=1
-      }else{
-        $.alert('Popups are blocked.')
-      }
-    }
-    if(!done){
-      var dir=ee['debugger']?'south':'east', size=ee['debugger']?D.prf.tracerHeight():D.prf.editorWidth()
-      this.layout.sizePane(dir,size||'50%');this.layout.open(dir)
-      var $li=$('<li id=wintab'+w+'><a href=#win'+w+'><span class=tab-name></span>'+
-                                   '<span class=tab-close title="Save and close">×</span></a>')
-        .appendTo('.ui-layout-'+dir+' ul')
-        .click(function(e){var win=D.ide.wins[w];e.which===2&&win&&win.EP&&win.EP(win.cm)}) // middle click
-      $li.find('.tab-name').text(ee.name)
-      var $tabContent=$('<div class=win id=win'+w+'>').appendTo('.ui-layout-'+dir)
-      ;(this.wins[w]=new D.Ed(this,$tabContent,editorOpts)).open(ee)
-      $('.ui-layout-'+dir).tabs('refresh').tabs({active:-1})
-        .data('ui-tabs').panels.off('keydown') // prevent jQueryUI tabs from hijacking <C-Up>
-    }
   },
   focusMRUWin:function(){ // most recently used
     var t=0,w;for(var k in this.wins){var x=this.wins[k];if(x.id&&t<=x.focusTimestamp){w=x;t=x.focusTimestamp}}

@@ -6,33 +6,35 @@ var CM=CodeMirror,
 
 var b=function(c,t){return'<a href=# class="'+c+' tb-btn" title="'+t+'"></a>'} // cc:css classes, t:title
 var ED_HTML=
-  '<div class=toolbar>'+ // CSS classes "first" and "last" indicate button grouping.
-    b('tb-ER  tc-only first','Execute line'                            )+
-    b('tb-TC  tc-only'      ,'Trace into expression'                   )+
-    b('tb-BK  tc-only'      ,'Go back one line'                        )+
-    b('tb-FD  tc-only'      ,'Skip current line'                       )+
-    b('tb-BH  tc-only'      ,'Stop on next line of calling function'   )+
-    b('tb-RM  tc-only'      ,'Continue execution of this thread'       )+
-    b('tb-MA  tc-only'      ,'Continue execution of all threads'       )+
-    b('tb-ED  tc-only'      ,'Edit name'                               )+
-    b('tb-WI  tc-only'      ,'Interrupt'                               )+
-    b('tb-CBP tc-only'      ,'Clear trace/stop/monitor for this object')+
-    b('tb-LN  tc-only last' ,'Toggle line numbers'                     )+
-    b('tb-LN  ed-only first','Toggle line numbers'                     )+
-    b('tb-AO  ed-only'      ,'Comment selected text'                   )+
-    b('tb-DO  ed-only last' ,'Uncomment selected text'                 )+
-    '<span class=tb-sep></span>'+
-    '<div class=tb-sc></div>'+
-    '<div class="tb-rp ed-only"></div>'+
-    b('tb-NX first'         ,'Search for next match'                   )+
-    b('tb-PV'               ,'Search for previous match'               )+
-    b('tb-case last'        ,'Match case'                              )+
-  '</div>'+
-  '<div class=ride-win></div>'
+  '<div class=ride-win>'+
+    '<div class=toolbar>'+ // CSS classes "first" and "last" indicate button grouping.
+      b('tb-ER  tc-only first','Execute line'                            )+
+      b('tb-TC  tc-only'      ,'Trace into expression'                   )+
+      b('tb-BK  tc-only'      ,'Go back one line'                        )+
+      b('tb-FD  tc-only'      ,'Skip current line'                       )+
+      b('tb-BH  tc-only'      ,'Stop on next line of calling function'   )+
+      b('tb-RM  tc-only'      ,'Continue execution of this thread'       )+
+      b('tb-MA  tc-only'      ,'Continue execution of all threads'       )+
+      b('tb-ED  tc-only'      ,'Edit name'                               )+
+      b('tb-WI  tc-only'      ,'Interrupt'                               )+
+      b('tb-CBP tc-only'      ,'Clear trace/stop/monitor for this object')+
+      b('tb-LN  tc-only last' ,'Toggle line numbers'                     )+
+      b('tb-LN  ed-only first','Toggle line numbers'                     )+
+      b('tb-AO  ed-only'      ,'Comment selected text'                   )+
+      b('tb-DO  ed-only last' ,'Uncomment selected text'                 )+
+      '<span class=tb-sep></span>'+
+      '<div class=tb-sc></div>'+
+      '<div class="tb-rp ed-only"></div>'+
+      b('tb-NX first'         ,'Search for next match'                   )+
+      b('tb-PV'               ,'Search for previous match'               )+
+      b('tb-case last'        ,'Match case'                              )+
+    '</div>'+
+    '<div class=ride-win-cm></div>'+
+  '</div>'
 b=null
 
-D.Ed=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
-  var ed=this;ed.ide=ide;ed.$e=$(e).html(ED_HTML);ed.opts=opts;ed.id=opts.id;ed.name=opts.name;ed.emit=opts.emit
+D.Ed=function(ide,opts){ // Editor constructor
+  var ed=this;ed.ide=ide;ed.$e=$(ED_HTML);ed.opts=opts;ed.id=opts.id;ed.name=opts.name;ed.emit=opts.emit
   ed.tc=opts.tracer
   ed.xline=null // the line number of the empty line inserted at eof when cursor is there and you press <down>
   ed.oText='';ed.oStop=[] // remember original text and "stops" to avoid pointless saving on EP
@@ -40,7 +42,7 @@ D.Ed=function(ide,e,opts){ // ide:instance of owner IDE, e:DOM element
   ed.lastQuery=ed.lastIC=ed.lastGen=ed.overlay=ed.annotation=null // search-related state
   ed.focusTimestamp=0
   ed.jumps=[]
-  ed.cm=CM(ed.$e.find('.ride-win')[0],$.extend({},D.util.cmOpts,{
+  ed.cm=CM(ed.$e.find('.ride-win-cm')[0],$.extend({},D.util.cmOpts,{
     lineNumbers:!!(ed.tc?D.prf.lineNumsTracer():D.prf.lineNumsEditor()),
     firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
     smartIndent:D.prf.indent()>=0,indentUnit:D.prf.indent(),scrollButtonHeight:12,matchBrackets:!!D.prf.matchBrackets(),

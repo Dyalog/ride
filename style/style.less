@@ -65,19 +65,11 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #cn .hsplitbar{width:6px;border-right:solid #888 1px}
 
 // IDE page
-// ┌──────────────────────────────────────┐
-// │menu:File Edit etc                    │
-// ├──────────────────────────────────────┤
-// │language bar:← +-×÷*⍟⌹○!? |⌈⌊⊥⊤⊣⊢ etc │
-// ├────────────────────────┬─────────────┤
-// │                        │(Tab)(Tab)...│
-// │        session         │             │
-// ├────────────────────────┤    editor   │
-// │        tracer          │             │
-// └────────────────────────┴─────────────┘
 .ide{position:absolute;top:0;bottom:0;left:0;right:0} // "top" will be computed in JS
 body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0;overflow:hidden}
 .platform-mac .ide{top:0} // no menu inside window
+.ride-win{width:100%;height:100%;display:flex;flex-direction:column}
+.ride-win .ride-win-cm{flex-grow:1}
 
 .menu{ // see ../src/menu.js for the DOM structure
   .bg;height:18px;line-height:17px;cursor:default;padding:0;margin:2px 0 0 0;
