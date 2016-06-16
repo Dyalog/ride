@@ -5,15 +5,10 @@ function parseId(s){return+s.replace(/^.*?(\d+)$/,'$1')}
 D.IDE=function(){
   var ide=D.ide=this
   document.body.innerHTML=
+    '<div class=ide></div>'+
     '<div class=lb style=display:none><a class=lb-prf href=#></a>'+D.lb.html+'</div>'+
     '<div class=lb-tip style=display:none><div class=lb-tip-desc></div><pre class=lb-tip-text></pre></div>'+
-    '<div class=lb-tip-triangle style=display:none></div>'+
-    '<div class=ide>'+
-//      '<div id=wse class="ui-layout-west wse">Workspace Explorer</div>'+
-//      '<div class=ui-layout-center></div>'+
-//      '<div class=ui-layout-east ><ul></ul></div>'+
-//      '<div class=ui-layout-south><ul></ul></div>'+
-    '</div>'
+    '<div class=lb-tip-triangle style=display:none></div>'
   ide.$ide=$('.ide')
   ide.pending=[] // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.exec=function(l,tc){ // l:lines, tc:trace
@@ -23,22 +18,6 @@ D.IDE=function(){
   D.wins=ide.wins={0:new D.Se(ide,{id:0,emit:ide.emit.bind(ide),exec:ide.exec.bind(ide)})}
   ide.focusedWin=ide.wins[0] // last focused window, it might not have the focus right now
 
-  // tab management
-//  ide.tabOpts={heightStyle:'fill',activate:(function(_,ui){
-//    var w=ide.wins[parseId(ui.newTab.prop('id'))];w.updSize();w.focus();w.updGutters()
-//  })}
-//  ide.$tabs=$('.ui-layout-east,.ui-layout-south').tabs(ide.tabOpts)
-//  ide.refreshTabs=function(){
-//    $('.ui-layout-east  li',ide.$ide).length||ide.layout.close('east')
-//    $('.ui-layout-south li',ide.$ide).length||ide.layout.close('south')
-//    ide.$tabs.tabs('refresh')
-//  }
-//  ide.$tabs.find('ul')
-//    .on('click','.tab-close',function(){var w=ide.wins[parseId($(this).closest('a').prop('href'))];w&&w.EP(w.cm)})
-//    .sortable({cursor:'move',containment:'parent',tolerance:'pointer',axis:'x',revert:true,
-//               // $().sortable changes z-indices after dragging, so we fix those in stop()
-//               stop:function(_,ui){ide.refreshTabs();$('[role=tab]',ide.$tabs).attr('style','')}})
-//    .each(function(){$(this).data('ui-sortable').floating=true}) // workaround bugs.jqueryui.com/ticket/6702#comment:20
   var handlers=this.handlers={ // for RIDE protocol messages
     '*connected':function(x){ide.setHostAndPort(x.host,x.port)},
     '*error':function(x){ide.die();setTimeout(function(){$.alert(x.msg,'Error')},100)},
@@ -73,8 +52,7 @@ D.IDE=function(){
     UpdateWindow:function(x){$('#wintab'+x.token+' .tab-name').text(x.name);ide.wins[x.token].open(x)},
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
     CloseWindow:function(x){
-//      $('#wintab'+x.win+',#win'+x.win).remove();ide.$tabs.tabs('destroy').tabs(ide.tabOpts);ide.refreshTabs()
-      var w=ide.wins[x.win];if(w){w.closePopup&&w.closePopup();w.vt.clear()}
+      var w=ide.wins[x.win];if(w){w.closePopup&&w.closePopup();w.vt.clear();w.container&&w.container.close()}
       delete ide.wins[x.win];ide.wins[0].focus()
     },
     OpenWindow:function(ee){
@@ -190,15 +168,14 @@ D.IDE=function(){
     })
 
   var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
-  ide.gl=new GoldenLayout({
-    content:[{type:'row',content:[
-      {type:'component',componentName:'w',componentState:{id:0},isClosable:false,title:'Session'}
-    ]}]
-  })
-  ide.gl.registerComponent('w',function(container,state){container.getElement().append(ide.wins[state.id].$e)})
-  ide.gl.on('stateChanged',function(){eachWin(function(w){w.updSize()})})
+  ide.gl=new GoldenLayout({content:[{type:'row',content:[
+    {type:'component',componentName:'w',componentState:{id:0},isClosable:false,title:'Session'}]}]})
+  ide.gl.registerComponent('w',function(c,h){var w=ide.wins[h.id];w.container=c;c.getElement().append(w.$e);return w})
+  ide.gl.registerComponent('wse',function(c,h){
+    var u=ide.wse||(ide.wse=new D.WSE(ide));u.container=c;c.getElement().append(u.$e);return u})
+  ide.gl.on('stateChanged',function(){eachWin(function(w){w.updSize();w.cm.refresh();w.updGutters&&w.updGutters()})})
   ide.gl.init()
-  var updTopBtm=function(){ide.$ide.css({top:(D.prf.lbar()?$('.lb').height():0)+(D.el?1:22)})/*;layout&&layout.resizeAll()*/}
+  var updTopBtm=function(){ide.$ide.css({top:(D.prf.lbar()?$('.lb').height():0)+(D.el?1:22)})}
   $('.lb').toggle(!!D.prf.lbar());updTopBtm();$(window).resize(updTopBtm)
   D.prf.lbar(function(x){$('.lb').toggle(!!x);updTopBtm()})
   setTimeout(function(){
@@ -211,9 +188,9 @@ D.IDE=function(){
   D.prf.fold(function(x){eachWin(function(w){if(w.id){w.cm.setOption('foldGutter',!!x);w.updGutters()}})})
   D.prf.matchBrackets(function(x){eachWin(function(w){w.cm.setOption('matchBrackets',!!x)})})
   var updWSE=function(){
-//    if(!D.prf.wse()){ide.layout.close('west');return}
-//    ide.layout.sizePane('west',D.prf.wseWidth());ide.layout.open('west')
-    ide.wse||(ide.wse=new D.WSE($('.wse'),ide));ide.wse.refresh()
+    D.prf.wse()
+      ?ide.gl.root.contentItems[0].addChild({type:'component',componentName:'wse',title:'Workspace Explorer'})
+      :ide.gl.root.getComponentsByName('wse').forEach(function(x){x.container.close()})
   }
   D.prf.wse(updWSE);D.prf.wse()&&setTimeout(updWSE,500)
   D.mac&&setTimeout(function(){ide.wins[0].focus()},500) // OSX is stealing our focus.  Let's steal it back!  Bug #5

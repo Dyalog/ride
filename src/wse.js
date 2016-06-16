@@ -1,8 +1,8 @@
 // workspace explorer
 'use strict'
-D.WSE=function($e,ide){
+D.WSE=function(ide){
   var pending=this.pending={}
-  this.$e=$e
+  var $e=this.$e=$('<div class=wse>')
     .jstree({plugins:[],core:{animation:true,check_callback:true,data:function(x,f){
       var i=x.id==='#'?0:+x.id.replace(/\D+/g,'');pending[i]=f.bind(this);ide.emit('TreeList',{nodeId:i})
     }}})
