@@ -213,8 +213,8 @@ this.Editor.prototype={
     for(var k=0;k<ed.oStop.length;k++)cm.setGutterMarker(ed.oStop[k],'breakpoints',ed.createBPEl())
     D.floating&&$('title',ed.$e[0].ownerDocument).text(ee.name)
   },
-  hasFocus:function(){return window.focused&&this.cm.hasFocus()},
-  focus:function(){if(!window.focused){window.focus()};this.cm.focus()},
+  hasFocus:function(){return window&&window.focused&&this.cm.hasFocus()},
+  focus:function(){if(window){window.focused||window.focus();this.cm.focus()}},
   insert:function(ch){this.cm.getOption('readOnly')||this.cm.replaceSelection(ch)},
   saved:function(err){
     if(err){this.isClosing=0;$.alert('Cannot save changes')}else{this.isClosing&&this.emit('CloseWindow',{win:this.id})}

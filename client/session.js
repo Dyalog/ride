@@ -77,8 +77,8 @@ this.Session.prototype={
   scrollCursorIntoView:function(){
     var cm=this.cm;cm.scrollTo(0,cm.getScrollInfo().top);setTimeout(function(){cm.scrollIntoView()},1)
   },
-  hasFocus:function(){return window.focused&&this.cm.hasFocus()},
-  focus:function(){window.focused||window.focus();this.cm.focus()},
+  hasFocus:function(){return window&&window.focused&&this.cm.hasFocus()},
+  focus:function(){if(window){window.focused||window.focus();this.cm.focus()}},
   insert:function(ch){this.cm.getOption('readOnly')||this.cm.replaceSelection(ch)},
   die:function(){this.cm.setOption('readOnly',true)},
   getDocument:function(){return this.$e[0].ownerDocument},
