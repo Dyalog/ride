@@ -164,14 +164,16 @@ D.IDE=function(){'use strict'
     })
 
   var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
-  ide.gl=new GoldenLayout({content:[{type:'row',content:[
-    {type:'component',componentName:'w',componentState:{id:0},isClosable:false,title:'Session'}]}]})
+  ide.gl=new GoldenLayout({content:[{type:'row',content:[{type:'component',componentName:'w',componentState:{id:0},
+                                                         isClosable:false,title:'Session'}]}]},
+                          ide.$ide)
   ide.gl.registerComponent('w',function(c,h){var w=ide.wins[h.id];w.container=c;c.getElement().append(w.$e);return w})
   ide.gl.registerComponent('wse',function(c,h){
     var u=ide.wse||(ide.wse=new D.WSE(ide));u.container=c;c.getElement().append(u.$e);return u})
   ide.gl.on('stateChanged',function(){eachWin(function(w){w.updSize();w.cm.refresh();w.updGutters&&w.updGutters()})})
   ide.gl.init()
-  var updTopBtm=function(){ide.$ide.css({top:(D.prf.lbar()?$('.lb').height():0)+(D.el?1:22)})}
+  var updTopBtm=function(){ide.$ide.css({top:(D.prf.lbar()?$('.lb').height():0)+(D.el?1:22)})
+                           ide.gl.updateSize(ide.$ide.width(),ide.$ide.height())}
   $('.lb').toggle(!!D.prf.lbar());updTopBtm();$(window).resize(updTopBtm)
   D.prf.lbar(function(x){$('.lb').toggle(!!x);updTopBtm()})
   setTimeout(function(){
