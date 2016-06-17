@@ -9,14 +9,7 @@ D.prf_tabs.push({
         '<input id=shc-search placeholder=Search>'+
         '<a id=shc-search-clear href=# style=display:none title="Clear search">×</a>'+
       '</div>'+
-      '<div id=shc-tbl-wr>'+
-        '<table>'+
-          D.cmds.map(function(x){var c=x[0],s=x[1];return(
-            '<tr data-code='+c+'>'+
-              '<td>'+s+'<td class=shc-code>'+c+'<td id=shc-'+c+'><td><a href=# class=shc-rst title=Reset>↶</a>'
-          )}).join('')+
-        '</table>'+
-      '</div>'+
+      '<div id=shc-tbl-wr></div>'+
       '<div id=shc-no-results style=display:none>No results</div>'
     )
       .on('mouseover','.shc-del',function(){$(this).parent().addClass   ('shc-del-hover')})
@@ -44,11 +37,16 @@ D.prf_tabs.push({
     $('#shc-search-clear').click(function(){$(this).hide();$sc.val('').change().focus();return!1})
   },
   load:function(){
-    var h=D.prf.keys()
-    for(var i=0;i<D.cmds.length;i++){
-      var c=D.cmds[i][0],d=D.cmds[i][2]
-      $('#shc-'+c).html((h[c]||d).map(keyHTML).join('')).append('<a href=# class=shc-add>+</a>')
+    var h=D.prf.keys(),html='<table>',cmds=D.cmds
+    for(var i=0;i<cmds.length;i++){
+      var x=cmds[i],c=x[0],s=x[1],d=x[2] // c:code, s:description, d:default
+      html+='<tr data-code='+c+'>'+
+              '<td>'+s+'<td class=shc-code>'+c+
+              '<td id=shc-'+c+'>'+((h[c]||d).map(keyHTML).join(''))+'<a href=# class=shc-add>+</a>'
+              '<td><a href=# class=shc-rst title=Reset>↶</a>'
     }
+    html+='</table>'
+    document.getElementById('shc-tbl-wr').innerHTML=html
     updDups();$sc.val()&&$sc.val('').change()
   },
   validate:function(){var $d=$('#shc-tbl-wr .shc-dup');if($d.length)return{msg:'Duplicate shortcuts',el:$d[0]}},
