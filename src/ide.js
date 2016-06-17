@@ -82,11 +82,15 @@ D.IDE=function(){'use strict'
     },
     ShowHTML:ide.showHTML.bind(ide),
     OptionsDialog:function(x){
-      var i=-1;function f(e){i=$(e.target).closest('.ui-button').index();$(this).dialog('close')} // i:clicked index
-      $('<p>').text(typeof x.text==='string'?x.text:x.text.join('\n')).dialog({ // todo: clean up after transition to json protocol
-        modal:1,title:x.title,buttons:x.options.map(function(s){return{text:s,click:f}}),
-        close:function(){ide.emit('ReplyOptionsDialog',{index:i,token:x.token})}
-      })
+      var text=typeof x.text==='string'?x.text:x.text.join('\n') // todo: clean up after transition to json protocol
+      if(D.el){
+        var i=D.el.dialog.showMessageBox(D.elw,{message:text,title:x.title||'',buttons:x.options,cancelId:-1})
+        ide.emit('ReplyOptionsDialog',{index:i,token:x.token})
+      }else{
+        var i=-1;var f=function(e){i=$(e.target).closest('.ui-button').index();$(this).dialog('close')} // i:clicked index
+        $('<p>').text(text).dialog({modal:1,title:x.title,buttons:x.options.map(function(s){return{text:s,click:f}}),
+                                    close:function(){ide.emit('ReplyOptionsDialog',{index:i,token:x.token})}})
+      }
     },
     StringDialog:function(x){
       var ok,$i=$('<input>').val(x.initialValue||'')
@@ -165,13 +169,19 @@ D.IDE=function(){'use strict'
 
   var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
   ide.gl=new GoldenLayout({content:[{type:'row',content:[{type:'component',componentName:'w',componentState:{id:0},
-                                                         isClosable:false,title:'Session'}]}]},
+                                                          isClosable:false,title:'Session'}]}]},
                           ide.$ide)
   ide.gl.registerComponent('w',function(c,h){var w=ide.wins[h.id];w.container=c;c.getElement().append(w.$e);return w})
   ide.gl.registerComponent('wse',function(c,h){
     var u=ide.wse||(ide.wse=new D.WSE(ide));u.container=c;c.getElement().append(u.$e);return u})
   ide.gl.on('stateChanged',function(){eachWin(function(w){w.updSize();w.cm.refresh();w.updGutters&&w.updGutters()})})
+  ide.gl.on('tabCreated',function(x){
+    if(x.contentItem.componentName==='w')
+      x.closeElement.off('click').click(function(){
+        var w=ide.wins[x.contentItem.config.componentState.id];w.EP(w.cm)})})
+  ide.gl.on('stackCreated',function(x){x.header.controlsContainer.find('.lm_close').remove()})
   ide.gl.init()
+
   var updTopBtm=function(){ide.$ide.css({top:(D.prf.lbar()?$('.lb').height():0)+(D.el?1:22)})
                            ide.gl.updateSize(ide.$ide.width(),ide.$ide.height())}
   $('.lb').toggle(!!D.prf.lbar());updTopBtm();$(window).resize(updTopBtm)
