@@ -1,8 +1,4 @@
-;(function(){'use strict'
-
-var esc=D.util.esc
-function parseId(s){return+s.replace(/^.*?(\d+)$/,'$1')}
-D.IDE=function(){
+D.IDE=function(){'use strict'
   var ide=D.ide=this
   document.body.innerHTML=
     '<div class=ide></div>'+
@@ -103,7 +99,7 @@ D.IDE=function(){
       })
     },
     TaskDialog:function(x){
-      var i=-1 // the result
+      var esc=D.util.esc, i=-1 // i:the result
       var $d=$('<div class=task-dialog><p>'+esc(x.text||'')+'<p class=subtext>'+esc(x.subtext||'')+'<div>'+
                  x.buttonText.map(function(s){return'<button class=task>'+esc(s)+'</button>'}).join('')+
                '</div><p class=footer>'+esc(x.footer||'')+'</div>')
@@ -226,7 +222,7 @@ D.IDE.prototype={
     var ide=this
     var init=function(){
       ide.w3500.document.body.innerHTML=x.html
-      ide.w3500.document.getElementsByTagName('title')[0].innerHTML=esc(x.title||'3500⌶')
+      ide.w3500.document.getElementsByTagName('title')[0].innerHTML=D.util.esc(x.title||'3500⌶')
     }
     if(ide.w3500&&!ide.w3500.closed){ide.w3500.focus();init()}
     else{ide.w3500=open('empty.html','3500 I-beam','width=800,height=500');ide.w3500.onload=init}
@@ -248,5 +244,3 @@ D.IDE.prototype={
   }
 }
 CodeMirror.commands.WSE=function(){D.prf.wse.toggle()}
-
-}())
