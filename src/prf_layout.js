@@ -1,9 +1,10 @@
 ;(function(){'use strict'
 
 var layouts=D.kbds.layouts,geom=D.kbds.geom
-var $pfx,$lc // DOM elements for "Prefix" and "Locale"
 var NK=58    // number of scancodes we are concerned with
 var model={} // dictionary: locale→[arrayOfAPLGlyphs,arrayOfShiftedAPLGlyphs]
+var $pfx,$lc // jQuery objects for "Prefix" and "Locale"
+var grp=[]   // grp[i][j] is the DOM elements for keys i and group j
 function U(c){return'U+'+('000'+c.charCodeAt(0).toString(16).toUpperCase()).slice(-4)} // fmt Unicode char as "U+0123"
 D.prf_tabs.push({
   name:'Layout',id:'layout',
@@ -41,6 +42,8 @@ D.prf_tabs.push({
         $(this).val(v).prop('title',U(v))
       })
       .on('mouseover mouseout','.key input',function(e){$(this).toggleClass('hover',e.type==='mouseover')})
+    for(var i=1;i<NK;i++)
+      {grp[i]=[];var e=document.getElementById('k'+i);for(var j=0;j<4;j++)grp[i][j]=e.querySelector('.g'+j)}
     D.win&&$e.append('<label id=layout-ime-wrapper><input type=checkbox id=layout-ime> '+
                      'Also enable Dyalog IME (requires RIDE restart)</label>')
     if(!layouts[D.prf.kbdLocale()]){
@@ -86,8 +89,9 @@ function updGlyphs(){ // apply model values to the DOM
   var lc=$lc.val(),l=layouts[lc],m=model[lc]; if(!l)return
   $('#layout-kbd').removeClass('geom-ansi geom-iso').addClass('geom-'+(geom[$lc.val()]||geom._))
   for(var i=1;i<NK;i++){
-    var g0=l[0][i];if(g0!=='☠'){$('#k'+i+' .g0').text(g0);var g1=m[0][i];$('#k'+i+' .g1').val(g1).prop('title',U(g1))}
-    var g2=l[1][i];if(g2!=='☠'){$('#k'+i+' .g2').text(g2);var g3=m[1][i];$('#k'+i+' .g3').val(g3).prop('title',U(g3))}
+    var g0=l[0][i],g1=m[0][i],g2=l[1][i],g3=m[1][i]
+    if(g0!=='☠'){if(grp[i][0])grp[i][0].textContent=g0;if(grp[i][1]){grp[i][1].value=g1;grp[i][1].title=U(g1)}}
+    if(g2!=='☠'){if(grp[i][2])grp[i][2].textContent=g2;if(grp[i][3]){grp[i][3].value=g3;grp[i][3].title=U(g3)}}
   }
 }
 
