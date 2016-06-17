@@ -19,10 +19,8 @@ D.prf_tabs.push({
         '<tr><td class=g2>⇧x</td><td class=g3><span class=pfx2>`</span>&nbsp;⇧x</td></tr>'+
         '<tr><td class=g0>x</td><td class=g1><span class=pfx2>`</span>&nbsp;x</td></tr>'+
       '</table>'+
-      '<label id=layout-lc-label><u>L</u>ocale:'+
-      '  <select id=layout-lc>'+
-          ((function(){var r=[];for(var lc in layouts)r.push('<option>'+lc);return r})()).sort().join('')+
-      '  </select>'+
+      '<label id=layout-lc-label><u>L</u>ocale: '+
+        '<select id=layout-lc><option>'+Object.keys(layouts).sort().join('<option>')+'</select>'+
       '</label>'+
       '<div id=layout-kbd>'+
         (function(){
