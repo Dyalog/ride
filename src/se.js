@@ -76,7 +76,12 @@ D.Se.prototype={
     var cm=this.cm;cm.scrollTo(0,cm.getScrollInfo().top);setTimeout(function(){cm.scrollIntoView()},1)
   },
   hasFocus:function(){return window.focused&&this.cm.hasFocus()},
-  focus:function(){window.focused||window.focus();this.cm.focus()},
+  focus:function(){
+    var q=this.container,p=q&&q.parent,l=q&&q.layoutManager,m=l&&l._maximisedItem
+    if(m&&m!==(p&&p.parent))m.toggleMaximise()
+    while(p){p.setActiveContentItem&&p.setActiveContentItem(q);q=p;p=p.parent} // reveal in golden layout
+    window.focused||window.focus();this.cm.focus()
+  },
   insert:function(ch){this.cm.getOption('readOnly')||this.cm.replaceSelection(ch)},
   die:function(){this.cm.setOption('readOnly',true)},
   getDocument:function(){return this.$e[0].ownerDocument},

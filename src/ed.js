@@ -215,7 +215,12 @@ D.Ed.prototype={
     D.floating&&$('title',ed.$e[0].ownerDocument).text(ee.name)
   },
   hasFocus:function(){return window.focused&&this.cm.hasFocus()},
-  focus:function(){if(!window.focused){window.focus()};this.cm.focus()},
+  focus:function(){
+    var q=this.container,p=q&&q.parent,l=q&&q.layoutManager,m=l&&l._maximisedItem
+    if(m&&m!==(p&&p.parent))m.toggleMaximise()
+    while(p){p.setActiveContentItem&&p.setActiveContentItem(q);q=p;p=p.parent} // reveal in golden layout
+    window.focused||window.focus();this.cm.focus()
+  },
   insert:function(ch){this.cm.getOption('readOnly')||this.cm.replaceSelection(ch)},
   saved:function(err){
     if(err){this.isClosing=0;$.alert('Cannot save changes')}else{this.isClosing&&this.emit('CloseWindow',{win:this.id})}

@@ -40,12 +40,12 @@ D.IDE=function(){'use strict'
       t===4&&ide.wins[0].focus() // ⍞ input
     },
     HadError:function(){ide.pending.splice(0,ide.pending.length);ide.wins[0].focus()},
-    GotoWindow:function(x){$('#wintab'+x.win+' a').click();var w=ide.wins[x.win];w&&w.focus()},
+    GotoWindow:function(x){var w=ide.wins[x.win];w&&w.focus()},
     WindowTypeChanged:function(x){return ide.wins[x.win].setTracer(x.tracer)},
     ReplyGetAutocomplete:function(x){var w=ide.wins[x.token];w&&w.processAutocompleteReply(x)},
     ValueTip:function(x){ide.wins[x.token].vt.processReply(x)},
     SetHighlightLine:function(x){var w=ide.wins[x.win];w&&w.highlight(x.line)},
-    UpdateWindow:function(x){$('#wintab'+x.token+' .tab-name').text(x.name);ide.wins[x.token].open(x)},
+    UpdateWindow:function(x){var w=ide.wins[x.token];if(w){w.container&&w.container.setTitle(x.name);w.open(x)}},
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
     CloseWindow:function(x){
       var w=ide.wins[x.win];if(w){w.closePopup&&w.closePopup();w.vt.clear();w.container&&w.container.close()}
@@ -168,17 +168,19 @@ D.IDE=function(){'use strict'
     })
 
   var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
-  ide.gl=new GoldenLayout({content:[{type:'row',content:[{type:'component',componentName:'w',componentState:{id:0},
-                                                          isClosable:false,title:'Session'}]}]},
+  ide.gl=new GoldenLayout({labels:{minimise:'unmaximise'},
+                           content:[{type:'row',content:[{type:'component',componentName:'w',
+                                                          componentState:{id:0},title:'Session'}]}]},
                           ide.$ide)
   ide.gl.registerComponent('w',function(c,h){var w=ide.wins[h.id];w.container=c;c.getElement().append(w.$e);return w})
   ide.gl.registerComponent('wse',function(c,h){
     var u=ide.wse||(ide.wse=new D.WSE(ide));u.container=c;c.getElement().append(u.$e);return u})
   ide.gl.on('stateChanged',function(){eachWin(function(w){w.updSize();w.cm.refresh();w.updGutters&&w.updGutters()})})
-  ide.gl.on('tabCreated',function(x){
-    if(x.contentItem.componentName==='w')
-      x.closeElement.off('click').click(function(){
-        var w=ide.wins[x.contentItem.config.componentState.id];w.EP(w.cm)})})
+  ide.gl.on('tabCreated',function(x){if(x.contentItem.componentName==='w'){
+    var id=x.contentItem.config.componentState.id
+    id?x.closeElement.off('click').click(function(){var w=ide.wins[id];w.EP(w.cm)})
+      :x.closeElement.remove()
+  }})
   ide.gl.on('stackCreated',function(x){x.header.controlsContainer.find('.lm_close').remove()})
   ide.gl.init()
 
