@@ -130,7 +130,7 @@ D.IDE=function(){'use strict'
     })
   }
   function rrd(){tid||(new Date-last<20?(tid=setTimeout(rd,20)):rd())} // request rundown
-  D.skt.onevent=function(h){mq.push(h.data);rrd()}
+  D.skt.recv=function(x,y){mq.push([x,y]);rrd()}
   ide.block=function(){blk++}
   ide.unblock=function(){--blk||rrd()}
 

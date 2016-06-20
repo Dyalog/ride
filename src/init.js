@@ -50,30 +50,15 @@ if(D.floating&&win){
   D.ide.unblock()
 }else{
   if(D.el){
-    ;(function(){
-      function LS(){} // local socket, imitating socket.io's API
-      LS.prototype={
-        emit:function(){var a=1<=arguments.length?[].slice.call(arguments,0):[];return this.other.onevent({data:a})},
-        onevent:function(x){var a=this[x.data[0]]||[];for(var i=0;i<a.length;i++)a[i].apply(null,x.data.slice(1))},
-        on:function(e,f){(this[e]=this[e]||[]).push(f);return this}
-      }
-      var x=D.skt=new LS,y=new LS;x.other=y;y.other=x;node_require('./proxy')(y)
-    }())
+    D.skt    ={emit:function(x,y){other.recv(x,y)}}
+    var other={emit:function(x,y){D.skt.recv(x,y)}}
+    node_require('./proxy')(other)
   }else{
-    ;(function(){
-      var skt=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host)
-      var l={},q=[],io={} // l:listeners, q:send queue, io:socket.io-like API
-      var flush=function(){while(skt.readyState===1&&q.length)skt.send(q.shift())}
-      var io={
-        emit:function(x,y){q.push(JSON.stringify([x,y]));flush();return this},
-        on:function(e,f){(l[e]=l[e]||[]).push(f);return this},
-        onevent:function(x){var a=l[x.data[0]]||[];for(var i=0;i<a.length;i++)a[i].apply(null,x.data.slice(1))}
-      }
-      skt.onopen=flush
-      skt.onerror=function(e){console.info('ws error:',e)}
-      skt.onmessage=function(m){io.onevent({data:JSON.parse(m.data)})}
-      D.skt=io
-    }())
+    var ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host)
+    var q=[],flush=ws.onopen=function(){while(ws.readyState===1&&q.length)ws.send(q.shift())} //q:send queue
+    D.skt={emit:function(x,y){q.push(JSON.stringify([x,y]));flush()}}
+    ws.onerror=function(e){console.info('ws error:',e)}
+    ws.onmessage=function(m){var u=JSON.parse(m.data);D.skt.recv(u[0],u[1])}
   }
   if(!D.quit)D.quit=close
   var c=(D.args||{})['-c']||env.RIDE_CONNECT

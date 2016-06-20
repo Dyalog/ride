@@ -111,14 +111,16 @@ D.cn=function(){
   $(':text',q.rhs).elastic()
   $(':text[name],textarea[name]',q.rhs).change(function(){var k=this.name,v=this.value;v?(sel[k]=v):delete sel[k];save()})
   $(':checkbox[name]',q.rhs).change(function(){this.checked?(sel[this.name]=1):delete sel[this.name];save()})
-  D.skt
-    .on('*connected',function(x){if($d){$d.dialog('close');$d=null};new D.IDE().setHostAndPort(x.host,x.port)})
-    .on('*spawned',function(x){D.lastSpawnedExe=x.exe})
-    .on('*spawnedExited',function(x){$.alert(x.code!=null?'exited with code '+x.code:'received '+x.sig)})
-    .on('*error',function(x){$d&&$d.dialog('close');$d=null;$.alert(x.msg,'Error');q.fetch[0].disabled=0})
-    .on('*proxyInfo',function(x){interpreters=x.interpreters;updExes()})
-    .on('*sshInterpreters',function(x){interpretersSSH=x.interpreters;updExes();q.fetch[0].disabled=0})
-    .emit('*getProxyInfo')
+  var handlers={
+    '*connected':function(x){if($d){$d.dialog('close');$d=null};new D.IDE().setHostAndPort(x.host,x.port)},
+    '*spawned':function(x){D.lastSpawnedExe=x.exe},
+    '*spawnedExited':function(x){$.alert(x.code!=null?'exited with code '+x.code:'received '+x.sig)},
+    '*error':function(x){$d&&$d.dialog('close');$d=null;$.alert(x.msg,'Error');q.fetch[0].disabled=0},
+    '*proxyInfo':function(x){interpreters=x.interpreters;updExes()},
+    '*sshInterpreters':function(x){interpretersSSH=x.interpreters;updExes();q.fetch[0].disabled=0}
+  }
+  D.skt.recv=function(x,y){handlers[x](y)}
+  D.skt.emit('*getProxyInfo',{})
 }
 function validate(){
   var $host=$('[name=host]:visible'),$port=$('[name=port]:visible')
