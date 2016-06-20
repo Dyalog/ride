@@ -82,7 +82,8 @@ if(D.floating&&win){
         else{$.alert('Invalid $RIDE_CONNECT')}}
   else if(+env.RIDE_SPAWN){new D.IDE;D.skt.emit('*launch',{}) // '*error' is handled in ide.coffee
                          window.onbeforeunload=function(){D.skt.emit('Exit',{code:0})}}
-  else{D.cn()}
+  else if(D.el){D.cn()}
+  else{new D.IDE}
 }
 
 if(!D.prf.theme()){
