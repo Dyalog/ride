@@ -3,7 +3,8 @@
 
 let $sel=$(),sel,$d //$sel:selected item(s), sel: .data('cn') of the selected item (only if it's unique), $d:dialog
 ,interpreters=[], interpretersSSH=[]
-const esc=D.util.esc,user=D.el?process.env.USER:'',q={} //q:mapping between ids and jQuery objects
+const fs=node_require('fs'),cp=node_require('child_process')
+,esc=D.util.esc,user=D.el?process.env.USER:'',q={} //q:mapping between ids and jQuery objects
 ,ANON='[anonymous]',TEMP='[temp]',MIN_V=[15,0]
 ,KV=/^([a-z_]\w*)=(.*)$/i,WS=/^\s*$/ //regexes for parsing env vars
 ,cmpVer=(x,y)=>x[0]-y[0]||x[1]-y[1]||0 //compare two versions of the form [major,minor]
@@ -25,6 +26,64 @@ const esc=D.util.esc,user=D.el?process.env.USER:'',q={} //q:mapping between ids 
   q.exes.html(h+'<option value="">Other...').val(q.exe.val()).val()||q.exes.val('')
   q.exe.prop('readonly',!!q.exes.val())
 }
+,validate=_=>{
+  var $host=$('[name=host]:visible'),$port=$('[name=port]:visible')
+  if($host.length&&!sel.host){$.alert('"host" is required','Error',_=>{$host.select()});return}
+  if($port.length&&sel.port&&(!/^\d*$/.test(sel.port)||+sel.port<1||+sel.port>0xffff))
+      {$.alert('Invalid port','Error',_=>{$port.select()});return}
+  if(q.type.val()==='start'){
+    var a=q.env.val().split('\n')
+    for(var i=0;i<a.length;i++)if(!KV.test(a[i])&&!WS.test(a[i]))
+      {$.alert('Invalid environment variables','Error',_=>{q.env.focus()});return}
+    if(sel.ssh){
+      var pw=q.ssh_pass.val(),kf=q.ssh_key.val()
+      if(!pw&&!kf){$.alert('Either "Password" or "Key file" is required','Error',_=>{q.ssh_pass.focus()});return}
+      if(pw&&kf){$.alert('Only one of "Password" and "Key file" must be present','Error',_=>{q.ssh_pass.focus()});return}
+    }
+  }
+  return 1
+}
+,go=_=>{
+  $d&&$d.dialog('close');if(!validate())return!1
+  try{
+    switch(q.type.val()){
+      case'connect':
+        $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
+          .dialog({modal:1,width:350,title:'Connecting...'})
+        D.skt.emit('*connect',{host:sel.host,port:+sel.port||4502,ssl:sel.ssl,cert:sel.cert,subj:sel.subj});break
+      case'listen':
+        var port=sel.port||4502
+        $d=$(
+          '<div class=listen>'+
+            '<div class=visual-distraction></div>'+
+            'Please start the remote interpreter with'+
+            '<div class=tt>RIDE_INIT=\'CONNECT:<i>host</i>:'+port+'\'</div>'+
+            ' in its environment, so it connects here.'+
+          '</div>'
+        ).dialog({modal:1,width:450,title:'Waiting for connection...',
+                  buttons:[{html:'<u>C</u>ancel',click:_=>{$d.dialog('close')}}],
+                  close:_=>{D.skt.emit('*listenCancel')}})
+        D.skt.emit('*listen',{port});break
+      case'start':
+        var env={},a=q.env.val().split('\n'),m
+        for(var i=0;i<a.length;i++)if(m=KV.exec(a[i]))env[m[1]]=m[2]
+        if(sel.ssh){
+          var pw=q.ssh_pass.val(),kf=q.ssh_key.val()
+          $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
+            .dialog({modal:1,width:350,title:'Connecting...'})
+          D.skt.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||user,pass:pw,key:kf,env})
+        }else{
+          D.skt.emit('*launch',{exe:sel.exe,env})
+        }
+        break
+      default:$.alert('nyi')
+    }
+  }catch(e){$.alert(e,'Error')}
+  return!1
+}
+,ls=x=>fs.readdirSync(x)
+,parseVer=x=>x.split('.').map(y=>+y)
+,sil=f=>x=>{try{f(x)}catch(_){}} //exception silencer
 D.cn=_=>{
   document.title='RIDE - Connect'
   $('#cn').show().splitter()
@@ -109,66 +168,39 @@ D.cn=_=>{
     '*spawned'(x){D.lastSpawnedExe=x.exe},
     '*spawnedExited'(x){$.alert(x.code!=null?'exited with code '+x.code:'received '+x.sig)},
     '*error'(x){$d&&$d.dialog('close');$d=0;$.alert(x.msg,'Error');q.fetch[0].disabled=0},
-    '*proxyInfo'(x){interpreters=x.interpreters;updExes()},
     '*sshInterpreters'(x){interpretersSSH=x.interpreters;updExes();q.fetch[0].disabled=0}
   }
   D.skt.recv=(x,y)=>{handlers[x](y)}
-  D.skt.emit('*getProxyInfo',{})
-}
-const validate=_=>{
-  var $host=$('[name=host]:visible'),$port=$('[name=port]:visible')
-  if($host.length&&!sel.host){$.alert('"host" is required','Error',_=>{$host.select()});return}
-  if($port.length&&sel.port&&(!/^\d*$/.test(sel.port)||+sel.port<1||+sel.port>0xffff))
-      {$.alert('Invalid port','Error',_=>{$port.select()});return}
-  if(q.type.val()==='start'){
-    var a=q.env.val().split('\n')
-    for(var i=0;i<a.length;i++)if(!KV.test(a[i])&&!WS.test(a[i]))
-      {$.alert('Invalid environment variables','Error',_=>{q.env.focus()});return}
-    if(sel.ssh){
-      var pw=q.ssh_pass.val(),kf=q.ssh_key.val()
-      if(!pw&&!kf){$.alert('Either "Password" or "Key file" is required','Error',_=>{q.ssh_pass.focus()});return}
-      if(pw&&kf){$.alert('Only one of "Password" and "Key file" must be present','Error',_=>{q.ssh_pass.focus()});return}
-    }
-  }
-  return 1
-}
-,go=_=>{
-  $d&&$d.dialog('close');if(!validate())return!1
+
+  //collect information about installed interpreters
+  interpreters=[]
   try{
-    switch(q.type.val()){
-      case'connect':
-        $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
-          .dialog({modal:1,width:350,title:'Connecting...'})
-        D.skt.emit('*connect',{host:sel.host,port:+sel.port||4502,ssl:sel.ssl,cert:sel.cert,subj:sel.subj});break
-      case'listen':
-        var port=sel.port||4502
-        $d=$(
-          '<div class=listen>'+
-            '<div class=visual-distraction></div>'+
-            'Please start the remote interpreter with'+
-            '<div class=tt>RIDE_INIT=\'CONNECT:<i>host</i>:'+port+'\'</div>'+
-            ' in its environment, so it connects here.'+
-          '</div>'
-        ).dialog({modal:1,width:450,title:'Waiting for connection...',
-                  buttons:[{html:'<u>C</u>ancel',click:_=>{$d.dialog('close')}}],
-                  close:_=>{D.skt.emit('*listenCancel')}})
-        D.skt.emit('*listen',{port});break
-      case'start':
-        var env={},a=q.env.val().split('\n'),m
-        for(var i=0;i<a.length;i++)if(m=KV.exec(a[i]))env[m[1]]=m[2]
-        if(sel.ssh){
-          var pw=q.ssh_pass.val(),kf=q.ssh_key.val()
-          $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
-            .dialog({modal:1,width:350,title:'Connecting...'})
-          D.skt.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||user,pass:pw,key:kf,env})
-        }else{
-          D.skt.emit('*launch',{exe:sel.exe,env})
+    if(/^win/.test(process.platform)){
+      const s=cp.execSync('reg query "HKEY_CURRENT_USER\\Software\\Dyalog" /s /v localdyalogdir',{timeout:2000})
+      let b,v,u,m //b:bits,v:version,u:edition,m:match object
+      e||s.split('\r\n').forEach(x=>{if(x){
+        if(m=/^HK.*\\Dyalog APL\/W(-64)? (\d+\.\d+)( Unicode)?$/i.exec(x)){
+          b=m[1]?64:32;v=m[2];u=m[3]?'unicode':'classic'
+        }else if(v&&(m=/^ *localdyalogdir +REG_SZ +(\S.*)$/i.exec(x))){
+          interpreters.push({exe:m[1]+'\\dyalog.exe',ver:parseVer(v),bits:b,edition:u})
+        }else if(!/^\s*$/.test(x)){
+          b=v=u=null
         }
-        break
-      default:$.alert('nyi')
+      }})
+    }else if(process.platform==='darwin'){
+      const a='/Applications'
+      ls(a).forEach(x=>{const m=/^Dyalog-(\d+\.\d+)\.app$/.exec(x), exe=`${a}/${x}/Contents/Resources/Dyalog/mapl`
+                        m&&fs.existsSync(exe)&&interpreters.push({exe,ver:parseVer(m[1]),bits:64,edition:'unicode'})})
+    }else{
+      const a='/opt/mdyalog'
+      ls(a).forEach(sil(v=>{if(/^\d+\.\d+/.test(v))
+        ls(`${a}/${v}`).forEach(sil(b=>{if(b==='32'||b==='64')
+          ls(`${a}/${v}/${b}`).forEach(sil(u=>{if(u==='unicode'||u==='classic'){
+            const exe=`${a}/${v}/${b}/${u}/mapl`
+            fs.existsSync(exe)&&interpreters.push({exe,ver:parseVer(v),bits:+b,edition:u})}}))}))}))
     }
-  }catch(e){$.alert(e,'Error')}
-  return!1
+  }catch(e){console.error(e)}
+  updExes()
 }
 
 }())

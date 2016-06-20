@@ -6,8 +6,6 @@ let clt,   //client, TCP connection to interpreter
 const rq=require,fs=rq('fs'),net=rq('net'),os=rq('os'),path=rq('path'),cp=rq('child_process')
 ,log=x=>{console.log(x)}
 ,maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
-,ls=x=>fs.readdirSync(x)
-,sil=f=>x=>{try{f(x)}catch(_){}} //exception silencer
 ,shEsc=x=>`'${x.replace(/'/g,"'\\''")}'` //shell escape
 ,parseVer=x=>x.split('.').map(y=>+y)
 ,toBuf=x=>{const b=Buffer('xxxxRIDE'+x);b.writeInt32BE(b.length,0);return b}
@@ -114,60 +112,7 @@ const rq=require,fs=rq('fs'),net=rq('net'),os=rq('os'),path=rq('path'),cp=rq('ch
     srv.on('error',x=>{srv=0;toBrowser('*error',{msg:''+x})})
     srv.listen(x.port,x.host||'',_=>{log('listening on port '+x.port);x.callback&&x.callback()})
   },
-  '*listenCancel':_=>{srv&&srv.close()},
-  '*getProxyInfo':_=>{
-    //List available interpreter executables, possible paths are:
-    // C:\Program Files\Dyalog\Dyalog APL $VERSION\dyalog.exe
-    // C:\Program Files\Dyalog\Dyalog APL $VERSION unicode\dyalog.exe
-    // C:\Program Files\Dyalog\Dyalog APL-64 $VERSION\dyalog.exe
-    // C:\Program Files\Dyalog\Dyalog APL-64 $VERSION unicode\dyalog.exe
-    // C:\Program Files (x86)\Dyalog\Dyalog APL $VERSION\dyalog.exe
-    // C:\Program Files (x86)\Dyalog\Dyalog APL $VERSION unicode\dyalog.exe
-    // /opt/mdyalog/$VERSION/[64|32]/[classic|unicode]/mapl
-    // /Applications/Dyalog-$VERSION/Contents/Resources/Dyalog/mapl
-    const r={interpreters:[],platform:process.platform} //proxy info (the result)
-    if(/^win/.test(r.platform)){
-      try{
-        cp.exec('reg query "HKEY_CURRENT_USER\\Software\\Dyalog" /s /v localdyalogdir',{timeout:2000},(e,s)=>{
-          let b,v,u,m //b:bits,v:version,u:edition,m:match object
-          e||s.split('\r\n').forEach(x=>{if(x){
-            if(m=/^HK.*\\Dyalog APL\/W(-64)? (\d+\.\d+)( Unicode)?$/i.exec(x)){
-              b=m[1]?64:32;v=m[2];u=m[3]?'unicode':'classic'
-            }else if(v&&(m=/^ *localdyalogdir +REG_SZ +(\S.*)$/i.exec(x))){
-              r.interpreters.push({exe:m[1]+'\\dyalog.exe',ver:parseVer(v),bits:b,edition:u})
-            }else if(!/^\s*$/.test(x)){
-              b=v=u=null
-            }
-          }})
-          toBrowser('*proxyInfo',r)
-        })
-      }catch(ex){
-        console.error(ex);toBrowser('*proxyInfo',r)
-      }
-    }else if(r.platform==='darwin'){
-      try{
-        const a='/Applications'
-        ls(a).forEach(x=>{
-          const m=/^Dyalog-(\d+\.\d+)\.app$/.exec(x), exe=`${a}/${x}/Contents/Resources/Dyalog/mapl`
-          m&&fs.existsSync(exe)&&r.interpreters.push({exe,ver:parseVer(m[1]),bits:64,edition:'unicode'})
-        })
-      }catch(_){}
-      toBrowser('*proxyInfo',r)
-    }else{
-      try{
-        const a='/opt/mdyalog'
-        ls(a).forEach(sil(v=>{if(/^\d+\.\d+/.test(v))
-          ls(`${a}/${v}`).forEach(sil(b=>{if(b==='32'||b==='64')
-            ls(`${a}/${v}/${b}`).forEach(sil(u=>{if(u==='unicode'||u==='classic'){
-              const exe=`${a}/${v}/${b}/${u}/mapl`
-              fs.existsSync(exe)&&r.interpreters.push({exe,ver:parseVer(v),bits:+b,edition:u})
-            }}))
-          }))
-        }))
-      }catch(_){}
-      toBrowser('*proxyInfo',r)
-    }
-  }
+  '*listenCancel':_=>{srv&&srv.close()}
 }
 ,sshExec=(x,cmd,f)=>{ //f:callback
   try{ //see https://github.com/mscdex/ssh2/issues/238#issuecomment-87495628 for why we use tryKeyboard:true
