@@ -19,7 +19,7 @@ D.prf_tabs.push({
         '<p><label><input id=code-vt   type=checkbox>Show <u>v</u>alue tips</label>'+
         '<p><label><input id=code-sqt  type=checkbox>Show tips for <u>g</u>lyphs</label>'+
       '</div>'
-    $e[0].querySelectorAll('[id]').forEach(function(x){h[x.id.replace(/^code-/,'')]=x})
+    var u=$e[0].querySelectorAll('[id]');for(var i=0;i<u.length;i++){h[u[i].id.replace(/^code-/,'')]=u[i]}
     var updEnabling=function(){h.sw.disabled=h.aim.disabled=!h.ai.checked;h.swm.disabled=!h.ai.checked||!h.aim.checked}
     h.ai  .onchange=function(){updEnabling();h.ai .checked&&h.sw .select()}
     h.aim .onchange=function(){updEnabling();h.aim.checked&&h.swm.select()}
