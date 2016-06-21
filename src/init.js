@@ -52,7 +52,7 @@ if(D.floating&&win){
   if(D.el){
     D.skt    ={emit:function(x,y){other.recv(x,y)}}
     var other={emit:function(x,y){D.skt.recv(x,y)}}
-    node_require('./proxy')(other)
+    node_require('./src/proxy')(other)
   }else{
     var ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host)
     var q=[],flush=ws.onopen=function(){while(ws.readyState===1&&q.length)ws.send(q.shift())} //q:send queue

@@ -34,7 +34,6 @@ const incl={
   '/index.html'                                                :1,
   '/main.js'                                                   :1,
   '/package.json'                                              :1,
-  '/proxy.js'                                                  :1,
   '/node_modules/jquery/dist/jquery.min.js'                    :1,
   '/node_modules/codemirror/lib/codemirror.js'                 :1,
   '/node_modules/codemirror/addon/dialog/dialog.js'            :1,

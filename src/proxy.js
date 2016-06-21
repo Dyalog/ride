@@ -1,3 +1,4 @@
+//this file should be dismantled and its remaining functionality should be moved to init.js and cn.js
 'use strict'
 let clt,   //client, TCP connection to interpreter
     skt,   //socket-like object for communicating with the front end
