@@ -211,7 +211,7 @@ this.Editor.prototype={
     cm.setCursor(line,col);cm.scrollIntoView(null,ed.$e.height()/2)
     ed.oStop=(ee.stop||[]).slice(0).sort(function(x,y){return x-y})
     for(var k=0;k<ed.oStop.length;k++)cm.setGutterMarker(ed.oStop[k],'breakpoints',ed.createBPEl())
-    D.floating&&$('title',ed.$e[0].ownerDocument).text(ee.name)
+    if(D.floating){$('title',ed.$e[0].ownerDocument).text(ee.name);this.focus()}
   },
   hasFocus:function(){return window&&window.focused&&this.cm.hasFocus()},
   focus:function(){if(window){window.focused||window.focus();this.cm.focus()}},
