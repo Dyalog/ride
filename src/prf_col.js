@@ -181,10 +181,10 @@ D.prf_tabs.push({
       scm=scms[Math.min(i,scms.length-1)];updScms();return!1
     })
     $cm=$('#col-cm')
-    cm=CodeMirror($cm[0],$.extend({},D.util.cmOpts,{
+    cm=CodeMirror($cm[0],{
       lineNumbers:true,firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
       indentUnit:4,scrollButtonHeight:12,matchBrackets:true,autoCloseBrackets:{pairs:'()[]{}',explode:'{}'}
-    }))
+    })
     cm.addOverlay({token:function(stream){
       var i=stream.string.slice(stream.pos).indexOf(SEARCH_MATCH)
       if(!i){stream.pos+=SEARCH_MATCH.length;return'searching'}

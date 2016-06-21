@@ -10,8 +10,7 @@ D.util={
     var t=0,x=0,y=0 //last click's timestamp and coordinates
     cm.on('mousedown',function(cm,e){
       e.timeStamp-t<400&&Math.abs(x-e.x)+Math.abs(y-e.y)<10&&!$(e.target).closest('.CodeMirror-gutter-wrapper').length&&f(e)
-      t=e.timeStamp;x=e.x;y=e.y})},
-  cmOpts:{}} //default CodeMirror options in RIDE
+      t=e.timeStamp;x=e.x;y=e.y})}}
 $.alert=function(m,t,f){ //m:message, t:title, f:callback
   if(D.el){D.el.dialog.showMessageBox(D.elw,{message:m,title:t,buttons:['OK']});f&&f()}
   else{$('<p>').text(m)
