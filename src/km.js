@@ -127,7 +127,7 @@ $.extend(CM.commands,{
               F1:function(){sel&&sel.text&&D.hlp[sel.text]&&D.openExternal(D.hlp[sel.text])}
             },
             hint:function(){
-              var pk=D.prf.prefixKey(),ks=[];for(var x in bq)if(x!=='☠')ks.push(x);ks.sort()
+              var pk=D.prf.prefixKey(),ks=[];for(var x in bq)ks.push(x);ks.sort()
               var data={from:c0,to:cm.getCursor(),list:ks.map(function(k){
                 var v=bq[k];return(k===pk
                   ?{text:'',hint:bqbqHint,render:function(e){e.innerHTML='  '+pk+pk+' <i>completion by name</i>'}}
