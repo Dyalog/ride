@@ -16,21 +16,21 @@ D.IDE=function(){'use strict'
 
   var handlers=this.handlers={ // for RIDE protocol messages
     '*connected':function(x){ide.setHostAndPort(x.host,x.port)},
-    '*error':function(x){ide.die();setTimeout(function(){$.alert(x.msg,'Error')},100)},
+    '*error':function(x){ide.die();setTimeout(function(){$.err(x.msg)},100)},
     '*spawnedExited':function(x){
-      if(x.code){ide.die();setTimeout(function(){$.alert('Interpreter process exited with code '+x.code,'Error')},100)}
+      if(x.code){ide.die();setTimeout(function(){$.err('Interpreter process exited\nwith code '+x.code)},100)}
       if(D.el&&!x.code){process.exit(0)}
     },
-    '*disconnected':function(){if(!ide.dead){$.alert('Interpreter disconnected','Error');ide.die()}},
+    '*disconnected':function(){if(!ide.dead){$.err('Interpreter disconnected');ide.die()}},
     Identify:function(x){D.remoteIdentification=x;ide.updTitle();ide.connected=1;ide.wins[0].updPW(1)},
     Disconnect:function(x){
       if(ide.dead)return
       ide.die()
       if(x.message==='Dyalog session has ended'){try{close()}catch(e){};D.el&&process.exit(0)}
-      else $.alert(x.message,'Interpreter disconnected')
+      else $.err(x.message,'Interpreter disconnected')
     },
-    SysError:function(x){$.alert(x.text,'SysError');ide.die()},
-    InternalError:function(x){$.alert('An error ('+x.error+') occurred processing '+x.message,'Internal Error')},
+    SysError:function(x){$.err(x.text,'SysError');ide.die()},
+    InternalError:function(x){$.err('An error ('+x.error+') occurred processing '+x.message,'Internal Error')},
     NotificationMessage:function(x){$.alert(x.message,'Notification')},
     UpdateDisplayName:function(a){ide.wsid=a.displayName;ide.updTitle()},
     EchoInput:function(x){ide.wins[0].add(x.input)},
@@ -70,7 +70,7 @@ D.IDE=function(){'use strict'
           this.block() // the popup will create D.wins[w] and unblock the message queue
           ;(D.pendingEditors=D.pendingEditors||{})[w]={editorOpts:editorOpts,ee:ee,ide:this};done=1
         }else{
-          $.alert('Popups are blocked.')
+          $.err('Popups are blocked.')
         }
       }
       if(!done){
@@ -190,7 +190,7 @@ D.IDE=function(){'use strict'
   D.prf.lbar(function(x){$('.lb').toggle(!!x);updTopBtm()})
   setTimeout(function(){
     try{D.installMenu(D.parseMenuDSL(D.prf.menu()))}
-    catch(e){$.alert('Invalid menu configuration -- the default menu will be used instead','Warning')
+    catch(e){$.err('Invalid menu configuration -- the default menu will be used instead')
              console.error(e);D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()))}
   },100)
   D.prf.autoCloseBrackets(function(x){eachWin(function(w){w.cm.setOption('autoCloseBrackets',!!x&&D.Ed.ACB_VALUE)})})

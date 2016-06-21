@@ -18,7 +18,7 @@ function ok(){apply()&&$d.dialog('close')}
 function apply(){ // returns 0 on failure and 1 on success
   var v
   for(var i=0;i<tabs.length;i++)if(v=tabs[i].validate&&tabs[i].validate()){
-    setTimeout(function(){$.alert(v.msg,'Error',v.el?function(){v.el.focus()}:null)},1)
+    setTimeout(function(){$.err(v.msg,v.el?function(){v.el.focus()}:null)},1)
     return 0
   }
   for(var i=0;i<tabs.length;i++)tabs[i].save&&tabs[i].save()

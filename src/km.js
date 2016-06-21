@@ -45,8 +45,8 @@ $.extend(CM.commands,{
       e.RIDE_SPAWN='1';e.RIDE_INTERPRETER_EXE=D.lastSpawnedExe
       node_require('child_process').spawn(process.execPath,[],{detached:true,stdio:['ignore','ignore','ignore'],env:e})
     }else{
-      $.alert('The current session is remote. To connect elsewhere or launch a local interpreter, '+
-              'please use "Connect..." instead.','Cannot Start New Session')
+      $.err('The current session is remote.\nTo connect elsewhere or\nlaunch a local interpreter,\n'+
+            'please use "Connect..." instead.','Cannot Start New Session')
     }
   },
   QIT:function(){D.quit()},

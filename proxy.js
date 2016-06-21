@@ -116,7 +116,7 @@ const rq=require,fs=rq('fs'),net=rq('net'),os=rq('os'),path=rq('path'),cp=rq('ch
 }
 ,sshExec=(x,cmd,f)=>{ //f:callback
   try{ //see https://github.com/mscdex/ssh2/issues/238#issuecomment-87495628 for why we use tryKeyboard:true
-    const c=new(require('ssh2').Client),o={host:x.host,port:x.port,username:x.user,tryKeyboard:true}
+    var c=new(require('ssh2').Client),o={host:x.host,port:x.port,username:x.user,tryKeyboard:true}
     x.key?(o.privateKey=fs.readFileSync(x.key)):(o.password=x.pass)
     c.on('ready',_=>{c.exec(cmd,(e,sm)=>{e||f(sm)})})
      .on('tcp connection',(_,acc)=>{clt=acc();toBrowser('*connected',{host:'',port:0});initInterpreterConn()})

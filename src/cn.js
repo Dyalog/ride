@@ -28,17 +28,17 @@ const fs=node_require('fs'),cp=node_require('child_process')
 }
 ,validate=_=>{
   const $host=$('[name=host]:visible'),$port=$('[name=port]:visible')
-  if($host.length&&!sel.host){$.alert('"host" is required','Error',_=>{$host.select()});return}
+  if($host.length&&!sel.host){$.err('"host" is required',_=>{$host.select()});return}
   if($port.length&&sel.port&&(!/^\d*$/.test(sel.port)||+sel.port<1||+sel.port>0xffff))
-      {$.alert('Invalid port','Error',_=>{$port.select()});return}
+      {$.err('Invalid port',_=>{$port.select()});return}
   if(q.type.val()==='start'){
     const a=q.env.val().split('\n')
     for(let i=0;i<a.length;i++)if(!KV.test(a[i])&&!WS.test(a[i]))
-      {$.alert('Invalid environment variables','Error',_=>{q.env.focus()});return}
+      {$.err('Invalid environment variables',_=>{q.env.focus()});return}
     if(sel.ssh){
       const pw=q.ssh_pass.val(),kf=q.ssh_key.val()
-      if(!pw&&!kf){$.alert('Either "Password" or "Key file" is required','Error',_=>{q.ssh_pass.focus()});return}
-      if(pw&&kf){$.alert('Only one of "Password" and "Key file" must be present','Error',_=>{q.ssh_pass.focus()});return}
+      if(!pw&&!kf){$.err('Either "Password" or "Key file" is required',_=>{q.ssh_pass.focus()});return}
+      if(pw&&kf){$.err('Only one of "Password" and "Key file" must be present',_=>{q.ssh_pass.focus()});return}
     }
   }
   return 1
@@ -74,9 +74,8 @@ const fs=node_require('fs'),cp=node_require('child_process')
           D.skt.emit('*launch',{exe:sel.exe,env})
         }
         break
-      default:$.alert('nyi')
     }
-  }catch(e){$.alert(e,'Error')}
+  }catch(e){$.err(''+e)}
   return!1
 }
 ,ls=x=>fs.readdirSync(x)
@@ -162,8 +161,8 @@ D.cn=_=>{
   const handlers={
     '*connected'(x){if($d){$d.dialog('close');$d=0};new D.IDE().setHostAndPort(x.host,x.port)},
     '*spawned'(x){D.lastSpawnedExe=x.exe},
-    '*spawnedExited'(x){$.alert(x.code!=null?'exited with code '+x.code:'received '+x.sig)},
-    '*error'(x){$d&&$d.dialog('close');$d=0;$.alert(x.msg,'Error');q.fetch[0].disabled=0},
+    '*spawnedExited'(x){$.err(x.code!=null?'exited with code '+x.code:'received '+x.sig)},
+    '*error'(x){$d&&$d.dialog('close');$d=0;$.err(x.msg);q.fetch[0].disabled=0},
     '*sshInterpreters'(x){interpretersSSH=x.interpreters;updExes();q.fetch[0].disabled=0}
   }
   D.skt.recv=(x,y)=>{handlers[x](y)}

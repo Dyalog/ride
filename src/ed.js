@@ -223,7 +223,7 @@ D.Ed.prototype={
   },
   insert:function(ch){this.cm.getOption('readOnly')||this.cm.replaceSelection(ch)},
   saved:function(err){
-    if(err){this.isClosing=0;$.alert('Cannot save changes')}else{this.isClosing&&this.emit('CloseWindow',{win:this.id})}
+    if(err){this.isClosing=0;$.err('Cannot save changes')}else{this.isClosing&&this.emit('CloseWindow',{win:this.id})}
   },
   closePopup:function(){if(D.floating){window.onbeforeunload=null;D.forceClose=1;close()}},
   die:function(){this.setReadOnly(true)},

@@ -64,7 +64,7 @@ if(D.floating&&win){
   var c=(D.args||{})['-c']||env.RIDE_CONNECT
   if(c){var m=/^([^:]+|\[[^\]]+\])(?::(\d+))?$/.exec(c) // parse host and port
         if(m){new D.IDE;D.skt.emit('*connect',{host:m[1],port:+m[2]||4502})}
-        else{$.alert('Invalid $RIDE_CONNECT')}}
+        else{$.err('Invalid $RIDE_CONNECT')}}
   else if(+env.RIDE_SPAWN){new D.IDE;D.skt.emit('*launch',{}) // '*error' is handled in ide.coffee
                          window.onbeforeunload=function(){D.skt.emit('Exit',{code:0})}}
   else if(D.el){node_require(__dirname+'/src/cn');D.cn()}
@@ -126,11 +126,11 @@ if(D.el){
   CodeMirror.defaults.dragDrop=0;window.ondragover=window.ondrop=function(e){e.preventDefault();return!1}
   window.ondrop=function(e){
     var a=e.dataTransfer.files,f=(a[0]||{}).path
-    if(!D.lastSpawnedExe){$.alert('Drag and drop of workspaces works only for locally started interpreters.','Error')}
-    else if(!/\.dws$/i.test(f)){$.alert('RIDE supports drag and drop only for .dws files.','Error')}
-    else if(a.length!==1){$.alert('RIDE does not support dropping of multiple files.','Error')}
+    if(!D.lastSpawnedExe){$.err('Drag and drop of workspaces works only for locally started interpreters.')}
+    else if(!/\.dws$/i.test(f)){$.err('RIDE supports drag and drop only for .dws files.')}
+    else if(a.length!==1){$.err('RIDE does not support dropping of multiple files.')}
     else{$.confirm('Are you sure you want to )load '+f.replace(/^.*[\\\/]/,'')+'?','Load workspace',
-              function(x){x&&D.ide.exec(['      )load '+f+'\n'],0)})}
+                   function(x){x&&D.ide.exec(['      )load '+f+'\n'],0)})}
     e.preventDefault();return!1
   }
 

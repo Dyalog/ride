@@ -15,7 +15,7 @@ function keyInfo(e){ // returns a pair of the key name and an "is complete" flag
 }
 function loadDemoScript(f){ // f:path to file, ignored if empty
   f&&node_require('fs').readFile(f,'utf8',function(err,s){
-    if(err){console.error(err);$.alert('Cannot load demo file');return}
+    if(err){console.error(err);$.err('Cannot load demo file');return}
     index=-1
     lines=s.replace(/^[\ufeff\ufffe]/,'').split(/\r?\n/)
            .filter(function(x){return!/^\s*(?:$|⍝⍝)/.test(x)})
