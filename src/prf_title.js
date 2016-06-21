@@ -26,7 +26,7 @@ D.prf_tabs.push({
       '</pre>'
     wt=document.getElementById('title-input')
     var subs=document.getElementById('title-subs')
-    subs.onclick=function(x){$(wt).insert(x.target.textContent)}
+    subs.onclick=function(x){x.target.nodeName==='A'&&$(wt).insert(x.target.textContent)}
     var a=subs.querySelectorAll('a');for(var i=0;i<a.length;i++){a[i].href='#';a[i].title='Insert'}
     document.getElementById('title-rst').onclick=function(){wt.value=D.prf.title.getDefault();return!1}
   },
