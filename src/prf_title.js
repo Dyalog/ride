@@ -1,15 +1,15 @@
 ;(function(){'use strict'
 
-var wt // <input> element for Window Title
+var wt //<input> element for Window Title
 D.prf_tabs.push({
   name:'Title',id:'title',
   init:function($e){
     var e=$e[0]
     e.innerHTML=
-      '<button class=rst><u>R</u>eset</button>'+
+      '<button id=title-rst class=rst><u>R</u>eset</button>'+
       '<label for=title-input>Window title:</label>'+
       '<input id=title-input>'+
-      '<pre>'+
+      '<pre id=title-subs>'+
       '\n<a href=#>{WSID}</a>            workspace name'+
       '\n<a href=#>{HOST}</a>:<a href=#>{PORT}</a>     interpreter\'s TCP endpoint'+
       '\n<a href=#>{PID}</a>             PID of the interpreter process'+
@@ -25,9 +25,10 @@ D.prf_tabs.push({
       '\n  <a href=#>{RIDE_VER_C}</a>      git commit number'+
       '</pre>'
     wt=document.getElementById('title-input')
-    $e.on('click','pre a',function(e){$(wt).insert($(e.target).text())})
-    $('pre a',e).attr('title','Insert')
-    $('.rst',e).click(function(){wt.value=D.prf.title.getDefault()})
+    var subs=document.getElementById('title-subs')
+    subs.onclick=function(x){$(wt).insert(x.target.textContent)}
+    subs.querySelectorAll('a').forEach(function(x){x.title='Insert'})
+    document.getElementById('title-rst').onclick=function(){wt.value=D.prf.title.getDefault()}
   },
   load:function(){wt.value=D.prf.title()},
   save:function(){D.prf.title(wt.value)}

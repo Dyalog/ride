@@ -1,25 +1,26 @@
 ;(function(){'use strict'
 
-var $ta // the textarea
+var ta // the textarea
 D.prf_tabs.push({
   name:'Menu',id:'menu',
   init:function($e){
-    $e[0].innerHTML='<button class=rst><u>R</u>eset</button>'+
-                    '<p>Takes effect on restart</p><textarea wrap=off></textarea>'
-    $ta=$('textarea',$e);$('.rst',$e).click(function(){$ta.val(D.prf.menu.getDefault())})
+    $e[0].innerHTML='<button id=menu-rst class=rst><u>R</u>eset</button>'+
+                    '<p>Takes effect on restart</p><textarea id=menu-ta wrap=off></textarea>'
+    ta=document.getElementById('menu-ta')
+    document.getElementById('menu-rst').onclick=function(){ta.value=D.prf.menu.getDefault()}
   },
-  load:function(){$ta.val(D.prf.menu())},
-  save:function(){D.prf.menu($ta.val())},
+  load:function(){ta.value=D.prf.menu()},
+  save:function(){D.prf.menu(ta.value)},
   validate:function(){
     try {
       var visit=function(x){
         if(x.cmd==='PRF')return 1
         if(x.items)for(var i=0;i<x.items.length;i++)if(visit(x.items[i]))return 1
       }
-      var ok=0,a=D.parseMenuDSL($ta.val());for(var i=0;i<a.length;i++)if(visit(a[i])){ok=1;break}
-      if(!ok)return{msg:'Menu must contain the PRF (Preferences) command',el:$ta}
+      var ok=0,a=D.parseMenuDSL(ta.value);for(var i=0;i<a.length;i++)if(visit(a[i])){ok=1;break}
+      if(!ok)return{msg:'Menu must contain the PRF (Preferences) command',el:ta}
     }catch(e){
-      return{msg:e.message,el:$ta}
+      return{msg:e.message,el:ta}
     }
   }
 })

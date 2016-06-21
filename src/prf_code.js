@@ -1,7 +1,6 @@
 ;(function(){'use strict'
 
-var on=CodeMirror.on
-var h={} // various input elements
+var on=CodeMirror.on, h={} //h:various input elements
 D.prf_tabs.push({
   name:'Code',id:'code',
   init:function($e){
@@ -20,12 +19,12 @@ D.prf_tabs.push({
         '<p><label><input id=code-vt   type=checkbox>Show <u>v</u>alue tips</label>'+
         '<p><label><input id=code-sqt  type=checkbox>Show tips for <u>g</u>lyphs</label>'+
       '</div>'
-    $('[id^=code-]',$e).each(function(){h[this.id.replace(/^code-/,'')]=this})
-    $(h.ai).add(h.aim)
-      .change(function(x){h.sw.disabled=h.aim.disabled=!h.ai.checked;h.swm.disabled=!h.ai.checked||!h.aim.checked})
-    on(h.acbl,'change',function(){h.acbe.disabled=!this.checked})
-    on(h.ac  ,'change',function(){h.acd .disabled=!this.checked})
-    ;[h.sw,h.swm,h.acd].forEach(function(x){on(x,'change',function(){$(this).select()})})
+    $e[0].querySelectorAll('[id]').forEach(function(x){h[x.id.replace(/^code-/,'')]=x})
+    var updEnabling=function(){h.sw.disabled=h.aim.disabled=!h.ai.checked;h.swm.disabled=!h.ai.checked||!h.aim.checked}
+    h.ai  .onchange=function(){updEnabling();h.ai .checked&&h.sw .select()}
+    h.aim .onchange=function(){updEnabling();h.aim.checked&&h.swm.select()}
+    h.acbl.onchange=function(){h.acbe.disabled=!h.acbl.checked;h.acbl.checked&&h.acbe.focus()}
+    h.ac  .onchange=function(){h.acd .disabled=!h.ac  .checked;h.ac.checked&&h.acd.select()}
   },
   load:function(){
     var p=D.prf
@@ -42,7 +41,7 @@ D.prf_tabs.push({
     h.fold.checked=!!p.fold               ()
     h.vt  .checked=!!p.valueTips          ()
     h.sqt .checked=!!p.squiggleTips       ()
-    $(h.ai).add(h.acbl).add(h.ac).change()
+    h.ai.onchange();h.acbl.onchange();h.ac.onchange()
   },
   save:function(){
     var p=D.prf
@@ -61,9 +60,9 @@ D.prf_tabs.push({
     p.squiggleTips       (h.sqt .checked)
   },
   validate:function(){
-    if(h.ai .checked&&!isInt(h.sw .value,0))return{msg:'Auto-indent must be a non-negative integer.'           ,h:h.ai}
-    if(h.aim.checked&&!isInt(h.swm.value,0))return{msg:'Auto-indent in methods must be a non-negative integer.',h:h.aim}
-    if(h.ac .checked&&!isInt(h.acd.value,1))return{msg:'Autocompletion delay must be a positive integer.'      ,h:h.acd}
+    if(h.ai .checked&&!isInt(h.sw .value,0))return{msg:'Auto-indent must be a non-negative integer.'           ,el:h.sw}
+    if(h.aim.checked&&!isInt(h.swm.value,0))return{msg:'Auto-indent in methods must be a non-negative integer.',el:h.swm}
+    if(h.ac .checked&&!isInt(h.acd.value,1))return{msg:'Autocompletion delay must be a positive integer.'      ,el:h.acd}
   }
 })
 function isInt(x,minX){x=+x;return x===(x|0)&&x>=minX}
