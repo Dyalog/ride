@@ -12,8 +12,8 @@ if(D.el){
   CM.commands.ZMI=function(){D.prf.zoom(Math.min( zM,D.prf.zoom()+1));updPW()}
   CM.commands.ZMO=function(){D.prf.zoom(Math.max(-zM,D.prf.zoom()-1));updPW()}
   CM.commands.ZMR=function(){D.prf.zoom(0);updPW()}
-  document.onmousewheel=function(e){var d=e.originalEvent.wheelDelta
-                                    d&&(e.ctrlKey||e.metaKey)&&!e.shiftKey&&!e.altKey&&CM.commands[d>0?'ZMI':'ZMO']()}
+  document.onmousewheel=
+    function(e){var d=e.wheelDelta;d&&(e.ctrlKey||e.metaKey)&&!e.shiftKey&&!e.altKey&&CM.commands[d>0?'ZMI':'ZMO']()}
   document.body.className+=' zoom'+D.prf.zoom()
   D.prf.zoom(function(z){
     if(!D.ide)return
