@@ -2,7 +2,7 @@
 ;(function(){'use strict'
 
 let $sel=$(),sel,$d //$sel:selected item(s), sel: .data('cn') of the selected item (only if it's unique), $d:dialog
-,interpreters=[], interpretersSSH=[]
+,interpreters=[],interpretersSSH=[]
 const fs=node_require('fs'),cp=node_require('child_process')
 ,esc=D.util.esc,user=D.el?process.env.USER:'',q={} //q:mapping between ids and jQuery objects
 ,ANON='[anonymous]',TEMP='[temp]',MIN_V=[15,0]
