@@ -35,11 +35,8 @@ const fs=node_require('fs'),cp=node_require('child_process')
     const a=q.env.value.split('\n')
     for(let i=0;i<a.length;i++)if(!KV.test(a[i])&&!WS.test(a[i]))
       {$.err('Invalid environment variables',_=>{q.env.focus()});return}
-    if(sel.ssh){
-      const pw=q.ssh_pass.value,kf=q.ssh_key.value
-      if(!pw&&!kf){$.err('Either "Password" or "Key file" is required',_=>{q.ssh_pass.focus()});return}
-      if(pw&&kf){$.err('Only one of "Password" and "Key file" must be present',_=>{q.ssh_pass.focus()});return}
-    }
+    if(sel.ssh){const t=q.ssh_auth_type.value
+                q['ssh_'+t].value||$.err((t==='key'?'"Key file"':'"Password"')+' is required',_=>{q['ssh_'+t].focus()})}
   }
   return 1
 }
@@ -66,10 +63,9 @@ const fs=node_require('fs'),cp=node_require('child_process')
       case'start':
         const env={},a=q.env.value.split('\n');for(let i=0;i<a.length;i++){const m=KV.exec(a[i]);m&&(env[m[1]]=m[2])}
         if(sel.ssh){
-          const pw=q.ssh_pass.value,kf=q.ssh_key.value
-          $d=$('<progress class=cn_progress/>')
-             .dialog({modal:1,width:350,title:'Connecting...'})
-          D.skt.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||user,pass:pw,key:kf,env})
+          $d=$('<progress class=cn_progress/>').dialog({modal:1,width:350,title:'Connecting...'})
+          D.skt.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||user,
+                             pass:q.ssh_pass.value,key:q.ssh_key.value,env})
         }else{
           D.skt.emit('*launch',{exe:sel.exe,env})
         }
@@ -98,9 +94,9 @@ D.cn=_=>{
   q.ssh.onchange=_=>{q.ssh_dtl.hidden=!q.ssh.checked;updExes()}
   q.ssh_user.placeholder=user
   q.fetch.onclick=_=>{if(!validate())return
-                      const pw=q.ssh_pass.value,kf=q.ssh_key.value;q.fetch[0].disabled=1
-                      D.skt.emit('*sshFetchListOfInterpreters',
-                                 {host:sel.host,port:+sel.port||22,user:sel.user||user,pass:pw,key:kf})}
+                      q.fetch.disabled=1
+                      D.skt.emit('*sshFetchListOfInterpreters',{host:sel.host,port:+sel.port||22,user:sel.user||user,
+                                                                pass:q.ssh_pass.value,key:q.ssh_key.value})}
   q.exe.onchange=q.exe.onkeyup=_=>{q.exes.value||D.prf.otherExe(q.exe.value)}
   q.exes.onchange=_=>{const v=q.exes.value;q.exe.value=v||D.prf.otherExe();q.exe.readOnly=!!v;$(q.exe).change()
                       v||q.exe.focus();D.prf.selectedExe(v)} //todo: do we still need this pref?
@@ -120,6 +116,7 @@ D.cn=_=>{
                            if(v){x.value=v[0];$(x).elastic().change()};return!1}
   q.cert_dots   .onclick=_=>{browse(q.cert   ,'Certificate')}
   q.ssh_key_dots.onclick=_=>{browse(q.ssh_key,'SSH Key'    )}
+  q.ssh_auth_type.onchange=_=>{var k=q.ssh_auth_type.value==='key';q.ssh_pass_wr.hidden=k;q.ssh_key_wr.hidden=!k}
   D.prf.favs().forEach(x=>{q.favs.appendChild(favDOM(x)[0])})
   $(q.favs).list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
     .on('click','.go',function(e){$(q.favs).list('select',$(this).parentsUntil(q.favs).last().index());q.go.click()})
