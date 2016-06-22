@@ -155,6 +155,3 @@ if(env.RIDE_EDITOR){
     p.on('exit',()=>{const s=fs.readFileSync(f,'utf8');fs.unlinkSync(f);callback(s)})
   }
 }
-
-// cmd line args
-{const a=ps.argv,h=D.args={};for(let i=2;i<a.length;i++)if(a[i][0]==='-'){h[a[i]]=a[i+1];i++}}
