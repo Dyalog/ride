@@ -1,11 +1,11 @@
 ;(function(){'use strict'
 
-var G=[],H={},q={} //G:syntax highlighting groups {t,s,c,ctrls}; H:reverse lookup dict for G; q:DOM elements
-D.addSyntaxGroups=function(x){G=G.concat(x);H={};for(var i=0;i<G.length;i++)H[G[i].t]=i;SCMS&&updStl()}
-D.addSyntaxGroups([
-  //t: token type, a short key for storing customisations in localStorage
+var G=[],H={},q={} //G:syntax highlighting groups; H:reverse lookup dict for G; q:DOM elements
+D.addSynGrps=function(x){G=G.concat(x);H={};for(var i=0;i<G.length;i++)H[G[i].t]=i;SCMS&&updStl()}
+D.addSynGrps([
+  //t: token type, a short key for storing customisations
   //s: string to display in the UI
-  //c: css selector -- will be prefixed with "#col-cm" or ".ride-win" unless /*noprefix*/ is present
+  //c: css selector -- will be prefixed with "#col_cm" or ".ride-win" unless /*noprefix*/ is present
   //ctrls: what UI controls should be shown or hidden for this group (other than the default ones)
   {s:'assignment'      ,t:'asgn',c:'.cm-apl-asgn'},
   {s:'bracket'         ,t:'sqbr',c:'.cm-apl-sqbr'},
@@ -94,12 +94,12 @@ var SCMS=[ //built-in schemes
     'str=fg:8 tc=bg:e,bgo:1 zld=fg:8 vtt=bc:aaa'},
   {name:'Kazimir Malevich',styles:''}
 ].map(decScm).map(function(x){x.frz=1;return x})
-var scms   //all schemes (built-in and user-defined) as objects
-var scm    //the active scheme object
-var $cm,cm //DOM element and CodeMirror instance for displaying sample code
-var sel    //the selected group's token type (.t)
+var scms //all schemes (built-in and user-defined) as objects
+var scm  //the active scheme object
+var cm   //CodeMirror instance for displaying sample code
+var sel  //the selected group's token type (.t)
 function renderCSS(scm,isSample){
-  var rp=isSample?'#col-cm':'.ride-win' //css rule prefix, ignored when there's a "/*noprefix*/"
+  var rp=isSample?'#col_cm':'.ride-win' //css rule prefix, ignored when there's a "/*noprefix*/"
   return G.map(function(g){var h=scm[g.t];return!h?'':
     g.c.split(',').map(function(x){return!/^\/\*noprefix\*\//.test(x)?rp+' '+x:isSample?'#nonexistent':x}).join(',')+'{'+
       (h.fg?'color:'+RGB(h.fg)+';'           :'')+
@@ -118,7 +118,7 @@ function rgb(x){if(!/^#.{6}$/.test(x))return x
                 var r=x[1],R=x[2],g=x[3],G=x[4],b=x[5],B=x[6];return r!==R||g!==G||b!==B?x.slice(1):r===g&&g===b?r:r+g+b}
 function updStl(){ //update global style from what's in prefs.json
   var s=D.prf.colourScheme(),a=SCMS.concat(D.prf.colourSchemes().map(decScm))
-  for(var i=0;i<a.length;i++)if(a[i].name===s){document.getElementById('col-stl').textContent=renderCSS(a[i]);break}
+  for(var i=0;i<a.length;i++)if(a[i].name===s){document.getElementById('col_stl').textContent=renderCSS(a[i]);break}
 }
 $(updStl);D.prf.colourScheme(updStl);D.prf.colourSchemes(updStl)
 function uniqScmName(x){ //x:suggested root
@@ -128,33 +128,33 @@ function uniqScmName(x){ //x:suggested root
 var SC_MATCH='search match' //sample text to illustrate it
 D.prf_tabs.push({
   name:'Colours',id:'col',
-  init:function($e){
+  init:function(t){
     var u=[],fg;for(var g in scm)(fg=scm[g].fg)&&u.indexOf(fg)<0&&u.push(fg);u.sort() //u:unique colours
-    $e[0].innerHTML=
-      '<div id=col-top>'+
-        '<label><u>S</u>cheme: <select id=col-scm></select></label>'+
-        '<input id=col-new-name> '+
-        '<button id=col-cln>C<u>l</u>one</button>  '+
-        '<button id=col-ren><u>R</u>ename</button> '+
-        '<button id=col-del><u>D</u>elete</button> '+
+    t.innerHTML=
+      '<div id=col_top>'+
+        '<label><u>S</u>cheme: <select id=col_scm></select></label>'+
+        '<input id=col_new_name> '+
+        '<button id=col_cln>C<u>l</u>one</button>  '+
+        '<button id=col_ren><u>R</u>ename</button> '+
+        '<button id=col_del><u>D</u>elete</button> '+
       '</div>'+
-      '<div id=col-cm></div>'+
-      '<div id=col-settings>'+
-        '<datalist id=col-list>'+u.map(function(c){return'<option value='+c+'>'}).join('')+'</datalist>'+
-        '<select id=col-group>'+G.map(function(g,i){return'<option value='+i+'>'+g.s}).join('')+'</select>'+
-        '<p id=col-fg-p><label><input type=checkbox id=col-fg-cb><u>F</u>oreground</label> <input type=color id=col-fg list=col-list>'+
-        '<p id=col-bg-p><label><input type=checkbox id=col-bg-cb><u>B</u>ackground</label> <input type=color id=col-bg list=col-list>'+
-        '<div id=col-bgo title=Transparency></div>'+
-        '<p id=col-BIU-p>'+
-          '<label><input type=checkbox id=col-B><b>B</b></label> '+
-          '<label><input type=checkbox id=col-I><i>I</i></label> '+
-          '<label><input type=checkbox id=col-U><u>U</u></label> '+
-        '<p id=col-bc-p><label><input type=checkbox id=col-bc-cb>Border colour</label> <input type=color id=col-bc list=col-list>'+
+      '<div id=col_cm></div>'+
+      '<div id=col_settings>'+
+        '<datalist id=col_list>'+u.map(function(c){return'<option value='+c+'>'}).join('')+'</datalist>'+
+        '<select id=col_group>'+G.map(function(g,i){return'<option value='+i+'>'+g.s}).join('')+'</select>'+
+        '<p id=col_fg_p><label><input type=checkbox id=col_fg_cb><u>F</u>oreground</label> <input type=color id=col_fg list=col_list>'+
+        '<p id=col_bg_p><label><input type=checkbox id=col_bg_cb><u>B</u>ackground</label> <input type=color id=col_bg list=col_list>'+
+        '<div id=col_bgo title=Transparency></div>'+
+        '<p id=col_BIU_p>'+
+          '<label><input type=checkbox id=col_B><b>B</b></label> '+
+          '<label><input type=checkbox id=col_I><i>I</i></label> '+
+          '<label><input type=checkbox id=col_U><u>U</u></label> '+
+        '<p id=col_bc_p><label><input type=checkbox id=col_bc_cb>Border colour</label> <input type=color id=col_bc list=col_list>'+
       '</div>'
-    var a=$e[0].querySelectorAll('[id]');for(var i=0;i<a.length;i++)q[a[i].id.replace(/^col-/,'').replace(/-/g,'_')]=a[i]
+    var a=t.querySelectorAll('[id]');for(var i=0;i<a.length;i++)q[a[i].id.replace(/^col_/,'')]=a[i]
     q.scm.onchange=function(){scm=scms[+this.selectedIndex];updSampleStl()
                               $('#prf-tab-col').toggleClass('frz',!!scm.frz)
-                              cm.setSize(cm.offsetWidth,cm.offsetHeight)}
+                              cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight)}
     q.new_name.onblur=function(){var newName=$(this).val();if(!newName)return
                                  scm.name='';scm.name=uniqScmName(newName)
                                  $('#prf-tab-col').removeClass('renaming');updScms()}
@@ -166,8 +166,7 @@ D.prf_tabs.push({
                              $('#prf-tab-col').addClass('renaming');setTimeout(function(){q.new_name.focus()},0)}
     q.del.onclick=function(){var i=q.scm.selectedIndex;scms.splice(i,1);scm=scms[Math.min(i,scms.length-1)]
                              updScms();return!1}
-    $cm=$(q.cm)
-    cm=CodeMirror($cm[0],{
+    cm=CodeMirror(q.cm,{
       lineNumbers:true,firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
       indentUnit:4,scrollButtonHeight:12,matchBrackets:true,autoCloseBrackets:{pairs:'()[]{}',explode:'{}'},
       value:'{R}←{X}tradfn(Y Z);local\n'+
@@ -205,22 +204,23 @@ D.prf_tabs.push({
     q.bg_cb.onclick=function(){q.bgo.hidden=!this.checked}
     $(q.bgo).slider({range:'min',value:.5,min:0,max:1,step:.25,animate:false,
                      slide:function(e,ui){(scm[sel]||(scm[sel]={})).bgo=ui.value;updSampleStl()}})
-    ;['B','I','U'].forEach(function(p){$('#col-'+p).click(function(){var h=scm[sel]||(scm[sel]={})
+    ;['B','I','U'].forEach(function(p){$('#col_'+p).click(function(){var h=scm[sel]||(scm[sel]={})
                                        this.checked?h[p]=1:delete h[p];updSampleStl()})})
   },
   load:function(){var a=scms=SCMS.concat(D.prf.colourSchemes().map(decScm)),s=D.prf.colourScheme()
                   scm=a[0];for(var i=0;i<a.length;i++)if(a[i].name===s){scm=a[i];break}
-                  updScms();$('#prf-tab-col').removeClass('renaming');cm.setSize($cm.width(),$cm.height())},
+                  updScms();$('#prf-tab-col').removeClass('renaming')
+                  cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);cm.refresh()},
   save:function(){D.prf.colourSchemes(scms.filter(function(x){return!x.frz}).map(encScm));D.prf.colourScheme(scm.name)},
-  resize:function(){cm.setSize($cm.width(),$cm.height())}
+  resize:function(){cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);cm.refresh()}
 })
 function updScms(){
   q.scm.innerHTML=scms.map(function(x){x=D.util.esc(x.name);return'<option value="'+x+'">'+x}).join('')
   q.scm.value=scm.name
-  $('#prf-tab-col').toggleClass('frz',!!scm.frz);cm.setSize($cm.width(),$cm.height())
+  $('#prf-tab-col').toggleClass('frz',!!scm.frz);cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight)
   updSampleStl();selGrp('norm',1)
 }
-function updSampleStl(){document.getElementById('col-sample-stl').textContent=renderCSS(scm,1)}
+function updSampleStl(){document.getElementById('col_sample_stl').textContent=renderCSS(scm,1)}
 function selGrp(t,forceRefresh){
   if(!scm||sel===t&&!forceRefresh)return
   var i=H[t],h=scm[t]||{},v;q.group.value=i

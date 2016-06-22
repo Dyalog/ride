@@ -21,12 +21,14 @@ fmt   format
 fn    function
 geom  geometry, the mechanical layout of a keyboard
 hdr   header
+hvr   hover
 kbd   keyboard
 kw    keyword; sometimes used as a synonym for "control structure"
 lb    language bar
 lbl   label
 lc    locale
 lhs   left-hand side
+lyt   layout
 msg   message
 pfx   prefix
 pos   position

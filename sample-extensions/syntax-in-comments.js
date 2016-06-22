@@ -31,7 +31,7 @@ CodeMirror.defineMode('acme',function(){ // https://codemirror.net/doc/manual.ht
     }
   }
 })
-D.addSyntaxGroups( // Dyalog API for adding extra syntax highlighting groups to Preferences>Colours:
+D.addSynGrps( //Dyalog API for adding extra syntax highlighting groups to Preferences>Colours:
   'type comment number dollarnumber as identifier colon delimiter error'
   .split(' ').map(function(x){return{t:'acme-'+x,s:'ACME '+x,c:'.cm-apl-com.cm-acme-'+x}})
 )

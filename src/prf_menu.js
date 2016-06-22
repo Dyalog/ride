@@ -2,12 +2,12 @@
 
 var ta // the textarea
 D.prf_tabs.push({
-  name:'Menu',id:'menu',
-  init:function($e){
-    $e[0].innerHTML='<button id=menu-rst class=rst><u>R</u>eset</button>'+
-                    '<p>Takes effect on restart</p><textarea id=menu-ta wrap=off></textarea>'
-    ta=document.getElementById('menu-ta')
-    document.getElementById('menu-rst').onclick=function(){ta.value=D.prf.menu.getDefault()}
+  name:'Menu',id:'pmenu',
+  init:function(t){
+    t.innerHTML='<button id=pmenu_rst><u>R</u>eset</button>'+
+                '<p>Takes effect on restart</p><textarea id=pmenu_ta wrap=off></textarea>'
+    ta=document.getElementById('pmenu_ta')
+    document.getElementById('pmenu_rst').onclick=function(){ta.value=D.prf.menu.getDefault()}
   },
   load:function(){ta.value=D.prf.menu()},
   save:function(){D.prf.menu(ta.value)},
@@ -24,7 +24,7 @@ D.prf_tabs.push({
     }
   }
 })
-D.parseMenuDSL=function(md){ // md:menu description
+D.parseMenuDSL=function(md){ //md:menu description
   var extraOpts={
     LBR:{checkBoxPref:D.prf.lbar      },
     FLT:{checkBoxPref:D.prf.floating  },

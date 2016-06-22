@@ -3,23 +3,23 @@
 var on=CodeMirror.on, h={} //h:various input elements
 D.prf_tabs.push({
   name:'Code',id:'code',
-  init:function($e){
-    $e[0].innerHTML=
+  init:function(t){
+    t.innerHTML=
       '<div>'+
-        '<p><label><input id=code-ai   type=checkbox>A<u>u</u>to-indent</label> <label><input id=code-sw  size=1> spaces</label>'+
-        '<p><label><input id=code-aim  type=checkbox>in <u>m</u>ethods:</label> <label><input id=code-swm size=1> spaces</label>'+
-        '<p><label><input id=code-icom type=checkbox><u>I</u>ndent lines that contain only a comment</label>'+
-        '<p><label><input id=code-io   type=checkbox>I<u>n</u>dent content when an editor is opened</label>'+
-        '<p><label><input id=code-mb   type=checkbox><u>H</u>ighlight matching brackets: <tt>()[]{}</tt></label></p>'+
-        '<p><label><input id=code-acbr type=checkbox>Au<u>t</u>o-close brackets</label>'+
-        '<p><label><input id=code-acbl type=checkbox>Auto-c<u>l</u>ose blocks: <tt>:If :For ...</tt></label>'+
-           '<label><u>w</u>ith <select id=code-acbe><option value=0>:EndIf,:EndFor,...<option value=1>just :End</select></label>'+
-        '<p><label><input id=code-ac   type=checkbox>Autocom<u>p</u>letion</label> <label>a<u>f</u>ter <input id=code-acd size=5>ms</label>'+
-        '<p><label><input id=code-fold type=checkbox>Co<u>d</u>e folding (outlining)</label>'+
-        '<p><label><input id=code-vt   type=checkbox>Show <u>v</u>alue tips</label>'+
-        '<p><label><input id=code-sqt  type=checkbox>Show tips for <u>g</u>lyphs</label>'+
+        '<p><label><input id=code_ai   type=checkbox>A<u>u</u>to-indent</label> <label><input id=code_sw  size=1> spaces</label>'+
+        '<p><label><input id=code_aim  type=checkbox>in <u>m</u>ethods:</label> <label><input id=code_swm size=1> spaces</label>'+
+        '<p><label><input id=code_icom type=checkbox><u>I</u>ndent lines that contain only a comment</label>'+
+        '<p><label><input id=code_io   type=checkbox>I<u>n</u>dent content when an editor is opened</label>'+
+        '<p><label><input id=code_mb   type=checkbox><u>H</u>ighlight matching brackets: <tt>()[]{}</tt></label></p>'+
+        '<p><label><input id=code_acbr type=checkbox>Au<u>t</u>o-close brackets</label>'+
+        '<p><label><input id=code_acbl type=checkbox>Auto-c<u>l</u>ose blocks: <tt>:If :For ...</tt></label>'+
+           '<label><u>w</u>ith <select id=code_acbe><option value=0>:EndIf,:EndFor,...<option value=1>just :End</select></label>'+
+        '<p><label><input id=code_ac   type=checkbox>Autocom<u>p</u>letion</label> <label>a<u>f</u>ter <input id=code_acd size=5>ms</label>'+
+        '<p><label><input id=code_fold type=checkbox>Co<u>d</u>e folding (outlining)</label>'+
+        '<p><label><input id=code_vt   type=checkbox>Show <u>v</u>alue tips</label>'+
+        '<p><label><input id=code_sqt  type=checkbox>Show tips for <u>g</u>lyphs</label>'+
       '</div>'
-    var u=$e[0].querySelectorAll('[id]');for(var i=0;i<u.length;i++){h[u[i].id.replace(/^code-/,'')]=u[i]}
+    var u=t.querySelectorAll('[id]');for(var i=0;i<u.length;i++){h[u[i].id.replace(/^code_/,'')]=u[i]}
     var updEnabling=function(){h.sw.disabled=h.aim.disabled=!h.ai.checked;h.swm.disabled=!h.ai.checked||!h.aim.checked}
     h.ai  .onchange=function(){updEnabling();h.ai .checked&&h.sw .select()}
     h.aim .onchange=function(){updEnabling();h.aim.checked&&h.swm.select()}
