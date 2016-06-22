@@ -144,14 +144,3 @@ D.rideConnect=()=>{
 //  }
 
 //D.open=(url,o)=>{o.icon='D.png';o.toolbar==null&&(o.toolbar=false);return!!gui.Window.open(url,o)} // o:options
-
-if(env.RIDE_EDITOR){
-  const d=os.tmpDir()+'/dyalog';fs.existsSync(d)||fs.mkdirSync(d,0o700)
-  D.openInExternalEditor=(ee,callback)=>{ // ee: EditableEntity from RIDE protocol
-    const f=d+'/'+ee.name+'.dyalog';fs.writeFileSync(f,ee.text,{encoding:'utf8',mode:0o600})
-    const e={};for(let k in env)e[k]=env[k];e.LINE=''+(1+(ee.currentRow||0))
-    const p=spawn(env.RIDE_EDITOR,[f],{env:e})
-    p.on('error',x=>{throw x})
-    p.on('exit',()=>{const s=fs.readFileSync(f,'utf8');fs.unlinkSync(f);callback(s)})
-  }
-}

@@ -52,8 +52,14 @@ D.IDE=function(){'use strict'
       delete ide.wins[x.win];ide.wins[0].focus()
     },
     OpenWindow:function(ee){
-      if(!ee['debugger']&&D.openInExternalEditor){
-        D.openInExternalEditor(ee,function(s){
+      if(!ee['debugger']&&D.el&&process.env.RIDE_EDITOR){
+        var fs=node_require('fs'),os=node_require('os'),cp=node_require('child_process')
+        var d=os.tmpDir()+'/dyalog';fs.existsSync(d)||fs.mkdirSync(d,7*8*8) //permissions: rwx------
+        var f=d+'/'+ee.name+'.dyalog';fs.writeFileSync(f,ee.text,{encoding:'utf8',mode:0o600})
+        var p=cp.spawn(process.env.RIDE_EDITOR,[f],{env:$.extend({},process.env,{LINE:''+(1+(ee.currentRow||0))})})
+        p.on('error',x=>{$.err(x)})
+        p.on('exit',()=>{
+          var s=fs.readFileSync(f,'utf8');fs.unlinkSync(f)
           ide.emit('SaveChanges',{win:ee.token,text:s.split('\n'),stop:ee.stop,trace:ee.trace,monitor:ee.monitor})
           ide.emit('CloseWindow',{win:ee.token})
         })
