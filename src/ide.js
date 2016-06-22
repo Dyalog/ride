@@ -2,9 +2,9 @@ D.IDE=function(){'use strict'
   var ide=D.ide=this
   document.body.innerHTML=
     '<div class=ide></div>'+
-    '<div class=lb style=display:none><a class=lb-prf href=#></a>'+D.lb.html+'</div>'+
-    '<div class=lb-tip style=display:none><div class=lb-tip-desc></div><pre class=lb-tip-text></pre></div>'+
-    '<div class=lb-tip-triangle style=display:none></div>'
+    '<div class=lb style=display:none><a class=lb_prf href=#></a>'+D.lb.html+'</div>'+
+    '<div class=lb_tip style=display:none><div class=lb_tip_desc></div><pre class=lb_tip_text></pre></div>'+
+    '<div class=lb_tip_triangle style=display:none></div>'
   ide.$ide=$('.ide')
   ide.pending=[] // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.exec=function(l,tc){ // l:lines, tc:trace
@@ -110,7 +110,7 @@ D.IDE=function(){'use strict'
     },
     TaskDialog:function(x){
       var esc=D.util.esc, i=-1 // i:the result
-      var $d=$('<div class=task-dialog><p>'+esc(x.text||'')+'<p class=subtext>'+esc(x.subtext||'')+'<div>'+
+      var $d=$('<div class=task_dlg><p>'+esc(x.text||'')+'<p class=subtext>'+esc(x.subtext||'')+'<div>'+
                  x.buttonText.map(function(s){return'<button class=task>'+esc(s)+'</button>'}).join('')+
                '</div><p class=footer>'+esc(x.footer||'')+'</div>')
       $d.on('click','.task',function(e){i=100+$(e.target).index();$d.dialog('close')})
@@ -141,13 +141,13 @@ D.IDE=function(){'use strict'
   ide.unblock=function(){--blk||rrd()}
 
   // language bar
-  $('.lb-prf').click(function(){D.prf_ui('layout')})
-  var $tip=$('.lb-tip'),$tipDesc=$('.lb-tip-desc'),$tipText=$('.lb-tip-text'),$tipTriangle=$('.lb-tip-triangle')
-  var ttid=null // tooltip timeout id
-  function requestTooltip(e,desc,text){ // e:element
+  $('.lb_prf').click(function(){D.prf_ui('layout')})
+  var $tip=$('.lb_tip'),$tipDesc=$('.lb_tip_desc'),$tipText=$('.lb_tip_text'),$tipTriangle=$('.lb_tip_triangle')
+  var ttid=0 //tooltip timeout id
+  function requestTooltip(e,desc,text){ //e:element
     clearTimeout(ttid);var $t=$(e.target),p=$t.position()
     ttid=setTimeout(function(){
-      ttid=null;$tipDesc.text(desc);$tipText.text(text)
+      ttid=0;$tipDesc.text(desc);$tipText.text(text)
       $tipTriangle.css({left:3+p.left+($t.width()-$tipTriangle.width())/2,top:p.top+$t.height()+3}).show()
       var x0=p.left-21,x1=x0+$tip.width(),y0=p.top+$t.height()
       $tip.css(x1>$(document).width()?{left:'',right:0,top:y0}:{left:Math.max(0,x0),right:'',top:y0}).show()
@@ -156,12 +156,12 @@ D.IDE=function(){'use strict'
   $('.lb')
     .on('mousedown',function(){return!1})
     .on('mousedown','b',function(e){var c=$(this).text(),w=ide.focusedWin;(w.hasFocus()?w:$(':focus')).insert(c);return!1})
-    .on('mouseout','b,.lb-prf',function(){clearTimeout(ttid);ttid=null;$tip.add($tipTriangle).hide()})
+    .on('mouseout','b,.lb_prf',function(){clearTimeout(ttid);ttid=null;$tip.add($tipTriangle).hide()})
     .on('mouseover','b',function(e){
       var c=$(this).text(),k=D.getBQKeyFor(c),s=k&&c.charCodeAt(0)>127?'Keyboard: '+D.prf.prefixKey()+k+'\n\n':''
       var h=D.lb.tips[c]||[c,''];requestTooltip(e,h[0],s+h[1])
     })
-    .on('mouseover','.lb-prf',function(e){
+    .on('mouseover','.lb_prf',function(e){
       var h=D.prf.keys(),s=''
       for(var i=0;i<D.cmds.length;i++){
         var cmd=D.cmds[i],code=cmd[0],desc=cmd[1],defaults=cmd[2]

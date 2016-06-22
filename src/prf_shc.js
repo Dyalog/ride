@@ -8,8 +8,7 @@ D.prf_tabs.push({
                      '<a id=shc_sc_clr href=# hidden title="Clear search">×</a></div>'+
                 '<div id=shc_tbl_wr></div>'+
                 '<div id=shc_no_res hidden>No results</div>'
-    var a=t.querySelectorAll('[id^="shc_"]')
-    for(var i=0;i<a.length;i++)q[a[i].id.replace(/^shc_/,'').replace(/-/g,'_')]=a[i]
+    var a=t.querySelectorAll('[id^="shc_"]');for(var i=0;i<a.length;i++)q[a[i].id.replace(/^shc_/,'')]=a[i]
     t.onmouseover=function(e){var u=e.target.closest('.shc_del');if(u)u.parentNode.className+=' shc_del_hvr'}
     t.onmouseout =function(e){var u=e.target.closest('.shc_del'),p=u&&u.parentNode
                               if(p)p.className=p.className.replace(/(^|\s+)shc_del_hvr($|\s+)/,' ')}
@@ -50,9 +49,9 @@ D.prf_tabs.push({
   },
   validate:function(){var a=q.tbl_wr.getElementsByClassName('shc_dup');if(a.length)return{msg:'Duplicate shortcuts',el:a[0]}},
   save:function(){
-    var h={}
-    for(var i=0;i<D.cmds.length;i++){
-      var c=D.cmds[i][0],d=D.cmds[i][2],a=$('#shc_'+c+' .shc_text').map(function(){return $(this).text()}).toArray()
+    var h={},cmds=D.cmds
+    for(var i=0;i<cmds.length;i++){
+      var c=cmds[i][0],d=cmds[i][2],a=$('#shc_'+c+' .shc_text').map(function(){return $(this).text()}).toArray()
       if(JSON.stringify(a)!==JSON.stringify(d))h[c]=a
     }
     D.prf.keys(h)
