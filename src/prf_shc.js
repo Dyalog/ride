@@ -1,55 +1,56 @@
 ;(function(){'use strict'
 
-var $sc // <input> for search
+var q={} //DOM elements
 D.prf_tabs.push({
   name:'Shortcuts',id:'shc',
   init:function($e){
-    $e.html(
-      '<div>'+
-        '<input id=shc-search placeholder=Search>'+
-        '<a id=shc-search-clear href=# style=display:none title="Clear search">×</a>'+
-      '</div>'+
-      '<div id=shc-tbl-wr></div>'+
-      '<div id=shc-no-results style=display:none>No results</div>'
-    )
-      .on('mouseover','.shc-del',function(){$(this).parent().addClass   ('shc-del-hover')})
-      .on('mouseout' ,'.shc-del',function(){$(this).parent().removeClass('shc-del-hover')})
-      .on('click','.shc-del',function(){$(this).parent().remove();updDups();return!1})
-      .on('click','.shc-add',function(){
-        var $b=$(this);getKeystroke(function(k){k&&$b.parent().append(keyHTML(k)).append($b);updDups()});return!1
-      })
-      .on('click','.shc-rst',function(){
-        var $tr=$(this).closest('tr'),c=$tr.data('code')
+    var t=$e[0]
+    t.innerHTML='<div><input id=shc-sc placeholder=Search>'+
+                     '<a id=shc-sc-clr href=# hidden title="Clear search">×</a></div>'+
+                '<div id=shc-tbl-wr></div>'+
+                '<div id=shc-no-res hidden>No results</div>'
+    var a=t.querySelectorAll('[id^="shc-"]')
+    for(var i=0;i<a.length;i++)q[a[i].id.replace(/^shc-/,'').replace(/-/g,'_')]=a[i]
+    t.onmouseover=function(e){var u=e.target.closest('.shc-del');if(u)u.parentNode.className+=' shc-del-hover'}
+    t.onmouseout =function(e){var u=e.target.closest('.shc-del'),p=u&&u.parentNode
+                              if(p)p.className=p.className.replace(/(^|\s+)shc-del-hover($|\s+)/,' ')}
+    t.onclick=function(e){
+      var u=e.target.closest('.shc-del'),p=u&&u.parentNode
+      if(p){p.parentNode.removeChild(p);updDups()return!1}
+      var u=e.target.closest('.shc-add'),p=u&&u.parentNode
+      if(p){getKeystroke(function(k){k&&u.insertAdjacentHTML('beforebegin',keyHTML(k));updDups()});return!1}
+      var u=e.target.closest('.shc-rst'),p=u&&u.parentNode
+      if(p){
+        var tr=u.closest('tr'),c=$(tr).data('code')
         for(var i=0;i<D.cmds.length;i++)if(D.cmds[i][0]===c){
-          $tr.find('.shc-key').remove()
-          $tr.find('.shc-add').parent().prepend(D.cmds[i][2].map(keyHTML).join(''))
+          var a=tr.getElementsByClassName('shc-key');for(var j=a.length-1;j>=0;j--)a[j].parentNode.removeChild(a[j])
+          tr.getElementsByClassName('shc-add')[0].parentNode
+            .insertAdjacentHTML('beforebegin',D.cmds[i][2].map(keyHTML).join(''))
           updDups()
         }
-      })
-    $sc=$('#shc-search').on('keyup change',function(){
-      var q=this.value.toLowerCase(),found=0
-      $('#shc-search-clear').toggle(!!q)
-      $('#shc-tbl-wr tr').each(function(){
-        var x;$(this).toggle(x=0<=$(this).text().toLowerCase().indexOf(q));found|=x
-      })
-      $('#shc-no-results').toggle(!found)
-    })
-    $('#shc-search-clear').click(function(){$(this).hide();$sc.val('').change().focus();return!1})
+        return!1
+      }
+    }
+    q.sc.onkeyup=q.sc.onchange=function(){
+      var a=q.tbl_wr.querySelectorAll('tr'),s=this.value.toLowerCase(),empty=1;q.sc_clr.hidden=!s
+      for(var i=0;i<a.length;i++)empty&=a[i].hidden=a[i].textContent.toLowerCase().indexOf(s)<0
+      q.no_res.hidden=!empty
+    }
+    q.sc_clr.onclick=function(){this.hidden=1;q.sc.value='';$(q.sc).change();q.sc.focus();return!1}
   },
   load:function(){
     var h=D.prf.keys(),html='<table>',cmds=D.cmds
     for(var i=0;i<cmds.length;i++){
-      var x=cmds[i],c=x[0],s=x[1],d=x[2] // c:code, s:description, d:default
+      var x=cmds[i],c=x[0],s=x[1],d=x[2] //c:code,s:description,d:default
       html+='<tr data-code='+c+'>'+
               '<td>'+s+'<td class=shc-code>'+c+
-              '<td id=shc-'+c+'>'+((h[c]||d).map(keyHTML).join(''))+'<a href=# class=shc-add>+</a>'
+              '<td id=shc-'+c+'>'+((h[c]||d).map(keyHTML).join(''))+'<a href=# class=shc-add>+</a>'+
               '<td><a href=# class=shc-rst title=Reset>↶</a>'
     }
-    html+='</table>'
-    document.getElementById('shc-tbl-wr').innerHTML=html
-    updDups();$sc.val()&&$sc.val('').change()
+    document.getElementById('shc-tbl-wr').innerHTML=html+'</table>'
+    updDups();if(q.sc.value){q.sc.value='';$(q.sc).change()}
   },
-  validate:function(){var $d=$('#shc-tbl-wr .shc-dup');if($d.length)return{msg:'Duplicate shortcuts',el:$d[0]}},
+  validate:function(){var a=q.tbl_wr.getElementsByClassName('shc-dup');if(a.length)return{msg:'Duplicate shortcuts',el:a[0]}},
   save:function(){
     var h={}
     for(var i=0;i<D.cmds.length;i++){
@@ -58,7 +59,7 @@ D.prf_tabs.push({
     }
     D.prf.keys(h)
   },
-  activate:function(){$sc.focus()}
+  activate:function(){q.sc.focus()}
 })
 function keyHTML(k){return'<span class=shc-key><span class=shc-text>'+k+'</span><a href=# class=shc-del>×</a></span> '}
 function updKeys(x){
