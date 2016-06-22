@@ -23,7 +23,6 @@ Leftover from RIDE3 (M:major, S:significant, W:wouldn't it be nice)
                 #!/bin/bash
                 xterm -e vim "$1"
         NN: Do we need GUI for this?
-  M7 add meta-information to Windows exe
   S1 export and import preferences
         NN: not needed because preferences are already in a file in human-readable form
   S2 config file for interpreter
