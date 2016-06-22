@@ -26,8 +26,8 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 
 // z-indices (except for CodeMirror which uses 1-10)
 .ui-tooltip                            {z-index:9999}
-.lb_tip_triangle                       {z-index: 301}
-.lb_tip                                {z-index: 300}
+#lb_tip_tri                            {z-index: 301}
+#lb_tip                                {z-index: 300}
 #vt_balloon,#vt_triangle,#vt_rect      {z-index: 300}
 .menu .m-box                           {z-index: 200}
 .ui-front                              {z-index: 100}
@@ -100,24 +100,24 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 }
 
 //language bar
-.lb{.tt;.bg;padding:0 2px 0 10px;cursor:default;border-bottom:solid #888 1px;line-height:28px}
-.lb b{border:solid @dark 1px;border-left:0;font-weight:normal;margin-bottom:3px;padding:1px;background:#eeeae2}
-.lb b.first{border-left:solid @dark 1px}
-.lb b:hover{background-color:@light}
-.lb_prf{float:right;margin-right:4px;width:24px;height:24px;background:no-repeat center center url(../style/img/lb-prf.png)}
-.lb_tip_triangle{position:absolute;padding:0;margin:0;width:20px;height:19px;
-                 background:center center no-repeat url(../style/img/lb-tip-triangle.png)}
-.lb_tip{.tt;position:absolute;padding:10px;border-radius:10px;border:solid black 1px;margin-top:20px;
+#lb{.tt;.bg;padding:0 2px 0 10px;cursor:default;border-bottom:solid #888 1px;line-height:28px}
+#lb b{border:solid @dark 1px;border-left:0;font-weight:normal;margin-bottom:3px;padding:1px;background:#eeeae2}
+#lb b.first{border-left:solid @dark 1px}
+#lb b:hover{background-color:@light}
+#lb_prf{float:right;margin-right:4px;width:24px;height:24px;background:no-repeat center center url(../style/img/lb-prf.png)}
+#lb_tip{.tt;position:absolute;padding:10px;border-radius:10px;border:solid black 1px;margin-top:20px;
         background:@tip 10px 10px no-repeat url(../style/img/lb-tip.png)}
-.lb_tip_desc{.tt;padding:0 0 0 30px;margin:0;font-weight:bold}
-.lb_tip_text{.tt}
+#lb_tip_tri{position:absolute;padding:0;margin:0;width:20px;height:19px;
+            background:center center no-repeat url(../style/img/lb-tip-triangle.png)}
+#lb_tip_desc{.tt;padding:0 0 0 30px;margin:0;font-weight:bold}
+#lb_tip_text{.tt}
 
 //value tips (also styled via Prefs>Colours)
 #vt_balloon{.tt;position:absolute;border-radius:8px;border:solid black 1px;padding:7px;white-space:pre;
-  background-color:#000;color:#fff;overflow:hidden}
+            background-color:#000;color:#fff;overflow:hidden}
 #vt_triangle{position:absolute;border:solid;border-color:#000;border-width:6px 6px 0 6px;height:6px;bottom:-6px;
-  border-left-color:transparent!important;border-right-color:transparent!important;
-  background-color:transparent!important;content:""}
+             border-left-color:transparent!important;border-right-color:transparent!important;
+             background-color:transparent!important;content:""}
 #vt_triangle.inv{border-width:0 6px 6px 6px;margin-top:-6px;bottom:auto}
 #vt_rect{position:absolute;border:dotted transparent 2px;margin:-1px}
 

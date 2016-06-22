@@ -2,9 +2,9 @@ D.IDE=function(){'use strict'
   var ide=D.ide=this
   document.body.innerHTML=
     '<div class=ide></div>'+
-    '<div class=lb style=display:none><a class=lb_prf href=#></a>'+D.lb.html+'</div>'+
-    '<div class=lb_tip style=display:none><div class=lb_tip_desc></div><pre class=lb_tip_text></pre></div>'+
-    '<div class=lb_tip_triangle style=display:none></div>'
+    '<div id=lb hidden><a id=lb_prf href=#></a>'+D.lb.html+'</div>'+
+    '<div id=lb_tip hidden><div id=lb_tip_desc></div><pre id=lb_tip_text></pre></div>'+
+    '<div id=lb_tip_tri hidden></div>'
   ide.$ide=$('.ide')
   ide.pending=[] // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.exec=function(l,tc){ // l:lines, tc:trace
@@ -140,38 +140,43 @@ D.IDE=function(){'use strict'
   ide.block=function(){blk++}
   ide.unblock=function(){--blk||rrd()}
 
-  // language bar
-  $('.lb_prf').click(function(){D.prf_ui('layout')})
-  var $tip=$('.lb_tip'),$tipDesc=$('.lb_tip_desc'),$tipText=$('.lb_tip_text'),$tipTriangle=$('.lb_tip_triangle')
-  var ttid=0 //tooltip timeout id
-  function requestTooltip(e,desc,text){ //e:element
-    clearTimeout(ttid);var $t=$(e.target),p=$t.position()
+  //language bar
+  var lb  =document.getElementById('lb')
+  ,tip    =document.getElementById('lb_tip')
+  ,tipDesc=document.getElementById('lb_tip_desc')
+  ,tipText=document.getElementById('lb_tip_text')
+  ,tipTri =document.getElementById('lb_tip_tri')
+  ,lbPrf  =document.getElementById('lb_prf') //the "keyboard" button
+  ,ttid //tooltip timeout id
+  ,reqTip=function(x,desc,text){ //request tooltip, x:event
+    clearTimeout(ttid);var t=x.target,p=$(t).position()
     ttid=setTimeout(function(){
-      ttid=0;$tipDesc.text(desc);$tipText.text(text)
-      $tipTriangle.css({left:3+p.left+($t.width()-$tipTriangle.width())/2,top:p.top+$t.height()+3}).show()
-      var x0=p.left-21,x1=x0+$tip.width(),y0=p.top+$t.height()
-      $tip.css(x1>$(document).width()?{left:'',right:0,top:y0}:{left:Math.max(0,x0),right:'',top:y0}).show()
+      ttid=0;tipDesc.textContent=desc;tipText.textContent=text
+      tipTri.hidden=0;$(tipTri).css({left:p.left+(t.offsetWidth-tipTri.offsetWidth)/2,top:p.top+t.offsetHeight})
+      var x0=p.left-21,x1=x0+$(tip).width(),y0=p.top+t.offsetHeight-3
+      tip.hidden=0;$(tip).css(x1>document.body.offsetWidth?{left:'',right:0,top:y0}:{left:Math.max(0,x0),right:'',top:y0})
     },200)
   }
-  $('.lb')
-    .on('mousedown',function(){return!1})
-    .on('mousedown','b',function(e){var c=$(this).text(),w=ide.focusedWin;(w.hasFocus()?w:$(':focus')).insert(c);return!1})
-    .on('mouseout','b,.lb_prf',function(){clearTimeout(ttid);ttid=null;$tip.add($tipTriangle).hide()})
-    .on('mouseover','b',function(e){
-      var c=$(this).text(),k=D.getBQKeyFor(c),s=k&&c.charCodeAt(0)>127?'Keyboard: '+D.prf.prefixKey()+k+'\n\n':''
-      var h=D.lb.tips[c]||[c,''];requestTooltip(e,h[0],s+h[1])
-    })
-    .on('mouseover','.lb_prf',function(e){
-      var h=D.prf.keys(),s=''
-      for(var i=0;i<D.cmds.length;i++){
-        var cmd=D.cmds[i],code=cmd[0],desc=cmd[1],defaults=cmd[2]
-        if(/^(BK|BT|ED|EP|FD|QT|RP|SC|TB|TC|TL)$/.test(code)){
-          var pad=Array(Math.max(0,25-desc.length)).join(' '),ks=h[code]||defaults
-          s+=code+':'+desc+':'+pad+' '+(ks[ks.length-1]||'none')+'\n'
-        }
-      }
-      requestTooltip(e,'Keyboard Shortcuts',s+'...')
-    })
+  lb.onmousedown=function(x){
+    if(x.target.nodeName==='B'){var w=ide.focusedWin;(w.hasFocus()?w:$(':focus')).insert(x.target.textContent)}
+    return!1
+  }
+  lb.onmouseout=function(x){if(x.target.nodeName==='B'||x.target.id==='lb_prf'){
+    clearTimeout(ttid);ttid=0;tip.hidden=tipTri.hidden=1
+  }}
+  lb.onmouseover=function(x){if(x.target.nodeName==='B'){
+    var c=x.target.textContent,k=D.getBQKeyFor(c),s=k&&c.charCodeAt(0)>127?'Keyboard: '+D.prf.prefixKey()+k+'\n\n':''
+    var h=D.lb.tips[c]||[c,''];reqTip(x,h[0],s+h[1])
+  }}
+  lbPrf.onmouseover=function(x){
+    var h=D.prf.keys(),s='',r=/^(BK|BT|ED|EP|FD|QT|RP|SC|TB|TC|TL)$/
+    for(var i=0;i<D.cmds.length;i++){
+      var cmd=D.cmds[i],c=cmd[0],d=cmd[1],df=cmd[2] //c:code,ds:description,df:defaults
+      r.test(c)&&(s+=c+': '+d+':'+' '.repeat(Math.max(1,25-d.length))+((h[c]||df).slice(-1)[0]||'none')+'\n')
+    }
+    reqTip(x,'Keyboard Shortcuts',s+'...')
+  }
+  lbPrf.onclick=function(){D.prf_ui('layout');return!1}
 
   var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
   ide.gl=new GoldenLayout({labels:{minimise:'unmaximise'},
@@ -190,10 +195,10 @@ D.IDE=function(){'use strict'
   ide.gl.on('stackCreated',function(x){x.header.controlsContainer.find('.lm_close').remove()})
   ide.gl.init()
 
-  var updTopBtm=function(){ide.$ide.css({top:(D.prf.lbar()?$('.lb').height():0)+(D.el?1:22)})
+  var updTopBtm=function(){ide.$ide.css({top:(D.prf.lbar()?lb.offsetHeight:0)+(D.el?1:22)})
                            ide.gl.updateSize(ide.$ide.width(),ide.$ide.height())}
-  $('.lb').toggle(!!D.prf.lbar());updTopBtm();$(window).resize(updTopBtm)
-  D.prf.lbar(function(x){$('.lb').toggle(!!x);updTopBtm()})
+  lb.hidden=!D.prf.lbar();updTopBtm();$(window).resize(updTopBtm)
+  D.prf.lbar(function(x){lb.hidden=!x;updTopBtm()})
   setTimeout(function(){
     try{D.installMenu(D.parseMenuDSL(D.prf.menu()))}
     catch(e){$.err('Invalid menu configuration -- the default menu will be used instead')
