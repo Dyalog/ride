@@ -48,13 +48,13 @@ const fs=node_require('fs'),cp=node_require('child_process')
   try{
     switch(q.type.val()){
       case'connect':
-        $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
+        $d=$('<div class=cn-dialog><progress class=cn-progress/></div>')
           .dialog({modal:1,width:350,title:'Connecting...'})
         D.skt.emit('*connect',{host:sel.host,port:+sel.port||4502,ssl:sel.ssl,cert:sel.cert,subj:sel.subj});break
       case'listen':
         const port=sel.port||4502
         $d=$('<div class=listen>'+
-               '<div class=visual-distraction></div>'+
+               '<progress class=cn-progress/>'+
                'Please start the remote interpreter with'+
                '<div class=tt>RIDE_INIT=\'CONNECT:<i>host</i>:'+port+'\'</div>'+
                ' in its environment, so it connects here.'+
@@ -67,7 +67,7 @@ const fs=node_require('fs'),cp=node_require('child_process')
         const env={},a=q.env.val().split('\n');for(let i=0;i<a.length;i++){const m=KV.exec(a[i]);m&&(env[m[1]]=m[2])}
         if(sel.ssh){
           const pw=q.ssh_pass.val(),kf=q.ssh_key.val()
-          $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
+          $d=$('<progress class=cn-progress/>')
              .dialog({modal:1,width:350,title:'Connecting...'})
           D.skt.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||user,pass:pw,key:kf,env})
         }else{
