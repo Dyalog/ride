@@ -37,7 +37,11 @@ $.extend(CM.commands,{
   TO:CM.commands.toggleFold,
   PRF:function(){D.prf_ui()},
   ABT:function(){D.abt()},
-  CNC:function(){D.rideConnect()},
+  CNC:function(){
+    //todo: D.mac&&(p=p.replace(/(\/Contents\/).*$/,'$1MacOS/nwjs'))
+    var p=ps.execPath
+    spawn(p,[],{detached:true,stdio:['ignore','ignore','ignore'],env:$.expand({},process.env,{RIDE_SPAWN:'0'})})
+  },
   NEW:function(){
     if(!D.el)return
     if(D.lastSpawnedExe){
