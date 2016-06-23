@@ -4,8 +4,6 @@ var ta //the textarea
 D.prf_tabs.pmenu={
   name:'Menu',
   init:function(t){
-    t.innerHTML='<button id=pmenu_rst><u>R</u>eset</button>'+
-                '<p>Takes effect on restart</p><textarea id=pmenu_ta wrap=off></textarea>'
     ta=document.getElementById('pmenu_ta')
     document.getElementById('pmenu_rst').onclick=function(){ta.value=D.prf.menu.getDefault()}
   },

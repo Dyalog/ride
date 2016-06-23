@@ -13,8 +13,8 @@
 //All tabs' validate() methods are invoked, if they exist, before any attempt to call save()
 var tabs=D.prf_tabs={} //tab implementations self-register here
 
-var $d //dialog instance, lazily initialized
-function ok(){apply()&&$d.dialog('close')}
+var dlg //DOM element for dialog, lazily initialized
+function ok(){apply()&&(d.hidden=1)}
 function apply(){ //returns 0 on failure and 1 on success
   var v
   for(var i in tabs)if(v=tabs[i].validate&&tabs[i].validate()){
@@ -25,15 +25,13 @@ function apply(){ //returns 0 on failure and 1 on success
   return 1
 }
 D.prf_ui=function(){
-  if(!$d){
-    $d=$('#prf')
-      .keydown(function(e){if(e.which===13&&!e.shiftKey&&e.ctrlKey&&!e.altKey&&!e.metaKey){ok();return!1}})
-      .on('dragstart',function(){return!1})
-      .dialog({autoOpen:0,title:'Preferences',width:600,minWidth:600,height:450,minHeight:450,
-               resize:function(){for(var i in tabs)tabs[i].resize&&tabs[i].resize()},
-               buttons:[{html:'<u>O</u>K'    ,click:function(){ok();return!1}},
-                        {html:'<u>A</u>pply' ,click:function(){apply();return!1}},
-                        {html:'<u>C</u>ancel',click:function(){$d.dialog('close')}}]})
+  if(!dlg){
+    D.util.initDlg(dlg=document.getElementById('prf_dlg'))
+    dlg.onkeydown=function(x){if(x.which===13&&!x.shiftKey&&x.ctrlKey&&!x.altKey&&!x.metaKey){ok();return!1}}
+//    onresize=function(){for(var i in tabs)tabs[i].resize&&tabs[i].resize()}
+    document.getElementById('prf_dlg_ok'    ).onclick=function(){ok()   ;return!1}
+    document.getElementById('prf_dlg_apply' ).onclick=function(){apply();return!1}
+    document.getElementById('prf_dlg_cancel').onclick=function(){dlg.hidden=1}
     var nav=document.getElementById('prf_nav'),hdrs=nav.children,payloads=[]
     nav.onclick=function(x){return!1}
     nav.onmousedown=function(x){if(x.target.nodeName==='A'){
@@ -44,7 +42,7 @@ D.prf_ui=function(){
     for(var i=0;i<hdrs.length;i++){var id=hdrs[i].href.replace(/.*#/,''),e=document.getElementById(id)
                                    tabs[id].init(e);payloads.push(e)}
   }
-  $d.dialog('option','position',{at:'center',of:window}).dialog('open');for(var i in tabs)tabs[i].load()
+  dlg.hidden=0;for(var i in tabs)tabs[i].load()
 }
 
 }())

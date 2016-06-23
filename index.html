@@ -90,7 +90,8 @@
   <div id=abt_ta_wr><textarea id=abt_ta readonly wrap=off></textarea></div>
 </div>
 
-<div id=prf hidden>
+<div id=prf_dlg class=dlg hidden>
+  <div class=dlg_title><a href=# class=dlg_close title=Close>×</a>Preferences</div>
   <div id=prf_nav>
     <a href=#lyt class=sel>Layout</a>
     <a href=#shc>Shortcuts</a>
@@ -99,58 +100,69 @@
     <a href=#title>Title</a>
     <a href=#pmenu>Menu</a>
   </div>
+  <div id=prf_content>
 
-  <!--Layout-->
-  <div id=lyt>
-    <div id=lyt_hlp>To insert a blue glyph, type Prefix followed by the corresponding black character.<br>
-                    To insert a red glyph, type Prefix followed by Shift+the black character.</div><hr>
-    <div id=lyt_ctrls>
-      <button id=lyt_rst><u>R</u>eset</button>
-      <label id=lyt_pfx_lbl><u>P</u>refix: <input id=lyt_pfx size=1></label>
-      <label id=lyt_lc_lbl><u>L</u>ocale: <select id=lyt_lc></select></label>
+    <!--Layout-->
+    <div id=lyt>
+      <div id=lyt_hlp>To insert a blue glyph, type Prefix followed by the corresponding black character.<br>
+                      To insert a red glyph, type Prefix followed by Shift+the black character.</div><hr>
+      <div id=lyt_ctrls>
+        <button id=lyt_rst><u>R</u>eset</button>
+        <label id=lyt_pfx_lbl><u>P</u>refix: <input id=lyt_pfx size=1></label>
+        <label id=lyt_lc_lbl><u>L</u>ocale: <select id=lyt_lc></select></label>
+      </div>
+      <div id=lyt_kbd></div>
     </div>
-    <div id=lyt_kbd></div>
-  </div>
 
-  <!--Shortcuts-->
-  <div id=shc hidden>
-    <div><input id=shc_sc placeholder=Search><a id=shc_sc_clr href=# hidden title="Clear search">×</a></div>
-    <div id=shc_tbl_wr></div>
-    <div id=shc_no_res hidden>No results</div>
-  </div>
-
-  <!--Code-->
-  <div id=code hidden></div>
-
-  <!--Colours-->
-  <div id=col hidden>
-    <div id=col_top>
-      <label><u>S</u>cheme: <select id=col_scm></select></label>
-      <input id=col_new_name>
-      <button id=col_cln>C<u>l</u>one</button>
-      <button id=col_ren><u>R</u>ename</button>
-      <button id=col_del><u>D</u>elete</button>
+    <!--Shortcuts-->
+    <div id=shc hidden>
+      <div><input id=shc_sc placeholder=Search><a id=shc_sc_clr href=# hidden title="Clear search">×</a></div>
+      <div id=shc_tbl_wr></div>
+      <div id=shc_no_res hidden>No results</div>
     </div>
-    <div id=col_cm></div>
-    <div id=col_settings>
-      <datalist id=col_list></datalist>
-      <label><u>T</u>oken type:<br><select id=col_grp></select></label>
-      <p id=col_fg_p><label><input type=checkbox id=col_fg_cb><u>F</u>oreground</label> <input type=color id=col_fg list=col_list>
-      <p id=col_bg_p><label><input type=checkbox id=col_bg_cb><u>B</u>ackground</label> <input type=color id=col_bg list=col_list>
-      <div id=col_bgo title=Transparency></div>
-      <p id=col_BIU_p>
-        <label><input type=checkbox id=col_B><b>B</b></label>
-        <label><input type=checkbox id=col_I><i>I</i></label>
-        <label><input type=checkbox id=col_U><u>U</u></label>
-      <p id=col_bc_p><label><input type=checkbox id=col_bc_cb>Border colour</label> <input type=color id=col_bc list=col_list>
+
+    <!--Code-->
+    <div id=code hidden></div>
+
+    <!--Colours-->
+    <div id=col hidden>
+      <div id=col_top>
+        <label><u>S</u>cheme: <select id=col_scm></select></label>
+        <input id=col_new_name>
+        <button id=col_cln>C<u>l</u>one</button>
+        <button id=col_ren><u>R</u>ename</button>
+        <button id=col_del><u>D</u>elete</button>
+      </div>
+      <div id=col_cm></div>
+      <div id=col_settings>
+        <datalist id=col_list></datalist>
+        <label><u>T</u>oken type:<br><select id=col_grp></select></label>
+        <p id=col_fg_p><label><input type=checkbox id=col_fg_cb><u>F</u>oreground</label> <input type=color id=col_fg list=col_list>
+        <p id=col_bg_p><label><input type=checkbox id=col_bg_cb><u>B</u>ackground</label> <input type=color id=col_bg list=col_list>
+        <div id=col_bgo title=Transparency></div>
+        <p id=col_BIU_p>
+          <label><input type=checkbox id=col_B><b>B</b></label>
+          <label><input type=checkbox id=col_I><i>I</i></label>
+          <label><input type=checkbox id=col_U><u>U</u></label>
+        <p id=col_bc_p><label><input type=checkbox id=col_bc_cb>Border colour</label> <input type=color id=col_bc list=col_list>
+      </div>
     </div>
+
+    <!--Title-->
+    <div id=title hidden></div>
+
+    <!--Menu-->
+    <div id=pmenu hidden>
+      <p><button id=pmenu_rst><u>R</u>eset</button> Takes effect on restart</p>
+      <div id=pmenu_ta_wr><textarea id=pmenu_ta wrap=off></textarea></div>
+    </div>
+
   </div>
-
-  <!--Title-->
-  <div id=title hidden></div>
-
-  <!--Menu-->
-  <div id=pmenu hidden></div>
+  <div class=dlg_btns>
+    <button id=prf_dlg_ok><u>O</u>K</button>
+    <button id=prf_dlg_apply><u>A</u>pply</button>
+    <button id=prf_dlg_cancel><u>C</u>ancel</button>
+  </div>
 </div>
 
 <!--libs-->
