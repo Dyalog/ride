@@ -13,26 +13,19 @@
 //All tabs' validate() methods are invoked, if they exist, before any attempt to call save()
 var tabs=D.prf_tabs={} //tab implementations self-register here
 
-var $d // dialog instance, lazily initialized
+var $d //dialog instance, lazily initialized
 function ok(){apply()&&$d.dialog('close')}
-function apply(){ // returns 0 on failure and 1 on success
+function apply(){ //returns 0 on failure and 1 on success
   var v
-  for(var i=0;i<tabs.length;i++)if(v=tabs[i].validate&&tabs[i].validate()){
+  for(var i in tabs)if(v=tabs[i].validate&&tabs[i].validate()){
     setTimeout(function(){$.err(v.msg,v.el?function(){v.el.focus()}:null)},1)
     return 0
   }
-  for(var i=0;i<tabs.length;i++)tabs[i].save&&tabs[i].save()
+  for(var i in tabs)tabs[i].save()
   return 1
 }
 D.prf_ui=function(){
   if(!$d){
-    var nav=document.getElementById('prf_nav'),hdrs=nav.children,payloads=[]
-    for(var i=0;i<hdrs.length;i++)payloads.push(document.getElementById(hdrs[i].href.replace(/.*#/,'')))
-    nav.onmousedown=function(x){if(x.target.nodeName==='A'){
-      for(var i=0;i<hdrs.length;i++){var b=hdrs[i]===x.target;payloads[i].hidden=!b;hdrs[i].className=b?'sel':''}
-      var id=x.target.href.replace(/.*#/,''),t=tabs[id];t.resize&&t.resize();t.activate&&t.activate()
-      x.preventDefault();return!1
-    }}
     $d=$('#prf')
       .keydown(function(e){if(e.which===13&&!e.shiftKey&&e.ctrlKey&&!e.altKey&&!e.metaKey){ok();return!1}})
       .on('dragstart',function(){return!1})
@@ -41,10 +34,17 @@ D.prf_ui=function(){
                buttons:[{html:'<u>O</u>K'    ,click:function(){ok();return!1}},
                         {html:'<u>A</u>pply' ,click:function(){apply();return!1}},
                         {html:'<u>C</u>ancel',click:function(){$d.dialog('close')}}]})
-    for(var i in tabs)tabs[i].init&&tabs[i].init(document.getElementById(i))
+    var nav=document.getElementById('prf_nav'),hdrs=nav.children,payloads=[]
+    nav.onclick=function(x){return!1}
+    nav.onmousedown=function(x){if(x.target.nodeName==='A'){
+      for(var i=0;i<hdrs.length;i++){var b=hdrs[i]===x.target;payloads[i].hidden=!b;hdrs[i].className=b?'sel':''}
+      var id=x.target.href.replace(/.*#/,''),t=tabs[id];t.resize&&t.resize();t.activate&&t.activate()
+      x.preventDefault();return!1
+    }}
+    for(var i=0;i<hdrs.length;i++){var id=hdrs[i].href.replace(/.*#/,''),e=document.getElementById(id)
+                                   tabs[id].init(e);payloads.push(e)}
   }
-  $d.dialog('option','position',{at:'center',of:window}).dialog('open')
-  for(var i in tabs)tabs[i].load&&tabs[i].load()
+  $d.dialog('option','position',{at:'center',of:window}).dialog('open');for(var i in tabs)tabs[i].load()
 }
 
 }())
