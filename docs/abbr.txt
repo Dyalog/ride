@@ -20,6 +20,7 @@ fg    foreground
 fmt   format
 fn    function
 geom  geometry, the mechanical layout of a keyboard
+grp   group
 hdr   header
 hvr   hover
 kbd   keyboard

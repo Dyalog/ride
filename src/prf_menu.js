@@ -1,8 +1,8 @@
 ;(function(){'use strict'
 
-var ta // the textarea
-D.prf_tabs.push({
-  name:'Menu',id:'pmenu',
+var ta //the textarea
+D.prf_tabs.pmenu={
+  name:'Menu',
   init:function(t){
     t.innerHTML='<button id=pmenu_rst><u>R</u>eset</button>'+
                 '<p>Takes effect on restart</p><textarea id=pmenu_ta wrap=off></textarea>'
@@ -23,7 +23,7 @@ D.prf_tabs.push({
       return{msg:e.message,el:ta}
     }
   }
-})
+}
 D.parseMenuDSL=function(md){ //md:menu description
   var extraOpts={
     LBR:{checkBoxPref:D.prf.lbar      },

@@ -14,24 +14,11 @@ D.abt=function(){
     '\n  Platform: '  +(ri.platform        ||u)+
     '\n  Edition: '   +(ri.arch            ||u)+
     '\n  Date: '      +(ri.date            ||u)+'\n'
-  var btns=[]
-  D.el&&btns.push({html:'<u>C</u>opy',click:function(){D.el.clipboard.writeText($('textarea',this).val())}})
-  btns.push({html:'C<u>l</u>ose',click:function(){$(this).dialog('close')}})
-  $(
-    '<div class=about>'+
-      '<div class=logo>'+
-        '<div class=contact-info>'+
-          '<span title="Dyalog\'s UK phone number">+44 (0)1256 830030</span><br>'+
-          '<a href="mailto:support@dyalog.com?subject=RIDE&body='+escape('\n--\n'+info)+'"'+
-          '   title="Populate an email draft with the information below">support@dyalog.com</a><br>'+
-          '<a href="http://www.dyalog.com/" target=_blank'+
-          '   title="Open Dyalog\'s website in a new window">www.dyalog.com</a>'+
-        '</div>'+
-      '</div>'+
-      '<div class=textarea-wrapper><textarea readonly wrap=off></textarea></div>'+
-    '</div>'
-  )
-    .dialog({title:'About',width:520,height:410,buttons:btns,open:function(){$(this).find('textarea').focus()}})
-    .on('click','a[href^=http]',function(){D.openExternal($(this).attr('href'));return!1})
-    .find('textarea').val(info).select()
+  var abt=document.getElementById('abt')
+  var ta =document.getElementById('abt_ta')
+  var btns=[{html:'C<u>l</u>ose',click:function(){$(abt).dialog('close')}}]
+  D.el&&btns.unshift({html:'<u>C</u>opy',click:function(){D.el.clipboard.writeText(ta.value)}})
+  $(abt).dialog({title:'About',width:520,height:410,buttons:btns,open:function(){ta.focus()}})
+  abt.onclick=function(x){if(x.target.nodeName==='A'&&/^http/.test(x.target.href)){D.openExternal(x.target.href);return!1}}
+  ta.value=info;ta.select()
 }

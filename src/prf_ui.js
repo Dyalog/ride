@@ -11,7 +11,7 @@
 //  resize()   called when the Preferences dialog is resized or the tab is selected
 //  activate() called when the tab is selected ("activated")
 //All tabs' validate() methods are invoked, if they exist, before any attempt to call save()
-var tabs=D.prf_tabs=[] // tab implementations self-register here
+var tabs=D.prf_tabs={} //tab implementations self-register here
 
 var $d // dialog instance, lazily initialized
 function ok(){apply()&&$d.dialog('close')}
@@ -24,25 +24,27 @@ function apply(){ // returns 0 on failure and 1 on success
   for(var i=0;i<tabs.length;i++)tabs[i].save&&tabs[i].save()
   return 1
 }
-D.prf_ui=function(tabId){ //tabId:which tab to focus initially
+D.prf_ui=function(){
   if(!$d){
-    $d=$('<div id=prf>'+
-           '<ul id=prf_nav>'+tabs.map(function(x){return'<li><a href=#'+x.id+'>'+x.name+'</a>'}).join('')+'</ul>'+
-           tabs.map(function(x){return'<div id='+x.id+'></div>'}).join('')+
-         '</div>')
-      .tabs({activate:function(e,ui){var t=tabs[$(ui.newTab).index()];t.resize&&t.resize();t.activate&&t.activate()}})
+    var nav=document.getElementById('prf_nav'),hdrs=nav.children,payloads=[]
+    for(var i=0;i<hdrs.length;i++)payloads.push(document.getElementById(hdrs[i].href.replace(/.*#/,'')))
+    nav.onmousedown=function(x){if(x.target.nodeName==='A'){
+      for(var i=0;i<hdrs.length;i++){var b=hdrs[i]===x.target;payloads[i].hidden=!b;hdrs[i].className=b?'sel':''}
+      var id=x.target.href.replace(/.*#/,''),t=tabs[id];t.resize&&t.resize();t.activate&&t.activate()
+      x.preventDefault();return!1
+    }}
+    $d=$('#prf')
       .keydown(function(e){if(e.which===13&&!e.shiftKey&&e.ctrlKey&&!e.altKey&&!e.metaKey){ok();return!1}})
       .on('dragstart',function(){return!1})
       .dialog({autoOpen:0,title:'Preferences',width:600,minWidth:600,height:450,minHeight:450,
-               resize:function(){for(var i=0;i<tabs.length;i++)tabs[i].resize&&tabs[i].resize()},
+               resize:function(){for(var i in tabs)tabs[i].resize&&tabs[i].resize()},
                buttons:[{html:'<u>O</u>K'    ,click:function(){ok();return!1}},
                         {html:'<u>A</u>pply' ,click:function(){apply();return!1}},
                         {html:'<u>C</u>ancel',click:function(){$d.dialog('close')}}]})
-    for(var i=0;i<tabs.length;i++){var x=tabs[i];x.init&&x.init(document.getElementById(x.id))}
+    for(var i in tabs)tabs[i].init&&tabs[i].init(document.getElementById(i))
   }
   $d.dialog('option','position',{at:'center',of:window}).dialog('open')
-  tabId&&$d.tabs({active:$('#prf_nav a[href="#'+tabId+'"]').parent().index()})
-  for(var i=0;i<tabs.length;i++)tabs[i].load&&tabs[i].load()
+  for(var i in tabs)tabs[i].load&&tabs[i].load()
 }
 
 }())

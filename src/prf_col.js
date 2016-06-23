@@ -126,32 +126,13 @@ function uniqScmName(x){ //x:suggested root
   var r=x;if(h[x]){x=x.replace(/ \(\d+\)$/,'');var i=1;while(h[r=x+' ('+i+')'])i++};return r
 }
 var SC_MATCH='search match' //sample text to illustrate it
-D.prf_tabs.push({
-  name:'Colours',id:'col',
+D.prf_tabs.col={
+  name:'Colours',
   init:function(t){
-    var u=[],fg;for(var g in scm)(fg=scm[g].fg)&&u.indexOf(fg)<0&&u.push(fg);u.sort() //u:unique colours
-    t.innerHTML=
-      '<div id=col_top>'+
-        '<label><u>S</u>cheme: <select id=col_scm></select></label>'+
-        '<input id=col_new_name> '+
-        '<button id=col_cln>C<u>l</u>one</button>  '+
-        '<button id=col_ren><u>R</u>ename</button> '+
-        '<button id=col_del><u>D</u>elete</button> '+
-      '</div>'+
-      '<div id=col_cm></div>'+
-      '<div id=col_settings>'+
-        '<datalist id=col_list>'+u.map(function(c){return'<option value='+c+'>'}).join('')+'</datalist>'+
-        '<select id=col_group>'+G.map(function(g,i){return'<option value='+i+'>'+g.s}).join('')+'</select>'+
-        '<p id=col_fg_p><label><input type=checkbox id=col_fg_cb><u>F</u>oreground</label> <input type=color id=col_fg list=col_list>'+
-        '<p id=col_bg_p><label><input type=checkbox id=col_bg_cb><u>B</u>ackground</label> <input type=color id=col_bg list=col_list>'+
-        '<div id=col_bgo title=Transparency></div>'+
-        '<p id=col_BIU_p>'+
-          '<label><input type=checkbox id=col_B><b>B</b></label> '+
-          '<label><input type=checkbox id=col_I><i>I</i></label> '+
-          '<label><input type=checkbox id=col_U><u>U</u></label> '+
-        '<p id=col_bc_p><label><input type=checkbox id=col_bc_cb>Border colour</label> <input type=color id=col_bc list=col_list>'+
-      '</div>'
     var a=t.querySelectorAll('[id]');for(var i=0;i<a.length;i++)q[a[i].id.replace(/^col_/,'')]=a[i]
+    var u=[],fg;for(var g in scm)(fg=scm[g].fg)&&u.indexOf(fg)<0&&u.push(fg);u.sort() //u:unique colours
+    q.list.innerHTML=u.map(function(x){return'<option value='+x+'>'}).join('')
+    q.grp.innerHTML=G.map(function(g,i){return'<option value='+i+'>'+g.s}).join('')
     q.scm.onchange=function(){scm=scms[+this.selectedIndex];updSampleStl()
                               $('#prf-tab-col').toggleClass('frz',!!scm.frz)
                               cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight)}
@@ -195,7 +176,7 @@ D.prf_tabs.push({
         'norm'
       )
     })
-    q.group.onchange=function(){selGrp(G[+this.value].t)}
+    q.grp.onchange=function(){selGrp(G[+this.value].t)}
     ;['fg','bg','bc'].forEach(function(p){
       q[p].onchange=function(){(scm[sel]||(scm[sel]={}))[p]=this.value;updSampleStl()}
       q[p+'_cb'].onclick=function(){var h=scm[sel]||(scm[sel]={});this.checked?h[p]=rgb(q[p].value):delete h[p]
@@ -213,17 +194,17 @@ D.prf_tabs.push({
                   cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);cm.refresh()},
   save:function(){D.prf.colourSchemes(scms.filter(function(x){return!x.frz}).map(encScm));D.prf.colourScheme(scm.name)},
   resize:function(){cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);cm.refresh()}
-})
+}
 function updScms(){
   q.scm.innerHTML=scms.map(function(x){x=D.util.esc(x.name);return'<option value="'+x+'">'+x}).join('')
   q.scm.value=scm.name
-  $('#prf-tab-col').toggleClass('frz',!!scm.frz);cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight)
+  $('#col').toggleClass('frz',!!scm.frz);cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight)
   updSampleStl();selGrp('norm',1)
 }
 function updSampleStl(){document.getElementById('col_sample_stl').textContent=renderCSS(scm,1)}
 function selGrp(t,forceRefresh){
   if(!scm||sel===t&&!forceRefresh)return
-  var i=H[t],h=scm[t]||{},v;q.group.value=i
+  var i=H[t],h=scm[t]||{},v;q.grp.value=i
   v=h.fg;q.fg_cb.checked=!!v;q.fg.value=RGB(v)||'#000000';q.fg.hidden=!v
   v=h.bg;q.bg_cb.checked=!!v;q.bg.value=RGB(v)||'#000000';q.bg.hidden=!v
   v=h.bc;q.bc_cb.checked=!!v;q.bc.value=RGB(v)||'#000000';q.bc.hidden=!v

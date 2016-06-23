@@ -1,8 +1,8 @@
 ;(function(){'use strict'
 
 var on=CodeMirror.on, h={} //h:various input elements
-D.prf_tabs.push({
-  name:'Code',id:'code',
+D.prf_tabs.code={
+  name:'Code',
   init:function(t){
     t.innerHTML=
       '<div>'+
@@ -64,7 +64,7 @@ D.prf_tabs.push({
     if(h.aim.checked&&!isInt(h.swm.value,0))return{msg:'Auto-indent in methods must be a non-negative integer.',el:h.swm}
     if(h.ac .checked&&!isInt(h.acd.value,1))return{msg:'Autocompletion delay must be a positive integer.'      ,el:h.acd}
   }
-})
+}
 function isInt(x,minX){x=+x;return x===(x|0)&&x>=minX}
 
 }())

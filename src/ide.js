@@ -1,11 +1,9 @@
 D.IDE=function(){'use strict'
   var ide=D.ide=this
-  document.body.innerHTML=
-    '<div class=ide></div>'+
-    '<div id=lb hidden><a id=lb_prf href=#></a>'+D.lb.html+'</div>'+
-    '<div id=lb_tip hidden><div id=lb_tip_desc></div><pre id=lb_tip_text></pre></div>'+
-    '<div id=lb_tip_tri hidden></div>'
-  ide.$ide=$('.ide')
+  document.getElementById('cn').hidden=1
+  document.getElementById('ide').hidden=0
+  document.getElementById('lb').insertAdjacentHTML('beforeend',D.lb.html)
+  ide.$ide=$('#ide')
   ide.pending=[] // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.exec=function(l,tc){ // l:lines, tc:trace
     if(l&&l.length){tc||(ide.pending=l.slice(1));ide.emit('Execute',{trace:tc,text:l[0]+'\n'})}
@@ -176,7 +174,7 @@ D.IDE=function(){'use strict'
     }
     reqTip(x,'Keyboard Shortcuts',s+'...')
   }
-  lbPrf.onclick=function(){D.prf_ui('layout');return!1}
+  lbPrf.onclick=function(){D.prf_ui();return!1}
 
   var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
   ide.gl=new GoldenLayout({labels:{minimise:'unmaximise'},

@@ -74,6 +74,85 @@
   </div></div>
 </div>
 
+<div id=ide></div>
+<div id=lb hidden><a id=lb_prf href=#></a></div>
+<div id=lb_tip hidden><div id=lb_tip_desc></div><pre id=lb_tip_text></pre></div>
+<div id=lb_tip_tri hidden></div>
+
+<div id=abt hidden>
+  <div id=abt_logo>
+    <div id=abt_contact>
+      <span title="Dyalog's UK phone number">+44 (0)1256 830030</span><br>
+      <a id=abt_email href=#>support@dyalog.com</a><br>
+      <a href='http://www.dyalog.com/' target=_blank>www.dyalog.com</a>
+    </div>
+  </div>
+  <div id=abt_ta_wr><textarea id=abt_ta readonly wrap=off></textarea></div>
+</div>
+
+<div id=prf hidden>
+  <ul id=prf_nav>
+    <a href=#lyt class=sel>Layout</a>
+    <a href=#shc>Shortcuts</a>
+    <a href=#code>Code</a>
+    <a href=#col>Colours</a>
+    <a href=#title>Title</a>
+    <a href=#pmenu>Menu</a>
+  </ul>
+
+  <!--Layout-->
+  <div id=lyt>
+    <div id=lyt_hlp>To insert a blue glyph, type Prefix followed by the corresponding black character.<br>
+                    To insert a red glyph, type Prefix followed by Shift+the black character.</div><hr>
+    <div id=lyt_ctrls>
+      <button id=lyt_rst><u>R</u>eset</button>
+      <label id=lyt_pfx_lbl><u>P</u>refix: <input id=lyt_pfx size=1></label>
+      <label id=lyt_lc_lbl><u>L</u>ocale: <select id=lyt_lc></select></label>
+    </div>
+    <div id=lyt_kbd></div>
+  </div>
+
+  <!--Shortcuts-->
+  <div id=shc hidden>
+    <div><input id=shc_sc placeholder=Search><a id=shc_sc_clr href=# hidden title="Clear search">×</a></div>
+    <div id=shc_tbl_wr></div>
+    <div id=shc_no_res hidden>No results</div>
+  </div>
+
+  <!--Code-->
+  <div id=code hidden></div>
+
+  <!--Colours-->
+  <div id=col hidden>
+    <div id=col_top>
+      <label><u>S</u>cheme: <select id=col_scm></select></label>
+      <input id=col_new_name>
+      <button id=col_cln>C<u>l</u>one</button>
+      <button id=col_ren><u>R</u>ename</button>
+      <button id=col_del><u>D</u>elete</button>
+    </div>
+    <div id=col_cm></div>
+    <div id=col_settings>
+      <datalist id=col_list></datalist>
+      <label><u>T</u>oken type:<br><select id=col_grp></select></label>
+      <p id=col_fg_p><label><input type=checkbox id=col_fg_cb><u>F</u>oreground</label> <input type=color id=col_fg list=col_list>
+      <p id=col_bg_p><label><input type=checkbox id=col_bg_cb><u>B</u>ackground</label> <input type=color id=col_bg list=col_list>
+      <div id=col_bgo title=Transparency></div>
+      <p id=col_BIU_p>
+        <label><input type=checkbox id=col_B><b>B</b></label>
+        <label><input type=checkbox id=col_I><i>I</i></label>
+        <label><input type=checkbox id=col_U><u>U</u></label>
+      <p id=col_bc_p><label><input type=checkbox id=col_bc_cb>Border colour</label> <input type=color id=col_bc list=col_list>
+    </div>
+  </div>
+
+  <!--Title-->
+  <div id=title hidden></div>
+
+  <!--Menu-->
+  <div id=pmenu hidden></div>
+</div>
+
 <!--libs-->
 <script>
   // https://github.com/electron/electron/blob/master/docs/faq/electron-faq.md#i-can-not-use-jqueryrequirejsmeteorangularjs-in-electron

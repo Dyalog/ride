@@ -5,45 +5,21 @@ var NK=58     //number of scancodes we are concerned with
 var model={}  //dictionary: locale→[arrayOfAPLGlyphs,arrayOfShiftedAPLGlyphs]
 var q={},g=[] //q:DOM elements, g[i][j]:the DOM elements for key i and group j
 function tip(x){return x===' '?'Click to\nconfigure':'U+'+('000'+x.charCodeAt(0).toString(16).toUpperCase()).slice(-4)}
-D.prf_tabs.push({
-  name:'Layout',id:'lyt',
+D.prf_tabs.lyt={
+  name:'Layout',
   init:function(t){
     var sk={15:'←',16:'↹',30:'Caps',43:'↲',44:'⇧',57:'⇧'} //special keys
-    t.innerHTML=
-//    '<table id=lyt_lgnd class=key>'+
-//      '<tr><td class=g2>⇧x</td><td class=g3><span class=pfx2>`</span>&nbsp;⇧x</td></tr>'+
-//      '<tr><td class=g0>x</td><td class=g1><span class=pfx2>`</span>&nbsp;x</td></tr>'+
-//    '</table>'+
-      '<div id=lyt_hlp>'+
-        'To insert a blue glyph, type Prefix followed by the corresponding black character.<br>'+
-        'To insert a red glyph, type Prefix followed by Shift+the black character.'+
-      '</div>'+
-      '<hr>'+
-      '<div id=lyt_ctrls>'+
-        '<button id=lyt_rst><u>R</u>eset</button>'+
-        '<label id=lyt_pfx_lbl><u>P</u>refix: <input id=lyt_pfx size=1></label>'+
-        '<label id=lyt_lc_lbl><u>L</u>ocale: '+
-          '<select id=lyt_lc><option>'+Object.keys(layouts).sort().join('<option>')+'</select>'+
-        '</label>'+
-      '</div>'+
-      '<div id=lyt_kbd>'+
-        (function(){
-          var s='';for(var i=1;i<NK;i++)s+=
-            '<span id=k'+i+' class=key>'+
-              (sk[i]||'<span class=g2></span><input class=g3><br><span class=g0></span><input class=g1>')+
-            '</span>'
-          return s
-        }())+
-      '</div>'
-    var a=t.querySelectorAll('[id^="lyt_"]')
-    for(var i=0;i<a.length;i++)q[a[i].id.replace(/^lyt_/,'')]=a[i]
+    var a=t.querySelectorAll('[id^="lyt_"]');for(var i=0;i<a.length;i++)q[a[i].id.replace(/^lyt_/,'')]=a[i]
+    var s='';for(var i=1;i<NK;i++)s+='<span id=k'+i+' class=key>'+(sk[i]||'<span class=g2></span><input class=g3><br>'+
+                                                                          '<span class=g0></span><input class=g1>')+'</span>'
+    q.kbd.innerHTML=s;q.lc.innerHTML='<option>'+Object.keys(layouts).sort().join('<option>')
     $(t)
       .on('focus','.key input',function(){var e=this;setTimeout(function(){e.select()},1)})
       .on('blur','.key input',function(){
         var i=+$(this).hasClass('g3'),
             j=+$(this).closest('.key').prop('id').slice(1),
             v=model[q.lc.value][i][j]=$(this).val().slice(-1)||' '
-        $(this).val(v).prop('title',tip(v))
+        this.value=v;this.title=tip(v)
       })
       .on('mouseover mouseout','.key input',function(e){$(this).toggleClass('hover',e.type==='mouseover')})
     for(var i=1;i<NK;i++){g[i]=[];var e=document.getElementById('k'+i)
@@ -84,7 +60,7 @@ D.prf_tabs.push({
     }
     D.prf.prefixMaps(h);D.win&&D.prf.ime(q.ime.checked)
   }
-})
+}
 //Every geometry (aka "mechanical layout") has a CSS class specifying the precise key arrangement.
 function updGlyphs(){ //apply model values to the DOM
   var lc=q.lc.value,l=layouts[lc],m=model[lc]; if(!l)return

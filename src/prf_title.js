@@ -1,8 +1,8 @@
 ;(function(){'use strict'
 
 var wt //<input> element for Window Title
-D.prf_tabs.push({
-  name:'Title',id:'title',
+D.prf_tabs.title={
+  name:'Title',
   init:function(t){
     t.innerHTML=
       '<button id=title_rst class=rst><u>R</u>eset</button>'+
@@ -30,6 +30,6 @@ D.prf_tabs.push({
   },
   load:function(){wt.value=D.prf.title()},
   save:function(){D.prf.title(wt.value)}
-})
+}
 
 }())

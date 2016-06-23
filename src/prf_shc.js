@@ -1,13 +1,9 @@
 ;(function(){'use strict'
 
 var q={} //DOM elements
-D.prf_tabs.push({
-  name:'Shortcuts',id:'shc',
+D.prf_tabs.shc={
+  name:'Shortcuts',
   init:function(t){
-    t.innerHTML='<div><input id=shc_sc placeholder=Search>'+
-                     '<a id=shc_sc_clr href=# hidden title="Clear search">×</a></div>'+
-                '<div id=shc_tbl_wr></div>'+
-                '<div id=shc_no_res hidden>No results</div>'
     var a=t.querySelectorAll('[id^="shc_"]');for(var i=0;i<a.length;i++)q[a[i].id.replace(/^shc_/,'')]=a[i]
     t.onmouseover=function(e){var u=e.target.closest('.shc_del');if(u)u.parentNode.className+=' shc_del_hvr'}
     t.onmouseout =function(e){var u=e.target.closest('.shc_del'),p=u&&u.parentNode
@@ -57,7 +53,7 @@ D.prf_tabs.push({
     D.prf.keys(h)
   },
   activate:function(){q.sc.focus()}
-})
+}
 function keyHTML(k){return'<span class=shc_key><span class=shc_text>'+k+'</span><a href=# class=shc_del>×</a></span> '}
 function updKeys(x){
   var h=CodeMirror.keyMap.dyalog={fallthrough:'dyalogDefault'}
