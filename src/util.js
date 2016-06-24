@@ -13,12 +13,10 @@ D.util={
         !$(e.target).closest('.CodeMirror-gutter-wrapper').length&&f(e)
       t=e.timeStamp;x=e.clientX;y=e.clientY})},
   initDlg:function(d){
-    d.hidden=0
+    D.util.showDlg(d)
     d.onclick=function(e){if(e.target.className==='dlg_close'){d.hidden=1;return!1}}
     d.addEventListener('keydown',
         function(e){if(e.which===27&&!e.ctrlKey&&!e.shiftKey&&!e.altKey&&!e.metaKey){d.hidden=1;return!1}})
-    d.style.left=(0|(innerWidth -d.clientWidth )/2)+'px'
-    d.style.top =(0|(innerHeight-d.clientHeight)/2)+'px'
     var t=d.querySelector('.dlg_title')
     if(t){
       var dx,dy,mx,my //dx,dy:dialog position corrected for mouse; mx,my:maximum coords of dialog in window
@@ -29,7 +27,10 @@ D.util={
       t.onmouseup=function(e){document.removeEventListener('mousemove',move)}
       var move=function(e){d.style.left=Math.min(mx,Math.max(0,dx+e.clientX))+'px'
                            d.style.top =Math.min(my,Math.max(0,dy+e.clientY))+'px'
-                           e.preventDefault();return!1}}}}
+                           e.preventDefault();return!1}}},
+  showDlg:function(d){d.hidden=0
+                      d.style.left=(0|(innerWidth -d.clientWidth )/2)+'px'
+                      d.style.top =(0|(innerHeight-d.clientHeight)/2)+'px'}}
 $.alert=function(m,t,f){ //m:message, t:title, f:callback
   if(D.el){D.el.dialog.showMessageBox(D.elw,{message:m,title:t,buttons:['OK']});f&&f()}
   else{$('<p>').text(m)

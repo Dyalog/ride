@@ -10,8 +10,9 @@ D.abt=function(){
     document.getElementById('abt_contact').onclick=
       function(x){if(x.target.nodeName==='A'&&/^http/.test(x.target.href)){D.openExternal(x.target.href);return!1}}
     ta=document.getElementById('abt_ta')
+  }else{
+    D.util.showDlg(d)
   }
-  d.hidden=0
   var v=D.versionInfo,ri=D.remoteIdentification||{},u='unknown',db=D.db||localStorage,repr=JSON.stringify
   var s='';for(var i=0;i<db.length;i++){var x=db.key(i);s+=(i?',\n':'')+'    '+repr(x)+':'+repr(db.getItem(x))}
   ta.value='IDE:'+

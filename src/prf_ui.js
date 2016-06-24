@@ -41,8 +41,10 @@ D.prf_ui=function(){
     }}
     for(var i=0;i<hdrs.length;i++){var id=hdrs[i].href.replace(/.*#/,''),e=document.getElementById(id)
                                    tabs[id].init(e);payloads.push(e)}
+  }else{
+    D.util.showDlg(d)
   }
-  d.hidden=0;for(var i in tabs)tabs[i].load()
+  for(var i in tabs)tabs[i].load()
 }
 
 }())
