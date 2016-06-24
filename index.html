@@ -127,7 +127,20 @@
     </div>
 
     <!--Code-->
-    <div id=code hidden></div>
+    <div id=code hidden>
+      <p><label><input id=code_ai   type=checkbox>A<u>u</u>to-indent</label> <label><input id=code_sw  size=1> spaces</label>
+      <p><label><input id=code_aim  type=checkbox>in <u>m</u>ethods:</label> <label><input id=code_swm size=1> spaces</label>
+      <p><label><input id=code_icom type=checkbox><u>I</u>ndent lines that contain only a comment</label>
+      <p><label><input id=code_io   type=checkbox>I<u>n</u>dent content when an editor is opened</label>
+      <p><label><input id=code_mb   type=checkbox><u>H</u>ighlight matching brackets: <tt>()[]{}</tt></label></p>
+      <p><label><input id=code_acbr type=checkbox>Au<u>t</u>o-close brackets</label>
+      <p><label><input id=code_acbl type=checkbox>Auto-c<u>l</u>ose blocks: <tt>:If :For ...</tt></label>
+         <label><u>w</u>ith <select id=code_acbe><option value=0>:EndIf,:EndFor,...<option value=1>just :End</select></label>
+      <p><label><input id=code_ac   type=checkbox>Autocom<u>p</u>letion</label> <label>a<u>f</u>ter <input id=code_acd size=5>ms</label>
+      <p><label><input id=code_fold type=checkbox>Co<u>d</u>e folding (outlining)</label>
+      <p><label><input id=code_vt   type=checkbox>Show <u>v</u>alue tips</label>
+      <p><label><input id=code_sqt  type=checkbox>Show tips for <u>g</u>lyphs</label>
+    </div>
 
     <!--Colours-->
     <div id=col hidden>
@@ -154,7 +167,25 @@
     </div>
 
     <!--Title-->
-    <div id=title hidden></div>
+    <div id=title hidden>
+      <button id=title_rst><u>R</u>eset</button>
+      <label for=title_inp>Window title:</label><input id=title_inp>
+      <pre id=title_subs><!--
+             --><a>{WSID}</a>            workspace name<!--
+        -->&#10;<a>{HOST}</a>:<a href=#>{PORT}</a>     interpreter's TCP endpoint<!--
+        -->&#10;<a>{PID}</a>             PID of the interpreter process<!--
+        -->&#10;<a>{CHARS}</a>           Unicode or Classic<!--
+        -->&#10;<a>{BITS}</a>            64 or 32<!--
+        -->&#10;<a>{VER}</a>             interpreter version<!--
+        -->&#10;  <a>{VER_A}</a>           major<!--
+        -->&#10;  <a>{VER_B}</a>           minor<!--
+        -->&#10;  <a>{VER_C}</a>           svn revision<!--
+        -->&#10;<a>{RIDE_VER}</a>        RIDE version<!--
+        -->&#10;  <a>{RIDE_VER_A}</a>      major<!--
+        -->&#10;  <a>{RIDE_VER_B}</a>      minor<!--
+        -->&#10;  <a>{RIDE_VER_C}</a>      git commit number
+      </pre>
+    </div>
 
     <!--Menu-->
     <div id=pmenu hidden>

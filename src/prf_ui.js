@@ -13,7 +13,7 @@
 //All tabs' validate() methods are invoked, if they exist, before any attempt to call save()
 var tabs=D.prf_tabs={} //tab implementations self-register here
 
-var dlg //DOM element for dialog, lazily initialized
+var d //DOM element for dialog, lazily initialized
 function ok(){apply()&&(d.hidden=1)}
 function apply(){ //returns 0 on failure and 1 on success
   var v
@@ -25,13 +25,13 @@ function apply(){ //returns 0 on failure and 1 on success
   return 1
 }
 D.prf_ui=function(){
-  if(!dlg){
-    D.util.initDlg(dlg=document.getElementById('prf_dlg'))
-    dlg.onkeydown=function(x){if(x.which===13&&!x.shiftKey&&x.ctrlKey&&!x.altKey&&!x.metaKey){ok();return!1}}
+  if(!d){
+    D.util.initDlg(d=document.getElementById('prf_dlg'))
+    d.onkeydown=function(x){if(x.which===13&&!x.shiftKey&&x.ctrlKey&&!x.altKey&&!x.metaKey){ok();return!1}}
 //    onresize=function(){for(var i in tabs)tabs[i].resize&&tabs[i].resize()}
     document.getElementById('prf_dlg_ok'    ).onclick=function(){ok()   ;return!1}
     document.getElementById('prf_dlg_apply' ).onclick=function(){apply();return!1}
-    document.getElementById('prf_dlg_cancel').onclick=function(){dlg.hidden=1}
+    document.getElementById('prf_dlg_cancel').onclick=function(){d.hidden=1}
     var nav=document.getElementById('prf_nav'),hdrs=nav.children,payloads=[]
     nav.onclick=function(x){return!1}
     nav.onmousedown=function(x){if(x.target.nodeName==='A'){
@@ -42,7 +42,7 @@ D.prf_ui=function(){
     for(var i=0;i<hdrs.length;i++){var id=hdrs[i].href.replace(/.*#/,''),e=document.getElementById(id)
                                    tabs[id].init(e);payloads.push(e)}
   }
-  dlg.hidden=0;for(var i in tabs)tabs[i].load()
+  d.hidden=0;for(var i in tabs)tabs[i].load()
 }
 
 }())
