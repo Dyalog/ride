@@ -134,17 +134,17 @@ D.prf_tabs.col={
     var u=[],fg;for(var g in scm)(fg=scm[g].fg)&&u.indexOf(fg)<0&&u.push(fg);u.sort() //u:unique colours
     q.list.innerHTML=u.map(function(x){return'<option value='+x+'>'}).join('')
     q.grp.innerHTML=G.map(function(g,i){return'<option value='+i+'>'+g.s}).join('')
-    q.scm.onchange=function(){scm=scms[+this.selectedIndex];updSampleStl();$(col).toggleClass('frz',!!scm.frz)
+    q.scm.onchange=function(){scm=scms[+this.selectedIndex];updSampleStl();col.className=scm.frz?'frz':''
+                              console.info('q.scm.onchange',this.selectedIndex,'frz',scm.frz)
                               cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight)}
     q.new_name.onblur=function(){var s=this.value;if(!s)return;scm.name='';scm.name=uniqScmName(s)
-                                 col.className=col.className.replace(/\s*\brenaming\b\s*/,' ');updScms()}
-    q.new_name.onkeydown=function(e){switch(e.which){/*enter*/case 13:$(this)              .blur();return!1
-                                                     /*esc  */case 27:$(this).val(scm.name).blur();return!1}}
+                                 col.className='';updScms()}
+    q.new_name.onkeydown=function(x){switch(x.which){/*enter*/case 13:                    this.blur();return!1
+                                                     /*esc  */case 27:this.value=scm.name;this.blur();return!1}}
     q.cln.onclick=function(){var x={};scms.push(x);for(var k in scm)x[k]=$.extend({},scm[k]) //x:the new scheme
                              x.name=uniqScmName(scm.name);delete x.frz;scm=x;updScms()}
     q.ren.onclick=function(){q.new_name.style.width=q.scm.offsetWidth+'px';q.new_name.value=scm.name
-                             q.new_name.select();document.getElementById('col').className='renaming'
-                             setTimeout(function(){q.new_name.focus()},0)}
+                             q.new_name.select();col.className='renaming';setTimeout(function(){q.new_name.focus()},0)}
     q.del.onclick=function(){var i=q.scm.selectedIndex;scms.splice(i,1);scm=scms[Math.min(i,scms.length-1)]
                              updScms();return!1}
     cm=CodeMirror(q.cm,{
@@ -186,13 +186,13 @@ D.prf_tabs.col={
   },
   load:function(){var a=scms=SCMS.concat(D.prf.colourSchemes().map(decScm)),s=D.prf.colourScheme()
                   scm=a[0];for(var i=0;i<a.length;i++)if(a[i].name===s){scm=a[i];break}
-                  updScms();document.getElementById('col').className=''
+                  document.getElementById('col').className='';updScms()
                   cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);cm.refresh()},
   save:function(){D.prf.colourSchemes(scms.filter(function(x){return!x.frz}).map(encScm));D.prf.colourScheme(scm.name)},
   resize:function(){cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);cm.refresh()}
 }
 function updScms(){q.scm.innerHTML=scms.map(function(x){x=D.util.esc(x.name);return'<option value="'+x+'">'+x}).join('')
-                   q.scm.value=scm.name;document.getElementById('col').className=scm.frz?'frz':''
+                   q.scm.value=scm.name;q.scm.onchange();document.getElementById('col').className=scm.frz?'frz':''
                    cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);updSampleStl();selGrp('norm',1)}
 function updSampleStl(){document.getElementById('col_sample_stl').textContent=renderCSS(scm,1)} //[sic]
 function selGrp(t,forceRefresh){
