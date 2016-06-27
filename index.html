@@ -73,6 +73,16 @@
     <p><button id=cn_go><u>G</u>o</button>
   </div></div>
 </div>
+<div id=cn_listen_dlg class=dlg hidden>
+  <div class=dlg_title>Waiting for connection...</div>
+  <div id=cn_listen_dlg_content>
+    <progress class=cn_progress></progress>
+    Please start the remote interpreter with
+    <div class=tt>RIDE_INIT=connect:<i>host</i>:<span id=cn_listen_dlg_port>port</span></div>
+    in its environment, so it connects here.
+  </div>
+  <div class=dlg_btns><button id=cn_listen_dlg_cancel><u>C</u>ancel</button></div>
+</div>
 
 <!--Session, editors, etc-->
 <div id=ide></div>

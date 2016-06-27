@@ -60,20 +60,13 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
         $d=$('<div class=cn_dialog><progress class=cn_progress/></div>').dialog({modal:1,width:350,title:'Connecting...'})
         connect({host:x.host,port:+x.port||4502,ssl:x.ssl,cert:x.cert,subj:x.subj});break
       case'listen':
-        const port=+x.port||4502
-        $d=$('<div class=listen>'+
-               '<progress class=cn_progress/>'+
-               'Please start the remote interpreter with'+
-               '<div class=tt>RIDE_INIT=\'CONNECT:<i>host</i>:'+port+'\'</div>'+
-               ' in its environment, so it connects here.'+
-             '</div>')
-           .dialog({modal:1,width:450,title:'Waiting for connection...',
-                    buttons:[{html:'<u>C</u>ancel',click:_=>{$d.dialog('close')}}],
-                    close:_=>{srv&&srv.close()}})
-        srv=net.createServer(x=>{let t,rhost=x&&(t=x.request)&&(t=t.connection)&&t.remoteAddress
-                                 log('interpreter connected from '+rhost);srv&&srv.close();srv=0;clt=x
-                                 initInterpreterConn();connected({host:rhost,port})})
-        srv.on('error',x=>{srv=0;err(''+x)});srv.listen(port,'',_=>{log('listening on port '+port)});break
+        D.util.initDlg(q.listen_dlg);const port=+x.port||4502;q.listen_dlg_port.textContent=''+port
+        q.listen_dlg_cancel.onclick=_=>{srv&&srv.close();q.listen_dlg.hidden=1;return!1}
+        srv=net.createServer(x=>{let t,host=x&&(t=x.request)&&(t=t.connection)&&t.remoteAddress
+                                 log('interpreter connected from '+host);srv&&srv.close();srv=0;clt=x
+                                 initInterpreterConn();connected({host,port})})
+        srv.on('error',x=>{srv=0;q.listen_dlg.hidden=1;err(''+x)})
+        srv.listen(port,'',_=>{log('listening on port '+port)});break
       case'start':
         const env={},a=(x.env||'').split('\n');for(let i=0;i<a.length;i++){const m=KV.exec(a[i]);m&&(env[m[1]]=m[2])}
         if(x.ssh){
@@ -117,7 +110,7 @@ D.cn=_=>{ //set up Connect page
   document.title='RIDE - Connect';const cn=document.getElementById('cn');cn.hidden=0
   $(cn).splitter()
   cn.onkeyup=x=>{if(D.el&&fmtKey(x)==='F12'){D.elw.webContents.toggleDevTools();return!1}}
-  {const a=cn.querySelectorAll('[id]');for(let i=0;i<a.length;i++)q[a[i].id.replace(/^cn_/,'')]=a[i]}
+  {const a=document.body.querySelectorAll('[id^="cn_"]');for(let i=0;i<a.length;i++)q[a[i].id.replace(/^cn_/,'')]=a[i]}
   q.fav_name.onchange=q.fav_name.onkeyup=_=>{
     const u=sel.name,v=q.fav_name.value||''
     if(u!==v){v?(sel.name=v):delete sel.name;$sel.find('.name').text(favText(sel));save()}
