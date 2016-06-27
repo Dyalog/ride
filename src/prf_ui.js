@@ -26,7 +26,7 @@ function apply(){ //returns 0 on failure and 1 on success
 }
 D.prf_ui=function(){
   if(!d){
-    D.util.initDlg(d=document.getElementById('prf_dlg'))
+    d=document.getElementById('prf_dlg')
     d.onkeydown=function(x){if(x.which===13&&!x.shiftKey&&x.ctrlKey&&!x.altKey&&!x.metaKey){ok();return!1}}
 //    onresize=function(){for(var i in tabs)tabs[i].resize&&tabs[i].resize()}
     document.getElementById('prf_dlg_ok'    ).onclick=function(){ok()   ;return!1}
@@ -41,10 +41,8 @@ D.prf_ui=function(){
     }}
     for(var i=0;i<hdrs.length;i++){var id=hdrs[i].href.replace(/.*#/,''),e=document.getElementById(id)
                                    tabs[id].init(e);payloads.push(e)}
-  }else{
-    D.util.showDlg(d)
   }
-  for(var i in tabs)tabs[i].load()
+  D.util.dlg(d);for(var i in tabs)tabs[i].load()
 }
 
 }())

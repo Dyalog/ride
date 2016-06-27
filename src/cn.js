@@ -60,7 +60,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
         $d=$('<div class=cn_dialog><progress class=cn_progress/></div>').dialog({modal:1,width:350,title:'Connecting...'})
         connect({host:x.host,port:+x.port||4502,ssl:x.ssl,cert:x.cert,subj:x.subj});break
       case'listen':
-        D.util.initDlg(q.listen_dlg);const port=+x.port||4502;q.listen_dlg_port.textContent=''+port
+        D.util.dlg(q.listen_dlg);const port=+x.port||4502;q.listen_dlg_port.textContent=''+port
         q.listen_dlg_cancel.onclick=_=>{srv&&srv.close();q.listen_dlg.hidden=1;return!1}
         srv=net.createServer(x=>{let t,host=x&&(t=x.request)&&(t=t.connection)&&t.remoteAddress
                                  log('interpreter connected from '+host);srv&&srv.close();srv=0;clt=x

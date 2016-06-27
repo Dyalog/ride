@@ -4,15 +4,14 @@
 var d,ta //DOM elements for the dialog and the textarea
 D.abt=function(){
   if(!d){
-    d=document.getElementById('abt');D.util.initDlg(d)
+    d=document.getElementById('abt')
     document.getElementById('abt_close').onclick=function(){d.hidden=1}
     document.getElementById('abt_copy').onclick=function(){D.el.clipboard.writeText(ta.value)}
     document.getElementById('abt_contact').onclick=
       function(x){if(x.target.nodeName==='A'&&/^http/.test(x.target.href)){D.openExternal(x.target.href);return!1}}
     ta=document.getElementById('abt_ta')
-  }else{
-    D.util.showDlg(d)
   }
+  D.util.dlg(d)
   var v=D.versionInfo,ri=D.remoteIdentification||{},u='unknown',db=D.db||localStorage,repr=JSON.stringify
   var s='';for(var i=0;i<db.length;i++){var x=db.key(i);s+=(i?',\n':'')+'    '+repr(x)+':'+repr(db.getItem(x))}
   ta.value='IDE:'+
