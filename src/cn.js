@@ -13,7 +13,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
 ,cmpVer=(x,y)=>x[0]-y[0]||x[1]-y[1]||0 //compare two versions of the form [major,minor]
 ,ls=x=>fs.readdirSync(x)
 ,parseVer=x=>x.split('.').map(y=>+y)
-,err=x=>{$d&&$d.dialog('close');$d=0;$.err(x);q.fetch.disabled=0}
+,err=x=>{$d&&$d.dialog('close');q.connecting_dlg.hidden=q.listen_dlg.hidden=1;q.$d=0;$.err(x);q.fetch.disabled=0}
 ,save=_=>{var a=q.favs.children,b=[];for(var i=0;i<a.length;i++)b[i]=a[i].cnData;D.prf.favs(b)}
 ,favText=x=>x.name||'unnamed'
 ,favDOM=x=>{const e=document.createElement('div');e.cnData=x
@@ -57,7 +57,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   try{
     switch(x.type){
       case'connect':
-        $d=$('<div class=cn_dialog><progress class=cn_progress/></div>').dialog({modal:1,width:350,title:'Connecting...'})
+        D.util.dlg(q.connecting_dlg)
         connect({host:x.host,port:+x.port||4502,ssl:x.ssl,cert:x.cert,subj:x.subj});break
       case'listen':
         D.util.dlg(q.listen_dlg);const port=+x.port||4502;q.listen_dlg_port.textContent=''+port
@@ -70,7 +70,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
       case'start':
         const env={},a=(x.env||'').split('\n');for(let i=0;i<a.length;i++){const m=KV.exec(a[i]);m&&(env[m[1]]=m[2])}
         if(x.ssh){
-          $d=$('<progress class=cn_progress/>').dialog({modal:1,width:350,title:'Connecting...'})
+          D.util.dlg(q.connection_dlg)
           var o={host:x.host,port:+x.port||22,user:x.user||user}
           if(x===sel){o.pass=q.ssh_pass.value;o.key=q.ssh_key.value}
           const c=sshExec(o,'/bin/sh',(e,sm)=>{if(e)throw e
@@ -91,8 +91,8 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
             log('spawning interpreter '+JSON.stringify(x.exe))
             let args=['+s','-q'],stdio=['pipe','ignore','ignore']
             if(/^win/i.test(process.platform)){args=[];stdio[0]='ignore'}
-            try{const h={};for(let k in env)h[k]=env[k];h.RIDE_INIT='CONNECT:'+hp;h.RIDE_SPAWNED='1'
-                child=cp.spawn(x.exe,args,{stdio,env:h})}
+            try{child=cp.spawn(x.exe,args,{stdio,env:$.extend({},process.env,env,
+                                           {RIDE_INIT:'CONNECT:'+hp,RIDE_SPAWNED:'1'})})}
             catch(e){err(''+e);return}
             D.lastSpawnedExe=x.exe
             child.on('exit',(code,sig)=>{srv&&srv.close();srv=clt=child=0
