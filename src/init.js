@@ -51,11 +51,12 @@ if(D.floating&&win){
   if(D.el){
     node_require(__dirname+'/src/cn')()
   }else{
-    var ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host)
-    var q=[],flush=ws.onopen=function(){while(ws.readyState===1&&q.length)ws.send(q.shift())} //q:send queue
+    var ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host+'/WebSocket')
+    var q=[],flush=function(){while(ws.readyState===1&&q.length)ws.send(q.shift())} //q:send queue
     D.skt={emit:function(x,y){q.push(JSON.stringify([x,y]));flush()}}
+    ws.onopen=function(){ws.send('SupportedProtocols=2');ws.send('UsingProtocol=2');flush()}
     ws.onerror=function(x){console.info('ws error:',x)}
-    ws.onmessage=function(x){var a=JSON.parse(x.data);D.skt.recv(a[0],a[1])}
+    ws.onmessage=function(x){if(x.data[0]==='['){var a=JSON.parse(x.data);D.skt.recv(a[0],a[1])}}
     new D.IDE
   }
   if(!D.quit)D.quit=close
