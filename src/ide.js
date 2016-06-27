@@ -13,13 +13,6 @@ D.IDE=function(){'use strict'
   ide.focusedWin=ide.wins[0] // last focused window, it might not have the focus right now
 
   var handlers=this.handlers={ // for RIDE protocol messages
-    '*connected':function(x){ide.setHostAndPort(x.host,x.port)},
-    '*error':function(x){ide.die();setTimeout(function(){$.err(x.msg)},100)},
-    '*spawnedExited':function(x){
-      if(x.code){ide.die();setTimeout(function(){$.err('Interpreter process exited\nwith code '+x.code)},100)}
-      if(D.el&&!x.code){process.exit(0)}
-    },
-    '*disconnected':function(){if(!ide.dead){$.err('Interpreter disconnected');ide.die()}},
     Identify:function(x){D.remoteIdentification=x;ide.updTitle();ide.connected=1;ide.wins[0].updPW(1)},
     Disconnect:function(x){
       if(ide.dead)return
@@ -264,6 +257,15 @@ D.IDE.prototype={
   getUnsaved:function(){
     var r={};for(var k in this.wins){var cm=this.wins[k].cm,v=cm.getValue();if(+k&&v!==cm.oText)r[k]=v}
     return r
-  }
+  },
+
+  //invoked from cn.js
+  _connected:function(x){this.setHostAndPort(x.host,x.port)},
+  _error:function(x){this.die();setTimeout(function(){$.err(x.msg)},100)},
+  _spawnedExited:function(x){
+    if(x.code){this.die();setTimeout(function(){$.err('Interpreter process exited\nwith code '+x.code)},100)}
+    if(D.el&&!x.code){process.exit(0)}
+  },
+  _disconnected:function(){if(!this.dead){$.err('Interpreter disconnected');this.die()}}
 }
 CodeMirror.commands.WSE=function(){D.prf.wse.toggle()}

@@ -49,18 +49,7 @@ if(D.floating&&win){
   D.ide.unblock()
 }else{
   if(D.el){
-    node_require(__dirname+'/src/cn')
-    D.skt    ={emit:function(x,y){other.recv(x,y)}}
-    var other={emit:function(x,y){D.skt.recv(x,y)}}
-    D.proxy(other)
-    var a=node_require('electron').remote.process.argv, h={c:process.env.RIDE_CONNECT} //h:args by name
-    for(var i=1;i<a.length;i++)if(a[i][0]==='-'){h[a[i].slice(1)]=a[i+1];i++}
-    if(h.c){var m=/^([^:]+|\[[^\]]+\])(?::(\d+))?$/.exec(h.c) //parse host and port
-            if(m){new D.IDE;D.skt.emit('*connect',{host:m[1],port:+m[2]||4502})}
-            else{$.err('Invalid $RIDE_CONNECT')}}
-    else if(+env.RIDE_SPAWN){new D.IDE;D.skt.emit('*launch',{}) // '*error' is handled in ide.coffee
-                             window.onbeforeunload=function(){D.skt.emit('Exit',{code:0})}}
-    else{D.cn()}
+    node_require(__dirname+'/src/cn')()
   }else{
     var ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host)
     var q=[],flush=ws.onopen=function(){while(ws.readyState===1&&q.length)ws.send(q.shift())} //q:send queue

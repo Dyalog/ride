@@ -1,19 +1,27 @@
 //Connect page (loaded only when running in Electron)
-;(function(){'use strict'
+;(()=>{'use strict'
 
-let $sel=$(),sel,$d //$sel:selected item(s), sel: .data('cn') of the selected item (only if it's unique), $d:dialog
-,interpreters=[],interpretersSSH=[]
+let $sel=$(),sel,$d //$sel:selected item(s), sel:data associated with the selected item (only if it's unique)
+,interpreters=[],interpretersSSH=[] //local interpreters and those obtained over ssh
+,clt   //client, TCP connection to interpreter
+,child //a ChildProcess instance, the result from spawn()
+,srv   //server, used to listen for connections from interpreters
 const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os'),path=rq('path')
+,log=x=>{console.log(x)}
 ,esc=D.util.esc,user=D.el?process.env.USER:'',q={} //q:DOM elements
-,ANON='[anonymous]',TEMP='[temp]',MIN_V=[15,0],KV=/^([a-z_]\w*)=(.*)$/i,WS=/^\s*$/ //KV:regexes for parsing env vars
+,MIN_V=[15,0],KV=/^([a-z_]\w*)=(.*)$/i,WS=/^\s*$/ //KV:regexes for parsing env vars
 ,cmpVer=(x,y)=>x[0]-y[0]||x[1]-y[1]||0 //compare two versions of the form [major,minor]
-,save=_=>{D.prf.favs($('>*',q.favs).map((_,x)=>{const h=$(x).data('cn');return h.tmp?null:h}).toArray())} //[sic]
-,favText=x=>x.tmp?TEMP:x.name||ANON
-,favDOM=x=>$(`<div><span class=name>${esc(favText(x))}</span><button class=go>Go</button>`).data('cn',x)
+,ls=x=>fs.readdirSync(x)
+,parseVer=x=>x.split('.').map(y=>+y)
+,err=x=>{$d&&$d.dialog('close');$d=0;$.err(x);q.fetch.disabled=0}
+,save=_=>{var a=q.favs.children,b=[];for(var i=0;i<a.length;i++)b[i]=a[i].cnData;D.prf.favs(b)}
+,favText=x=>x.name||'unnamed'
+,favDOM=x=>{const e=document.createElement('div');e.cnData=x
+            e.innerHTML=`<span class=name>${esc(favText(x))}</span><button class=go>Go</button>`;return e}
 ,fmtKey=x=>[x.metaKey?'Cmd-':'',x.ctrlKey?'Ctrl-':'',x.altKey?'Alt-':'',x.shiftKey?'Shift-':'',
             CodeMirror.keyNames[x.which]||''].join('')
-,updFormDtl=_=>{var a=q.dtl.children;for(var i=0;i<a.length;i++)a[i].hidden=1
-                   q[q.type.value].hidden=0} //the part below "Type"
+,updFormDtl=_=>{const a=q.dtl.children;for(let i=0;i<a.length;i++)a[i].hidden=1
+                q[q.type.value].hidden=0} //the part below "Type"
 ,updExes=_=>{
   q.fetch.hidden=!q.ssh.checked
   const h=(q.ssh.checked?interpretersSSH:interpreters)
@@ -26,30 +34,33 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   q.exes.innerHTML=h+'<option value="">Other...';q.exes.value=q.exe.value;q.exes.value||(q.exes.value='')
   q.exe.readOnly=!!q.exes.value
 }
-,validate=_=>{
-  const $host=$('[name=host]:visible'),$port=$('[name=port]:visible')
-  if($host.length&&!sel.host){$.err('"host" is required',_=>{$host.select()});return}
-  if($port.length&&sel.port&&(!/^\d*$/.test(sel.port)||+sel.port<1||+sel.port>0xffff))
-      {$.err('Invalid port',_=>{$port.select()});return}
-  if(q.type.value==='start'){
-    const a=q.env.value.split('\n')
+,validate=x=>{
+  x=x||sel;const t=x.type,h=x.host,p=x.port
+  if((t==='connect'||t==='start'&&x.ssh)&&!h)
+    {$.err('"host" is required',_=>{(t==='connect'?q.tcp_host:q.ssh_host).select()});return}
+  if((t==='connect'||t==='start'&&x.ssh||t==='listen')&&p&&(!/^\d*$/.test(p)||+p<1||+p>0xffff))
+    {$.err('Invalid port',_=>{(t==='connect'?q.tcp_port:t==='start'?q.ssh_port:q.listen_port).select()});return}
+  if(t==='start'){
+    const a=(x.env||'').split('\n')
     for(let i=0;i<a.length;i++)if(!KV.test(a[i])&&!WS.test(a[i]))
       {$.err('Invalid environment variables',_=>{q.env.focus()});return}
-    if(sel.ssh){const t=q.ssh_auth_type.value
-                q['ssh_'+t].value||$.err((t==='key'?'"Key file"':'"Password"')+' is required',_=>{q['ssh_'+t].focus()})}
+    if(!x.exe){$.err('"Interpreter" is required',_=>{q.exe.focus()});return}
+    if(x===sel&&x.ssh){
+      const t=q.ssh_auth_type.value, e=q['ssh_'+t]
+      if(!e.value){$.err((t==='key'?'"Key file"':'"Password"')+' is required',_=>{e.focus()});return}
+    }
   }
   return 1
 }
-,go=_=>{
-  $d&&$d.dialog('close');if(!validate())return!1
+,go=(x)=>{
+  x=x||sel;$d&&$d.dialog('close');if(!validate(x))return 0
   try{
-    switch(q.type.value){
+    switch(x.type){
       case'connect':
-        $d=$('<div class=cn_dialog><progress class=cn_progress/></div>')
-          .dialog({modal:1,width:350,title:'Connecting...'})
-        D.skt.emit('*connect',{host:sel.host,port:+sel.port||4502,ssl:sel.ssl,cert:sel.cert,subj:sel.subj});break
+        $d=$('<div class=cn_dialog><progress class=cn_progress/></div>').dialog({modal:1,width:350,title:'Connecting...'})
+        connect({host:x.host,port:+x.port||4502,ssl:x.ssl,cert:x.cert,subj:x.subj});break
       case'listen':
-        const port=sel.port||4502
+        const port=+x.port||4502
         $d=$('<div class=listen>'+
                '<progress class=cn_progress/>'+
                'Please start the remote interpreter with'+
@@ -58,39 +69,60 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
              '</div>')
            .dialog({modal:1,width:450,title:'Waiting for connection...',
                     buttons:[{html:'<u>C</u>ancel',click:_=>{$d.dialog('close')}}],
-                    close:_=>{D.skt.emit('*listenCancel')}})
-        D.skt.emit('*listen',{port});break
+                    close:_=>{srv&&srv.close()}})
+        srv=net.createServer(x=>{let t,rhost=x&&(t=x.request)&&(t=t.connection)&&t.remoteAddress
+                                 log('interpreter connected from '+rhost);srv&&srv.close();srv=0;clt=x
+                                 initInterpreterConn();connected({host:rhost,port})})
+        srv.on('error',x=>{srv=0;err(''+x)});srv.listen(port,'',_=>{log('listening on port '+port)});break
       case'start':
-        const env={},a=q.env.value.split('\n');for(let i=0;i<a.length;i++){const m=KV.exec(a[i]);m&&(env[m[1]]=m[2])}
-        if(sel.ssh){
+        const env={},a=(x.env||'').split('\n');for(let i=0;i<a.length;i++){const m=KV.exec(a[i]);m&&(env[m[1]]=m[2])}
+        if(x.ssh){
           $d=$('<progress class=cn_progress/>').dialog({modal:1,width:350,title:'Connecting...'})
-          D.skt.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||user,
-                             pass:q.ssh_pass.value,key:q.ssh_key.value,env})
+          var o={host:x.host,port:+x.port||22,user:x.user||user}
+          if(x===sel){o.pass=q.ssh_pass.value;o.key=q.ssh_key.value}
+          const c=sshExec(o,'/bin/sh',(e,sm)=>{if(e)throw e
+            sm.on('close',(code,sig)=>{D.ide&&D.ide._sshExited({code,sig});c.end()})
+            c.forwardIn('',0,(e,rport)=>{if(e)throw e
+              let s='';for(let k in env)s+=`${k}=${shEsc(env[k])} `
+              sm.write(`${s}RIDE_INIT=CONNECT:127.0.0.1:${rport} ${shEsc(x.exe)} +s -q >/dev/null\n`)
+            })
+          }).on('error',x=>{err(x.message||''+x)})
         }else{
-          D.skt.emit('*launch',{exe:sel.exe,env})
+          srv=net.createServer(x=>{log('spawned interpreter connected');const a=srv.address();srv&&srv.close();srv=0;clt=x
+                                   initInterpreterConn();connected({host:a.address,port:a.port})
+                                   if(typeof D!=='undefined'&&D.el)D.lastSpawnedExe=x.exe})
+          srv.on('error',x=>{log('listen failed: '+x);srv=clt=0;err(x.message)})
+          srv.listen(0,'127.0.0.1',_=>{
+            const a=srv.address(),hp=a.address+':'+a.port
+            log('listening for connections from spawned interpreter on '+hp)
+            log('spawning interpreter '+JSON.stringify(x.exe))
+            let args=['+s','-q'],stdio=['pipe','ignore','ignore']
+            if(/^win/i.test(process.platform)){args=[];stdio[0]='ignore'}
+            try{const h={};for(let k in env)h[k]=env[k];h.RIDE_INIT='CONNECT:'+hp;h.RIDE_SPAWNED='1'
+                child=cp.spawn(x.exe,args,{stdio,env:h})}
+            catch(e){err(''+e);return}
+            D.lastSpawnedExe=x.exe
+            child.on('exit',(code,sig)=>{srv&&srv.close();srv=clt=child=0
+                                         err('Interpreter '+(code!=null?'exited with code '+code:'received '+sig))})
+            child.on('error',x=>{srv&&srv.close();srv=clt=child=0
+                                 err(x.code==='ENOENT'?"Cannot find the interpreter's executable":''+x)})
+          })
         }
         break
     }
   }catch(e){$.err(''+e)}
   return!1
 }
-,ls=x=>fs.readdirSync(x)
-,parseVer=x=>x.split('.').map(y=>+y)
-,sil=f=>x=>{try{f(x)}catch(_){}} //exception silencer
-D.cn=_=>{
-  document.title='RIDE - Connect';var cn=document.getElementById('cn');cn.hidden=0
-  $(cn).splitter().keyup(x=>{if(D.el&&x.which===123&&!x.ctrlKey&&!x.shiftKey&&!x.altKey&&!x.metaKey)
-                                  {D.elw.webContents.toggleDevTools();return!1}})
-  var a=cn.querySelectorAll('[id^="cn_"]');for(var i=0;i<a.length;i++)q[a[i].id.replace(/^cn_/,'')]=a[i]
-  q.fav_cb.onchange=_=>{const c=q.fav_cb.checked;c?delete sel.tmp:(sel.tmp=1);$sel.find('.name').text(favText(sel))
-                        q.fav_name_wr.hidden=!c;c&&q.fav_name.focus();save()}
-  q.fav_name.placeholder=ANON
+D.cn=_=>{ //set up Connect page
+  document.title='RIDE - Connect';const cn=document.getElementById('cn');cn.hidden=0
+  $(cn).splitter()
+  cn.onkeyup=x=>{if(D.el&&fmtKey(x)==='F12'){D.elw.webContents.toggleDevTools();return!1}}
+  {const a=cn.querySelectorAll('[id]');for(let i=0;i<a.length;i++)q[a[i].id.replace(/^cn_/,'')]=a[i]}
   q.fav_name.onchange=q.fav_name.onkeyup=_=>{
     const u=sel.name,v=q.fav_name.value||''
     if(u!==v){v?(sel.name=v):delete sel.name;$sel.find('.name').text(favText(sel));save()}
   }
-  q.type.onchange=_=>{sel.type=q.type.value;updFormDtl();save()}
-  updFormDtl()
+  updFormDtl();q.type.onchange=_=>{sel.type=q.type.value;updFormDtl();save()}
   q.ssh.onchange=_=>{q.ssh_dtl.hidden=!q.ssh.checked;updExes()}
   q.ssh_user.placeholder=user
   q.fetch.onclick=_=>{
@@ -98,7 +130,8 @@ D.cn=_=>{
     q.fetch.disabled=1
     const c=sshExec({host:sel.host,port:+sel.port||22,user:sel.user||user,pass:q.ssh_pass.value,key:q.ssh_key.value},
                     '/bin/ls /opt/mdyalog/*/*/*/mapl /Applications/Dyalog-*/Contents/Resources/Dyalog/mapl',
-                    sm=>{
+                    (e,sm)=>{
+      if(e)throw e
       let s='';interpretersSSH=[]
       sm.on('data',x=>{s+=x})
         .on('close',_=>{
@@ -109,15 +142,15 @@ D.cn=_=>{
           })
           updExes();q.fetch.disabled=0;c.end()
         })
-        .on('error',x=>{$.err(x.message||''+x);updExes();q.fetch.disabled=0})
+        .on('error',x=>{err(x.message||''+x);updExes();q.fetch.disabled=0})
     })
   }
   q.exe.onchange=q.exe.onkeyup=_=>{q.exes.value||D.prf.otherExe(q.exe.value)}
   q.exes.onchange=_=>{const v=q.exes.value;q.exe.value=v||D.prf.otherExe();q.exe.readOnly=!!v;$(q.exe).change()
                       v||q.exe.focus();D.prf.selectedExe(v)} //todo: do we still need this pref?
-  q.env_add.onclick=function(e){
-    if(e.target.nodeName!=='A')return
-    let t=e.target.textContent, k=t.split('=')[0], s=q.env.value, m=RegExp('^'+k+'=(.*)$','m').exec(s)
+  q.env_add.onclick=x=>{
+    if(x.target.nodeName!=='A')return
+    let t=x.target.textContent, k=t.split('=')[0], s=q.env.value, m=RegExp('^'+k+'=(.*)$','m').exec(s)
     if(m){q.env.setSelectionRange(m.index+k.length+1,m.index+m[0].length)}
     else{q.env.value=s=s.replace(/([^\n])$/,'$1\n')+t+'\n';$(q.env).change()
          q.env.setSelectionRange(s.length-t.length+k.length,s.length-1)}
@@ -131,24 +164,24 @@ D.cn=_=>{
                            if(v){x.value=v[0];$(x).elastic().change()};return!1}
   q.cert_dots   .onclick=_=>{browse(q.cert   ,'Certificate')}
   q.ssh_key_dots.onclick=_=>{browse(q.ssh_key,'SSH Key'    )}
-  q.ssh_auth_type.onchange=_=>{var k=q.ssh_auth_type.value==='key';q.ssh_pass_wr.hidden=k;q.ssh_key_wr.hidden=!k}
-  D.prf.favs().forEach(x=>{q.favs.appendChild(favDOM(x)[0])})
+  q.ssh_auth_type.onchange=_=>{const k=q.ssh_auth_type.value==='key';q.ssh_pass_wr.hidden=k;q.ssh_key_wr.hidden=!k}
+  D.prf.favs().forEach(x=>{q.favs.appendChild(favDOM(x))})
   $(q.favs).list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
-    .on('click','.go',function(e){$(q.favs).list('select',$(this).parentsUntil(q.favs).last().index());q.go.click()})
+    .on('click','.go',function(){$(q.favs).list('select',$(this).parentsUntil(q.favs).last().index());q.go.click()})
     .keydown(x=>{switch(fmtKey(x)){case'Enter' :q.go.hidden||q.go.click();return!1
-                                   case'Ctrl-N':q.neu  .click();return!1
-                                   case'Delete':q.del  .click();return!1
-                                   case'Ctrl-D':q.clone.click();return!1}})
+                                   case'Ctrl-N':q.neu.click();return!1
+                                   case'Delete':q.del.click();return!1
+                                   case'Ctrl-D':q.cln.click();return!1}})
     .on('list-order-changed',save)
     .on('list-selection-changed',_=>{
       $sel=$('.list-selection',q.favs)
       const u=$sel.length===1 //is selection unique?
-      q.clone.disabled=!u;q.del.disabled=!$sel.length;q.rhs.hidden=!u
-      sel=u?$sel.data('cn'):null
+      q.cln.disabled=!u;q.del.disabled=!$sel.length;q.rhs.hidden=!u
+      sel=u?$sel[0].cnData:null
       if(u){
         q.type.value=sel.type||'connect';updFormDtl();updExes()
-        q.fav_cb.checked=!sel.tmp;q.fav_name.value=sel.name||'';q.fav_name_wr.hidden=sel.tmp
-        $(':text[name],textarea[name]',q.rhs).each((_,x)=>{$(x).val(sel[x.name])})
+        q.fav_name.value=sel.name||''
+        $(':text[name],textarea[name]',q.rhs).each((_,x)=>{x.value=sel[x.name]||''})
         $(':checkbox[name]',q.rhs).each((_,x)=>{x.checked=!!+sel[x.name]})
         q.exes.value=sel.exe;q.exes.value||(q.exes.value='') //use sel.exe if available, otherwise use "Other..."
         $(':text',q.rhs).elastic()
@@ -158,9 +191,9 @@ D.cn=_=>{
       }
     })
     .list('select',0)
-  var a=q.favs.querySelectorAll('a')[0];a&&a.focus()
-  q.neu.onclick=_=>{const $e=favDOM({});q.favs.appendChild($e[0]);$(q.favs).list('select',$e.index());q.fav_name.focus()}
-  q.clone.onclick=_=>{if(sel){favDOM($.extend({},sel)).insertBefore($sel);$('a',$sel).focus();save();q.fav_name.focus()}}
+  {const a=q.favs.querySelectorAll('a')[0];a&&a.focus()}
+  q.neu.onclick=_=>{const $e=$(favDOM({}));q.favs.appendChild($e[0]);$(q.favs).list('select',$e.index());q.fav_name.focus()}
+  q.cln.onclick=_=>{if(sel){$(favDOM($.extend({},sel))).insertBefore($sel);$('a',$sel).focus();save();q.fav_name.focus()}}
   q.del.onclick=_=>{
     const n=$sel.length
     n&&$.confirm('Are you sure you want to delete\nthe selected configuration'+(n>1?'s':'')+'?','Confirmation',
@@ -168,18 +201,10 @@ D.cn=_=>{
                            $sel.remove();$(q.favs).list('select',i);save()}})
   }
   q.abt.onclick=_=>{D.abt()}
-  q.go.onclick=go
+  q.go.onclick=_=>{go();return!1}
   $(':text',q.rhs).elastic()
   $(':text[name],textarea[name]',q.rhs).change(function(){const k=this.name,v=this.value;v?(sel[k]=v):delete sel[k];save()})
   $(':checkbox[name]',q.rhs).change(function(){this.checked?(sel[this.name]=1):delete sel[this.name];save()})
-  const handlers={
-    '*connected'(x){if($d){$d.dialog('close');$d=0};new D.IDE().setHostAndPort(x.host,x.port)},
-    '*spawned'(x){D.lastSpawnedExe=x.exe},
-    '*spawnedExited'(x){$.err(x.code!=null?'exited with code '+x.code:'received '+x.sig)},
-    '*error'(x){$d&&$d.dialog('close');$d=0;$.err(x.msg);q.fetch.disabled=0}
-  }
-  D.skt.recv=(x,y)=>{handlers[x](y)}
-
   //collect information about installed interpreters
   try{
     if(/^win/.test(process.platform)){
@@ -199,7 +224,7 @@ D.cn=_=>{
       ls(a).forEach(x=>{const m=/^Dyalog-(\d+\.\d+)\.app$/.exec(x), exe=`${a}/${x}/Contents/Resources/Dyalog/mapl`
                         m&&fs.existsSync(exe)&&interpreters.push({exe,ver:parseVer(m[1]),bits:64,edition:'unicode'})})
     }else{
-      const a='/opt/mdyalog'
+      const a='/opt/mdyalog',sil=f=>x=>{try{f(x)}catch(_){}} //exception silencer
       ls(a).forEach(sil(v=>{if(/^\d+\.\d+/.test(v))
         ls(`${a}/${v}`).forEach(sil(b=>{if(b==='32'||b==='64')
           ls(`${a}/${v}/${b}`).forEach(sil(u=>{if(u==='unicode'||u==='classic'){
@@ -210,120 +235,69 @@ D.cn=_=>{
   updExes()
 }
 
-let clt,   //client, TCP connection to interpreter
-    skt,   //socket-like object for communicating with the front end
-    child, //a ChildProcess instance, the result from spawn()
-    srv    //server, used to listen for connections from interpreters
-const log=x=>{console.log(x)}
-,maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
+const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
 ,shEsc=x=>`'${x.replace(/'/g,"'\\''")}'` //shell escape
 ,toBuf=x=>{const b=Buffer('xxxxRIDE'+x);b.writeInt32BE(b.length,0);return b}
 ,sendEach=x=>{if(clt){x.forEach(y=>log('send '+trunc(y)));clt.write(Buffer.concat(x.map(toBuf)))}}
-,iSend=(x,y)=>{log('internal send '+trunc(JSON.stringify([x,y])));skt&&skt.emit(x,y)}
 ,initInterpreterConn=_=>{
   let q=Buffer(0),old //old:have we warned the user that we're talking to an old interpreter
   clt.on('data',x=>{
     q=Buffer.concat([q,x]);let n
     while(q.length>=4&&(n=q.readInt32BE(0))<=q.length){
-      if(n<=8){iSend('*error',{msg:''});break}
+      if(n<=8){err('Bad protocol message');break}
       const m=''+q.slice(8,n);q=q.slice(n);log('recv '+trunc(m))
       if(m[0]==='['){
-        const u=JSON.parse(m);skt&&skt.emit(u[0],u[1])
-      }else if(/^<ReplyUnknownRIDECommand>/.test(m)&&!old){
-        old=1;iSend('*error',{msg:'This version of RIDE cannot talk to interpreters older than v15.0'})
+        const u=JSON.parse(m);D.skt&&D.skt.recv&&D.skt.recv(u[0],u[1])
+      }else if(m[0]==='<'&&!old){
+        old=1;err('This version of RIDE cannot talk to interpreters older than v15.0')
       }else if(/^UsingProtocol=/.test(m)&&m.slice(m.indexOf('=')+1)!=='2'){
-        iSend('*error',{msg:'Unsupported RIDE protocol version'});break
+        err('Unsupported RIDE protocol version');break
       }
     }
   })
-  clt.on('error',x=>{iSend('*error',{msg:''+x});clt=0})
-  clt.on('end',_=>{log('interpreter diconnected');iSend('*disconnected');clt=0})
+  clt.on('error',x=>{err(''+x);clt=0})
+  clt.on('end',_=>{log('interpreter diconnected');D.ide&&D.ide._disconnected();clt=0})
   sendEach(['SupportedProtocols=2','UsingProtocol=2',
             '["Identify",{"identity":1}]','["Connect",{"remoteId":2}]','["GetWindowLayout",{}]'])
 }
-,proxyHandlers={
-  '*connect':x=>{
-    let m=net,o={host:x.host,port:x.port} //m:module used to create connection; o:options for .connect()
-    if(x.ssl){
-      m=require('tls');o.rejectUnauthorized=false
-      if(x.cert)try{o.key=fs.readFileSync(x.cert)}catch(e){iSend('*error',{msg:e.message});return}
-    }
-    clt=m.connect(o,_=>{
-      if(x.ssl&&x.subj){
-        const s=clt.getPeerCertificate().subject.CN
-        if(s!==x.subj){
-          iSend('*error',{msg:
-            `Wrong server certificate name.  Expected:${JSON.stringify(x.subj)}, actual:${JSON.stringify(s)}`})
-          return
-        }
-      }
-      iSend('*connected',x);initInterpreterConn()
-    })
-    clt.on('error',x=>{log('connect failed: '+x);clt=0;iSend('*error',{msg:x.message})})
-  },
-  '*launch':x=>{
-    const exe=(x||{}).exe||process.env.RIDE_INTERPRETER_EXE||'dyalog'
-    srv=net.createServer(x=>{
-      log('spawned interpreter connected');const a=srv.address();srv&&srv.close();srv=0;clt=x
-      iSend('*connected',{host:a.address,port:a.port});initInterpreterConn()
-      if(typeof D!=='undefined'&&D.el)D.lastSpawnedExe=exe
-    })
-    srv.on('error',x=>{log('listen failed: '+x);srv=clt=0;iSend('*error',{msg:x.message})})
-    srv.listen(0,'127.0.0.1',_=>{
-      const a=srv.address(),hp=a.address+':'+a.port
-      log('listening for connections from spawned interpreter on '+hp)
-      log('spawning interpreter '+JSON.stringify(exe))
-      let args=['+s','-q'],stdio=['pipe','ignore','ignore']
-      if(/^win/i.test(process.platform)){args=[];stdio[0]='ignore'}
-      try{
-        const h=x.env||{},H=process.env;for(let k in H)h[k]=H[k];h.RIDE_INIT='CONNECT:'+hp;h.RIDE_SPAWNED='1'
-        child=cp.spawn(exe,args,{stdio,env:h})
-      }catch(e){
-        iSend('*error',{code:0,msg:''+e});return
-      }
-      iSend('*spawned',{exe,pid:child.pid})
-      child.on('error',x=>{
-        srv&&srv.close();srv=clt=child=0
-        iSend('*error',{code:x.code,msg:x.code==='ENOENT'?"Cannot find the interpreter's executable":''+x})
-      })
-      child.on('exit',(code,sig)=>{srv&&srv.close();srv=clt=0;iSend('*spawnedExited',{code,sig});child=0})
-    })
-  },
-  '*ssh':x=>{
-    const c=sshExec(x,'/bin/sh',sm=>{
-      sm.on('close',(code,sig)=>{iSend('*sshExited',{code,sig});c.end()})
-      c.forwardIn('',0,(e,remotePort)=>{if(e)throw e
-        let s='';for(let k in x.env)s+=`${k}=${shEsc(x.env[k])} `
-        sm.write(`${s}RIDE_INIT=CONNECT:127.0.0.1:${remotePort} ${shEsc(x.exe||'dyalog')} +s -q >/dev/null\n`)
-      })
-    }).on('error',x=>{iSend('*error',{msg:x.message||''+x})})
-  },
-  '*listen':x=>{
-    srv=net.createServer(x=>{
-      let t,rhost=x&&(t=x.request)&&(t=t.connection)&&t.remoteAddress
-      log('interpreter connected from '+rhost);srv&&srv.close();srv=0;clt=x
-      iSend('*connected',{host:rhost,port:x.port});initInterpreterConn()
-    })
-    srv.on('error',x=>{srv=0;iSend('*error',{msg:''+x})})
-    srv.listen(x.port,x.host||'',_=>{log('listening on port '+x.port);x.callback&&x.callback()})
-  },
-  '*listenCancel':_=>{srv&&srv.close()}
-}
 ,sshExec=(x,cmd,f)=>{ //f:callback
   try{ //see https://github.com/mscdex/ssh2/issues/238#issuecomment-87495628 for why we use tryKeyboard:true
-    var c=new(require('ssh2').Client),o={host:x.host,port:x.port,username:x.user,tryKeyboard:true}
+    const c=new(rq('ssh2').Client),o={host:x.host,port:x.port,username:x.user,tryKeyboard:true}
     x.key?(o.privateKey=fs.readFileSync(x.key)):(o.password=x.pass)
-    c.on('ready',_=>{c.exec(cmd,(e,sm)=>{e||f(sm)})})
-     .on('tcp connection',(_,acc)=>{clt=acc();iSend('*connected',{host:'',port:0});initInterpreterConn()})
+    c.on('ready',_=>{c.exec(cmd,f)})
+     .on('tcp connection',(_,acc)=>{clt=acc();initInterpreterConn();connected({host:'',port:0})})
      .on('keyboard-interactive',(_,_1,_2,_3,fin)=>{fin([x.pass])})
      .connect(o)
-  }catch(e){iSend('*error',{msg:e.message})}
-  return c
+    return c
+  }catch(e){err(e.message)}
 }
-D.proxy=x=>{
-  ;(skt=x).recv=(x,y)=>{const f=proxyHandlers[x],s=JSON.stringify([x,y])
-                        f&&log('internal recv '+trunc(s));f?f(y):sendEach([s])}
-  child&&iSend('*spawned',{pid:child.pid})
+,connect=x=>{
+  let m=net,o={host:x.host,port:x.port} //m:module used to create connection; o:options for .connect()
+  if(x.ssl){m=rq('tls');o.rejectUnauthorized=false
+            if(x.cert)try{o.key=fs.readFileSync(x.cert)}catch(e){err(e.message);return}}
+  clt=m.connect(o,_=>{
+    if(x.ssl&&x.subj){
+      const s=clt.getPeerCertificate().subject.CN
+      if(s!==x.subj){err(`Wrong server certificate name.  Expected:${JSON.stringify(x.subj)}, actual:${JSON.stringify(s)}`)
+                     return}
+    }
+    initInterpreterConn();connected(x)
+  })
+  clt.on('error',x=>{log('connect failed: '+x);clt=0;err(x.message)})
+}
+,connected=x=>{if($d){$d.dialog('close');$d=0};new D.IDE().setHostAndPort(x.host,x.port)}
+
+module.exports=_=>{
+  D.skt={emit(x,y){sendEach([JSON.stringify([x,y])])}}
+  const a=node_require('electron').remote.process.argv
+  ,h={c:process.env.RIDE_CONNECT,s:process.env.RIDE_SPAWN} //h:args by name
+  for(var i=1;i<a.length;i++)if(a[i][0]==='-'){h[a[i].slice(1)]=a[i+1];i++}
+  if(h.c){var m=/^([^:]+|\[[^\]]+\])(?::(\d+))?$/.exec(h.c) //parse host and port
+          m?go({type:'connect',host:m[1],port:+m[2]||4502})
+           :$.err('Invalid $RIDE_CONNECT')}
+  else if(h.s){go({type:'start',exe:h.s})
+               window.onbeforeunload=function(){D.skt.emit('Exit',{code:0})}}
+  else{D.cn()}
 }
 
-}())
+})()

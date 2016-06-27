@@ -135,7 +135,6 @@ D.prf_tabs.col={
     q.list.innerHTML=u.map(function(x){return'<option value='+x+'>'}).join('')
     q.grp.innerHTML=G.map(function(g,i){return'<option value='+i+'>'+g.s}).join('')
     q.scm.onchange=function(){scm=scms[+this.selectedIndex];updSampleStl();col.className=scm.frz?'frz':''
-                              console.info('q.scm.onchange',this.selectedIndex,'frz',scm.frz)
                               cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight)}
     q.new_name.onblur=function(){var s=this.value;if(!s)return;scm.name='';scm.name=uniqScmName(s)
                                  col.className='';updScms()}
