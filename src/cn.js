@@ -1,7 +1,7 @@
 //Connect page (loaded only when running in Electron)
 ;(()=>{'use strict'
 
-let $sel=$(),sel,$d //$sel:selected item(s), sel:data associated with the selected item (only if it's unique)
+let $sel=$(),sel //$sel:selected item(s), sel:data associated with the selected item (only if it's unique)
 ,interpreters=[],interpretersSSH=[] //local interpreters and those obtained over ssh
 ,clt   //client, TCP connection to interpreter
 ,child //a ChildProcess instance, the result from spawn()
@@ -13,7 +13,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
 ,cmpVer=(x,y)=>x[0]-y[0]||x[1]-y[1]||0 //compare two versions of the form [major,minor]
 ,ls=x=>fs.readdirSync(x)
 ,parseVer=x=>x.split('.').map(y=>+y)
-,err=x=>{$d&&$d.dialog('close');q.connecting_dlg.hidden=q.listen_dlg.hidden=1;q.$d=0;$.err(x);q.fetch.disabled=0}
+,err=x=>{q.connecting_dlg.hidden=q.listen_dlg.hidden=1;$.err(x);q.fetch.disabled=0}
 ,save=_=>{var a=q.favs.children,b=[];for(var i=0;i<a.length;i++)b[i]=a[i].cnData;D.prf.favs(b)}
 ,favText=x=>x.name||'unnamed'
 ,favDOM=x=>{const e=document.createElement('div');e.cnData=x
@@ -53,7 +53,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   return 1
 }
 ,go=(x)=>{
-  x=x||sel;$d&&$d.dialog('close');if(!validate(x))return 0
+  x=x||sel;if(!validate(x))return 0
   try{
     switch(x.type){
       case'connect':
@@ -64,7 +64,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
         q.listen_dlg_cancel.onclick=_=>{srv&&srv.close();q.listen_dlg.hidden=1;return!1}
         srv=net.createServer(x=>{let t,host=x&&(t=x.request)&&(t=t.connection)&&t.remoteAddress
                                  log('interpreter connected from '+host);srv&&srv.close();srv=0;clt=x
-                                 initInterpreterConn();connected({host,port})})
+                                 initInterpreterConn();new D.IDE().setHostAndPort(host,port)})
         srv.on('error',x=>{srv=0;q.listen_dlg.hidden=1;err(''+x)})
         srv.listen(port,'',_=>{log('listening on port '+port)});break
       case'start':
@@ -82,7 +82,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
           }).on('error',x=>{err(x.message||''+x)})
         }else{
           srv=net.createServer(x=>{log('spawned interpreter connected');const a=srv.address();srv&&srv.close();srv=0;clt=x
-                                   initInterpreterConn();connected({host:a.address,port:a.port})
+                                   initInterpreterConn();new D.IDE().setHostAndPort(a.address,a.port)
                                    if(typeof D!=='undefined'&&D.el)D.lastSpawnedExe=x.exe})
           srv.on('error',x=>{log('listen failed: '+x);srv=clt=0;err(x.message)})
           srv.listen(0,'127.0.0.1',_=>{
@@ -258,7 +258,7 @@ const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
     const c=new(rq('ssh2').Client),o={host:x.host,port:x.port,username:x.user,tryKeyboard:true}
     x.key?(o.privateKey=fs.readFileSync(x.key)):(o.password=x.pass)
     c.on('ready',_=>{c.exec(cmd,f)})
-     .on('tcp connection',(_,acc)=>{clt=acc();initInterpreterConn();connected({host:'',port:0})})
+     .on('tcp connection',(_,acc)=>{clt=acc();initInterpreterConn();new D.IDE().setHostAndPort('',0)})
      .on('keyboard-interactive',(_,_1,_2,_3,fin)=>{fin([x.pass])})
      .connect(o)
     return c
@@ -274,11 +274,10 @@ const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
       if(s!==x.subj){err(`Wrong server certificate name.  Expected:${JSON.stringify(x.subj)}, actual:${JSON.stringify(s)}`)
                      return}
     }
-    initInterpreterConn();connected(x)
+    initInterpreterConn();new D.IDE().setHostAndPort(x.host,x.port)
   })
   clt.on('error',x=>{log('connect failed: '+x);clt=0;err(x.message)})
 }
-,connected=x=>{if($d){$d.dialog('close');$d=0};new D.IDE().setHostAndPort(x.host,x.port)}
 
 module.exports=_=>{
   D.skt={emit(x,y){sendEach([JSON.stringify([x,y])])}}
