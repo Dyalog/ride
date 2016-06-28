@@ -48,14 +48,12 @@ const incl={
   '/node_modules/codemirror/addon/fold/indent-fold.js'         :1}
 Object.keys(incl).map(x=>{const a=x.split('/');a.map((_,i)=>incl[a.slice(0,i).join('/')]=1)}) // include ancestors
 
-const excl={
-  '/style/apl385.ttf'        :1,
-  '/style/DyalogUnicode.icns':1,
-  '/style/style.less'        :1,
-  '/style/thm'               :1}
-
-const namev='ride'+v.split('.').slice(0,2).join('')
-const pkg=(x,y,f)=>{
+const excl={'/style/apl385.ttf'      :1,
+            '/style/Dyalog_icon.icns':1,
+            '/style/style.less'      :1,
+            '/style/thm'             :1}
+,namev='ride'+v.split('.').slice(0,2).join('')
+,pkg=(x,y,f)=>{
   rq('electron-packager')(
     {dir:'.',platform:x,arch:y,out:'_/'+namev,overwrite:true,'download.cache':'cache',icon:'favicon.ico',tmpdir:false,
       ignore:p=>!incl[p]&&!/^\/(src|style|lib|_)(\/|$)/.test(p)&&!(x==='win32'&&/^\/windows-ime(\/|$)/.test(p))||excl[p],
