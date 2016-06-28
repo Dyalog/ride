@@ -7,9 +7,7 @@ app.disable('x-powered-by');app.use((x,_,f)=>{log(x.method+' '+x.path);f()})
 app.use(rq('compression')());app.use('/',express.static('.'))
 const hsrv=rq('https').createServer({cert,key},app)
 let wskt
-;(new rq('ws').Server({server:hsrv})).on('connection',x=>{
-  wskt=x;x.on('message',y=>sendEach([y]));sendEach(['["Connect",{"remoteId":2}]','["GetWindowLayout",{}]'])
-})
+;(new rq('ws').Server({server:hsrv})).on('connection',x=>{wskt=x;x.on('message',y=>sendEach([y]))})
 hsrv.listen(port,_=>log('http server listening on port '+port))
 
 const maxl=100,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
@@ -23,7 +21,6 @@ let clt,srv=rq('net').createServer(x=>{
     while(q.length>=4&&q.length>=(n=q.readInt32BE(0)))
       {const m=''+q.slice(8,n);q=q.slice(n);log('recv '+trunc(m));m[0]==='['&&wskt&&wskt.send(m)}
   })
-  sendEach(['SupportedProtocols=2','UsingProtocol=2','["Identify",{"identity":1}]'])
 })
 srv.listen(0,'127.0.0.1',_=>{
   const a=srv.address(),hp=a.address+':'+a.port,exe='dyalog'
