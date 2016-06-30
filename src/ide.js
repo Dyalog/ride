@@ -178,14 +178,13 @@ D.IDE=function(){'use strict'
   ide.gl.registerComponent('wse',function(c,h){var u=ide.wse||(ide.wse=new D.WSE(ide));u.container=c
                                                c.getElement().append(u.$e);return u})
   ide.gl.on('stateChanged',function(){eachWin(function(w){w.updSize();w.cm.refresh();w.updGutters&&w.updGutters()})})
-  ide.gl.on('tabCreated',function(x){
-    switch(x.contentItem.componentName){
-      case'w':var id=x.contentItem.config.componentState.id
-              id?x.closeElement.off('click').click(function(){var w=ide.wins[id];w.EP(w.cm)}):x.closeElement.remove()
-              break
-      case'wse':x.closeElement.off('click').click(D.prf.wse.toggle);break
-    }
-  })
+  ide.gl.on('tabCreated',function(x){switch(x.contentItem.componentName){
+    case'wse':x.closeElement.off('click').click(D.prf.wse.toggle);break
+    case'w':var id=x.contentItem.config.componentState.id
+            id?x.closeElement.off('click').click(function(){var w=ide.wins[id];w.EP(w.cm)})
+              :x.closeElement.remove()
+            break
+  }})
   ide.gl.on('stackCreated',function(x){x.header.controlsContainer.find('.lm_close').remove()})
   ide.gl.init()
 
@@ -203,9 +202,14 @@ D.IDE=function(){'use strict'
   D.prf.fold(function(x){eachWin(function(w){if(w.id){w.cm.setOption('foldGutter',!!x);w.updGutters()}})})
   D.prf.matchBrackets(function(x){eachWin(function(w){w.cm.setOption('matchBrackets',!!x)})})
   var updWSE=function(){
-    D.prf.wse()
-      ?ide.gl.root.contentItems[0].addChild({type:'component',componentName:'wse',title:'Workspace Explorer'})
-      :ide.gl.root.getComponentsByName('wse').forEach(function(x){x.container.close()})
+    if(!D.prf.wse()){
+      ide.gl.root.getComponentsByName('wse').forEach(function(x){x.container.close()})
+    }else{
+      var p=ide.gl.root.contentItems[0]
+      if(p.type!=='row'){var row=ide.gl.createContentItem({type:'row'},p);p.parent.replaceChild(p,row)
+                         row.addChild(p,0,true);row.callDownwards('setSize');p=row}
+      p.addChild({type:'component',componentName:'wse',title:'Workspace Explorer'},0)
+    }
   }
   D.prf.wse(updWSE);D.prf.wse()&&setTimeout(updWSE,500)
   D.mac&&setTimeout(function(){ide.wins[0].focus()},500) // OSX is stealing our focus.  Let's steal it back!  Bug #5
