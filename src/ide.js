@@ -175,14 +175,17 @@ D.IDE=function(){'use strict'
                                                           componentState:{id:0},title:'Session'}]}]},
                           ide.$ide)
   ide.gl.registerComponent('w',function(c,h){var w=ide.wins[h.id];w.container=c;c.getElement().append(w.$e);return w})
-  ide.gl.registerComponent('wse',function(c,h){
-    var u=ide.wse||(ide.wse=new D.WSE(ide));u.container=c;c.getElement().append(u.$e);return u})
+  ide.gl.registerComponent('wse',function(c,h){var u=ide.wse||(ide.wse=new D.WSE(ide));u.container=c
+                                               c.getElement().append(u.$e);return u})
   ide.gl.on('stateChanged',function(){eachWin(function(w){w.updSize();w.cm.refresh();w.updGutters&&w.updGutters()})})
-  ide.gl.on('tabCreated',function(x){if(x.contentItem.componentName==='w'){
-    var id=x.contentItem.config.componentState.id
-    id?x.closeElement.off('click').click(function(){var w=ide.wins[id];w.EP(w.cm)})
-      :x.closeElement.remove()
-  }})
+  ide.gl.on('tabCreated',function(x){
+    switch(x.contentItem.componentName){
+      case'w':var id=x.contentItem.config.componentState.id
+              id?x.closeElement.off('click').click(function(){var w=ide.wins[id];w.EP(w.cm)}):x.closeElement.remove()
+              break
+      case'wse':x.closeElement.off('click').click(D.prf.wse.toggle);break
+    }
+  })
   ide.gl.on('stackCreated',function(x){x.header.controlsContainer.find('.lm_close').remove()})
   ide.gl.init()
 
