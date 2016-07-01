@@ -162,7 +162,7 @@ function go(){
           var pw=q.ssh_pass.val(),kf=q.ssh_key.val()
           $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
             .dialog({modal:1,width:350,title:'Connecting...'})
-          D.skt.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||user,pass:pw,key:kf,env:env})
+          D.skt.emit('*ssh',{host:sel.host,port:+sel.port||22,user:sel.user||user,pass:pw,key:kf,env:env,exe:sel.exe})
         }else{
           D.skt.emit('*launch',{exe:sel.exe,env:env})
         }
