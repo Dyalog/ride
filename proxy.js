@@ -108,7 +108,7 @@ var handlers={
     })
   },
   '*sshFetchListOfInterpreters':function(x){
-    var c=sshExec(x,'/bin/ls /opt/mdyalog/*/*/*/mapl /Applications/Dyalog-*/Contents/Resources/Dyalog/mapl',function(sm){
+    var c=sshExec(x,'/bin/ls /opt/mdyalog/*/*/*/mapl /Applications/Dyalog-*/Contents/Resources/Dyalog/mapl 2>/dev/null',function(sm){
       var s=''
       sm.on('data',function(x){s+=x}).on('close',function(){
         toBrowser('*sshInterpreters',{interpreters:s.split('\n').filter(function(x){return x}).map(function(x){
