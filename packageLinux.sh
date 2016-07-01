@@ -15,7 +15,7 @@ fi
 echo "Packaging for $TARGET"
 
 RIDEDIR="/devt/builds/ride/${TARGET}/latest/linux64"
-ICON="/devt/admin/Dyalog Logos Stationery/Logos/Application/Dyalog-icon.svg"
+ICON="/devt/admin/Dyalog Logos Stationery/Logos/Application/Dyalog_icon.svg"
 SBOXDIR=/tmp/ride$$
 postinst=/tmp/postinst$$
 prerm=/tmp/prerm$$
