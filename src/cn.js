@@ -70,7 +70,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
       case'start':
         const env={},a=(x.env||'').split('\n');for(let i=0;i<a.length;i++){const m=KV.exec(a[i]);m&&(env[m[1]]=m[2])}
         if(x.ssh){
-          D.util.dlg(q.connection_dlg)
+          D.util.dlg(q.connecting_dlg)
           var o={host:x.host,port:+x.port||22,user:x.user||user}
           if(x===sel){o.pass=q.ssh_pass.value;o.key=q.ssh_key.value}
           const c=sshExec(o,'/bin/sh',(e,sm)=>{if(e)throw e
@@ -78,8 +78,9 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
             c.forwardIn('',0,(e,rport)=>{if(e)throw e
               let s='';for(let k in env)s+=`${k}=${shEsc(env[k])} `
               sm.write(`${s}RIDE_INIT=CONNECT:127.0.0.1:${rport} ${shEsc(x.exe)} +s -q >/dev/null\n`)
+              q.connecting_dlg.hidden=0
             })
-          }).on('error',x=>{err(x.message||''+x)})
+          }).on('error',x=>{err(x.message||''+x);q.connecting_dlg.hidden=0})
         }else{
           srv=net.createServer(x=>{log('spawned interpreter connected');const a=srv.address();srv&&srv.close();srv=0;clt=x
                                    initInterpreterConn();new D.IDE().setHostAndPort(a.address,a.port)
