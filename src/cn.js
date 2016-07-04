@@ -123,7 +123,7 @@ D.cn=_=>{ //set up Connect page
     if(!validate())return
     q.fetch.disabled=1
     const c=sshExec({host:sel.host,port:+sel.port||22,user:sel.user||user,pass:q.ssh_pass.value,key:q.ssh_key.value},
-                    '/bin/ls /opt/mdyalog/*/*/*/mapl /Applications/Dyalog-*/Contents/Resources/Dyalog/mapl',
+                    '/bin/ls /opt/mdyalog/*/*/*/mapl /Applications/Dyalog-*/Contents/Resources/Dyalog/mapl 2>/dev/null',
                     (e,sm)=>{
       if(e)throw e
       let s='';interpretersSSH=[]
