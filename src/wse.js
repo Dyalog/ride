@@ -17,7 +17,7 @@ D.WSE.prototype={
     f((x.nodeIds||[]).map(function(c,i){
       var t=Math.floor(x.classes[i])
       return{text:x.names[i],children:!!c,id:'wse-'+(c||('leaf-'+x.nodeId+'-'+i)),
-             icon:c?'':2<=t&&t<=4?'style/img/wse-t'+t+'.png':'img/tb-ED.png'}
+             icon:c?'':2<=t&&t<=4?'style/img/wse-t'+t+'.png':'tb/ED.png'}
     }))
     delete this.pending[x.nodeId]
   },
