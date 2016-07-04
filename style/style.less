@@ -28,7 +28,7 @@ table{border-collapse:collapse;border-spacing:0}
 @font-face{font-family:'apl';src:url('../style/apl385.woff')format('woff'),url('../style/apl385.ttf')format('truetype')}
 
 ::selection{.sel} ::-moz-selection{.sel} // these two must be separate rules
-body{.bg;padding:0;margin:0;font-family:sans-serif;overflow:hidden}
+body{.bg;padding:0;margin:0;font-family:Verdana,"BitStream Vera Sans","DejaVu Sans",sans-serif;overflow:hidden}
 //The following lines disable selection of UI elements:
 // https://stackoverflow.com/questions/826782/css-rule-to-disable-text-selection-highlighting/4358620#answer-4407335
 // -webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none
@@ -118,16 +118,16 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 }
 
 //language bar
-#lb{.tt;.bg;padding:0 2px 0 10px;cursor:default;border-bottom:solid #888 1px;line-height:28px}
-#lb b{border:solid @dark 1px;border-left:0;font-weight:normal;margin-bottom:3px;padding:1px;background:#eeeae2}
-#lb b.first{border-left:solid @dark 1px}
+#lb{.tt;.bg;padding:0 2px 0 10px;cursor:default;border-bottom:solid @dark 1px;line-height:28px}
+#lb b{font-weight:normal;margin-bottom:3px;padding:1px;color:#666}
 #lb b:hover{background-color:@light}
 #lb_prf{float:right;margin-right:4px;width:24px;height:24px;background:no-repeat center center url(../style/img/lb-prf.png)}
-#lb_tip{.tt;position:absolute;padding:10px;border-radius:10px;border:solid black 1px;margin-top:20px;
-        background:@tip 10px 10px no-repeat url(../style/img/lb-tip.png)}
-#lb_tip_tri{position:absolute;padding:0;margin:0;width:20px;height:19px;
-            background:center center no-repeat url(../style/img/lb-tip-triangle.png)}
-#lb_tip_desc{.tt;padding:0 0 0 30px;margin:0;font-weight:bold}
+#lb_tip{.tt;.outset;position:absolute;padding:8px;margin-top:16px;border-width:1px;border-style:solid;
+        background:linear-gradient(#88f,#cdf);box-shadow:4px 4px 12px rgba(0,0,0,0.5)}
+#lb_tip_tri{position:absolute;border:solid;border-color:#88f;border-width:0 16px 16px 16px;
+            border-left-color:transparent!important;border-right-color:transparent!important;
+            background-color:transparent!important;content:""}
+#lb_tip_desc{.tt;padding:0 0 0 32px;margin:0;font-weight:bold;background:0 center no-repeat url(../style/img/lb-tip.png)}
 #lb_tip_text{.tt}
 
 //value tips (also styled via Prefs>Colours)
@@ -229,7 +229,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .ui-widget-overlay{opacity:.3;filter:Alpha(Opacity=30);background:#aaa}
 .ui-widget-shadow{margin:-8px 0 0 -8px;padding:8px;opacity:.3;filter:Alpha(Opacity=30);border-radius:8px;background:#aaa}
 
-.dlg{.bg;.outset;border-style:solid;border-width:1px;position:absolute;box-shadow:4px 4px 32px #888}
+.dlg{.bg;.outset;border-style:solid;border-width:1px;position:absolute;box-shadow:4px 4px 12px rgba(0,0,0,0.5)}
 .dlg_title{background-color:#004;color:#fff;cursor:default;padding-left:8px;height:19px;line-height:19px}
 .dlg_close{float:right;background-color:#eee;color:#000;width:14px;height:14px;margin:2px;line-height:16px;
            text-align:center;text-decoration:none;cursor:pointer}
@@ -239,7 +239,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 
 //Preferences dialog
 #prf_dlg{width:600px;height:450px}
-#prf_nav{height:28px;border-bottom:solid 1px @light;text-align:left;margin-bottom:2px}
+#prf_nav{height:28px;border-bottom:solid 1px @light;text-align:left;margin-bottom:2px;background-color:#ccc}
 #prf_nav a{.bg;float:left;height:16px;padding:2px 12px 1px 12px;
            text-decoration:none;color:#444;margin:8px 0 0 4px;
            border:solid #aaa 1px;border-bottom:0;border-top-left-radius:4px;border-top-right-radius:4px}
@@ -351,8 +351,8 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 }
 
 //About dialog
-#abt{padding:0;margin:0;width:520px;height:410px}
-#abt_logo{background:#fc9732 16px center no-repeat url(../style/dyaloglogo.png);height:80px}
+#abt{padding:0;margin:0;width:600px;height:450px}
+#abt_logo{background:16px center no-repeat url(../style/Dyalog_60.png);height:80px}
 #abt_contact{float:right;text-align:right;margin:12px 12px 0 0;cursor:default}
 #abt_contact a,
 #abt_contact a:visited,
