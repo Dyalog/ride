@@ -49,6 +49,7 @@ D.prf_tabs.lyt={
     }
     updGlyphs();if(D.win)q.ime.checked=!!D.prf.ime()
   },
+  activate:function(){q.pfx.focus()},
   validate:function(){if(q.pfx.value.length!==1)return{msg:'Invalid prefix key',el:q.pfx}},
   save:function(){
     D.prf.prefixKey(q.pfx.value);D.prf.kbdLocale(q.lc.value)

@@ -10,6 +10,7 @@ D.prf_tabs.title={
     var a=subs.querySelectorAll('a');for(var i=0;i<a.length;i++){a[i].href='#';a[i].title='Insert'}
     document.getElementById('title_rst').onclick=function(){wt.value=D.prf.title.getDefault();wt.focus();return!1}
   },
+  activate:function(){wt.focus()},
   load:function(){wt.value=D.prf.title()},
   save:function(){D.prf.title(wt.value)}
 }

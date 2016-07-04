@@ -187,6 +187,7 @@ D.prf_tabs.col={
                   scm=a[0];for(var i=0;i<a.length;i++)if(a[i].name===s){scm=a[i];break}
                   document.getElementById('col').className='';updScms()
                   cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);cm.refresh()},
+  activate:function(){q.scm.focus()},
   save:function(){D.prf.colourSchemes(scms.filter(function(x){return!x.frz}).map(encScm));D.prf.colourScheme(scm.name)},
   resize:function(){cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);cm.refresh()}
 }

@@ -28,6 +28,7 @@ D.prf_tabs.code={
     q.sqt .checked=!!p.squiggleTips       ()
     q.ai.onchange();q.acbl.onchange();q.ac.onchange()
   },
+  activate:function(){q.ai.focus()},
   save:function(){
     var p=D.prf
     p.indent             (q.ai .checked?(+q.sw .value||0):-1)

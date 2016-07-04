@@ -8,6 +8,7 @@ D.prf_tabs.pmenu={
     document.getElementById('pmenu_rst').onclick=function(){ta.value=D.prf.menu.getDefault()}
   },
   load:function(){ta.value=D.prf.menu()},
+  activate:function(){ta.focus()},
   save:function(){D.prf.menu(ta.value)},
   validate:function(){
     try {
