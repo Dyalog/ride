@@ -37,6 +37,7 @@ Leftover from RIDE3 (M:major, S:significant, W:wouldn't it be nice)
         NN: it turns out no content is available for the status bar, therefore I removed it, see email 2016-04-07
 
 Not prioritized:
+  font size in value tips should match font size in CodeMirror
   configurable list for ``
   ``idiomname
   <AC> on <RD>
