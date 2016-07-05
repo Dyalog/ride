@@ -61,7 +61,7 @@ el.app.on('ready',_=>{
    .on('show',_=>{if(p){const q=w.getPosition();dx=q[0]-p[0];dy=q[1]-p[1]}}).show()
   if(D.win){const fix=_=>{setTimeout(_=>{const a=w.getSize();w.setSize(a[0],a[1]-1);w.setSize(a[0],a[1])},100)}
             w.on('page-title-updated',fix).on('blur',fix)}
-  w.webContents.openDevTools()
+  //w.webContents.openDevTools()
 })
 el.app.on('window-all-closed',_=>el.app.quit())
 
