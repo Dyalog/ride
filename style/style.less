@@ -322,6 +322,8 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #col_settings{width:200px;right:8px;overflow:auto;padding-top:5px}
 #col_fg,#col_bg{width:48px;padding:0;cursor:pointer}
 #col_settings,#col_cm{text-align:left;position:absolute;top:90px;bottom:38px}
+#col_settings p{padding-top:8px;padding-bottom:8px}
+#col_bgo_p{background-color:#ccc;border-radius:8px;margin-left:16px;padding-left:8px;padding-right:8px}
 #col.frz #col_ren,
 #col.frz #col_del,
 #col.frz #col_settings{display:none}
@@ -501,19 +503,6 @@ body .ui-tooltip{border-width:2px}
 
 .ui-icon{width:16px;height:16px}
 .ui-icon-closethick{background:no-repeat center center url(../style/img/close.png)}
-
-.ui-slider{position:relative;text-align:left;margin:0 10px}
-.ui-slider .ui-slider-handle{position:absolute;width:10px;height:10px;cursor:pointer}
-.ui-slider .ui-slider-range{position:absolute;display:block;border:0}
-// For IE8 - See #6727
-.ui-slider.ui-state-disabled .ui-slider-handle,.ui-slider.ui-state-disabled .ui-slider-range{filter:inherit}
-.ui-slider-horizontal{.inset;height:1px;border-style:solid;border-width:1px}
-.ui-slider-horizontal .ui-slider-handle{
-  .outset;top:-5px;background-color:@bg;margin-left:-5px;border-style:solid;border-width:1px;border-radius:2px
-}
-.ui-slider-horizontal .ui-slider-range{top:0;height:100%}
-.ui-slider-horizontal .ui-slider-range-min{left:0;background-color:#000}
-.ui-slider-horizontal .ui-slider-range-max{right:0;background-color:#000}
 
 // CodeMirror styles
 .CodeMirror{.tt;height:300px;color:black}

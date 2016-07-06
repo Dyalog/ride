@@ -176,10 +176,9 @@ D.prf_tabs.col={
     ;['fg','bg','bc'].forEach(function(p){
       q[p].onchange=function(){(scm[sel]||(scm[sel]={}))[p]=this.value;updSampleStl()}
       q[p+'_cb'].onclick=function(){var h=scm[sel]||(scm[sel]={});this.checked?h[p]=rgb(q[p].value):delete h[p]
-                                    q[p].hidden=!this.checked;updSampleStl();if(p==='cb')q.bgo.hidden=!this.checked}
+                                    q[p].hidden=!this.checked;updSampleStl();if(p==='cb')q.bgo_p.hidden=!this.checked}
     })
-    $(q.bgo).slider({range:'min',value:.5,min:0,max:1,step:.25,animate:false,
-                     slide:function(e,ui){(scm[sel]||(scm[sel]={})).bgo=ui.value;updSampleStl()}})
+    q.bgo.onchange=function(e){(scm[sel]||(scm[sel]={})).bgo=+q.bgo.value;updSampleStl()}
     ;['B','I','U'].forEach(function(p){$(q[p]).click(function(){var h=scm[sel]||(scm[sel]={})
                                        this.checked?h[p]=1:delete h[p];updSampleStl()})})
   },
@@ -204,11 +203,11 @@ function selGrp(t,forceRefresh){
   q.B.checked=!!h.B
   q.I.checked=!!h.I
   q.U.checked=!!h.U
-  $(q.bgo).slider('value',h.bgo==null?.5:h.bgo)
+  q.bgo.value=h.bgo==null?.5:h.bgo
   var c=(G[i]||G[0]).ctrls||{}
   q.fg_p.hidden=c.fg!=null&&!c.fg
   q.bg_p.hidden=c.bg!=null&&!c.bg
-  q.bgo.hidden=(c.bg!=null&&!c.bg)||!h.bg
+  q.bgo_p.hidden=(c.bg!=null&&!c.bg)||!h.bg
   q.BIU_p.hidden=c.BIU!=null&&!c.BIU
   q.bc_p.hidden=!c.bc
   sel=t
