@@ -36,9 +36,9 @@ D.prf_tabs.shc={
     for(var i=0;i<cmds.length;i++){
       var x=cmds[i],c=x[0],s=x[1],d=x[2] //c:code,s:description,d:default
       html+='<tr data-code='+c+'>'+
-              '<td class=shc_code>'+c+'<td>'+s+
-              '<td id=shc_'+c+'>'+(h[c]||d).map(keyHTML).join('')+'<button class=shc_add>+</button>'+
-              '<td><button class=shc_rst title="Reset to default">↶</button>'
+        '<td class=shc_code>'+c+'<td>'+s+
+        '<td id=shc_'+c+'>'+(h[c]||d).map(keyHTML).join('')+'<button class=shc_add title="Add shortcut">+</button>'+
+        '<td><button class=shc_rst title="Reset to default">↶</button>'
     }
     document.getElementById('shc_tbl_wr').innerHTML=html+'</table>'
     updDups();if(q.sc.value){q.sc.value='';$(q.sc).change()}
@@ -55,7 +55,7 @@ D.prf_tabs.shc={
   activate:function(){q.sc.focus()}
 }
 function keyHTML(k){
-  return'<span class=shc_key><span class=shc_text>'+k+'</span><a href=# class=shc_del title="Delete shortcut">×</a></span> '
+  return'<span class=shc_key><span class=shc_text>'+k+'</span><a href=# class=shc_del title="Remove shortcut">×</a></span> '
 }
 function updKeys(x){
   var h=CodeMirror.keyMap.dyalog={fallthrough:'dyalogDefault'}
