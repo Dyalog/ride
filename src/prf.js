@@ -84,8 +84,6 @@ D.prf={}
     '\n  Strong Interrupt         =SI'+
     '\n&Window                         {mac}'+
     '\n&Help'+
-    '\n  About                    =ABT {!mac}'+
-    '\n  -                             {!mac}'+
     '\n  Dyalog Help              =http://help.dyalog.com/'+
     '\n  Documentation Centre     =http://dyalog.com/documentation.htm'+
     '\n  -'+
@@ -93,6 +91,8 @@ D.prf={}
     '\n  MyDyalog                 =https://my.dyalog.com/'+
     '\n  -'+
     '\n  Dyalog Forum             =http://www.dyalog.com/forum'+
+    '\n  -                             {!mac}'+
+    '\n  About                    =ABT {!mac}'+
     '\n'+
     '\n# Syntax:'+
     '\n#   &x   access key, alt+x'+
