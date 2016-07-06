@@ -294,19 +294,21 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 //Prefs>Shortcuts
 #shc{position:absolute;left:0;right:0;top:48px;bottom:48px;overflow:auto;text-align:left;padding:8px 0 0 8px}
 #shc td{text-align:left}
-#shc td.shc_code{.tt;padding:0 3px;border-left:solid #aaa 1px;border-right:solid #aaa 1px;color:#555;text-align:center}
+.shc_code{.tt;padding:2px 16px 2px 8px;color:#555}
 #shc_tbl_wr{position:absolute;top:40px;left:3px;right:3px;bottom:0;overflow:auto}
-#shc_tbl_wr table{width:100%}
-#shc_sc_clr{width:24px;margin-left:-20px;color:#888;text-decoration:none;&:hover{color:#000}}
+#shc_tbl_wr table{width:100%;cursor:default}
+#shc_tbl_wr tr:hover{background-color:#eee}
+#shc_sc_clr{width:24px;margin-left:-20px;color:#888;text-decoration:none}
+#shc_sc_clr:hover{color:#000}
 #shc_no_res{font-style:italic;padding:20px;color:#888}
-.shc_text,.shc_del,.shc_add,.shc_rst{padding:0 3px;border-radius:10px;border:solid#799 1px}
-.shc_text{background-color:#cff;color:#255;border-top-right-radius:0;border-bottom-right-radius:0;border-right-width:0}
-.shc_del_hvr .shc_text{border-color:red}
+.shc_key{border:solid #aaa 1px;border-radius:2px;margin:8px 2px;line-height:24px;white-space:nowrap}
+.shc_key.shc_del_hvr{border-color:red}
+.shc_text{border-top-right-radius:0;border-bottom-right-radius:0;border-right-width:0;padding:0 2px}
 .shc_text.shc_dup{border-color:red;background-color:red;color:white}
-.shc_del{background-color:#799;color:#fff;text-decoration:none;border-top-left-radius:0;border-bottom-left-radius:0}
-.shc_del:hover{background-color:red;border-color:#800}
-.shc_add{background-color:#799;color:#fff;text-decoration:none;&:hover{background-color:#080;border-color:#040}}
-.shc_rst{background-color:#799;color:#fff;text-decoration:none;&:hover{background-color:#a80;border-color:#540}}
+.shc_del{color:#f00;text-decoration:none;border-top-left-radius:0;border-bottom-left-radius:0}
+.shc_del:hover{background-color:red;color:#fff;border-color:#800}
+.shc_add,.shc_rst{visibility:hidden}
+#shc_tbl_wr tr:hover .shc_add,#shc_tbl_wr tr:hover .shc_rst{visibility:visible}
 .shc_inp{background-color:#ace}
 
 //Prefs>Code
