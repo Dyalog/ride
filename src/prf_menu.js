@@ -3,12 +3,10 @@
 var ta //the textarea
 D.prf_tabs.pmenu={
   name:'Menu',
-  init:function(t){
-    ta=document.getElementById('pmenu_ta')
-    document.getElementById('pmenu_rst').onclick=function(){ta.value=D.prf.menu.getDefault()}
-  },
+  init:function(t){ta=document.getElementById('pmenu_ta')
+                   document.getElementById('pmenu_rst').onclick=function(){ta.value=D.prf.menu.getDefault()}},
   load:function(){ta.value=D.prf.menu()},
-  activate:function(){ta.focus()},
+  activate:function(){ta.scrollTop=ta.selectionStart=ta.selectionEnd=0;ta.focus()},
   save:function(){D.prf.menu(ta.value)},
   validate:function(){
     try {
