@@ -49,7 +49,7 @@ $.confirm=function(m,t,f){
 $.fn.insert=function(s){ //replace selection in an <input> or <textarea> with s
   return this.each(function(){
     if(!$(this).is(':text,textarea')||this.readOnly)return
-    var e=this,i=e.selectionStart,j=e.selectionEnd  //TODO: IE
+    var e=this,i=e.selectionStart,j=e.selectionEnd
     if(i!=null&&j!=null){e.value=e.value.slice(0,i)+s+e.value.slice(j);e.selectionStart=e.selectionEnd=i+s.length}})}
 $.fn.elastic=function(){ //as you type in an <input>, it stretches as necessary to accommodate the text
   return this.each(function(){

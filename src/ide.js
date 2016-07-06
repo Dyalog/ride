@@ -111,7 +111,6 @@ D.IDE=function(){'use strict'
                  }}})})
     },
     ReplyTreeList:function(x){ide.wse.replyTreeList(x)},
-    UnknownRIDECommand:function(){}, // todo
     UnknownCommand:function(){}
   }
   // We need to be able to temporarily block the stream of messages coming from socket.io
