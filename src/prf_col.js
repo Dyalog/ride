@@ -176,7 +176,7 @@ D.prf_tabs.col={
     ;['fg','bg','bc'].forEach(function(p){
       q[p].onchange=function(){(scm[sel]||(scm[sel]={}))[p]=this.value;updSampleStl()}
       q[p+'_cb'].onclick=function(){var h=scm[sel]||(scm[sel]={});this.checked?h[p]=rgb(q[p].value):delete h[p]
-                                    q[p].hidden=!this.checked;updSampleStl();if(p==='cb')q.bgo_p.hidden=!this.checked}
+                                    q[p].hidden=!this.checked;updSampleStl();if(p==='bg')q.bgo_p.hidden=!this.checked}
     })
     q.bgo.onchange=function(e){(scm[sel]||(scm[sel]={})).bgo=+q.bgo.value;updSampleStl()}
     ;['B','I','U'].forEach(function(p){$(q[p]).click(function(){var h=scm[sel]||(scm[sel]={})
