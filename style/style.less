@@ -39,6 +39,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 
 //z-indices (except for CodeMirror which uses 1-10)
 .ui-tooltip                            {z-index:9999}
+#lyt_popup                             {z-index:9999}
 #lb_tip_tri                            {z-index: 301}
 #lb_tip                                {z-index: 300}
 #vt_balloon,#vt_triangle,#vt_rect      {z-index: 300}
@@ -249,11 +250,8 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 
 //Prefs>Layout
 #lyt{padding:5px}
-#lyt_hlp{font-size:16px;text-align:left;color:#444;font-style:italic}
-//#lyt_lgnd{.tt;width:90px;border-collapse:collapse;color:#000;
-//  .g0,.g2{text-align:left ;cursor:default}
-//  .g1,.g3{text-align:right;cursor:default}}
-#lyt_ctrls{text-align:left;margin-bottom:10px}
+#lyt_ctrls{text-align:center;margin-bottom:10px}
+#lyt_legend{float:left}
 #lyt_rst{float:right}
 #lyt_pfx_lbl{margin:12px 10px auto auto}
 #lyt_pfx{width:20px;text-align:center}
@@ -290,6 +288,8 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
                           position:relative;left:-30%;width:30%;height:45px}
               #k44{width:8.4%}     //lshift
               #k45{display:block}} //the key between lshift and Z
+#lyt_popup{position:absolute;left:0;right:0;top:0;bottom:0;background-color:rgba(0,0,0,.5)}
+#lyt_popup_content{width:80%;height:60%;background-color:white;margin:10% auto 0;text-align:center}
 
 //Prefs>Shortcuts
 #shc{position:absolute;left:0;right:0;top:48px;bottom:48px;overflow:auto;text-align:left;padding:8px 0 0 8px}
