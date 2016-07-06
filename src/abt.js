@@ -26,7 +26,7 @@ D.abt=function(){
     '\n  Platform: '  +(ri.platform        ||u)+
     '\n  Edition: '   +(ri.arch            ||u)+
     '\n  Date: '      +(ri.date            ||u)+'\n'
-  ta.focus();ta.select()
+  ta.scrollTop=ta.selectionStart=ta.selectionEnd=0;document.getElementById('abt_copy').focus()
 }
 
 }())
