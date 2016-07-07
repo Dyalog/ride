@@ -38,9 +38,9 @@ $.extend(CM.commands,{
   PRF:function(){D.prf_ui()},
   ABT:function(){D.abt()},
   CNC:function(){
-    //todo: D.mac&&(p=p.replace(/(\/Contents\/).*$/,'$1MacOS/nwjs'))
-    var p=ps.execPath
-    spawn(p,[],{detached:true,stdio:['ignore','ignore','ignore'],env:$.expand({},process.env,{RIDE_SPAWN:'0'})})
+    var p=process.execPath;if(D.mac)p=p.replace(/(\/Contents\/).*$/,'$1MacOS/nwjs')
+    node_require('child_process').spawn(p,[],{detached:true,stdio:['ignore','ignore','ignore'],
+                                        env:$.extend({},process.env,{RIDE_SPAWN:'0'})})
   },
   NEW:function(){
     if(!D.el)return

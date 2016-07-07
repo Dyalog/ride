@@ -34,7 +34,7 @@ D.vt=function(w){'use strict' //.init(w) gets called for every window w (session
       var rx=r0.left,ry=r0.top,rw=r1.right-r0.left,rh=r1.bottom-r0.top //bounding rectangle for whole token
       var s=(x.tip.length<MH?x.tip:x.tip.slice(0,MH-1).concat('…'))
               .map(function(s){return s.length<MW?s:s.slice(0,MW-1)+'…'}).join('\n')
-      cl();$b=$('<div id=vt_balloon>',d).text(s);$t=$('<div id=vt_triangle>',d);$r=$('<div id=vt_rect>',d)
+      cl();$b=$('<div id=vt_bln>',d).text(s);$t=$('<div id=vt_tri>',d);$r=$('<div id=vt_rect>',d)
       $b.add($t).add($r).hide().appendTo(d.body)
       var th=6,tw=2*th,inv=ry<wh-ry-rh                                 //tw,th:triangle dimensions, inv:is upside-down?
       var bp=8,bw=$b.width(),bh=$b.height()                            //balloon padding and dimensions

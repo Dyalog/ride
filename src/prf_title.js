@@ -7,7 +7,7 @@ D.prf_tabs.title={
     wt=document.getElementById('title_inp')
     var subs=document.getElementById('title_subs')
     subs.onclick=function(x){x.target.nodeName==='A'&&$(wt).insert(x.target.textContent);wt.focus()}
-    var a=subs.querySelectorAll('a');for(var i=0;i<a.length;i++){a[i].href='#';a[i].title='Insert'}
+    var a=subs.querySelectorAll('a');for(var i=0;i<a.length;i++){a[i].href='#';a[i].title='Click to insert'}
     document.getElementById('title_rst').onclick=function(){wt.value=D.prf.title.getDefault();wt.focus();return!1}
   },
   activate:function(){wt.focus()},

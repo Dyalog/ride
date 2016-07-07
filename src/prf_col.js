@@ -43,8 +43,8 @@ D.addSynGrps([
   {s:'tracer'          ,t:'tc'  ,c:'.tracer .CodeMirror,.tracer .CodeMirror .CodeMirror-gutter-wrapper'},
   {s:'tradfn'          ,t:'trad',c:'.cm-apl-trad'},
   {s:'user command'    ,t:'ucmd',c:'.cm-apl-ucmd'},
-  {s:'value tip target',t:'vtt' ,c:'/*noprefix*/#vtip-rect',ctrls:{bc:1,fg:0,BIU:0}},
-  {s:'value tip'       ,t:'vtip',c:'/*noprefix*/#vtip-balloon,/*noprefix*/#vtip-triangle',ctrls:{bc:1}},
+  {s:'value tip target',t:'vtt' ,c:'/*noprefix*/#vt_rect',ctrls:{bc:1,fg:0,BIU:0}},
+  {s:'value tip'       ,t:'vtip',c:'/*noprefix*/#vt_bln,/*noprefix*/#vt_tri',ctrls:{bc:1}},
   {s:'zilde'           ,t:'zld' ,c:'.cm-apl-zld' }
 ])
 //Colour schemes have two representations:

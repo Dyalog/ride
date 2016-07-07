@@ -38,20 +38,17 @@ select:focus{outline:dotted #000 1px}
 input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 
 //z-indices (except for CodeMirror which uses 1-10)
-.ui-tooltip                            {z-index:9999}
-#lyt_popup                             {z-index:9999}
-#lb_tip_tri                            {z-index: 301}
-#lb_tip                                {z-index: 300}
-#vt_balloon,#vt_triangle,#vt_rect      {z-index: 300}
-.menu .m-box                           {z-index: 200}
-.dlg                                   {z-index: 100}
-.ui-front                              {z-index: 100}
-.ui-selectable-helper                  {z-index: 100}
-.CodeMirror-hints                      {z-index:  10}
-.cm-scroll                             {z-index:   6}
-.ui-slider .ui-slider-handle           {z-index:   2}
-.ui-tabs .ui-tabs-nav li.ui-tabs-active{z-index:   1}
-.ui-slider .ui-slider-range            {z-index:   1}
+.ui-tooltip             {z-index:9999}
+#lyt_popup              {z-index:9999}
+#lb_tip_tri             {z-index: 301}
+#lb_tip                 {z-index: 300}
+#vt_bln,#vt_tri,#vt_rect{z-index: 300}
+.menu .m-box            {z-index: 200}
+.dlg                    {z-index: 100}
+.ui-front               {z-index: 100}
+.ui-selectable-helper   {z-index: 100}
+.CodeMirror-hints       {z-index:  10}
+.cm-scroll              {z-index:   6}
 
 //connect page
 #cn{position:absolute;left:0;right:0;top:0;bottom:0}
@@ -122,8 +119,11 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 //language bar
 #lb{.tt;.bg;padding:0 2px 0 10px;cursor:default;border-bottom:solid @dark 1px;line-height:28px}
 #lb b{font-weight:normal;margin-bottom:3px;padding:1px;color:#666}
-#lb b:hover{background-color:@light}
+#lb b:hover{background-color:#eee}
+#lb b:active{background-color:#fff}
 #lb_prf{float:right;margin-right:4px;width:24px;height:24px;background:no-repeat center center url(../style/img/lb-prf.png)}
+#lb_prf:hover{background-color:#eee}
+#lb_prf:active{background-color:#fff}
 #lb_tip{.tt;position:absolute;padding:8px;margin-top:16px;border-radius:2px;
         background:linear-gradient(#aaf,#bcd);box-shadow:4px 4px 12px rgba(0,0,0,0.5)}
 #lb_tip_tri{position:absolute;border:solid;border-color:#aaf;border-width:0 16px 16px 16px;
@@ -133,20 +133,13 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #lb_tip_text{.tt}
 
 //value tips (also styled via Prefs>Colours)
-#vt_balloon{.tt;position:absolute;border-radius:8px;border:solid black 1px;padding:7px;white-space:pre;
+#vt_bln{.tt;position:absolute;border-radius:8px;border:solid black 1px;padding:7px;white-space:pre;
             background-color:#000;color:#fff;overflow:hidden}
-#vt_triangle{position:absolute;border:solid;border-color:#000;border-width:6px 6px 0 6px;height:6px;bottom:-6px;
+#vt_tri{position:absolute;border:solid;border-color:#000;border-width:6px 6px 0 6px;height:6px;bottom:-6px;
              border-left-color:transparent!important;border-right-color:transparent!important;
              background-color:transparent!important;content:""}
-#vt_triangle.inv{border-width:0 6px 6px 6px;margin-top:-6px;bottom:auto}
+#vt_tri.inv{border-width:0 6px 6px 6px;margin-top:-6px;bottom:auto}
 #vt_rect{position:absolute;border:dotted transparent 2px;margin:-1px}
-
-//splitting lines between session and editor,tracer,wsexplorer
-.ui-layout-resizer{.bg}
-.ui-layout-resizer-east,.ui-layout-resizer-west
-  {border-left:solid @light 1px;border-right:solid @dark 1px;padding:2px 0 !important;margin-top:-1px !important}
-.ui-layout-resizer-south,.ui-layout-resizer-north{border-top:solid @light 1px;border-bottom:solid #888 1px}
-.ui-layout-resizer:hover .ui-layout-toggler{background:#ace}
 
 .zoom11  .CodeMirror{font-size:48px}
 .zoom10  .CodeMirror{font-size:42px}
@@ -173,7 +166,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .zoom-11 .CodeMirror{font-size: 6px}
 
 .disconnected{.CodeMirror,.CodeMirror-gutter-wrapper{background-color:#e2d3bb}} //beige
-.breakpoints{width:12px}
+.breakpoints{width:12px} /*gutter*/
 .breakpoint{color:#f00;width:12px;text-indent:-99px;cursor:pointer;
             background:no-repeat transparent center center url(../style/img/breakpoint.png)}
 .hidden{display:none}
@@ -217,20 +210,19 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .tb-WI  {background-image:url(../style/tb/WI.png)}
 .tb-CBP {background-image:url(../style/tb/CBP.png)}
 .tb-sep{float:left;width:10px;height:24px;background:no-repeat center center url(../style/tb/sep.png)} /*separator*/
-.tb-sc,.tb-rp{ //search and replace
-  .inset;border-style:solid;border-width:2px;float:left;width:120px;height:24px;resize:none;overflow:hidden;
-  .toolbar & .CodeMirror{font-size:18px}
-  &.no-matches .cm-s-default{background-color:#fee}
-  & .CodeMirror-lines{padding:0}
-  & .CodeMirror-empty{color:#888}
-}
+//search and replace
+.tb-sc,.tb-rp{.inset;border-style:solid;border-width:2px;float:left;width:120px;height:24px;resize:none;overflow:hidden}
+.toolbar .tb-sc .CodeMirror,
+.toolbar .tb-rp .CodeMirror{font-size:18px}
+.tb-sc.no-matches .cm-s-default,
+.tb-rp.no-matches .cm-s-default{background-color:#fee}
+.tb-sc .CodeMirror-empty,
+.tb-rp .CodeMirror-empty{color:#888}
 .tb-rp{margin-left:2px}
-.win,.floating-window{position:absolute;left:0;right:0;top:32px;bottom:0;overflow:hidden!important;padding:0!important;height:auto!important}
+.win,.floating-window{position:absolute;left:0;right:0;top:32px;bottom:0;
+                      overflow:hidden!important;padding:0!important;height:auto!important}
 
 //various dialogs
-.ui-widget-overlay{opacity:.3;filter:Alpha(Opacity=30);background:#aaa}
-.ui-widget-shadow{margin:-8px 0 0 -8px;padding:8px;opacity:.3;filter:Alpha(Opacity=30);border-radius:8px;background:#aaa}
-
 .dlg{.bg;.outset;border-style:solid;border-width:1px;position:absolute;box-shadow:4px 4px 12px rgba(0,0,0,0.5)}
 .dlg_title{background-color:#004;color:#fff;cursor:default;padding-left:8px;height:19px;line-height:19px}
 .dlg_close{float:right;background-color:#eee;color:#000;width:14px;height:14px;margin:2px;line-height:16px;
@@ -258,16 +250,14 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #lyt_pfx{width:20px;text-align:center}
 #lyt_kbd{.tt;background-color:#aaa;border-radius:5px;height:200px;clear:both;color:#000;cursor:default}
 #lyt_ime_wr{float:left;margin-top:5px}
-.key{
-  float:left;width:6%;height:45px;border-radius:5px;margin-left:0.6%;margin-top:4px;text-align:center;
-  background-color:#fff;overflow:hidden;
-  .g1,.g3{width:40%;height:20px;padding:0;border-width:0;cursor:pointer;margin-top:1px}
-  .g1{color:#00f}
-  .g3{color:#f00}
-  .g1.hover{outline:solid #bbf 1px;background-color:#eee}
-  .g3.hover{outline:solid #fbb 1px;background-color:#eee}
-  input{text-align:center}
-}
+.key{float:left;width:6%;height:45px;border-radius:5px;margin-left:0.6%;margin-top:4px;text-align:center;
+     background-color:#fff;overflow:hidden}
+.key .g1,.key .g3{width:40%;height:20px;padding:0;border-width:0;cursor:pointer;margin-top:1px}
+.key .g1{color:#00f}
+.key .g3{color:#f00}
+.key .g1.hover{outline:solid #bbf 1px;background-color:#eee}
+.key .g3.hover{outline:solid #fbb 1px;background-color:#eee}
+.key input{text-align:center}
 #k15,#k16,#k30,#k43,#k44,#k57{line-height:45px;cursor:default} //bksp,tab,caps,enter,lshift,rshift
 #k16,#k30,#k44{clear:left}                                     //tab,caps,lshift
 #k15,#k16,#k43,#k44,#k57{font-size:32px}                       //bksp,tab,enter,lshift,rshift
@@ -280,15 +270,14 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #k43{width:13.6%} // enter
 #k44{width:15%  } // lshift
 #k57{width:17.2%} // rshift
-.lyt_geom_iso{#k29{display:none}   //the key above enter on an ansi layout
-              #k42{display:block}  //the key between @' and enter
-              //enter
-              #k43{width:7%;height:94px;line-height:94px;margin-top:-45px;text-indent:-2%;
+.lyt_geom_iso #k29{display:none}  //the key above enter on an ansi layout
+.lyt_geom_iso #k42{display:block} //the key between @' and enter
+.lyt_geom_iso #k43{width:7%;height:94px;line-height:94px;margin-top:-45px;text-indent:-2%; //enter
                    border-radius:0 5px 5px 5px;overflow:visible}
-              #k43:before{content:"";background-color:#fff;float:left;border-radius:5px 0 0 5px;
+.lyt_geom_iso #k43:before{content:"";background-color:#fff;float:left;border-radius:5px 0 0 5px;
                           position:relative;left:-30%;width:30%;height:45px}
-              #k44{width:8.4%}     //lshift
-              #k45{display:block}} //the key between lshift and Z
+.lyt_geom_iso #k44{width:8.4%}    //lshift
+.lyt_geom_iso #k45{display:block} //the key between lshift and Z
 #lyt_popup{position:absolute;left:0;right:0;top:0;bottom:0;background-color:rgba(0,0,0,.5)}
 #lyt_popup_content{width:80%;height:60%;background-color:white;margin:10% auto 0;text-align:center}
 
@@ -347,12 +336,11 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #pmenu_ta_wr{position:absolute;left:4px;right:8px;top:78px;bottom:36px;overflow:hidden;padding:4px}
 #pmenu_ta{width:100%;height:100%;resize:none}
 
-.ui-dialog .ui-dialog-content.task_dlg{
-  padding:8px;
-  p{text-align:left}
-  .subtext,.footer{font-size:12px;color:#444}
-  .task{display:block;width:100%;margin-top:2px}
-}
+.ui-dialog .ui-dialog-content.task_dlg{padding:8px}
+.ui-dialog .ui-dialog-content.task_dlg p{text-align:left}
+.ui-dialog .ui-dialog-content.task_dlg .subtext,
+.ui-dialog .ui-dialog-content.task_dlg .footer{font-size:12px;color:#444}
+.ui-dialog .ui-dialog-content.task_dlg .task{display:block;width:100%;margin-top:2px}
 
 //About dialog
 #abt{padding:0;margin:0;width:600px;height:450px}
@@ -648,6 +636,9 @@ span.CodeMirror-selectedtext{background:none}
 .cm-scroll-h .btn1:after{content:"\25b6"}
 .cm-scroll-v .btn0:after{content:"\25b2"}
 .cm-scroll-v .btn1:after{content:"\25bc"}
+
+//Golden Layout
+.lm_goldenlayout{background-image:none!important;background-color:#eee}
 
 @import url(../style/jstree/style.css);
 @import url(../style/goldenlayout/goldenlayout-base.css);
