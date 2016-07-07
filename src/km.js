@@ -156,7 +156,6 @@ $.extend(CM.commands,{
   },
   JSC:function(){D.elw&&D.elw.webContents.toggleDevTools()},
   LOG:function(){D.showProtocolLog&&D.showProtocolLog()},
-  MNU:function(){$('.menu .m-opener').eq(0).click()},
   TIP:function(){var w=D.ide.focusedWin,u=w.cm.getCursor();w.vt.show({line:u.line,ch:Math.max(0,u.ch-1)},1)},
   AO:function(cm){ // add comment
     if(cm.somethingSelected()){
