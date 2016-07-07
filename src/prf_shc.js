@@ -12,7 +12,7 @@ D.prf_tabs.shc={
       var u=e.target.closest('.shc_del'),p=u&&u.parentNode
       if(p){p.parentNode.removeChild(p);updDups();return!1}
       var u=e.target.closest('.shc_add'),p=u&&u.parentNode
-      if(p){getKeystroke(function(k){k&&u.insertAdjacentHTML('beforebegin',keyHTML(k));updDups()});return!1}
+      if(p){getKeystroke(u,function(k){k&&u.insertAdjacentHTML('beforebegin',keyHTML(k));updDups()});return!1}
       var u=e.target.closest('.shc_rst'),p=u&&u.parentNode
       if(p){
         var tr=u.closest('tr'),c=$(tr).data('code')
@@ -62,25 +62,23 @@ function updKeys(x){
   for(var i=0;i<D.cmds.length;i++){var c=D.cmds[i][0],d=D.cmds[i][2],ks=x[c]||d;for(var j=0;j<ks.length;j++)h[ks[j]]=c}
 }
 D.prf.keys(updKeys);updKeys(D.prf.keys())
-function updDups(){var h={} // h: maps keystrokes to jQuery objects
+function updDups(){var h={} //h:maps keystrokes to jQuery objects
   $('#shc_tbl_wr .shc_text').each(function(){var $t=$(this),k=$t.text();$t.add(h[k]).toggleClass('shc_dup',!!h[k]);h[k]=$t})
 }
-function getKeystroke(callback){
-  var $d=$('<p><input class=shc_inp placeholder=...>')
-    .dialog({title:'New Shortcut',modal:1,buttons:{Cancel:function(){$d.dialog('close');callback()}}})
-  $('input',$d)
-    .focus(function(){$(this).addClass   ('shc_inp')})
-    .blur (function(){$(this).removeClass('shc_inp')})
-    .on('keypress keyup',function(e){
-      var kn=CodeMirror.keyNames[e.which]||''
-      if(kn!=='Shift'&&kn!=='Ctrl'&&kn!=='Alt'&&kn!=='Cmd'){$d.dialog('close');callback(this.value);return!1}
-      $(this).val((e.shiftKey?'Shift-':'')+(e.ctrlKey?'Ctrl-':'')+(e.altKey&&'Alt-'||'')+(e.metaKey&&'Cmd-'||''));return!1
-    })
-    .keydown(function(e){
-      var kn=CodeMirror.keyNames[e.which]||''
-      if(kn==='Shift'||kn==='Ctrl'||kn==='Alt'||kn==='Cmd')kn=''
-      $(this).val((e.shiftKey?'Shift-':'')+(e.ctrlKey?'Ctrl-':'')+(e.altKey?'Alt-':'')+(e.metaKey?'Cmd-':'')+kn);return!1
-    })
+function getKeystroke(b,f){ //b:"+" button,f:callback
+  var inp=document.createElement('input');inp.placeholder='Enter keystroke...'
+  inp.onkeyup=function(e){
+    var kn=CodeMirror.keyNames[e.which]||''
+    if(kn!=='Shift'&&kn!=='Ctrl'&&kn!=='Alt'&&kn!=='Cmd'){inp.blur();return!1}
+    inp.value=(e.shiftKey?'Shift-':'')+(e.ctrlKey?'Ctrl-':'')+(e.altKey&&'Alt-'||'')+(e.metaKey&&'Cmd-'||'');return!1
+  }
+  inp.onkeydown=function(e){
+    var kn=CodeMirror.keyNames[e.which]||''
+    if(kn==='Shift'||kn==='Ctrl'||kn==='Alt'||kn==='Cmd')kn=''
+    inp.value=(e.shiftKey?'Shift-':'')+(e.ctrlKey?'Ctrl-':'')+(e.altKey?'Alt-':'')+(e.metaKey?'Cmd-':'')+kn;return!1
+  }
+  inp.onblur=function(){f(inp.value);inp.parentNode.removeChild(inp)}
+  b.parentNode.insertBefore(inp,b);inp.focus()
 }
 
 }())
