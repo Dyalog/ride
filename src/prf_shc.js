@@ -63,19 +63,16 @@ function updDups(){
                               a[i].className=h[k]?(h[k].className='shc_text shc_dup'):'shc_text';h[k]=a[i]}
 }
 function getKeystroke(b,f){ //b:"+" button,f:callback
-  var inp=document.createElement('input');inp.placeholder='Enter keystroke...'
-  inp.onkeyup=function(e){
-    var kn=CodeMirror.keyNames[e.which]||''
-    if(kn!=='Shift'&&kn!=='Ctrl'&&kn!=='Alt'&&kn!=='Cmd'){inp.blur();return!1}
-    inp.value=(e.shiftKey?'Shift-':'')+(e.ctrlKey?'Ctrl-':'')+(e.altKey&&'Alt-'||'')+(e.metaKey&&'Cmd-'||'');return!1
+  var e=document.createElement('input')
+  var upd=function(x){
+    var kn=CodeMirror.keyNames[x.which]||'';if(!kn||kn==='Shift'||kn==='Ctrl'||kn==='Alt'||kn==='Cmd')kn=''
+    e.value=(x.shiftKey&&(x.type!=='keyup'||x.which)?'Shift-':'')+
+            (x.ctrlKey?'Ctrl-':'')+(x.altKey?'Alt-':'')+(x.metaKey?'Cmd-':'')+kn
+    kn&&e.blur();x.preventDefault();x.stopPropagation();return!1
   }
-  inp.onkeydown=function(e){
-    var kn=CodeMirror.keyNames[e.which]||''
-    if(kn==='Shift'||kn==='Ctrl'||kn==='Alt'||kn==='Cmd')kn=''
-    inp.value=(e.shiftKey?'Shift-':'')+(e.ctrlKey?'Ctrl-':'')+(e.altKey?'Alt-':'')+(e.metaKey?'Cmd-':'')+kn;return!1
-  }
-  inp.onblur=function(){f(inp.value);inp.parentNode.removeChild(inp)}
-  b.parentNode.insertBefore(inp,b);inp.focus()
+  e.addEventListener('keyup',upd);e.addEventListener('keydown',upd)
+  e.onblur=function(){var r=e.value;e.parentNode.removeChild(e);f(r)}
+  e.placeholder='Press keystroke...';b.parentNode.insertBefore(e,b);e.focus()
 }
 
 }())
