@@ -19,13 +19,12 @@ D.abt=function(){
     '\n  Platform: '  +(navigator.platform ||u)+
     '\n  Date: '      +(v.date             ||u)+
     '\n  Git commit: '+(v.rev              ||u)+
-    '\n  User agent: '+(navigator.userAgent||u)+
-    '\n  Settings:{\n'+s+'\n  }\n'+
+    '\n  Preferences:{\n'+s+'\n  }\n'+
     '\nInterpreter:'  +
     '\n  Version: '   +(ri.version         ||u)+
     '\n  Platform: '  +(ri.platform        ||u)+
     '\n  Edition: '   +(ri.arch            ||u)+
-    '\n  Date: '      +(ri.date            ||u)+'\n'
+    '\n  Date: '      +(ri.date            ||u).replace(/^Created: /,'')+'\n'
   ta.scrollTop=ta.selectionStart=ta.selectionEnd=0;document.getElementById('abt_copy').focus()
 }
 

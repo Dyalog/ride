@@ -23,11 +23,12 @@ D.util={
     var t=d.querySelector('.dlg_title')
     if(t){
       var dx,dy,mx,my //dx,dy:dialog position corrected for mouse; mx,my:maximum coords of dialog in window
-      t.onmousedown=function(e){dx=d.offsetLeft-e.clientX;dy=d.offsetTop-e.clientY
-                                mx=innerWidth-d.clientWidth;my=innerHeight-d.clientHeight
-                                document.addEventListener('mousemove',move);e.preventDefault();
-                                return!1}
-      t.onmouseup=function(e){document.removeEventListener('mousemove',move)}
+      t.onmousedown=function(e){
+        if(e.target.closest('.dlg_no_drag'))return
+        dx=d.offsetLeft-e.clientX;dy=d.offsetTop-e.clientY;mx=innerWidth-d.clientWidth;my=innerHeight-d.clientHeight
+        t.style.cursor='move';document.addEventListener('mousemove',move);e.preventDefault();return!1
+      }
+      t.onmouseup=function(e){document.removeEventListener('mousemove',move);t.style.cursor=''}
       var move=function(e){d.style.left=Math.min(mx,Math.max(0,dx+e.clientX))+'px'
                            d.style.top =Math.min(my,Math.max(0,dy+e.clientY))+'px'
                            e.preventDefault();return!1}}}}
