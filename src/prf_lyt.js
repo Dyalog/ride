@@ -1,31 +1,29 @@
 ;(function(){'use strict'
 
-var layouts=D.kbds.layouts,geom=D.kbds.geom
-var NK=58     //number of scancodes we are concerned with
-var model={}  //dictionary: locale→[arrayOfAPLGlyphs,arrayOfShiftedAPLGlyphs]
-var q={},g=[] //q:DOM elements, g[i][j]:the DOM elements for key i and group j
-function tip(x){return x===' '?'Click to\nconfigure':'U+'+('000'+x.charCodeAt(0).toString(16).toUpperCase()).slice(-4)}
+var layouts=D.kbds.layouts,geom=D.kbds.geom,NK=58 //NK:number of scancodes we are concerned with
+,model={}  //dictionary: locale→[arrayOfAPLGlyphs,arrayOfShiftedAPLGlyphs]
+,q={},g=[] //q:DOM elements, g[i][j]:the DOM element for key i and group j
+,tip=function(x){return x===' '?'Click to\nconfigure':'U+'+('000'+x.charCodeAt(0).toString(16).toUpperCase()).slice(-4)}
 D.prf_tabs.lyt={
   name:'Layout',
   init:function(t){
     var sk={15:'←',16:'↹',30:'Caps',43:'↲',44:'⇧',57:'⇧'} //special keys
     var a=document.querySelectorAll('[id^="lyt_"]');for(var i=0;i<a.length;i++)q[a[i].id.replace(/^lyt_/,'')]=a[i]
-    var s='';for(var i=1;i<NK;i++)s+='<span id=k'+i+' class=key>'+(sk[i]||'<span class=g2></span><input class=g3><br>'+
-                                                                          '<span class=g0></span><input class=g1>')+'</span>'
+    var s='';for(var i=1;i<NK;i++)s+='<span id=lyt_'+i+' class=lyt_key>'+
+                                         (sk[i]||'<span class=lyt_g2></span><input class=lyt_g3><br>'+
+                                                 '<span class=lyt_g0></span><input class=lyt_g1>')+'</span>'
     q.kbd.innerHTML=s;q.lc.innerHTML='<option>'+Object.keys(layouts).sort().join('<option>')
-    $(t)
-      .on('focus','.key input',function(){var e=this;setTimeout(function(){e.select()},1)})
-      .on('blur','.key input',function(){
-        var i=+$(this).hasClass('g3'),
-            j=+$(this).closest('.key').prop('id').slice(1),
-            v=model[q.lc.value][i][j]=$(this).val().slice(-1)||' '
-        this.value=v;this.title=tip(v)
-      })
-      .on('mouseover mouseout','.key input',function(e){$(this).toggleClass('hover',e.type==='mouseover')})
-    for(var i=1;i<NK;i++){g[i]=[];var e=document.getElementById('k'+i)
-                          for(var j=0;j<4;j++)g[i][j]=e.querySelector('.g'+j)}
-    D.win&&$(t).append('<label id=lyt_ime_wr><input type=checkbox id=lyt_ime> '+
-                       'Also enable Dyalog IME (requires RIDE restart)</label>')
+    var inputs=q.kbd.querySelectorAll('input')
+    for(var i=0;i<inputs.length;i++){
+      inputs[i].onfocus=function(x){setTimeout(function(){x.target.select()},1)}
+      inputs[i].onblur=function(x){
+        var e=x.target,v=model[q.lc.value][+(e.className==='lyt_g3')][+e.closest('.lyt_key').id.slice(1)]=e.value.slice(-1)||' '
+        e.value=v;e.title=tip(v)
+      }
+    }
+    for(var i=1;i<NK;i++){g[i]=[];var e=document.getElementById('lyt_'+i)
+                          for(var j=0;j<4;j++)g[i][j]=e.querySelector('.lyt_g'+j)}
+    q.ime_wr.hidden=!D.win
     if(!layouts[D.prf.kbdLocale()]){
       var s=navigator.language, l=s.slice(0,2).toLowerCase(), c=s.slice(3,5).toUpperCase() //language&country
       var d=Object.keys(layouts).filter(function(x){return x.slice(3,5)===c}).sort()[0] //default layout for country c

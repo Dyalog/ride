@@ -33,20 +33,16 @@ D.util={
                            d.style.top =Math.min(my,Math.max(0,dy+e.clientY))+'px'
                            e.preventDefault();return!1}}}}
 $.alert=function(m,t,f){ //m:message, t:title, f:callback
-  if(D.el){D.el.dialog.showMessageBox(D.elw,{message:m,title:t,buttons:['OK']});f&&f()}
-  else{$('<p>').text(m)
-         .dialog({modal:1,title:t,buttons:[{html:'<u>O</u>K',click:function(){$(this).dialog('close');f&&f()}}]})}}
+  D.el?D.el.dialog.showMessageBox(D.elw,{message:m,title:t,buttons:['OK']}):alert(m);f&&f()
+}
 $.err=function(m,t,f){
   if(typeof t==='function'){f=t;t=''}
-  t=t||'Error'
-  if(D.el){D.el.dialog.showMessageBox(D.elw,{type:'error',message:m,title:t,buttons:['OK']});f&&f()}
-  else{$('<p>').text(m)
-         .dialog({modal:1,title:t,buttons:[{html:'<u>O</u>K',click:function(){$(this).dialog('close');f&&f()}}]})}}
+  t=t||'Error';D.el?D.el.dialog.showMessageBox(D.elw,{type:'error',message:m,title:t,buttons:['OK']}):alert(m);f&&f()
+}
 $.confirm=function(m,t,f){
-  if(D.el){f(1-D.el.dialog.showMessageBox(D.elw,{message:m,title:t,type:'question',buttons:['Yes','No'],cancelId:1}))}
-  else{var r;$('<p>').text(m).dialog({modal:1,title:t,close:function(){f&&f(r)},buttons:[
-                                        {html:'<u>Y</u>es',click:function(){r=1;$(this).dialog('close')}},
-                                        {html:'<u>N</u>o' ,click:function(){r=0;$(this).dialog('close')}}]})}}
+  f(D.el?1-D.el.dialog.showMessageBox(D.elw,{message:m,title:t,type:'question',buttons:['Yes','No'],cancelId:1})
+        :+confirm(m))
+}
 $.fn.insert=function(s){ //replace selection in an <input> or <textarea> with s
   return this.each(function(){
     if(!$(this).is(':text,textarea')||this.readOnly)return

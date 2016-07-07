@@ -243,41 +243,41 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 
 //Prefs>Layout
 #lyt{padding:5px}
-#lyt_ctrls{text-align:center;margin-bottom:10px}
+#lyt_ctrls{text-align:center;margin:16px 0}
 #lyt_legend{float:left}
 #lyt_rst{float:right}
 #lyt_pfx_lbl{margin:12px 10px auto auto}
 #lyt_pfx{width:20px;text-align:center}
 #lyt_kbd{.tt;background-color:#aaa;border-radius:5px;height:200px;clear:both;color:#000;cursor:default}
 #lyt_ime_wr{float:left;margin-top:5px}
-.key{float:left;width:6%;height:45px;border-radius:5px;margin-left:0.6%;margin-top:4px;text-align:center;
-     background-color:#fff;overflow:hidden}
-.key .g1,.key .g3{width:40%;height:20px;padding:0;border-width:0;cursor:pointer;margin-top:1px}
-.key .g1{color:#00f}
-.key .g3{color:#f00}
-.key .g1.hover{outline:solid #bbf 1px;background-color:#eee}
-.key .g3.hover{outline:solid #fbb 1px;background-color:#eee}
-.key input{text-align:center}
-#k15,#k16,#k30,#k43,#k44,#k57{line-height:45px;cursor:default} //bksp,tab,caps,enter,lshift,rshift
-#k16,#k30,#k44{clear:left}                                     //tab,caps,lshift
-#k15,#k16,#k43,#k44,#k57{font-size:32px}                       //bksp,tab,enter,lshift,rshift
-#k15,#k16,#k30,#k43,#k44,#k57{color:#888}                      //bksp,tab,caps,enter,lshift,rshift
-#k14,#k42,#k45,#k56{display:none}
-#k15{width:13%  } // bksp
-#k16{width:10%  } // tab
-#k29{width: 9%  } // |\ key on an ansi layout
-#k30{width:12%  } // caps
-#k43{width:13.6%} // enter
-#k44{width:15%  } // lshift
-#k57{width:17.2%} // rshift
-.lyt_geom_iso #k29{display:none}  //the key above enter on an ansi layout
-.lyt_geom_iso #k42{display:block} //the key between @' and enter
-.lyt_geom_iso #k43{width:7%;height:94px;line-height:94px;margin-top:-45px;text-indent:-2%; //enter
+.lyt_key{float:left;width:6%;height:45px;border-radius:5px;margin-left:0.6%;margin-top:4px;text-align:center;
+         background-color:#fff;overflow:hidden}
+.lyt_key .lyt_g1,.lyt_key .lyt_g3{width:40%;height:20px;padding:0;border-width:0;cursor:pointer;margin-top:1px}
+.lyt_key .lyt_g1{color:#00f}
+.lyt_key .lyt_g3{color:#f00}
+.lyt_key .lyt_g1:hover{outline:solid #bbf 1px;background-color:#eee}
+.lyt_key .lyt_g3:hover{outline:solid #fbb 1px;background-color:#eee}
+.lyt_key input{text-align:center}
+#lyt_15,#lyt_16,#lyt_30,#lyt_43,#lyt_k44,#lyt_k57{line-height:45px;cursor:default} //bksp,tab,caps,enter,lshift,rshift
+#lyt_16,#lyt_30,#lyt_44{clear:left}                         //tab,caps,lshift
+#lyt_15,#lyt_16,#lyt_43,#lyt_44,#lyt_57{font-size:32px}     //bksp,tab,enter,lshift,rshift
+#lyt_15,#lyt_16,#lyt_30,#lyt_43,#lyt_44,#lyt_57{color:#888} //bksp,tab,caps,enter,lshift,rshift
+#lyt_14,#lyt_42,#lyt_45,#lyt_56{display:none}
+#lyt_15{width:13%  } //bksp
+#lyt_16{width:10%  } //tab
+#lyt_29{width: 9%  } // |\ key on ansi layout
+#lyt_30{width:12%  } //caps
+#lyt_43{width:13.6%} //enter
+#lyt_44{width:15%  } //lshift
+#lyt_57{width:17.2%} //rshift
+.lyt_geom_iso #lyt_29{display:none}  //the key above enter on an ansi layout
+.lyt_geom_iso #lyt_42{display:block} //the key between @' and enter
+.lyt_geom_iso #lyt_43{width:7%;height:94px;line-height:94px;margin-top:-45px;text-indent:-2%; //enter
                    border-radius:0 5px 5px 5px;overflow:visible}
-.lyt_geom_iso #k43:before{content:"";background-color:#fff;float:left;border-radius:5px 0 0 5px;
+.lyt_geom_iso #lyt_43:before{content:"";background-color:#fff;float:left;border-radius:5px 0 0 5px;
                           position:relative;left:-30%;width:30%;height:45px}
-.lyt_geom_iso #k44{width:8.4%}    //lshift
-.lyt_geom_iso #k45{display:block} //the key between lshift and Z
+.lyt_geom_iso #lyt_44{width:8.4%}    //lshift
+.lyt_geom_iso #lyt_45{display:block} //the key between lshift and Z
 #lyt_popup{position:absolute;left:0;right:0;top:0;bottom:0;background-color:rgba(0,0,0,.5)}
 #lyt_popup_content{width:80%;height:60%;background-color:white;margin:10% auto 0;text-align:center}
 
