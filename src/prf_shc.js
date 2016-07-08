@@ -24,20 +24,11 @@ D.prf_tabs.shc={
         return!1
       }
     }
+    q.rst_all.onclick=function(){loadFrom({});return!1}
     q.sc.onkeyup=q.sc.onchange=updSC
     q.sc_clr.onclick=function(){this.hidden=1;q.sc.value='';updSC();q.sc.focus();return!1}
   },
-  load:function(){
-    var h=D.prf.keys(),html='<table>',cmds=D.cmds
-    for(var i=0;i<cmds.length;i++){
-      var x=cmds[i],c=x[0],s=x[1],d=x[2] //c:code,s:description,d:default
-      html+='<tr data-code='+c+'>'+
-        '<td class=shc_code>'+c+'<td>'+s+
-        '<td id=shc_'+c+'>'+(h[c]||d).map(keyHTML).join('')+'<button class=shc_add title="Add shortcut">+</button>'+
-        '<td><button class=shc_rst title="Reset to default">↶</button>'
-    }
-    q.tbl_wr.innerHTML=html+'</table>';updDups();if(q.sc.value){q.sc.value='';updSC()}
-  },
+  load:function(){loadFrom(D.prf.keys())},
   validate:function(){var a=q.tbl_wr.getElementsByClassName('shc_dup');if(a.length)return{msg:'Duplicate shortcuts',el:a[0]}},
   save:function(){
     var h={},cmds=D.cmds,a=q.tbl_wr.querySelectorAll('.shc_text')
@@ -47,6 +38,17 @@ D.prf_tabs.shc={
     D.prf.keys(h)
   },
   activate:function(){q.sc.focus()}
+}
+function loadFrom(h){
+  var html='<table>',cmds=D.cmds
+  for(var i=0;i<cmds.length;i++){
+    var x=cmds[i],c=x[0],s=x[1],d=x[2] //c:code,s:description,d:default
+    html+='<tr data-code='+c+'>'+
+      '<td class=shc_code>'+c+'<td>'+s+
+      '<td id=shc_'+c+'>'+(h[c]||d).map(keyHTML).join('')+'<button class=shc_add title="Add shortcut">+</button>'+
+      '<td><button class=shc_rst title="Reset &quot;'+c+'&quot; to its defaults">↶</button>'
+  }
+  q.tbl_wr.innerHTML=html+'</table>';updDups();if(q.sc.value){q.sc.value='';updSC()}
 }
 function updSC(){var a=q.tbl_wr.querySelectorAll('tr'),s=this.value.toLowerCase(),empty=1;q.sc_clr.hidden=!s
                  for(var i=0;i<a.length;i++)empty&=a[i].hidden=a[i].textContent.toLowerCase().indexOf(s)<0
