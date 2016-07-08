@@ -34,7 +34,8 @@ D.prf_tabs.lyt={
     q.lc.onchange=updGlyphs
     q.pfx.onfocus=function(){setTimeout(function(){$(q.pfx).select()},1)}
     q.legend.onclick=function(){q.popup.hidden=0;q.popup_close.focus()}
-    q.popup_close.onclick=function(){q.popup.hidden=1;q.legend.focus()}
+    var cls=q.popup_close.onclick=function(){q.popup.hidden=1;q.legend.focus()}
+    q.popup.onmousedown=function(x){x.target===q.popup&&cls();return!1}
   },
   load:function(){
     q.lc.value=D.prf.kbdLocale();q.pfx.value=D.prf.prefixKey();model={}
