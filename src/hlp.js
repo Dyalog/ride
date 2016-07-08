@@ -1,6 +1,6 @@
 ;(function(){'use strict'
 
-var p='http://help.dyalog.com/15.0/Content/',q='.htm' // prefix and suffix
+var p='http://help.dyalog.com/15.0/Content/',q='.htm' //prefix and suffix
 var h=D.hlp={WELCOME:p+'MiscPages/HelpWelcome'+q,
              UCMDS:p+'UserGuide/The APL Environment/User Commands'+q,
              LANGELEMENTS:p+'Language/Introduction/Language Elements'+q}
@@ -27,49 +27,63 @@ var a='&Ampersand ]Brackets ⊖Circle_Bar ○Circle ⌽Circle_Stile ⍪Comma_Bar
 for(var i=0;i<a.length;i++)h[a[i][0]]=u+a[i].slice(1).replace(/_/g,' ')+q
 var b="#⍺⍵∇'⋄⍝:;¯";for(var i=0;i<b.length;i++)h[b[i][0]]=u+'Special Symbols'+q
 
-var u=p+'Language/Primitive Operators/' // I-beams
-var a={
-    8:'Inverted Table Index Of'+q,
-   85:'Execute Expression'+q,
-  127:'Overwrite Free Pockets'+q,
-  181:'Unsqueezed Type'+q,
-  200:'Syntax Colouring'+q,
-  219:'Compress Vector of Short Integers'+q,
-  220:'Serialise Array'+q,
-  900:'Called Monadically'+q+'#Called_Monadically',
-  950:'Loaded Libraries'+q+'#Loaded_Libraries',
- 1111:'Number Of Threads'+q,
- 1112:'Parallel Execution Threshold'+q,
- 1159:'Update Function Timestamp'+q,
- 2000:'Memory Manager Statistics'+q,
- 2002:'Specify Workspace Available'+q,
- 2010:'Update DataTable'+q,
- 2011:'Read DataTable'+q,
- 2015:'Create Data Binding Source'+q,
- 2022:'Flush Session Caption'+q+'#Flush_Session_Caption',
- 2023:'Close All Windows'+q+'#Close_all_Windows',
- 2035:'Set Dyalog Pixel Type'+q+'#Set_Dyalog_Pixel_Type',
- 2100:'Export To Memory'+q,
- 2101:'Close .NET AppDomain'+q+'#Close_.NET_AppDomain',
- 2400:'Set Workspace Save Options'+q+'#Set_Workspace_Save_Options',
- 2401:'Expose Root Properties'+q+'#ExposeRootPropertiesI-Beam',
- 2503:'Mark Thread as Uninterruptible'+q,
- 2520:'Use Separate Thread For .NET'+q+'#Use_Separate_Thread_For_NET',
- 3002:'Disable Component Checksum Validation'+q+'#Disable_Component_Checksum_Validation',
- 3500:'Send Text to RIDE-embedded Browser'+q+'#SendTexttoRIDEembeddedBrowser',
- 3501:'Connected to the RIDE'+q+'#Connected_RIDE',
- 3502:'Enable RIDE in Run-time Interpreter'+q+'#Enable_RIDE_In_Runtime',
- 4000:'Fork New Task'+q,
- 4001:'Change User'+q,
- 4002:'Reap Forked Tasks'+q,
- 4007:'Signal Counts'+q,
- 7159:'JSON Import'+q,
- 7160:'JSON Export'+q,
- 7161:'JSON TrueFalse'+q,
- 7162:'JSON Translate Name'+q,
-16807:'Random Number Generator'+q,
-50100:'Line Count'+q+'#Line_Count'
+var u=p+'Language/Primitive Operators/' //I-beams
+var a=D.ibeams={ // http://help.dyalog.com/15.0/Content/Language/Primitive%20Operators/I%20Beam.htm
+    8:'Inverted Table Index-of',
+   85:'Execute Expression',
+  127:'Overwrite Free Pockets',
+  180:'Canonical Representation',
+  181:'Unsqueezed Type',
+  200:'Syntax Colouring',
+  219:'Compress/Decompress Vector of Short Integers',
+  220:'Serialise/Deserialise Array',
+  400:'Compiler Control',
+  600:'Trap Control',
+  819:'Case Convert',
+  900:'Called Monadically',
+  950:'Loaded Libraries',
+ 1111:'Number of Threads',
+ 1112:'Parallel Execution Threshold',
+ 1159:'Update Function Time and User Stamp',
+ 1500:'Hash Array',
+ 2000:'Memory Manager Statistics',
+ 2002:'Specify Workspace Available',
+ 2010:'Update DataTable',           //W
+ 2011:'Read DataTable',             //W
+ 2014:'Remove Data Binding',        //W
+ 2015:'Create Data Binding Source', //W
+ 2016:'Create .NET Delegate',       //W
+ 2017:'Identify .NET Type',         //W
+ 2022:'Flush Session Caption',      //W
+ 2023:'Close all Windows',          //W
+ 2035:'Set Dyalog Pixel Type',
+ 2041:'Override COM Default Value', //W
+ 2100:'Export to Memory',           //W
+ 2101:'Close .NET AppDomain',       //W
+ 2400:'Set Workspace Save Options',
+ 2401:'Expose Root Properties',
+ 2501:'Discard thread on exit',     //W
+ 2502:'Discard parked threads',     //W
+ 2503:'Mark Thread as Uninterruptible',
+ 2520:'Use Separate Thread For .NET',
+ 3002:'Disable Component Checksum Validation',
+ 3500:'Send Text to RIDE-embedded Browser',
+ 3501:'Connected to the RIDE',
+ 3502:'Manage RIDE Connections',
+ 4000:'Fork New Task',              //X
+ 4001:'Change User',                //X
+ 4002:'Reap Forked Tasks',          //X
+ 4007:'Signal Counts',              //X
+ 5176:'List Loaded Files',
+ 5177:'List Loaded File Objects',
+ 7159:'JSON Import',
+ 7160:'JSON Export',
+ 7161:'JSON TrueFalse',
+ 7162:'JSON Translate Name',
+ 8415:'Singular Value Decomposition',
+16807:'Random Number Generator',
+50100:'Line Count'
 }
-for(var k in a)h[k+'⌶']=u+a[k]
+for(var k in a)h[k+'⌶']=u+a[k]+q
 
 }());
