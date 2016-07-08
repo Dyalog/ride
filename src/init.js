@@ -19,8 +19,8 @@ if(D.el){
     if(!D.ide)return
     var wins=D.ide.wins
     for(var x in wins){
-      var $b=$('body',wins[x].getDocument())
-      $b.prop('class','zoom'+z+' '+$b.prop('class').split(/\s+/).filter(function(s){return!/^zoom-?\d+$/.test(s)}).join(' '))
+      var b=wins[x].getDocument().body
+      b.className='zoom'+z+' '+b.className.split(/\s+/).filter(function(s){return!/^zoom-?\d+$/.test(s)}).join(' ')
       wins[x].refresh()
     }
     wins[0].scrollCursorIntoView()
@@ -38,8 +38,8 @@ var urlParams={},ref=(location+'').replace(/^[^\?]*($|\?)/,'').split('&')
 for(var i=0;i<ref.length;i++){var m=/^([^=]*)=?(.*)$/.exec(ref[i]);urlParams[unescape(m[1]||'')]=unescape(m[2]||'')}
 var win=urlParams.win
 if(D.floating&&win){
-  $('body').addClass('floating-window')
-  $(window).resize(function(){ed&&ed.updSize()})
+  document.body.className+=' floating-window'
+  window.onresize=function(){ed&&ed.updSize()}
   var pe=opener.D.pendingEditors[win], editorOpts=pe.editorOpts, ee=pe.ee, ide=pe.ide
   D.ide=opener.D.ide
   var ed=D.ide.wins[win]=new D.Ed(ide,$(document.body),editorOpts)
@@ -75,8 +75,7 @@ updThm();D.prf.theme(updThm)
 
 if(D.el)document.body.className+=D.mac?' platform-mac':D.win?' platform-windows':''
 
-$(window).on('focus blur',function(e){window.focused=e.type==='focus'})
-window.focused=true
+window.focused=true;window.onfocus=window.onblur=function(x){window.focused=x.type==='focus'}
 
 // migrations
 var db=D.db||localStorage
@@ -91,10 +90,10 @@ if(v[0]<3&&db.favs){
 //Implement access keys (Alt-X) using <u></u>.
 //HTML's accesskey=X doesn't handle duplicates well -- it doesn't always favour a visible input over a hidden one.
 //Also, browsers like Firefox and Opera use different shortcuts (such as Alt-Shift-X or Ctrl-X) for accesskey-s.
-D.mac||$(document).keydown(function(e){ // Alt-A...Alt-Z or Alt-Shift-A...Alt-Shift-Z
+D.mac||document.addEventListener('keydown',function(e){ // Alt-A...Alt-Z or Alt-Shift-A...Alt-Shift-Z
   if(!e.altKey||e.ctrlKey||e.metaKey||e.which<65||e.which>90)return
   var c=String.fromCharCode(e.which).toLowerCase(),C=c.toUpperCase()
-  var $ctx=$('.ui-widget-overlay').length?$('.ui-dialog:visible').last():$('body') // modal dialogs take priority
+  var $ctx=$('.ui-widget-overlay').length?$('.ui-dialog:visible').last():$('body') //modal dialogs take priority
   var $a=$('u:visible',$ctx).map(function(){
     var h=this.innerHTML;if(h!==c&&h!==C)return
     var $i=$(this).closest(':input,label,a').eq(0)
@@ -106,7 +105,7 @@ D.mac||$(document).keydown(function(e){ // Alt-A...Alt-Z or Alt-Shift-A...Alt-Sh
   else if($a.is(':text,:password,textarea,select')){$a.focus()}
   else{$a.click()}
   return!$a.length
-})
+},true)
 
 if(D.el){
   //context menu
