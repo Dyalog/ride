@@ -168,7 +168,7 @@ D.cn=_=>{ //set up Connect page
                                    case'Ctrl-D':q.cln.click();return!1}})
     .on('list-order-changed',save)
     .on('list-selection-changed',_=>{
-      $sel=$('.list-selection',q.favs)
+      $sel=$('.list_sel',q.favs)
       const u=$sel.length===1 //is selection unique?
       q.cln.disabled=!u;q.del.disabled=!$sel.length;q.rhs.hidden=!u
       sel=u?$sel[0].cnData:null

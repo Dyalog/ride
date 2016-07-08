@@ -4,30 +4,30 @@
 var CM=CodeMirror,
     ACB_VALUE={pairs:'()[]{}',explode:'{}'} // value for CodeMirror's "autoCloseBrackets" option when on
 
-var b=function(c,t){return'<a href=# class="'+c+' tb-btn" title="'+t+'"></a>'} // cc:css classes, t:title
+var b=function(c,t){return'<a href=# class="'+c+' tb_btn" title="'+t+'"></a>'} // cc:css classes, t:title
 var ED_HTML=
   '<div class=ride-win>'+
     '<div class=toolbar>'+ // CSS classes "first" and "last" indicate button grouping.
-      b('tb-ER  tc-only first','Execute line'                            )+
-      b('tb-TC  tc-only'      ,'Trace into expression'                   )+
-      b('tb-BK  tc-only'      ,'Go back one line'                        )+
-      b('tb-FD  tc-only'      ,'Skip current line'                       )+
-      b('tb-BH  tc-only'      ,'Stop on next line of calling function'   )+
-      b('tb-RM  tc-only'      ,'Continue execution of this thread'       )+
-      b('tb-MA  tc-only'      ,'Continue execution of all threads'       )+
-      b('tb-ED  tc-only'      ,'Edit name'                               )+
-      b('tb-WI  tc-only'      ,'Interrupt'                               )+
-      b('tb-CBP tc-only'      ,'Clear trace/stop/monitor for this object')+
-      b('tb-LN  tc-only last' ,'Toggle line numbers'                     )+
-      b('tb-LN  ed-only first','Toggle line numbers'                     )+
-      b('tb-AO  ed-only'      ,'Comment selected text'                   )+
-      b('tb-DO  ed-only last' ,'Uncomment selected text'                 )+
-      '<span class=tb-sep></span>'+
-      '<div class=tb-sc></div>'+
-      '<div class="tb-rp ed-only"></div>'+
-      b('tb-NX first'         ,'Search for next match'                   )+
-      b('tb-PV'               ,'Search for previous match'               )+
-      b('tb-case last'        ,'Match case'                              )+
+      b('tb_ER  tc_only first','Execute line'                            )+
+      b('tb_TC  tc_only'      ,'Trace into expression'                   )+
+      b('tb_BK  tc_only'      ,'Go back one line'                        )+
+      b('tb_FD  tc_only'      ,'Skip current line'                       )+
+      b('tb_BH  tc_only'      ,'Stop on next line of calling function'   )+
+      b('tb_RM  tc_only'      ,'Continue execution of this thread'       )+
+      b('tb_MA  tc_only'      ,'Continue execution of all threads'       )+
+      b('tb_ED  tc_only'      ,'Edit name'                               )+
+      b('tb_WI  tc_only'      ,'Interrupt'                               )+
+      b('tb_CBP tc_only'      ,'Clear trace/stop/monitor for this object')+
+      b('tb_LN  tc_only last' ,'Toggle line numbers'                     )+
+      b('tb_LN  ed_only first','Toggle line numbers'                     )+
+      b('tb_AO  ed_only'      ,'Comment selected text'                   )+
+      b('tb_DO  ed_only last' ,'Uncomment selected text'                 )+
+      '<span class=tb_sep></span>'+
+      '<div class=tb_sc></div>'+
+      '<div class="tb_rp ed_only"></div>'+
+      b('tb_NX first'         ,'Search for next match'                   )+
+      b('tb_PV'               ,'Search for previous match'               )+
+      b('tb_case last'        ,'Match case'                              )+
     '</div>'+
     '<div class=ride-win-cm></div>'+
   '</div>'
@@ -60,15 +60,15 @@ D.Ed=function(ide,opts){ // Editor constructor
   D.util.cmOnDblClick(ed.cm,function(e){ed.ED(ed.cm);e.preventDefault();e.stopPropagation()})
   ed.processAutocompleteReply=D.ac(ed)
   ed.$tb=$('.toolbar',ed.$e)
-    .on('click','.tb-hid,.tb-case',function(e){$(e.target).toggleClass('pressed');ed.highlightSearch();return!1})
-    .on('mousedown','.tb-btn',function(e){$(e.target).addClass('armed');e.preventDefault()})
-    .on('mouseup mouseout','.tb-btn',function(e){$(e.target).removeClass('armed');e.preventDefault()})
-    .on('click','.tb-btn',function(e){
+    .on('click','.tb_hid,.tb_case',function(e){$(e.target).toggleClass('pressed');ed.highlightSearch();return!1})
+    .on('mousedown','.tb_btn',function(e){$(e.target).addClass('armed');e.preventDefault()})
+    .on('mouseup mouseout','.tb_btn',function(e){$(e.target).removeClass('armed');e.preventDefault()})
+    .on('click','.tb_btn',function(e){
       var m,a=$(e.target).prop('class').split(/\s+/)
-      for(var i=0;i<a.length;i++)if(m=/^tb-([A-Z]{2,3})$/.exec(a[i]))
+      for(var i=0;i<a.length;i++)if(m=/^tb_([A-Z]{2,3})$/.exec(a[i]))
         {ed[m[1]]?ed[m[1]](ed.cm):CM.commands[m[1]]?CM.commands[m[1]](ed.cm):0;break}
     })
-  ed.cmSC=CM(ed.$tb.find('.tb-sc')[0],{placeholder:'Search',extraKeys:{
+  ed.cmSC=CM(ed.$tb.find('.tb_sc')[0],{placeholder:'Search',extraKeys:{
     Enter:ed.NX.bind(ed),
     'Shift-Enter':ed.PV.bind(ed),
     'Ctrl-Enter':ed.selectAllSearchResults.bind(ed),
@@ -76,7 +76,7 @@ D.Ed=function(ide,opts){ // Editor constructor
     'Shift-Tab':ed.cm.focus.bind(ed.cm)
   }})
   ed.cmSC.on('change',function(){ed.highlightSearch()})
-  ed.$rp=ed.$tb.find('.tb-rp')
+  ed.$rp=ed.$tb.find('.tb_rp')
   ed.cmRP=CM(ed.$rp[0],{placeholder:'Replace',extraKeys:{
     Enter            :function(){ed.replace()},
     'Shift-Enter'    :function(){ed.replace(1)},
@@ -126,18 +126,18 @@ D.Ed.prototype={
     this.cm.scrollIntoView({left:x,right:x,top:y-h/3,bottom:y+2*h/3})
   },
   clearSearch:function(){
-    var ed=this;$('.ride-win .CodeMirror-vscrollbar',ed.$e).prop('title','');$('.tb-sc',ed.$tb).removeClass('no-matches')
+    var ed=this;$('.ride-win .CodeMirror-vscrollbar',ed.$e).prop('title','');$('.tb_sc',ed.$tb).removeClass('no-matches')
     ed.cm.removeOverlay(ed.overlay);ed.annotation&&ed.annotation.clear();ed.overlay=ed.annotation=null
   },
   highlightSearch:function(){
-    var ed=this,ic=!$('.tb-case',ed.$tb).hasClass('pressed'),g=ed.cm.changeGeneration(),q=ed.cmSC.getValue()
+    var ed=this,ic=!$('.tb_case',ed.$tb).hasClass('pressed'),g=ed.cm.changeGeneration(),q=ed.cmSC.getValue()
     if(ic)q=q.toLowerCase() // ic:ignore case?, q:query string
     if(ed.lastQuery!==q||ed.lastIC!==ic||ed.lastGen!==g){
       ed.lastQuery=q;ed.lastIC=ic;ed.lastGen=g;ed.clearSearch()
       if(q){
         ed.annotation=ed.cm.showMatchesOnScrollbar(q,ic)
         ed.cm.addOverlay(ed.overlay={token:function(x){ // x:stream
-          var s=ed.cm.getValue();if(ic)s=s.toLowerCase();$('.tb-sc',ed.$tb).toggleClass('no-matches',s.indexOf(q)<0)
+          var s=ed.cm.getValue();if(ic)s=s.toLowerCase();$('.tb_sc',ed.$tb).toggleClass('no-matches',s.indexOf(q)<0)
           s=x.string.slice(x.pos);var i=s.indexOf(q);if(!i){x.pos+=q.length;return'searching'};i>0?x.pos+=i:x.skipToEnd()
         }})
         $('.CodeMirror-vscrollbar',ed.$e).prop('title','Lines on scroll bar show match locations')
@@ -160,7 +160,7 @@ D.Ed.prototype={
     return!1
   },
   selectAllSearchResults:function(){
-    var cm=this.cm,ic=!$('.tb-case',this.$tb).hasClass('pressed') // ic:ignore case?, q:query string
+    var cm=this.cm,ic=!$('.tb_case',this.$tb).hasClass('pressed') // ic:ignore case?, q:query string
     var q=this.cmSC.getValue();ic&&(q=q.toLowerCase())
     if(q){
       var s=cm.getValue(),sels=[],i=0;ic&&(s=s.toLowerCase())
@@ -170,13 +170,13 @@ D.Ed.prototype={
     cm.focus()
   },
   replace:function(backwards){ // replace current occurrence and move to next
-    var ic=!$('.tb-case',this.$tb).hasClass('pressed')   // ignore case?
+    var ic=!$('.tb_case',this.$tb).hasClass('pressed')   // ignore case?
     var q=this.cmSC.getValue()  ;ic&&(q=q.toLowerCase()) // query string
     var s=this.cm.getSelection();ic&&(s=s.toLowerCase()) // selection
     s===q&&this.cm.replaceSelection(this.cmRP.getValue(),backwards?'start':'end')
     this.search(backwards)
     var v=this.cm.getValue();ic&&(v=v.toLowerCase())
-    $('.tb-sc',this.$tb).toggleClass('no-matches',v.indexOf(q)<0)
+    $('.tb_sc',this.$tb).toggleClass('no-matches',v.indexOf(q)<0)
   },
   highlight:function(l){ // current line in tracer
     var ed=this;ed.hll!=null&&ed.cm.removeLineClass(ed.hll,'background','highlighted')
@@ -187,7 +187,7 @@ D.Ed.prototype={
   setTracer:function(x){
     var ed=this;ed.tc=x;ed.$e.toggleClass('tracer',x);ed.highlight(null)
     var ln=!!(ed.tc?D.prf.lineNumsTracer():D.prf.lineNumsEditor())
-    ed.cm.setOption('lineNumbers',ln);ed.$tb.find('.tb-LN').toggleClass('pressed',ln)
+    ed.cm.setOption('lineNumbers',ln);ed.$tb.find('.tb_LN').toggleClass('pressed',ln)
     ed.updGutters();ed.setReadOnly(x)
   },
   setReadOnly:function(x){this.cm.setOption('readOnly',x);this.$rp.toggle(!x)},
@@ -273,7 +273,7 @@ D.Ed.prototype={
   },
   LN:function(cm){ // toggle line numbers
     var v=!!(this.tc?D.prf.lineNumsTracer.toggle():D.prf.lineNumsEditor.toggle())
-    cm.setOption('lineNumbers',v);this.updGutters();this.$tb.find('.tb-LN').toggleClass('pressed',v)
+    cm.setOption('lineNumbers',v);this.updGutters();this.$tb.find('.tb_LN').toggleClass('pressed',v)
   },
   PV:function(){this.search(1)},
   NX:function(){this.search()},
