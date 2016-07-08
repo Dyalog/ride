@@ -8,7 +8,7 @@ D.WSE=function(ide){
     }}})
     .on('click','.jstree-anchor',function(){
       ide.emit('Edit',{win:0,pos:0,text:$e.jstree('get_path',this,'.')})
-      ;/^wse-leaf-/.test(this.id)||$e.jstree('refresh_node',this)
+      ;/^wse_leaf_/.test(this.id)||$e.jstree('refresh_node',this)
     })
 }
 D.WSE.prototype={
@@ -16,8 +16,8 @@ D.WSE.prototype={
     var f=this.pending[x.nodeId];if(!f)return
     f((x.nodeIds||[]).map(function(c,i){
       var t=Math.floor(x.classes[i])
-      return{text:x.names[i],children:!!c,id:'wse-'+(c||('leaf-'+x.nodeId+'-'+i)),
-             icon:c?'':2<=t&&t<=4?'style/img/wse-t'+t+'.png':'tb/ED.png'}
+      return{text:x.names[i],children:!!c,id:'wse_'+(c||('leaf_'+x.nodeId+'_'+i)),
+             icon:c?'':2<=t&&t<=4?'style/img/wse_nc'+t+'.png':'img/tb_ED.png'}
     }))
     delete this.pending[x.nodeId]
   },

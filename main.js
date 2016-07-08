@@ -52,8 +52,7 @@ if(D.mac&&!env.RIDE_INTERPRETER_EXE){env.RIDE_INTERPRETER_EXE=D.lastSpawnedExe=p
 
 el.app.on('ready',_=>{
   const p=D.db.getItem('pos');let dx=0,dy=0
-  let w=D.elw=new el.BrowserWindow({x:p&&p[0],y:p&&p[1],width:p&&p[2],height:p&&p[3],
-                                    show:0,icon:'style/branding/D.png'})
+  let w=D.elw=new el.BrowserWindow({x:p&&p[0],y:p&&p[1],width:p&&p[2],height:p&&p[3],show:0,icon:'style/img/D.png'})
   const savePos=_=>{const b=w.getBounds();D.db.setItem('pos',[b.x-dx,b.y-dy,b.width,b.height])}
   el.Menu.setApplicationMenu(null)
   w.loadURL(`file://${__dirname}/index.html`)

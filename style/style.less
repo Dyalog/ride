@@ -98,11 +98,11 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
     a{
       display:block;height:17px;line-height:17px;text-align:left;padding:1px 17px;overflow:hidden;text-overflow:ellipsis;
       .m-shc{font-size:small;float:right;margin-left:20px;color:#666}
-      &.m-checked{background:transparent 5px center no-repeat url(../style/img/menu-check.png)}
+      &.m-checked{background:transparent 5px center no-repeat url(../style/img/menu_chk.png)}
       &:focus{
         .sel;
         .m-shc{color:@selfg}
-        &.m-checked{background:@selbg 5px center no-repeat url(../style/img/menu-check-white.png)}
+        &.m-checked{background:@selbg 5px center no-repeat url(../style/img/menu_chk_wht.png)}
       }
       .outset
     }
@@ -110,8 +110,8 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
   .m-box .m-opener{
     // "right 5px" might not work in Safari, see
     // https://stackoverflow.com/questions/3197250/position-a-css-background-image-x-pixels-from-the-right#comment-35531805
-    background:transparent center right 5px no-repeat url(../style/img/menu-right-triangle.png);
-    &:focus{background:@selbg center right 5px no-repeat url(../style/img/menu-right-triangle-white.png)}
+    background:transparent center right 5px no-repeat url(../style/img/menu_rgt_tri.png);
+    &:focus{background:@selbg center right 5px no-repeat url(../style/img/menu_rgt_tri_wht.png)}
   }
   hr{margin:3px 0 5px 0} // used as a separator
 }
@@ -121,7 +121,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #lb b{font-weight:normal;margin-bottom:3px;padding:1px;color:#666}
 #lb b:hover{background-color:#eee}
 #lb b:active{background-color:#fff}
-#lb_prf{float:right;margin-right:4px;width:24px;height:24px;background:no-repeat center center url(../style/img/lb-prf.png)}
+#lb_prf{float:right;margin-right:4px;width:24px;height:24px;background:no-repeat center center url(../style/img/lb_prf.png)}
 #lb_prf:hover{background-color:#eee}
 #lb_prf:active{background-color:#fff}
 #lb_tip{.tt;position:absolute;padding:8px;margin-top:16px;border-radius:2px;
@@ -192,24 +192,24 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .tb-btn:hover{.outset}
 .tb-btn.armed{.inset}
 .tb-btn.pressed{.inset;background-color:#eee}
-.tb-LN  {background-image:url(../style/tb/LN.png)}
-.tb-AO  {background-image:url(../style/tb/AO.png)}
-.tb-DO  {background-image:url(../style/tb/DO.png)}
-.tb-NX  {background-image:url(../style/tb/NX.png)}
-.tb-PV  {background-image:url(../style/tb/PV.png)}
-.tb-hid {background-image:url(../style/tb/hid.png)}
-.tb-case{background-image:url(../style/tb/case.png)}
-.tb-ER  {background-image:url(../style/tb/ER.png)}
-.tb-TC  {background-image:url(../style/tb/TC.png)}
-.tb-BK  {background-image:url(../style/tb/BK.png)}
-.tb-FD  {background-image:url(../style/tb/FD.png)}
-.tb-BH  {background-image:url(../style/tb/BH.png)}
-.tb-RM  {background-image:url(../style/tb/RM.png)}
-.tb-MA  {background-image:url(../style/tb/MA.png)}
-.tb-ED  {background-image:url(../style/tb/ED.png)}
-.tb-WI  {background-image:url(../style/tb/WI.png)}
-.tb-CBP {background-image:url(../style/tb/CBP.png)}
-.tb-sep{float:left;width:10px;height:24px;background:no-repeat center center url(../style/tb/sep.png)} /*separator*/
+.tb-LN  {background-image:url(../style/img/tb_LN.png)}
+.tb-AO  {background-image:url(../style/img/tb_AO.png)}
+.tb-DO  {background-image:url(../style/img/tb_DO.png)}
+.tb-NX  {background-image:url(../style/img/tb_NX.png)}
+.tb-PV  {background-image:url(../style/img/tb_PV.png)}
+.tb-hid {background-image:url(../style/img/tb_hid.png)}
+.tb-case{background-image:url(../style/img/tb_case.png)}
+.tb-ER  {background-image:url(../style/img/tb_ER.png)}
+.tb-TC  {background-image:url(../style/img/tb_TC.png)}
+.tb-BK  {background-image:url(../style/img/tb_BK.png)}
+.tb-FD  {background-image:url(../style/img/tb_FD.png)}
+.tb-BH  {background-image:url(../style/img/tb_BH.png)}
+.tb-RM  {background-image:url(../style/img/tb_RM.png)}
+.tb-MA  {background-image:url(../style/img/tb_MA.png)}
+.tb-ED  {background-image:url(../style/img/tb_ED.png)}
+.tb-WI  {background-image:url(../style/img/tb_WI.png)}
+.tb-CBP {background-image:url(../style/img/tb_CBP.png)}
+.tb-sep{float:left;width:10px;height:24px;background:no-repeat center center url(../style/img/tb_sep.png)} /*separator*/
 //search and replace
 .tb-sc,.tb-rp{.inset;border-style:solid;border-width:2px;float:left;width:120px;height:24px;resize:none;overflow:hidden}
 .toolbar .tb-sc .CodeMirror,
@@ -351,7 +351,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 
 //About dialog
 #abt{padding:0;margin:0;width:600px;height:450px}
-#abt_logo{background:16px center no-repeat url(../style/branding/Dyalog_60.png);height:80px;line-height:20px}
+#abt_logo{background:16px center no-repeat url(../style/img/Dyalog_60.png);height:80px;line-height:20px}
 #abt_contact{color:#000;float:right;text-align:right;margin:12px 12px 0 0;cursor:default}
 #abt_contact a,
 #abt_contact a:visited,
@@ -618,10 +618,10 @@ span.CodeMirror-selectedtext{background:none}
   background-position:center center;background-repeat:no-repeat}
 .cm-foldgutter-open:after,.cm-foldgutter-folded:after,.cm-foldgutter-cont:after,.cm-foldgutter-end:after{
   content:"\00a0"}
-.cm-foldgutter-open  {background-image:url(../style/fold/open.png)}
-.cm-foldgutter-folded{background-image:url(../style/fold/folded.png)}
-.cm-foldgutter-cont  {background-image:url(../style/fold/cont.png)}
-.cm-foldgutter-end   {background-image:url(../style/fold/end.png)}
+.cm-foldgutter-open  {background-image:url(../style/img/fold_open.png)}
+.cm-foldgutter-folded{background-image:url(../style/img/fold_folded.png)}
+.cm-foldgutter-cont  {background-image:url(../style/img/fold_cont.png)}
+.cm-foldgutter-end   {background-image:url(../style/img/fold_end.png)}
 .cm-foldgutter-open,.cm-foldgutter-folded{cursor:pointer}
 
 //scrollbars; see ../src/scrl.js
