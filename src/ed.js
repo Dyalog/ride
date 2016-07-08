@@ -1,40 +1,11 @@
 ;(function(){'use strict'
 
-//editor
 var CM=CodeMirror,
     ACB_VALUE={pairs:'()[]{}',explode:'{}'} // value for CodeMirror's "autoCloseBrackets" option when on
 
-var b=function(c,t){return'<a href=# class="'+c+' tb_btn" title="'+t+'"></a>'} // cc:css classes, t:title
-var ED_HTML=
-  '<div class=ride-win>'+
-    '<div class=toolbar>'+ // CSS classes "first" and "last" indicate button grouping.
-      b('tb_ER  tc_only first','Execute line'                            )+
-      b('tb_TC  tc_only'      ,'Trace into expression'                   )+
-      b('tb_BK  tc_only'      ,'Go back one line'                        )+
-      b('tb_FD  tc_only'      ,'Skip current line'                       )+
-      b('tb_BH  tc_only'      ,'Stop on next line of calling function'   )+
-      b('tb_RM  tc_only'      ,'Continue execution of this thread'       )+
-      b('tb_MA  tc_only'      ,'Continue execution of all threads'       )+
-      b('tb_ED  tc_only'      ,'Edit name'                               )+
-      b('tb_WI  tc_only'      ,'Interrupt'                               )+
-      b('tb_CBP tc_only'      ,'Clear trace/stop/monitor for this object')+
-      b('tb_LN  tc_only last' ,'Toggle line numbers'                     )+
-      b('tb_LN  ed_only first','Toggle line numbers'                     )+
-      b('tb_AO  ed_only'      ,'Comment selected text'                   )+
-      b('tb_DO  ed_only last' ,'Uncomment selected text'                 )+
-      '<span class=tb_sep></span>'+
-      '<div class=tb_sc></div>'+
-      '<div class="tb_rp ed_only"></div>'+
-      b('tb_NX first'         ,'Search for next match'                   )+
-      b('tb_PV'               ,'Search for previous match'               )+
-      b('tb_case last'        ,'Match case'                              )+
-    '</div>'+
-    '<div class=ride-win-cm></div>'+
-  '</div>'
-b=null
-
-D.Ed=function(ide,opts){ // Editor constructor
-  var ed=this;ed.ide=ide;ed.$e=$(ED_HTML);ed.opts=opts;ed.id=opts.id;ed.name=opts.name;ed.emit=opts.emit
+D.Ed=function(ide,opts){ //Editor constructor
+  var ed=this;ed.ide=ide;ed.$e=$(document.getElementById('ed_tmpl').cloneNode(1));ed.$e[0].hidden=0
+  ed.opts=opts;ed.id=opts.id;ed.name=opts.name;ed.emit=opts.emit
   ed.tc=opts.tracer
   ed.xline=null // the line number of the empty line inserted at eof when cursor is there and you press <down>
   ed.oText='';ed.oStop=[] // remember original text and "stops" to avoid pointless saving on EP

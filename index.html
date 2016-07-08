@@ -89,11 +89,36 @@
   <div class=dlg_btns><button id=cn_listen_dlg_cancel><u>C</u>ancel</button></div>
 </div>
 
-<!--Session, editors, etc-->
+<!--IDE:language bar,session,editors,etc-->
 <div id=ide></div>
 <div id=lb hidden><a id=lb_prf href=#></a></div>
 <div id=lb_tip hidden><div id=lb_tip_desc></div><pre id=lb_tip_text></pre></div>
 <div id=lb_tip_tri hidden></div>
+<div id=ed_tmpl class=ride-win hidden>
+  <div class=toolbar>
+    <a href=# class='tb_btn tb_ER  tc_only first' title='Execute line'                            ></a>
+    <a href=# class='tb_btn tb_TC  tc_only      ' title='Trace into expression'                   ></a>
+    <a href=# class='tb_btn tb_BK  tc_only      ' title='Go back one line'                        ></a>
+    <a href=# class='tb_btn tb_FD  tc_only      ' title='Skip current line'                       ></a>
+    <a href=# class='tb_btn tb_BH  tc_only      ' title='Stop on next line of calling function'   ></a>
+    <a href=# class='tb_btn tb_RM  tc_only      ' title='Continue execution of this thread'       ></a>
+    <a href=# class='tb_btn tb_MA  tc_only      ' title='Continue execution of all threads'       ></a>
+    <a href=# class='tb_btn tb_ED  tc_only      ' title='Edit name'                               ></a>
+    <a href=# class='tb_btn tb_WI  tc_only      ' title='Interrupt'                               ></a>
+    <a href=# class='tb_btn tb_CBP tc_only      ' title='Clear trace/stop/monitor for this object'></a>
+    <a href=# class='tb_btn tb_LN  tc_only last ' title='Toggle line numbers'                     ></a>
+    <a href=# class='tb_btn tb_LN  ed_only first' title='Toggle line numbers'                     ></a>
+    <a href=# class='tb_btn tb_AO  ed_only      ' title='Comment selected text'                   ></a>
+    <a href=# class='tb_btn tb_DO  ed_only last ' title='Uncomment selected text'                 ></a>
+    <span class=tb_sep></span>
+    <div class=tb_sc></div>
+    <div class="tb_rp ed_only"></div>
+    <a href=# class='tb_btn tb_NX          first' title='Search for next match'                   ></a>
+    <a href=# class='tb_btn tb_PV               ' title='Search for previous match'               ></a>
+    <a href=# class='tb_btn tb_case        last ' title='Match case'                              ></a>
+  </div>
+  <div class=ride-win-cm></div>
+</div>
 
 <!--About-->
 <div id=abt class=dlg hidden>
