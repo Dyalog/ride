@@ -34,7 +34,7 @@ D.prf_tabs.lyt={
     q.lc.onchange=updGlyphs
     q.pfx.onfocus=function(){setTimeout(function(){$(q.pfx).select()},1)}
     q.legend.onclick=function(){q.popup.hidden=0;q.popup_close.focus()}
-    q.popup_close.onclick=function(){q.popup.hidden=1}
+    q.popup_close.onclick=function(){q.popup.hidden=1;q.legend.focus()}
   },
   load:function(){
     q.lc.value=D.prf.kbdLocale();q.pfx.value=D.prf.prefixKey();model={}
@@ -48,7 +48,7 @@ D.prf_tabs.lyt={
     }
     updGlyphs();if(D.win)q.ime.checked=!!D.prf.ime()
   },
-  activate:function(){q.pfx.focus()},
+  activate:function(){q.legend.focus()},
   validate:function(){if(q.pfx.value.length!==1)return{msg:'Invalid prefix key',el:q.pfx}},
   save:function(){
     D.prf.prefixKey(q.pfx.value);D.prf.kbdLocale(q.lc.value)
