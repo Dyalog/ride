@@ -37,7 +37,7 @@ Leftover from RIDE3 (M:major, S:significant, W:wouldn't it be nice)
         NN: it turns out no content is available for the status bar, therefore I removed it, see email 2016-04-07
 
 Not prioritized:
-  update list of I-beams
+  configurable colours in WSE, Mantis #13629, email 2016-07-05
   font size in value tips should match font size in CodeMirror
   configurable list for ``
   ``idiomname
