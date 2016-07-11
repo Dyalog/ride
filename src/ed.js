@@ -4,7 +4,7 @@ var CM=CodeMirror,
     ACB_VALUE={pairs:'()[]{}',explode:'{}'} // value for CodeMirror's "autoCloseBrackets" option when on
 
 D.Ed=function(ide,opts){ //Editor constructor
-  var ed=this;ed.ide=ide;ed.$e=$(document.getElementById('ed_tmpl').cloneNode(1));ed.$e[0].hidden=0
+  var ed=this;ed.ide=ide;ed.dom=document.getElementById('ed_tmpl').cloneNode(1);ed.dom.hidden=0;ed.$e=$(ed.dom)
   ed.opts=opts;ed.id=opts.id;ed.name=opts.name;ed.emit=opts.emit
   ed.tc=opts.tracer
   ed.xline=null // the line number of the empty line inserted at eof when cursor is there and you press <down>
@@ -13,7 +13,7 @@ D.Ed=function(ide,opts){ //Editor constructor
   ed.lastQuery=ed.lastIC=ed.lastGen=ed.overlay=ed.annotation=null // search-related state
   ed.focusTimestamp=0
   ed.jumps=[]
-  ed.cm=CM(ed.$e.find('.ride-win-cm')[0],{
+  ed.cm=CM(ed.dom.querySelector('.ride-win-cm'),{
     lineNumbers:!!(ed.tc?D.prf.lineNumsTracer():D.prf.lineNumsEditor()),
     firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
     smartIndent:D.prf.indent()>=0,indentUnit:D.prf.indent(),scrollButtonHeight:12,matchBrackets:!!D.prf.matchBrackets(),
@@ -30,7 +30,7 @@ D.Ed=function(ide,opts){ //Editor constructor
   ed.cm.on('focus',function(){ed.focusTimestamp=+new Date;ide.focusedWin=ed})
   D.util.cmOnDblClick(ed.cm,function(e){ed.ED(ed.cm);e.preventDefault();e.stopPropagation()})
   ed.processAutocompleteReply=D.ac(ed)
-  ed.$tb=$('.toolbar',ed.$e)
+  ed.$tb=$('.toolbar',ed.dom)
     .on('click','.tb_hid,.tb_case',function(e){$(e.target).toggleClass('pressed');ed.highlightSearch();return!1})
     .on('mousedown','.tb_btn',function(e){$(e.target).addClass('armed');e.preventDefault()})
     .on('mouseup mouseout','.tb_btn',function(e){$(e.target).removeClass('armed');e.preventDefault()})
@@ -77,7 +77,7 @@ D.Ed.prototype={
     cm.setOption('gutters',g)
   },
   createBPEl:function(){
-    var e=this.$e[0].ownerDocument.createElement('div');e.className='breakpoint';e.innerHTML='●';return e
+    var e=this.dom.ownerDocument.createElement('div');e.className='breakpoint';e.innerHTML='●';return e
   },
   getStops:function(){ // returns an array of line numbers
     var r=[];this.cm.eachLine(function(lh){var m=lh.gutterMarkers;m&&m.breakpoints&&r.push(lh.lineNo())})
@@ -93,11 +93,11 @@ D.Ed.prototype={
     ed.xline=null
   },
   scrollCursorIntoProminentView:function(){ // approx. to 1/3 of editor height; might not work near the top or bottom
-    var h=this.$e.height(),cc=this.cm.cursorCoords(true,'local'),x=cc.left,y=cc.top
+    var h=this.dom.clientHeight,cc=this.cm.cursorCoords(true,'local'),x=cc.left,y=cc.top
     this.cm.scrollIntoView({left:x,right:x,top:y-h/3,bottom:y+2*h/3})
   },
   clearSearch:function(){
-    var ed=this;$('.ride-win .CodeMirror-vscrollbar',ed.$e).prop('title','');$('.tb_sc',ed.$tb).removeClass('no-matches')
+    var ed=this;$('.ride-win .CodeMirror-vscrollbar',ed.dom).prop('title','');$('.tb_sc',ed.$tb).removeClass('no-matches')
     ed.cm.removeOverlay(ed.overlay);ed.annotation&&ed.annotation.clear();ed.overlay=ed.annotation=null
   },
   highlightSearch:function(){
@@ -111,7 +111,7 @@ D.Ed.prototype={
           var s=ed.cm.getValue();if(ic)s=s.toLowerCase();$('.tb_sc',ed.$tb).toggleClass('no-matches',s.indexOf(q)<0)
           s=x.string.slice(x.pos);var i=s.indexOf(q);if(!i){x.pos+=q.length;return'searching'};i>0?x.pos+=i:x.skipToEnd()
         }})
-        $('.CodeMirror-vscrollbar',ed.$e).prop('title','Lines on scroll bar show match locations')
+        $('.CodeMirror-vscrollbar',ed.dom).prop('title','Lines on scroll bar show match locations')
       }
     }
     return[q,ic]

@@ -3,8 +3,8 @@
 D.Se=function(ide,opts){ // Session constructor
   var se=this;se.ide=ide;se.opts=opts;se.emit=opts.emit;se.hist=[''];se.histIdx=0;se.focusTimestamp=0;se.id=0
   se.dirty={} // modified lines: lineNumber→originalContent, inserted lines: lineNumber→0 (also used in syn.js)
-  se.$e=$('<div class=ride-win>')
-  var cm=se.cm=CodeMirror(se.$e[0],{
+  se.dom=document.createElement('div');se.dom.className='ride-win';se.$e=$(se.dom)
+  var cm=se.cm=CodeMirror(se.dom,{
     autofocus:true,mode:{name:'apl-session',se:se},matchBrackets:!!D.prf.matchBrackets(),readOnly:true,keyMap:'dyalog',
     lineWrapping:!!D.prf.wrap(),indentUnit:4,smartIndent:0,autoCloseBrackets:{pairs:'()[]{}',explode:''},
     scrollbarStyle:'simple',extraKeys:{'Shift-Tab':'indentLess',Tab:'tabOrAutocomplete'},
@@ -63,13 +63,13 @@ D.Se.prototype={
   },
   updSize:function(){
     var i=this.cm.getScrollInfo(),b=5>Math.abs(i.top+i.clientHeight-i.height) // b:are we at the bottom edge?
-    this.cm.setSize(this.$e.width(),this.$e.height());b&&this.scrollCursorIntoView();this.updPW()
+    this.cm.setSize(this.dom.clientWidth,this.dom.clientHeight);b&&this.scrollCursorIntoView();this.updPW()
   },
   updPW:function(force){ // force:emit a SetPW message even if the width hasn't changed
     // discussion about CodeMirror's width in chars: https://github.com/codemirror/CodeMirror/issues/3618
     // We can get the scrollbar's width through cm.display.scrollbarFiller.clientWidth, it's 0 if not present.
     // But it's better to reserve a hard-coded width for it regardless of its presence.
-    var pw=Math.max(42,Math.floor((this.$e.width()-20)/this.cm.defaultCharWidth()))
+    var pw=Math.max(42,Math.floor((this.dom.clientWidth-20)/this.cm.defaultCharWidth()))
     if(pw!==this.pw&&this.ide.connected||force)this.emit('SetPW',{pw:this.pw=pw})
   },
   scrollCursorIntoView:function(){
@@ -84,7 +84,7 @@ D.Se.prototype={
   },
   insert:function(ch){this.cm.getOption('readOnly')||this.cm.replaceSelection(ch)},
   die:function(){this.cm.setOption('readOnly',true)},
-  getDocument:function(){return this.$e[0].ownerDocument},
+  getDocument:function(){return this.dom.ownerDocument},
   refresh:function(){this.cm.refresh()},
   loadLine:function(s){var cm=this.cm,l=cm.lastLine();cm.replaceRange(s,{line:l,ch:0},{line:l,ch:cm.getLine(l).length})},
   exec:function(trace){
