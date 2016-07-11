@@ -1,9 +1,8 @@
 D.IDE=function(){'use strict'
   var ide=D.ide=this
   document.getElementById('cn').hidden=1
-  document.getElementById('ide').hidden=0
   document.getElementById('lb').insertAdjacentHTML('beforeend',D.lb.html)
-  ide.$ide=$('#ide')
+  ide.dom=document.getElementById('ide');ide.dom.hidden=0
   ide.pending=[] // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.exec=function(l,tc){ // l:lines, tc:trace
     if(l&&l.length){tc||(ide.pending=l.slice(1));ide.emit('Execute',{trace:tc,text:l[0]+'\n'})}
@@ -139,16 +138,19 @@ D.IDE=function(){'use strict'
   ,lbPrf  =document.getElementById('lb_prf') //the "keyboard" button
   ,ttid //tooltip timeout id
   ,reqTip=function(x,desc,text){ //request tooltip, x:event
-    clearTimeout(ttid);var t=x.target,p=$(t).position()
+    clearTimeout(ttid);var t=x.target
     ttid=setTimeout(function(){
-      ttid=0;tipDesc.textContent=desc;tipText.textContent=text
-      tipTri.hidden=0;$(tipTri).css({left:p.left+(t.offsetWidth-tipTri.offsetWidth)/2,top:p.top+t.offsetHeight})
-      var x0=p.left-21,x1=x0+$(tip).width(),y0=p.top+t.offsetHeight-3
-      tip.hidden=0;$(tip).css(x1>document.body.offsetWidth?{left:'',right:0,top:y0}:{left:Math.max(0,x0),right:'',top:y0})
+      ttid=0;tipDesc.textContent=desc;tipText.textContent=text;tip.hidden=tipTri.hidden=0
+      var s=tipTri.style
+      s.left=(t.offsetLeft+(t.offsetWidth-tipTri.offsetWidth)/2)+'px';s.top=(t.offsetTop+t.offsetHeight)+'px'
+      var s=tip.style,x0=t.offsetLeft-21,x1=x0+tip.offsetWidth,y0=t.offsetTop+t.offsetHeight-3
+      s.top=y0+'px';if(x1>document.body.offsetWidth){s.left='';s.right='0'}else{s.left=Math.max(0,x0)+'px';s.right=''}
     },200)
   }
   lb.onmousedown=function(x){
-    if(x.target.nodeName==='B'){var w=ide.focusedWin;(w.hasFocus()?w:$(':focus')).insert(x.target.textContent)}
+    if(x.target.nodeName==='B'){
+      var w=ide.focusedWin;(w.hasFocus()?w:$(document.activeElement)).insert(x.target.textContent)
+    }
     return!1
   }
   lb.onmouseout=function(x){if(x.target.nodeName==='B'||x.target.id==='lb_prf'){
@@ -172,7 +174,7 @@ D.IDE=function(){'use strict'
   ide.gl=new GoldenLayout({labels:{minimise:'unmaximise'},
                            content:[{type:'row',content:[{type:'component',componentName:'w',
                                                           componentState:{id:0},title:'Session'}]}]},
-                          ide.$ide)
+                          $(ide.dom))
   ide.gl.registerComponent('w',function(c,h){var w=ide.wins[h.id];w.container=c;c.getElement().append(w.$e);return w})
   ide.gl.registerComponent('wse',function(c,h){var u=ide.wse||(ide.wse=new D.WSE(ide));u.container=c
                                                c.getElement().append(u.$e);return u})
@@ -187,8 +189,8 @@ D.IDE=function(){'use strict'
   ide.gl.on('stackCreated',function(x){x.header.controlsContainer.find('.lm_close').remove()})
   ide.gl.init()
 
-  var updTopBtm=function(){ide.$ide.css({top:(D.prf.lbar()?lb.offsetHeight:0)+(D.el?1:22)})
-                           ide.gl.updateSize(ide.$ide.width(),ide.$ide.height())}
+  var updTopBtm=function(){ide.dom.style.top=((D.prf.lbar()?lb.offsetHeight:0)+(D.el?1:22))+'px'
+                           ide.gl.updateSize(ide.dom.clientWidth,ide.dom.clientHeight)}
   lb.hidden=!D.prf.lbar();updTopBtm();$(window).resize(updTopBtm)
   D.prf.lbar(function(x){lb.hidden=!x;updTopBtm()})
   setTimeout(function(){
@@ -218,7 +220,7 @@ D.IDE.prototype={
   emit:function(x,y){this.dead||D.skt.emit(x,y)},
   die:function(){ // don't really, just pretend
     if(this.dead)return
-    this.dead=1;this.connected=0;this.$ide.addClass('disconnected');for(var k in this.wins)this.wins[k].die()
+    this.dead=1;this.connected=0;this.dom.className+=' disconnected';for(var k in this.wins)this.wins[k].die()
   },
   updTitle:function(){ // change listener for D.prf.title
     var ide=this,ri=D.remoteIdentification||{},v=D.versionInfo
