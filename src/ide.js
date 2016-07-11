@@ -176,7 +176,9 @@ D.IDE=function(){'use strict'
                                                           componentState:{id:0},title:'Session'}]}]},
                           $(ide.dom))
   ide.gl.registerComponent('win',function(c,h){
-    var w=ide.wins[h.id];w.container=c;c.getElement().append(w.dom);return w
+    var w=ide.wins[h.id];w.container=c;c.getElement().append(w.dom)
+    setTimeout(function(){w.focus()},1)
+    return w
   })
   ide.gl.registerComponent('wse',function(c,h){
     var u=ide.wse||(ide.wse=new D.WSE());u.container=c;c.getElement().append(u.dom);return u
