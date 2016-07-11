@@ -310,7 +310,7 @@ D.Ed.prototype={
   },
   VAL:function(cm){
     var a=cm.getSelections(), s=a.length!==1?'':!a[0]?this.cword():a[0].indexOf('\n')<0?a[0]:''
-    s&&this.ide.wins[0].opts.exec(['      '+s],0)
+    s&&this.ide.exec(['      '+s],0)
   },
   addJump:function(){var j=this.jumps,u=this.cm.getCursor();j.push({lh:this.cm.getLineHandle(u.line),ch:u.ch})>10&&j.shift()},
   JBK:function(cm){var p=this.jumps.pop();p&&cm.setCursor({line:p.lh.lineNo(),ch:p.ch})},

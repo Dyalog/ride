@@ -8,7 +8,7 @@ D.IDE=function(){'use strict'
     if(l&&l.length){tc||(ide.pending=l.slice(1));ide.emit('Execute',{trace:tc,text:l[0]+'\n'})}
   }
   ide.host=ide.port=ide.wsid='';D.prf.title(ide.updTitle.bind(ide))
-  D.wins=ide.wins={0:new D.Se(ide,{id:0,emit:ide.emit.bind(ide),exec:ide.exec.bind(ide)})}
+  D.wins=ide.wins={0:new D.Se(ide,{id:0,emit:ide.emit.bind(ide)})}
   ide.focusedWin=ide.wins[0] // last focused window, it might not have the focus right now
 
   var handlers=this.handlers={ // for RIDE protocol messages
