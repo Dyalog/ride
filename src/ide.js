@@ -73,7 +73,7 @@ D.IDE=function(){'use strict'
         var dir=ee['debugger']?'south':'east', size=ee['debugger']?D.prf.tracerHeight():D.prf.editorWidth()
         ;(this.wins[w]=new D.Ed(this,editorOpts)).open(ee)
         ide.gl.root.contentItems[0]
-          .addChild({type:'component',componentName:'w',componentState:{id:ee.token},title:ee.name})
+          .addChild({type:'component',componentName:'win',componentState:{id:ee.token},title:ee.name})
       }
     },
     ShowHTML:ide.showHTML.bind(ide),
@@ -172,19 +172,22 @@ D.IDE=function(){'use strict'
 
   var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
   ide.gl=new GoldenLayout({labels:{minimise:'unmaximise'},
-                           content:[{type:'row',content:[{type:'component',componentName:'w',
+                           content:[{type:'row',content:[{type:'component',componentName:'win',
                                                           componentState:{id:0},title:'Session'}]}]},
                           $(ide.dom))
-  ide.gl.registerComponent('w',function(c,h){var w=ide.wins[h.id];w.container=c;c.getElement().append(w.dom);return w})
-  ide.gl.registerComponent('wse',function(c,h){var u=ide.wse||(ide.wse=new D.WSE());u.container=c
-                                               c.getElement().append(u.dom);return u})
+  ide.gl.registerComponent('win',function(c,h){
+    var w=ide.wins[h.id];w.container=c;c.getElement().append(w.dom);return w
+  })
+  ide.gl.registerComponent('wse',function(c,h){
+    var u=ide.wse||(ide.wse=new D.WSE());u.container=c;c.getElement().append(u.dom);return u
+  })
   ide.gl.on('stateChanged',function(){eachWin(function(w){w.updSize();w.cm.refresh();w.updGutters&&w.updGutters()})})
   ide.gl.on('tabCreated',function(x){switch(x.contentItem.componentName){
     case'wse':x.closeElement.off('click').click(D.prf.wse.toggle);break
-    case'w':var id=x.contentItem.config.componentState.id
-            id?x.closeElement.off('click').click(function(){var w=ide.wins[id];w.EP(w.cm)})
-              :x.closeElement.remove()
-            break
+    case'win':var id=x.contentItem.config.componentState.id
+              id?x.closeElement.off('click').click(function(){var w=ide.wins[id];w.EP(w.cm)})
+                :x.closeElement.remove()
+              break
   }})
   ide.gl.on('stackCreated',function(x){x.header.controlsContainer.find('.lm_close').remove()})
   ide.gl.init()
