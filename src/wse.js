@@ -1,15 +1,14 @@
-// workspace explorer
+//workspace explorer
 'use strict'
-D.WSE=function(ide){
+D.WSE=function(){
   var pending=this.pending={}
-  var $e=this.$e=$('<div class=wse>')
-    .jstree({plugins:[],core:{animation:true,check_callback:true,data:function(x,f){
-      var i=x.id==='#'?0:+x.id.replace(/\D+/g,'');pending[i]=f.bind(this);ide.emit('TreeList',{nodeId:i})
-    }}})
-    .on('click','.jstree-anchor',function(){
-      ide.emit('Edit',{win:0,pos:0,text:$e.jstree('get_path',this,'.')})
-      ;/^wse_leaf_/.test(this.id)||$e.jstree('refresh_node',this)
-    })
+  this.dom=document.getElementById('wse')
+  this.dom.onclick=function(x){var t=x.target.closest('.jstree-anchor');if(!t)return
+                               D.ide.emit('Edit',{win:0,pos:0,text:$e.jstree('get_path',t,'.')})
+                               ;/^wse_leaf_/.test(this.id)||$e.jstree('refresh_node',t)}
+  var $e=this.$e=$(this.dom).jstree({plugins:[],core:{animation:true,check_callback:true,data:function(x,f){
+    var i=x.id==='#'?0:+x.id.replace(/\D+/g,'');pending[i]=f.bind(this);D.ide.emit('TreeList',{nodeId:i})
+  }}})
 }
 D.WSE.prototype={
   replyTreeList:function(x){

@@ -175,9 +175,9 @@ D.IDE=function(){'use strict'
                            content:[{type:'row',content:[{type:'component',componentName:'w',
                                                           componentState:{id:0},title:'Session'}]}]},
                           $(ide.dom))
-  ide.gl.registerComponent('w',function(c,h){var w=ide.wins[h.id];w.container=c;c.getElement().append(w.$e);return w})
-  ide.gl.registerComponent('wse',function(c,h){var u=ide.wse||(ide.wse=new D.WSE(ide));u.container=c
-                                               c.getElement().append(u.$e);return u})
+  ide.gl.registerComponent('w',function(c,h){var w=ide.wins[h.id];w.container=c;c.getElement().append(w.dom);return w})
+  ide.gl.registerComponent('wse',function(c,h){var u=ide.wse||(ide.wse=new D.WSE());u.container=c
+                                               c.getElement().append(u.dom);return u})
   ide.gl.on('stateChanged',function(){eachWin(function(w){w.updSize();w.cm.refresh();w.updGutters&&w.updGutters()})})
   ide.gl.on('tabCreated',function(x){switch(x.contentItem.componentName){
     case'wse':x.closeElement.off('click').click(D.prf.wse.toggle);break
