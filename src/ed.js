@@ -4,7 +4,8 @@ var CM=CodeMirror,
     ACB_VALUE={pairs:'()[]{}',explode:'{}'} // value for CodeMirror's "autoCloseBrackets" option when on
 
 D.Ed=function(ide,opts){ //Editor constructor
-  var ed=this;ed.ide=ide;ed.dom=document.getElementById('ed_tmpl').cloneNode(1);ed.dom.hidden=0;ed.$e=$(ed.dom)
+  var ed=this;ed.ide=ide
+  ed.dom=document.getElementById('ed_tmpl').cloneNode(1);ed.dom.id=null;ed.dom.hidden=0;ed.$e=$(ed.dom)
   ed.opts=opts;ed.id=opts.id;ed.name=opts.name;ed.emit=opts.emit
   ed.tc=opts.tracer
   ed.xline=null // the line number of the empty line inserted at eof when cursor is there and you press <down>
