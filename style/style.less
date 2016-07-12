@@ -249,8 +249,9 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #lyt_pfx_lbl{float:left;margin:-5px 10px auto 5px}
 #lyt_pfx{width:20px;text-align:center}
 #lyt_kbd{.tt;border-radius:2px;height:250px;clear:both;color:#000;cursor:default}
+#lyt_kbd b{font-weight:normal}
 #lyt_ime_wr{float:left;margin-top:5px}
-.lyt_key{float:left;width:6%;height:45px;border-radius:2px;margin-left:0.6%;margin-top:4px;text-align:center;
+.lyt_k{float:left;width:6%;height:45px;border-radius:2px;margin-left:0.6%;margin-top:4px;text-align:center;
          background-color:#fff;overflow:hidden}
 .lyt_g1,.lyt_g3{width:40%;height:20px;line-height:20px;padding:0;border-width:0;margin-top:1px}
 .lyt_g0{color:#000} //The arrangement is: ┌──────┐
@@ -258,13 +259,14 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .lyt_g2{color:#f00} //                    │g0  g1│
 .lyt_g3{color:#00f} //                    └──────┘
 #lyt_spc{width:40%;margin-left:30%;margin-right:30%;padding-left:8px;padding-right:8px}
-#lyt_spc .lyt_g0{float:left ;text-align:left ;clear:left ;white-space:nowrap}
-#lyt_spc .lyt_g1{float:right;text-align:right;clear:right;white-space:nowrap}
-#lyt_spc .lyt_g2{float:left ;text-align:left             ;white-space:nowrap}
-#lyt_spc .lyt_g3{float:right;text-align:right            ;white-space:nowrap}
-input.lyt_g1:hover{outline:solid #bbf 1px;background-color:#eee;cursor:pointer}
-input.lyt_g3:hover{outline:solid #fbb 1px;background-color:#eee;cursor:pointer}
-.lyt_key input{text-align:center}
+#lyt_spc br{clear:both}
+#lyt_spc .lyt_g0{float:left ;text-align:left ;white-space:nowrap}
+#lyt_spc .lyt_g1{float:right;text-align:right;white-space:nowrap}
+#lyt_spc .lyt_g2{float:left ;text-align:left ;white-space:nowrap}
+#lyt_spc .lyt_g3{float:right;text-align:right;white-space:nowrap}
+input.lyt_g1:hover,
+input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
+.lyt_k input{text-align:center}
 #lyt_15,#lyt_16,#lyt_30,#lyt_43,#lyt_44,#lyt_57{line-height:45px;cursor:default} //bksp,tab,caps,enter,lshift,rshift
 #lyt_16,#lyt_30,#lyt_44{clear:left}                         //tab,caps,lshift
 #lyt_15,#lyt_16,#lyt_43,#lyt_44,#lyt_57{font-size:32px}     //bksp,tab,enter,lshift,rshift

@@ -7,21 +7,13 @@ var layouts=D.kbds.layouts,geom=D.kbds.geom,NK=58 //NK:number of scancodes we ar
 D.prf_tabs.lyt={
   name:'Layout',
   init:function(t){
-    var sk={15:'←',16:'↹',30:'Caps',43:'↲',44:'⇧',57:'⇧'} //special keys
     var a=document.querySelectorAll('[id^="lyt_"]');for(var i=0;i<a.length;i++)q[a[i].id.replace(/^lyt_/,'')]=a[i]
-    var s='';for(var i=1;i<NK;i++)s+='<span id=lyt_'+i+' class=lyt_key>'+
-                                         (sk[i]||'<span class=lyt_g2></span><input class=lyt_g3><br>'+
-                                                 '<span class=lyt_g0></span><input class=lyt_g1>')+'</span>'
-    s+='<span id=lyt_spc class=lyt_key>'+
-         '<span class=lyt_g2>Shift+X</span><span class=lyt_g3>` Shift+X</span><br>'+
-         '<span class=lyt_g0>X</span><span class=lyt_g1>` X</span>'+
-       '</span>'
-    q.kbd.innerHTML=s;q.lc.innerHTML='<option>'+Object.keys(layouts).sort().join('<option>')
+    q.lc.innerHTML='<option>'+Object.keys(layouts).sort().join('<option>')
     var inputs=q.kbd.querySelectorAll('input')
     for(var i=0;i<inputs.length;i++){
       inputs[i].onfocus=function(x){setTimeout(function(){x.target.select()},1)}
       inputs[i].onblur=function(x){
-        var e=x.target,v=model[q.lc.value][+(e.className==='lyt_g3')][+e.closest('.lyt_key').id.slice(1)]=e.value.slice(-1)||' '
+        var e=x.target,v=model[q.lc.value][+(e.className==='lyt_g3')][+e.closest('.lyt_k').id.slice(1)]=e.value.slice(-1)||' '
         e.value=v;e.title=tip(v)
       }
     }
@@ -33,10 +25,11 @@ D.prf_tabs.lyt={
       var d=Object.keys(layouts).filter(function(x){return x.slice(3,5)===c}).sort()[0] //default layout for country c
       D.prf.kbdLocale(D.mac&&layouts[l+'_'+c+'_Mac']?l+'_'+c+'_Mac':layouts[l+'_'+c]?l+'_'+c:d?d:'en_US')
     }
-    q.rst.onclick=function(){var lc=q.lc.value;q.pfx.value=D.prf.prefixKey.getDefault()
+    q.rst.onclick=function(){var lc=q.lc.value;q.pfx.value=D.prf.prefixKey.getDefault();updPfx()
                              model[lc]=[layouts[lc][2].split(''),layouts[lc][3].split('')];updGlyphs()}
     q.lc.onchange=updGlyphs
     q.pfx.onfocus=function(){setTimeout(function(){$(q.pfx).select()},1)}
+    q.pfx.onchange=q.pfx.onkeyup=updPfx
   },
   load:function(){
     q.lc.value=D.prf.kbdLocale();q.pfx.value=D.prf.prefixKey();model={}
@@ -62,6 +55,11 @@ D.prf_tabs.lyt={
     }
     D.prf.prefixMaps(h);D.win&&D.prf.ime(q.ime.checked)
   }
+}
+function updPfx(){
+  var c=q.pfx.value[0]||'`'
+  q.spc_g1.textContent=c+q.spc_g1.textContent.slice(1)
+  q.spc_g3.textContent=c+q.spc_g3.textContent.slice(1)
 }
 //Every geometry (aka "mechanical layout") has a CSS class specifying the precise key arrangement.
 function updGlyphs(){ //apply model values to the DOM
