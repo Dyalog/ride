@@ -13,8 +13,8 @@
           e.ctrlKey&&!e.shiftKey ? $a.toggleClass(S) : $l.list('select',$a.index(),e.ctrlKey,e.shiftKey)
           $l.trigger(ES);return!1
         })
-        .on('focus','*',function(){$(this).parentsUntil('.'+L).andSelf().eq(0).   addClass(F)})
-        .on('blur' ,'*',function(){$(this).parentsUntil('.'+L).andSelf().eq(0).removeClass(F)})
+        .on('focus','*',function(){$(this).parentsUntil('.'+L).addBack().eq(0).   addClass(F)})
+        .on('blur' ,'*',function(){$(this).parentsUntil('.'+L).addBack().eq(0).removeClass(F)})
         .keydown(function(e){
           var $l=$(this),ck=e.ctrlKey,sk=e.shiftKey,ak=e.altKey;if(e.metaKey)return
           if(!ak){
