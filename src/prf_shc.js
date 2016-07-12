@@ -50,7 +50,7 @@ function loadFrom(h){
   }
   q.tbl_wr.innerHTML=html+'</table>';updDups();if(q.sc.value){q.sc.value='';updSC()}
 }
-function updSC(){var a=q.tbl_wr.querySelectorAll('tr'),s=this.value.toLowerCase(),empty=1;q.sc_clr.hidden=!s
+function updSC(){var a=q.tbl_wr.querySelectorAll('tr'),s=q.sc.value.toLowerCase(),empty=1;q.sc_clr.hidden=!s
                  for(var i=0;i<a.length;i++)empty&=a[i].hidden=a[i].textContent.toLowerCase().indexOf(s)<0
                  q.no_res.hidden=!empty}
 function keyHTML(x){return'<span class=shc_key><span class=shc_text>'+x+'</span>'+
