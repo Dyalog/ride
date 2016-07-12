@@ -12,6 +12,10 @@ D.prf_tabs.lyt={
     var s='';for(var i=1;i<NK;i++)s+='<span id=lyt_'+i+' class=lyt_key>'+
                                          (sk[i]||'<span class=lyt_g2></span><input class=lyt_g3><br>'+
                                                  '<span class=lyt_g0></span><input class=lyt_g1>')+'</span>'
+    s+='<span id=lyt_spc class=lyt_key>'+
+         '<span class=lyt_g2>Shift+X</span><span class=lyt_g3>` Shift+X</span><br>'+
+         '<span class=lyt_g0>X</span><span class=lyt_g1>` X</span>'+
+       '</span>'
     q.kbd.innerHTML=s;q.lc.innerHTML='<option>'+Object.keys(layouts).sort().join('<option>')
     var inputs=q.kbd.querySelectorAll('input')
     for(var i=0;i<inputs.length;i++){
@@ -33,9 +37,6 @@ D.prf_tabs.lyt={
                              model[lc]=[layouts[lc][2].split(''),layouts[lc][3].split('')];updGlyphs()}
     q.lc.onchange=updGlyphs
     q.pfx.onfocus=function(){setTimeout(function(){$(q.pfx).select()},1)}
-    q.legend.onclick=function(){q.popup.hidden=0;q.popup_close.focus()}
-    var cls=q.popup_close.onclick=function(){q.popup.hidden=1;q.legend.focus()}
-    q.popup.onmousedown=function(x){x.target===q.popup&&cls();return!1}
   },
   load:function(){
     q.lc.value=D.prf.kbdLocale();q.pfx.value=D.prf.prefixKey();model={}
@@ -49,7 +50,7 @@ D.prf_tabs.lyt={
     }
     updGlyphs();if(D.win)q.ime.checked=!!D.prf.ime()
   },
-  activate:function(){q.legend.focus()},
+  activate:function(){q.pfx.focus()},
   validate:function(){if(q.pfx.value.length!==1)return{msg:'Invalid prefix key',el:q.pfx}},
   save:function(){
     D.prf.prefixKey(q.pfx.value);D.prf.kbdLocale(q.lc.value)
