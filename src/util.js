@@ -1,5 +1,6 @@
 //a kitchen sink for small generic functions and jQuery plugins
 'use strict'
+var zCtr=100
 D.util={
   dict:function(x){var r={};for(var i=0;i<x.length;i++)r[x[i][0]]=x[i][1];return r}, //dictionary from key-value pairs
   ESC:{'<':'&lt;','>':'&gt;','&':'&amp;',"'":'&apos;','"':'&quot;'},
@@ -13,10 +14,11 @@ D.util={
         !$(e.target).closest('.CodeMirror-gutter-wrapper').length&&f(e)
       t=e.timeStamp;x=e.clientX;y=e.clientY})},
   dlg:function(d){
-    d.hidden=0
+    d.style.zIndex=zCtr++;d.hidden=0
     d.style.left=(0|(innerWidth -d.clientWidth )/2)+'px'
     d.style.top =(0|(innerHeight-d.clientHeight)/2)+'px'
     if(d.__dlg)return;d.__dlg=1
+    d.onmousedown=function(){d.style.zIndex=zCtr++}
     d.onclick=function(e){if(e.target.className==='dlg_close'){d.hidden=1;return!1}}
     d.addEventListener('keydown',
         function(e){if(e.which===27&&!e.ctrlKey&&!e.shiftKey&&!e.altKey&&!e.metaKey){d.hidden=1;return!1}})

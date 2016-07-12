@@ -24,14 +24,13 @@ input,textarea,select,a{outline:0}
 select:focus{outline:dotted #000 1px}
 input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 
-/*z-indices (except for CodeMirror which uses 1-10)*/
+/*z-indices; CodeMirror uses 1-10; .dlg uses 100+ */
 .ui-tooltip             {z-index:9999}
 #lyt_popup              {z-index:9999}
 #lb_tip_tri             {z-index: 301}
 #lb_tip                 {z-index: 300}
 #vt_bln,#vt_tri,#vt_rect{z-index: 300}
 .menu .m-box            {z-index: 200}
-.dlg                    {z-index: 100}
 .ui-front               {z-index: 100}
 .ui-selectable-helper   {z-index: 100}
 .CodeMirror-hints       {z-index:  10}
