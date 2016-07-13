@@ -1,7 +1,6 @@
 #!/bin/bash
 # This script is for Jenkins (continuous integration) to run.
-set -x
-set -e
+set -x -e -o pipefail
 
 BASE_VERSION=`node -pe "($(cat package.json)).version"`
 VERSION="${BASE_VERSION%%.0}.`git rev-list HEAD --count`"  # "%%.0" strips trailing ".0"
