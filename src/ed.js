@@ -6,8 +6,7 @@ var CM=CodeMirror,
 D.Ed=function(ide,opts){ //Editor constructor
   var ed=this;ed.ide=ide
   ed.dom=document.getElementById('ed_tmpl').cloneNode(1);ed.dom.id=null;ed.dom.style.display='';ed.$e=$(ed.dom)
-  ed.opts=opts;ed.id=opts.id;ed.name=opts.name
-  ed.tc=opts.tracer
+  ed.id=opts.id;ed.name=opts.name;ed.tc=opts.tc
   ed.xline=null // the line number of the empty line inserted at eof when cursor is there and you press <down>
   ed.oText='';ed.oStop=[] // remember original text and "stops" to avoid pointless saving on EP
   ed.hll=null // highlighted line -- currently executed line in tracer

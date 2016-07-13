@@ -8,7 +8,7 @@ D.IDE=function(){'use strict'
     if(l&&l.length){tc||(ide.pending=l.slice(1));D.send('Execute',{trace:tc,text:l[0]+'\n'})}
   }
   ide.host=ide.port=ide.wsid='';D.prf.title(ide.updTitle.bind(ide))
-  D.wins=ide.wins={0:new D.Se(ide,{id:0})}
+  D.wins=ide.wins={0:new D.Se(ide)}
   ide.focusedWin=ide.wins[0] // last focused window, it might not have the focus right now
 
   var handlers=this.handlers={ // for RIDE protocol messages
@@ -56,7 +56,7 @@ D.IDE=function(){'use strict'
         })
         return
       }
-      var w=ee.token, done, editorOpts={id:w,name:ee.name,tracer:ee['debugger']}
+      var w=ee.token, done, editorOpts={id:w,name:ee.name,tc:ee['debugger']}
       if(D.prf.floating()&&!D.floating&&!this.dead){
         var p=ee['debugger']?D.prf.posTracer():D.prf.posEditor()
         if(!p[4]){var d=ee.token-1;p[0]+=d*(process.env.RIDE_XOFFSET||32);p[1]+=d*(process.env.RIDE_YOFFSET||32)}

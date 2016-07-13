@@ -1,7 +1,7 @@
 //session
 'use strict'
-D.Se=function(ide,opts){ // Session constructor
-  var se=this;se.ide=ide;se.opts=opts;se.hist=[''];se.histIdx=0;se.focusTimestamp=0;se.id=0
+D.Se=function(ide){ // Session constructor
+  var se=this;se.ide=ide;se.hist=[''];se.histIdx=0;se.focusTimestamp=0;se.id=0
   se.dirty={} // modified lines: lineNumber→originalContent, inserted lines: lineNumber→0 (also used in syn.js)
   se.dom=document.createElement('div');se.dom.className='ride-win';se.$e=$(se.dom)
   var cm=se.cm=CodeMirror(se.dom,{
