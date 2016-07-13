@@ -17,7 +17,7 @@ D.ac=function(win){ //win: an instance of Editor or Session
         }else if(i&&(win.autocompleteWithTab||RegExp('['+D.syn.letter+'\\)\\]\\.]$').test(s.slice(0,i)))
                   &&s.slice(0,i).replace(re,'').slice(-1)!==D.prf.prefixKey()
                   &&win.promptType!==4){ //don't autocomplete in ⍞ input
-          win.autocompleteWithTab=0;win.emit('GetAutocomplete',{line:s,pos:i,token:win.id})
+          win.autocompleteWithTab=0;D.send('GetAutocomplete',{line:s,pos:i,token:win.id})
         }
       },D.prf.autocompletionDelay())
     }

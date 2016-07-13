@@ -17,7 +17,7 @@ D.vt=function(w){'use strict' //.init(w) gets called for every window w (session
       if((force||D.prf.squiggleTips())&&lbt&&!(c==='⎕'&&/[áa-z]/i.test(s[p.ch+1]||''))){
         rf({tip:lbt.join('\n\n').split('\n'),startCol:p.ch,endCol:p.ch+1}) //show tooltip from language bar
       }else if((force||D.prf.valueTips())&&/[^ \(\)\[\]\{\}':;]/.test(c)){
-        w.emit('GetValueTip',{win:w.id,line:s,pos:p.ch,token:w.id,maxWidth:MW,maxHeight:MH}) //ask interpreter
+        D.send('GetValueTip',{win:w.id,line:s,pos:p.ch,token:w.id,maxWidth:MW,maxHeight:MH}) //ask interpreter
       }
     },500))
   }

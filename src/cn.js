@@ -241,7 +241,7 @@ const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
       if(n<=8){err('Bad protocol message');break}
       const m=''+q.slice(8,n);q=q.slice(n);log('recv '+trunc(m))
       if(m[0]==='['){
-        const u=JSON.parse(m);D.skt&&D.skt.recv&&D.skt.recv(u[0],u[1])
+        const u=JSON.parse(m);D.recv&&D.recv(u[0],u[1])
       }else if(m[0]==='<'&&!old){
         old=1;err('This version of RIDE cannot talk to interpreters older than v15.0')
       }else if(/^UsingProtocol=/.test(m)&&m.slice(m.indexOf('=')+1)!=='2'){
@@ -281,7 +281,7 @@ const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
 }
 
 module.exports=_=>{
-  D.skt={emit(x,y){sendEach([JSON.stringify([x,y])])}}
+  D.send=(x,y)=>{sendEach([JSON.stringify([x,y])])}
   const a=node_require('electron').remote.process.argv
   ,h={c:process.env.RIDE_CONNECT,s:process.env.RIDE_SPAWN} //h:args by name
   for(var i=1;i<a.length;i++)if(a[i][0]==='-'){h[a[i].slice(1)]=a[i+1];i++}
@@ -289,7 +289,7 @@ module.exports=_=>{
           m?go({type:'connect',host:m[1],port:+m[2]||4502})
            :$.err('Invalid $RIDE_CONNECT')}
   else if(h.s){go({type:'start',exe:h.s})
-               window.onbeforeunload=function(){D.skt.emit('Exit',{code:0})}}
+               window.onbeforeunload=function(){D.send('Exit',{code:0})}}
   else{D.cn()}
 }
 

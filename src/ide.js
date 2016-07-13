@@ -5,7 +5,7 @@ D.IDE=function(){'use strict'
   ide.dom=document.getElementById('ide');ide.dom.hidden=0
   ide.pending=[] // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.exec=function(l,tc){ // l:lines, tc:trace
-    if(l&&l.length){tc||(ide.pending=l.slice(1));D.skt.emit('Execute',{trace:tc,text:l[0]+'\n'})}
+    if(l&&l.length){tc||(ide.pending=l.slice(1));D.send('Execute',{trace:tc,text:l[0]+'\n'})}
   }
   ide.host=ide.port=ide.wsid='';D.prf.title(ide.updTitle.bind(ide))
   D.wins=ide.wins={0:new D.Se(ide,{id:0})}
@@ -26,7 +26,7 @@ D.IDE=function(){'use strict'
     EchoInput:function(x){ide.wins[0].add(x.input)},
     AppendSessionOutput:function(x){var r=x.result;ide.wins[0].add(typeof r==='string'?r:r.join('\n'))},
     SetPromptType:function(x){
-      var t=x.type;t&&ide.pending.length?D.skt.emit('Execute',{trace:0,text:ide.pending.shift()+'\n'})
+      var t=x.type;t&&ide.pending.length?D.send('Execute',{trace:0,text:ide.pending.shift()+'\n'})
                                         :ide.wins[0].prompt(t)
       t===4&&ide.wins[0].focus() // ⍞ input
     },
@@ -51,8 +51,8 @@ D.IDE=function(){'use strict'
         p.on('error',function(x){$.err(x)})
         p.on('exit',function(){
           var s=fs.readFileSync(f,'utf8');fs.unlinkSync(f)
-          D.skt.emit('SaveChanges',{win:ee.token,text:s.split('\n'),stop:ee.stop,trace:ee.trace,monitor:ee.monitor})
-          D.skt.emit('CloseWindow',{win:ee.token})
+          D.send('SaveChanges',{win:ee.token,text:s.split('\n'),stop:ee.stop,trace:ee.trace,monitor:ee.monitor})
+          D.send('CloseWindow',{win:ee.token})
         })
         return
       }
@@ -82,11 +82,11 @@ D.IDE=function(){'use strict'
       var text=typeof x.text==='string'?x.text:x.text.join('\n') // todo: clean up after transition to json protocol
       if(D.el){
         var i=D.el.dialog.showMessageBox(D.elw,{message:text,title:x.title||'',buttons:x.options,cancelId:-1})
-        D.skt.emit('ReplyOptionsDialog',{index:i,token:x.token})
+        D.send('ReplyOptionsDialog',{index:i,token:x.token})
       }else{
         var i=-1;var f=function(e){i=$(e.target).closest('.ui-button').index();$(this).dialog('close')} // i:clicked index
         $('<p>').text(text).dialog({modal:1,title:x.title,buttons:x.options.map(function(s){return{text:s,click:f}}),
-                                    close:function(){D.skt.emit('ReplyOptionsDialog',{index:i,token:x.token})}})
+                                    close:function(){D.send('ReplyOptionsDialog',{index:i,token:x.token})}})
       }
     },
     StringDialog:function(x){
@@ -96,7 +96,7 @@ D.IDE=function(){'use strict'
           {html:'<u>O</u>K'    ,click:function(){ok=1;$(this).dialog('close')}},
           {html:'<u>C</u>ancel',click:function(){     $(this).dialog('close')}}
         ],
-        close:function(){D.skt.emit('ReplyStringDialog',{value:ok?$i.val():x.defaultValue||null,token:x.token})}
+        close:function(){D.send('ReplyStringDialog',{value:ok?$i.val():x.defaultValue||null,token:x.token})}
       })
     },
     TaskDialog:function(x){
@@ -105,7 +105,7 @@ D.IDE=function(){'use strict'
                  x.buttonText.map(function(s){return'<button class=task>'+esc(s)+'</button>'}).join('')+
                '</div><p class=footer>'+esc(x.footer||'')+'</div>')
       $d.on('click','.task',function(e){i=100+$(e.target).index();$d.dialog('close')})
-        .dialog({modal:1,title:x.title,close:function(){D.skt.emit('ReplyTaskDialog',{index:i,token:x.token})},
+        .dialog({modal:1,title:x.title,close:function(){D.send('ReplyTaskDialog',{index:i,token:x.token})},
                  buttons:x.options.map(function(s){return{text:s,click:function(e){
                    i=$(e.target).closest('.ui-button').index();$d.dialog('close')
                  }}})})
@@ -120,13 +120,13 @@ D.IDE=function(){'use strict'
   function rd(){ // run down the queue
     ide.wins[0].cm.operation(function(){
       while(mq.length&&!blk){
-        var a=mq.shift(),f=handlers[a[0]];f?f.apply(ide,a.slice(1)):D.skt.emit('UnknownCommand',{name:a[0]})
+        var a=mq.shift(),f=handlers[a[0]];f?f.apply(ide,a.slice(1)):D.send('UnknownCommand',{name:a[0]})
       }
       last=+new Date;tid=0
     })
   }
   function rrd(){tid||(new Date-last<20?(tid=setTimeout(rd,20)):rd())} // request rundown
-  D.skt.recv=function(x,y){mq.push([x,y]);rrd()}
+  D.recv=function(x,y){mq.push([x,y]);rrd()}
   ide.block=function(){blk++}
   ide.unblock=function(){--blk||rrd()}
 
