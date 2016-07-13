@@ -55,8 +55,8 @@ $.extend(CM.commands,{
   },
   QIT:function(){D.quit()},
   LBR:function(){D.prf.lbar.toggle()},
-  WI:function(){D.ide.emit('WeakInterrupt',{})},
-  SI:function(){D.ide.emit('StrongInterrupt',{})},
+  WI:function(){D.skt.emit('WeakInterrupt',{})},
+  SI:function(){D.skt.emit('StrongInterrupt',{})},
   FUL:function(){
     var d=document,e=d.body,x
     ;(    d.fullscreenElement||d.webkitFullscreenElement||d.mozFullScreenElement||d.msFullscreenElement) // if

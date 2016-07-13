@@ -6,7 +6,7 @@ var CM=CodeMirror,
 D.Ed=function(ide,opts){ //Editor constructor
   var ed=this;ed.ide=ide
   ed.dom=document.getElementById('ed_tmpl').cloneNode(1);ed.dom.id=null;ed.dom.style.display='';ed.$e=$(ed.dom)
-  ed.opts=opts;ed.id=opts.id;ed.name=opts.name;ed.emit=opts.emit
+  ed.opts=opts;ed.id=opts.id;ed.name=opts.name
   ed.tc=opts.tracer
   ed.xline=null // the line number of the empty line inserted at eof when cursor is there and you press <down>
   ed.oText='';ed.oStop=[] // remember original text and "stops" to avoid pointless saving on EP
@@ -195,7 +195,7 @@ D.Ed.prototype={
   },
   insert:function(ch){this.cm.getOption('readOnly')||this.cm.replaceSelection(ch)},
   saved:function(err){
-    if(err){this.isClosing=0;$.err('Cannot save changes')}else{this.isClosing&&this.emit('CloseWindow',{win:this.id})}
+    if(err){this.isClosing=0;$.err('Cannot save changes')}else{this.isClosing&&D.skt.emit('CloseWindow',{win:this.id})}
   },
   closePopup:function(){if(D.floating){window.onbeforeunload=null;D.forceClose=1;close()}},
   die:function(){this.setReadOnly(true)},
@@ -210,11 +210,11 @@ D.Ed.prototype={
   },
   ED:function(cm){
     this.addJump()
-    this.emit('Edit',{win:this.id,pos:cm.indexFromPos(cm.getCursor()),text:cm.getValue(),unsaved:this.ide.getUnsaved()})
+    D.skt.emit('Edit',{win:this.id,pos:cm.indexFromPos(cm.getCursor()),text:cm.getValue(),unsaved:this.ide.getUnsaved()})
   },
-  QT:function(){this.emit('CloseWindow',{win:this.id})},
-  BK:function(cm){this.tc?this.emit('TraceBackward',{win:this.id}):cm.execCommand('undo')},
-  FD:function(cm){this.tc?this.emit('TraceForward' ,{win:this.id}):cm.execCommand('redo')},
+  QT:function(){D.skt.emit('CloseWindow',{win:this.id})},
+  BK:function(cm){this.tc?D.skt.emit('TraceBackward',{win:this.id}):cm.execCommand('undo')},
+  FD:function(cm){this.tc?D.skt.emit('TraceForward' ,{win:this.id}):cm.execCommand('redo')},
   SC:function(cm){
     var v=cm.getSelection();/^[ -\uffff]+$/.test(v)&&this.cmSC.setValue(v)
     this.cmSC.focus();this.cmSC.execCommand('selectAll')
@@ -227,9 +227,9 @@ D.Ed.prototype={
   EP:function(cm){this.isClosing=1;this.FX(cm)},
   FX:function(cm){
     var ed=this,v=cm.getValue(),stop=ed.getStops()
-    if(ed.tc||v===ed.oText&&''+stop===''+ed.oStop){ed.emit('CloseWindow',{win:ed.id});return} // if tracer or unchanged
+    if(ed.tc||v===ed.oText&&''+stop===''+ed.oStop){D.skt.emit('CloseWindow',{win:ed.id});return} // if tracer or unchanged
     for(var i=0;i<stop.length;i++)cm.setGutterMarker(stop[i],'breakpoints',null)
-    ed.emit('SaveChanges',{win:ed.id,text:cm.getValue().split('\n'),stop:stop})
+    D.skt.emit('SaveChanges',{win:ed.id,text:cm.getValue().split('\n'),stop:stop})
   },
   TL:function(cm){ // toggle localisation
     var name=this.cword(),l,l0=l=cm.getCursor().line;if(!name)return
@@ -249,7 +249,7 @@ D.Ed.prototype={
   },
   PV:function(){this.search(1)},
   NX:function(){this.search()},
-  TC:function(){this.emit('StepInto',{win:this.id})},
+  TC:function(){D.skt.emit('StepInto',{win:this.id})},
   AC:function(cm){ // align comments
     var ed=this,ll=cm.lastLine(),o=cm.listSelections() // o:original selections
     var sels=cm.somethingSelected()?o:[{anchor:{line:0,ch:0},head:{line:ll,ch:cm.getLine(ll).length}}]
@@ -268,7 +268,7 @@ D.Ed.prototype={
     cm.setSelections(o)
   },
   ER:function(cm){
-    if(this.tc){this.emit('RunCurrentLine',{win:this.id});return}
+    if(this.tc){D.skt.emit('RunCurrentLine',{win:this.id});return}
     if(D.prf.autoCloseBlocks()){
       var u=cm.getCursor(),l=u.line,s=cm.getLine(l),m
       var re=/^(\s*):(class|disposable|for|if|interface|namespace|property|repeat|section|select|trap|while|with)\b([^⋄\{]*)$/i
@@ -286,12 +286,12 @@ D.Ed.prototype={
     }
     cm.execCommand('newlineAndIndent')
   },
-  BH:function(){this.emit('ContinueTrace' ,{win:this.id})},
-  RM:function(){this.emit('Continue'      ,{win:this.id})},
-  MA:function(){this.emit('RestartThreads',{win:this.id})},
+  BH:function(){D.skt.emit('ContinueTrace' ,{win:this.id})},
+  RM:function(){D.skt.emit('Continue'      ,{win:this.id})},
+  MA:function(){D.skt.emit('RestartThreads',{win:this.id})},
   CBP:function(){ // Clear trace/stop/monitor for this object
     var ed=this,n=ed.cm.lineCount();for(var i=0;i<n;i++)ed.cm.setGutterMarker(i,'breakpoints',null)
-    ed.tc&&ed.emit('SetLineAttributes',{win:ed.id,nLines:n,stop:ed.getStops(),trace:[],monitor:[]})
+    ed.tc&&D.skt.emit('SetLineAttributes',{win:ed.id,nLines:n,stop:ed.getStops(),trace:[],monitor:[]})
   },
   BP:function(cm){ // toggle breakpoint
     var sels=cm.listSelections()
@@ -302,7 +302,7 @@ D.Ed.prototype={
         (cm.getLineHandle(l).gutterMarkers||{}).breakpoints?null:this.createBPEl()
       )
     }
-    this.tc&&this.emit('SetLineAttributes',{win:this.id,nLines:cm.lineCount(),stop:this.getStops()})
+    this.tc&&D.skt.emit('SetLineAttributes',{win:this.id,nLines:cm.lineCount(),stop:this.getStops()})
   },
   RD:function(cm){
     if(cm.somethingSelected()){cm.execCommand('indentAuto')}
@@ -317,7 +317,7 @@ D.Ed.prototype={
   tabOrAutocomplete:function(cm){
     if(cm.somethingSelected()){cm.execCommand('indentMore');return}
     var c=cm.getCursor(),s=cm.getLine(c.line);if(/^ *$/.test(s.slice(0,c.ch))){cm.execCommand('indentMore');return}
-    this.autocompleteWithTab=1;this.emit('GetAutocomplete',{line:s,pos:c.ch,token:this.id,win:this.id})
+    this.autocompleteWithTab=1;D.skt.emit('GetAutocomplete',{line:s,pos:c.ch,token:this.id,win:this.id})
   },
   downOrXline:function(cm){
     var l=cm.getCursor().line;if(l!==cm.lastLine()||/^\s*$/.test(cm.getLine(l))){cm.execCommand('goLineDown');return}

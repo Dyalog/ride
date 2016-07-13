@@ -1,7 +1,7 @@
 //session
 'use strict'
 D.Se=function(ide,opts){ // Session constructor
-  var se=this;se.ide=ide;se.opts=opts;se.emit=opts.emit;se.hist=[''];se.histIdx=0;se.focusTimestamp=0;se.id=0
+  var se=this;se.ide=ide;se.opts=opts;se.hist=[''];se.histIdx=0;se.focusTimestamp=0;se.id=0
   se.dirty={} // modified lines: lineNumber→originalContent, inserted lines: lineNumber→0 (also used in syn.js)
   se.dom=document.createElement('div');se.dom.className='ride-win';se.$e=$(se.dom)
   var cm=se.cm=CodeMirror(se.dom,{
@@ -70,7 +70,7 @@ D.Se.prototype={
     // We can get the scrollbar's width through cm.display.scrollbarFiller.clientWidth, it's 0 if not present.
     // But it's better to reserve a hard-coded width for it regardless of its presence.
     var pw=Math.max(42,Math.floor((this.dom.clientWidth-20)/this.cm.defaultCharWidth()))
-    if(pw!==this.pw&&this.ide.connected||force)this.emit('SetPW',{pw:this.pw=pw})
+    if(pw!==this.pw&&this.ide.connected||force)D.skt.emit('SetPW',{pw:this.pw=pw})
   },
   scrollCursorIntoView:function(){
     var cm=this.cm;cm.scrollTo(0,cm.getScrollInfo().top);setTimeout(function(){cm.scrollIntoView()},1)
@@ -105,7 +105,7 @@ D.Se.prototype={
     se.cm.setOption('cursorHeight',0) // avoid flicker at column 0 when leaning on <ER>
   },
   ED:function(cm){
-    var c=cm.getCursor();this.emit('Edit',{win:0,pos:c.ch,text:cm.getLine(c.line),unsaved:this.ide.getUnsaved()})
+    var c=cm.getCursor();D.skt.emit('Edit',{win:0,pos:c.ch,text:cm.getLine(c.line),unsaved:this.ide.getUnsaved()})
   },
   BK:function(){this.histMove(1)},
   FD:function(){this.histMove(-1)},
@@ -126,6 +126,6 @@ D.Se.prototype={
   tabOrAutocomplete:function(cm){
     var u=cm.getCursor(),s=cm.getLine(u.line)
     if(cm.somethingSelected()||this.promptType===4||/^ *$/.test(s.slice(0,u.ch))){cm.execCommand('indentMore');return}
-    this.autocompleteWithTab=1;this.emit('GetAutocomplete',{line:s,pos:u.ch,token:0,win:0})
+    this.autocompleteWithTab=1;D.skt.emit('GetAutocomplete',{line:s,pos:u.ch,token:0,win:0})
   }
 }

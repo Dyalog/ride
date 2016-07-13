@@ -70,6 +70,75 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .ride-win .ride-win-cm{flex-grow:1}
 
 /*menu (see ../src/menu.js for the DOM structure)*/
+.menu{background-color:#dcdad5;height:18px;line-height:17px;cursor:default;padding:0;margin:2px 0 0 0;
+      font-family:sans-serif;border-bottom:solid#888 1px;/*used as a separator*/}
+.menu a{text-decoration:none;color:black;cursor:default}
+.menu .m-opener.m-top{text-align:center;border:solid transparent 1px;padding:0 5px;margin:0}
+.menu .m-open .m-top{border-color:#888 #fff #fff #888}
+.menu .m-open>.m-box {
+  display: block;
+}
+.menu > .m-sub {
+  float: left;
+}
+.menu .m-box {
+  background-color: #dcdad5;
+  border-color: #fff #888 #888 #fff;
+  display: none;
+  border-style: solid;
+  border-width: 1px 2px 2px 1px;
+  position: absolute;
+  padding: 1px;
+  margin: 2px 0 0 0;
+  min-width: 125px;
+  white-space: nowrap;
+}
+.menu .m-box .m-box {
+  margin-left: 100%;
+  margin-top: -17px;
+}
+.menu .m-box a {
+  display: block;
+  height: 17px;
+  line-height: 17px;
+  text-align: left;
+  padding: 1px 17px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-color: #fff #888 #888 #fff;
+}
+.menu .m-box a .m-shc {
+  font-size: small;
+  float: right;
+  margin-left: 20px;
+  color: #666;
+}
+.menu .m-box a.m-checked {
+  background: transparent 5px center no-repeat url(../style/img/menu_chk.png);
+}
+.menu .m-box a:focus {
+  background: #0a246a;
+  color: #fff;
+}
+.menu .m-box a:focus .m-shc {
+  color: #fff;
+}
+.menu .m-box a:focus.m-checked {
+  background: #0a246a 5px center no-repeat url(../style/img/menu_chk_wht.png);
+}
+.menu .m-box .m-opener {
+  /* "right 5px" might not work in Safari, see
+       https://stackoverflow.com/questions/3197250/position-a-css-background-image-x-pixels-from-the-right#comment-35531805 */
+  background: transparent center right 5px no-repeat url(../style/img/menu_rgt_tri.png);
+}
+.menu .m-box .m-opener:focus {
+  background: #0a246a center right 5px no-repeat url(../style/img/menu_rgt_tri_wht.png);
+}
+.menu hr {
+  margin: 3px 0 5px 0;
+}
+
+/*menu (see ../src/menu.js for the DOM structure)*/
 .menu{
   background-color:#dcdad5;height:18px;line-height:17px;cursor:default;padding:0;margin:2px 0 0 0;
   font-family:sans-serif;border-bottom:solid #888 1px;
