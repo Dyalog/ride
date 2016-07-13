@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 //instead of a Makefile
 'use strict';process.chdir(__dirname)
-const rq=require,fs=rq('fs'),path=rq('path'),less=rq('less'),{execSync}=rq('child_process'),async=rq('async')
+const rq=require,fs=rq('fs'),path=rq('path'),{execSync}=rq('child_process'),async=rq('async')
 ,sh=x=>execSync(x,{encoding:'utf8'}).replace(/[\r\n]/g,'')          // shell
 ,rf=x=>fs.readFileSync(x,'utf8')                                    // read file
 ,wf=(x,y)=>fs.writeFileSync(x,y)                                    // write file
@@ -14,20 +14,9 @@ const rq=require,fs=rq('fs'),path=rq('path'),less=rq('less'),{execSync}=rq('chil
 ,tasks={}
 
 tasks.b=tasks.build=f=>{
-  md('_/thm')
-  console.info('v'+v)
-  wf('_/version',v)
+  md('_');wf('_/version',v);console.info('v'+v)
   wf('_/version.js','D='+JSON.stringify({versionInfo:{
        version:v,date:sh('git show -s HEAD --pretty=format:%ci'),rev:sh('git rev-parse HEAD')}}))
-  async.each(['style','thm/classic','thm/redmond','thm/cupertino'],
-    (x,f)=>{
-      const i=`style/${x}.less`,o=`_/${x}.css`
-      if(!nt(i,o)){f();return}
-      console.info('preprocessing '+i)
-      less.render(rf(i),(e,r)=>{if(e)throw e;wf(o,r.css);f()})
-    },
-    e=>{f&&f(e)}
-  )
 }
 
 const incl={
@@ -48,10 +37,7 @@ const incl={
   '/node_modules/codemirror/addon/fold/indent-fold.js'         :1}
 Object.keys(incl).map(x=>{const a=x.split('/');a.map((_,i)=>incl[a.slice(0,i).join('/')]=1)}) // include ancestors
 
-const excl={'/style/apl385.ttf'               :1,
-            '/style/img/Dyalog_icon.icns':1,
-            '/style/style.less'               :1,
-            '/style/thm'                      :1}
+const excl={'/style/img/Dyalog_icon.icns':1}
 ,namev='ride'+v.split('.').slice(0,2).join('')
 ,pkg=(x,y,f)=>{
   rq('electron-packager')(

@@ -11,7 +11,7 @@ blockquote,q{quotes:none}
 blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}
 table{border-collapse:collapse;border-spacing:0}
 
-@font-face{font-family:'apl';src:url('../style/apl385.woff')format('woff'),url('../style/apl385.ttf')format('truetype')}
+@font-face{font-family:'apl';src:url('apl385.woff')format('woff'),url('apl385.ttf')format('truetype')}
 
      ::selection{background:#0a246a;color:#fff} /*must be separate rules*/
 ::-moz-selection{background:#0a246a;color:#fff} /*must be separate rules*/
@@ -71,106 +71,30 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 
 /*menu (see ../src/menu.js for the DOM structure)*/
 .menu{background-color:#dcdad5;height:18px;line-height:17px;cursor:default;padding:0;margin:2px 0 0 0;
-      font-family:sans-serif;border-bottom:solid#888 1px;/*used as a separator*/}
+      font-family:sans-serif;border-bottom:solid #888 1px;/*used as a separator*/}
 .menu a{text-decoration:none;color:black;cursor:default}
 .menu .m-opener.m-top{text-align:center;border:solid transparent 1px;padding:0 5px;margin:0}
 .menu .m-open .m-top{border-color:#888 #fff #fff #888}
-.menu .m-open>.m-box {
-  display: block;
-}
-.menu > .m-sub {
-  float: left;
-}
-.menu .m-box {
-  background-color: #dcdad5;
-  border-color: #fff #888 #888 #fff;
-  display: none;
-  border-style: solid;
-  border-width: 1px 2px 2px 1px;
-  position: absolute;
-  padding: 1px;
-  margin: 2px 0 0 0;
-  min-width: 125px;
-  white-space: nowrap;
-}
-.menu .m-box .m-box {
-  margin-left: 100%;
-  margin-top: -17px;
-}
-.menu .m-box a {
-  display: block;
-  height: 17px;
-  line-height: 17px;
-  text-align: left;
-  padding: 1px 17px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  border-color: #fff #888 #888 #fff;
-}
-.menu .m-box a .m-shc {
-  font-size: small;
-  float: right;
-  margin-left: 20px;
-  color: #666;
-}
-.menu .m-box a.m-checked {
-  background: transparent 5px center no-repeat url(../style/img/menu_chk.png);
-}
-.menu .m-box a:focus {
-  background: #0a246a;
-  color: #fff;
-}
-.menu .m-box a:focus .m-shc {
-  color: #fff;
-}
-.menu .m-box a:focus.m-checked {
-  background: #0a246a 5px center no-repeat url(../style/img/menu_chk_wht.png);
-}
-.menu .m-box .m-opener {
+.menu .m-open>.m-box{display:block}
+.menu>.m-sub{float:left}
+.menu .m-box{background-color:#dcdad5;border-color:#fff #888 #888 #fff;display:none;border-style:solid;
+             border-width:1px 2px 2px 1px;position:absolute;padding:1px;margin:2px 0 0 0;min-width:125px;
+             white-space:nowrap}
+.menu .m-box .m-box{margin-left:100%;margin-top:-17px}
+.menu .m-box a{display:block;height:17px;line-height:17px;text-align:left;padding:1px 17px;overflow:hidden;
+               text-overflow:ellipsis;border-color:#fff #888 #888 #fff}
+.menu .m-box a .m-shc{font-size:small;float:right;margin-left:20px;color:#666}
+.menu .m-box a.m-checked{background:transparent 5px center no-repeat url(img/menu_chk.png)}
+.menu .m-box a:focus{background:#0a246a;color:#fff}
+.menu .m-box a:focus .m-shc{color: #fff}
+.menu .m-box a:focus.m-checked{background:#0a246a 5px center no-repeat url(img/menu_chk_wht.png)}
+.menu .m-box .m-opener{
   /* "right 5px" might not work in Safari, see
        https://stackoverflow.com/questions/3197250/position-a-css-background-image-x-pixels-from-the-right#comment-35531805 */
-  background: transparent center right 5px no-repeat url(../style/img/menu_rgt_tri.png);
+  background:transparent center right 5px no-repeat url(img/menu_rgt_tri.png)
 }
-.menu .m-box .m-opener:focus {
-  background: #0a246a center right 5px no-repeat url(../style/img/menu_rgt_tri_wht.png);
-}
-.menu hr {
-  margin: 3px 0 5px 0;
-}
-
-/*menu (see ../src/menu.js for the DOM structure)*/
-.menu{
-  background-color:#dcdad5;height:18px;line-height:17px;cursor:default;padding:0;margin:2px 0 0 0;
-  font-family:sans-serif;border-bottom:solid #888 1px;
-  a{text-decoration:none;color:black;cursor:default}
-  .m-opener.m-top{text-align:center;border:solid transparent 1px;padding:0 5px;margin:0}
-  .m-open .m-top{border-color:#888 #fff #fff #888}
-  .m-open>.m-box{display:block}
-  &>.m-sub{float:left}
-  .m-box{
-    background-color:#dcdad5;border-color:#fff #888 #888 #fff;display:none;border-style:solid;
-    border-width:1px 2px 2px 1px;position:absolute;padding:1px;margin:2px 0 0 0;min-width:125px;white-space:nowrap;
-    .m-box{margin-left:100%;margin-top:-17px}
-    a{
-      display:block;height:17px;line-height:17px;text-align:left;padding:1px 17px;overflow:hidden;text-overflow:ellipsis;
-      .m-shc{font-size:small;float:right;margin-left:20px;color:#666}
-      &.m-checked{background:transparent 5px center no-repeat url(../style/img/menu_chk.png)}
-      &:focus{
-        background:#0a246a;color:#fff;
-        .m-shc{color:#fff}
-        &.m-checked{background:#0a246a 5px center no-repeat url(../style/img/menu_chk_wht.png)}
-      }
-      border-color:#fff #888 #888 #fff
-    }
-  }
-  .m-box .m-opener{
-    /* "right 5px" might not work in Safari, see
-       https://stackoverflow.com/questions/3197250/position-a-css-background-image-x-pixels-from-the-right#comment-35531805 */
-    background:transparent center right 5px no-repeat url(../style/img/menu_rgt_tri.png);
-    &:focus{background:#0a246a center right 5px no-repeat url(../style/img/menu_rgt_tri_wht.png)}
-  }
-  hr{margin:3px 0 5px 0} /*used as a separator*/
-}
+.menu .m-box .m-opener:focus{background: #0a246a center right 5px no-repeat url(img/menu_rgt_tri_wht.png)}
+.menu hr{margin: 3px 0 5px 0}
 
 /*language bar*/
 #lb{font-family:apl,monospace;font-size:18px;background-color:#dcdad5;padding:0 2px 0 10px;
@@ -178,7 +102,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #lb b{font-weight:normal;margin-bottom:3px;padding:1px;color:#666}
 #lb b:hover{background-color:#eee}
 #lb b:active{background-color:#fff}
-#lb_prf{float:right;margin-right:4px;width:24px;height:24px;background:no-repeat center center url(../style/img/lb_prf.png)}
+#lb_prf{float:right;margin-right:4px;width:24px;height:24px;background:no-repeat center center url(img/lb_prf.png)}
 #lb_prf:hover{background-color:#eee}
 #lb_prf:active{background-color:#fff}
 #lb_tip{font-family:apl,monospace;font-size:18px;position:absolute;padding:8px;margin-top:16px;border-radius:2px;
@@ -226,7 +150,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .disconnected .CodeMirror,.disconnected .CodeMirror-gutter-wrapper{background-color:#e2d3bb} /*beige*/
 .breakpoints{width:12px} /*gutter*/
 .breakpoint{color:#f00;width:12px;text-indent:-99px;cursor:pointer;
-            background:no-repeat transparent center center url(../style/img/breakpoint.png)}
+            background:no-repeat transparent center center url(img/breakpoint.png)}
 .hidden{display:none}
 .highlighted{border:solid red 1px}
 .CodeMirror-hints{
@@ -250,24 +174,24 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .tb_btn:hover{border-color:#fff #888 #888 #fff}
 .tb_btn.armed{border-color:#888 #fff #fff #888}
 .tb_btn.pressed{background-color:#eee;border-color:#888 #fff #fff #888}
-.tb_LN  {background-image:url(../style/img/tb_LN.png)}
-.tb_AO  {background-image:url(../style/img/tb_AO.png)}
-.tb_DO  {background-image:url(../style/img/tb_DO.png)}
-.tb_NX  {background-image:url(../style/img/tb_NX.png)}
-.tb_PV  {background-image:url(../style/img/tb_PV.png)}
-.tb_hid {background-image:url(../style/img/tb_hid.png)}
-.tb_case{background-image:url(../style/img/tb_case.png)}
-.tb_ER  {background-image:url(../style/img/tb_ER.png)}
-.tb_TC  {background-image:url(../style/img/tb_TC.png)}
-.tb_BK  {background-image:url(../style/img/tb_BK.png)}
-.tb_FD  {background-image:url(../style/img/tb_FD.png)}
-.tb_BH  {background-image:url(../style/img/tb_BH.png)}
-.tb_RM  {background-image:url(../style/img/tb_RM.png)}
-.tb_MA  {background-image:url(../style/img/tb_MA.png)}
-.tb_ED  {background-image:url(../style/img/tb_ED.png)}
-.tb_WI  {background-image:url(../style/img/tb_WI.png)}
-.tb_CBP {background-image:url(../style/img/tb_CBP.png)}
-.tb_sep{float:left;width:10px;height:24px;background:no-repeat center center url(../style/img/tb_sep.png)} /*separator*/
+.tb_LN  {background-image:url(img/tb_LN.png)}
+.tb_AO  {background-image:url(img/tb_AO.png)}
+.tb_DO  {background-image:url(img/tb_DO.png)}
+.tb_NX  {background-image:url(img/tb_NX.png)}
+.tb_PV  {background-image:url(img/tb_PV.png)}
+.tb_hid {background-image:url(img/tb_hid.png)}
+.tb_case{background-image:url(img/tb_case.png)}
+.tb_ER  {background-image:url(img/tb_ER.png)}
+.tb_TC  {background-image:url(img/tb_TC.png)}
+.tb_BK  {background-image:url(img/tb_BK.png)}
+.tb_FD  {background-image:url(img/tb_FD.png)}
+.tb_BH  {background-image:url(img/tb_BH.png)}
+.tb_RM  {background-image:url(img/tb_RM.png)}
+.tb_MA  {background-image:url(img/tb_MA.png)}
+.tb_ED  {background-image:url(img/tb_ED.png)}
+.tb_WI  {background-image:url(img/tb_WI.png)}
+.tb_CBP {background-image:url(img/tb_CBP.png)}
+.tb_sep{float:left;width:10px;height:24px;background:no-repeat center center url(img/tb_sep.png)} /*separator*/
 /*search and replace*/
 .tb_sc,.tb_rp{border-color:#888 #fff #fff #888;border-style:solid;border-width:1px;
               float:left;width:120px;height:24px;resize:none;overflow:hidden}
@@ -418,7 +342,7 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 
 /*About dialog*/
 #abt{padding:0;margin:0;width:600px;height:450px}
-#abt_logo{background:16px center no-repeat url(../style/img/Dyalog_60.png);height:80px;line-height:20px}
+#abt_logo{background:16px center no-repeat url(img/Dyalog_60.png);height:80px;line-height:20px}
 #abt_contact{color:#000;float:right;text-align:right;margin:12px 12px 0 0;cursor:default}
 #abt_contact a,
 #abt_contact a:visited,
@@ -537,15 +461,26 @@ body .ui-tooltip{border-width:2px}
 /*Interaction states*/
 .ui-state-default,.ui-widget-content .ui-state-default,.ui-widget-header .ui-state-default{font-weight:normal}
 
-.ui-state-default{a,a:link,a:visited{color:#000;text-decoration:none}}
+.ui-state-default a,
+.ui-state-default a:link,
+.ui-state-default a:visited{color:#000;text-decoration:none}
 
 .ui-state-hover,.ui-widget-content .ui-state-hover,.ui-widget-header .ui-state-hover,
 .ui-state-focus,.ui-widget-content .ui-state-focus,.ui-widget-header .ui-state-focus{
   font-weight:normal
 }
 
-.ui-state-hover,.ui-state-focus{a,a:hover,a:link,a:visited{text-decoration:none}}
-.ui-state-active{a,a:link,a:visited{text-decoration:none}}
+.ui-state-hover a,
+.ui-state-hover a:hover,
+.ui-state-hover a:link,
+.ui-state-hover a:visited,
+.ui-state-focus a,
+.ui-state-focus a:hover,
+.ui-state-focus a:link,
+.ui-state-focus a:visited,
+.ui-state-active a,
+.ui-state-active a:link,
+.ui-state-active a:visited{text-decoration:none}
 
 /*Interaction Cues*/
 .ui-state-highlight,.ui-widget-content .ui-state-highlight,.ui-widget-header .ui-state-highlight
@@ -568,7 +503,7 @@ body .ui-tooltip{border-width:2px}
   {filter:Alpha(Opacity=35)} /*For IE8 - See #6059*/
 
 .ui-icon{width:16px;height:16px}
-.ui-icon-closethick{background:no-repeat center center url(../style/img/close.png)}
+.ui-icon-closethick{background:no-repeat center center url(img/close.png)}
 
 /*CodeMirror styles*/
 .CodeMirror{font-family:apl,monospace;font-size:18px;height:300px;color:black}
@@ -685,10 +620,10 @@ span.CodeMirror-selectedtext{background:none}
   background-position:center center;background-repeat:no-repeat}
 .cm-foldgutter-open:after,.cm-foldgutter-folded:after,.cm-foldgutter-cont:after,.cm-foldgutter-end:after{
   content:"\00a0"}
-.cm-foldgutter-open  {background-image:url(../style/img/fold_open.png)}
-.cm-foldgutter-folded{background-image:url(../style/img/fold_folded.png)}
-.cm-foldgutter-cont  {background-image:url(../style/img/fold_cont.png)}
-.cm-foldgutter-end   {background-image:url(../style/img/fold_end.png)}
+.cm-foldgutter-open  {background-image:url(img/fold_open.png)}
+.cm-foldgutter-folded{background-image:url(img/fold_folded.png)}
+.cm-foldgutter-cont  {background-image:url(img/fold_cont.png)}
+.cm-foldgutter-end   {background-image:url(img/fold_end.png)}
 .cm-foldgutter-open,.cm-foldgutter-folded{cursor:pointer}
 
 /*scrollbars; see ../src/scrl.js*/
@@ -712,8 +647,4 @@ span.CodeMirror-selectedtext{background:none}
 .cm-scroll-v .btn1:after{content:"\25bc"}
 
 /*Golden Layout*/
-.lm_goldenlayout{background-image:none!important;background-color:#eee}
-
-@import url(../style/jstree/style.css);
-@import url(../style/goldenlayout/goldenlayout-base.css);
-@import url(../style/goldenlayout/goldenlayout-light-theme.css);
+.lm_goldenlayout{background-image:none!important;background-color:#eee!important}
