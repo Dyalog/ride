@@ -220,7 +220,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #prf_nav a{background-color:#dcdad5;float:left;height:16px;padding:2px 12px 1px 12px;
            text-decoration:none;color:#444;margin:8px 0 0 4px;
            border:solid #aaa 1px;border-bottom:0;border-top-left-radius:4px;border-top-right-radius:4px}
-#prf_nav a.sel{border-color:#fff #888 #888 #fff;color:black;padding-top:4px;padding-bottom:8px;margin-top:4px;height:13px;transition:0.1s}
+#prf_nav a.sel{border-color:#fff #888 #888 #fff;color:black;padding-top:4px;padding-bottom:8px;margin-top:4px;height:13px}
 #prf_nav a:hover{color:#000;transition:0.1s}
 #prf_nav a:hover.sel{background-color:#dcdad5;cursor:default}
 
