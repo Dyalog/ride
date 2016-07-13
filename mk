@@ -17,6 +17,7 @@ tasks.b=tasks.build=f=>{
   md('_');wf('_/version',v);console.info('v'+v)
   wf('_/version.js','D='+JSON.stringify({versionInfo:{
        version:v,date:sh('git show -s HEAD --pretty=format:%ci'),rev:sh('git rev-parse HEAD')}}))
+  f()
 }
 
 const incl={
