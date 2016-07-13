@@ -216,7 +216,6 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .dlg_btns button{min-width:75px;margin:0 8px}
 
 /*Preferences dialog*/
-#prf_dlg{width:600px;height:450px}
 #prf_nav{height:28px;border-bottom:solid 1px #fff;text-align:left;margin-bottom:2px;background-color:#ccc}
 #prf_nav a{background-color:#dcdad5;float:left;height:16px;padding:2px 12px 1px 12px;
            text-decoration:none;color:#444;margin:8px 0 0 4px;
@@ -341,7 +340,7 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 .ui-dialog .ui-dialog-content.task_dlg .task{display:block;width:100%;margin-top:2px}
 
 /*About dialog*/
-#abt{padding:0;margin:0;width:600px;height:450px}
+#abt{padding:0;margin:0}
 #abt_logo{background:16px center no-repeat url(img/Dyalog_60.png);height:80px;line-height:20px}
 #abt_contact{color:#000;float:right;text-align:right;margin:12px 12px 0 0;cursor:default}
 #abt_contact a,

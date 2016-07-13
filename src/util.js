@@ -13,10 +13,11 @@ D.util={
       e.timeStamp-t<400&&Math.abs(x-e.clientX)+Math.abs(y-e.clientY)<10&&
         !$(e.target).closest('.CodeMirror-gutter-wrapper').length&&f(e)
       t=e.timeStamp;x=e.clientX;y=e.clientY})},
-  dlg:function(d){
+  dlg:function(d,o){o=o||{}
     d.style.zIndex=zCtr++;d.hidden=0
-    d.style.left=(0|(innerWidth -d.clientWidth )/2)+'px'
-    d.style.top =(0|(innerHeight-d.clientHeight)/2)+'px'
+    d.style.left=(0|(innerWidth -(o.w||d.clientWidth ))/2)+'px';if(o.w)d.style.width =o.w+'px'
+    d.style.top =(0|(innerHeight-(o.h||d.clientHeight))/2)+'px';if(o.h)d.style.height=o.h+'px'
+    o=null
     if(d.__dlg)return;d.__dlg=1
     d.onmousedown=function(){d.style.zIndex=zCtr++}
     d.onclick=function(e){if(e.target.className==='dlg_close'){d.hidden=1;return!1}}

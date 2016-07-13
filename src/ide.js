@@ -169,7 +169,7 @@ D.IDE=function(){'use strict'
     }
     reqTip(x,'Keyboard Shortcuts',s+'...')
   }
-  lbPrf.onclick=function(){D.prf_ui();return!1}
+  lbPrf.onmousedown=function(){D.prf_ui();return!1}
 
   var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
   ide.gl=new GoldenLayout({labels:{minimise:'unmaximise'},
