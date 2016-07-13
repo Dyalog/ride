@@ -19,7 +19,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
 ,favDOM=x=>{const e=document.createElement('div');e.cnData=x
             e.innerHTML=`<span class=name>${esc(favText(x))}</span><button class=go>Go</button>`;return e}
 ,fmtKey=x=>[x.metaKey?'Cmd-':'',x.ctrlKey?'Ctrl-':'',x.altKey?'Alt-':'',x.shiftKey?'Shift-':'',
-            CodeMirror.keyNames[x.which]||''].join('')
+            CM.keyNames[x.which]||''].join('')
 ,updFormDtl=_=>{const a=q.dtl.children;for(let i=0;i<a.length;i++)a[i].hidden=1
                 q[q.type.value].hidden=0} //the part below "Type"
 ,updExes=_=>{

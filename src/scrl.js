@@ -1,7 +1,6 @@
 //scrollbars for CodeMirror
 ;(function(){'use strict'
 
-var CM=CodeMirror
 function addClass(e,c){e.className+=' '+c}
 function rmClass(e,c){e.className=e.className.replace(RegExp(' *\\b'+c+'\\b','gi'),'')}
 function Bar(o,scroll){ // o:orientation(0=vertical,1=horizontal), scroll:a callback function to request scrolling

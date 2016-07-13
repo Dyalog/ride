@@ -9,7 +9,7 @@ var $p // DOM element for the pending key or null if key display mode is off
 function keyInfo(e){ // returns a pair of the key name and an "is complete" flag
   var s='' // key name
   e.shiftKey&&e.which&&(s+='Shift-');e.ctrlKey&&(s+='Ctrl-');e.altKey&&(s+='Alt-');e.metaKey&&(s+='Cmd-')
-  var k=CodeMirror.keyNames[e.which]||'['+e.which+']'
+  var k=CM.keyNames[e.which]||'['+e.which+']'
   var c=!!e.which&&k!=='Shift'&&k!=='Ctrl'&&k!=='Alt'&&k!=='Cmd' // c: is the key combination complete?
   c&&(s+=k);return[s,c]
 }
@@ -23,7 +23,7 @@ function loadDemoScript(f){ // f:path to file, ignored if empty
   })
 }
 D.el&&loadDemoScript(process.env.RIDE_DEMO_SCRIPT)
-$.extend(CodeMirror.commands,{
+$.extend(CM.commands,{
   DMN:function(){move( 1)}, // next line
   DMP:function(){move(-1)}, // prev line
   DMR:function(){ // load demo script

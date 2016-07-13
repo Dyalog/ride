@@ -1,8 +1,7 @@
 //syntax highlighting using https://codemirror.net/doc/manual.html#modeapi
 ;(function(){'use strict'
 D.syn={}
-var CM=CodeMirror,
-  letter=D.syn.letter='A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ',
+var letter=D.syn.letter='A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ',
   name0=RegExp('['+letter+']'),
   name1=RegExp('['+letter+'\\d]*'),
   name='(?:['+letter+']['+letter+'\\d]*)',

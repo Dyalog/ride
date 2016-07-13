@@ -1,7 +1,6 @@
 //various stuff related to keymapping
 ;(function(){'use strict'
 
-var CM=CodeMirror
 D.prf.prefixKey(function(x,old){
   if(x!==old){var m=CM.keyMap.dyalogDefault;m["'"+x+"'"]=m["'"+old+"'"];delete m["'"+old+"'"]}
 })

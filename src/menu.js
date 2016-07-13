@@ -88,7 +88,7 @@ D.installMenu=function(x){
         mFocus($(this).parentsUntil('.menu').last().is('.m-open')&&e.type==='mousedown'?null:this);return!1
       })
       .keydown(function(e){
-        switch(CodeMirror.keyNames[e.which]){
+        switch(CM.keyNames[e.which]){
           case'Left' :leftRight(-1,$(e.target));break
           case'Right':leftRight( 1,$(e.target));break
           case'Up'   :upDown   (-1,$(e.target));break

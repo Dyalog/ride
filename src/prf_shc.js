@@ -55,7 +55,7 @@ function updSC(){var a=q.tbl_wr.querySelectorAll('tr'),s=q.sc.value.toLowerCase(
                  q.no_res.hidden=!empty}
 function keyHTML(x){return'<span class=shc_key><span class=shc_text>'+x+'</span>'+
                                               '<a href=# class=shc_del title="Remove shortcut">×</a></span> '}
-function updKeys(x){var h=CodeMirror.keyMap.dyalog={fallthrough:'dyalogDefault'}
+function updKeys(x){var h=CM.keyMap.dyalog={fallthrough:'dyalogDefault'}
                     for(var i=0;i<D.cmds.length;i++){var c=D.cmds[i][0],d=D.cmds[i][2],ks=x[c]||d
                                                      for(var j=0;j<ks.length;j++)h[ks[j]]=c}}
 D.prf.keys(updKeys);updKeys(D.prf.keys())
@@ -67,7 +67,7 @@ function updDups(){
 function getKeystroke(b,f){ //b:"+" button,f:callback
   var e=document.createElement('input'),r //r:result
   var upd=function(x){
-    var kn=CodeMirror.keyNames[x.which]||'';if(!kn||kn==='Shift'||kn==='Ctrl'||kn==='Alt'||kn==='Cmd')kn=''
+    var kn=CM.keyNames[x.which]||'';if(!kn||kn==='Shift'||kn==='Ctrl'||kn==='Alt'||kn==='Cmd')kn=''
     e.value=(x.shiftKey&&(x.type!=='keyup'||x.which)?'Shift-':'')+
             (x.ctrlKey?'Ctrl-':'')+(x.altKey?'Alt-':'')+(x.metaKey?'Cmd-':'')+kn
     if(kn){r=e.value;e.blur()};x.preventDefault();x.stopPropagation();return!1

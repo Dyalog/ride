@@ -3,7 +3,6 @@
 // https://codemirror.net/demo/folding.html
 ;(function(){'use strict'
 
-var CM=CodeMirror
 CM.defineOption('foldGutter',false,function(cm,v,o){ // v:new value, o:old value
   if(o&&o!==CM.Init){cm.clearGutter('cm-foldgutter');cm.state.foldGutter=null;for(var k in eh)cm.off(k,eh[k])}
   if(v){cm.state.foldGutter={from:0,to:0};updInViewport(cm);for(var k in eh)cm.on(k,eh[k])}

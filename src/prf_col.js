@@ -146,7 +146,7 @@ D.prf_tabs.col={
                              q.new_name.select();col.className='renaming';setTimeout(function(){q.new_name.focus()},0)}
     q.del.onclick=function(){var i=q.scm.selectedIndex;scms.splice(i,1);scm=scms[Math.min(i,scms.length-1)]
                              updScms();return!1}
-    cm=CodeMirror(q.cm,{
+    cm=CM(q.cm,{
       lineNumbers:true,firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
       indentUnit:4,scrollButtonHeight:12,matchBrackets:true,autoCloseBrackets:{pairs:'()[]{}',explode:'{}'},
       value:'{R}←{X}tradfn(Y Z);local\n'+

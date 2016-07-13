@@ -45,7 +45,7 @@ D.ac=function(win){ //win: an instance of Editor or Session
                                 function(s){return typeof s==='string'&&s.slice(0,u.length).toLowerCase()===u}
                              ).sort()
             list.length&&list.unshift('')
-            var data={from:from,to:to,list:list};CodeMirror.on(data,'select',function(x){sel=x});return data
+            var data={from:from,to:to,list:list};CM.on(data,'select',function(x){sel=x});return data
           }
         })
       }

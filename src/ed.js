@@ -1,7 +1,6 @@
 ;(function(){'use strict'
 
-var CM=CodeMirror,
-    ACB_VALUE={pairs:'()[]{}',explode:'{}'} // value for CodeMirror's "autoCloseBrackets" option when on
+var ACB_VALUE={pairs:'()[]{}',explode:'{}'} // value for CodeMirror's "autoCloseBrackets" option when on
 
 D.Ed=function(ide,opts){ //Editor constructor
   var ed=this;ed.ide=ide

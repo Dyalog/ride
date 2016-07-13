@@ -2,7 +2,7 @@
 
 if(typeof node_require!=='undefined')D=$.extend(D,node_require('electron').remote.getGlobal('D'))
 
-var CM=CodeMirror,env=D.el?process.env:{}
+var env=D.el?process.env:{}
 
 //don't use Alt- keystrokes on the Mac (see email from 2015-09-01)
 var h=CM.keyMap.emacsy;for(var k in h)if(/^alt-[a-z]$/i.test(k))delete h[k]
