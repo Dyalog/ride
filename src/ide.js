@@ -138,7 +138,7 @@ D.IDE=function(){'use strict'
   ,tipTri =document.getElementById('lb_tip_tri')
   ,lbPrf  =document.getElementById('lb_prf') //the "keyboard" button
   ,ttid //tooltip timeout id
-  ,reqTip=function(x,desc,text){ //request tooltip, x:event
+  ,reqTip=function(x,desc,text,delay){ //request tooltip, x:event
     clearTimeout(ttid);var t=x.target
     ttid=setTimeout(function(){
       ttid=0;tipDesc.textContent=desc;tipText.textContent=text;tip.hidden=tipTri.hidden=0
@@ -146,7 +146,7 @@ D.IDE=function(){'use strict'
       s.left=(t.offsetLeft+(t.offsetWidth-tipTri.offsetWidth)/2)+'px';s.top=(t.offsetTop+t.offsetHeight)+'px'
       var s=tip.style,x0=t.offsetLeft-21,x1=x0+tip.offsetWidth,y0=t.offsetTop+t.offsetHeight-3
       s.top=y0+'px';if(x1>document.body.offsetWidth){s.left='';s.right='0'}else{s.left=Math.max(0,x0)+'px';s.right=''}
-    },200)
+    },delay||200)
   }
   lb.onmousedown=function(x){
     if(x.target.nodeName==='B'){
@@ -167,7 +167,7 @@ D.IDE=function(){'use strict'
       var cmd=D.cmds[i],c=cmd[0],d=cmd[1],df=cmd[2] //c:code,ds:description,df:defaults
       r.test(c)&&(s+=c+': '+d+':'+' '.repeat(Math.max(1,25-d.length))+((h[c]||df).slice(-1)[0]||'none')+'\n')
     }
-    reqTip(x,'Keyboard Shortcuts',s+'...')
+    reqTip(x,'Keyboard Shortcuts',s+'...',1000)
   }
   lbPrf.onmousedown=function(){D.prf_ui();return!1}
 
