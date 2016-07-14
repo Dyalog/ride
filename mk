@@ -21,22 +21,24 @@ tasks.b=tasks.build=f=>{
 }
 
 const incl={
-  '/index.html'                                                :1,
-  '/main.js'                                                   :1,
-  '/package.json'                                              :1,
-  '/node_modules/jquery/dist/jquery.min.js'                    :1,
-  '/node_modules/codemirror/lib/codemirror.js'                 :1,
-  '/node_modules/codemirror/addon/dialog/dialog.js'            :1,
-  '/node_modules/codemirror/addon/search/searchcursor.js'      :1,
-  '/node_modules/codemirror/addon/scroll/annotatescrollbar.js' :1,
-  '/node_modules/codemirror/addon/search/matchesonscrollbar.js':1,
-  '/node_modules/codemirror/addon/hint/show-hint.js'           :1,
-  '/node_modules/codemirror/addon/edit/matchbrackets.js'       :1,
-  '/node_modules/codemirror/addon/edit/closebrackets.js'       :1,
-  '/node_modules/codemirror/addon/display/placeholder.js'      :1,
-  '/node_modules/codemirror/addon/fold/foldcode.js'            :1,
-  '/node_modules/codemirror/addon/fold/indent-fold.js'         :1,
-  '/node_modules/golden-layout/dist/goldenlayout.min.js'       :1}
+  '/index.html'                                                     :1,
+  '/main.js'                                                        :1,
+  '/package.json'                                                   :1,
+  '/node_modules/jquery/dist/jquery.min.js'                         :1,
+  '/node_modules/codemirror/lib/codemirror.js'                      :1,
+  '/node_modules/codemirror/addon/dialog/dialog.js'                 :1,
+  '/node_modules/codemirror/addon/search/searchcursor.js'           :1,
+  '/node_modules/codemirror/addon/scroll/annotatescrollbar.js'      :1,
+  '/node_modules/codemirror/addon/search/matchesonscrollbar.js'     :1,
+  '/node_modules/codemirror/addon/hint/show-hint.js'                :1,
+  '/node_modules/codemirror/addon/edit/matchbrackets.js'            :1,
+  '/node_modules/codemirror/addon/edit/closebrackets.js'            :1,
+  '/node_modules/codemirror/addon/display/placeholder.js'           :1,
+  '/node_modules/codemirror/addon/fold/foldcode.js'                 :1,
+  '/node_modules/codemirror/addon/fold/indent-fold.js'              :1,
+  '/node_modules/golden-layout/dist/goldenlayout.min.js'            :1,
+  '/node_modules/golden-layout/src/css/goldenlayout-base.css'       :1,
+  '/node_modules/golden-layout/src/css/goldenlayout-light-theme.css':1}
 Object.keys(incl).map(x=>{const a=x.split('/');a.map((_,i)=>incl[a.slice(0,i).join('/')]=1)}) // include ancestors
 
 const excl={'/style/img/Dyalog_icon.icns':1}
