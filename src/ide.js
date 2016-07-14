@@ -128,37 +128,31 @@ D.IDE=function(){'use strict'
   ide.unblock=function(){--blk||rrd()}
 
   //language bar
-  var lb  =I.lb
-  ,tip    =I.lb_tip
-  ,tipDesc=I.lb_tip_desc
-  ,tipText=I.lb_tip_text
-  ,tipTri =I.lb_tip_tri
-  ,lbPrf  =I.lb_prf //the "keyboard" button
-  ,ttid //tooltip timeout id
+  var ttid //tooltip timeout id
   ,reqTip=function(x,desc,text,delay){ //request tooltip, x:event
     clearTimeout(ttid);var t=x.target
     ttid=setTimeout(function(){
-      ttid=0;tipDesc.textContent=desc;tipText.textContent=text;tip.hidden=tipTri.hidden=0
-      var s=tipTri.style
-      s.left=(t.offsetLeft+(t.offsetWidth-tipTri.offsetWidth)/2)+'px';s.top=(t.offsetTop+t.offsetHeight)+'px'
-      var s=tip.style,x0=t.offsetLeft-21,x1=x0+tip.offsetWidth,y0=t.offsetTop+t.offsetHeight-3
+      ttid=0;I.lb_tip_desc.textContent=desc;I.lb_tip_text.textContent=text;I.lb_tip.hidden=I.lb_tip_tri.hidden=0
+      var s=I.lb_tip_tri.style
+      s.left=(t.offsetLeft+(t.offsetWidth-I.lb_tip_tri.offsetWidth)/2)+'px';s.top=(t.offsetTop+t.offsetHeight)+'px'
+      var s=I.lb_tip.style,x0=t.offsetLeft-21,x1=x0+I.lb_tip.offsetWidth,y0=t.offsetTop+t.offsetHeight-3
       s.top=y0+'px';if(x1>document.body.offsetWidth){s.left='';s.right='0'}else{s.left=Math.max(0,x0)+'px';s.right=''}
     },delay||200)
   }
-  lb.onmousedown=function(x){
+  I.lb.onmousedown=function(x){
     if(x.target.nodeName==='B'){
       var w=ide.focusedWin;(w.hasFocus()?w:$(document.activeElement)).insert(x.target.textContent)
     }
     return!1
   }
-  lb.onmouseout=function(x){if(x.target.nodeName==='B'||x.target.id==='lb_prf'){
-    clearTimeout(ttid);ttid=0;tip.hidden=tipTri.hidden=1
+  I.lb.onmouseout=function(x){if(x.target.nodeName==='B'||x.target.id==='lb_prf'){
+    clearTimeout(ttid);ttid=0;I.lb_tip.hidden=I.lb_tip_tri.hidden=1
   }}
-  lb.onmouseover=function(x){if(x.target.nodeName==='B'){
+  I.lb.onmouseover=function(x){if(x.target.nodeName==='B'){
     var c=x.target.textContent,k=D.getBQKeyFor(c),s=k&&c.charCodeAt(0)>127?'Keyboard: '+D.prf.prefixKey()+k+'\n\n':''
     var h=D.lb.tips[c]||[c,''];reqTip(x,h[0],s+h[1])
   }}
-  lbPrf.onmouseover=function(x){
+  I.lb_prf.onmouseover=function(x){
     var h=D.prf.keys(),s='',r=/^(BK|BT|ED|EP|FD|QT|RP|SC|TB|TC|TL)$/
     for(var i=0;i<D.cmds.length;i++){
       var cmd=D.cmds[i],c=cmd[0],d=cmd[1],df=cmd[2] //c:code,ds:description,df:defaults
@@ -166,7 +160,7 @@ D.IDE=function(){'use strict'
     }
     reqTip(x,'Keyboard Shortcuts',s+'...',1000)
   }
-  lbPrf.onmousedown=function(){D.prf_ui();return!1}
+  I.lb_prf.onmousedown=function(){D.prf_ui();return!1}
 
   var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
   ide.gl=new GoldenLayout({labels:{minimise:'unmaximise'},
@@ -192,10 +186,10 @@ D.IDE=function(){'use strict'
   ide.gl.on('stackCreated',function(x){x.header.controlsContainer.find('.lm_close').remove()})
   ide.gl.init()
 
-  var updTopBtm=function(){ide.dom.style.top=((D.prf.lbar()?lb.offsetHeight:0)+(D.el?1:22))+'px'
+  var updTopBtm=function(){ide.dom.style.top=((D.prf.lbar()?I.lb.offsetHeight:0)+(D.el?1:22))+'px'
                            ide.gl.updateSize(ide.dom.clientWidth,ide.dom.clientHeight)}
-  lb.hidden=!D.prf.lbar();updTopBtm();$(window).resize(updTopBtm)
-  D.prf.lbar(function(x){lb.hidden=!x;updTopBtm()})
+  I.lb.hidden=!D.prf.lbar();updTopBtm();$(window).resize(updTopBtm)
+  D.prf.lbar(function(x){I.lb.hidden=!x;updTopBtm()})
   setTimeout(function(){
     try{D.installMenu(D.parseMenuDSL(D.prf.menu()))}
     catch(e){$.err('Invalid menu configuration -- the default menu will be used instead')
