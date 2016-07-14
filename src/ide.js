@@ -63,12 +63,9 @@ D.IDE=function(){'use strict'
           $.err('Popups are blocked.')
         }
       }
-      if(!done){
-        var dir=ee['debugger']?'south':'east', size=ee['debugger']?D.prf.tracerHeight():D.prf.editorWidth()
-        ;(this.wins[w]=new D.Ed(this,editorOpts)).open(ee)
-        ide.gl.root.contentItems[0]
-          .addChild({type:'component',componentName:'win',componentState:{id:ee.token},title:ee.name})
-      }
+      if(done)return
+      ;(this.wins[w]=new D.Ed(this,editorOpts)).open(ee)
+      ide.gl.root.contentItems[0].addChild({type:'component',componentName:'win',componentState:{id:w},title:ee.name})
     },
     ShowHTML:ide.showHTML.bind(ide),
     OptionsDialog:function(x){
