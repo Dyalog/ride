@@ -35,7 +35,8 @@ const incl={
   '/node_modules/codemirror/addon/edit/closebrackets.js'       :1,
   '/node_modules/codemirror/addon/display/placeholder.js'      :1,
   '/node_modules/codemirror/addon/fold/foldcode.js'            :1,
-  '/node_modules/codemirror/addon/fold/indent-fold.js'         :1}
+  '/node_modules/codemirror/addon/fold/indent-fold.js'         :1,
+  '/node_modules/golden-layout/dist/goldenlayout.min.js'       :1}
 Object.keys(incl).map(x=>{const a=x.split('/');a.map((_,i)=>incl[a.slice(0,i).join('/')]=1)}) // include ancestors
 
 const excl={'/style/img/Dyalog_icon.icns':1}
