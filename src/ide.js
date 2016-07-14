@@ -1,20 +1,16 @@
 D.IDE=function(){'use strict'
   var ide=D.ide=this;I.cn.hidden=1;I.lb.insertAdjacentHTML('beforeend',D.lb.html);ide.dom=I.ide;I.ide.hidden=0
-  ide.pending=[] // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
-  ide.exec=function(l,tc){ // l:lines, tc:trace
-    if(l&&l.length){tc||(ide.pending=l.slice(1));D.send('Execute',{trace:tc,text:l[0]+'\n'})}
-  }
+  ide.pending=[] //lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
+  ide.exec=function(a,tc){if(a&&a.length){tc||(ide.pending=a.slice(1));D.send('Execute',{trace:tc,text:a[0]+'\n'})}}
   ide.host=ide.port=ide.wsid='';D.prf.title(ide.updTitle.bind(ide))
   D.wins=ide.wins={0:new D.Se(ide)}
-  ide.focusedWin=ide.wins[0] // last focused window, it might not have the focus right now
-
-  var handlers=this.handlers={ // for RIDE protocol messages
+  ide.focusedWin=ide.wins[0] //last focused window, it might not have the focus right now
+  var handlers=this.handlers={ //for RIDE protocol messages
     Identify:function(x){D.remoteIdentification=x;ide.updTitle();ide.connected=1;ide.wins[0].updPW(1)},
     Disconnect:function(x){
       if(ide.dead)return
-      ide.die()
-      if(x.message==='Dyalog session has ended'){try{close()}catch(e){};D.el&&process.exit(0)}
-      else $.err(x.message,'Interpreter disconnected')
+      ide.die();if(x.message==='Dyalog session has ended'){try{close()}catch(e){};D.el&&process.exit(0)}
+      $.err(x.message,'Interpreter disconnected')
     },
     SysError:function(x){$.err(x.text,'SysError');ide.die()},
     InternalError:function(x){$.err('An error ('+x.error+') occurred processing '+x.message,'Internal Error')},
@@ -25,7 +21,7 @@ D.IDE=function(){'use strict'
     SetPromptType:function(x){
       var t=x.type;t&&ide.pending.length?D.send('Execute',{trace:0,text:ide.pending.shift()+'\n'})
                                         :ide.wins[0].prompt(t)
-      t===4&&ide.wins[0].focus() // ⍞ input
+      t===4&&ide.wins[0].focus() //⍞ input
     },
     HadError:function(){ide.pending.splice(0,ide.pending.length);ide.wins[0].focus()},
     GotoWindow:function(x){var w=ide.wins[x.win];w&&w.focus()},
@@ -61,7 +57,7 @@ D.IDE=function(){'use strict'
         var url='ed.html?win='+w+'&x='+p[0]+'&y='+p[1]+'&width='+p[2]+
                 '&height='+p[3]+'&maximized='+(p[4]||0)+'&token='+w+'&tracer='+(+!!ee['debugger'])
         if(D.open(url,$.extend({title:ee.name},ph))){
-          this.block() // the popup will create D.wins[w] and unblock the message queue
+          this.block() //the popup will create D.wins[w] and unblock the message queue
           ;(D.pendingEditors=D.pendingEditors||{})[w]={editorOpts:editorOpts,ee:ee,ide:this};done=1
         }else{
           $.err('Popups are blocked.')
@@ -76,12 +72,12 @@ D.IDE=function(){'use strict'
     },
     ShowHTML:ide.showHTML.bind(ide),
     OptionsDialog:function(x){
-      var text=typeof x.text==='string'?x.text:x.text.join('\n') // todo: clean up after transition to json protocol
+      var text=typeof x.text==='string'?x.text:x.text.join('\n')
       if(D.el){
         var i=D.el.dialog.showMessageBox(D.elw,{message:text,title:x.title||'',buttons:x.options,cancelId:-1})
         D.send('ReplyOptionsDialog',{index:i,token:x.token})
       }else{
-        var i=-1;var f=function(e){i=$(e.target).closest('.ui-button').index();$(this).dialog('close')} // i:clicked index
+        var i=-1;var f=function(e){i=$(e.target).closest('.ui-button').index();$(this).dialog('close')} //i:clicked index
         $('<p>').text(text).dialog({modal:1,title:x.title,buttons:x.options.map(function(s){return{text:s,click:f}}),
                                     close:function(){D.send('ReplyOptionsDialog',{index:i,token:x.token})}})
       }
@@ -97,7 +93,7 @@ D.IDE=function(){'use strict'
       })
     },
     TaskDialog:function(x){
-      var esc=D.util.esc, i=-1 // i:the result
+      var esc=D.util.esc, i=-1 //i:the result
       var $d=$('<div class=task_dlg><p>'+esc(x.text||'')+'<p class=subtext>'+esc(x.subtext||'')+'<div>'+
                  x.buttonText.map(function(s){return'<button class=task>'+esc(s)+'</button>'}).join('')+
                '</div><p class=footer>'+esc(x.footer||'')+'</div>')
@@ -110,19 +106,18 @@ D.IDE=function(){'use strict'
     ReplyTreeList:function(x){ide.wse.replyTreeList(x)},
     UnknownCommand:function(){}
   }
-  // We need to be able to temporarily block the stream of messages coming from socket.io
-  // Creating a floating window can only be done asynchronously and it's possible that a message
-  // for it comes in before the window is ready.
-  var mq=[],blk=0,tid=0,last=0 // mq:message queue, blk:blocked?, tid:timeout id, last:when last rundown finished
-  function rd(){ // run down the queue
+  //We need to be able to temporarily block the stream of messages coming from socket.io
+  //Creating a floating window can only be done asynchronously and it's possible that a message
+  //for it comes in before the window is ready.
+  var mq=[],blk=0,tid=0,last=0 //mq:message queue, blk:blocked?, tid:timeout id, last:when last rundown finished
+  function rd(){ //run down the queue
     ide.wins[0].cm.operation(function(){
-      while(mq.length&&!blk){
-        var a=mq.shift(),f=handlers[a[0]];f?f.apply(ide,a.slice(1)):D.send('UnknownCommand',{name:a[0]})
-      }
+      while(mq.length&&!blk){var a=mq.shift(),f=handlers[a[0]]
+                             f?f.apply(ide,a.slice(1)):D.send('UnknownCommand',{name:a[0]})}
       last=+new Date;tid=0
     })
   }
-  function rrd(){tid||(new Date-last<20?(tid=setTimeout(rd,20)):rd())} // request rundown
+  function rrd(){tid||(new Date-last<20?(tid=setTimeout(rd,20)):rd())} //request rundown
   D.recv=function(x,y){mq.push([x,y]);rrd()}
   ide.block=function(){blk++}
   ide.unblock=function(){--blk||rrd()}
@@ -167,21 +162,15 @@ D.IDE=function(){'use strict'
                            content:[{type:'row',content:[{type:'component',componentName:'win',
                                                           componentState:{id:0},title:'Session'}]}]},
                           $(ide.dom))
-  ide.gl.registerComponent('win',function(c,h){
-    var w=ide.wins[h.id];w.container=c;c.getElement().append(w.dom)
-    setTimeout(function(){w.focus()},1)
-    return w
-  })
-  ide.gl.registerComponent('wse',function(c,h){
-    var u=ide.wse||(ide.wse=new D.WSE());u.container=c;c.getElement().append(u.dom);return u
-  })
+  ide.gl.registerComponent('win',function(c,h){var w=ide.wins[h.id];w.container=c;c.getElement().append(w.dom)
+                                               setTimeout(function(){w.focus()},1);return w})
+  ide.gl.registerComponent('wse',function(c,h){var u=ide.wse||(ide.wse=new D.WSE());u.container=c
+                                               c.getElement().append(u.dom);return u})
   ide.gl.on('stateChanged',function(){eachWin(function(w){w.updSize();w.cm.refresh();w.updGutters&&w.updGutters()})})
   ide.gl.on('tabCreated',function(x){switch(x.contentItem.componentName){
     case'wse':x.closeElement.off('click').click(D.prf.wse.toggle);break
-    case'win':var id=x.contentItem.config.componentState.id
-              id?x.closeElement.off('click').click(function(){var w=ide.wins[id];w.EP(w.cm)})
-                :x.closeElement.remove()
-              break
+    case'win':var id=x.contentItem.config.componentState.id,cls=x.closeElement
+              id?cls.off('click').click(function(){var w=ide.wins[id];w.EP(w.cm)}):cls.remove();break
   }})
   ide.gl.on('stackCreated',function(x){x.header.controlsContainer.find('.lm_close').remove()})
   ide.gl.init()
@@ -190,51 +179,39 @@ D.IDE=function(){'use strict'
                            ide.gl.updateSize(ide.dom.clientWidth,ide.dom.clientHeight)}
   I.lb.hidden=!D.prf.lbar();updTopBtm();$(window).resize(updTopBtm)
   D.prf.lbar(function(x){I.lb.hidden=!x;updTopBtm()})
-  setTimeout(function(){
-    try{D.installMenu(D.parseMenuDSL(D.prf.menu()))}
-    catch(e){$.err('Invalid menu configuration -- the default menu will be used instead')
-             console.error(e);D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()))}
-  },100)
+  setTimeout(function(){try{D.installMenu(D.parseMenuDSL(D.prf.menu()))}
+                        catch(e){$.err('Invalid menu configuration -- the default menu will be used instead')
+                                 console.error(e);D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()))}},100)
   D.prf.autoCloseBrackets(function(x){eachWin(function(w){w.cm.setOption('autoCloseBrackets',!!x&&D.Ed.ACB_VALUE)})})
   D.prf.indent(function(x){eachWin(function(w){if(w.id){w.cm.setOption('smartIndent',x>=0);w.cm.setOption('indentUnit',x)}})})
   D.prf.fold(function(x){eachWin(function(w){if(w.id){w.cm.setOption('foldGutter',!!x);w.updGutters()}})})
   D.prf.matchBrackets(function(x){eachWin(function(w){w.cm.setOption('matchBrackets',!!x)})})
   var updWSE=function(){
-    if(!D.prf.wse()){
-      ide.gl.root.getComponentsByName('wse').forEach(function(x){x.container.close()})
-    }else{
-      var p=ide.gl.root.contentItems[0]
-      if(p.type!=='row'){var row=ide.gl.createContentItem({type:'row'},p);p.parent.replaceChild(p,row)
-                         row.addChild(p,0,true);row.callDownwards('setSize');p=row}
-      p.addChild({type:'component',componentName:'wse',title:'Workspace Explorer'},0)
-    }
+    if(!D.prf.wse()){ide.gl.root.getComponentsByName('wse').forEach(function(x){x.container.close()});return}
+    var p=ide.gl.root.contentItems[0]
+    if(p.type!=='row'){var row=ide.gl.createContentItem({type:'row'},p);p.parent.replaceChild(p,row)
+                       row.addChild(p,0,true);row.callDownwards('setSize');p=row}
+    p.addChild({type:'component',componentName:'wse',title:'Workspace Explorer'},0)
   }
   D.prf.wse(updWSE);D.prf.wse()&&setTimeout(updWSE,500)
-  D.mac&&setTimeout(function(){ide.wins[0].focus()},500) // OSX is stealing our focus.  Let's steal it back!  Bug #5
+  D.mac&&setTimeout(function(){ide.wins[0].focus()},500) //OSX is stealing our focus.  Let's steal it back!  Bug #5
 }
 D.IDE.prototype={
   setHostAndPort:function(h,p){this.host=h;this.port=p;this.updTitle()},
-  die:function(){ // don't really, just pretend
+  die:function(){ //don't really, just pretend
     if(this.dead)return
     this.dead=1;this.connected=0;this.dom.className+=' disconnected';for(var k in this.wins)this.wins[k].die()
   },
-  updTitle:function(){ // change listener for D.prf.title
+  updTitle:function(){ //change listener for D.prf.title
     var ide=this,ri=D.remoteIdentification||{},v=D.versionInfo
     document.title=D.prf.title().replace(/\{\w+\}/g,function(x){var X=x.toUpperCase();return(
-      X==='{WSID}'?ide.wsid:
-      X==='{HOST}'?ide.host:
-      X==='{PORT}'?ide.port:
-      X==='{PID}'?ri.pid:
-      X==='{CHARS}'?(ri.arch||'').split('/')[0]:
-      X==='{BITS}' ?(ri.arch||'').split('/')[1]:
-      X==='{VER_A}'?(ri.version||'').split('.')[0]:
-      X==='{VER_B}'?(ri.version||'').split('.')[1]:
-      X==='{VER_C}'?(ri.version||'').split('.')[2]:
-      X==='{VER}'?ri.version:
-      X==='{RIDE_VER_A}'?(v.version||'').split('.')[0]:
-      X==='{RIDE_VER_B}'?(v.version||'').split('.')[1]:
-      X==='{RIDE_VER_C}'?(v.version||'').split('.')[2]:
-      X==='{RIDE_VER}'?v.version:
+      X==='{WSID}'?ide.wsid:                         X==='{PID}'?ri.pid:
+      X==='{HOST}'?ide.host:                         X==='{CHARS}'?(ri.arch||'').split('/')[0]:
+      X==='{PORT}'?ide.port:                         X==='{BITS}' ?(ri.arch||'').split('/')[1]:
+      X==='{VER_A}'?(ri.version||'').split('.')[0]:  X==='{RIDE_VER_A}'?(v.version||'').split('.')[0]:
+      X==='{VER_B}'?(ri.version||'').split('.')[1]:  X==='{RIDE_VER_B}'?(v.version||'').split('.')[1]:
+      X==='{VER_C}'?(ri.version||'').split('.')[2]:  X==='{RIDE_VER_C}'?(v.version||'').split('.')[2]:
+      X==='{VER}'?ri.version:                        X==='{RIDE_VER}'?v.version:
       x
     )||''})||'Dyalog'
   },
@@ -247,8 +224,8 @@ D.IDE.prototype={
     if(ide.w3500&&!ide.w3500.closed){ide.w3500.focus();init()}
     else{ide.w3500=open('empty.html','3500 I-beam','width=800,height=500');ide.w3500.onload=init}
   },
-  focusMRUWin:function(){ // most recently used
-    var t=0,w;for(var k in this.wins){var x=this.wins[k];if(x.id&&t<=x.focusTimestamp){w=x;t=x.focusTimestamp}}
+  focusMRUWin:function(){ //most recently used
+    var t=0,w;for(var k in this.wins){var x=this.wins[k];if(x.id&&t<=x.focusTS){w=x;t=x.focusTS}}
     w&&w.focus()
   },
   LBR:D.prf.lbar      .toggle,
@@ -262,14 +239,6 @@ D.IDE.prototype={
     var r={};for(var k in this.wins){var cm=this.wins[k].cm,v=cm.getValue();if(+k&&v!==cm.oText)r[k]=v}
     return r
   },
-
-  //invoked from cn.js
-  _connected:function(x){this.setHostAndPort(x.host,x.port)},
-  _error:function(x){this.die();setTimeout(function(){$.err(x.msg)},100)},
-  _spawnedExited:function(x){
-    if(x.code){this.die();setTimeout(function(){$.err('Interpreter process exited\nwith code '+x.code)},100)}
-    if(D.el&&!x.code){process.exit(0)}
-  },
-  _disconnected:function(){if(!this.dead){$.err('Interpreter disconnected');this.die()}}
+  _disconnected:function(){if(!this.dead){$.err('Interpreter disconnected');this.die()}} //invoked from cn.js
 }
-CodeMirror.commands.WSE=function(){D.prf.wse.toggle()}
+CM.commands.WSE=function(){D.prf.wse.toggle()}

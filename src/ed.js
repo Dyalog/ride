@@ -1,16 +1,16 @@
 ;(function(){'use strict'
 
-var ACB_VALUE={pairs:'()[]{}',explode:'{}'} // value for CodeMirror's "autoCloseBrackets" option when on
+var ACB_VALUE={pairs:'()[]{}',explode:'{}'} //value for CodeMirror's "autoCloseBrackets" option when on
 
 D.Ed=function(ide,opts){ //Editor constructor
   var ed=this;ed.ide=ide
   ed.dom=I.ed_tmpl.cloneNode(1);ed.dom.id=null;ed.dom.style.display='';ed.$e=$(ed.dom)
   ed.id=opts.id;ed.name=opts.name;ed.tc=opts.tc
-  ed.xline=null // the line number of the empty line inserted at eof when cursor is there and you press <down>
-  ed.oText='';ed.oStop=[] // remember original text and "stops" to avoid pointless saving on EP
-  ed.hll=null // highlighted line -- currently executed line in tracer
-  ed.lastQuery=ed.lastIC=ed.lastGen=ed.overlay=ed.annotation=null // search-related state
-  ed.focusTimestamp=0
+  ed.xline=null //the line number of the empty line inserted at eof when cursor is there and you press <down>
+  ed.oText='';ed.oStop=[] //remember original text and "stops" to avoid pointless saving on EP
+  ed.hll=null //highlighted line -- currently executed line in tracer
+  ed.lastQuery=ed.lastIC=ed.lastGen=ed.overlay=ed.annotation=null //search-related state
+  ed.focusTS=0 //focus timestamp
   ed.jumps=[]
   ed.cm=CM(ed.dom.querySelector('.ride-win-cm'),{
     lineNumbers:!!(ed.tc?D.prf.lineNumsTracer():D.prf.lineNumsEditor()),
@@ -19,14 +19,14 @@ D.Ed=function(ide,opts){ //Editor constructor
     autoCloseBrackets:!!D.prf.autoCloseBrackets()&&ACB_VALUE,foldGutter:!!D.prf.fold(),
     scrollbarStyle:'simple',
     keyMap:'dyalog',extraKeys:{'Shift-Tab':'indentLess',Tab:'tabOrAutocomplete',Down:'downOrXline'}
-    // Some options of this.cm can be set from ide.coffee when the corresponding pref changes.
+    //Some options of this.cm can be set from ide.coffee when the corresponding pref changes.
   })
   ed.cm.dyalogCmds=ed
   ed.cm.on('cursorActivity',ed.cursorActivity.bind(ed))
-  ed.cm.on('gutterClick',function(cm,l,g){ // g:gutter
+  ed.cm.on('gutterClick',function(cm,l,g){ //g:gutter
     if(g==='breakpoints'||g==='CodeMirror-linenumbers'){cm.setCursor({line:l,ch:0});ed.BP(ed.cm)}
   })
-  ed.cm.on('focus',function(){ed.focusTimestamp=+new Date;ide.focusedWin=ed})
+  ed.cm.on('focus',function(){ed.focusTS=+new Date;ide.focusedWin=ed})
   D.util.cmOnDblClick(ed.cm,function(e){ed.ED(ed.cm);e.preventDefault();e.stopPropagation()})
   ed.processAutocompleteReply=D.ac(ed)
   ed.$tb=$('.toolbar',ed.dom)
@@ -78,7 +78,7 @@ D.Ed.prototype={
   createBPEl:function(){
     var e=this.dom.ownerDocument.createElement('div');e.className='breakpoint';e.innerHTML='●';return e
   },
-  getStops:function(){ // returns an array of line numbers
+  getStops:function(){ //returns an array of line numbers
     var r=[];this.cm.eachLine(function(lh){var m=lh.gutterMarkers;m&&m.breakpoints&&r.push(lh.lineNo())})
     return r.sort(function(x,y){return x-y})
   },
@@ -91,7 +91,7 @@ D.Ed.prototype={
     }
     ed.xline=null
   },
-  scrollCursorIntoProminentView:function(){ // approx. to 1/3 of editor height; might not work near the top or bottom
+  scrollCursorIntoProminentView:function(){ //approx. to 1/3 of editor height; might not work near the top or bottom
     var h=this.dom.clientHeight,cc=this.cm.cursorCoords(true,'local'),x=cc.left,y=cc.top
     this.cm.scrollIntoView({left:x,right:x,top:y-h/3,bottom:y+2*h/3})
   },
@@ -101,12 +101,12 @@ D.Ed.prototype={
   },
   highlightSearch:function(){
     var ed=this,ic=!$('.tb_case',ed.$tb).hasClass('pressed'),g=ed.cm.changeGeneration(),q=ed.cmSC.getValue()
-    if(ic)q=q.toLowerCase() // ic:ignore case?, q:query string
+    if(ic)q=q.toLowerCase() //ic:ignore case?, q:query string
     if(ed.lastQuery!==q||ed.lastIC!==ic||ed.lastGen!==g){
       ed.lastQuery=q;ed.lastIC=ic;ed.lastGen=g;ed.clearSearch()
       if(q){
         ed.annotation=ed.cm.showMatchesOnScrollbar(q,ic)
-        ed.cm.addOverlay(ed.overlay={token:function(x){ // x:stream
+        ed.cm.addOverlay(ed.overlay={token:function(x){ //x:stream
           var s=ed.cm.getValue();if(ic)s=s.toLowerCase();$('.tb_sc',ed.$tb).toggleClass('no-matches',s.indexOf(q)<0)
           s=x.string.slice(x.pos);var i=s.indexOf(q);if(!i){x.pos+=q.length;return'searching'};i>0?x.pos+=i:x.skipToEnd()
         }})
@@ -116,7 +116,7 @@ D.Ed.prototype={
     return[q,ic]
   },
   search:function(backwards){
-    var cm=this.cm,h=this.highlightSearch(),q=h[0],ic=h[1] // ic:ignore case?, q:query string
+    var cm=this.cm,h=this.highlightSearch(),q=h[0],ic=h[1] //ic:ignore case?, q:query string
     if(q){
       var s=cm.getValue();ic&&(s=s.toLowerCase())
       if(backwards){
@@ -130,7 +130,7 @@ D.Ed.prototype={
     return!1
   },
   selectAllSearchResults:function(){
-    var cm=this.cm,ic=!$('.tb_case',this.$tb).hasClass('pressed') // ic:ignore case?, q:query string
+    var cm=this.cm,ic=!$('.tb_case',this.$tb).hasClass('pressed') //ic:ignore case?, q:query string
     var q=this.cmSC.getValue();ic&&(q=q.toLowerCase())
     if(q){
       var s=cm.getValue(),sels=[],i=0;ic&&(s=s.toLowerCase())
@@ -139,16 +139,16 @@ D.Ed.prototype={
     }
     cm.focus()
   },
-  replace:function(backwards){ // replace current occurrence and move to next
-    var ic=!$('.tb_case',this.$tb).hasClass('pressed')   // ignore case?
-    var q=this.cmSC.getValue()  ;ic&&(q=q.toLowerCase()) // query string
-    var s=this.cm.getSelection();ic&&(s=s.toLowerCase()) // selection
+  replace:function(backwards){ //replace current occurrence and move to next
+    var ic=!$('.tb_case',this.$tb).hasClass('pressed')   //ignore case?
+    var q=this.cmSC.getValue()  ;ic&&(q=q.toLowerCase()) //query string
+    var s=this.cm.getSelection();ic&&(s=s.toLowerCase()) //selection
     s===q&&this.cm.replaceSelection(this.cmRP.getValue(),backwards?'start':'end')
     this.search(backwards)
     var v=this.cm.getValue();ic&&(v=v.toLowerCase())
     $('.tb_sc',this.$tb).toggleClass('no-matches',v.indexOf(q)<0)
   },
-  highlight:function(l){ // current line in tracer
+  highlight:function(l){ //current line in tracer
     var ed=this;ed.hll!=null&&ed.cm.removeLineClass(ed.hll,'background','highlighted')
     if((ed.hll=l)!=null){
       ed.cm.addLineClass(l,'background','highlighted');ed.cm.setCursor(l,0);ed.scrollCursorIntoProminentView()
@@ -162,18 +162,18 @@ D.Ed.prototype={
   },
   setReadOnly:function(x){this.cm.setOption('readOnly',x);this.$rp.toggle(!x)},
   updSize:function(){var $p=this.$e;this.cm.setSize($p.width(),$p.height()-28)},
-  open:function(ee){ // ee:editable entity
+  open:function(ee){ //ee:editable entity
     var ed=this,cm=ed.cm
-    this.jumps.forEach(function(x){x.n=x.lh.lineNo()}) // to preserve jumps, convert LineHandle-s to line numbers
-    cm.setValue(ed.oText=ee.text.join('\n')) // .setValue() invalidates old LineHandle-s
-    this.jumps.forEach(function(x){x.lh=cm.getLineHandle(x.n);delete x.n}) // look up new LineHandle-s, forget numbers
+    this.jumps.forEach(function(x){x.n=x.lh.lineNo()}) //to preserve jumps, convert LineHandle-s to line numbers
+    cm.setValue(ed.oText=ee.text.join('\n')) //.setValue() invalidates old LineHandle-s
+    this.jumps.forEach(function(x){x.lh=cm.getLineHandle(x.n);delete x.n}) //look up new LineHandle-s, forget numbers
     cm.clearHistory()
     if(D.mac){cm.focus();window.focus()}
-    // entityType:             16 NestedArray        512 AplClass
-    //  1 DefinedFunction      32 QuadORObject      1024 AplInterface
-    //  2 SimpleCharArray      64 NativeFile        2048 AplSession
-    //  4 SimpleNumericArray  128 SimpleCharVector  4096 ExternalFunction
-    //  8 MixedSimpleArray    256 AplNamespace
+    //entityType:             16 NestedArray        512 AplClass
+    // 1 DefinedFunction      32 QuadORObject      1024 AplInterface
+    // 2 SimpleCharArray      64 NativeFile        2048 AplSession
+    // 4 SimpleNumericArray  128 SimpleCharVector  4096 ExternalFunction
+    // 8 MixedSimpleArray    256 AplNamespace
     if([1,256,512,1024,2048,4096].indexOf(ee.entityType)<0){cm.setOption('mode','text')}
     else{cm.setOption('mode','apl');if(D.prf.indentOnOpen()){cm.execCommand('selectAll');cm.execCommand('indentAuto')}}
     ed.setReadOnly(ee.readOnly||ee['debugger'])
@@ -188,7 +188,7 @@ D.Ed.prototype={
   focus:function(){
     var q=this.container,p=q&&q.parent,l=q&&q.layoutManager,m=l&&l._maximisedItem
     if(m&&m!==(p&&p.parent))m.toggleMaximise()
-    while(p){p.setActiveContentItem&&p.setActiveContentItem(q);q=p;p=p.parent} // reveal in golden layout
+    while(p){p.setActiveContentItem&&p.setActiveContentItem(q);q=p;p=p.parent} //reveal in golden layout
     window.focused||window.focus();this.cm.focus()
   },
   insert:function(ch){this.cm.getOption('readOnly')||this.cm.replaceSelection(ch)},
@@ -199,12 +199,12 @@ D.Ed.prototype={
   die:function(){this.setReadOnly(true)},
   getDocument:function(){return this.$e[0].ownerDocument},
   refresh:function(){this.cm.refresh()},
-  cword:function(){ // apl identifier under cursor
-    var c=this.cm.getCursor(),s=this.cm.getLine(c.line),r='['+D.syn.letter+'0-9]*' // r:regex fragment used for a name
+  cword:function(){ //apl identifier under cursor
+    var c=this.cm.getCursor(),s=this.cm.getLine(c.line),r='['+D.syn.letter+'0-9]*' //r:regex fragment used for a name
     return(
-        ((RegExp('⎕?'+r+'$').exec(s.slice(0,c.ch))||[])[0]||'')+ // match left  of cursor
-        ((RegExp('^'+r     ).exec(s.slice(  c.ch))||[])[0]||'')  // match right of cursor
-    ).replace(/^\d+/,'') // trim leading digits
+        ((RegExp('⎕?'+r+'$').exec(s.slice(0,c.ch))||[])[0]||'')+ //match left  of cursor
+        ((RegExp('^'+r     ).exec(s.slice(  c.ch))||[])[0]||'')  //match right of cursor
+    ).replace(/^\d+/,'') //trim leading digits
   },
   ED:function(cm){
     this.addJump()
@@ -225,13 +225,13 @@ D.Ed.prototype={
   EP:function(cm){this.isClosing=1;this.FX(cm)},
   FX:function(cm){
     var ed=this,v=cm.getValue(),stop=ed.getStops()
-    if(ed.tc||v===ed.oText&&''+stop===''+ed.oStop){D.send('CloseWindow',{win:ed.id});return} // if tracer or unchanged
+    if(ed.tc||v===ed.oText&&''+stop===''+ed.oStop){D.send('CloseWindow',{win:ed.id});return} //if tracer or unchanged
     for(var i=0;i<stop.length;i++)cm.setGutterMarker(stop[i],'breakpoints',null)
     D.send('SaveChanges',{win:ed.id,text:cm.getValue().split('\n'),stop:stop})
   },
-  TL:function(cm){ // toggle localisation
+  TL:function(cm){ //toggle localisation
     var name=this.cword(),l,l0=l=cm.getCursor().line;if(!name)return
-    while(l>=0&&!/^\s*∇\s*\S/.test(cm.getLine(l)))l-- // search back for tradfn header (might find a dfns's ∇ instead)
+    while(l>=0&&!/^\s*∇\s*\S/.test(cm.getLine(l)))l-- //search back for tradfn header (might find a dfns's ∇ instead)
     if(l<0&&!/\{\s*$/.test(cm.getLine(0).replace(/⍝.*/,'')))l=0
     if(l<0||l===l0)return
     var m=/([^⍝]*)(.*)/.exec(cm.getLine(l)), s=m[1], com=m[2]
@@ -241,21 +241,21 @@ D.Ed.prototype={
     s=[head].concat(tail.sort()).join(';')+(com?(' '+com):'')
     cm.replaceRange(s,{line:l,ch:0},{line:l,ch:cm.getLine(l).length},'D')
   },
-  LN:function(cm){ // toggle line numbers
+  LN:function(cm){ //toggle line numbers
     var v=!!(this.tc?D.prf.lineNumsTracer.toggle():D.prf.lineNumsEditor.toggle())
     cm.setOption('lineNumbers',v);this.updGutters();this.$tb.find('.tb_LN').toggleClass('pressed',v)
   },
   PV:function(){this.search(1)},
   NX:function(){this.search()},
   TC:function(){D.send('StepInto',{win:this.id})},
-  AC:function(cm){ // align comments
-    var ed=this,ll=cm.lastLine(),o=cm.listSelections() // o:original selections
+  AC:function(cm){ //align comments
+    var ed=this,ll=cm.lastLine(),o=cm.listSelections() //o:original selections
     var sels=cm.somethingSelected()?o:[{anchor:{line:0,ch:0},head:{line:ll,ch:cm.getLine(ll).length}}]
-    var a=sels.map(function(sel){ // a:info about individual selections (Hey, it's AC; we must align our own comments!)
-      var p=sel.anchor,q=sel.head;if((p.line-q.line||p.ch-q.ch)>0){var h=p;p=q;q=h} // p:from, q:to
-      var l=ed.cm.getRange({line:p.line,ch:0},q,'\n').split('\n')                   // l:lines
-      var u=l.map(function(x){return x.replace(/'[^']*'?/g,function(y){return' '.repeat(y.length)})}) // u:scrubbed strings
-      var c=u.map(function(x){return x.indexOf('⍝')})                               // c:column index of ⍝
+    var a=sels.map(function(sel){ //a:info about individual selections (Hey, it's AC; we must align our own comments!)
+      var p=sel.anchor,q=sel.head;if((p.line-q.line||p.ch-q.ch)>0){var h=p;p=q;q=h} //p:from, q:to
+      var l=ed.cm.getRange({line:p.line,ch:0},q,'\n').split('\n')                   //l:lines
+      var u=l.map(function(x){return x.replace(/'[^']*'?/g,function(y){return' '.repeat(y.length)})}) //u:scrubbed strings
+      var c=u.map(function(x){return x.indexOf('⍝')})                               //c:column index of ⍝
       return{p:p,q:q,l:l,u:u,c:c}
     })
     var m=Math.max.apply(Math,a.map(function(sel){return Math.max.apply(Math,sel.c)}))
@@ -272,7 +272,7 @@ D.Ed.prototype={
       var re=/^(\s*):(class|disposable|for|if|interface|namespace|property|repeat|section|select|trap|while|with)\b([^⋄\{]*)$/i
       if(u.ch===s.length&&(m=re.exec(s))&&!D.syn.dfnDepth(cm.getStateAfter(l-1))){
         var pre=m[1],kw=m[2],post=m[3],l1=l+1,end=cm.lastLine();kw=kw[0].toUpperCase()+kw.slice(1).toLowerCase()
-        while(l1<=end&&/^\s*(?:$|⍝)/.test(cm.getLine(l1)))l1++ // find the next non-blank line
+        while(l1<=end&&/^\s*(?:$|⍝)/.test(cm.getLine(l1)))l1++ //find the next non-blank line
         var s1=cm.getLine(l1)||'',pre1=s1.replace(/\S.*$/,'')
         if(pre.length>pre1.length||pre.length===pre1.length&&!/^\s*:(?:end|else|andif|orif|case|until|access)/i.test(s1)){
           var r=':'+kw+post+'\n'+pre+':End'
@@ -287,11 +287,11 @@ D.Ed.prototype={
   BH:function(){D.send('ContinueTrace' ,{win:this.id})},
   RM:function(){D.send('Continue'      ,{win:this.id})},
   MA:function(){D.send('RestartThreads',{win:this.id})},
-  CBP:function(){ // Clear trace/stop/monitor for this object
+  CBP:function(){ //Clear trace/stop/monitor for this object
     var ed=this,n=ed.cm.lineCount();for(var i=0;i<n;i++)ed.cm.setGutterMarker(i,'breakpoints',null)
     ed.tc&&D.send('SetLineAttributes',{win:ed.id,nLines:n,stop:ed.getStops(),trace:[],monitor:[]})
   },
-  BP:function(cm){ // toggle breakpoint
+  BP:function(cm){ //toggle breakpoint
     var sels=cm.listSelections()
     for(var i=0;i<sels.length;i++){
       var p=sels[i].anchor,q=sels[i].head;if(p.line>q.line){var h=p;p=q;q=h}
@@ -321,9 +321,9 @@ D.Ed.prototype={
     var l=cm.getCursor().line;if(l!==cm.lastLine()||/^\s*$/.test(cm.getLine(l))){cm.execCommand('goLineDown');return}
     cm.execCommand('goDocEnd');cm.execCommand('newlineAndIndent');this.xline=l+1
   },
-  onbeforeunload:function(){ // called when the user presses [X] on the OS window
+  onbeforeunload:function(){ //called when the user presses [X] on the OS window
     var ed=this
-    if(ed.ide.dead){D.nww&&D.nww.close(true)} // force close window
+    if(ed.ide.dead){D.nww&&D.nww.close(true)} //force close window
     else if(ed.tc||ed.cm.getValue()===ed.oText&&''+ed.getStops()===''+ed.oStop){ed.EP(ed.cm)}
     else if(!ed.dlg){
       window.focus()
@@ -335,10 +335,10 @@ D.Ed.prototype={
           {html:'<u>C</u>ancel',click:function(){ed.dlg.dialog('close');ed.dlg=null}}
         ]
       })
-      // When a string is returned from onbeforeunload:
-      //   NW.js prevents the window from closing.
-      //   Browsers ask the user "Are you sure you want to close this window?"
-      //   In addition, some browsers display the returned string along with the above question.
+      //When a string is returned from onbeforeunload:
+      // NW.js prevents the window from closing.
+      // Browsers ask the user "Are you sure you want to close this window?"
+      // In addition, some browsers display the returned string along with the above question.
       return''
     }
   }

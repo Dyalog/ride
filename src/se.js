@@ -1,7 +1,7 @@
 //session
 'use strict'
 D.Se=function(ide){ // Session constructor
-  var se=this;se.ide=ide;se.hist=[''];se.histIdx=0;se.focusTimestamp=0;se.id=0
+  var se=this;se.ide=ide;se.hist=[''];se.histIdx=0;se.focusTS=0;se.id=0
   se.dirty={} // modified lines: lineNumber→originalContent, inserted lines: lineNumber→0 (also used in syn.js)
   se.dom=document.createElement('div');se.dom.className='ride-win';se.$e=$(se.dom)
   var cm=se.cm=CM(se.dom,{
@@ -11,7 +11,7 @@ D.Se=function(ide){ // Session constructor
   })
   cm.dyalogCmds=se
   D.util.cmOnDblClick(cm,function(e){se.ED(cm);e.stopPropagation();e.preventDefault()})
-  cm.on('focus',function(){se.focusTimestamp=+new Date;ide.focusedWin=se})
+  cm.on('focus',function(){se.focusTS=+new Date;ide.focusedWin=se})
   cm.on('beforeChange',function(_,c){
     if(c.origin==='D')return
     var l0=c.from.line,l1=c.to.line,m=l1-l0+1,n=c.text.length
