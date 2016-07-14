@@ -90,9 +90,9 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .menu .m-box .m-opener{
   /* "right 5px" might not work in Safari, see
        https://stackoverflow.com/questions/3197250/position-a-css-background-image-x-pixels-from-the-right#comment-35531805 */
-  background:transparent center right 5px no-repeat url(img/menu_rgt_tri.png)
+  background:transparent center right 5px no-repeat url(img/menu_tri.png)
 }
-.menu .m-box .m-opener:focus{background: #0a246a center right 5px no-repeat url(img/menu_rgt_tri_wht.png)}
+.menu .m-box .m-opener:focus{background: #0a246a center right 5px no-repeat url(img/menu_tri_wht.png)}
 .menu hr{margin: 3px 0 5px 0}
 
 /*language bar*/
