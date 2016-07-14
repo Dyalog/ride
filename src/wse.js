@@ -2,7 +2,7 @@
 'use strict'
 D.WSE=function(){
   var pending=this.pending={}
-  this.dom=document.getElementById('wse')
+  this.dom=I.wse
   this.dom.hidden=0
   this.dom.onclick=function(x){var t=x.target.closest('.jstree-anchor');if(!t)return
                                D.send('Edit',{win:0,pos:0,text:$e.jstree('get_path',t,'.')})

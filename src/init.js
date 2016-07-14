@@ -1,8 +1,16 @@
+var I={}, //all elements by id, eg I.lb_tip_text is document.getElementById('lb_tip_text')
+    J={}  //grouped by id prefix using '_' as a separator; J[x][y] is the element with id x+'_'+y
+          //eg J.lb.tip_text is document.getElementById('lb_tip_text')
+
 ;(function(){'use strict'
 
 if(typeof node_require!=='undefined')D=$.extend(D,node_require('electron').remote.getGlobal('D'))
 
 var env=D.el?process.env:{}
+
+var a=document.querySelectorAll('[id]')
+for(var i=0;i<a.length;i++){var e=a[i],s=e.id,j=s.indexOf('_');I[s]=e;
+                            if(j>=0){var u=s.slice(0,j),v=s.slice(j+1);(J[u]=J[u]||{})[v]=e}}
 
 //don't use Alt- keystrokes on the Mac (see email from 2015-09-01)
 var h=CM.keyMap.emacsy;for(var k in h)if(/^alt-[a-z]$/i.test(k))delete h[k]
@@ -70,7 +78,7 @@ if(!D.prf.theme()){
   D.prf.theme(D.mac||/^(darwin|mac|ipad|iphone|ipod)/i.test(navigator?navigator.platform:'')?'cupertino':
               D.win||/^win/.test(navigator?navigator.platform:'')?'redmond':'classic')
 }
-var updThm=function(){document.getElementById('thm').innerHTML='@import url(style/thm/'+D.prf.theme()+'.css);'}
+var updThm=function(){I.thm.innerHTML='@import url(style/thm/'+D.prf.theme()+'.css);'}
 updThm();D.prf.theme(updThm)
 
 if(D.el)document.body.className+=D.mac?' platform-mac':D.win?' platform-windows':''

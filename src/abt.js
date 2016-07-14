@@ -4,12 +4,12 @@
 var d,ta //DOM elements for the dialog and the textarea
 D.abt=function(){
   if(!d){
-    d=document.getElementById('abt')
-    document.getElementById('abt_close').onclick=function(){d.hidden=1}
-    document.getElementById('abt_copy').onclick=function(){D.el.clipboard.writeText(ta.value)}
-    document.getElementById('abt_contact').onclick=
+    d=I.abt
+    I.abt_close.onclick=function(){d.hidden=1}
+    I.abt_copy.onclick=function(){D.el.clipboard.writeText(ta.value)}
+    I.abt_contact.onclick=
       function(x){if(x.target.nodeName==='A'&&/^http/.test(x.target.href)){D.openExternal(x.target.href);return!1}}
-    ta=document.getElementById('abt_ta')
+    ta=I.abt_ta
   }
   D.util.dlg(d,{w:600,h:450})
   var v=D.versionInfo,ri=D.remoteIdentification||{},u='unknown',db=D.db||localStorage,repr=JSON.stringify
@@ -25,7 +25,7 @@ D.abt=function(){
     '\n  Platform: '  +(ri.platform        ||u)+
     '\n  Edition: '   +(ri.arch            ||u)+
     '\n  Date: '      +(ri.date            ||u).replace(/^Created: /,'')+'\n'
-  ta.scrollTop=ta.selectionStart=ta.selectionEnd=0;document.getElementById('abt_copy').focus()
+  ta.scrollTop=ta.selectionStart=ta.selectionEnd=0;I.abt_copy.focus()
 }
 
 }())

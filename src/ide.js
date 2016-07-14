@@ -1,8 +1,5 @@
 D.IDE=function(){'use strict'
-  var ide=D.ide=this
-  document.getElementById('cn').hidden=1
-  document.getElementById('lb').insertAdjacentHTML('beforeend',D.lb.html)
-  ide.dom=document.getElementById('ide');ide.dom.hidden=0
+  var ide=D.ide=this;I.cn.hidden=1;I.lb.insertAdjacentHTML('beforeend',D.lb.html);ide.dom=I.ide;I.ide.hidden=0
   ide.pending=[] // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.exec=function(l,tc){ // l:lines, tc:trace
     if(l&&l.length){tc||(ide.pending=l.slice(1));D.send('Execute',{trace:tc,text:l[0]+'\n'})}
@@ -131,12 +128,12 @@ D.IDE=function(){'use strict'
   ide.unblock=function(){--blk||rrd()}
 
   //language bar
-  var lb  =document.getElementById('lb')
-  ,tip    =document.getElementById('lb_tip')
-  ,tipDesc=document.getElementById('lb_tip_desc')
-  ,tipText=document.getElementById('lb_tip_text')
-  ,tipTri =document.getElementById('lb_tip_tri')
-  ,lbPrf  =document.getElementById('lb_prf') //the "keyboard" button
+  var lb  =I.lb
+  ,tip    =I.lb_tip
+  ,tipDesc=I.lb_tip_desc
+  ,tipText=I.lb_tip_text
+  ,tipTri =I.lb_tip_tri
+  ,lbPrf  =I.lb_prf //the "keyboard" button
   ,ttid //tooltip timeout id
   ,reqTip=function(x,desc,text,delay){ //request tooltip, x:event
     clearTimeout(ttid);var t=x.target

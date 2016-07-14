@@ -1,6 +1,7 @@
 ;(function(){'use strict'
 
-var G=[],H={},q={} //G:syntax highlighting groups; H:reverse lookup dict for G; q:DOM elements
+var G=[],H={} //G:syntax highlighting groups; H:reverse lookup dict for G
+var q //DOM elements whose ids start with "col_", keyed by the rest of the id
 D.addSynGrps=function(x){G=G.concat(x);H={};for(var i=0;i<G.length;i++)H[G[i].t]=i;SCMS&&updStl()}
 D.addSynGrps([
   //t: token type, a short key for storing customisations
@@ -118,7 +119,7 @@ function rgb(x){if(!/^#.{6}$/.test(x))return x
                 var r=x[1],R=x[2],g=x[3],G=x[4],b=x[5],B=x[6];return r!==R||g!==G||b!==B?x.slice(1):r===g&&g===b?r:r+g+b}
 function updStl(){ //update global style from what's in prefs.json
   var s=D.prf.colourScheme(),a=SCMS.concat(D.prf.colourSchemes().map(decScm))
-  for(var i=0;i<a.length;i++)if(a[i].name===s){document.getElementById('col_stl').textContent=renderCSS(a[i]);break} //[sic]
+  for(var i=0;i<a.length;i++)if(a[i].name===s){I.col_stl.textContent=renderCSS(a[i]);break} //[sic]
 }
 $(updStl);D.prf.colourScheme(updStl);D.prf.colourSchemes(updStl)
 function uniqScmName(x){ //x:suggested root
@@ -129,21 +130,19 @@ var SC_MATCH='search match' //sample text to illustrate it
 D.prf_tabs.col={
   name:'Colours',
   init:function(t){
-    var col=document.getElementById('col')
-    var a=t.querySelectorAll('[id]');for(var i=0;i<a.length;i++)q[a[i].id.replace(/^col_/,'')]=a[i]
-    var u=[],fg;for(var g in scm)(fg=scm[g].fg)&&u.indexOf(fg)<0&&u.push(fg);u.sort() //u:unique colours
+    q=J.col;var u=[],fg;for(var g in scm)(fg=scm[g].fg)&&u.indexOf(fg)<0&&u.push(fg);u.sort() //u:unique colours
     q.list.innerHTML=u.map(function(x){return'<option value='+x+'>'}).join('')
     q.grp.innerHTML=G.map(function(g,i){return'<option value='+i+'>'+g.s}).join('')
-    q.scm.onchange=function(){scm=scms[+this.selectedIndex];updSampleStl();col.className=scm.frz?'frz':''
+    q.scm.onchange=function(){scm=scms[+this.selectedIndex];updSampleStl();I.col.className=scm.frz?'frz':''
                               cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight)}
     q.new_name.onblur=function(){var s=this.value;if(!s)return;scm.name='';scm.name=uniqScmName(s)
-                                 col.className='';updScms()}
+                                 I.col.className='';updScms()}
     q.new_name.onkeydown=function(x){switch(x.which){/*enter*/case 13:                    this.blur();return!1
                                                      /*esc  */case 27:this.value=scm.name;this.blur();return!1}}
     q.cln.onclick=function(){var x={};scms.push(x);for(var k in scm)x[k]=$.extend({},scm[k]) //x:the new scheme
                              x.name=uniqScmName(scm.name);delete x.frz;scm=x;updScms()}
     q.ren.onclick=function(){q.new_name.style.width=q.scm.offsetWidth+'px';q.new_name.value=scm.name
-                             q.new_name.select();col.className='renaming';setTimeout(function(){q.new_name.focus()},0)}
+                             q.new_name.select();I.col.className='renaming';setTimeout(function(){q.new_name.focus()},0)}
     q.del.onclick=function(){var i=q.scm.selectedIndex;scms.splice(i,1);scm=scms[Math.min(i,scms.length-1)]
                              updScms();return!1}
     cm=CM(q.cm,{
@@ -184,16 +183,16 @@ D.prf_tabs.col={
   },
   load:function(){var a=scms=SCMS.concat(D.prf.colourSchemes().map(decScm)),s=D.prf.colourScheme()
                   scm=a[0];for(var i=0;i<a.length;i++)if(a[i].name===s){scm=a[i];break}
-                  document.getElementById('col').className='';updScms()
+                  I.col.className='';updScms()
                   cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);cm.refresh()},
   activate:function(){q.scm.focus()},
   save:function(){D.prf.colourSchemes(scms.filter(function(x){return!x.frz}).map(encScm));D.prf.colourScheme(scm.name)},
   resize:function(){cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);cm.refresh()}
 }
 function updScms(){q.scm.innerHTML=scms.map(function(x){x=D.util.esc(x.name);return'<option value="'+x+'">'+x}).join('')
-                   q.scm.value=scm.name;q.scm.onchange();document.getElementById('col').className=scm.frz?'frz':''
+                   q.scm.value=scm.name;q.scm.onchange();I.col.className=scm.frz?'frz':''
                    cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);updSampleStl();selGrp('norm',1)}
-function updSampleStl(){document.getElementById('col_sample_stl').textContent=renderCSS(scm,1)} //[sic]
+function updSampleStl(){I.col_sample_stl.textContent=renderCSS(scm,1)} //[sic]
 function selGrp(t,forceRefresh){
   if(!scm||sel===t&&!forceRefresh)return
   var i=H[t],h=scm[t]||{},v;q.grp.value=i

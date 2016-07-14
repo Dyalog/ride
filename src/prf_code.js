@@ -1,10 +1,10 @@
 ;(function(){'use strict'
 
-var q={} //DOM elements
+var q //DOM elements whose ids start with "code_", keyed by the rest of the id
 D.prf_tabs.code={
   name:'Code',
   init:function(t){
-    var u=t.querySelectorAll('[id]');for(var i=0;i<u.length;i++){q[u[i].id.replace(/^code_/,'')]=u[i]}
+    q=J.code
     var updEnabling=function(){q.sw.disabled=q.aim.disabled=!q.ai.checked;q.swm.disabled=!q.ai.checked||!q.aim.checked}
     q.ai  .onchange=function(){updEnabling();q.ai .checked&&q.sw .select()}
     q.aim .onchange=function(){updEnabling();q.aim.checked&&q.swm.select()}

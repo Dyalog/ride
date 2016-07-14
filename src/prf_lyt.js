@@ -1,14 +1,14 @@
 ;(function(){'use strict'
 
 var layouts=D.kbds.layouts,geom=D.kbds.geom,NK=58 //NK:number of scancodes we are concerned with
-,model={}  //dictionary: locale→[arrayOfAPLGlyphs,arrayOfShiftedAPLGlyphs]
-,q={},g=[] //q:DOM elements, g[i][j]:the DOM element for key i and group j
+,model={} //dictionary: locale→[arrayOfAPLGlyphs,arrayOfShiftedAPLGlyphs]
+,q={} //DOM elements whose ids start with "lyt_", keyed by the rest of the id
+,g=[] //g[i][j]:the DOM element for key i and group j
 ,tip=function(x){return x===' '?'Click to\nconfigure':'U+'+('000'+x.charCodeAt(0).toString(16).toUpperCase()).slice(-4)}
 D.prf_tabs.lyt={
   name:'Layout',
   init:function(t){
-    var a=document.querySelectorAll('[id^="lyt_"]');for(var i=0;i<a.length;i++)q[a[i].id.replace(/^lyt_/,'')]=a[i]
-    q.lc.innerHTML='<option>'+Object.keys(layouts).sort().join('<option>')
+    q=J.lyt;q.lc.innerHTML='<option>'+Object.keys(layouts).sort().join('<option>')
     var inputs=q.kbd.querySelectorAll('input')
     for(var i=0;i<inputs.length;i++){
       inputs[i].onfocus=function(x){setTimeout(function(){x.target.select()},1)}
@@ -17,8 +17,7 @@ D.prf_tabs.lyt={
         e.value=v;e.title=tip(v)
       }
     }
-    for(var i=1;i<NK;i++){g[i]=[];var e=document.getElementById('lyt_'+i)
-                          for(var j=0;j<4;j++)g[i][j]=e.querySelector('.lyt_g'+j)}
+    for(var i=1;i<NK;i++){g[i]=[];var e=J.lyt[i];for(var j=0;j<4;j++)g[i][j]=e.querySelector('.lyt_g'+j)}
     q.ime_wr.hidden=!D.win
     if(!layouts[D.prf.kbdLocale()]){
       var s=navigator.language, l=s.slice(0,2).toLowerCase(), c=s.slice(3,5).toUpperCase() //language&country

@@ -1,10 +1,10 @@
 ;(function(){'use strict'
 
-var q={} //DOM elements
+var q //DOM elements whose ids start with "shc_", keyed by the rest of the id
 D.prf_tabs.shc={
   name:'Shortcuts',
   init:function(t){
-    var a=t.querySelectorAll('[id^="shc_"]');for(var i=0;i<a.length;i++)q[a[i].id.replace(/^shc_/,'')]=a[i]
+    q=J.shc
     t.onmouseover=function(e){var u=e.target.closest('.shc_del');if(u)u.parentNode.className+=' shc_del_hvr'}
     t.onmouseout =function(e){var u=e.target.closest('.shc_del'),p=u&&u.parentNode
                               if(p)p.className=p.className.replace(/(^|\s+)shc_del_hvr($|\s+)/,' ')}

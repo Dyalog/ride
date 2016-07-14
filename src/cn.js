@@ -2,13 +2,14 @@
 ;(()=>{'use strict'
 
 let $sel=$(),sel //$sel:selected item(s), sel:data associated with the selected item (only if it's unique)
+,q //DOM elements whose ids start with "cn_", keyed by the rest of the id
 ,interpreters=[],interpretersSSH=[] //local interpreters and those obtained over ssh
 ,clt   //client, TCP connection to interpreter
 ,child //a ChildProcess instance, the result from spawn()
 ,srv   //server, used to listen for connections from interpreters
 const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os'),path=rq('path')
 ,log=x=>{console.log(x)}
-,esc=D.util.esc,user=D.el?process.env.USER:'',q={} //q:DOM elements
+,esc=D.util.esc,user=D.el?process.env.USER:''
 ,MIN_V=[15,0],KV=/^([a-z_]\w*)=(.*)$/i,WS=/^\s*$/ //KV:regexes for parsing env vars
 ,cmpVer=(x,y)=>x[0]-y[0]||x[1]-y[1]||0 //compare two versions of the form [major,minor]
 ,ls=x=>fs.readdirSync(x)
@@ -108,10 +109,8 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   return!1
 }
 D.cn=_=>{ //set up Connect page
-  document.title='RIDE - Connect';const cn=document.getElementById('cn');cn.hidden=0
-  $(cn).splitter()
-  cn.onkeyup=x=>{if(D.el&&fmtKey(x)==='F12'){D.elw.webContents.toggleDevTools();return!1}}
-  {const a=document.body.querySelectorAll('[id^="cn_"]');for(let i=0;i<a.length;i++)q[a[i].id.replace(/^cn_/,'')]=a[i]}
+  q=J.cn;document.title='RIDE - Connect';I.cn.hidden=0;$(I.cn).splitter()
+  I.cn.onkeyup=x=>{if(D.el&&fmtKey(x)==='F12'){D.elw.webContents.toggleDevTools();return!1}}
   q.fav_name.onchange=q.fav_name.onkeyup=_=>{
     const u=sel.name,v=q.fav_name.value||''
     if(u!==v){v?(sel.name=v):delete sel.name;$sel.find('.name').text(favText(sel));save()}
