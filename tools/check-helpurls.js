@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 const http=require('http')
-D={modules:{}};require('../src/helpurls');D.modules.helpurls(null,D.modules.helpurls);const h=D.helpurls
+D={modules:{}};require('../src/hlp');const h=D.hlp
 const a=Object.keys(h).map(k=>h[k]).sort(),o={host:'help.dyalog.com',port:80,path:''}
 const rec=i=>{
   if(i>=a.length)return
