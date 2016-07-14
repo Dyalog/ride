@@ -29,22 +29,22 @@ var b="#⍺⍵∇'⋄⍝:;¯";for(var i=0;i<b.length;i++)h[b[i][0]]=u+'Special S
 
 var u=p+'Language/Primitive Operators/' //I-beams
 var a=D.ibeams={ // http://help.dyalog.com/15.0/Content/Language/Primitive%20Operators/I%20Beam.htm
-    8:'Inverted Table Index-of',
+    8:'Inverted Table Index Of',
    85:'Execute Expression',
   127:'Overwrite Free Pockets',
   180:'Canonical Representation',
   181:'Unsqueezed Type',
   200:'Syntax Colouring',
-  219:'Compress/Decompress Vector of Short Integers',
-  220:'Serialise/Deserialise Array',
+  219:'Compress Vector of Short Integers',
+  220:'Serialise Array',
   400:'Compiler Control',
   600:'Trap Control',
   819:'Case Convert',
   900:'Called Monadically',
   950:'Loaded Libraries',
- 1111:'Number of Threads',
+ 1111:'Number Of Threads',
  1112:'Parallel Execution Threshold',
- 1159:'Update Function Time and User Stamp',
+ 1159:'Update Function Timestamp',
  1500:'Hash Array',
  2000:'Memory Manager Statistics',
  2002:'Specify Workspace Available',
@@ -53,17 +53,17 @@ var a=D.ibeams={ // http://help.dyalog.com/15.0/Content/Language/Primitive%20Ope
  2014:'Remove Data Binding',        //W
  2015:'Create Data Binding Source', //W
  2016:'Create .NET Delegate',       //W
- 2017:'Identify .NET Type',         //W
+ 2017:'Identify NET Type',          //W
  2022:'Flush Session Caption',      //W
- 2023:'Close all Windows',          //W
+ 2023:'Close All Windows',          //W
  2035:'Set Dyalog Pixel Type',
  2041:'Override COM Default Value', //W
- 2100:'Export to Memory',           //W
+ 2100:'Export To Memory',           //W
  2101:'Close .NET AppDomain',       //W
  2400:'Set Workspace Save Options',
  2401:'Expose Root Properties',
- 2501:'Discard thread on exit',     //W
- 2502:'Discard parked threads',     //W
+ 2501:'Discard Thread on Exit',      //W
+ 2502:'Discard Parked Threads',      //W
  2503:'Mark Thread as Uninterruptible',
  2520:'Use Separate Thread For .NET',
  3002:'Disable Component Checksum Validation',
