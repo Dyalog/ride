@@ -41,7 +41,7 @@ const incl={
   '/node_modules/golden-layout/src/css/goldenlayout-light-theme.css':1}
 Object.keys(incl).map(x=>{const a=x.split('/');a.map((_,i)=>incl[a.slice(0,i).join('/')]=1)}) // include ancestors
 
-const excl={'/style/img/Dyalog_icon.icns':1}
+const excl={'/style/img/D.icns':1}
 ,namev='ride'+v.split('.').slice(0,2).join('')
 ,pkg=(x,y,f)=>{
   rq('electron-packager')(
