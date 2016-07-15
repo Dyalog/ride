@@ -150,11 +150,11 @@ D.cn=_=>{ //set up Connect page
     return!1
   }
   q.ssl_cb.onchange=_=>{q.ssl_dtl.hidden=!q.ssl_cb.checked}
-  q.cert_cb.onchange=_=>{q.cert.disabled=q.cert_dots.disabled=!q.cert_cb.checked;q.cert.value='';$(q.cert).elastic()}
+  q.cert_cb.onchange=_=>{q.cert.disabled=q.cert_dots.disabled=!q.cert_cb.checked;q.cert.value='';D.util.elastic(q.cert)}
   q.subj_cb.onchange=_=>{q.subj.disabled=!q.subj_cb.checked;q.subj.value=''}
   q.subj_cb.onclick=_=>{q.subj_cb.checked&&q.subj.focus()}
   const browse=(x,title)=>{const v=D.el.dialog.showOpenDialog({title,defaultPath:x.value})
-                           if(v){x.value=v[0];$(x).elastic().change()};return!1}
+                           if(v){x.value=v[0];D.util.elastic(x);$(x).change()};return!1}
   q.cert_dots   .onclick=_=>{browse(q.cert   ,'Certificate')}
   q.ssh_key_dots.onclick=_=>{browse(q.ssh_key,'SSH Key'    )}
   q.ssh_auth_type.onchange=_=>{const k=q.ssh_auth_type.value==='key';q.ssh_pass_wr.hidden=k;q.ssh_key_wr.hidden=!k}
@@ -177,7 +177,8 @@ D.cn=_=>{ //set up Connect page
         $(':text[name],textarea[name]',q.rhs).each((_,x)=>{x.value=sel[x.name]||''})
         $(':checkbox[name]',q.rhs).each((_,x)=>{x.checked=!!+sel[x.name]})
         q.exes.value=sel.exe;q.exes.value||(q.exes.value='') //use sel.exe if available, otherwise use "Other..."
-        $(':text',q.rhs).elastic()
+        var a=q.rhs.querySelectorAll('input,textarea')
+        for(var i=0;i<a.length;i++)if(/^text(area)?$/.test(a[i].type))D.util.elastic(a[i])
         q.ssl_dtl.hidden=!sel.ssl;q.ssh_dtl.hidden=!sel.ssh
         q.cert_cb.checked=!!sel.cert;q.cert.disabled=q.cert_dots.disabled=!sel.cert
         q.subj_cb.checked=!!sel.subj;q.subj.disabled=!sel.subj
@@ -195,7 +196,8 @@ D.cn=_=>{ //set up Connect page
   }
   q.abt.onclick=_=>{D.abt()}
   q.go.onclick=_=>{go();return!1}
-  $(':text',q.rhs).elastic()
+  var a=q.rhs.querySelectorAll('input,textarea')
+  for(var i=0;i<a.length;i++)if(/^text(area)?$/.test(a[i].type))D.util.elastic(a[i])
   $(':text[name],textarea[name]',q.rhs).change(function(){const k=this.name,v=this.value;v?(sel[k]=v):delete sel[k];save()})
   $(':checkbox[name]',q.rhs).change(function(){this.checked?(sel[this.name]=1):delete sel[this.name];save()})
   //collect information about installed interpreters

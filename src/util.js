@@ -12,7 +12,9 @@ D.util={
     cm.on('mousedown',function(cm,e){
       e.timeStamp-t<400&&Math.abs(x-e.clientX)+Math.abs(y-e.clientY)<10&&
         !$(e.target).closest('.CodeMirror-gutter-wrapper').length&&f(e)
-      t=e.timeStamp;x=e.clientX;y=e.clientY})},
+      t=e.timeStamp;x=e.clientX;y=e.clientY
+    })
+  },
   dlg:function(d,o){o=o||{}
     d.style.zIndex=zCtr++;d.hidden=0
     d.style.left=(0|(innerWidth -(o.w||d.clientWidth ))/2)+'px';if(o.w)d.style.width =o.w+'px'
@@ -34,7 +36,16 @@ D.util={
       t.onmouseup=function(e){document.removeEventListener('mousemove',move);t.style.cursor=''}
       var move=function(e){d.style.left=Math.min(mx,Math.max(0,dx+e.clientX))+'px'
                            d.style.top =Math.min(my,Math.max(0,dy+e.clientY))+'px'
-                           e.preventDefault();return!1}}}}
+                           e.preventDefault();return!1}
+    }
+  },
+  elastic:function(inp){ //as you type in an <input>, it stretches as necessary to accommodate the text
+    var m=inp.dataset.minSize
+    if(!m){inp.onkeyup=inp.onkeypress=inp.onchange=function(){D.util.elastic(inp)}
+           inp.dataset.minSize=m=+inp.size||1}
+    inp.size=Math.max(m,inp.value.length+1)
+  }
+}
 $.alert=function(m,t,f){ //m:message, t:title, f:callback
   D.el?D.el.dialog.showMessageBox(D.elw,{message:m,title:t,buttons:['OK']}):alert(m);f&&f()
 }
@@ -51,8 +62,3 @@ $.fn.insert=function(s){ //replace selection in an <input> or <textarea> with s
     if(!$(this).is(':text,textarea')||this.readOnly)return
     var e=this,i=e.selectionStart,j=e.selectionEnd
     if(i!=null&&j!=null){e.value=e.value.slice(0,i)+s+e.value.slice(j);e.selectionStart=e.selectionEnd=i+s.length}})}
-$.fn.elastic=function(){ //as you type in an <input>, it stretches as necessary to accommodate the text
-  return this.each(function(){
-    var m=$(this).data('minSize')
-    m||$(this).data('minSize',m=+this.size||1).on('keyup keypress change',function(){$(this).elastic()})
-    this.size=Math.max(m,this.value.length+1)})}
