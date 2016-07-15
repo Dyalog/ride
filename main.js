@@ -1,16 +1,14 @@
-global.D={}
-const fs=require('fs'),path=require('path'),{spawn}=require('child_process'),
-      ps=process,{env}=ps,repr=JSON.stringify,el=D.el=require('electron')
-// Detect platform: https://nodejs.org/api/process.html#process_process_platform
+const rq=require,fs=rq('fs'),path=rq('path'),{spawn}=rq('child_process'),ps=process,{env}=ps,
+      repr=JSON.stringify,el=rq('electron'),D={}
+//Detect platform: https://nodejs.org/api/process.html#process_process_platform
 // https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
 D.win=/^win/i.test(ps.platform);D.mac=ps.platform=='darwin'
 env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a standalone RIDE
   (D.win?0:+fs.existsSync(path.dirname(ps.execPath)+(D.mac?'/../../../../Resources/Dyalog/mapl':'/../mapl')))
 
 {//file-backed storage with an API similar to that of localStorage
-  if(D.floating){D.db=opener.D.db;return}
   const k=[],v=[] //keys and values
-  D.db={
+  D.db=global.db={
     key:i=>k[i],
     getItem(x)   {const i=k.indexOf(x);return i<0?null:v[i]},
     setItem(x,y) {const i=k.indexOf(x);if(i<0){k.push(x);v.push(y)}else{v[i]=y};dbWrite()},
@@ -52,18 +50,14 @@ if(D.mac&&!env.RIDE_INTERPRETER_EXE){env.RIDE_INTERPRETER_EXE=D.lastSpawnedExe=p
 
 el.app.on('ready',_=>{
   const p=D.db.getItem('pos');let dx=0,dy=0
-  let w=D.elw=new el.BrowserWindow({x:p&&p[0],y:p&&p[1],width:p&&p[2],height:p&&p[3],show:0,icon:'style/img/D.png'})
+  let w=global.elw=new el.BrowserWindow({x:p&&p[0],y:p&&p[1],width:p&&p[2],height:p&&p[3],show:0,icon:'style/img/D.png'})
   const savePos=_=>{const b=w.getBounds();D.db.setItem('pos',[b.x-dx,b.y-dy,b.width,b.height])}
   el.Menu.setApplicationMenu(null)
   w.loadURL(`file://${__dirname}/index.html`)
-  w.on('closed',_=>{w=D.elw=0}).on('moved',savePos).on('resize',savePos)
+  w.on('closed',_=>{w=global.elw=0}).on('moved',savePos).on('resize',savePos)
    .on('show',_=>{if(p){const q=w.getPosition();dx=q[0]-p[0];dy=q[1]-p[1]}}).show()
   if(D.win){const fix=_=>{setTimeout(_=>{const a=w.getSize();w.setSize(a[0],a[1]-1);w.setSize(a[0],a[1])},100)}
             w.on('page-title-updated',fix).on('blur',fix)}
   w.webContents.openDevTools()
 })
 el.app.on('window-all-closed',_=>el.app.quit())
-
-
-//  D.quit=function(){gui.Window.get().close()}
-//D.open=(url,o)=>{o.icon='D.png';o.toolbar==null&&(o.toolbar=false);return!!gui.Window.open(url,o)} // o:options

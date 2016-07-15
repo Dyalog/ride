@@ -4,7 +4,13 @@ var I={}, //all elements by id, eg I.lb_tip_text is document.getElementById('lb_
 
 ;(function(){'use strict'
 
-if(typeof node_require!=='undefined')D=$.extend(D,node_require('electron').remote.getGlobal('D'))
+if(typeof node_require!=='undefined'){
+  D.el=node_require('electron').remote
+  D.elw=D.el.getGlobal('elw')
+  D.db =D.el.getGlobal('db' )
+  D=$.extend(D,node_require('electron').remote.getGlobal('D'))
+  var plt=process.platform;D.win=/^win/i.test(plt);D.mac=plt==='darwin'
+}
 
 var env=D.el?process.env:{}
 
