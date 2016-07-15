@@ -13,8 +13,8 @@ D.prf_tabs.lyt={
     for(var i=0;i<inputs.length;i++){
       inputs[i].onfocus=function(x){setTimeout(function(){x.target.select()},1)}
       inputs[i].onblur=function(x){
-        var e=x.target,v=model[q.lc.value][+(e.className==='lyt_g3')][+e.closest('.lyt_k').id.slice(1)]=e.value.slice(-1)||' '
-        e.value=v;e.title=tip(v)
+        var e=x.target,v=e.value.slice(-1)||' ';e.value=v;e.title=tip(v)
+        model[q.lc.value][+(e.className==='lyt_g3')][+e.closest('.lyt_k').id.replace(/^lyt_/,'')]=v
       }
     }
     for(var i=1;i<NK;i++){g[i]=[];var e=J.lyt[i];for(var j=0;j<4;j++)g[i][j]=e.querySelector('.lyt_g'+j)}
