@@ -27,7 +27,7 @@ D.prf_tabs.lyt={
     q.rst.onclick=function(){var lc=q.lc.value;q.pfx.value=D.prf.prefixKey.getDefault();updPfx()
                              model[lc]=[layouts[lc][2].split(''),layouts[lc][3].split('')];updGlyphs()}
     q.lc.onchange=updGlyphs
-    q.pfx.onfocus=function(){setTimeout(function(){$(q.pfx).select()},1)}
+    q.pfx.onfocus=function(){q.pfx.selectionStart=0;q.pfx.selectionEnd=q.pfx.value.length}
     q.pfx.onchange=q.pfx.onkeyup=updPfx
   },
   load:function(){
