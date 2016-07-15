@@ -67,7 +67,21 @@ D.IDE=function(){'use strict'
       ;(this.wins[w]=new D.Ed(this,editorOpts)).open(ee)
       ide.gl.root.contentItems[0].addChild({type:'component',componentName:'win',componentState:{id:w},title:ee.name})
     },
-    ShowHTML:ide.showHTML.bind(ide),
+    ShowHTML:function(x){
+      if(D.el){
+        var w=ide.w3500;if(!w||w.isDestroyed())w=ide.w3500=new D.el.BrowserWindow({width:800,height:500})
+        w.loadURL(`file://${__dirname}/empty.html`)
+        w.webContents.executeJavaScript('document.body.innerHTML='+JSON.stringify(x.html))
+        w.setTitle(x.title||'3500 I-beam')
+      }else{
+        var init=function(){
+          ide.w3500.document.body.innerHTML=x.html
+          ide.w3500.document.getElementsByTagName('title')[0].innerHTML=D.util.esc(x.title||'3500⌶')
+        }
+        if(ide.w3500&&!ide.w3500.closed){ide.w3500.focus();init()}
+        else{ide.w3500=open('empty.html','3500 I-beam','width=800,height=500');ide.w3500.onload=init}
+      }
+    },
     OptionsDialog:function(x){
       var text=typeof x.text==='string'?x.text:x.text.join('\n')
       if(D.el){
@@ -211,15 +225,6 @@ D.IDE.prototype={
       X==='{VER}'?ri.version:                        X==='{RIDE_VER}'?v.version:
       x
     )||''})||'Dyalog'
-  },
-  showHTML:function(x){
-    var ide=this
-    var init=function(){
-      ide.w3500.document.body.innerHTML=x.html
-      ide.w3500.document.getElementsByTagName('title')[0].innerHTML=D.util.esc(x.title||'3500⌶')
-    }
-    if(ide.w3500&&!ide.w3500.closed){ide.w3500.focus();init()}
-    else{ide.w3500=open('empty.html','3500 I-beam','width=800,height=500');ide.w3500.onload=init}
   },
   focusMRUWin:function(){ //most recently used
     var t=0,w;for(var k in this.wins){var x=this.wins[k];if(x.id&&t<=x.focusTS){w=x;t=x.focusTS}}
