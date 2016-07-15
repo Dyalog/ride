@@ -167,6 +167,7 @@ D.IDE=function(){'use strict'
     reqTip(x,'Keyboard Shortcuts',s+'...',1000)
   }
   I.lb_prf.onmousedown=function(){D.prf_ui();return!1}
+  I.lb_prf.onclick=function(){return!1} //prevent # appearing in the URL bar
 
   var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
   ide.gl=new GoldenLayout({labels:{minimise:'unmaximise'},
