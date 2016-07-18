@@ -136,7 +136,7 @@ $.extend(CM.commands,{
               var data={from:c0,to:cm.getCursor(),list:ks.map(function(k){
                 var v=bq[k];return(k===pk
                   ?{text:'',hint:bqbqHint,render:function(e){e.innerHTML='  '+pk+pk+' <i>completion by name</i>'}}
-                  :{text:v,render:function(e){$(e).text(v+' '+pk+k+' '+(sqglDesc[v]||'')+'  ')}}
+                  :{text:v,render:function(x){x.textContent=v+' '+pk+k+' '+(sqglDesc[v]||'')+'  '}}
                 )
               })}
               CM.on(data,'select',function(x){sel=x})
@@ -197,7 +197,7 @@ $.extend(CM.commands,{
 
 function switchWindows(d){ // d: a step of either 1 or -1
   var a=[],i=-1,wins=D.ide.wins;for(var k in wins){wins[k].hasFocus()&&(i=a.length);a.push(wins[k])}
-  var j=i<0?0:(i+a.length+d)%a.length;$('#wintab'+a[j].id+' a').click();a[j].focus();return!1
+  var j=i<0?0:(i+a.length+d)%a.length;a[j].focus();return!1
 }
 
 // D.kbds.layouts[lc] contains four strings describing how keys map to characters:
@@ -351,15 +351,15 @@ var informal=[
 ]
 for(var i=0;i<26;i++)informal.push(String.fromCharCode(i+0x24b6)+' _'+String.fromCharCode(i+0x61/*a*/)) // Ⓐ _a
 
-var bqbqc=[] // backquote-backquote completions
+var bqbqc=[] //backquote-backquote completions
 for(var i=0;i<informal.length;i++){
   var a=informal[i].split(' ')
   for(var j=1;j<a.length;j++){
     bqbqc.push({name:a[j],text:a[0],render:
-      (function(squiggle,name){ // bind squiggle=a[0] and name=a[j]
-        return function(e){ // the actual render() function
+      (function(squiggle,name){ //bind squiggle=a[0] and name=a[j]
+        return function(x){ //the actual render() function
           var key=D.getBQKeyFor(squiggle),pk=D.prf.prefixKey()
-          $(e).text(squiggle+' '+(key?pk+key:'  ')+' '+pk+pk+name)
+          x.textContent=squiggle+' '+(key?pk+key:'  ')+' '+pk+pk+name
         }
       }(a[0],a[j]))
     })
