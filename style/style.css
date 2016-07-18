@@ -32,6 +32,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .menu .m-box            {z-index: 200}
 .ui-front               {z-index: 100}
 .ui-selectable-helper   {z-index: 100}
+.lm_splitter            {z-index:  11!important}
 .CodeMirror-hints       {z-index:  10}
 .cm-scroll              {z-index:   6}
 
