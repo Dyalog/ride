@@ -239,7 +239,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .lyt_g1{color:#040} /*                    │g2  g3│*/
 .lyt_g2{color:#f00} /*                    │g0  g1│*/
 .lyt_g3{color:#00f} /*                    └──────┘*/
-#lyt_spc{width:40%;margin-left:30%;margin-right:30%;padding-left:8px;padding-right:8px}
+#lyt_spc{width:50%;margin-left:25%;margin-right:25%;padding-left:8px;padding-right:8px}
 #lyt_spc br{clear:both}
 #lyt_spc .lyt_g0{float:left ;text-align:left ;white-space:nowrap}
 #lyt_spc .lyt_g1{float:right;text-align:right;white-space:nowrap}
