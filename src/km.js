@@ -25,7 +25,9 @@ var sqglDesc={
 
 var ctid=0 // backquote completion timeout id
 CM.keyMap.dyalogDefault={fallthrough:'default',End:'goLineEndSmart'}
-CM.keyMap.dyalogDefault["'"+D.prf.prefixKey()+"'"]='BQC'
+setTimeout(function(){ //D.db is initialised in init.js, so we must wait until the next tick for D.prf.prefixKey()
+  CM.keyMap.dyalogDefault["'"+D.prf.prefixKey()+"'"]='BQC'
+},1)
 $.extend(CM.commands,{
   TB:function(){switchWindows( 1)},
   BT:function(){switchWindows(-1)},
