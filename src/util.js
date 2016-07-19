@@ -41,7 +41,7 @@ D.util={
   },
   elastic:function(inp){ //as you type in an <input>, it stretches as necessary to accommodate the text
     var m=inp.dataset.minSize
-    if(!m){inp.onkeyup=inp.onkeypress=inp.onchange=function(){D.util.elastic(inp)}
+    if(!m){var f=function(){D.util.elastic(inp)};CM.on(inp,'keyup',f);CM.on(inp,'keypress',f);CM.on(inp,'change',f)
            inp.dataset.minSize=m=+inp.size||1}
     inp.size=Math.max(m,inp.value.length+1)
   },
