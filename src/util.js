@@ -44,6 +44,11 @@ D.util={
     if(!m){inp.onkeyup=inp.onkeypress=inp.onchange=function(){D.util.elastic(inp)}
            inp.dataset.minSize=m=+inp.size||1}
     inp.size=Math.max(m,inp.value.length+1)
+  },
+  insert:function(x,y){ //replace selection in an <input> or <textarea> x with the string y
+    if(!x||(x.nodeName!=='INPUT'&&x.nodeName!=='TEXTAREA')||x.readOnly||x.disabled)return
+    var i=x.selectionStart,j=x.selectionEnd,v=x.value
+    if(i!=null&&j!=null){x.value=v.slice(0,i)+y+v.slice(j);x.selectionStart=x.selectionEnd=i+y.length}
   }
 }
 $.alert=function(m,t,f){ //m:message, t:title, f:callback
@@ -57,8 +62,3 @@ $.confirm=function(m,t,f){
   f(D.el?1-D.el.dialog.showMessageBox(D.elw,{message:m,title:t,type:'question',buttons:['Yes','No'],cancelId:1})
         :+confirm(m))
 }
-$.fn.insert=function(s){ //replace selection in an <input> or <textarea> with s
-  return this.each(function(){
-    if(!$(this).is(':text,textarea')||this.readOnly)return
-    var e=this,i=e.selectionStart,j=e.selectionEnd
-    if(i!=null&&j!=null){e.value=e.value.slice(0,i)+s+e.value.slice(j);e.selectionStart=e.selectionEnd=i+s.length}})}

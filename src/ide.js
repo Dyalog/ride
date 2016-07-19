@@ -146,9 +146,8 @@ D.IDE=function(){'use strict'
     },delay||200)
   }
   I.lb.onmousedown=function(x){
-    if(x.target.nodeName==='B'){
-      var w=ide.focusedWin;(w.hasFocus()?w:$(document.activeElement)).insert(x.target.textContent)
-    }
+    if(x.target.nodeName==='B'){var w=ide.focusedWin,s=x.target.textContent
+                                w.hasFocus()?w.insert(s):D.util.insert(document.activeElement,s)}
     return!1
   }
   I.lb.onmouseout=function(x){if(x.target.nodeName==='B'||x.target.id==='lb_prf'){
