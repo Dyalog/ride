@@ -1,15 +1,15 @@
 //value tips: hover over a name to see a pop-up with its current value
 D.vt=function(w){'use strict' //.init(w) gets called for every window w (session or editor)
-  var i,p,$b,$t,$r,rf //i:timeout id, p:position as {line,ch}, rf:function that processes the reply
+  var i,p,rf //i:timeout id, p:position as {line,ch}, rf:function that processes the reply
   //╭─────────────╮
-  //│             │ $b:balloon
+  //│             │ I.vt_bln   balloon
   //╰────.  .─────╯
-  //      ╲╱        $t:triangle, centred horizontally on the token
+  //      ╲╱        I.vt_tri   triangle, centred horizontally on the token
   // ┌ ─ ─ ─ ─ ┐
-  //  t o k e n     $r:rectangle around the token
+  //  t o k e n     I.vt_rect  around the token
   // └ ─ ─ ─ ─ ┘
   var MW=64,MH=32 // maxWidth and maxHeight for the character matrix displayed in the tooltip
-  var cl=function(){i&&clearTimeout(i);$b&&$b.remove();$t&&$t.remove();$r&&$r.remove();i=p=$b=$t=$r=null} //clear all
+  var cl=function(){i&&clearTimeout(i);I.vt_bln.hidden=I.vt_tri.hidden=I.vt_rect.hidden=1;i=p=null} //clear all
   w.cm.on('cursorActivity',cl)
   var show=function(p0,force){ //p0:{line,ch}
     cl();p0.outside||(i=setTimeout(function(){ //send a request (but not too often)
@@ -21,28 +21,30 @@ D.vt=function(w){'use strict' //.init(w) gets called for every window w (session
       }
     },500))
   }
-  $(w.cm.display.wrapper).mouseout(cl).mousemove(function(e){show(w.cm.coordsChar({left:e.clientX,top:e.clientY}))})
+  w.cm.display.wrapper.onmouseout=cl
+  w.cm.display.wrapper.onmousemove=function(x){show(w.cm.coordsChar({left:x.clientX,top:x.clientY}))}
   return{
     clear:cl,show:show,
-    processReply:rf=function(x){ //return a function that processes the reply
+    processReply:rf=function(x){
       if(!p)return
-      var d=w.getDocument(),ce=w.cm.display.wrapper                    //ce:CodeMirror element
-      var cw=ce.clientWidth,co=$(ce).offset(),cx=co.left,cy=co.top     //CodeMirror's dimensions and coordinates
-      var de=d.documentElement,ww=de.clientWidth,wh=de.clientHeight    //window dimensions
-      var r0=w.cm.charCoords({line:p.line,ch:x.startCol})              //bounding rectangle for start of token
-      var r1=w.cm.charCoords({line:p.line,ch:x.endCol-1})              //                       end   of token
-      var rx=r0.left,ry=r0.top,rw=r1.right-r0.left,rh=r1.bottom-r0.top //bounding rectangle for whole token
-      var s=(x.tip.length<MH?x.tip:x.tip.slice(0,MH-1).concat('…'))
+      var d=w.getDocument(),ce=w.cm.display.wrapper                 //ce:CodeMirror element
+      ,cw=ce.clientWidth,cx=ce.clientLeft,cy=ce.clientTop           //CodeMirror's dimensions and coordinates
+      ,de=d.documentElement,ww=de.clientWidth,wh=de.clientHeight    //window dimensions
+      ,r0=w.cm.charCoords({line:p.line,ch:x.startCol})              //bounding rectangle for start of token
+      ,r1=w.cm.charCoords({line:p.line,ch:x.endCol-1})              //                       end   of token
+      ,rx=r0.left,ry=r0.top,rw=r1.right-r0.left,rh=r1.bottom-r0.top //bounding rectangle for whole token
+      ,s=(x.tip.length<MH?x.tip:x.tip.slice(0,MH-1).concat('…'))
               .map(function(s){return s.length<MW?s:s.slice(0,MW-1)+'…'}).join('\n')
-      cl();$b=$('<div id=vt_bln>',d).text(s);$t=$('<div id=vt_tri>',d);$r=$('<div id=vt_rect>',d)
-      $b.add($t).add($r).hide().appendTo(d.body)
-      var th=6,tw=2*th,inv=ry<wh-ry-rh                                 //tw,th:triangle dimensions, inv:is upside-down?
-      var bp=8,bw=$b.width(),bh=$b.height()                            //balloon padding and dimensions
-      var bx=Math.max(0,Math.min(ww-bw,rx+(rw-bw)/2-bp))               //balloon coordinates
-      var by=inv?ry+rh+th:ry-bh-2*bp-th,tx=rx+(rw-tw)/2,ty=inv?ry+rh:ry-th //triangle coordinates
-      $b.css({left:bx,top:by<0?0:by,height:by<0?ry-th-2*bp:'auto'}).show()
-      $t.css({left:tx,top:ty}).toggleClass('inv',inv).show()
-      $r.css({left:rx,top:ry,width:rw,height:rh}).show()
+      ,be=I.vt_bln,te=I.vt_tri,re=I.vt_rect                         //DOM elements
+      cl();be.hidden=te.hidden=re.hidden=0;be.textContent=s
+      var th=6,tw=2*th,inv=ry<wh-ry-rh                              //tw,th:triangle dimensions, inv:is upside-down?
+      ,bp=0,bw=be.clientWidth,bh=be.clientHeight                    //balloon padding and dimensions
+      ,bx=Math.max(0,Math.min(ww-bw,rx+(rw-bw)/2-bp))               //balloon coordinates
+      ,by=inv?ry+rh+th:ry-bh-2*bp-th
+      ,tx=rx+(rw-tw)/2,ty=inv?ry+rh:ry-th                           //triangle coordinates
+      var bs=be.style;bs.left=bx+'px';bs.top=by<0?0:by+'px';bs.height=by<0?(ry-th-2*bp)+'px':'auto'
+      var ts=te.style;ts.left=tx+'px';ts.top=ty+'px';te.className=inv?'inv':''
+      var rs=re.style;rs.left=rx+'px';rs.top=ry+'px';rs.width=rw+'px';rs.height=rh+'px'
     }
   }
 }
