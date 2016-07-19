@@ -5,11 +5,10 @@ const rq=require,fs=rq('fs'),path=rq('path'),{execSync}=rq('child_process'),asyn
 ,sh=x=>execSync(x,{encoding:'utf8'}).replace(/[\r\n]/g,'')          // shell
 ,rf=x=>fs.readFileSync(x,'utf8')                                    // read file
 ,wf=(x,y)=>fs.writeFileSync(x,y)                                    // write file
+,mv=(x,y)=>fs.renameSync(x,y)                                       // move/rename file
 ,md=x=>{if(!fs.existsSync(x)){md(path.dirname(x));fs.mkdirSync(x)}} // mkdir -p
 ,nt=(x,y)=>!fs.existsSync(y)||fs.statSync(x)>fs.statSync(y)         // newer than
-,rm=x=>{if(!fs.existsSync(x))return
-        fs.readdirSync(x).map(y=>{y=x+'/'+y;fs.lstatSync(y).isDirectory()?rm(y):fs.unlinkSync(y)})
-        fs.rmdirSync(x)}
+,rm=x=>{if(fs.lstatSync(x).isDirectory()){fs.readdirSync(x).map(y=>rm(x+'/'+y));fs.rmdirSync(x)}else{fs.unlinkSync(x)}}
 ,v=JSON.parse(rf('package.json')).version.replace(/\.0$/,'')+'.'+sh('git rev-list --count HEAD') // version string
 ,tasks={}
 
@@ -56,7 +55,8 @@ const excl={'/style/img/D.icns':1}
         OriginalFilename:namev+'.exe',
         ProductName:'RIDE',
         InternalName:'RIDE'}},
-    e=>{f&&f(e)}
+    e=>{const d='_/'+namev+'/'+namev+'-'+x+'-'+y;rm(d+'/version');mv(d+'/LICENSE',d+'/LICENSE.electron')
+        f&&f(e)}
   )
 }
 tasks.l=tasks.linux=f=>{pkg('linux' ,'x64' ,f)}
