@@ -1,12 +1,4 @@
-// to run the tests: export RIDE_JS=/path/to/t.js and start RIDE
-var fs=require('fs'),CM=CodeMirror
-
-;(function(){ // place windows near the right edge of the screen, try to avoid overlap
-  var gui=require('nw.gui'),m=gui.Window.get(),t=m.showDevTools() // m:main window, t:developer tools window
-  var a=gui.Screen.screens[0].work_area,x=a.width-m.width,dy=52
-  t.moveTo(x,m.height+dy);t.resizeTo(m.width,a.height-m.height-dy);m.moveTo(x,0);m.focus()
-}())
-
+var fs=node_require('fs'),CM=CodeMirror
 var nFailures=0
 function fail(x){nFailures++;console.error(x)}
 function assert(x,y){(typeof x==='string'?eval(x):x)||fail(y||'assertion failed')}

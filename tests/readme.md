@@ -2,13 +2,12 @@
 
 Install a 64-bit Unicode interpreter on Linux and in RIDE's git root do:
 
-    ./dist.sh linux64        # package RIDE as an executable
-    rm -r ~/.config/ride30   # reset prefs to factory defaults
+    ./mk c b l               # clean, build, and package RIDE for Linux
+    rm -r ~/.config/ride31   # reset prefs to factory defaults
     rm "$OBJDIR"/default.dlf # delete interpreter's session log
-    RIDE_SPAWN=1 RIDE_JS=tests/t.js build/ride30/linux64/ride30
+    RIDE_SPAWN=dyalog RIDE_JS=tests/t.js _/ride31/ride31-linux-x64/ride31
 
-RIDE's main window and a devtools window should appear near the right edge of your screen.
-The latter will print test actions as they are being executed (lines from `test/t.txt`)
+Electron's console will print test actions as they are being executed (lines from `test/t.txt`)
 and will say "brilliant" at the end if everything's kushti.  Anything in red indicates failure.
 
 #Writing a test case
