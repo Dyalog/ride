@@ -27,18 +27,18 @@ D.Ed=function(ide,opts){ //Editor constructor
     if(g==='breakpoints'||g==='CodeMirror-linenumbers'){cm.setCursor({line:l,ch:0});ed.BP(ed.cm)}
   })
   ed.cm.on('focus',function(){ed.focusTS=+new Date;ide.focusedWin=ed})
-  D.util.cmOnDblClick(ed.cm,function(e){ed.ED(ed.cm);e.preventDefault();e.stopPropagation()})
+  D.util.cmOnDblClick(ed.cm,function(x){ed.ED(ed.cm);x.preventDefault();x.stopPropagation()})
   ed.processAutocompleteReply=D.ac(ed)
-  ed.$tb=$('.toolbar',ed.dom)
-    .on('click','.tb_hid,.tb_case',function(e){$(e.target).toggleClass('pressed');ed.highlightSearch();return!1})
-    .on('mousedown','.tb_btn',function(e){$(e.target).addClass('armed');e.preventDefault()})
-    .on('mouseup mouseout','.tb_btn',function(e){$(e.target).removeClass('armed');e.preventDefault()})
-    .on('click','.tb_btn',function(e){
-      var m,a=$(e.target).prop('class').split(/\s+/)
-      for(var i=0;i<a.length;i++)if(m=/^tb_([A-Z]{2,3})$/.exec(a[i]))
-        {ed[m[1]]?ed[m[1]](ed.cm):CM.commands[m[1]]?CM.commands[m[1]](ed.cm):0;break}
-    })
-  ed.cmSC=CM(ed.$tb.find('.tb_sc')[0],{placeholder:'Search',extraKeys:{
+  ed.tb=ed.dom.querySelector('.toolbar')
+  ed.tb.onmousedown=function(x){if(x.target.matches('.tb_btn')){x.target.className+=' armed';x.preventDefault()}}
+  ed.tb.onmouseup=ed.tb.onmouseout=function(x){if(x.target.matches('.tb_btn')){D.util.rmCls(x.target,'armed')
+                                                                               x.preventDefault()}}
+  ed.tb.onclick=function(x){var t=x.target
+    if(t.matches('.tb_hid,.tb_case')){D.util.tglCls(t,'pressed');ed.highlightSearch();return!1}
+    if(t.matches('.tb_btn')){var c=t.className.replace(/^.*\btb_([A-Z]{2,3})\b.*$/,'$1')
+                             ed[c]?ed[c](ed.cm):CM.commands[c]?CM.commands[c](ed.cm):0;return!1}
+  }
+  ed.cmSC=CM(ed.tb.querySelector('.tb_sc'),{placeholder:'Search',extraKeys:{
     Enter:ed.NX.bind(ed),
     'Shift-Enter':ed.PV.bind(ed),
     'Ctrl-Enter':ed.selectAllSearchResults.bind(ed),
@@ -46,8 +46,8 @@ D.Ed=function(ide,opts){ //Editor constructor
     'Shift-Tab':ed.cm.focus.bind(ed.cm)
   }})
   ed.cmSC.on('change',function(){ed.highlightSearch()})
-  ed.$rp=ed.$tb.find('.tb_rp')
-  ed.cmRP=CM(ed.$rp[0],{placeholder:'Replace',extraKeys:{
+  ed.rp=ed.tb.querySelector('.tb_rp')
+  ed.cmRP=CM(ed.rp,{placeholder:'Replace',extraKeys:{
     Enter            :function(){ed.replace()},
     'Shift-Enter'    :function(){ed.replace(1)},
     'Alt-Enter'      :function(){ed.search()},
@@ -96,21 +96,22 @@ D.Ed.prototype={
     this.cm.scrollIntoView({left:x,right:x,top:y-h/3,bottom:y+2*h/3})
   },
   clearSearch:function(){
-    var ed=this;$('.ride-win .CodeMirror-vscrollbar',ed.dom).prop('title','');$('.tb_sc',ed.$tb).removeClass('no-matches')
+    var ed=this,u=ed.dom.querySelector('.ride-win .cm-scroll-v');if(u)u.title=''
+    D.util.rmCls(ed.tb.querySelector('.tb_sc'),'no-matches')
     ed.cm.removeOverlay(ed.overlay);ed.annotation&&ed.annotation.clear();ed.overlay=ed.annotation=null
   },
   highlightSearch:function(){
-    var ed=this,ic=!$('.tb_case',ed.$tb).hasClass('pressed'),g=ed.cm.changeGeneration(),q=ed.cmSC.getValue()
+    var ed=this,ic=!$('.tb_case',ed.tb).hasClass('pressed'),g=ed.cm.changeGeneration(),q=ed.cmSC.getValue()
     if(ic)q=q.toLowerCase() //ic:ignore case?, q:query string
     if(ed.lastQuery!==q||ed.lastIC!==ic||ed.lastGen!==g){
       ed.lastQuery=q;ed.lastIC=ic;ed.lastGen=g;ed.clearSearch()
       if(q){
         ed.annotation=ed.cm.showMatchesOnScrollbar(q,ic)
         ed.cm.addOverlay(ed.overlay={token:function(x){ //x:stream
-          var s=ed.cm.getValue();if(ic)s=s.toLowerCase();$('.tb_sc',ed.$tb).toggleClass('no-matches',s.indexOf(q)<0)
+          var s=ed.cm.getValue();if(ic)s=s.toLowerCase();$('.tb_sc',ed.tb).toggleClass('no-matches',s.indexOf(q)<0)
           s=x.string.slice(x.pos);var i=s.indexOf(q);if(!i){x.pos+=q.length;return'searching'};i>0?x.pos+=i:x.skipToEnd()
         }})
-        $('.CodeMirror-vscrollbar',ed.dom).prop('title','Lines on scroll bar show match locations')
+        var u=ed.dom.querySelector('.ride-win .cm-scroll-v');if(u)u.title='Lines on scroll bar show match locations'
       }
     }
     return[q,ic]
@@ -130,7 +131,7 @@ D.Ed.prototype={
     return!1
   },
   selectAllSearchResults:function(){
-    var cm=this.cm,ic=!$('.tb_case',this.$tb).hasClass('pressed') //ic:ignore case?, q:query string
+    var cm=this.cm,ic=!$('.tb_case',this.tb).hasClass('pressed') //ic:ignore case?, q:query string
     var q=this.cmSC.getValue();ic&&(q=q.toLowerCase())
     if(q){
       var s=cm.getValue(),sels=[],i=0;ic&&(s=s.toLowerCase())
@@ -140,13 +141,13 @@ D.Ed.prototype={
     cm.focus()
   },
   replace:function(backwards){ //replace current occurrence and move to next
-    var ic=!$('.tb_case',this.$tb).hasClass('pressed')   //ignore case?
+    var ic=!$('.tb_case',this.tb).hasClass('pressed')   //ignore case?
     var q=this.cmSC.getValue()  ;ic&&(q=q.toLowerCase()) //query string
     var s=this.cm.getSelection();ic&&(s=s.toLowerCase()) //selection
     s===q&&this.cm.replaceSelection(this.cmRP.getValue(),backwards?'start':'end')
     this.search(backwards)
     var v=this.cm.getValue();ic&&(v=v.toLowerCase())
-    $('.tb_sc',this.$tb).toggleClass('no-matches',v.indexOf(q)<0)
+    $('.tb_sc',this.tb).toggleClass('no-matches',v.indexOf(q)<0)
   },
   highlight:function(l){ //current line in tracer
     var ed=this;ed.hll!=null&&ed.cm.removeLineClass(ed.hll,'background','highlighted')
@@ -155,13 +156,13 @@ D.Ed.prototype={
     }
   },
   setTracer:function(x){
-    var ed=this;ed.tc=x;ed.$e.toggleClass('tracer',x);ed.highlight(null)
+    var ed=this;ed.tc=x;D.util.tglCls(ed.dom,'tracer',x);ed.highlight(null)
     var ln=!!(ed.tc?D.prf.lineNumsTracer():D.prf.lineNumsEditor())
-    ed.cm.setOption('lineNumbers',ln);ed.$tb.find('.tb_LN').toggleClass('pressed',ln)
-    ed.updGutters();ed.setReadOnly(x)
+    ed.cm.setOption('lineNumbers',ln);ed.updGutters();ed.setReadOnly(x)
+    var a=ed.tb.querySelectorAll('.tb_LN');for(var i=0;i<a.length;i++)D.util.tglCls(a[i],'pressed',ln)
   },
-  setReadOnly:function(x){this.cm.setOption('readOnly',x);this.$rp.toggle(!x)},
-  updSize:function(){var $p=this.$e;this.cm.setSize($p.width(),$p.height()-28)},
+  setReadOnly:function(x){this.cm.setOption('readOnly',x);this.rp.hidden=!!x},
+  updSize:function(){var $p=$(this.dom);this.cm.setSize($p.width(),$p.height()-28)},
   open:function(ee){ //ee:editable entity
     var ed=this,cm=ed.cm
     this.jumps.forEach(function(x){x.n=x.lh.lineNo()}) //to preserve jumps, convert LineHandle-s to line numbers
@@ -179,10 +180,10 @@ D.Ed.prototype={
     ed.setReadOnly(ee.readOnly||ee['debugger'])
     var line=ee.currentRow,col=ee.currentColumn||0
     if(line===0&&col===0&&ee.text.length===1)col=ee.text[0].length
-    cm.setCursor(line,col);cm.scrollIntoView(null,ed.$e.height()/2)
+    cm.setCursor(line,col);cm.scrollIntoView(null,ed.dom.clientHeight/2)
     ed.oStop=(ee.stop||[]).slice(0).sort(function(x,y){return x-y})
     for(var k=0;k<ed.oStop.length;k++)cm.setGutterMarker(ed.oStop[k],'breakpoints',ed.createBPEl())
-    D.floating&&$('title',ed.$e[0].ownerDocument).text(ee.name)
+    D.floating&&$('title',ed.dom.ownerDocument).text(ee.name)
   },
   hasFocus:function(){return window.focused&&this.cm.hasFocus()},
   focus:function(){
@@ -197,7 +198,7 @@ D.Ed.prototype={
   },
   closePopup:function(){if(D.floating){window.onbeforeunload=null;D.forceClose=1;close()}},
   die:function(){this.setReadOnly(true)},
-  getDocument:function(){return this.$e[0].ownerDocument},
+  getDocument:function(){return this.dom.ownerDocument},
   refresh:function(){this.cm.refresh()},
   cword:function(){ //apl identifier under cursor
     var c=this.cm.getCursor(),s=this.cm.getLine(c.line),r='['+D.syn.letter+'0-9]*' //r:regex fragment used for a name
@@ -242,8 +243,9 @@ D.Ed.prototype={
     cm.replaceRange(s,{line:l,ch:0},{line:l,ch:cm.getLine(l).length},'D')
   },
   LN:function(cm){ //toggle line numbers
-    var v=!!(this.tc?D.prf.lineNumsTracer.toggle():D.prf.lineNumsEditor.toggle())
-    cm.setOption('lineNumbers',v);this.updGutters();this.$tb.find('.tb_LN').toggleClass('pressed',v)
+    var ed=this,v=!!(ed.tc?D.prf.lineNumsTracer.toggle():D.prf.lineNumsEditor.toggle())
+    cm.setOption('lineNumbers',v);ed.updGutters()
+    var a=ed.tb.querySelectorAll('.tb_LN');for(var i=0;i<a.length;i++)D.util.tglCls(a[i],'pressed',v)
   },
   PV:function(){this.search(1)},
   NX:function(){this.search()},
