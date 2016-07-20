@@ -19,9 +19,10 @@ $.fn.dereferenceLabels=function(){
   if(!this.length||this[0].tagName.toLowerCase()!=='label')return this
   var id=this.attr('for');return(id?$('#'+id):this.find(':input')).assertUnique()
 }
-function testcase(x){}
-function find(x){return $(':t('+JSON.stringify(x)+')').assertUnique().dereferenceLabels()}
-function click    (x){find(x).click    ()}
+function testcase (x){}
+function find     (x){return $(':t('+JSON.stringify(x)+')').assertUnique().dereferenceLabels()}
+function isPresent(x){return $(':t('+JSON.stringify(x)+')').length===1}
+function click(x){mousedown(x);isPresent(x)&&find(x).click();isPresent(x)&&mouseup(x)}
 function mousedown(x){find(x).mousedown()}
 function mouseup  (x){find(x).mouseup  ()}
 function mouseover(x){find(x).mouseover()}

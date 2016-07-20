@@ -16,7 +16,7 @@ testcase lbar toggle through menu
   find ⍤
 
 testcase lbar insert char
-  mousedown ⍣
+  click ⍣
   200
   assert sessionLastLines(1)[0].slice(-1)==='⍣'
 
@@ -24,7 +24,7 @@ testcase prefs dialog
   // mousedown Edit
   // click Preferences
   inSession <PRF>
-  mousedown Colours
+  click Colours
   fillIn('Scheme','Francisco Goya')
   click Clone
   click Apply
@@ -36,7 +36,7 @@ testcase prefs>layout: reset button
   // mousedown Edit
   // click Preferences
   inSession <PRF>
-  mousedown Layout
+  click Layout
   fillIn('Prefix','%')
   find Shift+Key
   click Reset
@@ -48,7 +48,7 @@ testcase prefs>title
   // mousedown Edit
   // click Preferences
   inSession <PRF>
-  mousedown Title
+  click Title
   fillIn('Window title','TestRunner was here')
   click Apply
   assert document.title.includes('TestRunner was here')
