@@ -12,7 +12,7 @@ D.Ed=function(ide,opts){ //Editor constructor
   ed.lastQuery=ed.lastIC=ed.lastGen=ed.overlay=ed.annotation=null //search-related state
   ed.focusTS=0 //focus timestamp
   ed.jumps=[]
-  ed.cm=CM(ed.dom.querySelector('.ride-win-cm'),{
+  ed.cm=CM(ed.dom.querySelector('.ride_win_cm'),{
     lineNumbers:!!(ed.tc?D.prf.lineNumsTracer():D.prf.lineNumsEditor()),
     firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
     smartIndent:D.prf.indent()>=0,indentUnit:D.prf.indent(),scrollButtonHeight:12,matchBrackets:!!D.prf.matchBrackets(),
@@ -96,7 +96,7 @@ D.Ed.prototype={
     this.cm.scrollIntoView({left:x,right:x,top:y-h/3,bottom:y+2*h/3})
   },
   clearSearch:function(){
-    var ed=this,u=ed.dom.querySelector('.ride-win .cm-scroll-v');if(u)u.title=''
+    var ed=this,u=ed.dom.querySelector('.ride_win .cm-scroll-v');if(u)u.title=''
     D.util.rmCls(ed.tb.querySelector('.tb_sc'),'no-matches')
     ed.cm.removeOverlay(ed.overlay);ed.annotation&&ed.annotation.clear();ed.overlay=ed.annotation=null
   },
@@ -111,7 +111,7 @@ D.Ed.prototype={
           var s=ed.cm.getValue();if(ic)s=s.toLowerCase();$('.tb_sc',ed.tb).toggleClass('no-matches',s.indexOf(q)<0)
           s=x.string.slice(x.pos);var i=s.indexOf(q);if(!i){x.pos+=q.length;return'searching'};i>0?x.pos+=i:x.skipToEnd()
         }})
-        var u=ed.dom.querySelector('.ride-win .cm-scroll-v');if(u)u.title='Lines on scroll bar show match locations'
+        var u=ed.dom.querySelector('.ride_win .cm-scroll-v');if(u)u.title='Lines on scroll bar show match locations'
       }
     }
     return[q,ic]

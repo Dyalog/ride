@@ -3,7 +3,7 @@
 D.Se=function(ide){ // Session constructor
   var se=this;se.ide=ide;se.hist=[''];se.histIdx=0;se.focusTS=0;se.id=0
   se.dirty={} // modified lines: lineNumber→originalContent, inserted lines: lineNumber→0 (also used in syn.js)
-  se.dom=document.createElement('div');se.dom.className='ride-win';se.$e=$(se.dom)
+  se.dom=document.createElement('div');se.dom.className='ride_win';se.$e=$(se.dom)
   var cm=se.cm=CM(se.dom,{
     autofocus:true,mode:{name:'apl-session',se:se},matchBrackets:!!D.prf.matchBrackets(),readOnly:true,keyMap:'dyalog',
     lineWrapping:!!D.prf.wrap(),indentUnit:4,smartIndent:0,autoCloseBrackets:{pairs:'()[]{}',explode:''},

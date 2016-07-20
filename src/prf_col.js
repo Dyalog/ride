@@ -6,7 +6,7 @@ D.addSynGrps=function(x){G=G.concat(x);H={};for(var i=0;i<G.length;i++)H[G[i].t]
 D.addSynGrps([
   //t: token type, a short key for storing customisations
   //s: string to display in the UI
-  //c: css selector -- will be prefixed with "#col_cm" or ".ride-win" unless /*noprefix*/ is present
+  //c: css selector -- will be prefixed with "#col_cm" or ".ride_win" unless /*noprefix*/ is present
   //ctrls: what UI controls should be shown or hidden for this group (other than the default ones)
   {s:'assignment'      ,t:'asgn',c:'.cm-apl-asgn'},
   {s:'bracket'         ,t:'sqbr',c:'.cm-apl-sqbr'},
@@ -100,7 +100,7 @@ var scm  //the active scheme object
 var cm   //CodeMirror instance for displaying sample code
 var sel  //the selected group's token type (.t)
 function renderCSS(scm,isSample){
-  var rp=isSample?'#col_cm':'.ride-win' //css rule prefix, ignored when there's a "/*noprefix*/"
+  var rp=isSample?'#col_cm':'.ride_win' //css rule prefix, ignored when there's a "/*noprefix*/"
   return G.map(function(g){var h=scm[g.t];return!h?'':
     g.c.split(',').map(function(x){return!/^\/\*noprefix\*\//.test(x)?rp+' '+x:isSample?'#nonexistent':x}).join(',')+'{'+
       (h.fg?'color:'+RGB(h.fg)+';'           :'')+
