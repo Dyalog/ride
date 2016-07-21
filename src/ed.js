@@ -327,21 +327,11 @@ D.Ed.prototype={
     var ed=this
     if(ed.ide.dead){D.nww&&D.nww.close(true)} //force close window
     else if(ed.tc||ed.cm.getValue()===ed.oText&&''+ed.getStops()===''+ed.oStop){ed.EP(ed.cm)}
-    else if(!ed.dlg){
+    else{
       window.focus()
-      ed.dlg=$('<p>The object "'+ed.name+'" has changed.<br>Do you want to save the changes?</p>').dialog({
-        width:400,title:'Save?',close:function(){ed.dlg.dialog('close');ed.dlg=null},
-        buttons:[
-          {html:'<u>Y</u>es'   ,click:function(){ed.dlg.dialog('close');ed.dlg=null;ed.EP(ed.cm)}},
-          {html:'<u>N</u>o'    ,click:function(){ed.dlg.dialog('close');ed.dlg=null;ed.QT(ed.cm)}},
-          {html:'<u>C</u>ancel',click:function(){ed.dlg.dialog('close');ed.dlg=null}}
-        ]
-      })
-      //When a string is returned from onbeforeunload:
-      // NW.js prevents the window from closing.
-      // Browsers ask the user "Are you sure you want to close this window?"
-      // In addition, some browsers display the returned string along with the above question.
-      return''
+      var r=D.el.dialog.showMessageBox(D.elw,{title:'Save?',buttons:['Yes','No','Cancel'],cancelId:-1,
+        message:'The object "'+ed.name+'" has changed.\nDo you want to save the changes?'})
+      r===0?ed.EP(ed.cm):r===1?ed.QT(ed.cm):0;return''
     }
   }
 }

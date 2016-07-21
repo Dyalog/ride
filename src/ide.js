@@ -84,35 +84,45 @@ D.IDE=function(){'use strict'
     },
     OptionsDialog:function(x){
       var text=typeof x.text==='string'?x.text:x.text.join('\n')
-      if(D.el){
-        var i=D.el.dialog.showMessageBox(D.elw,{message:text,title:x.title||'',buttons:x.options,cancelId:-1})
-        D.send('ReplyOptionsDialog',{index:i,token:x.token})
+      if(D.el&&process.env.RIDE_NATIVE_DIALOGS){
+        r=D.el.dialog.showMessageBox(D.elw,{message:text,title:x.title||'',buttons:x.options||[''],cancelId:-1})
+        D.send('ReplyOptionsDialog',{index:r,token:x.token})
       }else{
-        var i=-1;var f=function(e){i=$(e.target).closest('.ui-button').index();$(this).dialog('close')} //i:clicked index
-        $('<p>').text(text).dialog({modal:1,title:x.title,buttons:x.options.map(function(s){return{text:s,click:f}}),
-                                    close:function(){D.send('ReplyOptionsDialog',{index:i,token:x.token})}})
+        I.gd_title_text.textContent=x.title||'';I.gd_content.textContent=text
+        I.gd_btns.innerHTML=(x.options||[]).map(function(y){return'<button>'+D.util.esc(y)+'</button>'}).join('')
+        var ret=function(r){I.gd_btns.onclick=I.gd_close.onclick=null;I.gd.hidden=1
+                            D.send('ReplyOptionsDialog',{index:r,token:x.token})}
+        I.gd_close.onclick=function(){ret(-1)}
+        I.gd_btns.onclick=function(e){if(e.target.nodeName==='BUTTON'){
+                                        var i=0,t=e.target;while(t){t=t.previousSibling;i++}ret(i)}}
+        D.util.dlg(I.gd,{w:400,h:300})
       }
     },
     StringDialog:function(x){
-      var ok,$i=$('<input>').val(x.initialValue||'')
-      $('<p>').text(x.text||'').append('<br>').append($i).dialog({
-        modal:1,title:x.title,buttons:[
-          {html:'<u>O</u>K'    ,click:function(){ok=1;$(this).dialog('close')}},
-          {html:'<u>C</u>ancel',click:function(){     $(this).dialog('close')}}
-        ],
-        close:function(){D.send('ReplyStringDialog',{value:ok?$i.val():x.defaultValue||null,token:x.token})}
-      })
+      I.gd_title_text.textContent=x.title||'';I.gd_content.innerText=x.text||''
+      I.gd_content.insertAdjacentHTML('beforeend','<br><input>')
+      var inp=I.gd_content.querySelector('input');inp.value=x.initialValue||''
+      I.gd_btns.innerHTML='<button>OK</button><button>Cancel</button>'
+      var ret=function(r){I.gd_btns.onclick=I.gd_close.onclick=null;I.gd.hidden=1
+                          D.send('ReplyStringDialog',{value:r,token:x.token})}
+      I.gd_close.onclick=function(){ret(x.defaultValue||null)}
+      I.gd_btns.onclick=function(e){if(e.target.nodeName==='BUTTON'){
+                                        ret(e.target.previousSibling?x.defaultValue||null:inp.value)}}
+      D.util.dlg(I.gd,{w:400,h:300});setTimeout(function(){inp.focus()},1)
     },
     TaskDialog:function(x){
-      var esc=D.util.esc, i=-1 //i:the result
-      var $d=$('<div class=task_dlg><p>'+esc(x.text||'')+'<p class=subtext>'+esc(x.subtext||'')+'<div>'+
-                 x.buttonText.map(function(s){return'<button class=task>'+esc(s)+'</button>'}).join('')+
-               '</div><p class=footer>'+esc(x.footer||'')+'</div>')
-      $d.on('click','.task',function(e){i=100+$(e.target).index();$d.dialog('close')})
-        .dialog({modal:1,title:x.title,close:function(){D.send('ReplyTaskDialog',{index:i,token:x.token})},
-                 buttons:x.options.map(function(s){return{text:s,click:function(e){
-                   i=$(e.target).closest('.ui-button').index();$d.dialog('close')
-                 }}})})
+      var esc=D.util.esc
+      I.gd_title_text.textContent=x.title||''
+      I.gd_content.innerHTML=esc(x.text||'')+(x.subtext?'<div class=task_subtext>'+esc(x.subtext)+'</div>':'')
+      I.gd_btns.innerHTML=
+        (x.buttonText||[]).map(function(y){return'<button class=task>'+D.util.esc(y)+'</button>'}).join('')+
+        (x.footer?'<div class=task_footer>'+esc(x.footer)+'</div>':'')
+      var ret=function(r){I.gd_btns.onclick=I.gd_close.onclick=null;I.gd.hidden=1
+                          D.send('ReplyTaskDialog',{index:r,token:x.token})}
+      I.gd_close.onclick=function(){ret(-1)}
+      I.gd_btns.onclick=function(e){if(e.target.nodeName==='BUTTON'){
+                                      var t=e.target,i=-1;while(t){t=t.previousSibling;i++}ret(i)}}
+      D.util.dlg(I.gd,{w:400,h:300})
     },
     ReplyTreeList:function(x){ide.wse.replyTreeList(x)},
     UnknownCommand:function(){}
