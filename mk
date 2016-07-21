@@ -8,7 +8,8 @@ const rq=require,fs=rq('fs'),path=rq('path'),{execSync}=rq('child_process'),asyn
 ,mv=(x,y)=>fs.renameSync(x,y)                                       // move/rename file
 ,md=x=>{if(!fs.existsSync(x)){md(path.dirname(x));fs.mkdirSync(x)}} // mkdir -p
 ,nt=(x,y)=>!fs.existsSync(y)||fs.statSync(x)>fs.statSync(y)         // newer than
-,rm=x=>{if(fs.lstatSync(x).isDirectory()){fs.readdirSync(x).map(y=>rm(x+'/'+y));fs.rmdirSync(x)}else{fs.unlinkSync(x)}}
+,rm=x=>{if(fs.existsSync(x)){if(fs.lstatSync(x).isDirectory()){fs.readdirSync(x).map(y=>rm(x+'/'+y));fs.rmdirSync(x)}
+                             else{fs.unlinkSync(x)}}}
 ,v=JSON.parse(rf('package.json')).version.replace(/\.0$/,'')+'.'+sh('git rev-list --count HEAD') // version string
 ,tasks={}
 
