@@ -234,12 +234,16 @@ const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
 ,toBuf=x=>{const b=Buffer('xxxxRIDE'+x);b.writeInt32BE(b.length,0);return b}
 ,sendEach=x=>{if(clt){x.forEach(y=>log('send '+trunc(y)));clt.write(Buffer.concat(x.map(toBuf)))}}
 ,initInterpreterConn=_=>{
-  let q=Buffer(0),old //old:have we warned the user that we're talking to an old interpreter
+  let q=Buffer(4096),iq=0,nq=0,old //iq,nq:offset and length in q; old:have we warned about an old interpreter?
   clt.on('data',x=>{
-    q=Buffer.concat([q,x]);let n
-    while(q.length>=4&&(n=q.readInt32BE(0))<=q.length){
+    if(nq+x.length>q.length){const r=Buffer(Math.pow(2,Math.ceil(Math.log(nq+x.length)/Math.log(2))))
+                             q.copy(r,0,iq,iq+nq);iq=0;q=r;log('resized recv buffer to '+q.length)}
+    else if(iq+nq+x.length>q.length){q.copy(q,0,iq,iq+nq);iq=0}
+    x.copy(q,iq+nq,0,x.length);nq+=x.length
+    let n //message length
+    while(nq>=4&&(n=q.readInt32BE(iq))<=nq){
       if(n<=8){err('Bad protocol message');break}
-      const m=''+q.slice(8,n);q=q.slice(n);log('recv '+trunc(m))
+      const m=''+q.slice(iq+8,iq+n);iq+=n;nq-=n;log('recv '+trunc(m))
       if(m[0]==='['){
         const u=JSON.parse(m);D.recv&&D.recv(u[0],u[1])
       }else if(m[0]==='<'&&!old){
