@@ -45,6 +45,7 @@ D.cmds=[
   ['VAL','Evaluate selection or name under cursor',[]],
   ['WI', 'Weak interrupt',          ['Ctrl-Pause']],
   ['WSE','Toggle workspace explorer',[]],
+  ['ZM', 'Toggle maximise editor',  []],
   ['ZMI','Increase font size',      ['Ctrl-=','Shift-Ctrl-='].concat(D.mac?['Cmd-=','Shift-Cmd-=']:[])],
   ['ZMO','Decrease font size',      ['Ctrl--'].concat(D.mac?'Cmd--':[])],
   ['ZMR','Reset font size',         ['Ctrl-0'].concat(D.mac?'Cmd-0':[])]

@@ -260,3 +260,5 @@ D.IDE.prototype={
   _disconnected:function(){if(!this.dead){$.err('Interpreter disconnected');this.die()}} //invoked from cn.js
 }
 CM.commands.WSE=function(){D.prf.wse.toggle()}
+CM.commands.ZM=function(){var w=D.ide.focusedWin;w.container.parent.toggleMaximise()
+                          setTimeout(function(){w.cm&&w.cm.focus()},100)}
