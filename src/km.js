@@ -156,7 +156,17 @@ $.extend(CM.commands,{
     },{origin:'+move',bias:-1})
   },
   JSC:function(){D.elw&&D.elw.webContents.toggleDevTools()},
-  LOG:function(){D.showProtocolLog&&D.showProtocolLog()},
+  LOG:function(){
+    if(!D.el)return
+    var w=D.logw=new D.el.BrowserWindow({width:400,height:500}), cn=node_require(__dirname+'/src/cn')
+    w.setTitle('Protocol Log');w.loadURL('file://'+__dirname+'/empty.html')
+    w.webContents.executeJavaScript('var b=document.body,s=b.style;s.fontFamily="monospace";'+
+                                    's.overflow="scroll";s.whiteSpace="pre"')
+    var f=function(x){w.webContents.executeJavaScript('b.textContent+='+JSON.stringify(x+'\n')+
+                                                      ';b.scrollTop=b.scrollHeight')}
+    f(cn.getLog().filter(function(x){return x}).join('\n'))
+    cn.addLogListener(f);w.on('closed',function(){delete D.logw;cn.rmLogListener(f)})
+  },
   TIP:function(){var w=D.ide.focusedWin,u=w.cm.getCursor();w.vt.show({line:u.line,ch:Math.max(0,u.ch-1)},1)},
   AO:function(cm){ // add comment
     if(cm.somethingSelected()){

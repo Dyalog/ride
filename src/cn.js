@@ -8,7 +8,6 @@ let $sel=$(),sel //$sel:selected item(s), sel:data associated with the selected 
 ,child //a ChildProcess instance, the result from spawn()
 ,srv   //server, used to listen for connections from interpreters
 const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os'),path=rq('path')
-,log=x=>{console.log(x)}
 ,esc=D.util.esc,user=D.el?process.env.USER:''
 ,MIN_V=[15,0],KV=/^([a-z_]\w*)=(.*)$/i,WS=/^\s*$/ //KV:regexes for parsing env vars
 ,cmpVer=(x,y)=>x[0]-y[0]||x[1]-y[1]||0 //compare two versions of the form [major,minor]
@@ -292,6 +291,15 @@ module.exports=_=>{
   else if(h.s){go({type:'start',exe:h.s})
                window.onbeforeunload=function(){D.send('Exit',{code:0})}}
   else{D.cn()}
+}
+
+let log
+{//logging
+  let i=0;const n=100,a=Array(n),l=[],t0=+new Date
+  log=x=>{a[i++]=x=(new Date-t0)+' '+x;i%=n;for(var j=0;j<l.length;j++)l[j](x)}
+  module.exports.getLog=_=>a.slice(i).concat(a.slice(0,i))
+  module.exports.addLogListener=x=>{l.push(x)}
+  module.exports.rmLogListener=x=>{const i=l.indexOf(x);i>=0&&l.splice(i,1)}
 }
 
 })()
