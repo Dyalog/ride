@@ -70,15 +70,15 @@ D.prf={}
     '\n&View'+
     '\n  Show Language Bar        =LBR'+
     '\n  Show Workspace Explorer  =WSE'+
-    '\n  Floating Edit Windows    =FLT'+
-    '\n  Editors on Top           =TOP {!browser}'+
+//    '\n  Floating Edit Windows    =FLT'+
+//    '\n  Editors on Top           =TOP {!browser}'+
     '\n  Line Wrapping in Session =WRP'+
     '\n  -                             {!browser}'+
     '\n  Increase Font Size       =ZMI {!browser}'+
     '\n  Decrease Font Size       =ZMO {!browser}'+
     '\n  Reset Font Size          =ZMR {!browser}'+
-    '\n  -'+
-    '\n  Theme                    =THM'+
+//    '\n  -'+
+//    '\n  Theme                    =THM'+
     '\n&Actions'+
     '\n  Weak Interrupt           =WI'+
     '\n  Strong Interrupt         =SI'+

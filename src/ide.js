@@ -179,7 +179,7 @@ D.IDE=function(){'use strict'
   I.lb_prf.onclick=function(){return!1} //prevent # appearing in the URL bar
 
   var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
-  ide.gl=new GoldenLayout({labels:{minimise:'unmaximise'},
+  ide.gl=new GoldenLayout({labels:{minimise:'unmaximise'},settings:{showPopoutIcon:0},
                            content:[{type:'row',content:[{type:'component',componentName:'win',
                                                           componentState:{id:0},title:'Session'}]}]},
                           $(ide.dom))
