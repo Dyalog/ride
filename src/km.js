@@ -168,7 +168,8 @@ $.extend(CM.commands,{
     cn.addLogListener(f);w.on('closed',function(){delete D.logw;cn.rmLogListener(f)})
   },
   TIP:function(){var w=D.ide.focusedWin,u=w.cm.getCursor();w.vt.show({line:u.line,ch:Math.max(0,u.ch-1)},1)},
-  AO:function(cm){ // add comment
+  AO:function(cm){ //add comment
+    if(cm.getOption('readOnly'))return
     if(cm.somethingSelected()){
       var a=cm.listSelections()
       cm.replaceSelections(cm.getSelections().map(function(s){return s.replace(/^/gm,'⍝').replace(/\n⍝$/,'\n')}))
@@ -181,7 +182,8 @@ $.extend(CM.commands,{
       var l=cm.getCursor().line,p={line:l,ch:0};cm.replaceRange('⍝',p,p,'D');cm.setCursor({line:l,ch:1})
     }
   },
-  DO:function(cm){ // delete comment
+  DO:function(cm){ //delete comment
+    if(cm.getOption('readOnly'))return
     if(cm.somethingSelected()){
       var a=cm.listSelections(),u=cm.getSelections()
       cm.replaceSelections(u.map(function(s){return s.replace(/^⍝/gm,'')}))

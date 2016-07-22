@@ -252,6 +252,7 @@ D.Ed.prototype={
   NX:function(){this.search()},
   TC:function(){D.send('StepInto',{win:this.id})},
   AC:function(cm){ //align comments
+    if(cm.getOption('readOnly'))return
     var ed=this,ll=cm.lastLine(),o=cm.listSelections() //o:original selections
     var sels=cm.somethingSelected()?o:[{anchor:{line:0,ch:0},head:{line:ll,ch:cm.getLine(ll).length}}]
     var a=sels.map(function(sel){ //a:info about individual selections (Hey, it's AC; we must align our own comments!)
