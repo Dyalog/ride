@@ -175,8 +175,9 @@ D.Ed.prototype={
     // 2 SimpleCharArray      64 NativeFile        2048 AplSession
     // 4 SimpleNumericArray  128 SimpleCharVector  4096 ExternalFunction
     // 8 MixedSimpleArray    256 AplNamespace
-    if([1,256,512,1024,2048,4096].indexOf(ee.entityType)<0){cm.setOption('mode','text')}
-    else{cm.setOption('mode','apl');if(D.prf.indentOnOpen()){cm.execCommand('selectAll');cm.execCommand('indentAuto')}}
+    var isCode=[1,256,512,1024,2048,4096].indexOf(ee.entityType)>=0
+    cm.setOption('mode',isCode?'apl':'text');cm.setOption('foldGutter',isCode&&!!D.prf.fold())
+    if(isCode&&D.prf.indentOnOpen()){cm.execCommand('selectAll');cm.execCommand('indentAuto')}
     ed.setReadOnly(ee.readOnly||ee['debugger'])
     var line=ee.currentRow,col=ee.currentColumn||0
     if(line===0&&col===0&&ee.text.length===1)col=ee.text[0].length
