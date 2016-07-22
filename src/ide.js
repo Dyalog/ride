@@ -187,7 +187,11 @@ D.IDE=function(){'use strict'
                                                setTimeout(function(){w.focus()},1);return w})
   ide.gl.registerComponent('wse',function(c,h){var u=ide.wse||(ide.wse=new D.WSE());u.container=c
                                                c.getElement().append(u.dom);return u})
-  ide.gl.on('stateChanged',function(){eachWin(function(w){w.updSize();w.cm.refresh();w.updGutters&&w.updGutters()})})
+  var sctid //stateChanged timeout id
+  ide.gl.on('stateChanged',function(){
+    clearTimeout(sctid)
+    sctid=setTimeout(function(){eachWin(function(w){w.updSize();w.cm.refresh();w.updGutters&&w.updGutters()})},50)
+  })
   ide.gl.on('tabCreated',function(x){switch(x.contentItem.componentName){
     case'wse':x.closeElement.off('click').click(D.prf.wse.toggle);break
     case'win':var id=x.contentItem.config.componentState.id,cls=x.closeElement
