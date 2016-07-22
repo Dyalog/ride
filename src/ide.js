@@ -153,7 +153,7 @@ D.IDE=function(){'use strict'
       s.left=(t.offsetLeft+(t.offsetWidth-I.lb_tip_tri.offsetWidth)/2)+'px';s.top=(t.offsetTop+t.offsetHeight)+'px'
       var s=I.lb_tip.style,x0=t.offsetLeft-21,x1=x0+I.lb_tip.offsetWidth,y0=t.offsetTop+t.offsetHeight-3
       s.top=y0+'px';if(x1>document.body.offsetWidth){s.left='';s.right='0'}else{s.left=Math.max(0,x0)+'px';s.right=''}
-    },delay||200)
+    },delay||20)
   }
   I.lb.onmousedown=function(x){
     if(x.target.nodeName==='B'){var w=ide.focusedWin,s=x.target.textContent
@@ -195,7 +195,9 @@ D.IDE=function(){'use strict'
   ide.gl.on('tabCreated',function(x){switch(x.contentItem.componentName){
     case'wse':x.closeElement.off('click').click(D.prf.wse.toggle);break
     case'win':var id=x.contentItem.config.componentState.id,cls=x.closeElement
-              id?cls.off('click').click(function(){var w=ide.wins[id];w.EP(w.cm)}):cls.remove();break
+              if(id){cls.off('click').click(function(){var w=ide.wins[id];w.EP(w.cm)})}
+              else{cls.remove();x.titleElement[0].closest('.lm_tab').style.paddingRight='10px'}
+              break
   }})
   ide.gl.on('stackCreated',function(x){x.header.controlsContainer.find('.lm_close').remove()})
   ide.gl.init()
