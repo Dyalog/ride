@@ -58,7 +58,8 @@ function keyHTML(x){return'<span class=shc_key><span class=shc_text>'+x+'</span>
 function updKeys(x){var h=CM.keyMap.dyalog={fallthrough:'dyalogDefault'}
                     for(var i=0;i<D.cmds.length;i++){var c=D.cmds[i][0],d=D.cmds[i][2],ks=x[c]||d
                                                      for(var j=0;j<ks.length;j++)h[ks[j]]=c}}
-D.prf.keys(updKeys);updKeys(D.prf.keys())
+D.prf.keys(updKeys);CM.keyMap.dyalog={fallthrough:'dyalogDefault'} //temporarily set keyMap.dyalog to something
+setTimeout(function(){updKeys(D.prf.keys())},1) //wait until D.db is initialised in init.js, then set the real keymap
 function updDups(){
   var a=q.tbl_wr.querySelectorAll('.shc_text'),h={} //h:maps keystrokes to jQuery objects
   for(var i=0;i<a.length;i++){var k=a[i].textContent
