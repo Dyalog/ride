@@ -135,8 +135,8 @@ D.IDE=function(){'use strict'
     ide.wins[0].cm.operation(function(){
       while(mq.length&&!blk){var a=mq.shift(),f=handlers[a[0]]
                              f?f.apply(ide,a.slice(1)):D.send('UnknownCommand',{name:a[0]})}
-      last=+new Date;tid=0
     })
+    last=+new Date;tid=0
   }
   function rrd(){tid||(new Date-last<20?(tid=setTimeout(rd,20)):rd())} //request rundown
   D.recv=function(x,y){mq.push([x,y]);rrd()}
