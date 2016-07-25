@@ -234,7 +234,7 @@ const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
 ,toBuf=x=>{const b=Buffer('xxxxRIDE'+x);b.writeInt32BE(b.length,0);return b}
 ,sendEach=x=>{if(clt){x.forEach(y=>log('send '+trunc(y)));clt.write(Buffer.concat(x.map(toBuf)))}}
 ,initInterpreterConn=_=>{
-  let q=Buffer(4096),iq=0,nq=0,old //iq,nq:offset and length in q; old:have we warned about an old interpreter?
+  let q=Buffer(0x100000),iq=0,nq=0,old //iq,nq:offset and length in q; old:have we warned about an old interpreter?
   clt.on('data',x=>{
     if(nq+x.length>q.length){const r=Buffer(Math.pow(2,Math.ceil(Math.log(nq+x.length)/Math.log(2))))
                              q.copy(r,0,iq,iq+nq);iq=0;q=r;log('resized recv buffer to '+q.length)}
