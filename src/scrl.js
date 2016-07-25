@@ -1,8 +1,6 @@
 //scrollbars for CodeMirror
 ;(function(){'use strict'
 
-function addClass(e,c){e.className+=' '+c}
-function rmClass(e,c){e.className=e.className.replace(RegExp(' *\\b'+c+'\\b','gi'),'')}
 function Bar(o,scroll){ // o:orientation(0=vertical,1=horizontal), scroll:a callback function to request scrolling
   //                  ┏visible━part━┓
   // ┌all─content─────╂─────────────╂──────────────────────────┐
@@ -25,10 +23,10 @@ function Bar(o,scroll){ // o:orientation(0=vertical,1=horizontal), scroll:a call
   CM.on(thumb,'mousedown',function(e){
     if(e.which!==1)return
     CM.e_preventDefault(e);var axis=o?'pageX':'pageY',start=e[axis],pos0=pos
-    function done(){CM.off(document,'mousemove',move);CM.off(document,'mouseup',done);rmClass(thumb,'press')}
+    function done(){CM.off(document,'mousemove',move);CM.off(document,'mouseup',done);D.util.rmCls(thumb,'press')}
     function move(e){e.which!==1?done():moveTo(pos0+total*(e[axis]-start)/(size-2*w))}
     CM.on(document,'mousemove',move);CM.on(document,'mouseup',done)
-    addClass(thumb,'press')
+    D.util.addCls(thumb,'press')
   })
   CM.on(node,'click',function(e){
     CM.e_preventDefault(e);var x=e.clientX,y=e.clientY,r=thumb.getBoundingClientRect()
