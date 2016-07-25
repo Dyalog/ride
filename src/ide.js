@@ -185,7 +185,7 @@ D.IDE=function(){'use strict'
                           $(ide.dom))
   ide.gl.registerComponent('win',function(c,h){var w=ide.wins[h.id];w.container=c;c.getElement().append(w.dom)
                                                setTimeout(function(){w.focus()},1);return w})
-  ide.gl.registerComponent('wse',function(c,h){var u=ide.wse||(ide.wse=new D.WSE());u.container=c
+  ide.gl.registerComponent('wse',function(c,h){var u=ide.wse=new D.WSE();u.container=c
                                                c.getElement().append(u.dom);return u})
   var sctid //stateChanged timeout id
   ide.gl.on('stateChanged',function(){
