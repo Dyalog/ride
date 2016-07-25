@@ -113,20 +113,49 @@ D.prf={}
       str=t==='object'?JSON.stringify:function(x){return''+x}, // stringifier function
       sd=str(d),  // default value "d" converted to a string
       p=D.prf[k]=function(x){
-        var db=D.db||localStorage
         if(typeof x==='function'){
           l.push(x)
         }else if(arguments.length){
           x=t==='number'?(+x):t==='string'?(''+x):x // coerce "x" to type "t"
           var sx=str(x) // sx: "x" converted to a string; values can only be strings
           if(l.length)var old=p()
-          sx===sd?db.removeItem(k):db.setItem(k,sx) // avoid recording if it's at its default
+          sx===sd?D.db.removeItem(k):D.db.setItem(k,sx) // avoid recording if it's at its default
           for(var i=0;i<l.length;i++)l[i](x,old) // notify listeners
           return x
         }else{
-          var r=db.getItem(k);return r==null?d:t==='number'?(+r):t==='object'?JSON.parse(r):r
+          var r=D.db.getItem(k);return r==null?d:t==='number'?(+r):t==='object'?JSON.parse(r):r
         }
       }
   p.getDefault=function(){return d}
   p.toggle=function(){return p(!p())}
 })
+
+D.db=!D.el?localStorage:(function(){
+  //file-backed storage with API similar to that of localStorage
+  var k=[],v=[] //keys and values
+  var db={key       :function(x)  {return k[x]},
+          getItem   :function(x)  {var i=k.indexOf(x);return i<0?null:v[i]},
+          setItem   :function(x,y){var i=k.indexOf(x);if(i<0){k.push(x);v.push(y)}else{v[i]=y};dbWrite()},
+          removeItem:function(x)  {var i=k.indexOf(x);if(i>=0){k.splice(i,1);v.splice(i,1);dbWrite()}},
+          _getAll   :function()   {var r={};for(var i=0;i<k.length;i++)r[k[i]]=v[i];return r}}
+  Object.defineProperty(db,'length',{get:function(){return k.length}})
+  var ver=fs.readFileSync(__dirname+'/_/version','utf8').replace(/^(\d+)\.(\d+)\.[^]*$/,'$1$2')
+  var d=D.el.app.getPath('userData'),f=d+'/prefs.json'
+  try{if(fs.existsSync(f)){var h=JSON.parse(fs.readFileSync(f,'utf8'));for(var x in h){k.push(x);v.push(h[x])}}}
+  catch(e){console.error(e)}
+  var st=0,dbWrite=function(){ //st: state 0=initial, 1=write pending, 2=write in progress
+    if(st===2){st=1;return}else{st=2}
+    var s='{\n'+k.map(function(x,i){return'  '+repr(x)+':'+repr(v[i])}).sort().join(',\n')+'\n}\n'
+    fs.writeFile(f+'1',s,function(e){
+      if(e){console.error(e);dbWrite=function(){};return} //make dbWrite() a nop
+      fs.unlink(f,function(){fs.rename(f+'1',f,function(){if(st===1){setTimeout(function(){dbWrite()},1000)}else{st=0}})})
+    })
+  }
+  return db
+}())
+
+if(D.win&&D.db.getItem('ime')!=='0'){
+  var setImeExe=process.execPath.replace(/[^\\\/]+$/,'set-ime.exe')
+  var fs=node_require('fs'),spawn=node_require('child_process').spawn
+  fs.existsSync(setImeExe)&&spawn(setImeExe,[process.pid],{stdio:['ignore','ignore','ignore']})
+}

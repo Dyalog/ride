@@ -7,7 +7,6 @@ var I={}, //all elements by id, eg I.lb_tip_text is document.getElementById('lb_
 if(typeof node_require!=='undefined'){
   D.el=node_require('electron').remote
   D.elw=D.el.getGlobal('elw')
-  D.db =D.el.getGlobal('db' )
   D=$.extend(D,node_require('electron').remote.getGlobal('D'))
   var plt=process.platform;D.win=/^win/i.test(plt);D.mac=plt==='darwin'
 }
@@ -90,16 +89,6 @@ updThm();D.prf.theme(updThm)
 if(D.el)document.body.className+=D.mac?' platform-mac':D.win?' platform-windows':''
 
 window.focused=true;window.onfocus=window.onblur=function(x){window.focused=x.type==='focus'}
-
-// migrations
-var db=D.db||localStorage
-db.version=db.version||'[3,0]' // localStorage.version defaults to current version
-var v=JSON.parse(db.version)
-if(v[0]<3&&db.favs){
-  try{db.favs=JSON.strigify(JSON.parse(db.favs).map(function(x){x.type='connect';x.port===4502&&delete x.port}))}
-  catch(_){delete db.favs}
-  db.version='[3,0]'
-}
 
 //Implement access keys (Alt-X) using <u></u>.
 //HTML's accesskey=X doesn't handle duplicates well -- it doesn't always favour a visible input over a hidden one.
