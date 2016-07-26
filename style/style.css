@@ -207,7 +207,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 
 /*various dialogs*/
 .dlg{background-color:#dcdad5;border-color:#fff #888 #888 #fff;border-style:solid;border-width:1px;position:absolute;box-shadow:4px 4px 12px rgba(0,0,0,0.5)}
-.dlg_title{background-color:#004;color:#fff;cursor:default;padding-left:8px;height:19px;line-height:19px}
+.dlg_title{background-color:#ccc;color:#444;cursor:default;text-align:center;font-weight:bold;height:19px;line-height:19px}
 .dlg_close{float:right;background-color:#eee;color:#000;width:14px;height:14px;margin:2px;line-height:16px;
            text-align:center;text-decoration:none;cursor:pointer}
 .dlg_close:hover{background-color:#fff}
@@ -340,7 +340,7 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 #abt_contact a,
 #abt_contact a:visited,
 #abt_contact a:active{color:blue}
-#abt_ta_wr{position:absolute;left:5px;right:13px;top:86px;bottom:45px;width:auto}
+#abt_ta_wr{position:absolute;left:5px;right:13px;top:86px;bottom:52px;width:auto}
 #abt_ta{border-style:solid;border-color:#888 #fff #fff #888;border-width:2px;white-space:pre;word-wrap:normal;
         overflow-x:scroll;width:100%;height:100%;resize:none}
 
