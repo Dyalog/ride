@@ -13,7 +13,7 @@ D.Ed=function(ide,opts){ //Editor constructor
   ed.focusTS=0 //focus timestamp
   ed.jumps=[]
   ed.cm=CM(ed.dom.querySelector('.ride_win_cm'),{
-    lineNumbers:!!(ed.tc?D.prf.lineNumsTracer():D.prf.lineNumsEditor()),
+    lineNumbers:!!D.prf.lineNums(),
     firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
     smartIndent:D.prf.indent()>=0,indentUnit:D.prf.indent(),scrollButtonHeight:12,matchBrackets:!!D.prf.matchBrackets(),
     autoCloseBrackets:!!D.prf.autoCloseBrackets()&&ACB_VALUE,foldGutter:!!D.prf.fold(),
@@ -156,8 +156,7 @@ D.Ed.prototype={
     }
   },
   setTracer:function(x){
-    var ed=this;ed.tc=x;D.util.tglCls(ed.dom,'tracer',x);ed.highlight(null)
-    var ln=!!(ed.tc?D.prf.lineNumsTracer():D.prf.lineNumsEditor())
+    var ed=this,ln=!!D.prf.lineNums();ed.tc=x;D.util.tglCls(ed.dom,'tracer',x);ed.highlight(null)
     ed.cm.setOption('lineNumbers',ln);ed.updGutters();ed.setReadOnly(x)
     var a=ed.tb.querySelectorAll('.tb_LN');for(var i=0;i<a.length;i++)D.util.tglCls(a[i],'pressed',ln)
   },
@@ -243,11 +242,8 @@ D.Ed.prototype={
     s=[head].concat(tail.sort()).join(';')+(com?(' '+com):'')
     cm.replaceRange(s,{line:l,ch:0},{line:l,ch:cm.getLine(l).length},'D')
   },
-  LN:function(cm){ //toggle line numbers
-    var ed=this,v=!!(ed.tc?D.prf.lineNumsTracer.toggle():D.prf.lineNumsEditor.toggle())
-    cm.setOption('lineNumbers',v);ed.updGutters()
-    var a=ed.tb.querySelectorAll('.tb_LN');for(var i=0;i<a.length;i++)D.util.tglCls(a[i],'pressed',v)
-  },
+  LN:function(cm){var ed=this,v=D.prf.lineNums.toggle();cm.setOption('lineNumbers',v);ed.updGutters()
+                  var a=ed.tb.querySelectorAll('.tb_LN');for(var i=0;i<a.length;i++)D.util.tglCls(a[i],'pressed',v)},
   PV:function(){this.search(1)},
   NX:function(){this.search()},
   TC:function(){D.send('StepInto',{win:this.id})},

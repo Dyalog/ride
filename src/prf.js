@@ -27,7 +27,7 @@ D.prf={}
   ['kbdLocale',          ''],// e.g. "US", "GB"
   ['keys',               {}],// a mapping between commands and keystrokes, only diffs from the defaults
   ['lbar',               1], // show language bar
-  ['lineNumsEditor',     1],
+  ['lineNums',           1],
   ['lineNumsTracer',     0],
   ['matchBrackets',      1], // whether to highlight matching brackets
   ['otherExe',           ''],// content of the "exe" text box "Other..." is selected in the Connect page
