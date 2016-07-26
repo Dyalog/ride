@@ -18,8 +18,7 @@ el.app.on('ready',_=>{
   el.Menu.setApplicationMenu(null)
   w.loadURL(`file://${__dirname}/index.html`)
   w.on('show',_=>{if(p){const q=w.getPosition();dx=q[0]-p[0];dy=q[1]-p[1]}})
-   .on('moved',sv).on('resize',sv).on('maximize',sv).on('unmaximize',sv)
-   .on('close',_=>{if(tid){clearTimeout(tid);svNow()}}).on('closed',_=>{w=global.elw=0})
+   .on('moved',sv).on('resize',sv).on('close',_=>{if(tid){clearTimeout(tid);svNow()}}).on('closed',_=>{w=global.elw=0})
    .show()
   if(D.win){const fix=_=>{setTimeout(_=>{const a=w.getSize();w.setSize(a[0],a[1]-1);w.setSize(a[0],a[1])},100)}
             w.on('page-title-updated',fix).on('blur',fix)}
