@@ -17,7 +17,6 @@ D.IDE=function(){'use strict'
     NotificationMessage:function(x){$.alert(x.message,'Notification')},
     UpdateDisplayName:function(a){ide.wsid=a.displayName;ide.updTitle()},
     EchoInput:function(x){ide.wins[0].add(x.input)},
-    AppendSessionOutput:function(x){var r=x.result;ide.wins[0].add(typeof r==='string'?r:r.join('\n'))},
     SetPromptType:function(x){
       var t=x.type;t&&ide.pending.length?D.send('Execute',{trace:0,text:ide.pending.shift()+'\n'})
                                         :ide.wins[0].prompt(t)
@@ -132,10 +131,20 @@ D.IDE=function(){'use strict'
   //for it comes in before the window is ready.
   var mq=[],blk=0,tid=0,last=0 //mq:message queue, blk:blocked?, tid:timeout id, last:when last rundown finished
   function rd(){ //run down the queue
-    ide.wins[0].cm.operation(function(){
-      while(mq.length&&!blk){var a=mq.shift(),f=handlers[a[0]]
-                             f?f.apply(ide,a.slice(1)):D.send('UnknownCommand',{name:a[0]})}
-    })
+    while(mq.length&&!blk){
+      var a=mq.shift() //a[0]:command name, a[1]:command args
+      if(a[0]==='AppendSessionOutput'){ //special case: batch sequences of AppendSessionOutput together
+        ide.wins[0].cm.operation(function(){
+          var s=a[1].result,nq=Math.min(mq.length,64)
+          for(var i=0;i<nq&&mq[i][0]==='AppendSessionOutput';i++){
+            var r=mq[i][1].result;s+=typeof r==='string'?r:r.join('\n')
+          }
+          i&&mq.splice(0,i);ide.wins[0].add(s)
+        })
+      }else{
+        var f=handlers[a[0]];f?f.apply(ide,a.slice(1)):D.send('UnknownCommand',{name:a[0]})
+      }
+    }
     last=+new Date;tid=0
   }
   function rrd(){tid||(new Date-last<20?(tid=setTimeout(rd,20)):rd())} //request rundown
