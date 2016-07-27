@@ -75,6 +75,12 @@ D.Se.prototype={
   scrollCursorIntoView:function(){
     var cm=this.cm;cm.scrollTo(0,cm.getScrollInfo().top);setTimeout(function(){cm.scrollIntoView()},1)
   },
+  saveScrollPos:function(){ //workaround for CodeMirror scrolling up to the top under GoldenLayout when editor is closed
+    if(this.btm==null){var i=this.cm.getScrollInfo();this.btm=i.height-i.clientHeight-i.top}
+  },
+  restoreScrollPos:function(){
+    if(this.btm!=null){var i=this.cm.getScrollInfo();this.cm.scrollTo(0,i.height-i.clientHeight-this.btm);this.btm=null}
+  },
   hasFocus:function(){return window.focused&&this.cm.hasFocus()},
   focus:function(){
     var q=this.container,p=q&&q.parent,l=q&&q.layoutManager,m=l&&l._maximisedItem

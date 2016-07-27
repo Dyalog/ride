@@ -203,8 +203,12 @@ D.IDE=function(){'use strict'
   var sctid //stateChanged timeout id
   ide.gl.on('stateChanged',function(){
     clearTimeout(sctid)
-    sctid=setTimeout(function(){eachWin(function(w){w.updSize();w.cm.refresh();w.updGutters&&w.updGutters()})},50)
+    sctid=setTimeout(function(){
+      eachWin(function(w){w.updSize();w.cm.refresh();w.updGutters&&w.updGutters()})
+      ide.wins[0].restoreScrollPos()
+    },50)
   })
+  ide.gl.on('itemDestroyed',function(x){ide.wins[0].saveScrollPos()})
   ide.gl.on('tabCreated',function(x){
     switch(x.contentItem.componentName){
       case'wse':x.closeElement.off('click').click(D.prf.wse.toggle);break
