@@ -13,11 +13,9 @@ D.Ed=function(ide,opts){ //Editor constructor
   ed.focusTS=0 //focus timestamp
   ed.jumps=[]
   ed.cm=CM(ed.dom.querySelector('.ride_win_cm'),{
-    lineNumbers:!!D.prf.lineNums(),
-    firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
+    lineNumbers:!!D.prf.lineNums(),firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
     smartIndent:D.prf.indent()>=0,indentUnit:D.prf.indent(),scrollButtonHeight:12,matchBrackets:!!D.prf.matchBrackets(),
-    autoCloseBrackets:!!D.prf.autoCloseBrackets()&&ACB_VALUE,foldGutter:!!D.prf.fold(),
-    scrollbarStyle:'simple',
+    autoCloseBrackets:!!D.prf.autoCloseBrackets()&&ACB_VALUE,foldGutter:!!D.prf.fold(),scrollbarStyle:'simple',
     keyMap:'dyalog',extraKeys:{'Shift-Tab':'indentLess',Tab:'tabOrAutocomplete',Down:'downOrXline'}
     //Some options of this.cm can be set from ide.coffee when the corresponding pref changes.
   })
