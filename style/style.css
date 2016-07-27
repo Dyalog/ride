@@ -641,3 +641,4 @@ span.CodeMirror-selectedtext{background:none}
 
 /*Golden Layout*/
 .lm_goldenlayout{background-image:none!important;background-color:#eee!important}
+.lm_drag_handle{width:8px!important;left:-2px!important}

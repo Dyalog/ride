@@ -185,12 +185,13 @@ D.IDE=function(){'use strict'
     reqTip(x,'Keyboard Shortcuts',s+'...',1000)
   }
   I.lb_prf.onmousedown=function(){D.prf_ui();return!1}
-  I.lb_prf.onclick=function(){return!1} //prevent # appearing in the URL bar
+  I.lb_prf.onclick=function(){return!1} //prevent # from appearing in the URL bar
 
   var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
-  ide.gl=new GoldenLayout({labels:{minimise:'unmaximise'},settings:{showPopoutIcon:0},
-                           content:[{type:'row',content:[{type:'component',componentName:'win',
-                                                          componentState:{id:0},title:'Session'}]}]},
+  ide.gl=new GoldenLayout({
+    labels:{minimise:'unmaximise'},settings:{showPopoutIcon:0},dimensions:{borderWidth:4},
+    content:[{type:'row',content:[{type:'component',componentName:'win',componentState:{id:0},title:'Session'}]}]
+  },
                           $(ide.dom))
   ide.gl.registerComponent('win',function(c,h){var w=ide.wins[h.id];w.container=c;c.getElement().append(w.dom)
                                                setTimeout(function(){w.focus()},1);return w})
