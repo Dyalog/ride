@@ -338,7 +338,7 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 .ui-dialog .ui-dialog-content.task_dlg .task{display:block;width:100%;margin-top:2px}
 
 /*About dialog*/
-#abt{padding:0;margin:0}
+#abt{padding:0;margin:0;background:linear-gradient(#fff,#eee 1%,#dcdad5 5%)}
 #abt_logo{background:16px center no-repeat url(img/Dyalog_60.png);height:80px;line-height:20px}
 #abt_contact{color:#000;float:right;text-align:right;margin:12px 12px 0 0;cursor:default}
 #abt_contact a,
@@ -646,3 +646,6 @@ span.CodeMirror-selectedtext{background:none}
 /*Golden Layout*/
 .lm_goldenlayout{background-image:none!important;background-color:#eee!important}
 .lm_drag_handle{width:8px!important;left:-2px!important}
+.lm_tab{background-color:#dcdad5!important}
+.lm_close{border-radius:16px}
+.lm_close_tab.hvr{background-color:red;color:white}
