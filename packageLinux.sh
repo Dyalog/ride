@@ -64,7 +64,7 @@ Encoding=UTF-8
 Version=1.0
 Type=Application
 Exec=ride-${BASE_VERSION}
-Icon=ride
+Icon=ride30
 Terminal=false
 Name=Ride-${BASE_VERSION}
 Comment=Remote IDE for Dyalog APL
@@ -163,7 +163,7 @@ fi
 mkdir -p ${SBOXDIR}/opt/ride-${BASE_VERSION}
 mkdir -p ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps
 cp -R ${RIDEDIR}/* ${SBOXDIR}/opt/ride-${BASE_VERSION}/
-cp "$ICON" ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps/ride.svg
+cp "$ICON" ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps/ride30.svg
 
 createDEB
 createRPM
