@@ -199,8 +199,8 @@ D.IDE=function(){'use strict'
 
   var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
   var gl=ide.gl=new GoldenLayout({
-    labels:{minimise:'unmaximise'},settings:{showPopoutIcon:0},dimensions:{borderWidth:4},
-    content:[{type:'component',componentName:'win',componentState:{id:0},title:'Session'}]
+    settings:{showPopoutIcon:0},dimensions:{borderWidth:4},labels:{minimise:'unmaximise'},
+    content:[{title:'Session',type:'component',componentName:'win',componentState:{id:0}}]
   },$(ide.dom))
   gl.registerComponent('win',function(c,h){
     var w=ide.wins[h.id];w.container=c;c.getElement().append(w.dom)
@@ -227,9 +227,6 @@ D.IDE=function(){'use strict'
                 else{cls.remove();x.titleElement[0].closest('.lm_tab').style.paddingRight='10px'}
                 break
     }
-  })
-  gl.on('stackCreated',function(x){
-    x.header.controlsContainer.find('.lm_close').remove()
   })
   gl.init()
 

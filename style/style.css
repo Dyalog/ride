@@ -647,5 +647,4 @@ span.CodeMirror-selectedtext{background:none}
 .lm_goldenlayout{background-image:none!important;background-color:#eee!important}
 .lm_drag_handle{width:8px!important;left:-2px!important}
 .lm_tab{background-color:#dcdad5!important}
-.lm_close{border-radius:16px}
-.lm_close_tab.hvr{background-color:red;color:white}
+.lm_close{display:none!important}
