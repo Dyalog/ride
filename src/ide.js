@@ -65,16 +65,16 @@ D.IDE=function(){'use strict'
       if(done)return
       ;(ide.wins[w]=new D.Ed(ide,editorOpts)).open(ee)
       //add to golden layout:
-      var comp={type:'component',componentName:'win',componentState:{id:w},title:ee.name}
       var tc=!!ee['debugger']
       var bro=gl.root.getComponentsByName('win').filter(function(x){return x.id&&tc===!!x.tc})[0] //existing editor
       if(bro){ //add next to existing editor
-        bro.container.parent.parent.addChild(comp)
+        var p=bro.container.parent.parent
       }else{ //add to the right
-        var t0=tc?'column':'row', t1=tc?'row':'column', a=gl.root.contentItems[0] //a:old element, b:new element
-        var b=gl.createContentItem({type:t0,content:[{type:t1,content:[]},{type:t1,content:[]}]})
-        gl.root.replaceChild(a,b);b.contentItems[0].addChild(a);b.contentItems[1].addChild(comp)
+        var p=gl.root.contentItems[0], t0=tc?'column':'row', t1=tc?'row':'column'
+        if(p.type!==t0){var q=gl.createContentItem({type:t0},p);p.parent.replaceChild(p,q)
+                        q.addChild(p);q.callDownwards('setSize');p=q}
       }
+      p.addChild({type:'component',componentName:'win',componentState:{id:w},title:ee.name})
     },
     ShowHTML:function(x){
       if(D.el){
