@@ -93,7 +93,7 @@ window.focused=true;window.onfocus=window.onblur=function(x){window.focused=x.ty
 //Implement access keys (Alt-X) using <u></u>.
 //HTML's accesskey=X doesn't handle duplicates well -- it doesn't always favour a visible input over a hidden one.
 //Also, browsers like Firefox and Opera use different shortcuts (such as Alt-Shift-X or Ctrl-X) for accesskey-s.
-D.mac||document.addEventListener('keydown',function(e){ // Alt-A...Alt-Z or Alt-Shift-A...Alt-Shift-Z
+D.mac||CM.on(document,'keydown',function(e){ // Alt-A...Alt-Z or Alt-Shift-A...Alt-Shift-Z
   if(!e.altKey||e.ctrlKey||e.metaKey||e.which<65||e.which>90)return
   var c=String.fromCharCode(e.which).toLowerCase(),C=c.toUpperCase()
   var $ctx=$('.ui-widget-overlay').length?$('.ui-dialog:visible').last():$('body') //modal dialogs take priority

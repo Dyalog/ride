@@ -23,17 +23,16 @@ D.util={
     if(d.__dlg)return;d.__dlg=1
     d.onmousedown=function(){d.style.zIndex=zCtr++}
     d.onclick=function(e){if(e.target.className==='dlg_close'){d.hidden=1;return!1}}
-    d.addEventListener('keydown',
-        function(e){if(e.which===27&&!e.ctrlKey&&!e.shiftKey&&!e.altKey&&!e.metaKey){d.hidden=1;return!1}})
+    CM.on(d,'keydown',function(e){if(e.which===27&&!e.ctrlKey&&!e.shiftKey&&!e.altKey&&!e.metaKey){d.hidden=1;return!1}})
     var t=d.querySelector('.dlg_title')
     if(t){
       var dx,dy,mx,my //dx,dy:dialog position corrected for mouse; mx,my:maximum coords of dialog in window
       t.onmousedown=function(e){
         if(e.target.closest('.dlg_no_drag'))return
         dx=d.offsetLeft-e.clientX;dy=d.offsetTop-e.clientY;mx=innerWidth-d.clientWidth;my=innerHeight-d.clientHeight
-        t.style.cursor='move';document.addEventListener('mousemove',move);e.preventDefault();return!1
+        t.style.cursor='move';CM.on(document,'mousemove',move);e.preventDefault();return!1
       }
-      t.onmouseup=function(e){document.removeEventListener('mousemove',move);t.style.cursor=''}
+      t.onmouseup=function(e){CM.off(document,'mousemove',move);t.style.cursor=''}
       var move=function(e){d.style.left=Math.min(mx,Math.max(0,dx+e.clientX))+'px'
                            d.style.top =Math.min(my,Math.max(0,dy+e.clientY))+'px'
                            e.preventDefault();return!1}

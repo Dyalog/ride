@@ -73,7 +73,7 @@ function getKeystroke(b,f){ //b:"+" button,f:callback
             (x.ctrlKey?'Ctrl-':'')+(x.altKey?'Alt-':'')+(x.metaKey?'Cmd-':'')+kn
     if(kn){r=e.value;e.blur()};x.preventDefault();x.stopPropagation();return!1
   }
-  e.addEventListener('keyup',upd);e.addEventListener('keydown',upd)
+  CM.on(e,'keyup',upd);CM.on(e,'keydown',upd)
   e.onblur=function(){e.parentNode.removeChild(e);f(r)}
   e.placeholder='Press keystroke...';b.parentNode.insertBefore(e,b);e.focus()
 }
