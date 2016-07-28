@@ -64,7 +64,9 @@ D.IDE=function(){'use strict'
       }
       if(done)return
       ;(this.wins[w]=new D.Ed(this,editorOpts)).open(ee)
-      ide.gl.root.contentItems[0].addChild({type:'component',componentName:'win',componentState:{id:w},title:ee.name})
+      var bro=ide.gl.root.getComponentsByName('win').filter(function(x){return x.id&&!x.tc})[0]
+      var mum=bro?bro.container.parent.parent:ide.gl.root.contentItems[0]
+      mum.addChild({type:'component',componentName:'win',componentState:{id:w},title:ee.name})
     },
     ShowHTML:function(x){
       if(D.el){
