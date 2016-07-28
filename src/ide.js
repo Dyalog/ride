@@ -5,7 +5,7 @@ D.IDE=function(){'use strict'
   ide.host=ide.port=ide.wsid='';D.prf.title(ide.updTitle.bind(ide))
   D.wins=ide.wins={0:new D.Se(ide)}
   ide.focusedWin=ide.wins[0] //last focused window, it might not have the focus right now
-  var handlers=this.handlers={ //for RIDE protocol messages
+  var handlers=ide.handlers={ //for RIDE protocol messages
     Identify:function(x){D.remoteIdentification=x;ide.updTitle();ide.connected=1;ide.wins[0].updPW(1)},
     Disconnect:function(x){
       if(ide.dead)return
@@ -49,29 +49,30 @@ D.IDE=function(){'use strict'
         return
       }
       var w=ee.token, done, editorOpts={id:w,name:ee.name,tc:ee['debugger']}
-      if(D.prf.floating()&&!D.floating&&!this.dead){
+      if(D.prf.floating()&&!D.floating&&!ide.dead){
         var p=ee['debugger']?D.prf.posTracer():D.prf.posEditor()
         if(!p[4]){var d=ee.token-1;p[0]+=d*(process.env.RIDE_XOFFSET||32);p[1]+=d*(process.env.RIDE_YOFFSET||32)}
         var ph={x:p[0],y:p[1],width:p[2],height:p[3]}
         var url='ed.html?win='+w+'&x='+p[0]+'&y='+p[1]+'&width='+p[2]+
                 '&height='+p[3]+'&maximized='+(p[4]||0)+'&token='+w+'&tracer='+(+!!ee['debugger'])
         if(D.open(url,$.extend({title:ee.name},ph))){
-          this.block() //the popup will create D.wins[w] and unblock the message queue
-          ;(D.pendingEditors=D.pendingEditors||{})[w]={editorOpts:editorOpts,ee:ee,ide:this};done=1
+          ide.block() //the popup will create D.wins[w] and unblock the message queue
+          ;(D.pendingEditors=D.pendingEditors||{})[w]={editorOpts:editorOpts,ee:ee,ide:ide};done=1
         }else{
           $.err('Popups are blocked.')
         }
       }
       if(done)return
-      ;(this.wins[w]=new D.Ed(this,editorOpts)).open(ee)
+      ;(ide.wins[w]=new D.Ed(ide,editorOpts)).open(ee)
       //add to golden layout:
       var comp={type:'component',componentName:'win',componentState:{id:w},title:ee.name}
-      var bro=gl.root.getComponentsByName('win').filter(function(x){return x.id&&!x.tc})[0] //existing editor
+      var tc=!!ee['debugger']
+      var bro=gl.root.getComponentsByName('win').filter(function(x){return x.id&&tc===!!x.tc})[0] //existing editor
       if(bro){ //add next to existing editor
         bro.container.parent.parent.addChild(comp)
       }else{ //add to the right
-        var a=gl.root.contentItems[0] //a:old element, b:new element
-        var b=gl.createContentItem({type:'row',content:[{type:'column',content:[]},{type:'column',content:[]}]})
+        var t0=tc?'column':'row', t1=tc?'row':'column', a=gl.root.contentItems[0] //a:old element, b:new element
+        var b=gl.createContentItem({type:t0,content:[{type:t1,content:[]},{type:t1,content:[]}]})
         gl.root.replaceChild(a,b);b.contentItems[0].addChild(a);b.contentItems[1].addChild(comp)
       }
     },
