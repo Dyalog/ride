@@ -64,9 +64,16 @@ D.IDE=function(){'use strict'
       }
       if(done)return
       ;(this.wins[w]=new D.Ed(this,editorOpts)).open(ee)
-      var bro=ide.gl.root.getComponentsByName('win').filter(function(x){return x.id&&!x.tc})[0]
-      var mum=bro?bro.container.parent.parent:ide.gl.root.contentItems[0]
-      mum.addChild({type:'component',componentName:'win',componentState:{id:w},title:ee.name})
+      //add to golden layout:
+      var comp={type:'component',componentName:'win',componentState:{id:w},title:ee.name}
+      var bro=gl.root.getComponentsByName('win').filter(function(x){return x.id&&!x.tc})[0] //existing editor
+      if(bro){ //add next to existing editor
+        bro.container.parent.parent.addChild(comp)
+      }else{ //add to the right
+        var a=gl.root.contentItems[0] //a:old element, b:new element
+        var b=gl.createContentItem({type:'row',content:[{type:'column',content:[]},{type:'column',content:[]}]})
+        gl.root.replaceChild(a,b);b.contentItems[0].addChild(a);b.contentItems[1].addChild(comp)
+      }
     },
     ShowHTML:function(x){
       if(D.el){
@@ -190,28 +197,28 @@ D.IDE=function(){'use strict'
   I.lb_prf.onclick=function(){return!1} //prevent # from appearing in the URL bar
 
   var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
-  ide.gl=new GoldenLayout({
+  var gl=ide.gl=new GoldenLayout({
     labels:{minimise:'unmaximise'},settings:{showPopoutIcon:0},dimensions:{borderWidth:4},
-    content:[{type:'row',content:[{type:'component',componentName:'win',componentState:{id:0},title:'Session'}]}]
+    content:[{type:'component',componentName:'win',componentState:{id:0},title:'Session'}]
   },$(ide.dom))
-  ide.gl.registerComponent('win',function(c,h){
+  gl.registerComponent('win',function(c,h){
     var w=ide.wins[h.id];w.container=c;c.getElement().append(w.dom)
     setTimeout(function(){w.focus()},1);return w
   })
-  ide.gl.registerComponent('wse',function(c,h){
+  gl.registerComponent('wse',function(c,h){
     var u=ide.wse=new D.WSE();u.container=c
     c.getElement().append(u.dom);return u
   })
   var sctid //stateChanged timeout id
-  ide.gl.on('stateChanged',function(){
+  gl.on('stateChanged',function(){
     clearTimeout(sctid)
     sctid=setTimeout(function(){
       eachWin(function(w){w.updSize();w.cm.refresh();w.updGutters&&w.updGutters()})
       ide.wins[0].restoreScrollPos()
     },50)
   })
-  ide.gl.on('itemDestroyed',function(x){ide.wins[0].saveScrollPos()})
-  ide.gl.on('tabCreated',function(x){
+  gl.on('itemDestroyed',function(x){ide.wins[0].saveScrollPos()})
+  gl.on('tabCreated',function(x){
     switch(x.contentItem.componentName){
       case'wse':x.closeElement.off('click').click(D.prf.wse.toggle);break
       case'win':var id=x.contentItem.config.componentState.id,cls=x.closeElement
@@ -220,14 +227,14 @@ D.IDE=function(){'use strict'
                 break
     }
   })
-  ide.gl.on('stackCreated',function(x){
+  gl.on('stackCreated',function(x){
     x.header.controlsContainer.find('.lm_close').remove()
   })
-  ide.gl.init()
+  gl.init()
 
   var updTopBtm=function(){
     ide.dom.style.top=((D.prf.lbar()?I.lb.offsetHeight:0)+(D.el?1:22))+'px'
-    ide.gl.updateSize(ide.dom.clientWidth,ide.dom.clientHeight)
+    gl.updateSize(ide.dom.clientWidth,ide.dom.clientHeight)
   }
   I.lb.hidden=!D.prf.lbar();updTopBtm();$(window).resize(updTopBtm)
   D.prf.lbar(function(x){I.lb.hidden=!x;updTopBtm()})
@@ -239,9 +246,9 @@ D.IDE=function(){'use strict'
   D.prf.fold(function(x){eachWin(function(w){if(w.id){w.cm.setOption('foldGutter',!!x);w.updGutters()}})})
   D.prf.matchBrackets(function(x){eachWin(function(w){w.cm.setOption('matchBrackets',!!x)})})
   var updWSE=function(){
-    if(!D.prf.wse()){ide.gl.root.getComponentsByName('wse').forEach(function(x){x.container.close()});return}
-    var p=ide.gl.root.contentItems[0]
-    if(p.type!=='row'){var row=ide.gl.createContentItem({type:'row'},p);p.parent.replaceChild(p,row)
+    if(!D.prf.wse()){gl.root.getComponentsByName('wse').forEach(function(x){x.container.close()});return}
+    var p=gl.root.contentItems[0]
+    if(p.type!=='row'){var row=gl.createContentItem({type:'row'},p);p.parent.replaceChild(p,row)
                        row.addChild(p,0,true);row.callDownwards('setSize');p=row}
     p.addChild({type:'component',componentName:'wse',title:'Workspace Explorer'},0)
   }
