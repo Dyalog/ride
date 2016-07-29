@@ -64,7 +64,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
         q.listen_dlg_cancel.onclick=_=>{srv&&srv.close();q.listen_dlg.hidden=1;return!1}
         srv=net.createServer(x=>{let t,host=x&&(t=x.request)&&(t=t.connection)&&t.remoteAddress
                                  log('interpreter connected from '+host);srv&&srv.close();srv=0;clt=x
-                                 initInterpreterConn();new D.IDE().setHostAndPort(host,port)})
+                                 initInterpreterConn();new D.IDE().setConnInfo(host,port,sel.name)})
         srv.on('error',x=>{srv=0;q.listen_dlg.hidden=1;err(''+x)})
         srv.listen(port,'',_=>{log('listening on port '+port)});break
       case'start':
@@ -83,7 +83,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
           }).on('error',x=>{err(x.message||''+x);q.connecting_dlg.hidden=0})
         }else{
           srv=net.createServer(x=>{log('spawned interpreter connected');const a=srv.address();srv&&srv.close();srv=0;clt=x
-                                   initInterpreterConn();new D.IDE().setHostAndPort(a.address,a.port)
+                                   initInterpreterConn();new D.IDE().setConnInfo(a.address,a.port,sel.name)
                                    if(typeof D!=='undefined'&&D.el)D.lastSpawnedExe=x.exe})
           srv.on('error',x=>{log('listen failed: '+x);srv=clt=0;err(x.message)})
           srv.listen(0,'127.0.0.1',_=>{
@@ -263,7 +263,7 @@ const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
     const c=new(rq('ssh2').Client),o={host:x.host,port:x.port,username:x.user,tryKeyboard:true}
     x.key?(o.privateKey=fs.readFileSync(x.key)):(o.password=x.pass)
     c.on('ready',_=>{c.exec(cmd,f)})
-     .on('tcp connection',(_,acc)=>{clt=acc();initInterpreterConn();new D.IDE().setHostAndPort('',0)})
+     .on('tcp connection',(_,acc)=>{clt=acc();initInterpreterConn();new D.IDE().setConnInfo('',0,sel.name)})
      .on('keyboard-interactive',(_,_1,_2,_3,fin)=>{fin([x.pass])})
      .connect(o)
     return c
@@ -279,7 +279,7 @@ const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
       if(s!==x.subj){err(`Wrong server certificate name.  Expected:${JSON.stringify(x.subj)}, actual:${JSON.stringify(s)}`)
                      return}
     }
-    initInterpreterConn();new D.IDE().setHostAndPort(x.host,x.port)
+    initInterpreterConn();new D.IDE().setConnInfo(x.host,x.port,sel.name)
   })
   clt.on('error',x=>{log('connect failed: '+x);clt=0;err(x.message)})
 }
