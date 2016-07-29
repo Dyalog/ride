@@ -163,7 +163,8 @@ $.extend(CM.commands,{
     w.webContents.executeJavaScript('var b=document.body,s=b.style;s.fontFamily="monospace";'+
                                     's.overflow="scroll";s.whiteSpace="pre"')
     var f=function(x){w.webContents.executeJavaScript('b.textContent+='+JSON.stringify(x+'\n')+
-                                                      ';b.scrollTop=b.scrollHeight')}
+                                                      ';b.scrollTop=b.scrollHeight')
+                      w.webContents.executeJavaScript('console.info(b.textContent)')}
     f(cn.getLog().filter(function(x){return x}).join('\n'))
     cn.addLogListener(f);w.on('closed',function(){delete D.logw;cn.rmLogListener(f)})
   },

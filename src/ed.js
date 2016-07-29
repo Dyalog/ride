@@ -287,7 +287,7 @@ D.Ed.prototype={
   MA:function(){D.send('RestartThreads',{win:this.id})},
   CBP:function(){ //Clear trace/stop/monitor for this object
     var ed=this,n=ed.cm.lineCount();for(var i=0;i<n;i++)ed.cm.setGutterMarker(i,'breakpoints',null)
-    ed.tc&&D.send('SetLineAttributes',{win:ed.id,nLines:n,stop:ed.getStops(),trace:[],monitor:[]})
+    ed.tc&&D.send('SetLineAttributes',{win:ed.id,stop:ed.getStops(),trace:[],monitor:[]})
   },
   BP:function(cm){ //toggle breakpoint
     var sels=cm.listSelections()
@@ -298,7 +298,7 @@ D.Ed.prototype={
         (cm.getLineHandle(l).gutterMarkers||{}).breakpoints?null:this.createBPEl()
       )
     }
-    this.tc&&D.send('SetLineAttributes',{win:this.id,nLines:cm.lineCount(),stop:this.getStops()})
+    this.tc&&D.send('SetLineAttributes',{win:this.id,stop:this.getStops()})
   },
   RD:function(cm){
     if(cm.somethingSelected()){cm.execCommand('indentAuto')}
