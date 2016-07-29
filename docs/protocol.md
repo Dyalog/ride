@@ -93,16 +93,6 @@ line editor, `4`
 
 :red_circle: These modes need explaining with expected behaviour.
 
-In addition to passively processing `SetPromptType` messages, RIDE can request information about the interpreter's
-ability to accept input at any time through
-<a name=CanSessionAcceptInput></a><a name=ReplyCanSessionAcceptInput></a>
-```json
-["CanSessionAcceptInput",{}]                           // RIDE -> Interpreter
-["ReplyCanSessionAcceptInput",{"canAcceptInput":true}] // Interpreter -> RIDE
-```
-
-:red_circle: RIDE doesn't use these.
-
 When the user presses `<ER>` (Enter) or `<TC>` (Ctrl-Enter), RIDE sends
 <a name=Execute></a>
 ```json
