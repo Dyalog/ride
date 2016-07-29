@@ -168,7 +168,7 @@ The interpreter may decide to change the type of a window (editor vs tracer) wit
 When the user presses `<EP>` (Esc), RIDE should request that the editor contents are fixed through
 <a name=SaveChanges></a>
 ```json
-["SaveChanges",{"win":123,"text":"r←avg a\ns←+⌿a\nn←≢a\nr←s÷n","stop":[2,3]}] // RIDE -> Interpreter
+["SaveChanges",{"win":123,"text":["r←avg a","s←+⌿a","n←≢a","r←s÷n"],"stop":[2,3]}] // RIDE -> Interpreter
 ```
 `stop` is an array of 0-based line numbers.
 
@@ -188,9 +188,9 @@ but does not close the UI window until the interpreter replies with the same mes
 
 #Debugging
 The following messages are used in relation to trace windows.
-<a name=HighlightLine></a>
+<a name=SetHighlightLine></a>
 ```json
-["HighlightLine",{"win":123,"line":45}] // Interpreter -> RIDE
+["SetHighlightLine",{"win":123,"line":45}] // Interpreter -> RIDE
 ```
 tells RIDE where the currently executed line is.  Traditionally that's indicated by a red border around it.
 
@@ -399,7 +399,7 @@ RIDE can use the display name as the title of its application window.
 
 <a name=Disconnect></a>
 ```json
-["Disconnect",{"msg":"..."}]
+["Disconnect",{"message":"..."}]
 ```
 Sent from any peer to shut down the connection cleanly.
 
