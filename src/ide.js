@@ -254,7 +254,7 @@ D.IDE=function(){'use strict'
   D.mac&&setTimeout(function(){ide.wins[0].focus()},500) //OSX is stealing our focus.  Let's steal it back!  Bug #5
 }
 D.IDE.prototype={
-  setConnInfo:function(x,y,z){this.host=x;this.port=y;this.cfgName=z;this.updTitle()},
+  setConnInfo:function(x,y,z){this.host=x;this.port=y;this.profile=z;this.updTitle()},
   die:function(){ //don't really, just pretend
     if(this.dead)return
     this.dead=1;this.connected=0;this.dom.className+=' disconnected';for(var k in this.wins)this.wins[k].die()
@@ -269,7 +269,7 @@ D.IDE.prototype={
       X==='{VER_B}'?(ri.version||'').split('.')[1]:  X==='{RIDE_VER_B}'?(v.version||'').split('.')[1]:
       X==='{VER_C}'?(ri.version||'').split('.')[2]:  X==='{RIDE_VER_C}'?(v.version||'').split('.')[2]:
       X==='{VER}'?ri.version:                        X==='{RIDE_VER}'?v.version:
-      X==='{CFG}'?ide.cfgName||'':                   x
+      X==='{PROFILE}'?ide.profile||'':                   x
     )||''})||'Dyalog'
   },
   focusMRUWin:function(){ //most recently used
