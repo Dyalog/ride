@@ -220,6 +220,9 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .dlg_btns button{min-width:75px;margin:0 8px}
 .dlg_btns button.task{display:block;margin:4px 0;width:100%}
 
+/*generic dialog for processing OptionsDialog,StringDialog,TaskDialog*/
+#gd_content{padding:32px;border-top:solid #fff 1px;text-align:center}
+
 /*Preferences dialog*/
 #prf_nav{height:28px;border-bottom:solid 1px #fff;text-align:left;margin-bottom:2px;background-color:#ccc}
 #prf_nav a{background-color:#dcdad5;float:left;height:16px;padding:2px 12px 1px 12px;

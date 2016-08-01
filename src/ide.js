@@ -94,7 +94,7 @@ D.IDE=function(){'use strict'
     OptionsDialog:function(x){
       var text=typeof x.text==='string'?x.text:x.text.join('\n')
       if(D.el&&process.env.RIDE_NATIVE_DIALOGS){
-        r=D.el.dialog.showMessageBox(D.elw,{message:text,title:x.title||'',buttons:x.options||[''],cancelId:-1})
+        var r=D.el.dialog.showMessageBox(D.elw,{message:text,title:x.title||'',buttons:x.options||[''],cancelId:-1})
         D.send('ReplyOptionsDialog',{index:r,token:x.token})
       }else{
         I.gd_title_text.textContent=x.title||'';I.gd_content.textContent=text
@@ -103,8 +103,8 @@ D.IDE=function(){'use strict'
                             D.send('ReplyOptionsDialog',{index:r,token:x.token})}
         I.gd_close.onclick=function(){ret(-1)}
         I.gd_btns.onclick=function(e){if(e.target.nodeName==='BUTTON'){
-                                        var i=0,t=e.target;while(t){t=t.previousSibling;i++}ret(i)}}
-        D.util.dlg(I.gd,{w:400,h:300})
+                                      var i=-1,t=e.target;while(t){t=t.previousSibling;i++}ret(i)}}
+        D.util.dlg(I.gd,{w:400,h:250})
       }
     },
     StringDialog:function(x){
@@ -117,7 +117,7 @@ D.IDE=function(){'use strict'
       I.gd_close.onclick=function(){ret(x.defaultValue||null)}
       I.gd_btns.onclick=function(e){if(e.target.nodeName==='BUTTON'){
                                         ret(e.target.previousSibling?x.defaultValue||null:inp.value)}}
-      D.util.dlg(I.gd,{w:400,h:300});setTimeout(function(){inp.focus()},1)
+      D.util.dlg(I.gd,{w:400,h:250});setTimeout(function(){inp.focus()},1)
     },
     TaskDialog:function(x){
       var esc=D.util.esc
