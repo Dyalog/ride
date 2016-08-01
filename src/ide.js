@@ -130,7 +130,7 @@ D.IDE=function(){'use strict'
                           D.send('ReplyTaskDialog',{index:r,token:x.token})}
       I.gd_close.onclick=function(){ret(-1)}
       I.gd_btns.onclick=function(e){if(e.target.nodeName==='BUTTON'){
-                                      var t=e.target,i=-1;while(t){t=t.previousSibling;i++}ret(i)}}
+                                      var t=e.target,i=99;while(t){t=t.previousSibling;i++}ret(i)}}
       D.util.dlg(I.gd,{w:400,h:300})
     },
     ReplyTreeList:function(x){ide.wse.replyTreeList(x)},
