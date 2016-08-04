@@ -1,6 +1,6 @@
 ;(function(){'use strict'
   var gui=require('nw.gui'),fs=require('fs'),os=require('os'),path=require('path'),spawn=require('child_process').spawn,
-      proxy=require('./proxy'),ps=process,env=ps.env,repr=JSON.stringify
+      crypto=require('crypto'),proxy=require('./proxy'),ps=process,env=ps.env,repr=JSON.stringify
   // Detect platform: https://nodejs.org/api/process.html#process_process_platform
   // https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
   D.nwjs=1;D.win=/^win/i.test(ps.platform);D.mac=ps.platform=='darwin';D.floating=!!opener
@@ -19,16 +19,26 @@
       _getAll:function(){var r={};for(var i=0;i<k.length;i++)r[k[i]]=v[i];return r}
     }
     Object.defineProperty(D.db,'length',{get:function(){return k.length}})
-    var f=gui.App.dataPath+'/prefs.json'
-    try{if(fs.existsSync(f)){var h=JSON.parse(fs.readFileSync(f,'utf8'));for(var x in h){k.push(x);v.push(h[x])}}}
-    catch(e){console.error(e)}
-    var st=0,dbWrite=function(){ // st: state 0=initial, 1=write pending, 2=write in progress
+    var f=gui.App.dataPath+'/prefs.json', tmpf=gui.App.dataPath+'/tmp'+crypto.randomBytes(8).toString('hex'), ts=0
+    try{
+      if(fs.existsSync(f)){
+        var h=JSON.parse(fs.readFileSync(f,'utf8'));for(var x in h){k.push(x);v.push(h[x])}
+        ts=+fs.statSync(f).mtime
+      }
+    }catch(e){
+      console.error(e)
+    }
+    var st=0 //state 0=initial, 1=write pending, 2=write in progress
+    var dbWrite=function(){
       if(st===2){st=1;return}else{st=2}
       var s='{\n'+k.map(function(x,i){return'  '+repr(x)+':'+repr(v[i])}).sort().join(',\n')+'\n}\n'
-      fs.writeFile(f+'1',s,function(err){
-        if(err){console.error(err);dbWrite=function(){};return} // make dbWrite() a nop
+      fs.writeFile(tmpf,s,function(err){
+        if(err){console.error(err);dbWrite=function(){};return} //make dbWrite() a nop
+        var ts1=fs.existsSync(f)?+fs.statSync(f).mtime:0
+        if(ts1&&ts&&ts1!==ts&&!confirm(f+'\nwas modified by another process. Overwrite?'))return
         fs.unlink(f,function(){
-          fs.rename(f+'1',f,function(){
+          fs.rename(tmpf,f,function(){
+            ts=+fs.statSync(f).mtime
             if(st===1){setTimeout(function(){dbWrite()},1000)}else{st=0}
           })
         })
