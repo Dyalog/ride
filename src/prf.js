@@ -130,7 +130,8 @@ D.prf={}
   p.toggle=function(){return p(!p())}
 })
 
-D.db=!D.el?localStorage:(function(){
+D.db=!node_require?localStorage:(function(){
+  var rq=node_require,crypto=rq('crypto'),fs=rq('fs'),el=rq('electron').remote
   //file-backed storage with API similar to that of localStorage
   var k=[],v=[] //keys and values
   var db={key       :function(x)  {return k[x]},
@@ -140,15 +141,27 @@ D.db=!D.el?localStorage:(function(){
           _getAll   :function()   {var r={};for(var i=0;i<k.length;i++)r[k[i]]=v[i];return r}}
   Object.defineProperty(db,'length',{get:function(){return k.length}})
   var ver=fs.readFileSync(__dirname+'/_/version','utf8').replace(/^(\d+)\.(\d+)\.[^]*$/,'$1$2')
-  var d=D.el.app.getPath('userData'),f=d+'/prefs.json'
-  try{if(fs.existsSync(f)){var h=JSON.parse(fs.readFileSync(f,'utf8'));for(var x in h){k.push(x);v.push(h[x])}}}
-  catch(e){console.error(e)}
-  var st=0,dbWrite=function(){ //st: state 0=initial, 1=write pending, 2=write in progress
+  var d=el.app.getPath('userData'), f=d+'/prefs.json', tmpf=d+'/tmp'+crypto.randomBytes(8).toString('hex'), ts=0
+  try{
+    if(fs.existsSync(f)){
+      var h=JSON.parse(fs.readFileSync(f,'utf8'));for(var x in h){k.push(x);v.push(h[x])}
+      ts=+fs.statSync(f).mtime
+    }
+  }catch(e){console.error(e)}
+  var st=0 //state 0=initial, 1=write pending, 2=write in progress
+  var dbWrite=function(){
     if(st===2){st=1;return}else{st=2}
-    var s='{\n'+k.map(function(x,i){return'  '+repr(x)+':'+repr(v[i])}).sort().join(',\n')+'\n}\n'
-    fs.writeFile(f+'1',s,function(e){
+    var s='{\n'+k.map(function(x,i){return'  '+JSON.stringify(x)+':'+JSON.stringify(v[i])}).sort().join(',\n')+'\n}\n'
+    fs.writeFile(tmpf,s,function(e){
       if(e){console.error(e);dbWrite=function(){};return} //make dbWrite() a nop
-      fs.unlink(f,function(){fs.rename(f+'1',f,function(){if(st===1){setTimeout(function(){dbWrite()},1000)}else{st=0}})})
+      var ts1=fs.existsSync(f)?+fs.statSync(f).mtime:0
+      if(ts1&&ts&&ts1!==ts&&!confirm(f+'\nwas modified by another process. Overwrite?'))return
+      fs.unlink(f,function(){
+        fs.rename(tmpf,f,function(){
+          ts=+fs.statSync(f).mtime
+          if(st===1){setTimeout(function(){dbWrite()},1000)}else{st=0}
+        })
+      })
     })
   }
   return db
