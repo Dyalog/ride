@@ -55,14 +55,14 @@
              <input id=cn-ssh-user name=user size=8> @
              <input id=cn-ssh-host name=host size=12> :
              <input id=cn-ssh-port name=port size=4 placeholder=22>
-          <p><label>Pass<u>w</u>ord: <input id=cn-ssh-pass type=password></label>
+          <p><label>Pass<u>w</u>ord: <span class=cn-hint>(not remembered)</span>
+                                     <input id=cn-ssh-pass type=password></label>
              <span class=cn-hint>OR</span>
              <label for=cn-ssh-key-dots><u>K</u>ey file:</label>
-             <input id=cn-ssh-key><button id=cn-ssh-key-dots>...</button>
+             <input id=cn-ssh-key name=ssh-key><button id=cn-ssh-key-dots>...</button>
              <input id=cn-ssh-key-file type=file style=display:none>
-             <span class=cn-hint>(not remembered)</span>
-           <p class=cn-hint>After starting the interpreter, RIDE will tunnel its communication with it
-                            through the same ssh connection.
+             <p class=cn-hint>After starting the interpreter, RIDE will tunnel its communication with it
+                              through the same ssh connection.
         </div>
         <p><label><u>I</u>nterpreter: <select id=cn-exes name=exes></select></label>
         <button id=cn-fetch style=display:none><u>F</u>etch list of interpreters through ssh</button>
