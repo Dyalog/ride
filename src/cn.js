@@ -70,7 +70,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
         if(x.ssh){
           D.util.dlg(q.connecting_dlg)
           var o={host:x.host,port:+x.port||22,user:x.user||user}
-          if(x===sel){o.pass=q.ssh_pass.value;o.key=q.ssh_key.value}
+          if(x.ssh_auth_type==='key'){o.key=x.ssh_key.value}else{o.pass=x===sel?q.ssh_pass.value:''}
           const c=sshExec(o,'/bin/sh',(e,sm)=>{if(e)throw e
             sm.on('close',(code,sig)=>{D.ide&&D.ide._sshExited({code,sig});c.end()})
             c.forwardIn('',0,(e,rport)=>{if(e)throw e
