@@ -34,7 +34,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   q.exe.readOnly=!!q.exes.value
 }
 ,validate=x=>{
-  x=x||sel;const t=x.type,h=x.host,p=x.port
+  const t=x.type,h=x.host,p=x.port
   if((t==='connect'||t==='start'&&x.ssh)&&!h)
     {$.err('"host" is required',_=>{(t==='connect'?q.tcp_host:q.ssh_host).select()});return}
   if((t==='connect'||t==='start'&&x.ssh||t==='listen')&&p&&(!/^\d*$/.test(p)||+p<1||+p>0xffff))
@@ -56,8 +56,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   try{
     switch(x.type){
       case'connect':
-        D.util.dlg(q.connecting_dlg)
-        connect({host:x.host,port:+x.port||4502,ssl:x.ssl,cert:x.cert,subj:x.subj});break
+        D.util.dlg(q.connecting_dlg);connect({host:x.host,port:+x.port||4502,ssl:x.ssl,cert:x.cert,subj:x.subj});break
       case'listen':
         D.util.dlg(q.listen_dlg);const port=+x.port||4502;q.listen_dlg_port.textContent=''+port
         q.listen_dlg_cancel.onclick=_=>{srv&&srv.close();q.listen_dlg.hidden=1;return!1}
@@ -77,9 +76,9 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
             c.forwardIn('',0,(e,rport)=>{if(e)throw e
               let s='';for(let k in env)s+=`${k}=${shEsc(env[k])} `
               sm.write(`${s}RIDE_INIT=CONNECT:127.0.0.1:${rport} ${shEsc(x.exe)} +s -q >/dev/null\n`)
-              q.connecting_dlg.hidden=0
+              q.connecting_dlg.hidden=1
             })
-          }).on('error',x=>{err(x.message||''+x);q.connecting_dlg.hidden=0})
+          }).on('error',x=>{err(x.message||''+x);q.connecting_dlg.hidden=1})
         }else{
           srv=net.createServer(x=>{log('spawned interpreter connected');const a=srv.address();srv&&srv.close();srv=0;clt=x
                                    initInterpreterConn();new D.IDE().setConnInfo(a.address,a.port,sel?sel.name:'')
@@ -155,7 +154,8 @@ D.cn=_=>{ //set up Connect page
                            if(v){x.value=v[0];D.util.elastic(x);$(x).change()};return!1}
   q.cert_dots   .onclick=_=>{browse(q.cert   ,'Certificate')}
   q.ssh_key_dots.onclick=_=>{browse(q.ssh_key,'SSH Key'    )}
-  q.ssh_auth_type.onchange=_=>{const k=q.ssh_auth_type.value==='key';q.ssh_pass_wr.hidden=k;q.ssh_key_wr.hidden=!k}
+  q.ssh_auth_type.onchange=_=>{const k=q.ssh_auth_type.value==='key';q.ssh_pass_wr.hidden=k;q.ssh_key_wr.hidden=!k;
+                               sel.ssh_auth_type=q.ssh_auth_type.value;save()}
   D.prf.favs().forEach(x=>{q.favs.appendChild(favDOM(x))})
   $(q.favs).list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
     .on('click','.go',function(){$(q.favs).list('select',$(this).parentsUntil(q.favs).last().index());q.go.click()})
@@ -177,6 +177,7 @@ D.cn=_=>{ //set up Connect page
         q.exes.value=sel.exe;q.exes.value||(q.exes.value='') //use sel.exe if available, otherwise use "Other..."
         var a=q.rhs.querySelectorAll('input,textarea')
         for(var i=0;i<a.length;i++)if(/^text(area)?$/.test(a[i].type))D.util.elastic(a[i])
+        q.ssh_auth_type.value=sel.ssh_auth_type||'pass';q.ssh_auth_type.onchange()
         q.ssl_dtl.hidden=!sel.ssl;q.ssh_dtl.hidden=!sel.ssh
         q.cert_cb.checked=!!sel.cert;q.cert.disabled=q.cert_dots.disabled=!sel.cert
         q.subj_cb.checked=!!sel.subj;q.subj.disabled=!sel.subj
@@ -289,15 +290,13 @@ module.exports=_=>{
   ,h={c:process.env.RIDE_CONNECT,s:process.env.RIDE_SPAWN} //h:args by name
   for(var i=1;i<a.length;i++)if(a[i][0]==='-'){h[a[i].slice(1)]=a[i+1];i++}
   if(h.c){var m=/^([^:]+|\[[^\]]+\])(?::(\d+))?$/.exec(h.c) //parse host and port
-          m?go({type:'connect',host:m[1],port:+m[2]||4502})
-           :$.err('Invalid $RIDE_CONNECT')}
-  else if(h.s){go({type:'start',exe:h.s})
-               window.onbeforeunload=function(){D.send('Exit',{code:0})}}
+          m?go({type:'connect',host:m[1],port:+m[2]||4502}):$.err('Invalid $RIDE_CONNECT')}
+  else if(h.s){go({type:'start',exe:h.s});window.onbeforeunload=function(){D.send('Exit',{code:0})}}
   else{D.cn()}
 }
 
 let log
-{//logging
+{
   let i=0;const n=100,a=Array(n),l=[],t0=+new Date
   log=x=>{a[i++]=x=(new Date-t0)+' '+x;i%=n;for(var j=0;j<l.length;j++)l[j](x)}
   module.exports.getLog=_=>a.slice(i).concat(a.slice(0,i))
