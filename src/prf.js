@@ -105,22 +105,22 @@ D.prf={}
     '\n# The =PRF ("Preferences") menu item must be present.'
   ]
 ].forEach(function(kd){
-  var k=kd[0], d=kd[1], t=typeof d, l=[], // k:preference name (key), d:default value, t:type, l:listeners
-      str=t==='object'?JSON.stringify:function(x){return''+x}, // stringifier function
-      sd=str(d),  // default value "d" converted to a string
+  var k=kd[0], d=kd[1], t=typeof d, l=[], //k:preference name (key), d:default value, t:type, l:listeners
+      str=t==='object'?JSON.stringify:function(x){return''+x}, //stringifier function
+      sd=str(d),
       p=D.prf[k]=function(x){
-        if(typeof x==='function'){
-          l.push(x)
-        }else if(arguments.length){
-          x=t==='number'?(+x):t==='string'?(''+x):x // coerce "x" to type "t"
-          var sx=str(x) // sx: "x" converted to a string; values can only be strings
-          if(l.length)var old=p()
-          sx===sd?D.db.removeItem(k):D.db.setItem(k,sx) // avoid recording if it's at its default
-          for(var i=0;i<l.length;i++)l[i](x,old) // notify listeners
-          return x
-        }else{
-          var r=D.db.getItem(k);return r==null?d:t==='number'?(+r):t==='object'?JSON.parse(r):r
-        }
+        if(typeof x==='function'){l.push(x);return} //add listener
+        if(!arguments.length){var r=D.db.getItem(k);return r==null?d:t==='number'?+r:t==='object'?JSON.parse(r):r} //get
+        //set:
+        x=t==='number'?+x:t==='string'?(''+x):x  //coerce x to type t
+        var sx=str(x);if(sx===sd)sx=''           //convert to a string; if default, use ''
+        var sy=D.db.getItem(k)||''               //old value, stringified
+        if(sx===sy)return x
+        if(l.length)var y=p()                    //old value as an object (only needed if we have any listeners)
+        sx?D.db.setItem(k,sx):D.db.removeItem(k) //store
+        console.info('notifying '+l.length+' about '+k)
+        for(var i=0;i<l.length;i++)l[i](x,y)     //notify listeners
+        return x
       }
   p.getDefault=function(){return d}
   p.toggle=function(){return p(!p())}
