@@ -24,10 +24,10 @@ D.IDE=function(){'use strict'
     },
     HadError:function(){ide.pending.splice(0,ide.pending.length);ide.wins[0].focus()},
     GotoWindow:function(x){var w=ide.wins[x.win];w&&w.focus()},
-    WindowTypeChanged:function(x){return ide.wins[x.win].setTracer(x.tracer)},
+    WindowTypeChanged:function(x){return ide.wins[x.win].setTC(x.tracer)},
     ReplyGetAutocomplete:function(x){var w=ide.wins[x.token];w&&w.processAutocompleteReply(x)},
     ValueTip:function(x){ide.wins[x.token].vt.processReply(x)},
-    SetHighlightLine:function(x){var w=ide.wins[x.win];w&&w.highlight(x.line)},
+    SetHighlightLine:function(x){var w=ide.wins[x.win];w&&w.hl&&w.hl(x.line)},
     UpdateWindow:function(x){var w=ide.wins[x.token];if(w){w.container&&w.container.setTitle(x.name);w.open(x)}},
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
     CloseWindow:function(x){

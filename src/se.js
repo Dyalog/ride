@@ -7,7 +7,7 @@ D.Se=function(ide){ // Session constructor
   var cm=se.cm=CM(se.dom,{
     autofocus:true,mode:{name:'apl-session',se:se},matchBrackets:!!D.prf.matchBrackets(),readOnly:true,keyMap:'dyalog',
     lineWrapping:!!D.prf.wrap(),indentUnit:4,smartIndent:0,autoCloseBrackets:{pairs:'()[]{}',explode:''},
-    scrollbarStyle:'simple',extraKeys:{'Shift-Tab':'indentLess',Tab:'tabOrAutocomplete'},
+    scrollbarStyle:'simple',extraKeys:{'Shift-Tab':'indentLess',Tab:'indentOrComplete'},
   })
   cm.dyalogCmds=se
   D.util.cmOnDblClick(cm,function(e){se.ED(cm);e.stopPropagation();e.preventDefault()})
@@ -129,7 +129,7 @@ D.Se.prototype={
   EP:function(){this.ide.focusMRUWin()},
   ER:function(){this.exec(0)},
   TC:function(){this.exec(1)},
-  tabOrAutocomplete:function(cm){
+  indentOrComplete:function(cm){
     var u=cm.getCursor(),s=cm.getLine(u.line)
     if(cm.somethingSelected()||this.promptType===4||/^ *$/.test(s.slice(0,u.ch))){cm.execCommand('indentMore');return}
     this.autocompleteWithTab=1;D.send('GetAutocomplete',{line:s,pos:u.ch,token:0,win:0})

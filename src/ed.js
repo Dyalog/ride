@@ -1,22 +1,14 @@
 ;(function(){'use strict'
-
 var ACB_VALUE={pairs:'()[]{}',explode:'{}'} //value for CodeMirror's "autoCloseBrackets" option when on
-
 D.Ed=function(ide,opts){ //Editor constructor
-  var ed=this;ed.ide=ide
-  ed.dom=I.ed_tmpl.cloneNode(1);ed.dom.id=null;ed.dom.style.display='';ed.$e=$(ed.dom)
-  ed.id=opts.id;ed.name=opts.name;ed.tc=opts.tc
-  ed.xline=null //the line number of the empty line inserted at eof when cursor is there and you press <down>
+  var ed=this;ed.ide=ide;ed.id=opts.id;ed.name=opts.name;ed.tc=opts.tc
+  ed.dom=I.ed_tmpl.cloneNode(1);ed.dom.id=null;ed.dom.style.display='';ed.$e=$(ed.dom);ed.jumps=[];ed.focusTS=0
   ed.oText='';ed.oStop=[] //remember original text and "stops" to avoid pointless saving on EP
-  ed.hll=null //highlighted line -- currently executed line in tracer
-  ed.lastQuery=ed.lastIC=ed.lastGen=ed.overlay=ed.annotation=null //search-related state
-  ed.focusTS=0 //focus timestamp
-  ed.jumps=[]
   ed.cm=CM(ed.dom.querySelector('.ride_win_cm'),{
     lineNumbers:!!D.prf.lineNums(),firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
     smartIndent:D.prf.indent()>=0,indentUnit:D.prf.indent(),scrollButtonHeight:12,matchBrackets:!!D.prf.matchBrackets(),
     autoCloseBrackets:!!D.prf.autoCloseBrackets()&&ACB_VALUE,foldGutter:!!D.prf.fold(),scrollbarStyle:'simple',
-    keyMap:'dyalog',extraKeys:{'Shift-Tab':'indentLess',Tab:'tabOrAutocomplete',Down:'downOrXline'}
+    keyMap:'dyalog',extraKeys:{'Shift-Tab':'indentLess',Tab:'indentOrComplete',Down:'downOrXline'}
     //Some options of this.cm can be set from ide.coffee when the corresponding pref changes.
   })
   ed.cm.dyalogCmds=ed
@@ -32,7 +24,7 @@ D.Ed=function(ide,opts){ //Editor constructor
   ed.tb.onmouseup=ed.tb.onmouseout=function(x){if(x.target.matches('.tb_btn')){D.util.rmCls(x.target,'armed')
                                                                                x.preventDefault()}}
   ed.tb.onclick=function(x){var t=x.target
-    if(t.matches('.tb_hid,.tb_case')){D.util.tglCls(t,'pressed');ed.highlightSearch();return!1}
+    if(t.matches('.tb_hid,.tb_case')){D.util.tglCls(t,'pressed');ed.hls();return!1}
     if(t.matches('.tb_btn')){var c=t.className.replace(/^.*\btb_([A-Z]{2,3})\b.*$/,'$1')
                              ed[c]?ed[c](ed.cm):CM.commands[c]?CM.commands[c](ed.cm):0;return!1}
   }
@@ -43,13 +35,13 @@ D.Ed=function(ide,opts){ //Editor constructor
     Tab:function(){(ed.tc?ed.cm:ed.cmRP).focus()},
     'Shift-Tab':ed.cm.focus.bind(ed.cm)
   }})
-  ed.cmSC.on('change',function(){ed.highlightSearch()})
+  ed.cmSC.on('change',function(){ed.hls()})
   ed.rp=ed.tb.querySelector('.tb_rp')
   ed.cmRP=CM(ed.rp,{placeholder:'Replace',extraKeys:{
-    Enter            :function(){ed.replace()},
-    'Shift-Enter'    :function(){ed.replace(1)},
-    'Alt-Enter'      :function(){ed.search()},
-    'Shift-Alt-Enter':function(){ed.search(1)},
+    Enter            :function(){ed.rp()},
+    'Shift-Enter'    :function(){ed.rp(1)},
+    'Alt-Enter'      :function(){ed.sc()},
+    'Shift-Alt-Enter':function(){ed.sc(1)},
     Tab              :function(){ed.cm.focus()},
     'Shift-Tab'      :function(){(ed.tc?ed.cm:ed.cmSC).focus()}
   }})
@@ -57,15 +49,11 @@ D.Ed=function(ide,opts){ //Editor constructor
   for(var i=0;i<cms.length;i++){
     cms[i].setOption('keyMap','dyalog')
     cms[i].setOption('scrollbarStyle','null')
-    cms[i].addKeyMap({
-      Down:ed.NX.bind(ed),
-      Up:ed.PV.bind(ed),
-      Esc:function(){ed.clearSearch();setTimeout(ed.cm.focus.bind(ed.cm),0)}
-    })
+    cms[i].addKeyMap({Esc :function(){ed.clrSC();setTimeout(ed.cm.focus.bind(ed.cm),0)},
+                      Down:function(){ed.NX()},
+                      Up  :function(){ed.PV()}})
   }
-  ed.setTracer(!!ed.tc)
-  this.vt=D.vt(this)
-  this.setLN(D.prf.lineNums())
+  ed.setTC(!!ed.tc);this.vt=D.vt(this);this.setLN(D.prf.lineNums())
 }
 D.Ed.prototype={
   updGutters:function(){
@@ -82,28 +70,28 @@ D.Ed.prototype={
     return r.sort(function(x,y){return x-y})
   },
   cursorActivity:function(){
-    if(this.xline==null)return
+    if(this.xline==null)return //xline:the line number of the empty line inserted when you press <down> at eof
     var ed=this,n=ed.cm.lineCount(),l=ed.cm.getCursor().line
     if(l===ed.xline&&l===n-1&&/^\s*$/.test(ed.cm.getLine(n-1)))return
     if(l<ed.xline&&ed.xline===n-1&&/^\s*$/.test(ed.cm.getLine(n-1))){
       ed.cm.replaceRange('',{line:n-2,ch:ed.cm.getLine(n-2).length},{line:n-1,ch:0},'D')
     }
-    ed.xline=null
+    delete ed.xline
   },
-  scrollCursorIntoProminentView:function(){ //approx. to 1/3 of editor height; might not work near the top or bottom
+  scrollToCursor:function(){ //approx. to 1/3 of editor height; might not work near the top or bottom
     var h=this.dom.clientHeight,cc=this.cm.cursorCoords(true,'local'),x=cc.left,y=cc.top
     this.cm.scrollIntoView({left:x,right:x,top:y-h/3,bottom:y+2*h/3})
   },
-  clearSearch:function(){
+  clrSC:function(){ //clear search
     var ed=this,u=ed.dom.querySelector('.ride_win .cm-scroll-v');if(u)u.title=''
     D.util.rmCls(ed.tb.querySelector('.tb_sc'),'no-matches')
     ed.cm.removeOverlay(ed.overlay);ed.annotation&&ed.annotation.clear();ed.overlay=ed.annotation=null
   },
-  highlightSearch:function(){
+  hls:function(){ //highlight search ("hls" named after the Vim option)
     var ed=this,ic=!$('.tb_case',ed.tb).hasClass('pressed'),g=ed.cm.changeGeneration(),q=ed.cmSC.getValue()
     if(ic)q=q.toLowerCase() //ic:ignore case?, q:query string
     if(ed.lastQuery!==q||ed.lastIC!==ic||ed.lastGen!==g){
-      ed.lastQuery=q;ed.lastIC=ic;ed.lastGen=g;ed.clearSearch()
+      ed.lastQuery=q;ed.lastIC=ic;ed.lastGen=g;ed.clrSC()
       if(q){
         ed.annotation=ed.cm.showMatchesOnScrollbar(q,ic)
         ed.cm.addOverlay(ed.overlay={token:function(x){ //x:stream
@@ -115,18 +103,14 @@ D.Ed.prototype={
     }
     return[q,ic]
   },
-  search:function(backwards){
-    var cm=this.cm,h=this.highlightSearch(),q=h[0],ic=h[1] //ic:ignore case?, q:query string
-    if(q){
-      var s=cm.getValue();ic&&(s=s.toLowerCase())
-      if(backwards){
-        var i=cm.indexFromPos(cm.getCursor('anchor')),j=s.slice(0,i).lastIndexOf(q)
-        if(j<0){j=s.slice(i).lastIndexOf(q);if(j>=0)j+=i}
-      }else{
-        var i=cm.indexFromPos(cm.getCursor()),j=s.slice(i).indexOf(q);j=j>=0?(j+i):s.slice(0,i).indexOf(q)
-      }
-      if(j>=0){cm.setSelection(cm.posFromIndex(j),cm.posFromIndex(j+q.length));this.scrollCursorIntoProminentView()}
-    }
+  sc:function(bk){ //bk:is backwards?
+    var cm=this.cm,h=this.hls(),q=h[0],ic=h[1] //ic:ignore case?, q:query string
+    if(!q)return!1
+    var s=cm.getValue();ic&&(s=s.toLowerCase())
+    if(bk){var i=cm.indexFromPos(cm.getCursor('anchor')),j=s.slice(0,i).lastIndexOf(q)
+           if(j<0){j=s.slice(i).lastIndexOf(q);if(j>=0)j+=i}}
+    else{var i=cm.indexFromPos(cm.getCursor()),j=s.slice(i).indexOf(q);j=j>=0?(j+i):s.slice(0,i).indexOf(q)}
+    if(j>=0){cm.setSelection(cm.posFromIndex(j),cm.posFromIndex(j+q.length));this.scrollToCursor()}
     return!1
   },
   selectAllSearchResults:function(){
@@ -139,29 +123,27 @@ D.Ed.prototype={
     }
     cm.focus()
   },
-  replace:function(backwards){ //replace current occurrence and move to next
+  rp:function(bk){ //replace current occurrence and move to next; bk:is backwards?
     var ic=!$('.tb_case',this.tb).hasClass('pressed')   //ignore case?
     var q=this.cmSC.getValue()  ;ic&&(q=q.toLowerCase()) //query string
     var s=this.cm.getSelection();ic&&(s=s.toLowerCase()) //selection
-    s===q&&this.cm.replaceSelection(this.cmRP.getValue(),backwards?'start':'end')
-    this.search(backwards)
+    s===q&&this.cm.replaceSelection(this.cmRP.getValue(),bk?'start':'end')
+    this.sc(bk)
     var v=this.cm.getValue();ic&&(v=v.toLowerCase())
     $('.tb_sc',this.tb).toggleClass('no-matches',v.indexOf(q)<0)
   },
-  highlight:function(l){ //current line in tracer
+  hl:function(l){ //highlight - set current line in tracer
     var ed=this;ed.hll!=null&&ed.cm.removeLineClass(ed.hll,'background','highlighted')
-    if((ed.hll=l)!=null){
-      ed.cm.addLineClass(l,'background','highlighted');ed.cm.setCursor(l,0);ed.scrollCursorIntoProminentView()
+    if((ed.hll=l)!=null){ //hll:highlighted line -- currently executed line in tracer
+      ed.cm.addLineClass(l,'background','highlighted');ed.cm.setCursor(l,0);ed.scrollToCursor()
     }
   },
   setLN:function(x){ //update the display of line numbers and the state of the "[...]" button
     var ed=this;ed.cm.setOption('lineNumbers',!!x);ed.updGutters()
     var a=ed.tb.querySelectorAll('.tb_LN');for(var i=0;i<a.length;i++)D.util.tglCls(a[i],'pressed',x)
   },
-  setTracer:function(x){
-    var ed=this;ed.tc=x;D.util.tglCls(ed.dom,'tracer',x);ed.highlight(null);ed.updGutters();ed.setReadOnly(x)
-  },
-  setReadOnly:function(x){this.cm.setOption('readOnly',x);this.rp.hidden=!!x},
+  setTC:function(x){var ed=this;ed.tc=x;D.util.tglCls(ed.dom,'tracer',x);ed.hl(null);ed.updGutters();ed.setRO(x)},
+  setRO:function(x){this.cm.setOption('readOnly',x);this.rp.hidden=x},
   updSize:function(){var $p=$(this.dom);this.cm.setSize($p.width(),$p.height()-28)},
   open:function(ee){ //ee:editable entity
     var ed=this,cm=ed.cm
@@ -178,7 +160,7 @@ D.Ed.prototype={
     var isCode=[1,256,512,1024,2048,4096].indexOf(ee.entityType)>=0
     cm.setOption('mode',isCode?'apl':'text');cm.setOption('foldGutter',isCode&&!!D.prf.fold())
     if(isCode&&D.prf.indentOnOpen()){cm.execCommand('selectAll');cm.execCommand('indentAuto')}
-    ed.setReadOnly(ee.readOnly||ee['debugger'])
+    ed.setRO(ee.readOnly||ee['debugger'])
     var line=ee.currentRow,col=ee.currentColumn||0
     if(line===0&&col===0&&ee.text.length===1)col=ee.text[0].length
     cm.setCursor(line,col);cm.scrollIntoView(null,ed.dom.clientHeight/2)
@@ -198,7 +180,7 @@ D.Ed.prototype={
     if(err){this.isClosing=0;$.err('Cannot save changes')}else{this.isClosing&&D.send('CloseWindow',{win:this.id})}
   },
   closePopup:function(){if(D.floating){window.onbeforeunload=null;D.forceClose=1;close()}},
-  die:function(){this.setReadOnly(true)},
+  die:function(){this.setRO(1)},
   getDocument:function(){return this.dom.ownerDocument},
   refresh:function(){this.cm.refresh()},
   cword:function(){ //apl identifier under cursor
@@ -222,7 +204,7 @@ D.Ed.prototype={
   RP:function(cm){
     if(cm.getOption('readOnly'))return
     var v=cm.getSelection()||this.cword();if(v&&v.indexOf('\n')<0){this.cmSC.setValue(v);this.cmRP.setValue(v)}
-    this.cmRP.focus();this.cmRP.execCommand('selectAll');this.highlightSearch()
+    this.cmRP.focus();this.cmRP.execCommand('selectAll');this.hls()
   },
   EP:function(cm){this.isClosing=1;this.FX(cm)},
   FX:function(cm){
@@ -244,8 +226,8 @@ D.Ed.prototype={
     cm.replaceRange(s,{line:l,ch:0},{line:l,ch:cm.getLine(l).length},'D')
   },
   LN:function(){D.prf.lineNums.toggle()},
-  PV:function(){this.search(1)},
-  NX:function(){this.search()},
+  PV:function(){this.sc(1)},
+  NX:function(){this.sc()},
   TC:function(){D.send('StepInto',{win:this.id})},
   AC:function(cm){ //align comments
     if(cm.getOption('readOnly'))return
@@ -312,7 +294,7 @@ D.Ed.prototype={
   },
   addJump:function(){var j=this.jumps,u=this.cm.getCursor();j.push({lh:this.cm.getLineHandle(u.line),ch:u.ch})>10&&j.shift()},
   JBK:function(cm){var p=this.jumps.pop();p&&cm.setCursor({line:p.lh.lineNo(),ch:p.ch})},
-  tabOrAutocomplete:function(cm){
+  indentOrComplete:function(cm){
     if(cm.somethingSelected()){cm.execCommand('indentMore');return}
     var c=cm.getCursor(),s=cm.getLine(c.line);if(/^ *$/.test(s.slice(0,c.ch))){cm.execCommand('indentMore');return}
     this.autocompleteWithTab=1;D.send('GetAutocomplete',{line:s,pos:c.ch,token:this.id,win:this.id})
