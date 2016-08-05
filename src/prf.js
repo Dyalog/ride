@@ -14,7 +14,6 @@ D.prf={}
   ['autocompletionDelay',500],
   ['colourScheme',       'Default'], // name of the active colour scheme
   ['colourSchemes',      []],// objects describing user-defined colour schemes
-  ['editorWidth',        0], // width of a docked editor
   ['favs',               [{type:'connect'}]],
   ['floating',           0], // floating editor and tracer windows
   ['floatOnTop',         0], // try to keep floating windows on top of the session
@@ -28,7 +27,6 @@ D.prf={}
   ['keys',               {}],// a mapping between commands and keystrokes, only diffs from the defaults
   ['lbar',               1], // show language bar
   ['lineNums',           1],
-  ['lineNumsTracer',     0],
   ['matchBrackets',      1], // whether to highlight matching brackets
   ['otherExe',           ''],// content of the "exe" text box "Other..." is selected in the Connect page
   ['pos',                null], // [x,y,w,h,maximized] of the main window, used in ../init-nw.js; maximized is optional
@@ -39,12 +37,10 @@ D.prf={}
   ['selectedExe',        ''],// Which interpreter is selected in dropdown in the Connect page?
   ['theme',              ''],
   ['title',              '{WSID}'], // a.k.a. "caption"
-  ['tracerHeight',       0], // height of a docked tracer
   ['valueTips',          1], // value tips
   ['squiggleTips',       1],
   ['wrap',               0], // line wrapping in session
   ['wse',                0], // show workspace explorer?
-  ['wseWidth',           200], // workspace explorer width in pixels
   ['zoom',               0],
   ['menu',
     '# see below for syntax'+
