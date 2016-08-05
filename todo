@@ -5,7 +5,6 @@ Decision pending regarding initial handshake:
 
 Things to be done in the interpreter:
   * in GetAutocomplete either rename "token" to "win" or don't require them to be the same
-  * interpreter can start using OptionsDialog/StringDialog/TaskDialog for external files, see M5,S3 below
   * define and implement protocol messages for "show stack" and "show threads", see W1,W2 below
   * define protocol messages for transferring a file to the interpreter, e.g. for drag&drop of a .dws
   * don't crash when receiving JSON that's not structured as expected
@@ -17,14 +16,6 @@ Leftover from RIDE3 (M:major, S:significant, W:wouldn't it be nice)
   M5 edit "external" source files
         NN: email 2016-01-20, added a "string input dialog" to the protocol
         NN: email 2016-01-28, "format on open" should be off by default for external source files
-  M6 support external editors
-        NN: implemented in its simplest form -- execute a command with a tmp file as argument.
-            Emacs works fine.  Gvim will probably work, too.  Vim requires a wrapper script to run in a terminal, e.g.:
-                #!/bin/bash
-                xterm -e vim "$1"
-        NN: Do we need GUI for this?
-  S1 export and import preferences
-        NN: not needed because preferences are already in a file in human-readable form
   S2 config file for interpreter
   S5 enhanced navigation of classes and functions
         e.g. provide a way to jump to the last edited position in the same editor, like '' or `` in vim
