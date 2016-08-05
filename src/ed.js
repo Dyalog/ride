@@ -65,6 +65,7 @@ D.Ed=function(ide,opts){ //Editor constructor
   }
   ed.setTracer(!!ed.tc)
   this.vt=D.vt(this)
+  this.setLN(D.prf.lineNums())
 }
 D.Ed.prototype={
   updGutters:function(){
@@ -153,10 +154,12 @@ D.Ed.prototype={
       ed.cm.addLineClass(l,'background','highlighted');ed.cm.setCursor(l,0);ed.scrollCursorIntoProminentView()
     }
   },
+  setLN:function(x){ //update the display of line numbers and the state of the "[...]" button
+    var ed=this;ed.cm.setOption('lineNumbers',!!x);ed.updGutters()
+    var a=ed.tb.querySelectorAll('.tb_LN');for(var i=0;i<a.length;i++)D.util.tglCls(a[i],'pressed',x)
+  },
   setTracer:function(x){
-    var ed=this,ln=!!D.prf.lineNums();ed.tc=x;D.util.tglCls(ed.dom,'tracer',x);ed.highlight(null)
-    ed.cm.setOption('lineNumbers',ln);ed.updGutters();ed.setReadOnly(x)
-    var a=ed.tb.querySelectorAll('.tb_LN');for(var i=0;i<a.length;i++)D.util.tglCls(a[i],'pressed',ln)
+    var ed=this;ed.tc=x;D.util.tglCls(ed.dom,'tracer',x);ed.highlight(null);ed.updGutters();ed.setReadOnly(x)
   },
   setReadOnly:function(x){this.cm.setOption('readOnly',x);this.rp.hidden=!!x},
   updSize:function(){var $p=$(this.dom);this.cm.setSize($p.width(),$p.height()-28)},
@@ -240,8 +243,7 @@ D.Ed.prototype={
     s=[head].concat(tail.sort()).join(';')+(com?(' '+com):'')
     cm.replaceRange(s,{line:l,ch:0},{line:l,ch:cm.getLine(l).length},'D')
   },
-  LN:function(cm){var ed=this,v=D.prf.lineNums.toggle();cm.setOption('lineNumbers',v);ed.updGutters()
-                  var a=ed.tb.querySelectorAll('.tb_LN');for(var i=0;i<a.length;i++)D.util.tglCls(a[i],'pressed',v)},
+  LN:function(){D.prf.lineNums.toggle()},
   PV:function(){this.search(1)},
   NX:function(){this.search()},
   TC:function(){D.send('StepInto',{win:this.id})},

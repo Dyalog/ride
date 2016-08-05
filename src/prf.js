@@ -118,7 +118,6 @@ D.prf={}
         if(sx===sy)return x
         if(l.length)var y=p()                    //old value as an object (only needed if we have any listeners)
         sx?D.db.setItem(k,sx):D.db.removeItem(k) //store
-        console.info('notifying '+l.length+' about '+k)
         for(var i=0;i<l.length;i++)l[i](x,y)     //notify listeners
         return x
       }

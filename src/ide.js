@@ -252,6 +252,7 @@ D.IDE=function(){'use strict'
   }
   D.prf.wse(updWSE);D.prf.wse()&&setTimeout(updWSE,500)
   D.mac&&setTimeout(function(){ide.wins[0].focus()},500) //OSX is stealing our focus.  Let's steal it back!  Bug #5
+  D.prf.lineNums(function(x){eachWin(function(w){w.id&&w.setLN(x)})})
 }
 D.IDE.prototype={
   setConnInfo:function(x,y,z){this.host=x;this.port=y;this.profile=z;this.updTitle()},
