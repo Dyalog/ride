@@ -133,6 +133,7 @@ D.IDE=function(){'use strict'
       D.util.dlg(I.gd,{w:400,h:300})
     },
     ReplyTreeList:function(x){ide.wse.replyTreeList(x)},
+    StatusOutput:function(){}, //nyi
     UnknownCommand:function(){}
   }
   //We need to be able to temporarily block the stream of messages coming from socket.io
