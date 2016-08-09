@@ -29,9 +29,6 @@ D.prf={}
   ['lineNums',           1],
   ['matchBrackets',      1], // whether to highlight matching brackets
   ['otherExe',           ''],// content of the "exe" text box "Other..." is selected in the Connect page
-  ['pos',                null], // [x,y,w,h,maximized] of the main window, used in ../init-nw.js; maximized is optional
-  ['posEditor',          [32,32,1000,618]], // [x,y,w,h,maximized]
-  ['posTracer',          [32,32,1000,618]], // [x,y,w,h,maximized]
   ['prefixKey',          '`'],
   ['prefixMaps',         {}],// per-locale strings of pairs of characters -- diffs from the default map for that locale
   ['selectedExe',        ''],// Which interpreter is selected in dropdown in the Connect page?

@@ -9,7 +9,6 @@ D.Ed=function(ide,opts){ //Editor constructor
     smartIndent:D.prf.indent()>=0,indentUnit:D.prf.indent(),scrollButtonHeight:12,matchBrackets:!!D.prf.matchBrackets(),
     autoCloseBrackets:!!D.prf.autoCloseBrackets()&&ACB_VALUE,foldGutter:!!D.prf.fold(),scrollbarStyle:'simple',
     keyMap:'dyalog',extraKeys:{'Shift-Tab':'indentLess',Tab:'indentOrComplete',Down:'downOrXline'}
-    //Some options of this.cm can be set from ide.coffee when the corresponding pref changes.
   })
   ed.cm.dyalogCmds=ed
   ed.cm.on('cursorActivity',ed.cursorActivity.bind(ed))

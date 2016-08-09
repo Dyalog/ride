@@ -50,7 +50,6 @@ D.IDE=function(){'use strict'
       }
       var w=ee.token, done, editorOpts={id:w,name:ee.name,tc:ee['debugger']}
       if(D.prf.floating()&&!D.floating&&!ide.dead){
-        var p=ee['debugger']?D.prf.posTracer():D.prf.posEditor()
         if(!p[4]){var d=ee.token-1;p[0]+=d*(process.env.RIDE_XOFFSET||32);p[1]+=d*(process.env.RIDE_YOFFSET||32)}
         var ph={x:p[0],y:p[1],width:p[2],height:p[3]}
         var url='ed.html?win='+w+'&x='+p[0]+'&y='+p[1]+'&width='+p[2]+
