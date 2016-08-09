@@ -14,7 +14,7 @@ D.WSE.prototype={
     var f=this.pending[x.nodeId];if(!f)return
     f((x.nodeIds||[]).map(function(c,i){
       var t=Math.floor(x.classes[i]);return{text:x.names[i],children:!!c,id:'wse_'+(c||('leaf_'+x.nodeId+'_'+i)),
-                                            icon:c?'':2<=t&&t<=4?'style/img/wse_nc'+t+'.png':'img/tb_ED.png'}
+                                            icon:c?'':2<=t&&t<=4?'style/img/wse_nc'+t+'.png':'style/img/tb_ED.png'}
     }))
     delete this.pending[x.nodeId]
   },
