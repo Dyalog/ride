@@ -80,6 +80,8 @@ Any echoed input or interpreter output or the initial content of the session are
 These two perform essentially the same task except that `AppendSessionOutput` doesn't have trailing `"\n"`-s at the end
 of each element of `result`.
 
+:red_circle: Sometimes the interpreter returns `"result"` as a string, other times as an array of strings.
+
 The interpreter informs RIDE about changes in its ability to accept user input with
 <a name=SetPromptType></a>
 ```json
