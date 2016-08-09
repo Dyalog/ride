@@ -227,6 +227,7 @@ D.cn=_=>{ //set up Connect page
     }
   }catch(e){console.error(e)}
   updExes()
+  q.connecting_dlg_close.onclick=_=>{q.connecting_dlg.hidden=1}
 }
 
 const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
@@ -234,16 +235,17 @@ const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
 ,toBuf=x=>{const b=Buffer('xxxxRIDE'+x);b.writeInt32BE(b.length,0);return b}
 ,sendEach=x=>{if(clt){x.forEach(y=>log('send '+trunc(y)));clt.write(Buffer.concat(x.map(toBuf)))}}
 ,initInterpreterConn=_=>{
-  let q=Buffer(0x100000),iq=0,nq=0,old //iq,nq:offset and length in q; old:have we warned about an old interpreter?
+  q.connecting_dlg.hidden=q.listen_dlg.hidden=1
+  let b=Buffer(0x100000),ib=0,nb=0,old //ib,nb:offset and length in b; old:have we warned about an old interpreter?
   clt.on('data',x=>{
-    if(nq+x.length>q.length){const r=Buffer(Math.pow(2,Math.ceil(Math.log(nq+x.length)/Math.log(2))))
-                             q.copy(r,0,iq,iq+nq);iq=0;q=r;log('resized recv buffer to '+q.length)}
-    else if(iq+nq+x.length>q.length){q.copy(q,0,iq,iq+nq);iq=0}
-    x.copy(q,iq+nq,0,x.length);nq+=x.length
+    if(nb+x.length>b.length){const r=Buffer(Math.pow(2,Math.ceil(Math.log(nb+x.length)/Math.log(2))))
+                             b.copy(r,0,ib,ib+nb);ib=0;b=r;log('resized recv buffer to '+b.length)}
+    else if(ib+nb+x.length>b.length){b.copy(b,0,ib,ib+nb);ib=0}
+    x.copy(b,ib+nb,0,x.length);nb+=x.length
     let n //message length
-    while(nq>=4&&(n=q.readInt32BE(iq))<=nq){
+    while(nb>=4&&(n=b.readInt32BE(ib))<=nb){
       if(n<=8){err('Bad protocol message');break}
-      const m=''+q.slice(iq+8,iq+n);iq+=n;nq-=n;log('recv '+trunc(m))
+      const m=''+b.slice(ib+8,ib+n);ib+=n;nb-=n;log('recv '+trunc(m))
       if(m[0]==='['){
         const u=JSON.parse(m);D.recv&&D.recv(u[0],u[1])
       }else if(m[0]==='<'&&!old){
