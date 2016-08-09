@@ -227,7 +227,7 @@ D.cn=_=>{ //set up Connect page
     }
   }catch(e){console.error(e)}
   updExes()
-  q.connecting_dlg_close.onclick=_=>{q.connecting_dlg.hidden=1}
+//  q.connecting_dlg_close.onclick=_=>{q.connecting_dlg.hidden=1}
 }
 
 const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
@@ -235,7 +235,7 @@ const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
 ,toBuf=x=>{const b=Buffer('xxxxRIDE'+x);b.writeInt32BE(b.length,0);return b}
 ,sendEach=x=>{if(clt){x.forEach(y=>log('send '+trunc(y)));clt.write(Buffer.concat(x.map(toBuf)))}}
 ,initInterpreterConn=_=>{
-  q.connecting_dlg.hidden=q.listen_dlg.hidden=1
+  if(q)q.connecting_dlg.hidden=q.listen_dlg.hidden=1
   let b=Buffer(0x100000),ib=0,nb=0,old //ib,nb:offset and length in b; old:have we warned about an old interpreter?
   clt.on('data',x=>{
     if(nb+x.length>b.length){const r=Buffer(Math.pow(2,Math.ceil(Math.log(nb+x.length)/Math.log(2))))
