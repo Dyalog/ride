@@ -49,17 +49,12 @@ D.IDE=function(){'use strict'
         return
       }
       var w=ee.token, done, editorOpts={id:w,name:ee.name,tc:ee['debugger']}
-      if(D.prf.floating()&&!D.floating&&!ide.dead){
-        if(!p[4]){var d=ee.token-1;p[0]+=d*(process.env.RIDE_XOFFSET||32);p[1]+=d*(process.env.RIDE_YOFFSET||32)}
-        var ph={x:p[0],y:p[1],width:p[2],height:p[3]}
-        var url='ed.html?win='+w+'&x='+p[0]+'&y='+p[1]+'&width='+p[2]+
-                '&height='+p[3]+'&maximized='+(p[4]||0)+'&token='+w+'&tracer='+(+!!ee['debugger'])
-        if(D.open(url,$.extend({title:ee.name},ph))){
-          ide.block() //the popup will create D.wins[w] and unblock the message queue
-          ;(D.pendingEditors=D.pendingEditors||{})[w]={editorOpts:editorOpts,ee:ee,ide:ide};done=1
-        }else{
-          $.err('Popups are blocked.')
-        }
+      if(D.el&&D.prf.floating()&&!ide.dead){
+        var bw=new D.el.BrowserWindow({parent:D.elw});bw.loadURL(location+'?'+ee.token)
+//        if(!p[4]){var d=ee.token-1;p[0]+=d*(process.env.RIDE_XOFFSET||32);p[1]+=d*(process.env.RIDE_YOFFSET||32)}
+//          ide.block() //the popup will create D.wins[w] and unblock the message queue
+//          ;(D.pendingEditors=D.pendingEditors||{})[w]={editorOpts:editorOpts,ee:ee,ide:ide};done=1
+//        }
       }
       if(done)return
       ;(ide.wins[w]=new D.Ed(ide,editorOpts)).open(ee)

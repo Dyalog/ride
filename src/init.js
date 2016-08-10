@@ -11,8 +11,6 @@ if(typeof node_require!=='undefined'){
   var plt=process.platform;D.win=/^win/i.test(plt);D.mac=plt==='darwin'
 }
 
-var env=D.el?process.env:{}
-
 var a=document.querySelectorAll('[id]')
 for(var i=0;i<a.length;i++){var e=a[i],s=e.id,j=s.indexOf('_');I[s]=e;
                             if(j>=0){var u=s.slice(0,j),v=s.slice(j+1);(J[u]=J[u]||{})[v]=e}}
@@ -47,19 +45,18 @@ D.open=D.open||function(url,o){
   return!!open(url,'_blank',spec)
 }
 D.openExternal=D.el?D.el.shell.openExternal:function(x){open(x,'_blank')}
-var urlParams={},ref=(location+'').replace(/^[^\?]*($|\?)/,'').split('&')
-for(var i=0;i<ref.length;i++){var m=/^([^=]*)=?(.*)$/.exec(ref[i]);urlParams[unescape(m[1]||'')]=unescape(m[2]||'')}
-var win=urlParams.win
-if(D.floating&&win){
+if(/^\?\d+$/.test(location.search)){
+  var winId=+location.search.slice(1)
   document.body.className+=' floating-window'
-  window.onresize=function(){ed&&ed.updSize()}
-  var pe=opener.D.pendingEditors[win], editorOpts=pe.editorOpts, ee=pe.ee, ide=pe.ide
-  D.ide=opener.D.ide
-  var ed=D.ide.wins[win]=new D.Ed(ide,$(document.body),editorOpts)
-  ed.open(ee);ed.updSize();document.title=ed.name
-  window.onbeforeunload=function(){return ed.onbeforeunload()}
-  setTimeout(function(){ed.refresh()},500) //work around a rendering issue on Ubuntu
-  D.ide.unblock()
+  document.body.textContent='editor '+winId
+//  window.onresize=function(){ed&&ed.updSize()}
+//  var pe=opener.D.pendingEditors[winId], editorOpts=pe.editorOpts, ee=pe.ee, ide=pe.ide
+//  D.ide=opener.D.ide
+//  var ed=D.ide.wins[winId]=new D.Ed(ide,$(document.body),editorOpts)
+//  ed.open(ee);ed.updSize();document.title=ed.name
+//  window.onbeforeunload=function(){return ed.onbeforeunload()}
+//  setTimeout(function(){ed.refresh()},500) //work around a rendering issue on Ubuntu
+//  D.ide.unblock()
 }else{
   if(D.el){
     node_require(__dirname+'/src/cn')()
@@ -132,7 +129,7 @@ if(D.el){
   }
 
   //extra css and js
-  var path=node_require('path')
+  var path=node_require('path'),env=process.env
   env.RIDE_JS&&env.RIDE_JS.split(path.delimiter)
                           .forEach(function(x){x&&$.getScript('file://'+path.resolve(process.cwd(),x))})
   env.RIDE_CSS&&$('<style>').text(env.RIDE_CSS.split(path.delimiter)
