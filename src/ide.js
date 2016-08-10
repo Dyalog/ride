@@ -50,7 +50,7 @@ D.IDE=function(){'use strict'
       }
       var w=ee.token, done, editorOpts={id:w,name:ee.name,tc:ee['debugger']}
       if(D.el&&D.prf.floating()&&!ide.dead){
-        var bw=new D.el.BrowserWindow({parent:D.elw});bw.loadURL(location+'?'+ee.token)
+        var bw=new D.el.BrowserWindow({parent:D.elw});bw.loadURL(location+'?'+ee.token);bw.openDevTools()
 //        if(!p[4]){var d=ee.token-1;p[0]+=d*(process.env.RIDE_XOFFSET||32);p[1]+=d*(process.env.RIDE_YOFFSET||32)}
 //          ide.block() //the popup will create D.wins[w] and unblock the message queue
 //          ;(D.pendingEditors=D.pendingEditors||{})[w]={editorOpts:editorOpts,ee:ee,ide:ide};done=1
