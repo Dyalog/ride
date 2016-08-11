@@ -13,11 +13,13 @@ const rq=require,fs=rq('fs'),path=rq('path'),{execSync}=rq('child_process'),asyn
 ,v=JSON.parse(rf('package.json')).version.replace(/\.0$/,'')+'.'+sh('git rev-list --count HEAD') // version string
 ,tasks={}
 
+let buildDone=0
 tasks.b=tasks.build=f=>{
+  if(buildDone){f();return}
   md('_');wf('_/version',v);console.info('v'+v)
   wf('_/version.js','D='+JSON.stringify({versionInfo:{
        version:v,date:sh('git show -s HEAD --pretty=format:%ci'),rev:sh('git rev-parse HEAD')}}))
-  f()
+  buildDone=1;f()
 }
 
 const incl={
@@ -60,11 +62,11 @@ const excl={'/style/img/D.icns':1}
         f&&f(e)}
   )
 }
-tasks.l=tasks.linux=f=>{pkg('linux' ,'x64' ,f)}
-tasks.w=tasks.win  =f=>{pkg('win32' ,'ia32',f)}
-tasks.o=tasks.osx  =f=>{pkg('darwin','x64' ,f)}
-tasks.a=tasks.osx  =f=>{pkg('linux' ,'arm' ,f)} // waiting for https://github.com/electron-userland/electron-packager/pull/107
-tasks.d=tasks.dist=f=>{tasks.build(e=>{e?f(e):async.parallel([tasks.l,tasks.w,tasks.o],e=>{f(e)})})}
+tasks.l=tasks.linux=f=>{tasks.build(e=>e?f(e):pkg('linux' ,'x64' ,f))}
+tasks.w=tasks.win  =f=>{tasks.build(e=>e?f(e):pkg('win32' ,'ia32',f))}
+tasks.o=tasks.osx  =f=>{tasks.build(e=>e?f(e):pkg('darwin','x64' ,f))}
+tasks.a=tasks.osx  =f=>{tasks.build(e=>e?f(e):pkg('linux' ,'arm' ,f))} //waiting for https://github.com/electron-userland/electron-packager/pull/107
+tasks.d=tasks.dist=f=>{async.series([tasks.l,tasks.w,tasks.o],e=>{f(e)})}
 
 tasks.c=tasks.clean=f=>{rm('_');f()}
 
