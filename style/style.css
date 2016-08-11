@@ -54,7 +54,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #cn_fav_btns{position:absolute;top:0;left:0;right:0;height:32px;overflow:hidden;width:9999px;padding:3px}
 #cn_fav_btns button,#cn_go{font-size:18px;min-width:75px}
 #cn .indent{margin-left:24px}
-#cn_exe{width:100%;margin-top:2px}
+#cn_exe,#cn_args{width:100%;margin-top:2px}
 #cn_env{width:100%}
 #cn_env_add{padding-left:32px}
 #cn_env_add a{font-family:apl,monospace;font-size:18px}

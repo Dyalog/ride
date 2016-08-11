@@ -70,12 +70,13 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
         if(x.ssh){
           D.util.dlg(q.connecting_dlg)
           var o={host:x.host,port:+x.port||22,user:x.user||user}
-          if(x.ssh_auth_type==='key'){o.key=x.ssh_key.value}else{o.pass=x===sel?q.ssh_pass.value:''}
+          if(x.ssh_auth_type==='key'){o.key=x.ssh_key}else{o.pass=x===sel?q.ssh_pass.value:''}
           const c=sshExec(o,'/bin/sh',(e,sm)=>{if(e)throw e
             sm.on('close',(code,sig)=>{D.ide&&D.ide._sshExited({code,sig});c.end()})
             c.forwardIn('',0,(e,rport)=>{if(e)throw e
-              let s='';for(let k in env)s+=`${k}=${shEsc(env[k])} `
-              sm.write(`${s}RIDE_INIT=CONNECT:127.0.0.1:${rport} ${shEsc(x.exe)} +s -q >/dev/null\n`)
+              let s0='';for(let k in env)s0+=`${k}=${shEsc(env[k])} `
+              let s1=x.args?x.args.replace(/\n$/,'').split('\n').map(shEsc).join(' '):''
+              sm.write(`${s0}RIDE_INIT=CONNECT:127.0.0.1:${rport} ${shEsc(x.exe)} ${x.args||''} ${s1} +s -q >/dev/null\n`)
               q.connecting_dlg.hidden=1
             })
           }).on('error',x=>{err(x.message||''+x);q.connecting_dlg.hidden=1})
@@ -90,6 +91,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
             log('spawning interpreter '+JSON.stringify(x.exe))
             let args=['+s','-q'],stdio=['pipe','ignore','ignore']
             if(/^win/i.test(process.platform)){args=[];stdio[0]='ignore'}
+            if(x.args)args=args.concat(args,x.args.replace(/\n$/,'').split('\n'))
             try{child=cp.spawn(x.exe,args,{stdio,env:$.extend({},process.env,env,
                                            {RIDE_INIT:'CONNECT:'+hp,RIDE_SPAWNED:'1'})})}
             catch(e){err(''+e);return}
