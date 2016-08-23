@@ -24,6 +24,7 @@ Leftover from RIDE3 (M:major, S:significant, W:wouldn't it be nice)
   W1 show stack
   W2 show threads
   W3 status window
+        NN: done
 
 Not prioritized:
   configurable colours in WSE, Mantis #13629, email 2016-07-05

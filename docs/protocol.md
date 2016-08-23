@@ -429,6 +429,21 @@ RIDE should query information only about the visible parts of the tree as they g
 When the user presses Enter or clicks on an editable node, RIDE should use the [Edit](#Edit) command to notify the
 interpreter.  Then it can send back commands to open or focus an editor window.
 
+#Status window
+
+The interpreter may request the display of messages in a separate "Status Output" window.
+
+<a name=ConnectTo></a>
+```json
+["StatusOutput",{"text":"some very important message\r\n","flags":2}] // Interpreter -> RIDE
+```
+
+`flags` (despite its name) is the message type, one of:
+* `1` info, usually shown in green
+* `2` error, red
+* `4` warning, blue
+* `8` .Net function overload clash overload (red?)
+
 #Process manager
 :red_circle: As of April 2016 there is no process manager.
 

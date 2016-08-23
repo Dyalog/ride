@@ -128,7 +128,13 @@ D.IDE=function(){'use strict'
       D.util.dlg(I.gd,{w:400,h:300})
     },
     ReplyTreeList:function(x){ide.wse.replyTreeList(x)},
-    StatusOutput:function(){}, //nyi
+    StatusOutput:function(x){
+      var w=ide.wStatus;if(!D.el)return
+      if(!w){w=ide.wStatus=new D.el.BrowserWindow({width:600,height:400,parent:D.elw})
+             w.setTitle('Status Output');w.loadURL('file://'+__dirname+'/status.html')
+             w.on('closed',function(){delete ide.wStatus})}
+      w.webContents.executeJavaScript('add('+JSON.stringify(x)+')')
+    },
     UnknownCommand:function(){}
   }
   //We need to be able to temporarily block the stream of messages coming from socket.io
