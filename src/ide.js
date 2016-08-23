@@ -250,6 +250,7 @@ D.IDE=function(){'use strict'
     if(p.type!=='row'){var row=gl.createContentItem({type:'row'},p);p.parent.replaceChild(p,row)
                        row.addChild(p,0,true);row.callDownwards('setSize');p=row}
     p.addChild({type:'component',componentName:'wse',title:'Workspace Explorer'},0)
+    var comp=gl.root.getComponentsByName('wse')[0];comp&&comp.container&&comp.container.setSize(200)
   }
   D.prf.wse(updWSE);D.prf.wse()&&setTimeout(updWSE,500)
   D.mac&&setTimeout(function(){ide.wins[0].focus()},500) //OSX is stealing our focus.  Let's steal it back!  Bug #5
