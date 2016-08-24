@@ -27,7 +27,7 @@ D.IDE=function(){'use strict'
     WindowTypeChanged:function(x){return ide.wins[x.win].setTC(x.tracer)},
     ReplyGetAutocomplete:function(x){var w=ide.wins[x.token];w&&w.processAutocompleteReply(x)},
     ValueTip:function(x){ide.wins[x.token].vt.processReply(x)},
-    SetHighlightLine:function(x){var w=ide.wins[x.win];w&&w.hl&&w.hl(x.line)},
+    SetHighlightLine:function(x){var w=ide.wins[x.win];if(w&&w.hl){w.hl(x.line);w.focus()}},
     UpdateWindow:function(x){var w=ide.wins[x.token];if(w){w.container&&w.container.setTitle(x.name);w.open(x)}},
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
     CloseWindow:function(x){
