@@ -185,7 +185,7 @@ CM.defineMode('apl-session',function(config,modeConfig){
     }
   }
 })
-CM.registerHelper('wordChars','apl',name1)
+;['apl','apl-session'].forEach(function(x){CM.registerHelper('wordChars',x,RegExp('['+letter+'\\d]'))})
 CM.registerHelper('fold','apl',function(cm,start){
   var l,l0=l=start.line,end=cm.lastLine()
   var x0=stackStr(cm.getStateAfter(l0-1))   // x0: the stackStr at the beginning of start.line
