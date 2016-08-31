@@ -54,7 +54,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
 ,go=(x)=>{
   x=x||sel;if(!validate(x))return 0
   try{
-    switch(x.type){
+    switch(x.type||'connect'){
       case'connect':
         D.util.dlg(q.connecting_dlg);connect({host:x.host,port:+x.port||4502,ssl:x.ssl,cert:x.cert,subj:x.subj});break
       case'listen':
