@@ -11,7 +11,7 @@
     "codemirror": "5.18.2",
     "golden-layout": "1.5.1",
     "jquery": "3.1.0",
-    "ssh2": "0.5.0"
+    "ssh2": "0.5.1"
   },
   "devDependencies": {
     "async": "2.0.1",
