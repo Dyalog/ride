@@ -59,6 +59,7 @@ D.IDE=function(){'use strict'
       if(done)return
       ;(ide.wins[w]=new D.Ed(ide,editorOpts)).open(ee)
       //add to golden layout:
+      var si=ide.wins[0].cm.getScrollInfo() //remember session scroll position
       var tc=!!ee['debugger']
       var bro=gl.root.getComponentsByName('win').filter(function(x){return x.id&&tc===!!x.tc})[0] //existing editor
       if(bro){ //add next to existing editor
@@ -69,6 +70,7 @@ D.IDE=function(){'use strict'
                         q.addChild(p);q.callDownwards('setSize');p=q}
       }
       p.addChild({type:'component',componentName:'win',componentState:{id:w},title:ee.name})
+      ide.wins[0].cm.scrollTo(si.left,si.top)
     },
     ShowHTML:function(x){
       if(D.el){
