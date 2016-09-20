@@ -276,6 +276,7 @@ function bqbqHint(cm){
 }
 
 // BACKQUOTE BACKQUOTE name completions
+// mentioned in http://wiki.dyalog.bramley/index.php/New_Glyphs
 var informal=[
   // 'squiggle alias0 alias1 ...'
   '← leftarrow assign gets',

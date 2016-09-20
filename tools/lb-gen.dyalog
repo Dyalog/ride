@@ -10,6 +10,8 @@
 ⍝ #generate the .js
 ⍝ ./lb-gen.dyalog >../src/lb.js
 
+⍝mentioned in http://wiki.dyalog.bramley/index.php/New_Glyphs
+
 ⎕io←⎕ct←0 ⋄ ⎕pw←32767 ⋄ json←7160⌶ ⋄ 'base64'⎕cy'dfns'
 esc←(,¨'&<>')⎕r'\&amp;' '\&lt;' '\&gt;'
 trim←('\n+\Z'⎕r''⍠'Mode' 'D')(' +$'⎕r'') ⍝rm trailing spaces from each line and rm empty lines at the end of ⍵

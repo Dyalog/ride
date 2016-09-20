@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-// This script scrapes keyboard definitions from http://dfns.dyalog.com/n_keyboards.htm
-// and generates ../src/kbds.js
+//This script scrapes keyboard definitions from http://dfns.dyalog.com/n_keyboards.htm and generates ../src/kbds.js
+//Mentioned in http://wiki.dyalog.bramley/index.php/New_Glyphs
 'use strict';process.chdir(__dirname)
 const rq=require,fs=rq('fs'),http=rq('http'),cheerio=rq('cheerio')
 ,err=s=>{process.stderr.write(`ERROR: ${s}\n`);process.exit(1)}
