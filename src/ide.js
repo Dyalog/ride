@@ -5,7 +5,7 @@ D.IDE=function(){'use strict'
   ide.host=ide.port=ide.wsid='';D.prf.title(ide.updTitle.bind(ide))
   D.wins=ide.wins={0:new D.Se(ide)}
   ide.focusedWin=ide.wins[0] //last focused window, it might not have the focus right now
-  var handlers=ide.handlers={ //for RIDE protocol messages
+  ide.handlers={ //for RIDE protocol messages
     Identify:function(x){D.remoteIdentification=x;ide.updTitle();ide.connected=1;ide.wins[0].updPW(1)},
     Disconnect:function(x){
       if(ide.dead)return
@@ -15,7 +15,7 @@ D.IDE=function(){'use strict'
     SysError:function(x){$.err(x.text,'SysError');ide.die()},
     InternalError:function(x){$.err('An error ('+x.error+') occurred processing '+x.message,'Internal Error')},
     NotificationMessage:function(x){$.alert(x.message,'Notification')},
-    UpdateDisplayName:function(a){ide.wsid=a.displayName;ide.updTitle()},
+    UpdateDisplayName:function(x){ide.wsid=x.displayName;ide.updTitle()},
     EchoInput:function(x){ide.wins[0].add(x.input)},
     SetPromptType:function(x){
       var t=x.type;t&&ide.pending.length?D.send('Execute',{trace:0,text:ide.pending.shift()+'\n'})
@@ -155,7 +155,7 @@ D.IDE=function(){'use strict'
           i&&mq.splice(0,i);ide.wins[0].add(s)
         })
       }else{
-        var f=handlers[a[0]];f?f.apply(ide,a.slice(1)):D.send('UnknownCommand',{name:a[0]})
+        var f=ide.handlers[a[0]];f?f.apply(ide,a.slice(1)):D.send('UnknownCommand',{name:a[0]})
       }
     }
     last=+new Date;tid=0
@@ -259,10 +259,10 @@ D.IDE=function(){'use strict'
   D.prf.lineNums(function(x){eachWin(function(w){w.id&&w.setLN(x)})})
 }
 D.IDE.prototype={
-  setConnInfo:function(x,y,z){this.host=x;this.port=y;this.profile=z;this.updTitle()},
+  setConnInfo:function(x,y,z){var ide=this;ide.host=x;ide.port=y;ide.profile=z;ide.updTitle()},
   die:function(){ //don't really, just pretend
-    if(this.dead)return
-    this.dead=1;this.connected=0;this.dom.className+=' disconnected';for(var k in this.wins)this.wins[k].die()
+    var ide=this;if(ide.dead)return
+    ide.dead=1;ide.connected=0;ide.dom.className+=' disconnected';for(var k in ide.wins)ide.wins[k].die()
   },
   updTitle:function(){ //change listener for D.prf.title
     var ide=this,ri=D.remoteIdentification||{},v=D.versionInfo
@@ -274,11 +274,11 @@ D.IDE.prototype={
       X==='{VER_B}'?(ri.version||'').split('.')[1]:  X==='{RIDE_VER_B}'?(v.version||'').split('.')[1]:
       X==='{VER_C}'?(ri.version||'').split('.')[2]:  X==='{RIDE_VER_C}'?(v.version||'').split('.')[2]:
       X==='{VER}'?ri.version:                        X==='{RIDE_VER}'?v.version:
-      X==='{PROFILE}'?ide.profile||'':                   x
+      X==='{PROFILE}'?ide.profile||'':               x
     )||''})||'Dyalog'
   },
   focusMRUWin:function(){ //most recently used
-    var t=0,w;for(var k in this.wins){var x=this.wins[k];if(x.id&&t<=x.focusTS){w=x;t=x.focusTS}}
+    var t=0,w,wins=this.wins;for(var k in wins){var x=wins[k];if(x.id&&t<=x.focusTS){w=x;t=x.focusTS}}
     w&&w.focus()
   },
   LBR:D.prf.lbar      .toggle,
