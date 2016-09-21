@@ -5,7 +5,7 @@
 
          as a desktop application                          in a browser
 
-* install [Git](https://git-scm.com/downloads) and [NodeJS v6.1.0](https://nodejs.org/download/release/v6.1.0/)
+* install [Git](https://git-scm.com/downloads) and [NodeJS v6.6.0](https://nodejs.org/download/release/v6.6.0/)
 * `git clone https://github.com/dyalog/ride --depth=1`
 * `cd ride`
 * `npm i         # download dependencies`
