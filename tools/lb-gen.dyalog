@@ -1,10 +1,7 @@
 #!/bin/bash
-(echo '∇M';tail -n+3 "$0";echo -e '∇\nM\n⎕off')|dyalog -script;exit $?
+(echo ∇M;tail -n+3 $0;echo -e '∇\nM\n⎕off')|dyalog -script;exit $?
 
-⍝This script takes an lbar_unicode.xml as input and
-⍝generates JavaScript constants with information about the language bar.
-
-⍝Usage from bash:
+⍝This script generates JS constants with information about the language bar. Usage:
 ⍝ #fetch the latest .xml
 ⍝ svn cat http://svn.dyalog.bramley/svn/dyalog/trunk/apl/svn/tools/languagebar/out/lbar_unicode.xml >lb.xml
 ⍝ #generate the .js
