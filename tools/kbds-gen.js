@@ -57,8 +57,7 @@ const rq=require,fs=rq('fs'),http=rq('http'),cheerio=rq('cheerio')
       for(let r=0;r<4;r++)for(let y=0;y<2;y++){
         const chunks=lines[1+y+3*r].slice(1,74).split(/[─│┌┬┐├┼┤└┴┘]+/g)
         for(let c=0;c<chunks.length;c++)if(G[g1].sc[r][c]){
-          let chunk=chunks[c]
-          if(lc==='de_DE'&&chunk==='^  ⋄')chunk='^ ⋄ ' //todo: rm temporary workaround
+          const chunk=chunks[c]
           if(chunk[1]!==' '||chunk[3]!==' ')err('bad key in '+lc+' layout -- '+JSON.stringify(chunk))
           for(let x=0;x<2;x++)l[2*x+1-y][G[g1].sc[r][c]]=chunk[2*x]
         }
