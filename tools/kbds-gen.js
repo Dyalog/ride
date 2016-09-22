@@ -46,7 +46,7 @@ const rq=require,fs=rq('fs'),http=rq('http'),cheerio=rq('cheerio')
 ,processData=data=>{
   cheerio.load(data)('pre').text()
     .replace(/\r\n/g,'\n')
-    .replace(/\nDyalog( Mac)? APL\/([a-z]{2}-[A-Z]{2}) .*\n¯+\n(┌(?:.*\n){11}.*)/gm,(_,mac,lc,desc)=>{
+    .replace(/\nDyalog( Mac)? APL\/([a-z]{2}-[A-Z]{2}) .*\n¯+\n(?:.*\n)?(┌(?:.*\n){11}.*)/gm,(_,mac,lc,desc)=>{
       lc=lc.replace('-','_')+(mac?'_Mac':'')
       console.info('  '+lc)
       const l=layouts[lc]=[];for(let i=0;i<4;i++){l.push([]);for(let j=0;j<58;j++)l[i].push(' ')}
@@ -57,7 +57,8 @@ const rq=require,fs=rq('fs'),http=rq('http'),cheerio=rq('cheerio')
       for(let r=0;r<4;r++)for(let y=0;y<2;y++){
         const chunks=lines[1+y+3*r].slice(1,74).split(/[─│┌┬┐├┼┤└┴┘]+/g)
         for(let c=0;c<chunks.length;c++)if(G[g1].sc[r][c]){
-          const chunk=chunks[c]
+          let chunk=chunks[c]
+          if(lc==='de_DE'&&chunk==='^  ⋄')chunk='^ ⋄ ' //todo: rm temporary workaround
           if(chunk[1]!==' '||chunk[3]!==' ')err('bad key in '+lc+' layout -- '+JSON.stringify(chunk))
           for(let x=0;x<2;x++)l[2*x+1-y][G[g1].sc[r][c]]=chunk[2*x]
         }
