@@ -1,3 +1,4 @@
+//Electron's entry point (web-based RIDE doesn't load it)
 const rq=require,fs=rq('fs'),path=rq('path'),{spawn}=rq('child_process'),ps=process,{env}=ps,
       repr=JSON.stringify,el=rq('electron'),D={}
 //Detect platform: https://nodejs.org/api/process.html#process_process_platform
@@ -7,14 +8,14 @@ env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a stan
   (D.win?0:+fs.existsSync(path.dirname(ps.execPath)+(D.mac?'/../../../../Resources/Dyalog/mapl':'/../mapl')))
 if(D.mac&&!env.RIDE_INTERPRETER_EXE){env.RIDE_INTERPRETER_EXE=D.lastSpawnedExe=path.resolve(ps.cwd(),'../Dyalog/mapl')}
 
-const dbf=el.app.getPath('userData')+'/winstate.json'
+const dbf=el.app.getPath('userData')+'/winstate.json' //json "database" file for storing preferences
 let db={};try{if(fs.existsSync(dbf))db=JSON.parse(fs.readFileSync(dbf,'utf8'))}catch(e){console.error(e)}
-let tid;const sv=_=>{if(!tid)tid=setTimeout(svNow,2000)}
-const svNow=_=>{
+let tid;const sv=_=>{if(!tid)tid=setTimeout(svNow,2000)} //save (throttled)
+const svNow=_=>{ //save now
   tid=0;try{const b=elw.getBounds(),h={main:[b.x-dx,b.y-dy,b.width,b.height],devTools:elw.isDevToolsOpened()}
             fs.writeFileSync(dbf,JSON.stringify(h))}catch(e){console.error(e)}
 }
-let dx=0,dy=0 //used to correct for misreported coords
+let dx=0,dy=0 //used to correct for bad coords misreported by Electron (NW.js has the same problem)
 el.app.on('ready',_=>{
   const p=db.main||[]
   let w=global.elw=new el.BrowserWindow({x:p[0],y:p[1],width:p[2],height:p[3],show:0,icon:'style/img/D.png'})

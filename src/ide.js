@@ -1,4 +1,6 @@
-//represents the main screen of RIDE; holds refs to the session (.win[0]), editors/tracers (.win[i])
+//represents the main screen of a connected RIDE
+//holds refs to the session (.win[0]), editors/tracers (.win[i])
+//and an instance of the workspace explorer (.wse) defined in wse.js
 //manages the language bar, its tooltips, and the insertion of characters
 //processes incoming RIDE protocol messages
 D.IDE=function(){'use strict'
