@@ -1,17 +1,17 @@
 #!/usr/bin/env node
+//a webserver that starts the interpreter and serves RIDE for web browsers at https://127.0.0.1:8443/
 'use strict'
 const rq=require,express=rq('express'),fs=rq('fs'),log=x=>{console.log(x)},cp=rq('child_process')
-if(!fs.existsSync(__dirname+'/_')){log('ERROR: please first build ride with "node mk"');process.exit(1)}
+if(!fs.existsSync(__dirname+'/_')){log('ERROR: please build ride with "node mk" first');process.exit(1)}
 const app=express(),port=8443,cert=fs.readFileSync('ssl/cert.pem'),key=fs.readFileSync('ssl/key.pem')
 app.disable('x-powered-by');app.use((x,_,f)=>{log(x.method+' '+x.path);f()})
 app.use(rq('compression')());app.use('/',express.static('.'))
 const hsrv=rq('https').createServer({cert,key},app)
-let wskt
+let wskt //websocket connection
 ;(new rq('ws').Server({server:hsrv})).on('connection',x=>{wskt=x;x.on('message',y=>sendEach([y]))})
 hsrv.listen(port,_=>log('http server listening on port '+port))
-
-const maxl=100,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
-,toBuf=x=>{const b=Buffer('xxxxRIDE'+x);b.writeInt32BE(b.length,0);return b}
+const maxl=100,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x //helper for logging
+,toBuf=x=>{const b=Buffer('xxxxRIDE'+x);b.writeInt32BE(b.length,0);return b} //serialize in a RIDE protocol envelope
 ,sendEach=x=>{if(clt){x.forEach(y=>log('send '+trunc(y)));clt.write(Buffer.concat(x.map(toBuf)))}}
 let clt,srv=rq('net').createServer(x=>{
   clt=x;srv.close();srv=0;log('interpreter connected');clt.on('end',_=>log('interpreter diconnected'))
