@@ -1,3 +1,6 @@
+//represents the main screen of RIDE; holds refs to the session (.win[0]), editors/tracers (.win[i])
+//manages the language bar, its tooltips, and the insertion of characters
+//processes incoming RIDE protocol messages
 D.IDE=function(){'use strict'
   var ide=D.ide=this;I.cn.hidden=1;I.lb.insertAdjacentHTML('beforeend',D.lb.html);ide.dom=I.ide;I.ide.hidden=0
   ide.pending=[] //lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it

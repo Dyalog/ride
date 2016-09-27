@@ -1,5 +1,9 @@
 ;(function(){'use strict'
 
+//mapping between various elements of the APL language and their urls in the online help, e.g.
+// D.hlp['⍴']     -> 'http://help.dyalog.com/15.0/Content/Language/Symbols/Rho.htm'
+// D.hlp[')vars'] -> 'http://help.dyalog.com/15.0/Content/Language/System%20Commands/vars.htm'
+
 var p='http://help.dyalog.com/15.0/Content/',q='.htm' //prefix and suffix
 var h=D.hlp={WELCOME:p+'MiscPages/HelpWelcome'+q,
              UCMDS:p+'UserGuide/The APL Environment/User Commands'+q,

@@ -1,8 +1,9 @@
-//session
 'use strict'
-D.Se=function(ide){ // Session constructor
+//session
+//holds a reference to a CodeMirror instance (.cm) and processes some of its commands (e.g. .ED(), .ER(), ...)
+D.Se=function(ide){ //constructor
   var se=this;se.ide=ide;se.hist=[''];se.histIdx=0;se.focusTS=0;se.id=0
-  se.dirty={} // modified lines: lineNumber→originalContent, inserted lines: lineNumber→0 (also used in syn.js)
+  se.dirty={} //modified lines: lineNumber→originalContent, inserted lines: lineNumber→0 (also used in syn.js)
   se.dom=document.createElement('div');se.dom.className='ride_win';se.$e=$(se.dom)
   var cm=se.cm=CM(se.dom,{
     autofocus:true,mode:{name:'apl-session',se:se},matchBrackets:!!D.prf.matchBrackets(),readOnly:true,keyMap:'dyalog',
@@ -16,8 +17,8 @@ D.Se=function(ide){ // Session constructor
     if(c.origin==='D')return
     var l0=c.from.line,l1=c.to.line,m=l1-l0+1,n=c.text.length
     if(n<m){
-      if(!c.update){c.cancel();return} // the change is probably the result of Undo
-      var text=c.text.slice(0);for(var j=n;j<m;j++)text.push('') // pad shrinking changes with empty lines
+      if(!c.update){c.cancel();return} //the change is probably the result of Undo
+      var text=c.text.slice(0);for(var j=n;j<m;j++)text.push('') //pad shrinking changes with empty lines
       c.update(c.from,c.to,text);n=m
     }else if(m<n){
       var h=se.dirty;se.dirty={};for(var x in h)se.dirty[x+(n-m)*(x>l1)]=h[x]
@@ -31,14 +32,14 @@ D.Se=function(ide){ // Session constructor
     var l0=c.from.line,l1=c.to.line,m=l1-l0+1,n=c.text.length
     for(var l in se.dirty)se.cm.addLineClass(+l,'background','modified')
   })
-  se.promptType=0 // see ../docs/protocol.md #SetPromptType
+  se.promptType=0 //see ../docs/protocol.md #SetPromptType
   se.processAutocompleteReply=D.ac(se)
   D.prf.wrap(function(x){se.cm.setOption('lineWrapping',!!x);se.scrollCursorIntoView()})
-  this.vt=D.vt(this)
+  this.vt=D.vt(this) //value tips
 }
 D.Se.prototype={
   histAdd:function(lines){this.hist[0]='';[].splice.apply(this.hist,[1,0].concat(lines));this.histIdx=0},
-  histMove:function(d){
+  histMove:function(d){ //go back or forward in history
     var i=this.histIdx+d, l=this.cm.getCursor().line
     if(i<0                ){$.alert('There is no next line'    ,'Dyalog APL Error');return}
     if(i>=this.hist.length){$.alert('There is no previous line','Dyalog APL Error');return}
@@ -48,7 +49,7 @@ D.Se.prototype={
     this.cm.setCursor({line:l,ch:this.hist[i].replace(/[^ ].*$/,'').length})
     this.histIdx=i
   },
-  add:function(s){
+  add:function(s){ //append text to session
     var cm=this.cm,l=cm.lastLine(),s0=cm.getLine(l)
     cm.replaceRange((cm.getOption('readOnly')?(s0+s):s),{line:l,ch:0},{line:l,ch:s0.length},'D')
     cm.setCursor(cm.lastLine(),0)
@@ -62,13 +63,13 @@ D.Se.prototype={
     x&&cm.clearHistory()
   },
   updSize:function(){
-    var i=this.cm.getScrollInfo(),b=5>Math.abs(i.top+i.clientHeight-i.height) // b:are we at the bottom edge?
+    var i=this.cm.getScrollInfo(),b=5>Math.abs(i.top+i.clientHeight-i.height) //b:are we at the bottom edge?
     this.cm.setSize(this.dom.clientWidth,this.dom.clientHeight);b&&this.scrollCursorIntoView();this.updPW()
   },
-  updPW:function(force){ // force:emit a SetPW message even if the width hasn't changed
-    // discussion about CodeMirror's width in chars: https://github.com/codemirror/CodeMirror/issues/3618
-    // We can get the scrollbar's width through cm.display.scrollbarFiller.clientWidth, it's 0 if not present.
-    // But it's better to reserve a hard-coded width for it regardless of its presence.
+  updPW:function(force){ //force:emit a SetPW message even if the width hasn't changed
+    //discussion about CodeMirror's width in chars: https://github.com/codemirror/CodeMirror/issues/3618
+    //We can get the scrollbar's width through cm.display.scrollbarFiller.clientWidth, it's 0 if not present.
+    //But it's better to reserve a hard-coded width for it regardless of its presence.
     var pw=Math.max(42,Math.floor((this.dom.clientWidth-20)/this.cm.defaultCharWidth()))
     if(pw!==this.pw&&this.ide.connected||force)D.send('SetPW',{pw:this.pw=pw})
   },
@@ -85,7 +86,7 @@ D.Se.prototype={
   focus:function(){
     var q=this.container,p=q&&q.parent,l=q&&q.layoutManager,m=l&&l._maximisedItem
     if(m&&m!==(p&&p.parent))m.toggleMaximise()
-    while(p){p.setActiveContentItem&&p.setActiveContentItem(q);q=p;p=p.parent} // reveal in golden layout
+    while(p){p.setActiveContentItem&&p.setActiveContentItem(q);q=p;p=p.parent} //reveal in golden layout
     window.focused||window.focus();this.cm.focus()
   },
   insert:function(ch){this.cm.getOption('readOnly')||this.cm.replaceSelection(ch)},
@@ -98,7 +99,7 @@ D.Se.prototype={
     for(l in se.dirty)ls.push(+l)
     if(ls.length){
       ls.sort(function(x,y){return x-y})
-      es=ls.map(function(l){return se.cm.getLine(l)||''}) // strings to execute
+      es=ls.map(function(l){return se.cm.getLine(l)||''}) //strings to execute
       ls.reverse().forEach(function(l){
         se.cm.removeLineClass(l,'background','modified')
         se.dirty[l]===0?se.cm.replaceRange('',{line:l,ch:0},{line:l+1,ch:0},'D')
@@ -108,7 +109,7 @@ D.Se.prototype={
       es=[se.cm.getLine(se.cm.getCursor().line)]
     }
     se.ide.exec(es,trace);se.dirty={};se.histAdd(es.filter(function(x){return!/^\s*$/.test(x)}));se.cm.clearHistory()
-    se.cm.setOption('cursorHeight',0) // avoid flicker at column 0 when leaning on <ER>
+    se.cm.setOption('cursorHeight',0) //avoid flicker at column 0 when leaning on <ER>
   },
   ED:function(cm){
     var c=cm.getCursor();D.send('Edit',{win:0,pos:c.ch,text:cm.getLine(c.line),unsaved:this.ide.getUnsaved()})

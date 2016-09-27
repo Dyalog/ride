@@ -1,6 +1,11 @@
 ;(function(){'use strict'
 var ACB_VALUE={pairs:'()[]{}',explode:'{}'} //value for CodeMirror's "autoCloseBrackets" option when on
-D.Ed=function(ide,opts){ //Editor constructor
+
+//represents an editor (.tc==0) or a tracer (.tc==1)
+//holds a ref to a CodeMirror instance (.cm),
+//plus two small-size CodeMirror instances for Search and Replace (.cmSC, .cmRP)
+//handles most CodeMirror commands in editors (e.g. .LN(), .QT(), .TL(), ...)
+D.Ed=function(ide,opts){ //constructor
   var ed=this;ed.ide=ide;ed.id=opts.id;ed.name=opts.name;ed.tc=opts.tc
   ed.dom=I.ed_tmpl.cloneNode(1);ed.dom.id=null;ed.dom.style.display='';ed.$e=$(ed.dom);ed.jumps=[];ed.focusTS=0
   ed.oText='';ed.oStop=[] //remember original text and "stops" to avoid pointless saving on EP
