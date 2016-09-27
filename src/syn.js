@@ -1,13 +1,13 @@
 //syntax highlighting using https://codemirror.net/doc/manual.html#modeapi
 ;(function(){'use strict'
-D.syn={}
+D.syn={} //namespace for "exported" stuff
 var letter=D.syn.letter='A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ',
   name0=RegExp('['+letter+']'),
   name1=RegExp('['+letter+'\\d]*'),
   name='(?:['+letter+']['+letter+'\\d]*)',
   notName=RegExp('[^'+letter+'0-9]+'),
   end='(?:⍝|$)',
-  dfnHeader=RegExp(
+  dfnHeader=RegExp( //best effort to tell the difference between a dfn vs tradfn header
     '^\\s*'+name+'\\s*←\\s*\\{\\s*(?:'+
       end+'|'+
       '[^'+letter+'⍝\\s]|'+
@@ -31,9 +31,9 @@ function escIdiom(s){
   return s.replace(/«(.*?)»|(.)/g,function(_,g,g2){g||(g=g2);return' *'+(g==='_'?"' '":escRE(g))}).slice(2)
 }
 var idiomsRE=RegExp('^(?:'+(idioms.sort(function(x,y){return y.length-x.length}).map(escIdiom).join('|'))+')','i')
-var sw=4,swm=2 // default indent unit and indent unit for methods; these are kept in sync with prf
+var sw=4,swm=2 //sw:default indent unit (vim calls that "sw" for "shift width"), swm:indent unit for methods
 function updSW(){sw=D.prf.indent();swm=D.prf.indentMethods();swm<0&&(swm=sw)}
-updSW();D.prf.indent(updSW);D.prf.indentMethods(updSW)
+updSW();D.prf.indent(updSW);D.prf.indentMethods(updSW) //keep sw,swm in sync with the prefs
 var icom=D.prf.indentComments();D.prf.indentComments(function(x){icom=x})
 var dfnDepth=D.syn.dfnDepth=function(a){var r=0;for(var j=0;j<a.length;j++)a[j].t==='{'&&r++;return r}
 CM.defineMIME('text/apl','apl')
@@ -41,17 +41,17 @@ CM.defineMode('apl',function(){
   var comMode=CM.getMode({},'text/apl-comments');if(!comMode.token||!comMode.startState)comMode=null
   return{
     startState:function(){
-      // hdr       are we at a location where a tradfn header can be expected?
-      // a         stack of objects with the following properties
-      //   t       the opening token -- a keyword (without the colon) or '{', '[', '(', '∇'
-      //   oi      outer indent -- the indent of the opening token's line
-      //   ii      inner indent -- the indent of the block's body; it can be adjusted later
-      // kw        current keyword
-      // vars      local names in a tradfn
-      // comState  state of the inner mode for syntax highlighting inside comments
+      //hdr      are we at a location where a tradfn header can be expected?
+      //a        stack of objects with the following properties
+      // t       the opening token - a keyword (without the colon) or '{', '[', '(', '∇'
+      // oi      outer indent - the indent of the opening token's line
+      // ii      inner indent - the indent of the block's body; it can be adjusted later
+      //kw       current keyword
+      //vars     local names in a tradfn
+      //comState state of the inner mode for syntax highlighting inside comments
       return{hdr:1,a:[{t:'',oi:0,ii:0}]}
     },
-    token:function(sm,h){ // sm:stream, h:state
+    token:function(sm,h){ //sm:stream, h:state
       var a=h.a,la=a[a.length-1],n=sm.indentation(),c
       if(sm.sol()){delete h.kw;if(!sm.match(/^\s*(:|∇|$)/,false)){a[a.length-1]=$.extend({ii:n},la)}}
       if(h.hdr){
@@ -59,7 +59,7 @@ CM.defineMode('apl',function(){
         if(/^\s*:/.test(s)||dfnHeader.test(s)){sm.backUp(s.length)}else{h.vars=s.split(notName)}
         return'apl-trad'
       }else if(h.comState){
-        if(sm.sol()){
+        if(sm.sol()){ //start of line?
           return delete h.comState
         }else{
           var h1=CM.copyState(comMode,h.comState)
@@ -94,7 +94,7 @@ CM.defineMode('apl',function(){
           case'⍺':case'⍵':case'∇':case':':
             var dd
             if(dd=dfnDepth(a)){
-              return'apl-dfn apl-dfn'+dd
+              return'apl-dfn apl-dfn'+dd //the latter group is for "rainbow colouring" of nested dfns
             }else if(c==='∇'){
               var i=a.length-1;while(i&&a[i].t!=='∇')i--
               if(i){a.splice(i);delete h.vars}else{a.push({t:'∇',oi:n,ii:n+swm});h.hdr=1}
@@ -112,7 +112,7 @@ CM.defineMode('apl',function(){
                 case'endclass':case'enddisposable':case'endfor':case'endhold':case'endif':case'endinterface':
                 case'endnamespace':case'endproperty':case'endrepeat':case'endsection':case'endselect':case'endtrap':
                 case'endwhile':case'endwith':case'until':
-                  var kw0=kw==='until'?'repeat':kw.slice(3) // corresponding opening keyword
+                  var kw0=kw==='until'?'repeat':kw.slice(3) //corresponding opening keyword
                   ok=la.t===kw0
                   if(ok){a.pop()}else{var i=a.length-1;while(i&&a[i].t!==kw0)i--;i&&a.splice(i)}
                   break
@@ -134,7 +134,7 @@ CM.defineMode('apl',function(){
                     ok=1
                   }
                   break
-                case'': ok=h.kw==='class' // ":" is allowed after ":Class" to specify inheritance
+                case'': ok=h.kw==='class' //":" is allowed after ":Class" to specify inheritance
               }
               if(ok){h.kw=kw;return'apl-kw'}else{delete h.kw;return'apl-err'}
             }
@@ -150,8 +150,8 @@ CM.defineMode('apl',function(){
         }
       }
     },
-    electricInput:/(?::end|:else|:andif|:orif|:case|:until|:access|\}|∇)$/, // these trigger a re-indent
-    indent:function(h,s){ // h:state, s:textAfter
+    electricInput:/(?::end|:else|:andif|:orif|:case|:until|:access|\}|∇)$/, //these trigger a re-indent
+    indent:function(h,s){ //h:state,s:textAfter
       var a=h.a,la=a[a.length-1]
       if(!icom&&/^\s*⍝/.test(s))return CM.Pass
       else if(dfnDepth(a))return/^\s*\}/.test(s)?la.oi:la.ii
@@ -162,20 +162,23 @@ CM.defineMode('apl',function(){
     fold:'apl'
   }
 })
-// stackStr(h): a string representation of the block stack in CodeMirror's state object "h"
+//stackStr(h): a string representation of the block stack in CodeMirror's state object "h"
+//e.g. if you have (A[B]) in a dfn in an :if in a :switch, the innermost stackStr could be "∇ :switch :if { ( [ "
 function stackStr(h){var a=h.a,r='';for(var i=0;i<a.length;i++)r+=a[i].t+' ';return r}
 function isPrefix(x,y){return x===y.slice(0,x.length)}
 var scmd=('classes clear cmd continue copy cs drop ed erase events fns holds intro lib load methods ns objects obs off'+
-          ' ops pcopy props reset save sh sic si sinl tid vars wsid xload').split(' ') // system commands
+          ' ops pcopy props reset save sh sic si sinl tid vars wsid xload').split(' ') //system commands
 CM.defineMIME('text/apl-session','apl-session')
 CM.defineMode('apl-session',function(config,modeConfig){
-  var im=CM.getMode(config,'text/apl'), se=modeConfig.se // im:inner mode, se:the Session object
+  //the session allows some additional token types (system commands and user commands)
+  //and needs to enable highlighting only in modified lines
+  var im=CM.getMode(config,'text/apl'), se=modeConfig.se //im:inner mode, se:the Session object
   return{
-    startState:function(){return{l:0}}, // .l:line number, .h:inner state
+    startState:function(){return{l:0}}, //.l:line number, .h:inner state
     copyState:function(h){h=CM.copyState({},h);h.h=CM.copyState(im,h.h);return h},
     blankLine:function(h){h.l++},
-    token:function(sm,h){ // sm:stream, h:state
-      var sol=sm.sol(),m // sol:start of line? m:regex match object
+    token:function(sm,h){ //sm:stream,h:state
+      var sol=sm.sol(),m //sol:start of line? m:regex match object
       if(se.dirty[h.l]==null){sm.skipToEnd();h.l++;return}
       if(sol&&(m=sm.match(/^ *\)(\w+).*/))){h.l++;return!m[1]||scmd.indexOf(m[1])<0?'apl-err':'apl-scmd'}
       if(sol&&(m=sm.match(/^ *\].*/))){h.l++;return'apl-ucmd'}
@@ -186,14 +189,14 @@ CM.defineMode('apl-session',function(config,modeConfig){
   }
 })
 ;['apl','apl-session'].forEach(function(x){CM.registerHelper('wordChars',x,RegExp('['+letter+'\\d]'))})
-CM.registerHelper('fold','apl',function(cm,start){
+CM.registerHelper('fold','apl',function(cm,start){ //the old IDE refers to folding as "outlining"
   var l,l0=l=start.line,end=cm.lastLine()
-  var x0=stackStr(cm.getStateAfter(l0-1))   // x0: the stackStr at the beginning of start.line
-  var y0=stackStr(cm.getStateAfter(l0))     // y0: the stackStr at the end of start.line
+  var x0=stackStr(cm.getStateAfter(l0-1))   //x0:the stackStr at the beginning of start.line
+  var y0=stackStr(cm.getStateAfter(l0))     //y0:the stackStr at the end of start.line
   if(x0!==y0&&isPrefix(x0,y0)){
     while(++l<=end){
-      var x=stackStr(cm.getStateAfter(l-1)) // x:  the stackStr at the beginning of the current line
-      var y=stackStr(cm.getStateAfter(l))   // y:  the stackStr at the end of the current line
+      var x=stackStr(cm.getStateAfter(l-1)) //x: the stackStr at the beginning of the current line
+      var y=stackStr(cm.getStateAfter(l))   //y: the stackStr at the end of the current line
       if(!isPrefix(y0,x)||!isPrefix(y0,y))break
     }
     if(l<=end&&x0===y&&isPrefix(y,x)){
