@@ -1,6 +1,6 @@
 utf8, no bom, \n as eol, eol at eof
-2 spaces for indentation
 terse is better than verbose
+2-space indent (I would consider 1-space)
 soft limit of 120 chars per line
   vertical space is precious, so make good use of the horizontal
 no unnecessary whitespace
@@ -9,6 +9,14 @@ no unnecessary whitespace
   leave a space before //but not after it
   align whatever looks suitable for alignment
 no blank lines unless really important
+alignment
+  either "egyptian" style:
+      if(a){
+        b();c()
+      }
+  or lisp style:
+      if(a){b()
+            c()}
 no unnecessary {}
   except: if you {} the if, you should {} the else too, or vice versa
 no unnecessary ; at the eol
@@ -27,14 +35,6 @@ single-letter identifiers are fine, ideally with a comment on declaration
     r is the result
     _ is something ignored
 for-s should always have a var: for(var i=0;i<n;i++)
-alignment
-  either "egyptian" style:
-      if(a){
-        b();c()
-      }
-  or lisp style:
-      if(a){b()
-            c()}
 prefer ternary if (a?b:c) over an if statement
 it's ok to use && and || as a substitute for if
   assignment requires parens: a&&(b=c)

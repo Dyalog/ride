@@ -2,15 +2,16 @@
 //instead of a Makefile
 'use strict';process.chdir(__dirname)
 const rq=require,fs=rq('fs'),path=rq('path'),{execSync}=rq('child_process'),async=rq('async')
-,sh=x=>execSync(x,{encoding:'utf8'}).replace(/[\r\n]/g,'')          // shell
-,rf=x=>fs.readFileSync(x,'utf8')                                    // read file
-,wf=(x,y)=>fs.writeFileSync(x,y)                                    // write file
-,mv=(x,y)=>fs.renameSync(x,y)                                       // move/rename file
-,md=x=>{if(!fs.existsSync(x)){md(path.dirname(x));fs.mkdirSync(x)}} // mkdir -p
-,nt=(x,y)=>!fs.existsSync(y)||fs.statSync(x)>fs.statSync(y)         // newer than
+,sh=x=>execSync(x,{encoding:'utf8'}).replace(/[\r\n]/g,'')          //exec in shell
+,rf=x=>fs.readFileSync(x,'utf8')                                    //read file
+,wf=(x,y)=>fs.writeFileSync(x,y)                                    //write file
+,mv=(x,y)=>fs.renameSync(x,y)                                       //move/rename file
+,md=x=>{if(!fs.existsSync(x)){md(path.dirname(x));fs.mkdirSync(x)}} //mkdir -p
+,nt=(x,y)=>!fs.existsSync(y)||fs.statSync(x)>fs.statSync(y)         //newer than
 ,rm=x=>{try{var s=fs.lstatSync(x)}catch(_){}
         if(s){if(s.isDirectory()){fs.readdirSync(x).map(y=>rm(x+'/'+y));fs.rmdirSync(x)}else{fs.unlinkSync(x)}}}
-,v=JSON.parse(rf('package.json')).version.replace(/\.0$/,'')+'.'+sh('git rev-list --count HEAD') // version string
+//v:version string - "x.y.z" where z is the number of commits since the beginning of the project
+,v=JSON.parse(rf('package.json')).version.replace(/\.0$/,'')+'.'+sh('git rev-list --count HEAD')
 ,tasks={}
 
 let buildDone=0
@@ -45,23 +46,20 @@ Object.keys(incl).map(x=>{const a=x.split('/');a.map((_,i)=>incl[a.slice(0,i).jo
 
 const excl={'/style/img/D.icns':1}
 ,namev='ride'+v.split('.').slice(0,2).join('')
-,pkg=(x,y,f)=>{
-  rq('electron-packager')(
-    {dir:'.',platform:x,arch:y,out:'_/'+namev,overwrite:true,'download.cache':'cache',icon:'favicon.ico',tmpdir:false,
-      ignore:p=>!incl[p]&&!/^\/(src|style|lib|_)(\/|$)/.test(p)&&!(x==='win32'&&/^\/windows-ime(\/|$)/.test(p))||excl[p],
-      'app-copyright':`(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
-      'app-version':v,
-      'build-version':v,
-      'version-string':{
-        CompanyName:'Dyalog Ltd',
-        FileDescription:'Remote Integrated Development Environment for Dyalog APL',
-        OriginalFilename:namev+'.exe',
-        ProductName:'RIDE',
-        InternalName:'RIDE'}},
-    e=>{const d='_/'+namev+'/'+namev+'-'+x+'-'+y;rm(d+'/version');mv(d+'/LICENSE',d+'/LICENSE.electron')
-        f&&f(e)}
-  )
-}
+,pkg=(x,y,f)=>{rq('electron-packager')(
+  {dir:'.',platform:x,arch:y,out:'_/'+namev,overwrite:true,'download.cache':'cache',icon:'favicon.ico',tmpdir:false,
+    ignore:p=>!incl[p]&&!/^\/(src|style|lib|_)(\/|$)/.test(p)&&!(x==='win32'&&/^\/windows-ime(\/|$)/.test(p))||excl[p],
+    'app-copyright':`(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
+    'app-version':v,
+    'build-version':v,
+    'version-string':{ //ends up in Windows Explorer's right click > Properties
+      CompanyName:'Dyalog Ltd',
+      FileDescription:'Remote Integrated Development Environment for Dyalog APL',
+      OriginalFilename:namev+'.exe',
+      ProductName:'RIDE',
+      InternalName:'RIDE'}},
+  e=>{const d='_/'+namev+'/'+namev+'-'+x+'-'+y;rm(d+'/version');mv(d+'/LICENSE',d+'/LICENSE.electron');f&&f(e)}
+)}
 tasks.l=tasks.linux=f=>{tasks.build(e=>e?f(e):pkg('linux' ,'x64' ,f))}
 tasks.w=tasks.win  =f=>{tasks.build(e=>e?f(e):pkg('win32' ,'ia32',f))}
 tasks.o=tasks.osx  =f=>{tasks.build(e=>e?f(e):pkg('darwin','x64' ,f))}
