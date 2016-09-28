@@ -4,7 +4,7 @@
 var re=RegExp('['+D.syn.letter+']*$')
 var ibeamOptions=[];for(var x in D.ibeams)ibeamOptions.push({text:x+'⌶',displayText:x+'⌶ '+D.ibeams[x]})
 
-D.ac=function(win){ //win: an instance of Editor or Session
+D.ac=function(win){ //win:editor or session instance to set up autocompletion in
   var tid,cm=win.cm,r
   cm.on('change',function(){
     var mode=cm.getOption('mode');if(typeof mode==='object'&&mode!=null&&mode.name)mode=mode.name

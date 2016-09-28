@@ -1,5 +1,7 @@
-// This is the list of command-to-keystroke mappings that are configurable in Preferences>Keys.
-// The list does not necessarily contain all commands and all keystrokes in RIDE, only those in Preferences>Keys.
+//This is the list of command-to-keystroke mappings that are configurable in Preferences>Keys.
+//The list does not necessarily contain all commands and all keystrokes in RIDE, only those in Preferences>Keys.
+//Some of the codes are inherited from Dyalog's old IDE (see ../docs/cmd-codes.txt and near the end of km.js)
+//Others were made up for RIDE's purposes - those use no fewer than three letters.
 'use strict'
 D.cmds=[
   //code description                default keys

@@ -1,13 +1,13 @@
 //a kitchen sink for small generic functions and jQuery plugins
 'use strict'
-var zCtr=100
+var zCtr=100 //css z-index counter
 D.util={
   dict:function(x){var r={};for(var i=0;i<x.length;i++)r[x[i][0]]=x[i][1];return r}, //dictionary from key-value pairs
   ESC:{'<':'&lt;','>':'&gt;','&':'&amp;',"'":'&apos;','"':'&quot;'},
   esc:function(s){return s.replace(/[<>&'"]/g,function(x){return D.util.ESC[x]})},
   cmOnDblClick:function(cm,f){
     //CodeMirror supports 'dblclick' events but they are unreliable and seem to require rather a short time between the
-    //two clicks.  So, let's track clicks manually:
+    //two clicks. So, let's track clicks manually:
     var t=0,x=0,y=0 //last click's timestamp and coordinates
     cm.on('mousedown',function(cm,e){
       e.timeStamp-t<400&&Math.abs(x-e.clientX)+Math.abs(y-e.clientY)<10&&
@@ -15,7 +15,7 @@ D.util={
       t=e.timeStamp;x=e.clientX;y=e.clientY
     })
   },
-  dlg:function(d,o){o=o||{}
+  dlg:function(d,o){o=o||{} //.dlg(d) shows an element d in a movable dom-only dialog
     d.style.zIndex=zCtr++;d.hidden=0
     d.style.left=(0|(innerWidth -(o.w||d.clientWidth ))/2)+'px';if(o.w)d.style.width =o.w+'px'
     d.style.top =(0|(innerHeight-(o.h||d.clientHeight))/2)+'px';if(o.h)d.style.height=o.h+'px'
@@ -38,7 +38,7 @@ D.util={
                            e.preventDefault();return!1}
     }
   },
-  elastic:function(inp){ //as you type in an <input>, it stretches as necessary to accommodate the text
+  elastic:function(inp){ //make an <input> stretch when you type long text in it
     var m=inp.dataset.minSize
     if(!m){var f=function(){D.util.elastic(inp)};CM.on(inp,'keyup',f);CM.on(inp,'keypress',f);CM.on(inp,'change',f)
            inp.dataset.minSize=m=+inp.size||1}
@@ -49,12 +49,13 @@ D.util={
     var i=x.selectionStart,j=x.selectionEnd,v=x.value
     if(i!=null&&j!=null){x.value=v.slice(0,i)+y+v.slice(j);x.selectionStart=x.selectionEnd=i+y.length}
   },
+  //jQuery-free manipulation of css classes; x:dom element,y:css class name
   addCls:function(x,y){var c=x.className.split(' ');c.push(y);                                 x.className=c.join(' ')},
    rmCls:function(x,y){var c=x.className.split(' '),i=c.indexOf(y);      if(i>=0)c.splice(i,1);x.className=c.join(' ')},
   hasCls:function(x,y){var c=x.className.split(' ');return c.indexOf(y)>=0},
   tglCls:function(x,y,z){if(z==null)z=!D.util.hasCls(x,y);D.util[z?'addCls':'rmCls'](x,y)}
 }
-$.alert=function(m,t,f){ //m:message, t:title, f:callback
+$.alert=function(m,t,f){ //m:message,t:title,f:callback
   D.el?D.el.dialog.showMessageBox(D.elw,{message:m,title:t,buttons:['OK']}):alert(m);f&&f()
 }
 $.err=function(m,t,f){

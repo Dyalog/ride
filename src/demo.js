@@ -1,19 +1,17 @@
+//support for presentations
 ;(function(){'use strict'
 
-// support for presentations
 var lines=[], index=-1, $i // $i:an <input type=file> used to open the file chooser dialog
 function move(d){if(0<=index+d&&index+d<lines.length){index+=d;D.ide.wins[0].loadLine(lines[index])}}
 
-// Key display mode:
-var $p // DOM element for the pending key or null if key display mode is off
-function keyInfo(e){ // returns a pair of the key name and an "is complete" flag
-  var s='' // key name
-  e.shiftKey&&e.which&&(s+='Shift-');e.ctrlKey&&(s+='Ctrl-');e.altKey&&(s+='Alt-');e.metaKey&&(s+='Cmd-')
-  var k=CM.keyNames[e.which]||'['+e.which+']'
-  var c=!!e.which&&k!=='Shift'&&k!=='Ctrl'&&k!=='Alt'&&k!=='Cmd' // c: is the key combination complete?
-  c&&(s+=k);return[s,c]
+//key display mode:
+var $p //dom element for the pending key or null if key display mode is off
+function keyInfo(e){ //returns a pair of the key name and an "is complete?" flag
+  var s='';e.shiftKey&&e.which&&(s+='Shift-');e.ctrlKey&&(s+='Ctrl-');e.altKey&&(s+='Alt-');e.metaKey&&(s+='Cmd-')
+  var k=CM.keyNames[e.which]||'['+e.which+']', c=!!e.which&&k!=='Shift'&&k!=='Ctrl'&&k!=='Alt'&&k!=='Cmd'
+  c&&(s+=k);return[s,c] //s:key name,c:is the key combination complete?
 }
-function loadDemoScript(f){ // f:path to file, ignored if empty
+function loadDemoScript(f){ //f:path to file, ignored if empty
   f&&node_require('fs').readFile(f,'utf8',function(err,s){
     if(err){console.error(err);$.err('Cannot load demo file');return}
     index=-1
@@ -24,15 +22,15 @@ function loadDemoScript(f){ // f:path to file, ignored if empty
 }
 D.el&&loadDemoScript(process.env.RIDE_DEMO_SCRIPT)
 $.extend(CM.commands,{
-  DMN:function(){move( 1)}, // next line
-  DMP:function(){move(-1)}, // prev line
-  DMR:function(){ // load demo script
+  DMN:function(){move( 1)}, //next line
+  DMP:function(){move(-1)}, //prev line
+  DMR:function(){ //load demo script
     if(D.el&&!D.floating){
       ($i=$i||$('<input id=demo-input type=file style=display:none>').appendTo('body'))
         .val('').click().change(function(){loadDemoScript(this.value)})
     }
   },
-  DMK:function(){ // toggle key display mode
+  DMK:function(){ //toggle key display mode
     if($p){$(document).off('.demo');$('#demo-keys').remove();$p=null;return}
     $('body').append($('<div id=demo-keys>').append($p=$('<span>').hide()))
     $(document)

@@ -1,9 +1,9 @@
-// generic jQuery list with accessible selectable items
+//generic jQuery list with accessible selectable items
 ;(function($){'use strict'
-  var L='list',S='list_sel',F='list_focus' // css classes
-  var ES='list-selection-changed',EO='list-order-changed' // event names
-  function pg($l){var $c=$('>',$l);return~~($l.height()/($c.eq(1).position().top-$c.position().top))} // page size
-  function idx($l){return $('>.'+F,$l).index()} // index of focused item
+  var L='list',S='list_sel',F='list_focus' //css classes
+  var ES='list-selection-changed',EO='list-order-changed' //event names
+  function pg($l){var $c=$('>',$l);return~~($l.height()/($c.eq(1).position().top-$c.position().top))} //page size
+  function idx($l){return $('>.'+F,$l).index()} //index of focused item
   var methods={
     init:function(){
       return(this.addClass(L)
