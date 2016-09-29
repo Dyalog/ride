@@ -1,3 +1,4 @@
+//Preferences > Code
 ;(function(){'use strict'
 
 var q //DOM elements whose ids start with "code_", keyed by the rest of the id

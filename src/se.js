@@ -13,27 +13,21 @@ D.Se=function(ide){ //constructor
   cm.dyalogCmds=se
   D.util.cmOnDblClick(cm,function(e){se.ED(cm);e.stopPropagation();e.preventDefault()})
   cm.on('focus',function(){se.focusTS=+new Date;ide.focusedWin=se})
-  cm.on('beforeChange',function(_,c){
+  cm.on('beforeChange',function(_,c){ //keep track of inserted/deleted/changed lines, use se.dirty for that
     if(c.origin==='D')return
     var l0=c.from.line,l1=c.to.line,m=l1-l0+1,n=c.text.length
-    if(n<m){
-      if(!c.update){c.cancel();return} //the change is probably the result of Undo
-      var text=c.text.slice(0);for(var j=n;j<m;j++)text.push('') //pad shrinking changes with empty lines
-      c.update(c.from,c.to,text);n=m
-    }else if(m<n){
-      var h=se.dirty;se.dirty={};for(var x in h)se.dirty[x+(n-m)*(x>l1)]=h[x]
-    }
-    var l=l0
-    while(l<=l1){var base=se.dirty;base[l]==null&&(base[l]=se.cm.getLine(l));l++}
+    if(m<n){var h=se.dirty;se.dirty={};for(var x in h)se.dirty[x+(n-m)*(x>l1)]=h[x]}
+    else if(n<m){if(!c.update){c.cancel();return} //the change is probably the result of Undo
+                 var text=c.text.slice(0);for(var j=n;j<m;j++)text.push('') //pad shrinking changes with empty lines
+                 c.update(c.from,c.to,text);n=m}
+    var l=l0;while(l<=l1){var base=se.dirty;base[l]==null&&(base[l]=se.cm.getLine(l));l++}
     while(l<l0+n)se.dirty[l++]=0
   })
-  cm.on('change',function(_,c){
-    if(c.origin==='D')return
-    var l0=c.from.line,l1=c.to.line,m=l1-l0+1,n=c.text.length
-    for(var l in se.dirty)se.cm.addLineClass(+l,'background','modified')
-  })
+  cm.on('change',function(_,c){if(c.origin==='D')return
+                               var l0=c.from.line,l1=c.to.line,m=l1-l0+1,n=c.text.length
+                               for(var l in se.dirty)se.cm.addLineClass(+l,'background','modified')})
   se.promptType=0 //see ../docs/protocol.md #SetPromptType
-  se.processAutocompleteReply=D.ac(se)
+  se.processAutocompleteReply=D.ac(se) //delegate autocompletion processing to ac.js
   D.prf.wrap(function(x){se.cm.setOption('lineWrapping',!!x);se.scrollCursorIntoView()})
   this.vt=D.vt(this) //value tips
 }

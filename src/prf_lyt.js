@@ -1,9 +1,10 @@
+//Preferences > Layout
 ;(function(){'use strict'
 
 var layouts=D.kbds.layouts,geom=D.kbds.geom,NK=58 //NK:number of scancodes we are concerned with
 ,model={} //dictionary: locale→[arrayOfAPLGlyphs,arrayOfShiftedAPLGlyphs]
-,q={} //DOM elements whose ids start with "lyt_", keyed by the rest of the id
-,g=[] //g[i][j]:the DOM element for key i and group j
+,q={} //DOM elements whose ids start with "lyt_" (for "LaYouT"), keyed by the rest of the id
+,g=[] //g[i][j]:the DOM element for key i and group j (group 0 is bottom-left, 1 top-left, etc, for instance: eE∊⍷)
 ,tip=function(x){return x===' '?'Click to\nconfigure':'U+'+('000'+x.charCodeAt(0).toString(16).toUpperCase()).slice(-4)}
 D.prf_tabs.lyt={
   name:'Layout',
@@ -40,35 +41,30 @@ D.prf_tabs.lyt={
         var ix=layouts[lc][j].indexOf(v[i]);ix>=0&&(model[lc][j][ix]=v[i+1])
       }
     }
-    updGlyphs();if(D.win)q.ime.checked=!!D.prf.ime()
+    updGlyphs()
+    //"IME" is the key mapper in Windows; there's a checkbox to enable Dyalog's keymap when RIDE starts
+    //That's done in prf.js which spawns an external process - see also ../windows-ime/readme
+    if(D.win)q.ime.checked=!!D.prf.ime()
   },
   activate:function(){q.pfx.focus()},
   validate:function(){if(q.pfx.value.length!==1)return{msg:'Invalid prefix key',el:q.pfx}},
   save:function(){
-    D.prf.prefixKey(q.pfx.value);D.prf.kbdLocale(q.lc.value)
-    var h={}
-    for(var lc in model){
-      var m=model[lc],l=layouts[lc],s='',xs=l[0]+l[1],ys=m[0].concat(m[1]).join(''),YS=l[2]+l[3]
-      for(var i=0;i<xs.length;i++){var x=xs[i],y=ys[i],Y=YS[i];if(y!==Y)s+=x+y}
-      s&&(h[lc]=s)
-    }
+    D.prf.prefixKey(q.pfx.value);D.prf.kbdLocale(q.lc.value);var h={}
+    for(var lc in model){var m=model[lc],l=layouts[lc],s='',xs=l[0]+l[1],ys=m[0].concat(m[1]).join(''),YS=l[2]+l[3]
+                        for(var i=0;i<xs.length;i++){var x=xs[i],y=ys[i],Y=YS[i];if(y!==Y)s+=x+y}
+                        s&&(h[lc]=s)}
     D.prf.prefixMaps(h);D.win&&D.prf.ime(q.ime.checked)
   }
 }
-function updPfx(){
-  var c=q.pfx.value[0]||'`'
-  q.spc_g1.textContent=c+q.spc_g1.textContent.slice(1)
-  q.spc_g3.textContent=c+q.spc_g3.textContent.slice(1)
-}
-//Every geometry (aka "mechanical layout") has a CSS class specifying the precise key arrangement.
+function updPfx(){var c=q.pfx.value[0]||'`';q.spc_g1.textContent=c+q.spc_g1.textContent.slice(1)
+                                            q.spc_g3.textContent=c+q.spc_g3.textContent.slice(1)}
+//every geometry ("mechanical layout") has a css class specifying the precise key arrangement
 function updGlyphs(){ //apply model values to the DOM
   var lc=q.lc.value,l=layouts[lc],m=model[lc]; if(!l)return
   q.kbd.className='lyt_geom_'+(geom[lc]||geom._)
-  for(var i=1;i<NK;i++){
-    var g0=l[0][i],g1=m[0][i],g2=l[1][i],g3=m[1][i]
-    if(g[i][0])g[i][0].textContent=g0;if(g[i][1]){g[i][1].value=g1;g[i][1].title=tip(g1)}
-    if(g[i][2])g[i][2].textContent=g2;if(g[i][3]){g[i][3].value=g3;g[i][3].title=tip(g3)}
-  }
+  for(var i=1;i<NK;i++){var g0=l[0][i],g1=m[0][i],g2=l[1][i],g3=m[1][i]
+                        if(g[i][0])g[i][0].textContent=g0;if(g[i][1]){g[i][1].value=g1;g[i][1].title=tip(g1)}
+                        if(g[i][2])g[i][2].textContent=g2;if(g[i][3]){g[i][3].value=g3;g[i][3].title=tip(g3)}}
 }
 
 }())

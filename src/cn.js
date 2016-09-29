@@ -1,9 +1,9 @@
-//Connect page (loaded only when running in Electron)
-;(()=>{'use strict'
+//Connect page, loaded only when running in Electron
+;(_=>{'use strict'
 
 let $sel=$(),sel //$sel:selected item(s), sel:data associated with the selected item (only if it's unique)
-,q //DOM elements whose ids start with "cn_", keyed by the rest of the id
-,interpreters=[],interpretersSSH=[] //local interpreters and those obtained over ssh
+,q //a dictionary of DOM elements whose ids start with "cn_", keyed by the rest of the id
+,interpreters=[],interpretersSSH=[] //local interpreters and those listed through ssh
 ,clt   //client, TCP connection to interpreter
 ,child //a ChildProcess instance, the result from spawn()
 ,srv   //server, used to listen for connections from interpreters
@@ -44,14 +44,12 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
     for(let i=0;i<a.length;i++)if(!KV.test(a[i])&&!WS.test(a[i]))
       {$.err('Invalid environment variables',_=>{q.env.focus()});return}
     if(!x.exe){$.err('"Interpreter" is required',_=>{q.exe.focus()});return}
-    if(x===sel&&x.ssh){
-      const t=q.ssh_auth_type.value, e=q['ssh_'+t]
-      if(!e.value){$.err((t==='key'?'"Key file"':'"Password"')+' is required',_=>{e.focus()});return}
-    }
+    if(x===sel&&x.ssh){const t=q.ssh_auth_type.value, e=q['ssh_'+t]
+                       if(!e.value){$.err((t==='key'?'"Key file"':'"Password"')+' is required',_=>{e.focus()});return}}
   }
   return 1
 }
-,go=(x)=>{
+,go=x=>{ //"Go" buttons in the favs or the "Go" button at the bottom
   x=x||sel;if(!validate(x))return 0
   try{
     switch(x.type||'connect'){

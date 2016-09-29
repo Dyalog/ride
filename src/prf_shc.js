@@ -1,3 +1,4 @@
+//Preferences > Shortcuts
 ;(function(){'use strict'
 
 var q //DOM elements whose ids start with "shc_", keyed by the rest of the id
@@ -9,11 +10,11 @@ D.prf_tabs.shc={
     t.onmouseout =function(e){var u=e.target.closest('.shc_del'),p=u&&u.parentNode
                               if(p)p.className=p.className.replace(/(^|\s+)shc_del_hvr($|\s+)/,' ')}
     t.onclick=function(e){
-      var u=e.target.closest('.shc_del'),p=u&&u.parentNode
+      var u=e.target.closest('.shc_del'),p=u&&u.parentNode //the [x] button next to a keystroke
       if(p){p.parentNode.removeChild(p);updDups();return!1}
-      var u=e.target.closest('.shc_add'),p=u&&u.parentNode
+      var u=e.target.closest('.shc_add'),p=u&&u.parentNode //the [+] button
       if(p){getKeystroke(u,function(k){k&&u.insertAdjacentHTML('beforebegin',keyHTML(k));updDups()});return!1}
-      var u=e.target.closest('.shc_rst'),p=u&&u.parentNode
+      var u=e.target.closest('.shc_rst'),p=u&&u.parentNode //the [↶] button ("reset")
       if(p){
         var tr=u.closest('tr'),c=tr.dataset.code
         for(var i=0;i<D.cmds.length;i++)if(D.cmds[i][0]===c){
@@ -26,7 +27,7 @@ D.prf_tabs.shc={
     }
     q.rst_all.onclick=function(){loadFrom({});return!1}
     q.sc.onkeyup=q.sc.onchange=updSC
-    q.sc_clr.onclick=function(){this.hidden=1;q.sc.value='';updSC();q.sc.focus();return!1}
+    q.sc_clr.onclick=function(){this.hidden=1;q.sc.value='';updSC();q.sc.focus();return!1} //[x] button to clear search
   },
   load:function(){loadFrom(D.prf.keys())},
   validate:function(){var a=q.tbl_wr.getElementsByClassName('shc_dup');if(a.length)return{msg:'Duplicate shortcuts',el:a[0]}},
@@ -60,14 +61,14 @@ function updKeys(x){var h=CM.keyMap.dyalog={fallthrough:'dyalogDefault'}
                                                      for(var j=0;j<ks.length;j++)h[ks[j]]=c}}
 D.prf.keys(updKeys);CM.keyMap.dyalog={fallthrough:'dyalogDefault'} //temporarily set keyMap.dyalog to something
 setTimeout(function(){updKeys(D.prf.keys())},1) //wait until D.db is initialised in init.js, then set the real keymap
-function updDups(){
+function updDups(){ //check for duplicates and make them show in red
   var a=q.tbl_wr.querySelectorAll('.shc_text'),h={} //h:maps keystrokes to jQuery objects
   for(var i=0;i<a.length;i++){var k=a[i].textContent
                               a[i].className=h[k]?(h[k].className='shc_text shc_dup'):'shc_text';h[k]=a[i]}
 }
 function getKeystroke(b,f){ //b:"+" button,f:callback
   var e=document.createElement('input'),r //r:result
-  var upd=function(x){
+  var upd=function(x){ //update displayed text for new keystroke as you hold down/release keys
     var kn=CM.keyNames[x.which]||'';if(!kn||kn==='Shift'||kn==='Ctrl'||kn==='Alt'||kn==='Cmd')kn=''
     e.value=(x.shiftKey&&(x.type!=='keyup'||x.which)?'Shift-':'')+
             (x.ctrlKey?'Ctrl-':'')+(x.altKey?'Alt-':'')+(x.metaKey?'Cmd-':'')+kn

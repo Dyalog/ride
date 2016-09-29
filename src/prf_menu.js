@@ -1,3 +1,4 @@
+//Preferences > Menu
 ;(function(){'use strict'
 
 var ta //the textarea

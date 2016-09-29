@@ -1,3 +1,4 @@
+//Preferences > Title
 ;(function(){'use strict'
 
 var wt //<input> element for Window Title

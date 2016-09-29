@@ -1,16 +1,17 @@
 ;(function(){'use strict'
-//This file implements the Preferences dialog.
-//The contents of individual tabs are in separate files: prf_*.js
-//Each of them can export the following properties:
-//  name       tab title
-//  id         a string used to construct DOM ids, CSS classes, etc
-//  init()     called only once, before Preferences is opened for the first time
-//  load()     called every time Preferences is opened
-//  validate() should return a falsey value on success or a {msg,el} object on failure
-//  save()     called when OK or Apply is pressed
-//  resize()   called when the Preferences dialog is resized or the tab is selected
-//  activate() called when the tab is selected ("activated")
-//All tabs' validate() methods are invoked, if they exist, before any attempt to call save()
+//This file implements the Preferences dialog as a whole. Individual tabs are in separate files: prf_*.js
+//Tab implementations can export the following properties:
+// name       tab title
+// id         a string used to construct DOM ids, CSS classes, etc
+// init()     called only once, before Preferences is opened for the first time
+// load()     called every time Preferences is opened
+// validate() should return a falsey value on success or a {msg,el} object on failure
+// save()     called when OK or Apply is pressed
+// resize()   called when the Preferences dialog is resized or the tab is selected
+// activate() called when the tab is selected ("activated")
+//
+//Before any attempt to call save(), all tabs' validate() methods are tested.
+//If any of them returns a falsey value, save() is aborted.
 var tabs=D.prf_tabs={} //tab implementations self-register here
 
 var d //DOM element for the dialog, lazily initialized

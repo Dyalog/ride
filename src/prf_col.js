@@ -1,59 +1,60 @@
+//Preferences > Colours
 ;(function(){'use strict'
 
 var G=[],H={} //G:syntax highlighting groups; H:reverse lookup dict for G
-var q //DOM elements whose ids start with "col_", keyed by the rest of the id
+var q //dict of DOM elements whose ids start with "col_", keyed by the rest of the id
 D.addSynGrps=function(x){G=G.concat(x);H={};for(var i=0;i<G.length;i++)H[G[i].t]=i;SCMS&&updStl()}
 D.addSynGrps([
   //t: token type, a short key for storing customisations
   //s: string to display in the UI
   //c: css selector -- will be prefixed with "#col_cm" or ".ride_win" unless /*noprefix*/ is present
   //ctrls: what UI controls should be shown or hidden for this group (other than the default ones)
-  {s:'assignment'      ,t:'asgn',c:'.cm-apl-asgn'},
-  {s:'bracket'         ,t:'sqbr',c:'.cm-apl-sqbr'},
-  {s:'comment'         ,t:'com' ,c:'.cm-apl-com' },
+  {s:'assignment'      ,t:'asgn',c:'.cm-apl-asgn'}, //←
+  {s:'bracket'         ,t:'sqbr',c:'.cm-apl-sqbr'}, //[]
+  {s:'comment'         ,t:'com' ,c:'.cm-apl-com' }, //⍝
   {s:'cursor'          ,t:'cur' ,c:'div.CodeMirror-cursor',ctrls:{bc:1,fg:0,bg:0,BIU:0}},
-  {s:'dfn level 1'     ,t:'dfn1',c:'.cm-apl-dfn1'},
+  {s:'dfn level 1'     ,t:'dfn1',c:'.cm-apl-dfn1'}, //{}
   {s:'dfn level 2'     ,t:'dfn2',c:'.cm-apl-dfn2'},
   {s:'dfn level 3'     ,t:'dfn3',c:'.cm-apl-dfn3'},
   {s:'dfn level 4'     ,t:'dfn4',c:'.cm-apl-dfn4'},
-  {s:'dfn level 5'     ,t:'dfn5',c:'.cm-apl-dfn5'},
+  {s:'dfn level 5'     ,t:'dfn5',c:'.cm-apl-dfn5'}, //{1 {2 {3 {4 {5} } } } }
   {s:'dfn'             ,t:'dfn' ,c:'.cm-apl-dfn' },
-  {s:'diamond'         ,t:'diam',c:'.cm-apl-diam'},
-  {s:'dyadic operator' ,t:'op2' ,c:'.cm-apl-op2' },
+  {s:'diamond'         ,t:'diam',c:'.cm-apl-diam'}, //⋄
+  {s:'dyadic operator' ,t:'op2' ,c:'.cm-apl-op2' }, //⍣ ...
   {s:'error'           ,t:'err' ,c:'.cm-apl-err' },
-  {s:'function'        ,t:'fn'  ,c:'.cm-apl-fn'  },
+  {s:'function'        ,t:'fn'  ,c:'.cm-apl-fn'  }, //+ ...
   {s:'global name'     ,t:'glb' ,c:'.cm-apl-glb' },
-  {s:'idiom'           ,t:'idm' ,c:'.cm-apl-idm' },
-  {s:'keyword'         ,t:'kw'  ,c:'.cm-apl-kw'  },
-  {s:'label'           ,t:'lbl' ,c:'.cm-apl-lbl' },
+  {s:'idiom'           ,t:'idm' ,c:'.cm-apl-idm' }, //⊃⌽ ...
+  {s:'keyword'         ,t:'kw'  ,c:'.cm-apl-kw'  }, //:If ...
+  {s:'label'           ,t:'lbl' ,c:'.cm-apl-lbl' }, //L:
   {s:'line number'     ,t:'lnum',c:'.CodeMirror-linenumber'},
   {s:'matching bracket',t:'mtch',c:'.CodeMirror-matchingbracket'},
-  {s:'modified line'   ,t:'mod' ,c:'.modified'   },
-  {s:'monadic operator',t:'op1' ,c:'.cm-apl-op1' },
-  {s:'namespace'       ,t:'ns'  ,c:'.cm-apl-ns'  },
-  {s:'name'            ,t:'var' ,c:'.cm-apl-var' },
+  {s:'modified line'   ,t:'mod' ,c:'.modified'   }, //in the session - lines queued for execution
+  {s:'monadic operator',t:'op1' ,c:'.cm-apl-op1' }, //⌸ ...
+  {s:'namespace'       ,t:'ns'  ,c:'.cm-apl-ns'  }, //#
+  {s:'name'            ,t:'var' ,c:'.cm-apl-var' }, //a.k.a. identifier
   {s:'normal'          ,t:'norm',c:'.cm-s-default,.CodeMirror-gutters,/*noprefix*/#wse'},
-  {s:'number'          ,t:'num' ,c:'.cm-apl-num' },
-  {s:'parenthesis'     ,t:'par' ,c:'.cm-apl-par' },
-  {s:'quad name'       ,t:'quad',c:'.cm-apl-quad'},
+  {s:'number'          ,t:'num' ,c:'.cm-apl-num' }, //0 ...
+  {s:'parenthesis'     ,t:'par' ,c:'.cm-apl-par' }, //()
+  {s:'quad name'       ,t:'quad',c:'.cm-apl-quad'}, //⎕XYZ
   {s:'search match'    ,t:'srch',c:'.cm-searching'},
   {s:'selection'       ,t:'sel' ,c:'.CodeMirror-selected,.CodeMirror-focused .CodeMirror-selected',ctrls:{fg:0,BIU:0}},
-  {s:'semicolon'       ,t:'semi',c:'.cm-apl-semi'},
-  {s:'string'          ,t:'str' ,c:'.cm-apl-str' },
-  {s:'system command'  ,t:'scmd',c:'.cm-apl-scmd'},
+  {s:'semicolon'       ,t:'semi',c:'.cm-apl-semi'}, //as in A[B;C]
+  {s:'string'          ,t:'str' ,c:'.cm-apl-str' }, //'a.k.a. character vector or scalar'
+  {s:'system command'  ,t:'scmd',c:'.cm-apl-scmd'}, //)XYZ
   {s:'tracer'          ,t:'tc'  ,c:'.tracer .CodeMirror,.tracer .CodeMirror .CodeMirror-gutter-wrapper'},
-  {s:'tradfn'          ,t:'trad',c:'.cm-apl-trad'},
-  {s:'user command'    ,t:'ucmd',c:'.cm-apl-ucmd'},
-  {s:'value tip target',t:'vtt' ,c:'/*noprefix*/#vt_rect',ctrls:{bc:1,fg:0,BIU:0}},
-  {s:'value tip'       ,t:'vtip',c:'/*noprefix*/#vt_bln,/*noprefix*/#vt_tri',ctrls:{bc:1}},
-  {s:'zilde'           ,t:'zld' ,c:'.cm-apl-zld' }
+  {s:'tradfn'          ,t:'trad',c:'.cm-apl-trad'}, //the header line (e.g. ∇{R}←A F B) or the closing ∇
+  {s:'user command'    ,t:'ucmd',c:'.cm-apl-ucmd'}, //]XYZ
+  {s:'value tip target',t:'vtt' ,c:'/*noprefix*/#vt_rect',ctrls:{bc:1,fg:0,BIU:0}}, //the rectangle around the token
+  {s:'value tip'       ,t:'vtip',c:'/*noprefix*/#vt_bln,/*noprefix*/#vt_tri',ctrls:{bc:1}}, //the balloon
+  {s:'zilde'           ,t:'zld' ,c:'.cm-apl-zld' }  //⍬
 ])
 //Colour schemes have two representations:
-// in memory                in prefs.json
-//   {                        {
-//     name:"MyScheme",         "name":"MyScheme",
-//     group1:{                 "styles":"group1=fg:f00,B group2=bg:f00 ..."
-//       fg:"f00",            }
+// in memory (easier to manipulate)   in prefs.json (more compact)
+//   {                                {
+//     name:"MyScheme",                 "name":"MyScheme",
+//     group1:{                         "styles":"group1=fg:f00,B group2=bg:f00 ..."
+//       fg:"f00",                    }
 //       B:1
 //     },
 //     group2:{
@@ -193,7 +194,7 @@ function updScms(){q.scm.innerHTML=scms.map(function(x){x=D.util.esc(x.name);ret
                    q.scm.value=scm.name;q.scm.onchange();I.col.className=scm.frz?'frz':''
                    cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);updSampleStl();selGrp('norm',1)}
 function updSampleStl(){I.col_sample_stl.textContent=renderCSS(scm,1)} //[sic]
-function selGrp(t,forceRefresh){
+function selGrp(t,forceRefresh){ //update everything as necessary when selection in the Group dropdown changes
   if(!scm||sel===t&&!forceRefresh)return
   var i=H[t],h=scm[t]||{},v;q.grp.value=i
   v=h.fg;q.fg_cb.checked=!!v;q.fg.value=RGB(v)||'#000000';q.fg.hidden=!v
