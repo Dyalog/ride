@@ -22,10 +22,7 @@ var letter=D.syn.letter='A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ',
 var quadNames=' a á af ai an arbin arbout arg at av avu base class clear cmd cr cs ct cy d dct df div dl dm dmx dq dr ea ec ed em en env es et ex exception export fappend favail fc fchk fcopy fcreate fdrop ferase fhold fix flib fmt fnames fnums fprops fr frdac frdci fread frename freplace fresize fsize fstac fstie ftie funtie fx inp instances io kl l lc load lock lx map mkdir mkdir ml monitor na nappend nc ncreate ndelete nerase new nexists nget ninfo nl nlock nnames nnums nparts nput nq nr nread nrename nreplace nresize ns nsi nsize ntie null nuntie nxlate off opt or path pfkey pp pr profile ps pt pw r refs rl rsi rtl s save sd se sh shadow si signal size sm sr src stack state stop svc sve svo svq svr svs syl tc tcnums tf tget this tid tkill tname tnums tpool tput trace trap treq ts tsync tz ucs ul using vfi vr wa wc wg wn ws wsid wx x xml xsi xt'.split(' ')
 // « and » prevent tolerance for extra whitespace
 // _ stands for «' '» (space as an APL character literal)
-var idioms=['⍴⍴','/⍳','/⍳⍴','⊃¨⊂','{}','{⍺}','{⍵}','{⍺⍵}','{0}','{0}¨',',/','⍪/','⊃⌽','↑⌽','⊃⌽,','↑⌽,','0=⍴','0=⍴⍴',
-'0=≡','{(↓⍺)⍳↓⍵}','↓⍉↑','↓⍉⊃','∧\\_=','+/∧\\_=','+/∧\\\n{(∨\\_≠⍵)/⍵}','{(+/∧\\_=⍵)↓⍵}','~∘_¨↓','{(+/∨\\_≠⌽⍵)↑¨↓⍵}',
-'⊃∘⍴¨','↑∘⍴¨',',←','⍪←','{⍵[⍋⍵]}','{⍵[⍒⍵]}','{⍵[⍋⍵;]}','{⍵[⍒⍵;]}','1=≡','1=≡,','0∊⍴','~0∊⍴','⊣⌿','⊣/','⊢⌿','⊢/','*○',
-'0=⊃⍴','0≠⊃⍴','⌊«0.5»+','«⎕AV»⍳']
+var idioms='⍴⍴ /⍳ /⍳⍴ ⊃¨⊂ {} {⍺} {⍵} {⍺⍵} {0} {0}¨ ,/ ⍪/ ⊃⌽ ↑⌽ ⊃⌽, ↑⌽, 0=⍴ 0=⍴⍴ 0=≡ {(↓⍺)⍳↓⍵} ↓⍉↑ ↓⍉⊃ ∧\\_= +/∧\\_= +/∧\\\n{(∨\\_≠⍵)/⍵} {(+/∧\\_=⍵)↓⍵} ~∘_¨↓ {(+/∨\\_≠⌽⍵)↑¨↓⍵} ⊃∘⍴¨ ↑∘⍴¨ ,← ⍪← {⍵[⍋⍵]} {⍵[⍒⍵]} {⍵[⍋⍵;]} {⍵[⍒⍵;]} 1=≡ 1=≡, 0∊⍴ ~0∊⍴ ⊣⌿ ⊣/ ⊢⌿ ⊢/ *○ 0=⊃⍴ 0≠⊃⍴ ⌊«0.5»+ «⎕AV»⍳'.split(' ')
 function escRE(s){return s.replace(/[\(\)\[\]\{\}\.\?\+\*\/\\\^\$\|]/g,function(x){return'\\'+x})}
 function escIdiom(s){
   return s.replace(/«(.*?)»|(.)/g,function(_,g,g2){g||(g=g2);return' *'+(g==='_'?"' '":escRE(g))}).slice(2)
