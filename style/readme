@@ -1,0 +1,7 @@
+The Apl385 font is in the public domain:
+"All fonts listed on this page are original artwork by Adrian Smith, and are freely placed into the public domain."
+http://www.apl385.com/fonts/ (retrieved 2016-10-03)
+
+To convert .ttf to .woff you can use http://people.mozilla.org/~jkew/woff/ like this:
+$ mkdir tmp && cd tmp && wget http://people.mozilla.org/~jkew/woff/woff-code-latest.zip \
+   && unzip woff-code-latest.zip && make && cd .. && sfnt2woff Apl385.ttf

@@ -1,4 +1,0 @@
-#!/bin/bash
-set -e
-[ apl385.ttf -nt apl385.woff ] && sfnt2woff apl385.ttf
-:

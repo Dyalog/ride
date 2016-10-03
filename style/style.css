@@ -11,7 +11,7 @@ blockquote,q{quotes:none}
 blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}
 table{border-collapse:collapse;border-spacing:0}
 
-@font-face{font-family:'apl';src:url('apl385.woff')format('woff'),url('apl385.ttf')format('truetype')}
+@font-face{font-family:'apl';src:url('Apl385.woff')format('woff'),url('Apl385.ttf')format('truetype')}
 
      ::selection{background:#0a246a;color:#fff} /*must be separate rules*/
 ::-moz-selection{background:#0a246a;color:#fff} /*must be separate rules*/
