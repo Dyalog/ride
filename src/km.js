@@ -199,9 +199,24 @@ $.extend(CM.commands,{
     cm.execCommand(b?'DO':'AO')
   }
 })
-
 function switchWin(x){var a=[],i=-1,wins=D.ide.wins;for(var k in wins){wins[k].hasFocus()&&(i=a.length);a.push(wins[k])}
                       var j=i<0?0:(i+a.length+x)%a.length;a[j].focus();return!1} //x: +1 or -1
+
+//pfkeys
+function nop(){}
+function fakeEvent(s){
+  var e={type:'keydown',ctrlKey:false,shiftKey:false,altKey:false,preventDefault:nop,stopPropagation:nop}
+  var h={C:'ctrlKey',A:'altKey',S:'shiftKey'}
+  var s1=s.replace(/(\w+)-/g,function(_,type){e[h[type]||type.toLowerCase()+'Key']=true;return''})
+  for(var k in CM.keyNames)if(CM.keyNames[k]===s1){e.keyCode=k;break}
+  e.keyCode||fail('Unknown key:'+JSON.stringify(s))
+  return e
+}
+for(var i=1;i<=12;i++)CM.commands['PF'+i]=function pfk(i){
+  D.prf.pfkeys()[i].replace(/<(.+?)>|(.)/g,function(_,x,y){
+    var w=D.ide.focusedWin;y?w.insert(y):CM.commands[x]?w.cm.execCommand(x):w.cm.triggerOnKeyDown(fakeEvent(x))
+  })
+}.bind(this,i)
 
 //D.kbds.layouts[lc] contains four strings describing how keys map to characters:
 // 0:normal  1:shifted

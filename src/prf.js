@@ -7,37 +7,38 @@
 'use strict'
 D.prf={}
 ;[//name                 default (type is determined from default value; setter enforces type and handles encoding)
-  ['autoCloseBlocks',    1], // whether to insert :end after :if,:for,etc when Enter is pressed
-  ['autoCloseBlocksEnd', 0], // 0: close blocks with ":EndIf",":EndFor",etc;  1: close blocks only with ":End"
-  ['autoCloseBrackets',  1], // whether to insert {}[]() in pairs
+  ['autoCloseBlocks',    1], //whether to insert :end after :if,:for,etc when Enter is pressed
+  ['autoCloseBlocksEnd', 0], //0: close blocks with ":EndIf",":EndFor",etc;  1: close blocks only with ":End"
+  ['autoCloseBrackets',  1], //whether to insert {}[]() in pairs
   ['autocompletion',     1],
   ['autocompletionDelay',500],
-  ['colourScheme',       'Default'], // name of the active colour scheme
-  ['colourSchemes',      []],// objects describing user-defined colour schemes
+  ['colourScheme',       'Default'], //name of the active colour scheme
+  ['colourSchemes',      []],//objects describing user-defined colour schemes
   ['favs',               [{type:'connect'}]],
-  ['floating',           0], // floating editor and tracer windows
-  ['floatOnTop',         0], // try to keep floating windows on top of the session
-  ['fold',               1], // code folding
-  ['ime',                1],
-  ['indent',             4], // -1 disables autoindent
-  ['indentComments',     0], // whether to touch comment-only lines at all
-  ['indentMethods',      -1],// -1 makes methods use the same indent as all other blocks
-  ['indentOnOpen',       1], // whether to re-indent source code on editor open
-  ['kbdLocale',          ''],// e.g. "US", "GB"
-  ['keys',               {}],// a mapping between commands and keystrokes, only diffs from the defaults
-  ['lbar',               1], // show language bar
+  ['floating',           0], //floating editor and tracer windows
+  ['floatOnTop',         0], //try to keep floating windows on top of the session
+  ['fold',               1], //code folding
+  ['ime',                1], //switch to dyalog IME when RIDE starts (Windows-only)
+  ['indent',             4], //-1 disables autoindent
+  ['indentComments',     0], //whether to touch comment-only lines at all
+  ['indentMethods',      -1],//-1 makes methods use the same indent as all other blocks
+  ['indentOnOpen',       1], //whether to re-indent source code on editor open
+  ['kbdLocale',          ''],//e.g. "US", "GB"
+  ['keys',               {}],//a mapping between commands and keystrokes, only diffs from the defaults
+  ['lbar',               1], //show language bar
   ['lineNums',           1],
-  ['matchBrackets',      1], // whether to highlight matching brackets
-  ['otherExe',           ''],// content of the "exe" text box "Other..." is selected in the Connect page
+  ['matchBrackets',      1], //whether to highlight matching brackets
+  ['otherExe',           ''],//content of the "exe" text box "Other..." is selected in the Connect page
   ['prefixKey',          '`'],
-  ['prefixMaps',         {}],// per-locale strings of pairs of characters -- diffs from the default map for that locale
-  ['selectedExe',        ''],// Which interpreter is selected in dropdown in the Connect page?
+  ['prefixMaps',         {}],//per-locale strings of pairs of characters - diffs from the default map for that locale
+  ['pfkeys',             ['','','','','','','','','','','','','']], //command strings for pfkeys
+  ['selectedExe',        ''],//which interpreter is selected in dropdown in the Connect page?
   ['theme',              ''],
-  ['title',              '{WSID}'], // a.k.a. "caption"
-  ['valueTips',          1], // value tips
+  ['title',              '{WSID}'], //a.k.a. "caption"
+  ['valueTips',          1], //value tips
   ['squiggleTips',       1],
-  ['wrap',               0], // line wrapping in session
-  ['wse',                0], // show workspace explorer?
+  ['wrap',               0], //line wrapping in session
+  ['wse',                0], //show workspace explorer?
   ['zoom',               0],
   ['menu',
     '# see below for syntax'+

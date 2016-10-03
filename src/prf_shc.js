@@ -36,7 +36,7 @@ D.prf_tabs.shc={
     for(var i=0;i<a.length;i++){var c=a[i].closest('td').id.replace(/^shc_/,'');(h[c]=h[c]||[]).push(a[i].textContent)}
     for(var i=0;i<cmds.length;i++){var c=cmds[i][0],d=cmds[i][2].slice(0).sort() //d:defaults
                                    if(h[c]&&JSON.stringify(h[c].sort())===JSON.stringify(d))delete h[c]}
-    D.prf.keys(h)
+    var a=[''];for(var i=1;i<=12;i++){a.push(document.getElementById('shc_val_PF'+i).value)} D.prf.pfkeys(a)
   },
   activate:function(){q.sc.focus()}
 }
@@ -45,11 +45,13 @@ function loadFrom(h){
   for(var i=0;i<cmds.length;i++){
     var x=cmds[i],c=x[0],s=x[1],d=x[2] //c:code,s:description,d:default
     html+='<tr data-code='+c+'>'+
-      '<td class=shc_code>'+c+'<td>'+s+
+      '<td class=shc_code>'+c+
+      '<td>'+(s||('<input class=shc_val id=shc_val_'+c+'>'))+ //pfkeys show an <input> for the commands mapped to them
       '<td id=shc_'+c+'>'+(h[c]||d).map(keyHTML).join('')+'<button class=shc_add title="Add shortcut">+</button>'+
       '<td><button class=shc_rst title="Reset &quot;'+c+'&quot; to its defaults">↶</button>'
   }
   q.tbl_wr.innerHTML=html+'</table>';updDups();if(q.sc.value){q.sc.value='';updSC()}
+  var a=D.prf.pfkeys();for(var i=1;i<=12;i++)document.getElementById('shc_val_PF'+i).value=a[i]
 }
 function updSC(){var a=q.tbl_wr.querySelectorAll('tr'),s=q.sc.value.toLowerCase(),empty=1;q.sc_clr.hidden=!s
                  for(var i=0;i<a.length;i++)empty&=a[i].hidden=a[i].textContent.toLowerCase().indexOf(s)<0

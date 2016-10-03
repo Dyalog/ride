@@ -52,3 +52,4 @@ D.cmds=[
   ['ZMO','Decrease font size',      ['Ctrl--'].concat(D.mac?'Cmd--':[])],
   ['ZMR','Reset font size',         ['Ctrl-0'].concat(D.mac?'Cmd-0':[])]
 ]
+for(var i=1;i<=12;i++)D.cmds.push(['PF'+i,'',2<=i&&i<=10?['F'+i]:[]]) //pfkeys
