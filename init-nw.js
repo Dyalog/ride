@@ -11,11 +11,14 @@
   ;(function(){
     if(D.floating){D.db=opener.D.db;return}
     var k=[],v=[] // keys and values
+    var important=0 // 0:only window position/size have changed; 1:other prefs have changed
     D.db={ // file-backed storage with an API similar to that of localStorage
       key:function(i){return k[i]},
       getItem   :function(x)  {var i=k.indexOf(x);return i<0?null:v[i]},
-      setItem   :function(x,y){var i=k.indexOf(x);if(i<0){k.push(x);v.push(y)}else{v[i]=y};dbWrite()},
-      removeItem:function(x)  {var i=k.indexOf(x);if(i>=0){k.splice(i,1);v.splice(i,1);dbWrite()}},
+      setItem   :function(x,y){var i=k.indexOf(x);if(i<0){k.push(x);v.push(y)}else{v[i]=y}
+                               important|=x.slice(0,3)!=='pos';dbWrite()},
+      removeItem:function(x)  {var i=k.indexOf(x);if(i>=0){k.splice(i,1);v.splice(i,1)
+                               important|=x.slice(0,3)!=='pos';dbWrite()}},
       _getAll:function(){var r={};for(var i=0;i<k.length;i++)r[k[i]]=v[i];return r}
     }
     Object.defineProperty(D.db,'length',{get:function(){return k.length}})
@@ -35,10 +38,10 @@
       fs.writeFile(tmpf,s,function(err){
         if(err){console.error(err);dbWrite=function(){};return} //make dbWrite() a nop
         var ts1=fs.existsSync(f)?+fs.statSync(f).mtime:0
-        if(ts1&&ts&&ts1!==ts&&!confirm(f+'\nwas modified by another process. Overwrite?'))return
+        if(ts1&&ts&&ts1!==ts&&important&&!confirm(f+'\nwas modified by another process. Overwrite?'))return
         fs.unlink(f,function(){
           fs.rename(tmpf,f,function(){
-            ts=+fs.statSync(f).mtime
+            ts=+fs.statSync(f).mtime;important=0
             if(st===1){setTimeout(function(){dbWrite()},1000)}else{st=0}
           })
         })
