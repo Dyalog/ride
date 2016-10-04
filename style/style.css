@@ -343,7 +343,7 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 /*About dialog*/
 #abt{padding:0;margin:0;background:linear-gradient(#fff,#eee 1%,#dcdad5 5%)}
 #abt_logo{background:16px center no-repeat url(img/Dyalog_60.png);height:80px;line-height:20px}
-#abt_contact{color:#000;float:right;text-align:right;margin:12px 12px 0 0;cursor:default}
+#abt_contact{color:#000;float:right;text-align:right;padding:12px;cursor:default}
 #abt_contact a,
 #abt_contact a:visited,
 #abt_contact a:active{color:blue}
