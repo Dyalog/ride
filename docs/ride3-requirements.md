@@ -1,13 +1,11 @@
 #The Ride 4.0 Project
-_(email from Morten, 2016-09-21)_
-
 Version 2, Dated September 21st, 2016
 
 ##Introduction
 RIDE 4, being the third release of the "new generation" RIDE, will hopefully bring the RIDE to a level of maturity where people no longer think of it as a new and somewhat experimental IDE. The last significant missing features (like threading menu items) should be added, and any remaining unintended differences with the ODE should be ironed out, and stability should be improved to the point where people should feel comfortable using RIDE even under Windows (with the possible exception of people who are addicted to the "window modes" that the ODE supports).
 Note that RIDE 4.0 needs to be upwards compatible with Dyalog v15.0, so there is no reason to link the release date for RIDE 4.0 directly to that of Dyalog v16.0. It is still natural to think of them as being related.
 ##Bug Fixing
-We need to look at Kai’s most important concerns and sort them into short-term bugs to be fixed in RIDE 3, bugs to fix at the start of RIDE 4 (and either back-port them or have Kai as an "alpha" tester of RIDE 4), and "new features for RIDE 4".
+We need to look at Kai's most important concerns and sort them into short-term bugs to be fixed in RIDE 3, bugs to fix at the start of RIDE 4 (and either back-port them or have Kai as an "alpha" tester of RIDE 4), and "new features for RIDE 4".
 Research into Android and iOS
 We should do research into how we might be able to deliver "native" (as opposed to browser-based) RIDE on Android and iOS. We should test "native" iOS and Android browsers to see whether they support the browser-based version, and how it reacts to small form factors.
 ##Major Features
@@ -29,7 +27,7 @@ Ability to launch RIDE from a browser by pointing to an interpreter which embeds
 
 ###4. Establish ssh tunnel and connect to existing APL process
 Jason has identified the ability to create an ssh tunnel and then connect to (or listen for) an existing APL interpreter as an important use case for system administrators.
-We may want to consider separating connection features into a separate module which could be worked on independently (but ideally still in Javascript). However, the addition of this feature now that we already have the ssh tunnel capability, doesn’t seem to justify the work to do the separation at this point.
+We may want to consider separating connection features into a separate module which could be worked on independently (but ideally still in Javascript). However, the addition of this feature now that we already have the ssh tunnel capability, doesn't seem to justify the work to do the separation at this point.
 ###5. Formatting of Functions
 Through the addition of new options to RIDE and/or ODE, there needs to be a mode in which it is possible to "reformat" source code in both systems and achieve the EXACT same results, to avoid glitches with source code management systems.
 ###6. Search Functionality
@@ -56,4 +54,4 @@ Including Quote Quad and System Command Output. This is probably mostly interpre
 ###12. WIBNI Section
 
 1. WIBNI `⎕PFKEY` worked, at least for simple cases. Kai reports that in addition to strings to enter, he would need support for the actions LL (Left Limit), RL (Right Limit) and ER (Enter).
-2. Alex Foia’s idea of a "variable inspector" is worth thinking about.
+2. Alex Foia's idea of a "variable inspector" is worth thinking about.
