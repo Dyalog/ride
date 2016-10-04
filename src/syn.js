@@ -162,14 +162,13 @@ CM.defineMode('apl',function(){
 //stackStr(h): a string representation of the block stack in CodeMirror's state object "h"
 //e.g. if you have (A[B]) in a dfn in an :if in a :switch, the innermost stackStr could be "∇ :switch :if { ( [ "
 function stackStr(h){var a=h.a,r='';for(var i=0;i<a.length;i++)r+=a[i].t+' ';return r}
-function isPrefix(x,y){return x===y.slice(0,x.length)}
 var scmd=('classes clear cmd continue copy cs drop ed erase events fns holds intro lib load methods ns objects obs off'+
           ' ops pcopy props reset save sh sic si sinl tid vars wsid xload').split(' ') //system commands
 CM.defineMIME('text/apl-session','apl-session')
-CM.defineMode('apl-session',function(config,modeConfig){
-  //the session allows some additional token types (system commands and user commands)
-  //and needs to enable highlighting only in modified lines
-  var im=CM.getMode(config,'text/apl'), se=modeConfig.se //im:inner mode, se:the Session object
+CM.defineMode('apl-session',function(cfg,modeCfg){
+  //the session requires its own CodeMirror mode as it allows additional token types (system commands and user commands)
+  //and it needs to enable syntax highlighting only in modified lines
+  var im=CM.getMode(cfg,'text/apl'), se=modeCfg.se //im:inner mode, se:the Session object
   return{
     startState:function(){return{l:0}}, //.l:line number, .h:inner state
     copyState:function(h){h=CM.copyState({},h);h.h=CM.copyState(im,h.h);return h},
@@ -188,19 +187,15 @@ CM.defineMode('apl-session',function(config,modeConfig){
 ;['apl','apl-session'].forEach(function(x){CM.registerHelper('wordChars',x,RegExp('['+letter+'\\d]'))})
 CM.registerHelper('fold','apl',function(cm,start){ //the old IDE refers to folding as "outlining"
   var l,l0=l=start.line,end=cm.lastLine()
-  var x0=stackStr(cm.getStateAfter(l0-1))   //x0:the stackStr at the beginning of start.line
-  var y0=stackStr(cm.getStateAfter(l0))     //y0:the stackStr at the end of start.line
-  if(x0!==y0&&isPrefix(x0,y0)){
-    while(++l<=end){
-      var x=stackStr(cm.getStateAfter(l-1)) //x: the stackStr at the beginning of the current line
-      var y=stackStr(cm.getStateAfter(l))   //y: the stackStr at the end of the current line
-      if(!isPrefix(y0,x)||!isPrefix(y0,y))break
-    }
-    if(l<=end&&x0===y&&isPrefix(y,x)){
-      while(l+1<=end&&/^ *$/.test(cm.getLine(l+1)))l++
-      return{from:CM.Pos(l0,cm.getLine(l0).length),to:CM.Pos(l,cm.getLine(l).length)}
-    }
-  }
+  ,x0=stackStr(cm.getStateAfter(l0-1))                  //x0:the stackStr at the beginning of start.line
+  ,y0=stackStr(cm.getStateAfter(l0))                    //y0:the stackStr at the end of start.line
+  if(x0===y0||!isPfx(x0,y0))return
+  while(++l<=end){var x=stackStr(cm.getStateAfter(l-1)) //x: the stackStr at the beginning of the current line
+                  var y=stackStr(cm.getStateAfter(l))   //y: the stackStr at the end of the current line
+                  if(!isPfx(y0,x)||!isPfx(y0,y))break}
+  if(l<=end&&x0===y&&isPfx(y,x)){while(l+1<=end&&/^ *$/.test(cm.getLine(l+1)))l++
+                                 return{from:CM.Pos(l0,cm.getLine(l0).length),to:CM.Pos(l,cm.getLine(l).length)}}
 })
+function isPfx(x,y){return x===y.slice(0,x.length)} //is x is a prefix of y?
 
 }())
