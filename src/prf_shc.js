@@ -36,7 +36,8 @@ D.prf_tabs.shc={
     for(var i=0;i<a.length;i++){var c=a[i].closest('td').id.replace(/^shc_/,'');(h[c]=h[c]||[]).push(a[i].textContent)}
     for(var i=0;i<cmds.length;i++){var c=cmds[i][0],d=cmds[i][2].slice(0).sort() //d:defaults
                                    if(h[c]&&JSON.stringify(h[c].sort())===JSON.stringify(d))delete h[c]}
-    var a=[''];for(var i=1;i<=12;i++){a.push(document.getElementById('shc_val_PF'+i).value)} D.prf.pfkeys(a)
+    var a=[''];for(var i=1;i<=12;i++){a.push(document.getElementById('shc_val_PF'+i).value)}
+    D.prf.keys(h);D.prf.pfkeys(a)
   },
   activate:function(){q.sc.focus()}
 }
