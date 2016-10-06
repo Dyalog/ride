@@ -64,7 +64,7 @@ D.prf={}
     '\n&View'+
     '\n  Show Language Bar        =LBR'+
     '\n  Show Workspace Explorer  =WSE'+
-    '\n  Floating Edit Windows    =FLT'+
+//    '\n  Floating Edit Windows    =FLT'+
 //    '\n  Editors on Top           =TOP {!browser}'+
     '\n  Line Wrapping in Session =WRP'+
     '\n  -                             {!browser}'+
