@@ -13,11 +13,11 @@ D.addSynGrps([
   {s:'bracket'         ,t:'sqbr',c:'.cm-apl-sqbr'}, //[]
   {s:'comment'         ,t:'com' ,c:'.cm-apl-com' }, //⍝
   {s:'cursor'          ,t:'cur' ,c:'div.CodeMirror-cursor',ctrls:{bc:1,fg:0,bg:0,BIU:0}},
-  {s:'dfn level 1'     ,t:'dfn1',c:'.cm-apl-dfn1'}, //{}
-  {s:'dfn level 2'     ,t:'dfn2',c:'.cm-apl-dfn2'},
-  {s:'dfn level 3'     ,t:'dfn3',c:'.cm-apl-dfn3'},
-  {s:'dfn level 4'     ,t:'dfn4',c:'.cm-apl-dfn4'},
-  {s:'dfn level 5'     ,t:'dfn5',c:'.cm-apl-dfn5'}, //{1 {2 {3 {4 {5} } } } }
+  {s:'dfn level 1'     ,t:'dfn1',c:'.cm-apl-dfn.cm-apl-dfn1'}, //{}
+  {s:'dfn level 2'     ,t:'dfn2',c:'.cm-apl-dfn.cm-apl-dfn2'},
+  {s:'dfn level 3'     ,t:'dfn3',c:'.cm-apl-dfn.cm-apl-dfn3'},
+  {s:'dfn level 4'     ,t:'dfn4',c:'.cm-apl-dfn.cm-apl-dfn4'},
+  {s:'dfn level 5'     ,t:'dfn5',c:'.cm-apl-dfn.cm-apl-dfn5'}, //{1 {2 {3 {4 {5} } } } }
   {s:'dfn'             ,t:'dfn' ,c:'.cm-apl-dfn' },
   {s:'diamond'         ,t:'diam',c:'.cm-apl-diam'}, //⋄
   {s:'dyadic operator' ,t:'op2' ,c:'.cm-apl-op2' }, //⍣ ...
