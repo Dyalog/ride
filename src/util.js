@@ -26,15 +26,15 @@ D.util={
     CM.on(d,'keydown',function(e){if(e.which===27&&!e.ctrlKey&&!e.shiftKey&&!e.altKey&&!e.metaKey){d.hidden=1;return!1}})
     var t=d.querySelector('.dlg_title')
     if(t){
-      var dx,dy,mx,my //dx,dy:dialog position corrected for mouse; mx,my:maximum coords of dialog in window
+      var dx,dy //dx,dy:dialog position corrected for mouse
       t.onmousedown=function(e){
         if(e.target.closest('.dlg_no_drag'))return
-        dx=d.offsetLeft-e.clientX;dy=d.offsetTop-e.clientY;mx=innerWidth-d.clientWidth;my=innerHeight-d.clientHeight
+        dx=d.offsetLeft-e.clientX;dy=d.offsetTop-e.clientY
         t.style.cursor='move';CM.on(document,'mousemove',move);e.preventDefault();return!1
       }
       t.onmouseup=function(e){CM.off(document,'mousemove',move);t.style.cursor=''}
-      var move=function(e){d.style.left=Math.min(mx,Math.max(0,dx+e.clientX))+'px'
-                           d.style.top =Math.min(my,Math.max(0,dy+e.clientY))+'px'
+      var move=function(e){d.style.left=(dx+e.clientX)+'px'
+                           d.style.top =(dy+e.clientY)+'px'
                            e.preventDefault();return!1}
     }
   },
