@@ -41,22 +41,18 @@ D.Ed=function(ide,opts){ //constructor
   }})
   ed.cmSC.on('change',function(){ed.hls()})
   ed.rp=ed.tb.querySelector('.tb_rp')
-  ed.cmRP=CM(ed.rp,{placeholder:'Replace',extraKeys:{
-    Enter            :function(){ed.rp()},
-    'Shift-Enter'    :function(){ed.rp(1)},
-    'Alt-Enter'      :function(){ed.sc()},
-    'Shift-Alt-Enter':function(){ed.sc(1)},
-    Tab              :function(){ed.cm.focus()},
-    'Shift-Tab'      :function(){(ed.tc?ed.cm:ed.cmSC).focus()}
-  }})
+  ed.cmRP=CM(ed.rp,{placeholder:'Replace',extraKeys:{Enter            :function(){ed.rp()},
+                                                     'Shift-Enter'    :function(){ed.rp(1)},
+                                                     'Alt-Enter'      :function(){ed.sc()},
+                                                     'Shift-Alt-Enter':function(){ed.sc(1)},
+                                                     Tab              :function(){ed.cm.focus()},
+                                                     'Shift-Tab'      :function(){(ed.tc?ed.cm:ed.cmSC).focus()}}})
   var cms=[ed.cmSC,ed.cmRP]
-  for(var i=0;i<cms.length;i++){
-    cms[i].setOption('keyMap','dyalog')
-    cms[i].setOption('scrollbarStyle','null')
-    cms[i].addKeyMap({Esc :function(){ed.clrSC();setTimeout(ed.cm.focus.bind(ed.cm),0)},
-                      Down:function(){ed.NX()},
-                      Up  :function(){ed.PV()}})
-  }
+  for(var i=0;i<cms.length;i++){cms[i].setOption('keyMap','dyalog')
+                                cms[i].setOption('scrollbarStyle','null')
+                                cms[i].addKeyMap({Esc :function(){ed.clrSC();setTimeout(ed.cm.focus.bind(ed.cm),0)},
+                                                  Down:function(){ed.NX()},
+                                                  Up  :function(){ed.PV()}})}
   ed.setTC(!!ed.tc);this.vt=D.vt(this);this.setLN(D.prf.lineNums())
 }
 D.Ed.prototype={
@@ -66,14 +62,14 @@ D.Ed.prototype={
     cm.getOption('foldGutter') &&g.push('cm-foldgutter')
     cm.setOption('gutters',g)
   },
-  createBPEl:function(){
+  createBPEl:function(){ //create breakpoint element
     var e=this.dom.ownerDocument.createElement('div');e.className='breakpoint';e.innerHTML='●';return e
   },
   getStops:function(){ //returns an array of line numbers
     var r=[];this.cm.eachLine(function(lh){var m=lh.gutterMarkers;m&&m.breakpoints&&r.push(lh.lineNo())})
     return r.sort(function(x,y){return x-y})
   },
-  cursorActivity:function(){
+  cursorActivity:function(){ //handle "cursor activity" event from CodeMirror
     if(this.xline==null)return //xline:the line number of the empty line inserted when you press <down> at eof
     var ed=this,n=ed.cm.lineCount(),l=ed.cm.getCursor().line
     if(l===ed.xline&&l===n-1&&/^\s*$/.test(ed.cm.getLine(n-1)))return
@@ -120,11 +116,9 @@ D.Ed.prototype={
   selectAllSearchResults:function(){
     var cm=this.cm,ic=!$('.tb_case',this.tb).hasClass('pressed') //ic:ignore case?, q:query string
     var q=this.cmSC.getValue();ic&&(q=q.toLowerCase())
-    if(q){
-      var s=cm.getValue(),sels=[],i=0;ic&&(s=s.toLowerCase())
-      while((i=s.indexOf(q,i))>=0){sels.push({anchor:cm.posFromIndex(i),head:cm.posFromIndex(i+q.length)});i++}
-      sels.length&&cm.setSelections(sels)
-    }
+    if(q){var s=cm.getValue(),sels=[],i=0;ic&&(s=s.toLowerCase())
+          while((i=s.indexOf(q,i))>=0){sels.push({anchor:cm.posFromIndex(i),head:cm.posFromIndex(i+q.length)});i++}
+          sels.length&&cm.setSelections(sels)}
     cm.focus()
   },
   rp:function(bk){ //replace current occurrence and move to next; bk:is backwards?
@@ -138,7 +132,7 @@ D.Ed.prototype={
   },
   hl:function(l){ //highlight - set current line in tracer
     var ed=this;ed.hll!=null&&ed.cm.removeLineClass(ed.hll,'background','highlighted')
-    if((ed.hll=l)!=null){ //hll:highlighted line -- currently executed line in tracer
+    if((ed.hll=l)!=null){ //hll:highlighted line -- the one about to be executed in the tracer
       ed.cm.addLineClass(l,'background','highlighted');ed.cm.setCursor(l,0);ed.scrollToCursor()
     }
   },
@@ -194,17 +188,13 @@ D.Ed.prototype={
         ((RegExp('^'+r     ).exec(s.slice(  c.ch))||[])[0]||'')  //match right of cursor
     ).replace(/^\d+/,'') //trim leading digits
   },
-  ED:function(cm){
-    this.addJump()
-    D.send('Edit',{win:this.id,pos:cm.indexFromPos(cm.getCursor()),text:cm.getValue(),unsaved:this.ide.getUnsaved()})
-  },
+  ED:function(cm){this.addJump();D.send('Edit',{win:this.id,pos:cm.indexFromPos(cm.getCursor()),
+                                                text:cm.getValue(),unsaved:this.ide.getUnsaved()})},
   QT:function(){D.send('CloseWindow',{win:this.id})},
   BK:function(cm){this.tc?D.send('TraceBackward',{win:this.id}):cm.execCommand('undo')},
   FD:function(cm){this.tc?D.send('TraceForward' ,{win:this.id}):cm.execCommand('redo')},
-  SC:function(cm){
-    var v=cm.getSelection();/^[ -\uffff]+$/.test(v)&&this.cmSC.setValue(v)
-    this.cmSC.focus();this.cmSC.execCommand('selectAll')
-  },
+  SC:function(cm){var v=cm.getSelection();/^[ -\uffff]+$/.test(v)&&this.cmSC.setValue(v)
+                  this.cmSC.focus();this.cmSC.execCommand('selectAll')},
   RP:function(cm){
     if(cm.getOption('readOnly'))return
     var v=cm.getSelection()||this.cword();if(v&&v.indexOf('\n')<0){this.cmSC.setValue(v);this.cmRP.setValue(v)}
@@ -288,14 +278,10 @@ D.Ed.prototype={
     }
     this.tc&&D.send('SetLineAttributes',{win:this.id,stop:this.getStops()})
   },
-  RD:function(cm){
-    if(cm.somethingSelected()){cm.execCommand('indentAuto')}
-    else{var u=cm.getCursor();cm.execCommand('SA');cm.execCommand('indentAuto');cm.setCursor(u)}
-  },
-  VAL:function(cm){
-    var a=cm.getSelections(), s=a.length!==1?'':!a[0]?this.cword():a[0].indexOf('\n')<0?a[0]:''
-    s&&this.ide.exec(['      '+s],0)
-  },
+  RD:function(cm){if(cm.somethingSelected()){cm.execCommand('indentAuto')}
+                  else{var u=cm.getCursor();cm.execCommand('SA');cm.execCommand('indentAuto');cm.setCursor(u)}},
+  VAL:function(cm){var a=cm.getSelections(), s=a.length!==1?'':!a[0]?this.cword():a[0].indexOf('\n')<0?a[0]:''
+                   s&&this.ide.exec(['      '+s],0)},
   addJump:function(){var j=this.jumps,u=this.cm.getCursor();j.push({lh:this.cm.getLineHandle(u.line),ch:u.ch})>10&&j.shift()},
   JBK:function(cm){var p=this.jumps.pop();p&&cm.setCursor({line:p.lh.lineNo(),ch:p.ch})},
   indentOrComplete:function(cm){
