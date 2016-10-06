@@ -296,6 +296,7 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 .shc_del{color:#f00;text-decoration:none;border-top-left-radius:0;border-bottom-left-radius:0}
 .shc_del:hover{background-color:red;color:#fff;border-color:#800}
 .shc_add,.shc_rst{visibility:hidden}
+.shc_val{width:90%}
 #shc_tbl_wr tr:hover .shc_add,#shc_tbl_wr tr:hover .shc_rst{visibility:visible}
 
 /*Prefs>Code*/
