@@ -31,6 +31,18 @@ D.cmds=[
   ['LOG','Show RIDE protocol log',  ['Ctrl-F12']],
   ['MA', 'Continue execution of all threads',[]],
   ['NEW','New session',             ['Ctrl-N']],
+  ['PF1' ,'',                       []],
+  ['PF2' ,'',                       ['F2']],
+  ['PF3' ,'',                       ['F3']],
+  ['PF4' ,'',                       ['F4']],
+  ['PF5' ,'',                       ['F5']],
+  ['PF6' ,'',                       ['F6']],
+  ['PF7' ,'',                       ['F7']],
+  ['PF8' ,'',                       ['F8']],
+  ['PF9' ,'',                       ['F9']],
+  ['PF10','',                       ['F10']],
+  ['PF11','',                       []],
+  ['PF12','',                       []],
   ['PRF','Show preferences',        []],
   ['QIT','Quit',                    ['Ctrl-Q']],
   ['QT', 'Quit (and lose changes)', ['Shift-Esc']],
@@ -52,4 +64,3 @@ D.cmds=[
   ['ZMO','Decrease font size',      ['Ctrl--'].concat(D.mac?'Cmd--':[])],
   ['ZMR','Reset font size',         ['Ctrl-0'].concat(D.mac?'Cmd-0':[])]
 ]
-for(var i=1;i<=12;i++)D.cmds.push(['PF'+i,'',2<=i&&i<=10?['F'+i]:[]]) //pfkeys
