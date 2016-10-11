@@ -11,4 +11,4 @@
 * `npm i         # download dependencies`
 * `node mk       # build RIDE`
 * `npm start     # start RIDE (without building native apps)`
-* `node mk dist  # build native apps`
+* `node mk dist  # build native apps under _/ride${version}/`
