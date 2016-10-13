@@ -12,3 +12,6 @@
 * `node mk       # build RIDE`
 * `npm start     # start RIDE (without building native apps)`
 * `node mk dist  # build native apps under _/ride${version}/`
+
+Dyalog customers can download a pre-built installable RIDE from [my.dyalog](https://my.dyalog.com/) under the Downloads
+&gt; RIDE menu.
