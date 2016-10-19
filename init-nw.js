@@ -8,6 +8,8 @@
   env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a standalone RIDE
     (D.win?0:+fs.existsSync(path.dirname(ps.execPath)+(D.mac?'/../../../../Resources/Dyalog/mapl':'/../mapl')))
 
+  function mtime(f){try{return+fs.statSync(f).mtime}catch(_){return 0}}
+
   ;(function(){
     if(D.floating){D.db=opener.D.db;return}
     var k=[],v=[] // keys and values
@@ -26,7 +28,7 @@
     try{
       if(fs.existsSync(f)){
         var h=JSON.parse(fs.readFileSync(f,'utf8'));for(var x in h){k.push(x);v.push(h[x])}
-        ts=+fs.statSync(f).mtime
+        ts=mtime(f)
       }
     }catch(e){
       console.error(e)
@@ -37,11 +39,11 @@
       var s='{\n'+k.map(function(x,i){return'  '+repr(x)+':'+repr(v[i])}).sort().join(',\n')+'\n}\n'
       fs.writeFile(tmpf,s,function(err){
         if(err){console.error(err);dbWrite=function(){};return} //make dbWrite() a nop
-        var ts1=fs.existsSync(f)?+fs.statSync(f).mtime:0
+        var ts1=fs.existsSync(f)?mtime(f):0
         if(ts1&&ts&&ts1!==ts&&important&&!confirm(f+'\nwas modified by another process. Overwrite?'))return
         fs.unlink(f,function(){
           fs.rename(tmpf,f,function(){
-            ts=+fs.statSync(f).mtime;important=0
+            ts=mtime(f);important=0
             if(st===1){setTimeout(function(){dbWrite()},1000)}else{st=0}
           })
         })
