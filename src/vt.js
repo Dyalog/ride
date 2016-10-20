@@ -25,8 +25,11 @@ D.vt=function(w){'use strict' //.init(w) gets called for every window w (session
       }
     },500))
   }
+  var oldX=0,oldY=0 //ignore "mousemove" when it's the result of the user pressing <ER> at the end of session
+                    //without moving the mouse
   w.cm.display.wrapper.onmouseout=cl
-  w.cm.display.wrapper.onmousemove=function(x){show(w.cm.coordsChar({left:x.clientX,top:x.clientY}))}
+  w.cm.display.wrapper.onmousemove=function(e){var x=e.clientX,y=e.clientY;if(x===oldX&&y===oldY)return
+                                               show(w.cm.coordsChar({left:oldX=x,top:oldY=y}))}
   return{clear:cl,show:show,processReply:rf=function(x){
     if(!p)return
     var d=w.getDocument(),ce=w.cm.display.wrapper                 //ce:CodeMirror element
