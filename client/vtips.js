@@ -23,7 +23,11 @@ this.init=function(w){ // .init(w) gets called for every window w (session or ed
       }
     },500))
   }
-  $(w.cm.display.wrapper).mouseout(cl).mousemove(function(e){show(w.cm.coordsChar({left:e.clientX,top:e.clientY}))})
+  var oldX=0,oldY=0 //detect and ignore "mousemove" when the user presses <ER> and the
+                    //end of the session but doesn't move the mouse
+  $(w.cm.display.wrapper).mouseout(cl)
+                         .mousemove(function(e){var x=e.clientX,y=e.clientY;if(x===oldX&&y===oldY)return
+                                                show(w.cm.coordsChar({left:x,top:y}));oldX=x;oldY=y})
   return{
     clear:cl,show:show,
     processReply:rf=function(x){ // return a function that processes the reply
