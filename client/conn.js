@@ -62,6 +62,9 @@ module.exports=function(){
   q.cert_cb.change(function(){q.cert.add(q.cert_dots).prop('disabled',!this.checked).val('');q.cert.elastic()})
   q.subj_cb.change(function(){q.subj.prop('disabled',!this.checked).val('')})
            .click(function(){this.checked&&q.subj.focus()})
+  q.rootcertsdir_cb.change(function(){q.rootcertsdir.prop('disabled',!this.checked).val('')
+                                      q.rootcertsdir.elastic()})
+                   .click(function(){this.checked&&q.rootcertsdir.focus()})
   q.cert_dots.click(function(){q.cert_file.click()})
   q.cert_file.change(function(){q.cert.val(this.value).elastic().change()})
   q.ssh_key_dots.click(function(){q.ssh_key_file.click()})
@@ -91,6 +94,7 @@ module.exports=function(){
         q.ssl_detail.toggle(!!sel.ssl);q.ssh_detail.toggle(!!sel.ssh)
         q.cert_cb.prop('checked',!!sel.cert);q.cert.add(q.cert_dots).prop('disabled',!sel.cert)
         q.subj_cb.prop('checked',!!sel.subj);q.subj.prop('disabled',!sel.subj)
+        q.rootcertsdir_cb.prop('checked',!!sel.rootcertsdir);q.rootcertsdir.prop('disabled',!sel.rootcertsdir)
       }
     })
     .list('select',0).find('a').eq(0).focus()
@@ -141,7 +145,9 @@ function go(){
       case'connect':
         $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
           .dialog({modal:1,width:350,title:'Connecting...'})
-        D.skt.emit('*connect',{host:sel.host,port:+sel.port||4502,ssl:sel.ssl,cert:sel.cert,subj:sel.subj});break
+        D.skt.emit('*connect',{host:sel.host,port:+sel.port||4502,ssl:sel.ssl,cert:sel.cert,subj:sel.subj,
+                               rootcertsdir:sel.rootcertsdir})
+        break
       case'listen':
         var port=sel.port||4502
         $d=$(

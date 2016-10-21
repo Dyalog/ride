@@ -61,8 +61,17 @@ var handlers={
   '*connect':function(x){
     var m=net,o={host:x.host,port:x.port} // m:module used to create connection; o:options for .connect()
     if(x.ssl){
-      m=require('tls');o.rejectUnauthorized=false
-      if(x.cert)try{o.key=fs.readFileSync(x.cert)}catch(e){toBrowser('*error',{msg:e.message});return}
+      try{
+        m=require('tls')
+        if(x.cert){o.key=fs.readFileSync(x.cert)}
+        if(x.rootcertsdir){
+          var ca=fs.readdirSync(x.rootcertsdir).map(function(y){return fs.readFileSync(path.join(x.rootcertsdir,y))})
+          o.secureContext=m.createSecureContext({ca:ca})
+        }
+      }catch(e){
+        console.error(e)
+        toBrowser('*error',{msg:e.message});return
+      }
     }
     clt=m.connect(o,function(){
       if(x.ssl&&x.subj){
