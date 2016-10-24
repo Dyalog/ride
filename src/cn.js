@@ -148,11 +148,15 @@ D.cn=_=>{ //set up Connect page
     return!1
   }
   q.ssl_cb.onchange=_=>{q.ssl_dtl.hidden=!q.ssl_cb.checked}
-  q.cert_cb.onchange=_=>{q.cert.disabled=q.cert_dots.disabled=!q.cert_cb.checked;q.cert.value='';D.util.elastic(q.cert)}
-  q.subj_cb.onchange=_=>{q.subj.disabled=!q.subj_cb.checked;q.subj.value=''}
+  q.cert_cb.onchange=_=>{q.cert.disabled=q.cert_dots.disabled=!q.cert_cb.checked
+                         q.cert.value=sel.cert=''
+                         D.util.elastic(q.cert);save()}
+  q.subj_cb.onchange=_=>{q.subj.disabled=!q.subj_cb.checked
+                         q.subj.value=sel.subj='';save()}
   q.subj_cb.onclick=_=>{q.subj_cb.checked&&q.subj.focus()}
-  q.rootcertsdir_cb.onchange=_=>{q.rootcertsdir.disabled=!q.rootcertsdir_cb.checked;q.rootcertsdir.value=''
-                                 D.util.elastic(q.rootcertsdir)}
+  q.rootcertsdir_cb.onchange=_=>{q.rootcertsdir.disabled=!q.rootcertsdir_cb.checked
+                                 q.rootcertsdir.value=sel.rootcertsdir=''
+                                 D.util.elastic(q.rootcertsdir);save()}
   q.rootcertsdir_cb.onclick=_=>{q.rootcertsdir_cb.checked&&q.rootcertsdir.focus()}
   const browse=(x,title)=>{const v=D.el.dialog.showOpenDialog({title,defaultPath:x.value})
                            if(v){x.value=v[0];D.util.elastic(x);$(x).change()};return!1}
