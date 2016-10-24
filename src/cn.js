@@ -54,7 +54,8 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   try{
     switch(x.type||'connect'){
       case'connect':
-        D.util.dlg(q.connecting_dlg);connect({host:x.host,port:+x.port||4502,ssl:x.ssl,cert:x.cert,subj:x.subj});break
+        D.util.dlg(q.connecting_dlg)
+        connect({host:x.host,port:+x.port||4502,ssl:x.ssl,cert:x.cert,subj:x.subj,rootcertsdir:x.rootcertsdir});break
       case'listen':
         D.util.dlg(q.listen_dlg);const port=+x.port||4502;q.listen_dlg_port.textContent=''+port
         q.listen_dlg_cancel.onclick=_=>{srv&&srv.close();q.listen_dlg.hidden=1;return!1}
@@ -150,6 +151,9 @@ D.cn=_=>{ //set up Connect page
   q.cert_cb.onchange=_=>{q.cert.disabled=q.cert_dots.disabled=!q.cert_cb.checked;q.cert.value='';D.util.elastic(q.cert)}
   q.subj_cb.onchange=_=>{q.subj.disabled=!q.subj_cb.checked;q.subj.value=''}
   q.subj_cb.onclick=_=>{q.subj_cb.checked&&q.subj.focus()}
+  q.rootcertsdir_cb.onchange=_=>{q.rootcertsdir.disabled=!q.rootcertsdir_cb.checked;q.rootcertsdir.value=''
+                                 D.util.elastic(q.rootcertsdir)}
+  q.rootcertsdir_cb.onclick=_=>{q.rootcertsdir_cb.checked&&q.rootcertsdir.focus()}
   const browse=(x,title)=>{const v=D.el.dialog.showOpenDialog({title,defaultPath:x.value})
                            if(v){x.value=v[0];D.util.elastic(x);$(x).change()};return!1}
   q.cert_dots   .onclick=_=>{browse(q.cert   ,'Certificate')}
@@ -181,6 +185,7 @@ D.cn=_=>{ //set up Connect page
         q.ssl_dtl.hidden=!sel.ssl;q.ssh_dtl.hidden=!sel.ssh
         q.cert_cb.checked=!!sel.cert;q.cert.disabled=q.cert_dots.disabled=!sel.cert
         q.subj_cb.checked=!!sel.subj;q.subj.disabled=!sel.subj
+        q.rootcertsdir_cb.checked=!!sel.rootcertsdir;q.rootcertsdir.disabled=!sel.rootcertsdir
       }
     })
     .list('select',0)
@@ -273,8 +278,14 @@ const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
 }
 ,connect=x=>{
   let m=net,o={host:x.host,port:x.port} //m:module used to create connection; o:options for .connect()
-  if(x.ssl){m=rq('tls');o.rejectUnauthorized=false
-            if(x.cert)try{o.key=fs.readFileSync(x.cert)}catch(e){err(e.message);return}}
+  if(x.ssl){
+    try{
+      m=rq('tls')
+      if(x.cert)o.key=fs.readFileSync(x.cert)
+      if(x.rootcertsdir){var ca=fs.readdirSync(x.rootcertsdir).map(y=>fs.readFileSync(path.join(x.rootcertsdir,y)))
+                         o.secureContext=m.createSecureContext({ca})}
+    }catch(e){err(e.message);return}
+  }
   clt=m.connect(o,_=>{
     if(x.ssl&&x.subj){
       const s=clt.getPeerCertificate().subject.CN
