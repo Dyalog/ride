@@ -154,14 +154,15 @@ D.cn=_=>{ //set up Connect page
   q.subj_cb.onchange=_=>{q.subj.disabled=!q.subj_cb.checked
                          q.subj.value=sel.subj='';save()}
   q.subj_cb.onclick=_=>{q.subj_cb.checked&&q.subj.focus()}
-  q.rootcertsdir_cb.onchange=_=>{q.rootcertsdir.disabled=!q.rootcertsdir_cb.checked
+  q.rootcertsdir_cb.onchange=_=>{q.rootcertsdir.disabled=q.rootcertsdir_dots.disabled=!q.rootcertsdir_cb.checked
                                  q.rootcertsdir.value=sel.rootcertsdir=''
                                  D.util.elastic(q.rootcertsdir);save()}
   q.rootcertsdir_cb.onclick=_=>{q.rootcertsdir_cb.checked&&q.rootcertsdir.focus()}
-  const browse=(x,title)=>{const v=D.el.dialog.showOpenDialog({title,defaultPath:x.value})
-                           if(v){x.value=v[0];D.util.elastic(x);$(x).change()};return!1}
-  q.cert_dots   .onclick=_=>{browse(q.cert   ,'Certificate')}
-  q.ssh_key_dots.onclick=_=>{browse(q.ssh_key,'SSH Key'    )}
+  const browse=(x,title,props)=>{const v=D.el.dialog.showOpenDialog({title,defaultPath:x.value,properties:props||[]})
+                                 if(v){x.value=v[0];D.util.elastic(x);$(x).change()};return!1}
+  q.cert_dots        .onclick=_=>{browse(q.cert        ,'Certificate')}
+  q.ssh_key_dots     .onclick=_=>{browse(q.ssh_key     ,'SSH Key'    )}
+  q.rootcertsdir_dots.onclick=_=>{browse(q.rootcertsdir,'Directory with Root Certificates',['openDirectory'])}
   q.ssh_auth_type.onchange=_=>{const k=q.ssh_auth_type.value==='key';q.ssh_pass_wr.hidden=k;q.ssh_key_wr.hidden=!k;
                                sel.ssh_auth_type=q.ssh_auth_type.value;save()}
   D.prf.favs().forEach(x=>{q.favs.appendChild(favDOM(x))})
@@ -189,7 +190,7 @@ D.cn=_=>{ //set up Connect page
         q.ssl_dtl.hidden=!sel.ssl;q.ssh_dtl.hidden=!sel.ssh
         q.cert_cb.checked=!!sel.cert;q.cert.disabled=q.cert_dots.disabled=!sel.cert
         q.subj_cb.checked=!!sel.subj;q.subj.disabled=!sel.subj
-        q.rootcertsdir_cb.checked=!!sel.rootcertsdir;q.rootcertsdir.disabled=!sel.rootcertsdir
+        q.rootcertsdir_cb.checked=!!sel.rootcertsdir;q.rootcertsdir.disabled=q.rootcertsdir_dots.disabled=!sel.rootcertsdir
       }
     })
     .list('select',0)
