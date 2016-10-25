@@ -55,7 +55,9 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
     switch(x.type||'connect'){
       case'connect':
         D.util.dlg(q.connecting_dlg)
-        connect({host:x.host,port:+x.port||4502,ssl:x.ssl,cert:x.cert,subj:x.subj,rootcertsdir:x.rootcertsdir});break
+        connect({host:x.host,port:+x.port||4502,
+                 ssl:x.ssl,cert:x.cert,key:x.key,subj:x.subj,rootcertsdir:x.rootcertsdir})
+        break
       case'listen':
         D.util.dlg(q.listen_dlg);const port=+x.port||4502;q.listen_dlg_port.textContent=''+port
         q.listen_dlg_cancel.onclick=_=>{srv&&srv.close();q.listen_dlg.hidden=1;return!1}
@@ -148,9 +150,9 @@ D.cn=_=>{ //set up Connect page
     return!1
   }
   q.ssl_cb.onchange=_=>{q.ssl_dtl.hidden=!q.ssl_cb.checked}
-  q.cert_cb.onchange=_=>{q.cert.disabled=q.cert_dots.disabled=!q.cert_cb.checked
-                         q.cert.value=sel.cert=''
-                         D.util.elastic(q.cert);save()}
+  q.cert_cb.onchange=_=>{q.cert.disabled=q.key.disabled=q.cert_dots.disabled=q.key_dots.disabled=!q.cert_cb.checked
+                         q.cert.value=q.key.value=sel.cert=sel.key=''
+                         D.util.elastic(q.cert);D.util.elastic(q.key);save()}
   q.subj_cb.onchange=_=>{q.subj.disabled=!q.subj_cb.checked
                          q.subj.value=sel.subj='';save()}
   q.subj_cb.onclick=_=>{q.subj_cb.checked&&q.subj.focus()}
@@ -161,6 +163,7 @@ D.cn=_=>{ //set up Connect page
   const browse=(x,title,props)=>{const v=D.el.dialog.showOpenDialog({title,defaultPath:x.value,properties:props||[]})
                                  if(v){x.value=v[0];D.util.elastic(x);$(x).change()};return!1}
   q.cert_dots        .onclick=_=>{browse(q.cert        ,'Certificate')}
+  q.key_dots         .onclick=_=>{browse(q.key         ,'Key'        )}
   q.ssh_key_dots     .onclick=_=>{browse(q.ssh_key     ,'SSH Key'    )}
   q.rootcertsdir_dots.onclick=_=>{browse(q.rootcertsdir,'Directory with Root Certificates',['openDirectory'])}
   q.ssh_auth_type.onchange=_=>{const k=q.ssh_auth_type.value==='key';q.ssh_pass_wr.hidden=k;q.ssh_key_wr.hidden=!k;
@@ -188,7 +191,7 @@ D.cn=_=>{ //set up Connect page
         for(var i=0;i<a.length;i++)if(/^text(area)?$/.test(a[i].type))D.util.elastic(a[i])
         q.ssh_auth_type.value=sel.ssh_auth_type||'pass';q.ssh_auth_type.onchange()
         q.ssl_dtl.hidden=!sel.ssl;q.ssh_dtl.hidden=!sel.ssh
-        q.cert_cb.checked=!!sel.cert;q.cert.disabled=q.cert_dots.disabled=!sel.cert
+        q.cert_cb.checked=!!sel.cert;q.cert.disabled=q.key.disabled=q.cert_dots.disabled=q.key_dots.disabled=!sel.cert
         q.subj_cb.checked=!!sel.subj;q.subj.disabled=!sel.subj
         q.rootcertsdir_cb.checked=!!sel.rootcertsdir;q.rootcertsdir.disabled=q.rootcertsdir_dots.disabled=!sel.rootcertsdir
       }
