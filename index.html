@@ -38,10 +38,13 @@
           <input id=cn-tcp-port name=port size=4 placeholder=4502>
         <p><label><input name=ssl type=checkbox id=cn-ssl-cb><u>S</u>ecure connection (TLS/SSL)</label>
         <div id=cn-ssl-detail class=indent>
-          <p><label><input type=checkbox id=cn-cert-cb>Provide c<u>e</u>rtificate</label>
-             <input id=cn-cert name=cert>
+          <p><label><input type=checkbox id=cn-cert-cb>Provide user c<u>e</u>rtificate</label>
+             <input  id=cn-cert name=cert>
              <button id=cn-cert-dots>...</button> <span class=cn-hint>(PEM file)</span>
-             <input id=cn-cert-file type=file style=display:none>
+             <input  id=cn-cert-file type=file style=display:none>
+          <p><label style=padding-left:2em> Key <input id=cn-key name=key></label>
+             <button id=cn-key-dots>...</button> <span class=cn-hint>(PEM file)</span>
+             <input  id=cn-key-file type=file style=display:none>
           <p><label><input type=checkbox id=cn-subj-cb><u>V</u>alidate server subject name</label>
              <input id=cn-subj name=subj>
           <p><label><input type=checkbox id=cn-rootcertsdir-cb>Custom root certificates</label>

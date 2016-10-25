@@ -59,14 +59,17 @@ module.exports=function(){
     return!1
   })
   q.ssl_cb.change(function(){q.ssl_detail.toggle(this.checked)})
-  q.cert_cb.change(function(){q.cert.add(q.cert_dots).prop('disabled',!this.checked).val('');q.cert.elastic()})
+  q.cert_cb.change(function(){q.cert.add(q.key).add(q.cert_dots).add(q.key_dots).prop('disabled',!this.checked).val('')
+                              q.cert.add(q.key).elastic()})
   q.subj_cb.change(function(){q.subj.prop('disabled',!this.checked).val('')})
            .click(function(){this.checked&&q.subj.focus()})
   q.rootcertsdir_cb.change(function(){q.rootcertsdir.prop('disabled',!this.checked).val('')
                                       q.rootcertsdir.elastic()})
                    .click(function(){this.checked&&q.rootcertsdir.focus()})
   q.cert_dots.click(function(){q.cert_file.click()})
+  q.key_dots .click(function(){q.key_file .click()})
   q.cert_file.change(function(){q.cert.val(this.value).elastic().change()})
+  q.key_file .change(function(){q.key .val(this.value).elastic().change()})
   q.ssh_key_dots.click(function(){q.ssh_key_file.click()})
   q.ssh_key_file.change(function(){q.ssh_key.val(this.value).change()})
   prefs.favs().forEach(function(x){q.favs.append(favDOM(x))})
@@ -92,7 +95,8 @@ module.exports=function(){
         q.exes.val(sel.exe).val()||q.exes.val('') // use sel.exe if available, otherwise use "Other..."
         $(':text',q.rhs).elastic()
         q.ssl_detail.toggle(!!sel.ssl);q.ssh_detail.toggle(!!sel.ssh)
-        q.cert_cb.prop('checked',!!sel.cert);q.cert.add(q.cert_dots).prop('disabled',!sel.cert)
+        var b=!!(sel.key&&sel.cert)
+        q.cert_cb.prop('checked',b);q.key.add(q.key_dots).add(q.cert).add(q.cert_dots).prop('disabled',!b)
         q.subj_cb.prop('checked',!!sel.subj);q.subj.prop('disabled',!sel.subj)
         q.rootcertsdir_cb.prop('checked',!!sel.rootcertsdir);q.rootcertsdir.prop('disabled',!sel.rootcertsdir)
       }
@@ -145,8 +149,8 @@ function go(){
       case'connect':
         $d=$('<div class=cn-dialog><div class=visual-distraction></div></div>')
           .dialog({modal:1,width:350,title:'Connecting...'})
-        D.skt.emit('*connect',{host:sel.host,port:+sel.port||4502,ssl:sel.ssl,cert:sel.cert,subj:sel.subj,
-                               rootcertsdir:sel.rootcertsdir})
+        D.skt.emit('*connect',{host:sel.host,port:+sel.port||4502,
+                               ssl:sel.ssl,key:sel.key,cert:sel.cert,subj:sel.subj,rootcertsdir:sel.rootcertsdir})
         break
       case'listen':
         var port=sel.port||4502

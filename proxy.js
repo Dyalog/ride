@@ -63,11 +63,9 @@ var handlers={
     if(x.ssl){
       try{
         m=require('tls')
-        if(x.cert){o.key=fs.readFileSync(x.cert)}
-        if(x.rootcertsdir){
-          var ca=fs.readdirSync(x.rootcertsdir).map(function(y){return fs.readFileSync(path.join(x.rootcertsdir,y))})
-          o.secureContext=m.createSecureContext({ca:ca})
-        }
+        if(x.cert){o.key=fs.readFileSync(x.key);o.cert=fs.readFileSync(x.cert)}
+        if(x.rootcertsdir)o.ca=fs.readdirSync(x.rootcertsdir)
+                                 .map(function(y){return fs.readFileSync(path.join(x.rootcertsdir,y))})
       }catch(e){
         console.error(e)
         toBrowser('*error',{msg:e.message});return
