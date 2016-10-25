@@ -286,9 +286,8 @@ const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
   if(x.ssl){
     try{
       m=rq('tls')
-      if(x.cert)o.key=fs.readFileSync(x.cert)
-      if(x.rootcertsdir){var ca=fs.readdirSync(x.rootcertsdir).map(y=>fs.readFileSync(path.join(x.rootcertsdir,y)))
-                         o.secureContext=m.createSecureContext({ca})}
+      if(x.cert){o.cert=fs.readFileSync(x.cert);o.key=fs.readFileSync(x.key)}
+      if(x.rootcertsdir)o.ca=fs.readdirSync(x.rootcertsdir).map(y=>fs.readFileSync(path.join(x.rootcertsdir,y)))
     }catch(e){err(e.message);return}
   }
   clt=m.connect(o,_=>{
