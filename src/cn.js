@@ -297,7 +297,7 @@ const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
     if(x.ssl&&x.subj){
       const s=clt.getPeerCertificate().subject.CN
       if(s!==x.subj){err(`Wrong server certificate name.  Expected:${JSON.stringify(x.subj)}, actual:${JSON.stringify(s)}`)
-                     return}
+                     try{clt.end()}catch(e){console.error(e)};return}
     }
     initInterpreterConn();new D.IDE().setConnInfo(x.host,x.port,sel?sel.name:'')
   })
