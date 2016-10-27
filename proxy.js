@@ -77,7 +77,7 @@ var handlers={
         if(s!==x.subj){
           toBrowser('*error',{msg:
             'Wrong server certificate name.  Expected:'+JSON.stringify(x.subj)+', actual:'+JSON.stringify(s)})
-          clt.end();return
+          try{clt.end()}catch(e){console.error(e)};return
         }
       }
       toBrowser('*connected',x);initInterpreterConn()
