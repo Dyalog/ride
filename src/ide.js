@@ -290,7 +290,6 @@ D.IDE.prototype={
   FLT:D.prf.floating  .toggle,
   WRP:D.prf.wrap      .toggle,
   TOP:D.prf.floatOnTop.toggle,
-  THM:function(){},
   UND:function(){this.focusedWin.cm.undo()},
   RDO:function(){this.focusedWin.cm.redo()},
   getUnsaved:function(){

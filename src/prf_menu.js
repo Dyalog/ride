@@ -28,9 +28,6 @@ D.parseMenuDSL=function(md){ //md:menu description
     WRP:{checkBoxPref:D.prf.wrap      },
     TOP:{checkBoxPref:D.prf.floatOnTop},
     WSE:{checkBoxPref:D.prf.wse       },
-    THM:{items:['Classic','Redmond','Cupertino'].map(function(x,i){
-      return{'':x,group:'thm',checked:D.prf.theme()===x.toLowerCase(),action:function(){D.prf.theme(x.toLowerCase())}}
-    })}
   }
   var stk=[{ind:-1,items:[]}],lines=md.split('\n')
   for(var i=0;i<lines.length;i++){

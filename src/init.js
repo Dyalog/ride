@@ -76,13 +76,6 @@ if(/^\?\d+$/.test(location.search)){
   if(!D.quit)D.quit=close
 }
 
-if(!D.prf.theme()){
-  D.prf.theme(D.mac||/^(darwin|mac|ipad|iphone|ipod)/i.test(navigator?navigator.platform:'')?'cupertino':
-              D.win||/^win/.test(navigator?navigator.platform:'')?'redmond':'classic')
-}
-var updThm=function(){I.thm.innerHTML='@import url(style/thm/'+D.prf.theme()+'.css);'}
-updThm();D.prf.theme(updThm)
-
 if(D.el)document.body.className+=D.mac?' platform-mac':D.win?' platform-windows':''
 
 window.focused=true;window.onfocus=window.onblur=function(x){window.focused=x.type==='focus'}

@@ -53,7 +53,6 @@ srv   server (like in Conga)
 stk   stack
 stl   style
 tb    toolbar
-thm   theme
 tid   id returned by setTimeoutId()
 upd   update
 win   window (session or editor)

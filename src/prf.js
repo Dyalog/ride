@@ -33,7 +33,6 @@ D.prf={}
   ['prefixMaps',         {}],//per-locale strings of pairs of characters - diffs from the default map for that locale
   ['pfkeys',             ['','','','','','','','','','','','','']], //command strings for pfkeys
   ['selectedExe',        ''],//which interpreter is selected in dropdown in the Connect page?
-  ['theme',              ''],
   ['title',              '{WSID}'], //a.k.a. "caption"
   ['valueTips',          1], //value tips
   ['squiggleTips',       1],
@@ -72,7 +71,6 @@ D.prf={}
     '\n  Decrease Font Size       =ZMO {!browser}'+
     '\n  Reset Font Size          =ZMR {!browser}'+
 //    '\n  -'+
-//    '\n  Theme                    =THM'+
     '\n&Actions'+
     '\n  Weak Interrupt           =WI'+
     '\n  Strong Interrupt         =SI'+
@@ -92,7 +90,6 @@ D.prf={}
     '\n#   &x   access key, alt+x'+
     '\n#   =CMD command code; some are special:'+
     '\n#          LBR FLT WRP TOP WSE render as checkboxes'+
-    '\n#          THM ("Theme") renders its own submenu'+
     '\n#   =http://example.com/  open a URL'+
     '\n#   {}   conditional display, a boolean expression'+
     '\n#          operators: && || ! ( )'+
