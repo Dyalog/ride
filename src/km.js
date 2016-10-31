@@ -44,7 +44,7 @@ $.extend(CM.commands,{
     if(!D.el)return
     if(D.lastSpawnedExe){
       let e={};for(let k in process.env)e[k]=process.env[k]
-      e.RIDE_SPAWN='1';e.RIDE_INTERPRETER_EXE=D.lastSpawnedExe
+      e.RIDE_SPAWN=D.lastSpawnedExe
       node_require('child_process').spawn(process.execPath,[],{detached:true,stdio:['ignore','ignore','ignore'],env:e})
     }else{
       $.err('The current session is remote.\nTo connect elsewhere or\nlaunch a local interpreter,\n'+

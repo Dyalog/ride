@@ -99,8 +99,9 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
             D.lastSpawnedExe=x.exe
             child.on('exit',(code,sig)=>{srv&&srv.close();srv=clt=child=0
                                          err('Interpreter '+(code!=null?'exited with code '+code:'received '+sig))})
-            child.on('error',x=>{srv&&srv.close();srv=clt=child=0
-                                 err(x.code==='ENOENT'?"Cannot find the interpreter's executable":''+x)})
+            child.on('error',y=>{srv&&srv.close();srv=clt=child=0
+                                 err(y.code==='ENOENT'?"Cannot find the interpreter's executable":''+y)
+                                 console.error(y)})
           })
         }
         break
