@@ -13,7 +13,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
 ,cmpVer=(x,y)=>x[0]-y[0]||x[1]-y[1]||0 //compare two versions of the form [major,minor]
 ,ls=x=>fs.readdirSync(x)
 ,parseVer=x=>x.split('.').map(y=>+y)
-,err=x=>{q.connecting_dlg.hidden=q.listen_dlg.hidden=1;$.err(x);q.fetch.disabled=0}
+,err=x=>{if(q){q.connecting_dlg.hidden=q.listen_dlg.hidden=1;q.fetch.disabled=0}$.err(x)}
 ,save=_=>{var a=q.favs.children,b=[];for(var i=0;i<a.length;i++)b[i]=a[i].cnData;D.prf.favs(b)}
 ,favText=x=>x.name||'unnamed'
 ,favDOM=x=>{const e=document.createElement('div');e.cnData=x
