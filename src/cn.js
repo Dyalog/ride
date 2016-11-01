@@ -154,9 +154,7 @@ D.cn=_=>{ //set up Connect page
   q.cert_cb.onchange=_=>{q.cert.disabled=q.key.disabled=q.cert_dots.disabled=q.key_dots.disabled=!q.cert_cb.checked
                          q.cert.value=q.key.value=sel.cert=sel.key=''
                          D.util.elastic(q.cert);D.util.elastic(q.key);save()}
-  q.subj_cb.onchange=_=>{q.subj.disabled=!q.subj_cb.checked
-                         q.subj.value=sel.subj='';save()}
-  q.subj_cb.onclick=_=>{q.subj_cb.checked&&q.subj.focus()}
+  q.subj_cb.onclick=_=>{sel.subj=q.subj_cb.checked?'1':'';save()}
   q.rootcertsdir_cb.onchange=_=>{q.rootcertsdir.disabled=q.rootcertsdir_dots.disabled=!q.rootcertsdir_cb.checked
                                  q.rootcertsdir.value=sel.rootcertsdir=''
                                  D.util.elastic(q.rootcertsdir);save()}
@@ -193,7 +191,7 @@ D.cn=_=>{ //set up Connect page
         q.ssh_auth_type.value=sel.ssh_auth_type||'pass';q.ssh_auth_type.onchange()
         q.ssl_dtl.hidden=!sel.ssl;q.ssh_dtl.hidden=!sel.ssh
         q.cert_cb.checked=!!sel.cert;q.cert.disabled=q.key.disabled=q.cert_dots.disabled=q.key_dots.disabled=!sel.cert
-        q.subj_cb.checked=!!sel.subj;q.subj.disabled=!sel.subj
+        q.subj_cb.checked=!!sel.subj
         q.rootcertsdir_cb.checked=!!sel.rootcertsdir;q.rootcertsdir.disabled=q.rootcertsdir_dots.disabled=!sel.rootcertsdir
       }
     })
@@ -292,16 +290,15 @@ const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
       m=rq('tls')
       if(x.cert){o.cert=fs.readFileSync(x.cert);o.key=fs.readFileSync(x.key)}
       if(x.rootcertsdir)o.ca=fs.readdirSync(x.rootcertsdir).map(y=>fs.readFileSync(path.join(x.rootcertsdir,y)))
+      o.checkServerIdentity=(servername,cert)=>{
+        if(!x.subj||x.host===cert.subject.CN)return
+        err(`Wrong server certificate name. Expected:${JSON.stringify(x.host)}, actual:${JSON.stringify(cert.subject.CN)}`)
+        try{clt.end()}catch(e){console.error(e)}
+        throw new Error
+      }
     }catch(e){err(e.message);return}
   }
-  clt=m.connect(o,_=>{
-    if(x.ssl&&x.subj){
-      const s=clt.getPeerCertificate().subject.CN
-      if(s!==x.subj){err(`Wrong server certificate name.  Expected:${JSON.stringify(x.subj)}, actual:${JSON.stringify(s)}`)
-                     try{clt.end()}catch(e){console.error(e)};return}
-    }
-    initInterpreterConn();new D.IDE().setConnInfo(x.host,x.port,sel?sel.name:'')
-  })
+  clt=m.connect(o,_=>{initInterpreterConn();new D.IDE().setConnInfo(x.host,x.port,sel?sel.name:'')})
   clt.on('error',x=>{log('connect failed: '+x);clt=0;err(x.message)})
 }
 
