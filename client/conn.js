@@ -61,8 +61,7 @@ module.exports=function(){
   q.ssl_cb.change(function(){q.ssl_detail.toggle(this.checked)})
   q.cert_cb.change(function(){q.cert.add(q.key).add(q.cert_dots).add(q.key_dots).prop('disabled',!this.checked)
                                                .val('').change().elastic()})
-  q.subj_cb.change(function(){q.subj.prop('disabled',!this.checked).val('').change()})
-           .click(function(){this.checked&&q.subj.focus()})
+  q.subj_cb.change(function(){sel.subj=+this.checked;save()})
   q.rootcertsdir_cb.change(function(){q.rootcertsdir.prop('disabled',!this.checked).val('').change().elastic()})
                    .click(function(){this.checked&&q.rootcertsdir.focus()})
   q.cert_dots.click(function(){q.cert_file.click()})
@@ -96,7 +95,7 @@ module.exports=function(){
         q.ssl_detail.toggle(!!sel.ssl);q.ssh_detail.toggle(!!sel.ssh)
         var b=!!(sel.key||sel.cert)
         q.cert_cb.prop('checked',b);q.key.add(q.key_dots).add(q.cert).add(q.cert_dots).prop('disabled',!b)
-        q.subj_cb.prop('checked',!!sel.subj);q.subj.prop('disabled',!sel.subj)
+        q.subj_cb.prop('checked',!!sel.subj)
         q.rootcertsdir_cb.prop('checked',!!sel.rootcertsdir);q.rootcertsdir.prop('disabled',!sel.rootcertsdir)
       }
     })

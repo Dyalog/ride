@@ -59,30 +59,31 @@ function initInterpreterConn(){
 }
 var handlers={
   '*connect':function(x){
-    var m=net,o={host:x.host,port:x.port} // m:module used to create connection; o:options for .connect()
+    var m=net,o={host:x.host,port:x.port} //m:module used to create connection; o:options for .connect()
+    var valid=1
     if(x.ssl){
       try{
         m=require('tls')
         if(x.cert){o.key=fs.readFileSync(x.key);o.cert=fs.readFileSync(x.cert)}
         if(x.rootcertsdir)o.ca=fs.readdirSync(x.rootcertsdir)
                                  .map(function(y){return fs.readFileSync(path.join(x.rootcertsdir,y))})
+        o.checkServerIdentity=function(servername,cert){
+          if(!x.subj||x.host===cert.subject.CN)return
+          toBrowser('*error',{msg:'Wrong server certificate name. Expected:'+JSON.stringify(x.host)+
+                                  ', actual:'+JSON.stringify(cert.subject.CN)})
+          valid=0;try{clt.end()}catch(e){console.error(e)}
+        }
       }catch(e){
         console.error(e)
         toBrowser('*error',{msg:e.message});return
       }
     }
-    clt=m.connect(o,function(){
-      if(x.ssl&&x.subj){
-        var s=clt.getPeerCertificate().subject.CN
-        if(s!==x.subj){
-          toBrowser('*error',{msg:
-            'Wrong server certificate name.  Expected:'+JSON.stringify(x.subj)+', actual:'+JSON.stringify(s)})
-          try{clt.end()}catch(e){console.error(e)};return
-        }
-      }
-      toBrowser('*connected',x);initInterpreterConn()
-    })
-    clt.on('error',function(err){log('connect failed: '+err);clt=null;toBrowser('*error',{msg:err.message})})
+    try{
+      clt=m.connect(o,function(){if(valid){toBrowser('*connected',x);initInterpreterConn()}})
+      clt.on('error',function(err){log('connect failed: '+err);clt=null;toBrowser('*error',{msg:err.message})})
+    }catch(e){
+      console.error(e)
+    }
   },
   '*launch':function(x){
     var exe=(x||{}).exe||process.env.RIDE_INTERPRETER_EXE||'dyalog'
