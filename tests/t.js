@@ -50,7 +50,7 @@ function fakeEvent(s){
 }
 function nop(){}
 
-var tUniversalDelay=0,tIndex=0,tLines=[]
+var tUniversalDelay=100,tIndex=0,tLines=[]
 function tStep(){
   var tLine=tLines[tIndex++],tDone,tMatch
   try{
@@ -60,7 +60,8 @@ function tStep(){
   }catch(tException){
     fail(tException)
   }
-  if(tIndex>=tLines.length){var n=nFailures;console.info(!n?'brilliant':n>1?n+' failures':'1 failure')}
+  if(tIndex>=tLines.length){var n=nFailures;console.info(!n?'brilliant':n>1?n+' failures':'1 failure')
+                            D.elw.openDevTools()}
   else if(!tDone)setTimeout(tStep,tUniversalDelay)
 }
 function tRun(){
