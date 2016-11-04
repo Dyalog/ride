@@ -1,8 +1,10 @@
 //Preferences > Colours
+//Here we generate CSS based on the user's preferences and put it in <style id=col_stl> (see ../index.html)
+//Same for <style id=col_sample_stl> - this one controls the display of the sample text, before pressing Apply or OK.
 ;(function(){'use strict'
-
 var G=[],H={} //G:syntax highlighting groups; H:reverse lookup dict for G
 var q //dict of DOM elements whose ids start with "col_", keyed by the rest of the id
+//D.addSynGrps(...) is the API for extensions, see ../sample-extensions/syntax-in-comments.js
 D.addSynGrps=function(x){G=G.concat(x);H={};for(var i=0;i<G.length;i++)H[G[i].t]=i;SCMS&&updStl()}
 D.addSynGrps([
   //t: token type, a short key for storing customisations
