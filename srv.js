@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 //a webserver that starts the interpreter and serves RIDE for web browsers at https://127.0.0.1:8443/
+
+//We're planning to put such a web server in the interpreter itself - the "zero footprint" version of RIDE.
+//Once Bjørn & Morten are satisfied with "zero footprint" RIDE, this file will become unnecessary - please delete it.
+
 'use strict'
 const rq=require,express=rq('express'),fs=rq('fs'),log=x=>{console.log(x)},cp=rq('child_process')
 if(!fs.existsSync(__dirname+'/_')){log('ERROR: please build ride with "node mk" first');process.exit(1)}
