@@ -26,6 +26,10 @@ D.IDE=function(){'use strict'
       var t=x.type;t&&ide.pending.length?D.send('Execute',{trace:0,text:ide.pending.shift()+'\n'})
                                         :ide.wins[0].prompt(t)
       t===4&&ide.wins[0].focus() //⍞ input
+      if(t===1&&!ide.bannerDone){ //arrange for the banner to appear at the top of the session window
+        ide.bannerDone=1;var cm=ide.wins[0].cm
+        cm.scrollTo(0,cm.heightAtLine(cm.lastLine()-4)-cm.heightAtLine(0))
+      }
     },
     HadError:function(){ide.pending.splice(0,ide.pending.length);ide.wins[0].focus()},
     GotoWindow:function(x){var w=ide.wins[x.win];w&&w.focus()},
