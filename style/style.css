@@ -508,7 +508,7 @@ body .ui-tooltip{border-width:2px}
 
 /*CodeMirror styles*/
 .CodeMirror{font-family:apl,monospace;font-size:18px;height:300px;color:black}
-.CodeMirror-lines{padding:4px 0} /*Vertical padding around content*/
+.CodeMirror-lines{padding:4px 0;margin-bottom:1024px} /*Vertical padding around content*/
 .CodeMirror pre{padding:0 4px} /*Horizontal padding of content*/
 .CodeMirror-scrollbar-filler,.CodeMirror-gutter-filler{background-color:white} /*the square between H and V scrollbars*/
 .CodeMirror-gutter-elt.CodeMirror-linenumber{

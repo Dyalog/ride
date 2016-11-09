@@ -30,6 +30,8 @@ D.Se=function(ide){ //constructor
   se.processAutocompleteReply=D.ac(se) //delegate autocompletion processing to ac.js
   D.prf.wrap(function(x){se.cm.setOption('lineWrapping',!!x);se.scrollCursorIntoView()})
   this.vt=D.vt(this) //value tips
+  var f=function(){cm.scrollTo(0,cm.heightAtLine(cm.lastLine()-4)-cm.heightAtLine(0));cm.off(f)}
+  cm.on('refresh',f)
 }
 D.Se.prototype={
   histAdd:function(lines){this.hist[0]='';[].splice.apply(this.hist,[1,0].concat(lines));this.histIdx=0},
