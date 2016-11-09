@@ -41,7 +41,6 @@ Not prioritized:
   check for updates automatically (Jason, 2015-10-12)
   shortcut to clear the "modified" flag of a line in session without reverting it to original content (Adam 2015-09-07)
   selecting a block of text and pressing ⍝ should comment/uncomment it
-  arrange for the banner to appear at the _top_ of a new session (John Scholes)
   status bar and programmatic access to "current object" (2015-09-07 Ray)
   custom fonts (2015-09-07 Jim Brown)
   https://github.com/codemirror/CodeMirror/issues/3240
