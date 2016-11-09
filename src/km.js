@@ -34,6 +34,7 @@ $.extend(CM.commands,{
   CT:function(){document.execCommand('Cut'  )},
   CP:function(){document.execCommand('Copy' )},
   PT:function(){document.execCommand('Paste')},
+  EMD:function(cm){D.send('Edit',{win:cm.dyalogCmds.id,pos:0,text:''})},
   TO:CM.commands.toggleFold,
   PRF:function(){D.prf_ui()},
   ABT:function(){D.abt()},
