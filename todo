@@ -11,7 +11,6 @@ Things to be done in the interpreter:
   * take into account modified editor content in Edit message
 
 Morten, 2016-11-09:
-  1) Issues with multiple RIDEs sharing a configuration file
   2) AUTOPW not working reliably (need a repro, ask Andy)?
   4) If you use the connect menu from a disconnected session, the new session should (at least optionally)
         replace the existing session so you don't end up with a gaggle of dead windows
