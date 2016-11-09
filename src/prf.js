@@ -63,7 +63,7 @@ D.prf={}
     '\n&View'+
     '\n  Show Language Bar        =LBR'+
     '\n  Show Workspace Explorer  =WSE'+
-//    '\n  Floating Edit Windows    =FLT'+
+    '\n  Floating Edit Windows    =FLT'+
 //    '\n  Editors on Top           =TOP {!browser}'+
     '\n  Line Wrapping in Session =WRP'+
     '\n  -                             {!browser}'+
@@ -107,7 +107,7 @@ D.prf={}
         if(typeof x==='function'){l.push(x);return} //add listener
         if(!arguments.length){var r=D.db.getItem(k);return r==null?d:t==='number'?+r:t==='object'?JSON.parse(r):r} //get
         //set:
-        x=t==='number'?+x:t==='string'?(''+x):x  //coerce x to type t
+        x=t==='number'?+x:t==='string'?(''+x):(typeof x==='string'?JSON.parse(x):x) //coerce x to type t
         var sx=str(x);if(sx===sd)sx=''           //convert to a string; if default, use ''
         var sy=D.db.getItem(k)||''               //old value, stringified
         if(sx===sy)return x
@@ -121,7 +121,7 @@ D.prf={}
 })
 
 D.db=!node_require?localStorage:(function(){
-  var rq=node_require,crypto=rq('crypto'),fs=rq('fs'),el=rq('electron').remote
+  var rq=node_require,crypto=rq('crypto'),fs=rq('fs'),el=rq('electron').remote,elw=el.getGlobal('elw')
   //file-backed storage with API similar to that of localStorage
   var k=[],v=[] //keys and values
   var db={key       :function(x)  {return k[x]},
@@ -130,29 +130,19 @@ D.db=!node_require?localStorage:(function(){
           removeItem:function(x)  {var i=k.indexOf(x);if(i>=0){k.splice(i,1);v.splice(i,1);dbWrite()}},
           _getAll   :function()   {var r={};for(var i=0;i<k.length;i++)r[k[i]]=v[i];return r}}
   Object.defineProperty(db,'length',{get:function(){return k.length}})
-  var ver=fs.readFileSync(__dirname+'/_/version','utf8').replace(/^(\d+)\.(\d+)\.[^]*$/,'$1$2')
-  var d=el.app.getPath('userData'), f=d+'/prefs.json', tmpf=d+'/tmp'+crypto.randomBytes(8).toString('hex'), ts=0
+  var d=el.app.getPath('userData'), f=d+'/prefs.json', ts=0
+  elw.on('focus',function(){
+    if(!fs.existsSync(f))return
+    var ts1=+fs.statSync(f).mtime;if(ts1===ts||!confirm('Preferences have been modified. Reload?')){ts=ts1;return}
+    var h=JSON.parse(fs.readFileSync(f,'utf8'));for(var x in h)D.prf[x](h[x])
+  })
   try{
-    if(fs.existsSync(f)){
-      var h=JSON.parse(fs.readFileSync(f,'utf8'));for(var x in h){k.push(x);v.push(h[x])}
-      ts=+fs.statSync(f).mtime
-    }
+    if(fs.existsSync(f)){var h=JSON.parse(fs.readFileSync(f,'utf8'));for(var x in h){k.push(x);v.push(h[x])}
+                         ts=+fs.statSync(f).mtime}
   }catch(e){console.error(e)}
-  var st=0 //state 0=initial, 1=write pending, 2=write in progress
   var dbWrite=function(){
-    if(st===2){st=1;return}else{st=2}
     var s='{\n'+k.map(function(x,i){return'  '+JSON.stringify(x)+':'+JSON.stringify(v[i])}).sort().join(',\n')+'\n}\n'
-    fs.writeFile(tmpf,s,function(e){
-      if(e){console.error(e);dbWrite=function(){};return} //make dbWrite() a nop
-      var ts1=fs.existsSync(f)?+fs.statSync(f).mtime:0
-      if(ts1&&ts&&ts1!==ts&&!confirm(f+'\nwas modified by another process. Overwrite?'))return
-      fs.unlink(f,function(){
-        fs.rename(tmpf,f,function(){
-          ts=+fs.statSync(f).mtime
-          if(st===1){setTimeout(function(){dbWrite()},1000)}else{st=0}
-        })
-      })
-    })
+    fs.writeFileSync(f,s);ts=+fs.statSync(f).mtime
   }
   return db
 }())
