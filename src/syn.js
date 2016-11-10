@@ -176,7 +176,7 @@ CM.defineMode('apl-session',function(cfg,modeCfg){
     token:function(sm,h){ //sm:stream,h:state
       var sol=sm.sol(),m //sol:start of line? m:regex match object
       if(se.dirty[h.l]==null){sm.skipToEnd();h.l++;return}
-      if(sol&&(m=sm.match(/^ *\)(\w+).*/))){h.l++;return!m[1]||scmd.indexOf(m[1])<0?'apl-err':'apl-scmd'}
+      if(sol&&(m=sm.match(/^ *\)(\w+).*/))){h.l++;return!m[1]||scmd.indexOf(m[1].toLowerCase())<0?'apl-err':'apl-scmd'}
       if(sol&&(m=sm.match(/^ *\].*/))){h.l++;return'apl-ucmd'}
       if(sol){h.h=im.startState();delete h.h.hdr}
       var h1=CM.copyState(im,h.h),t=im.token(sm,h1);if(sm.eol()){h.l++;delete h.h}else{h.h=CM.copyState(im,h1)}
