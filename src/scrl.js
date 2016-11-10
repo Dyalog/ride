@@ -19,13 +19,14 @@ function Bar(o,scroll){ //o:orientation(0=vertical,1=horizontal), scroll:functio
   var node=document.createElement('div');node.className='cm-scroll cm-scroll-'+'vh'[o]
   var btns=[],thumb=node.appendChild(document.createElement('a'));thumb.className='thumb'
   for(var i=0;i<2;i++){var b=node.appendChild(document.createElement('a'));b.className='btn btn'+i;btns.push(b)}
+  var pageXY='page'+'YX'[o]
+  var xy0,pos0 //mouse coordinate and thumb position where dragging started
+  function move(e){e.which!==1?done():moveTo(pos0+total*(e[pageXY]-xy0)/(size-2*w))}
+  function done(){CM.off(document,'mousemove',move);CM.off(document,'mouseup',done);D.util.rmCls(thumb,'press')}
   CM.on(thumb,'mousedown',function(e){
     if(e.which!==1)return
-    CM.e_preventDefault(e);var axis=o?'pageX':'pageY',start=e[axis],pos0=pos
-    function done(){CM.off(document,'mousemove',move);CM.off(document,'mouseup',done);D.util.rmCls(thumb,'press')}
-    function move(e){e.which!==1?done():moveTo(pos0+total*(e[axis]-start)/(size-2*w))}
-    CM.on(document,'mousemove',move);CM.on(document,'mouseup',done)
-    D.util.addCls(thumb,'press')
+    CM.e_preventDefault(e);xy0=e[pageXY],pos0=pos
+    CM.on(document,'mousemove',move);CM.on(document,'mouseup',done);D.util.addCls(thumb,'press')
   })
   CM.on(node,'click',function(e){
     CM.e_preventDefault(e);var x=e.clientX,y=e.clientY,r=thumb.getBoundingClientRect()
@@ -45,6 +46,8 @@ function Bar(o,scroll){ //o:orientation(0=vertical,1=horizontal), scroll:functio
   return{node:node,moveTo:moveTo,update:update}
 }
 CM.scrollbarModel.simple=function(place,scroll){
+  //place:callback that places a ScrollBar in CM's viewport
+  //scroll:callback that scrolls CM's content
   var h=Bar(1,scroll),v=Bar(0,scroll),width;place(h.node);place(v.node)
   return{
     setScrollTop :function(p){v.moveTo(p,1)},
