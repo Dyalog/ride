@@ -11,14 +11,14 @@
     "codemirror": "5.20.2",
     "golden-layout": "1.5.6",
     "jquery": "3.1.1",
-    "ssh2": "0.5.2"
+    "ssh2": "0.5.4"
   },
   "devDependencies": {
     "async": "2.1.2",
     "cheerio": "0.22.0",
     "compression": "1.6.2",
     "electron-packager": "8.2.0",
-    "electron-prebuilt": "1.4.5",
+    "electron-prebuilt": "1.4.6",
     "express": "4.14.0",
     "ws": "1.1.1"
   }
