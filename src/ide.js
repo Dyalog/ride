@@ -28,7 +28,7 @@ D.IDE=function(){'use strict'
       t===4&&ide.wins[0].focus() //⍞ input
       if(t===1&&!ide.bannerDone){ //arrange for the banner to appear at the top of the session window
         ide.bannerDone=1;var cm=ide.wins[0].cm
-        cm.scrollTo(0,cm.heightAtLine(cm.lastLine()-4)-cm.heightAtLine(0))
+        cm.scrollTo(0,cm.heightAtLine(cm.lastLine()-4)-cm.heightAtLine(0)+3) //+3px to compensate for CM's own padding
       }
     },
     HadError:function(){ide.pending.splice(0,ide.pending.length);ide.wins[0].focus()},
