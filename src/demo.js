@@ -1,7 +1,7 @@
 //support for presentations
 ;(function(){'use strict'
 
-var lines=[], index=-1, $i // $i:an <input type=file> used to open the file chooser dialog
+var lines=[], index=-1, inp // inp:an <input type=file> used to open the file chooser dialog
 function move(d){if(0<=index+d&&index+d<lines.length){index+=d;D.ide.wins[0].loadLine(lines[index])}}
 
 //key display mode:
@@ -25,10 +25,10 @@ $.extend(CM.commands,{
   DMN:function(){move( 1)}, //next line
   DMP:function(){move(-1)}, //prev line
   DMR:function(){ //load demo script
-    if(D.el&&!D.floating){
-      ($i=$i||$('<input id=demo-input type=file style=display:none>').appendTo('body'))
-        .val('').click().change(function(){loadDemoScript(this.value)})
-    }
+    if(!D.el||D.floating)return
+    if(!inp){inp=document.createElement('input');inp.type='file';inp.hidden=1;document.body.appendChild(inp)
+             inp.onchange=function(){loadDemoScript(inp.files[0].path)}}
+    inp.value='';inp.click()
   },
   DMK:function(){ //toggle key display mode
     if($p){$(document).off('.demo');$('#demo-keys').remove();$p=null;return}
