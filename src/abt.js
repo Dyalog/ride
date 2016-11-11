@@ -13,7 +13,7 @@ D.abt=function(){
     ta=I.abt_ta
   }
   D.util.dlg(d,{w:600,h:450})
-  var v=D.versionInfo,ri=D.remoteIdentification||{},u='unknown',db=D.db||localStorage,repr=JSON.stringify
+  var v=D.versionInfo||{},ri=D.remoteIdentification||{},u='unknown',db=D.db||localStorage,repr=JSON.stringify
   var s='';for(var i=0;i<db.length;i++){var x=db.key(i);s+=(i?',\n':'')+'    '+repr(x)+':'+repr(db.getItem(x))}
   ta.value='IDE:'+
     '\n  Version: '   +(v.version          ||u)+
