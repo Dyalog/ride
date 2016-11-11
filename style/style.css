@@ -274,7 +274,7 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 .lyt_geom_iso #lyt_43{width:7%;height:94px;line-height:94px;margin-top:-45px;text-indent:-2%; /*enter*/
                    border-radius:0 2px 2px 2px;overflow:visible}
 .lyt_geom_iso #lyt_43:before{content:"";background-color:#fff;float:left;border-radius:2px 0 0 2px;
-                          position:relative;left:-30%;width:30%;height:45px}
+                             position:relative;left:-30%;width:30%;height:45px;padding-right:1px}
 .lyt_geom_iso #lyt_44{width:8.4%}    /*lshift*/
 .lyt_geom_iso #lyt_45{display:block} /*the key between lshift and Z*/
 
