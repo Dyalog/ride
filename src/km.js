@@ -53,7 +53,7 @@ $.extend(CM.commands,{
     }
   },
   QIT:function(){D.quit()},
-  LBR:function(){D.prf.lbar.toggle()},
+  LBR:D.prf.lbar.toggle,
   WI:function(){D.send('WeakInterrupt',{})},
   SI:function(){D.send('StrongInterrupt',{})},
   FUL:function(){
@@ -101,51 +101,41 @@ $.extend(CM.commands,{
     if(m=/^ *(\)[a-z]+).*$/.exec(s))u=h[m[1]]||h.WELCOME
     else if(m=/^ *(\][a-z]+).*$/.exec(s))u=h[m[1]]||h.UCMDS
     else if(m=/(\d+) *⌶$/.exec(s.slice(0,c.ch)))u=h[m[1]+'⌶']||h['⌶']+'#'+m[1]
-    else{
-      var x=s.slice(s.slice(0,c.ch).replace(/.[áa-z]*$/i,'').length)
-             .replace(/^([⎕:][áa-z]*|.).*$/i,'$1').replace(/^:end/,':')
-      u=h[x]||(x[0]==='⎕'?h.SYSFNS:x[0]===':'?h.CTRLSTRUCTS:h.LANGELEMENTS)
-    }
+    else{var x=s.slice(s.slice(0,c.ch).replace(/.[áa-z]*$/i,'').length)
+                .replace(/^([⎕:][áa-z]*|.).*$/i,'$1').replace(/^:end/,':')
+         u=h[x]||(x[0]==='⎕'?h.SYSFNS:x[0]===':'?h.CTRLSTRUCTS:h.LANGELEMENTS)}
     D.openExternal(u)
   },
   BQC:function(cm){
-    if(cm.dyalogBQ){
-      var c=cm.getCursor();cm.replaceSelection(D.prf.prefixKey(),'end')
-    }else{
-      //Make it possible to use pfxkey( etc -- remember the original value of
-      //autoCloseBrackets, set it temporarily to false, and restore it when the
-      //menu is closed:
-      cm.setOption('autoCloseBrackets',false) //this is temporary until bqCleanUp()
-      cm.on('change',bqChangeHandler);cm.dyalogBQ=1
-      var c0=cm.getCursor();cm.replaceSelection(D.prf.prefixKey(),'end')
-      ctid=setTimeout(function(){
-        var c1=cm.getCursor(),sel //sel: selected completion object
-        if(c1.line === c0.line && c1.ch == c0.ch + 1){
-          cm.showHint({
-            completeOnSingleClick:true,
-            extraKeys:{
-              Backspace:function(cm,m){m.close();cm.execCommand('delCharBefore')},
-              Left:     function(cm,m){m.close();cm.execCommand('goCharLeft')},
-              Right:    function(cm,m){m.pick()},
-              F1:function(){sel&&sel.text&&D.hlp[sel.text]&&D.openExternal(D.hlp[sel.text])}
-            },
-            hint:function(){
-              var pk=D.prf.prefixKey(),ks=[];for(var x in bq)ks.push(x);ks.sort()
-              var data={from:c0,to:cm.getCursor(),list:ks.map(function(k){
-                var v=bq[k];return(k===pk
-                  ?{text:'',hint:bqbqHint,render:function(e){e.innerHTML='  '+pk+pk+' <i>completion by name</i>'}}
-                  :{text:v,render:function(x){x.textContent=v+' '+pk+k+' '+(sqglDesc[v]||'')+'  '}}
-                )
-              })}
-              CM.on(data,'select',function(x){sel=x})
-              return data
-            }
-          })
-        }else{
-          bqCleanUp(cm)
+    if(cm.dyalogBQ){var c=cm.getCursor();cm.replaceSelection(D.prf.prefixKey(),'end');return}
+    //Make it possible to use pfxkey( etc -- remember the original value of
+    //autoCloseBrackets, set it temporarily to false, and restore it when the
+    //menu is closed:
+    cm.setOption('autoCloseBrackets',false) //this is temporary until bqCleanUp()
+    cm.on('change',bqChangeHandler);cm.dyalogBQ=1
+    var c0=cm.getCursor();cm.replaceSelection(D.prf.prefixKey(),'end')
+    ctid=setTimeout(function(){
+      var c1=cm.getCursor(),sel //sel: selected completion object
+      if(c1.line!==c0.line||c1.ch!==c0.ch+1){bqCleanUp(cm);return}
+      cm.showHint({
+        completeOnSingleClick:true,
+        extraKeys:{Backspace:function(cm,m){m.close();cm.execCommand('delCharBefore')},
+                   Left     :function(cm,m){m.close();cm.execCommand('goCharLeft')},
+                   Right    :function(cm,m){m.pick()},
+                   F1       :function(){sel&&sel.text&&D.hlp[sel.text]&&D.openExternal(D.hlp[sel.text])}},
+        hint:function(){
+          var pk=D.prf.prefixKey(),ks=[];for(var x in bq)ks.push(x);ks.sort()
+          var data={from:c0,to:cm.getCursor(),list:ks.map(function(k){
+            var v=bq[k];return(k===pk
+              ?{text:'',hint:bqbqHint,render:function(e){e.innerHTML='  '+pk+pk+' <i>completion by name</i>'}}
+              :{text:v,render:function(x){x.textContent=v+' '+pk+k+' '+(sqglDesc[v]||'')+'  '}}
+            )
+          })}
+          CM.on(data,'select',function(x){sel=x})
+          return data
         }
-      },500)
-    }
+      })
+    },500)
   },
   goLineEndSmart:function(cm){ //CodeMirror provides a goLineStartSmart but not a goLineEndSmart command.
     cm.extendSelectionsBy(function(){
@@ -240,15 +230,12 @@ function bqChangeHandler(cm,o){ //o:changeObj
   var l=o.from.line,c=o.from.ch
   if(o.origin!=='+input'||o.text.length!==1||o.text[0].length!==1){bqCleanUp(cm);return}
   var x=o.text[0],pk=D.prf.prefixKey()
-  if(x===pk){
-    var s=cm.getLine(l)
-    if(s.slice(c-2,c)===pk+pk){cm.replaceRange(bq[pk]||'',{line:l,ch:c-2},{line:l,ch:c+1},'D')} //``` for ⋄
-    else if(s[c-1]===pk){bqCleanUp(cm);bqbqHint(cm)}
-  }else{
-    if(bq[x]){cm.replaceRange(bq[x],{line:l,ch:c-1},{line:l,ch:c+1},'D')
-              bq[x]==='∇'&&/^\s*∇/.test(cm.getLine(l))&&cm.getOption('smartIndent')&&cm.indentLine(l,'smart')}
-    bqCleanUp(cm)
-  }
+  if(x!==pk){if(bq[x]){cm.replaceRange(bq[x],{line:l,ch:c-1},{line:l,ch:c+1},'D')
+                       bq[x]==='∇'&&/^\s*∇/.test(cm.getLine(l))&&cm.getOption('smartIndent')&&cm.indentLine(l,'smart')}
+             bqCleanUp(cm);return}
+  var s=cm.getLine(l)
+  if(s.slice(c-2,c)===pk+pk){cm.replaceRange(bq[pk]||'',{line:l,ch:c-2},{line:l,ch:c+1},'D');return} //``` for ⋄
+  if(s[c-1]===pk){bqCleanUp(cm);bqbqHint(cm)}
 }
 function bqCleanUp(cm){
   cm.off('change',bqChangeHandler);delete cm.dyalogBQ;clearTimeout(ctid)
