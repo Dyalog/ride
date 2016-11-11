@@ -29,6 +29,7 @@ kw    keyword; sometimes used as a synonym for "control structure"
 lb    language bar
 lbl   label
 lc    locale
+lh    CodeMirror's LineHandle objects (see https://codemirror.net/doc/manual.html#getLineHandle)
 lhs   left-hand side
 lyt   layout
 msg   message
