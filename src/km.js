@@ -227,6 +227,7 @@ function complexity(x){return(1+order.indexOf(x))||(1+order.length+x.charCodeAt(
 D.getBQKeyFor=function(v){var r='',x,y;for(x in bq){y=bq[x];if(y===v&&(!r||complexity(r)>complexity(x)))r=x};return r}
 
 function bqChangeHandler(cm,o){ //o:changeObj
+  if(!cm.dyalogBQ)return
   var l=o.from.line,c=o.from.ch
   if(o.origin!=='+input'||o.text.length!==1||o.text[0].length!==1){bqCleanUp(cm);return}
   var x=o.text[0],pk=D.prf.prefixKey()
@@ -238,8 +239,7 @@ function bqChangeHandler(cm,o){ //o:changeObj
   if(s[c-1]===pk){bqCleanUp(cm);bqbqHint(cm)}
 }
 function bqCleanUp(cm){
-  cm.off('change',bqChangeHandler);delete cm.dyalogBQ;clearTimeout(ctid)
-  var ca=cm.state.completionActive;ca&&ca.close&&ca.close()
+  delete cm.dyalogBQ;clearTimeout(ctid);var ca=cm.state.completionActive;ca&&ca.close&&ca.close()
   cm.setOption('autoCloseBrackets',!!D.prf.autoCloseBrackets()&&D.Ed.ACB_VALUE)
 }
 function bqbqHint(cm){
