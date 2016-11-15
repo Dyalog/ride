@@ -208,11 +208,17 @@ D.Ed.prototype={
     D.send('SaveChanges',{win:ed.id,text:cm.getValue().split('\n'),stop:stop})
   },
   TL:function(cm){ //toggle localisation
-    var name=this.cword(),l,l0=l=cm.getCursor().line;if(!name)return
-    while(l>=0&&!/^\s*∇\s*\S/.test(cm.getLine(l)))l-- //search back for tradfn header (might find a dfns's ∇ instead)
-    if(l<0&&!/\{\s*$/.test(cm.getLine(0).replace(/⍝.*/,'')))l=0
-    if(l<0||l===l0)return
-    var m=/([^⍝]*)(.*)/.exec(cm.getLine(l)), s=m[1], com=m[2]
+    var name=this.cword();if(!name)return
+    var ts=(((cm.getTokenAt(cm.getCursor())||{}).state||{}).a||[])
+             .map(function(x){return x.t})
+             .filter(function(t){return/^(∇|\{|namespace|class|interface)$/.test(t)})
+    if(ts.includes('{')||(ts.length&&!ts.includes('∇')))return
+    var l0=cm.getCursor().line,f //f:found?
+    for(var l=l0-1;l>=0;l--){var b=cm.getLineTokens(l)
+                             for(var i=b.length-1;i>=0;i--)if(b[i].type==='apl-trad'){f=1;break}
+                             if(f)break}
+    if(l<0)l=0
+    var u=cm.getLine(l).split('⍝'), s=u[0], com=u.slice(1).join('⍝') //s:the part before the first "⍝", com:the rest
     var a=s.split(';'), head=a[0].replace(/\s+$/,''), tail=a.length>1?a.slice(1):[]
     tail=tail.map(function(x){return x.replace(/\s+/g,'')})
     var i=tail.indexOf(name);i<0?tail.push(name):tail.splice(i,1)

@@ -43,10 +43,11 @@ CM.defineMode('apl',function(){
       // t       the opening token - a keyword (without the colon) or '{', '[', '(', '∇'
       // oi      outer indent - the indent of the opening token's line
       // ii      inner indent - the indent of the block's body; it can be adjusted later
+      // l       line number where the opening token occurs
       //kw       current keyword
       //vars     local names in a tradfn
       //comState state of the inner mode for syntax highlighting inside comments
-      return{hdr:1,a:[{t:'',oi:0,ii:0}]}
+      return{hdr:1,a:[{t:'',oi:0,ii:0,l:0}]}
     },
     token:function(sm,h){ //sm:stream, h:state
       var a=h.a,la=a[a.length-1],n=sm.indentation(),c
