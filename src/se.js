@@ -9,7 +9,7 @@ D.Se=function(ide){ //constructor
     autofocus:true,mode:{name:'apl-session',se:se},matchBrackets:!!D.prf.matchBrackets(),readOnly:true,keyMap:'dyalog',
     lineWrapping:!!D.prf.wrap(),indentUnit:4,smartIndent:0,autoCloseBrackets:{pairs:'()[]{}',explode:''},
     scrollbarStyle:'simple',extraKeys:{'Shift-Tab':'indentLess',Tab:'indentOrComplete'},
-  })
+  });D.prf.blockCursor()&&CM.addClass(cm.getWrapperElement(),'cm-fat-cursor')
   cm.dyalogCmds=se
   D.util.cmOnDblClick(cm,function(e){se.ED(cm);e.stopPropagation();e.preventDefault()})
   cm.on('focus',function(){se.focusTS=+new Date;ide.focusedWin=se})
@@ -29,6 +29,9 @@ D.Se=function(ide){ //constructor
   se.promptType=0 //see ../docs/protocol.md #SetPromptType
   se.processAutocompleteReply=D.ac(se) //delegate autocompletion processing to ac.js
   D.prf.wrap(function(x){se.cm.setOption('lineWrapping',!!x);se.scrollCursorIntoView()})
+  D.prf.blockCursor(function(x){Object.keys(D.wins).map(function(i){let w=D.wins[Number.parseInt(i)];
+  if(x){CM.addClass(w.cm.getWrapperElement(),'cm-fat-cursor')}else{CM.rmClass(w.cm.getWrapperElement(),'cm-fat-cursor')}
+                                                                    })});
   this.vt=D.vt(this) //value tips
 }
 D.Se.prototype={

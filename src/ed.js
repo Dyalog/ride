@@ -14,7 +14,7 @@ D.Ed=function(ide,opts){ //constructor
     smartIndent:D.prf.indent()>=0,indentUnit:D.prf.indent(),scrollButtonHeight:12,matchBrackets:!!D.prf.matchBrackets(),
     autoCloseBrackets:!!D.prf.autoCloseBrackets()&&ACB_VALUE,foldGutter:!!D.prf.fold(),scrollbarStyle:'simple',
     keyMap:'dyalog',extraKeys:{'Shift-Tab':'indentLess',Tab:'indentOrComplete',Down:'downOrXline'}
-  })
+  });D.prf.blockCursor()&&CM.addClass(ed.cm.getWrapperElement(),'cm-fat-cursor')
   ed.cm.dyalogCmds=ed
   ed.cm.on('cursorActivity',ed.cursorActivity.bind(ed))
   ed.cm.on('gutterClick',function(cm,l,g){ //g:gutter

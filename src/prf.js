@@ -11,6 +11,7 @@ D.prf={}
   ['autoCloseBlocksEnd', 0], //0: close blocks with ":EndIf",":EndFor",etc;  1: close blocks only with ":End"
   ['autoCloseBrackets',  1], //whether to insert {}[]() in pairs
   ['autocompletion',     1],
+  ['blockCursor',        0], // use block cursor selection?
   ['autocompletionDelay',500],
   ['colourScheme',       'Default'], //name of the active colour scheme
   ['colourSchemes',      []],//objects describing user-defined colour schemes
