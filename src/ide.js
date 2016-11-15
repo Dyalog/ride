@@ -13,9 +13,8 @@ D.IDE=function(){'use strict'
   ide.handlers={ //for RIDE protocol messages
     Identify:function(x){D.remoteIdentification=x;ide.updTitle();ide.connected=1;ide.wins[0].updPW(1)},
     Disconnect:function(x){
-      if(ide.dead)return
-      ide.die();if(x.message==='Dyalog session has ended'){try{close()}catch(e){};D.el&&process.exit(0)}
-      $.err(x.message,'Interpreter disconnected')
+      let m=x.message.toLowerCase();ide.die()
+      if(m==='dyalog session has ended'&&D.local){try{close()}catch(e){}};$.err(x.message,'Interpreter disconnected')
     },
     SysError:function(x){$.err(x.text,'SysError');ide.die()},
     InternalError:function(x){$.err('An error ('+x.error+') occurred processing '+x.message,'Internal Error')},

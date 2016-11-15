@@ -50,7 +50,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   return 1
 }
 ,go=x=>{ //"Go" buttons in the favs or the "Go" button at the bottom
-  x=x||sel;if(!validate(x))return 0
+  x=x||sel;if(!validate(x))return 0;D.local=0
   try{
     switch(x.type||'connect'){
       case'connect':
@@ -84,7 +84,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
         }else{
           srv=net.createServer(x=>{log('spawned interpreter connected');const a=srv.address();srv&&srv.close();srv=0;clt=x
                                    initInterpreterConn();new D.IDE().setConnInfo(a.address,a.port,sel?sel.name:'')
-                                   if(typeof D!=='undefined'&&D.el)D.lastSpawnedExe=x.exe})
+                                   if(typeof D!=='undefined'&&D.el)D.lastSpawnedExe=x.exe;D.local=1})
           srv.on('error',x=>{log('listen failed: '+x);srv=clt=0;err(x.message)})
           srv.listen(0,'127.0.0.1',_=>{
             const a=srv.address(),hp=a.address+':'+a.port

@@ -40,7 +40,8 @@ $.extend(CM.commands,{
   ABT:function(){D.abt()},
   CNC:function(){var p=D.el.process.argv;//if(D.mac)p=p.replace(/(\/Contents\/).*$/,'$1MacOS/nwjs')
                  node_require('child_process').spawn(p[0],p.slice(1),{detached:true,stdio:['ignore','ignore','ignore'],
-                                                           env:$.extend({},process.env,{RIDE_SPAWN:'0'})})},
+                                                           env:$.extend({},process.env,{RIDE_SPAWN:'0'})})
+                 if(D.ide.dead)close()},
   NEW:function(){
     if(!D.el)return
     if(D.lastSpawnedExe){
