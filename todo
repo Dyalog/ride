@@ -28,6 +28,7 @@ Leftover from RIDE3 (M:major, S:significant, W:wouldn't it be nice)
   W2 show threads
 
 Not prioritized:
+  Ctrl-Delete in the session should delete lines permanently
   configurable colours in WSE (Mantis #13629, email 2016-07-05)
   font size in value tips should match font size in CodeMirror
   configurable list for ``
