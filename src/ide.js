@@ -14,7 +14,8 @@ D.IDE=function(){'use strict'
     Identify:function(x){D.remoteIdentification=x;ide.updTitle();ide.connected=1;ide.wins[0].updPW(1)},
     Disconnect:function(x){
       let m=x.message.toLowerCase();ide.die()
-      if(m==='dyalog session has ended'&&D.local){try{close()}catch(e){}};$.err(x.message,'Interpreter disconnected')
+      if(m==='dyalog session has ended'){try{D.local&&close()}catch(e){}}
+      else{$.err(x.message,'Interpreter disconnected')}
     },
     SysError:function(x){$.err(x.text,'SysError');ide.die()},
     InternalError:function(x){$.err('An error ('+x.error+') occurred processing '+x.message,'Internal Error')},
