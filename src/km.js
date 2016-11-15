@@ -38,8 +38,8 @@ $.extend(CM.commands,{
   TO:CM.commands.toggleFold,
   PRF:function(){D.prf_ui()},
   ABT:function(){D.abt()},
-  CNC:function(){var p=process.execPath;if(D.mac)p=p.replace(/(\/Contents\/).*$/,'$1MacOS/nwjs')
-                 node_require('child_process').spawn(p,[],{detached:true,stdio:['ignore','ignore','ignore'],
+  CNC:function(){var p=D.el.process.argv;//if(D.mac)p=p.replace(/(\/Contents\/).*$/,'$1MacOS/nwjs')
+                 node_require('child_process').spawn(p[0],p.slice(1),{detached:true,stdio:['ignore','ignore','ignore'],
                                                            env:$.extend({},process.env,{RIDE_SPAWN:'0'})})},
   NEW:function(){
     if(!D.el)return
