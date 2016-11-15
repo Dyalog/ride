@@ -11,12 +11,8 @@ Things to be done in the interpreter:
   * take into account modified editor content in Edit message
 
 Morten, 2016-11-09:
-  2) AUTOPW not working reliably (need a repro, ask Andy)?
-          NN: no repro - tried ⎕DL, ⎕NA with busy loop, both RIDE3 and RIDE4
   4) If you use the connect menu from a disconnected session, the new session should (at least optionally)
         replace the existing session so you don't end up with a gaggle of dead windows
-  5) Andy says that if you go from trace to edit then hit ESC, you don't get your trace window back right
-          away, focus goes to the session.
 
 Leftover from RIDE3 (M:major, S:significant, W:wouldn't it be nice)
   M2 awareness of Process Manager
