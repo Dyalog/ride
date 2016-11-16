@@ -12,7 +12,8 @@ D.IDE=function(){'use strict'
   D.wins=ide.wins={0:new D.Se(ide)}
   ide.focusedWin=ide.wins[0] //last focused window, it might not have the focus right now
   ide.handlers={ //for RIDE protocol messages
-    Identify:function(x){D.remoteIdentification=x;ide.updTitle();ide.connected=1;ide.wins[0].updPW(1)},
+    Identify:function(x){D.remoteIdentification=x;ide.updTitle();ide.connected=1;ide.wins[0].updPW(1)
+                         clearTimeout(D.tmr);delete D.tmr},
     Disconnect:function(x){
       let m=x.message.toLowerCase();ide.die()
       if(m==='dyalog session has ended'){try{D.local&&close()}catch(e){}}
