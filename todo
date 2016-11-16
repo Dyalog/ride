@@ -54,8 +54,7 @@ Not prioritized:
     that limit and it's impossible to scroll beyond a certain offset.  This is
     hard to work around without going deep into CodeMirror's code and rewriting
     parts of it.
-  there should be no flashing cursors in windows that don't have focus (John Scholes 2015-03-21)
-  if we spawn an interpreter and it fails to connect after X time, please could we have a message box about it? (Andy email 2015-06-29)
+  OS X: there should be no flashing cursors in windows that don't have focus (John Scholes 2015-03-21)
   on OS X dragging the text to a different point uses the vertical bar cursor. Holding the Option key while doing this
     changes the cursor to the green and white cross (Implying a copy - but it still moves the text).  (Mike Powell)
   Type a couple of chars and hit Alt+Enter, followed by Enter. Uncaught node.js Error (John Scholes email 2015-03-10)
@@ -71,12 +70,9 @@ Not prioritized:
     NN: I made F1 open a help page based on selection in the menu
   curly underlines (Adam 2015-09-09)
   lbar in floating editor windows
-  sortable language bar
   detachable language bar (Mike Mingard)
   drag and drop a "finder object" in the Mac RIDE crashes it (Alex Bochannek 2015-06-25)
   RIDE on multiple screens on Mac loses its title bar (Alex Bochannek 2015-06-25)
   search history
   invert cursor colour (Alex Bochannek 2015-10-20)
-  custom themes (Alexey Veretennikov 2015-10-20)
-    NN: there's $RIDE_CSS for that - it loads extra css file
   remove invisible scrollbars on Mac (Alexey Veretennikov 2015-10-20)
