@@ -190,7 +190,7 @@ D.IDE=function(){'use strict'
     },delay||20)
   }
   I.lb.onclick=function(x){
-    if(x.target.nodeName==='B'){var w=ide.focusedWin,s=x.target.textContent;if(s===' ')return
+    if(x.target.nodeName==='B'){var w=ide.focusedWin,s=x.target.textContent;if(/\s/.test(s))return
                                 w.hasFocus()?w.insert(s):D.util.insert(document.activeElement,s)}
     return!1
   }
@@ -200,7 +200,7 @@ D.IDE=function(){'use strict'
   I.lb.onmouseover=function(x){
     if(lbDragged||x.target.nodeName!=='B')return
     var c=x.target.textContent,k=D.getBQKeyFor(c),s=k&&c.charCodeAt(0)>127?'Keyboard: '+D.prf.prefixKey()+k+'\n\n':''
-    if(c!==' '){var h=D.lb.tips[c]||[c,''];reqTip(x,h[0],s+h[1])}
+    if(/\S/.test(c)){var h=D.lb.tips[c]||[c,''];reqTip(x,h[0],s+h[1])}
   }
   I.lb_prf.onmouseover=function(x){
     var h=D.prf.keys(),s='',r=/^(BK|BT|ED|EP|FD|QT|RP|SC|TB|TC|TL)$/
@@ -212,7 +212,8 @@ D.IDE=function(){'use strict'
   }
   I.lb_prf.onmousedown=function(){D.prf_ui();return!1}
   I.lb_prf.onclick=function(){return!1} //prevent # from appearing in the URL bar
-  $(I.lb).sortable({containment:'parent',helper:'clone',
+  $(I.lb).sortable({containment:'parent',helper:'clone',forcePlaceholderSize:true,forceHelperSize:true,
+                    placeholder:'lb_placeholder',
                     start:function(){lbDragged=1},
                     stop:function(e){D.prf.lbarOrder(I.lb.textContent);lbDragged=0}})
   D.prf.lbarOrder(this.lbarRecreate)
@@ -311,8 +312,8 @@ D.IDE.prototype={
   _disconnected:function(){if(!this.dead){$.err('Interpreter disconnected');this.die()}}, //invoked from cn.js
   lbarRecreate:function(){
     var d=D.lb.order, u=D.prf.lbarOrder() //d:default order, u:user's order
-    var r='';if(d!==u)for(var i=0;i<d.length;i++)if(!u.includes(d[i]))r+=d[i] //r:set difference between d and u
-    I.lb.innerHTML=D.prf.lbarOrder().replace(/ *$/,' '+r).replace(/(.)/g,'<b>$1</b>')
+    var r='';if(d!==u)for(var i=0;i<d.length;i++)if(!u.includes(d[i])&&/\S/.test(d[i]))r+=d[i] //r:set difference between d and u
+    I.lb.innerHTML=D.prf.lbarOrder().replace(/\s*$/,'\xa0'+r).replace(/(.)/g,'<b>$1</b>').replace(/\s/g,'\xa0')
   }
 }
 CM.commands.WSE=function(){D.prf.wse.toggle()}

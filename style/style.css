@@ -112,6 +112,8 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
             background-color:transparent!important;content:""}
 #lb_tip_desc{font-family:apl,monospace;font-size:18px;border-bottom:solid 1px #bcd;padding-bottom:8px;margin-bottom:8px}
 #lb_tip_text{font-family:apl,monospace;font-size:18px}
+.lb_placeholder{background-color:red}
+#lb .ui-sortable-helper{color:#000}
 
 /*value tips (also styled via Prefs>Colours)*/
 
