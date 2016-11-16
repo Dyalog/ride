@@ -178,6 +178,7 @@ D.IDE=function(){'use strict'
 
   //language bar
   var ttid //tooltip timeout id
+  ,lbDragged
   ,reqTip=function(x,desc,text,delay){ //request tooltip, x:event
     clearTimeout(ttid);var t=x.target
     ttid=setTimeout(function(){
@@ -196,11 +197,11 @@ D.IDE=function(){'use strict'
   I.lb.onmouseout=function(x){if(x.target.nodeName==='B'||x.target.id==='lb_prf'){
     clearTimeout(ttid);ttid=0;I.lb_tip.hidden=I.lb_tip_tri.hidden=1
   }}
-  I.lb.onmouseover=function(x){if(x.target.nodeName==='B'){
+  I.lb.onmouseover=function(x){
+    if(lbDragged||x.target.nodeName!=='B')return
     var c=x.target.textContent,k=D.getBQKeyFor(c),s=k&&c.charCodeAt(0)>127?'Keyboard: '+D.prf.prefixKey()+k+'\n\n':''
-    if(c===' ')return
-    var h=D.lb.tips[c]||[c,''];reqTip(x,h[0],s+h[1])
-  }}
+    if(c!==' '){var h=D.lb.tips[c]||[c,''];reqTip(x,h[0],s+h[1])}
+  }
   I.lb_prf.onmouseover=function(x){
     var h=D.prf.keys(),s='',r=/^(BK|BT|ED|EP|FD|QT|RP|SC|TB|TC|TL)$/
     for(var i=0;i<D.cmds.length;i++){
@@ -211,7 +212,9 @@ D.IDE=function(){'use strict'
   }
   I.lb_prf.onmousedown=function(){D.prf_ui();return!1}
   I.lb_prf.onclick=function(){return!1} //prevent # from appearing in the URL bar
-  $(I.lb).sortable({containment:'parent',helper:'clone',stop:function(e){D.prf.lbarOrder(I.lb.textContent)}})
+  $(I.lb).sortable({containment:'parent',helper:'clone',
+                    start:function(){lbDragged=1},
+                    stop:function(e){D.prf.lbarOrder(I.lb.textContent);lbDragged=0}})
   D.prf.lbarOrder(this.lbarRecreate)
 
   var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
