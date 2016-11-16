@@ -305,7 +305,11 @@ D.IDE.prototype={
     return r
   },
   _disconnected:function(){if(!this.dead){$.err('Interpreter disconnected');this.die()}}, //invoked from cn.js
-  lbarRecreate:function(){I.lb.innerHTML=D.prf.lbarOrder().replace(/(.)/g,'<b>$1</b>')}
+  lbarRecreate:function(){
+    var d=D.lb.order, u=D.prf.lbarOrder() //d:default order, u:user's order
+    var r='';if(d!==u)for(var i=0;i<d.length;i++)if(!u.includes(d[i]))r+=d[i] //r:set difference between d and u
+    I.lb.innerHTML=D.prf.lbarOrder().replace(/ *$/,' '+r).replace(/(.)/g,'<b>$1</b>')
+  }
 }
 CM.commands.WSE=function(){D.prf.wse.toggle()}
 CM.commands.ZM=function(){var w=D.ide.focusedWin;w.container.parent.toggleMaximise()
