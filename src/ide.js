@@ -4,7 +4,7 @@
 //manages the language bar, its tooltips, and the insertion of characters
 //processes incoming RIDE protocol messages
 D.IDE=function(){'use strict'
-  var ide=D.ide=this;I.cn.hidden=1;I.lb.insertAdjacentHTML('beforeend',D.lb.order.replace(/(\S)/g,'<b>$1</b>'))
+  var ide=D.ide=this;I.cn.hidden=1;this.lbarRecreate()
   ide.dom=I.ide;I.ide.hidden=0
   ide.pending=[] //lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.exec=function(a,tc){if(a&&a.length){tc||(ide.pending=a.slice(1));D.send('Execute',{trace:tc,text:a[0]+'\n'})}}
@@ -187,8 +187,8 @@ D.IDE=function(){'use strict'
       s.top=y0+'px';if(x1>document.body.offsetWidth){s.left='';s.right='0'}else{s.left=Math.max(0,x0)+'px';s.right=''}
     },delay||20)
   }
-  I.lb.onmousedown=function(x){
-    if(x.target.nodeName==='B'){var w=ide.focusedWin,s=x.target.textContent
+  I.lb.onclick=function(x){
+    if(x.target.nodeName==='B'){var w=ide.focusedWin,s=x.target.textContent;if(s===' ')return
                                 w.hasFocus()?w.insert(s):D.util.insert(document.activeElement,s)}
     return!1
   }
@@ -197,6 +197,7 @@ D.IDE=function(){'use strict'
   }}
   I.lb.onmouseover=function(x){if(x.target.nodeName==='B'){
     var c=x.target.textContent,k=D.getBQKeyFor(c),s=k&&c.charCodeAt(0)>127?'Keyboard: '+D.prf.prefixKey()+k+'\n\n':''
+    if(c===' ')return
     var h=D.lb.tips[c]||[c,''];reqTip(x,h[0],s+h[1])
   }}
   I.lb_prf.onmouseover=function(x){
@@ -209,6 +210,8 @@ D.IDE=function(){'use strict'
   }
   I.lb_prf.onmousedown=function(){D.prf_ui();return!1}
   I.lb_prf.onclick=function(){return!1} //prevent # from appearing in the URL bar
+  $(I.lb).sortable({containment:'parent',helper:'clone',stop:function(e){D.prf.lbarOrder(I.lb.textContent)}})
+  D.prf.lbarOrder(this.lbarRecreate)
 
   var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
   var gl=ide.gl=new GoldenLayout({
@@ -301,7 +304,8 @@ D.IDE.prototype={
     var r={};for(var k in this.wins){var cm=this.wins[k].cm,v=cm.getValue();if(+k&&v!==cm.oText)r[k]=v}
     return r
   },
-  _disconnected:function(){if(!this.dead){$.err('Interpreter disconnected');this.die()}} //invoked from cn.js
+  _disconnected:function(){if(!this.dead){$.err('Interpreter disconnected');this.die()}}, //invoked from cn.js
+  lbarRecreate:function(){I.lb.innerHTML=D.prf.lbarOrder().replace(/(.)/g,'<b>$1</b>')}
 }
 CM.commands.WSE=function(){D.prf.wse.toggle()}
 CM.commands.ZM=function(){var w=D.ide.focusedWin;w.container.parent.toggleMaximise()
