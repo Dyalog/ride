@@ -13,8 +13,10 @@ D.addSynGrps([
   //ctrls: what UI controls should be shown or hidden for this group (other than the default ones)
   {s:'assignment'      ,t:'asgn',c:'.cm-apl-asgn'}, //←
   {s:'bracket'         ,t:'sqbr',c:'.cm-apl-sqbr'}, //[]
+  //{s:'block cursor'    ,t:'bcr', c:'.CodeMirror-cursor',ctrls:{fg:1,bc:0,bg:0,BIU:0}},
   {s:'comment'         ,t:'com' ,c:'.cm-apl-com' }, //⍝
-  {s:'cursor'          ,t:'cur' ,c:'div.CodeMirror-cursor',ctrls:{bc:1,fg:0,bg:0,BIU:0}},
+  {s:'block cursor'    ,t:'bcr' ,c:'.CodeMirror.cm-fat-cursor div.CodeMirror-cursor',ctrls:{bc:0,bg:1,BIU:0,fg:0}},
+  {s:'cursor'          ,t:'cur' ,c:'div.CodeMirror-cursor'                          ,ctrls:{bc:1,bg:0,BIU:0,fg:0}},
   {s:'dfn level 1'     ,t:'dfn1',c:'.cm-apl-dfn.cm-apl-dfn1'}, //{}
   {s:'dfn level 2'     ,t:'dfn2',c:'.cm-apl-dfn.cm-apl-dfn2'},
   {s:'dfn level 3'     ,t:'dfn3',c:'.cm-apl-dfn.cm-apl-dfn3'},

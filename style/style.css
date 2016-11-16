@@ -519,7 +519,7 @@ body .ui-tooltip{border-width:2px}
 .CodeMirror-guttermarker-subtle{color:#999}
 .CodeMirror div.CodeMirror-cursor{border-left:1px solid black}
 .CodeMirror div.CodeMirror-secondarycursor{border-left:1px solid silver} /*Shown when moving in bi-directional text*/
-.CodeMirror.cm-fat-cursor div.CodeMirror-cursor{width:auto;border:0;background:#7e7}
+.CodeMirror.cm-fat-cursor div.CodeMirror-cursor{width:auto;border:0;background-color:#7e7}
 .CodeMirror.cm-fat-cursor div.CodeMirror-cursors{z-index:1}
 .cm-animate-fat-cursor{
   width:auto;border:0;
