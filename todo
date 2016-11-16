@@ -10,10 +10,6 @@ Things to be done in the interpreter:
   * dev version of interpreter doesn't honour "+s -q" over ssh (probably one for Geoff), see email from 2016-01-28
   * take into account modified editor content in Edit message
 
-Morten, 2016-11-09:
-  4) If you use the connect menu from a disconnected session, the new session should (at least optionally)
-        replace the existing session so you don't end up with a gaggle of dead windows
-
 Leftover from RIDE3 (M:major, S:significant, W:wouldn't it be nice)
   M2 awareness of Process Manager
   M5 edit "external" source files
