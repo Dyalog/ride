@@ -4,7 +4,8 @@
 //manages the language bar, its tooltips, and the insertion of characters
 //processes incoming RIDE protocol messages
 D.IDE=function(){'use strict'
-  var ide=D.ide=this;I.cn.hidden=1;I.lb.insertAdjacentHTML('beforeend',D.lb.html);ide.dom=I.ide;I.ide.hidden=0
+  var ide=D.ide=this;I.cn.hidden=1;I.lb.insertAdjacentHTML('beforeend',D.lb.order.replace(/(\S)/g,'<b>$1</b>'))
+  ide.dom=I.ide;I.ide.hidden=0
   ide.pending=[] //lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.exec=function(a,tc){if(a&&a.length){tc||(ide.pending=a.slice(1));D.send('Execute',{trace:tc,text:a[0]+'\n'})}}
   ide.host=ide.port=ide.wsid='';D.prf.title(ide.updTitle.bind(ide))
