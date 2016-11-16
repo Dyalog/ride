@@ -212,7 +212,7 @@ D.IDE=function(){'use strict'
   }
   I.lb_prf.onmousedown=function(){D.prf_ui();return!1}
   I.lb_prf.onclick=function(){return!1} //prevent # from appearing in the URL bar
-  $(I.lb).sortable({containment:'parent',helper:'clone',forcePlaceholderSize:true,forceHelperSize:true,
+  $(I.lb).sortable({helper:'clone',forcePlaceholderSize:true,forceHelperSize:true,
                     placeholder:'lb_placeholder',
                     start:function(){lbDragged=1},
                     stop:function(e){D.prf.lbarOrder(I.lb.textContent);lbDragged=0}})
