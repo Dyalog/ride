@@ -189,14 +189,14 @@ D.IDE=function(){'use strict'
       s.top=y0+'px';if(x1>document.body.offsetWidth){s.left='';s.right='0'}else{s.left=Math.max(0,x0)+'px';s.right=''}
     },delay||20)
   }
-  I.lb.onclick=function(x){
+  I.lb_inner.onclick=function(x){
     var s=x.target.textContent;if(lbDragged||x.target.nodeName!=='B'||/\s/.test(s))return!1
     var w=ide.focusedWin;w.hasFocus()?w.insert(s):D.util.insert(document.activeElement,s);return!1
   }
-  I.lb.onmouseout=function(x){if(x.target.nodeName==='B'||x.target.id==='lb_prf'){
+  I.lb_inner.onmouseout=function(x){if(x.target.nodeName==='B'||x.target.id==='lb_prf'){
     clearTimeout(ttid);ttid=0;I.lb_tip.hidden=I.lb_tip_tri.hidden=1
   }}
-  I.lb.onmouseover=function(x){
+  I.lb_inner.onmouseover=function(x){
     if(lbDragged||x.target.nodeName!=='B')return
     var c=x.target.textContent,k=D.getBQKeyFor(c),s=k&&c.charCodeAt(0)>127?'Keyboard: '+D.prf.prefixKey()+k+'\n\n':''
     if(/\S/.test(c)){var h=D.lb.tips[c]||[c,''];reqTip(x,h[0],s+h[1])}
@@ -211,9 +211,9 @@ D.IDE=function(){'use strict'
   }
   I.lb_prf.onmousedown=function(){D.prf_ui();return!1}
   I.lb_prf.onclick=function(){return!1} //prevent # from appearing in the URL bar
-  $(I.lb).sortable({forcePlaceholderSize:1,placeholder:'lb_placeholder',revert:1,distance:8,
-                    start:function(){lbDragged=1},
-                    stop:function(e){D.prf.lbarOrder(I.lb.textContent);lbDragged=0}})
+  $(I.lb_inner).sortable({forcePlaceholderSize:1,placeholder:'lb_placeholder',revert:1,distance:8,
+                          start:function(){lbDragged=1},
+                          stop:function(e){D.prf.lbarOrder(I.lb_inner.textContent);lbDragged=0}})
   D.prf.lbarOrder(this.lbarRecreate)
 
   var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
@@ -311,7 +311,7 @@ D.IDE.prototype={
   lbarRecreate:function(){
     var d=D.lb.order, u=D.prf.lbarOrder() //d:default order, u:user's order
     var r='';if(d!==u)for(var i=0;i<d.length;i++)if(!u.includes(d[i])&&/\S/.test(d[i]))r+=d[i] //r:set difference between d and u
-    I.lb.innerHTML=D.prf.lbarOrder().replace(/\s*$/,'\xa0'+r).replace(/(.)/g,'<b>$1</b>').replace(/\s/g,'\xa0')
+    I.lb_inner.innerHTML=D.prf.lbarOrder().replace(/\s*$/,'\xa0'+r).replace(/(.)/g,'<b>$1</b>').replace(/\s/g,'\xa0')
   }
 }
 CM.commands.WSE=function(){D.prf.wse.toggle()}
