@@ -190,9 +190,8 @@ D.IDE=function(){'use strict'
     },delay||20)
   }
   I.lb.onclick=function(x){
-    if(x.target.nodeName==='B'){var w=ide.focusedWin,s=x.target.textContent;if(/\s/.test(s))return
-                                w.hasFocus()?w.insert(s):D.util.insert(document.activeElement,s)}
-    return!1
+    var s=x.target.textContent;if(lbDragged||x.target.nodeName!=='B'||/\s/.test(s))return!1
+    var w=ide.focusedWin;w.hasFocus()?w.insert(s):D.util.insert(document.activeElement,s);return!1
   }
   I.lb.onmouseout=function(x){if(x.target.nodeName==='B'||x.target.id==='lb_prf'){
     clearTimeout(ttid);ttid=0;I.lb_tip.hidden=I.lb_tip_tri.hidden=1
@@ -212,8 +211,7 @@ D.IDE=function(){'use strict'
   }
   I.lb_prf.onmousedown=function(){D.prf_ui();return!1}
   I.lb_prf.onclick=function(){return!1} //prevent # from appearing in the URL bar
-  $(I.lb).sortable({helper:'clone',forcePlaceholderSize:true,forceHelperSize:true,
-                    placeholder:'lb_placeholder',
+  $(I.lb).sortable({forcePlaceholderSize:1,placeholder:'lb_placeholder',revert:1,distance:8,
                     start:function(){lbDragged=1},
                     stop:function(e){D.prf.lbarOrder(I.lb.textContent);lbDragged=0}})
   D.prf.lbarOrder(this.lbarRecreate)

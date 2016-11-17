@@ -99,7 +99,8 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 /*language bar*/
 #lb{font-family:apl,monospace;font-size:18px;background-color:#dcdad5;padding:0 2px 0 10px;
     cursor:default;border-bottom:solid #888 1px;line-height:22px}
-#lb b{font-weight:normal;margin-bottom:1px;padding:1px;color:#666;width:.7em;display:inline-block;text-align:center}
+#lb b{font-weight:normal;padding:1px 1px 0 1px;color:#666;width:.7em;display:inline-block;text-align:center;
+      border-radius:5px}
 #lb b:hover{background-color:#eee}
 #lb b:active{background-color:#fff}
 #lb_prf{float:right;margin-right:4px;width:24px;height:24px;background:no-repeat center center url(img/lb_prf.png)}
@@ -112,8 +113,8 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
             background-color:transparent!important;content:""}
 #lb_tip_desc{font-family:apl,monospace;font-size:18px;border-bottom:solid 1px #bcd;padding-bottom:8px;margin-bottom:8px}
 #lb_tip_text{font-family:apl,monospace;font-size:18px}
-#lb .lb_placeholder{width:1px;margin-right:-2px;border-right:solid 1px #f00;margin-bottom:-0.5ex;height:2ex}
-#lb .ui-sortable-helper{color:#000}
+#lb .lb_placeholder{vertical-align:bottom;background:#666}
+#lb .ui-sortable-helper{color:#000;cursor:move}
 
 /*value tips (also styled via Prefs>Colours)*/
 
