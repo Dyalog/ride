@@ -25,16 +25,16 @@ select:focus{outline:dotted #000 1px}
 input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 
 /*z-indices; CodeMirror uses 1-10; .dlg uses 100+ */
-.ui-tooltip             {z-index:9999}
-#lb_tip_tri             {z-index: 301}
-#lb_tip                 {z-index: 300}
-#vt_bln,#vt_tri,#vt_rect{z-index: 300}
-.menu .m-box            {z-index: 200}
-.ui-front               {z-index: 100}
-.ui-selectable-helper   {z-index: 100}
-.lm_splitter            {z-index:  11!important}
-.CodeMirror-hints       {z-index:  10}
-.cm-scroll              {z-index:   6}
+.ui-tooltip          {z-index:9999}
+#lb_tip_tri          {z-index: 301}
+#lb_tip              {z-index: 300}
+#vt_bln,#vt_tri      {z-index: 300}
+.menu .m-box         {z-index: 200}
+.ui-front            {z-index: 100}
+.ui-selectable-helper{z-index: 100}
+.lm_splitter         {z-index:  11!important}
+.CodeMirror-hints    {z-index:  10}
+.cm-scroll           {z-index:   6}
 
 /*connect page*/
 #cn{position:absolute;left:0;right:0;top:0;bottom:0}
@@ -124,7 +124,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
              border-left-color:transparent!important;border-right-color:transparent!important;
              background-color:transparent!important;content:""}
 #vt_tri.inv{border-width:0 6px 6px 6px;margin-top:-6px;bottom:auto}
-#vt_rect{position:absolute;border:dotted transparent 2px;margin:-1px}
+.vt_marker{border:dotted transparent 2px;margin:-2px}
 
 .zoom11  .CodeMirror{font-size:48px}
 .zoom10  .CodeMirror{font-size:42px}
