@@ -55,7 +55,10 @@ function loadFrom(h){
   var a=D.prf.pfkeys();for(var i=1;i<=12;i++)document.getElementById('shc_val_PF'+i).value=a[i]
 }
 function updSC(){var a=q.tbl_wr.querySelectorAll('tr'),s=q.sc.value.toLowerCase(),empty=1;q.sc_clr.hidden=!s
-                 for(var i=0;i<a.length;i++)empty&=a[i].hidden=a[i].textContent.toLowerCase().indexOf(s)<0
+                 for(var i=0;i<a.length;i++){
+                   var h=a[i].textContent.toLowerCase().indexOf(s)<0&&!a[i].querySelectorAll('.shc_dup').length
+                   empty&=a[i].hidden=h
+                 }
                  q.no_res.hidden=!empty}
 function keyHTML(x){return'<span class=shc_key><span class=shc_text>'+x+'</span>'+
                                               '<a href=# class=shc_del title="Remove shortcut">×</a></span> '}
