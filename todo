@@ -25,6 +25,7 @@ Leftover from RIDE3 (M:major, S:significant, W:wouldn't it be nice)
 
 Not prioritized:
   Ctrl-Delete in the session should delete lines permanently
+    NN: requires a new message in the protocol
   configurable colours in WSE (Mantis #13629, email 2016-07-05)
   font size in value tips should match font size in CodeMirror
   configurable list for ``
@@ -42,8 +43,10 @@ Not prioritized:
   check for updates automatically (Jason, 2015-10-12)
   shortcut to clear the "modified" flag of a line in session without reverting it to original content (Adam 2015-09-07)
   selecting a block of text and pressing ⍝ should comment/uncomment it
+    NN: remapping ⍝ in CM doesn't work on Windows
   status bar and programmatic access to "current object" (2015-09-07 Ray)
   custom fonts (2015-09-07 Jim Brown)
+    NN: export RIDE_CSS=/path/to/my-styles.css can be used for that
   https://github.com/codemirror/CodeMirror/issues/3240
     WebKit stores DOM height in 25 bits, ~33 million pixels.  When displaying
     large arrays (~millions of lines, depending on font size), CodeMirror hits
