@@ -44,7 +44,7 @@ PLISTValue "$PLISTFILE" "CFBundleDisplayName" "$APPNAME"
 PLISTValue "$PLISTFILE" "CFBundleName" "$APPNAME"
 
 mkdir -p ./OSX-Packing/
-cp -R ${RIDEDIR}/${BUILDNAME} ./OSX-Packing/${APPNAME}.app
+cp -R ${RIDEDIR}/${RIDEAPPDIRNAME} ./OSX-Packing/${APPNAME}.app
 
 cd OSX-Packing
 
