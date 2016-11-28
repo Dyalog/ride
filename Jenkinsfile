@@ -3,13 +3,14 @@ def extWorkspace = exwsAllocate 'diskpool1'
 
 node('nodejs') {
 	exws (estWorkspace) {
-	stage ('Checkout from GitHub')
-	git url: 'https://github.com/Dyalog/Ride.git'
-	
-	stage ('Build Ride')
-	sh './mk dist'
-	stage ('Dyalog Network Publish')
-	sh './publish.sh'
+		stage ('Checkout from GitHub')
+		git url: 'https://github.com/Dyalog/Ride.git'
+		
+		stage ('Build Ride')
+		sh './mk dist'
+		stage ('Dyalog Network Publish')
+		sh './publish.sh'
+	}
 }
 
 stage ('Packaging')
@@ -37,6 +38,4 @@ parallel (
 			}
 	}
 )
-
-
 
