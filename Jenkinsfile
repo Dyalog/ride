@@ -5,6 +5,9 @@ node('NodeJS') {
 	exws (extWorkspace) {
 		stage ('Checkout from GitHub')
 		git url: 'https://github.com/Dyalog/Ride.git'
+
+		stage ('Update npm modules')
+		sh 'npm i'
 		
 		stage ('Build Ride')
 		sh './mk dist'
