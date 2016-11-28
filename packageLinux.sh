@@ -1,10 +1,14 @@
 #!/bin/bash
 set -x
 
+
 if ! [ "$1" = "" ]; then
         TARGET=$1
 else
-	TARGET=${GIT_BRANCH#*/}
+	if ! [ "$GIT_BRANCH" ]; then
+		GIT_BRANCH=`git branch -a | grep \* | awk '{print $2}'`
+		TARGET=${GIT_BRANCH#*/}
+	fi
 fi
 
 if [ "x$TARGET" = "x" ]; then
@@ -12,10 +16,12 @@ if [ "x$TARGET" = "x" ]; then
 	exit 1
 fi
 
+APP_NAME=$(node -e "console.log($(cat package.json).name)") # "ride30" or similar
+
 echo "Packaging for $TARGET"
 
-RIDEDIR="/devt/builds/ride/${TARGET}/latest/linux64"
-ICON="/devt/admin/Dyalog Logos Stationery/Logos/Dyalog-D.svg"
+RIDEDIR="_/${APP_NAME}/${APP_NAME}-linux-x64"
+ICON="style/img/D.svg"
 SBOXDIR=/tmp/ride$$
 postinst=/tmp/postinst$$
 prerm=/tmp/prerm$$
