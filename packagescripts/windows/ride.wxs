@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+	<Product Id="$(env.GUID_RIDE)" Name="$(env.RIDE_DESC)" Version="$(env.RIDE_VERSION)" Manufacturer="Dyalog" UpgradeCode="$(env.GUID_RIDE_UPGRADE)" Language="1033">
+		<Package InstallerVersion="300" Description="$(env.RIDE_DESC)" Comments="$(env.RIDE_DESC)" Platform="$(env.PLATFORM)" Manufacturer="Dyalog" Languages="0" Compressed="yes" InstallPrivileges="limited"/> 
+<!--
+		<MajorUpgrade
+		    AllowDowngrades="no" DowngradeErrorMessage="A later version of [ProductName] is already installed. Setup will now exit."
+		    AllowSameVersionUpgrades="yes"
+		    />
+-->
+		<Upgrade Id="$(env.GUID_RIDE_UPGRADE)">
+<!--
+			<UpgradeVersion Minimum="$(env.RIDE_VERSION_AB)" IncludeMinimum="no" OnlyDetect="yes" Property="NEWPRODUCTFOUND"/>
+-->
+			<UpgradeVersion Minimum="$(env.RIDE_MIN_UPGRADE_VERSION)" IncludeMinimum="yes" IncludeMaximum="yes" Maximum="$(env.RIDE_MAX_UPGRADE_VERSION)" Property="UPGRADEFOUND"/>
+		</Upgrade>
+		<!-- Prevent downgrading -->
+		<CustomAction Id="PreventDowngrading" Error="A later version of [ProductName] is already installed. Setup will now exit."/>
+		<!-- Install Sequences -->
+		<InstallUISequence>
+			<Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWPRODUCTFOUND</Custom>
+		</InstallUISequence>
+		<InstallExecuteSequence>
+			<Custom Action="PreventDowngrading" After="FindRelatedProducts">NEWPRODUCTFOUND</Custom>
+			<InstallExecute Before="RemoveExistingProducts" />
+			<RemoveExistingProducts Before="InstallFinalize" />
+		</InstallExecuteSequence>
+		<!-- Install Sequences -->
+		<AdminExecuteSequence/>
+		<AdminUISequence/>
+		<AdvertiseExecuteSequence/>
+		<Media Id="1" DiskPrompt="RIDE Disk 1" VolumeLabel="RIDEDisk1" Cabinet="ride.cab" EmbedCab="yes"/>
+<Property Id="ALLUSERS" Value="2"/>
+<Property Id="MSIINSTALLPERUSER" Value="1"/>
+		<!-- LMF [6768] 25-Jan-2011 Set to "Per Machine" Install -->
+		<Property Id="DiskPrompt" Value="!(loc.UIDiskPrompt)"/>
+		<Property Id="ARPURLINFOABOUT" Value="www.dyalog.com"/>
+		<Property Id="ARPURLUPDATEINFO" Value="www.dyalog.com"/>
+		<Property Id="ARPHELPLINK" Value="www.dyalog.com"/>
+		<Property Id="ARPNOMODIFY" Value="0"/>
+		<Property Id="SUF_INSTALLDIR" Value="INSTALLDIR"/>
+		<Property Id="SUFUSERPROFILE" Value="ALLUSERS"/>
+		<Feature Id="Complete" Title="Complete Install" Level="1" Absent="allow" AllowAdvertise="no" TypicalDefault="install" Display="expand" InstallDefault="local">
+			<ComponentGroupRef Id="localesFiles"/>
+			<ComponentRef Id="desktopshortcut"/>
+		</Feature>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+			<Directory Id="DesktopFolder" Name="DesktopFolder"/>
+			<Directory Id="$(env.PROGRAMFILESFOLDER)" Name="$(env.PROGRAMFILESFOLDER)">
+				<Directory Id="DyalogFLDR" Name="Dyalog">
+					<Directory Id="RideFLDR" Name="RIDE">
+						<Directory Id="INSTALLDIR" Name="$(env.RIDE_VERSION)"/>
+					</Directory>
+				</Directory>
+			</Directory>
+		</Directory>
+		<!-- LMF [5392] 16-Mar-2011 -->
+		<UIRef Id="RideUI"/>
+		<InstallExecuteSequence>
+		</InstallExecuteSequence>
+		<UIRef Id="CommonErrorText"/>
+		<UIRef Id="CommonProgressText"/>
+		<UIRef Id="CommonUIText"/>
+	</Product>
+	<Fragment>
+		<DirectoryRef Id="INSTALLDIR">
+			<Component Id="desktopshortcut" Win64="$(env.IS_WIN64)" Guid="*">
+				<Shortcut Id="desktopshortcut" Name="$(env.RIDE_ICON_LABEL)" Directory="DesktopFolder" Target="[INSTALLDIR]$(env.RIDE_EXE)" Show="normal" />
+				<RegistryValue Root="HKCU" Key="Software\Dyalog\InstalledComponents\$(env.GUID_RIDE)\9a90359c-7b45-4da7-abc7-8e422515081c" KeyPath="yes" Type="string" Value=""/>
+			</Component>
+		</DirectoryRef>
+	</Fragment>
+	<?include $(env.OBJ_TMP)/RIDE.wxi?>
+	<!-- Component Groups -->
+</Wix>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+	Interpreter specific dialogs use the prefix "Interpreter_".
+	Common dialogs use no prefixing or suffixing.
+-->
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <UI>
+            <Dialog Id="Interpreter_WelcomeDlg" Width="370" Height="270" Title="!(loc.WelcomeDlg_Title)">
+                <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.UIButtonNext)">
+                    <Publish Event="NewDialog" Value="Interpreter_InstallDirDlg" />
+                </Control>
+                <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.UIButtonCancel)">
+                    <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+                </Control>
+                <Control Id="Bitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="234" TabSkip="no" Text="Image_SideBanner" />
+                <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Disabled="yes" Text="!(loc.UIButtonBack)" />
+                <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+                <Control Id="Description" Type="Text" X="135" Y="70" Width="220" Height="60" Transparent="yes" NoPrefix="yes" Text="!(loc.WelcomeDlgDescription)" />
+                <Control Id="Title" Type="Text" X="135" Y="20" Width="220" Height="60" Transparent="yes" NoPrefix="yes" Text="!(loc.WelcomeDlgTitle)" />
+            </Dialog>
+        </UI>
+    </Fragment>
+    <Fragment>
+        <UI>
+            <Dialog Id="Interpreter_InstallDirDlg" Width="370" Height="270" Title="!(loc.InstallDirDlg_Title)">
+                <Control Id="Next" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.UIButtonNext)">
+                    <!-- <Publish Event="NewDialog" Value="Interpreter_UserProfileDlg">1</Publish> -->
+                    <Publish Event="NewDialog" Value="Interpreter_VerifyReadyDlgInstall">1</Publish>
+                </Control>
+                <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.UIButtonBack)">
+				<Publish Event="NewDialog" Value="Interpreter_WelcomeDlg" />
+                </Control>
+                <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.UIButtonCancel)">
+                    <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+                </Control>
+                <Control Id="Description" Type="Text" X="25" Y="23" Width="280" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.InstallDirDlgDescription)" />
+                <Control Id="Title" Type="Text" X="15" Y="6" Width="200" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.InstallDirDlgTitle)" />
+                <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="Image_TopBanner" />
+                <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+                <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+                <Control Id="FolderLabel" Type="Text" X="20" Y="60" Width="290" Height="30" Text="!(loc.InstallDirDlgFolderLabel)" />
+                <Control Id="Folder" Type="PathEdit" X="20" Y="100" Width="320" Height="18" Property="SUF_INSTALLDIR" Indirect="yes" />
+                <Control Id="ChangeFolder" Type="PushButton" X="20" Y="120" Width="56" Height="17" Text="!(loc.InstallDirDlgChange)">
+                    <Publish Property="_BrowseProperty" Value="[SUF_INSTALLDIR]" Order="1">1</Publish>
+                    <Publish Event="SpawnDialog" Value="BrowseDlg" Order="2">1</Publish>
+                </Control>
+            </Dialog>
+        </UI>
+    </Fragment>
+    <Fragment>
+        <UI>
+            <Dialog Id="Interpreter_VerifyReadyDlgInstall" Width="370" Height="270" Title="!(loc.VerifyReadyDlg_Title)" TrackDiskSpace="yes">
+                <Control Id="Install" Type="PushButton" X="236" Y="243" Width="56" Height="17" Default="yes" Text="!(loc.VerifyReadyDlgInstall)">
+                    <Publish Event="EndDialog" Value="Return"><![CDATA[OutOfDiskSpace <> 1]]></Publish>
+                    <Publish Event="SpawnDialog" Value="OutOfRbDiskDlg">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND (PROMPTROLLBACKCOST="P" OR NOT PROMPTROLLBACKCOST)</Publish>
+                    <Publish Event="EndDialog" Value="Return">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND PROMPTROLLBACKCOST="D"</Publish>
+                    <Publish Event="EnableRollback" Value="False">OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 0 AND PROMPTROLLBACKCOST="D"</Publish>
+                    <Publish Event="SpawnDialog" Value="OutOfDiskDlg">(OutOfDiskSpace = 1 AND OutOfNoRbDiskSpace = 1) OR (OutOfDiskSpace = 1 AND PROMPTROLLBACKCOST="F")</Publish>
+                </Control>
+                <Control Id="InstallTitle" Type="Text" X="15" Y="15" Width="300" Height="15" Transparent="yes" NoPrefix="yes" Text="!(loc.VerifyReadyDlgInstallTitle)" />
+                <Control Id="InstallText" Type="Text" X="25" Y="70" Width="320" Height="80" Text="!(loc.VerifyReadyDlgInstallText)" />
+                <Control Id="Cancel" Type="PushButton" X="304" Y="243" Width="56" Height="17" Cancel="yes" Text="!(loc.UIButtonCancel)">
+                    <Publish Event="SpawnDialog" Value="CancelDlg">1</Publish>
+                </Control>
+                <Control Id="Back" Type="PushButton" X="180" Y="243" Width="56" Height="17" Text="!(loc.UIButtonBack)">
+                    <!-- <Publish Event="NewDialog" Value="Interpreter_UserProfileDlg">1</Publish> -->
+                    <Publish Event="NewDialog" Value="Interpreter_InstallDirDlg">1</Publish>
+                </Control>
+                <Control Id="BannerBitmap" Type="Bitmap" X="0" Y="0" Width="370" Height="44" TabSkip="no" Text="Image_TopBanner" />
+                <Control Id="BannerLine" Type="Line" X="0" Y="44" Width="370" Height="0" />
+                <Control Id="BottomLine" Type="Line" X="0" Y="234" Width="370" Height="0" />
+            </Dialog>
+        </UI>
+    </Fragment>
+    <Fragment>
+        <UI Id="RideUI">
+            <TextStyle Id="UI_Font_Normal" FaceName="MS Shell Dlg" Size="8" />
+            <TextStyle Id="UI_Font_Bigger" FaceName="MS Shell Dlg" Size="12" Bold="yes" />
+            <TextStyle Id="UI_Font_Title" FaceName="MS Shell Dlg" Size="9" Bold="yes" />
+            <TextStyle Id="UI_Font_Emphasized" FaceName="MS Shell Dlg" Size="8" Italic="yes" />
+            <TextStyle Id="UI_Font_Bold" FaceName="MS Shell Dlg" Size="8" Bold="yes" />
+            <Property Id="DefaultUIFont" Value="UI_Font_Normal" />
+			
+            <Binary Id="Icon_Information" SourceFile="images\info.ico" />
+            <Binary Id="Icon_Up" SourceFile="images\Up.ico" />
+            <Binary Id="Icon_New" SourceFile="images\New.ico" />
+            <Binary Id="Icon_Exclamation" SourceFile="images\exclamic.ico" />
+			
+			<Binary Id="Image_SideBanner" SourceFile="images\dlgbmp.bmp" />
+            <Binary Id="Image_TopBanner" SourceFile="images\bannrbmp.bmp" />
+			
+            <DialogRef Id="Interpreter_WelcomeDlg" />
+            <DialogRef Id="CancelDlg" />
+            <!-- LMF [7049] 24-Mar-2011 Only show the LicenceAgreementDlg if we're not the unregistered version -->
+            <DialogRef Id="BrowseDlg" />
+            <DialogRef Id="Interpreter_InstallDirDlg" />
+            <DialogRef Id="Interpreter_VerifyReadyDlgInstall" />
+            <DialogRef Id="OutOfRbDiskDlg" />
+            <DialogRef Id="OutOfDiskDlg" />
+            <DialogRef Id="MaintenanceWelcomeDlg" />
+            <DialogRef Id="WaitForCostingDlg" />
+            <DialogRef Id="MaintenanceTypeDlgNoChange" />
+            <DialogRef Id="MaintenanceVerifyReadyDlgNoChange" />
+            <DialogRef Id="ResumeDlg" />
+            <DialogRef Id="ProgressDlg" />
+            <DialogRef Id="PrepareDlg" />
+            <DialogRef Id="ExitDialog" />
+            <DialogRef Id="UserExit" />
+            <DialogRef Id="FatalError" />
+            <DialogRef Id="FilesInUse" />
+            <DialogRef Id="ErrorDlg" />
+            <!-- <DialogRef Id="CustomizeDlg" /> -->
+            <DialogRef Id="DiskCostDlg" />
+            <InstallUISequence>
+                <Show Dialog="Interpreter_WelcomeDlg" Before="ProgressDlg">NOT Installed</Show>
+                <Show Dialog="MaintenanceWelcomeDlg" Before="ProgressDlg">Installed AND NOT RESUME AND NOT Preselected AND NOT PATCH</Show>
+                <Show Dialog="ResumeDlg" Before="ProgressDlg">Installed AND (RESUME OR Preselected)</Show>
+                <Show Dialog="ProgressDlg" Before="ExecuteAction" />
+                <Show Dialog="PrepareDlg" Before="AppSearch" />
+                <Show Dialog="ExitDialog" OnExit="success" />
+                <Show Dialog="UserExit" OnExit="cancel" />
+                <Show Dialog="FatalError" OnExit="error" />
+            </InstallUISequence>
+            <AdminUISequence>
+                <Show Dialog="ExitDialog" OnExit="success" />
+                <Show Dialog="UserExit" OnExit="cancel" />
+                <Show Dialog="FatalError" OnExit="error" />
+            </AdminUISequence>
+        </UI>
+    </Fragment>
+</Wix>
