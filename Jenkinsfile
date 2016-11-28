@@ -29,21 +29,21 @@ stage ('Packaging') {
         "Linux Package" : {
                         node('NodeJS') {
                                 exws (extWorkspace) {
-                                sh './packagingscripts/linux/packageLinux.sh'
+                                sh './packagescripts/linux/packageLinux.sh'
                                 }
                         }
         },
         "Mac Package" : {
                         node('MAC') {
                                 exws (extWorkspace) {
-                                sh './packagingscripts/osx/packageOSX.sh'
+                                sh './packagescripts/osx/packageOSX.sh'
                                 }
                         }
         },
         "Windows Package" : {
                         node('Windows') {
                                 exws (extWorkspace) {
-                                bat '/packagingscripts/windows/packageWindows.bat'
+                                bat '/packagescripts/windows/packageWindows.bat'
                                 }
                         }
         }
