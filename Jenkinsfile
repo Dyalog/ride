@@ -1,8 +1,8 @@
 stage ('Allocate shared workspace')
-def extWorkspace = exwsAllocate 'diskpool1'
+def extWorkspace = exwsAllocate 'rideDiskPool'
 
 node('nodejs') {
-	exws (estWorkspace) {
+	exws (extWorkspace) {
 		stage ('Checkout from GitHub')
 		git url: 'https://github.com/Dyalog/Ride.git'
 		
@@ -17,21 +17,21 @@ stage ('Packaging')
 
 parallel (
 	"Linux Package" : {
-			exws (estWorkspace) {
+			exws (extWorkspace) {
 				node('nodejs') {
 				sh './PackageLinux'
 				}
 			}
 	},
 	"Mac Package" : {
-			exws (estWorkspace) {
+			exws (extWorkspace) {
 				node('OSX') {
 				sh './PackageOSX'
 				}
 			}
 	},
 	"Windows Package" : {
-			exws (estWorkspace) {
+			exws (extWorkspace) {
 				node('Windows') {
 				bat 'PackageWindows.bat'
 				}
