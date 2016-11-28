@@ -20,22 +20,22 @@ stage ('Packaging')
 
 parallel (
 	"Linux Package" : {
-			exws (extWorkspace) {
-				node('NodeJS') {
+			node('NodeJS') {
+				exws (extWorkspace) {
 				sh './PackageLinux'
 				}
 			}
 	},
 	"Mac Package" : {
-			exws (extWorkspace) {
-				node('MAC') {
+			node('MAC') {
+				exws (extWorkspace) {
 				sh './PackageOSX'
 				}
 			}
 	},
 	"Windows Package" : {
-			exws (extWorkspace) {
-				node('Windows') {
+			node('Windows') {
+				exws (extWorkspace) {
 				bat 'PackageWindows.bat'
 				}
 			}
