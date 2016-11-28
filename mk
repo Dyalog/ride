@@ -58,12 +58,14 @@ const excl={'/style/img/D.icns':1}
       OriginalFilename:namev+'.exe',
       ProductName:'RIDE',
       InternalName:'RIDE'}},
-  e=>{const d='_/'+namev+'/'+namev+'-'+x+'-'+y;rm(d+'/version');/*mv(d+'/LICENSE',d+'/LICENSE.electron');*/f&&f(e)}
+  e=>{const d='_/'+namev+'/'+namev+'-'+x+'-'+y;rm(d+'/version')
+      fs.existsSync(d+'/LICENSE')&&mv(d+'/LICENSE',d+'/LICENSE.electron')
+      f&&f(e)}
 )}
 tasks.l=tasks.linux=f=>{tasks.build(e=>e?f(e):pkg('linux' ,'x64'   ,f))}
 tasks.w=tasks.win  =f=>{tasks.build(e=>e?f(e):pkg('win32' ,'ia32'  ,f))}
 tasks.o=tasks.osx  =f=>{tasks.build(e=>e?f(e):pkg('darwin','x64'   ,f))}
-tasks.a=tasks.arm  =f=>{tasks.build(e=>e?f(e):pkg('linux' ,'armv7l',f))} //waiting for https://github.com/electron-userland/electron-packager/pull/107
+tasks.a=tasks.arm  =f=>{tasks.build(e=>e?f(e):pkg('linux' ,'armv7l',f))}
 tasks.d=tasks.dist=f=>{async.series([tasks.l,tasks.w,tasks.o],e=>{f(e)})}
 
 tasks.c=tasks.clean=f=>{rm('_');f()}
