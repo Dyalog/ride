@@ -43,7 +43,7 @@ stage ('Packaging') {
         "Windows Package" : {
                         node('Windows') {
                                 exws (extWorkspace) {
-                                bat '/packagescripts/windows/packageWindows.bat'
+                                bat '\packagescripts\windows\packageWindows.bat'
                                 }
                         }
         }
