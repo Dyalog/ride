@@ -54,7 +54,6 @@ cd ..
 
 mkdir -p ${SHIPDIRECTORY}
 
-=$APPNAME-tmp1.pkg 
 TMP1ARCHIVE=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac_unsigned.pkg" | tr '[:upper:]' '[:lower:]'`
 ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac.pkg" | tr '[:upper:]' '[:lower:]'`
 
