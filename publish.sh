@@ -20,20 +20,20 @@ echo Copying Directories to $r/$d
 for DIR in `ls _/${APP_NAME}`; do
 
   OS=`echo ${DIR#${APP_NAME}-} | awk -F"-" '{print $1}'`
-  BITS=`echo ${DIR#${APP_NAME}-} | awk -F"-" '{print $2}' | sed 's/[a-zA-Z]//g'`
+  ARCH=`echo ${DIR#${APP_NAME}-} | awk -F"-" '{print $2}'`
 	echo "DEBUG: \$DIR=$DIR"
 	echo "DEBUG: \$OS=$OS"
-	echo "DEBUG: \$BITS=$BITS"
+	echo "DEBUG: \$ARCH=$ARCH"
 
   case ${OS} in
     darwin)
-      OSNAME="mac${BITS}"
+      OSNAME="mac-${ARCH}"
       ;;
     win32)
-      OSNAME="win${BITS}"
+      OSNAME="win32"
       ;;
     *)
-      OSNAME="${OS}${BITS}"
+      OSNAME="${OS}-${ARCH}"
       ;;
   esac
 	echo "DEBUG: \$OSNAME=$OSNAME"
