@@ -66,7 +66,7 @@ tasks.l=tasks.linux=f=>{tasks.build(e=>e?f(e):pkg('linux' ,'x64'   ,f))}
 tasks.w=tasks.win  =f=>{tasks.build(e=>e?f(e):pkg('win32' ,'ia32'  ,f))}
 tasks.o=tasks.osx  =f=>{tasks.build(e=>e?f(e):pkg('darwin','x64'   ,f))}
 tasks.a=tasks.arm  =f=>{tasks.build(e=>e?f(e):pkg('linux' ,'armv7l',f))}
-tasks.d=tasks.dist=f=>{async.series([tasks.l,tasks.w,tasks.o],e=>{f(e)})}
+tasks.d=tasks.dist=f=>{async.series([tasks.l,tasks.w,tasks.o,tasks.a],e=>{f(e)})}
 
 tasks.c=tasks.clean=f=>{rm('_');f()}
 
