@@ -4,6 +4,9 @@ set -x -e -o pipefail
 
 BASE_VERSION=`node -pe "($(cat package.json)).version"`
 VERSION="${BASE_VERSION%%.0}.`git rev-list HEAD --count`"  # "%%.0" strips trailing ".0"
+if ! [ "$GIT_BRANCH" ]; then
+	GIT_BRANCH=`git branch -a | grep \* | awk '{print $2}'`
+fi
 echo "Current branch: ${GIT_BRANCH#*/}"
 CURRENTBRANCH=${GIT_BRANCH#*/}
 APP_NAME=$(node -e "console.log($(cat package.json).name)") # "ride30" or similar
