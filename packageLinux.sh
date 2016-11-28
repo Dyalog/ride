@@ -115,7 +115,7 @@ function createDEB() {
 		--category "devel"			\
 		--after-install $postinst		\
 		--before-remove $prerm			\
-		-p /devt/builds/ride/${TARGET}/latest/ship/ride-${RIDEVERSION}_linux.amd64.deb	\
+		-p ship/ride-${RIDEVERSION}_linux.amd64.deb	\
 		-n ride-${BASE_VERSION}			\
 		-v ${RIDEVERSION}			\
 		-a amd64				\
@@ -139,7 +139,7 @@ function createRPM() {
 		--category "devel"			\
 		--after-install $postinst		\
 		--before-remove $prerm			\
-		-p /devt/builds/ride/${TARGET}/latest/ship/ride-${RIDEVERSION}_linux.amd64.rpm	\
+		-p ship/ride-${RIDEVERSION}_linux.amd64.rpm	\
 		-n ride-${BASE_VERSION}			\
 		-v ${RIDEVERSION}			\
 		-a amd64				\
@@ -163,8 +163,8 @@ checkEnvironment
 getVersionInfo
 createPackageFiles
 
-if ! [ -d /devt/builds/ride/${TARGET}/latest/ship ]; then
-	mkdir -p /devt/builds/ride/${TARGET}/latest/ship
+if ! [ -d ship ]; then
+	mkdir -p ship
 fi
 mkdir -p ${SBOXDIR}/opt/ride-${BASE_VERSION}
 mkdir -p ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps
