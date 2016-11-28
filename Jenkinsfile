@@ -9,7 +9,7 @@ node('nodejs') {
 	stage ('Build Ride')
 	sh './mk dist'
 	stage ('Dyalog Network Publish')
-	sh './publish.sh')
+	sh './publish.sh'
 }
 
 stage ('Packaging')
