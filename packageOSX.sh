@@ -59,7 +59,7 @@ ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac.pkg" | tr
 
 /usr/bin/pkgbuild --analyze --root ./${APPNAME}.app ${APPNAME}.plist
 
-/usr/bin/pkgbuild --root "OSX-Packaging"                \
+/usr/bin/pkgbuild --root "OSX-Packing"                  \
 --identifier "com.dyalog.pkg.ride${BASE_VERSION_ND}"    \
 --version "${RIDEVERSION}"                              \
 --install-location "/Applications/"                     \
