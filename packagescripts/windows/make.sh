@@ -182,7 +182,7 @@ export SVNDIR="c:/svn"
 
 export RIDE_FILES_MEDIA_DISK_ID=1
 
-export OBJ_TMP=packagescripts/windows
+export OBJ_TMP=$JENKINSROOT/packagescripts/windows
 export OBJ_FILES=${OBJ_TMP}/files/ride	# LMF [6886] 11-Feb-2011
 export OBJ_CABINETS=${OBJ_TMP}/cabs
 export RIDEDIR=$OBJ_TMP/RIDE
