@@ -157,7 +157,7 @@ if ! [ "$RIDE_BRANCH" ]; then
 fi
 
 export RIDE_BITS="32"
-export RIDE_SRC="$JENKINSROOT/_/ride40/win$RIDE_BITS"
+export RIDE_SRC="$JENKINSROOT/_/ride40/ride40-win32-ia32"
 export RIDE_SHIP="$JENKINSROOT/ship/"
 
 export RIDE_VERSION_ABC_DOT=$(cat ${RIDE_SRC}/../version | tr -d '\n')
