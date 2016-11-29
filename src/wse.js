@@ -1,4 +1,4 @@
-//workspace explorer; uses https://www.jstree.com/
+//workspace explorer
 'use strict'
 D.WSE=function(){
   var pending=this.pending={};this.dom=I.wse;this.dom.hidden=0
