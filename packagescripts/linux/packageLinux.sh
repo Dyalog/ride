@@ -37,8 +37,8 @@ function checkEnvironment() {
 }
 
 function getVersionInfo() {
-if [ -s ${RIDEDIR}/../version ]; then
-        RIDEVERSION=`cat ${RIDEDIR}/../version`
+if [ -s ${RIDEDIR}/../../version ]; then
+        RIDEVERSION=`cat ${RIDEDIR}/../../version`
 else
         RIDEVERSION="1.9.0"
 fi
