@@ -2,6 +2,8 @@
 set -x
 ##set -e
 
+JENKINSROOT=$PWD
+
 do_candle()
 {
 OUT=$1
@@ -126,12 +128,12 @@ ${SVNDIR}/svn export -q http://svn.dyalog.bramley/svn/dyalog/branches/14.1.dss/s
 
 get_upgrade_guid()
 {
-UPGRADE_GUID=$(cat $WORKSPACE/ride/windows/upgrade_guids | grep  "^${RIDE_VERSION_AB_DOT}=" | sed "s/^${RIDE_VERSION_AB_DOT}=\(.*\)/\1/")
+UPGRADE_GUID=$(cat $JENKINSROOT/packagescripts/windows/upgrade_guids | grep  "^${RIDE_VERSION_AB_DOT}=" | sed "s/^${RIDE_VERSION_AB_DOT}=\(.*\)/\1/")
 #echo UPGRADE_GUID=$UPGRADE_GUID
 
 if [ _${UPGRADE_GUID}_ = "__" ]
 then
-	echo "${RIDE_VERSION_AB_DOT}=$(uuidgen)" >> $WORKSPACE/ride/windows/upgrade_guids
+	echo "${RIDE_VERSION_AB_DOT}=$(uuidgen)" >> $JENKINSROOT/packagescripts/windows/upgrade_guids
 	UPGRADE_GUID=$(cat upgrade_guids | grep  "^${RIDE_VERSION_AB_DOT}=" | sed "s/^${RIDE_VERSION_AB_DOT}=\(.*\)/\1/")
 	echo svn commit upgrade_guids -m "automatic add of upgrade guid"
 fi
@@ -156,7 +158,7 @@ fi
 
 export RIDE_BITS="32"
 export RIDE_SRC="_/ride40/win$RIDE_BITS"
-export RIDE_SHIP="ship/"
+export RIDE_SHIP="$JENKINSROOT/ship/"
 
 export RIDE_VERSION_ABC_DOT=$(cat ${RIDE_SRC}/../version | tr -d '\n')
 
