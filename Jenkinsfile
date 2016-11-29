@@ -41,7 +41,7 @@ stage ('Packaging') {
                         }
         },
         "Windows Package" : {
-                        node('Windows') {
+                        node('WIX') {
                                 exws (extWorkspace) {
                                 bat 'packagescripts/windows/packageWindows.bat'
                                 }
