@@ -4,7 +4,7 @@ D.WSE=function(){
   var pending=this.pending={};this.dom=I.wse;this.dom.hidden=0
   var bt=new Bonsai(this.dom,{
     children:function(id,callback){pending[id]=callback.bind(this);D.send('TreeList',{nodeId:id})},
-    click:function(path){D.send('Edit',{win:0,pos:0,text:path.slice(1).map(function(x){return x.text}).join('.')})}
+    click:function(path){D.send('Edit',{win:0,pos:0,text:path.map(function(x){return x.text}).join('.')})}
   })
 }
 D.WSE.prototype={

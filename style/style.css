@@ -356,8 +356,9 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
         overflow-x:scroll;width:100%;height:100%;resize:none}
 
 #wse{font-family:apl,monospace;font-size:18px;text-align:left;
-     background-color:#fff;overflow:scroll;width:100%;height:100%;white-space:nowrap;cursor:default}
+     background-color:#fff;overflow:auto;width:100%;height:100%;white-space:nowrap;cursor:default}
 #wse div{padding-left:1em}
+#wse>div{padding-left:2px}
 #wse .bt_node_expand,#wse .bt_node_indent{display:inline-block;width:16px;height:16px;text-align:center;margin-right:4px}
 #wse .bt_node_expand{font-family:monospace;background-color:#eee;cursor:pointer}
 #wse .bt_icon_2, #wse .bt_icon_3, #wse .bt_icon_4, #wse .bt_icon_9{

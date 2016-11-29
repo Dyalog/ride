@@ -1,7 +1,11 @@
 function Bonsai(e,o){ //e:dom element, o:options={children:function(id,callback){...}, click:function(path){...}}
   var bt=this //bonsai tree
-  bt.nodes={0:{id:0,text:'',expandable:1,icon:''}}
-  e.innerHTML=bt.render(bt.nodes[0])
+  bt.nodes={}
+  o.children(0,function(children){
+    bt.nodes[0]={id:0,text:'',expandable:1,expanded:1,children:children,icon:''}
+    children.forEach(function(c){bt.nodes[c.id]=c})
+    e.innerHTML=children.map(bt.render).join('')
+  })
   e.onmousedown=function(event){
     if(event.target.matches('.bt_node_expand')){
       var a=event.target, node=bt.nodes[a.parentNode.dataset.id];if(!node||!node.expandable)return
