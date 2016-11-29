@@ -1,8 +1,8 @@
 #!/bin/bash
 set -x
-##set -e
+set -e
 
-JENKINSROOT=$PWD
+WORKSPACE=${JENKINSDIR}
 
 do_candle()
 {
@@ -11,7 +11,7 @@ SRC=$2
 
 export CANDLE_OPTS="-nologo -v -arch x86"
 
-${WIXDIR}/candle.exe $CANDLE_OPTS -ext WixUtilExtension -ext WixIIsExtension -out $OUT $SRC | grep -v "^$SRC\$"
+${WIXDIR}/candle.exe $CANDLE_OPTS -ext WixUtilExtension -ext WixIIsExtension -out $OUT $SRC 
 }
 
 install_dir_contents()
@@ -114,7 +114,9 @@ echo "#define GUID_RIDE_UPGRADE \"{$GUID_RIDE_UPGRADE}\"" >> $OBJ_TMP/guids.h
 
 	export LIB="$LIB;c:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Lib"
 	cd $OBJ_TMP/setup
+	set +e
 	. ./make.ksh
+	set -e
 
 	cp ${MK_SETUPDIR}/setup.exe ${OBJ_FILES}/setup_ride.exe
 	)
@@ -128,14 +130,14 @@ ${SVNDIR}/svn export -q http://svn.dyalog.bramley/svn/dyalog/branches/14.1.dss/s
 
 get_upgrade_guid()
 {
-UPGRADE_GUID=$(cat $JENKINSROOT/packagescripts/windows/upgrade_guids | grep  "^${RIDE_VERSION_AB_DOT}=" | sed "s/^${RIDE_VERSION_AB_DOT}=\(.*\)/\1/")
+UPGRADE_GUID=$(cat $WORKSPACE/upgrade_guids | grep  "^${RIDE_VERSION_AB_DOT}=" | sed "s/^${RIDE_VERSION_AB_DOT}=\(.*\)/\1/")
 #echo UPGRADE_GUID=$UPGRADE_GUID
 
 if [ _${UPGRADE_GUID}_ = "__" ]
 then
-	echo "${RIDE_VERSION_AB_DOT}=$(uuidgen)" >> $JENKINSROOT/packagescripts/windows/upgrade_guids
+	echo "${RIDE_VERSION_AB_DOT}=$(uuidgen)" >> $WORKSPACE/upgrade_guids
 	UPGRADE_GUID=$(cat upgrade_guids | grep  "^${RIDE_VERSION_AB_DOT}=" | sed "s/^${RIDE_VERSION_AB_DOT}=\(.*\)/\1/")
-	echo svn commit upgrade_guids -m "automatic add of upgrade guid"
+	#echo svn commit upgrade_guids -m "automatic add of upgrade guid"
 fi
 
 echo $UPGRADE_GUID
@@ -150,15 +152,15 @@ cp $RIDE_ZIP_FILENAME $RIDE_SHIP
 
 }
 
-export WORKSPACE=$(echo $WORKSPACE | sed 's/\\/\//')
+export WORKSPACE=$(echo $WORKSPACE | sed 's/\\/\//g')
 
 if ! [ "$RIDE_BRANCH" ]; then
 	export RIDE_BRANCH="master"
 fi
 
 export RIDE_BITS="32"
-export RIDE_SRC="$JENKINSROOT/_/ride40/ride40-win32-ia32"
-export RIDE_SHIP="$JENKINSROOT/ship/"
+export RIDE_SRC="${WORKSPACE}/_/ride40/ride40-win${RIDE_BITS}-ia32"
+export RIDE_SHIP="${WORKSPACE}/ship/"
 
 export RIDE_VERSION_ABC_DOT=$(cat ${RIDE_SRC}/../../version | tr -d '\n')
 
@@ -182,7 +184,7 @@ export SVNDIR="c:/svn"
 
 export RIDE_FILES_MEDIA_DISK_ID=1
 
-export OBJ_TMP=$JENKINSROOT/packagescripts/windows
+export OBJ_TMP=$WORKSPACE/WinBuild
 export OBJ_FILES=${OBJ_TMP}/files/ride	# LMF [6886] 11-Feb-2011
 export OBJ_CABINETS=${OBJ_TMP}/cabs
 export RIDEDIR=$OBJ_TMP/RIDE
@@ -198,6 +200,8 @@ mkdir -p $OBJ_TMP
 mkdir -p $OBJ_FILES
 mkdir -p $OBJ_CABINETS
 mkdir -p $RIDEDIR
+
+cd $WORKSPACE/packagescripts/windows
 
 get_svn
 
