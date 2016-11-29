@@ -160,7 +160,7 @@ export RIDE_BITS="32"
 export RIDE_SRC="$JENKINSROOT/_/ride40/ride40-win32-ia32"
 export RIDE_SHIP="$JENKINSROOT/ship/"
 
-export RIDE_VERSION_ABC_DOT=$(cat ${RIDE_SRC}/../version | tr -d '\n')
+export RIDE_VERSION_ABC_DOT=$(cat ${RIDE_SRC}/../../version | tr -d '\n')
 
 export RIDE_VERSION_A=$(echo $RIDE_VERSION_ABC_DOT | sed "s/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)/\1/")
 export RIDE_VERSION_B=$(echo $RIDE_VERSION_ABC_DOT | sed "s/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)/\2/")
@@ -198,8 +198,6 @@ mkdir -p $OBJ_TMP
 mkdir -p $OBJ_FILES
 mkdir -p $OBJ_CABINETS
 mkdir -p $RIDEDIR
-
-cd packagescripts/windows/
 
 get_svn
 
