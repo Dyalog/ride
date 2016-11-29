@@ -199,7 +199,7 @@ mkdir -p $OBJ_FILES
 mkdir -p $OBJ_CABINETS
 mkdir -p $RIDEDIR
 
-cd packagescrpits/windows/
+cd packagescripts/windows/
 
 get_svn
 
