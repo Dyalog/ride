@@ -53,10 +53,9 @@ function Bonsai(e,o){ //e:dom element, o:options={children:function(id,callback)
         }
         return!1
       case 37:case 39:
-        var sel=e.getElementsByClassName('selected')[0]
-        if (!!bt.nodes[sel.dataset.id].expanded===(event.which===37)){
-          toggleNode(sel.previousSibling)
-        }
+        var sel=e.getElementsByClassName('selected')[0], left=event.which===37
+        if(!!bt.nodes[sel.dataset.id].expanded===left)toggleNode(sel.previousSibling)
+        else if(left){selectNode(sel.parentNode.parentNode.getElementsByClassName('bt_text')[0])}
         return!1
     }
   }
