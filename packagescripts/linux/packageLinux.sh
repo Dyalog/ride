@@ -16,11 +16,11 @@ if [ "x$TARGET" = "x" ]; then
 	exit 1
 fi
 
-APP_NAME=$(node -e "console.log($(cat package.json).name)") # "ride30" or similar
+APP_NAME=$(node -e "console.log($(cat package.json).packageName)") # "Ride-40" or similar
 
 echo "Packaging for $TARGET"
 
-RIDEDIR="_/${APP_NAME}/${APP_NAME}-linux-x64"
+RIDEDIR="_/ride40/${APP_NAME}-linux-x64"
 ICON="style/img/D.svg"
 SBOXDIR=/tmp/ride$$
 postinst=/tmp/postinst$$

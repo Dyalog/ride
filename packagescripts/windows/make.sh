@@ -160,7 +160,7 @@ if ! [ "$RIDE_BRANCH" ]; then
 fi
 
 export RIDE_BITS="32"
-export RIDE_SRC="${WORKSPACE}/_/ride40/ride40-win${RIDE_BITS}-ia32"
+export RIDE_SRC="${WORKSPACE}/_/ride40/Ride-4.0-win${RIDE_BITS}-ia32"
 export RIDE_SHIP="${WORKSPACE}/ship/"
 
 export RIDE_VERSION_ABC_DOT=$(cat ${RIDE_SRC}/../../version | tr -d '\n')
