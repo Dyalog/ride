@@ -29,7 +29,7 @@ D.Se=function(ide){ //constructor
   se.promptType=0 //see ../docs/protocol.md #SetPromptType
   se.processAutocompleteReply=D.ac(se) //delegate autocompletion processing to ac.js
   D.prf.wrap(function(x){se.cm.setOption('lineWrapping',!!x);se.scrollCursorIntoView()})
-  D.prf.blockCursor(function(x){for(var i in D.wins)D.util.tglCls(D.wins[i].cm.getWrapperElement(),'cm-fat-cursor',x)})
+  D.prf.blockCursor(function(x){for(var i in D.wins)D.wins[i].cm.getWrapperElement().classList.toggle('cm-fat-cursor',!!x)})
   this.vt=D.vt(this) //value tips
 }
 D.Se.prototype={

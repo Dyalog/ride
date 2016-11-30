@@ -48,12 +48,7 @@ D.util={
     if(!x||(x.nodeName!=='INPUT'&&x.nodeName!=='TEXTAREA')||x.readOnly||x.disabled)return
     var i=x.selectionStart,j=x.selectionEnd,v=x.value
     if(i!=null&&j!=null){x.value=v.slice(0,i)+y+v.slice(j);x.selectionStart=x.selectionEnd=i+y.length}
-  },
-  //jQuery-free manipulation of css classes; x:dom element,y:css class name
-  addCls:function(x,y){var c=x.className.split(' ');c.push(y);                                 x.className=c.join(' ')},
-   rmCls:function(x,y){var c=x.className.split(' '),i=c.indexOf(y);      if(i>=0)c.splice(i,1);x.className=c.join(' ')},
-  hasCls:function(x,y){var c=x.className.split(' ');return c.indexOf(y)>=0},
-  tglCls:function(x,y,z){if(z==null)z=!D.util.hasCls(x,y);D.util[z?'addCls':'rmCls'](x,y)}
+  }
 }
 $.alert=function(m,t,f){ //m:message,t:title,f:callback
   D.el?D.el.dialog.showMessageBox(D.elw,{message:m,title:t,buttons:['OK']}):alert(m);f&&f()

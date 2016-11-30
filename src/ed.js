@@ -25,10 +25,10 @@ D.Ed=function(ide,opts){ //constructor
   ed.processAutocompleteReply=D.ac(ed)
   ed.tb=ed.dom.querySelector('.toolbar')
   ed.tb.onmousedown=function(x){if(x.target.matches('.tb_btn')){x.target.className+=' armed';x.preventDefault()}}
-  ed.tb.onmouseup=ed.tb.onmouseout=function(x){if(x.target.matches('.tb_btn')){D.util.rmCls(x.target,'armed')
+  ed.tb.onmouseup=ed.tb.onmouseout=function(x){if(x.target.matches('.tb_btn')){x.target.classList.remove('armed')
                                                                                x.preventDefault()}}
   ed.tb.onclick=function(x){var t=x.target
-    if(t.matches('.tb_hid,.tb_case')){D.util.tglCls(t,'pressed');ed.hls();return!1}
+    if(t.matches('.tb_hid,.tb_case')){t.classList.toggle('pressed');ed.hls();return!1}
     if(t.matches('.tb_btn')){var c=t.className.replace(/^.*\btb_([A-Z]{2,3})\b.*$/,'$1')
                              ed[c]?ed[c](ed.cm):CM.commands[c]?CM.commands[c](ed.cm):0;return!1}
   }
@@ -84,7 +84,7 @@ D.Ed.prototype={
   },
   clrSC:function(){ //clear search
     var ed=this,u=ed.dom.querySelector('.ride_win .cm-scroll-v');if(u)u.title=''
-    D.util.rmCls(ed.tb.querySelector('.tb_sc'),'no-matches')
+    ed.tb.querySelector('.tb_sc').classList.remove('no-matches')
     ed.cm.removeOverlay(ed.overlay);ed.annotation&&ed.annotation.clear();ed.overlay=ed.annotation=null
   },
   hls:function(){ //highlight search ("hls" named after the Vim option)
@@ -139,9 +139,9 @@ D.Ed.prototype={
   },
   setLN:function(x){ //update the display of line numbers and the state of the "[...]" button
     var ed=this;ed.cm.setOption('lineNumbers',!!x);ed.updGutters()
-    var a=ed.tb.querySelectorAll('.tb_LN');for(var i=0;i<a.length;i++)D.util.tglCls(a[i],'pressed',x)
+    var a=ed.tb.querySelectorAll('.tb_LN');for(var i=0;i<a.length;i++)a[i].classList.toggle('pressed',!!x)
   },
-  setTC:function(x){var ed=this;ed.tc=x;D.util.tglCls(ed.dom,'tracer',x);ed.hl(null);ed.updGutters();ed.setRO(x)},
+  setTC:function(x){var ed=this;ed.tc=x;ed.dom.classList.toggle('tracer',!!x);ed.hl(null);ed.updGutters();ed.setRO(x)},
   setRO:function(x){this.cm.setOption('readOnly',x);this.rp.hidden=x},
   updSize:function(){var $p=$(this.dom);this.cm.setSize($p.width(),$p.height()-28)},
   open:function(ee){ //ee:editable entity

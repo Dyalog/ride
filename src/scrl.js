@@ -22,11 +22,11 @@ function Bar(o,scroll){ //o:orientation(0=vertical,1=horizontal), scroll:functio
   var pageXY='page'+'YX'[o]
   var xy0,pos0 //mouse coordinate and thumb position where dragging started
   function move(e){e.which!==1?done():moveTo(pos0+total*(e[pageXY]-xy0)/(size-2*w))}
-  function done(){CM.off(document,'mousemove',move);CM.off(document,'mouseup',done);D.util.rmCls(thumb,'press')}
+  function done(){CM.off(document,'mousemove',move);CM.off(document,'mouseup',done);thumb.classList.remove('press')}
   CM.on(thumb,'mousedown',function(e){
     if(e.which!==1)return
     CM.e_preventDefault(e);xy0=e[pageXY],pos0=pos
-    CM.on(document,'mousemove',move);CM.on(document,'mouseup',done);D.util.addCls(thumb,'press')
+    CM.on(document,'mousemove',move);CM.on(document,'mouseup',done);thumb.classList.add('press')
   })
   CM.on(node,'click',function(e){
     CM.e_preventDefault(e);var x=e.clientX,y=e.clientY,r=thumb.getBoundingClientRect()
