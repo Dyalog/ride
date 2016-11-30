@@ -16,11 +16,27 @@ function Bonsai(e,o){ //e:dom element, o:options={children:function(id,callback)
         a.parentNode.outerHTML=bt.render(node)
       })
       a.parentNode.className=node.expanded?'':'bt_collapsed'
-      return!1
-    }else if(o.click&&event.target.matches('.bt_text')){
-      var path=[], div=event.target.parentNode
+    } else if (event.target.matches('.bt_text')){
+      var sel=e.getElementsByClassName('selected'); for (var i=0;i<sel.length;i++){sel[i].classList.remove('selected')}
+      event.target.classList.add('selected');event.target.focus();
+    }
+    return!1;
+  }
+  var selectNode=function(tgt){ //tgt=target
+    if(o.click&&tgt.matches('.bt_text')){
+      var path=[],div=tgt.parentNode
       while(div!==e){path.unshift(bt.nodes[div.dataset.id]);div=div.parentNode}
-      o.click(path);return!1
+      o.click(path)
+    }
+  }
+  e.ondblclick=function(event){
+    selectNode(event.target)
+    return!1;
+  }
+  e.onkeydown=function(event){
+    switch (event.which){
+      case 13://case 37:case 38:case 39:case 40://Enter,Left,Up,Right,Down
+        selectNode(event.target)
     }
   }
 }
@@ -29,7 +45,7 @@ Bonsai.prototype={
     return'<div data-id="'+node.id+'">'+
             (node.expandable?'<a class=bt_node_expand>'+'⊞⊟'[+!!node.expanded]+'</a>'
                             :'<a class=bt_node_indent></a>')+
-            '<span data-id='+node.id+' class="bt_icon_'+node.icon+' bt_text">'+node.text+'</span>'+
+            '<span tabIndex=-1 data-id='+node.id+' class="bt_icon_'+node.icon+' bt_text">'+node.text+'</span>'+
             (node.expanded?node.children.map(this.render).join(''):'')+
           '</div>'
   }

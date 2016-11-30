@@ -383,6 +383,7 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 #wse .bt_icon_9_7::before{content:"i";background:#fc0} /*external interface*/
 #wse .bt_text::before{display:inline-block;width:16px;height:16px;border-radius:50%;color:#fff;text-align:center;margin-right:4px}
 .bt_collapsed>div{display:none}
+#wse .bt_text.selected{background-color:#ff69b4}
 
 #demo-keys{position:fixed;top:10px;right:10px}
 #demo-keys span{font-family:apl,monospace;font-size:18px;font-size:48px;border:solid #333 1px;
