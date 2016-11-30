@@ -57,9 +57,9 @@ mkdir -p ${SHIPDIRECTORY}
 TMP1ARCHIVE=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac_unsigned.pkg" | tr '[:upper:]' '[:lower:]'`
 ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac.pkg" | tr '[:upper:]' '[:lower:]'`
 
-cd ${RIDEDIR}
-/usr/bin/pkgbuild --analyze --root ./${APPNAME}.app ${APPNAME}.plist
-cd ${BUILDROOTDIR}
+#cd ${RIDEDIR}
+#/usr/bin/pkgbuild --analyze --root ./${APPNAME}.app ${APPNAME}.plist
+#cd ${BUILDROOTDIR}
 
 /usr/bin/pkgbuild --root "${RIDEDIR}"                  \
 --identifier "com.dyalog.pkg.ride${BASE_VERSION_ND}"    \
