@@ -35,7 +35,7 @@ fi
 BASE_VERSION=`echo $RIDEVERSION | sed 's/\([0-9]*\.[0-9]*\)\.[0-9]*/\1/'`
 REVISION_VERSION=`echo $RIDEVERSION | sed 's/[0-9]*\.[0-9]*\.\([0-9]*\)/\1/'`
 BASE_VERSION_ND=`echo $BASE_VERSION | sed 's/\.//g'`
-APPNAME="Ride-$BASE_VERSION"
+APPNAME=${PackageName}
 
 ## Set the RIDE Version number and product name
 
@@ -44,8 +44,6 @@ PLISTValue "$PLISTFILE" "CFBundleShortVersionString" "$RIDEVERSION"
 PLISTValue "$PLISTFILE" "CFBundleIdentifier" "com.dyalog.ride$BASE_VERSION_ND"
 PLISTValue "$PLISTFILE" "CFBundleDisplayName" "$APPNAME"
 #PLISTValue "$PLISTFILE" "CFBundleName" "$APPNAME"
-
-mv  ${RIDEDIR}/${RIDEAPPDIRNAME} ${RIDEDIR}/${APPNAME}.app
 
 cd ${RIDEDIR}
 
