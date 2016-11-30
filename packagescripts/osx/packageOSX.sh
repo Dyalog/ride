@@ -33,7 +33,7 @@ fi
 BASE_VERSION=`echo $RIDEVERSION | sed 's/\([0-9]*\.[0-9]*\)\.[0-9]*/\1/'`
 REVISION_VERSION=`echo $RIDEVERSION | sed 's/[0-9]*\.[0-9]*\.\([0-9]*\)/\1/'`
 BASE_VERSION_ND=`echo $BASE_VERSION | sed 's/\.//g'`
-APPNAME="Ride-$RIDEVERSION"
+APPNAME="Ride-$BASE_VERSION"
 
 ## Set the RIDE Version number and product name
 
@@ -43,7 +43,6 @@ PLISTValue "$PLISTFILE" "CFBundleIdentifier" "com.dyalog.ride$BASE_VERSION_ND"
 PLISTValue "$PLISTFILE" "CFBundleDisplayName" "$APPNAME"
 PLISTValue "$PLISTFILE" "CFBundleName" "$APPNAME"
 
-mkdir -p ./OSX-Packing/
 mv  ${RIDEDIR}/${RIDEAPPDIRNAME} ${RIDEDIR}/${APPNAME}.app
 
 cd ${RIDEDIR}
@@ -57,9 +56,11 @@ mkdir -p ${SHIPDIRECTORY}
 TMP1ARCHIVE=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac_unsigned.pkg" | tr '[:upper:]' '[:lower:]'`
 ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac.pkg" | tr '[:upper:]' '[:lower:]'`
 
+cd ${RIDEDIR}
 /usr/bin/pkgbuild --analyze --root ./${APPNAME}.app ${APPNAME}.plist
+cd ..
 
-/usr/bin/pkgbuild --root "OSX-Packing"                  \
+/usr/bin/pkgbuild --root "${RIDEDIR}"                  \
 --identifier "com.dyalog.pkg.ride${BASE_VERSION_ND}"    \
 --version "${RIDEVERSION}"                              \
 --install-location "/Applications/"                     \
