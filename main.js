@@ -5,7 +5,7 @@ const rq=require,fs=rq('fs'),path=rq('path'),{spawn}=rq('child_process'),ps=proc
 // https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
 D.win=/^win/i.test(ps.platform);D.mac=ps.platform=='darwin'
 if(!env.RIDE_SPAWN&&!D.win){
-  var mapl=path.dirname(ps.execPath)+(D.mac?'/../../../../Resources/Dyalog/mapl':'/../mapl')
+  var mapl=path.dirname(ps.execPath)+(D.mac?'/../Resources/Dyalog/mapl':'/../mapl')
   if(fs.existsSync(mapl))env.RIDE_SPAWN=D.lastSpawnedExe=mapl
 }
 const dbf=el.app.getPath('userData')+'/winstate.json' //json "database" file for storing preferences
