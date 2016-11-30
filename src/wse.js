@@ -12,8 +12,7 @@ D.WSE.prototype={
     var f=this.pending[x.nodeId];if(!f)return
     f((x.nodeIds||[]).map(function(c,i){
       //x.classes uses constants from http://help.dyalog.com/15.0/Content/Language/System%20Functions/nc.htm
-      var t=Math.floor(x.classes[i]);return{id:c||('leaf_'+x.nodeId+'_'+i),
-                                            text:x.names[i],expandable:!!c,icon:t}
+      return{id:c||('leaf_'+x.nodeId+'_'+i),text:x.names[i],expandable:!!c,icon:(''+Math.abs(x.classes[i])).replace('.','_')}
     }))
     delete this.pending[x.nodeId]
   },

@@ -9,7 +9,7 @@ function Bonsai(e,o){ //e:dom element, o:options={children:function(id,callback)
   e.onmousedown=function(event){
     if(event.target.matches('.bt_node_expand')){
       var a=event.target, node=bt.nodes[a.parentNode.dataset.id];if(!node||!node.expandable)return
-      node.expanded=1-!!node.expanded; a.textContent='+-'[+!!node.expanded]
+      node.expanded=1-!!node.expanded; a.textContent='⊞⊟'[+!!node.expanded]
       node.expanded&&o.children(node.id,function(children){
         node.children=children
         children.forEach(function(c){bt.nodes[c.id]=c})
@@ -27,7 +27,7 @@ function Bonsai(e,o){ //e:dom element, o:options={children:function(id,callback)
 Bonsai.prototype={
   render:function(node){
     return'<div data-id="'+node.id+'">'+
-            (node.expandable?'<a class=bt_node_expand>'+'+-'[+!!node.expanded]+'</a>'
+            (node.expandable?'<a class=bt_node_expand>'+'⊞⊟'[+!!node.expanded]+'</a>'
                             :'<a class=bt_node_indent></a>')+
             '<span data-id='+node.id+' class="bt_icon_'+node.icon+' bt_text">'+node.text+'</span>'+
             (node.expanded?node.children.map(this.render).join(''):'')+
