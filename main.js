@@ -6,7 +6,10 @@ const rq=require,fs=rq('fs'),path=rq('path'),{spawn}=rq('child_process'),ps=proc
 D.win=/^win/i.test(ps.platform);D.mac=ps.platform=='darwin'
 env.RIDE_SPAWN=env.RIDE_SPAWN|| // the default depends on whether this is a standalone RIDE
   (D.win?'':fs.existsSync(path.dirname(ps.execPath)+(D.mac?'/../../../../Resources/Dyalog/mapl':'/../mapl')))
-if(D.mac&&!env.RIDE_SPAWN){env.RIDE_SPAWN=D.lastSpawnedExe=path.resolve(ps.cwd(),'../Dyalog/mapl')}
+if(D.mac&&!env.RIDE_SPAWN){
+  var mapl=path.resolve(ps.cwd(),'../Dyalog/mapl')
+  if(fs.existsSync(mapl))env.RIDE_SPAWN=D.lastSpawnedExe=mapl
+}
 
 const dbf=el.app.getPath('userData')+'/winstate.json' //json "database" file for storing preferences
 let db={};try{if(fs.existsSync(dbf))db=JSON.parse(fs.readFileSync(dbf,'utf8'))}catch(e){console.error(e)}
