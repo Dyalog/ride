@@ -44,7 +44,7 @@ PLISTValue "$PLISTFILE" "CFBundleDisplayName" "$APPNAME"
 PLISTValue "$PLISTFILE" "CFBundleName" "$APPNAME"
 
 mkdir -p ./OSX-Packing/
-rsync -a --copy-links ${RIDEDIR}/${RIDEAPPDIRNAME} ./OSX-Packing/${APPNAME}.app
+rsync -a --copy-links ${RIDEDIR}/${RIDEAPPDIRNAME}/ ./OSX-Packing/${APPNAME}.app
 
 cd OSX-Packing
 
