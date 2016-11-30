@@ -1,6 +1,7 @@
 #!/bin/bash
 set -x
 set -e
+BUILDROOTDIR=${PWD}
 GIT_BRANCH=`git branch -a | grep \* | awk '{print $2}'`
 TARGET=$GIT_BRANCH
 
@@ -38,18 +39,18 @@ APPNAME="Ride-$BASE_VERSION"
 ## Set the RIDE Version number and product name
 
 PLISTValue "$PLISTFILE" "CFBundleVersion" "$RIDEVERSION"
-PLISTValue "$PLISTFILE" "CFBundleShortVersionString" "Value $RIDEVERSION"
+PLISTValue "$PLISTFILE" "CFBundleShortVersionString" "$RIDEVERSION"
 PLISTValue "$PLISTFILE" "CFBundleIdentifier" "com.dyalog.ride$BASE_VERSION_ND"
 PLISTValue "$PLISTFILE" "CFBundleDisplayName" "$APPNAME"
-PLISTValue "$PLISTFILE" "CFBundleName" "$APPNAME"
+#PLISTValue "$PLISTFILE" "CFBundleName" "$APPNAME"
 
 mv  ${RIDEDIR}/${RIDEAPPDIRNAME} ${RIDEDIR}/${APPNAME}.app
 
 cd ${RIDEDIR}
 
-/usr/bin/codesign --deep --sign "6LKE87V3BD" --verbose ${APPNAME}.app
+#/usr/bin/codesign --deep --sign "6LKE87V3BD" --verbose ${APPNAME}.app
 
-cd ..
+cd ${BUILDROOTDIR}
 
 mkdir -p ${SHIPDIRECTORY}
 
