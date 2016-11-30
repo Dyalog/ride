@@ -355,9 +355,34 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 #abt_ta{border-style:solid;border-color:#888 #fff #fff #888;border-width:2px;white-space:pre;word-wrap:normal;
         overflow-x:scroll;width:100%;height:100%;resize:none}
 
+/*workspace explorer*/
 #wse{font-family:apl,monospace;font-size:18px;text-align:left;
-     background-color:#fff;overflow:scroll;width:100%;height:100%}
-/*.wse.jstree-default .jstree-clicked{.sel}*/
+     background-color:#fff;overflow:auto;width:100%;height:100%;white-space:nowrap;cursor:default}
+#wse div{padding-left:1em}
+#wse>div{padding-left:2px}
+#wse .bt_node_expand,#wse .bt_node_indent{display:inline-block;width:16px;height:16px;text-align:center;margin-right:4px}
+#wse .bt_node_expand{font-family:monospace;cursor:pointer;opacity:.7}
+#wse .bt_node_expand:hover{opacity:1}
+#wse .bt_icon_2_1::before{content:"v";background:#f00} /*variable*/
+#wse .bt_icon_2_2::before{content:"v";background:#f00} /*field*/
+#wse .bt_icon_2_3::before{content:"v";background:#f00} /*property*/
+#wse .bt_icon_2_6::before{content:"v";background:#f00} /*external shared variable*/
+#wse .bt_icon_3_1::before{content:"f";background:#0aa} /*tradfn*/
+#wse .bt_icon_3_2::before{content:"f";background:#0aa} /*dfn*/
+#wse .bt_icon_3_3::before{content:"f";background:#0aa} /*derived or primitive function*/
+#wse .bt_icon_3_6::before{content:"f";background:#0aa} /*external function*/
+#wse .bt_icon_4_1::before{content:"o";background:#00f} /*tradop*/
+#wse .bt_icon_4_2::before{content:"o";background:#00f} /*dop*/
+#wse .bt_icon_4_3::before{content:"o";background:#00f} /*derived or primitive operator*/
+#wse .bt_icon_9_1::before{content:"n";background:#fc0} /*user-defined namespace*/
+#wse .bt_icon_1::before,
+#wse .bt_icon_9_2::before{content:"n";background:#fc0} /*instance*/
+#wse .bt_icon_9_4::before{content:"c";background:#fc0} /*class*/
+#wse .bt_icon_9_5::before{content:"i";background:#fc0} /*interface*/
+#wse .bt_icon_9_6::before{content:"c";background:#fc0} /*external class*/
+#wse .bt_icon_9_7::before{content:"i";background:#fc0} /*external interface*/
+#wse .bt_text::before{display:inline-block;width:16px;height:16px;border-radius:50%;color:#fff;text-align:center;margin-right:4px}
+.bt_collapsed>div{display:none}
 
 #demo-keys{position:fixed;top:10px;right:10px}
 #demo-keys span{font-family:apl,monospace;font-size:18px;font-size:48px;border:solid #333 1px;
