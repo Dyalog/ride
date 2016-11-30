@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <UI Id="CommonProgressText">
+            <ProgressText Action="InstallValidate">!(loc.ProgressTextInstallValidate)</ProgressText>
+            <ProgressText Action="InstallFiles" Template="!(loc.ProgressTextInstallFilesTemplate)">!(loc.ProgressTextInstallFiles)</ProgressText>
+            <ProgressText Action="InstallAdminPackage" Template="!(loc.ProgressTextInstallAdminPackageTemplate)">!(loc.ProgressTextInstallAdminPackage)</ProgressText>
+            <ProgressText Action="FileCost">!(loc.ProgressTextFileCost)</ProgressText>
+            <ProgressText Action="CostInitialize">!(loc.ProgressTextCostInitialize)</ProgressText>
+            <ProgressText Action="CostFinalize">!(loc.ProgressTextCostFinalize)</ProgressText>
+            <ProgressText Action="CreateShortcuts" Template="!(loc.ProgressTextCreateShortcutsTemplate)">!(loc.ProgressTextCreateShortcuts)</ProgressText>
+            <ProgressText Action="PublishComponents" Template="!(loc.ProgressTextPublishComponentsTemplate)">!(loc.ProgressTextPublishComponents)</ProgressText>
+            <ProgressText Action="PublishFeatures" Template="!(loc.ProgressTextPublishFeaturesTemplate)">!(loc.ProgressTextPublishFeatures)</ProgressText>
+            <ProgressText Action="PublishProduct">!(loc.ProgressTextPublishProduct)</ProgressText>
+            <ProgressText Action="RegisterClassInfo" Template="!(loc.ProgressTextRegisterClassInfoTemplate)">!(loc.ProgressTextRegisterClassInfo)</ProgressText>
+            <ProgressText Action="RegisterExtensionInfo" Template="!(loc.ProgressTextRegisterExtensionInfoTemplate)">!(loc.ProgressTextRegisterExtensionInfo)</ProgressText>
+            <ProgressText Action="RegisterMIMEInfo" Template="!(loc.ProgressTextRegisterMIMEInfoTemplate)">!(loc.ProgressTextRegisterMIMEInfo)</ProgressText>
+            <ProgressText Action="RegisterProgIdInfo" Template="!(loc.ProgressTextRegisterProgIdInfoTemplate)">!(loc.ProgressTextRegisterProgIdInfo)</ProgressText>
+            <ProgressText Action="AllocateRegistrySpace" Template="!(loc.ProgressTextAllocateRegistrySpaceTemplate)">!(loc.ProgressTextAllocateRegistrySpace)</ProgressText>
+            <ProgressText Action="AppSearch" Template="!(loc.ProgressTextAppSearchTemplate)">!(loc.ProgressTextAppSearch)</ProgressText>
+            <ProgressText Action="BindImage" Template="!(loc.ProgressTextBindImageTemplate)">!(loc.ProgressTextBindImage)</ProgressText>
+            <ProgressText Action="CCPSearch">!(loc.ProgressTextCCPSearch)</ProgressText>
+            <ProgressText Action="CreateFolders" Template="!(loc.ProgressTextCreateFoldersTemplate)">!(loc.ProgressTextCreateFolders)</ProgressText>
+            <ProgressText Action="DeleteServices" Template="!(loc.ProgressTextDeleteServicesTemplate)">!(loc.ProgressTextDeleteServices)</ProgressText>
+            <ProgressText Action="DuplicateFiles" Template="!(loc.ProgressTextDuplicateFilesTemplate)">!(loc.ProgressTextDuplicateFiles)</ProgressText>
+            <ProgressText Action="FindRelatedProducts" Template="!(loc.ProgressTextFindRelatedProductsTemplate)">!(loc.ProgressTextFindRelatedProducts)</ProgressText>
+            <ProgressText Action="InstallODBC">!(loc.ProgressTextInstallODBC)</ProgressText>
+            <ProgressText Action="InstallServices" Template="!(loc.ProgressTextInstallServicesTemplate)">!(loc.ProgressTextInstallServices)</ProgressText>
+            <ProgressText Action="LaunchConditions">!(loc.ProgressTextLaunchConditions)</ProgressText>
+            <ProgressText Action="MigrateFeatureStates" Template="!(loc.ProgressTextMigrateFeatureStatesTemplate)">!(loc.ProgressTextMigrateFeatureStates)</ProgressText>
+            <ProgressText Action="MoveFiles" Template="!(loc.ProgressTextMoveFilesTemplate)">!(loc.ProgressTextMoveFiles)</ProgressText>
+            <ProgressText Action="PatchFiles" Template="!(loc.ProgressTextPatchFilesTemplate)">!(loc.ProgressTextPatchFiles)</ProgressText>
+            <ProgressText Action="ProcessComponents">!(loc.ProgressTextProcessComponents)</ProgressText>
+            <ProgressText Action="RegisterComPlus" Template="!(loc.ProgressTextRegisterComPlusTemplate)">!(loc.ProgressTextRegisterComPlus)</ProgressText>
+            <ProgressText Action="RegisterFonts" Template="!(loc.ProgressTextRegisterFontsTemplate)">!(loc.ProgressTextRegisterFonts)</ProgressText>
+            <ProgressText Action="RegisterProduct" Template="!(loc.ProgressTextRegisterProductTemplate)">!(loc.ProgressTextRegisterProduct)</ProgressText>
+            <ProgressText Action="RegisterTypeLibraries" Template="!(loc.ProgressTextRegisterTypeLibrariesTemplate)">!(loc.ProgressTextRegisterTypeLibraries)</ProgressText>
+            <ProgressText Action="RegisterUser" Template="!(loc.ProgressTextRegisterUserTemplate)">!(loc.ProgressTextRegisterUser)</ProgressText>
+            <ProgressText Action="RemoveDuplicateFiles" Template="!(loc.ProgressTextRemoveDuplicateFilesTemplate)">!(loc.ProgressTextRemoveDuplicateFiles)</ProgressText>
+            <ProgressText Action="RemoveEnvironmentStrings" Template="!(loc.ProgressTextRemoveEnvironmentStringsTemplate)">!(loc.ProgressTextRemoveEnvironmentStrings)</ProgressText>
+            <ProgressText Action="RemoveExistingProducts" Template="!(loc.ProgressTextRemoveExistingProductsTemplate)">!(loc.ProgressTextRemoveExistingProducts)</ProgressText>
+            <ProgressText Action="RemoveFiles" Template="!(loc.ProgressTextRemoveFilesTemplate)">!(loc.ProgressTextRemoveFiles)</ProgressText>
+            <ProgressText Action="RemoveFolders" Template="!(loc.ProgressTextRemoveFoldersTemplate)">!(loc.ProgressTextRemoveFolders)</ProgressText>
+            <ProgressText Action="RemoveIniValues" Template="!(loc.ProgressTextRemoveIniValuesTemplate)">!(loc.ProgressTextRemoveIniValues)</ProgressText>
+            <ProgressText Action="RemoveODBC">!(loc.ProgressTextRemoveODBC)</ProgressText>
+            <ProgressText Action="RemoveRegistryValues" Template="!(loc.ProgressTextRemoveRegistryValuesTemplate)">!(loc.ProgressTextRemoveRegistryValues)</ProgressText>
+            <ProgressText Action="RemoveShortcuts" Template="!(loc.ProgressTextRemoveShortcutsTemplate)">!(loc.ProgressTextRemoveShortcuts)</ProgressText>
+            <ProgressText Action="RMCCPSearch">!(loc.ProgressTextRMCCPSearch)</ProgressText>
+            <ProgressText Action="SelfRegModules" Template="!(loc.ProgressTextSelfRegModulesTemplate)">!(loc.ProgressTextSelfRegModules)</ProgressText>
+            <ProgressText Action="SelfUnregModules" Template="!(loc.ProgressTextSelfUnregModulesTemplate)">!(loc.ProgressTextSelfUnregModules)</ProgressText>
+            <ProgressText Action="SetODBCFolders">!(loc.ProgressTextSetODBCFolders)</ProgressText>
+            <ProgressText Action="StartServices" Template="!(loc.ProgressTextStartServicesTemplate)">!(loc.ProgressTextStartServices)</ProgressText>
+            <ProgressText Action="StopServices" Template="!(loc.ProgressTextStopServicesTemplate)">!(loc.ProgressTextStopServices)</ProgressText>
+            <ProgressText Action="UnpublishComponents" Template="!(loc.ProgressTextUnpublishComponentsTemplate)">!(loc.ProgressTextUnpublishComponents)</ProgressText>
+            <ProgressText Action="UnpublishFeatures" Template="!(loc.ProgressTextUnpublishFeaturesTemplate)">!(loc.ProgressTextUnpublishFeatures)</ProgressText>
+            <ProgressText Action="UnregisterClassInfo" Template="!(loc.ProgressTextUnregisterClassInfoTemplate)">!(loc.ProgressTextUnregisterClassInfo)</ProgressText>
+            <ProgressText Action="UnregisterComPlus" Template="!(loc.ProgressTextUnregisterComPlusTemplate)">!(loc.ProgressTextUnregisterComPlus)</ProgressText>
+            <ProgressText Action="UnregisterExtensionInfo" Template="!(loc.ProgressTextUnregisterExtensionInfoTemplate)">!(loc.ProgressTextUnregisterExtensionInfo)</ProgressText>
+            <ProgressText Action="UnregisterFonts" Template="!(loc.ProgressTextUnregisterFontsTemplate)">!(loc.ProgressTextUnregisterFonts)</ProgressText>
+            <ProgressText Action="UnregisterMIMEInfo" Template="!(loc.ProgressTextUnregisterMIMEInfoTemplate)">!(loc.ProgressTextUnregisterMIMEInfo)</ProgressText>
+            <ProgressText Action="UnregisterProgIdInfo" Template="!(loc.ProgressTextUnregisterProgIdInfoTemplate)">!(loc.ProgressTextUnregisterProgIdInfo)</ProgressText>
+            <ProgressText Action="UnregisterTypeLibraries" Template="!(loc.ProgressTextUnregisterTypeLibrariesTemplate)">!(loc.ProgressTextUnregisterTypeLibraries)</ProgressText>
+            <ProgressText Action="WriteEnvironmentStrings" Template="!(loc.ProgressTextWriteEnvironmentStringsTemplate)">!(loc.ProgressTextWriteEnvironmentStrings)</ProgressText>
+            <ProgressText Action="WriteIniValues" Template="!(loc.ProgressTextWriteIniValuesTemplate)">!(loc.ProgressTextWriteIniValues)</ProgressText>
+            <ProgressText Action="WriteRegistryValues" Template="!(loc.ProgressTextWriteRegistryValuesTemplate)">!(loc.ProgressTextWriteRegistryValues)</ProgressText>
+            <ProgressText Action="Advertise">!(loc.ProgressTextAdvertise)</ProgressText>
+            <ProgressText Action="GenerateScript" Template="!(loc.ProgressTextGenerateScriptTemplate)">!(loc.ProgressTextGenerateScript)</ProgressText>
+            <ProgressText Action="InstallSFPCatalogFile" Template="!(loc.ProgressTextInstallSFPCatalogFileTemplate)">!(loc.ProgressTextInstallSFPCatalogFile)</ProgressText>
+            <ProgressText Action="MsiPublishAssemblies" Template="!(loc.ProgressTextMsiPublishAssembliesTemplate)">!(loc.ProgressTextMsiPublishAssemblies)</ProgressText>
+            <ProgressText Action="MsiUnpublishAssemblies" Template="!(loc.ProgressTextMsiUnpublishAssembliesTemplate)">!(loc.ProgressTextMsiUnpublishAssemblies)</ProgressText>
+            <ProgressText Action="Rollback" Template="!(loc.ProgressTextRollbackTemplate)">!(loc.ProgressTextRollback)</ProgressText>
+            <ProgressText Action="RollbackCleanup" Template="!(loc.ProgressTextRollbackCleanupTemplate)">!(loc.ProgressTextRollbackCleanup)</ProgressText>
+            <ProgressText Action="UnmoveFiles" Template="!(loc.ProgressTextUnmoveFilesTemplate)">!(loc.ProgressTextUnmoveFiles)</ProgressText>
+            <ProgressText Action="UnpublishProduct">!(loc.ProgressTextUnpublishProduct)</ProgressText>
+        </UI>
+    </Fragment>
+</Wix>

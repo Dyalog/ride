@@ -1,10 +1,14 @@
 #!/bin/bash
 set -x
 
+
 if ! [ "$1" = "" ]; then
         TARGET=$1
 else
-	TARGET=${GIT_BRANCH#*/}
+	if ! [ "$GIT_BRANCH" ]; then
+		GIT_BRANCH=`git branch -a | grep \* | awk '{print $2}'`
+		TARGET=${GIT_BRANCH#*/}
+	fi
 fi
 
 if [ "x$TARGET" = "x" ]; then
@@ -12,10 +16,12 @@ if [ "x$TARGET" = "x" ]; then
 	exit 1
 fi
 
+APP_NAME=$(node -e "console.log($(cat package.json).packageName)") # "Ride-40" or similar
+
 echo "Packaging for $TARGET"
 
-RIDEDIR="/devt/builds/ride/${TARGET}/latest/linux64"
-ICON="/devt/admin/Dyalog Logos Stationery/Logos/Dyalog-D.svg"
+RIDEDIR="_/ride40/${APP_NAME}-linux-x64"
+ICON="style/img/D.svg"
 SBOXDIR=/tmp/ride$$
 postinst=/tmp/postinst$$
 prerm=/tmp/prerm$$
@@ -31,8 +37,8 @@ function checkEnvironment() {
 }
 
 function getVersionInfo() {
-if [ -s ${RIDEDIR}/../version ]; then
-        RIDEVERSION=`cat ${RIDEDIR}/../version`
+if [ -s ${RIDEDIR}/../../version ]; then
+        RIDEVERSION=`cat ${RIDEDIR}/../../version`
 else
         RIDEVERSION="1.9.0"
 fi
@@ -109,7 +115,7 @@ function createDEB() {
 		--category "devel"			\
 		--after-install $postinst		\
 		--before-remove $prerm			\
-		-p /devt/builds/ride/${TARGET}/latest/ship/ride-${RIDEVERSION}_linux.amd64.deb	\
+		-p ship/ride-${RIDEVERSION}_linux.amd64.deb	\
 		-n ride-${BASE_VERSION}			\
 		-v ${RIDEVERSION}			\
 		-a amd64				\
@@ -133,7 +139,7 @@ function createRPM() {
 		--category "devel"			\
 		--after-install $postinst		\
 		--before-remove $prerm			\
-		-p /devt/builds/ride/${TARGET}/latest/ship/ride-${RIDEVERSION}_linux.amd64.rpm	\
+		-p ship/ride-${RIDEVERSION}_linux.amd64.rpm	\
 		-n ride-${BASE_VERSION}			\
 		-v ${RIDEVERSION}			\
 		-a amd64				\
@@ -157,8 +163,8 @@ checkEnvironment
 getVersionInfo
 createPackageFiles
 
-if ! [ -d /devt/builds/ride/${TARGET}/latest/ship ]; then
-	mkdir -p /devt/builds/ride/${TARGET}/latest/ship
+if ! [ -d ship ]; then
+	mkdir -p ship
 fi
 mkdir -p ${SBOXDIR}/opt/ride-${BASE_VERSION}
 mkdir -p ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps
