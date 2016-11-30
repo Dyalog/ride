@@ -19,7 +19,7 @@ LINENUM=$(($(cat -n ${PLISTFILE} | awk "/$PLKEY/ {print \$1}") + 1))
 ## Unlock the keychain
 /Users/jenkins/unlock.sh
 
-PackageName="Ride-40"
+PackageName="Ride-4.0"
 BUILDNAME="ride40"
 RIDEDIR="_/${BUILDNAME}/${PackageName}-darwin-x64"
 SHIPDIRECTORY=ship/
