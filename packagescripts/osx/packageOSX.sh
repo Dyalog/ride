@@ -59,7 +59,7 @@ ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac.pkg" | tr
 
 cd ${RIDEDIR}
 /usr/bin/pkgbuild --analyze --root ./${APPNAME}.app ${APPNAME}.plist
-cd ..
+cd ${BUILDROOTDIR}
 
 /usr/bin/pkgbuild --root "${RIDEDIR}"                  \
 --identifier "com.dyalog.pkg.ride${BASE_VERSION_ND}"    \
