@@ -44,9 +44,9 @@ PLISTValue "$PLISTFILE" "CFBundleDisplayName" "$APPNAME"
 PLISTValue "$PLISTFILE" "CFBundleName" "$APPNAME"
 
 mkdir -p ./OSX-Packing/
-cp -R ${RIDEDIR}/${RIDEAPPDIRNAME} ./OSX-Packing/${APPNAME}.app
+mv  ${RIDEDIR}/${RIDEAPPDIRNAME} ${RIDEDIR}/${APPNAME}.app
 
-cd OSX-Packing
+cd ${RIDEDIR}
 
 /usr/bin/codesign --deep --sign "6LKE87V3BD" --verbose ${APPNAME}.app
 
