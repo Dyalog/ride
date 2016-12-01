@@ -16,7 +16,7 @@ if [ "x$TARGET" = "x" ]; then
 	exit 1
 fi
 
-APP_NAME=$(node -e "console.log($(cat package.json).packageName)") # "Ride-40" or similar
+APP_NAME=$(node -e "console.log($(cat package.json).productName)") # "Ride-4.0" or similar
 
 echo "Packaging for $TARGET"
 
