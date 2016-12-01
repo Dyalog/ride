@@ -3,13 +3,15 @@
 set -x -e -o pipefail
 
 BASE_VERSION=`node -pe "($(cat package.json)).version"`
+PACKAGE_NAME=`node -pe "($(cat package.json)).productName"`
+APP_NAME=$(node -e "console.log($(cat package.json).name)") # "ride30" or similar
+
 VERSION="${BASE_VERSION%%.0}.`git rev-list HEAD --count`"  # "%%.0" strips trailing ".0"
 if ! [ "$GIT_BRANCH" ]; then
 	GIT_BRANCH=`git symbolic-ref --short HEAD`
 fi
 echo "Current branch: ${GIT_BRANCH#*/}"
 CURRENTBRANCH=${GIT_BRANCH#*/}
-APP_NAME=$(node -e "console.log($(cat package.json).name)") # "ride30" or similar
 
 umask 002 # user and group can do everything, others can only read and execute
 mountpoint /devt; echo Devt is mounted: good # make sure it's mounted
@@ -22,8 +24,8 @@ echo Copying Directories to $r/$d
 #cp -r _/${APP_NAME}/* $r/$d
 for DIR in `ls _/${APP_NAME}`; do
 
-  OS=`echo ${DIR#${APP_NAME}-} | awk -F"-" '{print $1}'`
-  ARCH=`echo ${DIR#${APP_NAME}-} | awk -F"-" '{print $2}'`
+  OS=`echo ${DIR#${PACKAGE_NAME}-} | awk -F"-" '{print $1}'`
+  ARCH=`echo ${DIR#${PACKAGE_NAME}-} | awk -F"-" '{print $2}'`
 	echo "DEBUG: \$DIR=$DIR"
 	echo "DEBUG: \$OS=$OS"
 	echo "DEBUG: \$ARCH=$ARCH"
@@ -40,6 +42,7 @@ for DIR in `ls _/${APP_NAME}`; do
       ;;
   esac
 	echo "DEBUG: \$OSNAME=$OSNAME"
+
 cp -r _/${APP_NAME}/${DIR} $r/$d/${OSNAME}
 
   ZIPFILE="ride-${VERSION}-${OSNAME}.zip"
