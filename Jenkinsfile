@@ -54,7 +54,9 @@ stage ('Packaging') {
 
 stage ('Copy Install Images') {
 	node('Linux && sharedworkspace') {
-		// Copy installer images to /devt/build/ride/
-		sh './copyinstallers.sh'
+		exws (extWorkspace) {
+			// Copy installer images to /devt/build/ride/
+			sh './copyinstallers.sh'
+		}
 	}
 }
