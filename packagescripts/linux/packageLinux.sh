@@ -6,7 +6,7 @@ if ! [ "$1" = "" ]; then
         TARGET=$1
 else
 	if ! [ "$GIT_BRANCH" ]; then
-		GIT_BRANCH=`git branch -a | grep \* | awk '{print $2}'`
+		GIT_BRANCH=`git symbolic-ref --short HEAD`
 		TARGET=${GIT_BRANCH#*/}
 	fi
 fi

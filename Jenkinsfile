@@ -1,9 +1,9 @@
 def extWorkspace = exwsAllocate 'rideDiskPool'
 
-node('NodeJS') {
+node('Linux && NodeJS && sharedworkspace') {
         exws (extWorkspace) {
                 stage ('Checkout from GitHub') {
-                    git url: 'https://github.com/JasonRivers/Ride.git'
+                    git url: 'https://github.com/Dyalog/Ride.git'
                 }
                 
 
@@ -13,11 +13,13 @@ node('NodeJS') {
                 
 
                 stage ('Build Ride') {
+			// Build RIDE for all platforms
                     sh './mk dist'
                 }
                 
                 stage ('Dyalog Network Publish') {
-                    //sh './publish.sh'
+			// Copy built files to /devt/builds/ride/
+                    sh './publish.sh'
                 }
                 
         }
@@ -27,25 +29,32 @@ stage ('Packaging') {
 
     parallel (
         "Linux Package" : {
-                        node('NodeJS') {
+                        node('Linux && sharedworkspace') {
                                 exws (extWorkspace) {
                                 sh './packagescripts/linux/packageLinux.sh'
                                 }
                         }
         },
         "Mac Package" : {
-                        node('MAC') {
+                        node('MAC && sharedworkspace') {
                                 exws (extWorkspace) {
                                 sh './packagescripts/osx/packageOSX.sh'
                                 }
                         }
         },
         "Windows Package" : {
-                        node('WIX') {
+                        node('Windows && WIX && sharedworkspace') {
                                 exws (extWorkspace) {
                                 bat 'packagescripts/windows/packageWindows.bat'
                                 }
                         }
         }
     )
+}
+
+stage ('Copy Install Images') {
+	node('Linux && sharedworkspace') {
+		// Copy installer images to /devt/build/ride/
+		sh 'copyinstallers.sh'
+	}
 }
