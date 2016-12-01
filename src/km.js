@@ -232,9 +232,12 @@ function bqChangeHandler(cm,o){ //o:changeObj
   var l=o.from.line,c=o.from.ch
   if(o.origin!=='+input'||o.text.length!==1||o.text[0].length!==1){bqCleanUp(cm);return}
   var x=o.text[0],pk=D.prf.prefixKey()
-  if(x!==pk){if(bq[x]){cm.replaceRange(bq[x],{line:l,ch:c-1},{line:l,ch:c+1},'D')
-                       bq[x]==='∇'&&/^\s*∇/.test(cm.getLine(l))&&cm.getOption('smartIndent')&&cm.indentLine(l,'smart')}
-             bqCleanUp(cm);return}
+  if(x!==pk){
+    var y=x===' '?pk:bq[x]
+    if(y){cm.replaceRange(y,{line:l,ch:c-1},{line:l,ch:c+1},'D')
+          y==='∇'&&/^\s*∇/.test(cm.getLine(l))&&cm.getOption('smartIndent')&&cm.indentLine(l,'smart')}
+    bqCleanUp(cm);return
+  }
   var s=cm.getLine(l)
   if(s.slice(c-2,c)===pk+pk){cm.replaceRange(bq[pk]||'',{line:l,ch:c-2},{line:l,ch:c+1},'D');return} //``` for ⋄
   if(s[c-1]===pk){bqCleanUp(cm);bqbqHint(cm)}
