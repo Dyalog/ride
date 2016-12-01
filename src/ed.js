@@ -95,8 +95,9 @@ D.Ed.prototype={
       if(q){
         ed.annotation=ed.cm.showMatchesOnScrollbar(q,ic)
         ed.cm.addOverlay(ed.overlay={token:function(x){ //x:stream
-          var s=ed.cm.getValue();if(ic)s=s.toLowerCase();$('.tb_sc',ed.tb).toggleClass('no-matches',s.indexOf(q)<0)
-          s=x.string.slice(x.pos);var i=s.indexOf(q);if(!i){x.pos+=q.length;return'searching'};i>0?x.pos+=i:x.skipToEnd()
+          var s=ed.cm.getValue();$('.tb_sc',ed.tb).toggleClass('no-matches',s.indexOf(q)<0)
+          s=x.string.slice(x.pos);if(ic)s=s.toLowerCase()
+          var i=s.indexOf(q);if(!i){x.pos+=q.length;return'searching'};i>0?x.pos+=i:x.skipToEnd()
         }})
         var u=ed.dom.querySelector('.ride_win .cm-scroll-v');if(u)u.title='Lines on scroll bar show match locations'
       }
