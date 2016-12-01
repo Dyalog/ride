@@ -1,4 +1,4 @@
-def extWorkspace = exwsAllocate 'rideDiskPool'
+def extWorkspace = exwsAllocate 'sharedWorkspace'
 
 node('Linux && NodeJS && sharedworkspace') {
         exws (extWorkspace) {
