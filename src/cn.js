@@ -83,9 +83,9 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
           }).on('error',x=>{err(x.message||''+x);q.connecting_dlg.hidden=1;clearTimeout(D.tmr);delete D.tmr})
           D.tmr=setTimeout(function(){err('Timed out');c&&c.end();q.connecting_dlg.hidden=1},3000)
         }else{
-          srv=net.createServer(x=>{log('spawned interpreter connected');const a=srv.address();srv&&srv.close();srv=0;clt=x
+          srv=net.createServer(y=>{log('spawned interpreter connected');const a=srv.address();srv&&srv.close();srv=0;clt=y
                                    initInterpreterConn();new D.IDE().setConnInfo(a.address,a.port,sel?sel.name:'')
-                                   if(typeof D!=='undefined'&&D.el)D.lastSpawnedExe=x.exe;D.local=1})
+                                   D.lastSpawnedExe=x.exe;D.local=1})
           srv.on('error',x=>{log('listen failed: '+x);srv=clt=0;err(x.message);clearTimeout(D.tmr);delete D.tmr})
           srv.listen(0,'127.0.0.1',_=>{
             const a=srv.address(),hp=a.address+':'+a.port
