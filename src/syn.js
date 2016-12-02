@@ -123,7 +123,7 @@ CM.defineMode('apl',function(){
                   break
                 case'access':ok=la.t==='class'||la.t==='∇';sm.match(/(?:\s+\w+)+/);ok=1;break
                 case'base':case'goto':case'include':case'return':case'using':ok=1;break
-                case'field':sm.match(/(\s+(private|public))?(\s+(instance|shared))?/i,1,1);ok=1;break
+                case'field':sm.match(/(\s+(private|public|instance|shared|readonly))+/i,1,1);ok=1;break
                 case'implements':
                   var m=sm.match(/\s+(\w+)/)
                   if(m){
