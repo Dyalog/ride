@@ -27,7 +27,7 @@ function escRE(s){return s.replace(/[\(\)\[\]\{\}\.\?\+\*\/\\\^\$\|]/g,function(
 function escIdiom(s){
   return s.replace(/«(.*?)»|(.)/g,function(_,g,g2){g||(g=g2);return' *'+(g==='_'?"' '":escRE(g))}).slice(2)
 }
-var idiomsRE=RegExp('^(?:'+(idioms.sort(function(x,y){return y.length-x.length}).map(escIdiom).join('|'))+')','i')
+var idiomsRE=RegExp('^(?:'+idioms.sort(function(x,y){return y.length-x.length}).map(escIdiom).join('|')+')','i')
 var sw=4,swm=2 //sw:default indent unit (vim calls that "sw" for "shift width"), swm:indent unit for methods
 function updSW(){sw=D.prf.indent();swm=D.prf.indentMethods();swm<0&&(swm=sw)}
 updSW();D.prf.indent(updSW);D.prf.indentMethods(updSW) //keep sw,swm in sync with the prefs
