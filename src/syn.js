@@ -121,9 +121,12 @@ CM.defineMode('apl',function(){
                 case'leave':case'continue':
                   ok=0;for(var i=0;i<a.length;i++)if(/^(?:for|repeat|while)$/.test(a[i].t)){ok=1;break}
                   break
-                case'access':ok=la.t==='class'||la.t==='∇';sm.match(/(?:\s+\w+)+/);ok=1;break
+                case'access':ok=la.t==='class'||la.t==='∇'
+                  var m=sm.match(/[^⋄\n\r]*/)
+                  ok=!m||/^(\s+(private|public|instance|shared|webmethod|overridable|override))*\s*$/i.test(m[0])
+                  break
                 case'base':case'goto':case'include':case'return':case'using':ok=1;break
-                case'field':sm.match(/(\s+(private|public|instance|shared|readonly))+/i,1,1);ok=1;break
+                case'field':sm.match(/(\s+(private|public|instance|shared|readonly)\b)+/i,1,1);ok=1;break
                 case'implements':
                   var m=sm.match(/\s+(\w+)/)
                   if(m){
