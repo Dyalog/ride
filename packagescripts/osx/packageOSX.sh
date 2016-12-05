@@ -22,7 +22,7 @@ LINENUM=$(($(cat -n ${PLISTFILE} | awk "/$PLKEY/ {print \$1}") + 1))
 PackageName="Ride-4.0"
 BUILDNAME="ride40"
 RIDEDIR="_/${BUILDNAME}/${PackageName}-darwin-x64"
-SHIPDIRECTORY=ship/
+SHIPDIRECTORY=ship
 RIDEAPPDIRNAME="${PackageName}.app"
 PLISTFILE=${RIDEDIR}/${RIDEAPPDIRNAME}/Contents/Info.plist
 
