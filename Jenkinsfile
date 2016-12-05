@@ -29,7 +29,7 @@ stage ('Packaging') {
 
     parallel (
         "Linux Package" : {
-                        node('Linux && sharedworkspace') {
+                        node('Linux && NodeJS sharedworkspace') {
                                 exws (extWorkspace) {
                                 sh './packagescripts/linux/packageLinux.sh'
                                 }
