@@ -147,7 +147,7 @@ CM.defineMode('apl',function(){
               var x=sm.current(),dd=dfnDepth(a)
               return !dd&&sm.match(/:/) ? 'apl-lbl' : dd||h.vars&&h.vars.indexOf(x)>=0 ? 'apl-var' : 'apl-glb'
             }
-            return/[\+\-×÷⌈⌊\|⍳⍸\?\*⍟○!⌹<≤=≥>≠≡≢∊⍷∪∩~∧∨⍲⍱⍴,⍪⌽⊖⍉↑↓⊂⊃⌷⍋⍒⊤⊥⍕⍎⊣⊢→]/.test(c)?'apl-fn':
+            return/[\+\-×÷⌈⌊\|⍳⍸\?\*⍟○!⌹<≤=≥>≠≡≢∊⍷∪∩~∧∨⍲⍱⍴,⍪⌽⊖⍉↑↓⊆⊂⊃⌷⍋⍒⊤⊥⍕⍎⊣⊢→]/.test(c)?'apl-fn':
                   /[\/\\⌿⍀¨⍨⌸⌶&]/.test(c)?'apl-op1':/[\.∘⍤⍣⍠@]/.test(c)?'apl-op2':'apl-err'
         }
       }

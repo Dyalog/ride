@@ -20,7 +20,8 @@ var sqglDesc={
   '↓':'split/drop'       ,'⊃':'disclose/pick'     ,'⍟':'logarithm'         ,'⍪':'table / ,[⎕io]' ,
   '⍳':'indices/index of' ,'∩':'intersection'      ,'⍱':'nor'               ,'⍠':'variant'        ,
   '○':'pi/trig'          ,'∪':'unique/union'      ,'⍲':'nand'              ,'@':'amend'          ,
-  '*':'exp/power'        ,'⊥':'decode (1 2 3→123)','!':'factorial/binomial','⍸':'where/interval index'
+  '*':'exp/power'        ,'⊥':'decode (1 2 3→123)','!':'factorial/binomial','⍸':'where/interval index',
+  '⊆':'enclose if simple'
 }
 
 var ctid=0 //backquote completion timeout id
@@ -342,7 +343,8 @@ var informal=[
   '⍥ circlediaeresis hoof',
   '⍫ deltilde',
   'á aacute',
-  '⍸ where intervalindex iotaunderbar'
+  '⍸ where intervalindex iotaunderbar',
+  '⊆ encloseifsimple leftshoeunderbar'
 ]
 for(var i=0;i<26;i++)informal.push(String.fromCharCode(i+0x24b6)+' _'+String.fromCharCode(i+0x61/*a*/)) //Ⓐ _a
 
