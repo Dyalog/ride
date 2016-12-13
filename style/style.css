@@ -195,16 +195,9 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .tb_WI  {background-image:url(img/tb_WI.png)}
 .tb_CBP {background-image:url(img/tb_CBP.png)}
 .tb_sep{float:left;width:10px;height:24px;background:no-repeat center center url(img/tb_sep.png)} /*separator*/
+.tb_SC,.tb_RP{text-indent:0;width:auto;color:#444;text-decoration:none;padding-left:2px;padding-right:2px;
+              line-height:22px}
 /*search and replace*/
-.tb_sc,.tb_rp{border-color:#888 #fff #fff #888;border-style:solid;border-width:1px;
-              float:left;width:120px;height:24px;resize:none;overflow:hidden}
-.toolbar .tb_sc .CodeMirror,
-.toolbar .tb_rp .CodeMirror{font-size:18px}
-.tb_sc.no-matches .cm-s-default,
-.tb_rp.no-matches .cm-s-default{background-color:#fee}
-.tb_sc .CodeMirror-empty,
-.tb_rp .CodeMirror-empty{color:#888}
-.tb_rp{margin-left:2px}
 .win,.floating-window{position:absolute;left:0;right:0;top:32px;bottom:0;
                       overflow:hidden!important;padding:0!important;height:auto!important}
 
@@ -642,6 +635,7 @@ div.CodeMirror-cursors{visibility:hidden;position:relative;z-index:3}
 .cm-tab-wrap-hack:after{content:''} /*see CodeMirror issue #2901*/
 /*Help users use markselection to safely style text background*/
 span.CodeMirror-selectedtext{background:none}
+.CodeMirror-dialog input{font-family:apl!important}
 
 .CodeMirror-foldmarker{color:blue;text-shadow:#b9f 1px 1px 2px,#b9f -1px -1px 2px,#b9f 1px -1px 2px,#b9f -1px 1px 2px;
                        font-family:arial;line-height:.3;cursor:pointer}

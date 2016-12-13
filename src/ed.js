@@ -3,7 +3,6 @@ var ACB_VALUE={pairs:'()[]{}',explode:'{}'} //value for CodeMirror's "autoCloseB
 
 //represents an editor (.tc==0) or a tracer (.tc==1)
 //holds a ref to a CodeMirror instance (.cm),
-//plus two small-size CodeMirror instances for Search and Replace (.cmSC, .cmRP)
 //handles most CodeMirror commands in editors (e.g. .LN(), .QT(), .TL(), ...)
 D.Ed=function(ide,opts){ //constructor
   var ed=this;ed.ide=ide;ed.id=opts.id;ed.name=opts.name;ed.tc=opts.tc
@@ -32,27 +31,6 @@ D.Ed=function(ide,opts){ //constructor
     if(t.matches('.tb_btn')){var c=t.className.replace(/^.*\btb_([A-Z]{2,3})\b.*$/,'$1')
                              ed[c]?ed[c](ed.cm):CM.commands[c]?CM.commands[c](ed.cm):0;return!1}
   }
-  ed.cmSC=CM(ed.tb.querySelector('.tb_sc'),{placeholder:'Search',extraKeys:{
-    Enter:ed.NX.bind(ed),
-    'Shift-Enter':ed.PV.bind(ed),
-    'Ctrl-Enter':ed.selectAllSearchResults.bind(ed),
-    Tab:function(){(ed.tc?ed.cm:ed.cmRP).focus()},
-    'Shift-Tab':ed.cm.focus.bind(ed.cm)
-  }})
-  ed.cmSC.on('change',function(){ed.hls()})
-  ed.rp=ed.tb.querySelector('.tb_rp')
-  ed.cmRP=CM(ed.rp,{placeholder:'Replace',extraKeys:{Enter            :function(){ed.rp()},
-                                                     'Shift-Enter'    :function(){ed.rp(1)},
-                                                     'Alt-Enter'      :function(){ed.sc()},
-                                                     'Shift-Alt-Enter':function(){ed.sc(1)},
-                                                     Tab              :function(){ed.cm.focus()},
-                                                     'Shift-Tab'      :function(){(ed.tc?ed.cm:ed.cmSC).focus()}}})
-  var cms=[ed.cmSC,ed.cmRP]
-  for(var i=0;i<cms.length;i++){cms[i].setOption('keyMap','dyalog')
-                                cms[i].setOption('scrollbarStyle','null')
-                                cms[i].addKeyMap({Esc :function(){ed.clrSC();setTimeout(ed.cm.focus.bind(ed.cm),0)},
-                                                  Down:function(){ed.NX()},
-                                                  Up  :function(){ed.PV()}})}
   ed.setTC(!!ed.tc);this.vt=D.vt(this);this.setLN(D.prf.lineNums())
 }
 D.Ed.prototype={
@@ -82,55 +60,6 @@ D.Ed.prototype={
     var h=this.dom.clientHeight,cc=this.cm.cursorCoords(true,'local'),x=cc.left,y=cc.top
     this.cm.scrollIntoView({left:x,right:x,top:y-h/3,bottom:y+2*h/3})
   },
-  clrSC:function(){ //clear search
-    var ed=this,u=ed.dom.querySelector('.ride_win .cm-scroll-v');if(u)u.title=''
-    ed.tb.querySelector('.tb_sc').classList.remove('no-matches')
-    ed.cm.removeOverlay(ed.overlay);ed.annotation&&ed.annotation.clear();ed.overlay=ed.annotation=null
-  },
-  hls:function(){ //highlight search ("hls" named after the Vim option)
-    var ed=this,ic=!$('.tb_case',ed.tb).hasClass('pressed'),g=ed.cm.changeGeneration(),q=ed.cmSC.getValue()
-    if(ic)q=q.toLowerCase() //ic:ignore case?, q:query string
-    if(ed.lastQuery!==q||ed.lastIC!==ic||ed.lastGen!==g){
-      ed.lastQuery=q;ed.lastIC=ic;ed.lastGen=g;ed.clrSC()
-      if(q){
-        ed.annotation=ed.cm.showMatchesOnScrollbar(q,ic)
-        ed.cm.addOverlay(ed.overlay={token:function(x){ //x:stream
-          var s=ed.cm.getValue();$('.tb_sc',ed.tb).toggleClass('no-matches',s.indexOf(q)<0)
-          s=x.string.slice(x.pos);if(ic)s=s.toLowerCase()
-          var i=s.indexOf(q);if(!i){x.pos+=q.length;return'searching'};i>0?x.pos+=i:x.skipToEnd()
-        }})
-        var u=ed.dom.querySelector('.ride_win .cm-scroll-v');if(u)u.title='Lines on scroll bar show match locations'
-      }
-    }
-    return[q,ic]
-  },
-  sc:function(bk){ //bk:is backwards?
-    var cm=this.cm,h=this.hls(),q=h[0],ic=h[1] //ic:ignore case?, q:query string
-    if(!q)return!1
-    var s=cm.getValue();ic&&(s=s.toLowerCase())
-    if(bk){var i=cm.indexFromPos(cm.getCursor('anchor')),j=s.slice(0,i).lastIndexOf(q)
-           if(j<0){j=s.slice(i).lastIndexOf(q);if(j>=0)j+=i}}
-    else{var i=cm.indexFromPos(cm.getCursor()),j=s.slice(i).indexOf(q);j=j>=0?(j+i):s.slice(0,i).indexOf(q)}
-    if(j>=0){cm.setSelection(cm.posFromIndex(j),cm.posFromIndex(j+q.length));this.scrollToCursor()}
-    return!1
-  },
-  selectAllSearchResults:function(){
-    var cm=this.cm,ic=!$('.tb_case',this.tb).hasClass('pressed') //ic:ignore case?, q:query string
-    var q=this.cmSC.getValue();ic&&(q=q.toLowerCase())
-    if(q){var s=cm.getValue(),sels=[],i=0;ic&&(s=s.toLowerCase())
-          while((i=s.indexOf(q,i))>=0){sels.push({anchor:cm.posFromIndex(i),head:cm.posFromIndex(i+q.length)});i++}
-          sels.length&&cm.setSelections(sels)}
-    cm.focus()
-  },
-  rp:function(bk){ //replace current occurrence and move to next; bk:is backwards?
-    var ic=!$('.tb_case',this.tb).hasClass('pressed')   //ignore case?
-    var q=this.cmSC.getValue()  ;ic&&(q=q.toLowerCase()) //query string
-    var s=this.cm.getSelection();ic&&(s=s.toLowerCase()) //selection
-    s===q&&this.cm.replaceSelection(this.cmRP.getValue(),bk?'start':'end')
-    this.sc(bk)
-    var v=this.cm.getValue();ic&&(v=v.toLowerCase())
-    $('.tb_sc',this.tb).toggleClass('no-matches',v.indexOf(q)<0)
-  },
   hl:function(l){ //highlight - set current line in tracer
     var ed=this;ed.hll!=null&&ed.cm.removeLineClass(ed.hll,'background','highlighted')
     if((ed.hll=l)!=null){ //hll:highlighted line -- the one about to be executed in the tracer
@@ -142,7 +71,7 @@ D.Ed.prototype={
     var a=ed.tb.querySelectorAll('.tb_LN');for(var i=0;i<a.length;i++)a[i].classList.toggle('pressed',!!x)
   },
   setTC:function(x){var ed=this;ed.tc=x;ed.dom.classList.toggle('tracer',!!x);ed.hl(null);ed.updGutters();ed.setRO(x)},
-  setRO:function(x){this.cm.setOption('readOnly',x);this.rp.hidden=x},
+  setRO:function(x){this.cm.setOption('readOnly',x)/*;this.rp.hidden=x*/},
   updSize:function(){var $p=$(this.dom);this.cm.setSize($p.width(),$p.height()-28)},
   open:function(ee){ //ee:editable entity
     var ed=this,cm=ed.cm
@@ -194,13 +123,6 @@ D.Ed.prototype={
   QT:function(){D.send('CloseWindow',{win:this.id})},
   BK:function(cm){this.tc?D.send('TraceBackward',{win:this.id}):cm.execCommand('undo')},
   FD:function(cm){this.tc?D.send('TraceForward' ,{win:this.id}):cm.execCommand('redo')},
-  SC:function(cm){var v=cm.getSelection();/^[ -\uffff]+$/.test(v)&&this.cmSC.setValue(v)
-                  this.cmSC.focus();this.cmSC.execCommand('selectAll')},
-  RP:function(cm){
-    if(cm.getOption('readOnly'))return
-    var v=cm.getSelection()||this.cword();if(v&&v.indexOf('\n')<0){this.cmSC.setValue(v);this.cmRP.setValue(v)}
-    this.cmRP.focus();this.cmRP.execCommand('selectAll');this.hls()
-  },
   EP:function(cm){this.isClosing=1;this.FX(cm)},
   FX:function(cm){
     var ed=this,v=cm.getValue(),stop=ed.getStops()
@@ -227,8 +149,6 @@ D.Ed.prototype={
     cm.replaceRange(s,{line:l,ch:0},{line:l,ch:cm.getLine(l).length},'D')
   },
   LN:function(){D.prf.lineNums.toggle()},
-  PV:function(){this.sc(1)},
-  NX:function(){this.sc()},
   TC:function(){D.send('StepInto',{win:this.id})},
   AC:function(cm){ //align comments
     if(cm.getOption('readOnly'))return

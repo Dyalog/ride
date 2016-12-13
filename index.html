@@ -4,6 +4,7 @@
   <title></title>
   <meta charset=utf-8>
   <link rel=stylesheet href='style/style.css'>
+  <link rel=stylesheet href='node_modules/codemirror/addon/dialog/dialog.css'>
   <link rel=stylesheet href='node_modules/golden-layout/src/css/goldenlayout-base.css'>
   <link rel=stylesheet href='node_modules/golden-layout/src/css/goldenlayout-light-theme.css'>
   <style id=col_stl></style><!--src/prf_col.js injects css here-->
@@ -126,11 +127,8 @@
     <a href=# class='tb_btn tb_AO  ed_only      ' title='Comment selected text'                   ></a>
     <a href=# class='tb_btn tb_DO  ed_only last ' title='Uncomment selected text'                 ></a>
     <span class=tb_sep></span>
-    <div class=tb_sc></div>
-    <div class="tb_rp ed_only"></div>
-    <a href=# class='tb_btn tb_NX          first' title='Search for next match'                   ></a>
-    <a href=# class='tb_btn tb_PV               ' title='Search for previous match'               ></a>
-    <a href=# class='tb_btn tb_case        last ' title='Match case'                              ></a>
+    <a href=# class='tb_btn tb_SC          first' title='Search'                                  >Search</a>
+    <a href=# class='tb_btn tb_RP          last ' title='Replace'                                 >Replace</a>
   </div>
   <div class=ride_win_cm></div>
 </div>
@@ -334,6 +332,7 @@
 <script src=lib/jquery-ui.min.js                                      ></script>
 <script src=node_modules/codemirror/lib/codemirror.js                 ></script>
 <script src=node_modules/codemirror/addon/dialog/dialog.js            ></script>
+<script src=node_modules/codemirror/addon/search/search.js            ></script>
 <script src=node_modules/codemirror/addon/search/searchcursor.js      ></script>
 <script src=node_modules/codemirror/addon/scroll/annotatescrollbar.js ></script>
 <script src=node_modules/codemirror/addon/search/matchesonscrollbar.js></script>
