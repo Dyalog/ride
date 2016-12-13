@@ -194,9 +194,9 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .tb_ED  {background-image:url(img/tb_ED.png)}
 .tb_WI  {background-image:url(img/tb_WI.png)}
 .tb_CBP {background-image:url(img/tb_CBP.png)}
+.tb_SC  {background-image:url(img/tb_SC.png);background-size:16px 16px}
+.tb_RP  {background-image:url(img/tb_RP.png);background-size:16px 16px}
 .tb_sep{float:left;width:10px;height:24px;background:no-repeat center center url(img/tb_sep.png)} /*separator*/
-.tb_SC,.tb_RP{text-indent:0;width:auto;color:#444;text-decoration:none;padding-left:2px;padding-right:2px;
-              line-height:22px}
 /*search and replace*/
 .win,.floating-window{position:absolute;left:0;right:0;top:32px;bottom:0;
                       overflow:hidden!important;padding:0!important;height:auto!important}
