@@ -216,9 +216,10 @@ D.cn=_=>{ //set up Connect page
   //collect information about installed interpreters
   try{
     if(/^win/.test(process.platform)){
-      const s=cp.execSync('reg query "HKEY_CURRENT_USER\\Software\\Dyalog" /s /v localdyalogdir',{timeout:2000})
+      const s=cp.execSync('reg query "HKEY_CURRENT_USER\\Software\\Dyalog" /s /v localdyalogdir',{timeout:2000,
+                                                                                                  encoding:'UTF8'})
       let b,v,u,m //b:bits,v:version,u:edition,m:match object
-      s||s.split('\r\n').forEach(x=>{if(x){
+      s&&s.split('\r\n').forEach(x=>{if(x){
         if(m=/^HK.*\\Dyalog APL\/W(-64)? (\d+\.\d+)( Unicode)?$/i.exec(x)){
           b=m[1]?64:32;v=m[2];u=m[3]?'unicode':'classic'
         }else if(v&&(m=/^ *localdyalogdir +REG_SZ +(\S.*)$/i.exec(x))){
