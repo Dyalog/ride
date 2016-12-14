@@ -107,11 +107,11 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #lb_prf:hover{background-color:#eee}
 #lb_prf:active{background-color:#fff}
 #lb_tip{font-family:apl,monospace;font-size:18px;position:absolute;padding:8px;margin-top:16px;border-radius:2px;
-        background:linear-gradient(#aaf,#bcd);box-shadow:4px 4px 12px rgba(0,0,0,0.5)}
-#lb_tip_tri{position:absolute;border:solid;border-color:#aaf;border-width:0 16px 16px 16px;
+        background: #fff;box-shadow:4px 4px 12px rgba(0,0,0,0.5)}
+#lb_tip_tri{position:absolute;border:solid;border-color: #fff;border-width:0 16px 16px 16px;
             border-left-color:transparent!important;border-right-color:transparent!important;
             background-color:transparent!important;content:""}
-#lb_tip_desc{font-family:apl,monospace;font-size:18px;border-bottom:solid 1px #bcd;padding-bottom:8px;margin-bottom:8px}
+#lb_tip_desc{font-family:apl,monospace;font-size:18px;border-bottom:solid 1px #ccc;padding-bottom:8px;margin-bottom:8px;text-align:center;font-weight:bold}
 #lb_tip_text{font-family:apl,monospace;font-size:18px}
 #lb .lb_placeholder{vertical-align:bottom;background:#666}
 #lb .ui-sortable-helper{color:#000;cursor:move}
