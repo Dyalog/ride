@@ -173,7 +173,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
         .toolbar .tc_only{display:none}
 .tracer .toolbar .tc_only{display:block}
 .tb_btn{float:left;width:24px;height:24px;border:solid transparent 1px;text-align:center;font-weight:bold;
-        background:no-repeat center center;text-indent:-9999px;cursor:default}
+        background:no-repeat center center;text-indent:-9999px;cursor:default;background-size:20px 20px}
 .tb_btn:hover{border-color:#fff #888 #888 #fff}
 .tb_btn.armed{border-color:#888 #fff #fff #888}
 .tb_btn.pressed{background-color:#eee;border-color:#888 #fff #fff #888}
@@ -194,8 +194,8 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .tb_ED  {background-image:url(img/tb_ED.png)}
 .tb_WI  {background-image:url(img/tb_WI.png)}
 .tb_CBP {background-image:url(img/tb_CBP.png)}
-.tb_SC  {background-image:url(img/tb_SC.png);background-size:16px 16px}
-.tb_RP  {background-image:url(img/tb_RP.png);background-size:16px 16px}
+.tb_SC  {background-image:url(img/tb_SC.png)}
+.tb_RP  {background-image:url(img/tb_RP.png)}
 .tb_sep{float:left;width:10px;height:24px;background:no-repeat center center url(img/tb_sep.png)} /*separator*/
 /*search and replace*/
 .win,.floating-window{position:absolute;left:0;right:0;top:32px;bottom:0;

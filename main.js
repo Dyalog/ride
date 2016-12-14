@@ -27,3 +27,7 @@ el.app.on('ready',_=>{
   db.devTools&&w.webContents.openDevTools()
 })
 el.app.on('window-all-closed',_=>el.app.quit())
+
+global.ev=x=>eval(x)
+global.js=(i,x)=>el.BrowserWindow.fromId(i).webContents.executeJavaScript(x)
+const inc=x=>x+1
