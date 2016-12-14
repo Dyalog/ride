@@ -110,7 +110,7 @@ CM.defineMode('apl',function(){
                 case'endclass':case'enddisposable':case'endfor':case'endhold':case'endif':case'endinterface':
                 case'endnamespace':case'endproperty':case'endrepeat':case'endsection':case'endselect':case'endtrap':
                 case'endwhile':case'endwith':case'until':
-                  var kw0=kw==='until'?'repeat':kw.slice(3) //corresponding opening keyword
+                  var kw0=kw==='until'?(la.t==='repeat'?'repeat':'while'):kw.slice(3) //corresponding opening keyword
                   ok=la.t===kw0
                   if(ok){a.pop()}else{var i=a.length-1;while(i&&a[i].t!==kw0)i--;i&&a.splice(i)}
                   break
