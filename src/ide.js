@@ -189,14 +189,14 @@ D.IDE=function(){'use strict'
       s.top=y0+'px';if(x1>document.body.offsetWidth){s.left='';s.right='0'}else{s.left=Math.max(0,x0)+'px';s.right=''}
     },delay||20)
   }
-  I.lb_inner.onclick=function(x){
+  I.lb.onclick=function(x){
     var s=x.target.textContent;if(lbDragged||x.target.nodeName!=='B'||/\s/.test(s))return!1
     var w=ide.focusedWin;w.hasFocus()?w.insert(s):D.util.insert(document.activeElement,s);return!1
   }
-  I.lb_inner.onmouseout=function(x){if(x.target.nodeName==='B'||x.target.id==='lb_prf'){
+  I.lb.onmouseout=function(x){if(x.target.nodeName==='B'||x.target.id==='lb_prf'){
     clearTimeout(ttid);ttid=0;I.lb_tip.hidden=I.lb_tip_tri.hidden=1
   }}
-  I.lb_inner.onmouseover=function(x){
+  I.lb.onmouseover=function(x){
     if(lbDragged||x.target.nodeName!=='B')return
     var c=x.target.textContent,k=D.getBQKeyFor(c),s=k&&c.charCodeAt(0)>127?'Keyboard: '+D.prf.prefixKey()+k+'\n\n':''
     if(/\S/.test(c)){var h=D.lb.tips[c]||[c,''];reqTip(x,h[0],s+h[1])}
