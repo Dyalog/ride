@@ -74,6 +74,8 @@ D.prf={}
     '\n  Reset Font Size          =ZMR {!browser}'+
 //    '\n  -'+
     '\n&Actions'+
+    '\n  Edit                     =ED'+
+    '\n  Trace                    =TC'+
     '\n  Weak Interrupt           =WI'+
     '\n  Strong Interrupt         =SI'+
     '\n&Window                         {mac}'+
