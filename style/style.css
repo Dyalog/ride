@@ -172,11 +172,10 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .tracer .toolbar .ed_only{display:none}
         .toolbar .tc_only{display:none}
 .tracer .toolbar .tc_only{display:block}
-.tb_btn{float:left;width:24px;height:24px;border:solid transparent 1px;text-align:center;font-weight:bold;
-        background:no-repeat center center;text-indent:-9999px;cursor:default;background-size:20px 20px}
-.tb_btn:hover{border-color:#fff #888 #888 #fff}
-.tb_btn.armed{border-color:#888 #fff #fff #888}
-.tb_btn.pressed{background-color:#eee;border-color:#888 #fff #fff #888}
+.tb_btn,.tb_sep{float:left;width:24px;height:24px;margin:0 1px;background:no-repeat center center;text-indent:-9999px;cursor:default;background-size:20px 20px;border-radius:10px}
+.tb_btn.pressed{background-color:#fff}
+.tb_btn:hover  {background-color:#eee}
+.tb_btn:active {background-color:#fff}
 .tb_LN  {background-image:url(img/tb_LN.png)}
 .tb_AO  {background-image:url(img/tb_AO.png)}
 .tb_DO  {background-image:url(img/tb_DO.png)}
@@ -196,7 +195,6 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .tb_CBP {background-image:url(img/tb_CBP.png)}
 .tb_SC  {background-image:url(img/tb_SC.png)}
 .tb_RP  {background-image:url(img/tb_RP.png)}
-.tb_sep{float:left;width:10px;height:24px;background:no-repeat center center url(img/tb_sep.png)} /*separator*/
 /*search and replace*/
 .win,.floating-window{position:absolute;left:0;right:0;top:32px;bottom:0;
                       overflow:hidden!important;padding:0!important;height:auto!important}
@@ -240,10 +238,10 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .lyt_k{float:left;width:6%;height:45px;border-radius:2px;margin-left:0.6%;margin-top:4px;text-align:center;
          background-color:#fff;overflow:hidden}
 .lyt_g1,.lyt_g3{width:40%;height:20px;line-height:20px;padding:0;border-width:0;margin-top:1px}
-.lyt_g0{color:#000} /*The arrangement is: ┌──────┐*/
-.lyt_g1{color:#040} /*                    │g2  g3│*/
-.lyt_g2{color:#f00} /*                    │g0  g1│*/
-.lyt_g3{color:#00f} /*                    └──────┘*/
+.lyt_g0{color:#000} /*The arrangement is: â”Œâ”€â”€â”€â”€â”€â”€â”*/
+.lyt_g1{color:#040} /*                    â”‚g2  g3â”‚*/
+.lyt_g2{color:#f00} /*                    â”‚g0  g1â”‚*/
+.lyt_g3{color:#00f} /*                    â””â”€â”€â”€â”€â”€â”€â”˜*/
 #lyt_spc{width:50%;margin-left:25%;margin-right:25%;padding-left:8px;padding-right:8px}
 #lyt_spc br{clear:both}
 #lyt_spc .lyt_g0{float:left ;text-align:left ;white-space:nowrap}
