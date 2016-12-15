@@ -126,6 +126,7 @@ function updStl(){ //update global style from what's in prefs.json
   var s=D.prf.colourScheme(),a=SCMS.concat(D.prf.colourSchemes().map(decScm))
   for(var i=0;i<a.length;i++)if(a[i].name===s){
     I.col_stl.textContent=renderCSS(a[i])
+    //add class=dark to <body> if the brightness of the background for normal text is lower than average
     var h=a[i].norm||{}, bg=RGB(h.bg||'#ffffff'), bgo=h.bgo==null?1:h.bgo,
         b=Math.max(+('0x'+bg.slice(1,3)),+('0x'+bg.slice(3,5)),+('0x'+bg.slice(5,7))),
         dark=128>(1-bgo)*255+bgo*b
