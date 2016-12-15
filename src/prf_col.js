@@ -128,7 +128,7 @@ function updStl(){ //update global style from what's in prefs.json
     I.col_stl.textContent=renderCSS(a[i])
     var h=a[i].norm||{}, bg=RGB(h.bg||'#ffffff'), bgo=h.bgo==null?1:h.bgo,
         b=Math.max(+('0x'+bg.slice(1,3)),+('0x'+bg.slice(3,5)),+('0x'+bg.slice(5,7))),
-        dark=127>(1-bgo)*255+bgo*b
+        dark=128>(1-bgo)*255+bgo*b
     document.body.classList[dark?'add':'remove']('dark')
     break
   }
