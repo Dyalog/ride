@@ -3,7 +3,7 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,
 table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,
 nav,output,ruby,section,summary,time,mark,audio,video
-  {margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}
+  {margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline;}
 article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}
 body{line-height:1}
 ol,ul{list-style:none}
@@ -15,7 +15,7 @@ table{border-collapse:collapse;border-spacing:0}
 
      ::selection{background:#0a246a;color:#fff} /*must be separate rules*/
 ::-moz-selection{background:#0a246a;color:#fff} /*must be separate rules*/
-body{background-color:#dcdad5;padding:0;margin:0;font-family:Verdana,"BitStream Vera Sans","DejaVu Sans",sans-serif;overflow:hidden}
+body{padding:0;margin:0;font-family:Verdana,"BitStream Vera Sans","DejaVu Sans",sans-serif;overflow:hidden;}
 /*The following lines disable selection of UI elements:
    https://stackoverflow.com/questions/826782/css-rule-to-disable-text-selection-highlighting/4358620#answer-4407335
    -webkit-touch-callout:none;-webkit-user-select:none;-khtml-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none*/
@@ -97,15 +97,13 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .menu hr{margin: 3px 0 5px 0}
 
 /*language bar*/
-#lb{font-family:apl,monospace;font-size:18px;background-color:#dcdad5;padding:0 2px 0 10px;
-    cursor:default;border-bottom:solid #888 1px;line-height:22px}
-#lb b{font-weight:normal;padding:1px 1px 0 1px;color:#666;width:.7em;display:inline-block;text-align:center;
-      border-radius:5px}
-#lb b:hover{background-color:#eee}
-#lb b:active{background-color:#fff}
-#lb_prf{float:right;margin-right:4px;width:24px;height:24px;background:no-repeat center center url(img/lb_prf.png)}
-#lb_prf:hover{background-color:#eee}
-#lb_prf:active{background-color:#fff}
+#lb{font-family:apl,monospace;font-size:18px;cursor:default;line-height:22px;}
+#lb b{font-weight:normal;width: 22px;display:inline-block;text-align:center;border-radius: 50%;}
+#lb b:hover{background-color: rgba(0,0,0,0.1);}
+#lb b:active{background-color: rgba(0,0,0,0.2);}
+#lb_prf{float:right;margin-right:4px;width: 22px;height: 22px;background:no-repeat center center url(img/lb_prf.png);border-radius: 50%;}
+#lb_prf:hover{background-color: rgba(0,0,0,0.1);}
+#lb_prf:active{background-color: rgba(0,0,0,0.2);}
 #lb_tip{font-family:apl,monospace;font-size:18px;position:absolute;padding:8px;margin-top:16px;border-radius:2px;
         background: #fff;box-shadow:4px 4px 12px rgba(0,0,0,0.5)}
 #lb_tip_tri{position:absolute;border:solid;border-color: #fff;border-width:0 16px 16px 16px;
@@ -113,8 +111,8 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
             background-color:transparent!important;content:""}
 #lb_tip_desc{font-family:apl,monospace;font-size:18px;border-bottom:solid 1px #ccc;padding-bottom:8px;margin-bottom:8px;text-align:center;font-weight:bold}
 #lb_tip_text{font-family:apl,monospace;font-size:18px}
-#lb .lb_placeholder{vertical-align:bottom;background:#666}
-#lb .ui-sortable-helper{color:#000;cursor:move}
+#lb .lb_placeholder{vertical-align:bottom;background:rgba(0,0,0,0.2)}
+#lb .ui-sortable-helper{color:#fff;cursor:move}
 
 /*value tips (also styled via Prefs>Colours)*/
 
@@ -168,14 +166,14 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .CodeMirror-search-match{background:gold;border-top:1px solid orange;border-bottom:1px solid orange;
                          -moz-box-sizing:border-box;box-sizing:border-box;opacity:.5}
 
-.toolbar{background-color:#dcdad5;height:24px;overflow:hidden;cursor:default;overflow:hidden;padding:2px;border-bottom:solid #aaa 1px}
+.toolbar{background-color: white;height:24px;overflow:hidden;cursor:default;overflow:hidden;padding:2px;border-bottom:solid #aaa 1px;}
 .tracer .toolbar .ed_only{display:none}
         .toolbar .tc_only{display:none}
 .tracer .toolbar .tc_only{display:block}
 .tb_btn,.tb_sep{float:left;width:24px;height:24px;margin:0 1px;background:no-repeat center center;cursor:default;background-size:20px 20px;border-radius:10px}
-.tb_btn.pressed{background-color:#fff}
-.tb_btn:hover  {background-color:#eee}
-.tb_btn:active {background-color:#fff}
+.tb_btn.pressed{background-color:rgba(0,0,0,0.2)}
+.tb_btn:hover  {background-color: rgba(0,0,0,0.1);}
+.tb_btn:active {background-color:rgba(0,0,0,0.2)}
 .tb_LN  {background-image:url(img/tb_LN.png)}
 .tb_AO  {background-image:url(img/tb_AO.png)}
 .tb_DO  {background-image:url(img/tb_DO.png)}
@@ -200,17 +198,12 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
                       overflow:hidden!important;padding:0!important;height:auto!important}
 
 /*various dialogs*/
-.dlg{position:absolute;background-color:#dcdad5;box-shadow:4px 4px 12px rgba(0,0,0,0.5);
-     border-color:#fff #888 #888 #fff;border-style:solid;border-width:1px;border-radius:4px}
-.dlg_title{background:linear-gradient(#eee,#ddd 30%,#ccc);color:#578;text-shadow:#fff 1px 1px 2px;
-           cursor:default;text-align:center;font-weight:bold;height:19px;line-height:19px;
-           border-top-left-radius:4px;border-top-right-radius:4px}
+.dlg{position:absolute;background-color: #fff;box-shadow:4px 4px 12px rgba(0,0,0,0.5);border: 1px solid #ccc}
+.dlg_title{color:#ed7f00;cursor:default;text-align:center;padding-top: 0.5ex;ont-size: large;}
 .dlg_close{float:right;background-color:#eee;color:#000;width:14px;height:14px;margin:2px;line-height:16px;
            text-align:center;text-decoration:none;cursor:pointer}
 .dlg_close:hover{background-color:#fff}
-.dlg_btns{padding:8px;text-align:center;position:absolute;bottom:0;left:0;right:0;
-          background:linear-gradient(#ccc,#bbb 90%,#aaa);
-          border-top:solid #888 1px;border-bottom-left-radius:4px;border-bottom-right-radius:4px}
+.dlg_btns{padding:8px;text-align:center;position:absolute;bottom:0;left:0;right:0;border-bottom-left-radius:4px;border-bottom-right-radius:4px;}
 .dlg_btns button{min-width:75px;margin:0 8px}
 .dlg_btns button.task{display:block;margin:4px 0;width:100%}
 
@@ -218,13 +211,11 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #gd_content{padding:32px;border-top:solid #fff 1px;text-align:center}
 
 /*Preferences dialog*/
-#prf_nav{height:28px;border-bottom:solid 1px #fff;text-align:left;margin-bottom:2px;background-color:#ccc}
-#prf_nav a{background-color:#dcdad5;float:left;height:16px;padding:2px 12px 1px 12px;
-           text-decoration:none;color:#444;margin:8px 0 0 4px;
-           border:solid #aaa 1px;border-bottom:0;border-top-left-radius:4px;border-top-right-radius:4px}
-#prf_nav a.sel{border-color:#fff #888 #888 #fff;color:black;padding-top:4px;padding-bottom:8px;margin-top:4px;height:13px}
-#prf_nav a:hover{color:#000;transition:0.1s}
-#prf_nav a:hover.sel{background-color:#dcdad5;cursor:default}
+#prf_nav{height:28px;border-bottom: solid 1px #ed7f00;text-align:left;margin-bottom:2px}
+#prf_nav a{float:left;height:16px;padding:4px 12px 4px 12px;text-decoration:none;color:#444;margin:4px 0 0 4px}
+#prf_nav a.sel{color:black;padding-top:4px;padding-bottom: 4px;margin-top:4px;height:13px;border-bottom: 0.5ex solid #ed7f00}
+#prf_nav a:hover{color:#000;transition:0.1s;}
+#prf_nav a:hover.sel{cursor:default;}
 
 /*Prefs>Layout*/
 #lyt{padding:5px}
@@ -235,13 +226,12 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #lyt_kbd{font-family:apl,monospace;font-size:18px;border-radius:2px;height:250px;clear:both;color:#000;cursor:default}
 #lyt_kbd b{font-weight:normal}
 #lyt_ime_wr{float:left;margin-top:5px}
-.lyt_k{float:left;width:6%;height:45px;border-radius:2px;margin-left:0.6%;margin-top:4px;text-align:center;
-         background-color:#fff;overflow:hidden}
+.lyt_k{float:left;width:6%;height:45px;border-radius:2px;margin-left:0.6%;margin-top:4px;text-align:center;overflow:hidden;box-shadow: 0 0 0 1px rgba(0,0,0,0.3) inset;}
 .lyt_g1,.lyt_g3{width:40%;height:20px;line-height:20px;padding:0;border-width:0;margin-top:1px}
-.lyt_g0{color:#000} /*The arrangement is: â”Œâ”€â”€â”€â”€â”€â”€â”*/
-.lyt_g1{color:#040} /*                    â”‚g2  g3â”‚*/
-.lyt_g2{color:#f00} /*                    â”‚g0  g1â”‚*/
-.lyt_g3{color:#00f} /*                    â””â”€â”€â”€â”€â”€â”€â”˜*/
+.lyt_g0{color:#000} /*The arrangement is: Ã¢â€Å’Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Â*/
+.lyt_g1{color:#040} /*                    Ã¢â€â€šg2  g3Ã¢â€â€š*/
+.lyt_g2{color:#f00} /*                    Ã¢â€â€šg0  g1Ã¢â€â€š*/
+.lyt_g3{color:#00f} /*                    Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Ëœ*/
 #lyt_spc{width:50%;margin-left:25%;margin-right:25%;padding-left:8px;padding-right:8px}
 #lyt_spc br{clear:both}
 #lyt_spc .lyt_g0{float:left ;text-align:left ;white-space:nowrap}
@@ -303,11 +293,11 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 #col_top{text-align:left}
 #col_new_name{display:none}
 #col_cm{left:8px;right:216px;background-color:white;outline:solid #aaa 1px;overflow:hidden}
-#col_settings{width:200px;right:8px;overflow:auto;padding-top:5px}
+#col_settings{width:200px;right:8px;overflow:auto;padding-top:5px;line-height: 1.5;}
 #col_fg,#col_bg{width:48px;padding:0;cursor:pointer}
 #col_settings,#col_cm{text-align:left;position:absolute;top:90px;bottom:46px}
 #col_settings p{padding-top:8px;padding-bottom:8px}
-#col_bgo_p{background-color:#ccc;border-radius:8px;margin-left:16px;padding-left:8px;padding-right:8px}
+#col_bgo_p{margin-left:16px;padding-left:8px;padding-right:8px;}
 #col_B+u{font-weight:bold;text-decoration:none}
 #col_I+u{font-style:italic;text-decoration:none}
 #col.frz #col_ren,#col.frz #col_del,#col.frz #col_settings{display:none}
@@ -336,15 +326,14 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 .ui-dialog .ui-dialog-content.task_dlg .task{display:block;width:100%;margin-top:2px}
 
 /*About dialog*/
-#abt{padding:0;margin:0;background:linear-gradient(#fff,#eee 1%,#dcdad5 5%)}
+#abt{padding:0;margin:0}
 #abt_logo{background:16px center no-repeat url(img/Dyalog_60.png);height:80px;line-height:20px}
 #abt_contact{color:#000;float:right;text-align:right;padding:12px;cursor:default}
 #abt_contact a,
 #abt_contact a:visited,
-#abt_contact a:active{color:blue}
+#abt_contact a:active{color:blue;text-decoration: none;}
 #abt_ta_wr{position:absolute;left:5px;right:13px;top:86px;bottom:52px;width:auto}
-#abt_ta{border-style:solid;border-color:#888 #fff #fff #888;border-width:2px;white-space:pre;word-wrap:normal;
-        overflow-x:scroll;width:100%;height:100%;resize:none}
+#abt_ta{white-space:pre;word-wrap:normal;overflow-x:scroll;width:100%;height:100%;resize:none}
 
 /*workspace explorer*/
 #wse{font-family:apl,monospace;font-size:18px;text-align:left;
@@ -652,13 +641,13 @@ span.CodeMirror-selectedtext{background:none}
 .cm-scroll{position:absolute;background:#eee}
 .cm-scroll-h{bottom:0;left:0;height:16px}
 .cm-scroll-v{right :0;top :0;width :16px}
-.cm-scroll   a{position:absolute;background:#ccc;color:#444}
+.cm-scroll   a{position:absolute;background:#ccc;color:#444;}
 .cm-scroll   a:hover{background:#aaa;color:#222}
 .cm-scroll   a.press{background:#888!important;color:#000!important}
-.cm-scroll   .thumb{box-sizing:border-box;border:1px solid #bbb;border-radius:2px}
+.cm-scroll   .thumb{box-sizing:border-box;/* border:1px solid #bbb; *//* border-radius:2px; */}
 .cm-scroll-h .thumb{bottom:0;height:100%}
 .cm-scroll-v .thumb{right :0;width :100%}
-.cm-scroll   .btn{width:16px;height:16px;line-height:16px;text-align:center;font-size:10px;cursor:pointer;color:#444}
+.cm-scroll   .btn{width:16px;height:16px;line-height:16px;text-align:center;font-size:10px;cursor:pointer;color:#444;}
 .cm-scroll-h .btn0{bottom:0;left:0}
 .cm-scroll-h .btn1{bottom:0;right:0}
 .cm-scroll-v .btn0{right:0;top:0}
@@ -669,7 +658,7 @@ span.CodeMirror-selectedtext{background:none}
 .cm-scroll-v .btn1:after{content:"\25bc"}
 
 /*Golden Layout*/
-.lm_goldenlayout{background-image:none!important;background-color:#eee!important}
+.lm_goldenlayout{background-image:none!important;}
 .lm_drag_handle{width:8px!important;left:-2px!important}
 .lm_tab{background-color:#dcdad5!important}
 .lm_close{display:none!important}
