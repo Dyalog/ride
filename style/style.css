@@ -105,8 +105,8 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #lb_prf:hover{background-color: rgba(0,0,0,0.1);}
 #lb_prf:active{background-color: rgba(0,0,0,0.2);}
 #lb_tip{font-family:apl,monospace;font-size:18px;position:absolute;padding:8px;margin-top:16px;border-radius:2px;
-        background: #fff;box-shadow:4px 4px 12px rgba(0,0,0,0.5)}
-#lb_tip_tri{position:absolute;border:solid;border-color: #fff;border-width:0 16px 16px 16px;
+        background: #eee;box-shadow:4px 4px 12px rgba(0,0,0,0.5)}
+#lb_tip_tri{position:absolute;border:solid;border-color: #eee;border-width:0 16px 16px 16px;
             border-left-color:transparent!important;border-right-color:transparent!important;
             background-color:transparent!important;content:""}
 #lb_tip_desc{font-family:apl,monospace;font-size:18px;border-bottom:solid 1px #ccc;padding-bottom:8px;margin-bottom:8px;text-align:center;font-weight:bold}
@@ -199,6 +199,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 
 /*various dialogs*/
 .dlg{position:absolute;background-color:#eee;box-shadow:4px 4px 12px rgba(0,0,0,0.5);border:1px solid #ccc}
+.dark .dlg {background:#ccc;}
 .dlg_title{color:#ed7f00;cursor:default;text-align:center;padding-top: 0.5ex;font-size:large}
 .dlg_close{float:right;background-color:#eee;color:#000;width:14px;height:14px;margin:2px;line-height:16px;
            text-align:center;text-decoration:none;cursor:pointer}
