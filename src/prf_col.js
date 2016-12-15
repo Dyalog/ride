@@ -127,7 +127,8 @@ function updStl(){ //update global style from what's in prefs.json
   for(var i=0;i<a.length;i++)if(a[i].name===s){
     I.col_stl.textContent=renderCSS(a[i])
     var h=a[i].norm||{}, bg=RGB(h.bg||'#ffffff'), bgo=h.bgo==null?1:h.bgo,
-        dark=127>bgo*Math.max(+('0x'+bg.slice(1,3)),+('0x'+bg.slice(3,5)),+('0x'+bg.slice(5,7)))
+        b=Math.max(+('0x'+bg.slice(1,3)),+('0x'+bg.slice(3,5)),+('0x'+bg.slice(5,7))),
+        dark=127>(1-bgo)*255+bgo*b
     document.body.classList[dark?'add':'remove']('dark')
     break
   }
