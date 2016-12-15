@@ -361,12 +361,12 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 /*workspace explorer*/
 #wse{font-family:apl,monospace;font-size:18px;text-align:left;
      background-color:#fff;overflow:auto;width:100%;height:100%;white-space:nowrap;cursor:default}
-#wse div{padding-left:1em}
+#wse div{padding-left:1em;margin: 2px 0;}
 #wse>div{padding-left:2px}
 #wse .bt_text::before{display:inline-block;width:1em;height:2ex;border-radius:50%;color:#fff;text-align:center;margin-right:.2em}
 .bt_collapsed>div{display:none}
 #wse .bt_text.selected{background-color:rgba(128,128,128,.5)}
-#wse .bt_node_expand,#wse .bt_node_indent{display:inline-block;width:1em;height:2ex;text-align:center;margin-right:.2em}
+#wse .bt_node_expand,#wse .bt_node_indent{display:inline-block;width:1em;height: 0;text-align:center;margin-right:.2em}
 #wse .bt_node_expand{font-family:monospace;cursor:pointer;opacity:.7}
 #wse .bt_node_expand:hover{opacity:1}
 #wse .bt_icon_2_1::before{content:"v";background:#f00} /*variable*/
