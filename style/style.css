@@ -243,10 +243,10 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #lyt_ime_wr{float:left;margin-top:5px}
 .lyt_k{float:left;width:6%;height:45px;border-radius:2px;margin-left:0.6%;margin-top:4px;text-align:center;overflow:hidden;background:#fff}
 .lyt_g1,.lyt_g3{width:40%;height:20px;line-height:20px;padding:0;border-width:0;margin-top:1px}
-.lyt_g0{color:#000} /*The arrangement is: 
-.lyt_g1{color:#040} /*                    
-.lyt_g2{color:#f00} /*                    
-.lyt_g3{color:#00f} /*                    
+.lyt_g0{color:#000} /*The arrangement is: +-------+ */
+.lyt_g1{color:#040} /*                    | g1 g3 | */
+.lyt_g2{color:#f00} /*                    | g0 g2 | */
+.lyt_g3{color:#00f} /*                    +-------+ */
 #lyt_spc{width:50%;margin-left:25%;margin-right:25%;padding-left:8px;padding-right:8px}
 #lyt_spc br{clear:both}
 #lyt_spc .lyt_g0{float:left ;text-align:left ;white-space:nowrap}
