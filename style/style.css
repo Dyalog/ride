@@ -7,14 +7,15 @@ nav,output,ruby,section,summary,time,mark,audio,video
 article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}
 body{line-height:1}
 /* Material UI elements */
-button{border:none;background:#eee;color:#ed7f00;font-family:inherit;font-weight:bold;padding:5px 0.5em;transition:0.1s;text-transform:uppercase;}
+button{border:none;background:#eee;color:#ed7f00;font-family:inherit;font-weight:bold;padding:5px 0.5em;transition:0.2s;text-transform:uppercase;}
 .dark button{background:#444}
 button:hover{background:#fff}
 button:active{background:#ed7f00;color:#fff}
-[type=checkbox],[type=checkbox]:focus {margin-right:0.75em;outline:none!important;transition:0.1s;font-weight:bold}
-[type=checkbox]::before{position:relative;content:"\2714";background:#eee;color:transparent;display:inline-block;height:3ex;width:3ex;top:-4px;
-                        font-size:70%;text-align:center;box-shadow: 0 0 0 1px #ed7f00 inset;border-radius:2px}
+[type=checkbox],[type=checkbox]:focus{margin-right:0.75em;outlinex:none!important}
+[type=checkbox]::before{position:relative;content:"\2714";background:#eee;color:transparent;display:inline-block;height:3ex;width:3ex;top:-4px;left:-2px;
+                        font-size:70%;text-align:center;box-shadow: 0 0 0 1px #ed7f00 inset;border-radius:2px;transition:0.2s;font-weight:bold}
 .dark [type=checkbox]::before{background:#444}
+[type=checkbox]:focus:before{outline:inherit}
 [type=checkbox]:hover::before{background:#fff}
 [type=checkbox]:checked::before{color:#ed7f00}
 [type=checkbox]:active::before{background:#ed7f00;color:#fff}
@@ -231,11 +232,10 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #gd_content{padding:32px;border-top:solid #fff 1px;text-align:center}
 
 /*Preferences dialog*/
-#prf_nav{height:28px;border-bottom: solid 1px #ed7f00;text-align:left;margin-bottom:2px}
-#prf_nav a{float:left;height:16px;padding:4px 12px 4px 12px;text-decoration:none;color:#ed7f00 ;margin:4px 0 0 4px}
-#prf_nav a.sel{padding-top:4px;padding-bottom: 4px;margin-top:4px;height:13px;border-bottom: 0.5ex solid #ed7f00}
-#prf_nav a:hover{transition:0.1s}
-#prf_nav a:hover.sel{cursor:default}
+#prf_nav{height:28px;border-bottom: solid 1px #ed7f00;margin-bottom:2px;}
+#prf_nav a{border-bottom:0.5ex solid rgba(237,127,0,0);float:left;height:13px;padding:4px 12px 4px 12px;text-decoration:none;color:#ed7f00;margin:4px 0 0 4px;transition:0.2s}
+#prf_nav a:hover{border-bottom: 0.5ex solid rgba(237,127,0,0.5)}
+#prf_nav a.sel{border-bottom: 0.5ex solid rgba(237,127,0,1);cursor:default}
 
 /*Prefs>Layout*/
 #lyt{padding:5px}
