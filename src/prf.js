@@ -137,8 +137,9 @@ D.db=!node_require?localStorage:(function(){
   var d=el.app.getPath('userData'), f=d+'/prefs.json', ts=0
   elw.on('focus',function(){
     if(!fs.existsSync(f))return
-    var ts1=+fs.statSync(f).mtime;if(ts1===ts||!confirm('Preferences have been modified. Reload?')){ts=ts1;return}
-    var h=JSON.parse(fs.readFileSync(f,'utf8'));for(var x in h)D.prf[x](h[x])
+    var ts1=+fs.statSync(f).mtime
+    if(ts1===ts||!confirm('Preferences have been modified. Reload?')){ts=ts1;return}
+    ts=ts1;var h=JSON.parse(fs.readFileSync(f,'utf8'));for(var x in h)D.prf[x](h[x])
   })
   try{
     if(fs.existsSync(f)){var h=JSON.parse(fs.readFileSync(f,'utf8'));for(var x in h){k.push(x);v.push(h[x])}
