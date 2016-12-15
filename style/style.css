@@ -48,15 +48,16 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #cn{position:absolute;left:0;right:0;top:0;bottom:0}
 #cn .hsplitbar{width:6px;background: #ccc}
 #cn_favs{position:absolute;left:0;right:0;top: 42px;bottom:0;overflow:auto}
-#cn_favs>*{line-height: 30px;padding:0 2px 0 8px;margin-bottom:1px;background-color:#fff;cursor:default}
+#cn_favs>*{line-height: 30px;padding:0 2px 0 8px;margin-bottom:1px;cursor:default;}
 #cn_favs .go{float:right;margin-top: 2px}
 #cn_favs .list_sel{background:#0a246a;color:#fff}
 #cn_favs .list-focus{outline:dotted #000 1px}
 #cn_favs div{overflow:hidden;position:relative}
 #cn_abt{float:right}
 #cn_lhs,#cn_rhs{position:absolute;top:0;bottom:0}
-#cn_lhs{left:0;width:250px;overflow:hidden}
-#cn_rhs{right:0;left:250px;padding:0;overflow:auto}
+#cn_lhs{left:0;width: 300px;overflow:hidden;}
+#cn_rhs{right:0;left:250px;padding:0;overflow:auto;background:#eee}
+.dark #cn_rhs{background:#444}
 #cn_rhs_inner{padding:8px}
 #cn_rhs_inner p{padding:4px 0}
 #cn_fav_btns{position:absolute;top:0;left:0;right:0;height: 40px;overflow:hidden;width:9999px;padding: 4px}
@@ -65,7 +66,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #cn_exe, #cn_args, #cn_env{width:100%;margin-top: 1ex}
 #cn_env{width:100%}
 #cn_env_add{padding-left:32px}
-#cn_env_add a{font-family:apl,monospace;font-size:18px}
+#cn_env_add a{font-family:apl,monospace;font-size:18px;color:#ed7f00;text-decoration:none}
 .cn_hint{font-size:14px;font-style:italic;opacity:0.5}
 .cn_progress{display:block;width:100%;margin-bottom:8px}
 
