@@ -59,7 +59,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #cn_env{width:100%}
 #cn_env_add{padding-left:32px}
 #cn_env_add a{font-family:apl,monospace;font-size:18px}
-.cn_hint{font-size:14px;color:#666;font-style:italic}
+.cn_hint{font-size:14px;font-style:italic;opacity:0.5}
 .cn_progress{display:block;width:100%;margin-bottom:8px}
 
 #cn_listen_dlg,#cn_connecting_dlg{width:360px;height:160px}
