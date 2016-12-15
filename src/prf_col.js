@@ -124,7 +124,13 @@ function rgb(x){if(!/^#.{6}$/.test(x))return x
                 var r=x[1],R=x[2],g=x[3],G=x[4],b=x[5],B=x[6];return r!==R||g!==G||b!==B?x.slice(1):r===g&&g===b?r:r+g+b}
 function updStl(){ //update global style from what's in prefs.json
   var s=D.prf.colourScheme(),a=SCMS.concat(D.prf.colourSchemes().map(decScm))
-  for(var i=0;i<a.length;i++)if(a[i].name===s){I.col_stl.textContent=renderCSS(a[i]);break} //[sic]
+  for(var i=0;i<a.length;i++)if(a[i].name===s){
+    I.col_stl.textContent=renderCSS(a[i])
+    var h=a[i].norm||{}, bg=RGB(h.bg||'#ffffff'), bgo=h.bgo==null?1:h.bgo,
+        dark=127>bgo*Math.max(+('0x'+bg.slice(1,3)),+('0x'+bg.slice(3,5)),+('0x'+bg.slice(5,7)))
+    document.body.classList[dark?'add':'remove']('dark')
+    break
+  }
 }
 $(updStl);D.prf.colourScheme(updStl);D.prf.colourSchemes(updStl)
 function uniqScmName(x){ //x:suggested root
