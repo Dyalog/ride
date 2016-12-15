@@ -3,16 +3,26 @@ html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abb
 em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,
 table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,
 nav,output,ruby,section,summary,time,mark,audio,video
-  {margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}
+  {margin:0;padding: 0;border:0;font-size:100%;font:inherit;vertical-align:baseline;}
 article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}
 body{line-height:1}
-button{border:none;background:#ed7f00;color:#fff;font-family:inherit;font-weight:bold;padding:5px 0.5em;transition:0.1s;text-transform:uppercase}
-button:active{background:#fff;color:#ed7f00}
-[type=checkbox],[type=checkbox]:focus {margin-right:0.5em;outline:none!important;transistion:0.1s}
-[type=checkbox]::before{position:relative;content:"\2714";background:#ed7f00;color:transparent;display:inline-block;height:3ex;width:3ex;top:-4px;font-size:70%;text-align:center}
-[type=checkbox]:checked::before{color:#fff}
-[type=checkbox]:active::before{background:#fff;color:#ed7f00}
-[type=checkbox]:disabled::before{background:#777}
+/* Material UI elements */
+button{border:none;background:#eee;color:#ed7f00;font-family:inherit;font-weight:bold;padding:5px 0.5em;transition:0.1s;text-transform:uppercase;}
+.dark button{background:#444}
+button:hover{background:#fff}
+button:active{background:#ed7f00;color:#fff}
+[type=checkbox],[type=checkbox]:focus {margin-right:0.75em;outline:none!important;transition:0.1s;font-weight:bold}
+[type=checkbox]::before{position:relative;content:"\2714";background:#eee;color:transparent;display:inline-block;height:3ex;width:3ex;top:-4px;
+                        font-size:70%;text-align:center;box-shadow: 0 0 0 1px #ed7f00 inset;border-radius:2px}
+.dark [type=checkbox]::before{background:#444}
+[type=checkbox]:hover::before{background:#fff}
+[type=checkbox]:checked::before{color:#ed7f00}
+[type=checkbox]:active::before{background:#ed7f00;color:#fff}
+[type=checkbox]:disabled::before{color:transparent;box-shadow:0 0 0 1px #777 inset;background:#eee}
+[type=checkbox]:checked:disabled::before{color:#777;background:#eee}
+.dark [type=checkbox]:checked:disabled::before{color:#777;background:#444}
+.dark [type=checkbox]:disabled::before{color:transparent;background:#444}
+
 ol,ul{list-style:none}
 blockquote,q{quotes:none}
 blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}
@@ -57,11 +67,11 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #cn_lhs,#cn_rhs{position:absolute;top:0;bottom:0}
 #cn_lhs{left:0;width: 300px;overflow:hidden;}
 #cn_rhs{right:0;left:250px;padding:0;overflow:auto;background:#eee}
-.dark #cn_rhs{background:#444}
+.dark #cn_rhs,.dark #cn_lhs{background:#444}
 #cn_rhs_inner{padding:8px}
 #cn_rhs_inner p{padding:4px 0}
 #cn_fav_btns{position:absolute;top:0;left:0;right:0;height: 40px;overflow:hidden;width:9999px;padding: 4px}
-#cn_fav_btns button,#cn_go{font-size:18px;min-width:75px}
+#cn_fav_btns button,#cn_go{min-width:75px;}
 #cn .indent{margin-left:24px}
 #cn_exe, #cn_args, #cn_env{width:100%;margin-top: 1ex}
 #cn_env{width:100%}
@@ -114,13 +124,13 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #lb_prf:hover{background-color: rgba(0,0,0,0.1)}
 #lb_prf:active{background-color: rgba(0,0,0,0.2)}
 #lb_tip{font-family:apl,monospace;font-size:18px;position:absolute;padding:8px;margin-top:16px;border-radius:2px;
-        background: #eee;box-shadow:4px 4px 12px rgba(0,0,0,0.5)}
+        background: #eee;box-shadow:0 18px 48px rgba(0,0,0,0.5)}
 .dark #lb_tip{background:#444}
 #lb_tip_tri{position:absolute;border:solid;border-color: #eee;border-width:0 16px 16px 16px;
             border-left-color:transparent!important;border-right-color:transparent!important;
             background-color:transparent!important;content:""}
 .dark #lb_tip_tri{border-color: #444}
-#lb_tip_desc{font-family:apl,monospace;font-size:18px;border-bottom:solid 1px #ccc;padding-bottom:8px;margin-bottom:8px;text-align:center;font-weight:bold}
+#lb_tip_desc{font-family:apl,monospace;font-size:18px;border-bottom:solid 1px #ccc;padding-bottom:8px;margin-bottom:8px;text-align:center;text-transform:uppercase}
 #lb_tip_text{font-family:apl,monospace;font-size:18px}
 #lb .lb_placeholder{vertical-align:bottom;background:rgba(0,0,0,0.2)}
 #lb .ui-sortable-helper{color:#000;cursor:move}
@@ -128,7 +138,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 
 /*value tips (also styled via Prefs>Colours)*/
 
-#vt_bln{font-family:apl,monospace;font-size:18px;position:absolute;border-radius:8px;
+#vt_bln{font-family:apl,monospace;font-size:18px;position:absolute;
         border:solid black 1px;padding:7px;white-space:pre;background-color:#000;color:#fff;overflow:hidden}
 #vt_tri{position:absolute;border:solid;border-color:#000;border-width:6px 6px 0 6px;height:6px;bottom:-6px;
              border-left-color:transparent!important;border-right-color:transparent!important;
@@ -166,13 +176,8 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
             background:no-repeat transparent center center url(img/breakpoint.png)}
 .hidden{display:none}
 .highlighted{border:solid red 1px}
-.CodeMirror-hints{
-  font-family:apl,monospace;font-size:18px;position:absolute;overflow:hidden;list-style:none;margin:0;padding:0;
-  border:1px solid black;background:#ffffe1;font-size:90%;max-height:20em;overflow-y:auto;
-  -webkit-box-shadow:2px 3px 5px rgba(0,0,0,.2);
-     -moz-box-shadow:2px 3px 5px rgba(0,0,0,.2);
-          box-shadow:2px 3px 5px rgba(0,0,0,.2);
-}
+.CodeMirror-hints{font-family:apl,monospace;font-size:18px;position:absolute;overflow:hidden;list-style:none;margin:0;padding:0;
+                  border:1px solid black;background:#ffffe1;font-size:90%;max-height:20em;overflow-y:auto;box-shadow:0 18px 48px rgba(0,0,0,0.5);}
 .CodeMirror-hint{margin:0;padding:0 2px;max-width:19em;overflow:hidden;white-space:pre;color:black;cursor:pointer}
 .CodeMirror-hint-active{background:#0a246a;color:#fff}
 .CodeMirror-search-match{background:gold;border-top:1px solid orange;border-bottom:1px solid orange;
@@ -183,7 +188,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .tracer .toolbar .ed_only{display:none}
         .toolbar .tc_only{display:none}
 .tracer .toolbar .tc_only{display:block}
-.tb_btn,.tb_sep{float:left;width:24px;height:24px;margin:0 1px;background:no-repeat center center;cursor:default;background-size:20px 20px;border-radius:10px}
+.tb_btn,.tb_sep{float:left;width:24px;height:24px;margin:0 1px;background:no-repeat center center;cursor:default;background-size:20px 20px}
 .tb_btn.pressed{background-color:rgba(0,0,0,0.2)}
 .tb_btn:hover  {background-color: rgba(0,0,0,0.1)}
 .tb_btn:active {background-color:rgba(0,0,0,0.2)}
@@ -211,7 +216,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
                       overflow:hidden!important;padding:0!important;height:auto!important}
 
 /*various dialogs*/
-.dlg{position:absolute;background-color:#eee;box-shadow:4px 4px 12px rgba(0,0,0,0.5);border:1px solid #444}
+.dlg{position:absolute;background-color:#eee;box-shadow:0 18px 48px rgba(0,0,0,0.5);border:1px solid #444}
 .dark .dlg {background:#444}
 .dlg_title{color:#ed7f00;cursor:default;text-align:center;padding-top: 0.5ex;font-size:large}
 #prf_dlg .dlg_title{text-transform:uppercase;cursor:move}
@@ -283,9 +288,9 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 #shc td{text-align:left;text-indent:-2ex;padding-left:2ex}
 .shc_code{font-family:apl,monospace;font-size:18px;padding:2px 16px 2px 8px}
 #shc_tbl_wr{position:absolute;top:40px;left:3px;right:3px;bottom:0;overflow:auto}
-#shc_tbl_wr table{width:100%;cursor:default}
-#shc_tbl_wr tr:hover{background-color:#fff}
-.dark #shc_tbl_wr tr:hover{background-color:#000}
+#shc_tbl_wr table{width:100%;cursor:default;padding-left:2px}
+#shc_tbl_wr tr:hover{color:#fff;background-color:#777;box-shadow:0 0 0 1px #777}
+.dark #shc_tbl_wr tr:hover{background-color:#000;box-shadow:0 0 0 1px black}
 #shc_sc_clr{width:24px;margin-left:-20px;color:#888;text-decoration:none}
 #shc_sc_clr:hover{color:#000}
 #shc_no_res{font-style:italic;padding:20px;color:#888}
@@ -474,7 +479,7 @@ input.ui-button{padding:0 5px}
 .tab-close{float:right;width:20px;border-radius:12px;text-align:center;cursor:pointer;color:#888;margin:0 -10px 0 5px;line-height:20px}
 .tab-close:hover{background-color:#d88;color:white}
 
-.ui-tooltip{padding:8px;position:absolute;max-width:300px;-webkit-box-shadow:0 0 5px #aaa;box-shadow:0 0 5px #aaa}
+.ui-tooltip{padding:8px;position:absolute;max-width:300px;box-shadow:0 0 5px #aaa}
 body .ui-tooltip{border-width:2px}
 
 /*Component containers*/
@@ -611,7 +616,7 @@ div.CodeMirror-overwrite div.CodeMirror-cursor{border-style:solid;border-width:1
 .CodeMirror-lines{cursor:text;min-height:1px} /*prevents collapsing before first draw*/
 .CodeMirror pre{
   /*Reset some styles that the rest of the page might have set*/
-  -moz-border-radius:0;-webkit-border-radius:0;border-radius:0;
+  border-radius:0;
   border-width:0;background:transparent;font-family:inherit;font-size:inherit;
   margin:0;white-space:pre;word-wrap:normal;line-height:inherit;color:inherit;
   z-index:2;position:relative;overflow:visible;-webkit-tap-highlight-color:transparent
@@ -662,7 +667,7 @@ span.CodeMirror-selectedtext{background:none}
 .cm-scroll   a{position:absolute;background:#ccc;color:#444}
 .cm-scroll   a:hover{background:#aaa;color:#222}
 .cm-scroll   a.press{background:#888!important;color:#000!important}
-.cm-scroll   .thumb{box-sizing:border-box;/* border:1px solid #bbb; *//* border-radius:2px; */}
+.cm-scroll   .thumb{box-sizing:border-box;}
 .cm-scroll-h .thumb{bottom:0;height:100%}
 .cm-scroll-v .thumb{right :0;width :100%}
 .cm-scroll   .btn{width:16px;height:16px;line-height:16px;text-align:center;font-size:10px;cursor:pointer;color:#444}
