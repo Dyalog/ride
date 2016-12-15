@@ -6,6 +6,8 @@ nav,output,ruby,section,summary,time,mark,audio,video
   {margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}
 article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}
 body{line-height:1}
+button{border:none;background:#ed7f00;color:#fff;font-family:inherit;font-weight:bold;padding:5px 0.5em;transition:0.1s;text-transform:uppercase}
+button:active{background:#fff;color:#ed7f00}
 ol,ul{list-style:none}
 blockquote,q{quotes:none}
 blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}
@@ -39,10 +41,10 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 
 /*connect page*/
 #cn{position:absolute;left:0;right:0;top:0;bottom:0}
-#cn .hsplitbar{width:6px;border-right:solid #888 1px}
-#cn_favs{position:absolute;left:0;right:0;top:32px;bottom:0;border-color:#888 #fff #fff #888;border-width:2px;border-style:solid;overflow:auto}
-#cn_favs>*{height:22px;line-height:22px;padding:0 2px 0 8px;margin-bottom:1px;background-color:#fff;cursor:default}
-#cn_favs .go{float:right;height:20px;margin-top:1px}
+#cn .hsplitbar{width:6px;background: #ccc}
+#cn_favs{position:absolute;left:0;right:0;top: 42px;bottom:0;overflow:auto}
+#cn_favs>*{line-height: 30px;padding:0 2px 0 8px;margin-bottom:1px;background-color:#fff;cursor:default}
+#cn_favs .go{float:right;margin-top: 2px}
 #cn_favs .list_sel{background:#0a246a;color:#fff}
 #cn_favs .list-focus{outline:dotted #000 1px}
 #cn_favs div{overflow:hidden;position:relative}
@@ -52,10 +54,10 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #cn_rhs{right:0;left:250px;padding:0;overflow:auto}
 #cn_rhs_inner{padding:8px}
 #cn_rhs_inner p{padding:4px 0}
-#cn_fav_btns{position:absolute;top:0;left:0;right:0;height:32px;overflow:hidden;width:9999px;padding:3px}
+#cn_fav_btns{position:absolute;top:0;left:0;right:0;height: 40px;overflow:hidden;width:9999px;padding: 4px}
 #cn_fav_btns button,#cn_go{font-size:18px;min-width:75px}
 #cn .indent{margin-left:24px}
-#cn_exe,#cn_args{width:100%;margin-top:2px}
+#cn_exe, #cn_args, #cn_env{width:100%;margin-top: 1ex}
 #cn_env{width:100%}
 #cn_env_add{padding-left:32px}
 #cn_env_add a{font-family:apl,monospace;font-size:18px}
@@ -170,7 +172,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .CodeMirror-search-match{background:gold;border-top:1px solid orange;border-bottom:1px solid orange;
                          -moz-box-sizing:border-box;box-sizing:border-box;opacity:.5}
 
-.toolbar{background-color: white;height:24px;overflow:hidden;cursor:default;overflow:hidden;padding:2px;border-bottom:solid #aaa 1px;}
+.toolbar{background-color: white;height:24px;overflow:hidden;cursor:default;overflow:hidden;padding:2px;border-bottom:solid #aaa 1px}
 .dark .toolbar{background:#777}
 .tracer .toolbar .ed_only{display:none}
         .toolbar .tc_only{display:none}
@@ -226,7 +228,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 
 /*Prefs>Layout*/
 #lyt{padding:5px}
-#lyt_ctrls{text-align:center;margin:16px 0}
+#lyt_ctrls{text-align:center;margin: 3px 3px 20px 3px}
 #lyt_rst{float:right}
 #lyt_pfx_lbl{float:left;margin:-5px 10px auto 5px}
 #lyt_pfx{width:20px;text-align:center}
@@ -235,10 +237,10 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #lyt_ime_wr{float:left;margin-top:5px}
 .lyt_k{float:left;width:6%;height:45px;border-radius:2px;margin-left:0.6%;margin-top:4px;text-align:center;overflow:hidden;background:#fff}
 .lyt_g1,.lyt_g3{width:40%;height:20px;line-height:20px;padding:0;border-width:0;margin-top:1px}
-.lyt_g0{color:#000} /*The arrangement is: Ã¢â€Å’Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Â*/
-.lyt_g1{color:#040} /*                    Ã¢â€â€šg2  g3Ã¢â€â€š*/
-.lyt_g2{color:#f00} /*                    Ã¢â€â€šg0  g1Ã¢â€â€š*/
-.lyt_g3{color:#00f} /*                    Ã¢â€â€Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€â‚¬Ã¢â€Ëœ*/
+.lyt_g0{color:#000} /*The arrangement is: ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã¢â‚¬Â¦ÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â*/
+.lyt_g1{color:#040} /*                    ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡g2  g3ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡*/
+.lyt_g2{color:#f00} /*                    ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡g0  g1ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡*/
+.lyt_g3{color:#00f} /*                    ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡Ãƒâ€šÃ‚Â¬ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€šÃ‚ÂÃƒÆ’Ã¢â‚¬Â¹Ãƒâ€¦Ã¢â‚¬Å“*/
 #lyt_spc{width:50%;margin-left:25%;margin-right:25%;padding-left:8px;padding-right:8px}
 #lyt_spc br{clear:both}
 #lyt_spc .lyt_g0{float:left ;text-align:left ;white-space:nowrap}
@@ -270,7 +272,7 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 .lyt_geom_iso #lyt_45{display:block} /*the key between lshift and Z*/
 
 /*Prefs>Shortcuts*/
-#shc{position:absolute;left:0;right:0;top:48px;bottom:40px;overflow:auto;text-align:left;padding:8px 0 0 8px}
+#shc{position:absolute;left:0;right:0;top: 54px;bottom:40px;overflow:auto;text-align:left;padding:8px 0 0 8px}
 #shc_rst_all{float:right;margin-right:8px}
 #shc td{text-align:left;text-indent:-2ex;padding-left:2ex}
 .shc_code{font-family:apl,monospace;font-size:18px;padding:2px 16px 2px 8px}
@@ -303,7 +305,7 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 #col_cm{left:8px;right:216px;background-color:white;outline:solid #aaa 1px;overflow:hidden}
 #col_settings{width:200px;right:8px;overflow:auto;padding-top:5px;line-height: 1.5}
 #col_fg,#col_bg{width:48px;padding:0;cursor:pointer}
-#col_settings,#col_cm{text-align:left;position:absolute;top:90px;bottom:46px}
+#col_settings,#col_cm{text-align:left;position:absolute;top: 100px;bottom: 56px}
 #col_settings p{padding-top:8px;padding-bottom:8px}
 #col_bgo_p{margin-left:16px;padding-left:8px;padding-right:8px}
 #col_B+u{font-weight:bold;text-decoration:none}
@@ -315,17 +317,17 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 
 /*Prefs>Title*/
 #title{text-align:left;padding:8px}
-#title_inp{width:100%;display:block;margin-bottom:16px;margin-top:10px}
+#title_inp{width:100%;display:block;margin-bottom:16px;margin-top: 24px}
 #title_rst{float:right}
-#title pre{overflow:auto;position:absolute;left:8px;right:8px;top:128px;bottom:40px}
+#title pre{overflow:auto;position:absolute;left:8px;right:8px;top: 138px;bottom:40px}
 #title pre a{text-decoration:none;color:#000}
 .dark #title pre a{color:#fff}
 #title pre a:hover{color:#ed7f00}
 
 /*Prefs>Menu*/
 #pmenu_rst{float:right}
-#pmenu p{margin:8px}
-#pmenu_ta_wr{position:absolute;left:4px;right:8px;top:78px;bottom:46px;overflow:hidden;padding:4px}
+#pmenu p{margin: 10px 8px}
+#pmenu_ta_wr{position:absolute;left:4px;right:8px;top: 94px;bottom:46px;overflow:hidden;padding:4px}
 #pmenu_ta{width:100%;height:100%;resize:none}
 
 .ui-dialog .ui-dialog-content.task_dlg{padding:8px}
@@ -337,7 +339,7 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 /*About dialog*/
 #abt{padding:0;margin:0}
 #abt_logo{background:16px center no-repeat url(img/Dyalog_60.png);height:80px;line-height:20px;cursor:move}
-#abt_contact{color:#000;float:right;text-align:right;padding:12px;cursor:default;}
+#abt_contact{color:#000;float:right;text-align:right;padding:12px;cursor:default}
 .dark #abt_contact{color:#ccc}
 #abt_contact a,
 #abt_contact a:visited,
@@ -669,6 +671,8 @@ span.CodeMirror-selectedtext{background:none}
 
 /*Golden Layout*/
 .lm_goldenlayout{background-image:none!important}
+.lm_maximised .lm_header {background-color: #fff!important}
+.dark .lm_maximised .lm_header {background-color: #777!important}
 .lm_drag_handle{width:8px!important;left:-2px!important}
 .lm_tab{background-color:#dcdad5!important}
 .lm_close{display:none!important}
