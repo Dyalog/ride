@@ -60,3 +60,14 @@ stage ('Copy Install Images') {
 		}
 	}
 }
+
+
+stage ('Send Emails') {
+        step([
+                $class: 'Mailer',
+                notifyEveryUnstableBuild: true,
+                recipients: 'ride@dyalog.com',
+                sendToIndividuals: true
+        ])
+}
+
