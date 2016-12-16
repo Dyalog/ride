@@ -67,7 +67,8 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #cn_abt{float:right}
 #cn_lhs,#cn_rhs{position:absolute;top:0;bottom:0}
 #cn_lhs{left:0;width: 300px;overflow:hidden;}
-#cn_rhs{right:0;left:250px;padding:0;overflow:auto;background:#eee}
+#cn_rhs{right:0;left:250px;padding:0;overflow:auto}
+#cn_rhs, #cn_lhs{background:#eee}
 .dark #cn_rhs,.dark #cn_lhs{background:#444}
 #cn_rhs_inner{padding:8px}
 #cn_rhs_inner p{padding:4px 0}
@@ -118,7 +119,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 
 /*language bar*/
 #lb{font-family:apl,monospace;font-size:18px;cursor:default;line-height:22px}
-#lb b{font-weight:normal;width: 22px;display:inline-block;text-align:center;border-radius: 50%}
+#lb b{font-weight:normal;width: 22px;display:inline-block;text-align:center;border-radius: 50%;margin-right:-4px}
 #lb b:hover{background-color: rgba(0,0,0,0.1)}
 #lb b:active{background-color: rgba(0,0,0,0.2)}
 #lb_prf{float:right;margin-right:4px;width: 22px;height: 22px;background:no-repeat center center url(img/lb_prf.png);border-radius: 50%}
