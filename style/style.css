@@ -190,7 +190,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .tracer .toolbar .ed_only{display:none}
         .toolbar .tc_only{display:none}
 .tracer .toolbar .tc_only{display:block}
-.tb_btn,.tb_sep{float:left;width:24px;height:24px;margin:0 1px;background:no-repeat center center;cursor:default;background-size:20px 20px}
+.tb_btn,.tb_sep{float:left;width:24px;height:24px;margin:0 1px;background:no-repeat center center;cursor:default;background-size:20px 20px;border-radius:50%}
 .tb_btn.pressed{background-color:rgba(0,0,0,0.2)}
 .tb_btn:hover  {background-color: rgba(0,0,0,0.1)}
 .tb_btn:active {background-color:rgba(0,0,0,0.2)}
