@@ -12,6 +12,7 @@ D.prf={}
   ['autoCloseBrackets',  1], //whether to insert {}[]() in pairs
   ['autocompletion',     1],
   ['blockCursor',        1], // use block cursor selection?
+  ['blinkCursor',        1], // cursor blinking
   ['autocompletionDelay',500],
   ['colourScheme',       'Default'], //name of the active colour scheme
   ['colourSchemes',      []],//objects describing user-defined colour schemes
