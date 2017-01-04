@@ -3,14 +3,12 @@ set -x -e -o pipefail
 
 JOB_NAME=${JOB_NAME#*/} ## remove folder from the job_name
 
-CHECKPR=${JOB_NAME#*/}
-if [ "${CHECKPR:0:2}" = "PR" ]; then
+GIT_BRANCH=${JOB_NAME#*/}
+if [ "${GIT_BRANCH:0:2}" = "PR" ]; then
         echo "skipping copying files for pull requests"
         exit 0
 fi
 
-
-GIT_BRANCH=`git symbolic-ref --short HEAD`
 
 ## Check /devt is mounted
 
