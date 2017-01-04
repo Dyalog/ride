@@ -7,6 +7,7 @@ PACKAGE_NAME=`node -pe "($(cat package.json)).productName"`
 APP_NAME=$(node -e "console.log($(cat package.json).name)") # "ride30" or similar
 
 VERSION="${BASE_VERSION%%.0}.`git rev-list HEAD --count`"  # "%%.0" strips trailing ".0"
+echo $JOB_NAME
 if ! [ "$GIT_BRANCH" ]; then
 	GIT_BRANCH=`git symbolic-ref --short HEAD`
 fi
