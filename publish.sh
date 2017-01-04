@@ -24,7 +24,7 @@ CURRENTBRANCH=${GIT_BRANCH#*/}
 
 umask 002 # user and group can do everything, others can only read and execute
 mountpoint /devt; echo Devt is mounted: good # make sure it's mounted
-r=/devt/builds/JR-Test/${JOB_NAME}
+r=/devt/builds/${JOB_NAME}
 d=${BUILD_NUMBER}
 for suffix in '' {a..z}; do if [ ! -e $r/$d$suffix ]; then d=$d$suffix; break; fi; done
 mkdir -p $r/$d
