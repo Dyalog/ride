@@ -67,8 +67,13 @@ cp -r _/${APP_NAME}/${DIR} $r/$d/${OSNAME}
   cd -
 done
 
-echo 'updating "latest" symlink'; l=$r/../latest; [ -L $l ]; rm -f $l; ln -s ${JOB_NAME#*/}$d $l
-echo 'fixing permissions'; chmod +x $r/../latest/win32/{*.exe,*.dll}
+echo 'fixing permissions'; chmod +x $r/$d/win32/{*.exe,*.dll}
+
+if [ "${CHECKPR:0:2}" = "PR" ]; then
+	echo "skipping creating latest link for PR builds"
+else
+	echo 'updating "latest" symlink'; l=$r/../latest; [ -L $l ]; rm -f $l; ln -s ${JOB_NAME#*/}/$d $l
+fi
 echo 'cleaning up old releases'
 for x in $(ls $r | grep -P '^\d{4}-\d{2}-\d{2}--\d{2}-\d{2}[a-z]?$' | sort | head -n-10); do
   echo "deleting $x"; rm -rf $r/$x || true
