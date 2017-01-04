@@ -65,6 +65,6 @@ echo 'fixing permissions'; chmod +x $r/$d/win32/{*.exe,*.dll}
 
 echo 'updating "latest" symlink'; l=$r/latest; rm -f $l; ln -s $d $l
 echo 'cleaning up old releases'
-for x in $(ls $r | grep -P '^\d{4}-\d{2}-\d{2}--\d{2}-\d{2}[a-z]?$' | sort | head -n-10); do
+for x in $(ls -d $r/*/ | grep -v "latest" | head -n-10); do
   echo "deleting $x"; rm -rf $r/$x || true
 done
