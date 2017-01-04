@@ -3,7 +3,7 @@ def extWorkspace = exwsAllocate 'sharedWorkspace'
 node('Linux && NodeJS && sharedworkspace') {
         exws (extWorkspace) {
                 stage ('Checkout from GitHub') {
-                    git url: 'https://github.com/Dyalog/Ride.git'
+                    checkout scm
                 }
                 
 

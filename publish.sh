@@ -7,6 +7,15 @@ PACKAGE_NAME=`node -pe "($(cat package.json)).productName"`
 APP_NAME=$(node -e "console.log($(cat package.json).name)") # "ride30" or similar
 
 VERSION="${BASE_VERSION%%.0}.`git rev-list HEAD --count`"  # "%%.0" strips trailing ".0"
+if [ "${JOB_NAME:0:13}" = "Dyalog_Github" ]; then
+	JOB_NAME=${JOB_NAME#*/}
+fi
+
+CHECKPR=${JOB_NAME#*/}
+if [ "${CHECKPR:0:2}" = "PR" ]; then
+	GIT_BRANCH=$CHECKPR
+fi
+
 if ! [ "$GIT_BRANCH" ]; then
 	GIT_BRANCH=`git symbolic-ref --short HEAD`
 fi
@@ -15,8 +24,8 @@ CURRENTBRANCH=${GIT_BRANCH#*/}
 
 umask 002 # user and group can do everything, others can only read and execute
 mountpoint /devt; echo Devt is mounted: good # make sure it's mounted
-r=/devt/builds/ride/${CURRENTBRANCH}
-d=`date +%Y-%m-%d--%H-%M` # append a letter to $d if such a directory already exists
+r=/devt/builds/${JOB_NAME}
+d=${BUILD_NUMBER}
 for suffix in '' {a..z}; do if [ ! -e $r/$d$suffix ]; then d=$d$suffix; break; fi; done
 mkdir -p $r/$d
 echo "$VERSION" > $r/$d/version
@@ -58,8 +67,9 @@ cp -r _/${APP_NAME}/${DIR} $r/$d/${OSNAME}
   cd -
 done
 
-echo 'updating "latest" symlink'; l=$r/latest; [ -L $l ]; rm -f $l; ln -s $d $l
-echo 'fixing permissions'; chmod +x $r/latest/win32/{*.exe,*.dll}
+echo 'fixing permissions'; chmod +x $r/$d/win32/{*.exe,*.dll}
+
+echo 'updating "latest" symlink'; l=$r/latest; rm -f $l; ln -s $d $l
 echo 'cleaning up old releases'
 for x in $(ls $r | grep -P '^\d{4}-\d{2}-\d{2}--\d{2}-\d{2}[a-z]?$' | sort | head -n-10); do
   echo "deleting $x"; rm -rf $r/$x || true
