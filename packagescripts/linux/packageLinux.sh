@@ -1,5 +1,12 @@
 #!/bin/bash
-set -x
+set -x -e -o pipefail
+
+CHECKPR=${JOB_NAME#*/*/}
+if [ "${CHECKPR:0:2}" = "PR" ]; then
+        echo "skipping creating installer for pull requests"
+	exit 0
+fi
+
 
 
 if ! [ "$1" = "" ]; then

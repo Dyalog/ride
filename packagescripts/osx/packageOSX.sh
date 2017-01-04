@@ -1,6 +1,13 @@
 #!/bin/bash
-set -x
-set -e
+set -x -e -o pipefail
+
+CHECKPR=${JOB_NAME#*/*/}
+if [ "${CHECKPR:0:2}" = "PR" ]; then
+        echo "skipping creating installer for pull requests"
+        exit 0
+fi
+
+
 BUILDROOTDIR=${PWD}
 GIT_BRANCH=`git branch -a | grep \* | awk '{print $2}'`
 TARGET=$GIT_BRANCH
