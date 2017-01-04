@@ -9,6 +9,7 @@ D.Se=function(ide){ //constructor
     autofocus:true,mode:{name:'apl-session',se:se},matchBrackets:!!D.prf.matchBrackets(),readOnly:true,keyMap:'dyalog',
     lineWrapping:!!D.prf.wrap(),indentUnit:4,smartIndent:0,autoCloseBrackets:{pairs:'()[]{}',explode:''},
     scrollbarStyle:'simple',extraKeys:{'Shift-Tab':'indentLess',Tab:'indentOrComplete'},
+    cursorBlinkRate:D.prf.blinkCursor()*CM.defaults.cursorBlinkRate,
   });D.prf.blockCursor()&&CM.addClass(cm.getWrapperElement(),'cm-fat-cursor')
   cm.dyalogCmds=se
   D.util.cmOnDblClick(cm,function(e){se.ED(cm);e.stopPropagation();e.preventDefault()})
@@ -30,6 +31,7 @@ D.Se=function(ide){ //constructor
   se.processAutocompleteReply=D.ac(se) //delegate autocompletion processing to ac.js
   D.prf.wrap(function(x){se.cm.setOption('lineWrapping',!!x);se.scrollCursorIntoView()})
   D.prf.blockCursor(function(x){for(var i in D.wins)D.wins[i].cm.getWrapperElement().classList.toggle('cm-fat-cursor',!!x)})
+  D.prf.blinkCursor(function(x){for(var i in D.wins)D.wins[i].cm.setOption("cursorBlinkRate",D.prf.blinkCursor()*CM.defaults.cursorBlinkRate)})
   this.vt=D.vt(this) //value tips
 }
 D.Se.prototype={
