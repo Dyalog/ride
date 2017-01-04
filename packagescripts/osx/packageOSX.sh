@@ -1,15 +1,14 @@
 #!/bin/bash
 set -x -e -o pipefail
 
-CHECKPR=${JOB_NAME#*/*/}
-if [ "${CHECKPR:0:2}" = "PR" ]; then
+GIT_BRANCH=${JOB_NAME#*/*/}
+if [ "${GIT_BRANCH:0:2}" = "PR" ]; then
         echo "skipping creating installer for pull requests"
         exit 0
 fi
 
 
 BUILDROOTDIR=${PWD}
-GIT_BRANCH=`git branch -a | grep \* | awk '{print $2}'`
 TARGET=$GIT_BRANCH
 
 function PLISTValue() {
@@ -32,6 +31,8 @@ RIDEDIR="_/${BUILDNAME}/${PackageName}-darwin-x64"
 SHIPDIRECTORY=ship
 RIDEAPPDIRNAME="${PackageName}.app"
 PLISTFILE=${RIDEDIR}/${RIDEAPPDIRNAME}/Contents/Info.plist
+
+rm ${RIDEDIR}/LICENSE ${RIDEDIR}/LICENSES.chromium.html ${RIDEDIR}/version
 
 if [ -s ${RIDEDIR}/../../version ]; then
 RIDEVERSION=`cat ${RIDEDIR}/../../version`

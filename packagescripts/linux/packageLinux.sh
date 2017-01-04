@@ -1,8 +1,8 @@
 #!/bin/bash
 set -x -e -o pipefail
 
-CHECKPR=${JOB_NAME#*/*/}
-if [ "${CHECKPR:0:2}" = "PR" ]; then
+GIT_BRANCH=${JOB_NAME#*/*/}
+if [ "${GIT_BRANCH:0:2}" = "PR" ]; then
         echo "skipping creating installer for pull requests"
 	exit 0
 fi

@@ -11,14 +11,8 @@ if [ "${JOB_NAME:0:13}" = "Dyalog_Github" ]; then
 	JOB_NAME=${JOB_NAME#*/}
 fi
 
-CHECKPR=${JOB_NAME#*/}
-if [ "${CHECKPR:0:2}" = "PR" ]; then
-	GIT_BRANCH=$CHECKPR
-fi
+GIT_BRANCH=${JOB_NAME#*/}
 
-if ! [ "$GIT_BRANCH" ]; then
-	GIT_BRANCH=`git symbolic-ref --short HEAD`
-fi
 echo "Current branch: ${GIT_BRANCH#*/}"
 CURRENTBRANCH=${GIT_BRANCH#*/}
 
