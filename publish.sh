@@ -7,8 +7,12 @@ PACKAGE_NAME=`node -pe "($(cat package.json)).productName"`
 APP_NAME=$(node -e "console.log($(cat package.json).name)") # "ride30" or similar
 
 VERSION="${BASE_VERSION%%.0}.`git rev-list HEAD --count`"  # "%%.0" strips trailing ".0"
-JOB_NAME=${JOB_NAME#*/*/}
-if [ "${JOB_NAME:0:2}" = "PR" ]; then
+if [ "${JOB_NAME:0:13}" = "Dyalog_Github" ]; then
+	JOB_NAME=${JOB_NAME#*/}
+fi
+
+CHECKPR=${JOB_NAME#*/}
+if [ "${CHECKPR:0:2}" = "PR" ]; then
 	GIT_BRANCH=$JOB_NAME
 fi
 
