@@ -185,7 +185,13 @@ export SVNDIR="c:/svn"
 
 export RIDE_FILES_MEDIA_DISK_ID=1
 
-export OBJ_TMP=$WORKSPACE/WinBuild
+GIT_BRANCH=`echo ${JOB_NAME#*/*/}`
+if [ "${GIT_BRANCH:0:2}" = "PR" ]; then
+	cd ../..	
+	export OBJ_TMP=${PWD}/${GIT_BRANCH:3}/WinBuild
+else
+	export OBJ_TMP=${WORKSPACE}/WinBuild
+fi
 export OBJ_FILES=${OBJ_TMP}/files/ride	# LMF [6886] 11-Feb-2011
 export OBJ_CABINETS=${OBJ_TMP}/cabs
 export RIDEDIR=$OBJ_TMP/RIDE
