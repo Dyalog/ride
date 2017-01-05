@@ -34,11 +34,13 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   q.exe.readOnly=!!q.exes.value
 }
 ,validate=x=>{
-  const t=x.type,h=x.host,p=x.port
+  const t=x.type,h=x.host,p=x.port,tn=x.ssh_tnl
   if((t==='connect'||t==='start'&&x.ssh)&&!h)
-    {$.err('"host" is required',_=>{(t==='connect'?q.tcp_host:q.ssh_host).select()});return}
+    {$.err('"host" is required',_=>{(t==='connect'?x.ssh_tnl?q.ssh_tnl_host:q.tcp_host:q.ssh_host).select()});return}
   if((t==='connect'||t==='start'&&x.ssh||t==='listen')&&p&&(!/^\d*$/.test(p)||+p<1||+p>0xffff))
-    {$.err('Invalid port',_=>{(t==='connect'?q.tcp_port:t==='start'?q.ssh_port:q.listen_port).select()});return}
+    {$.err('Invalid port',_=>{(t==='connect'?x.ssh_tnl?q.ssh_tnl_port:q.tcp_port:t==='start'?q.ssh_port:q.listen_port).select()});return}
+  if((t==='connect'&&x.ssh_tnl)&&x.ride_port&&(!/^\d*$/.test(x.ride_port)||+x.ride_port<1||+x.ride_port>0xffff))
+    {$.err('Invalid RIDE port',_=>{q.ssh_ride_port.select()});return}
   if(t==='start'){
     const a=(x.env||'').split('\n')
     for(let i=0;i<a.length;i++)if(!KV.test(a[i])&&!WS.test(a[i]))
@@ -49,14 +51,29 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   }
   return 1
 }
-,go=x=>{ //"Go" buttons in the favs or the "Go" button at the bottom
+,go=global.go=x=>{ //"Go" buttons in the favs or the "Go" button at the bottom
   x=x||sel;if(!validate(x))return 0;D.local=0
   try{
     switch(x.type||'connect'){
       case'connect':
         D.util.dlg(q.connecting_dlg)
-        connect({host:x.host,port:+x.port||4502,
-                 ssl:x.ssl,cert:x.cert,key:x.key,subj:x.subj,rootcertsdir:x.rootcertsdir})
+        if(x.ssh_tnl){
+          var o={host:x.host,port:+x.port||22,user:x.user||user}
+          if(x.ssh_tnl_auth_type==='key'){o.key=x.ssh_tnl_key}else{o.pass=x===sel?q.ssh_tnl_pass.value:''}
+          const c=sshExec(o,'/bin/sh',(e,sm)=>{if(e)throw e
+            sm.on('close',(code,sig)=>{D.ide&&D.ide._sshExited({code,sig});c.end()})
+            c.forwardOut('',0,'127.0.0.1',x.ride_port,(e,sm)=>{
+              if(e){log('cannot forward out through ssh');clt=0;err(e.message);clearTimeout(D.tmr);delete D.tmr;return}
+              clt=sm;initInterpreterConn();new D.IDE().setConnInfo(x.host,x.port,sel?sel.name:'')
+              clt.on('error',x=>{log('connect failed: '+x);clt=0;err(x.message);clearTimeout(D.tmr);delete D.tmr})
+            })
+          })
+          c&&c.on('error',x=>{err(x.message||''+x);q.connecting_dlg.hidden=1;clearTimeout(D.tmr);delete D.tmr})
+          D.tmr=setTimeout(function(){err('Timed out');c&&c.end();q.connecting_dlg.hidden=1},3000)
+        }else{
+          connect({host:x.host,port:+x.port||4502,
+                   ssl:x.ssl,cert:x.cert,key:x.key,subj:x.subj,rootcertsdir:x.rootcertsdir})
+        }
         break
       case'listen':
         D.util.dlg(q.listen_dlg);const port=+x.port||4502;q.listen_dlg_port.textContent=''+port
@@ -120,7 +137,8 @@ D.cn=_=>{ //set up Connect page
   }
   updFormDtl();q.type.onchange=_=>{sel.type=q.type.value;updFormDtl();save()}
   q.ssh.onchange=_=>{q.ssh_dtl.hidden=!q.ssh.checked;updExes()}
-  q.ssh_user.placeholder=user
+  q.ssh_tnl.onchange=_=>{q.ssh_tnl_dtl.hidden=!q.ssh_tnl.checked;q.tcp_dtl.hidden=q.ssh_tnl.checked}
+  q.ssh_user.placeholder=q.ssh_tnl_user=user
   q.fetch.onclick=_=>{
     if(!validate($.extend({},sel,{exe:'x'})))return //validate all except "exe"
     q.fetch.disabled=1
@@ -166,9 +184,12 @@ D.cn=_=>{ //set up Connect page
   q.cert_dots        .onclick=_=>{browse(q.cert        ,'Certificate')}
   q.key_dots         .onclick=_=>{browse(q.key         ,'Key'        )}
   q.ssh_key_dots     .onclick=_=>{browse(q.ssh_key     ,'SSH Key'    )}
+  q.ssh_tnl_key_dots     .onclick=_=>{browse(q.ssh_tnl_key     ,'SSH Key'    )}
   q.rootcertsdir_dots.onclick=_=>{browse(q.rootcertsdir,'Directory with Root Certificates',['openDirectory'])}
   q.ssh_auth_type.onchange=_=>{const k=q.ssh_auth_type.value==='key';q.ssh_pass_wr.hidden=k;q.ssh_key_wr.hidden=!k;
                                sel.ssh_auth_type=q.ssh_auth_type.value;save()}
+  q.ssh_tnl_auth_type.onchange=_=>{const k=q.ssh_tnl_auth_type.value==='key';q.ssh_tnl_pass_wr.hidden=k;q.ssh_tnl_key_wr.hidden=!k;
+                               sel.ssh_tnl_auth_type=q.ssh_tnl_auth_type.value;save()}
   D.prf.favs().forEach(x=>{q.favs.appendChild(favDOM(x))})
   $(q.favs).list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
     .on('click','.go',function(){$(q.favs).list('select',$(this).parentsUntil(q.favs).last().index());q.go.click()})
@@ -191,7 +212,9 @@ D.cn=_=>{ //set up Connect page
         var a=q.rhs.querySelectorAll('input,textarea')
         for(var i=0;i<a.length;i++)if(/^text(area)?$/.test(a[i].type))D.util.elastic(a[i])
         q.ssh_auth_type.value=sel.ssh_auth_type||'pass';q.ssh_auth_type.onchange()
+        q.ssh_tnl_auth_type.value=sel.ssh_tnl_auth_type||'pass';q.ssh_tnl_auth_type.onchange()
         q.ssl_dtl.hidden=!sel.ssl;q.ssh_dtl.hidden=!sel.ssh
+        q.ssh_tnl_dtl.hidden=!sel.ssh_tnl;q.tcp_dtl.hidden=sel.ssh_tnl
         q.cert_cb.checked=!!sel.cert;q.cert.disabled=q.key.disabled=q.cert_dots.disabled=q.key_dots.disabled=!sel.cert
         q.subj_cb.checked=!!sel.subj
         q.rootcertsdir_cb.checked=!!sel.rootcertsdir;q.rootcertsdir.disabled=q.rootcertsdir_dots.disabled=!sel.rootcertsdir

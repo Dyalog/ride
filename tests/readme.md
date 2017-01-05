@@ -2,9 +2,9 @@
 
 Install a 64-bit Unicode interpreter on Linux and in RIDE's git root do:
 
-    ./mk c b l               # clean, build, and package RIDE for Linux
-    rm -r ~/.config/ride40   # reset prefs to factory defaults
-    rm "$OBJDIR"/default.dlf # delete interpreter's session log (if you're building it from source)
+    ./mk c b l                # clean, build, and package RIDE for Linux
+    rm -r ~/.config/Ride-4.0/ # reset prefs to factory defaults
+    rm "$OBJDIR"/default.dlf  # delete interpreter's session log (if you're building it from source)
     RIDE_SPAWN=dyalog RIDE_JS=tests/t.js _/ride40/Ride-4.0-linux-x64/Ride-4.0
 
 Electron's console will print test actions as they are being executed (lines from `test/t.txt`)
