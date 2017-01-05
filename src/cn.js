@@ -134,7 +134,8 @@ D.cn=_=>{ //set up Connect page
   }
   updFormDtl();q.type.onchange=_=>{sel.type=q.type.value;updFormDtl();save()}
   q.ssh.onchange=_=>{q.ssh_dtl.hidden=!q.ssh.checked;updExes()}
-  q.ssh_user.placeholder=user
+  q.ssh_tnl.onchange=_=>{q.ssh_tnl_dtl.hidden=!q.ssh_tnl.checked;q.tcp_dtl.hidden=q.ssh_tnl.checked}
+  q.ssh_user.placeholder=q.ssh_tnl_user=user
   q.fetch.onclick=_=>{
     if(!validate($.extend({},sel,{exe:'x'})))return //validate all except "exe"
     q.fetch.disabled=1
@@ -180,9 +181,12 @@ D.cn=_=>{ //set up Connect page
   q.cert_dots        .onclick=_=>{browse(q.cert        ,'Certificate')}
   q.key_dots         .onclick=_=>{browse(q.key         ,'Key'        )}
   q.ssh_key_dots     .onclick=_=>{browse(q.ssh_key     ,'SSH Key'    )}
+  q.ssh_tnl_key_dots     .onclick=_=>{browse(q.ssh_tnl_key     ,'SSH Key'    )}
   q.rootcertsdir_dots.onclick=_=>{browse(q.rootcertsdir,'Directory with Root Certificates',['openDirectory'])}
   q.ssh_auth_type.onchange=_=>{const k=q.ssh_auth_type.value==='key';q.ssh_pass_wr.hidden=k;q.ssh_key_wr.hidden=!k;
                                sel.ssh_auth_type=q.ssh_auth_type.value;save()}
+  q.ssh_tnl_auth_type.onchange=_=>{const k=q.ssh_tnl_auth_type.value==='key';q.ssh_tnl_pass_wr.hidden=k;q.ssh_tnl_key_wr.hidden=!k;
+                               sel.ssh_tnl_auth_type=q.ssh_tnl_auth_type.value;save()}
   D.prf.favs().forEach(x=>{q.favs.appendChild(favDOM(x))})
   $(q.favs).list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
     .on('click','.go',function(){$(q.favs).list('select',$(this).parentsUntil(q.favs).last().index());q.go.click()})
@@ -205,7 +209,9 @@ D.cn=_=>{ //set up Connect page
         var a=q.rhs.querySelectorAll('input,textarea')
         for(var i=0;i<a.length;i++)if(/^text(area)?$/.test(a[i].type))D.util.elastic(a[i])
         q.ssh_auth_type.value=sel.ssh_auth_type||'pass';q.ssh_auth_type.onchange()
+        q.ssh_tnl_auth_type.value=sel.ssh_tnl_auth_type||'pass';q.ssh_tnl_auth_type.onchange()
         q.ssl_dtl.hidden=!sel.ssl;q.ssh_dtl.hidden=!sel.ssh
+        q.ssh_tnl_dtl.hidden=!sel.ssh_tnl;q.tcp_dtl.hidden=sel.ssh_tnl
         q.cert_cb.checked=!!sel.cert;q.cert.disabled=q.key.disabled=q.cert_dots.disabled=q.key_dots.disabled=!sel.cert
         q.subj_cb.checked=!!sel.subj
         q.rootcertsdir_cb.checked=!!sel.rootcertsdir;q.rootcertsdir.disabled=q.rootcertsdir_dots.disabled=!sel.rootcertsdir
