@@ -55,9 +55,9 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
     switch(x.type||'connect'){
       case'connect':
         D.util.dlg(q.connecting_dlg)
-        if(x.ssh){
+        if(x.ssh_tnl){
           var o={host:x.host,port:+x.port||22,user:x.user||user}
-          if(x.ssh_auth_type==='key'){o.key=x.ssh_key}else{o.pass=x===sel?q.ssh_pass.value:''}
+          if(x.ssh_tnl_auth_type==='key'){o.key=x.ssh_tnl_key}else{o.pass=x===sel?q.ssh_tnl_pass.value:''}
           const c=sshExec(o,'/bin/sh',(e,sm)=>{if(e)throw e
             sm.on('close',(code,sig)=>{D.ide&&D.ide._sshExited({code,sig});c.end()})
             c.forwardOut('',0,'127.0.0.1',x.ride_port,(e,sm)=>{
