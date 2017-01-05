@@ -34,11 +34,13 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   q.exe.readOnly=!!q.exes.value
 }
 ,validate=x=>{
-  const t=x.type,h=x.host,p=x.port
+  const t=x.type,h=x.host,p=x.port,tn=x.ssh_tnl
   if((t==='connect'||t==='start'&&x.ssh)&&!h)
-    {$.err('"host" is required',_=>{(t==='connect'?q.tcp_host:q.ssh_host).select()});return}
+    {$.err('"host" is required',_=>{(t==='connect'?x.ssh_tnl?q.ssh_tnl_host:q.tcp_host:q.ssh_host).select()});return}
   if((t==='connect'||t==='start'&&x.ssh||t==='listen')&&p&&(!/^\d*$/.test(p)||+p<1||+p>0xffff))
-    {$.err('Invalid port',_=>{(t==='connect'?q.tcp_port:t==='start'?q.ssh_port:q.listen_port).select()});return}
+    {$.err('Invalid port',_=>{(t==='connect'?x.ssh_tnl?q.ssh_tnl_port:q.tcp_port:t==='start'?q.ssh_port:q.listen_port).select()});return}
+  if((t==='connect'&&x.ssh_tnl)&&x.ride_port&&(!/^\d*$/.test(x.ride_port)||+x.ride_port<1||+x.ride_port>0xffff))
+    {$.err('Invalid RIDE port',_=>{q.ssh_ride_port.select()});return}
   if(t==='start'){
     const a=(x.env||'').split('\n')
     for(let i=0;i<a.length;i++)if(!KV.test(a[i])&&!WS.test(a[i]))
