@@ -116,7 +116,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
             catch(e){err(''+e);return}
             D.lastSpawnedExe=x.exe
             child.on('exit',(code,sig)=>{srv&&srv.close();srv=clt=child=0;clearTimeout(D.tmr);delete D.tmr
-                                         err('Interpreter '+(code!=null?'exited with code '+code:'received '+sig))})
+                                         if(code!==0){err('Interpreter '+(code!=null?'exited with code '+code:'received '+sig))}})
             child.on('error',y=>{srv&&srv.close();srv=clt=child=0;clearTimeout(D.tmr);delete D.tmr
                                  err(y.code==='ENOENT'?"Cannot find the interpreter's executable":''+y)
                                  console.error(y)})
