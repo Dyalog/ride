@@ -65,6 +65,6 @@ echo 'fixing permissions'; chmod +x $r/$d/win32/{*.exe,*.dll}
 
 echo 'updating "latest" symlink'; l=$r/latest; rm -f $l; ln -s $d $l
 echo 'cleaning up old releases'
-for x in $(ls -d $r/*/ | grep -v "latest" | head -n-10); do
-  echo "deleting $x"; rm -rf $x || true
+for x in $(ls $r/ | grep -v "latest" | grep -v "Thumbs.db" | sort -n | head -n-10); do
+  echo "deleting $r/$x"; rm -rf $r/$x || true
 done
