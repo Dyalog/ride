@@ -15,4 +15,4 @@ fi
 mountpoint /devt; echo Devt is mouted: good
 RIDEDIR=/devt/builds/${JOB_NAME}/latest
 
-cp -vR ship $RIDEDIR
+cp -vR ship $RIDEDIR/
