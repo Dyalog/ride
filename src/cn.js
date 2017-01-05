@@ -49,14 +49,28 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   }
   return 1
 }
-,go=x=>{ //"Go" buttons in the favs or the "Go" button at the bottom
+,go=global.go=x=>{ //"Go" buttons in the favs or the "Go" button at the bottom
   x=x||sel;if(!validate(x))return 0;D.local=0
   try{
     switch(x.type||'connect'){
       case'connect':
         D.util.dlg(q.connecting_dlg)
-        connect({host:x.host,port:+x.port||4502,
-                 ssl:x.ssl,cert:x.cert,key:x.key,subj:x.subj,rootcertsdir:x.rootcertsdir})
+        if(x.ssh){
+          var o={host:x.host,port:+x.port||22,user:x.user||user}
+          if(x.ssh_auth_type==='key'){o.key=x.ssh_key}else{o.pass=x===sel?q.ssh_pass.value:''}
+          const c=sshExec(o,'/bin/sh',(e,sm)=>{if(e)throw e
+            sm.on('close',(code,sig)=>{D.ide&&D.ide._sshExited({code,sig});c.end()})
+            c.forwardOut('',0,'127.0.0.1',x.ride_port,(e,sm)=>{
+              if(e){log('cannot forward out through ssh');clt=0;err(e.message);clearTimeout(D.tmr);delete D.tmr}
+              clt=sm;initInterpreterConn();new D.IDE().setConnInfo(x.host,x.port,sel?sel.name:'')
+              clt.on('error',x=>{log('connect failed: '+x);clt=0;err(x.message);clearTimeout(D.tmr);delete D.tmr})
+            })
+          }).on('error',x=>{err(x.message||''+x);q.connecting_dlg.hidden=1;clearTimeout(D.tmr);delete D.tmr})
+          D.tmr=setTimeout(function(){err('Timed out');c&&c.end();q.connecting_dlg.hidden=1},3000)
+        }else{
+          connect({host:x.host,port:+x.port||4502,
+                   ssl:x.ssl,cert:x.cert,key:x.key,subj:x.subj,rootcertsdir:x.rootcertsdir})
+        }
         break
       case'listen':
         D.util.dlg(q.listen_dlg);const port=+x.port||4502;q.listen_dlg_port.textContent=''+port
