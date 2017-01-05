@@ -307,7 +307,7 @@ D.IDE.prototype={
     var r={};for(var k in this.wins){var cm=this.wins[k].cm,v=cm.getValue();if(+k&&v!==cm.oText)r[k]=v}
     return r
   },
-  _disconnected:function(){if(!this.dead){$.err('Interpreter disconnected');this.die()}}, //invoked from cn.js
+  _disconnected:function(){if(!this.dead){this.die()}}, //invoked from cn.js
   lbarRecreate:function(){
     var d=D.lb.order, u=D.prf.lbarOrder() //d:default order, u:user's order
     var r='';if(d!==u)for(var i=0;i<d.length;i++)if(!u.includes(d[i])&&/\S/.test(d[i]))r+=d[i] //r:set difference between d and u
