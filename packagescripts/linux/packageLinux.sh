@@ -29,7 +29,7 @@ APP_NAME=$(node -e "console.log($(cat package.json).productName)") # "Ride-4.0" 
 
 echo "Packaging for $TARGET"
 
-RIDEDIR="_/ride40/${APP_NAME}-linux-x64"
+RIDEDIR="_/ride40/${APP_NAME}-linux"
 ICON="style/img/D.svg"
 SBOXDIR=/tmp/ride$$
 postinst=/tmp/postinst$$
@@ -46,8 +46,8 @@ function checkEnvironment() {
 }
 
 function getVersionInfo() {
-if [ -s ${RIDEDIR}/../../version ]; then
-        RIDEVERSION=`cat ${RIDEDIR}/../../version`
+if [ -s ${RIDEDIR}-${CPUTYPE}/../../version ]; then
+        RIDEVERSION=`cat ${RIDEDIR}-${CPUTYPE}/../../version`
 else
         RIDEVERSION="1.9.0"
 fi
@@ -120,10 +120,10 @@ function createDEB() {
 		--category "devel"			\
 		--after-install $postinst		\
 		--before-remove $prerm			\
-		-p ship/ride-${RIDEVERSION}_linux.amd64.deb	\
+		-p ship/ride-${RIDEVERSION}_linux.${PACKAGECPUTYPE}.deb	\
 		-n ride-${BASE_VERSION}			\
 		-v ${RIDEVERSION}			\
-		-a amd64				\
+		-a ${PACKAGECPUTYPE}				\
 		--epoch 0				\
 		--description "Remote IDE for Dyalog APL"	\
 		opt usr
@@ -144,10 +144,10 @@ function createRPM() {
 		--category "devel"			\
 		--after-install $postinst		\
 		--before-remove $prerm			\
-		-p ship/ride-${RIDEVERSION}_linux.amd64.rpm	\
+		-p ship/ride-${RIDEVERSION}_linux.${PACKAGECPUTYPE}.rpm	\
 		-n ride-${BASE_VERSION}			\
 		-v ${RIDEVERSION}			\
-		-a amd64				\
+		-a ${PACKAGECPUTYPE}				\
 		--epoch 0				\
 		--description "Remote IDE for Dyalog APL"	\
 		opt usr
@@ -163,19 +163,28 @@ rm -Rf $prerm
 }
 
 
+for CPUTYPE in x64 armv7l; do
 
-checkEnvironment
-getVersionInfo
-createPackageFiles
+	if [ "${CPUTYPE}" = "x64" ]; then
+		PACKAGECPUTYPE="amd64"
+	elif [ "${CPUTYPE}" = "armv7l" ]; then
+		PACKAGECPUTYPE="armhf"
+	fi
 
-if ! [ -d ship ]; then
-	mkdir -p ship
-fi
-mkdir -p ${SBOXDIR}/opt/ride-${BASE_VERSION}
-mkdir -p ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps
-cp -R ${RIDEDIR}/* ${SBOXDIR}/opt/ride-${BASE_VERSION}/
-cp "$ICON" ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps/ride.svg
+	checkEnvironment
+	getVersionInfo
+	createPackageFiles
 
-createDEB
-createRPM
-cleanup
+	if ! [ -d ship ]; then
+		mkdir -p ship
+	fi
+	mkdir -p ${SBOXDIR}/opt/ride-${BASE_VERSION}
+	mkdir -p ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps
+	cp -R ${RIDEDIR}-${CPUTYPE}/* ${SBOXDIR}/opt/ride-${BASE_VERSION}/
+	cp "$ICON" ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps/ride.svg
+
+	createDEB
+	createRPM
+	cleanup
+
+done
