@@ -62,8 +62,6 @@ function createPackageFiles() {
 cat >$postinst <<-!!postinst
 #!/bin/bash
 
-set -x
-
 if which update-alternatives >/dev/null 2>&1 ; then
   update-alternatives --install /usr/bin/ride ride /opt/ride-${BASE_VERSION}/Ride-${BASE_VERSION} `echo ${BASE_VERSION} | sed 's/\.//g'`
   update-alternatives --install /usr/bin/ride-${BASE_VERSION} ride${BASE_VERSION_ND} /opt/ride-${BASE_VERSION}/Ride-${BASE_VERSION} `echo ${BASE_VERSION} | sed 's/\.//g'`
