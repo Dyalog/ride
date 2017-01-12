@@ -62,9 +62,23 @@ function createPackageFiles() {
 cat >$postinst <<-!!postinst
 #!/bin/bash
 
+set -x
+
 if which update-alternatives >/dev/null 2>&1 ; then
   update-alternatives --install /usr/bin/ride ride /opt/ride-${BASE_VERSION}/Ride-${BASE_VERSION} `echo ${BASE_VERSION} | sed 's/\.//g'`
   update-alternatives --install /usr/bin/ride-${BASE_VERSION} ride${BASE_VERSION_ND} /opt/ride-${BASE_VERSION}/Ride-${BASE_VERSION} `echo ${BASE_VERSION} | sed 's/\.//g'`
+fi
+
+#check for an installed interpreter and update it's icon if it exists.
+
+if [ -f /usr/bin/dyalog ]; then
+        ## 16.0 has renamed the shortcut, this allows us to deal with 15.0 in a semi-sensible way
+        if ! [ -f /usr/share/applications/dyalogtty.desktop ]; then
+                cat /usr/share/applications/dyalog.desktop | sed 's/\(^Name=.*\)/\1 (tty)/' > /usr/share/applications/dyalogtty.desktop
+        fi
+        ## This will always launch the most recent version of DyalogAPL the user has available
+        cat /usr/share/applications/dyalogtty.desktop | sed 's/^Exec=.*/Exec=env RIDE_SPAWN=\/usr\/bin\/dyalog \/usr\/bin\/ride-${BASE_VERSION}/' > /usr/share/applications/dyalog.desktop
+        sed -i 's/^Terminal=.*/Terminal=False/' /usr/share/applications/dyalog.desktop
 fi
 
 
@@ -79,7 +93,7 @@ Icon=ride
 Terminal=false
 Name=Ride-${BASE_VERSION}
 Comment=Remote IDE for Dyalog APL
-Catefories=Application;Development;
+Categories=Application;Development;Programming
 !!desktopFile
 
 fi
@@ -100,6 +114,11 @@ if [ -s /usr/share/applications/ride-${BASE_VERSION}.desktop ]; then
 	rm /usr/share/applications/ride-${BASE_VERSION}.desktop
 fi
 
+if [ -s /usr/share/applications/dyalog.desktop ]; then
+	rm /usr/share/applications/dyalog.desktop
+fi
+
+fi
 
 
 !!prerm
