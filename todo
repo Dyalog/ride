@@ -1,77 +1,20 @@
-Decision pending regarding initial handshake:
-  * fix Identify message and/or redefine its semantics in docs/protocol.md
-  * don't send a ReplyConnect message
-
-Things to be done in the interpreter:
-  * in GetAutocomplete either rename "token" to "win" or don't require them to be the same
-  * define and implement protocol messages for "show stack" and "show threads", see W1,W2 below
-  * define protocol messages for transferring a file to the interpreter, e.g. for drag&drop of a .dws
-  * don't crash when receiving JSON that's not structured as expected
-  * dev version of interpreter doesn't honour "+s -q" over ssh (probably one for Geoff), see email from 2016-01-28
-  * take into account modified editor content in Edit message
-
 Leftover from RIDE3 (M:major, S:significant, W:wouldn't it be nice)
-  M2 awareness of Process Manager
   M5 edit "external" source files
         NN: email 2016-01-20, added a "string input dialog" to the protocol
         NN: email 2016-01-28, "format on open" should be off by default for external source files
-  S2 config file for interpreter
-  S5 enhanced navigation of classes and functions
-        e.g. provide a way to jump to the last edited position in the same editor, like '' or `` in vim
-        (meeting with Morten and Jay, 2016-01-08)
-                NN: done but there are some issues with editing classes, see docs/protocol.md #Edit
-  W1 show stack
-  W2 show threads
 
 Not prioritized:
-  Ctrl-Delete in the session should delete lines permanently
-    NN: requires a new message in the protocol
-  configurable colours in WSE (Mantis #13629, email 2016-07-05)
-  font size in value tips should match font size in CodeMirror
-  configurable list for ``
-  ``idiomname
+  define protocol messages for transferring a file to the interpreter, e.g. for drag&drop of a .dws
+  dev version of interpreter doesn't honour "+s -q" over ssh (probably one for Geoff), see email from 2016-01-28
   <AC> on <RD>
-  programmable menu items
-  on a Mac esc closes the session instead of the editor (John Scholes 2015-12-03)
-  cmd to toggle rainbow colouring
-  names of open editors should appear at the bottom of the Window menu (Marc Griffiths 2015-03-13)
-    NN: not convinced that would be useful
-  Ctrl+Cmd+Space on the Mac starts a "Special Characters" application -- find a way to disable it
-    NN: "Special Characters" and "Start Dictation" are added based on the presence of "Copy" in the menu.
-        But if we don't have "Copy" in the menu, cmd+c doesn't work.
   make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud (Kai)
-  check for updates automatically (Jason, 2015-10-12)
-  shortcut to clear the "modified" flag of a line in session without reverting it to original content (Adam 2015-09-07)
-  selecting a block of text and pressing ⍝ should comment/uncomment it
-    NN: remapping ⍝ in CM doesn't work on Windows
-  status bar and programmatic access to "current object" (2015-09-07 Ray)
-  custom fonts (2015-09-07 Jim Brown)
-    NN: export RIDE_CSS=/path/to/my-styles.css can be used for that
+  programmatic access to "current object" (2015-09-07 Ray)
   https://github.com/codemirror/CodeMirror/issues/3240
     WebKit stores DOM height in 25 bits, ~33 million pixels.  When displaying
     large arrays (~millions of lines, depending on font size), CodeMirror hits
     that limit and it's impossible to scroll beyond a certain offset.  This is
     hard to work around without going deep into CodeMirror's code and rewriting
     parts of it.
-  OS X: there should be no flashing cursors in windows that don't have focus (John Scholes 2015-03-21)
-  on OS X dragging the text to a different point uses the vertical bar cursor. Holding the Option key while doing this
-    changes the cursor to the green and white cross (Implying a copy - but it still moves the text).  (Mike Powell)
-  Type a couple of chars and hit Alt+Enter, followed by Enter. Uncaught node.js Error (John Scholes email 2015-03-10)
-    NN: cannot reproduce on Linux
-  there is a limit for the number of match locations shown on the scrollbar (1000) -- should we change it?
-  floating editors: )ed F G should place F above G and focus F. Then Esc Esc should close F and then G (John Scholes)
-    NN: the interpreter controls the order; that's even beyond JD's code
   "Cancel" button in "Connecting..." dialog (Morten, Jabber 2015-03-30)
     NN: added "Cancel" button, though it doesn't really cancel, just closes the dialog
-  regular expressions in search
-  multiple sessions (i.e. connections to interpreters) as tabs with a green/red dot to indicate error (Mike Mingard)
-  show help next to ` completions (Mike Mingard)
-    NN: I made F1 open a help page based on selection in the menu
-  curly underlines (Adam 2015-09-09)
-  lbar in floating editor windows
-  detachable language bar (Mike Mingard)
-  drag and drop a "finder object" in the Mac RIDE crashes it (Alex Bochannek 2015-06-25)
-  RIDE on multiple screens on Mac loses its title bar (Alex Bochannek 2015-06-25)
-  search history
-  invert cursor colour (Alex Bochannek 2015-10-20)
   remove invisible scrollbars on Mac (Alexey Veretennikov 2015-10-20)
