@@ -76,6 +76,7 @@ if [ -f /usr/bin/dyalog ]; then
         fi
         ## This will always launch the most recent version of DyalogAPL the user has available
         cat /usr/share/applications/dyalogtty.desktop | sed 's/^Exec=.*/Exec=env RIDE_SPAWN=\/usr\/bin\/dyalog \/usr\/bin\/ride-${BASE_VERSION}/' > /usr/share/applications/dyalog.desktop
+	sed -i 's/^Name=.*/Name=Dyalog APL/' /usr/share/applications/dyalog.desktop
         sed -i 's/^Terminal=.*/Terminal=False/' /usr/share/applications/dyalog.desktop
 fi
 
