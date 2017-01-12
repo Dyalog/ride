@@ -62,13 +62,9 @@ function createPackageFiles() {
 cat >$postinst <<-!!postinst
 #!/bin/bash
 
-if ! [ -L /usr/bin/ride-${BASE_VERSION} ]; then
-	ln -s /opt/ride-${BASE_VERSION}/ride /usr/bin/ride-${BASE_VERSION}
-fi
-
 if which update-alternatives >/dev/null 2>&1 ; then
-  update-alternatives --install /usr/bin/ride ride /opt/ride-${BASE_VERSION}/ride${BASE_VERSION_ND} `echo ${BASE_VERSION} | sed 's/\.//g'`
-  update-alternatives --install /usr/bin/ride-${BASE_VERSION} ride${BASE_VERSION_ND} /opt/ride-${BASE_VERSION}/ride${BASE_VERSION_ND} `echo ${BASE_VERSION} | sed 's/\.//g'`
+  update-alternatives --install /usr/bin/ride ride /opt/ride-${BASE_VERSION}/Ride-${BASE_VERSION} `echo ${BASE_VERSION} | sed 's/\.//g'`
+  update-alternatives --install /usr/bin/ride-${BASE_VERSION} ride${BASE_VERSION_ND} /opt/ride-${BASE_VERSION}/Ride-${BASE_VERSION} `echo ${BASE_VERSION} | sed 's/\.//g'`
 fi
 
 
@@ -78,7 +74,7 @@ cat >/usr/share/applications/ride-${BASE_VERSION}.desktop <<-!!desktopFile
 Encoding=UTF-8
 Version=1.0
 Type=Application
-Exec=ride-${BASE_VERSION}
+Exec=/usr/bin/ride-${BASE_VERSION}
 Icon=ride
 Terminal=false
 Name=Ride-${BASE_VERSION}
