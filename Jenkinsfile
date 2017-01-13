@@ -61,7 +61,7 @@ stage ('Copy Install Images') {
 	}
 }
 
-node() {
+node('Linux && sharedworkspace') {
 	stage ('Upload to installers to Github') {
 		withCredentials([string(credentialsId: '16dda99e-77d1-462d-a7c8-385eb2dd2ef7', variable: 'GHTOKEN')]) {
 			sh './GH-Release.sh'
