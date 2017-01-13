@@ -1,12 +1,12 @@
 #!/bin/bash
-set -e
+set -e 
 
 # create JSON
 TMP_JSON=/tmp/GH-Publish.json
 BASE_VERSION=`node -pe "($(cat package.json)).version"`
 VERSION="${BASE_VERSION%%.0}.`git rev-list HEAD --count`"  # "%%.0" strips trailing ".0"
 
-if ! [ $GHTOKEN ]; then
+if ! [ "$GHTOKEN" ]; then
   echo 'Please put your GitHub API Token in an environment variable named GHTOKEN'
   exit 1
 fi
