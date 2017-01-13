@@ -18,7 +18,7 @@ cat >$TMP_JSON <<.
   "target_commitish": "master",
   "name": "v$VERSION",
   "body": $(
-    ( echo -e 'Pre-release of RIDE 2.0\n\nChangelog:'; git log --format='%s' $(git tag | tail -n 1).. ) \
+    ( echo -e 'Release of RIDE 3.0\n\nChangelog:'; git log --format='%s' $(git tag | tail -n 1).. ) \
       | grep -v -i todo | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
   ),
   "draft": true,
@@ -34,34 +34,12 @@ RELEASE_ID=`grep '"id"' $TMP_RESPONSE | head -1 | sed 's/.*: //;s/,//'`
 
 echo "created release with id: $RELEASE_ID"
 
-for DIR in `ls build/ride`; do
-  OS=`echo ${DIR} | sed 's/64//;s/32//'`
-  BITS=`echo ${DIR} | sed 's/linux//;s/osx//;s/win//'`
-
-  case ${OS} in
-    osx)
-      OSNAME="mac${BITS}"
-      ;;
-    win)
-      OSNAME="windows${BITS}"
-      ;;
-    *)
-      OSNAME="${OS}${BITS}"
-      ;;
-  esac
-
-  ZIP=ride2-${VERSION}-${OSNAME}.zip
-  TMP_ZIP=/tmp/$ZIP
-  cd build/ride/$DIR
-  echo "creating $TMP_ZIP"
-  zip -q -r "$TMP_ZIP" .
-  echo 'uploading to Github'
+for F in `ls /devt/builds/ride/ride3/latest/ship/`; do
+  echo 'uploading $F to Github'
   curl -o /dev/null -H "Authorization: token $TOKEN" \
     -H 'Accept: application/vnd.github.manifold-preview' \
     -H 'Content-Type: application/zip' \
-    --data-binary @"$TMP_ZIP" \
-    https://uploads.github.com/repos/$REPO/releases/$RELEASE_ID/assets?name=$ZIP
-  rm "$TMP_ZIP"
-  cd -
+    --data-binary @"/devt/builds/ride/ride3/latest/ship/$F" \
+    https://uploads.github.com/repos/$REPO/releases/$RELEASE_ID/assets?name=$F
 done
 rm $TMP_RESPONSE $TMP_JSON
