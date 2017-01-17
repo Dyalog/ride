@@ -117,8 +117,6 @@ if [ -s /usr/share/applications/dyalog.desktop ]; then
 	rm /usr/share/applications/dyalog.desktop
 fi
 
-fi
-
 
 !!prerm
 
