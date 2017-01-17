@@ -71,11 +71,11 @@ fi
 
 if [ -f /usr/bin/dyalog ]; then
         ## 16.0 has renamed the shortcut, this allows us to deal with 15.0 in a semi-sensible way
-        if ! [ -f /usr/share/applications/dyalogtty.desktop ]; then
-                cat /usr/share/applications/dyalog.desktop | sed 's/\(^Name=.*\)/\1 (tty)/' > /usr/share/applications/dyalogtty.desktop
+        if ! [ -f /usr/share/applications/dyalog-tty.desktop ]; then
+                cat /usr/share/applications/dyalog.desktop | sed 's/\(^Name=.*\)/\1 (tty)/' > /usr/share/applications/dyalog-tty.desktop
         fi
         ## This will always launch the most recent version of DyalogAPL the user has available
-        cat /usr/share/applications/dyalogtty.desktop | sed 's/^Exec=.*/Exec=env RIDE_SPAWN=\/usr\/bin\/dyalog \/usr\/bin\/ride-${BASE_VERSION}/' > /usr/share/applications/dyalog.desktop
+        cat /usr/share/applications/dyalog-tty.desktop | sed 's/^Exec=.*/Exec=env RIDE_SPAWN=\/usr\/bin\/dyalog \/usr\/bin\/ride-${BASE_VERSION}/' > /usr/share/applications/dyalog.desktop
 	sed -i 's/^Name=.*/Name=Dyalog APL/' /usr/share/applications/dyalog.desktop
         sed -i 's/^Terminal=.*/Terminal=False/' /usr/share/applications/dyalog.desktop
 fi
