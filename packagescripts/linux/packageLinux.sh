@@ -67,7 +67,7 @@ if which update-alternatives >/dev/null 2>&1 ; then
   update-alternatives --install /usr/bin/ride-${BASE_VERSION} ride${BASE_VERSION_ND} /opt/ride-${BASE_VERSION}/Ride-${BASE_VERSION} `echo ${BASE_VERSION} | sed 's/\.//g'`
 fi
 
-#check for an installed interpreter and update it's icon if it exists.
+#check for an installed interpreter and update it's shortcut if it exists.
 
 if [ -f /usr/bin/dyalog ]; then
         ## 16.0 has renamed the shortcut, this allows us to deal with 15.0 in a semi-sensible way
@@ -102,7 +102,7 @@ fi
 cat >$prerm <<-!!prerm
 
 if which update-alternatives >/dev/null 2>&1 ; then
-	update-alternatives --remove ride /opt/ride-${BASE_VERSION}/ride
+	update-alternatives --remove ride /opt/ride-${BASE_VERSION}/Ride-${BASE_VERSION}
 fi
 
 if [ -L /usr/bin/ride-${BASE_VERSION} ]; then
