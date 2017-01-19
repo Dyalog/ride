@@ -220,17 +220,17 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 /*various dialogs*/
 .dlg{position:absolute;background-color:#eee;box-shadow:0 18px 48px rgba(0,0,0,0.5);border:1px solid #444}
 .dark .dlg {background:#444}
-.dlg_title{color:#ed7f00;cursor:default;text-align:center;padding-top: 0.5ex;font-size:large}
-#prf_dlg .dlg_title{text-transform:uppercase;cursor:move}
-.dlg_close{float:right;background-color:#eee;color:#000;width:14px;height:14px;margin:2px;line-height:16px;
-           text-align:center;text-decoration:none;cursor:pointer}
+.dlg_title{color:#ed7f00;cursor:default;text-align:center;padding-top: 0.5ex;font-size:large;cursor:move}
+#prf_dlg .dlg_title{text-transform:uppercase}
+.dlg_close{float:right;color:#ed7f00;width:2ex;height:2ex;position:relative;display:inline-block;
+           text-align:center;text-decoration:none;cursor:pointer;top:-0.5ex}
 .dlg_close:hover{background-color:#fff}
 .dlg_btns{padding:8px;text-align:center;position:absolute;bottom:0;left:0;right:0;border-bottom-left-radius:4px;border-bottom-right-radius:4px}
 .dlg_btns button{min-width:75px;margin:0 8px}
 .dlg_btns button.task{display:block;margin:4px 0;width:100%}
 
 /*generic dialog for processing OptionsDialog,StringDialog,TaskDialog*/
-#gd_content{padding:32px;border-top:solid #fff 1px;text-align:center}
+#gd_content{padding: 1em;line-height:1.5;}
 
 /*Preferences dialog*/
 #prf_nav{height:28px;border-bottom: solid 1px #ed7f00;margin-bottom:2px;}
