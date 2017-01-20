@@ -139,6 +139,8 @@ D.cn=_=>{ //set up Connect page
   q.ssh.onchange=_=>{q.ssh_dtl.hidden=!q.ssh.checked;updExes()}
   q.ssh_tnl.onchange=_=>{q.ssh_tnl_dtl.hidden=!q.ssh_tnl.checked;q.tcp_dtl.hidden=q.ssh_tnl.checked}
   q.ssh_user.placeholder=q.ssh_tnl_user=user
+  var enterConnect=function(event){if (event.keyCode==13){$('#cn_go').click()}}
+  $('#cn_ssh_tnl_host').keyup(enterConnect);$('#cn_tcp_host').keyup(enterConnect);$('#cn_ssh_host').keyup(enterConnect)
   q.fetch.onclick=_=>{
     if(!validate($.extend({},sel,{exe:'x'})))return //validate all except "exe"
     q.fetch.disabled=1
