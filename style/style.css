@@ -7,10 +7,10 @@ nav,output,ruby,section,summary,time,mark,audio,video
 article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}
 body{line-height:1}
 /* Material UI elements */
-button{border:none;background:#eee;color:#ed7f00;font-family:inherit;font-weight:bold;padding:5px 0.5em;transition:0.2s;text-transform:uppercase;}
-.dark button{background:#444}
-button:hover{background:#fff}
-button:active{background:#ed7f00;color:#fff}
+button{border:none;background:#fff;color:#ed7f00;font-family:inherit;font-weight:bold;padding:5px 0.5em;transition:0.2s;text-transform:uppercase;}
+.dark button{background: #333;}
+button:hover{box-shadow: 0 0.5ex 0.5ex rgba(0,0,0,0.5);}
+button:active{box-shadow:none}
 [type=checkbox],[type=checkbox]:focus{margin-right:0.75em;outlinex:none!important}
 [type=checkbox]::before{position:relative;content:"\2714";background:#eee;color:transparent;display:inline-block;height:3ex;width:3ex;top:-4px;left:-2px;
                         font-size:70%;text-align:center;box-shadow: 0 0 0 1px #ed7f00 inset;border-radius:2px;transition:0.2s;font-weight:bold}
@@ -63,7 +63,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #cn_favs .go{float:right;margin-top: 2px}
 #cn_favs .list_sel{background:#0a246a;color:#fff}
 #cn_favs .list-focus{outline:dotted #000 1px}
-#cn_favs div{overflow:hidden;position:relative}
+#cn_favs div{position:relative;}
 #cn_abt{float:right}
 #cn_lhs,#cn_rhs{position:absolute;top:0;bottom:0}
 #cn_lhs{left:0;width: 300px;overflow:hidden;}
