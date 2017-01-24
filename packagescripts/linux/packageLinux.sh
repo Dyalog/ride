@@ -94,7 +94,10 @@ Name=Ride-${BASE_VERSION}
 Comment=Remote IDE for Dyalog APL
 Categories=Application;Development;Programming
 !!desktopFile
+fi
 
+if which gtk-update-icon-cache >/dev/null 2>&1 ; then
+	gtk-update-icon-cache --quiet --force --ignore-theme-index /usr/share/icons/hicolor
 fi
 
 !!postinst
@@ -117,6 +120,9 @@ if [ -s /usr/share/applications/dyalog.desktop ]; then
 	rm /usr/share/applications/dyalog.desktop
 fi
 
+if which gtk-update-icon-cache >/dev/null 2>&1 ; then
+	gtk-update-icon-cache --quiet --force --ignore-theme-index /usr/share/icons/hicolor
+fi
 
 !!prerm
 
