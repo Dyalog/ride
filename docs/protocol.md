@@ -283,7 +283,7 @@ Request all suspended threads are resumed from their current position.
 <a name=ReplyGetSIStack></a>
 ```json
 ["GetSIStack",{}] // RIDE -> Interpreter
-["ReplyGetSIStack",{"stack":["#.f[12]*","#.g[34]"],"tid":tid}] // Interpreter -> RIDE
+["ReplyGetSIStack",{"stack":["#.f[12]*","#.g[34]"],"tid":2}] // Interpreter -> RIDE
 ```
 
 Request information about the current stack.
@@ -506,7 +506,7 @@ DetailedProcessManagerInformation => [] // Placeholder - add any more informatio
 * `⎕PFKEY`
 * programmatic access to "current object"
 ```json
-["SetCurrentObject",{text:""}] // RIDE -> Interpreter
+["SetCurrentObject",{"text":""}] // RIDE -> Interpreter
 ```
 * compiler information
 * list of valid I-beams and their descriptions
