@@ -685,7 +685,8 @@ span.CodeMirror-selectedtext{background:none}
 .lm_goldenlayout{background-image:none!important}
 .lm_maximised .lm_header {background-color: #fff!important}
 .dark .lm_maximised .lm_header {background-color: #777!important;background-color: inherit!important;}
-.lm_drag_handle{width:8px!important;left:-2px!important}
+.lm_splitter.lm_horizontal .lm_drag_handle{width: 8px!important;left:-2px!important}
+.lm_splitter.lm_vertical   .lm_drag_handle{height:8px!important;top: -2px!important}
 .lm_tab{background-color:#dcdad5!important}
 .lm_close{display:none!important}
 
