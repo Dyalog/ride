@@ -98,7 +98,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
               q.connecting_dlg.hidden=1
             })
           }).on('error',x=>{err(x.message||''+x);q.connecting_dlg.hidden=1;clearTimeout(D.tmr);delete D.tmr})
-          D.tmr=setTimeout(function(){err('Timed out');c&&c.end();q.connecting_dlg.hidden=1},600000)
+          D.tmr=setTimeout(function(){err('Timed out');c&&c.end();q.connecting_dlg.hidden=1},10000)
         }else{
           srv=net.createServer(y=>{log('spawned interpreter connected');const a=srv.address();srv&&srv.close();srv=0;clt=y
                                    initInterpreterConn();new D.IDE().setConnInfo(a.address,a.port,sel?sel.name:'')
@@ -121,7 +121,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
                                  err(y.code==='ENOENT'?"Cannot find the interpreter's executable":''+y)
                                  console.error(y)})
           })
-          D.tmr=setTimeout(function(){err('Timed out');srv&&srv.close();srv=0;child&&child.kill();child=0},600000)
+          D.tmr=setTimeout(function(){err('Timed out');srv&&srv.close();srv=0;child&&child.kill();child=0},10000)
         }
         break
     }
