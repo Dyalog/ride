@@ -335,9 +335,9 @@ module.exports=_=>{
   const a=node_require('electron').remote.process.argv, env=D.el.process.env
   ,h={c:env.RIDE_CONNECT,s:env.RIDE_SPAWN} //h:args by name
   for(var i=1;i<a.length;i++)if(a[i][0]==='-'){h[a[i].slice(1)]=a[i+1];i++}
-  if(h.c){var m=/^([^:]+|\[[^\]]+\])(?::(\d+))?$/.exec(h.c) //parse host and port
+  if(h.c){q=J.cn;var m=/^([^:]+|\[[^\]]+\])(?::(\d+))?$/.exec(h.c) //parse host and port
           m?go({type:'connect',host:m[1],port:+m[2]||4502}):$.err('Invalid $RIDE_CONNECT')}
-  else if(h.s){go({type:'start',exe:h.s});window.onbeforeunload=function(){D.send('Exit',{code:0})}}
+  else if(h.s){q=J.cn;go({type:'start',exe:h.s});window.onbeforeunload=function(){D.send('Exit',{code:0})}}
   else{D.cn()}
 }
 
