@@ -30,7 +30,7 @@ D.IDE=function(){'use strict'
       t===4&&ide.wins[0].focus() //⍞ input
       if(t===1&&!ide.bannerDone){ //arrange for the banner to appear at the top of the session window
         ide.bannerDone=1;var cm=ide.wins[0].cm
-        cm.scrollTo(0,cm.heightAtLine(cm.lastLine()-4)-cm.heightAtLine(0)+3) //+3px to compensate for CM's own padding
+        cm.scrollTo(0,cm.heightAtLine(cm.lastLine()-5)-cm.heightAtLine(0)+5) //+5px to compensate for CM's own padding
       }
     },
     HadError:function(){ide.pending.splice(0,ide.pending.length);ide.wins[0].focus()},
@@ -81,7 +81,7 @@ D.IDE=function(){'use strict'
                         q.addChild(p);q.callDownwards('setSize');p=q}
       }
       p.addChild({type:'component',componentName:'win',componentState:{id:w},title:ee.name})
-      ide.wins[0].cm.scrollTo(si.left,si.top)
+      tc?ide.wins[0].scrollCursorIntoView():ide.wins[0].cm.scrollTo(si.left,si.top)
     },
     ShowHTML:function(x){
       if(D.el){
@@ -264,10 +264,12 @@ D.IDE=function(){'use strict'
   D.prf.matchBrackets(function(x){eachWin(function(w){w.cm.setOption('matchBrackets',!!x)})})
   var updWSE=function(){
     if(!D.prf.wse()){gl.root.getComponentsByName('wse').forEach(function(x){x.container.close()});return}
+    var si=D.ide.wins[0].cm.getScrollInfo() //remember session scroll position
     var p=gl.root.contentItems[0]
     if(p.type!=='row'){var row=gl.createContentItem({type:'row'},p);p.parent.replaceChild(p,row)
                        row.addChild(p,0,true);row.callDownwards('setSize');p=row}
     p.addChild({type:'component',componentName:'wse',title:'Workspace Explorer'},0)
+    D.ide.wins[0].cm.scrollTo(si.left,si.top)
     var comp=gl.root.getComponentsByName('wse')[0];comp&&comp.container&&comp.container.setSize(200)
   }
   D.prf.wse(updWSE);D.prf.wse()&&setTimeout(updWSE,500)
