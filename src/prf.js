@@ -74,6 +74,8 @@ D.prf={}
     '\n  Decrease Font Size       =ZMO {!browser}'+
     '\n  Reset Font Size          =ZMR {!browser}'+
 //    '\n  -'+
+    '\n&Windows'+
+    '\n  Close all windows        =CAW'+
     '\n&Actions'+
     '\n  Edit                     =ED'+
     '\n  Trace                    =TC'+
