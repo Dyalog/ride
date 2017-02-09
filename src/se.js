@@ -50,6 +50,7 @@ D.Se.prototype={
     var cm=this.cm,l=cm.lastLine(),s0=cm.getLine(l)
     cm.replaceRange((cm.getOption('readOnly')?(s0+s):s),{line:l,ch:0},{line:l,ch:s0.length},'D')
     cm.setCursor(cm.lastLine(),0)
+    if (this.btm!=null) this.btm=-1
   },
   prompt:function(x){
     var cm=this.cm,l=cm.lastLine();this.promptType=x;cm.setOption('readOnly',!x);cm.setOption('cursorHeight',+!!x)
@@ -77,7 +78,8 @@ D.Se.prototype={
     if(this.btm==null){var i=this.cm.getScrollInfo();this.btm=i.clientHeight+i.top}
   },
   restoreScrollPos:function(){
-    if(this.btm!=null){var i=this.cm.getScrollInfo();this.cm.scrollTo(0,this.btm-i.clientHeight);this.btm=null}
+    if(this.btm==-1){this.cm.scrollTo(0,this.cm.heightAtLine(this.cm.lastLine(),"local")-this.cm.getScrollInfo().clientHeight+this.cm.defaultTextHeight()+4);this.btm=null}
+    else if(this.btm!=null){var i=this.cm.getScrollInfo();this.cm.scrollTo(0,this.btm-i.clientHeight);this.btm=null}
   },
   hasFocus:function(){return window.focused&&this.cm.hasFocus()},
   focus:function(){

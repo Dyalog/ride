@@ -74,6 +74,13 @@ D.Ed.prototype={
   setTC:function(x){var ed=this;ed.tc=x;ed.dom.classList.toggle('tracer',!!x);ed.hl(null);ed.updGutters();ed.setRO(x)},
   setRO:function(x){this.cm.setOption('readOnly',x)/*;this.rp.hidden=x*/},
   updSize:function(){var $p=$(this.dom);this.cm.setSize($p.width(),$p.height()-28)},
+  saveScrollPos:function(){ //workaround for CodeMirror scrolling up to the top under GoldenLayout when editor is closed
+    if(this.btm==null){var i=this.cm.getScrollInfo();this.btm=i.clientHeight+i.top}
+  },
+  restoreScrollPos:function(){
+    if(this.btm==-1){this.cm.scrollTo(0,this.cm.heightAtLine(this.cm.lastLine(),"local")-this.cm.getScrollInfo().clientHeight+this.cm.defaultTextHeight()+4);this.btm=null}
+    else if(this.btm!=null){var i=this.cm.getScrollInfo();this.cm.scrollTo(0,this.btm-i.clientHeight);this.btm=null}
+  },
   open:function(ee){ //ee:editable entity
     var ed=this,cm=ed.cm
     this.jumps.forEach(function(x){x.n=x.lh.lineNo()}) //to preserve jumps, convert LineHandle-s to line numbers

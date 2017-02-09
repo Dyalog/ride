@@ -223,6 +223,11 @@ D.IDE=function(){'use strict'
   },$(ide.dom))
   gl.registerComponent('win',function(c,h){
     var w=ide.wins[h.id];w.container=c;c.getElement().append(w.dom)
+    c.on('open',function(){
+      var sw=ide.wins[h.id]
+      $(c.getElement()).closest(".lm_item").find(".lm_maximise").onFirst('click',function(){
+        w.saveScrollPos()
+    })})
     setTimeout(function(){w.focus()},1);return w
   })
   gl.registerComponent('wse',function(c,h){
@@ -233,8 +238,7 @@ D.IDE=function(){'use strict'
   gl.on('stateChanged',function(){
     clearTimeout(sctid)
     sctid=setTimeout(function(){
-      eachWin(function(w){w.updSize();w.cm.refresh();w.updGutters&&w.updGutters()})
-      ide.wins[0].restoreScrollPos()
+      eachWin(function(w){w.updSize();w.cm.refresh();w.updGutters&&w.updGutters();w.restoreScrollPos()})
     },50)
   })
   gl.on('itemDestroyed',function(x){ide.wins[0].saveScrollPos()})
