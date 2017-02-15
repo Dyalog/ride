@@ -32,7 +32,7 @@ SHIPDIRECTORY=ship
 RIDEAPPDIRNAME="${PackageName}.app"
 PLISTFILE=${RIDEDIR}/${RIDEAPPDIRNAME}/Contents/Info.plist
 
-rm ${RIDEDIR}/LICENSE ${RIDEDIR}/LICENSES.chromium.html ${RIDEDIR}/version
+rm ${RIDEDIR}/LICENSE.electron ${RIDEDIR}/LICENSES.chromium.html
 
 if [ -s ${RIDEDIR}/../../version ]; then
 RIDEVERSION=`cat ${RIDEDIR}/../../version`
