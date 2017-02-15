@@ -10,8 +10,9 @@ const rq=require,fs=rq('fs'),path=rq('path'),{execSync}=rq('child_process'),asyn
 ,nt=(x,y)=>!fs.existsSync(y)||fs.statSync(x)>fs.statSync(y)         //newer than
 ,rm=x=>{try{var s=fs.lstatSync(x)}catch(_){}
         if(s){if(s.isDirectory()){fs.readdirSync(x).map(y=>rm(x+'/'+y));fs.rmdirSync(x)}else{fs.unlinkSync(x)}}}
+,pj=JSON.parse(rf('package.json'))
 //v:version string - "x.y.z" where z is the number of commits since the beginning of the project
-,v=JSON.parse(rf('package.json')).version.replace(/\.0$/,'')+'.'+sh('git rev-list --count HEAD')
+,v=pj.version.replace(/\.0$/,'')+'.'+sh('git rev-list --count HEAD')
 ,tasks={}
 
 let buildDone=0
@@ -89,7 +90,7 @@ const excl={'/style/img/D.icns':1}
       OriginalFilename:namev+'.exe',
       ProductName:'RIDE',
       InternalName:'RIDE'}},
-  e=>{const d='_/'+namev+'/'+namev+'-'+x+'-'+y;rm(d+'/version')
+  e=>{const d='_/'+namev+'/'+pj.productName+'-'+x+'-'+y;rm(d+'/version')
       fs.existsSync(d+'/LICENSE')&&mv(d+'/LICENSE',d+'/LICENSE.electron')
       f&&f(e)}
 )}
