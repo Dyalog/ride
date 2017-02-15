@@ -27,7 +27,7 @@ D.IDE=function(){'use strict'
     SetPromptType:function(x){
       var t=x.type;t&&ide.pending.length?D.send('Execute',{trace:0,text:ide.pending.shift()+'\n'})
                                         :ide.wins[0].prompt(t)
-      t===4&&ide.wins[0].focus() //⍞ input
+      t===4||t===1&&setTimeout(function(){ide.wins[0].focus()},1) //⍞ input
       if(t===1&&!ide.bannerDone){ //arrange for the banner to appear at the top of the session window
         ide.bannerDone=1;var cm=ide.wins[0].cm
         cm.scrollTo(0,cm.heightAtLine(cm.lastLine()-5)-cm.heightAtLine(0)+5) //+5px to compensate for CM's own padding
