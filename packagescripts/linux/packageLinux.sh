@@ -30,7 +30,7 @@ APP_NAME=$(node -e "console.log($(cat package.json).productName)") # "Ride-4.0" 
 echo "Packaging for $TARGET"
 
 RIDEDIR="_/ride40/${APP_NAME}-linux"
-ICON="style/img/D.svg"
+ICON="D.svg"
 SBOXDIR=/tmp/ride$$
 postinst=/tmp/postinst$$
 prerm=/tmp/prerm$$

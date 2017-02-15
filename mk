@@ -76,11 +76,10 @@ const incl={
   '/node_modules/streamsearch/lib/sbmh.js':1}
 Object.keys(incl).map(x=>{const a=x.split('/');a.map((_,i)=>incl[a.slice(0,i).join('/')]=1)}) // include ancestors
 
-const excl={'/style/img/D.icns':1}
-,namev='ride'+v.split('.').slice(0,2).join('')
+const namev='ride'+v.split('.').slice(0,2).join('')
 ,pkg=(x,y,f)=>{rq('electron-packager')(
   {dir:'.',platform:x,arch:y,out:'_/'+namev,overwrite:true,'download.cache':'cache',icon:'favicon.ico',tmpdir:false,
-    ignore:p=>!incl[p]&&!/^\/(src|style|lib|_)(\/|$)/.test(p)&&!(x==='win32'&&/^\/windows-ime(\/|$)/.test(p))||excl[p],
+    ignore:p=>!incl[p]&&!/^\/(src|style|lib|_)(\/|$)/.test(p)&&!(x==='win32'&&/^\/windows-ime(\/|$)/.test(p)),
     'app-copyright':`(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
     'app-version':v,
     'build-version':v,
