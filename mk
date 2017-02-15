@@ -25,10 +25,11 @@ tasks.b=tasks.build=f=>{
 }
 
 const incl={
+  '/empty.html'                                                     :1,
   '/index.html'                                                     :1,
+  '/status.html'                                                    :1,
   '/main.js'                                                        :1,
   '/package.json'                                                   :1,
-  '/lib/jquery.bind-first-0.2.3.min.js'                             :1,
   '/node_modules/jquery/dist/jquery.min.js'                         :1,
   '/node_modules/codemirror/lib/codemirror.js'                      :1,
   '/node_modules/codemirror/addon/dialog/dialog.js'                 :1,
