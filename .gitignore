@@ -7,3 +7,4 @@ GHTOKEN
 npm-debug.log
 *.swp
 ship/
+.vscode

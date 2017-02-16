@@ -14,7 +14,8 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
 ,ls=x=>fs.readdirSync(x)
 ,parseVer=x=>x.split('.').map(y=>+y)
 ,err=x=>{if(q){q.connecting_dlg.hidden=q.listen_dlg.hidden=1;q.fetch.disabled=0}$.err(x)}
-,save=_=>{var a=q.favs.children,b=[];for(var i=0;i<a.length;i++)b[i]=a[i].cnData;D.prf.favs(b)}
+,setConns=cl=>{D.conns=cl;var d=D.el.app.getPath('userData'),f=d+'/connections.json';fs.writeFileSync(f,JSON.stringify(D.conns))}
+,save=_=>{var a=q.favs.children,b=[];for(var i=0;i<a.length;i++)b[i]=a[i].cnData;setConns(b)}
 ,favText=x=>x.name||'unnamed'
 ,favDOM=x=>{const e=document.createElement('div');e.cnData=x
             e.innerHTML=`<span class=name>${esc(favText(x))}</span><button class=go>Go</button>`;return e}
@@ -130,6 +131,9 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
 }
 D.cn=_=>{ //set up Connect page
   q=J.cn;document.title='RIDE - Connect';I.cn.hidden=0;$(I.cn).splitter()
+  var d=D.el.app.getPath('userData'),f=d+'/connections.json'
+  if (fs.existsSync(f)){D.conns=JSON.parse(fs.readFileSync(f).toString())}
+  D.conns=D.conns||[{type:"connect"}]
   I.cn.onkeyup=x=>{if(D.el&&fmtKey(x)==='F12'){D.elw.webContents.toggleDevTools();return!1}}
   q.args.oncontextmenu=q.env.oncontextmenu=D.oncmenu
   q.fav_name.onchange=q.fav_name.onkeyup=_=>{
@@ -193,7 +197,7 @@ D.cn=_=>{ //set up Connect page
                                sel.ssh_auth_type=q.ssh_auth_type.value;save()}
   q.ssh_tnl_auth_type.onchange=_=>{const k=q.ssh_tnl_auth_type.value==='key';q.ssh_tnl_pass_wr.hidden=k;q.ssh_tnl_key_wr.hidden=!k;
                                sel.ssh_tnl_auth_type=q.ssh_tnl_auth_type.value;save()}
-  D.prf.favs().forEach(x=>{q.favs.appendChild(favDOM(x))})
+  D.conns.forEach(x=>{q.favs.appendChild(favDOM(x))})
   $(q.favs).list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
     .on('click','.go',function(){$(q.favs).list('select',$(this).parentsUntil(q.favs).last().index());q.go.click()})
     .keydown(x=>{switch(fmtKey(x)){case'Enter' :q.go.hidden||q.go.click();return!1
