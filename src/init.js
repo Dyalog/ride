@@ -37,7 +37,6 @@ if(D.el){
     wins[0].scrollCursorIntoView()
   })
 }
-
 D.open=D.open||function(url,o){
   var x=o.x,y=o.y,width=o.width,height=o.height,spec='resizable=1'
   if(width!=null&&height!=null)spec+=',width='+width+',height='+height
@@ -59,6 +58,13 @@ if(/^\?\d+$/.test(location.search)){
 //  D.ide.unblock()
 }else{
   if(D.el){
+  //context menu
+    let cmenu=D.el.Menu.buildFromTemplate(
+      ['Cut','Copy','Paste'].map(function(x){return{label:x,role:x.toLowerCase()}})
+      .concat({type:'separator'})
+      .concat(['Undo','Redo'].map(function(x){return{label:x,click:function(){
+        let u=D.ide;u&&(u=u.focusedWin)&&(u=u.cm)&&u[x.toLowerCase()]&&u[x.toLowerCase()]()}}})))
+    D.oncmenu=function(e){e.preventDefault();cmenu.popup(D.elw)}
     node_require(__dirname+'/src/cn')()
   }else{
     var ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host)
@@ -99,16 +105,7 @@ D.mac||CM.on(document,'keydown',function(e){ // Alt-A...Alt-Z or Alt-Shift-A...A
   else{$a.click()}
   return!$a.length
 },true)
-
 if(D.el){
-  //context menu
-  let cmenu=D.el.Menu.buildFromTemplate(
-    ['Cut','Copy','Paste'].map(function(x){return{label:x,role:x.toLowerCase()}})
-    .concat({type:'separator'})
-    .concat(['Undo','Redo'].map(function(x){return{label:x,click:function(){
-      let u=D.ide;u&&(u=u.focusedWin)&&(u=u.cm)&&u[x.toLowerCase()]&&u[x.toLowerCase()]()}}})))
-  window.oncontextmenu=function(e){e.preventDefault();cmenu.popup(D.elw)}
-
   //drag and drop
   CM.defaults.dragDrop=0;window.ondragover=window.ondrop=function(e){e.preventDefault();return!1}
   window.ondrop=function(e){

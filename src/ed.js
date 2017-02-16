@@ -7,6 +7,7 @@ var ACB_VALUE={pairs:'()[]{}',explode:'{}'} //value for CodeMirror's "autoCloseB
 D.Ed=function(ide,opts){ //constructor
   var ed=this;ed.ide=ide;ed.id=opts.id;ed.name=opts.name;ed.tc=opts.tc
   ed.dom=I.ed_tmpl.cloneNode(1);ed.dom.id=null;ed.dom.style.display='';ed.$e=$(ed.dom);ed.jumps=[];ed.focusTS=0
+  ed.dom.oncontextmenu=D.oncmenu 
   ed.oText='';ed.oStop=[] //remember original text and "stops" to avoid pointless saving on EP
   ed.cm=CM(ed.dom.querySelector('.ride_win_cm'),{
     lineNumbers:!!D.prf.lineNums(),firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},

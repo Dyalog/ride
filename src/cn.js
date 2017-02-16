@@ -131,6 +131,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
 D.cn=_=>{ //set up Connect page
   q=J.cn;document.title='RIDE - Connect';I.cn.hidden=0;$(I.cn).splitter()
   I.cn.onkeyup=x=>{if(D.el&&fmtKey(x)==='F12'){D.elw.webContents.toggleDevTools();return!1}}
+  q.args.oncontextmenu=q.env.oncontextmenu=D.oncmenu
   q.fav_name.onchange=q.fav_name.onkeyup=_=>{
     const u=sel.name,v=q.fav_name.value||''
     if(u!==v){v?(sel.name=v):delete sel.name;$sel.find('.name').text(favText(sel));save()}
