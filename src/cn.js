@@ -145,8 +145,13 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
 D.cn=_=>{ //set up Connect page
   q=J.cn;document.title='RIDE - Connect';I.cn.hidden=0;$(I.cn).splitter()
   var d=D.el.app.getPath('userData'),f=d+'/connections.json'
-  D.conns_modified=+fs.statSync(f).mtime
-  if (fs.existsSync(f)){D.conns=JSON.parse(fs.readFileSync(f).toString())}
+  if (fs.existsSync(f)){
+    D.conns=JSON.parse(fs.readFileSync(f).toString())
+    D.conns_modified=+fs.statSync(f).mtime
+  }else{
+    fs.writeFileSync(f,JSON.stringify([{type:"connect"}]))
+    D.conns_modified=+fs.statSync(f).mtime
+  }
   D.conns=D.conns||[{type:"connect"}]
   I.cn.onkeyup=x=>{if(D.el&&fmtKey(x)==='F12'){D.elw.webContents.toggleDevTools();return!1}}
   q.args.oncontextmenu=q.env.oncontextmenu=D.oncmenu
