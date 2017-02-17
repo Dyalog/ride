@@ -138,20 +138,13 @@ D.db=!node_require?localStorage:(function(){
           removeItem:function(x)  {var i=k.indexOf(x);if(i>=0){k.splice(i,1);v.splice(i,1);dbWrite()}},
           _getAll   :function()   {var r={};for(var i=0;i<k.length;i++)r[k[i]]=v[i];return r}}
   Object.defineProperty(db,'length',{get:function(){return k.length}})
-  var d=el.app.getPath('userData'), f=d+'/prefs.json', ts=0
-  elw.on('focus',function(){
-    if(!fs.existsSync(f))return
-    var ts1=+fs.statSync(f).mtime
-    if(ts1===ts||!confirm('Preferences have been modified. Reload?')){ts=ts1;return}
-    ts=ts1;var h=JSON.parse(fs.readFileSync(f,'utf8'));for(var x in h)D.prf[x](h[x])
-  })
+  var d=el.app.getPath('userData'), f=d+'/prefs.json'
   try{
-    if(fs.existsSync(f)){var h=JSON.parse(fs.readFileSync(f,'utf8'));for(var x in h){k.push(x);v.push(h[x])}
-                         ts=+fs.statSync(f).mtime}
+    if(fs.existsSync(f)){var h=JSON.parse(fs.readFileSync(f,'utf8'));for(var x in h){k.push(x);v.push(h[x])}}
   }catch(e){console.error(e)}
   var dbWrite=function(){
     var s='{\n'+k.map(function(x,i){return'  '+JSON.stringify(x)+':'+JSON.stringify(v[i])}).sort().join(',\n')+'\n}\n'
-    fs.writeFileSync(f,s);ts=+fs.statSync(f).mtime
+    fs.writeFileSync(f,s)
   }
   return db
 }())
