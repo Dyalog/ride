@@ -66,7 +66,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #cn_favs div{position:relative;}
 #cn_abt{float:right}
 #cn_lhs,#cn_rhs{position:absolute;top:0;bottom:0}
-#cn_lhs{left:0;width: 300px;overflow:hidden;}
+#cn_lhs{left:0;width: 325px;overflow:hidden;}
 #cn_rhs{right:0;left:250px;padding:0;overflow:auto}
 #cn_rhs, #cn_lhs{background:#eee}
 .dark #cn_rhs,.dark #cn_lhs{background:#444}
