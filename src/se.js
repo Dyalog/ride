@@ -107,7 +107,11 @@ D.Se.prototype={
       })
     }else{
       es=[se.cm.getLine(se.cm.getCursor().line)]
-      if (/^\s*$/.test(es[0]))trace=0 // empty prompt
+      if (trace&&/^\s*$/.test(es[0])){
+        for(var k in se.ide.wins){var w=se.ide.wins[k];if(w.tc)break}
+        if (w.tc) {w.focus();return}
+        else trace=0 // empty prompt
+      }
     }
     se.ide.exec(es,trace);se.dirty={};se.histAdd(es.filter(function(x){return!/^\s*$/.test(x)}));se.cm.clearHistory()
     se.cm.setOption('cursorHeight',0) //avoid flicker at column 0 when leaning on <ER>
