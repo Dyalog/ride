@@ -131,11 +131,11 @@ D.db=!node_require?localStorage:(function(){
   var rq=node_require,crypto=rq('crypto'),fs=rq('fs'),el=rq('electron').remote,elw=el.getGlobal('elw')
   //file-backed storage with API similar to that of localStorage
   var k=[],v=[] //keys and values
-  var iv=['wse'] //ignored vars (not saved to file)
+  // var iv=['wse'] //ignored vars (not saved to file)
   var db={key       :function(x)  {return k[x]},
           getItem   :function(x)  {var i=k.indexOf(x);return i<0?null:v[i]},
-          setItem   :function(x,y){var i=k.indexOf(x);if(i<0){k.push(x);v.push(y)}else{v[i]=y};if(!iv.includes(x)){dbWrite()}},
-          removeItem:function(x)  {var i=k.indexOf(x);if(i>=0){k.splice(i,1);v.splice(i,1);if(!iv.includes(x)){dbWrite()}}},
+          setItem   :function(x,y){var i=k.indexOf(x);if(i<0){k.push(x);v.push(y)}else{v[i]=y};dbWrite()},
+          removeItem:function(x)  {var i=k.indexOf(x);if(i>=0){k.splice(i,1);v.splice(i,1);dbWrite()}},
           _getAll   :function()   {var r={};for(var i=0;i<k.length;i++)r[k[i]]=v[i];return r}}
   Object.defineProperty(db,'length',{get:function(){return k.length}})
   var d=el.app.getPath('userData'), f=d+'/prefs.json', ts=0
