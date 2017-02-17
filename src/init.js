@@ -82,7 +82,7 @@ if(/^\?\d+$/.test(location.search)){
   if(!D.quit)D.quit=close
 }
 window.onbeforeunload=function(e){
-  if (!D.shutdown){
+  if (D.ide&&!D.shutdown){
     e.returnValue=false
     setTimeout(function(){
       $.confirm('Quit Dyalog APL. Are you sure?',document.title,function(q){
