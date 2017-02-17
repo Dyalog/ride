@@ -14,8 +14,21 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
 ,ls=x=>fs.readdirSync(x)
 ,parseVer=x=>x.split('.').map(y=>+y)
 ,err=x=>{if(q){q.connecting_dlg.hidden=q.listen_dlg.hidden=1;q.fetch.disabled=0}$.err(x)}
-,setConns=cl=>{D.conns=cl;var d=D.el.app.getPath('userData'),f=d+'/connections.json';fs.writeFileSync(f,JSON.stringify(D.conns))}
-,save=_=>{var a=q.favs.children,b=[];for(var i=0;i<a.length;i++)b[i]=a[i].cnData;setConns(b)}
+,save=_=>{
+  var d=D.el.app.getPath('userData'),f=d+'/connections.json'
+  if (((+fs.statSync(f).mtime)!=D.conns_modified)){
+    console.log("Before:\n"+(+fs.statSync(f).mtime)+"\n"+D.conns_modified)
+    if (!confirm("Connections file has been modified, do you want to overwrite with your changes?")){
+      console.log("returning")
+      return;
+    }
+  }
+  console.log("saving")
+  var a=q.favs.children,b=[];for(var i=0;i<a.length;i++)b[i]=a[i].cnData
+  D.conns=b;fs.writeFileSync(f,JSON.stringify(D.conns))
+  D.conns_modified=+fs.statSync(f).mtime
+  console.log("After:\n"+(+fs.statSync(f).mtime)+"\n"+D.conns_modified)
+}
 ,favText=x=>x.name||'unnamed'
 ,favDOM=x=>{const e=document.createElement('div');e.cnData=x
             e.innerHTML=`<span class=name>${esc(favText(x))}</span><button class=go>Go</button>`;return e}
@@ -132,15 +145,16 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
 D.cn=_=>{ //set up Connect page
   q=J.cn;document.title='RIDE - Connect';I.cn.hidden=0;$(I.cn).splitter()
   var d=D.el.app.getPath('userData'),f=d+'/connections.json'
+  D.conns_modified=+fs.statSync(f).mtime
   if (fs.existsSync(f)){D.conns=JSON.parse(fs.readFileSync(f).toString())}
   D.conns=D.conns||[{type:"connect"}]
   I.cn.onkeyup=x=>{if(D.el&&fmtKey(x)==='F12'){D.elw.webContents.toggleDevTools();return!1}}
   q.args.oncontextmenu=q.env.oncontextmenu=D.oncmenu
   q.fav_name.onchange=q.fav_name.onkeyup=_=>{
     const u=sel.name,v=q.fav_name.value||''
-    if(u!==v){v?(sel.name=v):delete sel.name;$sel.find('.name').text(favText(sel));save()}
+    if(u!==v){v?(sel.name=v):delete sel.name;$sel.find('.name').text(favText(sel))}
   }
-  updFormDtl();q.type.onchange=_=>{sel.type=q.type.value;updFormDtl();save()}
+  updFormDtl();q.type.onchange=_=>{sel.type=q.type.value;updFormDtl()}
   q.ssh.onchange=_=>{q.ssh_dtl.hidden=!q.ssh.checked;updExes()}
   q.ssh_tnl.onchange=_=>{q.ssh_tnl_dtl.hidden=!q.ssh_tnl.checked;q.tcp_dtl.hidden=q.ssh_tnl.checked}
   q.ssh_user.placeholder=q.ssh_tnl_user=user
@@ -180,11 +194,11 @@ D.cn=_=>{ //set up Connect page
   q.ssl_cb.onchange=_=>{q.ssl_dtl.hidden=!q.ssl_cb.checked}
   q.cert_cb.onchange=_=>{q.cert.disabled=q.key.disabled=q.cert_dots.disabled=q.key_dots.disabled=!q.cert_cb.checked
                          q.cert.value=q.key.value=sel.cert=sel.key=''
-                         D.util.elastic(q.cert);D.util.elastic(q.key);save()}
-  q.subj_cb.onclick=_=>{sel.subj=q.subj_cb.checked?'1':'';save()}
+                         D.util.elastic(q.cert);D.util.elastic(q.key)}
+  q.subj_cb.onclick=_=>{sel.subj=q.subj_cb.checked?'1':''}
   q.rootcertsdir_cb.onchange=_=>{q.rootcertsdir.disabled=q.rootcertsdir_dots.disabled=!q.rootcertsdir_cb.checked
                                  q.rootcertsdir.value=sel.rootcertsdir=''
-                                 D.util.elastic(q.rootcertsdir);save()}
+                                 D.util.elastic(q.rootcertsdir)}
   q.rootcertsdir_cb.onclick=_=>{q.rootcertsdir_cb.checked&&q.rootcertsdir.focus()}
   const browse=(x,title,props)=>{const v=D.el.dialog.showOpenDialog({title,defaultPath:x.value,properties:props||[]})
                                  if(v){x.value=v[0];D.util.elastic(x);$(x).change()};return!1}
@@ -194,9 +208,9 @@ D.cn=_=>{ //set up Connect page
   q.ssh_tnl_key_dots     .onclick=_=>{browse(q.ssh_tnl_key     ,'SSH Key'    )}
   q.rootcertsdir_dots.onclick=_=>{browse(q.rootcertsdir,'Directory with Root Certificates',['openDirectory'])}
   q.ssh_auth_type.onchange=_=>{const k=q.ssh_auth_type.value==='key';q.ssh_pass_wr.hidden=k;q.ssh_key_wr.hidden=!k;
-                               sel.ssh_auth_type=q.ssh_auth_type.value;save()}
+                               sel.ssh_auth_type=q.ssh_auth_type.value}
   q.ssh_tnl_auth_type.onchange=_=>{const k=q.ssh_tnl_auth_type.value==='key';q.ssh_tnl_pass_wr.hidden=k;q.ssh_tnl_key_wr.hidden=!k;
-                               sel.ssh_tnl_auth_type=q.ssh_tnl_auth_type.value;save()}
+                               sel.ssh_tnl_auth_type=q.ssh_tnl_auth_type.value}
   D.conns.forEach(x=>{q.favs.appendChild(favDOM(x))})
   $(q.favs).list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
     .on('click','.go',function(){$(q.favs).list('select',$(this).parentsUntil(q.favs).last().index());q.go.click()})
@@ -229,20 +243,21 @@ D.cn=_=>{ //set up Connect page
     })
     .list('select',0)
   {const a=q.favs.querySelectorAll('a')[0];a&&a.focus()}
+  q.sve.onclick=_=>{save()}
   q.neu.onclick=_=>{const $e=$(favDOM({}));q.favs.appendChild($e[0]);$(q.favs).list('select',$e.index());q.fav_name.focus()}
-  q.cln.onclick=_=>{if(sel){$(favDOM($.extend({},sel))).insertBefore($sel);$('a',$sel).focus();save();q.fav_name.focus()}}
+  q.cln.onclick=_=>{if(sel){$(favDOM($.extend({},sel))).insertBefore($sel);$('a',$sel).focus();q.fav_name.focus()}}
   q.del.onclick=_=>{
     const n=$sel.length
     n&&$.confirm('Are you sure you want to delete\nthe selected configuration'+(n>1?'s':'')+'?','Confirmation',
                  x=>{if(x){const i=Math.min($sel.eq(0).index(),q.favs.children.length-1)
-                           $sel.remove();$(q.favs).list('select',i);save()}})
+                           $sel.remove();$(q.favs).list('select',i)}})
   }
   q.abt.onclick=_=>{D.abt()}
   q.go.onclick=_=>{go();return!1}
   var a=q.rhs.querySelectorAll('input,textarea')
   for(var i=0;i<a.length;i++)if(/^text(area)?$/.test(a[i].type))D.util.elastic(a[i])
-  $(':text[name],textarea[name]',q.rhs).change(function(){const k=this.name,v=this.value;v?(sel[k]=v):delete sel[k];save()})
-  $(':checkbox[name]',q.rhs).change(function(){this.checked?(sel[this.name]=1):delete sel[this.name];save()})
+  $(':text[name],textarea[name]',q.rhs).change(function(){const k=this.name,v=this.value;v?(sel[k]=v):delete sel[k]})
+  $(':checkbox[name]',q.rhs).change(function(){this.checked?(sel[this.name]=1):delete sel[this.name]})
   //collect information about installed interpreters
   try{
     if(/^win/.test(process.platform)){
