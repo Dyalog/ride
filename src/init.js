@@ -81,11 +81,24 @@ if(/^\?\d+$/.test(location.search)){
   }
   if(!D.quit)D.quit=close
 }
+window.onbeforeunload=function(e){
+  if (!D.shutdown){
+    e.returnValue=false
+    setTimeout(function(){
+      $.confirm('Quit Dyalog APL. Are you sure?',document.title,function(q){
+        if(q) {
+          D.shutdown=1
+          D.send('Disconnect',{message:'User shutdown request'})
+          close()
+        }
+      })
+    },10)
+  }
+}
 
 if(D.el)document.body.className+=D.mac?' platform-mac':D.win?' platform-windows':''
 
 window.focused=true;window.onfocus=window.onblur=function(x){window.focused=x.type==='focus'}
-
 //Implement access keys (Alt-X) using <u></u>.
 //HTML's accesskey=X doesn't handle duplicates well -- it doesn't always favour a visible input over a hidden one.
 //Also, browsers like Firefox and Opera use different shortcuts (such as Alt-Shift-X or Ctrl-X) for accesskey-s.
