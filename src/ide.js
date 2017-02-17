@@ -176,6 +176,7 @@ D.IDE=function(){'use strict'
   D.recv=function(x,y){mq.push([x,y]);rrd()}
   ide.block=function(){blk++}
   ide.unblock=function(){--blk||rrd()}
+  ide.tracer=function(){var tc;for(var k in ide.wins){var w=ide.wins[k];if(w.tc){tc=w;break}};return tc}
 
   //language bar
   var ttid //tooltip timeout id

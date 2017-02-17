@@ -108,8 +108,8 @@ D.Se.prototype={
     }else{
       es=[se.cm.getLine(se.cm.getCursor().line)]
       if (trace&&/^\s*$/.test(es[0])){
-        for(var k in se.ide.wins){var w=se.ide.wins[k];if(w.tc)break}
-        if (w.tc) {w.focus();return}
+        var w=se.ide.tracer();
+        if (w) {w.focus();return}
         else trace=0 // empty prompt
       }
     }
@@ -117,7 +117,12 @@ D.Se.prototype={
     se.cm.setOption('cursorHeight',0) //avoid flicker at column 0 when leaning on <ER>
   },
   ED:function(cm){
-    var c=cm.getCursor();D.send('Edit',{win:0,pos:c.ch,text:cm.getLine(c.line),unsaved:this.ide.getUnsaved()})
+    var c=cm.getCursor(),txt=cm.getLine(c.line);
+    if(/^\s*$/.test(txt)){
+      var tc=this.ide.tracer();tc.focus();tc.ED(tc.cm)
+    } else{
+      D.send('Edit',{win:0,pos:c.ch,text:txt,unsaved:this.ide.getUnsaved()})
+    }
   },
   BK:function(){this.histMove(1)},
   FD:function(){this.histMove(-1)},
