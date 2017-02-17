@@ -27,18 +27,18 @@ D.IDE=function(){'use strict'
     SetPromptType:function(x){
       var t=x.type;t&&ide.pending.length?D.send('Execute',{trace:0,text:ide.pending.shift()+'\n'})
                                         :ide.wins[0].prompt(t)
-      t===4||t===1&&setTimeout(function(){ide.wins[0].focus()},1) //⍞ input
+      t===4&&ide.wins[0].focus() //⍞ input
       if(t===1&&!ide.bannerDone){ //arrange for the banner to appear at the top of the session window
         ide.bannerDone=1;var cm=ide.wins[0].cm
         cm.scrollTo(0,cm.heightAtLine(cm.lastLine()-5)-cm.heightAtLine(0)+5) //+5px to compensate for CM's own padding
       }
     },
-    HadError:function(){ide.pending.splice(0,ide.pending.length);ide.wins[0].focus()},
+    HadError:function(){ide.pending.splice(0,ide.pending.length);ide.wins[0].focus();ide.hadErr=1},
     GotoWindow:function(x){var w=ide.wins[x.win];w&&w.focus()},
     WindowTypeChanged:function(x){return ide.wins[x.win].setTC(x.tracer)},
     ReplyGetAutocomplete:function(x){var w=ide.wins[x.token];w&&w.processAutocompleteReply(x)},
     ValueTip:function(x){ide.wins[x.token].vt.processReply(x)},
-    SetHighlightLine:function(x){var w=ide.wins[x.win];if(w&&w.hl){w.hl(x.line);w.focus()}},
+    SetHighlightLine:function(x){var w=ide.wins[x.win];if(w&&w.hl){w.hl(x.line);w.focus()};},
     UpdateWindow:function(x){var w=ide.wins[x.token];if(w){w.container&&w.container.setTitle(x.name);w.open(x)}},
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
     CloseWindow:function(x){
@@ -60,6 +60,7 @@ D.IDE=function(){'use strict'
         return
       }
       var w=ee.token, done, editorOpts={id:w,name:ee.name,tc:ee['debugger']}
+      ide.hadErr&=editorOpts.tc;
       if(D.el&&D.prf.floating()&&!ide.dead){
         var bw=new D.el.BrowserWindow({parent:D.elw});bw.loadURL(location+'?'+ee.token);bw.openDevTools()
 //        if(!p[4]){var d=ee.token-1;p[0]+=d*(process.env.RIDE_XOFFSET||32);p[1]+=d*(process.env.RIDE_YOFFSET||32)}
@@ -228,7 +229,8 @@ D.IDE=function(){'use strict'
       $(c.getElement()).closest(".lm_item").find(".lm_maximise").onFirst('click',function(){
         w.saveScrollPos()
     })})
-    setTimeout(function(){w.focus()},1);return w
+    setTimeout(function(){ide.wins[ide.hadErr?0:h.id].focus();ide.hadErr=0},1);
+    return w
   })
   gl.registerComponent('wse',function(c,h){
     var u=ide.wse=new D.WSE();u.container=c
