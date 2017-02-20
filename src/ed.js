@@ -21,6 +21,7 @@ D.Ed=function(ide,opts){ //constructor
   ed.cm.on('gutterClick',function(cm,l,g){ //g:gutter
     if(g==='breakpoints'||g==='CodeMirror-linenumbers'){cm.setCursor({line:l,ch:0});ed.BP(ed.cm)}
   })
+  ed.cm.on('scroll',function(c){var i=c.getScrollInfo();ed.btm=i.clientHeight+i.top})
   ed.cm.on('focus',function(){ed.focusTS=+new Date;ide.focusedWin=ed})
   D.util.cmOnDblClick(ed.cm,function(x){ed.ED(ed.cm);x.preventDefault();x.stopPropagation()})
   ed.processAutocompleteReply=D.ac(ed)
@@ -79,8 +80,8 @@ D.Ed.prototype={
     if(this.btm==null){var i=this.cm.getScrollInfo();this.btm=i.clientHeight+i.top}
   },
   restoreScrollPos:function(){
-    if(this.btm==-1){this.cm.scrollTo(0,this.cm.heightAtLine(this.cm.lastLine(),"local")-this.cm.getScrollInfo().clientHeight+this.cm.defaultTextHeight()+4);this.btm=null}
-    else if(this.btm!=null){var i=this.cm.getScrollInfo();this.cm.scrollTo(0,this.btm-i.clientHeight);this.btm=null}
+    if(this.btm==-1){this.cm.scrollTo(0,this.cm.heightAtLine(this.cm.lastLine(),"local")-this.cm.getScrollInfo().clientHeight+this.cm.defaultTextHeight()+4)}
+    else if(this.btm!=null){var i=this.cm.getScrollInfo();this.cm.scrollTo(0,this.btm-i.clientHeight)}
   },
   open:function(ee){ //ee:editable entity
     var ed=this,cm=ed.cm

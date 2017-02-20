@@ -14,6 +14,7 @@ D.Se=function(ide){ //constructor
   });D.prf.blockCursor()&&CM.addClass(cm.getWrapperElement(),'cm-fat-cursor')
   cm.dyalogCmds=se
   D.util.cmOnDblClick(cm,function(e){se.ED(cm);e.stopPropagation();e.preventDefault()})
+  cm.on('scroll',function(c){var i=c.getScrollInfo();se.btm=i.clientHeight+i.top})
   cm.on('focus',function(){se.focusTS=+new Date;ide.focusedWin=se})
   cm.on('beforeChange',function(_,c){ //keep track of inserted/deleted/changed lines, use se.dirty for that
     if(c.origin==='D')return
@@ -79,8 +80,8 @@ D.Se.prototype={
     if(this.btm==null){var i=this.cm.getScrollInfo();this.btm=i.clientHeight+i.top}
   },
   restoreScrollPos:function(){
-    if(this.btm==-1){this.cm.scrollTo(0,this.cm.heightAtLine(this.cm.lastLine(),"local")-this.cm.getScrollInfo().clientHeight+this.cm.defaultTextHeight()+4);this.btm=null}
-    else if(this.btm!=null){var i=this.cm.getScrollInfo();this.cm.scrollTo(0,this.btm-i.clientHeight);this.btm=null}
+    if(this.btm==-1){this.cm.scrollTo(0,this.cm.heightAtLine(this.cm.lastLine(),"local")-this.cm.getScrollInfo().clientHeight+this.cm.defaultTextHeight()+4)}
+    else if(this.btm!=null){var i=this.cm.getScrollInfo();this.cm.scrollTo(0,this.btm-i.clientHeight)}
   },
   hasFocus:function(){return window.focused&&this.cm.hasFocus()},
   focus:function(){
