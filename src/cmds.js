@@ -51,7 +51,7 @@ D.cmds=[
   ['QT', 'Quit (and lose changes)', ['Shift-Esc']],
   ['RD', 'Reformat',                []],
   ['RP', 'Replace',                 []],
-  ['SC', 'Search',                  []],
+  ['SC', 'Search',                  ['Ctrl-F']],
   ['SI', 'Strong interrupt',        []],
   ['TB', 'Tab between windows',     ['Ctrl-Tab']],
   ['TC', 'Trace',                   ['Ctrl-Enter']],
