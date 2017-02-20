@@ -17,7 +17,8 @@ D.installMenu=function(x){
       if(x.items){h.submenu=new D.el.Menu;x.items.forEach(function(y){h.submenu.append(render(y))})}
       var mi=new D.el.MenuItem(h);return mi
     }
-    var m=new D.el.Menu;x.forEach(function(y){m.append(render(y))});D.elw.setMenu(m)
+    var m=new D.el.Menu;x.forEach(function(y){m.append(render(y))})
+    if(D.mac)D.el.Menu.setApplicationMenu(m);else D.elw.setMenu(m)
   }else{
     var arg=x
     // DOM structure:
