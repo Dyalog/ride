@@ -691,7 +691,8 @@ span.CodeMirror-selectedtext{background:none}
 .lm_close{display:none!important}
 
 /*Status window*/
-#status{font-family:apl;overflow:scroll;white-space:pre}
+#status_body{overflow:scroll}
+#status{font-family:apl;white-space:pre}
 #status .m{padding:1px 8px}
 #status .t1{color:#0f0}/*info*/
 #status .t2{color:#f00}/*error*/

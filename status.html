@@ -6,9 +6,12 @@
 <link rel=stylesheet href='style/style.css'>
 <script>
 onkeydown=function(x){if(x.which===27)close()}
-function add(x){var d=document,b=d.body,e=d.createElement('div');e.className='m t'+x.flags
-                e.textContent=x.text;b.appendChild(e);b.scrollTop=b.scrollHeight}
+function add(x){var d=document,b=d.body,s=d.getElementById('status')
+                var e=d.createElement('div');e.className='m t'+x.flags;e.textContent=x.text
+                s.appendChild(e);b.scrollTop=b.scrollHeight}
 </script>
 </head>
-<body id=status></body>
+<body id=status_body>
+<div id=status></div>
+</body>
 </html>
