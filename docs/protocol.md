@@ -355,7 +355,7 @@ Several kinds of dialogs are supported:
 ["OptionsDialog",{"title":"","text":"","type":1,"options":["Yes","No","Cancel"],"token":123}] // Interpreter -> RIDE
 ["ReplyOptionsDialog",{"index":0,"token":123}] // RIDE -> Interpreter
 ```
-Constants for type: `1` info, `2` warning, `3` error.
+Constants for type: `1` warning, `2` information, `3` question, `4` stop.
 
 :red_circle: "type" is not supported in RIDE
 
