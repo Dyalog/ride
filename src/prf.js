@@ -74,14 +74,13 @@ D.prf={}
     '\n  Decrease Font Size       =ZMO {!browser}'+
     '\n  Reset Font Size          =ZMR {!browser}'+
 //    '\n  -'+
-    '\n&Windows'+
+    '\n&Window'+
     '\n  Close all windows        =CAW'+
-    '\n&Actions'+
+    '\n&Action'+
     '\n  Edit                     =ED'+
     '\n  Trace                    =TC'+
     '\n  Weak Interrupt           =WI'+
     '\n  Strong Interrupt         =SI'+
-    '\n&Window                         {mac}'+
     '\n&Help'+
     '\n  Dyalog Help              =http://help.dyalog.com/'+
     '\n  Documentation Centre     =http://dyalog.com/documentation.htm'+
