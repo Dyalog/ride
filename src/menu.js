@@ -14,6 +14,8 @@ D.installMenu=function(x){
         if(x.action)h.click=function(){x.action(mi.checked)}
         x.checkBoxPref(function(v){mi.checked=!!v})
       }
+      const roles={'window':1,'help':1}
+      var r=x[''].replace('&','').toLowerCase();if(r in roles)h.role=r
       if(x.items){h.submenu=new D.el.Menu;x.items.forEach(function(y){h.submenu.append(render(y))})}
       var mi=new D.el.MenuItem(h);return mi
     }
