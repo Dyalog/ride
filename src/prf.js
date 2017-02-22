@@ -67,13 +67,13 @@ D.prf={}
     '\n  Show Language Bar        =LBR'+
     '\n  Show Workspace Explorer  =WSE'+
 //  '\n  Floating Edit Windows    =FLT'+
-//    '\n  Editors on Top           =TOP {!browser}'+
+//  '\n  Editors on Top           =TOP {!browser}'+
     '\n  Line Wrapping in Session =WRP'+
     '\n  -                             {!browser}'+
     '\n  Increase Font Size       =ZMI {!browser}'+
     '\n  Decrease Font Size       =ZMO {!browser}'+
     '\n  Reset Font Size          =ZMR {!browser}'+
-//    '\n  -'+
+//  '\n  -'+
     '\n&Window'+
     '\n  Close all windows        =CAW'+
     '\n&Action'+
