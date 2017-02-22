@@ -44,6 +44,7 @@ D.IDE=function(){'use strict'
     CloseWindow:function(x){
       var w=ide.wins[x.win];if(w){w.closePopup&&w.closePopup();w.vt.clear();w.container&&w.container.close()}
       delete ide.wins[x.win];ide.wins[0].focus()
+      ide.WSEwidth=ide.wsew
     },
     OpenWindow:function(ee){
       if(!ee['debugger']&&D.el&&process.env.RIDE_EDITOR){
@@ -82,6 +83,7 @@ D.IDE=function(){'use strict'
                         q.addChild(p);q.callDownwards('setSize');p=q}
       }
       p.addChild({type:'component',componentName:'win',componentState:{id:w},title:ee.name})
+      ide.WSEwidth=ide.wsew
       tc?ide.wins[0].scrollCursorIntoView():ide.wins[0].cm.scrollTo(si.left,si.top)
     },
     ShowHTML:function(x){
@@ -177,6 +179,14 @@ D.IDE=function(){'use strict'
   ide.block=function(){blk++}
   ide.unblock=function(){--blk||rrd()}
   ide.tracer=function(){var tc;for(var k in ide.wins){var w=ide.wins[k];if(w.tc){tc=w;break}};return tc}
+  Object.defineProperty(ide, 'WSEwidth', {
+    get:function() {
+       var comp=this.gl.root.getComponentsByName('wse')[0];
+       return comp&&comp.container&&comp.container.width},
+    set:function(w){
+       var comp=this.gl.root.getComponentsByName('wse')[0];
+       comp&&comp.container&&comp.container.setSize(w)}
+  })
 
   //language bar
   var ttid //tooltip timeout id
@@ -243,6 +253,7 @@ D.IDE=function(){'use strict'
     sctid=setTimeout(function(){
       eachWin(function(w){w.updSize();w.cm.refresh();w.updGutters&&w.updGutters();w.restoreScrollPos()})
     },50)
+    ide.wsew=ide.WSEwidth;
   })
   gl.on('itemDestroyed',function(x){ide.wins[0].saveScrollPos()})
   gl.on('tabCreated',function(x){
@@ -277,7 +288,7 @@ D.IDE=function(){'use strict'
                        row.addChild(p,0,true);row.callDownwards('setSize');p=row}
     p.addChild({type:'component',componentName:'wse',title:'Workspace Explorer'},0)
     D.ide.wins[0].cm.scrollTo(si.left,si.top)
-    var comp=gl.root.getComponentsByName('wse')[0];comp&&comp.container&&comp.container.setSize(200)
+    D.ide.WSEwidth=D.ide.wsew=200;
   }
   D.prf.wse(updWSE);D.prf.wse()&&setTimeout(updWSE,500)
   D.mac&&setTimeout(function(){ide.wins[0].focus()},500) //OSX is stealing our focus.  Let's steal it back!  Bug #5
