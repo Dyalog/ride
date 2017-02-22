@@ -49,20 +49,23 @@ D.prf={}
     '\n  About Dyalog             =ABT'+
     '\n  -'+
     '\n  Preferences              =PRF'+
+    '\n  -                            '+
+    '\n  &Quit                    =QIT'+
     '\n&File                           {!browser}'+
     '\n  New &Session             =NEW'+
     '\n  &Connect...              =CNC'+
     '\n  -                             {!mac}'+
     '\n  &Quit                    =QIT {!mac}'+
     '\n&Edit'+
-    '\n  Cut                      =CT  {!mac&&!browser}'+
-    '\n  Copy                     =CP  {!mac&&!browser}'+
-    '\n  Paste                    =PT  {!mac&&!browser}'+
     '\n  Undo                     =UND {!browser}'+
     '\n  Redo                     =RDO {!browser}'+
+    '\n  -                             {!browser}'+
+    '\n  Cut                      =CT  {!browser}'+
+    '\n  Copy                     =CP  {!browser}'+
+    '\n  Paste                    =PT  {!browser}'+
+    '\n  Select All               =SA  {mac}'+
     '\n  -                             {!mac&&!browser}'+
     '\n  Preferences              =PRF {!mac}'+
-    '\n  Select All               =SA  {mac}'+
     '\n&View'+
     '\n  Show Language Bar        =LBR'+
     '\n  Show Workspace Explorer  =WSE'+
@@ -75,7 +78,7 @@ D.prf={}
     '\n  Reset Font Size          =ZMR {!browser}'+
 //  '\n  -'+
     '\n&Window'+
-    '\n  Close all windows        =CAW'+
+    '\n  Close All Windows        =CAW'+
     '\n&Action'+
     '\n  Edit                     =ED'+
     '\n  Trace                    =TC'+
