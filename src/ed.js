@@ -101,7 +101,7 @@ D.Ed.prototype={
     ed.setRO(ee.readOnly||ee['debugger'])
     var line=ee.currentRow,col=ee.currentColumn||0
     if(line===0&&col===0&&ee.text.length===1)col=ee.text[0].length
-    cm.setCursor(line,col);cm.scrollIntoView(null,ed.dom.clientHeight/2)
+    cm.setCursor(line,col);cm.scrollIntoView(null,cm.getScrollInfo().clientHeight/2)
     ed.oStop=(ee.stop||[]).slice(0).sort(function(x,y){return x-y})
     for(var k=0;k<ed.oStop.length;k++)cm.setGutterMarker(ed.oStop[k],'breakpoints',ed.createBPEl())
     D.floating&&$('title',ed.dom.ownerDocument).text(ee.name)
