@@ -84,7 +84,10 @@ D.IDE=function(){'use strict'
       }
       p.addChild({type:'component',componentName:'win',componentState:{id:w},title:ee.name})
       ide.WSEwidth=ide.wsew
-      tc?ide.wins[0].scrollCursorIntoView():ide.wins[0].cm.scrollTo(si.left,si.top)
+      if(tc){
+        D.send('GetSIStack',{})
+        ide.wins[0].scrollCursorIntoView()
+      }else ide.wins[0].cm.scrollTo(si.left,si.top)
     },
     ShowHTML:function(x){
       if(D.el){
@@ -143,6 +146,7 @@ D.IDE=function(){'use strict'
                                       var t=e.target,i=99;while(t){t=t.previousSibling;i++}ret(i)}}
       D.util.dlg(I.gd,{w:400,h:300})
     },
+    ReplyGetSIStack:function(x){var tc=ide.tracer();tc&&tc.updateSIStack(x)},
     ReplyTreeList:function(x){ide.wse.replyTreeList(x)},
     StatusOutput:function(x){
       var w=ide.wStatus;if(!D.el)return

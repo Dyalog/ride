@@ -120,7 +120,7 @@ D.Se.prototype={
   ED:function(cm){
     var c=cm.getCursor(),txt=cm.getLine(c.line);
     if(/^\s*$/.test(txt)){
-      var tc=this.ide.tracer();tc.focus();tc.ED(tc.cm)
+      var tc=this.ide.tracer();if(tc){tc.focus();tc.ED(tc.cm)}
     } else{
       D.send('Edit',{win:0,pos:c.ch,text:txt,unsaved:this.ide.getUnsaved()})
     }

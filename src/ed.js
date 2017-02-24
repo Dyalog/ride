@@ -83,6 +83,9 @@ D.Ed.prototype={
     if(this.btm==-1){this.cm.scrollTo(0,this.cm.heightAtLine(this.cm.lastLine(),"local")-this.cm.getScrollInfo().clientHeight+this.cm.defaultTextHeight()+4)}
     else if(this.btm!=null){var i=this.cm.getScrollInfo();this.cm.scrollTo(0,this.btm-i.clientHeight)}
   },
+  updateSIStack:function(x){
+    this.dom.querySelector('.si_stack').innerHTML=x.stack.map(function(o){return'<option>'+o}).join('')
+  },
   open:function(ee){ //ee:editable entity
     var ed=this,cm=ed.cm
     this.jumps.forEach(function(x){x.n=x.lh.lineNo()}) //to preserve jumps, convert LineHandle-s to line numbers
@@ -159,7 +162,7 @@ D.Ed.prototype={
     cm.replaceRange(s,{line:l,ch:0},{line:l,ch:cm.getLine(l).length},'D')
   },
   LN:function(){D.prf.lineNums.toggle()},
-  TC:function(){D.send('StepInto',{win:this.id})},
+  TC:function(){D.send('StepInto',{win:this.id});D.send('GetSIStack',{})},
   AC:function(cm){ //align comments
     if(cm.getOption('readOnly'))return
     var ed=this,ll=cm.lastLine(),o=cm.listSelections() //o:original selections
@@ -179,7 +182,7 @@ D.Ed.prototype={
     cm.setSelections(o)
   },
   ER:function(cm){
-    if(this.tc){D.send('RunCurrentLine',{win:this.id});return}
+    if(this.tc){D.send('RunCurrentLine',{win:this.id});D.send('GetSIStack',{});return}
     if(D.prf.autoCloseBlocks()){
       var u=cm.getCursor(),l=u.line,s=cm.getLine(l),m
       var re=/^(\s*):(class|disposable|for|if|interface|namespace|property|repeat|section|select|trap|while|with)\b([^⋄\{]*)$/i
