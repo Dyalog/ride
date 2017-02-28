@@ -30,11 +30,14 @@ if(D.el){
     if(!D.ide)return
     var wins=D.ide.wins
     for(var x in wins){
-      var b=wins[x].getDocument().body
+      var w=wins[x],b=w.getDocument().body
+      var btm_line=w.cm.lineAtHeight(w.btm,'local')
+      var diff=w.btm-btm_line*w.cm.defaultTextHeight()
       b.className='zoom'+z+' '+b.className.split(/\s+/).filter(function(s){return!/^zoom-?\d+$/.test(s)}).join(' ')
-      wins[x].refresh()
+      w.refresh()
+      w.btm=w.cm.defaultTextHeight()*btm_line+diff;
     }
-    wins[0].scrollCursorIntoView()
+    wins[0].restoreScrollPos()
   })
 }
 D.open=D.open||function(url,o){
