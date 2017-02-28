@@ -43,7 +43,7 @@ D.IDE=function(){'use strict'
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
     CloseWindow:function(x){
       var w=ide.wins[x.win];if(w){w.closePopup&&w.closePopup();w.vt.clear();w.container&&w.container.close()}
-      delete ide.wins[x.win];ide.wins[0].focus()
+      delete ide.wins[x.win];ide.focusMRUWin()
       ide.WSEwidth=ide.wsew
     },
     OpenWindow:function(ee){
@@ -318,8 +318,9 @@ D.IDE.prototype={
     )||''})||'Dyalog'
   },
   focusMRUWin:function(){ //most recently used
-    var t=0,w,wins=this.wins;for(var k in wins){var x=wins[k];if(x.id&&t<=x.focusTS){w=x;t=x.focusTS}}
-    w&&w.focus()
+    var t=0,wins=this.wins,w=wins[0];
+    for(var k in wins){var x=wins[k];if(x.id&&t<=x.focusTS){w=x;t=x.focusTS}}
+    w.focus()
   },
   LBR:D.prf.lbar      .toggle,
   FLT:D.prf.floating  .toggle,
