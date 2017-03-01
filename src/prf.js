@@ -38,6 +38,7 @@ D.prf={}
   ['selectedExe',        ''],//which interpreter is selected in dropdown in the Connect page?
   ['title',              '{WSID}'], //a.k.a. "caption"
   ['valueTips',          1], //value tips
+  ['sis',                0], //status indicator stack
   ['squiggleTips',       1],
   ['wrap',               0], //line wrapping in session
   ['wse',                0], //show workspace explorer?
@@ -94,6 +95,8 @@ D.prf={}
     '\n  Dyalog Forum             =http://www.dyalog.com/forum'+
     '\n  -                             {!mac}'+
     '\n  About                    =ABT {!mac}'+
+    '\n&Threads'+
+    '\n  Show Stack...            =SIS'+
     '\n'+
     '\n# Syntax:'+
     '\n#   &x   access key, alt+x'+

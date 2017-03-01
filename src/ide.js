@@ -82,7 +82,8 @@ D.IDE=function(){'use strict'
         if(p.type!==t0){var q=gl.createContentItem({type:t0},p);p.parent.replaceChild(p,q)
                         q.addChild(p);q.callDownwards('setSize');p=q}
       }
-      p.addChild({type:'component',componentName:'win',componentState:{id:w},title:ee.name})
+      var ind=editorOpts.tc||!!bro||!D.prf.sis()||p.contentItems.length-1
+      p.addChild({type:'component',componentName:'win',componentState:{id:w},title:ee.name},ind)
       ide.WSEwidth=ide.wsew
       if(tc){
         D.send('GetSIStack',{})
@@ -146,7 +147,7 @@ D.IDE=function(){'use strict'
                                       var t=e.target,i=99;while(t){t=t.previousSibling;i++}ret(i)}}
       D.util.dlg(I.gd,{w:400,h:300})
     },
-    ReplyGetSIStack:function(x){var tc=ide.tracer();tc&&tc.updateSIStack(x)},
+    ReplyGetSIStack:function(x){ide.sis&&ide.sis.updateStack(x)},
     ReplyTreeList:function(x){ide.wse.replyTreeList(x)},
     StatusOutput:function(x){
       var w=ide.wStatus;if(!D.el)return
@@ -183,13 +184,16 @@ D.IDE=function(){'use strict'
   ide.block=function(){blk++}
   ide.unblock=function(){--blk||rrd()}
   ide.tracer=function(){var tc;for(var k in ide.wins){var w=ide.wins[k];if(w.tc){tc=w;break}};return tc}
-  Object.defineProperty(ide, 'WSEwidth', {
-    get:function() {
-       var comp=this.gl.root.getComponentsByName('wse')[0];
-       return comp&&comp.container&&comp.container.width},
-    set:function(w){
-       var comp=this.gl.root.getComponentsByName('wse')[0];
-       comp&&comp.container&&comp.container.setSize(w)}
+  var prop_objs=[{comp_name:"wse",prop_name:"WSEwidth"},{comp_name:"sis",prop_name:"SISwidth"}]
+  prop_objs.map(function(obj){
+    Object.defineProperty(ide, obj.prop_name, {
+      get:function() {
+        var comp=this.gl.root.getComponentsByName(obj.comp_name)[0];
+        return comp&&comp.container&&comp.container.width},
+      set:function(w){
+         var comp=this.gl.root.getComponentsByName(obj.comp_name)[0];
+         comp&&comp.container&&comp.container.setSize(w)}
+    })
   })
 
   //language bar
@@ -251,17 +255,22 @@ D.IDE=function(){'use strict'
     var u=ide.wse=new D.WSE();u.container=c
     c.getElement().append(u.dom);return u
   })
+  gl.registerComponent('sis',function(c,h){
+    var u=ide.sis=new D.SIStack();u.container=c
+    c.getElement().append(u.dom);return u
+  })
   var sctid //stateChanged timeout id
   gl.on('stateChanged',function(){
     clearTimeout(sctid)
     sctid=setTimeout(function(){
       eachWin(function(w){w.updSize();w.cm.refresh();w.updGutters&&w.updGutters();w.restoreScrollPos()})
     },50)
-    ide.wsew=ide.WSEwidth;
+    ide.wsew=ide.WSEwidth;ide.sisw=ide.SISwidth
   })
   gl.on('itemDestroyed',function(x){ide.wins[0].saveScrollPos()})
   gl.on('tabCreated',function(x){
     switch(x.contentItem.componentName){
+      case'sis':x.closeElement.off('click').click(D.prf.sis.toggle);break
       case'wse':x.closeElement.off('click').click(D.prf.wse.toggle);break
       case'win':var id=x.contentItem.config.componentState.id,cls=x.closeElement
                 if(id){cls.off('click').click(function(){var w=ide.wins[id];w.EP(w.cm)})}
@@ -284,17 +293,20 @@ D.IDE=function(){'use strict'
   D.prf.indent(function(x){eachWin(function(w){if(w.id){w.cm.setOption('smartIndent',x>=0);w.cm.setOption('indentUnit',x)}})})
   D.prf.fold(function(x){eachWin(function(w){if(w.id){w.cm.setOption('foldGutter',!!x);w.updGutters()}})})
   D.prf.matchBrackets(function(x){eachWin(function(w){w.cm.setOption('matchBrackets',!!x)})})
-  var updWSE=function(){
-    if(!D.prf.wse()){gl.root.getComponentsByName('wse').forEach(function(x){x.container.close()});return}
+  var togglePanel=function(comp_name,comp_title,left){
+    if(!D.prf[comp_name]()){gl.root.getComponentsByName(comp_name).forEach(function(x){x.container.close()});return}
     var si=D.ide.wins[0].cm.getScrollInfo() //remember session scroll position
     var p=gl.root.contentItems[0]
     if(p.type!=='row'){var row=gl.createContentItem({type:'row'},p);p.parent.replaceChild(p,row)
                        row.addChild(p,0,true);row.callDownwards('setSize');p=row}
-    p.addChild({type:'component',componentName:'wse',title:'Workspace Explorer'},0)
+    p.addChild({type:'component',componentName:comp_name,title:comp_title},left?0:true)
     D.ide.wins[0].cm.scrollTo(si.left,si.top)
-    D.ide.WSEwidth=D.ide.wsew=200;
+    D.ide[comp_name.toUpperCase+"width"]=D.ide[comp_name+"w"]=200;
   }
-  D.prf.wse(updWSE);D.prf.wse()&&setTimeout(updWSE,500)
+  var toggleWSE=function(){togglePanel('wse','Workspace Explorer',1)}
+  var toggleSIS=function(){togglePanel('sis','SI Stack',0)}
+  D.prf.wse(toggleWSE);D.prf.wse()&&setTimeout(toggleWSE,500)
+  D.prf.sis(toggleSIS);D.prf.sis()&&setTimeout(toggleSIS,500)
   D.mac&&setTimeout(function(){ide.wins[0].focus()},500) //OSX is stealing our focus.  Let's steal it back!  Bug #5
   D.prf.lineNums(function(x){eachWin(function(w){w.id&&w.setLN(x)})})
 }
@@ -342,6 +354,7 @@ D.IDE.prototype={
     I.lb_inner.innerHTML=D.prf.lbarOrder().replace(/\s*$/,'\xa0'+r).replace(/(.)/g,'<b>$1</b>').replace(/\s/g,'\xa0')
   }
 }
+CM.commands.SIS=function(){D.prf.sis.toggle()}
 CM.commands.WSE=function(){D.prf.wse.toggle()}
 CM.commands.ZM=function(){var w=D.ide.focusedWin;w.container.parent.toggleMaximise()
                           setTimeout(function(){w.cm&&w.cm.focus()},100)}
