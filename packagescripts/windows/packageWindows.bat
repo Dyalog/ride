@@ -1,3 +1,4 @@
+@setlocal ENABLEEXTENSIONS ENABLEDELAYEDEXPANSION
 
 set JENKINSDIR=%CD%
 
@@ -5,8 +6,10 @@ for /F "tokens=1,2,3 delims=/" %%a in ("%JOB_NAME%") do set GHBRANCH=%%c
 
 IF "%GHBRANCH:~0,2%"=="PR" ( GOTO PR ) else ( GOTO BUILD )
 
+IF not x%GHBRANCH:-=%==x%GHBRANCH% (GOTO PR) else (GOTO BUILD)
+
 :PR
-	echo Skipping creating installer for pull requests
+	echo Skipping creating Windows installer for pull requests or branches with a hyphen"
 	GOTO END
 
 :BUILD
