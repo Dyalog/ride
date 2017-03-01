@@ -24,11 +24,11 @@ tasks.b=tasks.build=f=>{
   buildDone=1;f()
 }
 
-const incl=['','/empty.html','/index.html','/status.html','/main.js','/package.json']
+const incl=new RegExp('^$|^/(empty.html|index.html|status.html|main.js|package.json)$|^/(src|style|lib|node_modules|_)(/|$)')
 const namev='ride'+v.split('.').slice(0,2).join('')
 ,pkg=(x,y,f)=>{rq('electron-packager')(
   {dir:'.',platform:x,arch:y,out:'_/'+namev,overwrite:true,'download.cache':'cache',icon:'D',tmpdir:false,
-    ignore:p=>!incl.includes(p)&&!/^\/(src|style|lib|node_modules|_)(\/|$)/.test(p)&&!(x==='win32'&&/^\/windows-ime(\/|$)/.test(p)),
+    ignore:p=>!incl.test(p)&&!(x==='win32'&&/^\/windows-ime(\/|$)/.test(p)),
     'app-copyright':`(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
     'app-version':v,
     'build-version':v,
