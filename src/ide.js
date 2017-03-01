@@ -147,8 +147,8 @@ D.IDE=function(){'use strict'
                                       var t=e.target,i=99;while(t){t=t.previousSibling;i++}ret(i)}}
       D.util.dlg(I.gd,{w:400,h:300})
     },
-    ReplyGetSIStack:function(x){ide.sis&&ide.sis.updateStack(x)},
-    ReplyGetThreads:function(x){ide.stp&&ide.stp.updateThreads(x)},
+    ReplyGetSIStack:function(x){ide.sis&&ide.sis.render(x.stack)},
+    ReplyGetThreads:function(x){ide.stp&&ide.stp.render(x.threads)},
     ReplyTreeList:function(x){ide.wse.replyTreeList(x)},
     StatusOutput:function(x){
       var w=ide.wStatus;if(!D.el)return
@@ -257,12 +257,20 @@ D.IDE=function(){'use strict'
     c.getElement().append(u.dom);return u
   })
   gl.registerComponent('sis',function(c,h){
-    var u=ide.sis=new D.SIStack();u.container=c
-    c.getElement().append(u.dom);return u
+    var u=ide.sis=new D.ListView('sistack',{
+      item_class:'stackitem',
+      click_handler:function(e){D.send('SetSIStack',{stack:e.target.innerHTML});console.log(event.target.innerHTML)},
+      no_item_message:'&lt;No Stack&gt;'
+    })
+    u.container=c;c.getElement().append(u.dom);return u
   })
   gl.registerComponent('stp',function(c,h){
-    var u=ide.stp=new D.Threads();u.container=c
-    c.getElement().append(u.dom);return u
+    var u=ide.stp=new D.ListView('threads',{
+      item_class:'threaditem',
+      click_handler:function(e){D.send('SetThread',{stack:e.target.innerHTML});console.log(event.target.innerHTML)},
+      no_item_message:'&lt;No Threads&gt;'
+    })
+    u.container=c;c.getElement().append(u.dom);return u
   })
   var sctid //stateChanged timeout id
   gl.on('stateChanged',function(){
