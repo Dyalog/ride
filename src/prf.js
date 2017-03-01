@@ -39,6 +39,8 @@ D.prf={}
   ['title',              '{WSID}'], //a.k.a. "caption"
   ['valueTips',          1], //value tips
   ['sis',                0], //status indicator stack
+  ['stp',                0], //show threads panel
+  ['sqp',                1], //show quit prompt
   ['squiggleTips',       1],
   ['wrap',               0], //line wrapping in session
   ['wse',                0], //show workspace explorer?
@@ -97,6 +99,7 @@ D.prf={}
     '\n  About                    =ABT {!mac}'+
     '\n&Threads'+
     '\n  Show Stack...            =SIS'+
+//    '\n  Show Threads...          =STP'+
     '\n'+
     '\n# Syntax:'+
     '\n#   &x   access key, alt+x'+

@@ -394,6 +394,11 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 #sistack div:nth-child(even){background-color:#eee}
 #sistack div.selected{background-color:blue}
 
+#threads{width:100%;height:100%;background-color:white;font-family:apl}
+#threads div{width:100%;padding:5px;cursor:pointer}
+#threads div:nth-child(even){background-color:#eee}
+#threads div.selected{background-color:blue}
+
 #demo-keys{position:fixed;top:10px;right:10px}
 #demo-keys span{font-family:apl,monospace;font-size:18px;font-size:48px;border:solid #333 1px;
                 background-color:#888;color:white;margin:10px;border-radius:10px;padding:5px}

@@ -88,13 +88,20 @@ window.onbeforeunload=function(e){
   if (D.ide&&!D.shutdown){
     e.returnValue=false
     setTimeout(function(){
-      $.confirm('Quit Dyalog APL. Are you sure?',document.title,function(q){
-        if(q) {
-          D.shutdown=1
-          D.send('Disconnect',{message:'User shutdown request'})
-          close()
-        }
-      })
+      if (D.prf.sqp()){
+        $.confirm('Quit Dyalog APL. Are you sure?',document.title,function(q){
+          if(q) {
+            D.shutdown=1
+            D.send('Disconnect',{message:'User shutdown request'})
+            close()
+          }
+        })
+      }
+      else{
+        D.shutdown=1
+        D.send('Disconnect',{message:'User shutdown request'})
+        close()
+      }
     },10)
   }
 }

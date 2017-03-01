@@ -28,7 +28,8 @@ D.parseMenuDSL=function(md){ //md:menu description
     WRP:{checkBoxPref:D.prf.wrap      },
     TOP:{checkBoxPref:D.prf.floatOnTop},
     WSE:{checkBoxPref:D.prf.wse       },
-    SIS:{checkBoxPref:D.prf.sis   }
+    SIS:{checkBoxPref:D.prf.sis       },
+    STP:{checkBoxPref:D.prf.stp       }
   }
   var stk=[{ind:-1,items:[]}],lines=md.split('\n')
   for(var i=0;i<lines.length;i++){

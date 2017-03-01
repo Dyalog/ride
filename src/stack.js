@@ -15,7 +15,7 @@ D.SIStack=function(){
 D.SIStack.prototype={
     updateStack:function(updated_stack){
         if (updated_stack.stack.length<1){
-            this.dom.innerHTML="<div>No stack :(</div>"
+            this.dom.innerHTML="<div>&lt;No stack&gt;</div>"
         }
         else{
             this.dom.innerHTML=updated_stack.stack.map(function(stack_item){

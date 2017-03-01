@@ -29,6 +29,7 @@ D.prf_tabs.code={
     q.fold.checked=!!p.fold               ()
     q.vt  .checked=!!p.valueTips          ()
     q.sqt .checked=!!p.squiggleTips       ()
+    q.sqp .checked=!!p.sqp                ()
     q.ai.onchange();q.acbl.onchange();q.ac.onchange()
   },
   activate:function(){q.ai.focus()},
@@ -49,6 +50,7 @@ D.prf_tabs.code={
     p.fold               (q.fold.checked)
     p.valueTips          (q.vt  .checked)
     p.squiggleTips       (q.sqt .checked)
+    p.sqp                (q.sqp .checked)
   },
   validate:function(){
     if(q.ai .checked&&!isInt(q.sw .value,0))return{msg:'Auto-indent must be a non-negative integer.'           ,el:q.sw}

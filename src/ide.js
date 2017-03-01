@@ -148,6 +148,7 @@ D.IDE=function(){'use strict'
       D.util.dlg(I.gd,{w:400,h:300})
     },
     ReplyGetSIStack:function(x){ide.sis&&ide.sis.updateStack(x)},
+    ReplyGetThreads:function(x){ide.stp&&ide.stp.updateThreads(x)},
     ReplyTreeList:function(x){ide.wse.replyTreeList(x)},
     StatusOutput:function(x){
       var w=ide.wStatus;if(!D.el)return
@@ -184,7 +185,7 @@ D.IDE=function(){'use strict'
   ide.block=function(){blk++}
   ide.unblock=function(){--blk||rrd()}
   ide.tracer=function(){var tc;for(var k in ide.wins){var w=ide.wins[k];if(w.tc){tc=w;break}};return tc}
-  var prop_objs=[{comp_name:"wse",prop_name:"WSEwidth"},{comp_name:"sis",prop_name:"SISwidth"}]
+  var prop_objs=[{comp_name:"wse",prop_name:"WSEwidth"},{comp_name:"sis",prop_name:"SISwidth"},{comp_name:"stp",prop_name:"STPwidth"}]
   prop_objs.map(function(obj){
     Object.defineProperty(ide, obj.prop_name, {
       get:function() {
@@ -259,6 +260,10 @@ D.IDE=function(){'use strict'
     var u=ide.sis=new D.SIStack();u.container=c
     c.getElement().append(u.dom);return u
   })
+  gl.registerComponent('stp',function(c,h){
+    var u=ide.stp=new D.Threads();u.container=c
+    c.getElement().append(u.dom);return u
+  })
   var sctid //stateChanged timeout id
   gl.on('stateChanged',function(){
     clearTimeout(sctid)
@@ -271,6 +276,7 @@ D.IDE=function(){'use strict'
   gl.on('tabCreated',function(x){
     switch(x.contentItem.componentName){
       case'sis':x.closeElement.off('click').click(D.prf.sis.toggle);break
+      case'stp':x.closeElement.off('click').click(D.prf.stp.toggle);break
       case'wse':x.closeElement.off('click').click(D.prf.wse.toggle);break
       case'win':var id=x.contentItem.config.componentState.id,cls=x.closeElement
                 if(id){cls.off('click').click(function(){var w=ide.wins[id];w.EP(w.cm)})}
@@ -305,8 +311,10 @@ D.IDE=function(){'use strict'
   }
   var toggleWSE=function(){togglePanel('wse','Workspace Explorer',1)}
   var toggleSIS=function(){togglePanel('sis','SI Stack',0)}
+  var toggleSTP=function(){togglePanel('stp','Threads',0)}
   D.prf.wse(toggleWSE);D.prf.wse()&&setTimeout(toggleWSE,500)
   D.prf.sis(toggleSIS);D.prf.sis()&&setTimeout(toggleSIS,500)
+  D.prf.stp(toggleSTP);D.prf.stp()&&setTimeout(toggleSTP,500)
   D.mac&&setTimeout(function(){ide.wins[0].focus()},500) //OSX is stealing our focus.  Let's steal it back!  Bug #5
   D.prf.lineNums(function(x){eachWin(function(w){w.id&&w.setLN(x)})})
 }
@@ -355,6 +363,7 @@ D.IDE.prototype={
   }
 }
 CM.commands.SIS=function(){D.prf.sis.toggle()}
+CM.commands.STP=function(){D.prf.stp.toggle()}
 CM.commands.WSE=function(){D.prf.wse.toggle()}
 CM.commands.ZM=function(){var w=D.ide.focusedWin;w.container.parent.toggleMaximise()
                           setTimeout(function(){w.cm&&w.cm.focus()},100)}
