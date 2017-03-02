@@ -1,6 +1,8 @@
 #!/bin/bash
 set -e 
 
+GIT_BRANCH=${JOB_NAME#*/*/}
+
 if ! [ "${GIT_BRANCH}" = "master" ]; then
 	echo "skipping creating release for ${GIT_BRANCH}"
 	exit 0
