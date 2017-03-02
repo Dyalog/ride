@@ -361,9 +361,7 @@ D.IDE.prototype={
   TOP:D.prf.floatOnTop.toggle,
   UND:function(){this.focusedWin.cm.undo()},
   RDO:function(){this.focusedWin.cm.redo()},
-  CAW:function(){
-	  for(var k in this.wins){(k>0)&&D.send('CloseWindow',{win:+k})}
-  },
+  CAW:function(){D.send('CloseAllWindows',{})},
   getUnsaved:function(){
     var r={};for(var k in this.wins){var cm=this.wins[k].cm,v=cm.getValue();if(+k&&v!==cm.oText)r[k]=v}
     return r
