@@ -1,6 +1,11 @@
 #!/bin/bash
 set -e 
 
+if ! [ "${GIT_BRANCH}" = "master" ]; then
+	echo "skipping creating release for ${GIT_BRANCH}"
+	exit 0
+fi
+
 # create JSON
 TMP_JSON=/tmp/GH-Publish.json
 BASE_VERSION=`node -pe "($(cat package.json)).version"`
