@@ -244,6 +244,11 @@ D.IDE=function(){'use strict'
   },$(ide.dom))
   gl.registerComponent('win',function(c,h){
     var w=ide.wins[h.id];w.container=c;c.getElement().append(w.dom)
+    c.on('tab',function(tab){
+      tab.element.click(function(){
+        w.cm.focus();
+      })
+    })
     c.on('open',function(){
       var sw=ide.wins[h.id]
       $(c.getElement()).closest(".lm_item").find(".lm_maximise").onFirst('click',function(){
