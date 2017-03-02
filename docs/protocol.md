@@ -181,6 +181,24 @@ The interpreter responds with
 ```
 If `err` is 0, save succeeded; otherwise it failed.
 
+RIDE can request that the intepreter reformat code:
+<a name=FormatCode></a>
+```json
+["FormatCode",{"win":123,"text":["r←avg a","s←+⌿a","n ←    ≢a","r←s÷n"]}] // RIDE -> Interpreter
+```
+
+The interpreter will respond with:
+<a name=ReplyFormatCode></a>
+```json
+["ReplyFormatCode",{"win":123,"text":["r←avg a","s←+⌿a","n←≢a","r←s÷n"]}] // Interpreter -> RIDE
+```
+
+Where the code has been formated per the interpreter's rules. 
+
+* `win`: TENTATIVE: a window identifer. The interpreter needs a window in which to format the code (don't ask!). In the short term we'll insist that we can only format code in a window the interpreter is aware of.
+
+
+
 When the user presses `<EP>` (Esc) and saving is successful or presses `<QT>` (Shift-Esc), RIDE sends
 <a name=CloseWindow></a>
 ```json
@@ -291,14 +309,8 @@ Request all suspended threads are resumed from their current position.
 <a name=ReplyGetSIStack></a>
 ```json
 ["GetSIStack",{}] // RIDE -> Interpreter
-["ReplyGetSIStack",{"stack":[
-                {"description":"#.f[12]*"},
-                ],
-                "tid":2}] // Interpreter -> RIDE
+["ReplyGetSIStack",{"stack":["#.f[12]*","#.g[34]"],"tid":2}] // Interpreter -> RIDE
 ```
-* `description`: a text description of the stack frame.
-* `tid`: the Tid (numeric)
-
 
 Request information about the current stack.
 
