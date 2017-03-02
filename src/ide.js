@@ -82,7 +82,7 @@ D.IDE=function(){'use strict'
         if(p.type!==t0){var q=gl.createContentItem({type:t0},p);p.parent.replaceChild(p,q)
                         q.addChild(p);q.callDownwards('setSize');p=q}
       }
-      var ind=editorOpts.tc||!!bro||!D.prf.sis()||p.contentItems.length-1
+      var ind=p.contentItems.length-!(editorOpts.tc||!!bro||!D.prf.sis())
       p.addChild({type:'component',componentName:'win',componentState:{id:w},title:ee.name},ind)
       ide.WSEwidth=ide.wsew
       if(tc){
@@ -313,9 +313,9 @@ D.IDE=function(){'use strict'
     var p=gl.root.contentItems[0]
     if(p.type!=='row'){var row=gl.createContentItem({type:'row'},p);p.parent.replaceChild(p,row)
                        row.addChild(p,0,true);row.callDownwards('setSize');p=row}
-    p.addChild({type:'component',componentName:comp_name,title:comp_title},left?0:true)
+    p.addChild({type:'component',componentName:comp_name,title:comp_title},left?0:p.contentItems.length)
     D.ide.wins[0].cm.scrollTo(si.left,si.top)
-    D.ide[comp_name.toUpperCase+"width"]=D.ide[comp_name+"w"]=200;
+    D.ide[comp_name.toUpperCase()+"width"]=D.ide[comp_name+"w"]=200;
   }
   var toggleWSE=function(){togglePanel('wse','Workspace Explorer',1)}
   var toggleSIS=function(){togglePanel('sis','SI Stack',0)}
