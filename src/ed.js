@@ -222,8 +222,16 @@ D.Ed.prototype={
     }
     this.tc&&D.send('SetLineAttributes',{win:this.id,stop:this.getStops()})
   },
-  RD:function(cm){if(cm.somethingSelected()){cm.execCommand('indentAuto')}
-                  else{var u=cm.getCursor();cm.execCommand('SA');cm.execCommand('indentAuto');cm.setCursor(u)}},
+  RD:function(cm){
+    if (D.prf.ilf()){
+        var cm_v=this.cm.getValue().split('\n')
+        D.send('FormatCode',{win:this.id,text:cm_v})
+    }
+    else{
+      if(cm.somethingSelected()){cm.execCommand('indentAuto')}
+      else{var u=cm.getCursor();cm.execCommand('SA');cm.execCommand('indentAuto');cm.setCursor(u)}
+    }
+  },
   VAL:function(cm){var a=cm.getSelections(), s=a.length!==1?'':!a[0]?this.cword():a[0].indexOf('\n')<0?a[0]:''
                    s&&this.ide.exec(['      '+s],0)},
   addJump:function(){var j=this.jumps,u=this.cm.getCursor();j.push({lh:this.cm.getLineHandle(u.line),ch:u.ch})>10&&j.shift()},

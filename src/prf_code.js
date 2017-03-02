@@ -18,6 +18,7 @@ D.prf_tabs.code={
     var swm=p.indentMethods();q.aim.checked=swm>=0;q.swm.value=swm<0&&2||swm
     q.icom.checked=!!p.indentComments     ()
     q.io  .checked=!!p.indentOnOpen       ()
+    q.ilf .checked=!!p.ilf                ()
     q.mb  .checked=!!p.matchBrackets      ()
     q.acbr.checked=!!p.autoCloseBrackets  ()
     q.acbl.checked=!!p.autoCloseBlocks    ()

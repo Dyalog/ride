@@ -149,6 +149,10 @@ D.IDE=function(){'use strict'
     },
     ReplyGetSIStack:function(x){ide.sis&&ide.sis.render(x.stack)},
     ReplyGetThreads:function(x){ide.stp&&ide.stp.render(x.threads)},
+    ReplyFormatCode:function(x){
+      var w=D.wins[x.win]
+      w.cm.setValue(x.text.join('\n'))
+    },
     ReplyTreeList:function(x){ide.wse.replyTreeList(x)},
     StatusOutput:function(x){
       var w=ide.wStatus;if(!D.el)return

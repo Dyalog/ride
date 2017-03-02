@@ -31,6 +31,7 @@ D.prf={}
   ['lbarOrder',          D.lb.order],
   ['lineNums',           1],
   ['matchBrackets',      1], //whether to highlight matching brackets
+  ['ilf',                1], //when re-formating use ODE style (interpreter level formatting)
   ['otherExe',           ''],//content of the "exe" text box "Other..." is selected in the Connect page
   ['prefixKey',          '`'],
   ['prefixMaps',         {}],//per-locale strings of pairs of characters - diffs from the default map for that locale
