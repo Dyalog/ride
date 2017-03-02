@@ -32,10 +32,22 @@ D.prf_tabs.shc={
   load:function(){loadFrom(D.prf.keys())},
   validate:function(){var a=q.tbl_wr.getElementsByClassName('shc_dup');if(a.length)return{msg:'Duplicate shortcuts',el:a[0]}},
   save:function(){
-    var h={},cmds=D.cmds,a=q.tbl_wr.querySelectorAll('.shc_text')
-    for(var i=0;i<a.length;i++){var c=a[i].closest('td').id.replace(/^shc_/,'');(h[c]=h[c]||[]).push(a[i].textContent)}
-    for(var i=0;i<cmds.length;i++){var c=cmds[i][0],d=cmds[i][2].slice(0).sort() //d:defaults
-                                   if(h[c]&&JSON.stringify(h[c].sort())===JSON.stringify(d))delete h[c]}
+    var h={},cmds=D.cmds,a=$('[id^=shc_itm_]')//a=q.tbl_wr.querySelectorAll('.shc_text')
+    for(var i=0;i<a.length;i++){
+      var cmd_name=a[i].id.replace(/^shc_itm_/,'')
+      var keys=[]
+      var shortcuts=a[i].querySelectorAll('[class^=shc_text]')
+      if (shortcuts.length<1){}
+      else{shortcuts=shortcuts.forEach(function(e){keys.push(e.innerHTML)})}
+      h[cmd_name]=keys
+      //var c=a[i].closest('td').id.replace(/^shc_/,'');
+      //(h[c]=h[c]||[]).push(a[i].textContent)
+    }
+    for(var i=0;i<cmds.length;i++){
+      var c=cmds[i][0];
+      var d=cmds[i][2].slice(0).sort() //d:defaults
+      if(h[c]&&JSON.stringify(h[c].sort())===JSON.stringify(d))delete h[c]
+    }
     var a=[''];for(var i=1;i<=12;i++){a.push(document.getElementById('shc_val_PF'+i).value)}
     D.prf.keys(h);D.prf.pfkeys(a)
   },
@@ -48,7 +60,7 @@ function loadFrom(h){
     html+='<tr data-code='+c+'>'+
       '<td class=shc_code>'+c+
       '<td>'+(s||('<input class=shc_val id=shc_val_'+c+'>'))+ //pfkeys show an <input> for the commands mapped to them
-      '<td id=shc_'+c+'>'+(h[c]||d).map(keyHTML).join('')+'<button class=shc_add title="Add shortcut">+</button>'+
+      '<td id=shc_itm_'+c+'>'+(h[c]||d).map(keyHTML).join('')+'<button class=shc_add title="Add shortcut">+</button>'+
       '<td><button class=shc_rst title="Reset &quot;'+c+'&quot; to its defaults">↶</button>'
   }
   q.tbl_wr.innerHTML=html+'</table>';updDups();if(q.sc.value){q.sc.value='';updSC()}
@@ -63,8 +75,16 @@ function updSC(){var a=q.tbl_wr.querySelectorAll('tr'),s=q.sc.value.toLowerCase(
 function keyHTML(x){return'<span class=shc_key><span class=shc_text>'+x+'</span>'+
                                               '<a href=# class=shc_del title="Remove shortcut">×</a></span> '}
 function updKeys(x){var h=CM.keyMap.dyalog={fallthrough:'dyalogDefault'}
-                    for(var i=0;i<D.cmds.length;i++){var c=D.cmds[i][0],d=D.cmds[i][2],ks=x[c]||d
-                                                     for(var j=0;j<ks.length;j++)h[ks[j]]=c}}
+                    for(var i=0;i<D.cmds.length;i++){
+                        var c=D.cmds[i][0],d=D.cmds[i][2],ks=x[c]||d
+                        if ((ks.length==0)&&(h[d]==c)){delete h[d]}
+                        else{
+                          for(var j=0;j<ks.length;j++){
+                            h[ks[j]]=c
+                          }
+                        }
+                      }
+                    }
 D.prf.keys(updKeys);CM.keyMap.dyalog={fallthrough:'dyalogDefault'} //temporarily set keyMap.dyalog to something
 setTimeout(function(){updKeys(D.prf.keys())},1) //wait until D.db is initialised in init.js, then set the real keymap
 function updDups(){ //check for duplicates and make them show in red
