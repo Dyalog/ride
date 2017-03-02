@@ -22,7 +22,7 @@ D.IDE=function(){'use strict'
     SysError:function(x){$.err(x.text,'SysError');ide.die()},
     InternalError:function(x){$.err('An error ('+x.error+') occurred processing '+x.message,'Internal Error')},
     NotificationMessage:function(x){$.alert(x.message,'Notification')},
-    UpdateDisplayName:function(x){ide.wsid=x.displayName;ide.updTitle()},
+    UpdateDisplayName:function(x){ide.wsid=x.displayName;ide.updTitle();ide.wse&&ide.wse.refresh()},
     EchoInput:function(x){ide.wins[0].add(x.input)},
     SetPromptType:function(x){
       var t=x.type;t&&ide.pending.length?D.send('Execute',{trace:0,text:ide.pending.shift()+'\n'})

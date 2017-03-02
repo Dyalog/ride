@@ -1,11 +1,10 @@
 function Bonsai(e,o){ //e:dom element, o:options={children:function(id,callback){...}, click:function(path){...}}
   var bt=this //bonsai tree
-  bt.nodes={}
-  o.children(0,function(children){
-    bt.nodes[0]={id:0,text:'',expandable:1,expanded:1,children:children,icon:''}
-    children.forEach(function(c){bt.nodes[c.id]=c})
-    e.innerHTML=children.map(bt.render).join('')
-  })
+  
+  this.childrenCb=o.children
+  this.dom=e
+  this.rebuild()
+  
   e.onmousedown=function(event){
     if(event.target.matches('.bt_node_expand')){toggleNode(event.target)}
     selectNode(event.target,0);
@@ -57,6 +56,8 @@ function Bonsai(e,o){ //e:dom element, o:options={children:function(id,callback)
         if(!!bt.nodes[sel.dataset.id].expanded===left)toggleNode(sel.previousSibling)
         else if(left){selectNode(sel.parentNode.parentNode.getElementsByClassName('bt_text')[0])}
         return!1
+      case 116://F5
+        bt.rebuild();break
     }
   }
 }
@@ -71,5 +72,15 @@ Bonsai.prototype={
             '</span>'+
             (node.expanded?node.children.map(function(x){return bt.render(x)}).join(''):'')+
           '</div>'
+  },
+  rebuild:function(){
+    var bt=this
+    bt.nodes={}
+    bt.childrenCb(0,function(children){
+      bt.nodes[0]={id:0,text:'',expandable:1,expanded:1,children:children,icon:''}
+      children.forEach(function(c){bt.nodes[c.id]=c})
+      bt.dom.innerHTML=children.map(bt.render).join('')
+    })
   }
+  
 }
