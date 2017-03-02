@@ -188,6 +188,14 @@ When the user presses `<EP>` (Esc) and saving is successful or presses `<QT>` (S
 ```
 but does not close the UI window until the interpreter replies with the same message.
 
+To close all windows, but leave the SIstack unchanged RIDE can send the CloseAllWindows message.
+
+<a name=CloseAllWindows></a>
+```json
+["CloseAllWindows",{}] // RIDE -> Interpreter
+```
+In response the interpreter will send a CloseWindow messsage for each window that it is aware of. The CloseAllWindows message will leave the SIStack unchanged, it will just close all (trace and edit) windows in the interpreter.
+
 #Debugging
 The following messages are used in relation to trace windows.
 <a name=SetHighlightLine></a>
