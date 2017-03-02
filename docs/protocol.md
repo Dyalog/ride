@@ -298,6 +298,26 @@ Request information about the current stack.
 
 :red_circle: Not used in RIDE yet.
 
+Get information about the current threads.
+<a name=GetThreads></a>
+```json
+["GetThreads",{}] // RIDE -> Interpreter
+```
+The interpreter will respond with ReplyGetThreads:
+```json
+["ReplyGetThreads",{"threads":[
+    {"description":"","state":"Session","tid":0,"flags":"Normal","Treq":""},
+    ]}]// Interpreter -> RIDE
+```
+* `description`: a text description of the thread. Derived from the Tid and ⎕TNAME for the thread
+* `state`: a string indicating the current location of the thread
+* `tid`: the Tid (numeric)
+* `flags`: e.g. Normal, Paused or Terminated
+* `Treq`: a string indicating any tokens that the thread is waiting for.
+
+
+
+
 #Interrupts
 APL supports two kinds of interrupts
 <a name=WeakInterrupt></a><a name=StrongInterrupt></a>
