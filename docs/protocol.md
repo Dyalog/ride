@@ -321,7 +321,7 @@ Request all suspended threads are resumed from their current position.
 <a name=ReplyGetSIStack></a>
 ```json
 ["GetSIStack",{}] // RIDE -> Interpreter
-["ReplyGetSIStack",{"stack":["#.f[12]*","#.g[34]"],"tid":2}] // Interpreter -> RIDE
+["ReplyGetSIStack",{"stack":[{"description":"#.f[12]*"},{"description":"#.g[34]"}],"tid":2}] // Interpreter -> RIDE
 ```
 
 Request information about the current stack.
