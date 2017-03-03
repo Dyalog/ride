@@ -49,7 +49,7 @@ D.cmds=[
   ['PV' ,'Previous match',          []],
   ['QIT','Quit',                    ['Ctrl-Q']],
   ['QT', 'Quit (and lose changes)', ['Shift-Esc']],
-  ['RD', 'Reformat',                []],
+  ['RD', 'Reformat',                ['NumpadDivide']],
   ['RP', 'Replace',                 []],
   ['SC', 'Search',                  ['Ctrl-F']],
   ['TR', 'Refresh threads',         []],
