@@ -120,10 +120,11 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
             const a=srv.address(),hp=a.address+':'+a.port
             log('listening for connections from spawned interpreter on '+hp)
             log('spawning interpreter '+JSON.stringify(x.exe))
+            let cwd=x.cwd||q.cwd.placeholder
             let args=['+s','-q'],stdio=['pipe','ignore','ignore']
             if(/^win/i.test(process.platform)){args=[];stdio[0]='ignore'}
             if(x.args)args=args.concat(args,x.args.replace(/\n$/,'').split('\n'))
-            try{child=cp.spawn(x.exe,args,{stdio,env:$.extend({},process.env,env,
+            try{child=cp.spawn(x.exe,args,{cwd,stdio,env:$.extend({},process.env,env,
                                            {CLASSICMODE:1,SINGLETRACE:1,RIDE_INIT:'CONNECT:'+hp,RIDE_SPAWNED:'1'})})}
             catch(e){err(''+e);return}
             D.lastSpawnedExe=x.exe
@@ -152,13 +153,13 @@ D.cn=_=>{ //set up Connect page
   }
   D.conns=D.conns||[{type:"connect"}]
   I.cn.onkeyup=x=>{if(D.el&&fmtKey(x)==='F12'){D.elw.webContents.toggleDevTools();return!1}}
-  q.args.oncontextmenu=q.env.oncontextmenu=D.oncmenu
+  q.cwd.oncontextmenu=q.args.oncontextmenu=q.env.oncontextmenu=D.oncmenu
   q.fav_name.onchange=q.fav_name.onkeyup=_=>{
     const u=sel.name,v=q.fav_name.value||''
     if(u!==v){v?(sel.name=v):delete sel.name;$sel.find('.name').text(favText(sel))}
   }
   updFormDtl();q.type.onchange=_=>{sel.type=q.type.value;updFormDtl()}
-  q.ssh.onchange=_=>{q.ssh_dtl.hidden=!q.ssh.checked;updExes()}
+  q.ssh.onchange=_=>{q.ssh_dtl.hidden=!(q.non_ssh_dtl.hidden=q.ssh.checked);updExes()}
   q.ssh_tnl.onchange=_=>{q.ssh_tnl_dtl.hidden=!q.ssh_tnl.checked;q.tcp_dtl.hidden=q.ssh_tnl.checked}
   q.ssh_user.placeholder=q.ssh_tnl_user=user
   var enterConnect=function(event){if (event.keyCode==13){$('#cn_go').click()}}
@@ -186,6 +187,7 @@ D.cn=_=>{ //set up Connect page
   q.exe.onchange=q.exe.onkeyup=_=>{q.exes.value||D.prf.otherExe(q.exe.value)}
   q.exes.onchange=_=>{const v=q.exes.value;q.exe.value=v||D.prf.otherExe();q.exe.readOnly=!!v;$(q.exe).change()
                       v||q.exe.focus();D.prf.selectedExe(v)} //todo: do we still need this pref?
+  q.cwd.placeholder=D.el.app.getPath('home')
   q.env_add.onclick=x=>{
     if(x.target.nodeName!=='A')return
     let t=x.target.textContent, k=t.split('=')[0], s=q.env.value, m=RegExp('^'+k+'=(.*)$','m').exec(s)
@@ -237,7 +239,7 @@ D.cn=_=>{ //set up Connect page
         for(var i=0;i<a.length;i++)if(/^text(area)?$/.test(a[i].type))D.util.elastic(a[i])
         q.ssh_auth_type.value=sel.ssh_auth_type||'pass';q.ssh_auth_type.onchange()
         q.ssh_tnl_auth_type.value=sel.ssh_tnl_auth_type||'pass';q.ssh_tnl_auth_type.onchange()
-        q.ssl_dtl.hidden=!sel.ssl;q.ssh_dtl.hidden=!sel.ssh
+        q.ssl_dtl.hidden=!sel.ssl;q.ssh_dtl.hidden=!(q.non_ssh_dtl.hidden=sel.ssh)
         q.ssh_tnl_dtl.hidden=!sel.ssh_tnl;q.tcp_dtl.hidden=sel.ssh_tnl
         q.cert_cb.checked=!!sel.cert;q.cert.disabled=q.key.disabled=q.cert_dots.disabled=q.key_dots.disabled=!sel.cert
         q.subj_cb.checked=!!sel.subj

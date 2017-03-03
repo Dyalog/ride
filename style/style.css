@@ -75,7 +75,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #cn_fav_btns{position:absolute;top:0;left:0;right:0;height: 40px;overflow:hidden;width:9999px;padding: 4px}
 #cn_fav_btns button,#cn_go{min-width:75px;}
 #cn .indent{margin-left:24px}
-#cn_exe, #cn_args, #cn_env{width:100%;margin-top: 1ex}
+#cn_exe, #cn_cwd, #cn_args, #cn_env{width:100%;margin-top: 1ex}
 #cn_env{width:100%}
 #cn_env_add{padding-left:32px}
 #cn_env_add a{font-family:apl,monospace;font-size:18px;color:#ed7f00;text-decoration:none}
