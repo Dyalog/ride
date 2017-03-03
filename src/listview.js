@@ -6,23 +6,31 @@ D.ListView=function(e,o){
   this.no_item_message=o.no_item_message||'No Items!'
   this.dom.className='ctl_listview'
   this.click_handler=o.click_handler||function(e){return}
+  this.items=[]
   
   this.dom.onclick=function(event){
-      if (event.target.className.indexOf('ctl_listview_item')>-1){
-        this.click_handler(event)
+      var cn=event.target
+      while(cn&&cn.className.indexOf('ctl_listview_item')==-1) cn=cn.parentNode
+      
+      if (cn){
+        $(this.dom.querySelectorAll('.ctl_listview_item')).removeClass('selected')
+        $(cn).addClass('selected')
+        this.click_handler(this.items[+cn.dataset.itemid])
       }
   }.bind(this)
 
-  this.render=(o.render||function(array){
+  this.render=function(array){
+    this.items=o.sortFn?array.sort(o.sortFn):array;
+    var rf=o.renderItem||function(x){return x}
     if (array.length>0){
-      this.dom.innerHTML=array.map(function(i){
-        return "<div class=\""+this.item_class+" ctl_listview_item\">"+i+"</div>"
+      this.dom.innerHTML=array.map(function(e,i){
+        return "<div class=\""+this.item_class+" ctl_listview_item\" data-itemid="+i+">"+rf(e)+"</div>"
       }).join('')
     }
     else{
       this.dom.innerHTML="<div>"+this.no_item_message+"</div>"
     }
-  }).bind(this)
+  }
 
   this.render([]);
 }

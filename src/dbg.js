@@ -2,44 +2,28 @@
 'use strict'
 D.DBG=function(){
   var dbg=this
+  function encodeHTML(i){return $('<div/>').text(i).html()}
+      
   dbg.dom=I.debug;dbg.dom.hidden=0
   dbg.sistack=new D.ListView('sistack',{
     item_class:'stackitem',
     click_handler:function(e){
-      D.send('SetSIStack',{stack:e.target.innerHTML})
+      D.send('SetSIStack',{stack:e.description})
     },
     no_item_message:'&lt;no stack&gt;',
-    render:function(array){
-      var encodeHTML=function(i){return $('<div/>').text(i).html()}
-      if (array.length>0){
-        this.dom.innerHTML=array.sort(function(p,n){return p.tid-n.tid}).map((function(i){
-          return "<div class=\""+this.item_class+" ctl_listview_item\">"
-              +"<span class=stack_desc>" +encodeHTML(i.description)+"</span>"
-            +"</div>"
-        }).bind(this)).join('')
-      }else{
-        this.dom.innerHTML="<div>"+this.no_item_message+"</div>"
-      }
+    renderItem:function(item){
+      return "<span class=stack_desc>" +encodeHTML(item.description)+"</span>"
     }
   })
   dbg.threads=new D.ListView('threads',{
     item_class:'threaditem',
-    click_handler:function(e){D.send('SetThread',{stack:e.target.innerHTML})},
-    render:function(array){
-      var encodeHTML=function(i){return $('<div/>').text(i).html()}
-      if (array.length>0){
-        this.dom.innerHTML=array.sort(function(p,n){return p.tid-n.tid}).map((function(i){
-          return "<div class=\""+this.item_class+" ctl_listview_item\">"
-              +"<span class=thread_desc>" +encodeHTML(i.description)+"</span>"
-              +"<span class=thread_state>"+encodeHTML(i.state)+"</span>"
-              +"<span class=thread_tid>"  +encodeHTML(i.tid)+"</span>"
-              +"<span class=thread_flags>"+encodeHTML(i.flags)+"</span>"
-            +"</div>"
-        }).bind(this)).join('')
-      }
-      else{
-        this.dom.innerHTML="<div>"+this.no_item_message+"</div>"
-      }
+    click_handler:function(e){D.send('SetThread',{tid:e.tid})},
+    sortFn:function(p,n){return p.tid-n.tid},
+    renderItem:function(item){
+      return "<span class=thread_desc>" +encodeHTML(item.description)+"</span>"
+            +"<span class=thread_state>"+encodeHTML(item.state)+"</span>"
+            +"<span class=thread_tid>"  +encodeHTML(item.tid)+"</span>"
+            +"<span class=thread_flags>"+encodeHTML(item.flags)+"</span>"
     },
     no_item_message:'&lt;no threads&gt;'
   })
