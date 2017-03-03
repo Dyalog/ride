@@ -124,7 +124,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
             let args=['+s','-q'],stdio=['pipe','ignore','ignore']
             if(/^win/i.test(process.platform)){args=[];stdio[0]='ignore'}
             if(x.args)args=args.concat(args,x.args.replace(/\n$/,'').split('\n'))
-            try{child=cp.spawn(x.exe,args,{cwd,stdio,env:$.extend({},process.env,env,
+            try{child=cp.spawn(x.exe,args,{cwd,stdio,detached:true,env:$.extend({},process.env,env,
                                            {CLASSICMODE:1,SINGLETRACE:1,RIDE_INIT:'CONNECT:'+hp,RIDE_SPAWNED:'1'})})}
             catch(e){err(''+e);return}
             D.lastSpawnedExe=x.exe
