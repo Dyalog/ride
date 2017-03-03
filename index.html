@@ -156,8 +156,21 @@
 </div>
 <div id=wse hidden></div><!--workspace explorer-->
 <div id=vt_bln hidden></div><div id=vt_tri hidden></div><!--value tips-->
-<div id=sistack hidden></div>
-<div id=threads hidden></div>
+<div id=debug hidden>
+  <div>
+    <div class=ctl_listview_header>Threads</div>
+    <div class=toolbar>
+      <a href=# class='tb_btn tb_TR' title='Refresh now'                             ></a>
+      <a href=# class='tb_btn tb_RM' title='Continue execution of this thread'       ></a>
+      <a href=# class='tb_btn tb_MA' title='Continue execution of all threads'       ></a>
+    </div>
+    <div id=threads hidden></div>
+  </div>
+  <div>
+    <div class=ctl_listview_header>SI Stack</div>
+    <div id=sistack hidden></div>
+  </div>
+</div>
 <!--About-->
 <div id=abt class=dlg hidden>
   <div id=abt_logo class=dlg_title>
@@ -390,6 +403,7 @@
 <script src=src/vt.js         ></script>
 <script src=src/syn.js        ></script>
 <script src=src/wse.js        ></script>
+<script src=src/dbg.js        ></script>
 <script src=src/listview.js   ></script>
 <script src=src/demo.js       ></script>
 <script src=src/ac.js         ></script>

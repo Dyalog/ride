@@ -213,6 +213,7 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .tb_CBP {background-image:url(img/tb_CBP.png)}
 .tb_SC  {background-image:url(img/tb_SC.png)}
 .tb_RP  {background-image:url(img/tb_RP.png)}
+.tb_TR  {background-image:url(img/tb_TR.png)}
 /*search and replace*/
 .win,.floating-window{position:absolute;left:0;right:0;top:32px;bottom:0;
                       overflow:hidden!important;padding:0!important;height:auto!important}
@@ -389,10 +390,18 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 #wse .bt_icon_9_6::before{content:"c";background:#fc0} /*external class*/
 #wse .bt_icon_9_7::before{content:"i";background:#fc0} /*external interface*/
 
-.ctl_listview{width:100%;height:100%;background-color:white;font-family:apl}
-.ctl_listview div{width:100%;padding:5px;cursor:pointer}
+.ctl_listview{width:100%;background-color:white;font-family:apl;overflow-x:hidden;overflow-y:auto}
+.ctl_listview div{width:100%;padding:6px;cursor:pointer;display:block}
+.ctl_listview div span{padding-left:5px;width:25%;display:inline-block;border-right:1px solid black;box-sizing:border-box}
 .ctl_listview div:nth-child(even){background-color:#eee}
 .ctl_listview div.selected{background-color:blue}
+
+#debug {height:inherit;background-color:white;}
+#debug>div{height:50%;display:block}
+#debug toolbar{min-height:29px}
+#debug .ctl_listview_header{height:20px}
+
+#threads,#sistack{height: calc(100% - 52px)}
 
 #demo-keys{position:fixed;top:10px;right:10px}
 #demo-keys span{font-family:apl,monospace;font-size:18px;font-size:48px;border:solid #333 1px;

@@ -52,6 +52,7 @@ D.cmds=[
   ['RD', 'Reformat',                []],
   ['RP', 'Replace',                 []],
   ['SC', 'Search',                  ['Ctrl-F']],
+  ['TR', 'Refresh threads',         []],
   ['SI', 'Strong interrupt',        []],
   ['TB', 'Tab between windows',     ['Ctrl-Tab']],
   ['TC', 'Trace',                   ['Ctrl-Enter']],

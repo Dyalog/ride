@@ -9,20 +9,20 @@ D.ListView=function(e,o){
   
   this.dom.onclick=function(event){
       if (event.target.className.indexOf('ctl_listview_item')>-1){
-          this.click_handler(event)
+        this.click_handler(event)
       }
   }.bind(this)
 
-  this.render=o.render||function(array){
-      if (array.length>0){
-          this.dom.innerHTML=array.map(function(i){
-              return "<div class=\""+this.item_class+" ctl_listview_item\">"+i+"</div>"
-          }).join('')
-      }
-      else{
-          this.dom.innerHTML="<div>"+this.no_item_message+"</div>"
-      }
-  }
+  this.render=(o.render||function(array){
+    if (array.length>0){
+      this.dom.innerHTML=array.map(function(i){
+        return "<div class=\""+this.item_class+" ctl_listview_item\">"+i+"</div>"
+      }).join('')
+    }
+    else{
+      this.dom.innerHTML="<div>"+this.no_item_message+"</div>"
+    }
+  }).bind(this)
 
   this.render([]);
 }

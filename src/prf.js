@@ -39,8 +39,7 @@ D.prf={}
   ['selectedExe',        ''],//which interpreter is selected in dropdown in the Connect page?
   ['title',              '{WSID}'], //a.k.a. "caption"
   ['valueTips',          1], //value tips
-  ['sis',                0], //status indicator stack
-  ['stp',                0], //show threads panel
+  ['dbg',                0], //show debug panel
   ['sqp',                1], //show quit prompt
   ['squiggleTips',       1],
   ['wrap',               0], //line wrapping in session
@@ -73,6 +72,7 @@ D.prf={}
     '\n&View'+
     '\n  Show Language Bar        =LBR'+
     '\n  Show Workspace Explorer  =WSE'+
+    '\n  Show Debug               =DBG'+
 //  '\n  Floating Edit Windows    =FLT'+
 //  '\n  Editors on Top           =TOP {!browser}'+
     '\n  Line Wrapping in Session =WRP'+
@@ -98,9 +98,6 @@ D.prf={}
     '\n  Dyalog Forum             =http://www.dyalog.com/forum'+
     '\n  -                             {!mac}'+
     '\n  About                    =ABT {!mac}'+
-    '\n&Threads'+
-    '\n  Show Stack...            =SIS'+
-//    '\n  Show Threads...          =STP'+
     '\n'+
     '\n# Syntax:'+
     '\n#   &x   access key, alt+x'+
