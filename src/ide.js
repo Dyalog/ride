@@ -263,11 +263,13 @@ D.IDE=function(){'use strict'
   })
   gl.registerComponent('wse',function(c,h){
     var u=ide.wse=new D.WSE();u.container=c
-    c.getElement().append(u.dom);return u
+    c.getElement().append(u.dom)
+    ide.DBGwidth=ide.dbgw;return u
   })
   gl.registerComponent('dbg',function(c,h){
     var u=ide.dbg=new D.DBG();u.container=c
-    c.getElement().append(u.dom);return u
+    c.getElement().append(u.dom)
+    ide.WSEwidth=ide.wsew;return u
   })
   var sctid //stateChanged timeout id
   gl.on('stateChanged',function(){

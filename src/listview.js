@@ -7,15 +7,17 @@ D.ListView=function(e,o){
   this.dom.className='ctl_listview'
   this.click_handler=o.click_handler||function(e){return}
   this.items=[]
+  this.selected={tid:0}
   
   this.dom.onclick=function(event){
       var cn=event.target
-      while(cn&&cn.className.indexOf('ctl_listview_item')==-1) cn=cn.parentNode
+      while((cn!==this.dom)&&cn.className.indexOf('ctl_listview_item')==-1) cn=cn.parentNode
       
-      if (cn){
+      if (cn!==this.dom){
         $(this.dom.querySelectorAll('.ctl_listview_item')).removeClass('selected')
         $(cn).addClass('selected')
-        this.click_handler(this.items[+cn.dataset.itemid])
+        this.selected=this.items[+cn.dataset.itemid]
+        this.click_handler(this.selected)
       }
   }.bind(this)
 
