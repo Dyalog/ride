@@ -17,17 +17,14 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
 ,save=_=>{
   var d=D.el.app.getPath('userData'),f=d+'/connections.json'
   if (((+fs.statSync(f).mtime)!=D.conns_modified)){
-    console.log("Before:\n"+(+fs.statSync(f).mtime)+"\n"+D.conns_modified)
     if (!confirm("Connections file has been modified, do you want to overwrite with your changes?")){
       console.log("returning")
       return;
     }
   }
-  console.log("saving")
   var a=q.favs.children,b=[];for(var i=0;i<a.length;i++)b[i]=a[i].cnData
   D.conns=b;fs.writeFileSync(f,JSON.stringify(D.conns))
   D.conns_modified=+fs.statSync(f).mtime
-  console.log("After:\n"+(+fs.statSync(f).mtime)+"\n"+D.conns_modified)
 }
 ,favText=x=>x.name||'unnamed'
 ,favDOM=x=>{const e=document.createElement('div');e.cnData=x
