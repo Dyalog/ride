@@ -61,6 +61,12 @@ Constants for `identity`: `1` RIDE, `2` interpreter, `3` process manager.
 
 :red_circle: The interpreter sends an `Identify` that means something else and has different args.
 
+After it has received the Identify command the interpreter will send 0 or more "ReplyGetLog" messages containing the session log:
+<a name=ReplyGetLog></a>
+```json
+["ReplyGetLog",{"result":["line 1","line 2"]}]
+```
+
 They should then check the type of application they are connected to, and if not happy to continue, close the
 connection.  For instance, RIDE may check that the application it's connected to is an interpreter or a process
 manager. If it finds the peer is another RIDE, it should close the connection.
