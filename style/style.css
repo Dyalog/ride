@@ -392,16 +392,18 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 
 .ctl_listview{width:100%;background-color:white;font-family:apl;overflow-x:hidden;overflow-y:auto}
 .ctl_listview div{width:100%;padding:6px;cursor:pointer;display:block}
-.ctl_listview div span{padding-left:5px;width:25%;display:inline-block;border-right:1px solid black;box-sizing:border-box}
+.ctl_listview div span{padding-left:5px;display:inline-block;border-right:1px solid black;box-sizing:border-box}
 .ctl_listview div:nth-child(even){background-color:#eee}
 .ctl_listview div.selected{background-color:blue}
-
+#threads span{width:25%;}
+#sistack span{width:100%;}
 #debug {height:inherit;background-color:white;}
 #debug>div{height:50%;display:block}
 #debug toolbar{min-height:29px}
-#debug .ctl_listview_header{height:20px}
+#debug .ctl_listview_header{height: 14px;padding: 5px 5px;background-color: #ffa336;
+    border-bottom: solid #ea741b 1px;color: white;font-weight: 600;border-top: solid #ea741b 1px;}
 
-#threads,#sistack{height: calc(100% - 52px)}
+#threads,#sistack{height: calc(100% - 54px)}
 
 #demo-keys{position:fixed;top:10px;right:10px}
 #demo-keys span{font-family:apl,monospace;font-size:18px;font-size:48px;border:solid #333 1px;
