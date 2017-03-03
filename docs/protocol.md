@@ -30,11 +30,23 @@ If the receiver of a message does not recognise it, it should respond with
 ["UnknownCommand",{"name":"Xyz"}]
 ```
 
+Should the interpreter generate an error during the processing of an incoming RIDE message it will respond with an InternalError message:
+
+<a name=InternalError></a>
+```json
+["InternalError",{"error":1,"error_text":"WS FULL","dmx":"","message":"Edit"}]
+```
+* `error`: aka ⎕EN
+* 'error_text: aka ⎕EM 
+* 'dmx': the DMX message for the error (currently always empty)
+* `message`: the name of the originating incoming RIDE message
+
 The connection may be closed at any time, leaving some messages undelivered or unprocessed.
 
 Command names and their arguments are case-sensitive.
 
 JSON booleans `true` and `false` can be freely substituted with and should be treated as equivalent to `1` and `0`.
+
 
 #Connection setup and teardown
 
