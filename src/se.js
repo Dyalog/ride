@@ -96,7 +96,7 @@ D.Se.prototype={
   refresh:function(){this.cm.refresh()},
   loadLine:function(s){var cm=this.cm,l=cm.lastLine();cm.replaceRange(s,{line:l,ch:0},{line:l,ch:cm.getLine(l).length})},
   exec:function(trace){
-    var es,l,ls=[],se=this;if(!se.promptType)return
+    var w,es,l,ls=[],se=this;if(!se.promptType)return
     for(l in se.dirty)ls.push(+l)
     if(ls.length){
       ls.sort(function(x,y){return x-y})
@@ -108,14 +108,11 @@ D.Se.prototype={
       })
     }else{
       es=[se.cm.getLine(se.cm.getCursor().line)]
-      if (trace&&/^\s*$/.test(es[0])){
-        var w=se.ide.tracer();
-        if (w) {w.focus();return}
-        else trace=0 // empty prompt
+      if (trace&&/^\s*$/.test(es[0])&&(w=se.ide.tracer())){
+        w.focus();return
       }
     }
     se.ide.exec(es,trace);se.dirty={};se.histAdd(es.filter(function(x){return!/^\s*$/.test(x)}));se.cm.clearHistory()
-    se.cm.setOption('cursorHeight',0) //avoid flicker at column 0 when leaning on <ER>
   },
   ED:function(cm){
     var c=cm.getCursor(),txt=cm.getLine(c.line);
