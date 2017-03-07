@@ -161,7 +161,7 @@ D.cn=_=>{ //set up Connect page
   updFormDtl();q.type.onchange=_=>{sel.type=q.type.value;updFormDtl()}
   q.ssh.onchange=_=>{q.ssh_dtl.hidden=!(q.non_ssh_dtl.hidden=q.ssh.checked);updExes()}
   q.ssh_tnl.onchange=_=>{q.ssh_tnl_dtl.hidden=!q.ssh_tnl.checked;q.tcp_dtl.hidden=q.ssh_tnl.checked}
-  q.ssh_user.placeholder=q.ssh_tnl_user=user
+  q.ssh_user.placeholder=q.ssh_tnl_user.placeholder=user
   var enterConnect=function(event){if (event.keyCode==13){$('#cn_go').click()}}
   $('#cn_ssh_tnl_host').keyup(enterConnect);$('#cn_tcp_host').keyup(enterConnect);$('#cn_ssh_host').keyup(enterConnect)
   q.fetch.onclick=_=>{
