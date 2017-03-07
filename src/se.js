@@ -44,7 +44,7 @@ D.Se.prototype={
     if(i>=this.hist.length){$.alert('There is no previous line','Dyalog APL Error');return}
     if(!this.histIdx)this.hist[0]=this.cm.getLine(l)
     if(this.hist[i]==null)return
-    this.cm.replaceRange(this.hist[i],{line:l,ch:0},{line:l,ch:this.cm.getLine(l).length},'D')
+    this.cm.replaceRange(this.hist[i],{line:l,ch:0},{line:l,ch:this.cm.getLine(l).length})
     this.cm.setCursor({line:l,ch:this.hist[i].search(/\S|$/)})
     this.histIdx=i
   },
