@@ -45,9 +45,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   q.exe.readOnly=!!q.exes.value
 }
 ,validate=x=>{
-  const t=x.type,h=x.host,p=x.port,tn=x.ssh_tnl
-  if((t==='connect'||t==='start'&&x.ssh)&&!h)
-    {$.err('"host" is required',_=>{(t==='connect'?x.ssh_tnl?q.ssh_tnl_host:q.tcp_host:q.ssh_host).select()});return}
+  const t=x.type,p=x.port,tn=x.ssh_tnl
   if((t==='connect'||t==='start'&&x.ssh||t==='listen')&&p&&(!/^\d*$/.test(p)||+p<1||+p>0xffff))
     {$.err('Invalid port',_=>{(t==='connect'?x.ssh_tnl?q.ssh_tnl_port:q.tcp_port:t==='start'?q.ssh_port:q.listen_port).select()});return}
   if((t==='connect'&&x.ssh_tnl)&&x.ride_port&&(!/^\d*$/.test(x.ride_port)||+x.ride_port<1||+x.ride_port>0xffff))
@@ -70,7 +68,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
       case'connect':
         D.util.dlg(q.connecting_dlg)
         if(x.ssh_tnl){
-          var o={host:x.host,port:+x.port||22,user:x.user||user}
+          var o={host:x.host||'localhost',port:+x.port||22,user:x.user||user}
           if(x.ssh_tnl_auth_type==='key'){o.key=x.ssh_tnl_key}else{o.pass=x===sel?q.ssh_tnl_pass.value:''}
           const c=sshExec(o,'/bin/sh',(e,sm)=>{if(e)throw e
             sm.on('close',(code,sig)=>{D.ide&&D.ide._sshExited({code,sig});c.end()})
@@ -83,7 +81,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
           c&&c.on('error',x=>{err(x.message||''+x);q.connecting_dlg.hidden=1;clearTimeout(D.tmr);delete D.tmr})
           D.tmr=setTimeout(function(){err('Timed out');c&&c.end();q.connecting_dlg.hidden=1},ct)
         }else{
-          connect({host:x.host,port:+x.port||4502,
+          connect({host:x.host||'localhost',port:+x.port||4502,
                    ssl:x.ssl,cert:x.cert,key:x.key,subj:x.subj,rootcertsdir:x.rootcertsdir})
         }
         break
@@ -99,7 +97,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
         const env={},a=(x.env||'').split('\n');for(let i=0;i<a.length;i++){const m=KV.exec(a[i]);m&&(env[m[1]]=m[2])}
         if(x.ssh){
           D.util.dlg(q.connecting_dlg)
-          var o={host:x.host,port:+x.port||22,user:x.user||user}
+          var o={host:x.host||'localhost',port:+x.port||22,user:x.user||user}
           if(x.ssh_auth_type==='key'){o.key=x.ssh_key}else{o.pass=x===sel?q.ssh_pass.value:''}
           const c=sshExec(o,'/bin/sh',(e,sm)=>{if(e)throw e
             sm.on('close',(code,sig)=>{D.ide&&D.ide._sshExited({code,sig});c.end()})
@@ -167,7 +165,7 @@ D.cn=_=>{ //set up Connect page
   q.fetch.onclick=_=>{
     if(!validate($.extend({},sel,{exe:'x'})))return //validate all except "exe"
     q.fetch.disabled=1
-    const c=sshExec({host:sel.host,port:+sel.port||22,user:sel.user||user,pass:q.ssh_pass.value,key:q.ssh_key.value},
+    const c=sshExec({host:sel.host||'localhost',port:+sel.port||22,user:sel.user||user,pass:q.ssh_pass.value,key:q.ssh_key.value},
                     '/bin/ls /opt/mdyalog/*/*/*/mapl /Applications/Dyalog-*/Contents/Resources/Dyalog/mapl 2>/dev/null',
                     (e,sm)=>{
       if(e)throw e

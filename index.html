@@ -40,7 +40,7 @@
              <label for=cn_ssh_tnl_host><u>h</u>ost</label> :
              <label for=cn_ssh_tnl_port><u>p</u>ort</label>
              <input id=cn_ssh_tnl_user name=user size=4> @
-             <input id=cn_ssh_tnl_host name=host size=10> :
+             <input id=cn_ssh_tnl_host name=host size=10 placeholder=localhost> :
              <input id=cn_ssh_tnl_port name=port size=4 placeholder=22>
           <p><select id=cn_ssh_tnl_auth_type>
                <option value=pass>Password (not remembered)
@@ -53,7 +53,7 @@
         </div>
         <div id=cn_tcp_dtl>
           <p><label for=cn_tcp_host><u>H</u>ost</label> and <label for=cn_tcp_port><u>p</u>ort:</label>
-            <input id=cn_tcp_host name=host size=12> :
+            <input id=cn_tcp_host name=host size=12 placeholder=localhost> :
             <input id=cn_tcp_port name=port size=4 placeholder=4502>
           <p><label><input name=ssl type=checkbox id=cn_ssl_cb><u>S</u>ecure connection (TLS/SSL)</label>
           <div id=cn_ssl_dtl class=indent>
@@ -76,7 +76,7 @@
              <label for=cn_ssh_host><u>h</u>ost</label> :
              <label for=cn_ssh_port><u>p</u>ort</label>
              <input id=cn_ssh_user name=user size=4> @
-             <input id=cn_ssh_host name=host size=10> :
+             <input id=cn_ssh_host name=host size=10 placeholder=localhost> :
              <input id=cn_ssh_port name=port size=4 placeholder=22>
           <p><select id=cn_ssh_auth_type>
                <option value=pass>Password (not remembered)
