@@ -3,7 +3,8 @@
 //Some of the codes are inherited from Dyalog's old IDE (see ../docs/cmd-codes.txt and near the end of km.js)
 //Others were made up for RIDE's purposes - those use no fewer than three letters.
 'use strict'
-D.cmds=[
+D.buildCmds=function(){
+  return [
   //code description                default keys
   ['ABT','About',                   ['Shift-F1']],
   ['AC', 'Align comments',          []],
@@ -47,7 +48,7 @@ D.cmds=[
   ['PF12','',                       []],
   ['PRF','Show preferences',        []],
   ['PV' ,'Previous match',          []],
-  ['QIT','Quit',                    ['Ctrl-Q']],
+  ['QIT','Quit',                    (D.mac?['Cmd-Q']:[]).concat('Ctrl-Q')],
   ['QT', 'Quit (and lose changes)', ['Shift-Esc']],
   ['RD', 'Reformat',                ['NumpadDivide']],
   ['RP', 'Replace',                 []],
@@ -64,7 +65,8 @@ D.cmds=[
   ['WI', 'Weak interrupt',          ['Ctrl-Pause']],
   ['WSE','Toggle workspace explorer',[]],
   ['ZM', 'Toggle maximise editor',  []],
-  ['ZMI','Increase font size',      ['Ctrl-=','Shift-Ctrl-='].concat(D.mac?['Cmd-=','Shift-Cmd-=']:[])],
-  ['ZMO','Decrease font size',      ['Ctrl--'].concat(D.mac?'Cmd--':[])],
-  ['ZMR','Reset font size',         ['Ctrl-0'].concat(D.mac?'Cmd-0':[])]
+  ['ZMI','Increase font size',      (D.mac?['Cmd-=','Shift-Cmd-=']:[]).concat(['Ctrl-=','Shift-Ctrl-='])],
+  ['ZMO','Decrease font size',      (D.mac?['Cmd--']:[]).concat('Ctrl--')],
+  ['ZMR','Reset font size',         (D.mac?['Cmd-0']:[]).concat('Ctrl-0')]
 ]
+}
