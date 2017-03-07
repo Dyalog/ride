@@ -45,7 +45,7 @@ D.Se.prototype={
     if(!this.histIdx)this.hist[0]=this.cm.getLine(l)
     if(this.hist[i]==null)return
     this.cm.replaceRange(this.hist[i],{line:l,ch:0},{line:l,ch:this.cm.getLine(l).length},'D')
-    this.cm.setCursor({line:l,ch:this.hist[i].replace(/[^ ].*$/,'').length})
+    this.cm.setCursor({line:l,ch:this.hist[i].search(/\S|$/)})
     this.histIdx=i
   },
   add:function(s){ //append text to session
@@ -132,7 +132,7 @@ D.Se.prototype={
       delete this.dirty[l];var h=this.dirty;this.dirty={};for(var x in h)this.dirty[x-(x>l)]=h[x]
     }else if(this.dirty[l]!=null){
       cm.replaceRange(this.dirty[l],{line:l,ch:0},{line:l,ch:cm.getLine(l).length},'D')
-      cm.removeLineClass(l,'background','modified');cm.setCursor(l+1,c.ch);delete this.dirty[l]
+      cm.removeLineClass(l,'background','modified');cm.setCursor(l,this.dirty[l].search(/\S|$/));delete this.dirty[l]
     }
   },
   EP:function(){this.ide.focusMRUWin()},
