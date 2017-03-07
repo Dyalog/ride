@@ -311,7 +311,7 @@ D.IDE=function(){'use strict'
     var p=gl.root.contentItems[0]
     if(p.type!=='row'){var row=gl.createContentItem({type:'row'},p);p.parent.replaceChild(p,row)
                        row.addChild(p,0,true);row.callDownwards('setSize');p=row}
-    p.addChild({type:'component',componentName:comp_name,title:comp_title},left?0:p.contentItems.length)
+    p.addChild({type:'component',componentName:comp_name,title:comp_title,fixedSize:true},left?0:p.contentItems.length)
     D.ide.wins[0].cm.scrollTo(si.left,si.top)
     D.ide[comp_name.toUpperCase()+"width"]=D.ide[comp_name+"w"]=left?200:300;
   }
