@@ -29,8 +29,9 @@ D.IDE=function(){'use strict'
                                         :ide.wins[0].prompt(t)
       t===4&&ide.wins[0].focus() //⍞ input
       if(t===1&&!ide.bannerDone){ //arrange for the banner to appear at the top of the session window
-        ide.bannerDone=1;var cm=ide.wins[0].cm
-        cm.scrollTo(0,cm.heightAtLine(cm.lastLine()-5)-cm.heightAtLine(0)+5) //+5px to compensate for CM's own padding
+        ide.bannerDone=1;var cm=ide.wins[0].cm,txt=cm.getValue().split('\n'),i=txt.length
+        while(--i){if(/^Dyalog APL/.test(txt[i])) break }
+        cm.scrollTo(0,cm.heightAtLine(i)-cm.heightAtLine(0)+5) //+5px to compensate for CM's own padding
       }
     },
     HadError:function(){ide.pending.splice(0,ide.pending.length);ide.wins[0].focus();ide.hadErr=1},
@@ -161,6 +162,7 @@ D.IDE=function(){'use strict'
              w.on('closed',function(){delete ide.wStatus})}
       w.webContents.executeJavaScript('add('+JSON.stringify(x)+')')
     },
+    ReplyGetLog:function(x){ide.wins[0].add(x.result.join('\n'))},
     UnknownCommand:function(){}
   }
   //We need to be able to temporarily block the stream of messages coming from socket.io
