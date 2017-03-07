@@ -95,10 +95,7 @@ Any echoed input or interpreter output or the initial content of the session are
 ["EchoInput",{"input":"      1 2 3+4 5 6\n"}] // Interpreter -> RIDE
 ["AppendSessionOutput",{"result":["5 7 9"]}]  // Interpreter -> RIDE
 ```
-These two perform essentially the same task except that `AppendSessionOutput` doesn't have trailing `"\n"`-s at the end
-of each element of `result`.
-
-:red_circle: Sometimes the interpreter returns `"result"` as a string, other times as an array of strings.
+These two perform essentially the same task.
 
 The interpreter informs RIDE about changes in its ability to accept user input with
 <a name=SetPromptType></a>
