@@ -329,8 +329,6 @@ Request all suspended threads are resumed from their current position.
 
 Request information about the current stack.
 
-:red_circle: Not used in RIDE yet.
-
 Get information about the current threads.
 <a name=GetThreads></a>
 ```json
