@@ -17,6 +17,35 @@ if ! [ "$GHTOKEN" ]; then
   echo 'Please put your GitHub API Token in an environment variable named GHTOKEN'
   exit 1
 fi
+
+# Delete all the old draft releases, otherwise this gets filled up pretty fast as we create for every commit:
+# but only if jq is available
+if which jq >/dev/null 2>&1; then
+        DRAFT=true
+        C=0
+
+	# Get the json from Github API
+        curl -o ./GH-Releases.json \
+          --silent -H "Authorization: token $GHTOKEN" \
+          https://api.github.com/repos/Dyalog/Ride/releases
+
+        while [ $DRAFT = "true" ] ; do
+		DRAFT=`cat GH-Releases.json | jq  ".[$C].draft"`
+		ID=`cat GH-Releases.json | jq  ".[$C].id"`
+
+		if [ "$DRAFT" = "true" ]; then
+			echo -e -n "*** $(cat GH-Releases.json | jq ".[$C].name" | sed 's/"//g') with id: $(cat GH-Releases.json | jq  ".[$C].id") is a draft - Deleting.\n"
+			curl -X "DELETE" -H "Authorization: token $GHTOKEN" https://api.github.com/repos/Dyalog/Ride/releases/${ID}
+		fi
+
+		let C=$C+1
+        done
+        rm -f GH-Releases.json
+
+else
+        echo jq not found, not removing draft releases
+fi
+
 cat >$TMP_JSON <<.
 {
   "tag_name": "v$VERSION",

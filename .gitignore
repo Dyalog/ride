@@ -9,3 +9,4 @@ npm-debug.log
 *.swp
 ship/
 .vscode
+GH-Releases.json
