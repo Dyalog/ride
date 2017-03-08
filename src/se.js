@@ -138,6 +138,7 @@ D.Se.prototype={
   EP:function(){this.ide.focusMRUWin()},
   ER:function(){this.exec(0)},
   TC:function(){this.exec(1)},
+  MA:function(){D.send('RestartThreads',{win:0})},
   indentOrComplete:function(cm){
     var u=cm.getCursor(),s=cm.getLine(u.line)
     if(cm.somethingSelected()||this.promptType===4||/^ *$/.test(s.slice(0,u.ch))){cm.execCommand('indentMore');return}
