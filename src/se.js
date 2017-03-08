@@ -113,6 +113,7 @@ D.Se.prototype={
       }
     }
     se.ide.exec(es,trace);se.dirty={};se.histAdd(es.filter(function(x){return!/^\s*$/.test(x)}));se.cm.clearHistory()
+    se.ide.getThreads();
   },
   ED:function(cm){
     var c=cm.getCursor(),txt=cm.getLine(c.line);

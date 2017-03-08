@@ -46,6 +46,7 @@ D.IDE=function(){'use strict'
       var w=ide.wins[x.win];if(w){w.closePopup&&w.closePopup();w.vt.clear();w.container&&w.container.close()}
       delete ide.wins[x.win];ide.focusMRUWin()
       ide.WSEwidth=ide.wsew;ide.DBGwidth=ide.dbgw
+      ide.getSIS()
     },
     OpenWindow:function(ee){
       if(!ee['debugger']&&D.el&&process.env.RIDE_EDITOR){
@@ -87,7 +88,7 @@ D.IDE=function(){'use strict'
       p.addChild({type:'component',componentName:'win',componentState:{id:w},title:ee.name},ind)
       ide.WSEwidth=ide.wsew;ide.DBGwidth=ide.dbgw
       if(tc){
-        D.send('GetSIStack',{})
+        ide.getSIS()
         ide.wins[0].scrollCursorIntoView()
       }else ide.wins[0].cm.scrollTo(si.left,si.top)
     },
@@ -333,6 +334,8 @@ D.IDE.prototype={
     var ide=this;if(ide.dead)return
     ide.dead=1;ide.connected=0;ide.dom.className+=' disconnected';for(var k in ide.wins)ide.wins[k].die()
   },
+  getThreads:$.debounce(100,function(){D.ide.dbg&&D.send('GetThreads',{})}),
+  getSIS:$.debounce(100,function(){D.ide.dbg&&D.send('GetSIStack',{})}),
   updTitle:function(){ //change listener for D.prf.title
     var ide=this,ri=D.remoteIdentification||{},v=D.versionInfo
     document.title=D.prf.title().replace(/\{\w+\}/g,function(x){var X=x.toUpperCase();return(

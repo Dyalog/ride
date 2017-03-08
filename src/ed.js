@@ -166,7 +166,7 @@ D.Ed.prototype={
     cm.replaceRange(s,{line:l,ch:0},{line:l,ch:cm.getLine(l).length},'D')
   },
   LN:function(){D.prf.lineNums.toggle()},
-  TC:function(){D.send('StepInto',{win:this.id});D.send('GetSIStack',{})},
+  TC:function(){D.send('StepInto',{win:this.id});D.ide.getSIS()},
   AC:function(cm){ //align comments
     if(cm.getOption('readOnly'))return
     var ed=this,ll=cm.lastLine(),o=cm.listSelections() //o:original selections
@@ -186,7 +186,7 @@ D.Ed.prototype={
     cm.setSelections(o)
   },
   ER:function(cm){
-    if(this.tc){D.send('RunCurrentLine',{win:this.id});D.send('GetSIStack',{});return}
+    if(this.tc){D.send('RunCurrentLine',{win:this.id});D.ide.getSIS();return}
     if(D.prf.autoCloseBlocks()){
       var u=cm.getCursor(),l=u.line,s=cm.getLine(l),m
       var re=/^(\s*):(class|disposable|for|if|interface|namespace|property|repeat|section|select|trap|while|with)\b([^⋄\{]*)$/i
