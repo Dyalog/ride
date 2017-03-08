@@ -435,6 +435,12 @@ In the response `index` can be:
 * the index of an `options` button
 * `-1` if the user closes the dialog
 
+##Notification
+<a name=NotificationMessage></a>
+```json
+["NotificationMessage",{"message":"Object too large to edit","token":123}] // Interpreter -> RIDE
+```
+
 #Other
 <a name=ShowHTML></a>
 ```json
