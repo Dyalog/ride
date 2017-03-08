@@ -273,14 +273,6 @@ Request restart of the APL program. (Black arrow in ODE)
 ```
 Request resumption of tracing an APL program. (White arrow in ODE)
 
-<a name=ContinueAllThreads></a>
-```json
-["ContinueAllThreads",{"win":123}] // RIDE -> Interpreter
-```
-:red_circle: Not used in RIDE.  The green arrow actually corresponds to [`RestartThreads`](#RestartThreads).
-
-Request resumption of all threads. (Green arrow in ODE)
-
 <a name=Cutback></a>
 ```json
 ["Cutback",{"win":123}] // RIDE -> Interpreter
