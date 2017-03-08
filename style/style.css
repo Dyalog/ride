@@ -230,8 +230,14 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 .dlg_btns button{min-width:75px;margin:0 8px}
 .dlg_btns button.task{display:block;margin:4px 0;width:100%}
 
+.dlg_icon_warn {background-image:url(img/dlg_warn.png)}
+.dlg_icon_info {background-image:url(img/dlg_info.png)}
+.dlg_icon_error{background-image:url(img/dlg_error.png)}
+.dlg_icon_query{background-image:url(img/dlg_query.png)}
+
 /*generic dialog for processing OptionsDialog,StringDialog,TaskDialog*/
-#gd_content{padding: 1em;line-height:1.5;}
+#gd_icon   {margin:1em 1em 2em;width:128px;height:128px;float:left}
+#gd_content{padding:1em;line-height:1.5;margin-bottom:2em}
 
 /*Preferences dialog*/
 #prf_nav{height:28px;border-bottom: solid 1px #ed7f00;margin-bottom:2px;}

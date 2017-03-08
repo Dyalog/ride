@@ -112,18 +112,22 @@ D.IDE=function(){'use strict'
         var r=D.el.dialog.showMessageBox(D.elw,{message:text,title:x.title||'',buttons:x.options||[''],cancelId:-1})
         D.send('ReplyOptionsDialog',{index:r,token:x.token})
       }else{
-        I.gd_title_text.textContent=x.title||'';I.gd_content.textContent=text
+        text=text.replace(/\r?\n/g,'<br>')
+        I.gd_title_text.textContent=x.title||'';I.gd_content.innerHTML=text
+        I.gd_icon.style.display=''
+        I.gd_icon.className='dlg_icon_'+['warn','info','query','error'][x.type-1]
         I.gd_btns.innerHTML=(x.options||[]).map(function(y){return'<button>'+D.util.esc(y)+'</button>'}).join('')
         var ret=function(r){I.gd_btns.onclick=I.gd_close.onclick=null;I.gd.hidden=1
                             D.send('ReplyOptionsDialog',{index:r,token:x.token})}
         I.gd_close.onclick=function(){ret(-1)}
         I.gd_btns.onclick=function(e){if(e.target.nodeName==='BUTTON'){
                                       var i=-1,t=e.target;while(t){t=t.previousSibling;i++}ret(i)}}
-        D.util.dlg(I.gd,{w:400,h:250})
+        D.util.dlg(I.gd,{w:400})
       }
     },
     StringDialog:function(x){
       I.gd_title_text.textContent=x.title||'';I.gd_content.innerText=x.text||''
+      I.gd_icon.style.display='none'
       I.gd_content.insertAdjacentHTML('beforeend','<br><input>')
       var inp=I.gd_content.querySelector('input');inp.value=x.initialValue||''
       I.gd_btns.innerHTML='<button>OK</button><button>Cancel</button>'
@@ -137,6 +141,7 @@ D.IDE=function(){'use strict'
     TaskDialog:function(x){
       var esc=D.util.esc
       I.gd_title_text.textContent=x.title||''
+      I.gd_icon.style.display='none'
       I.gd_content.innerHTML=esc(x.text||'')+(x.subtext?'<div class=task_subtext>'+esc(x.subtext)+'</div>':'')
       I.gd_btns.innerHTML=
         (x.buttonText||[]).map(function(y){return'<button class=task>'+D.util.esc(y)+'</button>'}).join('')+
