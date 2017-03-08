@@ -46,7 +46,7 @@ D.prf_ui=function(){
     for(var i=0;i<hdrs.length;i++){var id=hdrs[i].href.replace(/.*#/,''),e=document.getElementById(id)
                                    tabs[id].init(e);payloads.push(e)}
   }
-  D.util.dlg(d,{w:600,h:450});for(var i in tabs)tabs[i].load()
+  D.util.dlg(d,{w:600,h:490});for(var i in tabs)tabs[i].load()
   var t=tabs[(((document.getElementById('prf_nav').querySelector('.sel')||{}).href)||'').replace(/.*#/,'')]
   t&&t.activate&&t.activate()
 }

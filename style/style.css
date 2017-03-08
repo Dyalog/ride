@@ -313,7 +313,6 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 #shc_tbl_wr tr:hover .shc_add,#shc_tbl_wr tr:hover .shc_rst{visibility:visible}
 
 /*Prefs>Code*/
-#code{overflow:auto}
 #code p{margin:5px}
 #code_aim{margin-left:48px}
 
