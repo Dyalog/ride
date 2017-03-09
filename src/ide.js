@@ -7,7 +7,11 @@ D.IDE=function(){'use strict'
   var ide=D.ide=this;I.cn.hidden=1;this.lbarRecreate()
   ide.dom=I.ide;I.ide.hidden=0
   ide.pending=[] //lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
-  ide.exec=function(a,tc){if(a&&a.length){tc||(ide.pending=a.slice(1));D.send('Execute',{trace:tc,text:a[0]+'\n'})}}
+  ide.exec=function(a,tc){if(a&&a.length){
+    tc||(ide.pending=a.slice(1));
+    D.send('Execute',{trace:tc,text:a[0]+'\n'});
+    ide.getThreads()
+  }}
   ide.host=ide.port=ide.wsid='';D.prf.title(ide.updTitle.bind(ide))
   D.wins=ide.wins={0:new D.Se(ide)}
   ide.focusedWin=ide.wins[0] //last focused window, it might not have the focus right now
@@ -334,8 +338,8 @@ D.IDE.prototype={
     var ide=this;if(ide.dead)return
     ide.dead=1;ide.connected=0;ide.dom.className+=' disconnected';for(var k in ide.wins)ide.wins[k].die()
   },
-  getThreads:$.debounce(100,function(){D.ide.dbg&&D.send('GetThreads',{})}),
-  getSIS:$.debounce(100,function(){D.ide.dbg&&D.send('GetSIStack',{})}),
+  getThreads:$.debounce(100,function(){D.prf.dbg()&&D.send('GetThreads',{})}),
+  getSIS:    $.debounce(100,function(){D.prf.dbg()&&D.send('GetSIStack',{})}),
   updTitle:function(){ //change listener for D.prf.title
     var ide=this,ri=D.remoteIdentification||{},v=D.versionInfo
     document.title=D.prf.title().replace(/\{\w+\}/g,function(x){var X=x.toUpperCase();return(

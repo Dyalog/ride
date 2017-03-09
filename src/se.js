@@ -49,10 +49,17 @@ D.Se.prototype={
     this.histIdx=i
   },
   add:function(s){ //append text to session
-    var cm=this.cm,l=cm.lastLine(),s0=cm.getLine(l)
-    cm.replaceRange((cm.getOption('readOnly')?(s0+s):s),{line:l,ch:0},{line:l,ch:s0.length},'D')
-    cm.setCursor(cm.lastLine(),0)
-    if (this.btm!=null) this.btm=-1
+    var cm=this.cm,l=cm.lastLine(),s0=cm.getLine(l),p='      ',sp
+    if(this.dirty[l]!=null){ 
+      var cp=cm.getCursor()
+      cm.replaceRange(s0+'\n'+s+p,{line:l,ch:0},{line:l,ch:s0.length},'D')
+      cm.setCursor(cp)
+    } else {
+      sp=(cm.getOption('readOnly')&&s0!==p?(s0+s):s)+p
+      cm.replaceRange(sp,{line:l,ch:0},{line:l,ch:s0.length},'D')
+      cm.setCursor({line:cm.lastLine()})
+      if (this.btm!=null) this.btm=-1
+    }
   },
   prompt:function(x){
     var cm=this.cm,l=cm.lastLine();this.promptType=x;cm.setOption('readOnly',!x);cm.setOption('cursorHeight',+!!x)
@@ -113,7 +120,6 @@ D.Se.prototype={
       }
     }
     se.ide.exec(es,trace);se.dirty={};se.histAdd(es.filter(function(x){return!/^\s*$/.test(x)}));se.cm.clearHistory()
-    se.ide.getThreads();
   },
   ED:function(cm){
     var c=cm.getCursor(),txt=cm.getLine(c.line);
