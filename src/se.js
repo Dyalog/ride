@@ -55,7 +55,8 @@ D.Se.prototype={
       cm.replaceRange(s0+'\n'+s+p,{line:l,ch:0},{line:l,ch:s0.length},'D')
       cm.setCursor(cp)
     } else {
-      sp=(cm.getOption('readOnly')&&s0!==p?(s0+s):s)+p
+      sp=cm.getOption('readOnly')&&s0!==p?(s0+s):s
+      sp+=this.promptType==1?p:''
       cm.replaceRange(sp,{line:l,ch:0},{line:l,ch:s0.length},'D')
       cm.setCursor({line:cm.lastLine()})
       if (this.btm!=null) this.btm=-1
