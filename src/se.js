@@ -49,25 +49,26 @@ D.Se.prototype={
     this.histIdx=i
   },
   add:function(s){ //append text to session
-    var cm=this.cm,l=cm.lastLine(),s0=cm.getLine(l),p='      ',sp
+    var cm=this.cm,l=cm.lastLine(),s0=cm.getLine(l),p='      ',sp=s.slice(-1)=='\n'?s+p:s
     if(this.dirty[l]!=null){ 
       var cp=cm.getCursor()
-      cm.replaceRange(s0+'\n'+s+p,{line:l,ch:0},{line:l,ch:s0.length},'D')
+      cm.replaceRange(s0+'\n'+sp,{line:l,ch:0},{line:l,ch:s0.length},'D')
       cm.setCursor(cp)
     } else {
-      sp=cm.getOption('readOnly')&&s0!==p?(s0+s):s
-      sp+=this.promptType==1?p:''
+      sp=cm.getOption('readOnly')&&s0!==p?(s0+sp):sp
       cm.replaceRange(sp,{line:l,ch:0},{line:l,ch:s0.length},'D')
       cm.setCursor({line:cm.lastLine()})
       if (this.btm!=null) this.btm=-1
     }
   },
   prompt:function(x){
-    var cm=this.cm,l=cm.lastLine();this.promptType=x;cm.setOption('readOnly',!x);cm.setOption('cursorHeight',+!!x)
+    var cm=this.cm,l=cm.lastLine(),t=cm.getLine(l);
+    this.promptType=x;cm.setOption('readOnly',!x);cm.setOption('cursorHeight',+!!x)
+    
     if(x===1&&this.dirty[l]==null||[0,1,3,4].indexOf(x)<0)
-      cm.replaceRange('      ',{line:l,ch:0},{line:l,ch:cm.getLine(l).length},'D')
-    else if('      '===cm.getLine(l))cm.replaceRange('',{line:l,ch:0},{line:l,ch:6},'D')
-    else cm.setCursor(l,cm.getLine(l).length)
+      cm.replaceRange('      ',{line:l,ch:0},{line:l,ch:t.length},'D')
+    else if('      '===t)cm.replaceRange('',{line:l,ch:0},{line:l,ch:6},'D')
+    else cm.setCursor(l,t.length)
     x&&cm.clearHistory()
   },
   updSize:function(){
