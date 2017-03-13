@@ -3,14 +3,14 @@ var I={}, //all elements by id, eg I.lb_tip_text is document.getElementById('lb_
           //eg J.lb.tip_text is document.getElementById('lb_tip_text')
 
 ;(function(){'use strict'
-
+/*
 if(typeof node_require!=='undefined'){
   D.el=node_require('electron').remote
   D.elw=D.el.getGlobal('elw')
   D=$.extend(D,node_require('electron').remote.getGlobal('D'))
   var plt=process.platform;D.win=/^win/i.test(plt);D.mac=plt==='darwin'
 }
-D.cmds=D.buildCmds()
+*/
 var a=document.querySelectorAll('[id]')
 for(var i=0;i<a.length;i++){var e=a[i],s=e.id,j=s.indexOf('_');I[s]=e;
                             if(j>=0){var u=s.slice(0,j),v=s.slice(j+1);(J[u]=J[u]||{})[v]=e}}

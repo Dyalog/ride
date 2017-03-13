@@ -3,8 +3,7 @@
 //Some of the codes are inherited from Dyalog's old IDE (see ../docs/cmd-codes.txt and near the end of km.js)
 //Others were made up for RIDE's purposes - those use no fewer than three letters.
 'use strict'
-D.buildCmds=function(){
-  return [
+D.cmds=[
   //code description                default keys
   ['ABT','About',                   ['Shift-F1']],
   ['AC', 'Align comments',          []],
@@ -69,4 +68,3 @@ D.buildCmds=function(){
   ['ZMO','Decrease font size',      (D.mac?['Cmd--']:[]).concat('Ctrl--')],
   ['ZMR','Reset font size',         (D.mac?['Cmd-0']:[]).concat('Ctrl-0')]
 ]
-}
