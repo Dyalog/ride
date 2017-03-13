@@ -148,29 +148,29 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 #vt_tri.inv{border-width:0 6px 6px 6px;margin-top:-6px;bottom:auto}
 .vt_marker{border:dotted transparent 2px;margin:-2px}
 
-.zoom11  .CodeMirror,.zoom11  #wse{font-size:48px}
-.zoom10  .CodeMirror,.zoom10  #wse{font-size:42px}
-.zoom9   .CodeMirror,.zoom9   #wse{font-size:36px}
-.zoom8   .CodeMirror,.zoom8   #wse{font-size:32px}
-.zoom7   .CodeMirror,.zoom7   #wse{font-size:28px}
-.zoom6   .CodeMirror,.zoom6   #wse{font-size:26px}
-.zoom5   .CodeMirror,.zoom5   #wse{font-size:24px}
-.zoom4   .CodeMirror,.zoom4   #wse{font-size:22px}
-.zoom3   .CodeMirror,.zoom3   #wse{font-size:20px}
-.zoom2   .CodeMirror,.zoom2   #wse{font-size:19px}
-.zoom1   .CodeMirror,.zoom1   #wse{font-size:18px}
-.zoom0   .CodeMirror,.zoom0   #wse{font-size:17px}
-.zoom-1  .CodeMirror,.zoom-1  #wse{font-size:16px}
-.zoom-2  .CodeMirror,.zoom-2  #wse{font-size:15px}
-.zoom-3  .CodeMirror,.zoom-3  #wse{font-size:14px}
-.zoom-4  .CodeMirror,.zoom-4  #wse{font-size:13px}
-.zoom-5  .CodeMirror,.zoom-5  #wse{font-size:12px}
-.zoom-6  .CodeMirror,.zoom-6  #wse{font-size:11px}
-.zoom-7  .CodeMirror,.zoom-7  #wse{font-size:10px}
-.zoom-8  .CodeMirror,.zoom-8  #wse{font-size: 9px}
-.zoom-9  .CodeMirror,.zoom-9  #wse{font-size: 8px}
-.zoom-10 .CodeMirror,.zoom-10 #wse{font-size: 7px}
-.zoom-11 .CodeMirror,.zoom-11 #wse{font-size: 6px}
+.zoom12  .CodeMirror,.zoom12  #wse{font-size:48px}
+.zoom11  .CodeMirror,.zoom11  #wse{font-size:42px}
+.zoom10  .CodeMirror,.zoom10  #wse{font-size:36px}
+.zoom9   .CodeMirror,.zoom9   #wse{font-size:32px}
+.zoom8   .CodeMirror,.zoom8   #wse{font-size:28px}
+.zoom7   .CodeMirror,.zoom7   #wse{font-size:26px}
+.zoom6   .CodeMirror,.zoom6   #wse{font-size:24px}
+.zoom5   .CodeMirror,.zoom5   #wse{font-size:22px}
+.zoom4   .CodeMirror,.zoom4   #wse{font-size:20px}
+.zoom3   .CodeMirror,.zoom3   #wse{font-size:19px}
+.zoom2   .CodeMirror,.zoom2   #wse{font-size:18px}
+.zoom1   .CodeMirror,.zoom1   #wse{font-size:17px}
+.zoom0   .CodeMirror,.zoom0   #wse{font-size:16px}
+.zoom-1  .CodeMirror,.zoom-1  #wse{font-size:15px}
+.zoom-2  .CodeMirror,.zoom-2  #wse{font-size:14px}
+.zoom-3  .CodeMirror,.zoom-3  #wse{font-size:13px}
+.zoom-4  .CodeMirror,.zoom-4  #wse{font-size:12px}
+.zoom-5  .CodeMirror,.zoom-5  #wse{font-size:11px}
+.zoom-6  .CodeMirror,.zoom-6  #wse{font-size:10px}
+.zoom-7  .CodeMirror,.zoom-7  #wse{font-size: 9px}
+.zoom-8  .CodeMirror,.zoom-8  #wse{font-size: 8px}
+.zoom-9  .CodeMirror,.zoom-9  #wse{font-size: 7px}
+.zoom-10 .CodeMirror,.zoom-10 #wse{font-size: 6px}
 
 .disconnected .CodeMirror,.disconnected .CodeMirror-gutter-wrapper{background-color:#e2d3bb} /*beige*/
 .breakpoints{width:12px} /*gutter*/

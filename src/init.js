@@ -18,10 +18,9 @@ for(var i=0;i<a.length;i++){var e=a[i],s=e.id,j=s.indexOf('_');I[s]=e;
 //don't use Alt- keystrokes on the Mac (see email from 2015-09-01)
 var h=CM.keyMap.emacsy;for(var k in h)if(/^alt-[a-z]$/i.test(k))delete h[k]
 if(D.el){
-  var zM=11 //zoom level can be between -zM and zM inclusive
   var updPW=function(){D.ide&&D.ide.wins&&D.ide.wins[0]&&D.ide.wins[0].updPW()}
-  CM.commands.ZMI=function(){D.prf.zoom(Math.min( zM,D.prf.zoom()+1));updPW()}
-  CM.commands.ZMO=function(){D.prf.zoom(Math.max(-zM,D.prf.zoom()-1));updPW()}
+  CM.commands.ZMI=function(){D.prf.zoom(Math.min( 12,D.prf.zoom()+1));updPW()}
+  CM.commands.ZMO=function(){D.prf.zoom(Math.max(-10,D.prf.zoom()-1));updPW()}
   CM.commands.ZMR=function(){D.prf.zoom(0);updPW()}
   document.onmousewheel=
     function(e){var d=e.wheelDelta;d&&(e.ctrlKey||e.metaKey)&&!e.shiftKey&&!e.altKey&&CM.commands[d>0?'ZMI':'ZMO']()}
