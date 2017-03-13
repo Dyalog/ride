@@ -376,24 +376,24 @@ input.lyt_g3:hover{outline:solid #bbb 1px;background-color:#eee;cursor:pointer}
 #wse .bt_node_expand,#wse .bt_node_indent{display:inline-block;width:1em;height: 0;text-align:center;margin-right:.2em}
 #wse .bt_node_expand{font-family:monospace;cursor:pointer;opacity:.7}
 #wse .bt_node_expand:hover{opacity:1}
-#wse .bt_icon_2_1::before{content:"v";background:#f00} /*variable*/
-#wse .bt_icon_2_2::before{content:"v";background:#f00} /*field*/
-#wse .bt_icon_2_3::before{content:"v";background:#f00} /*property*/
-#wse .bt_icon_2_6::before{content:"v";background:#f00} /*external shared variable*/
-#wse .bt_icon_3_1::before{content:"f";background:#0aa} /*tradfn*/
-#wse .bt_icon_3_2::before{content:"f";background:#0aa} /*dfn*/
-#wse .bt_icon_3_3::before{content:"f";background:#0aa} /*derived or primitive function*/
-#wse .bt_icon_3_6::before{content:"f";background:#0aa} /*external function*/
-#wse .bt_icon_4_1::before{content:"o";background:#00f} /*tradop*/
-#wse .bt_icon_4_2::before{content:"o";background:#00f} /*dop*/
-#wse .bt_icon_4_3::before{content:"o";background:#00f} /*derived or primitive operator*/
-#wse .bt_icon_9_1::before{content:"n";background:#fc0} /*user-defined namespace*/
+#wse .bt_icon_2_1::before{content:"v";background:#f88} /*variable*/
+#wse .bt_icon_2_2::before{content:"v";background:#f88} /*field*/
+#wse .bt_icon_2_3::before{content:"v";background:#f88} /*property*/
+#wse .bt_icon_2_6::before{content:"v";background:#f88} /*external shared variable*/
+#wse .bt_icon_3_1::before{content:"f";background:#8cc} /*tradfn*/
+#wse .bt_icon_3_2::before{content:"f";background:#8cc} /*dfn*/
+#wse .bt_icon_3_3::before{content:"f";background:#8cc} /*derived or primitive function*/
+#wse .bt_icon_3_6::before{content:"f";background:#8cc} /*external function*/
+#wse .bt_icon_4_1::before{content:"o";background:#88f} /*tradop*/
+#wse .bt_icon_4_2::before{content:"o";background:#88f} /*dop*/
+#wse .bt_icon_4_3::before{content:"o";background:#88f} /*derived or primitive operator*/
+#wse .bt_icon_9_1::before{content:"n";background:#fc8} /*user-defined namespace*/
 #wse .bt_icon_1::before,
-#wse .bt_icon_9_2::before{content:"n";background:#fc0} /*instance*/
-#wse .bt_icon_9_4::before{content:"c";background:#fc0} /*class*/
-#wse .bt_icon_9_5::before{content:"i";background:#fc0} /*interface*/
-#wse .bt_icon_9_6::before{content:"c";background:#fc0} /*external class*/
-#wse .bt_icon_9_7::before{content:"i";background:#fc0} /*external interface*/
+#wse .bt_icon_9_2::before{content:"n";background:#fc8} /*instance*/
+#wse .bt_icon_9_4::before{content:"c";background:#fc8} /*class*/
+#wse .bt_icon_9_5::before{content:"i";background:#fc8} /*interface*/
+#wse .bt_icon_9_6::before{content:"c";background:#fc8} /*external class*/
+#wse .bt_icon_9_7::before{content:"i";background:#fc8} /*external interface*/
 
 .ctl_listview{width:100%;background-color:white;font-family:apl;overflow-x:hidden;overflow-y:auto}
 .ctl_listview div{width:100%;padding:6px;cursor:pointer;display:block}
