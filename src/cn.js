@@ -228,10 +228,10 @@ D.cn=_=>{ //set up Connect page
       q.cln.disabled=!u;q.del.disabled=!$sel.length;q.rhs.hidden=!u
       sel=u?$sel[0].cnData:null
       if(u){
-        q.type.value=sel.type||'connect';updFormDtl();updExes()
-        q.fav_name.value=sel.name||''
         $(':text[name],textarea[name]',q.rhs).each((_,x)=>{x.value=sel[x.name]||''})
         $(':checkbox[name]',q.rhs).each((_,x)=>{x.checked=!!+sel[x.name]})
+        q.type.value=sel.type||'connect';updFormDtl();updExes()
+        q.fav_name.value=sel.name||''
         q.exes.value=sel.exe;q.exes.value||(q.exes.value='') //use sel.exe if available, otherwise use "Other..."
         var a=q.rhs.querySelectorAll('input,textarea')
         for(var i=0;i<a.length;i++)if(/^text(area)?$/.test(a[i].type))D.util.elastic(a[i])
