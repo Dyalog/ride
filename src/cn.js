@@ -327,6 +327,7 @@ const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
     c.on('ready',_=>{c.exec(cmd,f)})
      .on('tcp connection',(_,acc)=>{clt=acc();initInterpreterConn();new D.IDE().setConnInfo('',0,sel?sel.name:'')})
      .on('keyboard-interactive',(_,_1,_2,_3,fin)=>{fin([x.pass])})
+     .on('error',x=>err(''+x))
      .connect(o)
     return c
   }catch(e){err(e.message)}
