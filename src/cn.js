@@ -16,12 +16,9 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
 ,err=x=>{if(q){q.connecting_dlg.hidden=q.listen_dlg.hidden=1;q.fetch.disabled=0}$.err(x)}
 ,save=_=>{
   var d=D.el.app.getPath('userData'),f=d+'/connections.json'
-  if (((+fs.statSync(f).mtime)!=D.conns_modified)){
-    if (!confirm("Connections file has been modified, do you want to overwrite with your changes?")){
-      console.log("returning")
-      return;
-    }
-  }
+  if (((+fs.statSync(f).mtime)!=D.conns_modified))
+    if (!confirm("Connections file has been modified, do you want to overwrite with your changes?"))
+      return
   var a=q.favs.children,b=[];for(var i=0;i<a.length;i++)b[i]=a[i].cnData
   D.conns=b;fs.writeFileSync(f,JSON.stringify(D.conns))
   D.conns_modified=+fs.statSync(f).mtime
