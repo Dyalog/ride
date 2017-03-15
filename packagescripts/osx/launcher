@@ -1,0 +1,5 @@
+#!/bin/sh
+cd "$(dirname "$0")"
+D="$(pwd)"
+cd
+"$D/Ride-4.0" "$@"
