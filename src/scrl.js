@@ -57,9 +57,9 @@ CM.scrollbarModel.simple=function(place,scroll){
       if(!width){var style=window.getComputedStyle?window.getComputedStyle(h.node):h.node.currentStyle
                  if(style)width=parseInt(style.height)}
       var w=width||0,vs=v.node.style,hs=h.node.style
-      var hb=m.scrollWidth >m.clientWidth +1;vs.display=vb?'':'none' //hb:needs horizontal bar?
-      var vb=m.scrollHeight>m.clientHeight+1;hs.display=hb?'':'none' //vb:needs vertical bar?
-      if(vb){v.update(m.scrollHeight,m.clientHeight,m.viewHeight-(hb?w:0),w);vs.display='';vs.bottom=hb?w+'px':'0'}
+      var hb=m.scrollWidth >m.clientWidth +1;hs.display=hb?'':'none' //hb:needs horizontal bar?
+      var vb=m.scrollHeight>m.clientHeight+1;vs.display=vb?'':'none' //vb:needs vertical bar?
+      if(vb){v.update(m.scrollHeight,m.clientHeight,m.viewHeight-(hb?w:0),w);vs.bottom=hb?w+'px':'0'}
       if(hb){h.update(m.scrollWidth,m.clientWidth,m.viewWidth-(vb?w:0)-m.barLeft,w);hs.right=vb?w+'px':'0';hs.left=m.barLeft+'px'}
       return{right:vb?w:0,bottom:hb?w:0}
     }
