@@ -115,11 +115,10 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
             const a=srv.address(),hp=a.address+':'+a.port
             log('listening for connections from spawned interpreter on '+hp)
             log('spawning interpreter '+JSON.stringify(x.exe))
-            let cwd=x.cwd||q.cwd.placeholder
             let args=['+s','-q'],stdio=['pipe','ignore','ignore']
             if(/^win/i.test(process.platform)){args=[];stdio[0]='ignore'}
             if(x.args)args=args.concat(args,x.args.replace(/\n$/,'').split('\n'))
-            try{child=cp.spawn(x.exe,args,{cwd,stdio,detached:true,env:$.extend({},process.env,env,
+            try{child=cp.spawn(x.exe,args,{cwd:x.cwd,stdio,detached:true,env:$.extend({},process.env,env,
                                            {CLASSICMODE:1,SINGLETRACE:1,RIDE_INIT:'CONNECT:'+hp,RIDE_SPAWNED:'1'})})}
             catch(e){err(''+e);return}
             D.lastSpawnedExe=x.exe
@@ -182,7 +181,6 @@ D.cn=_=>{ //set up Connect page
   q.exe.onchange=q.exe.onkeyup=_=>{q.exes.value||D.prf.otherExe(q.exe.value)}
   q.exes.onchange=_=>{const v=q.exes.value;q.exe.value=v||D.prf.otherExe();q.exe.readOnly=!!v;$(q.exe).change()
                       v||q.exe.focus();D.prf.selectedExe(v)} //todo: do we still need this pref?
-  q.cwd.placeholder=D.el.app.getPath('home')
   q.env_add.onclick=x=>{
     if(x.target.nodeName!=='A')return
     let t=x.target.textContent, k=t.split('=')[0], s=q.env.value, m=RegExp('^'+k+'=(.*)$','m').exec(s)
