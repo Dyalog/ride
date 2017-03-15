@@ -29,6 +29,7 @@ const namev='ride'+v.split('.').slice(0,2).join('')
 ,pkg=(x,y,f)=>{rq('electron-packager')(
   {dir:'.',platform:x,arch:y,out:'_/'+namev,overwrite:true,'download.cache':'cache',icon:'D',tmpdir:false,
     ignore:p=>!incl.test(p)&&!(x==='win32'&&/^\/windows-ime(\/|$)/.test(p)),
+    'app-bundle-id':'com.dyalog.'+namev,
     'app-copyright':`(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
     'app-version':v,
     'build-version':v,
