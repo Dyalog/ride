@@ -20,7 +20,8 @@ BUILDNAME="ride40"
 RIDEDIR="_/${BUILDNAME}/${PackageName}-darwin-x64"
 SHIPDIRECTORY=ship
 
-rm ${RIDEDIR}/LICENSE.electron ${RIDEDIR}/LICENSES.chromium.html
+mkdir ${RIDEDIR}/Ride-4.0.app/Contents/Resources/LICENCES
+mv ${RIDEDIR}/LICENSE.electron ${RIDEDIR}/LICENSES.chromium.html ${RIDEDIR}/Ride-4.0.app/Contents/Resources/LICENCES/
 
 if [ -s ${RIDEDIR}/../../version ]; then
 RIDEVERSION=`cat ${RIDEDIR}/../../version`
@@ -33,10 +34,6 @@ REVISION_VERSION=`echo $RIDEVERSION | sed 's/[0-9]*\.[0-9]*\.\([0-9]*\)/\1/'`
 BASE_VERSION_ND=`echo $BASE_VERSION | sed 's/\.//g'`
 APPNAME=${PackageName}
 
-cd ${RIDEDIR}
-
-#/usr/bin/codesign --deep --sign "6LKE87V3BD" --verbose ${APPNAME}.app
-
 cd ${BUILDROOTDIR}
 
 mkdir -p ${SHIPDIRECTORY}
@@ -44,11 +41,7 @@ mkdir -p ${SHIPDIRECTORY}
 TMP1ARCHIVE=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac_unsigned.pkg" | tr '[:upper:]' '[:lower:]'`
 ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac.pkg" | tr '[:upper:]' '[:lower:]'`
 
-#cd ${RIDEDIR}
-#/usr/bin/pkgbuild --analyze --root ./${APPNAME}.app ${APPNAME}.plist
-#cd ${BUILDROOTDIR}
-
-/usr/bin/pkgbuild --root "${RIDEDIR}"                  \
+/usr/bin/pkgbuild --root "${RIDEDIR}"                   \
 --identifier "com.dyalog.pkg.ride${BASE_VERSION_ND}"    \
 --version "${RIDEVERSION}"                              \
 --install-location "/Applications/"                     \
