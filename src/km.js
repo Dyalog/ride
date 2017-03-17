@@ -21,7 +21,7 @@ var sqglDesc={
   '⍳':'indices/index of' ,'∩':'intersection'      ,'⍱':'nor'               ,'⍠':'variant'        ,
   '○':'pi/trig'          ,'∪':'unique/union'      ,'⍲':'nand'              ,'@':'amend'          ,
   '*':'exp/power'        ,'⊥':'decode (1 2 3→123)','!':'factorial/binomial','⍸':'where/interval index',
-  '⊆':'enclose if simple/partition'
+  '⊆':'nest/partition'
 }
 
 var ctid=0 //backquote completion timeout id
@@ -336,7 +336,7 @@ var informal=[
   '⍫ deltilde',
   'Á aacute underscoredalphabet',
   '⍸ where intervalindex iotaunderbar',
-  '⊆ leftshoeunderbar encloseifsimple conditionalenclose partition',
+  '⊆ leftshoeunderbar encloseifsimple conditionalenclose partition nest',
   '@ at amend merge'
 ]
 for(var i=0;i<26;i++)informal.push(String.fromCharCode(i+0x24b6)+' _'+String.fromCharCode(i+0x61/*a*/)) //Ⓐ _a

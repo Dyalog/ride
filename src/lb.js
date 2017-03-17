@@ -36,7 +36,7 @@ tips:{
 "↓":["Down Arrow (↓)","Monadic function:  Split\n\n      ↓ 3 3⍴1 2 3 4\n 1 2 3  4 1 2  3 4 1\n\nDyadic function:   Drop\n\n      1 1 ↓ 3 3⍴⍳18\n5 6\n8 9\n      ¯1 1 ↓ 3 3⍴⍳18\n2 3\n5 6"],
 "⊂":["Left Shoe (⊂)","Monadic function:  Enclose\n\n      ⊂ 1 (2 2) (2 2⍴3)\n 1  2 2  3 3\n         3 3\n\nDyadic function:   ⎕ML ≤ 2 Partitioned Enclose, ⎕ML = 3 Partition\n\n      ⎕ML←1 ⋄ 0 1 0 1 ⊂ 1 2 3 4\n 2 3  4\n\n      ⎕ML←3 ⋄ 0 1 0 1 ⊂ 1 2 3 4\n 2  4"],
 "⊃":["Right Shoe (⊃)","Monadic function:  ⎕ML ≤ 1 First, ⎕ML ≥2 Mix\n\n      ⎕ML←1 ⋄ ⊃ (2 2)(3 3 3)\n2 2\n\n      ⎕ML←3 ⋄ ⊃ (2 2)(3 3 3)\n2 2 0\n3 3 3\n\nDyadic function:   Pick\n\n      2 ⊃ (2 2)(2 3⍴3)\n3 3 3\n3 3 3"],
-"⊆":["Left Shoe Underbar (⊆)","Monadic function:  Enclose if simple\n\n      ⊆ 1 2 3\n 1 2 3\n\n      ⊆ 1 (2 3)\n1  2 3\n\nDyadic function:   Partition\n\n      0 1 0 1 ⊆ 1 2 3 4\n 2  4"],
+"⊆":["Left Shoe Underbar (⊆)","Monadic function:  Nest\n\n      ⊆ 1 2 3\n 1 2 3\n\n      ⊆ 1 (2 3)\n1  2 3\n\nDyadic function:   Partition\n\n      0 1 0 1 ⊆ 1 2 3 4\n 2  4"],
 "⌷":["Squad (⌷)","Monadic function:  Materialise\n      ⌷ 1 2 3 4\n1 2 3 4\n\n N.B.  imc.Item≡⌷imc if imc is an instance of a class for\n which Item is the default property\n\nDyadic function:   Index\n\n      2 3⌷4 3⍴⍳12\n6\n\n      2⌷[1]⍳2 3 4\n 2 1 1  2 1 2  2 1 3  2 1 4\n 2 2 1  2 2 2  2 2 3  2 2 4\n 2 3 1  2 3 2  2 3 3  2 3 4"],
 "⍋":["Grade Up (⍋)","Monadic function:  Grade Up\n      ⍋ 3 1 4 6 2\n2 5 1 3 4\n\nDyadic function:   Dyadic Grade Up\n\n      'ABCDEFG'⍋'CDEDEDE'\n1 2 4 6 3 5 7"],
 "⍒":["Grade Down (⍒)","Monadic function:  Grade Down\n\n      ⍒ 3 1 4 6 2\n4 3 1 5 2\n\nDyadic function:   Dyadic Grade Down\n\n      'ABCDEFG' ⍒ 'CDEDEDE'\n3 5 7 2 4 6 1"],
