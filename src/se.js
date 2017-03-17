@@ -92,7 +92,7 @@ D.Se.prototype={
     if(this.btm==-1){this.cm.scrollTo(0,this.cm.heightAtLine(this.cm.lastLine(),"local")-this.cm.getScrollInfo().clientHeight+this.cm.defaultTextHeight()+4)}
     else if(this.btm!=null){var i=this.cm.getScrollInfo();this.cm.scrollTo(0,this.btm-i.clientHeight)}
   },
-  hasFocus:function(){return window.focused&&this.cm.hasFocus()},
+  hasFocus:function(){return this.cm.hasFocus()},
   focus:function(){
     var q=this.container,p=q&&q.parent,l=q&&q.layoutManager,m=l&&l._maximisedItem
     if(m&&m!==(p&&p.parent))m.toggleMaximise()

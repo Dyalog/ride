@@ -113,7 +113,7 @@ D.Ed.prototype={
     for(var k=0;k<ed.oStop.length;k++)cm.setGutterMarker(ed.oStop[k],'breakpoints',ed.createBPEl())
     D.floating&&$('title',ed.dom.ownerDocument).text(ee.name)
   },
-  hasFocus:function(){return window.focused&&this.cm.hasFocus()},
+  hasFocus:function(){return this.cm.hasFocus()},
   focus:function(){
     var q=this.container,p=q&&q.parent,l=q&&q.layoutManager,m=l&&l._maximisedItem
     if(m&&m!==(p&&p.parent))m.toggleMaximise()
