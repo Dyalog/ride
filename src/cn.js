@@ -162,7 +162,7 @@ D.cn=_=>{ //set up Connect page
     if(!validate($.extend({},sel,{exe:'x'})))return //validate all except "exe"
     q.fetch.disabled=1
     const c=sshExec({host:sel.host||'localhost',port:+sel.port||22,user:sel.user||user,pass:q.ssh_pass.value,key:q.ssh_key.value},
-                    '/bin/ls /opt/mdyalog/*/*/*/mapl /Applications/Dyalog-*/Contents/Resources/Dyalog/mapl 2>/dev/null',
+                    '/bin/ls -1 /opt/mdyalog/*/*/*/mapl /Applications/Dyalog-*/Contents/Resources/Dyalog/mapl 2>/dev/null',
                     (e,sm)=>{
       if(e)throw e
       let s='';interpretersSSH=[]
@@ -322,7 +322,7 @@ const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
   try{ //see https://github.com/mscdex/ssh2/issues/238#issuecomment-87495628 for why we use tryKeyboard:true
     const c=new(rq('ssh2').Client),o={host:x.host,port:x.port,username:x.user,tryKeyboard:true}
     x.key?(o.privateKey=fs.readFileSync(x.key)):(o.password=x.pass)
-    c.on('ready',_=>{c.exec(cmd,f)})
+    c.on('ready',_=>{c.exec(cmd,{pty:true},f)})
      .on('tcp connection',(_,acc)=>{clt=acc();initInterpreterConn();new D.IDE().setConnInfo('',0,sel?sel.name:'')})
      .on('keyboard-interactive',(_,_1,_2,_3,fin)=>{fin([x.pass])})
      .on('error',x=>err(''+x))
