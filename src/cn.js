@@ -101,7 +101,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
             c.forwardIn('',0,(e,rport)=>{if(e)throw e
               let s0='';for(let k in env)s0+=`${k}=${shEsc(env[k])} `
               let s1=x.args?x.args.replace(/\n$/,'').split('\n').map(shEsc).join(' '):''
-              sm.write(`${s0}CLASSICMODE=1 SINGLETRACE=1 RIDE_INIT=CONNECT:127.0.0.1:${rport} ${shEsc(x.exe)} ${x.args||''} ${s1} +s -q >/dev/null\n`)
+              sm.write(`${s0}CLASSICMODE=1 SINGLETRACE=1 RIDE_INIT=CONNECT:127.0.0.1:${rport} ${shEsc(x.exe)} ${s1} +s -q >/dev/null\n`)
               q.connecting_dlg.hidden=1
             })
           }).on('error',x=>{err(x.message||''+x);q.connecting_dlg.hidden=1;clearTimeout(D.tmr);delete D.tmr})
