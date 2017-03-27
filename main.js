@@ -17,11 +17,19 @@ const svNow=_=>{ //save now
 }
 let dx=0,dy=0 //used to correct for bad coords misreported by Electron (NW.js has the same problem)
 el.app.on('ready',_=>{
-  const p=db.main||[]
-  let w=global.elw=new el.BrowserWindow({x:p[0],y:p[1],width:p[2],height:p[3],show:0,icon:'style/img/D.png'})
+  var x,y,width,height
+  if(db.main){
+    [x,y,width,height]=db.main
+    const b=el.screen.getDisplayMatching({x,y,width,height}).bounds
+    if(width*height>2*(Math.min(x+width,b.x+b.width)-Math.max(x,b.x))*(Math.min(y+height,b.y+b.height)-Math.max(y,b.y))){
+      //saved window position is now mostly off screen
+      x=y=null;width=Math.min(width,b.width);height=Math.min(height,b.height)
+    }
+  }
+  let w=global.elw=new el.BrowserWindow({x,y,width,height,show:0,icon:'style/img/D.png'})
   el.Menu.setApplicationMenu(null);w.loadURL(`file://${__dirname}/index.html`)
   w.on('moved',sv).on('resize',sv).on('close',_=>{tid&&clearTimeout(tid);svNow()}).on('closed',_=>{w=global.elw=0})
-   .on('show',_=>{if(p){const q=w.getPosition();dx=q[0]-p[0];dy=q[1]-p[1]}}).show()
+   .on('show',_=>{if(x){const q=w.getPosition();dx=q[0]-x;dy=q[1]-y}}).show()
   if(D.win){const fix=_=>{setTimeout(_=>{const a=w.getSize();w.setSize(a[0],a[1]-1);w.setSize(a[0],a[1])},100)}
             w.on('page-title-updated',fix).on('blur',fix)}
   db.devTools&&w.webContents.openDevTools()
