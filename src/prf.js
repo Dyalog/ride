@@ -80,7 +80,8 @@ D.prf={}
     '\n  Increase Font Size       =ZMI {!browser}'+
     '\n  Decrease Font Size       =ZMO {!browser}'+
     '\n  Reset Font Size          =ZMR {!browser}'+
-//  '\n  -'+
+    '\n  -                             {!browser}'+
+    '\n  Toggle Full Screen            {!browser}'+
     '\n&Window'+
     '\n  Close All Windows        =CAW'+
     '\n&Action'+

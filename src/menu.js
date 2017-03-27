@@ -16,6 +16,7 @@ D.installMenu=function(x){
       }
       const roles={'undo':1,'redo':1,
                    'cut':1,'copy':1,'paste':1,'selectall':1,
+                   'togglefullscreen':1,
                    'window':1,'help':1}
       var r=x[''].replace(/[& ]/g,'').toLowerCase();if(r in roles)h.role=r
       if(x.items){h.submenu=new D.el.Menu;x.items.forEach(function(y){h.submenu.append(render(y))})}
