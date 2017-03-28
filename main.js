@@ -21,7 +21,9 @@ el.app.on('ready',_=>{
   if(db.main){
     [x,y,width,height]=db.main
     const b=el.screen.getDisplayMatching({x,y,width,height}).bounds
-    if(width*height>2*(Math.min(x+width,b.x+b.width)-Math.max(x,b.x))*(Math.min(y+height,b.y+b.height)-Math.max(y,b.y))){
+    const vw=Math.max(0,Math.min(x+width ,b.x+b.width )-Math.max(x,b.x))
+    const vh=Math.max(0,Math.min(y+height,b.y+b.height)-Math.max(y,b.y))
+    if(width*height>2*vw*vh){
       //saved window position is now mostly off screen
       x=y=null;width=Math.min(width,b.width);height=Math.min(height,b.height)
     }
