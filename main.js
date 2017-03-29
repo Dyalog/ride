@@ -30,7 +30,7 @@ el.app.on('ready',_=>{
   }
   let w=global.elw=new el.BrowserWindow({x,y,width,height,show:0,icon:'style/img/D.png'})
   el.Menu.setApplicationMenu(null);w.loadURL(`file://${__dirname}/index.html`)
-  w.on('moved',sv).on('resize',sv).on('close',_=>{tid&&clearTimeout(tid);svNow()}).on('closed',_=>{w=global.elw=0})
+  w.on('move',sv).on('resize',sv).on('close',_=>{tid&&clearTimeout(tid);svNow()}).on('closed',_=>{w=global.elw=0})
    .on('show',_=>{if(x){const q=w.getPosition();dx=q[0]-x;dy=q[1]-y}}).show()
   if(D.win){const fix=_=>{setTimeout(_=>{const a=w.getSize();w.setSize(a[0],a[1]-1);w.setSize(a[0],a[1])},100)}
             w.on('page-title-updated',fix).on('blur',fix)}
