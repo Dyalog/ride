@@ -12,7 +12,7 @@ const dbf=el.app.getPath('userData')+'/winstate.json' //json "database" file for
 let db={};try{if(fs.existsSync(dbf))db=JSON.parse(fs.readFileSync(dbf,'utf8'))}catch(e){console.error(e)}
 let tid;const sv=_=>{if(!tid)tid=setTimeout(svNow,2000)} //save (throttled)
 const svNow=_=>{ //save now
-  tid=0;try{const b=elw.getBounds(),h={main:[b.x-dx,b.y-dy,b.width,b.height],devTools:elw.isDevToolsOpened()}
+  tid=0;try{const b=elw.getBounds(),h={main:[b.x-dx,b.y-dy,b.width,b.height,elw.isMaximized()],devTools:elw.isDevToolsOpened()}
             fs.writeFileSync(dbf,JSON.stringify(h))}catch(e){console.error(e)}
 }
 let dx=0,dy=0 //used to correct for bad coords misreported by Electron (NW.js has the same problem)
@@ -29,10 +29,15 @@ el.app.on('ready',_=>{
     }
   }
   let w=global.elw=new el.BrowserWindow({x,y,width,height,show:0,icon:'style/img/D.png'})
+  db.main[4]&&w.maximize()
   el.Menu.setApplicationMenu(null);w.loadURL(`file://${__dirname}/index.html`)
-  w.on('move',sv).on('resize',sv).on('close',_=>{tid&&clearTimeout(tid);svNow()}).on('closed',_=>{w=global.elw=0})
+  w.on('move',sv).on('resize',sv).on('maximize',sv).on('unmaximize',sv)
+   .on('close',_=>{tid&&clearTimeout(tid);svNow()}).on('closed',_=>{w=global.elw=0})
    .on('show',_=>{if(x){const q=w.getPosition();dx=q[0]-x;dy=q[1]-y}}).show()
-  if(D.win){const fix=_=>{setTimeout(_=>{const a=w.getSize();w.setSize(a[0],a[1]-1);w.setSize(a[0],a[1])},100)}
+  if(D.win){const fix=_=>{setTimeout(_=>{
+              if(w.isMaximized()){w.unmaximize();w.maximize()}
+              else{const a=w.getSize();w.setSize(a[0],a[1]-1);w.setSize(a[0],a[1])}
+            },100)}
             w.on('page-title-updated',fix).on('blur',fix)}
   db.devTools&&w.webContents.openDevTools()
 })
