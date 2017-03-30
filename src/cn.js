@@ -38,7 +38,9 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
       const supported=cmpVer(x.ver,MIN_V)>=0;supported||(s+=' (unsupported)')
       return`<option value="${esc(x.exe)}"${supported?'':' disabled'}>${esc(s)}`
     }).join('')
-  q.exes.innerHTML=h+'<option value="">Other...';q.exes.value=q.exe.value;q.exes.value||(q.exes.value='')
+  q.exes.innerHTML=h+'<option value="">Other...'
+  q.exes.value=q.exe.value
+  if(!q.exes.value){q.exes.selectedIndex=0;q.exe.value=q.exes.value}
   q.exe.readOnly=!!q.exes.value
 }
 ,validate=x=>{
@@ -168,7 +170,7 @@ D.cn=_=>{ //set up Connect page
       let s='';interpretersSSH=[]
       sm.on('data',x=>{s+=x})
         .on('close',_=>{
-          interpretersSSH=s.split('\n').filter(x=>x).map(x=>{
+          interpretersSSH=s.split(/\r?\n/).filter(x=>x).map(x=>{
             let a=x.split('/')
             return a[1]==='opt'?{exe:x,ver:parseVer(a[3]),bits:+a[4],edition:a[5]}
                                :{exe:x,ver:parseVer(a[2].replace(/^Dyalog-|\.app$/g,'')),bits:64,edition:'unicode'}
