@@ -102,9 +102,10 @@ D.Ed.prototype={
     cm.setOption('mode',isCode?'apl':'text');cm.setOption('foldGutter',isCode&&!!D.prf.fold())
     if(isCode&&D.prf.indentOnOpen()){cm.execCommand('selectAll');cm.execCommand('indentAuto')}
     ed.setRO(ee.readOnly||ee['debugger'])
-    if (ee.readOnly){ //don't show comment buttons if editor is readonly
+    if (ee.readOnly){ //don't show comment or replace buttons if editor is readonly
       ed.dom.getElementsByClassName("tb_AO")[0].style.display="none"
       ed.dom.getElementsByClassName("tb_DO")[0].style.display="none"
+      ed.dom.getElementsByClassName("tb_RP")[0].style.display="none"
     }
     var line=ee.currentRow,col=ee.currentColumn||0
     if(line===0&&col===0&&ee.text.length===1)col=ee.text[0].length
