@@ -218,7 +218,8 @@ updBQ();D.prf.prefixMaps(updBQ);D.prf.kbdLocale(updBQ)
 //Tooltips in the lbar show the simplest one.
 var order='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 function complexity(x){return(1+order.indexOf(x))||(1+order.length+x.charCodeAt(0))}
-D.getBQKeyFor=function(v){var r='',x,y;for(x in bq){y=bq[x];if(y===v&&(!r||complexity(r)>complexity(x)))r=x};return r}
+D.getBQKeyFor=function(v){var r='',x,y;for(x in bq){y=bq[x];if(y===v&&(!r||complexity(r)>complexity(x)))r=x}
+                          var pk=D.prf.prefixKey();return r===pk?pk+pk:r}
 
 function bqChangeHandler(cm,o){ //o:changeObj
   if(!cm.dyalogBQ)return
