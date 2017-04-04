@@ -23,7 +23,7 @@ for(var i=0;i<a.length;i++)h['⎕'+a[i]]=u+a[i]+q
 
 var u=p+'Language/Control Structures/'
 h.CTRLSTRUCTS=u+'Control Structures Summary'+q
-var a='access attribute class continue for goto hold if implements interface leave namespace repeat return section select signature trap using while with'.split(' ')
+var a='access attribute class continue disposable for goto hold if implements interface leave namespace repeat return section select signature trap using while with'.split(' ')
 for(var i=0;i<a.length;i++)h[':'+a[i]]=u+a[i]+q
 
 var u=p+'Language/Symbols/'
