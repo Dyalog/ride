@@ -338,7 +338,7 @@ var informal=[
   'Á aacute underscoredalphabet',
   '⍸ where intervalindex iotaunderbar',
   '⊆ leftshoeunderbar encloseifsimple conditionalenclose partition nest',
-  '@ at amend merge'
+  '@ at substitute merge amend'
 ]
 for(var i=0;i<26;i++)informal.push(String.fromCharCode(i+0x24b6)+' _'+String.fromCharCode(i+0x61/*a*/)) //Ⓐ _a
 
