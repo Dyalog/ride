@@ -19,7 +19,7 @@ var sqglDesc={
   '↑':'mix/take'         ,'⊂':'enclose/partition' ,'⊖':'⌽[⎕io]'            ,'⊣':'left'           ,
   '↓':'split/drop'       ,'⊃':'disclose/pick'     ,'⍟':'logarithm'         ,'⍪':'table / ,[⎕io]' ,
   '⍳':'indices/index of' ,'∩':'intersection'      ,'⍱':'nor'               ,'⍠':'variant'        ,
-  '○':'pi/trig'          ,'∪':'unique/union'      ,'⍲':'nand'              ,'@':'amend'          ,
+  '○':'pi/trig'          ,'∪':'unique/union'      ,'⍲':'nand'              ,
   '*':'exp/power'        ,'⊥':'decode (1 2 3→123)','!':'factorial/binomial','⍸':'where/interval index',
   '⊆':'nest/partition'
 }
