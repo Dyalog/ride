@@ -27,9 +27,9 @@ el.app.on('ready',_=>{
       //saved window position is now mostly off screen
       x=y=null;width=Math.min(width,b.width);height=Math.min(height,b.height)
     }
+    db.main[4]&&w.maximize()
   }
   let w=global.elw=new el.BrowserWindow({x,y,width,height,show:0,icon:'style/img/D.png'})
-  db.main[4]&&w.maximize()
   el.Menu.setApplicationMenu(null);w.loadURL(`file://${__dirname}/index.html`)
   w.on('move',sv).on('resize',sv).on('maximize',sv).on('unmaximize',sv)
    .on('close',_=>{tid&&clearTimeout(tid);svNow()}).on('closed',_=>{w=global.elw=0})
