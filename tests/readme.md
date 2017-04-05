@@ -1,4 +1,4 @@
-#Running the test suite
+# Running the test suite
 
 Install a 64-bit Unicode interpreter on Linux and in RIDE's git root do:
 
@@ -10,7 +10,7 @@ Install a 64-bit Unicode interpreter on Linux and in RIDE's git root do:
 Electron's console will print test actions as they are being executed (lines from `test/t.txt`)
 and will say "brilliant" at the end if everything's kushti.  Anything in red indicates failure.
 
-#Writing a test case
+# Writing a test case
 `test/t.txt` contains a series of test cases, for example:
 
     testcase Strong Interrupt
@@ -26,22 +26,22 @@ A line in a test case can be one of:
 
 All of RIDE's global variables are accessible here.  In addition, the test framework provides some utility functions:
 
-##`find(x)`
+## `find(x)`
 selects an element by text and returns it as a jQuery wrapper.  The text must match exactly except for leading/trailing spaces and a traling `:`, for instance `find('Canc')` won't find the Cancel button.  It the element is not unique, that's an error.  If the element is a `<label>`, `find()` will return its corresponding `<input>` instead (or `<select>` or `<textarea>`, etc.)
 
-##`click(x)`, `mousedown(x)`, `mouseup(x)`, `mouseover(x)`, `mouseout(x)`
+## `click(x)`, `mousedown(x)`, `mouseup(x)`, `mouseover(x)`, `mouseout(x)`
 use `find(x)` to select an element and trigger an event.
 
 Note: top level menu items require a `mousedown` instead of `click`, e.g.: `mousedown('Edit');click('Preferences')`
 
-##`fillIn(x,value)`
+## `fillIn(x,value)`
 uses `find(x)` to select an element, set its value to `value`, and trigger a `change` event.
 
-##`inSession(s)`, `inEditor(s)`
+## `inSession(s)`, `inEditor(s)`
 type text or send keystrokes.  `s` is a string that can contain keystrokes surrounded with `<>`, e.g. `<Shift-Enter>`, `<S-Enter>`, `<C-A-S-Space>`.  Command codes are also supported: `<ED>`, `<TC>`, `<PRF>`.
 
-##`sessionLastLines(n)`
+## `sessionLastLines(n)`
 returns an array of the last `n` lines in the session
 
-##`testcase(description)`
+## `testcase(description)`
 does nothing, it's only an ornament
