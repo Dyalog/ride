@@ -281,6 +281,7 @@ D.IDE=function(){'use strict'
   gl.registerComponent('dbg',function(c,h){
     var u=ide.dbg=new D.DBG();u.container=c
     c.getElement().append(u.dom)
+    ide.getSIS();
     ide.WSEwidth=ide.wsew;return u
   })
   var sctid //stateChanged timeout id
