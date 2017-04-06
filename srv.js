@@ -27,7 +27,7 @@ let clt,srv=rq('net').createServer(x=>{
   })
 })
 srv.listen(0,'127.0.0.1',_=>{
-  const a=srv.address(),hp=a.address+':'+a.port,exe='dyalog'
+  const a=srv.address(),hp=a.address+':'+a.port,exe=process.env.RIDE_SPAWN||'dyalog'
   let args=['+s','-q'],stdio=['pipe','ignore','ignore'];if(/^win/i.test(process.platform)){args=[];stdio[0]='ignore'}
   const env={},H=process.env;for(let k in H)env[k]=H[k];env.RIDE_INIT='CONNECT:'+hp;env.RIDE_SPAWNED='1'
   cp.spawn(exe,args,{stdio,env});log('spawned interpreter '+JSON.stringify(exe)+', expecting it to connect back to '+hp)
