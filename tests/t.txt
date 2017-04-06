@@ -2,7 +2,7 @@ testcase lbar tooltips
   500
   mouseover ⍤
   200
-  find Jot Diaeresis (⍤)
+  find JOT DIAERESIS (⍤)
   mouseout ⍤
 
 testcase lbar toggle through menu
@@ -27,9 +27,9 @@ testcase prefs dialog
   inSession <PRF>
   click Colours
   fillIn('Scheme','Francisco Goya')
-  click Clone
-  click Apply
-  click Delete
+  click CLONE
+  click APPLY
+  click DELETE
   fillIn('Scheme','Default')
   click OK
 
@@ -40,10 +40,10 @@ testcase prefs>layout: reset button
   click Layout
   fillIn('Prefix','%')
   find Shift+Key
-  click Reset
+  click RESET
   assert find('Prefix').val()!=='%'
   find Shift+Key
-  click Cancel
+  click CANCEL
 
 testcase prefs>title
   // mousedown Edit
@@ -51,15 +51,15 @@ testcase prefs>title
   inSession <PRF>
   click Title
   fillIn('Window title','TestRunner was here')
-  click Apply
+  click APPLY
   assert document.title.includes('TestRunner was here')
   fillIn('Window title','Edition=')
   click {CHARS}
-  click Apply
+  click APPLY
   assert document.title.includes('Edition')
   assert /unicode|clasic/i.test(document.title)
-  click Reset
-  click Apply
+  click RESET
+  click APPLY
   assert !document.title.includes('Edition')
   click OK
 
@@ -76,7 +76,7 @@ testcase about dialog
   // click About
   inSession <ABT>
   find support@dyalog.com
-  click Close
+  click CLOSE
 
 testcase simple expressions
   inSession 1 2 3+4 5 6<ER>
