@@ -12,7 +12,7 @@ D.DBG=function(){
     },
     no_item_message:'&lt;no stack&gt;',
     renderItem:function(item){
-      return "<span class=stack_desc>" +encodeHTML(item.description)+"</span>"
+      return "<td class=stack_desc>" +encodeHTML(item.description)+"</td>"
     }
   })
   dbg.threads=new D.ListView('threads',{
@@ -20,11 +20,12 @@ D.DBG=function(){
     click_handler:function(e){D.send('SetThread',{tid:e.tid})},
     sortFn:function(p,n){return p.tid-n.tid},
     renderItem:function(item){
-      return "<span class=thread_desc>" +encodeHTML(item.description)+"</span>"
-            +"<span class=thread_state>"+encodeHTML(item.state)+"</span>"
-            +"<span class=thread_tid>"  +encodeHTML(item.tid)+"</span>"
-            +"<span class=thread_flags>"+encodeHTML(item.flags)+"</span>"
+      return "<td class=thread_desc>" +encodeHTML(item.description)+"</td>"
+            +"<td class=thread_state>"+encodeHTML(item.state)+"</td>"
+            +"<td class=thread_tid>"  +encodeHTML(item.tid)+"</td>"
+            +"<td class=thread_flags>"+encodeHTML(item.flags)+"</td>"
     },
+    //headerFunction:function(){return '<th>Desc.</th><th>State</th><th>TID</th><th>Flags</th>'},
     no_item_message:'&lt;no threads&gt;'
   })
   dbg.tb=dbg.dom.querySelector('.toolbar')

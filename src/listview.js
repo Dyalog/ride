@@ -24,14 +24,14 @@ D.ListView=function(e,o){
   this.render=function(array){
     this.items=o.sortFn?array.sort(o.sortFn):array;
     var rf=o.renderItem||function(x){return x}
+    var hf=o.headerFunction||function(){return ''}
+    var html=['<tr><td>'+this.no_item_message+'</td></tr>']
     if (array.length>0){
-      this.dom.innerHTML=array.map(function(e,i){
-        return "<div class=\""+this.item_class+" ctl_listview_item\" data-itemid="+i+">"+rf(e)+"</div>"
-      }).join('')
+      html=array.map(function(e,i){
+        return ("<tr class=\""+this.item_class+" ctl_listview_item\" data-itemid="+i+">"+rf(e)+"</tr>\n");
+      })
     }
-    else{
-      this.dom.innerHTML="<div>"+this.no_item_message+"</div>"
-    }
+    this.dom.innerHTML='<table>\n<thead>\n'+hf()+'\n</thead>\n<tbody>\n'+html.join('')+'</tbody>\n</table>';
   }
 
   this.render([]);
