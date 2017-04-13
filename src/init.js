@@ -88,14 +88,18 @@ window.onbeforeunload=function(e){
     e.returnValue=false
     setTimeout(function(){
       if (D.prf.sqp()){
-        
-        $.confirm('Quit RIDE and terminate Dyalog APL. Are you sure?',document.title,function(q){
-          if(q) {
-            D.shutdown=1
-            D.send('Disconnect',{message:'User shutdown request'})
-            close()
-          }
-        })
+        if (D.local){
+          $.confirm('Quit Dyalog APL. Are you sure?',document.title,function(q){
+            if(q) {
+              D.shutdown=1
+              D.send('Disconnect',{message:'User shutdown request'})
+              close()
+            }
+          })
+        } else{
+          // D.send('Disconnect',{message:'RIDE Disconnected'}) // Should I be sending this message?
+          close() // just close RIDE don't close the interpreter
+        }
       }
       else{
         D.shutdown=1
