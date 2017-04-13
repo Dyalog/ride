@@ -88,7 +88,8 @@ window.onbeforeunload=function(e){
     e.returnValue=false
     setTimeout(function(){
       if (D.prf.sqp()){
-        $.confirm('Quit Dyalog APL. Are you sure?',document.title,function(q){
+        
+        $.confirm('Quit RIDE and terminate Dyalog APL. Are you sure?',document.title,function(q){
           if(q) {
             D.shutdown=1
             D.send('Disconnect',{message:'User shutdown request'})
