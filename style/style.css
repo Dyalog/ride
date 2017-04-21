@@ -88,7 +88,9 @@ input[type=checkbox]:focus{outline:dotted #000 1px;outline-offset:2px}
 /*IDE page*/
 #ide,body.floating-window{position:absolute;top:0;bottom:0;left:0;right:0}
 .ride_win{width:100%;height:100%;display:flex;flex-direction:column}
-.ride_win .ride_win_cm{flex-grow:1}
+.ride_win.edit_trace{width:100%;height:100%;display:block}
+.ride_win_cm{height:100%;max-height:100%}
+.ride_win_cm>div.CodeMirror{height:calc(100% - 28px)}
 
 /*menu (see ../src/menu.js for the DOM structure)*/
 .menu{background-color:#dcdad5;height:18px;line-height:17px;cursor:default;padding:0;margin:2px 0 0 0;

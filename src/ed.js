@@ -14,6 +14,7 @@ D.Ed=function(ide,opts){ //constructor
     smartIndent:D.prf.indent()>=0,indentUnit:D.prf.indent(),scrollButtonHeight:12,matchBrackets:!!D.prf.matchBrackets(),
     autoCloseBrackets:!!D.prf.autoCloseBrackets()&&ACB_VALUE,foldGutter:!!D.prf.fold(),scrollbarStyle:'simple',
     keyMap:'dyalog',extraKeys:{'Shift-Tab':'indentLess',Tab:'indentOrComplete',Down:'downOrXline'},
+    viewportMargin:Infinity,
     cursorBlinkRate:D.prf.blinkCursor()*CM.defaults.cursorBlinkRate,
   });D.prf.blockCursor()&&CM.addClass(ed.cm.getWrapperElement(),'cm-fat-cursor')
   ed.cm.dyalogCmds=ed
@@ -75,13 +76,14 @@ D.Ed.prototype={
   },
   setTC:function(x){var ed=this;ed.tc=x;ed.dom.classList.toggle('tracer',!!x);ed.hl(null);ed.updGutters();ed.setRO(x)},
   setRO:function(x){this.cm.setOption('readOnly',x)/*;this.rp.hidden=x*/},
-  updSize:function(){var $p=$(this.dom);this.cm.setSize($p.width(),$p.height()-28)},
+  updSize:function(){},
   saveScrollPos:function(){ //workaround for CodeMirror scrolling up to the top under GoldenLayout when editor is closed
     if(this.btm==null){var i=this.cm.getScrollInfo();this.btm=i.clientHeight+i.top}
   },
   restoreScrollPos:function(){
     if(this.btm==-1){this.cm.scrollTo(0,this.cm.heightAtLine(this.cm.lastLine(),"local")-this.cm.getScrollInfo().clientHeight+this.cm.defaultTextHeight()+4)}
     else if(this.btm!=null){var i=this.cm.getScrollInfo();this.cm.scrollTo(0,this.btm-i.clientHeight)}
+    else {this.cm.scrollTo(0,0)}
   },
   updateSIStack:function(x){
     this.dom.querySelector('.si_stack').innerHTML=x.stack.map(function(o){return'<option>'+o}).join('')

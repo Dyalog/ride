@@ -9,7 +9,7 @@
   },
   "repository": ".",
   "dependencies": {
-    "codemirror": "5.21.0",
+    "codemirror": "5.25.2",
     "golden-layout": "1.5.6",
     "jquery": "3.1.1",
     "ssh2": "0.5.4"
