@@ -1,10 +1,8 @@
-# RIDE Issue Report
-
 ### Describe the issue you are having
 <!-- Ride Issue -->
 
 ### Did you connect to an already running interpreter or start the interpreter from RIDE?
-<!-- Yes/No -->
+<!-- Connect/Start an interpreter -->
 
 ### How do you reproduce the issue?
 <!-- instructions to reproduce -->
