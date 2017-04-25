@@ -2,7 +2,7 @@
 <!-- Ride Issue -->
 
 ### Did you connect to an already running interpreter or start the interpreter from RIDE?
-<!-- Connect/Start an interpreter -->
+<!-- Connect to already running/Start an interpreter -->
 
 ### How do you reproduce the issue?
 <!-- instructions to reproduce -->
