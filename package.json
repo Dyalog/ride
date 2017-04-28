@@ -5,7 +5,8 @@
   "main": "main.js",
   "productName": "Ride-4.0",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "watch": "nodemon ./node_modules/.bin/electron ."
   },
   "repository": ".",
   "dependencies": {

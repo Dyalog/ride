@@ -86,25 +86,32 @@ if(/^\?\d+$/.test(location.search)){
 window.onbeforeunload=function(e){
   if (D.ide&&!D.shutdown){
     e.returnValue=false
+    var quitLocal=function(){
+      D.shutdown=1;
+      D.send('Exit',{code:0});
+      // Wait for the disconnect message
+    }
+
+    var quitConnected=function(){
+      D.shutdown=1;
+      D.send('Disconnect',{message:'User shutdown request'});
+      close();
+    }
+
+    var msg=D.local?'Quit Dyalog APL. Are you sure?':'Disconnect from interpreter. Are you sure?';
+
     setTimeout(function(){
       if (D.prf.sqp()){
-        if (D.local){
-          $.confirm('Quit Dyalog APL. Are you sure?',document.title,function(q){
-            if(q) {
-              D.shutdown=1
-              D.send('Disconnect',{message:'User shutdown request'})
-              close()
-            }
-          })
-        } else{
-          // D.send('Disconnect',{message:'RIDE Disconnected'}) // Should I be sending this message?
-          close() // just close RIDE don't close the interpreter
-        }
+        $.confirm(msg,document.title,function(q){
+          if(q) {
+            if (D.local){quitLocal()}
+            else {quitConnected()}
+          }
+        })
       }
       else{
-        D.shutdown=1
-        D.send('Disconnect',{message:'User shutdown request'})
-        close()
+        if (D.local){quitLocal()}
+        else {quitConnected()}
       }
     },10)
   }
