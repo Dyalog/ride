@@ -1,15 +1,3 @@
-@color_1: #fff;
-@color_2: #888;
-@color_3: #000;
-@color_4: white;
-@color_5: #f00;
-@font_family_1: apl,monospace;
-@background_color_1: #777;
-@background_color_2: #000;
-@background_color_3: red;
-@border_color_1: red;
-@border_color_2: #800;
-
 /*Prefs>Shortcuts*/
 #shc {
 	position: absolute;
@@ -31,7 +19,7 @@
 	margin-right: 8px;
 }
 .shc_code {
-	font-family: @font_family_1;
+	font-family: @APL_FONT;
 	font-size: 18px;
 	padding: 2px 16px 2px 8px;
 }
@@ -49,8 +37,8 @@
 	}
 	tr {
 		&:hover {
-			color: @color_1;
-			background-color: @background_color_1;
+			color: @WHITE;
+			background-color: @LIGHT_GREY;
 			box-shadow: 0 0 0 1px #777;
 			.shc_add {
 				visibility: visible;
@@ -65,7 +53,7 @@
 	#shc_tbl_wr {
 		tr {
 			&:hover {
-				background-color: @background_color_2;
+				background-color: @BLACK;
 				box-shadow: 0 0 0 1px black;
 			}
 		}
@@ -74,16 +62,16 @@
 #shc_sc_clr {
 	width: 24px;
 	margin-left: -20px;
-	color: @color_2;
+	color: @GREY;
 	text-decoration: none;
 	&:hover {
-		color: @color_3;
+		color: @BLACK;
 	}
 }
 #shc_no_res {
 	font-style: italic;
 	padding: 20px;
-	color: @color_2;
+	color: @GREY;
 }
 .shc_key {
 	border: solid #aaa 1px;
@@ -93,7 +81,7 @@
 	white-space: nowrap;
 }
 .shc_key.shc_del_hvr {
-	border-color: @border_color_1;
+	border-color: @RED;
 }
 .shc_text {
 	border-top-right-radius: 0;
@@ -102,19 +90,19 @@
 	padding: 0 2px;
 }
 .shc_text.shc_dup {
-	border-color: @border_color_1;
-	background-color: @background_color_3;
-	color: @color_4;
+	border-color: @RED;
+	background-color: @RED;
+	color: @WHITE;
 }
 .shc_del {
-	color: @color_5;
+	color: @RED;
 	text-decoration: none;
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
 	&:hover {
-		background-color: @background_color_3;
-		color: @color_1;
-		border-color: @border_color_2;
+		background-color: @RED;
+		color: @WHITE;
+		border-color: @DARK_RED;
 	}
 }
 .shc_add {

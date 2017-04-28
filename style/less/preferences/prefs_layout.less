@@ -1,12 +1,3 @@
-@color_1: #000;
-@color_2: #040;
-@color_3: #f00;
-@color_4: #00f;
-@color_5: #888;
-@font_family_1: apl,monospace;
-@background_color_1: #eee;
-@background_color_2: #fff;
-
 /*Prefs>Layout*/
 /*The arrangement is: +-------+ */
 /*                    | g1 g3 | */
@@ -46,12 +37,12 @@
 	text-align: center;
 }
 #lyt_kbd {
-	font-family: @font_family_1;
+	font-family: @APL_FONT;
 	font-size: 18px;
 	border-radius: 2px;
 	height: 250px;
 	clear: both;
-	color: @color_1;
+	color: @BLACK;
 	cursor: default;
 	b {
 		font-weight: normal;
@@ -82,7 +73,7 @@
 	padding: 0;
 	border-width: 0;
 	margin-top: 1px;
-	color: @color_2;
+	color: @DARK_GREEN;
 }
 .lyt_g3 {
 	width: 40%;
@@ -91,13 +82,13 @@
 	padding: 0;
 	border-width: 0;
 	margin-top: 1px;
-	color: @color_4;
+	color: @BLUE;
 }
 .lyt_g0 {
-	color: @color_1;
+	color: @BLACK;
 }
 .lyt_g2 {
-	color: @color_3;
+	color: @RED;
 }
 #lyt_spc {
 	width: 50%;
@@ -132,14 +123,14 @@
 input.lyt_g1 {
 	&:hover {
 		outline: solid #bbb 1px;
-		background-color: @background_color_1;
+		background-color: @CREAM;
 		cursor: pointer;
 	}
 }
 input.lyt_g3 {
 	&:hover {
 		outline: solid #bbb 1px;
-		background-color: @background_color_1;
+		background-color: @CREAM;
 		cursor: pointer;
 	}
 }
@@ -147,7 +138,7 @@ input.lyt_g3 {
 	line-height: 45px;
 	cursor: default;
 	font-size: 32px;
-	color: @color_5;
+	color: @GREY;
 	width: 13%;
 }
 #lyt_16 {
@@ -155,21 +146,21 @@ input.lyt_g3 {
 	cursor: default;
 	clear: left;
 	font-size: 32px;
-	color: @color_5;
+	color: @GREY;
 	width: 10%;
 }
 #lyt_30 {
 	line-height: 45px;
 	cursor: default;
 	clear: left;
-	color: @color_5;
+	color: @GREY;
 	width: 12%;
 }
 #lyt_43 {
 	line-height: 45px;
 	cursor: default;
 	font-size: 32px;
-	color: @color_5;
+	color: @GREY;
 	width: 13.6%;
 }
 #lyt_44 {
@@ -177,14 +168,14 @@ input.lyt_g3 {
 	cursor: default;
 	clear: left;
 	font-size: 32px;
-	color: @color_5;
+	color: @GREY;
 	width: 15%;
 }
 #lyt_57 {
 	line-height: 45px;
 	cursor: default;
 	font-size: 32px;
-	color: @color_5;
+	color: @GREY;
 	width: 17.2%;
 }
 #lyt_14 {
@@ -219,7 +210,7 @@ input.lyt_g3 {
 		overflow: visible;
 		&:before {
 			content: "";
-			background-color: @background_color_2;
+			background-color: @WHITE;
 			float: left;
 			border-radius: 2px 0 0 2px;
 			position: relative;
