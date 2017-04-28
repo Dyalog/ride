@@ -6,7 +6,8 @@
   "productName": "Ride-4.0",
   "scripts": {
     "start": "electron .",
-    "watch": "nodemon ./node_modules/.bin/electron ."
+    "dev": "lessc ./style/less/style.less ./style/style.css --strict-math=on && ./node_modules/.bin/electron .",
+    "watch": "nodemon --config ./nodemon.json --exec 'npm run dev'"
   },
   "repository": ".",
   "dependencies": {
@@ -19,9 +20,11 @@
     "async": "2.1.4",
     "cheerio": "0.22.0",
     "compression": "1.6.2",
-    "electron-packager": "8.5.2",
     "electron": "1.6.2",
+    "electron-packager": "8.5.2",
     "express": "4.14.0",
+    "less": "^2.7.2",
+    "nodemon": "^1.11.0",
     "ws": "1.1.1"
   }
 }

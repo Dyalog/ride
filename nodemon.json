@@ -1,0 +1,13 @@
+{
+    "verbose":true,
+    "ignore":[
+        "_/",
+        ".git",
+        "node_modules/**/node_modules"
+    ],
+    "watch":[
+        "src/",
+        "style/less/"
+    ],
+    "ext":"js json css less"
+}

@@ -1,0 +1,40 @@
+@background_color_1: #fff;
+@background_color_2: #777;
+@background_color_3: inherit;
+@background_color_4: #dcdad5;
+
+/*Golden Layout*/
+.lm_goldenlayout {
+	background-image: none !important;
+}
+.lm_maximised {
+	.lm_header {
+		background-color: @background_color_1 !important;
+	}
+}
+.dark {
+	.lm_maximised {
+		.lm_header {
+			background-color: @background_color_2 !important;
+			background-color: @background_color_3 !important;
+		}
+	}
+}
+.lm_splitter.lm_horizontal {
+	.lm_drag_handle {
+		width: 8px !important;
+		left: -2px !important;
+	}
+}
+.lm_splitter.lm_vertical {
+	.lm_drag_handle {
+		height: 8px !important;
+		top: -2px !important;
+	}
+}
+.lm_tab {
+	background-color: @background_color_4 !important;
+}
+.lm_close {
+	display: none !important;
+}

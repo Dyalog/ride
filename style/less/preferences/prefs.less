@@ -1,0 +1,31 @@
+@color_1: #ed7f00;
+
+#prf_nav {
+	height: 28px;
+	border-bottom: solid 1px #ed7f00;
+	margin-bottom: 2px;
+	a {
+		border-bottom: 0.5ex solid rgba(237,127,0,0);
+		float: left;
+		height: 13px;
+		padding: 4px 12px 4px 12px;
+		text-decoration: none;
+		color: @color_1;
+		margin: 4px 0 0 4px;
+		transition: 0.2s;
+		&:hover {
+			border-bottom: 0.5ex solid rgba(237,127,0,0.5);
+		}
+	}
+	a.sel {
+		border-bottom: 0.5ex solid rgba(237,127,0,1);
+		cursor: default;
+	}
+}
+
+@import './prefs_layout.less';
+@import './prefs_shortcuts.less';
+@import './prefs_code.less';
+@import './prefs_colours.less';
+@import './prefs_title.less';
+@import './prefs_menu.less';

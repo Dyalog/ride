@@ -1,0 +1,95 @@
+@color_1: black;
+@color_2: #666;
+@color_3: #fff;
+@font_family_1: sans-serif;
+@background_color_1: #dcdad5;
+@border_color_1: #888 #fff #fff #888;
+@border_color_2: #fff #888 #888 #fff;
+
+/*menu (see ../src/menu.js for the DOM structure)*/
+.menu {
+	background-color: @background_color_1;
+	height: 18px;
+	line-height: 17px;
+	cursor: default;
+	padding: 0;
+	margin: 2px 0 0 0;
+	font-family: @font_family_1;
+	border-bottom: solid #888 1px;
+	a {
+		text-decoration: none;
+		color: @color_1;
+		cursor: default;
+	}
+	.m-opener.m-top {
+		text-align: center;
+		border: solid transparent 1px;
+		padding: 0 5px;
+		margin: 0;
+	}
+	.m-open {
+		.m-top {
+			border-color: @border_color_1;
+		}
+		>.m-box {
+			display: block;
+		}
+	}
+	>.m-sub {
+		float: left;
+	}
+	.m-box {
+		background-color: @background_color_1;
+		border-color: @border_color_2;
+		display: none;
+		border-style: solid;
+		border-width: 1px 2px 2px 1px;
+		position: absolute;
+		padding: 1px;
+		margin: 2px 0 0 0;
+		min-width: 125px;
+		white-space: nowrap;
+		.m-box {
+			margin-left: 100%;
+			margin-top: -17px;
+		}
+		a {
+			display: block;
+			height: 17px;
+			line-height: 17px;
+			text-align: left;
+			padding: 1px 17px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			border-color: @border_color_2;
+			.m-shc {
+				font-size: small;
+				float: right;
+				margin-left: 20px;
+				color: @color_2;
+			}
+			&:focus {
+				background: #0a246a;
+				color: @color_3;
+				.m-shc {
+					color: @color_3;
+				}
+			}
+			&:focus.m-checked {
+				background: #0a246a 5px center no-repeat url(img/menu_chk_wht.png);
+			}
+		}
+		a.m-checked {
+			background: transparent 5px center no-repeat url(img/menu_chk.png);
+		}
+		.m-opener {
+			background: transparent center right 5px no-repeat url(img/menu_tri.png);
+			&:focus {
+				background: #0a246a center right 5px no-repeat url(img/menu_tri_wht.png);
+			}
+		}
+	}
+	hr {
+		margin: 3px 0 5px 0;
+	}
+}
