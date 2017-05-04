@@ -35,7 +35,9 @@ D.IDE=function(){'use strict'
       if(t===1&&ide.bannerDone==0){ //arrange for the banner to appear at the top of the session window
         ide.bannerDone=1;var cm=ide.wins[0].cm,txt=cm.getValue().split('\n'),i=txt.length
         while(--i){if(/^Dyalog APL/.test(txt[i])) break }
-        cm.scrollTo(0,cm.heightAtLine(i)-cm.heightAtLine(0)+5) //+5px to compensate for CM's own padding
+        setTimeout(function(){
+          cm.scrollTo(0,cm.heightAtLine(i)-cm.heightAtLine(0)+5)
+        },5); //+5px to compensate for CM's own padding
       }
     },
     HadError:function(){ide.pending.splice(0,ide.pending.length);ide.wins[0].focus();ide.hadErr=1},
