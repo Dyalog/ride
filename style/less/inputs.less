@@ -1,0 +1,44 @@
+/* Material UI elements */
+button{
+  border:none;
+  background:@BUTTON_BG_COL;
+  color:@BUTTON_COL;
+  font-family:inherit;
+  font-weight:bold;
+  padding:5px 0.5em;
+  transition:box-shadow 0.2s;
+  text-transform:uppercase;
+  &:hover{box-shadow: 0 0.5ex 0.5ex @BUTTON_HOVER_COL;}
+  &:active{box-shadow:none}
+}
+.dark button{background: #333;}
+[type=checkbox],[type=checkbox]:focus{margin-right:0.75em;outlinex:none!important}
+[type=checkbox]::before{
+    position:relative;
+    content:"\2714";
+    background:@CREAM;
+    color:transparent;
+    display:inline-block;
+    height:3ex;width:3ex;top:-4px;left:-2px;
+    font-size:70%;
+    text-align:center;
+    box-shadow: 0 0 0 1px @ORANGE inset;
+    border-radius:2px;
+    transition:0.2s;
+    font-weight:bold
+}
+.dark [type=checkbox]::before{background:@MID_GREY}
+[type=checkbox]{
+    &:focus:before{outline:inherit}
+    &:focus{outline:dotted @BLACK 1px;outline-offset:2px}
+    &:hover::before{background:@CHECKBOX_HOVER_BG_COL}
+    &:active::before{background:@CHECKBOX_COL;color:@CHECKBOX_HOVER_BG_COL}
+    &:checked::before{color:@CHECKBOX_COL}
+    &:disabled::before{color:transparent;box-shadow:0 0 0 1px @LIGHT_GREY inset;background:@CREAM}
+    &:checked:disabled::before{color:grayscale(@CHECKBOX_COL);background:grayscale(@CHECKBOX_BG_COL)}
+}
+.dark [type=checkbox]:checked:disabled::before{color:@LIGHT_GREY ;background:@MID_GREY}
+.dark [type=checkbox]:disabled::before{color:transparent;background:@MID_GREY}
+input,textarea,pre,tt{font-family:@APL_FONT;font-size:18px}
+input,textarea,select,a{outline:0;}
+select:focus{outline:dotted @BLACK 1px}

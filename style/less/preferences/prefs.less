@@ -1,6 +1,6 @@
 #prf_nav {
 	height: 28px;
-	border-bottom: solid 1px @ORANGE;
+	border-bottom: solid 1px @PRF_NAV_COL;
 	margin-bottom: 2px;
 	a {
 		border-bottom: 0.5ex solid transparent;
@@ -8,15 +8,15 @@
 		height: 13px;
 		padding: 4px 12px 4px 12px;
 		text-decoration: none;
-		color: @ORANGE;
+		color: @PRF_NAV_COL;
 		margin: 4px 0 0 4px;
-		transition: 0.2s;
+		transition:border-bottom 0.2s;
 		&:hover {
-			border-bottom: 0.5ex solid @TRANSLUCENT_ORANGE;
+			border-bottom: 0.5ex solid @PRF_NAV_BORDER_COL;
 		}
 	}
 	a.sel {
-		border-bottom: 0.5ex solid @ORANGE;
+		border-bottom: 0.5ex solid @PRF_NAV_COL;
 		cursor: default;
 	}
 }
