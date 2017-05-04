@@ -17,7 +17,7 @@ D.vt=function(w){'use strict' //.init(w) gets called for every window w (session
   var show=function(p0,force){ //p0:{line,ch}
     cl();p0.outside||(i=setTimeout(function(){ //send a request (but not too often)
       i=0;p=p0;var s=w.cm.getLine(p.line),c=s[p.ch]||' ',lbt=D.lb.tips[c]
-      if((force||D.prf.squiggleTips())&&lbt&&!(c==='⎕'&&/[áa-z]/i.test(s[p.ch+1]||''))){
+      if((force||D.prf.squiggleTips())&&lbt&&!'⍺⍵'.includes(c)&&!(c==='⎕'&&/[áa-z]/i.test(s[p.ch+1]||''))){
         rf({tip:lbt.join('\n\n').split('\n'),startCol:p.ch,endCol:p.ch+1}) //show tooltip from language bar
       }else if((force||D.prf.valueTips())&&/[^ \(\)\[\]\{\}':;]/.test(c)){
         D.send('GetValueTip',{win:w.id,line:s,pos:p.ch,token:w.id,maxWidth:MW,maxHeight:MH}) //ask interpreter
