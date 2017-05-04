@@ -9,7 +9,7 @@ D.Se=function(ide){ //constructor
   var cm=se.cm=CM(se.dom,{
     autofocus:true,mode:{name:'apl-session',se:se},matchBrackets:!!D.prf.matchBrackets(),readOnly:true,keyMap:'dyalog',
     lineWrapping:!!D.prf.wrap(),indentUnit:4,smartIndent:0,autoCloseBrackets:{pairs:'()[]{}',explode:''},
-    scrollbarStyle:'native',extraKeys:{'Shift-Tab':'indentLess',Tab:'indentOrComplete'},
+    scrollbarStyle:'simple',extraKeys:{'Shift-Tab':'indentLess',Tab:'indentOrComplete'},
     cursorBlinkRate:D.prf.blinkCursor()*CM.defaults.cursorBlinkRate,
   });D.prf.blockCursor()&&CM.addClass(cm.getWrapperElement(),'cm-fat-cursor')
   cm.dyalogCmds=se
