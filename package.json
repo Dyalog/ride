@@ -6,7 +6,7 @@
   "productName": "Ride-4.0",
   "scripts": {
     "start": "electron .",
-    "dev": "lessc ./style/less/style.less ./style/style.css --strict-math=on && ./node_modules/.bin/electron .",
+    "dev": "lessc ./style/less/style.less ./style/style.css --strict-math=on && RIDE_SPAWN=dyalog ./node_modules/.bin/electron .",
     "watch": "nodemon --config ./nodemon.json --exec 'npm run dev'"
   },
   "repository": ".",

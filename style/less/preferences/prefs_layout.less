@@ -61,7 +61,7 @@
 	margin-top: 4px;
 	text-align: center;
 	overflow: hidden;
-	background: #fff;
+	background: @WHITE;
 	input {
 		text-align: center;
 	}
@@ -120,16 +120,9 @@
 		white-space: nowrap;
 	}
 }
-input.lyt_g1 {
+input.lyt_g1, input.lyt_g3 {
 	&:hover {
-		outline: solid #bbb 1px;
-		background-color: @CREAM;
-		cursor: pointer;
-	}
-}
-input.lyt_g3 {
-	&:hover {
-		outline: solid #bbb 1px;
+		outline: solid @LAYOUT_KEY_OUTLINE_COL 1px;
 		background-color: @CREAM;
 		cursor: pointer;
 	}

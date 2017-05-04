@@ -1,7 +1,3 @@
-@color_1: #fff;
-@color_2: #ed7f00;
-@font_family_1: apl,monospace;
-
 /*connect page*/
 #cn {
 	position: absolute;
@@ -11,7 +7,7 @@
 	bottom: 0;
 	.hsplitbar {
 		width: 6px;
-		background: #ccc;
+		background: @DARK_CREAM;
 	}
 	.indent {
 		margin-left: 24px;
@@ -35,11 +31,11 @@
 		margin-top: 2px;
 	}
 	.list_sel {
-		background: #0a246a;
-		color: @color_1;
+		background: @DARK_BLUE;
+		color: @WHITE;
 	}
 	.list-focus {
-		outline: dotted #000 1px;
+		outline: dotted @BLACK 1px;
 	}
 	div {
 		position: relative;
@@ -55,7 +51,7 @@
 	left: 0;
 	width: 325px;
 	overflow: hidden;
-	background: #eee;
+	background: @CREAM;
 }
 #cn_rhs {
 	position: absolute;
@@ -65,14 +61,14 @@
 	left: 250px;
 	padding: 0;
 	overflow: auto;
-	background: #eee;
+	background: @CREAM;
 }
 .dark {
 	#cn_rhs {
-		background: #444;
+		background: @MID_GREY;
 	}
 	#cn_lhs {
-		background: #444;
+		background: @MID_GREY;
 	}
 }
 #cn_rhs_inner {
@@ -117,9 +113,9 @@
 #cn_env_add {
 	padding-left: 32px;
 	a {
-		font-family: @font_family_1;
+		font-family: @APL_FONT;
 		font-size: 18px;
-		color: @color_2;
+		color: @ORANGE;
 		text-decoration: none;
 	}
 }

@@ -1,9 +1,9 @@
 #prf_nav {
 	height: 28px;
-	border-bottom: solid 1px #ed7f00;
+	border-bottom: solid 1px @ORANGE;
 	margin-bottom: 2px;
 	a {
-		border-bottom: 0.5ex solid rgba(237,127,0,0);
+		border-bottom: 0.5ex solid transparent;
 		float: left;
 		height: 13px;
 		padding: 4px 12px 4px 12px;
@@ -12,11 +12,11 @@
 		margin: 4px 0 0 4px;
 		transition: 0.2s;
 		&:hover {
-			border-bottom: 0.5ex solid rgba(237,127,0,0.5);
+			border-bottom: 0.5ex solid @TRANSLUCENT_ORANGE;
 		}
 	}
 	a.sel {
-		border-bottom: 0.5ex solid rgba(237,127,0,1);
+		border-bottom: 0.5ex solid @ORANGE;
 		cursor: default;
 	}
 }

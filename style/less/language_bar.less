@@ -1,17 +1,6 @@
-@color_1: #000;
-@color_2: #fff;
-@font_family_1: apl,monospace;
-@background_color_1: rgba(0,0,0,0.1);
-@background_color_2: rgba(0,0,0,0.2);
-@background_color_3: transparent;
-@border_color_1: #eee;
-@border_color_2: #444;
-@border_right_color_1: transparent;
-@border_left_color_1: transparent;
-
 /*language bar*/
 #lb {
-	font-family: @font_family_1;
+	font-family: @APL_FONT;
 	font-size: 18px;
 	cursor: default;
 	line-height: 22px;
@@ -23,10 +12,10 @@
 		border-radius: 50%;
 		margin-right: -4px;
 		&:hover {
-			background-color: @background_color_1;
+			background-color: @LB_BUTTON_HOVER;
 		}
 		&:active {
-			background-color: @background_color_2;
+			background-color: @LB_BUTTON_ACTIVE;
 		}
 	}
 	.lb_placeholder {
@@ -34,7 +23,7 @@
 		background: rgba(0,0,0,0.2);
 	}
 	.ui-sortable-helper {
-		color: @color_1;
+		color: @BLACK;
 		cursor: move;
 	}
 }
@@ -46,32 +35,32 @@
 	background: no-repeat center center url(img/lb_prf.png);
 	border-radius: 50%;
 	&:hover {
-		background-color: @background_color_1;
+		background-color: @LB_BUTTON_HOVER;
 	}
 	&:active {
-		background-color: @background_color_2;
+		background-color: @LB_BUTTON_ACTIVE;
 	}
 }
 #lb_tip {
-	font-family: @font_family_1;
+	font-family: @APL_FONT;
 	font-size: 18px;
 	position: absolute;
 	padding: 8px;
 	margin-top: 16px;
 	border-radius: 2px;
-	background: #eee;
-	box-shadow: 0 18px 48px rgba(0,0,0,0.5);
+	background: @CREAM;
+	box-shadow: 0 18px 48px @TRANSLUCENT_BLACK;
 }
 .dark {
 	#lb_tip {
-		background: #444;
+		background: @MID_GREY;
 	}
 	#lb_tip_tri {
-		border-color: @border_color_2;
+		border-color: @MID_GREY;
 	}
 	#lb {
 		.ui-sortable-helper {
-			color: @color_2;
+			color: @WHITE;
 			cursor: move;
 		}
 	}
@@ -79,23 +68,23 @@
 #lb_tip_tri {
 	position: absolute;
 	border: solid;
-	border-color: @border_color_1;
+	border-color: @CREAM;
 	border-width: 0 16px 16px 16px;
-	border-left-color: @border_left_color_1 !important;
-	border-right-color: @border_right_color_1 !important;
-	background-color: @background_color_3 !important;
+	border-left-color: transparent !important;
+	border-right-color: transparent !important;
+	background-color: transparent !important;
 	content: "";
 }
 #lb_tip_desc {
-	font-family: @font_family_1;
+	font-family: @APL_FONT;
 	font-size: 18px;
-	border-bottom: solid 1px #ccc;
+	border-bottom: solid 1px @DARK_CREAM;
 	padding-bottom: 8px;
 	margin-bottom: 8px;
 	text-align: center;
 	text-transform: uppercase;
 }
 #lb_tip_text {
-	font-family: @font_family_1;
+	font-family: @APL_FONT;
 	font-size: 18px;
 }
