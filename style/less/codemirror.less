@@ -119,3 +119,16 @@ span.CodeMirror-selectedtext{background:none}
 .cm-foldgutter-cont  {background-image:url(img/fold_cont.png)}
 .cm-foldgutter-end   {background-image:url(img/fold_end.png)}
 .cm-foldgutter-open,.cm-foldgutter-folded{cursor:pointer}
+
+.disconnected .CodeMirror,.disconnected .CodeMirror-gutter-wrapper{background-color:#e2d3bb} /*beige*/
+.breakpoints{width:12px} /*gutter*/
+.breakpoint{color:@RED;width:12px;text-indent:-99px;cursor:pointer;
+            background:no-repeat transparent center center url(img/breakpoint.png)}
+.hidden{display:none}
+.highlighted{border:solid @RED 1px}
+.CodeMirror-hints{font-family:@APL_FONT;font-size:18px;position:absolute;overflow:hidden;list-style:none;margin:0;padding:0;
+                  border:1px solid @BLACK;background:#ffffe1;font-size:90%;max-height:20em;overflow-y:auto;box-shadow:0 18px 48px rgba(0,0,0,0.5);}
+.CodeMirror-hint{margin:0;padding:0 2px;max-width:19em;overflow:hidden;white-space:pre;color:@BLACK;cursor:pointer}
+.CodeMirror-hint-active{background:@DARK_BLUE;color:@WHITE}
+.CodeMirror-search-match{background:gold;border-top:1px solid @ORANGE;border-bottom:1px solid @ORANGE;
+                         -moz-box-sizing:border-box;box-sizing:border-box;opacity:.5}

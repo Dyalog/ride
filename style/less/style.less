@@ -44,18 +44,7 @@ input,textarea,select,a{outline:0;}
 select:focus{outline:dotted @BLACK 1px}
 input[type=checkbox]:focus{outline:dotted @BLACK 1px;outline-offset:2px}
 
-/*z-indices; CodeMirror uses 1-10; .dlg uses 100+ */
-.ui-tooltip          {z-index:9999}
-#lb_tip_tri          {z-index: 301}
-#lb_tip              {z-index: 300}
-#vt_bln,#vt_tri      {z-index: 300}
-.menu .m-box         {z-index: 200}
-.ui-front            {z-index: 100}
-.ui-selectable-helper{z-index: 100}
-.lm_splitter         {z-index:  11!important}
-.CodeMirror-hints    {z-index:  10}
-.cm-scroll           {z-index:   6}
-
+@import './zindices.less';
 @import './connect_page.less';
 
 /*IDE page*/
@@ -64,6 +53,8 @@ input[type=checkbox]:focus{outline:dotted @BLACK 1px;outline-offset:2px}
 .ride_win.edit_trace{width:100%;height:100%;display:block}
 .ride_win_cm{height:100%;max-height:100%}
 .ride_win_cm>div.CodeMirror{height:calc(100% - 28px)}
+.win,.floating-window{position:absolute;left:0;right:0;top:32px;bottom:0;
+                      overflow:hidden!important;padding:0!important;height:auto!important}
 
 @import './menu.less';
 @import './language_bar.less';
@@ -79,89 +70,15 @@ input[type=checkbox]:focus{outline:dotted @BLACK 1px;outline-offset:2px}
 .vt_marker{border:dotted transparent 2px;margin:-2px}
 
 @import './zoom.less';
-
-.disconnected .CodeMirror,.disconnected .CodeMirror-gutter-wrapper{background-color:#e2d3bb} /*beige*/
-.breakpoints{width:12px} /*gutter*/
-.breakpoint{color:@RED;width:12px;text-indent:-99px;cursor:pointer;
-            background:no-repeat transparent center center url(img/breakpoint.png)}
-.hidden{display:none}
-.highlighted{border:solid @RED 1px}
-.CodeMirror-hints{font-family:@APL_FONT;font-size:18px;position:absolute;overflow:hidden;list-style:none;margin:0;padding:0;
-                  border:1px solid @BLACK;background:#ffffe1;font-size:90%;max-height:20em;overflow-y:auto;box-shadow:0 18px 48px rgba(0,0,0,0.5);}
-.CodeMirror-hint{margin:0;padding:0 2px;max-width:19em;overflow:hidden;white-space:pre;color:@BLACK;cursor:pointer}
-.CodeMirror-hint-active{background:@DARK_BLUE;color:@WHITE}
-.CodeMirror-search-match{background:gold;border-top:1px solid @ORANGE;border-bottom:1px solid @ORANGE;
-                         -moz-box-sizing:border-box;box-sizing:border-box;opacity:.5}
 @import './tracer.less';
-
-/*search and replace*/
-.win,.floating-window{position:absolute;left:0;right:0;top:32px;bottom:0;
-                      overflow:hidden!important;padding:0!important;height:auto!important}
-
-/*various dialogs*/
-.dlg{position:absolute;background-color:@CREAM;box-shadow:0 18px 48px rgba(0,0,0,0.5);border:1px solid @MID_GREY}
-.dark .dlg {background:@MID_GREY}
-.dlg_title{color:@ORANGE;cursor:default;text-align:center;padding-top: 0.5ex;font-size:large;cursor:move}
-#prf_dlg .dlg_title{text-transform:uppercase}
-.dlg_close{color:@ORANGE;width:2ex;height:2ex;position:relative;display:inline-block;
-           text-align:center;text-decoration:none;cursor:pointer;top:-0.5ex}
-.dlg_close:hover{background-color:@WHITE}
-.dlg_btns{padding:8px;text-align:center;position:absolute;bottom:0;left:0;right:0;border-bottom-left-radius:4px;border-bottom-right-radius:4px}
-.dlg_btns button{min-width:75px;margin:0 8px}
-.dlg_btns button.task{display:block;margin:4px 0;width:100%}
-
-.dlg_icon_warn {background-image:url(img/dlg_warn.png)}
-.dlg_icon_info {background-image:url(img/dlg_info.png)}
-.dlg_icon_error{background-image:url(img/dlg_error.png)}
-.dlg_icon_query{background-image:url(img/dlg_query.png)}
-
-/*generic dialog for processing OptionsDialog,StringDialog,TaskDialog*/
-#gd_icon   {margin:1em 1em 2em;width:128px;height:128px;float:left}
-#gd_content{padding:1em;line-height:1.5;margin-bottom:2em}
-
+@import './dialogs/dialogs.less';
 @import './preferences/prefs.less';
-
-.ui-dialog .ui-dialog-content.task_dlg{padding:8px}
-.ui-dialog .ui-dialog-content.task_dlg p{text-align:left}
-.ui-dialog .ui-dialog-content.task_dlg .subtext,
-.ui-dialog .ui-dialog-content.task_dlg .footer{font-size:12px;color:@MID_GREY}
-.ui-dialog .ui-dialog-content.task_dlg .task{display:block;width:100%;margin-top:2px}
-
-/*About dialog*/
-#abt{padding:0;margin:0}
-#abt_logo{background:16px center no-repeat url(img/Dyalog_60.png);height:80px;line-height:20px;cursor:move}
-#abt_contact{color:@BLACK;float:right;text-align:right;padding:12px;cursor:default}
-.dark #abt_contact{color:@DARK_CREAM}
-#abt_contact a,
-#abt_contact a:visited,
-#abt_contact a:active{color:@ORANGE;text-decoration:none}
-#abt_ta_wr{position:absolute;left:5px;right:13px;top:86px;bottom:52px;width:auto}
-#abt_ta{white-space:pre;word-wrap:normal;overflow-x:scroll;width:100%;height:100%;resize:none}
-
 @import './workspace_explorer.less';
-
-.ctl_listview{width:100%;font-family:apl;overflow-x:auto;overflow-y:auto}
-.ctl_listview tr{padding:6px;cursor:pointer}
-/*.ctl_listview div span{padding-left:5px;display:inline-block;border-right:1px solid @BLACK;box-sizing:border-box}*/
-.ctl_listview tr:nth-child(even){background-color:@CREAM}
-.ctl_listview tr.selected{background-color:blue}
-#threads>table,#sistack>table{width:100%;}
-#debug {height:inherit;background:@CREAM}
-.dark #debug {background:@MID_GREY}
-#debug>div{height:50%;display:block}
-#debug toolbar{min-height:29px}
-#debug .ctl_listview_header{height:14px;padding:5px 5px;background-color:@WHITE}
-.dark #debug .ctl_listview_header {background:@LIGHT_GREY }
-
-#threads{height: calc(100% - 54px)}
-#sistack{height: calc(100% - 26px)}
+@import './debug_panel.less';
 
 #demo-keys{position:fixed;top:10px;right:10px}
 #demo-keys span{font-family:@APL_FONT;font-size:18px;font-size:48px;border:solid #333 1px;
                 background-color:@GREY;color:@WHITE;margin:10px;border-radius:10px;padding:5px}
-
-@-webkit-keyframes Waiting{0%{margin-left:0};100%{margin-left:70%}}
-@keyframes         Waiting{0%{margin-left:0};100%{margin-left:70%}}
 
 @import './jquery_ui.less';
 @import './codemirror.less';
