@@ -300,10 +300,12 @@ select:focus {
   right: 0;
   top: 0;
   bottom: 0;
+  background: #1c1e28;
+  color: #fff;
 }
 #cn .hsplitbar {
   width: 6px;
-  background: #ccc;
+  background: #00a1ff;
 }
 #cn .indent {
   margin-left: 24px;
@@ -346,7 +348,7 @@ select:focus {
   left: 0;
   width: 325px;
   overflow: hidden;
-  background: #eee;
+  background: #1c1e28;
 }
 #cn_rhs {
   position: absolute;
@@ -356,7 +358,7 @@ select:focus {
   left: 250px;
   padding: 0;
   overflow: auto;
-  background: #eee;
+  background: #1c1e28;
 }
 .dark #cn_rhs {
   background: #444;
@@ -408,7 +410,7 @@ select:focus {
 #cn_env_add a {
   font-family: apl, monospace;
   font-size: 18px;
-  color: #fc9732;
+  color: #00a1ff;
   text-decoration: none;
 }
 .cn_hint {
