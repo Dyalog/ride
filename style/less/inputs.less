@@ -1,4 +1,7 @@
 /* Material UI elements */
+label{
+    color:@INPUT_COL;
+}
 button{
   border:none;
   background:@BUTTON_BG_COL;
@@ -8,7 +11,7 @@ button{
   padding:5px 0.5em;
   transition:box-shadow 0.2s;
   text-transform:uppercase;
-  &:hover{box-shadow: 0 0.5ex 0.5ex @BUTTON_HOVER_COL;}
+  &:hover{color:@BUTTON_HOVER_COL}
   &:active{box-shadow:none}
 }
 .dark button{background: #333;}
@@ -16,7 +19,7 @@ button{
 [type=checkbox]::before{
     position:relative;
     content:"\2714";
-    background:@CREAM;
+    background:@WIN_BG_COL;
     color:transparent;
     display:inline-block;
     height:3ex;width:3ex;top:-4px;left:-2px;
@@ -31,10 +34,10 @@ button{
 [type=checkbox]{
     &:focus:before{outline:inherit}
     &:focus{outline:dotted @BLACK 1px;outline-offset:2px}
-    &:hover::before{background:@CHECKBOX_HOVER_BG_COL}
-    &:active::before{background:@CHECKBOX_COL;color:@CHECKBOX_HOVER_BG_COL}
+    &:hover::before{background:lighten(@WIN_BG_COL,10%)}
+    &:active::before{background:@CHECKBOX_COL;color:lighten(@WIN_BG_COL,10%)}
     &:checked::before{color:@CHECKBOX_COL}
-    &:disabled::before{color:transparent;box-shadow:0 0 0 1px @LIGHT_GREY inset;background:@CREAM}
+    &:disabled::before{color:transparent;box-shadow:0 0 0 1px @CHECKBOX_COL inset;background:lighten(@WIN_BG_COL,10%)}
     &:checked:disabled::before{color:grayscale(@CHECKBOX_COL);background:grayscale(@CHECKBOX_BG_COL)}
 }
 .dark [type=checkbox]:checked:disabled::before{color:@LIGHT_GREY ;background:@MID_GREY}

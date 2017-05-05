@@ -1,9 +1,15 @@
-/*language bar*/
+@LB_BUTTON_HOVER:contrast(@LB_BG_COL,fade(@MID_GREY,20%),fade(@LIGHT_GREY,20%));
+@LB_BUTTON_ACTIVE:rgba(0,0,0,0.2);
+@LB_BG_COL:@DYALOG_BLUE;
+@LB_BUTTON_COL:@WIN_BG_COL;
 #lb {
 	font-family: @APL_FONT;
 	font-size: 18px;
 	cursor: default;
 	line-height: 22px;
+	background-color:@LB_BG_COL;
+	border-top:1px @BLACK solid;
+	border-bottom:1px @BLACK solid;
 	b {
 		font-weight: normal;
 		width: 22px;
@@ -11,6 +17,7 @@
 		text-align: center;
 		border-radius: 50%;
 		margin-right: -4px;
+		color:@LB_BUTTON_COL;
 		&:hover {
 			background-color: @LB_BUTTON_HOVER;
 		}

@@ -18,6 +18,8 @@
 /*the key between @' and enter*/
 /*lshift*/
 /*the key between lshift and Z*/
+@KEY_COL:@VERY_LIGHT_GREY;
+
 #lyt {
 	padding: 5px;
 }
@@ -61,7 +63,7 @@
 	margin-top: 4px;
 	text-align: center;
 	overflow: hidden;
-	background: @WHITE;
+	background: @KEY_COL;
 	input {
 		text-align: center;
 	}
@@ -89,6 +91,9 @@
 }
 .lyt_g2 {
 	color: @RED;
+}
+.lyt_g0,.lyt_g1,.lyt_g2,.lyt_g3{
+	background-color:@KEY_COL;
 }
 #lyt_spc {
 	width: 50%;
@@ -131,7 +136,7 @@ input.lyt_g1, input.lyt_g3 {
 	line-height: 45px;
 	cursor: default;
 	font-size: 32px;
-	color: @GREY;
+	color: @DARK_GREY;
 	width: 13%;
 }
 #lyt_16 {
@@ -139,21 +144,21 @@ input.lyt_g1, input.lyt_g3 {
 	cursor: default;
 	clear: left;
 	font-size: 32px;
-	color: @GREY;
+	color: @DARK_GREY;
 	width: 10%;
 }
 #lyt_30 {
 	line-height: 45px;
 	cursor: default;
 	clear: left;
-	color: @GREY;
+	color: @DARK_GREY;
 	width: 12%;
 }
 #lyt_43 {
 	line-height: 45px;
 	cursor: default;
 	font-size: 32px;
-	color: @GREY;
+	color: @DARK_GREY;
 	width: 13.6%;
 }
 #lyt_44 {
@@ -161,14 +166,14 @@ input.lyt_g1, input.lyt_g3 {
 	cursor: default;
 	clear: left;
 	font-size: 32px;
-	color: @GREY;
+	color: @DARK_GREY;
 	width: 15%;
 }
 #lyt_57 {
 	line-height: 45px;
 	cursor: default;
 	font-size: 32px;
-	color: @GREY;
+	color: @DARK_GREY;
 	width: 17.2%;
 }
 #lyt_14 {
@@ -203,7 +208,7 @@ input.lyt_g1, input.lyt_g3 {
 		overflow: visible;
 		&:before {
 			content: "";
-			background-color: @WHITE;
+			background-color: @KEY_COL;
 			float: left;
 			border-radius: 2px 0 0 2px;
 			position: relative;

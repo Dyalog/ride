@@ -37,7 +37,7 @@ D.addSynGrps([
   {s:'monadic operator',t:'op1' ,c:'.cm-apl-op1' }, //⌸ ...
   {s:'namespace'       ,t:'ns'  ,c:'.cm-apl-ns'  }, //#
   {s:'name'            ,t:'var' ,c:'.cm-apl-var' }, //a.k.a. identifier
-  {s:'normal'          ,t:'norm',c:'.cm-s-default,.CodeMirror-gutters,/*noprefix*/#wse'},
+  {s:'normal'          ,t:'norm',c:'.cm-s-default,.CodeMirror-gutters'},
   {s:'number'          ,t:'num' ,c:'.cm-apl-num' }, //0 ...
   {s:'parenthesis'     ,t:'par' ,c:'.cm-apl-par' }, //()
   {s:'quad name'       ,t:'quad',c:'.cm-apl-quad'}, //⎕XYZ

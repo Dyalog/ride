@@ -308,7 +308,7 @@ D.IDE=function(){'use strict'
   gl.init()
 
   var updTopBtm=function(){
-    ide.dom.style.top=((D.prf.lbar()?I.lb.offsetHeight:0)+(D.el?1:22))+'px'
+    ide.dom.style.top=((D.prf.lbar()?I.lb.offsetHeight:0)+(D.el?0:22))+'px'
     gl.updateSize(ide.dom.clientWidth,ide.dom.clientHeight)
   }
   I.lb.hidden=!D.prf.lbar();updTopBtm();$(window).resize(updTopBtm)
@@ -378,7 +378,7 @@ D.IDE.prototype={
   lbarRecreate:function(){
     var d=D.lb.order, u=D.prf.lbarOrder() //d:default order, u:user's order
     var r='';if(d!==u)for(var i=0;i<d.length;i++)if(!u.includes(d[i])&&/\S/.test(d[i]))r+=d[i] //r:set difference between d and u
-    I.lb_inner.innerHTML=D.prf.lbarOrder().replace(/\s*$/,'\xa0'+r).replace(/(.)/g,'<b>$1</b>').replace(/\s/g,'\xa0')
+    I.lb_inner.innerHTML=D.prf.lbarOrder().split('').map(i=>{var c=(i==="\xa0")?' class="sep"':'';return '<b'+c+'>'+i+'</b>'}).join('').replace(/\s/g,'\xa0')
   }
 }
 CM.commands.DBG=function(){D.prf.dbg.toggle()}

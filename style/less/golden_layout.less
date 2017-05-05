@@ -1,11 +1,17 @@
 /*Golden Layout*/
+@LM_TAB_BG_COL:@DYALOG_BLUE;
+@LM_TAB_BORDER_COL:@DYALOG_BLUE;
+@LM_TAB_COL:@WIN_BG_COL;
 .lm_goldenlayout {
-	background-image: none !important;
+	/*background-color:@WIN_BG_COL !important;*/
+	background:@WIN_BG_COL !important;
 }
-.lm_maximised {
-	.lm_header {
-		background-color: @WHITE !important;
-	}
+.lm_header,.lm_content {
+	background-color: @WIN_BG_COL !important;
+	border-color: @WIN_BG_COL !important;
+}
+.lm_content{
+	border:none !important;
 }
 .dark {
 	.lm_maximised {
@@ -28,8 +34,17 @@
 	}
 }
 .lm_tab {
-	background-color: @DARK_CREAM !important;
+	background-color: @LM_TAB_BG_COL !important;
+	color: @LM_TAB_COL !important;
+	border:1px @LM_TAB_BG_COL solid !important;
+}
+.lm_tabs{
+	padding-left:3px !important;
 }
 .lm_close {
 	display: none !important;
+}
+.lm_splitter{
+	opacity:1 !important;
+	background:@DYALOG_BLUE !important;
 }

@@ -12,6 +12,7 @@
 		text-align: left;
 		text-indent: -2ex;
 		padding-left: 2ex;
+		color:@INPUT_COL;
 	}
 }
 #shc_rst_all {
@@ -38,8 +39,8 @@
 	tr {
 		&:hover {
 			color: @WHITE;
-			background-color: @LIGHT_GREY;
-			box-shadow: 0 0 0 1px @LIGHT_GREY;
+			background-color: contrast(@WIN_BG_COL,darken(@WIN_BG_COL,10%),lighten(@WIN_BG_COL,10%));;
+			// box-shadow: 0 0 0 1px @LIGHT_GREY;
 			.shc_add {
 				visibility: visible;
 			}

@@ -1,4 +1,13 @@
-.toolbar{background-color: @WHITE;height:24px;overflow:hidden;cursor:default;overflow:hidden;padding:2px;border-bottom:solid @VERY_LIGHT_GREY 1px}
+@TOOLBAR_BG_COL:lighten(@WIN_BG_COL,5%);
+.toolbar{
+        background-color: @TOOLBAR_BG_COL;;
+        height:24px;
+        overflow:hidden;
+        cursor:default;
+        overflow:hidden;
+        padding:2px;
+        border-bottom:solid @VERY_LIGHT_GREY 1px
+}
 .dark .toolbar{background:@LIGHT_GREY }
 .tracer .toolbar .ed_only{display:none}
         .toolbar .tc_only{display:none}
