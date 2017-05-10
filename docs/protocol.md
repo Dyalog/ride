@@ -74,7 +74,7 @@ manager. If it finds the peer is another RIDE, it should close the connection.
 :red_circle: In reality RIDE doesn't bother verifying that it's not talking to another RIDE.
 
 If at any time the interpreter crashes with a
-[syserror](http://help.dyalog.com/16.0/Content/UserGuide/Installation%20and%20Configuration/System%20Errors.htm), it
+[syserror](http://help.dyalog.com/16.0/Content/Language/Errors/System%20Errors.htm), it
 sends
 <a name=SysError></a>
 ```json
