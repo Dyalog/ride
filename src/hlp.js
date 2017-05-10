@@ -1,10 +1,10 @@
 ;(function(){'use strict'
 
 //mapping between various elements of the APL language and their urls in the online help, e.g.
-// D.hlp['⍴']     -> 'http://help.dyalog.com/15.0/Content/Language/Symbols/Rho.htm'
-// D.hlp[')vars'] -> 'http://help.dyalog.com/15.0/Content/Language/System%20Commands/vars.htm'
+// D.hlp['⍴']     -> 'http://help.dyalog.com/16.0/Content/Language/Symbols/Rho.htm'
+// D.hlp[')vars'] -> 'http://help.dyalog.com/16.0/Content/Language/System%20Commands/vars.htm'
 
-var p='http://help.dyalog.com/15.0/Content/',q='.htm' //prefix and suffix
+var p='http://help.dyalog.com/16.0/Content/',q='.htm' //prefix and suffix
 var h=D.hlp={WELCOME:p+'MiscPages/HelpWelcome'+q,
              UCMDS:p+'UserGuide/The APL Environment/User Commands'+q,
              LANGELEMENTS:p+'Language/Introduction/Language Elements'+q}
@@ -32,7 +32,7 @@ for(var i=0;i<a.length;i++)h[a[i][0]]=u+a[i].slice(1).replace(/_/g,' ')+q
 var b="#⍺⍵∇'⋄⍝:;¯";for(var i=0;i<b.length;i++)h[b[i][0]]=u+'Special Symbols'+q
 
 var u=p+'Language/Primitive Operators/' //I-beams
-var a=D.ibeams={ // http://help.dyalog.com/15.0/Content/Language/Primitive%20Operators/I%20Beam.htm
+var a=D.ibeams={ // http://help.dyalog.com/16.0/Content/Language/Primitive%20Operators/I%20Beam.htm
     8:'Inverted Table Index Of',
    85:'Execute Expression',
   127:'Overwrite Free Pockets',
@@ -85,7 +85,6 @@ var a=D.ibeams={ // http://help.dyalog.com/15.0/Content/Language/Primitive%20Ope
  7161:'JSON TrueFalse',
  7162:'JSON Translate Name',
  8415:'Singular Value Decomposition',
-16807:'Random Number Generator',
 50100:'Line Count'
 }
 for(var k in a)h[k+'⌶']=u+a[k]+q

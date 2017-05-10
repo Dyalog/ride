@@ -11,7 +11,7 @@ D.WSE.prototype={
   replyTreeList:function(x){ //handle response from interpreter
     var f=this.pending[x.nodeId];if(!f)return
     f((x.nodeIds||[]).map(function(c,i){
-      //x.classes uses constants from http://help.dyalog.com/15.0/Content/Language/System%20Functions/nc.htm
+      //x.classes uses constants from http://help.dyalog.com/16.0/Content/Language/System%20Functions/nc.htm
       return{id:c||('leaf_'+x.nodeId+'_'+i),text:x.names[i],expandable:!!c,icon:(''+Math.abs(x.classes[i])).replace('.','_')}
     }))
     delete this.pending[x.nodeId]
