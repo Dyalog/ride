@@ -43,7 +43,7 @@ APPNAME=${PackageName}
 
 ## Use a launcher script to launch RIDE
 
-cp "$BUILDROOTDIR/packagescripts/osx/launcher" "$RIDEDIR/$RIDEAPPDIRNAME/Contents/MacOS/"
+sed s/EXECUTABLE/Ride-4.0/ < "$BUILDROOTDIR/packagescripts/osx/launcher" > "$RIDEDIR/$RIDEAPPDIRNAME/Contents/MacOS/launcher"
 PLISTValue "$PLISTFILE" "CFBundleExecutable" "launcher"
 
 cd ${BUILDROOTDIR}
