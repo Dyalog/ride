@@ -44,6 +44,7 @@ APPNAME=${PackageName}
 ## Use a launcher script to launch RIDE
 
 sed s/EXECUTABLE/Ride-4.0/ < "$BUILDROOTDIR/packagescripts/osx/launcher" > "$RIDEDIR/$RIDEAPPDIRNAME/Contents/MacOS/launcher"
+chmod +x "$RIDEDIR/$RIDEAPPDIRNAME/Contents/MacOS/launcher"
 PLISTValue "$PLISTFILE" "CFBundleExecutable" "launcher"
 
 cd ${BUILDROOTDIR}
