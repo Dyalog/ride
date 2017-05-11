@@ -2,4 +2,4 @@
 cd "$(dirname "$0")"
 D="$(pwd)"
 cd
-"$D/EXECUTABLE" "$@"
+exec "$D/EXECUTABLE" "$@"
