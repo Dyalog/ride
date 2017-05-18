@@ -19,8 +19,9 @@ D.util={
     d.style.zIndex=zCtr++;d.hidden=0
     d.style.left=(0|(innerWidth -(o.w||d.clientWidth ))/2)+'px';if(o.w)d.style.width =o.w+'px'
     d.style.top =(0|(innerHeight-(o.h||d.clientHeight))/2)+'px';if(o.h)d.style.height=o.h+'px'
-    if (o.closable!==undefined&&!o.closable){d.querySelector('.dlg_close').style.display="none"}
-    else{d.querySelector('.dlg_close').style.display="";
+    var close_button=d.querySelector('.dlg_close');
+    if (o.closable!==undefined&&!o.closable&&close_button){close_button.style.display="none"}
+    else if (close_button){close_button.style.display="";
         CM.on(d,'keydown',function(e){if(e.which===27&&!e.ctrlKey&&!e.shiftKey&&!e.altKey&&!e.metaKey){d.hidden=1;return!1}})}
     o=null
     if(d.__dlg)return;d.__dlg=1
