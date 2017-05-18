@@ -1569,6 +1569,7 @@ input.lyt_g3:hover {
   color: #fff;
   text-align: center;
   margin-right: .2em;
+  color: #1c1e28 !important;
 }
 #wse .bt_text.selected {
   background-color: rgba(128, 128, 128, 0.5);
@@ -1593,77 +1594,41 @@ input.lyt_g3:hover {
   text-align: center;
   margin-right: .2em;
 }
-#wse .bt_icon_2_1::before {
-  content: "v";
-  background: #f88;
-}
-#wse .bt_icon_2_2::before {
-  content: "v";
-  background: #f88;
-}
-#wse .bt_icon_2_3::before {
-  content: "v";
-  background: #f88;
-}
+#wse .bt_icon_2_1::before,
+#wse .bt_icon_2_2::before,
+#wse .bt_icon_2_3::before,
 #wse .bt_icon_2_6::before {
   content: "v";
-  background: #f88;
+  background: #ff5a00;
 }
-#wse .bt_icon_3_1::before {
-  content: "f";
-  background: #8cc;
-}
-#wse .bt_icon_3_2::before {
-  content: "f";
-  background: #8cc;
-}
-#wse .bt_icon_3_3::before {
-  content: "f";
-  background: #8cc;
-}
+#wse .bt_icon_3_1::before,
+#wse .bt_icon_3_2::before,
+#wse .bt_icon_3_3::before,
 #wse .bt_icon_3_6::before {
   content: "f";
-  background: #8cc;
+  background: #00ff48;
 }
-#wse .bt_icon_4_1::before {
-  content: "o";
-  background: #88f;
-}
-#wse .bt_icon_4_2::before {
-  content: "o";
-  background: #88f;
-}
+#wse .bt_icon_4_1::before,
+#wse .bt_icon_4_2::before,
 #wse .bt_icon_4_3::before {
   content: "o";
-  background: #88f;
+  background: #9c00ff;
 }
-#wse .bt_icon_9_1::before {
-  content: "n";
-  background: #fc8;
-}
-#wse .bt_icon_1::before {
-  content: "n";
-  background: #fc8;
-}
+#wse .bt_icon_9_1::before,
+#wse .bt_icon_1::before,
 #wse .bt_icon_9_2::before {
   content: "n";
-  background: #fc8;
+  background: #ffd800;
 }
-#wse .bt_icon_9_4::before {
-  content: "c";
-  background: #fc8;
-}
-#wse .bt_icon_9_5::before {
-  content: "i";
-  background: #fc8;
-}
+#wse .bt_icon_9_4::before,
 #wse .bt_icon_9_6::before {
   content: "c";
-  background: #fc8;
+  background: #ffd800;
 }
+#wse .bt_icon_9_5::before,
 #wse .bt_icon_9_7::before {
   content: "i";
-  background: #fc8;
+  background: #ffd800;
 }
 .bt_collapsed > div {
   display: none;
