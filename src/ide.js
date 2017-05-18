@@ -130,7 +130,7 @@ D.IDE=function(){'use strict'
         I.gd_close.onclick=function(){ret(-1)}
         I.gd_btns.onclick=function(e){if(e.target.nodeName==='BUTTON'){
                                       var i=-1,t=e.target;while(t){t=t.previousSibling;i++}ret(i)}}
-        D.util.dlg(I.gd,{w:400});setTimeout(function(){b.focus()},1)
+        D.util.dlg(I.gd,{w:400,closable:false});setTimeout(function(){b.focus()},1)
       }
     },
     StringDialog:function(x){
@@ -144,7 +144,7 @@ D.IDE=function(){'use strict'
       I.gd_close.onclick=function(){ret(x.defaultValue||null)}
       I.gd_btns.onclick=function(e){if(e.target.nodeName==='BUTTON'){
                                         ret(e.target.previousSibling?x.defaultValue||null:inp.value)}}
-      D.util.dlg(I.gd,{w:400,h:250});setTimeout(function(){inp.focus()},1)
+      D.util.dlg(I.gd,{w:400,h:250,closable:false});setTimeout(function(){inp.focus()},1)
     },
     TaskDialog:function(x){
       var esc=D.util.esc
@@ -160,7 +160,7 @@ D.IDE=function(){'use strict'
       I.gd_close.onclick=function(){ret(-1)}
       I.gd_btns.onclick=function(e){if(e.target.nodeName==='BUTTON'){
                                       var t=e.target,i=99;while(t){t=t.previousSibling;i++}ret(i)}}
-      D.util.dlg(I.gd,{w:400,h:300});setTimeout(function(){b.focus()},1)
+      D.util.dlg(I.gd,{w:400,h:300,closable:false});setTimeout(function(){b.focus()},1)
     },
     ReplyGetSIStack:function(x){ide.dbg&&ide.dbg.sistack.render(x.stack)},
     ReplyGetThreads:function(x){ide.dbg&&ide.dbg.threads.render(x.threads)},
