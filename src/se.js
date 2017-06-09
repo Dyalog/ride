@@ -58,7 +58,8 @@ D.Se.prototype={
       sp=cm.getOption('readOnly')&&s0!==p?(s0+sp):sp
       cm.replaceRange(sp,{line:l,ch:0},{line:l,ch:s0.length},'D')
       cm.setCursor({line:cm.lastLine()})
-      if (this.btm!=null) this.btm=-1
+      var i=cm.getScrollInfo()
+      this.btm=Math.max(i.clientHeight+i.top,cm.heightAtLine(cm.lastLine(),"local"))
     }
   },
   prompt:function(x){
@@ -89,8 +90,7 @@ D.Se.prototype={
     if(this.btm==null){var i=this.cm.getScrollInfo();this.btm=i.clientHeight+i.top}
   },
   restoreScrollPos:function(){
-    if(this.btm==-1){this.cm.scrollTo(0,this.cm.heightAtLine(this.cm.lastLine(),"local")-this.cm.getScrollInfo().clientHeight+this.cm.defaultTextHeight()+4)}
-    else if(this.btm!=null){var i=this.cm.getScrollInfo();this.cm.scrollTo(0,this.btm-i.clientHeight)}
+    if(this.btm!=null){var i=this.cm.getScrollInfo();this.cm.scrollTo(0,this.btm-i.clientHeight)}
   },
   hasFocus:function(){return this.cm.hasFocus()},
   focus:function(){

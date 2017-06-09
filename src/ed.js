@@ -81,8 +81,7 @@ D.Ed.prototype={
     if(this.btm==null){var i=this.cm.getScrollInfo();this.btm=i.clientHeight+i.top}
   },
   restoreScrollPos:function(){
-    if(this.btm==-1){this.cm.scrollTo(0,this.cm.heightAtLine(this.cm.lastLine(),"local")-this.cm.getScrollInfo().clientHeight+this.cm.defaultTextHeight()+4)}
-    else if(this.btm!=null){var i=this.cm.getScrollInfo();this.cm.scrollTo(0,this.btm-i.clientHeight)}
+    if(this.btm!=null){var i=this.cm.getScrollInfo();this.cm.scrollTo(0,this.btm-i.clientHeight)}
     else {this.cm.scrollTo(0,0)}
   },
   updateSIStack:function(x){
