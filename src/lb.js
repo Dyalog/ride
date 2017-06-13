@@ -2,7 +2,7 @@
 ;(D=typeof D==="undefined"?{}:D).lb={//language bar information
 order:"← +-×÷*⍟⌹○!? |⌈⌊⊥⊤⊣⊢ =≠≤<>≥≡≢ ∨∧⍲⍱ ↑↓⊂⊃⊆⌷⍋⍒ ⍳⍸∊⍷∪∩~ /\\⌿⍀ ,⍪⍴⌽⊖⍉ ¨⍨⍣.∘⍤@ ⍞⎕⍠⌸⌺⌶⍎⍕ ⋄⍝→⍵⍺∇& ¯⍬",
 tips:{
-"←":["Left Arrow (←)","Dyadic syntax:   Assignment\n\n      X←3 5⍴'ABCDEFG'\n      X\nABCDE\nFGABC\nDEFGA\n\n      X,←3 4 5\n      X\nABCDE 3\nFGABC 4\nDEFGA 5"],
+"←":["Left Arrow (←)","Assignment\n\n      X ← 'hallo'  ⍝ initial assignment\n      (1↑X) ← 'H'  ⍝ selective assignment (replace first item)\n      X ,← '!'     ⍝ modified assignment (append an item)\n      X[2] ← 'e'   ⍝ indexed assignment (replace 2nd item)\n      X\nHello!\n\n      (X Y) ← 3 4  ⍝ distributed (re-)assignment\n      plus ← +     ⍝ function assignment\n      X plus Y\n7"],
 "+":["Plus (+)","Monadic function:  Conjugate\n\n      + 3.2 ¯12.666 1j1 2j¯2\n3.2 ¯12.666 1J¯1 2J2\n\nDyadic function:   Plus\n\n      1 2 3 4 + 5 6 7 8\n6 8 10 12"],
 "-":["Minus (-)","Monadic function:  Negate\n\n      - 3 2 5.5 ¯7 0\n¯3 ¯2 ¯5.5 7 0\n\nDyadic function:   Minus\n\n      3 7 9 - 5\n¯2 2 4"],
 "×":["Times (×)","Monadic function:  Direction\n\n      × 3 2 ¯2 0 8\n1 1 ¯1 0 1\n\nDyadic function:   Times\n\n      2 ¯8 2 5 4 × 3 2 ¯2 0 8\n6 ¯16 ¯4 0 32"],
@@ -77,7 +77,7 @@ tips:{
 "→":["Right Arrow (→)","Niladic syntax:    Abort\n\n      →\n\nMonadic syntax:  Branch\n\n      → Label1"],
 "⍵":["Omega (⍵)","Right argument in direct functions\n\n      {(+/⍵)÷⍴⍵} 1 2 3 4    ⍝ Arithmetic Mean (Average)\n2.5"],
 "⍺":["Alpha (⍺)","Left argument in direct functions\n\n      3 {⍵*÷⍺} 64     ⍝ ⍺th root\n4"],
-"∇":["Del (∇)","Direct Function Self Reference (Recursion)\n\nfact←{          ⍝ Factorial ⍵.\n    ⍵≤1: 1      ⍝ Small ⍵, finished,\n    ⍵×∇ ⍵-1     ⍝ Otherwise recur.\n}"],
+"∇":["Del (∇)","Direct Function Self Reference (Recursion)\n\nfact←{          ⍝ Factorial ⍵.\n    ⍵≤1:1       ⍝ Small ⍵, finished\n    ⍵×∇ ⍵-1     ⍝ Otherwise recur.\n}"],
 "&":["Ampersand (&)","Monadic operator:  Spawn\n\n      ⍎& '÷2 4'\n0.5 0.25\n\n      20÷&2 4\n10 5"],
 "¯":["High Minus (¯)","If a number is prefixed by the ¯ symbol (also known as\n\"high minus\") it means that the number is negative.\n\n      1+¯1 0 1 ¯3\n0 1 2 ¯2"],
 "⍬":["Zilde (⍬)","Niladic syntax:     Empty Numeric Vector\n\n      ⍬≡⍳0\n1\n      ⍬≢''\n1\n      ⍬≡0⍴0\n1"]
