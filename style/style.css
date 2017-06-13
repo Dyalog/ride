@@ -916,6 +916,7 @@ body.floating-window {
   text-decoration: none;
   cursor: pointer;
   top: -0.5ex;
+  float:right;
 }
 .dlg_close:hover {
   background-color: #fff;

@@ -126,11 +126,13 @@ D.IDE=function(){'use strict'
         I.gd_btns.innerHTML=(x.options||[]).map(function(y){return'<button>'+D.util.esc(y)+'</button>'}).join('')
         var b=I.gd_btns.querySelector('button');
         var ret=function(r){I.gd_btns.onclick=I.gd_close.onclick=null;I.gd.hidden=1
-                            D.send('ReplyOptionsDialog',{index:r,token:x.token})}
+                            D.send('ReplyOptionsDialog',{index:r,token:x.token})
+                            D.ide.focusedWin.focus();
+                          }
         I.gd_close.onclick=function(){ret(-1)}
         I.gd_btns.onclick=function(e){if(e.target.nodeName==='BUTTON'){
                                       var i=-1,t=e.target;while(t){t=t.previousSibling;i++}ret(i)}}
-        D.util.dlg(I.gd,{w:400,closable:false});setTimeout(function(){b.focus()},1)
+        D.util.dlg(I.gd,{w:400});setTimeout(function(){b.focus()},1)
       }
     },
     StringDialog:function(x){
@@ -140,11 +142,13 @@ D.IDE=function(){'use strict'
       var inp=I.gd_content.querySelector('input');inp.value=x.initialValue||''
       I.gd_btns.innerHTML='<button>OK</button><button>Cancel</button>'
       var ret=function(r){I.gd_btns.onclick=I.gd_close.onclick=null;I.gd.hidden=1
-                          D.send('ReplyStringDialog',{value:r,token:x.token})}
+                          D.send('ReplyStringDialog',{value:r,token:x.token})
+                          D.ide.focusedWin.focus();
+                        }
       I.gd_close.onclick=function(){ret(x.defaultValue||null)}
       I.gd_btns.onclick=function(e){if(e.target.nodeName==='BUTTON'){
                                         ret(e.target.previousSibling?x.defaultValue||null:inp.value)}}
-      D.util.dlg(I.gd,{w:400,h:250,closable:false});setTimeout(function(){inp.focus()},1)
+      D.util.dlg(I.gd,{w:400,h:250});setTimeout(function(){inp.focus()},1)
     },
     TaskDialog:function(x){
       var esc=D.util.esc
@@ -155,12 +159,14 @@ D.IDE=function(){'use strict'
         (x.buttonText||[]).map(function(y){return'<button class=task>'+D.util.esc(y)+'</button>'}).join('')+
         (x.footer?'<div class=task_footer>'+esc(x.footer)+'</div>':'')
       var ret=function(r){I.gd_btns.onclick=I.gd_close.onclick=null;I.gd.hidden=1
-                          D.send('ReplyTaskDialog',{index:r,token:x.token})}
+                          D.send('ReplyTaskDialog',{index:r,token:x.token});
+                          D.ide.focusedWin.focus();
+                        }
       var b=I.gd_btns.querySelector('button');
       I.gd_close.onclick=function(){ret(-1)}
       I.gd_btns.onclick=function(e){if(e.target.nodeName==='BUTTON'){
                                       var t=e.target,i=99;while(t){t=t.previousSibling;i++}ret(i)}}
-      D.util.dlg(I.gd,{w:400,h:300,closable:false});setTimeout(function(){b.focus()},1)
+      D.util.dlg(I.gd,{w:400,h:300});setTimeout(function(){b.focus()},1)
     },
     ReplyGetSIStack:function(x){ide.dbg&&ide.dbg.sistack.render(x.stack)},
     ReplyGetThreads:function(x){ide.dbg&&ide.dbg.threads.render(x.threads)},
