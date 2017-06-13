@@ -95,7 +95,7 @@ function updDups(){ //check for duplicates and make them show in red
 function getKeystroke(b,f){ //b:"+" button,f:callback
   var e=document.createElement('input'),r //r:result
   var upd=function(x){ //update displayed text for new keystroke as you hold down/release keys
-    var kn=CM.keyNames[x.which]||'';if(!kn||kn==='Shift'||kn==='Ctrl'||kn==='Alt'||kn==='Cmd')kn=''
+    var kn=CM.keyNames[x.which]||'';if(!kn||kn==='Shift'||kn==='Ctrl'||kn==='Alt'||kn==='Mod')kn=''
     e.value=(x.shiftKey&&(x.type!=='keyup'||x.which)?'Shift-':'')+
             (x.ctrlKey?'Ctrl-':'')+(x.altKey?'Alt-':'')+(x.metaKey?'Cmd-':'')+kn
     if(kn){r=e.value;e.blur()};x.preventDefault();x.stopPropagation();return!1
