@@ -40,6 +40,7 @@ D.prf_tabs.code={
     p.indentMethods      (q.aim.checked?(+q.swm.value||0):-1)
     p.indentComments     (q.icom.checked)
     p.indentOnOpen       (q.io  .checked)
+    p.ilf                (q.ilf .checked)
     p.matchBrackets      (q.mb  .checked)
     p.autoCloseBrackets  (q.acbr.checked)
     p.autoCloseBlocks    (q.acbl.checked)
