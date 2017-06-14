@@ -29,12 +29,14 @@ if(D.el){
     if(!D.ide)return
     var wins=D.ide.wins
     for(var x in wins){
-      var w=wins[x],b=w.getDocument().body
-      var btm_line=w.cm.lineAtHeight(w.btm,'local')
-      var diff=w.btm-btm_line*w.cm.defaultTextHeight()
+      var w=wins[x],b=w.getDocument().body,
+        top=w.cm.heightAtLine(w.cm.lastLine(),"local")<w.btm,i=w.cm.getScrollInfo(),
+        line=w.cm.lineAtHeight(top?i.top:w.btm,'local'),
+        diff=w.btm-line*w.cm.defaultTextHeight(),
+        ch=i.clientHeight
       b.className='zoom'+z+' '+b.className.split(/\s+/).filter(function(s){return!/^zoom-?\d+$/.test(s)}).join(' ')
       w.refresh()
-      w.btm=w.cm.defaultTextHeight()*btm_line+diff;
+      w.btm=w.cm.defaultTextHeight()*line+(top?ch+5:diff)+w.cm.getScrollInfo().clientHeight-ch
     }
     wins[0].restoreScrollPos()
   })
