@@ -81,7 +81,7 @@ CM.defineMode('apl',function(){
           case'⍬':return'apl-zld'
           case'(':a.push({t:c,oi:la.oi,ii:la.ii});return'apl-par'
           case'[':a.push({t:c,oi:la.oi,ii:la.ii});return'apl-sqbr'
-          case'{':a.push({t:c,oi:n,ii:n+sw});return'apl-dfn'+dfnDepth(a)+' apl-dfn'
+          case'{':a.push({t:c,oi:la.ii,ii:la.ii+sw});return'apl-dfn'+dfnDepth(a)+' apl-dfn'
           case')':if(la.t==='('){a.pop();return'apl-par' }else{return'apl-err'}
           case']':if(la.t==='['){a.pop();return'apl-sqbr'}else{return'apl-err'}
           case'}':if(la.t==='{'){a.pop();return'apl-dfn'+(1+dfnDepth(a))+' apl-dfn'}else{return'apl-err'}
