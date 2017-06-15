@@ -42,6 +42,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   q.exes.value=q.exe.value
   if(!q.exes.value){q.exes.selectedIndex=0;q.exe.value=q.exes.value}
   q.exe.readOnly=!!q.exes.value
+  q.exe.onchange();
 }
 ,validate=x=>{
   const t=x.type,p=x.port,tn=x.ssh_tnl
@@ -182,7 +183,7 @@ D.cn=_=>{ //set up Connect page
         .on('error',x=>{err(x.message||''+x);updExes();q.fetch.disabled=0})
     })
   }
-  q.exe.onchange=q.exe.onkeyup=_=>{q.exes.value||D.prf.otherExe(q.exe.value)}
+  q.exe.onchange=q.exe.onkeyup=_=>{q.exes.value||D.prf.otherExe(q.exe.value);sel&&(sel.exe=q.exe.value)}
   q.exes.onchange=_=>{const v=q.exes.value;q.exe.value=v||D.prf.otherExe();q.exe.readOnly=!!v;$(q.exe).change()
                       v||q.exe.focus();D.prf.selectedExe(v)} //todo: do we still need this pref?
   q.env_add.onclick=x=>{
