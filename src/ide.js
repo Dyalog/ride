@@ -319,6 +319,7 @@ D.IDE=function(){'use strict'
   }
   I.lb.hidden=!D.prf.lbar();updTopBtm();$(window).resize(updTopBtm)
   D.prf.lbar(function(x){I.lb.hidden=!x;updTopBtm()})
+  D.prf.dark(function(x){x?$("body").addClass("newDark"):$("body").removeClass("newDark")})
   setTimeout(function(){try{D.installMenu(D.parseMenuDSL(D.prf.menu()))}
                         catch(e){$.err('Invalid menu configuration -- the default menu will be used instead')
                                  console.error(e);D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()))}},100)

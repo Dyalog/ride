@@ -25,6 +25,7 @@ D.prf_tabs.code={
     q.acbe.value  =  p.autoCloseBlocksEnd ()
     q.ac  .checked=!!p.autocompletion     ()
     q.acd .value  =  p.autocompletionDelay()
+    q.dark.checked=!!p.dark()
     q.bc.checked=!!p.blockCursor        ()
     q.blc.checked=!!p.blinkCursor         ()
     q.fold.checked=!!p.fold               ()
@@ -53,6 +54,7 @@ D.prf_tabs.code={
     p.valueTips          (q.vt  .checked)
     p.squiggleTips       (q.sqt .checked)
     p.sqp                (q.sqp .checked)
+    p.dark                (q.dark .checked)
   },
   validate:function(){
     if(q.ai .checked&&!isInt(q.sw .value,0))return{msg:'Auto-indent must be a non-negative integer.'           ,el:q.sw}
