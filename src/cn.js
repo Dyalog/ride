@@ -42,7 +42,6 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   q.exes.value=q.exe.value
   if(!q.exes.value){q.exes.selectedIndex=0;q.exe.value=q.exes.value}
   q.exe.readOnly=!!q.exes.value
-  q.exe.onchange();
 }
 ,validate=x=>{
   const t=x.type,p=x.port,tn=x.ssh_tnl
@@ -242,6 +241,7 @@ D.cn=_=>{ //set up Connect page
         q.cert_cb.checked=!!sel.cert;q.cert.disabled=q.key.disabled=q.cert_dots.disabled=q.key_dots.disabled=!sel.cert
         q.subj_cb.checked=!!sel.subj
         q.rootcertsdir_cb.checked=!!sel.rootcertsdir;q.rootcertsdir.disabled=q.rootcertsdir_dots.disabled=!sel.rootcertsdir
+        q.exe.onchange();
       }
     })
     .list('select',0)
