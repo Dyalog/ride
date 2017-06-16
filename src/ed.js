@@ -204,7 +204,7 @@ D.Ed.prototype={
         }
       }
     }
-    cm.execCommand('newlineAndIndent')
+    cm.getOption('mode')=='apl'?cm.execCommand('newlineAndIndent'):cm.replaceSelection('\n','end')
   },
   BH:function(){D.send('ContinueTrace' ,{win:this.id})},
   RM:function(){D.send('Continue'      ,{win:this.id})},
