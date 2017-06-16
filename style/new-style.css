@@ -214,11 +214,11 @@
   src: url('Apl385.woff') format('woff'), url('Apl385.ttf') format('truetype');
 }
 .newDark ::selection {
-  background: #0a246a;
+  background: #313446;
   color: #fff;
 }
 .newDark ::-moz-selection {
-  background: #0a246a;
+  background: #313446;
   color: #fff;
 }
 .newDark body {
@@ -248,12 +248,12 @@
   padding: 5px;
 }
 .newDark label {
-  color: #00a1ff;
+  color: #fc9732;
 }
 .newDark button {
   border: none;
   background: #25303B;
-  color: #00a1ff;
+  color: #fc9732;
   font-family: inherit;
   font-weight: bold;
   padding: 5px 0.5em;
@@ -286,7 +286,7 @@
   left: -2px;
   font-size: 70%;
   text-align: center;
-  box-shadow: 0 0 0 1px #00a1ff inset;
+  box-shadow: 0 0 0 1px #fc9732 inset;
   border-radius: 2px;
   transition: 0.2s;
   font-weight: bold;
@@ -305,19 +305,19 @@
   background: #313446;
 }
 .newDark [type=checkbox]:active::before {
-  background: #00a1ff;
+  background: #fc9732;
   color: #313446;
 }
 .newDark [type=checkbox]:checked::before {
-  color: #00a1ff;
+  color: #fc9732;
 }
 .newDark [type=checkbox]:disabled::before {
   color: transparent;
-  box-shadow: 0 0 0 1px #00a1ff inset;
+  box-shadow: 0 0 0 1px #fc9732 inset;
   background: #313446;
 }
 .newDark [type=checkbox]:checked:disabled::before {
-  color: grayscale(#00a1ff);
+  color: grayscale(#fc9732);
   background: grayscale(#888);
 }
 .newDark .dark [type=checkbox]:checked:disabled::before {
@@ -386,7 +386,7 @@
 }
 .newDark #cn .hsplitbar {
   width: 6px;
-  background: #00a1ff;
+  background: #fc9732;
 }
 .newDark #cn .indent {
   margin-left: 24px;
@@ -410,7 +410,7 @@
   margin-top: 2px;
 }
 .newDark #cn_favs .list_sel {
-  background: #0a246a;
+  background: #313446;
   color: #fff;
 }
 .newDark #cn_favs .list-focus {
@@ -491,7 +491,7 @@
 .newDark #cn_env_add a {
   font-family: apl, monospace;
   font-size: 18px;
-  color: #00a1ff;
+  color: #fc9732;
   text-decoration: none;
 }
 .newDark .cn_hint {
@@ -565,7 +565,7 @@
 }
 .newDark .menu a {
   text-decoration: none;
-  color: #00a1ff;
+  color: #fc9732;
   cursor: default;
 }
 .newDark .menu .m-opener.m-top {
@@ -616,14 +616,14 @@
   color: #777;
 }
 .newDark .menu .m-box a:focus {
-  background: #0a246a;
+  background: #313446;
   color: #fff;
 }
 .newDark .menu .m-box a:focus .m-shc {
   color: #fff;
 }
 .newDark .menu .m-box a:focus.m-checked {
-  background: #0a246a 5px center no-repeat url(img/menu_chk_wht.png);
+  background: #313446 5px center no-repeat url(img/menu_chk_wht.png);
 }
 .newDark .menu .m-box a.m-checked {
   background: transparent 5px center no-repeat url(img/menu_chk.png);
@@ -632,7 +632,7 @@
   background: transparent center right 5px no-repeat url(img/menu_tri.png);
 }
 .newDark .menu .m-box .m-opener:focus {
-  background: #0a246a center right 5px no-repeat url(img/menu_tri_wht.png);
+  background: #313446 center right 5px no-repeat url(img/menu_tri_wht.png);
 }
 .newDark .menu hr {
   margin: 3px 0 5px 0;
@@ -642,7 +642,7 @@
   font-size: 18px;
   cursor: default;
   line-height: 22px;
-  background-color: #00a1ff;
+  background-color: #fc9732;
   border-top: 1px #000 solid;
   border-bottom: 1px #000 solid;
 }
@@ -656,7 +656,7 @@
   color: #1c1e28;
 }
 .newDark #lb b:hover {
-  background-color: rgba(119, 119, 119, 0.2);
+  background-color: rgba(68, 68, 68, 0.2);
 }
 .newDark #lb b:active {
   background-color: rgba(0, 0, 0, 0.2);
@@ -678,7 +678,7 @@
   border-radius: 50%;
 }
 .newDark #lb_prf:hover {
-  background-color: rgba(119, 119, 119, 0.2);
+  background-color: rgba(68, 68, 68, 0.2);
 }
 .newDark #lb_prf:active {
   background-color: rgba(0, 0, 0, 0.2);
@@ -983,7 +983,7 @@
   background: #444;
 }
 .newDark .dlg_title {
-  color: #00a1ff;
+  color: #fc9732;
   cursor: default;
   text-align: center;
   padding-top: 0.5ex;
@@ -994,7 +994,7 @@
   text-transform: uppercase;
 }
 .newDark .dlg_close {
-  color: #00a1ff;
+  color: #fc9732;
   width: 2ex;
   height: 2ex;
   position: relative;
@@ -1110,7 +1110,7 @@
 }
 .newDark #prf_nav {
   height: 28px;
-  border-bottom: solid 1px #00a1ff;
+  border-bottom: solid 1px #fc9732;
   margin-bottom: 2px;
 }
 .newDark #prf_nav a {
@@ -1119,15 +1119,15 @@
   height: 13px;
   padding: 4px 12px 4px 12px;
   text-decoration: none;
-  color: #00a1ff;
+  color: #fc9732;
   margin: 4px 0 0 4px;
   transition: border-bottom 0.2s;
 }
 .newDark #prf_nav a:hover {
-  border-bottom: 0.5ex solid rgba(0, 161, 255, 0.5);
+  border-bottom: 0.5ex solid rgba(252, 151, 50, 0.5);
 }
 .newDark #prf_nav a.sel {
-  border-bottom: 0.5ex solid #00a1ff;
+  border-bottom: 0.5ex solid #fc9732;
   cursor: default;
 }
 .newDark #lyt {
@@ -1349,7 +1349,7 @@
   text-align: left;
   text-indent: -2ex;
   padding-left: 2ex;
-  color: #00a1ff;
+  color: #fc9732;
 }
 .newDark #shc_rst_all {
   float: right;
@@ -1376,6 +1376,7 @@
 .newDark #shc_tbl_wr tr:hover {
   color: #fff;
   background-color: #313446;
+  box-shadow: none!important;
 }
 .newDark #shc_tbl_wr tr:hover .shc_add {
   visibility: visible;
@@ -1539,7 +1540,7 @@
 }
 .newDark #title pre a {
   text-decoration: none;
-  color: #00a1ff;
+  color: #fc9732;
 }
 .newDark #title pre a:hover {
   color: #fff;
@@ -1554,7 +1555,7 @@
   float: right;
 }
 .newDark .dark #title pre a {
-  color: #00a1ff;
+  color: #fc9732;
 }
 .newDark #pmenu_rst {
   float: right;
@@ -1608,6 +1609,7 @@
 }
 .newDark #wse .bt_text.selected {
   background-color: rgba(128, 128, 128, 0.5);
+  outline: #313446;
 }
 .newDark #wse .bt_node_expand {
   display: inline-block;
@@ -1709,7 +1711,7 @@
   height: 14px;
   padding: 5px 5px;
   background-color: #1c1e28;
-  color: #00a1ff;
+  color: #fc9732;
 }
 .newDark .dark #debug .ctl_listview_header {
   background: #777;
@@ -2174,7 +2176,6 @@
   font-family: apl, monospace;
   font-size: 18px;
   height: 300px;
-  color: #000;
 }
 .newDark .CodeMirror-lines {
   padding: 4px 0;
@@ -2306,7 +2307,6 @@
 .newDark .CodeMirror {
   position: relative;
   overflow: hidden;
-  background: #fff;
 }
 .newDark .CodeMirror-scroll {
   overflow: scroll!important;
@@ -2689,9 +2689,9 @@
   top: -2px !important;
 }
 .newDark .lm_tab {
-  background-color: #00a1ff !important;
+  background-color: #fc9732 !important;
   color: #1c1e28 !important;
-  border: 1px #00a1ff solid !important;
+  border: 1px #fc9732 solid !important;
 }
 .newDark .lm_tabs {
   padding-left: 3px !important;
@@ -2701,7 +2701,7 @@
 }
 .newDark .lm_splitter {
   opacity: 1 !important;
-  background: #00a1ff !important;
+  background: #fc9732 !important;
 }
 .newDark #status_body {
   overflow: scroll;

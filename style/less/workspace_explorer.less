@@ -51,9 +51,10 @@
 			margin-right: .2em;
 			color:#1c1e28 !important;
 		}
-	}
-	.bt_text.selected {
-		background-color: @background_color_2;
+		&.selected {
+			background-color: @background_color_2;
+			outline:lighten(@WIN_BG_COL,10);
+		}
 	}
 	.bt_node_expand {
 		display: inline-block;

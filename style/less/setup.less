@@ -13,8 +13,8 @@ table{border-collapse:collapse;border-spacing:0}
 
 @font-face{font-family:'apl';src:url('Apl385.woff')format('woff'),url('Apl385.ttf')format('truetype')}
 
-     ::selection{background:@DARK_BLUE;color:@WHITE} /*must be separate rules*/
-::-moz-selection{background:@DARK_BLUE;color:@WHITE} /*must be separate rules*/
+     ::selection{background:lighten(@WIN_BG_COL,10);color:@WHITE} /*must be separate rules*/
+::-moz-selection{background:lighten(@WIN_BG_COL,10);color:@WHITE} /*must be separate rules*/
 body{padding:0;margin:0;font-family:Verdana,"BitStream Vera Sans","DejaVu Sans",sans-serif;overflow:hidden}
 .dark{background:@LIGHT_GREY ;color:@WHITE}
 

@@ -61,14 +61,14 @@
 				color: @LIGHT_GREY;
 			}
 			&:focus {
-				background: @DARK_BLUE;
+				background: lighten(@WIN_BG_COL,10);
 				color: @WHITE;
 				.m-shc {
 					color: @WHITE;
 				}
 			}
 			&:focus.m-checked {
-				background: @DARK_BLUE 5px center no-repeat url(img/menu_chk_wht.png);
+				background: lighten(@WIN_BG_COL,10) 5px center no-repeat url(img/menu_chk_wht.png);
 			}
 		}
 		a.m-checked {
@@ -77,7 +77,7 @@
 		.m-opener {
 			background: transparent center right 5px no-repeat url(img/menu_tri.png);
 			&:focus {
-				background: @DARK_BLUE center right 5px no-repeat url(img/menu_tri_wht.png);
+				background: lighten(@WIN_BG_COL,10) center right 5px no-repeat url(img/menu_tri_wht.png);
 			}
 		}
 	}
