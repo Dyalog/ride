@@ -73,9 +73,11 @@ D.Se.prototype={
     x&&cm.clearHistory()
   },
   updSize:function(){
-    var top=this.cm.getScrollInfo().top,ontop=this.cm.heightAtLine(this.cm.lastLine(),"local")<this.btm;
+    var i=this.cm.getScrollInfo(),top=i.top,
+      ontop=top>this.cm.heightAtLine(this.cm.lastLine(),"local")-i.clientHeight;
     this.cm.setSize(this.dom.clientWidth,this.dom.clientHeight);this.updPW()
-    if (ontop) this.btm = top+this.cm.getScrollInfo().clientHeight;
+    if (ontop){this.btm=top+this.cm.getScrollInfo().clientHeight;
+    }else if(i.top==0){this.btm+=this.cm.getScrollInfo().clientHeight-i.clientHeight}
   },
   updPW:function(force){ //force:emit a SetPW message even if the width hasn't changed
     //discussion about CodeMirror's width in chars: https://github.com/codemirror/CodeMirror/issues/3618
