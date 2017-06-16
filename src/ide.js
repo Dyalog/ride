@@ -194,7 +194,8 @@ D.IDE=function(){'use strict'
       var a=mq.shift() //a[0]:command name, a[1]:command args
       if(a[0]==='AppendSessionOutput'){ //special case: batch sequences of AppendSessionOutput together
         ide.wins[0].cm.operation(function(){
-          var s=a[1].result,nq=Math.min(mq.length,256);s=typeof s==='string'?s:s.join('\n')
+          var s=a[1].result,nq=Math.min(mq.length,256);
+          if (typeof s==='object'){s=s.join('\n');ide.bannerDone=0}
           for(var i=0;i<nq&&mq[i][0]==='AppendSessionOutput';i++){
             var r=mq[i][1].result;s+=typeof r==='string'?r:r.join('\n')
           }
