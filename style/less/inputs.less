@@ -14,7 +14,6 @@ button{
   &:hover{color:@BUTTON_HOVER_COL}
   &:active{box-shadow:none}
 }
-.dark button{background: #333;}
 [type=checkbox],[type=checkbox]:focus{margin-right:0.75em;outlinex:none!important}
 [type=checkbox]::before{
     position:relative;
@@ -30,7 +29,6 @@ button{
     transition:0.2s;
     font-weight:bold
 }
-.dark [type=checkbox]::before{background:@MID_GREY}
 [type=checkbox]{
     &:focus:before{outline:inherit}
     &:focus{outline:dotted @BLACK 1px;outline-offset:2px}
@@ -40,8 +38,6 @@ button{
     &:disabled::before{color:transparent;box-shadow:0 0 0 1px @CHECKBOX_COL inset;background:lighten(@WIN_BG_COL,10%)}
     &:checked:disabled::before{color:grayscale(@CHECKBOX_COL);background:grayscale(@CHECKBOX_BG_COL)}
 }
-.dark [type=checkbox]:checked:disabled::before{color:@LIGHT_GREY ;background:@MID_GREY}
-.dark [type=checkbox]:disabled::before{color:transparent;background:@MID_GREY}
 input,textarea,pre,tt{font-family:@APL_FONT;font-size:18px}
 input,textarea,select,a{outline:0;}
 select:focus{outline:dotted @BLACK 1px}
