@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'apl';
+  src: url('Apl385.woff') format('woff'), url('Apl385.ttf') format('truetype');
+}
+.ui-font {
+  font-family: "Verdana";
+  font-size: 14px;
+}
 .newDark {
   /* http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 License: none (public domain) */
   /*must be separate rules*/
@@ -209,10 +217,6 @@
   border-collapse: collapse;
   border-spacing: 0;
 }
-@font-face {
-  font-family: 'apl';
-  src: url('Apl385.woff') format('woff'), url('Apl385.ttf') format('truetype');
-}
 .newDark ::selection {
   background: #313446;
   color: #fff;
@@ -233,7 +237,7 @@
   right: 10px;
 }
 .newDark #demo-keys span {
-  font-family: apl, monospace;
+  font-family: "apl";
   font-size: 18px;
   font-size: 48px;
   border: solid #333 1px;
@@ -314,7 +318,7 @@
 .newDark textarea,
 .newDark pre,
 .newDark tt {
-  font-family: apl, monospace;
+  font-family: "apl";
   font-size: 18px;
 }
 .newDark input,
@@ -465,7 +469,7 @@
   padding-left: 32px;
 }
 .newDark #cn_env_add a {
-  font-family: apl, monospace;
+  font-family: "apl";
   font-size: 18px;
   color: #fc9732;
   text-decoration: none;
@@ -614,7 +618,7 @@
   margin: 3px 0 5px 0;
 }
 .newDark #lb {
-  font-family: apl, monospace;
+  font-family: "apl";
   font-size: 18px;
   cursor: default;
   line-height: 22px;
@@ -660,7 +664,7 @@
   background-color: rgba(0, 0, 0, 0.2);
 }
 .newDark #lb_tip {
-  font-family: apl, monospace;
+  font-family: "apl";
   font-size: 18px;
   position: absolute;
   padding: 8px;
@@ -680,7 +684,7 @@
   content: "";
 }
 .newDark #lb_tip_desc {
-  font-family: apl, monospace;
+  font-family: "apl";
   font-size: 18px;
   border-bottom: solid 1px #ccc;
   padding-bottom: 8px;
@@ -689,11 +693,11 @@
   text-transform: uppercase;
 }
 .newDark #lb_tip_text {
-  font-family: apl, monospace;
+  font-family: "apl";
   font-size: 18px;
 }
 .newDark #vt_bln {
-  font-family: apl, monospace;
+  font-family: "apl";
   font-size: 18px;
   position: absolute;
   border: solid #000 1px;
@@ -1106,7 +1110,7 @@
   text-align: center;
 }
 .newDark #lyt_kbd {
-  font-family: apl, monospace;
+  font-family: "apl";
   font-size: 18px;
   border-radius: 2px;
   height: 250px;
@@ -1313,7 +1317,7 @@
   margin-right: 8px;
 }
 .newDark .shc_code {
-  font-family: apl, monospace;
+  font-family: "apl";
   font-size: 18px;
   padding: 2px 16px 2px 8px;
 }
@@ -2117,7 +2121,7 @@
   background: no-repeat center center url(img/close.png);
 }
 .newDark .CodeMirror {
-  font-family: apl, monospace;
+  font-family: "apl";
   font-size: 18px;
   height: 300px;
 }
@@ -2498,7 +2502,7 @@
   border: solid #f00 1px;
 }
 .newDark .CodeMirror-hints {
-  font-family: apl, monospace;
+  font-family: "apl";
   font-size: 18px;
   position: absolute;
   overflow: hidden;
@@ -2647,7 +2651,7 @@
   overflow: scroll;
 }
 .newDark #status {
-  font-family: apl, monospace;
+  font-family: "apl";
   white-space: pre;
 }
 .newDark #status .m {
@@ -2669,4 +2673,9 @@
   overflow: hidden;
   overflow-y: scroll;
   max-height: 397px;
+}
+#cn *,
+#cn #cn_env_add a {
+  font-family: "Verdana";
+  font-size: 14px;
 }

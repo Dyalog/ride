@@ -1,4 +1,5 @@
 @import './less/colours.less';
+@import './less/fonts.less';
 
 .newDark{
     @import './less/setup.less';
@@ -26,4 +27,10 @@
     overflow: hidden;
     overflow-y: scroll;
     max-height: 397px;
+}
+
+#cn{
+  *,#cn_env_add a{
+    .ui-font();
+  }
 }
