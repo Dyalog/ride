@@ -103,10 +103,10 @@
   -webkit-padding-end: 20px;
   -webkit-padding-start: 2px;
   -webkit-user-select: none;
-  background-image: url(img/select_arrow.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
-  background-position: 97% center;
+  background-image: url(img/arrow2.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+  background-position: right center;
   background-repeat: no-repeat;
-  border: 1px solid #AAA;
+  border: 1px solid #FFF;
   font-family: inherit;
   font-size: inherit;
   overflow: hidden;
