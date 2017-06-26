@@ -56,7 +56,6 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   q.exes.value=q.exe.value
   if(!q.exes.value){q.exes.selectedIndex=0;q.exe.value=q.exes.value}
   q.exe.readOnly=!!q.exes.value;
-  sel&&(sel.exe=q.exe.value);
 }
 ,validate=x=>{
   const t=x.type,p=x.port,ssh=x.subtype==='ssh'
@@ -169,7 +168,8 @@ D.cn=_=>{ //set up Connect page
     const u=sel.name,v=q.fav_name.value||''
     if(u!==v){v?(sel.name=v):delete sel.name;$sel.find('.name').text(favText(sel))}
   }
-  updFormDtl();q.type.onchange=_=>{sel.type=q.type.value;updFormDtl()}
+  updFormDtl();
+  q.type.onchange=_=>{sel.type=q.type.value;updFormDtl();sel.exe=sel.exe||q.exe.value;}
   q.subtype.onchange=updSubtype
   q.ssh_user.placeholder=user
   var enterConnect=function(event){if (event.keyCode==13){$('#cn_go').click()}}
