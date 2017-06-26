@@ -74,7 +74,203 @@
   font-weight: 900;
   font-style: italic;
 }
-/*connect page*/
+/* http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 License: none (public domain) */
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+body {
+  padding: 0;
+  margin: 0;
+  font-family: Verdana, "BitStream Vera Sans", "DejaVu Sans", sans-serif;
+  overflow: hidden;
+}
+#demo-keys {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+}
+#demo-keys span {
+  font-family: apl, monospace;
+  font-size: 18px;
+  font-size: 48px;
+  margin: 10px;
+  border-radius: 10px;
+  padding: 5px;
+}
+button {
+  border: none;
+  font-family: inherit;
+  font-weight: bold;
+  padding: 5px 0.5em;
+  transition: box-shadow 0.2s;
+  text-transform: uppercase;
+}
+button:active {
+  box-shadow: none;
+}
+[type=checkbox],
+[type=checkbox]:focus {
+  margin-right: 0.75em;
+  outlinex: none !important;
+}
+[type=checkbox]::before {
+  position: relative;
+  content: "\2714";
+  color: transparent;
+  display: inline-block;
+  height: 3ex;
+  width: 3ex;
+  top: -4px;
+  left: -2px;
+  font-size: 70%;
+  text-align: center;
+  border-radius: 2px;
+  transition: 0.2s;
+  font-weight: bold;
+}
+[type=checkbox]:focus:before {
+  outline: inherit;
+}
+[type=checkbox]:focus {
+  outline: dotted #000 1px;
+  outline-offset: 2px;
+}
+input,
+textarea,
+pre,
+tt {
+  font-family: apl, monospace;
+  font-size: 18px;
+}
+input,
+textarea,
+select,
+a {
+  outline: 0;
+}
+select:focus {
+  outline: dotted #000 1px;
+}
 #cn {
   position: absolute;
   left: 0;
@@ -87,6 +283,17 @@
 #cn input {
   font-family: "Roboto";
   font-size: 14px;
+}
+#cn input:not([type=button]):not([type=file]):not([type=submit]):not([disabled]),
+#cn textarea {
+  border-radius: 2px;
+  border: 1px solid white;
+  padding-left: 5px;
+  line-height: 24px;
+  background-color: #e3e0d7;
+}
+#cn label {
+  font-weight: 600;
 }
 #cn .cn_label {
   display: inline-block;
@@ -115,7 +322,9 @@
   white-space: nowrap;
 }
 #cn .hsplitbar {
-  width: 6px;
+  width: 10px;
+  border-left: 1px solid white;
+  border-right: 1px solid white;
 }
 #cn .indent {
   margin-left: 24px;
@@ -128,15 +337,27 @@
   bottom: 0;
   overflow: auto;
 }
-#cn_favs > * {
-  line-height: 30px;
+#cn_favs > div {
+  line-height: 46px;
   padding: 0 2px 0 8px;
   margin-bottom: 1px;
   cursor: default;
 }
 #cn_favs .go {
   float: right;
-  margin-top: 2px;
+  margin-top: 6px;
+  margin-right: 5px;
+  width: 32px;
+  height: 32px;
+  border: 1px solid white;
+  border-radius: 2px;
+  padding: 1px 6px;
+  content: ">";
+  font-size: 1.6em;
+  line-height: 0px;
+}
+#cn_favs .name {
+  font-weight: 600;
 }
 #cn_favs .list-focus {
   outline: dotted #000 1px;
@@ -721,153 +942,37 @@ span.CodeMirror-selectedtext {
 .lm_splitter {
   opacity: 1 !important;
 }
-/* http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 License: none (public domain) */
-html,
-body,
-div,
-span,
-applet,
-object,
-iframe,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p,
-blockquote,
-pre,
-a,
-abbr,
-acronym,
-address,
-big,
-cite,
-code,
-del,
-dfn,
-em,
-img,
-ins,
-kbd,
-q,
-s,
-samp,
-small,
-strike,
-strong,
-sub,
-sup,
-tt,
-var,
-b,
-u,
-i,
-center,
-dl,
-dt,
-dd,
-ol,
-ul,
-li,
-fieldset,
-form,
-label,
-legend,
-table,
-caption,
-tbody,
-tfoot,
-thead,
-tr,
-th,
-td,
-article,
-aside,
-canvas,
-details,
-embed,
-figure,
-figcaption,
-footer,
-header,
-hgroup,
-menu,
-nav,
-output,
-ruby,
-section,
-summary,
-time,
-mark,
-audio,
-video {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  font-size: 100%;
-  font: inherit;
-  vertical-align: baseline;
+/* Default colours */
+#cn_favs > div {
+  background-color: #eee;
+  color: #fc9732;
 }
-article,
-aside,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-menu,
-nav,
-section {
-  display: block;
+#cn_favs .list_sel {
+  background: #fc9732;
+  color: #fff;
 }
-body {
-  line-height: 1;
+#cn_favs .list-focus {
+  outline: dotted #000 1px;
 }
-ol,
-ul {
-  list-style: none;
+#cn_favs .go {
+  background: linear-gradient(to right bottom, #e3e0d7 50%, #dad7ce 50%);
 }
-blockquote,
-q {
-  quotes: none;
+#cn_lhs {
+  background: #e3e0d7;
 }
-blockquote:before,
-blockquote:after,
-q:before,
-q:after {
-  content: '';
-  content: none;
+#cn .hsplitbar {
+  background-color: #fc9732;
 }
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
+#cn_fav_btns button {
+  background-color: transparent;
+  color: #893d0a;
 }
-body {
-  padding: 0;
-  margin: 0;
-  font-family: Verdana, "BitStream Vera Sans", "DejaVu Sans", sans-serif;
-  overflow: hidden;
-}
-#demo-keys {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-}
-#demo-keys span {
-  font-family: apl, monospace;
-  font-size: 18px;
-  font-size: 48px;
-  margin: 10px;
-  border-radius: 10px;
-  padding: 5px;
+#cn label {
+  color: #893d0a;
 }
 .newDark {
   /*must be separate rules*/
   /*must be separate rules*/
-  /* Material UI elements */
   /*z-indices; CodeMirror uses 1-10; .dlg uses 100+ */
   /*connect page*/
   /*IDE page*/
@@ -956,49 +1061,11 @@ body {
   color: #fc9732;
 }
 .newDark button {
-  border: none;
   background: #25303B;
   color: #fc9732;
-  font-family: inherit;
-  font-weight: bold;
-  padding: 5px 0.5em;
-  transition: box-shadow 0.2s;
-  text-transform: uppercase;
 }
 .newDark button:hover {
   color: #fff;
-}
-.newDark button:active {
-  box-shadow: none;
-}
-.newDark [type=checkbox],
-.newDark [type=checkbox]:focus {
-  margin-right: 0.75em;
-  outlinex: none !important;
-}
-.newDark [type=checkbox]::before {
-  position: relative;
-  content: "\2714";
-  background: #1c1e28;
-  color: transparent;
-  display: inline-block;
-  height: 3ex;
-  width: 3ex;
-  top: -4px;
-  left: -2px;
-  font-size: 70%;
-  text-align: center;
-  box-shadow: 0 0 0 1px #fc9732 inset;
-  border-radius: 2px;
-  transition: 0.2s;
-  font-weight: bold;
-}
-.newDark [type=checkbox]:focus:before {
-  outline: inherit;
-}
-.newDark [type=checkbox]:focus {
-  outline: dotted #000 1px;
-  outline-offset: 2px;
 }
 .newDark [type=checkbox]:hover::before {
   background: #313446;
@@ -1018,22 +1085,6 @@ body {
 .newDark [type=checkbox]:checked:disabled::before {
   color: grayscale(#fc9732);
   background: grayscale(#888);
-}
-.newDark input,
-.newDark textarea,
-.newDark pre,
-.newDark tt {
-  font-family: apl, monospace;
-  font-size: 18px;
-}
-.newDark input,
-.newDark textarea,
-.newDark select,
-.newDark a {
-  outline: 0;
-}
-.newDark select:focus {
-  outline: dotted #000 1px;
 }
 .newDark .ui-tooltip {
   z-index: 9999;

@@ -25,7 +25,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
 }
 ,favText=x=>x.name||'unnamed'
 ,favDOM=x=>{const e=document.createElement('div');e.cnData=x
-            e.innerHTML=`<span class=name>${esc(favText(x))}</span><button class=go>Go</button>`;return e}
+            e.innerHTML=`<span class=name>${esc(favText(x))}</span><button class=go>&gt;</button>`;return e}
 ,fmtKey=x=>[x.metaKey?'Cmd-':'',x.ctrlKey?'Ctrl-':'',x.altKey?'Alt-':'',x.shiftKey?'Shift-':'',
             CM.keyNames[x.which]||''].join('')
 ,updFormDtl=_=>{
