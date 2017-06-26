@@ -36,8 +36,9 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   q.start.hidden=q.fetch.hidden=q.type.value!=="start"
 }
 ,updSubtype=_=>{
-  q.cwd.disabled=!(q.ssh.hidden=q.subtype.value!=="ssh")
-  q.ssl.hidden=q.subtype.value!=="ssl"
+  var sub=q.subtype.value;sel&&(sel.subtype=sub)
+  q.cwd.disabled=!(q.ssh.hidden=sub!=="ssh")
+  q.ssl.hidden=sub!=="ssl"
 }
 ,updExes=_=>{
   var ssh=q.subtype.value==='ssh'
@@ -55,10 +56,10 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   sel&&(sel.exe=q.exe.value);
 }
 ,validate=x=>{
-  const t=x.type,p=x.port,tn=x.ssh_tnl
-  if((t==='connect'||t==='start'&&x.ssh||t==='listen')&&p&&(!/^\d*$/.test(p)||+p<1||+p>0xffff))
-    {$.err('Invalid port',_=>{(t==='connect'?x.ssh_tnl?q.ssh_tnl_port:q.tcp_port:t==='start'?q.ssh_port:q.listen_port).select()});return}
-  if((t==='connect'&&x.ssh_tnl)&&x.ride_port&&(!/^\d*$/.test(x.ride_port)||+x.ride_port<1||+x.ride_port>0xffff))
+  const t=x.type,p=x.port,ssh=x.subtype==="ssh"
+  if((t==='connect'||t==='start'&&ssh||t==='listen')&&p&&(!/^\d*$/.test(p)||+p<1||+p>0xffff))
+    {$.err('Invalid port',_=>{(t==='connect'?ssh?q.ssh_port:q.tcp_port:t==='start'?q.ssh_port:q.listen_port).select()});return}
+  if((t==='connect'&&ssh)&&x.ride_port&&(!/^\d*$/.test(x.ride_port)||+x.ride_port<1||+x.ride_port>0xffff))
     {$.err('Invalid RIDE port',_=>{q.ssh_ride_port.select()});return}
   if(t==='start'){
     const a=(x.env||'').split('\n')
@@ -77,12 +78,12 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
     switch(x.type||'connect'){
       case'connect':
         D.util.dlg(q.connecting_dlg)
-        if(x.ssh_tnl){
-          var o={host:x.host||'localhost',port:+x.port||22,user:x.user||user}
-          if(x.ssh_tnl_auth_type==='key'){o.key=x.ssh_tnl_key}else{o.pass=x===sel?q.ssh_tnl_pass.value:''}
+        if(x.subtype==="ssh"){
+          var o={host:x.host||'localhost',port:+x.ssh_port||22,user:x.user||user}
+          if(x.ssh_auth_type==='key'){o.key=x.ssh_key}else{o.pass=x===sel?q.ssh_pass.value:''}
           const c=sshExec(o,'/bin/sh',(e,sm)=>{if(e)throw e
             sm.on('close',(code,sig)=>{D.ide&&D.ide._sshExited({code,sig});c.end()})
-            c.forwardOut('',0,'127.0.0.1',x.ride_port,(e,sm)=>{
+            c.forwardOut('',0,'127.0.0.1',+x.port||4502,(e,sm)=>{
               if(e){log('cannot forward out through ssh');clt=0;err(e.message);clearTimeout(D.tmr);delete D.tmr;return}
               clt=sm;initInterpreterConn();new D.IDE().setConnInfo(x.host,x.port,sel?sel.name:'')
               clt.on('error',x=>{log('connect failed: '+x);clt=0;err(x.message);clearTimeout(D.tmr);delete D.tmr})
@@ -105,7 +106,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
         srv.listen(port,'',_=>{log('listening on port '+port)});break
       case'start':
         const env={},a=(x.env||'').split('\n');for(let i=0;i<a.length;i++){const m=KV.exec(a[i]);m&&(env[m[1]]=m[2])}
-        if(x.ssh){
+        if(x.subtype==="ssh"){
           D.util.dlg(q.connecting_dlg)
           var o={host:x.host||'localhost',port:+x.port||22,user:x.user||user}
           if(x.ssh_auth_type==='key'){o.key=x.ssh_key}else{o.pass=x===sel?q.ssh_pass.value:''}
@@ -169,8 +170,8 @@ D.cn=_=>{ //set up Connect page
   q.subtype.onchange=updSubtype
   q.ssh_user.placeholder=user
   var enterConnect=function(event){if (event.keyCode==13){$('#cn_go').click()}}
-  $('#cn_ssh_tnl_host').keyup(enterConnect);$('#cn_tcp_host').keyup(enterConnect);$('#cn_ssh_host').keyup(enterConnect);
-  $('#cn_ssh_tnl_port').keyup(enterConnect);$('#cn_tcp_port').keyup(enterConnect);$('#cn_ssh_port').keyup(enterConnect);
+  $('#cn_tcp_host').keyup(enterConnect);$('#cn_ssh_host').keyup(enterConnect);
+  $('#cn_tcp_port').keyup(enterConnect);$('#cn_ssh_port').keyup(enterConnect);
   $('#cn_listen_port').keyup(enterConnect);$('#cn_exe').keyup(enterConnect);
   q.fetch.onclick=_=>{
     if(!validate($.extend({},sel,{exe:'x'})))return //validate all except "exe"
