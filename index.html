@@ -42,57 +42,83 @@
     <hr>
     <div id=cn_dtl>
       <div id=cn_tcp_dtl>
-        <p>
+        <div>
           <label for=cn_tcp_host class=cn_label><u>H</u>ost:</label>
           <input id=cn_tcp_host name=host size=12 placeholder=localhost>
-        <p>
+        </div>
+        <div>
           <label for=cn_tcp_port class=cn_label><u>P</u>ort:</label>
           <input id=cn_tcp_port name=port size=4 placeholder=4502>
+        </div>
       </div>
       <div id=cn_ssh hidden>
-        <p>
+        <div>
           <label for=cn_ssh_port class=cn_label>SSH <u>P</u>ort:</label>
           <input id=cn_ssh_port name=ssh_port size=4 placeholder=22>
-        <p>
+        </div>
+        <div>
           <label for=cn_ssh_user class=cn_label><u>U</u>ser:</label>
           <input id=cn_ssh_user name=user size=10>
-        <p><select id=cn_ssh_auth_type class="cn_select cn_label">
+        </div>
+        <div>
+          <select id=cn_ssh_auth_type class="cn_select cn_label">
               <option value=pass title="password is not saved">Password
               <option value=key>Key file
             </select>
             <span id=cn_ssh_pass_wr><input id=cn_ssh_pass type=password></span>
             <span id=cn_ssh_key_wr hidden><input id=cn_ssh_key name=ssh_key><button id=cn_ssh_key_dots>Browse...</button></span>
-        <p>
+        </div>
+        <div>
           <button id=cn_fetch><u>F</u>etch list of interpreters through ssh</button>
+        </div> 
       </div>
       <div id=cn_ssl hidden>
-        <p>
+        <div>
           <label class=cn_cb_label>
             <input type=checkbox id=cn_cert_cb>Provide user c<u>e</u>rtificate
                     <span class=cn_hint>(PEM file)</span></label>
-          <p><label style=padding-left:2em>Cert <span class=cn_hint>(PEM file)</span>
+        </div>
+        <div>
+          <label style=padding-left:2em>Cert <span class=cn_hint>(PEM file)</span>
             <input id=cn_cert name=cert><button id=cn_cert_dots>Browse...</button>
-          <p><label style=padding-left:2em>Key <span class=cn_hint>(PEM file)</span></label>
+        </div>
+        <div>
+          <label style=padding-left:2em>Key <span class=cn_hint>(PEM file)</span></label>
             <input id=cn_key name=key><button id=cn_key_dots>Browse...</button>
-          <p><label class=cn_cb_label><input type=checkbox id=cn_subj_cb><u>V</u>alidate server subject common name matches hostname</label>
-          <p><label class=cn_cb_label><input type=checkbox id=cn_rootcertsdir_cb>Custom root certificates
+        </div>
+        <div>
+          <label class=cn_cb_label><input type=checkbox id=cn_subj_cb><u>V</u>alidate server subject common name matches hostname</label>
+        </div>
+        <div>
+          <label class=cn_cb_label><input type=checkbox id=cn_rootcertsdir_cb>Custom root certificates
                     <span class=cn_hint>(directory with PEM files)</span></label>
             <input id=cn_rootcertsdir name=rootcertsdir><button id=cn_rootcertsdir_dots>Browse...</button>
+        </div>
+        
       </div>
       <div id=cn_start hidden>
-        <p><label for=cn_exes class=cn_label><u>I</u>nterpreter:</label>
+        <div><label for=cn_exes class=cn_label><u>I</u>nterpreter:</label>
           <select id=cn_exes name=exes class=cn_select></select>
           <input id=cn_exe name=exe placeholder='path to executable'>
-        <p><label for=cn_cwd><u>W</u>orking directory:</label><br>
+        </div>
+        <div><label for=cn_cwd><u>W</u>orking directory:</label><br>
           <input id=cn_cwd name=cwd>
-        <p><label for=cn_args>Arg<u>u</u>ments:</label><br>
-          <span class=cn_hint>(one per line; if needed, RIDE may also pass "+s" and "-q")</span>
+        </div>
+        <div><label for=cn_args>Arg<u>u</u>ments:</label>
+          <div class="tooltip">
+            <span class="tooltiptext">one per line; if needed, RIDE may also pass "+s" and "-q"</span>
+          </div>
           <textarea id=cn_args name=args cols=40 rows=4></textarea>
-        <p><label for=cn_env><u>E</u>nvironment variables:</label><br>
-          <span class=cn_hint>(key=value, one pair per line, no extra spaces, no quoting or escaping of value)</span>
+        </div>
+        <div>
+          <label for=cn_env><u>E</u>nvironment variables:</label>
+          <div class="tooltip">
+            <span class="tooltiptext">key=value, one pair per line, no extra spaces, no quoting or escaping of value</span>
+          </div>
           <textarea id=cn_env name=env cols=40 rows=4></textarea><br>
           <span id=cn_env_add>For example:
             <a href=#>MAXWS=1G</a>, <a href=#>WSPATH=.</a>, <a href=#>HISTORY_SIZE=1000</a>, ...</span>
+        </div>
       </div>
     </div>
     <p><button id=cn_go><u>G</u>o</button>
