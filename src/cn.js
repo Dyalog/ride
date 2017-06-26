@@ -30,15 +30,18 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
             CM.keyNames[x.which]||''].join('')
 ,updFormDtl=_=>{
   q.subtype.hidden=q.type.value=="listen"
-  q.subtype.selectedIndex=0;updSubtype()
+  if(q.type.value==="listen"||q.type.value==="start"&&q.subtype.value==="ssl")q.subtype.value='raw';updSubtype()
   q.ssl_opt.disabled=q.type.value!=="connect"
   q.raw_opt.text=q.type.value==="start"?"Local":"Raw"
   q.start.hidden=q.fetch.hidden=q.type.value!=="start"
 }
 ,updSubtype=_=>{
-  var sub=q.subtype.value;sel&&(sel.subtype=sub)
-  q.cwd.disabled=!(q.ssh.hidden=sub!=="ssh")
-  q.ssl.hidden=sub!=="ssl"
+  var t=q.type.value,s=q.subtype.value;sel&&(sel.subtype=s)
+  q.cwd.disabled=!(q.ssh.hidden=s!=='ssh')
+  q.tcp_port.disabled=t==='start'&&s==='raw'
+  q.tcp_host.disabled=t==='listen'||t==='start'&&s==='raw'
+  q.ssl.hidden=s!=='ssl'
+  updExes()
 }
 ,updExes=_=>{
   var ssh=q.subtype.value==='ssh'
@@ -56,17 +59,17 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   sel&&(sel.exe=q.exe.value);
 }
 ,validate=x=>{
-  const t=x.type,p=x.port,ssh=x.subtype==="ssh"
+  const t=x.type,p=x.port,ssh=x.subtype==='ssh'
   if((t==='connect'||t==='start'&&ssh||t==='listen')&&p&&(!/^\d*$/.test(p)||+p<1||+p>0xffff))
-    {$.err('Invalid port',_=>{(t==='connect'?ssh?q.ssh_port:q.tcp_port:t==='start'?q.ssh_port:q.listen_port).select()});return}
-  if((t==='connect'&&ssh)&&x.ride_port&&(!/^\d*$/.test(x.ride_port)||+x.ride_port<1||+x.ride_port>0xffff))
-    {$.err('Invalid RIDE port',_=>{q.ssh_ride_port.select()});return}
+    {$.err('Invalid port',_=>{(t==='connect'?ssh?q.ssh_port:q.tcp_port:t==='start'?q.ssh_port:q.tcp_port).select()});return}
+  if((t==='connect'&&ssh)&&x.tcp_port&&(!/^\d*$/.test(x.tcp_port)||+x.tcp_port<1||+x.tcp_port>0xffff))
+    {$.err('Invalid RIDE port',_=>{q.tcp_port.select()});return}
   if(t==='start'){
     const a=(x.env||'').split('\n')
     for(let i=0;i<a.length;i++)if(!KV.test(a[i])&&!WS.test(a[i]))
       {$.err('Invalid environment variables',_=>{q.env.focus()});return}
     if(!x.exe){$.err('"Interpreter" is required',_=>{q.exe.focus()});return}
-    if(x===sel&&x.ssh){const t=q.ssh_auth_type.value, e=q['ssh_'+t]
+    if(x===sel&&ssh){const t=q.ssh_auth_type.value, e=q['ssh_'+t]
                        if(!e.value){$.err((t==='key'?'"Key file"':'"Password"')+' is required',_=>{e.focus()});return}}
   }
   return 1
@@ -172,7 +175,7 @@ D.cn=_=>{ //set up Connect page
   var enterConnect=function(event){if (event.keyCode==13){$('#cn_go').click()}}
   $('#cn_tcp_host').keyup(enterConnect);$('#cn_ssh_host').keyup(enterConnect);
   $('#cn_tcp_port').keyup(enterConnect);$('#cn_ssh_port').keyup(enterConnect);
-  $('#cn_listen_port').keyup(enterConnect);$('#cn_exe').keyup(enterConnect);
+  $('#cn_exe').keyup(enterConnect);
   q.fetch.onclick=_=>{
     if(!validate($.extend({},sel,{exe:'x'})))return //validate all except "exe"
     q.fetch.disabled=1
@@ -197,7 +200,7 @@ D.cn=_=>{ //set up Connect page
     q.exes.value||D.prf.otherExe(q.exe.value);sel&&(sel.exe=q.exe.value)
   }
   q.exes.onchange=_=>{
-    v=q.exes.value;
+    const v=q.exes.value;
     q.exe.value=v||D.prf.otherExe();q.exe.readOnly=!!v;$(q.exe).change()
     v||q.exe.focus();D.prf.selectedExe(v)} //todo: do we still need this pref?
   q.env_add.onclick=x=>{
@@ -240,7 +243,8 @@ D.cn=_=>{ //set up Connect page
       sel=u?$sel[0].cnData:null
       if(u){
         $(':checkbox[name]',q.rhs).each((_,x)=>{x.checked=!!+sel[x.name]})
-        q.type.value=sel.type||'connect';updFormDtl();updExes()
+        q.type.value=sel.type||'connect';q.subtype.value=sel.subtype||'raw'
+        updFormDtl();updExes()
         q.fav_name.value=sel.name||''
         $(':text[name],textarea[name]',q.rhs).each((_,x)=>{x.value=sel[x.name]||''})
         q.exes.value=sel.exe;q.exes.value||(q.exes.value='') //use sel.exe if available, otherwise use "Other..."
