@@ -1,0 +1,84 @@
+.CodeMirror-scrollbar-filler,.CodeMirror-gutter-filler{
+  background-color:@WHITE; /*the square between H and V scrollbars*/
+}
+.CodeMirror-guttermarker{
+  color:@BLACK;
+}
+.CodeMirror-guttermarker-subtle{
+  color:#999;
+}
+.CodeMirror div.CodeMirror-cursor{
+  border-left:1px solid @BLACK;
+}
+.CodeMirror div.CodeMirror-secondarycursor{
+  border-left:1px solid silver; /*Shown when moving in bi-directional text*/
+}
+.CodeMirror.cm-fat-cursor div.CodeMirror-cursor{
+  background-color:dimgrey;
+}
+@-moz-keyframes    blink{0%{background:#7e7} 50%{background:none} 100%{background:#7e7}}
+@-webkit-keyframes blink{0%{background:#7e7} 50%{background:none} 100%{background:#7e7}}
+@keyframes         blink{0%{background:#7e7} 50%{background:none} 100%{background:#7e7}}
+.CodeMirror-ruler{
+  border-left:1px solid @DARK_CREAM;
+}
+.cm-negative{
+  color:#d44
+}
+.cm-positive{
+  color:#292
+}
+.cm-s-default .cm-error{
+  color:@RED
+}
+.cm-invalidchar{
+  color:@RED
+}
+.CodeMirror-matchingtag{
+  background:rgba(255,150,0,.3);
+}
+.CodeMirror-activeline-background{
+  background:#e8f2ff;
+}
+.CodeMirror-selected{
+  background:#d9d9d9;
+}
+.CodeMirror-focused .CodeMirror-selected{
+  background:#d7d4f0;
+}
+.CodeMirror ::selection{
+  background:#d7d4f0;
+}
+.CodeMirror ::-moz-selection{
+  background:#d7d4f0;
+}
+.CodeMirror-foldmarker{
+  color:blue;
+  text-shadow:#b9f 1px 1px 2px,#b9f -1px -1px 2px,#b9f 1px -1px 2px,#b9f -1px 1px 2px;
+}
+.disconnected .CodeMirror,.disconnected .CodeMirror-gutter-wrapper{
+  background-color:#e2d3bb; /*beige*/
+}
+.breakpoint{
+  color:@RED;
+}
+.highlighted{
+  border:solid @RED 1px;
+}
+.CodeMirror-hints{
+  border:1px solid @BLACK;
+  background:#ffffe1;
+  box-shadow:0 18px 48px rgba(0,0,0,0.5);
+}
+.CodeMirror-hint{
+  color:@BLACK;
+}
+.CodeMirror-hint-active{
+  background:@DARK_BLUE;
+  color:@WHITE;
+}
+.CodeMirror-search-match{
+  background:gold;
+  border-top:1px solid @ORANGE;
+  border-bottom:1px solid @ORANGE;
+}

@@ -1,30 +1,21 @@
-/* Material UI elements */
-label{
-    color:@INPUT_COL;
-}
 button{
   border:none;
-  background:@BUTTON_BG_COL;
-  color:@BUTTON_COL;
   font-family:inherit;
   font-weight:bold;
   padding:5px 0.5em;
   transition:box-shadow 0.2s;
   text-transform:uppercase;
-  &:hover{color:@BUTTON_HOVER_COL}
   &:active{box-shadow:none}
 }
 [type=checkbox],[type=checkbox]:focus{margin-right:0.75em;outlinex:none!important}
 [type=checkbox]::before{
     position:relative;
     content:"\2714";
-    background:@WIN_BG_COL;
     color:transparent;
     display:inline-block;
     height:3ex;width:3ex;top:-4px;left:-2px;
     font-size:70%;
     text-align:center;
-    box-shadow: 0 0 0 1px @CHECKBOX_COL inset;
     border-radius:2px;
     transition:0.2s;
     font-weight:bold
@@ -32,11 +23,6 @@ button{
 [type=checkbox]{
     &:focus:before{outline:inherit}
     &:focus{outline:dotted @BLACK 1px;outline-offset:2px}
-    &:hover::before{background:lighten(@WIN_BG_COL,10%)}
-    &:active::before{background:@CHECKBOX_COL;color:lighten(@WIN_BG_COL,10%)}
-    &:checked::before{color:@CHECKBOX_COL}
-    &:disabled::before{color:transparent;box-shadow:0 0 0 1px @CHECKBOX_COL inset;background:lighten(@WIN_BG_COL,10%)}
-    &:checked:disabled::before{color:grayscale(@CHECKBOX_COL);background:grayscale(@CHECKBOX_BG_COL)}
 }
 input,textarea,pre,tt{font-family:@APL_FONT;font-size:18px}
 input,textarea,select,a{outline:0;}
