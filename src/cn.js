@@ -28,10 +28,20 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
             e.innerHTML=`<span class=name>${esc(favText(x))}</span><button class=go>Go</button>`;return e}
 ,fmtKey=x=>[x.metaKey?'Cmd-':'',x.ctrlKey?'Ctrl-':'',x.altKey?'Alt-':'',x.shiftKey?'Shift-':'',
             CM.keyNames[x.which]||''].join('')
-,updFormDtl=_=>{const a=q.dtl.children,e=q[q.type.value];for(let i=0;i<a.length;i++)a[i].hidden=a[i]!==e}
+,updFormDtl=_=>{
+  q.subtype.hidden=q.type.value=="listen"
+  q.subtype.selectedIndex=0;updSubtype()
+  q.ssl_opt.disabled=q.type.value!=="connect"
+  q.raw_opt.text=q.type.value==="start"?"Local":"Raw"
+  q.start.hidden=q.fetch.hidden=q.type.value!=="start"
+}
+,updSubtype=_=>{
+  q.cwd.disabled=!(q.ssh.hidden=q.subtype.value!=="ssh")
+  q.ssl.hidden=q.subtype.value!=="ssl"
+}
 ,updExes=_=>{
-  q.fetch.hidden=!q.ssh.checked
-  const h=(q.ssh.checked?interpretersSSH:interpreters)
+  var ssh=q.subtype.value==='ssh'
+  const h=(ssh?interpretersSSH:interpreters)
     .sort((x,y)=>cmpVer(y.ver,x.ver)||+y.bits-+x.bits||(y.edition==='unicode')-(x.edition==='unicode'))
     .map(x=>{
       let s='v'+x.ver.join('.')+', '+x.bits+'-bit, '+x.edition[0].toUpperCase()+x.edition.slice(1)
@@ -41,7 +51,8 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   q.exes.innerHTML=h+'<option value="">Other...'
   q.exes.value=q.exe.value
   if(!q.exes.value){q.exes.selectedIndex=0;q.exe.value=q.exes.value}
-  q.exe.readOnly=!!q.exes.value
+  q.exe.readOnly=!!q.exes.value;
+  sel&&(sel.exe=q.exe.value);
 }
 ,validate=x=>{
   const t=x.type,p=x.port,tn=x.ssh_tnl
@@ -109,30 +120,30 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
           }).on('error',x=>{err(x.message||''+x);q.connecting_dlg.hidden=1;clearTimeout(D.tmr);delete D.tmr})
           D.tmr=setTimeout(function(){err('Timed out');c&&c.end();q.connecting_dlg.hidden=1},ct)
         }else{
-          srv=net.createServer(y=>{log('spawned interpreter connected');const a=srv.address();srv&&srv.close();srv=0;clt=y
-                                   initInterpreterConn();new D.IDE().setConnInfo(a.address,a.port,sel?sel.name:'')
-                                   D.lastSpawnedExe=x.exe;D.local=1})
-          srv.on('error',x=>{log('listen failed: '+x);srv=clt=0;err(x.message);clearTimeout(D.tmr);delete D.tmr})
-          srv.listen(0,'127.0.0.1',_=>{
-            const a=srv.address(),hp=a.address+':'+a.port
-            log('listening for connections from spawned interpreter on '+hp)
-            log('spawning interpreter '+JSON.stringify(x.exe))
-            let args=['+s','-q'],stdio=['pipe','ignore','ignore']
-            if(/^win/i.test(process.platform)){args=[];stdio[0]='ignore'}
-            if(x.args)args=args.concat(args,x.args.replace(/\n$/,'').split('\n'))
-            try{child=cp.spawn(x.exe,args,{cwd:x.cwd,stdio,detached:true,env:$.extend({},process.env,env,
-                                           {CLASSICMODE:1,SINGLETRACE:1,RIDE_INIT:'CONNECT:'+hp,RIDE_SPAWNED:'1'})})}
-            catch(e){err(''+e);return}
-            D.lastSpawnedExe=x.exe
-            child.on('exit',(code,sig)=>{srv&&srv.close();srv=clt=child=0;clearTimeout(D.tmr);delete D.tmr
-                                         if(code!==0){err('Interpreter '+(code!=null?'exited with code '+code:'received '+sig))}})
-            child.on('error',y=>{srv&&srv.close();srv=clt=child=0;clearTimeout(D.tmr);delete D.tmr
-                                 err(y.code==='ENOENT'?"Cannot find the interpreter's executable":''+y)
-                                 console.error(y)})
-          })
-          D.tmr=setTimeout(function(){err('Timed out');srv&&srv.close();srv=0;child&&child.kill();child=0},ct)
-        }
-        break
+        srv=net.createServer(y=>{log('spawned interpreter connected');const a=srv.address();srv&&srv.close();srv=0;clt=y
+                                  initInterpreterConn();new D.IDE().setConnInfo(a.address,a.port,sel?sel.name:'')
+                                  D.lastSpawnedExe=x.exe;D.local=1})
+        srv.on('error',x=>{log('listen failed: '+x);srv=clt=0;err(x.message);clearTimeout(D.tmr);delete D.tmr})
+        srv.listen(0,'127.0.0.1',_=>{
+          const a=srv.address(),hp=a.address+':'+a.port
+          log('listening for connections from spawned interpreter on '+hp)
+          log('spawning interpreter '+JSON.stringify(x.exe))
+          let args=['+s','-q'],stdio=['pipe','ignore','ignore']
+          if(/^win/i.test(process.platform)){args=[];stdio[0]='ignore'}
+          if(x.args)args=args.concat(args,x.args.replace(/\n$/,'').split('\n'))
+          try{child=cp.spawn(x.exe,args,{cwd:x.cwd,stdio,detached:true,env:$.extend({},process.env,env,
+                                          {CLASSICMODE:1,SINGLETRACE:1,RIDE_INIT:'CONNECT:'+hp,RIDE_SPAWNED:'1'})})}
+          catch(e){err(''+e);return}
+          D.lastSpawnedExe=x.exe
+          child.on('exit',(code,sig)=>{srv&&srv.close();srv=clt=child=0;clearTimeout(D.tmr);delete D.tmr
+                                        if(code!==0){err('Interpreter '+(code!=null?'exited with code '+code:'received '+sig))}})
+          child.on('error',y=>{srv&&srv.close();srv=clt=child=0;clearTimeout(D.tmr);delete D.tmr
+                                err(y.code==='ENOENT'?"Cannot find the interpreter's executable":''+y)
+                                console.error(y)})
+        })
+        D.tmr=setTimeout(function(){err('Timed out');srv&&srv.close();srv=0;child&&child.kill();child=0},ct)
+      }
+      break
     }
   }catch(e){$.err(''+e)}
   return!1
@@ -155,9 +166,8 @@ D.cn=_=>{ //set up Connect page
     if(u!==v){v?(sel.name=v):delete sel.name;$sel.find('.name').text(favText(sel))}
   }
   updFormDtl();q.type.onchange=_=>{sel.type=q.type.value;updFormDtl()}
-  q.ssh.onchange=_=>{q.ssh_dtl.hidden=!(q.non_ssh_dtl.hidden=q.ssh.checked);updExes()}
-  q.ssh_tnl.onchange=_=>{q.ssh_tnl_dtl.hidden=!q.ssh_tnl.checked;q.tcp_dtl.hidden=q.ssh_tnl.checked}
-  q.ssh_user.placeholder=q.ssh_tnl_user.placeholder=user
+  q.subtype.onchange=updSubtype
+  q.ssh_user.placeholder=user
   var enterConnect=function(event){if (event.keyCode==13){$('#cn_go').click()}}
   $('#cn_ssh_tnl_host').keyup(enterConnect);$('#cn_tcp_host').keyup(enterConnect);$('#cn_ssh_host').keyup(enterConnect);
   $('#cn_ssh_tnl_port').keyup(enterConnect);$('#cn_tcp_port').keyup(enterConnect);$('#cn_ssh_port').keyup(enterConnect);
@@ -182,9 +192,13 @@ D.cn=_=>{ //set up Connect page
         .on('error',x=>{err(x.message||''+x);updExes();q.fetch.disabled=0})
     })
   }
-  q.exe.onchange=q.exe.onkeyup=_=>{q.exes.value||D.prf.otherExe(q.exe.value);sel&&(sel.exe=q.exe.value)}
-  q.exes.onchange=_=>{const v=q.exes.value;q.exe.value=v||D.prf.otherExe();q.exe.readOnly=!!v;$(q.exe).change()
-                      v||q.exe.focus();D.prf.selectedExe(v)} //todo: do we still need this pref?
+  q.exe.onchange=q.exe.onkeyup=_=>{
+    q.exes.value||D.prf.otherExe(q.exe.value);sel&&(sel.exe=q.exe.value)
+  }
+  q.exes.onchange=_=>{
+    v=q.exes.value;
+    q.exe.value=v||D.prf.otherExe();q.exe.readOnly=!!v;$(q.exe).change()
+    v||q.exe.focus();D.prf.selectedExe(v)} //todo: do we still need this pref?
   q.env_add.onclick=x=>{
     if(x.target.nodeName!=='A')return
     let t=x.target.textContent, k=t.split('=')[0], s=q.env.value, m=RegExp('^'+k+'=(.*)$','m').exec(s)
@@ -193,7 +207,6 @@ D.cn=_=>{ //set up Connect page
          q.env.setSelectionRange(s.length-t.length+k.length,s.length-1)}
     return!1
   }
-  q.ssl_cb.onchange=_=>{q.ssl_dtl.hidden=!q.ssl_cb.checked}
   q.cert_cb.onchange=_=>{q.cert.disabled=q.key.disabled=q.cert_dots.disabled=q.key_dots.disabled=!q.cert_cb.checked
                          q.cert.value=q.key.value=sel.cert=sel.key=''
                          D.util.elastic(q.cert);D.util.elastic(q.key)}
@@ -207,12 +220,10 @@ D.cn=_=>{ //set up Connect page
   q.cert_dots        .onclick=_=>{browse(q.cert        ,'Certificate')}
   q.key_dots         .onclick=_=>{browse(q.key         ,'Key'        )}
   q.ssh_key_dots     .onclick=_=>{browse(q.ssh_key     ,'SSH Key'    )}
-  q.ssh_tnl_key_dots     .onclick=_=>{browse(q.ssh_tnl_key     ,'SSH Key'    )}
   q.rootcertsdir_dots.onclick=_=>{browse(q.rootcertsdir,'Directory with Root Certificates',['openDirectory'])}
-  q.ssh_auth_type.onchange=_=>{const k=q.ssh_auth_type.value==='key';q.ssh_pass_wr.hidden=k;q.ssh_key_wr.hidden=!k;
-                               sel.ssh_auth_type=q.ssh_auth_type.value}
-  q.ssh_tnl_auth_type.onchange=_=>{const k=q.ssh_tnl_auth_type.value==='key';q.ssh_tnl_pass_wr.hidden=k;q.ssh_tnl_key_wr.hidden=!k;
-                               sel.ssh_tnl_auth_type=q.ssh_tnl_auth_type.value}
+  q.ssh_auth_type.onchange=_=>{
+    const k=q.ssh_auth_type.value==='key';q.ssh_pass_wr.hidden=k;q.ssh_key_wr.hidden=!k;
+    sel.ssh_auth_type=q.ssh_auth_type.value}
   D.conns.forEach(x=>{q.favs.appendChild(favDOM(x))})
   $(q.favs).list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
     .on('click','.go',function(){$(q.favs).list('select',$(this).parentsUntil(q.favs).last().index());q.go.click()})
@@ -235,9 +246,6 @@ D.cn=_=>{ //set up Connect page
         var a=q.rhs.querySelectorAll('input,textarea')
         for(var i=0;i<a.length;i++)if(/^text(area)?$/.test(a[i].type))D.util.elastic(a[i])
         q.ssh_auth_type.value=sel.ssh_auth_type||'pass';q.ssh_auth_type.onchange()
-        q.ssh_tnl_auth_type.value=sel.ssh_tnl_auth_type||'pass';q.ssh_tnl_auth_type.onchange()
-        q.ssl_dtl.hidden=!sel.ssl;q.ssh_dtl.hidden=!(q.non_ssh_dtl.hidden=sel.ssh)
-        q.ssh_tnl_dtl.hidden=!sel.ssh_tnl;q.tcp_dtl.hidden=sel.ssh_tnl
         q.cert_cb.checked=!!sel.cert;q.cert.disabled=q.key.disabled=q.cert_dots.disabled=q.key_dots.disabled=!sel.cert
         q.subj_cb.checked=!!sel.subj
         q.rootcertsdir_cb.checked=!!sel.rootcertsdir;q.rootcertsdir.disabled=q.rootcertsdir_dots.disabled=!sel.rootcertsdir

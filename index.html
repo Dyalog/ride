@@ -3,8 +3,8 @@
 <head>
   <title></title>
   <meta charset=utf-8>
-  <link rel=stylesheet href='style/style.css'>
   <link rel=stylesheet href='style/new-style.css'>
+  <link rel=stylesheet href='style/style.css'>
   <link rel=stylesheet href='lib/codemirror/addon/dialog/dialog.css'>
   <!-- <link rel=stylesheet href='node_modules/golden-layout/src/css/goldenlayout-base.css'> -->
   <!-- <link rel=stylesheet href='node_modules/golden-layout/src/css/goldenlayout-light-theme.css'> -->
@@ -29,88 +29,76 @@
     <button id=cn_abt>A<u>b</u>out</button>
     <p><label>C<u>o</u>nfiguration name: <input id=cn_fav_name placeholder=unnamed></label>
     <p><label for=cn_type><u>T</u>ype:</label>
-       <select id=cn_type><option value=connect>Connect to an interpreter
-                          <option value=start  >Start an interpreter
-                          <option value=listen >Listen for connections from interpreters</select>
+      <select id=cn_type class=cn_select>
+        <option value=connect     title="Connect to an interpreter"                  >Connect
+        <option value=start       title="Start and connect to an interpreter"        >Start
+        <option value=listen      title="Start and connect to an interpreter via SSL">Listen
+      </select>
+      <select id=cn_subtype hidden>
+        <option value=raw title="Connect to an interpreter via raw TCP/IP" id=cn_raw_opt>Raw
+        <option value=ssh title="Connect to an interpreter via SSH"                     >SSH
+        <option value=ssl title="Connect to an interpreter using TLS/SSL"  id=cn_ssl_opt>TLS/SSL
+      </select>
     <hr>
     <div id=cn_dtl>
-      <div id=cn_connect hidden>
-        <p><label><input id=cn_ssh_tnl name=ssh_tnl type=checkbox> Connect to an interpreter over <u>s</u>sh</label>
-        <div id=cn_ssh_tnl_dtl>
-          <p><label for=cn_ssh_tnl_user><u>U</u>ser</label> @
-             <label for=cn_ssh_tnl_host><u>h</u>ost</label> :
-             <label for=cn_ssh_tnl_port><u>p</u>ort</label>
-             <input id=cn_ssh_tnl_user name=user size=4> @
-             <input id=cn_ssh_tnl_host name=host size=10 placeholder=localhost> :
-             <input id=cn_ssh_tnl_port name=port size=4 placeholder=22>
-          <p><select id=cn_ssh_tnl_auth_type>
-               <option value=pass>Password (not remembered)
-               <option value=key>Key file
-             </select>
-             <span id=cn_ssh_tnl_pass_wr><input id=cn_ssh_tnl_pass type=password></span>
-             <span id=cn_ssh_tnl_key_wr hidden><input id=cn_ssh_tnl_key name=ssh_tnl_key><button id=cn_ssh_tnl_key_dots>Browse...</button></span>
-          <p><label for=cn_ssh_ride_port><u>R</u>IDE Port:</label>
-             <input id=cn_ssh_ride_port name=ride_port size=4 placeholder=4502>
-        </div>
-        <div id=cn_tcp_dtl>
-          <p><label for=cn_tcp_host><u>H</u>ost</label> and <label for=cn_tcp_port><u>p</u>ort:</label>
-            <input id=cn_tcp_host name=host size=12 placeholder=localhost> :
-            <input id=cn_tcp_port name=port size=4 placeholder=4502>
-          <p><label><input name=ssl type=checkbox id=cn_ssl_cb><u>S</u>ecure connection (TLS/SSL)</label>
-          <div id=cn_ssl_dtl class=indent>
-            <p><label><input type=checkbox id=cn_cert_cb>Provide user c<u>e</u>rtificate
-                      <span class=cn_hint>(PEM file)</span></label>
-              <input id=cn_cert name=cert><button id=cn_cert_dots>Browse...</button>
-            <p><label style=padding-left:2em>Key <span class=cn_hint>(PEM file)</span></label>
-              <input id=cn_key name=key><button id=cn_key_dots>Browse...</button>
-            <p><label><input type=checkbox id=cn_subj_cb><u>V</u>alidate server subject common name matches hostname</label>
-            <p><label><input type=checkbox id=cn_rootcertsdir_cb>Custom root certificates
-                      <span class=cn_hint>(directory with PEM files)</span></label>
-              <input id=cn_rootcertsdir name=rootcertsdir><button id=cn_rootcertsdir_dots>Browse...</button>
-          </div>
-        </div>
+      <div id=cn_tcp_dtl>
+        <p>
+          <label for=cn_tcp_host class=cn_label><u>H</u>ost:</label>
+          <input id=cn_tcp_host name=host size=12 placeholder=localhost>
+        <p>
+          <label for=cn_tcp_port class=cn_label><u>P</u>ort:</label>
+          <input id=cn_tcp_port name=port size=4 placeholder=4502>
+      </div>
+      <div id=cn_ssh hidden>
+        <p>
+          <label for=cn_ssh_port class=cn_label>SSH <u>P</u>ort:</label>
+          <input id=cn_ssh_port name=port size=4 placeholder=22>
+        <p>
+          <label for=cn_ssh_user class=cn_label><u>U</u>ser:</label>
+          <input id=cn_ssh_user name=user size=10>
+        <p><select id=cn_ssh_auth_type class=cn_select>
+              <option value=pass title="password is not saved">Password
+              <option value=key>Key file
+            </select>
+            <span id=cn_ssh_pass_wr><input id=cn_ssh_pass type=password></span>
+            <span id=cn_ssh_key_wr hidden><input id=cn_ssh_key name=ssh_key><button id=cn_ssh_key_dots>Browse...</button></span>
+        <p>
+          <button id=cn_fetch><u>F</u>etch list of interpreters through ssh</button>
+      </div>
+      <div id=cn_ssl hidden>
+        <p>
+          <label class=cn_cb_label>
+            <input type=checkbox id=cn_cert_cb>Provide user c<u>e</u>rtificate
+                    <span class=cn_hint>(PEM file)</span></label>
+          <p><label style=padding-left:2em>Cert <span class=cn_hint>(PEM file)</span>
+            <input id=cn_cert name=cert><button id=cn_cert_dots>Browse...</button>
+          <p><label style=padding-left:2em>Key <span class=cn_hint>(PEM file)</span></label>
+            <input id=cn_key name=key><button id=cn_key_dots>Browse...</button>
+          <p><label class=cn_cb_label><input type=checkbox id=cn_subj_cb><u>V</u>alidate server subject common name matches hostname</label>
+          <p><label class=cn_cb_label><input type=checkbox id=cn_rootcertsdir_cb>Custom root certificates
+                    <span class=cn_hint>(directory with PEM files)</span></label>
+            <input id=cn_rootcertsdir name=rootcertsdir><button id=cn_rootcertsdir_dots>Browse...</button>
       </div>
       <div id=cn_start hidden>
-        <p><label><input id=cn_ssh name=ssh type=checkbox> Start the interpreter over <u>s</u>sh</label>
-        <div id=cn_ssh_dtl class=indent>
-          <p><label for=cn_ssh_user><u>U</u>ser</label> @
-             <label for=cn_ssh_host><u>h</u>ost</label> :
-             <label for=cn_ssh_port><u>p</u>ort</label>
-             <input id=cn_ssh_user name=user size=4> @
-             <input id=cn_ssh_host name=host size=10 placeholder=localhost> :
-             <input id=cn_ssh_port name=port size=4 placeholder=22>
-          <p><select id=cn_ssh_auth_type>
-               <option value=pass>Password (not remembered)
-               <option value=key>Key file
-             </select>
-             <span id=cn_ssh_pass_wr><input id=cn_ssh_pass type=password></span>
-             <span id=cn_ssh_key_wr hidden><input id=cn_ssh_key name=ssh_key><button id=cn_ssh_key_dots>Browse...</button></span>
-          <p class=cn_hint>After starting the interpreter, RIDE will tunnel its communication with it
-                           through the same ssh connection.
-        </div>
-        <p><label><u>I</u>nterpreter: <select id=cn_exes name=exes></select></label>
-           <button id=cn_fetch hidden><u>F</u>etch list of interpreters through ssh</button>
-           <input id=cn_exe name=exe placeholder='path to executable'>
-        <div id=cn_non_ssh_dtl>
-          <p><label for=cn_cwd><u>W</u>orking directory:</label><br>
-             <input id=cn_cwd name=cwd>
-        </div>
+        <p><label for=cn_exes class=cn_label><u>I</u>nterpreter:</label>
+          <select id=cn_exes name=exes class=cn_select></select>
+          <input id=cn_exe name=exe placeholder='path to executable'>
+        <p><label for=cn_cwd><u>W</u>orking directory:</label><br>
+          <input id=cn_cwd name=cwd>
         <p><label for=cn_args>Arg<u>u</u>ments:</label><br>
-           <span class=cn_hint>(one per line; if needed, RIDE may also pass "+s" and "-q")</span>
-           <textarea id=cn_args name=args cols=40 rows=4></textarea>
+          <span class=cn_hint>(one per line; if needed, RIDE may also pass "+s" and "-q")</span>
+          <textarea id=cn_args name=args cols=40 rows=4></textarea>
         <p><label for=cn_env><u>E</u>nvironment variables:</label><br>
-           <span class=cn_hint>(key=value, one pair per line, no extra spaces, no quoting or escaping of value)</span>
-           <textarea id=cn_env name=env cols=40 rows=4></textarea><br>
-           <span id=cn_env_add>For example:
-             <a href=#>MAXWS=1G</a>, <a href=#>WSPATH=.</a>, <a href=#>HISTORY_SIZE=1000</a>, ...</span>
-      </div>
-      <div id=cn_listen hidden>
-        <p><label><u>P</u>ort: <input id=cn_listen_port name=port placeholder=4502 size=4></label>
+          <span class=cn_hint>(key=value, one pair per line, no extra spaces, no quoting or escaping of value)</span>
+          <textarea id=cn_env name=env cols=40 rows=4></textarea><br>
+          <span id=cn_env_add>For example:
+            <a href=#>MAXWS=1G</a>, <a href=#>WSPATH=.</a>, <a href=#>HISTORY_SIZE=1000</a>, ...</span>
       </div>
     </div>
     <p><button id=cn_go><u>G</u>o</button>
   </div></div>
 </div>
+
 <div id=cn_connecting_dlg class=dlg hidden>
   <div class=dlg_title>Connecting...</div>
   <div class=cn_dlg_content><progress class=cn_progress></progress></div>
