@@ -69,12 +69,12 @@ RELEASE_ID=`grep '"id"' $TMP_RESPONSE | head -1 | sed 's/.*: //;s/,//'`
 
 echo "created release with id: $RELEASE_ID"
 
-for F in `ls /devt/builds/ride/ride4/latest/ship/ | grep -v "unsigned"`; do
+for F in `ls /devt/builds/ride/$GIT_BRANCH/latest/ship/ | grep -v "unsigned"`; do
   echo "uploading $F to Github"
   curl -o /dev/null -H "Authorization: token $GHTOKEN" \
     -H 'Accept: application/vnd.github.manifold-preview' \
     -H 'Content-Type: application/zip' \
-    --data-binary @"/devt/builds/ride/ride4/latest/ship/$F" \
+    --data-binary @"/devt/builds/ride/$GIT_BRANCH/latest/ship/$F" \
     https://uploads.github.com/repos/$REPO/releases/$RELEASE_ID/assets?name=$F
 done
 rm $TMP_RESPONSE $TMP_JSON
