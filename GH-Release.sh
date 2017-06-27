@@ -11,7 +11,7 @@ fi
 # create JSON
 TMP_JSON=/tmp/GH-Publish.json
 BASE_VERSION=`node -pe "($(cat package.json)).version"`
-VERSION_AB="${BASE_VERSION%%.0}"  # "%%.0" strips trailing ".0"
+VERSION_AB="${BASE_VERSION%.*}"  # "%%.0" strips trailing ".0" - JR - use %.* incase the last digit isn't 0
 VERSION="${VERSION_AB}.`git rev-list HEAD --count`"
 
 if ! [ "$GHTOKEN" ]; then
@@ -33,10 +33,15 @@ if which jq >/dev/null 2>&1; then
         while [ $DRAFT = "true" ] ; do
 		DRAFT=`cat GH-Releases.json | jq  ".[$C].draft"`
 		ID=`cat GH-Releases.json | jq  ".[$C].id"`
+		GH_VERSION=$(cat GH-Releases.json | jq ".[$C].version" | sed 's/"//g;')
+		GH_VERSION_AB=${GH_VERSION%.*}
+
 
 		if [ "$DRAFT" = "true" ]; then
-			echo -e -n "*** $(cat GH-Releases.json | jq ".[$C].name" | sed 's/"//g') with id: $(cat GH-Releases.json | jq  ".[$C].id") is a draft - Deleting.\n"
-			curl -X "DELETE" -H "Authorization: token $GHTOKEN" https://api.github.com/repos/Dyalog/Ride/releases/${ID}
+			if [ "${GH_VERSION_AB}" = "${VERSION_AB}" ]; then
+				echo -e -n "*** $(cat GH-Releases.json | jq ".[$C].name" | sed 's/"//g') with id: $(cat GH-Releases.json | jq  ".[$C].id") is a draft - Deleting.\n"
+				curl -X "DELETE" -H "Authorization: token $GHTOKEN" https://api.github.com/repos/Dyalog/Ride/releases/${ID}
+			fi
 		fi
 
 		let C=$C+1
@@ -69,12 +74,12 @@ RELEASE_ID=`grep '"id"' $TMP_RESPONSE | head -1 | sed 's/.*: //;s/,//'`
 
 echo "created release with id: $RELEASE_ID"
 
-for F in `ls /devt/builds/ride/$GIT_BRANCH/latest/ship/ | grep -v "unsigned"`; do
+for F in `ls /devt/builds/ride/${GIT_BRANCH}/latest/ship/ | grep -v "unsigned"`; do
   echo "uploading $F to Github"
   curl -o /dev/null -H "Authorization: token $GHTOKEN" \
     -H 'Accept: application/vnd.github.manifold-preview' \
     -H 'Content-Type: application/zip' \
-    --data-binary @"/devt/builds/ride/$GIT_BRANCH/latest/ship/$F" \
+    --data-binary @"/devt/builds/ride/${GIT_BRANCH}/latest/ship/$F" \
     https://uploads.github.com/repos/$REPO/releases/$RELEASE_ID/assets?name=$F
 done
 rm $TMP_RESPONSE $TMP_JSON
