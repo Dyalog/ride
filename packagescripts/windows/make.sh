@@ -159,18 +159,19 @@ if ! [ "$RIDE_BRANCH" ]; then
 	export RIDE_BRANCH="master"
 fi
 
-export RIDE_BITS="32"
-export RIDE_SRC="${WORKSPACE}/_/ride40/Ride-4.0-win${RIDE_BITS}-ia32"
-export RIDE_SHIP="${WORKSPACE}/ship/"
-
-export RIDE_VERSION_ABC_DOT=$(cat ${RIDE_SRC}/../../version | tr -d '\n')
+export RIDE_VERSION_ABC_DOT=$(cat ${WORKSPACE}/_/version | tr -d '\n')
 
 export RIDE_VERSION_A=$(echo $RIDE_VERSION_ABC_DOT | sed "s/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)/\1/")
 export RIDE_VERSION_B=$(echo $RIDE_VERSION_ABC_DOT | sed "s/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)/\2/")
 export RIDE_VERSION_C=$(echo $RIDE_VERSION_ABC_DOT | sed "s/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)/\3/")
 
 export RIDE_VERSION=$RIDE_VERSION_ABC_DOT
+export RIDE_VERSION_AB=${RIDE_VERSION_A}${RIDE_VERSION_B}
 export RIDE_VERSION_AB_DOT=${RIDE_VERSION_A}.${RIDE_VERSION_B}
+
+export RIDE_BITS="32"
+export RIDE_SRC="${WORKSPACE}/_/ride${RIDE_VERSION_AB}/Ride-${RIDE_VERSION_AB_DOT}-win${RIDE_BITS}-ia32"
+export RIDE_SHIP="${WORKSPACE}/ship/"
 
 export RIDE_ZIP_FILENAME="ride-${RIDE_VERSION}_windows.zip"
 

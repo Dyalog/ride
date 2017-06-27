@@ -26,10 +26,11 @@ if [ "x$TARGET" = "x" ]; then
 fi
 
 APP_NAME=$(node -e "console.log($(cat package.json).productName)") # "Ride-4.0" or similar
+BUILDNAME=$(node -e "console.log($(cat package.json).name)") # "ride40" or similar
 
 echo "Packaging for $TARGET"
 
-RIDEDIR="_/ride40/${APP_NAME}-linux"
+RIDEDIR="_/${BUILDNAME}/${APP_NAME}-linux"
 ICON="D.svg"
 SBOXDIR=/tmp/ride$$
 postinst=/tmp/postinst$$
@@ -46,8 +47,8 @@ function checkEnvironment() {
 }
 
 function getVersionInfo() {
-if [ -s ${RIDEDIR}-${CPUTYPE}/../../version ]; then
-        RIDEVERSION=`cat ${RIDEDIR}-${CPUTYPE}/../../version`
+if [ -s _/version ]; then
+        RIDEVERSION=`cat _/version`
 else
         RIDEVERSION="1.9.0"
 fi

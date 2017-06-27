@@ -11,7 +11,8 @@ fi
 # create JSON
 TMP_JSON=/tmp/GH-Publish.json
 BASE_VERSION=`node -pe "($(cat package.json)).version"`
-VERSION="${BASE_VERSION%%.0}.`git rev-list HEAD --count`"  # "%%.0" strips trailing ".0"
+VERSION_AB="${BASE_VERSION%%.0}"  # "%%.0" strips trailing ".0"
+VERSION="${VERSION_AB}.`git rev-list HEAD --count`"
 
 if ! [ "$GHTOKEN" ]; then
   echo 'Please put your GitHub API Token in an environment variable named GHTOKEN'
@@ -52,7 +53,7 @@ cat >$TMP_JSON <<.
   "target_commitish": "master",
   "name": "v$VERSION",
   "body": $(
-    ( echo -e 'Pre-Release of RIDE 4.0\n\nWARNING: This is a pre-release version of RIDE. We cannot guarantee the stability of this product at this time.\n\nChangelog:'; git log --format='%s' $(git tag | tail -n 1).. ) \
+    ( echo -e "Pre-Release of RIDE $VERSION_AB\n\nWARNING: This is a pre-release version of RIDE. We cannot guarantee the stability of this product at this time.\n\nChangelog:"; git log --format='%s' $(git tag | tail -n 1).. ) \
       | grep -v -i todo | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
   ),
   "draft": true,

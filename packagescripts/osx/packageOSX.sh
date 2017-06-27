@@ -20,18 +20,18 @@ function PLISTValue() {
 ## Unlock the keychain
 /Users/jenkins/unlock.sh
 
-PackageName="Ride-4.0"
-BUILDNAME="ride40"
+PackageName=$(node -e "console.log($(cat package.json).productName)") # "Ride-4.0" or similar
+BUILDNAME=$(node -e "console.log($(cat package.json).name)") # "ride40" or similar
 RIDEDIR="_/${BUILDNAME}/${PackageName}-darwin-x64"
 SHIPDIRECTORY=ship
-RIDEAPPDIRNAME="$PackageName.app"
+RIDEAPPDIRNAME="${PackageName}.app"
 PLISTFILE="$RIDEDIR/$RIDEAPPDIRNAME/Contents/Info.plist"
 
-mkdir ${RIDEDIR}/Ride-4.0.app/Contents/Resources/LICENCES
-mv ${RIDEDIR}/LICENSE.electron ${RIDEDIR}/LICENSES.chromium.html ${RIDEDIR}/Ride-4.0.app/Contents/Resources/LICENCES/
+mkdir ${RIDEDIR}/${PackageName}.app/Contents/Resources/LICENCES
+mv ${RIDEDIR}/LICENSE.electron ${RIDEDIR}/LICENSES.chromium.html ${RIDEDIR}/${PackageName}.app/Contents/Resources/LICENCES/
 
-if [ -s ${RIDEDIR}/../../version ]; then
-RIDEVERSION=`cat ${RIDEDIR}/../../version`
+if [ -s _/version ]; then
+RIDEVERSION=`cat _/version`
 else
 RIDEVERSION=9.9.9
 fi
@@ -43,7 +43,7 @@ APPNAME=${PackageName}
 
 ## Use a launcher script to launch RIDE
 
-sed s/EXECUTABLE/Ride-4.0/ < "$BUILDROOTDIR/packagescripts/osx/launcher" > "$RIDEDIR/$RIDEAPPDIRNAME/Contents/MacOS/launcher"
+sed "s/EXECUTABLE/${PackageName}/" < "$BUILDROOTDIR/packagescripts/osx/launcher" > "$RIDEDIR/$RIDEAPPDIRNAME/Contents/MacOS/launcher"
 chmod +x "$RIDEDIR/$RIDEAPPDIRNAME/Contents/MacOS/launcher"
 PLISTValue "$PLISTFILE" "CFBundleExecutable" "launcher"
 
