@@ -25,21 +25,20 @@ tasks.b=tasks.build=f=>{
 }
 
 const incl=new RegExp('^$|^/(empty.html|index.html|status.html|main.js|package.json)$|^/(src|style|lib|node_modules|_)(/|$)')
-const namev='ride'+v.split('.').slice(0,2).join('')
 ,pkg=(x,y,f)=>{rq('electron-packager')(
-  {dir:'.',platform:x,arch:y,out:'_/'+namev,overwrite:true,'download.cache':'cache',icon:'D',tmpdir:false,
+  {dir:'.',platform:x,arch:y,out:'_/'+pj.name,overwrite:true,'download.cache':'cache',icon:'D',tmpdir:false,
     ignore:p=>!incl.test(p)&&!(x==='win32'&&/^\/windows-ime(\/|$)/.test(p)),
-    'appBundleId':'com.dyalog.'+namev,
+    'appBundleId':'com.dyalog.'+pj.name,
     'appCopyright':`(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
     'appVersion':v,
     'buildVersion':v,
     'win32metadata':{ //ends up in Windows Explorer's right click > Properties
       CompanyName:'Dyalog Ltd',
       FileDescription:'Remote Integrated Development Environment for Dyalog APL',
-      OriginalFilename:namev+'.exe',
+      OriginalFilename:pj.productName+'.exe',
       ProductName:'RIDE',
       InternalName:'RIDE'}},
-  e=>{const d='_/'+namev+'/'+pj.productName+'-'+x+'-'+y;rm(d+'/version')
+  e=>{const d='_/'+pj.name+'/'+pj.productName+'-'+x+'-'+y;rm(d+'/version')
       fs.existsSync(d+'/LICENSE')&&mv(d+'/LICENSE',d+'/LICENSE.electron')
       f&&f(e)}
 )}
