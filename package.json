@@ -1,9 +1,9 @@
 {
-  "name": "ride40",
-  "version": "4.0.0",
+  "name": "ride41",
+  "version": "4.1.0",
   "private": true,
   "main": "main.js",
-  "productName": "Ride-4.0",
+  "productName": "Ride-4.1",
   "scripts": {
     "start": "electron .",
     "build-css": "lessc ./style/style.less ./style/new-style.css --strict-math=on",
