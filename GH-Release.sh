@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e 
+set -x
 
 GIT_BRANCH=${JOB_NAME#*/*/}
 
@@ -29,6 +30,7 @@ if which jq >/dev/null 2>&1; then
         curl -o ./GH-Releases.json \
           --silent -H "Authorization: token $GHTOKEN" \
           https://api.github.com/repos/Dyalog/Ride/releases
+	cat ./GH-Releases.json
 
         while [ $DRAFT = "true" ] ; do
 		DRAFT=`cat GH-Releases.json | jq  ".[$C].draft"`
