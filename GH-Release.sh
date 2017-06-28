@@ -35,7 +35,7 @@ if which jq >/dev/null 2>&1; then
         while [ $DRAFT = "true" ] ; do
 		DRAFT=`cat GH-Releases.json | jq  ".[$C].draft"`
 		ID=`cat GH-Releases.json | jq  ".[$C].id"`
-		GH_VERSION=$(cat GH-Releases.json | jq ".[$C].version" | sed 's/"//g;')
+		GH_VERSION=$(cat GH-Releases.json | jq ".[$C].name" | sed 's/"//g;s/^v//')
 		GH_VERSION_AB=${GH_VERSION%.*}
 
 
