@@ -1,0 +1,45 @@
+@LB_BUTTON_HOVER:contrast(@LB_BG_COL,fade(@MID_GREY,20%),fade(@LIGHT_GREY,20%));
+@LB_BUTTON_ACTIVE:rgba(0,0,0,0.2);
+@LB_BG_COL:@SPLITTER;
+@LB_BUTTON_COL:@WIN_BG_COL;
+#lb {
+	background-color:@LB_BG_COL;
+	border-top:1px @BLACK solid;
+	border-bottom:1px @BLACK solid;
+	b {
+		color:@LB_BUTTON_COL;
+		&:hover {
+			background-color: @LB_BUTTON_HOVER;
+		}
+		&:active {
+			background-color: @LB_BUTTON_ACTIVE;
+		}
+	}
+	.lb_placeholder {
+		background: rgba(0,0,0,0.2);
+	}
+	.ui-sortable-helper {
+		color: @BLACK;
+	}
+}
+#lb_prf {
+	&:hover {
+		background-color: @LB_BUTTON_HOVER;
+	}
+	&:active {
+		background-color: @LB_BUTTON_ACTIVE;
+	}
+}
+#lb_tip {
+	background: @CREAM;
+	box-shadow: 0 18px 48px @TRANSLUCENT_BLACK;
+}
+#lb_tip_tri {
+	border-color: @CREAM;
+	border-left-color: transparent !important;
+	border-right-color: transparent !important;
+	background-color: transparent !important;
+}
+#lb_tip_desc {
+	border-bottom: solid 1px @DARK_CREAM;
+}

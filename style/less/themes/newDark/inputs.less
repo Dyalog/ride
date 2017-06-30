@@ -8,6 +8,9 @@ button{
 }
 
 [type=checkbox]{
+    &::before{
+      background:@WIN_BG_COL;
+    }
     &:hover::before{background:lighten(@WIN_BG_COL,10%)}
     &:active::before{background:@CHECKBOX_COL;color:lighten(@WIN_BG_COL,10%)}
     &:checked::before{color:@CHECKBOX_COL}
