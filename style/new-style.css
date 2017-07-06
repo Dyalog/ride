@@ -305,6 +305,7 @@ select:focus {
 }
 #cn {
   position: absolute;
+  z-index: 2;
   left: 0;
   right: 0;
   top: 0;
@@ -323,6 +324,7 @@ select:focus {
   padding-left: 5px;
   line-height: 24px;
   background-color: #e3e0d7;
+  border-color: #a9a9a9;
 }
 #cn label {
   font-weight: 600;
@@ -336,22 +338,19 @@ select:focus {
   width: 100%;
 }
 #cn select {
-  -webkit-appearance: button;
-  -webkit-border-radius: 2px;
-  -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
-  -webkit-padding-end: 20px;
-  -webkit-padding-start: 2px;
-  -webkit-user-select: none;
-  background-image: url(img/arrow2.png), -webkit-linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
-  background-position: right center;
-  background-repeat: no-repeat;
-  border: 1px solid #FFF;
+  background: url(img/arrow2.png) no-repeat right center;
+  background-color: #e3e0d7;
+  border: 1px solid #AAA;
   font-family: inherit;
   font-size: inherit;
   overflow: hidden;
   padding: 2px 34px 2px 4px;
   text-overflow: ellipsis;
   white-space: nowrap;
+  min-height: 30px;
+  min-width: 14vw;
+  font-weight: 500;
+  margin-right: 10px;
 }
 #cn .hsplitbar {
   width: 10px;
@@ -361,12 +360,28 @@ select:focus {
 #cn .indent {
   margin-left: 24px;
 }
+#cn_inner {
+  display: flex;
+  height: 95vh;
+}
+#cn_inner table {
+  width: 100%;
+}
+#cn_inner table tr {
+  height: 40px;
+  width: 100vw;
+}
+#cn_inner table tr td.fullwidth > * {
+  width: 100%;
+}
+.cn_tbl_l {
+  width: 20%;
+}
+.cn_tbl_r {
+  width: 80%;
+}
 #cn_favs {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 42px;
-  bottom: 0;
+  position: static;
   overflow: auto;
 }
 #cn_favs > div {
@@ -401,21 +416,17 @@ select:focus {
   float: right;
 }
 #cn_lhs {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 325px;
+  position: static;
+  width: 25vw;
   overflow: hidden;
+  flex-direction: column;
 }
 #cn_rhs {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 250px;
+  position: static;
+  width: 75vw;
   padding: 0;
-  overflow: auto;
+  overflow-y: auto;
+  flex-direction: column;
 }
 #cn_rhs_inner {
   padding: 8px;
@@ -424,17 +435,17 @@ select:focus {
   padding: 4px 0;
 }
 #cn_fav_btns {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 40px;
+  position: static;
+  height: 5vh;
   overflow: hidden;
-  width: 9999px;
+  width: 100vw;
   padding: 4px;
+  border-bottom: solid white 1px;
 }
 #cn_fav_btns button {
-  min-width: 75px;
+  min-width: 50px;
+  margin-right: 10px;
+  height: 5vh;
 }
 #cn_go {
   min-width: 75px;
@@ -1659,6 +1670,9 @@ span.CodeMirror-selectedtext {
 }
 #cn .hsplitbar {
   background-color: #fc9732;
+}
+#cn_fav_btns {
+  background: linear-gradient(#eeece6, #d9d4c8);
 }
 #cn_fav_btns button {
   background-color: transparent;

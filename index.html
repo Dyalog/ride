@@ -18,111 +18,168 @@
 
 <!--Connect page-->
 <div id=cn hidden>
-  <div id=cn_lhs>
-    <div id=cn_fav_btns><button id=cn_neu><u>N</u>ew</button>
-                        <button id=cn_cln><u>C</u>lone</button>
-                        <button id=cn_del><u>D</u>elete</button>
-                        <button id=cn_sve><u>S</u>ave</button></div>
-    <div id=cn_favs></div>
-  </div>
-  <div id=cn_rhs><div id=cn_rhs_inner>
-    <button id=cn_abt>A<u>b</u>out</button>
-    <p><label>C<u>o</u>nfiguration name: <input id=cn_fav_name placeholder=unnamed></label>
-    <p><label for=cn_type><u>T</u>ype:</label>
-      <select id=cn_type class=cn_select>
-        <option value=connect     title="Connect to an interpreter"                  >Connect
-        <option value=start       title="Start and connect to an interpreter"        >Start
-        <option value=listen      title="Start and connect to an interpreter via SSL">Listen
-      </select>
-      <select id=cn_subtype hidden>
-        <option value=raw title="Connect to an interpreter via raw TCP/IP" id=cn_raw_opt>Raw
-        <option value=ssh title="Connect to an interpreter via SSH"                     >SSH
-        <option value=ssl title="Connect to an interpreter using TLS/SSL"  id=cn_ssl_opt>TLS/SSL
-      </select>
-    <hr>
-    <div id=cn_dtl>
-      <div id=cn_tcp_dtl>
-        <div>
-          <label for=cn_tcp_host class=cn_label><u>H</u>ost:</label>
-          <input id=cn_tcp_host name=host size=12 placeholder=localhost>
-        </div>
-        <div>
-          <label for=cn_tcp_port class=cn_label><u>P</u>ort:</label>
-          <input id=cn_tcp_port name=port size=4 placeholder=4502>
-        </div>
-      </div>
-      <div id=cn_ssh hidden>
-        <div>
-          <label for=cn_ssh_port class=cn_label>SSH <u>P</u>ort:</label>
-          <input id=cn_ssh_port name=ssh_port size=4 placeholder=22>
-        </div>
-        <div>
-          <label for=cn_ssh_user class=cn_label><u>U</u>ser:</label>
-          <input id=cn_ssh_user name=user size=10>
-        </div>
-        <div>
-          <select id=cn_ssh_auth_type class="cn_select cn_label">
-              <option value=pass title="password is not saved">Password
-              <option value=key>Key file
-            </select>
-            <span id=cn_ssh_pass_wr><input id=cn_ssh_pass type=password></span>
-            <span id=cn_ssh_key_wr hidden><input id=cn_ssh_key name=ssh_key><button id=cn_ssh_key_dots>Browse...</button></span>
-        </div>
-        <div>
-          <button id=cn_fetch><u>F</u>etch list of interpreters through ssh</button>
-        </div> 
-      </div>
-      <div id=cn_ssl hidden>
-        <div>
-          <label class=cn_cb_label>
-            <input type=checkbox id=cn_cert_cb>Provide user c<u>e</u>rtificate
-                    <span class=cn_hint>(PEM file)</span></label>
-        </div>
-        <div>
-          <label style=padding-left:2em>Cert <span class=cn_hint>(PEM file)</span>
-            <input id=cn_cert name=cert><button id=cn_cert_dots>Browse...</button>
-        </div>
-        <div>
-          <label style=padding-left:2em>Key <span class=cn_hint>(PEM file)</span></label>
-            <input id=cn_key name=key><button id=cn_key_dots>Browse...</button>
-        </div>
-        <div>
-          <label class=cn_cb_label><input type=checkbox id=cn_subj_cb><u>V</u>alidate server subject common name matches hostname</label>
-        </div>
-        <div>
-          <label class=cn_cb_label><input type=checkbox id=cn_rootcertsdir_cb>Custom root certificates
-                    <span class=cn_hint>(directory with PEM files)</span></label>
-            <input id=cn_rootcertsdir name=rootcertsdir><button id=cn_rootcertsdir_dots>Browse...</button>
-        </div>
-        
-      </div>
-      <div id=cn_start hidden>
-        <div><label for=cn_exes class=cn_label><u>I</u>nterpreter:</label>
-          <select id=cn_exes name=exes class=cn_select></select>
-          <input id=cn_exe name=exe placeholder='path to executable'>
-        </div>
-        <div><label for=cn_cwd><u>W</u>orking directory:</label><br>
-          <input id=cn_cwd name=cwd>
-        </div>
-        <div><label for=cn_args>Arg<u>u</u>ments:</label>
-          <div class="tooltip">
-            <span class="tooltiptext">one per line; if needed, RIDE may also pass "+s" and "-q"</span>
-          </div>
-          <textarea id=cn_args name=args cols=40 rows=4></textarea>
-        </div>
-        <div>
-          <label for=cn_env><u>E</u>nvironment variables:</label>
-          <div class="tooltip">
-            <span class="tooltiptext">key=value, one pair per line, no extra spaces, no quoting or escaping of value</span>
-          </div>
-          <textarea id=cn_env name=env cols=40 rows=4></textarea><br>
-          <span id=cn_env_add>For example:
-            <a href=#>MAXWS=1G</a>, <a href=#>WSPATH=.</a>, <a href=#>HISTORY_SIZE=1000</a>, ...</span>
-        </div>
-      </div>
+  <div id=cn_fav_btns><button id=cn_neu><u>N</u>ew</button>
+                      <button id=cn_cln><u>C</u>lone</button>
+                      <button id=cn_del><u>D</u>elete</button>
+                      <button id=cn_sve><u>S</u>ave</button></div>
+  <div id="cn_inner">
+    <div id=cn_lhs>
+      <div id=cn_favs></div>
     </div>
-    <p><button id=cn_go><u>G</u>o</button>
-  </div></div>
+    <div id=cn_rhs><div id=cn_rhs_inner>
+      <button id=cn_abt>A<u>b</u>out</button>
+      <table>
+        <tbody>
+          <col class="cn_tbl_l"></col>
+          <col class="cn_tbl_r"></col>
+          <tr>
+            <td><label for=cn_fav_name>C<u>o</u>nfiguration name:</label></td>
+            <td><input id=cn_fav_name placeholder=unnamed></td>
+          </tr>
+          <tr>
+            <td><label for=cn_type><u>T</u>ype:</label></td>
+            <td>
+              <select id=cn_type class=cn_select>
+                <option value=connect     title="Connect to an interpreter"                  >Connect
+                <option value=start       title="Start and connect to an interpreter"        >Start
+                <option value=listen      title="Start and connect to an interpreter via SSL">Listen
+              </select>
+              <select id=cn_subtype hidden>
+                <option value=raw title="Connect to an interpreter via raw TCP/IP" id=cn_raw_opt>Raw
+                <option value=ssh title="Connect to an interpreter via SSH"                     >SSH
+                <option value=ssl title="Connect to an interpreter using TLS/SSL"  id=cn_ssl_opt>TLS/SSL
+              </select>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <hr>
+      <div id=cn_dtl>
+        <div id=cn_tcp_dtl>
+          <table>
+            <colgroup>
+              <col class="cn_tbl_l"></col>
+              <col class="cn_tbl_r"></col>
+            </colgroup>
+            <tbody>
+              <tr>
+                <td><label for=cn_tcp_host class=cn_label><u>H</u>ost:</label></td>
+                <td><input id=cn_tcp_host name=host size=12 placeholder=localhost></td>
+              </tr>
+              <tr>
+                <td><label for=cn_tcp_port class=cn_label><u>P</u>ort:</label></td>
+                <td><input id=cn_tcp_port name=port size=4 placeholder=4502></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id=cn_ssh hidden>
+          <table>
+            <colgroup>
+              <col class="cn_tbl_l"></col>
+              <col class="cn_tbl_r"></col>
+            </colgroup>
+            <tbody>
+              <tr>
+                <td><label for=cn_ssh_port class=cn_label>SSH <u>P</u>ort:</label></td>
+                <td><input id=cn_ssh_port name=ssh_port size=4 placeholder=22></td>
+              </tr>
+              <tr>
+                <td><label for=cn_ssh_user class=cn_label><u>U</u>ser:</label></td>
+                <td><input id=cn_ssh_user name=user size=10></td>
+              </tr>
+              <tr>
+                <td>
+                  <select id=cn_ssh_auth_type class="cn_select cn_label">
+                    <option value=pass title="password is not saved">Password
+                    <option value=key>Key file
+                  </select>
+                </td>
+                <td><span id=cn_ssh_pass_wr><input id=cn_ssh_pass type=password></span></td>
+                <td><span id=cn_ssh_key_wr hidden><input id=cn_ssh_key name=ssh_key><button id=cn_ssh_key_dots>Browse...</button></span></td>
+              </tr>
+              <tr>
+                <td colspan="2"><button id=cn_fetch><u>F</u>etch list of interpreters through ssh</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id=cn_ssl hidden>
+          <table>
+            <colgroup>
+              <col class="cn_tbl_l"></col>
+              <col class="cn_tbl_r"></col>
+            </colgroup>
+            <tbody>
+              <tr>
+                <td colspan="2"><label class=cn_cb_label><input type=checkbox id=cn_cert_cb>Provide user c<u>e</u>rtificate <span class=cn_hint>(PEM file)</span></label></td>
+              </tr>
+              <tr>
+                <td><label style=padding-left:2em>Cert <span class=cn_hint>(PEM file)</span></td>
+                <td><input id=cn_cert name=cert><button id=cn_cert_dots>Browse...</button></td>
+              </tr>
+              <tr>
+                <td><label style=padding-left:2em>Key <span class=cn_hint>(PEM file)</span></label></td>
+                <td><input id=cn_key name=key><button id=cn_key_dots>Browse...</button></td>
+              </tr>
+              <tr>
+                <td colspan="2"><label class=cn_cb_label for=cn_subj_cb><u>V</u>alidate server subject common name matches hostname<input type=checkbox id=cn_subj_cb></label></td>
+              </tr>
+              <tr>
+                <td colspan="2"><label class=cn_cb_label for=cn_rootcertsdir_cb><input type=checkbox id=cn_rootcertsdir_cb>Custom root certificates <span class=cn_hint>(directory with PEM files)</span></label></td>
+              </tr>
+              <tr>
+                <td colspan="2"><input id=cn_rootcertsdir name=rootcertsdir><button id=cn_rootcertsdir_dots>Browse...</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div id=cn_start hidden>
+          <table>
+            <colgroup>
+              <col class="cn_tbl_l"></col>
+              <col class="cn_tbl_r"></col>
+            </colgroup>
+            <tbody>
+              <tr>
+                <td><label for=cn_exes class=cn_label><u>I</u>nterpreter:</label></td>
+                <td><select id=cn_exes name=exes class=cn_select></select></td>
+              </tr>
+              <tr><td colspan="2"><input id=cn_exe name=exe placeholder='path to executable'></td></tr>
+              <tr><td colspan="2"><label for=cn_cwd><u>W</u>orking directory:</label></td></tr>
+              <tr><td colspan="2"><input id=cn_cwd name=cwd></td></tr>
+              <tr>
+                <td colspan="2">
+                  <label for=cn_args>Arg<u>u</u>ments:</label>
+                  <div class="tooltip">
+                    <span class="tooltiptext">one per line; if needed, RIDE may also pass "+s" and "-q"</span>
+                  </div>
+                </td>
+              </tr>
+              <tr><td colspan="2"><textarea id=cn_args name=args cols=40 rows=4></textarea></td></tr>
+              <tr>
+                <td colspan="2">
+                  <label for=cn_env><u>E</u>nvironment variables:</label>
+                  <div class="tooltip">
+                    <span class="tooltiptext">key=value, one pair per line, no extra spaces, no quoting or escaping of value</span>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <textarea id=cn_env name=env cols=40 rows=4></textarea><br>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2"><span id=cn_env_add>For example: <a href=#>MAXWS=1G</a>, <a href=#>WSPATH=.</a>, <a href=#>HISTORY_SIZE=1000</a>, ...</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p><button id=cn_go><u>G</u>o</button>
+    </div></div>
+  </div>
 </div>
 
 <div id=cn_connecting_dlg class=dlg hidden>

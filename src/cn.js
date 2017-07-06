@@ -152,7 +152,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   return!1
 }
 D.cn=_=>{ //set up Connect page
-  q=J.cn;document.title='RIDE - Connect';I.cn.hidden=0;$(I.cn).splitter()
+  q=J.cn;document.title='RIDE - Connect';I.cn.hidden=0;//$(q.inner).splitter()
   var d=D.el.app.getPath('userData'),f=d+'/connections.json'
   if (fs.existsSync(f)){
     D.conns=JSON.parse(fs.readFileSync(f).toString())
