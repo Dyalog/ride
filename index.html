@@ -29,9 +29,11 @@
     <div id=cn_rhs><div id=cn_rhs_inner>
       <button id=cn_abt>A<u>b</u>out</button>
       <table>
-        <tbody>
+        <colgroup>
           <col class="cn_tbl_l"></col>
           <col class="cn_tbl_r"></col>
+        </colgroup>
+        <tbody>
           <tr>
             <td><label for=cn_fav_name>C<u>o</u>nfiguration name:</label></td>
             <td><input id=cn_fav_name placeholder=unnamed></td>
@@ -89,17 +91,18 @@
                 <td><input id=cn_ssh_user name=user size=10></td>
               </tr>
               <tr>
+                <td><label for=cn_ssh_auth_type class=cn_label><u>A</u>uthentication</label></td>
                 <td>
-                  <select id=cn_ssh_auth_type class="cn_select cn_label">
+                  <select id=cn_ssh_auth_type class="cn_select">
                     <option value=pass title="password is not saved">Password
                     <option value=key>Key file
                   </select>
+                  <input id=cn_ssh_pass type=password>
+                  <input id=cn_ssh_key name=ssh_key><button id=cn_ssh_key_dots>Browse...</button>
                 </td>
-                <td><span id=cn_ssh_pass_wr><input id=cn_ssh_pass type=password></span></td>
-                <td><span id=cn_ssh_key_wr hidden><input id=cn_ssh_key name=ssh_key><button id=cn_ssh_key_dots>Browse...</button></span></td>
               </tr>
               <tr>
-                <td colspan="2"><button id=cn_fetch><u>F</u>etch list of interpreters through ssh</button></td>
+                <td /><td><button id=cn_fetch><u>F</u>etch list of interpreters through ssh</button></td>
               </tr>
             </tbody>
           </table>
@@ -167,7 +170,7 @@
               </tr>
               <tr>
                 <td colspan="2">
-                  <textarea id=cn_env name=env cols=40 rows=4></textarea><br>
+                  <textarea id=cn_env name=env cols=40 rows=4></textarea>
                 </td>
               </tr>
               <tr>
@@ -177,7 +180,7 @@
           </table>
         </div>
       </div>
-      <p><button id=cn_go><u>G</u>o</button>
+      <p><button id=cn_go><u>C</u>onnect</button>
     </div></div>
   </div>
 </div>

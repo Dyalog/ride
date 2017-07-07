@@ -340,17 +340,16 @@ select:focus {
 #cn select {
   background: url(img/arrow2.png) no-repeat right center;
   background-color: #e3e0d7;
-  border: 1px solid #AAA;
-  font-family: inherit;
-  font-size: inherit;
   overflow: hidden;
   padding: 2px 34px 2px 4px;
   text-overflow: ellipsis;
   white-space: nowrap;
   min-height: 30px;
-  min-width: 14vw;
+  min-width: 15vw;
   font-weight: 500;
-  margin-right: 10px;
+}
+#cn select option {
+  font-weight: 500;
 }
 #cn .hsplitbar {
   width: 10px;
@@ -368,17 +367,10 @@ select:focus {
   width: 100%;
 }
 #cn_inner table tr {
-  height: 40px;
-  width: 100vw;
-}
-#cn_inner table tr td.fullwidth > * {
   width: 100%;
 }
-.cn_tbl_l {
-  width: 20%;
-}
-.cn_tbl_r {
-  width: 80%;
+#cn_inner table tr td {
+  padding: 5px 5px;
 }
 #cn_favs {
   position: static;
@@ -412,28 +404,6 @@ select:focus {
 #cn_favs div {
   position: relative;
 }
-#cn_abt {
-  float: right;
-}
-#cn_lhs {
-  position: static;
-  width: 25vw;
-  overflow: hidden;
-  flex-direction: column;
-}
-#cn_rhs {
-  position: static;
-  width: 75vw;
-  padding: 0;
-  overflow-y: auto;
-  flex-direction: column;
-}
-#cn_rhs_inner {
-  padding: 8px;
-}
-#cn_rhs_inner p {
-  padding: 4px 0;
-}
 #cn_fav_btns {
   position: static;
   height: 5vh;
@@ -447,27 +417,70 @@ select:focus {
   margin-right: 10px;
   height: 5vh;
 }
+.cn_tbl_l {
+  width: 24vw;
+}
+.cn_tbl_r {
+  width: 50vw;
+}
+#cn_abt {
+  float: right;
+  position: absolute;
+  right: 5px;
+}
+#cn_lhs {
+  position: static;
+  width: 25vw;
+  overflow: hidden;
+  flex-direction: column;
+}
+#cn_ssh_auth_type,
+#cn_ssh_pass,
+#cn_ssh_key {
+  margin-right: 1vw;
+  width: 15vw;
+}
+#cn_tcp_host,
+#cn_tcp_port,
+#cn_ssh_port,
+#cn_ssh_user,
+#cn_exes,
+#cn_fetch {
+  width: 31vw;
+}
+#cn_rhs {
+  position: static;
+  width: 75vw;
+  padding: 0;
+  overflow-y: auto;
+  flex-direction: column;
+}
+#cn_rhs button {
+  border-radius: 3px;
+  padding: 8px;
+}
+#cn_rhs_inner {
+  padding: 0.5vh 0.5vw;
+}
+#cn_rhs_inner p {
+  padding: 4px 0;
+}
 #cn_go {
   min-width: 75px;
 }
+#cn_env,
+#cn_args,
+#cn_cwd,
 #cn_exe {
-  width: 100%;
-  margin-top: 1ex;
+  width: 55vw;
 }
-#cn_cwd {
-  width: 100%;
-  margin-top: 1ex;
-}
-#cn_args {
-  width: 100%;
-  margin-top: 1ex;
-}
-#cn_env {
-  margin-top: 1ex;
-  width: 100%;
+#cn_type,
+#cn_subtype {
+  margin-right: 1vw;
+  width: 15vw;
 }
 #cn_env_add {
-  padding-left: 32px;
+  padding-left: 0px;
 }
 #cn_env_add a {
   font-family: apl, monospace;
@@ -1650,6 +1663,44 @@ span.CodeMirror-selectedtext {
 .lm_splitter {
   opacity: 1 !important;
 }
+.tooltip {
+  content: " ";
+  width: 16px;
+  height: 16px;
+  background-image: url(img/icon-help.png);
+  position: relative;
+  display: inline-block;
+}
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px;
+  border-radius: 6px;
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  left: 25px;
+  min-width: 30vw;
+}
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 12px;
+  right: 100%;
+  /* To the left of the tooltip */
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: transparent black transparent transparent;
+}
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
 /* Default colours */
 #cn_favs > div {
   background-color: #eee;
@@ -1667,6 +1718,10 @@ span.CodeMirror-selectedtext {
 }
 #cn_lhs {
   background: #e3e0d7;
+}
+#cn_rhs button {
+  color: #fff;
+  background-color: #fc9732;
 }
 #cn .hsplitbar {
   background-color: #fc9732;

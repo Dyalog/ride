@@ -226,7 +226,7 @@ D.cn=_=>{ //set up Connect page
   q.ssh_key_dots     .onclick=_=>{browse(q.ssh_key     ,'SSH Key'    )}
   q.rootcertsdir_dots.onclick=_=>{browse(q.rootcertsdir,'Directory with Root Certificates',['openDirectory'])}
   q.ssh_auth_type.onchange=_=>{
-    const k=q.ssh_auth_type.value==='key';q.ssh_pass_wr.hidden=k;q.ssh_key_wr.hidden=!k;
+    const k=q.ssh_auth_type.value==='key';q.ssh_pass.hidden=k;q.ssh_key.hidden=!k;q.ssh_key_dots.hidden=!k;
     sel.ssh_auth_type=q.ssh_auth_type.value}
   D.conns.forEach(x=>{q.favs.appendChild(favDOM(x))})
   $(q.favs).list().sortable({cursor:'move',revert:true,axis:'y',stop:save})
