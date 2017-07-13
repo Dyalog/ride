@@ -187,7 +187,7 @@ button:active {
   margin-right: 0.75em;
   outlinex: none !important;
 }
-[type=checkbox]::before {
+/*[type=checkbox]::before {
   position: relative;
   content: "\2714";
   background: #eee;
@@ -203,7 +203,7 @@ button:active {
   border-radius: 2px;
   transition: 0.2s;
   font-weight: bold;
-}
+}*/
 .dark [type=checkbox]::before {
   background: #444;
 }

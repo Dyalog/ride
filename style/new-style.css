@@ -249,62 +249,6 @@ body {
 .cm-scroll {
   z-index: 6;
 }
-button {
-  border: none;
-  font-family: inherit;
-  font-weight: bold;
-  padding: 5px 0.5em;
-  transition: box-shadow 0.2s;
-  text-transform: uppercase;
-}
-button:active {
-  box-shadow: none;
-}
-[type=checkbox],
-[type=checkbox]:focus {
-  margin-right: 0.75em;
-  outlinex: none !important;
-}
-[type=checkbox]::before {
-  position: relative;
-  content: "\2714";
-  color: transparent;
-  display: inline-block;
-  height: 3ex;
-  width: 3ex;
-  top: -1px;
-  left: -1px;
-  font-size: 70%;
-  text-align: center;
-  border-radius: 2px;
-  transition: 0.2s;
-  font-weight: bold;
-  background: #eee;
-  box-shadow: 0 0 0 1px #fc9732 inset;
-}
-[type=checkbox]:focus:before {
-  outline: inherit;
-}
-[type=checkbox]:focus {
-  outline: dotted #000 1px;
-  outline-offset: 2px;
-}
-input,
-textarea,
-pre,
-tt {
-  font-family: apl, monospace;
-  font-size: 18px;
-}
-input,
-textarea,
-select,
-a {
-  outline: 0;
-}
-select:focus {
-  outline: dotted #000 1px;
-}
 #cn {
   position: absolute;
   z-index: 2;
@@ -319,7 +263,7 @@ select:focus {
   font-family: "Roboto";
   font-size: 14px;
 }
-#cn input:not([type=button]):not([type=file]):not([type=submit]),
+#cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),
 #cn textarea {
   border-radius: 2px;
   border: 1px solid white;
@@ -482,6 +426,59 @@ select:focus {
 .cn_dlg_content {
   padding: 8px;
   text-align: center;
+}
+button {
+  border: none;
+  font-family: inherit;
+  font-weight: bold;
+  padding: 5px 0.5em;
+  transition: box-shadow 0.2s;
+  text-transform: uppercase;
+}
+button:active {
+  box-shadow: none;
+}
+input[type=checkbox] {
+  -webkit-appearance: none;
+  background-color: #fff;
+  border: 1px solid #fc9732;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+  padding: 8px;
+  border-radius: 3px;
+  display: inline-block;
+  position: relative;
+  margin: 0px 5px;
+}
+input[type=checkbox]:focus {
+  outline: none;
+  margin-right: 5px;
+}
+input[type=checkbox]:checked {
+  background-color: #fc9732;
+}
+input[type=checkbox]:checked:after {
+  content: '\2714';
+  font-size: 11px;
+  position: absolute;
+  top: 0px;
+  left: 4px;
+  color: #fff;
+}
+input,
+textarea,
+pre,
+tt {
+  font-family: apl, monospace;
+  font-size: 18px;
+}
+input,
+textarea,
+select,
+a {
+  outline: 0;
+}
+select:focus {
+  outline: dotted #000 1px;
 }
 #lb {
   font-family: apl, monospace;
