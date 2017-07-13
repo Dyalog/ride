@@ -1,7 +1,7 @@
 ;(function(){'use strict'
 
 //autocompletion
-var rLetters=RegExp('['+D.syn.letter+']*$'), rCompletable=RegExp('['+D.syn.letter+'\\)\\]\\.]$')
+var rLetters=RegExp('['+D.syn.letter+']*$'), rCompletable=RegExp('['+D.syn.letter+'⎕\\)\\]\\.]$')
 var ibeamOptions=[];for(var x in D.ibeams)ibeamOptions.push({text:x+'⌶',displayText:x+'⌶ '+D.ibeams[x]})
 
 D.ac=function(win){ //win:editor or session instance to set up autocompletion in
