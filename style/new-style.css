@@ -272,13 +272,15 @@ button:active {
   display: inline-block;
   height: 3ex;
   width: 3ex;
-  top: -4px;
-  left: -2px;
+  top: -1px;
+  left: -1px;
   font-size: 70%;
   text-align: center;
   border-radius: 2px;
   transition: 0.2s;
   font-weight: bold;
+  background: #eee;
+  box-shadow: 0 0 0 1px #fc9732 inset;
 }
 [type=checkbox]:focus:before {
   outline: inherit;
@@ -317,13 +319,18 @@ select:focus {
   font-family: "Roboto";
   font-size: 14px;
 }
-#cn input:not([type=button]):not([type=file]):not([type=submit]):not([disabled]),
+#cn input:not([type=button]):not([type=file]):not([type=submit]),
 #cn textarea {
   border-radius: 2px;
   border: 1px solid white;
   padding-left: 5px;
   line-height: 24px;
   background-color: #e3e0d7;
+  border-color: #a9a9a9;
+}
+#cn input:not([type=button]):not([type=file]):not([type=submit]):disabled,
+#cn textarea:disabled {
+  background-color: #a9a9a9;
   border-color: #a9a9a9;
 }
 #cn label {
@@ -345,7 +352,6 @@ select:focus {
   text-overflow: ellipsis;
   white-space: nowrap;
   min-height: 30px;
-  min-width: 15vw;
   font-weight: 500;
 }
 #cn select option {
@@ -359,18 +365,8 @@ select:focus {
 #cn .indent {
   margin-left: 24px;
 }
-#cn_inner {
-  display: flex;
-  height: 95vh;
-}
-#cn_inner table {
-  width: 100%;
-}
-#cn_inner table tr {
-  width: 100%;
-}
-#cn_inner table tr td {
-  padding: 5px 5px;
+.cn_inner {
+  height: 100%;
 }
 #cn_favs {
   position: static;
@@ -417,67 +413,44 @@ select:focus {
   margin-right: 10px;
   height: 5vh;
 }
-.cn_tbl_l {
-  width: 24vw;
-}
-.cn_tbl_r {
-  width: 50vw;
+#cn_rhs > * > .row,
+#cn_rhs > .row,
+#cn_dtl > * > .row {
+  /* margin: 10px 0px; */
+  padding: 3px 0px;
 }
 #cn_abt {
   float: right;
   position: absolute;
   right: 5px;
 }
-#cn_lhs {
-  position: static;
-  width: 25vw;
-  overflow: hidden;
-  flex-direction: column;
-}
-#cn_ssh_auth_type,
-#cn_ssh_pass,
-#cn_ssh_key {
-  margin-right: 1vw;
-  width: 15vw;
-}
-#cn_tcp_host,
-#cn_tcp_port,
-#cn_ssh_port,
-#cn_ssh_user,
-#cn_exes,
-#cn_fetch {
-  width: 31vw;
-}
+#cn_lhs,
 #cn_rhs {
   position: static;
-  width: 75vw;
-  padding: 0;
+  height: 100%;
+}
+#cn_lhs {
+  padding: 0px;
+  overflow: hidden;
+}
+#cn_rhs {
+  padding: 10px;
   overflow-y: auto;
-  flex-direction: column;
 }
 #cn_rhs button {
   border-radius: 3px;
   padding: 8px;
 }
-#cn_rhs_inner {
-  padding: 0.5vh 0.5vw;
+#cn_rhs .col > input,
+#cn_rhs .col > select,
+#cn_rhs .col > button {
+  width: 100%;
 }
 #cn_rhs_inner p {
   padding: 4px 0;
 }
 #cn_go {
   min-width: 75px;
-}
-#cn_env,
-#cn_args,
-#cn_cwd,
-#cn_exe {
-  width: 55vw;
-}
-#cn_type,
-#cn_subtype {
-  margin-right: 1vw;
-  width: 15vw;
 }
 #cn_env_add {
   padding-left: 0px;
