@@ -7,11 +7,11 @@
   "scripts": {
     "start": "electron .",
     "build-css": "lessc ./style/style.less ./style/new-style.css --strict-math=on",
-    "dev": "npm run build-css && RIDE_CSS=./style/new-style.css ./node_modules/.bin/electron .",
-    "watch": "nodemon --config ./nodemon.json --exec 'npm run dev'",
+    "dev": "npm run build-css && npm run start",
+    "watch": "nodemon --config ./nodemon.json --exec \"npm run dev\"",
     "dev-start": "npm run build-css && RIDE_CSS=./style/new-style.css RIDE_SPAWN=dyalog ./node_modules/.bin/electron .",
     "watch-start": "nodemon --config ./nodemon.json --exec 'npm run dev-start'",
-    "watch-css": "nodemon --config ./nodemon.json --exec 'npm run build-css'"
+    "watch-css": "nodemon --config ./nodemon.json --exec \"npm run build-css\""
   },
   "repository": ".",
   "dependencies": {
