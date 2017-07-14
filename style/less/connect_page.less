@@ -41,6 +41,7 @@
     white-space: nowrap;
     min-height:30px;
     //min-width:15vw;
+    box-shadow: none;
     font-weight:500;
     option{
       font-weight:500;
@@ -93,14 +94,15 @@
 }
 #cn_fav_btns {
   position:static;
-	height: 5vh;
+	height: 40px;
 	overflow: hidden;
 	width: 100vw;
 	padding: 4px;
 	button {
 		min-width: 50px;
     margin-right:10px;
-    height:5vh;
+    height:40px;
+    margin-top:-5px;
 	}
   border-bottom:solid white 1px;
 }
@@ -122,10 +124,12 @@
 #cn_lhs {
   padding:0px;
 	overflow: hidden;
+  border-right:1px solid @WHITE;
 }
 #cn_rhs {
 	padding: 10px;
 	overflow-y: auto;
+  border-left:8px solid @PRIMARY;
   button{
     border-radius:3px;
     padding:8px;

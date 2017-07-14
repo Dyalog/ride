@@ -55,7 +55,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   q.exes.innerHTML=h+'<option value="">Other...'
   q.exes.value=q.exe.value
   if(!q.exes.value){q.exes.selectedIndex=0;q.exe.value=q.exes.value}
-  q.exe.readOnly=!!q.exes.value;
+  q.exe.disabled=!!q.exes.value;
 }
 ,validate=x=>{
   const t=x.type,p=x.port,ssh=x.subtype==='ssh'
@@ -152,7 +152,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   return!1
 }
 D.cn=_=>{ //set up Connect page
-  q=J.cn;document.title='RIDE - Connect';I.cn.hidden=0;//$(q.inner).splitter()
+  q=J.cn;I.cn.hidden=0;//$(q.inner).splitter()
   var d=D.el.app.getPath('userData'),f=d+'/connections.json'
   if (fs.existsSync(f)){
     D.conns=JSON.parse(fs.readFileSync(f).toString())
@@ -168,8 +168,8 @@ D.cn=_=>{ //set up Connect page
     const u=sel.name,v=q.fav_name.value||''
     if(u!==v){v?(sel.name=v):delete sel.name;$sel.find('.name').text(favText(sel))}
   }
-  updFormDtl();
-  q.type.onchange=_=>{sel.type=q.type.value;updFormDtl();sel.exe=sel.exe||q.exe.value;}
+  updFormDtl();function upperFirst(s){return s[0].toUpperCase()+s.substr(1)}
+  q.type.onchange=_=>{sel.type=q.type.value;document.title="RIDE - "+upperFirst(q.type.value);updFormDtl();sel.exe=sel.exe||q.exe.value;}
   q.subtype.onchange=updSubtype
   q.ssh_user.placeholder=user
   var enterConnect=function(event){if (event.keyCode==13){$('#cn_go').click()}}
@@ -201,7 +201,7 @@ D.cn=_=>{ //set up Connect page
   }
   q.exes.onchange=_=>{
     const v=q.exes.value;
-    q.exe.value=v||D.prf.otherExe();q.exe.readOnly=!!v;$(q.exe).change()
+    q.exe.value=v||D.prf.otherExe();q.exe.disabled=!!v;$(q.exe).change()
     v||q.exe.focus();D.prf.selectedExe(v)} //todo: do we still need this pref?
   q.env_add.onclick=x=>{
     if(x.target.nodeName!=='A')return
@@ -303,6 +303,7 @@ D.cn=_=>{ //set up Connect page
     }
   }catch(e){console.error(e)}
   updExes()
+  document.title="RIDE - "+upperFirst(q.type.value);
 //  q.connecting_dlg_close.onclick=_=>{q.connecting_dlg.hidden=1}
 }
 

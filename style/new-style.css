@@ -296,6 +296,7 @@ body {
   text-overflow: ellipsis;
   white-space: nowrap;
   min-height: 30px;
+  box-shadow: none;
   font-weight: 500;
 }
 #cn select option {
@@ -346,7 +347,7 @@ body {
 }
 #cn_fav_btns {
   position: static;
-  height: 5vh;
+  height: 40px;
   overflow: hidden;
   width: 100vw;
   padding: 4px;
@@ -355,7 +356,8 @@ body {
 #cn_fav_btns button {
   min-width: 50px;
   margin-right: 10px;
-  height: 5vh;
+  height: 40px;
+  margin-top: -5px;
 }
 #cn_rhs > * > .row,
 #cn_rhs > .row,
@@ -376,10 +378,12 @@ body {
 #cn_lhs {
   padding: 0px;
   overflow: hidden;
+  border-right: 1px solid #fff;
 }
 #cn_rhs {
   padding: 10px;
   overflow-y: auto;
+  border-left: 8px solid #fc9732;
 }
 #cn_rhs button {
   border-radius: 3px;
