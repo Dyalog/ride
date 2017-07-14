@@ -25,7 +25,7 @@ if(D.el){
   document.onmousewheel=
     function(e){var d=e.wheelDelta;d&&(e.ctrlKey||e.metaKey)&&!e.shiftKey&&!e.altKey&&CM.commands[d>0?'ZMI':'ZMO']()}
   document.body.className+=' zoom'+D.prf.zoom();
-  D.prf.dark()&&(document.body.className+=' newDark');
+  D.prf.dark()&&false&&(document.body.className+=' newDark');
   D.prf.zoom(function(z){
     if(!D.ide)return
     var wins=D.ide.wins

@@ -124,7 +124,7 @@ table {
 }
 @font-face {
   font-family: 'apl';
-  src: url('Apl385.woff') format('woff'), url('Apl385.ttf') format('truetype');
+  src: url('fonts/Apl385.woff') format('woff'), url('fonts/Apl385.ttf') format('truetype');
 }
 ::selection {
   background: #0a246a;
@@ -1537,6 +1537,7 @@ input.lyt_g3:hover {
   white-space: nowrap;
   cursor: default;
 }
+.dark #wse{background:#777}
 #wse div {
   padding-left: 1em;
   margin: 2px 0;
