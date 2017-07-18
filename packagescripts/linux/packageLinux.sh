@@ -107,6 +107,7 @@ cat >$prerm <<-!!prerm
 
 if which update-alternatives >/dev/null 2>&1 ; then
 	update-alternatives --remove ride /opt/ride-${BASE_VERSION}/Ride-${BASE_VERSION}
+	update-alternatives --remove ride${BASE_VERSION_ND} /opt/ride-${BASE_VERSION}/Ride-${BASE_VERSION}
 fi
 
 if [ -L /usr/bin/ride-${BASE_VERSION} ]; then
