@@ -28,7 +28,7 @@ el.app.on('ready',_=>{
       x=y=null;width=Math.min(width,b.width);height=Math.min(height,b.height)
     }
   }
-  let w=global.elw=new el.BrowserWindow({x,y,width,height,show:0,icon:'style/img/D.png'})
+  let w=global.elw=new el.BrowserWindow({x,y,width,height,show:0,icon:'D.png'})
   db.main&&db.main[4]&&w.maximize()
   el.Menu.setApplicationMenu(null);w.loadURL(`file://${__dirname}/index.html`)
   w.on('move',sv).on('resize',sv).on('maximize',sv).on('unmaximize',sv)
