@@ -7,7 +7,7 @@ D.cmds=[
   //code description                default keys
   ['ABT','About',                   ['Shift-F1']],
   ['AC', 'Align comments',          []],
-  ['AO', 'Add comments',            []],
+  ['AO', 'Comment out lines',       []],
   ['BK', 'Backward or Undo',        ['Shift-Ctrl-Backspace']],
   ['BP', 'Toggle breakpoint',       []],
   ['BT', 'Back Tab between windows',['Shift-Ctrl-Tab']],
@@ -16,7 +16,7 @@ D.cmds=[
   ['DMN','Next line in demo',       []],
   ['DMP','Previous line in demo',   []],
   ['DMR','Load demo file',          []],
-  ['DO', 'Delete comments',         []],
+  ['DO', 'Uncomment lines',         []],
   ['ED', 'Edit',                    ['Shift-Enter']],
   ['EMD','Edit Mode',               ['Shift-F3']],
   ['EP', 'Exit (and save changes)', ['Esc']],
