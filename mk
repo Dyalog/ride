@@ -24,7 +24,7 @@ tasks.b=tasks.build=f=>{
   buildDone=1;f()
 }
 
-const incl=new RegExp('^$|^/(empty.html|index.html|status.html|main.js|package.json)$|^/(src|style|lib|node_modules|_)(/|$)')
+const incl=new RegExp('^$|^/(D.png|empty.html|index.html|status.html|main.js|package.json)$|^/(src|style|lib|node_modules|_)(/|$)')
 const namev='ride'+v.split('.').slice(0,2).join('')
 ,pkg=(x,y,f)=>{rq('electron-packager')(
   {dir:'.',platform:x,arch:y,out:'_/'+namev,overwrite:true,'download.cache':'cache',icon:'D',tmpdir:false,
