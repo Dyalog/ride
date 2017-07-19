@@ -101,7 +101,7 @@ D.Ed.prototype={
     // 8 MixedSimpleArray    256 AplNamespace
     var isCode=[1,256,512,1024,2048,4096].indexOf(ee.entityType)>=0
     cm.setOption('mode',isCode?'apl':'text');cm.setOption('foldGutter',isCode&&!!D.prf.fold())
-    if(isCode&&D.prf.indentOnOpen()){cm.execCommand('selectAll');cm.execCommand('indentAuto')}
+    if(isCode&&D.prf.indentOnOpen())this.RD(cm)
     ed.setRO(ee.readOnly||ee['debugger'])
     if (ee.readOnly){ //don't show comment or replace buttons if editor is readonly
       ed.dom.getElementsByClassName("tb_AO")[0].style.display="none"
@@ -226,7 +226,7 @@ D.Ed.prototype={
   },
   RD:function(cm){
     if (D.prf.ilf()){
-        var cm_v=this.cm.getValue().split('\n')
+        var cm_v=cm.getValue().split('\n')
         D.send('FormatCode',{win:this.id,text:cm_v})
     }
     else{
