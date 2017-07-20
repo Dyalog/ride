@@ -10,7 +10,8 @@ if ! [ "${GIT_BRANCH}" = "master" ]; then
 fi
 
 # create JSON
-TMP_JSON=/tmp/GH-Publish.json
+TMP_JSON=/tmp/GH-Publish.$$.json
+GH_RELEASES=/tmp/GH-Releases.$$.json
 BASE_VERSION=`node -pe "($(cat package.json)).version"`
 VERSION_AB="${BASE_VERSION%.*}"  # "%%.0" strips trailing ".0" - JR - use %.* incase the last digit isn't 0
 VERSION="${VERSION_AB}.`git rev-list HEAD --count`"
@@ -27,28 +28,28 @@ if which jq >/dev/null 2>&1; then
         C=0
 
 	# Get the json from Github API
-        curl -o ./GH-Releases.json \
+        curl -o $GH_RELEASES \
           --silent -H "Authorization: token $GHTOKEN" \
           https://api.github.com/repos/Dyalog/Ride/releases
-	cat ./GH-Releases.json
+	cat $GH_RELEASES
 
         while [ $DRAFT = "true" ] ; do
-		DRAFT=`cat GH-Releases.json | jq  ".[$C].draft"`
-		ID=`cat GH-Releases.json | jq  ".[$C].id"`
-		GH_VERSION=$(cat GH-Releases.json | jq ".[$C].name" | sed 's/"//g;s/^v//')
+		DRAFT=`cat $GH_RELEASES | jq  ".[$C].draft"`
+		ID=`cat $GH_RELEASES | jq  ".[$C].id"`
+		GH_VERSION=$(cat $GH_RELEASES | jq ".[$C].name" | sed 's/"//g;s/^v//')
 		GH_VERSION_AB=${GH_VERSION%.*}
 
 
 		if [ "$DRAFT" = "true" ]; then
 			if [ "${GH_VERSION_AB}" = "${VERSION_AB}" ]; then
-				echo -e -n "*** $(cat GH-Releases.json | jq ".[$C].name" | sed 's/"//g') with id: $(cat GH-Releases.json | jq  ".[$C].id") is a draft - Deleting.\n"
+				echo -e -n "*** $(cat $GH_RELEASES | jq ".[$C].name" | sed 's/"//g') with id: $(cat $GH_RELEASES | jq  ".[$C].id") is a draft - Deleting.\n"
 				curl -X "DELETE" -H "Authorization: token $GHTOKEN" https://api.github.com/repos/Dyalog/Ride/releases/${ID}
 			fi
 		fi
 
 		let C=$C+1
         done
-        rm -f GH-Releases.json
+        rm -f $GH_RELEASES
 
 else
         echo jq not found, not removing draft releases
@@ -69,7 +70,7 @@ cat >$TMP_JSON <<.
 .
 
 REPO=Dyalog/ride # ideally this should be parsed from "git ls-remote --get-url origin"
-TMP_RESPONSE=/tmp/GH-Response.json
+TMP_RESPONSE=/tmp/GH-Response.$$.json
 curl -o $TMP_RESPONSE --data @$TMP_JSON -H "Authorization: token $GHTOKEN" -i https://api.github.com/repos/$REPO/releases
 
 RELEASE_ID=`grep '"id"' $TMP_RESPONSE | head -1 | sed 's/.*: //;s/,//'`
@@ -84,4 +85,4 @@ for F in `ls /devt/builds/ride/${GIT_BRANCH}/latest/ship/ | grep -v "unsigned"`;
     --data-binary @"/devt/builds/ride/${GIT_BRANCH}/latest/ship/$F" \
     https://uploads.github.com/repos/$REPO/releases/$RELEASE_ID/assets?name=$F
 done
-rm $TMP_RESPONSE $TMP_JSON
+rm -f $TMP_RESPONSE $TMP_JSON
