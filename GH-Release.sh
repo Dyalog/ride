@@ -33,7 +33,7 @@ if which jq >/dev/null 2>&1; then
         while [ $DRAFT = "true" ] ; do
 		DRAFT=`cat GH-Releases.json | jq  ".[$C].draft"`
 		ID=`cat GH-Releases.json | jq  ".[$C].id"`
-		GH_VERSION=$(cat GH-Releases.json | jq ".[$C].version" | sed 's/"//g;')
+		GH_VERSION=$(cat GH-Releases.json | jq ".[$C].name" | sed 's/"//g;')
 		GH_VERSION_AB=${GH_VERSION%.*}
 
 
@@ -58,7 +58,7 @@ cat >$TMP_JSON <<.
   "target_commitish": "master",
   "name": "v$VERSION",
   "body": $(
-    ( echo -e 'Pre-Release of RIDE 4.0\n\nWARNING: This is a pre-release version of RIDE. We cannot guarantee the stability of this product at this time.\n\nChangelog:'; git log --format='%s' $(git tag | tail -n 1).. ) \
+    ( echo -e 'Release of RIDE 4.0\n\nChangelog:'; git log --format='%s' $(git tag | tail -n 1).. ) \
       | grep -v -i todo | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
   ),
   "draft": true,
