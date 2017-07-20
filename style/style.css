@@ -559,6 +559,7 @@ body.floating-window {
   cursor: default;
   line-height: 22px;
 }
+#lb_inner{background:#eee}
 #lb b {
   font-weight: normal;
   width: 22px;
