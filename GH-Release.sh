@@ -2,6 +2,7 @@
 set -e 
 
 GIT_BRANCH=${JOB_NAME#*/*/}
+GIT_COMMIT=$(git rev-parse HEAD)
 
 if ! [ "${GIT_BRANCH}" = "ride4" ]; then
 	echo "skipping creating release for ${GIT_BRANCH}"
@@ -55,7 +56,7 @@ fi
 cat >$TMP_JSON <<.
 {
   "tag_name": "v$VERSION",
-  "target_commitish": "master",
+  "target_commitish": "${GIT_COMMIT}",
   "name": "v$VERSION",
   "body": $(
     ( echo -e 'Release of RIDE 4.0\n\nChangelog:'; git log --format='%s' $(git tag | tail -n 1).. ) \
