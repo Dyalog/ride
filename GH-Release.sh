@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e 
+#set -x
 
 GIT_BRANCH=${JOB_NAME#*/*/}
 GIT_COMMIT=$(git rev-parse HEAD)
@@ -31,19 +32,28 @@ if which jq >/dev/null 2>&1; then
           --silent -H "Authorization: token $GHTOKEN" \
           https://api.github.com/repos/Dyalog/Ride/releases
 
-        while [ $DRAFT = "true" ] ; do
+	RELEASE_COUNT=`cat ./GH-Releases.json | jq ". | length"`
+        GH_VERSION_ND_LAST=0
+
+        while [ $C -le $RELEASE_COUNT ] ; do
 		DRAFT=`cat GH-Releases.json | jq  ".[$C].draft"`
 		ID=`cat GH-Releases.json | jq  ".[$C].id"`
 		GH_VERSION=$(cat GH-Releases.json | jq ".[$C].name" | sed 's/"//g;s/^v//')
+		GH_VERSION_ND=$(cat ./GH-Releases.json | jq ".[$C].name" | sed 's/"//g;s/^v//;s/\.//g')
 		GH_VERSION_AB=${GH_VERSION%.*}
 
 
-		if [ "$DRAFT" = "true" ]; then
-			if [ "${GH_VERSION_AB}" = "${VERSION_AB}" ]; then
-				echo -e -n "*** $(cat GH-Releases.json | jq ".[$C].name" | sed 's/"//g') with id: $(cat GH-Releases.json | jq  ".[$C].id") is a draft - Deleting.\n"
-				curl -X "DELETE" -H "Authorization: token $GHTOKEN" https://api.github.com/repos/Dyalog/Ride/releases/${ID}
-			fi
-		fi
+                if [ "${GH_VERSION_AB}" = "${VERSION_AB}" ]; then
+                        if [ "$DRAFT" = "true" ]; then
+                                echo -e -n "*** $(cat ./GH-Releases.json | jq ".[$C].name" | sed 's/"//g') with id: $(cat ./GH-Releases.json | jq  ".[$C].id") is a draft - Deleting.\n"
+                                curl -X "DELETE" -H "Authorization: token $GHTOKEN" https://api.github.com/repos/Dyalog/Ride/releases/${ID}
+                        else
+                                if [ $GH_VERSION_ND -gt $GH_VERSION_ND_LAST ]; then
+                                        COMMIT_SHA=`cat ./GH-Releases.json | jq ".[$C].target_commitish" | sed 's/"//g'`
+                                        GH_VERSION_ND_LAST=$GH_VERSION_ND
+                                fi
+                        fi
+                fi
 
 		let C=$C+1
         done
@@ -53,19 +63,31 @@ else
         echo jq not found, not removing draft releases
 fi
 
+if [ "$COMMIT_SHA" = "master" ] || [ "$COMMIT_SHA" = "ride4" ]; then
+        COMMIT_SHA=c6fe399aeeae1e489a486dfa2126399200ef54bb ## first release after setting target_commitish correctly
+fi
+
+if [ $GH_VERSION_ND_LAST = 0 ]; then
+        echo "No releases of $VERSION_AB found, not populating changelog"
+        JSON_BODY=$(echo "Release of RIDE $VERSION_AB\n\nInitial version of RIDE $VERSION_AB" | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
+else
+        echo using log from $COMMIT_SHA from $GH_VERSION_ND_LAST
+        JSON_BODY=$( ( echo -e "Release of RIDE $VERSION_AB\n\nChangelog:"; git log --format='%s' ${COMMIT_SHA}.. ) | grep -v -i todo | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
+        
+fi
+
 cat >$TMP_JSON <<.
 {
   "tag_name": "v$VERSION",
   "target_commitish": "${GIT_COMMIT}",
   "name": "v$VERSION",
-  "body": $(
-    ( echo -e 'Release of RIDE 4.0\n\nChangelog:'; git log --format='%s' $(git tag | tail -n 1).. ) \
-      | grep -v -i todo | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
-  ),
+  "body": $JSON_BODY,
   "draft": true,
   "prerelease": true
 }
 .
+
+cat $TMP_JSON
 
 REPO=Dyalog/ride # ideally this should be parsed from "git ls-remote --get-url origin"
 TMP_RESPONSE=/tmp/GH-Response.json
