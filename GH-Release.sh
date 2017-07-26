@@ -36,7 +36,6 @@ if which jq >/dev/null 2>&1; then
 
 	RELEASE_COUNT=`cat $GH_RELEASES | jq ". | length"`
 	GH_VERSION_ND_LAST=0
-	COMMIT_SHA="3740bf054a03a5c8fa8528a731de327dad79508d" ## Branched Ride 4.0
 
         while [ $C -le $RELEASE_COUNT ] ; do
 		DRAFT=`cat $GH_RELEASES | jq  ".[$C].draft"`
@@ -68,7 +67,7 @@ fi
 
 echo "SHA: ${COMMIT_SHA}"
 
-if [ "$COMMIT_SHA" = "master" ]; then
+if [ $GH_VERSION_ND_LAST = 0 ]; then
 	echo "No releases of $VERSION_AB found, not populating changelog"
 	JSON_BODY=$(echo "Pre-Release of RIDE $VERSION_AB\n\nWARNING: This is a pre-release version of RIDE. We cannot guarantee the stability of this product at this time.\n\nInitial version of RIDE $VERSION_AB" | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
 else
