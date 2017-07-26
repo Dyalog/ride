@@ -1,12 +1,14 @@
 #!/bin/bash
 set -e 
-set -x
 
 GIT_BRANCH=${JOB_NAME#*/*/}
+GIT_COMMIT=$(git rev-parse HEAD)
 
 if ! [ "${GIT_BRANCH}" = "master" ]; then
 	echo "skipping creating release for ${GIT_BRANCH}"
 	exit 0
+else
+	echo "creating ${GIT_BRANCH} release"
 fi
 
 # create JSON
@@ -31,19 +33,28 @@ if which jq >/dev/null 2>&1; then
         curl -o $GH_RELEASES \
           --silent -H "Authorization: token $GHTOKEN" \
           https://api.github.com/repos/Dyalog/Ride/releases
-	cat $GH_RELEASES
 
-        while [ $DRAFT = "true" ] ; do
+	RELEASE_COUNT=`cat $GH_RELEASES | jq ". | length"`
+	GH_VERSION_ND_LAST=0
+	COMMIT_SHA="3740bf054a03a5c8fa8528a731de327dad79508d" ## Branched Ride 4.0
+
+        while [ $C -le $RELEASE_COUNT ] ; do
 		DRAFT=`cat $GH_RELEASES | jq  ".[$C].draft"`
 		ID=`cat $GH_RELEASES | jq  ".[$C].id"`
 		GH_VERSION=$(cat $GH_RELEASES | jq ".[$C].name" | sed 's/"//g;s/^v//')
+		GH_VERSION_ND=$(cat $GH_RELEASES | jq ".[$C].name" | sed 's/"//g;s/^v//;s/\.//g')
 		GH_VERSION_AB=${GH_VERSION%.*}
 
 
-		if [ "$DRAFT" = "true" ]; then
-			if [ "${GH_VERSION_AB}" = "${VERSION_AB}" ]; then
+		if [ "${GH_VERSION_AB}" = "${VERSION_AB}" ]; then
+			if [ "$DRAFT" = "true" ]; then
 				echo -e -n "*** $(cat $GH_RELEASES | jq ".[$C].name" | sed 's/"//g') with id: $(cat $GH_RELEASES | jq  ".[$C].id") is a draft - Deleting.\n"
 				curl -X "DELETE" -H "Authorization: token $GHTOKEN" https://api.github.com/repos/Dyalog/Ride/releases/${ID}
+			else
+				if [ $GH_VERSION_ND -gt $GH_VERSION_ND_LAST ]; then
+					COMMIT_SHA=`cat $GH_RELEASES | jq ".[$C].target_commitish"`
+					GH_VERSION_ND_LAST=$GH_VERSION_ND
+				fi
 			fi
 		fi
 
@@ -55,19 +66,29 @@ else
         echo jq not found, not removing draft releases
 fi
 
+echo "SHA: ${COMMIT_SHA}"
+
+if [ "$COMMIT_SHA" = "master" ]; then
+	echo "No releases of $VERSION_AB found, not populating changelog"
+	JSON_BODY=$(echo "Pre-Release of RIDE $VERSION_AB\n\nWARNING: This is a pre-release version of RIDE. We cannot guarantee the stability of this product at this time.\n\nInitial version of RIDE $VERSION_AB" | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
+else
+	echo using log from $COMMIT_SHA from $GH_VERSION_ND_LAST
+	JSON_BODY=$( ( echo -e "Pre-Release of RIDE $VERSION_AB\n\nWARNING: This is a pre-release version of RIDE. We cannot guarantee the stability of this product at this time.\n\nChangelog:"; git log --format='%s' ${COMMIT_SHA}.. ) | grep -v -i todo | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
+	
+fi
+
 cat >$TMP_JSON <<.
 {
   "tag_name": "v$VERSION",
-  "target_commitish": "master",
+  "target_commitish": "${GIT_COMMIT}",
   "name": "v$VERSION",
-  "body": $(
-    ( echo -e "Pre-Release of RIDE $VERSION_AB\n\nWARNING: This is a pre-release version of RIDE. We cannot guarantee the stability of this product at this time.\n\nChangelog:"; git log --format='%s' $(git tag | tail -n 1).. ) \
-      | grep -v -i todo | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))'
-  ),
+  "body": $JSON_BODY,
   "draft": true,
   "prerelease": true
 }
 .
+
+cat $TMP_JSON
 
 REPO=Dyalog/ride # ideally this should be parsed from "git ls-remote --get-url origin"
 TMP_RESPONSE=/tmp/GH-Response.$$.json
