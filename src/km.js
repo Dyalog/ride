@@ -19,7 +19,7 @@ var sqglDesc={
   '↑':'mix/take'         ,'⊂':'enclose/partition' ,'⊖':'⌽[⎕io]'            ,'⊣':'left'           ,
   '↓':'split/drop'       ,'⊃':'disclose/pick'     ,'⍟':'logarithm'         ,'⍪':'table / ,[⎕io]' ,
   '⍳':'indices/index of' ,'∩':'intersection'      ,'⍱':'nor'               ,'⍠':'variant'        ,
-  '○':'pi/trig'          ,'∪':'unique/union'      ,'⍲':'nand'              ,
+  '○':'pi/trig'          ,'∪':'unique/union'      ,'⍲':'nand'              ,'⌺':'stencil'        ,
   '*':'exp/power'        ,'⊥':'decode (1 2 3→123)','!':'factorial/binomial','⍸':'where/interval index',
   '⊆':'nest/partition'
 }
@@ -338,7 +338,8 @@ var informal=[
   'Á aacute underscoredalphabet',
   '⍸ where intervalindex iotaunderbar',
   '⊆ leftshoeunderbar encloseifsimple conditionalenclose partition nest',
-  '@ at substitute merge amend'
+  '@ at substitute merge amend',
+  '⌺ diamondquad quaddiamond stencil tessellate tile'
 ]
 for(var i=0;i<26;i++)informal.push(String.fromCharCode(i+0x24b6)+' _'+String.fromCharCode(i+0x61/*a*/)) //Ⓐ _a
 
