@@ -172,7 +172,11 @@ D.IDE=function(){'use strict'
     ReplyGetThreads:function(x){ide.dbg&&ide.dbg.threads.render(x.threads)},
     ReplyFormatCode:function(x){
       var w=D.wins[x.win]
-      w.cm.setValue(x.text.join('\n'))
+      var u=w.cm.getCursor();
+      w.saveScrollPos();
+      w.cm.setValue(x.text.join('\n'));
+      w.restoreScrollPos();
+      w.cm.setCursor(u);
     },
     ReplyTreeList:function(x){ide.wse.replyTreeList(x)},
     StatusOutput:function(x){
