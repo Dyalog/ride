@@ -1,10 +1,11 @@
 #!/bin/bash
 set -e 
+#set -x
 
 GIT_BRANCH=${JOB_NAME#*/*/}
 GIT_COMMIT=$(git rev-parse HEAD)
 
-if ! [ "${GIT_BRANCH}" = "master" ]; then
+if ! [ "${GIT_BRANCH}" = "ride4" ]; then
 	echo "skipping creating release for ${GIT_BRANCH}"
 	exit 0
 else
@@ -65,15 +66,17 @@ else
         echo jq not found, not removing draft releases
 fi
 
-echo "SHA: ${COMMIT_SHA}"
+if [ "$COMMIT_SHA" = "master" ] || [ "$COMMIT_SHA" = "ride4" ]; then
+        COMMIT_SHA=c6fe399aeeae1e489a486dfa2126399200ef54bb ## first release after setting target_commitish correctly
+fi
 
 if [ $GH_VERSION_ND_LAST = 0 ]; then
-	echo "No releases of $VERSION_AB found, not populating changelog"
-	JSON_BODY=$(echo -e "Pre-Release of RIDE $VERSION_AB\n\nWARNING: This is a pre-release version of RIDE. We cannot guarantee the stability of this product at this time.\n\nInitial version of RIDE $VERSION_AB" | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
+        echo "No releases of $VERSION_AB found, not populating changelog"
+        JSON_BODY=$(echo "Release of RIDE $VERSION_AB\n\nInitial version of RIDE $VERSION_AB" | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
 else
-	echo using log from $COMMIT_SHA from $GH_VERSION_ND_LAST
-	JSON_BODY=$( ( echo -e "Pre-Release of RIDE $VERSION_AB\n\nWARNING: This is a pre-release version of RIDE. We cannot guarantee the stability of this product at this time.\n\nChangelog:"; git log --format='%s' ${COMMIT_SHA}.. ) | grep -v -i todo | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
-	
+        echo using log from $COMMIT_SHA from $GH_VERSION_ND_LAST
+        JSON_BODY=$( ( echo -e "Release of RIDE $VERSION_AB\n\nChangelog:"; git log --format='%s' ${COMMIT_SHA}.. ) | grep -v -i todo | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
+        
 fi
 
 cat >$TMP_JSON <<.
