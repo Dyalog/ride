@@ -311,12 +311,14 @@ D.IDE=function(){'use strict'
       case'win':
         var id=x.contentItem.config.componentState.id,cls=x.closeElement
         if(id){
-          x.element.mousedown(function(e){
-            if(e.target!==x.closeElement&&e.which===2){
-              e.preventDefault();
+          x.element.off('mousedown',x._onTabClickFn).on('mousedown',function(e){
+            if( event.button === 0 || event.type === 'touchstart' ) {
+              this.header.parent.setActiveContentItem( this.contentItem );
+            }
+            else if( event.button === 1 && this.contentItem.config.isClosable ) {
               var w=ide.wins[id];w.EP(w.cm);
             }
-          })
+          }.bind(x))
           cls.off('click').mousedown(function(){
             var w=ide.wins[id];w.EP(w.cm)
           })
