@@ -305,13 +305,37 @@ D.IDE=function(){'use strict'
   })
   gl.on('itemDestroyed',function(x){ide.wins[0].saveScrollPos()})
   gl.on('tabCreated',function(x){
+    x.element.off('mousedown',x._onTabClickFn); //remove default binding
+    x.element.on('mousedown',function(e){
+      if( event.button === 0 || event.type === 'touchstart' ) {
+        this.header.parent.setActiveContentItem( this.contentItem );
+      }
+      else if( event.button === 1 && this.contentItem.config.isClosable ){
+        if ( this.middleClick )this.middleClick();
+        else this._onTabClick(e);
+      }
+    }.bind(x));
     switch(x.contentItem.componentName){
-      case'dbg':x.closeElement.off('click').click(D.prf.dbg.toggle);break
-      case'wse':x.closeElement.off('click').click(D.prf.wse.toggle);break
-      case'win':var id=x.contentItem.config.componentState.id,cls=x.closeElement
-                if(id){cls.off('click').mousedown(function(){var w=ide.wins[id];w.EP(w.cm)})}
-                else{cls.remove();x.titleElement[0].closest('.lm_tab').style.paddingRight='10px'}
-                break
+      case'dbg':
+        x.middleClick=D.prf.dbg.toggle;
+        x.closeElement.off('click').click(D.prf.dbg.toggle);
+        break;
+      case'wse':
+        x.middleClick=D.prf.wse.toggle;
+        x.closeElement.off('click').click(D.prf.wse.toggle);
+        break;
+      case'win':
+        var id=x.contentItem.config.componentState.id,cls=x.closeElement
+        if(id){
+          x.middleClick=function(){var w=ide.wins[id];w.EP(w.cm);}
+          cls.off('click').mousedown(function(){
+            var w=ide.wins[id];w.EP(w.cm)
+          })
+        }
+        else{
+          cls.remove();x.titleElement[0].closest('.lm_tab').style.paddingRight='10px'
+        }
+        break
     }
   })
   gl.init()
