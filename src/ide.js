@@ -308,10 +308,23 @@ D.IDE=function(){'use strict'
     switch(x.contentItem.componentName){
       case'dbg':x.closeElement.off('click').click(D.prf.dbg.toggle);break
       case'wse':x.closeElement.off('click').click(D.prf.wse.toggle);break
-      case'win':var id=x.contentItem.config.componentState.id,cls=x.closeElement
-                if(id){cls.off('click').mousedown(function(){var w=ide.wins[id];w.EP(w.cm)})}
-                else{cls.remove();x.titleElement[0].closest('.lm_tab').style.paddingRight='10px'}
-                break
+      case'win':
+        var id=x.contentItem.config.componentState.id,cls=x.closeElement
+        if(id){
+          x.element.mousedown(function(e){
+            if(e.target!==x.closeElement&&e.which===2){
+              e.preventDefault();
+              var w=ide.wins[id];w.EP(w.cm);
+            }
+          })
+          cls.off('click').mousedown(function(){
+            var w=ide.wins[id];w.EP(w.cm)
+          })
+        }
+        else{
+          cls.remove();x.titleElement[0].closest('.lm_tab').style.paddingRight='10px'
+        }
+        break
     }
   })
   gl.init()
