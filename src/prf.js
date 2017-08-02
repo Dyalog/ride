@@ -42,7 +42,7 @@ D.prf={}
   ['valueTips',          1], //value tips
   ['dbg',                0], //show debug panel
   ['sqp',                1], //show quit prompt
-  ['squiggleTips',       1],
+  ['squiggleTips',       0],
   ['wrap',               0], //line wrapping in session
   ['wse',                0], //show workspace explorer?
   ['zoom',               0],
