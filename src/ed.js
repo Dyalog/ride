@@ -36,6 +36,7 @@ D.Ed=function(ide,opts){ //constructor
                              ed[c]?ed[c](ed.cm):CM.commands[c]?CM.commands[c](ed.cm):0;return!1}
   }
   ed.setTC(!!ed.tc);this.vt=D.vt(this);this.setLN(D.prf.lineNums())
+  ed.firstOpen=true;
 }
 D.Ed.prototype={
   updGutters:function(){
@@ -92,7 +93,7 @@ D.Ed.prototype={
     this.jumps.forEach(function(x){x.n=x.lh.lineNo()}) //to preserve jumps, convert LineHandle-s to line numbers
     cm.setValue(ed.oText=ee.text.join('\n')) //.setValue() invalidates old LineHandle-s
     this.jumps.forEach(function(x){x.lh=cm.getLineHandle(x.n);delete x.n}) //look up new LineHandle-s, forget numbers
-    cm.clearHistory()
+    cm.clearHistory();
     if(D.mac){cm.focus();window.focus()}
     //entityType:             16 NestedArray        512 AplClass
     // 1 DefinedFunction      32 QuadORObject      1024 AplInterface
