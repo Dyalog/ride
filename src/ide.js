@@ -177,7 +177,8 @@ D.IDE=function(){'use strict'
       w.cm.setValue(x.text.join('\n'));
       if (w.tc)w.hl(u.line);
       if (w.firstOpen!==undefined&&w.firstOpen===true){
-        u.ch=w.cm.getLine(u.line).length
+        if (x.text.length===1&&/\s?[a-z|@]+$/.test(x.text[0]))u.ch=w.cm.getLine(u.line).length
+        else u.ch=1
         w.firstOpen=false
       }
       w.restoreScrollPos();

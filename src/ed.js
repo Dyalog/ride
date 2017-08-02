@@ -110,7 +110,7 @@ D.Ed.prototype={
       ed.dom.getElementsByClassName("tb_RP")[0].style.display="none"
     }
     var line=ee.currentRow,col=ee.currentColumn||0
-    if(line===0&&col===0&&ee.text.length===1)col=ee.text[0].length
+    if(line===0&&col===0&&ee.text.length===1&&/\s?[a-z|@]+$/.test(ee.text[0]))col=ee.text[0].length
     cm.setCursor(line,col);cm.scrollIntoView(null,cm.getScrollInfo().clientHeight/2)
     ed.oStop=(ee.stop||[]).slice(0).sort(function(x,y){return x-y})
     for(var k=0;k<ed.oStop.length;k++)cm.setGutterMarker(ed.oStop[k],'breakpoints',ed.createBPEl())
