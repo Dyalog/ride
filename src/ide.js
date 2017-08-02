@@ -175,6 +175,7 @@ D.IDE=function(){'use strict'
       var u=w.cm.getCursor();
       w.saveScrollPos();
       w.cm.setValue(x.text.join('\n'));
+      if (w.tc)w.hl(u.line);
       w.restoreScrollPos();
       w.cm.setCursor(u);
     },
