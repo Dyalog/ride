@@ -42,6 +42,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   q.exes.value=q.exe.value
   if(!q.exes.value){q.exes.selectedIndex=0;q.exe.value=q.exes.value}
   q.exe.readOnly=!!q.exes.value
+  sel&&(sel.exe=q.exe.value);
 }
 ,validate=x=>{
   const t=x.type,p=x.port,tn=x.ssh_tnl
