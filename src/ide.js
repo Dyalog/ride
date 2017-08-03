@@ -176,6 +176,12 @@ D.IDE=function(){'use strict'
       w.saveScrollPos();
       w.cm.setValue(x.text.join('\n'));
       if (w.tc)w.hl(u.line);
+      if (w.firstOpen!==undefined&&w.firstOpen===true){
+        if (x.text.length===1&&/\s?[a-z|@]+$/.test(x.text[0]))u.ch=w.cm.getLine(u.line).length
+        else if (x.text[0][0]===":")u.ch=0
+        else u.ch=1
+        w.firstOpen=false
+      }
       w.restoreScrollPos();
       w.cm.setCursor(u);
     },
