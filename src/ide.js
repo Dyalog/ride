@@ -339,7 +339,7 @@ D.IDE=function(){'use strict'
         var id=x.contentItem.config.componentState.id,cls=x.closeElement
         if(id){
           x.middleClick=function(){var w=ide.wins[id];w.EP(w.cm);}
-          cls.off('click').mousedown(function(){
+          cls.off('click').click(function(){
             var w=ide.wins[id];w.EP(w.cm)
           })
         }
