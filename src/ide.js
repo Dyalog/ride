@@ -45,7 +45,14 @@ D.IDE=function(){'use strict'
     WindowTypeChanged:function(x){return ide.wins[x.win].setTC(x.tracer)},
     ReplyGetAutocomplete:function(x){var w=ide.wins[x.token];w&&w.processAutocompleteReply(x)},
     ValueTip:function(x){ide.wins[x.token].vt.processReply(x)},
-    SetHighlightLine:function(x){var w=ide.wins[x.win];if(w&&w.hl){w.hl(x.line);w.focus()};},
+    SetHighlightLine:function(x){
+      var w=ide.wins[x.win];
+      if(w&&w.hl){
+        w.hl(x.line);
+        w.focus()
+        w.HIGHLIGHT_LINE=x.line;
+      };
+    },
     UpdateWindow:function(x){var w=ide.wins[x.token];if(w){w.container&&w.container.setTitle(x.name);w.open(x)}},
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
     CloseWindow:function(x){
@@ -175,7 +182,10 @@ D.IDE=function(){'use strict'
       var u=w.cm.getCursor();
       w.saveScrollPos();
       w.cm.setValue(x.text.join('\n'));
-      if (w.tc)w.hl(u.line);
+      if (w.tc&&w.HIGHLIGHT_LINE){
+        w.hl(w.HIGHLIGHT_LINE);
+        u.line=w.HIGHLIGHT_LINE;
+      }
       if (w.firstOpen!==undefined&&w.firstOpen===true){
         if (x.text.length===1&&/\s?[a-z|@]+$/.test(x.text[0]))u.ch=w.cm.getLine(u.line).length
         else if (x.text[0][0]===":")u.ch=0
