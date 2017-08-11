@@ -1,0 +1,40 @@
+/*menu (see ../src/menu.js for the DOM structure)*/
+.menu {
+	background-color: @DARK_CREAM;
+	border-bottom: solid @GREY 1px;
+	a {
+		color: @INPUT_COL;
+	}
+	.m-open {
+		.m-top {
+			border-color: @DOM_MENU_ITEM_TOP;
+		}
+	}
+	.m-box {
+		a {
+			border-color: @DOM_MENU_ITEM_BORDER;
+			.m-shc {
+				color: @LIGHT_GREY;
+			}
+			&:focus {
+				background: lighten(@WIN_BG_COL,10);
+				color: @WHITE;
+				.m-shc {
+					color: @WHITE;
+				}
+			}
+			&:focus.m-checked {
+				background: lighten(@WIN_BG_COL,10) 5px center no-repeat url(img/menu_chk_wht.png);
+			}
+		}
+		a.m-checked {
+			background: transparent 5px center no-repeat url(img/menu_chk.png);
+		}
+		.m-opener {
+			background: transparent center right 5px no-repeat url(img/menu_tri.png);
+			&:focus {
+				background: lighten(@WIN_BG_COL,10) center right 5px no-repeat url(img/menu_tri_wht.png);
+			}
+		}
+	}
+}

@@ -27,6 +27,7 @@
     "grunt-contrib-less": "^1.4.1",
     "grunt-contrib-watch": "^1.0.0",
     "less": "^2.7.2",
+    "less-plugin-glob": "^2.0.1",
     "nodemon": "^1.11.0",
     "ws": "1.1.1"
   }

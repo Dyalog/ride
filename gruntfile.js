@@ -1,5 +1,6 @@
 const path     = require('path'),
-      electron = require('electron-connect').server.create();
+      electron = require('electron-connect').server.create(),
+      less_glob= require('less-plugin-glob');
 
 module.exports=function(grunt){
   grunt.loadNpmTasks('grunt-contrib-less');
@@ -18,7 +19,8 @@ module.exports=function(grunt){
     less:{
       development:{
         options:{
-          paths:[path.join(__dirname,'style','less')]
+          paths:[path.join(__dirname,'style','less')],
+          plugins:[less_glob]
         },
         files:{
           './style/new-style.css':'./style/new-style.less'
@@ -27,7 +29,7 @@ module.exports=function(grunt){
     },
     watch:{
       scripts:{
-        files:['style/less/**/*.less'],
+        files:['style/less/**/*.less','style/new-style.less'],
         tasks:['less','reload'],
         options:{spawn:false}
       }

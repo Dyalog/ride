@@ -1,0 +1,13 @@
+#wse {
+	background-color: @WIN_BG_COL;
+	color:@TEXT_COL;
+	.bt_text {
+		&::before {
+			color:#1c1e28;
+		}
+		&.selected {
+			background-color: rgba(128,128,128,.5);;
+			outline:lighten(@WIN_BG_COL,10);
+		}
+	}
+}
