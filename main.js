@@ -1,6 +1,6 @@
 //Electron's entry point (web-based RIDE doesn't load it)
 const rq=require,fs=rq('fs'),path=rq('path'),{spawn}=rq('child_process'),ps=process,{env}=ps,
-      repr=JSON.stringify,el=rq('electron'),D={}
+      repr=JSON.stringify,el=rq('electron'),D={},client=rq('electron-connect').client
 //Detect platform: https://nodejs.org/api/process.html#process_process_platform
 // https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
 D.win=/^win/i.test(ps.platform);D.mac=ps.platform=='darwin'
@@ -39,7 +39,10 @@ el.app.on('ready',_=>{
               else{const a=w.getSize();w.setSize(a[0],a[1]-1);w.setSize(a[0],a[1])}
             },100)}
             w.on('page-title-updated',fix).on('blur',fix)}
-  db.devTools&&w.webContents.openDevTools()
+  db.devTools&&w.webContents.openDevTools();
+  if (process.argv.constructor===Array&&process.argv.includes('DEV_STYLE')){
+    client.create(w,{sendBounds:false});
+  }
 })
 el.app.on('window-all-closed',_=>el.app.quit())
 
