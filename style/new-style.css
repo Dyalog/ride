@@ -2382,17 +2382,8 @@ body.floating-window {
 #cn select {
   background-color: #e3e0d7;
 }
-#cn .hsplitbar {
-  background-color: #fc9732;
-  border-left: 1px solid white;
-  border-right: 1px solid white;
-}
 #cn label {
   color: #893d0a;
-}
-#cn_favs > div {
-  background-color: #eee;
-  color: #fc9732;
 }
 #cn_favs .go {
   border: 1px solid #dad7ce;
@@ -2415,13 +2406,13 @@ body.floating-window {
 }
 #cn_lhs {
   background: #e3e0d7;
-  border-right: 1px solid #fff;
+  border-right: 1px solid white;
 }
 #cn_rhs {
   border-left: 8px solid #fc9732;
 }
 #cn_rhs button {
-  color: #fff;
+  color: white;
   background-color: #fc9732;
 }
 #cn_env_add a {
@@ -2429,16 +2420,16 @@ body.floating-window {
 }
 .ctl_listview {
   background-color: #1c1e28;
-  color: #fff;
+  color: white;
 }
 .ctl_listview tr:nth-child(even) {
-  background-color: #eee;
+  background-color: #464b64;
 }
 .ctl_listview tr.selected {
   background-color: blue;
 }
 #debug {
-  background: #eee;
+  background: #1c1e28;
 }
 #debug .ctl_listview_header {
   background-color: #1c1e28;
@@ -2448,24 +2439,16 @@ body.floating-window {
 .dlg {
   background-color: #1c1e28;
   box-shadow: 0 18px 48px rgba(0, 0, 0, 0.5);
-  border: 1px solid #000;
+  border: 1px solid black;
 }
-.dlg_title {
-  color: #fc9732;
-}
+.dlg_title,
 .dlg_close {
   color: #fc9732;
 }
 .dlg_close:hover {
-  background-color: #fff;
+  background-color: white;
 }
-.ui-dialog .ui-dialog-content.task_dlg .subtext,
-.ui-dialog .ui-dialog-content.task_dlg .footer {
-  color: #444;
-}
-#abt_contact {
-  color: #000;
-}
+#abt_contact,
 #abt_contact a,
 #abt_contact a:visited,
 #abt_contact a:active {
@@ -2482,7 +2465,7 @@ body.floating-window {
 }
 .lm_tab {
   background-color: #fc9732 !important;
-  color: #1c1e28 !important;
+  color: white !important;
   border: 1px #fc9732 solid !important;
 }
 .lm_splitter {
