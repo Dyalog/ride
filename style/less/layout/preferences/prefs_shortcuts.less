@@ -12,7 +12,6 @@
 		text-align: left;
 		text-indent: -2ex;
 		padding-left: 2ex;
-		color:@INPUT_COL;
 	}
 }
 #shc_rst_all {
@@ -38,8 +37,6 @@
 	}
 	tr {
 		&:hover {
-			color: @WHITE;
-			background-color: contrast(@WIN_BG_COL,darken(@WIN_BG_COL,10%),lighten(@WIN_BG_COL,10%));;
 			box-shadow:none!important;
 			// box-shadow: 0 0 0 1px @LIGHT_GREY;
 			.shc_add {
@@ -54,26 +51,17 @@
 #shc_sc_clr {
 	width: 24px;
 	margin-left: -20px;
-	color: @GREY;
 	text-decoration: none;
-	&:hover {
-		color: @BLACK;
-	}
 }
 #shc_no_res {
 	font-style: italic;
 	padding: 20px;
-	color: @GREY;
 }
 .shc_key {
-	border: solid @VERY_LIGHT_GREY 1px;
 	border-radius: 2px;
 	margin: 8px 2px;
 	line-height: 24px;
 	white-space: nowrap;
-}
-.shc_key.shc_del_hvr {
-	border-color: @RED;
 }
 .shc_text {
 	border-top-right-radius: 0;
@@ -81,21 +69,10 @@
 	border-right-width: 0;
 	padding: 0 2px;
 }
-.shc_text.shc_dup {
-	border-color: @RED;
-	background-color: @RED;
-	color: @WHITE;
-}
 .shc_del {
-	color: @RED;
 	text-decoration: none;
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
-	&:hover {
-		background-color: @RED;
-		color: @WHITE;
-		border-color: @DARK_RED;
-	}
 }
 .shc_add {
 	visibility: hidden;

@@ -1,0 +1,63 @@
+#cn {
+  input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),textarea{
+    border: 1px solid white;
+    background-color: #e3e0d7;
+    border-color:#a9a9a9;
+    &:disabled{
+      background-color: #a9a9a9;
+      border-color:#a9a9a9;
+    }
+  }
+  select{
+    background-color:@CN_LHS_COL;
+  }
+	.hsplitbar {
+  	background-color:@PRIMARY;
+    border-left:1px solid white;
+    border-right:1px solid white;
+	}
+	label{
+		color:#893d0a;
+	}
+}
+#cn_favs {
+	>div{
+		background-color:#eee;
+    color:@PRIMARY;
+	}
+	.go {
+		border:1px solid #dad7ce;
+		background:linear-gradient(to right bottom, @CN_LHS_COL 50%, #dad7ce 50%);
+	}
+	.list_sel{
+		background:@PRIMARY;
+		color: @WHITE;
+	}
+	.list-focus {
+		outline: dotted @BLACK 1px;
+	}
+}
+#cn_fav_btns {
+  border-bottom:solid white 1px;
+  background:linear-gradient(lighten(@CN_LHS_COL,5),darken(@CN_LHS_COL,5));
+  button{
+    background-color:transparent;
+    color:#893d0a;
+  }
+}
+#cn_lhs {
+	background: @CN_LHS_COL;
+  border-right:1px solid @WHITE;
+}
+#cn_rhs {
+	border-left:8px solid @PRIMARY;
+	button{
+		color:@WHITE;
+    background-color:@PRIMARY;
+	}
+}
+#cn_env_add {
+	a {
+		color: @INPUT_COL;
+	}
+}
