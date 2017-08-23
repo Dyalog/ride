@@ -2,35 +2,34 @@
   input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),textarea{
     border: 1px solid white;
     background-color: 	@CN_INPUT_BG;
-    border-color:				@CN_INPUT_BORDER_COL;
+		border-color:				@CN_INPUT_BORDER_COL;
+		color:@CN_INPUT_FG;
     &:disabled{
       background-color:	@CN_INPUT_DIS_BG;
-      border-color:	@CN_INPUT_BORDER_COL;
+			border-color:	@CN_INPUT_BORDER_COL;
+			color:@CN_INPUT_DIS_FG;
     }
   }
   select{
     background-color:	@CN_SELECT_BG;
   }
-	label{
-		color:#893d0a;
-	}
 }
 #cn_favs {
 	.go {
-		border:1px solid #dad7ce;
-		background:linear-gradient(to right bottom, @CN_LHS_COL 50%, #dad7ce 50%);
+		border:1px solid @CN_FAV_GO_BORDER;
+		background:linear-gradient(to right bottom, @THEME_WIN_BG 50%, darken(@THEME_WIN_BG,5) 50%);
 	}
 	.list_sel{
-		background:@PRIMARY;
-		color: @WHITE;
+		background:@CN_FAV_BTN_FG;
+		color: @CN_INPUT_FG;
 	}
 	.list-focus {
-		outline: dotted @BLACK 1px;
+		outline: dotted black 1px;
 	}
 }
 #cn_fav_btns {
   border-bottom:solid @CN_FAV_BTNS_BORDER_COL 1px;
-  background:linear-gradient(lighten(@CN_INPUT_BG,5),darken(@CN_INPUT_BG,5));
+  background:linear-gradient(lighten(@THEME_WIN_BG,5),@THEME_WIN_BG);
   button{
     background-color:@CN_FAV_BTN_BG;
     color:@CN_FAV_BTN_FG;
@@ -42,9 +41,13 @@
 }
 #cn_rhs {
 	border-left:8px solid @CN_HSPLIT;
+	background-color:@CN_RHS_BG;
 	button{
 		color:@CN_RHS_BUTTON_FG;
     background-color:@CN_RHS_BUTTON_BG;
+	}
+	label{
+		color:@CN_LABEL_COL;
 	}
 }
 #cn_env_add {

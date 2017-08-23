@@ -9,8 +9,6 @@ button{
 }
 input[type=checkbox]{
   -webkit-appearance: none;
-	background-color: @WHITE;
-	border: 1px solid @PRIMARY;
 	box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
 	padding: 8px;
 	border-radius: 3px;
@@ -21,18 +19,14 @@ input[type=checkbox]{
     outline:none;
     margin-right:5px;
   }
-  &:checked{
-    background-color: @PRIMARY;
-  }
   &:checked:after{
     content: '\2714';
     font-size: 11px;
     position: absolute;
     top: 0px;
     left: 4px;
-    color:@WHITE;
   }
 }
 input,textarea,pre,tt{font-family:@APL_FONT;font-size:18px}
 input,textarea,select,a{outline:0;}
-select:focus{outline:dotted @BLACK 1px}
+select:focus{outline:dotted black 1px}

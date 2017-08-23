@@ -1,40 +1,43 @@
 /*menu (see ../src/menu.js for the DOM structure)*/
 .menu {
-	background-color: @DARK_CREAM;
-	border-bottom: solid @GREY 1px;
+	background-color: @MENU_BG;
+	border-bottom: solid grey 1px;
 	a {
 		color: @INPUT_COL;
 	}
 	.m-open {
 		.m-top {
-			border-color: @DOM_MENU_ITEM_TOP;
+			border-color:transparent;
 		}
 	}
 	.m-box {
+		background-color:@MENU_BG;
+		border-color:@MENU_BG;
 		a {
-			border-color: @DOM_MENU_ITEM_BORDER;
+			border:none;
+			border-color: @MENU_BG;
 			.m-shc {
-				color: @LIGHT_GREY;
+				color: @INPUT_COL;
 			}
 			&:focus {
-				background: lighten(@WIN_BG_COL,10);
-				color: @WHITE;
+				background: lighten(@MENU_BG,10);
+				color: white;
 				.m-shc {
-					color: @WHITE;
+					color: white;
 				}
 			}
+			.m-checked{
+				background: transparent 5px center no-repeat url(img/menu_chk.png);
+			}
 			&:focus.m-checked {
-				background: lighten(@WIN_BG_COL,10) 5px center no-repeat url(img/menu_chk_wht.png);
+				background: lighten(@MENU_BG,10) 5px center no-repeat url(img/menu_chk_wht.png);
 			}
 		}
-		a.m-checked {
-			background: transparent 5px center no-repeat url(img/menu_chk.png);
-		}
-		.m-opener {
-			background: transparent center right 5px no-repeat url(img/menu_tri.png);
-			&:focus {
-				background: lighten(@WIN_BG_COL,10) center right 5px no-repeat url(img/menu_tri_wht.png);
-			}
+	}
+	.m-opener {
+		background: transparent center right 5px no-repeat url(img/menu_tri.png);
+		&:focus {
+			background: lighten(@MENU_BG,10) center right 5px no-repeat url(img/menu_tri_wht.png);
 		}
 	}
 }
