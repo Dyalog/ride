@@ -37,7 +37,11 @@ el.app.on('ready',_=>{
             w.on('page-title-updated',fix).on('blur',fix)}
   db.devTools&&w.webContents.openDevTools();
   if (process.argv.constructor===Array&&process.argv.includes('DEV_STYLE')){
-    client.create(w,{sendBounds:false});
+    var c=client.create(w,{sendBounds:false});
+    c.on('reboot',function(){
+      w.close();
+      el.app.relaunch();
+    });
   }
 })
 el.app.on('window-all-closed',_=>el.app.quit())

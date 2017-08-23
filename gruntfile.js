@@ -5,6 +5,7 @@ const path     = require('path'),
 module.exports=function(grunt){
   grunt.loadNpmTasks('grunt-contrib-less');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-env');
 
   grunt.registerTask('start','Start-Up electron server',function(){
     electron.start(['.','DEV_STYLE']);
@@ -14,8 +15,17 @@ module.exports=function(grunt){
     electron.reload();
   });
 
+  grunt.registerTask('restart','Restart RIDE and go into a session.',function(){
+    electron.broadcast('reboot',{message:'Shutdown then restart.'});
+  });
+
   grunt.initConfig({
     pkg:grunt.file.readJSON('package.json'),
+    env:{
+      spawn:{
+        RIDE_SPAWN:'dyalog'
+      }
+    },
     less:{
       development:{
         options:{
@@ -28,13 +38,19 @@ module.exports=function(grunt){
       }
     },
     watch:{
-      scripts:{
+      reload:{
         files:['style/less/**/*.less','style/new-style.less'],
         tasks:['less','reload'],
+        options:{spawn:false}
+      },
+      restart:{
+        files:['style/less/**/*.less','style/new-style.less'],
+        tasks:['less','env','restart'],
         options:{spawn:false}
       }
     }
   });
 
-  grunt.registerTask('default',['start','less','watch'])
+  grunt.registerTask('default',['start','less','watch:reload'])
+  grunt.registerTask('spawn-reload',['env','start','less','watch:restart'])
 }
