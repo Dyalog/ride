@@ -1,84 +1,84 @@
 .CodeMirror-scrollbar-filler,.CodeMirror-gutter-filler{
-  background-color:@WHITE; /*the square between H and V scrollbars*/
+  background-color:@CM_SCROLL_SEPERATOR; /*the square between H and V scrollbars*/
 }
 .CodeMirror-guttermarker{
-  color:@BLACK;
+  color:@CM_GUTTER_MARKER_COL;
 }
 .CodeMirror-guttermarker-subtle{
   color:#999;
 }
 .CodeMirror div.CodeMirror-cursor{
-  border-left:1px solid @BLACK;
+  border-left:1px solid @CM_CURSOR;
 }
 .CodeMirror div.CodeMirror-secondarycursor{
-  border-left:1px solid silver; /*Shown when moving in bi-directional text*/
+  border-left:1px solid @CM_CURSOR_SECONDARY; /*Shown when moving in bi-directional text*/
 }
 .CodeMirror.cm-fat-cursor div.CodeMirror-cursor{
-  background-color:dimgrey;
+  background-color:@CM_FAT_CURSOR;
 }
-@-moz-keyframes    blink{0%{background:#7e7} 50%{background:none} 100%{background:#7e7}}
-@-webkit-keyframes blink{0%{background:#7e7} 50%{background:none} 100%{background:#7e7}}
-@keyframes         blink{0%{background:#7e7} 50%{background:none} 100%{background:#7e7}}
+@-moz-keyframes    blink{0%{background:@CM_CURSOR_BLINK_COL} 50%{background:none} 100%{background:@CM_CURSOR_BLINK_COL}}
+@-webkit-keyframes blink{0%{background:@CM_CURSOR_BLINK_COL} 50%{background:none} 100%{background:@CM_CURSOR_BLINK_COL}}
+@keyframes         blink{0%{background:@CM_CURSOR_BLINK_COL} 50%{background:none} 100%{background:@CM_CURSOR_BLINK_COL}}
 .CodeMirror-ruler{
-  border-left:1px solid @DARK_CREAM;
+  border-left:1px solid @CM_RULER;
 }
 .cm-negative{
-  color:#d44
+  color:@CM_NEGATIVE;
 }
 .cm-positive{
-  color:#292
+  color:@CM_POSITIVE;
 }
 .cm-s-default .cm-error{
-  color:@RED
+  color:@CM_NEGATIVE;
 }
 .cm-invalidchar{
-  color:@RED
+  color:@CM_NEGATIVE;
 }
 .CodeMirror-matchingtag{
-  background:rgba(255,150,0,.3);
+  background:@CM_MATCHING_TAG;
 }
 .CodeMirror-activeline-background{
-  background:#e8f2ff;
+  background:@CM_ACTIVELINE_BG;
 }
 .CodeMirror-selected{
-  background:#d9d9d9;
+  background:@CM_SELECTED_BG;
 }
 .CodeMirror-focused .CodeMirror-selected{
-  background:#d7d4f0;
+  background:@CM_FOCUS_SELECTED_BG;
 }
 .CodeMirror ::selection{
-  background:#d7d4f0;
+  background:@CM_FOCUS_SELECTED_BG;
 }
 .CodeMirror ::-moz-selection{
-  background:#d7d4f0;
+  background:@CM_FOCUS_SELECTED_BG;
 }
 .CodeMirror-foldmarker{
-  color:blue;
+  color:@CM_FOLDMARKER;
   text-shadow:#b9f 1px 1px 2px,#b9f -1px -1px 2px,#b9f 1px -1px 2px,#b9f -1px 1px 2px;
 }
 .disconnected .CodeMirror,.disconnected .CodeMirror-gutter-wrapper{
-  background-color:#e2d3bb; /*beige*/
+  background-color:@CM_DICONNECTED; /*beige*/
 }
 .breakpoint{
-  color:@RED;
+  color:@CM_BREAKPOINT;
 }
 .highlighted{
-  border:solid @RED 1px;
+  border:solid @CM_HIGHLIGHTED 1px;
 }
 .CodeMirror-hints{
-  border:1px solid @BLACK;
-  background:#ffffe1;
-  box-shadow:0 18px 48px rgba(0,0,0,0.5);
+  border:1px solid black;
+  background:@CM_HINT;
+  box-shadow:none;
 }
 .CodeMirror-hint{
-  color:@BLACK;
+  color:@CM_HINT_COL;
 }
 .CodeMirror-hint-active{
-  background:@DARK_BLUE;
-  color:@WHITE;
+  background:@CM_HINT_ACTIVE_BG;
+  color:@CM_HINT_ACTIVE_COL;
 }
 .CodeMirror-search-match{
-  background:gold;
-  border-top:1px solid @ORANGE;
-  border-bottom:1px solid @ORANGE;
+  background:@CM_SEARCH_MATCH_BG;
+  border-top:1px solid @CM_SEARCH_MATCH_BORDER;
+  border-bottom:1px solid @CM_SEARCH_MATCH_BORDER;
 }

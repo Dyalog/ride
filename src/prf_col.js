@@ -37,7 +37,7 @@ D.addSynGrps([
   {s:'monadic operator',t:'op1' ,c:'.cm-apl-op1' }, //⌸ ...
   {s:'namespace'       ,t:'ns'  ,c:'.cm-apl-ns'  }, //#
   {s:'name'            ,t:'var' ,c:'.cm-apl-var' }, //a.k.a. identifier
-  {s:'normal'          ,t:'norm',c:'.cm-s-default,.CodeMirror-gutters'},
+  {s:'normal'          ,t:'norm',c:'.cm-s-default,.CodeMirror-gutters,.ride_win_cm'},
   {s:'number'          ,t:'num' ,c:'.cm-apl-num' }, //0 ...
   {s:'parenthesis'     ,t:'par' ,c:'.cm-apl-par' }, //()
   {s:'quad name'       ,t:'quad',c:'.cm-apl-quad'}, //⎕XYZ
@@ -130,7 +130,7 @@ function updStl(){ //update global style from what's in prefs.json
     var h=a[i].norm||{}, bg=RGB(h.bg||'#ffffff'), bgo=h.bgo==null?1:h.bgo,
         b=Math.max(+('0x'+bg.slice(1,3)),+('0x'+bg.slice(3,5)),+('0x'+bg.slice(5,7))),
         dark=128>(1-bgo)*255+bgo*b
-    document.body.classList[dark?'add':'remove']('dark')
+    //document.body.classList[dark?'add':'remove']('dark')
     break
   }
 }

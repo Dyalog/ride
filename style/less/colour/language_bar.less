@@ -1,11 +1,10 @@
-@LB_BUTTON_HOVER:contrast(@LB_BG_COL,fade(@MID_GREY,20%),fade(@LIGHT_GREY,20%));
-@LB_BUTTON_ACTIVE:rgba(0,0,0,0.2);
-@LB_BG_COL:@SPLITTER;
-@LB_BUTTON_COL:@WIN_BG_COL;
 #lb {
 	background-color:@LB_BG_COL;
-	border-top:1px @BLACK solid;
-	border-bottom:1px @BLACK solid;
+	border-top:1px black solid;
+	border-bottom:1px black solid;
+	#lb_inner{
+		background:@LB_BG_COL;
+	}
 	b {
 		color:@LB_BUTTON_COL;
 		&:hover {
@@ -19,7 +18,7 @@
 		background: rgba(0,0,0,0.2);
 	}
 	.ui-sortable-helper {
-		color: @BLACK;
+		color: black;
 	}
 }
 #lb_prf {
@@ -31,15 +30,17 @@
 	}
 }
 #lb_tip {
-	background: @CREAM;
-	box-shadow: 0 18px 48px @TRANSLUCENT_BLACK;
+	background: @LB_TIP_BG;
+	//box-shadow: 0 18px 48px @TRANSLUCENT_BLACK;
+	box-shadow:none;
+	color:@LB_TIP_COL;
 }
 #lb_tip_tri {
-	border-color: @CREAM;
+	border-color: @LB_TIP_BG;
 	border-left-color: transparent !important;
 	border-right-color: transparent !important;
 	background-color: transparent !important;
 }
 #lb_tip_desc {
-	border-bottom: solid 1px @DARK_CREAM;
+	border-bottom: solid 1px @LB_TIP_HR;
 }

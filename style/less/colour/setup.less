@@ -1,13 +1,13 @@
 body{
-  background-color:@DYALOG_BLUE
+  background-color:@THEME_WIN_BG;
 }
-     ::selection{background:lighten(@WIN_BG_COL,10);color:@WHITE} /*must be separate rules*/
-::-moz-selection{background:lighten(@WIN_BG_COL,10);color:@WHITE} /*must be separate rules*/
+     ::selection{background:lighten(@THEME_WIN_BG,10);color:white} /*must be separate rules*/
+::-moz-selection{background:lighten(@THEME_WIN_BG,10);color:white} /*must be separate rules*/
 body{
   font-family:Verdana,"BitStream Vera Sans","DejaVu Sans",sans-serif;
 }
 #demo-keys span{
   border:solid #333 1px;
-  background-color:@GREY;
-  color:@WHITE;
+  background-color:grey;
+  color:white;
 }
