@@ -534,12 +534,12 @@ span.CodeMirror-selectedtext {
 #cn_abt {
   float: right;
   position: absolute;
-  right: 5px;
+  right: 20px;
 }
 #cn_lhs,
 #cn_rhs {
   position: static;
-  height: 100%;
+  height: calc(100% - 40px);
 }
 #cn_lhs {
   padding: 0px;
@@ -548,6 +548,7 @@ span.CodeMirror-selectedtext {
 #cn_rhs {
   padding: 10px;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 #cn_rhs button {
   border-radius: 3px;
@@ -624,10 +625,10 @@ span.CodeMirror-selectedtext {
   padding: 5px 5px;
 }
 #threads {
-  height: calc(46%);
+  height: calc(100% - 54px);
 }
 #sistack {
-  height: calc(76%);
+  height: calc(100% - 24px);
 }
 /*various dialogs*/
 .dlg {
@@ -1872,7 +1873,7 @@ body.floating-window {
   max-height: 100%;
 }
 .ride_win_cm > div.CodeMirror {
-  height: calc(72%);
+  height: calc(100% - 28px);
 }
 .win,
 .floating-window {

@@ -30,7 +30,8 @@ module.exports=function(grunt){
       development:{
         options:{
           paths:[path.join(__dirname,'style','less')],
-          plugins:[less_glob]
+          plugins:[less_glob],
+          strictMath:true
         },
         files:{
           './style/new-style.css':'./style/new-style.less'
