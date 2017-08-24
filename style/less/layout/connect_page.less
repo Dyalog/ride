@@ -100,11 +100,11 @@
 #cn_abt {
 	float: right;
   position:absolute;
-  right:5px;
+  right:20px;
 }
 #cn_lhs,#cn_rhs{
   position:static;
-  height:100%;
+  height:calc(100% - 40px);
 }
 #cn_lhs {
   padding:0px;
@@ -112,7 +112,8 @@
 }
 #cn_rhs {
 	padding: 10px;
-	overflow-y: auto;
+  overflow-y: auto;
+  overflow-x: hidden;
   button{
     border-radius:3px;
     padding:8px;
