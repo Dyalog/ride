@@ -33,7 +33,8 @@ el.app.on('ready',_=>{
   el.Menu.setApplicationMenu(null);w.loadURL(`file://${__dirname}/index.html`)
   w.on('move',sv).on('resize',sv).on('maximize',sv).on('unmaximize',sv)
    .on('close',_=>{tid&&clearTimeout(tid);svNow()}).on('closed',_=>{w=global.elw=0})
-   .on('show',_=>{if(x){const q=w.getPosition();dx=q[0]-x;dy=q[1]-y}}).show()
+   .on('show',_=>{if(x){const q=w.getPosition();dx=q[0]-x;dy=q[1]-y}})
+   .on('ready-to-show',w.show);
   if(D.win){const fix=_=>{setTimeout(_=>{
               if(w.isMaximized()){w.unmaximize();w.maximize()}
               else{const a=w.getSize();w.setSize(a[0],a[1]-1);w.setSize(a[0],a[1])}
