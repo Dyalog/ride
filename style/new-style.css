@@ -2252,35 +2252,42 @@ body.floating-window {
 }
 .CodeMirror-search-match {
   background: gold;
-  border-top: 1px solid #fc9732;
-  border-bottom: 1px solid #fc9732;
+  border-top: 1px solid #00a1ff;
+  border-bottom: 1px solid #00a1ff;
 }
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),
 #cn textarea {
   border: 1px solid white;
   background-color: #111319;
-  border-color: #a9a9a9;
+  border-color: rgba(169, 169, 169, 0.3);
   color: white;
 }
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]):disabled,
 #cn textarea:disabled {
-  background-color: #a9a9a9;
-  border-color: #a9a9a9;
-  color: #767676;
+  background-color: rgba(169, 169, 169, 0.3);
+  border-color: rgba(169, 169, 169, 0.3);
+  color: #a9a9a9;
 }
 #cn select {
   background-color: #111319;
+  color: #00a1ff;
 }
 #cn_favs .go {
-  border: 1px solid #1c1e28;
+  border: 1px solid #111319;
   background: linear-gradient(to right bottom, #1c1e28 50%, #111319 50%);
 }
-#cn_favs .list_sel {
-  background: #fc9732;
+#cn_favs > div.list_sel {
+  background: #20222e;
   color: white;
+  opacity: 1;
 }
 #cn_favs .list-focus {
   outline: dotted black 1px;
+}
+#cn_favs > div {
+  background: #20222e;
+  color: #00a1ff;
+  opacity: 0.3;
 }
 #cn_fav_btns {
   border-bottom: solid white 1px;
@@ -2288,25 +2295,25 @@ body.floating-window {
 }
 #cn_fav_btns button {
   background-color: transparent;
-  color: #fc9732;
+  color: #00a1ff;
 }
 #cn_lhs {
   background: #111319;
   border-right: 1px solid white;
 }
 #cn_rhs {
-  border-left: 8px solid #fc9732;
+  border-left: 8px solid #00a1ff;
   background-color: #1c1e28;
 }
 #cn_rhs button {
   color: white;
-  background-color: #fc9732;
+  background-color: #00a1ff;
 }
 #cn_rhs label {
-  color: #fc9732;
+  color: #00a1ff;
 }
 #cn_env_add a {
-  color: #fc9732;
+  color: #00a1ff;
 }
 .ctl_listview {
   background-color: #1c1e28;
@@ -2323,7 +2330,7 @@ body.floating-window {
 }
 #debug .ctl_listview_header {
   background-color: #16171f;
-  color: #fc9732;
+  color: #00a1ff;
 }
 /*various dialogs*/
 .dlg {
@@ -2333,7 +2340,7 @@ body.floating-window {
 }
 .dlg_title,
 .dlg_close {
-  color: #fc9732;
+  color: #00a1ff;
 }
 .dlg_close:hover {
   background-color: white;
@@ -2342,7 +2349,7 @@ body.floating-window {
 #abt_contact a,
 #abt_contact a:visited,
 #abt_contact a:active {
-  color: #fc9732;
+  color: #00a1ff;
 }
 /*Golden Layout*/
 .lm_goldenlayout {
@@ -2354,50 +2361,50 @@ body.floating-window {
   border-color: #1c1e28 !important;
 }
 .lm_tab {
-  background-color: #fc9732 !important;
+  background-color: #00a1ff !important;
   color: white !important;
-  border: 1px #fc9732 solid !important;
+  border: 1px #00a1ff solid !important;
 }
 .lm_splitter {
-  background: #fc9732 !important;
+  background: #00a1ff !important;
 }
 label {
-  color: #fc9732;
+  color: #00a1ff;
 }
 button {
-  background: #fc9732;
+  background: #00a1ff;
   color: white;
 }
 button:hover {
-  color: #fc9732;
+  color: #00a1ff;
 }
 [type=checkbox] {
   background-color: white;
-  border: 1px solid #fc9732;
+  border: 1px solid #00a1ff;
 }
 [type=checkbox]:checked {
-  background-color: #fc9732;
+  background-color: #00a1ff;
 }
 [type=checkbox]:hover::before {
   background: #313446;
 }
 [type=checkbox]:active::before {
-  background: #fc9732;
+  background: #00a1ff;
   color: #313446;
 }
 [type=checkbox]:checked::before {
-  color: #fc9732;
+  color: #00a1ff;
 }
 [type=checkbox]:checked:after {
   color: white;
 }
 [type=checkbox]:disabled::before {
   color: transparent;
-  box-shadow: 0 0 0 1px #fc9732 inset;
+  box-shadow: 0 0 0 1px #00a1ff inset;
   background: #313446;
 }
 [type=checkbox]:checked:disabled::before {
-  color: grayscale(#fc9732);
+  color: grayscale(#00a1ff);
   background: grayscale(white);
 }
 #lb {
@@ -2409,7 +2416,7 @@ button:hover {
   background: #222531;
 }
 #lb b {
-  color: #fc9732;
+  color: #00a1ff;
 }
 #lb b:hover {
   background-color: rgba(76, 82, 109, 0.2);
@@ -2449,7 +2456,7 @@ button:hover {
   border-bottom: solid grey 1px;
 }
 .menu a {
-  color: #fc9732;
+  color: #00a1ff;
 }
 .menu .m-open .m-top {
   border-color: transparent;
@@ -2463,7 +2470,7 @@ button:hover {
   border-color: #1c1e28;
 }
 .menu .m-box a .m-shc {
-  color: #fc9732;
+  color: #00a1ff;
 }
 .menu .m-box a:focus {
   background: #313446;
@@ -2485,17 +2492,17 @@ button:hover {
   background: #313446 center right 5px no-repeat url(img/menu_tri_wht.png);
 }
 #prf_nav {
-  border-bottom: solid 1px #fc9732;
+  border-bottom: solid 1px #00a1ff;
 }
 #prf_nav a {
   border-bottom: 0.5ex solid transparent;
-  color: #fc9732;
+  color: #00a1ff;
 }
 #prf_nav a:hover {
-  border-bottom: 0.5ex solid rgba(252, 151, 50, 0.5);
+  border-bottom: 0.5ex solid rgba(0, 161, 255, 0.5);
 }
 #prf_nav a.sel {
-  border-bottom: 0.5ex solid #fc9732;
+  border-bottom: 0.5ex solid #00a1ff;
 }
 #lyt_kbd {
   color: black;
@@ -2538,7 +2545,7 @@ input.lyt_g3:hover {
   background-color: lightgrey;
 }
 #shc td {
-  color: #fc9732;
+  color: #00a1ff;
 }
 #shc_tbl_wr tr {
   color: white;
@@ -2577,16 +2584,16 @@ input.lyt_g3:hover {
   outline: solid lightgrey 1px;
 }
 #title pre {
-  color: #fc9732;
+  color: #00a1ff;
 }
 #title pre a {
-  color: #fc9732;
+  color: #00a1ff;
 }
 #title pre a:hover {
   color: white;
 }
 #pmenu p {
-  color: #fc9732;
+  color: #00a1ff;
 }
 /*scrollbars; see ../src/scrl.js*/
 .cm-scroll {
