@@ -11,7 +11,8 @@
     }
   }
   select{
-    background-color:	@CN_SELECT_BG;
+		background-color:	@CN_SELECT_BG;
+		color:@CN_SELECT_FG;
   }
 }
 #cn_favs {
@@ -19,20 +20,26 @@
 		border:1px solid @CN_FAV_GO_BORDER;
 		background:linear-gradient(to right bottom, @THEME_WIN_BG 50%, darken(@THEME_WIN_BG,5) 50%);
 	}
-	.list_sel{
-		background:@CN_FAV_BTN_FG;
+	>div.list_sel{
+		background:@CN_FAV_BTN_BG;
 		color: @CN_INPUT_FG;
+		opacity:1;
 	}
 	.list-focus {
 		outline: dotted black 1px;
+	}
+	>div{
+		background:@CN_FAV_BTN_UNSEL_BG;
+		color:@CN_FAV_BTN_UNSEL_FG;
+		opacity:0.3;
 	}
 }
 #cn_fav_btns {
   border-bottom:solid @CN_FAV_BTNS_BORDER_COL 1px;
   background:linear-gradient(lighten(@THEME_WIN_BG,5),@THEME_WIN_BG);
   button{
-    background-color:@CN_FAV_BTN_BG;
-    color:@CN_FAV_BTN_FG;
+    background-color:@CN_FAV_MENU_BTN_BG;
+    color:@CN_FAV_MENU_BTN_FG;
   }
 }
 #cn_lhs {
