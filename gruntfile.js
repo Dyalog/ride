@@ -11,12 +11,12 @@ module.exports=function(grunt){
     electron.start(['.','DEV_STYLE']);
   });
 
-  grunt.registerTask('reload','Reload the running electron client',function(){
-    electron.reload();
-  });
-
   grunt.registerTask('restart','Restart RIDE and go into a session.',function(){
     electron.broadcast('reboot',{message:'Shutdown then restart.'});
+  });
+
+  grunt.registerTask('reload-css','Attempt to live reload the CSS without having to restart/reload RIDE',function(){
+    electron.broadcast('css_update',{message:'Try and trigger styling reload.'});
   });
 
   grunt.initConfig({
@@ -39,19 +39,19 @@ module.exports=function(grunt){
       }
     },
     watch:{
-      reload:{
-        files:['style/less/**/*.less','style/new-style.less'],
-        tasks:['less','reload'],
-        options:{spawn:false}
-      },
       restart:{
         files:['style/less/**/*.less','style/new-style.less'],
         tasks:['less','env','restart'],
+        options:{spawn:false}
+      },
+      css_reload:{
+        files:['style/less/**/*.less','style/new-style.less'],
+        tasks:['less','reload-css'],
         options:{spawn:false}
       }
     }
   });
 
-  grunt.registerTask('default',['start','less','watch:reload'])
-  grunt.registerTask('spawn-reload',['env','start','less','watch:restart'])
+  grunt.registerTask('default',['start','less','watch:css_reload']);
+  grunt.registerTask('spawn-reload',['env','start','less','watch:restart']);
 }

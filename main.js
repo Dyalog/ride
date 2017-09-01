@@ -43,6 +43,19 @@ el.app.on('ready',_=>{
       w.close();
       el.app.relaunch();
     });
+    c.on('css_update',function(){
+      let css_update_func=_=>{
+        document.getElementById("lr-style")&&document.getElementById("lr-style").remove();
+        var link=document.createElement('link');
+        link.href="style/new-style.css";
+        link.type="text/css";
+        link.rel="stylesheet";
+        link.id="lr-style";
+        document.getElementsByTagName("head")[0].appendChild(link);
+      }
+
+      w.webContents.executeJavaScript(`(${css_update_func.toString()})()`)
+    });
   }
 })
 el.app.on('window-all-closed',_=>el.app.quit())
