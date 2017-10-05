@@ -540,117 +540,163 @@ select:focus {
 }
 .zoom12 .CodeMirror,
 .zoom12 #wse,
-.zoom12 #debug {
+.zoom12 #debug,
+.zoom12 #lb_tip *,
+.zoom12 #vt_bln {
   font-size: 48px;
 }
 .zoom11 .CodeMirror,
 .zoom11 #wse,
-.zoom11 #debug {
+.zoom11 #debug,
+.zoom11 #lb_tip *,
+.zoom11 #vt_bln {
   font-size: 42px;
 }
 .zoom10 .CodeMirror,
 .zoom10 #wse,
-.zoom10 #debug {
+.zoom10 #debug,
+.zoom10 #lb_tip *,
+.zoom10 #vt_bln {
   font-size: 36px;
 }
 .zoom9 .CodeMirror,
 .zoom9 #wse,
-.zoom9 #debug {
+.zoom9 #debug,
+.zoom9 #lb_tip *,
+.zoom9 #vt_bln {
   font-size: 32px;
 }
 .zoom8 .CodeMirror,
 .zoom8 #wse,
-.zoom8 #debug {
+.zoom8 #debug,
+.zoom8 #lb_tip *,
+.zoom8 #vt_bln {
   font-size: 28px;
 }
 .zoom7 .CodeMirror,
 .zoom7 #wse,
-.zoom7 #debug {
+.zoom7 #debug,
+.zoom7 #lb_tip *,
+.zoom7 #vt_bln {
   font-size: 26px;
 }
 .zoom6 .CodeMirror,
 .zoom6 #wse,
-.zoom6 #debug {
+.zoom6 #debug,
+.zoom6 #lb_tip *,
+.zoom6 #vt_bln {
   font-size: 24px;
 }
 .zoom5 .CodeMirror,
 .zoom5 #wse,
-.zoom5 #debug {
+.zoom5 #debug,
+.zoom5 #lb_tip *,
+.zoom5 #vt_bln {
   font-size: 22px;
 }
 .zoom4 .CodeMirror,
 .zoom4 #wse,
-.zoom4 #debug {
+.zoom4 #debug,
+.zoom4 #lb_tip *,
+.zoom4 #vt_bln {
   font-size: 20px;
 }
 .zoom3 .CodeMirror,
 .zoom3 #wse,
-.zoom3 #debug {
+.zoom3 #debug,
+.zoom3 #lb_tip *,
+.zoom3 #vt_bln {
   font-size: 19px;
 }
 .zoom2 .CodeMirror,
 .zoom2 #wse,
-.zoom2 #debug {
+.zoom2 #debug,
+.zoom2 #lb_tip *,
+.zoom2 #vt_bln {
   font-size: 18px;
 }
 .zoom1 .CodeMirror,
 .zoom1 #wse,
-.zoom1 #debug {
+.zoom1 #debug,
+.zoom1 #lb_tip *,
+.zoom1 #vt_bln {
   font-size: 17px;
 }
 .zoom0 .CodeMirror,
 .zoom0 #wse,
-.zoom0 #debug {
+.zoom0 #debug,
+.zoom0 #lb_tip *,
+.zoom0 #vt_bln {
   font-size: 16px;
 }
 .zoom-1 .CodeMirror,
 .zoom-1 #wse,
-.zoom-1 #debug {
+.zoom-1 #debug,
+.zoom-1 #lb_tip *,
+.zoom-1 #vt_bln {
   font-size: 15px;
 }
 .zoom-2 .CodeMirror,
 .zoom-2 #wse,
-.zoom-2 #debug {
+.zoom-2 #debug,
+.zoom-2 #lb_tip *,
+.zoom-2 #vt_bln {
   font-size: 14px;
 }
 .zoom-3 .CodeMirror,
 .zoom-3 #wse,
-.zoom-3 #debug {
+.zoom-3 #debug,
+.zoom-3 #lb_tip *,
+.zoom-3 #vt_bln {
   font-size: 13px;
 }
 .zoom-4 .CodeMirror,
 .zoom-4 #wse,
-.zoom-4 #debug {
+.zoom-4 #debug,
+.zoom-4 #lb_tip *,
+.zoom-4 #vt_bln {
   font-size: 12px;
 }
 .zoom-5 .CodeMirror,
 .zoom-5 #wse,
-.zoom-5 #debug {
+.zoom-5 #debug,
+.zoom-5 #lb_tip *,
+.zoom-5 #vt_bln {
   font-size: 11px;
 }
 .zoom-6 .CodeMirror,
 .zoom-6 #wse,
-.zoom-6 #debug {
+.zoom-6 #debug,
+.zoom-6 #lb_tip *,
+.zoom-6 #vt_bln {
   font-size: 10px;
 }
 .zoom-7 .CodeMirror,
 .zoom-7 #wse,
-.zoom-7 #debug {
+.zoom-7 #debug,
+.zoom-7 #lb_tip *,
+.zoom-7 #vt_bln {
   font-size: 9px;
 }
 .zoom-8 .CodeMirror,
 .zoom-8 #wse,
-.zoom-8 #debug {
+.zoom-8 #debug,
+.zoom-8 #lb_tip *,
+.zoom-8 #vt_bln {
   font-size: 8px;
 }
 .zoom-9 .CodeMirror,
 .zoom-9 #wse,
-.zoom-9 #debug {
+.zoom-9 #debug,
+.zoom-9 #lb_tip *,
+.zoom-9 #vt_bln {
   font-size: 7px;
 }
 .zoom-10 .CodeMirror,
 .zoom-10 #wse,
-.zoom-10 #debug {
+.zoom-10 #debug,
+.zoom-10 #lb_tip *,
+.zoom-10 #vt_bln {
   font-size: 6px;
 }
 /*IDE page*/
