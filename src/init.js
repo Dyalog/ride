@@ -39,7 +39,8 @@ if(D.el){
       w.refresh()
       w.btm=w.cm.defaultTextHeight()*line+(top?ch+5:diff)+w.cm.getScrollInfo().clientHeight-ch
     }
-    wins[0].restoreScrollPos()
+    wins[0].restoreScrollPos();
+    D.ide.gl.container.resize();
   })
 }
 D.open=D.open||function(url,o){
