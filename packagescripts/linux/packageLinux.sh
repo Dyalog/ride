@@ -60,12 +60,18 @@ BASE_VERSION_ND=`echo $RIDEVERSION | sed 's/\([0-9]*\)\.\([0-9]*\)\.[0-9]*/\1\2/
 
 function createPackageFiles() {
 
+if [ $CPUTYPE = armv7l ] ; then
+	EXECUTABLE=/opt/ride-${BASE_VERSION}/launcher
+else
+	EXECUTABLE=/opt/ride-${BASE_VERSION}/Ride-${BASE_VERSION}
+fi
+
 cat >$postinst <<-!!postinst
 #!/bin/bash
 
 if which update-alternatives >/dev/null 2>&1 ; then
-  update-alternatives --install /usr/bin/ride ride /opt/ride-${BASE_VERSION}/Ride-${BASE_VERSION} `echo ${BASE_VERSION} | sed 's/\.//g'`
-  update-alternatives --install /usr/bin/ride-${BASE_VERSION} ride${BASE_VERSION_ND} /opt/ride-${BASE_VERSION}/Ride-${BASE_VERSION} `echo ${BASE_VERSION} | sed 's/\.//g'`
+  update-alternatives --install /usr/bin/ride ride ${EXECUTABLE} `echo ${BASE_VERSION} | sed 's/\.//g'`
+  update-alternatives --install /usr/bin/ride-${BASE_VERSION} ride${BASE_VERSION_ND} ${EXECUTABLE} `echo ${BASE_VERSION} | sed 's/\.//g'`
 fi
 
 #check for an installed interpreter and update it's shortcut if it exists.
@@ -106,8 +112,8 @@ fi
 cat >$prerm <<-!!prerm
 
 if which update-alternatives >/dev/null 2>&1 ; then
-	update-alternatives --remove ride /opt/ride-${BASE_VERSION}/Ride-${BASE_VERSION}
-	update-alternatives --remove ride${BASE_VERSION_ND} /opt/ride-${BASE_VERSION}/Ride-${BASE_VERSION}
+	update-alternatives --remove ride ${EXECUTABLE}
+	update-alternatives --remove ride${BASE_VERSION_ND} ${EXECUTABLE}
 fi
 
 if [ -L /usr/bin/ride-${BASE_VERSION} ]; then
@@ -199,14 +205,17 @@ for CPUTYPE in x64 armv7l; do
 	getVersionInfo
 	createPackageFiles
 
-	if ! [ -d ship ]; then
-		mkdir -p ship
-	fi
 	mkdir -p ${SBOXDIR}/opt/ride-${BASE_VERSION}
 	mkdir -p ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps
 	cp -R ${RIDEDIR}-${CPUTYPE}/* ${SBOXDIR}/opt/ride-${BASE_VERSION}/
 	cp "$ICON" ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps/ride.svg
 
+	if [ $CPUTYPE = armv7l ] ; then
+		sed s/EXECUTABLE/Ride-${BASE_VERSION}/ < packagescripts/linux/launcher > ${SBOXDIR}/opt/ride-${BASE_VERSION}/launcher
+		chmod +x ${SBOXDIR}/opt/ride-${BASE_VERSION}/launcher
+	fi
+
+	mkdir -p ship
 	createDEB
 	createRPM
 	cleanup
