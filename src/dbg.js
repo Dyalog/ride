@@ -1,4 +1,4 @@
-//workspace explorer
+//debug pane
 'use strict'
 D.DBG=function(){
   var dbg=this
