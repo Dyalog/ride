@@ -175,16 +175,17 @@ CM.defineMode('apl-session',function(cfg,modeCfg){
   //and it needs to enable syntax highlighting only in modified lines
   var im=CM.getMode(cfg,'text/apl'), se=modeCfg.se //im:inner mode, se:the Session object
   return{
-    startState:function(){return{l:0}}, //.l:line number, .h:inner state
+    startState:function(){return{l:0,s:1}}, //.l:line number, .s:start of line ignoring whitespace, .h:inner state
     copyState:function(h){h=CM.copyState({},h);h.h=CM.copyState(im,h.h);return h},
     blankLine:function(h){h.l++},
     token:function(sm,h){ //sm:stream,h:state
-      var sol=sm.sol(),m //sol:start of line? m:regex match object
+      var m //m:regex match object
       if(se.dirty[h.l]==null){sm.skipToEnd();h.l++;return}
-      if(sol&&(m=sm.match(/^ *\)(\w+).*/))){h.l++;return!m[1]||scmd.indexOf(m[1].toLowerCase())<0?'apl-err':'apl-scmd'}
-      if(sol&&(m=sm.match(/^ *\].*/))){h.l++;return'apl-ucmd'}
-      if(sol){h.h=im.startState();delete h.h.hdr}
-      var h1=CM.copyState(im,h.h),t=im.token(sm,h1);if(sm.eol()){h.l++;delete h.h}else{h.h=CM.copyState(im,h1)}
+      if(sm.sol()&&(sm.match(/^ +/))){if(sm.eol())h.l++;return}
+      if(h.s&&(m=sm.match(/^\)(\w+).*/))){h.l++;return scmd.indexOf(m[1].toLowerCase())<0?'apl-err':'apl-scmd'}
+      if(h.s&&(sm.match(/^\].*/))){h.l++;return'apl-ucmd'}
+      if(h.s){h.h=im.startState();delete h.h.hdr}
+      var h1=CM.copyState(im,h.h),t=im.token(sm,h1);if(sm.eol()){h.l++;delete h.h}else{h.h=CM.copyState(im,h1);h.s=0}
       return t
     }
   }
