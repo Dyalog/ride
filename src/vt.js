@@ -28,7 +28,9 @@ D.vt=function(w){'use strict' //.init(w) gets called for every window w (session
                     //without moving the mouse
   w.cm.display.wrapper.onmouseout=cl
   w.cm.display.wrapper.onmousemove=function(e){var x=e.clientX,y=e.clientY;if(x===oldX&&y===oldY)return
-                                               show(w.cm.coordsChar({left:oldX=x,top:oldY=y}))}
+                                               var p=w.cm.coordsChar({left:oldX=x,top:oldY=y})
+                                               p.ch-=p.xRel<0     //https://github.com/codemirror/CodeMirror/issues/5010
+                                               show(p)}
   return{clear:cl,show:show,processReply:rf=function(x){
     if(!p)return
     var d=w.getDocument(),ce=w.cm.display.wrapper                 //ce:CodeMirror element
