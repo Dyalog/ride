@@ -4,10 +4,6 @@ const rq=require,fs=rq('fs'),path=rq('path'),{spawn}=rq('child_process'),ps=proc
 //Detect platform: https://nodejs.org/api/process.html#process_process_platform
 // https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
 D.win=/^win/i.test(ps.platform);D.mac=ps.platform=='darwin'
-if(!env.RIDE_SPAWN&&!D.win){
-  var mapl=path.dirname(ps.execPath)+(D.mac?'/../Resources/Dyalog/mapl':'/../mapl')
-  if(fs.existsSync(mapl))env.RIDE_SPAWN=D.lastSpawnedExe=mapl
-}
 const dbf=el.app.getPath('userData')+'/winstate.json' //json "database" file for storing preferences
 let db={};try{if(fs.existsSync(dbf))db=JSON.parse(fs.readFileSync(dbf,'utf8'))}catch(e){console.error(e)}
 let tid;const sv=_=>{if(!tid)tid=setTimeout(svNow,2000)} //save (throttled)
