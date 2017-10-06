@@ -11,6 +11,7 @@ D.prf_tabs.code={
     q.aim .onchange=function(){updEnabling();q.aim.checked&&q.swm.select()}
     q.acbl.onchange=function(){q.acbe.disabled=!q.acbl.checked;q.acbl.checked&&q.acbe.focus()}
     q.ac  .onchange=function(){q.acd .disabled=!q.ac  .checked;q.ac.checked&&q.acd.select()}
+    q.ilf.onchange=function(){q.ai.disabled=q.aim.disabled=q.icom.disabled=q.io.disabled=q.ilf.checked;};
   },
   load:function(){
     var p=D.prf
@@ -32,7 +33,7 @@ D.prf_tabs.code={
     q.vt  .checked=!!p.valueTips          ()
     q.sqt .checked=!!p.squiggleTips       ()
     q.sqp .checked=!!p.sqp                ()
-    q.ai.onchange();q.acbl.onchange();q.ac.onchange()
+    q.ai.onchange();q.acbl.onchange();q.ac.onchange();q.ilf.onchange();
   },
   activate:function(){q.ai.focus()},
   save:function(){
