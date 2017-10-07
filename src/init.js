@@ -53,15 +53,56 @@ D.openExternal=D.el?D.el.shell.openExternal:function(x){open(x,'_blank')}
 if(/^\?\d+$/.test(location.search)){
   var winId=+location.search.slice(1)
   document.body.className+=' floating-window'
-  document.body.textContent='editor '+winId
-//  window.onresize=function(){ed&&ed.updSize()}
-//  var pe=opener.D.pendingEditors[winId], editorOpts=pe.editorOpts, ee=pe.ee, ide=pe.ide
-//  D.ide=opener.D.ide
-//  var ed=D.ide.wins[winId]=new D.Ed(ide,$(document.body),editorOpts)
-//  ed.open(ee);ed.updSize();document.title=ed.name
-//  window.onbeforeunload=function(){return ed.onbeforeunload()}
-//  setTimeout(function(){ed.refresh()},500) //work around a rendering issue on Ubuntu
-//  D.ide.unblock()
+//  document.body.textContent='editor '+winId
+// start IPC client  
+  D.ipc.config.id   = 'hello';
+  D.ipc.config.retry= 1500;
+  D.ide=new D.IDE()
+  D.ipc.connectTo(
+    'ride_master',
+      function(){
+        D.ipc.of.ride_master.on(
+          'connect',
+          function(){
+            D.ipc.log('## connected to ride_master ##'.rainbow, D.ipc.config.delay);
+            D.ipc.of.ride_master.emit(
+              'pendingEditor',  //any event or message type your server listens for 
+              winId
+            )
+          }
+        );
+        D.ipc.of.ride_master.on(
+          'disconnect',
+          function(){
+            D.ipc.log('disconnected from ride_master'.notice);
+          }
+        );
+        D.ipc.of.ride_master.on(
+          'ReplyFormatCode',
+          function(x){
+            D.ipc.log('ReplyFormatCode'.notice);
+            D.ide.handlers.ReplyFormatCode.apply(D.ide,[x]);
+          }
+        );
+        D.ipc.of.ride_master.on(
+          'pendingEditor',  //any event or message type your server listens for 
+          function(pe){
+            D.ipc.log('got pendingEditor from ride_master : '.debug);
+            window.onresize=function(){ed&&ed.updSize()}
+            var editorOpts=pe.editorOpts, ee=pe.ee
+          // D.ide=opener.D.ide
+            D.send=(type,payload)=>D.ipc.of.ride_master.emit('RIDE',[type,payload]);
+            var ed=D.ide.wins[winId]=new D.Ed(D.ide,editorOpts)
+            ed.open(ee);ed.updSize();document.title=ed.name
+            window.onbeforeunload=function(){return ed.onbeforeunload()}
+            setTimeout(function(){ed.refresh()},500) //work around a rendering issue on Ubuntu
+          //  D.ide.unblock()
+            D.ipc.of.ride_master.emit('unblock');
+          }
+        );
+      }
+  );
+  
 }else{
   if(D.el){
   //context menu
@@ -72,6 +113,42 @@ if(/^\?\d+$/.test(location.search)){
         let u=D.ide;u&&(u=u.focusedWin)&&(u=u.cm)&&u[x.toLowerCase()]&&u[x.toLowerCase()]()}}})))
     D.oncmenu=function(e){e.preventDefault();cmenu.popup(D.elw)}
     node_require(__dirname+'/src/cn')()
+  // start IPC server
+    D.IPC=Symbol('IPC');
+    D.ipc.config.id   = 'ride_master';
+    D.ipc.config.retry= 1500;
+    D.ipc.serve(
+      function(){
+        D.ipc.server.on(
+          'pendingEditor',
+          function(winId,socket){
+            let pe=D.pendingEditors[winId];
+            socket[D.IPC]=true;
+            D.wins[winId]=socket;
+            D.ipc.server.emit(
+              socket,
+              'pendingEditor',  
+              pe
+            );
+          }
+        );
+        D.ipc.server.on(
+          'unblock',
+          (data,socket)=>{
+            D.ipc.log('received unblock from ride_editor : '.debug,data,socket);
+            D.ide.unblock();
+          }
+        );
+        D.ipc.server.on(
+          'RIDE',
+          ([type,payload],socket)=>{
+            D.send(type,payload);
+          }
+        );
+      }
+    );
+    D.ipc.server.start();
+ 
   }else{
     var ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host)
     var q=[],flush=function(){while(ws.readyState===1&&q.length)ws.send(q.shift())} //q:send queue

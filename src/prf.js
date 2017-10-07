@@ -74,8 +74,8 @@ D.prf={}
     '\n  Show Language Bar        =LBR'+
     '\n  Show Workspace Explorer  =WSE'+
     '\n  Show Debug               =DBG'+
-//  '\n  Floating Edit Windows    =FLT'+
-//  '\n  Editors on Top           =TOP {!browser}'+
+    '\n  Floating Edit Windows    =FLT'+
+    '\n  Editors on Top           =TOP {!browser}'+
     '\n  Line Wrapping in Session =WRP'+
     '\n  -                             {!browser}'+
     '\n  Increase Font Size       =ZMI {!browser}'+

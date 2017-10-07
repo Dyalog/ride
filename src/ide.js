@@ -80,8 +80,8 @@ D.IDE=function(){'use strict'
       if(D.el&&D.prf.floating()&&!ide.dead){
         var bw=new D.el.BrowserWindow({parent:D.elw});bw.loadURL(location+'?'+ee.token);bw.openDevTools()
 //        if(!p[4]){var d=ee.token-1;p[0]+=d*(process.env.RIDE_XOFFSET||32);p[1]+=d*(process.env.RIDE_YOFFSET||32)}
-//          ide.block() //the popup will create D.wins[w] and unblock the message queue
-//          ;(D.pendingEditors=D.pendingEditors||{})[w]={editorOpts:editorOpts,ee:ee,ide:ide};done=1
+        ide.block() //the popup will create D.wins[w] and unblock the message queue
+       ;(D.pendingEditors=D.pendingEditors||{})[w]={editorOpts:editorOpts,ee:ee};done=1
 //        }
       }
       if(done)return
@@ -179,6 +179,7 @@ D.IDE=function(){'use strict'
     ReplyGetThreads:function(x){ide.dbg&&ide.dbg.threads.render(x.threads)},
     ReplyFormatCode:function(x){
       var w=D.wins[x.win]
+      if(w&&w[D.IPC]) {D.ipc.server.emit(w,'ReplyFormatCode',x);return;};
       var u=w.cm.getCursor();
       w.saveScrollPos();
       w.cm.setValue(x.text.join('\n'));
@@ -223,7 +224,8 @@ D.IDE=function(){'use strict'
           i&&mq.splice(0,i);ide.wins[0].add(s)
         })
       }else{
-        var f=ide.handlers[a[0]];f?f.apply(ide,a.slice(1)):D.send('UnknownCommand',{name:a[0]})
+        var f=ide.handlers[a[0]];
+        f?f.apply(ide,a.slice(1)):D.send('UnknownCommand',{name:a[0]})
       }
     }
     last=+new Date;tid=0
