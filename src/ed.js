@@ -138,6 +138,24 @@ D.Ed.prototype={
         ((RegExp('^'+r     ).exec(s.slice(  c.ch))||[])[0]||'')  //match right of cursor
     ).replace(/^\d+/,'') //trim leading digits
   },
+  ReplyFormatCode:function(lines){
+    let w=this;
+    var u=w.cm.getCursor();
+    w.saveScrollPos();
+    w.cm.setValue(lines.join('\n'));
+    if (w.tc&&w.HIGHLIGHT_LINE){
+      w.hl(w.HIGHLIGHT_LINE);
+      u.line=w.HIGHLIGHT_LINE;
+    }
+    if (w.firstOpen!==undefined&&w.firstOpen===true){
+      if (lines.length===1&&/\s?[a-z|@]+$/.test(lines[0]))u.ch=w.cm.getLine(u.line).length
+      else if (lines[0][0]===":")u.ch=0
+      else u.ch=1
+      w.firstOpen=false
+    }
+    w.restoreScrollPos();
+    w.cm.setCursor(u);
+  },
   ED:function(cm){this.addJump();D.send('Edit',{win:this.id,pos:cm.indexFromPos(cm.getCursor()),
                                                 text:cm.getValue(),unsaved:this.ide.getUnsaved()})},
   QT:function(){D.send('CloseWindow',{win:this.id})},

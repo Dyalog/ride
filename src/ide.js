@@ -56,7 +56,12 @@ D.IDE=function(){'use strict'
     UpdateWindow:function(x){var w=ide.wins[x.token];if(w){w.container&&w.container.setTitle(x.name);w.open(x)}},
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
     CloseWindow:function(x){
-      var w=ide.wins[x.win];if(w){w.closePopup&&w.closePopup();w.vt.clear();w.container&&w.container.close()}
+      var fw=ide.floatingWins[x.win],w=ide.wins[x.win];
+      if(fw){
+        fw.destroy();delete ide.floatingWins[x.win]
+      } else if(w){
+        w.closePopup&&w.closePopup();w.vt.clear();w.container&&w.container.close()
+      }
       delete ide.wins[x.win];ide.focusMRUWin()
       ide.WSEwidth=ide.wsew;ide.DBGwidth=ide.dbgw
       ide.getSIS()
@@ -78,7 +83,8 @@ D.IDE=function(){'use strict'
       var w=ee.token, done, editorOpts={id:w,name:ee.name,tc:ee['debugger']}
       ide.hadErr&=editorOpts.tc;
       if(D.el&&D.prf.floating()&&!ide.dead){
-        var bw=new D.el.BrowserWindow({parent:D.elw});bw.loadURL(location+'?'+ee.token);bw.openDevTools()
+        var bw=new D.el.BrowserWindow({parent:D.elw});bw.loadURL(location+'?'+ee.token);//bw.openDevTools();
+        (ide.floatingWins=ide.floatingWins||{})[w]=bw;
 //        if(!p[4]){var d=ee.token-1;p[0]+=d*(process.env.RIDE_XOFFSET||32);p[1]+=d*(process.env.RIDE_YOFFSET||32)}
         ide.block() //the popup will create D.wins[w] and unblock the message queue
        ;(D.pendingEditors=D.pendingEditors||{})[w]={editorOpts:editorOpts,ee:ee};done=1
@@ -178,23 +184,23 @@ D.IDE=function(){'use strict'
     ReplyGetSIStack:function(x){ide.dbg&&ide.dbg.sistack.render(x.stack)},
     ReplyGetThreads:function(x){ide.dbg&&ide.dbg.threads.render(x.threads)},
     ReplyFormatCode:function(x){
-      var w=D.wins[x.win]
-      if(w&&w[D.IPC]) {D.ipc.server.emit(w,'ReplyFormatCode',x);return;};
-      var u=w.cm.getCursor();
-      w.saveScrollPos();
-      w.cm.setValue(x.text.join('\n'));
-      if (w.tc&&w.HIGHLIGHT_LINE){
-        w.hl(w.HIGHLIGHT_LINE);
-        u.line=w.HIGHLIGHT_LINE;
-      }
-      if (w.firstOpen!==undefined&&w.firstOpen===true){
-        if (x.text.length===1&&/\s?[a-z|@]+$/.test(x.text[0]))u.ch=w.cm.getLine(u.line).length
-        else if (x.text[0][0]===":")u.ch=0
-        else u.ch=1
-        w.firstOpen=false
-      }
-      w.restoreScrollPos();
-      w.cm.setCursor(u);
+      D.wins[x.win].ReplyFormatCode(x.text)
+      // var w=D.wins[x.win]
+      // var u=w.cm.getCursor();
+      // w.saveScrollPos();
+      // w.cm.setValue(x.text.join('\n'));
+      // if (w.tc&&w.HIGHLIGHT_LINE){
+      //   w.hl(w.HIGHLIGHT_LINE);
+      //   u.line=w.HIGHLIGHT_LINE;
+      // }
+      // if (w.firstOpen!==undefined&&w.firstOpen===true){
+      //   if (x.text.length===1&&/\s?[a-z|@]+$/.test(x.text[0]))u.ch=w.cm.getLine(u.line).length
+      //   else if (x.text[0][0]===":")u.ch=0
+      //   else u.ch=1
+      //   w.firstOpen=false
+      // }
+      // w.restoreScrollPos();
+      // w.cm.setCursor(u);
     },
     ReplyTreeList:function(x){ide.wse.replyTreeList(x)},
     StatusOutput:function(x){
