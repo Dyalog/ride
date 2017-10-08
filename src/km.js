@@ -29,8 +29,8 @@ CM.keyMap.dyalogDefault={fallthrough:'default',End:'goLineEndSmart'}
 //D.db is initialised later in init.js, so we must wait until the next tick for D.prf.prefixKey():
 setTimeout(function(){CM.keyMap.dyalogDefault["'"+D.prf.prefixKey()+"'"]='BQC'},1)
 $.extend(CM.commands,{
-  TB:function(){switchWin( 1)},
-  BT:function(){switchWin(-1)},
+  TB:function(){D.ide.switchWin( 1)},
+  BT:function(){D.ide.switchWin(-1)},
   SA:CM.commands.selectAll,
   CT:function(){document.execCommand('Cut'  )},
   CP:function(){document.execCommand('Copy' )},
@@ -184,8 +184,8 @@ $.extend(CM.commands,{
   PV:CM.commands.findPrev,
   NX:CM.commands.findNext
 })
-function switchWin(x){var a=[],i=-1,wins=D.ide.wins;for(var k in wins){wins[k].hasFocus()&&(i=a.length);a.push(wins[k])}
-                      var j=i<0?0:(i+a.length+x)%a.length;a[j].focus();return!1} //x: +1 or -1
+// function switchWin(x){var a=[],i=-1,wins=D.ide.wins;for(var k in wins){wins[k].hasFocus()&&(i=a.length);a.push(wins[k])}
+//                       var j=i<0?0:(i+a.length+x)%a.length;a[j].focus();return!1} //x: +1 or -1
 
 //pfkeys
 function nop(){}

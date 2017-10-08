@@ -25,6 +25,7 @@ if(D.el){
   document.onmousewheel=
     function(e){var d=e.wheelDelta;d&&(e.ctrlKey||e.metaKey)&&!e.shiftKey&&!e.altKey&&CM.commands[d>0?'ZMI':'ZMO']()}
   document.body.className+=' zoom'+D.prf.zoom();
+  D.floating=D.prf.floating();
   D.prf.dark()&&false&&(document.body.className+=' newDark');
   D.prf.zoom(function(z){
     if(!D.ide)return
@@ -53,45 +54,51 @@ D.openExternal=D.el?D.el.shell.openExternal:function(x){open(x,'_blank')}
 if(/^\?\d+$/.test(location.search)){
   var winId=+location.search.slice(1)
   document.body.className+=' floating-window'
-//  document.body.textContent='editor '+winId
-// start IPC client  
-  D.ipc.config.id   = 'hello';
+  //  document.body.textContent='editor '+winId
+  // start IPC client  
+  D.ipc.config.id   = 'editor'+winId;
   D.ipc.config.retry= 1500;
   D.ide={};
   D.ipc.connectTo(
     'ride_master',
-      function(){
-        D.ipc.of.ride_master.on(
-          'connect',
-          function(){
-            D.ipc.log('## connected to ride_master ##'.rainbow, D.ipc.config.delay);
-            D.ipc.of.ride_master.emit(
-              'pendingEditor',  //any event or message type your server listens for 
-              winId
-            )
-          }
-        );
-        D.ipc.of.ride_master.on(
-          'disconnect',
-          function(){
-            D.ipc.log('disconnected from ride_master'.notice);
-          }
-        );
-        D.ipc.of.ride_master.on('ReplyFormatCode',x=>D.ed.ReplyFormatCode(x));
-        D.ipc.of.ride_master.on('saved',x=>D.ed.saved(x));
-        D.ipc.of.ride_master.on(
-          'pendingEditor', 
-          function(pe){
-            D.ipc.log('got pendingEditor from ride_master : '.debug);
-            window.onresize=function(){ed&&ed.updSize()}
-            var editorOpts=pe.editorOpts, ee=pe.ee
-            D.send=(type,payload)=>D.ipc.of.ride_master.emit('RIDE',[type,payload]);
-            var ed=D.ed=new D.Ed(D.ide,editorOpts);
-            I.ide.append(ed.dom);
-            ed.open(ee);ed.updSize();document.title=ed.name
-            window.onbeforeunload=function(){return ed.onbeforeunload()}
-            setTimeout(function(){ed.refresh()},500) //work around a rendering issue on Ubuntu
-            D.ipc.of.ride_master.emit('unblock');
+    function(){
+      D.ipc.of.ride_master.on(
+        'connect',
+        function(){
+          D.ipc.log('## connected to ride_master ##'.rainbow, D.ipc.config.delay);
+          D.ipc.of.ride_master.emit(
+            'pendingEditor',  //any event or message type your server listens for 
+            winId
+          )
+        }
+      );
+      D.ipc.of.ride_master.on(
+        'disconnect',
+        function(){
+          D.ipc.log('disconnected from ride_master'.notice);
+        }
+      );
+      D.ipc.of.ride_master.on('processAutocompleteReply',x=>D.ed.processAutocompleteReply(x));
+      D.ipc.of.ride_master.on('ReplyFormatCode',x=>D.ed.ReplyFormatCode(x));
+      D.ipc.of.ride_master.on('saved',x=>D.ed.saved(x));
+      D.ipc.of.ride_master.on('SetHighlightLine',x=>D.ed.SetHighlightLine(x));
+      D.ipc.of.ride_master.on(
+        'pendingEditor', 
+        function(pe){
+          D.ipc.log('got pendingEditor from ride_master : '.debug);
+          window.onresize=function(){ed&&ed.updSize()}
+          var editorOpts=pe.editorOpts, ee=pe.ee
+          D.send=(type,payload)=>D.ipc.of.ride_master.emit('RIDE',[type,payload]);
+          D.ide.switchWin=function(x){D.ipc.of.ride_master.emit('switchWin',x);};
+          D.ide.getSIS=function(x){D.ipc.of.ride_master.emit('getSIS',x);};
+          
+          var ed=D.ed=new D.Ed(D.ide,editorOpts);
+          I.ide.append(ed.dom);
+          ed.open(ee);ed.updSize();document.title=ed.name
+          window.onfocus=()=>ed.focus();
+          window.onbeforeunload=function(){return ed.onbeforeunload()}
+          setTimeout(function(){ed.refresh()},500) //work around a rendering issue on Ubuntu
+          D.ipc.of.ride_master.emit('unblock');
           }
         );
       }
@@ -121,6 +128,7 @@ if(/^\?\d+$/.test(location.search)){
               processAutocompleteReply:x=>D.ipc.server.emit(socket,'processAutocompleteReply',x),
               ReplyFormatCode:x=>D.ipc.server.emit(socket,'ReplyFormatCode',x),
               saved:x=>D.ipc.server.emit(socket,'saved',x),
+              SetHighlightLine:x=>D.ipc.server.emit(socket,'SetHighlightLine',x),
               socket:socket
             };
             D.wins[winId]=wp;
@@ -131,10 +139,9 @@ if(/^\?\d+$/.test(location.search)){
             );
           }
         );
-        D.ipc.server.on(
-          'unblock',
-          (data,socket)=>{D.ide.unblock();}
-        );
+        D.ipc.server.on('getSIS',(data,socket)=>{D.ide.getSIS();});
+        D.ipc.server.on('switchWin',(data,socket)=>{D.ide.switchWin(data);});
+        D.ipc.server.on('unblock',(data,socket)=>{D.ide.unblock();});
         D.ipc.server.on(
           'RIDE',
           ([type,payload],socket)=>{

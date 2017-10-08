@@ -156,6 +156,14 @@ D.Ed.prototype={
     w.restoreScrollPos();
     w.cm.setCursor(u);
   },
+  SetHighlightLine:function(line){
+    let w=this;
+    if(w&&w.hl){
+      w.hl(line);
+      w.focus()
+      w.HIGHLIGHT_LINE=line;
+    };
+  },
   ED:function(cm){this.addJump();D.send('Edit',{win:this.id,pos:cm.indexFromPos(cm.getCursor()),
                                                 text:cm.getValue(),unsaved:this.ide.getUnsaved()})},
   QT:function(){D.send('CloseWindow',{win:this.id})},

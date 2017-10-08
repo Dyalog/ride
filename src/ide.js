@@ -15,6 +15,20 @@ D.IDE=function(){'use strict'
   ide.host=ide.port=ide.wsid='';D.prf.title(ide.updTitle.bind(ide))
   D.wins=ide.wins={0:new D.Se(ide)}
   ide.focusedWin=ide.wins[0] //last focused window, it might not have the focus right now
+  ide.switchWin=function(x){ //x: +1 or -1
+    let a=[],i=-1,j,wins=D.ide.wins;
+    if (D.floating){
+      a=D.el.BrowserWindow.getAllWindows();
+      i=a.findIndex(x=>x.isFocused());
+      j=i<0?0:(i+a.length+x)%a.length;
+      a[j].focus();
+      return!1 
+    } else {
+      for(var k in wins){wins[k].hasFocus()&&(i=a.length);a.push(wins[k])}
+      j=i<0?0:(i+a.length+x)%a.length;a[j].focus();return!1
+    }
+  }
+
   ide.handlers={ //for RIDE protocol messages
     Identify:function(x){D.remoteIdentification=x;ide.updTitle();ide.connected=1;ide.wins[0].updPW(1)
                          clearTimeout(D.tmr);delete D.tmr},
@@ -45,14 +59,7 @@ D.IDE=function(){'use strict'
     WindowTypeChanged:function(x){return ide.wins[x.win].setTC(x.tracer)},
     ReplyGetAutocomplete:function(x){var w=ide.wins[x.token];w&&w.processAutocompleteReply(x)},
     ValueTip:function(x){ide.wins[x.token].vt.processReply(x)},
-    SetHighlightLine:function(x){
-      var w=ide.wins[x.win];
-      if(w&&w.hl){
-        w.hl(x.line);
-        w.focus()
-        w.HIGHLIGHT_LINE=x.line;
-      };
-    },
+    SetHighlightLine:function(x){D.wins[x.win].SetHighlightLine(x.line)},
     UpdateWindow:function(x){var w=ide.wins[x.token];if(w){w.container&&w.container.setTitle(x.name);w.open(x)}},
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
     CloseWindow:function(x){
@@ -82,8 +89,12 @@ D.IDE=function(){'use strict'
       }
       var w=ee.token, done, editorOpts={id:w,name:ee.name,tc:ee['debugger']}
       ide.hadErr&=editorOpts.tc;
-      if(D.el&&D.prf.floating()&&!ide.dead){
-        var bw=new D.el.BrowserWindow({parent:D.elw});bw.loadURL(location+'?'+ee.token);//bw.openDevTools();
+      if(D.el&&D.floating&&!ide.dead){
+        var bw=new D.el.BrowserWindow({parent:D.elw});
+        //bw.loadURL(location+'?'+ee.token);
+        bw.loadURL(`file://${__dirname}/editor.html?`+ee.token);
+        bw.openDevTools();
+        
         (ide.floatingWins=ide.floatingWins||{})[w]=bw;
 //        if(!p[4]){var d=ee.token-1;p[0]+=d*(process.env.RIDE_XOFFSET||32);p[1]+=d*(process.env.RIDE_YOFFSET||32)}
         ide.block() //the popup will create D.wins[w] and unblock the message queue
@@ -183,25 +194,7 @@ D.IDE=function(){'use strict'
     },
     ReplyGetSIStack:function(x){ide.dbg&&ide.dbg.sistack.render(x.stack)},
     ReplyGetThreads:function(x){ide.dbg&&ide.dbg.threads.render(x.threads)},
-    ReplyFormatCode:function(x){
-      D.wins[x.win].ReplyFormatCode(x.text)
-      // var w=D.wins[x.win]
-      // var u=w.cm.getCursor();
-      // w.saveScrollPos();
-      // w.cm.setValue(x.text.join('\n'));
-      // if (w.tc&&w.HIGHLIGHT_LINE){
-      //   w.hl(w.HIGHLIGHT_LINE);
-      //   u.line=w.HIGHLIGHT_LINE;
-      // }
-      // if (w.firstOpen!==undefined&&w.firstOpen===true){
-      //   if (x.text.length===1&&/\s?[a-z|@]+$/.test(x.text[0]))u.ch=w.cm.getLine(u.line).length
-      //   else if (x.text[0][0]===":")u.ch=0
-      //   else u.ch=1
-      //   w.firstOpen=false
-      // }
-      // w.restoreScrollPos();
-      // w.cm.setCursor(u);
-    },
+    ReplyFormatCode:function(x){D.wins[x.win].ReplyFormatCode(x.text)},
     ReplyTreeList:function(x){ide.wse.replyTreeList(x)},
     StatusOutput:function(x){
       var w=ide.wStatus;if(!D.el)return
