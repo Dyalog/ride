@@ -63,9 +63,9 @@ D.IDE=function(){'use strict'
     UpdateWindow:function(x){var w=ide.wins[x.token];if(w){w.container&&w.container.setTitle(x.name);w.open(x)}},
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
     CloseWindow:function(x){
-      var fw=ide.floatingWins[x.win],w=ide.wins[x.win];
-      if(fw){
-        fw.destroy();delete ide.floatingWins[x.win]
+      let w=ide.wins[x.win];
+      if(D.floating){
+        D.el.BrowserWindow.fromId(w.bw_id).destroy();
       } else if(w){
         w.closePopup&&w.closePopup();w.vt.clear();w.container&&w.container.close()
       }
@@ -95,14 +95,12 @@ D.IDE=function(){'use strict'
         bw.loadURL(`file://${__dirname}/editor.html?`+ee.token);
         bw.openDevTools();
         
-        (ide.floatingWins=ide.floatingWins||{})[w]=bw;
-//        if(!p[4]){var d=ee.token-1;p[0]+=d*(process.env.RIDE_XOFFSET||32);p[1]+=d*(process.env.RIDE_YOFFSET||32)}
-        ide.block() //the popup will create D.wins[w] and unblock the message queue
-       ;(D.pendingEditors=D.pendingEditors||{})[w]={editorOpts:editorOpts,ee:ee};done=1
-//        }
+        ide.block(); //the popup will create D.wins[w] and unblock the message queue
+        (D.pendingEditors=D.pendingEditors||{})[w]={editorOpts:editorOpts,ee:ee,bw_id:bw.id};
+        done=1;
       }
-      if(done)return
-      ;(ide.wins[w]=new D.Ed(ide,editorOpts)).open(ee)
+      if(done)return;
+      (ide.wins[w]=new D.Ed(ide,editorOpts)).open(ee)
       //add to golden layout:
       var si=ide.wins[0].cm.getScrollInfo() //remember session scroll position
       var tc=!!ee['debugger']
@@ -417,7 +415,7 @@ D.IDE.prototype={
   focusMRUWin:function(){ //most recently used
     var t=0,wins=this.wins,w=wins[0];
     for(var k in wins){var x=wins[k];if(x.id&&t<=x.focusTS){w=x;t=x.focusTS}}
-    w.focus()
+    D.floating&&w.id==0?D.el.BrowserWindow.getAllWindows()[0].focus():w.focus();
   },
   LBR:D.prf.lbar      .toggle,
   FLT:D.prf.floating  .toggle,

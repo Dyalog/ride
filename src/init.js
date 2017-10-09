@@ -91,7 +91,9 @@ if(/^\?\d+$/.test(location.search)){
           D.send=(type,payload)=>D.ipc.of.ride_master.emit('RIDE',[type,payload]);
           D.ide.switchWin=function(x){D.ipc.of.ride_master.emit('switchWin',x);};
           D.ide.getSIS=function(x){D.ipc.of.ride_master.emit('getSIS',x);};
-          
+          Object.defineProperty(D.ide,'focusedWin',{
+            set:x=>D.ipc.of.ride_master.emit('focusedWin',x.id)
+          });
           var ed=D.ed=new D.Ed(D.ide,editorOpts);
           I.ide.append(ed.dom);
           ed.open(ee);ed.updSize();document.title=ed.name
@@ -105,15 +107,7 @@ if(/^\?\d+$/.test(location.search)){
   );
   
 }else{
-  if(D.el){
-  //context menu
-    let cmenu=D.el.Menu.buildFromTemplate(
-      ['Cut','Copy','Paste'].map(function(x){return{label:x,role:x.toLowerCase()}})
-      .concat({type:'separator'})
-      .concat(['Undo','Redo'].map(function(x){return{label:x,click:function(){
-        let u=D.ide;u&&(u=u.focusedWin)&&(u=u.cm)&&u[x.toLowerCase()]&&u[x.toLowerCase()]()}}})))
-    D.oncmenu=function(e){e.preventDefault();cmenu.popup(D.elw)}
-    node_require(__dirname+'/src/cn')()
+  if (D.el&&D.floating){
   // start IPC server
     D.ipc.config.id   = 'ride_master';
     D.ipc.config.retry= 1500;
@@ -125,33 +119,40 @@ if(/^\?\d+$/.test(location.search)){
             let pe=D.pendingEditors[winId];
             let wp={
               id:winId,
+              focus:()=>D.el.BrowserWindow.fromId(pe.bw_id).focus(),
               processAutocompleteReply:x=>D.ipc.server.emit(socket,'processAutocompleteReply',x),
               ReplyFormatCode:x=>D.ipc.server.emit(socket,'ReplyFormatCode',x),
               saved:x=>D.ipc.server.emit(socket,'saved',x),
               SetHighlightLine:x=>D.ipc.server.emit(socket,'SetHighlightLine',x),
-              socket:socket
+              socket:socket,
+              bw_id:pe.bw_id
             };
             D.wins[winId]=wp;
-            D.ipc.server.emit(
-              socket,
-              'pendingEditor',  
-              pe
-            );
+            D.ipc.server.emit(socket,'pendingEditor',pe);
+            setTimeout(()=>{
+              wp.focus()
+            },1000);
           }
         );
+        D.ipc.server.on('focusedWin',(id,socket)=>{(D.ide.focusedWin=D.ide.wins[id]).focusTS=+new Date;});
         D.ipc.server.on('getSIS',(data,socket)=>{D.ide.getSIS();});
         D.ipc.server.on('switchWin',(data,socket)=>{D.ide.switchWin(data);});
         D.ipc.server.on('unblock',(data,socket)=>{D.ide.unblock();});
-        D.ipc.server.on(
-          'RIDE',
-          ([type,payload],socket)=>{
-            D.send(type,payload);
-          }
-        );
+        D.ipc.server.on('RIDE',([type,payload],socket)=>{D.send(type,payload);});
       }
     );
     D.ipc.server.start();
- 
+  }
+  
+  if(D.el){
+    //context menu
+    let cmenu=D.el.Menu.buildFromTemplate(
+      ['Cut','Copy','Paste'].map(function(x){return{label:x,role:x.toLowerCase()}})
+      .concat({type:'separator'})
+      .concat(['Undo','Redo'].map(function(x){return{label:x,click:function(){
+        let u=D.ide;u&&(u=u.focusedWin)&&(u=u.cm)&&u[x.toLowerCase()]&&u[x.toLowerCase()]()}}})))
+        D.oncmenu=function(e){e.preventDefault();cmenu.popup(D.elw)}
+        node_require(__dirname+'/src/cn')()
   }else{
     var ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host)
     var q=[],flush=function(){while(ws.readyState===1&&q.length)ws.send(q.shift())} //q:send queue
