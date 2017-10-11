@@ -145,7 +145,8 @@ $.extend(CM.commands,{
       return CM.Pos(l,m<=c.ch&&c.ch<n||!m?n:m)
     },{origin:'+move',bias:-1})
   },
-  JSC:function(){D.elw&&D.elw.webContents.toggleDevTools()},
+//JSC:function(){D.elw&&D.elw.webContents.toggleDevTools()},
+  JSC:function(){var w;D.el&&(w=D.el.BrowserWindow.getFocusedWindow())&&w.webContents.toggleDevTools()},
   LOG:function(){
     if(!D.el)return
     var w=D.logw=new D.el.BrowserWindow({width:400,height:500,parent:D.elw}), cn=node_require(__dirname+'/src/cn')

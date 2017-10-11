@@ -43,6 +43,16 @@ if(D.el){
     wins[0].restoreScrollPos();
     D.ide.gl.container.resize();
   })
+  //context menu
+  let cmenu=D.el.Menu.buildFromTemplate(
+    ['Cut','Copy','Paste'].map(function(x){return{label:x,role:x.toLowerCase()}})
+    .concat({type:'separator'})
+    .concat(['Undo','Redo'].map(function(x){return{label:x,click:function(){
+      let u=D.ed||D.ide.focusedWin;
+      u&&(u=u.cm)&&u[x.toLowerCase()]&&u[x.toLowerCase()]();
+    }}}))
+  );
+  D.oncmenu=function(e){e.preventDefault();cmenu.popup(D.elw)};
 }
 D.open=D.open||function(url,o){
   var x=o.x,y=o.y,width=o.width,height=o.height,spec='resizable=1'
@@ -51,108 +61,16 @@ D.open=D.open||function(url,o){
   return!!open(url,'_blank',spec)
 }
 D.openExternal=D.el?D.el.shell.openExternal:function(x){open(x,'_blank')}
+
 if(/^\?\d+$/.test(location.search)){
   var winId=+location.search.slice(1)
   document.body.className+=' floating-window'
   //  document.body.textContent='editor '+winId
-  // start IPC client  
-  D.ipc.config.id   = 'editor'+winId;
-  D.ipc.config.retry= 1500;
-  D.ide={};
-  D.ipc.connectTo(
-    'ride_master',
-    function(){
-      D.ipc.of.ride_master.on(
-        'connect',
-        function(){
-          D.ipc.log('## connected to ride_master ##'.rainbow, D.ipc.config.delay);
-          D.ipc.of.ride_master.emit(
-            'pendingEditor',  //any event or message type your server listens for 
-            winId
-          )
-        }
-      );
-      D.ipc.of.ride_master.on(
-        'disconnect',
-        function(){
-          D.ipc.log('disconnected from ride_master'.notice);
-        }
-      );
-      D.ipc.of.ride_master.on('processAutocompleteReply',x=>D.ed.processAutocompleteReply(x));
-      D.ipc.of.ride_master.on('ReplyFormatCode',x=>D.ed.ReplyFormatCode(x));
-      D.ipc.of.ride_master.on('saved',x=>D.ed.saved(x));
-      D.ipc.of.ride_master.on('SetHighlightLine',x=>D.ed.SetHighlightLine(x));
-      D.ipc.of.ride_master.on(
-        'pendingEditor', 
-        function(pe){
-          D.ipc.log('got pendingEditor from ride_master : '.debug);
-          window.onresize=function(){ed&&ed.updSize()}
-          var editorOpts=pe.editorOpts, ee=pe.ee
-          D.send=(type,payload)=>D.ipc.of.ride_master.emit('RIDE',[type,payload]);
-          D.ide.switchWin=function(x){D.ipc.of.ride_master.emit('switchWin',x);};
-          D.ide.getSIS=function(x){D.ipc.of.ride_master.emit('getSIS',x);};
-          Object.defineProperty(D.ide,'focusedWin',{
-            set:x=>D.ipc.of.ride_master.emit('focusedWin',x.id)
-          });
-          var ed=D.ed=new D.Ed(D.ide,editorOpts);
-          I.ide.append(ed.dom);
-          ed.open(ee);ed.updSize();document.title=ed.name
-          window.onfocus=()=>ed.focus();
-          window.onbeforeunload=function(){return ed.onbeforeunload()}
-          setTimeout(function(){ed.refresh()},500) //work around a rendering issue on Ubuntu
-          D.ipc.of.ride_master.emit('unblock');
-          }
-        );
-      }
-  );
-  
+  D.IPC_Client(winId);
 }else{
-  if (D.el&&D.floating){
-  // start IPC server
-    D.ipc.config.id   = 'ride_master';
-    D.ipc.config.retry= 1500;
-    D.ipc.serve(
-      function(){
-        D.ipc.server.on(
-          'pendingEditor',
-          function(winId,socket){
-            let pe=D.pendingEditors[winId];
-            let wp={
-              id:winId,
-              focus:()=>D.el.BrowserWindow.fromId(pe.bw_id).focus(),
-              processAutocompleteReply:x=>D.ipc.server.emit(socket,'processAutocompleteReply',x),
-              ReplyFormatCode:x=>D.ipc.server.emit(socket,'ReplyFormatCode',x),
-              saved:x=>D.ipc.server.emit(socket,'saved',x),
-              SetHighlightLine:x=>D.ipc.server.emit(socket,'SetHighlightLine',x),
-              socket:socket,
-              bw_id:pe.bw_id
-            };
-            D.wins[winId]=wp;
-            D.ipc.server.emit(socket,'pendingEditor',pe);
-            setTimeout(()=>{
-              wp.focus()
-            },1000);
-          }
-        );
-        D.ipc.server.on('focusedWin',(id,socket)=>{(D.ide.focusedWin=D.ide.wins[id]).focusTS=+new Date;});
-        D.ipc.server.on('getSIS',(data,socket)=>{D.ide.getSIS();});
-        D.ipc.server.on('switchWin',(data,socket)=>{D.ide.switchWin(data);});
-        D.ipc.server.on('unblock',(data,socket)=>{D.ide.unblock();});
-        D.ipc.server.on('RIDE',([type,payload],socket)=>{D.send(type,payload);});
-      }
-    );
-    D.ipc.server.start();
-  }
-  
   if(D.el){
-    //context menu
-    let cmenu=D.el.Menu.buildFromTemplate(
-      ['Cut','Copy','Paste'].map(function(x){return{label:x,role:x.toLowerCase()}})
-      .concat({type:'separator'})
-      .concat(['Undo','Redo'].map(function(x){return{label:x,click:function(){
-        let u=D.ide;u&&(u=u.focusedWin)&&(u=u.cm)&&u[x.toLowerCase()]&&u[x.toLowerCase()]()}}})))
-        D.oncmenu=function(e){e.preventDefault();cmenu.popup(D.elw)}
-        node_require(__dirname+'/src/cn')()
+    D.floating&&D.IPC_Server();
+    node_require(__dirname+'/src/cn')();
   }else{
     var ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host)
     var q=[],flush=function(){while(ws.readyState===1&&q.length)ws.send(q.shift())} //q:send queue
@@ -178,6 +96,7 @@ window.onbeforeunload=function(e){
         $.confirm(msg,document.title,function(x){q=x})
       }
       if(q){
+        D.ipc.stop();
         if(D.local){
           D.send('Exit',{code:0});
           // Wait for the disconnect message

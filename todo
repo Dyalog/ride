@@ -1,4 +1,2 @@
-D.ide.focusedWin - check all references for direct access to child objects (these need to be proxied)
- -insert
- -undo
- -redo
+
+ 
