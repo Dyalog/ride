@@ -341,7 +341,7 @@ const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
   try{ //see https://github.com/mscdex/ssh2/issues/238#issuecomment-87495628 for why we use tryKeyboard:true
     const c=new(rq('ssh2').Client),o={host:x.host,port:x.port,username:x.user,tryKeyboard:true}
     x.key?(o.privateKey=fs.readFileSync(x.key)):(o.password=x.pass)
-    c.on('ready',_=>{c.exec(cmd,{pty:true},f)})
+    c.on('ready',_=>{c.exec(cmd,{pty:{term:'xterm'}},f)})
      .on('tcp connection',(_,acc)=>{clt=acc();initInterpreterConn();new D.IDE().setConnInfo('',0,sel?sel.name:'')})
      .on('keyboard-interactive',(_,_1,_2,_3,fin)=>{fin([x.pass])})
      .on('error',x=>err(''+x))
