@@ -463,7 +463,6 @@ span.CodeMirror-selectedtext {
   width: 100%;
 }
 #cn select {
-  background: url(img/arrow2.png) no-repeat right center;
   overflow: hidden;
   padding: 2px 34px 2px 4px;
   text-overflow: ellipsis;
@@ -594,6 +593,10 @@ span.CodeMirror-selectedtext {
 .cn_dlg_content {
   padding: 8px;
   text-align: center;
+}
+#cn_args,
+#cn_env {
+  width: 100%;
 }
 .ctl_listview {
   width: 100%;
@@ -1462,6 +1465,443 @@ body .ui-tooltip {
 .menu hr {
   margin: 3px 0 5px 0;
 }
+/*Prefs>Code*/
+#code p {
+  margin: 5px;
+}
+#code_aim {
+  margin-left: 48px;
+}
+#col {
+  padding: 8px;
+}
+#col_top {
+  text-align: left;
+}
+#col_new_name {
+  display: none;
+}
+#col_cm {
+  left: 8px;
+  right: 216px;
+  overflow: hidden;
+  text-align: left;
+  position: absolute;
+  top: 100px;
+  bottom: 56px;
+}
+#col_settings {
+  width: 200px;
+  right: 8px;
+  overflow: auto;
+  padding-top: 5px;
+  line-height: 1.5;
+  text-align: left;
+  position: absolute;
+  top: 100px;
+  bottom: 56px;
+}
+#col_settings p {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+#col_fg {
+  width: 48px;
+  padding: 0;
+  cursor: pointer;
+}
+#col_bg {
+  width: 48px;
+  padding: 0;
+  cursor: pointer;
+}
+#col_bgo_p {
+  margin-left: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+#col_B + u {
+  font-weight: bold;
+  text-decoration: none;
+}
+#col_I + u {
+  font-style: italic;
+  text-decoration: none;
+}
+#col.frz #col_ren {
+  display: none;
+}
+#col.frz #col_del {
+  display: none;
+}
+#col.frz #col_settings {
+  display: none;
+}
+#col.frz #col_cm {
+  right: 8px;
+}
+#col.renaming #col_scm {
+  display: none;
+}
+#col.renaming #col_new_name {
+  display: inline;
+}
+/*Prefs>Layout*/
+/*The arrangement is: +-------+ */
+/*                    | g1 g3 | */
+/*                    | g0 g2 | */
+/*                    +-------+ */
+/*bksp,tab,caps,enter,lshift,rshift*/
+/*tab,caps,lshift*/
+/*bksp,tab,enter,lshift,rshift*/
+/*bksp,tab,caps,enter,lshift,rshift*/
+/*bksp*/
+/*tab*/
+/* |\ key on ansi layout*/
+/*caps*/
+/*enter*/
+/*lshift*/
+/*rshift*/
+/*the key above enter on an ansi layout*/
+/*the key between @' and enter*/
+/*lshift*/
+/*the key between lshift and Z*/
+#lyt {
+  padding: 5px;
+}
+#lyt_ctrls {
+  text-align: center;
+  margin: 3px 3px 20px 3px;
+}
+#lyt_rst {
+  float: right;
+}
+#lyt_pfx_lbl {
+  float: left;
+  margin: -5px 10px auto 5px;
+}
+#lyt_pfx {
+  width: 20px;
+  text-align: center;
+}
+#lyt_kbd {
+  font-family: apl, monospace;
+  font-size: 18px;
+  border-radius: 2px;
+  height: 250px;
+  clear: both;
+  cursor: default;
+}
+#lyt_kbd b {
+  font-weight: normal;
+}
+#lyt_ime_wr {
+  float: left;
+  margin-top: 5px;
+}
+.lyt_k {
+  float: left;
+  width: 6%;
+  height: 45px;
+  border-radius: 2px;
+  margin-left: 0.6%;
+  margin-top: 4px;
+  text-align: center;
+  overflow: hidden;
+}
+.lyt_k input {
+  text-align: center;
+}
+.lyt_g1 {
+  width: 40%;
+  height: 20px;
+  line-height: 20px;
+  padding: 0;
+  border-width: 0;
+  margin-top: 1px;
+}
+.lyt_g3 {
+  width: 40%;
+  height: 20px;
+  line-height: 20px;
+  padding: 0;
+  border-width: 0;
+  margin-top: 1px;
+}
+#lyt_spc {
+  width: 50%;
+  margin-left: 25%;
+  margin-right: 25%;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+#lyt_spc br {
+  clear: both;
+}
+#lyt_spc .lyt_g0 {
+  float: left;
+  text-align: left;
+  white-space: nowrap;
+}
+#lyt_spc .lyt_g1 {
+  float: right;
+  text-align: right;
+  white-space: nowrap;
+}
+#lyt_spc .lyt_g2 {
+  float: left;
+  text-align: left;
+  white-space: nowrap;
+}
+#lyt_spc .lyt_g3 {
+  float: right;
+  text-align: right;
+  white-space: nowrap;
+}
+input.lyt_g1:hover,
+input.lyt_g3:hover {
+  cursor: pointer;
+}
+#lyt_15 {
+  line-height: 45px;
+  cursor: default;
+  font-size: 32px;
+  width: 13%;
+}
+#lyt_16 {
+  line-height: 45px;
+  cursor: default;
+  clear: left;
+  font-size: 32px;
+  width: 10%;
+}
+#lyt_30 {
+  line-height: 45px;
+  cursor: default;
+  clear: left;
+  width: 12%;
+}
+#lyt_43 {
+  line-height: 45px;
+  cursor: default;
+  font-size: 32px;
+  width: 13.6%;
+}
+#lyt_44 {
+  line-height: 45px;
+  cursor: default;
+  clear: left;
+  font-size: 32px;
+  width: 15%;
+}
+#lyt_57 {
+  line-height: 45px;
+  cursor: default;
+  font-size: 32px;
+  width: 17.2%;
+}
+#lyt_14 {
+  display: none;
+}
+#lyt_42 {
+  display: none;
+}
+#lyt_45 {
+  display: none;
+}
+#lyt_56 {
+  display: none;
+}
+#lyt_29 {
+  width: 9%;
+}
+.lyt_geom_iso #lyt_29 {
+  display: none;
+}
+.lyt_geom_iso #lyt_42 {
+  display: block;
+}
+.lyt_geom_iso #lyt_43 {
+  width: 7%;
+  height: 94px;
+  line-height: 94px;
+  margin-top: -45px;
+  text-indent: -2%;
+  border-radius: 0 2px 2px 2px;
+  overflow: visible;
+}
+.lyt_geom_iso #lyt_43:before {
+  content: "";
+  float: left;
+  border-radius: 2px 0 0 2px;
+  position: relative;
+  left: -30%;
+  width: 30%;
+  height: 45px;
+  padding-right: 1px;
+}
+.lyt_geom_iso #lyt_44 {
+  width: 8.4%;
+}
+.lyt_geom_iso #lyt_45 {
+  display: block;
+}
+/*Prefs>Menu*/
+#pmenu_rst {
+  float: right;
+}
+#pmenu p {
+  margin: 10px 8px;
+  color: white;
+}
+#pmenu_ta_wr {
+  position: absolute;
+  left: 4px;
+  right: 8px;
+  top: 94px;
+  bottom: 46px;
+  overflow: hidden;
+  padding: 4px;
+}
+#pmenu_ta {
+  width: 100%;
+  height: 100%;
+  resize: none;
+}
+/*Prefs>Shortcuts*/
+#shc {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 54px;
+  bottom: 40px;
+  overflow: auto;
+  text-align: left;
+  padding: 8px 0 0 8px;
+}
+#shc td {
+  text-align: left;
+  text-indent: -2ex;
+  padding-left: 2ex;
+}
+#shc_rst_all {
+  float: right;
+  margin-right: 8px;
+}
+.shc_code {
+  font-family: apl, monospace;
+  font-size: 18px;
+  padding: 2px 16px 2px 8px;
+}
+#shc_tbl_wr {
+  position: absolute;
+  top: 40px;
+  left: 3px;
+  right: 3px;
+  bottom: 0;
+  overflow: auto;
+}
+#shc_tbl_wr table {
+  width: 100%;
+  cursor: default;
+  padding-left: 2px;
+}
+#shc_tbl_wr tr:hover {
+  box-shadow: none!important;
+}
+#shc_tbl_wr tr:hover .shc_add {
+  visibility: visible;
+}
+#shc_tbl_wr tr:hover .shc_rst {
+  visibility: visible;
+}
+#shc_sc_clr {
+  width: 24px;
+  margin-left: -20px;
+  text-decoration: none;
+}
+#shc_no_res {
+  font-style: italic;
+  padding: 20px;
+}
+.shc_key {
+  border-radius: 2px;
+  margin: 8px 2px;
+  line-height: 24px;
+  white-space: nowrap;
+}
+.shc_text {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right-width: 0;
+  padding: 0 2px;
+}
+.shc_del {
+  text-decoration: none;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.shc_add {
+  visibility: hidden;
+}
+.shc_rst {
+  visibility: hidden;
+}
+.shc_val {
+  width: 90%;
+}
+/*Prefs>Title*/
+#title {
+  text-align: left;
+  padding: 8px;
+}
+#title pre {
+  overflow: auto;
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 138px;
+  bottom: 40px;
+  color: white;
+}
+#title pre a {
+  text-decoration: none;
+  color: #fac739;
+}
+#title pre a:hover {
+  color: white;
+}
+#title_inp {
+  width: 100%;
+  display: block;
+  margin-bottom: 16px;
+  margin-top: 24px;
+}
+#title_rst {
+  float: right;
+}
+#prf_nav {
+  height: 28px;
+  border-bottom: solid 1px #fac739;
+  margin-bottom: 2px;
+}
+#prf_nav a {
+  border-bottom: 0.5ex solid transparent;
+  float: left;
+  height: 13px;
+  padding: 4px 12px 4px 12px;
+  text-decoration: none;
+  color: #fac739;
+  margin: 4px 0 0 4px;
+  transition: border-bottom 0.2s;
+}
+#prf_nav a:hover {
+  border-bottom: 0.5ex solid rgba(250, 199, 57, 0.5);
+}
+#prf_nav a.sel {
+  border-bottom: 0.5ex solid #fac739;
+  cursor: default;
+}
 /*scrollbars; see ../src/scrl.js*/
 .cm-scroll {
   position: absolute;
@@ -2298,8 +2738,8 @@ body.floating-window {
 }
 .CodeMirror-search-match {
   background: gold;
-  border-top: 1px solid #deb340;
-  border-bottom: 1px solid #deb340;
+  border-top: 1px solid #fac739;
+  border-bottom: 1px solid #fac739;
 }
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),
 #cn textarea {
@@ -2316,7 +2756,7 @@ body.floating-window {
 }
 #cn select {
   background-color: #403e3e;
-  color: #deb340;
+  color: #fac739;
 }
 #cn_favs .go {
   border: 1px solid #403e3e;
@@ -2332,7 +2772,7 @@ body.floating-window {
 }
 #cn_favs > div {
   background: #524f50;
-  color: #deb340;
+  color: #fac739;
   opacity: 0.3;
 }
 #cn_fav_btns {
@@ -2341,25 +2781,25 @@ body.floating-window {
 }
 #cn_fav_btns button {
   background-color: transparent;
-  color: #deb340;
+  color: #fac739;
 }
 #cn_lhs {
   background: #403e3e;
   border-right: 1px solid white;
 }
 #cn_rhs {
-  border-left: 8px solid #deb340;
+  border-left: 8px solid #fac739;
   background-color: #4d4a4b;
 }
 #cn_rhs button {
   color: white;
-  background-color: #deb340;
+  background-color: #fac739;
 }
 #cn_rhs label {
-  color: #deb340;
+  color: #fac739;
 }
 #cn_env_add a {
-  color: #deb340;
+  color: #fac739;
 }
 .ctl_listview {
   background-color: #4d4a4b;
@@ -2376,7 +2816,7 @@ body.floating-window {
 }
 #debug .ctl_listview_header {
   background-color: #454343;
-  color: #deb340;
+  color: #fac739;
 }
 /*various dialogs*/
 .dlg {
@@ -2386,7 +2826,7 @@ body.floating-window {
 }
 .dlg_title,
 .dlg_close {
-  color: #deb340;
+  color: #fac739;
 }
 .dlg_close:hover {
   background-color: white;
@@ -2395,7 +2835,7 @@ body.floating-window {
 #abt_contact a,
 #abt_contact a:visited,
 #abt_contact a:active {
-  color: #deb340;
+  color: #fac739;
 }
 /*Golden Layout*/
 .lm_goldenlayout {
@@ -2407,50 +2847,50 @@ body.floating-window {
   border-color: #4d4a4b !important;
 }
 .lm_tab {
-  background-color: #deb340 !important;
+  background-color: #fac739 !important;
   color: white !important;
-  border: 1px #deb340 solid !important;
+  border: 1px #fac739 solid !important;
 }
 .lm_splitter {
-  background: #deb340 !important;
+  background: #fac739 !important;
 }
 label {
-  color: #deb340;
+  color: #fac739;
 }
 button {
-  background: #deb340;
+  background: #fac739;
   color: white;
 }
 button:hover {
-  color: #deb340;
+  color: #fac739;
 }
 [type=checkbox] {
   background-color: white;
-  border: 1px solid #deb340;
+  border: 1px solid #fac739;
 }
 [type=checkbox]:checked {
-  background-color: #deb340;
+  background-color: #fac739;
 }
 [type=checkbox]:hover::before {
   background: #676364;
 }
 [type=checkbox]:active::before {
-  background: #deb340;
+  background: #fac739;
   color: #676364;
 }
 [type=checkbox]:checked::before {
-  color: #deb340;
+  color: #fac739;
 }
 [type=checkbox]:checked:after {
   color: white;
 }
 [type=checkbox]:disabled::before {
   color: transparent;
-  box-shadow: 0 0 0 1px #deb340 inset;
+  box-shadow: 0 0 0 1px #fac739 inset;
   background: #676364;
 }
 [type=checkbox]:checked:disabled::before {
-  color: grayscale(#deb340);
+  color: grayscale(#fac739);
   background: grayscale(white);
 }
 #lb {
@@ -2462,7 +2902,7 @@ button:hover {
   background: #555153;
 }
 #lb b {
-  color: #deb340;
+  color: #fac739;
 }
 #lb b:hover {
   background-color: rgba(137, 132, 133, 0.2);
@@ -2502,7 +2942,7 @@ button:hover {
   border-bottom: solid grey 1px;
 }
 .menu a {
-  color: #deb340;
+  color: #fac739;
 }
 .menu .m-open .m-top {
   border-color: transparent;
@@ -2516,7 +2956,7 @@ button:hover {
   border-color: #4d4a4b;
 }
 .menu .m-box a .m-shc {
-  color: #deb340;
+  color: #fac739;
 }
 .menu .m-box a:focus {
   background: #676364;
@@ -2538,17 +2978,17 @@ button:hover {
   background: #676364 center right 5px no-repeat url(img/menu_tri_wht.png);
 }
 #prf_nav {
-  border-bottom: solid 1px #deb340;
+  border-bottom: solid 1px #fac739;
 }
 #prf_nav a {
   border-bottom: 0.5ex solid transparent;
-  color: #deb340;
+  color: #fac739;
 }
 #prf_nav a:hover {
-  border-bottom: 0.5ex solid rgba(222, 179, 64, 0.5);
+  border-bottom: 0.5ex solid rgba(250, 199, 57, 0.5);
 }
 #prf_nav a.sel {
-  border-bottom: 0.5ex solid #deb340;
+  border-bottom: 0.5ex solid #fac739;
 }
 #lyt_kbd {
   color: black;
@@ -2591,7 +3031,7 @@ input.lyt_g3:hover {
   background-color: lightgrey;
 }
 #shc td {
-  color: #deb340;
+  color: #fac739;
 }
 #shc_tbl_wr tr {
   color: white;
@@ -2630,16 +3070,16 @@ input.lyt_g3:hover {
   outline: solid lightgrey 1px;
 }
 #title pre {
-  color: #deb340;
+  color: #fac739;
 }
 #title pre a {
-  color: #deb340;
+  color: #fac739;
 }
 #title pre a:hover {
   color: white;
 }
 #pmenu p {
-  color: #deb340;
+  color: #fac739;
 }
 /*scrollbars; see ../src/scrl.js*/
 .cm-scroll {

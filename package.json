@@ -7,7 +7,8 @@
   "scripts": {
     "start": "electron .",
     "dev": "npm run build-css && npm run start",
-    "connect-page": "gulp live-style"
+    "styler": "electron ./utils/style-picker/style-picker.js",
+    "live-style":"grunt"
   },
   "repository": ".",
   "dependencies": {
