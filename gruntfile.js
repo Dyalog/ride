@@ -16,7 +16,7 @@ module.exports=function(grunt){
   });
 
   grunt.registerTask('reload-css','Attempt to live reload the CSS without having to restart/reload RIDE',function(){
-    electron.broadcast('css_update',{message:'Try and trigger styling reload.'});
+    electron.broadcast('css_update',{message:'Trigger styling reload.'});
   });
 
   grunt.initConfig({
