@@ -12,3 +12,4 @@ ship/
 GH-Releases.json
 test.dws
 yarn.lock
+package-lock.json

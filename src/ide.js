@@ -70,7 +70,11 @@ D.IDE=function(){'use strict'
     CloseWindow:function(x){
       let w=ide.wins[x.win],bw;
       if(D.floating){
-        (bw=D.el.BrowserWindow.fromId(w.bw_id))&&bw.destroy();
+        bw=D.el.BrowserWindow.fromId(w.bw_id);
+        if (bw){
+          w.id=-1;
+          bw.hide();
+        } 
       } else if(w){
         w.closePopup&&w.closePopup();w.vt.clear();w.container&&w.container.close()
       }
@@ -95,12 +99,13 @@ D.IDE=function(){'use strict'
       var w=ee.token, done, editorOpts={id:w,name:ee.name,tc:ee['debugger']}
       ide.hadErr&=editorOpts.tc;
       if(D.el&&D.floating&&!ide.dead){
-        var bw=new D.el.BrowserWindow({icon:__dirname+'/D.png'});//{parent:D.elw}); setting parent forces new windows on top of each other
-        //bw.loadURL(location+'?'+ee.token);
-        bw.loadURL(`file://${__dirname}/editor.html?`+ee.token);
+        // var bw=new D.el.BrowserWindow({icon:__dirname+'/D.png'});
+        // bw.loadURL(location+'?'+ee.token);
+        // //bw.loadURL(`file://${__dirname}/editor.html?`+ee.token);
         
         ide.block(); //the popup will create D.wins[w] and unblock the message queue
-        (D.pendingEditors=D.pendingEditors||{})[w]={editorOpts:editorOpts,ee:ee,bw_id:bw.id};
+        //(D.pendingEditors=D.pendingEditors||{})[w]={editorOpts:editorOpts,ee:ee,bw_id:bw.id};
+        D.IPC_LinkEditor({editorOpts:editorOpts,ee:ee});
         done=1;
       }
       if(done)return;

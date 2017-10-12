@@ -12,26 +12,26 @@
   },
   "repository": ".",
   "dependencies": {
-    "golden-layout": "1.5.6",
-    "grunt-env": "^0.4.4",
-    "jquery": "3.1.1",
+    "golden-layout": "^1.5.9",
+    "jquery": "^3.2.1",
     "node-ipc": "^9.1.1",
-    "ssh2": "0.5.4"
+    "ssh2": "^0.5.5"
   },
   "devDependencies": {
-    "async": "2.1.4",
-    "cheerio": "0.22.0",
-    "compression": "1.6.2",
-    "electron": "1.6.2",
+    "async": "^2.5.0",
+    "cheerio": "^1.0.0-rc.2",
+    "compression": "^1.7.1",
+    "electron": "^1.7.9",
     "electron-connect": "^0.6.2",
-    "electron-packager": "8.7.0",
-    "express": "4.14.0",
+    "electron-packager": "^9.1.0",
+    "express": "^4.16.2",
     "grunt": "^1.0.1",
     "grunt-contrib-less": "^1.4.1",
     "grunt-contrib-watch": "^1.0.0",
-    "less": "^2.7.2",
+    "grunt-env": "^0.4.4",
+    "less": "^3.0.0-alpha.3",
     "less-plugin-glob": "^2.0.1",
-    "nodemon": "^1.11.0",
-    "ws": "1.1.1"
+    "nodemon": "^1.12.1",
+    "ws": "^3.2.0"
   }
 }

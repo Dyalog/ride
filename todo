@@ -1,2 +1,3 @@
-
- 
+-check that hidden browser windows don't get focus
+-remove editor dom node when hiding browser windows
+-close hidden browser windows on shut down
