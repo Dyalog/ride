@@ -35,6 +35,7 @@ D.IPC_Client=function(winId){
     D.ipc.of.ride_master.on('matchBrackets',x=>D.ed.matchBrackets(x));
     
     D.ipc.of.ride_master.on('open',x=>D.ed.open(x));
+    D.ipc.of.ride_master.on('close',x=>D.ed.close(x));
     D.ipc.of.ride_master.on('saved',x=>D.ed.saved(x));
     D.ipc.of.ride_master.on('SetHighlightLine',x=>D.ed.SetHighlightLine(x));
     D.ipc.of.ride_master.on('setLN',x=>D.ed.setLN(x));
@@ -45,11 +46,11 @@ D.IPC_Client=function(winId){
       D.ipc.log('got pendingEditor from ride_master : '.debug);
       var editorOpts=pe.editorOpts, ee=pe.ee;
       var ed=D.ed=new D.Ed(D.ide,editorOpts);
-      I.ide.firstChild?I.ide.replaceChild(ed.dom,I.ide.firstChild):I.ide.append(ed.dom);
+      I.ide.append(ed.dom);
       ed.open(ee);ed.updSize();document.title=ed.name
       window.onresize=function(){ed&&ed.updSize()}
       window.onfocus=()=>ed.focus();
-      window.onbeforeunload=function(){return ed.onbeforeunload()}
+      window.onbeforeunload=function(e){ed.onbeforeunload(e)}
       setTimeout(function(){ed.refresh()},500) //work around a rendering issue on Ubuntu
       D.ipc.of.ride_master.emit('unblock',ed.id);
     });
@@ -71,6 +72,7 @@ D.IPC_Server=function(){
     D.ipc.server.on('focusedWin',(id,socket)=>{var w=D.ide.focusedWin=D.ide.wins[id];w&&(w.focusTS=+new Date);});
     D.ipc.server.on('getSIS',(data,socket)=>{D.ide.getSIS();});
     D.ipc.server.on('getUnsavedReply',(data,socket)=>{
+      if(!D.pendingEdit)return;
       if(data.unsaved&&D.pendingEdit.unsaved[data.win]===false) 
         D.pendingEdit.unsaved[data.win]=data.unsaved;
       else delete D.pendingEdit.unsaved[data.win];
@@ -122,6 +124,7 @@ D.IPC_WindowProxy.prototype={
   processAutocompleteReply:function(x){D.ipc.server.emit(this.socket,'processAutocompleteReply',x)},
   ReplyFormatCode:function(x){D.ipc.server.emit(this.socket,'ReplyFormatCode',x)},
   open:function(x){D.ipc.server.emit(this.socket,'open',x)},
+  close:function(x){D.ipc.server.emit(this.socket,'close',x)},
   saved:function(x){D.ipc.server.emit(this.socket,'saved',x)},
   SetHighlightLine:function(x){D.ipc.server.emit(this.socket,'SetHighlightLine',x)},
   setLN:function(x){D.ipc.server.emit(this.socket,'setLN',x)},

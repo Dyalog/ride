@@ -18,7 +18,7 @@ D.IDE=function(){'use strict'
   ide.switchWin=function(x){ //x: +1 or -1
     let a=[],i=-1,j,wins=D.ide.wins;
     if (D.floating){
-      a=D.el.BrowserWindow.getAllWindows();
+      a=D.el.BrowserWindow.getAllWindows().filter(x=>x.isVisible());
       i=a.findIndex(x=>x.isFocused());
       j=i<0?0:(i+a.length+x)%a.length;
       a[j].focus();
@@ -69,13 +69,8 @@ D.IDE=function(){'use strict'
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
     CloseWindow:function(x){
       let w=ide.wins[x.win],bw;
-      if(D.floating){
-        bw=D.el.BrowserWindow.fromId(w.bw_id);
-        if (bw){
-          w.id=-1;
-          bw.hide();
-        } 
-      } else if(w){
+      if(D.floating){w.id=-1;w.close();} 
+      else if(w){
         w.closePopup&&w.closePopup();w.vt.clear();w.container&&w.container.close()
       }
       delete ide.wins[x.win];ide.focusMRUWin()

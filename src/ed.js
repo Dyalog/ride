@@ -131,6 +131,11 @@ D.Ed.prototype={
   saved:function(err){
     if(err){this.isClosing=0;$.err('Cannot save changes')}else{this.isClosing&&D.send('CloseWindow',{win:this.id})}
   },
+  close:function(){if(D.floating){
+    window.onbeforeunload=null;
+    I.ide.removeChild(I.ide.firstChild);
+    D.el.getCurrentWindow().hide();
+  }},
   closePopup:function(){if(D.floating){window.onbeforeunload=null;D.forceClose=1;close()}},
   die:function(){this.setRO(1)},
   getDocument:function(){return this.dom.ownerDocument},
@@ -289,15 +294,18 @@ D.Ed.prototype={
     var l=cm.getCursor().line;if(l!==cm.lastLine()||/^\s*$/.test(cm.getLine(l))){cm.execCommand('goLineDown');return}
     cm.execCommand('goDocEnd');cm.execCommand('newlineAndIndent');this.xline=l+1
   },
-  onbeforeunload:function(){ //called when the user presses [X] on the OS window
+  onbeforeunload:function(e){ //called when the user presses [X] on the OS window
     var ed=this
+    if(D.floating){e.returnValue=false;}
     if(ed.ide.dead){D.nww&&D.nww.close(true)} //force close window
     else if(ed.tc||ed.cm.getValue()===ed.oText&&''+ed.getStops()===''+ed.oStop){ed.EP(ed.cm)}
     else{
-      window.focus()
-      var r=D.el.dialog.showMessageBox(D.elw,{title:'Save?',buttons:['Yes','No','Cancel'],cancelId:-1,
-        message:'The object "'+ed.name+'" has changed.\nDo you want to save the changes?'})
-      r===0?ed.EP(ed.cm):r===1?ed.QT(ed.cm):0;return''
+      setTimeout(function(){
+        window.focus()
+        var r=D.el.dialog.showMessageBox(D.elw,{title:'Save?',buttons:['Yes','No','Cancel'],cancelId:-1,
+          message:'The object "'+ed.name+'" has changed.\nDo you want to save the changes?'})
+        r===0?ed.EP(ed.cm):r===1?ed.QT(ed.cm):0;return''
+      },10);        
     }
   }
 }
