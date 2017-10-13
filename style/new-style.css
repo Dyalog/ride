@@ -2865,7 +2865,7 @@ button:hover {
   color: #fac739;
 }
 [type=checkbox] {
-  background-color: white;
+  background-color: #4d4a4b;
   border: 1px solid #fac739;
 }
 [type=checkbox]:checked {
@@ -2882,7 +2882,7 @@ button:hover {
   color: #fac739;
 }
 [type=checkbox]:checked:after {
-  color: white;
+  color: #4d4a4b;
 }
 [type=checkbox]:disabled::before {
   color: transparent;
@@ -2891,7 +2891,7 @@ button:hover {
 }
 [type=checkbox]:checked:disabled::before {
   color: grayscale(#fac739);
-  background: grayscale(white);
+  background: grayscale(#4d4a4b);
 }
 #lb {
   background-color: #555153;
@@ -3036,6 +3036,9 @@ input.lyt_g3:hover {
 #shc_tbl_wr tr {
   color: white;
   background-color: #676364;
+}
+#shc_tbl_wr tr:hover {
+  background-color: #4d4a4b;
 }
 #shc_sc_clr {
   color: grey;
