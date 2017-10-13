@@ -1,0 +1,84 @@
+.CodeMirror-scrollbar-filler,.CodeMirror-gutter-filler{
+  background-color:@CM_SCROLL_SEPERATOR; /*the square between H and V scrollbars*/
+}
+.CodeMirror-guttermarker{
+  color:@CM_GUTTER_MARKER_COL;
+}
+.CodeMirror-guttermarker-subtle{
+  color:#999;
+}
+.CodeMirror div.CodeMirror-cursor{
+  border-left:1px solid @CM_CURSOR;
+}
+.CodeMirror div.CodeMirror-secondarycursor{
+  border-left:1px solid @CM_CURSOR_SECONDARY; /*Shown when moving in bi-directional text*/
+}
+.CodeMirror.cm-fat-cursor div.CodeMirror-cursor{
+  background-color:@CM_FAT_CURSOR;
+}
+@-moz-keyframes    blink{0%{background:@CM_CURSOR_BLINK_COL} 50%{background:none} 100%{background:@CM_CURSOR_BLINK_COL}}
+@-webkit-keyframes blink{0%{background:@CM_CURSOR_BLINK_COL} 50%{background:none} 100%{background:@CM_CURSOR_BLINK_COL}}
+@keyframes         blink{0%{background:@CM_CURSOR_BLINK_COL} 50%{background:none} 100%{background:@CM_CURSOR_BLINK_COL}}
+.CodeMirror-ruler{
+  border-left:1px solid @CM_RULER;
+}
+.cm-negative{
+  color:@CM_NEGATIVE;
+}
+.cm-positive{
+  color:@CM_POSITIVE;
+}
+.cm-s-default .cm-error{
+  color:@CM_NEGATIVE;
+}
+.cm-invalidchar{
+  color:@CM_NEGATIVE;
+}
+.CodeMirror-matchingtag{
+  background:@CM_MATCHING_TAG;
+}
+.CodeMirror-activeline-background{
+  background:@CM_ACTIVELINE_BG;
+}
+.CodeMirror-selected{
+  background:@CM_SELECTED_BG;
+}
+.CodeMirror-focused .CodeMirror-selected{
+  background:@CM_FOCUS_SELECTED_BG;
+}
+.CodeMirror ::selection{
+  background:@CM_FOCUS_SELECTED_BG;
+}
+.CodeMirror ::-moz-selection{
+  background:@CM_FOCUS_SELECTED_BG;
+}
+.CodeMirror-foldmarker{
+  color:@CM_FOLDMARKER;
+  text-shadow:#b9f 1px 1px 2px,#b9f -1px -1px 2px,#b9f 1px -1px 2px,#b9f -1px 1px 2px;
+}
+.disconnected .CodeMirror,.disconnected .CodeMirror-gutter-wrapper{
+  background-color:@CM_DICONNECTED; /*beige*/
+}
+.breakpoint{
+  color:@CM_BREAKPOINT;
+}
+.highlighted{
+  border:solid @CM_HIGHLIGHTED 1px;
+}
+.CodeMirror-hints{
+  border:1px solid black;
+  background:@CM_HINT;
+  box-shadow:none;
+}
+.CodeMirror-hint{
+  color:@CM_HINT_COL;
+}
+.CodeMirror-hint-active{
+  background:@CM_HINT_ACTIVE_BG;
+  color:@CM_HINT_ACTIVE_COL;
+}
+.CodeMirror-search-match{
+  background:@CM_SEARCH_MATCH_BG;
+  border-top:1px solid @CM_SEARCH_MATCH_BORDER;
+  border-bottom:1px solid @CM_SEARCH_MATCH_BORDER;
+}

@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+        <link rel="stylesheet" href="./index.css" />
+    </head>
+    <body>
+        <nav class="navbar navbar-expand navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">RIDE Styler</a>
+            <form class="form-inline my-2 my-lg-0">
+                <input id="filter" type="text" class="form-control mr-sm-2" placeholder="Filter" oninput="global.filter(this.value)" />
+            </form>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" onclick="global.openFile()" href="#">Open Theme</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" onclick="global.saveFile()" href="#">Save Changes</a>
+                </li>
+            </ul>
+        </nav>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <table class="table table-hover table-inverse">
+                        <colgroup>
+                            <col width="20%" />
+                            <col width="70%" />
+                            <col width="10%" />
+                        </colgroup>
+                        <thead class="thead">
+                            <tr>
+                                <th> Variable </th>
+                                <th> Setting </th>
+                                <th> Preview </th>
+                            </tr>
+                        </thead>
+                        <tbody id="vars">
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <script src="./index-init.js" type="text/javascript"></script>
+    </body>
+</html>

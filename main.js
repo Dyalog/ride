@@ -29,13 +29,35 @@ el.app.on('ready',_=>{
   el.Menu.setApplicationMenu(null);w.loadURL(`file://${__dirname}/index.html`)
   w.on('move',sv).on('resize',sv).on('maximize',sv).on('unmaximize',sv)
    .on('close',_=>{tid&&clearTimeout(tid);svNow()}).on('closed',_=>{w=global.elw=0})
-   .on('show',_=>{if(x){const q=w.getPosition();dx=q[0]-x;dy=q[1]-y}}).show()
+   .on('show',_=>{if(x){const q=w.getPosition();dx=q[0]-x;dy=q[1]-y}})
+   .on('ready-to-show',w.show);
   if(D.win){const fix=_=>{setTimeout(_=>{
               if(w.isMaximized()){w.unmaximize();w.maximize()}
               else{const a=w.getSize();w.setSize(a[0],a[1]-1);w.setSize(a[0],a[1])}
             },100)}
             w.on('page-title-updated',fix).on('blur',fix)}
-  db.devTools&&w.webContents.openDevTools()
+  db.devTools&&w.webContents.openDevTools();
+  if (process.argv.constructor===Array&&process.argv.includes('DEV_STYLE')){
+    client=rq('electron-connect').client;
+    var c=client.create(w,{sendBounds:false});
+    c.on('reboot',function(){
+      w.close();
+      el.app.relaunch();
+    });
+    c.on('css_update',function(){
+      let css_update_func=_=>{
+        document.getElementById("lr-style")&&document.getElementById("lr-style").remove();
+        var link=document.createElement('link');
+        link.href="style/new-style.css";
+        link.type="text/css";
+        link.rel="stylesheet";
+        link.id="lr-style";
+        document.getElementsByTagName("head")[0].appendChild(link);
+      }
+
+      w.webContents.executeJavaScript(`(${css_update_func.toString()})()`)
+    });
+  }
 })
 el.app.on('window-all-closed',_=>el.app.quit())
 

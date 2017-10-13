@@ -1,0 +1,24 @@
+table tbody tr td, table thead tr th{
+    text-align: center;
+}
+
+.preview {
+    width:24px;
+    height:24px;
+    display:block;
+    background-color:transparent;
+    border:1px solid #ccc;
+    border-radius:50%;margin:0px auto;
+}
+
+.var-value {
+    width:100%;
+}
+
+.container-fluid {
+    padding: 0px;
+}
+
+/* tr > td {
+    line-height: 38px;
+} */

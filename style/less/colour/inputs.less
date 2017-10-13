@@ -1,0 +1,41 @@
+label{
+    color:@INPUT_COL;
+}
+button{
+  background:@BUTTON_BG_COL;
+  color:@BUTTON_COL;
+  &:hover{color:@BUTTON_HOVER_COL}
+}
+
+[type=checkbox]{
+    // &::before{
+    //   background:@THEME_WIN_BG;
+    // }
+    background-color: @CHECKBOX_BG;
+    border: 1px solid @THEME_PRIMARY;
+    &:checked{
+      background-color: @CHECKBOX_COL;
+    }
+    &:hover::before{
+      background:lighten(@THEME_WIN_BG,10%)
+    }
+    &:active::before{
+      background:@CHECKBOX_COL;
+      color:lighten(@THEME_WIN_BG,10%)
+    }
+    &:checked::before{
+      color:@CHECKBOX_COL
+    }
+    &:checked:after{
+      color:@CHECKBOX_BG;
+    }
+    &:disabled::before{
+      color:transparent;
+      box-shadow:0 0 0 1px @CHECKBOX_COL inset;
+      background:lighten(@THEME_WIN_BG,10%)
+    }
+    &:checked:disabled::before{
+      color:grayscale(@CHECKBOX_COL);
+      background:grayscale(@CHECKBOX_BG)
+    }
+}

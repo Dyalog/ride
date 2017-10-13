@@ -1,0 +1,58 @@
+/*menu (see ../src/menu.js for the DOM structure)*/
+.menu {
+	height: 18px;
+	line-height: 17px;
+	cursor: default;
+	padding: 0;
+	margin: 2px 0 0 0;
+	font-family: @SANS_SERIF_FONT;
+	a {
+		text-decoration: none;
+		cursor: default;
+	}
+	.m-opener.m-top {
+		text-align: center;
+		border: solid transparent 1px;
+		padding: 0 5px;
+		margin: 0;
+	}
+	.m-open {
+		>.m-box {
+			display: block;
+		}
+	}
+	>.m-sub {
+		float: left;
+	}
+	.m-box {
+		display: none;
+		border-style: solid;
+		border-width: 1px 2px 2px 1px;
+		position: absolute;
+		padding: 1px;
+		margin: 2px 0 0 0;
+		min-width: 125px;
+		white-space: nowrap;
+		.m-box {
+			margin-left: 100%;
+			margin-top: -17px;
+		}
+		a {
+			display: block;
+			height: 17px;
+			line-height: 17px;
+			text-align: left;
+			padding: 1px 17px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			.m-shc {
+				font-size: small;
+				float: right;
+				margin-left: 20px;
+			}
+		}
+	}
+	hr {
+		margin: 3px 0 5px 0;
+	}
+}

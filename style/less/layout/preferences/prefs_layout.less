@@ -1,0 +1,205 @@
+/*Prefs>Layout*/
+/*The arrangement is: +-------+ */
+/*                    | g1 g3 | */
+/*                    | g0 g2 | */
+/*                    +-------+ */
+/*bksp,tab,caps,enter,lshift,rshift*/
+/*tab,caps,lshift*/
+/*bksp,tab,enter,lshift,rshift*/
+/*bksp,tab,caps,enter,lshift,rshift*/
+/*bksp*/
+/*tab*/
+/* |\ key on ansi layout*/
+/*caps*/
+/*enter*/
+/*lshift*/
+/*rshift*/
+/*the key above enter on an ansi layout*/
+/*the key between @' and enter*/
+/*lshift*/
+/*the key between lshift and Z*/
+
+#lyt {
+	padding: 5px;
+}
+#lyt_ctrls {
+	text-align: center;
+	margin: 3px 3px 20px 3px;
+}
+#lyt_rst {
+	float: right;
+}
+#lyt_pfx_lbl {
+	float: left;
+	margin: -5px 10px auto 5px;
+}
+#lyt_pfx {
+	width: 20px;
+	text-align: center;
+}
+#lyt_kbd {
+	font-family: @APL_FONT;
+	font-size: 18px;
+	border-radius: 2px;
+	height: 250px;
+	clear: both;
+	cursor: default;
+	b {
+		font-weight: normal;
+	}
+}
+#lyt_ime_wr {
+	float: left;
+	margin-top: 5px;
+}
+.lyt_k {
+	float: left;
+	width: 6%;
+	height: 45px;
+	border-radius: 2px;
+	margin-left: 0.6%;
+	margin-top: 4px;
+	text-align: center;
+	overflow: hidden;
+	input {
+		text-align: center;
+	}
+}
+.lyt_g1 {
+	width: 40%;
+	height: 20px;
+	line-height: 20px;
+	padding: 0;
+	border-width: 0;
+	margin-top: 1px;
+}
+.lyt_g3 {
+	width: 40%;
+	height: 20px;
+	line-height: 20px;
+	padding: 0;
+	border-width: 0;
+	margin-top: 1px;
+}
+
+#lyt_spc {
+	width: 50%;
+	margin-left: 25%;
+	margin-right: 25%;
+	padding-left: 8px;
+	padding-right: 8px;
+	br {
+		clear: both;
+	}
+	.lyt_g0 {
+		float: left;
+		text-align: left;
+		white-space: nowrap;
+	}
+	.lyt_g1 {
+		float: right;
+		text-align: right;
+		white-space: nowrap;
+	}
+	.lyt_g2 {
+		float: left;
+		text-align: left;
+		white-space: nowrap;
+	}
+	.lyt_g3 {
+		float: right;
+		text-align: right;
+		white-space: nowrap;
+	}
+}
+input.lyt_g1, input.lyt_g3 {
+	&:hover {
+		cursor: pointer;
+	}
+}
+#lyt_15 {
+	line-height: 45px;
+	cursor: default;
+	font-size: 32px;
+	width: 13%;
+}
+#lyt_16 {
+	line-height: 45px;
+	cursor: default;
+	clear: left;
+	font-size: 32px;
+	width: 10%;
+}
+#lyt_30 {
+	line-height: 45px;
+	cursor: default;
+	clear: left;
+	width: 12%;
+}
+#lyt_43 {
+	line-height: 45px;
+	cursor: default;
+	font-size: 32px;
+	width: 13.6%;
+}
+#lyt_44 {
+	line-height: 45px;
+	cursor: default;
+	clear: left;
+	font-size: 32px;
+	width: 15%;
+}
+#lyt_57 {
+	line-height: 45px;
+	cursor: default;
+	font-size: 32px;
+	width: 17.2%;
+}
+#lyt_14 {
+	display: none;
+}
+#lyt_42 {
+	display: none;
+}
+#lyt_45 {
+	display: none;
+}
+#lyt_56 {
+	display: none;
+}
+#lyt_29 {
+	width: 9%;
+}
+.lyt_geom_iso {
+	#lyt_29 {
+		display: none;
+	}
+	#lyt_42 {
+		display: block;
+	}
+	#lyt_43 {
+		width: 7%;
+		height: 94px;
+		line-height: 94px;
+		margin-top: -45px;
+		text-indent: -2%;
+		border-radius: 0 2px 2px 2px;
+		overflow: visible;
+		&:before {
+			content: "";
+			float: left;
+			border-radius: 2px 0 0 2px;
+			position: relative;
+			left: -30%;
+			width: 30%;
+			height: 45px;
+			padding-right: 1px;
+		}
+	}
+	#lyt_44 {
+		width: 8.4%;
+	}
+	#lyt_45 {
+		display: block;
+	}
+}
