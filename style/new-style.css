@@ -2465,162 +2465,300 @@ body.floating-window {
 .zoom12 #wse,
 .zoom12 #debug,
 .zoom12 #lb_tip *,
-.zoom12 #vt_bln {
+.zoom12 #vt_bln,
+.zoom12 #lb_inner b {
   font-size: 48px;
+}
+.zoom12 #lb_inner b {
+  width: 52px;
+  height: 52px;
+  line-height: 52px;
 }
 .zoom11 .CodeMirror,
 .zoom11 #wse,
 .zoom11 #debug,
 .zoom11 #lb_tip *,
-.zoom11 #vt_bln {
+.zoom11 #vt_bln,
+.zoom11 #lb_inner b {
   font-size: 42px;
+}
+.zoom11 #lb_inner b {
+  width: 46px;
+  height: 46px;
+  line-height: 46px;
 }
 .zoom10 .CodeMirror,
 .zoom10 #wse,
 .zoom10 #debug,
 .zoom10 #lb_tip *,
-.zoom10 #vt_bln {
+.zoom10 #vt_bln,
+.zoom10 #lb_inner b {
   font-size: 36px;
+}
+.zoom10 #lb_inner b {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
 }
 .zoom9 .CodeMirror,
 .zoom9 #wse,
 .zoom9 #debug,
 .zoom9 #lb_tip *,
-.zoom9 #vt_bln {
+.zoom9 #vt_bln,
+.zoom9 #lb_inner b {
   font-size: 32px;
+}
+.zoom9 #lb_inner b {
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
 }
 .zoom8 .CodeMirror,
 .zoom8 #wse,
 .zoom8 #debug,
 .zoom8 #lb_tip *,
-.zoom8 #vt_bln {
+.zoom8 #vt_bln,
+.zoom8 #lb_inner b {
   font-size: 28px;
+}
+.zoom8 #lb_inner b {
+  width: 32px;
+  height: 32px;
+  line-height: 32px;
 }
 .zoom7 .CodeMirror,
 .zoom7 #wse,
 .zoom7 #debug,
 .zoom7 #lb_tip *,
-.zoom7 #vt_bln {
+.zoom7 #vt_bln,
+.zoom7 #lb_inner b {
   font-size: 26px;
+}
+.zoom7 #lb_inner b {
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
 }
 .zoom6 .CodeMirror,
 .zoom6 #wse,
 .zoom6 #debug,
 .zoom6 #lb_tip *,
-.zoom6 #vt_bln {
+.zoom6 #vt_bln,
+.zoom6 #lb_inner b {
   font-size: 24px;
+}
+.zoom6 #lb_inner b {
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
 }
 .zoom5 .CodeMirror,
 .zoom5 #wse,
 .zoom5 #debug,
 .zoom5 #lb_tip *,
-.zoom5 #vt_bln {
+.zoom5 #vt_bln,
+.zoom5 #lb_inner b {
   font-size: 22px;
+}
+.zoom5 #lb_inner b {
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
 }
 .zoom4 .CodeMirror,
 .zoom4 #wse,
 .zoom4 #debug,
 .zoom4 #lb_tip *,
-.zoom4 #vt_bln {
+.zoom4 #vt_bln,
+.zoom4 #lb_inner b {
   font-size: 20px;
+}
+.zoom4 #lb_inner b {
+  width: 26px;
+  height: 26px;
+  line-height: 26px;
 }
 .zoom3 .CodeMirror,
 .zoom3 #wse,
 .zoom3 #debug,
 .zoom3 #lb_tip *,
-.zoom3 #vt_bln {
+.zoom3 #vt_bln,
+.zoom3 #lb_inner b {
   font-size: 19px;
+}
+.zoom3 #lb_inner b {
+  width: 25px;
+  height: 25px;
+  line-height: 25px;
 }
 .zoom2 .CodeMirror,
 .zoom2 #wse,
 .zoom2 #debug,
 .zoom2 #lb_tip *,
-.zoom2 #vt_bln {
+.zoom2 #vt_bln,
+.zoom2 #lb_inner b {
   font-size: 18px;
+}
+.zoom2 #lb_inner b {
+  width: 24px;
+  height: 24px;
+  line-height: 24px;
 }
 .zoom1 .CodeMirror,
 .zoom1 #wse,
 .zoom1 #debug,
 .zoom1 #lb_tip *,
-.zoom1 #vt_bln {
+.zoom1 #vt_bln,
+.zoom1 #lb_inner b {
   font-size: 17px;
+}
+.zoom1 #lb_inner b {
+  width: 23px;
+  height: 23px;
+  line-height: 23px;
 }
 .zoom0 .CodeMirror,
 .zoom0 #wse,
 .zoom0 #debug,
 .zoom0 #lb_tip *,
-.zoom0 #vt_bln {
+.zoom0 #vt_bln,
+.zoom0 #lb_inner b {
   font-size: 16px;
+}
+.zoom0 #lb_inner b {
+  width: 22px;
+  height: 22px;
+  line-height: 22px;
 }
 .zoom-1 .CodeMirror,
 .zoom-1 #wse,
 .zoom-1 #debug,
 .zoom-1 #lb_tip *,
-.zoom-1 #vt_bln {
+.zoom-1 #vt_bln,
+.zoom-1 #lb_inner b {
   font-size: 15px;
+}
+.zoom-1 #lb_inner b {
+  width: 21px;
+  height: 21px;
+  line-height: 21px;
 }
 .zoom-2 .CodeMirror,
 .zoom-2 #wse,
 .zoom-2 #debug,
 .zoom-2 #lb_tip *,
-.zoom-2 #vt_bln {
+.zoom-2 #vt_bln,
+.zoom-2 #lb_inner b {
   font-size: 14px;
+}
+.zoom-2 #lb_inner b {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
 }
 .zoom-3 .CodeMirror,
 .zoom-3 #wse,
 .zoom-3 #debug,
 .zoom-3 #lb_tip *,
-.zoom-3 #vt_bln {
+.zoom-3 #vt_bln,
+.zoom-3 #lb_inner b {
   font-size: 13px;
+}
+.zoom-3 #lb_inner b {
+  width: 19px;
+  height: 19px;
+  line-height: 19px;
 }
 .zoom-4 .CodeMirror,
 .zoom-4 #wse,
 .zoom-4 #debug,
 .zoom-4 #lb_tip *,
-.zoom-4 #vt_bln {
+.zoom-4 #vt_bln,
+.zoom-4 #lb_inner b {
   font-size: 12px;
+}
+.zoom-4 #lb_inner b {
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
 }
 .zoom-5 .CodeMirror,
 .zoom-5 #wse,
 .zoom-5 #debug,
 .zoom-5 #lb_tip *,
-.zoom-5 #vt_bln {
+.zoom-5 #vt_bln,
+.zoom-5 #lb_inner b {
   font-size: 11px;
+}
+.zoom-5 #lb_inner b {
+  width: 17px;
+  height: 17px;
+  line-height: 17px;
 }
 .zoom-6 .CodeMirror,
 .zoom-6 #wse,
 .zoom-6 #debug,
 .zoom-6 #lb_tip *,
-.zoom-6 #vt_bln {
+.zoom-6 #vt_bln,
+.zoom-6 #lb_inner b {
   font-size: 10px;
+}
+.zoom-6 #lb_inner b {
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
 }
 .zoom-7 .CodeMirror,
 .zoom-7 #wse,
 .zoom-7 #debug,
 .zoom-7 #lb_tip *,
-.zoom-7 #vt_bln {
+.zoom-7 #vt_bln,
+.zoom-7 #lb_inner b {
   font-size: 9px;
+}
+.zoom-7 #lb_inner b {
+  width: 15px;
+  height: 15px;
+  line-height: 15px;
 }
 .zoom-8 .CodeMirror,
 .zoom-8 #wse,
 .zoom-8 #debug,
 .zoom-8 #lb_tip *,
-.zoom-8 #vt_bln {
+.zoom-8 #vt_bln,
+.zoom-8 #lb_inner b {
   font-size: 8px;
+}
+.zoom-8 #lb_inner b {
+  width: 14px;
+  height: 14px;
+  line-height: 14px;
 }
 .zoom-9 .CodeMirror,
 .zoom-9 #wse,
 .zoom-9 #debug,
 .zoom-9 #lb_tip *,
-.zoom-9 #vt_bln {
+.zoom-9 #vt_bln,
+.zoom-9 #lb_inner b {
   font-size: 7px;
+}
+.zoom-9 #lb_inner b {
+  width: 13px;
+  height: 13px;
+  line-height: 13px;
 }
 .zoom-10 .CodeMirror,
 .zoom-10 #wse,
 .zoom-10 #debug,
 .zoom-10 #lb_tip *,
-.zoom-10 #vt_bln {
+.zoom-10 #vt_bln,
+.zoom-10 #lb_inner b {
   font-size: 6px;
+}
+.zoom-10 #lb_inner b {
+  width: 12px;
+  height: 12px;
+  line-height: 12px;
 }
 .CodeMirror-scrollbar-filler,
 .CodeMirror-gutter-filler {
