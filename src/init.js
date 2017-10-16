@@ -90,17 +90,6 @@ if(/^\?\d+$/.test(location.search)){
 window.onbeforeunload=function(e){
   if (D.ide&&!D.shutdown){
     e.returnValue=false
-
-    var quitLocal=function(){
-      D.send('Exit',{code:0});
-      // Wait for the disconnect message
-    }
-
-    var quitConnected=function(){
-      D.send('Disconnect',{message:'User shutdown request'});
-      close();
-    }
-
     setTimeout(function(){
       var q=true
       if (D.prf.sqp()){
@@ -109,8 +98,13 @@ window.onbeforeunload=function(e){
       }
       if(q){
         D.shutdown=1;
-        if (D.local){quitLocal()}
-        else {quitConnected()}
+        if(D.local){
+          D.send('Exit',{code:0});
+          // Wait for the disconnect message
+        }else{
+          D.send('Disconnect',{message:'User shutdown request'});
+          close();
+        }
       }
     },10)
   }
