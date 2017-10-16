@@ -90,30 +90,25 @@ if(/^\?\d+$/.test(location.search)){
 window.onbeforeunload=function(e){
   if (D.ide&&!D.shutdown){
     e.returnValue=false
+
     var quitLocal=function(){
-      D.shutdown=1;
       D.send('Exit',{code:0});
       // Wait for the disconnect message
     }
 
     var quitConnected=function(){
-      D.shutdown=1;
       D.send('Disconnect',{message:'User shutdown request'});
       close();
     }
 
-    var msg=D.local?'Quit Dyalog APL. Are you sure?':'Disconnect from interpreter. Are you sure?';
-
     setTimeout(function(){
+      var q=true
       if (D.prf.sqp()){
-        $.confirm(msg,document.title,function(q){
-          if(q) {
-            if (D.local){quitLocal()}
-            else {quitConnected()}
-          }
-        })
+        var msg=D.local?'Quit Dyalog APL. Are you sure?':'Disconnect from interpreter. Are you sure?';
+        $.confirm(msg,document.title,function(x){q=x})
       }
-      else{
+      if(q){
+        D.shutdown=1;
         if (D.local){quitLocal()}
         else {quitConnected()}
       }
