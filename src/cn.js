@@ -333,7 +333,7 @@ const maxl=1000,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x
     }
   })
   clt.on('error',x=>{err(''+x);clt=0})
-  clt.on('end',_=>{log('interpreter diconnected');D.ide&&D.ide._disconnected();clt=0})
+  clt.on('end',_=>{log('interpreter disconnected');D.ide&&D.ide._disconnected();clt=0})
   sendEach(['SupportedProtocols=2','UsingProtocol=2',
             '["Identify",{"identity":1}]','["Connect",{"remoteId":2}]','["GetWindowLayout",{}]'])
 }

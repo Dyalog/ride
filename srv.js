@@ -18,7 +18,7 @@ const maxl=100,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x //helper for log
 ,toBuf=x=>{const b=Buffer('xxxxRIDE'+x);b.writeInt32BE(b.length,0);return b} //serialize in a RIDE protocol envelope
 ,sendEach=x=>{if(clt){x.forEach(y=>log('send '+trunc(y)));clt.write(Buffer.concat(x.map(toBuf)))}}
 let clt,srv=rq('net').createServer(x=>{
-  clt=x;srv.close();srv=0;log('interpreter connected');clt.on('end',_=>log('interpreter diconnected'))
+  clt=x;srv.close();srv=0;log('interpreter connected');clt.on('end',_=>log('interpreter disconnected'))
   let q=Buffer(0)
   clt.on('data',x=>{
     q=Buffer.concat([q,x]);let n
