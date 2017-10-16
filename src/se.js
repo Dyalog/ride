@@ -32,8 +32,10 @@ D.Se=function(ide){ //constructor
   se.promptType=0 //see ../docs/protocol.md #SetPromptType
   se.processAutocompleteReply=D.ac(se) //delegate autocompletion processing to ac.js
   D.prf.wrap(function(x){se.cm.setOption('lineWrapping',!!x);se.scrollCursorIntoView()})
-  D.prf.blockCursor(function(x){for(var i in D.wins)D.wins[i].cm.getWrapperElement().classList.toggle('cm-fat-cursor',!!x)})
-  D.prf.blinkCursor(function(x){for(var i in D.wins)D.wins[i].cm.setOption("cursorBlinkRate",D.prf.blinkCursor()*CM.defaults.cursorBlinkRate)})
+  D.prf.blockCursor(function(x){
+    for(var i in D.wins)D.wins[i].blockCursor(!!x)})
+  D.prf.blinkCursor(function(x){
+    for(var i in D.wins)D.wins[i].blinkCursor(D.prf.blinkCursor()*CM.defaults.cursorBlinkRate)})
   this.vt=D.vt(this) //value tips
 }
 D.Se.prototype={
@@ -95,6 +97,9 @@ D.Se.prototype={
   restoreScrollPos:function(){
     if(this.btm!=null){var i=this.cm.getScrollInfo();this.cm.scrollTo(0,this.btm-i.clientHeight)}
   },
+  stateChanged:function(){var w=this;w.updSize();w.cm.refresh();w.updGutters&&w.updGutters();w.restoreScrollPos()},
+  blockCursor:function(x){this.cm.getWrapperElement().classList.toggle('cm-fat-cursor',!!x)},
+  blinkCursor:function(x){this.cm.setOption("cursorBlinkRate",x)},
   hasFocus:function(){return this.cm.hasFocus()},
   focus:function(){
     var q=this.container,p=q&&q.parent,l=q&&q.layoutManager,m=l&&l._maximisedItem
@@ -126,12 +131,16 @@ D.Se.prototype={
     }
     se.ide.exec(es,trace);se.dirty={};se.histAdd(es.filter(function(x){return!/^\s*$/.test(x)}));se.cm.clearHistory()
   },
+  autoCloseBrackets:function(x){this.cm.setOption('autoCloseBrackets',x)},
+  matchBrackets:function(x){this.cm.setOption('matchBrackets',!!x)},
+  ValueTip:function(x){this.vt.processReply(x)},
   ED:function(cm){
     var c=cm.getCursor(),txt=cm.getLine(c.line);
     if(/^\s*$/.test(txt)){
       var tc=this.ide.tracer();if(tc){tc.focus();tc.ED(tc.cm)}
-    } else{
-      D.send('Edit',{win:0,pos:c.ch,text:txt,unsaved:this.ide.getUnsaved()})
+    } else {
+    //D.send('Edit',{win:0,pos:c.ch,text:txt,unsaved:this.ide.getUnsaved()})
+      this.ide.Edit({win:0,pos:c.ch,text:txt});
     }
   },
   BK:function(){this.histMove(1)},

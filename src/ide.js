@@ -15,6 +15,14 @@ D.IDE=function(){'use strict'
   ide.host=ide.port=ide.wsid='';D.prf.title(ide.updTitle.bind(ide))
   D.wins=ide.wins={0:new D.Se(ide)}
   ide.focusedWin=ide.wins[0] //last focused window, it might not have the focus right now
+  ide.switchWin=function(x){ //x: +1 or -1
+    let a=[],i=-1,j,wins=D.ide.wins,w;
+    for(var k in wins){wins[k].hasFocus()&&(i=a.length);a.push(wins[k])}
+    j=i<0?0:(i+a.length+x)%a.length;w=a[j];
+    if(!w.bw_id)D.elw.focus();
+    w.focus();return!1
+  }
+
   ide.handlers={ //for RIDE protocol messages
     Identify:function(x){D.remoteIdentification=x;ide.updTitle();ide.connected=1;ide.wins[0].updPW(1)
                          clearTimeout(D.tmr);delete D.tmr},
@@ -44,19 +52,19 @@ D.IDE=function(){'use strict'
     GotoWindow:function(x){var w=ide.wins[x.win];w&&w.focus()},
     WindowTypeChanged:function(x){return ide.wins[x.win].setTC(x.tracer)},
     ReplyGetAutocomplete:function(x){var w=ide.wins[x.token];w&&w.processAutocompleteReply(x)},
-    ValueTip:function(x){ide.wins[x.token].vt.processReply(x)},
-    SetHighlightLine:function(x){
-      var w=ide.wins[x.win];
-      if(w&&w.hl){
-        w.hl(x.line);
-        w.focus()
-        w.HIGHLIGHT_LINE=x.line;
-      };
-    },
-    UpdateWindow:function(x){var w=ide.wins[x.token];if(w){w.container&&w.container.setTitle(x.name);w.open(x)}},
+    ValueTip:function(x){ide.wins[x.token].ValueTip(x)},
+    SetHighlightLine:function(x){D.wins[x.win].SetHighlightLine(x.line)},
+    UpdateWindow:function(x){
+      var w=ide.wins[x.token];
+      if(w){
+        w.container&&w.container.setTitle(x.name);
+        w.open(x);
+      }},
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
     CloseWindow:function(x){
-      var w=ide.wins[x.win];if(w){w.closePopup&&w.closePopup();w.vt.clear();w.container&&w.container.close()}
+      let w=ide.wins[x.win],bw;
+      if(w.bw_id){w.id=-1;w.close();} 
+      else if(w){w.vt.clear();w.container&&w.container.close()}
       delete ide.wins[x.win];ide.focusMRUWin()
       ide.WSEwidth=ide.wsew;ide.DBGwidth=ide.dbgw
       ide.getSIS()
@@ -78,14 +86,12 @@ D.IDE=function(){'use strict'
       var w=ee.token, done, editorOpts={id:w,name:ee.name,tc:ee['debugger']}
       ide.hadErr&=editorOpts.tc;
       if(D.el&&D.prf.floating()&&!ide.dead){
-        var bw=new D.el.BrowserWindow({parent:D.elw});bw.loadURL(location+'?'+ee.token);bw.openDevTools()
-//        if(!p[4]){var d=ee.token-1;p[0]+=d*(process.env.RIDE_XOFFSET||32);p[1]+=d*(process.env.RIDE_YOFFSET||32)}
-//          ide.block() //the popup will create D.wins[w] and unblock the message queue
-//          ;(D.pendingEditors=D.pendingEditors||{})[w]={editorOpts:editorOpts,ee:ee,ide:ide};done=1
-//        }
-      }
-      if(done)return
-      ;(ide.wins[w]=new D.Ed(ide,editorOpts)).open(ee)
+        ide.block(); //the popup will create D.wins[w] and unblock the message queue
+        D.IPC_LinkEditor({editorOpts:editorOpts,ee:ee});
+        done=1;
+      } else if(D.elw&&!D.elw.isFocused()) D.elw.focus();
+      if(done)return;
+      (ide.wins[w]=new D.Ed(ide,editorOpts)).open(ee)
       //add to golden layout:
       var si=ide.wins[0].cm.getScrollInfo() //remember session scroll position
       var tc=!!ee['debugger']
@@ -177,24 +183,7 @@ D.IDE=function(){'use strict'
     },
     ReplyGetSIStack:function(x){ide.dbg&&ide.dbg.sistack.render(x.stack)},
     ReplyGetThreads:function(x){ide.dbg&&ide.dbg.threads.render(x.threads)},
-    ReplyFormatCode:function(x){
-      var w=D.wins[x.win]
-      var u=w.cm.getCursor();
-      w.saveScrollPos();
-      w.cm.setValue(x.text.join('\n'));
-      if (w.tc&&w.HIGHLIGHT_LINE){
-        w.hl(w.HIGHLIGHT_LINE);
-        u.line=w.HIGHLIGHT_LINE;
-      }
-      if (w.firstOpen!==undefined&&w.firstOpen===true){
-        if (x.text.length===1&&/\s?[a-z|@]+$/.test(x.text[0]))u.ch=w.cm.getLine(u.line).length
-        else if (x.text[0][0]===":")u.ch=0
-        else u.ch=1
-        w.firstOpen=false
-      }
-      w.restoreScrollPos();
-      w.cm.setCursor(u);
-    },
+    ReplyFormatCode:function(x){D.wins[x.win].ReplyFormatCode(x.text)},
     ReplyTreeList:function(x){ide.wse.replyTreeList(x)},
     StatusOutput:function(x){
       var w=ide.wStatus;if(!D.el)return
@@ -223,7 +212,8 @@ D.IDE=function(){'use strict'
           i&&mq.splice(0,i);ide.wins[0].add(s)
         })
       }else{
-        var f=ide.handlers[a[0]];f?f.apply(ide,a.slice(1)):D.send('UnknownCommand',{name:a[0]})
+        var f=ide.handlers[a[0]];
+        f?f.apply(ide,a.slice(1)):D.send('UnknownCommand',{name:a[0]})
       }
     }
     last=+new Date;tid=0
@@ -260,7 +250,15 @@ D.IDE=function(){'use strict'
   }
   I.lb.onclick=function(x){
     var s=x.target.textContent;if(lbDragged||x.target.nodeName!=='B'||/\s/.test(s))return!1
-    var w=ide.focusedWin;w.hasFocus()?w.insert(s):D.util.insert(document.activeElement,s);return!1
+    // if(D.floating){
+      var t=0,wins=ide.wins,w=wins[0],now=new Date;
+      for(var k in wins){var x=wins[k];if((500<now-x.focusTS)&&t<=x.focusTS){w=x;t=x.focusTS}}
+      w.insert(s);
+      w.id&&w.focus();
+    // } else {
+    //   var w=ide.focusedWin;w.hasFocus()?w.insert(s):D.util.insert(document.activeElement,s);
+    // }
+    return!1;
   }
   I.lb.onmouseout=function(x){if(x.target.nodeName==='B'||x.target.id==='lb_prf'){
     clearTimeout(ttid);ttid=0;I.lb_tip.hidden=I.lb_tip_tri.hidden=1
@@ -285,7 +283,7 @@ D.IDE=function(){'use strict'
                           stop:function(e){D.prf.lbarOrder(I.lb_inner.textContent);lbDragged=0}})
   D.prf.lbarOrder(this.lbarRecreate)
 
-  var eachWin=function(f){for(var k in ide.wins){var w=ide.wins[k];w.cm&&f(w)}}
+  var eachWin=function(f){for(var k in ide.wins){f(ide.wins[k])}}
   var gl=ide.gl=new GoldenLayout({
     settings:{showPopoutIcon:0},dimensions:{borderWidth:4},labels:{minimise:'unmaximise'},
     content:[{title:'Session',type:'component',componentName:'win',componentState:{id:0}}]
@@ -320,7 +318,7 @@ D.IDE=function(){'use strict'
   gl.on('stateChanged',function(){
     clearTimeout(sctid)
     sctid=setTimeout(function(){
-      eachWin(function(w){w.updSize();w.cm.refresh();w.updGutters&&w.updGutters();w.restoreScrollPos()})
+      eachWin(function(w){w.stateChanged()})
     },50)
     ide.wsew=ide.WSEwidth;ide.dbgw=ide.DBGwidth
   })
@@ -371,10 +369,10 @@ D.IDE=function(){'use strict'
   setTimeout(function(){try{D.installMenu(D.parseMenuDSL(D.prf.menu()))}
                         catch(e){$.err('Invalid menu configuration -- the default menu will be used instead')
                                  console.error(e);D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()))}},100)
-  D.prf.autoCloseBrackets(function(x){eachWin(function(w){w.cm.setOption('autoCloseBrackets',!!x&&D.Ed.ACB_VALUE)})})
-  D.prf.indent(function(x){eachWin(function(w){if(w.id){w.cm.setOption('smartIndent',x>=0);w.cm.setOption('indentUnit',x)}})})
-  D.prf.fold(function(x){eachWin(function(w){if(w.id){w.cm.setOption('foldGutter',!!x);w.updGutters()}})})
-  D.prf.matchBrackets(function(x){eachWin(function(w){w.cm.setOption('matchBrackets',!!x)})})
+  D.prf.autoCloseBrackets(function(x){eachWin(function(w){w.autoCloseBrackets(!!x&&D.Ed.ACB_VALUE)})})
+  D.prf.indent(function(x){eachWin(function(w){w.id&&w.indent(x)})})
+  D.prf.fold(function(x){eachWin(function(w){w.id&&w.fold(!!x)})})
+  D.prf.matchBrackets(function(x){eachWin(function(w){w.matchBrackets(!!x)})})
   var togglePanel=function(comp_name,comp_title,left){
     if(!D.prf[comp_name]()){gl.root.getComponentsByName(comp_name).forEach(function(x){x.container.close()});return}
     var si=D.ide.wins[0].cm.getScrollInfo() //remember session scroll position
@@ -416,7 +414,8 @@ D.IDE.prototype={
   focusMRUWin:function(){ //most recently used
     var t=0,wins=this.wins,w=wins[0];
     for(var k in wins){var x=wins[k];if(x.id&&t<=x.focusTS){w=x;t=x.focusTS}}
-    w.focus()
+    if(!w.bw_id)D.elw.focus();
+    w.focus();
   },
   LBR:D.prf.lbar      .toggle,
   FLT:D.prf.floating  .toggle,
@@ -425,8 +424,25 @@ D.IDE.prototype={
   UND:function(){this.focusedWin.cm.undo()},
   RDO:function(){this.focusedWin.cm.redo()},
   CAW:function(){D.send('CloseAllWindows',{})},
+  Edit:function(data){
+    D.pendingEdit=D.pendingEdit||data;
+    D.pendingEdit.unsaved=D.pendingEdit.unsaved||{};
+    let u=D.pendingEdit.unsaved,v,w,bws=0;
+    for(var k in this.wins){
+      w=this.wins[k];
+      v=+k&&(w.getUnsaved?w.getUnsaved():-1);
+      if(v)u[k]=v;
+      bws|=v===-1;
+    }
+    if (bws) {
+      D.ipc.server.broadcast('getUnsaved');
+    } else {
+      D.send('Edit',D.pendingEdit);
+      delete D.pendingEdit;
+    }
+  },
   getUnsaved:function(){
-    var r={};for(var k in this.wins){var cm=this.wins[k].cm,v=cm.getValue();if(+k&&v!==cm.oText)r[k]=v}
+    var r={};for(var k in this.wins){var v=(+k&&this.wins[k].getUnsaved());if(v)r[k]=v}
     return r
   },
   _disconnected:function(){this.die()}, //invoked from cn.js

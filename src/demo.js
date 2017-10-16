@@ -25,7 +25,7 @@ $.extend(CM.commands,{
   DMN:function(){move( 1)}, //next line
   DMP:function(){move(-1)}, //prev line
   DMR:function(){ //load demo script
-    if(!D.el||D.floating)return
+    if(!D.el||D.prf.floating())return
     if(!inp){inp=document.createElement('input');inp.type='file';inp.hidden=1;document.body.appendChild(inp)
              inp.onchange=function(){loadDemoScript(inp.files[0].path)}}
     inp.value='';inp.click()

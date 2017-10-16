@@ -25,6 +25,7 @@ if(D.el){
   document.onmousewheel=
     function(e){var d=e.wheelDelta;d&&(e.ctrlKey||e.metaKey)&&!e.shiftKey&&!e.altKey&&CM.commands[d>0?'ZMI':'ZMO']()}
   document.body.className+=' zoom'+D.prf.zoom();
+ 
   D.prf.dark()&&false&&(document.body.className+=' newDark');
   D.prf.zoom(function(z){
     if(!D.ide)return
@@ -42,6 +43,16 @@ if(D.el){
     wins[0].restoreScrollPos();
     D.ide.gl.container.resize();
   })
+  //context menu
+  let cmenu=D.el.Menu.buildFromTemplate(
+    ['Cut','Copy','Paste'].map(function(x){return{label:x,role:x.toLowerCase()}})
+    .concat({type:'separator'})
+    .concat(['Undo','Redo'].map(function(x){return{label:x,click:function(){
+      let u=D.ed||D.ide.focusedWin;
+      u&&(u=u.cm)&&u[x.toLowerCase()]&&u[x.toLowerCase()]();
+    }}}))
+  );
+  D.oncmenu=function(e){e.preventDefault();cmenu.popup(D.elw)};
 }
 D.open=D.open||function(url,o){
   var x=o.x,y=o.y,width=o.width,height=o.height,spec='resizable=1'
@@ -50,28 +61,16 @@ D.open=D.open||function(url,o){
   return!!open(url,'_blank',spec)
 }
 D.openExternal=D.el?D.el.shell.openExternal:function(x){open(x,'_blank')}
+
 if(/^\?\d+$/.test(location.search)){
   var winId=+location.search.slice(1)
   document.body.className+=' floating-window'
-  document.body.textContent='editor '+winId
-//  window.onresize=function(){ed&&ed.updSize()}
-//  var pe=opener.D.pendingEditors[winId], editorOpts=pe.editorOpts, ee=pe.ee, ide=pe.ide
-//  D.ide=opener.D.ide
-//  var ed=D.ide.wins[winId]=new D.Ed(ide,$(document.body),editorOpts)
-//  ed.open(ee);ed.updSize();document.title=ed.name
-//  window.onbeforeunload=function(){return ed.onbeforeunload()}
-//  setTimeout(function(){ed.refresh()},500) //work around a rendering issue on Ubuntu
-//  D.ide.unblock()
+  //  document.body.textContent='editor '+winId
+  D.IPC_Client(winId);
 }else{
   if(D.el){
-  //context menu
-    let cmenu=D.el.Menu.buildFromTemplate(
-      ['Cut','Copy','Paste'].map(function(x){return{label:x,role:x.toLowerCase()}})
-      .concat({type:'separator'})
-      .concat(['Undo','Redo'].map(function(x){return{label:x,click:function(){
-        let u=D.ide;u&&(u=u.focusedWin)&&(u=u.cm)&&u[x.toLowerCase()]&&u[x.toLowerCase()]()}}})))
-    D.oncmenu=function(e){e.preventDefault();cmenu.popup(D.elw)}
-    node_require(__dirname+'/src/cn')()
+    D.IPC_Server();
+    node_require(__dirname+'/src/cn')();
   }else{
     var ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host)
     var q=[],flush=function(){while(ws.readyState===1&&q.length)ws.send(q.shift())} //q:send queue
@@ -97,6 +96,7 @@ window.onbeforeunload=function(e){
         $.confirm(msg,document.title,function(x){q=x})
       }
       if(q){
+        D.ipc.stop();
         if(D.local){
           D.send('Exit',{code:0});
           // Wait for the disconnect message

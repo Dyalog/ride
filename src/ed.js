@@ -5,7 +5,8 @@ var ACB_VALUE={pairs:'()[]{}',explode:'{}'} //value for CodeMirror's "autoCloseB
 //holds a ref to a CodeMirror instance (.cm),
 //handles most CodeMirror commands in editors (e.g. .LN(), .QT(), .TL(), ...)
 D.Ed=function(ide,opts){ //constructor
-  var ed=this;ed.ide=ide;ed.id=opts.id;ed.name=opts.name;ed.tc=opts.tc
+  var ed=this;ed.ide=ide;ed.id=opts.id;ed.name=opts.name;ed.tc=opts.tc;
+  ed.HIGHLIGHT_LINE=0;
   ed.dom=I.ed_tmpl.cloneNode(1);ed.dom.id=null;ed.dom.style.display='';ed.$e=$(ed.dom);ed.jumps=[];ed.focusTS=0
   ed.dom.oncontextmenu=D.oncmenu 
   ed.oText='';ed.oStop=[] //remember original text and "stops" to avoid pointless saving on EP
@@ -88,6 +89,7 @@ D.Ed.prototype={
   updateSIStack:function(x){
     this.dom.querySelector('.si_stack').innerHTML=x.stack.map(function(o){return'<option>'+o}).join('')
   },
+  stateChanged:function(){var w=this;w.updSize();w.cm.refresh();w.updGutters&&w.updGutters();w.restoreScrollPos()},
   open:function(ee){ //ee:editable entity
     var ed=this,cm=ed.cm
     this.jumps.forEach(function(x){x.n=x.lh.lineNo()}) //to preserve jumps, convert LineHandle-s to line numbers
@@ -114,8 +116,10 @@ D.Ed.prototype={
     cm.setCursor(line,col);cm.scrollIntoView(null,cm.getScrollInfo().clientHeight/2)
     ed.oStop=(ee.stop||[]).slice(0).sort(function(x,y){return x-y})
     for(var k=0;k<ed.oStop.length;k++)cm.setGutterMarker(ed.oStop[k],'breakpoints',ed.createBPEl())
-    D.floating&&$('title',ed.dom.ownerDocument).text(ee.name)
+    D.prf.floating()&&$('title',ed.dom.ownerDocument).text(ee.name)
   },
+  blockCursor:function(x){this.cm.getWrapperElement().classList.toggle('cm-fat-cursor',!!x)},
+  blinkCursor:function(x){this.cm.setOption("cursorBlinkRate",x)},
   hasFocus:function(){return this.cm.hasFocus()},
   focus:function(){
     var q=this.container,p=q&&q.parent,l=q&&q.layoutManager,m=l&&l._maximisedItem
@@ -127,7 +131,11 @@ D.Ed.prototype={
   saved:function(err){
     if(err){this.isClosing=0;$.err('Cannot save changes')}else{this.isClosing&&D.send('CloseWindow',{win:this.id})}
   },
-  closePopup:function(){if(D.floating){window.onbeforeunload=null;D.forceClose=1;close()}},
+  close:function(){if(D.prf.floating()){
+    window.onbeforeunload=null;
+    I.ide.removeChild(I.ide.firstChild);
+    D.el.getCurrentWindow().hide();
+  }},
   die:function(){this.setRO(1)},
   getDocument:function(){return this.dom.ownerDocument},
   refresh:function(){this.cm.refresh()},
@@ -138,8 +146,44 @@ D.Ed.prototype={
         ((RegExp('^'+r     ).exec(s.slice(  c.ch))||[])[0]||'')  //match right of cursor
     ).replace(/^\d+/,'') //trim leading digits
   },
-  ED:function(cm){this.addJump();D.send('Edit',{win:this.id,pos:cm.indexFromPos(cm.getCursor()),
-                                                text:cm.getValue(),unsaved:this.ide.getUnsaved()})},
+  autoCloseBrackets:function(x){this.cm.setOption('autoCloseBrackets',x)},
+  indent:function(x){this.cm.setOption('smartIndent',x>=0);this.cm.setOption('indentUnit',x)},
+  fold:function(x){this.cm.setOption('foldGutter',!!x);this.updGutters()},
+  matchBrackets:function(x){this.cm.setOption('matchBrackets',!!x)},
+  
+  ReplyFormatCode:function(lines){
+    let w=this;
+    var u=w.cm.getCursor();
+    w.saveScrollPos();
+    w.cm.setValue(lines.join('\n'));
+    if (w.tc){
+      w.hl(w.HIGHLIGHT_LINE);
+      u.line=w.HIGHLIGHT_LINE;
+    }
+    if (w.firstOpen!==undefined&&w.firstOpen===true){
+      if (lines.length===1&&/\s?[a-z|@]+$/.test(lines[0]))u.ch=w.cm.getLine(u.line).length
+      else if (lines[0][0]===":")u.ch=0
+      else u.ch=1
+      w.firstOpen=false
+    }
+    w.restoreScrollPos();
+    w.cm.setCursor(u);
+    w.focus();
+  },
+  SetHighlightLine:function(line){
+    let w=this;
+    if(w&&w.hl){
+      w.hl(line);
+      w.focus()
+      w.HIGHLIGHT_LINE=line;
+    };
+  },
+  ValueTip:function(x){this.vt.processReply(x)},
+  ED:function(cm){this.addJump();
+    D.ide.Edit({win:this.id,pos:cm.indexFromPos(cm.getCursor()),text:cm.getValue()})
+    // D.send('Edit',{win:this.id,pos:cm.indexFromPos(cm.getCursor()),
+    //                text:cm.getValue(),unsaved:this.ide.getUnsaved()})
+                  },
   QT:function(){D.send('CloseWindow',{win:this.id})},
   BK:function(cm){this.tc?D.send('TraceBackward',{win:this.id}):cm.execCommand('undo')},
   FD:function(cm){this.tc?D.send('TraceForward' ,{win:this.id}):cm.execCommand('redo')},
@@ -238,6 +282,7 @@ D.Ed.prototype={
   VAL:function(cm){var a=cm.getSelections(), s=a.length!==1?'':!a[0]?this.cword():a[0].indexOf('\n')<0?a[0]:''
                    s&&this.ide.exec(['      '+s],0)},
   addJump:function(){var j=this.jumps,u=this.cm.getCursor();j.push({lh:this.cm.getLineHandle(u.line),ch:u.ch})>10&&j.shift()},
+  getUnsaved:function(){var cm=this.cm,v=cm.getValue();return(v!==cm.oText)?v:false;},
   JBK:function(cm){var p=this.jumps.pop();p&&cm.setCursor({line:p.lh.lineNo(),ch:p.ch})},
   indentOrComplete:function(cm){
     if(cm.somethingSelected()){cm.execCommand('indentMore');return}
@@ -248,15 +293,18 @@ D.Ed.prototype={
     var l=cm.getCursor().line;if(l!==cm.lastLine()||/^\s*$/.test(cm.getLine(l))){cm.execCommand('goLineDown');return}
     cm.execCommand('goDocEnd');cm.execCommand('newlineAndIndent');this.xline=l+1
   },
-  onbeforeunload:function(){ //called when the user presses [X] on the OS window
+  onbeforeunload:function(e){ //called when the user presses [X] on the OS window
     var ed=this
+    if(D.prf.floating()){e.returnValue=false;}
     if(ed.ide.dead){D.nww&&D.nww.close(true)} //force close window
     else if(ed.tc||ed.cm.getValue()===ed.oText&&''+ed.getStops()===''+ed.oStop){ed.EP(ed.cm)}
     else{
-      window.focus()
-      var r=D.el.dialog.showMessageBox(D.elw,{title:'Save?',buttons:['Yes','No','Cancel'],cancelId:-1,
-        message:'The object "'+ed.name+'" has changed.\nDo you want to save the changes?'})
-      r===0?ed.EP(ed.cm):r===1?ed.QT(ed.cm):0;return''
+      setTimeout(function(){
+        window.focus()
+        var r=D.el.dialog.showMessageBox(D.elw,{title:'Save?',buttons:['Yes','No','Cancel'],cancelId:-1,
+          message:'The object "'+ed.name+'" has changed.\nDo you want to save the changes?'})
+        r===0?ed.EP(ed.cm):r===1?ed.QT(ed.cm):0;return''
+      },10);        
     }
   }
 }

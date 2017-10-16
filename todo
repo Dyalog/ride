@@ -1,20 +1,3 @@
-Leftover from RIDE3 (M:major, S:significant, W:wouldn't it be nice)
-  M5 edit "external" source files
-        NN: email 2016-01-20, added a "string input dialog" to the protocol
-        NN: email 2016-01-28, "format on open" should be off by default for external source files
-
-Not prioritized:
-  define protocol messages for transferring a file to the interpreter, e.g. for drag&drop of a .dws
-  dev version of interpreter doesn't honour "+s -q" over ssh (probably one for Geoff), see email from 2016-01-28
-  <AC> on <RD>
-  make it easy to transfer IDE settings from one machine to another, e.g. save settings to the cloud (Kai)
-  programmatic access to "current object" (2015-09-07 Ray)
-  https://github.com/codemirror/CodeMirror/issues/3240
-    WebKit stores DOM height in 25 bits, ~33 million pixels.  When displaying
-    large arrays (~millions of lines, depending on font size), CodeMirror hits
-    that limit and it's impossible to scroll beyond a certain offset.  This is
-    hard to work around without going deep into CodeMirror's code and rewriting
-    parts of it.
-  "Cancel" button in "Connecting..." dialog (Morten, Jabber 2015-03-30)
-    NN: added "Cancel" button, though it doesn't really cancel, just closes the dialog
-  remove invisible scrollbars on Mac (Alexey Veretennikov 2015-10-20)
+-check that hidden browser windows don't get focus
+-remove editor dom node when hiding browser windows
+-close hidden browser windows on shut down
