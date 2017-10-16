@@ -16,17 +16,11 @@ D.IDE=function(){'use strict'
   D.wins=ide.wins={0:new D.Se(ide)}
   ide.focusedWin=ide.wins[0] //last focused window, it might not have the focus right now
   ide.switchWin=function(x){ //x: +1 or -1
-    let a=[],i=-1,j,wins=D.ide.wins;
-    if (D.floating){
-      a=D.el.BrowserWindow.getAllWindows().filter(x=>x.isVisible());
-      i=a.findIndex(x=>x.isFocused());
-      j=i<0?0:(i+a.length+x)%a.length;
-      a[j].focus();
-      return!1 
-    } else {
-      for(var k in wins){wins[k].hasFocus()&&(i=a.length);a.push(wins[k])}
-      j=i<0?0:(i+a.length+x)%a.length;a[j].focus();return!1
-    }
+    let a=[],i=-1,j,wins=D.ide.wins,w;
+    for(var k in wins){wins[k].hasFocus()&&(i=a.length);a.push(wins[k])}
+    j=i<0?0:(i+a.length+x)%a.length;w=a[j];
+    if(!w.bw_id)D.elw.focus();
+    w.focus();return!1
   }
 
   ide.handlers={ //for RIDE protocol messages
@@ -63,16 +57,14 @@ D.IDE=function(){'use strict'
     UpdateWindow:function(x){
       var w=ide.wins[x.token];
       if(w){
-        !D.floating&&w.container&&w.container.setTitle(x.name);
+        w.container&&w.container.setTitle(x.name);
         w.open(x);
       }},
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
     CloseWindow:function(x){
       let w=ide.wins[x.win],bw;
-      if(D.floating){w.id=-1;w.close();} 
-      else if(w){
-        w.closePopup&&w.closePopup();w.vt.clear();w.container&&w.container.close()
-      }
+      if(w.bw_id){w.id=-1;w.close();} 
+      else if(w){w.vt.clear();w.container&&w.container.close()}
       delete ide.wins[x.win];ide.focusMRUWin()
       ide.WSEwidth=ide.wsew;ide.DBGwidth=ide.dbgw
       ide.getSIS()
@@ -93,16 +85,11 @@ D.IDE=function(){'use strict'
       }
       var w=ee.token, done, editorOpts={id:w,name:ee.name,tc:ee['debugger']}
       ide.hadErr&=editorOpts.tc;
-      if(D.el&&D.floating&&!ide.dead){
-        // var bw=new D.el.BrowserWindow({icon:__dirname+'/D.png'});
-        // bw.loadURL(location+'?'+ee.token);
-        // //bw.loadURL(`file://${__dirname}/editor.html?`+ee.token);
-        
+      if(D.el&&D.prf.floating()&&!ide.dead){
         ide.block(); //the popup will create D.wins[w] and unblock the message queue
-        //(D.pendingEditors=D.pendingEditors||{})[w]={editorOpts:editorOpts,ee:ee,bw_id:bw.id};
         D.IPC_LinkEditor({editorOpts:editorOpts,ee:ee});
         done=1;
-      }
+      } else if(D.elw&&!D.elw.isFocused()) D.elw.focus();
       if(done)return;
       (ide.wins[w]=new D.Ed(ide,editorOpts)).open(ee)
       //add to golden layout:
@@ -263,14 +250,14 @@ D.IDE=function(){'use strict'
   }
   I.lb.onclick=function(x){
     var s=x.target.textContent;if(lbDragged||x.target.nodeName!=='B'||/\s/.test(s))return!1
-    if(D.floating){
+    // if(D.floating){
       var t=0,wins=ide.wins,w=wins[0],now=new Date;
       for(var k in wins){var x=wins[k];if((500<now-x.focusTS)&&t<=x.focusTS){w=x;t=x.focusTS}}
       w.insert(s);
       w.id&&w.focus();
-    } else {
-      var w=ide.focusedWin;w.hasFocus()?w.insert(s):D.util.insert(document.activeElement,s);
-    }
+    // } else {
+    //   var w=ide.focusedWin;w.hasFocus()?w.insert(s):D.util.insert(document.activeElement,s);
+    // }
     return!1;
   }
   I.lb.onmouseout=function(x){if(x.target.nodeName==='B'||x.target.id==='lb_prf'){
@@ -427,7 +414,8 @@ D.IDE.prototype={
   focusMRUWin:function(){ //most recently used
     var t=0,wins=this.wins,w=wins[0];
     for(var k in wins){var x=wins[k];if(x.id&&t<=x.focusTS){w=x;t=x.focusTS}}
-    D.floating&&w.id==0?D.el.BrowserWindow.getAllWindows()[0].focus():w.focus();
+    if(!w.bw_id)D.elw.focus();
+    w.focus();
   },
   LBR:D.prf.lbar      .toggle,
   FLT:D.prf.floating  .toggle,
@@ -437,14 +425,20 @@ D.IDE.prototype={
   RDO:function(){this.focusedWin.cm.redo()},
   CAW:function(){D.send('CloseAllWindows',{})},
   Edit:function(data){
-    if (D.floating&&D.ipc.server.sockets.length){
-      D.pendingEdit=D.pendingEdit||data;
-      let u=D.pendingEdit.unsaved={};
-      for(var k in this.wins){+k&&(u[k]=false);}
+    D.pendingEdit=D.pendingEdit||data;
+    D.pendingEdit.unsaved=D.pendingEdit.unsaved||{};
+    let u=D.pendingEdit.unsaved,v,w,bws=0;
+    for(var k in this.wins){
+      w=this.wins[k];
+      v=+k&&(w.getUnsaved?w.getUnsaved():-1);
+      if(v)u[k]=v;
+      bws|=v===-1;
+    }
+    if (bws) {
       D.ipc.server.broadcast('getUnsaved');
     } else {
-      data.unsaved=this.getUnsaved();
-      D.send('Edit',data);
+      D.send('Edit',D.pendingEdit);
+      delete D.pendingEdit;
     }
   },
   getUnsaved:function(){

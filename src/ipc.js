@@ -73,7 +73,7 @@ D.IPC_Server=function(){
     D.ipc.server.on('getSIS',(data,socket)=>{D.ide.getSIS();});
     D.ipc.server.on('getUnsavedReply',(data,socket)=>{
       if(!D.pendingEdit)return;
-      if(data.unsaved&&D.pendingEdit.unsaved[data.win]===false) 
+      if(data.unsaved&&D.pendingEdit.unsaved[data.win]===-1) 
         D.pendingEdit.unsaved[data.win]=data.unsaved;
       else delete D.pendingEdit.unsaved[data.win];
       var ready=true;for(var k in D.pendingEdit.unsaved){ready=ready&&D.pendingEdit.unsaved[k]}
@@ -115,7 +115,7 @@ D.IPC_WindowProxy.prototype={
   blockCursor:function(x){D.ipc.server.emit(this.socket,'blockCursor',x)},
   blinkCursor:function(x){D.ipc.server.emit(this.socket,'blinkCursor',x)},
   focus:function(){D.el.BrowserWindow.fromId(this.bw_id).focus()},
-  hasFocus:function(){D.el.BrowserWindow.fromId(this.bw_id).isFocused()},
+  hasFocus:function(){return D.el.BrowserWindow.fromId(this.bw_id).isFocused()},
   insert:function(x){D.ipc.server.emit(this.socket,'insert',x)},
   autoCloseBrackets:function(x){D.ipc.server.emit(this.socket,'autoCloseBrackets',x)},
   indent:function(x){D.ipc.server.emit(this.socket,'indent',x)},

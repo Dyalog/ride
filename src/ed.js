@@ -116,7 +116,7 @@ D.Ed.prototype={
     cm.setCursor(line,col);cm.scrollIntoView(null,cm.getScrollInfo().clientHeight/2)
     ed.oStop=(ee.stop||[]).slice(0).sort(function(x,y){return x-y})
     for(var k=0;k<ed.oStop.length;k++)cm.setGutterMarker(ed.oStop[k],'breakpoints',ed.createBPEl())
-    D.floating&&$('title',ed.dom.ownerDocument).text(ee.name)
+    D.prf.floating()&&$('title',ed.dom.ownerDocument).text(ee.name)
   },
   blockCursor:function(x){this.cm.getWrapperElement().classList.toggle('cm-fat-cursor',!!x)},
   blinkCursor:function(x){this.cm.setOption("cursorBlinkRate",x)},
@@ -131,12 +131,11 @@ D.Ed.prototype={
   saved:function(err){
     if(err){this.isClosing=0;$.err('Cannot save changes')}else{this.isClosing&&D.send('CloseWindow',{win:this.id})}
   },
-  close:function(){if(D.floating){
+  close:function(){if(D.prf.floating()){
     window.onbeforeunload=null;
     I.ide.removeChild(I.ide.firstChild);
     D.el.getCurrentWindow().hide();
   }},
-  closePopup:function(){if(D.floating){window.onbeforeunload=null;D.forceClose=1;close()}},
   die:function(){this.setRO(1)},
   getDocument:function(){return this.dom.ownerDocument},
   refresh:function(){this.cm.refresh()},
@@ -296,7 +295,7 @@ D.Ed.prototype={
   },
   onbeforeunload:function(e){ //called when the user presses [X] on the OS window
     var ed=this
-    if(D.floating){e.returnValue=false;}
+    if(D.prf.floating()){e.returnValue=false;}
     if(ed.ide.dead){D.nww&&D.nww.close(true)} //force close window
     else if(ed.tc||ed.cm.getValue()===ed.oText&&''+ed.getStops()===''+ed.oStop){ed.EP(ed.cm)}
     else{

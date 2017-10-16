@@ -25,7 +25,7 @@ if(D.el){
   document.onmousewheel=
     function(e){var d=e.wheelDelta;d&&(e.ctrlKey||e.metaKey)&&!e.shiftKey&&!e.altKey&&CM.commands[d>0?'ZMI':'ZMO']()}
   document.body.className+=' zoom'+D.prf.zoom();
-  D.floating=D.prf.floating();
+ 
   D.prf.dark()&&false&&(document.body.className+=' newDark');
   D.prf.zoom(function(z){
     if(!D.ide)return
@@ -69,7 +69,7 @@ if(/^\?\d+$/.test(location.search)){
   D.IPC_Client(winId);
 }else{
   if(D.el){
-    D.floating&&D.IPC_Server();
+    D.IPC_Server();
     node_require(__dirname+'/src/cn')();
   }else{
     var ws=new WebSocket((location.protocol==='https:'?'wss://':'ws://')+location.host)
