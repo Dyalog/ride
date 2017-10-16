@@ -88,7 +88,7 @@ if(/^\?\d+$/.test(location.search)){
   if(!D.quit)D.quit=close
 }
 window.onbeforeunload=function(e){
-  if (D.ide&&!D.shutdown){
+  if (D.ide&&D.ide.connected){
     e.returnValue=false
     setTimeout(function(){
       var q=true
@@ -97,12 +97,12 @@ window.onbeforeunload=function(e){
         $.confirm(msg,document.title,function(x){q=x})
       }
       if(q){
-        D.shutdown=1;
         if(D.local){
           D.send('Exit',{code:0});
           // Wait for the disconnect message
         }else{
           D.send('Disconnect',{message:'User shutdown request'});
+          D.ide.connected=0
           close();
         }
       }

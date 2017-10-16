@@ -20,7 +20,7 @@ D.IDE=function(){'use strict'
                          clearTimeout(D.tmr);delete D.tmr},
     Disconnect:function(x){
       let m=x.message.toLowerCase();ide.die()
-      if(m==='dyalog session has ended'){D.shutdown=1;close()}
+      if(m==='dyalog session has ended'){ide.connected=0;close()}
       else{$.err(x.message,'Interpreter disconnected')}
     },
     SysError:function(x){$.err(x.text,'SysError');ide.die()},
