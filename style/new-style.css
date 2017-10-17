@@ -2410,6 +2410,10 @@ body.floating-window {
   content: "o";
   background: #9c00ff;
 }
+#wse .bt_icon_8_6::before {
+  content: "e";
+  background: #ffd800;
+}
 #wse .bt_icon_9_1::before,
 #wse .bt_icon_1::before,
 #wse .bt_icon_9_2::before {
