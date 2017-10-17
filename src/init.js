@@ -96,7 +96,7 @@ window.onbeforeunload=function(e){
         $.confirm(msg,document.title,function(x){q=x})
       }
       if(q){
-        D.ipc.stop();
+        D.ipc&&D.ipc.server.stop();
         if(D.local){
           D.send('Exit',{code:0});
           // Wait for the disconnect message
