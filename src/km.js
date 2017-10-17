@@ -39,10 +39,25 @@ $.extend(CM.commands,{
   TO:CM.commands.toggleFold,
   PRF:function(){D.prf_ui()},
   ABT:function(){D.abt()},
-  CNC:function(){var p=D.el.process.argv;//if(D.mac)p=p.replace(/(\/Contents\/).*$/,'$1MacOS/nwjs')
-                 node_require('child_process').spawn(p[0],p.slice(1),{detached:true,stdio:['ignore','ignore','ignore'],
-                                                           env:$.extend({},process.env,{RIDE_SPAWN:''})})
-                 if(D.ide.dead)close()},
+  CNC:function(){
+    var p=D.el.process.argv;//if(D.mac)p=p.replace(/(\/Contents\/).*$/,'$1MacOS/nwjs')
+    node_require('child_process').spawn(p[0],p.slice(1),{detached:true,stdio:['ignore','ignore','ignore'],
+    env:$.extend({},process.env,{RIDE_SPAWN:''})})
+    if(D.ide.dead)close()
+  },
+  OWS:function(){
+    if(D.el&&D.lastSpawnedExe){
+      const v=D.el.dialog.showOpenDialog(D.elw,{
+        title:'Load Workspace',
+        filters:[{name:'Workspaces',extensions:['dws']}],
+        properties:['openFile']
+      })
+      if(v){
+        $.confirm('Run Latent Expression of '+v[0].replace(/^.*[\\\/]/,'')+'?','Load Workspace',
+          function(x){D.ide.exec(['      )'+(x?'':'x')+ 'load '+v[0]+'\n'],0)})
+      };
+    }
+  },
   NEW:function(){
     if(!D.el)return
     if(D.lastSpawnedExe){

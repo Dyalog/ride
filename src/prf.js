@@ -56,6 +56,7 @@ D.prf={}
     '\n  -                            '+
     '\n  &Quit                    =QIT'+
     '\n&File                           {!browser}'+
+    '\n  &Open...                 =OWS'+
     '\n  New &Session             =NEW'+
     '\n  &Connect...              =CNC'+
     '\n  -                             {!mac}'+
