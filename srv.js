@@ -11,8 +11,8 @@ const app=express(),port=8443,cert=fs.readFileSync('ssl/cert.pem'),key=fs.readFi
 app.disable('x-powered-by');app.use((x,_,f)=>{log(x.method+' '+x.path);f()})
 app.use(rq('compression')());app.use('/',express.static('.'))
 const hsrv=rq('https').createServer({cert,key},app)
-let wskt //websocket connection
-;(new rq('ws').Server({server:hsrv})).on('connection',x=>{wskt=x;x.on('message',y=>sendEach([y]))})
+let wskt,ws=rq('ws') //websocket connection
+;(new ws.Server({server:hsrv})).on('connection',x=>{wskt=x;x.on('message',y=>sendEach([y]))})
 hsrv.listen(port,_=>log('http server listening on port '+port))
 const maxl=100,trunc=x=>x.length>maxl?x.slice(0,maxl-3)+'...':x //helper for logging
 ,toBuf=x=>{const b=Buffer('xxxxRIDE'+x);b.writeInt32BE(b.length,0);return b} //serialize in a RIDE protocol envelope
