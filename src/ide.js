@@ -417,6 +417,12 @@ D.IDE.prototype={
     if(!w.bw_id)D.elw.focus();
     w.focus();
   },
+  zoom:function(z){
+    var wins=this.wins
+    for(var x in wins){wins[x].zoom(z)}
+    wins[0].restoreScrollPos();
+    this.gl.container.resize();
+  },
   LBR:D.prf.lbar      .toggle,
   FLT:D.prf.floating  .toggle,
   WRP:D.prf.wrap      .toggle,

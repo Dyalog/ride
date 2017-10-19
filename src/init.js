@@ -29,19 +29,8 @@ if(D.el){
   D.prf.dark()&&false&&(document.body.className+=' newDark');
   D.prf.zoom(function(z){
     if(!D.ide)return
-    var wins=D.ide.wins
-    for(var x in wins){
-      var w=wins[x],b=w.getDocument().body,
-        top=w.cm.heightAtLine(w.cm.lastLine(),"local")<w.btm,i=w.cm.getScrollInfo(),
-        line=w.cm.lineAtHeight(top?i.top:w.btm,'local'),
-        diff=w.btm-line*w.cm.defaultTextHeight(),
-        ch=i.clientHeight
-      b.className='zoom'+z+' '+b.className.split(/\s+/).filter(function(s){return!/^zoom-?\d+$/.test(s)}).join(' ')
-      w.refresh()
-      w.btm=w.cm.defaultTextHeight()*line+(top?ch+5:diff)+w.cm.getScrollInfo().clientHeight-ch
-    }
-    wins[0].restoreScrollPos();
-    D.ide.gl.container.resize();
+    if(D.ed) D.ipc.of.ride_master.emit('zoom',z)
+    else D.ide.zoom(z)
   })
   //context menu
   let cmenu=D.el.Menu.buildFromTemplate(

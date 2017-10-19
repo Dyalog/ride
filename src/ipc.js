@@ -42,6 +42,7 @@ D.IPC_Client=function(winId){
     D.ipc.of.ride_master.on('setTC',x=>D.ed.setTC(x));
     D.ipc.of.ride_master.on('stateChanged',x=>D.ed.stateChanged(x));
     D.ipc.of.ride_master.on('ValueTip',x=>D.ed.ValueTip(x));
+    D.ipc.of.ride_master.on('zoom',x=>D.ed.zoom(x));
     D.ipc.of.ride_master.on('pendingEditor',function(pe){
       D.ipc.log('got pendingEditor from ride_master : '.debug);
       var editorOpts=pe.editorOpts, ee=pe.ee;
@@ -85,6 +86,7 @@ D.IPC_Server=function(){
       bw.show();
       D.ide.unblock()}
     );
+    D.ipc.server.on('zoom',(z,socket)=>{D.ide.zoom(z)})
     D.ipc.server.on('RIDE',([type,payload],socket)=>{D.send(type,payload);});
   });
   D.ipc.server.start();
@@ -130,6 +132,7 @@ D.IPC_WindowProxy.prototype={
   setLN:function(x){D.ipc.server.emit(this.socket,'setLN',x)},
   setTC:function(x){D.ipc.server.emit(this.socket,'setTC',x);this.tc=x},
   stateChanged:function(){D.ipc.server.emit(this.socket,'stateChanged')},
+  zoom:function(z){D.ipc.server.emit(this.socket,'zoom',z)},
   ValueTip:function(x){D.ipc.server.emit(this.socket,'ValueTip',x)},
 };
   

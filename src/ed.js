@@ -150,6 +150,16 @@ D.Ed.prototype={
   indent:function(x){this.cm.setOption('smartIndent',x>=0);this.cm.setOption('indentUnit',x)},
   fold:function(x){this.cm.setOption('foldGutter',!!x);this.updGutters()},
   matchBrackets:function(x){this.cm.setOption('matchBrackets',!!x)},
+  zoom:function(z){
+    var w=this,b=w.getDocument().body,
+      top=w.cm.heightAtLine(w.cm.lastLine(),"local")<w.btm,i=w.cm.getScrollInfo(),
+      line=w.cm.lineAtHeight(top?i.top:w.btm,'local'),
+      diff=w.btm-line*w.cm.defaultTextHeight(),
+      ch=i.clientHeight
+    b.className='zoom'+z+' '+b.className.split(/\s+/).filter(function(s){return!/^zoom-?\d+$/.test(s)}).join(' ')
+    w.refresh()
+    w.btm=w.cm.defaultTextHeight()*line+(top?ch+5:diff)+w.cm.getScrollInfo().clientHeight-ch
+  },
   
   ReplyFormatCode:function(lines){
     let w=this;

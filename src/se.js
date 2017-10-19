@@ -133,6 +133,17 @@ D.Se.prototype={
   },
   autoCloseBrackets:function(x){this.cm.setOption('autoCloseBrackets',x)},
   matchBrackets:function(x){this.cm.setOption('matchBrackets',!!x)},
+  zoom:function(z){
+    var w=this,b=w.getDocument().body,
+      top=w.cm.heightAtLine(w.cm.lastLine(),"local")<w.btm,i=w.cm.getScrollInfo(),
+      line=w.cm.lineAtHeight(top?i.top:w.btm,'local'),
+      diff=w.btm-line*w.cm.defaultTextHeight(),
+      ch=i.clientHeight
+    b.className='zoom'+z+' '+b.className.split(/\s+/).filter(function(s){return!/^zoom-?\d+$/.test(s)}).join(' ')
+    w.refresh()
+    w.btm=w.cm.defaultTextHeight()*line+(top?ch+5:diff)+w.cm.getScrollInfo().clientHeight-ch
+  },
+  
   ValueTip:function(x){this.vt.processReply(x)},
   ED:function(cm){
     var c=cm.getCursor(),txt=cm.getLine(c.line);
