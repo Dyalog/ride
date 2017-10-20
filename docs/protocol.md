@@ -48,7 +48,7 @@ Command names and their arguments are case-sensitive.
 JSON booleans `true` and `false` can be freely substituted with and should be treated as equivalent to `1` and `0`.
 
 
-#Connection setup and teardown
+# Connection setup and teardown
 
 After the connection has been established and a protocol agreed, both peers immediately send an `Identify` message to
 indicate what type of application they are.
@@ -88,7 +88,7 @@ window (the session window):
 ["Exit",{"code":0}] // RIDE -> Interpreter
 ```
 
-#Session control
+# Session control
 Any echoed input or interpreter output or the initial content of the session are sent to RIDE using
 <a name=AppendSessionOutput></a><a name=EchoInput></a>
 ```json
@@ -140,7 +140,7 @@ RIDE can optionally advise the interpreter about the session's width in characte
 Further output will wrap at that width (with a few exceptions).
 See [`⎕PW`](http://help.dyalog.com/16.0/Content/Language/System%20Functions/pw.htm).
 
-#Window management
+# Window management
 When the user presses `<ED>` (Shift-Enter), RIDE should send
 <a name=Edit></a>
 ```json
@@ -232,7 +232,7 @@ To close all windows, but leave the SIstack unchanged RIDE can send the CloseAll
 ```
 In response the interpreter will send a CloseWindow messsage for each window that it is aware of. The CloseAllWindows message will leave the SIStack unchanged, it will just close all (trace and edit) windows in the interpreter.
 
-#Debugging
+# Debugging
 The following messages are used in relation to trace windows.
 <a name=SetHighlightLine></a>
 ```json
@@ -344,7 +344,7 @@ The interpreter will respond with ReplyGetThreads:
 
 
 
-#Interrupts
+# Interrupts
 APL supports two kinds of interrupts
 <a name=WeakInterrupt></a><a name=StrongInterrupt></a>
 ```json
@@ -356,7 +356,7 @@ parse messages.
 
 :red_circle: I've no idea what the above sentence means -Nick
 
-#Autocompletion
+# Autocompletion
 RIDE can request autocompletion with
 <a name=GetAutocomplete></a>
 ```json
@@ -380,7 +380,7 @@ shouldn't block while it's waiting for the response.
 ```
 * `skip`: how many characters before the request's `pos` to replace with an element of `options`
 
-#Value tips
+# Value tips
 When the user hovers a name with the mouse, RIDE should ask for a short textual representation of the current value:
 <a name=GetValueTip></a><a name=ValueTip></a>
 ```json
@@ -399,11 +399,11 @@ This information can be used to syntax-highlight the tooltip.
 `startCol` and `endCol` describe the position of the whole name to which the value tip pertains.
 `startCol` is inclusive and `endCol` is exclusive.
 
-#Dialogs
+# Dialogs
 The interpreter can ask RIDE to interact with the user by showing a modal dialog.
 Several kinds of dialogs are supported:
 
-##Options dialog
+## Options dialog
 <a name=OptionsDialog></a><a name=ReplyOptionsDialog></a>
 ```json
 ["OptionsDialog",{"title":"","text":"","type":1,"options":["Yes","No","Cancel"],"token":123}] // Interpreter -> RIDE
@@ -415,14 +415,14 @@ Constants for type: `1` warning, `2` information, `3` question, `4` stop.
 
 If the user closes the dialog without choosing an option, RIDE responds with an `index` of `-1`.
 
-##String dialog
+## String dialog
 <a name=StringDialog></a><a name=ReplyStringDialog></a>
 ```json
 ["StringDialog",{"title":"Name","text":"Please enter a name:","initialValue":"abc","defaultValue":null,"token":123}] // Interpreter -> RIDE
 ["ReplyStringDialog",{"value":"abcd","token":123}] // RIDE -> Interpreter
 ```
 
-##Task dialog
+## Task dialog
 A "task dialog" shows two sets of buttons -- vertically aligned `buttonText` and below them the horizontally aligned
 `options`.
 ```json
@@ -438,13 +438,13 @@ In the response `index` can be:
 * the index of an `options` button
 * `-1` if the user closes the dialog
 
-##Notification
+## Notification
 <a name=NotificationMessage></a>
 ```json
 ["NotificationMessage",{"message":"Object too large to edit","token":123}] // Interpreter -> RIDE
 ```
 
-#Other
+# Other
 <a name=ShowHTML></a>
 ```json
 ["ShowHTML",{"title":"Example","html":"<i>Hello</i> <b>world</b>"}] // Interpreter -> RIDE
@@ -467,7 +467,7 @@ Sent from any peer to shut down the connection cleanly.
 
 :red_circle: Why do we need "Disconnect"?  Why not just close the TCP connection?  That shouldn't be any less "clean".
 
-#Workspace explorer
+# Workspace explorer
 Optionally, RIDE can display a tree representing session content.
 It can query information about the children of a particular node with
 <a name=TreeList></a>
@@ -489,7 +489,7 @@ RIDE should query information only about the visible parts of the tree as they g
 When the user presses Enter or clicks on an editable node, RIDE should use the [Edit](#Edit) command to notify the
 interpreter.  Then it can send back commands to open or focus an editor window.
 
-#Status window
+# Status window
 
 The interpreter may request the display of messages in a separate "Status Output" window.
 
@@ -504,7 +504,7 @@ The interpreter may request the display of messages in a separate "Status Output
 * `4` warning, blue
 * `8` .Net function overload clash overload (red?)
 
-#Process manager
+# Process manager
 :red_circle: As of April 2016 there is no process manager.
 
 <a name=GetAvailableConnections></a>
@@ -547,7 +547,7 @@ If sent to a Process manager, `remoteId` is a list of remote IDs returned by
 ["ReplyGetDetailedInformation",{"information":[i0,i1,...]}] // anything -> anything
 ```
 
-#Proposed extensions
+# Proposed extensions
 * related to the process manager
 ```
 AvailableConnection => [
