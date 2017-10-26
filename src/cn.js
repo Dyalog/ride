@@ -34,6 +34,7 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
   q.ssl_opt.disabled=q.type.value!=="connect"
   q.raw_opt.text=q.type.value==="start"?"Local":"Raw"
   q.start.hidden=q.fetch.hidden=q.type.value!=="start"
+  q.go.innerHTML=`<u>${q.type.value[0]}</u>${q.type.value.substr(1)}`;
 }
 ,updSubtype=_=>{
   var t=q.type.value,s=q.subtype.value;sel&&(sel.subtype=s)
