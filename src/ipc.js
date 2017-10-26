@@ -18,7 +18,7 @@ D.IPC_Client=function(winId){
     });
     D.ipc.of.ride_master.on('disconnect',function(){
       D.ipc.log('disconnected from ride_master'.notice);
-      close();
+      D.ide.connected=0;close();
     });
     D.ipc.of.ride_master.on('die',()=>D.ed.die());
     D.ipc.of.ride_master.on('processAutocompleteReply',x=>D.ed.processAutocompleteReply(x));

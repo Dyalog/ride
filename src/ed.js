@@ -305,7 +305,7 @@ D.Ed.prototype={
   },
   onbeforeunload:function(e){ //called when the user presses [X] on the OS window
     var ed=this
-    if(D.prf.floating()){e.returnValue=false;}
+    if(D.prf.floating()&&D.ide.connected){e.returnValue=false;}
     if(ed.ide.dead){D.nww&&D.nww.close(true)} //force close window
     else if(ed.tc||ed.cm.getValue()===ed.oText&&''+ed.getStops()===''+ed.oStop){ed.EP(ed.cm)}
     else{
