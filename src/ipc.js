@@ -97,7 +97,9 @@ D.IPC_LinkEditor=function(pe){
   if(!D.pendingEditors.length)return;
   let wp=D.pwins.find(w=>w.id<0);
   if(!wp){
-    let bw=new D.el.BrowserWindow({icon:__dirname+'/D.png',show:false});
+    let bw,opts={icon:__dirname+'/D.png',show:false};
+    D.prf.floatOnTop()&&(opts.parent=D.elw)
+    bw=new D.el.BrowserWindow(opts);
     bw.loadURL(location+'?'+bw.id);
     return;
   }
