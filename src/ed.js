@@ -90,6 +90,10 @@ D.Ed.prototype={
       ed.dom.getElementsByClassName("tb_RP")[0].style.display="none"
     }
   },
+  setStop:function(){
+    var ed=this,cm=ed.cm;
+    for(var k=0;k<ed.oStop.length;k++)cm.setGutterMarker(ed.oStop[k],'breakpoints',ed.createBPEl())
+  },
   updSize:function(){},
   saveScrollPos:function(){ //workaround for CodeMirror scrolling up to the top under GoldenLayout when editor is closed
     if(this.btm==null){var i=this.cm.getScrollInfo();this.btm=i.clientHeight+i.top}
@@ -123,7 +127,7 @@ D.Ed.prototype={
     if(line===0&&col===0&&ee.text.length===1&&/\s?[a-z|@]+$/.test(ee.text[0]))col=ee.text[0].length
     cm.setCursor(line,col);cm.scrollIntoView(null,cm.getScrollInfo().clientHeight/2)
     ed.oStop=(ee.stop||[]).slice(0).sort(function(x,y){return x-y})
-    for(var k=0;k<ed.oStop.length;k++)cm.setGutterMarker(ed.oStop[k],'breakpoints',ed.createBPEl())
+    ed.setStop()
     D.prf.floating()&&$('title',ed.dom.ownerDocument).text(ee.name)
   },
   blockCursor:function(x){this.cm.getWrapperElement().classList.toggle('cm-fat-cursor',!!x)},
@@ -177,6 +181,7 @@ D.Ed.prototype={
     var u=w.cm.getCursor();
     w.saveScrollPos();
     w.cm.setValue(lines.join('\n'));
+    w.setStop();
     if (w.tc){
       w.hl(w.HIGHLIGHT_LINE);
       u.line=w.HIGHLIGHT_LINE;
