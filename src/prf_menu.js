@@ -23,6 +23,9 @@ D.prf_tabs.pmenu={
 }
 D.parseMenuDSL=function(md){ //md:menu description
   var extraOpts={
+    LN:{checkBoxPref:D.prf.lineNums   },
+    TVO:{checkBoxPref:D.prf.fold       },
+    TVB:{checkBoxPref:D.prf.breakPts   },
     LBR:{checkBoxPref:D.prf.lbar      },
     FLT:{checkBoxPref:D.prf.floating  },
     WRP:{checkBoxPref:D.prf.wrap      },

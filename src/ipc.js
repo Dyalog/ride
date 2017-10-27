@@ -41,6 +41,7 @@ D.IPC_Client=function(winId){
     D.ipc.of.ride_master.on('prompt',x=>D.ed.prompt(x));
     D.ipc.of.ride_master.on('saved',x=>D.ed.saved(x));
     D.ipc.of.ride_master.on('SetHighlightLine',x=>D.ed.SetHighlightLine(x));
+    D.ipc.of.ride_master.on('setBP',x=>D.ed.setBP(x));
     D.ipc.of.ride_master.on('setLN',x=>D.ed.setLN(x));
     D.ipc.of.ride_master.on('setTC',x=>D.ed.setTC(x));
     D.ipc.of.ride_master.on('stateChanged',x=>D.ed.stateChanged(x));
@@ -133,6 +134,7 @@ D.IPC_WindowProxy.prototype={
   prompt:function(x){D.ipc.server.emit(this.socket,'prompt',x)},
   saved:function(x){D.ipc.server.emit(this.socket,'saved',x)},
   SetHighlightLine:function(x){D.ipc.server.emit(this.socket,'SetHighlightLine',x)},
+  setBP:function(x){D.ipc.server.emit(this.socket,'setBP',x)},
   setLN:function(x){D.ipc.server.emit(this.socket,'setLN',x)},
   setTC:function(x){D.ipc.server.emit(this.socket,'setTC',x);this.tc=x},
   stateChanged:function(){D.ipc.server.emit(this.socket,'stateChanged')},

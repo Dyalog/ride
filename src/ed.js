@@ -18,6 +18,7 @@ D.Ed=function(ide,opts){ //constructor
     viewportMargin:Infinity,
     cursorBlinkRate:D.prf.blinkCursor()*CM.defaults.cursorBlinkRate,
   });D.prf.blockCursor()&&CM.addClass(ed.cm.getWrapperElement(),'cm-fat-cursor')
+  ed.isCode=1;ed.breakpoints=D.prf.breakPts()
   ed.cm.dyalogCmds=ed
   ed.cm.on('cursorActivity',ed.cursorActivity.bind(ed))
   ed.cm.on('gutterClick',function(cm,l,g){ //g:gutter
@@ -41,7 +42,8 @@ D.Ed=function(ide,opts){ //constructor
 }
 D.Ed.prototype={
   updGutters:function(){
-    var g=['breakpoints'],cm=this.cm
+    var g=[],ed=this,cm=ed.cm
+    ed.isCode&&ed.breakpoints&&g.push('breakpoints')
     cm.getOption('lineNumbers')&&g.push('CodeMirror-linenumbers')
     cm.getOption('foldGutter') &&g.push('cm-foldgutter')
     cm.setOption('gutters',g)
@@ -72,12 +74,22 @@ D.Ed.prototype={
       ed.cm.addLineClass(l,'background','highlighted');ed.cm.setCursor(l,0);ed.scrollToCursor()
     }
   },
+  setBP:function(x){ //update the display of breakpoints
+    var ed=this;ed.breakpoints=!!x;ed.updGutters()
+  },
   setLN:function(x){ //update the display of line numbers and the state of the "[...]" button
     var ed=this;ed.cm.setOption('lineNumbers',!!x);ed.updGutters()
     var a=ed.tb.querySelectorAll('.tb_LN');for(var i=0;i<a.length;i++)a[i].classList.toggle('pressed',!!x)
   },
   setTC:function(x){var ed=this;ed.tc=x;ed.dom.classList.toggle('tracer',!!x);ed.hl(null);ed.updGutters();ed.setRO(x)},
-  setRO:function(x){this.cm.setOption('readOnly',x)/*;this.rp.hidden=x*/},
+  setRO:function(x){
+    var ed=this;ed.cm.setOption('readOnly',x)/*;this.rp.hidden=x*/
+    if (x){
+      ed.dom.getElementsByClassName("tb_AO")[0].style.display="none"
+      ed.dom.getElementsByClassName("tb_DO")[0].style.display="none"
+      ed.dom.getElementsByClassName("tb_RP")[0].style.display="none"
+    }
+  },
   updSize:function(){},
   saveScrollPos:function(){ //workaround for CodeMirror scrolling up to the top under GoldenLayout when editor is closed
     if(this.btm==null){var i=this.cm.getScrollInfo();this.btm=i.clientHeight+i.top}
@@ -102,15 +114,11 @@ D.Ed.prototype={
     // 2 SimpleCharArray      64 NativeFile        2048 AplSession
     // 4 SimpleNumericArray  128 SimpleCharVector  4096 ExternalFunction
     // 8 MixedSimpleArray    256 AplNamespace
-    var isCode=[1,256,512,1024,2048,4096].indexOf(ee.entityType)>=0
-    cm.setOption('mode',isCode?'apl':'text');cm.setOption('foldGutter',isCode&&!!D.prf.fold())
-    if(isCode&&D.prf.indentOnOpen())this.RD(cm)
+    ed.isCode=[1,256,512,1024,2048,4096].indexOf(ee.entityType)>=0
+    cm.setOption('mode',ed.isCode?'apl':'text');cm.setOption('foldGutter',ed.isCode&&!!D.prf.fold())
+    if(ed.isCode&&D.prf.indentOnOpen())this.RD(cm)
     ed.setRO(ee.readOnly||ee['debugger'])
-    if (ee.readOnly){ //don't show comment or replace buttons if editor is readonly
-      ed.dom.getElementsByClassName("tb_AO")[0].style.display="none"
-      ed.dom.getElementsByClassName("tb_DO")[0].style.display="none"
-      ed.dom.getElementsByClassName("tb_RP")[0].style.display="none"
-    }
+    ed.setBP(ed.breakpoints)
     var line=ee.currentRow,col=ee.currentColumn||0
     if(line===0&&col===0&&ee.text.length===1&&/\s?[a-z|@]+$/.test(ee.text[0]))col=ee.text[0].length
     cm.setCursor(line,col);cm.scrollIntoView(null,cm.getScrollInfo().clientHeight/2)
@@ -151,7 +159,7 @@ D.Ed.prototype={
   },
   autoCloseBrackets:function(x){this.cm.setOption('autoCloseBrackets',x)},
   indent:function(x){this.cm.setOption('smartIndent',x>=0);this.cm.setOption('indentUnit',x)},
-  fold:function(x){this.cm.setOption('foldGutter',!!x);this.updGutters()},
+  fold:function(x){this.cm.setOption('foldGutter',this.isCode&&!!x);this.updGutters()},
   matchBrackets:function(x){this.cm.setOption('matchBrackets',!!x)},
   zoom:function(z){
     var w=this,b=w.getDocument().body,

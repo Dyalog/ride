@@ -389,6 +389,7 @@ D.IDE=function(){'use strict'
   D.prf.dbg(toggleDBG);D.prf.dbg()&&setTimeout(toggleDBG,500)
   D.mac&&setTimeout(function(){ide.wins[0].focus()},500) //OSX is stealing our focus.  Let's steal it back!  Bug #5
   D.prf.lineNums(function(x){eachWin(function(w){w.id&&w.setLN(x)})})
+  D.prf.breakPts(function(x){eachWin(function(w){w.id&&w.setBP(x)})})
 }
 D.IDE.prototype={
   setConnInfo:function(x,y,z){var ide=this;ide.host=x;ide.port=y;ide.profile=z;ide.updTitle()},
@@ -427,6 +428,8 @@ D.IDE.prototype={
   FLT:D.prf.floating  .toggle,
   WRP:D.prf.wrap      .toggle,
   TOP:D.prf.floatOnTop.toggle,
+  TVB:D.prf.breakPts  .toggle,
+  TVO:D.prf.fold      .toggle,
   UND:function(){this.focusedWin.cm.undo()},
   RDO:function(){this.focusedWin.cm.redo()},
   CAW:function(){D.send('CloseAllWindows',{})},

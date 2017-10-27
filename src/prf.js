@@ -30,6 +30,7 @@ D.prf={}
   ['keys',               {}],//a mapping between commands and keystrokes, only diffs from the defaults
   ['lbar',               1], //show language bar
   ['lbarOrder',          D.lb.order],
+  ['breakPts',           1],
   ['lineNums',           1],
   ['matchBrackets',      1], //whether to highlight matching brackets
   ['ilf',                1], //when re-formating use ODE style (interpreter level formatting)
@@ -78,6 +79,10 @@ D.prf={}
     '\n  Floating Edit Windows    =FLT'+
     '\n  Editors on Top           =TOP {!browser}'+
     '\n  Line Wrapping in Session =WRP'+
+    '\n  -                             {!browser}'+
+    '\n  Stops                    =TVB'+
+    '\n  Line Numbers             =LN'+
+    '\n  Outline                  =TVO'+
     '\n  -                             {!browser}'+
     '\n  Increase Font Size       =ZMI {!browser}'+
     '\n  Decrease Font Size       =ZMO {!browser}'+
