@@ -38,7 +38,7 @@ D.IDE=function(){'use strict'
     EchoInput:function(x){ide.wins[0].add(x.input)},
     SetPromptType:function(x){
       var t=x.type;t&&ide.pending.length?D.send('Execute',{trace:0,text:ide.pending.shift()+'\n'})
-                                        :ide.wins[0].prompt(t)
+                                        :eachWin(function(w){w.prompt(t)})
       t===4&&ide.wins[0].focus() //⍞ input
       if(t===1&&ide.bannerDone==0){ //arrange for the banner to appear at the top of the session window
         ide.bannerDone=1;var cm=ide.wins[0].cm,txt=cm.getValue().split('\n'),i=txt.length

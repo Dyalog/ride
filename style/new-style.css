@@ -2883,6 +2883,21 @@ body.floating-window {
   border-top: 1px solid #fac739;
   border-bottom: 1px solid #fac739;
 }
+.tracer .ride_win_cm .CodeMirror,
+.tracer .ride_win_cm .CodeMirror-gutters,
+.tracer .ride_win_cm .CodeMirror-linenumbers,
+.tracer .ride_win_cm .CodeMirror-linenumber {
+  background-color: lightgrey;
+}
+.tracer.pendent .ride_win_cm .CodeMirror,
+.tracer.pendent .ride_win_cm .CodeMirror-gutters,
+.tracer.pendent .ride_win_cm .CodeMirror-linenumbers,
+.tracer.pendent .ride_win_cm .CodeMirror-linenumber {
+  background-color: dimgrey;
+}
+.pendent .tb_btn {
+  pointer-events: none;
+}
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),
 #cn textarea {
   border: 1px solid white;

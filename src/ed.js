@@ -136,6 +136,9 @@ D.Ed.prototype={
     I.ide.removeChild(I.ide.firstChild);
     D.el.getCurrentWindow().hide();
   }},
+  prompt:function(x){
+    this.setRO(!x);this.tc&&this.dom.classList.toggle('pendent',!x)
+  },
   die:function(){this.setRO(1)},
   getDocument:function(){return this.dom.ownerDocument},
   refresh:function(){this.cm.refresh()},
