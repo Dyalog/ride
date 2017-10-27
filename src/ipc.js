@@ -9,7 +9,9 @@ D.IPC_Client=function(winId){
     set focusedWin(w){D.ipc.of.ride_master.emit('focusedWin',w.id)},
     Edit:     function(x){D.ipc.of.ride_master.emit('Edit',x);},
     switchWin:function(x){D.ipc.of.ride_master.emit('switchWin',x);},
-    getSIS:   function(x){D.ipc.of.ride_master.emit('getSIS',x);}
+    getSIS:   function(x){D.ipc.of.ride_master.emit('getSIS',x);},
+    connected:1,
+    dead:0
   };
   D.ipc.connectTo('ride_master',function(){
     D.ipc.of.ride_master.on('connect',function(){
