@@ -169,6 +169,7 @@ D.Se.prototype={
   },
   EP:function(){this.ide.focusMRUWin()},
   ER:function(){this.exec(0)},
+  LN:function(){D.prf.lineNums.toggle()},
   TC:function(){this.exec(1)},
   MA:function(){D.send('RestartThreads',{win:0})},
   indentOrComplete:function(cm){

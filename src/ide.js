@@ -429,6 +429,7 @@ D.IDE.prototype={
   WRP:D.prf.wrap      .toggle,
   TOP:D.prf.floatOnTop.toggle,
   TVB:D.prf.breakPts  .toggle,
+  LN :D.prf.lineNums  .toggle,
   TVO:D.prf.fold      .toggle,
   UND:function(){this.focusedWin.cm.undo()},
   RDO:function(){this.focusedWin.cm.redo()},
