@@ -30,6 +30,7 @@ D.prf={}
   ['keys',               {}],//a mapping between commands and keystrokes, only diffs from the defaults
   ['lbar',               1], //show language bar
   ['lbarOrder',          D.lb.order],
+  ['breakPts',           1],
   ['lineNums',           1],
   ['matchBrackets',      1], //whether to highlight matching brackets
   ['ilf',                1], //when re-formating use ODE style (interpreter level formatting)
@@ -78,6 +79,10 @@ D.prf={}
     '\n  Floating Edit Windows    =FLT'+
     '\n  Editors on Top           =TOP {!browser}'+
     '\n  Line Wrapping in Session =WRP'+
+    '\n  -                             {!browser}'+
+    '\n  Stops                    =TVB'+
+    '\n  Line Numbers             =LN'+
+    '\n  Outline                  =TVO'+
     '\n  -                             {!browser}'+
     '\n  Increase Font Size       =ZMI {!browser}'+
     '\n  Decrease Font Size       =ZMO {!browser}'+
@@ -130,6 +135,10 @@ D.prf={}
         if(l.length)var y=p()                    //old value as an object (only needed if we have any listeners)
         sx?D.db.setItem(k,sx):D.db.removeItem(k) //store
         for(var i=0;i<l.length;i++)l[i](x,y)     //notify listeners
+        if(D.ipc){
+          D.ipc.server&&D.ipc.server.broadcast('prf',[k,x])
+          D.ipc.of.ride_master&&D.ipc.of.ride_master.emit('prf',[k,x])
+        }
         return x
       }
   p.getDefault=function(){return d}

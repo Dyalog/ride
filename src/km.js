@@ -261,7 +261,7 @@ for(var i=0;i<D.informal.length;i++){
 var C=['QT','ER','TB','BT','EP','UC','DC','RC','LC','US','DS','RS','LS','UL','DL','RL', //00
        'LL','HO','CT','PT','IN','II','DI','DP','DB','RD','TG','DK','OP','CP','MV','FD', //10
        'BK','ZM','SC','RP','NX','PV','RT','RA','ED','TC','NB','NS','ST','EN','IF','HK', //20
-       'FX','LN','MC','MR','JP','D1','D2','D3','D4','D5','U1','U2','U3','U4','U5','Lc', //30
+       'FX',null,'MC','MR','JP','D1','D2','D3','D4','D5','U1','U2','U3','U4','U5','Lc', //30
        'Rc','LW','RW','Lw','Rw','Uc','Dc','Ll','Rl','Ul','Dl','Us','Ds','DD','DH','BH', //40
        'BP','AB','HT','TH','RM','CB','PR','SR',null,'TL','UA','AO','DO','GL','CH','PU', //50
        'PA',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null, //60

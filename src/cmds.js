@@ -59,6 +59,8 @@ D.cmds=[
   ['TIP','Show value tip',          []],
   ['TL', 'Toggle localisation',     ['Ctrl-Up']],
   ['TO', 'Toggle fold',             []],
+  ['TVB','Toggle view stops',       []],
+  ['TVO','Toggle view outline',     []],
   ['TR', 'Refresh threads',         []],
   ['VAL','Evaluate selection or name under cursor',[]],
   ['WI', 'Weak interrupt',          ['Ctrl-Pause']],

@@ -36,11 +36,13 @@ D.IPC_Client=function(winId){
     D.ipc.of.ride_master.on('fold',x=>D.ed.fold(x));
     D.ipc.of.ride_master.on('matchBrackets',x=>D.ed.matchBrackets(x));
     
+    D.ipc.of.ride_master.on('prf',([k,x])=>{D.prf[k](x)});
     D.ipc.of.ride_master.on('open',x=>D.ed.open(x));
     D.ipc.of.ride_master.on('close',x=>D.ed.close(x));
     D.ipc.of.ride_master.on('prompt',x=>D.ed.prompt(x));
     D.ipc.of.ride_master.on('saved',x=>D.ed.saved(x));
     D.ipc.of.ride_master.on('SetHighlightLine',x=>D.ed.SetHighlightLine(x));
+    D.ipc.of.ride_master.on('setBP',x=>D.ed.setBP(x));
     D.ipc.of.ride_master.on('setLN',x=>D.ed.setLN(x));
     D.ipc.of.ride_master.on('setTC',x=>D.ed.setTC(x));
     D.ipc.of.ride_master.on('stateChanged',x=>D.ed.stateChanged(x));
@@ -83,6 +85,7 @@ D.IPC_Server=function(){
       var ready=true;for(var k in D.pendingEdit.unsaved){ready=ready&&D.pendingEdit.unsaved[k]}
       if (ready){D.send('Edit',D.pendingEdit);delete D.pendingEdit;}
     });
+    D.ipc.server.on('prf',([k,x],socket)=>{D.prf[k](x)});
     D.ipc.server.on('switchWin',(data,socket)=>{D.ide.switchWin(data);});
     D.ipc.server.on('unblock',(id,socket)=>{
       let bw_id=D.ide.wins[id].bw_id,bw=D.el.BrowserWindow.fromId(bw_id);
@@ -113,9 +116,10 @@ D.IPC_LinkEditor=function(pe){
 }
 
 D.IPC_WindowProxy=function(bw_id,socket){
-  this.bw_id=bw_id;
-  this.socket=socket;
-  this.id=-1;
+  var ed=this;
+  ed.bw_id=bw_id;
+  ed.socket=socket;
+  ed.id=-1;
 };
 D.IPC_WindowProxy.prototype={
   die:function(){D.ipc.server.emit(this.socket,'die')},
@@ -135,6 +139,7 @@ D.IPC_WindowProxy.prototype={
   prompt:function(x){D.ipc.server.emit(this.socket,'prompt',x)},
   saved:function(x){D.ipc.server.emit(this.socket,'saved',x)},
   SetHighlightLine:function(x){D.ipc.server.emit(this.socket,'SetHighlightLine',x)},
+  setBP:function(x){D.ipc.server.emit(this.socket,'setBP',x)},
   setLN:function(x){D.ipc.server.emit(this.socket,'setLN',x)},
   setTC:function(x){D.ipc.server.emit(this.socket,'setTC',x);this.tc=x},
   stateChanged:function(){D.ipc.server.emit(this.socket,'stateChanged')},
