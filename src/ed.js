@@ -137,7 +137,7 @@ D.Ed.prototype={
     D.el.getCurrentWindow().hide();
   }},
   prompt:function(x){
-    this.setRO(!x);this.tc&&this.dom.classList.toggle('pendent',!x)
+    this.setRO(this.tc||!x);this.tc&&this.dom.classList.toggle('pendent',!x)
   },
   die:function(){this.setRO(1)},
   getDocument:function(){return this.dom.ownerDocument},
