@@ -99,7 +99,7 @@ var SCMS=[ //built-in schemes
   {name:'Albrecht Dürer',styles:'com=I:1 diam=B:1 err=fg:f,bg:0,bgo:.5,B:1,I:1,U:1 glb=I:1 idm=U:1,bg:e,bgo:.5 kw=B:1 '+
     'lnum=bg:f,bgo:0 mod=bg:e,bgo:1 mtch=bg:c,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 quad=fg:8 srch=bg:c,bgo:.5 '+
     'str=fg:8 tc=bg:e,bgo:1 tcpe=bg:dadada,bgo:1 zld=fg:8 vtt=bc:aaa'},
-  {name:'Kazimir Malevich',styles:''}
+  {name:'Kazimir Malevich',styles:'norm=bg:f,bgo:1'}
 ].map(decScm).map(function(x){x.frz=1;return x})
 var scms //all schemes (built-in and user-defined) as objects
 var scm  //the active scheme object
