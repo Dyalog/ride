@@ -8,7 +8,7 @@
     "start": "electron .",
     "dev": "npm run build-css && npm run start",
     "styler": "electron ./utils/style-picker/style-picker.js",
-    "live-style":"grunt"
+    "live-style": "grunt"
   },
   "repository": ".",
   "dependencies": {
@@ -24,6 +24,11 @@
     "electron": "^1.7.9",
     "electron-connect": "^0.6.2",
     "electron-packager": "^9.1.0",
+    "eslint": "^4.10.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.4.0",
     "express": "^4.16.2",
     "grunt": "^1.0.1",
     "grunt-contrib-less": "^1.4.1",
