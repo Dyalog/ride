@@ -59,7 +59,7 @@ D.prf_ui=function(){
   }
   if(D.el){
     let t=d.querySelector('.dlg_title');t&&(t.hidden=1)
-    document.title=t.InnerText;
+    document.title=t.innerText;
     d.style='width:100%;height:100%';d.hidden=0;
   } else {D.util.dlg(d,{w:600,h:490})}
   for(var i in tabs)tabs[i].load()

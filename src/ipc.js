@@ -100,6 +100,7 @@ D.IPC_Server=function(){
     });
     D.ipc.server.on('prfClose',function(data,socket){
       D.el.BrowserWindow.fromId(D.prf_bw.id).hide();
+      D.ide.focusMRUWin()
     });
     D.ipc.server.on('browserCreated',function(bw_id,socket){
       let wp=new D.IPC_WindowProxy(bw_id,socket);D.pwins.push(wp);
