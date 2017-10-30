@@ -120,6 +120,7 @@ D.IPC_WindowProxy=function(bw_id,socket){
   ed.bw_id=bw_id;
   ed.socket=socket;
   ed.id=-1;
+  ed.cm={dyalogCmds:ed};
 };
 D.IPC_WindowProxy.prototype={
   die:function(){D.ipc.server.emit(this.socket,'die')},
@@ -142,6 +143,9 @@ D.IPC_WindowProxy.prototype={
   setBP:function(x){D.ipc.server.emit(this.socket,'setBP',x)},
   setLN:function(x){D.ipc.server.emit(this.socket,'setLN',x)},
   setTC:function(x){D.ipc.server.emit(this.socket,'setTC',x);this.tc=x},
+  LN: function(x){D.prf.lineNums.toggle()},
+  TVO:function(x){D.prf.fold    .toggle()},
+  TVB:function(x){D.prf.breakPts.toggle()},
   stateChanged:function(){D.ipc.server.emit(this.socket,'stateChanged')},
   zoom:function(z){D.ipc.server.emit(this.socket,'zoom',z)},
   ValueTip:function(x){D.ipc.server.emit(this.socket,'ValueTip',x)},

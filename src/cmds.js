@@ -53,6 +53,7 @@ D.cmds=[
   ['RP', 'Replace',                 []],
   ['SC', 'Search',                  ['Ctrl-F']],
   ['SI', 'Strong interrupt',        []],
+  ['STL','Skip to line',            []],
   ['TB', 'Tab between windows',     ['Ctrl-Tab']],
   ['TC', 'Trace',                   ['Ctrl-Enter']],
   ['TGC','Toggle comment',          []],

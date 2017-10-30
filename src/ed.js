@@ -213,6 +213,13 @@ D.Ed.prototype={
   QT:function(){D.send('CloseWindow',{win:this.id})},
   BK:function(cm){this.tc?D.send('TraceBackward',{win:this.id}):cm.execCommand('undo')},
   FD:function(cm){this.tc?D.send('TraceForward' ,{win:this.id}):cm.execCommand('redo')},
+  STL:function(cm){
+    if(!this.tc) return;
+    var steps=cm.getCursor().line-this.HIGHLIGHT_LINE,
+        cmd=steps>0?'TraceForward':'TraceBackward';
+    steps=Math.abs(steps)
+    for(var i=0;i<steps;i++){D.send(cmd,{win:this.id})}
+  },
   EP:function(cm){this.isClosing=1;this.FX(cm)},
   FX:function(cm){
     var ed=this,v=cm.getValue(),stop=ed.getStops()
@@ -238,7 +245,9 @@ D.Ed.prototype={
     s=[head].concat(tail.sort()).join(';')+(com?(' '+com):'')
     cm.replaceRange(s,{line:l,ch:0},{line:l,ch:cm.getLine(l).length},'D')
   },
-  LN:function(){D.prf.lineNums.toggle()},
+  LN: function(){D.prf.lineNums.toggle()},
+  TVO:function(){D.prf.fold    .toggle()},
+  TVB:function(){D.prf.breakPts.toggle()},
   TC:function(){D.send('StepInto',{win:this.id});D.ide.getSIS()},
   AC:function(cm){ //align comments
     if(cm.getOption('readOnly'))return

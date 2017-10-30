@@ -261,14 +261,15 @@ for(var i=0;i<D.informal.length;i++){
 var C=['QT','ER','TB','BT','EP','UC','DC','RC','LC','US','DS','RS','LS','UL','DL','RL', //00
        'LL','HO','CT','PT','IN','II','DI','DP','DB','RD','TG','DK','OP','CP','MV','FD', //10
        'BK','ZM','SC','RP','NX','PV','RT','RA','ED','TC','NB','NS','ST','EN','IF','HK', //20
-       'FX',null,'MC','MR','JP','D1','D2','D3','D4','D5','U1','U2','U3','U4','U5','Lc', //30
+       'FX','LN','MC','MR','JP','D1','D2','D3','D4','D5','U1','U2','U3','U4','U5','Lc', //30
        'Rc','LW','RW','Lw','Rw','Uc','Dc','Ll','Rl','Ul','Dl','Us','Ds','DD','DH','BH', //40
        'BP','AB','HT','TH','RM','CB','PR','SR',null,'TL','UA','AO','DO','GL','CH','PU', //50
        'PA',null,null,null,null,null,null,null,null,null,null,null,null,null,null,null, //60
        null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null, //70
        null,null,null,null,null,null,'TO','MO',null,null,null,null,null,'S1','S2','OS'] //80
 function defCmd(x){var c=CM.commands;c[x]||(c[x]=function(cm){var h=cm.dyalogCmds;h&&h[x]&&h[x](cm)})}
-'CBP MA AC VAL indentOrComplete downOrXline indentMoreOrAutocomplete TGC JBK JSC LOG WSE'.split(' ').forEach(defCmd)
+'CBP MA AC VAL indentOrComplete downOrXline indentMoreOrAutocomplete'+
+' TGC JBK JSC LOG WSE STL TVO TVB'.split(' ').forEach(defCmd)
 for(var i=0;i<C.length;i++)if(C[i]){defCmd(C[i]);CM.keyMap.dyalogDefault["'"+String.fromCharCode(0xf800+i)+"'"]=C[i]}
 
 }())
