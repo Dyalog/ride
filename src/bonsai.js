@@ -34,7 +34,10 @@ function Bonsai(e,o){ //e:dom element, o:options={children:function(id,callback)
     }
   }
   e.ondblclick=function(event){
-    selectNode(event.target,1)
+    var ps=event.target.previousSibling;
+    if(ps.matches('.bt_node_expand')){
+      toggleNode(ps);selectNode(event.target,0)
+    } else {selectNode(event.target,1)}
     return!1;
   }
   e.onkeydown=function(event){
