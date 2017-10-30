@@ -268,8 +268,8 @@ var C=['QT','ER','TB','BT','EP','UC','DC','RC','LC','US','DS','RS','LS','UL','DL
        null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,null, //70
        null,null,null,null,null,null,'TO','MO',null,null,null,null,null,'S1','S2','OS'] //80
 function defCmd(x){var c=CM.commands;c[x]||(c[x]=function(cm){var h=cm.dyalogCmds;h&&h[x]&&h[x](cm)})}
-'CBP MA AC VAL indentOrComplete downOrXline indentMoreOrAutocomplete'+
-' TGC JBK JSC LOG WSE STL TVO TVB'.split(' ').forEach(defCmd)
+('CBP MA AC VAL indentOrComplete downOrXline indentMoreOrAutocomplete STL TVO TVB'+
+' TGC JBK JSC LOG WSE').split(' ').forEach(defCmd)
 for(var i=0;i<C.length;i++)if(C[i]){defCmd(C[i]);CM.keyMap.dyalogDefault["'"+String.fromCharCode(0xf800+i)+"'"]=C[i]}
 
 }())
