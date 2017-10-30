@@ -78,14 +78,19 @@ if(typeof node_require!=='undefined'){
 
   D.openExternal = D.el ? D.el.shell.openExternal : (x) => { window.open(x, '_blank'); };
   const loc = window.location;
-  if (/^\?\d+$/.test(loc.search)) {
+  if (/^\?prf$/.test(loc.search)) {
+    document.body.className += ' floating-window';
+    D.IPC_Prf();
+  } else if (/^\?\d+$/.test(loc.search)) {
     const winId = +loc.search.slice(1);
     document.body.className += ' floating-window';
-    //  document.body.textContent='editor '+winId
     D.IPC_Client(winId);
   } else {
     if (D.el) {
       D.IPC_Server();
+      const bw = new D.el.BrowserWindow({ icon: `${__dirname}/D.png`, show: false, parent: D.elw });
+      bw.loadURL(`${loc}?prf`); // bw.webContents.toggleDevTools();
+      D.prf_bw = { id: bw.id };
       node_require(`${__dirname}/src/cn`)();
     } else {
       const ws = new WebSocket((loc.protocol === 'https:' ? 'wss://' : 'ws://') + loc.host);

@@ -25,8 +25,19 @@ function apply(){ //returns 0 on failure and 1 on success
   for(var i in tabs)tabs[i].save()
   return 1
 }
-function cancel(){d.hidden=1;D.ide.wins[0].focus()}
+function cancel(){
+  if(D.el){
+    D.ipc.of.ride_master.emit('prfClose')
+  } else {
+    d.hidden=1;D.ide.wins[0].focus()
+  }
+}
 D.prf_ui=function(){
+  if(D.prf_bw){
+    D.ipc.server.emit(D.prf_bw.socket,'show');
+    D.el.BrowserWindow.fromId(D.prf_bw.id).show();
+    return!1
+  }
   if(!d){
     d=I.prf_dlg
     d.onkeydown=function(x){if(x.which===13&&!x.shiftKey&&x.ctrlKey&&!x.altKey&&!x.metaKey){ok();return!1}
@@ -46,7 +57,12 @@ D.prf_ui=function(){
     for(var i=0;i<hdrs.length;i++){var id=hdrs[i].href.replace(/.*#/,''),e=document.getElementById(id)
                                    tabs[id].init(e);payloads.push(e)}
   }
-  D.util.dlg(d,{w:600,h:490});for(var i in tabs)tabs[i].load()
+  if(D.el){
+    let t=d.querySelector('.dlg_title');t&&(t.hidden=1)
+    document.title=t.InnerText;
+    d.style='width:100%;height:100%';d.hidden=0;
+  } else {D.util.dlg(d,{w:600,h:490})}
+  for(var i in tabs)tabs[i].load()
   var t=tabs[(((document.getElementById('prf_nav').querySelector('.sel')||{}).href)||'').replace(/.*#/,'')]
   t&&t.activate&&t.activate()
 }
