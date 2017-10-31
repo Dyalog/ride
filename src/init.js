@@ -1,5 +1,3 @@
-'use strict';
-
 // all elements by id, eg I.lb_tip_text is document.getElementById('lb_tip_text')
 const I = {};
 
@@ -44,7 +42,7 @@ if(typeof node_require!=='undefined'){
     CM.commands.ZMO = () => { D.prf.zoom(Math.max(-10, D.prf.zoom() - 1)); updPW(); };
     CM.commands.ZMR = () => { D.prf.zoom(0); updPW(); };
 
-    document.onmousewheel = (e) => { let d = e.wheelDelta; if (d && (e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey)CM.commands[d > 0 ? 'ZMI' : 'ZMO'](); };
+    document.onmousewheel = (e) => { const d = e.wheelDelta; if (d && (e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey)CM.commands[d > 0 ? 'ZMI' : 'ZMO'](); };
     document.body.className += ` zoom${D.prf.zoom()}`;
 
     D.prf.zoom((z) => {
@@ -53,26 +51,21 @@ if(typeof node_require!=='undefined'){
       else D.ide.zoom(z);
     });
     // context menu
-    const cmenu = D.el.Menu.buildFromTemplate(
-      ['Cut', 'Copy', 'Paste'].map((x) => { 
-        return {
-          label: x, role: x.toLowerCase()
-        };
-      }).concat({ type: 'separator' })
-        .concat(['Undo', 'Redo'].map((x) => { 
-          return {
-            label: x, 
-            click: () => {
-              const u = D.ed || D.ide.focusedWin;
-              const { cm } = u;
-              if (u && cm[x.toLowerCase()])cm[x.toLowerCase()]();
-            },
-          };
-        })));
+    const cmitems = ['Cut', 'Copy', 'Paste'].map(x => ({ label: x, role: x.toLowerCase() }))
+      .concat({ type: 'separator' })
+      .concat(['Undo', 'Redo'].map(x => ({
+        label: x,
+        click: () => {
+          const u = D.ed || D.ide.focusedWin;
+          const { cm } = u;
+          if (u && cm[x.toLowerCase()])cm[x.toLowerCase()]();
+        },
+      })));
+    const cmenu = D.el.Menu.buildFromTemplate(cmitems);
     D.oncmenu = (e) => { e.preventDefault(); cmenu.popup(D.elw); };
   }
 
-  D.open = D.open || ((url,o) => {
+  D.open = D.open || ((url, o) => {
     const {
       height, width, x, y,
     } = o;
@@ -80,13 +73,13 @@ if(typeof node_require!=='undefined'){
 
     if (width != null && height != null)spec += `,width=${width},height=${height}`;
     if (x != null && y != null)spec += `,left=${x},top=${y},screenX=${x},screenY=${y}`;
-    return !!open(url, '_blank', spec);
+    return !!window.open(url, '_blank', spec);
   });
 
-  D.openExternal = D.el ? D.el.shell.openExternal : (x) => { open(x, '_blank'); };
-
-  if (/^\?\d+$/.test(location.search)) {
-    const winId = +location.search.slice(1);
+  D.openExternal = D.el ? D.el.shell.openExternal : (x) => { window.open(x, '_blank'); };
+  const loc = window.location;
+  if (/^\?\d+$/.test(loc.search)) {
+    const winId = +loc.search.slice(1);
     document.body.className += ' floating-window';
     //  document.body.textContent='editor '+winId
     D.IPC_Client(winId);
@@ -95,7 +88,7 @@ if(typeof node_require!=='undefined'){
       D.IPC_Server();
       node_require(`${__dirname}/src/cn`)();
     } else {
-      const ws = new WebSocket((location.protocol === 'https:' ? 'wss://' : 'ws://') + location.host);
+      const ws = new WebSocket((loc.protocol === 'https:' ? 'wss://' : 'ws://') + loc.host);
       const q = [];
       // q:send queue
       const flush = () => { while (ws.readyState === 1 && q.length)ws.send(q.shift()); };
@@ -108,10 +101,10 @@ if(typeof node_require!=='undefined'){
         ws.send('["GetWindowLayout",{}]');
       };
       ws.onmessage = (x) => { if (x.data[0] === '[') { const [c, h] = JSON.parse(x.data); D.recv(c, h); } };
-      ws.onerror = (x) => { console.info('ws error:', x) };
-      new D.IDE;
+      ws.onerror = (x) => { console.info('ws error:', x); };
+      D.ide2 = new D.IDE();
     }
-    if (!D.quit)D.quit = close;
+    if (!D.quit)D.quit = window.close;
   }
   window.onbeforeunload = (e) => {
     if (D.ide && D.ide.connected) {
@@ -119,7 +112,7 @@ if(typeof node_require!=='undefined'){
       setTimeout(() => {
         let q = true;
         if (D.prf.sqp()) {
-          let msg = D.local ? 'Quit Dyalog APL. Are you sure?' : 'Disconnect from interpreter. Are you sure?';
+          const msg = D.local ? 'Quit Dyalog APL. Are you sure?' : 'Disconnect from interpreter. Are you sure?';
           $.confirm(msg, document.title, (x) => { q = x; });
         }
         if (q) {
@@ -130,7 +123,7 @@ if(typeof node_require!=='undefined'){
           } else {
             D.send('Disconnect', { message: 'User shutdown request' });
             D.ide.connected = 0;
-            close();
+            window.close();
           }
         }
       }, 10);
@@ -147,49 +140,51 @@ if(typeof node_require!=='undefined'){
   // - it doesn't always favour a visible input over a hidden one.
   // Also, browsers like Firefox and Opera use different shortcuts -
   // - (such as Alt-Shift-X or Ctrl-X) for accesskey-s.
-  if (!D.mac)CM.on(document, 'keydown', (e) => { // Alt-A...Alt-Z or Alt-Shift-A...Alt-Shift-Z
-    if( !e.altKey || e.ctrlKey || e.metaKey || e.which < 65 || e.which > 90) return;
-    const c = String.fromCharCode(e.which).toLowerCase();
-    const C = c.toUpperCase();
-    const $ctx = $('.ui-widget-overlay').length ?
-      $('.ui-dialog:visible').last() :
-      $('body'); // modal dialogs take priority
+  if (!D.mac) {
+    CM.on(document, 'keydown', (e) => { // Alt-A...Alt-Z or Alt-Shift-A...Alt-Shift-Z
+      if (!e.altKey || e.ctrlKey || e.metaKey || e.which < 65 || e.which > 90) return undefined;
+      const c = String.fromCharCode(e.which).toLowerCase();
+      const C = c.toUpperCase();
+      const $ctx = $('.ui-widget-overlay').length ?
+        $('.ui-dialog:visible').last() :
+        $('body'); // modal dialogs take priority
 
-    const $a = $('u:visible', $ctx).map(() => {
-      const h = this.innerHTML;
-      if (h !== c && h !== C) return;
-      const $i = $(this).closest(':input,label,a').eq(0);
-      if ($i.is('label'))$i = $(`#${$i.attr('for')}`).add($i.find(':input')).eq(0);
-      return $i[0];
-    });
-    if ($a.length > 1) {
-      $a.eq(($a.index(':focus') + 1) % $a.length).focus();
-    } else if ($a.is(':checkbox')) {
-      $a.focus().prop('checked', !$a.prop('checked')).change()
-    } else if ($a.is(':text,:password,textarea,select')) { 
-      $a.focus();
-    } else { $a.click(); }
-    return !$a.length;
-  }, true);
+      const $a = $('u:visible', $ctx).map((i, n) => {
+        const h = n.innerHTML;
+        if (h !== c && h !== C) return undefined;
+        let $i = $(n).closest(':input,label,a').eq(0);
+        if ($i.is('label'))$i = $(`#${$i.attr('for')}`).add($i.find(':input')).eq(0);
+        return $i[0];
+      });
+      if ($a.length > 1) {
+        $a.eq(($a.index(':focus') + 1) % $a.length).focus();
+      } else if ($a.is(':checkbox')) {
+        $a.focus().prop('checked', !$a.prop('checked')).change();
+      } else if ($a.is(':text,:password,textarea,select')) {
+        $a.focus();
+      } else { $a.click(); }
+      return !$a.length;
+    }, true);
+  }
   if (D.el) {
     // drag and drop
     CM.defaults.dragDrop = 0;
-    window.ondrop = (e) => { e.preventDefault(); return!1; };
+    window.ondrop = (e) => { e.preventDefault(); return !1; };
     window.ondragover = window.ondrop;
     window.ondrop = (e) => {
       const { files } = e.dataTransfer;
-      let { path } = (files[0] || {});
+      const { path } = (files[0] || {});
       if (!D.lastSpawnedExe) {
         $.err('Drag and drop of workspaces works only for locally started interpreters.');
       } else if (!/\.dws$/i.test(path)) {
         $.err('RIDE supports drag and drop only for .dws files.');
       } else if (a.length !== 1) {
         $.err('RIDE does not support dropping of multiple files.');
-      } else { 
+      } else {
         $.confirm(
           `Are you sure you want to )load ${path.replace(/^.*[\\/]/, '')}?`,
           'Load workspace',
-          (x) => { if (x)D.ide.exec(['      )load '+f+'\n'],0); },
+          (x) => { if (x)D.ide.exec([`      )load ${path}\n`], 0); },
         );
       }
       e.preventDefault();
@@ -199,11 +194,15 @@ if(typeof node_require!=='undefined'){
     // extra css and js
     const path = node_require('path');
     const { env } = process;
-    if (env.RIDE_JS)env.RIDE_JS
-      .split(path.delimiter)
-      .forEach((x) => { if (x)$.getScript(`file://${path.resolve(process.cwd(), x)}`); });
-    if (env.RIDE_CSS)$('<style>')
-      .text(env.RIDE_CSS.split(path.delimiter).map(x => `@import url("${x}");`))
-      .appendTo('head');
+    if (env.RIDE_JS) {
+      env.RIDE_JS
+        .split(path.delimiter)
+        .forEach((x) => { if (x)$.getScript(`file://${path.resolve(process.cwd(), x)}`); });
+    }
+    if (env.RIDE_CSS) {
+      $('<style>')
+        .text(env.RIDE_CSS.split(path.delimiter).map(x => `@import url("${x}");`))
+        .appendTo('head');
+    }
   }
 }());

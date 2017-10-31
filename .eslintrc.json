@@ -1,11 +1,23 @@
 {
-    "extends":"airbnb"
-    // "env": {
-    //     "browser": true,
-    //     "commonjs": true,
-    //     "es6": true,
-    //     "node": true
-    // },
+    "extends":"airbnb",
+    "env":{
+        "browser":true,
+        "commonjs": true,
+        "es6": true,
+        "node": true
+    },
+    "globals": {
+        "node_require":true,
+        "$":true,
+        "I":true,
+        "J":true,
+        "D":true,
+        "CM":true
+
+    },
+    "rules" : {
+        "no-nested-ternary": "warn"
+    }
     // "parserOptions": {
     //     "ecmaFeatures": {
     //         "jsx": true
