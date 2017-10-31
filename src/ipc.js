@@ -63,6 +63,31 @@ D.IPC_Client=function(winId){
   });  
 };
 
+D.IPC_Prf=function(){
+  // start IPC client - preferences
+  D.ipc.config.id   = 'prf';
+  D.ipc.config.retry= 1500;
+  D.ipc.config.silent=true;
+  D.ipc.connectTo('ride_master',function(){
+    D.ipc.of.ride_master.on('connect',function(){
+      D.ipc.log('## connected to ride_master ##'.rainbow, D.ipc.config.delay);
+      window.onbeforeunload=function(e){
+        e.returnValue=false;
+        D.ipc.of.ride_master.emit('prfClose')
+      }
+      D.ipc.of.ride_master.emit('prfCreated');
+    });
+    D.ipc.of.ride_master.on('disconnect',function(){
+      D.ipc.log('disconnected from ride_master'.notice);
+      D.onbeforeunload=null;close();
+    });
+    D.ipc.of.ride_master.on('show',x=>{
+      D.prf_ui();
+    });
+    D.ipc.of.ride_master.on('prf',([k,x])=>{D.prf[k](x)});
+  });  
+};
+
 D.IPC_Server=function(){
   // start IPC server
   D.pwins=[];D.pendingEditors=[];
@@ -70,6 +95,13 @@ D.IPC_Server=function(){
   D.ipc.config.retry= 1500;
   D.ipc.config.silent=true;
   D.ipc.serve(function(){
+    D.ipc.server.on('prfCreated',function(data,socket){
+      D.prf_bw.socket=socket;
+    });
+    D.ipc.server.on('prfClose',function(data,socket){
+      D.el.BrowserWindow.fromId(D.prf_bw.id).hide();
+      D.ide.focusMRUWin()
+    });
     D.ipc.server.on('browserCreated',function(bw_id,socket){
       let wp=new D.IPC_WindowProxy(bw_id,socket);D.pwins.push(wp);
       D.IPC_LinkEditor();
