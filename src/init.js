@@ -86,7 +86,7 @@ if(typeof node_require!=='undefined'){
   D.openExternal = D.el ? D.el.shell.openExternal : (x) => { open(x, '_blank'); };
 
   if (/^\?\d+$/.test(location.search)) {
-    let winId = `${location.search.slice(1)}`;
+    const winId = +location.search.slice(1);
     document.body.className += ' floating-window';
     //  document.body.textContent='editor '+winId
     D.IPC_Client(winId);
