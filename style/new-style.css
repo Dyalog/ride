@@ -1865,6 +1865,7 @@ input.lyt_g3:hover {
   padding: 8px;
 }
 #title pre {
+  font-family: apl, monospace;
   overflow: auto;
   position: absolute;
   left: 8px;
