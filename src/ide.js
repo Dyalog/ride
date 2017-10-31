@@ -370,7 +370,8 @@ D.IDE=function(){'use strict'
                         catch(e){$.err('Invalid menu configuration -- the default menu will be used instead')
                                  console.error(e);D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()))}},100)
   D.prf.autoCloseBrackets(function(x){eachWin(function(w){w.autoCloseBrackets(!!x&&D.Ed.ACB_VALUE)})})
-  D.prf.indent(function(x){eachWin(function(w){w.id&&w.indent(x)})})
+  D.prf.ilf(function(x){var i=x?-1:D.prf.indent();eachWin(function(w){w.id&&w.indent(i)})})
+  D.prf.indent(function(x){var i=D.prf.ilf()?-1:x;eachWin(function(w){w.id&&w.indent(i)})})
   D.prf.fold(function(x){eachWin(function(w){w.id&&w.fold(!!x)})})
   D.prf.matchBrackets(function(x){eachWin(function(w){w.matchBrackets(!!x)})})
   var togglePanel=function(comp_name,comp_title,left){
