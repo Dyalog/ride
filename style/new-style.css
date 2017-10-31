@@ -3124,17 +3124,11 @@ button:hover {
 .menu .m-box a:focus .m-shc {
   color: white;
 }
-.menu .m-box a .m-checked {
+.menu .m-box a.m-checked {
   background: transparent 5px center no-repeat url(img/menu_chk.png);
 }
 .menu .m-box a:focus.m-checked {
   background: #676364 5px center no-repeat url(img/menu_chk_wht.png);
-}
-.menu .m-opener {
-  background: transparent center right 5px no-repeat url(img/menu_tri.png);
-}
-.menu .m-opener:focus {
-  background: #676364 center right 5px no-repeat url(img/menu_tri_wht.png);
 }
 #prf_nav {
   border-bottom: solid 1px #fac739;
