@@ -1,4 +1,4 @@
-//About dialog
+// About dialog
 ;(function(){
 
 var d,ta //DOM elements for the dialog and the textarea
@@ -6,8 +6,16 @@ D.abt=function(){
   if(!d){
     d=I.abt
     I.abt_close.onclick=function(){d.hidden=1}
-    I.abt_copy.onclick=function(){D.el.clipboard.writeText(ta.value)}
-    I.abt_copy.hidden=!D.el
+    I.abt_copy.onclick=function(){
+      if (D.el) {
+        D.el.clipboard.writeText(ta.value)
+      } else {
+        ta.select();
+        document.execCommand('copy');
+        ta.selectionEnd=0;
+      }
+    }
+    I.abt_copy.hidden = !D.el && !document.queryCommandSupported('copy');
     I.abt_contact.onclick=
       function(x){if(x.target.nodeName==='A'&&/^http/.test(x.target.href)){D.openExternal(x.target.href);return!1}}
     ta=I.abt_ta
@@ -26,7 +34,7 @@ D.abt=function(){
     '\n  Platform: '  +(ri.platform        ||u)+
     '\n  Edition: '   +(ri.arch            ||u)+
     '\n  Date: '      +(ri.date            ||u).replace(/^Created: /,'')+'\n'
-  ta.scrollTop=ta.selectionStart=ta.selectionEnd=0;(D.el?I.abt_copy:I.abt_close).focus()
+  ta.scrollTop=ta.selectionStart=ta.selectionEnd=0;(!I.abt_copy.hidden?I.abt_copy:I.abt_close).focus()
 }
 
 }())
