@@ -148,7 +148,13 @@ D.IPC_WindowProxy.prototype={
   processAutocompleteReply:function(x){D.ipc.server.emit(this.socket,'processAutocompleteReply',x)},
   ReplyFormatCode:function(x){D.ipc.server.emit(this.socket,'ReplyFormatCode',x)},
   open:function(x){D.ipc.server.emit(this.socket,'open',x)},
-  close:function(x){D.ipc.server.emit(this.socket,'close',x)},
+  close:function(x){
+    if(this===D.pwins[0]&&D.prf.editWinsRememberPos()){
+      let b=D.el.BrowserWindow.fromId(this.bw_id).getBounds();
+      D.prf.editWins(Object.assign(D.prf.editWins(),b))
+    }
+    D.ipc.server.emit(this.socket,'close',x)
+  },
   prompt:function(x){D.ipc.server.emit(this.socket,'prompt',x)},
   saved:function(x){D.ipc.server.emit(this.socket,'saved',x)},
   SetHighlightLine:function(x){D.ipc.server.emit(this.socket,'SetHighlightLine',x)},

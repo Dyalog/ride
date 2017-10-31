@@ -9,6 +9,7 @@ D.prf_tabs.wins={
   },
   load:function(){
     var w=D.prf.editWins()
+    q.mm.checked=!!D.prf.editWinsRememberPos()
     q.sw.value=w.width
     q.sh.value=w.height
     q.px.value=w.x
@@ -18,6 +19,7 @@ D.prf_tabs.wins={
   },
   activate:function(){q.sw.focus()},
   save:function(){
+    D.prf.editWinsRememberPos(q.mm.checked)
     D.prf.editWins({
       width:+q.sw.value,
       height:+q.sh.value,

@@ -46,6 +46,7 @@ D.prf={}
   ['squiggleTips',       0],
   ['wrap',               0], //line wrapping in session
   ['wse',                0], //show workspace explorer?
+  ['editWinsRememberPos',0], //editor windows remember position
   ['editWins',{              //editor windows size and placement
     width:800,height:600,
     x:200,y:200,
