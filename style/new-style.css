@@ -1880,6 +1880,10 @@ input.lyt_g3:hover {
 #title_rst {
   float: right;
 }
+/*Prefs>Code*/
+#wins .row {
+  padding: 3px 0px;
+}
 #prf_nav {
   height: 28px;
   border-bottom: solid 1px #fac739;
