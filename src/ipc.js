@@ -97,7 +97,18 @@ D.IPC_Server=function(){
   });
   D.ipc.server.start();
 };
-
+function WindowRect(id,prf){
+  var {x,y,width,height}=prf;
+  x+=prf.ox*(id-1);y+=prf.oy*(id-1);
+  const b=D.el.screen.getDisplayMatching({x,y,width,height}).bounds
+  const vw=Math.max(0,Math.min(x+width ,b.x+b.width )-Math.max(x,b.x))
+  const vh=Math.max(0,Math.min(y+height,b.y+b.height)-Math.max(y,b.y))
+  if(width*height>2*vw*vh){
+    //saved window position is now mostly off screen
+    x=y=null;width=Math.min(width,b.width);height=Math.min(height,b.height)
+  }
+  return{x,y,width,height};
+}
 D.IPC_LinkEditor=function(pe){
   pe&&D.pendingEditors.push(pe);
   if(!D.pendingEditors.length)return;
@@ -105,6 +116,7 @@ D.IPC_LinkEditor=function(pe){
   if(!wp){
     let bw,opts={icon:__dirname+'/D.png',show:false};
     D.prf.floatOnTop()&&(opts.parent=D.elw)
+    opts=Object.assign(opts,WindowRect(pe.editorOpts.id,D.prf.editWins()))
     bw=new D.el.BrowserWindow(opts);
     bw.loadURL(location+'?'+bw.id);
     return;
@@ -136,7 +148,13 @@ D.IPC_WindowProxy.prototype={
   processAutocompleteReply:function(x){D.ipc.server.emit(this.socket,'processAutocompleteReply',x)},
   ReplyFormatCode:function(x){D.ipc.server.emit(this.socket,'ReplyFormatCode',x)},
   open:function(x){D.ipc.server.emit(this.socket,'open',x)},
-  close:function(x){D.ipc.server.emit(this.socket,'close',x)},
+  close:function(x){
+    if(this===D.pwins[0]&&D.prf.editWinsRememberPos()){
+      let b=D.el.BrowserWindow.fromId(this.bw_id).getBounds();
+      D.prf.editWins(Object.assign(D.prf.editWins(),b))
+    }
+    D.ipc.server.emit(this.socket,'close',x)
+  },
   prompt:function(x){D.ipc.server.emit(this.socket,'prompt',x)},
   saved:function(x){D.ipc.server.emit(this.socket,'saved',x)},
   SetHighlightLine:function(x){D.ipc.server.emit(this.socket,'SetHighlightLine',x)},

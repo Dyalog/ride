@@ -280,6 +280,7 @@
     <a href=#col>Colours</a>
     <a href=#title>Title</a>
     <a href=#pmenu>Menu</a>
+    <a href=#wins>Windows</a>
   </div>
   <div id=prf_content>
 
@@ -437,6 +438,31 @@
       <p><button id=pmenu_rst><u>R</u>eset</button> Takes effect on restart</p>
       <div id=pmenu_ta_wr><textarea id=pmenu_ta wrap=off></textarea></div>
     </div>
+   
+    <!--Windows-->
+    <div id=wins hidden>
+      <div class="row">
+        <div class="col col-xs-12"><label><input id=wins_mm type=checkbox><u>R</u>emember previous window position</label></div>
+      </div>
+      <div class="row">
+        <div class="col col-xs-2"><label for=wins_sw>Size <u>w</u>idth:</label></div>
+        <div class="col col-xs-1"><input id=wins_sw size=4></div>
+        <div class="col col-xs-1"><label for=wins_sh><u>h</u>eight:</label></div>
+        <div class="col col-xs-1"><input id=wins_sh size=4></div>
+      </div>
+      <div class="row">
+        <div class="col col-xs-2"><label for=wins_px>Posn <u>x</u>:</label></div>
+        <div class="col col-xs-1"><input id=wins_px size=4></div>
+        <div class="col col-xs-1"><label for=wins_py><u>y</u>:</label></div>
+        <div class="col col-xs-1"><input id=wins_py size=4></div>
+      </div>
+      <div class="row">
+        <div class="col col-xs-2"><label for=wins_ox>Offset <u>x</u>:</label></div>
+        <div class="col col-xs-1"><input id=wins_ox size=4></div>
+        <div class="col col-xs-1"><label for=wins_oy><u>y</u>:</label></div>
+        <div class="col col-xs-1"><input id=wins_oy size=4></div>
+      </div>
+    </div>
 
   </div>
   <div class=dlg_btns>
@@ -501,6 +527,7 @@
 <script src=src/prf_col.js    ></script>
 <script src=src/prf_title.js  ></script>
 <script src=src/prf_menu.js   ></script>
+<script src=src/prf_wins.js   ></script>
 <script src=src/ed.js         ></script>
 <script src=src/se.js         ></script>
 <script src=src/bq.js         ></script>
