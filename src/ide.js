@@ -401,7 +401,7 @@ D.IDE.prototype={
   getThreads:$.debounce(100,function(){D.prf.dbg()&&D.send('GetThreads',{})}),
   getSIS:    $.debounce(100,function(){D.prf.dbg()&&D.send('GetSIStack',{})}),
   updTitle:function(){ //change listener for D.prf.title
-    var ide=this,ri=D.remoteIdentification||{},v=D.versionInfo
+    var ide=this,ri=D.remoteIdentification||{},v=D.versionInfo||{}
     document.title=D.prf.title().replace(/\{\w+\}/g,function(x){var X=x.toUpperCase();return(
       X==='{WSID}'?ide.wsid:                         X==='{PID}'?ri.pid:
       X==='{HOST}'?ide.host:                         X==='{CHARS}'?(ri.arch||'').split('/')[0]:
