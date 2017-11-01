@@ -37,6 +37,8 @@ D.prf_ui=function(){
     D.ipc.server.emit(D.prf_bw.socket,'show');
     D.el.BrowserWindow.fromId(D.prf_bw.id).show();
     return!1
+  } else if(D.ed){
+    D.ipc.of.ride_master.emit('prfShow');return!1;
   }
   if(!d){
     d=I.prf_dlg

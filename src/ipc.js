@@ -98,6 +98,9 @@ D.IPC_Server=function(){
     D.ipc.server.on('prfCreated',function(data,socket){
       D.prf_bw.socket=socket;
     });
+    D.ipc.server.on('prfShow',function(data,socket){
+      D.prf_ui();
+    }),
     D.ipc.server.on('prfClose',function(data,socket){
       D.el.BrowserWindow.fromId(D.prf_bw.id).hide();
       D.ide.focusMRUWin()
@@ -128,6 +131,11 @@ D.IPC_Server=function(){
     D.ipc.server.on('RIDE',([type,payload],socket)=>{D.send(type,payload);});
   });
   D.ipc.server.start();
+  D.prf.floatOnTop(function(x){
+    for(var k in D.pwins){
+      D.el.BrowserWindow.fromId(D.pwins[k].bw_id).setAlwaysOnTop(!!x) 
+    }
+  });
 };
 function WindowRect(id,prf){
   var {x,y,width,height}=prf;
@@ -146,8 +154,13 @@ D.IPC_LinkEditor=function(pe){
   if(!D.pendingEditors.length)return;
   let wp=D.pwins.find(w=>w.id<0);
   if(!wp){
-    let bw,opts={icon:__dirname+'/D.png',show:false};
-    D.prf.floatOnTop()&&(opts.parent=D.elw)
+    let bw,opts={
+      icon: `${__dirname}/D.png`,
+      show: false,
+      fullscreen: false,
+      fullscreenable: true,
+      alwaysOnTop: !!D.prf.floatOnTop(),
+    };
     opts=Object.assign(opts,WindowRect(pe.editorOpts.id,D.prf.editWins()))
     bw=new D.el.BrowserWindow(opts);
     bw.loadURL(location+'?'+bw.id);

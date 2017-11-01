@@ -9,15 +9,6 @@ const J = {};
 
 {
   const init = () => {
-    /*
-    if(typeof node_require!=='undefined'){
-      D.el=node_require('electron').remote
-      D.elw=D.el.getGlobal('elw')
-      D=$.extend(D,node_require('electron').remote.getGlobal('D'))
-      var plt=process.platform;D.win=/^win/i.test(plt);D.mac=plt==='darwin'
-    }
-    */
-
     // build up I by iterating over all elements with IDs
     const a = document.querySelectorAll('[id]');
     for (let i = 0; i < a.length; i += 1) {
@@ -91,7 +82,12 @@ const J = {};
     } else {
       if (D.el) {
         D.IPC_Server();
-        const bw = new D.el.BrowserWindow({ icon: `${__dirname}/D.png`, show: false, parent: D.elw });
+        const bw = new D.el.BrowserWindow({
+          icon: `${__dirname}/D.png`,
+          show: false,
+          parent: D.elw,
+          alwaysOnTop: true,
+        });
         bw.loadURL(`${loc}?prf`); // bw.webContents.toggleDevTools();
         D.prf_bw = { id: bw.id };
         node_require(`${__dirname}/src/cn`)();
