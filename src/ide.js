@@ -409,8 +409,8 @@ D.IDE.prototype={
       X==='{VER_A}'?(ri.version||'').split('.')[0]:  X==='{RIDE_VER_A}'?(v.version||'').split('.')[0]:
       X==='{VER_B}'?(ri.version||'').split('.')[1]:  X==='{RIDE_VER_B}'?(v.version||'').split('.')[1]:
       X==='{VER_C}'?(ri.version||'').split('.')[2]:  X==='{RIDE_VER_C}'?(v.version||'').split('.')[2]:
-      X==='{VER}'?ri.version||'':                    X==='{RIDE_VER}'?v.version||'':
-      X==='{PROFILE}'?ide.profile||'':               x
+      X==='{VER}'?ri.version:                        X==='{RIDE_VER}'?v.version:
+      X==='{PROFILE}'?ide.profile:                   x
     )||''})||'Dyalog'
   },
   focusMRUWin:function(){ //most recently used
