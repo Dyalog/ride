@@ -163,7 +163,11 @@ D.cn=_=>{ //set up Connect page
     D.conns_modified=+fs.statSync(f).mtime
   }
   D.conns=D.conns||[{type:"connect"}]
-  I.cn.onkeyup=x=>{if(D.el&&fmtKey(x)==='F12'){D.elw.webContents.toggleDevTools();return!1}}
+  I.cn.onkeyup=x=>{
+    const k=fmtKey(x);
+    if(D.el&&k==='F12'){D.elw.webContents.toggleDevTools();return!1}
+    else if (k==='Shift-F1') {D.abt();return!1}
+  }
   q.cwd.oncontextmenu=q.args.oncontextmenu=q.env.oncontextmenu=D.oncmenu
   q.fav_name.onchange=q.fav_name.onkeyup=_=>{
     const u=sel.name,v=q.fav_name.value||''
