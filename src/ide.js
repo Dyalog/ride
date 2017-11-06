@@ -300,7 +300,7 @@ D.IDE=function(){'use strict'
       $(c.getElement()).closest(".lm_item").find(".lm_maximise").onFirst('click',function(){
         w.saveScrollPos()
     })})
-    setTimeout(function(){ide.wins[ide.hadErr?0:h.id].focus();ide.hadErr=0},1);
+    setTimeout(function(){ide.wins[ide.hadErr?0:h.id].focus();ide.hadErr=D.prf.ilf()},1);
     return w
   })
   gl.registerComponent('wse',function(c,h){

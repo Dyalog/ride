@@ -45,6 +45,7 @@ D.IPC_Client=function(winId){
     D.ipc.of.ride_master.on('setBP',x=>D.ed.setBP(x));
     D.ipc.of.ride_master.on('setLN',x=>D.ed.setLN(x));
     D.ipc.of.ride_master.on('setTC',x=>D.ed.setTC(x));
+    D.ipc.of.ride_master.on('ED',x=>D.ed.ED(D.ed.cm));
     D.ipc.of.ride_master.on('stateChanged',x=>D.ed.stateChanged(x));
     D.ipc.of.ride_master.on('ValueTip',x=>D.ed.ValueTip(x));
     D.ipc.of.ride_master.on('zoom',x=>D.ed.zoom(x));
@@ -123,8 +124,12 @@ D.IPC_Server=function(){
     D.ipc.server.on('prf',([k,x],socket)=>{D.prf[k](x)});
     D.ipc.server.on('switchWin',(data,socket)=>{D.ide.switchWin(data);});
     D.ipc.server.on('unblock',(id,socket)=>{
-      let bw_id=D.ide.wins[id].bw_id,bw=D.el.BrowserWindow.fromId(bw_id);
+      let pw=D.ide.wins[id],bw=D.el.BrowserWindow.fromId(pw.bw_id);
       bw.show();
+      if(D.ide.hadErr&&pw.tc&&!D.elw.isFocused()) {
+        D.elw.focus();
+        D.ide.hadErr=0;
+      }
       D.ide.unblock()}
     );
     D.ipc.server.on('zoom',(z,socket)=>{D.ide.zoom(z)})
@@ -168,6 +173,7 @@ D.IPC_LinkEditor=function(pe){
   }
   pe=D.pendingEditors.shift();
   wp.id=pe.editorOpts.id;
+  wp.tc=pe.editorOpts.tc;
   D.wins[wp.id]=wp;
   D.ipc.server.emit(wp.socket,'pendingEditor',pe);
 }
@@ -178,6 +184,8 @@ D.IPC_WindowProxy=function(bw_id,socket){
   ed.socket=socket;
   ed.id=-1;
   ed.cm={dyalogCmds:ed};
+  ed.tc=0;
+  ed.focusTS=+new Date();
 };
 D.IPC_WindowProxy.prototype={
   die:function(){D.ipc.server.emit(this.socket,'die')},
@@ -206,6 +214,7 @@ D.IPC_WindowProxy.prototype={
   setBP:function(x){D.ipc.server.emit(this.socket,'setBP',x)},
   setLN:function(x){D.ipc.server.emit(this.socket,'setLN',x)},
   setTC:function(x){D.ipc.server.emit(this.socket,'setTC',x);this.tc=x},
+  ED:function(){D.ipc.server.emit(this.socket,'ED')},
   LN: function(x){D.prf.lineNums.toggle()},
   TVO:function(x){D.prf.fold    .toggle()},
   TVB:function(x){D.prf.breakPts.toggle()},

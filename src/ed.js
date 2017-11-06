@@ -194,7 +194,8 @@ D.Ed.prototype={
     }
     w.restoreScrollPos();
     w.cm.setCursor(u);
-    w.focus();
+    if(D.ide.hadErr) {D.ide.wins[0].focus();D.ide.hadErr=0}
+    else {w.focus()}
   },
   SetHighlightLine:function(line){
     let w=this;
