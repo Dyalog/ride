@@ -181,6 +181,7 @@ CM.defineMode('apl-session',function(cfg,modeCfg){
     token:function(sm,h){ //sm:stream,h:state
       var m //m:regex match object
       if(se.dirty[h.l]==null){sm.skipToEnd();h.l++;return}
+      if(sm.sol())h.s=!h.h.a;
       if(sm.sol()&&(sm.match(/^ +/))){if(sm.eol())h.l++;return}
       if(h.s&&(m=sm.match(/^\)(\w+).*/))){h.l++;return scmd.indexOf(m[1].toLowerCase())<0?'apl-err':'apl-scmd'}
       if(h.s&&(sm.match(/^\].*/))){h.l++;return'apl-ucmd'}
