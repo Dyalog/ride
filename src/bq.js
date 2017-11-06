@@ -84,7 +84,7 @@ D.informal=[
   '⍙ deltaunderbar',
   '⍥ circlediaeresis hoof holler',
   '⍫ deltilde',
-  'Á aacute underscoredalphabet',
+  '⎕Á aacute underscoredalphabet',
   '⍸ where intervalindex iotaunderbar',
   '⊆ leftshoeunderbar encloseifsimple conditionalenclose partition nest',
   '@ at substitute merge amend',
