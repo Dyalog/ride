@@ -322,7 +322,7 @@ D.Ed.prototype={
   JBK:function(cm){var p=this.jumps.pop();p&&cm.setCursor({line:p.lh.lineNo(),ch:p.ch})},
   indentOrComplete:function(cm){
     if(cm.somethingSelected()){cm.execCommand('indentMore');return}
-    var c=cm.getCursor(),s=cm.getLine(c.line);if(/^ *$/.test(s.slice(0,c.ch))){cm.execCommand('indentMore');return}
+    var c=cm.getCursor(),s=cm.getLine(c.line);if(/^ *$/.test(s.slice(0,c.ch))){cm.execCommand('insertSoftTab');return}
     this.autocompleteWithTab=1;D.send('GetAutocomplete',{line:s,pos:c.ch,token:this.id,win:this.id})
   },
   downOrXline:function(cm){
