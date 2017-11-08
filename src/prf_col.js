@@ -148,7 +148,8 @@ D.prf_tabs.col={
     q.list.innerHTML=u.map(function(x){return'<option value='+x+'>'}).join('')
     q.grp.innerHTML=G.map(function(g,i){return'<option value='+i+'>'+g.s}).join('')
     q.scm.onchange=function(){scm=scms[+this.selectedIndex];updSampleStl();I.col.className=scm.frz?'frz':''
-                              cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight)}
+                              // cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight)
+                            }
     q.new_name.onblur=function(){var s=this.value;if(!s)return;scm.name='';scm.name=uniqScmName(s)
                                  I.col.className='';updScms()}
     q.new_name.onkeydown=function(x){switch(x.which){/*enter*/case 13:                    this.blur();return!1
@@ -198,14 +199,19 @@ D.prf_tabs.col={
   load:function(){var a=scms=SCMS.concat(D.prf.colourSchemes().map(decScm)),s=D.prf.colourScheme()
                   scm=a[0];for(var i=0;i<a.length;i++)if(a[i].name===s){scm=a[i];break}
                   I.col.className='';updScms()
-                  cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);cm.refresh()},
+                  // cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);
+                  cm.refresh()},
   activate:function(){q.scm.focus()},
   save:function(){D.prf.colourSchemes(scms.filter(function(x){return!x.frz}).map(encScm));D.prf.colourScheme(scm.name)},
-  resize:function(){cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);cm.refresh()}
+  resize:function(){
+    // cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);
+    cm.refresh()
+  }
 }
 function updScms(){q.scm.innerHTML=scms.map(function(x){x=D.util.esc(x.name);return'<option value="'+x+'">'+x}).join('')
                    q.scm.value=scm.name;q.scm.onchange();I.col.className=scm.frz?'frz':''
-                   cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);updSampleStl();selGrp('norm',1)}
+                  //  cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);
+                   updSampleStl();selGrp('norm',1)}
 function updSampleStl(){I.col_sample_stl.textContent=renderCSS(scm,1)} //[sic]
 function selGrp(t,forceRefresh){ //update everything as necessary when selection in the Group dropdown changes
   if(!scm||sel===t&&!forceRefresh)return

@@ -1499,6 +1499,10 @@ body .ui-tooltip {
   top: 100px;
   bottom: 56px;
 }
+#col_cm .CodeMirror {
+  height: 100%;
+  width: 100%;
+}
 #col_settings {
   width: 200px;
   right: 8px;
@@ -1666,6 +1670,7 @@ body .ui-tooltip {
   float: right;
   text-align: right;
   white-space: nowrap;
+  width: inherit;
 }
 input.lyt_g1:hover,
 input.lyt_g3:hover {
