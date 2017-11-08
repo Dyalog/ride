@@ -28,11 +28,30 @@ function Bar(o,scroll){ //o:orientation(0=vertical,1=horizontal), scroll:functio
     CM.e_preventDefault(e);xy0=e[pageXY],pos0=pos
     CM.on(document,'mousemove',move);CM.on(document,'mouseup',done);thumb.classList.add('press')
   })
-  CM.on(node,'click',function(e){
-    CM.e_preventDefault(e);var x=e.clientX,y=e.clientY,r=thumb.getBoundingClientRect()
-    moveTo(pos+scrn*(o?(x>r.right)-(x<r.left):(y>r.bottom)-(y<r.top)))
+  // CM.on(node,'click',function(e){
+  //   CM.e_preventDefault(e);
+  //   var x=e.clientX,y=e.clientY,r=thumb.getBoundingClientRect(),d=e.target===node?scrn:20;
+  //   moveTo(pos+d*(o?(x>r.right)-(x<r.left):(y>r.bottom)-(y<r.top)))
+  // })
+  var scrolling
+  CM.on(node,'mousedown',function(e){
+    CM.e_preventDefault(e);
+    if (scrolling) return;
+    var x=e.clientX,y=e.clientY,r=thumb.getBoundingClientRect(),s=e.target===node?scrn:20,
+      d=s*(o?(x>r.right)-(x<r.left):(y>r.bottom)-(y<r.top));
+    moveTo(pos+d);
+    scrolling = setInterval((function(d){moveTo(pos+d)}).bind(this,d), 100 /*execute every 100ms*/);
   })
-  function wheel(e){var p=pos;moveTo(p+CM.wheelEventPixels(e)['xy'[o]]);pos!==p&&CM.e_preventDefault(e)}
+  function mouseScrollStop(e){
+    CM.e_preventDefault(e);
+    if(scrolling) scrolling=clearInterval(scrolling);
+  }
+  CM.on(node,'mouseup',mouseScrollStop);
+  CM.on(node,'mouseout',mouseScrollStop);
+  
+  function wheel(e){
+    var p=pos;moveTo(p+CM.wheelEventPixels(e)['yx'[o]]);pos!==p&&CM.e_preventDefault(e)
+  }
   CM.on(node,'mousewheel',wheel);CM.on(node,'DOMMouseScroll',wheel)
   function moveTo(p,skipUpdate){
     p=Math.max(0,Math.min(total-scrn,p));if(p!==pos){pos=p;thumb.style[o?'left':'top']=(w+(size-2*w)*p/total)+'px'

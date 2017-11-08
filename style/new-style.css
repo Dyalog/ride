@@ -1936,7 +1936,6 @@ input.lyt_g3:hover {
   height: 16px;
   line-height: 16px;
   text-align: center;
-  font-size: 10px;
   cursor: pointer;
 }
 .cm-scroll-h {
@@ -1947,6 +1946,9 @@ input.lyt_g3:hover {
 .cm-scroll-h .thumb {
   bottom: 0;
   height: 100%;
+}
+.cm-scroll-h .btn {
+  font-size: 12px!important;
 }
 .cm-scroll-h .btn0 {
   bottom: 0;
@@ -1970,6 +1972,9 @@ input.lyt_g3:hover {
 .cm-scroll-v .thumb {
   right: 0;
   width: 100%;
+}
+.cm-scroll-v .btn {
+  font-size: 16px!important;
 }
 .cm-scroll-v .btn0 {
   right: 0;
@@ -2343,6 +2348,9 @@ body.floating-window {
 }
 .ride_win_cm > div.CodeMirror {
   height: calc(100% - 28px);
+}
+.ride_win_cm > div.CodeMirror .CodeMirror-lines {
+  margin-bottom: 0px;
 }
 .win,
 .floating-window {

@@ -36,7 +36,7 @@ D.IPC_Client=function(winId){
     D.ipc.of.ride_master.on('fold',x=>D.ed.fold(x));
     D.ipc.of.ride_master.on('matchBrackets',x=>D.ed.matchBrackets(x));
     
-    D.ipc.of.ride_master.on('prf',([k,x])=>{D.prf[k](x)});
+    D.ipc.of.ride_master.on('prf',([k,x])=>{D.prf[k](x,1)});
     D.ipc.of.ride_master.on('open',x=>D.ed.open(x));
     D.ipc.of.ride_master.on('close',x=>D.ed.close(x));
     D.ipc.of.ride_master.on('prompt',x=>D.ed.prompt(x));
@@ -85,7 +85,7 @@ D.IPC_Prf=function(){
     D.ipc.of.ride_master.on('show',x=>{
       D.prf_ui();
     });
-    D.ipc.of.ride_master.on('prf',([k,x])=>{D.prf[k](x)});
+    D.ipc.of.ride_master.on('prf',([k,x])=>{D.prf[k](x,1)});
   });  
 };
 
