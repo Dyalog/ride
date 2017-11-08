@@ -28,11 +28,6 @@ function Bar(o,scroll){ //o:orientation(0=vertical,1=horizontal), scroll:functio
     CM.e_preventDefault(e);xy0=e[pageXY],pos0=pos
     CM.on(document,'mousemove',move);CM.on(document,'mouseup',done);thumb.classList.add('press')
   })
-  // CM.on(node,'click',function(e){
-  //   CM.e_preventDefault(e);
-  //   var x=e.clientX,y=e.clientY,r=thumb.getBoundingClientRect(),d=e.target===node?scrn:20;
-  //   moveTo(pos+d*(o?(x>r.right)-(x<r.left):(y>r.bottom)-(y<r.top)))
-  // })
   var scrolling
   CM.on(node,'mousedown',function(e){
     CM.e_preventDefault(e);
