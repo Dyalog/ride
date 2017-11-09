@@ -170,6 +170,7 @@ D.Se.prototype={
   EP:function(){this.ide.focusMRUWin()},
   ER:function(){this.exec(0)},
   TC:function(){this.exec(1)},
+  LN: function(){D.prf.lineNums.toggle()},
   MA:function(){D.send('RestartThreads',{win:0})},
   indentOrComplete:function(cm){
     var u=cm.getCursor(),s=cm.getLine(u.line)

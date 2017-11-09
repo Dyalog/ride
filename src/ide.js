@@ -10,7 +10,7 @@ D.IDE=function(){'use strict'
   ide.exec=function(a,tc){if(a&&a.length){
     tc||(ide.pending=a.slice(1));
     D.send('Execute',{trace:tc,text:a[0]+'\n'});
-    ide.getThreads()
+    ide.getThreads();ide.getSIS();
   }}
   ide.host=ide.port=ide.wsid='';D.prf.title(ide.updTitle.bind(ide))
   D.wins=ide.wins={0:new D.Se(ide)}
@@ -67,7 +67,7 @@ D.IDE=function(){'use strict'
       else if(w){w.vt.clear();w.container&&w.container.close()}
       delete ide.wins[x.win];ide.focusMRUWin()
       ide.WSEwidth=ide.wsew;ide.DBGwidth=ide.dbgw
-      ide.getSIS()
+      if(w.tc){ide.getSIS();ide.getThreads();}
     },
     OpenWindow:function(ee){
       if(!ee['debugger']&&D.el&&process.env.RIDE_EDITOR){

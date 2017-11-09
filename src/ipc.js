@@ -58,7 +58,7 @@ D.IPC_Client=function(winId){
       window.onresize=function(){ed&&ed.updSize()}
       window.onfocus=()=>ed.focus();
       window.onbeforeunload=function(e){ed.onbeforeunload(e)}
-      setTimeout(function(){ed.refresh()},500) //work around a rendering issue on Ubuntu
+      ed.refresh();
       D.ipc.of.ride_master.emit('unblock',ed.id);
     });
   });  
