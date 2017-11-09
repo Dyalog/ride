@@ -22,11 +22,18 @@ D.ac=function(win){ //win:editor or session instance to set up autocompletion in
     },D.prf.autocompletionDelay())
   })
   return r=function(x){
-    if(!D.prf.autocompletion()||!x.options.length||!cm.hasFocus()||!cm.getWrapperElement().ownerDocument.hasFocus())return
+    if(!D.prf.autocompletion()||!cm.hasFocus()||
+       !cm.getWrapperElement().ownerDocument.hasFocus()||
+       !win.autocompleteWithTab&&!x.options.length)return
     var c=cm.getCursor(),from={line:c.line,ch:c.ch-x.skip},
         sel='' //sel keeps track of selection in the completion list, so F1 knows what help page to open
-    if(x.options.length===1&&win.autocompleteWithTab){var v=x.options[0]
-                                                      cm.replaceRange(typeof v==='string'?v:v.text,from,c,'D');return}
+    if(win.autocompleteWithTab){
+      if(x.options.length===0){cm.execCommand('insertSoftTab');return}
+      if(x.options.length===1){
+        var v=x.options[0]
+        cm.replaceRange(typeof v==='string'?v:v.text,from,c,'D');return
+      }
+    }
     //There's an invisible (height=0) but selectable item at the front of the completion list.
     //Enter and Right both can complete the visible items, however they treat the invisible item differently.
     //Right completes with the first visible item instead of the invisible one; Enter does <ER>.
