@@ -10,7 +10,19 @@ D.Ed=function(ide,opts){ //constructor
   ed.dom=I.ed_tmpl.cloneNode(1);ed.dom.id=null;ed.dom.style.display='';ed.$e=$(ed.dom);ed.jumps=[];ed.focusTS=0
   ed.dom.oncontextmenu=D.oncmenu 
   ed.oText='';ed.oStop=[] //remember original text and "stops" to avoid pointless saving on EP
-  ed.cm=CM(ed.dom.querySelector('.ride_win_cm'),{
+  ed.monaco = monaco.editor.create(ed.dom.querySelector('.ride_win_cm'), {
+    value: 'hello world!',
+    language: 'javascript',
+    automaticLayout:true,
+    lineNumbers:!!D.prf.lineNums(),
+    autoIndent:true,
+    showFoldingControls:true,
+    folding:true,
+    
+  });
+  ed.monaco.addCommand(monaco.KeyCode.Escape, () => ed.FX(ed.monaco));
+  ed.monaco.getModel().setEOL(monaco.editor.EndOfLinePreference.LF);
+  ed.cm=CM(ed.dom.querySelector('.ride_win_hide'),{
     lineNumbers:!!D.prf.lineNums(),firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
     smartIndent:!D.prf.ilf()&&D.prf.indent()>=0,indentUnit:D.prf.indent(),scrollButtonHeight:12,matchBrackets:!!D.prf.matchBrackets(),
     autoCloseBrackets:!!D.prf.autoCloseBrackets()&&ACB_VALUE,foldGutter:!!D.prf.fold(),scrollbarStyle:'simple',
@@ -109,7 +121,9 @@ D.Ed.prototype={
   open:function(ee){ //ee:editable entity
     var ed=this,cm=ed.cm
     this.jumps.forEach(function(x){x.n=x.lh.lineNo()}) //to preserve jumps, convert LineHandle-s to line numbers
-    cm.setValue(ed.oText=ee.text.join('\n')) //.setValue() invalidates old LineHandle-s
+    ed.monaco.setValue(ed.oText=ee.text.join('\n'));
+    
+    // cm.setValue(ed.oText=ee.text.join('\n')) //.setValue() invalidates old LineHandle-s
     this.jumps.forEach(function(x){x.lh=cm.getLineHandle(x.n);delete x.n}) //look up new LineHandle-s, forget numbers
     cm.clearHistory();
     if(D.mac){cm.focus();window.focus()}
@@ -180,7 +194,9 @@ D.Ed.prototype={
     let w=this;
     var u=w.cm.getCursor();
     w.saveScrollPos();
-    w.cm.setValue(lines.join('\n'));
+    console.log(w.monaco, lines);
+    w.monaco.setValue(lines.join('\n'));
+    // w.cm.setValue(lines.join('\n'));
     w.setStop();
     if (w.tc){
       w.hl(w.HIGHLIGHT_LINE);
@@ -221,12 +237,12 @@ D.Ed.prototype={
     steps=Math.abs(steps)
     for(var i=0;i<steps;i++){D.send(cmd,{win:this.id})}
   },
-  EP:function(cm){this.isClosing=1;this.FX(cm)},
-  FX:function(cm){
-    var ed=this,v=cm.getValue(),stop=ed.getStops()
-    if(ed.tc||v===ed.oText&&''+stop===''+ed.oStop){D.send('CloseWindow',{win:ed.id});return} //if tracer or unchanged
-    for(var i=0;i<stop.length;i++)cm.setGutterMarker(stop[i],'breakpoints',null)
-    D.send('SaveChanges',{win:ed.id,text:cm.getValue().split('\n'),stop:stop})
+  EP:function(_monaco){this.isClosing=1;this.FX(_monaco)},
+  FX:function(_monaco){
+    var ed=this,v=_monaco.getModel().getValue(monaco.editor.EndOfLinePreference.LF); // ,stop=ed.getStops() [MONACO]
+    // if(ed.tc || v === ed.oText && '' + stop === '' + ed.oStop){D.send('CloseWindow',{win:ed.id});return} //if tracer or unchanged
+    // for(var i = 0; i < stop.length; i++)cm.setGutterMarker(stop[i],'breakpoints',null) [MONACO]
+    D.send('SaveChanges',{win:ed.id,text:v.split('\n'),stop:[]})
   },
   TL:function(cm){ //toggle localisation
     var name=this.cword();if(!name)return
@@ -340,7 +356,7 @@ D.Ed.prototype={
         window.focus()
         var r=D.el.dialog.showMessageBox(D.elw,{title:'Save?',buttons:['Yes','No','Cancel'],cancelId:-1,
           message:'The object "'+ed.name+'" has changed.\nDo you want to save the changes?'})
-        r===0?ed.EP(ed.cm):r===1?ed.QT(ed.cm):0;return''
+        r===0?ed.EP(ed.monaco):r===1?ed.QT(ed.monaco):0;return''
       },10);        
     }
   }
