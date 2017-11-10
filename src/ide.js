@@ -471,8 +471,10 @@ D.IDE.prototype = {
   _disconnected: function () { if (!this.dead) { this.die() } }, //invoked from cn.js
   lbarRecreate: function () {
     var d = D.lb.order, u = D.prf.lbarOrder() //d:default order, u:user's order
-    var r = ''; if (d !== u) for (var i = 0; i < d.length; i++)if (!u.includes(d[i]) && /\S/.test(d[i])) r += d[i] //r:set difference between d and u
-    I.lb_inner.innerHTML = D.prf.lbarOrder().split('').map(function (i) { return '<b>' + i + '</b>'; }).join('').replace(/\s/g, '\xa0');
+    var r = ''; if (d !== u) for (var i = 0; i < d.length; i++)if (!u.includes(d[i]) && /\S/.test(d[i])) r += d[i]; //r:set difference between d and u
+    I.lb_inner.innerHTML=D.prf.lbarOrder()
+      .replace(/\s*$/,'\xa0'+r+r&&'\xa0') // replace any trailing spaces with missing glyphs and final nbs
+      .replace(/\s+/g,'\xa0').replace(/(.)/g,'<b>$1</b>')  // replace white spaces with single nbs and markup
   }
 }
 CM.commands.DBG = function () { D.prf.dbg.toggle() }
