@@ -78,7 +78,9 @@ const J = {};
     } else if (/^\?\d+$/.test(loc.search)) {
       const winId = +loc.search.slice(1);
       document.body.className += ' floating-window';
-      D.IPC_Client(winId);
+      amdRequire(['vs/editor/editor.main'], function() {
+        D.IPC_Client(winId);
+      });
     } else {
       if (D.el) {
         D.IPC_Server();
