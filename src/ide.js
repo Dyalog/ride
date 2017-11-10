@@ -346,9 +346,9 @@ D.IDE=function(){'use strict'
       case'win':
         var id=x.contentItem.config.componentState.id,cls=x.closeElement
         if(id){
-          x.middleClick=function(){var w=ide.wins[id];w.EP(w.cm);}
+          x.middleClick=function(){var w=ide.wins[id];w.EP(w.monaco);}
           cls.off('click').click(function(){
-            var w=ide.wins[id];w.EP(w.cm)
+            var w=ide.wins[id];w.EP(w.monaco)
           })
         }
         else{

@@ -20,7 +20,8 @@ D.Ed=function(ide,opts){ //constructor
     folding:true,
     
   });
-  ed.monaco.addCommand(monaco.KeyCode.Escape, () => ed.FX(ed.monaco));
+  ed.monaco.addCommand(monaco.KeyCode.Escape, () => ed.EP(ed.monaco));
+  ed.monaco.addCommand(monaco.KeyMod.Shift|monaco.KeyCode.Escape, () => ed.QT());
   ed.monaco.getModel().setEOL(monaco.editor.EndOfLinePreference.LF);
   ed.cm=CM(ed.dom.querySelector('.ride_win_hide'),{
     lineNumbers:!!D.prf.lineNums(),firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
