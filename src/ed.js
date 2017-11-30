@@ -27,7 +27,8 @@ D.Ed=function(ide,opts){ //constructor
     cursorBlinking:D.prf.blinkCursor()?'blink':'solid'
     
   });
- // ed.monaco.addCommand(monaco.KeyCode.Enter , () => ed.ER(ed.monaco));
+  ed.tracer=ed.monaco.createContextKey('tracer',!!ed.tc);
+  ed.monaco.addCommand(monaco.KeyCode.Enter , () => ed.ER(ed.monaco),'tracer');
   ed.monaco.addCommand(monaco.KeyMod.WinCtrl|monaco.KeyCode.Enter, () => ed.TC());
   ed.monaco.addCommand(monaco.KeyCode.Escape, () => ed.EP(ed.monaco));
   ed.monaco.addCommand(monaco.KeyMod.Shift|monaco.KeyCode.Escape, () => ed.QT());
@@ -118,7 +119,9 @@ D.Ed.prototype={
     var ed=this;ed.cm.setOption('lineNumbers',!!x);ed.updGutters()
     var a=ed.tb.querySelectorAll('.tb_LN');for(var i=0;i<a.length;i++)a[i].classList.toggle('pressed',!!x)
   },
-  setTC:function(x){var ed=this;ed.tc=x;ed.dom.classList.toggle('tracer',!!x);ed.hl(null);ed.updGutters();ed.setRO(x)},
+  setTC:function(x){
+    var ed=this;ed.tc=x;ed.tracer.set(x);
+    ed.dom.classList.toggle('tracer',!!x);ed.hl(null);ed.updGutters();ed.setRO(x)},
   setRO:function(x){
     var ed=this;
    // ed.cm.setOption('readOnly',x)/*;this.rp.hidden=x*/
@@ -313,24 +316,33 @@ D.Ed.prototype={
     })
     cm.setSelections(o)
   },
-  ER:function(cm){
+  ER:function(mo){
     if(this.tc){D.send('RunCurrentLine',{win:this.id});D.ide.getSIS();return}
-    if(D.prf.autoCloseBlocks()){
-      var u=cm.getCursor(),l=u.line,s=cm.getLine(l),m
-      var re=/^(\s*):(class|disposable|for|if|interface|namespace|property|repeat|section|select|trap|while|with)\b([^⋄\{]*)$/i
-      if(u.ch===s.length&&(m=re.exec(s))&&!D.syn.dfnDepth(cm.getStateAfter(l-1))){
-        var pre=m[1],kw=m[2],post=m[3],l1=l+1,end=cm.lastLine();kw=kw[0].toUpperCase()+kw.slice(1).toLowerCase()
-        while(l1<=end&&/^\s*(?:$|⍝)/.test(cm.getLine(l1)))l1++ //find the next non-blank line
-        var s1=cm.getLine(l1)||'',pre1=s1.replace(/\S.*$/,'')
-        if(pre.length>pre1.length||pre.length===pre1.length&&!/^\s*:(?:end|else|andif|orif|case|until|access)/i.test(s1)){
-          var r=':'+kw+post+'\n'+pre+':End'
-          D.prf.autoCloseBlocksEnd()||(r+=kw)
-          cm.replaceRange(r,{line:l,ch:pre.length},{line:l,ch:s.length})
-          cm.execCommand('indentAuto');cm.execCommand('goLineUp');cm.execCommand('goLineEnd')
-        }
-      }
-    }
-    cm.getOption('mode')=='apl'?cm.execCommand('newlineAndIndent'):cm.replaceSelection('\n','end')
+    // if(D.prf.autoCloseBlocks()){
+    //   //var u=cm.getCursor(),l=u.line,s=cm.getLine(l),m
+    //   var u=mo.getPosition(),l=u.lineNumber,md=mo.getModel(),s=md.getLineContent(l),m
+    //   var re=/^(\s*):(class|disposable|for|if|interface|namespace|property|repeat|section|select|trap|while|with)\b([^⋄\{]*)$/i
+    //   //if(u.ch===s.length&&(m=re.exec(s))&&!D.syn.dfnDepth(cm.getStateAfter(l-1))){
+    //   md.getLineTokens(l,false)
+    //   let state=md._lines[l-1].getState().clone();
+      
+    //   if(u.column===s.length+1&&(m=re.exec(s))&&!D.syn.dfnDepth(state)){
+    //     var pre=m[1],kw=m[2],post=m[3],l1=l+1,end=md.getLineCount();
+    //     kw=kw[0].toUpperCase()+kw.slice(1).toLowerCase()
+    //     while(l1<=end&&/^\s*(?:$|⍝)/.test(md.getLineContent(l1)))l1++ //find the next non-blank line
+    //     var s1=md.getLineContent(l1)||'',pre1=s1.replace(/\S.*$/,'')
+    //     if(pre.length>pre1.length||pre.length===pre1.length&&!/^\s*:(?:end|else|andif|orif|case|until|access)/i.test(s1)){
+    //       var r=':'+kw+post+'\n'+pre+':End'
+    //       D.prf.autoCloseBlocksEnd()||(r+=kw)
+    //       cm.replaceRange(r,{line:l,ch:pre.length},{line:l,ch:s.length})
+    //       mo.executeEdits("editor", [{ range: new monaco.Range(l,pre.length,l,s.length), text: r }]);
+    //       mo.trigger('editor', 'editor.action.formatDocument');
+    //      // cm.execCommand('indentAuto');cm.execCommand('goLineUp');cm.execCommand('goLineEnd')
+    //     }
+    //   }
+    // }
+    // //cm.getOption('mode')=='apl'?cm.execCommand('newlineAndIndent'):cm.replaceSelection('\n','end')
+    // mo.trigger('editor','type',{text:'\n'})
   },
   BH:function(){D.send('ContinueTrace' ,{win:this.id})},
   RM:function(){D.send('Continue'      ,{win:this.id})},

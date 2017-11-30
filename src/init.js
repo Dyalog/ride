@@ -87,6 +87,7 @@ const J = {};
         })
         monaco.languages.setMonarchTokensProvider('apl', D.monarch.language);
         monaco.languages.setLanguageConfiguration('apl', D.monarch.conf);
+        monaco.languages.registerCompletionItemProvider('apl', D.monarch.snippets);
 //        monaco.languages.register({ id: 'apl' });
 //        monaco.languages.setMonarchTokensProvider('apl',);
         D.IPC_Client(winId);
