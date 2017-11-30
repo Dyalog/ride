@@ -79,6 +79,16 @@ const J = {};
       const winId = +loc.search.slice(1);
       document.body.className += ' floating-window';
       amdRequire(['vs/editor/editor.main'], function() {
+        monaco.languages.register({
+          id: 'apl',
+          extensions: ['.dyapp', '.dyalog'],
+          aliases: ['Dyalog', 'APL'],
+          module: './mon_apl'
+        })
+        monaco.languages.setMonarchTokensProvider('apl', D.monarch.language);
+        monaco.languages.setLanguageConfiguration('apl', D.monarch.conf);
+//        monaco.languages.register({ id: 'apl' });
+//        monaco.languages.setMonarchTokensProvider('apl',);
         D.IPC_Client(winId);
       });
     } else {

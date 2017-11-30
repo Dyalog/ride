@@ -7,21 +7,31 @@ var ACB_VALUE={pairs:'()[]{}',explode:'{}'} //value for CodeMirror's "autoCloseB
 D.Ed=function(ide,opts){ //constructor
   var ed=this;ed.ide=ide;ed.id=opts.id;ed.name=opts.name;ed.tc=opts.tc;
   ed.HIGHLIGHT_LINE=0;
+  ed.decorations=[];
   ed.dom=I.ed_tmpl.cloneNode(1);ed.dom.id=null;ed.dom.style.display='';ed.$e=$(ed.dom);ed.jumps=[];ed.focusTS=0
   ed.dom.oncontextmenu=D.oncmenu 
   ed.oText='';ed.oStop=[] //remember original text and "stops" to avoid pointless saving on EP
   ed.monaco = monaco.editor.create(ed.dom.querySelector('.ride_win_cm'), {
     value: 'hello world!',
-    language: 'javascript',
+    language: 'apl',
     automaticLayout:true,
-    lineNumbers:!!D.prf.lineNums(),
+    lineNumbers:!!D.prf.lineNums()&&(x=>`[${x-1}]`),
     autoIndent:true,
-    showFoldingControls:true,
+    matchBrackets:true,
+    renderIndentGuides:true,
+    showFoldingControls:'always',
     folding:true,
+    fontFamily:'apl',
+    mouseWheelZoom:true,
+    cursorStyle:D.prf.blockCursor()?'block':'line',
+    cursorBlinking:D.prf.blinkCursor()?'blink':'solid'
     
   });
+ // ed.monaco.addCommand(monaco.KeyCode.Enter , () => ed.ER(ed.monaco));
+  ed.monaco.addCommand(monaco.KeyMod.WinCtrl|monaco.KeyCode.Enter, () => ed.TC());
   ed.monaco.addCommand(monaco.KeyCode.Escape, () => ed.EP(ed.monaco));
   ed.monaco.addCommand(monaco.KeyMod.Shift|monaco.KeyCode.Escape, () => ed.QT());
+
   ed.monaco.getModel().setEOL(monaco.editor.EndOfLinePreference.LF);
   ed.cm=CM(ed.dom.querySelector('.ride_win_hide'),{
     lineNumbers:!!D.prf.lineNums(),firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
@@ -82,9 +92,23 @@ D.Ed.prototype={
     this.cm.scrollIntoView({left:x,right:x,top:y-h/3,bottom:y+2*h/3})
   },
   hl:function(l){ //highlight - set current line in tracer
-    var ed=this;ed.hll!=null&&ed.cm.removeLineClass(ed.hll,'background','highlighted')
-    if((ed.hll=l)!=null){ //hll:highlighted line -- the one about to be executed in the tracer
-      ed.cm.addLineClass(l,'background','highlighted');ed.cm.setCursor(l,0);ed.scrollToCursor()
+    var ed=this;
+    // ed.hll!=null&&ed.cm.removeLineClass(ed.hll,'background','highlighted')
+    // if((ed.hll=l)!=null){ //hll:highlighted line -- the one about to be executed in the tracer
+    //   ed.cm.addLineClass(l,'background','highlighted');ed.cm.setCursor(l,0);ed.scrollToCursor()
+    // }
+    if(l==null) 
+      ed.decorations = ed.monaco.deltaDecorations(ed.decorations, []);
+    else {
+      l++;
+      ed.decorations = ed.monaco.deltaDecorations(ed.decorations, [{
+        range: new monaco.Range(l,1,l,1),
+        options: {
+          isWholeLine: true,
+          className: 'highlighted'
+        }
+      }]);
+      ed.monaco.revealLineInCenter(l);
     }
   },
   setBP:function(x){ //update the display of breakpoints
@@ -96,7 +120,9 @@ D.Ed.prototype={
   },
   setTC:function(x){var ed=this;ed.tc=x;ed.dom.classList.toggle('tracer',!!x);ed.hl(null);ed.updGutters();ed.setRO(x)},
   setRO:function(x){
-    var ed=this;ed.cm.setOption('readOnly',x)/*;this.rp.hidden=x*/
+    var ed=this;
+   // ed.cm.setOption('readOnly',x)/*;this.rp.hidden=x*/
+   ed.monaco.updateOptions({readOnly:x});
     if (x){
       ed.dom.getElementsByClassName("tb_AO")[0].style.display="none"
       ed.dom.getElementsByClassName("tb_DO")[0].style.display="none"
@@ -141,6 +167,8 @@ D.Ed.prototype={
     var line=ee.currentRow,col=ee.currentColumn||0
     if(line===0&&col===0&&ee.text.length===1&&/\s?[a-z|@]+$/.test(ee.text[0]))col=ee.text[0].length
     cm.setCursor(line,col);cm.scrollIntoView(null,cm.getScrollInfo().clientHeight/2)
+    ed.monaco.setPosition({lineNumber:line+1,column:col+1});
+    setTimeout(x=>ed.monaco.revealLineInCenter(line+1),1);
     ed.oStop=(ee.stop||[]).slice(0).sort(function(x,y){return x-y})
     ed.setStop()
     D.prf.floating()&&$('title',ed.dom.ownerDocument).text(ee.name)
@@ -152,7 +180,8 @@ D.Ed.prototype={
     var q=this.container,p=q&&q.parent,l=q&&q.layoutManager,m=l&&l._maximisedItem
     if(m&&m!==(p&&p.parent))m.toggleMaximise()
     while(p){p.setActiveContentItem&&p.setActiveContentItem(q);q=p;p=p.parent} //reveal in golden layout
-    window.focused||window.focus();this.cm.focus()
+    window.focused||window.focus();//this.cm.focus()
+    this.monaco.focus();
   },
   insert:function(ch){this.cm.getOption('readOnly')||this.cm.replaceSelection(ch)},
   saved:function(err){
@@ -195,7 +224,6 @@ D.Ed.prototype={
     let w=this;
     var u=w.cm.getCursor();
     w.saveScrollPos();
-    console.log(w.monaco, lines);
     w.monaco.setValue(lines.join('\n'));
     // w.cm.setValue(lines.join('\n'));
     w.setStop();
