@@ -9,6 +9,9 @@ CM.keyNames[111]='NumpadDivide'
 var D=typeof D==="undefined"?{}:D
 ;(function(){
   if(typeof node_require!=='undefined'){
+    D.mop = new Promise(function(resolve, reject) {
+      amdRequire(['vs/editor/editor.main'], resolve, reject)
+    });
     D.el=node_require('electron').remote
     D.elw=D.el.getGlobal('elw');
     D.ipc=node_require('node-ipc');

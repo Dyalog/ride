@@ -14,7 +14,7 @@ D.addSynGrps([
   {s:'assignment'      ,t:'asgn',c:'.cm-apl-asgn'}, //←
   {s:'bracket'         ,t:'sqbr',c:'.cm-apl-sqbr'}, //[]
   //{s:'block cursor'    ,t:'bcr', c:'.CodeMirror-cursor',ctrls:{fg:1,bc:0,bg:0,BIU:0}},
-  {s:'comment'         ,t:'com' ,c:'.cm-apl-com' }, //⍝
+  {s:'comment'         ,t:'com' ,m:'comment',c:'.cm-apl-com' }, //⍝
   {s:'block cursor'    ,t:'bcr' ,c:'.CodeMirror.cm-fat-cursor div.CodeMirror-cursor',ctrls:{bc:0,bg:1,BIU:0,fg:0}},
   {s:'cursor'          ,t:'cur' ,c:'div.CodeMirror-cursor'                          ,ctrls:{bc:1,bg:0,BIU:0,fg:0}},
   {s:'dfn level 1'     ,t:'dfn1',c:'.cm-apl-dfn.cm-apl-dfn1'}, //{}
@@ -25,11 +25,11 @@ D.addSynGrps([
   {s:'dfn'             ,t:'dfn' ,c:'.cm-apl-dfn' },
   {s:'diamond'         ,t:'diam',c:'.cm-apl-diam'}, //⋄
   {s:'dyadic operator' ,t:'op2' ,c:'.cm-apl-op2' }, //⍣ ...
-  {s:'error'           ,t:'err' ,c:'.cm-apl-err' },
+  {s:'error'           ,t:'err' ,m:'invalid',c:'.cm-apl-err' },
   {s:'function'        ,t:'fn'  ,c:'.cm-apl-fn'  }, //+ ...
   {s:'global name'     ,t:'glb' ,c:'.cm-apl-glb' },
   {s:'idiom'           ,t:'idm' ,c:'.cm-apl-idm' }, //⊃⌽ ...
-  {s:'keyword'         ,t:'kw'  ,c:'.cm-apl-kw'  }, //:If ...
+  {s:'keyword'         ,t:'kw'  ,m:'keyword',c:'.cm-apl-kw'  }, //:If ...
   {s:'label'           ,t:'lbl' ,c:'.cm-apl-lbl' }, //L:
   {s:'line number'     ,t:'lnum',c:'.CodeMirror-linenumber'},
   {s:'matching bracket',t:'mtch',c:'.CodeMirror-matchingbracket'},
@@ -44,7 +44,7 @@ D.addSynGrps([
   {s:'search match'    ,t:'srch',c:'.cm-searching'},
   {s:'selection'       ,t:'sel' ,c:'.CodeMirror-selected,.CodeMirror-focused .CodeMirror-selected',ctrls:{fg:0,BIU:0}},
   {s:'semicolon'       ,t:'semi',c:'.cm-apl-semi'}, //as in A[B;C]
-  {s:'string'          ,t:'str' ,c:'.cm-apl-str' }, //'a.k.a. character vector or scalar'
+  {s:'string'          ,t:'str' ,m:'string',c:'.cm-apl-str' }, //'a.k.a. character vector or scalar'
   {s:'system command'  ,t:'scmd',c:'.cm-apl-scmd'}, //)XYZ
   {s:'tracer'          ,t:'tc'  ,c:'/*noprefix*/.tracer .cm-s-default,/*noprefix*/.tracer .CodeMirror-gutters'},
   {s:'pendent'         ,t:'tcpe',c:'/*noprefix*/.tracer.pendent .cm-s-default,/*noprefix*/.tracer.pendent .CodeMirror-gutters'},
@@ -118,15 +118,48 @@ function renderCSS(scm,isSample){
       (h.bg?'background-color:'+RGBA(h.bg,h.bgo==null?.5:h.bgo):'')+'}'
   }).join('')
 }
+function setMonacoTheme(scm){
+  let rules=[],colors={};G.forEach(g=>{
+    var h=scm[g.t];
+    if(!h)return
+    else if (g.m) rules.push({
+      token:g.m,
+      foreground:h.fg&&RGB(h.fg).slice(1),
+      background:h.bg&&RGB(h.bg).slice(1),
+      fontStyle:(h.B||h.I||h.U)&&[
+        (h.B ?'bold'     :''),
+        (h.I ?'italic'   :''),
+        (h.U ?'underline':'')
+      ].join(' ').trim()
+    })
+    else if(g.t==='norm'&&h.bg) {
+      rules.push({
+        foreground:h.fg&&RGB(h.fg).slice(1),
+        background:RGB(h.bg).slice(1)
+      })
+      colors['editor.background']=RGBO(h.bg,h.bgo||1)
+    } 
+  })
+  let name = 'my'+scm.name.split('').map(x=>x.codePointAt(0)+'').join('')
+  monaco.editor.defineTheme(name, {
+    base: 'vs', // can also be vs-dark or hc-black
+    inherit: false, // can also be false to completely replace the builtin rules
+    rules,colors
+  });
+  monaco.editor.setTheme(name);
+}
 //RGB() expands the hex representation of a colour, rgb() shrinks it
 function RGB(x){var n=(x||'').length;return n===6?'#'+x:n===3?'#'+x.replace(/(.)/g,'$1$1'):n===1?'#'+x+x+x+x+x+x:x}
 function RGBA(x,a){x=RGB(x);return'rgba('+[+('0x'+x.slice(1,3)),+('0x'+x.slice(3,5)),+('0x'+x.slice(5,7)),a]+')'}
+function RGBO(x,a){return RGB(x)+Math.round(a*255).toString(16)}
 function rgb(x){if(!/^#.{6}$/.test(x))return x
                 var r=x[1],R=x[2],g=x[3],G=x[4],b=x[5],B=x[6];return r!==R||g!==G||b!==B?x.slice(1):r===g&&g===b?r:r+g+b}
 function updStl(){ //update global style from what's in prefs.json
   var s=D.prf.colourScheme(),a=SCMS.concat(D.prf.colourSchemes().map(decScm))
   for(var i=0;i<a.length;i++)if(a[i].name===s){
-    I.col_stl.textContent=renderCSS(a[i])
+    let scm=a[i]
+    I.col_stl.textContent=renderCSS(scm)
+    if (window.monaco) setMonacoTheme(scm)
     //add class=dark to <body> if the brightness of the background for normal text is lower than average
     var h=a[i].norm||{}, bg=RGB(h.bg||'#ffffff'), bgo=h.bgo==null?1:h.bgo,
         b=Math.max(+('0x'+bg.slice(1,3)),+('0x'+bg.slice(3,5)),+('0x'+bg.slice(5,7))),
@@ -135,7 +168,9 @@ function updStl(){ //update global style from what's in prefs.json
     break
   }
 }
-$(updStl);D.prf.colourScheme(updStl);D.prf.colourSchemes(updStl)
+//$(updStl);
+D.mop.then(x=>updStl())
+D.prf.colourScheme(updStl);D.prf.colourSchemes(updStl)
 function uniqScmName(x){ //x:suggested root
   var h={};for(var i=0;i<scms.length;i++)h[scms[i].name]=1
   var r=x;if(h[x]){x=x.replace(/ \(\d+\)$/,'');var i=1;while(h[r=x+' ('+i+')'])i++};return r

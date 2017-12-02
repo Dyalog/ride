@@ -93,23 +93,24 @@ D.Ed.prototype={
     this.cm.scrollIntoView({left:x,right:x,top:y-h/3,bottom:y+2*h/3})
   },
   hl:function(l){ //highlight - set current line in tracer
-    var ed=this;
+    var ed=this,mo=ed.monaco;
     // ed.hll!=null&&ed.cm.removeLineClass(ed.hll,'background','highlighted')
     // if((ed.hll=l)!=null){ //hll:highlighted line -- the one about to be executed in the tracer
     //   ed.cm.addLineClass(l,'background','highlighted');ed.cm.setCursor(l,0);ed.scrollToCursor()
     // }
     if(l==null) 
-      ed.decorations = ed.monaco.deltaDecorations(ed.decorations, []);
+      ed.decorations = mo.deltaDecorations(ed.decorations, []);
     else {
       l++;
-      ed.decorations = ed.monaco.deltaDecorations(ed.decorations, [{
+      ed.decorations = mo.deltaDecorations(ed.decorations, [{
         range: new monaco.Range(l,1,l,1),
         options: {
           isWholeLine: true,
           className: 'highlighted'
         }
       }]);
-      ed.monaco.revealLineInCenter(l);
+      mo.setPosition({lineNumber:l,column:0});
+      mo.revealLineInCenter(l);
     }
   },
   setBP:function(x){ //update the display of breakpoints

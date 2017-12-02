@@ -78,20 +78,7 @@ const J = {};
     } else if (/^\?\d+$/.test(loc.search)) {
       const winId = +loc.search.slice(1);
       document.body.className += ' floating-window';
-      amdRequire(['vs/editor/editor.main'], function() {
-        monaco.languages.register({
-          id: 'apl',
-          extensions: ['.dyapp', '.dyalog'],
-          aliases: ['Dyalog', 'APL'],
-          module: './mon_apl'
-        })
-        monaco.languages.setMonarchTokensProvider('apl', D.monarch.language);
-        monaco.languages.setLanguageConfiguration('apl', D.monarch.conf);
-        monaco.languages.registerCompletionItemProvider('apl', D.monarch.snippets);
-//        monaco.languages.register({ id: 'apl' });
-//        monaco.languages.setMonarchTokensProvider('apl',);
-        D.IPC_Client(winId);
-      });
+      D.mop.then(x=>D.IPC_Client(winId));
     } else {
       if (D.el) {
         D.IPC_Server();
