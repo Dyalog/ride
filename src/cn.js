@@ -111,11 +111,11 @@ const rq=node_require,fs=rq('fs'),cp=rq('child_process'),net=rq('net'),os=rq('os
         const env={},a=(x.env||'').split('\n');for(let i=0;i<a.length;i++){const m=KV.exec(a[i]);m&&(env[m[1]]=m[2])}
         if(x.subtype==="ssh"){
           D.util.dlg(q.connecting_dlg)
-          var o={host:x.host||'localhost',port:+x.port||22,user:x.user||user}
+          var o={host:x.host||'localhost',port:+x.ssh_port||22,user:x.user||user}
           if(x.ssh_auth_type==='key'){o.key=x.ssh_key}else{o.pass=x===sel?q.ssh_pass.value:''}
           const c=sshExec(o,'/bin/sh',(e,sm)=>{if(e)throw e
             sm.on('close',(code,sig)=>{D.ide&&D.ide._sshExited({code,sig});c.end()})
-            c.forwardIn('',0,(e,rport)=>{if(e)throw e
+            c.forwardIn('',+x.port||0,(e,rport)=>{if(e)throw e
               let s0='';for(let k in env)s0+=`${k}=${shEsc(env[k])} `
               let s1=x.args?x.args.replace(/\n$/,'').split('\n').map(shEsc).join(' '):''
               sm.write(`${s0}CLASSICMODE=1 SINGLETRACE=1 RIDE_INIT=CONNECT:127.0.0.1:${rport} RIDE_SPAWNED=1 ${shEsc(x.exe)} ${s1} +s -q >/dev/null\n`)
@@ -184,7 +184,7 @@ D.cn=_=>{ //set up Connect page
   q.fetch.onclick=_=>{
     if(!validate($.extend({},sel,{exe:'x'})))return //validate all except "exe"
     q.fetch.disabled=1
-    const c=sshExec({host:sel.host||'localhost',port:+sel.port||22,user:sel.user||user,pass:q.ssh_pass.value,key:q.ssh_key.value},
+    const c=sshExec({host:sel.host||'localhost',port:+sel.ssh_port||22,user:sel.user||user,pass:q.ssh_pass.value,key:q.ssh_key.value},
                     '/bin/ls -1 /opt/mdyalog/*/*/*/mapl /opt/mdyalog/*/*/*/*/mapl /Applications/Dyalog-*/Contents/Resources/Dyalog/mapl 2>/dev/null',
                     (e,sm)=>{
       if(e)throw e
@@ -196,7 +196,7 @@ D.cn=_=>{ //set up Connect page
             return a[1]==='opt'?{exe:x,ver:parseVer(a[3]),bits:+a[4],edition:a[5]}
                                :{exe:x,ver:parseVer(a[2].replace(/^Dyalog-|\.app$/g,'')),bits:64,edition:'unicode'}
           })
-          updExes();q.fetch.disabled=0;c.end()
+          updExes();sel&&(sel.exe=q.exe.value);q.fetch.disabled=0;c.end()
         })
         .on('error',x=>{err(x.message||''+x);updExes();q.fetch.disabled=0})
     })
