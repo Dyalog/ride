@@ -74,6 +74,7 @@ const J = {};
     const loc = window.location;
     if (/^\?prf$/.test(loc.search)) {
       document.body.className += ' floating-window';
+      D.mac&&D.el.getCurrentWindow().hide();
       D.IPC_Prf();
     } else if (/^\?\d+$/.test(loc.search)) {
       const winId = +loc.search.slice(1);
