@@ -25,6 +25,7 @@ D.Ed=function(ide,opts){ //constructor
     cursorStyle:D.prf.blockCursor()?'block':'line',
     cursorBlinking:D.prf.blinkCursor()?'blink':'solid'    
   });
+
   ed.monaco_ready = new Promise(function(resolve, reject) {
     // ugly hack as monaco doesn't have a built in event for when the editor is ready?!
     // https://github.com/Microsoft/monaco-editor/issues/115
@@ -34,12 +35,15 @@ D.Ed=function(ide,opts){ //constructor
     });
   });
   ed.tracer=ed.monaco.createContextKey('tracer',!!ed.tc);
-  ed.monaco.addCommand(monaco.KeyCode.Enter , () => ed.ER(ed.monaco),'tracer');
-  ed.monaco.addCommand(monaco.KeyMod.WinCtrl|monaco.KeyCode.Enter, () => ed.TC());
-  ed.monaco.addCommand(monaco.KeyCode.Escape, () => ed.EP(ed.monaco));
-  ed.monaco.addCommand(monaco.KeyMod.Shift|monaco.KeyCode.Escape, () => ed.QT());
+  let kc=monaco.KeyCode,km=monaco.KeyMod;
+  ed.monaco.addCommand(kc.Enter , () => ed.ER(ed.monaco),'tracer');
+  ed.monaco.addCommand(km.WinCtrl|kc.Enter, () => ed.TC());
+  ed.monaco.addCommand(km.Shift|kc.Enter, () => ed.ED(ed.monaco));
+  ed.monaco.addCommand(kc.Escape, () => ed.EP(ed.monaco));
+  ed.monaco.addCommand(km.Shift|kc.Escape, () => ed.QT());
+  ed.monaco.addCommand(km.CtrlCmd|kc.Tab, () => CM.commands.TB());
+  ed.monaco.addCommand(km.CtrlCmd|km.Shift|kc.Tab, () => CM.commands.BT());
 
-  ed.monaco.getModel().setEOL(monaco.editor.EndOfLinePreference.LF);
   ed.cm=CM(ed.dom.querySelector('.ride_win_hide'),{
     lineNumbers:!!D.prf.lineNums(),firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
     smartIndent:!D.prf.ilf()&&D.prf.indent()>=0,indentUnit:D.prf.indent(),scrollButtonHeight:12,matchBrackets:!!D.prf.matchBrackets(),
@@ -158,7 +162,8 @@ D.Ed.prototype={
   open:function(ee){ //ee:editable entity
     var ed=this,cm=ed.cm
     ed.monaco_ready.then(_=>{
-      ed.monaco.setValue(ed.oText=ee.text.join('\n'));
+      ed.monaco.model.setValue(ed.oText=ee.text.join('\n'));
+      ed.monaco.model.setEOL(monaco.editor.EndOfLineSequence.LF);
       ed.jumps.forEach(function(x){x.n=x.lh.lineNo()}) //to preserve jumps, convert LineHandle-s to line numbers
       // cm.setValue(ed.oText=ee.text.join('\n')) //.setValue() invalidates old LineHandle-s
       ed.jumps.forEach(function(x){x.lh=cm.getLineHandle(x.n);delete x.n}) //look up new LineHandle-s, forget numbers
@@ -235,7 +240,6 @@ D.Ed.prototype={
     var u=w.cm.getCursor();
     w.saveScrollPos();
     w.monaco.setValue(lines.join('\n'));
-    // w.cm.setValue(lines.join('\n'));
     w.setStop();
     if (w.tc){
       w.hl(w.HIGHLIGHT_LINE);
@@ -261,10 +265,9 @@ D.Ed.prototype={
     };
   },
   ValueTip:function(x){this.vt.processReply(x)},
-  ED:function(cm){this.addJump();
-    D.ide.Edit({win:this.id,pos:cm.indexFromPos(cm.getCursor()),text:cm.getValue()})
-    // D.send('Edit',{win:this.id,pos:cm.indexFromPos(cm.getCursor()),
-    //                text:cm.getValue(),unsaved:this.ide.getUnsaved()})
+  ED:function(me){this.addJump();
+    // D.ide.Edit({win:this.id,pos:cm.indexFromPos(cm.getCursor()),text:cm.getValue()})
+    D.ide.Edit({win:this.id,pos:me.model.getOffsetAt(me.getPosition()),text:me.getValue()})
                   },
   QT:function(){D.send('CloseWindow',{win:this.id})},
   BK:function(cm){this.tc?D.send('TraceBackward',{win:this.id}):cm.execCommand('undo')},
