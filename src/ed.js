@@ -12,7 +12,6 @@ D.Ed=function(ide,opts){ //constructor
   ed.dom.oncontextmenu=D.oncmenu 
   ed.oText='';ed.oStop=[] //remember original text and "stops" to avoid pointless saving on EP
   ed.monaco = monaco.editor.create(ed.dom.querySelector('.ride_win_cm'), {
-    value: 'hello world!',
     language: 'apl',
     automaticLayout:true,
     lineNumbers:!!D.prf.lineNums()&&(x=>`[${x-1}]`),
@@ -24,8 +23,15 @@ D.Ed=function(ide,opts){ //constructor
     fontFamily:'apl',
     mouseWheelZoom:true,
     cursorStyle:D.prf.blockCursor()?'block':'line',
-    cursorBlinking:D.prf.blinkCursor()?'blink':'solid'
-    
+    cursorBlinking:D.prf.blinkCursor()?'blink':'solid'    
+  });
+  ed.monaco_ready = new Promise(function(resolve, reject) {
+    // ugly hack as monaco doesn't have a built in event for when the editor is ready?!
+    // https://github.com/Microsoft/monaco-editor/issues/115
+    let didScrollChangeDisposable = ed.monaco.onDidScrollChange(e=>{
+      didScrollChangeDisposable.dispose();
+      resolve(true);
+    });
   });
   ed.tracer=ed.monaco.createContextKey('tracer',!!ed.tc);
   ed.monaco.addCommand(monaco.KeyCode.Enter , () => ed.ER(ed.monaco),'tracer');
@@ -151,35 +157,35 @@ D.Ed.prototype={
   stateChanged:function(){var w=this;w.updSize();w.cm.refresh();w.updGutters&&w.updGutters();w.restoreScrollPos()},
   open:function(ee){ //ee:editable entity
     var ed=this,cm=ed.cm
-    this.jumps.forEach(function(x){x.n=x.lh.lineNo()}) //to preserve jumps, convert LineHandle-s to line numbers
-    ed.monaco.setValue(ed.oText=ee.text.join('\n'));
-    
-    // cm.setValue(ed.oText=ee.text.join('\n')) //.setValue() invalidates old LineHandle-s
-    this.jumps.forEach(function(x){x.lh=cm.getLineHandle(x.n);delete x.n}) //look up new LineHandle-s, forget numbers
-    cm.clearHistory();
-    if(D.mac){cm.focus();window.focus()}
-    //entityType:             16 NestedArray        512 AplClass
-    // 1 DefinedFunction      32 QuadORObject      1024 AplInterface
-    // 2 SimpleCharArray      64 NativeFile        2048 AplSession
-    // 4 SimpleNumericArray  128 SimpleCharVector  4096 ExternalFunction
-    // 8 MixedSimpleArray    256 AplNamespace
-    ed.isCode=[1,256,512,1024,2048,4096].indexOf(ee.entityType)>=0
-    cm.setOption('mode',ed.isCode?'apl':'text');cm.setOption('foldGutter',ed.isCode&&!!D.prf.fold())
-    if(ed.isCode&&D.prf.indentOnOpen())this.RD(cm)
-    ed.setRO(ee.readOnly||ee['debugger'])
-    ed.setBP(ed.breakpoints)
-    var line=ee.currentRow,col=ee.currentColumn||0
-    if(line===0&&col===0&&ee.text.length===1&&/\s?[a-z|@]+$/.test(ee.text[0]))col=ee.text[0].length
-    cm.setCursor(line,col);cm.scrollIntoView(null,cm.getScrollInfo().clientHeight/2)
-    ed.monaco.setPosition({lineNumber:line+1,column:col+1});
-    setTimeout(x=>ed.monaco.revealLineInCenter(line+1),1);
-    ed.oStop=(ee.stop||[]).slice(0).sort(function(x,y){return x-y})
-    ed.setStop()
-    D.prf.floating()&&$('title',ed.dom.ownerDocument).text(ee.name)
+    ed.monaco_ready.then(_=>{
+      ed.monaco.setValue(ed.oText=ee.text.join('\n'));
+      ed.jumps.forEach(function(x){x.n=x.lh.lineNo()}) //to preserve jumps, convert LineHandle-s to line numbers
+      // cm.setValue(ed.oText=ee.text.join('\n')) //.setValue() invalidates old LineHandle-s
+      ed.jumps.forEach(function(x){x.lh=cm.getLineHandle(x.n);delete x.n}) //look up new LineHandle-s, forget numbers
+      cm.clearHistory();
+      ed.monaco.focus();
+      //entityType:             16 NestedArray        512 AplClass
+      // 1 DefinedFunction      32 QuadORObject      1024 AplInterface
+      // 2 SimpleCharArray      64 NativeFile        2048 AplSession
+      // 4 SimpleNumericArray  128 SimpleCharVector  4096 ExternalFunction
+      // 8 MixedSimpleArray    256 AplNamespace
+      ed.isCode=[1,256,512,1024,2048,4096].indexOf(ee.entityType)>=0
+      cm.setOption('mode',ed.isCode?'apl':'text');cm.setOption('foldGutter',ed.isCode&&!!D.prf.fold())
+      if(ed.isCode&&D.prf.indentOnOpen())ed.RD(cm)
+      ed.setRO(ee.readOnly||ee['debugger'])
+      ed.setBP(ed.breakpoints)
+      var line=ee.currentRow,col=ee.currentColumn||0
+      if(line===0&&col===0&&ee.text.length===1&&/\s?[a-z|@]+$/.test(ee.text[0]))col=ee.text[0].length
+      ed.monaco.setPosition({lineNumber:line+1,column:col+1});
+      ed.monaco.revealLineInCenter(line+1)
+      ed.oStop=(ee.stop||[]).slice(0).sort(function(x,y){return x-y})
+      ed.setStop()
+      D.prf.floating()&&$('title',ed.dom.ownerDocument).text(ee.name)
+     });
   },
   blockCursor:function(x){this.cm.getWrapperElement().classList.toggle('cm-fat-cursor',!!x)},
   blinkCursor:function(x){this.cm.setOption("cursorBlinkRate",x)},
-  hasFocus:function(){return this.cm.hasFocus()},
+  hasFocus:function(){return this.monaco.isFocused()},
   focus:function(){
     var q=this.container,p=q&&q.parent,l=q&&q.layoutManager,m=l&&l._maximisedItem
     if(m&&m!==(p&&p.parent))m.toggleMaximise()
