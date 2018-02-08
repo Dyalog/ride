@@ -91,7 +91,9 @@ D.IDE=function(){'use strict'
         done=1;
       } else if(D.elw&&!D.elw.isFocused()) D.elw.focus();
       if(done)return;
-      (ide.wins[w]=new D.Ed(ide,editorOpts)).open(ee)
+      // (ide.wins[w]=new D.Ed(ide,editorOpts)).open(ee)
+      let ed=ide.wins[w]=new D.Ed(ide,editorOpts)
+      ed.monaco_ready.then(_=>ed.open(ee))
       //add to golden layout:
       var si=ide.wins[0].cm.getScrollInfo() //remember session scroll position
       var tc=!!ee['debugger']

@@ -11,7 +11,7 @@ D.Ed=function(ide,opts){ //constructor
   ed.dom=I.ed_tmpl.cloneNode(1);ed.dom.id=null;ed.dom.style.display='';ed.$e=$(ed.dom);ed.jumps=[];ed.focusTS=0
   ed.dom.oncontextmenu=D.oncmenu 
   ed.oText='';ed.oStop=[] //remember original text and "stops" to avoid pointless saving on EP
-  ed.monaco = monaco.editor.create(ed.dom.querySelector('.ride_win_cm'), {
+  let me = ed.monaco = monaco.editor.create(ed.dom.querySelector('.ride_win_cm'), {
     language: 'apl',
     automaticLayout:true,
     lineNumbers:!!D.prf.lineNums()&&(x=>`[${x-1}]`),
@@ -29,21 +29,48 @@ D.Ed=function(ide,opts){ //constructor
   ed.monaco_ready = new Promise(function(resolve, reject) {
     // ugly hack as monaco doesn't have a built in event for when the editor is ready?!
     // https://github.com/Microsoft/monaco-editor/issues/115
-    let didScrollChangeDisposable = ed.monaco.onDidScrollChange(e=>{
+    let didScrollChangeDisposable = me.onDidScrollChange(e=>{
       didScrollChangeDisposable.dispose();
       resolve(true);
     });
   });
-  ed.tracer=ed.monaco.createContextKey('tracer',!!ed.tc);
+  me.dyalogCmds = ed
   let kc=monaco.KeyCode,km=monaco.KeyMod;
-  ed.monaco.addCommand(kc.Enter , () => ed.ER(ed.monaco),'tracer');
-  ed.monaco.addCommand(km.WinCtrl|kc.Enter, () => ed.TC());
-  ed.monaco.addCommand(km.Shift|kc.Enter, () => ed.ED(ed.monaco));
-  ed.monaco.addCommand(kc.Escape, () => ed.EP(ed.monaco));
-  ed.monaco.addCommand(km.Shift|kc.Escape, () => ed.QT());
-  ed.monaco.addCommand(km.CtrlCmd|kc.Tab, () => CM.commands.TB());
-  ed.monaco.addCommand(km.CtrlCmd|km.Shift|kc.Tab, () => CM.commands.BT());
-
+  ed.tracer=me.createContextKey('tracer',!!ed.tc);
+  
+  let ctrlcmd = {
+    'Ctrl':D.mac?km.WinCtrl:km.CtrlCmd,
+    'Cmd':km.CtrlCmd,
+    'Esc':kc.Escape,
+    '\\':kc.US_BACKSLASH,
+    '`':kc.US_BACKTICK,
+    ']':kc.US_CLOSE_SQUARE_BRACKET,
+    ',':kc.US_COMMA,
+    '.':kc.US_DOT,
+    '=':kc.US_EQUAL,
+    '-':kc.US_MINUS,
+    '[':kc.US_OPEN_SQUARE_BRACKET,
+    '\'':kc.US_QUOTE,
+    ';':kc.US_SEMICOLON,
+    '/':kc.US_SLASH
+  }
+  Object.keys(CM.keyMap.dyalog).forEach(ks=>{
+    let nkc=ks.split('-').reduce(((a,k)=>{
+      k=k.replace(/^[A-Z0-9]$/,'KEY_$&')
+        .replace(/^Numpad(.*)/,(m,p)=>`NUMPAD_${p.toUpperCase()}`)
+        .replace(/^(Up|Left|Right|Down)$/,'$1Arrow')
+        .replace(/--/g,'-US_MINUS')
+      return a|(ctrlcmd[k]||km[k]||kc[k])
+    }),0)
+    if (nkc){
+      let cmd = CM.keyMap.dyalog[ks]
+      let cond = cmd==='ER'||cmd==='TC'?'tracer':undefined;
+      me.addCommand(nkc, _=>{
+        CM.commands[cmd](me)
+      },cond);
+    }
+  })
+  
   ed.cm=CM(ed.dom.querySelector('.ride_win_hide'),{
     lineNumbers:!!D.prf.lineNums(),firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
     smartIndent:!D.prf.ilf()&&D.prf.indent()>=0,indentUnit:D.prf.indent(),scrollButtonHeight:12,matchBrackets:!!D.prf.matchBrackets(),
@@ -103,24 +130,20 @@ D.Ed.prototype={
     this.cm.scrollIntoView({left:x,right:x,top:y-h/3,bottom:y+2*h/3})
   },
   hl:function(l){ //highlight - set current line in tracer
-    var ed=this,mo=ed.monaco;
-    // ed.hll!=null&&ed.cm.removeLineClass(ed.hll,'background','highlighted')
-    // if((ed.hll=l)!=null){ //hll:highlighted line -- the one about to be executed in the tracer
-    //   ed.cm.addLineClass(l,'background','highlighted');ed.cm.setCursor(l,0);ed.scrollToCursor()
-    // }
+    var ed=this,me=ed.monaco;
     if(l==null) 
-      ed.decorations = mo.deltaDecorations(ed.decorations, []);
+      ed.decorations = me.deltaDecorations(ed.decorations, []);
     else {
       l++;
-      ed.decorations = mo.deltaDecorations(ed.decorations, [{
+      ed.decorations = me.deltaDecorations(ed.decorations, [{
         range: new monaco.Range(l,1,l,1),
         options: {
           isWholeLine: true,
           className: 'highlighted'
         }
       }]);
-      mo.setPosition({lineNumber:l,column:0});
-      mo.revealLineInCenter(l);
+      me.setPosition({lineNumber:l,column:0});
+      me.revealLineInCenter(l);
     }
   },
   setBP:function(x){ //update the display of breakpoints
@@ -161,32 +184,30 @@ D.Ed.prototype={
   stateChanged:function(){var w=this;w.updSize();w.cm.refresh();w.updGutters&&w.updGutters();w.restoreScrollPos()},
   open:function(ee){ //ee:editable entity
     var ed=this,cm=ed.cm
-    ed.monaco_ready.then(_=>{
-      ed.monaco.model.setValue(ed.oText=ee.text.join('\n'));
-      ed.monaco.model.setEOL(monaco.editor.EndOfLineSequence.LF);
-      ed.jumps.forEach(function(x){x.n=x.lh.lineNo()}) //to preserve jumps, convert LineHandle-s to line numbers
-      // cm.setValue(ed.oText=ee.text.join('\n')) //.setValue() invalidates old LineHandle-s
-      ed.jumps.forEach(function(x){x.lh=cm.getLineHandle(x.n);delete x.n}) //look up new LineHandle-s, forget numbers
-      cm.clearHistory();
-      ed.monaco.focus();
-      //entityType:             16 NestedArray        512 AplClass
-      // 1 DefinedFunction      32 QuadORObject      1024 AplInterface
-      // 2 SimpleCharArray      64 NativeFile        2048 AplSession
-      // 4 SimpleNumericArray  128 SimpleCharVector  4096 ExternalFunction
-      // 8 MixedSimpleArray    256 AplNamespace
-      ed.isCode=[1,256,512,1024,2048,4096].indexOf(ee.entityType)>=0
-      cm.setOption('mode',ed.isCode?'apl':'text');cm.setOption('foldGutter',ed.isCode&&!!D.prf.fold())
-      if(ed.isCode&&D.prf.indentOnOpen())ed.RD(cm)
-      ed.setRO(ee.readOnly||ee['debugger'])
-      ed.setBP(ed.breakpoints)
-      var line=ee.currentRow,col=ee.currentColumn||0
-      if(line===0&&col===0&&ee.text.length===1&&/\s?[a-z|@]+$/.test(ee.text[0]))col=ee.text[0].length
-      ed.monaco.setPosition({lineNumber:line+1,column:col+1});
-      ed.monaco.revealLineInCenter(line+1)
-      ed.oStop=(ee.stop||[]).slice(0).sort(function(x,y){return x-y})
-      ed.setStop()
-      D.prf.floating()&&$('title',ed.dom.ownerDocument).text(ee.name)
-     });
+    ed.monaco.model.setValue(ed.oText=ee.text.join('\n'));
+    ed.monaco.model.setEOL(monaco.editor.EndOfLineSequence.LF);
+    ed.jumps.forEach(function(x){x.n=x.lh.lineNo()}) //to preserve jumps, convert LineHandle-s to line numbers
+    // cm.setValue(ed.oText=ee.text.join('\n')) //.setValue() invalidates old LineHandle-s
+    ed.jumps.forEach(function(x){x.lh=cm.getLineHandle(x.n);delete x.n}) //look up new LineHandle-s, forget numbers
+    cm.clearHistory();
+    ed.monaco.focus();
+    //entityType:             16 NestedArray        512 AplClass
+    // 1 DefinedFunction      32 QuadORObject      1024 AplInterface
+    // 2 SimpleCharArray      64 NativeFile        2048 AplSession
+    // 4 SimpleNumericArray  128 SimpleCharVector  4096 ExternalFunction
+    // 8 MixedSimpleArray    256 AplNamespace
+    ed.isCode=[1,256,512,1024,2048,4096].indexOf(ee.entityType)>=0
+    cm.setOption('mode',ed.isCode?'apl':'text');cm.setOption('foldGutter',ed.isCode&&!!D.prf.fold())
+    if(ed.isCode&&D.prf.indentOnOpen())ed.RD(cm)
+    ed.setRO(ee.readOnly||ee['debugger'])
+    ed.setBP(ed.breakpoints)
+    var line=ee.currentRow,col=ee.currentColumn||0
+    if(line===0&&col===0&&ee.text.length===1&&/\s?[a-z|@]+$/.test(ee.text[0]))col=ee.text[0].length
+    ed.monaco.setPosition({lineNumber:line+1,column:col+1});
+    ed.monaco.revealLineInCenter(line+1)
+    ed.oStop=(ee.stop||[]).slice(0).sort(function(x,y){return x-y})
+    ed.setStop()
+    D.prf.floating()&&$('title',ed.dom.ownerDocument).text(ee.name)
   },
   blockCursor:function(x){this.cm.getWrapperElement().classList.toggle('cm-fat-cursor',!!x)},
   blinkCursor:function(x){this.cm.setOption("cursorBlinkRate",x)},
@@ -279,9 +300,9 @@ D.Ed.prototype={
     steps=Math.abs(steps)
     for(var i=0;i<steps;i++){D.send(cmd,{win:this.id})}
   },
-  EP:function(_monaco){this.isClosing=1;this.FX(_monaco)},
-  FX:function(_monaco){
-    var ed=this,v=_monaco.getModel().getValue(monaco.editor.EndOfLinePreference.LF); // ,stop=ed.getStops() [MONACO]
+  EP:function(me){this.isClosing=1;this.FX(me)},
+  FX:function(me){
+    var ed=this,v=me.getModel().getValue(monaco.editor.EndOfLinePreference.LF); // ,stop=ed.getStops() [MONACO]
     // if(ed.tc || v === ed.oText && '' + stop === '' + ed.oStop){D.send('CloseWindow',{win:ed.id});return} //if tracer or unchanged
     // for(var i = 0; i < stop.length; i++)cm.setGutterMarker(stop[i],'breakpoints',null) [MONACO]
     D.send('SaveChanges',{win:ed.id,text:v.split('\n'),stop:[]})

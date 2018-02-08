@@ -54,12 +54,14 @@ D.IPC_Client=function(winId){
       var editorOpts=pe.editorOpts, ee=pe.ee;
       var ed=D.ed=new D.Ed(D.ide,editorOpts);
       I.ide.append(ed.dom);
-      ed.open(ee);ed.updSize();document.title=ed.name
-      window.onresize=function(){ed&&ed.updSize()}
-      window.onfocus=()=>ed.focus();
-      window.onbeforeunload=function(e){ed.onbeforeunload(e)}
-      ed.refresh();
-      D.ipc.of.ride_master.emit('unblock',ed.id);
+      ed.monaco_ready.then(_=>{
+        ed.open(ee);ed.updSize();document.title=ed.name
+        window.onresize=function(){ed&&ed.updSize()}
+        window.onfocus=()=>ed.focus();
+        window.onbeforeunload=function(e){ed.onbeforeunload(e)}
+        ed.refresh();
+        D.ipc.of.ride_master.emit('unblock',ed.id);
+      })
     });
   });  
 };
