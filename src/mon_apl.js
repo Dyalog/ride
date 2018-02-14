@@ -393,7 +393,7 @@ const language = {
   },
 };
 const snippets = { 
-  triggerCharacters:['`',':','.','(',')','[',']'],
+  triggerCharacters:['`',':','.','⎕','(',')','[',']'],
   provideCompletionItems: (model,position,token) => { 
     let l=position.lineNumber,c=position.column
     let s=model.getLineContent(l),ch=s[c-2]
@@ -447,16 +447,16 @@ const snippets = {
           kind: monaco.languages.CompletionItemKind.Text
         },
         {
-          label: 'access',
+          label: 'Access',
           kind: monaco.languages.CompletionItemKind.Snippet,
-          insertText:{value:':Access ${1:Public} ${2:Shared}'}
+          insertText:{value:'Access ${1:Public} ${2:Shared}'}
         },
         {
-          label: 'class',
+          label: 'Class',
           kind: monaco.languages.CompletionItemKind.Snippet,
           insertText: {
             value: [
-              ':Class ${1:name}',
+              'Class ${1:name}',
               '\t$0',
               ':EndClass'
             ].join('\n')
@@ -464,11 +464,11 @@ const snippets = {
           documentation: 'Class script'
         },
         {
-          label: 'disposable',
+          label: 'Disposable',
           kind: monaco.languages.CompletionItemKind.Snippet,
           insertText: {
             value: [
-              ':Disposable ${1:objects}',
+              'Disposable ${1:objects}',
               '\t$0',
               ':EndDisposable'
             ].join('\n')
@@ -476,11 +476,11 @@ const snippets = {
           documentation: 'Disposable Statement'
         },
         {
-          label: 'for',
+          label: 'For',
           kind: monaco.languages.CompletionItemKind.Snippet,
           insertText: {
             value: [
-              ':For ${1:item} :In ${2:items}',
+              'For ${1:item} :In ${2:items}',
               '\t$0',
               ':EndFor'
             ].join('\n')
@@ -488,11 +488,11 @@ const snippets = {
           documentation: 'For loop'
         },
         {
-          label: 'ifelse',
+          label: 'If Else',
           kind: monaco.languages.CompletionItemKind.Snippet,
           insertText: {
             value: [
-              ':If ${1:condition}',
+              'If ${1:condition}',
               '\t$2',
               ':Else',
               '\t$0',
@@ -502,11 +502,11 @@ const snippets = {
           documentation: 'If-Else Statement'
         },
         {
-          label: 'interface',
+          label: 'Interface',
           kind: monaco.languages.CompletionItemKind.Snippet,
           insertText: {
             value: [
-              ':Interface ${1:name}',
+              'Interface ${1:name}',
               '\t$0',
               ':EndInterface'
             ].join('\n')
@@ -514,11 +514,11 @@ const snippets = {
           documentation: 'Interface script'
         },
         {
-          label: 'namespace',
+          label: 'Namespace',
           kind: monaco.languages.CompletionItemKind.Snippet,
           insertText: {
             value: [
-              ':Namespace ${1:name}',
+              'Namespace ${1:name}',
               '\t$0',
               ':EndNamespace'
             ].join('\n')
@@ -526,11 +526,11 @@ const snippets = {
           documentation: 'Namespace script'
         },
         {
-          label: 'property',
+          label: 'Property',
           kind: monaco.languages.CompletionItemKind.Snippet,
           insertText: {
             value: [
-              ':Property ${1:name}',
+              'Property ${1:name}',
               '\t∇ r←get args',
               '\t  r←$2',
               '\t∇',
@@ -542,11 +542,11 @@ const snippets = {
           documentation: 'Property declaration'
         },
         {
-          label: 'repeat',
+          label: 'Repeat',
           kind: monaco.languages.CompletionItemKind.Snippet,
           insertText: {
             value: [
-              ':Repeat',
+              'Repeat',
               '\t$0',
               ':EndRepeat'
             ].join('\n')
@@ -554,11 +554,11 @@ const snippets = {
           documentation: 'Repeat loop - endless'
         },
         {
-          label: 'repeatuntil',
+          label: 'Repeat Until',
           kind: monaco.languages.CompletionItemKind.Snippet,
           insertText: {
             value: [
-              ':Repeat',
+              'Repeat',
               '\t$0',
               ':Until ${1:condition}'
             ].join('\n')
@@ -566,23 +566,23 @@ const snippets = {
           documentation: 'Repeat loop until'
         },
         {
-          label: 'section',
+          label: 'Section',
           kind: monaco.languages.CompletionItemKind.Snippet,
           insertText: {
             value: [
-              ':Section ${1:name}',
+              'Section ${1:name}',
               '\t$0',
               ':EndSection'
             ].join('\n')
           },
-          documentation: 'If-Else Statement'
+          documentation: 'Section block'
         },
         {
-          label: 'select',
+          label: 'Select',
           kind: monaco.languages.CompletionItemKind.Snippet,
           insertText: {
             value: [
-              ':Select ${1:object}',
+              'Select ${1:object}',
               ':Case ${2:value}',
               '\t$3',
               ':Else',
@@ -593,11 +593,11 @@ const snippets = {
           documentation: 'Select Statement'
         },
         {
-          label: 'trap',
+          label: 'Trap',
           kind: monaco.languages.CompletionItemKind.Snippet,
           insertText: {
             value: [
-              ':Trap ${1:error number}',
+              'Trap ${1:error number}',
               '\t$1',
               ':Else',
               '\t$0',
@@ -607,11 +607,11 @@ const snippets = {
           documentation: 'Trap-Else Statement'
         },
         {
-          label: 'while',
+          label: 'While',
           kind: monaco.languages.CompletionItemKind.Snippet,
           insertText: {
             value: [
-              ':While ${1:condition}',
+              'While ${1:condition}',
               '\t$0',
               ':EndWhile'
             ].join('\n')
@@ -619,11 +619,11 @@ const snippets = {
           documentation: 'While loop'
         },
         {
-          label: 'with',
+          label: 'With',
           kind: monaco.languages.CompletionItemKind.Snippet,
           insertText: {
             value: [
-              ':With ${1:condition}',
+              'With ${1:condition}',
               '\t$0',
               ':EndWith'
             ].join('\n')

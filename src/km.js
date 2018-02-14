@@ -241,23 +241,24 @@ function bqChangeHandlerMe(me,o){ //o:changeObj
   let s=me.model.getLineContent(l)
   if(s.slice(c-3,c)===pk+pk+pk){  // ``` for ⋄
     let nr=new monaco.Range(l,c-2,l,c+1)
+    let ns=new monaco.Selection(l,c-1,l,c-1);
     bqCleanUpMe(me);
-    me.executeEdits('D',[{range:nr,text:bq[pk]||''}])
+    setTimeout(_=>me.executeEdits('D',[{range:nr,text:bq[pk]||''}],[ns]),1)
   } else if (s.slice(c-3,c-1)===pk+pk){  // bqbqc
     me.dyalogBQ&&me.dyalogBQ.dispose();delete me.dyalogBQ
+  } else if (s[c-2]!==pk) {    
+    bqCleanUpMe(me)
   } else if (x!==pk){
     let y=x===' '?pk:bq[x]
     if(y){
       let nr=new monaco.Range(l,c-1,l,c+chg.text.length)
+      let ns=new monaco.Selection(l,c,l,c);
       bqCleanUpMe(me)
-      me.executeEdits('D',[{range:nr,text:y}])
+      setTimeout(_=>me.executeEdits('D',[{range:nr,text:y}],[ns]),1)
     } else {
       bqCleanUpMe(me)
     }
   }
-  // if(s[c-2]===pk){
-  //   me.dyalogBQ&&me.dyalogBQ.dispose();delete me.dyalogBQ
-  // }
 }
 function bqChangeHandler(cm,o){ //o:changeObj  
   if(!cm.dyalogBQ)return
@@ -284,8 +285,6 @@ function bqCleanUpMe(me){
     sw=me._view.contentWidgets._widgets["editor.widget.suggestWidget"]
     setTimeout(x=>sw&&sw._actual&&sw._actual.hideWidget(),50)
   }
-  // var ca=cm.state.completionActive;ca&&ca.close&&ca.close()
-  // cm.setOption('autoCloseBrackets',!!D.prf.autoCloseBrackets()&&D.Ed.ACB_VALUE)
 }
 function bqbqHint(cm){
   var sel, pick=function(cm,m){return m.pick()}, c=cm.getCursor() //sel:selected completion object
