@@ -105,6 +105,12 @@ $.extend(CM.commands,{
     D.openExternal(u)
   },
   BQC:function(cm){
+    if (cm.model) {
+      let me=cm;
+      if(me.dyalogBQ) return;
+      me.dyalogBQ=me.model.onDidChangeContent(x=>bqChangeHandlerMe(me,x))
+      return
+    }
     if(cm.dyalogBQ){var c=cm.getCursor();cm.replaceSelection(D.prf.prefixKey(),'end');return}
     //Make it possible to use pfxkey( etc -- remember the original value of
     //autoCloseBrackets, set it temporarily to false, and restore it when the
@@ -136,10 +142,20 @@ $.extend(CM.commands,{
     },500)
   },
   goLineEndSmart:function(cm){ //CodeMirror provides a goLineStartSmart but not a goLineEndSmart command.
-    cm.extendSelectionsBy(function(){
-      var c=cm.getCursor(),l=c.line,s=cm.getLine(l),n=s.length,m=s.replace(/ +$/,'').length
-      return CM.Pos(l,m<=c.ch&&c.ch<n||!m?n:m)
-    },{origin:'+move',bias:-1})
+    if (cm.extendSelectionsBy){
+      cm.extendSelectionsBy(function(){
+        var c=cm.getCursor(),l=c.line,s=cm.getLine(l),n=s.length,m=s.replace(/ +$/,'').length
+        return CM.Pos(l,m<=c.ch&&c.ch<n||!m?n:m)
+      },{origin:'+move',bias:-1})
+    } else {
+      let sels=cm.getSelections().map(c=>{
+        let l=c.startLineNumber,ch=c.startColumn-1
+        let t=cm.model.getLineContent(l),n=t.length,m=t.replace(/ +$/,'').length
+        let nc=1+(m<=ch&&ch<n||!m?n:m);
+        return new monaco.Selection(l,nc,l,nc)
+      })
+      cm.setSelections(sels);
+    }
   },
 //JSC:function(){D.elw&&D.elw.webContents.toggleDevTools()},
   JSC:function(){var w;D.el&&(w=D.el.BrowserWindow.getFocusedWindow())&&w.webContents.toggleDevTools()},
@@ -206,7 +222,7 @@ for(var i=1;i<=12;i++)CM.commands['PF'+i]=function pfk(i){
 //Each string can be indexed by scancode: http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
 //"APL" and "APL shifted" are the defaults upon which the user can build customisations.
 var bq //effective ` map as a dictionary, kept in sync with the prefs
-function updBQ(){bq={};var lc=D.prf.kbdLocale(), l=D.kbds.layouts[lc]||D.kbds.layouts.en_US, n=l[0].length
+function updBQ(){bq=D.bq={};var lc=D.prf.kbdLocale(), l=D.kbds.layouts[lc]||D.kbds.layouts.en_US, n=l[0].length
                  for(var i=0;i<2;i++)for(var j=0;j<n;j++){var name=l[i][j];bq[name]||(bq[name]=l[2+i][j])}
                  var s=D.prf.prefixMaps()[lc];if(s)for(var i=0;i<s.length;i+=2)bq[s[i]]=s[i+1]}
 updBQ();D.prf.prefixMaps(updBQ);D.prf.kbdLocale(updBQ)
@@ -218,7 +234,32 @@ function complexity(x){return(1+order.indexOf(x))||(1+order.length+x.charCodeAt(
 D.getBQKeyFor=function(v){var r='',x,y;for(x in bq){y=bq[x];if(y===v&&(!r||complexity(r)>complexity(x)))r=x}
                           var pk=D.prf.prefixKey();return r===pk?pk+pk:r}
 
-function bqChangeHandler(cm,o){ //o:changeObj
+function bqChangeHandlerMe(me,o){ //o:changeObj
+  if(!me.dyalogBQ)return
+  let chg=o.changes[0],r=chg.range,l=r.startLineNumber,c=r.startColumn
+  let x=chg.text[0],pk=D.prf.prefixKey()
+  let s=me.model.getLineContent(l)
+  if(s.slice(c-3,c)===pk+pk+pk){  // ``` for ⋄
+    let nr=new monaco.Range(l,c-2,l,c+1)
+    bqCleanUpMe(me);
+    me.executeEdits('D',[{range:nr,text:bq[pk]||''}])
+  } else if (s.slice(c-3,c-1)===pk+pk){  // bqbqc
+    me.dyalogBQ&&me.dyalogBQ.dispose();delete me.dyalogBQ
+  } else if (x!==pk){
+    let y=x===' '?pk:bq[x]
+    if(y){
+      let nr=new monaco.Range(l,c-1,l,c+chg.text.length)
+      bqCleanUpMe(me)
+      me.executeEdits('D',[{range:nr,text:y}])
+    } else {
+      bqCleanUpMe(me)
+    }
+  }
+  // if(s[c-2]===pk){
+  //   me.dyalogBQ&&me.dyalogBQ.dispose();delete me.dyalogBQ
+  // }
+}
+function bqChangeHandler(cm,o){ //o:changeObj  
   if(!cm.dyalogBQ)return
   var l=o.from.line,c=o.from.ch
   if(o.origin!=='+input'||o.text.length!==1||o.text[0].length!==1){bqCleanUp(cm);return}
@@ -237,6 +278,15 @@ function bqCleanUp(cm){
   delete cm.dyalogBQ;clearTimeout(ctid);var ca=cm.state.completionActive;ca&&ca.close&&ca.close()
   cm.setOption('autoCloseBrackets',!!D.prf.autoCloseBrackets()&&D.Ed.ACB_VALUE)
 }
+function bqCleanUpMe(me){
+  if(me.dyalogBQ){
+    me.dyalogBQ.dispose();delete me.dyalogBQ
+    sw=me._view.contentWidgets._widgets["editor.widget.suggestWidget"]
+    setTimeout(x=>sw&&sw._actual&&sw._actual.hideWidget(),50)
+  }
+  // var ca=cm.state.completionActive;ca&&ca.close&&ca.close()
+  // cm.setOption('autoCloseBrackets',!!D.prf.autoCloseBrackets()&&D.Ed.ACB_VALUE)
+}
 function bqbqHint(cm){
   var sel, pick=function(cm,m){return m.pick()}, c=cm.getCursor() //sel:selected completion object
   cm.showHint({completeOnSingleClick:true,
@@ -247,7 +297,7 @@ function bqbqHint(cm){
                                CM.on(data,'select',function(x){sel=x});return data}})
 }
 
-var bqbqc=[] //backquote-backquote completions
+var bqbqc=D.bqbqc=[] //backquote-backquote completions
 for(var i=0;i<D.informal.length;i++){
   var a=D.informal[i].split(' ')
   for(var j=1;j<a.length;j++)bqbqc.push({name:a[j],text:a[0],render:

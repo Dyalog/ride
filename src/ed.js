@@ -23,7 +23,8 @@ D.Ed=function(ide,opts){ //constructor
     fontFamily:'apl',
     mouseWheelZoom:true,
     cursorStyle:D.prf.blockCursor()?'block':'line',
-    cursorBlinking:D.prf.blinkCursor()?'blink':'solid'    
+    cursorBlinking:D.prf.blinkCursor()?'blink':'solid',
+    wordBasedSuggestions:false,  
   });
 
   ed.monaco_ready = new Promise(function(resolve, reject) {
@@ -35,42 +36,8 @@ D.Ed=function(ide,opts){ //constructor
     });
   });
   me.dyalogCmds = ed
-  let kc=monaco.KeyCode,km=monaco.KeyMod;
   ed.tracer=me.createContextKey('tracer',!!ed.tc);
-  
-  let ctrlcmd = {
-    'Ctrl':D.mac?km.WinCtrl:km.CtrlCmd,
-    'Cmd':km.CtrlCmd,
-    'Esc':kc.Escape,
-    '\\':kc.US_BACKSLASH,
-    '`':kc.US_BACKTICK,
-    ']':kc.US_CLOSE_SQUARE_BRACKET,
-    ',':kc.US_COMMA,
-    '.':kc.US_DOT,
-    '=':kc.US_EQUAL,
-    '-':kc.US_MINUS,
-    '[':kc.US_OPEN_SQUARE_BRACKET,
-    '\'':kc.US_QUOTE,
-    ';':kc.US_SEMICOLON,
-    '/':kc.US_SLASH
-  }
-  Object.keys(CM.keyMap.dyalog).forEach(ks=>{
-    let nkc=ks.split('-').reduce(((a,k)=>{
-      k=k.replace(/^[A-Z0-9]$/,'KEY_$&')
-        .replace(/^Numpad(.*)/,(m,p)=>`NUMPAD_${p.toUpperCase()}`)
-        .replace(/^(Up|Left|Right|Down)$/,'$1Arrow')
-        .replace(/--/g,'-US_MINUS')
-      return a|(ctrlcmd[k]||km[k]||kc[k])
-    }),0)
-    if (nkc){
-      let cmd = CM.keyMap.dyalog[ks]
-      let cond = cmd==='ER'||cmd==='TC'?'tracer':undefined;
-      me.addCommand(nkc, _=>{
-        CM.commands[cmd](me)
-      },cond);
-    }
-  })
-  
+  ed.mapKeys()
   ed.cm=CM(ed.dom.querySelector('.ride_win_hide'),{
     lineNumbers:!!D.prf.lineNums(),firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
     smartIndent:!D.prf.ilf()&&D.prf.indent()>=0,indentUnit:D.prf.indent(),scrollButtonHeight:12,matchBrackets:!!D.prf.matchBrackets(),
@@ -88,7 +55,11 @@ D.Ed=function(ide,opts){ //constructor
   ed.cm.on('scroll',function(c){var i=c.getScrollInfo();ed.btm=i.clientHeight+i.top})
   ed.cm.on('focus',function(){ed.focusTS=+new Date;ide.focusedWin=ed})
   D.util.cmOnDblClick(ed.cm,function(x){ed.ED(ed.cm);x.preventDefault();x.stopPropagation()})
-  ed.processAutocompleteReply=D.ac(ed)
+  // ed.processAutocompleteReply=D.ac(ed)
+  ed.processAutocompleteReply=x=>{
+    let items=x.options.map(i=>({label:i}))
+    me.model.ac&&me.model.ac.complete&&me.model.ac.complete(items)
+  }
   ed.tb=ed.dom.querySelector('.toolbar')
   ed.tb.onmousedown=function(x){if(x.target.matches('.tb_btn')){x.target.className+=' armed';x.preventDefault()}}
   ed.tb.onmouseup=ed.tb.onmouseout=function(x){if(x.target.matches('.tb_btn')){x.target.classList.remove('armed')
@@ -102,6 +73,47 @@ D.Ed=function(ide,opts){ //constructor
   ed.firstOpen=true;
 }
 D.Ed.prototype={
+  mapKeys:function(){
+    let me=this.monaco
+    let kc=monaco.KeyCode,km=monaco.KeyMod;
+    let ctrlcmd = {
+      'Ctrl':D.mac?km.WinCtrl:km.CtrlCmd,
+      'Cmd':km.CtrlCmd,
+      'Esc':kc.Escape,
+      '\\':kc.US_BACKSLASH,
+      // '`':kc.US_BACKTICK,
+      ']':kc.US_CLOSE_SQUARE_BRACKET,
+      ',':kc.US_COMMA,
+      '.':kc.US_DOT,
+      '=':kc.US_EQUAL,
+      '-':kc.US_MINUS,
+      '[':kc.US_OPEN_SQUARE_BRACKET,
+      '\'':kc.US_QUOTE,
+      ';':kc.US_SEMICOLON,
+      '/':kc.US_SLASH
+    }
+    let addCmd = map =>{
+      Object.keys(map).forEach(ks=>{
+        let nkc=ks.split('-').reduce(((a,ko)=>{
+          let k=ko.replace(/^[A-Z0-9]$/,'KEY_$&')
+          .replace(/^Numpad(.*)/,(m,p)=>`NUMPAD_${p.toUpperCase()}`)
+          .replace(/^(Up|Left|Right|Down)$/,'$1Arrow')
+          .replace(/--/g,'-US_MINUS')
+          .replace(/^\'(.)\'$/,'$1')
+          return a|(ctrlcmd[k]||km[k]||kc[k])
+        }),0)
+        if (nkc){
+          let cmd = map[ks]
+          let cond = cmd==='ER'||cmd==='TC'?'tracer':undefined;
+          me.addCommand(nkc, _=>{
+            CM.commands[cmd](me)
+          },cond);
+        }
+      })
+    }
+    addCmd(CM.keyMap.dyalogDefault)
+    addCmd(CM.keyMap.dyalog)
+  },
   updGutters:function(){
     var g=[],ed=this,cm=ed.cm
     ed.isCode&&ed.breakpoints&&g.push('breakpoints')
@@ -183,14 +195,18 @@ D.Ed.prototype={
   },
   stateChanged:function(){var w=this;w.updSize();w.cm.refresh();w.updGutters&&w.updGutters();w.restoreScrollPos()},
   open:function(ee){ //ee:editable entity
-    var ed=this,cm=ed.cm
-    ed.monaco.model.setValue(ed.oText=ee.text.join('\n'));
-    ed.monaco.model.setEOL(monaco.editor.EndOfLineSequence.LF);
+    var ed=this,cm=ed.cm,me=ed.monaco
+    me.model.winid=ed.id
+    me.model.onDidChangeContent(x=>{
+      !me.dyalogBQ&&x.changes.length===1&&x.changes[0].text===D.prf.prefixKey()&&CM.commands.BQC(me);
+    })
+    me.model.setValue(ed.oText=ee.text.join('\n'));
+    me.model.setEOL(monaco.editor.EndOfLineSequence.LF);
     ed.jumps.forEach(function(x){x.n=x.lh.lineNo()}) //to preserve jumps, convert LineHandle-s to line numbers
     // cm.setValue(ed.oText=ee.text.join('\n')) //.setValue() invalidates old LineHandle-s
     ed.jumps.forEach(function(x){x.lh=cm.getLineHandle(x.n);delete x.n}) //look up new LineHandle-s, forget numbers
     cm.clearHistory();
-    ed.monaco.focus();
+    me.focus();
     //entityType:             16 NestedArray        512 AplClass
     // 1 DefinedFunction      32 QuadORObject      1024 AplInterface
     // 2 SimpleCharArray      64 NativeFile        2048 AplSession
@@ -203,8 +219,8 @@ D.Ed.prototype={
     ed.setBP(ed.breakpoints)
     var line=ee.currentRow,col=ee.currentColumn||0
     if(line===0&&col===0&&ee.text.length===1&&/\s?[a-z|@]+$/.test(ee.text[0]))col=ee.text[0].length
-    ed.monaco.setPosition({lineNumber:line+1,column:col+1});
-    ed.monaco.revealLineInCenter(line+1)
+    me.setPosition({lineNumber:line+1,column:col+1});
+    me.revealLineInCenter(line+1)
     ed.oStop=(ee.stop||[]).slice(0).sort(function(x,y){return x-y})
     ed.setStop()
     D.prf.floating()&&$('title',ed.dom.ownerDocument).text(ee.name)
