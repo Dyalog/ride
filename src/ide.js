@@ -298,7 +298,6 @@ D.IDE=function(){'use strict'
       })
     })
     c.on('open',function(){
-      var sw=ide.wins[h.id]
       $(c.getElement()).closest(".lm_item").find(".lm_maximise").onFirst('click',function(){
         w.saveScrollPos()
     })})

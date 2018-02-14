@@ -282,7 +282,7 @@ function bqCleanUp(cm){
 function bqCleanUpMe(me){
   if(me.dyalogBQ){
     me.dyalogBQ.dispose();delete me.dyalogBQ
-    sw=me._view.contentWidgets._widgets["editor.widget.suggestWidget"]
+    let sw=me._view.contentWidgets._widgets["editor.widget.suggestWidget"]
     setTimeout(x=>sw&&sw._actual&&sw._actual.hideWidget(),50)
   }
 }

@@ -33,8 +33,8 @@
     
     constructor(hdr, a, vars) {
       this.hdr = hdr;
-      this.a = a;
-      this.vars = vars;
+      this.a = a.slice();
+      this.vars = vars.slice();
     }
     
     clone(){
@@ -45,8 +45,10 @@
       if(other === this) return true;
       if(!other || !(other instanceof State)) return false;
       if(this.hdr !== other.hdr) return false;
-      if(this.a !== other.a) return false;
-      if(this.vars !== other.vars) return false;
+      if(this.a.length !== other.a.length) return false;
+      if(!this.a.every((e,i)=>e===other.a[i])) return false;
+      if(this.vars.length !== other.vars.length) return false;
+      if(!this.vars.every((e,i)=>e===other.vars[i])) return false;
       return true;
     }
   }
@@ -84,7 +86,7 @@
   
   const tokenizer = {
     getInitialState: ()=>{
-      return new State(1,[{t:'',oi:0,ii:0,l:0}])
+      return new State(1,[{t:'',oi:0,ii:0,l:0}],[])
     },
     tokenize:function(line, state){
       let lt = {
