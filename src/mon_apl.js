@@ -230,10 +230,10 @@
 
             case '⎕':
               m = sm.slice(1).match(/^[áa-z0-9]*/i);
-              tkn = m && sysfns.indexOf(m[0].toLowerCase()) >= 0 ? 'predefined.quad' : 'invalid.sysfn';
+              tkn = m && sysfns.indexOf(m[0].toLowerCase()) >= 0 ? 'predefined.sysfn' : 'invalid.sysfn';
               addToken(offset, tkn); offset += 1 + m[0].length; break;
 
-            case '⍞': addToken(offset, 'predefined.quad'); offset += 1; break;
+            case '⍞': addToken(offset, 'predefined.sysfn'); offset += 1; break;
             case '#': addToken(offset, 'namespace'); offset += 1; break;
             case '⍺': case '⍵': case '∇': case ':':
               dd = dfnDepth(a);
@@ -242,7 +242,7 @@
                 addToken(offset, tkn); offset += 1; break;
               } else if (c === '∇') {
                 let i = a.length - 1; while (i && a[i].t !== '∇') i -= 1;
-                if (i) { a.splice(i); delete h.vars; } else { a.push({ t: '∇', oi: n, ii: n + swm }); h.hdr = 1; }
+                if (i) { a.splice(i); h.vars.length = 0; } else { a.push({ t: '∇', oi: n, ii: n + swm }); h.hdr = 1; }
                 addToken(offset, 'identifier.tradfn'); offset += 1; break;
               } else if (c === ':') {
                 let ok = 0;
@@ -277,7 +277,7 @@
                   case 'else': ok = la.t === 'if' || la.t === 'select' || la.t === 'trap'; break;
                   case 'elseif': case 'andif': case 'orif': ok = la.t === 'if'; break;
                   case 'in': case 'ineach': ok = la.t === 'for'; break;
-                  case 'case ': case 'case list': ok = la.t === 'select' || la.t === 'trap'; break;
+                  case 'case': case 'caselist': ok = la.t === 'select' || la.t === 'trap'; break;
                   case 'leave': case 'continue':
                     ok = 0;
                     for (let i = 0; i < a.length; i++) if (/^(?:for|repeat|while)$/.test(a[i].t)) { ok = 1; break; }
@@ -286,11 +286,15 @@
                   case 'access': ok = la.t === 'class' || la.t === '∇';
                     m = sm.slice(1).match(/[^⋄\n\r]*/);
                     ml += m && m[0].length;
-                    ok = !m || /^(\s+(private|public|instance|shared|webmethod|overridable|override))*\s*$/i.test(m[0]);
+                    ok = !m || /^access(\s+(private|public|instance|shared|webmethod|overridable|override))*\s*$/i.test(m[0]);
                     break;
 
                   case 'base': case 'goto': case 'include': case 'return': case 'using': ok = 1; break;
-                  case 'field': sm.match(/(\s+(private|public|instance|shared|readonly)\b)+/i, 1, 1); ok = 1; break;
+                  case 'field':
+                    m = sm.match(/(\s+(private|public|instance|shared|readonly)\b)+/i);
+                    ml += m && m[0].length;
+                    ok = 1;
+                    break;
                   case 'implements':
                     m = sm.match(/\s+(\w+)/);
                     if (m) {
@@ -400,7 +404,19 @@
           };
         });
       } else if (ch === ':') {
-        const items = ['Private', 'Public', 'Instance', 'Shared'].map(i => ({
+        const items = [
+          'Case',
+          'CaseList',
+          'Continue',
+          'Private',
+          'Public',
+          'Instance',
+          'Shared',
+          'Implements Constructor',
+          'Implements Destructor',
+          'Implements Method',
+          'Implements Trigger',
+        ].map(i => ({
           label: i,
           kind: kind.Text,
         }));
