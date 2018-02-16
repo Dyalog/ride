@@ -21,6 +21,8 @@
         "no-plusplus":["error", {"allowForLoopAfterthoughts": true}],
         "no-useless-escape":"warn",
         "no-template-curly-in-string":"warn",
-        "no-cond-assign": ["error", "except-parens"]
+        "no-cond-assign": ["error", "except-parens"],
+        "no-unused-expressions":["error", { "allowShortCircuit": true, "allowTernary": true }],
+        "no-param-reassign":["error", { "props": false }]
     }
 }

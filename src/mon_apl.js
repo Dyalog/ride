@@ -74,7 +74,8 @@
   // « and » prevent tolerance for extra whitespace
   // _ stands for «' '» (space as an APL character literal)
   const idioms = '⍴⍴ /⍳ /⍳⍴ ⊃¨⊂ {} {⍺} {⍵} {⍺⍵} {0} {0}¨ ,/ ⍪/ ⊃⌽ ↑⌽ ⊃⌽, ↑⌽, 0=⍴ 0=⍴⍴ 0=≡ {(↓⍺)⍳↓⍵} ↓⍉↑ ↓⍉⊃ ∧\\_= +/∧\\_= +/∧\\ {(∨\\_≠⍵)/⍵} {(+/∧\\_=⍵)↓⍵} ~∘_¨↓ {(+/∨\\_≠⌽⍵)↑¨↓⍵} ⊃∘⍴¨ ↑∘⍴¨ ,← ⍪← {⍵[⍋⍵]} {⍵[⍒⍵]} {⍵[⍋⍵;]} {⍵[⍒⍵;]} 1=≡ 1=≡, 0∊⍴ ~0∊⍴ ⊣⌿ ⊣/ ⊢⌿ ⊢/ *○ 0=⊃⍴ 0≠⊃⍴ ⌊«0.5»+ «⎕AV»⍳'.split(' ');
-  function escRE(s) { return s.replace(/[\(\)\[\]\{\}\.\?\+\*\/\\\^\$\|]/g, x => `\\${x}`); }
+  // function escRE(s) { return s.replace(/[\(\)\[\]\{\}\.\?\+\*\/\\\^\$\|]/g, x => `\\${x}`); }
+  function escRE(s) { return s.replace(/[()[\]{}.?+*/\\^$|]/g, x => `\\${x}`); }
   function escIdiom(s) {
     return s.replace(/«(.*?)»|(.)/g, (_, g1, g2) => { const g = g1 || g2; return ` *${(g === '_' ? "' '" : escRE(g))}`; }).slice(2);
   }
@@ -262,7 +263,8 @@
                   case 'endclass': case 'enddisposable': case 'endfor': case 'endhold': case 'endif': case 'endinterface':
                   case 'endnamespace': case 'endproperty': case 'endrepeat': case 'endsection': case 'endselect': case 'endtrap':
                   case 'endwhile': case 'endwith': case 'until':
-                    kw0 = kw === 'until' ? (la.t === 'repeat' ? 'repeat' : 'while') : kw.slice(3); // corresponding opening keyword
+                    if (kw === 'until') kw0 = la.t === 'repeat' ? 'repeat' : 'while';
+                    else kw0 = kw.slice(3); // corresponding opening keyword
                     ok = la.t === kw0;
                     if (ok) {
                       a.pop();
@@ -333,13 +335,13 @@
                   addToken(offset, 'identifier.global');
                 }
                 offset += x.length;
-              } else if ((m = sm.match(/^[\+\-×÷⌈⌊\|⍳⍸\?\*⍟○!⌹<≤=≥>≠≡≢∊⍷∪∩~∧∨⍲⍱⍴,⍪⌽⊖⍉↑↓⊆⊂⊃⌷⍋⍒⊤⊥⍕⍎⊣⊢→]+/))) {
+              } else if ((m = sm.match(/^[+\-×÷⌈⌊|⍳⍸?*⍟○!⌹<≤=≥>≠≡≢∊⍷∪∩~∧∨⍲⍱⍴,⍪⌽⊖⍉↑↓⊆⊂⊃⌷⍋⍒⊤⊥⍕⍎⊣⊢→]+/))) {
                 addToken(offset, 'keyword.function');
                 offset += m[0].length;
-              } else if ((m = sm.match(/^[\/\\⌿⍀¨⍨⌸⌶&]+/))) {
+              } else if ((m = sm.match(/^[/\\⌿⍀¨⍨⌸⌶&]+/))) {
                 addToken(offset, 'keyword.operator.monadic');
                 offset += m[0].length;
-              } else if ((m = sm.match(/^[\.∘⍤⍣⍠@⌺]+/))) {
+              } else if ((m = sm.match(/^[.∘⍤⍣⍠@⌺]+/))) {
                 addToken(offset, 'keyword.operator.dyadic');
                 offset += m[0].length;
               } else {
@@ -402,7 +404,8 @@
           label: i,
           kind: kind.Text,
         }));
-        items.push([{
+        /* eslint-disable no-template-curly-in-string */
+        items.push(...[{
           label: 'Access',
           kind: kind.Snippet,
           insertText: { value: 'Access ${1:Public} ${2:Shared}' },
@@ -587,6 +590,7 @@
           documentation: 'With Statement',
         },
         ]);
+        /* eslint-enable no-template-curly-in-string */
         return items;
       }
       D.send('GetAutocomplete', { line: s, pos: c - 1, token: model.winid });
