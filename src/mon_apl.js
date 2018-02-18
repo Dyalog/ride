@@ -616,6 +616,20 @@
       });
     },
   };
+  const aplHover = {
+    provideHover(model, position) {
+      const m = model;
+      const s = m.getLineContent(position.lineNumber);
+      D.send('GetValueTip', {
+        win: m.winid, line: s, pos: position.column, token: m.winid, maxWidth: 64, maxHeight: 32,
+      }); // ask interpreter
+      return new monaco.Promise((complete, error, progress) => {
+        m.vt = {
+          complete, error, progress, position,
+        };
+      });
+    },
+  };
   D.mop.then(() => {
     monaco.languages.register({
       id: 'apl',
@@ -624,5 +638,6 @@
     monaco.languages.setTokensProvider('apl', aplTokens);
     monaco.languages.setLanguageConfiguration('apl', aplConfig);
     monaco.languages.registerCompletionItemProvider('apl', aplCompletions);
+    monaco.languages.registerHoverProvider('apl', aplHover);
   });
 }

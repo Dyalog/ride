@@ -61,10 +61,15 @@ D.IDE=function(){'use strict'
         w.open(x);
       }},
     ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
-    CloseWindow:function(x){
-      let w=ide.wins[x.win],bw;
-      if(w.bw_id){w.id=-1;w.close();} 
-      else if(w){w.vt.clear();w.container&&w.container.close()}
+    CloseWindow(x) {
+      let w = ide.wins[x.win]
+      let bw;
+      if (w.bw_id) {
+        w.id = -1; w.close();
+      } else if (w) {
+        // w.vt.clear();
+        w.container&&w.container.close();
+      }
       delete ide.wins[x.win];ide.focusMRUWin()
       ide.WSEwidth=ide.wsew;ide.DBGwidth=ide.dbgw
       if(w.tc){ide.getSIS();ide.getThreads();}
@@ -294,7 +299,8 @@ D.IDE=function(){'use strict'
     var w=ide.wins[h.id];w.container=c;c.getElement().append(w.dom)
     c.on('tab',function(tab){
       tab.element.click(function(){
-        w.cm.focus();
+        w.cm && w.cm.focus();
+        w.focus();
       })
     })
     c.on('open',function(){

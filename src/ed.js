@@ -3,14 +3,16 @@
   // holds a ref to a CodeMirror instance (.cm),
   // handles most CodeMirror commands in editors (e.g. .LN(), .QT(), .TL(), ...)
   function Ed(ide, opts) { // constructor
-    const ACB_VALUE = { pairs: '()[]{}', explode: '{}' }; // value for CodeMirror's "autoCloseBrackets" option when on
     const ed = this;
+    ed.ACB_VALUE = { pairs: '()[]{}', explode: '{}' }; // value for CodeMirror's "autoCloseBrackets" option when on
     ed.ide = ide;
     ed.id = opts.id;
     ed.name = opts.name;
     ed.tc = opts.tc;
     ed.HIGHLIGHT_LINE = 0;
     ed.decorations = [];
+    ed.hlDecorations = [];
+    ed.stopDecorations = [];
     ed.dom = I.ed_tmpl.cloneNode(1);
     ed.dom.id = null;
     ed.dom.style.display = '';
@@ -20,19 +22,21 @@
     ed.dom.oncontextmenu = D.oncmenu;
     ed.oText = '';
     ed.oStop = []; // remember original text and "stops" to avoid pointless saving on EP
+    ed.stop = new Set(); // remember original text and "stops" to avoid pointless saving on EP
     const me = monaco.editor.create(ed.dom.querySelector('.ride_win_cm'), {
-      language: 'apl',
       automaticLayout: true,
-      lineNumbers: !!D.prf.lineNums() && (x => `[${x - 1}]`),
       autoIndent: true,
-      matchBrackets: true,
-      renderIndentGuides: true,
-      showFoldingControls: 'always',
-      folding: true,
-      fontFamily: 'apl',
-      mouseWheelZoom: true,
       cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
       cursorBlinking: D.prf.blinkCursor() ? 'blink' : 'solid',
+      folding: true,
+      fontFamily: 'apl',
+      glyphMargin: true,
+      language: 'apl',
+      lineNumbers: !!D.prf.lineNums() && (x => `[${x - 1}]`),
+      matchBrackets: true,
+      mouseWheelZoom: true,
+      renderIndentGuides: true,
+      showFoldingControls: 'always',
       wordBasedSuggestions: false,
     });
     ed.monaco = me;
@@ -48,36 +52,45 @@
     me.dyalogCmds = ed;
     ed.tracer = me.createContextKey('tracer', !!ed.tc);
     ed.mapKeys();
-    ed.cm = CM(ed.dom.querySelector('.ride_win_hide'), {
-      lineNumbers: !!D.prf.lineNums(),
-      firstLineNumber: 0,
-      lineNumberFormatter: i => `[${i}]`,
-      smartIndent: !D.prf.ilf() && D.prf.indent() >= 0,
-      indentUnit: D.prf.indent(),
-      scrollButtonHeight: 12,
-      matchBrackets: !!D.prf.matchBrackets(),
-      autoCloseBrackets: !!D.prf.autoCloseBrackets() && ACB_VALUE,
-      foldGutter: !!D.prf.fold(),
-      scrollbarStyle: 'simple',
-      keyMap: 'dyalog',
-      extraKeys: { 'Shift-Tab': 'indentLess', Tab: 'indentOrComplete', Down: 'downOrXline' },
-      viewportMargin: Infinity,
-      cursorBlinkRate: D.prf.blinkCursor() * CM.defaults.cursorBlinkRate,
-    });
+    // ed.cm = CM(ed.dom.querySelector('.ride_win_hide'), {
+    //   lineNumbers: !!D.prf.lineNums(),
+    //   firstLineNumber: 0,
+    //   lineNumberFormatter: i => `[${i}]`,
+    //   smartIndent: !D.prf.ilf() && D.prf.indent() >= 0,
+    //   indentUnit: D.prf.indent(),
+    //   scrollButtonHeight: 12,
+    //   matchBrackets: !!D.prf.matchBrackets(),
+    //   autoCloseBrackets: !!D.prf.autoCloseBrackets() && ACB_VALUE,
+    //   foldGutter: !!D.prf.fold(),
+    //   scrollbarStyle: 'simple',
+    //   keyMap: 'dyalog',
+    //   extraKeys: { 'Shift-Tab': 'indentLess', Tab: 'indentOrComplete', Down: 'downOrXline' },
+    //   viewportMargin: Infinity,
+    //   cursorBlinkRate: D.prf.blinkCursor() * CM.defaults.cursorBlinkRate,
+    // });
     if (D.prf.blockCursor()) CM.addClass(ed.cm.getWrapperElement(), 'cm-fat-cursor');
     ed.isCode = 1;
     ed.breakpoints = D.prf.breakPts();
-    ed.cm.dyalogCmds = ed;
-    ed.cm.on('cursorActivity', ed.cursorActivity.bind(ed));
-    ed.cm.on('gutterClick', (cm, l, g) => { // g:gutter
-      if (g === 'breakpoints' || g === 'CodeMirror-linenumbers') {
-        cm.setCursor({ line: l, ch: 0 });
-        ed.BP(ed.cm);
+    // ed.cm.dyalogCmds = ed;
+    // ed.cm.on('cursorActivity', ed.cursorActivity.bind(ed));
+    // ed.cm.on('gutterClick', (cm, l, g) => { // g:gutter
+    //   if (g === 'breakpoints' || g === 'CodeMirror-linenumbers') {
+    //     cm.setCursor({ line: l, ch: 0 });
+    //     ed.BP(ed.cm);
+    //   }
+    // });
+    me.onMouseDown((e) => {
+      const t = e.target;
+      const l = t.position.lineNumber - 1;
+      if (t.type === monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN) {
+        ed.stop.has(l) ? ed.stop.delete(l) : ed.stop.add(l);
+        ed.setStop();
+        ed.tc && D.send('SetLineAttributes', { win: ed.id, stop: ed.getStops() });
       }
     });
-    ed.cm.on('scroll', (c) => { const i = c.getScrollInfo(); ed.btm = i.clientHeight + i.top; });
-    ed.cm.on('focus', () => { ed.focusTS = +new Date(); ed.ide.focusedWin = ed; });
-    D.util.cmOnDblClick(ed.cm, (x) => { ed.ED(ed.cm); x.preventDefault(); x.stopPropagation(); });
+    // ed.cm.on('scroll', (c) => { const i = c.getScrollInfo(); ed.btm = i.clientHeight + i.top; });
+    // ed.cm.on('focus', () => { ed.focusTS = +new Date(); ed.ide.focusedWin = ed; });
+    // D.util.cmOnDblClick(ed.cm, (x) => { ed.ED(ed.cm); x.preventDefault(); x.stopPropagation(); });
     // ed.processAutocompleteReply=D.ac(ed)
     ed.processAutocompleteReply = (x) => {
       if (me.model.ac && me.model.ac.complete) {
@@ -103,13 +116,15 @@
       if (t.matches('.tb_hid,.tb_case')) { t.classList.toggle('pressed'); ed.hls(); return !1; }
       if (t.matches('.tb_btn')) {
         const c = t.className.replace(/^.*\btb_([A-Z]{2,3})\b.*$/, '$1');
-        if (ed[c]) ed[c](ed.cm);
-        else if (CM.commands[c]) CM.commands[c](ed.cm);
+        if (ed[c]) ed[c](ed.me);
+        else if (CM.commands[c]) CM.commands[c](ed.me);
         return !1;
       }
       return !0;
     };
-    ed.setTC(!!ed.tc); this.vt = D.vt(this); this.setLN(D.prf.lineNums());
+    ed.setTC(!!ed.tc);
+    // this.vt = D.vt(this);
+    this.setLN(D.prf.lineNums());
     ed.firstOpen = true;
   }
   Ed.prototype = {
@@ -145,7 +160,9 @@
           }), 0);
           if (nkc) {
             const cmd = map[ks];
-            const cond = cmd === 'ER' || cmd === 'TC' ? 'tracer' : undefined;
+            let cond;
+            if (cmd === 'ER' || cmd === 'TC') cond = 'tracer';
+            else if (nkc === kc.Escape) cond = '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode';
             me.addCommand(nkc, () => CM.commands[cmd](me), cond);
           }
         });
@@ -154,30 +171,26 @@
       addCmd(CM.keyMap.dyalog);
     },
     updGutters() {
-      const g = [];
+      // const g = [];
       const ed = this;
-      const { cm } = ed;
-      if (ed.isCode && ed.breakpoints) g.push('breakpoints');
-      if (cm.getOption('lineNumbers')) g.push('CodeMirror-linenumbers');
-      if (cm.getOption('foldGutter')) g.push('cm-foldgutter');
-      cm.setOption('gutters', g);
+      const me = ed.monaco;
+      me.glyphMargin = ed.isCode && ed.breakpoints;
+      // if (ed.isCode && ed.breakpoints) g.push('breakpoints');
+      // if (cm.getOption('lineNumbers')) g.push('CodeMirror-linenumbers');
+      // if (cm.getOption('foldGutter')) g.push('cm-foldgutter');
+      // cm.setOption('gutters', g);
     },
     createBPEl() { // create breakpoint element
       const e = this.dom.ownerDocument.createElement('div');
       e.className = 'breakpoint'; e.innerHTML = '●'; return e;
     },
     getStops() { // returns an array of line numbers
-      const r = [];
-      if (this.monaco) return r;
-      this.cm.eachLine((lh) => {
-        const m = lh.gutterMarkers; if (m && m.breakpoints) r.push(lh.lineNo());
-      });
-      return r.sort((x, y) => x - y);
+      return [...this.stop].sort((x, y) => x - y);
     },
     cursorActivity() { // handle "cursor activity" event from CodeMirror
       // xline:the line number of the empty line inserted when you press <down> at eof
-      if (this.xline == null) return;
       const ed = this;
+      if (ed.xline == null) return;
       const n = ed.cm.lineCount();
       const l = ed.cm.getCursor().line;
       if (l === ed.xline && l === n - 1 && /^\s*$/.test(ed.cm.getLine(n - 1))) return;
@@ -202,19 +215,20 @@
       const ed = this;
       const me = ed.monaco;
       if (l == null) {
-        ed.decorations = me.deltaDecorations(ed.decorations, []);
+        ed.hlDecorations = [];
       } else {
         const lm = l + 1;
-        ed.decorations = me.deltaDecorations(ed.decorations, [{
+        ed.hlDecorations = [{
           range: new monaco.Range(lm, 1, lm, 1),
           options: {
             isWholeLine: true,
             className: 'highlighted',
           },
-        }]);
+        }];
         me.setPosition({ lineNumber: lm, column: 0 });
         me.revealLineInCenter(l);
       }
+      ed.setDecorations();
     },
     setBP(x) { // update the display of breakpoints
       const ed = this;
@@ -223,7 +237,8 @@
     },
     setLN(x) { // update the display of line numbers and the state of the "[...]" button
       const ed = this;
-      ed.cm.setOption('lineNumbers', !!x);
+      // ed.cm.setOption('lineNumbers', !!x);
+      ed.monaco.lineNumbers = !!D.prf.lineNums() && (l => `[${l - 1}]`);
       ed.updGutters();
       const a = ed.tb.querySelectorAll('.tb_LN');
       for (let i = 0; i < a.length; i++) a[i].classList.toggle('pressed', !!x);
@@ -249,32 +264,50 @@
     },
     setStop() {
       const ed = this;
-      const { cm } = ed;
-      for (let k = 0; k < ed.oStop.length; k++) cm.setGutterMarker(ed.oStop[k], 'breakpoints', ed.createBPEl());
+      // const { cm } = ed;
+      // for (let k = 0; k < ed.oStop.length; k++) {
+      //   cm.setGutterMarker(ed.oStop[k], 'breakpoints', ed.createBPEl());
+      // }
+      ed.stopDecorations = [...ed.stop].map(x => ({
+        range: new monaco.Range(x + 1, 1, x + 1, 1),
+        options: {
+          isWholeLine: false,
+          glyphMarginClassName: 'breakpoint',
+        },
+      }));
+      ed.setDecorations();
+    },
+    setDecorations() {
+      const ed = this;
+      ed.decorations = ed.monaco.deltaDecorations(
+        ed.decorations,
+        [...ed.stopDecorations, ...ed.hlDecorations],
+      );
     },
     updSize() {},
     saveScrollPos() {
       // workaround for CodeMirror scrolling up to
       // the top under GoldenLayout when editor is closed
-      const ed = this;
-      if (ed.btm == null) {
-        const i = ed.cm.getScrollInfo();
-        ed.btm = i.clientHeight + i.top;
-      }
+      // const ed = this;
+      // if (ed.btm == null) {
+      //   const i = ed.cm.getScrollInfo();
+      //   ed.btm = i.clientHeight + i.top;
+      // }
     },
     restoreScrollPos() {
-      const ed = this;
-      if (ed.btm != null) {
-        const i = ed.cm.getScrollInfo();
-        ed.cm.scrollTo(0, ed.btm - i.clientHeight);
-      } else { ed.cm.scrollTo(0, 0); }
+      // const ed = this;
+      // if (ed.btm != null) {
+      //   const i = ed.cm.getScrollInfo();
+      //   ed.cm.scrollTo(0, ed.btm - i.clientHeight);
+      // } else { ed.cm.scrollTo(0, 0); }
     },
     updateSIStack(x) {
       this.dom.querySelector('.si_stack').innerHTML = x.stack.map(o => `<option>${o}`).join('');
     },
     stateChanged() {
       const w = this;
-      w.updSize(); w.cm.refresh();
+      w.updSize();
+      // w.cm.refresh();
       if (w.updGutters) w.updGutters();
       w.restoreScrollPos();
     },
@@ -294,7 +327,7 @@
       // cm.setValue(ed.oText=ee.text.join('\n')) //.setValue() invalidates old LineHandle-s
       // look up new LineHandle-s, forget numbers
       ed.jumps.forEach((x) => { x.lh = cm.getLineHandle(x.n); delete x.n; });
-      cm.clearHistory();
+      // cm.clearHistory();
       me.focus();
       // entityType:            16 NestedArray        512 AplClass
       // 1 DefinedFunction      32 QuadORObject      1024 AplInterface
@@ -302,9 +335,11 @@
       // 4 SimpleNumericArray  128 SimpleCharVector  4096 ExternalFunction
       // 8 MixedSimpleArray    256 AplNamespace
       ed.isCode = [1, 256, 512, 1024, 2048, 4096].indexOf(ee.entityType) >= 0;
-      cm.setOption('mode', ed.isCode ? 'apl' : 'text');
-      cm.setOption('foldGutter', ed.isCode && !!D.prf.fold());
-      if (ed.isCode && D.prf.indentOnOpen()) ed.RD(cm);
+      // cm.setOption('mode', ed.isCode ? 'apl' : 'text');
+      me.language = ed.isCode ? 'apl' : 'text';
+      // cm.setOption('foldGutter', ed.isCode && !!D.prf.fold());
+      me.folding = ed.isCode && !!D.prf.fold();
+      if (ed.isCode && D.prf.indentOnOpen()) ed.RD(me);
       ed.setRO(ee.readOnly || ee.debugger);
       ed.setBP(ed.breakpoints);
       const line = ee.currentRow;
@@ -314,6 +349,7 @@
       me.setPosition({ lineNumber: line + 1, column: col + 1 });
       me.revealLineInCenter(line + 1);
       ed.oStop = (ee.stop || []).slice(0).sort((x, y) => x - y);
+      ed.stop = new Set(ed.oStop);
       ed.setStop();
       D.prf.floating() && $('title', ed.dom.ownerDocument).text(ee.name);
     },
@@ -414,7 +450,22 @@
         w.HIGHLIGHT_LINE = line;
       }
     },
-    ValueTip(x) { this.vt.processReply(x); },
+    ValueTip(x) {
+      // this.vt.processReply(x);
+      const me = this.monaco;
+      if (me.model.vt && me.model.vt.complete) {
+        const vt = me.model.vt;
+        const l = vt.position.lineNumber;
+        const s = me.model.getLineContent(l);
+        vt.complete({
+          range: new monaco.Range(l, x.startCol + 1, l, x.endCol + 1),
+          contents: [
+            s.slice(x.startCol, x.endCol),
+            { language: 'apl', value: x.tip.join('\n') }
+          ],
+        });
+      }
+    },
     ED(me) {
       this.addJump();
       // D.ide.Edit({win:this.id,pos:cm.indexFromPos(cm.getCursor()),text:cm.getValue()})
@@ -445,7 +496,8 @@
       if (!ed.monaco) {
         for (let i = 0; i < stop.length; i++) me.setGutterMarker(stop[i], 'breakpoints', null);
       }
-      D.send('SaveChanges', { win: ed.id, text: v.split('\n'), stop: [] });
+      // D.send('SaveChanges', { win: ed.id, text: v.split('\n'), stop: [] });
+      D.send('SaveChanges', { win: ed.id, text: v.split('\n'), stop });
     },
     TL(cm) { // toggle localisation
       const name = this.cword();
@@ -558,33 +610,46 @@
         monitor: [],
       });
     },
-    BP(cm) { // toggle breakpoint
-      const sels = cm.listSelections();
-      for (let i = 0; i < sels.length; i++) {
-        let p = sels[i].anchor;
-        let q = sels[i].head;
-        if (p.line > q.line) { const h = p; p = q; q = h; }
-        const l1 = q.line - (p.line < q.line && !q.ch);
-        for (let l = p.line; l <= l1; l++) {
-          cm.setGutterMarker(
-            l, 'breakpoints',
-            (cm.getLineHandle(l).gutterMarkers || {}).breakpoints ? null : this.createBPEl(),
-          );
+    BP(me) { // toggle breakpoint
+      const ed = this;
+      const t = ed.stop.has(me.getSelection().positionLineNumber - 1);
+      me.getSelections().forEach((s) => {
+        let p = { l: s.selectionStartLineNumber - 1, c: s.selectionStartColumn - 1 };
+        let q = { l: s.positionLineNumber - 1, c: s.positionColumn - 1 };
+        if (p.l > q.l) { const h = p; p = q; q = h; }
+        const l1 = q.l - (p.l < q.l && q.c > 1);
+        for (let { l } = p; l <= l1; l++) {
+          // ed.stop.has(l1) ? ed.stop.delete(l1) : ed.stop.add(l1);
+          t ? ed.stop.delete(l1) : ed.stop.add(l1);
         }
-      }
+      });
+      ed.setStop();
+      // const sels = cm.listSelections();
+      // for (let i = 0; i < sels.length; i++) {
+      //   let p = sels[i].anchor;
+      //   let q = sels[i].head;
+      //   if (p.line > q.line) { const h = p; p = q; q = h; }
+      //   const l1 = q.line - (p.line < q.line && !q.ch);
+      //   for (let l = p.line; l <= l1; l++) {
+      //     cm.setGutterMarker(
+      //       l, 'breakpoints',
+      //       (cm.getLineHandle(l).gutterMarkers || {}).breakpoints ? null : this.createBPEl(),
+      //     );
+      //   }
+      // }
       this.tc && D.send('SetLineAttributes', { win: this.id, stop: this.getStops() });
     },
-    RD(cm) {
+    RD(me) {
       if (D.prf.ilf()) {
-        const cmv = cm.getValue().split('\n');
-        D.send('FormatCode', { win: this.id, text: cmv });
-      } else if (cm.somethingSelected()) {
-        cm.execCommand('indentAuto');
-      } else {
-        const u = cm.getCursor();
-        cm.execCommand('SA');
-        cm.execCommand('indentAuto');
-        cm.setCursor(u);
+        const text = me.getValue().split('\n');
+        D.send('FormatCode', { win: this.id, text });
+      // } else if (cm.somethingSelected()) {
+      //   cm.execCommand('indentAuto');
+      // } else {
+      //   const u = cm.getCursor();
+      //   cm.execCommand('SA');
+      //   cm.execCommand('indentAuto');
+      //   cm.setCursor(u);
       }
     },
     VAL(cm) {
