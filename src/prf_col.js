@@ -24,22 +24,22 @@
     {s:'bracket'         ,t:'sqbr',m:'delimiter.square',c:'.cm-apl-sqbr'}, //[]
     //{s:'block cursor'    ,t:'bcr', c:'.CodeMirror-cursor',ctrls:{fg:1,bc:0,bg:0,BIU:0}},
     {s:'comment'         ,t:'com' ,m:'comment',c:'.cm-apl-com' }, //⍝
-    {s:'block cursor'    ,t:'bcr' ,c:'.CodeMirror.cm-fat-cursor div.CodeMirror-cursor',ctrls:{bc:0,bg:1,BIU:0,fg:0}},
-    {s:'cursor'          ,t:'cur' ,e:'editorCursor.foreground',c:'div.CodeMirror-cursor'                          ,ctrls:{bc:1,bg:0,BIU:0,fg:0}},
-    {s:'dfn level 1'     ,t:'dfn1',c:'.cm-apl-dfn.cm-apl-dfn1'}, //{}
-    {s:'dfn level 2'     ,t:'dfn2',c:'.cm-apl-dfn.cm-apl-dfn2'},
-    {s:'dfn level 3'     ,t:'dfn3',c:'.cm-apl-dfn.cm-apl-dfn3'},
-    {s:'dfn level 4'     ,t:'dfn4',c:'.cm-apl-dfn.cm-apl-dfn4'},
-    {s:'dfn level 5'     ,t:'dfn5',c:'.cm-apl-dfn.cm-apl-dfn5'}, //{1 {2 {3 {4 {5} } } } }
-    {s:'dfn'             ,t:'dfn' ,c:'.cm-apl-dfn' },
-    {s:'diamond'         ,t:'diam',c:'.cm-apl-diam'}, //⋄
+    {s:'block cursor'    ,t:'bcr' ,c:'.CodeMirror.cm-fat-cursor div.CodeMirror-cursor', ctrls:{bc:0,bg:1,BIU:0,fg:0}},
+    {s:'cursor'          ,t:'cur' ,e:'editorCursor.foreground',c:'div.CodeMirror-cursor', ctrls:{bc:1,bg:0,BIU:0,fg:0}},
+    {s:'dfn level 1'     ,t:'dfn1',m:'identifier.dfn.1',c:'.cm-apl-dfn.cm-apl-dfn1'}, //{}
+    {s:'dfn level 2'     ,t:'dfn2',m:'identifier.dfn.2',c:'.cm-apl-dfn.cm-apl-dfn2'},
+    {s:'dfn level 3'     ,t:'dfn3',m:'identifier.dfn.3',c:'.cm-apl-dfn.cm-apl-dfn3'},
+    {s:'dfn level 4'     ,t:'dfn4',m:'identifier.dfn.4',c:'.cm-apl-dfn.cm-apl-dfn4'},
+    {s:'dfn level 5'     ,t:'dfn5',m:'identifier.dfn.5',c:'.cm-apl-dfn.cm-apl-dfn5'}, //{1 {2 {3 {4 {5} } } } }
+    {s:'dfn'             ,t:'dfn' ,m:'identifier.dfn',c:'.cm-apl-dfn' },
+    {s:'diamond'         ,t:'diam',m:'delimiter.diamond',c:'.cm-apl-diam'}, //⋄
     {s:'dyadic operator' ,t:'op2' ,m:'keyword.operator.dyadic',c:'.cm-apl-op2' }, //⍣ ...
     {s:'error'           ,t:'err' ,m:'invalid',c:'.cm-apl-err' },
     {s:'function'        ,t:'fn'  ,m:'keyword.function',c:'.cm-apl-fn'  }, //+ ...
     {s:'global name'     ,t:'glb' ,m:'identifier.global',c:'.cm-apl-glb' },
     {s:'idiom'           ,t:'idm' ,m:'predefined.idiom',c:'.cm-apl-idm' }, //⊃⌽ ...
     {s:'keyword'         ,t:'kw'  ,m:'keyword',c:'.cm-apl-kw'  }, //:If ...
-    {s:'label'           ,t:'lbl' ,c:'.cm-apl-lbl' }, //L:
+    {s:'label'           ,t:'lbl' ,m:'meta.label',c:'.cm-apl-lbl' }, //L:
     {s:'line number'     ,t:'lnum',c:'.CodeMirror-linenumber'},
     {s:'matching bracket',t:'mtch',c:'.CodeMirror-matchingbracket'},
     {s:'modified line'   ,t:'mod' ,c:'.modified'   }, //in the session - lines queued for execution
@@ -52,7 +52,7 @@
     {s:'quad name'       ,t:'quad',m:'predefined.sysfn',c:'.cm-apl-quad'}, //⎕XYZ
     {s:'search match'    ,t:'srch',c:'.cm-searching'},
     {s:'selection'       ,t:'sel' ,c:'.CodeMirror-selected,.CodeMirror-focused .CodeMirror-selected',ctrls:{fg:0,BIU:0}},
-    {s:'semicolon'       ,t:'semi',c:'.cm-apl-semi'}, //as in A[B;C]
+    {s:'semicolon'       ,t:'semi',m:'delimiter.semicolon',c:'.cm-apl-semi'}, //as in A[B;C]
     {s:'string'          ,t:'str' ,m:'string',c:'.cm-apl-str' }, //'a.k.a. character vector or scalar'
     {s:'system command'  ,t:'scmd',c:'.cm-apl-scmd'}, //)XYZ
     {s:'tracer'          ,t:'tc'  ,c:'/*noprefix*/.tracer .cm-s-default,/*noprefix*/.tracer .CodeMirror-gutters'},
@@ -61,7 +61,7 @@
     {s:'user command'    ,t:'ucmd',c:'.cm-apl-ucmd'}, //]XYZ
     {s:'value tip target',t:'vtt' ,c:'.vt_marker',ctrls:{bc:1,fg:0,BIU:0}}, //the rectangle around the token
     {s:'value tip'       ,t:'vtip',c:'/*noprefix*/#vt_bln,/*noprefix*/#vt_tri',ctrls:{bc:1}}, //the balloon
-    {s:'zilde'           ,t:'zld' ,c:'.cm-apl-zld' }  //⍬
+    {s:'zilde'           ,t:'zld' ,m:'predefined.zilde',c:'.cm-apl-zld' }  //⍬
   ])
   //Colour schemes have two representations:
   // in memory (easier to manipulate)   in prefs.json (more compact)

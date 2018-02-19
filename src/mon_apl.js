@@ -242,7 +242,11 @@
                 addToken(offset, tkn); offset += 1; break;
               } else if (c === '∇') {
                 let i = a.length - 1; while (i && a[i].t !== '∇') i -= 1;
-                if (i) { a.splice(i); h.vars.length = 0; } else { a.push({ t: '∇', oi: n, ii: n + swm }); h.hdr = 1; }
+                if (i) {
+                  a.splice(i); h.vars.length = 0;
+                } else {
+                  a.push({ t: '∇', oi: n, ii: n + swm }); h.hdr = 1;
+                }
                 addToken(offset, 'identifier.tradfn'); offset += 1; break;
               } else if (c === ':') {
                 let ok = 0;
@@ -404,6 +408,8 @@
           };
         });
       } else if (ch === ':') {
+        const { a } = model._lines[position.lineNumber-1]._state;
+        if (a[a.length - 1].t === '{') return [];
         const items = [
           'Case',
           'CaseList',

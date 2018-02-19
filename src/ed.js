@@ -367,14 +367,15 @@
     },
     die() { this.setRO(1); },
     getDocument() { return this.dom.ownerDocument; },
-    refresh() { this.cm.refresh(); },
+    refresh() { /* this.cm.refresh(); */ },
     cword() { // apl identifier under cursor
-      const c = this.cm.getCursor();
-      const s = this.cm.getLine(c.line);
+      const me = this.monaco;
+      const c = me.getPosition();
+      const s = me.model.getLineContent(c.lineNumber);
       const r = `[${D.syn.letter}0-9]*`; // r:regex fragment used for a name
       return (
-        ((RegExp(`⎕?${r}$`).exec(s.slice(0, c.ch)) || [])[0] || '') + // match left  of cursor
-        ((RegExp(`^${r}`).exec(s.slice(c.ch)) || [])[0] || '') // match right of cursor
+        ((RegExp(`⎕?${r}$`).exec(s.slice(0, c.column)) || [])[0] || '') + // match left  of cursor
+        ((RegExp(`^${r}`).exec(s.slice(c.column)) || [])[0] || '') // match right of cursor
       ).replace(/^\d+/, ''); // trim leading digits
     },
     autoCloseBrackets(x) {
@@ -399,26 +400,27 @@
     },
 
     ReplyFormatCode(lines) {
-      const w = this;
-      const u = w.cm.getCursor();
-      w.saveScrollPos();
-      w.monaco.setValue(lines.join('\n'));
-      w.setStop();
-      if (w.tc) {
-        w.hl(w.HIGHLIGHT_LINE);
-        u.line = w.HIGHLIGHT_LINE;
+      const ed = this;
+      const me = ed.monaco;
+      const u = me.getPosition();
+      ed.saveScrollPos();
+      me.setValue(lines.join('\n'));
+      ed.setStop();
+      if (ed.tc) {
+        ed.hl(ed.HIGHLIGHT_LINE);
+        u.lineNumber = ed.HIGHLIGHT_LINE;
       }
-      if (w.firstOpen !== undefined && w.firstOpen === true) {
-        if (lines.length === 1 && /\s?[a-z|@]+$/.test(lines[0])) u.ch = w.cm.getLine(u.line).length;
-        else if (lines[0][0] === ':') u.ch = 0;
-        else u.ch = 1;
-        w.firstOpen = false;
+      if (ed.firstOpen === true) {
+        if (lines.length === 1 && /\s?[a-z|@]+$/.test(lines[0])) u.column = me.model.getLineContent(u.lineNumber).length + 1;
+        else if (lines[0][0] === ':') u.column = 1;
+        else u.column = 2;
+        ed.firstOpen = false;
       }
-      w.restoreScrollPos();
-      w.cm.setCursor(u);
+      ed.restoreScrollPos();
+      me.setPosition(u);
       if (D.ide.hadErr) {
         D.ide.wins[0].focus(); D.ide.hadErr = 0;
-      } else { w.focus(); }
+      } else { ed.focus(); }
     },
     SetHighlightLine(line) {
       const w = this;
@@ -477,23 +479,27 @@
       // D.send('SaveChanges', { win: ed.id, text: v.split('\n'), stop: [] });
       D.send('SaveChanges', { win: ed.id, text: v.split('\n'), stop });
     },
-    TL(cm) { // toggle localisation
+    TL(me) { // toggle localisation
       const name = this.cword();
       if (!name) return;
-      const ts = (((cm.getTokenAt(cm.getCursor()) || {}).state || {}).a || [])
-        .map(x => x.t)
-        .filter(t => /^(∇|\{|namespace|class|interface)$/.test(t));
+      const l0 = me.getPosition().lineNumber;
+      const ta = me.model._lines[l0 - 1]._state.a.map(x => x.t);
+      const ti = ta.lastIndexOf('∇');
+      // const ts = (((me.model._lines[l0 - 1] || {})._state || {}).a || [])
+      // .map(x => x.t)
+      const ts = ta.filter(t => /^(∇|\{|namespace|class|interface)$/.test(t));
       if (ts.includes('{') || (ts.length && !ts.includes('∇'))) return;
-      const l0 = cm.getCursor().line;
       let f; // f:found?
       let l;
       for (l = l0 - 1; l >= 0; l--) {
-        const b = cm.getLineTokens(l);
-        for (let i = b.length - 1; i >= 0; i--) if (b[i].type === 'apl-trad') { f = 1; break; }
-        if (f) break;
+        // const b = me.model.getLineTokens(l);
+        // for (let i = b.length - 1; i >= 0; i--) if (b[i].type === 'apl-trad') { f = 1; break; }
+        // if (f) break;
+        if (me.model._lines[l]._state.a.length === ti) break;
       }
       if (l < 0) l = 0;
-      const u = cm.getLine(l).split('⍝');
+      const lt = me.model.getLineContent(l + 1)
+      const u = lt.split('⍝');
       let s = u[0]; // s:the part before the first "⍝"
       const com = u.slice(1).join('⍝'); // com:the rest
       const a = s.split(';');
@@ -502,7 +508,8 @@
       tail = tail.map(x => x.replace(/\s+/g, ''));
       const i = tail.indexOf(name); i < 0 ? tail.push(name) : tail.splice(i, 1);
       s = [head].concat(tail.sort()).join(';') + (com ? ` ${com}` : '');
-      cm.replaceRange(s, { line: l, ch: 0 }, { line: l, ch: cm.getLine(l).length }, 'D');
+      me.executeEdits('D', [{ range: new monaco.Range(l + 1, 1, l + 1, lt.length + 1), text: s }]);
+      me.trigger('editor', 'editor.action.formatDocument');
     },
     LN() { D.prf.lineNums.toggle(); },
     TVO() { D.prf.fold.toggle(); },
@@ -564,7 +571,7 @@
             let r = `:${kw}${post}\n${pre}:End`;
             D.prf.autoCloseBlocksEnd() || (r += kw);
             // cm.replaceRange(r, { line: l, ch: pre.length }, { line: l, ch: s.length });
-            me.executeEdits('editor', [{ range: new monaco.Range(l, pre.length, l, s.length), text: r }]);
+            me.executeEdits('D', [{ range: new monaco.Range(l, pre.length, l, s.length), text: r }]);
             me.trigger('editor', 'editor.action.formatDocument');
             // cm.execCommand('indentAuto');cm.execCommand('goLineUp');cm.execCommand('goLineEnd')
           }
@@ -579,8 +586,8 @@
     MA() { D.send('RestartThreads', { win: this.id }); },
     CBP() { // Clear trace/stop/monitor for this object
       const ed = this;
-      const n = ed.cm.lineCount();
-      for (let i = 0; i < n; i++) ed.cm.setGutterMarker(i, 'breakpoints', null);
+      ed.stop.clear();
+      ed.setStop();
       ed.tc && D.send('SetLineAttributes', {
         win: ed.id,
         stop: ed.getStops(),
@@ -595,26 +602,13 @@
         let p = { l: s.selectionStartLineNumber - 1, c: s.selectionStartColumn - 1 };
         let q = { l: s.positionLineNumber - 1, c: s.positionColumn - 1 };
         if (p.l > q.l) { const h = p; p = q; q = h; }
-        const l1 = q.l - (p.l < q.l && q.c > 1);
+        const l1 = q.l - (p.l < q.l && q.c === 1);
         for (let { l } = p; l <= l1; l++) {
           // ed.stop.has(l1) ? ed.stop.delete(l1) : ed.stop.add(l1);
-          t ? ed.stop.delete(l1) : ed.stop.add(l1);
+          t ? ed.stop.delete(l) : ed.stop.add(l);
         }
       });
       ed.setStop();
-      // const sels = cm.listSelections();
-      // for (let i = 0; i < sels.length; i++) {
-      //   let p = sels[i].anchor;
-      //   let q = sels[i].head;
-      //   if (p.line > q.line) { const h = p; p = q; q = h; }
-      //   const l1 = q.line - (p.line < q.line && !q.ch);
-      //   for (let l = p.line; l <= l1; l++) {
-      //     cm.setGutterMarker(
-      //       l, 'breakpoints',
-      //       (cm.getLineHandle(l).gutterMarkers || {}).breakpoints ? null : this.createBPEl(),
-      //     );
-      //   }
-      // }
       this.tc && D.send('SetLineAttributes', { win: this.id, stop: this.getStops() });
     },
     RD(me) {
