@@ -78,7 +78,7 @@ const J = {};
     } else if (/^\?\d+$/.test(loc.search)) {
       const winId = +loc.search.slice(1);
       document.body.className += ' floating-window';
-      D.mop.then(x=>D.IPC_Client(winId));
+      D.mop.then(() => D.IPC_Client(winId));
     } else {
       if (D.el) {
         D.IPC_Server();

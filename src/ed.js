@@ -1,10 +1,9 @@
 {
   // represents an editor (.tc==0) or a tracer (.tc==1)
-  // holds a ref to a CodeMirror instance (.cm),
-  // handles most CodeMirror commands in editors (e.g. .LN(), .QT(), .TL(), ...)
+  // holds a ref to a Monaco editor instance (.me),
+  // handles most commands in editors (e.g. .LN(), .QT(), .TL(), ...)
   function Ed(ide, opts) { // constructor
     const ed = this;
-    ed.ACB_VALUE = { pairs: '()[]{}', explode: '{}' }; // value for CodeMirror's "autoCloseBrackets" option when on
     ed.ide = ide;
     ed.id = opts.id;
     ed.name = opts.name;
@@ -53,7 +52,7 @@
     });
     me.dyalogCmds = ed;
     ed.tracer = me.createContextKey('tracer', !!ed.tc);
-    ed.mapKeys();
+    ed.mapKeys(); D.prf.keys(ed.mapKeys.bind(ed));
     // ed.cm = CM(ed.dom.querySelector('.ride_win_hide'), {
     //   smartIndent: !D.prf.ilf() && D.prf.indent() >= 0,
     //   indentUnit: D.prf.indent(),
@@ -65,6 +64,7 @@
     //   extraKeys: { 'Shift-Tab': 'indentLess', Tab: 'indentOrComplete', Down: 'downOrXline' },
     // });
     // ed.cm.on('cursorActivity', ed.cursorActivity.bind(ed));
+    me.onDidChangeCursorPosition(ed.cursorActivity.bind(ed));
     let mouseL = 0; let mouseC = 0; let mouseTS = 0;
     me.onMouseDown((e) => {
       const t = e.target;
@@ -105,7 +105,6 @@
     ed.tb.onmouseup = ed.tb.onmouseout;
     ed.tb.onclick = (x) => {
       const t = x.target;
-      if (t.matches('.tb_hid,.tb_case')) { t.classList.toggle('pressed'); ed.hls(); return !1; }
       if (t.matches('.tb_btn')) {
         const c = t.className.replace(/^.*\btb_([A-Z]{2,3})\b.*$/, '$1');
         if (ed[c]) ed[c](ed.me);
@@ -129,7 +128,7 @@
         Cmd: km.CtrlCmd,
         Esc: kc.Escape,
         '\\': kc.US_BACKSLASH,
-        // '`': kc.US_BACKTICK,
+        '`': kc.US_BACKTICK,
         ']': kc.US_CLOSE_SQUARE_BRACKET,
         ',': kc.US_COMMA,
         '.': kc.US_DOT,
@@ -153,7 +152,18 @@
           if (nkc) {
             const cmd = map[ks];
             let cond;
-            if (cmd === 'ER' || cmd === 'TC') cond = 'tracer';
+            if (cmd === 'BQC') {
+              return;
+            } else if (cmd === 'TGC') {
+              me.addCommand(nkc, () => me.trigger('editor', 'editor.action.commentLine'));
+              return;
+            } else if (cmd === 'AO') {
+              me.addCommand(nkc, () => me.trigger('editor', 'editor.action.addCommentLine'));
+              return;
+            } else if (cmd === 'DO') {
+              me.addCommand(nkc, () => me.trigger('editor', 'editor.action.removeCommentLine'));
+              return;
+            } else if (cmd === 'ER' || cmd === 'TC') cond = 'tracer';
             else if (nkc === kc.Escape) cond = '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode';
             me.addCommand(nkc, () => CM.commands[cmd](me), cond);
           }
@@ -161,6 +171,7 @@
       }
       addCmd(CM.keyMap.dyalogDefault);
       addCmd(CM.keyMap.dyalog);
+      me.addCommand(kc.DownArrow, () => this.downOrXline(me));
     },
     createBPEl() { // create breakpoint element
       const e = this.dom.ownerDocument.createElement('div');
@@ -169,15 +180,21 @@
     getStops() { // returns an array of line numbers
       return [...this.stop].sort((x, y) => x - y);
     },
-    cursorActivity() { // handle "cursor activity" event from CodeMirror
+    cursorActivity(e) { // handle "cursor activity" event from CodeMirror
       // xline:the line number of the empty line inserted when you press <down> at eof
       const ed = this;
+      const me = ed.monaco;
       if (ed.xline == null) return;
-      const n = ed.cm.lineCount();
-      const l = ed.cm.getCursor().line;
-      if (l === ed.xline && l === n - 1 && /^\s*$/.test(ed.cm.getLine(n - 1))) return;
-      if (l < ed.xline && ed.xline === n - 1 && /^\s*$/.test(ed.cm.getLine(n - 1))) {
-        ed.cm.replaceRange('', { line: n - 2, ch: ed.cm.getLine(n - 2).length }, { line: n - 1, ch: 0 }, 'D');
+      const n = me.model.getLineCount();
+      const l = e.position.lineNumber;
+      const s = me.model.getLineContent(n);
+      if (l === ed.xline && l === n && /^\s*$/.test(s)) return;
+      if (l < ed.xline && ed.xline === n && /^\s*$/.test(s)) {
+        const t = me.model.getLineContent(n - 1);
+        me.executeEdits('D', [{
+          range: new monaco.Range(n - 1, t.length + 1, n, s.length + 1),
+          text: '',
+        }]);
       }
       delete ed.xline;
     },
@@ -246,7 +263,7 @@
         [...ed.stopDecorations, ...ed.hlDecorations],
       );
     },
-    updSize() {},
+    updSize() { },
     saveScrollPos() {
       // workaround for CodeMirror scrolling up to
       // the top under GoldenLayout when editor is closed
@@ -357,7 +374,9 @@
         ((RegExp(`^${r}`).exec(s.slice(c.ch)) || [])[0] || '') // match right of cursor
       ).replace(/^\d+/, ''); // trim leading digits
     },
-    autoCloseBrackets(x) { this.cm.setOption('autoCloseBrackets', x); },
+    autoCloseBrackets(x) {
+      this.cm.setOption('autoCloseBrackets', x);
+    },
     indent(x) { this.cm.setOption('smartIndent', x >= 0); this.cm.setOption('indentUnit', x); },
     fold(x) { this.monaco.updateOptions({ folding: this.isCode && !!x }); },
     matchBrackets(x) { this.cm.setOption('matchBrackets', !!x); },
@@ -516,13 +535,13 @@
       });
       cm.setSelections(o);
     },
-    ER(mo) {
+    ER(me) {
       if (this.tc) { D.send('RunCurrentLine', { win: this.id }); D.ide.getSIS(); return; }
-      if (D.prf.autoCloseBlocks()) {
+      if (D.prf.autoCloseBlocks()) { // inactive, addCommand context limited to trace mode
         // var u=cm.getCursor(),l=u.line,s=cm.getLine(l),m
-        const u = mo.getPosition();
+        const u = me.getPosition();
         const l = u.lineNumber;
-        const md = mo.getModel();
+        const md = me.getModel();
         const s = md.getLineContent(l);
         let m;
         const re = /^(\s*):(class|disposable|for|if|interface|namespace|property|repeat|section|select|trap|while|with)\b([^⋄{]*)$/i;
@@ -542,15 +561,15 @@
             let r = `:${kw}${post}\n${pre}:End`;
             D.prf.autoCloseBlocksEnd() || (r += kw);
             // cm.replaceRange(r, { line: l, ch: pre.length }, { line: l, ch: s.length });
-            mo.executeEdits('editor', [{ range: new monaco.Range(l, pre.length, l, s.length), text: r }]);
-            mo.trigger('editor', 'editor.action.formatDocument');
+            me.executeEdits('editor', [{ range: new monaco.Range(l, pre.length, l, s.length), text: r }]);
+            me.trigger('editor', 'editor.action.formatDocument');
             // cm.execCommand('indentAuto');cm.execCommand('goLineUp');cm.execCommand('goLineEnd')
           }
         }
       }
       // cm.getOption('mode') === 'apl' ? cm.execCommand('newlineAndIndent')
       //   : cm.replaceSelection('\n', 'end');
-      mo.trigger('editor', 'type', { text: '\n' });
+      me.trigger('editor', 'type', { text: '\n' });
     },
     BH() { D.send('ContinueTrace', { win: this.id }); },
     RM() { D.send('Continue', { win: this.id }); },
@@ -599,13 +618,13 @@
       if (D.prf.ilf()) {
         const text = me.getValue().split('\n');
         D.send('FormatCode', { win: this.id, text });
-      // } else if (cm.somethingSelected()) {
-      //   cm.execCommand('indentAuto');
-      // } else {
-      //   const u = cm.getCursor();
-      //   cm.execCommand('SA');
-      //   cm.execCommand('indentAuto');
-      //   cm.setCursor(u);
+        // } else if (cm.somethingSelected()) {
+        //   cm.execCommand('indentAuto');
+        // } else {
+        //   const u = cm.getCursor();
+        //   cm.execCommand('SA');
+        //   cm.execCommand('indentAuto');
+        //   cm.setCursor(u);
       }
     },
     VAL(cm) {
@@ -613,7 +632,7 @@
       let s;
       if (a.length !== 1) s = '';
       else if (!a[0]) s = this.cword();
-      else if (a[0].indexOf('\n') < 0) [s] = a;
+      else if (a[0].indexOf('\n') < 0)[s] = a;
       s && this.ide.exec([`      ${s}`], 0);
     },
     addJump() {
@@ -640,12 +659,16 @@
       this.autocompleteWithTab = 1;
       D.send('GetAutocomplete', { line: s, pos: c.ch, token: this.id });
     },
-    downOrXline(cm) {
-      const l = cm.getCursor().line;
-      if (l !== cm.lastLine() || /^\s*$/.test(cm.getLine(l))) { cm.execCommand('goLineDown'); return; }
-      cm.execCommand('goDocEnd');
-      cm.execCommand('newlineAndIndent');
-      this.xline = l + 1;
+    downOrXline(me) {
+      const p = me.getPosition();
+      const l = p.lineNumber;
+      if (l !== me.model.getLineCount() || /^\s*$/.test(me.model.getLineContent(l))) {
+        me.setPosition({ lineNumber: l + 1, column: p.column });
+      } else {
+        me.trigger('editor', 'editor.action.insertLineAfter');
+        // cm.execCommand('newlineAndIndent');
+        this.xline = l + 1;
+      }
     },
     onbeforeunload(e) { // called when the user presses [X] on the OS window
       const ed = this;

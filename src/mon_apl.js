@@ -16,7 +16,7 @@
       { open: '\'', close: '\'' },
     ],
     indentationRules: {
-      decreaseIndentPattern: /^((?!.*?⍝).*)?\s*[\}\]\)].*$/,
+      decreaseIndentPattern: /^((?!.*?⍝).*)?\s*[}\])].*$/,
       increaseIndentPattern: /^((?!⍝).)*(\{[^}"'`]*|\([^)"'`]*|\[[^\]"'`]*)$/,
     },
   };
@@ -620,9 +620,14 @@
     provideHover(model, position) {
       const m = model;
       const s = m.getLineContent(position.lineNumber);
-      D.send('GetValueTip', {
-        win: m.winid, line: s, pos: position.column - 1, token: m.winid, maxWidth: 64, maxHeight: 32,
-      }); // ask interpreter
+      D.send('GetValueTip', { // ask interpreter
+        win: m.winid,
+        token: m.winid,
+        line: s,
+        pos: position.column - 1,
+        maxWidth: 64,
+        maxHeight: 32,
+      });
       return new monaco.Promise((complete, error, progress) => {
         m.vt = {
           complete, error, progress, position,
