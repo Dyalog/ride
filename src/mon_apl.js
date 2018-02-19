@@ -15,10 +15,10 @@
       { open: '"', close: '"' },
       { open: '\'', close: '\'' },
     ],
-    // indentationRules: {
-    //     decreaseIndentPattern: /^((?!.*?⍝).*)?\s*[\}\]\)].*$/,
-    //     increaseIndentPattern: /^((?!⍝).)*(\{[^}"'`]*|\([^)"'`]*|\[[^\]"'`]*)$/
-    // }
+    indentationRules: {
+      decreaseIndentPattern: /^((?!.*?⍝).*)?\s*[\}\]\)].*$/,
+      increaseIndentPattern: /^((?!⍝).)*(\{[^}"'`]*|\([^)"'`]*|\[[^\]"'`]*)$/,
+    },
   };
   class State {
     // hdr      are we at a location where a tradfn header can be expected?
@@ -621,7 +621,7 @@
       const m = model;
       const s = m.getLineContent(position.lineNumber);
       D.send('GetValueTip', {
-        win: m.winid, line: s, pos: position.column, token: m.winid, maxWidth: 64, maxHeight: 32,
+        win: m.winid, line: s, pos: position.column - 1, token: m.winid, maxWidth: 64, maxHeight: 32,
       }); // ask interpreter
       return new monaco.Promise((complete, error, progress) => {
         m.vt = {

@@ -23,16 +23,18 @@
     ed.oText = '';
     ed.oStop = []; // remember original text and "stops" to avoid pointless saving on EP
     ed.stop = new Set(); // remember original text and "stops" to avoid pointless saving on EP
+    ed.isCode = 1;
+    ed.breakpoints = D.prf.breakPts();
     const me = monaco.editor.create(ed.dom.querySelector('.ride_win_cm'), {
       automaticLayout: true,
       autoIndent: true,
       cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
       cursorBlinking: D.prf.blinkCursor() ? 'blink' : 'solid',
-      folding: true,
+      folding: ed.isCode && !!D.prf.fold(),
       fontFamily: 'apl',
-      glyphMargin: true,
+      glyphMargin: ed.breakpoints,
       language: 'apl',
-      lineNumbers: !!D.prf.lineNums() && (x => `[${x - 1}]`),
+      lineNumbers: D.prf.lineNums() ? (x => `[${x - 1}]`) : 'off',
       matchBrackets: true,
       mouseWheelZoom: true,
       renderIndentGuides: true,
@@ -53,45 +55,35 @@
     ed.tracer = me.createContextKey('tracer', !!ed.tc);
     ed.mapKeys();
     // ed.cm = CM(ed.dom.querySelector('.ride_win_hide'), {
-    //   lineNumbers: !!D.prf.lineNums(),
-    //   firstLineNumber: 0,
-    //   lineNumberFormatter: i => `[${i}]`,
     //   smartIndent: !D.prf.ilf() && D.prf.indent() >= 0,
     //   indentUnit: D.prf.indent(),
     //   scrollButtonHeight: 12,
     //   matchBrackets: !!D.prf.matchBrackets(),
     //   autoCloseBrackets: !!D.prf.autoCloseBrackets() && ACB_VALUE,
-    //   foldGutter: !!D.prf.fold(),
     //   scrollbarStyle: 'simple',
     //   keyMap: 'dyalog',
     //   extraKeys: { 'Shift-Tab': 'indentLess', Tab: 'indentOrComplete', Down: 'downOrXline' },
-    //   viewportMargin: Infinity,
-    //   cursorBlinkRate: D.prf.blinkCursor() * CM.defaults.cursorBlinkRate,
     // });
-    if (D.prf.blockCursor()) CM.addClass(ed.cm.getWrapperElement(), 'cm-fat-cursor');
-    ed.isCode = 1;
-    ed.breakpoints = D.prf.breakPts();
-    // ed.cm.dyalogCmds = ed;
     // ed.cm.on('cursorActivity', ed.cursorActivity.bind(ed));
-    // ed.cm.on('gutterClick', (cm, l, g) => { // g:gutter
-    //   if (g === 'breakpoints' || g === 'CodeMirror-linenumbers') {
-    //     cm.setCursor({ line: l, ch: 0 });
-    //     ed.BP(ed.cm);
-    //   }
-    // });
+    let mouseL = 0; let mouseC = 0; let mouseTS = 0;
     me.onMouseDown((e) => {
       const t = e.target;
-      const l = t.position.lineNumber - 1;
-      if (t.type === monaco.editor.MouseTargetType.GUTTER_GLYPH_MARGIN) {
+      const mt = monaco.editor.MouseTargetType;
+      const p = t.position;
+      if (t.type === mt.GUTTER_GLYPH_MARGIN) {
+        const l = p.lineNumber - 1;
         ed.stop.has(l) ? ed.stop.delete(l) : ed.stop.add(l);
         ed.setStop();
         ed.tc && D.send('SetLineAttributes', { win: ed.id, stop: ed.getStops() });
+      } else if (t.type === mt.CONTENT_TEXT) {
+        if (e.event.timestamp - mouseTS < 400 && mouseL === p.lineNumber && mouseC === p.column) {
+          ed.ED(me); e.event.preventDefault(); e.event.stopPropagation();
+        }
+        mouseL = p.lineNumber; mouseC = p.column; mouseTS = e.event.timestamp;
       }
     });
     // ed.cm.on('scroll', (c) => { const i = c.getScrollInfo(); ed.btm = i.clientHeight + i.top; });
-    // ed.cm.on('focus', () => { ed.focusTS = +new Date(); ed.ide.focusedWin = ed; });
-    // D.util.cmOnDblClick(ed.cm, (x) => { ed.ED(ed.cm); x.preventDefault(); x.stopPropagation(); });
-    // ed.processAutocompleteReply=D.ac(ed)
+    me.onDidFocusEditor(() => { ed.focusTS = +new Date(); ed.ide.focusedWin = ed; });
     ed.processAutocompleteReply = (x) => {
       if (me.model.ac && me.model.ac.complete) {
         me.model.ac.complete(x.options.map(i => ({ label: i })));
@@ -170,16 +162,6 @@
       addCmd(CM.keyMap.dyalogDefault);
       addCmd(CM.keyMap.dyalog);
     },
-    updGutters() {
-      // const g = [];
-      const ed = this;
-      const me = ed.monaco;
-      me.glyphMargin = ed.isCode && ed.breakpoints;
-      // if (ed.isCode && ed.breakpoints) g.push('breakpoints');
-      // if (cm.getOption('lineNumbers')) g.push('CodeMirror-linenumbers');
-      // if (cm.getOption('foldGutter')) g.push('cm-foldgutter');
-      // cm.setOption('gutters', g);
-    },
     createBPEl() { // create breakpoint element
       const e = this.dom.ownerDocument.createElement('div');
       e.className = 'breakpoint'; e.innerHTML = '●'; return e;
@@ -198,18 +180,6 @@
         ed.cm.replaceRange('', { line: n - 2, ch: ed.cm.getLine(n - 2).length }, { line: n - 1, ch: 0 }, 'D');
       }
       delete ed.xline;
-    },
-    scrollToCursor() { // approx. to 1/3 of editor height; might not work near the top or bottom
-      const h = this.dom.clientHeight;
-      const cc = this.cm.cursorCoords(true, 'local');
-      const x = cc.left;
-      const y = cc.top;
-      this.cm.scrollIntoView({
-        left: x,
-        right: x,
-        top: y - (h / 3),
-        bottom: y + (2 * (h / 3)),
-      });
     },
     hl(l) { // highlight - set current line in tracer
       const ed = this;
@@ -233,13 +203,11 @@
     setBP(x) { // update the display of breakpoints
       const ed = this;
       ed.breakpoints = !!x;
-      ed.updGutters();
+      ed.monaco.updateOptions({ glyphMargin: ed.isCode && ed.breakpoints });
     },
     setLN(x) { // update the display of line numbers and the state of the "[...]" button
       const ed = this;
-      // ed.cm.setOption('lineNumbers', !!x);
-      ed.monaco.lineNumbers = !!D.prf.lineNums() && (l => `[${l - 1}]`);
-      ed.updGutters();
+      ed.monaco.updateOptions({ lineNumbers: D.prf.lineNums() ? (l => `[${l - 1}]`) : 'off' });
       const a = ed.tb.querySelectorAll('.tb_LN');
       for (let i = 0; i < a.length; i++) a[i].classList.toggle('pressed', !!x);
     },
@@ -249,12 +217,10 @@
       ed.tracer.set(x);
       ed.dom.classList.toggle('tracer', !!x);
       ed.hl(null);
-      ed.updGutters();
       ed.setRO(x);
     },
     setRO(x) {
       const ed = this;
-      // ed.cm.setOption('readOnly',x)/*;this.rp.hidden=x*/
       ed.monaco.updateOptions({ readOnly: x });
       if (x) {
         ed.dom.getElementsByClassName('tb_AO')[0].style.display = 'none';
@@ -264,10 +230,6 @@
     },
     setStop() {
       const ed = this;
-      // const { cm } = ed;
-      // for (let k = 0; k < ed.oStop.length; k++) {
-      //   cm.setGutterMarker(ed.oStop[k], 'breakpoints', ed.createBPEl());
-      // }
       ed.stopDecorations = [...ed.stop].map(x => ({
         range: new monaco.Range(x + 1, 1, x + 1, 1),
         options: {
@@ -307,13 +269,10 @@
     stateChanged() {
       const w = this;
       w.updSize();
-      // w.cm.refresh();
-      if (w.updGutters) w.updGutters();
       w.restoreScrollPos();
     },
     open(ee) { // ee:editable entity
       const ed = this;
-      const { cm } = ed;
       const me = ed.monaco;
       me.model.winid = ed.id;
       me.model.onDidChangeContent((x) => {
@@ -322,11 +281,6 @@
       });
       me.model.setValue(ed.oText = ee.text.join('\n'));
       me.model.setEOL(monaco.editor.EndOfLineSequence.LF);
-      // to preserve jumps, convert LineHandle-s to line numbers
-      ed.jumps.forEach((x) => { x.n = x.lh.lineNo(); });
-      // cm.setValue(ed.oText=ee.text.join('\n')) //.setValue() invalidates old LineHandle-s
-      // look up new LineHandle-s, forget numbers
-      ed.jumps.forEach((x) => { x.lh = cm.getLineHandle(x.n); delete x.n; });
       // cm.clearHistory();
       me.focus();
       // entityType:            16 NestedArray        512 AplClass
@@ -335,10 +289,8 @@
       // 4 SimpleNumericArray  128 SimpleCharVector  4096 ExternalFunction
       // 8 MixedSimpleArray    256 AplNamespace
       ed.isCode = [1, 256, 512, 1024, 2048, 4096].indexOf(ee.entityType) >= 0;
-      // cm.setOption('mode', ed.isCode ? 'apl' : 'text');
       me.language = ed.isCode ? 'apl' : 'text';
-      // cm.setOption('foldGutter', ed.isCode && !!D.prf.fold());
-      me.folding = ed.isCode && !!D.prf.fold();
+      me.updateOptions({ folding: ed.isCode && !!D.prf.fold() });
       if (ed.isCode && D.prf.indentOnOpen()) ed.RD(me);
       ed.setRO(ee.readOnly || ee.debugger);
       ed.setBP(ed.breakpoints);
@@ -353,8 +305,12 @@
       ed.setStop();
       D.prf.floating() && $('title', ed.dom.ownerDocument).text(ee.name);
     },
-    blockCursor(x) { this.cm.getWrapperElement().classList.toggle('cm-fat-cursor', !!x); },
-    blinkCursor(x) { this.cm.setOption('cursorBlinkRate', x); },
+    blockCursor(x) {
+      this.monaco.updateOptions({ cursorStyle: x ? 'block' : 'line' });
+    },
+    blinkCursor(x) {
+      this.monaco.updateOptions({ cursorBlinking: x ? 'blink' : 'solid' });
+    },
     hasFocus() { return this.monaco.isFocused(); },
     focus() {
       let q = this.container;
@@ -366,7 +322,7 @@
         p.setActiveContentItem && p.setActiveContentItem(q);
         q = p; p = p.parent;
       } // reveal in golden layout
-      window.focused || window.focus(); // this.cm.focus()
+      window.focused || window.focus();
       this.monaco.focus();
     },
     insert(ch) { this.cm.getOption('readOnly') || this.cm.replaceSelection(ch); },
@@ -403,7 +359,7 @@
     },
     autoCloseBrackets(x) { this.cm.setOption('autoCloseBrackets', x); },
     indent(x) { this.cm.setOption('smartIndent', x >= 0); this.cm.setOption('indentUnit', x); },
-    fold(x) { this.cm.setOption('foldGutter', this.isCode && !!x); this.updGutters(); },
+    fold(x) { this.monaco.updateOptions({ folding: this.isCode && !!x }); },
     matchBrackets(x) { this.cm.setOption('matchBrackets', !!x); },
     zoom(z) {
       const w = this;
@@ -454,14 +410,14 @@
       // this.vt.processReply(x);
       const me = this.monaco;
       if (me.model.vt && me.model.vt.complete) {
-        const vt = me.model.vt;
+        const { vt } = me.model;
         const l = vt.position.lineNumber;
         const s = me.model.getLineContent(l);
         vt.complete({
           range: new monaco.Range(l, x.startCol + 1, l, x.endCol + 1),
           contents: [
             s.slice(x.startCol, x.endCol),
-            { language: 'apl', value: x.tip.join('\n') }
+            { language: x.class === 2 ? 'text' : 'apl', value: x.tip.join('\n') },
           ],
         });
       }
@@ -476,8 +432,8 @@
       });
     },
     QT() { D.send('CloseWindow', { win: this.id }); },
-    BK(cm) { this.tc ? D.send('TraceBackward', { win: this.id }) : cm.execCommand('undo'); },
-    FD(cm) { this.tc ? D.send('TraceForward', { win: this.id }) : cm.execCommand('redo'); },
+    BK(me) { this.tc ? D.send('TraceBackward', { win: this.id }) : me.trigger('D', 'undo'); },
+    FD(me) { this.tc ? D.send('TraceForward', { win: this.id }) : me.trigger('D', 'redo'); },
     STL(cm) {
       if (!this.tc) return;
       let steps = cm.getCursor().line - this.HIGHLIGHT_LINE;
@@ -662,15 +618,19 @@
     },
     addJump() {
       const j = this.jumps;
-      const u = this.cm.getCursor();
-      j.push({ lh: this.cm.getLineHandle(u.line), ch: u.ch }) > 10 && j.shift();
+      // const u = this.cm.getCursor();
+      // j.push({ lh: this.cm.getLineHandle(u.line), ch: u.ch }) > 10 && j.shift();
+      // monaco doesn't have line handles so jumps may be off somewhat if lines are added/deleted
+      j.push(this.monaco.getPosition()) > 10 && j.shift();
     },
     getUnsaved() {
-      const { cm } = this;
-      const v = cm.getValue();
-      return (v !== cm.oText) ? v : false;
+      const me = this.monaco;
+      const v = me.getValue();
+      return (v !== this.oText) ? v : false;
     },
-    JBK(cm) { const p = this.jumps.pop(); p && cm.setCursor({ line: p.lh.lineNo(), ch: p.ch }); },
+    JBK(me) {
+      const p = this.jumps.pop(); p && me.setPosition(p);
+    },
     indentOrComplete(cm) {
       if (cm.somethingSelected()) { cm.execCommand('indentMore'); return; }
       const c = cm.getCursor();
