@@ -617,7 +617,8 @@
         D.send('FormatCode', { win: this.id, text });
         // } else if (cm.somethingSelected()) {
         //   cm.execCommand('indentAuto');
-        // } else {
+      } else {
+        me.trigger('editor', 'editor.action.formatDocument');
         //   const u = cm.getCursor();
         //   cm.execCommand('SA');
         //   cm.execCommand('indentAuto');

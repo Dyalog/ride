@@ -641,14 +641,45 @@
       });
     },
   };
+  const aplFormat = {
+    formatLines(model, range, options) {
+      const ml = model._lines;
+      const from = range.startLineNumber || 1;
+      const to = range.endLineNumber || ml.length;
+      const edits = [];
+      for (let l = from - 1; l < to; l++) {
+        const s = model.getLineContent(l + 1);
+        const { a } = ml[l].getState();
+        const la = a[a.length - 1];
+        const [m] = s.match(/^(\s)*/);
+        const n = s[m.length] === '}' ? la.oi : la.ii;
+        if (n !== m.length) {
+          edits.push({
+            range: new monaco.Range(l + 1, 1, l + 1, m.length + 1),
+            text: ' '.repeat(n),
+          });
+        }
+      }
+      return edits;
+    },
+    provideDocumentRangeFormattingEdits(model, range, options) {
+      return this.formatLines(model, range, options);
+    },
+    provideDocumentFormattingEdits(model, options) {
+      return this.formatLines(model, {}, options);
+    },
+  };
   D.mop.then(() => {
-    monaco.languages.register({
+    const ml = monaco.languages;
+    ml.register({
       id: 'apl',
       extensions: ['.dyapp', '.dyalog'],
     });
-    monaco.languages.setTokensProvider('apl', aplTokens);
-    monaco.languages.setLanguageConfiguration('apl', aplConfig);
-    monaco.languages.registerCompletionItemProvider('apl', aplCompletions);
-    monaco.languages.registerHoverProvider('apl', aplHover);
+    ml.setTokensProvider('apl', aplTokens);
+    ml.setLanguageConfiguration('apl', aplConfig);
+    ml.registerCompletionItemProvider('apl', aplCompletions);
+    ml.registerHoverProvider('apl', aplHover);
+    ml.registerDocumentFormattingEditProvider('apl', aplFormat);
+    ml.registerDocumentRangeFormattingEditProvider('apl', aplFormat);
   });
 }
