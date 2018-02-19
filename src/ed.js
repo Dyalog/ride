@@ -23,6 +23,7 @@
     ed.oStop = []; // remember original text and "stops" to avoid pointless saving on EP
     ed.stop = new Set(); // remember original text and "stops" to avoid pointless saving on EP
     ed.isCode = 1;
+    ed.isReadOnly = !1;
     ed.breakpoints = D.prf.breakPts();
     const me = monaco.editor.create(ed.dom.querySelector('.ride_win_cm'), {
       automaticLayout: true,
@@ -238,6 +239,7 @@
     },
     setRO(x) {
       const ed = this;
+      ed.isReadOnly = x;
       ed.monaco.updateOptions({ readOnly: x });
       if (x) {
         ed.dom.getElementsByClassName('tb_AO')[0].style.display = 'none';
@@ -298,7 +300,6 @@
       });
       me.model.setValue(ed.oText = ee.text.join('\n'));
       me.model.setEOL(monaco.editor.EndOfLineSequence.LF);
-      // cm.clearHistory();
       me.focus();
       // entityType:            16 NestedArray        512 AplClass
       // 1 DefinedFunction      32 QuadORObject      1024 AplInterface
@@ -342,7 +343,9 @@
       window.focused || window.focus();
       this.monaco.focus();
     },
-    insert(ch) { this.cm.getOption('readOnly') || this.cm.replaceSelection(ch); },
+    insert(ch) {
+      this.isReadOnly || this.monaco.trigger('editor', 'type', { text: ch });
+    },
     saved(err) {
       if (err) {
         this.isClosing = 0;
@@ -506,8 +509,8 @@
     TVB() { D.prf.breakPts.toggle(); },
     TC() { D.send('StepInto', { win: this.id }); D.ide.getSIS(); },
     AC(cm) { // align comments
-      if (cm.getOption('readOnly')) return;
       const ed = this;
+      if (ed.isReadOnly) return;
       const ll = cm.lastLine();
       const o = cm.listSelections(); // o:original selections
       const sels = cm.somethingSelected() ? o : [{
