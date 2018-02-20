@@ -154,7 +154,7 @@
     })
     let name = 'my'+scm.name.split('').map(x=>x.codePointAt(0)+'').join('')
     monaco.editor.defineTheme(name, {
-      base: 'vs', // can also be vs-dark or hc-black
+      base: scm.name === 'Francisco Goya' ? 'vs-dark' : 'vs', // can also be vs-dark or hc-black
       inherit: false, // can also be false to completely replace the builtin rules
       rules,colors
     });
