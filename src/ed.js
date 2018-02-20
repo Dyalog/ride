@@ -458,16 +458,12 @@
       // .map(x => x.t)
       const ts = ta.filter(t => /^(∇|\{|namespace|class|interface)$/.test(t));
       if (ts.includes('{') || (ts.length && !ts.includes('∇'))) return;
-      let f; // f:found?
       let l;
       for (l = l0 - 1; l >= 0; l--) {
-        // const b = me.model.getLineTokens(l);
-        // for (let i = b.length - 1; i >= 0; i--) if (b[i].type === 'apl-trad') { f = 1; break; }
-        // if (f) break;
         if (me.model._lines[l]._state.a.length === ti) break;
       }
       if (l < 0) l = 0;
-      const lt = me.model.getLineContent(l + 1)
+      const lt = me.model.getLineContent(l + 1);
       const u = lt.split('⍝');
       let s = u[0]; // s:the part before the first "⍝"
       const com = u.slice(1).join('⍝'); // com:the rest
@@ -484,20 +480,23 @@
     TVO() { D.prf.fold.toggle(); },
     TVB() { D.prf.breakPts.toggle(); },
     TC() { D.send('StepInto', { win: this.id }); D.ide.getSIS(); },
-    AC(cm) { // align comments
+    AC(me) { // align comments
       const ed = this;
       if (ed.isReadOnly) return;
-      const ll = cm.lastLine();
-      const o = cm.listSelections(); // o:original selections
-      const sels = cm.somethingSelected() ? o : [{
-        anchor: { line: 0, ch: 0 },
-        head: { line: ll, ch: cm.getLine(ll).length },
-      }];
+      const ll = me.model.getLineCount();
+      const o = me.getSelections(); // o:original selections
+      const sels = o.length === 1 && o[0].isEmpty() ?
+        [new monaco.Selection(1, 1, ll, me.model.getLineContent(ll).length + 1)] : o;
+
       const a = sels.map((sel) => { // a:info about individual selections
-        let p = sel.anchor;
-        let q = sel.head;
-        if ((p.line - q.line || p.ch - q.ch) > 0) { const h = p; p = q; q = h; } // p:from, q:to
-        const l = ed.cm.getRange({ line: p.line, ch: 0 }, q, '\n').split('\n'); //  l:lines
+        const p = sel.getStartPosition();
+        const q = sel.getEndPosition();
+        const l = me.model.getValueInRange({
+          startLineNumber: p.lineNumber,
+          startColumn: 0,
+          endLineNumber: q.lineNumber,
+          endColumn: q.column,
+        }, monaco.editor.EndOfLinePreference.LF).split('\n'); //  l:lines
         const u = l.map(x => x.replace(/'[^']*'?/g, y => ' '.repeat(y.length))); // u:scrubbed strings
         const c = u.map(x => x.indexOf('⍝')); // c:column index of ⍝
         return {
@@ -505,14 +504,19 @@
         };
       });
       const m = Math.max(...a.map(sel => Math.max(...sel.c)));
-      a.forEach((sel) => {
+      const edits = a.map((sel) => {
         const r = sel.l.map((x, i) => {
           const ci = sel.c[i];
           return ci < 0 ? x : x.slice(0, ci) + ' '.repeat(m - ci) + x.slice(ci);
         });
-        r[0] = r[0].slice(sel.p.ch); ed.cm.replaceRange(r.join('\n'), sel.p, sel.q, 'D');
+        r[0] = r[0].slice(sel.p.column - 1);
+        return {
+          range: new monaco.Range(sel.p.lineNumber, sel.p.column, sel.q.lineNumber, sel.q.column),
+          text: r.join('\n'),
+        };
       });
-      cm.setSelections(o);
+      me.executeEdits('D', edits, o);
+      // me.setSelections(o);
     },
     ER(me) {
       if (this.tc) {
