@@ -300,6 +300,7 @@ D.IDE = function () {'use strict'
     c.on('tab',function(tab){
       tab.element.click(function(){
         w.cm && w.cm.focus();
+        w.monaco && w.monaco.focus();
         w.focus();
       })
     })

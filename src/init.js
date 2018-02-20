@@ -36,7 +36,10 @@ const J = {};
       CM.commands.ZMO = () => { D.prf.zoom(Math.max(-10, D.prf.zoom() - 1)); updPW(); };
       CM.commands.ZMR = () => { D.prf.zoom(0); updPW(); };
 
-      document.onmousewheel = (e) => { const d = e.wheelDelta; if (d && (e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey) CM.commands[d > 0 ? 'ZMI' : 'ZMO'](); };
+      document.onmousewheel = (e) => {
+        const d = e.wheelDelta;
+        if (d && (e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey) CM.commands[d > 0 ? 'ZMI' : 'ZMO']();
+      };
       document.body.className += ` zoom${D.prf.zoom()}`;
 
       D.prf.zoom((z) => {

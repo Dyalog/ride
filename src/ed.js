@@ -8,7 +8,7 @@
     ed.id = opts.id;
     ed.name = opts.name;
     ed.tc = opts.tc;
-    ed.HIGHLIGHT_LINE = 0;
+    ed.HIGHLIGHT_LINE = 1;
     ed.decorations = [];
     ed.hlDecorations = [];
     ed.stopDecorations = [];
@@ -25,18 +25,21 @@
     ed.isCode = 1;
     ed.isReadOnly = !1;
     ed.breakpoints = D.prf.breakPts();
+    ed.zoom2fs = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 26, 28, 32, 36, 42, 48];
     const me = monaco.editor.create(ed.dom.querySelector('.ride_win_cm'), {
+      autoClosingBrackets: !!D.prf.autoCloseBrackets(),
       automaticLayout: true,
       autoIndent: true,
       cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
       cursorBlinking: D.prf.blinkCursor() ? 'blink' : 'solid',
       folding: ed.isCode && !!D.prf.fold(),
       fontFamily: 'apl',
+      fontSize: ed.zoom2fs[D.prf.zoom() + 10],
       glyphMargin: ed.breakpoints,
       language: 'apl',
       lineNumbers: D.prf.lineNums() ? (x => `[${x - 1}]`) : 'off',
-      matchBrackets: true,
-      mouseWheelZoom: true,
+      matchBrackets: !!D.prf.matchBrackets(),
+      mouseWheelZoom: false,
       renderIndentGuides: true,
       showFoldingControls: 'always',
       wordBasedSuggestions: false,
@@ -54,17 +57,6 @@
     me.dyalogCmds = ed;
     ed.tracer = me.createContextKey('tracer', !!ed.tc);
     ed.mapKeys(); D.prf.keys(ed.mapKeys.bind(ed));
-    // ed.cm = CM(ed.dom.querySelector('.ride_win_hide'), {
-    //   smartIndent: !D.prf.ilf() && D.prf.indent() >= 0,
-    //   indentUnit: D.prf.indent(),
-    //   scrollButtonHeight: 12,
-    //   matchBrackets: !!D.prf.matchBrackets(),
-    //   autoCloseBrackets: !!D.prf.autoCloseBrackets() && ACB_VALUE,
-    //   scrollbarStyle: 'simple',
-    //   keyMap: 'dyalog',
-    //   extraKeys: { 'Shift-Tab': 'indentLess', Tab: 'indentOrComplete', Down: 'downOrXline' },
-    // });
-    // ed.cm.on('cursorActivity', ed.cursorActivity.bind(ed));
     me.onDidChangeCursorPosition(ed.cursorActivity.bind(ed));
     let mouseL = 0; let mouseC = 0; let mouseTS = 0;
     me.onMouseDown((e) => {
@@ -83,7 +75,6 @@
         mouseL = p.lineNumber; mouseC = p.column; mouseTS = e.event.timestamp;
       }
     });
-    // ed.cm.on('scroll', (c) => { const i = c.getScrollInfo(); ed.btm = i.clientHeight + i.top; });
     me.onDidFocusEditor(() => { ed.focusTS = +new Date(); ed.ide.focusedWin = ed; });
     ed.processAutocompleteReply = (x) => {
       if (me.model.ac && me.model.ac.complete) {
@@ -205,15 +196,14 @@
       if (l == null) {
         ed.hlDecorations = [];
       } else {
-        const lm = l + 1;
         ed.hlDecorations = [{
-          range: new monaco.Range(lm, 1, lm, 1),
+          range: new monaco.Range(l, 1, l, 1),
           options: {
             isWholeLine: true,
             className: 'highlighted',
           },
         }];
-        me.setPosition({ lineNumber: lm, column: 0 });
+        me.setPosition({ lineNumber: l, column: 0 });
         me.revealLineInCenter(l);
       }
       ed.setDecorations();
@@ -266,22 +256,8 @@
       );
     },
     updSize() { },
-    saveScrollPos() {
-      // workaround for CodeMirror scrolling up to
-      // the top under GoldenLayout when editor is closed
-      // const ed = this;
-      // if (ed.btm == null) {
-      //   const i = ed.cm.getScrollInfo();
-      //   ed.btm = i.clientHeight + i.top;
-      // }
-    },
-    restoreScrollPos() {
-      // const ed = this;
-      // if (ed.btm != null) {
-      //   const i = ed.cm.getScrollInfo();
-      //   ed.cm.scrollTo(0, ed.btm - i.clientHeight);
-      // } else { ed.cm.scrollTo(0, 0); }
-    },
+    saveScrollPos() { },
+    restoreScrollPos() { },
     updateSIStack(x) {
       this.dom.querySelector('.si_stack').innerHTML = x.stack.map(o => `<option>${o}`).join('');
     },
@@ -367,7 +343,7 @@
     },
     die() { this.setRO(1); },
     getDocument() { return this.dom.ownerDocument; },
-    refresh() { /* this.cm.refresh(); */ },
+    refresh() { },
     cword() { // apl identifier under cursor
       const me = this.monaco;
       const c = me.getPosition();
@@ -379,24 +355,18 @@
       ).replace(/^\d+/, ''); // trim leading digits
     },
     autoCloseBrackets(x) {
-      this.cm.setOption('autoCloseBrackets', x);
+      this.monaco.updateOptions('autoClosingBrackets', x);
     },
-    indent(x) { this.cm.setOption('smartIndent', x >= 0); this.cm.setOption('indentUnit', x); },
+    indent(x) { this.monaco.updateOptions('autoIndent', x >= 0); },
     fold(x) { this.monaco.updateOptions({ folding: this.isCode && !!x }); },
-    matchBrackets(x) { this.cm.setOption('matchBrackets', !!x); },
+    matchBrackets(x) { this.monaco.updateOptions('matchBrackets', !!x); },
+    
     zoom(z) {
-      const w = this;
-      const b = w.getDocument().body;
-      const top = w.cm.heightAtLine(w.cm.lastLine(), 'local') < w.btm;
-      const i = w.cm.getScrollInfo();
-      const line = w.cm.lineAtHeight(top ? i.top : w.btm, 'local');
-      const diff = w.btm - (line * w.cm.defaultTextHeight());
-      const ch = i.clientHeight;
-      b.className = `zoom${z} ${b.className.split(/\s+/).filter(s => !/^zoom-?\d+$/.test(s)).join(' ')}`;
-      w.refresh();
-      w.btm = (w.cm.defaultTextHeight() * line)
-        + (top ? ch + 5 : diff)
-        + (w.cm.getScrollInfo().clientHeight - ch);
+      const ed = this;
+      const me = ed.monaco;
+      const r = me.getCompletelyVisibleLinesRangeInViewport();
+      me.updateOptions({ fontSize: ed.zoom2fs[z + 10] });
+      me.revealRangeAtTop(r);
     },
 
     ReplyFormatCode(lines) {
@@ -425,9 +395,9 @@
     SetHighlightLine(line) {
       const w = this;
       if (w && w.hl) {
-        w.hl(line);
+        w.hl(line + 1);
         w.focus();
-        w.HIGHLIGHT_LINE = line;
+        w.HIGHLIGHT_LINE = line + 1;
       }
     },
     ValueTip(x) {
@@ -448,7 +418,6 @@
     },
     ED(me) {
       this.addJump();
-      // D.ide.Edit({win:this.id,pos:cm.indexFromPos(cm.getCursor()),text:cm.getValue()})
       D.ide.Edit({
         win: this.id,
         pos: me.model.getOffsetAt(me.getPosition()),
@@ -458,9 +427,9 @@
     QT() { D.send('CloseWindow', { win: this.id }); },
     BK(me) { this.tc ? D.send('TraceBackward', { win: this.id }) : me.trigger('D', 'undo'); },
     FD(me) { this.tc ? D.send('TraceForward', { win: this.id }) : me.trigger('D', 'redo'); },
-    STL(cm) {
+    STL(me) {
       if (!this.tc) return;
-      let steps = cm.getCursor().line - this.HIGHLIGHT_LINE;
+      let steps = me.getPosition().lineNumber - this.HIGHLIGHT_LINE;
       const cmd = steps > 0 ? 'TraceForward' : 'TraceBackward';
       steps = Math.abs(steps);
       for (let i = 0; i < steps; i++) { D.send(cmd, { win: this.id }); }
@@ -546,7 +515,9 @@
       cm.setSelections(o);
     },
     ER(me) {
-      if (this.tc) { D.send('RunCurrentLine', { win: this.id }); D.ide.getSIS(); return; }
+      if (this.tc) {
+        D.send('RunCurrentLine', { win: this.id }); D.ide.getSIS(); return;
+      }
       if (D.prf.autoCloseBlocks()) { // inactive, addCommand context limited to trace mode
         // var u=cm.getCursor(),l=u.line,s=cm.getLine(l),m
         const u = me.getPosition();
@@ -615,14 +586,10 @@
       if (D.prf.ilf()) {
         const text = me.getValue().split('\n');
         D.send('FormatCode', { win: this.id, text });
-        // } else if (cm.somethingSelected()) {
-        //   cm.execCommand('indentAuto');
-      } else {
+      } else if (me.getSelection().isEmpty()) {
         me.trigger('editor', 'editor.action.formatDocument');
-        //   const u = cm.getCursor();
-        //   cm.execCommand('SA');
-        //   cm.execCommand('indentAuto');
-        //   cm.setCursor(u);
+      } else {
+        me.trigger('editor', 'editor.action.formatSelection');
       }
     },
     VAL(cm) {

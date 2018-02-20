@@ -17,7 +17,8 @@
     ],
     indentationRules: {
       decreaseIndentPattern: /^((?!.*?⍝).*)?\s*[}\])].*$/,
-      increaseIndentPattern: /^((?!⍝).)*(\{[^}"'`]*|\([^)"'`]*|\[[^\]"'`]*)$/,
+      // increaseIndentPattern: /^((?!⍝).)*(\{[^}"'`]*|\([^)"'`]*|\[[^\]"'`]*)$/,
+      increaseIndentPattern: /^((?!⍝).)*(\{[^}"'`]*|\([^)"'`]*|\[[^\]"'`]*|:if(?!\s+.*:end(?:if)?(\s+|$)).*)$/,
     },
   };
   class State {
@@ -642,15 +643,18 @@
     },
   };
   const aplFormat = {
-    formatLines(model, range, options) {
+    formatLines(model, range) {
       const ml = model._lines;
       const from = range.startLineNumber || 1;
       const to = range.endLineNumber || ml.length;
       const edits = [];
       for (let l = from - 1; l < to; l++) {
         const s = model.getLineContent(l + 1);
-        const { a } = ml[l].getState();
-        const la = a[a.length - 1];
+        const a = (ml[l].getState() || {}).a || [];
+        // const la = a[a.length - 1];
+        const la = a.reduce((p, c) => {
+          p.ii += c.ii; p.oi += c.oi; return p;
+        }, { ii: 0, oi: 0 });
         const [m] = s.match(/^(\s)*/);
         const n = s[m.length] === '}' ? la.oi : la.ii;
         if (n !== m.length) {
