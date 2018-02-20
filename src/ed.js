@@ -25,7 +25,8 @@
     ed.isCode = 1;
     ed.isReadOnly = !1;
     ed.breakpoints = D.prf.breakPts();
-    ed.zoom2fs = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 22, 24, 26, 28, 32, 36, 42, 48];
+    ed.zoom2fs = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+      16, 17, 18, 19, 20, 22, 24, 26, 28, 32, 36, 42, 48];
     const me = monaco.editor.create(ed.dom.querySelector('.ride_win_cm'), {
       autoClosingBrackets: !!D.prf.autoCloseBrackets(),
       automaticLayout: true,
@@ -44,9 +45,9 @@
       showFoldingControls: 'always',
       wordBasedSuggestions: false,
     });
-    ed.monaco = me;
+    ed.me = me;
 
-    ed.monaco_ready = new Promise((resolve) => {
+    ed.me_ready = new Promise((resolve) => {
       // ugly hack as monaco doesn't have a built in event for when the editor is ready?!
       // https://github.com/Microsoft/monaco-editor/issues/115
       const didScrollChangeDisposable = me.onDidScrollChange(() => {
@@ -112,7 +113,7 @@
   }
   Ed.prototype = {
     mapKeys() {
-      const me = this.monaco;
+      const { me } = this;
       const kc = monaco.KeyCode;
       const km = monaco.KeyMod;
       const ctrlcmd = {
@@ -182,7 +183,7 @@
     cursorActivity(e) { // handle "cursor activity" event from CodeMirror
       // xline:the line number of the empty line inserted when you press <down> at eof
       const ed = this;
-      const me = ed.monaco;
+      const { me } = ed;
       if (ed.xline == null) return;
       const n = me.model.getLineCount();
       const l = e.position.lineNumber;
@@ -199,7 +200,7 @@
     },
     hl(l) { // highlight - set current line in tracer
       const ed = this;
-      const me = ed.monaco;
+      const { me } = ed;
       if (l == null) {
         ed.hlDecorations = [];
       } else {
@@ -218,11 +219,11 @@
     setBP(x) { // update the display of breakpoints
       const ed = this;
       ed.breakpoints = !!x;
-      ed.monaco.updateOptions({ glyphMargin: ed.isCode && ed.breakpoints });
+      ed.me.updateOptions({ glyphMargin: ed.isCode && ed.breakpoints });
     },
     setLN(x) { // update the display of line numbers and the state of the "[...]" button
       const ed = this;
-      ed.monaco.updateOptions({ lineNumbers: D.prf.lineNums() ? (l => `[${l - 1}]`) : 'off' });
+      ed.me.updateOptions({ lineNumbers: D.prf.lineNums() ? (l => `[${l - 1}]`) : 'off' });
       const a = ed.tb.querySelectorAll('.tb_LN');
       for (let i = 0; i < a.length; i++) a[i].classList.toggle('pressed', !!x);
     },
@@ -237,11 +238,10 @@
     setRO(x) {
       const ed = this;
       ed.isReadOnly = x;
-      ed.monaco.updateOptions({ readOnly: x });
+      ed.me.updateOptions({ readOnly: x });
       if (x) {
         ed.dom.getElementsByClassName('tb_AO')[0].style.display = 'none';
         ed.dom.getElementsByClassName('tb_DO')[0].style.display = 'none';
-        ed.dom.getElementsByClassName('tb_RP')[0].style.display = 'none';
       }
     },
     setStop() {
@@ -257,7 +257,7 @@
     },
     setDecorations() {
       const ed = this;
-      ed.decorations = ed.monaco.deltaDecorations(
+      ed.decorations = ed.me.deltaDecorations(
         ed.decorations,
         [...ed.stopDecorations, ...ed.hlDecorations],
       );
@@ -275,7 +275,7 @@
     },
     open(ee) { // ee:editable entity
       const ed = this;
-      const me = ed.monaco;
+      const { me } = ed;
       me.model.winid = ed.id;
       me.model.onDidChangeContent((x) => {
         if (!me.dyalogBQ && x.changes.length === 1
@@ -307,12 +307,12 @@
       D.prf.floating() && $('title', ed.dom.ownerDocument).text(ee.name);
     },
     blockCursor(x) {
-      this.monaco.updateOptions({ cursorStyle: x ? 'block' : 'line' });
+      this.me.updateOptions({ cursorStyle: x ? 'block' : 'line' });
     },
     blinkCursor(x) {
-      this.monaco.updateOptions({ cursorBlinking: x ? 'blink' : 'solid' });
+      this.me.updateOptions({ cursorBlinking: x ? 'blink' : 'solid' });
     },
-    hasFocus() { return this.monaco.isFocused(); },
+    hasFocus() { return this.me.isFocused(); },
     focus() {
       let q = this.container;
       let p = q && q.parent;
@@ -324,10 +324,10 @@
         q = p; p = p.parent;
       } // reveal in golden layout
       window.focused || window.focus();
-      this.monaco.focus();
+      this.me.focus();
     },
     insert(ch) {
-      this.isReadOnly || this.monaco.trigger('editor', 'type', { text: ch });
+      this.isReadOnly || this.me.trigger('editor', 'type', { text: ch });
     },
     saved(err) {
       if (err) {
@@ -352,7 +352,7 @@
     getDocument() { return this.dom.ownerDocument; },
     refresh() { },
     cword() { // apl identifier under cursor
-      const me = this.monaco;
+      const { me } = this;
       const c = me.getPosition();
       const s = me.model.getLineContent(c.lineNumber);
       const r = `[${D.syn.letter}0-9]*`; // r:regex fragment used for a name
@@ -362,15 +362,15 @@
       ).replace(/^\d+/, ''); // trim leading digits
     },
     autoCloseBrackets(x) {
-      this.monaco.updateOptions('autoClosingBrackets', x);
+      this.me.updateOptions('autoClosingBrackets', x);
     },
-    indent(x) { this.monaco.updateOptions('autoIndent', x >= 0); },
-    fold(x) { this.monaco.updateOptions({ folding: this.isCode && !!x }); },
-    matchBrackets(x) { this.monaco.updateOptions('matchBrackets', !!x); },
+    indent(x) { this.me.updateOptions('autoIndent', x >= 0); },
+    fold(x) { this.me.updateOptions({ folding: this.isCode && !!x }); },
+    matchBrackets(x) { this.me.updateOptions('matchBrackets', !!x); },
 
     zoom(z) {
       const ed = this;
-      const me = ed.monaco;
+      const { me } = ed;
       const r = me.getCompletelyVisibleLinesRangeInViewport();
       me.updateOptions({ fontSize: ed.zoom2fs[z + 10] });
       me.revealRangeAtTop(r);
@@ -378,7 +378,7 @@
 
     ReplyFormatCode(lines) {
       const ed = this;
-      const me = ed.monaco;
+      const { me } = ed;
       const u = me.getPosition();
       ed.saveScrollPos();
       me.setValue(lines.join('\n'));
@@ -410,7 +410,7 @@
     },
     ValueTip(x) {
       // this.vt.processReply(x);
-      const me = this.monaco;
+      const { me } = this;
       if (me.model.vt && me.model.vt.complete) {
         const { vt } = me.model;
         const l = vt.position.lineNumber;
@@ -450,7 +450,7 @@
       if (ed.tc || (v === ed.oText && `${stop}` === `${ed.oStop}`)) { // if tracer or unchanged
         D.send('CloseWindow', { win: ed.id }); return;
       }
-      if (!ed.monaco) {
+      if (!ed.me) {
         for (let i = 0; i < stop.length; i++) me.setGutterMarker(stop[i], 'breakpoints', null);
       }
       // D.send('SaveChanges', { win: ed.id, text: v.split('\n'), stop: [] });
@@ -460,7 +460,7 @@
       const name = this.cword();
       if (!name) return;
       const l0 = me.getPosition().lineNumber;
-      const ta = me.model._lines[l0 - 1]._state.a.map(x => x.t);
+      const ta = me.model._lines[l0 - 1].getState().a.map(x => x.t);
       const ti = ta.lastIndexOf('∇');
       // const ts = (((me.model._lines[l0 - 1] || {})._state || {}).a || [])
       // .map(x => x.t)
@@ -468,7 +468,7 @@
       if (ts.includes('{') || (ts.length && !ts.includes('∇'))) return;
       let l;
       for (l = l0 - 1; l >= 0; l--) {
-        if (me.model._lines[l]._state.a.length === ti) break;
+        if (me.model._lines[l].getState().a.length === ti) break;
       }
       if (l < 0) l = 0;
       const lt = me.model.getLineContent(l + 1);
@@ -606,16 +606,19 @@
     addJump() {
       const j = this.jumps;
       // monaco doesn't have line handles so jumps may be off somewhat if lines are added/deleted
-      j.push(this.monaco.getPosition()) > 10 && j.shift();
+      j.push(this.me.getPosition()) > 10 && j.shift();
     },
     getUnsaved() {
-      const me = this.monaco;
+      const { me } = this;
       const v = me.getValue();
       return (v !== this.oText) ? v : false;
     },
     JBK(me) {
       const p = this.jumps.pop(); p && me.setPosition(p);
     },
+    SC(me) { me.trigger('editor', 'actions.find'); },
+    AO(me) { me.trigger('editor', 'editor.action.addCommentLine'); },
+    DO(me) { me.trigger('editor', 'editor.action.removeCommentLine'); },
     indentOrComplete(me) {
       const sels = me.getSelections();
 
@@ -645,7 +648,7 @@
     },
     onbeforeunload(e) { // called when the user presses [X] on the OS window
       const ed = this;
-      const me = ed.monaco;
+      const { me } = ed;
       if (D.prf.floating() && D.ide.connected) { e.returnValue = false; }
       if (ed.ide.dead) {
         D.nww && D.nww.close(true); // force close window

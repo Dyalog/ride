@@ -98,7 +98,7 @@ D.IDE = function () {'use strict'
       if(done)return;
       // (ide.wins[w]=new D.Ed(ide,editorOpts)).open(ee)
       let ed=ide.wins[w]=new D.Ed(ide,editorOpts)
-      ed.monaco_ready.then(_=>ed.open(ee))
+      ed.me_ready.then(_=>ed.open(ee))
       //add to golden layout:
       var si=ide.wins[0].cm.getScrollInfo() //remember session scroll position
       var tc=!!ee['debugger']
@@ -300,7 +300,7 @@ D.IDE = function () {'use strict'
     c.on('tab',function(tab){
       tab.element.click(function(){
         w.cm && w.cm.focus();
-        w.monaco && w.monaco.focus();
+        w.me && w.me.focus();
         w.focus();
       })
     })
@@ -354,9 +354,9 @@ D.IDE = function () {'use strict'
       case'win':
         var id=x.contentItem.config.componentState.id,cls=x.closeElement
         if(id){
-          x.middleClick=function(){var w=ide.wins[id];w.EP(w.monaco);}
+          x.middleClick=function(){var w=ide.wins[id];w.EP(w.me);}
           cls.off('click').click(function(){
-            var w=ide.wins[id];w.EP(w.monaco)
+            var w=ide.wins[id];w.EP(w.me)
           })
         }
         else{

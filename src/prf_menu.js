@@ -51,7 +51,7 @@ D.parseMenuDSL=function(md){ //md:menu description
       h.cmd=cmd
       h.action=function(cmd){
         return function(){var f=CodeMirror.commands[cmd],w=D.ide.focusedWin;
-                          f?f(w.cm || w.monaco):D.ide[cmd]?D.ide[cmd]():$.err('Unknown command: '+cmd)}
+                          f?f(w.cm || w.me):D.ide[cmd]?D.ide[cmd]():$.err('Unknown command: '+cmd)}
       }(cmd)
     }else if(url){
       h.action=D.openExternal.bind(D,url)
