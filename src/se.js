@@ -12,11 +12,12 @@
     se.dirty = {};
     // modified lines: lineNumber→originalContent
     // inserted lines: lineNumber→0 (also used in syn.js)
-    se.dom = document.createElement('div');
-    se.dom.className = 'ride_win';
-    se.$e = $(se.dom);
-    se.dom.oncontextmenu = D.oncmenu;
-    const cm = CM(se.dom, {
+    se.dom2 = document.createElement('div');
+    se.dom2.className = 'ride_win_hide';
+    se.dom2.style.display = 'none';
+    // se.$e = $(se.dom2);
+    // se.dom.oncontextmenu = D.oncmenu;
+    const cm = CM(se.dom2, {
       autofocus: true,
       mode: { name: 'apl-session', se },
       matchBrackets: !!D.prf.matchBrackets(),
@@ -31,9 +32,45 @@
       cursorBlinkRate: D.prf.blinkCursor() * CM.defaults.cursorBlinkRate,
     });
     se.cm = cm;
-    D.prf.blockCursor() && CM.addClass(cm.getWrapperElement(), 'cm-fat-cursor');
     cm.dyalogCmds = se;
-    D.util.cmOnDblClick(cm, (e) => { se.ED(cm); e.stopPropagation(); e.preventDefault(); });
+
+    se.dom = document.createElement('div');
+    se.dom.className = 'ride_win';
+    se.$e = $(se.dom);
+    se.dom.oncontextmenu = D.oncmenu;
+    const me = monaco.editor.create(se.dom, {
+      autoClosingBrackets: !!D.prf.autoCloseBrackets(),
+      automaticLayout: true,
+      autoIndent: true,
+      cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
+      cursorBlinking: D.prf.blinkCursor() ? 'blink' : 'solid',
+      folding: false,
+      fontFamily: 'apl',
+      fontSize: se.ide.zoom2fs[D.prf.zoom() + 10],
+      glyphMargin: se.breakpoints,
+      language: 'apl-session',
+      lineNumbers: 'off',
+      matchBrackets: !!D.prf.matchBrackets(),
+      model: null,
+      mouseWheelZoom: false,
+      renderIndentGuides: false,
+      wordBasedSuggestions: false,
+    });
+    se.me = me;
+    me.dyalogCmds = se;
+
+    let mouseL = 0; let mouseC = 0; let mouseTS = 0;
+    me.onMouseDown((e) => {
+      const t = e.target;
+      const mt = monaco.editor.MouseTargetType;
+      const p = t.position;
+      if (t.type === mt.CONTENT_TEXT) {
+        if (e.event.timestamp - mouseTS < 400 && mouseL === p.lineNumber && mouseC === p.column) {
+          se.ED(me); e.event.preventDefault(); e.event.stopPropagation();
+        }
+        mouseL = p.lineNumber; mouseC = p.column; mouseTS = e.event.timestamp;
+      }
+    });
     cm.on('scroll', (c) => { const i = c.getScrollInfo(); se.btm = i.clientHeight + i.top; });
     cm.on('focus', () => { se.focusTS = +new Date(); ide.focusedWin = se; });
     cm.on('beforeChange', (_, c) => { // keep track of inserted/deleted/changed lines, use se.dirty for that
@@ -86,7 +123,7 @@
     },
     histMove(d) { // go back or forward in history
       const i = this.histIdx + d;
-      const l = this.cm.getCursor().line;
+      const l = this.me.getPosition().lineNumber - 1;
       if (i < 0) { $.alert('There is no next line', 'Dyalog APL Error'); return; }
       if (i >= this.hist.length) { $.alert('There is no previous line', 'Dyalog APL Error'); return; }
       if (!this.histIdx) this.hist[0] = this.cm.getLine(l);
@@ -100,9 +137,11 @@
       this.histIdx = i;
     },
     add(s) { // append text to session
-      const { cm } = this;
-      const l = cm.lastLine();
-      const s0 = cm.getLine(l);
+      const { cm, me } = this;
+      // const l = cm.lastLine();
+      // const s0 = cm.getLine(l);
+      const l = me.model.getLineCount();
+      const s0 = me.model.getLineContent(l);
       const p = '      ';
       let sp = s.slice(-1) === '\n' ? s + p : s;
       if (this.dirty[l] != null) {
@@ -111,8 +150,11 @@
         cm.setCursor(cp);
       } else {
         sp = cm.getOption('readOnly') && s0 !== p ? (s0 + sp) : sp;
-        cm.replaceRange(sp, { line: l, ch: 0 }, { line: l, ch: s0.length }, 'D');
-        cm.setCursor({ line: cm.lastLine() });
+        me.executeEdits('D', [{ range: new monaco.Range(l, 1, l, s0.length + 1), text: sp }]);
+        me.setPosition({ lineNumber: me.model.getLineCount(), column: 1 });
+        // me.revealRangeAtTop({ startLineNumber:  })
+        // cm.replaceRange(sp, { line: l, ch: 0 }, { line: l, ch: s0.length }, 'D');
+        // cm.setCursor({ line: cm.lastLine() });
         const i = cm.getScrollInfo();
         this.btm = Math.max(i.clientHeight + i.top, cm.heightAtLine(cm.lastLine(), 'local'));
       }
@@ -290,7 +332,7 @@
     indentOrComplete(cm) {
       const u = cm.getCursor();
       const s = cm.getLine(u.line);
-      if (cm.somethingSelected() || this.promptType === 4 || /^ *$/.test(s.slice(0,u.ch))) {
+      if (cm.somethingSelected() || this.promptType === 4 || /^ *$/.test(s.slice(0, u.ch))) {
         cm.execCommand('indentMore'); return;
       }
       this.autocompleteWithTab = 1;

@@ -25,8 +25,6 @@
     ed.isCode = 1;
     ed.isReadOnly = !1;
     ed.breakpoints = D.prf.breakPts();
-    ed.zoom2fs = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-      16, 17, 18, 19, 20, 22, 24, 26, 28, 32, 36, 42, 48];
     const me = monaco.editor.create(ed.dom.querySelector('.ride_win_cm'), {
       autoClosingBrackets: !!D.prf.autoCloseBrackets(),
       automaticLayout: true,
@@ -35,7 +33,7 @@
       cursorBlinking: D.prf.blinkCursor() ? 'blink' : 'solid',
       folding: ed.isCode && !!D.prf.fold(),
       fontFamily: 'apl',
-      fontSize: ed.zoom2fs[D.prf.zoom() + 10],
+      fontSize: ed.ide.zoom2fs[D.prf.zoom() + 10],
       glyphMargin: ed.breakpoints,
       language: 'apl',
       lineNumbers: D.prf.lineNums() ? (x => `[${x - 1}]`) : 'off',

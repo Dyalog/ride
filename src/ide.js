@@ -4,7 +4,10 @@
 // manages the language bar, its tooltips, and the insertion of characters
 // processes incoming RIDE protocol messages
 D.IDE = function () {'use strict'
-  var ide=D.ide=this;I.cn.hidden=1;this.lbarRecreate()
+  var ide=D.ide=this;I.cn.hidden=1;this.lbarRecreate();
+  ide.zoom2fs = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+    16, 17, 18, 19, 20, 22, 24, 26, 28, 32, 36, 42, 48];
+
   ide.dom=I.ide;I.ide.hidden=0
   ide.pending=[] //lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.exec=function(a,tc){if(a&&a.length){
@@ -14,6 +17,7 @@ D.IDE = function () {'use strict'
   }}
   ide.host=ide.port=ide.wsid='';D.prf.title(ide.updTitle.bind(ide))
   D.wins=ide.wins={0:new D.Se(ide)}
+  ide.wins[0].me.setModel(monaco.editor.createModel('', 'apl-session'));
   ide.focusedWin=ide.wins[0] //last focused window, it might not have the focus right now
   ide.switchWin=function(x){ //x: +1 or -1
     let a=[],i=-1,j,wins=D.ide.wins,w;
@@ -23,100 +27,138 @@ D.IDE = function () {'use strict'
     w.focus();return!1
   }
 
-  ide.handlers={ //for RIDE protocol messages
-    Identify:function(x){D.remoteIdentification=x;ide.updTitle();ide.connected=1;ide.wins[0].updPW(1)
-                         clearTimeout(D.tmr);delete D.tmr},
-    Disconnect:function(x){
-      let m=x.message.toLowerCase();ide.die()
-      if(m==='dyalog session has ended'){ide.connected=0;close()}
-      else{$.err(x.message,'Interpreter disconnected')}
+  ide.handlers = { // for RIDE protocol messages
+    Identify(x) {
+      D.remoteIdentification = x;
+      ide.updTitle();
+      ide.connected = 1;
+      ide.wins[0].updPW(1);
+      clearTimeout(D.tmr);
+      delete D.tmr;
     },
-    SysError:function(x){$.err(x.text,'SysError');ide.die()},
-    InternalError:function(x){$.err('An error ('+x.error+') occurred processing '+x.message,'Internal Error')},
-    NotificationMessage:function(x){$.alert(x.message,'Notification')},
-    UpdateDisplayName:function(x){ide.wsid=x.displayName;ide.updTitle();ide.wse&&ide.wse.refresh()},
-    EchoInput:function(x){ide.wins[0].add(x.input)},
-    SetPromptType:function(x){
-      var t=x.type;t&&ide.pending.length?D.send('Execute',{trace:0,text:ide.pending.shift()+'\n'})
-                                        :eachWin(function(w){w.prompt(t)})
-      t===4&&ide.wins[0].focus() //⍞ input
-      if(t===1&&ide.bannerDone==0){ //arrange for the banner to appear at the top of the session window
-        ide.bannerDone=1;var cm=ide.wins[0].cm,txt=cm.getValue().split('\n'),i=txt.length
-        while(--i){if(/^Dyalog APL/.test(txt[i])) break }
-        setTimeout(function(){
-          cm.scrollTo(0,cm.heightAtLine(i)-cm.heightAtLine(0)+5)
-        },5); //+5px to compensate for CM's own padding
+    Disconnect(x) {
+      const m = x.message.toLowerCase(); ide.die();
+      if (m === 'dyalog session has ended') {
+        ide.connected = 0; window.close();
+      } else { $.err(x.message, 'Interpreter disconnected'); }
+    },
+    SysError(x) { $.err(x.text, 'SysError'); ide.die(); },
+    InternalError(x) { $.err(`An error (${x.error}) occurred processing ${x.message}`, 'Internal Error'); },
+    NotificationMessage(x) { $.alert(x.message, 'Notification'); },
+    UpdateDisplayName(x) {
+      ide.wsid = x.displayName; ide.updTitle(); ide.wse && ide.wse.refresh();
+    },
+    EchoInput(x) { ide.wins[0].add(x.input); },
+    SetPromptType(x) {
+      const t = x.type;
+      if (t && ide.pending.length) D.send('Execute', { trace: 0, text: `${ide.pending.shift()}\n` });
+      else eachWin((w) => { w.prompt(t); });
+      t === 4 && ide.wins[0].focus(); // ⍞ input
+      if (t === 1 && ide.bannerDone === 0) {
+        // arrange for the banner to appear at the top of the session window
+        ide.bannerDone = 1;
+        const { me } = ide.wins[0];
+        const txt = me.getValue().split('\n');
+        let i = txt.length;
+        while (--i) { if (/^Dyalog APL/.test(txt[i])) break; }
+        me.revealRangeAtTop(new monaco.Range(i + 1, 1, i + 1, 1));
       }
     },
-    HadError:function(){ide.pending.splice(0,ide.pending.length);ide.wins[0].focus();ide.hadErr=1},
-    GotoWindow:function(x){var w=ide.wins[x.win];w&&w.focus()},
-    WindowTypeChanged:function(x){return ide.wins[x.win].setTC(x.tracer)},
-    ReplyGetAutocomplete:function(x){var w=ide.wins[x.token];w&&w.processAutocompleteReply(x)},
-    ValueTip:function(x){ide.wins[x.token].ValueTip(x)},
-    SetHighlightLine:function(x){D.wins[x.win].SetHighlightLine(x.line)},
-    UpdateWindow:function(x){
-      var w=ide.wins[x.token];
-      if(w){
-        w.container&&w.container.setTitle(x.name);
+    HadError() { ide.pending.splice(0, ide.pending.length); ide.wins[0].focus(); ide.hadErr = 1; },
+    GotoWindow(x) { const w = ide.wins[x.win]; w && w.focus(); },
+    WindowTypeChanged(x) { return ide.wins[x.win].setTC(x.tracer); },
+    ReplyGetAutocomplete(x) { const w = ide.wins[x.token]; w && w.processAutocompleteReply(x); },
+    ValueTip(x) { ide.wins[x.token].ValueTip(x); },
+    SetHighlightLine(x) { D.wins[x.win].SetHighlightLine(x.line); },
+    UpdateWindow(x) {
+      const w = ide.wins[x.token];
+      if (w) {
+        w.container && w.container.setTitle(x.name);
         w.open(x);
-      }},
-    ReplySaveChanges:function(x){var w=ide.wins[x.win];w&&w.saved(x.err)},
+      }
+    },
+    ReplySaveChanges(x) { const w = ide.wins[x.win]; w && w.saved(x.err); },
     CloseWindow(x) {
-      let w = ide.wins[x.win]
-      let bw;
+      const w = ide.wins[x.win];
       if (w.bw_id) {
         w.id = -1; w.close();
       } else if (w) {
-        // w.vt.clear();
-        w.container&&w.container.close();
+        w.container && w.container.close();
       }
-      delete ide.wins[x.win];ide.focusMRUWin()
-      ide.WSEwidth=ide.wsew;ide.DBGwidth=ide.dbgw
-      if(w.tc){ide.getSIS();ide.getThreads();}
+      delete ide.wins[x.win]; ide.focusMRUWin();
+      ide.WSEwidth = ide.wsew; ide.DBGwidth = ide.dbgw;
+      if (w.tc) { ide.getSIS(); ide.getThreads(); }
     },
-    OpenWindow:function(ee){
-      if(!ee['debugger']&&D.el&&process.env.RIDE_EDITOR){
-        var fs=node_require('fs'),os=node_require('os'),cp=node_require('child_process')
-        var d=os.tmpDir()+'/dyalog';fs.existsSync(d)||fs.mkdirSync(d,7*8*8) //rwx------
-        var f=d+'/'+ee.name+'.dyalog';fs.writeFileSync(f,ee.text,{encoding:'utf8',mode:6*8*8}) //rw-------
-        var p=cp.spawn(process.env.RIDE_EDITOR,[f],{env:$.extend({},process.env,{LINE:''+(1+(ee.currentRow||0))})})
-        p.on('error',function(x){$.err(x)})
-        p.on('exit',function(){
-          var s=fs.readFileSync(f,'utf8');fs.unlinkSync(f)
-          D.send('SaveChanges',{win:ee.token,text:s.split('\n'),stop:ee.stop,trace:ee.trace,monitor:ee.monitor})
-          D.send('CloseWindow',{win:ee.token})
-        })
-        return
+    OpenWindow(ee) {
+      if (!ee.debugger && D.el && process.env.RIDE_EDITOR) {
+        const fs = node_require('fs');
+        const os = node_require('os');
+        const cp = node_require('child_process');
+        const d = `${os.tmpDir()}/dyalog`;
+        fs.existsSync(d) || fs.mkdirSync(d, 7 * 8 * 8); // rwx------
+        const f = `${d}/${ee.name}.dyalog`;
+        fs.writeFileSync(f, ee.text, { encoding: 'utf8', mode: 6 * 8 * 8 }); // rw-------
+        const p = cp.spawn(
+          process.env.RIDE_EDITOR,
+          [f],
+          { env: $.extend({}, process.env, { LINE: `${1 + (ee.currentRow || 0)}` }) },
+        );
+        p.on('error', (x) => { $.err(x); });
+        p.on('exit', () => {
+          const s = fs.readFileSync(f, 'utf8'); fs.unlinkSync(f);
+          D.send('SaveChanges', {
+            win: ee.token,
+            text: s.split('\n'),
+            stop: ee.stop,
+            trace: ee.trace,
+            monitor: ee.monitor,
+          });
+          D.send('CloseWindow', { win: ee.token });
+        });
+        return;
       }
-      var w=ee.token, done, editorOpts={id:w,name:ee.name,tc:ee['debugger']}
-      ide.hadErr&=editorOpts.tc;
-      if(D.el&&D.prf.floating()&&!ide.dead){
-        ide.block(); //the popup will create D.wins[w] and unblock the message queue
-        D.IPC_LinkEditor({editorOpts:editorOpts,ee:ee});
-        done=1;
-      } else if(D.elw&&!D.elw.isFocused()) D.elw.focus();
-      if(done)return;
+      const w = ee.token;
+      let done;
+      const editorOpts = { id: w, name: ee.name, tc: ee.debugger };
+      ide.hadErr = ide.hadErr && editorOpts.tc;
+      if (D.el && D.prf.floating() && !ide.dead) {
+        ide.block(); // the popup will create D.wins[w] and unblock the message queue
+        D.IPC_LinkEditor({ editorOpts, ee });
+        done = 1;
+      } else if (D.elw && !D.elw.isFocused()) D.elw.focus();
+      if (done) return;
       // (ide.wins[w]=new D.Ed(ide,editorOpts)).open(ee)
-      let ed=ide.wins[w]=new D.Ed(ide,editorOpts)
-      ed.me_ready.then(_=>ed.open(ee))
-      //add to golden layout:
-      var si=ide.wins[0].cm.getScrollInfo() //remember session scroll position
-      var tc=!!ee['debugger']
-      var bro=gl.root.getComponentsByName('win').filter(function(x){return x.id&&tc===!!x.tc})[0] //existing editor
-      if(bro){ //add next to existing editor
-        var p=bro.container.parent.parent
-      }else{ //add to the right
-        var p=gl.root.contentItems[0], t0=tc?'column':'row', t1=tc?'row':'column'
-        if(p.type!==t0){var q=gl.createContentItem({type:t0},p);p.parent.replaceChild(p,q)
-                        q.addChild(p);q.callDownwards('setSize');p=q}
+      const ed = new D.Ed(ide, editorOpts);
+      ide.wins[w] = ed;
+      ed.me_ready.then(() => ed.open(ee));
+      // add to golden layout:
+      const si = ide.wins[0].cm.getScrollInfo(); // remember session scroll position
+      const tc = !!ee.debugger;
+      const bro = gl.root.getComponentsByName('win').filter(x => x.id && tc === !!x.tc)[0]; // existing editor
+      let p;
+      if (bro) { // add next to existing editor
+        p = bro.container.parent.parent;
+      } else { // add to the right
+        [p] = gl.root.contentItems;
+        const t0 = tc ? 'column' : 'row';
+        if (p.type !== t0) {
+          const q = gl.createContentItem({ type: t0 }, p);
+          p.parent.replaceChild(p, q);
+          q.addChild(p); q.callDownwards('setSize'); p = q;
+        }
       }
-      var ind=p.contentItems.length-!(editorOpts.tc||!!bro||!D.prf.dbg())
-      p.addChild({type:'component',componentName:'win',componentState:{id:w},title:ee.name},ind)
-      ide.WSEwidth=ide.wsew;ide.DBGwidth=ide.dbgw
-      if(tc){
-        ide.getSIS()
-        ide.wins[0].scrollCursorIntoView()
-      }else ide.wins[0].cm.scrollTo(si.left,si.top)
+      const ind = p.contentItems.length - !(editorOpts.tc || !!bro || !D.prf.dbg());
+      p.addChild({
+        type: 'component',
+        componentName: 'win',
+        componentState: { id: w },
+        title: ee.name,
+      }, ind);
+      ide.WSEwidth = ide.wsew; ide.DBGwidth = ide.dbgw;
+      if (tc) {
+        ide.getSIS();
+        ide.wins[0].scrollCursorIntoView();
+      } else ide.wins[0].cm.scrollTo(si.left, si.top);
     },
     ShowHTML:function(x){
       if(D.el){

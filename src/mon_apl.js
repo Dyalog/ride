@@ -21,6 +21,7 @@
       increaseIndentPattern: /^((?!⍝).)*(\{[^}"'`]*|\([^)"'`]*|\[[^\]"'`]*|:if(?!\s+.*:end(?:if)?(\s+|$)).*)$/,
     },
   };
+
   class State {
     // hdr      are we at a location where a tradfn header can be expected?
     // a        stack of objects with the following properties
@@ -53,6 +54,30 @@
       return true;
     }
   }
+
+  class SessionState {
+    // l:line number, .s:start of line ignoring whitespace, .h:inner state
+
+    constructor(l, s, h) {
+      this.l = l;
+      this.s = s;
+      this.h = h.clone();
+    }
+
+    clone() {
+      return new SessionState(this.l, this.s, this.h);
+    }
+
+    equals(other) {
+      if (other === this) return true;
+      if (!other || !(other instanceof SessionState)) return false;
+      if (this.l !== other.l) return false;
+      if (this.s !== other.s) return false;
+      if (!this.h.equals(other.h)) return false;
+      return true;
+    }
+  }
+
   const letter = 'A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ';
   const name0 = RegExp(`[${letter}]`);
   const name1 = RegExp(`[${letter}\\d]*`);
@@ -367,263 +392,320 @@
       return lt;
     },
   };
+  const scmd = ('classes clear cmd continue copy cs drop ed erase events fns holds intro lib load methods ns objects obs off' +
+  ' ops pcopy props reset save sh sic si sinl tid vars wsid xload').split(' '); // system commands
 
-  const aplCompletions = (pk) => {
-    return {
-      triggerCharacters: `:.⎕()[]${pk}`.split(''),
-      provideCompletionItems: (model, position) => {
-        const l = position.lineNumber;
-        const c = position.column;
-        const s = model.getLineContent(l);
-        const ch = s[c - 2];
-        const pk2 = `${pk}${pk}`;
-        const kind = monaco.languages.CompletionItemKind;
-        // console.log(`completion triggered on: ${ch}`);
-        if (s.slice(c - 3, c) === pk2) {
-          return Object.keys(D.bqbqc).map((k) => {
-            const v = D.bqbqc[k];
-            const key = D.getBQKeyFor(v.text);
-            const desc = `${v.text} ${key ? pk + key : '  '} ${pk2}${v.name}`;
-            return {
-              label: desc,
-              detail: D.sqglDesc[key] || '',
-              filterText: desc,
-              sortText: key,
-              kind: kind.Function,
-              insertText: { value: v.text },
-              range: new monaco.Range(l, c - 2, l, c),
-            };
+  const aplSessionTokens = {
+    getInitialState: () => new SessionState(0, 1, aplTokens.getInitialState()),
+    tokenize: (line, state) => {
+      const se = D.wins[0];
+      const lt = {
+        tokens: [],
+        endState: state.clone(),
+      };
+      function addToken(startIndex, type) {
+        const scope = `${type}.apl`;
+        if (lt.tokens.length === 0 || lt.tokens[lt.tokens.length - 1].scopes !== scope) {
+          lt.tokens.push({
+            startIndex,
+            scopes: scope,
           });
-        } else if (ch === pk) {
-          return Object.keys(D.bq).map((k) => {
-            const v = D.bq[k];
-            // const desc = `${v} ${pk}${k} ${D.sqglDesc[v] || ''}  `;
-            return {
-              label: `${v} ${pk}${k}`,
-              detail: D.sqglDesc[v] || '',
-              filterText: `${v} ${pk}${k}`,
-              sortText: k,
-              kind: kind.Function,
-              insertText: { value: v },
-              range: new monaco.Range(l, c - 1, l, c),
-            };
-          });
-        } else if (ch === ':') {
-          const { a } = model._lines[position.lineNumber-1]._state;
-          if (a[a.length - 1].t === '{') return [];
-          const items = [
-            'Case',
-            'CaseList',
-            'Continue',
-            'Private',
-            'Public',
-            'Instance',
-            'Shared',
-            'Implements Constructor',
-            'Implements Destructor',
-            'Implements Method',
-            'Implements Trigger',
-          ].map(i => ({
-            label: i,
-            kind: kind.Text,
-          }));
-          /* eslint-disable no-template-curly-in-string */
-          items.push(...[{
-            label: 'Access',
-            kind: kind.Snippet,
-            insertText: { value: 'Access ${1:Public} ${2:Shared}' },
-          },
-          {
-            label: 'Class',
-            kind: kind.Snippet,
-            insertText: {
-              value: [
-                'Class ${1:name}',
-                '\t$0',
-                ':EndClass',
-              ].join('\n'),
-            },
-            documentation: 'Class script',
-          },
-          {
-            label: 'Disposable',
-            kind: kind.Snippet,
-            insertText: {
-              value: [
-                'Disposable ${1:objects}',
-                '\t$0',
-                ':EndDisposable',
-              ].join('\n'),
-            },
-            documentation: 'Disposable Statement',
-          },
-          {
-            label: 'For',
-            kind: kind.Snippet,
-            insertText: {
-              value: [
-                'For ${1:item} :In ${2:items}',
-                '\t$0',
-                ':EndFor',
-              ].join('\n'),
-            },
-            documentation: 'For loop',
-          },
-          {
-            label: 'If Else',
-            kind: kind.Snippet,
-            insertText: {
-              value: [
-                'If ${1:condition}',
-                '\t$2',
-                ':Else',
-                '\t$0',
-                ':EndIf',
-              ].join('\n'),
-            },
-            documentation: 'If-Else Statement',
-          },
-          {
-            label: 'Interface',
-            kind: kind.Snippet,
-            insertText: {
-              value: [
-                'Interface ${1:name}',
-                '\t$0',
-                ':EndInterface',
-              ].join('\n'),
-            },
-            documentation: 'Interface script',
-          },
-          {
-            label: 'Namespace',
-            kind: kind.Snippet,
-            insertText: {
-              value: [
-                'Namespace ${1:name}',
-                '\t$0',
-                ':EndNamespace',
-              ].join('\n'),
-            },
-            documentation: 'Namespace script',
-          },
-          {
-            label: 'Property',
-            kind: kind.Snippet,
-            insertText: {
-              value: [
-                'Property ${1:name}',
-                '\t∇ r←get args',
-                '\t  r←$2',
-                '\t∇',
-                '\t∇ set args',
-                '\t∇',
-                ':EndProperty',
-              ].join('\n'),
-            },
-            documentation: 'Property declaration',
-          },
-          {
-            label: 'Repeat',
-            kind: kind.Snippet,
-            insertText: {
-              value: [
-                'Repeat',
-                '\t$0',
-                ':EndRepeat',
-              ].join('\n'),
-            },
-            documentation: 'Repeat loop - endless',
-          },
-          {
-            label: 'Repeat Until',
-            kind: kind.Snippet,
-            insertText: {
-              value: [
-                'Repeat',
-                '\t$0',
-                ':Until ${1:condition}',
-              ].join('\n'),
-            },
-            documentation: 'Repeat loop until',
-          },
-          {
-            label: 'Section',
-            kind: kind.Snippet,
-            insertText: {
-              value: [
-                'Section ${1:name}',
-                '\t$0',
-                ':EndSection',
-              ].join('\n'),
-            },
-            documentation: 'Section block',
-          },
-          {
-            label: 'Select',
-            kind: kind.Snippet,
-            insertText: {
-              value: [
-                'Select ${1:object}',
-                ':Case ${2:value}',
-                '\t$3',
-                ':Else',
-                '\t$0',
-                ':EndSelect',
-              ].join('\n'),
-            },
-            documentation: 'Select Statement',
-          },
-          {
-            label: 'Trap',
-            kind: kind.Snippet,
-            insertText: {
-              value: [
-                'Trap ${1:error number}',
-                '\t$1',
-                ':Else',
-                '\t$0',
-                ':EndTrap',
-              ].join('\n'),
-            },
-            documentation: 'Trap-Else Statement',
-          },
-          {
-            label: 'While',
-            kind: kind.Snippet,
-            insertText: {
-              value: [
-                'While ${1:condition}',
-                '\t$0',
-                ':EndWhile',
-              ].join('\n'),
-            },
-            documentation: 'While loop',
-          },
-          {
-            label: 'With',
-            kind: kind.Snippet,
-            insertText: {
-              value: [
-                'With ${1:condition}',
-                '\t$0',
-                ':EndWith',
-              ].join('\n'),
-            },
-            documentation: 'With Statement',
-          },
-          ]);
-          /* eslint-enable no-template-curly-in-string */
-          return items;
         }
-        D.send('GetAutocomplete', { line: s, pos: c - 1, token: model.winid });
-        const m = model;
-        return new monaco.Promise((complete, error, progress) => {
-          m.ac = { complete, error, progress };
-        });
-      },
-    }
+      }
+      let offset = 0;
+      const sol = offset === 0;
+      const eol = line.length;
+      const h = lt.endState;
+      let m; // m:regex match object
+      if (se.dirty[h.l] == null) {
+        offset = eol;
+        h.l += 1;
+        return lt;
+      }
+      if (sol) h.s = !h.h.a;
+      if (sol && (m = line.match(/^ +/))) {
+        offset += m[0].length;
+        if (offset === eol) h.l += 1;
+        return lt;
+      }
+      if (h.s && (m = line.match(/^\)(\w+).*/))) {
+        const token = scmd.indexOf(m[1].toLowerCase()) < 0 ? 'invalid.scmd' : 'predefined.scmd';
+        addToken(offset, token);
+        h.l += 1;
+        return lt;
+      }
+      if (h.s && (line.match(/^\].*/))) {
+        h.l += 1;
+        addToken(offset, 'predefined.ucmd');
+        return lt;
+      }
+      if (h.s) {
+        h.h.hdr = 0;
+      }
+      const h1 = h.h.clone();
+      const t = aplTokens.tokenize(line, h1);
+      h.l += 1;
+      lt.tokens = t.tokens.slice();
+      h.h = t.endState.clone();
+      return lt;
+    },
   };
+
+
+  const aplCompletions = pk => ({
+    triggerCharacters: `:.⎕()[]${pk}`.split(''),
+    provideCompletionItems: (model, position) => {
+      const l = position.lineNumber;
+      const c = position.column;
+      const s = model.getLineContent(l);
+      const ch = s[c - 2];
+      const pk2 = `${pk}${pk}`;
+      const kind = monaco.languages.CompletionItemKind;
+      // console.log(`completion triggered on: ${ch}`);
+      if (s.slice(c - 3, c) === pk2) {
+        return Object.keys(D.bqbqc).map((k) => {
+          const v = D.bqbqc[k];
+          const key = D.getBQKeyFor(v.text);
+          const desc = `${v.text} ${key ? pk + key : '  '} ${pk2}${v.name}`;
+          return {
+            label: desc,
+            detail: D.sqglDesc[key] || '',
+            filterText: desc,
+            sortText: key,
+            kind: kind.Function,
+            insertText: { value: v.text },
+            range: new monaco.Range(l, c - 2, l, c),
+          };
+        });
+      } else if (ch === pk) {
+        return Object.keys(D.bq).map((k) => {
+          const v = D.bq[k];
+          // const desc = `${v} ${pk}${k} ${D.sqglDesc[v] || ''}  `;
+          return {
+            label: `${v} ${pk}${k}`,
+            detail: D.sqglDesc[v] || '',
+            filterText: `${v} ${pk}${k}`,
+            sortText: k,
+            kind: kind.Function,
+            insertText: { value: v },
+            range: new monaco.Range(l, c - 1, l, c),
+          };
+        });
+      } else if (ch === ':') {
+        const { a } = model._lines[position.lineNumber-1]._state;
+        if (a[a.length - 1].t === '{') return [];
+        const items = [
+          'Case',
+          'CaseList',
+          'Continue',
+          'Private',
+          'Public',
+          'Instance',
+          'Shared',
+          'Implements Constructor',
+          'Implements Destructor',
+          'Implements Method',
+          'Implements Trigger',
+        ].map(i => ({
+          label: i,
+          kind: kind.Text,
+        }));
+        /* eslint-disable no-template-curly-in-string */
+        items.push(...[{
+          label: 'Access',
+          kind: kind.Snippet,
+          insertText: { value: 'Access ${1:Public} ${2:Shared}' },
+        },
+        {
+          label: 'Class',
+          kind: kind.Snippet,
+          insertText: {
+            value: [
+              'Class ${1:name}',
+              '\t$0',
+              ':EndClass',
+            ].join('\n'),
+          },
+          documentation: 'Class script',
+        },
+        {
+          label: 'Disposable',
+          kind: kind.Snippet,
+          insertText: {
+            value: [
+              'Disposable ${1:objects}',
+              '\t$0',
+              ':EndDisposable',
+            ].join('\n'),
+          },
+          documentation: 'Disposable Statement',
+        },
+        {
+          label: 'For',
+          kind: kind.Snippet,
+          insertText: {
+            value: [
+              'For ${1:item} :In ${2:items}',
+              '\t$0',
+              ':EndFor',
+            ].join('\n'),
+          },
+          documentation: 'For loop',
+        },
+        {
+          label: 'If Else',
+          kind: kind.Snippet,
+          insertText: {
+            value: [
+              'If ${1:condition}',
+              '\t$2',
+              ':Else',
+              '\t$0',
+              ':EndIf',
+            ].join('\n'),
+          },
+          documentation: 'If-Else Statement',
+        },
+        {
+          label: 'Interface',
+          kind: kind.Snippet,
+          insertText: {
+            value: [
+              'Interface ${1:name}',
+              '\t$0',
+              ':EndInterface',
+            ].join('\n'),
+          },
+          documentation: 'Interface script',
+        },
+        {
+          label: 'Namespace',
+          kind: kind.Snippet,
+          insertText: {
+            value: [
+              'Namespace ${1:name}',
+              '\t$0',
+              ':EndNamespace',
+            ].join('\n'),
+          },
+          documentation: 'Namespace script',
+        },
+        {
+          label: 'Property',
+          kind: kind.Snippet,
+          insertText: {
+            value: [
+              'Property ${1:name}',
+              '\t∇ r←get args',
+              '\t  r←$2',
+              '\t∇',
+              '\t∇ set args',
+              '\t∇',
+              ':EndProperty',
+            ].join('\n'),
+          },
+          documentation: 'Property declaration',
+        },
+        {
+          label: 'Repeat',
+          kind: kind.Snippet,
+          insertText: {
+            value: [
+              'Repeat',
+              '\t$0',
+              ':EndRepeat',
+            ].join('\n'),
+          },
+          documentation: 'Repeat loop - endless',
+        },
+        {
+          label: 'Repeat Until',
+          kind: kind.Snippet,
+          insertText: {
+            value: [
+              'Repeat',
+              '\t$0',
+              ':Until ${1:condition}',
+            ].join('\n'),
+          },
+          documentation: 'Repeat loop until',
+        },
+        {
+          label: 'Section',
+          kind: kind.Snippet,
+          insertText: {
+            value: [
+              'Section ${1:name}',
+              '\t$0',
+              ':EndSection',
+            ].join('\n'),
+          },
+          documentation: 'Section block',
+        },
+        {
+          label: 'Select',
+          kind: kind.Snippet,
+          insertText: {
+            value: [
+              'Select ${1:object}',
+              ':Case ${2:value}',
+              '\t$3',
+              ':Else',
+              '\t$0',
+              ':EndSelect',
+            ].join('\n'),
+          },
+          documentation: 'Select Statement',
+        },
+        {
+          label: 'Trap',
+          kind: kind.Snippet,
+          insertText: {
+            value: [
+              'Trap ${1:error number}',
+              '\t$1',
+              ':Else',
+              '\t$0',
+              ':EndTrap',
+            ].join('\n'),
+          },
+          documentation: 'Trap-Else Statement',
+        },
+        {
+          label: 'While',
+          kind: kind.Snippet,
+          insertText: {
+            value: [
+              'While ${1:condition}',
+              '\t$0',
+              ':EndWhile',
+            ].join('\n'),
+          },
+          documentation: 'While loop',
+        },
+        {
+          label: 'With',
+          kind: kind.Snippet,
+          insertText: {
+            value: [
+              'With ${1:condition}',
+              '\t$0',
+              ':EndWith',
+            ].join('\n'),
+          },
+          documentation: 'With Statement',
+        },
+        ]);
+        /* eslint-enable no-template-curly-in-string */
+        return items;
+      }
+      D.send('GetAutocomplete', { line: s, pos: c - 1, token: model.winid });
+      const m = model;
+      return new monaco.Promise((complete, error, progress) => {
+        m.ac = { complete, error, progress };
+      });
+    },
+  });
   const aplHover = {
     provideHover(model, position) {
       const m = model;
@@ -688,5 +770,15 @@
     ml.registerHoverProvider('apl', aplHover);
     ml.registerDocumentFormattingEditProvider('apl', aplFormat);
     ml.registerDocumentRangeFormattingEditProvider('apl', aplFormat);
+
+    ml.register({ id: 'apl-session' });
+    ml.setTokensProvider('apl-session', aplSessionTokens);
+    ml.setLanguageConfiguration('apl-session', aplConfig);
+    ml.registerCompletionItemProvider('apl-session', aplCompletions(D.prf.prefixKey()));
+    D.prf.prefixKey(x => ml.registerCompletionItemProvider('apl-session', aplCompletions(x)));
+    ml.registerHoverProvider('apl-session', aplHover);
+    ml.registerDocumentFormattingEditProvider('apl-session', aplFormat);
+    ml.registerDocumentRangeFormattingEditProvider('apl-session', aplFormat);
+
   });
 }
