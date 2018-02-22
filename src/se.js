@@ -58,6 +58,10 @@
     });
     se.me = me;
     me.dyalogCmds = se;
+    se.tracer = me.createContextKey('tracer', true);
+    se.listen = true;
+    se.oModel = monaco.editor.createModel('');
+    D.mapKeys(se); D.prf.keys(D.mapKeys.bind(this, se));
 
     let mouseL = 0; let mouseC = 0; let mouseTS = 0;
     me.onMouseDown((e) => {
@@ -70,6 +74,36 @@
         }
         mouseL = p.lineNumber; mouseC = p.column; mouseTS = e.event.timestamp;
       }
+    });
+    me.onDidChangeModelContent((e) => {
+      if (!se.listen) return;
+      e.changes.forEach((c) => {
+        const l0 = c.range.startLineNumber;
+        const l1 = c.range.endLineNumber;
+        const m = (l1 - l0) + 1;
+        const text = c.text.split('\n');
+        let n = text.length;
+        if (m < n) {
+          const h = se.dirty;
+          se.dirty = {};
+          Object.keys(h).forEach((x) => { se.dirty[x + ((n - m) * (x > l1))] = h[x]; });
+        } else if (n < m) {
+          // if (!c.update) { c.cancel(); return; } // the change is probably the result of Undo
+          for (let j = n; j < m; j++) text.push(''); // pad shrinking changes with empty lines
+          se.listen = false;
+          me.executeEdits('D', [{ range: new monaco.Range(l0 + n, 1, l0 + 1, 1), text: '\n'.repeat(m - n) }]);
+          se.listen = true;
+          // c.update(c.from, c.to, text);
+          n = m;
+        }
+        let l = l0;
+        while (l <= l1) {
+          const base = se.dirty;
+          base[l] == null && (base[l] = se.oModel.getLineContent(l));
+          l += 1;
+        }
+        while (l < l0 + n) se.dirty[l++] = 0;
+      });
     });
     cm.on('scroll', (c) => { const i = c.getScrollInfo(); se.btm = i.clientHeight + i.top; });
     cm.on('focus', () => { se.focusTS = +new Date(); ide.focusedWin = se; });
@@ -137,13 +171,15 @@
       this.histIdx = i;
     },
     add(s) { // append text to session
-      const { cm, me } = this;
+      const se = this;
+      const { cm, me } = se;
       // const l = cm.lastLine();
       // const s0 = cm.getLine(l);
       const l = me.model.getLineCount();
       const s0 = me.model.getLineContent(l);
       const p = '      ';
       let sp = s.slice(-1) === '\n' ? s + p : s;
+      se.listen = false;
       if (this.dirty[l] != null) {
         const cp = cm.getCursor();
         cm.replaceRange(`${s0}\n${sp}`, { line: l, ch: 0 }, { line: l, ch: s0.length }, 'D');
@@ -155,9 +191,11 @@
         // me.revealRangeAtTop({ startLineNumber:  })
         // cm.replaceRange(sp, { line: l, ch: 0 }, { line: l, ch: s0.length }, 'D');
         // cm.setCursor({ line: cm.lastLine() });
-        const i = cm.getScrollInfo();
-        this.btm = Math.max(i.clientHeight + i.top, cm.heightAtLine(cm.lastLine(), 'local'));
+        // const i = cm.getScrollInfo();
+        // this.btm = Math.max(i.clientHeight + i.top, cm.heightAtLine(cm.lastLine(), 'local'));
       }
+      se.oModel.setValue(me.getValue());
+      se.listen = true;
     },
     prompt(x) {
       const { cm } = this;
@@ -286,43 +324,64 @@
     },
 
     ValueTip(x) { this.vt.processReply(x); },
-    ED(cm) {
-      const c = cm.getCursor();
-      const txt = cm.getLine(c.line);
+    ED(me) {
+      const c = me.getPosition();
+      const txt = me.model.getLineContent(c.lineNumber);
       if (/^\s*$/.test(txt)) {
         const tc = this.ide.tracer();
         if (tc) { tc.focus(); tc.ED(tc.cm); }
       } else {
-        // D.send('Edit',{win:0,pos:c.ch,text:txt,unsaved:this.ide.getUnsaved()})
-        this.ide.Edit({ win: 0, pos: c.ch, text: txt });
+        D.ide.Edit({
+          win: 0,
+          pos: me.model.getOffsetAt(c),
+          text: me.getValue(),
+        });
       }
     },
     BK() { this.histMove(1); },
     FD() { this.histMove(-1); },
-    QT(cm) {
-      const c = cm.getCursor();
-      const l = c.line;
-      if (this.dirty[l] === 0) {
-        if (l === cm.lastLine()) {
-          cm.replaceRange('', { line: l, ch: 0 }, { line: l + 1, ch: 0 }, 'D');
+    QT(me) {
+      const se = this;
+      const c = me.getPosition();
+      const l = c.lineNumber;
+      se.listen = false;
+      if (se.dirty[l] === 0) {
+        if (l === me.model.getLineCount()) {
+          // cm.replaceRange('', { line: l, ch: 0 }, { line: l + 1, ch: 0 }, 'D');
+          me.executeEdits('D', [{ range: new monaco.Range(l, 1, l + 1, 1), text: '' }]);
         } else {
-          cm.replaceRange(
-            '',
-            { line: l - 1, ch: cm.getLine(l - 1).length },
-            { line: l, ch: cm.getLine(l).length },
-            'D',
-          );
+          // cm.replaceRange(
+          //   '',
+          //   { line: l - 1, ch: cm.getLine(l - 1).length },
+          //   { line: l, ch: cm.getLine(l).length },
+          //   'D',
+          // );
+          me.executeEdits('D', [{
+            range: new monaco.Range(
+              l - 1,
+              me.model.getLineContent(l - 1).length + 1,
+              l,
+              me.model.getLineContent(l).length + 1,
+            ),
+            text: '',
+          }]);
         }
-        delete this.dirty[l];
-        const h = this.dirty;
-        this.dirty = {};
-        Object.keys(h).forEach((x) => { this.dirty[x - (x > l)] = h[x]; });
-      } else if (this.dirty[l] != null) {
-        cm.replaceRange(this.dirty[l], { line: l, ch: 0 }, { line: l, ch: cm.getLine(l).length }, 'D');
-        cm.removeLineClass(l, 'background', 'modified');
-        cm.setCursor(l, this.dirty[l].search(/\S|$/));
-        delete this.dirty[l];
+        delete se.dirty[l];
+        const h = se.dirty;
+        se.dirty = {};
+        Object.keys(h).forEach((x) => { se.dirty[x - (x > l)] = h[x]; });
+      } else if (se.dirty[l] != null) {
+        // cm.replaceRange(se.dirty[l], { line: l, ch: 0 }, { line: l, ch: cm.getLine(l).length }, 'D');
+        me.executeEdits('D', [{
+          range: new monaco.Range(l, 1, l, me.model.getLineContent(l).length + 1),
+          text: se.dirty[l],
+        }]);
+        // cm.removeLineClass(l, 'background', 'modified');
+        me.setPosition({ lineNumber: l, column: 1 + se.dirty[l].search(/\S|$/) });
+        delete se.dirty[l];
       }
+      se.oModel.setValue(me.getValue());
+      se.listen = true;
     },
     EP() { this.ide.focusMRUWin(); },
     ER() { this.exec(0); },

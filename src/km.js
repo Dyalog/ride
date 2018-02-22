@@ -330,5 +330,64 @@
   ('CBP MA AC VAL indentOrComplete downOrXline indentMoreOrAutocomplete STL TVO TVB'+
   ' TGC JBK JSC LOG WSE').split(' ').forEach(defCmd)
   for(var i=0;i<C.length;i++)if(C[i]){defCmd(C[i]);CM.keyMap.dyalogDefault["'"+String.fromCharCode(0xf800+i)+"'"]=C[i]}
-
+  
+  D.mapKeys = (ed) => {
+    const { me } = ed;
+    const kc = monaco.KeyCode;
+    const km = monaco.KeyMod;
+    const ctrlcmd = {
+      Ctrl: D.mac ? km.WinCtrl : km.CtrlCmd,
+      Cmd: km.CtrlCmd,
+      Esc: kc.Escape,
+      '\\': kc.US_BACKSLASH,
+      '`': kc.US_BACKTICK,
+      ']': kc.US_CLOSE_SQUARE_BRACKET,
+      ',': kc.US_COMMA,
+      '.': kc.US_DOT,
+      '=': kc.US_EQUAL,
+      '-': kc.US_MINUS,
+      '[': kc.US_OPEN_SQUARE_BRACKET,
+      '\'': kc.US_QUOTE,
+      ';': kc.US_SEMICOLON,
+      '/': kc.US_SLASH,
+    };
+    function addCmd(map) {
+      Object.keys(map).forEach((ks) => {
+        const nkc = ks.split('-').reduce(((a, ko) => {
+          const k = ko.replace(/^[A-Z0-9]$/, 'KEY_$&')
+            .replace(/^Numpad(.*)/, (m, p) => `NUMPAD_${p.toUpperCase()}`)
+            .replace(/^(Up|Left|Right|Down)$/, '$1Arrow')
+            .replace(/--/g, '-US_MINUS')
+            .replace(/^'(.)'$/, '$1');
+          return a | (ctrlcmd[k] || km[k] || kc[k]); // eslint-disable-line no-bitwise
+        }), 0);
+        if (nkc) {
+          const cmd = map[ks];
+          let cond;
+          if (cmd === 'BQC') {
+            return;
+          } else if (cmd === 'TGC') {
+            me.addCommand(nkc, () => me.trigger('editor', 'editor.action.commentLine'));
+            return;
+          } else if (cmd === 'AO') {
+            me.addCommand(nkc, () => me.trigger('editor', 'editor.action.addCommentLine'));
+            return;
+          } else if (cmd === 'DO') {
+            me.addCommand(nkc, () => me.trigger('editor', 'editor.action.removeCommentLine'));
+            return;
+          } else if (cmd === 'SC') {
+            me.addCommand(nkc, () => me.trigger('editor', 'actions.find'));
+            return;
+          } else if (cmd === 'RP') {
+            me.addCommand(nkc, () => me.trigger('editor', 'editor.action.startFindReplaceAction'));
+            return;
+          } else if (cmd === 'ER' || cmd === 'TC') cond = 'tracer';
+          else if (nkc === kc.Escape) cond = '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode';
+          me.addCommand(nkc, () => CM.commands[cmd](me), cond);
+        }
+      });
+    }
+    addCmd(CM.keyMap.dyalogDefault);
+    addCmd(CM.keyMap.dyalog);
+  }
 }

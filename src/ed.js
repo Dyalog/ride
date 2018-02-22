@@ -55,7 +55,12 @@
     });
     me.dyalogCmds = ed;
     ed.tracer = me.createContextKey('tracer', !!ed.tc);
-    ed.mapKeys(); D.prf.keys(ed.mapKeys.bind(ed));
+    D.mapKeys(ed); D.prf.keys(D.mapKeys.bind(this, ed));
+
+    const kc = monaco.KeyCode;
+    me.addCommand(kc.DownArrow, () => ed.downOrXline(me), '!suggestWidgetVisible');
+    me.addCommand(kc.Tab, () => ed.indentOrComplete(me), '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode');
+
     me.onDidChangeCursorPosition(ed.cursorActivity.bind(ed));
     let mouseL = 0; let mouseC = 0; let mouseTS = 0;
     me.onMouseDown((e) => {
@@ -110,67 +115,6 @@
     ed.firstOpen = true;
   }
   Ed.prototype = {
-    mapKeys() {
-      const { me } = this;
-      const kc = monaco.KeyCode;
-      const km = monaco.KeyMod;
-      const ctrlcmd = {
-        Ctrl: D.mac ? km.WinCtrl : km.CtrlCmd,
-        Cmd: km.CtrlCmd,
-        Esc: kc.Escape,
-        '\\': kc.US_BACKSLASH,
-        '`': kc.US_BACKTICK,
-        ']': kc.US_CLOSE_SQUARE_BRACKET,
-        ',': kc.US_COMMA,
-        '.': kc.US_DOT,
-        '=': kc.US_EQUAL,
-        '-': kc.US_MINUS,
-        '[': kc.US_OPEN_SQUARE_BRACKET,
-        '\'': kc.US_QUOTE,
-        ';': kc.US_SEMICOLON,
-        '/': kc.US_SLASH,
-      };
-      function addCmd(map) {
-        Object.keys(map).forEach((ks) => {
-          const nkc = ks.split('-').reduce(((a, ko) => {
-            const k = ko.replace(/^[A-Z0-9]$/, 'KEY_$&')
-              .replace(/^Numpad(.*)/, (m, p) => `NUMPAD_${p.toUpperCase()}`)
-              .replace(/^(Up|Left|Right|Down)$/, '$1Arrow')
-              .replace(/--/g, '-US_MINUS')
-              .replace(/^'(.)'$/, '$1');
-            return a | (ctrlcmd[k] || km[k] || kc[k]); // eslint-disable-line no-bitwise
-          }), 0);
-          if (nkc) {
-            const cmd = map[ks];
-            let cond;
-            if (cmd === 'BQC') {
-              return;
-            } else if (cmd === 'TGC') {
-              me.addCommand(nkc, () => me.trigger('editor', 'editor.action.commentLine'));
-              return;
-            } else if (cmd === 'AO') {
-              me.addCommand(nkc, () => me.trigger('editor', 'editor.action.addCommentLine'));
-              return;
-            } else if (cmd === 'DO') {
-              me.addCommand(nkc, () => me.trigger('editor', 'editor.action.removeCommentLine'));
-              return;
-            } else if (cmd === 'SC') {
-              me.addCommand(nkc, () => me.trigger('editor', 'actions.find'));
-              return;
-            } else if (cmd === 'RP') {
-              me.addCommand(nkc, () => me.trigger('editor', 'editor.action.startFindReplaceAction'));
-              return;
-            } else if (cmd === 'ER' || cmd === 'TC') cond = 'tracer';
-            else if (nkc === kc.Escape) cond = '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode';
-            me.addCommand(nkc, () => CM.commands[cmd](me), cond);
-          }
-        });
-      }
-      addCmd(CM.keyMap.dyalogDefault);
-      addCmd(CM.keyMap.dyalog);
-      me.addCommand(kc.DownArrow, () => this.downOrXline(me), '!suggestWidgetVisible');
-      me.addCommand(kc.Tab, () => this.indentOrComplete(me), '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode');
-    },
     createBPEl() { // create breakpoint element
       const e = this.dom.ownerDocument.createElement('div');
       e.className = 'breakpoint'; e.innerHTML = '●'; return e;
