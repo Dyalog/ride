@@ -112,38 +112,10 @@
         se.hl();
       });
     });
+    
     // cm.on('scroll', (c) => { const i = c.getScrollInfo(); se.btm = i.clientHeight + i.top; });
     // cm.on('focus', () => { se.focusTS = +new Date(); ide.focusedWin = se; });
     me.onDidFocusEditor(() => { se.focusTS = +new Date(); se.ide.focusedWin = se; });
-    cm.on('beforeChange', (_, c) => { // keep track of inserted/deleted/changed lines, use se.dirty for that
-      if (c.origin === 'D') return;
-      const l0 = c.from.line;
-      const l1 = c.to.line;
-      const m = (l1 - l0) + 1;
-      let n = c.text.length;
-      if (m < n) {
-        const h = se.dirty;
-        se.dirty = {};
-        Object.keys(h).forEach((x) => { se.dirty[x + ((n - m) * (x > l1))] = h[x]; });
-      } else if (n < m) {
-        if (!c.update) { c.cancel(); return; } // the change is probably the result of Undo
-        const text = c.text.slice(0);
-        for (let j = n; j < m; j++) text.push(''); // pad shrinking changes with empty lines
-        c.update(c.from, c.to, text);
-        n = m;
-      }
-      let l = l0;
-      while (l <= l1) {
-        const base = se.dirty;
-        base[l] == null && (base[l] = se.cm.getLine(l));
-        l += 1;
-      }
-      while (l < l0 + n) se.dirty[l++] = 0;
-    });
-    // cm.on('change', (_, c) => {
-    //   if (c.origin === 'D') return;
-    //   Object.keys(se.dirty).forEach((l) => { se.cm.addLineClass(+l, 'background', 'modified'); });
-    // });
     se.promptType = 0; // see ../docs/protocol.md #SetPromptType
     // se.processAutocompleteReply = D.ac(se); // delegate autocompletion processing to ac.js
     se.processAutocompleteReply = (x) => {
@@ -169,19 +141,20 @@
       this.histIdx = 0;
     },
     histMove(d) { // go back or forward in history
-      const i = this.histIdx + d;
-      const l = this.me.getPosition().lineNumber - 1;
+      const se = this;
+      const { me } = se;
+      const i = se.histIdx + d;
+      const l = me.getPosition().lineNumber;
       if (i < 0) { $.alert('There is no next line', 'Dyalog APL Error'); return; }
-      if (i >= this.hist.length) { $.alert('There is no previous line', 'Dyalog APL Error'); return; }
-      if (!this.histIdx) this.hist[0] = this.cm.getLine(l);
-      if (this.hist[i] == null) return;
-      this.cm.replaceRange(
-        this.hist[i],
-        { line: l, ch: 0 },
-        { line: l, ch: this.cm.getLine(l).length },
-      );
-      this.cm.setCursor({ line: l, ch: this.hist[i].search(/\S|$/) });
-      this.histIdx = i;
+      if (i >= se.hist.length) { $.alert('There is no previous line', 'Dyalog APL Error'); return; }
+      if (!se.histIdx) se.hist[0] = me.model.getLineContent(l);
+      if (se.hist[i] == null) return;
+      me.executeEdits('D', [{
+        range: new monaco.Range(l, 1, l, me.model.getLineMaxColumn(l)),
+        text: se.hist[i],
+      }]);
+      me.setPosition({ lineNumber: l, column: 1 + se.hist[i].search(/\S|$/) });
+      se.histIdx = i;
     },
     hl() { // highlight modified lines
       const se = this;
@@ -216,7 +189,7 @@
         const ll = me.model.getLineCount();
         const lc = me.model.getLineMaxColumn(ll);
         me.setPosition({ lineNumber: ll, column: lc });
-        // me.revealRangeAtTop({ startLineNumber:  })
+        me.revealLineInCenterIfOutsideViewport(ll);
         // cm.replaceRange(sp, { line: l, ch: 0 }, { line: l, ch: s0.length }, 'D');
         // cm.setCursor({ line: cm.lastLine() });
         // const i = cm.getScrollInfo();
@@ -299,7 +272,7 @@
       while (p) {
         p.setActiveContentItem && p.setActiveContentItem(q); q = p; p = p.parent;
       } // reveal in golden layout
-      window.focused || window.focus(); this.cm.focus();
+      window.focused || window.focus(); this.me.focus();
     },
     insert(ch) { this.cm.getOption('readOnly') || this.cm.replaceSelection(ch); },
     die() { this.cm.setOption('readOnly', true); },
