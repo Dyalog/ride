@@ -22,6 +22,25 @@
     },
   };
 
+  const aplSessionConfig = {
+    comments: {
+      lineComment: '⍝',
+    },
+    brackets: [
+      ['{', '}'],
+      ['[', ']'],
+      ['(', ')'],
+    ],
+    autoClosingPairs: [
+      { open: '{', close: '}' },
+      { open: '[', close: ']' },
+      { open: '(', close: ')' },
+      { open: '"', close: '"' },
+      { open: '\'', close: '\'' },
+    ],
+    indentationRules: {},
+  };
+
   class State {
     // hdr      are we at a location where a tradfn header can be expected?
     // a        stack of objects with the following properties
@@ -398,11 +417,12 @@
   const aplSessionTokens = {
     getInitialState: () => new SessionState(0, 1, aplTokens.getInitialState()),
     tokenize: (line, state) => {
-      const se = D.wins[0];
+      const se = D.wins && D.wins[0];
       const lt = {
         tokens: [],
         endState: state.clone(),
       };
+      if (!se) return lt;
       function addToken(startIndex, type) {
         const scope = `${type}.apl`;
         if (lt.tokens.length === 0 || lt.tokens[lt.tokens.length - 1].scopes !== scope) {
@@ -773,7 +793,7 @@
 
     ml.register({ id: 'apl-session' });
     ml.setTokensProvider('apl-session', aplSessionTokens);
-    ml.setLanguageConfiguration('apl-session', aplConfig);
+    ml.setLanguageConfiguration('apl-session', aplSessionConfig);
     ml.registerCompletionItemProvider('apl-session', aplCompletions(D.prf.prefixKey()));
     D.prf.prefixKey(x => ml.registerCompletionItemProvider('apl-session', aplCompletions(x)));
     ml.registerHoverProvider('apl-session', aplHover);

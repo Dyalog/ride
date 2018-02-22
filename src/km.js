@@ -119,7 +119,7 @@
         let me=cm;
         if(me.dyalogBQ) return;
         me.dyalogBQ=me.model.onDidChangeContent(x=>bqChangeHandlerMe(me,x))
-        return
+        return;
       }
       if(cm.dyalogBQ){var c=cm.getCursor();cm.replaceSelection(D.prf.prefixKey(),'end');return}
       //Make it possible to use pfxkey( etc -- remember the original value of
@@ -245,26 +245,38 @@
                             var pk=D.prf.prefixKey();return r===pk?pk+pk:r}
 
   function bqChangeHandlerMe(me,o){ //o:changeObj
-    if(!me.dyalogBQ)return
-    let chg=o.changes[0],r=chg.range,l=r.startLineNumber,c=r.startColumn
-    let x=chg.text[0],pk=D.prf.prefixKey()
-    let s=me.model.getLineContent(l)
-    if(s.slice(c-3,c)===pk+pk+pk){  // ``` for ⋄
-      let nr=new monaco.Range(l,c-2,l,c+1)
-      let ns=new monaco.Selection(l,c-1,l,c-1);
+    if (!me.dyalogBQ) return;
+    let chg = o.changes[0];
+    let r = chg.range;
+    let l = r.startLineNumber;
+    let c = r.startColumn;
+    let x = chg.text[0];
+    let pk = D.prf.prefixKey();
+    let s = me.model.getLineContent(l);
+    if (s.slice(c - 3, c) === `${pk}${pk}${pk}`) {  // ``` for ⋄
+      let nr = new monaco.Range(l, c - 2, l, c + 1);
+      let ns = new monaco.Selection(l, c - 1, l, c - 1);
       bqCleanUpMe(me);
-      setTimeout(_=>me.executeEdits('D',[{range:nr,text:bq[pk]||''}],[ns]),1)
-    } else if (s.slice(c-3,c-1)===pk+pk){  // bqbqc
-      me.dyalogBQ&&me.dyalogBQ.dispose();delete me.dyalogBQ
-    } else if (s[c-2]!==pk) {    
+      setTimeout(_ => {
+        me.listen = false;
+        me.executeEdits('D', [{ range: nr, text: bq[pk] || '' }], [ns]);
+        me.listen = true;
+      }, 1);
+    } else if (s.slice(c - 3, c - 1) ===`${pk}${pk}`) {  // bqbqc
+      me.dyalogBQ && me.dyalogBQ.dispose(); delete me.dyalogBQ;
+    } else if (s[c - 2] !== pk) {    
       bqCleanUpMe(me)
-    } else if (x!==pk){
-      let y=x===' '?pk:bq[x]
-      if(y){
-        let nr=new monaco.Range(l,c-1,l,c+chg.text.length)
-        let ns=new monaco.Selection(l,c,l,c);
+    } else if (x !== pk){
+      let y = x === ' ' ? pk : bq[x];
+      if (y) {
+        let nr = new monaco.Range(l, c - 1, l, c + chg.text.length);
+        let ns = new monaco.Selection(l, c, l, c);
         bqCleanUpMe(me)
-        setTimeout(_=>me.executeEdits('D',[{range:nr,text:y}],[ns]),1)
+        setTimeout(_ => {
+          me.listen = false;
+          me.executeEdits('D', [{ range: nr, text: y }], [ns]);
+          me.listen = true;
+        }, 1);
       } else {
         bqCleanUpMe(me)
       }
@@ -381,7 +393,7 @@
           } else if (cmd === 'RP') {
             me.addCommand(nkc, () => me.trigger('editor', 'editor.action.startFindReplaceAction'));
             return;
-          } else if (cmd === 'ER' || cmd === 'TC') cond = 'tracer';
+          } else if (cmd === 'ER' || cmd === 'TC') cond = 'tracer && !suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode';
           else if (nkc === kc.Escape) cond = '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode';
           me.addCommand(nkc, () => CM.commands[cmd](me), cond);
         }

@@ -102,7 +102,7 @@
       'tcpe=bg:c8c8c8,bgo:1 trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f vtt=bg:ff0'},
     {name:'Francisco Goya',styles:'asgn=fg:ff0 com=fg:b,I:1 cur=bc:f00 dfn2=fg:eb4 dfn3=fg:c79 dfn4=fg:cd0 dfn5=fg:a0d '+
       'dfn=fg:a7b diam=fg:ff0 err=fg:f00,bg:822,bgo:.5,B:1,U:1 fn=fg:0f0 idm=fg:0f0 glb=B:1 kw=fg:aa2 '+
-      'lbl=U:1,bg:642,bgo:.5 lnum=fg:b94,bg:010,bgo:0 mod=bg:1,bgo:1 mtch=fg:0,bg:ff8,bgo:.75 norm=fg:9c7,bg:0,bgo:1 '+
+      'lbl=U:1,bg:642,bgo:.5 lnum=fg:b94,bg:010,bgo:0 mod=bg:7,bgo:.5 mtch=fg:0,bg:ff8,bgo:.75 norm=fg:9c7,bg:0,bgo:1 '+
       'num=fg:a8b op1=fg:d95 op2=fg:fd6 sel=bg:048,bgo:.5 semi=fg:8 sqbr=fg:8 srch=bg:b96,bgo:.75,fg:0 str=fg:dae '+
       'tc=bg:1,bgo:1 tcpe=bg:2,bgo:1 zld=fg:d9f,B:1 scmd=fg:0ff ucmd=fg:f80,B:1 vtip=bg:733,fg:ff0,bgo:1,bc:900 vtt=bc:f80'},
     {name:'Albrecht Dürer',styles:'com=I:1 diam=B:1 err=fg:f,bg:0,bgo:.5,B:1,I:1,U:1 glb=I:1 kw=B:1 '+

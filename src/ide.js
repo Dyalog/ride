@@ -17,7 +17,8 @@ D.IDE = function () {'use strict'
   }}
   ide.host=ide.port=ide.wsid='';D.prf.title(ide.updTitle.bind(ide))
   D.wins=ide.wins={0:new D.Se(ide)}
-  ide.wins[0].me.setModel(monaco.editor.createModel('', 'apl-session'));
+  // ide.wins[0].me.setModel(monaco.editor.createModel('', 'apl-session'));
+
   ide.focusedWin=ide.wins[0] //last focused window, it might not have the focus right now
   ide.switchWin=function(x){ //x: +1 or -1
     let a=[],i=-1,j,wins=D.ide.wins,w;

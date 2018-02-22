@@ -9,6 +9,7 @@
     se.histIdx = 0;
     se.focusTS = 0;
     se.id = 0;
+    se.decorations = [];
     se.dirty = {};
     // modified lines: lineNumber→originalContent
     // inserted lines: lineNumber→0 (also used in syn.js)
@@ -51,15 +52,15 @@
       language: 'apl-session',
       lineNumbers: 'off',
       matchBrackets: !!D.prf.matchBrackets(),
-      model: null,
       mouseWheelZoom: false,
       renderIndentGuides: false,
       wordBasedSuggestions: false,
     });
     se.me = me;
+    me.model.winid = 0;
     me.dyalogCmds = se;
     se.tracer = me.createContextKey('tracer', true);
-    se.listen = true;
+    me.listen = true;
     se.oModel = monaco.editor.createModel('');
     D.mapKeys(se); D.prf.keys(D.mapKeys.bind(this, se));
 
@@ -76,7 +77,12 @@
       }
     });
     me.onDidChangeModelContent((e) => {
-      if (!se.listen) return;
+      if (!me.listen) return;
+      if (!me.dyalogBQ && e.changes.length === 1
+        && e.changes[0].text === D.prf.prefixKey()) {
+        CM.commands.BQC(me);
+        return;
+      }
       e.changes.forEach((c) => {
         const l0 = c.range.startLineNumber;
         const l1 = c.range.endLineNumber;
@@ -90,9 +96,9 @@
         } else if (n < m) {
           // if (!c.update) { c.cancel(); return; } // the change is probably the result of Undo
           for (let j = n; j < m; j++) text.push(''); // pad shrinking changes with empty lines
-          se.listen = false;
+          me.listen = false;
           me.executeEdits('D', [{ range: new monaco.Range(l0 + n, 1, l0 + 1, 1), text: '\n'.repeat(m - n) }]);
-          se.listen = true;
+          me.listen = true;
           // c.update(c.from, c.to, text);
           n = m;
         }
@@ -103,10 +109,12 @@
           l += 1;
         }
         while (l < l0 + n) se.dirty[l++] = 0;
+        se.hl();
       });
     });
-    cm.on('scroll', (c) => { const i = c.getScrollInfo(); se.btm = i.clientHeight + i.top; });
-    cm.on('focus', () => { se.focusTS = +new Date(); ide.focusedWin = se; });
+    // cm.on('scroll', (c) => { const i = c.getScrollInfo(); se.btm = i.clientHeight + i.top; });
+    // cm.on('focus', () => { se.focusTS = +new Date(); ide.focusedWin = se; });
+    me.onDidFocusEditor(() => { se.focusTS = +new Date(); se.ide.focusedWin = se; });
     cm.on('beforeChange', (_, c) => { // keep track of inserted/deleted/changed lines, use se.dirty for that
       if (c.origin === 'D') return;
       const l0 = c.from.line;
@@ -132,12 +140,17 @@
       }
       while (l < l0 + n) se.dirty[l++] = 0;
     });
-    cm.on('change', (_, c) => {
-      if (c.origin === 'D') return;
-      Object.keys(se.dirty).forEach((l) => { se.cm.addLineClass(+l, 'background', 'modified'); });
-    });
+    // cm.on('change', (_, c) => {
+    //   if (c.origin === 'D') return;
+    //   Object.keys(se.dirty).forEach((l) => { se.cm.addLineClass(+l, 'background', 'modified'); });
+    // });
     se.promptType = 0; // see ../docs/protocol.md #SetPromptType
-    se.processAutocompleteReply = D.ac(se); // delegate autocompletion processing to ac.js
+    // se.processAutocompleteReply = D.ac(se); // delegate autocompletion processing to ac.js
+    se.processAutocompleteReply = (x) => {
+      if (me.model.ac && me.model.ac.complete) {
+        me.model.ac.complete(x.options.map(i => ({ label: i.replace(/^(]|\))?([^.]*\.)?(.*)/, '$3') })));
+      }
+    };
     D.prf.wrap((x) => { se.cm.setOption('lineWrapping', !!x); se.scrollCursorIntoView(); });
     D.prf.blockCursor((x) => {
       Object.keys(D.wins).forEach((i) => { D.wins[i].blockCursor(!!x); });
@@ -170,6 +183,19 @@
       this.cm.setCursor({ line: l, ch: this.hist[i].search(/\S|$/) });
       this.histIdx = i;
     },
+    hl() { // highlight modified lines
+      const se = this;
+      se.decorations = se.me.deltaDecorations(
+        se.decorations,
+        Object.keys(se.dirty).map(l => ({
+          range: new monaco.Range(+l, 1, +l, 1),
+          options: {
+            isWholeLine: true,
+            className: 'modified',
+          },
+        })),
+      );
+    },
     add(s) { // append text to session
       const se = this;
       const { cm, me } = se;
@@ -179,7 +205,7 @@
       const s0 = me.model.getLineContent(l);
       const p = '      ';
       let sp = s.slice(-1) === '\n' ? s + p : s;
-      se.listen = false;
+      me.listen = false;
       if (this.dirty[l] != null) {
         const cp = cm.getCursor();
         cm.replaceRange(`${s0}\n${sp}`, { line: l, ch: 0 }, { line: l, ch: s0.length }, 'D');
@@ -187,7 +213,9 @@
       } else {
         sp = cm.getOption('readOnly') && s0 !== p ? (s0 + sp) : sp;
         me.executeEdits('D', [{ range: new monaco.Range(l, 1, l, s0.length + 1), text: sp }]);
-        me.setPosition({ lineNumber: me.model.getLineCount(), column: 1 });
+        const ll = me.model.getLineCount();
+        const lc = me.model.getLineMaxColumn(ll);
+        me.setPosition({ lineNumber: ll, column: lc });
         // me.revealRangeAtTop({ startLineNumber:  })
         // cm.replaceRange(sp, { line: l, ch: 0 }, { line: l, ch: s0.length }, 'D');
         // cm.setCursor({ line: cm.lastLine() });
@@ -195,7 +223,7 @@
         // this.btm = Math.max(i.clientHeight + i.top, cm.heightAtLine(cm.lastLine(), 'local'));
       }
       se.oModel.setValue(me.getValue());
-      se.listen = true;
+      me.listen = true;
     },
     prompt(x) {
       const { cm } = this;
@@ -286,26 +314,42 @@
       let w;
       let es;
       const se = this;
+      const { me } = se;
       if (!se.promptType) return;
       const ls = Object.keys(se.dirty).map(l => +l);
       if (ls.length) {
+        me.listen = false;
         ls.sort((x, y) => x - y);
-        es = ls.map(l => se.cm.getLine(l) || ''); // strings to execute
+        es = ls.map(l => me.model.getLineContent(l) || ''); // strings to execute
         ls.reverse().forEach((l) => {
-          se.cm.removeLineClass(l, 'background', 'modified');
-          se.dirty[l] === 0 ? se.cm.replaceRange('', { line: l, ch: 0 }, { line: l + 1, ch: 0 }, 'D')
-            : se.cm.replaceRange(se.dirty[l], { line: l, ch: 0 }, { line: l, ch: (se.cm.getLine(l) || '').length || 0 }, 'D');
+          // se.cm.removeLineClass(l, 'background', 'modified');
+          if (se.dirty[l] === 0) {
+            // se.cm.replaceRange('', { line: l, ch: 0 }, { line: l + 1, ch: 0 }, 'D');
+            me.executeEdits('D', [{
+              range: new monaco.Range(l, 1, l + 1, 1),
+              text: '',
+            }]);
+          } else {
+            // se.cm.replaceRange(se.dirty[l], { line: l, ch: 0 }, { line: l, ch: (se.cm.getLine(l) || '').length || 0 }, 'D');
+            me.executeEdits('D', [{
+              range: new monaco.Range(l, 1, l, me.model.getLineMaxColumn(l)),
+              text: se.dirty[l],
+            }]);
+          }
         });
+        me.listen = true;
       } else {
-        es = [se.cm.getLine(se.cm.getCursor().line)];
+        es = [me.model.getLineContent(me.getPosition().lineNumber)];
         if (trace && /^\s*$/.test(es[0]) && (w = se.ide.tracer())) {
-          w.focus(); return;
+          w.focus();
+          return;
         }
       }
       se.ide.exec(es, trace);
       se.dirty = {};
+      se.hl();
       se.histAdd(es.filter(x => !/^\s*$/.test(x)));
-      se.cm.clearHistory();
+      // se.cm.clearHistory();
     },
     autoCloseBrackets(x) { this.cm.setOption('autoCloseBrackets', x); },
     matchBrackets(x) { this.cm.setOption('matchBrackets', !!x); },
@@ -323,7 +367,22 @@
         (w.cm.getScrollInfo().clientHeight - ch);
     },
 
-    ValueTip(x) { this.vt.processReply(x); },
+    ValueTip(x) {
+      // this.vt.processReply(x);
+      const { me } = this;
+      if (me.model.vt && me.model.vt.complete) {
+        const { vt } = me.model;
+        const l = vt.position.lineNumber;
+        const s = me.model.getLineContent(l);
+        vt.complete({
+          range: new monaco.Range(l, x.startCol + 1, l, x.endCol + 1),
+          contents: [
+            s.slice(x.startCol, x.endCol),
+            { language: x.class === 2 ? 'text' : 'apl', value: x.tip.join('\n') },
+          ],
+        });
+      }
+    },
     ED(me) {
       const c = me.getPosition();
       const txt = me.model.getLineContent(c.lineNumber);
@@ -344,7 +403,7 @@
       const se = this;
       const c = me.getPosition();
       const l = c.lineNumber;
-      se.listen = false;
+      me.listen = false;
       if (se.dirty[l] === 0) {
         if (l === me.model.getLineCount()) {
           // cm.replaceRange('', { line: l, ch: 0 }, { line: l + 1, ch: 0 }, 'D');
@@ -358,10 +417,8 @@
           // );
           me.executeEdits('D', [{
             range: new monaco.Range(
-              l - 1,
-              me.model.getLineContent(l - 1).length + 1,
-              l,
-              me.model.getLineContent(l).length + 1,
+              l - 1, me.model.getLineMaxColumn(l - 1),
+              l, me.model.getLineMaxColumn(l),
             ),
             text: '',
           }]);
@@ -373,7 +430,7 @@
       } else if (se.dirty[l] != null) {
         // cm.replaceRange(se.dirty[l], { line: l, ch: 0 }, { line: l, ch: cm.getLine(l).length }, 'D');
         me.executeEdits('D', [{
-          range: new monaco.Range(l, 1, l, me.model.getLineContent(l).length + 1),
+          range: new monaco.Range(l, 1, l, me.model.getLineMaxColumn(l)),
           text: se.dirty[l],
         }]);
         // cm.removeLineClass(l, 'background', 'modified');
@@ -381,7 +438,8 @@
         delete se.dirty[l];
       }
       se.oModel.setValue(me.getValue());
-      se.listen = true;
+      se.hl();
+      me.listen = true;
     },
     EP() { this.ide.focusMRUWin(); },
     ER() { this.exec(0); },
