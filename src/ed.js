@@ -248,12 +248,8 @@
       ed.setStop();
       D.prf.floating() && $('title', ed.dom.ownerDocument).text(ee.name);
     },
-    blockCursor(x) {
-      this.me.updateOptions({ cursorStyle: x ? 'block' : 'line' });
-    },
-    blinkCursor(x) {
-      this.me.updateOptions({ cursorBlinking: x ? 'blink' : 'solid' });
-    },
+    blockCursor(x) { this.me.updateOptions({ cursorStyle: x ? 'block' : 'line' }); },
+    blinkCursor(x) { this.me.updateOptions({ cursorBlinking: x ? 'blink' : 'solid' }); },
     hasFocus() { return this.me.isFocused(); },
     focus() {
       let q = this.container;
@@ -314,7 +310,7 @@
       const ed = this;
       const { me } = ed;
       const r = me.getCompletelyVisibleLinesRangeInViewport();
-      me.updateOptions({ fontSize: ed.zoom2fs[z + 10] });
+      me.updateOptions({ fontSize: ed.ide.zoom2fs[z + 10] });
       me.revealRangeAtTop(r);
     },
 

@@ -351,6 +351,7 @@
       Ctrl: D.mac ? km.WinCtrl : km.CtrlCmd,
       Cmd: km.CtrlCmd,
       Esc: kc.Escape,
+      Pause: kc.PauseBreak,
       '\\': kc.US_BACKSLASH,
       '`': kc.US_BACKTICK,
       ']': kc.US_CLOSE_SQUARE_BRACKET,
@@ -365,16 +366,15 @@
     };
     function addCmd(map) {
       Object.keys(map).forEach((ks) => {
-        const nkc = ks.split('-').reduce(((a, ko) => {
+        const nkc = ks.replace(/--/g, '-US_MINUS').split('-').reduce(((a, ko) => {
           const k = ko.replace(/^[A-Z0-9]$/, 'KEY_$&')
             .replace(/^Numpad(.*)/, (m, p) => `NUMPAD_${p.toUpperCase()}`)
             .replace(/^(Up|Left|Right|Down)$/, '$1Arrow')
-            .replace(/--/g, '-US_MINUS')
             .replace(/^'(.)'$/, '$1');
           return a | (ctrlcmd[k] || km[k] || kc[k]); // eslint-disable-line no-bitwise
         }), 0);
+        const cmd = map[ks];
         if (nkc) {
-          const cmd = map[ks];
           let cond;
           if (cmd === 'BQC') {
             return;

@@ -11,6 +11,7 @@
     se.id = 0;
     se.decorations = [];
     se.dirty = {};
+    se.isReadOnly = !1;
     // modified lines: lineNumber→originalContent
     // inserted lines: lineNumber→0 (also used in syn.js)
     se.dom2 = document.createElement('div');
@@ -55,6 +56,7 @@
       mouseWheelZoom: false,
       renderIndentGuides: false,
       wordBasedSuggestions: false,
+      wordWrap: D.prf.wrap() ? 'on' : 'off',
     });
     se.me = me;
     me.model.winid = 0;
@@ -63,6 +65,11 @@
     me.listen = true;
     se.oModel = monaco.editor.createModel('');
     D.mapKeys(se); D.prf.keys(D.mapKeys.bind(this, se));
+    me.addCommand(
+      monaco.KeyCode.Tab,
+      () => se.indentOrComplete(me),
+      '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode',
+    );
 
     let mouseL = 0; let mouseC = 0; let mouseTS = 0;
     me.onMouseDown((e) => {
@@ -112,9 +119,15 @@
         se.hl();
       });
     });
-    
+    me.onDidLayoutChange((e) => {
+      const r = me.viewModel.getCompletelyVisibleViewRange();
+      // const viewport = me.viewModel.viewLayout.getLinesViewportData();
+      const flt = me.getTopForLineNumber(r.startLineNumber);
+      const llt = me.getTopForLineNumber(r.endLineNumber + 1);
+      const ontop = (flt + se.dom.clientHeight) > llt;
+      se.top = ontop ? r.startLineNumber : null;
+    });
     // cm.on('scroll', (c) => { const i = c.getScrollInfo(); se.btm = i.clientHeight + i.top; });
-    // cm.on('focus', () => { se.focusTS = +new Date(); ide.focusedWin = se; });
     me.onDidFocusEditor(() => { se.focusTS = +new Date(); se.ide.focusedWin = se; });
     se.promptType = 0; // see ../docs/protocol.md #SetPromptType
     // se.processAutocompleteReply = D.ac(se); // delegate autocompletion processing to ac.js
@@ -123,7 +136,10 @@
         me.model.ac.complete(x.options.map(i => ({ label: i.replace(/^(]|\))?([^.]*\.)?(.*)/, '$3') })));
       }
     };
-    D.prf.wrap((x) => { se.cm.setOption('lineWrapping', !!x); se.scrollCursorIntoView(); });
+    D.prf.wrap((x) => {
+      se.me.updateOptions({ wordWrap: x ? 'on' : 'off' });
+      se.me.revealLineInCenterIfOutsideViewport(se.me.model.getLineCount());
+    });
     D.prf.blockCursor((x) => {
       Object.keys(D.wins).forEach((i) => { D.wins[i].blockCursor(!!x); });
     });
@@ -172,60 +188,73 @@
     add(s) { // append text to session
       const se = this;
       const { cm, me } = se;
-      // const l = cm.lastLine();
-      // const s0 = cm.getLine(l);
       const l = me.model.getLineCount();
       const s0 = me.model.getLineContent(l);
       const p = '      ';
       let sp = s.slice(-1) === '\n' ? s + p : s;
       me.listen = false;
+      se.isReadOnly && me.updateOptions({ readOnly: false });
       if (this.dirty[l] != null) {
-        const cp = cm.getCursor();
-        cm.replaceRange(`${s0}\n${sp}`, { line: l, ch: 0 }, { line: l, ch: s0.length }, 'D');
-        cm.setCursor(cp);
+        const cp = me.getPosition();
+        me.executeEdits('D', [{ range: new monaco.Range(l, 1, l, 1 + s0.length), text: `${s0}\n${sp}` }]);
+        me.setPosition(cp);
       } else {
-        sp = cm.getOption('readOnly') && s0 !== p ? (s0 + sp) : sp;
-        me.executeEdits('D', [{ range: new monaco.Range(l, 1, l, s0.length + 1), text: sp }]);
+        sp = se.isReadOnly && s0 !== p ? (s0 + sp) : sp;
+        me.executeEdits('D', [{ range: new monaco.Range(l, 1, l, 1 + s0.length), text: sp }]);
         const ll = me.model.getLineCount();
         const lc = me.model.getLineMaxColumn(ll);
         me.setPosition({ lineNumber: ll, column: lc });
-        me.revealLineInCenterIfOutsideViewport(ll);
-        // cm.replaceRange(sp, { line: l, ch: 0 }, { line: l, ch: s0.length }, 'D');
-        // cm.setCursor({ line: cm.lastLine() });
-        // const i = cm.getScrollInfo();
-        // this.btm = Math.max(i.clientHeight + i.top, cm.heightAtLine(cm.lastLine(), 'local'));
+        se.me.revealLine(ll);
+        // me.revealLineInCenterIfOutsideViewport(ll);
       }
+      se.isReadOnly && me.updateOptions({ readOnly: true });
       se.oModel.setValue(me.getValue());
       me.listen = true;
     },
     prompt(x) {
-      const { cm } = this;
-      const l = cm.lastLine();
-      const t = cm.getLine(l);
-      this.promptType = x;
-      cm.setOption('readOnly', !x);
-      cm.setOption('cursorHeight', +!!x);
-
+      const se = this;
+      const { me } = se;
+      const l = me.model.getLineCount();
+      const t = me.model.getLineContent(l);
+      se.promptType = x;
+      se.isReadOnly = !x;
+      me.updateOptions({ readOnly: !x });
+      me.listen = false;
       if ((x === 1 && this.dirty[l] == null) || [0, 1, 3, 4].indexOf(x) < 0) {
-        cm.replaceRange('      ', { line: l, ch: 0 }, { line: l, ch: t.length }, 'D');
+        me.executeEdits('D', [{
+          range: new monaco.Range(l, 1, l, 1 + t.length),
+          text: '      ',
+        }]);
       } else if (t === '      ') {
-        cm.replaceRange('', { line: l, ch: 0 }, { line: l, ch: 6 }, 'D');
+        me.executeEdits('D', [{
+          range: new monaco.Range(l, 1, l, 7),
+          text: '',
+        }]);
       } else {
-        cm.setCursor(l, t.length);
+        me.setPosition({ lineNumber: l, column: 1 + t.length });
       }
-      x && cm.clearHistory();
+      me.listen = true;
+      // x && cm.clearHistory();
     },
     updSize() {
-      const i = this.cm.getScrollInfo();
-      const { top } = i;
-      const ontop = top > this.cm.heightAtLine(this.cm.lastLine(), 'local') - i.clientHeight;
-      this.cm.setSize(this.dom.clientWidth, this.dom.clientHeight);
-      this.updPW();
-      if (ontop) {
-        this.btm = top + this.cm.getScrollInfo().clientHeight;
-      } else if (i.top === 0) {
-        this.btm += this.cm.getScrollInfo().clientHeight - i.clientHeight;
-      }
+      const se = this;
+      const { me } = se;
+      const r = me.viewModel.getCompletelyVisibleViewRange();
+      const viewport = me.viewModel.viewLayout.getLinesViewportData();
+      const flt = me.getTopForLineNumber(r.startLineNumber);
+      const llt = me.getTopForLineNumber(r.endLineNumber + 1);
+      const ontop = (flt + se.dom.clientHeight) > llt;
+      console.log('ontop', ontop);
+      // const i = this.cm.getScrollInfo();
+      // const { top } = i;
+      // const ontop = top > this.cm.heightAtLine(this.cm.lastLine(), 'local') - i.clientHeight;
+      // this.cm.setSize(this.dom.clientWidth, this.dom.clientHeight);
+      // this.updPW();
+      // if (ontop) {
+      //   this.btm = top + this.cm.getScrollInfo().clientHeight;
+      // } else if (i.top === 0) {
+      //   this.btm += this.cm.getScrollInfo().clientHeight - i.clientHeight;
+      // }
     },
     updPW(force) {
       // force:emit a SetPW message even if the width hasn't changed
@@ -236,9 +265,10 @@
       if ((pw !== this.pw && this.ide.connected) || force) D.send('SetPW', { pw: this.pw = pw });
     },
     scrollCursorIntoView() {
-      const { cm } = this;
-      cm.scrollTo(0, cm.getScrollInfo().top);
-      setTimeout(() => { cm.scrollIntoView(); }, 1);
+      const { me } = this;
+      me.revealLine(me.model.getLineCount());
+      // cm.scrollTo(0, cm.getScrollInfo().top);
+      // setTimeout(() => { cm.scrollIntoView(); }, 1);
     },
     saveScrollPos() {
       // workaround for CodeMirror scrolling up to the top under GoldenLayout when editor is closed
@@ -260,9 +290,9 @@
       w.updGutters && w.updGutters();
       w.restoreScrollPos();
     },
-    blockCursor(x) { this.cm.getWrapperElement().classList.toggle('cm-fat-cursor', !!x); },
-    blinkCursor(x) { this.cm.setOption('cursorBlinkRate', x); },
-    hasFocus() { return this.cm.hasFocus(); },
+    blockCursor(x) { this.me.updateOptions({ cursorStyle: x ? 'block' : 'line' }); },
+    blinkCursor(x) { this.me.updateOptions({ cursorBlinking: x ? 'blink' : 'solid' }); },
+    hasFocus() { return this.me.isFocused(); },
     focus() {
       let q = this.container;
       let p = q && q.parent;
@@ -274,7 +304,9 @@
       } // reveal in golden layout
       window.focused || window.focus(); this.me.focus();
     },
-    insert(ch) { this.cm.getOption('readOnly') || this.cm.replaceSelection(ch); },
+    insert(ch) {
+      this.isReadOnly || this.me.trigger('editor', 'type', { text: ch });
+    },
     die() { this.cm.setOption('readOnly', true); },
     getDocument() { return this.dom.ownerDocument; },
     refresh() { this.cm.refresh(); },
@@ -293,7 +325,14 @@
       if (ls.length) {
         me.listen = false;
         ls.sort((x, y) => x - y);
-        es = ls.map(l => me.model.getLineContent(l) || ''); // strings to execute
+        const max = me.model.getLineCount();
+        es = ls.map((l) => {
+          if (l > max) {
+            console.log('out of range', l);
+            return '';
+          }
+          return me.model.getLineContent(l) || '';
+        }); // strings to execute
         ls.reverse().forEach((l) => {
           // se.cm.removeLineClass(l, 'background', 'modified');
           if (se.dirty[l] === 0) {
@@ -312,10 +351,15 @@
         });
         me.listen = true;
       } else {
-        es = [me.model.getLineContent(me.getPosition().lineNumber)];
-        if (trace && /^\s*$/.test(es[0]) && (w = se.ide.tracer())) {
-          w.focus();
-          return;
+        const sel = me.getSelection();
+        if (sel.isEmpty()) {
+          es = [me.model.getLineContent(sel.startLineNumber)];
+          if (trace && /^\s*$/.test(es[0]) && (w = se.ide.tracer())) {
+            w.focus();
+            return;
+          }
+        } else {
+          es = [me.model.getValueInRange(sel)];
         }
       }
       se.ide.exec(es, trace);
@@ -327,17 +371,23 @@
     autoCloseBrackets(x) { this.cm.setOption('autoCloseBrackets', x); },
     matchBrackets(x) { this.cm.setOption('matchBrackets', !!x); },
     zoom(z) {
-      const w = this;
-      const b = w.getDocument().body;
-      const top = w.cm.heightAtLine(w.cm.lastLine(), 'local') < w.btm;
-      const i = w.cm.getScrollInfo();
-      const line = w.cm.lineAtHeight(top ? i.top : w.btm, 'local');
-      const diff = w.btm - (line * w.cm.defaultTextHeight());
-      const ch = i.clientHeight;
-      b.className = `zoom${z} ${b.className.split(/\s+/).filter(s => !/^zoom-?\d+$/.test(s)).join(' ')}`;
-      w.refresh();
-      w.btm = (w.cm.defaultTextHeight() * line) + (top ? ch + 5 : diff) +
-        (w.cm.getScrollInfo().clientHeight - ch);
+      const se = this;
+      const { me } = se;
+      const r = me.getCompletelyVisibleLinesRangeInViewport();
+      me.updateOptions({ fontSize: se.ide.zoom2fs[z + 10] });
+      me.revealRangeAtTop(r);
+
+      // const w = this;
+      // const b = w.getDocument().body;
+      // const top = w.cm.heightAtLine(w.cm.lastLine(), 'local') < w.btm;
+      // const i = w.cm.getScrollInfo();
+      // const line = w.cm.lineAtHeight(top ? i.top : w.btm, 'local');
+      // const diff = w.btm - (line * w.cm.defaultTextHeight());
+      // const ch = i.clientHeight;
+      // b.className = `zoom${z} ${b.className.split(/\s+/).filter(s => !/^zoom-?\d+$/.test(s)).join(' ')}`;
+      // w.refresh();
+      // w.btm = (w.cm.defaultTextHeight() * line) + (top ? ch + 5 : diff) +
+      //   (w.cm.getScrollInfo().clientHeight - ch);
     },
 
     ValueTip(x) {
@@ -361,7 +411,7 @@
       const txt = me.model.getLineContent(c.lineNumber);
       if (/^\s*$/.test(txt)) {
         const tc = this.ide.tracer();
-        if (tc) { tc.focus(); tc.ED(tc.cm); }
+        if (tc) { tc.focus(); tc.ED(tc.me); }
       } else {
         D.ide.Edit({
           win: 0,
@@ -379,15 +429,8 @@
       me.listen = false;
       if (se.dirty[l] === 0) {
         if (l === me.model.getLineCount()) {
-          // cm.replaceRange('', { line: l, ch: 0 }, { line: l + 1, ch: 0 }, 'D');
           me.executeEdits('D', [{ range: new monaco.Range(l, 1, l + 1, 1), text: '' }]);
         } else {
-          // cm.replaceRange(
-          //   '',
-          //   { line: l - 1, ch: cm.getLine(l - 1).length },
-          //   { line: l, ch: cm.getLine(l).length },
-          //   'D',
-          // );
           me.executeEdits('D', [{
             range: new monaco.Range(
               l - 1, me.model.getLineMaxColumn(l - 1),
@@ -401,12 +444,10 @@
         se.dirty = {};
         Object.keys(h).forEach((x) => { se.dirty[x - (x > l)] = h[x]; });
       } else if (se.dirty[l] != null) {
-        // cm.replaceRange(se.dirty[l], { line: l, ch: 0 }, { line: l, ch: cm.getLine(l).length }, 'D');
         me.executeEdits('D', [{
           range: new monaco.Range(l, 1, l, me.model.getLineMaxColumn(l)),
           text: se.dirty[l],
         }]);
-        // cm.removeLineClass(l, 'background', 'modified');
         me.setPosition({ lineNumber: l, column: 1 + se.dirty[l].search(/\S|$/) });
         delete se.dirty[l];
       }
@@ -419,14 +460,23 @@
     TC() { this.exec(1); },
     LN() { D.prf.lineNums.toggle(); },
     MA() { D.send('RestartThreads', { win: 0 }); },
-    indentOrComplete(cm) {
-      const u = cm.getCursor();
-      const s = cm.getLine(u.line);
-      if (cm.somethingSelected() || this.promptType === 4 || /^ *$/.test(s.slice(0, u.ch))) {
-        cm.execCommand('indentMore'); return;
+    indentOrComplete(me) {
+      const sels = me.getSelections();
+
+      const c = me.getPosition();
+      const ci = c.column - 1;
+      const s = me.model.getLineContent(c.lineNumber);
+      const ch = s[ci - 1];
+      if (sels.length !== 1 || !sels[0].isEmpty()
+        || this.promptType === 4 || /^ *$/.test(s.slice(0, ci))) {
+        me.trigger('editor', 'editor.action.indentLines'); return;
       }
-      this.autocompleteWithTab = 1;
-      D.send('GetAutocomplete', { line: s, pos: u.ch, token: 0 });
+      if (!ch || ch === ' ') {
+        const i = D.prf.indent();
+        me.trigger('editor', 'type', { text: ' '.repeat(i - (ci % i)) });
+        return;
+      }
+      me.trigger('editor', 'editor.action.triggerSuggest');
     },
   };
   D.Se = Se;
