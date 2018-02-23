@@ -54,8 +54,8 @@ const J = {};
           label: x,
           click: () => {
             const u = D.ed || D.ide.focusedWin;
-            const { cm } = u;
-            if (u && cm[x.toLowerCase()]) cm[x.toLowerCase()]();
+            const { me } = u;
+            if (u && me[x.toLowerCase()]) me[x.toLowerCase()]();
           },
         })));
       const cmenu = D.el.Menu.buildFromTemplate(cmitems);

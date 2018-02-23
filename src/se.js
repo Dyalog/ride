@@ -10,31 +10,10 @@
     se.focusTS = 0;
     se.id = 0;
     se.decorations = [];
-    se.dirty = {};
-    se.isReadOnly = !1;
     // modified lines: lineNumber→originalContent
     // inserted lines: lineNumber→0 (also used in syn.js)
-    se.dom2 = document.createElement('div');
-    se.dom2.className = 'ride_win_hide';
-    se.dom2.style.display = 'none';
-    // se.$e = $(se.dom2);
-    // se.dom.oncontextmenu = D.oncmenu;
-    const cm = CM(se.dom2, {
-      autofocus: true,
-      mode: { name: 'apl-session', se },
-      matchBrackets: !!D.prf.matchBrackets(),
-      readOnly: true,
-      keyMap: 'dyalog',
-      lineWrapping: !!D.prf.wrap(),
-      indentUnit: 4,
-      smartIndent: 0,
-      autoCloseBrackets: { pairs: '()[]{}', explode: '' },
-      scrollbarStyle: 'simple',
-      extraKeys: { 'Shift-Tab': 'indentLess', Tab: 'indentOrComplete' },
-      cursorBlinkRate: D.prf.blinkCursor() * CM.defaults.cursorBlinkRate,
-    });
-    se.cm = cm;
-    cm.dyalogCmds = se;
+    se.dirty = {};
+    se.isReadOnly = !1;
 
     se.dom = document.createElement('div');
     se.dom.className = 'ride_win';
@@ -48,7 +27,7 @@
       cursorBlinking: D.prf.blinkCursor() ? 'blink' : 'solid',
       folding: false,
       fontFamily: 'apl',
-      fontSize: se.ide.zoom2fs[D.prf.zoom() + 10],
+      fontSize: D.zoom2fs[D.prf.zoom() + 10],
       glyphMargin: se.breakpoints,
       language: 'apl-session',
       lineNumbers: 'off',
@@ -130,7 +109,6 @@
     // cm.on('scroll', (c) => { const i = c.getScrollInfo(); se.btm = i.clientHeight + i.top; });
     me.onDidFocusEditor(() => { se.focusTS = +new Date(); se.ide.focusedWin = se; });
     se.promptType = 0; // see ../docs/protocol.md #SetPromptType
-    // se.processAutocompleteReply = D.ac(se); // delegate autocompletion processing to ac.js
     se.processAutocompleteReply = (x) => {
       if (me.model.ac && me.model.ac.complete) {
         me.model.ac.complete(x.options.map(i => ({ label: i.replace(/^(]|\))?([^.]*\.)?(.*)/, '$3') })));
@@ -187,7 +165,7 @@
     },
     add(s) { // append text to session
       const se = this;
-      const { cm, me } = se;
+      const { me } = se;
       const l = me.model.getLineCount();
       const s0 = me.model.getLineContent(l);
       const p = '      ';
@@ -261,7 +239,8 @@
       // discussion about CodeMirror's width in chars: https://github.com/codemirror/CodeMirror/issues/3618
       // We can get the scrollbar's width through cm.display.scrollbarFiller.clientWidth, it's 0 if not present.
       // But it's better to reserve a hard-coded width for it regardless of its presence.
-      const pw = Math.max(42, Math.floor((this.dom.clientWidth - 20) / this.cm.defaultCharWidth()));
+      // const pw = Math.max(42, Math.floor((this.dom.clientWidth - 20) / this.cm.defaultCharWidth()));
+      const pw = this.me.getLayoutInfo().viewportColumn;
       if ((pw !== this.pw && this.ide.connected) || force) D.send('SetPW', { pw: this.pw = pw });
     },
     scrollCursorIntoView() {
@@ -273,20 +252,20 @@
     saveScrollPos() {
       // workaround for CodeMirror scrolling up to the top under GoldenLayout when editor is closed
       if (this.btm === null) {
-        const i = this.cm.getScrollInfo();
-        this.btm = i.clientHeight + i.top;
+        // const i = this.cm.getScrollInfo();
+        // this.btm = i.clientHeight + i.top;
       }
     },
     restoreScrollPos() {
       if (this.btm != null) {
-        const i = this.cm.getScrollInfo();
-        this.cm.scrollTo(0, this.btm - i.clientHeight);
+        // const i = this.cm.getScrollInfo();
+        // this.cm.scrollTo(0, this.btm - i.clientHeight);
       }
     },
     stateChanged() {
       const w = this;
       w.updSize();
-      w.cm.refresh();
+      // w.cm.refresh();
       w.updGutters && w.updGutters();
       w.restoreScrollPos();
     },
@@ -307,13 +286,16 @@
     insert(ch) {
       this.isReadOnly || this.me.trigger('editor', 'type', { text: ch });
     },
-    die() { this.cm.setOption('readOnly', true); },
+    die() { this.me.updateOptions({ readOnly: (this.isReadOnly = true) }); },
     getDocument() { return this.dom.ownerDocument; },
-    refresh() { this.cm.refresh(); },
+    refresh() { },
     loadLine(s) {
-      const { cm } = this;
-      const l = cm.lastLine();
-      cm.replaceRange(s, { line: l, ch: 0 }, { line: l, ch: cm.getLine(l).length });
+      const { me } = this;
+      const l = me.model.getLineCount();
+      me.executeEdits('D', [{
+        range: new monaco.Range(l, 1, l, me.model.getLineMaxColumn(l)),
+        text: s,
+      }]);
     },
     exec(trace) {
       let w;
@@ -334,15 +316,12 @@
           return me.model.getLineContent(l) || '';
         }); // strings to execute
         ls.reverse().forEach((l) => {
-          // se.cm.removeLineClass(l, 'background', 'modified');
           if (se.dirty[l] === 0) {
-            // se.cm.replaceRange('', { line: l, ch: 0 }, { line: l + 1, ch: 0 }, 'D');
             me.executeEdits('D', [{
               range: new monaco.Range(l, 1, l + 1, 1),
               text: '',
             }]);
           } else {
-            // se.cm.replaceRange(se.dirty[l], { line: l, ch: 0 }, { line: l, ch: (se.cm.getLine(l) || '').length || 0 }, 'D');
             me.executeEdits('D', [{
               range: new monaco.Range(l, 1, l, me.model.getLineMaxColumn(l)),
               text: se.dirty[l],
@@ -368,8 +347,8 @@
       se.histAdd(es.filter(x => !/^\s*$/.test(x)));
       // se.cm.clearHistory();
     },
-    autoCloseBrackets(x) { this.cm.setOption('autoCloseBrackets', x); },
-    matchBrackets(x) { this.cm.setOption('matchBrackets', !!x); },
+    autoCloseBrackets(x) { this.me.updateOptions('autoClosingBrackets', x); },
+    matchBrackets(x) { this.me.updateOptions('matchBrackets', !!x); },
     zoom(z) {
       const se = this;
       const { me } = se;

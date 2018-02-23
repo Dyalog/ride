@@ -45,7 +45,7 @@ D.IPC_Client=function(winId){
     D.ipc.of.ride_master.on('setBP',x=>D.ed.setBP(x));
     D.ipc.of.ride_master.on('setLN',x=>D.ed.setLN(x));
     D.ipc.of.ride_master.on('setTC',x=>D.ed.setTC(x));
-    D.ipc.of.ride_master.on('ED',x=>D.ed.ED(D.ed.cm));
+    D.ipc.of.ride_master.on('ED',x=>D.ed.ED(D.ed.me));
     D.ipc.of.ride_master.on('stateChanged',x=>D.ed.stateChanged(x));
     D.ipc.of.ride_master.on('ValueTip',x=>D.ed.ValueTip(x));
     D.ipc.of.ride_master.on('zoom',x=>D.ed.zoom(x));
@@ -54,7 +54,7 @@ D.IPC_Client=function(winId){
       var editorOpts=pe.editorOpts, ee=pe.ee;
       var ed=D.ed=new D.Ed(D.ide,editorOpts);
       I.ide.append(ed.dom);
-      ed.monaco_ready.then(_=>{
+      ed.me_ready.then(_=>{
         ed.open(ee);ed.updSize();document.title=ed.name
         window.onresize=function(){ed&&ed.updSize()}
         window.onfocus=()=>ed.focus();
@@ -185,7 +185,7 @@ D.IPC_WindowProxy=function(bw_id,socket){
   ed.bw_id=bw_id;
   ed.socket=socket;
   ed.id=-1;
-  ed.cm={dyalogCmds:ed};
+  ed.me={dyalogCmds:ed};
   ed.tc=0;
   ed.focusTS=+new Date();
 };

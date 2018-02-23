@@ -33,7 +33,7 @@
       cursorBlinking: D.prf.blinkCursor() ? 'blink' : 'solid',
       folding: ed.isCode && !!D.prf.fold(),
       fontFamily: 'apl',
-      fontSize: ed.ide.zoom2fs[D.prf.zoom() + 10],
+      fontSize: D.zoom2fs[D.prf.zoom() + 10],
       glyphMargin: ed.breakpoints,
       language: 'apl',
       lineNumbers: D.prf.lineNums() ? (x => `[${x - 1}]`) : 'off',
@@ -299,9 +299,7 @@
         ((RegExp(`^${r}`).exec(s.slice(c.column)) || [])[0] || '') // match right of cursor
       ).replace(/^\d+/, ''); // trim leading digits
     },
-    autoCloseBrackets(x) {
-      this.me.updateOptions('autoClosingBrackets', x);
-    },
+    autoCloseBrackets(x) { this.me.updateOptions('autoClosingBrackets', x); },
     indent(x) { this.me.updateOptions('autoIndent', x >= 0); },
     fold(x) { this.me.updateOptions({ folding: this.isCode && !!x }); },
     matchBrackets(x) { this.me.updateOptions('matchBrackets', !!x); },

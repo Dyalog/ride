@@ -5,9 +5,7 @@
 // processes incoming RIDE protocol messages
 D.IDE = function () {'use strict'
   var ide=D.ide=this;I.cn.hidden=1;this.lbarRecreate();
-  ide.zoom2fs = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-    16, 17, 18, 19, 20, 22, 24, 26, 28, 32, 36, 42, 48];
-
+  
   ide.dom=I.ide;I.ide.hidden=0
   ide.pending=[] //lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.exec=function(a,tc){if(a&&a.length){
@@ -133,7 +131,7 @@ D.IDE = function () {'use strict'
       ide.wins[w] = ed;
       ed.me_ready.then(() => ed.open(ee));
       // add to golden layout:
-      const si = ide.wins[0].cm.getScrollInfo(); // remember session scroll position
+      // const si = ide.wins[0].cm.getScrollInfo(); // remember session scroll position
       const tc = !!ee.debugger;
       const bro = gl.root.getComponentsByName('win').filter(x => x.id && tc === !!x.tc)[0]; // existing editor
       let p;
@@ -159,7 +157,7 @@ D.IDE = function () {'use strict'
       if (tc) {
         ide.getSIS();
         ide.wins[0].scrollCursorIntoView();
-      } else ide.wins[0].cm.scrollTo(si.left, si.top);
+      }// else ide.wins[0].me.scrollTo(si.left, si.top);
     },
     ShowHTML:function(x){
       if(D.el){
@@ -253,14 +251,12 @@ D.IDE = function () {'use strict'
     while(mq.length&&!blk){
       var a=mq.shift() //a[0]:command name, a[1]:command args
       if(a[0]==='AppendSessionOutput'){ //special case: batch sequences of AppendSessionOutput together
-        ide.wins[0].cm.operation(function(){
-          var s=a[1].result,nq=Math.min(mq.length,256);
-          if (typeof s==='object'){s=s.join('\n');ide.bannerDone=0}
-          for(var i=0;i<nq&&mq[i][0]==='AppendSessionOutput';i++){
-            var r=mq[i][1].result;s+=typeof r==='string'?r:r.join('\n')
-          }
-          i&&mq.splice(0,i);ide.wins[0].add(s)
-        })
+        var s=a[1].result,nq=Math.min(mq.length,256);
+        if (typeof s==='object'){s=s.join('\n');ide.bannerDone=0}
+        for(var i=0;i<nq&&mq[i][0]==='AppendSessionOutput';i++){
+          var r=mq[i][1].result;s+=typeof r==='string'?r:r.join('\n')
+        }
+        i&&mq.splice(0,i);ide.wins[0].add(s)
       }else{
         var f=ide.handlers[a[0]];
         f?f.apply(ide,a.slice(1)):D.send('UnknownCommand',{name:a[0]})
@@ -342,7 +338,6 @@ D.IDE = function () {'use strict'
     var w=ide.wins[h.id];w.container=c;c.getElement().append(w.dom)
     c.on('tab',function(tab){
       tab.element.click(function(){
-        w.cm && w.cm.focus();
         w.me && w.me.focus();
         w.focus();
       })
@@ -427,12 +422,12 @@ D.IDE = function () {'use strict'
   D.prf.matchBrackets(function(x){eachWin(function(w){w.matchBrackets(!!x)})})
   var togglePanel=function(comp_name,comp_title,left){
     if(!D.prf[comp_name]()){gl.root.getComponentsByName(comp_name).forEach(function(x){x.container.close()});return}
-    var si=D.ide.wins[0].cm.getScrollInfo() //remember session scroll position
+    // var si=D.ide.wins[0].cm.getScrollInfo() //remember session scroll position
     var p=gl.root.contentItems[0]
     if(p.type!=='row'){var row=gl.createContentItem({type:'row'},p);p.parent.replaceChild(p,row)
                        row.addChild(p,0,true);row.callDownwards('setSize');p=row}
     p.addChild({type:'component',componentName:comp_name,title:comp_title,fixedSize:true},left?0:p.contentItems.length)
-    D.ide.wins[0].cm.scrollTo(si.left,si.top)
+    // // D.ide.wins[0].me.scrollTo(si.left,si.top)
     D.ide[comp_name.toUpperCase()+"width"]=D.ide[comp_name+"w"]=left?200:300;
   }
   var toggleWSE=function(){togglePanel('wse','Workspace Explorer',1)}
@@ -483,8 +478,8 @@ D.IDE.prototype={
   TVB:D.prf.breakPts  .toggle,
   LN :D.prf.lineNums  .toggle,
   TVO:D.prf.fold      .toggle,
-  UND:function(){this.focusedWin.cm.undo()},
-  RDO:function(){this.focusedWin.cm.redo()},
+  UND:function(){this.focusedWin.me.trigger('D','undo')},
+  RDO:function(){this.focusedWin.me.trigger('D','redo')},
   CAW:function(){D.send('CloseAllWindows',{})},
   Edit:function(data){
     D.pendingEdit=D.pendingEdit||data;
@@ -519,4 +514,4 @@ D.IDE.prototype={
 CM.commands.DBG=function(){D.prf.dbg.toggle()}
 CM.commands.WSE=function(){D.prf.wse.toggle()}
 CM.commands.ZM=function(){var w=D.ide.focusedWin;w.container.parent.toggleMaximise()
-                          setTimeout(function(){w.cm&&w.cm.focus()},100)}
+                          setTimeout(function(){w.me&&w.me.focus()},100)}
