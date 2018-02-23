@@ -3,28 +3,40 @@
 // and an instance of the workspace explorer (.wse) defined in wse.js
 // manages the language bar, its tooltips, and the insertion of characters
 // processes incoming RIDE protocol messages
-D.IDE = function () {'use strict'
-  var ide=D.ide=this;I.cn.hidden=1;this.lbarRecreate();
-  
-  ide.dom=I.ide;I.ide.hidden=0
-  ide.pending=[] //lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
-  ide.exec=function(a,tc){if(a&&a.length){
-    tc||(ide.pending=a.slice(1));
-    D.send('Execute',{trace:tc,text:a[0]+'\n'});
-    ide.getThreads();ide.getSIS();
-  }}
-  ide.host=ide.port=ide.wsid='';D.prf.title(ide.updTitle.bind(ide))
-  D.wins=ide.wins={0:new D.Se(ide)}
-  // ide.wins[0].me.setModel(monaco.editor.createModel('', 'apl-session'));
+D.IDE = function () {
+  const ide = this;
+  I.cn.hidden = 1;
+  this.lbarRecreate();
+  D.ide = ide;
+  ide.dom = I.ide; I.ide.hidden = 0;
+  // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
+  ide.pending = [];
+  ide.exec = (a, tc) => {
+    if (a && a.length) {
+      tc || (ide.pending = a.slice(1));
+      D.send('Execute', { trace: tc, text: `${a[0]}\n` });
+      ide.getThreads(); ide.getSIS();
+    }
+  };
+  ide.host = ''; ide.port = ''; ide.wsid = '';
+  D.prf.title(ide.updTitle.bind(ide));
+  ide.wins = { 0: new D.Se(ide) };
+  D.wins = ide.wins;
 
-  ide.focusedWin=ide.wins[0] //last focused window, it might not have the focus right now
-  ide.switchWin=function(x){ //x: +1 or -1
-    let a=[],i=-1,j,wins=D.ide.wins,w;
-    for(var k in wins){wins[k].hasFocus()&&(i=a.length);a.push(wins[k])}
-    j=i<0?0:(i+a.length+x)%a.length;w=a[j];
-    if(!w.bw_id)D.elw.focus();
-    w.focus();return!1
-  }
+  ide.focusedWin = ide.wins['0']; // last focused window, it might not have the focus right now
+  ide.switchWin = (x) => { // x: +1 or -1
+    const a = [];
+    let i = -1;
+    const { wins } = D.ide;
+    Object.keys(wins).forEach((k) => {
+      wins[k].hasFocus() && (i = a.length);
+      a.push(wins[k]);
+    });
+    const j = i < 0 ? 0 : (i + a.length + x) % a.length;
+    const w = a[j];
+    if (!w.bw_id) D.elw.focus();
+    w.focus(); return !1;
+  };
 
   ide.handlers = { // for RIDE protocol messages
     Identify(x) {
@@ -159,292 +171,444 @@ D.IDE = function () {'use strict'
         ide.wins[0].scrollCursorIntoView();
       }// else ide.wins[0].me.scrollTo(si.left, si.top);
     },
-    ShowHTML:function(x){
-      if(D.el){
-        var w=ide.w3500;if(!w||w.isDestroyed())w=ide.w3500=new D.el.BrowserWindow({width:800,height:500})
-        w.loadURL(`file://${__dirname}/empty.html`)
-        w.webContents.executeJavaScript('document.body.innerHTML='+JSON.stringify(x.html))
-        w.setTitle(x.title||'3500 I-beam')
-      }else{
-        var init=function(){
-          ide.w3500.document.body.innerHTML=x.html
-          ide.w3500.document.getElementsByTagName('title')[0].innerHTML=D.util.esc(x.title||'3500⌶')
+    ShowHTML(x) {
+      if (D.el) {
+        let w = ide.w3500;
+        if (!w || w.isDestroyed()) {
+          ide.w3500 = new D.el.BrowserWindow({ width: 800, height: 500 });
+          w = ide.w3500;
         }
-        if(ide.w3500&&!ide.w3500.closed){ide.w3500.focus();init()}
-        else{ide.w3500=open('empty.html','3500 I-beam','width=800,height=500');ide.w3500.onload=init}
+        w.loadURL(`file://${__dirname}/empty.html`);
+        w.webContents.executeJavaScript(`document.body.innerHTML=${JSON.stringify(x.html)}`);
+        w.setTitle(x.title || '3500 I-beam');
+      } else {
+        const init = () => {
+          ide.w3500.document.body.innerHTML = x.html;
+          ide.w3500.document.getElementsByTagName('title')[0].innerHTML = D.util.esc(x.title || '3500⌶');
+        };
+        if (ide.w3500 && !ide.w3500.closed) {
+          ide.w3500.focus(); init();
+        } else {
+          ide.w3500 = window.open('empty.html', '3500 I-beam', 'width=800,height=500');
+          ide.w3500.onload = init;
+        }
       }
     },
-    OptionsDialog:function(x){
-      var text=typeof x.text==='string'?x.text:x.text.join('\n')
-      if(D.el&&process.env.RIDE_NATIVE_DIALOGS){
-        var r=D.el.dialog.showMessageBox(D.elw,{message:text,title:x.title||'',buttons:x.options||[''],cancelId:-1})
-        D.send('ReplyOptionsDialog',{index:r,token:x.token})
-      }else{
-        text=text.replace(/\r?\n/g,'<br>')
-        I.gd_title_text.textContent=x.title||'';I.gd_content.innerHTML=text
-        I.gd_icon.style.display=''
-        I.gd_icon.className='dlg_icon_'+['warn','info','query','error'][x.type-1]
-        I.gd_btns.innerHTML=(x.options||[]).map(function(y){return'<button>'+D.util.esc(y)+'</button>'}).join('')
-        var b=I.gd_btns.querySelector('button');
-        var ret=function(r){I.gd_btns.onclick=I.gd_close.onclick=null;I.gd.hidden=1
-                            D.send('ReplyOptionsDialog',{index:r,token:x.token})
-                            D.ide.focusedWin.focus();
-                          }
-        I.gd_close.onclick=function(){ret(-1)}
-        I.gd_btns.onclick=function(e){if(e.target.nodeName==='BUTTON'){
-                                      var i=-1,t=e.target;while(t){t=t.previousSibling;i++}ret(i)}}
-        D.util.dlg(I.gd,{w:400});setTimeout(function(){b.focus()},1)
+    OptionsDialog(x) {
+      let text = typeof x.text === 'string' ? x.text : x.text.join('\n');
+      if (D.el && process.env.RIDE_NATIVE_DIALOGS) {
+        const r = D.el.dialog.showMessageBox(D.elw, {
+          message: text,
+          title: x.title || '',
+          buttons: x.options || [''],
+          cancelId: -1,
+        });
+        D.send('ReplyOptionsDialog', { index: r, token: x.token });
+      } else {
+        text = text.replace(/\r?\n/g, '<br>');
+        I.gd_title_text.textContent = x.title || '';
+        I.gd_content.innerHTML = text;
+        I.gd_icon.style.display = '';
+        I.gd_icon.className = `dlg_icon_${['warn', 'info', 'query', 'error'][x.type - 1]}`;
+        I.gd_btns.innerHTML = (x.options || []).map(y => `<button>${D.util.esc(y)}</button>`).join('');
+        const b = I.gd_btns.querySelector('button');
+        const ret = (r) => {
+          I.gd_btns.onclick = null;
+          I.gd_close.onclick = null;
+          I.gd.hidden = 1;
+          D.send('ReplyOptionsDialog', { index: r, token: x.token });
+          D.ide.focusedWin.focus();
+        };
+        I.gd_close.onclick = () => ret(-1);
+        I.gd_btns.onclick = (e) => {
+          if (e.target.nodeName === 'BUTTON') {
+            let i = -1;
+            let t = e.target;
+            while (t) { t = t.previousSibling; i += 1; }
+            ret(i);
+          }
+        };
+        D.util.dlg(I.gd, { w: 400 });
+        setTimeout(() => { b.focus(); }, 1);
       }
     },
-    StringDialog:function(x){
-      I.gd_title_text.textContent=x.title||'';I.gd_content.innerText=x.text||''
-      I.gd_icon.style.display='none'
-      I.gd_content.insertAdjacentHTML('beforeend','<br><input>')
-      var inp=I.gd_content.querySelector('input');inp.value=x.initialValue||''
-      I.gd_btns.innerHTML='<button>OK</button><button>Cancel</button>'
-      var ret=function(r){I.gd_btns.onclick=I.gd_close.onclick=null;I.gd.hidden=1
-                          D.send('ReplyStringDialog',{value:r,token:x.token})
-                          D.ide.focusedWin.focus();
-                        }
-      I.gd_close.onclick=function(){ret(x.defaultValue||null)}
-      I.gd_btns.onclick=function(e){if(e.target.nodeName==='BUTTON'){
-                                        ret(e.target.previousSibling?x.defaultValue||null:inp.value)}}
-      D.util.dlg(I.gd,{w:400,h:250});setTimeout(function(){inp.focus()},1)
-    },
-    TaskDialog:function(x){
-      var esc=D.util.esc
-      I.gd_title_text.textContent=x.title||''
-      I.gd_icon.style.display='none'
-      I.gd_content.innerHTML=esc(x.text||'')+(x.subtext?'<div class=task_subtext>'+esc(x.subtext)+'</div>':'')
-      I.gd_btns.innerHTML=
-        (x.buttonText||[]).map(function(y){return'<button class=task>'+D.util.esc(y)+'</button>'}).join('')+
-        (x.footer?'<div class=task_footer>'+esc(x.footer)+'</div>':'')
-      var ret=function(r){I.gd_btns.onclick=I.gd_close.onclick=null;I.gd.hidden=1
-                          D.send('ReplyTaskDialog',{index:r,token:x.token});
-                          D.ide.focusedWin.focus();
-                        }
-      var b=I.gd_btns.querySelector('button');
-      I.gd_close.onclick=function(){ret(-1)}
-      I.gd_btns.onclick=function(e){if(e.target.nodeName==='BUTTON'){
-                                      var t=e.target,i=99;while(t){t=t.previousSibling;i++}ret(i)}}
-      D.util.dlg(I.gd,{w:400,h:300});setTimeout(function(){b.focus()},1)
-    },
-    ReplyGetSIStack:function(x){ide.dbg&&ide.dbg.sistack.render(x.stack)},
-    ReplyGetThreads:function(x){ide.dbg&&ide.dbg.threads.render(x.threads)},
-    ReplyFormatCode:function(x){D.wins[x.win].ReplyFormatCode(x.text)},
-    ReplyTreeList:function(x){ide.wse.replyTreeList(x)},
-    StatusOutput:function(x){
-      var w=ide.wStatus;if(!D.el)return
-      if(!w){w=ide.wStatus=new D.el.BrowserWindow({width:600,height:400,parent:D.elw})
-             w.setTitle('Status Output');w.loadURL('file://'+__dirname+'/status.html')
-             w.on('closed',function(){delete ide.wStatus})}
-      w.webContents.executeJavaScript('add('+JSON.stringify(x)+')')
-    },
-    ReplyGetLog:function(x){ide.wins[0].add(x.result.join('\n'));ide.bannerDone=0},
-    UnknownCommand:function(){}
-  }
-  //We need to be able to temporarily block the stream of messages coming from socket.io
-  //Creating a floating window can only be done asynchronously and it's possible that a message
-  //for it comes in before the window is ready.
-  var mq=[],blk=0,tid=0,last=0 //mq:message queue, blk:blocked?, tid:timeout id, last:when last rundown finished
-  function rd(){ //run down the queue
-    while(mq.length&&!blk){
-      var a=mq.shift() //a[0]:command name, a[1]:command args
-      if(a[0]==='AppendSessionOutput'){ //special case: batch sequences of AppendSessionOutput together
-        var s=a[1].result,nq=Math.min(mq.length,256);
-        if (typeof s==='object'){s=s.join('\n');ide.bannerDone=0}
-        for(var i=0;i<nq&&mq[i][0]==='AppendSessionOutput';i++){
-          var r=mq[i][1].result;s+=typeof r==='string'?r:r.join('\n')
+    StringDialog(x) {
+      I.gd_title_text.textContent = x.title || '';
+      I.gd_content.innerText = x.text || '';
+      I.gd_icon.style.display = 'none';
+      I.gd_content.insertAdjacentHTML('beforeend', '<br><input>');
+      const inp = I.gd_content.querySelector('input');
+      inp.value = x.initialValue || '';
+      I.gd_btns.innerHTML = '<button>OK</button><button>Cancel</button>';
+      const ret = (r) => {
+        I.gd_btns.onclick = null;
+        I.gd_close.onclick = null;
+        I.gd.hidden = 1;
+        D.send('ReplyStringDialog', { value: r, token: x.token });
+        D.ide.focusedWin.focus();
+      };
+      I.gd_close.onclick = () => { ret(x.defaultValue || null); };
+      I.gd_btns.onclick = (e) => {
+        if (e.target.nodeName === 'BUTTON') {
+          ret(e.target.previousSibling ? x.defaultValue || null : inp.value);
         }
-        i&&mq.splice(0,i);ide.wins[0].add(s)
-      }else{
-        var f=ide.handlers[a[0]];
-        f?f.apply(ide,a.slice(1)):D.send('UnknownCommand',{name:a[0]})
+      };
+      D.util.dlg(I.gd, { w: 400, h: 250 });
+      setTimeout(() => { inp.focus(); }, 1);
+    },
+    TaskDialog(x) {
+      const { esc } = D.util;
+      I.gd_title_text.textContent = x.title || '';
+      I.gd_icon.style.display = 'none';
+      I.gd_content.innerHTML = esc(x.text || '') + (x.subtext ? `<div class=task_subtext>${esc(x.subtext)}</div>` : '');
+      I.gd_btns.innerHTML =
+        (x.buttonText || []).map(y => `<button class=task>${esc(y)}</button>`).join('') +
+        (x.footer ? `<div class=task_footer>${esc(x.footer)}</div>` : '');
+      const ret = (r) => {
+        I.gd_btns.onclick = null;
+        I.gd_close.onclick = null;
+        I.gd.hidden = 1;
+        D.send('ReplyTaskDialog', { index: r, token: x.token });
+        D.ide.focusedWin.focus();
+      };
+      const b = I.gd_btns.querySelector('button');
+      I.gd_close.onclick = () => { ret(-1); };
+      I.gd_btns.onclick = (e) => {
+        if (e.target.nodeName === 'BUTTON') {
+          let t = e.target;
+          let i = 99;
+          while (t) { t = t.previousSibling; i += 1; }
+          ret(i);
+        }
+      };
+      D.util.dlg(I.gd, { w: 400, h: 300 });
+      setTimeout(() => { b.focus(); }, 1);
+    },
+    ReplyGetSIStack(x) { ide.dbg && ide.dbg.sistack.render(x.stack); },
+    ReplyGetThreads(x) { ide.dbg && ide.dbg.threads.render(x.threads); },
+    ReplyFormatCode(x) { D.wins[x.win].ReplyFormatCode(x.text); },
+    ReplyTreeList(x) { ide.wse.replyTreeList(x); },
+    StatusOutput(x) {
+      let w = ide.wStatus;
+      if (!D.el) return;
+      if (!w) {
+        ide.wStatus = new D.el.BrowserWindow({ width: 600, height: 400, parent: D.elw });
+        w = ide.wStatus;
+        w.setTitle('Status Output');
+        w.loadURL(`file://${__dirname}/status.html`);
+        w.on('closed', () => { delete ide.wStatus; });
+      }
+      w.webContents.executeJavaScript(`add(${JSON.stringify(x)})`);
+    },
+    ReplyGetLog(x) { ide.wins[0].add(x.result.join('\n')); ide.bannerDone = 0; },
+    UnknownCommand() { },
+  };
+  // We need to be able to temporarily block the stream of messages coming from socket.io
+  // Creating a floating window can only be done asynchronously and it's possible that a message
+  // for it comes in before the window is ready.
+  const mq = []; // mq:message queue
+  let blk = 0; // blk:blocked?
+  let tid = 0; // tid:timeout id
+  let last = 0; // last:when last rundown finished
+  function rd() { // run down the queue
+    while (mq.length && !blk) {
+      const a = mq.shift(); // a[0]:command name, a[1]:command args
+      if (a[0] === 'AppendSessionOutput') { // special case: batch sequences of AppendSessionOutput together
+        let s = a[1].result;
+        const nq = Math.min(mq.length, 256);
+        if (typeof s === 'object') { s = s.join('\n'); ide.bannerDone = 0; }
+        let i;
+        for (i = 0; i < nq && mq[i][0] === 'AppendSessionOutput'; i++) {
+          const r = mq[i][1].result;
+          s += typeof r === 'string' ? r : r.join('\n');
+        }
+        i && mq.splice(0, i);
+        ide.wins[0].add(s);
+      } else {
+        const f = ide.handlers[a[0]];
+        f ? f.apply(ide, a.slice(1)) : D.send('UnknownCommand', { name: a[0] });
       }
     }
-    last=+new Date;tid=0
+    last = +new Date(); tid = 0;
   }
-  function rrd(){tid||(new Date-last<20?(tid=setTimeout(rd,20)):rd())} //request rundown
-  D.recv=function(x,y){mq.push([x,y]);rrd()}
-  ide.block=function(){blk++}
-  ide.unblock=function(){--blk||rrd()}
-  ide.tracer=function(){var tc;for(var k in ide.wins){var w=ide.wins[k];if(w.tc){tc=w;break}};return tc}
-  var prop_objs=[{comp_name:"wse",prop_name:"WSEwidth"},{comp_name:"dbg",prop_name:"DBGwidth"}]
-  prop_objs.map(function(obj){
+  function rrd() { // request rundown
+    tid || (new Date() - last < 20 ? (tid = setTimeout(rd, 20)) : rd());
+  }
+  D.recv = (x, y) => { mq.push([x, y]); rrd(); };
+  ide.block = () => { blk += 1; };
+  ide.unblock = () => { (blk -= 1) || rrd(); };
+  ide.tracer = () => {
+    const tc = Object.keys(ide.wins).find(k => !!ide.wins[k].tc);
+    return tc && ide.wins[tc];
+  };
+  [{ comp_name: 'wse', prop_name: 'WSEwidth' }, { comp_name: 'dbg', prop_name: 'DBGwidth' }].forEach((obj) => {
     Object.defineProperty(ide, obj.prop_name, {
-      get:function() {
-        var comp=this.gl.root.getComponentsByName(obj.comp_name)[0];
-        return comp&&comp.container&&comp.container.width},
-      set:function(w){
-         var comp=this.gl.root.getComponentsByName(obj.comp_name)[0];
-         comp&&comp.container&&comp.container.setSize(w)}
-    })
-  })
+      get() {
+        const comp = this.gl.root.getComponentsByName(obj.comp_name)[0];
+        return comp && comp.container && comp.container.width;
+      },
+      set(w) {
+        const comp = this.gl.root.getComponentsByName(obj.comp_name)[0];
+        comp && comp.container && comp.container.setSize(w);
+      },
+    });
+  });
 
-  //language bar
-  var ttid //tooltip timeout id
-  ,lbDragged
-  ,reqTip=function(x,desc,text,delay){ //request tooltip, x:event
-    clearTimeout(ttid);var t=x.target
-    ttid=setTimeout(function(){
-      ttid=0;I.lb_tip_desc.textContent=desc;I.lb_tip_text.textContent=text;I.lb_tip.hidden=I.lb_tip_tri.hidden=0
-      var s=I.lb_tip_tri.style
-      s.left=(t.offsetLeft+(t.offsetWidth-I.lb_tip_tri.offsetWidth)/2)+'px';s.top=(t.offsetTop+t.offsetHeight)+'px'
-      var s=I.lb_tip.style,x0=t.offsetLeft-21,x1=x0+I.lb_tip.offsetWidth,y0=t.offsetTop+t.offsetHeight-3
-      s.top=y0+'px';if(x1>document.body.offsetWidth){s.left='';s.right='0'}else{s.left=Math.max(0,x0)+'px';s.right=''}
-    },delay||20)
-  }
-  I.lb.onclick=function(x){
-    var s=x.target.textContent;if(lbDragged||x.target.nodeName!=='B'||/\s/.test(s))return!1
-    // if(D.floating){
-      var t=0,wins=ide.wins,w=wins[0],now=new Date;
-      for(var k in wins){var x=wins[k];if((500<now-x.focusTS)&&t<=x.focusTS){w=x;t=x.focusTS}}
-      w.insert(s);
-      w.id&&w.focus();
-    // } else {
-    //   var w=ide.focusedWin;w.hasFocus()?w.insert(s):D.util.insert(document.activeElement,s);
-    // }
-    return!1;
-  }
-  I.lb.onmouseout=function(x){if(x.target.nodeName==='B'||x.target.id==='lb_prf'){
-    clearTimeout(ttid);ttid=0;I.lb_tip.hidden=I.lb_tip_tri.hidden=1
-  }}
-  I.lb.onmouseover=function(x){
-    if(lbDragged||x.target.nodeName!=='B')return
-    var c=x.target.textContent,k=D.getBQKeyFor(c),s=k&&c.charCodeAt(0)>127?'Keyboard: '+D.prf.prefixKey()+k+'\n\n':''
-    if(/\S/.test(c)){var h=D.lb.tips[c]||[c,''];reqTip(x,h[0],s+h[1])}
-  }
-  I.lb_prf.onmouseover=function(x){
-    var h=D.prf.keys(),s='',r=/^(BK|BT|ED|EP|FD|QT|RP|SC|TB|TC|TL)$/
-    for(var i=0;i<D.cmds.length;i++){
-      var cmd=D.cmds[i],c=cmd[0],d=cmd[1],df=cmd[2] //c:code,ds:description,df:defaults
-      r.test(c)&&(s+=c+': '+d+':'+' '.repeat(Math.max(1,25-d.length))+((h[c]||df).slice(-1)[0]||'none')+'\n')
+  // language bar
+  let ttid; // tooltip timeout id
+  let lbDragged;
+  const reqTip = (x, desc, text, delay) => { // request tooltip, x:event
+    clearTimeout(ttid);
+    const t = x.target;
+    ttid = setTimeout(() => {
+      ttid = 0;
+      I.lb_tip_desc.textContent = desc;
+      I.lb_tip_text.textContent = text;
+      I.lb_tip.hidden = 0; I.lb_tip_tri.hidden = 0;
+      let s = I.lb_tip_tri.style;
+      s.left = `${(t.offsetLeft + ((t.offsetWidth - I.lb_tip_tri.offsetWidth) / 2))}px`;
+      s.top = `${(t.offsetTop + t.offsetHeight)}px`;
+      s = I.lb_tip.style;
+      const x0 = t.offsetLeft - 21;
+      const x1 = x0 + I.lb_tip.offsetWidth;
+      const y0 = (t.offsetTop + t.offsetHeight) - 3;
+      s.top = `${y0}px`;
+      if (x1 > document.body.offsetWidth) {
+        s.left = ''; s.right = '0';
+      } else {
+        s.left = `${Math.max(0, x0)}px`;
+        s.right = '';
+      }
+    }, delay || 20);
+  };
+  I.lb.onclick = (x) => {
+    const s = x.target.textContent;
+    if (lbDragged || x.target.nodeName !== 'B' || /\s/.test(s)) return !1;
+    const { wins } = ide;
+    let t = 0;
+    let w = wins[0];
+    const now = new Date();
+    Object.keys(wins).forEach((k) => {
+      const w0 = wins[k];
+      if ((now - w0.focusTS > 500) && t <= w0.focusTS) { w = w0; t = w0.focusTS; }
+    });
+    w.insert(s);
+    w.id && w.focus();
+    return !1;
+  };
+  I.lb.onmouseout = (x) => {
+    if (x.target.nodeName === 'B' || x.target.id === 'lb_prf') {
+      clearTimeout(ttid); ttid = 0; I.lb_tip.hidden = 1; I.lb_tip_tri.hidden = 1;
     }
-    reqTip(x,'Keyboard Shortcuts',s+'...',1000)
-  }
-  I.lb_prf.onmousedown=function(){D.prf_ui();return!1}
-  I.lb_prf.onclick=function(){return!1} //prevent # from appearing in the URL bar
-  $(I.lb_inner).sortable({forcePlaceholderSize:1,placeholder:'lb_placeholder',revert:1,distance:8,
-                          start:function(){lbDragged=1},
-                          stop:function(e){D.prf.lbarOrder(I.lb_inner.textContent);lbDragged=0}})
-  D.prf.lbarOrder(this.lbarRecreate)
+  };
+  I.lb.onmouseover = (x) => {
+    if (lbDragged || x.target.nodeName !== 'B') return;
+    const c = x.target.textContent;
+    const k = D.getBQKeyFor(c);
+    const s = k && c.charCodeAt(0) > 127 ? `Keyboard: ${D.prf.prefixKey()}${k}\n\n` : '';
+    if (/\S/.test(c)) { const h = D.lb.tips[c] || [c, '']; reqTip(x, h[0], s + h[1]); }
+  };
+  I.lb_prf.onmouseover = (x) => {
+    const h = D.prf.keys();
+    let s = '';
+    const r = /^(BK|BT|ED|EP|FD|QT|RP|SC|TB|TC|TL)$/;
+    for (let i = 0; i < D.cmds.length; i++) {
+      const cmd = D.cmds[i];
+      const [c, d, df] = cmd; // c:code, d:description, df:defaults
+      r.test(c) && (s += `${c}: ${d}:${' '.repeat(Math.max(1, 25 - d.length))}${((h[c] || df).slice(-1)[0] || 'none')}\n`);
+    }
+    reqTip(x, 'Keyboard Shortcuts', `${s}...`, 1000);
+  };
+  I.lb_prf.onmousedown = () => { D.prf_ui(); return !1; };
+  I.lb_prf.onclick = () => !1; // prevent # from appearing in the URL bar
+  $(I.lb_inner).sortable({
+    forcePlaceholderSize: 1,
+    placeholder: 'lb_placeholder',
+    revert: 1,
+    distance: 8,
+    start() { lbDragged = 1; },
+    stop() { D.prf.lbarOrder(I.lb_inner.textContent); lbDragged = 0; },
+  });
+  D.prf.lbarOrder(this.lbarRecreate);
 
-  var eachWin=function(f){for(var k in ide.wins){f(ide.wins[k])}}
-  var gl=ide.gl=new GoldenLayout({
-    settings:{showPopoutIcon:0},dimensions:{borderWidth:4},labels:{minimise:'unmaximise'},
-    content:[{title:'Session',type:'component',componentName:'win',componentState:{id:0}}]
-  },$(ide.dom))
-  gl.registerComponent('win',function(c,h){
-    var w=ide.wins[h.id];w.container=c;c.getElement().append(w.dom)
-    c.on('tab',function(tab){
-      tab.element.click(function(){
+  const eachWin = (f) => { Object.keys(ide.wins).forEach((k) => { f(ide.wins[k]); }); };
+  ide.gl = new GoldenLayout({
+    settings: { showPopoutIcon: 0 },
+    dimensions: { borderWidth: 4 },
+    labels: { minimise: 'unmaximise' },
+    content: [{
+      title: 'Session',
+      type: 'component',
+      componentName: 'win',
+      componentState: { id: 0 },
+    }],
+  }, $(ide.dom));
+  const { gl } = ide;
+  function Win(c, h) {
+    const w = ide.wins[h.id];
+    w.container = c;
+    c.getElement().append(w.dom);
+    c.on('tab', (tab) => {
+      tab.element.click(() => {
         w.me && w.me.focus();
         w.focus();
-      })
-    })
-    c.on('open',function(){
-      $(c.getElement()).closest(".lm_item").find(".lm_maximise").onFirst('click',function(){
-        w.saveScrollPos()
-    })})
-    setTimeout(function(){ide.wins[ide.hadErr?0:h.id].focus();ide.hadErr&=D.prf.ilf()},1);
-    return w
-  })
-  gl.registerComponent('wse',function(c,h){
-    var u=ide.wse=new D.WSE();u.container=c
-    c.getElement().append(u.dom)
-    ide.DBGwidth=ide.dbgw;return u
-  })
-  gl.registerComponent('dbg',function(c,h){
-    var u=ide.dbg=new D.DBG();u.container=c
-    c.getElement().append(u.dom)
-    ide.getSIS();ide.getThreads();
-    ide.WSEwidth=ide.wsew;return u
-  })
-  var sctid //stateChanged timeout id
-  gl.on('stateChanged',function(){
-    clearTimeout(sctid)
-    sctid=setTimeout(function(){
-      eachWin(function(w){w.stateChanged()})
-    },50)
-    ide.wsew=ide.WSEwidth;ide.dbgw=ide.DBGwidth
-  })
-  gl.on('itemDestroyed',function(x){ide.wins[0].saveScrollPos()})
-  gl.on('tabCreated',function(x){
-    x.element.off('mousedown',x._onTabClickFn); //remove default binding
-    x.element.on('mousedown',function(e){
-      if( event.button === 0 || event.type === 'touchstart' ) {
-        this.header.parent.setActiveContentItem( this.contentItem );
+      });
+    });
+    c.on('open', () => {
+      $(c.getElement()).closest('.lm_item').find('.lm_maximise').onFirst('click', () => {
+        w.saveScrollPos();
+      });
+    });
+    setTimeout(() => {
+      ide.wins[ide.hadErr ? 0 : h.id].focus();
+      ide.hadErr = ide.hadErr && D.prf.ilf();
+    }, 1);
+    return w;
+  }
+  function WSE(c) {
+    const u = new D.WSE();
+    ide.wse = u;
+    u.container = c;
+    c.getElement().append(u.dom);
+    ide.DBGwidth = ide.dbgw;
+    return u;
+  }
+  function DBG(c, h) {
+    const u = new D.DBG();
+    ide.dbg = u;
+    u.container = c;
+    c.getElement().append(u.dom);
+    ide.getSIS(); ide.getThreads();
+    ide.WSEwidth = ide.wsew;
+    return u;
+  }
+  gl.registerComponent('win', Win);
+  gl.registerComponent('wse', WSE);
+  gl.registerComponent('dbg', DBG);
+  let sctid; // stateChanged timeout id
+  gl.on('stateChanged', () => {
+    clearTimeout(sctid);
+    sctid = setTimeout(() => {
+      eachWin((w) => { w.stateChanged(); });
+    }, 50);
+    ide.wsew = ide.WSEwidth;
+    ide.dbgw = ide.DBGwidth;
+  });
+  gl.on('itemDestroyed', () => { ide.wins[0].saveScrollPos(); });
+  gl.on('tabCreated', (x) => {
+    x.element.off('mousedown', x._onTabClickFn); // remove default binding
+    x.element.on('mousedown', (e) => {
+      if (e.button === 0 || e.type === 'touchstart') {
+        x.header.parent.setActiveContentItem(x.contentItem);
+      } else if (e.button === 1 && x.contentItem.config.isClosable) {
+        if (x.middleClick) x.middleClick();
+        else x._onTabClick(e);
       }
-      else if( event.button === 1 && this.contentItem.config.isClosable ){
-        if ( this.middleClick )this.middleClick();
-        else this._onTabClick(e);
-      }
-    }.bind(x));
-    switch(x.contentItem.componentName){
-      case'dbg':
-        x.middleClick=D.prf.dbg.toggle;
-        x.closeElement.off('click').click(D.prf.dbg.toggle);
+    });
+    const { id } = x.contentItem.config.componentState;
+    const cls = x.closeElement;
+    switch (x.contentItem.componentName) {
+      case 'dbg':
+        x.middleClick = D.prf.dbg.toggle;
+        cls.off('click').click(D.prf.dbg.toggle);
         break;
-      case'wse':
-        x.middleClick=D.prf.wse.toggle;
-        x.closeElement.off('click').click(D.prf.wse.toggle);
+      case 'wse':
+        x.middleClick = D.prf.wse.toggle;
+        cls.off('click').click(D.prf.wse.toggle);
         break;
-      case'win':
-        var id=x.contentItem.config.componentState.id,cls=x.closeElement
-        if(id){
-          x.middleClick=function(){var w=ide.wins[id];w.EP(w.me);}
-          cls.off('click').click(function(){
-            var w=ide.wins[id];w.EP(w.me)
-          })
+      case 'win':
+        if (id) {
+          const ep = () => { const w = ide.wins[id]; w.EP(w.me); };
+          x.middleClick = ep;
+          cls.off('click').click(ep);
+        } else {
+          cls.remove();
+          x.titleElement[0].closest('.lm_tab').style.paddingRight = '10px';
         }
-        else{
-          cls.remove();x.titleElement[0].closest('.lm_tab').style.paddingRight='10px'
-        }
-        break
+        break;
+      default:
     }
-  })
-  gl.init()
+  });
+  gl.init();
 
-  var updTopBtm=function(){
-    ide.dom.style.top=((D.prf.lbar()?I.lb.offsetHeight:0)+(D.el?0:22))+'px'
-    gl.updateSize(ide.dom.clientWidth,ide.dom.clientHeight)
-  }
-  I.lb.hidden=!D.prf.lbar();updTopBtm();$(window).resize(updTopBtm)
-  D.prf.lbar(function(x){I.lb.hidden=!x;updTopBtm()})
-  D.prf.dark(function(x){x?$("body").addClass("newDark"):$("body").removeClass("newDark")})
-  setTimeout(function(){try{D.installMenu(D.parseMenuDSL(D.prf.menu()))}
-                        catch(e){$.err('Invalid menu configuration -- the default menu will be used instead')
-                                 console.error(e);D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()))}},100)
-  D.prf.autoCloseBrackets(function(x){eachWin(function(w){w.autoCloseBrackets(!!x&&D.Ed.ACB_VALUE)})})
-  D.prf.ilf(function(x){var i=x?-1:D.prf.indent();eachWin(function(w){w.id&&w.indent(i)})})
-  D.prf.indent(function(x){var i=D.prf.ilf()?-1:x;eachWin(function(w){w.id&&w.indent(i)})})
-  D.prf.fold(function(x){eachWin(function(w){w.id&&w.fold(!!x)})})
-  D.prf.matchBrackets(function(x){eachWin(function(w){w.matchBrackets(!!x)})})
-  var togglePanel=function(comp_name,comp_title,left){
-    if(!D.prf[comp_name]()){gl.root.getComponentsByName(comp_name).forEach(function(x){x.container.close()});return}
+  const updTopBtm = () => {
+    ide.dom.style.top = `${(D.prf.lbar() ? I.lb.offsetHeight : 0) + (D.el ? 0 : 22)}px`;
+    gl.updateSize(ide.dom.clientWidth, ide.dom.clientHeight);
+  };
+  I.lb.hidden = !D.prf.lbar();
+  updTopBtm();
+  $(window).resize(updTopBtm);
+  D.prf.lbar((x) => { I.lb.hidden = !x; updTopBtm(); });
+  D.prf.dark((x) => { x ? $('body').addClass('newDark') : $('body').removeClass('newDark'); });
+  setTimeout(() => {
+    try { D.installMenu(D.parseMenuDSL(D.prf.menu())) }
+    catch (e) {
+      $.err('Invalid menu configuration -- the default menu will be used instead');
+      console.error(e);
+      D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()));
+    }
+  }, 100);
+  D.prf.autoCloseBrackets((x) => { eachWin((w) => { w.autoCloseBrackets(!!x); }); });
+  D.prf.ilf((x) => {
+    const i = x ? -1 : D.prf.indent();
+    eachWin((w) => { w.id && w.indent(i); });
+  });
+  D.prf.indent((x) => {
+    const i = D.prf.ilf() ? -1 : x;
+    eachWin((w) => { w.id && w.indent(i); });
+  });
+  D.prf.fold((x) => { eachWin((w) => { w.id && w.fold(!!x); }); });
+  D.prf.matchBrackets((x) => { eachWin((w) => { w.matchBrackets(!!x); }); });
+  const togglePanel = (compName, compTitle, left) => {
+    if (!D.prf[compName]()) {
+      gl.root.getComponentsByName(compName).forEach((x) => { x.container.close(); });
+      return;
+    }
     // var si=D.ide.wins[0].cm.getScrollInfo() //remember session scroll position
-    var p=gl.root.contentItems[0]
-    if(p.type!=='row'){var row=gl.createContentItem({type:'row'},p);p.parent.replaceChild(p,row)
-                       row.addChild(p,0,true);row.callDownwards('setSize');p=row}
-    p.addChild({type:'component',componentName:comp_name,title:comp_title,fixedSize:true},left?0:p.contentItems.length)
+    let p = gl.root.contentItems[0];
+    if (p.type !== 'row') {
+      const row = gl.createContentItem({ type: 'row' }, p);
+      p.parent.replaceChild(p, row);
+      row.addChild(p, 0, true); row.callDownwards('setSize');
+      p = row;
+    }
+    p.addChild({
+      type: 'component',
+      componentName: compName,
+      title: compTitle,
+      fixedSize: true,
+    }, left ? 0 : p.contentItems.length);
     // // D.ide.wins[0].me.scrollTo(si.left,si.top)
-    D.ide[comp_name.toUpperCase()+"width"]=D.ide[comp_name+"w"]=left?200:300;
-  }
-  var toggleWSE=function(){togglePanel('wse','Workspace Explorer',1)}
-  var toggleDBG=function(){togglePanel('dbg','Debug',0)}
-  D.prf.wse(toggleWSE);D.prf.wse()&&setTimeout(toggleWSE,500)
-  D.prf.dbg(toggleDBG);D.prf.dbg()&&setTimeout(toggleDBG,500)
-  D.mac&&setTimeout(function(){ide.wins[0].focus()},500) //OSX is stealing our focus.  Let's steal it back!  Bug #5
-  D.prf.lineNums(function(x){eachWin(function(w){w.id&&w.setLN(x)})})
-  D.prf.breakPts(function(x){eachWin(function(w){w.id&&w.setBP(x)})})
-}
-D.IDE.prototype={
-  setConnInfo:function(x,y,z){var ide=this;ide.host=x;ide.port=y;ide.profile=z;ide.updTitle()},
-  die:function(){ //don't really, just pretend
-    var ide=this;if(ide.dead)return
-    ide.dead=1;ide.connected=0;ide.dom.className+=' disconnected';for(var k in ide.wins)ide.wins[k].die()
+    const w = left ? 200 : 300;
+    D.ide[`${compName.toUpperCase()}width`] = w;
+    D.ide[`${compName}w`] = w;
+  };
+  const toggleWSE = () => { togglePanel('wse', 'Workspace Explorer', 1); };
+  const toggleDBG = () => { togglePanel('dbg', 'Debug', 0); };
+  D.prf.wse(toggleWSE); D.prf.wse() && setTimeout(toggleWSE, 500);
+  D.prf.dbg(toggleDBG); D.prf.dbg() && setTimeout(toggleDBG, 500);
+  // OSX is stealing our focus.  Let's steal it back!  Bug #5
+  D.mac && setTimeout(() => { ide.wins[0].focus(); }, 500);
+  D.prf.lineNums((x) => { eachWin((w) => { w.id && w.setLN(x); }); });
+  D.prf.breakPts((x) => { eachWin((w) => { w.id && w.setBP(x); }); });
+};
+D.IDE.prototype = {
+  setConnInfo(x, y, z) {
+    const ide = this;
+    ide.host = x;
+    ide.port = y;
+    ide.profile = z;
+    ide.updTitle();
   },
-  getThreads:$.debounce(100,function(){D.prf.dbg()&&D.send('GetThreads',{})}),
+  die() { // don't really, just pretend
+    const ide = this;
+    if (ide.dead) return;
+    ide.dead = 1;
+    ide.connected = 0;
+    ide.dom.className += ' disconnected';
+    Object.keys(ide.wins).forEach((k) => { ide.wins[k].die(); });
+  },
+  getThreads: $.debounce(100, function(){D.prf.dbg()&&D.send('GetThreads',{})}),
   getSIS:    $.debounce(100,function(){D.prf.dbg()&&D.send('GetSIStack',{})}),
   updTitle:function(){ //change listener for D.prf.title
     var ide=this,ri=D.remoteIdentification||{},v=D.versionInfo||{}

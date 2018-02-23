@@ -23,6 +23,7 @@ const J = {};
       }
     }
 
+    I.apl_font.hidden = true;
     // don't use Alt- keystrokes on the Mac (see email from 2015-09-01)
     const keyMap = CM.keyMap.emacsy;
     Object.keys(keyMap).forEach((key) => {

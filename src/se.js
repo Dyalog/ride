@@ -125,7 +125,6 @@
       Object.keys(D.wins).forEach((i) => {
         D.wins[i].blinkCursor(x * CM.defaults.cursorBlinkRate);
       });
-      this.vt = D.vt(this); // value tips
     });
   }
   Se.prototype = {
@@ -227,7 +226,7 @@
       // const { top } = i;
       // const ontop = top > this.cm.heightAtLine(this.cm.lastLine(), 'local') - i.clientHeight;
       // this.cm.setSize(this.dom.clientWidth, this.dom.clientHeight);
-      // this.updPW();
+      this.updPW();
       // if (ontop) {
       //   this.btm = top + this.cm.getScrollInfo().clientHeight;
       // } else if (i.top === 0) {
@@ -240,8 +239,10 @@
       // We can get the scrollbar's width through cm.display.scrollbarFiller.clientWidth, it's 0 if not present.
       // But it's better to reserve a hard-coded width for it regardless of its presence.
       // const pw = Math.max(42, Math.floor((this.dom.clientWidth - 20) / this.cm.defaultCharWidth()));
-      const pw = this.me.getLayoutInfo().viewportColumn;
-      if ((pw !== this.pw && this.ide.connected) || force) D.send('SetPW', { pw: this.pw = pw });
+      const se = this;
+      // se.me.viewModel.configuration.editor.fontInfo.typicalHalfwidthCharacterWidth
+      const pw = Math.max(42, se.me.getLayoutInfo().viewportColumn);
+      if ((pw !== se.pw && se.ide.connected) || force) D.send('SetPW', { pw: se.pw = pw });
     },
     scrollCursorIntoView() {
       const { me } = this;
@@ -353,7 +354,7 @@
       const se = this;
       const { me } = se;
       const r = me.getCompletelyVisibleLinesRangeInViewport();
-      me.updateOptions({ fontSize: se.ide.zoom2fs[z + 10] });
+      me.updateOptions({ fontSize: D.zoom2fs[z + 10] });
       me.revealRangeAtTop(r);
 
       // const w = this;
@@ -370,7 +371,6 @@
     },
 
     ValueTip(x) {
-      // this.vt.processReply(x);
       const { me } = this;
       if (me.model.vt && me.model.vt.complete) {
         const { vt } = me.model;

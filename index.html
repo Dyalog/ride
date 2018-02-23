@@ -469,13 +469,14 @@
     <button id=prf_dlg_cancel><u>C</u>ancel</button>
   </div>
 </div>
-
+<!-- need to force loading the apl font for the monaco editor to be able to detect character widths on load  -->
+<span id="apl_font" style="font-family: apl;">RIDE</span> 
 <script>
   // Monaco uses a custom amd loader that over-rides node's require.
   // Keep a reference to node's require so we can restore it after executing the amd loader file.
   var nodeRequire = global.require;
 </script>
-<script src="node_modules/monaco-editor/min/vs/loader.js"></script>
+<script src="node_modules/monaco-editor/dev/vs/loader.js"></script>
 <script>
   // Save Monaco's amd require and restore Node's require
   var amdRequire = global.require;
@@ -484,7 +485,7 @@
 
 <script>
   amdRequire.config({
-    baseUrl: __dirname + '/node_modules/monaco-editor/min'
+    baseUrl: __dirname + '/node_modules/monaco-editor/dev'
   });
   
   self.module = undefined;

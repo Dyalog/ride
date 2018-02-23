@@ -13,7 +13,8 @@
         "J":true,
         "D":true,
         "CM":true,
-        "monaco":true
+        "monaco":true,
+        "GoldenLayout":true
 
     },
     "rules" : {

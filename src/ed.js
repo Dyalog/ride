@@ -110,7 +110,6 @@
       return !0;
     };
     ed.setTC(!!ed.tc);
-    // this.vt = D.vt(this);
     this.setLN(D.prf.lineNums());
     ed.firstOpen = true;
   }
@@ -308,7 +307,7 @@
       const ed = this;
       const { me } = ed;
       const r = me.getCompletelyVisibleLinesRangeInViewport();
-      me.updateOptions({ fontSize: ed.ide.zoom2fs[z + 10] });
+      me.updateOptions({ fontSize: D.zoom2fs[z + 10] });
       me.revealRangeAtTop(r);
     },
 
