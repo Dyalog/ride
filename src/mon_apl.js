@@ -1,4 +1,11 @@
 {
+  const letter = 'A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ';
+  const name0 = RegExp(`[${letter}]`);
+  const name1 = RegExp(`[${letter}\\d]*`);
+  const name = `(?:[${letter}][${letter}\\d]*)`;
+  const notName = RegExp(`[^${letter}0-9]+`);
+  const end = '(?:⍝|$)';
+
   const aplConfig = {
     comments: {
       lineComment: '⍝',
@@ -20,6 +27,7 @@
       // increaseIndentPattern: /^((?!⍝).)*(\{[^}"'`]*|\([^)"'`]*|\[[^\]"'`]*)$/,
       increaseIndentPattern: /^((?!⍝).)*(\{[^}"'`]*|\([^)"'`]*|\[[^\]"'`]*|:if(?!\s+.*:end(?:if)?(\s+|$)).*)$/,
     },
+    wordPattern: RegExp(name),
   };
 
   const aplSessionConfig = {
@@ -39,6 +47,7 @@
       { open: '\'', close: '\'' },
     ],
     indentationRules: {},
+    wordPattern: RegExp(name),
   };
 
   class State {
@@ -97,12 +106,6 @@
     }
   }
 
-  const letter = 'A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ';
-  const name0 = RegExp(`[${letter}]`);
-  const name1 = RegExp(`[${letter}\\d]*`);
-  const name = `(?:[${letter}][${letter}\\d]*)`;
-  const notName = RegExp(`[^${letter}0-9]+`);
-  const end = '(?:⍝|$)';
   // best effort to tell the difference between a dfn vs tradfn header
   const dfnHeader = RegExp(`^\\s*${name}\\s*←\\s*\\{\\s*` +
       `(?:${end}|` +
@@ -237,7 +240,8 @@
               addToken(offset, 'delimiter.square'); offset += 1; break;
 
             case '{':
-              a.push({ t: c, oi: la.ii, ii: la.ii + sw });
+              // a.push({ t: c, oi: la.ii, ii: la.ii + sw });
+              a.push({ t: c, oi: 0, ii: sw });
               tkn = `identifier.dfn.${dfnDepth(a)}`;
               addToken(offset, tkn); offset += 1; break;
 
@@ -433,30 +437,32 @@
         }
       }
       let offset = 0;
-      const sol = offset === 0;
+      // const sol = offset === 0;
       const eol = line.length;
       const h = lt.endState;
       let m; // m:regex match object
-      if (se.dirty[h.l] == null) {
+      if (se.dirty[h.l + 1] == null) {
         offset = eol;
         h.l += 1;
         return lt;
       }
-      if (sol) h.s = !h.h.a;
-      if (sol && (m = line.match(/^ +/))) {
-        offset += m[0].length;
-        if (offset === eol) h.l += 1;
-        return lt;
-      }
-      if (h.s && (m = line.match(/^\)(\w+).*/))) {
-        const token = scmd.indexOf(m[1].toLowerCase()) < 0 ? 'invalid.scmd' : 'predefined.scmd';
+      if (h.s && (m = line.match(/^(\s*)\)(\w+).*/))) {
+        if (m[1]) {
+          addToken(offset, 'white');
+          offset += m[1].length;
+        }
+        const token = scmd.indexOf(m[2].toLowerCase()) < 0 ? 'invalid.scmd' : 'predefined.scmd';
         addToken(offset, token);
         h.l += 1;
         return lt;
       }
-      if (h.s && (line.match(/^\].*/))) {
-        h.l += 1;
+      if (h.s && (m = line.match(/^(\s*)\].*/))) {
+        if (m[1]) {
+          addToken(offset, 'white');
+          offset += m[1].length;
+        }
         addToken(offset, 'predefined.ucmd');
+        h.l += 1;
         return lt;
       }
       if (h.s) {
@@ -513,7 +519,7 @@
         });
       } else if (ch === ':') {
         const { a } = model._lines[position.lineNumber-1]._state;
-        if (a[a.length - 1].t === '{') return [];
+        if (!a || a[a.length - 1].t === '{') return [];
         const items = [
           'Case',
           'CaseList',
@@ -722,7 +728,9 @@
       D.send('GetAutocomplete', { line: s, pos: c - 1, token: model.winid });
       const m = model;
       return new monaco.Promise((complete, error, progress) => {
-        m.ac = { complete, error, progress };
+        m.ac = {
+          complete, error, progress, position,
+        };
       });
     },
   });
@@ -745,26 +753,38 @@
       });
     },
   };
+  let icom = D.prf.indentComments(); D.prf.indentComments((x) => { icom = x; });
   const aplFormat = {
     formatLines(model, range) {
       const ml = model._lines;
       const from = range.startLineNumber || 1;
       const to = range.endLineNumber || ml.length;
       const edits = [];
-      for (let l = from - 1; l < to; l++) {
-        const s = model.getLineContent(l + 1);
-        const a = (ml[l].getState() || {}).a || [];
-        // const la = a[a.length - 1];
-        const la = a.reduce((p, c) => {
-          p.ii += c.ii; p.oi += c.oi; return p;
-        }, { ii: 0, oi: 0 });
+
+      for (let l = from; l <= to; l++) {
+        const s = model.getLineContent(l);
         const [m] = s.match(/^(\s)*/);
-        const n = s[m.length] === '}' ? la.oi : la.ii;
-        if (n !== m.length) {
-          edits.push({
-            range: new monaco.Range(l + 1, 1, l + 1, m.length + 1),
-            text: ' '.repeat(n),
-          });
+        const a = ((ml[l - 1].getState() || {}).a || []).slice().reverse();
+        const [la, ...ra] = a;
+        if (la && (icom || !/^\s*⍝/.test(s))) {
+          let ind = ra.map(r => r.ii).reduce((r, c) => r + c, 0);
+          if (dfnDepth(a)) {
+            ind += /^\s*\}/.test(s) ? la.oi : la.ii;
+          } else if (/^\s*∇/.test(s)) {
+            const ai = a.find(x => x.t === '∇');
+            ind += ai ? ai.oi : la.ii;
+          } else if (/^\s*:access/i.test(s)) {
+            ind += la.t === 'class' ? la.oi : la.ii;
+          } else {
+            ind += /^\s*:(?:end|else|andif|orif|case|until)/i.test(s) ? la.oi : la.ii;
+          }
+
+          if (ind !== m.length) {
+            edits.push({
+              range: new monaco.Range(l, 1, l, m.length + 1),
+              text: ' '.repeat(ind),
+            });
+          }
         }
       }
       return edits;
@@ -774,6 +794,11 @@
     },
     provideDocumentFormattingEdits(model, options) {
       return this.formatLines(model, {}, options);
+    },
+    autoFormatTriggerCharacters: ':∇{}'.split(''),
+    provideOnTypeFormattingEdits(model, position, ch, options) {
+      const range = new monaco.Range(position.lineNumber, 1, position.lineNumber, 1);
+      return this.formatLines(model, range, options);
     },
   };
 
@@ -790,6 +815,7 @@
     ml.registerHoverProvider('apl', aplHover);
     ml.registerDocumentFormattingEditProvider('apl', aplFormat);
     ml.registerDocumentRangeFormattingEditProvider('apl', aplFormat);
+    ml.registerOnTypeFormattingEditProvider('apl', aplFormat);
 
     ml.register({ id: 'apl-session' });
     ml.setTokensProvider('apl-session', aplSessionTokens);
@@ -799,6 +825,6 @@
     ml.registerHoverProvider('apl-session', aplHover);
     ml.registerDocumentFormattingEditProvider('apl-session', aplFormat);
     ml.registerDocumentRangeFormattingEditProvider('apl-session', aplFormat);
-
+    ml.registerOnTypeFormattingEditProvider('apl-session', aplFormat);
   });
 }

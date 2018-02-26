@@ -20,6 +20,8 @@
     se.$e = $(se.dom);
     se.dom.oncontextmenu = D.oncmenu;
     const me = monaco.editor.create(se.dom, {
+      acceptSuggestionOnCommitCharacter: true,
+      acceptSuggestionOnEnter: 'on',
       autoClosingBrackets: !!D.prf.autoCloseBrackets(),
       automaticLayout: true,
       autoIndent: true,
@@ -49,6 +51,11 @@
       () => se.indentOrComplete(me),
       '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode',
     );
+    me.addCommand(
+      monaco.KeyCode.RightArrow,
+      () => me.trigger('editor', 'acceptSelectedSuggestion'),
+      'suggestWidgetVisible',
+    );
 
     let mouseL = 0; let mouseC = 0; let mouseTS = 0;
     me.onMouseDown((e) => {
@@ -63,12 +70,30 @@
       }
     });
     me.onDidChangeModelContent((e) => {
-      if (!me.listen) return;
+      if (!me.listen || me.dyalogBQ) return;
+      const pk = D.prf.prefixKey();
       if (!me.dyalogBQ && e.changes.length === 1
-        && e.changes[0].text === D.prf.prefixKey()) {
+        && e.changes[0].text === pk) {
         CM.commands.BQC(me);
         return;
       }
+      setTimeout(() => {
+        const sw = me.contentWidgets['editor.widget.suggestWidget'];
+        const swv = sw.widget.suggestWidgetVisible.get();
+        const r = e.changes[0].range;
+        const l = me.model.getLineContent(r.endLineNumber).toLowerCase();
+        const bq2 = e.changes.length === 1 && RegExp(`${pk}${pk}\\w*`, 'i').test(l);
+        if (swv && sw.widget.list.length === 1) {
+          const t = sw.widget.focusedItem.suggestion.insertText.toLowerCase();
+          if (l.slice(r.endColumn - t.length, r.endColumn) === t) {
+            me.trigger('editor', 'hideSuggestWidget');
+          } else {
+            me.trigger('editor', 'editor.action.triggerSuggest');
+          }
+        } else if (swv && !bq2) {
+          me.trigger('editor', 'editor.action.triggerSuggest');
+        }
+      }, 1);
       e.changes.forEach((c) => {
         const l0 = c.range.startLineNumber;
         const l1 = c.range.endLineNumber;
@@ -80,12 +105,10 @@
           se.dirty = {};
           Object.keys(h).forEach((x) => { se.dirty[x + ((n - m) * (x > l1))] = h[x]; });
         } else if (n < m) {
-          // if (!c.update) { c.cancel(); return; } // the change is probably the result of Undo
           for (let j = n; j < m; j++) text.push(''); // pad shrinking changes with empty lines
           me.listen = false;
           me.executeEdits('D', [{ range: new monaco.Range(l0 + n, 1, l0 + 1, 1), text: '\n'.repeat(m - n) }]);
           me.listen = true;
-          // c.update(c.from, c.to, text);
           n = m;
         }
         let l = l0;
@@ -98,7 +121,7 @@
         se.hl();
       });
     });
-    me.onDidLayoutChange((e) => {
+    me.onDidLayoutChange(() => {
       const r = me.viewModel.getCompletelyVisibleViewRange();
       // const viewport = me.viewModel.viewLayout.getLinesViewportData();
       const flt = me.getTopForLineNumber(r.startLineNumber);
@@ -110,8 +133,17 @@
     me.onDidFocusEditor(() => { se.focusTS = +new Date(); se.ide.focusedWin = se; });
     se.promptType = 0; // see ../docs/protocol.md #SetPromptType
     se.processAutocompleteReply = (x) => {
-      if (me.model.ac && me.model.ac.complete) {
-        me.model.ac.complete(x.options.map(i => ({ label: i.replace(/^(]|\))?([^.]*\.)?(.*)/, '$3') })));
+      // if (me.model.ac && me.model.ac.complete) {
+      //   me.model.ac.complete(x.options.map(i => ({ label: i.replace(/^(]|\))?([^.]*\.)?(.*)/, '$3') })));
+      // }
+      const { ac } = me.model;
+      if (ac && ac.complete) {
+        const l = ac.position.lineNumber;
+        const c = ac.position.column;
+        ac.complete(x.options.map(i => ({
+          label: i,
+          range: new monaco.Range(l, c - x.skip, l, c),
+        })));
       }
     };
     D.prf.wrap((x) => {

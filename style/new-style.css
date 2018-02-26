@@ -651,7 +651,7 @@ span.CodeMirror-selectedtext {
   width: 2ex;
   height: 2ex;
   position: relative;
-  display: inline-block;
+  display: block;
   text-align: center;
   text-decoration: none;
   cursor: pointer;
@@ -2342,6 +2342,9 @@ body.floating-window {
   height: 100%;
   display: block;
 }
+.ride_win_me {
+  height: calc(100% - 28px);
+}
 .ride_win_cm {
   height: 100%;
   max-height: 100%;
@@ -2898,6 +2901,7 @@ body.floating-window {
   /*beige*/
 }
 .breakpoint {
+  content: '●';
   color: red;
 }
 .highlighted {

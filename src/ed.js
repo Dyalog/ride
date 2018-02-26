@@ -25,7 +25,9 @@
     ed.isCode = 1;
     ed.isReadOnly = !1;
     ed.breakpoints = D.prf.breakPts();
-    const me = monaco.editor.create(ed.dom.querySelector('.ride_win_cm'), {
+    const me = monaco.editor.create(ed.dom.querySelector('.ride_win_me'), {
+      acceptSuggestionOnCommitCharacter: true,
+      acceptSuggestionOnEnter: 'on',
       autoClosingBrackets: !!D.prf.autoCloseBrackets(),
       automaticLayout: true,
       autoIndent: true,
@@ -34,6 +36,8 @@
       folding: ed.isCode && !!D.prf.fold(),
       fontFamily: 'apl',
       fontSize: D.zoom2fs[D.prf.zoom() + 10],
+      formatOnPaste: true,
+      formatOnType: true,
       glyphMargin: ed.breakpoints,
       language: 'apl',
       lineNumbers: D.prf.lineNums() ? (x => `[${x - 1}]`) : 'off',
@@ -81,8 +85,14 @@
     });
     me.onDidFocusEditor(() => { ed.focusTS = +new Date(); ed.ide.focusedWin = ed; });
     ed.processAutocompleteReply = (x) => {
-      if (me.model.ac && me.model.ac.complete) {
-        me.model.ac.complete(x.options.map(i => ({ label: i })));
+      const { ac } = me.model;
+      if (ac && ac.complete) {
+        const l = ac.position.lineNumber;
+        const c = ac.position.column;
+        ac.complete(x.options.map(i => ({
+          label: i,
+          range: new monaco.Range(l, c - x.skip, l, c),
+        })));
       }
     };
     ed.tb = ed.dom.querySelector('.toolbar');
@@ -515,12 +525,11 @@
         if (p.l > q.l) { const h = p; p = q; q = h; }
         const l1 = q.l - (p.l < q.l && q.c === 1);
         for (let { l } = p; l <= l1; l++) {
-          // ed.stop.has(l1) ? ed.stop.delete(l1) : ed.stop.add(l1);
           t ? ed.stop.delete(l) : ed.stop.add(l);
         }
       });
       ed.setStop();
-      this.tc && D.send('SetLineAttributes', { win: this.id, stop: this.getStops() });
+      ed.tc && D.send('SetLineAttributes', { win: ed.id, stop: ed.getStops() });
     },
     RD(me) {
       if (D.prf.ilf()) {
@@ -565,7 +574,8 @@
       const s = me.model.getLineContent(c.lineNumber);
       const ch = s[ci - 1];
       if (!ch || ch === ' ') {
-        const i = D.prf.indent();
+        let i = D.prf.indent();
+        i = i > 0 ? i : 4;
         me.trigger('editor', 'type', { text: ' '.repeat(i - (ci % i)) });
         return;
       }
@@ -575,7 +585,7 @@
       const p = me.getPosition();
       const l = p.lineNumber;
       if (l !== me.model.getLineCount() || /^\s*$/.test(me.model.getLineContent(l))) {
-        me.setPosition({ lineNumber: l + 1, column: p.column });
+        me.trigger('editor', 'cursorDown');
       } else {
         me.trigger('editor', 'editor.action.insertLineAfter');
         this.xline = l + 1;
