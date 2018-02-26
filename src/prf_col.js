@@ -9,11 +9,192 @@
   let H = {}; // H:reverse lookup dict for G
   let q; // dict of DOM elements whose ids start with "col_", keyed by the rest of the id
   // D.addSynGrps(...) is the API for extensions, see ../sample-extensions/syntax-in-comments.js
-  D.addSynGrps = function (x) {
+  function encScm(x) {
+    let s = '';
+    Object.keys(x).forEach((g) => {
+      if (g !== 'name') {
+        let u = '';
+        Object.keys(x[g]).forEach((p) => {
+          const v = x[g][p];
+          u += `,${p}`;
+          if ('BIU'.indexOf(p) < 0 || !v) u += `:${v}`;
+        });
+        u && (s += ` ${g}=${u.slice(1)}`);
+      }
+    });
+    return { name: x.name, styles: s.slice(1) };
+  }
+  function decScm(x) { // x:for example "num=fg:345,bg:f,B,U,bgo:.5 str=fg:2,I com=U"
+    const r = { name: x.name }; // r:the result
+    const a = (x.styles || '').split(/\s+/); // a:for example ["num=fg:345,bg:f,B,U,bgo:.5","str=fg:2,I","com=U"]
+    for (let i = 0; i < a.length; i++) {
+      if (a[i]) {
+        const b = a[i].split('='); // b:["num","fg:345,bg:f,B,U,bgo:.5"]
+        const g = b[0]; // g:"num" (the group)
+        const c = b[1].split(',');
+        const h = {}; r[g] = h;
+        for (let j = 0; j < c.length; j++) { // c:["fg:345","bg:f","B","U","bgo:.5"]
+          const pv = c[j].split(':');
+          const p = pv[0];
+          const v = pv[1];
+          h[p] = v != null ? v : 1; // p:"fg" v:"345"  or  p:"B" v:undefined
+        }
+        // if .bgo (background opacity) is present, convert it to a number
+        h.bgo != null && (h.bgo = +h.bgo);
+      }
+    }
+    return r;
+  }
+  const SCMS = [ // built-in schemes
+    {
+      name: 'Default',
+      styles: 'asgn=fg:00f com=fg:088 dfn=fg:00f diam=fg:00f err=fg:f00 fn=fg:008 idm=fg:008 kw=fg:800 ' +
+      'lnum=fg:008,bg:f,bgo:0 mod=bg:e,bgo:1 mtch=bg:ff8,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 op1=fg:00f op2=fg:00f ' +
+      'par=fg:00f quad=fg:808 sel=bg:48e,bgo:.5 semi=fg:00f sqbr=fg:00f srch=bg:f80,bgo:.5 str=fg:088 tc=bg:d,bgo:1 ' +
+      'tcpe=bg:c8c8c8,bgo:1 trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f vtt=bg:ff0',
+    }, {
+      name: 'Francisco Goya',
+      styles: 'asgn=fg:ff0 com=fg:b,I:1 cur=bc:f00 dfn2=fg:eb4 dfn3=fg:c79 dfn4=fg:cd0 dfn5=fg:a0d ' +
+      'dfn=fg:a7b diam=fg:ff0 err=fg:f00,bg:822,bgo:.5,B:1,U:1 fn=fg:0f0 idm=fg:0f0 glb=B:1 kw=fg:aa2 ' +
+      'lbl=U:1,bg:642,bgo:.5 lnum=fg:b94,bg:010,bgo:0 mod=bg:7,bgo:.5 mtch=fg:0,bg:ff8,bgo:.75 norm=fg:9c7,bg:0,bgo:1 ' +
+      'num=fg:a8b op1=fg:d95 op2=fg:fd6 sel=bg:048,bgo:.5 semi=fg:8 sqbr=fg:8 srch=bg:b96,bgo:.75,fg:0 str=fg:dae ' +
+      'tc=bg:1,bgo:1 tcpe=bg:2,bgo:1 zld=fg:d9f,B:1 scmd=fg:0ff ucmd=fg:f80,B:1 vtip=bg:733,fg:ff0,bgo:1,bc:900 vtt=bc:f80',
+    }, {
+      name: 'Albrecht Dürer',
+      styles: 'com=I:1 diam=B:1 err=fg:f,bg:0,bgo:.5,B:1,I:1,U:1 glb=I:1 kw=B:1 ' +
+      'lnum=bg:f,bgo:0 mod=bg:e,bgo:1 mtch=bg:c,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 quad=fg:8 srch=bg:c,bgo:.5 ' +
+      'str=fg:8 tc=bg:e,bgo:1 tcpe=bg:dadada,bgo:1 zld=fg:8 vtt=bc:aaa',
+    }, {
+      name: 'Kazimir Malevich',
+      styles: 'norm=bg:f,bgo:1',
+    },
+  ].map(decScm).map((x) => { x.frz = 1; return x; });
+  // Colour schemes have two representations:
+  // in memory (easier to manipulate)   in prefs.json (more compact)
+  //   {                                {
+  //     name:"MyScheme",                 "name":"MyScheme",
+  //     group1:{                         "styles":"group1=fg:f00,B group2=bg:f00 ..."
+  //       fg:"f00",                    }
+  //       B:1
+  //     },
+  //     group2:{
+  //       "bg":"f00"
+  //     },
+  //     ...
+  //   }
+  // encScm() and decScm() convert between them
+  let scms; // all schemes (built-in and user-defined) as objects
+  let scm = {}; //  the active scheme object
+  let cm; //   CodeMirror instance for displaying sample code
+  let sel; //  the selected group's token type (.t)
+  // RGB() expands the hex representation of a colour, rgb() shrinks it
+  function RGB(x) {
+    const n = (x || '').length;
+    if (n === 6) return `#${x}`;
+    else if (n === 3) return `#${x.replace(/(.)/g, '$1$1')}`;
+    return n === 1 ? `#${x.repeat(6)}` : x;
+  }
+  function RGBA(x, a) {
+    const r = RGB(x);
+    return `rgba(${[+`0x${r.slice(1, 3)}`, +`0x${r.slice(3, 5)}`, +`0x${r.slice(5, 7)}`, a]})`;
+  }
+  function RGBO(x, a) { return RGB(x) + Math.round(a * 255).toString(16); }
+  function rgb(x) {
+    if (!/^#.{6}$/.test(x)) return x;
+    const [, r, rr, g, gg, b, bb] = x;
+    if (r !== rr || g !== gg || b !== bb) return x.slice(1);
+    return r === g && g === b ? r : r + g + b;
+  }
+  function renderCSS(schema, isSample) {
+    const rp = isSample ? '#col_cm' : '.ride_win'; // css rule prefix, ignored when there's a "/*noprefix*/"
+    return G.map((g) => {
+      const h = schema[g.t];
+      if (!h) return '';
+      let cls = g.c.split(',').map((x) => {
+        if (!/^\/\*noprefix\*\//.test(x)) return `${rp} ${x}`;
+        return isSample ? '#nonexistent' : x;
+      }).join(',');
+      cls += '{';
+      h.fg && (cls += `color:${RGB(h.fg)};`);
+      h.bg && (cls += `background-color:${RGB(h.bg)};`);
+      h.B && (cls += 'font-weight:bold;');
+      h.I && (cls += 'font-style:italic;');
+      h.U && (cls += 'text-decoration:underline;');
+      h.bc && (cls += `border-color:${RGB(h.bc)};`);
+      h.bg && (cls += `background-color:${RGBA(h.bg, h.bgo == null ? 0.5 : h.bgo)};`);
+      cls += '}';
+      return cls;
+    }).join('');
+  }
+  function setMonacoTheme(schema) {
+    const rules = [];
+    const colors = {};
+    G.forEach((g) => {
+      const h = schema[g.t];
+      let c;
+      if (!h) {
+        // return
+      } else if (g.m) {
+        rules.push({
+          token: g.m,
+          foreground: h.fg && RGB(h.fg).slice(1),
+          background: h.bg && RGB(h.bg).slice(1),
+          fontStyle: (h.B || h.I || h.U) && [
+            (h.B ? 'bold' : ''),
+            (h.I ? 'italic' : ''),
+            (h.U ? 'underline' : ''),
+          ].join(' ').trim(),
+        });
+      } else if (g.t === 'norm' && h.bg) {
+        rules.push({
+          foreground: h.fg && RGB(h.fg).slice(1),
+          background: RGB(h.bg).slice(1),
+        });
+        colors['editor.background'] = RGBO(h.bg, h.bgo || 1);
+      } else if (g.e) {
+        (c = h.fg || h.bc) && (colors[g.e] = RGB(c).slice(1));
+      }
+    });
+    const name = `my${schema.name.split('').map(x => `${x.codePointAt(0)}`).join('')}`;
+    monaco.editor.defineTheme(name, {
+      base: schema.name === 'Francisco Goya' ? 'vs-dark' : 'vs', // can also be vs-dark or hc-black
+      inherit: false, // can also be false to completely replace the builtin rules
+      rules,
+      colors,
+    });
+    monaco.editor.setTheme(name);
+  }
+  function updStl() { // update global style from what's in prefs.json
+    const s = D.prf.colourScheme();
+    const a = SCMS.concat(D.prf.colourSchemes().map(decScm));
+    for (let i = 0; i < a.length; i++) {
+      if (a[i].name === s) {
+        const schema = a[i];
+        window.I && (I.col_stl.textContent = renderCSS(schema));
+        if (window.monaco) setMonacoTheme(schema);
+        // add class=dark to <body> if the brightness of
+        // the background for normal text is lower than average
+        // const h = a[i].norm || {};
+        // const bg = RGB(h.bg || '#ffffff');
+        // const bgo = h.bgo == null ? 1 : h.bgo;
+        // const b = Math.max(
+        //   +`0x${bg.slice(1, 3)}`,
+        //   +`0x${bg.slice(3, 5)}`,
+        //   +`0x${bg.slice(5, 7)}`,
+        // );
+        // const dark = ((1 - bgo) * 255) + (bgo * b) < 128;
+        // document.body.classList[dark?'add':'remove']('dark')
+        break;
+      }
+    }
+  }
+  // $(updStl);
+  D.addSynGrps = (x) => {
     G = G.concat(x);
     H = {};
     for (let i = 0; i < G.length; i++) H[G[i].t] = i; SCMS && updStl();
   };
+  /* eslint-disable */
   D.addSynGrps([
     // t: token type, a short key for storing customisations
     // s: string to display in the UI
@@ -22,7 +203,6 @@
     // ctrls: what UI controls should be shown or hidden for this group (other than the default ones)
     {s:'assignment'      ,t:'asgn',m:'keyword.operator.assignment',c:'.cm-apl-asgn'}, //←
     {s:'bracket'         ,t:'sqbr',m:'delimiter.square',c:'.cm-apl-sqbr'}, //[]
-    //{s:'block cursor'    ,t:'bcr', c:'.CodeMirror-cursor',ctrls:{fg:1,bc:0,bg:0,BIU:0}},
     {s:'comment'         ,t:'com' ,m:'comment',c:'.cm-apl-com' }, //⍝
     {s:'block cursor'    ,t:'bcr' ,c:'.CodeMirror.cm-fat-cursor div.CodeMirror-cursor', ctrls:{bc:0,bg:1,BIU:0,fg:0}},
     {s:'cursor'          ,t:'cur' ,e:'editorCursor.foreground',c:'div.CodeMirror-cursor', ctrls:{bc:1,bg:0,BIU:0,fg:0}},
@@ -62,221 +242,196 @@
     {s:'value tip target',t:'vtt' ,c:'.vt_marker',ctrls:{bc:1,fg:0,BIU:0}}, //the rectangle around the token
     {s:'value tip'       ,t:'vtip',c:'/*noprefix*/#vt_bln,/*noprefix*/#vt_tri',ctrls:{bc:1}}, //the balloon
     {s:'zilde'           ,t:'zld' ,m:'predefined.zilde',c:'.cm-apl-zld' }  //⍬
-  ])
-  //Colour schemes have two representations:
-  // in memory (easier to manipulate)   in prefs.json (more compact)
-  //   {                                {
-  //     name:"MyScheme",                 "name":"MyScheme",
-  //     group1:{                         "styles":"group1=fg:f00,B group2=bg:f00 ..."
-  //       fg:"f00",                    }
-  //       B:1
-  //     },
-  //     group2:{
-  //       "bg":"f00"
-  //     },
-  //     ...
-  //   }
-  //encScm() and decScm() convert between them
-  function encScm(x){
-    var s=''
-    for(var g in x)if(g!=='name'){var u='';for(var p in x[g]){var v=x[g][p];u+=','+p;if('BIU'.indexOf(p)<0||!v)u+=':'+v}
-                                  u&&(s+=' '+g+'='+u.slice(1))}
-    return{name:x.name,styles:s.slice(1)}
-  }
-  function decScm(x){                 //x:for example "num=fg:345,bg:f,B,U,bgo:.5 str=fg:2,I com=U"
-    var r={name:x.name}               //r:the result
-    var a=(x.styles||'').split(/\s+/) //a:for example ["num=fg:345,bg:f,B,U,bgo:.5","str=fg:2,I","com=U"]
-    for(var i=0;i<a.length;i++)if(a[i]){
-      var b=a[i].split('='),g=b[0],c=b[1].split(','),h=r[g]={}  //b:["num","fg:345,bg:f,B,U,bgo:.5"]  g:"num" (the group)
-      for(var j=0;j<c.length;j++){                              //c:["fg:345","bg:f","B","U","bgo:.5"]
-        var pv=c[j].split(':'),p=pv[0],v=pv[1];h[p]=v!=null?v:1 //p:"fg" v:"345"  or  p:"B" v:undefined
-      }
-      h.bgo!=null&&(h.bgo=+h.bgo)     //if .bgo (background opacity) is present, convert it to a number
+  ]);
+  /* eslint-enable */
+  D.mop.then(() => updStl());
+  D.prf.colourScheme(updStl); D.prf.colourSchemes(updStl);
+  function uniqScmName(x) { // x:suggested root
+    const h = {};
+    for (let i = 0; i < scms.length; i++) h[scms[i].name] = 1;
+    let r = x;
+    if (h[x]) {
+      const dx = x.replace(/ \(\d+\)$/, '');
+      let i = 1;
+      while (h[r = `${dx} (${i})`]) i += 1;
     }
-    return r
+    return r;
   }
-  var SCMS=[ //built-in schemes
-    {name:'Default',styles:'asgn=fg:00f com=fg:088 dfn=fg:00f diam=fg:00f err=fg:f00 fn=fg:008 idm=fg:008 kw=fg:800 '+
-      'lnum=fg:008,bg:f,bgo:0 mod=bg:e,bgo:1 mtch=bg:ff8,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 op1=fg:00f op2=fg:00f '+
-      'par=fg:00f quad=fg:808 sel=bg:48e,bgo:.5 semi=fg:00f sqbr=fg:00f srch=bg:f80,bgo:.5 str=fg:088 tc=bg:d,bgo:1 '+
-      'tcpe=bg:c8c8c8,bgo:1 trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f vtt=bg:ff0'},
-    {name:'Francisco Goya',styles:'asgn=fg:ff0 com=fg:b,I:1 cur=bc:f00 dfn2=fg:eb4 dfn3=fg:c79 dfn4=fg:cd0 dfn5=fg:a0d '+
-      'dfn=fg:a7b diam=fg:ff0 err=fg:f00,bg:822,bgo:.5,B:1,U:1 fn=fg:0f0 idm=fg:0f0 glb=B:1 kw=fg:aa2 '+
-      'lbl=U:1,bg:642,bgo:.5 lnum=fg:b94,bg:010,bgo:0 mod=bg:7,bgo:.5 mtch=fg:0,bg:ff8,bgo:.75 norm=fg:9c7,bg:0,bgo:1 '+
-      'num=fg:a8b op1=fg:d95 op2=fg:fd6 sel=bg:048,bgo:.5 semi=fg:8 sqbr=fg:8 srch=bg:b96,bgo:.75,fg:0 str=fg:dae '+
-      'tc=bg:1,bgo:1 tcpe=bg:2,bgo:1 zld=fg:d9f,B:1 scmd=fg:0ff ucmd=fg:f80,B:1 vtip=bg:733,fg:ff0,bgo:1,bc:900 vtt=bc:f80'},
-    {name:'Albrecht Dürer',styles:'com=I:1 diam=B:1 err=fg:f,bg:0,bgo:.5,B:1,I:1,U:1 glb=I:1 kw=B:1 '+
-      'lnum=bg:f,bgo:0 mod=bg:e,bgo:1 mtch=bg:c,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 quad=fg:8 srch=bg:c,bgo:.5 '+
-      'str=fg:8 tc=bg:e,bgo:1 tcpe=bg:dadada,bgo:1 zld=fg:8 vtt=bc:aaa'},
-    {name:'Kazimir Malevich',styles:'norm=bg:f,bgo:1'}
-  ].map(decScm).map(function(x){x.frz=1;return x})
-  var scms //all schemes (built-in and user-defined) as objects
-  var scm  //the active scheme object
-  var cm   //CodeMirror instance for displaying sample code
-  var sel  //the selected group's token type (.t)
-  function renderCSS(scm,isSample){
-    var rp=isSample?'#col_cm':'.ride_win' //css rule prefix, ignored when there's a "/*noprefix*/"
-    return G.map(function(g){var h=scm[g.t];return!h?'':
-      g.c.split(',').map(function(x){return!/^\/\*noprefix\*\//.test(x)?rp+' '+x:isSample?'#nonexistent':x}).join(',')+'{'+
-        (h.fg?'color:'+RGB(h.fg)+';'           :'')+
-        (h.bg?'background-color:'+RGB(h.bg)+';':'')+
-        (h.B ?'font-weight:bold;'              :'')+
-        (h.I ?'font-style:italic;'             :'')+
-        (h.U ?'text-decoration:underline;'     :'')+
-        (h.bc?'border-color:'+RGB(h.bc)+';'    :'')+
-        (h.bg?'background-color:'+RGBA(h.bg,h.bgo==null?.5:h.bgo):'')+'}'
-    }).join('')
+  const SC_MATCH = 'search match'; // sample text to illustrate it
+  function updSampleStl() { I.col_sample_stl.textContent = renderCSS(scm, 1); } // [sic]
+  function selGrp(t, forceRefresh) {
+    // update everything as necessary when selection in the Group dropdown changes
+    if (!scm || (sel === t && !forceRefresh)) return;
+    const i = H[t];
+    const h = scm[t] || {};
+    let v;
+    q.grp.value = i;
+    v = h.fg; q.fg_cb.checked = !!v; q.fg.value = RGB(v) || '#000000'; q.fg.hidden = !v;
+    v = h.bg; q.bg_cb.checked = !!v; q.bg.value = RGB(v) || '#000000'; q.bg.hidden = !v;
+    v = h.bc; q.bc_cb.checked = !!v; q.bc.value = RGB(v) || '#000000'; q.bc.hidden = !v;
+    q.B.checked = !!h.B;
+    q.I.checked = !!h.I;
+    q.U.checked = !!h.U;
+    q.bgo.value = h.bgo == null ? 0.5 : h.bgo;
+    const c = (G[i] || G[0]).ctrls || {};
+    q.fg_p.hidden = c.fg != null && !c.fg;
+    q.bg_p.hidden = c.bg != null && !c.bg;
+    q.bgo_p.hidden = (c.bg != null && !c.bg) || !h.bg;
+    q.BIU_p.hidden = c.BIU != null && !c.BIU;
+    q.bc_p.hidden = !c.bc;
+    sel = t;
   }
-  function setMonacoTheme(scm){
-    let rules=[],colors={};G.forEach(g=>{
-      let h=scm[g.t],c;
-      if(!h)return
-      else if (g.m) rules.push({
-        token:g.m,
-        foreground:h.fg&&RGB(h.fg).slice(1),
-        background:h.bg&&RGB(h.bg).slice(1),
-        fontStyle:(h.B||h.I||h.U)&&[
-          (h.B ?'bold'     :''),
-          (h.I ?'italic'   :''),
-          (h.U ?'underline':'')
-        ].join(' ').trim()
-      })
-      else if(g.t==='norm'&&h.bg) {
-        rules.push({
-          foreground:h.fg&&RGB(h.fg).slice(1),
-          background:RGB(h.bg).slice(1)
-        })
-        colors['editor.background']=RGBO(h.bg,h.bgo||1)
-      }
-      else if (g.e){
-        (c=h.fg||h.bc)&&(colors[g.e]=RGB(c).slice(1))
-      } 
-    })
-    let name = 'my'+scm.name.split('').map(x=>x.codePointAt(0)+'').join('')
-    monaco.editor.defineTheme(name, {
-      base: scm.name === 'Francisco Goya' ? 'vs-dark' : 'vs', // can also be vs-dark or hc-black
-      inherit: false, // can also be false to completely replace the builtin rules
-      rules,colors
-    });
-    monaco.editor.setTheme(name);
+  function updScms() {
+    q.scm.innerHTML = scms.map((x) => { const n = D.util.esc(x.name); return `<option value="${n}">${n}`; }).join('');
+    q.scm.value = scm.name;
+    q.scm.onchange();
+    I.col.className = scm.frz ? 'frz' : '';
+    //  cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);
+    updSampleStl();
+    selGrp('norm', 1);
   }
-  //RGB() expands the hex representation of a colour, rgb() shrinks it
-  function RGB(x){var n=(x||'').length;return n===6?'#'+x:n===3?'#'+x.replace(/(.)/g,'$1$1'):n===1?'#'+x+x+x+x+x+x:x}
-  function RGBA(x,a){x=RGB(x);return'rgba('+[+('0x'+x.slice(1,3)),+('0x'+x.slice(3,5)),+('0x'+x.slice(5,7)),a]+')'}
-  function RGBO(x,a){return RGB(x)+Math.round(a*255).toString(16)}
-  function rgb(x){if(!/^#.{6}$/.test(x))return x
-                  var r=x[1],R=x[2],g=x[3],G=x[4],b=x[5],B=x[6];return r!==R||g!==G||b!==B?x.slice(1):r===g&&g===b?r:r+g+b}
-  function updStl(){ //update global style from what's in prefs.json
-    var s=D.prf.colourScheme(),a=SCMS.concat(D.prf.colourSchemes().map(decScm))
-    for(var i=0;i<a.length;i++)if(a[i].name===s){
-      let scm=a[i]
-      I.col_stl.textContent=renderCSS(scm)
-      if (window.monaco) setMonacoTheme(scm)
-      //add class=dark to <body> if the brightness of the background for normal text is lower than average
-      var h=a[i].norm||{}, bg=RGB(h.bg||'#ffffff'), bgo=h.bgo==null?1:h.bgo,
-          b=Math.max(+('0x'+bg.slice(1,3)),+('0x'+bg.slice(3,5)),+('0x'+bg.slice(5,7))),
-          dark=128>(1-bgo)*255+bgo*b
-      //document.body.classList[dark?'add':'remove']('dark')
-      break
-    }
-  }
-  //$(updStl);
-  D.mop.then(x=>updStl())
-  D.prf.colourScheme(updStl);D.prf.colourSchemes(updStl)
-  function uniqScmName(x){ //x:suggested root
-    var h={};for(var i=0;i<scms.length;i++)h[scms[i].name]=1
-    var r=x;if(h[x]){x=x.replace(/ \(\d+\)$/,'');var i=1;while(h[r=x+' ('+i+')'])i++};return r
-  }
-  var SC_MATCH='search match' //sample text to illustrate it
-  D.prf_tabs.col={
-    name:'Colours',
-    init:function(t){
-      q=J.col;var u=[],fg;for(var g in scm)(fg=scm[g].fg)&&u.indexOf(fg)<0&&u.push(fg);u.sort() //u:unique colours
-      q.list.innerHTML=u.map(function(x){return'<option value='+x+'>'}).join('')
-      q.grp.innerHTML=G.map(function(g,i){return'<option value='+i+'>'+g.s}).join('')
-      q.scm.onchange=function(){scm=scms[+this.selectedIndex];updSampleStl();I.col.className=scm.frz?'frz':''
-                                // cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight)
-                              }
-      q.new_name.onblur=function(){var s=this.value;if(!s)return;scm.name='';scm.name=uniqScmName(s)
-                                  I.col.className='';updScms()}
-      q.new_name.onkeydown=function(x){switch(x.which){/*enter*/case 13:                    this.blur();return!1
-                                                      /*esc  */case 27:this.value=scm.name;this.blur();return!1}}
-      q.cln.onclick=function(){var x={};scms.push(x);for(var k in scm)x[k]=$.extend({},scm[k]) //x:the new scheme
-                              x.name=uniqScmName(scm.name);delete x.frz;scm=x;updScms()}
-      q.ren.onclick=function(){q.new_name.style.width=q.scm.offsetWidth+'px';q.new_name.value=scm.name
-                              q.new_name.select();I.col.className='renaming';setTimeout(function(){q.new_name.focus()},0)}
-      q.del.onclick=function(){var i=q.scm.selectedIndex;scms.splice(i,1);scm=scms[Math.min(i,scms.length-1)]
-                              updScms();return!1}
-      cm=CM(q.cm,{
-        lineNumbers:true,firstLineNumber:0,lineNumberFormatter:function(i){return'['+i+']'},
-        indentUnit:4,scrollButtonHeight:12,matchBrackets:true,autoCloseBrackets:{pairs:'()[]{}',explode:'{}'},
-        value:'{R}←{X}tradfn(Y Z);local\n'+
-              'dfn←{ ⍝ comment\n'+
-              '  0 ¯1.2e¯3j¯.45 \'string\' ⍬\n'+
-              '  +/-⍣(×A):⍺∇⍵[i;j]\n'+
-              '  {{{{nested ⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}\n'+
-              '}\n'+
-              'label:\n'+
-              ':For i :In ⍳X ⋄ :EndFor\n'+
-              ':If condition\n'+
-              '  {⍵[⍋⍵]} ⋄ global←local←0\n'+
-              '  ⎕error ) ] } :error \'unclosed\n'+
-              ':EndIf\n'+
-              SC_MATCH+'\n'})
-      cm.addOverlay({token:function(sm){var i=sm.string.slice(sm.pos).indexOf(SC_MATCH)
-                                        if(!i){sm.pos+=SC_MATCH.length;return'searching'}
-                                        i>0?(sm.pos+=i):sm.skipToEnd()}})
-      cm.on('gutterClick',function(){selGrp('lnum')})
-      cm.on('cursorActivity',function(){
-        var t;selGrp(cm.somethingSelected()?'sel':
-                    cm.getLine(cm.getCursor().line).indexOf(SC_MATCH)>=0?'srch':
-                    (t=cm.getTokenTypeAt(cm.getCursor(),1))?
-                      (t=t.split(' ').sort(function(x,y){return y.length-x.length})[0].replace(/^apl-/,'')):
-                    'norm')})
-      q.grp.onchange=function(){selGrp(G[+this.value].t)}
-      ;['fg','bg','bc'].forEach(function(p){
-        q[p].onchange=function(){(scm[sel]||(scm[sel]={}))[p]=this.value;updSampleStl()}
-        q[p+'_cb'].onclick=function(){var h=scm[sel]||(scm[sel]={});this.checked?h[p]=rgb(q[p].value):delete h[p]
-                                      q[p].hidden=!this.checked;updSampleStl();if(p==='bg')q.bgo_p.hidden=!this.checked}
-      })
-      q.bgo.onchange=function(e){(scm[sel]||(scm[sel]={})).bgo=+q.bgo.value;updSampleStl()}
-      ;['B','I','U'].forEach(function(p){$(q[p]).click(function(){var h=scm[sel]||(scm[sel]={})
-                                        this.checked?h[p]=1:delete h[p];updSampleStl()})})
+  D.prf_tabs.col = {
+    name: 'Colours',
+    init() {
+      q = J.col;
+      const u = [];
+      Object.keys(scm).forEach((g) => {
+        const { fg } = scm[g];
+        fg && u.indexOf(fg) < 0 && u.push(fg);
+      });
+      u.sort(); // u:unique colours
+      q.list.innerHTML = u.map(x => `<option value=${x}>`).join('');
+      q.grp.innerHTML = G.map((g, i) => `<option value=${i}>${g.s}`).join('');
+      q.scm.onchange = () => {
+        scm = scms[+q.scm.selectedIndex];
+        updSampleStl();
+        I.col.className = scm.frz ? 'frz' : '';
+        // cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight)
+      };
+      q.new_name.onblur = () => {
+        const s = q.new_name.value;
+        if (!s) return;
+        scm.name = ''; scm.name = uniqScmName(s);
+        I.col.className = '';
+        updScms();
+      };
+      q.new_name.onkeydown = (x) => {
+        const c = q.new_name;
+        switch (x.which) {
+          /* enter */case 13: c.blur(); return !1;
+          /* esc   */case 27: c.value = scm.name; c.blur(); return !1;
+          default: return !0;
+        }
+      };
+      q.cln.onclick = () => {
+        const x = {};
+        scms.push(x);
+        Object.keys(scm).forEach((k) => { x[k] = $.extend({}, scm[k]); }); // x:the new scheme
+        x.name = uniqScmName(scm.name);
+        delete x.frz;
+        scm = x;
+        updScms();
+      };
+      q.ren.onclick = () => {
+        q.new_name.style.width = `${q.scm.offsetWidth}px`;
+        q.new_name.value = scm.name;
+        q.new_name.select();
+        I.col.className = 'renaming';
+        setTimeout(() => { q.new_name.focus(); }, 0);
+      };
+      q.del.onclick = () => {
+        const i = q.scm.selectedIndex;
+        scms.splice(i, 1);
+        scm = scms[Math.min(i, scms.length - 1)];
+        updScms();
+        return !1;
+      };
+      cm = CM(q.cm, {
+        lineNumbers: true,
+        firstLineNumber: 0,
+        lineNumberFormatter: i => `[${i}]`,
+        indentUnit: 4,
+        scrollButtonHeight: 12,
+        matchBrackets: true,
+        autoCloseBrackets: { pairs: '()[]{}', explode: '{}' },
+        value: '{R}←{X}tradfn(Y Z);local\n' +
+              'dfn←{ ⍝ comment\n' +
+              '  0 ¯1.2e¯3j¯.45 \'string\' ⍬\n' +
+              '  +/-⍣(×A):⍺∇⍵[i;j]\n' +
+              '  {{{{nested ⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}\n' +
+              '}\n' +
+              'label:\n' +
+              ':For i :In ⍳X ⋄ :EndFor\n' +
+              ':If condition\n' +
+              '  {⍵[⍋⍵]} ⋄ global←local←0\n' +
+              '  ⎕error ) ] } :error \'unclosed\n' +
+              ':EndIf\n' +
+              `${SC_MATCH}\n`,
+      });
+      cm.addOverlay({
+        token(sm) {
+          const i = sm.string.slice(sm.pos).indexOf(SC_MATCH);
+          if (!i) { sm.pos += SC_MATCH.length; return 'searching'; }
+          i > 0 ? (sm.pos += i) : sm.skipToEnd(); return '';
+        },
+      });
+      cm.on('gutterClick', () => { selGrp('lnum'); });
+      cm.on('cursorActivity', () => {
+        let tmp;
+        let grp;
+        if (cm.somethingSelected()) grp = 'sel';
+        else if (cm.getLine(cm.getCursor().line).indexOf(SC_MATCH) >= 0) grp = 'srch';
+        else if ((tmp = cm.getTokenTypeAt(cm.getCursor(), 1))) {
+          grp = tmp.split(' ').sort((x, y) => y.length - x.length)[0].replace(/^apl-/, '');
+        } else grp = 'norm';
+        selGrp(grp);
+      });
+      q.grp.onchange = () => { selGrp(G[+q.grp.value].t); };
+      ['fg', 'bg', 'bc'].forEach((p) => {
+        const c = q[p];
+        const cb = q[`${p}_cb`];
+        c.onchange = () => {
+          (scm[sel] || (scm[sel] = {}))[p] = c.value;
+          updSampleStl();
+        };
+        cb.onclick = () => {
+          const h = scm[sel] || (scm[sel] = {});
+          cb.checked ? h[p] = rgb(q[p].value) : delete h[p];
+          q[p].hidden = !cb.checked;
+          updSampleStl();
+          if (p === 'bg') q.bgo_p.hidden = !cb.checked;
+        };
+      });
+      q.bgo.onchange = () => {
+        (scm[sel] || (scm[sel] = {})).bgo = +q.bgo.value; updSampleStl();
+      };
+      ['B', 'I', 'U'].forEach((p) => {
+        const b = $(q[p]);
+        b.click(() => {
+          const h = scm[sel] || (scm[sel] = {});
+          b.checked ? h[p] = 1 : delete h[p];
+          updSampleStl();
+        });
+      });
     },
-    load:function(){var a=scms=SCMS.concat(D.prf.colourSchemes().map(decScm)),s=D.prf.colourScheme()
-                    scm=a[0];for(var i=0;i<a.length;i++)if(a[i].name===s){scm=a[i];break}
-                    I.col.className='';updScms()
-                    // cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);
-                    cm.refresh()},
-    activate:function(){q.scm.focus()},
-    save:function(){D.prf.colourSchemes(scms.filter(function(x){return!x.frz}).map(encScm));D.prf.colourScheme(scm.name)},
-    resize:function(){
+    load() {
+      const a = SCMS.concat(D.prf.colourSchemes().map(decScm));
+      scms = a;
+      const s = D.prf.colourScheme();
+      [scm] = a;
+      for (let i = 0; i < a.length; i++) if (a[i].name === s) { scm = a[i]; break; }
+      I.col.className = ''; updScms();
       // cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);
-      cm.refresh()
-    }
-  }
-  function updScms(){q.scm.innerHTML=scms.map(function(x){x=D.util.esc(x.name);return'<option value="'+x+'">'+x}).join('')
-                    q.scm.value=scm.name;q.scm.onchange();I.col.className=scm.frz?'frz':''
-                    //  cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);
-                    updSampleStl();selGrp('norm',1)}
-  function updSampleStl(){I.col_sample_stl.textContent=renderCSS(scm,1)} //[sic]
-  function selGrp(t,forceRefresh){ //update everything as necessary when selection in the Group dropdown changes
-    if(!scm||sel===t&&!forceRefresh)return
-    var i=H[t],h=scm[t]||{},v;q.grp.value=i
-    v=h.fg;q.fg_cb.checked=!!v;q.fg.value=RGB(v)||'#000000';q.fg.hidden=!v
-    v=h.bg;q.bg_cb.checked=!!v;q.bg.value=RGB(v)||'#000000';q.bg.hidden=!v
-    v=h.bc;q.bc_cb.checked=!!v;q.bc.value=RGB(v)||'#000000';q.bc.hidden=!v
-    q.B.checked=!!h.B
-    q.I.checked=!!h.I
-    q.U.checked=!!h.U
-    q.bgo.value=h.bgo==null?.5:h.bgo
-    var c=(G[i]||G[0]).ctrls||{}
-    q.fg_p.hidden=c.fg!=null&&!c.fg
-    q.bg_p.hidden=c.bg!=null&&!c.bg
-    q.bgo_p.hidden=(c.bg!=null&&!c.bg)||!h.bg
-    q.BIU_p.hidden=c.BIU!=null&&!c.BIU
-    q.bc_p.hidden=!c.bc
-    sel=t
-  }
-
+      cm.refresh();
+    },
+    activate() { q.scm.focus(); },
+    save() {
+      D.prf.colourSchemes(scms.filter(x => !x.frz).map(encScm));
+      D.prf.colourScheme(scm.name);
+    },
+    resize() {
+      // cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);
+      cm.refresh();
+    },
+  };
 }
