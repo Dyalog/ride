@@ -40,6 +40,7 @@
           h[p] = v != null ? v : 1; // p:"fg" v:"345"  or  p:"B" v:undefined
         }
         // if .bgo (background opacity) is present, convert it to a number
+        h.fgo != null && (h.fgo = +h.fgo);
         h.bgo != null && (h.bgo = +h.bgo);
       }
     }
@@ -134,7 +135,6 @@
     const colors = {};
     G.forEach((g) => {
       const h = schema[g.t];
-      let c;
       if (!h) {
         // return
       } else if (g.m) {
@@ -155,7 +155,11 @@
         });
         colors['editor.background'] = RGBO(h.bg, h.bgo || 1);
       } else if (g.e) {
-        (c = h.fg || h.bc || h.bg) && (colors[g.e] = RGBO(c, h.bgo));
+        if (/background/i.test(g.e) && h.bg) {
+          colors[g.e] = RGBO(h.bg, h.bgo);
+        } else {
+          colors[g.e] = RGBO(h.fg || h.bc, h.fgo || 1);
+        }
       }
     });
     const name = `my${schema.name.split('').map(x => `${x.codePointAt(0)}`).join('')}`;
@@ -173,7 +177,7 @@
     for (let i = 0; i < a.length; i++) {
       if (a[i].name === s) {
         const schema = a[i];
-        window.I && (I.col_stl.textContent = renderCSS(schema));
+        I.col_stl && (I.col_stl.textContent = renderCSS(schema));
         if (window.monaco) setMonacoTheme(schema);
         // add class=dark to <body> if the brightness of
         // the background for normal text is lower than average
@@ -207,8 +211,8 @@
     {s:'assignment'      ,t:'asgn',m:'keyword.operator.assignment',c:'.cm-apl-asgn'}, //←
     {s:'bracket'         ,t:'sqbr',m:'delimiter.square',c:'.cm-apl-sqbr'}, //[]
     {s:'comment'         ,t:'com' ,m:'comment',c:'.cm-apl-com' }, //⍝
-    {s:'block cursor'    ,t:'bcr' ,c:'.CodeMirror.cm-fat-cursor div.CodeMirror-cursor', ctrls:{bc:0,bg:1,BIU:0,fg:0}},
-    {s:'cursor'          ,t:'cur' ,e:'editorCursor.foreground',c:'div.CodeMirror-cursor', ctrls:{bc:1,bg:0,BIU:0,fg:0}},
+    // {s:'block cursor'    ,t:'bcr' ,c:'.CodeMirror.cm-fat-cursor div.CodeMirror-cursor', ctrls:{bc:0,bg:1,BIU:0,fg:0}},
+    {s:'cursor'          ,t:'cur' ,e:'editorCursor.foreground',c:'div.CodeMirror-cursor', ctrls:{bg:0,BIU:0,fg:1}},
     {s:'dfn level 1'     ,t:'dfn1',m:'identifier.dfn.1',c:'.cm-apl-dfn.cm-apl-dfn1'}, //{}
     {s:'dfn level 2'     ,t:'dfn2',m:'identifier.dfn.2',c:'.cm-apl-dfn.cm-apl-dfn2'},
     {s:'dfn level 3'     ,t:'dfn3',m:'identifier.dfn.3',c:'.cm-apl-dfn.cm-apl-dfn3'},
@@ -224,7 +228,7 @@
     {s:'keyword'         ,t:'kw'  ,m:'keyword',c:'.cm-apl-kw'  }, //:If ...
     {s:'label'           ,t:'lbl' ,m:'meta.label',c:'.cm-apl-lbl' }, //L:
     {s:'line number'     ,t:'lnum',c:'.CodeMirror-linenumber',e:'editorLineNumber.foreground'},
-    {s:'matching bracket',t:'mtch',c:'.CodeMirror-matchingbracket'},
+    {s:'matching bracket',t:'mtch',c:'.CodeMirror-matchingbracket',e:'editorBracketMatch.background'},
     {s:'modified line'   ,t:'mod' ,c:'.modified'   }, //in the session - lines queued for execution
     {s:'monadic operator',t:'op1' ,m:'keyword.operator.monadic',c:'.cm-apl-op1' }, //⌸ ...
     {s:'namespace'       ,t:'ns'  ,c:'.cm-apl-ns'  }, //#
@@ -233,15 +237,15 @@
     {s:'number'          ,t:'num' ,m:'number',c:'.cm-apl-num' }, //0 ...
     {s:'parenthesis'     ,t:'par' ,m:'delimiter.parenthesis',c:'.cm-apl-par' }, //()
     {s:'quad name'       ,t:'quad',m:'predefined.sysfn',c:'.cm-apl-quad'}, //⎕XYZ
-    {s:'search match'    ,t:'srch',c:'.cm-searching'},
-    {s:'selection'       ,t:'sel' ,c:'.CodeMirror-selected,.CodeMirror-focused .CodeMirror-selected',ctrls:{fg:0,BIU:0}},
+    {s:'search match'    ,t:'srch',c:'.cm-searching',e:'editor.findMatchBackground',ctrls:{fg:0,BIU:0}},
+    {s:'selection'       ,t:'sel' ,c:'.CodeMirror-selected,.CodeMirror-focused .CodeMirror-selected',e:'editor.selectionBackground',ctrls:{fg:0,BIU:0}},
     {s:'semicolon'       ,t:'semi',m:'delimiter.semicolon',c:'.cm-apl-semi'}, //as in A[B;C]
     {s:'string'          ,t:'str' ,m:'string',c:'.cm-apl-str' }, //'a.k.a. character vector or scalar'
-    {s:'system command'  ,t:'scmd',c:'.cm-apl-scmd'}, //)XYZ
-    {s:'tracer'          ,t:'tc'  ,c:'/*noprefix*/.tracer .cm-s-default,/*noprefix*/.tracer .CodeMirror-gutters'},
-    {s:'pendent'         ,t:'tcpe',c:'/*noprefix*/.tracer.pendent .cm-s-default,/*noprefix*/.tracer.pendent .CodeMirror-gutters'},
+    {s:'system command'  ,t:'scmd',m:'predefined.scmd',c:'.cm-apl-scmd'}, //)XYZ
+    {s:'tracer'          ,t:'tc'  ,c:'/*noprefix*/.tracer .monaco-editor-background,/*noprefix*/.tracer .monaco-editor .margin'},
+    {s:'pendent'         ,t:'tcpe',c:'/*noprefix*/.tracer.pendent .monaco-editor-background,/*noprefix*/.tracer.pendent .monaco-editor .margin'},
     {s:'tradfn'          ,t:'trad',m:'identifier.tradfn.apl', c:'.cm-apl-trad'}, //the header line (e.g. ∇{R}←A F B) or the closing ∇
-    {s:'user command'    ,t:'ucmd',c:'.cm-apl-ucmd'}, //]XYZ
+    {s:'user command'    ,t:'ucmd',m:'predefined.ucmd',c:'.cm-apl-ucmd'}, //]XYZ
     {s:'value tip target',t:'vtt' ,c:'.vt_marker',ctrls:{bc:1,fg:0,BIU:0}}, //the rectangle around the token
     {s:'value tip'       ,t:'vtip',c:'/*noprefix*/#vt_bln,/*noprefix*/#vt_tri',ctrls:{bc:1}}, //the balloon
     {s:'zilde'           ,t:'zld' ,m:'predefined.zilde',c:'.cm-apl-zld' }  //⍬
@@ -280,10 +284,12 @@
     q.B.checked = !!h.B;
     q.I.checked = !!h.I;
     q.U.checked = !!h.U;
+    q.fgo.value = h.fgo == null ? 1 : h.fgo;
     q.bgo.value = h.bgo == null ? 0.5 : h.bgo;
     const c = (G[i] || G[0]).ctrls || {};
     q.fg_p.hidden = c.fg != null && !c.fg;
     q.bg_p.hidden = c.bg != null && !c.bg;
+    q.fgo_p.hidden = (c.fg != null && !c.fg) || !h.fg;
     q.bgo_p.hidden = (c.bg != null && !c.bg) || !h.bg;
     q.BIU_p.hidden = c.BIU != null && !c.BIU;
     q.bc_p.hidden = !c.bc;
@@ -421,9 +427,13 @@
           cb.checked ? h[p] = rgb(q[p].value) : delete h[p];
           q[p].hidden = !cb.checked;
           updSampleStl();
+          if (p === 'fg') q.fgo_p.hidden = !cb.checked;
           if (p === 'bg') q.bgo_p.hidden = !cb.checked;
         };
       });
+      q.fgo.onchange = () => {
+        (scm[sel] || (scm[sel] = {})).fgo = +q.fgo.value; updSampleStl();
+      };
       q.bgo.onchange = () => {
         (scm[sel] || (scm[sel] = {})).bgo = +q.bgo.value; updSampleStl();
       };

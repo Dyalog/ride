@@ -1,12 +1,5 @@
 const Console = console;
 
-// all elements by id, eg I.lb_tip_text is document.getElementById('lb_tip_text')
-const I = {};
-
-// grouped by id prefix using '_' as a separator; J[x][y] is the element with id x+'_'+y
-// e.g. J.lb.tip_text is document.getElementById('lb_tip_text')
-const J = {};
-
 {
   const init = () => {
     // build up I by iterating over all elements with IDs

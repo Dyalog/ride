@@ -473,7 +473,7 @@ D.IDE = function () {
     ide.DBGwidth = ide.dbgw;
     return u;
   }
-  function DBG(c, h) {
+  function DBG(c) {
     const u = new D.DBG();
     ide.dbg = u;
     u.container = c;
@@ -541,8 +541,9 @@ D.IDE = function () {
   D.prf.lbar((x) => { I.lb.hidden = !x; updTopBtm(); });
   D.prf.dark((x) => { x ? $('body').addClass('newDark') : $('body').removeClass('newDark'); });
   setTimeout(() => {
-    try { D.installMenu(D.parseMenuDSL(D.prf.menu())) }
-    catch (e) {
+    try {
+      D.installMenu(D.parseMenuDSL(D.prf.menu()));
+    } catch (e) {
       $.err('Invalid menu configuration -- the default menu will be used instead');
       console.error(e);
       D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()));
@@ -609,7 +610,7 @@ D.IDE.prototype = {
     Object.keys(ide.wins).forEach((k) => { ide.wins[k].die(); });
   },
   getThreads: $.debounce(100, function(){D.prf.dbg()&&D.send('GetThreads',{})}),
-  getSIS:    $.debounce(100,function(){D.prf.dbg()&&D.send('GetSIStack',{})}),
+  getSIS: $.debounce(100,function(){D.prf.dbg()&&D.send('GetSIStack',{})}),
   updTitle:function(){ //change listener for D.prf.title
     var ide=this,ri=D.remoteIdentification||{},v=D.versionInfo||{}
     document.title=D.prf.title().replace(/\{\w+\}/g,function(x){var X=x.toUpperCase();return(

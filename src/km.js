@@ -404,8 +404,11 @@
           } else if (cmd === 'RP') {
             me.addCommand(nkc, () => me.trigger('editor', 'editor.action.startFindReplaceAction'));
             return;
-          } else if (cmd === 'ER' || cmd === 'TC') cond = 'tracer && !suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode';
-          else if (nkc === kc.Escape) cond = '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode';
+          } else if (cmd === 'ER') {
+            cond = 'tracer && !suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode';
+          } else if (cmd === 'TC') {
+            cond = 'tracer';
+          } else if (nkc === kc.Escape) cond = '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode';
           me.addCommand(nkc, () => CM.commands[cmd](me), cond);
         }
       });

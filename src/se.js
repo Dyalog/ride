@@ -90,7 +90,9 @@
           } else {
             me.trigger('editor', 'editor.action.triggerSuggest');
           }
-        } else if (swv && !bq2) {
+        } else if (swv && !sw.widget.list.length) {
+          me.trigger('editor', 'hideSuggestWidget');
+        } else if (swv && !bq2 && sw.widget.list.length > 1) {
           me.trigger('editor', 'editor.action.triggerSuggest');
         }
       }, 1);
@@ -117,7 +119,7 @@
           base[l] == null && (base[l] = se.oModel.getLineContent(l));
           l += 1;
         }
-        while (l < l0 + n) se.dirty[l++] = 0;
+        while (l < l0 + n) se.dirty[l += 1] = 0;
         se.hl();
       });
     });
@@ -133,9 +135,6 @@
     me.onDidFocusEditor(() => { se.focusTS = +new Date(); se.ide.focusedWin = se; });
     se.promptType = 0; // see ../docs/protocol.md #SetPromptType
     se.processAutocompleteReply = (x) => {
-      // if (me.model.ac && me.model.ac.complete) {
-      //   me.model.ac.complete(x.options.map(i => ({ label: i.replace(/^(]|\))?([^.]*\.)?(.*)/, '$3') })));
-      // }
       const { ac } = me.model;
       if (ac && ac.complete) {
         const l = ac.position.lineNumber;
@@ -246,14 +245,13 @@
       // x && cm.clearHistory();
     },
     updSize() {
-      const se = this;
-      const { me } = se;
-      const r = me.viewModel.getCompletelyVisibleViewRange();
-      const viewport = me.viewModel.viewLayout.getLinesViewportData();
-      const flt = me.getTopForLineNumber(r.startLineNumber);
-      const llt = me.getTopForLineNumber(r.endLineNumber + 1);
-      const ontop = (flt + se.dom.clientHeight) > llt;
-      console.log('ontop', ontop);
+      // const se = this;
+      // const { me } = se;
+      // const r = me.viewModel.getCompletelyVisibleViewRange();
+      // const viewport = me.viewModel.viewLayout.getLinesViewportData();
+      // const flt = me.getTopForLineNumber(r.startLineNumber);
+      // const llt = me.getTopForLineNumber(r.endLineNumber + 1);
+      // const ontop = (flt + se.dom.clientHeight) > llt;
       // const i = this.cm.getScrollInfo();
       // const { top } = i;
       // const ontop = top > this.cm.heightAtLine(this.cm.lastLine(), 'local') - i.clientHeight;
@@ -267,12 +265,7 @@
     },
     updPW(force) {
       // force:emit a SetPW message even if the width hasn't changed
-      // discussion about CodeMirror's width in chars: https://github.com/codemirror/CodeMirror/issues/3618
-      // We can get the scrollbar's width through cm.display.scrollbarFiller.clientWidth, it's 0 if not present.
-      // But it's better to reserve a hard-coded width for it regardless of its presence.
-      // const pw = Math.max(42, Math.floor((this.dom.clientWidth - 20) / this.cm.defaultCharWidth()));
       const se = this;
-      // se.me.viewModel.configuration.editor.fontInfo.typicalHalfwidthCharacterWidth
       const pw = Math.max(42, se.me.getLayoutInfo().viewportColumn);
       if ((pw !== se.pw && se.ide.connected) || force) D.send('SetPW', { pw: se.pw = pw });
     },
@@ -396,7 +389,8 @@
       // const line = w.cm.lineAtHeight(top ? i.top : w.btm, 'local');
       // const diff = w.btm - (line * w.cm.defaultTextHeight());
       // const ch = i.clientHeight;
-      // b.className = `zoom${z} ${b.className.split(/\s+/).filter(s => !/^zoom-?\d+$/.test(s)).join(' ')}`;
+      // const cls = b.className.split(/\s+/).filter(s => !/^zoom-?\d+$/.test(s)).join(' ');
+      // b.className = `zoom${z} ${cls}`;
       // w.refresh();
       // w.btm = (w.cm.defaultTextHeight() * line) + (top ? ch + 5 : diff) +
       //   (w.cm.getScrollInfo().clientHeight - ch);

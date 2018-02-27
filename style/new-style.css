@@ -1524,6 +1524,7 @@ body .ui-tooltip {
   padding: 0;
   cursor: pointer;
 }
+#col_fgo_p,
 #col_bgo_p {
   margin-left: 16px;
   padding-left: 8px;
