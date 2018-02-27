@@ -1490,7 +1490,7 @@ body .ui-tooltip {
 #col_new_name {
   display: none;
 }
-#col_cm {
+#col_me {
   left: 8px;
   right: 216px;
   overflow: hidden;
@@ -1498,10 +1498,6 @@ body .ui-tooltip {
   position: absolute;
   top: 100px;
   bottom: 56px;
-}
-#col_cm .CodeMirror {
-  height: 100%;
-  width: 100%;
 }
 #col_settings {
   width: 200px;
@@ -1550,7 +1546,7 @@ body .ui-tooltip {
 #col.frz #col_settings {
   display: none;
 }
-#col.frz #col_cm {
+#col.frz #col_me {
   right: 8px;
 }
 #col.renaming #col_scm {
@@ -3248,7 +3244,7 @@ input.lyt_g3:hover {
   color: white;
   border-color: darkred;
 }
-#col_cm {
+#col_me {
   background-color: white;
   outline: solid lightgrey 1px;
 }

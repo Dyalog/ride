@@ -85,7 +85,7 @@
   // encScm() and decScm() convert between them
   let scms; // all schemes (built-in and user-defined) as objects
   let scm = {}; //  the active scheme object
-  let cm; //   CodeMirror instance for displaying sample code
+  let me; //   CodeMirror instance for displaying sample code
   let sel; //  the selected group's token type (.t)
   // RGB() expands the hex representation of a colour, rgb() shrinks it
   function RGB(x) {
@@ -98,7 +98,10 @@
     const r = RGB(x);
     return `rgba(${[+`0x${r.slice(1, 3)}`, +`0x${r.slice(3, 5)}`, +`0x${r.slice(5, 7)}`, a]})`;
   }
-  function RGBO(x, a) { return RGB(x) + Math.round(a * 255).toString(16); }
+  function RGBO(x, a) {
+    const o = a === undefined ? '' : `00${Math.round(a * 255).toString(16)}`.slice(-2);
+    return RGB(x) + o;
+  }
   function rgb(x) {
     if (!/^#.{6}$/.test(x)) return x;
     const [, r, rr, g, gg, b, bb] = x;
@@ -152,7 +155,7 @@
         });
         colors['editor.background'] = RGBO(h.bg, h.bgo || 1);
       } else if (g.e) {
-        (c = h.fg || h.bc) && (colors[g.e] = RGB(c).slice(1));
+        (c = h.fg || h.bc || h.bg) && (colors[g.e] = RGBO(c, h.bgo));
       }
     });
     const name = `my${schema.name.split('').map(x => `${x.codePointAt(0)}`).join('')}`;
@@ -220,7 +223,7 @@
     {s:'idiom'           ,t:'idm' ,m:'predefined.idiom',c:'.cm-apl-idm' }, //⊃⌽ ...
     {s:'keyword'         ,t:'kw'  ,m:'keyword',c:'.cm-apl-kw'  }, //:If ...
     {s:'label'           ,t:'lbl' ,m:'meta.label',c:'.cm-apl-lbl' }, //L:
-    {s:'line number'     ,t:'lnum',c:'.CodeMirror-linenumber'},
+    {s:'line number'     ,t:'lnum',c:'.CodeMirror-linenumber',e:'editorLineNumber.foreground'},
     {s:'matching bracket',t:'mtch',c:'.CodeMirror-matchingbracket'},
     {s:'modified line'   ,t:'mod' ,c:'.modified'   }, //in the session - lines queued for execution
     {s:'monadic operator',t:'op1' ,m:'keyword.operator.monadic',c:'.cm-apl-op1' }, //⌸ ...
@@ -258,7 +261,12 @@
     return r;
   }
   const SC_MATCH = 'search match'; // sample text to illustrate it
-  function updSampleStl() { I.col_sample_stl.textContent = renderCSS(scm, 1); } // [sic]
+  function updSampleStl() {
+    // I.col_sample_stl.textContent = renderCSS(scm, 1);
+    monaco.editor.setTheme('vs');
+    setMonacoTheme(scm);
+    // me.layout();
+  } // [sic]
   function selGrp(t, forceRefresh) {
     // update everything as necessary when selection in the Group dropdown changes
     if (!scm || (sel === t && !forceRefresh)) return;
@@ -286,7 +294,6 @@
     q.scm.value = scm.name;
     q.scm.onchange();
     I.col.className = scm.frz ? 'frz' : '';
-    //  cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);
     updSampleStl();
     selGrp('norm', 1);
   }
@@ -306,7 +313,6 @@
         scm = scms[+q.scm.selectedIndex];
         updSampleStl();
         I.col.className = scm.frz ? 'frz' : '';
-        // cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight)
       };
       q.new_name.onblur = () => {
         const s = q.new_name.value;
@@ -346,46 +352,62 @@
         updScms();
         return !1;
       };
-      cm = CM(q.cm, {
-        lineNumbers: true,
-        firstLineNumber: 0,
-        lineNumberFormatter: i => `[${i}]`,
-        indentUnit: 4,
-        scrollButtonHeight: 12,
+      me = monaco.editor.create(q.me, {
+        autoClosingBrackets: true,
+        automaticLayout: true,
+        autoIndent: true,
+        cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
+        cursorBlinking: D.prf.blinkCursor() ? 'blink' : 'solid',
+        fontFamily: 'apl',
+        fontSize: D.zoom2fs[D.prf.zoom() + 10],
+        language: 'apl',
+        lineNumbers: x => `[${x - 1}]`,
         matchBrackets: true,
-        autoCloseBrackets: { pairs: '()[]{}', explode: '{}' },
+        mouseWheelZoom: false,
+        renderIndentGuides: false,
+        showFoldingControls: 'always',
+        wordBasedSuggestions: false,
         value: '{R}←{X}tradfn(Y Z);local\n' +
-              'dfn←{ ⍝ comment\n' +
-              '  0 ¯1.2e¯3j¯.45 \'string\' ⍬\n' +
-              '  +/-⍣(×A):⍺∇⍵[i;j]\n' +
-              '  {{{{nested ⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}\n' +
-              '}\n' +
-              'label:\n' +
-              ':For i :In ⍳X ⋄ :EndFor\n' +
-              ':If condition\n' +
-              '  {⍵[⍋⍵]} ⋄ global←local←0\n' +
-              '  ⎕error ) ] } :error \'unclosed\n' +
-              ':EndIf\n' +
-              `${SC_MATCH}\n`,
+        'dfn←{ ⍝ comment\n' +
+        '  0 ¯1.2e¯3j¯.45 \'string\' ⍬\n' +
+        '  +/-⍣(×A):⍺∇⍵[i;j]\n' +
+        '  {{{{nested ⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}\n' +
+        '}\n' +
+        'label:\n' +
+        ':For i :In ⍳X ⋄ :EndFor\n' +
+        ':If condition\n' +
+        '  {⍵[⍋⍵]} ⋄ global←local←0\n' +
+        '  ⎕error ) ] } :error \'unclosed\n' +
+        ':EndIf\n' +
+        `${SC_MATCH}\n`,
       });
-      cm.addOverlay({
-        token(sm) {
-          const i = sm.string.slice(sm.pos).indexOf(SC_MATCH);
-          if (!i) { sm.pos += SC_MATCH.length; return 'searching'; }
-          i > 0 ? (sm.pos += i) : sm.skipToEnd(); return '';
-        },
+      // cm.addOverlay({
+      //   token(sm) {
+      //     const i = sm.string.slice(sm.pos).indexOf(SC_MATCH);
+      //     if (!i) { sm.pos += SC_MATCH.length; return 'searching'; }
+      //     i > 0 ? (sm.pos += i) : sm.skipToEnd(); return '';
+      //   },
+      // });
+      // cm.on('gutterClick', () => { selGrp('lnum'); });
+      me.onMouseDown((e) => {
+        const t = e.target;
+        const mt = monaco.editor.MouseTargetType;
+        if (t.type === mt.GUTTER_LINE_NUMBERS) {
+          selGrp('lnum');
+        } else if (t.type === mt.CONTENT_TEXT) {
+          // select by token?
+        }
       });
-      cm.on('gutterClick', () => { selGrp('lnum'); });
-      cm.on('cursorActivity', () => {
-        let tmp;
-        let grp;
-        if (cm.somethingSelected()) grp = 'sel';
-        else if (cm.getLine(cm.getCursor().line).indexOf(SC_MATCH) >= 0) grp = 'srch';
-        else if ((tmp = cm.getTokenTypeAt(cm.getCursor(), 1))) {
-          grp = tmp.split(' ').sort((x, y) => y.length - x.length)[0].replace(/^apl-/, '');
-        } else grp = 'norm';
-        selGrp(grp);
-      });
+      // cm.on('cursorActivity', () => {
+      //   let tmp;
+      //   let grp;
+      //   if (cm.somethingSelected()) grp = 'sel';
+      //   else if (cm.getLine(cm.getCursor().line).indexOf(SC_MATCH) >= 0) grp = 'srch';
+      //   else if ((tmp = cm.getTokenTypeAt(cm.getCursor(), 1))) {
+      //     grp = tmp.split(' ').sort((x, y) => y.length - x.length)[0].replace(/^apl-/, '');
+      //   } else grp = 'norm';
+      //   selGrp(grp);
+      // });
       q.grp.onchange = () => { selGrp(G[+q.grp.value].t); };
       ['fg', 'bg', 'bc'].forEach((p) => {
         const c = q[p];
@@ -409,7 +431,7 @@
         const b = $(q[p]);
         b.click(() => {
           const h = scm[sel] || (scm[sel] = {});
-          b.checked ? h[p] = 1 : delete h[p];
+          b[0].checked ? h[p] = 1 : delete h[p];
           updSampleStl();
         });
       });
@@ -421,17 +443,12 @@
       [scm] = a;
       for (let i = 0; i < a.length; i++) if (a[i].name === s) { scm = a[i]; break; }
       I.col.className = ''; updScms();
-      // cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);
-      cm.refresh();
     },
     activate() { q.scm.focus(); },
     save() {
       D.prf.colourSchemes(scms.filter(x => !x.frz).map(encScm));
       D.prf.colourScheme(scm.name);
     },
-    resize() {
-      // cm.setSize(q.cm.offsetWidth,q.cm.offsetHeight);
-      cm.refresh();
-    },
+    resize() { },
   };
 }

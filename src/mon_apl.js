@@ -724,20 +724,23 @@
         ]);
         /* eslint-enable no-template-curly-in-string */
         return items;
+      } else if (D.send) {
+        D.send('GetAutocomplete', { line: s, pos: c - 1, token: model.winid });
+        const m = model;
+        return new monaco.Promise((complete, error, progress) => {
+          m.ac = {
+            complete, error, progress, position,
+          };
+        });
       }
-      D.send('GetAutocomplete', { line: s, pos: c - 1, token: model.winid });
-      const m = model;
-      return new monaco.Promise((complete, error, progress) => {
-        m.ac = {
-          complete, error, progress, position,
-        };
-      });
+      return [];
     },
   });
   const aplHover = {
     provideHover(model, position) {
       const m = model;
       const s = m.getLineContent(position.lineNumber);
+      if (!D.send) return [];
       D.send('GetValueTip', { // ask interpreter
         win: m.winid,
         token: m.winid,
