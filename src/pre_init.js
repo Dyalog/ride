@@ -15,6 +15,8 @@ const I = {};
 // e.g. J.lb.tip_text is document.getElementById('lb_tip_text')
 const J = {};
 
+const KM = {}; // KeyMap and family, replace CodeMirror
+
 (function preInit() {
   if (typeof node_require !== 'undefined') {
     D.mop = new Promise((resolve, reject) => {
