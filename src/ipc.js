@@ -10,6 +10,7 @@ D.IPC_Client=function(winId){
     Edit:     function(x){D.ipc.of.ride_master.emit('Edit',x);},
     switchWin:function(x){D.ipc.of.ride_master.emit('switchWin',x);},
     getSIS:   function(x){D.ipc.of.ride_master.emit('getSIS',x);},
+    updPW(x) { D.ipc.of.ride_master.emit('updPW', x); },
     connected:1,
     dead:0
   };
@@ -125,6 +126,7 @@ D.IPC_Server=function(){
     });
     D.ipc.server.on('prf',([k,x],socket)=>{D.prf[k](x)});
     D.ipc.server.on('switchWin',(data,socket)=>{D.ide.switchWin(data);});
+    D.ipc.server.on('updPW', (data, socket) => { D.ide.updPW(data); });
     D.ipc.server.on('unblock',(id,socket)=>{
       let pw=D.ide.wins[id],bw=D.el.BrowserWindow.fromId(pw.bw_id);
       bw.show();

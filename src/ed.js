@@ -114,7 +114,7 @@
       if (t.matches('.tb_btn')) {
         const c = t.className.replace(/^.*\btb_([A-Z]{2,3})\b.*$/, '$1');
         if (ed[c]) ed[c](ed.me);
-        else if (CM.commands[c]) CM.commands[c](ed.me);
+        else if (D.commands[c]) D.commands[c](ed.me);
         return !1;
       }
       return !0;
@@ -131,7 +131,7 @@
     getStops() { // returns an array of line numbers
       return [...this.stop].sort((x, y) => x - y);
     },
-    cursorActivity(e) { // handle "cursor activity" event from CodeMirror
+    cursorActivity(e) { // handle "cursor activity" event
       // xline:the line number of the empty line inserted when you press <down> at eof
       const ed = this;
       const { me } = ed;
@@ -230,7 +230,7 @@
       me.model.winid = ed.id;
       me.model.onDidChangeContent((x) => {
         if (!me.dyalogBQ && x.changes.length === 1
-          && x.changes[0].text === D.prf.prefixKey()) CM.commands.BQC(me);
+          && x.changes[0].text === D.prf.prefixKey()) D.commands.BQC(me);
       });
       me.model.setValue(ed.oText = ee.text.join('\n'));
       me.model.setEOL(monaco.editor.EndOfLineSequence.LF);

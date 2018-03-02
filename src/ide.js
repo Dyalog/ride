@@ -240,7 +240,6 @@ D.IDE = function IDE() {
         else x._onTabClick(e);
       }
     });
-    const { id } = x.contentItem.config.componentState;
     const cls = x.closeElement;
     switch (x.contentItem.componentName) {
       case 'dbg':
@@ -251,7 +250,8 @@ D.IDE = function IDE() {
         x.middleClick = D.prf.wse.toggle;
         cls.off('click').click(D.prf.wse.toggle);
         break;
-      case 'win':
+      case 'win': {
+        const { id } = x.contentItem.config.componentState;
         if (id) {
           const ep = () => { const w = ide.wins[id]; w.EP(w.me); };
           x.middleClick = ep;
@@ -260,6 +260,7 @@ D.IDE = function IDE() {
           cls.remove();
           x.titleElement[0].closest('.lm_tab').style.paddingRight = '10px';
         }
+      }
         break;
       default:
     }
@@ -332,7 +333,7 @@ D.IDE = function IDE() {
       D.remoteIdentification = x;
       ide.updTitle();
       ide.connected = 1;
-      ide.wins[0].updPW(1);
+      ide.updPW(1);
       clearTimeout(D.tmr);
       delete D.tmr;
     },
@@ -611,6 +612,7 @@ D.IDE.prototype = {
   },
   getThreads: $.debounce(100, () => { D.prf.dbg() && D.send('GetThreads', {}); }),
   getSIS: $.debounce(100, () => { D.prf.dbg() && D.send('GetSIStack', {}); }),
+  updPW(x) { this.wins[0].updPW(x); },
   updTitle() { // change listener for D.prf.title
     const ide = this;
     const ri = D.remoteIdentification || {};
@@ -707,10 +709,4 @@ D.IDE.prototype = {
       .replace(/\s+/g, '\xa0').replace(/(.)/g, '<b>$1</b>'); // replace white spaces with single nbs and markup
   },
 };
-CM.commands.DBG = () => { D.prf.dbg.toggle(); };
-CM.commands.WSE = () => { D.prf.wse.toggle(); };
-CM.commands.ZM = () => {
-  const w = D.ide.focusedWin;
-  w.container.parent.toggleMaximise();
-  setTimeout(() => { w.me && w.me.focus(); }, 100);
-};
+

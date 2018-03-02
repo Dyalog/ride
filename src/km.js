@@ -2,23 +2,24 @@
 {
   D.prf.prefixKey((x, old) => {
     if (x !== old) {
-      const m = CM.keyMap.dyalogDefault;
+      const m = D.keyMap.dyalogDefault;
       m[`'${x}'`] = m[`'${old}'`]; delete m[`'${old}'`];
     }
   });
 
-  CM.keyMap.dyalogDefault = { fallthrough: 'default', End: 'goLineEndSmart' };
+  D.keyMap.dyalogDefault = { End: 'goLineEndSmart' };
   // D.db is initialised later in init.js, so we must wait until the next tick for D.prf.prefixKey()
-  setTimeout(() => { CM.keyMap.dyalogDefault[`'${D.prf.prefixKey()}'`] = 'BQC'; }, 1);
-  $.extend(CM.commands, {
+  // setTimeout(() => { D.keyMap.dyalogDefault[`'${D.prf.prefixKey()}'`] = 'BQC'; }, 1);
+
+  D.commands = {
     TB() { D.ide.switchWin(1); },
     BT() { D.ide.switchWin(-1); },
-    SA: CM.commands.selectAll,
+    SA(me) { me.trigger('editor', 'selectAll'); },
     CT() { document.execCommand('Cut'); },
     CP() { document.execCommand('Copy'); },
     PT() { document.execCommand('Paste'); },
-    EMD(cm) { D.send('Edit', { win: cm.dyalogCmds.id, pos: 0, text: '' }); },
-    TO: CM.commands.toggleFold,
+    EMD(me) { D.send('Edit', { win: me.dyalogCmds.id, pos: 0, text: '' }); },
+    TO(me) { me.trigger('editor', 'editor.fold'); }, // (editor.unfold) is there a toggle?
     PRF() { D.prf_ui(); },
     ABT() { D.abt(); },
     CNC() {
@@ -79,62 +80,7 @@
         x && x.apply(e);
       }
     },
-    EXP(me) {
-      const sels = me.getSelections();
-      const ll = me.model.getLineCount();
-      const u = me.getPosition();
-      const l = u.lineNumber;
-      if (sels.length !== 1) return;
-      // candidates for selection as [line0,ch0,line1,ch1], more candidates will be added later
-      const ranges = [
-        [l, 1, l, me.model.getLineMaxColumn(l)], // current line
-        [1, 1, ll, me.model.getLineMaxColumn(ll)], // whole document
-      ];
-      // choose token on the left or right based on how important it looks, and add it to "ranges"
-      const t0 = me.getTokenAt(u);
-      const t1 = me.getTokenAt({ line: u.lineNumber, ch: u.column + 1 });
-      let tu = t0 || t1;
-      if (t0 && t1 && (t0.start !== t1.start || t0.end !== t1.end)) {
-        // we must decide which token looks more important
-        const lr = [t0, t1].map(ti => (ti.type || '').replace(/^.*\bapl-(\w*)$/, '$1')); // lft and rgt token type
-        const I = { // importance table
-          var: 5, glb: 5, quad: 4, str: 3, num: 2, kw: 1, par: -1, sqbr: -1, semi: -1, dfn: -1, '': -2,
-        };
-        tu = (I[lr[0]] || 0) > (I[lr[1]] || 0) ? t0 : t1; // tu is the more important of t0 t1
-      }
-      tu && ranges.push([l, tu.start, l, tu.end]);
-      // look for surrounding pairs of balanced brackets and add them to "ranges"
-      const ts = me.getLineTokens(l);
-      const tl = [];
-      const tr = []; // tl,tr: tokens for closest op. and cl. brackets, indexed by stack height
-      for (let i = 0; i < ts.length; i++) {
-        const t = ts[i];
-        const h = (t.state.a || []).length; // stack height
-        if (t.end <= u.ch && '([{'.indexOf(t.string) >= 0) tl[h] = t;
-        if (t.start >= u.ch && ')]}'.indexOf(t.string) >= 0) tr[h + 1] = tr[h + 1] || t;
-      }
-      const mh = (tu.state.a || []).length; // stack height at current token
-      for (let h = Math.min(mh, Math.min(tl.length, tr.length) - 1); h >= 0; h--) {
-        tl[h] && tr[h] &&
-          ranges.push([l, tl[h].end, l, tr[h].start], [l, tl[h].start, l, tr[h].end]);
-      }
-      const sA = sels[0].anchor;
-      const sH = sels[0].head;
-      let s = [sA.line, sA.ch, sH.line, sH.ch];
-      // anchor and head could be in reverse order
-      if ((s[0] - s[2] || s[1] - s[3]) > 0) s = [s[2], s[3], s[0], s[1]];
-      let b = ranges[0]; // best candidate for new selection
-      for (let i = 0; i < ranges.length; i++) {
-        // choose candidate that wraps tightest around current selection
-        const r = ranges[i];
-        const d0 = r[0] - s[0] || r[1] - s[1] || 0;
-        const d1 = r[2] - s[2] || r[3] - s[3] || 0;
-        if (d0 <= 0 && d1 >= 0 && (d0 || d1) &&
-          ((b[0] - r[0] || b[1] - r[1] || 0) <= 0 ||
-          (b[2] - r[2] || b[3] - r[3] || 0) >= 0)) b = r;
-      }
-      me.setSelection(CM.Pos(b[0], b[1]), CM.Pos(b[2], b[3]));
-    },
+    EXP(me) { me.trigger('editor', 'editor.action.smartSelect.grow'); },
     HLP(me) {
       const c = me.getPosition();
       const s = me.model.getLineContent(c.lineNumber).toLowerCase();
@@ -193,11 +139,25 @@
       const u = w.me.getPosition();
       w.vt.show({ line: u.lineNumber, ch: Math.max(0, u.column - 1) }, 1);
     },
-    SC: CM.commands.find,
-    RP: CM.commands.replace,
-    PV: CM.commands.findPrev,
-    NX: CM.commands.findNext,
-  });
+    SC(me) { me.trigger('editor', 'actions.find'); },
+    RP(me) { me.trigger('editor', 'editor.action.startFindReplaceAction'); },
+    PV(me) { me.trigger('editor', 'editor.action.previousMatchFindAction'); },
+    NX(me) { me.trigger('editor', 'editor.action.nextMatchFindAction'); },
+    TGC(me) { me.trigger('editor', 'editor.action.commentLine'); },
+    AO(me) { me.trigger('editor', 'editor.action.addCommentLine'); },
+    DO(me) { me.trigger('editor', 'editor.action.removeCommentLine'); },
+    DBG() { D.prf.dbg.toggle(); },
+    WSE() { D.prf.wse.toggle(); },
+    ZM(me) {
+      const w = me.dyalogCmds;
+      w.container.parent.toggleMaximise();
+      setTimeout(() => { me && me.focus(); }, 100);
+    },
+    ZMI() { D.prf.zoom(Math.min(12, D.prf.zoom() + 1)); D.ide.updPW(); },
+    ZMO() { D.prf.zoom(Math.max(-10, D.prf.zoom() - 1)); D.ide.updPW(); },
+    ZMR() { D.prf.zoom(0); D.ide.updPW(); },
+
+  };
   // pfkeys
   function nop() {}
   function fakeEvent(s) {
@@ -213,18 +173,19 @@
     const s1 = s.replace(/(\w+)-/g, (_, type) => {
       e[h[type] || `${type.toLowerCase()}Key`] = true; return '';
     });
-    // for (var k in CM.keyNames)if(CM.keyNames[k]===s1){e.keyCode=k;break}
-    e.keyCode = Object.keys(CM.keyNames).find(k => CM.keyNames[k] === s1);
+    // e.keyCode = Object.keys(CM.keyNames).find(k => CM.keyNames[k] === s1);
+    e.keyCode = monaco.KeyCode[s1];
     e.keyCode || fail(`Unknown key:${JSON.stringify(s)}`);
     return e;
   }
   for (let i = 1; i <= 12; i++) {
-    CM.commands[`PF${i}`] = function pfk(j) {
+    D.commands[`PF${i}`] = function pfk(j) {
       D.prf.pfkeys()[j].replace(/<(.+?)>|(.)/g, (_, x, y) => {
         const w = D.ide.focusedWin;
         if (y) w.insert(y);
-        else if (CM.commands[x]) w.cm.execCommand(x);
-        else w.cm.triggerOnKeyDown(fakeEvent(x));
+        else if (D.commands[x]) D.commands[x](w.me);
+        else w.me._onKeyDown.fire(fakeEvent(x));
+        // else w.cm.triggerOnKeyDown(fakeEvent(x));
       });
     }.bind(this, i);
   }
@@ -343,7 +304,7 @@
     null, null, null, null, null, null, 'TO', 'MO', null, null, null, null, null, 'S1', 'S2', 'OS', // 80
   ];
   function defCmd(x) {
-    const c = CM.commands;
+    const c = D.commands;
     c[x] || (c[x] = (cm) => { const h = cm.dyalogCmds; h && h[x] && h[x](cm); });
   }
   ('CBP MA AC VAL indentOrComplete downOrXline indentMoreOrAutocomplete STL TVO TVB' +
@@ -351,7 +312,7 @@
   for (let i = 0; i < C.length; i++) {
     if (C[i]) {
       defCmd(C[i]);
-      CM.keyMap.dyalogDefault[`'${String.fromCharCode(0xf800 + i)}'`] = C[i];
+      D.keyMap.dyalogDefault[`'${String.fromCharCode(0xf800 + i)}'`] = C[i];
     }
   }
   D.mapKeys = (ed) => {
@@ -388,32 +349,17 @@
         if (nkc) {
           let cond;
           if (cmd === 'BQC') {
-            return;
-          } else if (cmd === 'TGC') {
-            me.addCommand(nkc, () => me.trigger('editor', 'editor.action.commentLine'));
-            return;
-          } else if (cmd === 'AO') {
-            me.addCommand(nkc, () => me.trigger('editor', 'editor.action.addCommentLine'));
-            return;
-          } else if (cmd === 'DO') {
-            me.addCommand(nkc, () => me.trigger('editor', 'editor.action.removeCommentLine'));
-            return;
-          } else if (cmd === 'SC') {
-            me.addCommand(nkc, () => me.trigger('editor', 'actions.find'));
-            return;
-          } else if (cmd === 'RP') {
-            me.addCommand(nkc, () => me.trigger('editor', 'editor.action.startFindReplaceAction'));
-            return;
+            return; // handled explicitly via change handler on editor
           } else if (cmd === 'ER') {
             cond = 'tracer && !suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode';
           } else if (cmd === 'TC') {
             cond = 'tracer';
           } else if (nkc === kc.Escape) cond = '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode';
-          me.addCommand(nkc, () => CM.commands[cmd](me), cond);
+          me.addCommand(nkc, () => D.commands[cmd](me), cond);
         }
       });
     }
-    addCmd(CM.keyMap.dyalogDefault);
-    addCmd(CM.keyMap.dyalog);
+    addCmd(D.keyMap.dyalogDefault);
+    addCmd(D.keyMap.dyalog);
   };
 }

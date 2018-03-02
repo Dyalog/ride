@@ -1,9 +1,11 @@
-//This is the list of command-to-keystroke mappings that are configurable in Preferences>Keys.
-//The list does not necessarily contain all commands and all keystrokes in RIDE, only those in Preferences>Keys.
-//Some of the codes are inherited from Dyalog's old IDE (see ../docs/cmd-codes.txt and near the end of km.js)
-//Others were made up for RIDE's purposes - those use no fewer than three letters.
-'use strict'
-D.cmds=[
+// This is the list of command-to-keystroke mappings that are configurable in Preferences>Keys.
+// The list does not necessarily contain all commands and all keystrokes in RIDE,
+// only those in Preferences>Keys.
+// Some of the codes are inherited from Dyalog's old IDE
+// (see ../docs/cmd-codes.txt and near the end of km.js)
+// Others were made up for RIDE's purposes - those use no fewer than three letters.
+D.cmds = [
+  /* eslint-disable */
   //code description                default keys
   ['ABT','About',                   ['Shift-F1']],
   ['AC', 'Align comments',          []],
@@ -69,5 +71,6 @@ D.cmds=[
   ['ZM', 'Toggle maximise editor',  []],
   ['ZMI','Increase font size',      (D.mac?['Cmd-=','Shift-Cmd-=']:[]).concat(['Ctrl-=','Shift-Ctrl-='])],
   ['ZMO','Decrease font size',      (D.mac?['Cmd--']:[]).concat('Ctrl--')],
-  ['ZMR','Reset font size',         (D.mac?['Cmd-0']:[]).concat('Ctrl-0')]
-]
+  ['ZMR','Reset font size',         (D.mac?['Cmd-0']:[]).concat('Ctrl-0')],
+  /* eslint-enable */
+];

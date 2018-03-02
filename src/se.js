@@ -74,7 +74,7 @@
       const pk = D.prf.prefixKey();
       if (!me.dyalogBQ && e.changes.length === 1
         && e.changes[0].text === pk) {
-        CM.commands.BQC(me);
+        D.commands.BQC(me);
         return;
       }
       setTimeout(() => {

@@ -21,7 +21,7 @@ function loadDemoScript(f){ //f:path to file, ignored if empty
   })
 }
 D.el&&loadDemoScript(process.env.RIDE_DEMO_SCRIPT)
-$.extend(CM.commands,{
+$.extend(D.commands,{
   DMN:function(){move( 1)}, //next line
   DMP:function(){move(-1)}, //prev line
   DMR:function(){ //load demo script

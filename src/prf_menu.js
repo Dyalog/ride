@@ -42,7 +42,7 @@
     const stk = [{ ind: -1, items: [] }];
     const lines = md.split('\n');
     const cb = cmd => () => {
-      const f = CM.commands[cmd];
+      const f = D.commands[cmd];
       const w = D.ide.focusedWin;
       if (f) f(w.me);
       else if (D.ide[cmd]) D.ide[cmd]();
