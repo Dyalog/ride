@@ -25,7 +25,7 @@
     return { name: x.name, styles: s.slice(1) };
   }
   function decScm(x) { // x:for example "num=fg:345,bg:f,B,U,bgo:.5 str=fg:2,I com=U"
-    const r = { name: x.name }; // r:the result
+    const r = { name: x.name, base: x.base }; // r:the result
     const a = (x.styles || '').split(/\s+/); // a:for example ["num=fg:345,bg:f,B,U,bgo:.5","str=fg:2,I","com=U"]
     for (let i = 0; i < a.length; i++) {
       if (a[i]) {
@@ -49,12 +49,14 @@
   const SCMS = [ // built-in schemes
     {
       name: 'Default',
+      base: 'vs',
       styles: 'asgn=fg:00f com=fg:088 dfn=fg:00f diam=fg:00f err=fg:f00 fn=fg:008 idm=fg:008 kw=fg:800 ' +
       'lnum=fg:008,bg:f,bgo:0 mod=bg:7,bgo:.25 mtch=bg:ff8,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 op1=fg:00f op2=fg:00f ' +
       'par=fg:00f quad=fg:808 sel=bg:48e,bgo:.5 semi=fg:00f sqbr=fg:00f srch=bg:f80,bgo:.5 str=fg:088 tc=bg:d,bgo:1 ' +
       'tcpe=bg:c8c8c8,bgo:1 trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f vtt=bg:ff0',
     }, {
       name: 'Francisco Goya',
+      base: 'vs-dark',
       styles: 'asgn=fg:ff0 com=fg:b,I:1 cur=bc:f00 dfn2=fg:eb4 dfn3=fg:c79 dfn4=fg:cd0 dfn5=fg:a0d ' +
       'dfn=fg:a7b diam=fg:ff0 err=fg:f00,bg:822,bgo:.5,B:1,U:1 fn=fg:0f0 idm=fg:0f0 glb=B:1 kw=fg:aa2 ' +
       'lbl=U:1,bg:642,bgo:.5 lnum=fg:b94,bg:010,bgo:0 mod=bg:7,bgo:.5 mtch=fg:0,bg:ff8,bgo:.75 norm=fg:9c7,bg:0,bgo:1 ' +
@@ -62,11 +64,13 @@
       'tc=bg:1,bgo:1 tcpe=bg:2,bgo:1 zld=fg:d9f,B:1 scmd=fg:0ff ucmd=fg:f80,B:1 vtip=bg:733,fg:ff0,bgo:1,bc:900 vtt=bc:f80',
     }, {
       name: 'Albrecht Dürer',
-      styles: 'com=I:1 diam=B:1 err=fg:f,bg:0,bgo:.5,B:1,I:1,U:1 glb=I:1 kw=B:1 ' +
+      base: 'vs',
+      styles: 'com=I:1 diam=B:1 err=fg:0,bg:1,bgo:.5,B:1,I:1,U:1 glb=I:1 kw=B:1 ' +
       'lnum=bg:f,bgo:0 mod=bg:7,bgo:.25 mtch=bg:c,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 quad=fg:8 srch=bg:c,bgo:.5 ' +
       'str=fg:8 tc=bg:e,bgo:1 tcpe=bg:dadada,bgo:1 zld=fg:8 vtt=bc:aaa',
     }, {
       name: 'Kazimir Malevich',
+      base: 'vs',
       styles: 'norm=bg:f,bgo:1',
     },
   ].map(decScm).map((x) => { x.frz = 1; return x; });
@@ -86,7 +90,7 @@
   // encScm() and decScm() convert between them
   let scms; // all schemes (built-in and user-defined) as objects
   let scm = {}; //  the active scheme object
-  let me; //   CodeMirror instance for displaying sample code
+  let me; //   Monaco editor instance for displaying sample code
   let sel; //  the selected group's token type (.t)
   // RGB() expands the hex representation of a colour, rgb() shrinks it
   function RGB(x) {
@@ -164,8 +168,8 @@
     });
     const name = `my${schema.name.split('').map(x => `${x.codePointAt(0)}`).join('')}`;
     monaco.editor.defineTheme(name, {
-      base: schema.name === 'Francisco Goya' ? 'vs-dark' : 'vs', // can also be vs-dark or hc-black
-      inherit: false, // can also be false to completely replace the builtin rules
+      base: schema.base,
+      inherit: false,
       rules,
       colors,
     });
@@ -211,7 +215,6 @@
     {s:'assignment'      ,t:'asgn',m:'keyword.operator.assignment',c:'.cm-apl-asgn'}, //←
     {s:'bracket'         ,t:'sqbr',m:'delimiter.square',c:'.cm-apl-sqbr'}, //[]
     {s:'comment'         ,t:'com' ,m:'comment',c:'.cm-apl-com' }, //⍝
-    // {s:'block cursor'    ,t:'bcr' ,c:'.CodeMirror.cm-fat-cursor div.CodeMirror-cursor', ctrls:{bc:0,bg:1,BIU:0,fg:0}},
     {s:'cursor'          ,t:'cur' ,e:'editorCursor.foreground',c:'div.CodeMirror-cursor', ctrls:{bg:0,BIU:0,fg:1}},
     {s:'dfn level 1'     ,t:'dfn1',m:'identifier.dfn.1',c:'.cm-apl-dfn.cm-apl-dfn1'}, //{}
     {s:'dfn level 2'     ,t:'dfn2',m:'identifier.dfn.2',c:'.cm-apl-dfn.cm-apl-dfn2'},
