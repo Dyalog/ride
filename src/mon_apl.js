@@ -5,6 +5,12 @@
   const name = `(?:[${letter}][${letter}\\d]*)`;
   const notName = RegExp(`[^${letter}0-9]+`);
   const end = '(?:⍝|$)';
+  const restartBlock = '|:else|:elseif|:andif|:orif';
+  const startBlock = ':class|:disposable|:for|:hold|:if|:interface|:namespace' +
+    `|:property|:repeat|:section|:select|:trap|:while|:with${restartBlock}`;
+  const endBlock = ':end|:endclass|:enddisposable|:endfor|:endhold|:endif|:endinterface' +
+    '|:endnamespace|:endproperty|:endrepeat|:endsection|:endselect|:endtrap' +
+    `|:endwhile|:endwith|:until${restartBlock}`;
 
   const aplConfig = {
     comments: {
@@ -23,9 +29,9 @@
       { open: '\'', close: '\'' },
     ],
     indentationRules: {
-      decreaseIndentPattern: /^((?!.*?⍝).*)?\s*[}\])].*$/,
-      // increaseIndentPattern: /^((?!⍝).)*(\{[^}"'`]*|\([^)"'`]*|\[[^\]"'`]*)$/,
-      increaseIndentPattern: /^((?!⍝).)*(\{[^}"'`]*|\([^)"'`]*|\[[^\]"'`]*|:if(?!\s+.*:end(?:if)?(\s+|$)).*)$/,
+      decreaseIndentPattern: RegExp(`^((?!.*?⍝).*)?\\s*([}\\])]|${endBlock})\\b.*$`, 'i'),
+      increaseIndentPattern: RegExp(`^(?:(?!⍝).)*(${startBlock})\\b.*$`, 'i'),
+      unIndentedLinePattern: /^\s*⍝.*$/,
     },
     wordPattern: RegExp(name),
   };
@@ -328,7 +334,8 @@
                     break;
 
                   case 'else': ok = la.t === 'if' || la.t === 'select' || la.t === 'trap'; break;
-                  case 'elseif': case 'andif': case 'orif': ok = la.t === 'if'; break;
+                  case 'elseif': case 'andif': case 'orif':
+                    ok = la.t === 'if' || la.t === 'while'; break;
                   case 'in': case 'ineach': ok = la.t === 'for'; break;
                   case 'case': case 'caselist': ok = la.t === 'select' || la.t === 'trap'; break;
                   case 'leave': case 'continue':
@@ -798,7 +805,7 @@
     provideDocumentFormattingEdits(model, options) {
       return this.formatLines(model, {}, options);
     },
-    autoFormatTriggerCharacters: ':∇{}'.split(''),
+    // autoFormatTriggerCharacters: ':∇{}'.split(''),
     provideOnTypeFormattingEdits(model, position, ch, options) {
       const range = new monaco.Range(position.lineNumber, 1, position.lineNumber, 1);
       return this.formatLines(model, range, options);
