@@ -1,13 +1,7 @@
 // early set up of environment properties
-const CM = CodeMirror;
-CM.keyNames[106] = 'NumpadMultiply';
-CM.keyNames[107] = 'NumpadAdd';
-CM.keyNames[109] = 'NumpadSubtract';
-CM.keyNames[110] = 'NumpadDecimal';
-CM.keyNames[111] = 'NumpadDivide';
-
 var D = typeof D === "undefined" ? {} : D;
 
+D.commands = {};
 D.keyMap = { dyalog: {}, dyalogDefault: {} };
 
 // all elements by id, eg I.lb_tip_text is document.getElementById('lb_tip_text')

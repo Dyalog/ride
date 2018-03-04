@@ -12,21 +12,49 @@
     }
   }
   function getKeystroke(b, f) { // b:"+" button,f:callback
-    const e = document.createElement('input');
+    const e = document.createElement('div');
+    e.className = 'shc_editor';
     let r; // r:result
+    let me;
+    const meta = new Set(['Shift', 'Alt', 'Ctrl', 'Cmd', 'Meta', 'Win']);
+    const close = () => { me.dispose(); e.parentNode.removeChild(e); f(r); };
     const upd = (x) => { // update displayed text for new keystroke as you hold down/release keys
-      let kn = CM.keyNames[x.which] || '';
-      if (!kn || kn === 'Shift' || kn === 'Ctrl' || kn === 'Alt' || kn === 'Mod') kn = '';
-      e.value = (x.shiftKey && (x.type !== 'keyup' || x.which) ? 'Shift-' : '') +
-              (x.ctrlKey ? 'Ctrl-' : '') + (x.altKey ? 'Alt-' : '') + (x.metaKey ? 'Cmd-' : '') + kn;
-      if (kn) { r = e.value; e.blur(); }
+      const kn = monaco.KeyCode[x.keyCode];
+      const be = x.browserEvent;
+      const isMeta = meta.has(kn);
+      const s = (be.shiftKey && (be.type === 'keydown' || be.which) ? 'Shift-' : '') +
+              (be.ctrlKey ? 'Ctrl-' : '') + (be.altKey ? 'Alt-' : '') + (be.metaKey ? 'Cmd-' : '') +
+              (isMeta ? '' : D.keyMap.labels[kn]);
+      me.setValue(s || 'Press keystroke...');
+      if (!isMeta) { r = s; close(); }
       x.preventDefault(); x.stopPropagation(); return !1;
     };
-    CM.on(e, 'keyup', upd); CM.on(e, 'keydown', upd);
-    e.onblur = () => { e.parentNode.removeChild(e); f(r); };
-    e.placeholder = 'Press keystroke...';
+    me = monaco.editor.create(e, {
+      acceptSuggestionOnCommitCharacter: false,
+      acceptSuggestionOnEnter: 'off',
+      autoClosingBrackets: false,
+      automaticLayout: true,
+      autoIndent: false,
+      cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
+      cursorBlinking: D.prf.blinkCursor() ? 'blink' : 'solid',
+      folding: false,
+      fontFamily: 'apl',
+      fontSize: 16,
+      glyphMargin: false,
+      lineNumbers: 'off',
+      matchBrackets: false,
+      minimap: { enabled: false },
+      mouseWheelZoom: false,
+      renderIndentGuides: false,
+      scrollbar: { horizontal: 'hidden', vertical: 'hidden' },
+      suggestOnTriggerCharacters: false,
+      wordBasedSuggestions: false,
+      value: 'Press keystroke...',
+    });
+    me.onKeyDown(upd); me.onKeyUp(upd);
+    me.onDidBlurEditor(close);
     b.parentNode.insertBefore(e, b);
-    e.focus();
+    me.focus();
   }
   function keyHTML(x) {
     return `<span class=shc_key><span class=shc_text>${x}</span>` +
@@ -63,11 +91,10 @@
     for (let i = 1; i <= 12; i++) document.getElementById(`shc_val_PF${i}`).value = a[i];
   }
   function updKeys(x) {
-    const h = { fallthrough: 'dyalogDefault' };
-    CM.keyMap.dyalog = h;
+    const h = {};
+    D.keyMap.dyalog = h;
     for (let i = 0; i < D.cmds.length; i++) {
-      const c = D.cmds[i][0];
-      const d = D.cmds[i][2];
+      const [c,, d] = D.cmds[i];
       const ks = x[c] || d;
       if ((ks.length === 0) && (h[d] === c)) {
         delete h[d];
@@ -79,7 +106,7 @@
     }
   }
   D.prf.keys(updKeys);
-  CM.keyMap.dyalog = { fallthrough: 'dyalogDefault' }; // temporarily set keyMap.dyalog to something
+  D.keyMap.dyalog = {}; // temporarily set keyMap.dyalog to something
   // wait until D.db is initialised in init.js, then set the real keymap
   setTimeout(() => { updKeys(D.prf.keys()); }, 1);
 

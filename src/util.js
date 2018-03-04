@@ -21,7 +21,7 @@ D.util={
     d.style.top =(0|(innerHeight-(o.h||d.clientHeight))/2)+'px';if(o.h)d.style.height=o.h+'px'
     if(d.__dlg)return;d.__dlg=1
     var close_button=d.querySelector('.dlg_close');
-    if(close_button) CM.on(d,'keydown',function(e){
+    if(close_button) $(d).on('keydown',function(e){
       if(e.which===27&&!e.ctrlKey&&!e.shiftKey&&!e.altKey&&!e.metaKey){
           close_button.click();return!1;}})
     o=null
@@ -33,9 +33,13 @@ D.util={
       t.onmousedown=function(e){
         if(e.target.closest('.dlg_no_drag'))return
         dx=d.offsetLeft-e.clientX;dy=d.offsetTop-e.clientY
-        t.style.cursor='move';CM.on(document,'mousemove',move);e.preventDefault();return!1
+        t.style.cursor='move';
+        $(document).on('mousemove',move);
+        e.preventDefault();return!1
       }
-      t.onmouseup=function(e){CM.off(document,'mousemove',move);t.style.cursor=''}
+      t.onmouseup=function(e){
+        $(document).off('mousemove',move);
+        t.style.cursor=''}
       var move=function(e){d.style.left=(dx+e.clientX)+'px'
                            d.style.top =(dy+e.clientY)+'px'
                            e.preventDefault();return!1}
@@ -43,7 +47,7 @@ D.util={
   },
   elastic:function(inp){ //make an <input> stretch when you type long text in it
     var m=inp.dataset.minSize
-    if(!m){var f=function(){D.util.elastic(inp)};CM.on(inp,'keyup',f);CM.on(inp,'keypress',f);CM.on(inp,'change',f)
+    if(!m){var f=function(){D.util.elastic(inp)};$(inp).on('keyup keypress change',f);
            inp.dataset.minSize=m=+inp.size||1}
     inp.size=Math.max(m,inp.value.length+1)
   },

@@ -11,7 +11,7 @@
   // D.db is initialised later in init.js, so we must wait until the next tick for D.prf.prefixKey()
   // setTimeout(() => { D.keyMap.dyalogDefault[`'${D.prf.prefixKey()}'`] = 'BQC'; }, 1);
 
-  D.commands = {
+  $.extend(D.commands, {
     TB() { D.ide.switchWin(1); },
     BT() { D.ide.switchWin(-1); },
     SA(me) { me.trigger('editor', 'selectAll'); },
@@ -157,7 +157,7 @@
     ZMO() { D.prf.zoom(Math.max(-10, D.prf.zoom() - 1)); D.ide.updPW(); },
     ZMR() { D.prf.zoom(0); D.ide.updPW(); },
 
-  };
+  });
   // pfkeys
   function nop() {}
   function fakeEvent(s) {
@@ -173,7 +173,6 @@
     const s1 = s.replace(/(\w+)-/g, (_, type) => {
       e[h[type] || `${type.toLowerCase()}Key`] = true; return '';
     });
-    // e.keyCode = Object.keys(CM.keyNames).find(k => CM.keyNames[k] === s1);
     e.keyCode = monaco.KeyCode[s1];
     e.keyCode || fail(`Unknown key:${JSON.stringify(s)}`);
     return e;
@@ -322,27 +321,13 @@
     const ctrlcmd = {
       Ctrl: D.mac ? km.WinCtrl : km.CtrlCmd,
       Cmd: km.CtrlCmd,
-      Esc: kc.Escape,
-      Pause: kc.PauseBreak,
-      '\\': kc.US_BACKSLASH,
-      '`': kc.US_BACKTICK,
-      ']': kc.US_CLOSE_SQUARE_BRACKET,
-      ',': kc.US_COMMA,
-      '.': kc.US_DOT,
-      '=': kc.US_EQUAL,
-      '-': kc.US_MINUS,
-      '[': kc.US_OPEN_SQUARE_BRACKET,
-      '\'': kc.US_QUOTE,
-      ';': kc.US_SEMICOLON,
-      '/': kc.US_SLASH,
+      Win: km.CtrlCmd,
+      Meta: km.CtrlCmd,
     };
     function addCmd(map) {
       Object.keys(map).forEach((ks) => {
         const nkc = ks.replace(/--/g, '-US_MINUS').split('-').reduce(((a, ko) => {
-          const k = ko.replace(/^[A-Z0-9]$/, 'KEY_$&')
-            .replace(/^Numpad(.*)/, (m, p) => `NUMPAD_${p.toUpperCase()}`)
-            .replace(/^(Up|Left|Right|Down)$/, '$1Arrow')
-            .replace(/^'(.)'$/, '$1');
+          const k = D.keyMap.labels[ko] || ko;
           return a | (ctrlcmd[k] || km[k] || kc[k]); // eslint-disable-line no-bitwise
         }), 0);
         const cmd = map[ks];
@@ -362,4 +347,119 @@
     addCmd(D.keyMap.dyalogDefault);
     addCmd(D.keyMap.dyalog);
   };
+  const l = {
+    Unknown: 'unknown',
+    Backspace: 'Backspace',
+    Tab: 'Tab',
+    Enter: 'Enter',
+    Shift: 'Shift',
+    Ctrl: 'Ctrl',
+    Alt: 'Alt',
+    PauseBreak: 'PauseBreak',
+    CapsLock: 'CapsLock',
+    Escape: 'Escape',
+    Space: 'Space',
+    PageUp: 'PageUp',
+    PageDown: 'PageDown',
+    End: 'End',
+    Home: 'Home',
+    LeftArrow: 'Left',
+    UpArrow: 'Up',
+    RightArrow: 'Right',
+    DownArrow: 'Down',
+    Insert: 'Insert',
+    Delete: 'Delete',
+    KEY_0: '0',
+    KEY_1: '1',
+    KEY_2: '2',
+    KEY_3: '3',
+    KEY_4: '4',
+    KEY_5: '5',
+    KEY_6: '6',
+    KEY_7: '7',
+    KEY_8: '8',
+    KEY_9: '9',
+    KEY_A: 'A',
+    KEY_B: 'B',
+    KEY_C: 'C',
+    KEY_D: 'D',
+    KEY_E: 'E',
+    KEY_F: 'F',
+    KEY_G: 'G',
+    KEY_H: 'H',
+    KEY_I: 'I',
+    KEY_J: 'J',
+    KEY_K: 'K',
+    KEY_L: 'L',
+    KEY_M: 'M',
+    KEY_N: 'N',
+    KEY_O: 'O',
+    KEY_P: 'P',
+    KEY_Q: 'Q',
+    KEY_R: 'R',
+    KEY_S: 'S',
+    KEY_T: 'T',
+    KEY_U: 'U',
+    KEY_V: 'V',
+    KEY_W: 'W',
+    KEY_X: 'X',
+    KEY_Y: 'Y',
+    KEY_Z: 'Z',
+    Meta: 'Meta',
+    ContextMenu: 'ContextMenu',
+    F1: 'F1',
+    F2: 'F2',
+    F3: 'F3',
+    F4: 'F4',
+    F5: 'F5',
+    F6: 'F6',
+    F7: 'F7',
+    F8: 'F8',
+    F9: 'F9',
+    F10: 'F10',
+    F11: 'F11',
+    F12: 'F12',
+    F13: 'F13',
+    F14: 'F14',
+    F15: 'F15',
+    F16: 'F16',
+    F17: 'F17',
+    F18: 'F18',
+    F19: 'F19',
+    NumLock: 'NumLock',
+    ScrollLock: 'ScrollLock',
+    US_SEMICOLON: ';',
+    US_EQUAL: '=',
+    US_COMMA: ',',
+    US_MINUS: '-',
+    US_DOT: '.',
+    US_SLASH: '/',
+    US_BACKTICK: '`',
+    ABNT_C1: 'ABNT_C1',
+    ABNT_C2: 'ABNT_C2',
+    US_OPEN_SQUARE_BRACKET: '[',
+    US_BACKSLASH: '\\',
+    US_CLOSE_SQUARE_BRACKET: ']',
+    US_QUOTE: '\'',
+    OEM_8: 'OEM_8',
+    OEM_102: 'OEM_102',
+    NUMPAD_0: 'NumPad0',
+    NUMPAD_1: 'NumPad1',
+    NUMPAD_2: 'NumPad2',
+    NUMPAD_3: 'NumPad3',
+    NUMPAD_4: 'NumPad4',
+    NUMPAD_5: 'NumPad5',
+    NUMPAD_6: 'NumPad6',
+    NUMPAD_7: 'NumPad7',
+    NUMPAD_8: 'NumPad8',
+    NUMPAD_9: 'NumPad9',
+    NUMPAD_MULTIPLY: 'NumPad_Multiply',
+    NUMPAD_ADD: 'NumPad_Add',
+    NUMPAD_SEPARATOR: 'NumPad_Separator',
+    NUMPAD_SUBTRACT: 'NumPad_Subtract',
+    NUMPAD_DECIMAL: 'NumPad_Decimal',
+    NUMPAD_DIVIDE: 'NumPad_Divide',
+  };
+  Object.keys(l).forEach((k) => { l[l[k]] = k; });
+  D.keyMap.labels = l;
 }

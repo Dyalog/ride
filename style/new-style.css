@@ -1792,8 +1792,18 @@ input.lyt_g3:hover {
 }
 #shc td {
   text-align: left;
-  text-indent: -2ex;
-  padding-left: 2ex;
+}
+#shc td .shc_editor {
+  height: 25px;
+  width: calc(100% - 26px);
+  display: inline-block;
+  vertical-align: bottom;
+}
+#shc td .shc_editor .editor-widget.suggest-widget {
+  width: 0;
+}
+#shc td:nth-child(3) {
+  width: 50%;
 }
 #shc_rst_all {
   float: right;

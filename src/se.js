@@ -154,7 +154,7 @@
     });
     D.prf.blinkCursor((x) => {
       Object.keys(D.wins).forEach((i) => {
-        D.wins[i].blinkCursor(x * CM.defaults.cursorBlinkRate);
+        D.wins[i].blinkCursor(x);
       });
     });
   }

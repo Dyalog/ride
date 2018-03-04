@@ -135,7 +135,7 @@ const Console = console;
     // Also, browsers like Firefox and Opera use different shortcuts -
     // - (such as Alt-Shift-X or Ctrl-X) for accesskey-s.
     if (!D.mac) {
-      CM.on(document, 'keydown', (e) => { // Alt-A...Alt-Z or Alt-Shift-A...Alt-Shift-Z
+      $(document).on('keydown', (e) => { // Alt-A...Alt-Z or Alt-Shift-A...Alt-Shift-Z
         if (!e.altKey || e.ctrlKey || e.metaKey || e.which < 65 || e.which > 90) return undefined;
         const c = String.fromCharCode(e.which).toLowerCase();
         const C = c.toUpperCase();
@@ -162,7 +162,6 @@ const Console = console;
     }
     if (D.el) {
       // drag and drop
-      CM.defaults.dragDrop = 0;
       window.ondrop = (e) => { e.preventDefault(); return !1; };
       window.ondragover = window.ondrop;
       window.ondrop = (e) => {

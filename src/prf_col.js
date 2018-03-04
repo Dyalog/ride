@@ -12,7 +12,7 @@
   function encScm(x) {
     let s = '';
     Object.keys(x).forEach((g) => {
-      if (g !== 'name') {
+      if (g !== 'name' && g !== 'base') {
         let u = '';
         Object.keys(x[g]).forEach((p) => {
           const v = x[g][p];

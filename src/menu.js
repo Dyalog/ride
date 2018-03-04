@@ -149,12 +149,12 @@ D.installMenu = function Menu(mx) {
       return !1;
     });
     $m.keydown((e) => {
-      switch (CM.keyNames[e.which]) {
-        case 'Left': leftRight(-1, $(e.target)); break;
-        case 'Right': leftRight(1, $(e.target)); break;
-        case 'Up': upDown(-1, $(e.target)); break;
-        case 'Down': upDown(1, $(e.target)); break;
-        case 'Esc': case 'F10': mFocus(null); return !1;
+      switch (e.key) {
+        case 'ArrowLeft': leftRight(-1, $(e.target)); break;
+        case 'ArrowRight': leftRight(1, $(e.target)); break;
+        case 'ArrowUp': upDown(-1, $(e.target)); break;
+        case 'ArrowDown': upDown(1, $(e.target)); break;
+        case 'Escape': case 'F10': mFocus(null); return !1;
         default:
       }
       return !0;

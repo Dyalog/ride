@@ -10,9 +10,15 @@
 	padding: 8px 0 0 8px;
 	td {
 		text-align: left;
-		text-indent: -2ex;
-		padding-left: 2ex;
+		.shc_editor {
+			height: 25px;	
+			width: calc(100% - 26px);
+			display: inline-block;
+			vertical-align: bottom;
+			.editor-widget.suggest-widget { width:0; }
+		}
 	}
+	td:nth-child(3) { width: 50%; }
 }
 #shc_rst_all {
 	float: right;
