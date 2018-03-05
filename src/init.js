@@ -158,7 +158,7 @@ const Console = console;
           $a.focus();
         } else { $a.click(); }
         return !$a.length;
-      }, true);
+      });
     }
     if (D.el) {
       // drag and drop
