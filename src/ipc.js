@@ -15,42 +15,24 @@ D.IPC_Client=function(winId){
     dead:0
   };
   D.ipc.connectTo('ride_master',function(){
-    D.ipc.of.ride_master.on('connect',function(){
+    const rm = D.ipc.of.ride_master;
+    rm.on('connect',function(){
       D.ipc.log('## connected to ride_master ##'.rainbow, D.ipc.config.delay);
-      D.ipc.of.ride_master.emit('browserCreated',winId);
+      rm.emit('browserCreated',winId);
     });
-    D.ipc.of.ride_master.on('disconnect',function(){
+    rm.on('disconnect',function(){
       D.ipc.log('disconnected from ride_master'.notice);
       D.ide.connected=0;close();
     });
-    D.ipc.of.ride_master.on('die',()=>D.ed.die());
-    D.ipc.of.ride_master.on('processAutocompleteReply',x=>D.ed.processAutocompleteReply(x));
-    D.ipc.of.ride_master.on('ReplyFormatCode',x=>D.ed.ReplyFormatCode(x));
-    D.ipc.of.ride_master.on('getUnsaved',x=>{
-      D.ipc.of.ride_master.emit('getUnsavedReply',{win:D.ed.id,unsaved:D.ed.getUnsaved()});
-    });
-    D.ipc.of.ride_master.on('blockCursor',x=>D.ed.blockCursor(x));
-    D.ipc.of.ride_master.on('blinkCursor',x=>D.ed.blinkCursor(x));
-    D.ipc.of.ride_master.on('insert',x=>D.ed.insert(x));
-    D.ipc.of.ride_master.on('autoCloseBrackets',x=>D.ed.autoCloseBrackets(x));
-    D.ipc.of.ride_master.on('indent',x=>D.ed.indent(x));
-    D.ipc.of.ride_master.on('fold',x=>D.ed.fold(x));
-    D.ipc.of.ride_master.on('matchBrackets',x=>D.ed.matchBrackets(x));
+    const pm = 'die processAutocompleteReply ReplyFormatCode blockCursor blinkCursor ' +
+               'insert autoCloseBrackets indent fold matchBrackets open close prompt saved ' +
+               'SetHighlightLine setBP setLN setTC stateChanged ValueTip zoom';
+    pm.split(' ').forEach(k=>rm.on(k,x=>D.ed[k](x)));
     
-    D.ipc.of.ride_master.on('prf',([k,x])=>{D.prf[k](x,1)});
-    D.ipc.of.ride_master.on('open',x=>D.ed.open(x));
-    D.ipc.of.ride_master.on('close',x=>D.ed.close(x));
-    D.ipc.of.ride_master.on('prompt',x=>D.ed.prompt(x));
-    D.ipc.of.ride_master.on('saved',x=>D.ed.saved(x));
-    D.ipc.of.ride_master.on('SetHighlightLine',x=>D.ed.SetHighlightLine(x));
-    D.ipc.of.ride_master.on('setBP',x=>D.ed.setBP(x));
-    D.ipc.of.ride_master.on('setLN',x=>D.ed.setLN(x));
-    D.ipc.of.ride_master.on('setTC',x=>D.ed.setTC(x));
-    D.ipc.of.ride_master.on('ED',x=>D.ed.ED(D.ed.me));
-    D.ipc.of.ride_master.on('stateChanged',x=>D.ed.stateChanged(x));
-    D.ipc.of.ride_master.on('ValueTip',x=>D.ed.ValueTip(x));
-    D.ipc.of.ride_master.on('zoom',x=>D.ed.zoom(x));
-    D.ipc.of.ride_master.on('pendingEditor',function(pe){
+    rm.on('getUnsaved',x=>{rm.emit('getUnsavedReply',{win:D.ed.id,unsaved:D.ed.getUnsaved()})});
+    rm.on('prf',([k,x])=>{D.prf[k](x,1)});
+    rm.on('ED',x=>D.ed.ED(D.ed.cm));
+    rm.on('pendingEditor',function(pe){
       D.ipc.log('got pendingEditor from ride_master : '.debug);
       var editorOpts=pe.editorOpts, ee=pe.ee;
       var ed=D.ed=new D.Ed(D.ide,editorOpts);
@@ -61,7 +43,7 @@ D.IPC_Client=function(winId){
         window.onfocus=()=>ed.focus();
         window.onbeforeunload=function(e){ed.onbeforeunload(e)}
         ed.refresh();
-        D.ipc.of.ride_master.emit('unblock',ed.id);
+        rm.emit('unblock',ed.id);
       })
     });
   });  
@@ -72,24 +54,23 @@ D.IPC_Prf=function(){
   D.ipc.config.id   = 'prf';
   D.ipc.config.retry= 1500;
   D.ipc.config.silent=true;
-  D.ipc.connectTo('ride_master',function(){
-    D.ipc.of.ride_master.on('connect',function(){
+  D.ipc.connectTo('ride_master',x=>{
+    const rm = D.ipc.of.ride_master;
+    rm.on('connect',x=>{
       D.ipc.log('## connected to ride_master ##'.rainbow, D.ipc.config.delay);
-      window.onbeforeunload=function(e){
+      window.onbeforeunload=e=>{
         e.returnValue=false;
-        D.ipc.of.ride_master.emit('prfClose')
+        rm.emit('prfClose')
       }
-      D.ipc.of.ride_master.emit('prfCreated');
+      rm.emit('prfCreated');
     });
-    D.ipc.of.ride_master.on('disconnect',function(){
+    rm.on('disconnect',x=>{
       D.ipc.log('disconnected from ride_master'.notice);
       D.onbeforeunload=null;close();
     });
-    D.ipc.of.ride_master.on('show',x=>{
-      D.prf_ui();
-    });
-    D.ipc.of.ride_master.on('prf',([k,x])=>{D.prf[k](x,1)});
-  });  
+    rm.on('show',x=>D.prf_ui());
+    rm.on('prf',([k,x])=>D.prf[k](x,1));
+  });
 };
 
 D.IPC_Server=function(){
@@ -99,24 +80,21 @@ D.IPC_Server=function(){
   D.ipc.config.retry= 1500;
   D.ipc.config.silent=true;
   D.ipc.serve(function(){
-    D.ipc.server.on('prfCreated',function(data,socket){
-      D.prf_bw.socket=socket;
-    });
-    D.ipc.server.on('prfShow',function(data,socket){
-      D.prf_ui();
-    }),
-    D.ipc.server.on('prfClose',function(data,socket){
+    const srv = D.ipc.server;
+    srv.on('prfCreated',(data,socket)=>D.prf_bw.socket=socket);
+    srv.on('prfShow',(data,socket)=>D.prf_ui()),
+    srv.on('prfClose',(data,socket)=>{
       D.el.BrowserWindow.fromId(D.prf_bw.id).hide();
       D.ide.focusMRUWin()
     });
-    D.ipc.server.on('browserCreated',function(bw_id,socket){
+    srv.on('browserCreated',(bw_id,socket)=>{
       let wp=new D.IPC_WindowProxy(bw_id,socket);D.pwins.push(wp);
       D.IPC_LinkEditor();
     });
-    D.ipc.server.on('Edit',(data,socket)=>{D.ide.Edit(data)});
-    D.ipc.server.on('focusedWin',(id,socket)=>{var w=D.ide.focusedWin=D.ide.wins[id];w&&(w.focusTS=+new Date);});
-    D.ipc.server.on('getSIS',(data,socket)=>{D.ide.getSIS();});
-    D.ipc.server.on('getUnsavedReply',(data,socket)=>{
+    srv.on('Edit',(data,socket)=>{D.ide.Edit(data)});
+    srv.on('focusedWin',(id,socket)=>{var w=D.ide.focusedWin=D.ide.wins[id];w&&(w.focusTS=+new Date);});
+    srv.on('getSIS',(data,socket)=>{D.ide.getSIS();});
+    srv.on('getUnsavedReply',(data,socket)=>{
       if(!D.pendingEdit)return;
       if(data.unsaved&&D.pendingEdit.unsaved[data.win]===-1) 
         D.pendingEdit.unsaved[data.win]=data.unsaved;
@@ -124,10 +102,10 @@ D.IPC_Server=function(){
       var ready=true;for(var k in D.pendingEdit.unsaved){ready=ready&&D.pendingEdit.unsaved[k]}
       if (ready){D.send('Edit',D.pendingEdit);delete D.pendingEdit;}
     });
-    D.ipc.server.on('prf',([k,x],socket)=>{D.prf[k](x)});
-    D.ipc.server.on('switchWin',(data,socket)=>{D.ide.switchWin(data);});
-    D.ipc.server.on('updPW', (data, socket) => { D.ide.updPW(data); });
-    D.ipc.server.on('unblock',(id,socket)=>{
+    srv.on('prf',([k,x],socket)=>{D.prf[k](x)});
+    srv.on('switchWin',(data,socket)=>{D.ide.switchWin(data);});
+    srv.on('updPW', (data, socket) => { D.ide.updPW(data); });
+    srv.on('unblock',(id,socket)=>{
       let pw=D.ide.wins[id],bw=D.el.BrowserWindow.fromId(pw.bw_id);
       bw.show();
       if(D.ide.hadErr&&pw.tc&&!D.elw.isFocused()) {
@@ -136,8 +114,8 @@ D.IPC_Server=function(){
       }
       D.ide.unblock()}
     );
-    D.ipc.server.on('zoom',(z,socket)=>{D.ide.zoom(z)})
-    D.ipc.server.on('RIDE',([type,payload],socket)=>{D.send(type,payload);});
+    srv.on('zoom',(z,socket)=>{D.ide.zoom(z)})
+    srv.on('RIDE',([type,payload],socket)=>{D.send(type,payload);});
   });
   D.ipc.server.start();
   D.prf.floatOnTop(function(x){
