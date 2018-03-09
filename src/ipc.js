@@ -31,7 +31,7 @@ D.IPC_Client=function(winId){
     
     rm.on('getUnsaved',x=>{rm.emit('getUnsavedReply',{win:D.ed.id,unsaved:D.ed.getUnsaved()})});
     rm.on('prf',([k,x])=>{D.prf[k](x,1)});
-    rm.on('ED',x=>D.ed.ED(D.ed.cm));
+    rm.on('ED',x=>D.ed.ED(D.ed.me));
     rm.on('pendingEditor',function(pe){
       D.ipc.log('got pendingEditor from ride_master : '.debug);
       var editorOpts=pe.editorOpts, ee=pe.ee;
