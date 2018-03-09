@@ -418,11 +418,10 @@
         const tc = this.ide.tracer();
         if (tc) { tc.focus(); tc.ED(tc.me); }
       } else {
-        D.ide.Edit({
-          win: 0,
-          pos: me.model.getOffsetAt(c),
-          text: me.getValue(),
-        });
+        const offset = me.model.getOffsetAt(c);
+        const text = me.getValue();
+        const pos = D.util.ucLength(text.slice(0, offset));
+        D.ide.Edit({ win: 0, pos, text });
       }
     },
     BK() { this.histMove(1); },

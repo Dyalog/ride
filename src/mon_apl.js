@@ -495,7 +495,7 @@
       const pk2 = `${pk}${pk}`;
       const kind = monaco.languages.CompletionItemKind;
       // console.log(`completion triggered on: ${ch}`);
-      if (s.slice(c - 3, c) === pk2) {
+      if (s.slice(c - 3, c - 1) === pk2) {
         return Object.keys(D.bqbqc).map((k) => {
           const v = D.bqbqc[k];
           const key = D.getBQKeyFor(v.text);
