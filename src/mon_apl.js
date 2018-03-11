@@ -526,209 +526,223 @@
         });
       } else if (ch === ':') {
         const { a } = model._lines[position.lineNumber-1]._state;
-        if (!a || a[a.length - 1].t === '{') return [];
-        const items = [
-          'Case',
-          'CaseList',
-          'Continue',
-          'Private',
-          'Public',
-          'Instance',
-          'Shared',
-          'Implements Constructor',
-          'Implements Destructor',
-          'Implements Method',
-          'Implements Trigger',
-        ].map(i => ({
+        const { t } = (a || []).slice(-1)[0] || {};
+        if (!a || t === '{') return [];
+        const items = [];
+        const textItem = i => ({
           label: i,
           kind: kind.Text,
-        }));
+        });
         /* eslint-disable no-template-curly-in-string */
-        items.push(...[{
-          label: 'Access',
-          kind: kind.Snippet,
-          insertText: { value: 'Access ${1:Public} ${2:Shared}' },
-        },
-        {
-          label: 'Class',
-          kind: kind.Snippet,
-          insertText: {
-            value: [
-              'Class ${1:name}',
-              '\t$0',
-              ':EndClass',
-            ].join('\n'),
+        if (t === '∇') {
+          items.push(...[
+            'Implements Constructor',
+            'Implements Destructor',
+            'Implements Method',
+            'Implements Trigger',
+          ].map(textItem));
+          items.push({
+            label: 'Access',
+            kind: kind.Snippet,
+            insertText: { value: 'Access ${1:Private} ${2:Instance}' },
+          });
+        }
+        if (t === 'select') {
+          items.push(...[
+            'Case',
+            'CaseList',
+          ].map(textItem));
+        }
+        if (t === 'for' || t === 'while' || t === 'repeat') {
+          items.push(...['Continue', 'Leave'].map(textItem));
+        }
+        if (t === 'class' || t === 'namesapce') {
+          items.push(
+            {
+              label: 'Class',
+              kind: kind.Snippet,
+              insertText: {
+                value: [
+                  'Class ${1:name}',
+                  '\t$0',
+                  ':EndClass',
+                ].join('\n'),
+              },
+              documentation: 'Class script',
+            },
+            {
+              label: 'Namespace',
+              kind: kind.Snippet,
+              insertText: {
+                value: [
+                  'Namespace ${1:name}',
+                  '\t$0',
+                  ':EndNamespace',
+                ].join('\n'),
+              },
+              documentation: 'Namespace script',
+            },
+            {
+              label: 'Interface',
+              kind: kind.Snippet,
+              insertText: {
+                value: [
+                  'Interface ${1:name}',
+                  '\t$0',
+                  ':EndInterface',
+                ].join('\n'),
+              },
+              documentation: 'Interface script',
+            },
+            {
+              label: 'Property',
+              kind: kind.Snippet,
+              insertText: {
+                value: [
+                  'Property ${1:name}',
+                  '\t∇ r←get args',
+                  '\t  r←$2',
+                  '\t∇',
+                  '\t∇ set args',
+                  '\t∇',
+                  ':EndProperty',
+                ].join('\n'),
+              },
+              documentation: 'Property declaration',
+            },
+            {
+              label: 'Section',
+              kind: kind.Snippet,
+              insertText: {
+                value: [
+                  'Section ${1:name}',
+                  '\t$0',
+                  ':EndSection',
+                ].join('\n'),
+              },
+              documentation: 'Section block',
+            },
+          );
+        }
+        // if (!t || t === '∇') {
+        items.push(
+          {
+            label: 'Disposable',
+            kind: kind.Snippet,
+            insertText: {
+              value: [
+                'Disposable ${1:objects}',
+                '\t$0',
+                ':EndDisposable',
+              ].join('\n'),
+            },
+            documentation: 'Disposable Statement',
           },
-          documentation: 'Class script',
-        },
-        {
-          label: 'Disposable',
-          kind: kind.Snippet,
-          insertText: {
-            value: [
-              'Disposable ${1:objects}',
-              '\t$0',
-              ':EndDisposable',
-            ].join('\n'),
+          {
+            label: 'For',
+            kind: kind.Snippet,
+            insertText: {
+              value: [
+                'For ${1:item} :In ${2:items}',
+                '\t$0',
+                ':EndFor',
+              ].join('\n'),
+            },
+            documentation: 'For loop',
           },
-          documentation: 'Disposable Statement',
-        },
-        {
-          label: 'For',
-          kind: kind.Snippet,
-          insertText: {
-            value: [
-              'For ${1:item} :In ${2:items}',
-              '\t$0',
-              ':EndFor',
-            ].join('\n'),
+          {
+            label: 'If Else',
+            kind: kind.Snippet,
+            insertText: {
+              value: [
+                'If ${1:condition}',
+                '\t$2',
+                ':Else',
+                '\t$0',
+                ':EndIf',
+              ].join('\n'),
+            },
+            documentation: 'If-Else Statement',
           },
-          documentation: 'For loop',
-        },
-        {
-          label: 'If Else',
-          kind: kind.Snippet,
-          insertText: {
-            value: [
-              'If ${1:condition}',
-              '\t$2',
-              ':Else',
-              '\t$0',
-              ':EndIf',
-            ].join('\n'),
+          {
+            label: 'Repeat',
+            kind: kind.Snippet,
+            insertText: {
+              value: [
+                'Repeat',
+                '\t$0',
+                ':EndRepeat',
+              ].join('\n'),
+            },
+            documentation: 'Repeat loop - endless',
           },
-          documentation: 'If-Else Statement',
-        },
-        {
-          label: 'Interface',
-          kind: kind.Snippet,
-          insertText: {
-            value: [
-              'Interface ${1:name}',
-              '\t$0',
-              ':EndInterface',
-            ].join('\n'),
+          {
+            label: 'Repeat Until',
+            kind: kind.Snippet,
+            insertText: {
+              value: [
+                'Repeat',
+                '\t$0',
+                ':Until ${1:condition}',
+              ].join('\n'),
+            },
+            documentation: 'Repeat loop until',
           },
-          documentation: 'Interface script',
-        },
-        {
-          label: 'Namespace',
-          kind: kind.Snippet,
-          insertText: {
-            value: [
-              'Namespace ${1:name}',
-              '\t$0',
-              ':EndNamespace',
-            ].join('\n'),
+          {
+            label: 'Select',
+            kind: kind.Snippet,
+            insertText: {
+              value: [
+                'Select ${1:object}',
+                ':Case ${2:value}',
+                '\t$3',
+                ':Else',
+                '\t$0',
+                ':EndSelect',
+              ].join('\n'),
+            },
+            documentation: 'Select Statement',
           },
-          documentation: 'Namespace script',
-        },
-        {
-          label: 'Property',
-          kind: kind.Snippet,
-          insertText: {
-            value: [
-              'Property ${1:name}',
-              '\t∇ r←get args',
-              '\t  r←$2',
-              '\t∇',
-              '\t∇ set args',
-              '\t∇',
-              ':EndProperty',
-            ].join('\n'),
+          {
+            label: 'Trap',
+            kind: kind.Snippet,
+            insertText: {
+              value: [
+                'Trap ${1:error number}',
+                '\t$1',
+                ':Else',
+                '\t$0',
+                ':EndTrap',
+              ].join('\n'),
+            },
+            documentation: 'Trap-Else Statement',
           },
-          documentation: 'Property declaration',
-        },
-        {
-          label: 'Repeat',
-          kind: kind.Snippet,
-          insertText: {
-            value: [
-              'Repeat',
-              '\t$0',
-              ':EndRepeat',
-            ].join('\n'),
+          {
+            label: 'While',
+            kind: kind.Snippet,
+            insertText: {
+              value: [
+                'While ${1:condition}',
+                '\t$0',
+                ':EndWhile',
+              ].join('\n'),
+            },
+            documentation: 'While loop',
           },
-          documentation: 'Repeat loop - endless',
-        },
-        {
-          label: 'Repeat Until',
-          kind: kind.Snippet,
-          insertText: {
-            value: [
-              'Repeat',
-              '\t$0',
-              ':Until ${1:condition}',
-            ].join('\n'),
+          {
+            label: 'With',
+            kind: kind.Snippet,
+            insertText: {
+              value: [
+                'With ${1:condition}',
+                '\t$0',
+                ':EndWith',
+              ].join('\n'),
+            },
+            documentation: 'With Statement',
           },
-          documentation: 'Repeat loop until',
-        },
-        {
-          label: 'Section',
-          kind: kind.Snippet,
-          insertText: {
-            value: [
-              'Section ${1:name}',
-              '\t$0',
-              ':EndSection',
-            ].join('\n'),
-          },
-          documentation: 'Section block',
-        },
-        {
-          label: 'Select',
-          kind: kind.Snippet,
-          insertText: {
-            value: [
-              'Select ${1:object}',
-              ':Case ${2:value}',
-              '\t$3',
-              ':Else',
-              '\t$0',
-              ':EndSelect',
-            ].join('\n'),
-          },
-          documentation: 'Select Statement',
-        },
-        {
-          label: 'Trap',
-          kind: kind.Snippet,
-          insertText: {
-            value: [
-              'Trap ${1:error number}',
-              '\t$1',
-              ':Else',
-              '\t$0',
-              ':EndTrap',
-            ].join('\n'),
-          },
-          documentation: 'Trap-Else Statement',
-        },
-        {
-          label: 'While',
-          kind: kind.Snippet,
-          insertText: {
-            value: [
-              'While ${1:condition}',
-              '\t$0',
-              ':EndWhile',
-            ].join('\n'),
-          },
-          documentation: 'While loop',
-        },
-        {
-          label: 'With',
-          kind: kind.Snippet,
-          insertText: {
-            value: [
-              'With ${1:condition}',
-              '\t$0',
-              ':EndWith',
-            ].join('\n'),
-          },
-          documentation: 'With Statement',
-        },
-        ]);
+        );
+        // }
         /* eslint-enable no-template-curly-in-string */
         return items;
       } else if (D.send) {
@@ -757,6 +771,7 @@
         maxHeight: 32,
       });
       return new monaco.Promise((complete, error, progress) => {
+        setTimeout(() => { complete({}); }, 500);
         m.vt = {
           complete, error, progress, position,
         };

@@ -48,7 +48,6 @@
       wordBasedSuggestions: false,
     });
     ed.me = me;
-
     ed.me_ready = new Promise((resolve) => {
       // ugly hack as monaco doesn't have a built in event for when the editor is ready?!
       // https://github.com/Microsoft/monaco-editor/issues/115
