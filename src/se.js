@@ -241,13 +241,15 @@
       const ll = me.model.getLineCount();
       const llt = me.getTopForLineNumber(ll);
       const ontop = top > (llt + lh + lh) - oldHeight;
-      const onbottom = me.getCompletelyVisibleLinesRangeInViewport().endLineNumber === ll;
+      const { startLineNumber, endLineNumber } = me.getCompletelyVisibleLinesRangeInViewport();
+      const onbottom = endLineNumber === ll;
       me.layout({ width: se.dom.clientWidth, height: se.dom.clientHeight });
+      const flt = me.getTopForLineNumber(startLineNumber);
       const newHeight = me.getLayoutInfo().contentHeight;
       this.updPW();
 
       if (ontop) {
-        this.btm = top + newHeight;
+        this.btm = flt + newHeight;
       } else if (onbottom) {
         me.setScrollTop(0);
         this.btm = null;
