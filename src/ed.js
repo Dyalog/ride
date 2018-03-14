@@ -62,7 +62,16 @@
 
     const kc = monaco.KeyCode;
     me.addCommand(kc.DownArrow, () => ed.downOrXline(me), '!suggestWidgetVisible');
-    me.addCommand(kc.Tab, () => ed.indentOrComplete(me), '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode');
+    me.addCommand(
+      kc.Tab,
+      () => ed.indentOrComplete(me),
+      '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode'
+    );
+    me.addCommand(
+      kc.RightArrow,
+      () => me.trigger('editor', 'acceptSelectedSuggestion'),
+      'suggestWidgetVisible',
+    );
 
     me.onDidChangeCursorPosition(ed.cursorActivity.bind(ed));
     let mouseL = 0; let mouseC = 0; let mouseTS = 0;
