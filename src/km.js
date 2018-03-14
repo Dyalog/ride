@@ -326,7 +326,7 @@
     };
     function addCmd(map) {
       Object.keys(map).forEach((ks) => {
-        const nkc = ks.replace(/--/g, '-US_MINUS').split('-').reduce(((a, ko) => {
+        const nkc = ks.replace(/-(.)/g, '\n$1').split('\n').reduce(((a, ko) => {
           const k = D.keyMap.labels[ko] || ko;
           return a | (ctrlcmd[k] || km[k] || kc[k]); // eslint-disable-line no-bitwise
         }), 0);
