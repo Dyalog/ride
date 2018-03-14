@@ -310,7 +310,7 @@
       const { me } = this;
       const c = me.getPosition();
       const s = me.model.getLineContent(c.lineNumber);
-      const r = `[${D.syn.letter}0-9]*`; // r:regex fragment used for a name
+      const r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*'; // r:regex fragment used for a name
       return (
         ((RegExp(`⎕?${r}$`).exec(s.slice(0, c.column)) || [])[0] || '') + // match left  of cursor
         ((RegExp(`^${r}`).exec(s.slice(c.column)) || [])[0] || '') // match right of cursor
@@ -478,37 +478,9 @@
       });
       me.executeEdits('D', edits, o);
     },
-    ER(me) {
-      if (this.tc) {
-        D.send('RunCurrentLine', { win: this.id }); D.ide.getSIS(); return;
-      }
-      if (D.prf.autoCloseBlocks()) { // inactive, addCommand context limited to trace mode
-        const u = me.getPosition();
-        const l = u.lineNumber;
-        const md = me.getModel();
-        const s = md.getLineContent(l);
-        let m;
-        const re = /^(\s*):(class|disposable|for|if|interface|namespace|property|repeat|section|select|trap|while|with)\b([^⋄{]*)$/i;
-        md.getLineTokens(l, false);
-        const state = md._lines[l - 1].getState().clone();
-        if (u.column === s.length + 1 && (m = re.exec(s)) && !D.syn.dfnDepth(state)) {
-          const [, pre, kwc, post] = m;
-          let l1 = l + 1;
-          const end = md.getLineCount();
-          const kw = kwc[0].toUpperCase() + kwc.slice(1).toLowerCase();
-          while (l1 <= end && /^\s*(?:$|⍝)/.test(md.getLineContent(l1))) l1 += 1; // find the next non-blank line
-          const s1 = md.getLineContent(l1) || '';
-          const pre1 = s1.replace(/\S.*$/, '');
-          if (pre.length > pre1.length ||
-            (pre.length === pre1.length && !/^\s*:(?:end|else|andif|orif|case|until|access)/i.test(s1))) {
-            let r = `:${kw}${post}\n${pre}:End`;
-            D.prf.autoCloseBlocksEnd() || (r += kw);
-            me.executeEdits('D', [{ range: new monaco.Range(l, pre.length, l, s.length), text: r }]);
-            me.trigger('editor', 'editor.action.formatDocument');
-          }
-        }
-      }
-      me.trigger('editor', 'type', { text: '\n' });
+    ER() {
+      D.send('RunCurrentLine', { win: this.id });
+      D.ide.getSIS();
     },
     BH() { D.send('ContinueTrace', { win: this.id }); },
     RM() { D.send('Continue', { win: this.id }); },
