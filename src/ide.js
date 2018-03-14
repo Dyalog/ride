@@ -486,12 +486,15 @@ D.IDE = function IDE() {
     },
     OptionsDialog(x) {
       let text = typeof x.text === 'string' ? x.text : x.text.join('\n');
-      if (D.el && process.env.RIDE_NATIVE_DIALOGS) {
-        const r = D.el.dialog.showMessageBox(D.elw, {
+      if (D.el) { // && process.env.RIDE_NATIVE_DIALOGS) {
+        const bwId = D.ide.focusedWin.bw_id;
+        const bw = bwId ? D.el.BrowserWindow.fromId(bwId) : D.elw;
+        const r = D.el.dialog.showMessageBox(bw, {
           message: text,
           title: x.title || '',
           buttons: x.options || [''],
           cancelId: -1,
+          type: ['warning', 'info', 'question', 'error'][x.type - 1],
         });
         D.send('ReplyOptionsDialog', { index: r, token: x.token });
       } else {
