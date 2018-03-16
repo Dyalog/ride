@@ -3291,6 +3291,12 @@ input.lyt_g3:hover {
 body {
   background-color: #4d4a4b;
 }
+#ide {
+  background: url(img/Dyalog_60.png) center no-repeat #4d4a4b;
+}
+#apl_font {
+  color: #4d4a4b;
+}
 ::selection {
   background: #676364;
   color: white;
