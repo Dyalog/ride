@@ -22,7 +22,7 @@
         u && (s += ` ${g}=${u.slice(1)}`);
       }
     });
-    return { name: x.name, styles: s.slice(1) };
+    return { name: x.name, base: x.base, styles: s.slice(1) };
   }
   function decScm(x) { // x:for example "num=fg:345,bg:f,B,U,bgo:.5 str=fg:2,I com=U"
     const r = { name: x.name, base: x.base }; // r:the result
@@ -343,6 +343,7 @@
         scms.push(x);
         Object.keys(scm).forEach((k) => { x[k] = $.extend({}, scm[k]); }); // x:the new scheme
         x.name = uniqScmName(scm.name);
+        x.base = scm.base;
         delete x.frz;
         scm = x;
         updScms();
