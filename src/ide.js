@@ -763,7 +763,7 @@ D.IDE.prototype = {
         } else {
           setTimeout(() => {
             window.focus();
-            const r = D.el.dialog.showMessageBox(D.elw, {
+            const r = D.el.dialog.showMessageBox(D.el.getCurrentWindow(), {
               title: 'Save?',
               buttons: ['Yes', 'No', 'Cancel'],
               cancelId: -1,
