@@ -344,8 +344,12 @@
         }
       });
     }
+    console.time('addCmdDefaults');
     addCmd(D.keyMap.dyalogDefault);
+    console.timeEnd('addCmdDefaults');
+    console.time('addCmdDyalog');
     addCmd(D.keyMap.dyalog);
+    console.timeEnd('addCmdDyalog');
   };
   const l = {
     Unknown: 'unknown',

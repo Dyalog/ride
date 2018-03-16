@@ -235,6 +235,9 @@
     open(ee) { // ee:editable entity
       const ed = this;
       const { me } = ed;
+      ed.name = ee.name;
+      ed.container && ed.container.setTitle(ed.name);
+      D.ide.floating && $('title', ed.dom.ownerDocument).text(ed.name);
       me.model.winid = ed.id;
       me.model.onDidChangeContent((x) => {
         if (!me.dyalogBQ && x.changes.length === 1
@@ -263,7 +266,6 @@
       ed.oStop = (ee.stop || []).slice(0).sort((x, y) => x - y);
       ed.stop = new Set(ed.oStop);
       ed.setStop();
-      D.prf.floating() && $('title', ed.dom.ownerDocument).text(ee.name);
     },
     blockCursor(x) { this.me.updateOptions({ cursorStyle: x ? 'block' : 'line' }); },
     blinkCursor(x) { this.me.updateOptions({ cursorBlinking: x ? 'blink' : 'solid' }); },
@@ -278,6 +280,10 @@
         p.setActiveContentItem && p.setActiveContentItem(q);
         q = p; p = p.parent;
       } // reveal in golden layout
+      if (D.ide.floating) {
+        $('title', this.dom.ownerDocument).text(this.name);
+        D.el.getCurrentWindow().focus();
+      }
       window.focused || window.focus();
       this.me.focus();
     },
@@ -293,17 +299,17 @@
       }
     },
     close() {
-      if (D.prf.floating()) {
-        window.onbeforeunload = null;
-        I.ide.removeChild(I.ide.firstChild);
-        D.el.getCurrentWindow().hide();
+      if (D.ide.floating) {
+        delete D.ide.wins[this.id];
+        this.container && this.container.close();
+        !D.ide.gl.root.contentItems.length && D.el.getCurrentWindow().hide();
       }
     },
     prompt(x) {
       this.setRO(this.tc || !x);
       this.tc && this.dom.classList.toggle('pendent', !x);
     },
-    die() { this.setRO(1); },
+    die() { this.setRO(1); this.ide.connected = 0; },
     getDocument() { return this.dom.ownerDocument; },
     refresh() { },
     cword() { // apl identifier under cursor
@@ -349,9 +355,6 @@
       }
       ed.restoreScrollPos();
       me.setPosition(u);
-      if (D.ide.hadErr) {
-        D.ide.wins[0].focus(); D.ide.hadErr = 0;
-      } else { ed.focus(); }
     },
     SetHighlightLine(line) {
       const w = this;
@@ -569,29 +572,6 @@
       } else {
         me.trigger('editor', 'editor.action.insertLineAfter');
         this.xline = l + 1;
-      }
-    },
-    onbeforeunload(e) { // called when the user presses [X] on the OS window
-      const ed = this;
-      const { me } = ed;
-      if (D.prf.floating() && D.ide.connected) { e.returnValue = false; }
-      if (ed.ide.dead) {
-        D.nww && D.nww.close(true); // force close window
-      } else if (ed.tc || (me.getValue() === ed.oText && `${ed.getStops()}` === `${ed.oStop}`)) {
-        ed.EP(me);
-      } else {
-        setTimeout(() => {
-          window.focus();
-          const r = D.el.dialog.showMessageBox(D.elw, {
-            title: 'Save?',
-            buttons: ['Yes', 'No', 'Cancel'],
-            cancelId: -1,
-            message: `The object "${ed.name}" has changed.\nDo you want to save the changes?`,
-          });
-          if (r === 0) ed.EP(me);
-          else if (r === 1) ed.QT(me);
-          return '';
-        }, 10);
       }
     },
   };

@@ -17,9 +17,10 @@ D.prf={}
   ['colourScheme',       'Default'], //name of the active colour scheme
   ['colourSchemes',      []],//objects describing user-defined colour schemes
   ['dark',               0],
-//  ['favs',               [{type:'connect'}]],
+  //  ['favs',               [{type:'connect'}]],
   ['floating',           0], //floating editor and tracer windows
   ['floatOnTop',         0], //try to keep floating windows on top of the session
+  ['floatSingle',        0], //create single floating edit window
   ['fold',               1], //code folding
   ['ime',                1], //switch to dyalog IME when RIDE starts (Windows-only)
   ['indent',             4], //-1 disables autoindent

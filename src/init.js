@@ -27,7 +27,7 @@ const Console = console;
 
       D.prf.zoom((z) => {
         if (!D.ide) return;
-        if (D.ed) D.ipc.of.ride_master.emit('zoom', z);
+        if (D.ide.floating) D.ipc.of.ride_master.emit('zoom', z);
         else D.ide.zoom(z);
       });
       // context menu
@@ -36,7 +36,7 @@ const Console = console;
         .concat(['Undo', 'Redo'].map(x => ({
           label: x,
           click: () => {
-            const u = D.ed || D.ide.focusedWin;
+            const u = D.ide.focusedWin;
             const { me } = u;
             if (u && me[x.toLowerCase()]) me[x.toLowerCase()]();
           },

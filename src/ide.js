@@ -3,12 +3,14 @@
 // and an instance of the workspace explorer (.wse) defined in wse.js
 // manages the language bar, its tooltips, and the insertion of characters
 // processes incoming RIDE protocol messages
-D.IDE = function IDE() {
+D.IDE = function IDE(opts = {}) {
   const ide = this;
   I.cn.hidden = 1;
   this.lbarRecreate();
   D.ide = ide;
   ide.dom = I.ide; I.ide.hidden = 0;
+  ide.floating = opts.floating;
+  ide.ipc = opts.ipc;
   // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.pending = [];
   ide.exec = (a, tc) => {
@@ -20,24 +22,37 @@ D.IDE = function IDE() {
   };
   ide.host = ''; ide.port = ''; ide.wsid = '';
   D.prf.title(ide.updTitle.bind(ide));
-  ide.wins = { 0: new D.Se(ide) };
-  D.wins = ide.wins;
-
-  ide.focusedWin = ide.wins['0']; // last focused window, it might not have the focus right now
-  ide.switchWin = (x) => { // x: +1 or -1
-    const a = [];
-    let i = -1;
-    const { wins } = D.ide;
-    Object.keys(wins).forEach((k) => {
-      wins[k].hasFocus() && (i = a.length);
-      a.push(wins[k]);
+  ide.wins = {};
+  if (ide.floating) {
+    ide.connected = 1;
+    ide._focusedWin = null;
+    Object.defineProperty(ide, 'focusedWin', {
+      set(w) {
+        ide.ipc.emit('focusedWin', w.id);
+        this._focusedWin = w;
+      },
+      get() { return this._focusedWin; },
     });
-    const j = i < 0 ? 0 : (i + a.length + x) % a.length;
-    const w = a[j];
-    if (!w.bw_id) D.elw.focus();
-    w.focus(); return !1;
-  };
+    ide.switchWin = (x) => { ide.ipc.emit('switchWin', x); };
+  } else {
+    ide.wins[0] = new D.Se(ide);
+    D.wins = ide.wins;
 
+    ide.focusedWin = ide.wins['0']; // last focused window, it might not have the focus right now
+    ide.switchWin = (x) => { // x: +1 or -1
+      const a = [];
+      let i = -1;
+      const { wins } = D.ide;
+      Object.keys(wins).forEach((k) => {
+        wins[k].hasFocus() && (i = a.length);
+        a.push(wins[k]);
+      });
+      const j = i < 0 ? 0 : (i + a.length + x) % a.length;
+      const w = a[j];
+      if (!w.bwId) D.elw.focus();
+      w.focus(); return !1;
+    };
+  }
   // We need to be able to temporarily block the stream of messages coming from socket.io
   // Creating a floating window can only be done asynchronously and it's possible that a message
   // for it comes in before the window is ready.
@@ -119,16 +134,8 @@ D.IDE = function IDE() {
   I.lb.onclick = (x) => {
     const s = x.target.textContent;
     if (lbDragged || x.target.nodeName !== 'B' || /\s/.test(s)) return !1;
-    const { wins } = ide;
-    let t = 0;
-    let w = wins[0];
-    const now = new Date();
-    Object.keys(wins).forEach((k) => {
-      const w0 = wins[k];
-      if ((now - w0.focusTS > 500) && t <= w0.focusTS) { w = w0; t = w0.focusTS; }
-    });
-    w.insert(s);
-    w.id && w.focus();
+    const w = ide.focusedWin;
+    w.hasFocus() ? w.insert(s) : D.util.insert(document.activeElement, s);
     return !1;
   };
   I.lb.onmouseout = (x) => {
@@ -171,7 +178,7 @@ D.IDE = function IDE() {
     settings: { showPopoutIcon: 0 },
     dimensions: { borderWidth: 4 },
     labels: { minimise: 'unmaximise' },
-    content: [{
+    content: [ide.floating ? { type: 'stack' } : {
       title: 'Session',
       type: 'component',
       componentName: 'win',
@@ -195,8 +202,13 @@ D.IDE = function IDE() {
       });
     });
     setTimeout(() => {
-      ide.wins[ide.hadErr ? 0 : h.id].focus();
-      ide.hadErr = ide.hadErr && D.prf.ilf();
+      if (ide.ipc) {
+        w.focus();
+        ide.ipc.emit('mounted', h.id);
+      } else {
+        ide.hadErr > 0 && (ide.hadErr -= 1);
+        ide.focusWin(w);
+      }
     }, 1);
     return w;
   }
@@ -229,7 +241,7 @@ D.IDE = function IDE() {
     ide.wsew = ide.WSEwidth;
     ide.dbgw = ide.DBGwidth;
   });
-  gl.on('itemDestroyed', () => { ide.wins[0].saveScrollPos(); });
+  gl.on('itemDestroyed', () => { ide.wins[0] && ide.wins[0].saveScrollPos(); });
   gl.on('tabCreated', (x) => {
     x.element.off('mousedown', x._onTabClickFn); // remove default binding
     x.element.on('mousedown', (e) => {
@@ -325,7 +337,7 @@ D.IDE = function IDE() {
   D.prf.wse(toggleWSE); D.prf.wse() && setTimeout(toggleWSE, 500);
   D.prf.dbg(toggleDBG); D.prf.dbg() && setTimeout(toggleDBG, 500);
   // OSX is stealing our focus.  Let's steal it back!  Bug #5
-  D.mac && setTimeout(() => { ide.wins[0].focus(); }, 500);
+  D.mac && !ide.floating && setTimeout(() => { ide.wins[0].focus(); }, 500);
   D.prf.lineNums((x) => { eachWin((w) => { w.id && w.setLN(x); }); });
   D.prf.breakPts((x) => { eachWin((w) => { w.id && w.setBP(x); }); });
   ide.handlers = { // for RIDE protocol messages
@@ -365,12 +377,21 @@ D.IDE = function IDE() {
         me.revealRangeAtTop(new monaco.Range(i + 1, 1, i + 1, 1));
       }
     },
-    HadError() { ide.pending.splice(0, ide.pending.length); ide.wins[0].focus(); ide.hadErr = 1; },
+    HadError() {
+      ide.pending.splice(0, ide.pending.length);
+      ide.wins[0].focus();
+      ide.hadErr = 2 + D.prf.ilf(); // gl mounted + SetHilghlightLine + ReplyFormatCode
+    },
     GotoWindow(x) { const w = ide.wins[x.win]; w && w.focus(); },
     WindowTypeChanged(x) { return ide.wins[x.win].setTC(x.tracer); },
     ReplyGetAutocomplete(x) { const w = ide.wins[x.token]; w && w.processAutocompleteReply(x); },
     ValueTip(x) { ide.wins[x.token].ValueTip(x); },
-    SetHighlightLine(x) { D.wins[x.win].SetHighlightLine(x.line); },
+    SetHighlightLine(x) {
+      const w = D.wins[x.win];
+      w.SetHighlightLine(x.line);
+      ide.hadErr > 0 && --ide.hadErr;
+      ide.focusWin(w);
+    },
     UpdateWindow(x) {
       const w = ide.wins[x.token];
       if (w) {
@@ -381,8 +402,9 @@ D.IDE = function IDE() {
     ReplySaveChanges(x) { const w = ide.wins[x.win]; w && w.saved(x.err); },
     CloseWindow(x) {
       const w = ide.wins[x.win];
-      if (w.bw_id) {
-        w.id = -1; w.close();
+      if (w.bwId) {
+        w.close();
+        w.id = -1;
       } else if (w) {
         w.container && w.container.close();
       }
@@ -421,7 +443,7 @@ D.IDE = function IDE() {
       const w = ee.token;
       let done;
       const editorOpts = { id: w, name: ee.name, tc: ee.debugger };
-      ide.hadErr = ide.hadErr && editorOpts.tc;
+      !editorOpts.tc && (ide.hadErr = -1);
       if (D.el && D.prf.floating() && !ide.dead) {
         ide.block(); // the popup will create D.wins[w] and unblock the message queue
         D.IPC_LinkEditor({ editorOpts, ee });
@@ -487,7 +509,7 @@ D.IDE = function IDE() {
     OptionsDialog(x) {
       let text = typeof x.text === 'string' ? x.text : x.text.join('\n');
       if (D.el) { // && process.env.RIDE_NATIVE_DIALOGS) {
-        const bwId = D.ide.focusedWin.bw_id;
+        const { bwId } = D.ide.focusedWin;
         const bw = bwId ? D.el.BrowserWindow.fromId(bwId) : D.elw;
         const r = D.el.dialog.showMessageBox(bw, {
           message: text,
@@ -579,7 +601,12 @@ D.IDE = function IDE() {
     },
     ReplyGetSIStack(x) { ide.dbg && ide.dbg.sistack.render(x.stack); },
     ReplyGetThreads(x) { ide.dbg && ide.dbg.threads.render(x.threads); },
-    ReplyFormatCode(x) { D.wins[x.win].ReplyFormatCode(x.text); },
+    ReplyFormatCode(x) {
+      const w = D.wins[x.win];
+      w.ReplyFormatCode(x.text);
+      ide.hadErr > 0 && (ide.hadErr -= 1);
+      ide.focusWin(w);
+    },
     ReplyTreeList(x) { ide.wse.replyTreeList(x); },
     StatusOutput(x) {
       let w = ide.wStatus;
@@ -614,7 +641,10 @@ D.IDE.prototype = {
     Object.keys(ide.wins).forEach((k) => { ide.wins[k].die(); });
   },
   getThreads: $.debounce(100, () => { D.prf.dbg() && D.send('GetThreads', {}); }),
-  getSIS: $.debounce(100, () => { D.prf.dbg() && D.send('GetSIStack', {}); }),
+  getSIS: $.debounce(100, () => {
+    if (this.floating) this.ipc.emit('getSIS');
+    else D.prf.dbg() && D.send('GetSIStack', {});
+  }),
   updPW(x) { this.wins[0].updPW(x); },
   updTitle() { // change listener for D.prf.title
     const ide = this;
@@ -642,6 +672,13 @@ D.IDE.prototype = {
     };
     document.title = D.prf.title().replace(/\{\w+\}/g, x => m[x.toUpperCase()] || x) || 'Dyalog';
   },
+  focusWin(w) {
+    if (this.hadErr === 0) {
+      D.elw && D.elw.focus();
+      this.wins[0].focus();
+      this.hadErr = -1;
+    } else { w.focus(); }
+  },
   focusMRUWin() { // most recently used
     const { wins } = this;
     let t = 0;
@@ -650,13 +687,13 @@ D.IDE.prototype = {
       const x = wins[k];
       if (x.id && t <= x.focusTS) { w = x; t = x.focusTS; }
     });
-    if (!w.bw_id) D.elw.focus();
+    if (!w.bwId) D.elw.focus();
     w.focus();
   },
   zoom(z) {
     const { wins } = this;
     Object.keys(wins).forEach((x) => { wins[x].zoom(z); });
-    wins[0].restoreScrollPos();
+    wins[0] && wins[0].restoreScrollPos();
     this.gl.container.resize();
   },
   LBR: D.prf.lbar.toggle,
@@ -670,6 +707,7 @@ D.IDE.prototype = {
   RDO() { this.focusedWin.me.trigger('D', 'redo'); },
   CAW() { D.send('CloseAllWindows', {}); },
   Edit(data) {
+    if (this.floating) { this.ipc.emit('Edit', data); return; }
     D.pendingEdit = D.pendingEdit || data;
     D.pendingEdit.unsaved = D.pendingEdit.unsaved || {};
     const u = D.pendingEdit.unsaved;
@@ -682,7 +720,7 @@ D.IDE.prototype = {
       if (v) u[k] = v;
       bws = bws || v === -1;
     });
-    if (bws) {
+    if (bws && D.ipc.server) {
       D.ipc.server.broadcast('getUnsaved');
     } else {
       D.send('Edit', D.pendingEdit);
@@ -710,6 +748,34 @@ D.IDE.prototype = {
     I.lb_inner.innerHTML = D.prf.lbarOrder()
       .replace(/\s*$/, `\xa0${r}${r && '\xa0'}`) // replace any trailing spaces with missing glyphs and final nbs
       .replace(/\s+/g, '\xa0').replace(/(.)/g, '<b>$1</b>'); // replace white spaces with single nbs and markup
+  },
+  onbeforeunload(e) { // called when the user presses [X] on the OS window
+    const ide = this;
+    if (ide.floating && ide.connected) { e.returnValue = false; }
+    if (ide.dead) {
+      D.nww && D.nww.close(true); // force close window
+    } else {
+      Object.keys(ide.wins).forEach((k) => {
+        const ed = ide.wins[k];
+        const { me } = ed;
+        if (ed.tc || (me.getValue() === ed.oText && `${ed.getStops()}` === `${ed.oStop}`)) {
+          ed.EP(me);
+        } else {
+          setTimeout(() => {
+            window.focus();
+            const r = D.el.dialog.showMessageBox(D.elw, {
+              title: 'Save?',
+              buttons: ['Yes', 'No', 'Cancel'],
+              cancelId: -1,
+              message: `The object "${ed.name}" has changed.\nDo you want to save the changes?`,
+            });
+            if (r === 0) ed.EP(me);
+            else if (r === 1) ed.QT(me);
+            return '';
+          }, 10);
+        }
+      });
+    }
   },
 };
 
