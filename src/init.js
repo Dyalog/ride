@@ -74,6 +74,8 @@ const Console = console;
           show: false,
           parent: D.elw,
           alwaysOnTop: true,
+          minWidth: 580,
+          minHeight: 460,
         });
         bw.loadURL(`${loc}?prf`); // bw.webContents.toggleDevTools();
         D.prf_bw = { id: bw.id };
@@ -103,8 +105,8 @@ const Console = console;
         setTimeout(() => {
           let q = true;
           if (D.prf.sqp()) {
-            const msg = D.local ? 'Quit Dyalog APL. Are you sure?' : 'Disconnect from interpreter. Are you sure?';
-            $.confirm(msg, document.title, (x) => { q = x; });
+            const msg = D.local ? 'Quit Dyalog APL.' : 'Disconnect from interpreter.';
+            $.confirm(`${msg} Are you sure?`, document.title, (x) => { q = x; });
           }
           if (q) {
             if (D.ipc) D.ipc.server.stop();
@@ -116,8 +118,11 @@ const Console = console;
               D.ide.connected = 0;
               window.close();
             }
+            D.prf.connectOnQuit() && D.commands.CNC();
           }
         }, 10);
+      } else if (D.ide && D.prf.connectOnQuit()) {
+        D.commands.CNC();
       }
     };
 

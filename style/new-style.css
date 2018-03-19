@@ -1475,6 +1475,14 @@ body .ui-tooltip {
   margin: 3px 0 5px 0;
 }
 /*Prefs>Code*/
+#code {
+  overflow: auto;
+  position: absolute;
+  top: 30px;
+  bottom: 40px;
+  left: 3px;
+  right: 3px;
+}
 #code p {
   margin: 5px;
 }
@@ -1496,7 +1504,7 @@ body .ui-tooltip {
   overflow: hidden;
   text-align: left;
   position: absolute;
-  top: 100px;
+  top: 75px;
   bottom: 56px;
 }
 #col_settings {
@@ -1507,7 +1515,7 @@ body .ui-tooltip {
   line-height: 1.5;
   text-align: left;
   position: absolute;
-  top: 100px;
+  top: 75px;
   bottom: 56px;
 }
 #col_settings p {
@@ -1784,7 +1792,7 @@ input.lyt_g3:hover {
   position: absolute;
   left: 0;
   right: 0;
-  top: 54px;
+  top: 30px;
   bottom: 40px;
   overflow: auto;
   text-align: left;
@@ -1907,7 +1915,8 @@ input.lyt_g3:hover {
   padding: 3px 5px;
 }
 #prf_nav {
-  height: 28px;
+  display: inline-block;
+  width: 100%;
   border-bottom: solid 1px #fac739;
   margin-bottom: 2px;
 }
@@ -3346,9 +3355,4 @@ body {
 #wse .bt_text.selected {
   background-color: #676364;
   outline: #676364;
-}
-#code {
-  overflow: hidden;
-  overflow-y: scroll;
-  max-height: 397px;
 }

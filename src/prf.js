@@ -1,12 +1,12 @@
-//Preferences API:
+// Preferences API:
 //  D.prf.foo()                              // getter
 //  D.prf.foo(123)                           // setter
 //  D.prf.foo(function(newValue,oldValue){}) // add "on change" listener
 //  D.prf.foo.toggle()                       // convenience function for booleans (numbers 0 and 1)
 //  D.prf.foo.getDefault()                   // retrieve default value
 'use strict'
-D.prf={}
-;[//name                 default (type is determined from default value; setter enforces type and handles encoding)
+D.prf = {};
+[ // name                 default (type is determined from default value; setter enforces type and handles encoding)
   ['autoCloseBlocks',    1], //whether to insert :end after :if,:for,etc when Enter is pressed
   ['autoCloseBlocksEnd', 0], //0: close blocks with ":EndIf",":EndFor",etc;  1: close blocks only with ":End"
   ['autoCloseBrackets',  1], //whether to insert {}[]() in pairs
@@ -16,7 +16,7 @@ D.prf={}
   ['autocompletionDelay',500],
   ['colourScheme',       'Default'], //name of the active colour scheme
   ['colourSchemes',      []],//objects describing user-defined colour schemes
-  ['dark',               0],
+  ['connectOnQuit',      0], // open connection page when active session ends
   //  ['favs',               [{type:'connect'}]],
   ['floating',           0], //floating editor and tracer windows
   ['floatOnTop',         0], //try to keep floating windows on top of the session

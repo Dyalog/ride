@@ -183,18 +183,6 @@
         const schema = a[i];
         I.col_stl && (I.col_stl.textContent = renderCSS(schema));
         if (window.monaco) setMonacoTheme(schema);
-        // add class=dark to <body> if the brightness of
-        // the background for normal text is lower than average
-        // const h = a[i].norm || {};
-        // const bg = RGB(h.bg || '#ffffff');
-        // const bgo = h.bgo == null ? 1 : h.bgo;
-        // const b = Math.max(
-        //   +`0x${bg.slice(1, 3)}`,
-        //   +`0x${bg.slice(3, 5)}`,
-        //   +`0x${bg.slice(5, 7)}`,
-        // );
-        // const dark = ((1 - bgo) * 255) + (bgo * b) < 128;
-        // document.body.classList[dark?'add':'remove']('dark')
         break;
       }
     }

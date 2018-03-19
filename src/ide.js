@@ -287,7 +287,6 @@ D.IDE = function IDE(opts = {}) {
   updTopBtm();
   $(window).resize(updTopBtm);
   D.prf.lbar((x) => { I.lb.hidden = !x; updTopBtm(); });
-  D.prf.dark((x) => { x ? $('body').addClass('newDark') : $('body').removeClass('newDark'); });
   setTimeout(() => {
     try {
       D.installMenu(D.parseMenuDSL(D.prf.menu()));
