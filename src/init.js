@@ -77,7 +77,7 @@ const Console = console;
         });
         bw.loadURL(`${loc}?prf`); // bw.webContents.toggleDevTools();
         D.prf_bw = { id: bw.id };
-        node_require(`${__dirname}/src/cn`)();
+        nodeRequire(`${__dirname}/src/cn`)();
       } else {
         const ws = new WebSocket((loc.protocol === 'https:' ? 'wss://' : 'ws://') + loc.host);
         const q = [];
@@ -186,7 +186,7 @@ const Console = console;
       };
 
       // extra css and js
-      const path = node_require('path');
+      const path = nodeRequire('path');
       const { env } = process;
       if (env.RIDE_JS) {
         env.RIDE_JS

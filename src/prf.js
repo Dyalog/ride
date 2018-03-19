@@ -152,8 +152,8 @@ D.prf={}
   p.toggle=function(){return p(!p())}
 })
 
-D.db=!node_require?localStorage:(function(){
-  var rq=node_require,crypto=rq('crypto'),fs=rq('fs'),el=rq('electron').remote,elw=el.getGlobal('elw')
+D.db=!nodeRequire?localStorage:(function(){
+  var rq=nodeRequire,crypto=rq('crypto'),fs=rq('fs'),el=rq('electron').remote,elw=el.getGlobal('elw')
   //file-backed storage with API similar to that of localStorage
   var k=[],v=[] //keys and values
   // var iv=['wse'] //ignored vars (not saved to file)
@@ -176,6 +176,6 @@ D.db=!node_require?localStorage:(function(){
 
 if(D.win&&D.db.getItem('ime')!=='0'){
   var setImeExe=process.execPath.replace(/[^\\\/]+$/,'set-ime.exe')
-  var fs=node_require('fs'),spawn=node_require('child_process').spawn
+  var fs=nodeRequire('fs'),spawn=nodeRequire('child_process').spawn
   fs.existsSync(setImeExe)&&spawn(setImeExe,[process.pid],{stdio:['ignore','ignore','ignore']})
 }

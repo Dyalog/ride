@@ -7,7 +7,8 @@
         "node": true
     },
     "globals": {
-        "node_require":true,
+        "amdRequire":true,
+        "nodeRequire":true,
         "$":true,
         "I":true,
         "J":true,

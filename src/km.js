@@ -24,7 +24,7 @@
     ABT() { D.abt(); },
     CNC() {
       const p = D.el.process.argv; // if(D.mac)p=p.replace(/(\/Contents\/).*$/,'$1MacOS/nwjs')
-      node_require('child_process').spawn(p[0], p.slice(1), {
+      nodeRequire('child_process').spawn(p[0], p.slice(1), {
         detached: true,
         stdio: ['ignore', 'ignore', 'ignore'],
         env: $.extend({}, process.env, { RIDE_SPAWN: '' }),
@@ -53,7 +53,7 @@
         const e = {};
         Object.keys(process.env).forEach((k) => { e[k] = process.env[k]; });
         e.RIDE_SPAWN = D.lastSpawnedExe; const p = D.el.process.argv;
-        node_require('child_process').spawn(p[0], p.slice(1), {
+        nodeRequire('child_process').spawn(p[0], p.slice(1), {
           detached: true, stdio: ['ignore', 'ignore', 'ignore'], env: e,
         });
       } else {
@@ -119,7 +119,7 @@
     LOG() {
       if (!D.el) return;
       const w = new D.el.BrowserWindow({ width: 400, height: 500, parent: D.elw });
-      const cn = node_require(`${__dirname}/src/cn`);
+      const cn = nodeRequire(`${__dirname}/src/cn`);
       D.logw = w;
       w.setTitle('Protocol Log');
       w.loadURL(`file://${__dirname}/empty.html`);

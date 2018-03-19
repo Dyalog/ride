@@ -414,9 +414,9 @@ D.IDE = function IDE(opts = {}) {
     },
     OpenWindow(ee) {
       if (!ee.debugger && D.el && process.env.RIDE_EDITOR) {
-        const fs = node_require('fs');
-        const os = node_require('os');
-        const cp = node_require('child_process');
+        const fs = nodeRequire('fs');
+        const os = nodeRequire('os');
+        const cp = nodeRequire('child_process');
         const d = `${os.tmpDir()}/dyalog`;
         fs.existsSync(d) || fs.mkdirSync(d, 7 * 8 * 8); // rwx------
         const f = `${d}/${ee.name}.dyalog`;

@@ -21,7 +21,7 @@
     return [s, !isMeta]; // s:key name, c:is the key combination complete?
   }
   function loadDemoScript(f) { // f:path to file, ignored if empty
-    f && node_require('fs').readFile(f, 'utf8', (err, s) => {
+    f && nodeRequire('fs').readFile(f, 'utf8', (err, s) => {
       if (err) { $.err('Cannot load demo file'); return; }
       index = -1;
       lines = s.replace(/^[\ufeff\ufffe]/, '').split(/\r?\n/)

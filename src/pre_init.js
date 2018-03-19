@@ -12,15 +12,15 @@ const I = {};
 const J = {};
 
 (function preInit() {
-  if (typeof node_require !== 'undefined') {
+  if (typeof nodeRequire !== 'undefined') {
     D.mop = new Promise((resolve, reject) => {
       amdRequire(['vs/editor/editor.main'], resolve, reject);
     });
-    D.el = node_require('electron').remote;
+    D.el = nodeRequire('electron').remote;
     D.elw = D.el.getGlobal('elw');
-    D.ipc = node_require('node-ipc');
+    D.ipc = nodeRequire('node-ipc');
     D.ipc.config.logInColor = false;
-    D = $.extend(D, node_require('electron').remote.getGlobal('D'));
+    D = $.extend(D, nodeRequire('electron').remote.getGlobal('D'));
     const plt = process.platform;
     D.win = /^win/i.test(plt);
     D.mac = plt === 'darwin';

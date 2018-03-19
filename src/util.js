@@ -61,7 +61,7 @@ D.util = {
     }
   },
   ucLength(s) {
-    return node_require('punycode').ucs2.decode(s).length;
+    return nodeRequire('punycode').ucs2.decode(s).length;
   },
   elastic(inp) { // make an <input> stretch when you type long text in it
     let m = inp.dataset.minSize;
