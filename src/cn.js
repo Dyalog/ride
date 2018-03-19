@@ -1,23 +1,6 @@
 // Connect page, loaded only when running in Electron
 {
   let log;
-  {
-    let i = 0;
-    const n = 100;
-    const a = Array(n);
-    const l = [];
-    const t0 = +new Date();
-    log = (x) => {
-      const msg = `${new Date() - t0} ${x}`;
-      a[i] = msg;
-      i = (i + 1) % n;
-      for (let j = 0; j < l.length; j++) l[j](msg);
-    };
-    module.exports.getLog = () => a.slice(i).concat(a.slice(0, i));
-    module.exports.addLogListener = (x) => { l.push(x); };
-    module.exports.rmLogListener = (x) => { const li = l.indexOf(x); li >= 0 && l.splice(li, 1); };
-  }
-
   let $sel = $(); // $sel:selected item(s)
   let sel; // sel:data associated with the selected item (only if it's unique)
   let q; // a dictionary of DOM elements whose ids start with "cn_", keyed by the rest of the id
@@ -701,8 +684,9 @@
       axis: 'y',
       stop: save,
     })
-      .on('click', '.go', function () {
-        $(q.favs).list('select', $(this).parentsUntil(q.favs).last().index());
+      .on('click', '.go', (e) => {
+        const t = $(e.target);
+        $(q.favs).list('select', t.parentsUntil(q.favs).last().index());
         q.go.click();
       })
       .keydown((x) => {
@@ -783,13 +767,15 @@
     q.go.onclick = () => { go(); return !1; };
     const a = q.rhs.querySelectorAll('input,textarea');
     for (let i = 0; i < a.length; i++) if (/^text(area)?$/.test(a[i].type)) D.util.elastic(a[i]);
-    $(':text[name],textarea[name]', q.rhs).change(function () {
-      const k = this.name;
-      const v = this.value;
+    $(':text[name],textarea[name]', q.rhs).change((e) => {
+      const t = $(e.target);
+      const k = t.name;
+      const v = t.value;
       v ? (sel[k] = v) : delete sel[k];
     });
-    $(':checkbox[name]', q.rhs).change(function () {
-      this.checked ? (sel[this.name] = 1) : delete sel[this.name];
+    $(':checkbox[name]', q.rhs).change((e) => {
+      const t = $(e.target);
+      t.checked ? (sel[t.name] = 1) : delete sel[t.name];
     });
     // collect information about installed interpreters
     try {
@@ -882,4 +868,21 @@
       window.onbeforeunload = () => { D.send('Exit', { code: 0 }); };
     } else { D.cn(); }
   };
+
+  {
+    let i = 0;
+    const n = 100;
+    const a = Array(n);
+    const l = [];
+    const t0 = +new Date();
+    log = (x) => {
+      const msg = `${new Date() - t0} ${x}`;
+      a[i] = msg;
+      i = (i + 1) % n;
+      for (let j = 0; j < l.length; j++) l[j](msg);
+    };
+    module.exports.getLog = () => a.slice(i).concat(a.slice(0, i));
+    module.exports.addLogListener = (x) => { l.push(x); };
+    module.exports.rmLogListener = (x) => { const li = l.indexOf(x); li >= 0 && l.splice(li, 1); };
+  }
 }
