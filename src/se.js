@@ -169,8 +169,7 @@
       const { me } = se;
       const i = se.histIdx + d;
       const l = me.getPosition().lineNumber;
-      if (i < 0) { $.alert('There is no next line', 'Dyalog APL Error'); return; }
-      if (i >= se.hist.length) { $.alert('There is no previous line', 'Dyalog APL Error'); return; }
+      if (i < 0 || i >= se.hist.length) return;
       if (!se.histIdx) se.hist[0] = me.model.getLineContent(l);
       if (se.hist[i] == null) return;
       me.executeEdits('D', [{
