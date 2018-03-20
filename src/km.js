@@ -7,9 +7,74 @@
     }
   });
 
+  // D.kbds.layouts[lc] contains four strings describing how keys map to characters:
+  //  0:normal  1:shifted
+  //  2:APL     3:APL shifted
+  // Each string can be indexed by scancode: http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
+  // "APL" and "APL shifted" are the defaults upon which the user can build customisations.
+  let bq; // effective ` map as a dictionary, kept in sync with the prefs
+  function updBQ() {
+    bq = {}; D.bq = bq;
+    const lc = D.prf.kbdLocale();
+    const l = D.kbds.layouts[lc] || D.kbds.layouts.en_US;
+    const n = l[0].length;
+    for (let i = 0; i < 2; i++) {
+      for (let j = 0; j < n; j++) {
+        const name = l[i][j];
+        bq[name] || (bq[name] = l[2 + i][j]);
+      }
+    }
+    const s = D.prf.prefixMaps()[lc];
+    if (s) for (let i = 0; i < s.length; i += 2) bq[s[i]] = s[i + 1];
+  }
+  updBQ(); D.prf.prefixMaps(updBQ); D.prf.kbdLocale(updBQ);
+
+  function bqCleanUpMe(me) {
+    if (me.dyalogBQ) {
+      me.dyalogBQ.dispose(); delete me.dyalogBQ;
+      me.trigger('editor', 'hideSuggestWidget');
+    }
+  }
+  function bqChangeHandlerMe(me, o) { // o:changeObj
+    if (!me.dyalogBQ) return;
+    const chg = o.changes[0];
+    const r = chg.range;
+    const l = r.startLineNumber;
+    const c = r.startColumn;
+    const x = chg.text[0];
+    const pk = D.prf.prefixKey();
+    const s = me.model.getLineContent(l);
+    if (s.slice(c - 3, c) === `${pk}${pk}${pk}`) { // ``` for ⋄
+      const nr = new monaco.Range(l, c - 2, l, c + 1);
+      const ns = new monaco.Selection(l, c - 1, l, c - 1);
+      bqCleanUpMe(me);
+      setTimeout(() => {
+        me.listen = false;
+        me.executeEdits('D', [{ range: nr, text: bq[pk] || '' }], [ns]);
+        me.listen = true;
+      }, 1);
+    } else if (s.slice(c - 3, c - 1) === `${pk}${pk}`) { // bqbqc
+      me.dyalogBQ && me.dyalogBQ.dispose(); delete me.dyalogBQ;
+    } else if (s[c - 2] !== pk) {
+      bqCleanUpMe(me);
+    } else if (x !== pk) {
+      const y = x === ' ' ? pk : bq[x];
+      if (y) {
+        const nr = new monaco.Range(l, c - 1, l, c + chg.text.length);
+        const ns = new monaco.Selection(l, c, l, c);
+        bqCleanUpMe(me);
+        setTimeout(() => {
+          me.listen = false;
+          me.executeEdits('D', [{ range: nr, text: y }], [ns]);
+          me.listen = true;
+        }, 1);
+      } else {
+        bqCleanUpMe(me);
+      }
+    }
+  }
+
   D.keyMap.dyalogDefault = { End: 'goLineEndSmart' };
-  // D.db is initialised later in init.js, so we must wait until the next tick for D.prf.prefixKey()
-  // setTimeout(() => { D.keyMap.dyalogDefault[`'${D.prf.prefixKey()}'`] = 'BQC'; }, 1);
 
   $.extend(D.commands, {
     TB() { D.ide.switchWin(1); },
@@ -93,7 +158,10 @@
       else {
         const x = s.slice(s.slice(0, c.column).replace(/.[áa-z]*$/i, '').length)
           .replace(/^([⎕:][áa-z]*|.).*$/i, '$1').replace(/^:end/, ':');
-        u = h[x] || (x[0] === '⎕' ? h.SYSFNS : x[0] === ':' ? h.CTRLSTRUCTS : h.LANGELEMENTS);
+        if (h[x]) u = h[x];
+        else if (x[0] === '⎕') u = h.SYSFNS;
+        else if (x[0] === ':') u = h.CTRLSTRUCTS;
+        else u = h.LANGELEMENTS;
       }
       D.openExternal(u);
     },
@@ -189,27 +257,6 @@
     }.bind(this, i);
   }
 
-  // D.kbds.layouts[lc] contains four strings describing how keys map to characters:
-  //  0:normal  1:shifted
-  //  2:APL     3:APL shifted
-  // Each string can be indexed by scancode: http://www.abreojosensamblador.net/Productos/AOE/html/Pags_en/ApF.html
-  // "APL" and "APL shifted" are the defaults upon which the user can build customisations.
-  let bq; // effective ` map as a dictionary, kept in sync with the prefs
-  function updBQ() {
-    bq = {}; D.bq = bq;
-    const lc = D.prf.kbdLocale();
-    const l = D.kbds.layouts[lc] || D.kbds.layouts.en_US;
-    const n = l[0].length;
-    for (let i = 0; i < 2; i++) {
-      for (let j = 0; j < n; j++) {
-        const name = l[i][j];
-        bq[name] || (bq[name] = l[2 + i][j]);
-      }
-    }
-    const s = D.prf.prefixMaps()[lc];
-    if (s) for (let i = 0; i < s.length; i += 2) bq[s[i]] = s[i + 1];
-  }
-  updBQ(); D.prf.prefixMaps(updBQ); D.prf.kbdLocale(updBQ);
 
   // order: used to measure how "complicated"
   // (for some made-up definition of the word) a shortcut is.
@@ -227,52 +274,6 @@
     const pk = D.prf.prefixKey();
     return r === pk ? pk + pk : r;
   };
-  function bqCleanUpMe(me) {
-    if (me.dyalogBQ) {
-      me.dyalogBQ.dispose(); delete me.dyalogBQ;
-      me.trigger('editor', 'hideSuggestWidget');
-      // const sw = me.contentWidgets['editor.widget.suggestWidget'];
-      // setTimeout(() => sw && sw.widget && sw.widget.hideWidget(), 50);
-    }
-  }
-  function bqChangeHandlerMe(me, o) { // o:changeObj
-    if (!me.dyalogBQ) return;
-    const chg = o.changes[0];
-    const r = chg.range;
-    const l = r.startLineNumber;
-    const c = r.startColumn;
-    const x = chg.text[0];
-    const pk = D.prf.prefixKey();
-    const s = me.model.getLineContent(l);
-    if (s.slice(c - 3, c) === `${pk}${pk}${pk}`) { // ``` for ⋄
-      const nr = new monaco.Range(l, c - 2, l, c + 1);
-      const ns = new monaco.Selection(l, c - 1, l, c - 1);
-      bqCleanUpMe(me);
-      setTimeout(() => {
-        me.listen = false;
-        me.executeEdits('D', [{ range: nr, text: bq[pk] || '' }], [ns]);
-        me.listen = true;
-      }, 1);
-    } else if (s.slice(c - 3, c - 1) === `${pk}${pk}`) { // bqbqc
-      me.dyalogBQ && me.dyalogBQ.dispose(); delete me.dyalogBQ;
-    } else if (s[c - 2] !== pk) {
-      bqCleanUpMe(me);
-    } else if (x !== pk) {
-      const y = x === ' ' ? pk : bq[x];
-      if (y) {
-        const nr = new monaco.Range(l, c - 1, l, c + chg.text.length);
-        const ns = new monaco.Selection(l, c, l, c);
-        bqCleanUpMe(me);
-        setTimeout(() => {
-          me.listen = false;
-          me.executeEdits('D', [{ range: nr, text: y }], [ns]);
-          me.listen = true;
-        }, 1);
-      } else {
-        bqCleanUpMe(me);
-      }
-    }
-  }
 
   const bqbqc = []; // backquote-backquote completions
   D.bqbqc = bqbqc;
@@ -344,12 +345,8 @@
         }
       });
     }
-    console.time('addCmdDefaults');
     addCmd(D.keyMap.dyalogDefault);
-    console.timeEnd('addCmdDefaults');
-    console.time('addCmdDyalog');
     addCmd(D.keyMap.dyalog);
-    console.timeEnd('addCmdDyalog');
   };
   const l = {
     Unknown: 'unknown',
