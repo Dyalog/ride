@@ -306,6 +306,7 @@
       while (p) {
         p.setActiveContentItem && p.setActiveContentItem(q); q = p; p = p.parent;
       } // reveal in golden layout
+      D.elw && D.elw.focus();
       window.focused || window.focus();
       this.me.focus();
     },
