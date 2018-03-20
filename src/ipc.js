@@ -20,8 +20,8 @@ D.IPC_Client = function IPCClient(winId) {
     const pm = 'die processAutocompleteReply ReplyFormatCode blockCursor blinkCursor focus ' +
                'insert autoCloseBrackets indent fold matchBrackets open close prompt saved ' +
                'SetHighlightLine setBP setLN setTC stateChanged ValueTip zoom';
-    pm.split(' ').forEach(k => rm.on(k, ([id, x]) => {
-      D.ide.wins[id][k](x);
+    pm.split(' ').forEach(k => rm.on(k, ([id, ...x]) => {
+      D.ide.wins[id][k](...x);
     }));
     rm.on('getUnsaved', () => {
       rm.emit('getUnsavedReply', D.ide.getUnsaved());
@@ -220,7 +220,7 @@ D.IPC_WindowProxy.prototype = {
   },
   prompt(x) { D.ipc.server.emit(this.socket, 'prompt', [this.id, x]); },
   saved(x) { D.ipc.server.emit(this.socket, 'saved', [this.id, x]); },
-  SetHighlightLine(x) { D.ipc.server.emit(this.socket, 'SetHighlightLine', [this.id, x]); },
+  SetHighlightLine(x, y) { D.ipc.server.emit(this.socket, 'SetHighlightLine', [this.id, x, y]); },
   setBP(x) { D.ipc.server.emit(this.socket, 'setBP', [this.id, x]); },
   setLN(x) { D.ipc.server.emit(this.socket, 'setLN', [this.id, x]); },
   setTC(x) { D.ipc.server.emit(this.socket, 'setTC', [this.id, x]); this.tc = x; },

@@ -24,6 +24,7 @@
         "no-template-curly-in-string":"warn",
         "no-cond-assign": ["error", "except-parens"],
         "no-unused-expressions":["error", { "allowShortCircuit": true, "allowTernary": true }],
-        "no-param-reassign":["error", { "props": false }]
+        "no-param-reassign":["error", { "props": false }],
+        "no-underscore-dangle": ["error", { "allowAfterThis": true }]
     }
 }

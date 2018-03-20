@@ -170,7 +170,7 @@
             className: 'highlighted',
           },
         }];
-        me.setPosition({ lineNumber: l, column: 0 });
+        me.setPosition({ lineNumber: l, column: 1 });
         me.revealLineInCenter(l);
       }
       ed.setDecorations();
@@ -356,13 +356,11 @@
       ed.restoreScrollPos();
       me.setPosition(u);
     },
-    SetHighlightLine(line) {
+    SetHighlightLine(line, hadErr) {
       const w = this;
-      if (w && w.hl) {
-        w.hl(line + 1);
-        w.focus();
-        w.HIGHLIGHT_LINE = line + 1;
-      }
+      w.hl(line + 1);
+      hadErr < 0 && w.focus();
+      w.HIGHLIGHT_LINE = line + 1;
     },
     ValueTip(x) {
       // this.vt.processReply(x);

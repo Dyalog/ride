@@ -25,7 +25,7 @@ D.IDE = function IDE(opts = {}) {
   ide.wins = {};
   if (ide.floating) {
     ide.connected = 1;
-    ide._focusedWin = null;
+    this._focusedWin = null;
     Object.defineProperty(ide, 'focusedWin', {
       set(w) {
         ide.ipc.emit('focusedWin', w.id);
@@ -201,15 +201,15 @@ D.IDE = function IDE(opts = {}) {
         w.saveScrollPos();
       });
     });
-    setTimeout(() => {
+    w.me_ready.then(() => {
       if (ide.ipc) {
-        w.focus();
+        // w.focus();
         ide.ipc.emit('mounted', h.id);
       } else {
         ide.hadErr > 0 && (ide.hadErr -= 1);
         ide.focusWin(w);
       }
-    }, 1);
+    });
     return w;
   }
   function WSE(c) {
@@ -370,10 +370,13 @@ D.IDE = function IDE(opts = {}) {
         // arrange for the banner to appear at the top of the session window
         ide.bannerDone = 1;
         const { me } = ide.wins[0];
+        me.focus();
         const txt = me.getValue().split('\n');
         let i = txt.length;
         while (--i) { if (/^Dyalog APL/.test(txt[i])) break; }
-        me.revealRangeAtTop(new monaco.Range(i + 1, 1, i + 1, 1));
+        setTimeout(() => {
+          me.revealRangeAtTop(new monaco.Range(i + 1, 1, i + 1, 1));
+        }, 1);
       }
     },
     HadError() {
@@ -387,7 +390,7 @@ D.IDE = function IDE(opts = {}) {
     ValueTip(x) { ide.wins[x.token].ValueTip(x); },
     SetHighlightLine(x) {
       const w = D.wins[x.win];
-      w.SetHighlightLine(x.line);
+      w.SetHighlightLine(x.line, ide.hadErr);
       ide.hadErr > 0 && --ide.hadErr;
       ide.focusWin(w);
     },
@@ -675,8 +678,9 @@ D.IDE.prototype = {
     if (this.hadErr === 0) {
       D.elw && D.elw.focus();
       this.wins[0].focus();
+      this.wins[0].hadErr = +new Date();
       this.hadErr = -1;
-    } else { w.focus(); }
+    } else if (this.hadErr < 0) { w.focus(); }
   },
   focusMRUWin() { // most recently used
     const { wins } = this;

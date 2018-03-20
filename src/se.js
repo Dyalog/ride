@@ -40,6 +40,14 @@
       wordWrap: D.prf.wrap() ? 'on' : 'off',
     });
     se.me = me;
+    se.me_ready = new Promise((resolve) => {
+      // ugly hack as monaco doesn't have a built in event for when the editor is ready?!
+      // https://github.com/Microsoft/monaco-editor/issues/115
+      const didScrollChangeDisposable = me.onDidScrollChange(() => {
+        didScrollChangeDisposable.dispose();
+        resolve(true);
+      });
+    });
     me.model.winid = 0;
     me.dyalogCmds = se;
     se.tracer = me.createContextKey('tracer', true);
@@ -247,8 +255,10 @@
       const flt = me.getTopForLineNumber(startLineNumber);
       const newHeight = me.getLayoutInfo().contentHeight;
       this.updPW();
-
-      if (ontop) {
+      const hadErr = (se.hadErr || 0) + 100 > +new Date();
+      if (hadErr) {
+        me.revealLine(ll);
+      } else if (ontop) {
         this.btm = flt + newHeight;
       } else if (onbottom) {
         me.setScrollTop(0);
@@ -297,7 +307,8 @@
       while (p) {
         p.setActiveContentItem && p.setActiveContentItem(q); q = p; p = p.parent;
       } // reveal in golden layout
-      window.focused || window.focus(); this.me.focus();
+      window.focused || window.focus();
+      this.me.focus();
     },
     insert(ch) {
       this.isReadOnly || this.me.trigger('editor', 'type', { text: ch });
