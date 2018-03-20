@@ -126,56 +126,103 @@ D.prf = {};
     '\n#   #    comment'+
     '\n'+
     '\n# The =PRF ("Preferences") menu item must be present.'
-  ]
-].forEach(function(kd){
-  var k=kd[0], d=kd[1], t=typeof d, l=[], //k:preference name (key), d:default value, t:type, l:listeners
-      str=t==='object'?JSON.stringify:function(x){return''+x}, //stringifier function
-      sd=str(d),
-      p=D.prf[k]=function(x,s){
-        if(typeof x==='function'){l.push(x);return} //add listener
-        if(!arguments.length){var r=D.db.getItem(k);return r==null?d:t==='number'?+r:t==='object'?JSON.parse(r):r} //get
-        //set:
-        x=t==='number'?+x:t==='string'?(''+x):(typeof x==='string'?JSON.parse(x):x) //coerce x to type t
-        var sx=str(x);if(sx===sd)sx=''           //convert to a string; if default, use ''
-        var sy=D.db.getItem(k)||''               //old value, stringified
-        if(sx===sy)return x
-        if(l.length)var y=p()                    //old value as an object (only needed if we have any listeners)
-        sx?D.db.setItem(k,sx):D.db.removeItem(k) //store
-        for(var i=0;i<l.length;i++)l[i](x,y)     //notify listeners
-        if(D.ipc){
-          D.ipc.server&&D.ipc.server.broadcast('prf',[k,x])
-          !s&&D.ipc.of.ride_master&&D.ipc.of.ride_master.emit('prf',[k,x])
-        }
-        return x
-      }
-  p.getDefault=function(){return d}
-  p.toggle=function(){return p(!p())}
-})
+  ],
+].forEach((kd) => {
+  const [k, d] = kd; // k:preference name (key), d:default value
+  const t = typeof d; // t:type
+  const l = []; // l:listeners
+  const str = t === 'object' ? JSON.stringify : x => `${x}`; // stringifier function
+  const sd = str(d);
+  const p = (x, s) => {
+    if (typeof x === 'function') { l.push(x); return null; } // add listener
+    if (x === undefined) { // get
+      const r = D.db.getItem(k);
+      if (r == null) return d;
+      else if (t === 'number') return +r;
+      else if (t === 'object') return JSON.parse(r);
+      return r;
+    }
+    // set:
+    let nx;
+    if (t === 'number') nx = +x; // coerce x to type t
+    else if (t === 'string') nx = `${x}`;
+    else if (typeof x === 'string') nx = JSON.parse(x);
+    else nx = x;
+    let sx = str(nx); if (sx === sd) sx = ''; // convert to a string; if default, use ''
+    const sy = D.db.getItem(k) || ''; // old value, stringified
+    if (sx === sy) return nx;
+    let y;
+    if (l.length) y = p(); // old value as an object (only needed if we have any listeners)
+    sx ? D.db.setItem(k, sx) : D.db.removeItem(k); // store
+    for (let i = 0; i < l.length; i++) l[i](nx, y); // notify listeners
+    if (D.ipc) {
+      D.ipc.server && D.ipc.server.broadcast('prf', [k, nx]);
+      !s && D.ipc.of.ride_master && D.ipc.of.ride_master.emit('prf', [k, nx]);
+    }
+    return nx;
+  };
+  D.prf[k] = p;
+  p.getDefault = () => d;
+  p.toggle = () => p(!p());
+});
 
-D.db=!nodeRequire?localStorage:(function(){
-  var rq=nodeRequire,crypto=rq('crypto'),fs=rq('fs'),el=rq('electron').remote,elw=el.getGlobal('elw')
-  //file-backed storage with API similar to that of localStorage
-  var k=[],v=[] //keys and values
+D.db = !nodeRequire ? localStorage : (function DB() {
+  const rq = nodeRequire;
+  const fs = rq('fs');
+  const el = rq('electron').remote;
+  // file-backed storage with API similar to that of localStorage
+  const k = []; // keys
+  const v = []; // values
+  const d = el.app.getPath('userData');
+  const f = `${d}/prefs.json`;
+  try {
+    if (fs.existsSync(f)) {
+      const h = JSON.parse(fs.readFileSync(f, 'utf8'));
+      Object.keys(h).forEach((x) => { k.push(x); v.push(h[x]); });
+    }
+  } catch (e) { console.error(e); }
+  const dbWrite = () => {
+    const s = `{\n${k.map((x, i) => `  ${JSON.stringify(x)}:${JSON.stringify(v[i])}`).sort().join(',\n')}\n}\n`;
+    fs.writeFileSync(f, s);
+  };
   // var iv=['wse'] //ignored vars (not saved to file)
-  var db={key       :function(x)  {return k[x]},
-          getItem   :function(x)  {var i=k.indexOf(x);return i<0?null:v[i]},
-          setItem   :function(x,y){var i=k.indexOf(x);if(i<0){k.push(x);v.push(y)}else{v[i]=y};dbWrite()},
-          removeItem:function(x)  {var i=k.indexOf(x);if(i>=0){k.splice(i,1);v.splice(i,1);dbWrite()}},
-          _getAll   :function()   {var r={};for(var i=0;i<k.length;i++)r[k[i]]=v[i];return r}}
-  Object.defineProperty(db,'length',{get:function(){return k.length}})
-  var d=el.app.getPath('userData'), f=d+'/prefs.json'
-  try{
-    if(fs.existsSync(f)){var h=JSON.parse(fs.readFileSync(f,'utf8'));for(var x in h){k.push(x);v.push(h[x])}}
-  }catch(e){console.error(e)}
-  var dbWrite=function(){
-    var s='{\n'+k.map(function(x,i){return'  '+JSON.stringify(x)+':'+JSON.stringify(v[i])}).sort().join(',\n')+'\n}\n'
-    fs.writeFileSync(f,s)
-  }
-  return db
-}())
+  const db = {
+    key(x) { return k[x]; },
+    getItem(x) {
+      const i = k.indexOf(x);
+      return i < 0 ? null : v[i];
+    },
+    setItem(x, y) {
+      const i = k.indexOf(x);
+      if (i < 0) {
+        k.push(x);
+        v.push(y);
+      } else {
+        v[i] = y;
+      }
+      dbWrite();
+    },
+    removeItem(x) {
+      const i = k.indexOf(x);
+      if (i >= 0) {
+        k.splice(i, 1);
+        v.splice(i, 1);
+        dbWrite();
+      }
+    },
+    _getAll() {
+      const r = {};
+      for (let i = 0; i < k.length; i++) r[k[i]] = v[i];
+      return r;
+    },
+  };
+  Object.defineProperty(db, 'length', { get() { return k.length; } });
+  return db;
+}());
 
-if(D.win&&D.db.getItem('ime')!=='0'){
-  var setImeExe=process.execPath.replace(/[^\\\/]+$/,'set-ime.exe')
-  var fs=nodeRequire('fs'),spawn=nodeRequire('child_process').spawn
-  fs.existsSync(setImeExe)&&spawn(setImeExe,[process.pid],{stdio:['ignore','ignore','ignore']})
+if (D.win && D.db.getItem('ime') !== '0') {
+  const setImeExe = process.execPath.replace(/[^\\/]+$/, 'set-ime.exe');
+  const fs = nodeRequire('fs');
+  const { spawn } = nodeRequire('child_process');
+  fs.existsSync(setImeExe) && spawn(setImeExe, [process.pid], { stdio: ['ignore', 'ignore', 'ignore'] });
 }
