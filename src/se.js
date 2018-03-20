@@ -161,7 +161,7 @@
   Se.prototype = {
     histAdd(lines) {
       this.hist[0] = '';
-      [].splice.apply(this.hist, [1, 0].concat(lines));
+      this.hist.splice(...[1, 0].concat(lines));
       this.histIdx = 0;
     },
     histMove(d) { // go back or forward in history
