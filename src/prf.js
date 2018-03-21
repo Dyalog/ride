@@ -36,6 +36,8 @@ D.prf = {};
   ['matchBrackets',      1], //whether to highlight matching brackets
   ['ilf',                1], //when re-formating use ODE style (interpreter level formatting)
   ['otherExe',           ''],//content of the "exe" text box when "Other..." is selected in the Connect page
+  ['persistentHistory',  1], // save history between sessions
+  ['persistentHistorySize',100], // max lines to save
   ['prefixKey',          '`'],
   ['prefixMaps',         {}],//per-locale strings of pairs of characters - diffs from the default map for that locale
   ['pfkeys',             ['','','','','','','','','','','','','']], //command strings for pfkeys

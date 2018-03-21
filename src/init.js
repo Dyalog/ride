@@ -123,6 +123,7 @@ const Console = console;
       } else if (D.ide && D.prf.connectOnQuit()) {
         D.commands.CNC();
       }
+      if (D.ide && !D.ide.connected && D.el) D.wins[0].histWrite();
     };
 
     let platform = '';

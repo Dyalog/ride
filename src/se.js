@@ -157,8 +157,28 @@
         D.wins[i].blinkCursor(x);
       });
     });
+    se.histRead();
   }
   Se.prototype = {
+    histRead() {
+      if (!D.el || !D.prf.persistentHistory()) return;
+      const fs = nodeRequire('fs');
+      const d = D.el.app.getPath('userData');
+      const f = `${d}/hist.txt`;
+      try {
+        if (fs.existsSync(f)) {
+          const l = fs.readFileSync(f, 'utf8').split('\n');
+          this.histAdd(l);
+        }
+      } catch (e) { console.error(e); }
+    },
+    histWrite() {
+      if (!D.el || !D.prf.persistentHistory()) return;
+      const fs = nodeRequire('fs');
+      const d = D.el.app.getPath('userData');
+      const f = `${d}/hist.txt`;
+      fs.writeFileSync(f, this.hist.slice(1, 1 + D.prf.persistentHistorySize()).join('\n'));
+    },
     histAdd(lines) {
       this.hist[0] = '';
       this.hist.splice(...[1, 0].concat(lines));
