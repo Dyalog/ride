@@ -690,7 +690,7 @@ D.IDE.prototype = {
       const x = wins[k];
       if (x.id && t <= x.focusTS) { w = x; t = x.focusTS; }
     });
-    if (!w.bwId) D.elw.focus();
+    D.elw && !w.bwId && D.elw.focus();
     w.focus();
   },
   zoom(z) {

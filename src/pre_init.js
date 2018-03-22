@@ -12,10 +12,12 @@ const I = {};
 const J = {};
 
 (function preInit() {
+  D.mop = new Promise((resolve, reject) => {
+    amdRequire(['vs/editor/editor.main'], resolve, reject);
+  });
+  D.zoom2fs = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
+    16, 17, 18, 19, 20, 22, 24, 26, 28, 32, 36, 42, 48];
   if (typeof nodeRequire !== 'undefined') {
-    D.mop = new Promise((resolve, reject) => {
-      amdRequire(['vs/editor/editor.main'], resolve, reject);
-    });
     D.el = nodeRequire('electron').remote;
     D.elw = D.el.getGlobal('elw');
     D.ipc = nodeRequire('node-ipc');
@@ -24,7 +26,5 @@ const J = {};
     const plt = process.platform;
     D.win = /^win/i.test(plt);
     D.mac = plt === 'darwin';
-    D.zoom2fs = [6, 7, 8, 9, 10, 11, 12, 13, 14, 15,
-      16, 17, 18, 19, 20, 22, 24, 26, 28, 32, 36, 42, 48];
   }
 }());
