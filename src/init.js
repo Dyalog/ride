@@ -2,20 +2,6 @@ const Console = console;
 
 {
   const init = () => {
-    // build up I by iterating over all elements with IDs
-    const a = document.querySelectorAll('[id]');
-    for (let i = 0; i < a.length; i += 1) {
-      const e = a[i];
-      const s = e.id;
-      const j = s.indexOf('_');
-      I[s] = e;
-      if (j >= 0) {
-        const u = s.slice(0, j);
-        const v = s.slice(j + 1);
-        (J[u] = J[u] || {})[v] = e;
-      }
-    }
-
     I.apl_font.hidden = true;
 
     if (D.el) {

@@ -337,7 +337,7 @@
           if (cmd === 'BQC') {
             return; // handled explicitly via change handler on editor
           } else if (cmd === 'ER') {
-            cond = 'tracer && !suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode';
+            cond = 'tracer && !suggestWidgetVisible && !editorHasMultipleSelections && !findInputFocussed && !inSnippetMode';
           } else if (cmd === 'TC') {
             cond = 'tracer';
           } else if (nkc === kc.Escape) cond = '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode';
