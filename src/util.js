@@ -61,7 +61,7 @@ D.util = {
     }
   },
   ucLength(s) {
-    return nodeRequire('punycode').ucs2.decode(s).length;
+    return window.punycode.ucs2.decode(s).length;
   },
   elastic(inp) { // make an <input> stretch when you type long text in it
     let m = inp.dataset.minSize;
@@ -93,7 +93,10 @@ $.alert = (m, t, f) => { // m:message,t:title,f:callback
 $.err = (m, t, f) => {
   if (typeof t === 'function') { f = t; t = ''; }
   t = t || 'Error';
-  D.el ? D.el.dialog.showMessageBox(D.elw, { type: 'error', message: m, title: t, buttons: ['OK'] }) : alert(m);
+  D.el ? D.el.dialog.showMessageBox(
+    D.el.getCurrentWindow(),
+    { type: 'error', message: m, title: t, buttons: ['OK'] },
+  ) : alert(m);
   f && f();
 };
 $.confirm = (m, t, f) => {

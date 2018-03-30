@@ -39,5 +39,9 @@ const J = {};
     const plt = process.platform;
     D.win = /^win/i.test(plt);
     D.mac = plt === 'darwin';
+  } else {
+    const plt = navigator.platform;
+    D.win = /^win/i.test(plt);
+    D.mac = /^mac/i.test(plt);
   }
 }());

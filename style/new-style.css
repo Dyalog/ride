@@ -1486,6 +1486,9 @@ body .ui-tooltip {
 #code p {
   margin: 5px;
 }
+.web #code {
+  top: 55px;
+}
 #code_aim {
   margin-left: 48px;
 }
@@ -1521,6 +1524,10 @@ body .ui-tooltip {
 #col_settings p {
   padding-top: 8px;
   padding-bottom: 8px;
+}
+.web #col_me,
+.web #col_settings {
+  top: 100px;
 }
 #col_fg {
   width: 48px;
@@ -1812,6 +1819,9 @@ input.lyt_g3:hover {
 }
 #shc td:nth-child(3) {
   width: 50%;
+}
+.web #shc {
+  top: 55px;
 }
 #shc_rst_all {
   float: right;
