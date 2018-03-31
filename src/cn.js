@@ -768,13 +768,13 @@
     const a = q.rhs.querySelectorAll('input,textarea');
     for (let i = 0; i < a.length; i++) if (/^text(area)?$/.test(a[i].type)) D.util.elastic(a[i]);
     $(':text[name],textarea[name]', q.rhs).change((e) => {
-      const t = $(e.target);
+      const t = e.target;
       const k = t.name;
       const v = t.value;
       v ? (sel[k] = v) : delete sel[k];
     });
     $(':checkbox[name]', q.rhs).change((e) => {
-      const t = $(e.target);
+      const t = e.target;
       t.checked ? (sel[t.name] = 1) : delete sel[t.name];
     });
     // collect information about installed interpreters
