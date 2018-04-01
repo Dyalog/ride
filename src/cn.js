@@ -143,12 +143,16 @@
         return 0;
       }
       if (x === sel && ssh) {
-        const at = q.ssh_auth_type.value;
-        const e = q[`ssh_${at}`];
-        if (!e.value) {
-          $.err(`${at === 'key' ? '"Key file"' : '"Password"'} is required`, () => { e.focus(); });
+        if (!q.ssh_pass.value && !q.ssh_key.value) {
+          $.err('Password and/or key file is required', () => { q.ssh_pass.focus(); });
           return 0;
         }
+        // const at = q.ssh_auth_type.value;
+        // const e = q[`ssh_${at}`];
+        // if (!e.value) {
+        //   $.err(`${at === 'key' ? '"Key file"' : '"Password"'} is required`, () => { e.focus(); });
+        //   return 0;
+        // }
       }
     }
     return 1;
@@ -214,7 +218,12 @@
         username: x.user,
         tryKeyboard: true,
       };
-      x.key ? (o.privateKey = fs.readFileSync(x.key)) : (o.password = x.pass);
+      if (x.key) {
+        o.privateKey = fs.readFileSync(x.key);
+        x.pass && (o.passphrase = x.pass);
+      } else {
+        o.password = x.pass;
+      }
       c.on('ready', () => { c.exec(cmd, { pty: { term: 'xterm' } }, f); })
         .on('tcp connection', (_, acc) => {
           clt = acc();
@@ -276,11 +285,13 @@
               port: +x.ssh_port || 22,
               user: x.user || user,
             };
-            if (x.ssh_auth_type === 'key') {
-              o.key = x.ssh_key;
-            } else {
-              o.pass = x === sel ? q.ssh_pass.value : '';
-            }
+            // if (x.ssh_auth_type === 'key') {
+            //   o.key = x.ssh_key;
+            // } else {
+            //   o.pass = x === sel ? q.ssh_pass.value : '';
+            // }
+            x.ssh_key && (o.key = x.ssh_key);
+            x === sel && q.ssh_pass.value && (o.pass = q.ssh_pass.value);
             const c = sshExec(o, '/bin/sh', (e, sm) => {
               if (e) throw e;
               sm.on('close', (code, sig) => { D.ide && D.ide._sshExited({ code, sig }); c.end(); });
@@ -371,11 +382,13 @@
               port: +x.ssh_port || 22,
               user: x.user || user,
             };
-            if (x.ssh_auth_type === 'key') {
-              o.key = x.ssh_key;
-            } else {
-              o.pass = x === sel ? q.ssh_pass.value : '';
-            }
+            // if (x.ssh_auth_type === 'key') {
+            //   o.key = x.ssh_key;
+            // } else {
+            //   o.pass = x === sel ? q.ssh_pass.value : '';
+            // }
+            x.ssh_key && (o.key = x.ssh_key);
+            x === sel && q.ssh_pass.value && (o.pass = q.ssh_pass.value);
             const c = sshExec(o, '/bin/sh', (e, sm) => {
               if (e) throw e;
               sm.on('close', (code, sig) => {
@@ -670,13 +683,13 @@
     q.rootcertsdir_dots.onclick = () => {
       browse(q.rootcertsdir, 'Directory with Root Certificates', ['openDirectory']);
     };
-    q.ssh_auth_type.onchange = () => {
-      const k = q.ssh_auth_type.value === 'key';
-      q.ssh_pass.hidden = k;
-      q.ssh_key.hidden = !k;
-      q.ssh_key_dots.hidden = !k;
-      sel.ssh_auth_type = q.ssh_auth_type.value;
-    };
+    // q.ssh_auth_type.onchange = () => {
+    //   const k = q.ssh_auth_type.value === 'key';
+    //   q.ssh_pass.hidden = k;
+    //   q.ssh_key.hidden = !k;
+    //   q.ssh_key_dots.hidden = !k;
+    //   sel.ssh_auth_type = q.ssh_auth_type.value;
+    // };
     D.conns.forEach((x) => { q.favs.appendChild(favDOM(x)); });
     $(q.favs).list().sortable({
       cursor: 'move',
@@ -718,8 +731,8 @@
           q.exes.value || (q.exes.value = ''); // use sel.exe if available, otherwise use "Other..."
           const a = q.rhs.querySelectorAll('input,textarea');
           for (let i = 0; i < a.length; i++) if (/^text(area)?$/.test(a[i].type)) D.util.elastic(a[i]);
-          q.ssh_auth_type.value = sel.ssh_auth_type || 'pass';
-          q.ssh_auth_type.onchange();
+          // q.ssh_auth_type.value = sel.ssh_auth_type || 'pass';
+          // q.ssh_auth_type.onchange();
           q.cert_cb.checked = !!sel.cert;
           const noc = !sel.cert;
           q.cert.disabled = noc;

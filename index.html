@@ -29,11 +29,11 @@
       <button id=cn_abt>A<u>b</u>out</button>
       <div class="row">
         <div class="col col-xs-3"><label for=cn_fav_name>C<u>o</u>nfiguration name:</label></div>
-        <div class="col col-xs-6"><input id=cn_fav_name placeholder=unnamed></div>
+        <div class="col col-xs-9"><input id=cn_fav_name placeholder=unnamed></div>
       </div>
       <div class="row">
         <div class="col col-xs-3"><label for=cn_type><u>T</u>ype:</label></div>
-        <div class="col col-xs-6">
+        <div class="col col-xs-9">
           <div class="row">
             <div class="col col-xs-6">
               <select id=cn_type class=cn_select>
@@ -57,114 +57,128 @@
         <div id=cn_tcp_dtl>
           <div class="row">
             <div class="col col-xs-3"><label for=cn_tcp_host class=cn_label><u>H</u>ost:</label></div>
-            <div class="col col-xs-6"><input id=cn_tcp_host name=host size=12 placeholder=localhost></div>
+            <div class="col col-xs-9"><input id=cn_tcp_host name=host size=12 placeholder=localhost></div>
           </div>
           <div class="row">
             <div class="col col-xs-3"><label for=cn_tcp_port class=cn_label><u>P</u>ort:</label></div>
-            <div class="col col-xs-6"><input id=cn_tcp_port name=port size=4 placeholder=4502></div>
+            <div class="col col-xs-9"><input id=cn_tcp_port name=port size=4 placeholder=4502></div>
           </div>
         </div>
         <div id=cn_ssh hidden>
           <div class="row">
             <div class="col col-xs-3"><label for=cn_ssh_port class=cn_label>SSH <u>P</u>ort:</label></div>
-            <div class="col col-xs-6"><input id=cn_ssh_port name=ssh_port size=4 placeholder=22></div>
+            <div class="col col-xs-9"><input id=cn_ssh_port name=ssh_port size=4 placeholder=22></div>
           </div>
           <div class="row">
             <div class="col col-xs-3"><label for=cn_ssh_user class=cn_label><u>U</u>ser:</label></div>
-            <div class="col col-xs-6"><input id=cn_ssh_user name=user size=10></div>
+            <div class="col col-xs-9"><input id=cn_ssh_user name=user size=10></div>
           </div>
           <div class="row">
-            <div class="col col-xs-3"><label for=cn_ssh_auth_type class=cn_label><u>A</u>uthentication</label></div>
-            <div class="col col-xs-6">
-              <div class="row">
-                <div class="col col-xs-6">
-                  <select id=cn_ssh_auth_type class="cn_select">
-                    <option value=pass title="password is not saved">Password
-                    <option value=key>Key file
-                  </select>
-                </div>
-                <div class="col col-xs-6">
-                  <input id=cn_ssh_pass type=password>
-                  <input id=cn_ssh_key name=ssh_key>
-                </div>
-              </div>
-            </div>
-            <div class="col col-xs-2">
-              <button id=cn_ssh_key_dots>Browse...</button>
-            </div>
+            <div class="col col-xs-3"><label for=cn_ssh_pass class=cn_label><u>P</u>assword/passphrase:</label></div>
+            <div class="col col-xs-9"><input id=cn_ssh_pass type=password></div>
           </div>
           <div class="row">
-            <div class="col col-xs-6 col-xs-offset-3"><button id=cn_fetch><u>F</u>etch list of interpreters through ssh</button></div>
+            <div class="col col-xs-3"><label for=cn_ssh_key class=cn_label><u>K</u>ey file:</label></div>
+            <div class="col col-xs-6"><input id=cn_ssh_key name=ssh_key></div>
+            <div class="col col-xs-3"><button id=cn_ssh_key_dots>Browse...</button></div>
+          </div>
+          <div class="row">
+            <div class="col col-xs-9 col-xs-offset-3">
+              <button id=cn_fetch><u>F</u>etch list of interpreters through ssh</button>
+            </div>
           </div>
         </div>
         <div id=cn_ssl hidden>
           <div class="row">
-            <div class="col col-xs-9"><label class=cn_cb_label><input type=checkbox id=cn_cert_cb>Provide user c<u>e</u>rtificate <span class=cn_hint>(PEM file)</span></label></div>
+            <div class="col col-xs-12">
+              <label class=cn_cb_label>
+                <input type=checkbox id=cn_cert_cb>
+                Provide user c<u>e</u>rtificate <span class=cn_hint>(PEM file)</span>
+              </label>
+            </div>
           </div>
           <div class="row">
-            <div class="col col-xs-3"><label style=padding-left:2em>Cert <span class=cn_hint>(PEM file)</span></div>
-            <div class="col col-xs-6">
+            <div class="col col-xs-3">
+              <label style=padding-left:2em>Cert <span class=cn_hint>(PEM file)</span>
+            </div>
+            <div class="col col-xs-9">
               <div class="row">
-                <div class="col col-xs-9">
+                <div class="col col-xs-8">
                   <input id=cn_cert name=cert>
                 </div>
-                <div class="col col-xs-5">
+                <div class="col col-xs-4">
                   <button id=cn_cert_dots>Browse...</button>
                 </div>
               </div>
             </div>
           </div>
           <div class="row">
-            <div class="col col-xs-3"><label style=padding-left:2em>Key <span class=cn_hint>(PEM file)</span></label></div>
-            <div class="col col-xs-6">
+            <div class="col col-xs-3">
+              <label style=padding-left:2em>Key <span class=cn_hint>(PEM file)</span></label>
+            </div>
+            <div class="col col-xs-9">
               <div class="row">
-                <div class="col col-xs-9">
+                <div class="col col-xs-8">
                   <input id=cn_key name=key>
                 </div>
-                <div class="col col-xs-5">
+                <div class="col col-xs-4">
                   <button id=cn_key_dots>Browse...</button>
                 </div>
               </div>
             </div>
           </div>
           <div class="row">
-            <div class="col col-xs-9"><label class=cn_cb_label for=cn_subj_cb><u>V</u>alidate server subject common name matches hostname<input type=checkbox id=cn_subj_cb></label></div>
+            <div class="col col-xs-12">
+              <label class=cn_cb_label for=cn_subj_cb>
+                <input type=checkbox id=cn_subj_cb>
+                <u>V</u>alidate server subject common name matches hostname
+              </label>
+            </div>
           </div>
           <div class="row">
-            <div class="col col-xs-9"><label class=cn_cb_label for=cn_rootcertsdir_cb><input type=checkbox id=cn_rootcertsdir_cb>Custom root certificates <span class=cn_hint>(directory with PEM files)</span></label></div>
+            <div class="col col-xs-12">
+              <label class=cn_cb_label for=cn_rootcertsdir_cb>
+                <input type=checkbox id=cn_rootcertsdir_cb>
+                Custom root certificates <span class=cn_hint>(directory with PEM files)</span>
+              </label>
+            </div>
           </div>
           <div class="row">
-            <div class="col col-xs-9">
-              <div class="row">
-                <div class="col col-xs-8">
-                  <input id=cn_rootcertsdir name=rootcertsdir>
-                </div>
-                <div class="col col-xs-6">
-                  <button id=cn_rootcertsdir_dots>Browse...</button>
-                </div>
-              </div>
+            <div class="col col-xs-8">
+              <input id=cn_rootcertsdir name=rootcertsdir>
+            </div>
+            <div class="col col-xs-4">
+              <button id=cn_rootcertsdir_dots>Browse...</button>
             </div>
           </div>
         </div>
         <div id=cn_start hidden>
           <div class="row">
             <div class="col col-xs-3"><label for=cn_exes class=cn_label><u>I</u>nterpreter:</label></div>
-            <div class="col col-xs-6"><select id=cn_exes name=exes class=cn_select></select></div>
+            <div class="col col-xs-9"><select id=cn_exes name=exes class=cn_select></select></div>
           </div>
-          <div class="row"><div class="col col-xs-9"><input id=cn_exe name=exe placeholder='path to executable'></div></div>
-          <div class="row" style="margin-top:10px"><div class="col col-xs-9"><label for=cn_cwd><u>W</u>orking directory:</label></div></div>
-          <div class="row"><div class="col col-xs-9"><input id=cn_cwd name=cwd></div></div>
           <div class="row">
-            <div class="col col-xs-9">
+            <div class="col col-xs-12">
+              <input id=cn_exe name=exe placeholder='path to executable'>
+            </div>
+          </div>
+          <div class="row" style="margin-top:10px"><div class="col col-xs-12"><label for=cn_cwd><u>W</u>orking directory:</label></div></div>
+          <div class="row"><div class="col col-xs-12"><input id=cn_cwd name=cwd></div></div>
+          <div class="row">
+            <div class="col col-xs-12">
               <label for=cn_args>Arg<u>u</u>ments:</label>
               <div class="tooltip">
                 <span class="tooltiptext">one per line; if needed, RIDE may also pass "+s" and "-q"</span>
               </div>
             </div>
           </div>
-          <div class="row"><div class="col col-xs-9"><textarea id=cn_args name=args cols=40 rows=4></textarea></div></div>
           <div class="row">
-            <div class="col col-xs-9">
+            <div class="col col-xs-12">
+              <textarea id=cn_args name=args cols=40 rows=4></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col col-xs-12">
               <label for=cn_env><u>E</u>nvironment variables:</label>
               <div class="tooltip">
                 <span class="tooltiptext">key=value, one pair per line, no extra spaces, no quoting or escaping of value</span>
@@ -172,12 +186,12 @@
             </div>
           </div>
           <div class="row">
-            <div class="col col-xs-9">
+            <div class="col col-xs-12">
               <textarea id=cn_env name=env cols=40 rows=4></textarea>
             </div>
           </div>
           <div class="row">
-            <div class="col col-xs-9"><span id=cn_env_add>For example: <a href=#>MAXWS=1G</a>, <a href=#>WSPATH=.</a>, <a href=#>HISTORY_SIZE=1000</a>, ...</span></div>
+            <div class="col col-xs-12"><span id=cn_env_add>For example: <a href=#>MAXWS=1G</a>, <a href=#>WSPATH=.</a>, <a href=#>HISTORY_SIZE=1000</a>, ...</span></div>
           </div>
         </div>
       </div>

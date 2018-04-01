@@ -533,7 +533,8 @@ span.CodeMirror-selectedtext {
 #cn_abt {
   float: right;
   position: absolute;
-  right: 20px;
+  top: 4px;
+  right: 4px;
 }
 #cn_lhs,
 #cn_rhs {

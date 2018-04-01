@@ -103,7 +103,6 @@ const Console = console;
               D.ide.connected = 0;
               window.close();
             }
-            D.prf.connectOnQuit() && D.commands.CNC();
           }
         }, 10);
       } else if (D.ide && D.prf.connectOnQuit()) {
