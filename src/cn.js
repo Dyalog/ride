@@ -63,7 +63,7 @@
   const favDOM = (x) => {
     const e = document.createElement('div');
     e.cnData = x;
-    e.innerHTML = `<span class=name>${esc(favText(x))}</span><button class=go>&gt;</button>`;
+    e.innerHTML = `<span class=name>${esc(favText(x))}</span><button class=go><span class="fas fa-play"></span></button>`;
     return e;
   };
   const fmtKey = x => [
@@ -515,7 +515,9 @@
   global.go = go;
   D.cn = () => { // set up Connect page
     q = J.cn;
-    I.cn.hidden = 0; // $(q.inner).splitter()
+    I.cn.hidden = 0;
+    $(I.cn).splitter();
+    setTimeout(() => D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()).slice(0,1)), 100);
     const d = D.el.app.getPath('userData');
     const f = `${d}/connections.json`;
     if (fs.existsSync(f)) {
@@ -530,9 +532,6 @@
       const k = fmtKey(x);
       if (D.el && k === 'F12') {
         D.elw.webContents.toggleDevTools();
-        return !1;
-      } else if (k === 'Shift-F1') {
-        D.abt();
         return !1;
       }
       return !0;
@@ -776,7 +775,6 @@
         },
       );
     };
-    q.abt.onclick = () => { D.abt(); };
     q.go.onclick = () => { go(); return !1; };
     const a = q.rhs.querySelectorAll('input,textarea');
     for (let i = 0; i < a.length; i++) if (/^text(area)?$/.test(a[i].type)) D.util.elastic(a[i]);

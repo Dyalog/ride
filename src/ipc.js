@@ -93,7 +93,7 @@ D.IPC_Server = function IPCServer() {
     srv.on('prfShow', () => D.prf_ui());
     srv.on('prfClose', () => {
       D.el.BrowserWindow.fromId(D.prf_bw.id).hide();
-      D.ide.focusMRUWin();
+      D.ide && D.ide.focusMRUWin();
     });
     srv.on('browserCreated', (bwId, socket) => {
       const wp = new D.IPC_WindowProxy(bwId, socket);
