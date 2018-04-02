@@ -25,6 +25,7 @@
     ed.isCode = 1;
     ed.isReadOnly = !1;
     ed.breakpoints = D.prf.breakPts();
+    const fs = D.zoom2fs[D.prf.zoom() + 10];
     const me = monaco.editor.create(ed.dom.querySelector('.ride_win_me'), {
       acceptSuggestionOnCommitCharacter: true,
       acceptSuggestionOnEnter: 'on',
@@ -35,11 +36,12 @@
       cursorBlinking: D.prf.blinkCursor() ? 'blink' : 'solid',
       folding: ed.isCode && !!D.prf.fold(),
       fontFamily: 'apl',
-      fontSize: D.zoom2fs[D.prf.zoom() + 10],
+      fontSize: fs,
       formatOnPaste: true,
       formatOnType: true,
       glyphMargin: ed.breakpoints,
       language: 'apl',
+      lineHeight: fs + 2,
       lineNumbers: D.prf.lineNums() ? (x => `[${x - 1}]`) : 'off',
       matchBrackets: !!D.prf.matchBrackets(),
       mouseWheelZoom: false,
@@ -331,7 +333,8 @@
       const ed = this;
       const { me } = ed;
       const r = me.getCompletelyVisibleLinesRangeInViewport();
-      me.updateOptions({ fontSize: D.zoom2fs[z + 10] });
+      const fs = D.zoom2fs[z + 10];
+      me.updateOptions({ fontSize: fs, lineHeight: fs + 2 });
       me.revealRangeAtTop(r);
     },
 

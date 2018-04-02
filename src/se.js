@@ -19,6 +19,7 @@
     se.dom.className = 'ride_win';
     se.$e = $(se.dom);
     se.dom.oncontextmenu = D.oncmenu;
+    const fs = D.zoom2fs[D.prf.zoom() + 10];
     const me = monaco.editor.create(se.dom, {
       acceptSuggestionOnCommitCharacter: true,
       acceptSuggestionOnEnter: 'on',
@@ -29,9 +30,10 @@
       cursorBlinking: D.prf.blinkCursor() ? 'blink' : 'solid',
       folding: false,
       fontFamily: 'apl',
-      fontSize: D.zoom2fs[D.prf.zoom() + 10],
+      fontSize: fs,
       glyphMargin: se.breakpoints,
       language: 'apl-session',
+      lineHeight: fs + 2,
       lineNumbers: 'off',
       matchBrackets: !!D.prf.matchBrackets(),
       mouseWheelZoom: false,
@@ -398,7 +400,8 @@
       const se = this;
       const { me } = se;
       const r = me.getCompletelyVisibleLinesRangeInViewport();
-      me.updateOptions({ fontSize: D.zoom2fs[z + 10] });
+      const fs = D.zoom2fs[z + 10];
+      me.updateOptions({ fontSize: fs, lineHeight: fs + 2 });
       me.revealRangeAtTop(r);
 
       // const w = this;

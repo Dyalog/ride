@@ -350,6 +350,7 @@
         updScms();
         return !1;
       };
+      const fs = D.zoom2fs[D.prf.zoom() + 10];
       me = monaco.editor.create(q.me, {
         autoClosingBrackets: true,
         automaticLayout: true,
@@ -357,8 +358,9 @@
         cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
         cursorBlinking: D.prf.blinkCursor() ? 'blink' : 'solid',
         fontFamily: 'apl',
-        fontSize: D.zoom2fs[D.prf.zoom() + 10],
+        fontSize: fs,
         language: 'apl',
+        lineHeight: fs + 2,
         lineNumbers: x => `[${x - 1}]`,
         matchBrackets: true,
         mouseWheelZoom: false,
