@@ -333,8 +333,10 @@ D.IDE = function IDE(opts = {}) {
   };
   const toggleWSE = () => { togglePanel('wse', 'Workspace Explorer', 1); };
   const toggleDBG = () => { togglePanel('dbg', 'Debug', 0); };
-  D.prf.wse(toggleWSE); D.prf.wse() && setTimeout(toggleWSE, 500);
-  D.prf.dbg(toggleDBG); D.prf.dbg() && setTimeout(toggleDBG, 500);
+  if (!ide.floating) {
+    D.prf.wse(toggleWSE); D.prf.wse() && setTimeout(toggleWSE, 500);
+    D.prf.dbg(toggleDBG); D.prf.dbg() && setTimeout(toggleDBG, 500);
+  }
   // OSX is stealing our focus.  Let's steal it back!  Bug #5
   D.mac && !ide.floating && setTimeout(() => { ide.wins[0].focus(); }, 500);
   D.prf.lineNums((x) => { eachWin((w) => { w.id && w.setLN(x); }); });

@@ -51,39 +51,37 @@ const Console = console;
       const winId = +loc.search.slice(1);
       document.body.className += ' floating-window';
       D.IPC_Client(winId);
+    } else if (D.el) {
+      D.IPC_Server();
+      const bw = new D.el.BrowserWindow({
+        icon: `${__dirname}/D.png`,
+        show: false,
+        parent: D.elw,
+        alwaysOnTop: true,
+        minWidth: 580,
+        minHeight: 460,
+      });
+      bw.loadURL(`${loc}?prf`); // bw.webContents.toggleDevTools();
+      D.prf_bw = { id: bw.id };
+      nodeRequire(`${__dirname}/src/cn`)();
     } else {
-      if (D.el) {
-        D.IPC_Server();
-        const bw = new D.el.BrowserWindow({
-          icon: `${__dirname}/D.png`,
-          show: false,
-          parent: D.elw,
-          alwaysOnTop: true,
-          minWidth: 580,
-          minHeight: 460,
-        });
-        bw.loadURL(`${loc}?prf`); // bw.webContents.toggleDevTools();
-        D.prf_bw = { id: bw.id };
-        nodeRequire(`${__dirname}/src/cn`)();
-      } else {
-        const ws = new WebSocket((loc.protocol === 'https:' ? 'wss://' : 'ws://') + loc.host);
-        const q = [];
-        // q:send queue
-        const flush = () => { while (ws.readyState === 1 && q.length) ws.send(q.shift()); };
-        D.send = (x, y) => { q.push(JSON.stringify([x, y])); flush(); };
-        ws.onopen = () => {
-          ws.send('SupportedProtocols=2');
-          ws.send('UsingProtocol=2');
-          ws.send('["Identify",{"identity":1}]');
-          ws.send('["Connect",{"remoteId":2}]');
-          ws.send('["GetWindowLayout",{}]');
-        };
-        ws.onmessage = (x) => { if (x.data[0] === '[') { const [c, h] = JSON.parse(x.data); D.recv(c, h); } };
-        ws.onerror = (x) => { Console.info('ws error:', x); };
-        D.ide2 = new D.IDE();
-      }
-      if (!D.quit) D.quit = window.close;
+      const ws = new WebSocket((loc.protocol === 'https:' ? 'wss://' : 'ws://') + loc.host);
+      const q = [];
+      // q:send queue
+      const flush = () => { while (ws.readyState === 1 && q.length) ws.send(q.shift()); };
+      D.send = (x, y) => { q.push(JSON.stringify([x, y])); flush(); };
+      ws.onopen = () => {
+        ws.send('SupportedProtocols=2');
+        ws.send('UsingProtocol=2');
+        ws.send('["Identify",{"identity":1}]');
+        ws.send('["Connect",{"remoteId":2}]');
+        ws.send('["GetWindowLayout",{}]');
+      };
+      ws.onmessage = (x) => { if (x.data[0] === '[') { const [c, h] = JSON.parse(x.data); D.recv(c, h); } };
+      ws.onerror = (x) => { Console.info('ws error:', x); };
+      D.ide2 = new D.IDE();
     }
+    if (!D.quit) D.quit = window.close;
     window.onbeforeunload = (e) => {
       if (D.ide && D.ide.connected) {
         e.returnValue = false;
