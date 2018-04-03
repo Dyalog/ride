@@ -851,6 +851,7 @@ button {
   padding: 5px 0.5em;
   transition: box-shadow 0.2s;
   text-transform: uppercase;
+  cursor: pointer;
 }
 button:active {
   box-shadow: none;
@@ -2983,12 +2984,22 @@ body.floating-window {
   color: #fac739;
   opacity: 0.3;
 }
+#cn_favs > div:hover {
+  opacity: 1;
+}
 #cn_fav_btns {
   background: linear-gradient(#5a5658, #4d4a4b);
 }
 #cn_fav_btns button {
   background-color: transparent;
-  color: #fac739;
+  opacity: 0.5;
+}
+#cn_fav_btns button:hover {
+  opacity: 1;
+}
+#cn_fav_btns button:active {
+  opacity: 1;
+  background-color: #fac739;
 }
 #cn_lhs {
   background: #403e3e;

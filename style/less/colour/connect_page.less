@@ -35,6 +35,9 @@
 		background:@CN_FAV_BTN_UNSEL_BG;
 		color:@CN_FAV_BTN_UNSEL_FG;
 		opacity:0.3;
+		&:hover {
+			opacity: 1;
+		}
 	}
 }
 #cn_fav_btns {
@@ -42,7 +45,14 @@
   background:linear-gradient(lighten(@THEME_WIN_BG,5),@THEME_WIN_BG);
   button{
     background-color:@CN_FAV_MENU_BTN_BG;
-    color:@CN_FAV_MENU_BTN_FG;
+		// color:@CN_FAV_MENU_BTN_FG;
+		opacity: 0.5;
+		&:hover { opacity: 1; }
+		&:active { 
+			opacity: 1; 
+			background-color: @CN_FAV_MENU_BTN_FG;
+		}
+
   }
 }
 #cn_lhs {
