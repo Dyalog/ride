@@ -35,7 +35,7 @@
     DMN() { move(1); }, // next line
     DMP() { move(-1); }, // prev line
     DMR() { // load demo script
-      if (!D.el || D.prf.floating()) return;
+      if (!D.el || D.ide.floating) return;
       if (!inp) {
         inp = document.createElement('input');
         inp.type = 'file';
