@@ -8,11 +8,19 @@
       background-color:	@CN_INPUT_DIS_BG;
 			border-color:	@CN_INPUT_BORDER_COL;
 			color:@CN_INPUT_DIS_FG;
-    }
+			&::-webkit-input-placeholder {
+				color: #413e3f;
+			}
+		}
   }
   select{
 		background-color:	@CN_SELECT_BG;
 		color:@CN_SELECT_FG;
+	}
+	hr {
+		background-color: #a9a9a9;
+		border-color: #a9a9a9;
+		color: #a9a9a9;
 	}
 	.hsplitbar {
 		background: @CN_HSPLIT;
@@ -57,7 +65,7 @@
 }
 #cn_lhs {
 	background: @CN_LHS_BG;
-  border-right:1px solid @CN_HSPLIT_BORDER_COL;
+  // border-right:1px solid @CN_HSPLIT_BORDER_COL;
 }
 #cn_rhs {
 	// border-left:8px solid @CN_HSPLIT;
@@ -71,6 +79,7 @@
 	}
 }
 #cn_env_add {
+	color: #a9a9a9;
 	a {
 		color: @CN_ENV_BTN_FG;
 	}

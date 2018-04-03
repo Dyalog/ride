@@ -97,18 +97,18 @@
           <div class="col col-xs-12">
             <label class=cn_cb_label>
               <input type=checkbox id=cn_cert_cb>
-              Provide user c<u>e</u>rtificate <span class=cn_hint>(PEM file)</span>
+              Provide user c<u>e</u>rtificate</span>
             </label>
           </div>
         </div>
         <div class="row">
           <div class="col col-xs-3">
-            <label style=padding-left:2em>Cert <span class=cn_hint>(PEM file)</span>
+            <label style=padding-left:2em>Cert</span>
           </div>
           <div class="col col-xs-9">
             <div class="row">
               <div class="col col-xs-8">
-                <input id=cn_cert name=cert>
+                <input id=cn_cert name=cert placeholder="PEM file">
               </div>
               <div class="col col-xs-4">
                 <button id=cn_cert_dots>Browse...</button>
@@ -118,15 +118,38 @@
         </div>
         <div class="row">
           <div class="col col-xs-3">
-            <label style=padding-left:2em>Key <span class=cn_hint>(PEM file)</span></label>
+            <label style=padding-left:2em>Key</label>
           </div>
           <div class="col col-xs-9">
             <div class="row">
               <div class="col col-xs-8">
-                <input id=cn_key name=key>
+                <input id=cn_key name=key placeholder="PEM file">
               </div>
               <div class="col col-xs-4">
                 <button id=cn_key_dots>Browse...</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col col-xs-12">
+            <label class=cn_cb_label for=cn_rootcertsdir_cb>
+              <input type=checkbox id=cn_rootcertsdir_cb>
+              Custom root certificates
+            </label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col col-xs-3">
+            <label style=padding-left:2em>Directory</label>
+          </div>
+          <div class="col col-xs-9">
+            <div class="row">
+              <div class="col col-xs-8">
+                <input id=cn_rootcertsdir name=rootcertsdir placeholder="PEM files">
+              </div>
+              <div class="col col-xs-4">
+                <button id=cn_rootcertsdir_dots>Browse...</button>
               </div>
             </div>
           </div>
@@ -137,22 +160,6 @@
               <input type=checkbox id=cn_subj_cb>
               <u>V</u>alidate server subject common name matches hostname
             </label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col col-xs-12">
-            <label class=cn_cb_label for=cn_rootcertsdir_cb>
-              <input type=checkbox id=cn_rootcertsdir_cb>
-              Custom root certificates <span class=cn_hint>(directory with PEM files)</span>
-            </label>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col col-xs-8">
-            <input id=cn_rootcertsdir name=rootcertsdir>
-          </div>
-          <div class="col col-xs-4">
-            <button id=cn_rootcertsdir_dots>Browse...</button>
           </div>
         </div>
       </div>

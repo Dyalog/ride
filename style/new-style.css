@@ -502,7 +502,7 @@ span.CodeMirror-selectedtext {
   height: 32px;
   border-radius: 2px;
   padding: 1px 6px;
-  font-size: 1.6em;
+  font-size: 1em;
   line-height: 0px;
 }
 #cn_favs .name {
@@ -859,11 +859,11 @@ button:active {
 input[type=checkbox]:disabled,
 input[type=checkbox]:disabled:checked {
   background-color: #ebebe4;
-  border-color: #a9a9a9;
+  border-color: #4c4a4a;
 }
 input[type=checkbox]:disabled:after,
 input[type=checkbox]:disabled:checked:after {
-  color: #a9a9a9;
+  color: #4c4a4a;
 }
 input[type=checkbox] {
   -webkit-appearance: none;
@@ -2960,9 +2960,18 @@ body.floating-window {
   border-color: rgba(169, 169, 169, 0.3);
   color: #a9a9a9;
 }
+#cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]):disabled::-webkit-input-placeholder,
+#cn textarea:disabled::-webkit-input-placeholder {
+  color: #413e3f;
+}
 #cn select {
   background-color: #403e3e;
   color: #fac739;
+}
+#cn hr {
+  background-color: #a9a9a9;
+  border-color: #a9a9a9;
+  color: #a9a9a9;
 }
 #cn .hsplitbar {
   background: #fac739;
@@ -3003,17 +3012,19 @@ body.floating-window {
 }
 #cn_lhs {
   background: #403e3e;
-  border-right: 1px solid white;
 }
 #cn_rhs {
   background-color: #4d4a4b;
 }
 #cn_rhs button {
-  color: white;
+  color: #4c4a4a;
   background-color: #fac739;
 }
 #cn_rhs label {
   color: #fac739;
+}
+#cn_env_add {
+  color: #a9a9a9;
 }
 #cn_env_add a {
   color: #fac739;

@@ -517,7 +517,8 @@
     q = J.cn;
     I.cn.hidden = 0;
     $(I.cn).splitter();
-    setTimeout(() => D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()).slice(0,1)), 100);
+    const m = 'Dyalog\n  About Dyalog=ABT\n  -\n  Preferences=PRF\n  -\n  &Quit=QIT';
+    setTimeout(() => D.installMenu(D.parseMenuDSL(m)), 100);
     const d = D.el.app.getPath('userData');
     const f = `${d}/connections.json`;
     if (fs.existsSync(f)) {
