@@ -59,6 +59,7 @@
       q.blc.checked = !!p.blinkCursor();
       q.coq.checked = !!p.connectOnQuit();
       q.fold.checked = !!p.fold();
+      q.rlh.value = p.renderLineHighlight();
       q.ph.checked = !!p.persistentHistory();
       q.phs.value = p.persistentHistorySize();
       q.vt.checked = !!p.valueTips();
@@ -87,6 +88,7 @@
       p.blockCursor        (q.bc.checked);
       p.blinkCursor        (q.blc.checked);
       p.fold               (q.fold.checked);
+      p.renderLineHighlight(q.rlh.value);
       p.persistentHistory  (q.ph.checked);
       p.persistentHistorySize(q.phs.value);
       p.valueTips          (q.vt.checked);

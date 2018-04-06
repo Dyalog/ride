@@ -45,6 +45,7 @@
       lineNumbers: D.prf.lineNums() ? (x => `[${x - 1}]`) : 'off',
       matchBrackets: !!D.prf.matchBrackets(),
       mouseWheelZoom: false,
+      renderLineHighlight: D.prf.renderLineHighlight(),
       renderIndentGuides: true,
       showFoldingControls: 'always',
       wordBasedSuggestions: false,
@@ -324,10 +325,11 @@
         ((RegExp(`^${r}`).exec(s.slice(c.column)) || [])[0] || '') // match right of cursor
       ).replace(/^\d+/, ''); // trim leading digits
     },
-    autoCloseBrackets(x) { this.me.updateOptions('autoClosingBrackets', x); },
-    indent(x) { this.me.updateOptions('autoIndent', x >= 0); },
+    autoCloseBrackets(x) { this.me.updateOptions({ autoClosingBrackets: x }); },
+    indent(x) { this.me.updateOptions({ autoIndent: x >= 0 }); },
     fold(x) { this.me.updateOptions({ folding: this.isCode && !!x }); },
-    matchBrackets(x) { this.me.updateOptions('matchBrackets', !!x); },
+    matchBrackets(x) { this.me.updateOptions({ matchBrackets: !!x }); },
+    renderLineHighlight(x) { this.me.updateOptions({ renderLineHighlight: x }); },
 
     zoom(z) {
       const ed = this;

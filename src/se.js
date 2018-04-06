@@ -38,6 +38,7 @@
       matchBrackets: !!D.prf.matchBrackets(),
       mouseWheelZoom: false,
       renderIndentGuides: false,
+      renderLineHighlight: D.prf.renderLineHighlight(),
       wordBasedSuggestions: false,
       wordWrap: D.prf.wrap() ? 'on' : 'off',
     });
@@ -155,9 +156,10 @@
       Object.keys(D.wins).forEach((i) => { D.wins[i].blockCursor(!!x); });
     });
     D.prf.blinkCursor((x) => {
-      Object.keys(D.wins).forEach((i) => {
-        D.wins[i].blinkCursor(x);
-      });
+      Object.keys(D.wins).forEach((i) => { D.wins[i].blinkCursor(x); });
+    });
+    D.prf.renderLineHighlight((x) => {
+      Object.keys(D.wins).forEach((i) => { D.wins[i].renderLineHighlight(x); });
     });
     se.histRead();
   }
@@ -394,8 +396,9 @@
       se.histAdd(es.filter(x => !/^\s*$/.test(x)));
       // se.cm.clearHistory();
     },
-    autoCloseBrackets(x) { this.me.updateOptions('autoClosingBrackets', x); },
-    matchBrackets(x) { this.me.updateOptions('matchBrackets', !!x); },
+    autoCloseBrackets(x) { this.me.updateOptions({ autoClosingBrackets: x }); },
+    matchBrackets(x) { this.me.updateOptions({ matchBrackets: !!x }); },
+    renderLineHighlight(x) { this.me.updateOptions({ renderLineHighlight: x }); },
     zoom(z) {
       const se = this;
       const { me } = se;

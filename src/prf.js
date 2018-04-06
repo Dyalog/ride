@@ -22,6 +22,7 @@ D.prf = {};
   ['floatOnTop',         0], //try to keep floating windows on top of the session
   ['floatSingle',        0], //create single floating edit window
   ['fold',               1], //code folding
+  ['ilf',                1], //when re-formating use ODE style (interpreter level formatting)
   ['ime',                1], //switch to dyalog IME when RIDE starts (Windows-only)
   ['indent',             4], //-1 disables autoindent
   ['indentComments',     0], //whether to touch comment-only lines at all
@@ -34,13 +35,13 @@ D.prf = {};
   ['breakPts',           1],
   ['lineNums',           1],
   ['matchBrackets',      1], //whether to highlight matching brackets
-  ['ilf',                1], //when re-formating use ODE style (interpreter level formatting)
   ['otherExe',           ''],//content of the "exe" text box when "Other..." is selected in the Connect page
   ['persistentHistory',  1], // save history between sessions
   ['persistentHistorySize',100], // max lines to save
   ['prefixKey',          '`'],
   ['prefixMaps',         {}],//per-locale strings of pairs of characters - diffs from the default map for that locale
   ['pfkeys',             ['','','','','','','','','','','','','']], //command strings for pfkeys
+  ['renderLineHighlight','none'], // highlight current line
   ['selectedExe',        ''],//which interpreter is selected in dropdown in the Connect page?
   ['title',              '{WSID}'], //a.k.a. "caption"
   ['valueTips',          1], //value tips
