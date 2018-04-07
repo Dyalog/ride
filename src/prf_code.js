@@ -68,6 +68,7 @@
       q.vt.checked = !!p.valueTips();
       q.sqt.checked = !!p.squiggleTips();
       q.sqp.checked = !!p.sqp();
+      q.ss.checked = !!p.snippetSuggestions();
       q.ai.onchange();
       q.acbl.onchange();
       q.ac.onchange();
@@ -100,6 +101,7 @@
       p.valueTips          (q.vt.checked);
       p.squiggleTips       (q.sqt.checked);
       p.sqp                (q.sqp.checked);
+      p.snippetSuggestions (q.ss.checked);
     },
     validate() {
       const isInt = (x, minX) => +x === (+x | 0) && +x >= minX;

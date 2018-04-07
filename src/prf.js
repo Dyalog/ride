@@ -46,6 +46,7 @@ D.prf = {};
   ['pfkeys',             ['','','','','','','','','','','','','']], //command strings for pfkeys
   ['renderLineHighlight','none'], // highlight current line
   ['selectedExe',        ''],//which interpreter is selected in dropdown in the Connect page?
+  ['snippetSuggestions', 0],// show snippet suggestions
   ['title',              '{WSID}'], //a.k.a. "caption"
   ['valueTips',          1], //value tips
   ['dbg',                0], //show debug panel
