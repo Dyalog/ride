@@ -46,6 +46,7 @@
       quickSuggestionsDelay: D.prf.autocompletionDelay(),
       renderIndentGuides: false,
       renderLineHighlight: D.prf.renderLineHighlight(),
+      suggestOnTriggerCharacters: D.prf.autocompletion(),
       wordBasedSuggestions: false,
       wordWrap: D.prf.wrap() ? 'on' : 'off',
     });
@@ -400,7 +401,12 @@
     minimapRenderCharacters(x) { this.me.updateOptions({ minimap: { renderCharacters: !!x } }); },
     minimapShowSlider(x) { this.me.updateOptions({ minimap: { showSlider: x } }); },
     renderLineHighlight(x) { this.me.updateOptions({ renderLineHighlight: x }); },
-    autocompletion(x) { this.me.updateOptions({ quickSuggestions: x }); },
+    autocompletion(x) {
+      this.me.updateOptions({
+        quickSuggestions: x,
+        suggestOnTriggerCharacters: x,
+      });
+    },
     autocompletionDelay(x) { this.me.updateOptions({ quickSuggestionsDelay: x }); },
     zoom(z) {
       const se = this;

@@ -54,6 +54,7 @@
       quickSuggestionsDelay: D.prf.autocompletionDelay(),
       renderLineHighlight: D.prf.renderLineHighlight(),
       renderIndentGuides: true,
+      suggestOnTriggerCharacters: D.prf.autocompletion(),
       showFoldingControls: 'always',
       wordBasedSuggestions: false,
     });
@@ -340,7 +341,12 @@
     minimapRenderCharacters(x) { this.me.updateOptions({ minimap: { renderCharacters: !!x } }); },
     minimapShowSlider(x) { this.me.updateOptions({ minimap: { showSlider: x } }); },
     renderLineHighlight(x) { this.me.updateOptions({ renderLineHighlight: x }); },
-    autocompletion(x) { this.me.updateOptions({ quickSuggestions: x }); },
+    autocompletion(x) {
+      this.me.updateOptions({
+        quickSuggestions: x,
+        suggestOnTriggerCharacters: x,
+      });
+    },
     autocompletionDelay(x) { this.me.updateOptions({ quickSuggestionsDelay: x }); },
     
     zoom(z) {
