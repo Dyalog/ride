@@ -7,12 +7,10 @@
 'use strict'
 D.prf = {};
 [ // name                 default (type is determined from default value; setter enforces type and handles encoding)
-  ['autoCloseBlocks',    1], //whether to insert :end after :if,:for,etc when Enter is pressed
-  ['autoCloseBlocksEnd', 0], //0: close blocks with ":EndIf",":EndFor",etc;  1: close blocks only with ":End"
   ['autoCloseBrackets',  1], //whether to insert {}[]() in pairs
   ['autocompletion',     1],
   ['blockCursor',        0], // use block cursor selection?
-  ['blinkCursor',        1], // cursor blinking
+  ['cursorBlinking',     'blink'], // cursor blinking
   ['autocompletionDelay',500],
   ['colourScheme',       'Default'], //name of the active colour scheme
   ['colourSchemes',      []],//objects describing user-defined colour schemes

@@ -342,7 +342,7 @@ D.IDE = function IDE(opts = {}) {
   D.prf.lineNums((x) => { eachWin(w => w.id && w.setLN(x)); });
   D.prf.breakPts((x) => { eachWin(w => w.id && w.setBP(x)); });
   D.prf.blockCursor((x) => { eachWin(w => !w.bwId && w.blockCursor(!!x)); });
-  D.prf.blinkCursor((x) => { eachWin(w => !w.bwId && w.blinkCursor(x)); });
+  D.prf.cursorBlinking((x) => { eachWin(w => !w.bwId && w.cursorBlinking(x)); });
   D.prf.renderLineHighlight((x) => { eachWin(w => !w.bwId && w.renderLineHighlight(x)); });
   D.prf.autocompletion((x) => { eachWin(w => !w.bwId && w.autocompletion(!!x)); });
   D.prf.autocompletionDelay((x) => { eachWin(w => !w.bwId && w.autocompletionDelay(x)); });

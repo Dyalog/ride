@@ -18,10 +18,6 @@
       q.aim.onchange = () => {
         updEnabling(); q.aim.checked && q.swm.select();
       };
-      q.acbl.onchange = () => {
-        q.acbe.disabled = !q.acbl.checked;
-        q.acbl.checked && q.acbe.focus();
-      };
       q.ac.onchange = () => {
         q.acd.disabled = !q.ac.checked;
         q.ac.checked && q.acd.select();
@@ -54,12 +50,10 @@
       q.mmrc.checked = !!p.minimapRenderCharacters();
       q.mmss.value = p.minimapShowSlider();
       q.acbr.checked = !!p.autoCloseBrackets();
-      q.acbl.checked = !!p.autoCloseBlocks();
-      q.acbe.value = p.autoCloseBlocksEnd();
       q.ac.checked = !!p.autocompletion();
       q.acd.value = p.autocompletionDelay();
       q.bc.checked = !!p.blockCursor();
-      q.blc.checked = !!p.blinkCursor();
+      q.cb.value = p.cursorBlinking();
       q.coq.checked = !!p.connectOnQuit();
       q.fold.checked = !!p.fold();
       q.rlh.value = p.renderLineHighlight();
@@ -70,13 +64,15 @@
       q.sqp.checked = !!p.sqp();
       q.ss.checked = !!p.snippetSuggestions();
       q.ai.onchange();
-      q.acbl.onchange();
       q.ac.onchange();
       q.ilf.onchange();
     },
     activate() { q.ai.focus(); },
     save() {
       const p = D.prf;
+      p.blockCursor        (q.bc.checked);
+      p.cursorBlinking     (q.cb.value);
+      p.fold               (q.fold.checked);
       p.indent             (q.ai.checked ? (+q.sw.value || 0) : -1);
       p.indentMethods      (q.aim.checked ? (+q.swm.value || 0) : -1);
       p.indentComments     (q.icom.checked);
@@ -87,14 +83,9 @@
       p.minimapRenderCharacters(q.mmrc.checked);
       p.minimapShowSlider  (q.mmss.value);
       p.autoCloseBrackets  (q.acbr.checked);
-      p.autoCloseBlocks    (q.acbl.checked);
-      p.autoCloseBlocksEnd (q.acbe.value);
       p.autocompletion     (q.ac.checked);
       p.autocompletionDelay(q.acd.value);
       p.connectOnQuit      (q.coq.checked);
-      p.blockCursor        (q.bc.checked);
-      p.blinkCursor        (q.blc.checked);
-      p.fold               (q.fold.checked);
       p.renderLineHighlight(q.rlh.value);
       p.persistentHistory  (q.ph.checked);
       p.persistentHistorySize(q.phs.value);

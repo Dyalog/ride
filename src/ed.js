@@ -33,7 +33,7 @@
       automaticLayout: true,
       autoIndent: true,
       cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
-      cursorBlinking: D.prf.blinkCursor() ? 'blink' : 'solid',
+      cursorBlinking: D.prf.cursorBlinking(),
       folding: ed.isCode && !!D.prf.fold(),
       fontFamily: 'apl',
       fontSize: fs,
@@ -280,7 +280,7 @@
       ed.setStop();
     },
     blockCursor(x) { this.me.updateOptions({ cursorStyle: x ? 'block' : 'line' }); },
-    blinkCursor(x) { this.me.updateOptions({ cursorBlinking: x ? 'blink' : 'solid' }); },
+    cursorBlinking(x) { this.me.updateOptions({ cursorBlinking: x }); },
     hasFocus() { return this.me.isFocused(); },
     focus() {
       let q = this.container;

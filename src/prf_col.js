@@ -356,7 +356,7 @@
         automaticLayout: true,
         autoIndent: true,
         cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
-        cursorBlinking: D.prf.blinkCursor() ? 'blink' : 'solid',
+        cursorBlinking: D.prf.cursorBlinking(),
         fontFamily: 'apl',
         fontSize: fs,
         language: 'apl',
@@ -381,6 +381,8 @@
         ':EndIf\n' +
         `${SC_MATCH}\n`,
       });
+      D.prf.blockCursor(x => me.updateOptions({ cursorStyle: x ? 'block' : 'line' }));
+      D.prf.cursorBlinking(x => me.updateOptions({ cursorBlinking: x }));
       // cm.addOverlay({
       //   token(sm) {
       //     const i = sm.string.slice(sm.pos).indexOf(SC_MATCH);
