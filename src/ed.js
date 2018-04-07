@@ -44,7 +44,14 @@
       lineHeight: fs + 2,
       lineNumbers: D.prf.lineNums() ? (x => `[${x - 1}]`) : 'off',
       matchBrackets: !!D.prf.matchBrackets(),
+      minimap: {
+        enabled: D.prf.minimapEnabled(),
+        renderCharacters: D.prf.minimapRenderCharacters(),
+        showSlider: D.prf.minimapShowSlider(),
+      },
       mouseWheelZoom: false,
+      quickSuggestions: D.prf.autocompletion(),
+      quickSuggestionsDelay: D.prf.autocompletionDelay(),
       renderLineHighlight: D.prf.renderLineHighlight(),
       renderIndentGuides: true,
       showFoldingControls: 'always',
@@ -329,8 +336,13 @@
     indent(x) { this.me.updateOptions({ autoIndent: x >= 0 }); },
     fold(x) { this.me.updateOptions({ folding: this.isCode && !!x }); },
     matchBrackets(x) { this.me.updateOptions({ matchBrackets: !!x }); },
+    minimapEnabled(x) { this.me.updateOptions({ minimap: { enabled: !!x } }); },
+    minimapRenderCharacters(x) { this.me.updateOptions({ minimap: { renderCharacters: !!x } }); },
+    minimapShowSlider(x) { this.me.updateOptions({ minimap: { showSlider: x } }); },
     renderLineHighlight(x) { this.me.updateOptions({ renderLineHighlight: x }); },
-
+    autocompletion(x) { this.me.updateOptions({ quickSuggestions: x }); },
+    autocompletionDelay(x) { this.me.updateOptions({ quickSuggestionsDelay: x }); },
+    
     zoom(z) {
       const ed = this;
       const { me } = ed;

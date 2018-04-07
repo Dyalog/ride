@@ -339,8 +339,17 @@ D.IDE = function IDE(opts = {}) {
   }
   // OSX is stealing our focus.  Let's steal it back!  Bug #5
   D.mac && !ide.floating && setTimeout(() => { ide.wins[0].focus(); }, 500);
-  D.prf.lineNums((x) => { eachWin((w) => { w.id && w.setLN(x); }); });
-  D.prf.breakPts((x) => { eachWin((w) => { w.id && w.setBP(x); }); });
+  D.prf.lineNums((x) => { eachWin(w => w.id && w.setLN(x)); });
+  D.prf.breakPts((x) => { eachWin(w => w.id && w.setBP(x)); });
+  D.prf.blockCursor((x) => { eachWin(w => !w.bwId && w.blockCursor(!!x)); });
+  D.prf.blinkCursor((x) => { eachWin(w => !w.bwId && w.blinkCursor(x)); });
+  D.prf.renderLineHighlight((x) => { eachWin(w => !w.bwId && w.renderLineHighlight(x)); });
+  D.prf.autocompletion((x) => { eachWin(w => !w.bwId && w.autocompletion(!!x)); });
+  D.prf.autocompletionDelay((x) => { eachWin(w => !w.bwId && w.autocompletionDelay(x)); });
+  D.prf.minimapEnabled((x) => { eachWin(w => !w.bwId && w.minimapEnabled(!!x)); });
+  D.prf.minimapRenderCharacters((x) => { eachWin(w => !w.bwId && w.minimapRenderCharacters(!!x)); });
+  D.prf.minimapShowSlider((x) => { eachWin(w => !w.bwId && w.minimapShowSlider(x)); });
+
   ide.handlers = { // for RIDE protocol messages
     Identify(x) {
       D.remoteIdentification = x;

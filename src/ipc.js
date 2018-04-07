@@ -1,3 +1,5 @@
+const pm = ('close die focus insert open processAutocompleteReply prompt saved setTC stateChanged' +
+  'zoom ReplyFormatCode SetHighlightLine ValueTip').split(' ');
 D.IPC_Client = function IPCClient(winId) {
   // start IPC client
   D.ipc.config.id = `editor${winId}`;
@@ -17,12 +19,7 @@ D.IPC_Client = function IPCClient(winId) {
       D.ide.connected = 0;
       window.close();
     });
-    const pm = 'die processAutocompleteReply ReplyFormatCode blockCursor blinkCursor focus ' +
-               'insert autoCloseBrackets indent fold matchBrackets open close prompt saved ' +
-               'SetHighlightLine setBP setLN setTC stateChanged ValueTip zoom';
-    pm.split(' ').forEach(k => rm.on(k, ([id, ...x]) => {
-      D.ide.wins[id][k](...x);
-    }));
+    pm.forEach(k => rm.on(k, ([id, ...x]) => { D.ide.wins[id][k](...x); }));
     rm.on('getUnsaved', () => {
       rm.emit('getUnsavedReply', D.ide.getUnsaved());
     });
@@ -198,37 +195,24 @@ D.IPC_WindowProxy = function IPCWindowProxy(bwId, socket) {
   ed.focusTS = +new Date();
 };
 D.IPC_WindowProxy.prototype = {
-  die() { D.ipc.server.emit(this.socket, 'die', [this.id]); },
-  blockCursor(x) { D.ipc.server.emit(this.socket, 'blockCursor', [this.id, x]); },
-  blinkCursor(x) { D.ipc.server.emit(this.socket, 'blinkCursor', [this.id, x]); },
-  focus() { D.ipc.server.emit(this.socket, 'focus', [this.id]); },
+  emit(f, ...x) { D.ipc.server.emit(this.socket, f, [this.id, ...x]); },
   hasFocus() { return this === D.ide.focusedWin; },
-  insert(x) { D.ipc.server.emit(this.socket, 'insert', [this.id, x]); },
-  autoCloseBrackets(x) { D.ipc.server.emit(this.socket, 'autoCloseBrackets', [this.id, x]); },
-  indent(x) { D.ipc.server.emit(this.socket, 'indent', [this.id, x]); },
-  fold(x) { D.ipc.server.emit(this.socket, 'fold', [this.id, x]); },
-  matchBrackets(x) { D.ipc.server.emit(this.socket, 'matchBrackets', [this.id, x]); },
-  processAutocompleteReply(x) { D.ipc.server.emit(this.socket, 'processAutocompleteReply', [this.id, x]); },
-  ReplyFormatCode(x) { D.ipc.server.emit(this.socket, 'ReplyFormatCode', [this.id, x]); },
-  open(x) { D.ipc.server.emit(this.socket, 'open', [this.id, x]); },
   close(x) {
     if (this === D.pwins[0] && D.prf.editWinsRememberPos()) {
       const b = D.el.BrowserWindow.fromId(this.bwId).getBounds();
       D.prf.editWins(Object.assign(D.prf.editWins(), b));
     }
-    D.ipc.server.emit(this.socket, 'close', [this.id, x]);
+    this.emit('close', x);
   },
-  prompt(x) { D.ipc.server.emit(this.socket, 'prompt', [this.id, x]); },
-  saved(x) { D.ipc.server.emit(this.socket, 'saved', [this.id, x]); },
-  SetHighlightLine(x, y) { D.ipc.server.emit(this.socket, 'SetHighlightLine', [this.id, x, y]); },
-  setBP(x) { D.ipc.server.emit(this.socket, 'setBP', [this.id, x]); },
-  setLN(x) { D.ipc.server.emit(this.socket, 'setLN', [this.id, x]); },
-  setTC(x) { D.ipc.server.emit(this.socket, 'setTC', [this.id, x]); this.tc = x; },
-  ED() { D.ipc.server.emit(this.socket, 'ED', this.id); },
+  setTC(x) { this.emit('setTC', x); this.tc = x; },
+  ED() { this.emit('ED'); },
   LN() { D.prf.lineNums.toggle(); },
   TVO() { D.prf.fold.toggle(); },
   TVB() { D.prf.breakPts.toggle(); },
-  stateChanged() { D.ipc.server.emit(this.socket, 'stateChanged', [this.id]); },
-  zoom(x) { D.ipc.server.emit(this.socket, 'zoom', [this.id, x]); },
-  ValueTip(x) { D.ipc.server.emit(this.socket, 'ValueTip', [this.id, x]); },
 };
+function handlerFor(k) {
+  return function handler(...x) { this.emit(k, ...x); };
+}
+pm.forEach((k) => {
+  D.IPC_WindowProxy.prototype[k] || (D.IPC_WindowProxy.prototype[k] = handlerFor(k));
+});

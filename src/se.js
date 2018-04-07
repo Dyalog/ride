@@ -36,7 +36,14 @@
       lineHeight: fs + 2,
       lineNumbers: 'off',
       matchBrackets: !!D.prf.matchBrackets(),
+      minimap: {
+        enabled: D.prf.minimapEnabled(),
+        renderCharacters: D.prf.minimapRenderCharacters(),
+        showSlider: D.prf.minimapShowSlider(),
+      },
       mouseWheelZoom: false,
+      quickSuggestions: D.prf.autocompletion(),
+      quickSuggestionsDelay: D.prf.autocompletionDelay(),
       renderIndentGuides: false,
       renderLineHighlight: D.prf.renderLineHighlight(),
       wordBasedSuggestions: false,
@@ -105,7 +112,7 @@
           } else if (swv && !bq2 && sw.widget.list.length > 1) {
             me.trigger('editor', 'editor.action.triggerSuggest');
           }
-        }, 1);
+        }, 50);
       }
       e.changes.forEach((c) => {
         const l0 = c.range.startLineNumber;
@@ -151,16 +158,7 @@
     D.prf.wrap((x) => {
       se.me.updateOptions({ wordWrap: x ? 'on' : 'off' });
       se.me.revealLineInCenterIfOutsideViewport(se.me.model.getLineCount());
-    });
-    D.prf.blockCursor((x) => {
-      Object.keys(D.wins).forEach((i) => { D.wins[i].blockCursor(!!x); });
-    });
-    D.prf.blinkCursor((x) => {
-      Object.keys(D.wins).forEach((i) => { D.wins[i].blinkCursor(x); });
-    });
-    D.prf.renderLineHighlight((x) => {
-      Object.keys(D.wins).forEach((i) => { D.wins[i].renderLineHighlight(x); });
-    });
+    });    
     se.histRead();
   }
   Se.prototype = {
@@ -398,7 +396,12 @@
     },
     autoCloseBrackets(x) { this.me.updateOptions({ autoClosingBrackets: x }); },
     matchBrackets(x) { this.me.updateOptions({ matchBrackets: !!x }); },
+    minimapEnabled(x) { this.me.updateOptions({ minimap: { enabled: !!x } }); },
+    minimapRenderCharacters(x) { this.me.updateOptions({ minimap: { renderCharacters: !!x } }); },
+    minimapShowSlider(x) { this.me.updateOptions({ minimap: { showSlider: x } }); },
     renderLineHighlight(x) { this.me.updateOptions({ renderLineHighlight: x }); },
+    autocompletion(x) { this.me.updateOptions({ quickSuggestions: x }); },
+    autocompletionDelay(x) { this.me.updateOptions({ quickSuggestionsDelay: x }); },
     zoom(z) {
       const se = this;
       const { me } = se;

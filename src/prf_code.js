@@ -50,6 +50,9 @@
       q.io.checked = !!p.indentOnOpen();
       q.ilf.checked = !!p.ilf();
       q.mb.checked = !!p.matchBrackets();
+      q.mme.checked = !!p.minimapEnabled();
+      q.mmrc.checked = !!p.minimapRenderCharacters();
+      q.mmss.value = p.minimapShowSlider();
       q.acbr.checked = !!p.autoCloseBrackets();
       q.acbl.checked = !!p.autoCloseBlocks();
       q.acbe.value = p.autoCloseBlocksEnd();
@@ -79,6 +82,9 @@
       p.indentOnOpen       (q.io.checked);
       p.ilf                (q.ilf.checked);
       p.matchBrackets      (q.mb.checked);
+      p.minimapEnabled     (q.mme.checked);
+      p.minimapRenderCharacters(q.mmrc.checked);
+      p.minimapShowSlider  (q.mmss.value);
       p.autoCloseBrackets  (q.acbr.checked);
       p.autoCloseBlocks    (q.acbl.checked);
       p.autoCloseBlocksEnd (q.acbe.value);
