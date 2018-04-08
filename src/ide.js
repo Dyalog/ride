@@ -392,9 +392,15 @@ D.IDE = function IDE(opts = {}) {
       }
     },
     HadError() {
+      // On error interpreter may open a new tracer window within a goldenlayout container
+      // and if configured, code formatted by interpretter.
+      // Each of these will set the focus on the new window,
+      // but on error we want focus on SE.
       ide.pending.splice(0, ide.pending.length);
-      ide.wins[0].focus();
-      ide.hadErr = 2 + D.prf.ilf(); // gl mounted + SetHilghlightLine + ReplyFormatCode
+      const se = ide.wins['0'];
+      se.focus();
+      se.hadErrTmr = setTimeout(() => { ide.hadErr = -1; delete se.hadErrTmr; }, 100); // in case no new window opened
+      ide.hadErr = 2 + D.prf.ilf(); // gl mounted + SetHighlightLine + ReplyFormatCode
     },
     GotoWindow(x) { const w = ide.wins[x.win]; w && w.focus(); },
     WindowTypeChanged(x) { return ide.wins[x.win].setTC(x.tracer); },
@@ -403,7 +409,7 @@ D.IDE = function IDE(opts = {}) {
     SetHighlightLine(x) {
       const w = D.wins[x.win];
       w.SetHighlightLine(x.line, ide.hadErr);
-      ide.hadErr > 0 && --ide.hadErr;
+      ide.hadErr > 0 && (ide.hadErr -= 1);
       ide.focusWin(w);
     },
     UpdateWindow(x) {
@@ -454,6 +460,7 @@ D.IDE = function IDE(opts = {}) {
         });
         return;
       }
+      ide.wins[0].hadErrTmr && clearTimeout(ide.wins[0].hadErrTmr);
       const w = ee.token;
       let done;
       const editorOpts = { id: w, name: ee.name, tc: ee.debugger };
@@ -464,12 +471,10 @@ D.IDE = function IDE(opts = {}) {
         done = 1;
       } else if (D.elw && !D.elw.isFocused()) D.elw.focus();
       if (done) return;
-      // (ide.wins[w]=new D.Ed(ide,editorOpts)).open(ee)
       const ed = new D.Ed(ide, editorOpts);
       ide.wins[w] = ed;
       ed.me_ready.then(() => ed.open(ee));
       // add to golden layout:
-      // const si = ide.wins[0].cm.getScrollInfo(); // remember session scroll position
       const tc = !!ee.debugger;
       const bro = gl.root.getComponentsByName('win').filter(x => x.id && tc === !!x.tc)[0]; // existing editor
       let p;
@@ -495,7 +500,7 @@ D.IDE = function IDE(opts = {}) {
       if (tc) {
         ide.getSIS();
         ide.wins[0].scrollCursorIntoView();
-      }// else ide.wins[0].me.scrollTo(si.left, si.top);
+      }
     },
     ShowHTML(x) {
       if (D.el) {
@@ -690,7 +695,7 @@ D.IDE.prototype = {
     if (this.hadErr === 0) {
       D.elw && D.elw.focus();
       this.wins[0].focus();
-      this.wins[0].hadErr = +new Date();
+      delete this.wins[0].hadErrTmr;
       this.hadErr = -1;
     } else if (this.hadErr < 0) { w.focus(); }
   },

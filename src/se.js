@@ -278,8 +278,7 @@
       const flt = me.getTopForLineNumber(startLineNumber);
       const newHeight = me.getLayoutInfo().contentHeight;
       this.updPW();
-      const hadErr = (se.hadErr || 0) + 100 > +new Date();
-      if (hadErr) {
+      if (se.hadErrTmr) {
         me.revealLine(ll);
       } else if (ontop) {
         this.btm = flt + newHeight;
@@ -314,7 +313,6 @@
     stateChanged() {
       const w = this;
       w.updSize();
-      // w.cm.refresh();
       w.updGutters && w.updGutters();
       w.restoreScrollPos();
     },
