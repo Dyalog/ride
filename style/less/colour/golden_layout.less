@@ -1,9 +1,10 @@
 /*Golden Layout*/
 .lm_goldenlayout {
-	background:@GL_BG !important;
+	// background:@GL_BG !important;
+	background:@THEME_WIN_BG url(img/mainBG.png) left -40px repeat-x !important;
 }
 .lm_header,.lm_content {
-	background-color: @GL_BG !important;
+// 	background-color: @GL_BG !important;
 	border-color: @GL_BG !important;
 }
 .lm_tab {
@@ -12,5 +13,12 @@
 	border:1px @GL_TAB_BG solid !important;
 }
 .lm_splitter{
-	background:@GL_SPLITTER !important;
+	background-color:@GL_SPLITTER !important;
+}
+
+.lm_splitter.lm_horizontal {
+	background:@GL_SPLITTER url(img/grabber_vert.png) no-repeat center !important;
+}
+.lm_splitter.lm_vertical {
+	background:@GL_SPLITTER url(img/grabber_hor.png) no-repeat center !important;
 }

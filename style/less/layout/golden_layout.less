@@ -1,24 +1,31 @@
 .lm_content{
 	border:none !important;
 }
-.lm_splitter.lm_horizontal {
-	.lm_drag_handle {
-		width: 8px !important;
-		left: -2px !important;
-	}
-}
-.lm_splitter.lm_vertical {
-	.lm_drag_handle {
-		height: 8px !important;
-		top: -2px !important;
-	}
-}
+
 .lm_tabs{
 	padding-left:3px !important;
+}
+.lm_header {
+	height: 30px !important;
+}
+.lm_tab {
+	height: 30px !important;
+	padding:10px !important;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
 }
 .lm_close {
 	display: none !important;
 }
 .lm_splitter{
 	opacity:1 !important;
+}
+.lm_header .lm_tab .lm_title {
+	padding: 1px 10px 0px;
+}
+.lm_header .lm_tab .lm_close_tab{
+	&::before {content: "x";}
+	&:hover { color: red;}
+	background-image: none !important;
+	font-weight: bold;
 }

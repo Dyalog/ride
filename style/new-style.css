@@ -827,22 +827,36 @@ span.CodeMirror-selectedtext {
 .lm_content {
   border: none !important;
 }
-.lm_splitter.lm_horizontal .lm_drag_handle {
-  width: 8px !important;
-  left: -2px !important;
-}
-.lm_splitter.lm_vertical .lm_drag_handle {
-  height: 8px !important;
-  top: -2px !important;
-}
 .lm_tabs {
   padding-left: 3px !important;
+}
+.lm_header {
+  height: 30px !important;
+}
+.lm_tab {
+  height: 30px !important;
+  padding: 10px !important;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 .lm_close {
   display: none !important;
 }
 .lm_splitter {
   opacity: 1 !important;
+}
+.lm_header .lm_tab .lm_title {
+  padding: 1px 10px 0px;
+}
+.lm_header .lm_tab .lm_close_tab {
+  background-image: none !important;
+  font-weight: bold;
+}
+.lm_header .lm_tab .lm_close_tab::before {
+  content: "x";
+}
+.lm_header .lm_tab .lm_close_tab:hover {
+  color: red;
 }
 button {
   border: none;
@@ -3067,20 +3081,25 @@ body.floating-window {
 }
 /*Golden Layout*/
 .lm_goldenlayout {
-  background: #4d4a4b !important;
+  background: #4d4a4b url(img/mainBG.png) left -40px repeat-x !important;
 }
 .lm_header,
 .lm_content {
-  background-color: #4d4a4b !important;
   border-color: #4d4a4b !important;
 }
 .lm_tab {
-  background-color: #fac739 !important;
+  background-color: #38393f !important;
   color: white !important;
-  border: 1px #fac739 solid !important;
+  border: 1px #38393f solid !important;
 }
 .lm_splitter {
-  background: #fac739 !important;
+  background-color: #1c1e28 !important;
+}
+.lm_splitter.lm_horizontal {
+  background: #1c1e28 url(img/grabber_vert.png) no-repeat center !important;
+}
+.lm_splitter.lm_vertical {
+  background: #1c1e28 url(img/grabber_hor.png) no-repeat center !important;
 }
 label {
   color: #fac739;
@@ -3323,11 +3342,8 @@ input.lyt_g3:hover {
 .cm-scroll .btn {
   color: #4d4a4b;
 }
-body {
-  background-color: #4d4a4b;
-}
 #ide {
-  background: url(img/Dyalog_60.png) center no-repeat #4d4a4b;
+  background: #4d4a4b url(img/mainBG.png) left top repeat-x;
 }
 #apl_font {
   color: #4d4a4b;
