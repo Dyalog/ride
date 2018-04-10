@@ -1,16 +1,26 @@
 /*Golden Layout*/
 .lm_goldenlayout {
-	// background:@GL_BG !important;
-	background:@THEME_WIN_BG url(img/mainBG.png) left -40px repeat-x !important;
+	background:@GL_BG url(img/mainBG.png) left -40px repeat-x !important;
 }
 .lm_header,.lm_content {
 // 	background-color: @GL_BG !important;
 	border-color: @GL_BG !important;
 }
+.lm_maximised .lm_header {
+	background: @GL_BG url(img/mainBG.png) left -40px repeat-x !important;
+}
 .lm_tab {
 	background-color: @GL_TAB_BG !important;
 	color: @GL_TAB_FG !important;
 	border:1px @GL_TAB_BG solid !important;
+}
+.lm_tab.lm_active {
+	background-color: @GL_ACT_TAB_BG !important;
+	border:1px @GL_ACT_TAB_BG solid !important;
+	color: @GL_ACT_TAB_FG !important;
+	.lm_close_tab{
+		color: @GL_ACT_TAB_FG !important;
+	}
 }
 .lm_splitter{
 	background-color:@GL_SPLITTER !important;
@@ -21,4 +31,16 @@
 }
 .lm_splitter.lm_vertical {
 	background:@GL_SPLITTER url(img/grabber_hor.png) no-repeat center !important;
+}
+.lm_header .lm_tab .lm_close_tab{
+	&::before {content: "×";}
+	background-image: none !important;
+	color: @GL_TAB_BG;
+	font-weight: bold;
+	&:hover {
+		color: @GL_TAB_FG;
+	}
+}
+.lm_header .lm_tab:hover .lm_close_tab{
+	color: @GL_ACT_TAB_FG !important;
 }
