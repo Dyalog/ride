@@ -2,5 +2,4 @@
 cd "$(dirname "$0")"
 D="$(pwd)"
 cd
-export RIDE_SPAWN="$D/../Resources/Dyalog/mapl"
 exec "$D/EXECUTABLE" "$@"
