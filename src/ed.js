@@ -210,10 +210,8 @@
       const ed = this;
       ed.isReadOnly = x;
       ed.me.updateOptions({ readOnly: x });
-      if (x) {
-        ed.dom.getElementsByClassName('tb_AO')[0].style.display = 'none';
-        ed.dom.getElementsByClassName('tb_DO')[0].style.display = 'none';
-      }
+      ed.dom.getElementsByClassName('tb_AO')[0].style.display = x ? 'none' : '';
+      ed.dom.getElementsByClassName('tb_DO')[0].style.display = x ? 'none' : '';
     },
     setStop() {
       const ed = this;
