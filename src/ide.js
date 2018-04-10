@@ -201,15 +201,12 @@ D.IDE = function IDE(opts = {}) {
         w.saveScrollPos();
       });
     });
-    w.me_ready.then(() => {
-      if (ide.ipc) {
-        // w.focus();
-        ide.ipc.emit('mounted', h.id);
-      } else {
-        ide.hadErr > 0 && (ide.hadErr -= 1);
-        ide.focusWin(w);
-      }
-    });
+    if (ide.ipc) {
+      w.me_ready.then(() => ide.ipc.emit('mounted', h.id));
+    } else {
+      ide.hadErr > 0 && (ide.hadErr -= 1);
+      setTimeout(() => ide.focusWin(w), 10);
+    }
     return w;
   }
   function WSE(c) {
@@ -399,7 +396,8 @@ D.IDE = function IDE(opts = {}) {
       ide.pending.splice(0, ide.pending.length);
       const se = ide.wins['0'];
       se.focus();
-      se.hadErrTmr = setTimeout(() => { ide.hadErr = -1; delete se.hadErrTmr; }, 100); // in case no new window opened
+      // set timer in case no new window is opened
+      se.hadErrTmr = setTimeout(() => { ide.hadErr = -1; delete se.hadErrTmr; }, 100);
       ide.hadErr = 2 + D.prf.ilf(); // gl mounted + SetHighlightLine + ReplyFormatCode
     },
     GotoWindow(x) { const w = ide.wins[x.win]; w && w.focus(); },
@@ -592,12 +590,16 @@ D.IDE = function IDE(opts = {}) {
     },
     TaskDialog(x) {
       const { esc } = D.util;
-      I.gd_title_text.textContent = x.title || '';
+      I.gd_title_text.textContent = x.title || 'Task';
       I.gd_icon.style.display = 'none';
       I.gd_content.innerHTML = esc(x.text || '') + (x.subtext ? `<div class=task_subtext>${esc(x.subtext)}</div>` : '');
-      I.gd_btns.innerHTML =
-        (x.buttonText || []).map(y => `<button class=task>${esc(y)}</button>`).join('') +
-        (x.footer ? `<div class=task_footer>${esc(x.footer)}</div>` : '');
+      let content = (x.buttonText || []).map((y) => {
+        const [caption, ...details] = esc(y).split('\n');
+        return '<button class=task><div class="btn_icon"><span class="far fa-long-arrow-right"></span></div>' +
+          `${caption}<br><div class="task_detail">${details.join('<br>')}</div></button>`;
+      }).join('');
+      content += (x.footer ? `<div class=task_footer>${esc(x.footer)}</div>` : '');
+      I.gd_btns.innerHTML = content;
       const ret = (r) => {
         I.gd_btns.onclick = null;
         I.gd_close.onclick = null;
@@ -631,7 +633,12 @@ D.IDE = function IDE(opts = {}) {
       let w = ide.wStatus;
       if (!D.el) return;
       if (!w) {
-        ide.wStatus = new D.el.BrowserWindow({ width: 600, height: 400, parent: D.elw });
+        ide.wStatus = new D.el.BrowserWindow({
+          icon: `${__dirname}/D.png`,
+          width: 600,
+          height: 400,
+          parent: D.elw,
+        });
         w = ide.wStatus;
         w.setTitle('Status Output');
         w.loadURL(`file://${__dirname}/status.html`);

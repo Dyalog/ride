@@ -12,11 +12,28 @@
 .dlg_close:hover{
   background-color:@DLG_CLOSE_HOVER_BG;
 }
+#gd {
+  &.dlg{
+      background-color:@GD_BG_COL;
+      box-shadow:0 18px 48px @DLG_SHADOW_COL;
+      border:1px solid @DLG_BORDER_COL;
+  }
+  .dlg_title,.dlg_close{
+    color:@GD_CLOSE_FG;
+  }
 
-// .ui-dialog .ui-dialog-content.task_dlg .subtext,
-// .ui-dialog .ui-dialog-content.task_dlg .footer{
-//   color:@MID_GREY
-// }
+  .dlg_close:hover{
+    color:@GD_CLOSE_HOVER_FG;
+    background-color:@GD_CLOSE_HOVER_BG;
+  }
+}
+
+#gd_content{
+  color: @GD_FG_COL;
+}
+.dlg_btns button.task{
+  color:@GD_FG_COL;
+}
 
 #abt_contact,
 #abt_contact a,

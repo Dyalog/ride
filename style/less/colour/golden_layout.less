@@ -1,13 +1,14 @@
 /*Golden Layout*/
 .lm_goldenlayout {
-	background:@GL_BG url(img/mainBG.png) left -40px repeat-x !important;
+	// background:@GL_BG url(img/mainBG.png) left -40px repeat-x !important;
+	background:@GL_BG !important;
+	.lm_header {
+	background: @GL_BG !important;
+	}
 }
 .lm_header,.lm_content {
 // 	background-color: @GL_BG !important;
 	border-color: @GL_BG !important;
-}
-.lm_maximised .lm_header {
-	background: @GL_BG url(img/mainBG.png) left -40px repeat-x !important;
 }
 .lm_tab {
 	background-color: @GL_TAB_BG !important;
@@ -36,7 +37,7 @@
 	&::before {content: "×";}
 	background-image: none !important;
 	color: @GL_TAB_BG;
-	font-weight: bold;
+	font-size: 16px;
 	&:hover {
 		color: @GL_TAB_FG;
 	}

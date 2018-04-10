@@ -45,8 +45,25 @@
 
 .dlg_btns button.task{
   display:block;
-  margin:4px 0;
-  width:100%
+  margin:10px 5px;
+  width:100%;
+  background-color: rgba(0, 0, 0, 0);
+  text-transform: none;
+  font-size: small;
+  font-weight: normal;
+  text-align: left;
+  border: 1px solid transparent;
+  &:hover{
+    border: 1px solid;
+  }
+  .task_detail {
+    font-size: smaller;
+  }
+  .btn_icon {
+    float:left;
+    font-size: 20px;
+    padding:0 10px;
+  }
 }
 
 .dlg_icon_warn {

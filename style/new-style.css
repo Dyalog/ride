@@ -668,8 +668,25 @@ span.CodeMirror-selectedtext {
 }
 .dlg_btns button.task {
   display: block;
-  margin: 4px 0;
+  margin: 10px 5px;
   width: 100%;
+  background-color: rgba(0, 0, 0, 0);
+  text-transform: none;
+  font-size: small;
+  font-weight: normal;
+  text-align: left;
+  border: 1px solid transparent;
+}
+.dlg_btns button.task:hover {
+  border: 1px solid;
+}
+.dlg_btns button.task .task_detail {
+  font-size: smaller;
+}
+.dlg_btns button.task .btn_icon {
+  float: left;
+  font-size: 20px;
+  padding: 0 10px;
 }
 .dlg_icon_warn {
   background-image: url(img/dlg_warn.png);
@@ -831,12 +848,10 @@ span.CodeMirror-selectedtext {
   padding-left: 3px !important;
 }
 .lm_header {
-  height: 30px !important;
+  height: 25px !important;
 }
 .lm_tab {
-  padding: 10px !important;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  padding: 5px 15px 5px 10px !important;
 }
 .lm_close {
   display: none !important;
@@ -846,6 +861,10 @@ span.CodeMirror-selectedtext {
 }
 .lm_header .lm_tab .lm_title {
   padding: 1px 10px 0px;
+}
+.lm_header .lm_tab .lm_close_tab {
+  top: 4px !important;
+  right: 6px !important;
 }
 button {
   border: none;
@@ -3062,6 +3081,25 @@ body.floating-window {
 .dlg_close:hover {
   background-color: white;
 }
+#gd.dlg {
+  background-color: white;
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.5);
+  border: 1px solid black;
+}
+#gd .dlg_title,
+#gd .dlg_close {
+  color: #828282;
+}
+#gd .dlg_close:hover {
+  color: white;
+  background-color: #38393f;
+}
+#gd_content {
+  color: blue;
+}
+.dlg_btns button.task {
+  color: blue;
+}
 #abt_contact,
 #abt_contact a,
 #abt_contact a:visited,
@@ -3070,14 +3108,14 @@ body.floating-window {
 }
 /*Golden Layout*/
 .lm_goldenlayout {
-  background: #4d4a4b url(img/mainBG.png) left -40px repeat-x !important;
+  background: #4d4a4b !important;
+}
+.lm_goldenlayout .lm_header {
+  background: #4d4a4b !important;
 }
 .lm_header,
 .lm_content {
   border-color: #4d4a4b !important;
-}
-.lm_maximised .lm_header {
-  background: #4d4a4b url(img/mainBG.png) left -40px repeat-x !important;
 }
 .lm_tab {
   background-color: #38393f !important;
@@ -3104,7 +3142,7 @@ body.floating-window {
 .lm_header .lm_tab .lm_close_tab {
   background-image: none !important;
   color: #38393f;
-  font-weight: bold;
+  font-size: 16px;
 }
 .lm_header .lm_tab .lm_close_tab::before {
   content: "×";
@@ -3357,7 +3395,7 @@ input.lyt_g3:hover {
   color: #4d4a4b;
 }
 #ide {
-  background: #4d4a4b url(img/mainBG.png) left top repeat-x;
+  background: url(img/Dyalog_60.png) center no-repeat #4d4a4b;
 }
 #apl_font {
   color: #4d4a4b;
