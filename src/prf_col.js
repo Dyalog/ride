@@ -117,7 +117,7 @@
     const rp = isSample ? '#col_cm' : '.ride_win'; // css rule prefix, ignored when there's a "/*noprefix*/"
     return G.map((g) => {
       const h = schema[g.t];
-      if (!h) return '';
+      if (!h || !g.c) return '';
       let cls = g.c.split(',').map((x) => {
         if (!/^\/\*noprefix\*\//.test(x)) return `${rp} ${x}`;
         return isSample ? '#nonexistent' : x;
@@ -200,46 +200,46 @@
     // c: css selector -- will be prefixed with "#col_cm" or ".ride_win" unless /*noprefix*/ is present
     // m: monaco theme token name
     // ctrls: what UI controls should be shown or hidden for this group (other than the default ones)
-    {s:'assignment'      ,t:'asgn',m:'keyword.operator.assignment',c:'.cm-apl-asgn'}, //←
-    {s:'bracket'         ,t:'sqbr',m:'delimiter.square',c:'.cm-apl-sqbr'}, //[]
-    {s:'comment'         ,t:'com' ,m:'comment',c:'.cm-apl-com' }, //⍝
-    {s:'cursor'          ,t:'cur' ,e:'editorCursor.foreground',c:'div.CodeMirror-cursor', ctrls:{bg:0,BIU:0,fg:1}},
-    {s:'dfn level 1'     ,t:'dfn1',m:'identifier.dfn.1',c:'.cm-apl-dfn.cm-apl-dfn1'}, //{}
-    {s:'dfn level 2'     ,t:'dfn2',m:'identifier.dfn.2',c:'.cm-apl-dfn.cm-apl-dfn2'},
-    {s:'dfn level 3'     ,t:'dfn3',m:'identifier.dfn.3',c:'.cm-apl-dfn.cm-apl-dfn3'},
-    {s:'dfn level 4'     ,t:'dfn4',m:'identifier.dfn.4',c:'.cm-apl-dfn.cm-apl-dfn4'},
-    {s:'dfn level 5'     ,t:'dfn5',m:'identifier.dfn.5',c:'.cm-apl-dfn.cm-apl-dfn5'}, //{1 {2 {3 {4 {5} } } } }
-    {s:'dfn'             ,t:'dfn' ,m:'identifier.dfn',c:'.cm-apl-dfn' },
-    {s:'diamond'         ,t:'diam',m:'delimiter.diamond',c:'.cm-apl-diam'}, //⋄
-    {s:'dyadic operator' ,t:'op2' ,m:'keyword.operator.dyadic',c:'.cm-apl-op2' }, //⍣ ...
-    {s:'error'           ,t:'err' ,m:'invalid',c:'.cm-apl-err' },
-    {s:'function'        ,t:'fn'  ,m:'keyword.function',c:'.cm-apl-fn'  }, //+ ...
-    {s:'global name'     ,t:'glb' ,m:'identifier.global',c:'.cm-apl-glb' },
-    {s:'idiom'           ,t:'idm' ,m:'predefined.idiom',c:'.cm-apl-idm' }, //⊃⌽ ...
-    {s:'keyword'         ,t:'kw'  ,m:'keyword',c:'.cm-apl-kw'  }, //:If ...
-    {s:'label'           ,t:'lbl' ,m:'meta.label',c:'.cm-apl-lbl' }, //L:
-    {s:'line number'     ,t:'lnum',c:'.CodeMirror-linenumber',e:'editorLineNumber.foreground'},
-    {s:'matching bracket',t:'mtch',c:'.CodeMirror-matchingbracket',e:'editorBracketMatch.background'},
+    {s:'assignment'      ,t:'asgn',m:'keyword.operator.assignment'}, //←
+    {s:'bracket'         ,t:'sqbr',m:'delimiter.square'}, //[]
+    {s:'comment'         ,t:'com' ,m:'comment'}, //⍝
+    {s:'cursor'          ,t:'cur' ,e:'editorCursor.foreground', ctrls:{bg:0,BIU:0,fg:1}},
+    {s:'dfn level 1'     ,t:'dfn1',m:'identifier.dfn.1'}, //{}
+    {s:'dfn level 2'     ,t:'dfn2',m:'identifier.dfn.2'},
+    {s:'dfn level 3'     ,t:'dfn3',m:'identifier.dfn.3'},
+    {s:'dfn level 4'     ,t:'dfn4',m:'identifier.dfn.4'},
+    {s:'dfn level 5'     ,t:'dfn5',m:'identifier.dfn.5'}, //{1 {2 {3 {4 {5} } } } }
+    {s:'dfn'             ,t:'dfn' ,m:'identifier.dfn'},
+    {s:'diamond'         ,t:'diam',m:'delimiter.diamond'}, //⋄
+    {s:'dyadic operator' ,t:'op2' ,m:'keyword.operator.dyadic'}, //⍣ ...
+    {s:'error'           ,t:'err' ,m:'invalid'},
+    {s:'function'        ,t:'fn'  ,m:'keyword.function'}, //+ ...
+    {s:'global name'     ,t:'glb' ,m:'identifier.global'},
+    {s:'idiom'           ,t:'idm' ,m:'predefined.idiom'}, //⊃⌽ ...
+    {s:'keyword'         ,t:'kw'  ,m:'keyword'}, //:If ...
+    {s:'label'           ,t:'lbl' ,m:'meta.label'}, //L:
+    {s:'line number'     ,t:'lnum',e:'editorLineNumber.foreground'},
+    {s:'matching bracket',t:'mtch',e:'editorBracketMatch.background'},
     {s:'modified line'   ,t:'mod' ,c:'.modified'   }, //in the session - lines queued for execution
-    {s:'monadic operator',t:'op1' ,m:'keyword.operator.monadic',c:'.cm-apl-op1' }, //⌸ ...
-    {s:'namespace'       ,t:'ns'  ,c:'.cm-apl-ns'  }, //#
-    {s:'name'            ,t:'var' ,m:'identifier.local',c:'.cm-apl-var' }, //a.k.a. identifier
-    {s:'normal'          ,t:'norm',c:'.cm-s-default,.CodeMirror-gutters,.ride_win_cm'},
-    {s:'number'          ,t:'num' ,m:'number',c:'.cm-apl-num' }, //0 ...
-    {s:'parenthesis'     ,t:'par' ,m:'delimiter.parenthesis',c:'.cm-apl-par' }, //()
-    {s:'quad name'       ,t:'quad',m:'predefined.sysfn',c:'.cm-apl-quad'}, //⎕XYZ
-    {s:'search match'    ,t:'srch',c:'.cm-searching',e:'editor.findMatchBackground',ctrls:{fg:0,BIU:0}},
-    {s:'selection'       ,t:'sel' ,c:'.CodeMirror-selected,.CodeMirror-focused .CodeMirror-selected',e:'editor.selectionBackground',ctrls:{fg:0,BIU:0}},
-    {s:'semicolon'       ,t:'semi',m:'delimiter.semicolon',c:'.cm-apl-semi'}, //as in A[B;C]
-    {s:'string'          ,t:'str' ,m:'string',c:'.cm-apl-str' }, //'a.k.a. character vector or scalar'
-    {s:'system command'  ,t:'scmd',m:'predefined.scmd',c:'.cm-apl-scmd'}, //)XYZ
+    {s:'monadic operator',t:'op1' ,m:'keyword.operator.monadic'}, //⌸ ...
+    {s:'namespace'       ,t:'ns'  }, //#
+    {s:'name'            ,t:'var' ,m:'identifier.local'}, //a.k.a. identifier
+    {s:'normal'          ,t:'norm',c:'.ride_win_me'},
+    {s:'number'          ,t:'num' ,m:'number'}, //0 ...
+    {s:'parenthesis'     ,t:'par' ,m:'delimiter.parenthesis'}, //()
+    {s:'quad name'       ,t:'quad',m:'predefined.sysfn'}, //⎕XYZ
+    {s:'search match'    ,t:'srch',e:'editor.findMatchBackground',ctrls:{fg:0,BIU:0}},
+    {s:'selection'       ,t:'sel' ,e:'editor.selectionBackground',ctrls:{fg:0,BIU:0}},
+    {s:'semicolon'       ,t:'semi',m:'delimiter.semicolon'}, //as in A[B;C]
+    {s:'string'          ,t:'str' ,m:'string'}, //'a.k.a. character vector or scalar'
+    {s:'system command'  ,t:'scmd',m:'predefined.scmd'}, //)XYZ
     {s:'tracer'          ,t:'tc'  ,c:'/*noprefix*/.tracer .monaco-editor-background,/*noprefix*/.tracer .monaco-editor .margin'},
     {s:'pendent'         ,t:'tcpe',c:'/*noprefix*/.tracer.pendent .monaco-editor-background,/*noprefix*/.tracer.pendent .monaco-editor .margin'},
-    {s:'tradfn'          ,t:'trad',m:'identifier.tradfn.apl', c:'.cm-apl-trad'}, //the header line (e.g. ∇{R}←A F B) or the closing ∇
-    {s:'user command'    ,t:'ucmd',m:'predefined.ucmd',c:'.cm-apl-ucmd'}, //]XYZ
+    {s:'tradfn'          ,t:'trad',m:'identifier.tradfn.apl'}, //the header line (e.g. ∇{R}←A F B) or the closing ∇
+    {s:'user command'    ,t:'ucmd',m:'predefined.ucmd'}, //]XYZ
     {s:'value tip target',t:'vtt' ,c:'.vt_marker',ctrls:{bc:1,fg:0,BIU:0}}, //the rectangle around the token
     {s:'value tip'       ,t:'vtip',c:'/*noprefix*/#vt_bln,/*noprefix*/#vt_tri',ctrls:{bc:1}}, //the balloon
-    {s:'zilde'           ,t:'zld' ,m:'predefined.zilde',c:'.cm-apl-zld' }  //⍬
+    {s:'zilde'           ,t:'zld' ,m:'predefined.zilde'}  //⍬
   ]);
   /* eslint-enable */
   D.mop.then(() => updStl());
