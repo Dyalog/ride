@@ -32,7 +32,6 @@ D.IPC_Client = function IPCClient(winId) {
       D.ide.wins[ed.id] = ed;
       ed.me_ready.then(() => {
         ed.open(ee); ed.updSize(); document.title = ed.name;
-        // window.onbeforeunload=function(e){ed.onbeforeunload(e)}
         ed.refresh();
         rm.emit('unblock', ed.id);
       });

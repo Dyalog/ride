@@ -255,7 +255,6 @@
       });
       me.model.setValue(ed.oText = ee.text.join('\n'));
       me.model.setEOL(monaco.editor.EndOfLineSequence.LF);
-      me.focus();
       // entityType:            16 NestedArray        512 AplClass
       // 1 DefinedFunction      32 QuadORObject      1024 AplInterface
       // 2 SimpleCharArray      64 NativeFile        2048 AplSession
