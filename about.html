@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset=utf-8>
+  <title>About Dyalog</title>
+  <link rel=stylesheet href='style/new-style.css'>
+</head>
+<body>
+  <div id=abt class="dlg floating">
+    <div id=abt_logo class=dlg_title>
+      <div id=abt_contact class=dlg_no_drag>
+        <span title="Dyalog's UK phone number">+44 (0)1256 830030</span><br>
+        <a id=abt_email href="mailto:support@dyalog.com">support@dyalog.com</a><br>
+        <a href='http://www.dyalog.com/' target=_blank>www.dyalog.com</a>
+      </div>
+    </div>
+    <div id=abt_ta_wr><textarea id=abt_ta readonly wrap=off></textarea></div>
+    <div class=dlg_btns>
+      <button id=abt_copy><u>C</u>opy</button>
+      <button id=abt_close>C<u>l</u>ose</button>
+    </div>
+  </div>
+  <script>
+    if (typeof require !== 'undefined') {
+      document.getElementById('abt_contact').onclick = (x) => {
+        if (x.target.nodeName === 'A' && /^http/.test(x.target.href)) {
+          require('electron').shell.openExternal(x.target.href);
+          return !1;
+        }
+        return !0;
+      };
+    }
+    let cpy = document.getElementById('abt_copy');
+    document.getElementById('abt_close').onclick = () => { window.close() };;
+    cpy.onclick = () => {
+      let ta = document.getElementById('abt_ta');
+        ta.select();
+        document.execCommand('copy');
+        ta.selectionEnd = 0;
+    };
+    cpy.hidden = !document.queryCommandSupported('copy');
+  </script>
+</body>
+</html>

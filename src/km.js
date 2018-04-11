@@ -186,7 +186,12 @@
     },
     LOG() {
       if (!D.el) return;
-      const w = new D.el.BrowserWindow({ width: 400, height: 500, parent: D.elw });
+      const w = new D.el.BrowserWindow({
+        icon: `${__dirname}/D.png`,
+        width: 400,
+        height: 500,
+        parent: D.elw,
+      });
       const cn = nodeRequire(`${__dirname}/src/cn`);
       D.logw = w;
       w.setTitle('Protocol Log');

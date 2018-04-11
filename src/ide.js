@@ -504,7 +504,11 @@ D.IDE = function IDE(opts = {}) {
       if (D.el) {
         let w = ide.w3500;
         if (!w || w.isDestroyed()) {
-          ide.w3500 = new D.el.BrowserWindow({ width: 800, height: 500 });
+          ide.w3500 = new D.el.BrowserWindow({
+            icon: `${__dirname}/D.png`,
+            width: 800,
+            height: 500,
+          });
           w = ide.w3500;
         }
         w.loadURL(`file://${__dirname}/empty.html`);
