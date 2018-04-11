@@ -11,6 +11,9 @@
 	border-color: @GL_BG !important;
 }
 .lm_tab {
+	font-family: sans-serif;
+	letter-spacing: 0.5px;
+	font-size: 12px;
 	background-color: @GL_TAB_BG !important;
 	color: @GL_TAB_FG !important;
 	border:1px @GL_TAB_BG solid !important;
@@ -36,12 +39,13 @@
 .lm_header .lm_tab .lm_close_tab{
 	&::before {content: "×";}
 	background-image: none !important;
-	color: @GL_TAB_BG;
+	color: @GL_TAB_FG;
 	font-size: 16px;
-	&:hover {
-		color: @GL_TAB_FG;
-	}
+	// &:hover {
+	// 	color: @GL_TAB_FG;
+	// }
 }
 .lm_header .lm_tab:hover .lm_close_tab{
+	opacity:1;
 	color: @GL_ACT_TAB_FG !important;
 }

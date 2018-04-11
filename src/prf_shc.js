@@ -36,7 +36,7 @@
       automaticLayout: true,
       autoIndent: false,
       cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
-      cursorBlinking: D.prf.blinkCursor() ? 'blink' : 'solid',
+      cursorBlinking: D.prf.cursorBlinking(),
       folding: false,
       fontFamily: 'apl',
       fontSize: 16,
@@ -46,6 +46,7 @@
       minimap: { enabled: false },
       mouseWheelZoom: false,
       renderIndentGuides: false,
+      renderLineHighlight: 'none',
       scrollbar: { horizontal: 'hidden', vertical: 'hidden' },
       suggestOnTriggerCharacters: false,
       wordBasedSuggestions: false,
@@ -81,8 +82,11 @@
       html += `<tr data-code=${c}>` +
         `<td class=shc_code>${c}` +
         `<td>${s || `<input class=shc_val id=shc_val_${c}>`}` + // pfkeys show an <input> for the commands mapped to them
-        `<td id=shc_itm_${c}>${(h[c] || d).map(keyHTML).join('')}<button class=shc_add title="Add shortcut">+</button>` +
-        `<td><button class=shc_rst title="Reset &quot;${c}&quot; to its defaults">↶</button>`;
+        `<td id=shc_itm_${c}>${(h[c] || d).map(keyHTML).join('')}` +
+        // '<button class=shc_add title="Add shortcut">+</button>' +
+        '<button class=shc_add title="Add shortcut"><span class="fas fa-plus"></span></button>' +
+        // `<td><button class=shc_rst title="Reset &quot;${c}&quot; to its defaults">↶</button>`;
+        `<td><button class=shc_rst title="Reset &quot;${c}&quot; to its defaults"><span class="fas fa-undo-alt"></span></button>`;
     }
     q.tbl_wr.innerHTML = `${html}</table>`;
     updDups();

@@ -28,7 +28,7 @@
 }
 
 .dlg_btns{
-  padding:8px;
+  padding:14px;
   text-align:center;
   position:absolute;
   bottom:0;
@@ -40,7 +40,9 @@
 
 .dlg_btns button{
   min-width:75px;
-  margin:0 8px
+  margin:0 8px;
+  border-radius:3px;
+  padding:8px;
 }
 
 .dlg_btns button.task{
@@ -115,7 +117,13 @@
 /*About dialog*/
 #abt{
   padding:0;
-  margin:0
+  margin:0;
+  &.floating {
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 #abt_logo{
@@ -143,11 +151,13 @@
   left:5px;
   right:13px;
   top:86px;
-  bottom:52px;
+  bottom:65px;
   width:auto
 }
 
 #abt_ta{
+  font-family: monospace;
+  font-size: 14px;
   white-space:pre;
   word-wrap:normal;
   overflow-x:scroll;

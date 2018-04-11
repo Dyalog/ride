@@ -21,9 +21,13 @@
 		background-color: #a9a9a9;
 		border-color: #a9a9a9;
 		color: #a9a9a9;
+		border-top: 1px solid @HR_TOP;
+		border-bottom: 1px solid @HR_BTM;
 	}
 	.hsplitbar {
-		background: @CN_HSPLIT;
+		background: @GL_SPLITTER url(img/grabber_vert.png) no-repeat center !important;
+		border-right: solid 1px @HR_TOP;
+		border-left: solid 1px @HR_TOP;
 	}
 }
 #cn_favs {
@@ -68,12 +72,12 @@
   // border-right:1px solid @CN_HSPLIT_BORDER_COL;
 }
 #cn_rhs {
-	// border-left:8px solid @CN_HSPLIT;
-	background-color:@CN_RHS_BG;
-	button{
-		color:@CN_RHS_BUTTON_FG;
-    background-color:@CN_RHS_BUTTON_BG;
-	}
+	// background-color:@CN_RHS_BG;
+	background: linear-gradient(@THEME_WIN_BG, black);
+	// button{
+	// 	color:@CN_RHS_BUTTON_FG;
+  //   background-color:@CN_RHS_BUTTON_BG;
+	// }
 	label{
 		color:@CN_LABEL_COL;
 	}

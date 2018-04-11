@@ -2,25 +2,37 @@
 	// height: 28px;
 	display: inline-block;
 	width: 100%;
-	border-bottom: solid 1px @PRF_NAV_COL;
-	margin-bottom: 2px;
+	// border-bottom: solid 1px @PRF_NAV_COL;
+	padding-bottom: 5px;
 	a {
-		border-bottom: 0.5ex solid transparent;
 		float: left;
 		height: 13px;
 		padding: 4px 12px 4px 12px;
 		text-decoration: none;
 		color: @PRF_NAV_COL;
 		margin: 4px 0 0 4px;
-		transition:border-bottom 0.2s;
-		&:hover {
-			border-bottom: 0.5ex solid @PRF_NAV_BORDER_COL;
+	}
+}
+
+#prf_content {
+	margin-top: -2px;
+	padding-top:5px;	
+	button{
+		border-radius:3px;
+		padding:8px;
+	}
+	select{
+		overflow: hidden;
+		padding: 2px 34px 2px 4px;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		min-height:30px;
+		box-shadow: none;
+		font-weight:500;
+		option{
+			font-weight:500;
 		}
-	}
-	a.sel {
-		border-bottom: 0.5ex solid @PRF_NAV_COL;
-		cursor: default;
-	}
+	}	
 }
 
 @import './prefs_layout.less';

@@ -1,134 +1,173 @@
 #prf_nav {
-	border-bottom: solid 1px @PRF_NAV_COL;
-	a {
-		border-bottom: 0.5ex solid transparent;
-		color: @PRF_NAV_COL;
-		&:hover {
-			border-bottom: 0.5ex solid @PRF_NAV_BORDER_COL;
-		}
-	}
-	a.sel {
-		border-bottom: 0.5ex solid @PRF_NAV_COL;
-	}
+  border-bottom: solid 1px @HR_TOP;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 600;
+  a {
+    color: @PRF_NAV_COL;
+    &.sel {
+      cursor: default;
+      color: @PRF_ACT_NAV_COL;
+    }
+  }
 }
-
+#prf_content {
+  border-top: solid 1px @HR_BTM;
+  // button{
+  //   color:@CN_RHS_BUTTON_FG;
+  //   background-color:@CN_RHS_BUTTON_BG;
+  // }
+  select{
+    background-color:	@CN_SELECT_BG;
+    color:@CN_SELECT_FG;
+  }
+  label {
+    font-size:14px;
+  }
+}
+#prf_dlg_cancel{
+  background-color: transparent;
+  border: 1px solid @DLG_CANCEL;
+  color: @DLG_CANCEL;
+  &:hover{
+    color: @BUTTON_HOVER_COL;
+  }
+}
 #lyt_kbd{
-	color:black;
+  color:black;
 }
 
 .lyt_k{
-	background: @KEY_COL;
+  background: @KEY_COL;
+  * {
+    font-family: apl, monospace;
+    font-size: 16px;
+  }
 }
 
 .lyt_g0,.lyt_g1,.lyt_g2,.lyt_g3{
-	background-color:@KEY_COL;
+  background-color:@KEY_COL;
 }
 
 .lyt_g0 {
-	color: black;
+  color: black;
 }
 .lyt_g1{
-	color:darkgreen;
+  color:darkgreen;
 }
 .lyt_g2 {
-	color: red;
+  color: red;
 }
 .lyt_g3{
-	color:red;
+  color:blue;
 }
 
 input.lyt_g1, input.lyt_g3 {
-	&:hover {
-		outline: solid @LAYOUT_KEY_OUTLINE_COL 1px;
-		background-color: @LAYOUT_KEY_BG;
-	}
+  &:hover {
+    outline: solid @LAYOUT_KEY_OUTLINE_COL 1px;
+    background-color: @LAYOUT_KEY_BG;
+  }
 }
 
 #lyt_15,#lyt_16,#lyt_30,#lyt_43,#lyt_44,#lyt_57{
-	color:@LAYOUT_KEY_COL;
+  color:@LAYOUT_KEY_COL;
 }
 
 #lyt_43{
-	&:before{
-		background-color: @KEY_COL;
-	}
+  &:before{
+    background-color: @KEY_COL;
+  }
 }
 
 // PREFS_SHORTCUTS
 
 #shc{
-	td{
-		color:@INPUT_COL;
-	}
+  td{
+    color:@INPUT_COL;
+  }
 }
 
 #shc_tbl_wr{
-	tr{
-		color: @SHC_TR_COL;
-		background-color:@SHC_TR_BG;
-		&:hover {
-			background-color:darken(@SHC_TR_BG,10);
-		}
-	}
+  tr{
+    background-color:@SHC_TR_BG;
+    color: @SHC_TR_COL;
+    font-family: Roboto;
+    font-weight: 300;
+    &:hover {
+      background-color:#4d5571;
+    }
+    button {
+      background-color:transparent !important;
+      color: @SHC_TR_COL;
+    }
+    .shc_code {
+      font-size: 16px;
+      font-weight: 600;
+      padding: 2px 16px 2px 8px;
+    }  
+    .shc_key {
+      font-size: 14px;
+      font-weight: 500;
+      border: solid @SHC_KEY_BORDER 1px;
+    }
+    .shc_key.shc_del_hvr {
+      border-color: @SHC_KEY_DEL_HVR;
+    }
+    
+    .shc_text.shc_dup {
+      border-color: @SHC_DUP;
+      background-color: @SHC_DUP;
+      color: @SHC_DUP_COL;
+    }
+    
+    .shc_del {
+      color: @SHC_DEL;
+      &:hover {
+        background-color: @SHC_KEY_DEL_HVR;
+        color: @SHC_DEL_COL;
+        border-color: @SHC_DEL_HOVER_BORDER;
+      }
+    }    
+  }
 }
 #shc_sc_clr {
-	color: @SHC_CLR_COL;
-	&:hover {
-		color: @SHC_CLR_HOVER_COL;
-	}
+  color: @SHC_CLR_COL;
+  &:hover {
+    color: @SHC_CLR_HOVER_COL;
+  }
 }
 
 #shc_no_res {
-	color: @SHC_NO_RES;
-}
-
-.shc_key {
-	border: solid @SHC_KEY_BORDER 1px;
-}
-
-.shc_key.shc_del_hvr {
-	border-color: @SHC_KEY_DEL_HVR;
-}
-
-.shc_text.shc_dup {
-	border-color: @SHC_DUP;
-	background-color: @SHC_DUP;
-	color: @SHC_DUP_COL;
-}
-
-.shc_del {
-	color: @SHC_DEL;
-	&:hover {
-		background-color: @SHC_KEY_DEL_HVR;
-		color: @SHC_DEL_COL;
-		border-color: @SHC_DEL_HOVER_BORDER;
-	}
+  color: @SHC_NO_RES;
 }
 
 // PREFS_COLS
 
 #col_me {
-	background-color: @COL_ME_BG;
-	outline: solid @COL_ME_OUTLINE 1px;
+  background-color: @COL_ME_BG;
+  outline: solid @COL_ME_OUTLINE 1px;
 }
 
 // PREFS_TITLE
 
 #title {
-	pre {
-		color:@INPUT_COL;
-		a {
-			color: @INPUT_COL;
-			&:hover {
-				color: @INPUT_HOVER_COL;
-			}
-		}
-	}
+  pre {
+    color:@INPUT_COL;
+    a {
+      color: @INPUT_COL;
+      &:hover {
+        color: @INPUT_HOVER_COL;
+      }
+    }
+  }
 }
 
 // PREFS_MENU
 #pmenu{
-	p{
-		color:@INPUT_COL;
-	}
+  p{
+    color:@INPUT_COL;
+  }
+  #pmenu_ta{
+    font-family: monospace;
+  }
 }

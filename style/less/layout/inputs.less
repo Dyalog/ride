@@ -1,6 +1,6 @@
 button{
   border:none;
-  font-family:inherit;
+  font-family:Roboto;
   font-weight:bold;
   padding:5px 0.5em;
   transition:box-shadow 0.2s;
@@ -8,7 +8,10 @@ button{
   cursor:pointer;
   &:active{box-shadow:none}
 }
-
+label input[type=checkbox]{
+  position: relative;
+  vertical-align: text-bottom;
+}
 input[type=checkbox]:disabled, input[type=checkbox]:disabled:checked {
   &:after{
     color: #4c4a4a;
@@ -37,6 +40,6 @@ input[type=checkbox]{
     left: 4px;
   }
 }
-input,textarea,pre,tt{font-family:@APL_FONT;font-size:18px}
+input,textarea,pre,tt{font-family:Roboto;font-size:14px}
 input,textarea,select,a{outline:0;}
 select:focus{outline:dotted black 1px}
