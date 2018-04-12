@@ -118,15 +118,8 @@ el.app.on('ready', () => {
     c.on('css_update', () => {
       // define the reload function that hacks in the new styles
       const reloadFn = `() => {
-        if (document.getElementById('lr-style'))document.getElementById('lr-style').remove();
-        const link = document.createElement('link');
-        link.href = 'style/dark-theme.css';
-        link.type = 'text/css';
-        link.rel = 'stylesheet';
-        link.id = 'lr-style';
-        document.getElementsByTagName('head')[0].appendChild(link);
+        [...document.getElementsByClassName('theme')].forEach(t => t.replaceWith(t));
       }`;
-
       w.webContents.executeJavaScript(`(${reloadFn})()`);
     });
   }

@@ -12,7 +12,7 @@
   function encScm(x) {
     let s = '';
     Object.keys(x).forEach((g) => {
-      if (g !== 'name' && g !== 'base') {
+      if (g !== 'name' && g !== 'theme') {
         let u = '';
         Object.keys(x[g]).forEach((p) => {
           const v = x[g][p];
@@ -22,10 +22,10 @@
         u && (s += ` ${g}=${u.slice(1)}`);
       }
     });
-    return { name: x.name, base: x.base, styles: s.slice(1) };
+    return { name: x.name, theme: x.theme, styles: s.slice(1) };
   }
   function decScm(x) { // x:for example "num=fg:345,bg:f,B,U,bgo:.5 str=fg:2,I com=U"
-    const r = { name: x.name, base: x.base }; // r:the result
+    const r = { name: x.name, theme: x.theme }; // r:the result
     const a = (x.styles || '').split(/\s+/); // a:for example ["num=fg:345,bg:f,B,U,bgo:.5","str=fg:2,I","com=U"]
     for (let i = 0; i < a.length; i++) {
       if (a[i]) {
@@ -49,14 +49,14 @@
   const SCMS = [ // built-in schemes
     {
       name: 'Default',
-      base: 'vs',
+      theme: 'light',
       styles: 'asgn=fg:00f com=fg:088 dfn=fg:00f diam=fg:00f err=fg:f00 fn=fg:008 idm=fg:008 kw=fg:800 ' +
       'lnum=fg:008,bg:f,bgo:0 mod=bg:7,bgo:.25 mtch=bg:ff8,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 op1=fg:00f op2=fg:00f ' +
       'par=fg:00f quad=fg:808 sel=bg:48e,bgo:.5 semi=fg:00f sqbr=fg:00f srch=bg:f80,bgo:.5 str=fg:088 tc=bg:d,bgo:1 ' +
       'tcpe=bg:c8c8c8,bgo:1 trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f vtt=bg:ff0',
     }, {
       name: 'Francisco Goya',
-      base: 'vs-dark',
+      theme: 'dark',
       styles: 'asgn=fg:ff0 com=fg:b,I:1 cur=bc:f00 dfn2=fg:eb4 dfn3=fg:c79 dfn4=fg:cd0 dfn5=fg:a0d ' +
       'dfn=fg:a7b diam=fg:ff0 err=fg:f00,bg:822,bgo:.5,B:1,U:1 fn=fg:0f0 idm=fg:0f0 glb=B:1 kw=fg:aa2 ' +
       'lbl=U:1,bg:642,bgo:.5 lnum=fg:b94,bg:010,bgo:0 mod=bg:7,bgo:.5 mtch=fg:0,bg:ff8,bgo:.75 norm=fg:9c7,bg:0,bgo:1 ' +
@@ -64,13 +64,13 @@
       'tc=bg:1,bgo:1 tcpe=bg:2,bgo:1 zld=fg:d9f,B:1 scmd=fg:0ff ucmd=fg:f80,B:1 vtip=bg:733,fg:ff0,bgo:1,bc:900 vtt=bc:f80',
     }, {
       name: 'Albrecht Dürer',
-      base: 'vs',
+      theme: 'light',
       styles: 'com=I:1 diam=B:1 err=fg:0,bg:1,bgo:.5,B:1,I:1,U:1 glb=I:1 kw=B:1 ' +
       'lnum=bg:f,bgo:0 mod=bg:7,bgo:.25 mtch=bg:c,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 quad=fg:8 srch=bg:c,bgo:.5 ' +
       'str=fg:8 tc=bg:e,bgo:1 tcpe=bg:dadada,bgo:1 zld=fg:8 vtt=bc:aaa',
     }, {
       name: 'Kazimir Malevich',
-      base: 'vs',
+      theme: 'light',
       styles: 'norm=bg:f,bgo:1',
     },
   ].map(decScm).map((x) => { x.frz = 1; return x; });
@@ -168,7 +168,7 @@
     });
     const name = `my${schema.name.split('').map(x => `${x.codePointAt(0)}`).join('')}`;
     monaco.editor.defineTheme(name, {
-      base: schema.base,
+      base: schema.theme === 'light' ? 'vs' : 'vs-dark',
       inherit: false,
       rules,
       colors,
@@ -181,6 +181,8 @@
     for (let i = 0; i < a.length; i++) {
       if (a[i].name === s) {
         const schema = a[i];
+        document.getElementById('theme_dark').disabled = schema.theme !== 'dark';
+        document.getElementById('theme_light').disabled = schema.theme !== 'light';
         I.col_stl && (I.col_stl.textContent = renderCSS(schema));
         if (window.monaco) setMonacoTheme(schema);
         break;
@@ -293,6 +295,7 @@
     I.col.className = scm.frz ? 'frz' : '';
     updSampleStl();
     selGrp('norm', 1);
+    q.chrome.value = scm.theme;
   }
   D.prf_tabs.col = {
     name: 'Colours',
@@ -331,7 +334,7 @@
         scms.push(x);
         Object.keys(scm).forEach((k) => { x[k] = $.extend({}, scm[k]); }); // x:the new scheme
         x.name = uniqScmName(scm.name);
-        x.base = scm.base;
+        x.theme = scm.theme;
         delete x.frz;
         scm = x;
         updScms();
@@ -410,6 +413,7 @@
       //   } else grp = 'norm';
       //   selGrp(grp);
       // });
+      q.chrome.onchange = () => { scm.theme = q.chrome.value; };
       q.grp.onchange = () => { selGrp(G[+q.grp.value].t); };
       ['fg', 'bg', 'bc'].forEach((p) => {
         const c = q[p];

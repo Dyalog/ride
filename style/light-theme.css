@@ -1811,7 +1811,7 @@ input.lyt_g3:hover {
 }
 #pmenu p {
   margin: 10px 8px;
-  color: #1c1e28;
+  color: white;
 }
 #pmenu_ta_wr {
   position: absolute;
@@ -1960,7 +1960,7 @@ input.lyt_g3:hover {
   height: 13px;
   padding: 4px 12px 4px 12px;
   text-decoration: none;
-  color: #616370;
+  color: #f77811;
   margin: 11px 5px 8px;
 }
 #prf_content {
@@ -2178,7 +2178,7 @@ h2 {
 .tooltip {
   width: 16px;
   height: 16px;
-  color: #ec7117;
+  color: #f77811;
   position: relative;
   display: inline-block;
 }
@@ -2784,7 +2784,7 @@ body.floating-window {
 }
 .CodeMirror-scrollbar-filler,
 .CodeMirror-gutter-filler {
-  background-color: #c2c2d4;
+  background-color: #717b9e;
   /*the square between H and V scrollbars*/
 }
 .CodeMirror-guttermarker {
@@ -2899,8 +2899,8 @@ body.floating-window {
 }
 .CodeMirror-search-match {
   background: gold;
-  border-top: 1px solid #ec7117;
-  border-bottom: 1px solid #ec7117;
+  border-top: 1px solid #f77811;
+  border-bottom: 1px solid #f77811;
 }
 .pendent .tb_btn {
   pointer-events: none;
@@ -2908,7 +2908,7 @@ body.floating-window {
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),
 #cn textarea {
   border: 1px solid rgba(169, 169, 169, 0.3);
-  background-color: #b3b3c9;
+  background-color: #646e92;
   color: white;
 }
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]):disabled,
@@ -2934,11 +2934,11 @@ body.floating-window {
   border-left: solid 1px black;
 }
 #cn_favs .go {
-  border: 1px solid #b3b3c9;
-  background: linear-gradient(to right bottom, #c2c2d4 50%, #b3b3c9 50%);
+  border: 1px solid #646e92;
+  background: linear-gradient(to right bottom, #717b9e 50%, #646e92 50%);
 }
 #cn_favs > div.list_sel {
-  background: #c8c8d8;
+  background: #7781a2;
   color: white;
   opacity: 1;
 }
@@ -2946,15 +2946,15 @@ body.floating-window {
   outline: dotted black 1px;
 }
 #cn_favs > div {
-  background: #c8c8d8;
-  color: #ec7117;
+  background: #7781a2;
+  color: #f77811;
   opacity: 0.3;
 }
 #cn_favs > div:hover {
   opacity: 1;
 }
 #cn_fav_btns {
-  background: linear-gradient(#d1d1df, #c2c2d4);
+  background: linear-gradient(#8089a8, #717b9e);
 }
 #cn_fav_btns button {
   background-color: transparent;
@@ -2965,49 +2965,49 @@ body.floating-window {
 }
 #cn_fav_btns button:active {
   opacity: 1;
-  background-color: #ec7117;
+  background-color: #f77811;
 }
 #cn_lhs {
-  background: #b3b3c9;
+  background: #646e92;
 }
 #cn_rhs {
-  background: linear-gradient(#c2c2d4, white);
+  background: linear-gradient(#717b9e, white);
 }
 #cn_env_add {
   color: #a9a9a9;
 }
 #cn_env_add a {
-  color: #ec7117;
+  color: #f77811;
 }
 .ctl_listview {
-  background-color: #c2c2d4;
-  color: #1c1e28;
+  background-color: black;
+  color: white;
 }
 .ctl_listview tr {
-  background-color: #e0e0e9;
-  border-bottom: 1px solid #c2c2d4;
+  background-color: #8f97b3;
+  border-bottom: 1px solid #717b9e;
 }
 .ctl_listview tr:hover {
   background-color: #4d5571;
 }
 .ctl_listview tr.selected {
-  background-color: blue;
+  background-color: #1c1e28;
 }
 #debug {
-  background: #c2c2d4;
+  background: black;
 }
 #debug .ctl_listview_header {
-  background-color: #b9b9ce;
+  background-color: #687398;
 }
 /*various dialogs*/
 .dlg {
-  background-color: #c2c2d4;
+  background-color: #717b9e;
   box-shadow: 0 18px 48px rgba(0, 0, 0, 0.5);
   border: 1px solid black;
 }
 .dlg_title,
 .dlg_close {
-  color: #ec7117;
+  color: #f77811;
 }
 .dlg_close:hover {
   background-color: white;
@@ -3030,7 +3030,7 @@ body.floating-window {
 }
 .dlg_btns button {
   color: #4c4a4a;
-  background-color: #ec7117;
+  background-color: #f77811;
 }
 .dlg_btns button.task {
   color: blue;
@@ -3039,18 +3039,18 @@ body.floating-window {
 #abt_contact a,
 #abt_contact a:visited,
 #abt_contact a:active {
-  color: #ec7117;
+  color: #f77811;
 }
 /*Golden Layout*/
 .lm_goldenlayout {
-  background: #1c1e28 !important;
+  background: #717b9e !important;
 }
 .lm_goldenlayout .lm_header {
-  background: #1c1e28 !important;
+  background: #717b9e !important;
 }
 .lm_header,
 .lm_content {
-  border-color: #1c1e28 !important;
+  border-color: #717b9e !important;
 }
 .lm_tab {
   font-family: sans-serif;
@@ -3091,72 +3091,72 @@ body.floating-window {
   color: white !important;
 }
 label {
-  color: #ec7117;
+  color: #a9a9a9;
   font-family: Roboto;
   font-size: 14px;
   font-weight: 600;
 }
 label.cb_label {
-  color: #ec7117;
+  color: #f77811;
   cursor: pointer;
 }
 button {
-  background: #ec7117;
+  background: #f77811;
   color: #4c4a4a;
 }
 button:hover {
   color: white;
 }
 [type=checkbox] {
-  background-color: #c2c2d4;
-  border: 1px solid #ec7117;
+  background-color: #717b9e;
+  border: 1px solid #f77811;
 }
 [type=checkbox]:checked {
-  background-color: #ec7117;
+  background-color: #f77811;
 }
 [type=checkbox]:hover::before {
-  background: #e0e0e9;
+  background: #8f97b3;
 }
 [type=checkbox]:active::before {
-  background: #ec7117;
-  color: #e0e0e9;
+  background: #f77811;
+  color: #8f97b3;
 }
 [type=checkbox]:checked::before {
-  color: #ec7117;
+  color: #f77811;
 }
 [type=checkbox]:checked:after {
-  color: #c2c2d4;
+  color: #717b9e;
 }
 [type=checkbox]:disabled::before {
   color: transparent;
-  box-shadow: 0 0 0 1px #ec7117 inset;
-  background: #e0e0e9;
+  box-shadow: 0 0 0 1px #f77811 inset;
+  background: #8f97b3;
 }
 [type=checkbox]:checked:disabled::before {
-  color: grayscale(#ec7117);
-  background: grayscale(#c2c2d4);
+  color: grayscale(#f77811);
+  background: grayscale(#717b9e);
 }
 select {
-  background-color: #b3b3c9;
+  background-color: #646e92;
   border: 1px solid rgba(169, 169, 169, 0.3);
-  color: #ec7117;
+  color: #f77811;
 }
 #lb {
-  background-color: #cbcbda;
+  background-color: #7a83a4;
   border-top: 1px black solid;
   border-bottom: 1px black solid;
 }
 #lb #lb_inner {
-  background: #cbcbda;
+  background: #7a83a4;
 }
 #lb b {
-  color: #ec7117;
+  color: #f77811;
 }
 #lb b:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(183, 188, 206, 0.2);
 }
 #lb b:active {
-  background-color: rgba(143, 143, 176, 0.2);
+  background-color: rgba(75, 83, 110, 0.2);
 }
 #lb .lb_placeholder {
   background: rgba(0, 0, 0, 0.2);
@@ -3165,18 +3165,18 @@ select {
   color: black;
 }
 #lb_prf:hover {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(183, 188, 206, 0.2);
 }
 #lb_prf:active {
-  background-color: rgba(143, 143, 176, 0.2);
+  background-color: rgba(75, 83, 110, 0.2);
 }
 #lb_tip {
-  background: #cbcbda;
+  background: #7a83a4;
   box-shadow: none;
   color: white;
 }
 #lb_tip_tri {
-  border-color: #cbcbda;
+  border-color: #7a83a4;
   border-left-color: transparent !important;
   border-right-color: transparent !important;
   background-color: transparent !important;
@@ -3186,28 +3186,28 @@ select {
 }
 /*menu (see ../src/menu.js for the DOM structure)*/
 .menu {
-  background-color: #c2c2d4;
+  background-color: #717b9e;
   border-bottom: solid grey 1px;
 }
 .menu a {
-  color: #ec7117;
+  color: #f77811;
 }
 .menu .m-open .m-top {
   border-color: transparent;
 }
 .menu .m-box {
-  background-color: #c2c2d4;
-  border-color: #c2c2d4;
+  background-color: #717b9e;
+  border-color: #717b9e;
 }
 .menu .m-box a {
   border: none;
-  border-color: #c2c2d4;
+  border-color: #717b9e;
 }
 .menu .m-box a .m-shc {
-  color: #ec7117;
+  color: #f77811;
 }
 .menu .m-box a:focus {
-  background: #e0e0e9;
+  background: #8f97b3;
   color: white;
 }
 .menu .m-box a:focus .m-shc {
@@ -3217,7 +3217,7 @@ select {
   background: transparent 5px center no-repeat url(img/menu_chk.png);
 }
 .menu .m-box a:focus.m-checked {
-  background: #e0e0e9 5px center no-repeat url(img/menu_chk_wht.png);
+  background: #8f97b3 5px center no-repeat url(img/menu_chk_wht.png);
 }
 #prf_dlg hr {
   border-top: 1px solid black;
@@ -3229,20 +3229,20 @@ select {
   font-weight: 600;
 }
 #prf_nav a {
-  color: #616370;
+  color: #f77811;
 }
 #prf_nav a.sel {
   cursor: default;
   color: white;
 }
 #prf_content select {
-  background-color: #b3b3c9;
-  color: #ec7117;
+  background-color: #646e92;
+  color: #f77811;
 }
 #prf_dlg_cancel {
   background-color: transparent;
-  border: 1px solid #4d5571;
-  color: #4d5571;
+  border: 1px solid #717b9e;
+  color: #717b9e;
 }
 #prf_dlg_cancel:hover {
   color: white;
@@ -3292,11 +3292,11 @@ input.lyt_g3:hover {
   background-color: lightgrey;
 }
 #shc td {
-  color: #ec7117;
+  color: #f77811;
 }
 #shc_tbl_wr tr {
-  background-color: #e0e0e9;
-  border-bottom: 1px solid #c2c2d4;
+  background-color: #8f97b3;
+  border-bottom: 1px solid #717b9e;
   color: white;
   font-family: Roboto;
   font-weight: 300;
@@ -3316,7 +3316,7 @@ input.lyt_g3:hover {
 #shc_tbl_wr tr .shc_key {
   font-size: 14px;
   font-weight: 500;
-  border: solid #c2c2d4 1px;
+  border: solid #717b9e 1px;
 }
 #shc_tbl_wr tr .shc_key.shc_del_hvr {
   border-color: red;
@@ -3348,13 +3348,13 @@ input.lyt_g3:hover {
   outline: solid lightgrey 1px;
 }
 #title pre {
-  color: #ec7117;
+  color: #a9a9a9;
   font-family: monospace;
   font-size: 16px;
   line-height: 1.2em;
 }
 #title pre a {
-  color: #ec7117;
+  color: #f77811;
   text-decoration: none;
 }
 #title pre a:hover {
@@ -3364,18 +3364,18 @@ input.lyt_g3:hover {
   font-family: monospace;
 }
 #ide {
-  background: url(img/RideSplashLogo.png) center no-repeat #c2c2d4;
+  background: url(img/RideSplashLogo.png) center no-repeat #717b9e;
 }
 #apl_font {
-  color: #c2c2d4;
+  color: #717b9e;
 }
 ::selection {
-  background: #e0e0e9;
+  background: #8f97b3;
   color: white;
 }
 /*must be separate rules*/
 ::-moz-selection {
-  background: #e0e0e9;
+  background: #8f97b3;
   color: white;
 }
 /*must be separate rules*/
@@ -3388,7 +3388,7 @@ body {
   color: white;
 }
 h2 {
-  color: #4d5571;
+  color: #717b9e;
   font-family: Roboto;
   font-size: 16px;
 }
@@ -3413,13 +3413,13 @@ h2 {
   border-color: black;
 }
 #wse {
-  background-color: #c2c2d4;
+  background-color: #717b9e;
   color: white;
 }
 #wse .bt_text::before {
   color: #1c1e28;
 }
 #wse .bt_text.selected {
-  background-color: #e0e0e9;
-  outline: #e0e0e9;
+  background-color: #8f97b3;
+  outline: #8f97b3;
 }
