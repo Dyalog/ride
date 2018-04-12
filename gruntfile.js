@@ -7,8 +7,8 @@ module.exports = function gruntTask(grunt) {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-env');
 
-  grunt.registerTask('start','Start-Up electron server', () => {
-    electron.start(['.','DEV_STYLE']);
+  grunt.registerTask('start', 'Start-Up electron server', () => {
+    electron.start(['.', 'DEV_STYLE']);
   });
 
   grunt.registerTask('restart', 'Restart RIDE and go into a session.', () => {
@@ -32,7 +32,7 @@ module.exports = function gruntTask(grunt) {
           strictMath: true,
         },
         files: {
-          './style/new-style.css': './style/new-style.less',
+          './style/dark-theme.css': './style/dark-theme.less',
         },
       },
     },

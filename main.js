@@ -120,7 +120,7 @@ el.app.on('ready', () => {
       const reloadFn = `() => {
         if (document.getElementById('lr-style'))document.getElementById('lr-style').remove();
         const link = document.createElement('link');
-        link.href = 'style/new-style.css';
+        link.href = 'style/dark-theme.css';
         link.type = 'text/css';
         link.rel = 'stylesheet';
         link.id = 'lr-style';
