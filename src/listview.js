@@ -1,38 +1,36 @@
-D.ListView=function(e,o){
-  //e=containing element for ListView
-  //o=options for ListView
-  this.dom=I[e];this.dom.hidden=0
-  this.item_class=o.item_class||''
-  this.no_item_message=o.no_item_message||'No Items!'
-  this.dom.className='ctl_listview'
-  this.click_handler=o.click_handler||function(e){return}
-  this.items=[]
-  this.selected={tid:0}
-  
-  this.dom.onclick=function(event){
-      var cn=event.target
-      while((cn!==this.dom)&&cn.className.indexOf('ctl_listview_item')==-1) cn=cn.parentNode
-      
-      if (cn!==this.dom){
-        $(this.dom.querySelectorAll('.ctl_listview_item')).removeClass('selected')
-        $(cn).addClass('selected')
-        this.selected=this.items[+cn.dataset.itemid]
-        this.click_handler(this.selected)
-      }
-  }.bind(this)
+D.ListView = function ListView(e, o) {
+  // e=containing element for ListView
+  // o=options for ListView
+  const lv = this;
+  lv.dom = I[e]; lv.dom.hidden = 0;
+  lv.item_class = o.item_class || '';
+  lv.no_item_message = o.no_item_message || 'No Items!';
+  lv.dom.className = 'ctl_listview';
+  lv.click_handler = o.click_handler || (() => { });
+  lv.items = [];
+  lv.selected = { tid: 0 };
+  lv.dom.onclick = (event) => {
+    let cn = event.target;
+    while ((cn !== lv.dom) && cn.className.indexOf('ctl_listview_item') === -1) cn = cn.parentNode;
 
-  this.render=function(array){
-    this.items=o.sortFn?array.sort(o.sortFn):array;
-    var rf=o.renderItem||function(x){return x}
-    var hf=o.headerFunction||function(){return ''}
-    var html=['<tr><td>'+this.no_item_message+'</td></tr>']
-    if (array.length>0){
-      html=array.map(function(e,i){
-        return ("<tr class=\""+this.item_class+" ctl_listview_item\" data-itemid="+i+">"+rf(e)+"</tr>\n");
-      })
+    if (cn !== lv.dom) {
+      $(lv.dom.querySelectorAll('.ctl_listview_item')).removeClass('selected');
+      $(cn).addClass('selected');
+      lv.selected = lv.items[+cn.dataset.itemid];
+      lv.click_handler(lv.selected);
     }
-    this.dom.innerHTML='<table>\n<thead>\n'+hf()+'\n</thead>\n<tbody>\n'+html.join('')+'</tbody>\n</table>';
-  }
+  };
 
-  this.render([]);
-}
+  lv.render = (array) => {
+    lv.items = o.sortFn ? array.sort(o.sortFn) : array;
+    const rf = o.renderItem || (x => x);
+    const hf = o.headerFunction || (() => '');
+    let html = [`<tr><td>${lv.no_item_message}</td></tr>`];
+    if (array.length > 0) {
+      html = array.map((l, i) => `<tr class="${lv.item_class} ctl_listview_item" data-itemid=${i}>${rf(l)}</tr>\n`);
+    }
+    lv.dom.innerHTML = `<table>\n<thead>\n${hf()}\n</thead>\n<tbody>\n${html.join('')}</tbody>\n</table>`;
+  };
+
+  lv.render([]);
+};

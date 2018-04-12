@@ -1,65 +1,12 @@
-/*scrollbars; see ../src/scrl.js*/
-.cm-scroll {
-	position: absolute;
-	a {
-		position: absolute;
-	}
-	.thumb {
-		box-sizing: border-box;
-	}
-	.btn {
-		width: 16px;
-		height: 16px;
-		line-height: 16px;
-		text-align: center;
-		cursor: pointer;
-	}
+div::-webkit-scrollbar {
+    width: 1em;
 }
-.cm-scroll-h {
-	bottom: 0;
-	left: 0;
-	height: 16px;
-	.thumb {
-		bottom: 0;
-		height: 100%;
-	}
-	.btn{font-size: 12px!important;}
-	.btn0 {
-		bottom: 0;
-		left: 0;
-		&:after {
-			content: "\25c0";
-		}
-	}
-	.btn1 {
-		bottom: 0;
-		right: 0;
-		&:after {
-			content: "\25b6";
-		}
-	}
+ 
+div::-webkit-scrollbar-track {
+  background-color: #1c1e28;
 }
-.cm-scroll-v {
-	right: 0;
-	top: 0;
-	width: 16px;
-	.thumb {
-		right: 0;
-		width: 100%;
-	}
-	.btn{font-size: 16px!important;}
-	.btn0 {
-		right: 0;
-		top: 0;
-		&:after {
-			content: "\25b2";
-		}
-	}
-	.btn1 {
-		right: 0;
-		bottom: 0;
-		&:after {
-			content: "\25bc";
-		}
-	}
-}
+ 
+div::-webkit-scrollbar-thumb {
+  background-color: #313446;
+} 
+ 

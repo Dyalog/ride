@@ -583,12 +583,15 @@ span.CodeMirror-selectedtext {
 .ctl_listview {
   width: 100%;
   font-family: apl;
+  line-height: 1.3em;
   overflow-x: auto;
   overflow-y: auto;
 }
 .ctl_listview tr {
-  padding: 6px;
   cursor: pointer;
+}
+.ctl_listview td {
+  padding: 3px 10px;
 }
 #threads > table,
 #sistack > table {
@@ -1515,9 +1518,6 @@ body .ui-tooltip {
 #code p {
   margin: 5px;
 }
-#code h2 {
-  padding-bottom: 5px;
-}
 #code > hr {
   margin-top: 5px !important;
 }
@@ -1983,74 +1983,14 @@ input.lyt_g3:hover {
 #prf_content select option {
   font-weight: 500;
 }
-/*scrollbars; see ../src/scrl.js*/
-.cm-scroll {
-  position: absolute;
+div::-webkit-scrollbar {
+  width: 1em;
 }
-.cm-scroll a {
-  position: absolute;
+div::-webkit-scrollbar-track {
+  background-color: #1c1e28;
 }
-.cm-scroll .thumb {
-  box-sizing: border-box;
-}
-.cm-scroll .btn {
-  width: 16px;
-  height: 16px;
-  line-height: 16px;
-  text-align: center;
-  cursor: pointer;
-}
-.cm-scroll-h {
-  bottom: 0;
-  left: 0;
-  height: 16px;
-}
-.cm-scroll-h .thumb {
-  bottom: 0;
-  height: 100%;
-}
-.cm-scroll-h .btn {
-  font-size: 12px!important;
-}
-.cm-scroll-h .btn0 {
-  bottom: 0;
-  left: 0;
-}
-.cm-scroll-h .btn0:after {
-  content: "\25c0";
-}
-.cm-scroll-h .btn1 {
-  bottom: 0;
-  right: 0;
-}
-.cm-scroll-h .btn1:after {
-  content: "\25b6";
-}
-.cm-scroll-v {
-  right: 0;
-  top: 0;
-  width: 16px;
-}
-.cm-scroll-v .thumb {
-  right: 0;
-  width: 100%;
-}
-.cm-scroll-v .btn {
-  font-size: 16px!important;
-}
-.cm-scroll-v .btn0 {
-  right: 0;
-  top: 0;
-}
-.cm-scroll-v .btn0:after {
-  content: "\25b2";
-}
-.cm-scroll-v .btn1 {
-  right: 0;
-  bottom: 0;
-}
-.cm-scroll-v .btn1:after {
-  content: "\25bc";
+div::-webkit-scrollbar-thumb {
+  background-color: #313446;
 }
 /* http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 License: none (public domain) */
 html,
@@ -2191,6 +2131,9 @@ label,
 #prf_nav a,
 .lyt_k {
   user-select: none;
+}
+h2 {
+  padding-bottom: 5px;
 }
 #demo-keys {
   position: fixed;
@@ -2446,8 +2389,10 @@ body.floating-window {
 /*external class*/
 /*external interface*/
 #wse {
-  font-family: apl, monospace;
+  font-family: Roboto;
   font-size: 18px;
+  font-weight: 300;
+  line-height: 1.3em;
   text-align: left;
   overflow: auto;
   width: 100%;
@@ -2466,9 +2411,10 @@ body.floating-window {
   display: inline-block;
   width: 1em;
   height: 2ex;
-  border-radius: 50%;
+  border-radius: 30%;
   text-align: center;
   margin-right: .2em;
+  font-weight: 600;
   color: #1c1e28 !important;
 }
 #wse .bt_node_expand {
@@ -2560,13 +2506,6 @@ body.floating-window {
 .lm_splitter {
   z-index: 11 !important;
 }
-.CodeMirror-hints {
-  z-index: 10;
-}
-.cm-scroll {
-  z-index: 6;
-}
-.zoom12 .CodeMirror *,
 .zoom12 #wse,
 .zoom12 #debug,
 .zoom12 #lb_tip *,
@@ -2579,7 +2518,6 @@ body.floating-window {
   height: 52px;
   line-height: 52px;
 }
-.zoom11 .CodeMirror *,
 .zoom11 #wse,
 .zoom11 #debug,
 .zoom11 #lb_tip *,
@@ -2592,7 +2530,6 @@ body.floating-window {
   height: 46px;
   line-height: 46px;
 }
-.zoom10 .CodeMirror *,
 .zoom10 #wse,
 .zoom10 #debug,
 .zoom10 #lb_tip *,
@@ -2605,7 +2542,6 @@ body.floating-window {
   height: 40px;
   line-height: 40px;
 }
-.zoom9 .CodeMirror *,
 .zoom9 #wse,
 .zoom9 #debug,
 .zoom9 #lb_tip *,
@@ -2618,7 +2554,6 @@ body.floating-window {
   height: 36px;
   line-height: 36px;
 }
-.zoom8 .CodeMirror *,
 .zoom8 #wse,
 .zoom8 #debug,
 .zoom8 #lb_tip *,
@@ -2631,7 +2566,6 @@ body.floating-window {
   height: 32px;
   line-height: 32px;
 }
-.zoom7 .CodeMirror *,
 .zoom7 #wse,
 .zoom7 #debug,
 .zoom7 #lb_tip *,
@@ -2644,7 +2578,6 @@ body.floating-window {
   height: 30px;
   line-height: 30px;
 }
-.zoom6 .CodeMirror *,
 .zoom6 #wse,
 .zoom6 #debug,
 .zoom6 #lb_tip *,
@@ -2657,7 +2590,6 @@ body.floating-window {
   height: 30px;
   line-height: 30px;
 }
-.zoom5 .CodeMirror *,
 .zoom5 #wse,
 .zoom5 #debug,
 .zoom5 #lb_tip *,
@@ -2670,7 +2602,6 @@ body.floating-window {
   height: 28px;
   line-height: 28px;
 }
-.zoom4 .CodeMirror *,
 .zoom4 #wse,
 .zoom4 #debug,
 .zoom4 #lb_tip *,
@@ -2683,7 +2614,6 @@ body.floating-window {
   height: 26px;
   line-height: 26px;
 }
-.zoom3 .CodeMirror *,
 .zoom3 #wse,
 .zoom3 #debug,
 .zoom3 #lb_tip *,
@@ -2696,7 +2626,6 @@ body.floating-window {
   height: 25px;
   line-height: 25px;
 }
-.zoom2 .CodeMirror *,
 .zoom2 #wse,
 .zoom2 #debug,
 .zoom2 #lb_tip *,
@@ -2709,7 +2638,6 @@ body.floating-window {
   height: 24px;
   line-height: 24px;
 }
-.zoom1 .CodeMirror *,
 .zoom1 #wse,
 .zoom1 #debug,
 .zoom1 #lb_tip *,
@@ -2722,7 +2650,6 @@ body.floating-window {
   height: 23px;
   line-height: 23px;
 }
-.zoom0 .CodeMirror *,
 .zoom0 #wse,
 .zoom0 #debug,
 .zoom0 #lb_tip *,
@@ -2735,7 +2662,6 @@ body.floating-window {
   height: 22px;
   line-height: 22px;
 }
-.zoom-1 .CodeMirror *,
 .zoom-1 #wse,
 .zoom-1 #debug,
 .zoom-1 #lb_tip *,
@@ -2748,7 +2674,6 @@ body.floating-window {
   height: 21px;
   line-height: 21px;
 }
-.zoom-2 .CodeMirror *,
 .zoom-2 #wse,
 .zoom-2 #debug,
 .zoom-2 #lb_tip *,
@@ -2761,7 +2686,6 @@ body.floating-window {
   height: 20px;
   line-height: 20px;
 }
-.zoom-3 .CodeMirror *,
 .zoom-3 #wse,
 .zoom-3 #debug,
 .zoom-3 #lb_tip *,
@@ -2774,7 +2698,6 @@ body.floating-window {
   height: 19px;
   line-height: 19px;
 }
-.zoom-4 .CodeMirror *,
 .zoom-4 #wse,
 .zoom-4 #debug,
 .zoom-4 #lb_tip *,
@@ -2787,7 +2710,6 @@ body.floating-window {
   height: 18px;
   line-height: 18px;
 }
-.zoom-5 .CodeMirror *,
 .zoom-5 #wse,
 .zoom-5 #debug,
 .zoom-5 #lb_tip *,
@@ -2800,7 +2722,6 @@ body.floating-window {
   height: 17px;
   line-height: 17px;
 }
-.zoom-6 .CodeMirror *,
 .zoom-6 #wse,
 .zoom-6 #debug,
 .zoom-6 #lb_tip *,
@@ -2813,7 +2734,6 @@ body.floating-window {
   height: 16px;
   line-height: 16px;
 }
-.zoom-7 .CodeMirror *,
 .zoom-7 #wse,
 .zoom-7 #debug,
 .zoom-7 #lb_tip *,
@@ -2826,7 +2746,6 @@ body.floating-window {
   height: 15px;
   line-height: 15px;
 }
-.zoom-8 .CodeMirror *,
 .zoom-8 #wse,
 .zoom-8 #debug,
 .zoom-8 #lb_tip *,
@@ -2839,7 +2758,6 @@ body.floating-window {
   height: 14px;
   line-height: 14px;
 }
-.zoom-9 .CodeMirror *,
 .zoom-9 #wse,
 .zoom-9 #debug,
 .zoom-9 #lb_tip *,
@@ -2852,7 +2770,6 @@ body.floating-window {
   height: 13px;
   line-height: 13px;
 }
-.zoom-10 .CodeMirror *,
 .zoom-10 #wse,
 .zoom-10 #debug,
 .zoom-10 #lb_tip *,
@@ -3066,8 +2983,12 @@ body.floating-window {
   background-color: #c2c2d4;
   color: #1c1e28;
 }
-.ctl_listview tr:nth-child(even) {
-  background-color: #fefefe;
+.ctl_listview tr {
+  background-color: #e0e0e9;
+  border-bottom: 1px solid #c2c2d4;
+}
+.ctl_listview tr:hover {
+  background-color: #4d5571;
 }
 .ctl_listview tr.selected {
   background-color: blue;
@@ -3077,7 +2998,6 @@ body.floating-window {
 }
 #debug .ctl_listview_header {
   background-color: #b9b9ce;
-  color: #ec7117;
 }
 /*various dialogs*/
 .dlg {
@@ -3150,6 +3070,7 @@ body.floating-window {
 }
 .lm_splitter {
   background-color: #1c1e28 !important;
+  outline: solid 1px black;
 }
 .lm_splitter.lm_horizontal {
   background: #1c1e28 url(img/grabber_vert.png) no-repeat center !important;
@@ -3422,11 +3343,6 @@ input.lyt_g3:hover {
 #shc_no_res {
   color: grey;
 }
-#code h2 {
-  color: #4d5571;
-  font-family: Roboto;
-  padding-bottom: 5px;
-}
 #col_me {
   background-color: white;
   outline: solid lightgrey 1px;
@@ -3446,23 +3362,6 @@ input.lyt_g3:hover {
 }
 #pmenu #pmenu_ta {
   font-family: monospace;
-}
-/*scrollbars; see ../src/scrl.js*/
-.cm-scroll {
-  background: #c2c2d4;
-}
-.cm-scroll a {
-  background: #efeff4;
-  color: #c2c2d4;
-}
-.cm-scroll a:hover {
-  background: #ffffff;
-}
-.cm-scroll a.press {
-  background: #d1d1df !important;
-}
-.cm-scroll .btn {
-  color: #c2c2d4;
 }
 #ide {
   background: url(img/RideSplashLogo.png) center no-repeat #c2c2d4;
@@ -3487,6 +3386,11 @@ body {
   border: solid #333 1px;
   background-color: grey;
   color: white;
+}
+h2 {
+  color: #4d5571;
+  font-family: Roboto;
+  font-size: 16px;
 }
 .toolbar {
   background-color: #38393f;

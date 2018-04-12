@@ -1,9 +1,13 @@
 .ctl_listview{
   background-color:@DBG_BG;
   color:@DBG_FG;
-}
-.ctl_listview tr:nth-child(even){
-  background-color:@DBG_ITEM_EVEN_BG;
+  tr {
+    background-color:@SHC_TR_BG;
+    border-bottom: 1px solid @THEME_WIN_BG;
+    &:hover {
+      background-color:#4d5571;
+    }
+  }
 }
 .ctl_listview tr.selected{
   background-color:@DBG_ITEM_SEL_BG
@@ -13,5 +17,4 @@
 }
 #debug .ctl_listview_header{
     background-color:@DBG_HEADER_BG;
-    color:@DBG_HEADER_FG;
 }
