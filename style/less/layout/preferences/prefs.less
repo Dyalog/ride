@@ -1,22 +1,26 @@
+#prf_dlg>hr{
+	border-top: 1px solid @HR_TOP;
+	border-bottom: 1px solid @HR_BTM;
+	margin-top:0;
+	margin-bottom: 15px;
+}
 #prf_nav {
 	// height: 28px;
 	display: inline-block;
 	width: 100%;
 	// border-bottom: solid 1px @PRF_NAV_COL;
-	padding-bottom: 5px;
 	a {
 		float: left;
 		height: 13px;
 		padding: 4px 12px 4px 12px;
 		text-decoration: none;
 		color: @PRF_NAV_COL;
-		margin: 4px 0 0 4px;
+		margin: 11px 5px 8px;
 	}
 }
-
 #prf_content {
 	margin-top: -2px;
-	padding-top:5px;	
+	padding:5px 10px 0;	
 	button{
 		border-radius:3px;
 		padding:8px;
@@ -34,6 +38,8 @@
 		}
 	}	
 }
+  
+@PRF_CONTENT_TOP: 54px;
 
 @import './prefs_layout.less';
 @import './prefs_shortcuts.less';

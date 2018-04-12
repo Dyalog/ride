@@ -33,17 +33,18 @@ module.exports = function gruntTask(grunt) {
         },
         files: {
           './style/dark-theme.css': './style/dark-theme.less',
+          './style/light-theme.css': './style/light-theme.less',
         },
       },
     },
     watch: {
       restart: {
-        files: ['style/less/**/*.less', 'style/new-style.less'],
+        files: ['style/less/**/*.less', 'style/*.less'],
         tasks: ['less', 'env', 'restart'],
         options: { spawn: false },
       },
       css_reload: {
-        files: ['style/less/**/*.less', 'style/new-style.less'],
+        files: ['style/less/**/*.less', 'style/*.less'],
         tasks: ['less', 'reload-css'],
         options: { spawn: false },
       },

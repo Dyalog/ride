@@ -58,8 +58,8 @@ const Console = console;
         show: false,
         parent: D.elw,
         alwaysOnTop: true,
-        minWidth: 580,
-        minHeight: 460,
+        minWidth: 600,
+        minHeight: 600,
       });
       bw.loadURL(`${loc}?prf`); // bw.webContents.toggleDevTools();
       D.prf_bw = { id: bw.id };

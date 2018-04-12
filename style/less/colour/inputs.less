@@ -1,6 +1,12 @@
 label{
-    color:@INPUT_COL;
+    color:@CN_LABEL_COL;
     font-family: Roboto;
+    font-size:14px;
+    font-weight: 600;
+    &.cb_label{
+      color:@INPUT_COL;
+      cursor: pointer;
+    }
 }
 button{
   background:@BUTTON_BG_COL;
@@ -9,9 +15,6 @@ button{
 }
 
 [type=checkbox]{
-    // &::before{
-    //   background:@THEME_WIN_BG;
-    // }
     background-color: @CHECKBOX_BG;
     border: 1px solid @THEME_PRIMARY;
     &:checked{
@@ -39,4 +42,9 @@ button{
       color:grayscale(@CHECKBOX_COL);
       background:grayscale(@CHECKBOX_BG)
     }
+}
+select{
+  background-color:	@CN_SELECT_BG;
+  border: 1px solid @CN_INPUT_BORDER_COL;
+  color:@CN_SELECT_FG;
 }

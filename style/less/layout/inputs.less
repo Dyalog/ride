@@ -27,7 +27,7 @@ input[type=checkbox]{
 	border-radius: 3px;
 	display: inline-block;
 	position: relative; 
-  margin:0px 5px;
+  margin:0 5px 0 0;
   &:focus{
     outline:none;
     margin-right:5px;
@@ -40,6 +40,26 @@ input[type=checkbox]{
     left: 4px;
   }
 }
-input,textarea,pre,tt{font-family:Roboto;font-size:14px}
-input,textarea,select,a{outline:0;}
-select:focus{outline:dotted black 1px}
+input,textarea,pre,tt{
+  font-family:Roboto;
+  font-size:14px;
+}
+input,textarea,select,a{
+  outline:0;
+}
+select{
+  overflow: hidden;
+  padding: 2px 34px 2px 4px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-height:30px;
+  box-shadow: none;
+  font-weight:500;
+  border-radius: 2px;
+  option{
+    font-weight:500;
+  }
+}
+select:focus{
+  outline:dotted black 1px;
+}

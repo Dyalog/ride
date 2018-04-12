@@ -1,5 +1,8 @@
+#prf_dlg hr{
+  border-top: 1px solid @HR_TOP;
+  border-bottom: 1px solid @HR_BTM;
+}
 #prf_nav {
-  border-bottom: solid 1px @HR_TOP;
   font-family: Roboto;
   font-size: 14px;
   font-weight: 600;
@@ -12,18 +15,15 @@
   }
 }
 #prf_content {
-  border-top: solid 1px @HR_BTM;
-  // button{
-  //   color:@CN_RHS_BUTTON_FG;
-  //   background-color:@CN_RHS_BUTTON_BG;
-  // }
   select{
     background-color:	@CN_SELECT_BG;
     color:@CN_SELECT_FG;
   }
-  label {
-    font-size:14px;
-  }
+  // label {
+  //   color: @CN_LABEL_COL;
+  //   font-size:14px;
+  //   font-weight: 600;
+  // }
 }
 #prf_dlg_cancel{
   background-color: transparent;
@@ -90,6 +90,7 @@ input.lyt_g1, input.lyt_g3 {
 #shc_tbl_wr{
   tr{
     background-color:@SHC_TR_BG;
+    border-bottom: 1px solid @THEME_WIN_BG;
     color: @SHC_TR_COL;
     font-family: Roboto;
     font-weight: 300;
@@ -141,6 +142,14 @@ input.lyt_g1, input.lyt_g3 {
   color: @SHC_NO_RES;
 }
 
+// PREFS_CODE
+#code h2{
+  color: @DLG_CANCEL;
+  font-family: Roboto;
+  padding-bottom:5px;
+}
+
+
 // PREFS_COLS
 
 #col_me {
@@ -152,9 +161,13 @@ input.lyt_g1, input.lyt_g3 {
 
 #title {
   pre {
-    color:@INPUT_COL;
-    a {
+    color:@CN_LABEL_COL;
+    font-family: monospace;
+    font-size: 16px;
+    line-height: 1.2em;
+		a {
       color: @INPUT_COL;
+    	text-decoration: none;
       &:hover {
         color: @INPUT_HOVER_COL;
       }
@@ -164,9 +177,6 @@ input.lyt_g1, input.lyt_g3 {
 
 // PREFS_MENU
 #pmenu{
-  p{
-    color:@INPUT_COL;
-  }
   #pmenu_ta{
     font-family: monospace;
   }

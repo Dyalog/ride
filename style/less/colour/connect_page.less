@@ -1,8 +1,7 @@
 #cn {
   input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),textarea{
-    border: 1px solid white;
+    border: 1px solid @CN_INPUT_BORDER_COL;
     background-color: 	@CN_INPUT_BG;
-		border-color:				@CN_INPUT_BORDER_COL;
 		color:@CN_INPUT_FG;
     &:disabled{
       background-color:	@CN_INPUT_DIS_BG;
@@ -13,10 +12,11 @@
 			}
 		}
   }
-  select{
-		background-color:	@CN_SELECT_BG;
-		color:@CN_SELECT_FG;
-	}
+  // select{
+	// 	background-color:	@CN_SELECT_BG;
+	// 	border: 1px solid @CN_INPUT_BORDER_COL;
+  //   color:@CN_SELECT_FG;
+	// }
 	hr {
 		background-color: #a9a9a9;
 		border-color: #a9a9a9;
@@ -73,14 +73,14 @@
 }
 #cn_rhs {
 	// background-color:@CN_RHS_BG;
-	background: linear-gradient(@THEME_WIN_BG, black);
+	background: linear-gradient(@THEME_WIN_BG, @THEME_WIN_BG2);
 	// button{
 	// 	color:@CN_RHS_BUTTON_FG;
   //   background-color:@CN_RHS_BUTTON_BG;
 	// }
-	label{
-		color:@CN_LABEL_COL;
-	}
+	// label{
+	// 	color:@CN_LABEL_COL;
+	// }
 }
 #cn_env_add {
 	color: #a9a9a9;
