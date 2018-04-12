@@ -244,6 +244,7 @@ D.IDE = function IDE(opts = {}) {
     x.element.on('mousedown', (e) => {
       if (e.button === 0 || e.type === 'touchstart') {
         x.header.parent.setActiveContentItem(x.contentItem);
+        x.element.click();
       } else if (e.button === 1 && x.contentItem.config.isClosable) {
         if (x.middleClick) x.middleClick();
         else x._onTabClick(e);
@@ -723,8 +724,11 @@ D.IDE.prototype = {
   },
   zoom(z) {
     const { wins } = this;
+    const se = wins['0'];
     Object.keys(wins).forEach((x) => { wins[x].zoom(z); });
-    wins[0] && wins[0].restoreScrollPos();
+    se && se.restoreScrollPos();
+    const b = se.getDocument().body;
+    b.className = `zoom${z} ${b.className.split(/\s+/).filter(s => !/^zoom-?\d+$/.test(s)).join(' ')}`;
     this.gl.container.resize();
   },
   LBR: D.prf.lbar.toggle,
