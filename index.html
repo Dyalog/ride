@@ -241,21 +241,69 @@
 <div id=lb_tip_tri hidden></div>
 <div id=ed_tmpl class="ride_win edit_trace" style=display:none>
   <div class=toolbar>
-    <a href=# class='tb_btn tb_LN         ' title='Toggle line numbers'                     ></a>
-    <a href=# class='tb_btn tb_ER  tc_only' title='Execute line'                            ></a>
-    <a href=# class='tb_btn tb_TC  tc_only' title='Trace into expression'                   ></a>
-    <a href=# class='tb_btn tb_BK  tc_only' title='Go back one line'                        ></a>
-    <a href=# class='tb_btn tb_FD  tc_only' title='Skip current line'                       ></a>
-    <a href=# class='tb_btn tb_BH  tc_only' title='Stop on next line of calling function'   ></a>
-    <a href=# class='tb_btn tb_RM  tc_only' title='Continue execution of this thread'       ></a>
-    <a href=# class='tb_btn tb_MA  tc_only' title='Continue execution of all threads'       ></a>
-    <a href=# class='tb_btn tb_ED  tc_only' title='Edit name'                               ></a>
-    <a href=# class='tb_btn tb_WI  tc_only' title='Interrupt'                               ></a>
-    <a href=# class='tb_btn tb_CBP tc_only' title='Clear trace/stop/monitor for this object'></a>
-    <a href=# class='tb_btn tb_AO  ed_only' title='Comment selected text'                   ></a>
-    <a href=# class='tb_btn tb_DO  ed_only' title='Uncomment selected text'                 ></a>
+    <button class='tb_btn tb_LN' title='Toggle line numbers'>
+      <span class="fa-layers fa-fw">
+        <span class="far fa-bars" data-fa-transform="shrink-3 right-2"></span>
+        <span class="fa-layers-text" data-fa-transform="shrink-10 left-8 up-6" style="font-weight:300">1</span>
+        <span class="fa-layers-text" data-fa-transform="shrink-10 left-8" style="font-weight:300">2</span>
+        <span class="fa-layers-text" data-fa-transform="shrink-10 left-8 down-6" style="font-weight:300">3</span>
+      </span>
+    </button>
     <span class=tb_sep></span>
-    <a href=# class='tb_btn tb_SC         ' title='Search'                                  ></a>
+    <button class='tb_btn tb_ER tc_only' title='Execute line'>
+      <!-- <span class="fas fa-caret-right" data-fa-transform="right-1" data-fa-mask="fas fa-cog"></span> -->
+       <span class="fa-layers fa-fw">
+        <i class="fas fa-fw fa-long-arrow-alt-right" data-fa-transform="shrink-3 up-3"></i>
+        <i class="fas fa-fw fa-circle tb_dot" data-fa-transform="shrink-12 down-4"></i>
+      </span>      
+    </button>
+    <button class='tb_btn tb_TC tc_only' title='Trace into expression'>
+      <span class="fas fa-fw fa-level-down" data-fa-transform="shrink-3"></span>
+    </button>
+    <button class='tb_btn tb_BH tc_only' title='Stop on next line of calling function'>
+      <span class="fas fa-fw fa-level-up" data-fa-transform="shrink-3"></span>
+    </button>
+    <span class=tb_sep></span>
+    <button class='tb_btn tb_BK tc_only' title='Go back one line'>
+      <span class="fas fa-fw fa-long-arrow-alt-left" data-fa-transform="shrink-3"></span>
+    </button>
+    <button class='tb_btn tb_FD tc_only' title='Skip current line'>
+      <span class="fas fa-fw fa-long-arrow-alt-right" data-fa-transform="shrink-3"></span>
+    </button>
+    <span class=tb_sep></span>
+    <button class='tb_btn tb_RM tc_only' title='Continue execution of this thread'>
+      <span class="fas fa-fw fa-angle-right"></span>
+    </button>
+    <button class='tb_btn tb_MA tc_only' title='Continue execution of all threads'>
+      <span class="fas fa-fw fa-angle-double-right"></span>
+    </button>
+    <button class='tb_btn tb_WI tc_only' title='Interrupt'>
+      <span class="far fa-fw fa-stop-circle"></span>
+    </button>
+    <span class=tb_sep></span>
+    <button class='tb_btn tb_ED tc_only' title='Edit name'>
+      <span class="fas fa-fw fa-pencil-alt"  data-fa-transform="shrink-3"></span>
+    </button>
+    <button class='tb_btn tb_EP' title='Quit this function'>
+      <span class="far fa-fw fa-times-circle"></span>
+    </button>
+    <button class='tb_btn tb_CBP tc_only' title='Clear trace/stop/monitor for this object'>
+      <span class="fa-layers fa-fw">
+        <i class="fas fa-fw fa-times-circle tb_cbp" data-fa-transform="shrink-8 down-3 left-3"></i>
+        <i class="far fa-fw fa-clock" data-fa-transform="shrink-8 down-3 right-3"></i>
+        <i class="fas fa-fw fa-circle" data-fa-transform="shrink-8 up-3"></i>
+      </span>      
+    </button>
+    <button class='tb_btn tb_AO ed_only' title='Comment selected text'>
+      <span class="fab fa-dyalog"></span>
+    </button>
+    <button class='tb_btn tb_DO ed_only' title='Uncomment selected text'>
+      <span class="fab fa-dyalog"></span>
+    </button>
+    <span class=tb_sep></span>
+    <button class='tb_btn tb_SC' title='Search'>
+      <span class="fas fa-fw fa-search" data-fa-transform="shrink-3"></span>
+    </button>
   </div>
   <div class=ride_win_me>
   </div>
@@ -266,9 +314,15 @@
   <div>
     <div class=ctl_listview_header><h2>Threads</h2></div>
     <div class=toolbar>
-      <a href=# class='tb_btn tb_TR' title='Refresh now'                             ></a>
-      <a href=# class='tb_btn tb_RM' title='Continue execution of this thread'       ></a>
-      <a href=# class='tb_btn tb_MA' title='Continue execution of all threads'       ></a>
+      <a href=# class='tb_btn tb_TR' title='Refresh now'>
+        <span class="fas fa-sync-alt" data-fa-transform="shrink-2"></span>
+      </a>
+      <a href=# class='tb_btn tb_RM' title='Continue execution of this thread'>
+        <span class="fas fa-angle-right"></span>
+      </a>
+      <a href=# class='tb_btn tb_MA' title='Continue execution of all threads'>
+        <span class="fas fa-angle-double-right"></span>
+      </a>
     </div>
     <div id=threads hidden></div>
   </div>

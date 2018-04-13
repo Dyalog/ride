@@ -2216,7 +2216,7 @@ h2 {
   height: 24px;
   cursor: default;
   overflow: hidden;
-  padding: 2px;
+  padding: 6px;
 }
 .tracer .toolbar .ed_only {
   display: none;
@@ -2225,78 +2225,18 @@ h2 {
   display: none;
 }
 .tracer .toolbar .tc_only {
-  display: block;
+  display: inline-block;
 }
-.tb_btn,
+.tb_btn {
+  display: inline-block;
+  padding: 2px;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  border-radius: 10%;
+}
 .tb_sep {
-  float: left;
-  width: 24px;
-  height: 24px;
-  margin: 0 1px;
-  background: no-repeat center center;
-  cursor: default;
-  background-size: 20px 20px;
-  border-radius: 50%;
-}
-.tb_LN {
-  background-image: url(img/tb_LN.png);
-}
-.tb_AO {
-  background-image: url(img/tb_AO.png);
-}
-.tb_DO {
-  background-image: url(img/tb_DO.png);
-}
-.tb_NX {
-  background-image: url(img/tb_NX.png);
-}
-.tb_PV {
-  background-image: url(img/tb_PV.png);
-}
-.tb_hid {
-  background-image: url(img/tb_hid.png);
-}
-.tb_case {
-  background-image: url(img/tb_case.png);
-}
-.tb_ER {
-  background-image: url(img/tb_ER.png);
-}
-.tb_TC {
-  background-image: url(img/tb_TC.png);
-}
-.tb_BK {
-  background-image: url(img/tb_BK.png);
-}
-.tb_FD {
-  background-image: url(img/tb_FD.png);
-}
-.tb_BH {
-  background-image: url(img/tb_BH.png);
-}
-.tb_RM {
-  background-image: url(img/tb_RM.png);
-}
-.tb_MA {
-  background-image: url(img/tb_MA.png);
-}
-.tb_ED {
-  background-image: url(img/tb_ED.png);
-}
-.tb_WI {
-  background-image: url(img/tb_WI.png);
-}
-.tb_CBP {
-  background-image: url(img/tb_CBP.png);
-}
-.tb_SC {
-  background-image: url(img/tb_SC.png);
-}
-.tb_RP {
-  background-image: url(img/tb_RP.png);
-}
-.tb_TR {
-  background-image: url(img/tb_TR.png);
+  margin: 0 8px 0 0;
 }
 #vt_bln {
   font-family: apl, monospace;
@@ -3395,14 +3335,26 @@ h2 {
 .toolbar {
   background-color: #38393f;
 }
-.tb_btn.pressed {
-  background-color: rgba(0, 0, 0, 0.2);
+.toolbar .tb_btn {
+  color: #f77811;
+  background: transparent;
+  font-size: 18px;
 }
-.tb_btn:hover {
+.toolbar .tb_btn:hover {
   background-color: rgba(0, 0, 0, 0.1);
+  color: white;
 }
-.tb_btn:active {
+.toolbar .tb_btn:active {
   background-color: rgba(0, 0, 0, 0.2);
+}
+.toolbar .tb_btn.pressed {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+.toolbar .tb_btn .tb_dot {
+  color: #717b9e;
+}
+.toolbar .tb_sep {
+  border: 1px solid #2e3035;
 }
 #vt_bln {
   border: solid black 1px;

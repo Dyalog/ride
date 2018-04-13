@@ -115,22 +115,24 @@
         })));
       }
     };
+    // ed.tb = ed.dom.querySelector('.toolbar');
     ed.tb = ed.dom.querySelector('.toolbar');
-    ed.tb.onmousedown = (x) => {
-      if (x.target.matches('.tb_btn')) {
-        x.target.classList.add('armed');
+    ed.tb = $(ed.dom).find('button');
+    ed.tb.mousedown((x) => {
+      if (x.currentTarget.matches('.tb_btn')) {
+        x.currentTarget.classList.add('armed');
         x.preventDefault();
       }
-    };
-    ed.tb.onmouseout = (x) => {
-      if (x.target.matches('.tb_btn')) {
-        x.target.classList.remove('armed');
+    });
+    ed.tb.on('mouseout mouseup', (x) => {
+      if (x.currentTarget.matches('.tb_btn')) {
+        x.currentTarget.classList.remove('armed');
         x.preventDefault();
       }
-    };
-    ed.tb.onmouseup = ed.tb.onmouseout;
-    ed.tb.onclick = (x) => {
-      const t = x.target;
+    });
+    // ed.tb.onmouseup = ed.tb.onmouseout;
+    ed.tb.click((x) => {
+      const t = x.currentTarget;
       if (t.matches('.tb_btn')) {
         const c = t.className.replace(/^.*\btb_([A-Z]{2,3})\b.*$/, '$1');
         if (ed[c]) ed[c](ed.me);
@@ -138,7 +140,7 @@
         return !1;
       }
       return !0;
-    };
+    });
     ed.setTC(!!ed.tc);
     this.setLN(D.prf.lineNums());
     ed.firstOpen = true;
@@ -195,8 +197,9 @@
     setLN(x) { // update the display of line numbers and the state of the "[...]" button
       const ed = this;
       ed.me.updateOptions({ lineNumbers: D.prf.lineNums() ? (l => `[${l - 1}]`) : 'off' });
-      const a = ed.tb.querySelectorAll('.tb_LN');
-      for (let i = 0; i < a.length; i++) a[i].classList.toggle('pressed', !!x);
+      ed.dom.querySelector('.tb_LN').classList.toggle('pressed', !!x);
+      // const a = ed.tb.querySelectorAll('.tb_LN');
+      // for (let i = 0; i < a.length; i++) a[i].classList.toggle('pressed', !!x);
     },
     setTC(x) {
       const ed = this;
