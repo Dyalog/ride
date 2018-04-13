@@ -142,7 +142,7 @@
       return !0;
     });
     ed.setTC(!!ed.tc);
-    this.setLN(D.prf.lineNums());
+    ed.setLN(D.prf.lineNums());
     ed.firstOpen = true;
   }
   Ed.prototype = {
@@ -198,8 +198,6 @@
       const ed = this;
       ed.me.updateOptions({ lineNumbers: D.prf.lineNums() ? (l => `[${l - 1}]`) : 'off' });
       ed.dom.querySelector('.tb_LN').classList.toggle('pressed', !!x);
-      // const a = ed.tb.querySelectorAll('.tb_LN');
-      // for (let i = 0; i < a.length; i++) a[i].classList.toggle('pressed', !!x);
     },
     setTC(x) {
       const ed = this;

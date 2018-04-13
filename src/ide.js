@@ -294,17 +294,17 @@ D.IDE = function IDE(opts = {}) {
       D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()));
     }
   }, 100);
-  D.prf.autoCloseBrackets((x) => { eachWin((w) => { w.autoCloseBrackets(!!x); }); });
+  D.prf.autoCloseBrackets((x) => { eachWin((w) => { !w.bwId && w.autoCloseBrackets(!!x); }); });
   D.prf.ilf((x) => {
     const i = x ? -1 : D.prf.indent();
-    eachWin((w) => { w.id && w.indent(i); });
+    eachWin((w) => { !w.bwId && w.id && w.indent(i); });
   });
   D.prf.indent((x) => {
     const i = D.prf.ilf() ? -1 : x;
-    eachWin((w) => { w.id && w.indent(i); });
+    eachWin((w) => { !w.bwId && w.id && w.indent(i); });
   });
-  D.prf.fold((x) => { eachWin((w) => { w.id && w.fold(!!x); }); });
-  D.prf.matchBrackets((x) => { eachWin((w) => { w.matchBrackets(!!x); }); });
+  D.prf.fold((x) => { eachWin((w) => { !w.bwId && w.fold(!!x); }); });
+  D.prf.matchBrackets((x) => { eachWin((w) => { !w.bwId && w.matchBrackets(!!x); }); });
   const togglePanel = (compName, compTitle, left) => {
     if (!D.prf[compName]()) {
       gl.root.getComponentsByName(compName).forEach((x) => { x.container.close(); });
@@ -337,8 +337,8 @@ D.IDE = function IDE(opts = {}) {
   }
   // OSX is stealing our focus.  Let's steal it back!  Bug #5
   D.mac && !ide.floating && setTimeout(() => { ide.wins[0].focus(); }, 500);
-  D.prf.lineNums((x) => { eachWin(w => w.id && w.setLN(x)); });
-  D.prf.breakPts((x) => { eachWin(w => w.id && w.setBP(x)); });
+  D.prf.lineNums((x) => { eachWin(w => w.setLN && w.setLN(x)); });
+  D.prf.breakPts((x) => { eachWin(w => w.setBP && w.setBP(x)); });
   D.prf.blockCursor((x) => { eachWin(w => !w.bwId && w.blockCursor(!!x)); });
   D.prf.cursorBlinking((x) => { eachWin(w => !w.bwId && w.cursorBlinking(x)); });
   D.prf.renderLineHighlight((x) => { eachWin(w => !w.bwId && w.renderLineHighlight(x)); });

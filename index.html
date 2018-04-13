@@ -243,13 +243,13 @@
   <div class=toolbar>
     <button class='tb_btn tb_LN' title='Toggle line numbers'>
       <span class="fa-layers fa-fw">
-        <span class="far fa-bars" data-fa-transform="shrink-3 right-2"></span>
+        <span class="fal fa-align-justify" data-fa-transform="shrink-3 right-2"></span>
         <span class="fa-layers-text" data-fa-transform="shrink-10 left-8 up-6" style="font-weight:300">1</span>
         <span class="fa-layers-text" data-fa-transform="shrink-10 left-8" style="font-weight:300">2</span>
         <span class="fa-layers-text" data-fa-transform="shrink-10 left-8 down-6" style="font-weight:300">3</span>
       </span>
     </button>
-    <span class=tb_sep></span>
+    <span class='tb_sep tc_only'></span>
     <button class='tb_btn tb_ER tc_only' title='Execute line'>
       <!-- <span class="fas fa-caret-right" data-fa-transform="right-1" data-fa-mask="fas fa-cog"></span> -->
        <span class="fa-layers fa-fw">
@@ -263,14 +263,7 @@
     <button class='tb_btn tb_BH tc_only' title='Stop on next line of calling function'>
       <span class="fas fa-fw fa-level-up" data-fa-transform="shrink-3"></span>
     </button>
-    <span class=tb_sep></span>
-    <button class='tb_btn tb_BK tc_only' title='Go back one line'>
-      <span class="fas fa-fw fa-long-arrow-alt-left" data-fa-transform="shrink-3"></span>
-    </button>
-    <button class='tb_btn tb_FD tc_only' title='Skip current line'>
-      <span class="fas fa-fw fa-long-arrow-alt-right" data-fa-transform="shrink-3"></span>
-    </button>
-    <span class=tb_sep></span>
+    <span class='tb_sep tc_only'></span>
     <button class='tb_btn tb_RM tc_only' title='Continue execution of this thread'>
       <span class="fas fa-fw fa-angle-right"></span>
     </button>
@@ -280,11 +273,11 @@
     <button class='tb_btn tb_WI tc_only' title='Interrupt'>
       <span class="far fa-fw fa-stop-circle"></span>
     </button>
-    <span class=tb_sep></span>
+    <span class='tb_sep tc_only'></span>
     <button class='tb_btn tb_ED tc_only' title='Edit name'>
       <span class="fas fa-fw fa-pencil-alt"  data-fa-transform="shrink-3"></span>
     </button>
-    <button class='tb_btn tb_EP' title='Quit this function'>
+    <button class='tb_btn tb_QT tc_only' title='Quit this function'>
       <span class="far fa-fw fa-times-circle"></span>
     </button>
     <button class='tb_btn tb_CBP tc_only' title='Clear trace/stop/monitor for this object'>
@@ -294,11 +287,21 @@
         <i class="fas fa-fw fa-circle" data-fa-transform="shrink-8 up-3"></i>
       </span>      
     </button>
+    <span class='tb_sep ed_only'></span>
+    <button class='tb_btn tb_EP' title='Save changes and return'>
+      <span class="far fa-fw fa-times-circle"></span>
+    </button>
     <button class='tb_btn tb_AO ed_only' title='Comment selected text'>
-      <span class="fab fa-dyalog"></span>
+      <span class="fa-layers fa-fw">
+        <span class="fa-layers-text" data-fa-transform="grow-4 up-3" style="font-family:apl">⍝</span>
+      </span>
     </button>
     <button class='tb_btn tb_DO ed_only' title='Uncomment selected text'>
-      <span class="fab fa-dyalog"></span>
+      <span class="fa-layers fa-fw">
+        <span class="fa-layers-text" data-fa-transform="grow-4 up-3" style="font-family:apl">⍝</span>
+        <span class="fas fa-circle" data-fa-transform="shrink-8 down-3 left-3" style="color:red"></span>
+        <span class="fas fa-times fa-inverse" data-fa-transform="shrink-10 down-3 left-3"></span>
+      </span>
     </button>
     <span class=tb_sep></span>
     <button class='tb_btn tb_SC' title='Search'>

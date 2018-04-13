@@ -34,8 +34,8 @@ D.prf_tabs.wins={
   validate:function(){
     if(q.sw.value&&!isInt(q.sw.value,400))return{msg:'Width must be at least 400.',el:q.sw}
     if(q.sh.value&&!isInt(q.sh.value,400))return{msg:'Height must be at least 400.',el:q.sh}
-    if(q.px.value&&!isInt(q.px.value,0))return{msg:'Position x must be a positive integer.',el:q.px}
-    if(q.py.value&&!isInt(q.py.value,0))return{msg:'Position y must be a positive integer.',el:q.py}
+    // if(q.px.value&&!isInt(q.px.value,0))return{msg:'Position x must be a positive integer.',el:q.px}
+    // if(q.py.value&&!isInt(q.py.value,0))return{msg:'Position y must be a positive integer.',el:q.py}
     if(q.ox.value&&!isInt(q.ox.value,0))return{msg:'Offset x must be a positive integer.',el:q.ox}
     if(q.oy.value&&!isInt(q.oy.value,0))return{msg:'Offset y must be a positive integer.',el:q.oy}
   }
