@@ -1,56 +1,109 @@
 #!/usr/bin/env node
-//instead of a Makefile
-'use strict';process.chdir(__dirname)
-const rq=require,fs=rq('fs'),path=rq('path'),{execSync}=rq('child_process'),async=rq('async')
-,sh=x=>execSync(x,{encoding:'utf8'}).replace(/[\r\n]/g,'')          //exec in shell
-,rf=x=>fs.readFileSync(x,'utf8')                                    //read file
-,wf=(x,y)=>fs.writeFileSync(x,y)                                    //write file
-,mv=(x,y)=>fs.renameSync(x,y)                                       //move/rename file
-,md=x=>{if(!fs.existsSync(x)){md(path.dirname(x));fs.mkdirSync(x)}} //mkdir -p
-,nt=(x,y)=>!fs.existsSync(y)||fs.statSync(x)>fs.statSync(y)         //newer than
-,rm=x=>{try{var s=fs.lstatSync(x)}catch(_){}
-        if(s){if(s.isDirectory()){fs.readdirSync(x).map(y=>rm(x+'/'+y));fs.rmdirSync(x)}else{fs.unlinkSync(x)}}}
-,pj=JSON.parse(rf('package.json'))
-//v:version string - "x.y.z" where z is the number of commits since the beginning of the project
-,v=pj.version.replace(/\.0$/,'')+'.'+sh('git rev-list --count HEAD')
-,tasks={}
+// instead of a Makefile
 
-let buildDone=0
-tasks.b=tasks.build=f=>{
-  if(buildDone){f();return}
-  md('_');wf('_/version',v);console.info('v'+v)
-  wf('_/version.js','D='+JSON.stringify({versionInfo:{
-       version:v,date:sh('git show -s HEAD --pretty=format:%ci'),rev:sh('git rev-parse HEAD')}}))
-  buildDone=1;f()
-}
+process.chdir(__dirname);
+const rq = require;
+const fs = rq('fs');
+const path = rq('path');
+const { execSync } = rq('child_process');
+const async = rq('async');
+const sh = x => execSync(x, { encoding: 'utf8' }).replace(/[\r\n]/g, ''); // exec in shell
+const rf = x => fs.readFileSync(x, 'utf8'); // read file
+const wf = (x, y) => fs.writeFileSync(x, y); // write file
+const mv = (x, y) => fs.renameSync(x, y); // move/rename file
+const md = (x) => { if (!fs.existsSync(x)) { md(path.dirname(x)); fs.mkdirSync(x); } }; // mkdir -p
+const rm = (x) => {
+  let s;
+  try { s = fs.lstatSync(x); } catch (_) { /**/ }
+  if (s) {
+    if (s.isDirectory()) {
+      fs.readdirSync(x).map(y => rm(`${x}/${y}`));
+      fs.rmdirSync(x);
+    } else { fs.unlinkSync(x); }
+  }
+};
+const pj = JSON.parse(rf('package.json'));
+// v:version string - "x.y.z" where z is the number of commits since the beginning of the project
+const v = `${pj.version.replace(/\.0$/, '')}.${sh('git rev-list --count HEAD')}`;
+const tasks = { };
 
-const incl=new RegExp('^$|^/(D.png|empty.html|index.html|status.html|main.js|package.json)$|^/(src|style|lib|node_modules|_)(/|$)')
-,pkg=(x,y,f)=>{rq('electron-packager')(
-  {dir:'.',platform:x,arch:y,out:'_/'+pj.name,overwrite:true,'download.cache':'cache',icon:'D',tmpdir:false,
-    ignore:p=>!incl.test(p)&&!(x==='win32'&&/^\/windows-ime(\/|$)/.test(p)),
-    'appBundleId':'com.dyalog.'+pj.name,
-    'appCopyright':`(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
-    'appVersion':v,
-    'buildVersion':v,
-    'win32metadata':{ //ends up in Windows Explorer's right click > Properties
-      CompanyName:'Dyalog Ltd',
-      FileDescription:'Remote Integrated Development Environment for Dyalog APL',
-      OriginalFilename:pj.productName+'.exe',
-      ProductName:'RIDE',
-      InternalName:'RIDE'}},
-  e=>{const d='_/'+pj.name+'/'+pj.productName+'-'+x+'-'+y;rm(d+'/version')
-      fs.existsSync(d+'/LICENSE')&&mv(d+'/LICENSE',d+'/LICENSE.electron')
-      f&&f(e)}
-)}
-tasks.l=tasks.linux=f=>{tasks.build(e=>e?f(e):pkg('linux' ,'x64'   ,f))}
-tasks.w=tasks.win  =f=>{tasks.build(e=>e?f(e):pkg('win32' ,'ia32'  ,f))}
-tasks.o=tasks.osx  =f=>{tasks.build(e=>e?f(e):pkg('darwin','x64'   ,f))}
-tasks.a=tasks.arm  =f=>{tasks.build(e=>e?f(e):pkg('linux' ,'armv7l',f))}
-tasks.d=tasks.dist=f=>{async.series([tasks.l,tasks.w,tasks.o,tasks.a],e=>{f(e)})}
+let buildDone = 0;
+const b = (f) => {
+  if (buildDone) { f(); return; }
+  md('_'); wf('_/version', v); console.info(`v${v}`);
+  const vi = {
+    versionInfo: {
+      version: v,
+      date: sh('git show -s HEAD --pretty=format:%ci'),
+      rev: sh('git rev-parse HEAD'),
+    },
+  };
+  wf('_/version.js', `D=${JSON.stringify(vi)}`);
+  buildDone = 1; f();
+};
 
-tasks.c=tasks.clean=f=>{rm('_');f()}
+const incl = new RegExp('^$' +
+  '|^/(D\\.png|[^/]*\\.html|main\\.js|package\\.json)$' +
+  '|^/(src|lib|node_modules|_)(/|$)' +
+  '|^/style($|/(fonts|img)|.*\\.css$)');
+const pkg = (x, y, f) => {
+  rq('electron-packager')(
+    {
+      dir: '.',
+      platform: x,
+      arch: y,
+      out: `_/${pj.name}`,
+      overwrite: true,
+      'download.cache': 'cache',
+      icon: 'D',
+      tmpdir: false,
+      ignore: p => !incl.test(p) && !(x === 'win32' && /^\/windows-ime(\/|$)/.test(p)),
+      appBundleId: `com.dyalog.${pj.name}`,
+      appCopyright: `(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
+      appVersion: v,
+      buildVersion: v,
+      win32metadata: { // ends up in Windows Explorer's right click > Properties
+        CompanyName: 'Dyalog Ltd',
+        FileDescription: 'Remote Integrated Development Environment for Dyalog APL',
+        OriginalFilename: `${pj.productName}.exe`,
+        ProductName: 'RIDE',
+        InternalName: 'RIDE',
+      },
+    },
+    (e) => {
+      const d = `_/${pj.name}/${pj.productName}-${x}-${y}`;
+      rm(`${d}/version`);
+      fs.existsSync(`${d}/LICENSE`) && mv(`${d}/LICENSE`, `${d}/LICENSE.electron`);
+      f && f(e);
+    },
+  );
+};
 
-async.each(process.argv.length>2?process.argv.slice(2):['build'],
-           (x,f)=>{if(tasks[x]){tasks[x](f)}
-                   else{process.stderr.write(`ERROR: no task named ${JSON.stringify(x)}\n`);process.exit(1)}},
-           e=>{if(e)throw e})
+const l = (f) => { b(e => (e ? f(e) : pkg('linux', 'x64', f))); };
+const w = (f) => { b(e => (e ? f(e) : pkg('win32', 'ia32', f))); };
+const o = (f) => { b(e => (e ? f(e) : pkg('darwin', 'x64', f))); };
+const a = (f) => { b(e => (e ? f(e) : pkg('linux', 'armv7l', f))); };
+const d = (f) => { async.series([l, w, o, a], (e) => { f(e); }); };
+
+const c = (f) => { rm('_'); f(); };
+
+tasks.b = b; tasks.build = b;
+tasks.l = l; tasks.linux = l;
+tasks.w = w; tasks.win = w;
+tasks.o = o; tasks.osx = o;
+tasks.a = a; tasks.arm = a;
+tasks.d = d; tasks.dist = d;
+tasks.c = c; tasks.clean = c;
+
+async.each(
+  process.argv.length > 2 ? process.argv.slice(2) : ['build'],
+  (x, f) => {
+    if (tasks[x]) {
+      tasks[x](f);
+    } else {
+      process.stderr.write(`ERROR: no task named ${JSON.stringify(x)}\n`);
+      process.exit(1);
+    }
+  },
+  (e) => { if (e) throw e; },
+);
