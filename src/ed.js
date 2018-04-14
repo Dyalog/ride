@@ -53,7 +53,7 @@
       quickSuggestions: D.prf.autocompletion(),
       quickSuggestionsDelay: D.prf.autocompletionDelay(),
       renderLineHighlight: D.prf.renderLineHighlight(),
-      renderIndentGuides: true,
+      renderIndentGuides: false,
       snippetSuggestions: D.prf.snippetSuggestions() ? 'bottom' : 'none',
       suggestOnTriggerCharacters: D.prf.autocompletion(),
       showFoldingControls: 'always',
@@ -144,6 +144,7 @@
     ed.setTC(!!ed.tc);
     ed.setLN(D.prf.lineNums());
     ed.firstOpen = true;
+    ed.setPendent = $.debounce(100, x => ed.dom.classList.toggle('pendent', x));
   }
   Ed.prototype = {
     createBPEl() { // create breakpoint element
@@ -317,7 +318,7 @@
     },
     prompt(x) {
       this.setRO(this.tc || !x);
-      this.tc && this.dom.classList.toggle('pendent', !x);
+      this.tc && this.setPendent(!x);
     },
     die() { this.setRO(1); this.ide.connected = 0; },
     getDocument() { return this.dom.ownerDocument; },
@@ -583,7 +584,7 @@
         me.trigger('editor', 'type', { text: ' '.repeat(i - (ci % i)) });
         return;
       }
-      me.trigger('editor', 'editor.action.triggerSuggest');
+      D.prf.autocompletion() && me.trigger('editor', 'editor.action.triggerSuggest');
     },
     downOrXline(me) {
       const p = me.getPosition();

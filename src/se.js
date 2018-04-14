@@ -291,7 +291,7 @@
     updPW(force) {
       // force:emit a SetPW message even if the width hasn't changed
       const se = this;
-      const pw = Math.max(42, se.me.getLayoutInfo().viewportColumn);
+      const pw = Math.max(42, se.me.getLayoutInfo().viewportColumn - 2);
       if ((pw !== se.pw && se.ide.connected) || force) D.send('SetPW', { pw: se.pw = pw });
     },
     scrollCursorIntoView() {
@@ -512,7 +512,7 @@
         me.trigger('editor', 'type', { text: ' '.repeat(i - (ci % i)) });
         return;
       }
-      me.trigger('editor', 'editor.action.triggerSuggest');
+      D.prf.autocompletion() && me.trigger('editor', 'editor.action.triggerSuggest');
     },
   };
   D.Se = Se;
