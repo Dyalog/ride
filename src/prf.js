@@ -18,7 +18,7 @@ D.prf = {};
   //  ['favs',               [{type:'connect'}]],
   ['floating',           0], //floating editor and tracer windows
   ['floatOnTop',         0], //try to keep floating windows on top of the session
-  ['floatSingle',        0], //create single floating edit window
+  ['floatSingle',        1], //create single floating edit window
   ['fold',               1], //code folding
   ['ilf',                1], //when re-formating use ODE style (interpreter level formatting)
   ['ime',                1], //switch to dyalog IME when RIDE starts (Windows-only)
@@ -44,6 +44,7 @@ D.prf = {};
   ['pfkeys',             ['','','','','','','','','','','','','']], //command strings for pfkeys
   ['renderLineHighlight','none'], // highlight current line
   ['selectedExe',        ''],//which interpreter is selected in dropdown in the Connect page?
+  ['selectionHighlight', 0],// hightlight matching words
   ['snippetSuggestions', 0],// show snippet suggestions
   ['title',              '{WSID}'], //a.k.a. "caption"
   ['valueTips',          1], //value tips

@@ -54,6 +54,7 @@
       quickSuggestionsDelay: D.prf.autocompletionDelay(),
       renderLineHighlight: D.prf.renderLineHighlight(),
       renderIndentGuides: false,
+      selectionHighlight: D.prf.selectionHighlight(),
       snippetSuggestions: D.prf.snippetSuggestions() ? 'bottom' : 'none',
       suggestOnTriggerCharacters: D.prf.autocompletion(),
       showFoldingControls: 'always',
@@ -341,6 +342,7 @@
     minimapRenderCharacters(x) { this.me.updateOptions({ minimap: { renderCharacters: !!x } }); },
     minimapShowSlider(x) { this.me.updateOptions({ minimap: { showSlider: x } }); },
     renderLineHighlight(x) { this.me.updateOptions({ renderLineHighlight: x }); },
+    selectionHighlight(x) { this.me.updateOptions({ selectionHighlight: x }); },
     snippetSuggestions(x) { this.me.updateOptions({ snippetSuggestions: x ? 'bottom' : 'none' }); },
     autocompletion(x) {
       this.me.updateOptions({

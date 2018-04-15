@@ -76,6 +76,40 @@ D.IPC_Prf = function IPCPrf() {
   });
 };
 
+function WindowRect(id, prf) {
+  let {
+    x, y, width, height,
+  } = prf;
+  x += prf.ox * (id - 1);
+  y += prf.oy * (id - 1);
+  const b = D.el.screen.getDisplayMatching({
+    x, y, width, height,
+  }).bounds;
+  const vw = Math.max(0, Math.min(x + width, b.x + b.width) - Math.max(x, b.x));
+  const vh = Math.max(0, Math.min(y + height, b.y + b.height) - Math.max(y, b.y));
+  if (width * height > 2 * vw * vh) {
+    // saved window position is now mostly off screen
+    x = null; y = null;
+    width = Math.min(width, b.width);
+    height = Math.min(height, b.height);
+  }
+  return {
+    x, y, width, height,
+  };
+}
+function CreateFloatingEditor(seq) {
+  let opts = {
+    icon: `${__dirname}/D.png`,
+    show: false,
+    fullscreen: false,
+    fullscreenable: true,
+    alwaysOnTop: !!D.prf.floatOnTop(),
+  };
+  opts = Object.assign(opts, WindowRect(seq, D.prf.editWins()));
+  const bw = new D.el.BrowserWindow(opts);
+  bw.loadURL(`${window.location}?${bw.id}`);
+}
+
 D.IPC_Server = function IPCServer() {
   // start IPC server
   D.pwins = [];
@@ -135,43 +169,14 @@ D.IPC_Server = function IPCServer() {
       D.el.BrowserWindow.fromId(D.pwins[k].bwId).setAlwaysOnTop(!!x);
     });
   });
+  D.prf.floating() && CreateFloatingEditor(1);
 };
-function WindowRect(id, prf) {
-  let {
-    x, y, width, height,
-  } = prf;
-  x += prf.ox * (id - 1);
-  y += prf.oy * (id - 1);
-  const b = D.el.screen.getDisplayMatching({
-    x, y, width, height,
-  }).bounds;
-  const vw = Math.max(0, Math.min(x + width, b.x + b.width) - Math.max(x, b.x));
-  const vh = Math.max(0, Math.min(y + height, b.y + b.height) - Math.max(y, b.y));
-  if (width * height > 2 * vw * vh) {
-    // saved window position is now mostly off screen
-    x = null; y = null;
-    width = Math.min(width, b.width);
-    height = Math.min(height, b.height);
-  }
-  return {
-    x, y, width, height,
-  };
-}
 D.IPC_LinkEditor = function IPCLinkEditor(pe) {
   pe && D.pendingEditors.push(pe);
   if (!D.pendingEditors.length) return;
   let wp = D.prf.floatSingle() ? D.pwins[0] : D.pwins.find(w => w.id < 0);
   if (!wp) {
-    let opts = {
-      icon: `${__dirname}/D.png`,
-      show: false,
-      fullscreen: false,
-      fullscreenable: true,
-      alwaysOnTop: !!D.prf.floatOnTop(),
-    };
-    opts = Object.assign(opts, WindowRect(pe.editorOpts.id, D.prf.editWins()));
-    const bw = new D.el.BrowserWindow(opts);
-    bw.loadURL(`${window.location}?${bw.id}`);
+    CreateFloatingEditor(pe.editorOpts.id);
     return;
   } else if (wp.id > 0) {
     wp = Object.assign(new D.IPC_WindowProxy(), wp);

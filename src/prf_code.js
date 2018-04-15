@@ -60,6 +60,7 @@
       q.ph.checked = !!p.persistentHistory();
       q.phs.value = p.persistentHistorySize();
       q.vt.checked = !!p.valueTips();
+      q.sh.checked = !!p.selectionHighlight();
       q.sqt.checked = !!p.squiggleTips();
       q.sqp.checked = !!p.sqp();
       q.ss.checked = !!p.snippetSuggestions();
@@ -90,6 +91,7 @@
       p.persistentHistory  (q.ph.checked);
       p.persistentHistorySize(q.phs.value);
       p.valueTips          (q.vt.checked);
+      p.selectionHighlight (q.sh.checked);
       p.squiggleTips       (q.sqt.checked);
       p.sqp                (q.sqp.checked);
       p.snippetSuggestions (q.ss.checked);
@@ -98,7 +100,7 @@
       const isInt = (x, minX) => +x === (+x | 0) && +x >= minX;
       if (q.ai.checked && !isInt(q.sw.value, 0)) return { msg: 'Auto-indent must be a non-negative integer.', el: q.sw };
       if (q.aim.checked && !isInt(q.swm.value, 0)) return { msg: 'Auto-indent in methods must be a non-negative integer.', el: q.swm };
-      if (q.ac.checked && !isInt(q.acd.value, 1)) return { msg: 'Autocompletion delay must be a positive integer.', el: q.acd };
+      if (q.ac.checked && !isInt(q.acd.value, 0)) return { msg: 'Autocompletion delay must be a non-negative integer.', el: q.acd };
       if (q.ph.checked && !isInt(q.phs.value, 1)) return { msg: 'Persistent history size must be a positive integer.', el: q.phs };
       return null;
     },

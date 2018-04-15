@@ -46,6 +46,7 @@
       quickSuggestionsDelay: D.prf.autocompletionDelay(),
       renderIndentGuides: false,
       renderLineHighlight: D.prf.renderLineHighlight(),
+      selectionHighlight: D.prf.selectionHighlight(),
       snippetSuggestions: D.prf.snippetSuggestions(),
       suggestOnTriggerCharacters: D.prf.autocompletion(),
       wordBasedSuggestions: false,
@@ -125,7 +126,7 @@
         if (m < n) {
           const h = se.dirty;
           se.dirty = {};
-          Object.keys(h).forEach((x) => { se.dirty[x + ((n - m) * (x > l1))] = h[x]; });
+          Object.keys(h).forEach((x) => { se.dirty[+x + ((n - m) * (+x > l1))] = h[x]; });
         } else if (n < m) {
           for (let j = n; j < m; j++) text.push(''); // pad shrinking changes with empty lines
           se.edit([{ range: new monaco.Range(l0 + n, 1, l0 + 1, 1), text: '\n'.repeat(m - n) }]);
@@ -137,7 +138,7 @@
           base[l] == null && (base[l] = se.oModel.getLineContent(l));
           l += 1;
         }
-        while (l < l0 + n) se.dirty[l += 1] = 0;
+        while (l < l0 + n) se.dirty[l++] = 0;
         se.hl();
       });
     });
@@ -291,7 +292,7 @@
     updPW(force) {
       // force:emit a SetPW message even if the width hasn't changed
       const se = this;
-      const pw = Math.max(42, se.me.getLayoutInfo().viewportColumn - 2);
+      const pw = Math.max(42, se.me.getLayoutInfo().viewportColumn);
       if ((pw !== se.pw && se.ide.connected) || force) D.send('SetPW', { pw: se.pw = pw });
     },
     scrollCursorIntoView() {
@@ -400,6 +401,7 @@
     minimapRenderCharacters(x) { this.me.updateOptions({ minimap: { renderCharacters: !!x } }); },
     minimapShowSlider(x) { this.me.updateOptions({ minimap: { showSlider: x } }); },
     renderLineHighlight(x) { this.me.updateOptions({ renderLineHighlight: x }); },
+    selectionHighlight(x) { this.me.updateOptions({ selectionHighlight: x }); },
     snippetSuggestions(x) { this.me.updateOptions({ snippetSuggestions: x ? 'bottom' : 'none' }); },
     autocompletion(x) {
       this.me.updateOptions({
@@ -479,7 +481,7 @@
         delete se.dirty[l];
         const h = se.dirty;
         se.dirty = {};
-        Object.keys(h).forEach((x) => { se.dirty[x - (x > l)] = h[x]; });
+        Object.keys(h).forEach((x) => { se.dirty[+x - (+x > l)] = h[x]; });
       } else if (se.dirty[l] != null) {
         se.edit([{
           range: new monaco.Range(l, 1, l, me.model.getLineMaxColumn(l)),
