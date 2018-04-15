@@ -348,6 +348,7 @@ D.IDE = function IDE(opts = {}) {
   D.prf.minimapRenderCharacters((x) => { eachWin(w => !w.bwId && w.minimapRenderCharacters(!!x)); });
   D.prf.minimapShowSlider((x) => { eachWin(w => !w.bwId && w.minimapShowSlider(x)); });
   D.prf.selectionHighlight((x) => { eachWin(w => !w.bwId && w.selectionHighlight(x)); });
+  D.prf.showEditorToolbar((x) => { $('.ride_win.edit_trace').toggleClass('no-toolbar', !x); });
   D.prf.snippetSuggestions((x) => { eachWin(w => !w.bwId && w.snippetSuggestions(x)); });
 
   ide.handlers = { // for RIDE protocol messages

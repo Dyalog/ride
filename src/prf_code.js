@@ -62,6 +62,7 @@
       q.vt.checked = !!p.valueTips();
       q.sh.checked = !!p.selectionHighlight();
       q.sqt.checked = !!p.squiggleTips();
+      q.set.checked = !!p.showEditorToolbar();
       q.sqp.checked = !!p.sqp();
       q.ss.checked = !!p.snippetSuggestions();
       q.ai.onchange();
@@ -92,6 +93,7 @@
       p.persistentHistorySize(q.phs.value);
       p.valueTips          (q.vt.checked);
       p.selectionHighlight (q.sh.checked);
+      p.showEditorToolbar  (q.set.checked);
       p.squiggleTips       (q.sqt.checked);
       p.sqp                (q.sqp.checked);
       p.snippetSuggestions (q.ss.checked);

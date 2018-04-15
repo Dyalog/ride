@@ -25,6 +25,7 @@
     ed.isCode = 1;
     ed.isReadOnly = !1;
     ed.breakpoints = D.prf.breakPts();
+    ed.$e.toggleClass('no-toolbar', !D.prf.showEditorToolbar());
     const fs = D.zoom2fs[D.prf.zoom() + 10];
     const me = monaco.editor.create(ed.dom.querySelector('.ride_win_me'), {
       acceptSuggestionOnCommitCharacter: true,
@@ -116,8 +117,6 @@
         })));
       }
     };
-    // ed.tb = ed.dom.querySelector('.toolbar');
-    ed.tb = ed.dom.querySelector('.toolbar');
     ed.tb = $(ed.dom).find('button');
     ed.tb.mousedown((x) => {
       if (x.currentTarget.matches('.tb_btn')) {

@@ -45,6 +45,7 @@ D.prf = {};
   ['renderLineHighlight','none'], // highlight current line
   ['selectedExe',        ''],//which interpreter is selected in dropdown in the Connect page?
   ['selectionHighlight', 0],// hightlight matching words
+  ['showEditorToolbar',  1],// show toolbar in editor windows
   ['snippetSuggestions', 0],// show snippet suggestions
   ['title',              '{WSID}'], //a.k.a. "caption"
   ['valueTips',          1], //value tips
