@@ -148,10 +148,6 @@
     ed.setPendent = $.debounce(100, x => ed.dom.classList.toggle('pendent', x));
   }
   Ed.prototype = {
-    createBPEl() { // create breakpoint element
-      const e = this.dom.ownerDocument.createElement('div');
-      e.className = 'breakpoint'; e.innerHTML = '●'; return e;
-    },
     getStops() { // returns an array of line numbers
       return [...this.stop].sort((x, y) => x - y);
     },
