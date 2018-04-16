@@ -63,6 +63,7 @@
     });
     me.model.winid = 0;
     me.dyalogCmds = se;
+    se.session = me.createContextKey('session', true);
     se.tracer = me.createContextKey('tracer', true);
     me.listen = true;
     se.oModel = monaco.editor.createModel('');

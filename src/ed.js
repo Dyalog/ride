@@ -18,7 +18,7 @@
     ed.$e = $(ed.dom);
     ed.jumps = [];
     ed.focusTS = 0;
-    ed.dom.oncontextmenu = D.oncmenu;
+    // ed.dom.oncontextmenu = D.oncmenu;
     ed.oText = '';
     ed.oStop = []; // remember original text and "stops" to avoid pointless saving on EP
     ed.stop = new Set(); // remember original text and "stops" to avoid pointless saving on EP
@@ -71,6 +71,7 @@
       });
     });
     me.dyalogCmds = ed;
+    ed.session = me.createContextKey('session', false);
     ed.tracer = me.createContextKey('tracer', !!ed.tc);
     D.mapKeys(ed); D.prf.keys(D.mapKeys.bind(this, ed));
 

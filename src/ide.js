@@ -678,7 +678,7 @@ D.IDE.prototype = {
     if (this.floating) this.ipc.emit('getSIS');
     else D.prf.dbg() && D.send('GetSIStack', {});
   }),
-  updPW(x) { this.wins[0].updPW(x); },
+  updPW(x) { this.wins[0] && this.wins[0].updPW(x); },
   updTitle() { // change listener for D.prf.title
     const ide = this;
     const ri = D.remoteIdentification || {};

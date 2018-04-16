@@ -330,28 +330,39 @@
       Win: km.CtrlCmd,
       Meta: km.CtrlCmd,
     };
+    const stlkbs = [];
+    function monacoKeyBinding(ks) {
+      return ks.replace(/-(.)/g, '\n$1').split('\n').reduce((a, ko) => {
+        const k = D.keyMap.labels[ko] || ko;
+        return a | (ctrlcmd[k] || km[k] || kc[k]); // eslint-disable-line no-bitwise
+      }, 0);
+    }
     function addCmd(map) {
       Object.keys(map).forEach((ks) => {
-        const nkc = ks.replace(/-(.)/g, '\n$1').split('\n').reduce(((a, ko) => {
-          const k = D.keyMap.labels[ko] || ko;
-          return a | (ctrlcmd[k] || km[k] || kc[k]); // eslint-disable-line no-bitwise
-        }), 0);
+        const nkc = monacoKeyBinding(ks);
         const cmd = map[ks];
-        if (nkc) {
-          let cond;
-          if (cmd === 'BQC') {
-            return; // handled explicitly via change handler on editor
-          } else if (cmd === 'ER') {
-            cond = 'tracer && !suggestWidgetVisible && !editorHasMultipleSelections && !findInputFocussed && !inSnippetMode';
-          } else if (cmd === 'TC') {
-            cond = 'tracer';
-          } else if (nkc === kc.Escape) cond = '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode';
-          me.addCommand(nkc, () => D.commands[cmd](me), cond);
-        }
+        let cond;
+        if (!nkc || cmd === 'BQC') return;
+        if (cmd === 'STL') { stlkbs.push(nkc); return; }
+        if (cmd === 'ER') {
+          cond = 'tracer && !suggestWidgetVisible && !editorHasMultipleSelections && !findInputFocussed && !inSnippetMode';
+        } else if (cmd === 'TC') {
+          cond = 'tracer';
+        } else if (nkc === kc.Escape) cond = '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode';
+        me.addCommand(nkc, () => D.commands[cmd](me), cond);
       });
     }
     addCmd(D.keyMap.dyalogDefault);
     addCmd(D.keyMap.dyalog);
+    me.addAction({
+      id: 'dyalog-skip-to-line',
+      contextMenuGroupId: 'navigation',
+      contextMenuOrder: 0,
+      precondition: 'tracer && !session',
+      keyBindings: stlkbs,
+      label: 'Skip to line',
+      run: e => ed.STL(e),
+    });
   };
   const l = {
     Unknown: 'unknown',
