@@ -836,7 +836,7 @@
       return this.formatLines(model, range, options);
     },
   };
-
+  D.Tokenizer = aplTokens;
   D.mop.then(() => {
     const ml = monaco.languages;
     ml.register({

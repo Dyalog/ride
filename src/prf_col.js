@@ -7,6 +7,7 @@
 
   let G = []; // G:syntax highlighting groups
   let H = {}; // H:reverse lookup dict for G
+  let M = {}; // H:reverse lookup dict for G
   let q; // dict of DOM elements whose ids start with "col_", keyed by the rest of the id
   // D.addSynGrps(...) is the API for extensions, see ../sample-extensions/syntax-in-comments.js
   function encScm(x) {
@@ -193,7 +194,12 @@
   D.addSynGrps = (x) => {
     G = G.concat(x);
     H = {};
-    for (let i = 0; i < G.length; i++) H[G[i].t] = i; SCMS && updStl();
+    M = {};
+    for (let i = 0; i < G.length; i++) {
+      H[G[i].t] = i;
+      G[i].m && (M[G[i].m] = G[i].t);
+    }
+    SCMS && updStl();
   };
   /* eslint-disable */
   D.addSynGrps([
@@ -237,7 +243,7 @@
     {s:'system command'  ,t:'scmd',m:'predefined.scmd'}, //)XYZ
     {s:'tracer'          ,t:'tc'  ,c:'/*noprefix*/.tracer .monaco-editor-background,/*noprefix*/.tracer .monaco-editor .margin'},
     {s:'pendent'         ,t:'tcpe',c:'/*noprefix*/.tracer.pendent .monaco-editor-background,/*noprefix*/.tracer.pendent .monaco-editor .margin'},
-    {s:'tradfn'          ,t:'trad',m:'identifier.tradfn.apl'}, //the header line (e.g. ∇{R}←A F B) or the closing ∇
+    {s:'tradfn'          ,t:'trad',m:'identifier.tradfn'}, //the header line (e.g. ∇{R}←A F B) or the closing ∇
     {s:'user command'    ,t:'ucmd',m:'predefined.ucmd'}, //]XYZ
     {s:'value tip target',t:'vtt' ,c:'.vt_marker',ctrls:{bc:1,fg:0,BIU:0}}, //the rectangle around the token
     {s:'value tip'       ,t:'vtip',c:'/*noprefix*/#vt_bln,/*noprefix*/#vt_tri',ctrls:{bc:1}}, //the balloon
@@ -394,13 +400,38 @@
       //   },
       // });
       // cm.on('gutterClick', () => { selGrp('lnum'); });
+      let ss;
+      const reTokenize = $.debounce(500, () => {
+        let s = D.Tokenizer.getInitialState();
+        const ls = me.model.getLinesContent();
+        ss = ls.map((l) => {
+          const st = D.Tokenizer.tokenize(l, s);
+          s = st.endState;
+          return st;
+        });
+      });
+      reTokenize();
+      me.onDidChangeModelContent(() => reTokenize());
+      function selGrpFromPosition(p) {
+        const { lineNumber, column } = p;
+        const s = ss[lineNumber - 1];
+        const si = s.tokens.map(x => x.startIndex).findIndex(x => x >= column - 1);
+        const t = s.tokens[si < 0 ? s.tokens.length - 1 : si - 1];
+        let sc = t ? t.scopes.slice(0, -4) : '';
+        while (!M[sc] && sc) sc = sc.slice(0, Math.max(0, sc.lastIndexOf('.')));
+        sc ? selGrp(M[sc]) : selGrp('norm');
+      }
+      me.onDidChangeCursorPosition((e) => {
+        if (!me.getSelection().isEmpty()) selGrp('sel');
+        else selGrpFromPosition(e.position);
+      });
       me.onMouseDown((e) => {
         const t = e.target;
         const mt = monaco.editor.MouseTargetType;
         if (t.type === mt.GUTTER_LINE_NUMBERS) {
           selGrp('lnum');
         } else if (t.type === mt.CONTENT_TEXT) {
-          // select by token?
+          selGrpFromPosition(t.position);
         }
       });
       // cm.on('cursorActivity', () => {
