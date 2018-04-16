@@ -60,6 +60,15 @@ D.util = {
       };
     }
   },
+  fmtKey(x) {
+    return [
+      x.metaKey ? 'Cmd-' : '',
+      x.ctrlKey ? 'Ctrl-' : '',
+      x.altKey ? 'Alt-' : '',
+      x.shiftKey ? 'Shift-' : '',
+      x.key || '',
+    ].join('');
+  },
   ucLength(s) {
     return window.punycode.ucs2.decode(s).length;
   },

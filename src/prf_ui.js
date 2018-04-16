@@ -53,10 +53,13 @@
     if (!d) {
       d = I.prf_dlg;
       d.onkeydown = (x) => {
-        if (x.which === 13 && !x.shiftKey && x.ctrlKey && !x.altKey && !x.metaKey) {
+        const k = D.util.fmtKey(x);
+        if (k === 'Ctrl-Enter') {
           ok(); return !1;
-        } else if (x.which === 27 && !x.shiftKey && !x.ctrlKey && !x.altKey && !x.metaKey) {
+        } else if (k === 'Escape') {
           cancel(); return !1;
+        } else if (k === 'F12') {
+          D.el.getCurrentWebContents().toggleDevTools(); return !1;
         }
         return !0;
       };

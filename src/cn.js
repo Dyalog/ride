@@ -66,13 +66,6 @@
     e.innerHTML = `<span class=name>${esc(favText(x))}</span><button class=go><span class="fas fa-play"></span></button>`;
     return e;
   };
-  const fmtKey = x => [
-    x.metaKey ? 'Cmd-' : '',
-    x.ctrlKey ? 'Ctrl-' : '',
-    x.altKey ? 'Alt-' : '',
-    x.shiftKey ? 'Shift-' : '',
-    x.key || '',
-  ].join('');
   const updExes = () => {
     const ssh = q.subtype.value === 'ssh';
     const h = (ssh ? interpretersSSH : interpreters)
@@ -530,7 +523,7 @@
     }
     D.conns = D.conns || [{ type: 'connect' }];
     I.cn.onkeyup = (x) => {
-      const k = fmtKey(x);
+      const k = D.util.fmtKey(x);
       if (D.el && k === 'F12') {
         D.elw.webContents.toggleDevTools();
         return !1;
@@ -703,7 +696,7 @@
         q.go.click();
       })
       .keydown((x) => {
-        switch (fmtKey(x)) {
+        switch (D.util.fmtKey(x)) {
           case 'Enter': q.go.hidden || q.go.click(); return !1;
           case 'Ctrl-N': q.neu.click(); return !1;
           case 'Delete': q.del.click(); return !1;
