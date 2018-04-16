@@ -1,9 +1,9 @@
 /*Golden Layout*/
 .lm_goldenlayout {
 	// background:@GL_BG url(img/mainBG.png) left -40px repeat-x !important;
-	background:@GL_BG !important;
+	background:url(img/RideSplashLogo.png) center no-repeat @GL_BG !important;
 	.lm_header {
-	background: @GL_BG !important;
+		background: @GL_BG !important;
 	}
 }
 .lm_header,.lm_content {
@@ -11,12 +11,12 @@
 	border-color: @GL_BG !important;
 }
 .lm_tab {
-	font-family: sans-serif;
+	font-family: Roboto!important;
 	letter-spacing: 0.5px;
 	font-size: 12px;
 	background-color: @GL_TAB_BG !important;
 	color: @GL_TAB_FG !important;
-	border:1px @GL_TAB_BG solid !important;
+	border:1px @GL_TAB_BRD_BG solid !important;
 }
 .lm_tab.lm_active {
 	background-color: @GL_ACT_TAB_BG !important;
@@ -32,10 +32,10 @@
 }
 
 .lm_splitter.lm_horizontal {
-	background:@GL_SPLITTER url(img/grabber_vert.png) no-repeat center !important;
+	background:@GL_SPLITTER @GL_SPLITTERV_IMG no-repeat center !important;
 }
 .lm_splitter.lm_vertical {
-	background:@GL_SPLITTER url(img/grabber_hor.png) no-repeat center !important;
+	background:@GL_SPLITTER @GL_SPLITTERH_IMG no-repeat center !important;
 }
 .lm_header .lm_tab .lm_close_tab{
 	&::before {content: "×";}

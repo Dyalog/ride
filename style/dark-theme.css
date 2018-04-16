@@ -264,6 +264,12 @@
   background-image: url(img/dlg_query.png);
 }
 /*generic dialog for processing OptionsDialog,StringDialog,TaskDialog*/
+#gd.floating {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 #gd_icon {
   margin: 1em 1em 2em;
   width: 128px;
@@ -1798,7 +1804,7 @@ h2 {
   display: none;
 }
 .tracer .toolbar .tc_only {
-  display: inline-block;
+  display: inline;
 }
 .tb_btn {
   display: inline-block;
@@ -2398,8 +2404,6 @@ body.floating-window {
 /*various dialogs*/
 .dlg {
   background-color: #1c1e28;
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.5);
-  border: 1px solid black;
 }
 .dlg_title,
 .dlg_close {
@@ -2410,12 +2414,13 @@ body.floating-window {
 }
 #gd.dlg {
   background-color: white;
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.5);
-  border: 1px solid black;
 }
 #gd .dlg_title,
 #gd .dlg_close {
   color: #828282;
+}
+#gd .dlg_btns {
+  background-color: white;
 }
 #gd .dlg_close:hover {
   color: white;
@@ -2423,6 +2428,9 @@ body.floating-window {
 }
 #gd_content {
   color: blue;
+}
+.dlg_btns {
+  background-color: #313446;
 }
 .dlg_btns button {
   color: #4c4a4a;
@@ -2439,7 +2447,7 @@ body.floating-window {
 }
 /*Golden Layout*/
 .lm_goldenlayout {
-  background: #1c1e28 !important;
+  background: url(img/RideSplashLogo.png) center no-repeat #1c1e28 !important;
 }
 .lm_goldenlayout .lm_header {
   background: #1c1e28 !important;
@@ -2449,12 +2457,12 @@ body.floating-window {
   border-color: #1c1e28 !important;
 }
 .lm_tab {
-  font-family: sans-serif;
+  font-family: Roboto!important;
   letter-spacing: 0.5px;
   font-size: 12px;
   background-color: #252831 !important;
   color: #828282 !important;
-  border: 1px #252831 solid !important;
+  border: 1px #1c1e28 solid !important;
 }
 .lm_tab.lm_active {
   background-color: #38393f !important;
@@ -2810,7 +2818,8 @@ h2 {
   color: #717b9e;
 }
 .toolbar .tb_sep {
-  border: 1px solid #2e3035;
+  border: 0 solid #1c1e28;
+  border-right-width: 1px;
 }
 #vt_bln {
   border: solid black 1px;

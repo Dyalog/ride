@@ -53,7 +53,7 @@ const Console = console;
       D.IPC_Client(winId);
     } else if (D.el) {
       D.IPC_Server();
-      const bw = new D.el.BrowserWindow({
+      let bw = new D.el.BrowserWindow({
         icon: `${__dirname}/D.png`,
         show: false,
         parent: D.elw,
@@ -63,6 +63,20 @@ const Console = console;
       });
       bw.loadURL(`${loc}?prf`); // bw.webContents.toggleDevTools();
       D.prf_bw = { id: bw.id };
+      bw = new D.el.BrowserWindow({
+        icon: `${__dirname}/D.png`,
+        show: false,
+        parent: D.elw,
+        alwaysOnTop: true,
+        modal: true,
+        width: 400,
+        height: 350,
+        resizable: false,
+        minimizable: false,
+        maximizable: false,
+      });
+      bw.loadURL(`file://${__dirname}/dialog.html`);
+      D.dlg_bw = { id: bw.id };
       nodeRequire(`${__dirname}/src/cn`)();
     } else {
       const ws = new WebSocket((loc.protocol === 'https:' ? 'wss://' : 'ws://') + loc.host);

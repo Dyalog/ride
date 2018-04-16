@@ -241,6 +241,13 @@
 <div id=lb_tip_tri hidden></div>
 <div id=ed_tmpl class="ride_win edit_trace" style=display:none>
   <div class=toolbar>
+    <button class='tb_btn tb_QT tc_only' title='Quit this function'>
+      <span class="far fa-fw fa-times-circle"></span>
+    </button>
+    <button class='tb_btn tb_EP ed_only' title='Save changes and return'>
+      <span class="far fa-fw fa-times-circle"></span>
+    </button>
+    <span class='tb_sep'></span>
     <button class='tb_btn tb_LN' title='Toggle line numbers'>
       <span class="fa-layers fa-fw">
         <span class="fal fa-align-justify" data-fa-transform="shrink-3 right-2"></span>
@@ -251,11 +258,7 @@
     </button>
     <span class='tb_sep tc_only'></span>
     <button class='tb_btn tb_ER tc_only' title='Execute line'>
-      <!-- <span class="fas fa-caret-right" data-fa-transform="right-1" data-fa-mask="fas fa-cog"></span> -->
-       <span class="fa-layers fa-fw">
-        <i class="fas fa-fw fa-long-arrow-alt-right" data-fa-transform="shrink-3 up-3"></i>
-        <i class="fas fa-fw fa-circle tb_dot" data-fa-transform="shrink-12 down-4"></i>
-      </span>      
+      <span class="fas fa-fw fa-step-forward" data-fa-transform="shrink-3"></span>
     </button>
     <button class='tb_btn tb_TC tc_only' title='Trace into expression'>
       <span class="fas fa-fw fa-level-down" data-fa-transform="shrink-3"></span>
@@ -271,26 +274,21 @@
       <span class="fas fa-fw fa-angle-double-right"></span>
     </button>
     <button class='tb_btn tb_WI tc_only' title='Interrupt'>
-      <span class="far fa-fw fa-stop-circle"></span>
+      <span class="far fa-fw fa-pause-circle"></span>
     </button>
     <span class='tb_sep tc_only'></span>
     <button class='tb_btn tb_ED tc_only' title='Edit name'>
       <span class="fas fa-fw fa-pencil-alt"  data-fa-transform="shrink-3"></span>
     </button>
-    <button class='tb_btn tb_QT tc_only' title='Quit this function'>
-      <span class="far fa-fw fa-times-circle"></span>
-    </button>
     <button class='tb_btn tb_CBP tc_only' title='Clear trace/stop/monitor for this object'>
-      <span class="fa-layers fa-fw">
-        <i class="fas fa-fw fa-times-circle tb_cbp" data-fa-transform="shrink-8 down-3 left-3"></i>
-        <i class="far fa-fw fa-clock" data-fa-transform="shrink-8 down-3 right-3"></i>
-        <i class="fas fa-fw fa-circle" data-fa-transform="shrink-8 up-3"></i>
+      <span class="fa-layers">
+        <span class="far fa-clock" data-fa-transform="shrink-8 down-4 right-4"></span>
+        <span class="fas fa-circle" data-fa-transform="shrink-8 up-4"></span>
+        <span class="fas fa-circle" data-fa-transform="shrink-8 down-4 left-4" style="color:red"></span>
+        <span class="fas fa-times fa-inverse" data-fa-transform="shrink-10 down-4 left-4"></span>
       </span>      
     </button>
     <span class='tb_sep ed_only'></span>
-    <button class='tb_btn tb_EP' title='Save changes and return'>
-      <span class="far fa-fw fa-times-circle"></span>
-    </button>
     <button class='tb_btn tb_AO ed_only' title='Comment selected text'>
       <span class="fa-layers fa-fw">
         <span class="fa-layers-text" data-fa-transform="grow-4 up-3" style="font-family:apl">⍝</span>

@@ -52,6 +52,7 @@ D.IDE = function IDE(opts = {}) {
       if (!w.bwId) D.elw.focus();
       w.focus(); return !1;
     };
+    D.prf.floating() && D.IPC_CreateWindow(1);
   }
   // We need to be able to temporarily block the stream of messages coming from socket.io
   // Creating a floating window can only be done asynchronously and it's possible that a message
@@ -596,6 +597,11 @@ D.IDE = function IDE(opts = {}) {
       setTimeout(() => { inp.focus(); }, 1);
     },
     TaskDialog(x) {
+      if (D.dlg_bw) {
+        D.ipc.server.emit(D.dlg_bw.socket, 'show', x);
+        D.el.BrowserWindow.fromId(D.dlg_bw.id).show();
+        return;
+      }
       const { esc } = D.util;
       I.gd_title_text.textContent = x.title || 'Task';
       I.gd_icon.style.display = 'none';

@@ -1,0 +1,72 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset=utf-8>
+  <title>Task</title>
+  <link rel=stylesheet href='style/dark-theme.css'>
+  <script defer src="lib/fontawesome-all.min.js"></script>
+</head>
+<body>
+  <div id=gd class="dlg floating"><!--generic dialog for processing OptionsDialog,StringDialog,TaskDialog-->
+    <div class=dlg_content id=gd_content></div>
+    <div class=dlg_btns    id=gd_btns   ></div>
+  </div>
+  
+  <script>
+    const ESC = { '<': '&lt;', '>': '&gt;', '&': '&amp;', "'": '&apos;', '"': '&quot;' };
+    const esc = s => s.replace(/[<>&'"]/g, x => ESC[x]);
+
+    const ipc = require('node-ipc');
+    ipc.config.id = 'dialog';
+    ipc.config.retry = 1500;
+    ipc.config.silent = true;
+    let rm;
+    ipc.connectTo('ride_master', () => {
+      rm = ipc.of.ride_master;
+      rm.on('connect', () => {
+        window.onbeforeunload = (e) => {
+          e.returnValue = false;
+          rm.emit('dialogClose',{ index: -1, token });
+        };
+        rm.emit('dialogCreated');
+      });
+      rm.on('disconnect', () => {
+        D.ipc.log('disconnected from ride_master'.notice);
+        D.onbeforeunload = null;
+        window.close();
+      });
+      rm.on('show', (opts) => show(opts));
+    });
+
+    const gd_content = document.getElementById('gd_content');
+    const gd_btns = document.getElementById('gd_btns');
+    let token;
+
+    function show(x) {
+      token = x.token;
+      document.title = x.title || 'Dyalog';
+      gd_content.innerHTML = esc(x.text || '') + (x.subtext ? `<div class=task_subtext>${esc(x.subtext)}</div>` : '');
+      let btns = (x.buttonText || []).map((y) => {
+        const [caption, ...details] = esc(y).split('\n');
+        return '<button class=task><div class="btn_icon"><span class="far fa-long-arrow-right"></span></div>' +
+          `${caption}<br><div class="task_detail">${details.join('<br>')}</div></button>`;
+      }).join('');
+      btns += (x.footer ? `<div class=task_footer>${esc(x.footer)}</div>` : '');
+      gd_btns.innerHTML = btns;
+      const ret = (r) => {
+        gd_btns.onclick = null;
+        rm.emit('dialogClose', { index: r, token: x.token });
+      };
+      gd_btns.onclick = (e) => {
+        if (e.target.nodeName === 'BUTTON') {
+          let t = e.target;
+          let i = 99;
+          while (t) { t = t.previousSibling; i += 1; }
+          ret(i);
+        }
+      };
+      gd_btns.querySelector('button').focus(); 
+    }
+  </script>
+</body>
+</html>

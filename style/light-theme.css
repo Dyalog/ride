@@ -264,6 +264,12 @@
   background-image: url(img/dlg_query.png);
 }
 /*generic dialog for processing OptionsDialog,StringDialog,TaskDialog*/
+#gd.floating {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 #gd_icon {
   margin: 1em 1em 2em;
   width: 128px;
@@ -1381,7 +1387,7 @@ input.lyt_g3:hover {
 }
 #pmenu p {
   margin: 10px 8px;
-  color: white;
+  color: black;
 }
 #pmenu_ta_wr {
   position: absolute;
@@ -1516,7 +1522,7 @@ input.lyt_g3:hover {
   padding: 3px 5px;
 }
 #prf_dlg > hr {
-  border-top: 1px solid black;
+  border-top: 1px solid #f58221;
   border-bottom: 1px solid #2e303e;
   margin-top: 0;
   margin-bottom: 15px;
@@ -1530,7 +1536,7 @@ input.lyt_g3:hover {
   height: 13px;
   padding: 4px 12px 4px 12px;
   text-decoration: none;
-  color: #f77811;
+  color: #ffa336;
   margin: 11px 5px 8px;
 }
 #prf_content {
@@ -1748,7 +1754,7 @@ h2 {
 .tooltip {
   width: 16px;
   height: 16px;
-  color: #f77811;
+  color: #ffa336;
   position: relative;
   display: inline-block;
 }
@@ -1798,7 +1804,7 @@ h2 {
   display: none;
 }
 .tracer .toolbar .tc_only {
-  display: inline-block;
+  display: inline;
 }
 .tb_btn {
   display: inline-block;
@@ -2304,8 +2310,8 @@ body.floating-window {
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),
 #cn textarea {
   border: 1px solid rgba(169, 169, 169, 0.3);
-  background-color: #646e92;
-  color: white;
+  background-color: #ece6dd;
+  color: black;
 }
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]):disabled,
 #cn textarea:disabled {
@@ -2321,36 +2327,36 @@ body.floating-window {
   background-color: #a9a9a9;
   border-color: #a9a9a9;
   color: #a9a9a9;
-  border-top: 1px solid black;
+  border-top: 1px solid #f58221;
   border-bottom: 1px solid #2e303e;
 }
 #cn .hsplitbar {
-  background: #1c1e28 url(img/grabber_vert.png) no-repeat center !important;
-  border-right: solid 1px black;
-  border-left: solid 1px black;
+  background: #ffa336 url(img/grabber_vert_light.png) no-repeat center !important;
+  border-right: solid 1px #f58221;
+  border-left: solid 1px #f58221;
 }
 #cn_favs .go {
-  border: 1px solid #646e92;
-  background: linear-gradient(to right bottom, #717b9e 50%, #646e92 50%);
+  border: 1px solid #ece6dd;
+  background: linear-gradient(to right bottom, #f5f2ed 50%, #ece6dd 50%);
 }
 #cn_favs > div.list_sel {
-  background: #7781a2;
-  color: white;
+  background: #f9f7f4;
+  color: black;
   opacity: 1;
 }
 #cn_favs .list-focus {
   outline: dotted black 1px;
 }
 #cn_favs > div {
-  background: #7781a2;
-  color: #f77811;
+  background: #f9f7f4;
+  color: #ffa336;
   opacity: 0.3;
 }
 #cn_favs > div:hover {
   opacity: 1;
 }
 #cn_fav_btns {
-  background: linear-gradient(#8089a8, #717b9e);
+  background: linear-gradient(#fefefd, #f5f2ed);
 }
 #cn_fav_btns button {
   background-color: transparent;
@@ -2361,27 +2367,27 @@ body.floating-window {
 }
 #cn_fav_btns button:active {
   opacity: 1;
-  background-color: #f77811;
+  background-color: #ffa336;
 }
 #cn_lhs {
-  background: #646e92;
+  background: #ece6dd;
 }
 #cn_rhs {
-  background: linear-gradient(#717b9e, white);
+  background: linear-gradient(#f5f2ed, white);
 }
 #cn_env_add {
   color: #a9a9a9;
 }
 #cn_env_add a {
-  color: #f77811;
+  color: #ffa336;
 }
 .ctl_listview {
   background-color: black;
-  color: white;
+  color: black;
 }
 .ctl_listview tr {
-  background-color: #8f97b3;
-  border-bottom: 1px solid #717b9e;
+  background-color: #ffffff;
+  border-bottom: 1px solid #f5f2ed;
 }
 .ctl_listview tr:hover {
   background-color: #4d5571;
@@ -2393,29 +2399,28 @@ body.floating-window {
   background: black;
 }
 #debug .ctl_listview_header {
-  background-color: #687398;
+  background-color: #f0ebe3;
 }
 /*various dialogs*/
 .dlg {
-  background-color: #717b9e;
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.5);
-  border: 1px solid black;
+  background-color: #f5f2ed;
 }
 .dlg_title,
 .dlg_close {
-  color: #f77811;
+  color: #ffa336;
 }
 .dlg_close:hover {
   background-color: white;
 }
 #gd.dlg {
   background-color: white;
-  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.5);
-  border: 1px solid black;
 }
 #gd .dlg_title,
 #gd .dlg_close {
   color: #828282;
+}
+#gd .dlg_btns {
+  background-color: white;
 }
 #gd .dlg_close:hover {
   color: white;
@@ -2424,9 +2429,12 @@ body.floating-window {
 #gd_content {
   color: blue;
 }
+.dlg_btns {
+  background-color: #313446;
+}
 .dlg_btns button {
   color: #4c4a4a;
-  background-color: #f77811;
+  background-color: #ffa336;
 }
 .dlg_btns button.task {
   color: blue;
@@ -2435,48 +2443,48 @@ body.floating-window {
 #abt_contact a,
 #abt_contact a:visited,
 #abt_contact a:active {
-  color: #f77811;
+  color: #ffa336;
 }
 /*Golden Layout*/
 .lm_goldenlayout {
-  background: #717b9e !important;
+  background: url(img/RideSplashLogo.png) center no-repeat #ffa336 !important;
 }
 .lm_goldenlayout .lm_header {
-  background: #717b9e !important;
+  background: #ffa336 !important;
 }
 .lm_header,
 .lm_content {
-  border-color: #717b9e !important;
+  border-color: #ffa336 !important;
 }
 .lm_tab {
-  font-family: sans-serif;
+  font-family: Roboto!important;
   letter-spacing: 0.5px;
   font-size: 12px;
-  background-color: #252831 !important;
-  color: #828282 !important;
-  border: 1px #252831 solid !important;
+  background-color: #c57f0c !important;
+  color: white !important;
+  border: 1px #ffa336 solid !important;
 }
 .lm_tab.lm_active {
-  background-color: #38393f !important;
-  border: 1px #38393f solid !important;
-  color: white !important;
+  background-color: #f5f2ed !important;
+  border: 1px #f5f2ed solid !important;
+  color: black !important;
 }
 .lm_tab.lm_active .lm_close_tab {
-  color: white !important;
+  color: black !important;
 }
 .lm_splitter {
-  background-color: #1c1e28 !important;
-  outline: solid 1px black;
+  background-color: #ffa336 !important;
+  outline: solid 1px #f58221;
 }
 .lm_splitter.lm_horizontal {
-  background: #1c1e28 url(img/grabber_vert.png) no-repeat center !important;
+  background: #ffa336 url(img/grabber_vert_light.png) no-repeat center !important;
 }
 .lm_splitter.lm_vertical {
-  background: #1c1e28 url(img/grabber_hor.png) no-repeat center !important;
+  background: #ffa336 url(img/grabber_hor.png) no-repeat center !important;
 }
 .lm_header .lm_tab .lm_close_tab {
   background-image: none !important;
-  color: #828282;
+  color: white;
   font-size: 16px;
 }
 .lm_header .lm_tab .lm_close_tab::before {
@@ -2484,7 +2492,7 @@ body.floating-window {
 }
 .lm_header .lm_tab:hover .lm_close_tab {
   opacity: 1;
-  color: white !important;
+  color: black !important;
 }
 label {
   color: #a9a9a9;
@@ -2493,66 +2501,66 @@ label {
   font-weight: 600;
 }
 label.cb_label {
-  color: #f77811;
+  color: #ffa336;
   cursor: pointer;
 }
 button {
-  background: #f77811;
+  background: #ffa336;
   color: #4c4a4a;
 }
 button:hover {
   color: white;
 }
 [type=checkbox] {
-  background-color: #717b9e;
-  border: 1px solid #f77811;
+  background-color: #f5f2ed;
+  border: 1px solid #ffa336;
 }
 [type=checkbox]:checked {
-  background-color: #f77811;
+  background-color: #ffa336;
 }
 [type=checkbox]:hover::before {
-  background: #8f97b3;
+  background: #ffffff;
 }
 [type=checkbox]:active::before {
-  background: #f77811;
-  color: #8f97b3;
+  background: #ffa336;
+  color: #ffffff;
 }
 [type=checkbox]:checked::before {
-  color: #f77811;
+  color: #ffa336;
 }
 [type=checkbox]:checked:after {
-  color: #717b9e;
+  color: #f5f2ed;
 }
 [type=checkbox]:disabled::before {
   color: transparent;
-  box-shadow: 0 0 0 1px #f77811 inset;
-  background: #8f97b3;
+  box-shadow: 0 0 0 1px #ffa336 inset;
+  background: #ffffff;
 }
 [type=checkbox]:checked:disabled::before {
-  color: grayscale(#f77811);
-  background: grayscale(#717b9e);
+  color: grayscale(#ffa336);
+  background: grayscale(#f5f2ed);
 }
 select {
-  background-color: #646e92;
+  background-color: #ece6dd;
   border: 1px solid rgba(169, 169, 169, 0.3);
-  color: #f77811;
+  color: #ffa336;
 }
 #lb {
-  background-color: #7a83a4;
+  background-color: #faf9f7;
   border-top: 1px black solid;
   border-bottom: 1px black solid;
 }
 #lb #lb_inner {
-  background: #7a83a4;
+  background: #faf9f7;
 }
 #lb b {
-  color: #f77811;
+  color: #ffa336;
 }
 #lb b:hover {
-  background-color: rgba(183, 188, 206, 0.2);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 #lb b:active {
-  background-color: rgba(75, 83, 110, 0.2);
+  background-color: rgba(214, 202, 181, 0.2);
 }
 #lb .lb_placeholder {
   background: rgba(0, 0, 0, 0.2);
@@ -2561,18 +2569,18 @@ select {
   color: black;
 }
 #lb_prf:hover {
-  background-color: rgba(183, 188, 206, 0.2);
+  background-color: rgba(255, 255, 255, 0.2);
 }
 #lb_prf:active {
-  background-color: rgba(75, 83, 110, 0.2);
+  background-color: rgba(214, 202, 181, 0.2);
 }
 #lb_tip {
-  background: #7a83a4;
+  background: #faf9f7;
   box-shadow: none;
   color: white;
 }
 #lb_tip_tri {
-  border-color: #7a83a4;
+  border-color: #faf9f7;
   border-left-color: transparent !important;
   border-right-color: transparent !important;
   background-color: transparent !important;
@@ -2582,28 +2590,28 @@ select {
 }
 /*menu (see ../src/menu.js for the DOM structure)*/
 .menu {
-  background-color: #717b9e;
+  background-color: #f5f2ed;
   border-bottom: solid grey 1px;
 }
 .menu a {
-  color: #f77811;
+  color: #ffa336;
 }
 .menu .m-open .m-top {
   border-color: transparent;
 }
 .menu .m-box {
-  background-color: #717b9e;
-  border-color: #717b9e;
+  background-color: #f5f2ed;
+  border-color: #f5f2ed;
 }
 .menu .m-box a {
   border: none;
-  border-color: #717b9e;
+  border-color: #f5f2ed;
 }
 .menu .m-box a .m-shc {
-  color: #f77811;
+  color: #ffa336;
 }
 .menu .m-box a:focus {
-  background: #8f97b3;
+  background: #ffffff;
   color: white;
 }
 .menu .m-box a:focus .m-shc {
@@ -2613,10 +2621,10 @@ select {
   background: transparent 5px center no-repeat url(img/menu_chk.png);
 }
 .menu .m-box a:focus.m-checked {
-  background: #8f97b3 5px center no-repeat url(img/menu_chk_wht.png);
+  background: #ffffff 5px center no-repeat url(img/menu_chk_wht.png);
 }
 #prf_dlg hr {
-  border-top: 1px solid black;
+  border-top: 1px solid #f58221;
   border-bottom: 1px solid #2e303e;
 }
 #prf_nav {
@@ -2625,15 +2633,15 @@ select {
   font-weight: 600;
 }
 #prf_nav a {
-  color: #f77811;
+  color: #ffa336;
 }
 #prf_nav a.sel {
   cursor: default;
-  color: white;
+  color: black;
 }
 #prf_content select {
-  background-color: #646e92;
-  color: #f77811;
+  background-color: #ece6dd;
+  color: #ffa336;
 }
 #prf_dlg_cancel {
   background-color: transparent;
@@ -2688,11 +2696,11 @@ input.lyt_g3:hover {
   background-color: lightgrey;
 }
 #shc td {
-  color: #f77811;
+  color: #ffa336;
 }
 #shc_tbl_wr tr {
-  background-color: #8f97b3;
-  border-bottom: 1px solid #717b9e;
+  background-color: #ffffff;
+  border-bottom: 1px solid #f5f2ed;
   color: white;
   font-family: Roboto;
   font-weight: 300;
@@ -2712,7 +2720,7 @@ input.lyt_g3:hover {
 #shc_tbl_wr tr .shc_key {
   font-size: 14px;
   font-weight: 500;
-  border: solid #717b9e 1px;
+  border: solid #f5f2ed 1px;
 }
 #shc_tbl_wr tr .shc_key.shc_del_hvr {
   border-color: red;
@@ -2750,7 +2758,7 @@ input.lyt_g3:hover {
   line-height: 1.2em;
 }
 #title pre a {
-  color: #f77811;
+  color: #ffa336;
   text-decoration: none;
 }
 #title pre a:hover {
@@ -2760,18 +2768,18 @@ input.lyt_g3:hover {
   font-family: monospace;
 }
 #ide {
-  background: url(img/RideSplashLogo.png) center no-repeat #717b9e;
+  background: url(img/RideSplashLogo.png) center no-repeat #f5f2ed;
 }
 #apl_font {
-  color: #717b9e;
+  color: #f5f2ed;
 }
 ::selection {
-  background: #8f97b3;
+  background: #ffffff;
   color: white;
 }
 /*must be separate rules*/
 ::-moz-selection {
-  background: #8f97b3;
+  background: #ffffff;
   color: white;
 }
 /*must be separate rules*/
@@ -2789,10 +2797,10 @@ h2 {
   font-size: 16px;
 }
 .toolbar {
-  background-color: #38393f;
+  background-color: #f5f2ed;
 }
 .toolbar .tb_btn {
-  color: #f77811;
+  color: #ffa336;
   background: transparent;
   font-size: 18px;
 }
@@ -2807,10 +2815,11 @@ h2 {
   background-color: rgba(0, 0, 0, 0.2);
 }
 .toolbar .tb_btn .tb_dot {
-  color: #717b9e;
+  color: #f5f2ed;
 }
 .toolbar .tb_sep {
-  border: 1px solid #2e3035;
+  border: 0 solid #ffa336;
+  border-right-width: 1px;
 }
 #vt_bln {
   border: solid black 1px;
@@ -2821,13 +2830,13 @@ h2 {
   border-color: black;
 }
 #wse {
-  background-color: #717b9e;
+  background-color: #f5f2ed;
   color: white;
 }
 #wse .bt_text::before {
   color: #1c1e28;
 }
 #wse .bt_text.selected {
-  background-color: #8f97b3;
-  outline: #8f97b3;
+  background-color: #ffffff;
+  outline: #ffffff;
 }

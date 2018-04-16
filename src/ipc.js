@@ -97,7 +97,7 @@ function WindowRect(id, prf) {
     x, y, width, height,
   };
 }
-function CreateFloatingEditor(seq) {
+D.IPC_CreateWindow = function IPCCreateWindow(seq) {
   let opts = {
     icon: `${__dirname}/D.png`,
     show: false,
@@ -108,7 +108,7 @@ function CreateFloatingEditor(seq) {
   opts = Object.assign(opts, WindowRect(seq, D.prf.editWins()));
   const bw = new D.el.BrowserWindow(opts);
   bw.loadURL(`${window.location}?${bw.id}`);
-}
+};
 
 D.IPC_Server = function IPCServer() {
   // start IPC server
@@ -123,6 +123,12 @@ D.IPC_Server = function IPCServer() {
     srv.on('prfShow', () => D.prf_ui());
     srv.on('prfClose', () => {
       D.el.BrowserWindow.fromId(D.prf_bw.id).hide();
+      D.ide && D.ide.focusMRUWin();
+    });
+    srv.on('dialogCreated', (data, socket) => { D.dlg_bw.socket = socket; });
+    srv.on('dialogClose', (x) => {
+      D.send('ReplyTaskDialog', x);
+      D.el.BrowserWindow.fromId(D.dlg_bw.id).hide();
       D.ide && D.ide.focusMRUWin();
     });
     srv.on('browserCreated', (bwId, socket) => {
@@ -169,14 +175,13 @@ D.IPC_Server = function IPCServer() {
       D.el.BrowserWindow.fromId(D.pwins[k].bwId).setAlwaysOnTop(!!x);
     });
   });
-  D.prf.floating() && CreateFloatingEditor(1);
 };
 D.IPC_LinkEditor = function IPCLinkEditor(pe) {
   pe && D.pendingEditors.push(pe);
   if (!D.pendingEditors.length) return;
   let wp = D.prf.floatSingle() ? D.pwins[0] : D.pwins.find(w => w.id < 0);
   if (!wp) {
-    CreateFloatingEditor(pe.editorOpts.id);
+    D.IPC_CreateWindow(pe.editorOpts.id);
     return;
   } else if (wp.id > 0) {
     wp = Object.assign(new D.IPC_WindowProxy(), wp);
