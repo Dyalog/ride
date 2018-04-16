@@ -25,7 +25,7 @@
       acceptSuggestionOnEnter: 'on',
       autoClosingBrackets: !!D.prf.autoCloseBrackets(),
       automaticLayout: false,
-      autoIndent: true,
+      autoIndent: false,
       cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
       cursorBlinking: D.prf.cursorBlinking(),
       folding: false,
@@ -49,6 +49,7 @@
       selectionHighlight: D.prf.selectionHighlight(),
       snippetSuggestions: D.prf.snippetSuggestions(),
       suggestOnTriggerCharacters: D.prf.autocompletion(),
+      useTabStops: false,
       wordBasedSuggestions: false,
       wordWrap: D.prf.wrap() ? 'on' : 'off',
     });

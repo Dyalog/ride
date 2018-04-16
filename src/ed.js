@@ -32,7 +32,7 @@
       acceptSuggestionOnEnter: 'on',
       autoClosingBrackets: !!D.prf.autoCloseBrackets(),
       automaticLayout: true,
-      autoIndent: true,
+      autoIndent: D.prf.indent() >= 0,
       cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
       cursorBlinking: D.prf.cursorBlinking(),
       folding: ed.isCode && !!D.prf.fold(),
