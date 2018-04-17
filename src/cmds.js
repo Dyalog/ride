@@ -50,7 +50,7 @@ D.cmds = [
   ['PRF','Show preferences',        []],
   ['PV' ,'Previous match',          []],
   ['QIT','Quit',                    (D.mac?['Cmd-Q']:[]).concat('Ctrl-Q')],
-  ['QT', 'Quit (and lose changes)', ['Shift-Escape']],
+  ['QT', 'Close window (and lose changes)',['Shift-Escape']],
   ['RD', 'Reformat',                ['NumPad_Divide']],
   ['RP', 'Replace',                 []],
   ['SC', 'Search',                  ['Ctrl-F']],
