@@ -1084,6 +1084,9 @@ body .ui-tooltip {
 .menu hr {
   margin: 3px 0 5px 0;
 }
+.monaco-editor .no-icons .icon {
+  display: none!important;
+}
 /*Prefs>Code*/
 #code {
   overflow: auto;
