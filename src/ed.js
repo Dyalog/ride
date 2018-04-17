@@ -29,7 +29,7 @@
     const fs = D.zoom2fs[D.prf.zoom() + 10];
     const me = monaco.editor.create(ed.dom.querySelector('.ride_win_me'), {
       acceptSuggestionOnCommitCharacter: true,
-      acceptSuggestionOnEnter: 'on',
+      acceptSuggestionOnEnter: 'off',
       autoClosingBrackets: !!D.prf.autoCloseBrackets(),
       automaticLayout: true,
       autoIndent: D.prf.indent() >= 0,
@@ -41,6 +41,7 @@
       formatOnPaste: true,
       formatOnType: true,
       glyphMargin: ed.breakpoints,
+      iconsInSuggestions: false,
       language: 'apl',
       lineHeight: fs + 2,
       lineNumbers: D.prf.lineNums() ? (x => `[${x - 1}]`) : 'off',

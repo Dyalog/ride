@@ -345,7 +345,7 @@
         if (!nkc || cmd === 'BQC') return;
         if (cmd === 'STL') { stlkbs.push(nkc); return; }
         if (cmd === 'ER') {
-          cond = 'tracer && !suggestWidgetVisible && !editorHasMultipleSelections && !findInputFocussed && !inSnippetMode';
+          cond = 'tracer && !editorHasMultipleSelections && !findInputFocussed && !inSnippetMode';
         } else if (cmd === 'TC') {
           cond = 'tracer';
         } else if (nkc === kc.Escape) cond = '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode';

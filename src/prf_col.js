@@ -361,20 +361,23 @@
       };
       const fs = D.zoom2fs[D.prf.zoom() + 10];
       me = monaco.editor.create(q.me, {
+        acceptSuggestionOnEnter: 'off',
         autoClosingBrackets: true,
         automaticLayout: true,
         autoIndent: true,
         cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
         cursorBlinking: D.prf.cursorBlinking(),
+        folding: false,
         fontFamily: 'apl',
         fontSize: fs,
         language: 'apl',
         lineHeight: fs + 2,
         lineNumbers: x => `[${x - 1}]`,
+        minimap: { enabled: false },
         matchBrackets: true,
         mouseWheelZoom: false,
         renderIndentGuides: false,
-        showFoldingControls: 'always',
+        useTabStops: false,
         wordBasedSuggestions: false,
         value: '{R}←{X}tradfn(Y Z);local\n' +
         'dfn←{ ⍝ comment\n' +
@@ -392,14 +395,6 @@
       });
       D.prf.blockCursor(x => me.updateOptions({ cursorStyle: x ? 'block' : 'line' }));
       D.prf.cursorBlinking(x => me.updateOptions({ cursorBlinking: x }));
-      // cm.addOverlay({
-      //   token(sm) {
-      //     const i = sm.string.slice(sm.pos).indexOf(SC_MATCH);
-      //     if (!i) { sm.pos += SC_MATCH.length; return 'searching'; }
-      //     i > 0 ? (sm.pos += i) : sm.skipToEnd(); return '';
-      //   },
-      // });
-      // cm.on('gutterClick', () => { selGrp('lnum'); });
       let ss;
       const reTokenize = $.debounce(500, () => {
         let s = D.Tokenizer.getInitialState();
@@ -411,7 +406,11 @@
         });
       });
       reTokenize();
-      me.onDidChangeModelContent(() => reTokenize());
+      me.model.onDidChangeContent((x) => {
+        if (!me.dyalogBQ && x.changes.length === 1
+          && x.changes[0].text === D.prf.prefixKey()) D.commands.BQC(me);
+        reTokenize();
+      });
       function selGrpFromPosition(p) {
         const { lineNumber, column } = p;
         const s = ss[lineNumber - 1];
@@ -434,16 +433,6 @@
           selGrpFromPosition(t.position);
         }
       });
-      // cm.on('cursorActivity', () => {
-      //   let tmp;
-      //   let grp;
-      //   if (cm.somethingSelected()) grp = 'sel';
-      //   else if (cm.getLine(cm.getCursor().line).indexOf(SC_MATCH) >= 0) grp = 'srch';
-      //   else if ((tmp = cm.getTokenTypeAt(cm.getCursor(), 1))) {
-      //     grp = tmp.split(' ').sort((x, y) => y.length - x.length)[0].replace(/^apl-/, '');
-      //   } else grp = 'norm';
-      //   selGrp(grp);
-      // });
       q.chrome.onchange = () => { scm.theme = q.chrome.value; };
       q.grp.onchange = () => { selGrp(G[+q.grp.value].t); };
       ['fg', 'bg', 'bc'].forEach((p) => {

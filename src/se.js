@@ -22,7 +22,7 @@
     const fs = D.zoom2fs[D.prf.zoom() + 10];
     const me = monaco.editor.create(se.dom, {
       acceptSuggestionOnCommitCharacter: true,
-      acceptSuggestionOnEnter: 'on',
+      acceptSuggestionOnEnter: 'off',
       autoClosingBrackets: !!D.prf.autoCloseBrackets(),
       automaticLayout: false,
       autoIndent: false,
@@ -32,6 +32,7 @@
       fontFamily: 'apl',
       fontSize: fs,
       glyphMargin: se.breakpoints,
+      iconsInSuggestions: false,
       language: 'apl-session',
       lineHeight: fs + 2,
       lineNumbers: 'off',
@@ -98,26 +99,6 @@
       if (!me.dyalogBQ && e.changes.length === 1
         && e.changes[0].text === pk) {
         D.commands.BQC(me);
-      } else {
-        setTimeout(() => {
-          const sw = me.contentWidgets['editor.widget.suggestWidget'];
-          const swv = sw.widget.suggestWidgetVisible.get();
-          const r = e.changes[0].range;
-          const l = me.model.getLineContent(r.endLineNumber).toLowerCase();
-          const bq2 = e.changes.length === 1 && RegExp(`${pk}${pk}\\w*`, 'i').test(l);
-          if (swv && sw.widget.list.length === 1) {
-            const t = sw.widget.focusedItem.suggestion.insertText.toLowerCase();
-            if (l.slice(r.endColumn - t.length, r.endColumn) === t) {
-              me.trigger('editor', 'hideSuggestWidget');
-            } else {
-              me.trigger('editor', 'editor.action.triggerSuggest');
-            }
-          } else if (swv && !sw.widget.list.length) {
-            me.trigger('editor', 'hideSuggestWidget');
-          } else if (swv && !bq2 && sw.widget.list.length > 1) {
-            me.trigger('editor', 'editor.action.triggerSuggest');
-          }
-        }, 50);
       }
       e.changes.forEach((c) => {
         const l0 = c.range.startLineNumber;
