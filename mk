@@ -75,7 +75,7 @@ const pkg = (x, y, f) => {
       rm(`${d}/version`);
       fs.existsSync(`${d}/LICENSE`) && mv(`${d}/LICENSE`, `${d}/LICENSE.electron`);
       f && f(e);
-    },
+    }
   );
 };
 
