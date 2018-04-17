@@ -256,11 +256,10 @@ Request the current line in a trace window be moved back.
 
 <a name=ClearTraceStopMonitor></a>
 ```json
-["ClearTraceStopMonitor",{"win":123}] // RIDE -> Interpreter
+["ClearTraceStopMonitor",{"token":123}] // RIDE -> Interpreter
+["ReplyClearTraceStopMonitor",{"traces":0,"stops":0,"monitors":0,"token":123}] // Interpreter -> RIDE
 ```
-Request it clears all breakpoints, stops, and monitors for a trace window.
-
-:red_circle: Not used in RIDE
+Request it clears all traces, stops, and monitors in the active workspace. The reply says how many of each thing were cleared.
 
 <a name=Continue></a>
 ```json
