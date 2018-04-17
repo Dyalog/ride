@@ -27,8 +27,9 @@
   // }
 }
 #prf_dlg_cancel{
-  background-color: transparent;
+  background: transparent!important;
   border: 1px solid @DLG_CANCEL;
+  box-shadow: none!important;
   color: @DLG_CANCEL;
   &:hover{
     color: @BUTTON_HOVER_COL;
@@ -82,25 +83,23 @@ input.lyt_g1, input.lyt_g3 {
 
 // PREFS_SHORTCUTS
 
-#shc{
-  td{
-    color:@INPUT_COL;
-  }
-}
-
 #shc_tbl_wr{
   tr{
     background-color:@SHC_TR_BG;
-    border-bottom: 1px solid @THEME_WIN_BG;
+    border-bottom: 1px solid @DLG_BG_COL;
     color: @SHC_TR_COL;
     font-family: Roboto;
     font-weight: 300;
     &:hover {
-      background-color:#4d5571;
+      background-color:@SHC_TR_HOV_BG;
     }
     button {
-      background-color:transparent !important;
-      color: @SHC_TR_COL;
+      background:transparent !important;
+      box-shadow: none!important;
+      color: @SHC_BTN_COL;
+      &:hover{
+        color:@INPUT_HOVER_COL;
+      }
     }
     .shc_code {
       font-size: 16px;
@@ -129,7 +128,10 @@ input.lyt_g1, input.lyt_g3 {
         color: @SHC_DEL_COL;
         border-color: @SHC_DEL_HOVER_BORDER;
       }
-    }    
+    }  
+    td{
+      color:@SHC_TD_COL;
+    }  
   }
 }
 #shc_sc_clr {

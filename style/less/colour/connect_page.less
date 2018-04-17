@@ -26,8 +26,8 @@
 	}
 	.hsplitbar {
 		background: @GL_SPLITTER @GL_SPLITTERV_IMG no-repeat center !important;
-		border-right: solid 1px @HR_TOP;
-		border-left: solid 1px @HR_TOP;
+		border-right: solid 1px @GL_SPLITTER_TOP;
+		border-left: solid 1px @GL_SPLITTER_TOP;
 	}
 }
 #cn_favs {
@@ -53,34 +53,24 @@
 	}
 }
 #cn_fav_btns {
-  // border-bottom:solid @CN_FAV_BTNS_BORDER_COL 1px;
-  background:linear-gradient(lighten(@THEME_WIN_BG,5),@THEME_WIN_BG);
-  button{
-    background-color:@CN_FAV_MENU_BTN_BG;
-		// color:@CN_FAV_MENU_BTN_FG;
-		opacity: 0.5;
-		&:hover { opacity: 1; }
-		&:active { 
-			opacity: 1; 
-			background-color: @CN_FAV_MENU_BTN_FG;
-		}
-
-  }
+  background:linear-gradient(@CN_RHS_BG, @CN_RHS_BG2);
+  // button{
+	// 	color:@CN_FAV_MENU_BTN_FG;
+  //   background-color:@CN_FAV_MENU_BTN_BG;
+	// 	// opacity: 0.5;
+	// 	&:hover {
+	// 		color: @BUTTON_HOVER_COL;
+	// 	}
+	// 	&:active { 
+	// 		opacity: 1; 
+	// 		background-color: @CN_FAV_MENU_BTN_FG;
+	// 	}
 }
 #cn_lhs {
 	background: @CN_LHS_BG;
-  // border-right:1px solid @CN_HSPLIT_BORDER_COL;
 }
 #cn_rhs {
-	// background-color:@CN_RHS_BG;
-	background: linear-gradient(@THEME_WIN_BG, @THEME_WIN_BG2);
-	// button{
-	// 	color:@CN_RHS_BUTTON_FG;
-  //   background-color:@CN_RHS_BUTTON_BG;
-	// }
-	// label{
-	// 	color:@CN_LABEL_COL;
-	// }
+	background: linear-gradient(@CN_RHS_BG, @CN_RHS_BG2);
 }
 #cn_env_add {
 	color: #a9a9a9;

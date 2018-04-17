@@ -79,7 +79,11 @@
 }
 #cn_fav_btns * {
   text-align: center;
-  font-size: 20px;
+  font-size: 16px;
+}
+#cn_fav_btns .tb_btn {
+  height: 30px;
+  width: 30px;
 }
 #cn_rhs > * > .row,
 #cn_rhs > .row,
@@ -102,7 +106,6 @@
   overflow-x: hidden;
 }
 #cn_rhs button {
-  border-radius: 3px;
   padding: 8px;
 }
 #cn_rhs .col > input,
@@ -226,7 +229,6 @@
 .dlg_btns button {
   min-width: 75px;
   margin: 0 8px;
-  border-radius: 3px;
   padding: 8px;
 }
 .dlg_btns button.task {
@@ -1426,6 +1428,9 @@ input.lyt_g3:hover {
 #shc td .shc_editor .editor-widget.suggest-widget {
   width: 0;
 }
+#shc td > * {
+  vertical-align: middle;
+}
 #shc td:nth-child(3) {
   width: 50%;
 }
@@ -1522,8 +1527,6 @@ input.lyt_g3:hover {
   padding: 3px 5px;
 }
 #prf_dlg > hr {
-  border-top: 1px solid #f58221;
-  border-bottom: 1px solid #2e303e;
   margin-top: 0;
   margin-bottom: 15px;
 }
@@ -1544,7 +1547,6 @@ input.lyt_g3:hover {
   padding: 5px 10px 0;
 }
 #prf_content button {
-  border-radius: 3px;
   padding: 8px;
 }
 #prf_content select {
@@ -1560,13 +1562,7 @@ input.lyt_g3:hover {
   font-weight: 500;
 }
 div::-webkit-scrollbar {
-  width: 1em;
-}
-div::-webkit-scrollbar-track {
-  background-color: #1c1e28;
-}
-div::-webkit-scrollbar-thumb {
-  background-color: #313446;
+  width: 14px;
 }
 /* http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 License: none (public domain) */
 html,
@@ -1812,7 +1808,6 @@ h2 {
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
-  border-radius: 10%;
 }
 .tb_sep {
   margin: 0 8px 0 0;
@@ -2327,8 +2322,8 @@ body.floating-window {
   background-color: #a9a9a9;
   border-color: #a9a9a9;
   color: #a9a9a9;
-  border-top: 1px solid #f58221;
-  border-bottom: 1px solid #2e303e;
+  border-top: 1px solid #d7d7d3;
+  border-bottom: 1px solid white;
 }
 #cn .hsplitbar {
   background: #ffa336 url(img/grabber_vert_light.png) no-repeat center !important;
@@ -2337,7 +2332,7 @@ body.floating-window {
 }
 #cn_favs .go {
   border: 1px solid #ece6dd;
-  background: linear-gradient(to right bottom, #f5f2ed 50%, #ece6dd 50%);
+  background: linear-gradient(to right bottom, #ffa336 50%, #ff971c 50%);
 }
 #cn_favs > div.list_sel {
   background: #f9f7f4;
@@ -2356,24 +2351,13 @@ body.floating-window {
   opacity: 1;
 }
 #cn_fav_btns {
-  background: linear-gradient(#fefefd, #f5f2ed);
-}
-#cn_fav_btns button {
-  background-color: transparent;
-  opacity: 0.5;
-}
-#cn_fav_btns button:hover {
-  opacity: 1;
-}
-#cn_fav_btns button:active {
-  opacity: 1;
-  background-color: #ffa336;
+  background: linear-gradient(#f5f2ed, #f5f2ed);
 }
 #cn_lhs {
   background: #ece6dd;
 }
 #cn_rhs {
-  background: linear-gradient(#f5f2ed, white);
+  background: linear-gradient(#f5f2ed, #f5f2ed);
 }
 #cn_env_add {
   color: #a9a9a9;
@@ -2382,24 +2366,24 @@ body.floating-window {
   color: #ffa336;
 }
 .ctl_listview {
-  background-color: black;
+  background-color: #f5f2ed;
   color: black;
 }
 .ctl_listview tr {
-  background-color: #ffffff;
-  border-bottom: 1px solid #f5f2ed;
+  background-color: #ece6dd;
+  border-bottom: 1px solid #ffa336;
 }
 .ctl_listview tr:hover {
   background-color: #4d5571;
 }
 .ctl_listview tr.selected {
-  background-color: #1c1e28;
+  background-color: #f58221;
 }
 #debug {
-  background: black;
+  background: #f5f2ed;
 }
 #debug .ctl_listview_header {
-  background-color: #f0ebe3;
+  background-color: #f5f2ed;
 }
 /*various dialogs*/
 .dlg {
@@ -2430,7 +2414,7 @@ body.floating-window {
   color: blue;
 }
 .dlg_btns {
-  background-color: #313446;
+  background-color: #d3d3d3;
 }
 .dlg_btns button {
   color: #4c4a4a;
@@ -2480,7 +2464,7 @@ body.floating-window {
   background: #ffa336 url(img/grabber_vert_light.png) no-repeat center !important;
 }
 .lm_splitter.lm_vertical {
-  background: #ffa336 url(img/grabber_hor.png) no-repeat center !important;
+  background: #ffa336 url(img/grabber_hor_light.png) no-repeat center !important;
 }
 .lm_header .lm_tab .lm_close_tab {
   background-image: none !important;
@@ -2507,6 +2491,11 @@ label.cb_label {
 button {
   background: #ffa336;
   color: #4c4a4a;
+  border-radius: 4px;
+  background-image: -moz-linear-gradient(90deg, #ffa336 0%, #ffc336 100%);
+  background-image: -webkit-linear-gradient(90deg, #ffa336 0%, #ffc336 100%);
+  background-image: -ms-linear-gradient(90deg, #ffa336 0%, #ffc336 100%);
+  box-shadow: 0px 2px 2px 0px rgba(19, 19, 19, 0.2);
 }
 button:hover {
   color: white;
@@ -2519,11 +2508,11 @@ button:hover {
   background-color: #ffa336;
 }
 [type=checkbox]:hover::before {
-  background: #ffffff;
+  background: #ffba69;
 }
 [type=checkbox]:active::before {
   background: #ffa336;
-  color: #ffffff;
+  color: #ffba69;
 }
 [type=checkbox]:checked::before {
   color: #ffa336;
@@ -2534,7 +2523,7 @@ button:hover {
 [type=checkbox]:disabled::before {
   color: transparent;
   box-shadow: 0 0 0 1px #ffa336 inset;
-  background: #ffffff;
+  background: #ffba69;
 }
 [type=checkbox]:checked:disabled::before {
   color: grayscale(#ffa336);
@@ -2624,8 +2613,8 @@ select {
   background: #ffffff 5px center no-repeat url(img/menu_chk_wht.png);
 }
 #prf_dlg hr {
-  border-top: 1px solid #f58221;
-  border-bottom: 1px solid #2e303e;
+  border-top: 1px solid #d7d7d3;
+  border-bottom: 1px solid white;
 }
 #prf_nav {
   font-family: Roboto;
@@ -2644,8 +2633,9 @@ select {
   color: #ffa336;
 }
 #prf_dlg_cancel {
-  background-color: transparent;
+  background: transparent!important;
   border: 1px solid #717b9e;
+  box-shadow: none!important;
   color: #717b9e;
 }
 #prf_dlg_cancel:hover {
@@ -2695,22 +2685,23 @@ input.lyt_g3:hover {
 #lyt_43:before {
   background-color: lightgrey;
 }
-#shc td {
-  color: #ffa336;
-}
 #shc_tbl_wr tr {
-  background-color: #ffffff;
+  background-color: #ece6dd;
   border-bottom: 1px solid #f5f2ed;
   color: white;
   font-family: Roboto;
   font-weight: 300;
 }
 #shc_tbl_wr tr:hover {
-  background-color: #4d5571;
+  background-color: #ffffff;
 }
 #shc_tbl_wr tr button {
-  background-color: transparent !important;
-  color: white;
+  background: transparent !important;
+  box-shadow: none!important;
+  color: #ffa336;
+}
+#shc_tbl_wr tr button:hover {
+  color: #f58221;
 }
 #shc_tbl_wr tr .shc_code {
   font-size: 16px;
@@ -2720,7 +2711,7 @@ input.lyt_g3:hover {
 #shc_tbl_wr tr .shc_key {
   font-size: 14px;
   font-weight: 500;
-  border: solid #f5f2ed 1px;
+  border: solid #ffa336 1px;
 }
 #shc_tbl_wr tr .shc_key.shc_del_hvr {
   border-color: red;
@@ -2737,6 +2728,9 @@ input.lyt_g3:hover {
   background-color: red;
   color: white;
   border-color: darkred;
+}
+#shc_tbl_wr tr td {
+  color: #a9a9a9;
 }
 #shc_sc_clr {
   color: grey;
@@ -2762,29 +2756,37 @@ input.lyt_g3:hover {
   text-decoration: none;
 }
 #title pre a:hover {
-  color: white;
+  color: #f58221;
 }
 #pmenu #pmenu_ta {
   font-family: monospace;
 }
+div::-webkit-scrollbar-track {
+  background-color: #ffa336;
+  border-left: 1px solid #f58221;
+}
+div::-webkit-scrollbar-thumb {
+  border-left: 1px solid #f58221;
+  background-color: #ffc683;
+}
 #ide {
-  background: url(img/RideSplashLogo.png) center no-repeat #f5f2ed;
+  background: url(img/RideSplashLogo.png) center no-repeat #ffa336;
 }
 #apl_font {
-  color: #f5f2ed;
+  color: #ffa336;
 }
 ::selection {
-  background: #ffffff;
+  background: #ffba69;
   color: white;
 }
 /*must be separate rules*/
 ::-moz-selection {
-  background: #ffffff;
+  background: #ffba69;
   color: white;
 }
 /*must be separate rules*/
 body {
-  font-family: Verdana, "BitStream Vera Sans", "DejaVu Sans", sans-serif;
+  font-family: Roboto, sans-serif;
 }
 #demo-keys span {
   border: solid #333 1px;
@@ -2804,25 +2806,22 @@ h2 {
 .toolbar {
   background-color: #f5f2ed;
 }
-.toolbar .tb_btn {
+.tb_btn {
   color: #ffa336;
   background: transparent;
+  box-shadow: none!important;
+  border-radius: 0!important;
   font-size: 18px;
 }
-.toolbar .tb_btn:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+.tb_btn:hover {
+  color: #f58221;
+}
+.tb_btn:active,
+.tb_btn.pressed {
+  background-color: rgba(0, 0, 0, 0.2);
   color: white;
 }
-.toolbar .tb_btn:active {
-  background-color: rgba(0, 0, 0, 0.2);
-}
-.toolbar .tb_btn.pressed {
-  background-color: rgba(0, 0, 0, 0.2);
-}
-.toolbar .tb_btn .tb_dot {
-  color: #f5f2ed;
-}
-.toolbar .tb_sep {
+.tb_sep {
   border: 0 solid #ffa336;
   border-right-width: 1px;
 }
@@ -2836,12 +2835,12 @@ h2 {
 }
 #wse {
   background-color: #f5f2ed;
-  color: white;
+  color: black;
 }
 #wse .bt_text::before {
   color: #1c1e28;
 }
 #wse .bt_text.selected {
-  background-color: #ffffff;
-  outline: #ffffff;
+  background-color: #d3d3d3;
+  outline: #d3d3d3;
 }

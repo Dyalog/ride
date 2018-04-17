@@ -1,23 +1,22 @@
 .toolbar{
   background-color: @TOOLBAR_BG_COL;
-  .tb_btn {
-    color:@INPUT_COL;
-    background: transparent;
-    font-size: 18px;
-    &:hover{
-      background-color: rgba(0,0,0,0.1);
-      color:@INPUT_HOVER_COL;
-    }
-    &:active {
-      background-color:rgba(0,0,0,0.2);
-    }
-    &.pressed{background-color:rgba(0,0,0,0.2)}
-    .tb_dot {
-      color:@THEME_SECONDARY;
-    }
-  }
-  .tb_sep{
-    border: 0 solid @GL_BG;
-    border-right-width: 1px;
-  }  
 }
+.tb_btn {
+  color:@INPUT_COL;
+  background: transparent;
+  box-shadow: none!important;
+  border-radius: 0!important;
+  font-size: 18px;
+  &:hover{
+    // background-color: rgba(0,0,0,0.1);
+    color:@INPUT_HOVER_COL;
+  }
+  &:active, &.pressed {
+    background-color:rgba(0,0,0,0.2);
+    color:white;
+  }
+}
+.tb_sep{
+  border: 0 solid @GL_BG;
+  border-right-width: 1px;
+}  

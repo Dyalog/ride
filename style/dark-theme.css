@@ -79,7 +79,11 @@
 }
 #cn_fav_btns * {
   text-align: center;
-  font-size: 20px;
+  font-size: 16px;
+}
+#cn_fav_btns .tb_btn {
+  height: 30px;
+  width: 30px;
 }
 #cn_rhs > * > .row,
 #cn_rhs > .row,
@@ -102,7 +106,6 @@
   overflow-x: hidden;
 }
 #cn_rhs button {
-  border-radius: 3px;
   padding: 8px;
 }
 #cn_rhs .col > input,
@@ -226,7 +229,6 @@
 .dlg_btns button {
   min-width: 75px;
   margin: 0 8px;
-  border-radius: 3px;
   padding: 8px;
 }
 .dlg_btns button.task {
@@ -1033,7 +1035,7 @@ body .ui-tooltip {
   cursor: default;
   padding: 0;
   margin: 2px 0 0 0;
-  font-family: sans-serif;
+  font-family: Roboto, sans-serif;
 }
 .menu a {
   text-decoration: none;
@@ -1426,6 +1428,9 @@ input.lyt_g3:hover {
 #shc td .shc_editor .editor-widget.suggest-widget {
   width: 0;
 }
+#shc td > * {
+  vertical-align: middle;
+}
 #shc td:nth-child(3) {
   width: 50%;
 }
@@ -1522,8 +1527,6 @@ input.lyt_g3:hover {
   padding: 3px 5px;
 }
 #prf_dlg > hr {
-  border-top: 1px solid black;
-  border-bottom: 1px solid #2e303e;
   margin-top: 0;
   margin-bottom: 15px;
 }
@@ -1544,7 +1547,6 @@ input.lyt_g3:hover {
   padding: 5px 10px 0;
 }
 #prf_content button {
-  border-radius: 3px;
   padding: 8px;
 }
 #prf_content select {
@@ -1560,13 +1562,7 @@ input.lyt_g3:hover {
   font-weight: 500;
 }
 div::-webkit-scrollbar {
-  width: 1em;
-}
-div::-webkit-scrollbar-track {
-  background-color: #1c1e28;
-}
-div::-webkit-scrollbar-thumb {
-  background-color: #313446;
+  width: 14px;
 }
 /* http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 License: none (public domain) */
 html,
@@ -1812,7 +1808,6 @@ h2 {
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
-  border-radius: 10%;
 }
 .tb_sep {
   margin: 0 8px 0 0;
@@ -2356,18 +2351,7 @@ body.floating-window {
   opacity: 1;
 }
 #cn_fav_btns {
-  background: linear-gradient(#272937, #1c1e28);
-}
-#cn_fav_btns button {
-  background-color: transparent;
-  opacity: 0.5;
-}
-#cn_fav_btns button:hover {
-  opacity: 1;
-}
-#cn_fav_btns button:active {
-  opacity: 1;
-  background-color: #f77811;
+  background: linear-gradient(#1c1e28, black);
 }
 #cn_lhs {
   background: #111319;
@@ -2507,6 +2491,11 @@ label.cb_label {
 button {
   background: #f77811;
   color: #4c4a4a;
+  border-radius: 4px;
+  background-image: -moz-linear-gradient(90deg, #ffa336 0%, #ffc336 100%);
+  background-image: -webkit-linear-gradient(90deg, #ffa336 0%, #ffc336 100%);
+  background-image: -ms-linear-gradient(90deg, #ffa336 0%, #ffc336 100%);
+  box-shadow: 0px 2px 2px 0px rgba(19, 19, 19, 0.2);
 }
 button:hover {
   color: white;
@@ -2644,8 +2633,9 @@ select {
   color: #f77811;
 }
 #prf_dlg_cancel {
-  background-color: transparent;
+  background: transparent!important;
   border: 1px solid #717b9e;
+  box-shadow: none!important;
   color: #717b9e;
 }
 #prf_dlg_cancel:hover {
@@ -2695,9 +2685,6 @@ input.lyt_g3:hover {
 #lyt_43:before {
   background-color: lightgrey;
 }
-#shc td {
-  color: #f77811;
-}
 #shc_tbl_wr tr {
   background-color: #313446;
   border-bottom: 1px solid #1c1e28;
@@ -2709,7 +2696,11 @@ input.lyt_g3:hover {
   background-color: #4d5571;
 }
 #shc_tbl_wr tr button {
-  background-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none!important;
+  color: white;
+}
+#shc_tbl_wr tr button:hover {
   color: white;
 }
 #shc_tbl_wr tr .shc_code {
@@ -2737,6 +2728,9 @@ input.lyt_g3:hover {
   background-color: red;
   color: white;
   border-color: darkred;
+}
+#shc_tbl_wr tr td {
+  color: #f77811;
 }
 #shc_sc_clr {
   color: grey;
@@ -2767,6 +2761,14 @@ input.lyt_g3:hover {
 #pmenu #pmenu_ta {
   font-family: monospace;
 }
+div::-webkit-scrollbar-track {
+  background-color: #1c1e28;
+  border-left: 1px solid black;
+}
+div::-webkit-scrollbar-thumb {
+  border-left: 1px solid black;
+  background-color: #313446;
+}
 #ide {
   background: url(img/RideSplashLogo.png) center no-repeat #1c1e28;
 }
@@ -2784,7 +2786,7 @@ input.lyt_g3:hover {
 }
 /*must be separate rules*/
 body {
-  font-family: Verdana, "BitStream Vera Sans", "DejaVu Sans", sans-serif;
+  font-family: Roboto, sans-serif;
 }
 #demo-keys span {
   border: solid #333 1px;
@@ -2804,25 +2806,22 @@ h2 {
 .toolbar {
   background-color: #38393f;
 }
-.toolbar .tb_btn {
+.tb_btn {
   color: #f77811;
   background: transparent;
+  box-shadow: none!important;
+  border-radius: 0!important;
   font-size: 18px;
 }
-.toolbar .tb_btn:hover {
-  background-color: rgba(0, 0, 0, 0.1);
+.tb_btn:hover {
   color: white;
 }
-.toolbar .tb_btn:active {
+.tb_btn:active,
+.tb_btn.pressed {
   background-color: rgba(0, 0, 0, 0.2);
+  color: white;
 }
-.toolbar .tb_btn.pressed {
-  background-color: rgba(0, 0, 0, 0.2);
-}
-.toolbar .tb_btn .tb_dot {
-  color: #717b9e;
-}
-.toolbar .tb_sep {
+.tb_sep {
   border: 0 solid #1c1e28;
   border-right-width: 1px;
 }

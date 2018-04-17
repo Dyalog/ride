@@ -20,10 +20,10 @@
   <div id="cn_lhs" class="col col-xs-3">
     <div id=cn_favs></div>
     <div id=cn_fav_btns class="row">
-      <div class="col col-xs-3"><button id=cn_neu><span class="fas fa-plus-square"></span></button></div>
-      <div class="col col-xs-3"><button id=cn_cln><span class="fas fa-clone"></span></button></div>
-      <div class="col col-xs-3"><button id=cn_del><span class="fas fa-minus-square"></span></button></div>
-      <div class="col col-xs-3"><button id=cn_sve><span class="fas fa-save"></span></button></div>
+      <div class="col col-xs-3"><button id=cn_neu class=tb_btn title="New"><span class="fas fa-plus-square"></span></button></div>
+      <div class="col col-xs-3"><button id=cn_cln class=tb_btn title="Clone"><span class="fas fa-clone"></span></button></div>
+      <div class="col col-xs-3"><button id=cn_del class=tb_btn title="Delete"><span class="fas fa-minus-square"></span></button></div>
+      <div class="col col-xs-3"><button id=cn_sve class=tb_btn title="Save"><span class="fas fa-save"></span></button></div>
     </div>
   </div>
   <div id="cn_rhs" class="col col-xs-9">
@@ -316,13 +316,13 @@
     <div class=ctl_listview_header><h2>Threads</h2></div>
     <div class=toolbar>
       <a href=# class='tb_btn tb_TR' title='Refresh now'>
-        <span class="fas fa-sync-alt" data-fa-transform="shrink-2"></span>
+        <span class="fas fa-fw fa-sync-alt" data-fa-transform="shrink-2"></span>
       </a>
       <a href=# class='tb_btn tb_RM' title='Continue execution of this thread'>
-        <span class="fas fa-angle-right"></span>
+        <span class="fas fa-fw fa-angle-right"></span>
       </a>
       <a href=# class='tb_btn tb_MA' title='Continue execution of all threads'>
-        <span class="fas fa-angle-double-right"></span>
+        <span class="fas fa-fw fa-angle-double-right"></span>
       </a>
     </div>
     <div id=threads hidden></div>
