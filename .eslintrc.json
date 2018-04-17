@@ -14,7 +14,8 @@
         "J":true,
         "D":true,
         "monaco":true,
-        "GoldenLayout":true
+        "GoldenLayout":true,
+        "toastr":true
 
     },
     "rules" : {

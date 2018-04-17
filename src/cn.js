@@ -49,15 +49,20 @@
     const d = D.el.app.getPath('userData');
     const f = `${d}/connections.json`;
     if (((+fs.statSync(f).mtime) !== D.conns_modified)) {
-      const r = window.confirm('Connections file has been modified, do you want to overwrite with your changes?');
+      const r = $.confirm('Connections file has been modified, do you want to overwrite with your changes?');
       if (!r) return;
     }
     const a = q.favs.children;
     const b = [];
     for (let i = 0; i < a.length; i++) b[i] = a[i].cnData;
     D.conns = b;
-    fs.writeFileSync(f, JSON.stringify(D.conns));
-    D.conns_modified = +fs.statSync(f).mtime;
+    try {
+      fs.writeFileSync(f, JSON.stringify(D.conns));
+      D.conns_modified = +fs.statSync(f).mtime;
+      toastr.success(f, 'Configuration saved.');
+    } catch (e) {
+      toastr.error(`${e.name}: ${e.message}`, 'Save failed');
+    }
   };
   const favText = x => x.name || 'unnamed';
   const favDOM = (x) => {

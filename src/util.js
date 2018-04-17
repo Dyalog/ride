@@ -109,6 +109,7 @@ $.err = (m, t, f) => {
   f && f();
 };
 $.confirm = (m, t, f) => {
-  f(D.el ? 1 - D.el.dialog.showMessageBox(D.elw, { message: m, title: t, type: 'question', buttons: ['Yes', 'No'], cancelId: 1 })
-    : +confirm(m));
+  f(D.el ? 1 - D.el.dialog.showMessageBox(D.elw, {
+    message: m, title: t, type: 'question', buttons: ['Yes', 'No'], cancelId: 1,
+  }) : +confirm(m));
 };
