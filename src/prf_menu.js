@@ -43,7 +43,7 @@
     const lines = md.split('\n');
     const cb = cmd => () => {
       const f = D.commands[cmd];
-      const w = f && !D.ide ? {} : D.ide.focusedWin;
+      const w = (D.ide || {}).focusedWin || {};
       if (f) f(w.me);
       else if (D.ide[cmd]) D.ide[cmd]();
       else $.err(`Unknown command: ${cmd}`);
