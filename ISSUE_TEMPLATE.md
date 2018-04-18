@@ -8,5 +8,6 @@
 <!-- instructions to reproduce -->
 
 ### Paste the contents of Help → About (Shift+F1)
-<!-- Paste Here -->
-
+```
+(Paste here)
+```
