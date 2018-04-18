@@ -13,6 +13,9 @@
     padding-left: 5px;
     line-height: 24px;
   }
+  select {
+    height:26px;
+  }
 
   label{
     font-weight:600;
@@ -103,8 +106,12 @@
     padding:8px;
   }
   .col{
-    >input,>select,>button{
+    // >input,>select,>button{
+    >input,>select{
       width:100%;
+      &.browse {
+        width: calc(100% - 35px);
+      }
     }
   }
 }

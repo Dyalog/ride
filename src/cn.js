@@ -68,7 +68,7 @@
   const favDOM = (x) => {
     const e = document.createElement('div');
     e.cnData = x;
-    e.innerHTML = `<span class=name>${esc(favText(x))}</span><button class=go><span class="fas fa-play"></span></button>`;
+    e.innerHTML = `<span class=name>${esc(favText(x))}</span><button class="go tb_btn"><span class="fas fa-play"></span></button>`;
     return e;
   };
   const updExes = () => {
@@ -98,6 +98,7 @@
     q.tcp_port.disabled = t === 'start' && s === 'raw';
     q.tcp_host.disabled = t === 'listen' || (t === 'start' && s === 'raw');
     q.ssl.hidden = s !== 'ssl';
+    q.fetch.disabled = q.ssh.hidden;
     updExes();
   };
   const updFormDtl = () => {
@@ -693,7 +694,7 @@
       cursor: 'move',
       revert: true,
       axis: 'y',
-      stop: save,
+      // stop: save,
     })
       .on('click', '.go', (e) => {
         const t = $(e.target);
@@ -709,7 +710,7 @@
           default: return !0;
         }
       })
-      .on('list-order-changed', save)
+      // .on('list-order-changed', save)
       .on('list-selection-changed', () => {
         $sel = $('.list_sel', q.favs);
         const u = $sel.length === 1; // is selection unique?

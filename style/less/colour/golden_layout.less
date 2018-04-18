@@ -16,11 +16,11 @@
 	font-size: 12px;
 	background-color: @GL_TAB_BG !important;
 	color: @GL_TAB_FG !important;
-	border:1px @GL_TAB_BRD_BG solid !important;
+	border-right:1px @GL_TAB_BRD_BG solid !important;
 }
 .lm_tab.lm_active {
 	background-color: @GL_ACT_TAB_BG !important;
-	border:1px @GL_ACT_TAB_BG solid !important;
+	border-right:1px @GL_TAB_BRD_BG solid !important;
 	color: @GL_ACT_TAB_FG !important;
 	.lm_close_tab{
 		color: @GL_ACT_TAB_FG !important;
@@ -28,14 +28,18 @@
 }
 .lm_splitter{
 	background-color:@GL_SPLITTER !important;
-	outline: solid 1px @GL_SPLITTER_TOP;
+	// outline: solid 1px @GL_SPLITTER_TOP;
 }
 
 .lm_splitter.lm_horizontal {
 	background:@GL_SPLITTER @GL_SPLITTERV_IMG no-repeat center !important;
+	box-shadow: -1px 0 0 @GL_SPLITTER_TOP inset,
+				 1px 0 0 @GL_SPLITTER_TOP inset;
 }
 .lm_splitter.lm_vertical {
 	background:@GL_SPLITTER @GL_SPLITTERH_IMG no-repeat center !important;
+	box-shadow: 0 -1px 0 @GL_SPLITTER_TOP inset,
+				0  1px 0 @GL_SPLITTER_TOP inset;
 }
 .lm_header .lm_tab .lm_close_tab{
 	&::before {content: "×";}

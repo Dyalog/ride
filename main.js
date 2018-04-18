@@ -71,7 +71,7 @@ el.app.on('ready', () => {
     height,
     show: 0,
     icon: `${__dirname}/D.png`,
-    backgroundColor: db.theme === 'dark' ? '#1c1e28' : '#ffa336',
+    backgroundColor: db.theme === 'dark' ? '#1c1e28' : '#f77811',
   });
 
   el.Menu.setApplicationMenu(null);

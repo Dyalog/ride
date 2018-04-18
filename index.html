@@ -84,12 +84,9 @@
         </div>
         <div class="row">
           <div class="col col-xs-3"><label for=cn_ssh_key class=cn_label><u>K</u>ey file:</label></div>
-          <div class="col col-xs-6"><input id=cn_ssh_key name=ssh_key></div>
-          <div class="col col-xs-3"><button id=cn_ssh_key_dots>Browse...</button></div>
-        </div>
-        <div class="row">
-          <div class="col col-xs-9 col-xs-offset-3">
-            <button id=cn_fetch><u>F</u>etch list of interpreters through ssh</button>
+          <div class="col col-xs-9">
+            <input id=cn_ssh_key name=ssh_key class=browse>
+            <button id=cn_ssh_key_dots class=tb_btn><span class="fas fa-ellipsis-h"></span></button>
           </div>
         </div>
       </div>
@@ -108,11 +105,9 @@
           </div>
           <div class="col col-xs-9">
             <div class="row">
-              <div class="col col-xs-8">
-                <input id=cn_cert name=cert placeholder="PEM file">
-              </div>
-              <div class="col col-xs-4">
-                <button id=cn_cert_dots>Browse...</button>
+              <div class="col col-xs-12">
+                <input id=cn_cert name=cert placeholder="PEM file" class=browse>
+                <button id=cn_cert_dots class=tb_btn><span class="fas fa-ellipsis-h"></span></button>
               </div>
             </div>
           </div>
@@ -123,11 +118,9 @@
           </div>
           <div class="col col-xs-9">
             <div class="row">
-              <div class="col col-xs-8">
-                <input id=cn_key name=key placeholder="PEM file">
-              </div>
-              <div class="col col-xs-4">
-                <button id=cn_key_dots>Browse...</button>
+              <div class="col col-xs-12">
+                <input id=cn_key name=key placeholder="PEM file" class=browse>
+                <button id=cn_key_dots class=tb_btn><span class="fas fa-ellipsis-h"></span></button>
               </div>
             </div>
           </div>
@@ -146,11 +139,9 @@
           </div>
           <div class="col col-xs-9">
             <div class="row">
-              <div class="col col-xs-8">
-                <input id=cn_rootcertsdir name=rootcertsdir placeholder="PEM files">
-              </div>
-              <div class="col col-xs-4">
-                <button id=cn_rootcertsdir_dots>Browse...</button>
+              <div class="col col-xs-12">
+                <input id=cn_rootcertsdir name=rootcertsdir placeholder="PEM files" class=browse>
+                <button id=cn_rootcertsdir_dots class=tb_btn><span class="fas fa-ellipsis-h"></span></button>
               </div>
             </div>
           </div>
@@ -167,7 +158,12 @@
       <div id=cn_start hidden>
         <div class="row">
           <div class="col col-xs-3"><label for=cn_exes class=cn_label><u>I</u>nterpreter:</label></div>
-          <div class="col col-xs-9"><select id=cn_exes name=exes class=cn_select></select></div>
+          <div class="col col-xs-9">
+            <select id=cn_exes name=exes class="cn_select browse"></select>
+            <button id=cn_fetch class=tb_btn title="Fetch list of interpreters through ssh">
+              <span class="fas fa-sync-alt"></span>
+            </button>
+          </div>
         </div>
         <div class="row">
           <div class="col col-xs-9 col-xs-offset-3">
