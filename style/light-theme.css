@@ -1014,9 +1014,15 @@ body .ui-tooltip {
   font-family: apl, monospace;
   font-size: 18px;
   position: absolute;
-  padding: 8px;
-  margin-top: 16px;
+  margin-top: 6px;
   border-radius: 2px;
+}
+#lb_tip hr {
+  margin: 0;
+}
+#lb_tip div,
+#lb_tip pre {
+  padding: 8px;
 }
 #lb_tip_tri {
   position: absolute;
@@ -1025,16 +1031,8 @@ body .ui-tooltip {
   content: "";
 }
 #lb_tip_desc {
-  font-family: apl, monospace;
-  font-size: 18px;
-  padding-bottom: 8px;
-  margin-bottom: 8px;
   text-align: center;
   text-transform: uppercase;
-}
-#lb_tip_text {
-  font-family: apl, monospace;
-  font-size: 18px;
 }
 /*menu (see ../src/menu.js for the DOM structure)*/
 .menu {
@@ -2536,11 +2534,11 @@ select {
   color: #f77811;
 }
 #lb {
-  background-color: #faf9f7;
+  background-color: #f5f2ed;
   border-bottom: 1px #9e4f06 solid;
 }
 #lb #lb_inner {
-  background: #faf9f7;
+  background: #f5f2ed;
 }
 #lb b {
   color: #f77811;
@@ -2549,7 +2547,7 @@ select {
   background-color: rgba(255, 255, 255, 0.2);
 }
 #lb b:active {
-  background-color: rgba(214, 202, 181, 0.2);
+  background-color: rgba(209, 195, 171, 0.2);
 }
 #lb .lb_placeholder {
   background: rgba(0, 0, 0, 0.2);
@@ -2561,21 +2559,16 @@ select {
   background-color: rgba(255, 255, 255, 0.2);
 }
 #lb_prf:active {
-  background-color: rgba(214, 202, 181, 0.2);
+  background-color: rgba(209, 195, 171, 0.2);
 }
 #lb_tip {
-  background: #faf9f7;
-  box-shadow: none;
-  color: white;
+  background: #f5f2ed;
+  border: 1px solid #d7d7d3;
+  color: black;
 }
-#lb_tip_tri {
-  border-color: #faf9f7;
-  border-left-color: transparent !important;
-  border-right-color: transparent !important;
-  background-color: transparent !important;
-}
-#lb_tip_desc {
-  border-bottom: solid 1px black;
+#lb_tip hr {
+  border-top: 1px solid #d7d7d3;
+  border-bottom: 1px solid white;
 }
 /*menu (see ../src/menu.js for the DOM structure)*/
 .menu {

@@ -115,11 +115,8 @@ D.IDE = function IDE(opts = {}) {
       ttid = 0;
       I.lb_tip_desc.textContent = desc;
       I.lb_tip_text.textContent = text;
-      I.lb_tip.hidden = 0; I.lb_tip_tri.hidden = 0;
-      let s = I.lb_tip_tri.style;
-      s.left = `${(t.offsetLeft + ((t.offsetWidth - I.lb_tip_tri.offsetWidth) / 2))}px`;
-      s.top = `${(t.offsetTop + t.offsetHeight)}px`;
-      s = I.lb_tip.style;
+      I.lb_tip.hidden = 0;
+      const s = I.lb_tip.style;
       const x0 = t.offsetLeft - 21;
       const x1 = x0 + I.lb_tip.offsetWidth;
       const y0 = (t.offsetTop + t.offsetHeight) - 3;
@@ -141,7 +138,7 @@ D.IDE = function IDE(opts = {}) {
   };
   I.lb.onmouseout = (x) => {
     if (x.target.nodeName === 'B' || x.target.id === 'lb_prf') {
-      clearTimeout(ttid); ttid = 0; I.lb_tip.hidden = 1; I.lb_tip_tri.hidden = 1;
+      clearTimeout(ttid); ttid = 0; I.lb_tip.hidden = 1;
     }
   };
   I.lb.onmouseover = (x) => {

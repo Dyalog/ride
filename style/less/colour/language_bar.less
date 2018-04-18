@@ -31,16 +31,10 @@
 }
 #lb_tip {
 	background: @LB_TIP_BG;
-	//box-shadow: 0 18px 48px @TRANSLUCENT_BLACK;
-	box-shadow:none;
+	border: 1px solid @LB_TIP_BORDER;
 	color:@LB_TIP_COL;
-}
-#lb_tip_tri {
-	border-color: @LB_TIP_BG;
-	border-left-color: transparent !important;
-	border-right-color: transparent !important;
-	background-color: transparent !important;
-}
-#lb_tip_desc {
-	border-bottom: solid 1px @LB_TIP_HR;
+	hr{
+		border-top: 1px solid @HR_TOP;
+		border-bottom: 1px solid @HR_BTM;
+	}
 }
