@@ -2359,6 +2359,7 @@ body.floating-window {
 #cn_lhs {
   background: #ece6dd;
 }
+#cn,
 #cn_rhs {
   background: linear-gradient(#f5f2ed, #f5f2ed);
 }

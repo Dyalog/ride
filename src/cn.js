@@ -597,7 +597,10 @@
                 };
               });
               updExes();
-              sel && (sel.exe = q.exe.value);
+              if (sel) {
+                sel.exe = q.exe.value;
+                sel.exes = interpretersSSH;
+              }
               q.fetch.disabled = 0;
               c.end();
             })
@@ -722,6 +725,7 @@
           $(':checkbox[name]', q.rhs).each((_, x) => { x.checked = !!+sel[x.name]; });
           q.type.value = sel.type || 'connect';
           q.subtype.value = sel.subtype || 'raw';
+          interpretersSSH = sel.exes || [];
           updFormDtl();
           updExes();
           q.fav_name.value = sel.name || '';
@@ -742,6 +746,7 @@
           q.rootcertsdir_cb.checked = !!sel.rootcertsdir;
           q.rootcertsdir.disabled = !sel.rootcertsdir;
           q.rootcertsdir_dots.disabled = !sel.rootcertsdir;
+          q.exe.disabled = !!q.exes.value;
           q.exe.onchange();
         }
       })
