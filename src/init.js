@@ -22,6 +22,7 @@ const Console = console;
         .concat(['Undo', 'Redo'].map(x => ({
           label: x,
           click: () => {
+            if (!D.ide) return;
             const u = D.ide.focusedWin;
             const { me } = u;
             if (u && me[x.toLowerCase()]) me[x.toLowerCase()]();
@@ -170,12 +171,14 @@ const Console = console;
       window.ondrop = (e) => {
         const { files } = e.dataTransfer;
         const { path } = (files[0] || {});
-        if (!D.lastSpawnedExe) {
-          $.err('Drag and drop of workspaces works only for locally started interpreters.');
+        if (!D.ide || !path) {
+          // no session or no file dragged
+        } else if (!D.lastSpawnedExe) {
+          toastr.error('Drag and drop of workspaces works only for locally started interpreters.', 'Drop failed');
         } else if (!/\.dws$/i.test(path)) {
-          $.err('RIDE supports drag and drop only for .dws files.');
-        } else if (a.length !== 1) {
-          $.err('RIDE does not support dropping of multiple files.');
+          toastr.error('RIDE supports drag and drop only for .dws files.');
+        } else if (files.length !== 1) {
+          toastr.error('RIDE does not support dropping of multiple files.');
         } else {
           $.confirm(
             `Are you sure you want to )load ${path.replace(/^.*[\\/]/, '')}?`,
