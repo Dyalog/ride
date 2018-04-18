@@ -22,14 +22,14 @@ let tid;
 let dx = 0;
 let dy = 0; // used to correct for bad coords misreported by Electron (NW.js has the same problem)
 
+const h = {};
+global.winstate = h;
 const svNow = () => { // save now
   tid = 0;
   try {
     const bounds = elw.getBounds();
-    const h = {
-      main: [bounds.x - dx, bounds.y - dy, bounds.width, bounds.height, elw.isMaximized()],
-      devTools: elw.isDevToolsOpened(),
-    };
+    h.main = [bounds.x - dx, bounds.y - dy, bounds.width, bounds.height, elw.isMaximized()];
+    h.devTools = elw.isDevToolsOpened();
     fs.writeFileSync(dbf, JSON.stringify(h));
   } catch (e) { console.error(e); }
 };
@@ -65,7 +65,13 @@ el.app.on('ready', () => {
 
   // create an electron renderer
   global.elw = new el.BrowserWindow({
-    x, y, width, height, show: 0, icon: `${__dirname}/D.png`,
+    x,
+    y,
+    width,
+    height,
+    show: 0,
+    icon: `${__dirname}/D.png`,
+    backgroundColor: db.theme === 'dark' ? '#1c1e28' : '#ffa336',
   });
 
   el.Menu.setApplicationMenu(null);

@@ -2434,7 +2434,7 @@ body.floating-window {
 }
 /*Golden Layout*/
 .lm_goldenlayout {
-  background: url(img/RideSplashLogo.png) center no-repeat #1c1e28 !important;
+  background: #1c1e28 !important;
 }
 .lm_goldenlayout .lm_header {
   background: #1c1e28 !important;
