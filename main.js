@@ -22,7 +22,7 @@ let tid;
 let dx = 0;
 let dy = 0; // used to correct for bad coords misreported by Electron (NW.js has the same problem)
 
-const h = {};
+const h = { theme: 'light' };
 global.winstate = h;
 const svNow = () => { // save now
   tid = 0;
