@@ -125,7 +125,10 @@ D.IPC_Server = function IPCServer() {
       D.el.BrowserWindow.fromId(D.prf_bw.id).hide();
       D.ide && D.ide.focusMRUWin();
     });
-    srv.on('dialogCreated', (data, socket) => { D.dlg_bw.socket = socket; });
+    srv.on('dialogCreated', (data, socket) => {
+      D.dlg_bw.socket = socket;
+      srv.emit(socket, 'setTheme', D.theme);
+    });
     srv.on('dialogClose', (x) => {
       D.send('ReplyTaskDialog', x);
       D.el.BrowserWindow.fromId(D.dlg_bw.id).hide();

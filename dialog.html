@@ -3,7 +3,8 @@
 <head>
   <meta charset=utf-8>
   <title>Task</title>
-  <link rel=stylesheet href='style/dark-theme.css'>
+  <link rel=stylesheet class=theme id=theme_dark href='style/dark-theme.css'>
+  <link rel=stylesheet class=theme id=theme_light href='style/light-theme.css'>
   <script defer src="lib/fontawesome-all.min.js"></script>
 </head>
 <body>
@@ -36,6 +37,10 @@
         window.close();
       });
       rm.on('show', (opts) => show(opts));
+      rm.on('setTheme', (theme) => {
+        document.getElementById('theme_dark').disabled = theme !== 'dark';
+        document.getElementById('theme_light').disabled = theme !== 'light';
+      });
     });
 
     const gd_content = document.getElementById('gd_content');
@@ -48,7 +53,7 @@
       gd_content.innerHTML = esc(x.text || '') + (x.subtext ? `<div class=task_subtext>${esc(x.subtext)}</div>` : '');
       let btns = (x.buttonText || []).map((y) => {
         const [caption, ...details] = esc(y).split('\n');
-        return '<button class=task><div class="btn_icon"><span class="far fa-long-arrow-right"></span></div>' +
+        return '<button class=task><div class="btn_icon"><span class="fas fa-chevron-circle-right"></span></div>' +
           `${caption}<br><div class="task_detail">${details.join('<br>')}</div></button>`;
       }).join('');
       btns += (x.footer ? `<div class=task_footer>${esc(x.footer)}</div>` : '');

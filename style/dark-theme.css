@@ -241,12 +241,6 @@
   display: block;
   margin: 10px 5px;
   width: 100%;
-  background-color: rgba(0, 0, 0, 0);
-  text-transform: none;
-  font-size: small;
-  font-weight: normal;
-  text-align: left;
-  border: 1px solid transparent;
 }
 .dlg_btns button.task:hover {
   border: 1px solid;
@@ -2401,27 +2395,34 @@ body.floating-window {
   background-color: white;
 }
 #gd.dlg {
-  background-color: white;
+  background-color: #1c1e28;
 }
 #gd .dlg_title,
 #gd .dlg_close {
   color: #828282;
 }
 #gd .dlg_btns {
-  background-color: white;
+  background-color: #1c1e28;
 }
 #gd .dlg_close:hover {
   color: white;
   background-color: #313446;
 }
 #gd_content {
-  color: blue;
+  color: #a9a9a9;
 }
 .dlg_btns {
   background-color: #313446;
 }
 .dlg_btns button.task {
-  color: blue;
+  background-image: none;
+  background-color: rgba(0, 0, 0, 0);
+  color: #f77811;
+  text-transform: none;
+  font-size: small;
+  font-weight: normal;
+  text-align: left;
+  border: 1px solid transparent;
 }
 #abt_contact,
 #abt_contact a,

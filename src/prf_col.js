@@ -187,6 +187,10 @@
         const schema = a[i];
         document.getElementById('theme_dark').disabled = schema.theme !== 'dark';
         document.getElementById('theme_light').disabled = schema.theme !== 'light';
+        D.theme = schema.theme;
+        if (D.dlg_bw) {
+          D.ipc.server.emit(D.dlg_bw.socket, 'setTheme', D.theme);
+        }
         I.col_stl && (I.col_stl.textContent = renderCSS(schema));
         if (window.monaco) setMonacoTheme(schema);
         break;
