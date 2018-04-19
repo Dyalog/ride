@@ -12,8 +12,8 @@ const I = {};
 const J = {};
 
 (function preInit() {
-  toastr.options.timeOut = 3000;
-  toastr.options.preventDuplicates = true;
+  toastr.options.timeOut = 5000;
+  toastr.options.preventDuplicates = false;
   // build up I by iterating over all elements with IDs
   const a = document.querySelectorAll('[id]');
   for (let i = 0; i < a.length; i += 1) {

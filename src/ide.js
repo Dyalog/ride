@@ -137,7 +137,7 @@ D.IDE = function IDE(opts = {}) {
     return !1;
   };
   I.lb.onmouseout = (x) => {
-    if (x.target.nodeName === 'B' || x.target.id === 'lb_prf') {
+    if (x.target.nodeName === 'B') {
       clearTimeout(ttid); ttid = 0; I.lb_tip.hidden = 1;
     }
   };
@@ -147,17 +147,6 @@ D.IDE = function IDE(opts = {}) {
     const k = D.getBQKeyFor(c);
     const s = k && c.charCodeAt(0) > 127 ? `Keyboard: ${D.prf.prefixKey()}${k}\n\n` : '';
     if (/\S/.test(c)) { const h = D.lb.tips[c] || [c, '']; reqTip(x, h[0], s + h[1]); }
-  };
-  I.lb_prf.onmouseover = (x) => {
-    const h = D.prf.keys();
-    let s = '';
-    const r = /^(BK|BT|ED|EP|FD|QT|RP|SC|TB|TC|TL)$/;
-    for (let i = 0; i < D.cmds.length; i++) {
-      const cmd = D.cmds[i];
-      const [c, d, df] = cmd; // c:code, d:description, df:defaults
-      r.test(c) && (s += `${c}: ${d}:${' '.repeat(Math.max(1, 25 - d.length))}${((h[c] || df).slice(-1)[0] || 'none')}\n`);
-    }
-    reqTip(x, 'Keyboard Shortcuts', `${s}...`, 1000);
   };
   I.lb_prf.onmousedown = () => { D.prf_ui(); return !1; };
   I.lb_prf.onclick = () => !1; // prevent # from appearing in the URL bar

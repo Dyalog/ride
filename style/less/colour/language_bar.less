@@ -7,12 +7,13 @@
 	}
 	b {
 		color:@LB_BUTTON_COL;
-		&:hover {
-			background-color: @LB_BUTTON_HOVER;
-		}
-		&:active {
-			background-color: @LB_BUTTON_ACTIVE;
-		}
+		&:hover{
+			color:@BUTTON_HOVER_COL;
+		  }
+		  &:active, &.pressed {
+			background-color:rgba(0,0,0,0.2);
+			color:white;
+		  }
 	}
 	.lb_placeholder {
 		background: rgba(0,0,0,0.2);
@@ -22,9 +23,9 @@
 	}
 }
 #lb_prf {
-	&:hover {
-		background-color: @LB_BUTTON_HOVER;
-	}
+	// &:hover {
+	// 	background-color: @LB_BUTTON_HOVER;
+	// }
 	&:active {
 		background-color: @LB_BUTTON_ACTIVE;
 	}
