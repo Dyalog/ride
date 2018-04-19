@@ -315,6 +315,7 @@ D.IDE = function IDE(opts = {}) {
     const w = left ? 200 : 300;
     D.ide[`${compName.toUpperCase()}width`] = w;
     D.ide[`${compName}w`] = w;
+    D.ide.focusMRUWin();
   };
   const toggleWSE = () => { togglePanel('wse', 'Workspace Explorer', 1); };
   const toggleDBG = () => { togglePanel('dbg', 'Debug', 0); };
