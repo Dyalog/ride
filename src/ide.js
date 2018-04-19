@@ -620,6 +620,12 @@ D.IDE = function IDE(opts = {}) {
       D.util.dlg(I.gd, { w: 400, h: 300 });
       setTimeout(() => { b.focus(); }, 1);
     },
+    ReplyClearTraceStopMonitor(x) {
+      $.alert(`The following markers were deleted:
+      trace:   ${x.traces}
+      stop:    ${x.stops}
+      monitor: ${x.monitors}`, 'Clear all markers');
+    },
     ReplyGetSIStack(x) { ide.dbg && ide.dbg.sistack.render(x.stack); },
     ReplyGetThreads(x) { ide.dbg && ide.dbg.threads.render(x.threads); },
     ReplyFormatCode(x) {
@@ -647,7 +653,9 @@ D.IDE = function IDE(opts = {}) {
       w.webContents.executeJavaScript(`add(${JSON.stringify(x)})`);
     },
     ReplyGetLog(x) { ide.wins[0].add(x.result.join('\n')); ide.bannerDone = 0; },
-    UnknownCommand() { },
+    UnknownCommand(x) {
+      if (x.name === 'ClearTraceStopMonitor') toastr.warning('Clear all markers not supported by the interpreter');
+    },
   };
 };
 D.IDE.prototype = {
@@ -735,6 +743,7 @@ D.IDE.prototype = {
   TVO: D.prf.fold.toggle,
   UND() { this.focusedWin.me.trigger('D', 'undo'); },
   RDO() { this.focusedWin.me.trigger('D', 'redo'); },
+  CAM() { D.send('ClearTraceStopMonitor', { token: 0 }); },
   CAW() { D.send('CloseAllWindows', {}); },
   Edit(data) {
     if (this.floating) { this.ipc.emit('Edit', data); return; }

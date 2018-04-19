@@ -90,7 +90,7 @@ D.prf = {};
     '\n  Show Language Bar        =LBR'+
     '\n  Show Workspace Explorer  =WSE'+
     '\n  Show Debug               =DBG'+
-    '\n  Floating Edit Windows    =FLT'+
+    '\n  Floating Edit Windows    =FLT {!browser}'+
     '\n  Editors on Top           =TOP {!browser}'+
     '\n  Line Wrapping in Session =WRP'+
     '\n  -                             {!browser}'+
@@ -108,6 +108,8 @@ D.prf = {};
     '\n&Action'+
     '\n  Edit                     =ED'+
     '\n  Trace                    =TC'+
+    '\n  -'+
+    '\n  Clear all markers        =CAM'+
     '\n  Weak Interrupt           =WI'+
     '\n  Strong Interrupt         =SI'+
     '\n&Help'+
