@@ -37,13 +37,13 @@
   const cmpVer = (x, y) => x[0] - y[0] || x[1] - y[1] || 0;
   const ls = x => fs.readdirSync(x);
   const parseVer = x => x.split('.').map(y => +y);
-  const err = (x) => {
+  const err = (...x) => {
     if (q) {
       q.connecting_dlg.hidden = 1;
       q.listen_dlg.hidden = 1;
       q.fetch.disabled = 0;
     }
-    $.err(x);
+    $.err(...x);
   };
   const save = () => {
     const d = D.el.app.getPath('userData');
@@ -230,10 +230,10 @@
           new D.IDE().setConnInfo('', 0, sel ? sel.name : '');
         })
         .on('keyboard-interactive', (_, _1, _2, _3, fin) => { fin([x.pass]); })
-        .on('error', e => err(`${e}`))
+        .on('error', e => err(e.message, e.name))
         .connect(o);
       return c;
-    } catch (e) { err(e.message); }
+    } catch (e) { err(e.message, e.name); }
     return null;
   };
   const connect = (x) => {
@@ -603,9 +603,10 @@
               }
               q.fetch.disabled = 0;
               c.end();
+              toastr.success(`${interpretersSSH.length} versions found`, 'Available interpreters fetched');
             })
             .on('error', (x) => {
-              err(x.message || `${x}`);
+              toastr.error(x.message, x.name);
               updExes();
               q.fetch.disabled = 0;
             });
