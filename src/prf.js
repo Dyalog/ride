@@ -33,7 +33,7 @@ D.prf = {};
   ['breakPts',           1],
   ['lineNums',           1],
   ['matchBrackets',      1], //whether to highlight matching brackets
-  ['minimapEnabled',     1], // show minimap
+  ['minimapEnabled',     0], // show minimap
   ['minimapRenderCharacters',1], // minimap render characters
   ['minimapShowSlider',  "mouseover"], // show minimap slider
   ['otherExe',           ''],//content of the "exe" text box when "Other..." is selected in the Connect page
