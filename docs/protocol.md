@@ -304,14 +304,6 @@ Request the current line in a trace window is executed. (Step over)
 ```
 Request the current line in a trace window is executed. (Step into)
 
-<a name=UnpauseThreads></a>
-```json
-["UnpauseThreads",{"win":123}] // RIDE -> Interpreter
-```
-:red_circle: Not used in RIDE
-
-Request all suspended threads are resumed from their current position.
-
 <a name=GetSIStack></a>
 <a name=ReplyGetSIStack></a>
 ```json
