@@ -99,7 +99,6 @@ function WindowRect(id, prf) {
 }
 D.IPC_CreateWindow = function IPCCreateWindow(seq) {
   let opts = {
-    icon: `${__dirname}/D.png`,
     show: false,
     fullscreen: false,
     fullscreenable: true,

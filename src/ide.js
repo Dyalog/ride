@@ -496,7 +496,6 @@ D.IDE = function IDE(opts = {}) {
         let w = ide.w3500;
         if (!w || w.isDestroyed()) {
           ide.w3500 = new D.el.BrowserWindow({
-            icon: `${__dirname}/D.png`,
             width: 800,
             height: 500,
           });
@@ -640,7 +639,6 @@ D.IDE = function IDE(opts = {}) {
       if (!D.el) return;
       if (!w) {
         ide.wStatus = new D.el.BrowserWindow({
-          icon: `${__dirname}/D.png`,
           width: 600,
           height: 400,
           parent: D.elw,

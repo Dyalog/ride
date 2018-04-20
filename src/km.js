@@ -187,7 +187,6 @@
     LOG() {
       if (!D.el) return;
       const w = new D.el.BrowserWindow({
-        icon: `${__dirname}/D.png`,
         width: 400,
         height: 500,
         parent: D.elw,

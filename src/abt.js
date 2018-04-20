@@ -27,7 +27,6 @@
 
     if (D.el) {
       const w = new D.el.BrowserWindow({
-        icon: `${__dirname}/D.png`,
         width: 600,
         height: 500,
         parent: D.elw,

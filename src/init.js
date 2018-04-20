@@ -55,7 +55,6 @@ const Console = console;
     } else if (D.el) {
       D.IPC_Server();
       let bw = new D.el.BrowserWindow({
-        icon: `${__dirname}/D.png`,
         show: false,
         parent: D.elw,
         alwaysOnTop: true,
@@ -65,7 +64,6 @@ const Console = console;
       bw.loadURL(`${loc}?prf`); // bw.webContents.toggleDevTools();
       D.prf_bw = { id: bw.id };
       bw = new D.el.BrowserWindow({
-        icon: `${__dirname}/D.png`,
         show: false,
         parent: D.elw,
         alwaysOnTop: true,

@@ -70,7 +70,7 @@ el.app.on('ready', () => {
     width,
     height,
     show: 0,
-    icon: `${__dirname}/D.png`,
+    icon: D.win || D.mac ? undefined : `${__dirname}/D.png`,
     backgroundColor: db.theme === 'dark' ? '#1c1e28' : '#f77811',
   });
 
