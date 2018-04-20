@@ -408,8 +408,6 @@ Several kinds of dialogs are supported:
 ```
 Constants for type: `1` warning, `2` information, `3` question, `4` stop.
 
-:red_circle: "type" is not supported in RIDE
-
 If the user closes the dialog without choosing an option, RIDE responds with an `index` of `-1`.
 
 ## String dialog
