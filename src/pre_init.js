@@ -13,7 +13,7 @@ const J = {};
 
 (function preInit() {
   toastr.options.timeOut = 5000;
-  toastr.options.preventDuplicates = false;
+  toastr.options.preventDuplicates = true;
   // build up I by iterating over all elements with IDs
   const a = document.querySelectorAll('[id]');
   for (let i = 0; i < a.length; i += 1) {
