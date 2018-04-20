@@ -265,15 +265,13 @@ Request it clears all traces, stops, and monitors in the active workspace. The r
 ```json
 ["Continue",{"win":123}] // RIDE -> Interpreter
 ```
-Request restart of the APL program. (Black arrow in ODE)
-
-:red_circle: "Continue" to restart? -- that doesn't sounds right...
+Request resume execution of the current thread.
 
 <a name=ContinueTrace></a>
 ```json
 ["ContinueTrace",{"win":123}] // RIDE -> Interpreter
 ```
-Request resumption of tracing an APL program. (White arrow in ODE)
+Request resume execution of the current function, but stop on the next line of the calling function.
 
 <a name=Cutback></a>
 ```json
@@ -292,7 +290,7 @@ Request the current line in a trace window be moved forward.
 ```json
 ["RestartThreads",{"win":123}] // RIDE -> Interpreter
 ```
-Request all suspended threads are restarted.
+Request resume execution of all threads.
 
 <a name=RunCurrentLine></a>
 ```json
