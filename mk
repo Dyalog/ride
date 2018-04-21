@@ -105,5 +105,5 @@ async.each(
       process.exit(1);
     }
   },
-  (e) => { if (e) throw e; },
+  (e) => { if (e) throw e; }
 );
