@@ -781,23 +781,38 @@
   });
   const aplHover = {
     provideHover(model, position) {
-      const m = model;
-      const s = m.getLineContent(position.lineNumber);
       if (!D.send) return [];
-      D.send('GetValueTip', { // ask interpreter
-        win: m.winid,
-        token: m.winid,
-        line: s,
-        pos: position.column - 1,
-        maxWidth: 64,
-        maxHeight: 32,
-      });
-      return new monaco.Promise((complete, error, progress) => {
-        setTimeout(() => { complete({}); }, 500);
-        m.vt = {
-          complete, error, progress, position,
+      const m = model;
+      const p = position;
+      const s = m.getLineContent(p.lineNumber);
+      const c = s[p.column - 2] || ' ';
+      const lbt = D.lb.tips[c];
+      if (D.prf.squiggleTips() && lbt &&
+        !'⍺⍵'.includes(c) && !(c === '⎕' && /[áa-z]/i.test(s[p.column - 1] || ''))) {
+        return {
+          range: new monaco.Range(p.lineNumber, p.column - 1, p.lineNumber, p.column),
+          contents: [
+            lbt[0],
+            { language: 'plaintext', value: lbt[1] },
+          ],
         };
-      });
+      } else if (D.prf.valueTips() && /[^ \(\)\[\]\{\}':;]/.test(c)) {
+        D.send('GetValueTip', { // ask interpreter
+          win: m.winid,
+          token: m.winid,
+          line: s,
+          pos: p.column - 1,
+          maxWidth: 200,
+          maxHeight: 100,
+        });
+        return new monaco.Promise((complete, error, progress) => {
+          setTimeout(() => { complete({}); }, 500);
+          m.vt = {
+            complete, error, progress, position,
+          };
+        });
+      }
+      return [];
     },
   };
   let icom = D.prf.indentComments(); D.prf.indentComments((x) => { icom = x; });
