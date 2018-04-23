@@ -406,7 +406,8 @@ D.IDE = function IDE(opts = {}) {
       const w = ide.wins[x.token];
       if (w) {
         w.container && w.container.setTitle(x.name);
-        w.open(x);
+        // w.open(x);
+        w.me_ready.then(() => w.open(x));
       }
     },
     ReplySaveChanges(x) { const w = ide.wins[x.win]; w && w.saved(x.err); },
