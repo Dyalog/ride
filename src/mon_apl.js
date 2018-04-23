@@ -521,10 +521,12 @@
           };
         });
       } else if (ch === pk) {
-        return Object.keys(D.bq).map((k) => {
+        const bqc = [];
+        Object.keys(D.bq).forEach((k) => {
           const v = D.bq[k];
           // const desc = `${v} ${pk}${k} ${D.sqglDesc[v] || ''}  `;
-          return {
+          if (v === ' ') return;
+          bqc.push({
             label: `${v} ${pk}${k}`,
             detail: D.sqglDesc[v] || '',
             filterText: `${v} ${pk}${k}`,
@@ -532,8 +534,9 @@
             kind: kind.Function,
             insertText: { value: v },
             range: new monaco.Range(l, c - 1, l, c),
-          };
+          });
         });
+        return bqc;
       } else if (ch === ':') {
         const { a } = model._lines[position.lineNumber-1]._state;
         const { t } = (a || []).slice(-1)[0] || {};
