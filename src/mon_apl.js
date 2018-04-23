@@ -661,6 +661,18 @@
             documentation: 'For loop',
           },
           {
+            label: 'If',
+            kind: kind.Snippet,
+            insertText: {
+              value: [
+                'If ${1:condition}',
+                '\t$2',
+                ':EndIf',
+              ].join('\n'),
+            },
+            documentation: 'If Statement',
+          },
+          {
             label: 'If Else',
             kind: kind.Snippet,
             insertText: {
