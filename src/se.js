@@ -226,6 +226,7 @@
       }
       se.isReadOnly && me.updateOptions({ readOnly: true });
       se.oModel.setValue(me.getValue());
+      me.model._commandManager.clear();
     },
     edit(edits) {
       const { me } = this;
@@ -379,7 +380,7 @@
       se.dirty = {};
       se.hl();
       se.histAdd(es.filter(x => !/^\s*$/.test(x)));
-      // se.cm.clearHistory();
+      me.model._commandManager.clear();
     },
     autoCloseBrackets(x) { this.me.updateOptions({ autoClosingBrackets: x }); },
     matchBrackets(x) { this.me.updateOptions({ matchBrackets: !!x }); },
