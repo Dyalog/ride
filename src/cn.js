@@ -702,7 +702,9 @@
     })
       .on('click', '.go', (e) => {
         const t = $(e.target);
-        $(q.favs).list('select', t.parentsUntil(q.favs).last().index());
+        const i = t.parentsUntil(q.favs).last().index();
+        D.prf.connectFav(i);
+        $(q.favs).list('select', i);
         q.go.click();
       })
       .keydown((x) => {
@@ -751,7 +753,7 @@
           q.exe.onchange();
         }
       });
-    setTimeout(() => $(q.favs).list('select', 0), 1);
+    setTimeout(() => $(q.favs).list('select', D.prf.connectFav()), 1);
     { const [a] = q.favs.querySelectorAll('a'); a && a.focus(); }
     q.sve.onclick = () => { save(); };
     q.neu.onclick = () => {
