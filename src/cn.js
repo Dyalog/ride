@@ -750,8 +750,8 @@
           q.exe.disabled = !!q.exes.value;
           q.exe.onchange();
         }
-      })
-      .list('select', 0);
+      });
+    setTimeout(() => $(q.favs).list('select', 0), 1);
     { const [a] = q.favs.querySelectorAll('a'); a && a.focus(); }
     q.sve.onclick = () => { save(); };
     q.neu.onclick = () => {
