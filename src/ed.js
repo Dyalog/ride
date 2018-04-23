@@ -35,6 +35,7 @@
       autoIndent: D.prf.indent() >= 0,
       cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
       cursorBlinking: D.prf.cursorBlinking(),
+      emptySelectionClipboard: false,
       folding: ed.isCode && !!D.prf.fold(),
       fontFamily: 'apl',
       fontSize: fs,

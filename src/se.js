@@ -28,6 +28,7 @@
       autoIndent: false,
       cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
       cursorBlinking: D.prf.cursorBlinking(),
+      emptySelectionClipboard: false,
       folding: false,
       fontFamily: 'apl',
       fontSize: fs,
