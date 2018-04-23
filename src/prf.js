@@ -109,7 +109,7 @@ D.prf = {};
     '\n  Edit                     =ED'+
     '\n  Trace                    =TC'+
     '\n  -'+
-    '\n  Clear all markers        =CAM'+
+    '\n  Clear all trace/stop/monitor =CAM'+
     '\n  Weak Interrupt           =WI'+
     '\n  Strong Interrupt         =SI'+
     '\n&Help'+

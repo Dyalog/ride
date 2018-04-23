@@ -622,10 +622,10 @@ D.IDE = function IDE(opts = {}) {
       setTimeout(() => { b.focus(); }, 1);
     },
     ReplyClearTraceStopMonitor(x) {
-      $.alert(`The following markers were deleted:
-      trace:   ${x.traces}
-      stop:    ${x.stops}
-      monitor: ${x.monitors}`, 'Clear all markers');
+      $.alert(`The following items were cleared:
+      ${x.traces} traces
+      ${x.stops} stops
+      ${x.monitors} monitors`, 'Clear all trace/stop/monitor');
     },
     ReplyGetSIStack(x) { ide.dbg && ide.dbg.sistack.render(x.stack); },
     ReplyGetThreads(x) { ide.dbg && ide.dbg.threads.render(x.threads); },
@@ -654,7 +654,7 @@ D.IDE = function IDE(opts = {}) {
     },
     ReplyGetLog(x) { ide.wins[0].add(x.result.join('\n')); ide.bannerDone = 0; },
     UnknownCommand(x) {
-      if (x.name === 'ClearTraceStopMonitor') toastr.warning('Clear all markers not supported by the interpreter');
+      if (x.name === 'ClearTraceStopMonitor') toastr.warning('Clear all trace/stop/monitor not supported by the interpreter');
     },
   };
 };
