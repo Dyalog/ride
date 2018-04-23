@@ -260,8 +260,18 @@
       // 2 SimpleCharArray      64 NativeFile        2048 AplSession
       // 4 SimpleNumericArray  128 SimpleCharVector  4096 ExternalFunction
       // 8 MixedSimpleArray    256 AplNamespace
+      const etype = {
+        2: ee.readOnly ? 'chararr' : 'charmat',
+        4: 'numarr',
+        8: 'mixarr',
+        16: ee.readOnly ? 'mixarr' : 'charvecvec',
+        32: 'quador',
+        64: 'mixarr',
+        128: 'charvec',
+      }[ee.entityType];
       ed.isCode = [1, 256, 512, 1024, 2048, 4096].indexOf(ee.entityType) >= 0;
-      me.language = ed.isCode ? 'apl' : 'text';
+      monaco.editor.setModelLanguage(me.model, ed.isCode ? 'apl' : 'plaintext');
+      etype && ed.dom.classList.toggle(etype, true);
       me.updateOptions({ folding: ed.isCode && !!D.prf.fold() });
       if (ed.isCode && D.prf.indentOnOpen()) ed.RD(me);
       ed.setRO(ee.readOnly || ee.debugger);

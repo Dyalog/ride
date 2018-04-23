@@ -54,7 +54,9 @@
       styles: 'asgn=fg:00f com=fg:088 dfn=fg:00f diam=fg:00f err=fg:f00 fn=fg:008 idm=fg:008 kw=fg:800 ' +
       'lnum=fg:008,bg:f,bgo:0 mod=bg:7,bgo:.25 mtch=bg:ff8,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 op1=fg:00f op2=fg:00f ' +
       'par=fg:00f quad=fg:808 sel=bg:48e,bgo:.5 semi=fg:00f sqbr=fg:00f srch=bg:f80,bgo:.5 str=fg:088 tc=bg:d,bgo:1 ' +
-      'tcpe=bg:c8c8c8,bgo:1 trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f vtt=bg:ff0',
+      'tcpe=bg:c8c8c8,bgo:1 trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f vtt=bg:ff0 ' +
+      'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:1,fg:0f0 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff ' +
+      'ma=bg:828282,bgo:1,fg:0ff na=bg:828282,bgo:1,fg:f qor=bg:f00,bgo:1,fg:f',
     }, {
       name: 'Francisco Goya',
       theme: 'dark',
@@ -62,7 +64,9 @@
       'dfn=fg:a7b diam=fg:ff0 err=fg:f00,bg:822,bgo:.5,B:1,U:1 fn=fg:0f0 idm=fg:0f0 glb=B:1 kw=fg:aa2 ' +
       'lbl=U:1,bg:642,bgo:.5 lnum=fg:b94,bg:010,bgo:0 mod=bg:7,bgo:.5 mtch=fg:0,bg:ff8,bgo:.75 norm=fg:9c7,bg:0,bgo:1 ' +
       'num=fg:a8b op1=fg:d95 op2=fg:fd6 sel=bg:048,bgo:.5 semi=fg:8 sqbr=fg:8 srch=bg:b96,bgo:.75,fg:0 str=fg:dae ' +
-      'tc=bg:1,bgo:1 tcpe=bg:2,bgo:1 zld=fg:d9f,B:1 scmd=fg:0ff ucmd=fg:f80,B:1 vtip=bg:733,fg:ff0,bgo:1,bc:900 vtt=bc:f80',
+      'tc=bg:1,bgo:1 tcpe=bg:2,bgo:1 zld=fg:d9f,B:1 scmd=fg:0ff ucmd=fg:f80,B:1 vtip=bg:733,fg:ff0,bgo:1,bc:900 vtt=bc:f80 ' +
+      'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:1,fg:0f0 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff ' +
+      'ma=bg:828282,bgo:1,fg:0ff na=bg:828282,bgo:1,fg:f qor=bg:f00,bgo:1,fg:f',
     }, {
       name: 'Albrecht Dürer',
       theme: 'light',
@@ -115,12 +119,12 @@
     return r === g && g === b ? r : r + g + b;
   }
   function renderCSS(schema, isSample) {
-    const rp = isSample ? '#col_cm' : '.ride_win'; // css rule prefix, ignored when there's a "/*noprefix*/"
+    // const rp = isSample ? '#col_cm' : '.ride_win'; // css rule prefix, ignored when there's a "/*noprefix*/"
     return G.map((g) => {
       const h = schema[g.t];
       if (!h || !g.c) return '';
       let cls = g.c.split(',').map((x) => {
-        if (!/^\/\*noprefix\*\//.test(x)) return `${rp} ${x}`;
+        // if (!/^\/\*noprefix\*\//.test(x)) return `${rp} ${x}`;
         return isSample ? '#nonexistent' : x;
       }).join(',');
       cls += '{';
@@ -254,7 +258,16 @@
     {s:'user command'    ,t:'ucmd',m:'predefined.ucmd'}, //]XYZ
     {s:'value tip target',t:'vtt' ,c:'.vt_marker',ctrls:{bc:1,fg:0,BIU:0}}, //the rectangle around the token
     {s:'value tip'       ,t:'vtip',c:'/*noprefix*/#vt_bln,/*noprefix*/#vt_tri',ctrls:{bc:1}}, //the balloon
-    {s:'zilde'           ,t:'zld' ,m:'predefined.zilde'}  //⍬
+    {s:'zilde'           ,t:'zld' ,m:'predefined.zilde'},  //⍬
+    
+    {s:'chararr'         ,t:'ca'  ,c:'.chararr .monaco-editor-background,.chararr .monaco-editor .margin,.chararr .monaco-editor span', ctrls:{BIU:0}},
+    {s:'charmat'         ,t:'cm'  ,c:'.charmat .monaco-editor-background,.charmat .monaco-editor .margin,.charmat .monaco-editor span', ctrls:{BIU:0}},
+    {s:'charvec'         ,t:'cv'  ,c:'.charvec .monaco-editor-background,.charvec .monaco-editor .margin,.charvec .monaco-editor span', ctrls:{BIU:0}},
+    {s:'charvecvec'      ,t:'cvv' ,c:'.charvecvec .monaco-editor-background,.charvecvec .monaco-editor .margin,.charvecvec .monaco-editor span', ctrls:{BIU:0}},
+    {s:'mixarr'          ,t:'ma'  ,c:'.mixarr .monaco-editor-background,.mixarr .monaco-editor .margin,.mixarr .monaco-editor span', ctrls:{BIU:0}},
+    {s:'numarr'          ,t:'na'  ,c:'.numarr .monaco-editor-background,.numarr .monaco-editor .margin,.numarr .monaco-editor span', ctrls:{BIU:0}},
+    {s:'quador'          ,t:'qor' ,c:'.quador .monaco-editor-background,.quador .monaco-editor .margin,.quador .monaco-editor span', ctrls:{BIU:0}},
+    
   ]);
   /* eslint-enable */
   D.mop.then(() => updStl());
