@@ -548,22 +548,22 @@
     <div id=title hidden>
       <button id=title_rst><u>R</u>eset</button>
       <label for=title_inp>Window title:</label><input id=title_inp>
-      <pre id=title_subs><!--
-             --><a>{WSID}</a>            workspace name<!--
-        -->&#10;<a>{HOST}</a>:<a href=#>{PORT}</a>     interpreter's TCP endpoint<!--
-        -->&#10;<a>{PROFILE}</a>         connect profile in use<!--
-        -->&#10;<a>{PID}</a>             PID of the interpreter process<!--
-        -->&#10;<a>{CHARS}</a>           Unicode or Classic<!--
-        -->&#10;<a>{BITS}</a>            64 or 32<!--
-        -->&#10;<a>{VER}</a>             interpreter version<!--
-        -->&#10;  <a>{VER_A}</a>           major<!--
-        -->&#10;  <a>{VER_B}</a>           minor<!--
-        -->&#10;  <a>{VER_C}</a>           svn revision<!--
-        -->&#10;<a>{RIDE_VER}</a>        RIDE version<!--
-        -->&#10;  <a>{RIDE_VER_A}</a>      major<!--
-        -->&#10;  <a>{RIDE_VER_B}</a>      minor<!--
-        -->&#10;  <a>{RIDE_VER_C}</a>      git commit number
-      </pre>
+      <table id=title_subs>
+        <tr><td>Workspace name</td><td><a>{WSID}</a></td></tr>
+        <tr><td>Interpreter's TCP endpoint</td><td><a>{HOST}</a>:<a href=#>{PORT}</a></td></tr>
+        <tr><td>Connect profile in use</td><td><a>{PROFILE}</a></td></tr>
+        <tr><td>PID of the interpreter process</td><td><a>{PID}</a></td></tr>
+        <tr><td>Unicode or Classic</td><td><a>{CHARS}</a></td></tr>
+        <tr><td>64 or 32</td><td><a>{BITS}</a></td></tr>
+        <tr><td>Interpreter version</td><td><a>{VER}</a></td></tr>
+        <tr><td>- major</td><td>- <a>{VER_A}</a></td></tr>
+        <tr><td>- minor</td><td>- <a>{VER_B}</a></td></tr>
+        <tr><td>- svn revision</td><td>- <a>{VER_C}</a></td></tr>
+        <tr><td>RIDE version</td><td><a>{RIDE_VER}</a></td></tr>
+        <tr><td>- major</td><td>- <a>{RIDE_VER_A}</a></td></tr>
+        <tr><td>- minor</td><td>- <a>{RIDE_VER_B}</a></td></tr>
+        <tr><td>- git commit number</td><td>- <a>{RIDE_VER_C}</a></td></tr>
+      </table>
     </div>
 
     <!--Menu-->

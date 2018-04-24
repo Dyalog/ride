@@ -1516,6 +1516,20 @@ input.lyt_g3:hover {
   top: 125px;
   bottom: 60px;
 }
+#title table {
+  table-layout: fixed;
+  width: 100%;
+  margin-top: 10px;
+}
+#title table tr {
+  height: 1.3em;
+}
+#title table td {
+  vertical-align: middle;
+}
+#title table td:nth-child(1) {
+  width: 30%;
+}
 #title_inp {
   width: calc(100% - 160px);
   margin-left: 10px;
@@ -2386,6 +2400,10 @@ body.floating-window {
 }
 #debug .ctl_listview_header {
   background-color: #7688d9;
+  color: white;
+}
+#debug .ctl_listview_header h2 {
+  font-size: 16px;
 }
 /*various dialogs*/
 .dlg {
@@ -2646,6 +2664,9 @@ select {
   background-color: #dde0ec;
   color: #4e65ce;
 }
+#prf_content h2 {
+  color: #4c4a4a;
+}
 #prf_dlg_cancel {
   background: transparent!important;
   border: 1px solid #717b9e;
@@ -2759,17 +2780,18 @@ input.lyt_g3:hover {
   background-color: white;
   outline: solid lightgrey 1px;
 }
-#title pre {
+#title td {
   color: #4c4a4a;
-  font-family: monospace;
-  font-size: 16px;
-  line-height: 1.2em;
 }
-#title pre a {
+#title td:nth-child(1) {
+  font-size: 14px;
+  font-weight: 600;
+}
+#title a {
   color: #7688d9;
   text-decoration: none;
 }
-#title pre a:hover {
+#title a:hover {
   color: #9eabe4;
 }
 #pmenu #pmenu_ta {
@@ -2806,11 +2828,6 @@ body {
   border: solid #333 1px;
   background-color: grey;
   color: white;
-}
-h2 {
-  color: white;
-  font-family: Roboto;
-  font-size: 16px;
 }
 #toast-container {
   font-family: Roboto;

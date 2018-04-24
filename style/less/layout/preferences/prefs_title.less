@@ -1,22 +1,36 @@
 /*Prefs>Title*/
 #title {
-	text-align: left;
-	padding: 8px;
-	pre {
-		overflow: auto;
-		position: absolute;
-		left: 8px;
-		right: 8px;
-		top: 125px;
-		bottom: 60px;
-	}
+  text-align: left;
+  padding: 8px;
+  pre {
+    overflow: auto;
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    top: 125px;
+    bottom: 60px;
+  }
+  table {
+    table-layout: fixed;
+    width: 100%;
+    margin-top:10px;
+    tr {
+      height: 1.3em;
+    }
+    td {
+      vertical-align: middle;
+      &:nth-child(1) {
+        width: 30%;
+      }
+    }
+  }
 }
 #title_inp {
-	width: calc(100% - 160px);
-	margin-left: 10px;
-	padding: 5px 0;
-	
+  width: calc(100% - 160px);
+  margin-left: 10px;
+  padding: 5px 0;
+  
 }
 #title_rst {
-	float: right;
+  float: right;
 }
