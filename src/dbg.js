@@ -40,6 +40,6 @@ D.DBG=function(){
 }
 D.DBG.prototype={
   TR:function(){D.send('GetThreads',{})},
-  RM:function(){D.send('Continue'      ,{win:this.threads.selected.tid})},
-  MA:function(){D.send('RestartThreads',{win:this.threads.selected.tid})}
+  RM:function(){D.send('Continue',{win:this.threads.selected.tid})},
+  MA:function(){D.send('RestartThreads',{})}
 }

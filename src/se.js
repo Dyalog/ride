@@ -471,7 +471,7 @@
     ER() { this.exec(0); },
     TC() { this.exec(1); },
     LN() { D.prf.lineNums.toggle(); },
-    MA() { D.send('RestartThreads', { win: 0 }); },
+    MA() { D.send('RestartThreads', {}); },
     indentOrComplete(me) {
       const sels = me.getSelections();
 

@@ -288,7 +288,7 @@ Request the current line in a trace window be moved forward.
 
 <a name=RestartThreads></a>
 ```json
-["RestartThreads",{"win":123}] // RIDE -> Interpreter
+["RestartThreads",{}] // RIDE -> Interpreter
 ```
 Request resume execution of all threads.
 

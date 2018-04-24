@@ -505,7 +505,7 @@
     },
     BH() { D.send('ContinueTrace', { win: this.id }); },
     RM() { D.send('Continue', { win: this.id }); },
-    MA() { D.send('RestartThreads', { win: this.id }); },
+    MA() { D.send('RestartThreads', {}); },
     CBP() { // Clear trace/stop/monitor for this object
       const ed = this;
       ed.stop.clear();
