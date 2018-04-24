@@ -8,7 +8,7 @@
 D.prf = {};
 [ // name                 default (type is determined from default value; setter enforces type and handles encoding)
   ['autoCloseBrackets',  1], //whether to insert {}[]() in pairs
-  ['autocompletion',     1],
+  ['autocompletion',     'classic'],
   ['blockCursor',        0], // use block cursor selection?
   ['cursorBlinking',     'blink'], // cursor blinking
   ['autocompletionDelay',500],

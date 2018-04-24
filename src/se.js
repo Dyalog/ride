@@ -44,13 +44,13 @@
         showSlider: D.prf.minimapShowSlider(),
       },
       mouseWheelZoom: false,
-      quickSuggestions: D.prf.autocompletion(),
+      quickSuggestions: D.prf.autocompletion() === 'classic',
       quickSuggestionsDelay: D.prf.autocompletionDelay(),
       renderIndentGuides: false,
       renderLineHighlight: D.prf.renderLineHighlight(),
       selectionHighlight: D.prf.selectionHighlight(),
       snippetSuggestions: D.prf.snippetSuggestions(),
-      suggestOnTriggerCharacters: D.prf.autocompletion(),
+      suggestOnTriggerCharacters: D.prf.autocompletion()  === 'classic',
       useTabStops: false,
       wordBasedSuggestions: false,
       wordWrap: D.prf.wrap() ? 'on' : 'off',
@@ -96,11 +96,6 @@
     });
     me.onDidChangeModelContent((e) => {
       if (!me.listen || me.dyalogBQ) return;
-      const pk = D.prf.prefixKey();
-      if (!me.dyalogBQ && e.changes.length === 1
-        && e.changes[0].text === pk) {
-        D.commands.BQC(me);
-      }
       e.changes.forEach((c) => {
         const l0 = c.range.startLineNumber;
         const l1 = c.range.endLineNumber;
@@ -131,21 +126,11 @@
     });
     me.onDidFocusEditor(() => { se.focusTS = +new Date(); se.ide.focusedWin = se; });
     se.promptType = 0; // see ../docs/protocol.md #SetPromptType
-    se.processAutocompleteReply = (x) => {
-      const { ac } = me.model;
-      if (ac && ac.complete) {
-        const l = ac.position.lineNumber;
-        const c = ac.position.column;
-        ac.complete(x.options.map(i => ({
-          label: i,
-          range: new monaco.Range(l, c - x.skip, l, c),
-        })));
-      }
-    };
+    se.processAutocompleteReply = D.ac(me);
     D.prf.wrap((x) => {
       se.me.updateOptions({ wordWrap: x ? 'on' : 'off' });
       se.me.revealLineInCenterIfOutsideViewport(se.me.model.getLineCount());
-    });    
+    });
     se.histRead();
   }
   Se.prototype = {
@@ -392,9 +377,10 @@
     selectionHighlight(x) { this.me.updateOptions({ selectionHighlight: x }); },
     snippetSuggestions(x) { this.me.updateOptions({ snippetSuggestions: x ? 'bottom' : 'none' }); },
     autocompletion(x) {
+      const on = x === 'classic';
       this.me.updateOptions({
-        quickSuggestions: x,
-        suggestOnTriggerCharacters: x,
+        quickSuggestions: on,
+        suggestOnTriggerCharacters: on,
       });
     },
     autocompletionDelay(x) { this.me.updateOptions({ quickSuggestionsDelay: x }); },
@@ -502,7 +488,10 @@
         me.trigger('editor', 'type', { text: ' '.repeat(i - (ci % i)) });
         return;
       }
-      D.prf.autocompletion() && me.trigger('editor', 'editor.action.triggerSuggest');
+      if (D.prf.autocompletion() !== 'off') {
+        me.tabComplete = 1;
+        me.trigger('editor', 'editor.action.triggerSuggest');
+      }
     },
   };
   D.Se = Se;

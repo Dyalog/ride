@@ -53,13 +53,13 @@
         showSlider: D.prf.minimapShowSlider(),
       },
       mouseWheelZoom: false,
-      quickSuggestions: D.prf.autocompletion(),
+      quickSuggestions: D.prf.autocompletion() === 'classic',
       quickSuggestionsDelay: D.prf.autocompletionDelay(),
       renderLineHighlight: D.prf.renderLineHighlight(),
       renderIndentGuides: false,
       selectionHighlight: D.prf.selectionHighlight(),
       snippetSuggestions: D.prf.snippetSuggestions() ? 'bottom' : 'none',
-      suggestOnTriggerCharacters: D.prf.autocompletion(),
+      suggestOnTriggerCharacters: D.prf.autocompletion() === 'classic',
       showFoldingControls: 'always',
       wordBasedSuggestions: false,
     });
@@ -109,17 +109,7 @@
       }
     });
     me.onDidFocusEditor(() => { ed.focusTS = +new Date(); ed.ide.focusedWin = ed; });
-    ed.processAutocompleteReply = (x) => {
-      const { ac } = me.model;
-      if (ac && ac.complete) {
-        const l = ac.position.lineNumber;
-        const c = ac.position.column;
-        ac.complete(x.options.map(i => ({
-          label: i,
-          range: new monaco.Range(l, c - x.skip, l, c),
-        })));
-      }
-    };
+    ed.processAutocompleteReply = D.ac(me);
     ed.tb = $(ed.dom).find('button');
     ed.tb.mousedown((x) => {
       if (x.currentTarget.matches('.tb_btn')) {
@@ -250,10 +240,6 @@
       ed.container && ed.container.setTitle(ed.name);
       D.ide.floating && $('title', ed.dom.ownerDocument).text(ed.name);
       me.model.winid = ed.id;
-      me.model.onDidChangeContent((x) => {
-        if (!me.dyalogBQ && x.changes.length === 1
-          && x.changes[0].text === D.prf.prefixKey()) D.commands.BQC(me);
-      });
       me.model.setValue(ed.oText = ee.text.join('\n'));
       me.model.setEOL(monaco.editor.EndOfLineSequence.LF);
       // entityType:            16 NestedArray        512 AplClass
@@ -594,7 +580,10 @@
         me.trigger('editor', 'type', { text: ' '.repeat(i - (ci % i)) });
         return;
       }
-      D.prf.autocompletion() && me.trigger('editor', 'editor.action.triggerSuggest');
+      if (D.prf.autocompletion() !== 'off') {
+        me.tabComplete = 1;
+        me.trigger('editor', 'editor.action.triggerSuggest');
+      }
     },
     downOrXline(me) {
       const p = me.getPosition();
