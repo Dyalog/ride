@@ -512,7 +512,6 @@
           const desc = `${v.text} ${key ? pk + key : '  '} ${pk2}${v.name}`;
           return {
             label: desc,
-            detail: D.sqglDesc[key] || '',
             filterText: desc,
             sortText: key,
             kind: kind.Function,
@@ -524,12 +523,10 @@
         const bqc = [];
         Object.keys(D.bq).forEach((k) => {
           const v = D.bq[k];
-          // const desc = `${v} ${pk}${k} ${D.sqglDesc[v] || ''}  `;
+          const desc = `${v} ${pk}${k} ${D.sqglDesc[v] || ''}  `;
           if (v === ' ') return;
           bqc.push({
-            label: `${v} ${pk}${k}`,
-            detail: D.sqglDesc[v] || '',
-            filterText: `${v} ${pk}${k}`,
+            label: desc,
             sortText: k,
             kind: kind.Function,
             insertText: { value: v },
