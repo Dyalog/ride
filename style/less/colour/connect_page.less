@@ -8,16 +8,14 @@
 			border-color:	@CN_INPUT_BORDER_COL;
 			color:@CN_INPUT_DIS_FG;
 			&::-webkit-input-placeholder {
-				color: #413e3f;
+				color: @CN_INPUT_DIS_FG;
 			}
 		}
+		&::placeholder {
+			color:@CN_INPUT_DIS_FG;
+		}
   }
-  // select{
-	// 	background-color:	@CN_SELECT_BG;
-	// 	border: 1px solid @CN_INPUT_BORDER_COL;
-  //   color:@CN_SELECT_FG;
-	// }
-	hr {
+  hr {
 		background-color: #a9a9a9;
 		border-color: #a9a9a9;
 		color: #a9a9a9;
@@ -25,16 +23,14 @@
 		border-bottom: 1px solid @HR_BTM;
 	}
 	.hsplitbar {
+		background-blend-mode: soft-light;
 		background: @GL_SPLITTER @GL_SPLITTERV_IMG no-repeat center !important;
 		border-right: solid 1px @GL_SPLITTER_TOP;
 		border-left: solid 1px @GL_SPLITTER_TOP;
 	}
 }
 #cn_favs {
-	// .go {
-	// 	border:1px solid @CN_FAV_GO_BORDER;
-	// 	background:linear-gradient(to right bottom, @THEME_WIN_BG 50%, darken(@THEME_WIN_BG,5) 50%);
-	// }
+	
 	>div.list_sel{
 		background:@CN_FAV_BTN_BG;
 		color: @CN_FAV_BTN_FG;
@@ -52,10 +48,6 @@
 	>div{
 		background:@CN_FAV_BTN_UNSEL_BG;
 		color:@CN_FAV_BTN_UNSEL_FG;
-		// opacity:0.6;
-		// &:hover {
-		// 	opacity: 1;
-		// }
 	}
 }
 #cn_fav_btns {
@@ -68,7 +60,7 @@
 	background: linear-gradient(@CN_RHS_BG, @CN_RHS_BG2);
 }
 #cn_env_add {
-	color: #a9a9a9;
+	color: @CN_LABEL_COL;
 	a {
 		color: @CN_ENV_BTN_FG;
 	}

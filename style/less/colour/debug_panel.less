@@ -2,10 +2,10 @@
   background-color:@DBG_BG;
   color:@DBG_FG;
   tr {
-    background-color:@SHC_TR_BG;
-    border-bottom: 1px solid @THEME_WIN_BG;
+    background-color: fade(@THEME_PRIMARY,50);
+    border-bottom: 1px solid @DBG_BG;
     &:hover {
-      background-color:#4d5571;
+      background-color:fade(@THEME_PRIMARY,25);
     }
   }
 }
@@ -13,7 +13,10 @@
   background-color:@DBG_ITEM_SEL_BG
 }
 #debug {
-  background:@DBG_BG
+  background:@DBG_BG;
+  // .toolbar {
+  //   background-color: fade(@THEME_PRIMARY,75);
+  // }
 }
 #debug .ctl_listview_header{
     background-color:@DBG_HEADER_BG;

@@ -7,7 +7,7 @@ var layouts=D.kbds.layouts,geom=D.kbds.geom,NK=58 //NK:number of scancodes we ar
 ,g=[] //g[i][j]:the DOM element for key i and group j (group 0 is bottom-left, 1 top-left, etc, for instance: eE∊⍷)
 ,tip=function(x){return x===' '?'Click to\nconfigure':'U+'+('000'+x.charCodeAt(0).toString(16).toUpperCase()).slice(-4)}
 D.prf_tabs.lyt={
-  name:'Layout',
+  name:'Keyboard',
   init:function(t){
     q=J.lyt;q.lc.innerHTML='<option>'+Object.keys(layouts).sort().join('<option>')
     var inputs=q.kbd.querySelectorAll('input')
