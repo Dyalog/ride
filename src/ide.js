@@ -163,7 +163,7 @@ D.IDE = function IDE(opts = {}) {
   const eachWin = (f) => { Object.keys(ide.wins).forEach((k) => { f(ide.wins[k]); }); };
   const gl = new GoldenLayout({
     settings: { showPopoutIcon: 0 },
-    dimensions: { borderWidth: 7 },
+    dimensions: { borderWidth: 7, headerHeight: 25 },
     labels: { minimise: 'unmaximise' },
     content: [ide.floating ? { type: 'stack' } : {
       title: 'Session',

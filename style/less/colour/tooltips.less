@@ -1,0 +1,13 @@
+.tooltip {
+    color: @THEME_PRIMARY;
+}
+
+/* Tooltip text */
+.tooltip .tooltiptext {
+    background-color: @THEME_SECONDARY_DIM;
+    color: @LABEL_COL;
+}
+
+.tooltip .tooltiptext::after {
+    border-color: transparent @THEME_SECONDARY_DIM transparent transparent;
+}

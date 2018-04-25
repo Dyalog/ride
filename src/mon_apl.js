@@ -796,7 +796,7 @@
             { language: 'plaintext', value: lbt[1] },
           ],
         };
-      } else if (D.prf.valueTips() && /[^ \(\)\[\]\{\}':;]/.test(c)) {
+      } else if (D.prf.valueTips() && /[^ ()[\]{}':;]/.test(c)) {
         D.send('GetValueTip', { // ask interpreter
           win: m.winid,
           token: m.winid,

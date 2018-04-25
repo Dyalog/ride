@@ -1,13 +1,11 @@
 /*Golden Layout*/
 .lm_goldenlayout {
-	// background:@GL_BG url(img/mainBG.png) left -40px repeat-x !important;
 	background: @GL_BG !important;
 	.lm_header {
 		background: @GL_BG !important;
 	}
 }
 .lm_header,.lm_content {
-// 	background-color: @GL_BG !important;
 	border-color: @GL_BG !important;
 }
 .lm_tab {
@@ -67,11 +65,14 @@
 	opacity: 1;
 	filter: alpha(opacity=100);
 }
+.lm_header .lm_controls .lm_tabdropdown:before {
+	color:@GL_TAB_FG !important;
+}
 
 .lm_controls .lm_maximise{
-	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAIklEQVR4nGNkYGD4z0AAMBFSAAOETPpPlEmDUREjAxHhBABPvAQLFv3qngAAAABJRU5ErkJggg==);
+	background-image: @GL_MAXIMISE_IMG;
 }
 
 .lm_maximised .lm_controls .lm_maximise{
-	background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAJklEQVR4nGP8//8/AyHARFDFUFbEwsDAwMDIyIgzHP7//89IlEkApSkHEScJTKoAAAAASUVORK5CYII=);
+	background-image: @GL_RESTORE_IMG;
 }

@@ -1,8 +1,6 @@
 /*various dialogs*/
 .dlg{
     background-color:@DLG_BG_COL;
-    // box-shadow:0 18px 48px @DLG_SHADOW_COL;
-    // border:1px solid @DLG_BORDER_COL;
 }
 
 .dlg_title,.dlg_close{
@@ -11,6 +9,9 @@
 
 .dlg_close:hover{
   background-color:@DLG_CLOSE_HOVER_BG;
+}
+#cn_listen_dlg,#cn_connecting_dlg {
+  border:1px solid @DLG_BORDER_COL;
 }
 #gd {
   &.dlg{
@@ -34,7 +35,7 @@
   color: @LABEL_COL;
 }
 .dlg_btns {
-  background-color: @THEME_THIRD;
+  background-color: @DLG_BOTTOM_BG;
   button.task{
     background-image: none;
     background-color: rgba(0, 0, 0, 0);
