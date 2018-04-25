@@ -1,4 +1,7 @@
 #!/bin/bash
+set -e
+
+# Create D.ico and D.icns from D.png
 
 for S in 16 24 32 48 128 256 512; do
     convert D.png -resize ${S}x${S} D$S.png
