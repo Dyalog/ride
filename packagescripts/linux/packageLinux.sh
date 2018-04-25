@@ -66,7 +66,7 @@ else
 	EXECUTABLE=/opt/ride-${BASE_VERSION}/Ride-${BASE_VERSION}
 fi
 
-cat >$postinst <<-!!postinst
+cat >$postinst <<-EOFpostinst
 #!/bin/bash
 
 if which update-alternatives >/dev/null 2>&1 ; then
@@ -89,7 +89,7 @@ fi
 
 
 if [ -d /usr/share/applications ]; then
-cat >/usr/share/applications/ride-${BASE_VERSION}.desktop <<-!!desktopFile
+cat >/usr/share/applications/ride-${BASE_VERSION}.desktop <<-EOFdesktopFile
 [Desktop Entry]
 Encoding=UTF-8
 Version=1.0
@@ -100,16 +100,16 @@ Terminal=false
 Name=Ride-${BASE_VERSION}
 Comment=Remote IDE for Dyalog APL
 Categories=Application;Development;Programming
-!!desktopFile
+EOFdesktopFile
 fi
 
 if which gtk-update-icon-cache >/dev/null 2>&1 ; then
 	gtk-update-icon-cache --quiet --force --ignore-theme-index /usr/share/icons/hicolor
 fi
 
-!!postinst
+EOFpostinst
 
-cat >$prerm <<-!!prerm
+cat >$prerm <<-EOFprerm
 
 if which update-alternatives >/dev/null 2>&1 ; then
 	update-alternatives --remove ride ${EXECUTABLE}
@@ -132,7 +132,7 @@ if which gtk-update-icon-cache >/dev/null 2>&1 ; then
 	gtk-update-icon-cache --quiet --force --ignore-theme-index /usr/share/icons/hicolor
 fi
 
-!!prerm
+EOFprerm
 
 }
 
