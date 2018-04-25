@@ -34,7 +34,7 @@
       { open: '\'', close: '\'' },
     ],
     indentationRules: {
-      decreaseIndentPattern: RegExp(`^((?!.*?⍝).*)?\\s*([}\\])]|${endBlock})\\b.*$`, 'i'),
+      decreaseIndentPattern: RegExp(`^((?!.*?⍝).*)?\\s*(${endBlock})\\b.*$`, 'i'),
       increaseIndentPattern: RegExp(`^(?:(?!⍝).)*(${startBlock})\\b.*$`, 'i'),
       unIndentedLinePattern: /^\s*⍝.*$/,
     },
