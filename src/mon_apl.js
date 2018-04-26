@@ -511,7 +511,7 @@
         return Object.keys(D.bqbqc).map((k) => {
           const v = D.bqbqc[k];
           const key = D.getBQKeyFor(v.text);
-          const desc = `${v.text} ${key ? pk + key : '  '} ${pk2}${v.name}`;
+          const desc = `${v.text} ${key ? `${pk}${key} `.slice(0, 3) : '   '} ${pk2}${v.name}`;
           return {
             label: desc,
             filterText: desc,
