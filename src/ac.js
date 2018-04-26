@@ -6,7 +6,7 @@
     me.tabComplete = 0;
     me.onDidChangeModelContent((e) => {
       const pk = D.prf.prefixKey();
-      if (!me.dyalogBQ && e.changes.length === 1
+      if (me.listen && !me.dyalogBQ && e.changes.length === 1
         && e.changes[0].text === pk) {
         D.commands.BQC(me);
       } else {
