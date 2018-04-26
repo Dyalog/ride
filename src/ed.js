@@ -273,6 +273,11 @@
       ed.stop = new Set(ed.oStop);
       ed.setStop();
     },
+    update(x) {
+      const ed = this;
+      ed.container && ed.container.setTitle(x.name);
+      ed.me_ready.then(() => ed.open(x));
+    },
     blockCursor(x) { this.me.updateOptions({ cursorStyle: x ? 'block' : 'line' }); },
     cursorBlinking(x) { this.me.updateOptions({ cursorBlinking: x }); },
     hasFocus() { return this.me.isFocused(); },

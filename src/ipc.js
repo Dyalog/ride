@@ -1,5 +1,5 @@
 const pm = ('close die focus insert open processAutocompleteReply prompt saved setTC stateChanged' +
-  ' zoom ReplyFormatCode SetHighlightLine ValueTip').split(' ');
+  ' update zoom ReplyFormatCode SetHighlightLine ValueTip').split(' ');
 D.IPC_Client = function IPCClient(winId) {
   // start IPC client
   D.ipc.config.id = `editor${winId}`;
