@@ -32,6 +32,7 @@ module.exports = function gruntTask(grunt) {
           strictMath: true,
         },
         files: {
+          './style/ride-base.css': './style/layout.less',
           './style/dark-theme.css': './style/dark-theme.less',
           './style/light-theme.css': './style/light-theme.less',
         },
