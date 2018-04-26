@@ -1,5 +1,5 @@
 {
-  const words = '[⎕\\]\\)A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ\\d]';
+  const words = '[⎕\\]\\)\\.A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ\\d]';
   const prefixRE = new RegExp(`^(${words}*)${words}*(?: \\1${words}*)*$`);
 
   D.ac = (me) => {
@@ -38,8 +38,8 @@
         const c = ac.position.column;
         const manual = me.tabComplete;
         if (D.prf.autocompletion() === 'shell' && manual) {
-          const prefix = x.options.join(' ').match(prefixRE)[1];
-          if (prefix.length > x.skip) {
+          const [,prefix] = x.options.join(' ').match(prefixRE);
+          if (prefix && prefix.length > x.skip) {
             const endCol = (c - x.skip) + prefix.length;
             me.executeEdits(
               'D',
