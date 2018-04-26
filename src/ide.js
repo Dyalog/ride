@@ -587,7 +587,9 @@ D.IDE = function IDE(opts = {}) {
     TaskDialog(x) {
       if (D.dlg_bw) {
         D.ipc.server.emit(D.dlg_bw.socket, 'show', x);
-        D.el.BrowserWindow.fromId(D.dlg_bw.id).show();
+        const bw = D.el.BrowserWindow.fromId(D.dlg_bw.id);
+        bw.show();
+        bw.setAlwaysOnTop(true);
         return;
       }
       const { esc } = D.util;
