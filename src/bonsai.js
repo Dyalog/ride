@@ -44,10 +44,10 @@ class Bonsai {
     let clickTimer = 0;
     e.onclick = (event) => {
       clearTimeout(clickTimer);
+      if (event.target.matches('.bt_node_expand')) { toggleNode(event.target); }
       clickTimer = setTimeout(() => {
-        if (event.target.matches('.bt_node_expand')) { toggleNode(event.target); }
         selectNode(event.target, 1);
-      });
+      }, 500);
       return !1;
     };
     
