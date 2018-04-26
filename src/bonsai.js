@@ -40,14 +40,19 @@ class Bonsai {
         }
       }
     };
-
-    e.onmousedown = (event) => {
-      if (event.target.matches('.bt_node_expand')) { toggleNode(event.target); }
-      selectNode(event.target, 0);
+    
+    let clickTimer = 0;
+    e.onclick = (event) => {
+      clearTimeout(clickTimer);
+      clickTimer = setTimeout(() => {
+        if (event.target.matches('.bt_node_expand')) { toggleNode(event.target); }
+        selectNode(event.target, 1);
+      });
       return !1;
     };
-
+    
     e.ondblclick = (event) => {
+      clearTimeout(clickTimer);
       const ps = event.target.previousSibling;
       if (ps.matches('.bt_node_expand')) {
         toggleNode(ps);
