@@ -504,7 +504,9 @@
       const ch = s[c - 2];
       const pk2 = `${pk}${pk}`;
       const kind = monaco.languages.CompletionItemKind;
-      // console.log(`completion triggered on: ${ch}`);
+      const { a } = model._lines[position.lineNumber-1]._state;
+      const { t } = (a || []).slice(-1)[0] || {};      
+      const snippets = /^\s*:\w*$/.test(s.slice(0, c - 1)) && a && t !== '{';
       if (s.slice(c - 3, c - 1) === pk2) {
         return Object.keys(D.bqbqc).map((k) => {
           const v = D.bqbqc[k];
@@ -534,14 +536,11 @@
           });
         });
         return bqc;
-      } else if (ch === ':') {
-        const { a } = model._lines[position.lineNumber-1]._state;
-        const { t } = (a || []).slice(-1)[0] || {};
-        if (!a || t === '{') return [];
+      } else if (snippets) {
         const items = [];
         const textItem = i => ({
           label: i,
-          kind: kind.Text,
+          kind: kind.Snippet,
         });
         /* eslint-disable no-template-curly-in-string */
         if (t === '∇') {

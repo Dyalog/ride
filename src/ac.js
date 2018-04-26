@@ -14,11 +14,11 @@
           const sw = me.contentWidgets['editor.widget.suggestWidget'];
           const swv = sw.widget.suggestWidgetVisible.get();
           const r = e.changes[0].range;
-          const l = me.model.getLineContent(r.endLineNumber).toLowerCase();
+          const l = me.model.getLineContent(r.startLineNumber).toLowerCase();
           const bq2 = e.changes.length === 1 && RegExp(`${pk}${pk}\\w*`, 'i').test(l);
           if (swv && sw.widget.list.length === 1) {
             const t = sw.widget.focusedItem.suggestion.insertText.toLowerCase();
-            if (l.slice(r.endColumn - t.length, r.endColumn) === t) {
+            if (l.slice(r.startColumn - t.length, r.startColumn) === t) {
               me.trigger('editor', 'hideSuggestWidget');
             } else {
               me.trigger('editor', 'editor.action.triggerSuggest');
