@@ -1330,14 +1330,12 @@ input.lyt_g3:hover {
   line-height: 45px;
   cursor: default;
   clear: left;
-  font-size: 32px;
-  width: 15%;
+  width: 16.1%;
 }
 #lyt_57 {
   line-height: 45px;
   cursor: default;
-  font-size: 32px;
-  width: 17.2%;
+  width: 16.1%;
 }
 #lyt_14 {
   display: none;
@@ -1380,7 +1378,7 @@ input.lyt_g3:hover {
   padding-right: 1px;
 }
 .lyt_geom_iso #lyt_44 {
-  width: 8.4%;
+  width: 9.6%;
 }
 .lyt_geom_iso #lyt_45 {
   display: block;
