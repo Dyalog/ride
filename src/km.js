@@ -287,11 +287,6 @@
       bqbqc.push({
         name: a[j],
         text: a[0],
-        render: ((squiggle, name) => (x) => { // bind squiggle=a[0] and name=a[j]
-          const key = D.getBQKeyFor(squiggle);
-          const pk = D.prf.prefixKey(); // the actual .render() function
-          x.textContent = `${squiggle} ${key ? pk + key : '  '} ${pk}${pk}${name}`;
-        })(a[0], a[j]),
       });
     }
   }
