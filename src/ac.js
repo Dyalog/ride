@@ -3,6 +3,7 @@
   const prefixRE = new RegExp(`^(${words}*)${words}*(?: \\1${words}*)*$`);
 
   D.ac = (me) => {
+    me.tabComplete = 0;
     me.onDidChangeModelContent((e) => {
       const pk = D.prf.prefixKey();
       if (!me.dyalogBQ && e.changes.length === 1
@@ -37,7 +38,6 @@
         const c = ac.position.column;
         const manual = me.tabComplete;
         if (D.prf.autocompletion() === 'shell' && manual) {
-          me.tabComplete = 0;
           const prefix = x.options.join(' ').match(prefixRE)[1];
           if (prefix.length > x.skip) {
             const endCol = (c - x.skip) + prefix.length;
@@ -47,8 +47,13 @@
               [new monaco.Selection(l, endCol, l, endCol)],
             );
             me.trigger('editor', 'hideSuggestWidget');
+            me.tabComplete = 0;
+            return;
+          } else if (me.tabComplete < 2) {
+            me.trigger('editor', 'hideSuggestWidget');
             return;
           }
+          me.tabComplete = 0;
         }
         if (!x.options.length || (D.prf.autocompletion() === 'shell' && !manual)) {
           me.trigger('editor', 'hideSuggestWidget');

@@ -489,7 +489,7 @@
         return;
       }
       if (D.prf.autocompletion() !== 'off') {
-        me.tabComplete = 1;
+        me.tabComplete += 1;
         me.trigger('editor', 'editor.action.triggerSuggest');
       }
     },
