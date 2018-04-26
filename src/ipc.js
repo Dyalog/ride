@@ -188,7 +188,9 @@ D.IPC_LinkEditor = function IPCLinkEditor(pe) {
   } else if (wp.id > 0) {
     wp = Object.assign(new D.IPC_WindowProxy(), wp);
   }
-  D.el.BrowserWindow.fromId(wp.bwId).show();
+  const bw = D.el.BrowserWindow.fromId(wp.bwId);
+  bw.show();
+  bw.setAlwaysOnTop(!!D.prf.floatOnTop());
   const ped = D.pendingEditors.shift();
   wp.id = ped.editorOpts.id;
   wp.tc = ped.editorOpts.tc;
