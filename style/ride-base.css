@@ -309,7 +309,7 @@
   height: 100%;
 }
 #abt_logo {
-  background: 16px center no-repeat url(img/Dyalog_60.png);
+  background: 16px center no-repeat url(img/dyalog.png);
   height: 80px;
   line-height: 20px;
   cursor: move;
@@ -331,9 +331,9 @@
 #abt_ta_wr {
   position: absolute;
   left: 5px;
-  right: 13px;
+  right: 5px;
   top: 86px;
-  bottom: 65px;
+  bottom: 70px;
   width: auto;
 }
 #abt_ta {
@@ -516,6 +516,10 @@ select option {
 }
 select:focus {
   outline: dotted black 1px;
+}
+textarea {
+  border: none;
+  padding: 0;
 }
 /*jQuery UI - v1.10.4 - 2014-01-17, heavily customized*/
 .ui-helper-hidden {
@@ -1094,7 +1098,7 @@ body .ui-tooltip {
   overflow: auto;
   position: absolute;
   top: 54px;
-  bottom: 60px;
+  bottom: 70px;
   left: 12px;
   right: 3px;
 }
@@ -1123,7 +1127,7 @@ body .ui-tooltip {
   text-align: left;
   position: absolute;
   top: 116px;
-  bottom: 56px;
+  bottom: 70px;
 }
 #col_settings {
   width: 200px;
@@ -1133,7 +1137,7 @@ body .ui-tooltip {
   text-align: left;
   position: absolute;
   top: 116px;
-  bottom: 56px;
+  bottom: 70px;
 }
 #col_settings p {
   padding-top: 8px;
@@ -1399,7 +1403,7 @@ input.lyt_g3:hover {
   left: 4px;
   right: 8px;
   top: 94px;
-  bottom: 60px;
+  bottom: 70px;
   overflow: hidden;
   padding: 4px;
 }
@@ -1414,7 +1418,7 @@ input.lyt_g3:hover {
   left: 0;
   right: 0;
   top: 54px;
-  bottom: 60px;
+  bottom: 70px;
   overflow: auto;
   text-align: left;
   padding: 8px 0 0 8px;
@@ -1515,7 +1519,7 @@ input.lyt_g3:hover {
   left: 8px;
   right: 8px;
   top: 125px;
-  bottom: 60px;
+  bottom: 70px;
 }
 #title table {
   table-layout: fixed;
@@ -1578,8 +1582,9 @@ input.lyt_g3:hover {
 #prf_content select option {
   font-weight: 500;
 }
-div::-webkit-scrollbar {
-  width: 14px;
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
 }
 /* http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 License: none (public domain) */
 html,

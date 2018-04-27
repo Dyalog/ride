@@ -33,7 +33,6 @@ D.DBG=function(){
   dbg.tb.onmouseup=dbg.tb.onmouseout=function(x){if(x.target.matches('.tb_btn')){x.target.classList.remove('armed')
                                                                                x.preventDefault()}}
   dbg.tb.onclick=function(x){var t=x.target
-    if(t.matches('.tb_hid,.tb_case')){t.classList.toggle('pressed');ed.hls();return!1}
     if(t.matches('.tb_btn')){var c=t.className.replace(/^.*\btb_([A-Z]{2,3})\b.*$/,'$1')
                              dbg[c]?dbg[c]():0;return!1}
   }

@@ -41,7 +41,6 @@
   border-bottom: 1px solid white;
 }
 #cn .hsplitbar {
-  background-blend-mode: soft-light;
   background: rgba(118, 136, 217, 0.3) url(img/grabber_vert.png) no-repeat center !important;
   border-right: solid 1px #9eabe4;
   border-left: solid 1px #9eabe4;
@@ -188,12 +187,10 @@
   background-color: rgba(118, 136, 217, 0.3) !important;
 }
 .lm_splitter.lm_horizontal {
-  background-blend-mode: soft-light;
   background: rgba(118, 136, 217, 0.3) url(img/grabber_vert.png) no-repeat center !important;
   box-shadow: -1px 0 0 #9eabe4 inset, 1px 0 0 #9eabe4 inset;
 }
 .lm_splitter.lm_vertical {
-  background-blend-mode: soft-light;
   background: rgba(118, 136, 217, 0.3) url(img/grabber_hor.png) no-repeat center !important;
   box-shadow: 0 -1px 0 #9eabe4 inset, 0 1px 0 #9eabe4 inset;
 }
@@ -505,24 +502,36 @@ a:hover {
 #pmenu #pmenu_ta {
   font-family: monospace;
 }
-::-webkit-scrollbar-corner {
-  background-color: #7688d9;
-}
 ::-webkit-scrollbar {
-  background-color: #7688d9;
+  background-color: white;
+}
+::-webkit-scrollbar-corner {
+  background-color: white;
 }
 ::-webkit-scrollbar-track {
-  background-color: #7688d9;
+  background-color: #f0f0f0;
+  border: 1px solid white;
+  border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb {
-  background-color: #b2bcea;
-  border: 1px solid #9eabe4;
+  background-color: rgba(118, 136, 217, 0.3);
+  border: 1px solid white;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  border-width: 1px 0;
+}
+::-webkit-scrollbar-thumb:vertical {
+  border-width: 0 1px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background-color: #dadff5;
+  background-color: rgba(118, 136, 217, 0.6);
+}
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(118, 136, 217, 0.9);
 }
 #ide {
-  background: url(img/RideSplash-Blue.png) center no-repeat #7688d9;
+  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #7688d9;
 }
 #apl_font {
   color: #7688d9;
