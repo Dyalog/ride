@@ -75,6 +75,7 @@
     me.dyalogCmds = ed;
     ed.session = me.createContextKey('session', false);
     ed.tracer = me.createContextKey('tracer', !!ed.tc);
+    me.listen = true;
     D.mapKeys(ed); D.prf.keys(D.mapKeys.bind(this, ed));
 
     const kc = monaco.KeyCode;
