@@ -96,7 +96,7 @@
     sel && (sel.subtype = s);
     q.cwd.disabled = !(q.ssh.hidden = s !== 'ssh');
     q.tcp_port.disabled = t === 'start' && s === 'raw';
-    q.tcp_host.disabled = t === 'listen' || (t === 'start' && s === 'raw');
+    q.tcp_host.disabled = t === 'start' && s === 'raw';
     q.ssl.hidden = s !== 'ssl';
     q.fetch.disabled = q.ssh.hidden;
     updExes();
@@ -347,7 +347,7 @@
         case 'listen': {
           D.util.dlg(q.listen_dlg);
           const port = +x.port || 4502;
-          q.listen_dlg_port.textContent = `${port}`;
+          const host = x.host || 'localhost';
           q.listen_dlg_cancel.onclick = () => {
             srv && srv.close();
             q.listen_dlg.hidden = 1;
@@ -355,16 +355,21 @@
           };
           srv = net.createServer((c) => {
             let t;
-            const host = c && (t = c.request) && (t = t.connection) && t.remoteAddress;
-            log(`interpreter connected from ${host}`);
+            const cHost = c && (t = c.request) && (t = t.connection) && t.remoteAddress;
+            log(`interpreter connected from ${cHost}`);
             srv && srv.close();
             srv = 0;
             clt = c;
             initInterpreterConn();
-            new D.IDE().setConnInfo(host, port, sel ? sel.name : '');
+            new D.IDE().setConnInfo(cHost, port, sel ? sel.name : '');
           });
           srv.on('error', (e) => { srv = 0; q.listen_dlg.hidden = 1; err(`${e}`); });
-          srv.listen(port, '', () => log(`listening on port ${port}`));
+          srv.listen(port, host, () => {
+            const o = srv.address();
+            log(`listening on ${o.address}:${o.port}`);
+            q.listen_dlg_host.textContent = `${o.address}`;
+            q.listen_dlg_port.textContent = `${o.port}`;
+          });
           break;
         }
         case 'start': {
