@@ -10,6 +10,7 @@ D.IDE = function IDE(opts = {}) {
   D.ide = ide;
   ide.dom = I.ide; I.ide.hidden = 0;
   ide.floating = opts.floating;
+  ide.hadErr = -1;
   ide.ipc = opts.ipc;
   // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.pending = [];
