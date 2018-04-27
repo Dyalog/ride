@@ -29,6 +29,8 @@
       const w = new D.el.BrowserWindow({
         width: 600,
         height: 500,
+        minWidth: 600,
+        minHeight: 500,
         parent: D.elw,
         modal: true,
       });

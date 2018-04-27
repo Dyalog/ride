@@ -1,22 +1,38 @@
-//workspace explorer
-'use strict'
-D.WSE=function(){
-  var pending=this.pending={};this.dom=I.wse;this.dom.hidden=0
-  this.bt=new Bonsai(this.dom,{
-    children:function(id,callback){pending[id]=callback.bind(this);D.send('TreeList',{nodeId:id})},
-    click:function(path){D.send('Edit',{win:0,pos:0,text:path.map(function(x){return x.text}).join('.')})}
-  })
-}
-D.WSE.prototype={
-  replyTreeList:function(x){ //handle response from interpreter
-    var f=this.pending[x.nodeId];if(!f)return
-    f((x.nodeIds||[]).map(function(c,i){
-      //x.classes uses constants from http://help.dyalog.com/16.0/Content/Language/System%20Functions/nc.htm
-      return{id:c||('leaf_'+x.nodeId+'_'+i),text:x.names[i],expandable:!!c,icon:(''+Math.abs(x.classes[i])).replace('.','_')}
-    }))
-    delete this.pending[x.nodeId]
-  },
-  refresh:function(){
-    this.bt.rebuild()
+// workspace explorer
+{
+  class WSE {
+    constructor() {
+      const pending = {};
+      this.pending = pending;
+      this.dom = I.wse;
+      this.dom.hidden = 0;
+      this.bt = new D.Bonsai(this.dom, {
+        children(id, callback) {
+          pending[id] = callback.bind(this);
+          D.send('TreeList', { nodeId: id });
+        },
+        click(path) {
+          D.send('Edit', { win: 0, pos: 0, text: path.map(x => x.text).join('.') });
+        },
+      });
+    }
+
+    replyTreeList(x) { // handle response from interpreter
+      const f = this.pending[x.nodeId];
+      if (!f) return;
+      f((x.nodeIds || []).map((c, i) => ({
+        // x.classes uses constants from http://help.dyalog.com/16.0/Content/Language/System%20Functions/nc.htm
+        id: c || `leaf_${x.nodeId}_${i}`,
+        text: x.names[i],
+        expandable: !!c,
+        icon: `${Math.abs(x.classes[i])}`.replace('.', '_'),
+      })));
+      delete this.pending[x.nodeId];
+    }
+
+    refresh() {
+      this.bt.rebuild();
+    }
   }
+  D.WSE = WSE;
 }
