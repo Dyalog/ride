@@ -13,6 +13,13 @@ fi
 ## Check /devt is mounted
 
 mountpoint /devt; echo "Devt is mounted: good"
-RIDEDIR=/devt/builds/${JOB_NAME}/latest
+r=/devt/builds/${JOB_NAME}
+d=${BUILD_NUMBER}
 
-cp -vR ship $RIDEDIR/
+cp -vR ship $r/$d/
+
+echo 'updating "latest" symlink'; l=$r/latest; rm -f $l; ln -s $d $l
+echo 'cleaning up old releases'
+for x in $(ls $r/ | grep -v "latest" | grep -v "Thumbs.db" | sort -n | head -n-10); do
+  echo "deleting $r/$x"; rm -rf $r/$x || true
+done

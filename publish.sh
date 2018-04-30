@@ -62,9 +62,3 @@ cp -r _/${APP_NAME}/${DIR} $r/$d/${OSNAME}
 done
 
 echo 'fixing permissions'; chmod +x $r/$d/win32/{*.exe,*.dll}
-
-echo 'updating "latest" symlink'; l=$r/latest; rm -f $l; ln -s $d $l
-echo 'cleaning up old releases'
-for x in $(ls $r/ | grep -v "latest" | grep -v "Thumbs.db" | sort -n | head -n-10); do
-  echo "deleting $r/$x"; rm -rf $r/$x || true
-done
