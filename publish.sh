@@ -17,13 +17,13 @@ echo "Current branch: ${GIT_BRANCH#*/}"
 CURRENTBRANCH=${GIT_BRANCH#*/}
 
 umask 002 # user and group can do everything, others can only read and execute
-mountpoint /devt; echo Devt is mounted: good # make sure it's mounted
+mountpoint /devt; echo "Devt is mounted: good" # make sure it's mounted
 r=/devt/builds/${JOB_NAME}
 d=${BUILD_NUMBER}
 for suffix in '' {a..z}; do if [ ! -e $r/$d$suffix ]; then d=$d$suffix; break; fi; done
 mkdir -p $r/$d
 echo "$VERSION" > $r/$d/version
-echo Copying Directories to $r/$d
+echo "Copying Directories to $r/$d"
 #cp -r _/${APP_NAME}/* $r/$d
 for DIR in `ls _/${APP_NAME}`; do
 
@@ -54,7 +54,7 @@ cp -r _/${APP_NAME}/${DIR} $r/$d/${OSNAME}
   cd _/${APP_NAME}/$DIR
   echo "creating $TMPZIP"
   zip -q -r "$TMPZIP" .
-  echo Copying to devt
+  echo "Copying to devt"
   cp $TMPZIP $r/$d
   echo "Removing $TMPZIP"
   rm $TMPZIP
