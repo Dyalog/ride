@@ -297,10 +297,11 @@
     'BK', 'ZM', 'SC', 'RP', 'NX', 'PV', 'RT', 'RA', 'ED', 'TC', 'NB', 'NS', 'ST', 'EN', 'IF', 'HK', // 20
     'FX', 'LN', 'MC', 'MR', 'JP', 'D1', 'D2', 'D3', 'D4', 'D5', 'U1', 'U2', 'U3', 'U4', 'U5', 'Lc', // 30
     'Rc', 'LW', 'RW', 'Lw', 'Rw', 'Uc', 'Dc', 'Ll', 'Rl', 'Ul', 'Dl', 'Us', 'Ds', 'DD', 'DH', 'BH', // 40
-    'BP', 'AB', 'HT', 'TH', 'RM', 'CB', 'PR', 'SR', null, 'TL', 'UA', 'AO', 'DO', 'GL', 'CH', 'PU', // 50
-    'PA', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, // 60
+    'BP', 'AB', 'HT', 'TH', 'RM', 'CB', 'PR', 'SR', 'IS', 'TL', 'UA', 'AO', 'DO', 'GL', 'CH', 'PU', // 50
+    'PA', 'SA', 'RZ', 'AC', 'MA', 'OF', 'FS', 'FA', 'TT', 'FT', 'PL', null, null, null, null, null, // 60
     null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, // 70
     null, null, null, null, null, null, 'TO', 'MO', null, null, null, null, null, 'S1', 'S2', 'OS', // 80
+    'IG', null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, // 90
   ];
   function defCmd(x) {
     const c = D.commands;
