@@ -391,7 +391,8 @@ D.IDE = function IDE(opts = {}) {
       se.focus();
       // set timer in case no new window is opened
       se.hadErrTmr = setTimeout(() => { ide.hadErr = -1; delete se.hadErrTmr; }, 100);
-      ide.hadErr = 2 + D.prf.ilf(); // gl mounted + SetHighlightLine + ReplyFormatCode
+      // gl mounted + SetHighlightLine + ReplyFormatCode
+      ide.hadErr = 2 + (D.prf.ilf() && D.prf.indentOnOpen());
     },
     GotoWindow(x) { const w = ide.wins[x.win]; w && w.focus(); },
     WindowTypeChanged(x) { return ide.wins[x.win].setTC(x.tracer); },
