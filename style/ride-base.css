@@ -1925,6 +1925,9 @@ body.floating-window {
 #wse > div {
   padding-left: 2px;
 }
+#wse .bt_text {
+  border-radius: 3px;
+}
 #wse .bt_text::before {
   display: inline-block;
   width: 1em;

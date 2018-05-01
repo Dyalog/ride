@@ -201,6 +201,11 @@ D.IDE = function IDE(opts = {}) {
     const u = new D.WSE();
     ide.wse = u;
     u.container = c;
+    c.on('tab', (tab) => {
+      tab.element.click(() => {
+        u.focus();
+      });
+    });
     c.getElement().append(u.dom);
     ide.DBGwidth = ide.dbgw;
     return u;
@@ -293,8 +298,8 @@ D.IDE = function IDE(opts = {}) {
   });
   D.prf.fold((x) => { eachWin((w) => { !w.bwId && w.fold(!!x); }); });
   D.prf.matchBrackets((x) => { eachWin((w) => { !w.bwId && w.matchBrackets(!!x); }); });
-  const togglePanel = (compName, compTitle, left) => {
-    if (!D.prf[compName]()) {
+  const togglePanel = (on, compName, compTitle, left) => {
+    if (!on) {
       gl.root.getComponentsByName(compName).forEach((x) => { x.container.close(); });
       return;
     }
@@ -318,11 +323,16 @@ D.IDE = function IDE(opts = {}) {
     D.ide[`${compName}w`] = w;
     D.ide.focusMRUWin();
   };
-  const toggleWSE = () => { togglePanel('wse', 'Workspace Explorer', 1); };
-  const toggleDBG = () => { togglePanel('dbg', 'Debug', 0); };
+  const toggleWSE = (x) => {
+    togglePanel(x, 'wse', 'Workspace Explorer', 1);
+    ide.wse.autoRefresh(x && 5000);
+  };
+  const toggleDBG = (x) => { togglePanel(x, 'dbg', 'Debug', 0); };
   if (!ide.floating) {
-    D.prf.wse(toggleWSE); D.prf.wse() && setTimeout(toggleWSE, 500);
-    D.prf.dbg(toggleDBG); D.prf.dbg() && setTimeout(toggleDBG, 500);
+    D.prf.wse(toggleWSE);
+    D.prf.dbg(toggleDBG);
+    D.prf.wse() && setTimeout(() => toggleWSE(D.prf.wse()), 500);
+    D.prf.dbg() && setTimeout(() => toggleDBG(D.prf.dbg()), 500);
   }
   // OSX is stealing our focus.  Let's steal it back!  Bug #5
   D.mac && !ide.floating && setTimeout(() => { ide.wins[0].focus(); }, 500);

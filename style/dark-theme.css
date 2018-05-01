@@ -623,6 +623,6 @@ body {
   color: #1c1e28;
 }
 #wse .bt_text.selected {
-  background-color: #3c3f55;
-  outline: #3c3f55;
+  background-color: rgba(118, 136, 217, 0.75);
+  outline: rgba(118, 136, 217, 0.75);
 }

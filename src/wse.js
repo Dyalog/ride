@@ -17,6 +17,10 @@
       });
     }
 
+    focus() {
+      this.bt.focus();
+    }
+
     replyTreeList(x) { // handle response from interpreter
       const f = this.pending[x.nodeId];
       if (!f) return;
@@ -31,7 +35,15 @@
     }
 
     refresh() {
-      this.bt.rebuild();
+      this.bt.refresh();
+    }
+
+    autoRefresh(ms) {
+      if (ms && !this.refreshTimer) {
+        this.refreshTimer = setInterval(this.bt.refresh, ms);
+      } else if (!ms && this.refreshTimer) {
+        clearInterval(this.refreshTimer); delete this.refreshTimer;
+      }
     }
   }
   D.WSE = WSE;
