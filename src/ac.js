@@ -31,6 +31,39 @@
         }, 50);
       }
     });
+    const fw = me.overlayWidgets['editor.contrib.findWidget'].widget;
+    const fi = fw._findInput;
+    fi.onKeyDown((e) => {
+      const pk = D.prf.prefixKey();
+      const s = fi.getValue();
+      const be = e.browserEvent;
+      const tgt = be.target;
+      const p = tgt.selectionStart;
+      if (s[p - 1] === pk && D.bq[be.key] &&
+        !be.altKey && !be.ctrlKey && !be.metaKey && !be.key !== 'Shift') {
+        e.preventDefault();
+        const t = s.slice(0, p - 1) + D.bq[be.key] + s.slice(p);
+        fi.setValue(t);
+        fi._onInput.fire();
+        tgt.selectionStart = p;
+        tgt.selectionEnd = p;
+      }
+    });
+    const fwr = fw._replaceInputBox.inputElement;
+    fwr.onkeydown = (be) => {
+      const pk = D.prf.prefixKey();
+      const s = fwr.value;
+      const tgt = be.target;
+      const p = tgt.selectionStart;
+      if (s[p - 1] === pk && D.bq[be.key] &&
+        !be.altKey && !be.ctrlKey && !be.metaKey && !be.key !== 'Shift') {
+        be.preventDefault();
+        fwr.value = s.slice(0, p - 1) + D.bq[be.key] + s.slice(p);
+        fw._state.change({ replaceString: fwr.value }, false);
+        tgt.selectionStart = p;
+        tgt.selectionEnd = p;
+      }
+    };
     return (x) => { // win:editor or session instance to set up autocompletion in
       const { ac } = me.model;
       if (ac && ac.complete) {
@@ -38,7 +71,7 @@
         const c = ac.position.column;
         const manual = me.tabComplete;
         if (D.prf.autocompletion() === 'shell' && manual) {
-          const [,prefix] = x.options.join(' ').match(prefixRE);
+          const [, prefix] = x.options.join(' ').match(prefixRE);
           if (prefix && prefix.length > x.skip) {
             const endCol = (c - x.skip) + prefix.length;
             me.executeEdits(
