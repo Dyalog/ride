@@ -389,6 +389,10 @@
                   addToken(offset, 'invalid');
                 }
                 offset += ml;
+                if (kw === 'section' || kw === 'endsection') {
+                  addToken(offset, 'white');
+                  offset = eol;
+                }
               } else {
                 offset += 1;
               }
