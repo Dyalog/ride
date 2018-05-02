@@ -4,6 +4,8 @@
   const name1 = RegExp(`[${letter}\\d]*`);
   const name = `(?:[${letter}][${letter}\\d]*)`;
   const notName = RegExp(`[^${letter}0-9]+`);
+  // /(\w+|\(\w+ +(\w+)(?: +\w+)?\)) *(?:\w+|\( *\w+(?: +\w+)* *\))?$/
+  const tradFnRE = RegExp(`(${name}|\\(${name} +(${name})(?: +${name})?\\)) *(?:${name}|\\( *${name}(?: +${name})* *\\))?$`);
   const end = '(?:⍝|$)';
   const restartBlock = '|:else|:elseif|:andif|:orif';
   const startBlock = ':class|:disposable|:for|:hold|:if|:interface|:namespace' +
@@ -178,6 +180,11 @@
       const n = 0;
       let tkn;
       let s;
+      const localVar = (l) => {
+        addToken(offset, 'delimiter.semicolon');
+        addToken(offset + 1, 'identifier.local');
+        offset += 1 + l.length;
+      };
       while (offset < eol) {
         const la = a[a.length - 1];
         if (offset === 0) {
@@ -194,20 +201,39 @@
           if (/^\s*:/.test(s) || dfnHeader.test(s)) {
             // sm.backUp(s.length)
           } else {
-            addToken(offset, 'identifier.tradfn');
-            h.vars = s.split(notName);
-            let ll;
-            let lv = s.match(/;[^;]*/);
-            while (lv) {
-              offset += lv.index;
-              ll = lv[0].length;
-              addToken(offset, 'delimiter');
-              if (ll > 1) addToken(offset + 1, 'identifier.local');
-              offset += ll;
-              s = s.slice(lv.index + ll);
-              lv = s.match(/;[^;]*/);
+            const [signature, ...locals] = s.split(';');
+            const [, fn, op] = signature.match(tradFnRE);
+            const fnop = op || fn;
+            const si = signature.indexOf(fnop);
+            while (offset < signature.length) {
+              const ch = signature[offset];
+              switch (ch) {
+                case '←':
+                  addToken(offset, 'keyword.operator.assignment'); offset += 1; break;
+                case '(': case ')':
+                  addToken(offset, 'delimiter.parenthesis'); offset += 1; break;
+                case '{': case '}':
+                  addToken(offset, 'delimiter.curly'); offset += 1; break;
+                case ' ':
+                  m = signature.slice(offset).match(/^[ \t\r\n]+/);
+                  addToken(offset, 'white');
+                  offset += m[0].length; break;
+
+                default:
+                  if (offset === si) {
+                    addToken(offset, 'identifier.global');
+                    offset += fnop.length;
+                  } else {
+                    m = signature.slice(offset).match(name);
+                    addToken(offset, 'identifier.local');
+                    offset += m[0].length;
+                  }
+              }
             }
-            offset += s.length;
+
+            locals.forEach(localVar);
+            h.vars = s.split(notName);
+            h.vars.splice(h.vars.indexOf(fnop), 1);
           }
         } else if ((m = sm.match(idiomsRE))) {
           addToken(offset, 'predefined.idiom');
