@@ -593,7 +593,19 @@ D.IDE = function IDE(opts = {}) {
       setTimeout(() => { inp.focus(); }, 1);
     },
     TaskDialog(x) {
-      if (D.dlg_bw) {
+      if (D.el && D.win) {
+        const { bwId } = D.ide.focusedWin;
+        const bw = bwId ? D.el.BrowserWindow.fromId(bwId) : D.elw;
+        const r = D.el.dialog.showMessageBox(bw, {
+          message: `${x.text}\n${x.subtext}`,
+          title: x.title || '',
+          buttons: x.options.concat(x.buttonText) || [''],
+          type: 'question',
+        });
+        const index = r < x.options.length ? r : 100 + (r - x.options.length);
+        D.send('ReplyOptionsDialog', { index, token: x.token });
+        return;
+      } else if (D.dlg_bw) {
         D.ipc.server.emit(D.dlg_bw.socket, 'show', x);
         const bw = D.el.BrowserWindow.fromId(D.dlg_bw.id);
         bw.show();
