@@ -205,32 +205,33 @@
             const [, fn, op] = signature.match(tradFnRE);
             const fnop = op || fn;
             const si = signature.indexOf(fnop);
-            while (offset < signature.length) {
-              const ch = signature[offset];
+            let i = 0;
+            while (i < signature.length) {
+              const ch = signature[i];
               switch (ch) {
                 case '←':
-                  addToken(offset, 'keyword.operator.assignment'); offset += 1; break;
+                  addToken(offset + i, 'keyword.operator.assignment'); i += 1; break;
                 case '(': case ')':
-                  addToken(offset, 'delimiter.parenthesis'); offset += 1; break;
+                  addToken(offset + i, 'delimiter.parenthesis'); i += 1; break;
                 case '{': case '}':
-                  addToken(offset, 'delimiter.curly'); offset += 1; break;
+                  addToken(offset + i, 'delimiter.curly'); i += 1; break;
                 case ' ':
-                  m = signature.slice(offset).match(/^[ \t\r\n]+/);
-                  addToken(offset, 'white');
-                  offset += m[0].length; break;
+                  m = signature.slice(i).match(/^[ \t\r\n]+/);
+                  addToken(offset + i, 'white');
+                  i += m[0].length; break;
 
                 default:
-                  if (offset === si) {
-                    addToken(offset, 'identifier.global');
-                    offset += fnop.length;
+                  if (i === si) {
+                    addToken(offset + i, 'identifier.global');
+                    i += fnop.length;
                   } else {
-                    m = signature.slice(offset).match(name);
-                    addToken(offset, 'identifier.local');
-                    offset += m[0].length;
+                    m = signature.slice(i).match(name);
+                    addToken(offset + i, 'identifier.local');
+                    i += m[0].length;
                   }
               }
             }
-
+            offset += i;
             locals.forEach(localVar);
             h.vars = s.split(notName);
             h.vars.splice(h.vars.indexOf(fnop), 1);
