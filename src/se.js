@@ -127,6 +127,7 @@
     me.onDidFocusEditor(() => { se.focusTS = +new Date(); se.ide.focusedWin = se; });
     se.promptType = 0; // see ../docs/protocol.md #SetPromptType
     se.processAutocompleteReply = D.ac(me);
+    me.viewModel.viewLayout.constructor.LINES_HORIZONTAL_EXTRA_PX = 14;
     D.prf.wrap((x) => {
       se.me.updateOptions({ wordWrap: x ? 'on' : 'off' });
       se.me.revealLineInCenterIfOutsideViewport(se.me.model.getLineCount());
