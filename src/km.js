@@ -186,6 +186,10 @@
     },
     LOG() {
       if (!D.el) return;
+      if (D.ide.floating) {
+        D.ipc.of.ride_master.emit('LOG');
+        return;
+      }
       const w = new D.el.BrowserWindow({
         width: 400,
         height: 500,

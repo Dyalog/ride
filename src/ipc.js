@@ -169,6 +169,7 @@ D.IPC_Server = function IPCServer() {
       D.ide.focusWin(D.ide.wins[id]);
     });
     srv.on('zoom', z => D.ide.zoom(z));
+    srv.on('LOG', () => D.commands.LOG());
     srv.on('RIDE', ([type, payload]) => D.send(type, payload));
   });
   D.ipc.server.start();
