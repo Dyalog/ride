@@ -44,6 +44,14 @@ const Console = console;
     });
 
     D.openExternal = D.el ? D.el.shell.openExternal : (x) => { window.open(x, '_blank'); };
+    if (D.el) {
+      window.electronOpen = window.open;
+      window.open = (url) => {
+        !!url && D.openExternal(url);
+        return { location: { set href(u) { D.openExternal(u); } } };
+      };
+    }
+
     const loc = window.location;
     if (/^\?prf$/.test(loc.search)) {
       document.body.className += ' floating-window';
