@@ -180,10 +180,37 @@
       const n = 0;
       let tkn;
       let s;
-      const localVar = (l) => {
-        addToken(offset, 'delimiter.semicolon');
-        addToken(offset + 1, 'identifier.local');
-        offset += 1 + l.length;
+
+      const localRE = RegExp(`( *)(;)( *)(${name})( *)(⍝?)`);
+      const localVars = () => {
+        let m;
+        while ((m = sm.match(localRE)) && m.index === 0) {
+          const [, s0, sc, s1, nm, s2, nb] = m;
+          if (s0.length) {
+            addToken(offset, 'white');
+            offset += s0.length;
+          }
+          addToken(offset, 'delimiter.semicolon');
+          offset += sc.length;
+          if (s1.length) {
+            addToken(offset, 'white');
+            offset += s1.length;
+          }
+          addToken(offset, 'identifier.local');
+          offset += nm.length;
+          h.vars.push(nm);
+          if (s2.length) {
+            addToken(offset, 'white');
+            offset += s2.length;
+          }
+          if (nb.length) {
+            addToken(offset, 'comment');
+            offset = eol; break;
+          }
+          sm = line.slice(offset);
+        }
+        offset !== eol && addToken(offset, 'invalid');
+        offset = eol;
       };
       while (offset < eol) {
         const la = a[a.length - 1];
@@ -201,10 +228,10 @@
           if (/^\s*:/.test(s) || dfnHeader.test(s)) {
             // sm.backUp(s.length)
           } else {
-            const [signature, ...locals] = s.split(';');
-            const [, fn, op] = signature.match(tradFnRE);
+            const [signature] = s.split(';');
+            const [, fn, op] = signature.match(tradFnRE) || [];
             const fnop = op || fn;
-            const si = signature.indexOf(fnop);
+            const si = fnop ? signature.match(RegExp(`\\b${fnop}\\b`)).index : -1;
             let i = 0;
             while (i < signature.length) {
               const ch = signature[i];
@@ -232,10 +259,13 @@
               }
             }
             offset += i;
-            locals.forEach(localVar);
             h.vars = s.split(notName);
             h.vars.splice(h.vars.indexOf(fnop), 1);
+            sm = line.slice(offset);
+            localVars();
           }
+        } else if (offset === 0 && RegExp(`^ *; *${name}($|[ ;])`).test(sm)) {
+          localVars();
         } else if ((m = sm.match(idiomsRE))) {
           addToken(offset, 'predefined.idiom');
           offset += m[0].length;
