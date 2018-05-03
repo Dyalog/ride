@@ -84,6 +84,7 @@ const Console = console;
       });
       bw.loadURL(`file://${__dirname}/dialog.html`);
       D.dlg_bw = { id: bw.id };
+      D.elw.focus();
       nodeRequire(`${__dirname}/src/cn`)();
     } else {
       const ws = new WebSocket((loc.protocol === 'https:' ? 'wss://' : 'ws://') + loc.host);
