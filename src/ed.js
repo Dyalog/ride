@@ -351,7 +351,7 @@
       });
     },
     autocompletionDelay(x) { this.me.updateOptions({ quickSuggestionsDelay: x }); },
-    
+    execCommand(cmd) { this[cmd] && this[cmd](this.me); },
     zoom(z) {
       const ed = this;
       const { me } = ed;

@@ -1,4 +1,4 @@
-const pm = ('close die focus insert open processAutocompleteReply prompt saved setTC stateChanged' +
+const pm = ('close die execCommand focus insert open processAutocompleteReply prompt saved setTC stateChanged' +
   ' update zoom ReplyFormatCode SetHighlightLine ValueTip').split(' ');
 D.IPC_Client = function IPCClient(winId) {
   // start IPC client
@@ -144,6 +144,7 @@ D.IPC_Server = function IPCServer() {
       D.ide.focusedWin = w;
       w && (w.focusTS = +new Date());
     });
+    srv.on('pfKey', x => D.ide.pfKey(x));
     srv.on('getSIS', () => D.ide.getSIS());
     srv.on('getUnsavedReply', (data) => {
       if (!D.pendingEdit) return;

@@ -89,6 +89,30 @@ D.IDE = function IDE(opts = {}) {
   D.recv = (x, y) => { mq.push([x, y]); rrd(); };
   ide.block = () => { blk += 1; };
   ide.unblock = () => { (blk -= 1) || rrd(); };
+
+  // pfkeys
+  const pfq = [];
+  let pfqtid = 0;
+  function pfKeyRun() {
+    if (pfq.length && ide.wins[0].promptType && !blk) {
+      const { text, cmd } = pfq.shift();
+      const w = D.ide.focusedWin;
+      if (text) w.insert(text);
+      else if (D.commands[cmd]) D.commands[cmd](w.me);
+    }
+    if (pfq.length) pfqtid = setTimeout(pfKeyRun, 100);
+    else pfqtid = 0;
+  }
+  ide.pfKey = (x) => {
+    if (ide.floating) ide.ipc.emit('pfKey', x);
+    else {
+      D.prf.pfkeys()[x].replace(/<(.+?)>|([^<>]+)/g, (_, cmd, text) => {
+        pfq.push({ cmd, text });
+      });
+      pfqtid = pfqtid || setTimeout(pfKeyRun, 1);
+    }
+  };
+
   ide.tracer = () => {
     const tc = Object.keys(ide.wins).find(k => !!ide.wins[k].tc);
     return tc && ide.wins[tc];
@@ -464,15 +488,18 @@ D.IDE = function IDE(opts = {}) {
       let done;
       const editorOpts = { id: w, name: ee.name, tc: ee.debugger };
       !editorOpts.tc && (ide.hadErr = -1);
+      ide.block(); // unblock the message queue once monaco ready
       if (D.el && D.prf.floating() && !ide.dead) {
-        ide.block(); // the popup will create D.wins[w] and unblock the message queue
         D.IPC_LinkEditor({ editorOpts, ee });
         done = 1;
       } else if (D.elw && !D.elw.isFocused()) D.elw.focus();
       if (done) return;
       const ed = new D.Ed(ide, editorOpts);
       ide.wins[w] = ed;
-      ed.me_ready.then(() => ed.open(ee));
+      ed.me_ready.then(() => {
+        ed.open(ee);
+        ide.unblock();
+      });
       // add to golden layout:
       const tc = !!ee.debugger;
       const bro = gl.root.getComponentsByName('win').filter(x => x.id && tc === !!x.tc)[0]; // existing editor

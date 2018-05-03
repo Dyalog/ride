@@ -234,37 +234,9 @@
     ZMR() { D.prf.zoom(0); D.ide.updPW(); },
 
   });
-  // pfkeys
-  function nop() {}
-  function fakeEvent(s) {
-    const e = {
-      type: 'keydown',
-      ctrlKey: false,
-      shiftKey: false,
-      altKey: false,
-      preventDefault: nop,
-      stopPropagation: nop,
-    };
-    const h = { C: 'ctrlKey', A: 'altKey', S: 'shiftKey' };
-    const s1 = s.replace(/(\w+)-/g, (_, type) => {
-      e[h[type] || `${type.toLowerCase()}Key`] = true; return '';
-    });
-    e.keyCode = monaco.KeyCode[s1];
-    e.keyCode || fail(`Unknown key:${JSON.stringify(s)}`);
-    return e;
-  }
-  for (let i = 1; i <= 12; i++) {
-    D.commands[`PF${i}`] = function pfk(j) {
-      D.prf.pfkeys()[j].replace(/<(.+?)>|(.)/g, (_, x, y) => {
-        const w = D.ide.focusedWin;
-        if (y) w.insert(y);
-        else if (D.commands[x]) D.commands[x](w.me);
-        else w.me._onKeyDown.fire(fakeEvent(x));
-        // else w.cm.triggerOnKeyDown(fakeEvent(x));
-      });
-    }.bind(this, i);
-  }
 
+  const pfKey = i => () => D.ide.pfKey(i);
+  for (let i = 1; i <= 12; i++) D.commands[`PF${i}`] = pfKey(i);
 
   // order: used to measure how "complicated"
   // (for some made-up definition of the word) a shortcut is.
@@ -309,7 +281,10 @@
   ];
   function defCmd(x) {
     const c = D.commands;
-    c[x] || (c[x] = (cm) => { const h = cm.dyalogCmds; h && h[x] && h[x](cm); });
+    c[x] || (c[x] = (me) => {
+      const h = me.dyalogCmds;
+      h && h.execCommand(x);
+    });
   }
   ('CBP MA AC VAL indentOrComplete downOrXline indentMoreOrAutocomplete STL TVO TVB' +
   ' TGC JBK JSC LOG WSE').split(' ').forEach(defCmd);
