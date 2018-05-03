@@ -5,7 +5,7 @@
   const name = `(?:[${letter}][${letter}\\d]*)`;
   const notName = RegExp(`[^${letter}0-9]+`);
   // /(\w+|\(\w+ +(\w+)(?: +\w+)?\)) *(?:\w+|\( *\w+(?: +\w+)* *\))?$/
-  const tradFnRE = RegExp(`(${name}|\\(${name} +(${name})(?: +${name})?\\)) *(?:${name}|\\( *${name}(?: +${name})* *\\))?$`);
+  const tradFnRE = RegExp(`(${name}|\\( *${name} +(${name})(?: +${name})? *\\)) *(?:${name}|\\( *${name}(?: +${name})* *\\))?$`);
   const end = '(?:⍝|$)';
   const restartBlock = '|:else|:elseif|:andif|:orif';
   const startBlock = ':class|:disposable|:for|:hold|:if|:interface|:namespace' +
