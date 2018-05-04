@@ -7,6 +7,9 @@ test.beforeEach(async (t) => {
   t.context.app = new Application({
     path: electronPath,
     args: [path.join(__dirname, '..')],
+    webdriverOptions: {
+      deprecationWarnings: false,
+    },
   });
 
   await t.context.app.start();
@@ -36,16 +39,39 @@ test(
 );
 
 test(
-  'cn - start raw',
+  'cn-fav-new',
   async (t) => {
-    t.plan(2);
+    t.plan(3);
+    const { app } = t.context;
+    const c = app.client;
+    await c.waitUntilWindowLoaded();
+    await c.leftClick('#cn_neu');
+    t.is(await c.getValue('#cn_fav_name'), '');
+    await c.waitForExist('#cn_favs .list_sel .name');
+    t.is(await c.getText('#cn_favs .list_sel .name'), 'unnamed');
+    await c.setValue('#cn_fav_name', 'myFav');
+    t.is(await c.getText('#cn_favs .list_sel .name'), 'myFav');
+  },
+);
+
+test(
+  'cn-start-raw',
+  async (t) => {
+    t.plan(3);
     const { app } = t.context;
     const c = app.client;
     await c.waitUntilWindowLoaded();
 
-    await  c.selectByValue('#cn_type', 'start');
+    await c.leftClick('#cn_neu');
+    await c.selectByValue('#cn_type', 'start');
     t.is(await c.getValue('#cn_type'), 'start');
+
     await c.selectByValue('#cn_subtype', 'raw');
     t.is(await c.getValue('#cn_subtype'), 'raw');
+
+    await c.leftClick('#cn_go');
+    await c.waitForExist('#ide .lm_tab.lm_active .lm_title');
+    t.is(await c.getText('#ide .lm_tab.lm_active .lm_title'), 'Session');
+
   },
 );
