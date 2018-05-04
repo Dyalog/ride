@@ -132,8 +132,10 @@ D.IDE = function IDE(opts = {}) {
 
   // language bar
   let ttid; // tooltip timeout id
+  let tthide = 0;
   let lbDragged;
   const reqTip = (x, desc, text, delay) => { // request tooltip, x:event
+    clearTimeout(tthide); tthide = 0;
     clearTimeout(ttid);
     const t = x.target;
     ttid = setTimeout(() => {
@@ -146,6 +148,8 @@ D.IDE = function IDE(opts = {}) {
       const x1 = x0 + I.lb_tip.offsetWidth;
       const y0 = (t.offsetTop + t.offsetHeight) - 3;
       s.top = `${y0}px`;
+      const maxHeight = window.innerHeight - (I.lb_tip_body.getBoundingClientRect().top + 30);
+      I.lb_tip_body.style.maxHeight = `${maxHeight}px`;
       if (x1 > document.body.offsetWidth) {
         s.left = ''; s.right = '0';
       } else {
@@ -161,10 +165,19 @@ D.IDE = function IDE(opts = {}) {
     w.hasFocus() ? w.insert(s) : D.util.insert(document.activeElement, s);
     return !1;
   };
+  function hideTT() { I.lb_tip.hidden = 1; tthide = 0; }
   I.lb.onmouseout = (x) => {
     if (x.target.nodeName === 'B') {
-      clearTimeout(ttid); ttid = 0; I.lb_tip.hidden = 1;
+      clearTimeout(ttid); ttid = 0;
+      tthide = tthide || setTimeout(hideTT, 500);
     }
+  };
+  I.lb_tip.onmouseover = () => {
+    clearTimeout(tthide); tthide = 0;
+  };
+  I.lb_tip.onmouseout = () => {
+    clearTimeout(tthide);
+    tthide = setTimeout(hideTT, 500);
   };
   I.lb.onmouseover = (x) => {
     if (lbDragged || x.target.nodeName !== 'B') return;

@@ -1011,21 +1011,16 @@ body .ui-tooltip {
   font-family: apl, monospace;
   font-size: 18px;
   position: absolute;
-  margin-top: 6px;
   border-radius: 2px;
 }
 #lb_tip hr {
   margin: 0;
 }
-#lb_tip div,
-#lb_tip pre {
+#lb_tip div {
   padding: 8px;
 }
-#lb_tip_tri {
-  position: absolute;
-  border: solid;
-  border-width: 0 16px 16px 16px;
-  content: "";
+#lb_tip_body {
+  overflow: auto;
 }
 #lb_tip_desc {
   text-align: center;
@@ -2005,9 +2000,6 @@ body.floating-window {
 /*z-indices; CodeMirror uses 1-10; .dlg uses 100+ */
 .ui-tooltip {
   z-index: 9999;
-}
-#lb_tip_tri {
-  z-index: 301;
 }
 #lb_tip {
   z-index: 300;
