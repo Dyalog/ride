@@ -58,9 +58,9 @@
       theme: 'light',
       styles: 'asgn=fg:00f com=fg:088 dfn=fg:00f diam=fg:00f err=fg:f00 fn=fg:008 idm=fg:008 kw=fg:800 ' +
       'lnum=fg:008,bg:f,bgo:0 mod=bg:7,bgo:.25 mtch=bg:ff8,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 op1=fg:00f op2=fg:00f ' +
-      'par=fg:00f quad=fg:808 sel=bg:48e,bgo:.5 semi=fg:00f sqbr=fg:00f srch=bg:f80,bgo:.5 str=fg:088 tc=bg:d,bgo:1 ' +
+      'par=fg:00f quad=fg:808 qdl=fg:c0c sel=bg:48e,bgo:.5 semi=fg:00f sqbr=fg:00f srch=bg:f80,bgo:.5 str=fg:088 tc=bg:d,bgo:1 ' +
       'tcpe=bg:c8c8c8,bgo:1 trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f vtt=bg:ff0 ' +
-      'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:1,fg:0f0 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff ' +
+      'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:.1,fg:0f0 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff ' +
       'ma=bg:828282,bgo:1,fg:0ff na=bg:828282,bgo:1,fg:f qor=bg:f00,bgo:1,fg:f',
     }, {
       name: 'Francisco Goya',
@@ -224,6 +224,7 @@
     {s:'bracket'         ,t:'sqbr',m:'delimiter.square'}, //[]
     {s:'comment'         ,t:'com' ,m:'comment'}, //⍝
     {s:'cursor'          ,t:'cur' ,e:'editorCursor.foreground', ctrls:{bg:0,BIU:0,fg:1}},
+    {s:'curly braces'    ,t:'cubr',m:'delimiter.curly'}, //{}
     {s:'dfn level 1'     ,t:'dfn1',m:'identifier.dfn.1'}, //{}
     {s:'dfn level 2'     ,t:'dfn2',m:'identifier.dfn.2'},
     {s:'dfn level 3'     ,t:'dfn3',m:'identifier.dfn.3'},
@@ -242,12 +243,13 @@
     {s:'matching bracket',t:'mtch',e:'editorBracketMatch.background'},
     {s:'modified line'   ,t:'mod' ,c:'.modified'   }, //in the session - lines queued for execution
     {s:'monadic operator',t:'op1' ,m:'keyword.operator.monadic'}, //⌸ ...
-    {s:'namespace'       ,t:'ns'  }, //#
+    {s:'namespace'       ,t:'ns'  ,m:'namespace'}, //#
     {s:'name'            ,t:'var' ,m:'identifier.local'}, //a.k.a. identifier
     {s:'normal'          ,t:'norm',c:'.ride_win_me'},
     {s:'number'          ,t:'num' ,m:'number'}, //0 ...
     {s:'parenthesis'     ,t:'par' ,m:'delimiter.parenthesis'}, //()
     {s:'quad name'       ,t:'quad',m:'predefined.sysfn'}, //⎕XYZ
+    {s:'quad name local' ,t:'qdl' ,m:'predefined.sysfn.local'}, // localized ⎕XYZ
     {s:'search match'    ,t:'srch',e:'editor.findMatchBackground',ctrls:{fg:0,BIU:0}},
     {s:'selection'       ,t:'sel' ,e:'editor.selectionBackground',ctrls:{fg:0,BIU:0}},
     {s:'semicolon'       ,t:'semi',m:'delimiter.semicolon'}, //as in A[B;C]

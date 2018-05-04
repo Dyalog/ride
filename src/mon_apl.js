@@ -149,11 +149,11 @@
     let r = 0;
     for (let j = 0; j < a.length; j++) if (a[j].t === '{') r += 1; return r;
   }
-
+  
   const idiomsRE = RegExp(`^(?:${idioms.sort((x, y) => y.length - x.length).map(escIdiom).join('|')})`, 'i');
   const sw = 4; // default indent unit (vim calls that "sw" for "shift width")
   const swm = 2; // indent unit for methods
-
+  
   const aplTokens = {
     getInitialState: () => new State(1, [{
       t: '', oi: 0, ii: 0, l: 0,
@@ -181,7 +181,8 @@
       let tkn;
       let s;
 
-      const localRE = RegExp(`( *)(;)( *)(${name})( *)(⍝?)`);
+      const sysvar = '⎕avu|⎕ct|⎕dct|⎕div|⎕fr|⎕io|⎕lx|⎕ml|⎕path|⎕pp|⎕pw|⎕rl|⎕rtl|⎕sm|⎕trap|⎕using|⎕wsid|⎕wx';
+      const localRE = RegExp(`( *)(;)( *)(${sysvar}|${name})( *)(⍝?)`, 'i');
       const localVars = () => {
         let m;
         while ((m = sm.match(localRE)) && m.index === 0) {
@@ -196,9 +197,9 @@
             addToken(offset, 'white');
             offset += s1.length;
           }
-          addToken(offset, 'identifier.local');
+          addToken(offset, nm[0] === '⎕' ? 'predefined.sysfn.local' : 'identifier.local');
           offset += nm.length;
-          h.vars.push(nm);
+          h.vars.push(nm[0] === '⎕' ? nm.toLowerCase() : nm);
           if (s2.length) {
             addToken(offset, 'white');
             offset += s2.length;
@@ -350,11 +351,16 @@
               tkn = la.t === '[' ? 'delimiter.semicolon' : 'invalid';
               addToken(offset, tkn); offset += 1; break;
 
-            case '⎕':
-              m = sm.slice(1).match(/^[áa-z0-9]*/i);
-              tkn = m && sysfns.indexOf(m[0].toLowerCase()) >= 0 ? 'predefined.sysfn' : 'invalid.sysfn';
-              addToken(offset, tkn); offset += 1 + m[0].length; break;
+            case '⎕': {
+              [m] = sm.slice(1).match(/^[áa-z0-9]*/i) || [];
+              const ml = (m || '').toLowerCase();
+              if (!m) tkn = 'invalid.sysfn';
+              else if (h.vars && h.vars.indexOf(`⎕${ml}`) >= 0) tkn = 'predefined.sysfn.local';
+              else if (sysfns.indexOf(ml) >= 0) tkn = 'predefined.sysfn';
+              else tkn = 'invalid.sysfn';
 
+              addToken(offset, tkn); offset += 1 + m.length; break;
+            }
             case '⍞': addToken(offset, 'predefined.sysfn'); offset += 1; break;
             case '#': addToken(offset, 'namespace'); offset += 1; break;
             case '⍺': case '⍵': case '∇': case ':':
