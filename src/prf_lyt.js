@@ -11,7 +11,7 @@
   const tip = x =>
     (x === ' ' ? 'Click to\nconfigure' : `U+${`000${x.charCodeAt(0).toString(16).toUpperCase()}`.slice(-4)}`);
   function updPfx() {
-    const c = q.pfx.value[0] || '`';
+    const c = q.pfx.value[0] || D.prf.prefixKey.getDefault();
     q.spc_g1.textContent = c + q.spc_g1.textContent.slice(1);
     q.spc_g3.textContent = c + q.spc_g3.textContent.slice(1);
   }
@@ -33,6 +33,7 @@
       if (g[i][3]) { g[i][3].value = g3; g[i][3].title = tip(g3); }
     }
   }
+  const defaultPrefix = lc => (/^d[ae]/.test(lc) ? '<' : D.prf.prefixKey.getDefault());
 
   D.prf_tabs.lyt = {
     name: 'Keyboard',
@@ -63,19 +64,24 @@
         const c = s.slice(3, 5).toUpperCase(); // country
         // default layout for country c
         const d = Object.keys(layouts).filter(x => x.slice(3, 5) === c).sort()[0];
-        if (D.mac && layouts[`${l}_${c}_Mac`]) D.prf.kbdLocale(`${l}_${c}_Mac`);
-        else if (layouts[`${l}_${c}`]) D.prf.kbdLocale(`${l}_${c}`);
-        else D.prf.kbdLocale(d || 'en_US');
+        let lc;
+        if (D.mac && layouts[`${l}_${c}_Mac`]) lc = `${l}_${c}_Mac`;
+        else if (layouts[`${l}_${c}`]) lc = `${l}_${c}`;
+        else lc = d || 'en_US';
+        D.prf.kbdLocale(lc);
+        D.prf.prefixKey(defaultPrefix(lc));
       }
-      q.rst.onclick = () => {
+      const updateLocale = (e) => {
         const lc = q.lc.value;
-        q.pfx.value = D.prf.prefixKey.getDefault();
+        q.pfx.value = defaultPrefix(lc);
         updPfx();
-        model[lc] = [layouts[lc][2].split(''), layouts[lc][3].split('')];
+        if (e.target === q.rst) {
+          model[lc] = [layouts[lc][2].split(''), layouts[lc][3].split('')];
+        }
         updGlyphs();
       };
-      q.lc.onchange = updGlyphs;
-      //  q.pfx.onfocus=function(){q.pfx.selectionStart=0;q.pfx.selectionEnd=q.pfx.value.length}
+      q.rst.onclick = updateLocale;
+      q.lc.onchange = updateLocale;
       q.pfx.onchange = updPfx;
       q.pfx.onkeyup = updPfx;
     },
