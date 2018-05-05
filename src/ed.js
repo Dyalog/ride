@@ -24,6 +24,7 @@
     ed.stop = new Set(); // remember original text and "stops" to avoid pointless saving on EP
     ed.isCode = 1;
     ed.isReadOnly = !1;
+    ed.isReadOnlyEntity = !1;
     ed.breakpoints = D.prf.breakPts();
     ed.$e.toggleClass('no-toolbar', !D.prf.showEditorToolbar());
     const fs = D.zoom2fs[D.prf.zoom() + 10];
@@ -200,8 +201,8 @@
     },
     setRO(x) {
       const ed = this;
-      ed.isReadOnly = x;
-      ed.me.updateOptions({ readOnly: x });
+      ed.isReadOnly = ed.isReadOnlyEntity || !!x;
+      ed.me.updateOptions({ readOnly: ed.isReadOnly });
       ed.dom.getElementsByClassName('tb_AO')[0].style.display = x ? 'none' : '';
       ed.dom.getElementsByClassName('tb_DO')[0].style.display = x ? 'none' : '';
     },
@@ -258,11 +259,12 @@
         128: 'charvec',
       }[ee.entityType];
       ed.isCode = [1, 256, 512, 1024, 2048, 4096].indexOf(ee.entityType) >= 0;
+      ed.isReadOnlyEntity = !!ee.readOnly;
       monaco.editor.setModelLanguage(me.model, ed.isCode ? 'apl' : 'plaintext');
       etype && ed.dom.classList.toggle(etype, true);
       me.updateOptions({ folding: ed.isCode && !!D.prf.fold() });
       if (ed.isCode && D.prf.indentOnOpen()) ed.RD(me);
-      ed.setRO(ee.readOnly || ee.debugger);
+      ed.setRO(ee.debugger);
       ed.setBP(ed.breakpoints);
       const line = ee.currentRow;
       let col = ee.currentColumn || 0;
