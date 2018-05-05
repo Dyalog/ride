@@ -54,6 +54,7 @@
       q.acd.value = p.autocompletionDelay();
       q.bc.checked = !!p.blockCursor();
       q.cb.value = p.cursorBlinking();
+      q.cbeol.checked = p.cursorBeyondEOL();
       q.coq.checked = !!p.connectOnQuit();
       q.fold.checked = !!p.fold();
       q.rlh.value = p.renderLineHighlight();
@@ -74,6 +75,7 @@
       const p = D.prf;
       p.blockCursor        (q.bc.checked);
       p.cursorBlinking     (q.cb.value);
+      p.cursorBeyondEOL    (q.cbeol.checked);
       p.fold               (q.fold.checked);
       p.indent             (q.ai.checked ? (+q.sw.value || 0) : -1);
       p.indentMethods      (q.aim.checked ? (+q.swm.value || 0) : -1);

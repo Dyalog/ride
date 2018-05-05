@@ -81,6 +81,14 @@
 
     const kc = monaco.KeyCode;
     me.addCommand(kc.DownArrow, () => ed.downOrXline(me), '!suggestWidgetVisible');
+    me.addCommand(kc.UpArrow, () => {
+      const p = me.getPosition();
+      const l = p.lineNumber;
+      me.trigger('editor', 'cursorUp');
+      if (l === 1 || !D.prf.cursorBeyondEOL()) return;
+      const l1c = me.model.getLineMaxColumn(l - 1);
+      if (l1c < p.column) me.trigger('editor', 'type', { text: ' '.repeat(p.column - l1c) });
+    }, '!suggestWidgetVisible');
     me.addCommand(
       kc.Tab,
       () => ed.indentOrComplete(me),
@@ -108,6 +116,9 @@
           ed.ED(me); e.event.preventDefault(); e.event.stopPropagation();
         }
         mouseL = p.lineNumber; mouseC = p.column; mouseTS = e.event.timestamp;
+      } else if (D.prf.cursorBeyondEOL() &&
+        t.type === mt.CONTENT_EMPTY && t.mouseColumn > p.column) {
+        me.trigger('editor', 'type', { text: ' '.repeat(t.mouseColumn - p.column) });
       }
     });
     me.onDidFocusEditor(() => { ed.focusTS = +new Date(); ed.ide.focusedWin = ed; });
@@ -596,11 +607,15 @@
     downOrXline(me) {
       const p = me.getPosition();
       const l = p.lineNumber;
-      if (l !== me.model.getLineCount() || /^\s*$/.test(me.model.getLineContent(l))) {
+      if (l < me.model.getLineCount() || /^\s*$/.test(me.model.getLineContent(l))) {
         me.trigger('editor', 'cursorDown');
       } else {
         me.trigger('editor', 'editor.action.insertLineAfter');
         this.xline = l + 1;
+      }
+      if (D.prf.cursorBeyondEOL() && l < me.model.getLineCount()) {
+        const l1c = me.model.getLineMaxColumn(l + 1);
+        if (l1c < p.column) me.trigger('editor', 'type', { text: ' '.repeat(p.column - l1c) });
       }
     },
   };

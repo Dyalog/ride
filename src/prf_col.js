@@ -465,11 +465,14 @@
       });
       me.onMouseDown((e) => {
         const t = e.target;
+        const p = t.position;
         const mt = monaco.editor.MouseTargetType;
         if (t.type === mt.GUTTER_LINE_NUMBERS) {
           selGrp('lnum');
         } else if (t.type === mt.CONTENT_TEXT) {
           selGrpFromPosition(t.position);
+        } else if (t.type === mt.CONTENT_EMPTY && t.mouseColumn > p.column) {
+          me.trigger('editor', 'type', { text: ' '.repeat(t.mouseColumn - p.column) });
         }
       });
       q.chrome.onchange = () => { scm.theme = q.chrome.value; };
