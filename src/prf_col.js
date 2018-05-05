@@ -127,14 +127,29 @@
     return G.map((g) => {
       const h = schema[g.t];
       if (!h || !g.c) return '';
-      let cls = g.c.split(',').map(x => (isSample ? '#nonexistent' : x)).join(',');
-      cls += '{';
+      const els = g.c.split(',').map(x => (isSample ? '#nonexistent' : x)).join(',');
+      const edmode = ['ca', 'cm', 'cv', 'cvv', 'ma', 'na', 'qor'].includes(g.t);
+      let cls;
+      if (edmode) {
+        cls = `${els} .monaco-editor-background,${els} .monaco-editor .margin{`;
+        h.bg && (cls += `background-color:${RGB(h.bg)};`);
+        h.bg && (cls += `background-color:${RGBA(h.bg, h.bgo == null ? 0.5 : h.bgo)};`);
+        cls += `}${els} .monaco-editor span{`;
+        h.fg && (cls += `color:${RGB(h.fg)};`);
+        h.fg && (cls += `color:${RGBA(h.fg, h.fgo == null ? 1 : h.fgo)};`);
+        h.B && (cls += 'font-weight:bold;');
+        h.I && (cls += 'font-style:italic;');
+        h.U && (cls += 'text-decoration:underline;');
+        cls += '}';
+        return cls;
+      }
+      cls = `${els}{`;
       h.fg && (cls += `color:${RGB(h.fg)};`);
-      h.bg && (cls += `background-color:${RGB(h.bg)};`);
       h.B && (cls += 'font-weight:bold;');
       h.I && (cls += 'font-style:italic;');
       h.U && (cls += 'text-decoration:underline;');
       h.bc && (cls += `border-color:${RGB(h.bc)};`);
+      h.bg && (cls += `background-color:${RGB(h.bg)};`);
       h.bg && (cls += `background-color:${RGBA(h.bg, h.bgo == null ? 0.5 : h.bgo)};`);
       cls += '}';
       return cls;
@@ -263,13 +278,13 @@
     {s:'value tip'       ,t:'vtip',c:'/*noprefix*/#vt_bln,/*noprefix*/#vt_tri',ctrls:{bc:1}}, //the balloon
     {s:'zilde'           ,t:'zld' ,m:'predefined.zilde'},  //⍬
     
-    {s:'chararr'         ,t:'ca'  ,c:'.chararr .monaco-editor-background,.chararr .monaco-editor .margin,.chararr .monaco-editor span', ctrls:{BIU:0}},
-    {s:'charmat'         ,t:'cm'  ,c:'.charmat .monaco-editor-background,.charmat .monaco-editor .margin,.charmat .monaco-editor span', ctrls:{BIU:0}},
-    {s:'charvec'         ,t:'cv'  ,c:'.charvec .monaco-editor-background,.charvec .monaco-editor .margin,.charvec .monaco-editor span', ctrls:{BIU:0}},
-    {s:'charvecvec'      ,t:'cvv' ,c:'.charvecvec .monaco-editor-background,.charvecvec .monaco-editor .margin,.charvecvec .monaco-editor span', ctrls:{BIU:0}},
-    {s:'mixarr'          ,t:'ma'  ,c:'.mixarr .monaco-editor-background,.mixarr .monaco-editor .margin,.mixarr .monaco-editor span', ctrls:{BIU:0}},
-    {s:'numarr'          ,t:'na'  ,c:'.numarr .monaco-editor-background,.numarr .monaco-editor .margin,.numarr .monaco-editor span', ctrls:{BIU:0}},
-    {s:'quador'          ,t:'qor' ,c:'.quador .monaco-editor-background,.quador .monaco-editor .margin,.quador .monaco-editor span', ctrls:{BIU:0}},
+    {s:'chararr'         ,t:'ca'  ,c:'.chararr'},
+    {s:'charmat'         ,t:'cm'  ,c:'.charmat'},
+    {s:'charvec'         ,t:'cv'  ,c:'.charvec'},
+    {s:'charvecvec'      ,t:'cvv' ,c:'.charvecvec'},
+    {s:'mixarr'          ,t:'ma'  ,c:'.mixarr'},
+    {s:'numarr'          ,t:'na'  ,c:'.numarr'},
+    {s:'quador'          ,t:'qor' ,c:'.quador'},
     
   ]);
   /* eslint-enable */
