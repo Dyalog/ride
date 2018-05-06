@@ -1088,6 +1088,9 @@ body .ui-tooltip {
 .monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main {
   white-space: pre;
 }
+.readOnly .monaco-editor .cursor {
+  visibility: hidden!important;
+}
 /*Prefs>Code*/
 #code {
   overflow: auto;

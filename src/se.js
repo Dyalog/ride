@@ -133,6 +133,7 @@
       se.me.revealLineInCenterIfOutsideViewport(se.me.model.getLineCount());
     });
     se.histRead();
+    se.setReadOnlyClass = $.debounce(100, x => se.dom.classList.toggle('readOnly', x));
   }
   Se.prototype = {
     histRead() {
@@ -228,6 +229,7 @@
       const t = me.model.getLineContent(l);
       se.promptType = x;
       se.isReadOnly = !x;
+      se.setReadOnlyClass(!x);
       me.updateOptions({ readOnly: !x });
       if ((x === 1 && this.dirty[l] == null) || [0, 1, 3, 4].indexOf(x) < 0) {
         se.edit([{ range: new monaco.Range(l, 1, l, 1 + t.length), text: '      ' }]);
