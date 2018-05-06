@@ -435,21 +435,6 @@
       D.prf.blockCursor(x => me.updateOptions({ cursorStyle: x ? 'block' : 'line' }));
       D.prf.cursorBlinking(x => me.updateOptions({ cursorBlinking: x }));
       let ss;
-      const reTokenize = $.debounce(500, () => {
-        let s = D.Tokenizer.getInitialState();
-        const ls = me.model.getLinesContent();
-        ss = ls.map((l) => {
-          const st = D.Tokenizer.tokenize(l, s);
-          s = st.endState;
-          return st;
-        });
-      });
-      reTokenize();
-      me.model.onDidChangeContent((x) => {
-        if (!me.dyalogBQ && x.changes.length === 1
-          && x.changes[0].text === D.prf.prefixKey()) D.commands.BQC(me);
-        reTokenize();
-      });
       function selGrpFromPosition(p) {
         const { lineNumber, column } = p;
         const s = ss[lineNumber - 1];
@@ -459,6 +444,22 @@
         while (!M[sc] && sc) sc = sc.slice(0, Math.max(0, sc.lastIndexOf('.')));
         sc ? selGrp(M[sc]) : selGrp('norm');
       }
+      const reTokenize = $.debounce(500, () => {
+        let s = D.Tokenizer.getInitialState();
+        const ls = me.model.getLinesContent();
+        ss = ls.map((l) => {
+          const st = D.Tokenizer.tokenize(l, s);
+          s = st.endState;
+          return st;
+        });
+        selGrpFromPosition(me.getPosition());
+      });
+      reTokenize();
+      me.model.onDidChangeContent((x) => {
+        if (!me.dyalogBQ && x.changes.length === 1
+          && x.changes[0].text === D.prf.prefixKey()) D.commands.BQC(me);
+        reTokenize();
+      });
       me.onDidChangeCursorPosition((e) => {
         if (!me.getSelection().isEmpty()) selGrp('sel');
         else selGrpFromPosition(e.position);
