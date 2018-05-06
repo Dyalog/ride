@@ -86,7 +86,7 @@
     me.addCommand(
       kc.Tab,
       () => ed.indentOrComplete(me),
-      '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode'
+      '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode',
     );
     me.addCommand(
       kc.RightArrow,
@@ -105,9 +105,11 @@
         ed.stop.has(l) ? ed.stop.delete(l) : ed.stop.add(l);
         ed.setStop();
         ed.tc && D.send('SetLineAttributes', { win: ed.id, stop: ed.getStops() });
-      } else if (t.type === mt.CONTENT_TEXT) {
+      } else if (t.type === mt.CONTENT_TEXT ||
+        (ed.isReadOnly && t.type === mt.CONTENT_EMPTY)) {
         if (e.event.timestamp - mouseTS < 400 && mouseL === p.lineNumber && mouseC === p.column) {
-          ed.ED(me); e.event.preventDefault(); e.event.stopPropagation();
+          e.event.preventDefault(); e.event.stopPropagation();
+          ed.ED(me);
         }
         mouseL = p.lineNumber; mouseC = p.column; mouseTS = e.event.timestamp;
       } else if (D.prf.cursorBeyondEOL() &&
