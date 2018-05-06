@@ -474,6 +474,12 @@
     TC() { this.exec(1); },
     LN() { D.prf.lineNums.toggle(); },
     MA() { D.send('RestartThreads', {}); },
+    DC() { this.me.trigger('editor', 'cursorDown'); },
+    UC() { this.me.trigger('editor', 'cursorUp'); },
+    LC() { this.me.trigger('editor', 'cursorLeft'); },
+    RC() { this.me.trigger('editor', 'cursorRight'); },
+    SA() { this.me.trigger('editor', 'selectAll'); },
+    TO() { this.me.trigger('editor', 'editor.fold'); }, // (editor.unfold) is there a toggle?
     indentOrComplete(me) {
       const sels = me.getSelections();
 

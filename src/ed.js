@@ -62,6 +62,7 @@
       snippetSuggestions: D.prf.snippetSuggestions() ? 'bottom' : 'none',
       suggestOnTriggerCharacters: D.prf.autocompletion() === 'classic',
       showFoldingControls: 'always',
+      useTabStops: false,
       wordBasedSuggestions: false,
     });
     ed.me = me;
@@ -80,15 +81,8 @@
     D.mapKeys(ed); D.prf.keys(D.mapKeys.bind(this, ed));
 
     const kc = monaco.KeyCode;
-    me.addCommand(kc.DownArrow, () => ed.downOrXline(me), '!suggestWidgetVisible');
-    me.addCommand(kc.UpArrow, () => {
-      const p = me.getPosition();
-      const l = p.lineNumber;
-      me.trigger('editor', 'cursorUp');
-      if (l === 1 || !D.prf.cursorBeyondEOL()) return;
-      const l1c = me.model.getLineMaxColumn(l - 1);
-      if (l1c < p.column) me.trigger('editor', 'type', { text: ' '.repeat(p.column - l1c) });
-    }, '!suggestWidgetVisible');
+    me.addCommand(kc.DownArrow, () => ed.DC(me), '!suggestWidgetVisible');
+    me.addCommand(kc.UpArrow, () => ed.UC(me), '!suggestWidgetVisible');
     me.addCommand(
       kc.Tab,
       () => ed.indentOrComplete(me),
@@ -604,7 +598,7 @@
         me.trigger('editor', 'editor.action.triggerSuggest');
       }
     },
-    downOrXline(me) {
+    DC(me) {
       const p = me.getPosition();
       const l = p.lineNumber;
       if (l < me.model.getLineCount() || /^\s*$/.test(me.model.getLineContent(l))) {
@@ -618,6 +612,18 @@
         if (l1c < p.column) me.trigger('editor', 'type', { text: ' '.repeat(p.column - l1c) });
       }
     },
+    UC(me) {
+      const p = me.getPosition();
+      const l = p.lineNumber;
+      me.trigger('editor', 'cursorUp');
+      if (l === 1 || !D.prf.cursorBeyondEOL()) return;
+      const l1c = me.model.getLineMaxColumn(l - 1);
+      if (l1c < p.column) me.trigger('editor', 'type', { text: ' '.repeat(p.column - l1c) });
+    },
+    LC() { this.me.trigger('editor', 'cursorLeft'); },
+    RC() { this.me.trigger('editor', 'cursorRight'); },
+    SA() { this.me.trigger('editor', 'selectAll'); },
+    TO() { this.me.trigger('editor', 'editor.fold'); }, // (editor.unfold) is there a toggle?
   };
   D.Ed = Ed;
 }

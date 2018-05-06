@@ -79,12 +79,10 @@
   $.extend(D.commands, {
     TB() { D.ide.switchWin(1); },
     BT() { D.ide.switchWin(-1); },
-    SA(me) { me.trigger('editor', 'selectAll'); },
     CT() { document.execCommand('Cut'); },
     CP() { document.execCommand('Copy'); },
     PT() { document.execCommand('Paste'); },
     EMD(me) { D.send('Edit', { win: me.dyalogCmds.id, pos: 0, text: '' }); },
-    TO(me) { me.trigger('editor', 'editor.fold'); }, // (editor.unfold) is there a toggle?
     PRF() { D.prf_ui(); },
     ABT() { D.abt(); },
     CNC() {
@@ -286,7 +284,7 @@
       h && h.execCommand(x);
     });
   }
-  ('CBP MA AC VAL indentOrComplete downOrXline indentMoreOrAutocomplete STL TVO TVB' +
+  ('CBP MA AC VAL indentOrComplete indentMoreOrAutocomplete STL TVO TVB' +
   ' TGC JBK JSC LOG WSE').split(' ').forEach(defCmd);
   for (let i = 0; i < C.length; i++) {
     if (C[i]) {
