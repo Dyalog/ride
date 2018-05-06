@@ -62,6 +62,28 @@ D.IDE = function IDE(opts = {}) {
   let blk = 0; // blk:blocked?
   let tid = 0; // tid:timeout id
   let last = 0; // last:when last rundown finished
+  const pfq = []; // pfkey queue
+  let pfqtid = 0; // pfkey timeout id
+  // pfkeys
+  function pfKeyRun() {
+    if (pfq.length && ide.wins[0].promptType && !blk) {
+      const { text, cmd } = pfq.shift();
+      const w = D.ide.focusedWin;
+      if (text) w.insert(text);
+      else if (D.commands[cmd]) D.commands[cmd](w.me);
+    }
+    if (pfq.length) pfqtid = setTimeout(pfKeyRun, 10);
+    else pfqtid = 0;
+  }
+  ide.pfKey = (x) => {
+    if (ide.floating) ide.ipc.emit('pfKey', x);
+    else {
+      D.prf.pfkeys()[x].replace(/<(.+?)>|([^<>]+)/g, (_, cmd, text) => {
+        pfq.push({ cmd, text });
+      });
+      pfqtid = pfqtid || setTimeout(pfKeyRun, 1);
+    }
+  };
   function rd() { // run down the queue
     while (mq.length && !blk) {
       const a = mq.shift(); // a[0]:command name, a[1]:command args
@@ -80,6 +102,10 @@ D.IDE = function IDE(opts = {}) {
         const f = ide.handlers[a[0]];
         f ? f.apply(ide, a.slice(1)) : D.send('UnknownCommand', { name: a[0] });
       }
+      if (pfqtid) {
+        clearTimeout(pfqtid);
+        pfqtid = setTimeout(pfKeyRun, 100);
+      }
     }
     last = +new Date(); tid = 0;
   }
@@ -89,30 +115,6 @@ D.IDE = function IDE(opts = {}) {
   D.recv = (x, y) => { mq.push([x, y]); rrd(); };
   ide.block = () => { blk += 1; };
   ide.unblock = () => { (blk -= 1) || rrd(); };
-
-  // pfkeys
-  const pfq = [];
-  let pfqtid = 0;
-  function pfKeyRun() {
-    if (pfq.length && ide.wins[0].promptType && !blk) {
-      const { text, cmd } = pfq.shift();
-      const w = D.ide.focusedWin;
-      if (text) w.insert(text);
-      else if (D.commands[cmd]) D.commands[cmd](w.me);
-    }
-    if (pfq.length) pfqtid = setTimeout(pfKeyRun, 100);
-    else pfqtid = 0;
-  }
-  ide.pfKey = (x) => {
-    if (ide.floating) ide.ipc.emit('pfKey', x);
-    else {
-      D.prf.pfkeys()[x].replace(/<(.+?)>|([^<>]+)/g, (_, cmd, text) => {
-        pfq.push({ cmd, text });
-      });
-      pfqtid = pfqtid || setTimeout(pfKeyRun, 1);
-    }
-  };
-
   ide.tracer = () => {
     const tc = Object.keys(ide.wins).find(k => !!ide.wins[k].tc);
     return tc && ide.wins[tc];
