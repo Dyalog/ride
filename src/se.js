@@ -125,6 +125,7 @@
       se.btm = se.me.getLayoutInfo().contentHeight + e.scrollTop;
     });
     me.onDidFocusEditor(() => { se.focusTS = +new Date(); se.ide.focusedWin = se; });
+    me.onDidChangeCursorPosition(e => ide.setCursorPosition(e.position));
     se.promptType = 0; // see ../docs/protocol.md #SetPromptType
     se.processAutocompleteReply = D.ac(me);
     me.viewModel.viewLayout.constructor.LINES_HORIZONTAL_EXTRA_PX = 14;
@@ -308,6 +309,7 @@
       D.elw && D.elw.focus();
       window.focused || window.focus();
       this.me.focus();
+      this.ide.setCursorPosition(this.me.getPosition());
     },
     insert(ch) {
       this.isReadOnly || this.me.trigger('editor', 'type', { text: ch });

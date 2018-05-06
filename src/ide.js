@@ -36,6 +36,8 @@ D.IDE = function IDE(opts = {}) {
     });
     ide.switchWin = (x) => { ide.ipc.emit('switchWin', x); };
   } else {
+    I.sb_sis.hidden = !1;
+    I.sb_threads.hidden = !1;
     ide.wins[0] = new D.Se(ide);
     D.wins = ide.wins;
 
@@ -188,8 +190,8 @@ D.IDE = function IDE(opts = {}) {
     const s = k && c.charCodeAt(0) > 127 ? `Keyboard: ${D.prf.prefixKey()}${k}\n\n` : '';
     if (/\S/.test(c)) { const h = D.lb.tips[c] || [c, '']; reqTip(x, h[0], s + h[1]); }
   };
-  I.lb_prf.onmousedown = () => { D.prf_ui(); return !1; };
-  I.lb_prf.onclick = () => !1; // prevent # from appearing in the URL bar
+  I.sb_prf.onmousedown = () => { D.prf_ui(); return !1; };
+  I.sb_prf.onclick = () => !1; // prevent # from appearing in the URL bar
   $(I.lb_inner).sortable({
     forcePlaceholderSize: 1,
     placeholder: 'lb_placeholder',
@@ -311,21 +313,27 @@ D.IDE = function IDE(opts = {}) {
 
   const updTopBtm = () => {
     ide.dom.style.top = `${(D.prf.lbar() ? I.lb.offsetHeight : 0) + (D.el ? 0 : 22)}px`;
+    ide.dom.style.bottom = `${I.sb.offsetHeight}px`;
     gl.updateSize(ide.dom.clientWidth, ide.dom.clientHeight);
   };
   I.lb.hidden = !D.prf.lbar();
+  I.sb.hidden = !1;
   updTopBtm();
   $(window).resize(updTopBtm);
   D.prf.lbar((x) => { I.lb.hidden = !x; updTopBtm(); });
-  !ide.floating && setTimeout(() => {
-    try {
-      D.installMenu(D.parseMenuDSL(D.prf.menu()));
-    } catch (e) {
-      $.err('Invalid menu configuration -- the default menu will be used instead');
-      console.error(e);
-      D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()));
-    }
-  }, 100);
+  if (!ide.floating) {
+    setTimeout(() => {
+      try {
+        D.installMenu(D.parseMenuDSL(D.prf.menu()));
+      } catch (e) {
+        $.err('Invalid menu configuration -- the default menu will be used instead');
+        console.error(e);
+        D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()));
+      }
+    }, 100);
+    setInterval(ide.getStats, 5000);
+    this.getStats();
+  }
   D.prf.autoCloseBrackets((x) => { eachWin((w) => { !w.bwId && w.autoCloseBrackets(!!x); }); });
   D.prf.ilf((x) => {
     const i = x ? -1 : D.prf.indent();
@@ -691,8 +699,18 @@ D.IDE = function IDE(opts = {}) {
       ${x.stops} stops
       ${x.monitors} monitors`, 'Clear all trace/stop/monitor');
     },
-    ReplyGetSIStack(x) { ide.dbg && ide.dbg.sistack.render(x.stack); },
-    ReplyGetThreads(x) { ide.dbg && ide.dbg.threads.render(x.threads); },
+    ReplyGetSIStack(x) {
+      const l = x.stack.length;
+      I.sb_sis.innerText = `⎕SI: ${l}`;
+      I.sb_sis.classList.toggle('active', l > 0);
+      ide.dbg && ide.dbg.sistack.render(x.stack);
+    },
+    ReplyGetThreads(x) {
+      const l = x.threads.length;
+      I.sb_threads.innerText = `&: ${l}`;
+      I.sb_threads.classList.toggle('active', l > 1);
+      ide.dbg && ide.dbg.threads.render(x.threads);
+    },
     ReplyFormatCode(x) {
       const w = D.wins[x.win];
       w.ReplyFormatCode(x.text);
@@ -730,6 +748,9 @@ D.IDE.prototype = {
     ide.profile = z;
     ide.updTitle();
   },
+  setCursorPosition(p) {
+    I.sb_cp.innerText = `Ln ${p.lineNumber - 1}, Col ${p.column - 1}`;
+  },
   die() { // don't really, just pretend
     const ide = this;
     if (ide.dead) return;
@@ -738,11 +759,15 @@ D.IDE.prototype = {
     ide.dom.className += ' disconnected';
     Object.keys(ide.wins).forEach((k) => { ide.wins[k].die(); });
   },
-  getThreads: $.debounce(100, () => { D.prf.dbg() && D.send('GetThreads', {}); }),
+  getThreads: $.debounce(100, () => { D.send('GetThreads', {}); }),
   getSIS: $.debounce(100, () => {
     if (this.floating) this.ipc.emit('getSIS');
-    else D.prf.dbg() && D.send('GetSIStack', {});
+    else D.send('GetSIStack', {});
   }),
+  getStats() {
+    D.send('GetSIStack', {});
+    D.send('GetThreads', {});    
+  },
   updPW(x) { this.wins[0] && this.wins[0].updPW(x); },
   updTitle() { // change listener for D.prf.title
     const ide = this;

@@ -157,6 +157,7 @@
       // xline:the line number of the empty line inserted when you press <down> at eof
       const ed = this;
       const { me } = ed;
+      ed.ide.setCursorPosition(e.position);
       if (ed.xline == null) return;
       const n = me.model.getLineCount();
       const l = e.position.lineNumber;
@@ -310,6 +311,7 @@
       }
       window.focused || window.focus();
       this.me.focus();
+      this.ide.setCursorPosition(this.me.getPosition());
     },
     insert(ch) {
       this.isReadOnly || this.me.trigger('editor', 'type', { text: ch });

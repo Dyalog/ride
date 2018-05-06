@@ -1,0 +1,21 @@
+#sb {
+	background-color: @STATUSBAR_BG_COL;
+	border-top:1px solid @GL_SPLITTER_TOP;
+  color:@LB_BUTTON_COL;
+  font-family: @APL_FONT;
+  div {
+		border-right: 1px solid @STATUSBAR_SEP_COL;
+ 		&.right {
+			border-right: none;
+			border-left: 1px solid @STATUSBAR_SEP_COL;	
+		}
+		&.active {
+			color: @STATUSBAR_ACTIVE_COL;
+		}
+	}
+}
+#sb_prf {
+	&:active {
+		background-color: @LB_BUTTON_ACTIVE;
+	}
+}

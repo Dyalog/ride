@@ -302,9 +302,6 @@ select {
 #lb .ui-sortable-helper {
   color: black;
 }
-#lb_prf:active {
-  background-color: #dde0ec;
-}
 #lb_tip {
   background: #edeff5;
   border: 1px solid #d7d7d3;
@@ -553,6 +550,25 @@ body {
   border: solid #333 1px;
   background-color: grey;
   color: white;
+}
+#sb {
+  background-color: white;
+  border-top: 1px solid #9eabe4;
+  color: #4c4a4a;
+  font-family: apl, monospace;
+}
+#sb div {
+  border-right: 1px solid #dde0ec;
+}
+#sb div.right {
+  border-right: none;
+  border-left: 1px solid #dde0ec;
+}
+#sb div.active {
+  color: #7688d9;
+}
+#sb_prf:active {
+  background-color: #dde0ec;
 }
 #toast-container {
   font-family: Roboto;
