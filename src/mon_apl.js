@@ -254,8 +254,13 @@
                     i += fnop.length;
                   } else {
                     m = signature.slice(i).match(name);
-                    addToken(offset + i, 'identifier.local');
-                    i += m[0].length;
+                    if (m) {
+                      addToken(offset + i, 'identifier.local');
+                      i += m[0].length;
+                    } else {
+                      addToken(offset + i, 'invalid');
+                      i = signature.length;                      
+                    }
                   }
               }
             }
