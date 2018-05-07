@@ -289,7 +289,7 @@
   for (let i = 0; i < C.length; i++) {
     if (C[i]) {
       defCmd(C[i]);
-      D.keyMap.dyalogDefault[`'${String.fromCharCode(0xf800 + i)}'`] = C[i];
+      D.keyMap.dyalogDefault[String.fromCharCode(0xf800 + i)] = C[i];
     }
   }
   D.mapKeys = (ed) => {

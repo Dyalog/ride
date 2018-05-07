@@ -81,7 +81,14 @@
       () => me.trigger('editor', 'acceptSelectedSuggestion'),
       'suggestWidgetVisible',
     );
-
+    me.onKeyDown((e) => {
+      const cmd = D.keyMap.dyalogDefault[e.browserEvent.key];
+      if (cmd && D.commands[cmd]){
+        e.preventDefault();
+        e.stopPropagation();
+        D.commands[cmd](me);
+      }
+    });
     let mouseL = 0; let mouseC = 0; let mouseTS = 0;
     me.onMouseDown((e) => {
       const t = e.target;
