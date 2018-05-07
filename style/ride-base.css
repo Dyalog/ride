@@ -1752,11 +1752,14 @@ h2 {
 #sb div.right {
   float: right;
 }
+#sb div[hidden] {
+  display: none;
+}
 #sb div .tb_btn {
   padding: 0;
 }
 #sb #sb_prf {
-  padding: 3px 10px;
+  padding: 4px 10px;
 }
 /*Status window*/
 /*info*/

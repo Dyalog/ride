@@ -396,6 +396,7 @@ D.IDE = function IDE(opts = {}) {
   D.prf.selectionHighlight((x) => { eachWin(w => !w.bwId && w.selectionHighlight(x)); });
   D.prf.showEditorToolbar((x) => { $('.ride_win.edit_trace').toggleClass('no-toolbar', !x); });
   D.prf.snippetSuggestions((x) => { eachWin(w => !w.bwId && w.snippetSuggestions(x)); });
+  D.prf.zoom(ide.zoom.bind(ide));
 
   ide.handlers = { // for RIDE protocol messages
     Identify(x) {
@@ -815,13 +816,17 @@ D.IDE.prototype = {
     w.focus();
   },
   zoom(z) {
+    const b = this.dom.ownerDocument.body;
+    b.className = `zoom${z} ${b.className.split(/\s+/).filter(s => !/^zoom-?\d+$/.test(s)).join(' ')}`;
+    this.gl.container.resize();
+    if (this.floating) {
+      D.ipc.of.ride_master.emit('zoom', z);
+      return;
+    }
     const { wins } = this;
     const se = wins['0'];
     Object.keys(wins).forEach((x) => { wins[x].zoom(z); });
     se && se.restoreScrollPos();
-    const b = se.getDocument().body;
-    b.className = `zoom${z} ${b.className.split(/\s+/).filter(s => !/^zoom-?\d+$/.test(s)).join(' ')}`;
-    this.gl.container.resize();
   },
   LBR: D.prf.lbar.toggle,
   FLT: D.prf.floating.toggle,

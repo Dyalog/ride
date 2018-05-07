@@ -11,11 +11,6 @@ const Console = console;
       };
       document.body.className += ` zoom${D.prf.zoom()}`;
 
-      D.prf.zoom((z) => {
-        if (!D.ide) return;
-        if (D.ide.floating) D.ipc.of.ride_master.emit('zoom', z);
-        else D.ide.zoom(z);
-      });
       // context menu
       const cmitems = ['Cut', 'Copy', 'Paste'].map(x => ({ label: x, role: x.toLowerCase() }))
         .concat({ type: 'separator' })
