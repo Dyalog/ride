@@ -59,7 +59,7 @@
       }
       q.ime_wr.hidden = !D.win;
       if (!layouts[D.prf.kbdLocale()]) {
-        const s = navigator.language;
+        const s = D.el ? nodeRequire('os-locale').sync() : navigator.language;
         const l = s.slice(0, 2).toLowerCase(); // language
         const c = s.slice(3, 5).toUpperCase(); // country
         // default layout for country c
