@@ -593,6 +593,7 @@ body {
 }
 .toolbar {
   background-color: #1c1e28;
+  border-bottom: 1px solid #272937;
 }
 .tb_btn {
   color: #a9a9a9;
