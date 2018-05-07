@@ -106,7 +106,7 @@ D.IPC_CreateWindow = function IPCCreateWindow(seq) {
   };
   opts = Object.assign(opts, WindowRect(seq, D.prf.editWins()));
   const bw = new D.el.BrowserWindow(opts);
-  bw.loadURL(`${window.location}?${bw.id}`);
+  bw.loadURL(`${window.location}?type=editor&winId=${bw.id}&appid=${D.ipc.config.appspace}`);
 };
 
 D.IPC_Server = function IPCServer() {
@@ -114,6 +114,7 @@ D.IPC_Server = function IPCServer() {
   D.pwins = [];
   D.pendingEditors = [];
   D.ipc.config.id = 'ride_master';
+  D.ipc.config.appspace = `ride_${+new Date()}`;
   D.ipc.config.retry = 1500;
   D.ipc.config.silent = true;
   D.ipc.serve(() => {

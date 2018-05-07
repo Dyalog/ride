@@ -19,7 +19,9 @@
     const esc = s => s.replace(/[<>&'"]/g, x => ESC[x]);
 
     const ipc = require('node-ipc');
+    const qp = require('querystring').parse(window.location.search.slice(1));
     ipc.config.id = 'dialog';
+    ipc.config.appspace = qp.appid;
     ipc.config.retry = 1500;
     ipc.config.silent = true;
     let rm;
