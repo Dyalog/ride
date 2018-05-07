@@ -4,6 +4,11 @@
 .monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main {
   white-space: pre;
 }
-.readOnly .monaco-editor .cursor {
-  visibility: hidden!important;
+.readOnly, .pendent {
+  .monaco-editor .cursor {
+    visibility: hidden!important;
+  }
+  .tb_btn {
+    pointer-events: none;
+  }
 }

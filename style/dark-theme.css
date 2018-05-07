@@ -1,18 +1,3 @@
-.disconnected .monaco-editor-background,
-.disconnected .monaco-editor .margin {
-  background-color: #e2d3bb;
-  /*beige*/
-}
-.breakpoint {
-  background: no-repeat transparent center center url(img/breakpoint.png);
-}
-.highlighted {
-  border: none;
-  outline: solid red 1px;
-}
-.pendent .tb_btn {
-  pointer-events: none;
-}
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),
 #cn textarea {
   border: 1px solid rgba(169, 169, 169, 0.3);
@@ -345,6 +330,21 @@ select {
 }
 .menu .m-box a:focus.m-checked {
   background: #323446 5px center no-repeat url(img/menu_chk_wht.png);
+}
+.disconnected .monaco-editor-background,
+.disconnected .monaco-editor .margin {
+  background-color: #e2d3bb;
+  /*beige*/
+}
+.breakpoint {
+  background: no-repeat transparent center center url(img/breakpoint.png);
+}
+.highlighted {
+  border: none;
+  outline: solid red 1px;
+}
+.pendent .tb_btn {
+  pointer-events: none;
 }
 #prf_dlg hr {
   border-top: 1px solid black;

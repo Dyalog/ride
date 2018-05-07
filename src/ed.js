@@ -144,7 +144,6 @@
       return !0;
     });
     ed.setPendent = $.debounce(100, x => ed.dom.classList.toggle('pendent', x));
-    ed.setReadOnlyClass = $.debounce(100, x => ed.dom.classList.toggle('readOnly', x));
     ed.setTC(!!ed.tc);
     ed.setLN(D.prf.lineNums());
     ed.firstOpen = true;
@@ -212,7 +211,6 @@
       const ed = this;
       const ro = ed.isReadOnlyEntity || !!x;
       ed.isReadOnly = ro;
-      ed.setReadOnlyClass(ro);
       ed.me.updateOptions({ readOnly: ro });
       ed.dom.getElementsByClassName('tb_AO')[0].style.display = ro ? 'none' : '';
       ed.dom.getElementsByClassName('tb_DO')[0].style.display = ro ? 'none' : '';
