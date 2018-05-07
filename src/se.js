@@ -87,9 +87,14 @@
       const t = e.target;
       const mt = monaco.editor.MouseTargetType;
       const p = t.position;
-      if (t.type === mt.CONTENT_TEXT) {
+      if (e.event.middleButton) {
+        e.event.preventDefault();
+        e.event.stopPropagation();
+      } else if (t.type === mt.CONTENT_TEXT) {
         if (e.event.timestamp - mouseTS < 400 && mouseL === p.lineNumber && mouseC === p.column) {
-          se.ED(me); e.event.preventDefault(); e.event.stopPropagation();
+          e.event.preventDefault();
+          e.event.stopPropagation();
+          se.ED(me);
         }
         mouseL = p.lineNumber; mouseC = p.column; mouseTS = e.event.timestamp;
       }

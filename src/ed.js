@@ -100,7 +100,10 @@
       const t = e.target;
       const mt = monaco.editor.MouseTargetType;
       const p = t.position;
-      if (t.type === mt.GUTTER_GLYPH_MARGIN) {
+      if (e.event.middleButton) {
+        e.event.preventDefault();
+        e.event.stopPropagation();
+      } else if (t.type === mt.GUTTER_GLYPH_MARGIN) {
         const l = p.lineNumber - 1;
         ed.stop.has(l) ? ed.stop.delete(l) : ed.stop.add(l);
         ed.setStop();
