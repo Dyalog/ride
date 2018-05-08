@@ -46,7 +46,7 @@
       }
     }
     if (!r.theme) { // check brightness and pick matching theme
-      const [rr, gg, bb] = r.norm.bg.match(/([0-9a-fA-F]{2})/g).map(c => parseInt(c, 16));
+      const [rr, gg, bb] = RGB(r.norm.bg).match(/([0-9a-fA-F]{2})/g).map(c => parseInt(c, 16));
       const lum = Math.sqrt((0.241 * rr * rr) + (0.691 * gg * gg) + (0.068 * bb * bb));
       r.theme = lum < 130 ? 'dark' : 'light';
     }
