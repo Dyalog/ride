@@ -357,14 +357,14 @@
               addToken(offset, tkn); offset += 1; break;
 
             case '⎕': {
-              [m] = sm.slice(1).match(/^[áa-z0-9]*/i) || [];
+              [m] = sm.slice(1).match(RegExp(`^${name}`)) || [];
               const ml = (m || '').toLowerCase();
-              if (!m) tkn = 'invalid.sysfn';
+              if (!m) tkn = 'predefined.sysfn';
               else if (h.vars && h.vars.indexOf(`⎕${ml}`) >= 0) tkn = 'predefined.sysfn.local';
               else if (sysfns.indexOf(ml) >= 0) tkn = 'predefined.sysfn';
               else tkn = 'invalid.sysfn';
 
-              addToken(offset, tkn); offset += 1 + m.length; break;
+              addToken(offset, tkn); offset += 1 + ml.length; break;
             }
             case '⍞': addToken(offset, 'predefined.sysfn'); offset += 1; break;
             case '#': addToken(offset, 'namespace'); offset += 1; break;
