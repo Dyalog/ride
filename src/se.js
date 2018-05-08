@@ -140,7 +140,6 @@
       se.me.revealLineInCenterIfOutsideViewport(se.me.model.getLineCount());
     });
     se.histRead();
-    se.setReadOnlyClass = $.debounce(100, x => se.dom.classList.toggle('readOnly', x));
   }
   Se.prototype = {
     histRead() {
@@ -203,15 +202,14 @@
       const { me } = se;
       const l = me.model.getLineCount();
       const s0 = me.model.getLineContent(l);
-      const p = '      ';
-      let sp = s.slice(-1) === '\n' ? s + p : s;
+      let sp = s;
       se.isReadOnly && me.updateOptions({ readOnly: false });
       if (this.dirty[l] != null) {
         const cp = me.getPosition();
         se.edit([{ range: new monaco.Range(l, 1, l, 1 + s0.length), text: `${s0}\n${sp}` }]);
         me.setPosition(cp);
       } else {
-        sp = se.isReadOnly && s0 !== p ? (s0 + sp) : sp;
+        sp = se.isReadOnly && s0 ? (s0 + sp) : sp;
         se.edit([{ range: new monaco.Range(l, 1, l, 1 + s0.length), text: sp }]);
         const ll = me.model.getLineCount();
         const lc = me.model.getLineMaxColumn(ll);
@@ -236,10 +234,12 @@
       const t = me.model.getLineContent(l);
       se.promptType = x;
       se.isReadOnly = !x;
-      se.setReadOnlyClass(!x);
       me.updateOptions({ readOnly: !x });
-      if ((x === 1 && this.dirty[l] == null) || [0, 1, 3, 4].indexOf(x) < 0) {
-        se.edit([{ range: new monaco.Range(l, 1, l, 1 + t.length), text: '      ' }]);
+      if ((x === 1 && this.dirty[l] == null) || ![0, 1, 3, 4].includes(x)) {
+        se.edit(
+          [{ range: new monaco.Range(l, 1, l, 1 + t.length), text: '      ' }],
+          [new monaco.Selection(l, 7, l, 7)],
+        );
       } else if (t === '      ') {
         se.edit([{ range: new monaco.Range(l, 1, l, 7), text: '' }]);
       } else {

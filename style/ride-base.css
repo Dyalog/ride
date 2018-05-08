@@ -1074,11 +1074,9 @@ body .ui-tooltip {
 .monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main {
   white-space: pre;
 }
-.readOnly .monaco-editor .cursor,
 .pendent .monaco-editor .cursor {
   visibility: hidden!important;
 }
-.readOnly .tb_btn,
 .pendent .tb_btn {
   pointer-events: none;
 }
