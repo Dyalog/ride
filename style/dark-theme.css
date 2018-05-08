@@ -361,9 +361,6 @@ select {
   border: none;
   outline: solid red 1px;
 }
-.pendent .tb_btn {
-  pointer-events: none;
-}
 #prf_dlg hr {
   border-top: 1px solid black;
   border-bottom: 1px solid #2e303e;
@@ -618,7 +615,6 @@ body {
   background: transparent;
   box-shadow: none!important;
   border-radius: 0!important;
-  font-size: 18px;
 }
 .tb_btn:hover {
   color: #7688d9;

@@ -109,7 +109,7 @@
     });
     me.onDidFocusEditor(() => { ed.focusTS = +new Date(); ed.ide.focusedWin = ed; });
     ed.processAutocompleteReply = D.ac(me);
-    ed.tb = $(ed.dom).find('button');
+    ed.tb = $(ed.dom).find('a');
     ed.tb.mousedown((x) => {
       if (x.currentTarget.matches('.tb_btn')) {
         x.currentTarget.classList.add('armed');

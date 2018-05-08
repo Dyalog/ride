@@ -180,9 +180,6 @@
   height: 50%;
   display: block;
 }
-#debug .toolbar {
-  border: none;
-}
 #debug .ctl_listview_header {
   height: 14px;
   padding: 5px;
@@ -1822,10 +1819,13 @@ h2 {
   visibility: visible;
 }
 .toolbar {
-  height: 24px;
   cursor: default;
   overflow: hidden;
-  padding: 6px;
+  padding: 3px 6px 2px;
+}
+.toolbar .tb_btn,
+.toolbar .tb_sep {
+  font-size: 1.2em;
 }
 .no-toolbar .toolbar {
   display: none;
@@ -1837,17 +1837,22 @@ h2 {
   display: none;
 }
 .tracer .toolbar .tc_only {
+  display: inline-block;
+}
+.tracer .toolbar .tc_only.tb_sep {
   display: inline;
 }
 .tb_btn {
   display: inline-block;
   padding: 2px;
+  width: 1em;
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
 }
 .tb_sep {
   margin: 0 8px 0 0;
+  vertical-align: middle;
 }
 #vt_bln {
   font-family: apl, monospace;
@@ -2050,7 +2055,7 @@ body.floating-window {
 .zoom12 #vt_bln,
 .zoom12 #lb_inner b,
 .zoom12 #sb,
-.zoom12 #sb .tb_btn {
+.zoom12 .toolbar {
   font-size: 48px;
 }
 .zoom11 #wse,
@@ -2059,7 +2064,7 @@ body.floating-window {
 .zoom11 #vt_bln,
 .zoom11 #lb_inner b,
 .zoom11 #sb,
-.zoom11 #sb .tb_btn {
+.zoom11 .toolbar {
   font-size: 42px;
 }
 .zoom10 #wse,
@@ -2068,7 +2073,7 @@ body.floating-window {
 .zoom10 #vt_bln,
 .zoom10 #lb_inner b,
 .zoom10 #sb,
-.zoom10 #sb .tb_btn {
+.zoom10 .toolbar {
   font-size: 36px;
 }
 .zoom9 #wse,
@@ -2077,7 +2082,7 @@ body.floating-window {
 .zoom9 #vt_bln,
 .zoom9 #lb_inner b,
 .zoom9 #sb,
-.zoom9 #sb .tb_btn {
+.zoom9 .toolbar {
   font-size: 32px;
 }
 .zoom8 #wse,
@@ -2086,7 +2091,7 @@ body.floating-window {
 .zoom8 #vt_bln,
 .zoom8 #lb_inner b,
 .zoom8 #sb,
-.zoom8 #sb .tb_btn {
+.zoom8 .toolbar {
   font-size: 28px;
 }
 .zoom7 #wse,
@@ -2095,7 +2100,7 @@ body.floating-window {
 .zoom7 #vt_bln,
 .zoom7 #lb_inner b,
 .zoom7 #sb,
-.zoom7 #sb .tb_btn {
+.zoom7 .toolbar {
   font-size: 26px;
 }
 .zoom6 #wse,
@@ -2104,7 +2109,7 @@ body.floating-window {
 .zoom6 #vt_bln,
 .zoom6 #lb_inner b,
 .zoom6 #sb,
-.zoom6 #sb .tb_btn {
+.zoom6 .toolbar {
   font-size: 24px;
 }
 .zoom5 #wse,
@@ -2113,7 +2118,7 @@ body.floating-window {
 .zoom5 #vt_bln,
 .zoom5 #lb_inner b,
 .zoom5 #sb,
-.zoom5 #sb .tb_btn {
+.zoom5 .toolbar {
   font-size: 22px;
 }
 .zoom4 #wse,
@@ -2122,7 +2127,7 @@ body.floating-window {
 .zoom4 #vt_bln,
 .zoom4 #lb_inner b,
 .zoom4 #sb,
-.zoom4 #sb .tb_btn {
+.zoom4 .toolbar {
   font-size: 20px;
 }
 .zoom3 #wse,
@@ -2131,7 +2136,7 @@ body.floating-window {
 .zoom3 #vt_bln,
 .zoom3 #lb_inner b,
 .zoom3 #sb,
-.zoom3 #sb .tb_btn {
+.zoom3 .toolbar {
   font-size: 19px;
 }
 .zoom2 #wse,
@@ -2140,7 +2145,7 @@ body.floating-window {
 .zoom2 #vt_bln,
 .zoom2 #lb_inner b,
 .zoom2 #sb,
-.zoom2 #sb .tb_btn {
+.zoom2 .toolbar {
   font-size: 18px;
 }
 .zoom1 #wse,
@@ -2149,7 +2154,7 @@ body.floating-window {
 .zoom1 #vt_bln,
 .zoom1 #lb_inner b,
 .zoom1 #sb,
-.zoom1 #sb .tb_btn {
+.zoom1 .toolbar {
   font-size: 17px;
 }
 .zoom0 #wse,
@@ -2158,7 +2163,7 @@ body.floating-window {
 .zoom0 #vt_bln,
 .zoom0 #lb_inner b,
 .zoom0 #sb,
-.zoom0 #sb .tb_btn {
+.zoom0 .toolbar {
   font-size: 16px;
 }
 .zoom-1 #wse,
@@ -2167,7 +2172,7 @@ body.floating-window {
 .zoom-1 #vt_bln,
 .zoom-1 #lb_inner b,
 .zoom-1 #sb,
-.zoom-1 #sb .tb_btn {
+.zoom-1 .toolbar {
   font-size: 15px;
 }
 .zoom-2 #wse,
@@ -2176,7 +2181,7 @@ body.floating-window {
 .zoom-2 #vt_bln,
 .zoom-2 #lb_inner b,
 .zoom-2 #sb,
-.zoom-2 #sb .tb_btn {
+.zoom-2 .toolbar {
   font-size: 14px;
 }
 .zoom-3 #wse,
@@ -2185,7 +2190,7 @@ body.floating-window {
 .zoom-3 #vt_bln,
 .zoom-3 #lb_inner b,
 .zoom-3 #sb,
-.zoom-3 #sb .tb_btn {
+.zoom-3 .toolbar {
   font-size: 13px;
 }
 .zoom-4 #wse,
@@ -2194,7 +2199,7 @@ body.floating-window {
 .zoom-4 #vt_bln,
 .zoom-4 #lb_inner b,
 .zoom-4 #sb,
-.zoom-4 #sb .tb_btn {
+.zoom-4 .toolbar {
   font-size: 12px;
 }
 .zoom-5 #wse,
@@ -2203,7 +2208,7 @@ body.floating-window {
 .zoom-5 #vt_bln,
 .zoom-5 #lb_inner b,
 .zoom-5 #sb,
-.zoom-5 #sb .tb_btn {
+.zoom-5 .toolbar {
   font-size: 11px;
 }
 .zoom-6 #wse,
@@ -2212,7 +2217,7 @@ body.floating-window {
 .zoom-6 #vt_bln,
 .zoom-6 #lb_inner b,
 .zoom-6 #sb,
-.zoom-6 #sb .tb_btn {
+.zoom-6 .toolbar {
   font-size: 10px;
 }
 .zoom-7 #wse,
@@ -2221,7 +2226,7 @@ body.floating-window {
 .zoom-7 #vt_bln,
 .zoom-7 #lb_inner b,
 .zoom-7 #sb,
-.zoom-7 #sb .tb_btn {
+.zoom-7 .toolbar {
   font-size: 9px;
 }
 .zoom-8 #wse,
@@ -2230,7 +2235,7 @@ body.floating-window {
 .zoom-8 #vt_bln,
 .zoom-8 #lb_inner b,
 .zoom-8 #sb,
-.zoom-8 #sb .tb_btn {
+.zoom-8 .toolbar {
   font-size: 8px;
 }
 .zoom-9 #wse,
@@ -2239,7 +2244,7 @@ body.floating-window {
 .zoom-9 #vt_bln,
 .zoom-9 #lb_inner b,
 .zoom-9 #sb,
-.zoom-9 #sb .tb_btn {
+.zoom-9 .toolbar {
   font-size: 7px;
 }
 .zoom-10 #wse,
@@ -2248,6 +2253,6 @@ body.floating-window {
 .zoom-10 #vt_bln,
 .zoom-10 #lb_inner b,
 .zoom-10 #sb,
-.zoom-10 #sb .tb_btn {
+.zoom-10 .toolbar {
   font-size: 6px;
 }
