@@ -9,7 +9,7 @@
       if (me.listen && !me.dyalogBQ && e.changes.length === 1
         && e.changes[0].text === pk) {
         D.commands.BQC(me);
-      } else {
+      } else if (!e.isRedoing && !e.isUndoing && !e.isFlush) {
         setTimeout(() => {
           const sw = me.contentWidgets['editor.widget.suggestWidget'];
           const swv = sw.widget.suggestWidgetVisible.get();

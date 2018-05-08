@@ -50,7 +50,7 @@
       renderLineHighlight: D.prf.renderLineHighlight(),
       selectionHighlight: D.prf.selectionHighlight(),
       snippetSuggestions: D.prf.snippetSuggestions(),
-      suggestOnTriggerCharacters: D.prf.autocompletion()  === 'classic',
+      suggestOnTriggerCharacters: D.prf.autocompletion() === 'classic',
       useTabStops: false,
       wordBasedSuggestions: false,
       wordWrap: D.prf.wrap() ? 'on' : 'off',
@@ -70,40 +70,34 @@
     se.tracer = me.createContextKey('tracer', true);
     me.listen = true;
     se.oModel = monaco.editor.createModel('');
+    D.mapScanCodes(me);
     D.mapKeys(se); D.prf.keys(D.mapKeys.bind(this, se));
-    me.addCommand(
-      monaco.KeyCode.Tab,
-      () => se.indentOrComplete(me),
-      '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode',
-    );
-    me.addCommand(
-      monaco.KeyCode.RightArrow,
-      () => me.trigger('editor', 'acceptSelectedSuggestion'),
-      'suggestWidgetVisible',
-    );
-    me.onKeyDown((e) => {
-      const cmd = D.keyMap.dyalogDefault[e.browserEvent.key];
-      if (cmd && D.commands[cmd]){
-        e.preventDefault();
-        e.stopPropagation();
-        D.commands[cmd](me);
-      }
-    });
+
     let mouseL = 0; let mouseC = 0; let mouseTS = 0;
     me.onMouseDown((e) => {
       const t = e.target;
       const mt = monaco.editor.MouseTargetType;
       const p = t.position;
+      const l = p.lineNumber;
+      const c = p.column;
       if (e.event.middleButton) {
         e.event.preventDefault();
         e.event.stopPropagation();
       } else if (t.type === mt.CONTENT_TEXT) {
-        if (e.event.timestamp - mouseTS < 400 && mouseL === p.lineNumber && mouseC === p.column) {
+        if (e.event.timestamp - mouseTS < 400 && mouseL === l && mouseC === c) {
           e.event.preventDefault();
           e.event.stopPropagation();
           se.ED(me);
         }
-        mouseL = p.lineNumber; mouseC = p.column; mouseTS = e.event.timestamp;
+        mouseL = l; mouseC = c; mouseTS = e.event.timestamp;
+      } else if (D.prf.cursorBeyondEOL()
+        && t.type === mt.CONTENT_EMPTY
+        && t.mouseColumn > c
+        && c === me.model.getLineMaxColumn(l)) {
+        this.edit(
+          [{ range: new monaco.Range(l, c, l, c), text: ' '.repeat(t.mouseColumn - c) }],
+          [new monaco.Selection(l, t.mouseColumn, l, t.mouseColumn)],
+        );
       }
     });
     me.onDidChangeModelContent((e) => {
@@ -229,10 +223,10 @@
       se.oModel.setValue(me.getValue());
       me.model._commandManager.clear();
     },
-    edit(edits) {
+    edit(edits, sel) {
       const { me } = this;
       me.listen = false;
-      me.executeEdits('D', edits);
+      me.executeEdits('D', edits, sel);
       me.listen = true;
     },
     prompt(x) {
@@ -490,10 +484,53 @@
     TC() { this.exec(1); },
     LN() { D.prf.lineNums.toggle(); },
     MA() { D.send('RestartThreads', {}); },
-    DC() { this.me.trigger('editor', 'cursorDown'); },
-    UC() { this.me.trigger('editor', 'cursorUp'); },
+    DC(me) {
+      const p = me.getPosition();
+      const l = p.lineNumber;
+      if (l < me.model.getLineCount() || /^\s*$/.test(me.model.getLineContent(l))) {
+        me.trigger('editor', 'cursorDown');
+      }
+      if (l === me.model.getLineCount() || !D.prf.cursorBeyondEOL()) return;
+      const nl = l + 1;
+      const l1c = me.model.getLineMaxColumn(nl);
+      if (l1c < p.column) {
+        this.edit(
+          [{ range: new monaco.Range(nl, l1c, nl, l1c), text: ' '.repeat(p.column - l1c) }],
+          [new monaco.Selection(nl, p.column, nl, p.column)],
+        );
+      }
+    },
+    UC(me) {
+      const p = me.getPosition();
+      const l = p.lineNumber;
+      me.trigger('editor', 'cursorUp');
+      if (l === 1 || !D.prf.cursorBeyondEOL()) return;
+      const nl = l - 1;
+      const l1c = me.model.getLineMaxColumn(nl);
+      if (l1c < p.column) {
+        this.edit(
+          [{ range: new monaco.Range(nl, l1c, nl, l1c), text: ' '.repeat(p.column - l1c) }],
+          [new monaco.Selection(nl, p.column, nl, p.column)],
+        );
+      }
+    },
     LC() { this.me.trigger('editor', 'cursorLeft'); },
-    RC() { this.me.trigger('editor', 'cursorRight'); },
+    RC() {
+      const { me } = this;
+      if (D.prf.cursorBeyondEOL()) {
+        const p = me.getPosition();
+        const l = p.lineNumber;
+        const c = p.column;
+        if (c === me.model.getLineMaxColumn(l)) {
+          this.edit(
+            [{ range: new monaco.Range(l, c, l, c), text: ' ' }],
+            [new monaco.Selection(l, c + 1, l, c + 1)],
+          );
+          return;
+        }
+      }
+      me.trigger('editor', 'cursorRight');
+    },
     SA() { this.me.trigger('editor', 'selectAll'); },
     TO() { this.me.trigger('editor', 'editor.fold'); }, // (editor.unfold) is there a toggle?
     indentOrComplete(me) {

@@ -78,31 +78,10 @@
     ed.session = me.createContextKey('session', false);
     ed.tracer = me.createContextKey('tracer', !!ed.tc);
     me.listen = true;
+    D.mapScanCodes(me);
     D.mapKeys(ed); D.prf.keys(D.mapKeys.bind(this, ed));
 
-    const kc = monaco.KeyCode;
-    me.addCommand(kc.DownArrow, () => ed.DC(me), '!suggestWidgetVisible');
-    me.addCommand(kc.UpArrow, () => ed.UC(me), '!suggestWidgetVisible');
-    me.addCommand(
-      kc.Tab,
-      () => ed.indentOrComplete(me),
-      '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode',
-    );
-    me.addCommand(
-      kc.RightArrow,
-      () => me.trigger('editor', 'acceptSelectedSuggestion'),
-      'suggestWidgetVisible',
-    );
-
     me.onDidChangeCursorPosition(ed.cursorActivity.bind(ed));
-    me.onKeyDown((e) => {
-      const cmd = D.keyMap.dyalogDefault[e.browserEvent.key];
-      if (cmd && D.commands[cmd]){
-        e.preventDefault();
-        e.stopPropagation();
-        D.commands[cmd](me);
-      }
-    });
     let mouseL = 0; let mouseC = 0; let mouseTS = 0;
     me.onMouseDown((e) => {
       const t = e.target;
@@ -637,7 +616,17 @@
       if (l1c < p.column) me.trigger('editor', 'type', { text: ' '.repeat(p.column - l1c) });
     },
     LC() { this.me.trigger('editor', 'cursorLeft'); },
-    RC() { this.me.trigger('editor', 'cursorRight'); },
+    RC() {
+      const { me } = this;
+      if (D.prf.cursorBeyondEOL()) {
+        const p = me.getPosition();
+        if (p.column === me.model.getLineMaxColumn(p.lineNumber)) {
+          me.trigger('editor', 'type', { text: ' ' });
+          return;
+        }
+      }
+      me.trigger('editor', 'cursorRight');
+    },
     SA() { this.me.trigger('editor', 'selectAll'); },
     TO() { this.me.trigger('editor', 'editor.fold'); }, // (editor.unfold) is there a toggle?
   };

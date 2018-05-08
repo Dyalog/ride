@@ -167,7 +167,7 @@
       if (me.dyalogBQ) return;
       me.dyalogBQ = me.model.onDidChangeContent(x => bqChangeHandlerMe(me, x));
     },
-    goLineEndSmart(me) { // CodeMirror provides a goLineStartSmart but not a goLineEndSmart command.
+    goLineEndSmart(me) { // Monaco provides a goLineStartSmart but not a goLineEndSmart command.
       const sels = me.getSelections().map((c) => {
         const l = c.startLineNumber;
         const ch = c.startColumn - 1;
@@ -292,6 +292,17 @@
       D.keyMap.dyalogDefault[String.fromCharCode(0xf800 + i)] = C[i];
     }
   }
+  D.mapScanCodes = (me) => {
+    me.onKeyDown((e) => {
+      const { key } = e.browserEvent;
+      const cmd = D.keyMap.dyalogDefault[key];
+      if (key.length === 1 && cmd && D.commands[cmd]) {
+        e.preventDefault();
+        e.stopPropagation();
+        D.commands[cmd](me);
+      }
+    });
+  };
   D.mapKeys = (ed) => {
     const { me } = ed;
     const kc = monaco.KeyCode;
@@ -326,6 +337,20 @@
     }
     addCmd(D.keyMap.dyalogDefault);
     addCmd(D.keyMap.dyalog);
+    me.addCommand(
+      kc.Tab,
+      () => ed.indentOrComplete(me),
+      '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode',
+    );
+    me.addCommand(
+      kc.RightArrow,
+      () => me.trigger('editor', 'acceptSelectedSuggestion'),
+      'suggestWidgetVisible',
+    );
+    me.addCommand(kc.DownArrow, () => ed.DC(me), '!suggestWidgetVisible && !findInputFocussed');
+    me.addCommand(kc.UpArrow, () => ed.UC(me), '!suggestWidgetVisible && !findInputFocussed');
+    me.addCommand(kc.RightArrow, () => ed.RC(me), '!suggestWidgetVisible && !findInputFocussed');
+
     me.addAction({
       id: 'dyalog-skip-to-line',
       contextMenuGroupId: 'navigation',
