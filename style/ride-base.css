@@ -1745,7 +1745,7 @@ h2 {
 }
 #sb div {
   display: inline-block;
-  padding: 5px 10px;
+  padding: 3px 6px;
   user-select: none;
   cursor: default;
 }
@@ -1759,7 +1759,7 @@ h2 {
   padding: 0;
 }
 #sb #sb_prf {
-  padding: 4px 10px;
+  padding: 2px 6px;
 }
 /*Status window*/
 /*info*/

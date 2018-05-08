@@ -8,6 +8,20 @@
 .lm_header,.lm_content {
 	border-color: @GL_BG !important;
 }
+.lm_dragProxy .lm_content{
+	box-shadow: 2px 2px 4px fade(@GL_PROXY_BG,20);
+}
+.lm_dropTargetIndicator{
+	box-shadow: inset 0 0 30px fade(@GL_PROXY_BG,40);
+	outline: 1px dashed @THEME_PRIMARY;
+	margin: 1px;
+	transition: all 200ms ease;
+}
+.lm_dropTargetIndicator .lm_inner{
+	background: @GL_PROXY_BG;
+	opacity: 0.1;
+	filter: alpha(opacity=1);
+}
 .lm_tab {
 	font-family: Roboto!important;
 	letter-spacing: 0.5px;
@@ -73,4 +87,9 @@
 
 .lm_maximised .lm_controls .lm_maximise{
 	background-image: @GL_RESTORE_IMG;
+}
+
+.lm_transition_indicator{
+	background-color: @GL_PROXY_BG;
+	border: 1px dashed @THEME_PRIMARY;
 }
