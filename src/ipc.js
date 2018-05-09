@@ -101,7 +101,8 @@ D.IPC_CreateWindow = function IPCCreateWindow(seq) {
   let opts = {
     show: false,
     fullscreen: false,
-    fullscreenable: true,
+    fullscreenable: false,
+    parent: D.elw,
     alwaysOnTop: !!D.prf.floatOnTop(),
   };
   opts = Object.assign(opts, WindowRect(seq, D.prf.editWins()));

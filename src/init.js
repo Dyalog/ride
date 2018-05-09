@@ -65,6 +65,8 @@ const Console = console;
           show: false,
           parent: D.elw,
           alwaysOnTop: true,
+          fullscreen: false,
+          fullscreenable: false,
           minWidth: 600,
           minHeight: 600,
         });
@@ -74,6 +76,8 @@ const Console = console;
           show: false,
           parent: D.elw,
           alwaysOnTop: true,
+          fullscreen: false,
+          fullscreenable: false,
           modal: true,
           width: 400,
           height: 350,
