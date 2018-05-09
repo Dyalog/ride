@@ -181,7 +181,8 @@
       let tkn;
       let s;
 
-      const sysvar = '⎕avu|⎕ct|⎕dct|⎕div|⎕fr|⎕io|⎕lx|⎕ml|⎕path|⎕pp|⎕pw|⎕rl|⎕rtl|⎕sm|⎕trap|⎕using|⎕wsid|⎕wx';
+      // localisable system variables, i.e. all but ⎕dmx ⎕se
+      const sysvar = '⎕avu|⎕ct|⎕dct|⎕div|⎕fr|⎕io|⎕lx|⎕ml|⎕path|⎕pp|⎕pw|⎕rl|⎕rtl|⎕sm|⎕tname|⎕trap|⎕using|⎕wsid|⎕wx';
       const localRE = RegExp(`( *)(;)( *)(${sysvar}|${name})( *)(⍝?)`, 'i');
       const localVars = () => {
         let m;
