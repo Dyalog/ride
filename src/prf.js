@@ -230,7 +230,7 @@ D.db = !nodeRequire ? localStorage : (function DB() {
   return db;
 }());
 
-if (D.win && D.db.getItem('ime') !== '0') {
+if (D.el && D.win && D.db.getItem('ime') !== '0') {
   const setImeExe = process.execPath.replace(/[^\\/]+$/, 'set-ime.exe');
   const fs = nodeRequire('fs');
   const { spawn } = nodeRequire('child_process');

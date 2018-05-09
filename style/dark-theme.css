@@ -97,6 +97,10 @@
   font-size: 16px;
 }
 /*various dialogs*/
+#dlg_modal_overlay {
+  background-color: black;
+  opacity: 0.2;
+}
 .dlg {
   background-color: #1c1e28;
 }
@@ -117,9 +121,6 @@
 #gd .dlg_title,
 #gd .dlg_close {
   color: #828282;
-}
-#gd .dlg_btns {
-  background-color: #1c1e28;
 }
 #gd .dlg_close:hover {
   color: white;
@@ -319,15 +320,20 @@ select {
   background-color: #1c1e28;
   border-bottom: solid grey 1px;
 }
-.menu a {
-  color: white;
+.menu a,
+.menu a:hover {
+  color: black;
+  font-size: 0.8em;
+}
+.menu .m-open {
+  background: rgba(0, 0, 0, 0.2);
 }
 .menu .m-open .m-top {
   border-color: transparent;
 }
 .menu .m-box {
-  background-color: #1c1e28;
-  border-color: #1c1e28;
+  background-color: white;
+  border-color: rgba(0, 0, 0, 0.2);
 }
 .menu .m-box a {
   border: none;
@@ -337,17 +343,13 @@ select {
   color: white;
 }
 .menu .m-box a:focus {
-  background: #323446;
-  color: white;
-}
-.menu .m-box a:focus .m-shc {
-  color: white;
+  background: rgba(0, 0, 0, 0.2);
 }
 .menu .m-box a.m-checked {
   background: transparent 5px center no-repeat url(img/menu_chk.png);
 }
 .menu .m-box a:focus.m-checked {
-  background: #323446 5px center no-repeat url(img/menu_chk_wht.png);
+  background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
 }
 .disconnected .monaco-editor-background,
 .disconnected .monaco-editor .margin {

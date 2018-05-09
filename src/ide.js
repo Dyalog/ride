@@ -55,7 +55,7 @@ D.IDE = function IDE(opts = {}) {
       if (!w.bwId) D.elw.focus();
       w.focus(); return !1;
     };
-    D.prf.floating() && D.IPC_CreateWindow(1);
+    D.el && D.prf.floating() && D.IPC_CreateWindow(1);
   }
   // We need to be able to temporarily block the stream of messages coming from socket.io
   // Creating a floating window can only be done asynchronously and it's possible that a message
@@ -173,7 +173,7 @@ D.IDE = function IDE(opts = {}) {
   I.lb.onmouseout = (x) => {
     if (x.target.nodeName === 'B') {
       clearTimeout(ttid); ttid = 0;
-      tthide = tthide || setTimeout(hideTT, 500);
+      tthide = tthide || setTimeout(hideTT, 200);
     }
   };
   I.lb_tip.onmouseover = () => {
@@ -181,7 +181,7 @@ D.IDE = function IDE(opts = {}) {
   };
   I.lb_tip.onmouseout = () => {
     clearTimeout(tthide);
-    tthide = setTimeout(hideTT, 500);
+    tthide = setTimeout(hideTT, 200);
   };
   I.lb.onmouseover = (x) => {
     if (lbDragged || x.target.nodeName !== 'B') return;
@@ -297,7 +297,11 @@ D.IDE = function IDE(opts = {}) {
       case 'win': {
         const { id } = x.contentItem.config.componentState;
         if (id) {
-          const ep = () => { const w = ide.wins[id]; w.EP(w.me); };
+          const ep = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            ide.wins[id].onClose();
+          };
           x.middleClick = ep;
           cls.off('click').click(ep);
         } else {
@@ -312,7 +316,7 @@ D.IDE = function IDE(opts = {}) {
   gl.init();
 
   const updTopBtm = () => {
-    ide.dom.style.top = `${(D.prf.lbar() ? I.lb.offsetHeight : 0) + (D.el ? 0 : 22)}px`;
+    ide.dom.style.top = `${(D.prf.lbar() ? I.lb.offsetHeight : 0) + (D.el ? 0 : 23)}px`;
     ide.dom.style.bottom = `${I.sb.offsetHeight}px`;
     gl.updateSize(ide.dom.clientWidth, ide.dom.clientHeight);
   };
@@ -579,45 +583,9 @@ D.IDE = function IDE(opts = {}) {
       }
     },
     OptionsDialog(x) {
-      let text = typeof x.text === 'string' ? x.text : x.text.join('\n');
-      if (D.el) { // && process.env.RIDE_NATIVE_DIALOGS) {
-        const { bwId } = D.ide.focusedWin;
-        const bw = bwId ? D.el.BrowserWindow.fromId(bwId) : D.elw;
-        const r = D.el.dialog.showMessageBox(bw, {
-          message: text,
-          title: x.title || '',
-          buttons: x.options || [''],
-          cancelId: -1,
-          type: ['warning', 'info', 'question', 'error'][x.type - 1],
-        });
+      D.util.optionsDialog(x, (r) => {
         D.send('ReplyOptionsDialog', { index: r, token: x.token });
-      } else {
-        text = text.replace(/\r?\n/g, '<br>');
-        I.gd_title_text.textContent = x.title || '';
-        I.gd_content.innerHTML = text;
-        I.gd_icon.style.display = '';
-        I.gd_icon.className = `dlg_icon_${['warn', 'info', 'query', 'error'][x.type - 1]}`;
-        I.gd_btns.innerHTML = (x.options || []).map(y => `<button>${D.util.esc(y)}</button>`).join('');
-        const b = I.gd_btns.querySelector('button');
-        const ret = (r) => {
-          I.gd_btns.onclick = null;
-          I.gd_close.onclick = null;
-          I.gd.hidden = 1;
-          D.send('ReplyOptionsDialog', { index: r, token: x.token });
-          D.ide.focusedWin.focus();
-        };
-        I.gd_close.onclick = () => ret(-1);
-        I.gd_btns.onclick = (e) => {
-          if (e.target.nodeName === 'BUTTON') {
-            let i = -1;
-            let t = e.target;
-            while (t) { t = t.previousSibling; i += 1; }
-            ret(i);
-          }
-        };
-        D.util.dlg(I.gd, { w: 400 });
-        setTimeout(() => { b.focus(); }, 1);
-      }
+      });
     },
     StringDialog(x) {
       I.gd_title_text.textContent = x.title || '';
@@ -640,59 +608,13 @@ D.IDE = function IDE(opts = {}) {
           ret(e.target.previousSibling ? x.defaultValue || null : inp.value);
         }
       };
-      D.util.dlg(I.gd, { w: 400, h: 250 });
+      D.util.dlg(I.gd, { w: 400, h: 250, modal: true });
       setTimeout(() => { inp.focus(); }, 1);
     },
     TaskDialog(x) {
-      if (D.el && D.win) {
-        const { bwId } = D.ide.focusedWin;
-        const bw = bwId ? D.el.BrowserWindow.fromId(bwId) : D.elw;
-        const r = D.el.dialog.showMessageBox(bw, {
-          message: `${x.text}\n${x.subtext}`,
-          title: x.title || '',
-          buttons: x.options.concat(x.buttonText) || [''],
-          type: 'question',
-        });
-        const index = r < x.options.length ? r : 100 + (r - x.options.length);
-        D.send('ReplyOptionsDialog', { index, token: x.token });
-        return;
-      } else if (D.dlg_bw) {
-        D.ipc.server.emit(D.dlg_bw.socket, 'show', x);
-        const bw = D.el.BrowserWindow.fromId(D.dlg_bw.id);
-        bw.show();
-        bw.setAlwaysOnTop(true);
-        return;
-      }
-      const { esc } = D.util;
-      I.gd_title_text.textContent = x.title || 'Task';
-      I.gd_icon.style.display = 'none';
-      I.gd_content.innerHTML = esc(x.text || '') + (x.subtext ? `<div class=task_subtext>${esc(x.subtext)}</div>` : '');
-      let content = (x.buttonText || []).map((y) => {
-        const [caption, ...details] = esc(y).split('\n');
-        return '<button class=task><div class="btn_icon"><span class="far fa-long-arrow-right"></span></div>' +
-          `${caption}<br><div class="task_detail">${details.join('<br>')}</div></button>`;
-      }).join('');
-      content += (x.footer ? `<div class=task_footer>${esc(x.footer)}</div>` : '');
-      I.gd_btns.innerHTML = content;
-      const ret = (r) => {
-        I.gd_btns.onclick = null;
-        I.gd_close.onclick = null;
-        I.gd.hidden = 1;
+      D.util.taskDialog(x, (r) => {
         D.send('ReplyTaskDialog', { index: r, token: x.token });
-        D.ide.focusedWin.focus();
-      };
-      const b = I.gd_btns.querySelector('button');
-      I.gd_close.onclick = () => { ret(-1); };
-      I.gd_btns.onclick = (e) => {
-        if (e.target.nodeName === 'BUTTON') {
-          let t = e.target;
-          let i = 99;
-          while (t) { t = t.previousSibling; i += 1; }
-          ret(i);
-        }
-      };
-      D.util.dlg(I.gd, { w: 400, h: 300 });
-      setTimeout(() => { b.focus(); }, 1);
+      });
     },
     ReplyClearTraceStopMonitor(x) {
       $.alert(`The following items were cleared:
@@ -885,9 +807,7 @@ D.IDE.prototype = {
   onbeforeunload(e) { // called when the user presses [X] on the OS window
     const ide = this;
     if (ide.floating && ide.connected) { e.returnValue = false; }
-    if (ide.dead) {
-      D.nww && D.nww.close(true); // force close window
-    } else {
+    if (!ide.dead) {
       Object.keys(ide.wins).forEach((k) => {
         const ed = ide.wins[k];
         const { me } = ed;

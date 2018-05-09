@@ -100,9 +100,9 @@
         d.hidden = 0;
       } else {
         d.className += ' web';
-        D.util.dlg(d, { w: 600, h: 490 });
       }
     }
+    !D.el && D.util.dlg(d, { w: 600, h: 600 });
     Object.keys(tabs).forEach((i) => { tabs[i].load(); });
     const t = tabs[(((document.getElementById('prf_nav').querySelector('.sel') || {}).href) || '').replace(/.*#/, '')];
     t && t.activate && t.activate();

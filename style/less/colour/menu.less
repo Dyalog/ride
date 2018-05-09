@@ -1,18 +1,21 @@
 /*menu (see ../src/menu.js for the DOM structure)*/
+@HOVER_COL: fade(black, 20);
 .menu {
 	background-color: @MENU_BG;
 	border-bottom: solid grey 1px;
-	a {
-		color: @INPUT_COL;
+	a, a:hover {
+    color: black;
+    font-size: 0.8em;
 	}
 	.m-open {
+		background: @HOVER_COL;
 		.m-top {
 			border-color:transparent;
 		}
 	}
 	.m-box {
-		background-color:@MENU_BG;
-		border-color:@MENU_BG;
+		background-color: white;
+		border-color: @HOVER_COL;
 		a {
 			border:none;
 			border-color: @MENU_BG;
@@ -20,17 +23,17 @@
 				color: @INPUT_COL;
 			}
 			&:focus {
-				background: lighten(@MENU_BG,10);
-				color: white;
-				.m-shc {
-					color: white;
-				}
+				background: @HOVER_COL;
+				// color: white;
+				// .m-shc {
+				// 	color: white;
+				// }
 			}
 			&.m-checked{
 				background: transparent 5px center no-repeat url(img/menu_chk.png);
 			}
 			&:focus.m-checked {
-				background: lighten(@MENU_BG,10) 5px center no-repeat url(img/menu_chk_wht.png);
+				background: @HOVER_COL 5px center no-repeat url(img/menu_chk.png);
 			}
 		}
 	}

@@ -191,6 +191,11 @@
   height: calc(100% - 24px);
 }
 /*various dialogs*/
+#dlg_modal_overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
 .dlg {
   position: absolute;
 }
@@ -274,7 +279,7 @@
 #gd_content {
   padding: 1em;
   line-height: 1.5;
-  margin-bottom: 2em;
+  margin-bottom: 60px;
 }
 .ui-dialog .ui-dialog-content.task_dlg {
   padding: 8px;
@@ -1014,12 +1019,13 @@ body .ui-tooltip {
 }
 /*menu (see ../src/menu.js for the DOM structure)*/
 .menu {
-  height: 18px;
-  line-height: 17px;
+  height: 22px;
+  line-height: 21px;
   cursor: default;
   padding: 0;
-  margin: 2px 0 0 0;
+  margin: 0;
   font-family: Roboto, sans-serif;
+  user-select: none;
 }
 .menu a {
   text-decoration: none;
@@ -1040,23 +1046,23 @@ body .ui-tooltip {
 .menu .m-box {
   display: none;
   border-style: solid;
-  border-width: 1px 2px 2px 1px;
+  border-width: 1px;
   position: absolute;
-  padding: 1px;
-  margin: 2px 0 0 0;
+  padding: 0;
+  margin: 0;
   min-width: 125px;
   white-space: nowrap;
 }
 .menu .m-box .m-box {
   margin-left: 100%;
-  margin-top: -17px;
+  margin-top: -21px;
 }
 .menu .m-box a {
   display: block;
-  height: 17px;
-  line-height: 17px;
+  height: 21px;
+  line-height: 21px;
   text-align: left;
-  padding: 1px 17px;
+  padding: 1px 21px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -1096,7 +1102,7 @@ body .ui-tooltip {
   margin-top: 5px !important;
 }
 .web #code {
-  top: 55px;
+  top: 75px;
 }
 #code_aim {
   margin-left: 48px;
@@ -1132,7 +1138,7 @@ body .ui-tooltip {
 }
 .web #col_me,
 .web #col_settings {
-  top: 100px;
+  top: 126px;
 }
 #col_fg {
   width: 48px;
@@ -1388,11 +1394,14 @@ input.lyt_g3:hover {
 #pmenu_ta_wr {
   position: absolute;
   left: 4px;
-  right: 8px;
+  right: 4px;
   top: 94px;
   bottom: 70px;
   overflow: hidden;
   padding: 4px;
+}
+.web #pmenu_ta_wr {
+  top: 120px;
 }
 #pmenu_ta {
   width: 100%;
@@ -1429,7 +1438,7 @@ input.lyt_g3:hover {
   width: 50%;
 }
 .web #shc {
-  top: 55px;
+  top: 70px;
 }
 #shc_rst_all {
   float: right;

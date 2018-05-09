@@ -37,12 +37,16 @@
   const cmpVer = (x, y) => x[0] - y[0] || x[1] - y[1] || 0;
   const ls = x => fs.readdirSync(x);
   const parseVer = x => x.split('.').map(y => +y);
-  const err = (...x) => {
+  const hideDlgs = () => {
     if (q) {
+      I.dlg_modal_overlay.hidden = 1;
       q.connecting_dlg.hidden = 1;
       q.listen_dlg.hidden = 1;
       q.fetch.disabled = 0;
     }
+  };
+  const err = (...x) => {
+    hideDlgs();
     $.err(...x);
   };
   const save = () => {
@@ -157,10 +161,7 @@
     return 1;
   };
   const initInterpreterConn = () => {
-    if (q) {
-      q.connecting_dlg.hidden = 1;
-      q.listen_dlg.hidden = 1;
-    }
+    hideDlgs();
     let b = Buffer.alloc(0x100000);
     let ib = 0; // ib:offset in b
     let nb = 0; // nb:length in b
@@ -277,7 +278,7 @@
       const ct = process.env.RIDE_CONNECT_TIMEOUT || 10000;
       switch (x.type || 'connect') {
         case 'connect':
-          D.util.dlg(q.connecting_dlg);
+          D.util.dlg(q.connecting_dlg, { modal: true });
           if (x.subtype === 'ssh') {
             const o = {
               host: x.host || 'localhost',
@@ -327,7 +328,7 @@
                 err('Timed out');
               }
               c && c.end();
-              q.connecting_dlg.hidden = 1;
+              hideDlgs();
               return !1;
             };
             D.tmr = setTimeout(cancelOp, ct);
@@ -345,12 +346,12 @@
           }
           break;
         case 'listen': {
-          D.util.dlg(q.listen_dlg);
+          D.util.dlg(q.listen_dlg, { modal: true });
           const port = +x.port || 4502;
           const host = x.host || 'localhost';
           q.listen_dlg_cancel.onclick = () => {
             srv && srv.close();
-            q.listen_dlg.hidden = 1;
+            hideDlgs();
             return !1;
           };
           srv = net.createServer((c) => {
@@ -363,7 +364,10 @@
             initInterpreterConn();
             new D.IDE().setConnInfo(cHost, port, sel ? sel.name : '');
           });
-          srv.on('error', (e) => { srv = 0; q.listen_dlg.hidden = 1; err(`${e}`); });
+          srv.on('error', (e) => {
+            srv = 0;
+            err(`${e}`);
+          });
           srv.listen(port, host, () => {
             const o = srv.address();
             log(`listening on ${o.address}:${o.port}`);
@@ -380,7 +384,7 @@
             k && (env[k] = v);
           }
           if (x.subtype === 'ssh') {
-            D.util.dlg(q.connecting_dlg);
+            D.util.dlg(q.connecting_dlg, { modal: true });
             const o = {
               host: x.host || 'localhost',
               port: +x.ssh_port || 22,
@@ -405,7 +409,7 @@
                 Object.keys(env).forEach((k) => { s0 += `${k}=${shEsc(env[k])} `; });
                 const s1 = x.args ? x.args.replace(/\n$/, '').split('\n').map(shEsc).join(' ') : '';
                 sm.write(`${s0}CLASSICMODE=1 SINGLETRACE=1 RIDE_INIT=CONNECT:127.0.0.1:${rport} RIDE_SPAWNED=1 ${shEsc(x.exe)} ${s1} +s -q >/dev/null\n`);
-                q.connecting_dlg.hidden = 1;
+                hideDlgs();
               });
             }).on('error', () => {
               clearTimeout(D.tmr);
@@ -419,7 +423,7 @@
                 err('Timed out');
               }
               c && c.end();
-              q.connecting_dlg.hidden = 1;
+              hideDlgs();
               return !1;
             };
             D.tmr = setTimeout(cancelOp, ct);
@@ -503,7 +507,7 @@
               srv = 0;
               child && child.kill();
               child = 0;
-              q.connecting_dlg.hidden = 1;
+              hideDlgs();
               return !1;
             };
             D.tmr = setTimeout(cancelOp, ct);

@@ -362,24 +362,45 @@
       me.updateOptions({ fontSize: fs, lineHeight: fs + 2 });
       me.revealRangeAtTop(r);
     },
-
+    onClose() {
+      const ed = this;
+      const { me } = ed;
+      if (ed.tc || (me.getValue() === ed.oText && `${ed.getStops()}` === `${ed.oStop}`)) {
+        ed.EP(me);
+      } else {
+        setTimeout(() => {
+          window.focus();
+          D.util.optionsDialog({
+            title: 'Save?',
+            options: ['Yes', 'No', 'Cancel'],
+            text: `The object "${ed.name}" has changed.\nDo you want to save the changes?`,
+          }, (r) => {
+            if (r === 0) ed.EP(me);
+            else if (r === 1) ed.QT(me);
+            else ed.focus();
+          });
+        }, 10);
+      }
+    },
     ReplyFormatCode(lines) {
       const ed = this;
       const { me } = ed;
       const u = me.getPosition();
+      const txt = lines.join('\n');
       ed.saveScrollPos();
-      me.setValue(lines.join('\n'));
+      me.setValue(txt);
       me.model.setEOL(monaco.editor.EndOfLineSequence.LF);
       ed.setStop();
       if (ed.tc) {
         ed.hl(ed.HIGHLIGHT_LINE);
         u.lineNumber = ed.HIGHLIGHT_LINE;
       }
-      if (ed.firstOpen === true) {
+      if (ed.firstOpen) {
         if (lines.length === 1 && /\s?[a-z|@]+$/.test(lines[0])) u.column = me.model.getLineContent(u.lineNumber).length + 1;
         else if (lines[0][0] === ':') u.column = 1;
         else u.column = 2;
         ed.firstOpen = false;
+        ed.oText = txt;
       }
       ed.restoreScrollPos();
       me.setPosition(u);
@@ -541,11 +562,16 @@
       ed.tc && D.send('SetLineAttributes', { win: ed.id, stop: ed.getStops() });
     },
     RD(me) {
+      const ed = this;
       if (D.prf.ilf()) {
         const text = me.getValue().split('\n');
         D.send('FormatCode', { win: this.id, text });
       } else if (me.getSelection().isEmpty()) {
         me.trigger('editor', 'editor.action.formatDocument');
+        ed.firstOpen && setTimeout(() => {
+          ed.oText = me.getValue();
+          ed.firstOpen = false;
+        }, 10);
       } else {
         me.trigger('editor', 'editor.action.formatSelection');
       }
