@@ -7,7 +7,7 @@
 D.cmds = [
   /* eslint-disable */
   //code description                default keys
-  ['ABT','About',                   ['Shift-F1']],
+  ['ABT','About Dyalog',            ['Shift-F1']],
   ['AC', 'Align comments',          []],
   ['AO', 'Comment out lines',       []],
   ['BK', 'Backward or Undo',        ['Shift-Ctrl-Backspace']],
@@ -20,7 +20,7 @@ D.cmds = [
   ['DMR','Load demo file',          []],
   ['DO', 'Uncomment lines',         []],
   ['ED', 'Edit',                    ['Shift-Enter']],
-  ['EMD','Edit Mode',               ['Shift-F3']],
+  ['EMD','Edit current trace window',['Shift-F3']],
   ['EP', 'Exit (and save changes)', ['Escape']],
   ['ER', 'Execute line',            ['Enter']],
   ['EXP','Expand selection',        ['Shift-Alt-Up']],
@@ -57,7 +57,7 @@ D.cmds = [
   ['SI', 'Strong interrupt',        []],
   ['STL','Skip to line',            []],
   ['TB', 'Tab between windows',     ['Ctrl-Tab']],
-  ['TC', 'Trace',                   ['Ctrl-Enter']],
+  ['TC', 'Trace line',              ['Ctrl-Enter']],
   ['TGC','Toggle comment',          []],
   ['TIP','Show value tip',          []],
   ['TL', 'Toggle localisation',     ['Ctrl-Up']],
