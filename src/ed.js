@@ -223,7 +223,11 @@
         [...ed.stopDecorations, ...ed.hlDecorations],
       );
     },
-    updSize() { },
+    updSize() {
+      const ed = this;
+      const tb = ed.dom.getElementsByClassName('toolbar')[0];
+      ed.me.domElement.style.top = `${tb.offsetHeight}px`;
+    },
     saveScrollPos() { },
     restoreScrollPos() { },
     updateSIStack(x) {

@@ -315,16 +315,17 @@ D.IDE = function IDE(opts = {}) {
   });
   gl.init();
 
-  const updTopBtm = () => {
+  const updTopBtm = $.debounce(100, () => {
     ide.dom.style.top = `${(D.prf.lbar() ? I.lb.offsetHeight : 0) + (D.el ? 0 : 23)}px`;
     ide.dom.style.bottom = `${I.sb.offsetHeight}px`;
     gl.updateSize(ide.dom.clientWidth, ide.dom.clientHeight);
-  };
+  });
   I.lb.hidden = !D.prf.lbar();
-  I.sb.hidden = !1;
+  I.sb.hidden = !D.prf.sbar();
   updTopBtm();
   $(window).resize(updTopBtm);
   D.prf.lbar((x) => { I.lb.hidden = !x; updTopBtm(); });
+  D.prf.sbar((x) => { I.sb.hidden = !x; updTopBtm(); });
   if (!ide.floating) {
     setTimeout(() => {
       try {
@@ -751,6 +752,7 @@ D.IDE.prototype = {
     se && se.restoreScrollPos();
   },
   LBR: D.prf.lbar.toggle,
+  SBR: D.prf.sbar.toggle,
   FLT: D.prf.floating.toggle,
   WRP: D.prf.wrap.toggle,
   TOP: D.prf.floatOnTop.toggle,

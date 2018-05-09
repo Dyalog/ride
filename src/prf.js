@@ -44,6 +44,7 @@ D.prf = {};
   ['prefixMaps',         {}],//per-locale strings of pairs of characters - diffs from the default map for that locale
   ['pfkeys',             ['','','','','','','','','','','','','']], //command strings for pfkeys
   ['renderLineHighlight','none'], // highlight current line
+  ['sbar',               1], //show status bar
   ['selectedExe',        ''],//which interpreter is selected in dropdown in the Connect page?
   ['selectionHighlight', 0],// hightlight matching words
   ['showEditorToolbar',  1],// show toolbar in editor windows
@@ -89,6 +90,7 @@ D.prf = {};
     '\n  Preferences              =PRF {!mac}'+
     '\n&View'+
     '\n  Show Language Bar        =LBR'+
+    '\n  Show Status Bar          =SBR'+
     '\n  Show Workspace Explorer  =WSE'+
     '\n  Show Debug               =DBG'+
     '\n  Floating Edit Windows    =FLT {!browser}'+

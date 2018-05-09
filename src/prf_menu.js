@@ -33,6 +33,7 @@
       TVO: { checkBoxPref: D.prf.fold },
       TVB: { checkBoxPref: D.prf.breakPts },
       LBR: { checkBoxPref: D.prf.lbar },
+      SBR: { checkBoxPref: D.prf.sbar },
       FLT: { checkBoxPref: D.prf.floating },
       WRP: { checkBoxPref: D.prf.wrap },
       TOP: { checkBoxPref: D.prf.floatOnTop },

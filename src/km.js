@@ -126,6 +126,7 @@
     },
     QIT() { D.quit(); },
     LBR: D.prf.lbar.toggle,
+    SBR: D.prf.sbar.toggle,
     WI() { D.send('WeakInterrupt', {}); },
     SI() { D.send('StrongInterrupt', {}); },
     FUL() {
