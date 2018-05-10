@@ -67,7 +67,8 @@
     let empty = 1;
     q.sc_clr.hidden = !s;
     for (let i = 0; i < a.length; i++) {
-      const h = a[i].textContent.toLowerCase().indexOf(s) < 0 && !a[i].querySelectorAll('.shc_dup').length;
+      const h = [...a[i].childNodes].map(n => n.textContent).join(' ').toLowerCase().indexOf(s) < 0
+        && !a[i].querySelectorAll('.shc_dup').length;
       a[i].hidden = h;
       empty = empty && h;
     }
