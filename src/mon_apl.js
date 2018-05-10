@@ -580,7 +580,8 @@
       const { a } = model._lines[position.lineNumber-1]._state;
       const { t } = (a || []).slice(-1)[0] || {};      
       const snippets = /^\s*:\w*$/.test(s.slice(0, c - 1)) && a && t !== '{';
-      if (s.slice(c - 3, c - 1) === pk2) {
+      const sc = model.bqc - 1;
+      if (s.slice(sc, c - 1) === pk2) {
         return Object.keys(D.bqbqc).map((k) => {
           const v = D.bqbqc[k];
           const key = D.getBQKeyFor(v.text);

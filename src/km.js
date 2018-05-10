@@ -29,51 +29,6 @@
   }
   updBQ(); D.prf.prefixMaps(updBQ); D.prf.kbdLocale(updBQ);
 
-  function bqCleanUpMe(me) {
-    if (me.dyalogBQ) {
-      me.dyalogBQ.dispose(); delete me.dyalogBQ;
-      me.trigger('editor', 'hideSuggestWidget');
-    }
-  }
-  function bqChangeHandlerMe(me, o) { // o:changeObj
-    if (!me.dyalogBQ) return;
-    const chg = o.changes[0];
-    const r = chg.range;
-    const l = r.startLineNumber;
-    const c = r.startColumn;
-    const x = chg.text[0];
-    const pk = D.prf.prefixKey();
-    const s = me.model.getLineContent(l);
-    if (s.slice(c - 3, c) === `${pk}${pk}${pk}`) { // ``` for ⋄
-      const nr = new monaco.Range(l, c - 2, l, c + 1);
-      const ns = new monaco.Selection(l, c - 1, l, c - 1);
-      bqCleanUpMe(me);
-      setTimeout(() => {
-        me.listen = false;
-        me.executeEdits('D', [{ range: nr, text: bq[pk] || '' }], [ns]);
-        me.listen = true;
-      }, 1);
-    } else if (s.slice(c - 3, c - 1) === `${pk}${pk}`) { // bqbqc
-      me.dyalogBQ && me.dyalogBQ.dispose(); delete me.dyalogBQ;
-    } else if (s[c - 2] !== pk) {
-      bqCleanUpMe(me);
-    } else if (x !== pk) {
-      const y = x === ' ' ? pk : bq[x];
-      if (y) {
-        const nr = new monaco.Range(l, c - 1, l, c + chg.text.length);
-        const ns = new monaco.Selection(l, c, l, c);
-        bqCleanUpMe(me);
-        setTimeout(() => {
-          me.listen = false;
-          me.executeEdits('D', [{ range: nr, text: y }], [ns]);
-          me.listen = true;
-        }, 1);
-      } else {
-        bqCleanUpMe(me);
-      }
-    }
-  }
-
   D.keyMap.dyalogDefault = { End: 'goLineEndSmart' };
 
   $.extend(D.commands, {
@@ -163,10 +118,6 @@
         else u = h.LANGELEMENTS;
       }
       D.openExternal(u);
-    },
-    BQC(me) {
-      if (me.dyalogBQ) return;
-      me.dyalogBQ = me.model.onDidChangeContent(x => bqChangeHandlerMe(me, x));
     },
     goLineEndSmart(me) { // Monaco provides a goLineStartSmart but not a goLineEndSmart command.
       const sels = me.getSelections().map((c) => {

@@ -101,7 +101,7 @@
       }
     });
     me.onDidChangeModelContent((e) => {
-      if (!me.listen || me.dyalogBQ) return;
+      if (!me.listen || me.model.bqc) return;
       e.changes.forEach((c) => {
         const l0 = c.range.startLineNumber;
         const l1 = c.range.endLineNumber;

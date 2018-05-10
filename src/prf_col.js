@@ -455,11 +455,9 @@
         selGrpFromPosition(me.getPosition());
       });
       reTokenize();
-      me.model.onDidChangeContent((x) => {
-        if (!me.dyalogBQ && x.changes.length === 1
-          && x.changes[0].text === D.prf.prefixKey()) D.commands.BQC(me);
-        reTokenize();
-      });
+      me.listen = 1;
+      me.model.onDidChangeContent(reTokenize);
+      D.ac(me);
       me.onDidChangeCursorPosition((e) => {
         if (!me.getSelection().isEmpty()) selGrp('sel');
         else selGrpFromPosition(e.position);
