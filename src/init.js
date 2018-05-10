@@ -64,7 +64,7 @@ const Console = console;
         let bw = new D.el.BrowserWindow({
           show: false,
           parent: D.elw,
-          alwaysOnTop: true,
+          alwaysOnTop: false,
           fullscreen: false,
           fullscreenable: false,
           minWidth: 600,
@@ -75,7 +75,7 @@ const Console = console;
         bw = new D.el.BrowserWindow({
           show: false,
           parent: D.elw,
-          alwaysOnTop: true,
+          alwaysOnTop: false,
           fullscreen: false,
           fullscreenable: false,
           modal: true,

@@ -47,7 +47,6 @@
       D.ipc.server.emit(D.prf_bw.socket, 'show');
       const bw = D.el.BrowserWindow.fromId(D.prf_bw.id);
       bw.show();
-      bw.setAlwaysOnTop(true);
       return !1;
     } else if (D.ide && D.ide.floating) {
       D.ipc.of.ride_master.emit('prfShow'); return !1;
