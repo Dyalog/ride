@@ -144,6 +144,7 @@ function createDEB() {
 		-s dir					\
 		-C ${SBOXDIR}				\
 		-d 'libc6 >= 2.11.3-4'			\
+		-d 'libnss3 >= 3.26'			\
 		--license "Proprietary"			\
 		-m "Dyalog Ltd <support@dyalog.com>"	\
 		--url "http://www.dyalog.com"		\
