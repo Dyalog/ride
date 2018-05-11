@@ -168,7 +168,7 @@ function createRPM() {
 		-s dir					\
 		-C ${SBOXDIR}				\
 		-d 'glibc >= 2.11.3-4'			\
-		-d 'liXScrnSaver'			\
+		-d 'libXScrnSaver'			\
 		--license "Proprietary"			\
 		-m "Dyalog Ltd <support@dyalog.com>"	\
 		--url "http://www.dyalog.com"		\
