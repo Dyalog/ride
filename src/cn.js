@@ -46,6 +46,8 @@
     }
   };
   const err = (...x) => {
+    D.tmr && clearTimeout(D.tmr);
+    delete D.tmr;
     hideDlgs();
     $.err(...x);
   };
@@ -79,7 +81,7 @@
     const ssh = q.subtype.value === 'ssh';
     const h = (ssh ? interpretersSSH : interpreters)
       .sort((x, y) => cmpVer(y.ver, x.ver) || +y.bits - +x.bits ||
-          (y.edition === 'unicode') - (x.edition === 'unicode'))
+        (y.edition === 'unicode') - (x.edition === 'unicode'))
       .map((x) => {
         let s = `v${x.ver.join('.')}, ${x.bits}-bit, ${x.edition.replace(/^./, w => w.toUpperCase())}`;
         const supported = cmpVer(x.ver, MIN_V) >= 0;
@@ -237,6 +239,22 @@
     } catch (e) { err(e.message, e.name); }
     return null;
   };
+  const ct = process.env.RIDE_CONNECT_TIMEOUT || 10000;
+  const cancelOp = (c) => {
+    const cancel = (e) => {
+      if (e) {
+        clearTimeout(D.tmr);
+        delete D.tmr;
+      } else {
+        err('Timed out');
+      }
+      c && c.end();
+      hideDlgs();
+      return !1;
+    };
+    D.tmr = setTimeout(cancel, ct);
+    q.connecting_dlg_close.onclick = cancel;
+  };
   const connect = (x) => {
     let m = net; // m:module used to create connection
     const o = { host: x.host, port: x.port }; // o:options for .connect()
@@ -268,6 +286,7 @@
       clt = 0;
       err(e.message);
     });
+    cancelOp(clt);
   };
 
   const go = (conf) => { // "Go" buttons in the favs or the "Go" button at the bottom
@@ -320,19 +339,7 @@
               clearTimeout(D.tmr);
               delete D.tmr;
             });
-            const cancelOp = (e) => {
-              if (e) {
-                clearTimeout(D.tmr);
-                delete D.tmr;
-              } else {
-                err('Timed out');
-              }
-              c && c.end();
-              hideDlgs();
-              return !1;
-            };
-            D.tmr = setTimeout(cancelOp, ct);
-            q.connecting_dlg_close.onclick = cancelOp;
+            cancelOp(c);
           } else {
             connect({
               host: x.host || 'localhost',
@@ -415,19 +422,7 @@
               clearTimeout(D.tmr);
               delete D.tmr;
             });
-            const cancelOp = (e) => {
-              if (e) {
-                clearTimeout(D.tmr);
-                delete D.tmr;
-              } else {
-                err('Timed out');
-              }
-              c && c.end();
-              hideDlgs();
-              return !1;
-            };
-            D.tmr = setTimeout(cancelOp, ct);
-            q.connecting_dlg_close.onclick = cancelOp;
+            cancelOp(c);
           } else {
             srv = net.createServer((y) => {
               log('spawned interpreter connected');
@@ -496,7 +491,7 @@
                 console.error(y);
               });
             });
-            const cancelOp = (e) => {
+            const cancel = (e) => {
               if (e) {
                 clearTimeout(D.tmr);
                 delete D.tmr;
@@ -510,8 +505,8 @@
               hideDlgs();
               return !1;
             };
-            D.tmr = setTimeout(cancelOp, ct);
-            q.connecting_dlg_close.onclick = cancelOp;
+            D.tmr = setTimeout(cancel, ct);
+            q.connecting_dlg_close.onclick = cancel;
           }
           break;
         }
@@ -874,7 +869,7 @@
     } catch (e) { console.error(e); }
     updExes();
     document.title = `RIDE - ${upperFirst(q.type.value)}`;
-  //  q.connecting_dlg_close.onclick=_=>{q.connecting_dlg.hidden=1}
+    //  q.connecting_dlg_close.onclick=_=>{q.connecting_dlg.hidden=1}
   };
 
   module.exports = () => {

@@ -689,7 +689,7 @@ D.IDE.prototype = {
   }),
   getStats() {
     D.send('GetSIStack', {});
-    D.send('GetThreads', {});    
+    D.send('GetThreads', {});
   },
   updPW(x) { this.wins[0] && this.wins[0].updPW(x); },
   updTitle() { // change listener for D.prf.title
