@@ -305,8 +305,7 @@ D.IDE = function IDE(opts = {}) {
           x.middleClick = ep;
           cls.off('click').click(ep);
         } else {
-          cls.remove();
-          x.titleElement[0].closest('.lm_tab').style.paddingRight = '10px';
+          x.contentItem.parent.header.position(false);
         }
       }
         break;
