@@ -39,16 +39,18 @@ var a=D.ibeams={ // http://help.dyalog.com/17.0/Content/Language/Primitive%20Ope
   180:'Canonical Representation',
   181:'Unsqueezed Type',
   200:'Syntax Colouring',
-  219:'Compress Vector of Short Integers',
-  220:'Serialise Array',
+  201:'Syntax Colour Tokens',
+  219:'Compress/Decompress Vector of Short Integers',
+  220:'Serialise/Deserialise Array',
   400:'Compiler Control',
   600:'Trap Control',
+  739:'Temporary Directory',
   819:'Case Convert',
   900:'Called Monadically',
   950:'Loaded Libraries',
- 1111:'Number Of Threads',
+ 1111:'Number of Threads',
  1112:'Parallel Execution Threshold',
- 1159:'Update Function Timestamp',
+ 1159:'Update Function Time and User Stamp',
  1500:'Hash Array',
  2000:'Memory Manager Statistics',
  2002:'Specify Workspace Available',
@@ -57,19 +59,20 @@ var a=D.ibeams={ // http://help.dyalog.com/17.0/Content/Language/Primitive%20Ope
  2014:'Remove Data Binding',        //W
  2015:'Create Data Binding Source', //W
  2016:'Create .NET Delegate',       //W
- 2017:'Identify NET Type',          //W
+ 2017:'Identify .NET Type',         //W
  2022:'Flush Session Caption',      //W
- 2023:'Close All Windows',          //W
- 2035:'Set Dyalog Pixel Type',
+ 2023:'Close All Windows',
+ 2035:'Set Dyalog Pixel Type',      //W
  2041:'Override COM Default Value', //W
  2100:'Export To Memory',           //W
  2101:'Close .NET AppDomain',       //W
  2400:'Set Workspace Save Options',
  2401:'Expose Root Properties',
- 2501:'Discard Thread on Exit',      //W
- 2502:'Discard Parked Threads',      //W
+ 2501:'Discard thread on exit',     //W
+ 2502:'Discard parked threads',     //W
  2503:'Mark Thread as Uninterruptible',
  2520:'Use Separate Thread For .NET',
+ 2704:'Continue Autosave',
  3002:'Disable Component Checksum Validation',
  3500:'Send Text to RIDE-embedded Browser',
  3501:'Connected to the RIDE',
@@ -80,9 +83,6 @@ var a=D.ibeams={ // http://help.dyalog.com/17.0/Content/Language/Primitive%20Ope
  4007:'Signal Counts',              //X
  5176:'List Loaded Files',
  5177:'List Loaded File Objects',
- 7159:'JSON Import',
- 7160:'JSON Export',
- 7161:'JSON TrueFalse',
  7162:'JSON Translate Name',
  8415:'Singular Value Decomposition',
 50100:'Line Count'
