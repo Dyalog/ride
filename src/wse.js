@@ -25,7 +25,7 @@
       const f = this.pending[x.nodeId];
       if (!f) return;
       f((x.nodeIds || []).map((c, i) => ({
-        // x.classes uses constants from http://help.dyalog.com/16.0/Content/Language/System%20Functions/nc.htm
+        // x.classes uses constants from http://help.dyalog.com/17.0/Content/Language/System%20Functions/nc.htm
         id: c || `leaf_${x.nodeId}_${i}`,
         text: x.names[i],
         expandable: !!c,
