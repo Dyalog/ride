@@ -18,7 +18,6 @@ D.prf = {};
   ['connectFav',         0], // favourite connection (most recently run item)
   ['cursorBeyondEOL',    0], // allow placing cursor beyond end of line
   ['floating',           0], //floating editor and tracer windows
-  ['floatOnTop',         0], //try to keep floating windows on top of the session
   ['floatSingle',        1], //create single floating edit window
   ['fold',               1], //code folding
   ['ilf',                1], //when re-formating use ODE style (interpreter level formatting)
@@ -94,7 +93,6 @@ D.prf = {};
     '\n  Show Workspace Explorer  =WSE'+
     '\n  Show Debug               =DBG'+
     '\n  Floating Edit Windows    =FLT {!browser}'+
-    '\n  Editors on Top           =TOP {!browser}'+
     '\n  Line Wrapping in Session =WRP'+
     '\n  -                             {!browser}'+
     '\n  Stops                    =TVB'+
@@ -129,7 +127,7 @@ D.prf = {};
     '\n# Syntax:'+
     '\n#   &x   access key, alt+x'+
     '\n#   =CMD command code; some are special:'+
-    '\n#          LBR FLT WRP TOP WSE render as checkboxes'+
+    '\n#          LBR FLT WRP WSE render as checkboxes'+
     '\n#   =http://example.com/  open a URL'+
     '\n#   {}   conditional display, a boolean expression'+
     '\n#          operators: && || ! ( )'+

@@ -103,7 +103,7 @@ D.IPC_CreateWindow = function IPCCreateWindow(seq) {
     fullscreen: false,
     fullscreenable: false,
     parent: D.elw,
-    alwaysOnTop: !!D.prf.floatOnTop(),
+    alwaysOnTop: false,
   };
   opts = Object.assign(opts, WindowRect(seq, D.prf.editWins()));
   const bw = new D.el.BrowserWindow(opts);
@@ -176,11 +176,6 @@ D.IPC_Server = function IPCServer() {
     srv.on('RIDE', ([type, payload]) => D.send(type, payload));
   });
   D.ipc.server.start();
-  D.prf.floatOnTop((x) => {
-    Object.keys(D.pwins).forEach((k) => {
-      D.el.BrowserWindow.fromId(D.pwins[k].bwId).setAlwaysOnTop(!!x);
-    });
-  });
 };
 D.IPC_LinkEditor = function IPCLinkEditor(pe) {
   pe && D.pendingEditors.push(pe);
@@ -194,7 +189,6 @@ D.IPC_LinkEditor = function IPCLinkEditor(pe) {
   }
   const bw = D.el.BrowserWindow.fromId(wp.bwId);
   bw.show();
-  bw.setAlwaysOnTop(!!D.prf.floatOnTop());
   const ped = D.pendingEditors.shift();
   wp.id = ped.editorOpts.id;
   wp.tc = ped.editorOpts.tc;

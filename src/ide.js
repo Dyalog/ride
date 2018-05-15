@@ -754,7 +754,6 @@ D.IDE.prototype = {
   SBR: D.prf.sbar.toggle,
   FLT: D.prf.floating.toggle,
   WRP: D.prf.wrap.toggle,
-  TOP: D.prf.floatOnTop.toggle,
   TVB: D.prf.breakPts.toggle,
   LN: D.prf.lineNums.toggle,
   TVO: D.prf.fold.toggle,

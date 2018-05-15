@@ -36,7 +36,6 @@
       SBR: { checkBoxPref: D.prf.sbar },
       FLT: { checkBoxPref: D.prf.floating },
       WRP: { checkBoxPref: D.prf.wrap },
-      TOP: { checkBoxPref: D.prf.floatOnTop },
       WSE: { checkBoxPref: D.prf.wse },
       DBG: { checkBoxPref: D.prf.dbg },
     };
