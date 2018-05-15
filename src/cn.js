@@ -239,7 +239,7 @@
     } catch (e) { err(e.message, e.name); }
     return null;
   };
-  const ct = process.env.RIDE_CONNECT_TIMEOUT || 10000;
+  const ct = process.env.RIDE_CONNECT_TIMEOUT || 60000;
   const cancelOp = (c) => {
     const cancel = (e) => {
       if (e) {
@@ -287,6 +287,9 @@
       err(e.message);
     });
     cancelOp(clt);
+    // net module needs a nudge to connect properly
+    // see https://github.com/Dyalog/ride/issues/387
+    D.ipc.server.broadcast('nudge');
   };
 
   const go = (conf) => { // "Go" buttons in the favs or the "Go" button at the bottom
@@ -294,7 +297,6 @@
     if (!validate(x)) return 0;
     D.local = 0;
     try {
-      const ct = process.env.RIDE_CONNECT_TIMEOUT || 10000;
       switch (x.type || 'connect') {
         case 'connect':
           D.util.dlg(q.connecting_dlg, { modal: true });
