@@ -112,7 +112,7 @@
     if (q.type.value === 'listen' ||
       (q.type.value === 'start' && q.subtype.value === 'ssl')) q.subtype.value = 'raw';
     updSubtype();
-    q.ssl_opt.disabled = q.type.value !== 'connect';
+    q.ssl_opt.hidden = q.type.value !== 'connect';
     q.raw_opt.text = q.type.value === 'start' ? 'Local' : 'TCP';
     q.fetch.hidden = q.type.value !== 'start';
     q.start.hidden = q.fetch.hidden;
