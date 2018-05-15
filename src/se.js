@@ -380,10 +380,9 @@
     selectionHighlight(x) { this.me.updateOptions({ selectionHighlight: x }); },
     snippetSuggestions(x) { this.me.updateOptions({ snippetSuggestions: x ? 'bottom' : 'none' }); },
     autocompletion(x) {
-      const on = x === 'classic';
       this.me.updateOptions({
-        quickSuggestions: on,
-        suggestOnTriggerCharacters: on,
+        quickSuggestions: x,
+        suggestOnTriggerCharacters: x,
       });
     },
     autocompletionDelay(x) { this.me.updateOptions({ quickSuggestionsDelay: x }); },
