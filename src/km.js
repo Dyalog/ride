@@ -130,6 +130,7 @@
         return new monaco.Selection(l, nc, l, nc);
       });
       me.setSelections(sels);
+      me.revealRange(monaco.Range.fromPositions(me.getPosition()));
     },
     JSC() {
       let w; D.el && (w = D.el.BrowserWindow.getFocusedWindow()) && w.webContents.toggleDevTools();
