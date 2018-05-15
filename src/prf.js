@@ -16,7 +16,6 @@ D.prf = {};
   ['colourSchemes',      []],//objects describing user-defined colour schemes
   ['connectOnQuit',      0], // open connection page when active session ends
   ['connectFav',         0], // favourite connection (most recently run item)
-  ['cursorBeyondEOL',    0], // allow placing cursor beyond end of line
   ['floating',           0], //floating editor and tracer windows
   ['floatSingle',        1], //create single floating edit window
   ['fold',               1], //code folding

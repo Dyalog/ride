@@ -90,14 +90,6 @@
           se.ED(me);
         }
         mouseL = l; mouseC = c; mouseTS = e.event.timestamp;
-      } else if (D.prf.cursorBeyondEOL()
-        && t.type === mt.CONTENT_EMPTY
-        && t.mouseColumn > c
-        && c === me.model.getLineMaxColumn(l)) {
-        this.edit(
-          [{ range: new monaco.Range(l, c, l, c), text: ' '.repeat(t.mouseColumn - c) }],
-          [new monaco.Selection(l, t.mouseColumn, l, t.mouseColumn)],
-        );
       }
     });
     me.onDidChangeModelContent((e) => {
@@ -484,53 +476,16 @@
     TC() { this.exec(1); },
     LN() { D.prf.lineNums.toggle(); },
     MA() { D.send('RestartThreads', {}); },
-    DC(me) {
-      const p = me.getPosition();
-      const l = p.lineNumber;
+    DC() {
+      const { me } = this;
+      const l = me.getPosition().lineNumber;
       if (l < me.model.getLineCount() || /^\s*$/.test(me.model.getLineContent(l))) {
         me.trigger('editor', 'cursorDown');
       }
-      if (l === me.model.getLineCount() || !D.prf.cursorBeyondEOL()) return;
-      const nl = l + 1;
-      const l1c = me.model.getLineMaxColumn(nl);
-      if (l1c < p.column) {
-        this.edit(
-          [{ range: new monaco.Range(nl, l1c, nl, l1c), text: ' '.repeat(p.column - l1c) }],
-          [new monaco.Selection(nl, p.column, nl, p.column)],
-        );
-      }
     },
-    UC(me) {
-      const p = me.getPosition();
-      const l = p.lineNumber;
-      me.trigger('editor', 'cursorUp');
-      if (l === 1 || !D.prf.cursorBeyondEOL()) return;
-      const nl = l - 1;
-      const l1c = me.model.getLineMaxColumn(nl);
-      if (l1c < p.column) {
-        this.edit(
-          [{ range: new monaco.Range(nl, l1c, nl, l1c), text: ' '.repeat(p.column - l1c) }],
-          [new monaco.Selection(nl, p.column, nl, p.column)],
-        );
-      }
-    },
+    UC() { this.me.trigger('editor', 'cursorUp'); },
     LC() { this.me.trigger('editor', 'cursorLeft'); },
-    RC() {
-      const { me } = this;
-      if (D.prf.cursorBeyondEOL()) {
-        const p = me.getPosition();
-        const l = p.lineNumber;
-        const c = p.column;
-        if (c === me.model.getLineMaxColumn(l)) {
-          this.edit(
-            [{ range: new monaco.Range(l, c, l, c), text: ' ' }],
-            [new monaco.Selection(l, c + 1, l, c + 1)],
-          );
-          return;
-        }
-      }
-      me.trigger('editor', 'cursorRight');
-    },
+    RC() { this.me.trigger('editor', 'cursorRight'); },
     SA() { this.me.trigger('editor', 'selectAll'); },
     TO() { this.me.trigger('editor', 'editor.fold'); }, // (editor.unfold) is there a toggle?
     indentOrComplete(me) {
