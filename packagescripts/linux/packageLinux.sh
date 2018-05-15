@@ -169,13 +169,21 @@ function createDEB() {
 
 function createRPM() {
 
+	# Dependencies tested with Fedora 25, Centos 7 and openSUSE 13.2.
+	# (NB Electron 2 needs libnss3.so >= 3.26. All these distributions have
+	# it available, but using different package names: "mozilla-nss" for
+	# openSUSE vs "nss" for the others.)
 	fpm						\
 		-f					\
 		-t rpm					\
 		-s dir					\
 		-C ${SBOXDIR}				\
-		-d 'glibc >= 2.11.3-4'			\
-		-d 'libXScrnSaver'			\
+		-d 'libc.so.6(GLIBC_2.17)(64bit)'	\
+		-d 'libXss.so.1()(64bit)'		\
+		-d 'libgtk-3.so.0()(64bit)'		\
+		-d 'libgconf-2.so.4()(64bit)'		\
+		-d 'libasound.so.2()(64bit)'		\
+		-d 'libnss3.so()(64bit)'		\
 		--license "Proprietary"			\
 		-m "Dyalog Ltd <support@dyalog.com>"	\
 		--url "http://www.dyalog.com"		\
