@@ -434,7 +434,7 @@ D.IDE = function IDE(opts = {}) {
         ide.bannerDone = 1;
         const { me } = ide.wins[0];
         me.focus();
-        if (!D.local) return;
+        if (!D.spawned) return;
         const txt = me.getValue().split('\n');
         let i = txt.length;
         while (--i) { if (/^Dyalog APL/.test(txt[i])) break; }

@@ -113,12 +113,12 @@ const Console = console;
         setTimeout(() => {
           let q = true;
           if (D.prf.sqp()) {
-            const msg = D.local ? 'Quit Dyalog APL.' : 'Disconnect from interpreter.';
+            const msg = D.spawned ? 'Quit Dyalog APL.' : 'Disconnect from interpreter.';
             $.confirm(`${msg} Are you sure?`, document.title, (x) => { q = x; });
           }
           if (q) {
             if (D.ipc) D.ipc.server.stop();
-            if (D.local) {
+            if (D.spawned) {
               D.send('Exit', { code: 0 });
               // Wait for the disconnect message
             } else {

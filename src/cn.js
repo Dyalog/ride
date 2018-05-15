@@ -295,7 +295,7 @@
   const go = (conf) => { // "Go" buttons in the favs or the "Go" button at the bottom
     const x = conf || sel;
     if (!validate(x)) return 0;
-    D.local = 0;
+    D.spawned = 0;
     try {
       switch (x.type || 'connect') {
         case 'connect':
@@ -386,6 +386,7 @@
           break;
         }
         case 'start': {
+          D.spawned = 1;
           const env = {};
           const a = (x.env || '').split('\n');
           for (let i = 0; i < a.length; i++) {
@@ -399,11 +400,6 @@
               port: +x.ssh_port || 22,
               user: x.user || user,
             };
-            // if (x.ssh_auth_type === 'key') {
-            //   o.key = x.ssh_key;
-            // } else {
-            //   o.pass = x === sel ? q.ssh_pass.value : '';
-            // }
             x.ssh_key && (o.key = x.ssh_key);
             x === sel && q.ssh_pass.value && (o.pass = q.ssh_pass.value);
             const c = sshExec(o, '/bin/sh', (e, sm) => {
@@ -435,7 +431,6 @@
               initInterpreterConn();
               new D.IDE().setConnInfo(adr.address, adr.port, sel ? sel.name : '');
               D.lastSpawnedExe = x.exe;
-              D.local = 1;
             });
             srv.on('error', (e) => {
               log(`listen failed: ${e}`);
