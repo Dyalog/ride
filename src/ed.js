@@ -199,8 +199,6 @@
       const ro = ed.isReadOnlyEntity || !!x;
       ed.isReadOnly = ro;
       ed.me.updateOptions({ readOnly: ro });
-      ed.dom.getElementsByClassName('tb_AO')[0].style.display = ro ? 'none' : '';
-      ed.dom.getElementsByClassName('tb_DO')[0].style.display = ro ? 'none' : '';
     },
     setStop() {
       const ed = this;
