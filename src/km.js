@@ -37,7 +37,6 @@
     CT() { document.execCommand('Cut'); },
     CP() { document.execCommand('Copy'); },
     PT() { document.execCommand('Paste'); },
-    EMD(me) { D.send('Edit', { win: me.dyalogCmds.id, pos: 0, text: '' }); },
     PRF() { D.prf_ui(); },
     ABT() { D.abt(); },
     CNC() {

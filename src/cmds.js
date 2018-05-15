@@ -20,7 +20,6 @@ D.cmds = [
   ['DMR','Load demo file',          []],
   ['DO', 'Uncomment lines',         []],
   ['ED', 'Edit',                    ['Shift-Enter']],
-  ['EMD','Edit current trace window',['Shift-F3']],
   ['EP', 'Exit (and save changes)', ['Escape']],
   ['ER', 'Execute line',            ['Enter']],
   ['EXP','Expand selection',        ['Shift-Alt-Up']],
