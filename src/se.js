@@ -443,6 +443,7 @@
       const se = this;
       const c = me.getPosition();
       const l = c.lineNumber;
+      const lc = me.model.getLineCount();
       if (se.dirty[l] === 0) {
         if (l === me.model.getLineCount()) {
           se.edit([{ range: new monaco.Range(l, 1, l + 1, 1), text: '' }]);
@@ -460,11 +461,12 @@
         se.dirty = {};
         Object.keys(h).forEach((x) => { se.dirty[+x - (+x > l)] = h[x]; });
       } else if (se.dirty[l] != null) {
+        const text = l === lc && !se.dirty[l].length ? '      ' : se.dirty[l];
         se.edit([{
           range: new monaco.Range(l, 1, l, me.model.getLineMaxColumn(l)),
-          text: se.dirty[l],
+          text,
         }]);
-        me.setPosition({ lineNumber: l, column: 1 + se.dirty[l].search(/\S|$/) });
+        me.setPosition({ lineNumber: l, column: 1 + text.search(/\S|$/) });
         delete se.dirty[l];
       }
       se.oModel.setValue(me.getValue());
