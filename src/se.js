@@ -321,7 +321,7 @@
       me.executeEdits('D', [{
         range: new monaco.Range(l, 1, l, me.model.getLineMaxColumn(l)),
         text: s,
-      }]);
+      }], [new monaco.Selection(l, s.length + 1, l, s.length + 1)]);
     },
     exec(trace) {
       let w;

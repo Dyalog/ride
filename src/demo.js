@@ -25,8 +25,7 @@
       if (err) { $.err('Cannot load demo file'); return; }
       index = -1;
       lines = s.replace(/^[\ufeff\ufffe]/, '').split(/\r?\n/)
-        .filter(x => !/^\s*(?:$|⍝⍝)/.test(x))
-        .map(x => `      ${x}`);
+        .filter(x => !/^\s*&/.test(x));
     });
   }
   D.el && loadDemoScript(process.env.RIDE_DEMO_SCRIPT);
