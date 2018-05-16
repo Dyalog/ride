@@ -40,7 +40,7 @@ D.prf = {};
   ['persistentHistorySize',100], // max lines to save
   ['prefixKey',          '`'],
   ['prefixMaps',         {}],//per-locale strings of pairs of characters - diffs from the default map for that locale
-  ['pfkeys',             ['','','','','','','','','','','','','']], //command strings for pfkeys
+  ['pfkeys',             [...Array(25)].map(() => '')], //command strings for pfkeys
   ['renderLineHighlight','none'], // highlight current line
   ['sbar',               1], //show status bar
   ['selectedExe',        ''],//which interpreter is selected in dropdown in the Connect page?

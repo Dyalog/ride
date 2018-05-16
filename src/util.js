@@ -67,10 +67,10 @@ D.util = {
   },
   fmtKey(x) {
     return [
-      x.metaKey ? 'Cmd-' : '',
       x.ctrlKey ? 'Ctrl-' : '',
       x.altKey ? 'Alt-' : '',
       x.shiftKey ? 'Shift-' : '',
+      x.metaKey ? 'Cmd-' : '',
       x.key || '',
     ].join('');
   },

@@ -78,6 +78,8 @@
               'please use "Connect..." instead.', 'Cannot Start New Session');
       }
     },
+    DK(me) { me.trigger('editor', 'editor.action.deleteLines'); },
+    QCP(me) { me.trigger('editor', 'editor.action.quickCommand'); },
     QIT() { D.quit(); },
     LBR: D.prf.lbar.toggle,
     SBR: D.prf.sbar.toggle,
@@ -186,7 +188,7 @@
   });
 
   const pfKey = i => () => D.ide.pfKey(i);
-  for (let i = 1; i <= 12; i++) D.commands[`PF${i}`] = pfKey(i);
+  for (let i = 1; i <= 24; i++) D.commands[`PF${i}`] = pfKey(i);
 
   // order: used to measure how "complicated"
   // (for some made-up definition of the word) a shortcut is.

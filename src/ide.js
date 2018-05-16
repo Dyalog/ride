@@ -74,7 +74,7 @@ D.IDE = function IDE(opts = {}) {
       if (text) w.insert(text);
       else if (D.commands[cmd]) D.commands[cmd](w.me);
     }
-    if (pfq.length) pfqtid = setTimeout(pfKeyRun, 10);
+    if (pfq.length) pfqtid = setTimeout(pfKeyRun, D.prf.floating() ? 100 : 20);
     else pfqtid = 0;
   }
   ide.pfKey = (x) => {
