@@ -184,6 +184,7 @@ function createRPM() {
 		-d 'libgconf-2.so.4()(64bit)'		\
 		-d 'libasound.so.2()(64bit)'		\
 		-d 'libnss3.so()(64bit)'		\
+		-d 'libX11-xcb.so.1()(64bit)'		\
 		--license "Proprietary"			\
 		-m "Dyalog Ltd <support@dyalog.com>"	\
 		--url "http://www.dyalog.com"		\
