@@ -166,7 +166,17 @@ D.IDE = function IDE(opts = {}) {
     const s = x.target.textContent;
     if (lbDragged || x.target.nodeName !== 'B' || /\s/.test(s)) return !1;
     const w = ide.focusedWin;
-    w.hasFocus() ? w.insert(s) : D.util.insert(document.activeElement, s);
+    if (w.hasFocus()) {
+      w.insert(s);
+    } else {
+      const ae = document.activeElement;
+      D.util.insert(ae, s);
+      const fw = w.me.overlayWidgets['editor.contrib.findWidget'].widget;
+      const fi = fw._findInput;
+      const fr = fw._replaceInputBox.inputElement;
+      if (fi.inputBox.input === ae) fi._onInput.fire();
+      else if (fr === ae) fw._state.change({ replaceString: fr.value }, false);
+    }
     return !1;
   };
   function hideTT() { I.lb_tip.hidden = 1; tthide = 0; }
