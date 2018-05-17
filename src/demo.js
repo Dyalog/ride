@@ -27,7 +27,7 @@
       let indent = 6;
       lines = s.replace(/^[\ufeff\ufffe]/, '').split(/\r?\n/)
         .map((l) => {
-          const [, m] = l.match(/^\s*&:(.*)/) || [];
+          const [, m] = l.match(/^\s*&&(.*)/) || [];
           if (m) {
             m.replace(/(\w*)=([^\s]*)/g, (x, k, v) => {
               k === 'indent' && (indent = +v);
@@ -35,7 +35,7 @@
           }
           return ' '.repeat(indent) + l;
         })
-        .filter(x => !/^\s*&(⍝|:)/.test(x));
+        .filter(x => !/^\s*&(⍝|&)/.test(x));
     });
   }
   D.el && loadDemoScript(process.env.RIDE_DEMO_SCRIPT);
