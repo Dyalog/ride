@@ -489,7 +489,7 @@
     LN() { D.prf.lineNums.toggle(); },
     TVO() { D.prf.fold.toggle(); },
     TVB() { D.prf.breakPts.toggle(); },
-    TC() { D.send('StepInto', { win: this.id }); D.ide.getSIS(); },
+    TC() { D.send('StepInto', { win: this.id }); D.ide.getStats(); },
     AC(me) { // align comments
       const ed = this;
       if (ed.isReadOnly) return;
@@ -529,7 +529,7 @@
     },
     ER() {
       D.send('RunCurrentLine', { win: this.id });
-      D.ide.getSIS();
+      D.ide.getStats();
     },
     BH() { D.send('ContinueTrace', { win: this.id }); },
     RM() { D.send('Continue', { win: this.id }); },

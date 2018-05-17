@@ -18,7 +18,7 @@ D.IDE = function IDE(opts = {}) {
     if (a && a.length) {
       tc || (ide.pending = a.slice(1));
       D.send('Execute', { trace: tc, text: `${a[0]}\n` });
-      ide.getThreads(); ide.getSIS();
+      ide.getStats();
     }
   };
   ide.host = ''; ide.port = ''; ide.wsid = '';
@@ -266,7 +266,6 @@ D.IDE = function IDE(opts = {}) {
     ide.dbg = u;
     u.container = c;
     c.getElement().append(u.dom);
-    ide.getSIS(); ide.getThreads();
     ide.WSEwidth = ide.wsew;
     return u;
   }
@@ -325,6 +324,13 @@ D.IDE = function IDE(opts = {}) {
   gl.init();
 
   let statsTid = 0;
+  ide.getStats = $.debounce(100, () => {
+    if (ide.floating) ide.ipc.emit('getStats');
+    else if (statsTid) {
+      D.send('GetSIStack', {});
+      D.send('GetThreads', {});
+    }
+  });
   const toggleStats = () => {
     if (ide.floating) return;
     if (statsTid && !D.prf.dbg() && !D.prf.sbar()) {
@@ -454,6 +460,7 @@ D.IDE = function IDE(opts = {}) {
       if (t && ide.pending.length) D.send('Execute', { trace: 0, text: `${ide.pending.shift()}\n` });
       else eachWin((w) => { w.prompt(t); });
       t === 4 && ide.wins[0].focus(); // ⍞ input
+      t === 1 && ide.getStats();
       if (t === 1 && ide.bannerDone === 0) {
         // arrange for the banner to appear at the top of the session window
         ide.bannerDone = 1;
@@ -506,7 +513,7 @@ D.IDE = function IDE(opts = {}) {
       }
       delete ide.wins[x.win]; ide.focusMRUWin();
       ide.WSEwidth = ide.wsew; ide.DBGwidth = ide.dbgw;
-      if (w.tc) { ide.getSIS(); ide.getThreads(); }
+      w.tc && ide.getStats();
     },
     OpenWindow(ee) {
       if (!ee.debugger && D.el && process.env.RIDE_EDITOR) {
@@ -577,7 +584,7 @@ D.IDE = function IDE(opts = {}) {
       }, ind);
       ide.WSEwidth = ide.wsew; ide.DBGwidth = ide.dbgw;
       if (tc) {
-        ide.getSIS();
+        ide.getStats();
         ide.wins[0].scrollCursorIntoView();
       }
     },
@@ -706,15 +713,6 @@ D.IDE.prototype = {
     ide.connected = 0;
     ide.dom.className += ' disconnected';
     Object.keys(ide.wins).forEach((k) => { ide.wins[k].die(); });
-  },
-  getThreads: $.debounce(100, () => { D.send('GetThreads', {}); }),
-  getSIS: $.debounce(100, () => {
-    if (this.floating) this.ipc.emit('getSIS');
-    else D.send('GetSIStack', {});
-  }),
-  getStats() {
-    D.send('GetSIStack', {});
-    D.send('GetThreads', {});
   },
   updPW(x) { this.wins[0] && this.wins[0].updPW(x); },
   updTitle() { // change listener for D.prf.title

@@ -148,7 +148,7 @@
         w && (w.focusTS = +new Date());
       });
       srv.on('pfKey', x => D.ide.pfKey(x));
-      srv.on('getSIS', () => D.ide.getSIS());
+      srv.on('getStats', () => D.ide.getStats());
       srv.on('getUnsavedReply', (data) => {
         if (!D.pendingEdit) return;
         Object.keys(data).forEach((k) => {
