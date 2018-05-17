@@ -324,6 +324,17 @@ D.IDE = function IDE(opts = {}) {
   });
   gl.init();
 
+  let statsTid = 0;
+  const toggleStats = () => {
+    if (ide.floating) return;
+    if (statsTid && !D.prf.dbg() && !D.prf.sbar()) {
+      clearInterval(statsTid); statsTid = 0;
+    } else if (!statsTid && (D.prf.dbg() || D.prf.sbar())) {
+      ide.getStats();
+      statsTid = statsTid || setInterval(ide.getStats, 5000);
+    }
+  };
+  toggleStats();
   const updTopBtm = $.debounce(100, () => {
     ide.dom.style.top = `${(D.prf.lbar() ? I.lb.offsetHeight : 0) + (D.el ? 0 : 23)}px`;
     ide.dom.style.bottom = `${I.sb.offsetHeight}px`;
@@ -334,7 +345,10 @@ D.IDE = function IDE(opts = {}) {
   updTopBtm();
   $(window).resize(updTopBtm);
   D.prf.lbar((x) => { I.lb.hidden = !x; updTopBtm(); });
-  D.prf.sbar((x) => { I.sb.hidden = !x; updTopBtm(); });
+  D.prf.sbar((x) => {
+    toggleStats();
+    I.sb.hidden = !x; updTopBtm();
+  });
   if (!ide.floating) {
     setTimeout(() => {
       try {
@@ -345,8 +359,6 @@ D.IDE = function IDE(opts = {}) {
         D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()));
       }
     }, 100);
-    setInterval(ide.getStats, 5000);
-    this.getStats();
   }
   D.prf.autoCloseBrackets((x) => { eachWin((w) => { !w.bwId && w.autoCloseBrackets(!!x); }); });
   D.prf.ilf((x) => {
@@ -388,7 +400,10 @@ D.IDE = function IDE(opts = {}) {
     togglePanel(x, 'wse', 'Workspace Explorer', 1);
     ide.wse.autoRefresh(x && 5000);
   };
-  const toggleDBG = (x) => { togglePanel(x, 'dbg', 'Debug', 0); };
+  const toggleDBG = (x) => {
+    toggleStats();
+    togglePanel(x, 'dbg', 'Debug', 0);
+  };
   if (!ide.floating) {
     D.prf.wse(toggleWSE);
     D.prf.dbg(toggleDBG);
