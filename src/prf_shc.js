@@ -96,7 +96,7 @@
     updDups();
     if (q.sc.value) { q.sc.value = ''; updSC(); }
     const a = D.prf.pfkeys();
-    for (let i = 1; i <= 24; i++) document.getElementById(`shc_val_PF${i}`).value = a[i] || '';
+    for (let i = 1; i <= 48; i++) document.getElementById(`shc_val_PF${i}`).value = a[i] || '';
   }
   function updKeys(x) {
     const h = {};
@@ -190,7 +190,7 @@
         if (h[c] && JSON.stringify(h[c].sort()) === JSON.stringify(d)) delete h[c];
       }
       a = [''];
-      for (let i = 1; i <= 24; i++) { a.push(document.getElementById(`shc_val_PF${i}`).value); }
+      for (let i = 1; i <= 48; i++) { a.push(document.getElementById(`shc_val_PF${i}`).value); }
       D.prf.keys(h); D.prf.pfkeys(a);
     },
     activate() { q.sc.focus(); },

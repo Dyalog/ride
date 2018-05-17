@@ -188,7 +188,7 @@
   });
 
   const pfKey = i => () => D.ide.pfKey(i);
-  for (let i = 1; i <= 24; i++) D.commands[`PF${i}`] = pfKey(i);
+  for (let i = 1; i <= 48; i++) D.commands[`PF${i}`] = pfKey(i);
 
   // order: used to measure how "complicated"
   // (for some made-up definition of the word) a shortcut is.
