@@ -21,6 +21,7 @@
         window.close();
       });
       pm.forEach(k => rm.on(k, ([id, ...x]) => { D.ide.wins[id][k](...x); }));
+      rm.on('caption', (c) => { D.ide.caption = c; });
       rm.on('getUnsaved', () => {
         rm.emit('getUnsavedReply', D.ide.getUnsaved());
       });
@@ -32,7 +33,9 @@
         const ed = new D.Ed(D.ide, editorOpts);
         D.ide.wins[ed.id] = ed;
         ed.me_ready.then(() => {
-          ed.open(ee); ed.updSize(); document.title = ed.name;
+          ed.open(ee);
+          ed.updSize();
+          // document.title = `${ed.name} - ${D.ide.caption}`;
           ed.refresh();
           rm.emit('unblock', ed.id);
         });
@@ -72,6 +75,7 @@
         D.onbeforeunload = null;
         window.close();
       });
+      rm.on('caption', (c) => { document.title = `Preferences - ${c}`; });
       rm.on('show', () => D.prf_ui());
       rm.on('prf', ([k, x]) => D.prf[k](x, 1));
     });
@@ -138,6 +142,7 @@
       });
       srv.on('browserCreated', (bwId, socket) => {
         const wp = new D.IPC_WindowProxy(bwId, socket);
+        srv.emit(socket, 'caption', D.ide.caption);
         D.pwins.push(wp);
         D.IPC_LinkEditor();
       });

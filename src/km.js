@@ -149,7 +149,7 @@
       });
       const cn = nodeRequire(`${__dirname}/src/cn`);
       D.logw = w;
-      w.setTitle('Protocol Log');
+      w.setTitle(`Protocol Log - ${D.ide.caption}`);
       w.loadURL(`file://${__dirname}/empty.html`);
       w.webContents.executeJavaScript('var d = document, b=d.body,e=d.createElement("div");' +
                                       'b.style.fontFamily="monospace";b.style.overflow="scroll";' +

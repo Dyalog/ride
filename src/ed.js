@@ -238,7 +238,7 @@
       const { me } = ed;
       ed.name = ee.name;
       ed.container && ed.container.setTitle(ed.name);
-      D.ide.floating && $('title', ed.dom.ownerDocument).text(ed.name);
+      // D.ide.floating && $('title', ed.dom.ownerDocument).text(`${ed.name} - ${ed.ide.caption}`);
       me.model.winid = ed.id;
       me.model.setValue(ed.oText = ee.text.join('\n'));
       me.model.setEOL(monaco.editor.EndOfLineSequence.LF);
@@ -283,7 +283,8 @@
     cursorBlinking(x) { this.me.updateOptions({ cursorBlinking: x }); },
     hasFocus() { return this.me.isFocused(); },
     focus() {
-      let q = this.container;
+      const ed = this;
+      let q = ed.container;
       let p = q && q.parent;
       const l = q && q.layoutManager;
       const m = l && l._maximisedItem;
@@ -293,12 +294,13 @@
         q = p; p = p.parent;
       } // reveal in golden layout
       if (D.ide.floating) {
-        $('title', this.dom.ownerDocument).text(this.name);
+        // $('title', ed.dom.ownerDocument).text(ed.name);
+        $('title', ed.dom.ownerDocument).text(`${ed.name} - ${ed.ide.caption}`);
         D.el.getCurrentWindow().focus();
       }
       window.focused || window.focus();
-      this.me.focus();
-      this.ide.setCursorPosition(this.me.getPosition());
+      ed.me.focus();
+      ed.ide.setCursorPosition(ed.me.getPosition());
     },
     insert(ch) {
       this.isReadOnly || this.me.trigger('editor', 'type', { text: ch });

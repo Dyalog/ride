@@ -22,7 +22,6 @@ D.IDE = function IDE(opts = {}) {
     }
   };
   ide.host = ''; ide.port = ''; ide.wsid = '';
-  D.prf.title(ide.updTitle.bind(ide));
   ide.wins = {};
   if (ide.floating) {
     ide.connected = 1;
@@ -36,6 +35,7 @@ D.IDE = function IDE(opts = {}) {
     });
     ide.switchWin = (x) => { ide.ipc.emit('switchWin', x); };
   } else {
+    D.prf.title(ide.updTitle.bind(ide));
     I.sb_sis.hidden = !1;
     I.sb_threads.hidden = !1;
     ide.wins[0] = new D.Se(ide);
@@ -452,7 +452,9 @@ D.IDE = function IDE(opts = {}) {
     InternalError(x) { $.err(`An error (${x.error}) occurred processing ${x.message}`, 'Internal Error'); },
     NotificationMessage(x) { $.alert(x.message, 'Notification'); },
     UpdateDisplayName(x) {
-      ide.wsid = x.displayName; ide.updTitle(); ide.wse && ide.wse.refresh();
+      ide.wsid = x.displayName;
+      ide.updTitle();
+      ide.wse && ide.wse.refresh();
     },
     EchoInput(x) { ide.wins[0].add(x.input); },
     SetPromptType(x) {
@@ -683,7 +685,7 @@ D.IDE = function IDE(opts = {}) {
           parent: D.elw,
         });
         w = ide.wStatus;
-        w.setTitle('Status Output');
+        w.setTitle(`Status Output - ${document.title}`);
         w.loadURL(`file://${__dirname}/status.html`);
         w.on('closed', () => { delete ide.wStatus; });
       }
@@ -734,12 +736,15 @@ D.IDE.prototype = {
       '{PID}': ri.pid,
       '{CHARS}': ch,
       '{BITS}': bits,
+      '{RIDE_PID}': D.el ? D.el.process.pid : '?',
       '{RIDE_VER_A}': rva,
       '{RIDE_VER_B}': rvb,
       '{RIDE_VER_C}': rvc,
       '{RIDE_VER}': v.version,
     };
-    document.title = D.prf.title().replace(/\{\w+\}/g, x => m[x.toUpperCase()] || x) || 'Dyalog';
+    ide.caption = D.prf.title().replace(/\{\w+\}/g, x => m[x.toUpperCase()] || x) || 'Dyalog';
+    D.ipc && D.ipc.server.broadcast('caption', ide.caption);
+    document.title = ide.caption;
   },
   focusWin(w) {
     if (this.hadErr === 0) {
