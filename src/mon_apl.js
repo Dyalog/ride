@@ -47,11 +47,13 @@
     comments: {
       lineComment: '⍝',
     },
-    brackets: [
-      ['{', '}'],
-      ['[', ']'],
-      ['(', ')'],
-    ],
+    // brackets removed as it causes closing bracket to match indentation
+    // of opening bracket from a previous line
+    // brackets: [
+    //   ['{', '}'],
+    //   ['[', ']'],
+    //   ['(', ')'],
+    // ],
     autoClosingPairs: [
       { open: '{', close: '}' },
       { open: '[', close: ']' },
@@ -149,11 +151,11 @@
     let r = 0;
     for (let j = 0; j < a.length; j++) if (a[j].t === '{') r += 1; return r;
   }
-  
+
   const idiomsRE = RegExp(`^(?:${idioms.sort((x, y) => y.length - x.length).map(escIdiom).join('|')})`, 'i');
   const sw = 4; // default indent unit (vim calls that "sw" for "shift width")
   const swm = 2; // indent unit for methods
-  
+
   const aplTokens = {
     getInitialState: () => new State(1, [{
       t: '', oi: 0, ii: 0, l: 0,
@@ -260,7 +262,7 @@
                       i += m[0].length;
                     } else {
                       addToken(offset + i, 'invalid');
-                      i = signature.length;                      
+                      i = signature.length;
                     }
                   }
               }
@@ -577,8 +579,8 @@
       const ch = s[c - 2];
       const pk2 = `${pk}${pk}`;
       const kind = monaco.languages.CompletionItemKind;
-      const { a } = model._lines[position.lineNumber-1]._state;
-      const { t } = (a || []).slice(-1)[0] || {};      
+      const { a } = model._lines[position.lineNumber - 1]._state;
+      const { t } = (a || []).slice(-1)[0] || {};
       const snippets = /^\s*:\w*$/.test(s.slice(0, c - 1)) && a && t !== '{';
       const sc = model.bqc - 1;
       if (s.slice(sc, c - 1) === pk2) {
