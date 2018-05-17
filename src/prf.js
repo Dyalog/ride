@@ -228,9 +228,8 @@ D.db = !nodeRequire ? localStorage : (function DB() {
   Object.defineProperty(db, 'length', { get() { return k.length; } });
   return db;
 }());
-
-if (D.el && D.win && D.db.getItem('ime') !== '0') {
-  const setImeExe = process.execPath.replace(/[^\\/]+$/, 'set-ime.exe');
+if (D.el && D.win && D.prf.ime()) {
+  const setImeExe = `${__dirname}\\windows-ime\\set-ime.exe`;
   const fs = nodeRequire('fs');
   const { spawn } = nodeRequire('child_process');
   fs.existsSync(setImeExe) && spawn(setImeExe, [process.pid], { stdio: ['ignore', 'ignore', 'ignore'] });

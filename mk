@@ -57,7 +57,7 @@ const pkg = (x, y, f) => {
       'download.cache': 'cache',
       icon: 'D',
       tmpdir: false,
-      ignore: p => !incl.test(p) && !(x === 'win32' && /^\/windows-ime(\/|$)/.test(p)),
+      ignore: p => !incl.test(p) && !(x === 'win32' && /^\/windows-ime(\/set-ime.exe|$)/.test(p)),
       appBundleId: `com.dyalog.${pj.name}`,
       appCopyright: `(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
       appVersion: v,
