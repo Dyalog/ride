@@ -123,7 +123,7 @@
     const p = x.port;
     const ssh = x.subtype === 'ssh';
     if ((t === 'connect' || (t === 'start' && ssh) || t === 'listen') &&
-      p && (!/^\d*$/.test(p) || +p < 1 || +p > 0xffff)) {
+      p && (!/^\d*$/.test(p) || +p < (t !== 'listen') || +p > 0xffff)) {
       $.err('Invalid port', () => {
         (ssh ? q.ssh_port : q.tcp_port).select();
       });
@@ -356,8 +356,10 @@
           break;
         case 'listen': {
           D.util.dlg(q.listen_dlg, { modal: true });
-          const port = +x.port || 4502;
-          const host = x.host || 'localhost';
+          const port = +(x.port || 4502);
+          const host = x.host || '';
+          q.listen_dlg_host.textContent = host;
+          q.listen_dlg_port.textContent = `${port}`;
           q.listen_dlg_cancel.onclick = () => {
             srv && srv.close();
             hideDlgs();
@@ -380,9 +382,10 @@
           srv.listen(port, host, () => {
             const o = srv.address();
             log(`listening on ${o.address}:${o.port}`);
-            q.listen_dlg_host.textContent = `${o.address}`;
+            q.listen_dlg_host.textContent = o.address !== '::' ? o.address : 'host';
             q.listen_dlg_port.textContent = `${o.port}`;
           });
+          D.ipc.server.broadcast('nudge');
           break;
         }
         case 'start': {
