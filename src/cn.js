@@ -165,12 +165,6 @@
           $.err('Password and/or key file is required', () => { q.ssh_pass.focus(); });
           return 0;
         }
-        // const at = q.ssh_auth_type.value;
-        // const e = q[`ssh_${at}`];
-        // if (!e.value) {
-        //   $.err(`${at === 'key' ? '"Key file"' : '"Password"'} is required`, () => { e.focus(); });
-        //   return 0;
-        // }
       }
     }
     return 1;
@@ -213,7 +207,7 @@
         }
       }
     });
-    clt.on('error', (x) => { err(`${x}`); clt = 0; });
+    clt.on('error', (x) => { clt && err(`${x}`); clt = 0; });
     clt.on('end', () => {
       log('interpreter disconnected');
       D.ide && D.ide._disconnected();
@@ -296,8 +290,12 @@
     });
     clt.on('error', (e) => {
       log(`connect failed: ${e}`);
+      if (D.tmr && D.ide && e.code === 'ECONNRESET') {
+        err('The interpreter is already serving another RIDE client.', 'Connection closed by interpreter');
+        D.ide.die();
+        D.commands.CNC();
+      } else err(e.message);
       clt = 0;
-      err(e.message);
     });
     cancelOp(clt);
     // net module needs a nudge to connect properly
