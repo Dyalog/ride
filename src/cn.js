@@ -52,6 +52,19 @@
     $.err(...x);
   };
   const save = () => {
+    const names = $('.name', q.favs).toArray().map(x => x.innerText);
+    const dups = names.filter((a, i) => names.indexOf(a) !== i);
+    if (dups.length) {
+      $.alert(
+        `The following name${dups.length ? 's are' : ' is'} duplicated:\n${dups.join('\n')}`,
+        'Duplicate connection names',
+        () => {
+          $(q.favs).list('select', names.lastIndexOf(dups[0]));
+          $(q.fav_name).focus();
+        },
+      );
+      return;
+    }
     const d = D.el.app.getPath('userData');
     const f = `${d}/connections.json`;
     if (((+fs.statSync(f).mtime) !== D.conns_modified)) {
@@ -770,6 +783,8 @@
       if (sel) {
         $(favDOM($.extend({}, sel))).insertBefore($sel);
         $('a', $sel).focus();
+        q.fav_name.value += '(copy)';
+        $(q.fav_name).change();
         q.fav_name.focus();
       }
     };
