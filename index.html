@@ -656,7 +656,7 @@
     if(typeof exp !== 'undefined') { exports = exp; delete exp; }
   </script>
   
-<script src="node_modules/monaco-editor/dev/vs/loader.js"></script>
+<script src="node_modules/monaco-editor/min/vs/loader.js"></script>
 <script>
   // Save Monaco's amd require and restore Node's require
   var amdRequire = require;
@@ -665,7 +665,7 @@
 <script>
   let dir = typeof __dirname !== 'undefined' ? `${__dirname}/` : '';
   amdRequire.config({
-    baseUrl: dir + 'node_modules/monaco-editor/dev'
+    baseUrl: dir + 'node_modules/monaco-editor/min'
   });
     
   self.module = undefined;
