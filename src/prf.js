@@ -182,8 +182,7 @@ D.db = !nodeRequire ? localStorage : (function DB() {
   // file-backed storage with API similar to that of localStorage
   const k = []; // keys
   const v = []; // values
-  const d = el.app.getPath('userData');
-  const f = `${d}/prefs.json`;
+  const f = el.process.env.RIDE_PREFS || `${el.app.getPath('userData')}/prefs.json`; 
   try {
     if (fs.existsSync(f)) {
       const h = JSON.parse(fs.readFileSync(f, 'utf8'));
