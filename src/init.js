@@ -113,7 +113,7 @@ const Console = console;
         e.returnValue = false;
         setTimeout(() => {
           let q = true;
-          if (D.prf.sqp()) {
+          if (D.prf.sqp() && !(D.db.el && process.env.NODE_ENV === 'test')) {
             const msg = D.spawned ? 'Quit Dyalog APL.' : 'Disconnect from interpreter.';
             $.confirm(`${msg} Are you sure?`, document.title, (x) => { q = x; });
           }

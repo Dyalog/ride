@@ -43,6 +43,7 @@
     "less-plugin-glob": "^2.0.1",
     "nodemon": "^1.12.1",
     "spectron": "^3.8.0",
+    "temp": "^0.8.3",
     "ws": "^3.2.0"
   }
 }

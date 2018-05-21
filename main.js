@@ -10,6 +10,10 @@ const D = {};
 D.win = /^win/i.test(ps.platform);
 D.mac = ps.platform === 'darwin';
 
+if (ps.env.spectron_temp_dir) {
+  el.app.setPath('userData', ps.env.spectron_temp_dir);
+}
+
 // build db file path & set up empty db
 const dbf = `${el.app.getPath('userData')}/winstate.json`; // json "database" file for storing preferences
 let db = {};

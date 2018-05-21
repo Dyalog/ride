@@ -891,7 +891,7 @@
     const { env } = D.el.process;
     const h = { // h:args by name
       c: env.RIDE_CONNECT,
-      s: env.RIDE_SPAWN,
+      s: env.RIDE_SPAWN || env.ride_spawn,
     };
     for (let i = 1; i < a.length; i++) if (a[i][0] === '-') { h[a[i].slice(1)] = a[i + 1]; i += 1; }
     if (h.c) {

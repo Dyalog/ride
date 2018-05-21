@@ -2,11 +2,16 @@ import test from 'ava';
 import { Application } from 'spectron';
 import electronPath from 'electron';
 import path from 'path';
+import temp from 'temp';
 
 test.beforeEach(async (t) => {
+  const userData = temp.mkdirSync('ride41');
   t.context.app = new Application({
     path: electronPath,
     args: [path.join(__dirname, '..')],
+    env: {
+      spectron_temp_dir: userData,
+    },
     webdriverOptions: {
       deprecationWarnings: false,
     },
@@ -14,14 +19,14 @@ test.beforeEach(async (t) => {
 
   await t.context.app.start();
 });
-// cmd /V /C "set RIDE_SPAWN=dyalog&& npm start"
 
 test.afterEach.always(async (t) => {
   await t.context.app.stop();
+  await temp.cleanupSync();
 });
 
-test(
-  'check app starts ok',
+test.serial(
+  'cn-app-starts-ok',
   async (t) => {
     const { app } = t.context;
     await app.client.waitUntilWindowLoaded();
@@ -38,7 +43,7 @@ test(
   },
 );
 
-test(
+test.serial(
   'cn-fav-new',
   async (t) => {
     t.plan(3);
@@ -54,7 +59,7 @@ test(
   },
 );
 
-test(
+test.serial(
   'cn-start-raw',
   async (t) => {
     t.plan(3);
@@ -70,8 +75,7 @@ test(
     t.is(await c.getValue('#cn_subtype'), 'raw');
 
     await c.leftClick('#cn_go');
-    await c.waitForExist('#ide .lm_tab.lm_active .lm_title');
-    t.is(await c.getText('#ide .lm_tab.lm_active .lm_title'), 'Session');
-
+    await c.waitForExist('#ide .lm_tab.lm_active');
+    t.is(await c.getAttribute('#ide .lm_tab.lm_active', 'title'), 'Session');
   },
 );
