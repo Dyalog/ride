@@ -132,6 +132,14 @@
       se.me.revealLineInCenterIfOutsideViewport(se.me.model.getLineCount());
     });
     se.histRead();
+    se.taBuffer = []; // type ahead buffer
+    se.taReplay = () => {
+      if (!se.taBuffer.length) return;
+      const k = se.taBuffer.shift();
+      if (typeof k === 'string') se.insert(k);
+      else document.activeElement.dispatchEvent(k);
+      setTimeout(se.taReplay, 1);
+    };
   }
   Se.prototype = {
     histRead() {
@@ -237,7 +245,19 @@
       } else {
         me.setPosition({ lineNumber: l, column: 1 + t.length });
       }
-      // x && cm.clearHistory();
+      if (!x) {
+        se.taBuffer.length = 0;
+        se.taCb = me.onKeyDown((ke) => {
+          const be = ke.browserEvent;
+          const k = be.key;
+          if (k.length === 1 && !be.ctrlKey && !be.altKey && !be.metaKey) se.taBuffer.push(k);
+          else se.taBuffer.push(be);
+        });
+      } else {
+        if (se.taCb) { se.taCb.dispose(); delete se.taCb; }
+        se.taBuffer.length && se.taReplay();
+      }
+      // x && me.model._commandManager.clear();
     },
     updSize() {
       const se = this;
