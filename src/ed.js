@@ -24,6 +24,7 @@
     ed.stop = new Set(); // remember original text and "stops" to avoid pointless saving on EP
     ed.isCode = 1;
     ed.isReadOnly = !1;
+    ed.isReadOnlyEntity = !1;
     ed.breakpoints = D.prf.breakPts();
     ed.$e.toggleClass('no-toolbar', !D.prf.showEditorToolbar());
     const fs = D.zoom2fs[D.prf.zoom() + 10];
@@ -61,6 +62,7 @@
       snippetSuggestions: D.prf.snippetSuggestions() ? 'bottom' : 'none',
       suggestOnTriggerCharacters: D.prf.autocompletion() === 'classic',
       showFoldingControls: 'always',
+      useTabStops: false,
       wordBasedSuggestions: false,
     });
     ed.me = me;
@@ -76,20 +78,8 @@
     ed.session = me.createContextKey('session', false);
     ed.tracer = me.createContextKey('tracer', !!ed.tc);
     me.listen = true;
+    D.mapScanCodes(me);
     D.mapKeys(ed); D.prf.keys(D.mapKeys.bind(this, ed));
-
-    const kc = monaco.KeyCode;
-    me.addCommand(kc.DownArrow, () => ed.downOrXline(me), '!suggestWidgetVisible');
-    me.addCommand(
-      kc.Tab,
-      () => ed.indentOrComplete(me),
-      '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode'
-    );
-    me.addCommand(
-      kc.RightArrow,
-      () => me.trigger('editor', 'acceptSelectedSuggestion'),
-      'suggestWidgetVisible',
-    );
 
     me.onDidChangeCursorPosition(ed.cursorActivity.bind(ed));
     let mouseL = 0; let mouseC = 0; let mouseTS = 0;
@@ -97,21 +87,26 @@
       const t = e.target;
       const mt = monaco.editor.MouseTargetType;
       const p = t.position;
-      if (t.type === mt.GUTTER_GLYPH_MARGIN) {
+      if (e.event.middleButton) {
+        e.event.preventDefault();
+        e.event.stopPropagation();
+      } else if (t.type === mt.GUTTER_GLYPH_MARGIN) {
         const l = p.lineNumber - 1;
         ed.stop.has(l) ? ed.stop.delete(l) : ed.stop.add(l);
         ed.setStop();
         ed.tc && D.send('SetLineAttributes', { win: ed.id, stop: ed.getStops() });
-      } else if (t.type === mt.CONTENT_TEXT) {
+      } else if (t.type === mt.CONTENT_TEXT ||
+        (ed.isReadOnly && t.type === mt.CONTENT_EMPTY)) {
         if (e.event.timestamp - mouseTS < 400 && mouseL === p.lineNumber && mouseC === p.column) {
-          ed.ED(me); e.event.preventDefault(); e.event.stopPropagation();
+          e.event.preventDefault(); e.event.stopPropagation();
+          ed.ED(me);
         }
         mouseL = p.lineNumber; mouseC = p.column; mouseTS = e.event.timestamp;
-      }
+      } 
     });
     me.onDidFocusEditor(() => { ed.focusTS = +new Date(); ed.ide.focusedWin = ed; });
     ed.processAutocompleteReply = D.ac(me);
-    ed.tb = $(ed.dom).find('button');
+    ed.tb = $(ed.dom).find('a');
     ed.tb.mousedown((x) => {
       if (x.currentTarget.matches('.tb_btn')) {
         x.currentTarget.classList.add('armed');
@@ -135,10 +130,10 @@
       }
       return !0;
     });
+    ed.setPendent = $.debounce(100, x => ed.dom.classList.toggle('pendent', x));
     ed.setTC(!!ed.tc);
     ed.setLN(D.prf.lineNums());
     ed.firstOpen = true;
-    ed.setPendent = $.debounce(100, x => ed.dom.classList.toggle('pendent', x));
   }
   Ed.prototype = {
     getStops() { // returns an array of line numbers
@@ -148,6 +143,7 @@
       // xline:the line number of the empty line inserted when you press <down> at eof
       const ed = this;
       const { me } = ed;
+      ed.ide.setCursorPosition(e.position);
       if (ed.xline == null) return;
       const n = me.model.getLineCount();
       const l = e.position.lineNumber;
@@ -200,10 +196,9 @@
     },
     setRO(x) {
       const ed = this;
-      ed.isReadOnly = x;
-      ed.me.updateOptions({ readOnly: x });
-      ed.dom.getElementsByClassName('tb_AO')[0].style.display = x ? 'none' : '';
-      ed.dom.getElementsByClassName('tb_DO')[0].style.display = x ? 'none' : '';
+      const ro = ed.isReadOnlyEntity || !!x;
+      ed.isReadOnly = ro;
+      ed.me.updateOptions({ readOnly: ro });
     },
     setStop() {
       const ed = this;
@@ -223,7 +218,11 @@
         [...ed.stopDecorations, ...ed.hlDecorations],
       );
     },
-    updSize() { },
+    updSize() {
+      const ed = this;
+      const tb = ed.dom.getElementsByClassName('toolbar')[0];
+      ed.me.domElement.style.top = `${tb.offsetHeight}px`;
+    },
     saveScrollPos() { },
     restoreScrollPos() { },
     updateSIStack(x) {
@@ -239,7 +238,7 @@
       const { me } = ed;
       ed.name = ee.name;
       ed.container && ed.container.setTitle(ed.name);
-      D.ide.floating && $('title', ed.dom.ownerDocument).text(ed.name);
+      // D.ide.floating && $('title', ed.dom.ownerDocument).text(`${ed.name} - ${ed.ide.caption}`);
       me.model.winid = ed.id;
       me.model.setValue(ed.oText = ee.text.join('\n'));
       me.model.setEOL(monaco.editor.EndOfLineSequence.LF);
@@ -258,11 +257,12 @@
         128: 'charvec',
       }[ee.entityType];
       ed.isCode = [1, 256, 512, 1024, 2048, 4096].indexOf(ee.entityType) >= 0;
+      ed.isReadOnlyEntity = !!ee.readOnly;
       monaco.editor.setModelLanguage(me.model, ed.isCode ? 'apl' : 'plaintext');
       etype && ed.dom.classList.toggle(etype, true);
       me.updateOptions({ folding: ed.isCode && !!D.prf.fold() });
       if (ed.isCode && D.prf.indentOnOpen()) ed.RD(me);
-      ed.setRO(ee.readOnly || ee.debugger);
+      ed.setRO(ee.debugger);
       ed.setBP(ed.breakpoints);
       const line = ee.currentRow;
       let col = ee.currentColumn || 0;
@@ -283,7 +283,8 @@
     cursorBlinking(x) { this.me.updateOptions({ cursorBlinking: x }); },
     hasFocus() { return this.me.isFocused(); },
     focus() {
-      let q = this.container;
+      const ed = this;
+      let q = ed.container;
       let p = q && q.parent;
       const l = q && q.layoutManager;
       const m = l && l._maximisedItem;
@@ -293,11 +294,13 @@
         q = p; p = p.parent;
       } // reveal in golden layout
       if (D.ide.floating) {
-        $('title', this.dom.ownerDocument).text(this.name);
+        // $('title', ed.dom.ownerDocument).text(ed.name);
+        $('title', ed.dom.ownerDocument).text(`${ed.name} - ${ed.ide.caption}`);
         D.el.getCurrentWindow().focus();
       }
       window.focused || window.focus();
-      this.me.focus();
+      ed.me.focus();
+      ed.ide.setCursorPosition(ed.me.getPosition());
     },
     insert(ch) {
       this.isReadOnly || this.me.trigger('editor', 'type', { text: ch });
@@ -351,7 +354,7 @@
       });
     },
     autocompletionDelay(x) { this.me.updateOptions({ quickSuggestionsDelay: x }); },
-    
+    execCommand(cmd) { this[cmd] && this[cmd](this.me); },
     zoom(z) {
       const ed = this;
       const { me } = ed;
@@ -360,24 +363,45 @@
       me.updateOptions({ fontSize: fs, lineHeight: fs + 2 });
       me.revealRangeAtTop(r);
     },
-
+    onClose() {
+      const ed = this;
+      const { me } = ed;
+      if (ed.tc || (me.getValue() === ed.oText && `${ed.getStops()}` === `${ed.oStop}`)) {
+        ed.EP(me);
+      } else {
+        setTimeout(() => {
+          window.focus();
+          D.util.optionsDialog({
+            title: 'Save?',
+            options: ['Yes', 'No', 'Cancel'],
+            text: `The object "${ed.name}" has changed.\nDo you want to save the changes?`,
+          }, (r) => {
+            if (r === 0) ed.EP(me);
+            else if (r === 1) ed.QT(me);
+            else ed.focus();
+          });
+        }, 10);
+      }
+    },
     ReplyFormatCode(lines) {
       const ed = this;
       const { me } = ed;
       const u = me.getPosition();
+      const txt = lines.join('\n');
       ed.saveScrollPos();
-      me.setValue(lines.join('\n'));
+      me.setValue(txt);
       me.model.setEOL(monaco.editor.EndOfLineSequence.LF);
       ed.setStop();
       if (ed.tc) {
         ed.hl(ed.HIGHLIGHT_LINE);
         u.lineNumber = ed.HIGHLIGHT_LINE;
       }
-      if (ed.firstOpen === true) {
+      if (ed.firstOpen) {
         if (lines.length === 1 && /\s?[a-z|@]+$/.test(lines[0])) u.column = me.model.getLineContent(u.lineNumber).length + 1;
         else if (lines[0][0] === ':') u.column = 1;
         else u.column = 2;
         ed.firstOpen = false;
+        ed.oText = txt;
       }
       ed.restoreScrollPos();
       me.setPosition(u);
@@ -467,7 +491,7 @@
     LN() { D.prf.lineNums.toggle(); },
     TVO() { D.prf.fold.toggle(); },
     TVB() { D.prf.breakPts.toggle(); },
-    TC() { D.send('StepInto', { win: this.id }); D.ide.getSIS(); },
+    TC() { D.send('StepInto', { win: this.id }); D.ide.getStats(); },
     AC(me) { // align comments
       const ed = this;
       if (ed.isReadOnly) return;
@@ -507,7 +531,7 @@
     },
     ER() {
       D.send('RunCurrentLine', { win: this.id });
-      D.ide.getSIS();
+      D.ide.getStats();
     },
     BH() { D.send('ContinueTrace', { win: this.id }); },
     RM() { D.send('Continue', { win: this.id }); },
@@ -539,11 +563,16 @@
       ed.tc && D.send('SetLineAttributes', { win: ed.id, stop: ed.getStops() });
     },
     RD(me) {
+      const ed = this;
       if (D.prf.ilf()) {
         const text = me.getValue().split('\n');
         D.send('FormatCode', { win: this.id, text });
       } else if (me.getSelection().isEmpty()) {
         me.trigger('editor', 'editor.action.formatDocument');
+        ed.firstOpen && setTimeout(() => {
+          ed.oText = me.getValue();
+          ed.firstOpen = false;
+        }, 10);
       } else {
         me.trigger('editor', 'editor.action.formatSelection');
       }
@@ -591,16 +620,21 @@
         me.trigger('editor', 'editor.action.triggerSuggest');
       }
     },
-    downOrXline(me) {
-      const p = me.getPosition();
-      const l = p.lineNumber;
-      if (l !== me.model.getLineCount() || /^\s*$/.test(me.model.getLineContent(l))) {
+    DC() {
+      const { me } = this;
+      const l = me.getPosition().lineNumber;
+      if (l < me.model.getLineCount() || /^\s*$/.test(me.model.getLineContent(l))) {
         me.trigger('editor', 'cursorDown');
       } else {
         me.trigger('editor', 'editor.action.insertLineAfter');
         this.xline = l + 1;
       }
     },
+    UC() { this.me.trigger('editor', 'cursorUp'); },
+    LC() { this.me.trigger('editor', 'cursorLeft'); },
+    RC() { this.me.trigger('editor', 'cursorRight'); },
+    SA() { this.me.trigger('editor', 'selectAll'); },
+    TO() { this.me.trigger('editor', 'editor.fold'); }, // (editor.unfold) is there a toggle?
   };
   D.Ed = Ed;
 }

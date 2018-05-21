@@ -18,11 +18,10 @@ D.IDE = function IDE(opts = {}) {
     if (a && a.length) {
       tc || (ide.pending = a.slice(1));
       D.send('Execute', { trace: tc, text: `${a[0]}\n` });
-      ide.getThreads(); ide.getSIS();
+      ide.getStats();
     }
   };
   ide.host = ''; ide.port = ''; ide.wsid = '';
-  D.prf.title(ide.updTitle.bind(ide));
   ide.wins = {};
   if (ide.floating) {
     ide.connected = 1;
@@ -36,6 +35,9 @@ D.IDE = function IDE(opts = {}) {
     });
     ide.switchWin = (x) => { ide.ipc.emit('switchWin', x); };
   } else {
+    D.prf.title(ide.updTitle.bind(ide));
+    I.sb_sis.hidden = !1;
+    I.sb_threads.hidden = !1;
     ide.wins[0] = new D.Se(ide);
     D.wins = ide.wins;
 
@@ -53,7 +55,7 @@ D.IDE = function IDE(opts = {}) {
       if (!w.bwId) D.elw.focus();
       w.focus(); return !1;
     };
-    D.prf.floating() && D.IPC_CreateWindow(1);
+    D.el && D.prf.floating() && D.IPC_CreateWindow(1);
   }
   // We need to be able to temporarily block the stream of messages coming from socket.io
   // Creating a floating window can only be done asynchronously and it's possible that a message
@@ -62,6 +64,28 @@ D.IDE = function IDE(opts = {}) {
   let blk = 0; // blk:blocked?
   let tid = 0; // tid:timeout id
   let last = 0; // last:when last rundown finished
+  const pfq = []; // pfkey queue
+  let pfqtid = 0; // pfkey timeout id
+  // pfkeys
+  function pfKeyRun() {
+    if (pfq.length && ide.wins[0].promptType && !blk) {
+      const { text, cmd } = pfq.shift();
+      const w = D.ide.focusedWin;
+      if (text) w.insert(text);
+      else if (D.commands[cmd]) D.commands[cmd](w.me);
+    }
+    if (pfq.length) pfqtid = setTimeout(pfKeyRun, D.prf.floating() ? 100 : 20);
+    else pfqtid = 0;
+  }
+  ide.pfKey = (x) => {
+    if (ide.floating) ide.ipc.emit('pfKey', x);
+    else {
+      D.prf.pfkeys()[x].replace(/<(.+?)>|([^<>]+)/g, (_, cmd, text) => {
+        pfq.push({ cmd, text });
+      });
+      pfqtid = pfqtid || setTimeout(pfKeyRun, 1);
+    }
+  };
   function rd() { // run down the queue
     while (mq.length && !blk) {
       const a = mq.shift(); // a[0]:command name, a[1]:command args
@@ -79,6 +103,10 @@ D.IDE = function IDE(opts = {}) {
       } else {
         const f = ide.handlers[a[0]];
         f ? f.apply(ide, a.slice(1)) : D.send('UnknownCommand', { name: a[0] });
+      }
+      if (pfqtid) {
+        clearTimeout(pfqtid);
+        pfqtid = setTimeout(pfKeyRun, 100);
       }
     }
     last = +new Date(); tid = 0;
@@ -108,8 +136,10 @@ D.IDE = function IDE(opts = {}) {
 
   // language bar
   let ttid; // tooltip timeout id
+  let tthide = 0;
   let lbDragged;
   const reqTip = (x, desc, text, delay) => { // request tooltip, x:event
+    clearTimeout(tthide); tthide = 0;
     clearTimeout(ttid);
     const t = x.target;
     ttid = setTimeout(() => {
@@ -122,6 +152,8 @@ D.IDE = function IDE(opts = {}) {
       const x1 = x0 + I.lb_tip.offsetWidth;
       const y0 = (t.offsetTop + t.offsetHeight) - 3;
       s.top = `${y0}px`;
+      const maxHeight = window.innerHeight - (I.lb_tip_body.getBoundingClientRect().top + 30);
+      I.lb_tip_body.style.maxHeight = `${maxHeight}px`;
       if (x1 > document.body.offsetWidth) {
         s.left = ''; s.right = '0';
       } else {
@@ -134,13 +166,32 @@ D.IDE = function IDE(opts = {}) {
     const s = x.target.textContent;
     if (lbDragged || x.target.nodeName !== 'B' || /\s/.test(s)) return !1;
     const w = ide.focusedWin;
-    w.hasFocus() ? w.insert(s) : D.util.insert(document.activeElement, s);
+    if (w.hasFocus()) {
+      w.insert(s);
+    } else {
+      const ae = document.activeElement;
+      D.util.insert(ae, s);
+      const fw = w.me.overlayWidgets['editor.contrib.findWidget'].widget;
+      const fi = fw._findInput;
+      const fr = fw._replaceInputBox.inputElement;
+      if (fi.inputBox.input === ae) fi._onInput.fire();
+      else if (fr === ae) fw._state.change({ replaceString: fr.value }, false);
+    }
     return !1;
   };
+  function hideTT() { I.lb_tip.hidden = 1; tthide = 0; }
   I.lb.onmouseout = (x) => {
     if (x.target.nodeName === 'B') {
-      clearTimeout(ttid); ttid = 0; I.lb_tip.hidden = 1;
+      clearTimeout(ttid); ttid = 0;
+      tthide = tthide || setTimeout(hideTT, 200);
     }
+  };
+  I.lb_tip.onmouseover = () => {
+    clearTimeout(tthide); tthide = 0;
+  };
+  I.lb_tip.onmouseout = () => {
+    clearTimeout(tthide);
+    tthide = setTimeout(hideTT, 200);
   };
   I.lb.onmouseover = (x) => {
     if (lbDragged || x.target.nodeName !== 'B') return;
@@ -149,8 +200,8 @@ D.IDE = function IDE(opts = {}) {
     const s = k && c.charCodeAt(0) > 127 ? `Keyboard: ${D.prf.prefixKey()}${k}\n\n` : '';
     if (/\S/.test(c)) { const h = D.lb.tips[c] || [c, '']; reqTip(x, h[0], s + h[1]); }
   };
-  I.lb_prf.onmousedown = () => { D.prf_ui(); return !1; };
-  I.lb_prf.onclick = () => !1; // prevent # from appearing in the URL bar
+  I.sb_prf.onmousedown = () => { D.prf_ui(); return !1; };
+  I.sb_prf.onclick = () => !1; // prevent # from appearing in the URL bar
   $(I.lb_inner).sortable({
     forcePlaceholderSize: 1,
     placeholder: 'lb_placeholder',
@@ -215,7 +266,6 @@ D.IDE = function IDE(opts = {}) {
     ide.dbg = u;
     u.container = c;
     c.getElement().append(u.dom);
-    ide.getSIS(); ide.getThreads();
     ide.WSEwidth = ide.wsew;
     return u;
   }
@@ -256,12 +306,15 @@ D.IDE = function IDE(opts = {}) {
       case 'win': {
         const { id } = x.contentItem.config.componentState;
         if (id) {
-          const ep = () => { const w = ide.wins[id]; w.EP(w.me); };
+          const ep = (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            ide.wins[id].onClose();
+          };
           x.middleClick = ep;
           cls.off('click').click(ep);
         } else {
-          cls.remove();
-          x.titleElement[0].closest('.lm_tab').style.paddingRight = '10px';
+          x.contentItem.parent.header.position(false);
         }
       }
         break;
@@ -270,23 +323,49 @@ D.IDE = function IDE(opts = {}) {
   });
   gl.init();
 
-  const updTopBtm = () => {
-    ide.dom.style.top = `${(D.prf.lbar() ? I.lb.offsetHeight : 0) + (D.el ? 0 : 22)}px`;
-    gl.updateSize(ide.dom.clientWidth, ide.dom.clientHeight);
+  let statsTid = 0;
+  ide.getStats = $.debounce(100, () => {
+    if (ide.floating) ide.ipc.emit('getStats');
+    else if (statsTid) {
+      D.send('GetSIStack', {});
+      D.send('GetThreads', {});
+    }
+  });
+  const toggleStats = () => {
+    if (ide.floating) return;
+    if (statsTid && !D.prf.dbg() && !D.prf.sbar()) {
+      clearInterval(statsTid); statsTid = 0;
+    } else if (!statsTid && (D.prf.dbg() || D.prf.sbar())) {
+      ide.getStats();
+      statsTid = statsTid || setInterval(ide.getStats, 5000);
+    }
   };
+  toggleStats();
+  const updTopBtm = $.debounce(100, () => {
+    ide.dom.style.top = `${(D.prf.lbar() ? I.lb.offsetHeight : 0) + (D.el ? 0 : 23)}px`;
+    ide.dom.style.bottom = `${I.sb.offsetHeight}px`;
+    gl.updateSize(ide.dom.clientWidth, ide.dom.clientHeight);
+  });
   I.lb.hidden = !D.prf.lbar();
+  I.sb.hidden = !D.prf.sbar();
   updTopBtm();
   $(window).resize(updTopBtm);
   D.prf.lbar((x) => { I.lb.hidden = !x; updTopBtm(); });
-  !ide.floating && setTimeout(() => {
-    try {
-      D.installMenu(D.parseMenuDSL(D.prf.menu()));
-    } catch (e) {
-      $.err('Invalid menu configuration -- the default menu will be used instead');
-      console.error(e);
-      D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()));
-    }
-  }, 100);
+  D.prf.sbar((x) => {
+    toggleStats();
+    I.sb.hidden = !x; updTopBtm();
+  });
+  if (!ide.floating) {
+    setTimeout(() => {
+      try {
+        D.installMenu(D.parseMenuDSL(D.prf.menu()));
+      } catch (e) {
+        $.err('Invalid menu configuration -- the default menu will be used instead');
+        console.error(e);
+        D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()));
+      }
+    }, 100);
+  }
   D.prf.autoCloseBrackets((x) => { eachWin((w) => { !w.bwId && w.autoCloseBrackets(!!x); }); });
   D.prf.ilf((x) => {
     const i = x ? -1 : D.prf.indent();
@@ -327,7 +406,10 @@ D.IDE = function IDE(opts = {}) {
     togglePanel(x, 'wse', 'Workspace Explorer', 1);
     ide.wse.autoRefresh(x && 5000);
   };
-  const toggleDBG = (x) => { togglePanel(x, 'dbg', 'Debug', 0); };
+  const toggleDBG = (x) => {
+    toggleStats();
+    togglePanel(x, 'dbg', 'Debug', 0);
+  };
   if (!ide.floating) {
     D.prf.wse(toggleWSE);
     D.prf.dbg(toggleDBG);
@@ -341,7 +423,7 @@ D.IDE = function IDE(opts = {}) {
   D.prf.blockCursor((x) => { eachWin(w => !w.bwId && w.blockCursor(!!x)); });
   D.prf.cursorBlinking((x) => { eachWin(w => !w.bwId && w.cursorBlinking(x)); });
   D.prf.renderLineHighlight((x) => { eachWin(w => !w.bwId && w.renderLineHighlight(x)); });
-  D.prf.autocompletion((x) => { eachWin(w => !w.bwId && w.autocompletion(!!x)); });
+  D.prf.autocompletion((x) => { eachWin(w => !w.bwId && w.autocompletion(x === 'classic')); });
   D.prf.autocompletionDelay((x) => { eachWin(w => !w.bwId && w.autocompletionDelay(x)); });
   D.prf.minimapEnabled((x) => { eachWin(w => !w.bwId && w.minimapEnabled(!!x)); });
   D.prf.minimapRenderCharacters((x) => { eachWin(w => !w.bwId && w.minimapRenderCharacters(!!x)); });
@@ -349,6 +431,7 @@ D.IDE = function IDE(opts = {}) {
   D.prf.selectionHighlight((x) => { eachWin(w => !w.bwId && w.selectionHighlight(x)); });
   D.prf.showEditorToolbar((x) => { $('.ride_win.edit_trace').toggleClass('no-toolbar', !x); });
   D.prf.snippetSuggestions((x) => { eachWin(w => !w.bwId && w.snippetSuggestions(x)); });
+  D.prf.zoom(ide.zoom.bind(ide));
 
   ide.handlers = { // for RIDE protocol messages
     Identify(x) {
@@ -369,7 +452,9 @@ D.IDE = function IDE(opts = {}) {
     InternalError(x) { $.err(`An error (${x.error}) occurred processing ${x.message}`, 'Internal Error'); },
     NotificationMessage(x) { $.alert(x.message, 'Notification'); },
     UpdateDisplayName(x) {
-      ide.wsid = x.displayName; ide.updTitle(); ide.wse && ide.wse.refresh();
+      ide.wsid = x.displayName;
+      ide.updTitle();
+      ide.wse && ide.wse.refresh();
     },
     EchoInput(x) { ide.wins[0].add(x.input); },
     SetPromptType(x) {
@@ -377,12 +462,13 @@ D.IDE = function IDE(opts = {}) {
       if (t && ide.pending.length) D.send('Execute', { trace: 0, text: `${ide.pending.shift()}\n` });
       else eachWin((w) => { w.prompt(t); });
       t === 4 && ide.wins[0].focus(); // ⍞ input
+      t === 1 && ide.getStats();
       if (t === 1 && ide.bannerDone === 0) {
         // arrange for the banner to appear at the top of the session window
         ide.bannerDone = 1;
         const { me } = ide.wins[0];
         me.focus();
-        if (!D.local) return;
+        if (!D.spawned) return;
         const txt = me.getValue().split('\n');
         let i = txt.length;
         while (--i) { if (/^Dyalog APL/.test(txt[i])) break; }
@@ -429,7 +515,7 @@ D.IDE = function IDE(opts = {}) {
       }
       delete ide.wins[x.win]; ide.focusMRUWin();
       ide.WSEwidth = ide.wsew; ide.DBGwidth = ide.dbgw;
-      if (w.tc) { ide.getSIS(); ide.getThreads(); }
+      w.tc && ide.getStats();
     },
     OpenWindow(ee) {
       if (!ee.debugger && D.el && process.env.RIDE_EDITOR) {
@@ -464,15 +550,18 @@ D.IDE = function IDE(opts = {}) {
       let done;
       const editorOpts = { id: w, name: ee.name, tc: ee.debugger };
       !editorOpts.tc && (ide.hadErr = -1);
+      ide.block(); // unblock the message queue once monaco ready
       if (D.el && D.prf.floating() && !ide.dead) {
-        ide.block(); // the popup will create D.wins[w] and unblock the message queue
         D.IPC_LinkEditor({ editorOpts, ee });
         done = 1;
       } else if (D.elw && !D.elw.isFocused()) D.elw.focus();
       if (done) return;
       const ed = new D.Ed(ide, editorOpts);
       ide.wins[w] = ed;
-      ed.me_ready.then(() => ed.open(ee));
+      ed.me_ready.then(() => {
+        ed.open(ee);
+        ide.unblock();
+      });
       // add to golden layout:
       const tc = !!ee.debugger;
       const bro = gl.root.getComponentsByName('win').filter(x => x.id && tc === !!x.tc)[0]; // existing editor
@@ -497,7 +586,7 @@ D.IDE = function IDE(opts = {}) {
       }, ind);
       ide.WSEwidth = ide.wsew; ide.DBGwidth = ide.dbgw;
       if (tc) {
-        ide.getSIS();
+        ide.getStats();
         ide.wins[0].scrollCursorIntoView();
       }
     },
@@ -528,45 +617,9 @@ D.IDE = function IDE(opts = {}) {
       }
     },
     OptionsDialog(x) {
-      let text = typeof x.text === 'string' ? x.text : x.text.join('\n');
-      if (D.el) { // && process.env.RIDE_NATIVE_DIALOGS) {
-        const { bwId } = D.ide.focusedWin;
-        const bw = bwId ? D.el.BrowserWindow.fromId(bwId) : D.elw;
-        const r = D.el.dialog.showMessageBox(bw, {
-          message: text,
-          title: x.title || '',
-          buttons: x.options || [''],
-          cancelId: -1,
-          type: ['warning', 'info', 'question', 'error'][x.type - 1],
-        });
+      D.util.optionsDialog(x, (r) => {
         D.send('ReplyOptionsDialog', { index: r, token: x.token });
-      } else {
-        text = text.replace(/\r?\n/g, '<br>');
-        I.gd_title_text.textContent = x.title || '';
-        I.gd_content.innerHTML = text;
-        I.gd_icon.style.display = '';
-        I.gd_icon.className = `dlg_icon_${['warn', 'info', 'query', 'error'][x.type - 1]}`;
-        I.gd_btns.innerHTML = (x.options || []).map(y => `<button>${D.util.esc(y)}</button>`).join('');
-        const b = I.gd_btns.querySelector('button');
-        const ret = (r) => {
-          I.gd_btns.onclick = null;
-          I.gd_close.onclick = null;
-          I.gd.hidden = 1;
-          D.send('ReplyOptionsDialog', { index: r, token: x.token });
-          D.ide.focusedWin.focus();
-        };
-        I.gd_close.onclick = () => ret(-1);
-        I.gd_btns.onclick = (e) => {
-          if (e.target.nodeName === 'BUTTON') {
-            let i = -1;
-            let t = e.target;
-            while (t) { t = t.previousSibling; i += 1; }
-            ret(i);
-          }
-        };
-        D.util.dlg(I.gd, { w: 400 });
-        setTimeout(() => { b.focus(); }, 1);
-      }
+      });
     },
     StringDialog(x) {
       I.gd_title_text.textContent = x.title || '';
@@ -589,59 +642,13 @@ D.IDE = function IDE(opts = {}) {
           ret(e.target.previousSibling ? x.defaultValue || null : inp.value);
         }
       };
-      D.util.dlg(I.gd, { w: 400, h: 250 });
+      D.util.dlg(I.gd, { w: 400, h: 250, modal: true });
       setTimeout(() => { inp.focus(); }, 1);
     },
     TaskDialog(x) {
-      if (D.el && D.win) {
-        const { bwId } = D.ide.focusedWin;
-        const bw = bwId ? D.el.BrowserWindow.fromId(bwId) : D.elw;
-        const r = D.el.dialog.showMessageBox(bw, {
-          message: `${x.text}\n${x.subtext}`,
-          title: x.title || '',
-          buttons: x.options.concat(x.buttonText) || [''],
-          type: 'question',
-        });
-        const index = r < x.options.length ? r : 100 + (r - x.options.length);
-        D.send('ReplyOptionsDialog', { index, token: x.token });
-        return;
-      } else if (D.dlg_bw) {
-        D.ipc.server.emit(D.dlg_bw.socket, 'show', x);
-        const bw = D.el.BrowserWindow.fromId(D.dlg_bw.id);
-        bw.show();
-        bw.setAlwaysOnTop(true);
-        return;
-      }
-      const { esc } = D.util;
-      I.gd_title_text.textContent = x.title || 'Task';
-      I.gd_icon.style.display = 'none';
-      I.gd_content.innerHTML = esc(x.text || '') + (x.subtext ? `<div class=task_subtext>${esc(x.subtext)}</div>` : '');
-      let content = (x.buttonText || []).map((y) => {
-        const [caption, ...details] = esc(y).split('\n');
-        return '<button class=task><div class="btn_icon"><span class="far fa-long-arrow-right"></span></div>' +
-          `${caption}<br><div class="task_detail">${details.join('<br>')}</div></button>`;
-      }).join('');
-      content += (x.footer ? `<div class=task_footer>${esc(x.footer)}</div>` : '');
-      I.gd_btns.innerHTML = content;
-      const ret = (r) => {
-        I.gd_btns.onclick = null;
-        I.gd_close.onclick = null;
-        I.gd.hidden = 1;
+      D.util.taskDialog(x, (r) => {
         D.send('ReplyTaskDialog', { index: r, token: x.token });
-        D.ide.focusedWin.focus();
-      };
-      const b = I.gd_btns.querySelector('button');
-      I.gd_close.onclick = () => { ret(-1); };
-      I.gd_btns.onclick = (e) => {
-        if (e.target.nodeName === 'BUTTON') {
-          let t = e.target;
-          let i = 99;
-          while (t) { t = t.previousSibling; i += 1; }
-          ret(i);
-        }
-      };
-      D.util.dlg(I.gd, { w: 400, h: 300 });
-      setTimeout(() => { b.focus(); }, 1);
+      });
     },
     ReplyClearTraceStopMonitor(x) {
       $.alert(`The following items were cleared:
@@ -649,8 +656,18 @@ D.IDE = function IDE(opts = {}) {
       ${x.stops} stops
       ${x.monitors} monitors`, 'Clear all trace/stop/monitor');
     },
-    ReplyGetSIStack(x) { ide.dbg && ide.dbg.sistack.render(x.stack); },
-    ReplyGetThreads(x) { ide.dbg && ide.dbg.threads.render(x.threads); },
+    ReplyGetSIStack(x) {
+      const l = x.stack.length;
+      I.sb_sis.innerText = `⎕SI: ${l}`;
+      I.sb_sis.classList.toggle('active', l > 0);
+      ide.dbg && ide.dbg.sistack.render(x.stack);
+    },
+    ReplyGetThreads(x) {
+      const l = x.threads.length;
+      I.sb_threads.innerText = `&: ${l}`;
+      I.sb_threads.classList.toggle('active', l > 1);
+      ide.dbg && ide.dbg.threads.render(x.threads);
+    },
     ReplyFormatCode(x) {
       const w = D.wins[x.win];
       w.ReplyFormatCode(x.text);
@@ -668,7 +685,7 @@ D.IDE = function IDE(opts = {}) {
           parent: D.elw,
         });
         w = ide.wStatus;
-        w.setTitle('Status Output');
+        w.setTitle(`Status Output - ${document.title}`);
         w.loadURL(`file://${__dirname}/status.html`);
         w.on('closed', () => { delete ide.wStatus; });
       }
@@ -688,6 +705,9 @@ D.IDE.prototype = {
     ide.profile = z;
     ide.updTitle();
   },
+  setCursorPosition(p) {
+    I.sb_cp.innerText = `Ln ${p.lineNumber - 1}, Col ${p.column - 1}`;
+  },
   die() { // don't really, just pretend
     const ide = this;
     if (ide.dead) return;
@@ -696,11 +716,6 @@ D.IDE.prototype = {
     ide.dom.className += ' disconnected';
     Object.keys(ide.wins).forEach((k) => { ide.wins[k].die(); });
   },
-  getThreads: $.debounce(100, () => { D.prf.dbg() && D.send('GetThreads', {}); }),
-  getSIS: $.debounce(100, () => {
-    if (this.floating) this.ipc.emit('getSIS');
-    else D.prf.dbg() && D.send('GetSIStack', {});
-  }),
   updPW(x) { this.wins[0] && this.wins[0].updPW(x); },
   updTitle() { // change listener for D.prf.title
     const ide = this;
@@ -721,12 +736,15 @@ D.IDE.prototype = {
       '{PID}': ri.pid,
       '{CHARS}': ch,
       '{BITS}': bits,
+      '{RIDE_PID}': D.el ? D.el.process.pid : '?',
       '{RIDE_VER_A}': rva,
       '{RIDE_VER_B}': rvb,
       '{RIDE_VER_C}': rvc,
       '{RIDE_VER}': v.version,
     };
-    document.title = D.prf.title().replace(/\{\w+\}/g, x => m[x.toUpperCase()] || x) || 'Dyalog';
+    ide.caption = D.prf.title().replace(/\{\w+\}/g, x => m[x.toUpperCase()] || x) || 'Dyalog';
+    D.ipc && D.ipc.server.broadcast('caption', ide.caption);
+    document.title = ide.caption;
   },
   focusWin(w) {
     if (this.hadErr === 0) {
@@ -748,18 +766,22 @@ D.IDE.prototype = {
     w.focus();
   },
   zoom(z) {
+    const b = this.dom.ownerDocument.body;
+    b.className = `zoom${z} ${b.className.split(/\s+/).filter(s => !/^zoom-?\d+$/.test(s)).join(' ')}`;
+    this.gl.container.resize();
+    if (this.floating) {
+      D.ipc.of.ride_master.emit('zoom', z);
+      return;
+    }
     const { wins } = this;
     const se = wins['0'];
     Object.keys(wins).forEach((x) => { wins[x].zoom(z); });
     se && se.restoreScrollPos();
-    const b = se.getDocument().body;
-    b.className = `zoom${z} ${b.className.split(/\s+/).filter(s => !/^zoom-?\d+$/.test(s)).join(' ')}`;
-    this.gl.container.resize();
   },
   LBR: D.prf.lbar.toggle,
+  SBR: D.prf.sbar.toggle,
   FLT: D.prf.floating.toggle,
   WRP: D.prf.wrap.toggle,
-  TOP: D.prf.floatOnTop.toggle,
   TVB: D.prf.breakPts.toggle,
   LN: D.prf.lineNums.toggle,
   TVO: D.prf.fold.toggle,
@@ -813,9 +835,7 @@ D.IDE.prototype = {
   onbeforeunload(e) { // called when the user presses [X] on the OS window
     const ide = this;
     if (ide.floating && ide.connected) { e.returnValue = false; }
-    if (ide.dead) {
-      D.nww && D.nww.close(true); // force close window
-    } else {
+    if (!ide.dead) {
       Object.keys(ide.wins).forEach((k) => {
         const ed = ide.wins[k];
         const { me } = ed;

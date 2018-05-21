@@ -37,15 +37,34 @@
   const cmpVer = (x, y) => x[0] - y[0] || x[1] - y[1] || 0;
   const ls = x => fs.readdirSync(x);
   const parseVer = x => x.split('.').map(y => +y);
-  const err = (...x) => {
+  const hideDlgs = () => {
     if (q) {
+      I.dlg_modal_overlay.hidden = 1;
       q.connecting_dlg.hidden = 1;
       q.listen_dlg.hidden = 1;
       q.fetch.disabled = 0;
     }
+  };
+  const err = (...x) => {
+    D.tmr && clearTimeout(D.tmr);
+    delete D.tmr;
+    hideDlgs();
     $.err(...x);
   };
   const save = () => {
+    const names = $('.name', q.favs).toArray().map(x => x.innerText);
+    const dups = names.filter((a, i) => names.indexOf(a) !== i);
+    if (dups.length) {
+      $.alert(
+        `The following name${dups.length ? 's are' : ' is'} duplicated:\n${dups.join('\n')}`,
+        'Duplicate connection names',
+        () => {
+          $(q.favs).list('select', names.lastIndexOf(dups[0]));
+          $(q.fav_name).focus();
+        },
+      );
+      return;
+    }
     const d = D.el.app.getPath('userData');
     const f = `${d}/connections.json`;
     if (((+fs.statSync(f).mtime) !== D.conns_modified)) {
@@ -75,7 +94,7 @@
     const ssh = q.subtype.value === 'ssh';
     const h = (ssh ? interpretersSSH : interpreters)
       .sort((x, y) => cmpVer(y.ver, x.ver) || +y.bits - +x.bits ||
-          (y.edition === 'unicode') - (x.edition === 'unicode'))
+        (y.edition === 'unicode') - (x.edition === 'unicode'))
       .map((x) => {
         let s = `v${x.ver.join('.')}, ${x.bits}-bit, ${x.edition.replace(/^./, w => w.toUpperCase())}`;
         const supported = cmpVer(x.ver, MIN_V) >= 0;
@@ -106,8 +125,8 @@
     if (q.type.value === 'listen' ||
       (q.type.value === 'start' && q.subtype.value === 'ssl')) q.subtype.value = 'raw';
     updSubtype();
-    q.ssl_opt.disabled = q.type.value !== 'connect';
-    q.raw_opt.text = q.type.value === 'start' ? 'Local' : 'Raw';
+    q.ssl_opt.hidden = q.type.value !== 'connect';
+    q.raw_opt.text = q.type.value === 'start' ? 'Local' : 'TCP';
     q.fetch.hidden = q.type.value !== 'start';
     q.start.hidden = q.fetch.hidden;
     q.go.innerHTML = `<u>${q.type.value[0]}</u>${q.type.value.substr(1)}`;
@@ -117,7 +136,7 @@
     const p = x.port;
     const ssh = x.subtype === 'ssh';
     if ((t === 'connect' || (t === 'start' && ssh) || t === 'listen') &&
-      p && (!/^\d*$/.test(p) || +p < 1 || +p > 0xffff)) {
+      p && (!/^\d*$/.test(p) || +p < (t !== 'listen') || +p > 0xffff)) {
       $.err('Invalid port', () => {
         (ssh ? q.ssh_port : q.tcp_port).select();
       });
@@ -146,21 +165,12 @@
           $.err('Password and/or key file is required', () => { q.ssh_pass.focus(); });
           return 0;
         }
-        // const at = q.ssh_auth_type.value;
-        // const e = q[`ssh_${at}`];
-        // if (!e.value) {
-        //   $.err(`${at === 'key' ? '"Key file"' : '"Password"'} is required`, () => { e.focus(); });
-        //   return 0;
-        // }
       }
     }
     return 1;
   };
   const initInterpreterConn = () => {
-    if (q) {
-      q.connecting_dlg.hidden = 1;
-      q.listen_dlg.hidden = 1;
-    }
+    hideDlgs();
     let b = Buffer.alloc(0x100000);
     let ib = 0; // ib:offset in b
     let nb = 0; // nb:length in b
@@ -197,7 +207,7 @@
         }
       }
     });
-    clt.on('error', (x) => { err(`${x}`); clt = 0; });
+    clt.on('error', (x) => { clt && err(`${x}`); clt = 0; });
     clt.on('end', () => {
       log('interpreter disconnected');
       D.ide && D.ide._disconnected();
@@ -236,6 +246,22 @@
     } catch (e) { err(e.message, e.name); }
     return null;
   };
+  const ct = process.env.RIDE_CONNECT_TIMEOUT || 60000;
+  const cancelOp = (c) => {
+    const cancel = (e) => {
+      if (e) {
+        clearTimeout(D.tmr);
+        delete D.tmr;
+      } else {
+        err('Timed out');
+      }
+      c && c.end();
+      hideDlgs();
+      return !1;
+    };
+    D.tmr = setTimeout(cancel, ct);
+    q.connecting_dlg_close.onclick = cancel;
+  };
   const connect = (x) => {
     let m = net; // m:module used to create connection
     const o = { host: x.host, port: x.port }; // o:options for .connect()
@@ -264,20 +290,27 @@
     });
     clt.on('error', (e) => {
       log(`connect failed: ${e}`);
+      if (D.tmr && D.ide && e.code === 'ECONNRESET') {
+        err('The interpreter is already serving another RIDE client.', 'Connection closed by interpreter');
+        D.ide.die();
+        D.commands.CNC();
+      } else err(e.message);
       clt = 0;
-      err(e.message);
     });
+    cancelOp(clt);
+    // net module needs a nudge to connect properly
+    // see https://github.com/Dyalog/ride/issues/387
+    D.ipc.server.broadcast('nudge');
   };
 
   const go = (conf) => { // "Go" buttons in the favs or the "Go" button at the bottom
     const x = conf || sel;
     if (!validate(x)) return 0;
-    D.local = 0;
+    D.spawned = 0;
     try {
-      const ct = process.env.RIDE_CONNECT_TIMEOUT || 10000;
       switch (x.type || 'connect') {
         case 'connect':
-          D.util.dlg(q.connecting_dlg);
+          D.util.dlg(q.connecting_dlg, { modal: true });
           if (x.subtype === 'ssh') {
             const o = {
               host: x.host || 'localhost',
@@ -319,19 +352,7 @@
               clearTimeout(D.tmr);
               delete D.tmr;
             });
-            const cancelOp = (e) => {
-              if (e) {
-                clearTimeout(D.tmr);
-                delete D.tmr;
-              } else {
-                err('Timed out');
-              }
-              c && c.end();
-              q.connecting_dlg.hidden = 1;
-              return !1;
-            };
-            D.tmr = setTimeout(cancelOp, ct);
-            q.connecting_dlg_close.onclick = cancelOp;
+            cancelOp(c);
           } else {
             connect({
               host: x.host || 'localhost',
@@ -345,12 +366,14 @@
           }
           break;
         case 'listen': {
-          D.util.dlg(q.listen_dlg);
-          const port = +x.port || 4502;
-          const host = x.host || 'localhost';
+          D.util.dlg(q.listen_dlg, { modal: true });
+          const port = +(x.port || 4502);
+          const host = x.host || '';
+          q.listen_dlg_host.textContent = host;
+          q.listen_dlg_port.textContent = `${port}`;
           q.listen_dlg_cancel.onclick = () => {
             srv && srv.close();
-            q.listen_dlg.hidden = 1;
+            hideDlgs();
             return !1;
           };
           srv = net.createServer((c) => {
@@ -363,16 +386,21 @@
             initInterpreterConn();
             new D.IDE().setConnInfo(cHost, port, sel ? sel.name : '');
           });
-          srv.on('error', (e) => { srv = 0; q.listen_dlg.hidden = 1; err(`${e}`); });
+          srv.on('error', (e) => {
+            srv = 0;
+            err(`${e}`);
+          });
           srv.listen(port, host, () => {
             const o = srv.address();
             log(`listening on ${o.address}:${o.port}`);
-            q.listen_dlg_host.textContent = `${o.address}`;
+            q.listen_dlg_host.textContent = o.address !== '::' ? o.address : 'host';
             q.listen_dlg_port.textContent = `${o.port}`;
           });
+          D.ipc.server.broadcast('nudge');
           break;
         }
         case 'start': {
+          D.spawned = 1;
           const env = {};
           const a = (x.env || '').split('\n');
           for (let i = 0; i < a.length; i++) {
@@ -380,17 +408,12 @@
             k && (env[k] = v);
           }
           if (x.subtype === 'ssh') {
-            D.util.dlg(q.connecting_dlg);
+            D.util.dlg(q.connecting_dlg, { modal: true });
             const o = {
               host: x.host || 'localhost',
               port: +x.ssh_port || 22,
               user: x.user || user,
             };
-            // if (x.ssh_auth_type === 'key') {
-            //   o.key = x.ssh_key;
-            // } else {
-            //   o.pass = x === sel ? q.ssh_pass.value : '';
-            // }
             x.ssh_key && (o.key = x.ssh_key);
             x === sel && q.ssh_pass.value && (o.pass = q.ssh_pass.value);
             const c = sshExec(o, '/bin/sh', (e, sm) => {
@@ -405,25 +428,13 @@
                 Object.keys(env).forEach((k) => { s0 += `${k}=${shEsc(env[k])} `; });
                 const s1 = x.args ? x.args.replace(/\n$/, '').split('\n').map(shEsc).join(' ') : '';
                 sm.write(`${s0}CLASSICMODE=1 SINGLETRACE=1 RIDE_INIT=CONNECT:127.0.0.1:${rport} RIDE_SPAWNED=1 ${shEsc(x.exe)} ${s1} +s -q >/dev/null\n`);
-                q.connecting_dlg.hidden = 1;
+                hideDlgs();
               });
             }).on('error', () => {
               clearTimeout(D.tmr);
               delete D.tmr;
             });
-            const cancelOp = (e) => {
-              if (e) {
-                clearTimeout(D.tmr);
-                delete D.tmr;
-              } else {
-                err('Timed out');
-              }
-              c && c.end();
-              q.connecting_dlg.hidden = 1;
-              return !1;
-            };
-            D.tmr = setTimeout(cancelOp, ct);
-            q.connecting_dlg_close.onclick = cancelOp;
+            cancelOp(c);
           } else {
             srv = net.createServer((y) => {
               log('spawned interpreter connected');
@@ -434,7 +445,6 @@
               initInterpreterConn();
               new D.IDE().setConnInfo(adr.address, adr.port, sel ? sel.name : '');
               D.lastSpawnedExe = x.exe;
-              D.local = 1;
             });
             srv.on('error', (e) => {
               log(`listen failed: ${e}`);
@@ -492,7 +502,7 @@
                 console.error(y);
               });
             });
-            const cancelOp = (e) => {
+            const cancel = (e) => {
               if (e) {
                 clearTimeout(D.tmr);
                 delete D.tmr;
@@ -503,11 +513,11 @@
               srv = 0;
               child && child.kill();
               child = 0;
-              q.connecting_dlg.hidden = 1;
+              hideDlgs();
               return !1;
             };
-            D.tmr = setTimeout(cancelOp, ct);
-            q.connecting_dlg_close.onclick = cancelOp;
+            D.tmr = setTimeout(cancel, ct);
+            q.connecting_dlg_close.onclick = cancel;
           }
           break;
         }
@@ -771,6 +781,8 @@
       if (sel) {
         $(favDOM($.extend({}, sel))).insertBefore($sel);
         $('a', $sel).focus();
+        q.fav_name.value += '(copy)';
+        $(q.fav_name).change();
         q.fav_name.focus();
       }
     };
@@ -870,7 +882,7 @@
     } catch (e) { console.error(e); }
     updExes();
     document.title = `RIDE - ${upperFirst(q.type.value)}`;
-  //  q.connecting_dlg_close.onclick=_=>{q.connecting_dlg.hidden=1}
+    //  q.connecting_dlg_close.onclick=_=>{q.connecting_dlg.hidden=1}
   };
 
   module.exports = () => {

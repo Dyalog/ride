@@ -45,7 +45,7 @@
           </div>
           <div class="col col-xs-6">
             <select id=cn_subtype hidden>
-              <option value=raw title="Connect to an interpreter via raw TCP/IP" id=cn_raw_opt>Raw
+              <option value=raw title="Connect to an interpreter via raw TCP/IP" id=cn_raw_opt>TCP
               <option value=ssh title="Connect to an interpreter via SSH"                     >SSH
               <option value=ssl title="Connect to an interpreter using TLS/SSL"  id=cn_ssl_opt>TLS/SSL
             </select>
@@ -208,7 +208,7 @@
     </div>
   </div>
 </div>
-
+<div id=dlg_modal_overlay class=ui-front hidden></div>
 <div id=cn_connecting_dlg class=dlg hidden>
   <div class=dlg_title>Connecting...</div>
   <div class=cn_dlg_content><span class="far fa-spinner fa-spin fa_icon"></span></div>
@@ -234,76 +234,81 @@
 <!--IDE:language bar,session,editors,etc-->
 <div id=ide></div>
 <div id=lb hidden>
-  <a id=lb_prf class=tb_btn href=# title=Preferences><span class="fas fa-fw fa-cog"></span></a>
   <div id=lb_inner></div>
 </div>
-<div id=lb_tip hidden><div id=lb_tip_desc></div><hr><pre id=lb_tip_text></pre></div>
+<div id=lb_tip hidden><div id=lb_tip_desc></div><hr><div id=lb_tip_body><pre id=lb_tip_text></pre></div></div>
+<div id=sb hidden>
+  <div id=sb_prf><a class=tb_btn href=# title=Preferences><span class="fas fa-cog"></span></a></div>
+  <div id=sb_cp class=right></div>
+  <div id=sb_threads class=right hidden></div>
+  <div id=sb_sis class=right hidden></div>
+</div>
 <div id=ed_tmpl class="ride_win edit_trace" style=display:none>
   <div class=toolbar>
-    <button class='tb_btn tb_QT tc_only' title='Quit this function'>
-      <span class="far fa-fw fa-times-circle"></span>
-    </button>
-    <button class='tb_btn tb_EP ed_only' title='Save changes and return'>
-      <span class="far fa-fw fa-times-circle"></span>
-    </button>
+    <a href=# class='tb_btn tb_QT tc_only' title='Quit this function'>
+      <span class="far fa-times-circle"></span>
+    </a>
+    <a href=# class='tb_btn tb_EP ed_only' title='Save changes and return'>
+      <span class="far fa-times-circle"></span>
+    </a>
     <span class='tb_sep'></span>
-    <button class='tb_btn tb_LN' title='Toggle line numbers'>
-      <span class="fa-layers fa-fw">
+    <a href=# class='tb_btn tb_LN' title='Toggle line numbers'>
+      <span class="fa-layers">
         <span class="fal fa-align-justify" data-fa-transform="shrink-3 right-2"></span>
         <span class="fa-layers-text" data-fa-transform="shrink-10 left-8 up-6" style="font-weight:300">1</span>
         <span class="fa-layers-text" data-fa-transform="shrink-10 left-8" style="font-weight:300">2</span>
         <span class="fa-layers-text" data-fa-transform="shrink-10 left-8 down-6" style="font-weight:300">3</span>
       </span>
-    </button>
+    </a>
     <span class='tb_sep tc_only'></span>
-    <button class='tb_btn tb_ER tc_only' title='Execute line'>
-      <span class="fas fa-fw fa-eject" data-fa-transform="shrink-3 rotate-90"></span>
-    </button>
-    <button class='tb_btn tb_TC tc_only' title='Trace into expression'>
-      <span class="fas fa-fw fa-level-down" data-fa-transform="shrink-3"></span>
-    </button>
-    <button class='tb_btn tb_BH tc_only' title='Stop on next line of calling function'>
-      <span class="fas fa-fw fa-level-up" data-fa-transform="shrink-3"></span>
-    </button>
+    <a href=# class='tb_btn tb_ER tc_only' title='Execute line'>
+      <span class="fas fa-eject" data-fa-transform="shrink-3 rotate-90"></span>
+    </a>
+    <a href=# class='tb_btn tb_TC tc_only' title='Trace into expression'>
+      <span class="fas fa-level-down" data-fa-transform="shrink-3"></span>
+    </a>
+    <a href=# class='tb_btn tb_BH tc_only' title='Stop on next line of calling function'>
+      <span class="fas fa-level-up" data-fa-transform="shrink-3"></span>
+    </a>
     <span class='tb_sep tc_only'></span>
-    <button class='tb_btn tb_RM tc_only' title='Continue execution of this thread'>
-      <span class="fas fa-fw fa-angle-right"></span>
-    </button>
-    <button class='tb_btn tb_MA tc_only' title='Continue execution of all threads'>
-      <span class="fas fa-fw fa-angle-double-right"></span>
-    </button>
-    <button class='tb_btn tb_WI tc_only' title='Interrupt'>
-      <span class="far fa-fw fa-pause-circle"></span>
-    </button>
+    <a href=# class='tb_btn tb_RM tc_only' title='Continue execution of this thread'>
+      <span class="fas fa-angle-right"></span>
+    </a>
+    <a href=# class='tb_btn tb_MA tc_only' title='Continue execution of all threads'>
+      <span class="fas fa-angle-double-right"></span>
+    </a>
+    <a href=# class='tb_btn tb_WI tc_only' title='Interrupt'>
+      <span class="far fa-pause-circle"></span>
+    </a>
     <span class='tb_sep tc_only'></span>
-    <button class='tb_btn tb_ED tc_only' title='Edit name'>
-      <span class="fas fa-fw fa-pencil-alt"  data-fa-transform="shrink-3"></span>
-    </button>
-    <button class='tb_btn tb_CBP tc_only' title='Clear trace/stop/monitor for this object'>
+    <a href=# class='tb_btn tb_ED tc_only' title='Edit name'>
+      <span class="fas fa-pencil-alt"  data-fa-transform="shrink-3"></span>
+    </a>
+    <a href=# class='tb_btn tb_CBP tc_only' title='Clear trace/stop/monitor for this object'>
       <span class="fa-layers">
         <span class="far fa-clock" data-fa-transform="shrink-8 down-4 right-4"></span>
         <span class="fas fa-circle" data-fa-transform="shrink-8 up-4"></span>
         <span class="fas fa-circle" data-fa-transform="shrink-8 down-4 left-4" style="color:red"></span>
         <span class="fas fa-times fa-inverse" data-fa-transform="shrink-10 down-4 left-4"></span>
       </span>      
-    </button>
+    </a>
     <span class='tb_sep ed_only'></span>
-    <button class='tb_btn tb_AO ed_only' title='Comment selected text'>
-      <span class="fa-layers fa-fw">
+    <a href=# class='tb_btn tb_AO ed_only' title='Comment selected text'>
+      <span class="fa-layers">
         <span class="fa-layers-text" data-fa-transform="grow-4 up-3" style="font-family:apl">⍝</span>
       </span>
-    </button>
-    <button class='tb_btn tb_DO ed_only' title='Uncomment selected text'>
-      <span class="fa-layers fa-fw">
+    </a>
+    <a href=# class='tb_btn tb_DO ed_only' title='Uncomment selected text'>
+      <span class="fa-layers">
         <span class="fa-layers-text" data-fa-transform="grow-4 up-3" style="font-family:apl">⍝</span>
         <span class="fas fa-circle" data-fa-transform="shrink-8 down-3 left-3" style="color:red"></span>
         <span class="fas fa-times fa-inverse" data-fa-transform="shrink-10 down-3 left-3"></span>
       </span>
-    </button>
+    </a>
     <span class=tb_sep></span>
-    <button class='tb_btn tb_SC' title='Search'>
-      <span class="fas fa-fw fa-search" data-fa-transform="shrink-3"></span>
-    </button>
+    <a href=# class='tb_btn tb_SC' title='Search'>
+      <span class="fas fa-search" data-fa-transform="shrink-3"></span>
+    </a>
   </div>
   <div class=ride_win_me>
   </div>
@@ -315,13 +320,13 @@
     <div class=ctl_listview_header><h2>Threads</h2></div>
     <div class=toolbar>
       <a href=# class='tb_btn tb_TR' title='Refresh now'>
-        <span class="fas fa-fw fa-sync-alt" data-fa-transform="shrink-2"></span>
+        <span class="fas fa-sync-alt" data-fa-transform="shrink-2"></span>
       </a>
       <a href=# class='tb_btn tb_RM' title='Continue execution of this thread'>
-        <span class="fas fa-fw fa-angle-right"></span>
+        <span class="fas fa-angle-right"></span>
       </a>
       <a href=# class='tb_btn tb_MA' title='Continue execution of all threads'>
-        <span class="fas fa-fw fa-angle-double-right"></span>
+        <span class="fas fa-angle-double-right"></span>
       </a>
     </div>
     <div id=threads hidden></div>
@@ -494,6 +499,7 @@
           <option value="all">all</option>
         </select>
       </label></p>
+      <p><label class=cb_label><input id=code_cbeol type=checkbox>Cursor beyond EOL</label></p>
       <hr>
       <h2>Minimap</h2>
       <p><label class=cb_label><input id=code_fold type=checkbox>Co<u>d</u>e folding (outlining)</label></p>
@@ -560,6 +566,7 @@
         <tr><td>- major</td><td>- <a>{VER_A}</a></td></tr>
         <tr><td>- minor</td><td>- <a>{VER_B}</a></td></tr>
         <tr><td>- svn revision</td><td>- <a>{VER_C}</a></td></tr>
+        <tr><td>PID of RIDE process</td><td><a>{RIDE_PID}</a></td></tr>
         <tr><td>RIDE version</td><td><a>{RIDE_VER}</a></td></tr>
         <tr><td>- major</td><td>- <a>{RIDE_VER_A}</a></td></tr>
         <tr><td>- minor</td><td>- <a>{RIDE_VER_B}</a></td></tr>
@@ -649,7 +656,7 @@
     if(typeof exp !== 'undefined') { exports = exp; delete exp; }
   </script>
   
-<script src="node_modules/monaco-editor/dev/vs/loader.js"></script>
+<script src="node_modules/monaco-editor/min/vs/loader.js"></script>
 <script>
   // Save Monaco's amd require and restore Node's require
   var amdRequire = require;
@@ -658,7 +665,7 @@
 <script>
   let dir = typeof __dirname !== 'undefined' ? `${__dirname}/` : '';
   amdRequire.config({
-    baseUrl: dir + 'node_modules/monaco-editor/dev'
+    baseUrl: dir + 'node_modules/monaco-editor/min'
   });
     
   self.module = undefined;

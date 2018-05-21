@@ -46,7 +46,7 @@
       }
     }
     if (!r.theme) { // check brightness and pick matching theme
-      const [rr, gg, bb] = r.norm.bg.match(/([0-9a-fA-F]{2})/g).map(c => parseInt(c, 16));
+      const [rr, gg, bb] = RGB(r.norm.bg).match(/([0-9a-fA-F]{2})/g).map(c => parseInt(c, 16));
       const lum = Math.sqrt((0.241 * rr * rr) + (0.691 * gg * gg) + (0.068 * bb * bb));
       r.theme = lum < 130 ? 'dark' : 'light';
     }
@@ -58,16 +58,16 @@
       theme: 'light',
       styles: 'asgn=fg:00f com=fg:088 dfn=fg:00f diam=fg:00f err=fg:f00 fn=fg:008 idm=fg:008 kw=fg:800 ' +
       'lnum=fg:008,bg:f,bgo:0 mod=bg:7,bgo:.25 mtch=bg:ff8,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 op1=fg:00f op2=fg:00f ' +
-      'par=fg:00f quad=fg:808 sel=bg:48e,bgo:.5 semi=fg:00f sqbr=fg:00f srch=bg:f80,bgo:.5 str=fg:088 tc=bg:d,bgo:1 ' +
+      'par=fg:00f quad=fg:808 qdl=fg:c0c sel=bg:48e,bgo:.5 semi=fg:00f sqbr=fg:00f srch=bg:f80,bgo:.5 str=fg:088 tc=bg:d,bgo:1 ' +
       'tcpe=bg:c8c8c8,bgo:1 trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f vtt=bg:ff0 ' +
-      'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:1,fg:0f0 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff ' +
+      'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:.1,fg:0f0 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff ' +
       'ma=bg:828282,bgo:1,fg:0ff na=bg:828282,bgo:1,fg:f qor=bg:f00,bgo:1,fg:f',
     }, {
       name: 'Francisco Goya',
       theme: 'dark',
       styles: 'asgn=fg:ff0 com=fg:b,I:1 cur=bc:f00 dfn2=fg:eb4 dfn3=fg:c79 dfn4=fg:cd0 dfn5=fg:a0d ' +
       'dfn=fg:a7b diam=fg:ff0 err=fg:f00,bg:822,bgo:.5,B:1,U:1 fn=fg:0f0 idm=fg:0f0 glb=B:1 kw=fg:aa2 ' +
-      'lbl=U:1,bg:642,bgo:.5 lnum=fg:b94,bg:010,bgo:0 mod=bg:7,bgo:.5 mtch=fg:0,bg:ff8,bgo:.75 norm=fg:9c7,bg:0,bgo:1 ' +
+      'lbl=U:1,bg:642,bgo:.5 lnum=fg:b94,bg:010,bgo:0 mod=bg:7,bgo:.5 mtch=fg:0,bg:0,bgo:0 norm=fg:9c7,bg:0,bgo:1 ' +
       'num=fg:a8b op1=fg:d95 op2=fg:fd6 sel=bg:048,bgo:.5 semi=fg:8 sqbr=fg:8 srch=bg:b96,bgo:.75,fg:0 str=fg:dae ' +
       'tc=bg:1,bgo:1 tcpe=bg:2,bgo:1 zld=fg:d9f,B:1 scmd=fg:0ff ucmd=fg:f80,B:1 vtip=bg:733,fg:ff0,bgo:1,bc:900 vtt=bc:f80 ' +
       'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:1,fg:0f0 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff ' +
@@ -127,14 +127,29 @@
     return G.map((g) => {
       const h = schema[g.t];
       if (!h || !g.c) return '';
-      let cls = g.c.split(',').map(x => (isSample ? '#nonexistent' : x)).join(',');
-      cls += '{';
+      const els = g.c.split(',').map(x => (isSample ? '#nonexistent' : x)).join(',');
+      const edmode = ['ca', 'cm', 'cv', 'cvv', 'ma', 'na', 'qor'].includes(g.t);
+      let cls;
+      if (edmode) {
+        cls = `${els} .monaco-editor-background,${els} .monaco-editor .margin{`;
+        h.bg && (cls += `background-color:${RGB(h.bg)};`);
+        h.bg && (cls += `background-color:${RGBA(h.bg, h.bgo == null ? 0.5 : h.bgo)};`);
+        cls += `}${els} .monaco-editor span{`;
+        h.fg && (cls += `color:${RGB(h.fg)};`);
+        h.fg && (cls += `color:${RGBA(h.fg, h.fgo == null ? 1 : h.fgo)};`);
+        h.B && (cls += 'font-weight:bold;');
+        h.I && (cls += 'font-style:italic;');
+        h.U && (cls += 'text-decoration:underline;');
+        cls += '}';
+        return cls;
+      }
+      cls = `${els}{`;
       h.fg && (cls += `color:${RGB(h.fg)};`);
-      h.bg && (cls += `background-color:${RGB(h.bg)};`);
       h.B && (cls += 'font-weight:bold;');
       h.I && (cls += 'font-style:italic;');
       h.U && (cls += 'text-decoration:underline;');
       h.bc && (cls += `border-color:${RGB(h.bc)};`);
+      h.bg && (cls += `background-color:${RGB(h.bg)};`);
       h.bg && (cls += `background-color:${RGBA(h.bg, h.bgo == null ? 0.5 : h.bgo)};`);
       cls += '}';
       return cls;
@@ -224,6 +239,7 @@
     {s:'bracket'         ,t:'sqbr',m:'delimiter.square'}, //[]
     {s:'comment'         ,t:'com' ,m:'comment'}, //⍝
     {s:'cursor'          ,t:'cur' ,e:'editorCursor.foreground', ctrls:{bg:0,BIU:0,fg:1}},
+    {s:'curly braces'    ,t:'cubr',m:'delimiter.curly'}, //{}
     {s:'dfn level 1'     ,t:'dfn1',m:'identifier.dfn.1'}, //{}
     {s:'dfn level 2'     ,t:'dfn2',m:'identifier.dfn.2'},
     {s:'dfn level 3'     ,t:'dfn3',m:'identifier.dfn.3'},
@@ -242,12 +258,13 @@
     {s:'matching bracket',t:'mtch',e:'editorBracketMatch.background'},
     {s:'modified line'   ,t:'mod' ,c:'.modified'   }, //in the session - lines queued for execution
     {s:'monadic operator',t:'op1' ,m:'keyword.operator.monadic'}, //⌸ ...
-    {s:'namespace'       ,t:'ns'  }, //#
+    {s:'namespace'       ,t:'ns'  ,m:'namespace'}, //#
     {s:'name'            ,t:'var' ,m:'identifier.local'}, //a.k.a. identifier
     {s:'normal'          ,t:'norm',c:'.ride_win_me'},
     {s:'number'          ,t:'num' ,m:'number'}, //0 ...
     {s:'parenthesis'     ,t:'par' ,m:'delimiter.parenthesis'}, //()
     {s:'quad name'       ,t:'quad',m:'predefined.sysfn'}, //⎕XYZ
+    {s:'quad name local' ,t:'qdl' ,m:'predefined.sysfn.local'}, // localized ⎕XYZ
     {s:'search match'    ,t:'srch',e:'editor.findMatchBackground',ctrls:{fg:0,BIU:0}},
     {s:'selection'       ,t:'sel' ,e:'editor.selectionBackground',ctrls:{fg:0,BIU:0}},
     {s:'semicolon'       ,t:'semi',m:'delimiter.semicolon'}, //as in A[B;C]
@@ -261,13 +278,13 @@
     {s:'value tip'       ,t:'vtip',c:'/*noprefix*/#vt_bln,/*noprefix*/#vt_tri',ctrls:{bc:1}}, //the balloon
     {s:'zilde'           ,t:'zld' ,m:'predefined.zilde'},  //⍬
     
-    {s:'chararr'         ,t:'ca'  ,c:'.chararr .monaco-editor-background,.chararr .monaco-editor .margin,.chararr .monaco-editor span', ctrls:{BIU:0}},
-    {s:'charmat'         ,t:'cm'  ,c:'.charmat .monaco-editor-background,.charmat .monaco-editor .margin,.charmat .monaco-editor span', ctrls:{BIU:0}},
-    {s:'charvec'         ,t:'cv'  ,c:'.charvec .monaco-editor-background,.charvec .monaco-editor .margin,.charvec .monaco-editor span', ctrls:{BIU:0}},
-    {s:'charvecvec'      ,t:'cvv' ,c:'.charvecvec .monaco-editor-background,.charvecvec .monaco-editor .margin,.charvecvec .monaco-editor span', ctrls:{BIU:0}},
-    {s:'mixarr'          ,t:'ma'  ,c:'.mixarr .monaco-editor-background,.mixarr .monaco-editor .margin,.mixarr .monaco-editor span', ctrls:{BIU:0}},
-    {s:'numarr'          ,t:'na'  ,c:'.numarr .monaco-editor-background,.numarr .monaco-editor .margin,.numarr .monaco-editor span', ctrls:{BIU:0}},
-    {s:'quador'          ,t:'qor' ,c:'.quador .monaco-editor-background,.quador .monaco-editor .margin,.quador .monaco-editor span', ctrls:{BIU:0}},
+    {s:'chararr'         ,t:'ca'  ,c:'.chararr'},
+    {s:'charmat'         ,t:'cm'  ,c:'.charmat'},
+    {s:'charvec'         ,t:'cv'  ,c:'.charvec'},
+    {s:'charvecvec'      ,t:'cvv' ,c:'.charvecvec'},
+    {s:'mixarr'          ,t:'ma'  ,c:'.mixarr'},
+    {s:'numarr'          ,t:'na'  ,c:'.numarr'},
+    {s:'quador'          ,t:'qor' ,c:'.quador'},
     
   ]);
   /* eslint-enable */
@@ -418,21 +435,6 @@
       D.prf.blockCursor(x => me.updateOptions({ cursorStyle: x ? 'block' : 'line' }));
       D.prf.cursorBlinking(x => me.updateOptions({ cursorBlinking: x }));
       let ss;
-      const reTokenize = $.debounce(500, () => {
-        let s = D.Tokenizer.getInitialState();
-        const ls = me.model.getLinesContent();
-        ss = ls.map((l) => {
-          const st = D.Tokenizer.tokenize(l, s);
-          s = st.endState;
-          return st;
-        });
-      });
-      reTokenize();
-      me.model.onDidChangeContent((x) => {
-        if (!me.dyalogBQ && x.changes.length === 1
-          && x.changes[0].text === D.prf.prefixKey()) D.commands.BQC(me);
-        reTokenize();
-      });
       function selGrpFromPosition(p) {
         const { lineNumber, column } = p;
         const s = ss[lineNumber - 1];
@@ -442,17 +444,34 @@
         while (!M[sc] && sc) sc = sc.slice(0, Math.max(0, sc.lastIndexOf('.')));
         sc ? selGrp(M[sc]) : selGrp('norm');
       }
+      const reTokenize = $.debounce(500, () => {
+        let s = D.Tokenizer.getInitialState();
+        const ls = me.model.getLinesContent();
+        ss = ls.map((l) => {
+          const st = D.Tokenizer.tokenize(l, s);
+          s = st.endState;
+          return st;
+        });
+        selGrpFromPosition(me.getPosition());
+      });
+      reTokenize();
+      me.listen = 1;
+      me.model.onDidChangeContent(reTokenize);
+      D.ac(me);
       me.onDidChangeCursorPosition((e) => {
         if (!me.getSelection().isEmpty()) selGrp('sel');
         else selGrpFromPosition(e.position);
       });
       me.onMouseDown((e) => {
         const t = e.target;
+        const p = t.position;
         const mt = monaco.editor.MouseTargetType;
         if (t.type === mt.GUTTER_LINE_NUMBERS) {
           selGrp('lnum');
         } else if (t.type === mt.CONTENT_TEXT) {
           selGrpFromPosition(t.position);
+        } else if (t.type === mt.CONTENT_EMPTY && t.mouseColumn > p.column) {
+          me.trigger('editor', 'type', { text: ' '.repeat(t.mouseColumn - p.column) });
         }
       });
       q.chrome.onchange = () => { scm.theme = q.chrome.value; };

@@ -1,18 +1,3 @@
-.disconnected .monaco-editor-background,
-.disconnected .monaco-editor .margin {
-  background-color: #e2d3bb;
-  /*beige*/
-}
-.breakpoint {
-  background: no-repeat transparent center center url(img/breakpoint.png);
-}
-.highlighted {
-  border: none;
-  outline: solid red 1px;
-}
-.pendent .tb_btn {
-  pointer-events: none;
-}
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),
 #cn textarea {
   border: 1px solid rgba(169, 169, 169, 0.3);
@@ -112,6 +97,10 @@
   font-size: 16px;
 }
 /*various dialogs*/
+#dlg_modal_overlay {
+  background-color: black;
+  opacity: 0.2;
+}
 .dlg {
   background-color: #1c1e28;
 }
@@ -132,9 +121,6 @@
 #gd .dlg_title,
 #gd .dlg_close {
   color: #828282;
-}
-#gd .dlg_btns {
-  background-color: #1c1e28;
 }
 #gd .dlg_close:hover {
   color: white;
@@ -166,6 +152,20 @@
 .lm_header,
 .lm_content {
   border-color: #272937 !important;
+}
+.lm_dragProxy .lm_content {
+  box-shadow: 2px 2px 4px rgba(255, 255, 255, 0.2);
+}
+.lm_dropTargetIndicator {
+  box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.4);
+  outline: 1px dashed #7688d9;
+  margin: 1px;
+  transition: all 200ms ease;
+}
+.lm_dropTargetIndicator .lm_inner {
+  background: white;
+  opacity: 0.1;
+  filter: alpha(opacity=1);
 }
 .lm_tab {
   font-family: Roboto!important;
@@ -223,6 +223,10 @@
 }
 .lm_maximised .lm_controls .lm_maximise {
   background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAJ0lEQVR4nGP8//8/AzGAiShVI1YhCwMDA8OsWbPwBmZaWhoj0SYCAN1lBxMAX4n0AAAAAElFTkSuQmCC);
+}
+.lm_transition_indicator {
+  background-color: white;
+  border: 1px dashed #7688d9;
 }
 label {
   color: #a9a9a9;
@@ -302,9 +306,6 @@ select {
 #lb .ui-sortable-helper {
   color: black;
 }
-#lb_prf:active {
-  background-color: rgba(0, 0, 0, 0.2);
-}
 #lb_tip {
   background: #1c1e28;
   border: 1px solid black;
@@ -319,15 +320,20 @@ select {
   background-color: #1c1e28;
   border-bottom: solid grey 1px;
 }
-.menu a {
-  color: white;
+.menu a,
+.menu a:hover {
+  color: black;
+  font-size: 0.8em;
+}
+.menu .m-open {
+  background: rgba(0, 0, 0, 0.2);
 }
 .menu .m-open .m-top {
   border-color: transparent;
 }
 .menu .m-box {
-  background-color: #1c1e28;
-  border-color: #1c1e28;
+  background-color: white;
+  border-color: rgba(0, 0, 0, 0.2);
 }
 .menu .m-box a {
   border: none;
@@ -337,17 +343,25 @@ select {
   color: white;
 }
 .menu .m-box a:focus {
-  background: #323446;
-  color: white;
-}
-.menu .m-box a:focus .m-shc {
-  color: white;
+  background: rgba(0, 0, 0, 0.2);
 }
 .menu .m-box a.m-checked {
   background: transparent 5px center no-repeat url(img/menu_chk.png);
 }
 .menu .m-box a:focus.m-checked {
-  background: #323446 5px center no-repeat url(img/menu_chk_wht.png);
+  background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
+}
+.disconnected .monaco-editor-background,
+.disconnected .monaco-editor .margin {
+  background-color: #e2d3bb;
+  /*beige*/
+}
+.breakpoint {
+  background: no-repeat transparent center center url(img/breakpoint.png);
+}
+.highlighted {
+  border: none;
+  outline: solid red 1px;
 }
 #prf_dlg hr {
   border-top: 1px solid black;
@@ -554,6 +568,25 @@ body {
   background-color: grey;
   color: white;
 }
+#sb {
+  background-color: #1c1e28;
+  border-top: 1px solid black;
+  color: #a9a9a9;
+  font-family: apl, monospace;
+}
+#sb div {
+  border-right: 1px solid #272937;
+}
+#sb div.right {
+  border-right: none;
+  border-left: 1px solid #272937;
+}
+#sb div.active {
+  color: #7688d9;
+}
+#sb_prf:active {
+  background-color: rgba(0, 0, 0, 0.2);
+}
 #toast-container {
   font-family: Roboto;
   font-size: 14px;
@@ -577,13 +610,13 @@ body {
 }
 .toolbar {
   background-color: #1c1e28;
+  border-bottom: 1px solid #272937;
 }
 .tb_btn {
   color: #a9a9a9;
   background: transparent;
   box-shadow: none!important;
   border-radius: 0!important;
-  font-size: 18px;
 }
 .tb_btn:hover {
   color: #7688d9;

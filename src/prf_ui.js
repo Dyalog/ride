@@ -47,7 +47,6 @@
       D.ipc.server.emit(D.prf_bw.socket, 'show');
       const bw = D.el.BrowserWindow.fromId(D.prf_bw.id);
       bw.show();
-      bw.setAlwaysOnTop(true);
       return !1;
     } else if (D.ide && D.ide.floating) {
       D.ipc.of.ride_master.emit('prfShow'); return !1;
@@ -100,9 +99,9 @@
         d.hidden = 0;
       } else {
         d.className += ' web';
-        D.util.dlg(d, { w: 600, h: 490 });
       }
     }
+    !D.el && D.util.dlg(d, { w: 600, h: 600 });
     Object.keys(tabs).forEach((i) => { tabs[i].load(); });
     const t = tabs[(((document.getElementById('prf_nav').querySelector('.sel') || {}).href) || '').replace(/.*#/, '')];
     t && t.activate && t.activate();

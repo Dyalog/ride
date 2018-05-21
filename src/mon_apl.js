@@ -5,7 +5,7 @@
   const name = `(?:[${letter}][${letter}\\d]*)`;
   const notName = RegExp(`[^${letter}0-9]+`);
   // /(\w+|\(\w+ +(\w+)(?: +\w+)?\)) *(?:\w+|\( *\w+(?: +\w+)* *\))?$/
-  const tradFnRE = RegExp(`(${name}|\\(${name} +(${name})(?: +${name})?\\)) *(?:${name}|\\( *${name}(?: +${name})* *\\))?$`);
+  const tradFnRE = RegExp(`(${name}|\\( *${name} +(${name})(?: +${name})? *\\)) *(?:${name}|\\( *${name}(?: +${name})* *\\))? *$`);
   const end = '(?:⍝|$)';
   const restartBlock = '|:else|:elseif|:andif|:orif';
   const startBlock = ':class|:disposable|:for|:hold|:if|:interface|:namespace' +
@@ -47,11 +47,13 @@
     comments: {
       lineComment: '⍝',
     },
-    brackets: [
-      ['{', '}'],
-      ['[', ']'],
-      ['(', ')'],
-    ],
+    // brackets removed as it causes closing bracket to match indentation
+    // of opening bracket from a previous line
+    // brackets: [
+    //   ['{', '}'],
+    //   ['[', ']'],
+    //   ['(', ')'],
+    // ],
     autoClosingPairs: [
       { open: '{', close: '}' },
       { open: '[', close: ']' },
@@ -180,10 +182,39 @@
       const n = 0;
       let tkn;
       let s;
-      const localVar = (l) => {
-        addToken(offset, 'delimiter.semicolon');
-        addToken(offset + 1, 'identifier.local');
-        offset += 1 + l.length;
+
+      // localisable system variables, i.e. all but ⎕dmx ⎕se
+      const sysvar = '⎕avu|⎕ct|⎕dct|⎕div|⎕fr|⎕io|⎕lx|⎕ml|⎕path|⎕pp|⎕pw|⎕rl|⎕rtl|⎕sm|⎕tname|⎕trap|⎕using|⎕wsid|⎕wx';
+      const localRE = RegExp(`( *)(;)( *)(${sysvar}|${name})( *)(⍝?)`, 'i');
+      const localVars = () => {
+        let m;
+        while ((m = sm.match(localRE)) && m.index === 0) {
+          const [, s0, sc, s1, nm, s2, nb] = m;
+          if (s0.length) {
+            addToken(offset, 'white');
+            offset += s0.length;
+          }
+          addToken(offset, 'delimiter.semicolon');
+          offset += sc.length;
+          if (s1.length) {
+            addToken(offset, 'white');
+            offset += s1.length;
+          }
+          addToken(offset, nm[0] === '⎕' ? 'predefined.sysfn.local' : 'identifier.local');
+          offset += nm.length;
+          h.vars.push(nm[0] === '⎕' ? nm.toLowerCase() : nm);
+          if (s2.length) {
+            addToken(offset, 'white');
+            offset += s2.length;
+          }
+          if (nb.length) {
+            addToken(offset, 'comment');
+            offset = eol; break;
+          }
+          sm = line.slice(offset);
+        }
+        offset !== eol && addToken(offset, 'invalid');
+        offset = eol;
       };
       while (offset < eol) {
         const la = a[a.length - 1];
@@ -201,10 +232,10 @@
           if (/^\s*:/.test(s) || dfnHeader.test(s)) {
             // sm.backUp(s.length)
           } else {
-            const [signature, ...locals] = s.split(';');
-            const [, fn, op] = signature.match(tradFnRE);
+            const [signature] = s.split(';');
+            const [, fn, op] = signature.match(tradFnRE) || [];
             const fnop = op || fn;
-            const si = signature.indexOf(fnop);
+            const si = fnop ? signature.match(RegExp(`\\b${fnop}\\b`)).index : -1;
             let i = 0;
             while (i < signature.length) {
               const ch = signature[i];
@@ -226,16 +257,24 @@
                     i += fnop.length;
                   } else {
                     m = signature.slice(i).match(name);
-                    addToken(offset + i, 'identifier.local');
-                    i += m[0].length;
+                    if (m) {
+                      addToken(offset + i, 'identifier.local');
+                      i += m[0].length;
+                    } else {
+                      addToken(offset + i, 'invalid');
+                      i = signature.length;
+                    }
                   }
               }
             }
             offset += i;
-            locals.forEach(localVar);
             h.vars = s.split(notName);
             h.vars.splice(h.vars.indexOf(fnop), 1);
+            sm = line.slice(offset);
+            localVars();
           }
+        } else if (offset === 0 && RegExp(`^ *; *${name}($|[ ;])`).test(sm)) {
+          localVars();
         } else if ((m = sm.match(idiomsRE))) {
           addToken(offset, 'predefined.idiom');
           offset += m[0].length;
@@ -320,11 +359,16 @@
               tkn = la.t === '[' ? 'delimiter.semicolon' : 'invalid';
               addToken(offset, tkn); offset += 1; break;
 
-            case '⎕':
-              m = sm.slice(1).match(/^[áa-z0-9]*/i);
-              tkn = m && sysfns.indexOf(m[0].toLowerCase()) >= 0 ? 'predefined.sysfn' : 'invalid.sysfn';
-              addToken(offset, tkn); offset += 1 + m[0].length; break;
+            case '⎕': {
+              [m] = sm.slice(1).match(RegExp(`^${name}`)) || [];
+              const ml = (m || '').toLowerCase();
+              if (!m) tkn = 'predefined.sysfn';
+              else if (h.vars && h.vars.indexOf(`⎕${ml}`) >= 0) tkn = 'predefined.sysfn.local';
+              else if (sysfns.indexOf(ml) >= 0) tkn = 'predefined.sysfn';
+              else tkn = 'invalid.sysfn';
 
+              addToken(offset, tkn); offset += 1 + ml.length; break;
+            }
             case '⍞': addToken(offset, 'predefined.sysfn'); offset += 1; break;
             case '#': addToken(offset, 'namespace'); offset += 1; break;
             case '⍺': case '⍵': case '∇': case ':':
@@ -535,10 +579,11 @@
       const ch = s[c - 2];
       const pk2 = `${pk}${pk}`;
       const kind = monaco.languages.CompletionItemKind;
-      const { a } = model._lines[position.lineNumber-1]._state;
-      const { t } = (a || []).slice(-1)[0] || {};      
+      const { a } = model._lines[position.lineNumber - 1]._state;
+      const { t } = (a || []).slice(-1)[0] || {};
       const snippets = /^\s*:\w*$/.test(s.slice(0, c - 1)) && a && t !== '{';
-      if (s.slice(c - 3, c - 1) === pk2) {
+      const sc = model.bqc - 1;
+      if (s.slice(sc, c - 1) === pk2) {
         return Object.keys(D.bqbqc).map((k) => {
           const v = D.bqbqc[k];
           const key = D.getBQKeyFor(v.text);

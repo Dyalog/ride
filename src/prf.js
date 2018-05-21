@@ -17,7 +17,6 @@ D.prf = {};
   ['connectOnQuit',      0], // open connection page when active session ends
   ['connectFav',         0], // favourite connection (most recently run item)
   ['floating',           0], //floating editor and tracer windows
-  ['floatOnTop',         0], //try to keep floating windows on top of the session
   ['floatSingle',        1], //create single floating edit window
   ['fold',               1], //code folding
   ['ilf',                1], //when re-formating use ODE style (interpreter level formatting)
@@ -41,8 +40,9 @@ D.prf = {};
   ['persistentHistorySize',100], // max lines to save
   ['prefixKey',          '`'],
   ['prefixMaps',         {}],//per-locale strings of pairs of characters - diffs from the default map for that locale
-  ['pfkeys',             ['','','','','','','','','','','','','']], //command strings for pfkeys
+  ['pfkeys',             [...Array(49)].map(() => '')], //command strings for pfkeys
   ['renderLineHighlight','none'], // highlight current line
+  ['sbar',               1], //show status bar
   ['selectedExe',        ''],//which interpreter is selected in dropdown in the Connect page?
   ['selectionHighlight', 0],// hightlight matching words
   ['showEditorToolbar',  1],// show toolbar in editor windows
@@ -88,10 +88,10 @@ D.prf = {};
     '\n  Preferences              =PRF {!mac}'+
     '\n&View'+
     '\n  Show Language Bar        =LBR'+
+    '\n  Show Status Bar          =SBR'+
     '\n  Show Workspace Explorer  =WSE'+
     '\n  Show Debug               =DBG'+
     '\n  Floating Edit Windows    =FLT {!browser}'+
-    '\n  Editors on Top           =TOP {!browser}'+
     '\n  Line Wrapping in Session =WRP'+
     '\n  -                             {!browser}'+
     '\n  Stops                    =TVB'+
@@ -126,7 +126,7 @@ D.prf = {};
     '\n# Syntax:'+
     '\n#   &x   access key, alt+x'+
     '\n#   =CMD command code; some are special:'+
-    '\n#          LBR FLT WRP TOP WSE render as checkboxes'+
+    '\n#          LBR FLT WRP WSE render as checkboxes'+
     '\n#   =http://example.com/  open a URL'+
     '\n#   {}   conditional display, a boolean expression'+
     '\n#          operators: && || ! ( )'+
@@ -182,8 +182,7 @@ D.db = !nodeRequire ? localStorage : (function DB() {
   // file-backed storage with API similar to that of localStorage
   const k = []; // keys
   const v = []; // values
-  const d = el.app.getPath('userData');
-  const f = `${d}/prefs.json`;
+  const f = el.process.env.RIDE_PREFS || `${el.app.getPath('userData')}/prefs.json`; 
   try {
     if (fs.existsSync(f)) {
       const h = JSON.parse(fs.readFileSync(f, 'utf8'));
@@ -228,9 +227,8 @@ D.db = !nodeRequire ? localStorage : (function DB() {
   Object.defineProperty(db, 'length', { get() { return k.length; } });
   return db;
 }());
-
-if (D.win && D.db.getItem('ime') !== '0') {
-  const setImeExe = process.execPath.replace(/[^\\/]+$/, 'set-ime.exe');
+if (D.el && D.win && D.prf.ime()) {
+  const setImeExe = `${__dirname}\\windows-ime\\set-ime.exe`;
   const fs = nodeRequire('fs');
   const { spawn } = nodeRequire('child_process');
   fs.existsSync(setImeExe) && spawn(setImeExe, [process.pid], { stdio: ['ignore', 'ignore', 'ignore'] });

@@ -1,22 +1,94 @@
 {
   const words = '[⎕\\]\\)\\.A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ\\d]';
   const prefixRE = new RegExp(`^(${words}*)${words}*(?: \\1${words}*)*$`);
+  let cce; // composition change event
+  function bqCleanUpMe(me) {
+    if (me.model.bqc) {
+      me.model.bqc = 0;
+      me.trigger('editor', 'hideSuggestWidget');
+    }
+  }
+  function bqChangeHandlerMe(me, o) { // o:changeObj
+    const chg = o.changes[0];
+    const r = chg.range;
+    const l = r.startLineNumber;
+    const c = r.startColumn;
+    const x = chg.text[0];
+    const pk = D.prf.prefixKey();
+    const s = me.model.getLineContent(l);
+    const sc = me.model.bqc - 1;
+    if (s.slice(sc, c) === `${pk}${pk}${pk}`) { // ``` for ⋄
+      const nr = [];
+      const ns = [];
+      const text = D.bq[pk] || '';
+      o.changes.forEach((oc) => {
+        const l1 = oc.range.startLineNumber;
+        const c1 = oc.range.startColumn;
+        nr.push({ range: new monaco.Range(l1, c1 - 2, l1, c1 + 1), text });
+        ns.push(new monaco.Selection(l1, c1 - 1, l1, c1 - 1));
+      });
+      bqCleanUpMe(me);
+      setTimeout(() => {
+        me.listen = false;
+        me.executeEdits('D', nr, ns);
+        me.listen = true;
+      }, 1);
+    } else if (s.slice(sc, c - 1) === `${pk}${pk}`) { // bqbqc
+      me.model.bqc = 0;
+    } else if (s[c - 2] !== pk) {
+      bqCleanUpMe(me);
+    } else if (x !== pk) {
+      let y = x === ' ' ? pk : D.bq[x] || '';
+      if (!(chg.text.length === 2 && D.prf.autoCloseBrackets()
+        && [')', ']', '}'].includes(chg.text[1]))) y += chg.text.slice(1);
+      if (y) {
+        const nr = [];
+        const ns = [];
+        o.changes.forEach((oc) => {
+          const l1 = oc.range.startLineNumber;
+          const c1 = oc.range.startColumn;
+          const ec = c1 + chg.text.length;
+          nr.push({ range: new monaco.Range(l1, c1 - 1, l1, ec), text: y });
+          ns.push(new monaco.Selection(l1, ec - 1, l1, ec - 1));
+        });
+        bqCleanUpMe(me);
+        setTimeout(() => {
+          me.listen = false;
+          me.executeEdits('D', nr, ns);
+          me.listen = true;
+        }, 1);
+      } else {
+        bqCleanUpMe(me);
+      }
+    }
+  }
 
   D.ac = (me) => {
     me.tabComplete = 0;
+    const ta = me.domElement.getElementsByTagName('textarea')[0];
+    ta.addEventListener('compositionstart', () => { me.isComposing = 1; });
+    ta.addEventListener('compositionend', () => {
+      me.isComposing = 0;
+      cce && bqChangeHandlerMe(me, cce);
+      cce = null;
+    });
     me.onDidChangeModelContent((e) => {
       const pk = D.prf.prefixKey();
-      if (me.listen && !me.dyalogBQ && e.changes.length === 1
+      if (me.model.bqc) {
+        if (me.isComposing) cce = e;
+        else bqChangeHandlerMe(me, e);
+      } else if (me.listen && !me.model.bqc && e.changes.length // === 1
         && e.changes[0].text === pk) {
-        D.commands.BQC(me);
-      } else {
+        me.model.bqc = e.changes[0].range.startColumn;
+      } else if (!e.isRedoing && !e.isUndoing && !e.isFlush) {
         setTimeout(() => {
           const sw = me.contentWidgets['editor.widget.suggestWidget'];
           const swv = sw.widget.suggestWidgetVisible.get();
           const r = e.changes[0].range;
+          if (r.startLineNumber > me.model.getLineCount()) return;
           const l = me.model.getLineContent(r.startLineNumber).toLowerCase();
-          const bq2 = e.changes.length === 1 && RegExp(`${pk}${pk}\\w*`, 'i').test(l);
-          if (swv && sw.widget.list.length === 1) {
+          const bq2 = e.changes.length && RegExp(`${pk}${pk}\\w*`, 'i').test(l);
+          if (swv && !bq2 && sw.widget.list.length === 1) {
             const t = sw.widget.focusedItem.suggestion.insertText.toLowerCase();
             if (l.slice(r.startColumn - t.length, r.startColumn) === t) {
               me.trigger('editor', 'hideSuggestWidget');

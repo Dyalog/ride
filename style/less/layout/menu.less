@@ -1,11 +1,13 @@
 /*menu (see ../src/menu.js for the DOM structure)*/
+@LINE_HEIGHT: 21px;
 .menu {
-	height: 18px;
-	line-height: 17px;
+	height: 22px;
+	line-height: @LINE_HEIGHT;
 	cursor: default;
 	padding: 0;
-	margin: 2px 0 0 0;
+	margin: 0;
 	font-family: @SANS_SERIF_FONT;
+	user-select: none;
 	a {
 		text-decoration: none;
 		cursor: default;
@@ -27,22 +29,22 @@
 	.m-box {
 		display: none;
 		border-style: solid;
-		border-width: 1px 2px 2px 1px;
+		border-width: 1px;
 		position: absolute;
-		padding: 1px;
-		margin: 2px 0 0 0;
+		padding: 0;
+		margin: 0;
 		min-width: 125px;
 		white-space: nowrap;
 		.m-box {
 			margin-left: 100%;
-			margin-top: -17px;
+			margin-top: -@LINE_HEIGHT;
 		}
 		a {
 			display: block;
-			height: 17px;
-			line-height: 17px;
+			height: @LINE_HEIGHT;
+			line-height: @LINE_HEIGHT;
 			text-align: left;
-			padding: 1px 17px;
+			padding: 1px @LINE_HEIGHT;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			.m-shc {

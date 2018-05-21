@@ -17,6 +17,7 @@
     "jquery": "^3.2.1",
     "monaco-editor": "0.10.1",
     "node-ipc": "^9.1.1",
+    "os-locale": "^2.1.0",
     "ssh2": "^0.5.5",
     "toastr": "^2.1.4"
   },

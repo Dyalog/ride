@@ -29,62 +29,14 @@
   }
   updBQ(); D.prf.prefixMaps(updBQ); D.prf.kbdLocale(updBQ);
 
-  function bqCleanUpMe(me) {
-    if (me.dyalogBQ) {
-      me.dyalogBQ.dispose(); delete me.dyalogBQ;
-      me.trigger('editor', 'hideSuggestWidget');
-    }
-  }
-  function bqChangeHandlerMe(me, o) { // o:changeObj
-    if (!me.dyalogBQ) return;
-    const chg = o.changes[0];
-    const r = chg.range;
-    const l = r.startLineNumber;
-    const c = r.startColumn;
-    const x = chg.text[0];
-    const pk = D.prf.prefixKey();
-    const s = me.model.getLineContent(l);
-    if (s.slice(c - 3, c) === `${pk}${pk}${pk}`) { // ``` for ⋄
-      const nr = new monaco.Range(l, c - 2, l, c + 1);
-      const ns = new monaco.Selection(l, c - 1, l, c - 1);
-      bqCleanUpMe(me);
-      setTimeout(() => {
-        me.listen = false;
-        me.executeEdits('D', [{ range: nr, text: bq[pk] || '' }], [ns]);
-        me.listen = true;
-      }, 1);
-    } else if (s.slice(c - 3, c - 1) === `${pk}${pk}`) { // bqbqc
-      me.dyalogBQ && me.dyalogBQ.dispose(); delete me.dyalogBQ;
-    } else if (s[c - 2] !== pk) {
-      bqCleanUpMe(me);
-    } else if (x !== pk) {
-      const y = x === ' ' ? pk : bq[x];
-      if (y) {
-        const nr = new monaco.Range(l, c - 1, l, c + chg.text.length);
-        const ns = new monaco.Selection(l, c, l, c);
-        bqCleanUpMe(me);
-        setTimeout(() => {
-          me.listen = false;
-          me.executeEdits('D', [{ range: nr, text: y }], [ns]);
-          me.listen = true;
-        }, 1);
-      } else {
-        bqCleanUpMe(me);
-      }
-    }
-  }
-
   D.keyMap.dyalogDefault = { End: 'goLineEndSmart' };
 
   $.extend(D.commands, {
     TB() { D.ide.switchWin(1); },
     BT() { D.ide.switchWin(-1); },
-    SA(me) { me.trigger('editor', 'selectAll'); },
     CT() { document.execCommand('Cut'); },
     CP() { document.execCommand('Copy'); },
     PT() { document.execCommand('Paste'); },
-    EMD(me) { D.send('Edit', { win: me.dyalogCmds.id, pos: 0, text: '' }); },
-    TO(me) { me.trigger('editor', 'editor.fold'); }, // (editor.unfold) is there a toggle?
     PRF() { D.prf_ui(); },
     ABT() { D.abt(); },
     CNC() {
@@ -126,8 +78,11 @@
               'please use "Connect..." instead.', 'Cannot Start New Session');
       }
     },
+    DK(me) { me.trigger('editor', 'editor.action.deleteLines'); },
+    QCP(me) { me.trigger('editor', 'editor.action.quickCommand'); },
     QIT() { D.quit(); },
     LBR: D.prf.lbar.toggle,
+    SBR: D.prf.sbar.toggle,
     WI() { D.send('WeakInterrupt', {}); },
     SI() { D.send('StrongInterrupt', {}); },
     FUL() {
@@ -165,11 +120,7 @@
       }
       D.openExternal(u);
     },
-    BQC(me) {
-      if (me.dyalogBQ) return;
-      me.dyalogBQ = me.model.onDidChangeContent(x => bqChangeHandlerMe(me, x));
-    },
-    goLineEndSmart(me) { // CodeMirror provides a goLineStartSmart but not a goLineEndSmart command.
+    goLineEndSmart(me) { // Monaco provides a goLineStartSmart but not a goLineEndSmart command.
       const sels = me.getSelections().map((c) => {
         const l = c.startLineNumber;
         const ch = c.startColumn - 1;
@@ -180,6 +131,7 @@
         return new monaco.Selection(l, nc, l, nc);
       });
       me.setSelections(sels);
+      me.revealRange(monaco.Range.fromPositions(me.getPosition()));
     },
     JSC() {
       let w; D.el && (w = D.el.BrowserWindow.getFocusedWindow()) && w.webContents.toggleDevTools();
@@ -197,7 +149,7 @@
       });
       const cn = nodeRequire(`${__dirname}/src/cn`);
       D.logw = w;
-      w.setTitle('Protocol Log');
+      w.setTitle(`Protocol Log - ${D.ide.caption}`);
       w.loadURL(`file://${__dirname}/empty.html`);
       w.webContents.executeJavaScript('var d = document, b=d.body,e=d.createElement("div");' +
                                       'b.style.fontFamily="monospace";b.style.overflow="scroll";' +
@@ -234,37 +186,9 @@
     ZMR() { D.prf.zoom(0); D.ide.updPW(); },
 
   });
-  // pfkeys
-  function nop() {}
-  function fakeEvent(s) {
-    const e = {
-      type: 'keydown',
-      ctrlKey: false,
-      shiftKey: false,
-      altKey: false,
-      preventDefault: nop,
-      stopPropagation: nop,
-    };
-    const h = { C: 'ctrlKey', A: 'altKey', S: 'shiftKey' };
-    const s1 = s.replace(/(\w+)-/g, (_, type) => {
-      e[h[type] || `${type.toLowerCase()}Key`] = true; return '';
-    });
-    e.keyCode = monaco.KeyCode[s1];
-    e.keyCode || fail(`Unknown key:${JSON.stringify(s)}`);
-    return e;
-  }
-  for (let i = 1; i <= 12; i++) {
-    D.commands[`PF${i}`] = function pfk(j) {
-      D.prf.pfkeys()[j].replace(/<(.+?)>|(.)/g, (_, x, y) => {
-        const w = D.ide.focusedWin;
-        if (y) w.insert(y);
-        else if (D.commands[x]) D.commands[x](w.me);
-        else w.me._onKeyDown.fire(fakeEvent(x));
-        // else w.cm.triggerOnKeyDown(fakeEvent(x));
-      });
-    }.bind(this, i);
-  }
 
+  const pfKey = i => () => D.ide.pfKey(i);
+  for (let i = 1; i <= 48; i++) D.commands[`PF${i}`] = pfKey(i);
 
   // order: used to measure how "complicated"
   // (for some made-up definition of the word) a shortcut is.
@@ -309,16 +233,30 @@
   ];
   function defCmd(x) {
     const c = D.commands;
-    c[x] || (c[x] = (cm) => { const h = cm.dyalogCmds; h && h[x] && h[x](cm); });
+    c[x] || (c[x] = (me) => {
+      const h = me.dyalogCmds;
+      h && h.execCommand(x);
+    });
   }
-  ('CBP MA AC VAL indentOrComplete downOrXline indentMoreOrAutocomplete STL TVO TVB' +
+  ('CBP MA AC VAL indentOrComplete indentMoreOrAutocomplete STL TVO TVB' +
   ' TGC JBK JSC LOG WSE').split(' ').forEach(defCmd);
   for (let i = 0; i < C.length; i++) {
     if (C[i]) {
       defCmd(C[i]);
-      D.keyMap.dyalogDefault[`'${String.fromCharCode(0xf800 + i)}'`] = C[i];
+      D.keyMap.dyalogDefault[String.fromCharCode(0xf800 + i)] = C[i];
     }
   }
+  D.mapScanCodes = (me) => {
+    me.onKeyDown((e) => {
+      const { key } = e.browserEvent;
+      const cmd = D.keyMap.dyalogDefault[key];
+      if (key.length === 1 && cmd && D.commands[cmd]) {
+        e.preventDefault();
+        e.stopPropagation();
+        D.commands[cmd](me);
+      }
+    });
+  };
   D.mapKeys = (ed) => {
     const { me } = ed;
     const kc = monaco.KeyCode;
@@ -353,6 +291,20 @@
     }
     addCmd(D.keyMap.dyalogDefault);
     addCmd(D.keyMap.dyalog);
+    me.addCommand(
+      kc.Tab,
+      () => ed.indentOrComplete(me),
+      '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode',
+    );
+    me.addCommand(
+      kc.RightArrow,
+      () => me.trigger('editor', 'acceptSelectedSuggestion'),
+      'suggestWidgetVisible',
+    );
+    me.addCommand(kc.DownArrow, () => ed.DC(me), '!suggestWidgetVisible && !findInputFocussed');
+    me.addCommand(kc.UpArrow, () => ed.UC(me), '!suggestWidgetVisible && !findInputFocussed');
+    me.addCommand(kc.RightArrow, () => ed.RC(me), '!suggestWidgetVisible && !findInputFocussed');
+
     me.addAction({
       id: 'dyalog-skip-to-line',
       contextMenuGroupId: 'navigation',

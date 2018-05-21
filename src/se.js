@@ -50,7 +50,7 @@
       renderLineHighlight: D.prf.renderLineHighlight(),
       selectionHighlight: D.prf.selectionHighlight(),
       snippetSuggestions: D.prf.snippetSuggestions(),
-      suggestOnTriggerCharacters: D.prf.autocompletion()  === 'classic',
+      suggestOnTriggerCharacters: D.prf.autocompletion() === 'classic',
       useTabStops: false,
       wordBasedSuggestions: false,
       wordWrap: D.prf.wrap() ? 'on' : 'off',
@@ -70,32 +70,30 @@
     se.tracer = me.createContextKey('tracer', true);
     me.listen = true;
     se.oModel = monaco.editor.createModel('');
+    D.mapScanCodes(me);
     D.mapKeys(se); D.prf.keys(D.mapKeys.bind(this, se));
-    me.addCommand(
-      monaco.KeyCode.Tab,
-      () => se.indentOrComplete(me),
-      '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode',
-    );
-    me.addCommand(
-      monaco.KeyCode.RightArrow,
-      () => me.trigger('editor', 'acceptSelectedSuggestion'),
-      'suggestWidgetVisible',
-    );
 
     let mouseL = 0; let mouseC = 0; let mouseTS = 0;
     me.onMouseDown((e) => {
       const t = e.target;
       const mt = monaco.editor.MouseTargetType;
       const p = t.position;
-      if (t.type === mt.CONTENT_TEXT) {
-        if (e.event.timestamp - mouseTS < 400 && mouseL === p.lineNumber && mouseC === p.column) {
-          se.ED(me); e.event.preventDefault(); e.event.stopPropagation();
+      const l = p.lineNumber;
+      const c = p.column;
+      if (e.event.middleButton) {
+        e.event.preventDefault();
+        e.event.stopPropagation();
+      } else if (t.type === mt.CONTENT_TEXT) {
+        if (e.event.timestamp - mouseTS < 400 && mouseL === l && mouseC === c) {
+          e.event.preventDefault();
+          e.event.stopPropagation();
+          se.ED(me);
         }
-        mouseL = p.lineNumber; mouseC = p.column; mouseTS = e.event.timestamp;
+        mouseL = l; mouseC = c; mouseTS = e.event.timestamp;
       }
     });
     me.onDidChangeModelContent((e) => {
-      if (!me.listen || me.dyalogBQ) return;
+      if (!me.listen || me.model.bqc) return;
       e.changes.forEach((c) => {
         const l0 = c.range.startLineNumber;
         const l1 = c.range.endLineNumber;
@@ -125,6 +123,7 @@
       se.btm = se.me.getLayoutInfo().contentHeight + e.scrollTop;
     });
     me.onDidFocusEditor(() => { se.focusTS = +new Date(); se.ide.focusedWin = se; });
+    me.onDidChangeCursorPosition(e => ide.setCursorPosition(e.position));
     se.promptType = 0; // see ../docs/protocol.md #SetPromptType
     se.processAutocompleteReply = D.ac(me);
     me.viewModel.viewLayout.constructor.LINES_HORIZONTAL_EXTRA_PX = 14;
@@ -133,6 +132,14 @@
       se.me.revealLineInCenterIfOutsideViewport(se.me.model.getLineCount());
     });
     se.histRead();
+    se.taBuffer = []; // type ahead buffer
+    se.taReplay = () => {
+      if (!se.taBuffer.length) return;
+      const k = se.taBuffer.shift();
+      if (typeof k === 'string') se.insert(k);
+      else document.activeElement.dispatchEvent(k);
+      setTimeout(se.taReplay, 1);
+    };
   }
   Se.prototype = {
     histRead() {
@@ -195,15 +202,14 @@
       const { me } = se;
       const l = me.model.getLineCount();
       const s0 = me.model.getLineContent(l);
-      const p = '      ';
-      let sp = s.slice(-1) === '\n' ? s + p : s;
+      let sp = s;
       se.isReadOnly && me.updateOptions({ readOnly: false });
       if (this.dirty[l] != null) {
         const cp = me.getPosition();
         se.edit([{ range: new monaco.Range(l, 1, l, 1 + s0.length), text: `${s0}\n${sp}` }]);
         me.setPosition(cp);
       } else {
-        sp = se.isReadOnly && s0 !== p ? (s0 + sp) : sp;
+        sp = se.isReadOnly && s0 ? (s0 + sp) : sp;
         se.edit([{ range: new monaco.Range(l, 1, l, 1 + s0.length), text: sp }]);
         const ll = me.model.getLineCount();
         const lc = me.model.getLineMaxColumn(ll);
@@ -215,10 +221,10 @@
       se.oModel.setValue(me.getValue());
       me.model._commandManager.clear();
     },
-    edit(edits) {
+    edit(edits, sel) {
       const { me } = this;
       me.listen = false;
-      me.executeEdits('D', edits);
+      me.executeEdits('D', edits, sel);
       me.listen = true;
     },
     prompt(x) {
@@ -229,14 +235,29 @@
       se.promptType = x;
       se.isReadOnly = !x;
       me.updateOptions({ readOnly: !x });
-      if ((x === 1 && this.dirty[l] == null) || [0, 1, 3, 4].indexOf(x) < 0) {
-        se.edit([{ range: new monaco.Range(l, 1, l, 1 + t.length), text: '      ' }]);
+      if ((x === 1 && this.dirty[l] == null) || ![0, 1, 3, 4].includes(x)) {
+        se.edit(
+          [{ range: new monaco.Range(l, 1, l, 1 + t.length), text: '      ' }],
+          [new monaco.Selection(l, 7, l, 7)],
+        );
       } else if (t === '      ') {
         se.edit([{ range: new monaco.Range(l, 1, l, 7), text: '' }]);
       } else {
         me.setPosition({ lineNumber: l, column: 1 + t.length });
       }
-      // x && cm.clearHistory();
+      if (!x) {
+        se.taBuffer.length = 0;
+        se.taCb = me.onKeyDown((ke) => {
+          const be = ke.browserEvent;
+          const k = be.key;
+          if (k.length === 1 && !be.ctrlKey && !be.altKey && !be.metaKey) se.taBuffer.push(k);
+          else se.taBuffer.push(be);
+        });
+      } else {
+        if (se.taCb) { se.taCb.dispose(); delete se.taCb; }
+        se.taBuffer.length && se.taReplay();
+      }
+      // x && me.model._commandManager.clear();
     },
     updSize() {
       const se = this;
@@ -306,6 +327,7 @@
       D.elw && D.elw.focus();
       window.focused || window.focus();
       this.me.focus();
+      this.ide.setCursorPosition(this.me.getPosition());
     },
     insert(ch) {
       this.isReadOnly || this.me.trigger('editor', 'type', { text: ch });
@@ -319,7 +341,7 @@
       me.executeEdits('D', [{
         range: new monaco.Range(l, 1, l, me.model.getLineMaxColumn(l)),
         text: s,
-      }]);
+      }], [new monaco.Selection(l, s.length + 1, l, s.length + 1)]);
     },
     exec(trace) {
       let w;
@@ -378,13 +400,13 @@
     selectionHighlight(x) { this.me.updateOptions({ selectionHighlight: x }); },
     snippetSuggestions(x) { this.me.updateOptions({ snippetSuggestions: x ? 'bottom' : 'none' }); },
     autocompletion(x) {
-      const on = x === 'classic';
       this.me.updateOptions({
-        quickSuggestions: on,
-        suggestOnTriggerCharacters: on,
+        quickSuggestions: x,
+        suggestOnTriggerCharacters: x,
       });
     },
     autocompletionDelay(x) { this.me.updateOptions({ quickSuggestionsDelay: x }); },
+    execCommand(cmd) { this[cmd] && this[cmd](this.me); },
     zoom(z) {
       const se = this;
       const { me } = se;
@@ -441,6 +463,7 @@
       const se = this;
       const c = me.getPosition();
       const l = c.lineNumber;
+      const lc = me.model.getLineCount();
       if (se.dirty[l] === 0) {
         if (l === me.model.getLineCount()) {
           se.edit([{ range: new monaco.Range(l, 1, l + 1, 1), text: '' }]);
@@ -458,11 +481,12 @@
         se.dirty = {};
         Object.keys(h).forEach((x) => { se.dirty[+x - (+x > l)] = h[x]; });
       } else if (se.dirty[l] != null) {
+        const text = l === lc && !se.dirty[l].length ? '      ' : se.dirty[l];
         se.edit([{
           range: new monaco.Range(l, 1, l, me.model.getLineMaxColumn(l)),
-          text: se.dirty[l],
+          text,
         }]);
-        me.setPosition({ lineNumber: l, column: 1 + se.dirty[l].search(/\S|$/) });
+        me.setPosition({ lineNumber: l, column: 1 + text.search(/\S|$/) });
         delete se.dirty[l];
       }
       se.oModel.setValue(me.getValue());
@@ -473,6 +497,18 @@
     TC() { this.exec(1); },
     LN() { D.prf.lineNums.toggle(); },
     MA() { D.send('RestartThreads', {}); },
+    DC() {
+      const { me } = this;
+      const l = me.getPosition().lineNumber;
+      if (l < me.model.getLineCount() || /^\s*$/.test(me.model.getLineContent(l))) {
+        me.trigger('editor', 'cursorDown');
+      }
+    },
+    UC() { this.me.trigger('editor', 'cursorUp'); },
+    LC() { this.me.trigger('editor', 'cursorLeft'); },
+    RC() { this.me.trigger('editor', 'cursorRight'); },
+    SA() { this.me.trigger('editor', 'selectAll'); },
+    TO() { this.me.trigger('editor', 'editor.fold'); }, // (editor.unfold) is there a toggle?
     indentOrComplete(me) {
       const sels = me.getSelections();
 

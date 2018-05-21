@@ -11,11 +11,6 @@ const Console = console;
       };
       document.body.className += ` zoom${D.prf.zoom()}`;
 
-      D.prf.zoom((z) => {
-        if (!D.ide) return;
-        if (D.ide.floating) D.ipc.of.ride_master.emit('zoom', z);
-        else D.ide.zoom(z);
-      });
       // context menu
       const cmitems = ['Cut', 'Copy', 'Paste'].map(x => ({ label: x, role: x.toLowerCase() }))
         .concat({ type: 'separator' })
@@ -53,39 +48,48 @@ const Console = console;
     }
 
     const loc = window.location;
-    if (/^\?prf$/.test(loc.search)) {
-      document.body.className += ' floating-window';
-      D.IPC_Prf();
-    } else if (/^\?\d+$/.test(loc.search)) {
-      const winId = +loc.search.slice(1);
-      document.body.className += ' floating-window';
-      D.IPC_Client(winId);
-    } else if (D.el) {
-      D.IPC_Server();
-      let bw = new D.el.BrowserWindow({
-        show: false,
-        parent: D.elw,
-        alwaysOnTop: true,
-        minWidth: 600,
-        minHeight: 600,
-      });
-      bw.loadURL(`${loc}?prf`); // bw.webContents.toggleDevTools();
-      D.prf_bw = { id: bw.id };
-      bw = new D.el.BrowserWindow({
-        show: false,
-        parent: D.elw,
-        alwaysOnTop: true,
-        modal: true,
-        width: 400,
-        height: 350,
-        resizable: false,
-        minimizable: false,
-        maximizable: false,
-      });
-      bw.loadURL(`file://${__dirname}/dialog.html`);
-      D.dlg_bw = { id: bw.id };
-      D.elw.focus();
-      nodeRequire(`${__dirname}/src/cn`)();
+    if (D.el) {
+      const qp = nodeRequire('querystring').parse(loc.search.slice(1));
+      if (qp.type === 'prf') {
+        D.ipc.config.appspace = qp.appid;
+        document.body.className += ' floating-window';
+        D.IPC_Prf();
+      } else if (qp.type === 'editor') {
+        D.ipc.config.appspace = qp.appid;
+        document.body.className += ' floating-window';
+        D.IPC_Client(+qp.winId);
+      } else {
+        D.IPC_Server();
+        const appid = D.ipc.config.appspace;
+        let bw = new D.el.BrowserWindow({
+          show: false,
+          parent: D.elw,
+          alwaysOnTop: false,
+          fullscreen: false,
+          fullscreenable: false,
+          minWidth: 600,
+          minHeight: 600,
+        });
+        bw.loadURL(`${loc}?type=prf&appid=${appid}`);
+        D.prf_bw = { id: bw.id };
+        bw = new D.el.BrowserWindow({
+          show: false,
+          parent: D.elw,
+          alwaysOnTop: false,
+          fullscreen: false,
+          fullscreenable: false,
+          modal: true,
+          width: 400,
+          height: 350,
+          resizable: false,
+          minimizable: false,
+          maximizable: false,
+        });
+        bw.loadURL(`file://${__dirname}/dialog.html?appid=${appid}`);
+        D.dlg_bw = { id: bw.id };
+        D.elw.focus();
+        nodeRequire(`${__dirname}/src/cn`)();
+      }
     } else {
       const ws = new WebSocket((loc.protocol === 'https:' ? 'wss://' : 'ws://') + loc.host);
       const q = [];
@@ -110,12 +114,12 @@ const Console = console;
         setTimeout(() => {
           let q = true;
           if (D.prf.sqp()) {
-            const msg = D.local ? 'Quit Dyalog APL.' : 'Disconnect from interpreter.';
+            const msg = D.spawned ? 'Quit Dyalog APL.' : 'Disconnect from interpreter.';
             $.confirm(`${msg} Are you sure?`, document.title, (x) => { q = x; });
           }
           if (q) {
             if (D.ipc) D.ipc.server.stop();
-            if (D.local) {
+            if (D.spawned) {
               D.send('Exit', { code: 0 });
               // Wait for the disconnect message
             } else {

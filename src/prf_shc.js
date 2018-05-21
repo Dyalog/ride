@@ -22,9 +22,10 @@
       const kn = monaco.KeyCode[x.keyCode];
       const be = x.browserEvent;
       const isMeta = meta.has(kn);
-      const s = (be.shiftKey && (be.type === 'keydown' || be.which) ? 'Shift-' : '') +
-              (be.ctrlKey ? 'Ctrl-' : '') + (be.altKey ? 'Alt-' : '') + (be.metaKey ? 'Cmd-' : '') +
-              (isMeta ? '' : D.keyMap.labels[kn]);
+      const s = (be.ctrlKey ? 'Ctrl-' : '') + (be.altKey ? 'Alt-' : '') +
+        (be.shiftKey && (be.type === 'keydown' || be.which) ? 'Shift-' : '') +
+        (be.metaKey ? 'Cmd-' : '') +
+        (isMeta ? '' : D.keyMap.labels[kn]);
       me.setValue(s || 'Press keystroke...');
       if (!isMeta) { r = s; close(); }
       x.preventDefault(); x.stopPropagation(); return !1;
@@ -67,7 +68,8 @@
     let empty = 1;
     q.sc_clr.hidden = !s;
     for (let i = 0; i < a.length; i++) {
-      const h = a[i].textContent.toLowerCase().indexOf(s) < 0 && !a[i].querySelectorAll('.shc_dup').length;
+      const h = [...a[i].childNodes].map(n => n.textContent).join(' ').toLowerCase().indexOf(s) < 0
+        && !a[i].querySelectorAll('.shc_dup').length;
       a[i].hidden = h;
       empty = empty && h;
     }
@@ -76,23 +78,25 @@
   function loadFrom(h) {
     let html = '<table>';
     const { cmds } = D;
+    const pfKey = c => `<input class=shc_val id=shc_val_${c}` +
+      ' placeholder="(<CMD>|text)*"' +
+      ' title="Sequence of commands (command code in angle brackets) to execute and/or text to type">';
     for (let i = 0; i < cmds.length; i++) {
       const x = cmds[i];
       const [c, s, d] = x; // c:code,s:description,d:default
       html += `<tr data-code=${c}>` +
         `<td class=shc_code>${c}` +
-        `<td>${s || `<input class=shc_val id=shc_val_${c}>`}` + // pfkeys show an <input> for the commands mapped to them
+        // pfkeys show an <input> for the commands mapped to them
+        `<td>${s || pfKey(c)}` +
         `<td id=shc_itm_${c}>${(h[c] || d).map(keyHTML).join('')}` +
-        // '<button class=shc_add title="Add shortcut">+</button>' +
         '<button class=shc_add title="Add shortcut"><span class="fas fa-plus"></span></button>' +
-        // `<td><button class=shc_rst title="Reset &quot;${c}&quot; to its defaults">↶</button>`;
         `<td><button class=shc_rst title="Reset &quot;${c}&quot; to its defaults"><span class="fas fa-undo-alt"></span></button>`;
     }
     q.tbl_wr.innerHTML = `${html}</table>`;
     updDups();
     if (q.sc.value) { q.sc.value = ''; updSC(); }
     const a = D.prf.pfkeys();
-    for (let i = 1; i <= 12; i++) document.getElementById(`shc_val_PF${i}`).value = a[i];
+    for (let i = 1; i <= 48; i++) document.getElementById(`shc_val_PF${i}`).value = a[i] || '';
   }
   function updKeys(x) {
     const h = {};
@@ -186,7 +190,7 @@
         if (h[c] && JSON.stringify(h[c].sort()) === JSON.stringify(d)) delete h[c];
       }
       a = [''];
-      for (let i = 1; i <= 12; i++) { a.push(document.getElementById(`shc_val_PF${i}`).value); }
+      for (let i = 1; i <= 48; i++) { a.push(document.getElementById(`shc_val_PF${i}`).value); }
       D.prf.keys(h); D.prf.pfkeys(a);
     },
     activate() { q.sc.focus(); },

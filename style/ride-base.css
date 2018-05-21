@@ -1,6 +1,3 @@
-.hidden {
-  display: none;
-}
 #cn {
   position: absolute;
   z-index: 2;
@@ -183,9 +180,6 @@
   height: 50%;
   display: block;
 }
-#debug .toolbar {
-  border: none;
-}
 #debug .ctl_listview_header {
   height: 14px;
   padding: 5px;
@@ -197,6 +191,11 @@
   height: calc(100% - 24px);
 }
 /*various dialogs*/
+#dlg_modal_overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
 .dlg {
   position: absolute;
 }
@@ -280,7 +279,7 @@
 #gd_content {
   padding: 1em;
   line-height: 1.5;
-  margin-bottom: 2em;
+  margin-bottom: 60px;
 }
 .ui-dialog .ui-dialog-content.task_dlg {
   padding: 8px;
@@ -983,11 +982,11 @@ body .ui-tooltip {
   font-family: apl, monospace;
   font-size: 18px;
   cursor: default;
-  line-height: 22px;
 }
 #lb b {
   font-weight: normal;
-  width: 22px;
+  width: 1em;
+  padding: 3px;
   display: inline-block;
   text-align: center;
   border-radius: 50%;
@@ -999,33 +998,20 @@ body .ui-tooltip {
 #lb .ui-sortable-helper {
   cursor: move;
 }
-#lb_prf {
-  float: right;
-  font-size: 14px;
-  margin-right: 4px;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-}
 #lb_tip {
   font-family: apl, monospace;
   font-size: 18px;
   position: absolute;
-  margin-top: 6px;
   border-radius: 2px;
 }
 #lb_tip hr {
   margin: 0;
 }
-#lb_tip div,
-#lb_tip pre {
+#lb_tip div {
   padding: 8px;
 }
-#lb_tip_tri {
-  position: absolute;
-  border: solid;
-  border-width: 0 16px 16px 16px;
-  content: "";
+#lb_tip_body {
+  overflow: auto;
 }
 #lb_tip_desc {
   text-align: center;
@@ -1033,12 +1019,13 @@ body .ui-tooltip {
 }
 /*menu (see ../src/menu.js for the DOM structure)*/
 .menu {
-  height: 18px;
-  line-height: 17px;
+  height: 22px;
+  line-height: 21px;
   cursor: default;
   padding: 0;
-  margin: 2px 0 0 0;
+  margin: 0;
   font-family: Roboto, sans-serif;
+  user-select: none;
 }
 .menu a {
   text-decoration: none;
@@ -1059,23 +1046,23 @@ body .ui-tooltip {
 .menu .m-box {
   display: none;
   border-style: solid;
-  border-width: 1px 2px 2px 1px;
+  border-width: 1px;
   position: absolute;
-  padding: 1px;
-  margin: 2px 0 0 0;
+  padding: 0;
+  margin: 0;
   min-width: 125px;
   white-space: nowrap;
 }
 .menu .m-box .m-box {
   margin-left: 100%;
-  margin-top: -17px;
+  margin-top: -21px;
 }
 .menu .m-box a {
   display: block;
-  height: 17px;
-  line-height: 17px;
+  height: 21px;
+  line-height: 21px;
   text-align: left;
-  padding: 1px 17px;
+  padding: 1px 21px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -1093,6 +1080,12 @@ body .ui-tooltip {
 .monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main {
   white-space: pre;
 }
+.pendent .monaco-editor .cursor {
+  visibility: hidden!important;
+}
+.pendent .tb_btn {
+  pointer-events: none;
+}
 /*Prefs>Code*/
 #code {
   overflow: auto;
@@ -1109,7 +1102,7 @@ body .ui-tooltip {
   margin-top: 5px !important;
 }
 .web #code {
-  top: 55px;
+  top: 75px;
 }
 #code_aim {
   margin-left: 48px;
@@ -1145,7 +1138,7 @@ body .ui-tooltip {
 }
 .web #col_me,
 .web #col_settings {
-  top: 100px;
+  top: 126px;
 }
 #col_fg {
   width: 48px;
@@ -1401,11 +1394,14 @@ input.lyt_g3:hover {
 #pmenu_ta_wr {
   position: absolute;
   left: 4px;
-  right: 8px;
+  right: 4px;
   top: 94px;
   bottom: 70px;
   overflow: hidden;
   padding: 4px;
+}
+.web #pmenu_ta_wr {
+  top: 120px;
 }
 #pmenu_ta {
   width: 100%;
@@ -1442,7 +1438,7 @@ input.lyt_g3:hover {
   width: 50%;
 }
 .web #shc {
-  top: 55px;
+  top: 70px;
 }
 #shc_rst_all {
   float: right;
@@ -1742,6 +1738,33 @@ h2 {
   border-radius: 10px;
   padding: 5px;
 }
+.hidden {
+  display: none;
+}
+#sb {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+#sb div {
+  display: inline-block;
+  padding: 3px 6px 4px;
+  user-select: none;
+  cursor: default;
+}
+#sb div.right {
+  float: right;
+}
+#sb div[hidden] {
+  display: none;
+}
+#sb div .tb_btn {
+  padding: 0;
+}
+#sb #sb_prf {
+  padding: 2px 6px 3px;
+}
 /*Status window*/
 /*info*/
 /*error*/
@@ -1803,10 +1826,13 @@ h2 {
   visibility: visible;
 }
 .toolbar {
-  height: 24px;
   cursor: default;
   overflow: hidden;
-  padding: 6px;
+  padding: 3px 6px 2px;
+}
+.toolbar .tb_btn,
+.toolbar .tb_sep {
+  font-size: 1.2em;
 }
 .no-toolbar .toolbar {
   display: none;
@@ -1818,17 +1844,22 @@ h2 {
   display: none;
 }
 .tracer .toolbar .tc_only {
+  display: inline-block;
+}
+.tracer .toolbar .tc_only.tb_sep {
   display: inline;
 }
 .tb_btn {
   display: inline-block;
   padding: 2px;
+  width: 1em;
   text-align: center;
   vertical-align: middle;
   cursor: pointer;
 }
 .tb_sep {
   margin: 0 8px 0 0;
+  vertical-align: middle;
 }
 #vt_bln {
   font-family: apl, monospace;
@@ -1877,7 +1908,11 @@ body.floating-window {
   display: block;
 }
 .ride_win.edit_trace .ride_win_me {
-  height: calc(100% - 36px);
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
 }
 .ride_win.edit_trace.no-toolbar .ride_win_me {
   height: 100%;
@@ -2006,9 +2041,6 @@ body.floating-window {
 .ui-tooltip {
   z-index: 9999;
 }
-#lb_tip_tri {
-  z-index: 301;
-}
 #lb_tip {
   z-index: 300;
 }
@@ -2032,275 +2064,206 @@ body.floating-window {
 .zoom12 #debug,
 .zoom12 #lb_tip *,
 .zoom12 #vt_bln,
-.zoom12 #lb_inner b {
+.zoom12 #lb_inner b,
+.zoom12 #sb,
+.zoom12 .toolbar {
   font-size: 48px;
-}
-.zoom12 #lb_inner b {
-  width: 52px;
-  height: 52px;
-  line-height: 52px;
 }
 .zoom11 #wse,
 .zoom11 #debug,
 .zoom11 #lb_tip *,
 .zoom11 #vt_bln,
-.zoom11 #lb_inner b {
+.zoom11 #lb_inner b,
+.zoom11 #sb,
+.zoom11 .toolbar {
   font-size: 42px;
-}
-.zoom11 #lb_inner b {
-  width: 46px;
-  height: 46px;
-  line-height: 46px;
 }
 .zoom10 #wse,
 .zoom10 #debug,
 .zoom10 #lb_tip *,
 .zoom10 #vt_bln,
-.zoom10 #lb_inner b {
+.zoom10 #lb_inner b,
+.zoom10 #sb,
+.zoom10 .toolbar {
   font-size: 36px;
-}
-.zoom10 #lb_inner b {
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
 }
 .zoom9 #wse,
 .zoom9 #debug,
 .zoom9 #lb_tip *,
 .zoom9 #vt_bln,
-.zoom9 #lb_inner b {
+.zoom9 #lb_inner b,
+.zoom9 #sb,
+.zoom9 .toolbar {
   font-size: 32px;
-}
-.zoom9 #lb_inner b {
-  width: 36px;
-  height: 36px;
-  line-height: 36px;
 }
 .zoom8 #wse,
 .zoom8 #debug,
 .zoom8 #lb_tip *,
 .zoom8 #vt_bln,
-.zoom8 #lb_inner b {
+.zoom8 #lb_inner b,
+.zoom8 #sb,
+.zoom8 .toolbar {
   font-size: 28px;
-}
-.zoom8 #lb_inner b {
-  width: 32px;
-  height: 32px;
-  line-height: 32px;
 }
 .zoom7 #wse,
 .zoom7 #debug,
 .zoom7 #lb_tip *,
 .zoom7 #vt_bln,
-.zoom7 #lb_inner b {
+.zoom7 #lb_inner b,
+.zoom7 #sb,
+.zoom7 .toolbar {
   font-size: 26px;
-}
-.zoom7 #lb_inner b {
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
 }
 .zoom6 #wse,
 .zoom6 #debug,
 .zoom6 #lb_tip *,
 .zoom6 #vt_bln,
-.zoom6 #lb_inner b {
+.zoom6 #lb_inner b,
+.zoom6 #sb,
+.zoom6 .toolbar {
   font-size: 24px;
-}
-.zoom6 #lb_inner b {
-  width: 30px;
-  height: 30px;
-  line-height: 30px;
 }
 .zoom5 #wse,
 .zoom5 #debug,
 .zoom5 #lb_tip *,
 .zoom5 #vt_bln,
-.zoom5 #lb_inner b {
+.zoom5 #lb_inner b,
+.zoom5 #sb,
+.zoom5 .toolbar {
   font-size: 22px;
-}
-.zoom5 #lb_inner b {
-  width: 28px;
-  height: 28px;
-  line-height: 28px;
 }
 .zoom4 #wse,
 .zoom4 #debug,
 .zoom4 #lb_tip *,
 .zoom4 #vt_bln,
-.zoom4 #lb_inner b {
+.zoom4 #lb_inner b,
+.zoom4 #sb,
+.zoom4 .toolbar {
   font-size: 20px;
-}
-.zoom4 #lb_inner b {
-  width: 26px;
-  height: 26px;
-  line-height: 26px;
 }
 .zoom3 #wse,
 .zoom3 #debug,
 .zoom3 #lb_tip *,
 .zoom3 #vt_bln,
-.zoom3 #lb_inner b {
+.zoom3 #lb_inner b,
+.zoom3 #sb,
+.zoom3 .toolbar {
   font-size: 19px;
-}
-.zoom3 #lb_inner b {
-  width: 25px;
-  height: 25px;
-  line-height: 25px;
 }
 .zoom2 #wse,
 .zoom2 #debug,
 .zoom2 #lb_tip *,
 .zoom2 #vt_bln,
-.zoom2 #lb_inner b {
+.zoom2 #lb_inner b,
+.zoom2 #sb,
+.zoom2 .toolbar {
   font-size: 18px;
-}
-.zoom2 #lb_inner b {
-  width: 24px;
-  height: 24px;
-  line-height: 24px;
 }
 .zoom1 #wse,
 .zoom1 #debug,
 .zoom1 #lb_tip *,
 .zoom1 #vt_bln,
-.zoom1 #lb_inner b {
+.zoom1 #lb_inner b,
+.zoom1 #sb,
+.zoom1 .toolbar {
   font-size: 17px;
-}
-.zoom1 #lb_inner b {
-  width: 23px;
-  height: 23px;
-  line-height: 23px;
 }
 .zoom0 #wse,
 .zoom0 #debug,
 .zoom0 #lb_tip *,
 .zoom0 #vt_bln,
-.zoom0 #lb_inner b {
+.zoom0 #lb_inner b,
+.zoom0 #sb,
+.zoom0 .toolbar {
   font-size: 16px;
-}
-.zoom0 #lb_inner b {
-  width: 22px;
-  height: 22px;
-  line-height: 22px;
 }
 .zoom-1 #wse,
 .zoom-1 #debug,
 .zoom-1 #lb_tip *,
 .zoom-1 #vt_bln,
-.zoom-1 #lb_inner b {
+.zoom-1 #lb_inner b,
+.zoom-1 #sb,
+.zoom-1 .toolbar {
   font-size: 15px;
-}
-.zoom-1 #lb_inner b {
-  width: 21px;
-  height: 21px;
-  line-height: 21px;
 }
 .zoom-2 #wse,
 .zoom-2 #debug,
 .zoom-2 #lb_tip *,
 .zoom-2 #vt_bln,
-.zoom-2 #lb_inner b {
+.zoom-2 #lb_inner b,
+.zoom-2 #sb,
+.zoom-2 .toolbar {
   font-size: 14px;
-}
-.zoom-2 #lb_inner b {
-  width: 20px;
-  height: 20px;
-  line-height: 20px;
 }
 .zoom-3 #wse,
 .zoom-3 #debug,
 .zoom-3 #lb_tip *,
 .zoom-3 #vt_bln,
-.zoom-3 #lb_inner b {
+.zoom-3 #lb_inner b,
+.zoom-3 #sb,
+.zoom-3 .toolbar {
   font-size: 13px;
-}
-.zoom-3 #lb_inner b {
-  width: 19px;
-  height: 19px;
-  line-height: 19px;
 }
 .zoom-4 #wse,
 .zoom-4 #debug,
 .zoom-4 #lb_tip *,
 .zoom-4 #vt_bln,
-.zoom-4 #lb_inner b {
+.zoom-4 #lb_inner b,
+.zoom-4 #sb,
+.zoom-4 .toolbar {
   font-size: 12px;
-}
-.zoom-4 #lb_inner b {
-  width: 18px;
-  height: 18px;
-  line-height: 18px;
 }
 .zoom-5 #wse,
 .zoom-5 #debug,
 .zoom-5 #lb_tip *,
 .zoom-5 #vt_bln,
-.zoom-5 #lb_inner b {
+.zoom-5 #lb_inner b,
+.zoom-5 #sb,
+.zoom-5 .toolbar {
   font-size: 11px;
-}
-.zoom-5 #lb_inner b {
-  width: 17px;
-  height: 17px;
-  line-height: 17px;
 }
 .zoom-6 #wse,
 .zoom-6 #debug,
 .zoom-6 #lb_tip *,
 .zoom-6 #vt_bln,
-.zoom-6 #lb_inner b {
+.zoom-6 #lb_inner b,
+.zoom-6 #sb,
+.zoom-6 .toolbar {
   font-size: 10px;
-}
-.zoom-6 #lb_inner b {
-  width: 16px;
-  height: 16px;
-  line-height: 16px;
 }
 .zoom-7 #wse,
 .zoom-7 #debug,
 .zoom-7 #lb_tip *,
 .zoom-7 #vt_bln,
-.zoom-7 #lb_inner b {
+.zoom-7 #lb_inner b,
+.zoom-7 #sb,
+.zoom-7 .toolbar {
   font-size: 9px;
-}
-.zoom-7 #lb_inner b {
-  width: 15px;
-  height: 15px;
-  line-height: 15px;
 }
 .zoom-8 #wse,
 .zoom-8 #debug,
 .zoom-8 #lb_tip *,
 .zoom-8 #vt_bln,
-.zoom-8 #lb_inner b {
+.zoom-8 #lb_inner b,
+.zoom-8 #sb,
+.zoom-8 .toolbar {
   font-size: 8px;
-}
-.zoom-8 #lb_inner b {
-  width: 14px;
-  height: 14px;
-  line-height: 14px;
 }
 .zoom-9 #wse,
 .zoom-9 #debug,
 .zoom-9 #lb_tip *,
 .zoom-9 #vt_bln,
-.zoom-9 #lb_inner b {
+.zoom-9 #lb_inner b,
+.zoom-9 #sb,
+.zoom-9 .toolbar {
   font-size: 7px;
-}
-.zoom-9 #lb_inner b {
-  width: 13px;
-  height: 13px;
-  line-height: 13px;
 }
 .zoom-10 #wse,
 .zoom-10 #debug,
 .zoom-10 #lb_tip *,
 .zoom-10 #vt_bln,
-.zoom-10 #lb_inner b {
+.zoom-10 #lb_inner b,
+.zoom-10 #sb,
+.zoom-10 .toolbar {
   font-size: 6px;
-}
-.zoom-10 #lb_inner b {
-  width: 12px;
-  height: 12px;
-  line-height: 12px;
 }
