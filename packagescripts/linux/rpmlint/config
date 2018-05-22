@@ -1,2 +1,4 @@
 from Config import *
 addFilter("E: dir-or-file-in-opt ")
+addFilter("E: binary-or-shlib-defines-rpath ")
+addFilter("E: missing-call-to-chdir-with-chroot ")

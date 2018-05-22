@@ -30,7 +30,6 @@ BUILDNAME=$(node -e "console.log($(cat package.json).name)") # "ride40" or simil
 
 echo "Packaging for $TARGET"
 
-RIDEDIR="_/${BUILDNAME}/${APP_NAME}-linux"
 ICON="D.svg"
 SBOXDIR=/tmp/ride$$
 postinst=/tmp/postinst$$
@@ -67,6 +66,7 @@ fi
 
 cat > $postinst <<EOFpostinst
 #!/bin/sh
+set -e
 
 if command -v update-alternatives > /dev/null ; then
 	update-alternatives --install /usr/bin/ride ride ${EXECUTABLE} $(echo "${BASE_VERSION}" | sed 's/\.//g')
@@ -107,6 +107,7 @@ EOFpostinst
 
 cat > $prerm <<EOFprerm
 #!/bin/sh
+set -e
 
 if command -v update-alternatives > /dev/null ; then
 	update-alternatives --remove ride ${EXECUTABLE}
@@ -159,6 +160,7 @@ createDEB() {
 		-a "${PACKAGECPUTYPE}"			\
 		--epoch 0				\
 		--description "Remote IDE for Dyalog APL"	\
+		--deb-priority optional			\
 		opt usr
 
 	command -v lintian > /dev/null && lintian --include-dir packagescripts/linux/lintian --profile ride "ship/ride-${RIDEVERSION}_linux.${PACKAGECPUTYPE}.deb" || true
@@ -211,6 +213,8 @@ cleanup() {
 
 for CPUTYPE in x64 armv7l ; do
 
+	RIDEDIR="_/${BUILDNAME}/${APP_NAME}-linux-${CPUTYPE}"
+
 	if [ "${CPUTYPE}" = "x64" ] ; then
 		PACKAGECPUTYPE="amd64"
 	elif [ "${CPUTYPE}" = "armv7l" ] ; then
@@ -222,8 +226,12 @@ for CPUTYPE in x64 armv7l ; do
 	createPackageFiles
 
 	mkdir -p "${SBOXDIR}/opt/ride-${BASE_VERSION}"
+	cp -R "${RIDEDIR}"/* "${SBOXDIR}/opt/ride-${BASE_VERSION}"/
+	find "${SBOXDIR}" -type f "(" -name "*.so" -o -name "*.svg" -o -name "*.js" ")" | xargs chmod -x # for lintian
+	find "${SBOXDIR}" -name ".git*" | xargs rm -r # for lintian
+	find "${SBOXDIR}" -type f "(" -name ".*" -o -name "*.c" ")"| xargs rm # for rpmlint
+
 	mkdir -p ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps
-	cp -R "${RIDEDIR}-${CPUTYPE}"/* "${SBOXDIR}/opt/ride-${BASE_VERSION}/"
 	cp "$ICON" ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps/ride.svg
 
 	if [ $CPUTYPE = armv7l ] ; then
