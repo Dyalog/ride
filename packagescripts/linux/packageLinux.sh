@@ -73,19 +73,19 @@ if command -v update-alternatives > /dev/null ; then
 	update-alternatives --install /usr/bin/ride-${BASE_VERSION} ride${BASE_VERSION_ND} ${EXECUTABLE} $(echo "${BASE_VERSION}" | sed 's/\.//g')
 fi
 
-# check for an installed interpreter and update its shortcut if it exists.
-if [ -f /usr/bin/dyalog ] ; then
-	## 16.0 has renamed the shortcut, this allows us to deal with 15.0 in a semi-sensible way
-	if ! [ -f /usr/share/applications/dyalog-tty.desktop ] ; then
-		sed 's/\(^Name=.*\)/\1 (tty)/' /usr/share/applications/dyalog.desktop > /usr/share/applications/dyalog-tty.desktop
-	fi
-	## This will always launch the most recent version of DyalogAPL the user has available
-	sed 's:^Exec=.*:Exec=env RIDE_SPAWN=/usr/bin/dyalog /usr/bin/ride-${BASE_VERSION}:' /usr/share/applications/dyalog-tty.desktop > /usr/share/applications/dyalog.desktop
-	sed -i 's/^Name=.*/Name=Dyalog APL/' /usr/share/applications/dyalog.desktop
-	sed -i 's/^Terminal=.*/Terminal=False/' /usr/share/applications/dyalog.desktop
-fi
-
 if [ -d /usr/share/applications ] ; then
+	# check for an installed interpreter and update its shortcut if it exists
+	if [ -f /usr/bin/dyalog ] ; then
+		## 16.0 has renamed the shortcut, this allows us to deal with 15.0 in a semi-sensible way
+		if ! [ -f /usr/share/applications/dyalog-tty.desktop ] ; then
+			sed 's/\(^Name=.*\)/\1 (tty)/' /usr/share/applications/dyalog.desktop > /usr/share/applications/dyalog-tty.desktop
+		fi
+		## This will always launch the most recent version of DyalogAPL the user has available
+		sed 's:^Exec=.*:Exec=env RIDE_SPAWN=/usr/bin/dyalog /usr/bin/ride-${BASE_VERSION}:' /usr/share/applications/dyalog-tty.desktop > /usr/share/applications/dyalog.desktop
+		sed -i 's/^Name=.*/Name=Dyalog APL/' /usr/share/applications/dyalog.desktop
+		sed -i 's/^Terminal=.*/Terminal=False/' /usr/share/applications/dyalog.desktop
+	fi
+
 	cat > /usr/share/applications/ride-${BASE_VERSION}.desktop <<-EOFdesktopFile
 		[Desktop Entry]
 		Encoding=UTF-8
