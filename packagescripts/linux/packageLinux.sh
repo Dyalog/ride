@@ -161,6 +161,8 @@ createDEB() {
 		--description "Remote IDE for Dyalog APL"	\
 		opt usr
 
+	command -v lintian > /dev/null && lintian --include-dir packagescripts/linux/lintian --profile ride "ship/ride-${RIDEVERSION}_linux.${PACKAGECPUTYPE}.deb" || true
+
 }
 
 createRPM() {
@@ -194,6 +196,8 @@ createRPM() {
 		--epoch 0				\
 		--description "Remote IDE for Dyalog APL"	\
 		opt usr
+
+	command -v rpmlint > /dev/null && rpmlint -f packagescripts/linux/rpmlint/config "ship/ride-${RIDEVERSION}_linux.${PACKAGECPUTYPE}.rpm" || true
 
 }
 
