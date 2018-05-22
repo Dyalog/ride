@@ -48,6 +48,25 @@
       else if (D.ide[cmd]) D.ide[cmd]();
       else $.err(`Unknown command: ${cmd}`);
     };
+    const evalExpr = (cond) => { 
+      const mVars = {
+        browser: !D.el,
+        mac: D.mac,
+        win: D.win,
+        true: true,
+      };
+      const RE = /(!)?(mac|win|browser|(\(.*\)))/g;
+      const test = (_, x, y) => {
+        if (!y) return false;
+        const exp = y[0] === '(' ? y.slice(1, y.length - 1).replace(RE, test) : y;
+        const b = exp.split('||').reduce((op, oc) => {
+          const g = oc.split('&&').reduce((ap, ac) => mVars[ac] && ap, true);
+          return g || op;
+        }, false);
+        return x ? !b : b;
+      };
+      return `(${cond})`.replace(RE, test) === 'true';
+    };
     for (let i = 0; i < lines.length; i++) {
       let s = lines[i];
       if (/^\s*$/.test(s = s.replace(/#.*/, ''))) continue;
@@ -56,7 +75,7 @@
       let cmd = ''; s = s.replace(/\=([a-z][a-z0-9]+)/i, (_, x) => { cmd = x; return ''; });
       const h = { ind: s.replace(/\S.*/, '').length, '': s.replace(/^\s*|\s*$/g, '') };
       while (h.ind <= stk[stk.length - 1].ind) stk.pop();
-      if (!cond || new Function(`var browser=${!D.el},mac=${D.mac},win=${D.win};return(${cond})`)()) {
+      if (!cond || evalExpr(cond)) {
         const base = stk[stk.length - 1]; (base.items || (base.items = [])).push(h);
       }
       stk.length !== 1 || h.items || (h.items = []); // force top-level items to be menus
