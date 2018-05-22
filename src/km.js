@@ -151,12 +151,12 @@
       D.logw = w;
       w.setTitle(`Protocol Log - ${D.ide.caption}`);
       w.loadURL(`file://${__dirname}/empty.html`);
-      w.webContents.executeJavaScript('var d = document, b=d.body,e=d.createElement("div");' +
+      w.webContents.executeJavaScript('var d = document, h=d.documentElement, b=d.body, e=d.createElement("div");' +
                                       'b.style.fontFamily="monospace";b.style.overflow="scroll";' +
                                       'e.style.whiteSpace="pre";b.appendChild(e)');
       const f = (x) => {
         const t = JSON.stringify(`${x}\n`);
-        w.webContents.executeJavaScript(`e.textContent += ${t}; b.scrollTop = b.scrollHeight`);
+        w.webContents.executeJavaScript(`e.textContent += ${t}; h.scrollTop = h.scrollHeight`);
       };
       f(cn.getLog().filter(x => x).join('\n'));
       cn.addLogListener(f);
