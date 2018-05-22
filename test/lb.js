@@ -1,35 +1,9 @@
 import test from 'ava';
-import { Application } from 'spectron';
-import electronPath from 'electron';
-import path from 'path';
-import temp from 'temp';
-import inWin from './_utils';
+import { tfw, inWin } from './_utils';
 
-temp.track();
+tfw.init({ port: 10100, RIDE_SPAWN: 'dyalog' });
 
-test.beforeEach(async (t) => {
-  const userData = temp.mkdirSync('ride41');
-  t.context.app = new Application({
-    path: electronPath,
-    args: [path.join(__dirname, '..')],
-    env: {
-      RIDE_SPAWN: 'dyalog',
-      spectron_temp_dir: userData,
-    },
-    webdriverOptions: {
-      deprecationWarnings: false,
-    },
-  });
-
-  await t.context.app.start();
-});
-
-test.afterEach.always(async (t) => {
-  await t.context.app.stop();
-  await temp.cleanupSync();
-});
-
-test.serial(
+test(
   'lb-show-hide',
   async (t) => {
     const { app } = t.context;
@@ -45,7 +19,7 @@ test.serial(
   },
 );
 
-test.serial(
+test(
   'lb-hover',
   async (t) => {
     const { app } = t.context;

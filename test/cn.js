@@ -1,31 +1,9 @@
 import test from 'ava';
-import { Application } from 'spectron';
-import electronPath from 'electron';
-import path from 'path';
-import temp from 'temp';
+import { tfw } from './_utils';
 
-test.beforeEach(async (t) => {
-  const userData = temp.mkdirSync('ride41');
-  t.context.app = new Application({
-    path: electronPath,
-    args: [path.join(__dirname, '..')],
-    env: {
-      spectron_temp_dir: userData,
-    },
-    webdriverOptions: {
-      deprecationWarnings: false,
-    },
-  });
+tfw.init({ port: 10000 });
 
-  await t.context.app.start();
-});
-
-test.afterEach.always(async (t) => {
-  await t.context.app.stop();
-  await temp.cleanupSync();
-});
-
-test.serial(
+test(
   'cn-app-starts-ok',
   async (t) => {
     const { app } = t.context;
@@ -43,13 +21,12 @@ test.serial(
   },
 );
 
-test.serial(
+test(
   'cn-fav-new',
   async (t) => {
     t.plan(3);
     const { app } = t.context;
     const c = app.client;
-    await c.waitUntilWindowLoaded();
     await c.leftClick('#cn_neu');
     t.is(await c.getValue('#cn_fav_name'), '');
     await c.waitForExist('#cn_favs .list_sel .name');
@@ -59,14 +36,33 @@ test.serial(
   },
 );
 
-test.serial(
+test(
+  'cn-fav-clone',
+  async (t) => {
+    t.plan(5);
+    const { app } = t.context;
+    const c = app.client;
+    await c.leftClick('#cn_cln');
+    t.is(await c.getValue('#cn_fav_name'), '(copy)');
+    await c.waitForExist('#cn_favs .list_sel .name');
+    t.is(await c.getText('#cn_favs .list_sel .name'), '(copy)');
+    await c.setValue('#cn_fav_name', 'myCopy');
+    t.is(await c.getText('#cn_favs .list_sel .name'), 'myCopy');
+
+    await c.leftClick('#cn_cln');
+    t.is(await c.getValue('#cn_fav_name'), 'myCopy(copy)');
+    await c.waitForExist('#cn_favs .list_sel .name');
+    t.is(await c.getText('#cn_favs .list_sel .name'), 'myCopy(copy)');
+  },
+);
+
+test(
   'cn-start-raw',
   async (t) => {
     t.plan(3);
     const { app } = t.context;
     const c = app.client;
-    await c.waitUntilWindowLoaded();
-
+  
     await c.leftClick('#cn_neu');
     await c.selectByValue('#cn_type', 'start');
     t.is(await c.getValue('#cn_type'), 'start');
