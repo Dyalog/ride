@@ -3,8 +3,7 @@ import { Application } from 'spectron';
 import electronPath from 'electron';
 import path from 'path';
 import temp from 'temp';
-
-temp.track();
+import rimraf from 'rimraf';
 
 export function inWin(id, s) {
   const w = D.ide.wins[id];
@@ -21,12 +20,12 @@ class TFW {
     const o = options || {};
     test.beforeEach(async (t) => {
       this.counter += 1;
-      const userData = temp.mkdirSync('ride41');
+      const x = t.context;
+      x.userData = temp.mkdirSync('ride41');
       const env = {
-        spectron_temp_dir: userData,
+        spectron_temp_dir: x.userData,
       };
       o.RIDE_SPAWN && (env.RIDE_SPAWN = o.RIDE_SPAWN);
-      const x = t.context;
       x.app = new Application({
         path: electronPath,
         args: [path.join(__dirname, '..')],
@@ -42,10 +41,11 @@ class TFW {
     });
 
     test.afterEach.always(async (t) => {
-      if (t.context.app.isRunning()) {
-        await t.context.app.stop();
+      const x = t.context;
+      if (x.app.isRunning()) {
+        await x.app.stop();
       }
-      await temp.cleanupSync();
+      rimraf.sync(x.userData);
     });
   }
 }
