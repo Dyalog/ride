@@ -8,7 +8,8 @@
     "start": "electron .",
     "dev": "npm run build-css && npm run start",
     "styler": "electron ./utils/style-picker/style-picker.js",
-    "live-style": "grunt"
+    "live-style": "grunt",
+    "test": "ava"
   },
   "repository": ".",
   "dependencies": {
@@ -22,6 +23,7 @@
   },
   "devDependencies": {
     "async": "^2.5.0",
+    "ava": "1.0.0-beta.4",
     "cheerio": "^1.0.0-rc.2",
     "compression": "^1.7.1",
     "electron": "^2.0.0",
@@ -40,6 +42,9 @@
     "less": "^3.0.0-alpha.3",
     "less-plugin-glob": "^2.0.1",
     "nodemon": "^1.12.1",
+    "rimraf": "^2.6.2",
+    "spectron": "^3.8.0",
+    "temp": "^0.8.3",
     "ws": "^3.2.0"
   }
 }

@@ -87,6 +87,7 @@ const Console = console;
         });
         bw.loadURL(`file://${__dirname}/dialog.html?appid=${appid}`);
         D.dlg_bw = { id: bw.id };
+        D.elw.focus();
         nodeRequire(`${__dirname}/src/cn`)();
       }
     } else {
@@ -112,7 +113,7 @@ const Console = console;
         e.returnValue = false;
         setTimeout(() => {
           let q = true;
-          if (D.prf.sqp()) {
+          if (D.prf.sqp() && !(D.el && process.env.NODE_ENV === 'test')) {
             const msg = D.spawned ? 'Quit Dyalog APL.' : 'Disconnect from interpreter.';
             $.confirm(`${msg} Are you sure?`, document.title, (x) => { q = x; });
           }
