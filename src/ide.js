@@ -507,6 +507,7 @@ D.IDE = function IDE(opts = {}) {
     ReplySaveChanges(x) { const w = ide.wins[x.win]; w && w.saved(x.err); },
     CloseWindow(x) {
       const w = ide.wins[x.win];
+      if (!w) return;
       if (w.bwId) {
         w.close();
         w.id = -1;
@@ -522,10 +523,10 @@ D.IDE = function IDE(opts = {}) {
         const fs = nodeRequire('fs');
         const os = nodeRequire('os');
         const cp = nodeRequire('child_process');
-        const d = `${os.tmpDir()}/dyalog`;
+        const d = `${os.tmpdir()}/dyalog`;
         fs.existsSync(d) || fs.mkdirSync(d, 7 * 8 * 8); // rwx------
         const f = `${d}/${ee.name}.dyalog`;
-        fs.writeFileSync(f, ee.text, { encoding: 'utf8', mode: 6 * 8 * 8 }); // rw-------
+        fs.writeFileSync(f, ee.text.join('\n'), { encoding: 'utf8', mode: 6 * 8 * 8 }); // rw-------
         const p = cp.spawn(
           process.env.RIDE_EDITOR,
           [f],

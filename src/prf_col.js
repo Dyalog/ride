@@ -61,7 +61,7 @@
       'par=fg:00f quad=fg:808 qdl=fg:c0c sel=bg:48e,bgo:.5 semi=fg:00f sqbr=fg:00f srch=bg:f80,bgo:.5 str=fg:088 tc=bg:d,bgo:1 ' +
       'tcpe=bg:c8c8c8,bgo:1 trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f vtt=bg:ff0 ' +
       'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:.1,fg:0f0 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff ' +
-      'ma=bg:828282,bgo:1,fg:0ff na=bg:828282,bgo:1,fg:f qor=bg:f00,bgo:1,fg:f',
+      'ma=bg:828282,bgo:1,fg:0ff na=bg:828282,bgo:1,fg:f qor=bg:f00,bgo:1,fg:f dc=bg:e2d3bb,bgo:1',
     }, {
       name: 'Francisco Goya',
       theme: 'dark',
@@ -71,13 +71,13 @@
       'num=fg:a8b op1=fg:d95 op2=fg:fd6 sel=bg:048,bgo:.5 semi=fg:8 sqbr=fg:8 srch=bg:b96,bgo:.75,fg:0 str=fg:dae ' +
       'tc=bg:1,bgo:1 tcpe=bg:2,bgo:1 zld=fg:d9f,B:1 scmd=fg:0ff ucmd=fg:f80,B:1 vtip=bg:733,fg:ff0,bgo:1,bc:900 vtt=bc:f80 ' +
       'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:1,fg:0f0 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff ' +
-      'ma=bg:828282,bgo:1,fg:0ff na=bg:828282,bgo:1,fg:f qor=bg:f00,bgo:1,fg:f',
+      'ma=bg:828282,bgo:1,fg:0ff na=bg:828282,bgo:1,fg:f qor=bg:f00,bgo:1,fg:f dc=bg:3,bgo:1',
     }, {
       name: 'Albrecht Dürer',
       theme: 'light',
       styles: 'com=I:1 diam=B:1 err=fg:0,bg:1,bgo:.5,B:1,I:1,U:1 glb=I:1 kw=B:1 ' +
       'lnum=bg:f,bgo:0 mod=bg:7,bgo:.25 mtch=bg:c,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 quad=fg:8 srch=bg:c,bgo:.5 ' +
-      'str=fg:8 tc=bg:e,bgo:1 tcpe=bg:dadada,bgo:1 zld=fg:8 vtt=bc:aaa',
+      'str=fg:8 tc=bg:e,bgo:1 tcpe=bg:dadada,bgo:1 zld=fg:8 vtt=bc:aaa dc=bg:e2d3bb,bgo:1',
     }, {
       name: 'Kazimir Malevich',
       theme: 'light',
@@ -128,7 +128,7 @@
       const h = schema[g.t];
       if (!h || !g.c) return '';
       const els = g.c.split(',').map(x => (isSample ? '#nonexistent' : x)).join(',');
-      const edmode = ['ca', 'cm', 'cv', 'cvv', 'ma', 'na', 'qor'].includes(g.t);
+      const edmode = ['ca', 'cm', 'cv', 'cvv', 'ma', 'na', 'qor', 'dc'].includes(g.t);
       let cls;
       if (edmode) {
         cls = `${els} .monaco-editor-background,${els} .monaco-editor .margin{`;
@@ -285,6 +285,7 @@
     {s:'mixarr'          ,t:'ma'  ,c:'.mixarr'},
     {s:'numarr'          ,t:'na'  ,c:'.numarr'},
     {s:'quador'          ,t:'qor' ,c:'.quador'},
+    {s:'disconnected'    ,t:'dc'  ,c:'.disconnected'},
     
   ]);
   /* eslint-enable */

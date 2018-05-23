@@ -317,7 +317,7 @@ select {
 }
 /*menu (see ../src/menu.js for the DOM structure)*/
 .menu {
-  background-color: #1c1e28;
+  background-color: #edeff5;
   border-bottom: solid grey 1px;
 }
 .menu a,
@@ -337,7 +337,7 @@ select {
 }
 .menu .m-box a {
   border: none;
-  border-color: #1c1e28;
+  border-color: #edeff5;
 }
 .menu .m-box a .m-shc {
   color: white;
@@ -350,11 +350,6 @@ select {
 }
 .menu .m-box a:focus.m-checked {
   background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
-}
-.disconnected .monaco-editor-background,
-.disconnected .monaco-editor .margin {
-  background-color: #e2d3bb;
-  /*beige*/
 }
 .breakpoint {
   background: no-repeat transparent center center url(img/breakpoint.png);

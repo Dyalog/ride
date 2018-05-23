@@ -351,11 +351,6 @@ select {
 .menu .m-box a:focus.m-checked {
   background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
 }
-.disconnected .monaco-editor-background,
-.disconnected .monaco-editor .margin {
-  background-color: #e2d3bb;
-  /*beige*/
-}
 .breakpoint {
   background: no-repeat transparent center center url(img/breakpoint.png);
 }

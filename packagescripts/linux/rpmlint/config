@@ -1,0 +1,2 @@
+from Config import *
+addFilter("E: dir-or-file-in-opt ")
