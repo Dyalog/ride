@@ -1,7 +1,7 @@
 import test from 'ava';
 import { tfw } from './_utils';
 
-tfw.init({ port: 10000 });
+tfw.init({ src: 'cn' });
 
 test(
   'cn-app-starts-ok',
@@ -62,7 +62,7 @@ test(
     t.plan(3);
     const { app } = t.context;
     const c = app.client;
-  
+
     await c.leftClick('#cn_neu');
     await c.selectByValue('#cn_type', 'start');
     t.is(await c.getValue('#cn_type'), 'start');

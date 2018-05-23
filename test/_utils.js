@@ -12,6 +12,10 @@ export function inWin(id, s) {
   });
 }
 
+export function sessionLastLines(n) {
+  return D.ide.wins[0].me.model.getLinesContent().slice(-n);
+}
+
 class TFW {
   constructor() {
     this.counter = 0;
@@ -33,7 +37,7 @@ class TFW {
         webdriverOptions: {
           deprecationWarnings: false,
         },
-        port: (o.port || 9515) + this.counter,
+        port: (TFW.portMap[o.src] || 9515) + this.counter,
       });
 
       await x.app.start();
@@ -42,11 +46,16 @@ class TFW {
 
     test.afterEach.always(async (t) => {
       const x = t.context;
-      if (x.app.isRunning()) {
+      if (x.app && x.app.isRunning()) {
         await x.app.stop();
       }
       rimraf.sync(x.userData);
     });
   }
 }
+TFW.portMap = {
+  cn: 10000,
+  lb: 10010,
+  se: 10020,
+};
 export const tfw = new TFW();

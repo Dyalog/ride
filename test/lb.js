@@ -1,14 +1,13 @@
 import test from 'ava';
-import { tfw, inWin } from './_utils';
+import { tfw, inWin, sessionLastLines } from './_utils';
 
-tfw.init({ port: 10100, RIDE_SPAWN: 'dyalog' });
+tfw.init({ src: 'lb', RIDE_SPAWN: 'dyalog' });
 
 test(
   'lb-show-hide',
   async (t) => {
     const { app } = t.context;
     const c = app.client;
-    await c.waitUntilWindowLoaded();
 
     await c.waitForExist('#lb');
     const lbarVisible = await c.isVisible('#lb');
@@ -24,7 +23,6 @@ test(
   async (t) => {
     const { app } = t.context;
     const c = app.client;
-    await c.waitUntilWindowLoaded();
 
     await c.waitForExist('#lb');
     // turn on if not already
@@ -45,5 +43,18 @@ test(
     await c.moveToObject('b=\xA0');
     await c.pause(1000);
     t.false(await c.isVisible('#lb_tip'));
+  },
+);
+
+test(
+  'lb-click',
+  async (t) => {
+    const { app } = t.context;
+    const c = app.client;
+
+    await c.waitForExist('#lb');
+    await c.leftClick('b=⍣');
+    const r = await c.execute(sessionLastLines, 1);
+    t.is(r.value[0].slice(-1), '⍣');
   },
 );
