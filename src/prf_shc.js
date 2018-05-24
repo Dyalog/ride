@@ -68,8 +68,9 @@
     let empty = 1;
     q.sc_clr.hidden = !s;
     for (let i = 0; i < a.length; i++) {
-      const h = [...a[i].childNodes].map(n => n.textContent).join(' ').toLowerCase().indexOf(s) < 0
+      let h = [...a[i].childNodes].map(n => n.textContent).join(' ').toLowerCase().indexOf(s) < 0
         && !a[i].querySelectorAll('.shc_dup').length;
+      if (q.defined.checked) h = h || !a[i].querySelectorAll('.shc_key').length;
       a[i].hidden = h;
       empty = empty && h;
     }
@@ -164,12 +165,16 @@
         q.sc.focus();
         return !1;
       };
+      q.defined.onchange = updSC;
     },
     load() { loadFrom(D.prf.keys()); },
     validate() {
       const a = q.tbl_wr.getElementsByClassName('shc_dup');
       if (a.length) return { msg: 'Duplicate shortcuts', el: a[0] };
       return null;
+    },
+    print() {
+      D.el.getCurrentWindow().webContents.print({ printBackground: true });
     },
     save() {
       const h = {};

@@ -55,12 +55,14 @@
 			.shc_rst {
 				visibility: visible;
 			}
-		}
+    }
+    page-break-inside: avoid;
 	}
 }
 #shc_sc_clr {
 	width: 24px;
 	margin-left: -20px;
+	margin-right: 12px;
 	text-decoration: none;
 }
 #shc_no_res {
@@ -92,4 +94,21 @@
 }
 .shc_val {
 	width: 90%;
+}
+@media print {
+  #shc, #shc_tbl_wr {
+    position: initial;
+    overflow: unset;
+  }
+  #shc_ctrls {
+    display: none;
+  }
+  #shc_tbl_wr {
+    tr {
+      line-height: 25px;
+    }
+    .shc_add, td:nth-child(4) {
+      display: none;
+    }
+  }
 }

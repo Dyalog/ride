@@ -105,7 +105,7 @@
         d.className += ' web';
       }
     }
-    !D.el && D.util.dlg(d, { w: 600, h: 600 });
+    !D.el && D.util.dlg(d, { w: 655, h: 600 });
     Object.keys(tabs).forEach((i) => { tabs[i].load(); });
     activeTab = tabs[(((document.getElementById('prf_nav').querySelector('.sel') || {}).href) || '').replace(/.*#/, '')];
     if (activeTab) {

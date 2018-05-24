@@ -67,7 +67,7 @@ const Console = console;
           alwaysOnTop: false,
           fullscreen: false,
           fullscreenable: false,
-          minWidth: 600,
+          minWidth: 655,
           minHeight: 600,
         });
         bw.loadURL(`${loc}?type=prf&appid=${appid}`);

@@ -454,7 +454,7 @@ input.lyt_g3:hover {
 }
 #shc_tbl_wr tr .shc_code {
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 700;
   padding: 2px 16px 2px 8px;
 }
 #shc_tbl_wr tr .shc_key {
@@ -526,6 +526,16 @@ a:hover {
     background: white;
     color: black;
     border: none;
+  }
+  #shc_tbl_wr tr {
+    background-color: white;
+    border-bottom: 1px solid grey;
+  }
+  #shc_tbl_wr tr .shc_key {
+    border: none;
+  }
+  #shc_tbl_wr tr .shc_key .shc_del {
+    display: none;
   }
 }
 ::-webkit-scrollbar {

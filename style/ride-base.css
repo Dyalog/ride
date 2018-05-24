@@ -1466,6 +1466,9 @@ input.lyt_g3:hover {
   cursor: default;
   padding-left: 2px;
 }
+#shc_tbl_wr tr {
+  page-break-inside: avoid;
+}
 #shc_tbl_wr tr:hover {
   box-shadow: none!important;
 }
@@ -1478,6 +1481,7 @@ input.lyt_g3:hover {
 #shc_sc_clr {
   width: 24px;
   margin-left: -20px;
+  margin-right: 12px;
   text-decoration: none;
 }
 #shc_no_res {
@@ -1509,6 +1513,23 @@ input.lyt_g3:hover {
 }
 .shc_val {
   width: 90%;
+}
+@media print {
+  #shc,
+  #shc_tbl_wr {
+    position: initial;
+    overflow: unset;
+  }
+  #shc_ctrls {
+    display: none;
+  }
+  #shc_tbl_wr tr {
+    line-height: 25px;
+  }
+  #shc_tbl_wr .shc_add,
+  #shc_tbl_wr td:nth-child(4) {
+    display: none;
+  }
 }
 /*Prefs>Title*/
 #title {
@@ -1568,7 +1589,8 @@ input.lyt_g3:hover {
 #prf_print {
   font-size: 20px;
   float: right;
-  margin: 7px 25px 0px 0px;
+  margin: 7px 20px 0px 0px;
+  width: 28px;
 }
 #prf_content {
   margin-top: -2px;

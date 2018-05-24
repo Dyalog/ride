@@ -446,9 +446,12 @@
 
     <!--Shortcuts-->
     <div id=shc hidden>
-      <div>
+      <div id=shc_ctrls>
         <button id=shc_rst_all title="Reset all to their defaults"><u>R</u>eset</button>
         <input id=shc_sc placeholder=Search><a id=shc_sc_clr href=# hidden title="Clear search">×</a>
+        <label id=shc_defined_lb class=cb_label>
+          <input type=checkbox id=shc_defined>Only show defined shortcuts
+        </label>
       </div>
       <div id=shc_tbl_wr></div>
       <div id=shc_no_res hidden>No results</div>
