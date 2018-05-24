@@ -1383,6 +1383,12 @@ input.lyt_g3:hover {
 .lyt_geom_iso #lyt_45 {
   display: block;
 }
+@media print {
+  #lyt_ime_wr,
+  #lyt_rst {
+    display: none;
+  }
+}
 /*Prefs>Menu*/
 #pmenu_rst {
   float: right;
@@ -1559,6 +1565,11 @@ input.lyt_g3:hover {
   color: #4c4a4a;
   margin: 11px 5px 8px;
 }
+#prf_print {
+  font-size: 20px;
+  float: right;
+  margin: 7px 25px 0px 0px;
+}
 #prf_content {
   margin-top: -2px;
   padding: 5px 10px 0;
@@ -1577,6 +1588,17 @@ input.lyt_g3:hover {
 }
 #prf_content select option {
   font-weight: 500;
+}
+@media print {
+  #prf_dlg {
+    background: white;
+  }
+  #prf_dlg hr,
+  #prf_dlg #prf_nav,
+  #prf_dlg .dlg_btns,
+  #prf_dlg .dlg_title {
+    display: none;
+  }
 }
 ::-webkit-scrollbar {
   width: 10px;

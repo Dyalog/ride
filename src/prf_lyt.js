@@ -116,6 +116,10 @@
       if (q.pfx.value.length !== 1) return { msg: 'Invalid prefix key', el: q.pfx };
       return null;
     },
+    print() {
+      q.pfx.blur();
+      D.el.getCurrentWindow().webContents.print({ printBackground: true });
+    },
     save() {
       D.prf.prefixKey(q.pfx.value);
       D.prf.kbdLocale(q.lc.value);

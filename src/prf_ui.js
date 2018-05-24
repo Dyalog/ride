@@ -1,5 +1,4 @@
-(function prfUI() {'use strict'
-
+(function prfUI() {
 // This file implements the Preferences dialog as a whole.
 // Individual tabs are in separate files: prf_*.js
 // Tab implementations can export the following properties:
@@ -15,6 +14,7 @@
 // Before any attempt to call save(), all tabs' validate() methods are tested.
 // If any of them returns a falsey value, save() is aborted.
   const tabs = {}; // tab implementations self-register here
+  let activeTab;
   D.prf_tabs = tabs;
 
   let d; // DOM element for the dialog, lazily initialized
@@ -68,7 +68,7 @@
       I.prf_dlg_ok.onclick = () => { ok(); return !1; };
       I.prf_dlg_apply.onclick = () => { apply(); return !1; };
       I.prf_dlg_cancel.onclick = () => { cancel(); return !1; };
-      const hdrs = I.prf_nav.children;
+      const hdrs = I.prf_nav.getElementsByTagName('a');
       const payloads = [];
       I.prf_nav.onclick = () => !1;
       I.prf_nav.onmousedown = (x) => {
@@ -79,11 +79,15 @@
           payloads[i].hidden = !b;
           hdrs[i].className = b ? 'sel' : '';
         }
-        const t = tabs[a.href.replace(/.*#/, '')];
-        t.resize && t.resize();
-        t.activate && t.activate();
+        activeTab = tabs[a.href.replace(/.*#/, '')];
+        activeTab.resize && activeTab.resize();
+        activeTab.activate && activeTab.activate();
+        I.prf_print.disabled = !activeTab.print;
         x.preventDefault();
         return !1;
+      };
+      I.prf_print.onclick = () => {
+        activeTab.print && activeTab.print();
       };
       for (let i = 0; i < hdrs.length; i++) {
         const id = hdrs[i].href.replace(/.*#/, '');
@@ -103,7 +107,10 @@
     }
     !D.el && D.util.dlg(d, { w: 600, h: 600 });
     Object.keys(tabs).forEach((i) => { tabs[i].load(); });
-    const t = tabs[(((document.getElementById('prf_nav').querySelector('.sel') || {}).href) || '').replace(/.*#/, '')];
-    t && t.activate && t.activate();
+    activeTab = tabs[(((document.getElementById('prf_nav').querySelector('.sel') || {}).href) || '').replace(/.*#/, '')];
+    if (activeTab) {
+      activeTab.activate && activeTab.activate();
+      I.prf_print.disabled = !activeTab.print;
+    }
   };
 }());

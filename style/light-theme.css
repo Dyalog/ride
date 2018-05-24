@@ -511,6 +511,23 @@ a:hover {
 #pmenu #pmenu_ta {
   font-family: monospace;
 }
+@media print {
+  .lyt_k,
+  .lyt_g0,
+  .lyt_g1,
+  .lyt_g2,
+  .lyt_g3,
+  #lyt_43:before {
+    background: #eee;
+  }
+  #prf_content select {
+    appearance: none;
+    -webkit-appearance: none;
+    background: white;
+    color: black;
+    border: none;
+  }
+}
 ::-webkit-scrollbar {
   background-color: white;
 }
