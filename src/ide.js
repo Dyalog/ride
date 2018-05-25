@@ -638,28 +638,9 @@ D.IDE = function IDE(opts = {}) {
       });
     },
     StringDialog(x) {
-      I.gd_title_text.textContent = x.title || '';
-      I.gd_content.innerText = x.text || '';
-      I.gd_icon.style.display = 'none';
-      I.gd_content.insertAdjacentHTML('beforeend', '<br><input>');
-      const inp = I.gd_content.querySelector('input');
-      inp.value = x.initialValue || '';
-      I.gd_btns.innerHTML = '<button>OK</button><button>Cancel</button>';
-      const ret = (r) => {
-        I.gd_btns.onclick = null;
-        I.gd_close.onclick = null;
-        I.gd.hidden = 1;
+      D.util.stringDialog(x, (r) => {
         D.send('ReplyStringDialog', { value: r, token: x.token });
-        D.ide.focusedWin.focus();
-      };
-      I.gd_close.onclick = () => { ret(x.defaultValue || null); };
-      I.gd_btns.onclick = (e) => {
-        if (e.target.nodeName === 'BUTTON') {
-          ret(e.target.previousSibling ? x.defaultValue || null : inp.value);
-        }
-      };
-      D.util.dlg(I.gd, { w: 400, h: 250, modal: true });
-      setTimeout(() => { inp.focus(); }, 1);
+      });
     },
     TaskDialog(x) {
       D.util.taskDialog(x, (r) => {

@@ -30,7 +30,7 @@
       rm.on('connect', () => {
         window.onbeforeunload = (e) => {
           e.returnValue = false;
-          rm.emit('dialogClose',{ index: -1, token });
+          rm.emit('dialogClose', { task, token, value, index: -1 });
         };
         rm.emit('dialogCreated');
       });
@@ -48,31 +48,62 @@
 
     const gd_content = document.getElementById('gd_content');
     const gd_btns = document.getElementById('gd_btns');
+    let value;
+    let task;
     let token;
 
     function show(x) {
       token = x.token;
       document.title = x.title || 'Dyalog';
-      gd_content.innerHTML = esc(x.text || '') + (x.subtext ? `<div class=task_subtext>${esc(x.subtext)}</div>` : '');
-      let btns = (x.buttonText || []).map((y) => {
-        const [caption, ...details] = esc(y).split('\n');
-        return '<button class=task><div class="btn_icon"><span class="fas fa-chevron-circle-right"></span></div>' +
-          `${caption}<br><div class="task_detail">${details.join('<br>')}</div></button>`;
-      }).join('');
-      btns += (x.footer ? `<div class=task_footer>${esc(x.footer)}</div>` : '');
-      gd_btns.innerHTML = btns;
-      const ret = (r) => {
-        gd_btns.onclick = null;
-        rm.emit('dialogClose', { index: r, token: x.token });
-      };
-      const clickCb = (e) => {
-        let t = e.currentTarget;
-        let i = 99;
-        while (t) { t = t.previousSibling; i += 1; }
-        ret(i);
-      };
-      [...gd_btns.getElementsByTagName('button')].forEach(x => x.onclick = clickCb);
-      gd_btns.querySelector('button').focus(); 
+      task = !!x.buttonText;
+      value = x.defaultValue || null;
+      if (task) {
+        gd_content.innerHTML = esc(x.text || '') + (x.subtext ? `<div class=task_subtext>${esc(x.subtext)}</div>` : '');
+        let btns = (x.buttonText || []).map((y) => {
+          const [caption, ...details] = esc(y).split('\n');
+          return '<button class=task><div class="btn_icon"><span class="fas fa-chevron-circle-right"></span></div>' +
+            `${caption}<br><div class="task_detail">${details.join('<br>')}</div></button>`;
+          }).join('');
+          btns += (x.footer ? `<div class=task_footer>${esc(x.footer)}</div>` : '');
+          gd_btns.innerHTML = btns;
+          const ret = (r) => {
+            gd_btns.onclick = null;
+            rm.emit('dialogClose', { task, token, index: r });
+          };
+          const clickCb = (e) => {
+            let t = e.currentTarget;
+            let i = 99;
+            while (t) { t = t.previousSibling; i += 1; }
+            ret(i);
+          };
+          [...gd_btns.getElementsByTagName('button')].forEach(x => x.onclick = clickCb);
+          gd_btns.querySelector('button').focus(); 
+      } else {
+        gd_content.innerText = x.text || '';
+        gd_content.insertAdjacentHTML('beforeend', '<br><input>');
+        const inp = gd_content.querySelector('input');
+        inp.value = x.initialValue || '';
+        gd_btns.innerHTML = '<button>OK</button><button>Cancel</button>';
+        const ret = (r) => {
+          gd_btns.onclick = null;
+          rm.emit('dialogClose', { task, token, value: r });
+        };
+        gd_btns.onclick = (e) => {
+          if (e.target.nodeName === 'BUTTON') {
+            ret(e.target.previousSibling ? value: inp.value);
+          }
+        };
+        inp.onkeydown = (e) => {
+          if (e.which === 13) {
+            e.preventDefault();
+            ret(inp.value);
+          } else if (e.which === 27) {
+            e.preventDefault();
+            ret(value);
+          }
+        };
+        setTimeout(() => { inp.focus(); }, 1);
+      }
     }
   </script>
 </body>

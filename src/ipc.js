@@ -136,7 +136,8 @@
         srv.emit(socket, 'setTheme', D.theme);
       });
       srv.on('dialogClose', (x) => {
-        D.send('ReplyTaskDialog', x);
+        if (x.task) D.send('ReplyTaskDialog', { token: x.token, index: x.index });
+        else D.send('ReplyStringDialog', { token: x.token, value: x.value });
         D.el.BrowserWindow.fromId(D.dlg_bw.id).hide();
         D.ide && D.ide.focusMRUWin();
       });

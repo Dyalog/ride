@@ -281,6 +281,9 @@
   line-height: 1.5;
   margin-bottom: 60px;
 }
+#gd_content input {
+  width: 100%;
+}
 .ui-dialog .ui-dialog-content.task_dlg {
   padding: 8px;
 }

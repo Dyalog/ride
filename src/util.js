@@ -141,6 +141,57 @@ D.util = {
       setTimeout(() => { b.focus(); }, 1);
     }
   },
+  stringDialog(x, f) {
+    if (D.dlg_bw) {
+      D.ipc.server.emit(D.dlg_bw.socket, 'show', x);
+      const bw = D.el.BrowserWindow.fromId(D.dlg_bw.id);
+      bw.show();
+      return;
+    }
+    const value = x.defaultValue || null;
+    I.gd_title_text.textContent = x.title || '';
+    I.gd_content.innerText = x.text || '';
+    I.gd_icon.style.display = 'none';
+    I.gd_content.insertAdjacentHTML('beforeend', '<br><input>');
+    const inp = I.gd_content.querySelector('input');
+    inp.value = x.initialValue || '';
+    I.gd_btns.innerHTML = '<button>OK</button><button>Cancel</button>';
+    const lb = I.gd_btns.children[1];
+    const ret = (r) => {
+      I.gd_btns.onclick = null;
+      I.gd_close.onclick = null;
+      I.gd.hidden = 1;
+      I.dlg_modal_overlay.hidden = 1;
+      f(r);
+      D.ide.focusedWin.focus();
+    };
+    I.gd_close.onclick = () => { ret(value); };
+    I.gd_btns.onclick = (e) => {
+      if (e.target.nodeName === 'BUTTON') {
+        ret(e.target.previousSibling ? value : inp.value);
+      }
+    };
+    inp.onkeydown = (e) => {
+      if (e.which === 13) {
+        e.preventDefault();
+        ret(inp.value);
+      } else if (e.which === 27) {
+        e.preventDefault();
+        ret(value);
+      } else if ((e.which === 9 && e.shiftKey)) {
+        e.preventDefault();
+        lb.focus();
+      }
+    };
+    lb.onkeydown = (e) => {
+      if ((e.which === 9 && !e.shiftKey)) {
+        e.preventDefault();
+        inp.focus();
+      }
+    };
+    D.util.dlg(I.gd, { w: 400, h: 250, modal: true });
+    setTimeout(() => { inp.focus(); }, 1);
+  },
   taskDialog(x, f) {
     if (D.el && D.win) {
       const { bwId } = D.ide.focusedWin;
@@ -158,7 +209,6 @@ D.util = {
       D.ipc.server.emit(D.dlg_bw.socket, 'show', x);
       const bw = D.el.BrowserWindow.fromId(D.dlg_bw.id);
       bw.show();
-      bw.setAlwaysOnTop(true);
       return;
     }
     const { esc } = D.util;
