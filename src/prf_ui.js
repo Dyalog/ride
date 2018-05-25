@@ -42,14 +42,14 @@
     }
   }
   function ok() { apply() && cancel(); }
-  D.prf_ui = function PrfUI() {
+  D.prf_ui = function PrfUI(tab) {
     if (D.prf_bw) {
-      D.ipc.server.emit(D.prf_bw.socket, 'show');
+      D.ipc.server.emit(D.prf_bw.socket, 'show', tab);
       const bw = D.el.BrowserWindow.fromId(D.prf_bw.id);
       bw.show();
       return !1;
     } else if (D.ide && D.ide.floating) {
-      D.ipc.of.ride_master.emit('prfShow'); return !1;
+      D.ipc.of.ride_master.emit('prfShow', tab); return !1;
     }
     if (!d) {
       d = I.prf_dlg;
@@ -107,10 +107,6 @@
     }
     !D.el && D.util.dlg(d, { w: 655, h: 600 });
     Object.keys(tabs).forEach((i) => { tabs[i].load(); });
-    activeTab = tabs[(((document.getElementById('prf_nav').querySelector('.sel') || {}).href) || '').replace(/.*#/, '')];
-    if (activeTab) {
-      activeTab.activate && activeTab.activate();
-      I.prf_print.disabled = !activeTab.print;
-    }
+    $(typeof tab === 'string' ? `#prf_nav a[href$=${tab}]` : '#prf_nav .sel').mousedown();
   };
 }());

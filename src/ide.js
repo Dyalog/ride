@@ -138,10 +138,9 @@ D.IDE = function IDE(opts = {}) {
   let ttid; // tooltip timeout id
   let tthide = 0;
   let lbDragged;
-  const reqTip = (x, desc, text, delay) => { // request tooltip, x:event
+  const reqTip = (x, desc, text, t) => { // request tooltip, x:event
     clearTimeout(tthide); tthide = 0;
     clearTimeout(ttid);
-    const t = x.target;
     ttid = setTimeout(() => {
       ttid = 0;
       I.lb_tip_desc.textContent = desc;
@@ -160,7 +159,7 @@ D.IDE = function IDE(opts = {}) {
         s.left = `${Math.max(0, x0)}px`;
         s.right = '';
       }
-    }, delay || 20);
+    }, 20);
   };
   I.lb.onclick = (x) => {
     const s = x.target.textContent;
@@ -198,8 +197,24 @@ D.IDE = function IDE(opts = {}) {
     const c = x.target.textContent;
     const k = D.getBQKeyFor(c);
     const s = k && c.charCodeAt(0) > 127 ? `Keyboard: ${D.prf.prefixKey()}${k}\n\n` : '';
-    if (/\S/.test(c)) { const h = D.lb.tips[c] || [c, '']; reqTip(x, h[0], s + h[1]); }
+    if (/\S/.test(c)) { const h = D.lb.tips[c] || [c, '']; reqTip(x, h[0], s + h[1], x.target); }
   };
+  I.lb_prf.onmouseover = (x) => {
+    const h = D.prf.keys();
+    const pfk = D.prf.pfkeys();
+    let s = '';
+    for (let i = 0; i < D.cmds.length; i++) {
+      const cmd = D.cmds[i];
+      const [c, desc, df] = cmd; // c:code, d:description, df:defaults
+      const shc = (h[c] || df).slice(-1)[0];
+      const code = `${c}  `.slice(0, 4);
+      const d = desc || c.replace(/PF(\d+)/, (_, n) => pfk[n]);
+      shc && d && (s += `${code}: ${d}:${' '.repeat(Math.max(1, 25 - d.length))}${shc}\n`);
+    }
+    reqTip(x, 'Keyboard Shortcuts', s, x.currentTarget);
+  };
+  I.lb_prf.onmousedown = () => { D.prf_ui('shc'); return !1; };
+  I.lb_prf.onclick = () => !1; // prevent # from appearing in the URL bar
   I.sb_prf.onmousedown = () => { D.prf_ui(); return !1; };
   I.sb_prf.onclick = () => !1; // prevent # from appearing in the URL bar
   $(I.lb_inner).sortable({

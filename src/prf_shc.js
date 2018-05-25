@@ -70,7 +70,10 @@
     for (let i = 0; i < a.length; i++) {
       let h = [...a[i].childNodes].map(n => n.textContent).join(' ').toLowerCase().indexOf(s) < 0
         && !a[i].querySelectorAll('.shc_dup').length;
-      if (q.defined.checked) h = h || !a[i].querySelectorAll('.shc_key').length;
+      if (q.defined.checked) {
+        const v = a[i].querySelector('.shc_val');
+        h = h || !a[i].querySelectorAll('.shc_key').length || (v && !v.value);
+      }
       a[i].hidden = h;
       empty = empty && h;
     }
@@ -94,10 +97,10 @@
         `<td><button class=shc_rst title="Reset &quot;${c}&quot; to its defaults"><span class="fas fa-undo-alt"></span></button>`;
     }
     q.tbl_wr.innerHTML = `${html}</table>`;
-    updDups();
-    if (q.sc.value) { q.sc.value = ''; updSC(); }
     const a = D.prf.pfkeys();
     for (let i = 1; i <= 48; i++) document.getElementById(`shc_val_PF${i}`).value = a[i] || '';
+    updDups();
+    if (q.sc.value || q.defined.checked) { q.sc.value = ''; updSC(); }
   }
   function updKeys(x) {
     const h = {};

@@ -76,7 +76,7 @@
         window.close();
       });
       rm.on('caption', (c) => { document.title = `Preferences - ${c}`; });
-      rm.on('show', () => D.prf_ui());
+      rm.on('show', x => D.prf_ui(x));
       rm.on('prf', ([k, x]) => D.prf[k](x, 1));
     });
   };
@@ -126,7 +126,7 @@
     D.ipc.serve(() => {
       const srv = D.ipc.server;
       srv.on('prfCreated', (data, socket) => { D.prf_bw.socket = socket; });
-      srv.on('prfShow', () => D.prf_ui());
+      srv.on('prfShow', x => D.prf_ui(x));
       srv.on('prfClose', () => {
         D.el.BrowserWindow.fromId(D.prf_bw.id).hide();
         D.ide && D.ide.focusMRUWin();

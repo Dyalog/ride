@@ -998,6 +998,10 @@ body .ui-tooltip {
 #lb .ui-sortable-helper {
   cursor: move;
 }
+#lb_prf {
+  float: right;
+  padding: 4px 12px;
+}
 #lb_tip {
   font-family: apl, monospace;
   font-size: 18px;
@@ -2108,7 +2112,7 @@ body.floating-window {
 .zoom12 #debug,
 .zoom12 #lb_tip *,
 .zoom12 #vt_bln,
-.zoom12 #lb_inner b,
+.zoom12 #lb,
 .zoom12 #sb,
 .zoom12 .toolbar {
   font-size: 48px;
@@ -2117,7 +2121,7 @@ body.floating-window {
 .zoom11 #debug,
 .zoom11 #lb_tip *,
 .zoom11 #vt_bln,
-.zoom11 #lb_inner b,
+.zoom11 #lb,
 .zoom11 #sb,
 .zoom11 .toolbar {
   font-size: 42px;
@@ -2126,7 +2130,7 @@ body.floating-window {
 .zoom10 #debug,
 .zoom10 #lb_tip *,
 .zoom10 #vt_bln,
-.zoom10 #lb_inner b,
+.zoom10 #lb,
 .zoom10 #sb,
 .zoom10 .toolbar {
   font-size: 36px;
@@ -2135,7 +2139,7 @@ body.floating-window {
 .zoom9 #debug,
 .zoom9 #lb_tip *,
 .zoom9 #vt_bln,
-.zoom9 #lb_inner b,
+.zoom9 #lb,
 .zoom9 #sb,
 .zoom9 .toolbar {
   font-size: 32px;
@@ -2144,7 +2148,7 @@ body.floating-window {
 .zoom8 #debug,
 .zoom8 #lb_tip *,
 .zoom8 #vt_bln,
-.zoom8 #lb_inner b,
+.zoom8 #lb,
 .zoom8 #sb,
 .zoom8 .toolbar {
   font-size: 28px;
@@ -2153,7 +2157,7 @@ body.floating-window {
 .zoom7 #debug,
 .zoom7 #lb_tip *,
 .zoom7 #vt_bln,
-.zoom7 #lb_inner b,
+.zoom7 #lb,
 .zoom7 #sb,
 .zoom7 .toolbar {
   font-size: 26px;
@@ -2162,7 +2166,7 @@ body.floating-window {
 .zoom6 #debug,
 .zoom6 #lb_tip *,
 .zoom6 #vt_bln,
-.zoom6 #lb_inner b,
+.zoom6 #lb,
 .zoom6 #sb,
 .zoom6 .toolbar {
   font-size: 24px;
@@ -2171,7 +2175,7 @@ body.floating-window {
 .zoom5 #debug,
 .zoom5 #lb_tip *,
 .zoom5 #vt_bln,
-.zoom5 #lb_inner b,
+.zoom5 #lb,
 .zoom5 #sb,
 .zoom5 .toolbar {
   font-size: 22px;
@@ -2180,7 +2184,7 @@ body.floating-window {
 .zoom4 #debug,
 .zoom4 #lb_tip *,
 .zoom4 #vt_bln,
-.zoom4 #lb_inner b,
+.zoom4 #lb,
 .zoom4 #sb,
 .zoom4 .toolbar {
   font-size: 20px;
@@ -2189,7 +2193,7 @@ body.floating-window {
 .zoom3 #debug,
 .zoom3 #lb_tip *,
 .zoom3 #vt_bln,
-.zoom3 #lb_inner b,
+.zoom3 #lb,
 .zoom3 #sb,
 .zoom3 .toolbar {
   font-size: 19px;
@@ -2198,7 +2202,7 @@ body.floating-window {
 .zoom2 #debug,
 .zoom2 #lb_tip *,
 .zoom2 #vt_bln,
-.zoom2 #lb_inner b,
+.zoom2 #lb,
 .zoom2 #sb,
 .zoom2 .toolbar {
   font-size: 18px;
@@ -2207,7 +2211,7 @@ body.floating-window {
 .zoom1 #debug,
 .zoom1 #lb_tip *,
 .zoom1 #vt_bln,
-.zoom1 #lb_inner b,
+.zoom1 #lb,
 .zoom1 #sb,
 .zoom1 .toolbar {
   font-size: 17px;
@@ -2216,7 +2220,7 @@ body.floating-window {
 .zoom0 #debug,
 .zoom0 #lb_tip *,
 .zoom0 #vt_bln,
-.zoom0 #lb_inner b,
+.zoom0 #lb,
 .zoom0 #sb,
 .zoom0 .toolbar {
   font-size: 16px;
@@ -2225,7 +2229,7 @@ body.floating-window {
 .zoom-1 #debug,
 .zoom-1 #lb_tip *,
 .zoom-1 #vt_bln,
-.zoom-1 #lb_inner b,
+.zoom-1 #lb,
 .zoom-1 #sb,
 .zoom-1 .toolbar {
   font-size: 15px;
@@ -2234,7 +2238,7 @@ body.floating-window {
 .zoom-2 #debug,
 .zoom-2 #lb_tip *,
 .zoom-2 #vt_bln,
-.zoom-2 #lb_inner b,
+.zoom-2 #lb,
 .zoom-2 #sb,
 .zoom-2 .toolbar {
   font-size: 14px;
@@ -2243,7 +2247,7 @@ body.floating-window {
 .zoom-3 #debug,
 .zoom-3 #lb_tip *,
 .zoom-3 #vt_bln,
-.zoom-3 #lb_inner b,
+.zoom-3 #lb,
 .zoom-3 #sb,
 .zoom-3 .toolbar {
   font-size: 13px;
@@ -2252,7 +2256,7 @@ body.floating-window {
 .zoom-4 #debug,
 .zoom-4 #lb_tip *,
 .zoom-4 #vt_bln,
-.zoom-4 #lb_inner b,
+.zoom-4 #lb,
 .zoom-4 #sb,
 .zoom-4 .toolbar {
   font-size: 12px;
@@ -2261,7 +2265,7 @@ body.floating-window {
 .zoom-5 #debug,
 .zoom-5 #lb_tip *,
 .zoom-5 #vt_bln,
-.zoom-5 #lb_inner b,
+.zoom-5 #lb,
 .zoom-5 #sb,
 .zoom-5 .toolbar {
   font-size: 11px;
@@ -2270,7 +2274,7 @@ body.floating-window {
 .zoom-6 #debug,
 .zoom-6 #lb_tip *,
 .zoom-6 #vt_bln,
-.zoom-6 #lb_inner b,
+.zoom-6 #lb,
 .zoom-6 #sb,
 .zoom-6 .toolbar {
   font-size: 10px;
@@ -2279,7 +2283,7 @@ body.floating-window {
 .zoom-7 #debug,
 .zoom-7 #lb_tip *,
 .zoom-7 #vt_bln,
-.zoom-7 #lb_inner b,
+.zoom-7 #lb,
 .zoom-7 #sb,
 .zoom-7 .toolbar {
   font-size: 9px;
@@ -2288,7 +2292,7 @@ body.floating-window {
 .zoom-8 #debug,
 .zoom-8 #lb_tip *,
 .zoom-8 #vt_bln,
-.zoom-8 #lb_inner b,
+.zoom-8 #lb,
 .zoom-8 #sb,
 .zoom-8 .toolbar {
   font-size: 8px;
@@ -2297,7 +2301,7 @@ body.floating-window {
 .zoom-9 #debug,
 .zoom-9 #lb_tip *,
 .zoom-9 #vt_bln,
-.zoom-9 #lb_inner b,
+.zoom-9 #lb,
 .zoom-9 #sb,
 .zoom-9 .toolbar {
   font-size: 7px;
@@ -2306,7 +2310,7 @@ body.floating-window {
 .zoom-10 #debug,
 .zoom-10 #lb_tip *,
 .zoom-10 #vt_bln,
-.zoom-10 #lb_inner b,
+.zoom-10 #lb,
 .zoom-10 #sb,
 .zoom-10 .toolbar {
   font-size: 6px;
