@@ -57,5 +57,6 @@ TFW.portMap = {
   cn: 10000,
   lb: 10010,
   se: 10020,
+  ed: 10030,
 };
 export const tfw = new TFW();
