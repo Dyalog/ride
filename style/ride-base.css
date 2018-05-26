@@ -1941,6 +1941,7 @@ h2 {
   margin: -2px;
 }
 /*IDE page*/
+#splash,
 #ide,
 body.floating-window {
   position: absolute;

@@ -54,12 +54,14 @@ const Console = console;
         D.ipc.config.appspace = qp.appid;
         document.body.className += ' floating-window';
         D.IPC_Prf();
+        I.splash.hidden = 1;
       } else if (qp.type === 'editor') {
         D.ipc.config.appspace = qp.appid;
         document.body.className += ' floating-window';
         D.IPC_Client(+qp.winId);
+        I.splash.hidden = 1;
       } else {
-        const r = D.IPC_Server();
+        const winsLoaded = D.IPC_Server();
         const appid = D.ipc.config.appspace;
         let bw = new D.el.BrowserWindow({
           show: false,
@@ -88,7 +90,10 @@ const Console = console;
         bw.loadURL(`file://${__dirname}/dialog.html?appid=${appid}`);
         D.dlg_bw = { id: bw.id };
         D.elw.focus();
-        Promise.all(r).then(() => nodeRequire(`${__dirname}/src/cn`)());
+        Promise.all(winsLoaded).then(() => {
+          I.splash.hidden = 1;
+          nodeRequire(`${__dirname}/src/cn`)();
+        });
       }
     } else {
       const ws = new WebSocket((loc.protocol === 'https:' ? 'wss://' : 'ws://') + loc.host);
@@ -106,6 +111,7 @@ const Console = console;
       ws.onmessage = (x) => { if (x.data[0] === '[') { const [c, h] = JSON.parse(x.data); D.recv(c, h); } };
       ws.onerror = (x) => { Console.info('ws error:', x); };
       D.ide2 = new D.IDE();
+      I.splash.hidden = 1;
     }
     if (!D.quit) D.quit = window.close;
     window.onbeforeunload = (e) => {

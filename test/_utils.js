@@ -42,6 +42,7 @@ class TFW {
 
       await x.app.start();
       await x.app.client.waitUntilWindowLoaded();
+      await x.app.client.waitForVisible('#splash', 5000, true);
     });
 
     test.afterEach.always(async (t) => {

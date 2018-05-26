@@ -20,6 +20,7 @@
   const KV = /^([a-z_]\w*)=(.*)$/i;
   const WS = /^\s*$/; // KV:regexes for parsing env vars
   const maxl = 1000;
+  const cnFile = `${D.el.app.getPath('userData')}/connections.json`;
   const trunc = x => (x.length > maxl ? `${x.slice(0, maxl - 3)}...` : x);
   const shEsc = x => `'${x.replace(/'/g, "'\\''")}'`; // shell escape
   const toBuf = (x) => {
@@ -51,6 +52,26 @@
     hideDlgs();
     $.err(...x);
   };
+  const passwdPrompt = (text, title) => {
+    setTimeout(() => D.util.stringDialog(
+      {
+        title,
+        text,
+        token: 1,
+        pass: 1,
+      },
+      (p) => {
+        setTimeout(() => {
+          if (p) {
+            q.ssh_pass.value = p;
+            q.go.click();
+          } else {
+            $.err('Password and/or key file is required', () => { q.ssh_pass.focus(); });
+          }
+        }, 10);
+      },
+    ), 10);
+  };
   const save = () => {
     const names = $('.name', q.favs).toArray().map(x => x.innerText);
     const dups = names.filter((a, i) => names.indexOf(a) !== i);
@@ -65,9 +86,7 @@
       );
       return;
     }
-    const d = D.el.app.getPath('userData');
-    const f = `${d}/connections.json`;
-    if (((+fs.statSync(f).mtime) !== D.conns_modified)) {
+    if (((+fs.statSync(cnFile).mtime) !== D.conns_modified)) {
       const r = $.confirm('Connections file has been modified, do you want to overwrite with your changes?');
       if (!r) return;
     }
@@ -76,9 +95,9 @@
     for (let i = 0; i < a.length; i++) b[i] = a[i].cnData;
     D.conns = b;
     try {
-      fs.writeFileSync(f, JSON.stringify(D.conns));
-      D.conns_modified = +fs.statSync(f).mtime;
-      toastr.success(f, 'Configuration saved.');
+      fs.writeFileSync(cnFile, JSON.stringify(D.conns));
+      D.conns_modified = +fs.statSync(cnFile).mtime;
+      toastr.success(cnFile, 'Configuration saved.');
     } catch (e) {
       toastr.error(`${e.name}: ${e.message}`, 'Save failed');
     }
@@ -163,7 +182,7 @@
       }
       if (x === sel && ssh) {
         if (!q.ssh_pass.value && !q.ssh_key.value) {
-          $.err('Password and/or key file is required', () => { q.ssh_pass.focus(); });
+          passwdPrompt(`Password for user ${x.user}:`, 'Password');
           return 0;
         }
       }
@@ -244,7 +263,11 @@
         .on('error', e => err(e.message, e.name))
         .connect(o);
       return c;
-    } catch (e) { err(e.message, e.name); }
+    } catch (e) {
+      if (e.message === 'Encrypted private key detected, but no passphrase given') {
+        passwdPrompt(`Passphrase for encrypted key ${x.key}:`, 'Passphrase');
+      } else err(e.message, e.name);
+    }
     return null;
   };
   const ct = process.env.RIDE_CONNECT_TIMEOUT || 60000;
@@ -431,7 +454,8 @@
                 sm.write(`${s0}CLASSICMODE=1 SINGLETRACE=1 RIDE_INIT=CONNECT:127.0.0.1:${rport} RIDE_SPAWNED=1 ${shEsc(x.exe)} ${s1} +s -q >/dev/null\n`);
                 hideDlgs();
               });
-            }).on('error', () => {
+            });
+            c && c.on('error', () => {
               clearTimeout(D.tmr);
               delete D.tmr;
             });
@@ -534,14 +558,12 @@
     $(I.cn).splitter();
     const m = 'Dyalog\n  About Dyalog=ABT\n  -\n  Preferences=PRF\n  -\n  &Quit=QIT';
     setTimeout(() => D.installMenu(D.parseMenuDSL(m)), 100);
-    const d = D.el.app.getPath('userData');
-    const f = `${d}/connections.json`;
-    if (fs.existsSync(f)) {
-      D.conns = JSON.parse(fs.readFileSync(f).toString());
-      D.conns_modified = +fs.statSync(f).mtime;
+    if (fs.existsSync(cnFile)) {
+      D.conns = JSON.parse(fs.readFileSync(cnFile).toString());
+      D.conns_modified = +fs.statSync(cnFile).mtime;
     } else {
-      fs.writeFileSync(f, JSON.stringify([{ type: 'connect' }]));
-      D.conns_modified = +fs.statSync(f).mtime;
+      fs.writeFileSync(cnFile, JSON.stringify([{ type: 'connect' }]));
+      D.conns_modified = +fs.statSync(cnFile).mtime;
     }
     D.conns = D.conns || [{ type: 'connect' }];
     I.cn.onkeyup = (x) => {
@@ -647,9 +669,9 @@
       const t = x.target.textContent;
       const k = t.split('=')[0];
       let s = q.env.value;
-      const m = RegExp(`^${k}=(.*)$`, 'm').exec(s);
-      if (m) {
-        q.env.setSelectionRange(m.index + k.length + 1, m.index + m[0].length);
+      const n = RegExp(`^${k}=(.*)$`, 'm').exec(s);
+      if (n) {
+        q.env.setSelectionRange(n.index + k.length + 1, n.index + n[0].length);
       } else {
         s = `${s.replace(/([^\n])$/, '$1\n')}${t}\n`;
         q.env.value = s;
@@ -769,7 +791,6 @@
           q.exe.onchange();
         }
       });
-    setTimeout(() => $(q.favs).list('select', D.prf.connectFav()), 1);
     { const [a] = q.favs.querySelectorAll('a'); a && a.focus(); }
     q.sve.onclick = () => { save(); };
     q.neu.onclick = () => {
@@ -824,16 +845,16 @@
         let b; // b:bits
         let v; // v:version
         let u; // u:edition
-        let m; // m:match object
+        let n; // n:match object
         s && s.split('\r\n').forEach((x) => {
           if (x) {
-            if ((m = /^HK.*\\Dyalog APL\/W(-64)? (\d+\.\d+)( Unicode)?$/i.exec(x))) {
-              [, b, v, u] = m;
+            if ((n = /^HK.*\\Dyalog APL\/W(-64)? (\d+\.\d+)( Unicode)?$/i.exec(x))) {
+              [, b, v, u] = n;
               b = b ? 64 : 32;
               u = u ? 'unicode' : 'classic';
-            } else if (v && (m = /^ *localdyalogdir +REG_SZ +(\S.*)$/i.exec(x))) {
+            } else if (v && (n = /^ *localdyalogdir +REG_SZ +(\S.*)$/i.exec(x))) {
               interpreters.push({
-                exe: `${m[1]}\\dyalog.exe`,
+                exe: `${n[1]}\\dyalog.exe`,
                 ver: parseVer(v),
                 bits: b,
                 edition: u,
@@ -848,11 +869,11 @@
       } else if (process.platform === 'darwin') {
         const rd = '/Applications';
         ls(rd).forEach((x) => {
-          const m = /^Dyalog-(\d+\.\d+)\.app$/.exec(x);
+          const n = /^Dyalog-(\d+\.\d+)\.app$/.exec(x);
           const exe = `${rd}/${x}/Contents/Resources/Dyalog/mapl`;
-          m && fs.existsSync(exe) && interpreters.push({
+          n && fs.existsSync(exe) && interpreters.push({
             exe,
-            ver: parseVer(m[1]),
+            ver: parseVer(n[1]),
             bits: 64,
             edition: 'unicode',
           });
@@ -883,7 +904,19 @@
     } catch (e) { console.error(e); }
     updExes();
     document.title = `RIDE - ${upperFirst(q.type.value)}`;
-    //  q.connecting_dlg_close.onclick=_=>{q.connecting_dlg.hidden=1}
+    const conf = D.el.process.env.RIDE_CONF;
+    if (conf) {
+      const i = [...q.favs.children].findIndex(x => x.cnData.name === conf);
+      if (i < 0) $.err(`Configuration '${conf}' not found.`);
+      else {
+        setTimeout(() => {
+          $(q.favs).list('select', i);
+          q.go.click();
+        }, 1);
+        return;
+      }
+    }
+    setTimeout(() => $(q.favs).list('select', D.prf.connectFav()), 1);
   };
 
   module.exports = () => {
