@@ -117,6 +117,12 @@
 
   D.IPC_Server = function IPCServer() {
     // start IPC server
+    let dlgLoaded;
+    let prfLoaded;
+    const winsLoaded = [
+      new Promise((r) => { dlgLoaded = r; }),
+      new Promise((r) => { prfLoaded = r; }),
+    ];
     D.pwins = [];
     D.pendingEditors = [];
     D.ipc.config.id = 'ride_master';
@@ -125,7 +131,10 @@
     D.ipc.config.silent = true;
     D.ipc.serve(() => {
       const srv = D.ipc.server;
-      srv.on('prfCreated', (data, socket) => { D.prf_bw.socket = socket; });
+      srv.on('prfCreated', (data, socket) => {
+        D.prf_bw.socket = socket;
+        prfLoaded(true);
+      });
       srv.on('prfShow', x => D.prf_ui(x));
       srv.on('prfClose', () => {
         D.el.BrowserWindow.fromId(D.prf_bw.id).hide();
@@ -134,10 +143,10 @@
       srv.on('dialogCreated', (data, socket) => {
         D.dlg_bw.socket = socket;
         srv.emit(socket, 'setTheme', D.theme);
+        dlgLoaded(true);
       });
-      srv.on('dialogClose', (x) => {
-        if (x.task) D.send('ReplyTaskDialog', { token: x.token, index: x.index });
-        else D.send('ReplyStringDialog', { token: x.token, value: x.value });
+      srv.on('dialogClose', ([t, r]) => {
+        D.util.replyDialog(t, r);
         D.el.BrowserWindow.fromId(D.dlg_bw.id).hide();
         D.ide && D.ide.focusMRUWin();
       });
@@ -183,6 +192,7 @@
       srv.on('RIDE', ([type, payload]) => D.send(type, payload));
     });
     D.ipc.server.start();
+    return winsLoaded;
   };
   D.IPC_LinkEditor = function IPCLinkEditor(pe) {
     pe && D.pendingEditors.push(pe);

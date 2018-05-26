@@ -30,7 +30,7 @@
       rm.on('connect', () => {
         window.onbeforeunload = (e) => {
           e.returnValue = false;
-          rm.emit('dialogClose', { task, token, value, index: -1 });
+          rm.emit('dialogClose', [token, task ? -1 : value]);
         };
         rm.emit('dialogCreated');
       });
@@ -68,7 +68,7 @@
           gd_btns.innerHTML = btns;
           const ret = (r) => {
             gd_btns.onclick = null;
-            rm.emit('dialogClose', { task, token, index: r });
+            rm.emit('dialogClose', [token, r]);
           };
           const clickCb = (e) => {
             let t = e.currentTarget;
@@ -80,13 +80,13 @@
           gd_btns.querySelector('button').focus(); 
       } else {
         gd_content.innerText = x.text || '';
-        gd_content.insertAdjacentHTML('beforeend', '<br><input>');
+        gd_content.insertAdjacentHTML('beforeend', `<br><input ${x.pass ? 'type=password' : ''}>`);
         const inp = gd_content.querySelector('input');
         inp.value = x.initialValue || '';
         gd_btns.innerHTML = '<button>OK</button><button>Cancel</button>';
         const ret = (r) => {
           gd_btns.onclick = null;
-          rm.emit('dialogClose', { task, token, value: r });
+          rm.emit('dialogClose', [token, r]);
         };
         gd_btns.onclick = (e) => {
           if (e.target.nodeName === 'BUTTON') {

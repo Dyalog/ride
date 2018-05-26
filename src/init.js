@@ -59,7 +59,7 @@ const Console = console;
         document.body.className += ' floating-window';
         D.IPC_Client(+qp.winId);
       } else {
-        D.IPC_Server();
+        const r = D.IPC_Server();
         const appid = D.ipc.config.appspace;
         let bw = new D.el.BrowserWindow({
           show: false,
@@ -88,7 +88,7 @@ const Console = console;
         bw.loadURL(`file://${__dirname}/dialog.html?appid=${appid}`);
         D.dlg_bw = { id: bw.id };
         D.elw.focus();
-        nodeRequire(`${__dirname}/src/cn`)();
+        Promise.all(r).then(() => nodeRequire(`${__dirname}/src/cn`)());
       }
     } else {
       const ws = new WebSocket((loc.protocol === 'https:' ? 'wss://' : 'ws://') + loc.host);
