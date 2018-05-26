@@ -29,7 +29,7 @@
   }
   updBQ(); D.prf.prefixMaps(updBQ); D.prf.kbdLocale(updBQ);
 
-  D.keyMap.dyalogDefault = { End: 'goLineEndSmart' };
+  D.keyMap.dyalogDefault = { };
 
   $.extend(D.commands, {
     TB() { D.ide.switchWin(1); },
@@ -120,7 +120,8 @@
       }
       D.openExternal(u);
     },
-    goLineEndSmart(me) { // Monaco provides a goLineStartSmart but not a goLineEndSmart command.
+    LL(me) { me.trigger('editor', 'cursorHome'); },
+    RL(me) {
       const sels = me.getSelections().map((c) => {
         const l = c.startLineNumber;
         const ch = c.startColumn - 1;
