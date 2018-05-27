@@ -50,17 +50,20 @@
     },
     OWS() {
       if (D.el && D.lastSpawnedExe) {
-        const v = D.el.dialog.showOpenDialog(D.elw, {
+        const [v] = D.el.dialog.showOpenDialog(D.elw, {
           title: 'Load Workspace',
-          filters: [{ name: 'Workspaces', extensions: ['dws'] }],
+          filters: [], // [{ name: 'Workspaces', extensions: ['dws'] }],
           properties: ['openFile'],
         });
-        if (v) {
+        if (!v) return;
+        if (/\.dws$/.test(v)) {
           $.confirm(
-            `Run Latent Expression of ${v[0].replace(/^.*[\\/]/, '')}?`,
+            `Run Latent Expression of ${v.replace(/^.*[\\/]/, '')}?`,
             'Load Workspace',
-            x => D.ide.exec([`      )${(x ? '' : 'x')}load ${v[0]}\n`], 0),
+            x => D.ide.exec([`      )${(x ? '' : 'x')}load ${v}\n`], 0),
           );
+        } else {
+          D.ide.exec([`      )ED file://${v}\n`], 0);
         }
       }
     },

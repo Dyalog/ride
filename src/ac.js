@@ -143,7 +143,7 @@
         const c = ac.position.column;
         const manual = me.tabComplete;
         if (D.prf.autocompletion() === 'shell' && manual) {
-          const [, prefix] = x.options.join(' ').match(prefixRE);
+          const [, prefix] = x.options.join(' ').match(prefixRE) || [];
           if (prefix && prefix.length > x.skip) {
             const endCol = (c - x.skip) + prefix.length;
             me.executeEdits(

@@ -258,8 +258,12 @@
       }[ee.entityType];
       ed.isCode = [1, 256, 512, 1024, 2048, 4096].indexOf(ee.entityType) >= 0;
       ed.isReadOnlyEntity = !!ee.readOnly;
-      monaco.editor.setModelLanguage(me.model, ed.isCode ? 'apl' : 'plaintext');
-      etype && ed.dom.classList.toggle(etype, true);
+      if (/(\.|\\|\/)/.test(ee.name)) {
+        me.setModel(monaco.editor.createModel(ed.oText, null, monaco.Uri.file(ee.name)));
+      } else {
+        monaco.editor.setModelLanguage(me.model, ed.isCode ? 'apl' : 'plaintext');
+        etype && ed.dom.classList.toggle(etype, true);
+      }
       me.updateOptions({ folding: ed.isCode && !!D.prf.fold() });
       if (ed.isCode && D.prf.indentOnOpen()) ed.RD(me);
       ed.setRO(ee.debugger);
