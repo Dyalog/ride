@@ -47,37 +47,33 @@ const incl = new RegExp('^$' +
   '|^/(src|lib|node_modules|_)(/|$)' +
   '|^/style($|/(fonts|img)|.*\\.css$)');
 const pkg = (x, y, f) => {
-  rq('electron-packager')(
-    {
-      dir: '.',
-      platform: x,
-      arch: y,
-      out: `_/${pj.name}`,
-      overwrite: true,
-      'download.cache': 'cache',
-      icon: 'D',
-      tmpdir: false,
-      ignore: p => (!incl.test(p) && !(x === 'win32' && /^\/windows-ime(\/set-ime.exe|$)/.test(p)))
-        || /monaco-editor\/(dev|min-maps)/.test(p),
-      appBundleId: `com.dyalog.${pj.name}`,
-      appCopyright: `(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
-      appVersion: v,
-      buildVersion: v,
-      win32metadata: { // ends up in Windows Explorer's right click > Properties
-        CompanyName: 'Dyalog Ltd',
-        FileDescription: 'Remote Integrated Development Environment for Dyalog APL',
-        OriginalFilename: `${pj.productName}.exe`,
-        ProductName: 'RIDE',
-        InternalName: 'RIDE',
-      },
+  rq('electron-packager')({
+    dir: '.',
+    platform: x,
+    arch: y,
+    out: `_/${pj.name}`,
+    overwrite: true,
+    'download.cache': 'cache',
+    icon: 'D',
+    ignore: p => (!incl.test(p) && !(x === 'win32' && /^\/windows-ime(\/set-ime.exe|$)/.test(p)))
+      || /monaco-editor\/(dev|min-maps)/.test(p),
+    appBundleId: `com.dyalog.${pj.name}`,
+    appCopyright: `(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
+    appVersion: v,
+    buildVersion: v,
+    win32metadata: { // ends up in Windows Explorer's right click > Properties
+      CompanyName: 'Dyalog Ltd',
+      FileDescription: 'Remote Integrated Development Environment for Dyalog APL',
+      OriginalFilename: `${pj.productName}.exe`,
+      ProductName: 'RIDE',
+      InternalName: 'RIDE',
     },
-    (e) => {
-      const d = `_/${pj.name}/${pj.productName}-${x}-${y}`;
-      rm(`${d}/version`);
-      fs.existsSync(`${d}/LICENSE`) && mv(`${d}/LICENSE`, `${d}/LICENSE.electron`);
-      f && f(e);
-    }
-  );
+  }).catch((e) => {
+    const d = `_/${pj.name}/${pj.productName}-${x}-${y}`;
+    rm(`${d}/version`);
+    fs.existsSync(`${d}/LICENSE`) && mv(`${d}/LICENSE`, `${d}/LICENSE.electron`);
+    f && f(e);
+  });
 };
 
 const l = (f) => { b(e => (e ? f(e) : pkg('linux', 'x64', f))); };
