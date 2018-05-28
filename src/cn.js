@@ -12,8 +12,10 @@
   const rq = nodeRequire;
   const fs = rq('fs');
   const cp = rq('child_process');
+  const home = rq('os').homedir();
   const net = rq('net');
   const path = rq('path');
+  const untildify = x => (home ? x.replace(/^~(?=$|\/|\\)/, home) : x);
   const { esc } = D.util;
   const user = D.el ? process.env.USER : '';
   const MIN_V = [15, 0];
@@ -490,7 +492,7 @@
               if (x.args) args = args.concat(args, x.args.replace(/\n$/, '').split('\n'));
               try {
                 child = cp.spawn(x.exe, args, {
-                  cwd: x.cwd,
+                  cwd: untildify(x.cwd),
                   stdio,
                   detached: true,
                   env: $.extend(
