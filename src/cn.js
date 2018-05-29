@@ -15,7 +15,7 @@
   const home = rq('os').homedir();
   const net = rq('net');
   const path = rq('path');
-  const untildify = x => (home ? x.replace(/^~(?=$|\/|\\)/, home) : x);
+  const untildify = x => (x && home ? x.replace(/^~(?=$|\/|\\)/, home) : x);
   const { esc } = D.util;
   const user = D.el ? process.env.USER : '';
   const MIN_V = [15, 0];
