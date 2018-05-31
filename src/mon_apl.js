@@ -235,7 +235,11 @@
             const [signature] = s.split(';');
             const [, fn, op] = signature.match(tradFnRE) || [];
             const fnop = op || fn;
-            const si = fnop ? signature.match(RegExp(`\\b${fnop}\\b`)).index : -1;
+            let si = -1; 
+            if (fnop) {
+              const sigm = signature.match(RegExp(`(^|[^${letter}0-9]+)${fnop}([^${letter}0-9]+|$)`));
+              si = sigm.index + sigm[1].length;
+            }
             let i = 0;
             while (i < signature.length) {
               const ch = signature[i];
