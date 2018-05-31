@@ -413,7 +413,7 @@
     },
     SetHighlightLine(line, hadErr) {
       const w = this;
-      w.hl(line + 1);
+      w.me_ready.then(() => w.hl(line + 1));
       hadErr < 0 && w.focus();
       w.HIGHLIGHT_LINE = line + 1;
     },
