@@ -161,6 +161,7 @@ createDEB() {
 		--epoch 0				\
 		--description "Remote IDE for Dyalog APL"	\
 		--deb-priority optional			\
+		--deb-no-default-config-files		\
 		opt usr
 
 	command -v lintian > /dev/null && lintian --include-dir packagescripts/linux/lintian --profile ride "ship/ride-${RIDEVERSION}_linux.${PACKAGECPUTYPE}.deb" || true
