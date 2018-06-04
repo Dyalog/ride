@@ -68,12 +68,12 @@ const pkg = (x, y, f) => {
       ProductName: 'RIDE',
       InternalName: 'RIDE',
     },
-  }).catch((e) => {
+  }).then(appPaths => {
     const d = `_/${pj.name}/${pj.productName}-${x}-${y}`;
     rm(`${d}/version`);
     fs.existsSync(`${d}/LICENSE`) && mv(`${d}/LICENSE`, `${d}/LICENSE.electron`);
-    f && f(e);
-  });
+    f();
+  }, e => f(e));
 };
 
 const l = (f) => { b(e => (e ? f(e) : pkg('linux', 'x64', f))); };
