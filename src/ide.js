@@ -390,7 +390,7 @@ D.IDE = function IDE(opts = {}) {
     const i = D.prf.ilf() ? -1 : x;
     eachWin((w) => { !w.bwId && w.id && w.indent(i); });
   });
-  D.prf.fold((x) => { eachWin((w) => { !w.bwId && w.fold(!!x); }); });
+  D.prf.fold((x) => { eachWin((w) => { w.id && !w.bwId && w.fold(!!x); }); });
   D.prf.matchBrackets((x) => { eachWin((w) => { !w.bwId && w.matchBrackets(!!x); }); });
   const togglePanel = (on, compName, compTitle, left) => {
     if (!on) {
