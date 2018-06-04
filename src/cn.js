@@ -17,7 +17,7 @@
   const path = rq('path');
   const untildify = x => (x && home ? x.replace(/^~(?=$|\/|\\)/, home) : x);
   const { esc } = D.util;
-  const user = D.el ? process.env.USER : '';
+  const user = D.el ? (process.env.USER || process.env.USERNAME || '') : '';
   const MIN_V = [15, 0];
   const KV = /^([a-z_]\w*)=(.*)$/i;
   const WS = /^\s*$/; // KV:regexes for parsing env vars
