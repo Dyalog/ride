@@ -43,7 +43,7 @@ const b = (f) => {
 };
 
 const incl = new RegExp('^$' +
-  '|^/(D\\.png|[^/]*\\.html|main\\.js|package\\.json)$' +
+  '|^/(D\\.png|favicon.*|[^/]*\\.html|main\\.js|package\\.json)$' +
   '|^/(src|lib|node_modules|_)(/|$)' +
   '|^/style($|/(fonts|img)|.*\\.css$)');
 const pkg = (x, y, f) => {
@@ -68,7 +68,7 @@ const pkg = (x, y, f) => {
       ProductName: 'RIDE',
       InternalName: 'RIDE',
     },
-  }).then(appPaths => {
+  }).then(() => {
     const d = `_/${pj.name}/${pj.productName}-${x}-${y}`;
     rm(`${d}/version`);
     fs.existsSync(`${d}/LICENSE`) && mv(`${d}/LICENSE`, `${d}/LICENSE.electron`);
