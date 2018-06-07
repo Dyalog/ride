@@ -45,9 +45,7 @@
 			<Directory Id="DesktopFolder" Name="DesktopFolder"/>
 			<Directory Id="$(env.PROGRAMFILESFOLDER)" Name="$(env.PROGRAMFILESFOLDER)">
 				<Directory Id="DyalogFLDR" Name="Dyalog">
-					<Directory Id="RideFLDR" Name="RIDE">
-						<Directory Id="INSTALLDIR" Name="$(env.RIDE_VERSION_AB_DOT)"/>
-					</Directory>
+					<Directory Id="INSTALLDIR" Name="Ride-$(env.RIDE_VERSION_AB_DOT)"/>
 				</Directory>
 			</Directory>
 		</Directory>
