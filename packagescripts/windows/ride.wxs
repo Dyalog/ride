@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="$(env.GUID_RIDE)" Name="$(env.RIDE_DESC)" Version="$(env.RIDE_VERSION)" Manufacturer="Dyalog" UpgradeCode="$(env.GUID_RIDE_UPGRADE)" Language="1033">
+	<Product Id="$(env.GUID_RIDE)" Name="$(env.RIDE_DESC)" Version="$(env.RIDE_VERSION_ABC_DOT)" Manufacturer="Dyalog" UpgradeCode="$(env.GUID_RIDE_UPGRADE)" Language="1033">
 		<Package InstallerVersion="300" Description="$(env.RIDE_DESC)" Comments="$(env.RIDE_DESC)" Platform="$(env.PLATFORM)" Manufacturer="Dyalog" Languages="0" Compressed="yes" InstallPrivileges="limited"/> 
 <!--
 		<MajorUpgrade
@@ -9,9 +9,6 @@
 		    />
 -->
 		<Upgrade Id="$(env.GUID_RIDE_UPGRADE)">
-<!--
-			<UpgradeVersion Minimum="$(env.RIDE_VERSION_AB)" IncludeMinimum="no" OnlyDetect="yes" Property="NEWPRODUCTFOUND"/>
--->
 			<UpgradeVersion Minimum="$(env.RIDE_MIN_UPGRADE_VERSION)" IncludeMinimum="yes" IncludeMaximum="yes" Maximum="$(env.RIDE_MAX_UPGRADE_VERSION)" Property="UPGRADEFOUND"/>
 		</Upgrade>
 		<!-- Prevent downgrading -->
@@ -49,7 +46,7 @@
 			<Directory Id="$(env.PROGRAMFILESFOLDER)" Name="$(env.PROGRAMFILESFOLDER)">
 				<Directory Id="DyalogFLDR" Name="Dyalog">
 					<Directory Id="RideFLDR" Name="RIDE">
-						<Directory Id="INSTALLDIR" Name="$(env.RIDE_VERSION)"/>
+						<Directory Id="INSTALLDIR" Name="$(env.RIDE_VERSION_AB_DOT)"/>
 					</Directory>
 				</Directory>
 			</Directory>

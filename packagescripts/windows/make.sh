@@ -48,7 +48,7 @@ if [ "$(ls -A $DIR)" ]; then
 			| sed "s/dir_heated_/dir_heated_${WIXVAR}_/" > $OUT
 	fi
 else
-    echo "$DIR is Empty, abandoning harvest."
+    echo "$DIR is empty, abandoning harvest."
 fi
 }
 
@@ -105,7 +105,7 @@ echo "#define GUID_RIDE_UPGRADE \"{$GUID_RIDE_UPGRADE}\"" >> $OBJ_TMP/guids.h
 #cp "$MK_LICENCE_FILE" $OBJ_FILES/licence.rtf
 
 	(
-	export SETUPTITLE="$RIDE_DESC_0 $RIDE_VERSION_AB_DOT"
+	export SETUPTITLE="$RIDE_DESC"
 
 	export MK_SETUPDIR=$OBJ_TMP/RIDE
 	export MK_RIDE_SETUP=1
@@ -147,7 +147,7 @@ echo $UPGRADE_GUID
 move_ride()
 {
 cd ${OBJ_FILES}/..
-echo "Compressing Ride setup Files"
+echo "Compressing RIDE setup files"
 zip -r $RIDE_ZIP_FILENAME ride
 cp $RIDE_ZIP_FILENAME $RIDE_SHIP
 
@@ -165,7 +165,6 @@ export RIDE_VERSION_A=$(echo $RIDE_VERSION_ABC_DOT | sed "s/\([0-9]*\)\.\([0-9]*
 export RIDE_VERSION_B=$(echo $RIDE_VERSION_ABC_DOT | sed "s/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)/\2/")
 export RIDE_VERSION_C=$(echo $RIDE_VERSION_ABC_DOT | sed "s/\([0-9]*\)\.\([0-9]*\)\.\([0-9]*\)/\3/")
 
-export RIDE_VERSION=$RIDE_VERSION_ABC_DOT
 export RIDE_VERSION_AB=${RIDE_VERSION_A}${RIDE_VERSION_B}
 export RIDE_VERSION_AB_DOT=${RIDE_VERSION_A}.${RIDE_VERSION_B}
 
@@ -173,7 +172,7 @@ export RIDE_BITS="32"
 export RIDE_SRC="${WORKSPACE}/_/ride${RIDE_VERSION_AB}/Ride-${RIDE_VERSION_AB_DOT}-win${RIDE_BITS}-ia32"
 export RIDE_SHIP="${WORKSPACE}/ship/"
 
-export RIDE_ZIP_FILENAME="ride-${RIDE_VERSION}_windows.zip"
+export RIDE_ZIP_FILENAME="ride-${RIDE_VERSION_ABC_DOT}_windows.zip"
 
 export RIDE_MIN_UPGRADE_VERSION=${RIDE_VERSION_AB_DOT}.0
 export RIDE_MAX_UPGRADE_VERSION=${RIDE_VERSION_AB_DOT}.$((${RIDE_VERSION_C} - 1))
@@ -191,10 +190,9 @@ export OBJ_FILES=${OBJ_TMP}/files/ride	# LMF [6886] 11-Feb-2011
 export OBJ_CABINETS=${OBJ_TMP}/cabs
 export RIDEDIR=$OBJ_TMP/RIDE
 
-export RIDE_DESC_0="Dyalog RIDE"
-export RIDE_DESC="$RIDE_DESC_0 $RIDE_VERSION"
-export RIDE_EXE="ride-${RIDE_VERSION_A}.${RIDE_VERSION_B}.exe"
-export RIDE_ICON_LABEL="Ride ${RIDE_VERSION_AB_DOT}"
+export RIDE_DESC="Dyalog RIDE $RIDE_VERSION_AB_DOT"
+export RIDE_EXE="Ride-${RIDE_VERSION_AB_DOT}.exe"
+export RIDE_ICON_LABEL="RIDE ${RIDE_VERSION_AB_DOT}"
 
 #rm -rf $OBJ_TMP
 
