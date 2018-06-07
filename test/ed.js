@@ -23,11 +23,18 @@ test(
 
     await c.waitForExist('#ide .ride_win.edit_trace', 1000, true);
     await c.waitForExist('#ide .ride_win');
-    // await c.pause(100);
     await c.keys([')ED f', 'Enter']);
     await c.waitForExist('#ide .ride_win.edit_trace');
     await c.keys(['Enter', '1', cc, 'a', 'c', cc, 'Escape']);
     text = await app.electron.clipboard.readText();
     t.is(text, `f${eol}1`);
+
+    await c.waitForExist('#ide .ride_win.edit_trace', 1000, true);
+    await c.waitForExist('#ide .ride_win');
+    await c.keys([')ED f', 'Enter']);
+    await c.waitForExist('#ide .ride_win.edit_trace');
+    await c.keys([cc, 'a', 'c', cc, 'Escape']);
+    text = await app.electron.clipboard.readText();
+    t.is(text, `f${eol} 1`);
   },
 );

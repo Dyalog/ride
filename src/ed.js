@@ -240,7 +240,7 @@
       ed.container && ed.container.setTitle(ed.name);
       // D.ide.floating && $('title', ed.dom.ownerDocument).text(`${ed.name} - ${ed.ide.caption}`);
       me.model.winid = ed.id;
-      me.model.setValue(ed.oText = ee.text.join('\n'));
+      me.model.setValue(ed.oText = ee.text.join(me.model.getEOL()));
       // me.model.setEOL(monaco.editor.EndOfLineSequence.LF);
       // entityType:            16 NestedArray        512 AplClass
       // 1 DefinedFunction      32 QuadORObject      1024 AplInterface
@@ -370,7 +370,7 @@
     onClose() {
       const ed = this;
       const { me } = ed;
-      const v = me.getValue({ lineEnding: '\n' });
+      const v = me.getValue();
       if (ed.tc || (v === ed.oText && `${ed.getStops()}` === `${ed.oStop}`)) {
         ed.EP(me);
       } else {
@@ -392,7 +392,7 @@
       const ed = this;
       const { me } = ed;
       const u = me.getPosition();
-      const txt = lines.join('\n');
+      const txt = lines.join(me.model.getEOL());
       ed.saveScrollPos();
       me.setValue(txt);
       // me.model.setEOL(monaco.editor.EndOfLineSequence.LF);
@@ -454,7 +454,7 @@
     EP(me) { this.isClosing = 1; this.FX(me); },
     FX(me) {
       const ed = this;
-      const v = me.getValue({ lineEnding: '\n' });
+      const v = me.getValue();
       const stop = ed.getStops();
       if (ed.tc || (v === ed.oText && `${stop}` === `${ed.oStop}`)) { // if tracer or unchanged
         D.send('CloseWindow', { win: ed.id }); return;
@@ -462,7 +462,7 @@
       if (!ed.me) {
         for (let i = 0; i < stop.length; i++) me.setGutterMarker(stop[i], 'breakpoints', null);
       }
-      D.send('SaveChanges', { win: ed.id, text: v.split('\n'), stop });
+      D.send('SaveChanges', { win: ed.id, text: v.split(me.model.getEOL()), stop });
     },
     TL(me) { // toggle localisation
       const name = this.cword();
@@ -528,7 +528,7 @@
         r[0] = r[0].slice(sel.p.column - 1);
         return {
           range: new monaco.Range(sel.p.lineNumber, sel.p.column, sel.q.lineNumber, sel.q.column),
-          text: r.join('\n'),
+          text: r.join(me.model.getEOL()),
         };
       });
       me.executeEdits('D', edits, o);
@@ -574,7 +574,7 @@
       } else if (me.getSelection().isEmpty()) {
         me.trigger('editor', 'editor.action.formatDocument');
         ed.firstOpen && setTimeout(() => {
-          ed.oText = me.getValue({ lineEnding: '\n' });
+          ed.oText = me.getValue();
           ed.firstOpen = false;
         }, 10);
       } else {
@@ -594,7 +594,7 @@
     },
     getUnsaved() {
       const { me } = this;
-      const v = me.getValue({ lineEnding: '\n' });
+      const v = me.getValue();
       return (v !== this.oText) ? v : false;
     },
     JBK(me) {
