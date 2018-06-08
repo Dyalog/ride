@@ -91,7 +91,6 @@ D.prf = {};
     '\n  Show Status Bar          =SBR'+
     '\n  Show Workspace Explorer  =WSE'+
     '\n  Show Debug               =DBG'+
-    '\n  Floating Edit Windows    =FLT {!browser}'+
     '\n  Line Wrapping in Session =WRP'+
     '\n  -                             {!browser}'+
     '\n  Stops                    =TVB'+
@@ -126,7 +125,7 @@ D.prf = {};
     '\n# Syntax:'+
     '\n#   &x   access key, alt+x'+
     '\n#   =CMD command code; some are special:'+
-    '\n#          LBR FLT WRP WSE render as checkboxes'+
+    '\n#          LBR WRP WSE render as checkboxes'+
     '\n#   =http://example.com/  open a URL'+
     '\n#   {}   conditional display, a boolean expression'+
     '\n#          operators: && || ! ( )'+
