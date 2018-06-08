@@ -247,7 +247,7 @@
       }
       if (!x) {
         se.taBuffer.length = 0;
-        se.taCb = me.onKeyDown((ke) => {
+        se.taCb = se.taCb || me.onKeyDown((ke) => {
           const be = ke.browserEvent;
           const k = be.key;
           if (k.length === 1 && !be.ctrlKey && !be.altKey && !be.metaKey) se.taBuffer.push(k);
