@@ -55,7 +55,6 @@
       q.bc.checked = !!p.blockCursor();
       q.cb.value = p.cursorBlinking();
       q.coq.checked = !!p.connectOnQuit();
-      q.fold.checked = !!p.fold();
       q.rlh.value = p.renderLineHighlight();
       q.ph.checked = !!p.persistentHistory();
       q.phs.value = p.persistentHistorySize();
@@ -74,7 +73,6 @@
       const p = D.prf;
       p.blockCursor        (q.bc.checked);
       p.cursorBlinking     (q.cb.value);
-      p.fold               (q.fold.checked);
       p.indent             (q.ai.checked ? (+q.sw.value || 0) : -1);
       p.indentMethods      (q.aim.checked ? (+q.swm.value || 0) : -1);
       p.indentComments     (q.icom.checked);
