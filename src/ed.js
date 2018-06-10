@@ -64,6 +64,7 @@
       showFoldingControls: 'always',
       useTabStops: false,
       wordBasedSuggestions: false,
+      wordSeparators: D.wordSeparators,
     });
     ed.me = me;
     ed.me_ready = new Promise((resolve) => {

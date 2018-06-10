@@ -53,6 +53,7 @@
       suggestOnTriggerCharacters: D.prf.autocompletion() === 'classic',
       useTabStops: false,
       wordBasedSuggestions: false,
+      wordSeparators: D.wordSeparators,
       wordWrap: D.prf.wrap() ? 'on' : 'off',
     });
     se.me = me;
