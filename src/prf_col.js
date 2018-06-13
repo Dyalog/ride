@@ -236,6 +236,7 @@
     // m: monaco theme token name
     // ctrls: what UI controls should be shown or hidden for this group (other than the default ones)
     {s:'assignment'      ,t:'asgn',m:'keyword.operator.assignment'}, //←
+    {s:'autocomplete sel',t:'acsl',e:'editorSuggestWidget.selectedBackground', ctrls:{bg:1,BIU:0,fg:0}},
     {s:'bracket'         ,t:'sqbr',m:'delimiter.square'}, //[]
     {s:'comment'         ,t:'com' ,m:'comment'}, //⍝
     {s:'cursor'          ,t:'cur' ,e:'editorCursor.foreground', ctrls:{bg:0,BIU:0,fg:1}},
