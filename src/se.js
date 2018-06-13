@@ -507,6 +507,7 @@
     RC() { this.me.trigger('editor', 'cursorRight'); },
     SA() { this.me.trigger('editor', 'selectAll'); },
     TO() { this.me.trigger('editor', 'editor.fold'); }, // (editor.unfold) is there a toggle?
+    TVB() { D.prf.breakPts.toggle(); },
     TVO() { D.prf.fold.toggle(); },
     indentOrComplete(me) {
       const sels = me.getSelections();
