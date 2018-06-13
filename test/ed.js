@@ -35,6 +35,6 @@ test(
     await c.waitForExist('#ide .ride_win.edit_trace');
     await c.keys([cc, 'a', 'c', cc, 'Escape']);
     text = await app.electron.clipboard.readText();
-    t.is(text, `f${eol} 1`);
+    t.is(text, ` f${eol} 1`);
   },
 );

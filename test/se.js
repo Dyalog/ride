@@ -9,11 +9,10 @@ test(
     const { app } = t.context;
     const c = app.client;
 
-    await c.execute(inWin, 0, '1 2 3+4 5 6');
-    await c.pause(100);
+    await c.keys(['1 2 3+4 5 6']);
     let r = await c.execute(sessionLastLines, 1);
     t.is(r.value[0], '      1 2 3+4 5 6');
-    await c.execute(inWin, 0, '<ER>');
+    await c.keys(['Enter']);
     await c.pause(100);
     r = await c.execute(sessionLastLines, 3);
     t.deepEqual(r.value, [
@@ -51,6 +50,7 @@ test(
     const c = app.client;
 
     await c.execute(() => { D.prf.prefixKey('<'); });
+    await c.pause(100);
     await c.keys(['<lDL 1', 'Enter']);
     await c.pause(100);
     await c.keys(['<i6', 'Enter']);

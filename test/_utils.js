@@ -42,7 +42,8 @@ class TFW {
 
       await x.app.start();
       await x.app.client.waitUntilWindowLoaded();
-      await x.app.client.waitForVisible('#splash', 5000, true);
+      await x.app.client.waitForVisible('#splash', 10000, true);
+      if (o.src !== 'cn') await x.app.client.waitForExist('#ide .lm_tab.lm_active');
     });
 
     test.afterEach.always(async (t) => {
