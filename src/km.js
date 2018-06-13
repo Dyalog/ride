@@ -51,8 +51,8 @@
     OWS() {
       if (D.el && D.lastSpawnedExe) {
         const [v] = D.el.dialog.showOpenDialog(D.elw, {
-          title: 'Load Workspace',
-          filters: [], // [{ name: 'Workspaces', extensions: ['dws'] }],
+          title: 'Open file',
+          filters: [],
           properties: ['openFile'],
         });
         if (!v) return;
