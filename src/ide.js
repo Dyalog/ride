@@ -527,6 +527,7 @@ D.IDE = function IDE(opts = {}) {
         w.close();
         w.id = -1;
       } else if (w) {
+        w.me.model.destroy();
         w.container && w.container.close();
       }
       delete ide.wins[x.win]; ide.focusMRUWin();

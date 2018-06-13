@@ -320,6 +320,7 @@
     },
     close() {
       if (D.ide.floating) {
+        this.me.model.destroy();
         delete D.ide.wins[this.id];
         this.container && this.container.close();
         !D.ide.gl.root.contentItems.length && D.el.getCurrentWindow().hide();
