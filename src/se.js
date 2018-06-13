@@ -378,10 +378,7 @@
         const sel = me.getSelection();
         if (sel.isEmpty()) {
           es = [me.model.getLineContent(sel.startLineNumber)];
-          if (trace && /^\s*$/.test(es[0]) && (w = se.ide.tracer())) {
-            w.focus();
-            return;
-          }
+          trace && /^\s*$/.test(es[0]) && (w = se.ide.tracer()) && w.focus();
         } else {
           es = [me.model.getValueInRange(sel)];
         }
