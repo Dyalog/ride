@@ -1,5 +1,5 @@
 {
-  const words = '[⎕\\]\\)\\.A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ\\d]';
+  const words = '[⎕\\\\\\/\\]\\)\\.A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ\\d]';
   const prefixRE = new RegExp(`^(${words}*)${words}*(?: \\1${words}*)*$`);
   let cce; // composition change event
   function bqCleanUpMe(me) {
