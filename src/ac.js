@@ -74,6 +74,7 @@
     });
     me.onDidChangeModelContent((e) => {
       const pk = D.prf.prefixKey();
+      me.tabComplete = 0;
       if (me.model.bqc) {
         if (me.isComposing) cce = e;
         else bqChangeHandlerMe(me, e);
