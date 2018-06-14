@@ -72,7 +72,7 @@ D.IDE = function IDE(opts = {}) {
       const { text, cmd } = pfq.shift();
       const w = D.ide.focusedWin;
       if (text) w.insert(text);
-      else if (D.commands[cmd]) D.commands[cmd](w.me);
+      else w.execCommand(cmd);
     }
     if (pfq.length) pfqtid = setTimeout(pfKeyRun, D.prf.floating() ? 100 : 20);
     else pfqtid = 0;

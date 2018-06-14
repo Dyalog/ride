@@ -38,6 +38,7 @@
           // document.title = `${ed.name} - ${D.ide.caption}`;
           ed.refresh();
           rm.emit('unblock', ed.id);
+          ed.meIsReady = true;
         });
         setTimeout(() => {
           const glr = D.ide.gl.root;
@@ -182,7 +183,10 @@
       srv.on('prf', ([k, x]) => { D.prf[k](x); });
       srv.on('switchWin', data => D.ide.switchWin(data));
       srv.on('updPW', data => D.ide.updPW(data));
-      srv.on('unblock', () => D.ide.unblock());
+      srv.on('unblock', (id) => {
+        D.ide.wins[id].me_resolve(true);
+        D.ide.unblock();
+      });
       srv.on('mounted', (id) => {
         D.ide.hadErr > 0 && (D.ide.hadErr -= 1);
         D.ide.focusWin(D.ide.wins[id]);
@@ -224,6 +228,7 @@
     ed.socket = socket;
     ed.id = -1;
     ed.me = { dyalogCmds: ed };
+    ed.me_ready = new Promise((r) => { ed.me_resolve = r; });
     ed.tc = 0;
     ed.focusTS = +new Date();
   };

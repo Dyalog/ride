@@ -360,7 +360,10 @@
       });
     },
     autocompletionDelay(x) { this.me.updateOptions({ quickSuggestionsDelay: x }); },
-    execCommand(cmd) { this[cmd] && this[cmd](this.me); },
+    execCommand(cmd) {
+      if (this[cmd]) this[cmd](this.me);
+      else if (D.commands[cmd]) D.commands[cmd](this.me);
+    },
     zoom(z) {
       const ed = this;
       const { me } = ed;
