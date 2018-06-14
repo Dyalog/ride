@@ -785,8 +785,6 @@ D.IDE.prototype = {
   TVO: D.prf.fold.toggle,
   UND() { this.focusedWin.me.trigger('D', 'undo'); },
   RDO() { this.focusedWin.me.trigger('D', 'redo'); },
-  CAM() { D.send('ClearTraceStopMonitor', { token: 0 }); },
-  CAW() { D.send('CloseAllWindows', {}); },
   Edit(data) {
     if (this.floating) { this.ipc.emit('Edit', data); return; }
     D.pendingEdit = D.pendingEdit || data;

@@ -39,6 +39,11 @@
     PT() { document.execCommand('Paste'); },
     PRF() { D.prf_ui(); },
     ABT() { D.abt(); },
+    CAM() {
+      D.send('ClearTraceStopMonitor', { token: 0 });
+      Object.keys(D.ide.wins).forEach((x) => { +x && D.ide.wins[x].execCommand('CBP'); });
+    },
+    CAW() { D.send('CloseAllWindows', {}); },
     CNC() {
       const p = D.el.process.argv; // if(D.mac)p=p.replace(/(\/Contents\/).*$/,'$1MacOS/nwjs')
       nodeRequire('child_process').spawn(p[0], p.slice(1), {
