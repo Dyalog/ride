@@ -63,3 +63,35 @@ test(
     ]);
   },
 );
+
+test(
+  'se-quad-output-while-tracing',
+  async (t) => {
+    const { app } = t.context;
+    const c = app.client;
+    let r;
+
+    await c.keys(["`lFX 'f' '`l`[''hello'''", 'Enter']);
+    await c.pause(100);
+    await c.keys(['f', 'Enter']);
+    await c.pause(100);
+    r = await c.execute(sessionLastLines, 3);
+    t.deepEqual(r.value, [
+      '      f',
+      'hello',
+      '      ',
+    ]);
+    
+    await c.keys(['f', 'Control', 'Enter']);
+    await c.waitForExist('#ide .ride_win.edit_trace');
+    await c.keys(['Control', 'Enter', 'Enter']);
+    await c.pause(100);
+    r = await c.execute(sessionLastLines, 3);
+    t.deepEqual(r.value, [
+      '      f',
+      'hello',
+      '      ',
+    ]);
+
+  },
+);
