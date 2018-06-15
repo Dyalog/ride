@@ -134,10 +134,9 @@
     const t = q.type.value;
     const s = q.subtype.value;
     sel && (sel.subtype = s);
-    q.cwd.disabled = !(q.ssh.hidden = s !== 'ssh');
-    q.tcp_port.disabled = t === 'start' && s === 'raw';
-    q.tcp_host.disabled = t === 'start' && s === 'raw';
-    q.tcp_port.placeholder = q.tcp_port.disabled ? 0 : 4502;
+    q.cwd_fld.hidden = !(q.ssh.hidden = s !== 'ssh');
+    q.tcp_dtl.hidden = t === 'start' && s === 'raw';
+    q.tcp_port.placeholder = q.tcp_dtl.hidden ? 0 : 4502;
     q.ssl.hidden = s !== 'ssl';
     q.fetch.disabled = q.ssh.hidden;
     updExes();
