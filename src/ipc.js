@@ -209,12 +209,12 @@
       wp = Object.assign(new D.IPC_WindowProxy(), wp);
     }
     const bw = D.el.BrowserWindow.fromId(wp.bwId);
+    bw.show();
     if (!D.prf.editWinsRememberPos()) {
-      const o = WindowRect(wp.bwId - D.pwins[0].bwId, D.prf.editWins());
+      const o = WindowRect(1 + (wp.bwId - D.pwins[0].bwId), D.prf.editWins());
       bw.setPosition(o.x, o.y);
       bw.setSize(o.width, o.height);
     }
-    bw.show();
     const ped = D.pendingEditors.shift();
     wp.id = ped.editorOpts.id;
     wp.tc = ped.editorOpts.tc;
