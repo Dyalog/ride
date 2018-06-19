@@ -576,7 +576,7 @@
 
 
   const aplCompletions = pk => ({
-    triggerCharacters: `:.⎕()[]${pk}`.split(''),
+    triggerCharacters: `1234567890:.⎕()[]${pk}`.split(''),
     provideCompletionItems: (model, position) => {
       const l = position.lineNumber;
       const c = position.column;
