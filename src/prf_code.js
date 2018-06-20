@@ -4,7 +4,7 @@
   let q; // DOM elements whose ids start with "code_", keyed by the rest of the id
   D.prf_tabs.code = {
     name: 'Code',
-    init(t) {
+    init() {
       q = J.code;
       const updEnabling = () => {
         q.aim.disabled = !q.ai.checked;
@@ -27,7 +27,6 @@
         q.ai.disabled = x;
         q.aim.disabled = x;
         q.icom.disabled = x;
-        q.io.disabled = x;
       };
       q.ph.onchange = () => {
         q.phs.disabled = !q.ph.checked;
