@@ -545,16 +545,11 @@
     BH() { D.send('ContinueTrace', { win: this.id }); },
     RM() { D.send('Continue', { win: this.id }); },
     MA() { D.send('RestartThreads', {}); },
-    CBP() { // Clear trace/stop/monitor for this object
+    CBP() { // Clear stops for this object
       const ed = this;
       ed.stop.clear();
       ed.setStop();
-      ed.tc && D.send('SetLineAttributes', {
-        win: ed.id,
-        stop: ed.getStops(),
-        trace: [],
-        monitor: [],
-      });
+      ed.tc && D.send('SetLineAttributes', { win: ed.id, stop: ed.getStops() });
     },
     BP(me) { // toggle breakpoint
       const ed = this;
