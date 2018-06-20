@@ -16,7 +16,7 @@ D.cmds = [
   ['BT', 'Back Tab between windows',['Ctrl-Shift-Tab']],
   ['CAM','Clear all trace/stop/monitor',[]],
   ['CAW','Close All Windows',[]],
-  ['CBP','Clear trace/stop/monitor current fn',[]],
+  ['CBP','Clear stops for active object',[]],
   ['CNC','Connect',                 []],
   ['DK', 'Delete lines',            []],
   ['DMK','Toggle key display mode', []],
