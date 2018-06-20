@@ -51,7 +51,7 @@ D.DBG = function DBG() {
   });
 };
 D.DBG.prototype = {
-  TR() { D.ide.getStats(); },
+  TFR() { D.ide.getStats(); },
   RM() { D.send('Continue', { win: this.threads.selected.tid }); },
   MA() { D.send('RestartThreads', {}); },
 };

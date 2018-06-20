@@ -61,7 +61,7 @@ D.cmds = [
   ['TO', 'Toggle fold',             []],
   ['TVB','Toggle view stops',       []],
   ['TVO','Toggle view outline',     []],
-  ['TR', 'Refresh threads',         []],
+  ['TFR', 'Refresh threads',        []],
   ['VAL','Evaluate selection or name under cursor',[]],
   ['WI', 'Weak interrupt',          ['Ctrl-PauseBreak']],
   ['WSE','Toggle workspace explorer',[]],
