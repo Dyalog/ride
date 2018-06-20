@@ -35,7 +35,6 @@
         ed.me_ready.then(() => {
           ed.open(ee);
           ed.updSize();
-          // document.title = `${ed.name} - ${D.ide.caption}`;
           ed.refresh();
           rm.emit('unblock', ed.id);
           ed.meIsReady = true;

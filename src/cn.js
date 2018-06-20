@@ -588,10 +588,8 @@
     };
     q.fav_name.onchange = q.fav_name.onkeyup;
     updFormDtl();
-    function upperFirst(s) { return s[0].toUpperCase() + s.substr(1); }
     q.type.onchange = () => {
       sel.type = q.type.value;
-      document.title = `RIDE - ${upperFirst(q.type.value)}`;
       updFormDtl();
       sel.exe = sel.exe || q.exe.value;
     };
@@ -904,7 +902,7 @@
       }
     } catch (e) { console.error(e); }
     updExes();
-    document.title = `RIDE - ${upperFirst(q.type.value)}`;
+    document.title = 'RIDE-Dyalog Session';
     const conf = D.el.process.env.RIDE_CONF;
     if (conf) {
       const i = [...q.favs.children].findIndex(x => x.cnData.name === conf);
