@@ -531,6 +531,9 @@ a:hover {
     background-color: white;
     border-bottom: 1px solid grey;
   }
+  #shc_tbl_wr tr td {
+    color: black;
+  }
   #shc_tbl_wr tr .shc_key {
     border: none;
   }
