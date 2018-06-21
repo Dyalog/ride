@@ -135,6 +135,9 @@ EOFprerm
 
 createDEB() {
 
+	# https://www.debian.org/doc/manuals/debian-faq/ch-pkg_basics#s-pkgname
+	PACKAGENAME="ride-${BASE_VERSION}_${RIDEVERSION}-1_${DEBCPUTYPE}.deb"
+
 	# Dependencies tested with Debian 8 and Ubuntu 14.04.
 	fpm						\
 		-f					\
@@ -154,21 +157,24 @@ createDEB() {
 		--category "devel"			\
 		--after-install $postinst		\
 		--before-remove $prerm			\
-		-p "ship/ride-${RIDEVERSION}_linux.${PACKAGECPUTYPE}.deb"	\
+		-p "ship/${PACKAGENAME}"		\
 		-n "ride-${BASE_VERSION}"		\
 		-v ${RIDEVERSION}			\
-		-a "${PACKAGECPUTYPE}"			\
+		-a "${DEBCPUTYPE}"			\
 		--epoch 0				\
 		--description "Remote IDE for Dyalog APL"	\
 		--deb-priority optional			\
 		--deb-no-default-config-files		\
 		opt usr
 
-	command -v lintian > /dev/null && lintian --include-dir packagescripts/linux/lintian --profile ride "ship/ride-${RIDEVERSION}_linux.${PACKAGECPUTYPE}.deb" || true
+	command -v lintian > /dev/null && lintian --include-dir packagescripts/linux/lintian --profile ride "ship/${PACKAGENAME}" || true
 
 }
 
 createRPM() {
+
+	# http://ftp.rpm.org/max-rpm/ch-rpm-file-format.html
+	PACKAGENAME="ride-${BASE_VERSION}-${RIDEVERSION}-1.${RPMCPUTYPE}.rpm"
 
 	# Dependencies tested with Fedora 25, Centos 7 and openSUSE 13.2.
 	# (NB Electron 2 needs libnss3.so >= 3.26. All these distributions have
@@ -192,15 +198,15 @@ createRPM() {
 		--category "devel"			\
 		--after-install $postinst		\
 		--before-remove $prerm			\
-		-p "ship/ride-${RIDEVERSION}_linux.${PACKAGECPUTYPE}.rpm"	\
+		-p "ship/${PACKAGENAME}"		\
 		-n "ride-${BASE_VERSION}"		\
 		-v ${RIDEVERSION}			\
-		-a "${PACKAGECPUTYPE}"			\
+		-a "${RPMCPUTYPE}"			\
 		--epoch 0				\
 		--description "Remote IDE for Dyalog APL"	\
 		opt usr
 
-	command -v rpmlint > /dev/null && rpmlint -f packagescripts/linux/rpmlint/config "ship/ride-${RIDEVERSION}_linux.${PACKAGECPUTYPE}.rpm" || true
+	command -v rpmlint > /dev/null && rpmlint -f packagescripts/linux/rpmlint/config "ship/${PACKAGENAME}" || true
 
 }
 
@@ -217,9 +223,11 @@ for CPUTYPE in x64 armv7l ; do
 	RIDEDIR="_/${BUILDNAME}/${APP_NAME}-linux-${CPUTYPE}"
 
 	if [ "${CPUTYPE}" = "x64" ] ; then
-		PACKAGECPUTYPE="amd64"
+		DEBCPUTYPE="amd64"
+		RPMCPUTYPE="x86_64"
 	elif [ "${CPUTYPE}" = "armv7l" ] ; then
-		PACKAGECPUTYPE="armhf"
+		DEBCPUTYPE="armhf"
+		RPMCPUTYPE="armhf"
 	fi
 
 	checkEnvironment
