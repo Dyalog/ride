@@ -25,7 +25,7 @@ class TFW {
     test.beforeEach(async (t) => {
       this.counter += 1;
       const x = t.context;
-      x.userData = temp.mkdirSync('ride41');
+      x.userData = temp.mkdirSync('ride42');
       const env = {
         spectron_temp_dir: x.userData,
       };
