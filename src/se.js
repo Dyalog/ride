@@ -71,6 +71,7 @@
     se.tracer = me.createContextKey('tracer', true);
     me.listen = true;
     se.oModel = monaco.editor.createModel('');
+    D.remDefaultMap(me);
     D.mapScanCodes(me);
     D.mapKeys(se); D.prf.keys(D.mapKeys.bind(this, se));
 
