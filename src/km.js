@@ -324,6 +324,12 @@
       run: e => ed.STL(e),
     });
   };
+  D.remDefaultMap = (me) => {
+    const kbs = me._standaloneKeybindingService;
+    kbs.addDynamicKeybinding('-editor.action.insertCursorAtEndOfEachLineSelected');
+    kbs.addDynamicKeybinding('-editor.action.blockComment');
+    kbs.addDynamicKeybinding('-editor.action.formatDocument');
+  };
   const l = {
     Unknown: 'unknown',
     Backspace: 'Backspace',
