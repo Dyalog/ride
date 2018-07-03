@@ -336,12 +336,13 @@
     refresh() { },
     cword() { // apl identifier under cursor
       const { me } = this;
-      const c = me.getPosition();
-      const s = me.model.getLineContent(c.lineNumber);
+      const p = me.getPosition();
+      const c = p.column - 1;
+      const s = me.model.getLineContent(p.lineNumber);
       const r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*'; // r:regex fragment used for a name
       return (
-        ((RegExp(`⎕?${r}$`).exec(s.slice(0, c.column)) || [])[0] || '') + // match left  of cursor
-        ((RegExp(`^${r}`).exec(s.slice(c.column)) || [])[0] || '') // match right of cursor
+        ((RegExp(`⎕?${r}$`).exec(s.slice(0, c)) || [])[0] || '') + // match left of cursor
+        ((RegExp(`^${r}`).exec(s.slice(c)) || [])[0] || '') // match right of cursor
       ).replace(/^\d+/, ''); // trim leading digits
     },
     autoCloseBrackets(x) { this.me.updateOptions({ autoClosingBrackets: x }); },
