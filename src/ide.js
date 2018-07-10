@@ -809,8 +809,7 @@ D.IDE.prototype = {
   getUnsaved() {
     const r = {};
     Object.keys(this.wins).forEach((k) => {
-      const v = (+k && this.wins[k].getUnsaved());
-      if (v) r[k] = v;
+      r[k] = this.wins[k].getUnsaved();
     });
     return r;
   },

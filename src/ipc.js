@@ -170,11 +170,8 @@
           if (data[k] && D.pendingEdit.unsaved[k] === -1) D.pendingEdit.unsaved[k] = data[k];
           else delete D.pendingEdit.unsaved[k];
         });
-        let ready = true;
-        Object.keys(D.pendingEdit.unsaved).forEach((k) => {
-          ready = ready && D.pendingEdit.unsaved[k];
-        });
-        if (ready) {
+
+        if (!Object.values(D.pendingEdit.unsaved).includes(-1)) {
           D.send('Edit', D.pendingEdit);
           delete D.pendingEdit;
         }

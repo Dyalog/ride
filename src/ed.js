@@ -104,7 +104,7 @@
           ed.ED(me);
         }
         mouseL = p.lineNumber; mouseC = p.column; mouseTS = e.event.timestamp;
-      } 
+      }
     });
     me.onDidFocusEditor(() => { ed.focusTS = +new Date(); ed.ide.focusedWin = ed; });
     ed.processAutocompleteReply = D.ac(me);
@@ -190,6 +190,7 @@
     },
     setTC(x) {
       const ed = this;
+      ed.isClosing = 0;
       ed.tc = x;
       ed.tracer.set(x);
       ed.dom.classList.toggle('tracer', !!x);
@@ -312,11 +313,13 @@
       this.isReadOnly || this.me.trigger('editor', 'type', { text: ch });
     },
     saved(err) {
+      const ed = this;
       if (err) {
-        this.isClosing = 0;
+        ed.isClosing = 0;
         $.err('Cannot save changes');
       } else {
-        this.isClosing && D.send('CloseWindow', { win: this.id });
+        ed.oText = ed.me.getValue();
+        ed.isClosing && D.send('CloseWindow', { win: ed.id });
       }
     },
     close() {
