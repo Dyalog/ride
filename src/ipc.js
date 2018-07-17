@@ -78,6 +78,7 @@
       rm.on('caption', (c) => { document.title = `Preferences - ${c}`; });
       rm.on('show', x => D.prf_ui(x));
       rm.on('prf', ([k, x]) => D.prf[k](x, 1));
+      rm.on('nudge', () => rm.emit('nudge'));
     });
   };
 
