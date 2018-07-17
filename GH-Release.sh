@@ -4,7 +4,7 @@ set -e
 GIT_BRANCH=${JOB_NAME#*/*/}
 GIT_COMMIT=$(git rev-parse HEAD)
 
-if ! [ "${GIT_BRANCH}" = "master" ]; then
+if ! [ "${GIT_BRANCH}" = "ride4.1" ]; then
 	echo "skipping creating release for ${GIT_BRANCH}"
 	exit 0
 else
