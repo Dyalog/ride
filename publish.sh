@@ -53,7 +53,7 @@ cp -r _/${APP_NAME}/${DIR} $r/$d/${OSNAME}
 
   cd _/${APP_NAME}/$DIR
   echo "creating $TMPZIP"
-  zip -q -r "$TMPZIP" .
+  zip -q -r --symlinks "$TMPZIP" .
   echo "Copying to devt"
   cp $TMPZIP $r/$d
   echo "Removing $TMPZIP"
