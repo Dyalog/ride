@@ -137,7 +137,7 @@ function createDEB() {
 		-s dir					\
 		-C ${SBOXDIR}				\
 		-d 'libc6 >= 2.11.3-4'			\
-		--license "Proprietary"			\
+		--license "MIT"				\
 		-m "Dyalog Ltd <support@dyalog.com>"	\
 		--url "http://www.dyalog.com"		\
 		--category "devel"			\
@@ -161,7 +161,7 @@ function createRPM() {
 		-s dir					\
 		-C ${SBOXDIR}				\
 		-d 'glibc >= 2.11.3-4'			\
-		--license "Proprietary"			\
+		--license "MIT"				\
 		-m "Dyalog Ltd <support@dyalog.com>"	\
 		--url "http://www.dyalog.com"		\
 		--category "devel"			\
