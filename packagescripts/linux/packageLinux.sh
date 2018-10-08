@@ -148,7 +148,7 @@ createDEB() {
 		-d 'libgconf-2-4'			\
 		-d 'libasound2'				\
 		-d 'libx11-xcb1'			\
-		--license "Proprietary"			\
+		--license "MIT"			\
 		-m "Dyalog Ltd <support@dyalog.com>"	\
 		--url "http://www.dyalog.com"		\
 		--category "devel"			\
@@ -186,7 +186,7 @@ createRPM() {
 		-d 'libasound.so.2()(64bit)'		\
 		-d 'libnss3.so()(64bit)'		\
 		-d 'libX11-xcb.so.1()(64bit)'		\
-		--license "Proprietary"			\
+		--license "MIT"			\
 		-m "Dyalog Ltd <support@dyalog.com>"	\
 		--url "http://www.dyalog.com"		\
 		--category "devel"			\
