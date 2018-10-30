@@ -1,3 +1,9 @@
+# RIDE
+
+RIDE is a remote IDE for [Dyalog](www.dyalog.com) APL.
+
+![Screenshot](/screenshot.png?raw=true)
+
                     RIDE                                             RIDE
     ┌────────────┐protocol┌───────────┐     ┌───────┐HTTPS ┌──────┐protocol┌───────────┐
     │Electron app├────────┤interpreter│     │browser├──────┤srv.js├────────┤interpreter│
