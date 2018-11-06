@@ -15,7 +15,7 @@
   "dependencies": {
     "golden-layout": "^1.5.9",
     "jquery": "^3.2.1",
-    "monaco-editor": "0.10.1",
+    "monaco-editor": "^0.14.3",
     "node-ipc": "^9.1.1",
     "os-locale": "^3.0.1",
     "ssh2": "^0.6.1",

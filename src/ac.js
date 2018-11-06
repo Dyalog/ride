@@ -84,6 +84,7 @@
       } else if (!e.isRedoing && !e.isUndoing && !e.isFlush) {
         setTimeout(() => {
           const sw = me.contentWidgets['editor.widget.suggestWidget'];
+          if (!sw) return;
           const swv = sw.widget.suggestWidgetVisible.get();
           const r = e.changes[0].range;
           if (r.startLineNumber > me.model.getLineCount()) return;
@@ -104,18 +105,21 @@
         }, 50);
       }
     });
-    const fw = me.overlayWidgets['editor.contrib.findWidget'].widget;
-    const fi = fw._findInput;
-    fi.onKeyDown((e) => {
-      const pk = D.prf.prefixKey();
-      const s = fi.getValue();
-      const be = e.browserEvent;
-      const tgt = be.target;
-      const p = tgt.selectionStart;
-      if (s[p - 1] === pk && D.bq[be.key] &&
-        !be.altKey && !be.ctrlKey && !be.metaKey && !be.key !== 'Shift') {
-        e.preventDefault();
-        const t = s.slice(0, p - 1) + D.bq[be.key] + s.slice(p);
+    const blurTextDisposable = me.onDidBlurEditorText(() => {
+      const fw = (me.overlayWidgets['editor.contrib.findWidget'] || {}).widget;
+      if (!fw) return;
+      blurTextDisposable.dispose();
+      const fi = fw._findInput;
+      fi.onKeyDown((e) => {
+        const pk = D.prf.prefixKey();
+        const s = fi.getValue();
+        const be = e.browserEvent;
+        const tgt = be.target;
+        const p = tgt.selectionStart;
+        if (s[p - 1] === pk && D.bq[be.key] &&
+          !be.altKey && !be.ctrlKey && !be.metaKey && !be.key !== 'Shift') {
+            e.preventDefault();
+            const t = s.slice(0, p - 1) + D.bq[be.key] + s.slice(p);
         fi.setValue(t);
         fi._onInput.fire();
         tgt.selectionStart = p;
@@ -130,13 +134,14 @@
       const p = tgt.selectionStart;
       if (s[p - 1] === pk && D.bq[be.key] &&
         !be.altKey && !be.ctrlKey && !be.metaKey && !be.key !== 'Shift') {
-        be.preventDefault();
-        fwr.value = s.slice(0, p - 1) + D.bq[be.key] + s.slice(p);
-        fw._state.change({ replaceString: fwr.value }, false);
-        tgt.selectionStart = p;
-        tgt.selectionEnd = p;
-      }
-    };
+          be.preventDefault();
+          fwr.value = s.slice(0, p - 1) + D.bq[be.key] + s.slice(p);
+          fw._state.change({ replaceString: fwr.value }, false);
+          tgt.selectionStart = p;
+          tgt.selectionEnd = p;
+        }
+      };
+    });
     return (x) => { // win:editor or session instance to set up autocompletion in
       const { ac } = me.model;
       if (ac && ac.complete) {

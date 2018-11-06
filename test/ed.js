@@ -10,7 +10,12 @@ test(
     const c = app.client;
     let text;
 
-    await c.execute(() => { D.prf.prefixKey('<'); D.prf.ilf(0); D.prf.indent(-1); });
+    await c.execute(() => { 
+      D.prf.prefixKey('<'); 
+      D.prf.ilf(0); 
+      D.prf.indent(-1); 
+      D.prf.indentOnOpen(0);
+    });
     const [mac, win] = (await c.execute(() => [D.mac, D.win])).value;
     const eol = win ? '\r\n' : '\n';
     const cc = mac ? 'Meta' : 'Control';
@@ -29,6 +34,7 @@ test(
     text = await app.electron.clipboard.readText();
     t.is(text, `f${eol}1`);
 
+    // the following test will pass if interpreter is configured to autoformat and indent
     await c.waitForExist('#ide .ride_win.edit_trace', 1000, true);
     await c.waitForExist('#ide .ride_win');
     await c.keys([')ED f', 'Enter']);

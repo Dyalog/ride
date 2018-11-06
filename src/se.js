@@ -79,13 +79,13 @@
     me.onMouseDown((e) => {
       const t = e.target;
       const mt = monaco.editor.MouseTargetType;
-      const p = t.position;
-      const l = p.lineNumber;
-      const c = p.column;
       if (e.event.middleButton) {
         e.event.preventDefault();
         e.event.stopPropagation();
       } else if (t.type === mt.CONTENT_TEXT) {
+        const p = t.position;
+        const l = p.lineNumber;
+        const c = p.column;
         if (e.event.timestamp - mouseTS < 400 && mouseL === l && mouseC === c) {
           e.event.preventDefault();
           e.event.stopPropagation();
@@ -124,7 +124,7 @@
     me.onDidScrollChange((e) => {
       se.btm = se.me.getLayoutInfo().contentHeight + e.scrollTop;
     });
-    me.onDidFocusEditor(() => { se.focusTS = +new Date(); se.ide.focusedWin = se; });
+    me.onDidFocusEditorText(() => { se.focusTS = +new Date(); se.ide.focusedWin = se; });
     me.onDidChangeCursorPosition(e => ide.setCursorPosition(e.position));
     se.promptType = 0; // see ../docs/protocol.md #SetPromptType
     se.processAutocompleteReply = D.ac(me);
@@ -270,7 +270,7 @@
       const ll = me.model.getLineCount();
       const llt = me.getTopForLineNumber(ll);
       const ontop = top > (llt + lh + lh) - oldHeight;
-      const { startLineNumber, endLineNumber } = me.getCompletelyVisibleLinesRangeInViewport();
+      const [{ startLineNumber, endLineNumber }] = me.getVisibleRanges();
       const onbottom = endLineNumber === ll;
       me.layout({ width: se.dom.clientWidth, height: se.dom.clientHeight });
       const flt = me.getTopForLineNumber(startLineNumber);
@@ -316,7 +316,7 @@
     },
     blockCursor(x) { this.me.updateOptions({ cursorStyle: x ? 'block' : 'line' }); },
     cursorBlinking(x) { this.me.updateOptions({ cursorBlinking: x }); },
-    hasFocus() { return this.me.isFocused(); },
+    hasFocus() { return this.me.hasTextFocus(); },
     focus() {
       let q = this.container;
       let p = q && q.parent;

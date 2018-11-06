@@ -106,7 +106,7 @@
         mouseL = p.lineNumber; mouseC = p.column; mouseTS = e.event.timestamp;
       }
     });
-    me.onDidFocusEditor(() => { ed.focusTS = +new Date(); ed.ide.focusedWin = ed; });
+    me.onDidFocusEditorText(() => { ed.focusTS = +new Date(); ed.ide.focusedWin = ed; });
     ed.processAutocompleteReply = D.ac(me);
     ed.tb = $(ed.dom).find('a');
     ed.tb.mousedown((x) => {
@@ -288,7 +288,7 @@
     },
     blockCursor(x) { this.me.updateOptions({ cursorStyle: x ? 'block' : 'line' }); },
     cursorBlinking(x) { this.me.updateOptions({ cursorBlinking: x }); },
-    hasFocus() { return this.me.isFocused(); },
+    hasFocus() { return this.me.hasTextFocus(); },
     focus() {
       const ed = this;
       let q = ed.container;
@@ -324,7 +324,7 @@
     },
     close() {
       if (D.ide.floating) {
-        this.me.model.destroy();
+        this.me.model.dispose();
         delete D.ide.wins[this.id];
         this.container && this.container.close();
         !D.ide.gl.root.contentItems.length && D.el.getCurrentWindow().hide();
@@ -478,15 +478,13 @@
       const name = this.cword();
       if (!name) return;
       const l0 = me.getPosition().lineNumber;
-      const ta = me.model._lines[l0 - 1].getState().a.map(x => x.t);
+      const ta = me.model._tokens._tokens[l0 - 1]._state.a.map(x => x.t);
       const ti = ta.lastIndexOf('∇');
-      // const ts = (((me.model._lines[l0 - 1] || {})._state || {}).a || [])
-      // .map(x => x.t)
       const ts = ta.filter(t => /^(∇|\{|namespace|class|interface)$/.test(t));
       if (ts.includes('{') || (ts.length && !ts.includes('∇'))) return;
       let l;
       for (l = l0 - 1; l >= 0; l--) {
-        if (me.model._lines[l].getState().a.length === ti) break;
+        if (me.model._tokens._tokens[l]._state.a.length === ti) break;
       }
       if (l < 0) l = 0;
       const lt = me.model.getLineContent(l + 1);
