@@ -372,7 +372,7 @@
     zoom(z) {
       const ed = this;
       const { me } = ed;
-      const r = me.getCompletelyVisibleLinesRangeInViewport();
+      const [r] = me.getVisibleRanges();
       const fs = D.zoom2fs[z + 10];
       me.updateOptions({ fontSize: fs, lineHeight: fs + 2 });
       me.revealRangeAtTop(r);
