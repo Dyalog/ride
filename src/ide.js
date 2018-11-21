@@ -170,7 +170,7 @@ D.IDE = function IDE(opts = {}) {
     } else {
       const ae = document.activeElement;
       D.util.insert(ae, s);
-      const fw = w.me.overlayWidgets['editor.contrib.findWidget'].widget;
+      const fw = w.me._overlayWidgets['editor.contrib.findWidget'].widget;
       const fi = fw._findInput;
       const fr = fw._replaceInputBox.inputElement;
       if (fi.inputBox.input === ae) fi._onInput.fire();
@@ -527,7 +527,7 @@ D.IDE = function IDE(opts = {}) {
         w.close();
         w.id = -1;
       } else if (w) {
-        w.me.model.dispose();
+        w.me.getModel().dispose();
         w.container && w.container.close();
       }
       delete ide.wins[x.win]; ide.focusMRUWin();
@@ -854,4 +854,3 @@ D.IDE.prototype = {
     }
   },
 };
-

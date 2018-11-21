@@ -54,7 +54,7 @@
       value: 'Press keystroke...',
     });
     me.onKeyDown(upd); me.onKeyUp(upd);
-    me.onDidBlurEditor(close);
+    me.onDidBlurEditorText(close);
     b.parentNode.insertBefore(e, b);
     me.focus();
   }
