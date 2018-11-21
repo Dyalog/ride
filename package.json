@@ -23,13 +23,13 @@
   },
   "devDependencies": {
     "async": "^2.6.1",
-    "ava": "^1.0.0-rc.1",
+    "ava": "^1.0.0-rc.2",
     "cheerio": "^1.0.0-rc.2",
     "compression": "^1.7.3",
-    "electron": "^3.0.8",
+    "electron": "^3.0.9",
     "electron-connect": "^0.6.2",
     "electron-packager": "^12.2.0",
-    "eslint": "^5.8.0",
+    "eslint": "^5.9.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-jsx-a11y": "^6.1.2",
@@ -45,6 +45,6 @@
     "rimraf": "^2.6.2",
     "spectron": "^5.0.0",
     "temp": "^0.8.3",
-    "ws": "^6.1.0"
+    "ws": "^6.1.2"
   }
 }
