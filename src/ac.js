@@ -174,10 +174,14 @@
           me.trigger('editor', 'hideSuggestWidget');
           return;
         }
-        ac.complete(x.options.map(i => ({
+        const suggestions = x.options.map(i => ({
           label: i,
+          insertText: i,
           range: new monaco.Range(l, c - x.skip, l, c),
-        })));
+        }));
+        ac.complete({
+          suggestions,
+        });
       }
     };
   };
