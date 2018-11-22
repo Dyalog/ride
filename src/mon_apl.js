@@ -236,7 +236,7 @@
             const [signature] = s.split(';');
             const [, fn, op] = signature.match(tradFnRE) || [];
             const fnop = op || fn;
-            let si = -1; 
+            let si = -1;
             if (fnop) {
               const sigm = signature.match(RegExp(`(^|[^${letter}0-9]+)${fnop}([^${letter}0-9]+|$)`));
               si = sigm.index + sigm[1].length;
@@ -584,7 +584,7 @@
       const ch = s[c - 2];
       const pk2 = `${pk}${pk}`;
       const kind = monaco.languages.CompletionItemKind;
-      const { a } = model._lines[position.lineNumber - 1]._state;
+      const { a } = model._tokens._tokens[l - 1]._state;
       const { t } = (a || []).slice(-1)[0] || {};
       const snippets = /^\s*:\w*$/.test(s.slice(0, c - 1)) && a && t !== '{';
       const sc = model.bqc - 1;
@@ -898,15 +898,15 @@
   let icom = D.prf.indentComments(); D.prf.indentComments((x) => { icom = x; });
   const aplFormat = {
     formatLines(model, range) {
-      const ml = model._lines;
+      const ml = model._tokens._tokens;
       const from = range.startLineNumber || 1;
       const to = range.endLineNumber || ml.length;
       const edits = [];
-      const initIndent = model.getIndentLevel(1);
+      const initIndent = model.getOneIndent().length;
       for (let l = from; l <= to; l++) {
         const s = model.getLineContent(l);
         const [m] = s.match(/^(\s)*/);
-        const a = ((ml[l - 1].getState() || {}).a || []).slice().reverse();
+        const a = ((ml[l - 1]._state || {}).a || []).slice().reverse();
         const [la, ...ra] = a;
         if (la && (icom || !/^\s*⍝/.test(s))) {
           let ind = ra.map(r => r.ii).reduce((r, c) => r + c, 0);

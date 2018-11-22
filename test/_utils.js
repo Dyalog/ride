@@ -13,13 +13,14 @@ export function inWin(id, s) {
 }
 
 export function sessionLastLines(n) {
-  return D.ide.wins[0].me.model.getLinesContent().slice(-n);
+  return D.ide.wins[0].me.getModel().getLinesContent().slice(-n);
 }
 
 class TFW {
   constructor() {
     this.counter = 0;
   }
+
   init(options) {
     const o = options || {};
     test.beforeEach(async (t) => {

@@ -65,7 +65,7 @@
         resolve(true);
       });
     });
-    me.model.winid = 0;
+    me.getModel().winid = 0;
     me.dyalogCmds = se;
     se.session = me.createContextKey('session', true);
     se.tracer = me.createContextKey('tracer', true);
@@ -79,13 +79,13 @@
     me.onMouseDown((e) => {
       const t = e.target;
       const mt = monaco.editor.MouseTargetType;
-      const p = t.position;
-      const l = p.lineNumber;
-      const c = p.column;
       if (e.event.middleButton) {
         e.event.preventDefault();
         e.event.stopPropagation();
       } else if (t.type === mt.CONTENT_TEXT) {
+        const p = t.position;
+        const l = p.lineNumber;
+        const c = p.column;
         if (e.event.timestamp - mouseTS < 400 && mouseL === l && mouseC === c) {
           e.event.preventDefault();
           e.event.stopPropagation();
@@ -95,7 +95,7 @@
       }
     });
     me.onDidChangeModelContent((e) => {
-      if (!me.listen || me.model.bqc) return;
+      if (!me.listen || me.getModel().bqc) return;
       e.changes.forEach((c) => {
         const l0 = c.range.startLineNumber;
         const l1 = c.range.endLineNumber;
@@ -124,14 +124,14 @@
     me.onDidScrollChange((e) => {
       se.btm = se.me.getLayoutInfo().contentHeight + e.scrollTop;
     });
-    me.onDidFocusEditor(() => { se.focusTS = +new Date(); se.ide.focusedWin = se; });
+    me.onDidFocusEditorText(() => { se.focusTS = +new Date(); se.ide.focusedWin = se; });
     me.onDidChangeCursorPosition(e => ide.setCursorPosition(e.position));
     se.promptType = 0; // see ../docs/protocol.md #SetPromptType
     se.processAutocompleteReply = D.ac(me);
-    me.viewModel.viewLayout.constructor.LINES_HORIZONTAL_EXTRA_PX = 14;
+    // me.viewModel.viewLayout.constructor.LINES_HORIZONTAL_EXTRA_PX = 14;
     D.prf.wrap((x) => {
       se.me.updateOptions({ wordWrap: x ? 'on' : 'off' });
-      se.me.revealLineInCenterIfOutsideViewport(se.me.model.getLineCount());
+      se.me.revealLineInCenterIfOutsideViewport(se.me.getModel().getLineCount());
     });
     se.histRead();
     se.taBuffer = []; // type ahead buffer
@@ -171,16 +171,17 @@
     histMove(d) { // go back or forward in history
       const se = this;
       const { me } = se;
+      const model = me.getModel();
       const i = se.histIdx + d;
       const l = me.getPosition().lineNumber;
       if (i < 0 || i >= se.hist.length) {
         toastr.info('Reached end of history');
         return;
       }
-      if (!se.histIdx) se.hist[0] = me.model.getLineContent(l);
+      if (!se.histIdx) se.hist[0] = model.getLineContent(l);
       if (se.hist[i] == null) return;
       me.executeEdits('D', [{
-        range: new monaco.Range(l, 1, l, me.model.getLineMaxColumn(l)),
+        range: new monaco.Range(l, 1, l, model.getLineMaxColumn(l)),
         text: se.hist[i],
       }]);
       me.setPosition({ lineNumber: l, column: 1 + se.hist[i].search(/\S|$/) });
@@ -202,8 +203,9 @@
     add(s) { // append text to session
       const se = this;
       const { me } = se;
-      const l = me.model.getLineCount();
-      const s0 = me.model.getLineContent(l);
+      const model = me.getModel();
+      const l = model.getLineCount();
+      const s0 = model.getLineContent(l);
       let sp = s;
       se.isReadOnly && me.updateOptions({ readOnly: false });
       if (this.dirty[l] != null) {
@@ -213,15 +215,15 @@
       } else {
         sp = se.isReadOnly && !/^\s*$/.test(s0) ? (s0 + sp) : sp;
         se.edit([{ range: new monaco.Range(l, 1, l, 1 + s0.length), text: sp }]);
-        const ll = me.model.getLineCount();
-        const lc = me.model.getLineMaxColumn(ll);
+        const ll = model.getLineCount();
+        const lc = model.getLineMaxColumn(ll);
         me.setPosition({ lineNumber: ll, column: lc });
         me.revealLine(ll);
         se.btm = Math.max(se.dom.clientHeight + me.getScrollTop(), me.getTopForLineNumber(ll));
       }
       se.isReadOnly && me.updateOptions({ readOnly: true });
       se.oModel.setValue(me.getValue());
-      me.model._commandManager.clear();
+      model._commandManager.clear();
     },
     edit(edits, sel) {
       const { me } = this;
@@ -232,8 +234,9 @@
     prompt(x) {
       const se = this;
       const { me } = se;
-      const l = me.model.getLineCount();
-      const t = me.model.getLineContent(l);
+      const model = me.getModel();
+      const l = model.getLineCount();
+      const t = model.getLineContent(l);
       se.promptType = x;
       se.isReadOnly = !x;
       me.updateOptions({ readOnly: !x });
@@ -259,7 +262,7 @@
         if (se.taCb) { se.taCb.dispose(); delete se.taCb; }
         se.taBuffer.length && se.taReplay();
       }
-      // x && me.model._commandManager.clear();
+      // x && model._commandManager.clear();
     },
     updSize() {
       const se = this;
@@ -267,10 +270,10 @@
       const oldHeight = me.getLayoutInfo().contentHeight;
       const top = me.getScrollTop();
       const lh = me.getConfiguration().lineHeight;
-      const ll = me.model.getLineCount();
+      const ll = me.getModel().getLineCount();
       const llt = me.getTopForLineNumber(ll);
       const ontop = top > (llt + lh + lh) - oldHeight;
-      const { startLineNumber, endLineNumber } = me.getCompletelyVisibleLinesRangeInViewport();
+      const [{ startLineNumber, endLineNumber }] = me.getVisibleRanges();
       const onbottom = endLineNumber === ll;
       me.layout({ width: se.dom.clientWidth, height: se.dom.clientHeight });
       const flt = me.getTopForLineNumber(startLineNumber);
@@ -294,7 +297,7 @@
     },
     scrollCursorIntoView() {
       const { me } = this;
-      setTimeout(() => { me.revealLine(me.model.getLineCount()); }, 1);
+      setTimeout(() => { me.revealLine(me.getModel().getLineCount()); }, 1);
     },
     saveScrollPos() {
       // workaround for Monaco scrolling under GoldenLayout on Windows when editor is closed
@@ -316,7 +319,7 @@
     },
     blockCursor(x) { this.me.updateOptions({ cursorStyle: x ? 'block' : 'line' }); },
     cursorBlinking(x) { this.me.updateOptions({ cursorBlinking: x }); },
-    hasFocus() { return this.me.isFocused(); },
+    hasFocus() { return this.me.hasTextFocus(); },
     focus() {
       let q = this.container;
       let p = q && q.parent;
@@ -339,9 +342,10 @@
     refresh() { },
     loadLine(s) {
       const { me } = this;
-      const l = me.model.getLineCount();
+      const model = me.getModel();
+      const l = model.getLineCount();
       me.executeEdits('D', [{
-        range: new monaco.Range(l, 1, l, me.model.getLineMaxColumn(l)),
+        range: new monaco.Range(l, 1, l, model.getLineMaxColumn(l)),
         text: s,
       }], [new monaco.Selection(l, s.length + 1, l, s.length + 1)]);
     },
@@ -350,17 +354,18 @@
       let es;
       const se = this;
       const { me } = se;
+      const model = me.getModel();
       if (!se.promptType) return;
       const ls = Object.keys(se.dirty).map(l => +l);
       if (ls.length) {
         ls.sort((x, y) => x - y);
-        const max = me.model.getLineCount();
+        const max = model.getLineCount();
         es = ls.map((l) => {
           if (l > max) {
             console.log('out of range', l);
             return '';
           }
-          return me.model.getLineContent(l) || '';
+          return model.getLineContent(l) || '';
         }); // strings to execute
         ls.reverse().forEach((l) => {
           if (se.dirty[l] === 0) {
@@ -370,7 +375,7 @@
             }]);
           } else {
             se.edit([{
-              range: new monaco.Range(l, 1, l, me.model.getLineMaxColumn(l)),
+              range: new monaco.Range(l, 1, l, model.getLineMaxColumn(l)),
               text: se.dirty[l],
             }]);
           }
@@ -378,17 +383,17 @@
       } else {
         const sel = me.getSelection();
         if (sel.isEmpty()) {
-          es = [me.model.getLineContent(sel.startLineNumber)];
+          es = [model.getLineContent(sel.startLineNumber)];
           trace && /^\s*$/.test(es[0]) && (w = se.ide.tracer()) && w.focus();
         } else {
-          es = [me.model.getValueInRange(sel)];
+          es = [model.getValueInRange(sel)];
         }
       }
       se.ide.exec(es, trace);
       se.dirty = {};
       se.hl();
       se.histAdd(es.filter(x => !/^\s*$/.test(x)));
-      me.model._commandManager.clear();
+      model._commandManager.clear();
     },
     autoCloseBrackets(x) { this.me.updateOptions({ autoClosingBrackets: x }); },
     matchBrackets(x) { this.me.updateOptions({ matchBrackets: !!x }); },
@@ -412,7 +417,7 @@
     zoom(z) {
       const se = this;
       const { me } = se;
-      const r = me.getCompletelyVisibleLinesRangeInViewport();
+      const [r] = me.getVisibleRanges();
       const fs = D.zoom2fs[z + 10];
       me.updateOptions({ fontSize: fs, lineHeight: fs + 2 });
       me.revealRangeAtTop(r);
@@ -433,10 +438,11 @@
 
     ValueTip(x) {
       const { me } = this;
-      if (me.model.vt && me.model.vt.complete) {
-        const { vt } = me.model;
+      const model = me.getModel();
+      if (model.vt && model.vt.complete) {
+        const { vt } = model;
         const l = vt.position.lineNumber;
-        const s = me.model.getLineContent(l);
+        const s = model.getLineContent(l);
         vt.complete({
           range: new monaco.Range(l, x.startCol + 1, l, x.endCol + 1),
           contents: [
@@ -448,12 +454,13 @@
     },
     ED(me) {
       const c = me.getPosition();
-      const txt = me.model.getLineContent(c.lineNumber);
+      const model = me.getModel();
+      const txt = model.getLineContent(c.lineNumber);
       if (/^\s*$/.test(txt)) {
         const tc = this.ide.tracer();
         if (tc) { tc.focus(); tc.ED(tc.me); }
       } else {
-        const offset = me.model.getOffsetAt(c);
+        const offset = model.getOffsetAt(c);
         const text = me.getValue();
         const pos = D.util.ucLength(text.slice(0, offset));
         D.ide.Edit({ win: 0, pos, text });
@@ -463,17 +470,18 @@
     FD() { this.histMove(-1); },
     QT(me) {
       const se = this;
+      const model = me.getModel();
       const c = me.getPosition();
       const l = c.lineNumber;
-      const lc = me.model.getLineCount();
+      const lc = model.getLineCount();
       if (se.dirty[l] === 0) {
-        if (l === me.model.getLineCount()) {
+        if (l === model.getLineCount()) {
           se.edit([{ range: new monaco.Range(l, 1, l + 1, 1), text: '' }]);
         } else {
           se.edit([{
             range: new monaco.Range(
-              l - 1, me.model.getLineMaxColumn(l - 1),
-              l, me.model.getLineMaxColumn(l),
+              l - 1, model.getLineMaxColumn(l - 1),
+              l, model.getLineMaxColumn(l),
             ),
             text: '',
           }]);
@@ -485,7 +493,7 @@
       } else if (se.dirty[l] != null) {
         const text = l === lc && !se.dirty[l].length ? '      ' : se.dirty[l];
         se.edit([{
-          range: new monaco.Range(l, 1, l, me.model.getLineMaxColumn(l)),
+          range: new monaco.Range(l, 1, l, model.getLineMaxColumn(l)),
           text,
         }]);
         me.setPosition({ lineNumber: l, column: 1 + text.search(/\S|$/) });
@@ -501,8 +509,9 @@
     MA() { D.send('RestartThreads', {}); },
     DC() {
       const { me } = this;
+      const model = me.getModel();
       const l = me.getPosition().lineNumber;
-      if (l < me.model.getLineCount() || /^\s*$/.test(me.model.getLineContent(l))) {
+      if (l < model.getLineCount() || /^\s*$/.test(model.getLineContent(l))) {
         me.trigger('editor', 'cursorDown');
       }
     },
@@ -518,7 +527,7 @@
 
       const c = me.getPosition();
       const ci = c.column - 1;
-      const s = me.model.getLineContent(c.lineNumber);
+      const s = me.getModel().getLineContent(c.lineNumber);
       const ch = s[ci - 1];
       if (sels.length !== 1 || !sels[0].isEmpty()
         || this.promptType === 4 || /^ *$/.test(s.slice(0, ci))) {
