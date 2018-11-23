@@ -911,7 +911,6 @@
       const from = range.startLineNumber || 1;
       const to = range.endLineNumber || ml.length;
       const edits = [];
-      const initIndent = model.getOneIndent().length;
       for (let l = from; l <= to; l++) {
         const s = model.getLineContent(l);
         const [m] = s.match(/^(\s)*/);
@@ -929,7 +928,6 @@
           } else {
             ind += /^\s*:(?:end|else|andif|orif|case|until)/i.test(s) ? la.oi : la.ii;
           }
-          ind += initIndent;
           if (ind !== m.length) {
             edits.push({
               range: new monaco.Range(l, 1, l, m.length + 1),
