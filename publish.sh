@@ -46,19 +46,7 @@ for DIR in `ls _/${APP_NAME}`; do
   esac
 	echo "DEBUG: \$OSNAME=$OSNAME"
 
-cp -r _/${APP_NAME}/${DIR} $r/$d/${OSNAME}
-
-  ZIPFILE="ride-${VERSION}-${OSNAME}.zip"
-  TMPZIP=/tmp/$ZIPFILE
-
-  cd _/${APP_NAME}/$DIR
-  echo "creating $TMPZIP"
-  zip -q -r "$TMPZIP" .
-  echo "Copying to devt"
-  cp $TMPZIP $r/$d
-  echo "Removing $TMPZIP"
-  rm $TMPZIP
-  cd -
+  cp -R _/${APP_NAME}/${DIR} $r/$d/${OSNAME}
 done
 
 echo 'fixing permissions'; chmod +x $r/$d/win32/{*.exe,*.dll}

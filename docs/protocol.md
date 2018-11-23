@@ -37,8 +37,8 @@ Should the interpreter generate an error during the processing of an incoming RI
 ["InternalError",{"error":1,"error_text":"WS FULL","dmx":"","message":"Edit"}]
 ```
 * `error`: aka ⎕EN
-* 'error_text: aka ⎕EM 
-* 'dmx': the DMX message for the error (currently always empty)
+* `error_text`: aka ⎕EM 
+* `dmx`: the DMX message for the error (currently always empty)
 * `message`: the name of the originating incoming RIDE message
 
 The connection may be closed at any time, leaving some messages undelivered or unprocessed.

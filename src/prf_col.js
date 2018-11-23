@@ -420,19 +420,19 @@
         renderIndentGuides: false,
         useTabStops: false,
         wordBasedSuggestions: false,
-        value: '{R}←{X}tradfn(Y Z);local\n' +
-        'dfn←{ ⍝ comment\n' +
-        '  0 ¯1.2e¯3j¯.45 \'string\' ⍬\n' +
-        '  +/-⍣(×A):⍺∇⍵[i;j]\n' +
-        '  {{{{nested ⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}\n' +
-        '}\n' +
-        'label:\n' +
-        ':For i :In ⍳X ⋄ :EndFor\n' +
-        ':If condition\n' +
-        '  {⍵[⍋⍵]} ⋄ global←local←0\n' +
-        '  ⎕error ) ] } :error \'unclosed\n' +
-        ':EndIf\n' +
-        `${SC_MATCH}\n`,
+        value: '{R}←{X}tradfn(Y Z);local\n'
+        + 'dfn←{ ⍝ comment\n'
+        + '  0 ¯1.2e¯3j¯.45 \'string\' ⍬\n'
+        + '  +/-⍣(×A):⍺∇⍵[i;j]\n'
+        + '  {{{{nested ⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}⍺:∇⍵}\n'
+        + '}\n'
+        + 'label:\n'
+        + ':For i :In ⍳X ⋄ :EndFor\n'
+        + ':If condition\n'
+        + '  {⍵[⍋⍵]} ⋄ global←local←0\n'
+        + '  ⎕error ) ] } :error \'unclosed\n'
+        + ':EndIf\n'
+        + `${SC_MATCH}\n`,
       });
       D.prf.blockCursor(x => me.updateOptions({ cursorStyle: x ? 'block' : 'line' }));
       D.prf.cursorBlinking(x => me.updateOptions({ cursorBlinking: x }));
@@ -448,7 +448,7 @@
       }
       const reTokenize = $.debounce(500, () => {
         let s = D.Tokenizer.getInitialState();
-        const ls = me.model.getLinesContent();
+        const ls = me.getModel().getLinesContent();
         ss = ls.map((l) => {
           const st = D.Tokenizer.tokenize(l, s);
           s = st.endState;
@@ -458,7 +458,7 @@
       });
       reTokenize();
       me.listen = 1;
-      me.model.onDidChangeContent(reTokenize);
+      me.getModel().onDidChangeContent(reTokenize);
       D.ac(me);
       me.onDidChangeCursorPosition((e) => {
         if (!me.getSelection().isEmpty()) selGrp('sel');

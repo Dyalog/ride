@@ -124,7 +124,6 @@ const Console = console;
             $.confirm(`${msg} Are you sure?`, document.title, (x) => { q = x; });
           }
           if (q) {
-            if (D.ipc) D.ipc.server.stop();
             if (D.spawned) {
               D.send('Exit', { code: 0 });
               // Wait for the disconnect message
@@ -135,8 +134,9 @@ const Console = console;
             }
           }
         }, 10);
-      } else if (D.ide && D.prf.connectOnQuit()) {
-        D.commands.CNC();
+      } else {
+        D.ipc && D.ipc.server.stop();
+        D.ide && D.prf.connectOnQuit() && D.commands.CNC();
       }
       if (D.ide && !D.ide.connected && D.el) D.wins[0].histWrite();
     };

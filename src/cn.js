@@ -115,9 +115,10 @@
     const ssh = q.subtype.value === 'ssh';
     const h = (ssh ? interpretersSSH : interpreters)
       .sort((x, y) => cmpVer(y.ver, x.ver) || +y.bits - +x.bits ||
-        (y.edition === 'unicode') - (x.edition === 'unicode'))
+        (y.edition === 'unicode') - (x.edition === 'unicode') ||
+        (y.opt > x.opt) - (y.opt < x.opt))
       .map((x) => {
-        let s = `v${x.ver.join('.')}, ${x.bits}-bit, ${x.edition.replace(/^./, w => w.toUpperCase())}`;
+        let s = `v${x.ver.join('.')}, ${x.bits}-bit, ${x.edition.replace(/^./, w => w.toUpperCase())}${x.opt ? ', '+x.opt : ''}`;
         const supported = cmpVer(x.ver, MIN_V) >= 0;
         supported || (s += ' (unsupported)');
         return `<option value="${esc(x.exe)}"${supported ? '' : ' disabled'}>${esc(s)}`;
@@ -626,11 +627,13 @@
                   ver: parseVer(a[3]),
                   bits: +a[4],
                   edition: a[5],
+                  opt: a[6] === 'mapl' ? '' : a[6],
                 } : {
                   exe: x,
                   ver: parseVer(a[2].replace(/^Dyalog-|\.app$/g, '')),
                   bits: 64,
                   edition: 'unicode',
+                  opt: '',
                 };
               });
               updExes();
@@ -857,6 +860,7 @@
                 ver: parseVer(v),
                 bits: b,
                 edition: u,
+                opt: '',
               });
             } else if (!/^\s*$/.test(x)) {
               b = null;
@@ -875,6 +879,7 @@
             ver: parseVer(n[1]),
             bits: 64,
             edition: 'unicode',
+            opt: '',
           });
         });
       } else {
@@ -892,6 +897,7 @@
                       ver: parseVer(v),
                       bits: +b,
                       edition: u,
+                      opt: '',
                     });
                   }
                 }));
