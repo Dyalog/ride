@@ -356,7 +356,9 @@
       const { me } = se;
       const model = me.getModel();
       if (!se.promptType) return;
-      const ls = Object.keys(se.dirty).map(l => +l);
+      const ls = Object.keys(se.dirty)
+        .map(l => +l)
+        .filter(l => !/^\s*$/.test(model.getLineContent(l)));
       if (ls.length) {
         ls.sort((x, y) => x - y);
         const max = model.getLineCount();
