@@ -8,11 +8,11 @@
   const tradFnRE = RegExp(`(${name}|\\( *${name} +(${name})(?: +${name})? *\\)) *(?:${name}|\\( *${name}(?: +${name})* *\\))? *$`);
   const end = '(?:⍝|$)';
   const restartBlock = '|:else|:elseif|:andif|:orif';
-  const startBlock = ':class|:disposable|:for|:hold|:if|:interface|:namespace' +
-    `|:property|:repeat|:section|:select|:trap|:while|:with${restartBlock}`;
-  const endBlock = ':end|:endclass|:enddisposable|:endfor|:endhold|:endif|:endinterface' +
-    '|:endnamespace|:endproperty|:endrepeat|:endsection|:endselect|:endtrap' +
-    `|:endwhile|:endwith|:until${restartBlock}`;
+  const startBlock = ':class|:disposable|:for|:hold|:if|:interface|:namespace'
+    + `|:property|:repeat|:section|:select|:trap|:while|:with${restartBlock}`;
+  const endBlock = ':end|:endclass|:enddisposable|:endfor|:endhold|:endif|:endinterface'
+    + '|:endnamespace|:endproperty|:endrepeat|:endsection|:endselect|:endtrap'
+    + `|:endwhile|:endwith|:until${restartBlock}`;
   D.wordSeparators = `${D.informal.slice(0, -26).map(x => x[0]).join('')}()[]{}%£#;:"`;
 
   const aplConfig = {
@@ -128,16 +128,16 @@
   }
 
   // best effort to tell the difference between a dfn vs tradfn header
-  const dfnHeader = RegExp(`^\\s*${name}\\s*←\\s*\\{\\s*` +
-      `(?:${end}|` +
-      `[^${letter}⍝\\s]|` +
-      `${name}\\s*(?:` +
-        `\\}\\s*${end}|` +
-        `${end}|` +
-        `[^${letter}\\d\\}⍝\\s]|` +
-        '\\s[^\\}⍝\\s]' +
-      ')' +
-    ')');
+  const dfnHeader = RegExp(`^\\s*${name}\\s*←\\s*\\{\\s*`
+      + `(?:${end}|`
+      + `[^${letter}⍝\\s]|`
+      + `${name}\\s*(?:`
+        + `\\}\\s*${end}|`
+        + `${end}|`
+        + `[^${letter}\\d\\}⍝\\s]|`
+        + '\\s[^\\}⍝\\s]'
+      + ')'
+    + ')');
 
   const sysfns = ' a á af ai an arbin arbout arg at av avu base class clear cmd cr cs csv ct cy d dct df div dl dm dmx dq dr ea ec ed em en env es et ex exception export fappend favail fc fchk fcopy fcreate fdrop ferase fhist fhold fix flib fmt fnames fnums fprops fr frdac frdci fread frename freplace fresize fsize fstac fstie ftie funtie fx inp instances io json kl l lc load lock lx map mkdir ml monitor na nappend nc ncopy ncreate ndelete nerase new nexists nget ninfo nl nlock nmove nnames nnums nparts nput nq nr nread nrename nreplace nresize ns nsi nsize ntie null nuntie nxlate off opt or path pfkey pp pr profile ps pt pw r refs rl rsi rtl s save sd se sh shadow si signal size sm sr src stack state stop svc sve svo svq svr svs syl tc tcnums tf tget this tid tkill tname tnums tpool tput trace trap treq ts tsync tz ucs ul using vfi vr wa wc wg wn ws wsid wx x xml xsi xt'.split(' ');
   // « and » prevent tolerance for extra whitespace
@@ -240,7 +240,7 @@
             const [signature] = s.split(';');
             const [, fn, op] = signature.match(tradFnRE) || [];
             const fnop = op || fn;
-            let si = -1; 
+            let si = -1;
             if (fnop) {
               const sigm = signature.match(RegExp(`(^|[^${letter}0-9]+)${fnop}([^${letter}0-9]+|$)`));
               si = sigm.index + sigm[1].length;
@@ -517,8 +517,8 @@
       return lt;
     },
   };
-  const scmd = ('classes clear cmd continue copy cs drop ed erase events fns holds intro lib load methods ns objects obs off' +
-  ' ops pcopy props reset save sh sic si sinl tid vars wsid xload').split(' '); // system commands
+  const scmd = ('classes clear cmd continue copy cs drop ed erase events fns holds intro lib load methods ns objects obs off'
+    + ' ops pcopy props reset save sh sic si sinl tid vars wsid xload').split(' '); // system commands
 
   const aplSessionTokens = {
     getInitialState: () => new SessionState(0, 1, aplTokens.getInitialState()),
@@ -589,7 +589,7 @@
       const ch = s[c - 2];
       const pk2 = `${pk}${pk}`;
       const kind = monaco.languages.CompletionItemKind;
-      const { a } = model._lines[position.lineNumber - 1]._state;
+      const { a } = model._tokens._tokens[l - 1]._state;
       const { t } = (a || []).slice(-1)[0] || {};
       const snippets = /^\s*:\w*$/.test(s.slice(0, c - 1)) && a && t !== '{';
       const sc = model.bqc - 1;
@@ -607,7 +607,8 @@
             range: new monaco.Range(l, c - 2, l, c),
           };
         });
-      } else if (ch === pk) {
+      }
+      if (ch === pk) {
         const bqc = [];
         Object.keys(D.bq).forEach((k) => {
           const v = D.bq[k];
@@ -622,7 +623,8 @@
           });
         });
         return bqc;
-      } else if (snippets) {
+      }
+      if (snippets) {
         const items = [];
         const textItem = i => ({
           label: i,
@@ -852,7 +854,8 @@
         // }
         /* eslint-enable no-template-curly-in-string */
         return items;
-      } else if (D.send) {
+      }
+      if (D.send) {
         D.send('GetAutocomplete', { line: s, pos: c - 1, token: model.winid });
         const m = model;
         return new monaco.Promise((complete, error, progress) => {
@@ -872,8 +875,8 @@
       const s = m.getLineContent(p.lineNumber);
       const c = s[p.column - 2] || ' ';
       const lbt = D.lb.tips[c];
-      if (D.prf.squiggleTips() && lbt &&
-        !'⍺⍵'.includes(c) && !(c === '⎕' && /[áa-z]/i.test(s[p.column - 1] || ''))) {
+      if (D.prf.squiggleTips() && lbt
+        && !'⍺⍵'.includes(c) && !(c === '⎕' && /[áa-z]/i.test(s[p.column - 1] || ''))) {
         return {
           range: new monaco.Range(p.lineNumber, p.column - 1, p.lineNumber, p.column),
           contents: [
@@ -881,7 +884,8 @@
             { language: 'plaintext', value: lbt[1] },
           ],
         };
-      } else if (D.prf.valueTips() && /[^ ()[\]{}':;]/.test(c)) {
+      }
+      if (D.prf.valueTips() && /[^ ()[\]{}':;]/.test(c)) {
         D.send('GetValueTip', { // ask interpreter
           win: m.winid,
           token: m.winid,
@@ -903,15 +907,15 @@
   let icom = D.prf.indentComments(); D.prf.indentComments((x) => { icom = x; });
   const aplFormat = {
     formatLines(model, range) {
-      const ml = model._lines;
+      const ml = model._tokens._tokens;
       const from = range.startLineNumber || 1;
       const to = range.endLineNumber || ml.length;
       const edits = [];
-      const initIndent = model.getIndentLevel(1);
+      const initIndent = model.getOneIndent().length;
       for (let l = from; l <= to; l++) {
         const s = model.getLineContent(l);
         const [m] = s.match(/^(\s)*/);
-        const a = ((ml[l - 1].getState() || {}).a || []).slice().reverse();
+        const a = ((ml[l - 1]._state || {}).a || []).slice().reverse();
         const [la, ...ra] = a;
         if (la && (icom || !/^\s*⍝/.test(s))) {
           let ind = ra.map(r => r.ii).reduce((r, c) => r + c, 0);

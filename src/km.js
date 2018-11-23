@@ -82,8 +82,8 @@
           detached: true, stdio: ['ignore', 'ignore', 'ignore'], env: e,
         });
       } else {
-        $.err('The current session is remote.\nTo connect elsewhere or\nlaunch a local interpreter,\n' +
-              'please use "Connect..." instead.', 'Cannot Start New Session');
+        $.err('The current session is remote.\nTo connect elsewhere or\nlaunch a local interpreter,\n'
+            + 'please use "Connect..." instead.', 'Cannot Start New Session');
       }
     },
     DK(me) { me.trigger('editor', 'editor.action.deleteLines'); },
@@ -97,21 +97,21 @@
       const d = document;
       const e = d.body;
       let x;
-      if (d.fullscreenElement || d.webkitFullscreenElement ||
-          d.mozFullScreenElement || d.msFullscreenElement) {
-        x = d.exitFullscreen || d.webkitExitFullscreen ||
-            d.mozCancelFullScreen || d.msExitFullscreen;
+      if (d.fullscreenElement || d.webkitFullscreenElement
+        || d.mozFullScreenElement || d.msFullscreenElement) {
+        x = d.exitFullscreen || d.webkitExitFullscreen
+          || d.mozCancelFullScreen || d.msExitFullscreen;
         x && x.apply(d);
       } else {
-        x = e.requestFullscreen || e.webkitRequestFullscreen ||
-            e.mozRequestFullScreen || e.msRequestFullscreen;
+        x = e.requestFullscreen || e.webkitRequestFullscreen
+          || e.mozRequestFullScreen || e.msRequestFullscreen;
         x && x.apply(e);
       }
     },
     EXP(me) { me.trigger('editor', 'editor.action.smartSelect.grow'); },
     HLP(me) {
       const c = me.getPosition();
-      const s = me.model.getLineContent(c.lineNumber).toLowerCase();
+      const s = me.getModel().getLineContent(c.lineNumber).toLowerCase();
       const h = D.hlp;
       let u; // u: the URL
       let m; // m: match object
@@ -133,7 +133,7 @@
       const sels = me.getSelections().map((c) => {
         const l = c.startLineNumber;
         const ch = c.startColumn - 1;
-        const t = me.model.getLineContent(l);
+        const t = me.getModel().getLineContent(l);
         const n = t.length;
         const m = t.replace(/ +$/, '').length;
         const nc = 1 + ((m <= ch && ch < n) || !m ? n : m);
@@ -160,9 +160,9 @@
       D.logw = w;
       w.setTitle(`Protocol Log - ${D.ide.caption}`);
       w.loadURL(`file://${__dirname}/empty.html`);
-      w.webContents.executeJavaScript('var d = document, h=d.documentElement, b=d.body, e=d.createElement("div");' +
-                                      'b.style.fontFamily="monospace";b.style.overflow="scroll";' +
-                                      'e.style.whiteSpace="pre";b.appendChild(e)');
+      w.webContents.executeJavaScript('var d = document, h=d.documentElement, b=d.body, e=d.createElement("div");'
+                                    + 'b.style.fontFamily="monospace";b.style.overflow="scroll";'
+                                    + 'e.style.whiteSpace="pre";b.appendChild(e)');
       const f = (x) => {
         const t = JSON.stringify(`${x}\n`);
         w.webContents.executeJavaScript(`e.textContent += ${t}; h.scrollTop = h.scrollHeight`);
@@ -247,8 +247,8 @@
       h && h.execCommand(x);
     });
   }
-  ('CBP MA AC VAL indentOrComplete indentMoreOrAutocomplete STL TVO TVB' +
-  ' TGC JBK JSC LOG WSE').split(' ').forEach(defCmd);
+  ('CBP MA AC VAL indentOrComplete indentMoreOrAutocomplete STL TVO TVB'
+  + ' TGC JBK JSC LOG WSE').split(' ').forEach(defCmd);
   for (let i = 0; i < C.length; i++) {
     if (C[i]) {
       defCmd(C[i]);

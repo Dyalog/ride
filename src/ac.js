@@ -3,20 +3,22 @@
   const prefixRE = new RegExp(`^(${words}*)${words}*(?: \\1${words}*)*$`);
   let cce; // composition change event
   function bqCleanUpMe(me) {
-    if (me.model.bqc) {
-      me.model.bqc = 0;
+    const model = me.getModel();
+    if (model.bqc) {
+      model.bqc = 0;
       me.trigger('editor', 'hideSuggestWidget');
     }
   }
   function bqChangeHandlerMe(me, o) { // o:changeObj
+    const model = me.getModel();
     const chg = o.changes[0];
     const r = chg.range;
     const l = r.startLineNumber;
     const c = r.startColumn;
     const x = chg.text[0];
     const pk = D.prf.prefixKey();
-    const s = me.model.getLineContent(l);
-    const sc = me.model.bqc - 1;
+    const s = model.getLineContent(l);
+    const sc = model.bqc - 1;
     if (s.slice(sc, c) === `${pk}${pk}${pk}`) { // ``` for ⋄
       const nr = [];
       const ns = [];
@@ -34,7 +36,7 @@
         me.listen = true;
       }, 1);
     } else if (s.slice(sc, c - 1) === `${pk}${pk}`) { // bqbqc
-      me.model.bqc = 0;
+      model.bqc = 0;
     } else if (s[c - 2] !== pk) {
       bqCleanUpMe(me);
     } else if (x !== pk) {
@@ -65,7 +67,7 @@
 
   D.ac = (me) => {
     me.tabComplete = 0;
-    const ta = me.domElement.getElementsByTagName('textarea')[0];
+    const ta = me.getDomNode().getElementsByTagName('textarea')[0];
     ta.addEventListener('compositionstart', () => { me.isComposing = 1; });
     ta.addEventListener('compositionend', () => {
       me.isComposing = 0;
@@ -74,20 +76,22 @@
     });
     me.onDidChangeModelContent((e) => {
       const pk = D.prf.prefixKey();
+      const model = me.getModel();
       me.tabComplete = 0;
-      if (me.model.bqc) {
+      if (model.bqc) {
         if (me.isComposing) cce = e;
         else bqChangeHandlerMe(me, e);
-      } else if (me.listen && !me.model.bqc && e.changes.length // === 1
+      } else if (me.listen && !model.bqc && e.changes.length // === 1
         && e.changes[0].text === pk) {
-        me.model.bqc = e.changes[0].range.startColumn;
+        model.bqc = e.changes[0].range.startColumn;
       } else if (!e.isRedoing && !e.isUndoing && !e.isFlush) {
         setTimeout(() => {
-          const sw = me.contentWidgets['editor.widget.suggestWidget'];
+          const sw = me._contentWidgets['editor.widget.suggestWidget'];
+          if (!sw) return;
           const swv = sw.widget.suggestWidgetVisible.get();
           const r = e.changes[0].range;
-          if (r.startLineNumber > me.model.getLineCount()) return;
-          const l = me.model.getLineContent(r.startLineNumber).toLowerCase();
+          if (r.startLineNumber > model.getLineCount()) return;
+          const l = model.getLineContent(r.startLineNumber).toLowerCase();
           const bq2 = e.changes.length && RegExp(`${pk}${pk}\\w*`, 'i').test(l);
           if (swv && !bq2 && sw.widget.list.length === 1) {
             const t = sw.widget.focusedItem.suggestion.insertText.toLowerCase();
@@ -104,41 +108,45 @@
         }, 50);
       }
     });
-    const fw = me.overlayWidgets['editor.contrib.findWidget'].widget;
-    const fi = fw._findInput;
-    fi.onKeyDown((e) => {
-      const pk = D.prf.prefixKey();
-      const s = fi.getValue();
-      const be = e.browserEvent;
-      const tgt = be.target;
-      const p = tgt.selectionStart;
-      if (s[p - 1] === pk && D.bq[be.key] &&
-        !be.altKey && !be.ctrlKey && !be.metaKey && !be.key !== 'Shift') {
-        e.preventDefault();
-        const t = s.slice(0, p - 1) + D.bq[be.key] + s.slice(p);
-        fi.setValue(t);
-        fi._onInput.fire();
-        tgt.selectionStart = p;
-        tgt.selectionEnd = p;
-      }
+    const blurTextDisposable = me.onDidBlurEditorText(() => {
+      const fw = (me._overlayWidgets['editor.contrib.findWidget'] || {}).widget;
+      if (!fw) return;
+      blurTextDisposable.dispose();
+      const fi = fw._findInput;
+      fi.onKeyDown((e) => {
+        const pk = D.prf.prefixKey();
+        const s = fi.getValue();
+        const be = e.browserEvent;
+        const tgt = be.target;
+        const p = tgt.selectionStart;
+        if (s[p - 1] === pk && D.bq[be.key]
+          && !be.altKey && !be.ctrlKey && !be.metaKey && !be.key !== 'Shift') {
+          e.preventDefault();
+          const t = s.slice(0, p - 1) + D.bq[be.key] + s.slice(p);
+          fi.setValue(t);
+          fi._onInput.fire();
+          tgt.selectionStart = p;
+          tgt.selectionEnd = p;
+        }
+      });
+      const fwr = fw._replaceInputBox.inputElement;
+      fwr.onkeydown = (be) => {
+        const pk = D.prf.prefixKey();
+        const s = fwr.value;
+        const tgt = be.target;
+        const p = tgt.selectionStart;
+        if (s[p - 1] === pk && D.bq[be.key]
+          && !be.altKey && !be.ctrlKey && !be.metaKey && !be.key !== 'Shift') {
+          be.preventDefault();
+          fwr.value = s.slice(0, p - 1) + D.bq[be.key] + s.slice(p);
+          fw._state.change({ replaceString: fwr.value }, false);
+          tgt.selectionStart = p;
+          tgt.selectionEnd = p;
+        }
+      };
     });
-    const fwr = fw._replaceInputBox.inputElement;
-    fwr.onkeydown = (be) => {
-      const pk = D.prf.prefixKey();
-      const s = fwr.value;
-      const tgt = be.target;
-      const p = tgt.selectionStart;
-      if (s[p - 1] === pk && D.bq[be.key] &&
-        !be.altKey && !be.ctrlKey && !be.metaKey && !be.key !== 'Shift') {
-        be.preventDefault();
-        fwr.value = s.slice(0, p - 1) + D.bq[be.key] + s.slice(p);
-        fw._state.change({ replaceString: fwr.value }, false);
-        tgt.selectionStart = p;
-        tgt.selectionEnd = p;
-      }
-    };
     return (x) => { // win:editor or session instance to set up autocompletion in
-      const { ac } = me.model;
+      const { ac } = me.getModel();
       if (ac && ac.complete) {
         const l = ac.position.lineNumber;
         const c = ac.position.column;
@@ -155,7 +163,8 @@
             me.trigger('editor', 'hideSuggestWidget');
             me.tabComplete = 0;
             return;
-          } else if (me.tabComplete < 2) {
+          }
+          if (me.tabComplete < 2) {
             me.trigger('editor', 'hideSuggestWidget');
             return;
           }
@@ -165,10 +174,14 @@
           me.trigger('editor', 'hideSuggestWidget');
           return;
         }
-        ac.complete(x.options.map(i => ({
+        const suggestions = x.options.map(i => ({
           label: i,
+          insertText: i,
           range: new monaco.Range(l, c - x.skip, l, c),
-        })));
+        }));
+        ac.complete({
+          suggestions,
+        });
       }
     };
   };
