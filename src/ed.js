@@ -500,7 +500,6 @@
       const i = tail.indexOf(name); i < 0 ? tail.push(name) : tail.splice(i, 1);
       const text = [head].concat(tail.sort()).join(';') + (com || '');
       me.executeEdits('D', [{ range: new monaco.Range(l + 1, 1, l + 1, lt.length + 1), text }]);
-      me.trigger('editor', 'editor.action.formatDocument');
     },
     LN() { D.prf.lineNums.toggle(); },
     TVO() { D.prf.fold.toggle(); },
