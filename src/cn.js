@@ -184,7 +184,7 @@
       }
       if (x === sel && ssh) {
         if (!q.ssh_pass.value && !q.ssh_key.value) {
-          passwdPrompt(`Password for user ${x.user}:`, 'Password');
+          passwdPrompt(`Password for user ${x.user || user}:`, 'Password');
           return 0;
         }
       }
