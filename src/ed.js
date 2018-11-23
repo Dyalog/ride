@@ -431,19 +431,18 @@
       w.HIGHLIGHT_LINE = line + 1;
     },
     ValueTip(x) {
-      // this.vt.processReply(x);
       const { me } = this;
       const model = me.getModel();
       if (model.vt && model.vt.complete) {
         const { vt } = model;
         const l = vt.position.lineNumber;
-        const s = model.getLineContent(l);
+        const value = '```'
+        + `${x.class === 2 ? 'plaintext' : 'apl'}\n`
+        + `${x.tip.join('\n')}`
+        + '```';
         vt.complete({
           range: new monaco.Range(l, x.startCol + 1, l, x.endCol + 1),
-          contents: [
-            s.slice(x.startCol, x.endCol),
-            { language: x.class === 2 ? 'text' : 'apl', value: x.tip.join('\n') },
-          ],
+          contents: [{ isTrusted: true, value }],
         });
       }
     },
