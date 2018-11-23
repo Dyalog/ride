@@ -493,17 +493,14 @@
       }
       if (l < 0) l = 0;
       const lt = model.getLineContent(l + 1);
-      const u = lt.split('⍝');
-      let s = u[0]; // s:the part before the first "⍝"
-      const com = u.slice(1).join('⍝'); // com:the rest
+      const [, s, com] = lt.match(/^(.*?)(\s*⍝.*)?$/);
       const a = s.split(';');
       const head = a[0].replace(/\s+$/, '');
       let tail = a.length > 1 ? a.slice(1) : [];
       tail = tail.map(x => x.replace(/\s+/g, ''));
       const i = tail.indexOf(name); i < 0 ? tail.push(name) : tail.splice(i, 1);
-      s = [head].concat(tail.sort()).join(';') + (com ? ` ${com}` : '');
-      me.executeEdits('D', [{ range: new monaco.Range(l + 1, 1, l + 1, lt.length + 1), text: s }]);
-      me.trigger('editor', 'editor.action.formatDocument');
+      const text = [head].concat(tail.sort()).join(';') + (com || '');
+      me.executeEdits('D', [{ range: new monaco.Range(l + 1, 1, l + 1, lt.length + 1), text }]);
     },
     LN() { D.prf.lineNums.toggle(); },
     TVO() { D.prf.fold.toggle(); },

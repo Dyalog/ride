@@ -214,6 +214,10 @@
           }
           sm = line.slice(offset);
         }
+        if (sm[0] === '⍝') {
+          addToken(offset, 'comment');
+          offset = eol;
+        }
         offset !== eol && addToken(offset, 'invalid');
         offset = eol;
       };
@@ -478,12 +482,13 @@
               if (name0.test(c)) {
                 m = sm.match(name1);
                 // var x=sm.current(),dd=dfnDepth(a)
-                const x = m[0];
+                let [x] = m;
                 dd = dfnDepth(a);
                 if (!dd && sm[x.length] === ':') {
                   addToken(offset, 'meta.label');
                   offset += 1;
-                } else if (dd || (h.vars && h.vars.indexOf(x) >= 0)) {
+                } else if (dd || (h.vars && h.vars.includes(x))) {
+                  [x] = sm.match(RegExp(`(${name}\\.?)+`));
                   addToken(offset, 'identifier.local');
                 } else {
                   addToken(offset, 'identifier.global');
@@ -906,7 +911,6 @@
       const from = range.startLineNumber || 1;
       const to = range.endLineNumber || ml.length;
       const edits = [];
-      const initIndent = model.getOneIndent().length;
       for (let l = from; l <= to; l++) {
         const s = model.getLineContent(l);
         const [m] = s.match(/^(\s)*/);
@@ -924,7 +928,6 @@
           } else {
             ind += /^\s*:(?:end|else|andif|orif|case|until)/i.test(s) ? la.oi : la.ii;
           }
-          ind += initIndent;
           if (ind !== m.length) {
             edits.push({
               range: new monaco.Range(l, 1, l, m.length + 1),
