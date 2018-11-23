@@ -60,6 +60,7 @@
       renderIndentGuides: false,
       selectionHighlight: D.prf.selectionHighlight(),
       snippetSuggestions: D.prf.snippetSuggestions() ? 'bottom' : 'none',
+      stopRenderingLineAfter: -1,
       suggestOnTriggerCharacters: D.prf.autocompletion() === 'classic',
       showFoldingControls: 'always',
       useTabStops: false,
