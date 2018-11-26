@@ -940,7 +940,6 @@
     } else if (h.s) {
       q = J.cn;
       go({ type: 'start', exe: h.s });
-      window.onbeforeunload = () => { D.send('Exit', { code: 0 }); };
     } else { D.cn(); }
   };
 
