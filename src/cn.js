@@ -36,6 +36,11 @@
       clt.write(Buffer.concat(x.map(toBuf)));
     }
   };
+  const dyalogArgs = (args) => {
+    const i = D.el.process.argv.indexOf('--');
+    if (!D.el || i < 0) return args;
+    return D.el.process.argv.slice(1 + i).concat(args);
+  };
   // compare two versions of the form [major,minor]
   const cmpVer = (x, y) => x[0] - y[0] || x[1] - y[1] || 0;
   const ls = x => fs.readdirSync(x);
@@ -452,7 +457,8 @@
                 if (fe) throw fe;
                 let s0 = '';
                 Object.keys(env).forEach((k) => { s0 += `${k}=${shEsc(env[k])} `; });
-                const s1 = x.args ? x.args.replace(/\n$/, '').split('\n').map(shEsc).join(' ') : '';
+                const args = x.args ? x.args.replace(/\n$/gm, '').split('\n') : [];
+                const s1 = dyalogArgs(args).map(shEsc).join(' ');
                 sm.write(`${s0}CLASSICMODE=1 SINGLETRACE=1 RIDE_INIT=CONNECT:127.0.0.1:${rport} RIDE_SPAWNED=1 ${shEsc(x.exe)} ${s1} +s -q >/dev/null\n`);
                 hideDlgs();
               });
@@ -489,7 +495,8 @@
               let args = ['+s', '-q'];
               const stdio = ['pipe', 'ignore', 'ignore'];
               if (/^win/i.test(process.platform)) { args = []; stdio[0] = 'ignore'; }
-              if (x.args) args = args.concat(args, x.args.replace(/\n$/, '').split('\n'));
+              args = dyalogArgs(args);
+              if (x.args) args.push(...x.args.replace(/\n$/gm, '').split('\n'));
               try {
                 child = cp.spawn(x.exe, args, {
                   cwd: untildify(x.cwd),
