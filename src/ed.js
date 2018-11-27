@@ -95,6 +95,7 @@
         e.event.stopPropagation();
       } else if (t.type === mt.GUTTER_GLYPH_MARGIN) {
         const l = p.lineNumber - 1;
+        ed.updStops();
         ed.stop.has(l) ? ed.stop.delete(l) : ed.stop.add(l);
         ed.setStop();
         ed.tc && D.send('SetLineAttributes', { win: ed.id, stop: ed.getStops() });
@@ -141,6 +142,13 @@
   Ed.prototype = {
     getStops() { // returns an array of line numbers
       return [...this.stop].sort((x, y) => x - y);
+    },
+    updStops() { // update stops from line decorations
+      const ed = this;
+      const model = ed.me.getModel();
+      ed.stop = new Set(model.getAllDecorations()
+        .filter(d => d.options.glyphMarginClassName === 'breakpoint')
+        .map(d => d.range.startLineNumber - 1));
     },
     cursorActivity(e) { // handle "cursor activity" event
       // xline:the line number of the empty line inserted when you press <down> at eof
@@ -212,6 +220,7 @@
         options: {
           isWholeLine: false,
           glyphMarginClassName: 'breakpoint',
+          stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
         },
       }));
       ed.setDecorations();
@@ -469,12 +478,11 @@
     FX(me) {
       const ed = this;
       const v = me.getValue();
+      ed.updStops();
       const stop = ed.getStops();
       if (ed.tc || (v === ed.oText && `${stop}` === `${ed.oStop}`)) { // if tracer or unchanged
-        D.send('CloseWindow', { win: ed.id }); return;
-      }
-      if (!ed.me) {
-        for (let i = 0; i < stop.length; i++) me.setGutterMarker(stop[i], 'breakpoints', null);
+        ed.isClosing && D.send('CloseWindow', { win: ed.id });
+        return;
       }
       D.send('SaveChanges', { win: ed.id, text: v.split(me.getModel().getEOL()), stop });
     },
@@ -559,6 +567,7 @@
     },
     BP(me) { // toggle breakpoint
       const ed = this;
+      ed.updStops();
       const t = ed.stop.has(me.getSelection().positionLineNumber - 1);
       me.getSelections().forEach((s) => {
         let p = { l: s.selectionStartLineNumber - 1, c: s.selectionStartColumn - 1 };

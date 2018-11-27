@@ -33,6 +33,7 @@ test(
     }
     // hover over ⍤
     await c.moveToObject('b=⍤');
+    await c.pause(1000);
     t.true(await c.isVisible('#lb_tip_body'));
     t.is(await c.getText('#lb_tip_desc'), 'JOT DIAERESIS (⍤)');
     // move over tip

@@ -1,5 +1,5 @@
 import test from 'ava';
-import { tfw } from './_utils';
+import { sessionLastLines, tfw } from './_utils';
 
 tfw.init({ src: 'ed', RIDE_SPAWN: 'dyalog' });
 
@@ -10,10 +10,10 @@ test(
     const c = app.client;
     let text;
 
-    await c.execute(() => { 
-      D.prf.prefixKey('<'); 
-      D.prf.ilf(0); 
-      D.prf.indent(-1); 
+    await c.execute(() => {
+      D.prf.prefixKey('<');
+      D.prf.ilf(0);
+      D.prf.indent(-1);
       D.prf.indentOnOpen(0);
     });
     const [mac, win] = (await c.execute(() => [D.mac, D.win])).value;
@@ -80,5 +80,67 @@ test(
     await c.keys([cc, 'a', 'c', cc, 'Escape']);
     text = await app.electron.clipboard.readText();
     t.is(text.slice(-5), '⍝  cd');
+  },
+);
+
+test(
+  'ed-set-stops-in-traced-script',
+  async (t) => {
+    const { app } = t.context;
+    const c = app.client;
+
+    const mac = (await c.execute(() => {
+      D.prf.ilf(0);
+      D.prf.indentOnOpen(0);
+      const pf = D.prf.pfkeys();
+      pf[2] = '<BP>';
+      D.prf.pfkeys(pf);
+      return D.mac;
+    })).value;
+    const cc = mac ? 'Meta' : 'Control';
+
+    await c.keys(["⎕FIX ':Namespace Sol' '∇ foo' '⍝' '⍝' '⍝' '⍝' '∇' ':EndNamespace'", 'Enter']);
+    await c.keys(['Sol.foo', cc, 'Enter', cc]);
+    await c.waitForExist('#ide .ride_win.edit_trace');
+    await c.keys(['F2']);
+    await c.pause(500);
+    await c.keys(['Escape']);
+    await c.waitForExist('#ide .ride_win.edit_trace', 1000, true);
+    await c.waitForExist('#ide .ride_win');
+    await c.keys(["⎕STOP 'Sol.foo'", 'Enter']);
+    await c.pause(500);
+    const r = await c.execute(sessionLastLines, 2);
+    t.is(r.value[0], '1');
+  },
+);
+
+test.failing(
+  'ed-set-stops-in-traced-script-with-ilf',
+  async (t) => {
+    const { app } = t.context;
+    const c = app.client;
+
+    const mac = (await c.execute(() => {
+      D.prf.ilf(1);
+      D.prf.indentOnOpen(1);
+      const pf = D.prf.pfkeys();
+      pf[2] = '<BP>';
+      D.prf.pfkeys(pf);
+      return D.mac;
+    })).value;
+    const cc = mac ? 'Meta' : 'Control';
+
+    await c.keys(["⎕FIX ':Namespace Sol' '∇ foo' '⍝' '⍝' '⍝' '⍝' '∇' ':EndNamespace'", 'Enter']);
+    await c.keys(['Sol.foo', cc, 'Enter', cc]);
+    await c.waitForExist('#ide .ride_win.edit_trace');
+    await c.keys(['F2']);
+    await c.pause(500);
+    await c.keys(['Escape']);
+    await c.waitForExist('#ide .ride_win.edit_trace', 1000, true);
+    await c.waitForExist('#ide .ride_win');
+    await c.keys(["⎕STOP 'Sol.foo'", 'Enter']);
+    await c.pause(500);
+    const r = await c.execute(sessionLastLines, 2);
+    t.is(r.value[0], '1');
   },
 );
