@@ -370,17 +370,18 @@ D.IDE = function IDE(opts = {}) {
     toggleStats();
     I.sb.hidden = !x; updTopBtm();
   });
-  if (!ide.floating) {
-    setTimeout(() => {
-      try {
-        D.installMenu(D.parseMenuDSL(D.prf.menu()));
-      } catch (e) {
-        $.err('Invalid menu configuration -- the default menu will be used instead');
-        console.error(e);
-        D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()));
-      }
-    }, 100);
-  }
+  const updMenu = () => {
+    try {
+      D.installMenu(D.parseMenuDSL(D.prf.menu()));
+    } catch (e) {
+      $.err('Invalid menu configuration -- the default menu will be used instead');
+      console.error(e);
+      D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()));
+    }
+  };
+  D.prf.menu(updMenu);
+  D.prf.keys(updMenu);
+  !ide.floating && setTimeout(updMenu, 100);
   D.prf.autoCloseBrackets((x) => { eachWin((w) => { !w.bwId && w.autoCloseBrackets(!!x); }); });
   D.prf.ilf((x) => {
     const i = x ? -1 : D.prf.indent();
