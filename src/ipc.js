@@ -190,6 +190,7 @@
       });
       srv.on('zoom', z => D.ide.zoom(z));
       srv.on('LOG', () => D.commands.LOG());
+      srv.on('NEW', () => D.commands.NEW());
       srv.on('RIDE', ([type, payload]) => D.send(type, payload));
     });
     D.ipc.server.start();
@@ -202,9 +203,8 @@
     if (!wp) {
       D.IPC_CreateWindow(pe.editorOpts.id);
       return;
-    } else if (wp.id > 0) {
-      wp = Object.assign(new D.IPC_WindowProxy(), wp);
     }
+    if (wp.id > 0) wp = Object.assign(new D.IPC_WindowProxy(), wp);
     const bw = D.el.BrowserWindow.fromId(wp.bwId);
     bw.show();
     if (!D.prf.editWinsRememberPos()) {

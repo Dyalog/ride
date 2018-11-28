@@ -74,6 +74,10 @@
     },
     NEW() {
       if (!D.el) return;
+      if (D.ide.floating) {
+        D.ipc.of.ride_master.emit('NEW');
+        return;
+      }
       if (D.lastSpawnedExe) {
         const e = {};
         Object.keys(process.env).forEach((k) => { e[k] = process.env[k]; });

@@ -38,7 +38,7 @@ D.cmds = [
   ['LN', 'Toggle line numbers',     []],
   ['LOG','Show RIDE protocol log',  ['Ctrl-F12']],
   ['MA', 'Continue execution of all threads',[]],
-  ['NEW','New session',             ['Ctrl-N']],
+  ['NEW','New session',             [D.mac?'Cmd-N':'Ctrl-N']],
   ['NX' ,'Next match',              []],
   ['PRF','Show preferences',        []],
   ['PV' ,'Previous match',          []], 
