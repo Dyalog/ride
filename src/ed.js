@@ -288,7 +288,7 @@
       if (line === 0 && col === 0 && ee.text.length === 1
         && /\s?[a-z|@]+$/.test(ee.text[0])) col = ee.text[0].length;
       me.setPosition({ lineNumber: line + 1, column: col + 1 });
-      me.revealLineInCenter(line + 1);
+      setTimeout(() => me.revealLineInCenter(line + 1), 100);
       ed.oStop = (ee.stop || []).slice(0).sort((x, y) => x - y);
       ed.stop = new Set(ed.oStop);
       ed.setStop();
