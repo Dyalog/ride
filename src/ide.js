@@ -490,6 +490,7 @@ D.IDE = function IDE(opts = {}) {
         while (--i) { if (/^Dyalog APL/.test(txt[i])) break; }
         setTimeout(() => {
           me.revealRangeAtTop(new monaco.Range(i + 1, 1, i + 1, 1));
+          me.setPosition({ ...me.getPosition(), column: 7 });
         }, 1);
       }
     },
