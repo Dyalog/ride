@@ -190,13 +190,17 @@ const Console = console;
         const { path } = (files[0] || {});
         if (!D.ide || !path) {
           // no session or no file dragged
-        } else if (!D.lastSpawnedExe) {
-          toastr.error('Drag and drop of workspaces works only for locally started interpreters.', 'Drop failed');
         } else if (!/\.dws$/i.test(path)) {
           toastr.error('RIDE supports drag and drop only for .dws files.');
         } else if (files.length !== 1) {
           toastr.error('RIDE does not support dropping of multiple files.');
         } else {
+          if (!D.lastSpawnedExe) {
+            toastr.warning(
+              'Drag and drop of workspaces works only for locally started interpreters.',
+              'Load may fail',
+            );
+          }
           $.confirm(
             `Are you sure you want to )load ${path.replace(/^.*[\\/]/, '')}?`,
             'Load workspace',
