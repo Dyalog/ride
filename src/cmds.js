@@ -40,6 +40,7 @@ D.cmds = [
   ['MA', 'Continue execution of all threads',[]],
   ['NEW','New session',             [D.mac?'Cmd-N':'Ctrl-N']],
   ['NX' ,'Next match',              []],
+  ['OWS','Open Workspace',          [D.mac?'Cmd-O':'Ctrl-O']],
   ['PRF','Show preferences',        []],
   ['PV' ,'Previous match',          []], 
   ['QCP','Quick Command Palette',   []], 

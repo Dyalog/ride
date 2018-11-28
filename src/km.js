@@ -54,6 +54,10 @@
       if (D.ide.dead) window.close();
     },
     OWS() {
+      if (D.el && D.ide.floating) {
+        D.ipc.of.ride_master.emit('OWS');
+        return;
+      }
       if (D.el && D.lastSpawnedExe) {
         const [v] = D.el.dialog.showOpenDialog(D.elw, {
           title: 'Open file',
@@ -281,6 +285,7 @@
       Meta: km.CtrlCmd,
     };
     const stlkbs = [];
+    const fxkbs = [];
     function monacoKeyBinding(ks) {
       return ks.replace(/-(.)/g, '\n$1').split('\n').reduce((a, ko) => {
         const k = D.keyMap.labels[ko] || ko;
@@ -294,6 +299,7 @@
         let cond;
         if (!nkc || cmd === 'BQC') return;
         if (cmd === 'STL') { stlkbs.push(nkc); return; }
+        if (cmd === 'FX') { fxkbs.push(nkc); return; }
         if (cmd === 'ER') {
           cond = 'tracer && !editorHasMultipleSelections && !findInputFocussed && !inSnippetMode';
         } else if (cmd === 'TC') {
@@ -323,9 +329,18 @@
       contextMenuGroupId: 'navigation',
       contextMenuOrder: 0,
       precondition: 'tracer && !session',
-      keyBindings: stlkbs,
+      keybindings: stlkbs,
       label: 'Skip to line',
       run: e => ed.STL(e),
+    });
+    me.addAction({
+      id: 'dyalog-fix',
+      contextMenuGroupId: 'modification',
+      contextMenuOrder: 0,
+      precondition: '!tracer && !session',
+      keybindings: fxkbs,
+      label: 'Fix',
+      run: e => ed.FX(e),
     });
   };
   D.remDefaultMap = (me) => {
