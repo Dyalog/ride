@@ -62,78 +62,79 @@ D.prf = {};
   }], 
   ['zoom',               0],
   ['menu',
-    '# see below for syntax'+
-    '\n'+
-    '\nDyalog                          {mac}'+
-    '\n  About Dyalog             =ABT'+
-    '\n  -'+
-    '\n  Preferences              =PRF'+
-    '\n  -                            '+
-    '\n  &Quit                    =QIT'+
-    '\n&File                           {!browser}'+
-    '\n  &Open...                 =OWS'+
-    '\n  New &Session             =NEW'+
-    '\n  &Connect...              =CNC'+
-    '\n  -                             {!mac}'+
-    '\n  &Quit                    =QIT {!mac}'+
-    '\n&Edit'+
-    '\n  Undo                     =UND {!browser}'+
-    '\n  Redo                     =RDO {!browser}'+
-    '\n  -                             {!browser}'+
-    '\n  Cut                      =CT  {!browser}'+
-    '\n  Copy                     =CP  {!browser}'+
-    '\n  Paste                    =PT  {!browser}'+
-    '\n  Select All               =SA  {mac}'+
-    '\n  -                             {!mac&&!browser}'+
-    '\n  Preferences              =PRF {!mac}'+
-    '\n&View'+
-    '\n  Show Language Bar        =LBR'+
-    '\n  Show Status Bar          =SBR'+
-    '\n  Show Workspace Explorer  =WSE'+
-    '\n  Show Debug               =DBG'+
-    '\n  Line Wrapping in Session =WRP'+
-    '\n  -                             {!browser}'+
-    '\n  Stops                    =TVB'+
-    '\n  Line Numbers             =LN'+
-    '\n  Outline                  =TVO'+
-    '\n  -                             {!browser}'+
-    '\n  Increase Font Size       =ZMI {!browser}'+
-    '\n  Decrease Font Size       =ZMO {!browser}'+
-    '\n  Reset Font Size          =ZMR {!browser}'+
-    '\n  -                             {!browser}'+
-    '\n  Toggle Full Screen            {!browser}'+
-    '\n&Window'+
-    '\n  Close All Windows        =CAW'+
-    '\n&Action'+
-    '\n  Edit                     =ED'+
-    '\n  Trace                    =TC'+
-    '\n  -'+
-    '\n  Clear all trace/stop/monitor =CAM'+
-    '\n  Weak Interrupt           =WI'+
-    '\n  Strong Interrupt         =SI'+
-    '\n&Help'+
-    '\n  Dyalog Help              =http://help.dyalog.com/'+
-    '\n  Documentation Centre     =http://dyalog.com/documentation.htm'+
-    '\n  -'+
-    '\n  Dyalog Website           =http://dyalog.com/'+
-    '\n  MyDyalog                 =https://my.dyalog.com/'+
-    '\n  -'+
-    '\n  Dyalog Forum             =http://www.dyalog.com/forum'+
-    '\n  -                             {!mac}'+
-    '\n  About                    =ABT {!mac}'+
-    '\n'+
-    '\n# Syntax:'+
-    '\n#   &x   access key, alt+x'+
-    '\n#   =CMD command code; some are special:'+
-    '\n#          LBR WRP WSE render as checkboxes'+
-    '\n#   =http://example.com/  open a URL'+
-    '\n#   {}   conditional display, a boolean expression'+
-    '\n#          operators: && || ! ( )'+
-    '\n#          variables: browser mac win'+
-    '\n#   -    separator (when alone)'+
-    '\n#   #    comment'+
-    '\n'+
-    '\n# The =PRF ("Preferences") menu item must be present.'
+    '# see below for syntax'
+    + '\n'
+    + '\nDyalog                          {mac}'
+    + '\n  About Dyalog             =ABT'
+    + '\n  -'
+    + '\n  Preferences              =PRF'
+    + '\n  -                            '
+    + '\n  &Quit                    =QIT'
+    + '\n&File                           {!browser}'
+    + '\n  &Open...                 =OWS'
+    + '\n  &Save...                 =FX'
+    + '\n  &New Session             =NEW'
+    + '\n  &Connect...              =CNC'
+    + '\n  -                             {!mac}'
+    + '\n  &Quit                    =QIT {!mac}'
+    + '\n&Edit'
+    + '\n  Undo                     =UND {!browser}'
+    + '\n  Redo                     =RDO {!browser}'
+    + '\n  -                             {!browser}'
+    + '\n  Cut                      =CT  {!browser}'
+    + '\n  Copy                     =CP  {!browser}'
+    + '\n  Paste                    =PT  {!browser}'
+    + '\n  Select All               =SA  {mac}'
+    + '\n  -                             {!mac&&!browser}'
+    + '\n  Preferences              =PRF {!mac}'
+    + '\n&View'
+    + '\n  Show Language Bar        =LBR'
+    + '\n  Show Status Bar          =SBR'
+    + '\n  Show Workspace Explorer  =WSE'
+    + '\n  Show Debug               =DBG'
+    + '\n  Line Wrapping in Session =WRP'
+    + '\n  -                             {!browser}'
+    + '\n  Stops                    =TVB'
+    + '\n  Line Numbers             =LN'
+    + '\n  Outline                  =TVO'
+    + '\n  -                             {!browser}'
+    + '\n  Increase Font Size       =ZMI {!browser}'
+    + '\n  Decrease Font Size       =ZMO {!browser}'
+    + '\n  Reset Font Size          =ZMR {!browser}'
+    + '\n  -                             {!browser}'
+    + '\n  Toggle Full Screen            {!browser}'
+    + '\n&Window'
+    + '\n  Close All Windows        =CAW'
+    + '\n&Action'
+    + '\n  Edit                     =ED'
+    + '\n  Trace                    =TC'
+    + '\n  -'
+    + '\n  Clear all trace/stop/monitor =CAM'
+    + '\n  Weak Interrupt           =WI'
+    + '\n  Strong Interrupt         =SI'
+    + '\n&Help'
+    + '\n  Dyalog Help              =http://help.dyalog.com/'
+    + '\n  Documentation Centre     =http://dyalog.com/documentation.htm'
+    + '\n  -'
+    + '\n  Dyalog Website           =http://dyalog.com/'
+    + '\n  MyDyalog                 =https://my.dyalog.com/'
+    + '\n  -'
+    + '\n  Dyalog Forum             =http://www.dyalog.com/forum'
+    + '\n  -                             {!mac}'
+    + '\n  About                    =ABT {!mac}'
+    + '\n'
+    + '\n# Syntax:'
+    + '\n#   &x   access key, alt+x'
+    + '\n#   =CMD command code; some are special:'
+    + '\n#          LBR WRP WSE render as checkboxes'
+    + '\n#   =http://example.com/  open a URL'
+    + '\n#   {}   conditional display, a boolean expression'
+    + '\n#          operators: && || ! ( )'
+    + '\n#          variables: browser mac win'
+    + '\n#   -    separator (when alone)'
+    + '\n#   #    comment'
+    + '\n'
+    + '\n# The =PRF ("Preferences") menu item must be present.',
   ],
 ].forEach((kd) => {
   const [k, d] = kd; // k:preference name (key), d:default value
@@ -146,8 +147,8 @@ D.prf = {};
     if (x === undefined) { // get
       const r = D.db.getItem(k);
       if (r == null) return d;
-      else if (t === 'number') return +r;
-      else if (t === 'object') return JSON.parse(r);
+      if (t === 'number') return +r;
+      if (t === 'object') return JSON.parse(r);
       return r;
     }
     // set:
@@ -181,7 +182,7 @@ D.db = !nodeRequire ? localStorage : (function DB() {
   // file-backed storage with API similar to that of localStorage
   const k = []; // keys
   const v = []; // values
-  const f = el.process.env.RIDE_PREFS || `${el.app.getPath('userData')}/prefs.json`; 
+  const f = el.process.env.RIDE_PREFS || `${el.app.getPath('userData')}/prefs.json`;
   try {
     if (fs.existsSync(f)) {
       const h = JSON.parse(fs.readFileSync(f, 'utf8'));
