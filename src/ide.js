@@ -213,6 +213,7 @@ D.IDE = function IDE(opts = {}) {
     }
     reqTip(x, 'Keyboard Shortcuts', s, x.currentTarget);
   };
+  I.lb_prf.onmouseout = I.lb_tip.onmouseout;
   I.lb_prf.onmousedown = () => { D.prf_ui('shc'); return !1; };
   I.lb_prf.onclick = () => !1; // prevent # from appearing in the URL bar
   I.sb_prf.onmousedown = () => { D.prf_ui(); return !1; };
