@@ -237,13 +237,14 @@
       const model = me.getModel();
       const l = model.getLineCount();
       const t = model.getLineContent(l);
+      const promtChanged = se.promptType !== x;
       se.promptType = x;
       se.isReadOnly = !x;
       me.updateOptions({ readOnly: !x });
       if ((x === 1 && this.dirty[l] == null) || ![0, 1, 3, 4].includes(x)) {
         se.edit(
           [{ range: new monaco.Range(l, 1, l, 1 + t.length), text: '      ' }],
-          [new monaco.Selection(l, 7, l, 7)],
+          promtChanged ? [new monaco.Selection(l, 7, l, 7)] : me.getSelections(),
         );
       } else if (t === '      ') {
         se.edit([{ range: new monaco.Range(l, 1, l, 7), text: '' }]);
