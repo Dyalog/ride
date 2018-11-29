@@ -77,25 +77,28 @@
     //  t       the opening token - a keyword (without the colon) or '{', '[', '(', '∇'
     //  oi      outer indent - the indent of the opening token's line
     //  ii      inner indent - the indent of the block's body; it can be adjusted later
-    //  l       line number where the opening token occurs
+    //  r       range ID, sequential numbering of ranges for folding
     // kw       current keyword
     // vars     local names in a tradfn
+    // rseq     last range ID
     // comState state of the inner mode for syntax highlighting inside comments
 
-    constructor(hdr, a, vars) {
+    constructor(hdr, a, vars, rseq) {
       this.hdr = hdr;
       this.a = a.slice();
       this.vars = vars.slice();
+      this.rseq = rseq;
     }
 
     clone() {
-      return new State(this.hdr, this.a, this.vars);
+      return new State(this.hdr, this.a, this.vars, this.rseq);
     }
 
     equals(other) {
       if (other === this) return true;
       if (!other || !(other instanceof State)) return false;
       if (this.hdr !== other.hdr) return false;
+      if (this.rseq !== other.rseq) return false;
       if (this.a.length !== other.a.length) return false;
       if (!this.a.every((e, i) => e === other.a[i])) return false;
       if (this.vars.length !== other.vars.length) return false;
@@ -159,12 +162,12 @@
 
   const aplTokens = {
     getInitialState: () => new State(1, [{
-      t: '', oi: 0, ii: 0, l: 0,
-    }], []),
+      t: '', oi: 0, ii: 0, r: 0,
+    }], [], 0),
     tokenize: (line, state) => {
       const lt = {
         tokens: [],
-        endState: new State(state.hdr, state.a, state.vars),
+        endState: new State(state.hdr, state.a, state.vars, state.rseq),
       };
       function addToken(startIndex, type) {
         const scope = `${type}.apl`;
@@ -323,16 +326,33 @@
             case '⍬': addToken(offset, 'predefined.zilde'); offset += 1; break;
 
             case '(':
-              a.push({ t: c, oi: la.oi, ii: la.ii });
+              h.rseq += 1;
+              a.push({
+                t: c,
+                oi: la.oi,
+                ii: la.ii,
+                r: h.rseq,
+              });
               addToken(offset, 'delimiter.parenthesis'); offset += 1; break;
 
             case '[':
-              a.push({ t: c, oi: la.oi, ii: la.ii });
+              h.rseq += 1;
+              a.push({
+                t: c,
+                oi: la.oi,
+                ii: la.ii,
+                r: h.rseq,
+              });
               addToken(offset, 'delimiter.square'); offset += 1; break;
 
             case '{':
-              // a.push({ t: c, oi: la.ii, ii: la.ii + sw });
-              a.push({ t: c, oi: 0, ii: sw });
+              h.rseq += 1;
+              a.push({
+                t: c,
+                oi: 0,
+                ii: sw,
+                r: h.rseq,
+              });
               tkn = `identifier.dfn.${dfnDepth(a)}`;
               addToken(offset, tkn); offset += 1; break;
 
@@ -390,7 +410,14 @@
                 if (i) {
                   a.splice(i); h.vars.length = 0;
                 } else {
-                  a.push({ t: '∇', oi: n, ii: n + swm }); h.hdr = 1;
+                  h.rseq += 1;
+                  a.push({
+                    t: '∇',
+                    oi: n,
+                    ii: n + swm,
+                    r: h.rseq,
+                  });
+                  h.hdr = 1;
                 }
                 addToken(offset, 'identifier.tradfn'); offset += 1; break;
               } else if (c === ':') {
@@ -402,7 +429,15 @@
                 switch (kw) {
                   case 'class': case 'disposable': case 'for': case 'hold': case 'if': case 'interface': case 'namespace':
                   case 'property': case 'repeat': case 'section': case 'select': case 'trap': case 'while': case 'with':
-                    a.push({ t: kw, oi: n, ii: n + sw }); ok = 1; break;
+                    h.rseq += 1;
+                    a.push({
+                      t: kw,
+                      oi: n,
+                      ii: n + sw,
+                      r: h.rseq,
+                    });
+                    ok = 1;
+                    break;
 
                   case 'end':
                     ok = a.length > 1 && la.t !== '∇';
@@ -423,11 +458,22 @@
                     }
                     break;
 
-                  case 'else': ok = la.t === 'if' || la.t === 'select' || la.t === 'trap'; break;
+                  case 'else':
+                    ok = la.t === 'if' || la.t === 'select' || la.t === 'trap';
+                    h.rseq += 1;
+                    a.push({ ...a.pop(), r: h.rseq });
+                    break;
                   case 'elseif': case 'andif': case 'orif':
-                    ok = la.t === 'if' || la.t === 'while'; break;
+                    ok = la.t === 'if' || la.t === 'while';
+                    h.rseq += 1;
+                    a.push({ ...a.pop(), r: h.rseq });
+                    break;
                   case 'in': case 'ineach': ok = la.t === 'for'; break;
-                  case 'case': case 'caselist': ok = la.t === 'select' || la.t === 'trap'; break;
+                  case 'case': case 'caselist':
+                    ok = la.t === 'select' || la.t === 'trap';
+                    h.rseq += 1;
+                    a.push({ ...a.pop(), r: h.rseq });
+                    break;
                   case 'leave': case 'continue':
                     ok = 0;
                     for (let i = 0; i < a.length; i++) if (/^(?:for|repeat|while)$/.test(a[i].t)) { ok = 1; break; }
@@ -904,6 +950,43 @@
       return [];
     },
   };
+  const aplFold = {
+    provideFoldingRanges(model, context, token) {
+      const ml = model._tokens._tokens;
+      const ranges = [];
+      const openRanges = [];
+      let pa = null;
+      Object.keys(ml).forEach((k) => {
+        const a = ((ml[k]._state || {}).a || []).slice().reverse();
+        if (!pa) {
+          pa = a;
+          return;
+        }
+        if (pa[0].r === a[0].r) return;
+        if (pa.length < a.length) {
+          openRanges.push({
+            start: +k,
+            kind: new monaco.languages.FoldingRangeKind(a[0].t),
+          });
+          pa = a;
+          return;
+        }
+        if (pa.length > a.length) {
+          ranges.push({ ...openRanges.pop(), end: +k });
+          pa = a;
+          return;
+        }
+        ranges.push({ ...openRanges.pop(), end: +k - 1 });
+        openRanges.push({
+          start: +k,
+          kind: new monaco.languages.FoldingRangeKind(a[0].t),
+        });
+        pa = a;
+      });
+      openRanges.forEach(r => ranges.push({ ...r, end: ml.length }));
+      return ranges;
+    },
+  };
   let icom = D.prf.indentComments(); D.prf.indentComments((x) => { icom = x; });
   const aplFormat = {
     formatLines(model, range) {
@@ -962,6 +1045,7 @@
     ml.registerCompletionItemProvider('apl', aplCompletions(D.prf.prefixKey()));
     D.prf.prefixKey(x => ml.registerCompletionItemProvider('apl', aplCompletions(x)));
     ml.registerHoverProvider('apl', aplHover);
+    ml.registerFoldingRangeProvider('apl', aplFold);
     ml.registerDocumentFormattingEditProvider('apl', aplFormat);
     ml.registerDocumentRangeFormattingEditProvider('apl', aplFormat);
     ml.registerOnTypeFormattingEditProvider('apl', aplFormat);
