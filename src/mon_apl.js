@@ -952,39 +952,45 @@
   };
   const aplFold = {
     provideFoldingRanges(model, context, token) {
-      const ml = model._tokens._tokens;
-      const ranges = [];
-      const openRanges = [];
-      let pa = null;
-      Object.keys(ml).forEach((k) => {
-        const a = ((ml[k]._state || {}).a || []).slice().reverse();
-        if (!pa) {
-          pa = a;
-          return;
-        }
-        if (pa[0].r === a[0].r) return;
-        if (pa.length < a.length) {
-          openRanges.push({
-            start: +k,
-            kind: new monaco.languages.FoldingRangeKind(a[0].t),
-          });
-          pa = a;
-          return;
-        }
-        if (pa.length > a.length) {
-          ranges.push({ ...openRanges.pop(), end: +k });
-          pa = a;
-          return;
-        }
-        ranges.push({ ...openRanges.pop(), end: +k - 1 });
-        openRanges.push({
-          start: +k,
-          kind: new monaco.languages.FoldingRangeKind(a[0].t),
-        });
-        pa = a;
+      return new Promise((resolve) => {
+        const ranges = [];
+        const openRanges = [];
+        let pa = null;
+        const totLength = model.getLineCount();
+        let i = 0;
+
+        (function defineRanges() {
+          const ml = model._tokens._tokens;
+          const { length } = ml;
+          for (i; i < length; i++) {
+            const a = ((ml[i]._state || {}).a || []).slice().reverse();
+            if (!pa) pa = a;
+            else if (pa.length < a.length) {
+              openRanges.push({
+                start: i,
+                kind: new monaco.languages.FoldingRangeKind(a[0].t),
+              });
+              pa = a;
+            } else if (pa.length > a.length) {
+              ranges.push({ ...openRanges.pop(), end: i });
+              pa = a;
+            } else if (pa[0].r !== a[0].r) {
+              ranges.push({ ...openRanges.pop(), end: i - 1 });
+              openRanges.push({
+                start: i,
+                kind: new monaco.languages.FoldingRangeKind(a[0].t),
+              });
+              pa = a;
+            }
+          }
+          if (token.isCancellationRequested || length === totLength) {
+            openRanges.forEach(r => ranges.push({ ...r, end: totLength }));
+            resolve(ranges);
+            return;
+          }
+          setTimeout(defineRanges, 1);
+        }());
       });
-      openRanges.forEach(r => ranges.push({ ...r, end: ml.length }));
-      return ranges;
     },
   };
   let icom = D.prf.indentComments(); D.prf.indentComments((x) => { icom = x; });
