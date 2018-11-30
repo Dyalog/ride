@@ -611,29 +611,48 @@ D.IDE = function IDE(opts = {}) {
       }
     },
     ShowHTML(x) {
-      if (D.el) {
-        let w = ide.w3500;
-        if (!w || w.isDestroyed()) {
-          ide.w3500 = new D.el.BrowserWindow({
-            width: 800,
-            height: 500,
-          });
-          w = ide.w3500;
-        }
-        w.loadURL(`file://${__dirname}/empty.html`);
-        w.webContents.executeJavaScript(`document.body.innerHTML=${JSON.stringify(x.html)}`);
-        w.setTitle(x.title || '3500 I-beam');
-      } else {
-        const init = () => {
-          ide.w3500.document.body.innerHTML = x.html;
-          ide.w3500.document.getElementsByTagName('title')[0].innerHTML = D.util.esc(x.title || '3500⌶');
-        };
-        if (ide.w3500 && !ide.w3500.closed) {
-          ide.w3500.focus(); init();
+      if (x.title) {
+        if (D.el) {
+          let w = ide.w3500;
+          if (!w || w.isDestroyed()) {
+            ide.w3500 = new D.el.BrowserWindow({
+              width: 800,
+              height: 500,
+            });
+            w = ide.w3500;
+          }
+          w.loadURL(`file://${__dirname}/empty.html`);
+          w.webContents.executeJavaScript(`document.body.innerHTML=${JSON.stringify(x.html)}`);
+          w.setTitle(x.title || '3500 I-beam');
         } else {
-          ide.w3500 = window.open('empty.html', '3500 I-beam', 'width=800,height=500');
-          ide.w3500.onload = init;
+          const init = () => {
+            ide.w3500.document.body.innerHTML = x.html;
+            ide.w3500.document.getElementsByTagName('title')[0].innerHTML = D.util.esc(x.title || '3500⌶');
+          };
+          if (ide.w3500 && !ide.w3500.closed) {
+            ide.w3500.focus(); init();
+          } else {
+            ide.w3500 = window.open('empty.html', '3500 I-beam', 'width=800,height=500');
+            ide.w3500.onload = init;
+          }
         }
+      } else {
+        const { me } = ide.wins['0'];
+        const html = x.html.trim();
+        const template = document.createElement('template');
+        template.innerHTML = html;
+        const node = ide.dom.appendChild(template.content.firstChild);
+        const height = node.clientHeight;
+        ide.dom.removeChild(node);
+        template.innerHTML = html;
+
+        me.changeViewZones((accessor) => {
+          accessor.addZone({
+            domNode: template.content.firstChild,
+            afterLineNumber: me.getModel().getLineCount() - 1,
+            heightInPx: height,
+          });
+        });
       }
     },
     OptionsDialog(x) {
