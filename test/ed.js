@@ -89,18 +89,17 @@ test(
     const { app } = t.context;
     const c = app.client;
 
-    const mac = (await c.execute(() => {
+    await c.execute(() => {
       D.prf.ilf(0);
       D.prf.indentOnOpen(0);
       const pf = D.prf.pfkeys();
       pf[2] = '<BP>';
       D.prf.pfkeys(pf);
       return D.mac;
-    })).value;
-    const cc = mac ? 'Meta' : 'Control';
+    });
 
     await c.keys(["⎕FIX ':Namespace Sol' '∇ foo' '⍝' '⍝' '⍝' '⍝' '∇' ':EndNamespace'", 'Enter']);
-    await c.keys(['Sol.foo', cc, 'Enter', cc]);
+    await c.keys(['Sol.foo', 'Control', 'Enter', 'Control']);
     await c.waitForExist('#ide .ride_win.edit_trace');
     await c.keys(['F2']);
     await c.pause(500);
@@ -120,18 +119,17 @@ test.failing(
     const { app } = t.context;
     const c = app.client;
 
-    const mac = (await c.execute(() => {
+    await c.execute(() => {
       D.prf.ilf(1);
       D.prf.indentOnOpen(1);
       const pf = D.prf.pfkeys();
       pf[2] = '<BP>';
       D.prf.pfkeys(pf);
       return D.mac;
-    })).value;
-    const cc = mac ? 'Meta' : 'Control';
+    });
 
     await c.keys(["⎕FIX ':Namespace Sol' '∇ foo' '⍝' '⍝' '⍝' '⍝' '∇' ':EndNamespace'", 'Enter']);
-    await c.keys(['Sol.foo', cc, 'Enter', cc]);
+    await c.keys(['Sol.foo', 'Control', 'Enter', 'Control']);
     await c.waitForExist('#ide .ride_win.edit_trace');
     await c.keys(['F2']);
     await c.pause(500);
