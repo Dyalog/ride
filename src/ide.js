@@ -366,10 +366,15 @@ D.IDE = function IDE(opts = {}) {
   I.sb.hidden = !D.prf.sbar();
   updTopBtm();
   $(window).resize(updTopBtm);
-  D.prf.lbar((x) => { I.lb.hidden = !x; updTopBtm(); });
+  D.prf.lbar((x) => {
+    I.lb.hidden = !x;
+    updTopBtm();
+    updMenu();
+  });
   D.prf.sbar((x) => {
     toggleStats();
     I.sb.hidden = !x; updTopBtm();
+    updMenu();
   });
   const updMenu = () => {
     try {
@@ -392,7 +397,10 @@ D.IDE = function IDE(opts = {}) {
     const i = D.prf.ilf() ? -1 : x;
     eachWin((w) => { !w.bwId && w.id && w.indent(i); });
   });
-  D.prf.fold((x) => { eachWin((w) => { w.id && !w.bwId && w.fold(!!x); }); });
+  D.prf.fold((x) => {
+    eachWin((w) => { w.id && !w.bwId && w.fold(!!x); });
+    updMenu();
+  });
   D.prf.matchBrackets((x) => { eachWin((w) => { !w.bwId && w.matchBrackets(!!x); }); });
   const togglePanel = (on, compName, compTitle, left) => {
     if (!on) {
@@ -422,10 +430,12 @@ D.IDE = function IDE(opts = {}) {
   const toggleWSE = (x) => {
     togglePanel(x, 'wse', 'Workspace Explorer', 1);
     ide.wse.autoRefresh(x && 5000);
+    updMenu();
   };
   const toggleDBG = (x) => {
     toggleStats();
     togglePanel(x, 'dbg', 'Debug', 0);
+    updMenu();
   };
   if (!ide.floating) {
     D.prf.wse(toggleWSE);
@@ -435,8 +445,15 @@ D.IDE = function IDE(opts = {}) {
   }
   // OSX is stealing our focus.  Let's steal it back!  Bug #5
   D.mac && !ide.floating && setTimeout(() => { ide.wins[0].focus(); }, 500);
-  D.prf.lineNums((x) => { eachWin(w => w.setLN && w.setLN(x)); });
-  D.prf.breakPts((x) => { eachWin(w => w.setBP && w.setBP(x)); });
+  D.prf.lineNums((x) => {
+    eachWin(w => w.setLN && w.setLN(x)); 
+    updMenu();
+  });
+  D.prf.breakPts((x) => {
+    eachWin(w => w.setBP && w.setBP(x));
+    updMenu();
+  });
+  D.prf.wrap((x) => { updMenu(); });
   D.prf.blockCursor((x) => { eachWin(w => !w.bwId && w.blockCursor(!!x)); });
   D.prf.cursorBlinking((x) => { eachWin(w => !w.bwId && w.cursorBlinking(x)); });
   D.prf.renderLineHighlight((x) => { eachWin(w => !w.bwId && w.renderLineHighlight(x)); });
