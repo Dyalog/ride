@@ -51,7 +51,7 @@
           const c1 = oc.range.startColumn;
           const ec = c1 + chg.text.length;
           nr.push({ range: new monaco.Range(l1, c1 - 1, l1, ec), text: y });
-          ns.push(new monaco.Selection(l1, ec - 1, l1, ec - 1));
+          ns.push(new monaco.Selection(l1, c1, l1, c1));
         });
         bqCleanUpMe(me);
         setTimeout(() => {
