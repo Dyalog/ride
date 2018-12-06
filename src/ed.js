@@ -71,8 +71,8 @@
     ed.me_ready = new Promise((resolve) => {
       // ugly hack as monaco doesn't have a built in event for when the editor is ready?!
       // https://github.com/Microsoft/monaco-editor/issues/115
-      const didScrollChangeDisposable = me.onDidScrollChange(() => {
-        didScrollChangeDisposable.dispose();
+      const onceReady = me.onDidLayoutChange(() => {
+        onceReady.dispose();
         resolve(true);
       });
     });
@@ -288,7 +288,7 @@
       if (line === 0 && col === 0 && ee.text.length === 1
         && /\s?[a-z|@]+$/.test(ee.text[0])) col = ee.text[0].length;
       me.setPosition({ lineNumber: line + 1, column: col + 1 });
-      setTimeout(() => me.revealLineInCenter(line + 1), 100);
+      me.revealLineInCenter(line + 1);
       ed.oStop = (ee.stop || []).slice(0).sort((x, y) => x - y);
       ed.stop = new Set(ed.oStop);
       ed.setStop();
