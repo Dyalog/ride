@@ -57,7 +57,12 @@
     D.tmr && clearTimeout(D.tmr);
     delete D.tmr;
     hideDlgs();
-    $.err(...x);
+    const [e] = x;
+    if (!(e instanceof Error)) {
+      $.err(...x);
+    } else if (e.code === 'ENOTFOUND') {
+      $.err(`The host "${e.host}" could not be found.`, 'Host not found');
+    } else if (e.code !== 'ETIMEDOUT') $.err(e.message, e.name);
   };
   const passwdPrompt = (text, title) => {
     setTimeout(() => D.util.stringDialog(
@@ -234,7 +239,7 @@
         }
       }
     });
-    clt.on('error', (x) => { clt && err(`${x}`); clt = 0; });
+    clt.on('error', (x) => { clt && err(x); clt = 0; });
     clt.on('end', () => {
       log('interpreter disconnected');
       D.ide && D.ide._disconnected();
@@ -267,13 +272,13 @@
           new D.IDE().setConnInfo('', 0, sel ? sel.name : '');
         })
         .on('keyboard-interactive', (_, _1, _2, _3, fin) => { fin([x.pass]); })
-        .on('error', e => err(e.message, e.name))
+        .on('error', err)
         .connect(o);
       return c;
     } catch (e) {
       if (e.message === 'Encrypted private key detected, but no passphrase given') {
         passwdPrompt(`Passphrase for encrypted key ${x.key}:`, 'Passphrase');
-      } else err(e.message, e.name);
+      } else err(e);
     }
     return null;
   };
@@ -325,7 +330,7 @@
         err('The interpreter is already serving another RIDE client.', 'Connection closed by interpreter');
         D.ide.die();
         D.commands.CNC();
-      } else err(e.message);
+      } else err(e);
       clt = 0;
     });
     cancelOp(clt);
@@ -362,7 +367,7 @@
                 if (fe) {
                   log('cannot forward out through ssh');
                   clt = 0;
-                  err(fe.message);
+                  err(fe);
                   clearTimeout(D.tmr);
                   delete D.tmr;
                   return;
@@ -373,7 +378,7 @@
                 clt.on('error', (ce) => {
                   log(`connect failed: ${ce}`);
                   clt = 0;
-                  err(ce.message);
+                  err(ce);
                   clearTimeout(D.tmr);
                   delete D.tmr;
                 });
@@ -419,7 +424,7 @@
           });
           srv.on('error', (e) => {
             srv = 0;
-            err(`${e}`);
+            err(e);
           });
           srv.listen(port, host, () => {
             const o = srv.address();
@@ -483,7 +488,7 @@
               log(`listen failed: ${e}`);
               srv = 0;
               clt = 0;
-              err(e.message);
+              err(e);
               clearTimeout(D.tmr);
               delete D.tmr;
             });
@@ -512,7 +517,7 @@
                     },
                   ),
                 });
-              } catch (e) { err(`${e}`); return; }
+              } catch (e) { err(e); return; }
               D.lastSpawnedExe = x.exe;
               child.on('exit', (code, sig) => {
                 srv && srv.close();
@@ -595,6 +600,9 @@
       }
     };
     q.fav_name.onchange = q.fav_name.onkeyup;
+    const noSpace = (e) => { e.target.value = e.target.value.replace(/\s*/g, ''); };
+    q.tcp_host.onchange = noSpace;
+    q.tcp_port.onchange = noSpace;
     updFormDtl();
     q.type.onchange = () => {
       sel.type = q.type.value;
