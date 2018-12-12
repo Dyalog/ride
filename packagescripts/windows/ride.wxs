@@ -38,7 +38,7 @@
 		<Property Id="SUF_INSTALLDIR" Value="INSTALLDIR"/>
 		<Property Id="SUFUSERPROFILE" Value="ALLUSERS"/>
 		<Feature Id="Complete" Title="Complete Install" Level="1" Absent="allow" AllowAdvertise="no" TypicalDefault="install" Display="expand" InstallDefault="local">
-			<ComponentGroupRef Id="resourcesFiles"/>
+			<ComponentGroupRef Id="localesFiles"/>
 			<ComponentRef Id="desktopshortcut"/>
 		</Feature>
 		<Directory Id="TARGETDIR" Name="SourceDir">
