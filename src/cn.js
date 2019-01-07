@@ -501,6 +501,7 @@
                       SINGLETRACE: 1,
                       RIDE_INIT: `CONNECT:${hp}`,
                       RIDE_SPAWNED: '1',
+                      APLK0: 'default',
                     },
                   ),
                 });
