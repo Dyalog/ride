@@ -88,7 +88,7 @@ Encoding=UTF-8
 Version=1.0
 Type=Application
 Exec=/usr/bin/ride-${BASE_VERSION}
-Icon=ride
+Icon=ride${BASE_VERSION_ND}
 Terminal=false
 Name=Ride-${BASE_VERSION}
 Comment=Remote IDE for Dyalog APL
@@ -204,7 +204,7 @@ for CPUTYPE in x64 armv7l; do
 	mkdir -p ${SBOXDIR}/opt/ride-${BASE_VERSION}
 	mkdir -p ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps
 	cp -R ${RIDEDIR}-${CPUTYPE}/* ${SBOXDIR}/opt/ride-${BASE_VERSION}/
-	cp "$ICON" ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps/ride.svg
+	cp "$ICON" ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps/ride${BASE_VERSION_ND}.svg
 
 	createDEB
 	createRPM
