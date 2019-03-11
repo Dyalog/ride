@@ -75,7 +75,7 @@ test(
     await c.waitUntil(() => c.execute('D.wins[1] && D.wins[1].meIsReady'), 10000);
     const [wh] = (await c.windowHandles()).value.filter(x => !whs.includes(x));
     await c.window(wh);
-    await c.pause(500);
+    await c.pause(1000);
     await c.keys(['Enter', 'cd', 'F2']);
     await c.keys([cc, 'a', 'c', cc, 'Escape']);
     text = await app.electron.clipboard.readText();
