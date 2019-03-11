@@ -163,6 +163,9 @@
         width: 400,
         height: 500,
         parent: D.elw,
+        webPreferences: {
+          nodeIntegration: false,
+        },
       });
       const cn = nodeRequire(`${__dirname}/src/cn`);
       D.logw = w;

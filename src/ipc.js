@@ -110,6 +110,9 @@
       fullscreenable: false,
       parent: D.elw,
       alwaysOnTop: false,
+      webPreferences: {
+        nodeIntegration: true,
+      },
     };
     opts = Object.assign(opts, WindowRect(seq, D.prf.editWins()));
     const bw = new D.el.BrowserWindow(opts);

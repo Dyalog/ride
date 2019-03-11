@@ -76,6 +76,9 @@ el.app.on('ready', () => {
     show: 0,
     icon: D.win || D.mac ? undefined : `${__dirname}/D.png`,
     backgroundColor: '#7688d9',
+    webPreferences: {
+      nodeIntegration: true,
+    },
   });
 
   el.Menu.setApplicationMenu(null);
