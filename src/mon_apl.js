@@ -904,7 +904,7 @@
       if (D.send) {
         D.send('GetAutocomplete', { line: s, pos: c - 1, token: model.winid });
         const m = model;
-        return new monaco.Promise((complete, error, progress) => {
+        return new Promise((complete, error, progress) => {
           m.ac = {
             complete, error, progress, position,
           };
@@ -940,7 +940,7 @@
           maxWidth: 200,
           maxHeight: 100,
         });
-        return new monaco.Promise((complete, error, progress) => {
+        return new Promise((complete, error, progress) => {
           setTimeout(() => { complete({}); }, 500);
           m.vt = {
             complete, error, progress, position,

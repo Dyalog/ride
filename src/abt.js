@@ -13,17 +13,17 @@
       const x = db.key(i);
       s += `${i ? ',\n' : ''}    ${repr(x)}:${repr(db.getItem(x))}`;
     }
-    const details = 'IDE:' +
-      `\n  Version: ${v.version || u}` +
-      `\n  Platform: ${navigator.platform || u}` +
-      `\n  Date: ${v.date || u}` +
-      `\n  Git commit: ${v.rev || u}` +
-      `\n  Preferences:{\n${s}\n  }\n` +
-      '\nInterpreter:' +
-      `\n  Version: ${ri.version || u}` +
-      `\n  Platform: ${ri.platform || u}` +
-      `\n  Edition: ${ri.arch || u}` +
-      `\n  Date: ${(ri.date || u).replace(/^Created: /, '')}\n`;
+    const details = 'IDE:'
+      + `\n  Version: ${v.version || u}`
+      + `\n  Platform: ${navigator.platform || u}`
+      + `\n  Date: ${v.date || u}`
+      + `\n  Git commit: ${v.rev || u}`
+      + `\n  Preferences:{\n${s}\n  }\n`
+      + '\nInterpreter:'
+      + `\n  Version: ${ri.version || u}`
+      + `\n  Platform: ${ri.platform || u}`
+      + `\n  Edition: ${ri.arch || u}`
+      + `\n  Date: ${(ri.date || u).replace(/^Created: /, '')}\n`;
 
     if (D.el) {
       const w = new D.el.BrowserWindow({
@@ -33,6 +33,9 @@
         minHeight: 500,
         parent: D.elw,
         modal: true,
+        webPreferences: {
+          nodeIntegration: false,
+        },
       });
       D.abtw = w;
       w.loadURL(`file://${__dirname}/about.html`);

@@ -634,6 +634,9 @@ D.IDE = function IDE(opts = {}) {
           ide.w3500 = new D.el.BrowserWindow({
             width: 800,
             height: 500,
+            webPreferences: {
+              nodeIntegration: false,
+            },
           });
           w = ide.w3500;
         }
@@ -701,6 +704,9 @@ D.IDE = function IDE(opts = {}) {
           width: 600,
           height: 400,
           parent: D.elw,
+          webPreferences: {
+            nodeIntegration: false,
+          },
         });
         w = ide.wStatus;
         w.setTitle(`Status Output - ${document.title}`);

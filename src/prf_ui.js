@@ -48,19 +48,26 @@
       const bw = D.el.BrowserWindow.fromId(D.prf_bw.id);
       bw.show();
       return !1;
-    } else if (D.ide && D.ide.floating) {
-      D.ipc.of.ride_master.emit('prfShow', tab); return !1;
+    }
+    if (D.ide && D.ide.floating) {
+      D.ipc.of.ride_master.emit('prfShow', tab);
+      return !1;
     }
     if (!d) {
       d = I.prf_dlg;
       d.onkeydown = (x) => {
         const k = D.util.fmtKey(x);
         if (k === 'Ctrl-Enter') {
-          ok(); return !1;
-        } else if (k === 'Escape') {
-          cancel(); return !1;
-        } else if (k === 'F12') {
-          D.el.getCurrentWebContents().toggleDevTools(); return !1;
+          ok();
+          return !1;
+        }
+        if (k === 'Escape') {
+          cancel();
+          return !1;
+        }
+        if (k === 'F12') {
+          D.el.getCurrentWebContents().toggleDevTools();
+          return !1;
         }
         return !0;
       };
