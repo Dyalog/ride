@@ -28,7 +28,7 @@
     "compression": "^1.7.3",
     "electron": "^4.0.8",
     "electron-connect": "^0.6.2",
-    "electron-packager": "^13.1.1",
+    "electron-packager": "^12.2.0",
     "eslint": "^5.15.1",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-plugin-import": "^2.16.0",
