@@ -31,6 +31,7 @@ global.winstate = h;
 const svNow = () => { // save now
   tid = 0;
   try {
+    const { elw } = global;
     const bounds = elw.getBounds();
     h.main = [bounds.x - dx, bounds.y - dy, bounds.width, bounds.height, elw.isMaximized()];
     h.devTools = elw.isDevToolsOpened();
@@ -104,21 +105,6 @@ el.app.on('ready', () => {
     })
     .on('ready-to-show', w.show);
 
-  if (D.win) {
-    const fix = () => {
-      setTimeout(() => {
-        if (w.isMaximized()) {
-          w.unmaximize(); w.maximize();
-        } else {
-          const a = w.getSize();
-          w.setSize(a[0], a[1] - 1);
-          w.setSize(a[0], a[1]);
-        }
-      }, 100);
-    };
-    w.on('page-title-updated', fix).on('blur', fix);
-  }
-
   if (db.devTools)w.webContents.openDevTools();
 
   if (process.argv.constructor === Array && process.argv.includes('DEV_STYLE')) {
@@ -140,5 +126,4 @@ el.app.on('ready', () => {
 
 el.app.on('window-all-closed', () => { el.app.quit(); });
 
-global.ev = x => eval(x);
 global.js = (i, x) => el.BrowserWindow.fromId(i).webContents.executeJavaScript(x);
