@@ -110,6 +110,9 @@
       fullscreenable: false,
       parent: D.elw,
       alwaysOnTop: false,
+      webPreferences: {
+        nodeIntegration: true,
+      },
     };
     opts = Object.assign(opts, WindowRect(seq, D.prf.editWins()));
     const bw = new D.el.BrowserWindow(opts);
@@ -210,7 +213,7 @@
     bw.show();
     if (!D.prf.editWinsRememberPos()) {
       const o = WindowRect(1 + (wp.bwId - D.pwins[0].bwId), D.prf.editWins());
-      bw.setPosition(o.x, o.y);
+      o.x && bw.setPosition(o.x, o.y);
       bw.setSize(o.width, o.height);
     }
     const ped = D.pendingEditors.shift();

@@ -51,7 +51,7 @@
           const c1 = oc.range.startColumn;
           const ec = c1 + chg.text.length;
           nr.push({ range: new monaco.Range(l1, c1 - 1, l1, ec), text: y });
-          ns.push(new monaco.Selection(l1, ec - 1, l1, ec - 1));
+          ns.push(new monaco.Selection(l1, c1, l1, c1));
         });
         bqCleanUpMe(me);
         setTimeout(() => {
@@ -94,7 +94,7 @@
           const l = model.getLineContent(r.startLineNumber).toLowerCase();
           const bq2 = e.changes.length && RegExp(`${pk}${pk}\\w*`, 'i').test(l);
           if (swv && !bq2 && sw.widget.list.length === 1) {
-            const t = sw.widget.focusedItem.suggestion.insertText.toLowerCase();
+            const t = sw.widget.focusedItem.completion.insertText.toLowerCase();
             if (l.slice(r.startColumn - t.length, r.startColumn) === t) {
               me.trigger('editor', 'hideSuggestWidget');
             } else {

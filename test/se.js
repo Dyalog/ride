@@ -81,7 +81,7 @@ test(
       'hello',
       '      ',
     ]);
-    
+
     await c.keys(['f', 'Control', 'Enter']);
     await c.waitForExist('#ide .ride_win.edit_trace');
     await c.keys(['Control', 'Enter', 'Enter']);
@@ -92,6 +92,5 @@ test(
       'hello',
       '      ',
     ]);
-
   },
 );

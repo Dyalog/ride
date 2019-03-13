@@ -92,7 +92,7 @@ if [ -d /usr/share/applications ] ; then
 		Version=1.0
 		Type=Application
 		Exec=/usr/bin/ride-${BASE_VERSION}
-		Icon=ride
+		Icon=ride${BASE_VERSION_ND}
 		Terminal=false
 		Name=Ride-${BASE_VERSION}
 		Comment=Remote IDE for Dyalog APL
@@ -242,7 +242,7 @@ for CPUTYPE in x64 armv7l ; do
 	find "${SBOXDIR}" -xtype l | xargs rm -f # remove dangling symlinks, for rpmlint
 
 	mkdir -p ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps
-	cp "$ICON" ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps/ride.svg
+	cp "$ICON" ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps/ride${BASE_VERSION_ND}.svg
 
 	if [ $CPUTYPE = armv7l ] ; then
 		sed "s/EXECUTABLE/Ride-${BASE_VERSION}/" < packagescripts/linux/launcher > "${SBOXDIR}/opt/ride-${BASE_VERSION}/launcher"
