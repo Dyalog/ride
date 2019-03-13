@@ -276,7 +276,7 @@
       if (/(\.|\\|\/)/.test(ee.name)) {
         me.setModel(monaco.editor.createModel(ed.oText, null, monaco.Uri.file(ee.name)));
       } else {
-        monaco.editor.setModelLanguage(model, ed.isCode ? 'apl' : 'plaintext');
+        monaco.editor.setModelLanguage(model, ed.isCode && !ed.isReadOnlyEntity ? 'apl' : 'plaintext');
         etype && ed.dom.classList.toggle(etype, true);
       }
       me.updateOptions({ folding: ed.isCode && !!D.prf.fold() });
