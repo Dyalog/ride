@@ -458,11 +458,11 @@
     },
     ED(me) {
       this.addJump();
-      D.ide.Edit({
-        win: this.id,
-        pos: me.getModel().getOffsetAt(me.getPosition()),
-        text: me.getValue(),
-      });
+      const c = me.getPosition();
+      const model = me.getModel();
+      const text = model.getLineContent(c.lineNumber);
+      const pos = D.util.ucLength(text.slice(0, c.column - 1));
+      D.ide.Edit({ win: this.id, pos, text });
     },
     QT() { D.send('CloseWindow', { win: this.id }); },
     BK(me) { this.tc ? D.send('TraceBackward', { win: this.id }) : me.trigger('D', 'undo'); },
