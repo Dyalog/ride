@@ -124,11 +124,11 @@
   const updExes = () => {
     const ssh = q.subtype.value === 'ssh';
     const h = (ssh ? interpretersSSH : interpreters)
-      .sort((x, y) => cmpVer(y.ver, x.ver) || +y.bits - +x.bits ||
-        (y.edition === 'unicode') - (x.edition === 'unicode') ||
-        (y.opt > x.opt) - (y.opt < x.opt))
+      .sort((x, y) => cmpVer(y.ver, x.ver) || +y.bits - +x.bits
+        || (y.edition === 'unicode') - (x.edition === 'unicode')
+        || (y.opt > x.opt) - (y.opt < x.opt))
       .map((x) => {
-        let s = `v${x.ver.join('.')}, ${x.bits}-bit, ${x.edition.replace(/^./, w => w.toUpperCase())}${x.opt ? ', '+x.opt : ''}`;
+        let s = `v${x.ver.join('.')}, ${x.bits}-bit, ${x.edition.replace(/^./, w => w.toUpperCase())}${x.opt ? `, ${x.opt}` : ''}`;
         const supported = cmpVer(x.ver, MIN_V) >= 0;
         supported || (s += ' (unsupported)');
         return `<option value="${esc(x.exe)}"${supported ? '' : ' disabled'}>${esc(s)}`;
@@ -154,8 +154,8 @@
   };
   const updFormDtl = () => {
     q.subtype.hidden = q.type.value === 'listen';
-    if (q.type.value === 'listen' ||
-      (q.type.value === 'start' && q.subtype.value === 'ssl')) q.subtype.value = 'raw';
+    if (q.type.value === 'listen'
+      || (q.type.value === 'start' && q.subtype.value === 'ssl')) q.subtype.value = 'raw';
     updSubtype();
     q.ssl_opt.hidden = q.type.value !== 'connect';
     q.raw_opt.text = q.type.value === 'start' ? 'Local' : 'TCP';
@@ -167,15 +167,15 @@
     const t = x.type;
     const p = x.port;
     const ssh = x.subtype === 'ssh';
-    if ((t === 'connect' || (t === 'start' && ssh) || t === 'listen') &&
-      p && (!/^\d*$/.test(p) || +p < (t !== 'listen') || +p > 0xffff)) {
+    if ((t === 'connect' || (t === 'start' && ssh) || t === 'listen')
+      && p && (!/^\d*$/.test(p) || +p < (t !== 'listen') || +p > 0xffff)) {
       $.err('Invalid port', () => {
         (ssh ? q.ssh_port : q.tcp_port).select();
       });
       return 0;
     }
-    if ((t === 'connect' && ssh) && x.tcp_port &&
-      (!/^\d*$/.test(x.tcp_port) || +x.tcp_port < 1 || +x.tcp_port > 0xffff)) {
+    if ((t === 'connect' && ssh) && x.tcp_port
+      && (!/^\d*$/.test(x.tcp_port) || +x.tcp_port < 1 || +x.tcp_port > 0xffff)) {
       $.err('Invalid RIDE port', () => { q.tcp_port.select(); });
       return 0;
     }
@@ -207,6 +207,7 @@
     let ib = 0; // ib:offset in b
     let nb = 0; // nb:length in b
     let old; // old:have we warned about an old interpreter?
+    let handshakeDone = false;
     clt.on('data', (x) => {
       if (nb + x.length > b.length) {
         const r = Buffer.alloc(2 ** Math.ceil(Math.log(nb + x.length) / Math.log(2)));
@@ -233,16 +234,27 @@
         } else if (m[0] === '<' && !old) {
           old = 1;
           err('This version of RIDE cannot talk to interpreters older than v15.0');
-        } else if (/^UsingProtocol=/.test(m) && m.slice(m.indexOf('=') + 1) !== '2') {
-          err('Unsupported RIDE protocol version');
-          break;
+        } else if (/^UsingProtocol=/.test(m)) {
+          if (m.slice(m.indexOf('=') + 1) === '2') {
+            handshakeDone = true;
+          } else {
+            err('Unsupported RIDE protocol version');
+            break;
+          }
         }
       }
     });
     clt.on('error', (x) => { clt && err(x); clt = 0; });
     clt.on('end', () => {
-      log('interpreter disconnected');
-      D.ide && D.ide._disconnected();
+      if (handshakeDone) {
+        log('interpreter disconnected');
+        D.ide && D.ide.die();
+      } else {
+        err('Either no interpreter is listening on the specified port'
+         + ' or the interpreter is already serving another RIDE client.', 'Connection rejected');
+        D.ide && D.ide.die();
+        D.commands.CNC();
+      }
       clt = 0;
     });
     sendEach([
@@ -309,8 +321,7 @@
           o.key = fs.readFileSync(x.key);
         }
         if (x.rootcertsdir) {
-          o.ca = fs.readdirSync(x.rootcertsdir).map(y =>
-            fs.readFileSync(path.join(x.rootcertsdir, y)));
+          o.ca = fs.readdirSync(x.rootcertsdir).map(y => fs.readFileSync(path.join(x.rootcertsdir, y)));
         }
         o.checkServerIdentity = (servername, cert) => {
           if (!x.subj || x.host === cert.subject.CN) return;
