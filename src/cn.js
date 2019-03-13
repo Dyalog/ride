@@ -582,7 +582,8 @@
     q = J.cn;
     I.cn.hidden = 0;
     $(I.cn).splitter();
-    const m = 'Dyalog\n  About Dyalog=ABT\n  -\n  Preferences=PRF\n  -\n  &Quit=QIT';
+    const m = 'Dyalog\n  About Dyalog=ABT\n  -\n  Preferences=PRF\n  -\n  &Quit=QIT'
+      + '\n&Edit\n  Undo=UND\n  Redo=RDO\n  -\n  Cut=CT\n  Copy=CP\n  Paste=PT\n  Select All=SA';
     setTimeout(() => D.installMenu(D.parseMenuDSL(m)), 100);
     if (fs.existsSync(cnFile)) {
       D.conns = JSON.parse(fs.readFileSync(cnFile).toString());
