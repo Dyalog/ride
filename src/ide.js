@@ -14,6 +14,7 @@ D.IDE = function IDE(opts = {}) {
   ide.ipc = opts.ipc;
   // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.pending = [];
+  ide.promptType = 1;
   ide.exec = (a, tc) => {
     if (a && a.length) {
       tc || (ide.pending = a.slice(1));
@@ -493,6 +494,7 @@ D.IDE = function IDE(opts = {}) {
     EchoInput(x) { ide.wins[0].add(x.input); },
     SetPromptType(x) {
       const t = x.type;
+      ide.promptType = t;
       if (t && ide.pending.length) D.send('Execute', { trace: 0, text: `${ide.pending.shift()}\n` });
       else eachWin((w) => { w.prompt(t); });
       t === 4 && ide.wins[0].focus(); // ⍞ input

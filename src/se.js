@@ -458,14 +458,12 @@
     ED(me) {
       const c = me.getPosition();
       const model = me.getModel();
-      const txt = model.getLineContent(c.lineNumber);
-      if (/^\s*$/.test(txt)) {
+      const text = model.getLineContent(c.lineNumber);
+      if (/^\s*$/.test(text)) {
         const tc = this.ide.tracer();
         if (tc) { tc.focus(); tc.ED(tc.me); }
       } else {
-        const offset = model.getOffsetAt(c);
-        const text = me.getValue();
-        const pos = D.util.ucLength(text.slice(0, offset));
+        const pos = D.util.ucLength(text.slice(0, c.column - 1));
         D.ide.Edit({ win: 0, pos, text });
       }
     },
