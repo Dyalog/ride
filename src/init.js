@@ -10,22 +10,50 @@ const Console = console;
         if (d && (e.ctrlKey || e.metaKey) && !e.shiftKey && !e.altKey) D.commands[d > 0 ? 'ZMI' : 'ZMO']();
       };
       document.body.className += ` zoom${D.prf.zoom()}`;
-
-      // context menu
-      const cmitems = ['Cut', 'Copy', 'Paste'].map(x => ({ label: x, role: x.toLowerCase() }))
-        .concat({ type: 'separator' })
-        .concat(['Undo', 'Redo'].map(x => ({
-          label: x,
-          click: () => {
-            if (!D.ide) return;
-            const u = D.ide.focusedWin;
-            const { me } = u;
-            if (u && me[x.toLowerCase()]) me[x.toLowerCase()]();
-          },
-        })));
-      const cmenu = D.el.Menu.buildFromTemplate(cmitems);
-      D.oncmenu = (e) => { e.preventDefault(); cmenu.popup(D.elw); };
     }
+
+    D.createContextMenu = (el, win) => {
+      if (!D.el) return;
+      el.oncontextmenu = (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        const hasSelection = win
+          ? !win.me.getSelection().isEmpty()
+          : el.getSelection().type === 'Range';
+        const isReadOnly = !!win && win.isReadOnly;
+        const tc = !!win && !!win.tc;
+        const fx = !!win && !tc && win.isCode && !win.isReadOnlyEntity;
+        const cmitems = [
+          { label: 'Cut', role: 'cut', enabled: hasSelection && !isReadOnly },
+          { label: 'Copy', role: 'copy', enabled: hasSelection },
+          { label: 'Paste', role: 'paste', enabled: !isReadOnly },
+          { type: 'separator' },
+          { label: 'Undo', role: 'undo', enabled: !tc },
+          { label: 'Redo', role: 'redo', enabled: !tc },
+        ];
+        if (win && !win.session.get()) {
+          const { me } = win;
+          if (fx || tc) {
+            cmitems.unshift(...[
+              {
+                label: 'Fix',
+                click: () => { win.FX(me); },
+                visible: fx,
+              },
+              {
+                label: 'Skip to line',
+                click: () => { win.STL(me); },
+                visible: tc,
+              },
+              { type: 'separator' },
+            ]);
+          }
+        }
+        const cmenu = D.el.Menu.buildFromTemplate(cmitems);
+        cmenu.popup();
+      };
+    };
+    D.createContextMenu(window);
 
     D.open = D.open || ((url, o) => {
       const {
@@ -160,9 +188,9 @@ const Console = console;
         if (!e.altKey || e.ctrlKey || e.metaKey || e.which < 65 || e.which > 90) return undefined;
         const c = String.fromCharCode(e.which).toLowerCase();
         const C = c.toUpperCase();
-        const $ctx = $('.ui-widget-overlay').length ?
-          $('.ui-dialog:visible').last() :
-          $('body'); // modal dialogs take priority
+        const $ctx = $('.ui-widget-overlay').length
+          ? $('.ui-dialog:visible').last()
+          : $('body'); // modal dialogs take priority
 
         const $a = $('u:visible', $ctx).map((i, n) => {
           const h = n.innerHTML;

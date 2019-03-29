@@ -36,6 +36,7 @@
       autoClosingBrackets: false,
       automaticLayout: true,
       autoIndent: false,
+      contextmenu: false,
       cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
       cursorBlinking: D.prf.cursorBlinking(),
       folding: false,

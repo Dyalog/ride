@@ -406,6 +406,7 @@
         autoClosingBrackets: true,
         automaticLayout: true,
         autoIndent: true,
+        contextmenu: false,
         cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
         cursorBlinking: D.prf.cursorBlinking(),
         folding: false,
