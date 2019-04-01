@@ -18,7 +18,7 @@
     se.dom = document.createElement('div');
     se.dom.className = 'ride_win';
     se.$e = $(se.dom);
-    // se.dom.oncontextmenu = D.oncmenu;
+    D.createContextMenu(se.dom, se);
     const fs = D.zoom2fs[D.prf.zoom() + 10];
     const me = monaco.editor.create(se.dom, {
       acceptSuggestionOnCommitCharacter: true,
@@ -26,6 +26,7 @@
       autoClosingBrackets: !!D.prf.autoCloseBrackets(),
       automaticLayout: false,
       autoIndent: false,
+      contextmenu: false,
       cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
       cursorBlinking: D.prf.cursorBlinking(),
       emptySelectionClipboard: false,

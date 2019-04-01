@@ -18,7 +18,7 @@
     ed.$e = $(ed.dom);
     ed.jumps = [];
     ed.focusTS = 0;
-    // ed.dom.oncontextmenu = D.oncmenu;
+    D.createContextMenu(ed.dom, ed);
     ed.oText = '';
     ed.oStop = []; // remember original text and "stops" to avoid pointless saving on EP
     ed.stop = new Set(); // remember original text and "stops" to avoid pointless saving on EP
@@ -34,6 +34,7 @@
       autoClosingBrackets: !!D.prf.autoCloseBrackets(),
       automaticLayout: true,
       autoIndent: D.prf.indent() >= 0,
+      contextmenu: false,
       cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
       cursorBlinking: D.prf.cursorBlinking(),
       emptySelectionClipboard: false,

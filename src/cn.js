@@ -601,9 +601,6 @@
       }
       return !0;
     };
-    q.cwd.oncontextmenu = D.oncmenu;
-    q.args.oncontextmenu = D.oncmenu;
-    q.env.oncontextmenu = D.oncmenu;
     q.fav_name.onkeyup = () => {
       const u = sel.name;
       const v = q.fav_name.value || '';
