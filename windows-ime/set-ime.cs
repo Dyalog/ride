@@ -13,6 +13,7 @@ class C {
   const uint WM_INPUTLANGCHANGEREQUEST = 0x0050;
   const int  KLF_ACTIVATE = 1;
 
+  [DllImport("user32.dll")] static extern uint GetKeyboardLayoutList(int nBuff, [Out] IntPtr [] lpList);
   [DllImport("user32.dll")] static extern bool GetKeyboardLayoutName(StringBuilder pwszKLID);
   [DllImport("user32.dll")] static extern IntPtr GetForegroundWindow();
   [DllImport("user32.dll")] static extern bool PostMessage(IntPtr hhwnd, uint msg, IntPtr wparam, IntPtr lparam);
@@ -51,13 +52,27 @@ class C {
     return FindPidFromIndexedProcessName(FindIndexedProcessName(process.Id));
   }
 
+  public static bool IsLayoutAvailable(string layoutId) {
+    uint nElements = GetKeyboardLayoutList(0, null);
+    IntPtr[] ids = new IntPtr[nElements];
+    GetKeyboardLayoutList(ids.Length, ids);
+    for (var index = 0; index < ids.Length; index++) {
+      if (ids[index].ToString("X16").Substring(8).Equals(layoutId)) return true;
+    }
+    return false;
+  }
+
   static int Main(string[] args) {
     if (args.Length != 1) { Console.WriteLine("usage: set-ime PID"); return 1; }
     int pid = int.Parse(args[0]);
     var w = getWindowByPID(pid);
     if (w == IntPtr.Zero) { w = getWindowByPID(Parent(Process.GetProcessById(pid)).Id); }
-    var lc = new StringBuilder(); GetKeyboardLayoutName(lc); lc[0] = 'E'; lc[1] = '0'; lc[2] = '9'; lc[3] = '9';
-    PostMessage(w, WM_INPUTLANGCHANGEREQUEST, IntPtr.Zero, LoadKeyboardLayout(lc.ToString(), KLF_ACTIVATE));
+    var lc = new StringBuilder();
+    GetKeyboardLayoutName(lc);
+    lc[0] = 'E'; lc[1] = '0'; lc[2] = '9'; lc[3] = '9';
+    string apl_ime = lc.ToString();
+    if (IsLayoutAvailable(apl_ime))
+      PostMessage(w, WM_INPUTLANGCHANGEREQUEST, IntPtr.Zero, LoadKeyboardLayout(apl_ime, KLF_ACTIVATE));
     return 0;
   }
 }
