@@ -640,7 +640,7 @@
       const snippets = /^\s*:\w*$/.test(s.slice(0, c - 1)) && a && t !== '{';
       const sc = model.bqc - 1;
       if (s.slice(sc, c - 1) === pk2) {
-        return Object.keys(D.bqbqc).map((k) => {
+        const suggestions = Object.keys(D.bqbqc).map((k) => {
           const v = D.bqbqc[k];
           const key = D.getBQKeyFor(v.text);
           const desc = `${v.text} ${key ? `${pk}${key} `.slice(0, 3) : '   '} ${pk2}${v.name}`;
@@ -649,257 +649,228 @@
             filterText: desc,
             sortText: key,
             kind: kind.Function,
-            insertText: { value: v.text },
+            insertText: v.text,
             range: new monaco.Range(l, c - 2, l, c),
           };
         });
+        return { suggestions };
       }
       if (ch === pk) {
-        const bqc = [];
+        const suggestions = [];
         Object.keys(D.bq).forEach((k) => {
           const v = D.bq[k];
           const desc = `${v} ${pk}${k} ${D.sqglDesc[v] || ''}  `;
           if (v === ' ') return;
-          bqc.push({
+          suggestions.push({
             label: desc,
             sortText: k,
             kind: kind.Function,
-            insertText: { value: v },
+            insertText: v,
             range: new monaco.Range(l, c - 1, l, c),
           });
         });
-        return bqc;
+        return { suggestions };
       }
       if (snippets) {
-        const items = [];
+        const suggestions = [];
         const textItem = i => ({
           label: i,
           kind: kind.Snippet,
         });
         /* eslint-disable no-template-curly-in-string */
         if (t === '∇') {
-          items.push(...[
+          suggestions.push(...[
             'Implements Constructor',
             'Implements Destructor',
             'Implements Method',
             'Implements Trigger',
           ].map(textItem));
-          items.push({
+          suggestions.push({
             label: 'Access',
             kind: kind.Snippet,
-            insertText: { value: 'Access ${1:Private} ${2:Instance}' },
+            insertText: 'Access ${1:Private} ${2:Instance}',
           });
         }
         if (t === 'select') {
-          items.push(...[
+          suggestions.push(...[
             'Case',
             'CaseList',
           ].map(textItem));
         }
         if (t === 'for' || t === 'while' || t === 'repeat') {
-          items.push(...['Continue', 'Leave'].map(textItem));
+          suggestions.push(...['Continue', 'Leave'].map(textItem));
         }
         if (t === 'class' || t === 'namesapce') {
-          items.push(
+          suggestions.push(
             {
               label: 'Class',
               kind: kind.Snippet,
-              insertText: {
-                value: [
-                  'Class ${1:name}',
-                  '\t$0',
-                  ':EndClass',
-                ].join('\n'),
-              },
+              insertText: [
+                'Class ${1:name}',
+                '\t$0',
+                ':EndClass',
+              ].join('\n'),
               documentation: 'Class script',
             },
             {
               label: 'Namespace',
               kind: kind.Snippet,
-              insertText: {
-                value: [
-                  'Namespace ${1:name}',
-                  '\t$0',
-                  ':EndNamespace',
-                ].join('\n'),
-              },
+              insertText: [
+                'Namespace ${1:name}',
+                '\t$0',
+                ':EndNamespace',
+              ].join('\n'),
               documentation: 'Namespace script',
             },
             {
               label: 'Interface',
               kind: kind.Snippet,
-              insertText: {
-                value: [
-                  'Interface ${1:name}',
-                  '\t$0',
-                  ':EndInterface',
-                ].join('\n'),
-              },
+              insertText: [
+                'Interface ${1:name}',
+                '\t$0',
+                ':EndInterface',
+              ].join('\n'),
               documentation: 'Interface script',
             },
             {
               label: 'Property',
               kind: kind.Snippet,
-              insertText: {
-                value: [
-                  'Property ${1:name}',
-                  '\t∇ r←get args',
-                  '\t  r←$2',
-                  '\t∇',
-                  '\t∇ set args',
-                  '\t∇',
-                  ':EndProperty',
-                ].join('\n'),
-              },
+              insertText: [
+                'Property ${1:name}',
+                '\t∇ r←get args',
+                '\t  r←$2',
+                '\t∇',
+                '\t∇ set args',
+                '\t∇',
+                ':EndProperty',
+              ].join('\n'),
               documentation: 'Property declaration',
             },
             {
               label: 'Section',
               kind: kind.Snippet,
-              insertText: {
-                value: [
-                  'Section ${1:name}',
-                  '\t$0',
-                  ':EndSection',
-                ].join('\n'),
-              },
+              insertText: [
+                'Section ${1:name}',
+                '\t$0',
+                ':EndSection',
+              ].join('\n'),
               documentation: 'Section block',
             },
           );
         }
         // if (!t || t === '∇') {
-        items.push(
+        suggestions.push(
           {
             label: 'Disposable',
             kind: kind.Snippet,
-            insertText: {
-              value: [
-                'Disposable ${1:objects}',
-                '\t$0',
-                ':EndDisposable',
-              ].join('\n'),
-            },
+            insertText: [
+              'Disposable ${1:objects}',
+              '\t$0',
+              ':EndDisposable',
+            ].join('\n'),
             documentation: 'Disposable Statement',
           },
           {
             label: 'For',
             kind: kind.Snippet,
-            insertText: {
-              value: [
-                'For ${1:item} :In ${2:items}',
-                '\t$0',
-                ':EndFor',
-              ].join('\n'),
-            },
+            insertText: [
+              'For ${1:item} :In ${2:items}',
+              '\t$0',
+              ':EndFor',
+            ].join('\n'),
             documentation: 'For loop',
           },
           {
             label: 'If',
             kind: kind.Snippet,
-            insertText: {
-              value: [
-                'If ${1:condition}',
-                '\t$2',
-                ':EndIf',
-              ].join('\n'),
-            },
+            insertText: [
+              'If ${1:condition}',
+              '\t$2',
+              ':EndIf',
+            ].join('\n'),
             documentation: 'If Statement',
           },
           {
             label: 'If Else',
             kind: kind.Snippet,
-            insertText: {
-              value: [
-                'If ${1:condition}',
-                '\t$2',
-                ':Else',
-                '\t$0',
-                ':EndIf',
-              ].join('\n'),
-            },
+            insertText: [
+              'If ${1:condition}',
+              '\t$2',
+              ':Else',
+              '\t$0',
+              ':EndIf',
+            ].join('\n'),
             documentation: 'If-Else Statement',
           },
           {
             label: 'Repeat',
             kind: kind.Snippet,
-            insertText: {
-              value: [
-                'Repeat',
-                '\t$0',
-                ':EndRepeat',
-              ].join('\n'),
-            },
+            insertText: [
+              'Repeat',
+              '\t$0',
+              ':EndRepeat',
+            ].join('\n'),
             documentation: 'Repeat loop - endless',
           },
           {
             label: 'Repeat Until',
             kind: kind.Snippet,
-            insertText: {
-              value: [
-                'Repeat',
-                '\t$0',
-                ':Until ${1:condition}',
-              ].join('\n'),
-            },
+            insertText: [
+              'Repeat',
+              '\t$0',
+              ':Until ${1:condition}',
+            ].join('\n'),
             documentation: 'Repeat loop until',
           },
           {
             label: 'Select',
             kind: kind.Snippet,
-            insertText: {
-              value: [
-                'Select ${1:object}',
-                ':Case ${2:value}',
-                '\t$3',
-                ':Else',
-                '\t$0',
-                ':EndSelect',
-              ].join('\n'),
-            },
+            insertText: [
+              'Select ${1:object}',
+              ':Case ${2:value}',
+              '\t$3',
+              ':Else',
+              '\t$0',
+              ':EndSelect',
+            ].join('\n'),
             documentation: 'Select Statement',
           },
           {
             label: 'Trap',
             kind: kind.Snippet,
-            insertText: {
-              value: [
-                'Trap ${1:error number}',
-                '\t$1',
-                ':Else',
-                '\t$0',
-                ':EndTrap',
-              ].join('\n'),
-            },
+            insertText: [
+              'Trap ${1:error number}',
+              '\t$1',
+              ':Else',
+              '\t$0',
+              ':EndTrap',
+            ].join('\n'),
             documentation: 'Trap-Else Statement',
           },
           {
             label: 'While',
             kind: kind.Snippet,
-            insertText: {
-              value: [
-                'While ${1:condition}',
-                '\t$0',
-                ':EndWhile',
-              ].join('\n'),
-            },
+            insertText: [
+              'While ${1:condition}',
+              '\t$0',
+              ':EndWhile',
+            ].join('\n'),
             documentation: 'While loop',
           },
           {
             label: 'With',
             kind: kind.Snippet,
-            insertText: {
-              value: [
-                'With ${1:condition}',
-                '\t$0',
-                ':EndWith',
-              ].join('\n'),
-            },
+            insertText: [
+              'With ${1:condition}',
+              '\t$0',
+              ':EndWith',
+            ].join('\n'),
             documentation: 'With Statement',
           },
         );
         // }
         /* eslint-enable no-template-curly-in-string */
-        return items;
+        return { suggestions };
       }
       if (D.send) {
         D.send('GetAutocomplete', { line: s, pos: c - 1, token: model.winid });
