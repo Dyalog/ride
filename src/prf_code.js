@@ -55,6 +55,7 @@
       q.cb.value = p.cursorBlinking();
       q.coq.checked = !!p.connectOnQuit();
       q.rlh.value = p.renderLineHighlight();
+      q.apw.checked = !!p.autoPW();
       q.ph.checked = !!p.persistentHistory();
       q.phs.value = p.persistentHistorySize();
       q.vt.checked = !!p.valueTips();
@@ -83,6 +84,7 @@
       p.minimapShowSlider  (q.mmss.value);
       p.autoCloseBrackets  (q.acbr.checked);
       p.autocompletion     (q.ac.value);
+      p.autoPW             (q.apw.checked);
       p.autocompletionDelay(q.acd.value);
       p.connectOnQuit      (q.coq.checked);
       p.renderLineHighlight(q.rlh.value);

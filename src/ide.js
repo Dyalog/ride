@@ -362,11 +362,21 @@ D.IDE = function IDE(opts = {}) {
     ide.dom.style.top = `${(D.prf.lbar() ? I.lb.offsetHeight : 0) + (D.el ? 0 : 23)}px`;
     ide.dom.style.bottom = `${I.sb.offsetHeight}px`;
     gl.updateSize(ide.dom.clientWidth, ide.dom.clientHeight);
+    ide.updPW(-1);
   });
   I.lb.hidden = !D.prf.lbar();
   I.sb.hidden = !D.prf.sbar();
   updTopBtm();
   $(window).resize(updTopBtm);
+  const updMenu = () => {
+    try {
+      D.installMenu(D.parseMenuDSL(D.prf.menu()));
+    } catch (e) {
+      $.err('Invalid menu configuration -- the default menu will be used instead');
+      console.error(e);
+      D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()));
+    }
+  };
   D.prf.lbar((x) => {
     I.lb.hidden = !x;
     updTopBtm();
@@ -377,18 +387,10 @@ D.IDE = function IDE(opts = {}) {
     I.sb.hidden = !x; updTopBtm();
     updMenu();
   });
-  const updMenu = () => {
-    try {
-      D.installMenu(D.parseMenuDSL(D.prf.menu()));
-    } catch (e) {
-      $.err('Invalid menu configuration -- the default menu will be used instead');
-      console.error(e);
-      D.installMenu(D.parseMenuDSL(D.prf.menu.getDefault()));
-    }
-  };
   D.prf.menu(updMenu);
   D.prf.keys(updMenu);
   !ide.floating && setTimeout(updMenu, 100);
+  D.prf.autoPW((x) => { x && ide.updPW(1); });
   D.prf.autoCloseBrackets((x) => { eachWin((w) => { !w.bwId && w.autoCloseBrackets(!!x); }); });
   D.prf.ilf((x) => {
     const i = x ? -1 : D.prf.indent();
@@ -447,14 +449,14 @@ D.IDE = function IDE(opts = {}) {
   // OSX is stealing our focus.  Let's steal it back!  Bug #5
   D.mac && !ide.floating && setTimeout(() => { ide.wins[0].focus(); }, 500);
   D.prf.lineNums((x) => {
-    eachWin(w => w.setLN && w.setLN(x)); 
+    eachWin(w => w.setLN && w.setLN(x));
     updMenu();
   });
   D.prf.breakPts((x) => {
     eachWin(w => w.setBP && w.setBP(x));
     updMenu();
   });
-  D.prf.wrap((x) => { updMenu(); });
+  D.prf.wrap(() => { updMenu(); });
   D.prf.blockCursor((x) => { eachWin(w => !w.bwId && w.blockCursor(!!x)); });
   D.prf.cursorBlinking((x) => { eachWin(w => !w.bwId && w.cursorBlinking(x)); });
   D.prf.renderLineHighlight((x) => { eachWin(w => !w.bwId && w.renderLineHighlight(x)); });
@@ -473,7 +475,7 @@ D.IDE = function IDE(opts = {}) {
       D.remoteIdentification = x;
       ide.updTitle();
       ide.connected = 1;
-      ide.updPW(1);
+      ide.updPW(-1);
       clearTimeout(D.tmr);
       delete D.tmr;
     },
