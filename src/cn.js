@@ -281,7 +281,7 @@
         .on('tcp connection', (_, acc) => {
           clt = acc();
           initInterpreterConn();
-          new D.IDE().setConnInfo('', 0, sel ? sel.name : '');
+          new D.IDE().setConnInfo(o.host, 'SSH', sel ? sel.name : '');
         })
         .on('keyboard-interactive', (_, _1, _2, _3, fin) => { fin([x.pass]); })
         .on('error', err)
