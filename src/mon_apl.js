@@ -13,7 +13,7 @@
   const endBlock = ':end|:endclass|:enddisposable|:endfor|:endhold|:endif|:endinterface'
     + '|:endnamespace|:endproperty|:endrepeat|:endsection|:endselect|:endtrap'
     + `|:endwhile|:endwith|:until${restartBlock}`;
-  D.wordSeparators = `${D.informal.slice(0, -26).map(x => x[0]).join('').replace(/⎕/g, '')}()[]{}%£#;:'"\`$^`;
+  D.wordSeparators = `${D.informal.slice(0, -26).map(x => x[0]).join('').replace(/[⎕∆⍙]/g, '')}()[]{}%£#;:'"\`$^`;
 
   const aplConfig = {
     comments: {
