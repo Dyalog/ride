@@ -4,12 +4,16 @@ set -e
 GIT_BRANCH=${JOB_NAME#*/*/}
 GIT_COMMIT=$(git rev-parse HEAD)
 
-if echo $GIT_BRANCH | grep "^ride[0-9]\.[0-9]" >/dev/null || [ "$GIT_BRANCH" = "master" ]; then
-	echo "skipping creating release for ${GIT_BRANCH}"
-	exit 0
-else
-	echo "creating ${GIT_BRANCH} release"
-fi
+case $GIT_BRANCH in
+	master|ride[0-9]\.[0-9])
+		echo "creating ${GIT_BRANCH} release"
+	;;
+	*)  
+		echo "skipping creating release for ${GIT_BRANCH}"
+		exit 0
+	;;
+esac
+
 
 # create JSON
 TMP_JSON=/tmp/GH-Publish.$$.json
