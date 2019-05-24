@@ -4,7 +4,7 @@ set -e
 GIT_BRANCH=${JOB_NAME#*/*/}
 GIT_COMMIT=$(git rev-parse HEAD)
 
-if echo $GIT_BRANCH | grep "^ride[0-9]\.[0-9]" >/dev/null || [ "$GIT_BRANCH" = "master" ];
+if echo $GIT_BRANCH | grep "^ride[0-9]\.[0-9]" >/dev/null || [ "$GIT_BRANCH" = "master" ]; then
 	echo "skipping creating release for ${GIT_BRANCH}"
 	exit 0
 else
