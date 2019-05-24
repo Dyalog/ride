@@ -136,7 +136,7 @@ EOFprerm
 createDEB() {
 
 	# https://www.debian.org/doc/manuals/debian-faq/ch-pkg_basics#s-pkgname
-	PACKAGENAME="ride-${BASE_VERSION}_${RIDEVERSION}-1_${DEBCPUTYPE}.deb"
+	PACKAGENAME="ride-${RIDEVERSION}-1_${DEBCPUTYPE}.deb"
 
 	# Dependencies tested with Debian 8 and Ubuntu 14.04.
 	fpm						\
@@ -174,7 +174,7 @@ createDEB() {
 createRPM() {
 
 	# http://ftp.rpm.org/max-rpm/ch-rpm-file-format.html
-	PACKAGENAME="ride-${BASE_VERSION}-${RIDEVERSION}-1.${RPMCPUTYPE}.rpm"
+	PACKAGENAME="ride-${RIDEVERSION}-1.${RPMCPUTYPE}.rpm"
 
 	# Dependencies tested with Fedora 25, Centos 7 and openSUSE 13.2.
 	# (NB Electron 2 needs libnss3.so >= 3.26. All these distributions have
