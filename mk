@@ -42,10 +42,10 @@ const b = (f) => {
   buildDone = 1; f();
 };
 
-const incl = new RegExp('^$' +
-  '|^/(D\\.png|favicon.*|[^/]*\\.html|main\\.js|package\\.json)$' +
-  '|^/(src|lib|node_modules|_)(/|$)' +
-  '|^/style($|/(fonts|img)|.*\\.css$)');
+const incl = new RegExp('^$'
+  + '|^/(D\\.png|favicon.*|[^/]*\\.html|main\\.js|package\\.json)$'
+  + '|^/(src|lib|node_modules|_)(/|$)'
+  + '|^/style($|/(fonts|img)|.*\\.css$)');
 const pkg = (x, y, f) => {
   rq('electron-packager')({
     dir: '.',
@@ -56,7 +56,7 @@ const pkg = (x, y, f) => {
     'download.cache': 'cache',
     icon: 'D',
     ignore: p => (!incl.test(p) && !(x === 'win32' && /^\/windows-ime(\/set-ime.exe|$)/.test(p)))
-      || /monaco-editor\/(dev|min-maps)/.test(p),
+      || /monaco-editor\/(dev|esm|min-maps)/.test(p),
     appBundleId: `com.dyalog.${pj.name}`,
     appCopyright: `(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
     appVersion: v,
