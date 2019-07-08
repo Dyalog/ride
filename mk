@@ -56,7 +56,11 @@ const pkg = (x, y, f) => {
     'download.cache': 'cache',
     icon: 'D',
     ignore: p => (!incl.test(p) && !(x === 'win32' && /^\/windows-ime(\/set-ime.exe|$)/.test(p)))
-      || /monaco-editor\/(dev|esm|min-maps)/.test(p),
+      || /monaco-editor\/(dev|esm|min-maps)/.test(p)
+      || /toastr\/(?!build($|\/toastr.min))/.test(p)
+      || /jquery\/(?!dist($|\/jquery\.min\.js))/.test(p)
+      || /\/test/.test(p)
+      || /\.map$/.test(p),
     appBundleId: `com.dyalog.${pj.name}`,
     appCopyright: `(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
     appVersion: v,
