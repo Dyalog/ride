@@ -473,6 +473,7 @@ D.IDE = function IDE(opts = {}) {
   ide.handlers = { // for RIDE protocol messages
     Identify(x) {
       D.remoteIdentification = x;
+      D.InitHelp(x.version);
       ide.updTitle();
       ide.connected = 1;
       ide.updPW(-1);
