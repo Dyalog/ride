@@ -99,6 +99,9 @@ const Console = console;
           fullscreenable: false,
           minWidth: 655,
           minHeight: 600,
+          webPreferences: {
+            nodeIntegration: true,
+          },
         });
         bw.loadURL(`${loc}?type=prf&appid=${appid}`);
         D.prf_bw = { id: bw.id };
@@ -114,6 +117,9 @@ const Console = console;
           resizable: false,
           minimizable: false,
           maximizable: false,
+          webPreferences: {
+            nodeIntegration: true,
+          },
         });
         bw.loadURL(`file://${__dirname}/dialog.html?appid=${appid}`);
         D.dlg_bw = { id: bw.id };
