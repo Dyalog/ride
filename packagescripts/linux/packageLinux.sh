@@ -237,7 +237,7 @@ for CPUTYPE in x64 armv7l ; do
 	mkdir -p "${SBOXDIR}/opt/ride-${BASE_VERSION}"
 	cp -R "${RIDEDIR}"/* "${SBOXDIR}/opt/ride-${BASE_VERSION}"/
 	find "${SBOXDIR}" -type f "(" -name "*.so" -o -name "*.svg" -o -name "*.js" ")" | xargs chmod -x # for lintian
-	find "${SBOXDIR}" -name ".git*" | xargs rm -r # for lintian
+	#find "${SBOXDIR}" -name ".git*" | xargs rm -r # for lintian
 	find "${SBOXDIR}" -type f "(" -name ".*" -o -name "*.c" ")" | xargs rm # for rpmlint
 	find "${SBOXDIR}" -xtype l | xargs rm -f # remove dangling symlinks, for rpmlint
 
