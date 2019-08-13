@@ -733,7 +733,7 @@
       q.rootcertsdir_cb.checked && q.rootcertsdir.focus();
     };
     const browse = (x, title, props) => {
-      const v = D.el.dialog.showOpenDialog({
+      const v = D.el.dialog.showOpenDialogSync({
         title,
         defaultPath: x.value,
         properties: props || [],

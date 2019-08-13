@@ -14,7 +14,7 @@ window.global={};
     }
 
     global.openFile=()=>{
-        dialog.showOpenDialog(function(filenames){
+        dialog.showOpenDialogSync(function(filenames){
             var filename=filenames[0];
             console.log(filename)
             if (filename!==undefined&&fs.existsSync(filename)){
