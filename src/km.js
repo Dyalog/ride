@@ -59,7 +59,7 @@
         return;
       }
       if (D.el && D.lastSpawnedExe) {
-        const [v] = D.el.dialog.showOpenDialog(D.elw, {
+        const [v] = D.el.dialog.showOpenDialogSync(D.elw, {
           title: 'Open file',
           filters: [],
           properties: ['openFile'],

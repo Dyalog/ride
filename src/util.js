@@ -105,7 +105,7 @@
       if (D.el) {
         const { bwId } = D.ide.focusedWin;
         const bw = bwId ? D.el.BrowserWindow.fromId(bwId) : D.elw;
-        const r = D.el.dialog.showMessageBox(bw, {
+        const r = D.el.dialog.showMessageBoxSync(bw, {
           message: text,
           title: x.title || '',
           buttons: x.options || [''],
@@ -205,7 +205,7 @@
       if (D.el && D.win) {
         const { bwId } = D.ide.focusedWin;
         const bw = bwId ? D.el.BrowserWindow.fromId(bwId) : D.elw;
-        const r = D.el.dialog.showMessageBox(bw, {
+        const r = D.el.dialog.showMessageBoxSync(bw, {
           message: `${x.text}\n${x.subtext}`,
           title: x.title || '',
           buttons: x.options.concat(x.buttonText) || [''],
@@ -267,20 +267,20 @@
     },
   };
   $.alert = (m, t, f) => { // m:message,t:title,f:callback
-    D.el ? D.el.dialog.showMessageBox(D.elw, { message: m, title: t, buttons: ['OK'] }) : alert(m);
+    D.el ? D.el.dialog.showMessageBoxSync(D.elw, { message: m, title: t, buttons: ['OK'] }) : alert(m);
     f && f();
   };
   $.err = (m, t, f) => {
     if (typeof t === 'function') { f = t; t = ''; }
     t = t || 'Error';
-    D.el ? D.el.dialog.showMessageBox(
+    D.el ? D.el.dialog.showMessageBoxSync(
       D.el.getCurrentWindow(),
       { type: 'error', message: m, title: t, buttons: ['OK'] },
     ) : alert(m);
     f && f();
   };
   $.confirm = (m, t, f) => {
-    f(D.el ? 1 - D.el.dialog.showMessageBox(D.elw, {
+    f(D.el ? 1 - D.el.dialog.showMessageBoxSync(D.elw, {
       message: m, title: t, type: 'question', buttons: ['Yes', 'No'], cancelId: 1,
     }) : +confirm(m));
   };

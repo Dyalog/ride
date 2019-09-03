@@ -733,7 +733,7 @@
       q.rootcertsdir_cb.checked && q.rootcertsdir.focus();
     };
     const browse = (x, title, props) => {
-      const v = D.el.dialog.showOpenDialog({
+      const v = D.el.dialog.showOpenDialogSync({
         title,
         defaultPath: x.value,
         properties: props || [],
@@ -952,7 +952,7 @@
   module.exports = () => {
     D.send = (x, y) => {
       if (D.ide && !D.ide.promptType
-        && !/Interrupt$|TreeList|Reply/.test(x)) return;
+        && !/Interrupt$|TreeList|Reply|FormatCode|GetAutocomplete|SaveChanges|CloseWindow|Exit/.test(x)) return;
       sendEach([JSON.stringify([x, y])]);
     };
     const a = rq('electron').remote.process.argv;

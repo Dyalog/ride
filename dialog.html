@@ -35,8 +35,8 @@
         rm.emit('dialogCreated');
       });
       rm.on('disconnect', () => {
-        D.ipc.log('disconnected from ride_master'.notice);
-        D.onbeforeunload = null;
+        ipc.log('disconnected from ride_master'.notice);
+        window.onbeforeunload = null;
         window.close();
       });
       rm.on('show', (opts) => show(opts));

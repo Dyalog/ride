@@ -33,7 +33,7 @@ class TFW {
       o.RIDE_SPAWN && (env.RIDE_SPAWN = o.RIDE_SPAWN);
       x.app = new Application({
         path: electronPath,
-        args: [path.join(__dirname, '..')],
+        args: ['.'],
         env,
         webdriverOptions: {
           deprecationWarnings: false,
