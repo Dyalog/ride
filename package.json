@@ -14,7 +14,7 @@
   "repository": ".",
   "dependencies": {
     "jquery": "^3.2.1",
-    "monaco-editor": "^0.17.1",
+    "monaco-editor": "^0.18.0",
     "node-ipc": "^9.1.1",
     "os-locale": "^4.0.0",
     "ssh2": "^0.8.5",
@@ -27,7 +27,7 @@
     "compression": "^1.7.4",
     "electron": "^6.0.2",
     "electron-connect": "^0.6.2",
-    "electron-packager": "^12.2.0",
+    "electron-packager": "^14.0.5",
     "eslint": "^6.1.0",
     "eslint-config-airbnb": "^18.0.0",
     "eslint-plugin-import": "^2.18.2",

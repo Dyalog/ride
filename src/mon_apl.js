@@ -70,7 +70,7 @@
     indentationRules: {},
     wordPattern: RegExp(name),
   };
-
+  /* eslint max-classes-per-file: 0 */
   class State {
     // hdr      are we at a location where a tradfn header can be expected?
     // a        stack of objects with the following properties
@@ -625,8 +625,8 @@
     },
   };
 
-
-  const aplCompletions = pk => ({
+  const getState = (m, l) => m._tokenization._tokenizationStateStore._beginState[l].h;
+  const aplCompletions = (pk) => ({
     triggerCharacters: `1234567890:.⎕()[]${pk}`.split(''),
     provideCompletionItems: (model, position) => {
       const l = position.lineNumber;
@@ -635,7 +635,7 @@
       const ch = s[c - 2];
       const pk2 = `${pk}${pk}`;
       const kind = monaco.languages.CompletionItemKind;
-      const { a } = model._tokens._tokens[l - 1]._state;
+      const { a } = getState(model, l - 1);
       const { t } = (a || []).slice(-1)[0] || {};
       const snippets = /^\s*:\w*$/.test(s.slice(0, c - 1)) && a && t !== '{';
       const sc = model.bqc - 1;
@@ -931,10 +931,9 @@
         let i = 0;
 
         (function defineRanges() {
-          const ml = model._tokens._tokens;
-          const { length } = ml;
+          const { length } = model._tokens._tokens;
           for (i; i < length; i++) {
-            const a = ((ml[i]._state || {}).a || []).slice().reverse();
+            const a = ((getState(model, i) || {}).a || []).slice().reverse();
             if (!pa) pa = a;
             else if (pa.length < a.length) {
               openRanges.push({
@@ -967,14 +966,13 @@
   let icom = D.prf.indentComments(); D.prf.indentComments((x) => { icom = x; });
   const aplFormat = {
     formatLines(model, range) {
-      const ml = model._tokens._tokens;
       const from = range.startLineNumber || 1;
-      const to = range.endLineNumber || ml.length;
+      const to = range.endLineNumber || model._tokens._tokens.length;
       const edits = [];
       for (let l = from; l <= to; l++) {
         const s = model.getLineContent(l);
         const [m] = s.match(/^(\s)*/);
-        const a = ((ml[l - 1]._state || {}).a || []).slice().reverse();
+        const a = ((getState(model, l - 1) || {}).a || []).slice().reverse();
         const [la, ...ra] = a;
         if (la && (icom || !/^\s*⍝/.test(s))) {
           let ind = ra.map(r => r.ii).reduce((r, c) => r + c, 0);

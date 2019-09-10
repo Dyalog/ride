@@ -490,15 +490,16 @@
     TL(me) { // toggle localisation
       const name = this.cword();
       const model = me.getModel();
+      const getState = (l) => model._tokenization._tokenizationStateStore._beginState[l];
       if (!name) return;
       const l0 = me.getPosition().lineNumber;
-      const ta = model._tokens._tokens[l0 - 1]._state.a.map(x => x.t);
+      const ta = getState(l0 - 1).a.map((x) => x.t);
       const ti = ta.lastIndexOf('∇');
-      const ts = ta.filter(t => /^(∇|\{|namespace|class|interface)$/.test(t));
+      const ts = ta.filter((t) => /^(∇|\{|namespace|class|interface)$/.test(t));
       if (ts.includes('{') || (ts.length && !ts.includes('∇'))) return;
       let l;
       for (l = l0 - 1; l >= 0; l--) {
-        if (model._tokens._tokens[l]._state.a.length === ti) break;
+        if (getState(l).a.length === ti) break;
       }
       if (l < 0) l = 0;
       const lt = model.getLineContent(l + 1);
