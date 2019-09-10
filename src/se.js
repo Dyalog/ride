@@ -453,7 +453,7 @@
         const l = vt.position.lineNumber;
         const value = '```'
           + `${x.class === 2 ? 'plaintext' : 'apl'}\n`
-          + `${x.tip.join('\n')}`
+          + `${x.tip.join('\n')}\n`
           + '```';
         vt.complete({
           range: new monaco.Range(l, x.startCol + 1, l, x.endCol + 1),

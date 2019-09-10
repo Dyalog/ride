@@ -897,8 +897,8 @@
         return {
           range: new monaco.Range(p.lineNumber, p.column - 1, p.lineNumber, p.column),
           contents: [
-            lbt[0],
-            { language: 'plaintext', value: lbt[1] },
+            { value: lbt[0] },
+            { value: `\`\`\`plaintext\n${lbt[1]}\n\`\`\`` },
           ],
         };
       }
