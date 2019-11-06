@@ -65,11 +65,11 @@
           properties: ['openFile'],
         });
         if (!v) return;
-        if (/\.dws$/.test(v)) {
+        if (/\.dws$/i.test(v)) {
           $.confirm(
             `Run Latent Expression of ${v.replace(/^.*[\\/]/, '')}?`,
             'Load Workspace',
-            x => D.ide.exec([`      )${(x ? '' : 'x')}load ${v}\n`], 0),
+            (x) => D.ide.exec([`      )${(x ? '' : 'x')}load ${v}\n`], 0),
           );
         } else {
           D.ide.exec([`      )ED file://${v}\n`], 0);
@@ -178,7 +178,7 @@
         const t = JSON.stringify(`${x}\n`);
         w.webContents.executeJavaScript(`e.textContent += ${t}; h.scrollTop = h.scrollHeight`);
       };
-      f(cn.getLog().filter(x => x).join('\n'));
+      f(cn.getLog().filter((x) => x).join('\n'));
       cn.addLogListener(f);
       w.on('closed', () => { delete D.logw; cn.rmLogListener(f); });
     },
@@ -207,7 +207,7 @@
 
   });
 
-  const pfKey = i => () => D.ide.pfKey(i);
+  const pfKey = (i) => () => D.ide.pfKey(i);
   for (let i = 1; i <= 48; i++) D.commands[`PF${i}`] = pfKey(i);
 
   // order: used to measure how "complicated"
@@ -334,7 +334,7 @@
       precondition: 'tracer && !session',
       keybindings: stlkbs,
       label: 'Skip to line',
-      run: e => ed.STL(e),
+      run: (e) => ed.STL(e),
     });
     me.addAction({
       id: 'dyalog-fix',
@@ -343,7 +343,7 @@
       precondition: '!tracer && !session',
       keybindings: fxkbs,
       label: 'Fix',
-      run: e => ed.FX(e),
+      run: (e) => ed.FX(e),
     });
   };
   D.remDefaultMap = (me) => {
