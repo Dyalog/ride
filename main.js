@@ -85,9 +85,15 @@ el.app.on('ready', () => {
   el.Menu.setApplicationMenu(null);
 
   let w = global.elw;
+  const showMB = (f) => {
+    w.setMenuBarVisibility(!!f);
+    w.setAutoHideMenuBar(!f);
+  };
   if (db.main && db.main[4])w.maximize();
   w.loadURL(`file://${__dirname}/index.html`);
   w.on('move', sv).on('resize', sv).on('maximize', sv).on('unmaximize', sv)
+    .on('enter-full-screen', () => showMB(0))
+    .on('leave-full-screen', () => showMB(1))
     .on('close', () => {
       if (tid)clearTimeout(tid);
       svNow();
