@@ -61,7 +61,7 @@ stage ('Upload to installers to Github') {
     node('Linux && sharedworkspace && NodeJS') {
         exws (extWorkspace) {
 //            withCredentials([usernamePassword(credentialsId: '9f5481da-1a4d-4c5d-b400-cc2ee3a3ac2c', passwordVariable: 'GHTOKEN', usernameVariable: 'API')]) {
-            withCredentials([string(credentialsId: '112b0db7-e903-40c0-b70c-aab2394b3617', variable: 'GHTOKEN')]) {
+            withCredentials([string(credentialsId: 'd037265a-b67c-4b09-bc5c-f48b28aa0eb4', variable: 'GHTOKEN')]) {
                 sh './GH-Release.sh'
             }
         }
