@@ -22,6 +22,9 @@ try {
   if (fs.existsSync(dbf))db = JSON.parse(fs.readFileSync(dbf, 'utf8'));
 } catch (e) { console.error(e); }
 
+//Enable autoplay in 3500⌶
+el.app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');
+
 let tid;
 let dx = 0;
 let dy = 0; // used to correct for bad coords misreported by Electron (NW.js has the same problem)
