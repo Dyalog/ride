@@ -973,7 +973,7 @@
     } else if (h.s) {
       const cnf = { type: 'start', exe: h.s };
       const open_file = rq('electron').remote.getGlobal('open_file');
-      if (open_file) {
+      if (open_file && /(dws|dcfg)$/i.test(open_file)) {
         const qt = /\s/.test(open_file) ? '"' : '';
         cnf.args = `LOAD=${qt}${open_file}${qt}`
       }
