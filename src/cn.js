@@ -568,7 +568,7 @@
               return !1;
             };
             D.tmr = setTimeout(cancel, ct);
-            q.connecting_dlg_close.onclick = cancel;
+            q && (q.connecting_dlg_close.onclick = cancel);
           }
           break;
         }
@@ -961,14 +961,24 @@
       c: env.RIDE_CONNECT,
       s: env.RIDE_SPAWN || env.ride_spawn,
     };
+    if (D.mac && env.DYALOG_SPAWN) {
+      const app = require('electron').remote.app.getAppPath();
+      h.s = `${app}${env.DYALOG_SPAWN}`;
+    }
     for (let i = 1; i < a.length; i++) if (a[i][0] === '-') { h[a[i].slice(1)] = a[i + 1]; i += 1; }
     if (h.c) {
       q = J.cn;
       const m = /^([^:]+|\[[^\]]+\])(?::(\d+))?$/.exec(h.c); // parse host and port
       m ? go({ type: 'connect', host: m[1], port: +m[2] || 4502 }) : $.err('Invalid $RIDE_CONNECT');
     } else if (h.s) {
+      const cnf = { type: 'start', exe: h.s };
+      const open_file = rq('electron').remote.getGlobal('open_file');
+      if (open_file) {
+        const qt = /\s/.test(open_file) ? '"' : '';
+        cnf.args = `LOAD=${qt}${open_file}${qt}`
+      }
       q = J.cn;
-      go({ type: 'start', exe: h.s });
+      go(cnf);
     } else { D.cn(); }
   };
 

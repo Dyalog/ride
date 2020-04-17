@@ -65,6 +65,8 @@ const pkg = (x, y, f) => {
     appCopyright: `(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
     appVersion: v,
     buildVersion: v,
+    appCategoryType: 'public.app-category.developer-tools',
+    extendInfo: /^dyalog/.test(pj.name) ? 'packagescripts/osx/Info.plist' : null,
     win32metadata: { // ends up in Windows Explorer's right click > Properties
       CompanyName: 'Dyalog Ltd',
       FileDescription: 'Remote Integrated Development Environment for Dyalog APL',
