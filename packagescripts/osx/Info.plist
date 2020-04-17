@@ -20,7 +20,6 @@
         <string>Owner</string>
         <key>CFBundleTypeExtensions</key>
         <array>
-          <string>dws</string>
           <string>apl</string>
           <string>apla</string>
           <string>aplc</string>
@@ -28,6 +27,8 @@
           <string>apli</string>
           <string>apln</string>
           <string>aplo</string>
+          <string>dcfg</string>
+          <string>dws</string>
           <string>dyalog</string>
           <string>dyapp</string>
           <string>mipage</string>
