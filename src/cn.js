@@ -515,7 +515,7 @@
               if (x.args) args.push(...x.args.replace(/\n$/gm, '').split('\n'));
               try {
                 child = cp.spawn(x.exe, args, {
-                  cwd: untildify(x.cwd),
+                  cwd: untildify(x.cwd) || home,
                   stdio,
                   detached: true,
                   env: $.extend(
