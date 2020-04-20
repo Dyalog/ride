@@ -4,7 +4,7 @@
   <dict>
     <key>LSEnvironment</key>
     <dict>
-      <key>DYALOG_PAWN</key>
+      <key>DYALOG_SPAWN</key>
       <string>/../Dyalog/mapl</string>
     </dict>
     <key>CFBundleDocumentTypes</key>
