@@ -1,5 +1,0 @@
-#!/bin/sh
-cd "$(dirname "$0")"
-D="$(pwd)"
-cd
-exec "$D/EXECUTABLE" "$@"

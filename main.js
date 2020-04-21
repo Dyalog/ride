@@ -131,5 +131,9 @@ el.app.on('ready', () => {
 });
 
 el.app.on('window-all-closed', () => { el.app.quit(); });
-
+el.app.on('will-finish-launching', () => {
+  el.app.on('open-file', (event, path) => {
+      global.open_file = path;
+  });
+});
 global.js = (i, x) => el.BrowserWindow.fromId(i).webContents.executeJavaScript(x);

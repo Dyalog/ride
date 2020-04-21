@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>LSEnvironment</key>
+    <dict>
+      <key>DYALOG_SPAWN</key>
+      <string>/../Dyalog/mapl</string>
+    </dict>
+    <key>CFBundleDocumentTypes</key>
+    <array>
+      <dict>
+        <key>CFBundleTypeIconFile</key>
+        <string>DyalogUnicode.icns</string>
+        <key>CFBundleTypeName</key>
+        <string>Dyalog APL</string>
+        <key>CFBundleTypeRole</key>
+        <string>Shell</string>
+        <key>LSHandlerRank</key>
+        <string>Owner</string>
+        <key>CFBundleTypeExtensions</key>
+        <array>
+          <string>apl</string>
+          <string>apla</string>
+          <string>aplc</string>
+          <string>aplf</string>
+          <string>apli</string>
+          <string>apln</string>
+          <string>aplo</string>
+          <string>dcfg</string>
+          <string>dws</string>
+          <string>dyalog</string>
+          <string>dyapp</string>
+          <string>mipage</string>
+        </array>
+      </dict>
+    </array>
+  </dict>
+</plist>
