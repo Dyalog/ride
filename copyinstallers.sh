@@ -16,6 +16,8 @@ mountpoint /devt; echo "Devt is mounted: good"
 r=/devt/builds/${JOB_NAME}
 d=${BUILD_NUMBER}
 
+mkdir -p $r/$d
+
 cp -v ship/*.* $r/$d/
 
 echo 'updating "latest" symlink'; l=$r/latest; rm -f $l; ln -s $d $l
