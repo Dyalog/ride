@@ -60,7 +60,7 @@ D.informal=[
   '⍨ commute switch selfie tildediaeresis swap constant',
   '⍣ poweroperator stardiaeresis powerlimit fixedpoint fixpoint converge while',
   '. dotproduct innerproduct namespaceseparator',
-  '∘ jot compose bind curry ring outerproduct""innerproduct bind',
+  '∘ jot compose bind curry ring outerproduct innerproduct bind',
   '⍤ jotdiaeresis rank paw atop',
   '⍞ quotequad input output characterinput rawinput',
   '⎕ quad evaluatedinput',
