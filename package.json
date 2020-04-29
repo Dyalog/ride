@@ -13,7 +13,7 @@
   },
   "repository": ".",
   "dependencies": {
-    "jquery": "^3.2.1",
+    "jquery": "^3.5.0",
     "monaco-editor": "^0.18.0",
     "node-ipc": "^9.1.1",
     "os-locale": "^4.0.0",
