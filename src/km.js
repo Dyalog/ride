@@ -53,6 +53,12 @@
       });
       if (D.ide.dead) window.close();
     },
+    DHI() {
+      D.openExternal(D.hlp.INDEX);
+    },
+    DOX() {
+      D.openExternal(D.hlp.DOX);
+    },
     OWS() {
       if (D.el && D.ide.floating) {
         D.ipc.of.ride_master.emit('OWS');

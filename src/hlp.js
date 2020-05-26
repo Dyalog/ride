@@ -4,9 +4,13 @@
   // D.hlp[')vars'] -> 'http://help.dyalog.com/17.0/Content/Language/System%20Commands/vars.htm'
   function initHelp(version) {
     const v = version ? version.slice(0, 4) : '17.0';
-    const p = `https://help.dyalog.com/${v}/Content/`;
+    const v3 = v.replace(/\./,'');
+    const helpUri = `https://help.dyalog.com/${v}/`;
+    const p = `${helpUri}Content/`;
     const q = '.htm'; // prefix and suffix
     const h = {
+      DOX: `https://www.dyalog.com/documentation_${v3}${q}`,
+      INDEX: `${helpUri}index${q}`,
       WELCOME: `${p}MiscPages/HelpWelcome${q}`,
       UCMDS: `${p}UserGuide/The APL Environment/User Commands${q}`,
       LANGELEMENTS: `${p}Language/Introduction/Language Elements${q}`,
