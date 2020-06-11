@@ -16,9 +16,20 @@ mountpoint /devt; echo "Devt is mounted: good"
 r=/devt/builds/${JOB_NAME}
 d=${BUILD_NUMBER}
 
-mkdir -p $r/$d
+# Identify the location of the file that will be used for zero footprint RIDE.  These files are identical across
+# platforms; the only difference in resources/app/<platform> is that the Windows tree has windows-ime/set-ime.exe
+# which we most certainly do not want.  So let's select the Linux app directory.
+# `pwd`/_/version contains the full version number of RIDE; need the major.minor and majorminor to build path
+
+VER=$(sed 's/\.[^\.]*$//' _/version)
+VERNODOT=({echo $VER | tr -d ".")
+SRC_RIDEAPPDIR="_/ride${VERNODOT}/Ride-${VER}-linux-x86"
+[ -d $SRC_RIDEAPPDIR ] || { echo "cannot find RideApplication directory $SRC_RIDEAPPDIR" ; exit 1 ; }
+RIDEAPPDIR=RIDEapp
+mkdir -p $r/$d/$RIDEAPPDIR
 
 cp -v ship/*.* $r/$d/
+cp -r $RIDEAPPDIR/* $r/$d/$RIDEAPPDIR
 
 echo 'updating "latest" symlink'; l=$r/latest; rm -f $l; ln -s $d $l
 echo 'cleaning up old releases'
