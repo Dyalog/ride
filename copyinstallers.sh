@@ -22,7 +22,7 @@ d=${BUILD_NUMBER}
 # `pwd`/_/version contains the full version number of RIDE; need the major.minor and majorminor to build path
 
 VER=$(sed 's/\.[^\.]*$//' _/version)
-VERNODOT=({echo $VER | tr -d ".")
+VERNODOT=(echo $VER | tr -d ".")
 SRC_RIDEAPPDIR="_/ride${VERNODOT}/Ride-${VER}-linux-x86"
 [ -d $SRC_RIDEAPPDIR ] || { echo "cannot find RideApplication directory $SRC_RIDEAPPDIR" ; exit 1 ; }
 RIDEAPPDIR=RIDEapp
