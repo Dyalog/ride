@@ -30,7 +30,7 @@ RIDEAPPDIR=RIDEapp
 mkdir -p $r/$d/$RIDEAPPDIR
 
 cp -v ship/*.* $r/$d/
-cp -r $RIDEAPPDIR/* $r/$d/$RIDEAPPDIR
+cp -r $SRC_RIDEAPPDIR/* $r/$d/$RIDEAPPDIR
 
 echo 'updating "latest" symlink'; l=$r/latest; rm -f $l; ln -s $d $l
 echo 'cleaning up old releases'
