@@ -68,6 +68,19 @@ const pkg = (x, y, f) => {
     buildVersion: v,
     appCategoryType: 'public.app-category.developer-tools',
     extendInfo: /^dyalog/.test(pj.name) ? 'packagescripts/osx/Info.plist' : null,
+    osxSign: {
+      identity: 'Developer ID Application: Dyalog Limited (6LKE87V3BD)',
+      entitlements: 'packagescripts/osx/entitlements-parent.plist',
+      'entitlements-inherit': 'packagescripts/osx/entitlements-child.plist',
+      hardenedRuntime: true,
+      'gatekeeper-assess': false,
+      'strict-verify': false
+    },
+    osxNotarize: {
+      appleId: process.env.apple_id,
+      appleIdPassword: process.env.apple_id_password,
+      ascProvider: '6LKE87V3BD'
+    },
     win32metadata: { // ends up in Windows Explorer's right click > Properties
       CompanyName: 'Dyalog Ltd',
       FileDescription: 'Remote Integrated Development Environment for Dyalog APL',
@@ -76,9 +89,9 @@ const pkg = (x, y, f) => {
       InternalName: 'RIDE',
     },
   }).then(() => {
-    const d = `_/${pj.name}/${pj.productName}-${x}-${y}`;
-    rm(`${d}/version`);
-    fs.existsSync(`${d}/LICENSE`) && mv(`${d}/LICENSE`, `${d}/LICENSE.electron`);
+    // const d = `_/${pj.name}/${pj.productName}-${x}-${y}`;
+    // rm(`${d}/version`);
+    // fs.existsSync(`${d}/LICENSE`) && mv(`${d}/LICENSE`, `${d}/LICENSE.electron`);
     f();
   }, e => f(e));
 };
@@ -89,7 +102,7 @@ const o = (f) => { b(e => (e ? f(e) : pkg('darwin', 'x64', f))); };
 const a = (f) => { b(e => (e ? f(e) : pkg('linux', 'armv7l', f))); };
 const d = (f) => { async.series([l, w, o, a], (e) => { f(e); }); };
 
-const c = (f) => { rm('_'); f(); };
+const c = (f) => { rm('_'); rm('../buildtmp'); f(); };
 
 tasks.b = b; tasks.build = b;
 tasks.l = l; tasks.linux = l;
