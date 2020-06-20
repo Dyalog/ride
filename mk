@@ -89,9 +89,9 @@ const pkg = (x, y, f) => {
       InternalName: 'RIDE',
     },
   }).then(() => {
-    // const d = `_/${pj.name}/${pj.productName}-${x}-${y}`;
-    // rm(`${d}/version`);
-    // fs.existsSync(`${d}/LICENSE`) && mv(`${d}/LICENSE`, `${d}/LICENSE.electron`);
+    const d = `_/${pj.name}/${pj.productName}-${x}-${y}`;
+    rm(`${d}/version`);
+    fs.existsSync(`${d}/LICENSE`) && mv(`${d}/LICENSE`, `${d}/LICENSE.electron`);
     f();
   }, e => f(e));
 };
