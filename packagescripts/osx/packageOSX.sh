@@ -50,3 +50,7 @@ ${TMP1ARCHIVE}
 
 
 /usr/bin/productsign --sign "Developer ID Installer: Dyalog Limited (6LKE87V3BD)" ${TMP1ARCHIVE} ${ARCHIVENAME}
+
+## notarise and staple the installer
+/usr/bin/xcrun altool -t osx -f ${ARCHIVENAME} -itc_provider 6LKE87V3BD --primary-bundle-id "com.dyalog.pkg.ride${BASE_VERSION_ND}" --notarize-app --username ${APPLE_ID} -p ${APPLE_ID_PASSWORD}
+/usr/bin/xcrun stapler staple ${ARCHIVENAME}
