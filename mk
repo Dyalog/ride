@@ -25,6 +25,7 @@ const rm = (x) => {
 const pj = JSON.parse(rf('package.json'));
 // v:version string - "x.y.z" where z is the number of commits since the beginning of the project
 const v = `${pj.version.replace(/\.0$/, '')}.${sh('git rev-list --count HEAD')}`;
+const isDyalogBuild = /^dyalog/.test(pj.name);
 const tasks = { };
 
 let buildDone = 0;
@@ -60,6 +61,7 @@ const pkg = (x, y, f) => {
       || /monaco-editor\/(dev|esm|min-maps)/.test(p)
       || /toastr\/(?!build($|\/toastr.min))/.test(p)
       || /jquery\/(?!dist($|\/jquery\.min\.js))/.test(p)
+      || /node_modules\/\.bin/.test(p)
       || /\/test/.test(p)
       || /\.map$/.test(p),
     appBundleId: `com.dyalog.${pj.name}`,
@@ -67,9 +69,29 @@ const pkg = (x, y, f) => {
     appVersion: v,
     buildVersion: v,
     appCategoryType: 'public.app-category.developer-tools',
-    extendInfo: /^dyalog/.test(pj.name) ? 'packagescripts/osx/Info.plist' : null,
+    extendInfo: isDyalogBuild ? 'packagescripts/osx/Info.plist' : null,
+    afterCopy: [
+      (buildPath, electronVersion, platform, arch, cb) => {
+        if (!isDyalogBuild) return;
+        console.log(`Add Dyalog to ${buildPath}/../`);
+        execSync(`cp -r ${process.env.DYALOG_ROOT} ${buildPath}/../`);
+        console.log(`Add CEF to ${buildPath}/../../Frameworks`);
+        md(`${buildPath}/../../Frameworks/Chromium\ Embedded\ Framework.framework/Versions`);
+        const cef = 'Chromium\\ Embedded\\ Framework';
+        const cef_path = `${buildPath}/../../Frameworks/${cef}.framework/`;
+        execSync(`cp -r ${process.env.CEF_ROOT} ${cef_path}Versions/A`);
+        execSync(`ln -s ./A ${cef_path}Versions/Current`);
+        execSync(`ln -s ./Versions/Current/Libraries ${cef_path}Libraries`);
+        execSync(`ln -s ./Versions/Current/Resources ${cef_path}Resources`);
+        execSync(`ln -s ./Versions/Current/${cef} ${cef_path}${cef}`);
+        console.log(`Add symlink to Frameworks`);
+        execSync(`ln -s ../Frameworks ${buildPath}/../Frameworks`);
+        console.log("Dyalog and CEF added.");
+        cb();
+      }
+    ],
     osxSign: {
-      identity: 'Developer ID Application: Dyalog Limited (6LKE87V3BD)',
+      identity: process.env.APPLE_CERT_APPLICATION,
       entitlements: 'packagescripts/osx/entitlements-parent.plist',
       'entitlements-inherit': 'packagescripts/osx/entitlements-child.plist',
       hardenedRuntime: true,
@@ -77,9 +99,9 @@ const pkg = (x, y, f) => {
       'strict-verify': false
     },
     osxNotarize: {
-      appleId: process.env.apple_id,
-      appleIdPassword: process.env.apple_id_password,
-      ascProvider: '6LKE87V3BD'
+      appleId: process.env.APPLE_ID,
+      appleIdPassword: `@keychain:${process.env.APPLE_ID_KEYCHAIN}`,
+      ascProvider: process.env.APPLE_TEAM
     },
     win32metadata: { // ends up in Windows Explorer's right click > Properties
       CompanyName: 'Dyalog Ltd',
