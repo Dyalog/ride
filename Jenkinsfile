@@ -9,12 +9,11 @@ pipeline {
         checkout scm
         sh 'npm i'
         sh './mk dist'
-        sh './publish.sh'
-        stash name: 'ride-build', includes: '_/*/**'
-//        stash name: 'ride-linux', includes: '_/ride44/Ride-4.4-linux*/**'
-//        stash name: 'ride-mac', includes: '_/ride44/Ride-4.4-darwin*/**'
-//        stash name: 'ride-version', includes: '_/ride44/version'
-       // stash name: 'packagescripts', includes: 'CI/**'
+        sh './CI/publish.sh'
+        stash name: 'ride-win', includes: '_/ride44/Ride-4.4-win32-ia32/**'
+        stash name: 'ride-linux', includes: '_/ride44/Ride-4.4-linux*/**'
+        stash name: 'ride-mac', includes: '_/ride44/Ride-4.4-darwin*/**'
+        stash name: 'ride-version', includes: '_/version, _/version.js'
       }
     }
     stage ('Packaging') {
@@ -24,9 +23,8 @@ pipeline {
             label 'Linux && NodeJS'
           }
           steps {
-            unstash 'ride-build'
-//            unstash 'ride-version'
-           // unstash 'pacakgescripts'
+            unstash 'ride-linux'
+            unstash 'ride-version'
             sh './CI/packagescripts/linux/packageLinux.sh'
             stash name: 'linux-ship', includes: 'ship/*'
           }
@@ -36,9 +34,8 @@ pipeline {
             label 'Mac && Build'
           }
           steps {
-            unstash 'ride-build'
-//            unstash 'ride-version'
-           // unstash 'pacakgescripts'
+            unstash 'ride-mac'
+            unstash 'ride-version'
             sh './CI/packagescripts/osx/packageOSX.sh'
             stash name: 'mac-ship', includes: 'ship/*'
           }
@@ -48,9 +45,8 @@ pipeline {
             label 'Windows'
           }
           steps {
-            unstash 'ride-build'
-//            unstash 'ride-version'
-           // unstash 'pacakgescripts'
+            unstash 'ride-win'
+            unstash 'ride-version'
             bat './CI/packagescripts/windows/packageWindows.bat'
             stash name: 'win-ship', includes: 'ship/*'
           }
