@@ -21,7 +21,7 @@ pipeline {
         stage ('Linux Packaging') {
           agent {
             docker {
-              image 'dyalog/ubuntu:18.04-build'
+              image 'dyalog/ubuntu:1804-build'
             }
           }
           steps {
@@ -58,7 +58,7 @@ pipeline {
     stage ('Copy install images') {
       agent {
         docker {
-          image 'dyalog/ubuntu:18.04-build'
+          image 'dyalog/ubuntu:1804-build'
         }
       }
       steps {
@@ -71,7 +71,7 @@ pipeline {
     stage ('Publish to Github') {
       agent {
         docker {
-          image 'dyalog/ubuntu:18.04-build'
+          image 'dyalog/ubuntu:1804-build'
         }
       }
       environment {
