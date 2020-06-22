@@ -69,7 +69,7 @@ pipeline {
         label 'Linux'
       }
       environment {
-        GHTOKEN credentials('250bdc45-ee69-451a-8783-30701df16935')
+        GHTOKEN = credentials('250bdc45-ee69-451a-8783-30701df16935')
       }
       steps {
         sh './CI/GH-Release.sh'
