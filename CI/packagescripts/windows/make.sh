@@ -124,9 +124,8 @@ echo "#define GUID_RIDE_UPGRADE \"{$GUID_RIDE_UPGRADE}\"" >> $OBJ_TMP/guids.h
 
 get_svn()
 {
-echo skip
-${SVNDIR}/svn export -q http://svn.dyalog.bramley/svn/dyalog/branches/14.1.dss/svn/installs/win/allwidth/setup $OBJ_TMP/setup
-${SVNDIR}/svn export -q http://svn.dyalog.bramley/svn/dyalog/branches/14.1.dss/svn/installs/win/allwidth/images $OBJ_TMP/images
+	${SVNDIR}/svn export --force -q http://svn.dyalog.bramley/svn/dyalog/branches/14.1.dss/svn/installs/win/allwidth/setup $OBJ_TMP/setup
+	${SVNDIR}/svn export --force -q http://svn.dyalog.bramley/svn/dyalog/branches/14.1.dss/svn/installs/win/allwidth/images $OBJ_TMP/images
 }
 
 get_upgrade_guid()

@@ -21,7 +21,7 @@ SHIPDIRECTORY=ship
 RIDEAPPDIRNAME="${PackageName}.app"
 PLISTFILE="$RIDEDIR/$RIDEAPPDIRNAME/Contents/Info.plist"
 
-mkdir ${RIDEDIR}/${PackageName}.app/Contents/Resources/LICENCES
+mkdir -p ${RIDEDIR}/${PackageName}.app/Contents/Resources/LICENCES
 mv ${RIDEDIR}/LICENSE.electron ${RIDEDIR}/LICENSES.chromium.html ${RIDEDIR}/${PackageName}.app/Contents/Resources/LICENCES/
 
 if [ -s _/version ]; then
