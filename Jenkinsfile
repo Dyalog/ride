@@ -1,80 +1,79 @@
-def extWorkspace = exwsAllocate 'sharedWorkspace'
-
-node('Linux && NodeJS && sharedworkspace') {
-    exws (extWorkspace) {
-        stage ('Checkout from GitHub') {
-            checkout scm
-        }
-
-        stage ('Update npm modules') {
-            sh 'npm i'
-        }
-
-        stage ('Build Ride') {
-            // Build RIDE for all platforms
-            sh './mk dist'
-        }
-
-        stage ('Dyalog Network Publish') {
-            // Copy built files to /devt/builds/ride/
-            sh './publish.sh'
-        }
+pipeline {
+  agent none
+  stages {
+    stage('Build') {
+      agent {
+        label 'Linux && NodeJS'
+      }
+      steps {
+        checkout scm
+        sh 'npm i'
+        sh './mk dist'
+        sh './publish.sh'
+        stash name: 'ride-win', includes: '_/ride44/Ride-4.4-win32*/**'
+        stash name: 'ride-linux', includes: '_/ride44/Ride-4.4-linux*/**'
+        stash name: 'ride-mac', includes: '_/ride44/Ride-4.4-darwin*/**'
+        stash name: 'packagescripts', includes: './CI/**'
+      }
     }
-}
-
-stage ('Packaging') {
-    parallel (
-        "Linux Package" : {
-            node('Linux && NodeJS && sharedworkspace') {
-                exws (extWorkspace) {
-                    sh './packagescripts/linux/packageLinux.sh'
-                }
-            }
-        },
-        "Mac Package" : {
-            node('Mac && sharedworkspace') {
-                exws (extWorkspace) {
-                    sh './packagescripts/osx/packageOSX.sh'
-                }
-            }
-        },
-        "Windows Package" : {
-            node('Windows && sharedworkspace') {
-                exws (extWorkspace) {
-                    bat 'packagescripts/windows/packageWindows.bat'
-                }
-            }
+    stage ('Packaging') {
+      parallel {
+        stage ('Linux Packaging') {
+          agent {
+            label 'Linux && NodeJS'
+          }
+          staps {
+            unstash 'ride-linux'
+            unstash 'pacakgescripts'
+            sh './CI/packagescripts/linux/packageLinux.sh'
+            stash name: 'linux-ship' includes 'ship/*'
+          }
         }
-    )
-}
-
-stage ('Copy Install Images') {
-    node('Linux && sharedworkspace && git') {
-        exws (extWorkspace) {
-            // Copy installer images to /devt/builds/ride/
-            sh './copyinstallers.sh'
+        stage ('Mac Packaging') {
+          agent {
+            label 'Mac && build'
+          }
+          staps {
+            unstash 'ride-mac'
+            unstash 'pacakgescripts'
+            sh './CI/packagescripts/osx/packageOSX.sh'
+            stash name: 'mac-ship' includes 'ship/*'
+          }
         }
-    }
-}
-
-stage ('Upload to installers to Github') {
-    node('Linux && sharedworkspace && NodeJS') {
-        exws (extWorkspace) {
-//            withCredentials([usernamePassword(credentialsId: '9f5481da-1a4d-4c5d-b400-cc2ee3a3ac2c', passwordVariable: 'GHTOKEN', usernameVariable: 'API')]) {
-            withCredentials([string(credentialsId: '250bdc45-ee69-451a-8783-30701df16935', variable: 'GHTOKEN')]) {
-                sh './GH-Release.sh'
-            }
+        stage ('Windows Packaging') {
+          agent {
+            label 'Windows'
+          }
+          steps {
+            unstash 'ride-win'
+            unstash 'pacakgescripts'
+            bat './CI/packagescripts/windows/packageWindows.bat'
+            stash name: 'win-ship' includes 'ship/*'
+          }
         }
+      }
     }
-}
-
-node() {
-    stage ('Send Emails') {
-        step([
-            $class: 'Mailer',
-            notifyEveryUnstableBuild: true,
-            recipients: 'ride@dyalog.com',
-            sendToIndividuals: true
-        ])
+    stage ('Copy install images') {
+      agent {
+        label 'Linux'
+      }
+      steps {
+        unstash 'linux-ship'
+        unstash 'mac-ship'
+        unstash 'win-ship'
+        sh './CI/copyinstallers.sh'
+      }
     }
+    stage ('Publish to Github') {
+      agent {
+        label 'Linux'
+      }
+      environment {
+        GHTOKEN credentials('250bdc45-ee69-451a-8783-30701df16935')
+      }
+      steps {
+        sh './CI/GH-Release.sh'
+      }
+    }
+  }
 }
