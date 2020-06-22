@@ -24,18 +24,18 @@ pipeline {
           }
           steps {
             unstash 'ride-linux'
-            unstash 'pacakgescripts'
+           // unstash 'pacakgescripts'
             sh './CI/packagescripts/linux/packageLinux.sh'
             stash name: 'linux-ship', includes: 'ship/*'
           }
         }
         stage ('Mac Packaging') {
           agent {
-            label 'Mac && build'
+            label 'Mac && Build'
           }
           steps {
             unstash 'ride-mac'
-            unstash 'pacakgescripts'
+           // unstash 'pacakgescripts'
             sh './CI/packagescripts/osx/packageOSX.sh'
             stash name: 'mac-ship', includes: 'ship/*'
           }
@@ -46,7 +46,7 @@ pipeline {
           }
           steps {
             unstash 'ride-win'
-            unstash 'pacakgescripts'
+           // unstash 'pacakgescripts'
             bat './CI/packagescripts/windows/packageWindows.bat'
             stash name: 'win-ship', includes: 'ship/*'
           }
