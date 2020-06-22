@@ -20,7 +20,9 @@ pipeline {
       parallel {
         stage ('Linux Packaging') {
           agent {
-            label 'Linux && NodeJS'
+            docker {
+              image 'dyalog/ubuntu:18.04-build'
+            }
           }
           steps {
             unstash 'ride-linux'
@@ -55,7 +57,9 @@ pipeline {
     }
     stage ('Copy install images') {
       agent {
-        label 'Linux'
+        docker {
+          image 'dyalog/ubuntu:18.04-build'
+        }
       }
       steps {
         unstash 'linux-ship'
@@ -66,7 +70,9 @@ pipeline {
     }
     stage ('Publish to Github') {
       agent {
-        label 'Linux'
+        docker {
+          image 'dyalog/ubuntu:18.04-build'
+        }
       }
       environment {
         GHTOKEN = credentials('250bdc45-ee69-451a-8783-30701df16935')
