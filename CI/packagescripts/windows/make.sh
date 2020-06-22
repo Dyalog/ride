@@ -137,7 +137,7 @@ UPGRADE_GUID=$(cat $WORKSPACE/CI/packagescripts/windows/upgrade_guids | grep  "^
 if [ "_${UPGRADE_GUID}_" = "__" ]
 then
 	echo "${RIDE_VERSION_AB_DOT}=$(uuidgen)" >> $WORKSPACE/CI/packagescripts/windows/upgrade_guids
-	UPGRADE_GUID=$(cat $WORKSPACE/CI/packagesripts/windows/upgrade_guids | grep  "^${RIDE_VERSION_AB_DOT}=" | sed "s/^${RIDE_VERSION_AB_DOT}=\(.*\)/\1/")
+  UPGRADE_GUID=$(cat $WORKSPACE/CI/packagescripts/windows/upgrade_guids | grep  "^${RIDE_VERSION_AB_DOT}=" | sed "s/^${RIDE_VERSION_AB_DOT}=\(.*\)/\1/")
 	#echo svn commit upgrade_guids -m "automatic add of upgrade guid"
 fi
 
