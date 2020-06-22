@@ -200,6 +200,7 @@ mkdir -p $OBJ_TMP
 mkdir -p $OBJ_FILES
 mkdir -p $OBJ_CABINETS
 mkdir -p $RIDEDIR
+mkdir -p $RIDE_SHIP
 
 cd $WORKSPACE/CI/packagescripts/windows
 
