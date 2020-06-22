@@ -13,6 +13,7 @@ pipeline {
         stash name: 'ride-win', includes: '_/ride44/Ride-4.4-win32*/**'
         stash name: 'ride-linux', includes: '_/ride44/Ride-4.4-linux*/**'
         stash name: 'ride-mac', includes: '_/ride44/Ride-4.4-darwin*/**'
+        stash name: 'ride-version', includes: '_/ride*/version*'
        // stash name: 'packagescripts', includes: 'CI/**'
       }
     }
@@ -24,6 +25,7 @@ pipeline {
           }
           steps {
             unstash 'ride-linux'
+            unstash 'ride-version'
            // unstash 'pacakgescripts'
             sh './CI/packagescripts/linux/packageLinux.sh'
             stash name: 'linux-ship', includes: 'ship/*'
@@ -35,6 +37,7 @@ pipeline {
           }
           steps {
             unstash 'ride-mac'
+            unstash 'ride-version'
            // unstash 'pacakgescripts'
             sh './CI/packagescripts/osx/packageOSX.sh'
             stash name: 'mac-ship', includes: 'ship/*'
@@ -46,6 +49,7 @@ pipeline {
           }
           steps {
             unstash 'ride-win'
+            unstash 'ride-version'
            // unstash 'pacakgescripts'
             bat './CI/packagescripts/windows/packageWindows.bat'
             stash name: 'win-ship', includes: 'ship/*'
