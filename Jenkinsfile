@@ -10,7 +10,7 @@ pipeline {
         sh 'npm i'
         sh './mk dist'
         sh './publish.sh'
-        stash name: 'ride-build', includes: '_/ride44/**'
+        stash name: 'ride-build', includes: '_/*/**'
 //        stash name: 'ride-linux', includes: '_/ride44/Ride-4.4-linux*/**'
 //        stash name: 'ride-mac', includes: '_/ride44/Ride-4.4-darwin*/**'
 //        stash name: 'ride-version', includes: '_/ride44/version'
