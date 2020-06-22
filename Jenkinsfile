@@ -26,7 +26,7 @@ pipeline {
             unstash 'ride-linux'
             unstash 'pacakgescripts'
             sh './CI/packagescripts/linux/packageLinux.sh'
-            stash name: 'linux-ship', includes 'ship/*'
+            stash name: 'linux-ship', includes: 'ship/*'
           }
         }
         stage ('Mac Packaging') {
@@ -37,7 +37,7 @@ pipeline {
             unstash 'ride-mac'
             unstash 'pacakgescripts'
             sh './CI/packagescripts/osx/packageOSX.sh'
-            stash name: 'mac-ship', includes 'ship/*'
+            stash name: 'mac-ship', includes: 'ship/*'
           }
         }
         stage ('Windows Packaging') {
@@ -48,7 +48,7 @@ pipeline {
             unstash 'ride-win'
             unstash 'pacakgescripts'
             bat './CI/packagescripts/windows/packageWindows.bat'
-            stash name: 'win-ship', includes 'ship/*'
+            stash name: 'win-ship', includes: 'ship/*'
           }
         }
       }
