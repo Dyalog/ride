@@ -167,7 +167,7 @@ createDEB() {
 		--deb-no-default-config-files		\
 		opt usr
 
-	command -v lintian > /dev/null && lintian --include-dir packagescripts/linux/lintian --profile ride "ship/${PACKAGENAME}" || true
+	command -v lintian > /dev/null && lintian --include-dir CI/packagescripts/linux/lintian --profile ride "ship/${PACKAGENAME}" || true
 
 }
 
@@ -206,7 +206,7 @@ createRPM() {
 		--description "Remote IDE for Dyalog APL"	\
 		opt usr
 
-	command -v rpmlint > /dev/null && rpmlint -f packagescripts/linux/rpmlint/config "ship/${PACKAGENAME}" || true
+	command -v rpmlint > /dev/null && rpmlint -f CI/packagescripts/linux/rpmlint/config "ship/${PACKAGENAME}" || true
 
 }
 
@@ -245,7 +245,7 @@ for CPUTYPE in x64 armv7l ; do
 	cp "$ICON" ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps/ride${BASE_VERSION_ND}.svg
 
 	if [ $CPUTYPE = armv7l ] ; then
-		sed "s/EXECUTABLE/Ride-${BASE_VERSION}/" < packagescripts/linux/launcher > "${SBOXDIR}/opt/ride-${BASE_VERSION}/launcher"
+		sed "s/EXECUTABLE/Ride-${BASE_VERSION}/" < CI/packagescripts/linux/launcher > "${SBOXDIR}/opt/ride-${BASE_VERSION}/launcher"
 		chmod +x "${SBOXDIR}/opt/ride-${BASE_VERSION}/launcher"
 	fi
 

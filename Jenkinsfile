@@ -13,7 +13,7 @@ pipeline {
         stash name: 'ride-win', includes: '_/ride44/Ride-4.4-win32*/**'
         stash name: 'ride-linux', includes: '_/ride44/Ride-4.4-linux*/**'
         stash name: 'ride-mac', includes: '_/ride44/Ride-4.4-darwin*/**'
-        stash name: 'packagescripts', includes: 'CI/**'
+       // stash name: 'packagescripts', includes: 'CI/**'
       }
     }
     stage ('Packaging') {
