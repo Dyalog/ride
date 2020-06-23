@@ -51,7 +51,7 @@ const pkg = (x, y, f) => {
     dir: '.',
     platform: x,
     arch: y,
-    tmpdir: '../buildtmp',
+    tmpdir: '/tmp/buildtmp',
     out: `_/${pj.name}`,
     overwrite: true,
     'download.cache': 'cache',
