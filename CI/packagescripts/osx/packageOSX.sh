@@ -24,6 +24,15 @@ PLISTFILE="$RIDEDIR/$RIDEAPPDIRNAME/Contents/Info.plist"
 mkdir -p ${RIDEDIR}/${PackageName}.app/Contents/Resources/LICENCES
 mv ${RIDEDIR}/LICENSE.electron ${RIDEDIR}/LICENSES.chromium.html ${RIDEDIR}/${PackageName}.app/Contents/Resources/LICENCES/
 
+## Code sign application
+
+cd ${RIDEDIR}
+
+CODESIGNLOG=codesign.out
+codesign --deep --sign "6LKE87V3BD" --verbose ${packageName}.app >$CODESIGNLOG 2>&1
+
+cat ${CODESIGNLOG}
+
 if [ -s _/version ]; then
 RIDEVERSION=`cat _/version`
 else
