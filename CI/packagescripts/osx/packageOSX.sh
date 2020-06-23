@@ -29,7 +29,7 @@ mv ${RIDEDIR}/LICENSE.electron ${RIDEDIR}/LICENSES.chromium.html ${RIDEDIR}/${Pa
 cd ${RIDEDIR}
 
 CODESIGNLOG=codesign.out
-codesign --deep --sign "6LKE87V3BD" --verbose ${packageName}.app >$CODESIGNLOG 2>&1
+codesign --deep --sign "6LKE87V3BD" --verbose ${PackageName}.app >$CODESIGNLOG 2>&1
 
 cat ${CODESIGNLOG}
 
@@ -59,3 +59,5 @@ ${TMP1ARCHIVE}
 
 
 /usr/bin/productsign --sign "Developer ID Installer: Dyalog Limited (6LKE87V3BD)" ${TMP1ARCHIVE} ${ARCHIVENAME}
+
+##notarise
