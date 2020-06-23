@@ -3,7 +3,10 @@ pipeline {
   stages {
     stage('Build') {
       agent {
-        label 'Linux && NodeJS'
+        docker {
+          image 'dyalog/ubuntu:1804-build'
+        }
+//        label 'Linux && NodeJS'
       }
       steps {
         checkout scm
