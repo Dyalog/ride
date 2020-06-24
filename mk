@@ -66,13 +66,13 @@ const pkg = (x, y, f) => {
       || /\.map$/.test(p),
     appBundleId: `com.dyalog.${pj.name}`,
     appCopyright: `(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
-    appVersion: v,
-    buildVersion: v,
+    appVersion: isDyalogBuild ? process.env.APPVERSION : v,
+    buildVersion: isDyalogBuild ? process.env.APPVERSION : v,
     appCategoryType: 'public.app-category.developer-tools',
     extendInfo: isDyalogBuild ? 'packagescripts/osx/Info.plist' : null,
     afterCopy: [
       (buildPath, electronVersion, platform, arch, cb) => {
-        if (!isDyalogBuild) return;
+        if (!isDyalogBuild) return cb();
         console.log(`Add Dyalog to ${buildPath}/../`);
         execSync(`cp -r ${process.env.DYALOG_ROOT} ${buildPath}/../`);
         console.log(`Add CEF to ${buildPath}/../../Frameworks`);
@@ -92,16 +92,11 @@ const pkg = (x, y, f) => {
     ],
     osxSign: {
       identity: process.env.APPLE_CERT_APPLICATION,
-      entitlements: 'packagescripts/osx/entitlements-parent.plist',
-      'entitlements-inherit': 'packagescripts/osx/entitlements-child.plist',
+      entitlements: 'packagescripts/osx/entitlements.plist',
+      'entitlements-inherit': 'packagescripts/osx/entitlements.plist',
       hardenedRuntime: true,
       'gatekeeper-assess': false,
       'strict-verify': false
-    },
-    osxNotarize: {
-      appleId: process.env.APPLE_ID,
-      appleIdPassword: `@keychain:${process.env.APPLE_ID_KEYCHAIN}`,
-      ascProvider: process.env.APPLE_TEAM
     },
     win32metadata: { // ends up in Windows Explorer's right click > Properties
       CompanyName: 'Dyalog Ltd',
