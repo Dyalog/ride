@@ -1,7 +1,7 @@
 pipeline {
   agent none
   stages {
-    stage('Build') {
+    stage('Build Linux & Windows') {
       agent {
 //        docker {
 //          image 'dyalog/ubuntu:1804-build'
@@ -12,11 +12,11 @@ pipeline {
       steps {
         checkout scm
         sh 'npm i'
-        sh './mk dist'
+        sh './mk l a w'
         sh './CI/publish.sh'
         stash name: 'ride-win', includes: '_/ride44/Ride-4.4-win32-ia32/**'
         stash name: 'ride-linux', includes: '_/ride44/Ride-4.4-linux*/**'
-        stash name: 'ride-mac', includes: '_/ride44/Ride-4.4-darwin*/**'
+//        stash name: 'ride-mac', includes: '_/ride44/Ride-4.4-darwin*/**'
         stash name: 'ride-version', includes: '_/version, _/version.js'
       }
     }
@@ -35,13 +35,15 @@ pipeline {
             stash name: 'linux-ship', includes: 'ship/*'
           }
         }
-        stage ('Mac Packaging') {
+        stage ('Mac Build and Packaging') {
           agent {
             label 'Mac && Build'
           }
           steps {
-            unstash 'ride-mac'
-            unstash 'ride-version'
+ //           unstash 'ride-mac'
+//            unstash 'ride-version'
+            sh 'npm i'
+            sh './mk m'
             sh './CI/packagescripts/osx/packageOSX.sh'
             stash name: 'mac-ship', includes: 'ship/*'
           }
