@@ -44,9 +44,7 @@ mv ${RIDEDIR}/LICENSE.electron ${RIDEDIR}/LICENSES.chromium.html ${RIDEDIR}/${Pa
 cd ${RIDEDIR}
 
 CODESIGNLOG=codesign.out
-codesign --deep --sign "6LKE87V3BD" --verbose ${PackageName}.app >$CODESIGNLOG 2>&1
-
-cat ${CODESIGNLOG}
+codesign --deep --sign "6LKE87V3BD" --verbose ${PackageName}.app 
 
 if [ -s _/version ]; then
 RIDEVERSION=`cat _/version`
