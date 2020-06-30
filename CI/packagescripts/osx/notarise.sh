@@ -30,6 +30,8 @@ notarizefile() { # $1: path to file to notarize, $2: identifier
         echo "could not upload for notarization"
         exit 1
     fi
+    echo "sleeping for 10 seconds for request to be available"
+    sleep 10
         
     # wait for status to be not "in progress" any more
     request_status="in progress"

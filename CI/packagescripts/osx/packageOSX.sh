@@ -41,18 +41,18 @@ SHIPDIRECTORY=ship
 mkdir -p ${RIDEDIR}/${PackageName}.app/Contents/Resources/LICENCES
 mv ${RIDEDIR}/LICENSE.electron ${RIDEDIR}/LICENSES.chromium.html ${RIDEDIR}/${PackageName}.app/Contents/Resources/LICENCES/
 
-## Code sign application
-
-cd ${RIDEDIR}
-
-CODESIGNLOG=codesign.out
-codesign --deep --sign "6LKE87V3BD" --verbose ${PackageName}.app 
-
 if [ -s _/version ]; then
 RIDEVERSION=`cat _/version`
 else
 RIDEVERSION=9.9.9
 fi
+
+## Code sign application
+
+cd ${RIDEDIR}
+
+codesign --deep --sign "6LKE87V3BD" --verbose ${PackageName}.app 
+
 
 BASE_VERSION=`echo $RIDEVERSION | sed 's/\([0-9]*\.[0-9]*\)\.[0-9]*/\1/'`
 REVISION_VERSION=`echo $RIDEVERSION | sed 's/[0-9]*\.[0-9]*\.\([0-9]*\)/\1/'`
