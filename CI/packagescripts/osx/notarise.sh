@@ -6,7 +6,7 @@ requeststatus() { # $1: requestUUID
     req_status=$(xcrun altool --notarization-info "$requestUUID" \
                               --username "$APPLE_ID" \
                               --password "$APPLE_APP_PASS" 2>&1 \
-                 | awk -F ': ' '/Status:/ { print $2; }' )
+                 | awk -F ': ' '/Status/ { print $2; }' )
     echo "$req_status"
 }
 
