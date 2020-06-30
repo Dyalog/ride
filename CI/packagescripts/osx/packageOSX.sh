@@ -26,6 +26,7 @@ fi
 
 BUILDROOTDIR=${PWD}
 TARGET=$GIT_BRANCH
+APPLE_TEAM="6LKE87V3BD"
 
 ## Unlock the keychain
 /Users/jenkins/unlock.sh
@@ -67,8 +68,8 @@ ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac.pkg" | tr
 
 ./node_modules/.bin/electron-osx-sign ${RIDEDIR}/${PackageName}.app \
 --identity="${APPLE_CERT_APPLICATION}" \
---entitlements="packagescripts/osx/entitlements.plist" \
---entitlements-inherit="packagescripts/osx/entitlements.plist" \
+--entitlements="CI/packagescripts/osx/entitlements.plist" \
+--entitlements-inherit="CI/packagescripts/osx/entitlements.plist" \
 --hardened-runtime \
 --no-gatekeeper-assess \
 --no-strict-verify
@@ -88,11 +89,3 @@ echo "## Stapling $ARCHIVENAME"
 /usr/bin/xcrun stapler staple "$ARCHIVENAME"
 
 echo '## Done!'
-
-<<<<<<< HEAD:CI/packagescripts/osx/packageOSX.sh
-/usr/bin/productsign --sign "Developer ID Installer: Dyalog Limited (6LKE87V3BD)" ${TMP1ARCHIVE} ${ARCHIVENAME}
-
-##notarise
-=======
-exit 0
->>>>>>> notarise:packagescripts/osx/packageOSX.sh

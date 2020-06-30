@@ -5,7 +5,7 @@ requeststatus() { # $1: requestUUID
     requestUUID=${1?:"need a request UUID"}
     req_status=$(xcrun altool --notarization-info "$requestUUID" \
                               --username "$APPLE_ID" \
-                              --password "@keychain:$APPLE_ID_KEYCHAIN" 2>&1 \
+                              --password "$APPLE_APP_PASS" 2>&1 \
                  | awk -F ': ' '/Status:/ { print $2; }' )
     echo "$req_status"
 }
@@ -19,7 +19,7 @@ notarizefile() { # $1: path to file to notarize, $2: identifier
     requestUUID=$(xcrun altool --notarize-app \
                                --primary-bundle-id "$identifier" \
                                --username "$APPLE_ID" \
-                               --password "@keychain:$APPLE_ID_KEYCHAIN" \
+                               --password "$APPLE_APP_PASS" \
                                --asc-provider "$APPLE_TEAM" \
                                --file "$filepath" 2>&1 \
                   | awk '/RequestUUID/ { print $NF; }')
@@ -43,7 +43,7 @@ notarizefile() { # $1: path to file to notarize, $2: identifier
     # print status information
     xcrun altool --notarization-info "$requestUUID" \
                  --username "$APPLE_ID" \
-                 --password "@keychain:$APPLE_ID_KEYCHAIN"
+                 --password "$APPLE_APP_PASS"
     echo 
     
     if [[ $request_status != "success" ]]; then
