@@ -52,8 +52,12 @@ done
 echo 'fixing permissions'; chmod +x $r/$d/win32/{*.exe,*.dll}
 
 if [ -L $r/latest ]; then
-  rm $r/latest
+  rm -f $r/latest
 fi
 
 cd $r
 ln -s $d latest
+
+ls | grep -v "latest" | sort -n | head -n-10 | while read D; do
+  rm -Rf $D
+done
