@@ -27,6 +27,8 @@ fi
 BUILDROOTDIR=${PWD}
 TARGET=$GIT_BRANCH
 APPLE_TEAM="6LKE87V3BD"
+APPLE_CERT_APPLICATION="Developer ID Application: Dyalog Limited (6LKE87V3BD)"
+APPLE_CERT_INSTALLER="Developer ID Installer: Dyalog Limited (6LKE87V3BD)"
 
 ## Unlock the keychain
 /Users/jenkins/unlock.sh
