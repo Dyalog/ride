@@ -50,3 +50,10 @@ for DIR in `ls _/${APP_NAME}`; do
 done
 
 echo 'fixing permissions'; chmod +x $r/$d/win32/{*.exe,*.dll}
+
+if [ -L $r/latest ]; then
+  rm $r/latest
+fi
+
+cd $r
+ln -s $d latest
