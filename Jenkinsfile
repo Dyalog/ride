@@ -59,12 +59,12 @@ pipeline {
             label 'Windows'
           }
           steps {
-            sh 'rm -Rf _ ship'
+            bat 'rmdir _ ship /S /Q'
             unstash 'ride-win'
             unstash 'ride-version'
             bat './CI/packagescripts/windows/packageWindows.bat'
             stash name: 'win-ship', includes: 'ship/*'
-            sh 'rm -Rf _ ship'
+            bat 'rmdir _ ship /S /Q'
           }
         }
       }
