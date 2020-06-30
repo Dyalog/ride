@@ -6,7 +6,7 @@ requeststatus() { # $1: requestUUID
     req_status=$(xcrun altool --notarization-info "$requestUUID" \
                               --username "$APPLE_ID" \
                               --password "$APPLE_APP_PASS" 2>&1 \
-                 | awk -F ': ' '/Status/ { print $2; }' )
+                 | awk -F ': ' '/Status:/ { print $2; }' )
     echo "$req_status"
 }
 
@@ -39,7 +39,7 @@ notarizefile() { # $1: path to file to notarize, $2: identifier
         echo -n "waiting... "
         sleep 10
         request_status=$(requeststatus "$requestUUID")
-        if ["$request_status" = ""] ; then
+        if [ "$request_status" = "" ] ; then
           request_status="in progress"
         fi
         echo "$request_status"
@@ -50,7 +50,7 @@ notarizefile() { # $1: path to file to notarize, $2: identifier
                  --username "$APPLE_ID" \
                  --password "$APPLE_APP_PASS"
 
-    if [[ $request_status != "success" ]]; then
+    if [[ "$request_status" != "success" ]]; then
         echo "## could not notarize $filepath"
         exit 1
     fi
