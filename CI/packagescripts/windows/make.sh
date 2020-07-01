@@ -124,20 +124,19 @@ echo "#define GUID_RIDE_UPGRADE \"{$GUID_RIDE_UPGRADE}\"" >> $OBJ_TMP/guids.h
 
 get_svn()
 {
-echo skip
-${SVNDIR}/svn export -q http://svn.dyalog.bramley/svn/dyalog/branches/14.1.dss/svn/installs/win/allwidth/setup $OBJ_TMP/setup
-${SVNDIR}/svn export -q http://svn.dyalog.bramley/svn/dyalog/branches/14.1.dss/svn/installs/win/allwidth/images $OBJ_TMP/images
+	${SVNDIR}/svn export --force -q http://svn.dyalog.bramley/svn/dyalog/branches/14.1.dss/svn/installs/win/allwidth/setup $OBJ_TMP/setup
+	${SVNDIR}/svn export --force -q http://svn.dyalog.bramley/svn/dyalog/branches/14.1.dss/svn/installs/win/allwidth/images $OBJ_TMP/images
 }
 
 get_upgrade_guid()
 {
-UPGRADE_GUID=$(cat $WORKSPACE/upgrade_guids | grep  "^${RIDE_VERSION_AB_DOT}=" | sed "s/^${RIDE_VERSION_AB_DOT}=\(.*\)/\1/")
+UPGRADE_GUID=$(cat $WORKSPACE/CI/packagescripts/windows/upgrade_guids | grep  "^${RIDE_VERSION_AB_DOT}=" | sed "s/^${RIDE_VERSION_AB_DOT}=\(.*\)/\1/")
 #echo UPGRADE_GUID=$UPGRADE_GUID
 
-if [ _${UPGRADE_GUID}_ = "__" ]
+if [ "_${UPGRADE_GUID}_" = "__" ]
 then
-	echo "${RIDE_VERSION_AB_DOT}=$(uuidgen)" >> $WORKSPACE/upgrade_guids
-	UPGRADE_GUID=$(cat upgrade_guids | grep  "^${RIDE_VERSION_AB_DOT}=" | sed "s/^${RIDE_VERSION_AB_DOT}=\(.*\)/\1/")
+	echo "${RIDE_VERSION_AB_DOT}=$(uuidgen)" >> $WORKSPACE/CI/packagescripts/windows/upgrade_guids
+  UPGRADE_GUID=$(cat $WORKSPACE/CI/packagescripts/windows/upgrade_guids | grep  "^${RIDE_VERSION_AB_DOT}=" | sed "s/^${RIDE_VERSION_AB_DOT}=\(.*\)/\1/")
 	#echo svn commit upgrade_guids -m "automatic add of upgrade guid"
 fi
 
@@ -200,8 +199,9 @@ mkdir -p $OBJ_TMP
 mkdir -p $OBJ_FILES
 mkdir -p $OBJ_CABINETS
 mkdir -p $RIDEDIR
+mkdir -p $RIDE_SHIP
 
-cd $WORKSPACE/packagescripts/windows
+cd $WORKSPACE/CI/packagescripts/windows
 
 get_svn
 

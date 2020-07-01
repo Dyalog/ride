@@ -25,6 +25,7 @@ const rm = (x) => {
 const pj = JSON.parse(rf('package.json'));
 // v:version string - "x.y.z" where z is the number of commits since the beginning of the project
 const v = `${pj.version.replace(/\.0$/, '')}.${sh('git rev-list --count HEAD')}`;
+const isDyalogBuild = /^dyalog/.test(pj.name);
 const tasks = { };
 
 let buildDone = 0;
@@ -51,6 +52,7 @@ const pkg = (x, y, f) => {
     dir: '.',
     platform: x,
     arch: y,
+    tmpdir: '/tmp/buildtmp',
     out: `_/${pj.name}`,
     overwrite: true,
     'download.cache': 'cache',
@@ -59,14 +61,35 @@ const pkg = (x, y, f) => {
       || /monaco-editor\/(dev|esm|min-maps)/.test(p)
       || /toastr\/(?!build($|\/toastr.min))/.test(p)
       || /jquery\/(?!dist($|\/jquery\.min\.js))/.test(p)
+      || /node_modules\/\.bin/.test(p)
       || /\/test/.test(p)
       || /\.map$/.test(p),
     appBundleId: `com.dyalog.${pj.name}`,
     appCopyright: `(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
-    appVersion: v,
-    buildVersion: v,
+    appVersion: isDyalogBuild ? process.env.APPVERSION : v,
+    buildVersion: isDyalogBuild ? process.env.APPVERSION : v,
     appCategoryType: 'public.app-category.developer-tools',
-    extendInfo: /^dyalog/.test(pj.name) ? 'packagescripts/osx/Info.plist' : null,
+    extendInfo: isDyalogBuild ? 'packagescripts/osx/Info.plist' : null,
+    afterCopy: [
+      (buildPath, electronVersion, platform, arch, cb) => {
+        if (!isDyalogBuild) return cb();
+        console.log(`Add Dyalog to ${buildPath}/../`);
+        execSync(`cp -r ${process.env.DYALOG_ROOT} ${buildPath}/../`);
+        console.log(`Add CEF to ${buildPath}/../../Frameworks`);
+        md(`${buildPath}/../../Frameworks/Chromium\ Embedded\ Framework.framework/Versions`);
+        const cef = 'Chromium\\ Embedded\\ Framework';
+        const cef_path = `${buildPath}/../../Frameworks/${cef}.framework/`;
+        execSync(`cp -r ${process.env.CEF_ROOT} ${cef_path}Versions/A`);
+        execSync(`ln -s ./A ${cef_path}Versions/Current`);
+        execSync(`ln -s ./Versions/Current/Libraries ${cef_path}Libraries`);
+        execSync(`ln -s ./Versions/Current/Resources ${cef_path}Resources`);
+        execSync(`ln -s ./Versions/Current/${cef} ${cef_path}${cef}`);
+        console.log(`Add symlink to Frameworks`);
+        execSync(`ln -s ../Frameworks ${buildPath}/../Frameworks`);
+        console.log("Dyalog and CEF added.");
+        cb();
+      }
+    ],
     win32metadata: { // ends up in Windows Explorer's right click > Properties
       CompanyName: 'Dyalog Ltd',
       FileDescription: 'Remote Integrated Development Environment for Dyalog APL',
@@ -85,15 +108,17 @@ const pkg = (x, y, f) => {
 const l = (f) => { b(e => (e ? f(e) : pkg('linux', 'x64', f))); };
 const w = (f) => { b(e => (e ? f(e) : pkg('win32', 'ia32', f))); };
 const o = (f) => { b(e => (e ? f(e) : pkg('darwin', 'x64', f))); };
+const m = (f) => { b(e => (e ? f(e) : pkg('mas', 'x64', f))); };
 const a = (f) => { b(e => (e ? f(e) : pkg('linux', 'armv7l', f))); };
 const d = (f) => { async.series([l, w, o, a], (e) => { f(e); }); };
 
-const c = (f) => { rm('_'); f(); };
+const c = (f) => { rm('_'); rm('../buildtmp'); f(); };
 
 tasks.b = b; tasks.build = b;
 tasks.l = l; tasks.linux = l;
 tasks.w = w; tasks.win = w;
 tasks.o = o; tasks.osx = o;
+tasks.m = m; tasks.mas = m;
 tasks.a = a; tasks.arm = a;
 tasks.d = d; tasks.dist = d;
 tasks.c = c; tasks.clean = c;
