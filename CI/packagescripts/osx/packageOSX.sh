@@ -51,9 +51,6 @@ fi
 
 cd ${RIDEDIR}
 
-codesign --deep --sign "6LKE87V3BD" --verbose ${PackageName}.app 
-
-
 BASE_VERSION=`echo $RIDEVERSION | sed 's/\([0-9]*\.[0-9]*\)\.[0-9]*/\1/'`
 REVISION_VERSION=`echo $RIDEVERSION | sed 's/[0-9]*\.[0-9]*\.\([0-9]*\)/\1/'`
 BASE_VERSION_ND=`echo $BASE_VERSION | sed 's/\.//g'`
