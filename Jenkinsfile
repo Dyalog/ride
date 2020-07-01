@@ -93,6 +93,7 @@ pipeline {
       agent {
         docker {
           image 'dyalog/ubuntu:1804-build'
+          args '-v /devt:/devt'
         }
       }
       environment {
