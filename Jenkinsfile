@@ -1,80 +1,112 @@
-def extWorkspace = exwsAllocate 'sharedWorkspace'
-
-node('Linux && NodeJS && sharedworkspace') {
-    exws (extWorkspace) {
-        stage ('Checkout from GitHub') {
-            checkout scm
+pipeline {
+  agent none
+  stages {
+    stage('Build Linux & Windows') {
+      agent {
+//        docker {
+//          image 'dyalog/ubuntu:1804-build'
+//          args '-v /devt:/devt'
+//        }
+        label 'Linux && NodeJS'
+      }
+      steps {
+        checkout scm
+        sh 'rm -Rf _ ship'
+        sh 'npm i'
+        sh './mk l a w'
+        sh './CI/publish.sh'
+        stash name: 'ride-win', includes: '_/ride44/Ride-4.4-win32-ia32/**'
+        stash name: 'ride-linux', includes: '_/ride44/Ride-4.4-linux*/**'
+        stash name: 'ride-version', includes: '_/version, _/version.js'
+        sh 'rm -Rf _'
+      }
+    }
+    stage ('Packaging') {
+      parallel {
+        stage ('Linux Packaging') {
+          agent {
+            docker {
+              image 'dyalog/ubuntu:1804-build'
+            }
+          }
+          steps {
+            sh 'rm -Rf _ ship'
+            unstash 'ride-linux'
+            unstash 'ride-version'
+            sh './CI/packagescripts/linux/packageLinux.sh'
+            stash name: 'linux-ship', includes: 'ship/*'
+            sh 'rm -Rf _ ship'
+          }
         }
-
-        stage ('Update npm modules') {
+        stage ('Mac Build and Packaging') {
+          agent {
+            label 'Mac && Build'
+          }
+          steps {
+            sh 'rm -Rf _ ship'
             sh 'npm i'
-        }
-
-        stage ('Build Ride') {
-            // Build RIDE for all platforms
-            sh './mk dist'
-        }
-
-        stage ('Dyalog Network Publish') {
-            // Copy built files to /devt/builds/ride/
-            sh './publish.sh'
-        }
-    }
-}
-
-stage ('Packaging') {
-    parallel (
-        "Linux Package" : {
-            node('Linux && NodeJS && sharedworkspace') {
-                exws (extWorkspace) {
-                    sh './packagescripts/linux/packageLinux.sh'
-                }
+            sh './mk o'
+            withCredentials([usernamePassword(credentialsId: '868dda6c-aaec-4ee4-845a-57362dec695b', passwordVariable: 'APPLE_APP_PASS', usernameVariable: 'APPLE_ID')]) {
+              sh './CI/packagescripts/osx/packageOSX.sh'
             }
-        },
-        "Mac Package" : {
-            node('Mac && sharedworkspace') {
-                exws (extWorkspace) {
-                    sh './packagescripts/osx/packageOSX.sh'
-                }
-            }
-        },
-        "Windows Package" : {
-            node('Windows && sharedworkspace') {
-                exws (extWorkspace) {
-                    bat 'packagescripts/windows/packageWindows.bat'
-                }
-            }
+            stash name: 'ride-mac', includes: '_/ride44/Ride-4.4-darwin*/**'
+            stash name: 'mac-ship', includes: 'ship/*'
+            sh 'rm -Rf _ ship'
+          }
         }
-    )
-}
-
-stage ('Copy Install Images') {
-    node('Linux && sharedworkspace && git') {
-        exws (extWorkspace) {
-            // Copy installer images to /devt/builds/ride/
-            sh './copyinstallers.sh'
+        stage ('Windows Packaging') {
+          agent {
+            label 'Windows'
+          }
+          steps {
+            powershell 'rm  -r -f _ ship'
+            unstash 'ride-win'
+            unstash 'ride-version'
+            bat './CI/packagescripts/windows/packageWindows.bat'
+            stash name: 'win-ship', includes: 'ship/*'
+            powershell 'rm  -r -f _ ship'
+          }
         }
+      }
     }
-}
-
-stage ('Upload to installers to Github') {
-    node('Linux && sharedworkspace && NodeJS') {
-        exws (extWorkspace) {
-//            withCredentials([usernamePassword(credentialsId: '9f5481da-1a4d-4c5d-b400-cc2ee3a3ac2c', passwordVariable: 'GHTOKEN', usernameVariable: 'API')]) {
-            withCredentials([string(credentialsId: '250bdc45-ee69-451a-8783-30701df16935', variable: 'GHTOKEN')]) {
-                sh './GH-Release.sh'
-            }
+    stage ('Copy install images') {
+      agent {
+        docker {
+          image 'dyalog/ubuntu:1804-build'
+          args '-v /devt:/devt'
         }
+      }
+      steps {
+        sh 'rm -Rf _ ship'
+        unstash 'ride-win'
+        unstash 'ride-mac'
+        unstash 'ride-linux'
+        unstash 'ride-version'
+        unstash 'linux-ship'
+        unstash 'mac-ship'
+        unstash 'win-ship'
+        sh './CI/copyinstallers.sh'
+        sh 'rm -Rf _ ship'
+      }
     }
-}
-
-node() {
-    stage ('Send Emails') {
-        step([
-            $class: 'Mailer',
-            notifyEveryUnstableBuild: true,
-            recipients: 'ride@dyalog.com',
-            sendToIndividuals: true
-        ])
+    stage ('Publish to Github') {
+      agent {
+        docker {
+          image 'dyalog/ubuntu:1804-build'
+        }
+      }
+      environment {
+        GHTOKEN = credentials('250bdc45-ee69-451a-8783-30701df16935')
+      }
+      steps {
+        sh 'rm -Rf _ ship'
+        unstash 'ride-version'
+        unstash 'linux-ship'
+        unstash 'mac-ship'
+        unstash 'win-ship'
+        sh './CI/GH-Release.sh'
+        sh 'rm -Rf _ ship'
+      }
     }
+  }
 }
