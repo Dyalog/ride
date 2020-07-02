@@ -15,8 +15,8 @@ pipeline {
         sh 'npm i'
         sh './mk l a w'
         sh './CI/publish.sh'
-        stash name: 'ride-win', includes: '_/ride44/Ride-4.4-win32-ia32/**'
-        stash name: 'ride-linux', includes: '_/ride44/Ride-4.4-linux*/**'
+        stash name: 'ride-win', includes: '_/ride*/Ride-*-win32-ia32/**'
+        stash name: 'ride-linux', includes: '_/ride*/Ride-*-linux*/**'
         stash name: 'ride-version', includes: '_/version, _/version.js'
         sh 'rm -Rf _'
       }
@@ -49,7 +49,7 @@ pipeline {
             withCredentials([usernamePassword(credentialsId: '868dda6c-aaec-4ee4-845a-57362dec695b', passwordVariable: 'APPLE_APP_PASS', usernameVariable: 'APPLE_ID')]) {
               sh './CI/packagescripts/osx/packageOSX.sh'
             }
-            stash name: 'ride-mac', includes: '_/ride44/Ride-4.4-darwin*/**'
+            stash name: 'ride-mac', includes: '_/ride*/Ride-*-darwin*/**'
             stash name: 'mac-ship', includes: 'ship/*'
             sh 'rm -Rf _ ship'
           }
