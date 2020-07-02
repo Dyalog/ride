@@ -25,7 +25,7 @@ const rm = (x) => {
 const pj = JSON.parse(rf('package.json'));
 // v:version string - "x.y.z" where z is the number of commits since the beginning of the project
 const v = `${pj.version.replace(/\.0$/, '')}.${sh('git rev-list --count HEAD')}`;
-const isDyalogBuild = /^dyalog/.test(pj.name);
+//const isDyalogBuild = /^dyalog/.test(pj.name);
 const tasks = { };
 
 let buildDone = 0;
