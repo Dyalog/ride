@@ -55,8 +55,9 @@ if which jq >/dev/null 2>&1; then
 				curl -X "DELETE" -H "Authorization: token $GHTOKEN" https://api.github.com/repos/Dyalog/Ride/releases/${ID}
 			else
 				if [ $GH_VERSION_ND -gt $GH_VERSION_ND_LAST ]; then
-					COMMIT_SHA=`cat $GH_RELEASES | jq ".[$C].target_commitish"`
+					COMMIT_SHA=`cat $GH_RELEASES | jq -r ".[$C].target_commitish"`
 					GH_VERSION_ND_LAST=$GH_VERSION_ND
+					PRERELEASE=`cat $GH_RELEASES | jq -r ".[$C].prerelease"`
 				fi
 			fi
 		fi
@@ -74,9 +75,16 @@ echo "SHA: ${COMMIT_SHA}"
 if [ $GH_VERSION_ND_LAST = 0 ]; then
 	echo "No releases of $VERSION_AB found, not populating changelog"
 	JSON_BODY=$(echo -e "Pre-Release of RIDE $VERSION_AB\n\nWARNING: This is a pre-release version of RIDE. We cannot guarantee the stability of this product at this time.\n\nInitial version of RIDE $VERSION_AB" | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
+	PRERELEASE=true
 else
 	echo using log from $COMMIT_SHA from $GH_VERSION_ND_LAST
-	JSON_BODY=$( ( echo -e "Pre-Release of RIDE $VERSION_AB\n\nWARNING: This is a pre-release version of RIDE. We cannot guarantee the stability of this product at this time.\n\nChangelog:"; git log --format='%s' ${COMMIT_SHA}.. ) | grep -v -i todo | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
+	echo "Is Prerelease: ${PRERELEASE}"
+	if [ "${PRERELEASE}" = "false" ]; then
+		MSG_TEXT="Release RIDE ${VERSION_AB}\n\n"
+  else
+	  MSG_TEXT="Pre-Release of RIDE $VERSION_AB\n\nWARNING: This is a pre-release version of RIDE. We cannot guarantee the stability of this product at this time.\n\n"
+	fi
+	JSON_BODY=$( ( echo -e "${MSG_TEXT}Changelog:"; git log --format='%s' ${COMMIT_SHA}.. ) | grep -v -i todo | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
 	
 fi
 
@@ -87,7 +95,7 @@ cat >$TMP_JSON <<.
   "name": "v$VERSION",
   "body": $JSON_BODY,
   "draft": true,
-  "prerelease": true
+  "prerelease": ${PRERELEASE}
 }
 .
 
