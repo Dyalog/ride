@@ -116,10 +116,10 @@ line editor, `4`
 When the user presses `<ER>` (Enter) or `<TC>` (Ctrl-Enter), RIDE sends
 <a name=Execute></a>
 ```json
-["Execute",{"text":"      1 2 3+4 5 6","trace":true}] // RIDE -> Interpreter
+["Execute",{"text":"      1 2 3+4 5 6","trace":1}] // RIDE -> Interpreter
 ```
 * `text`: the APL code to evaluate
-* `trace`: whether the expression should be evaluated in the tracer (`<TC>`)
+* `trace`: 0 or 1, whether the expression should be evaluated in the tracer (`<TC>`)
 
 Note that RIDE can't assume that everything entered in the session will be echoed, e.g. quote quad input (`⍞`) doesn't
 echo.  Therefore, RIDE should wait for the [`EchoInput`](#EchoInput) message.
