@@ -25,8 +25,7 @@ const rm = (x) => {
 const pj = JSON.parse(rf('package.json'));
 // v:version string - "x.y.z" where z is the number of commits since the beginning of the project
 const v = `${pj.version.replace(/\.0$/, '')}.${sh('git rev-list --count HEAD')}`;
-//const isDyalogBuild = /^dyalog/.test(pj.name);
-const isDyalogBuild = false
+const isDyalogBuild = /^dyalog/.test(pj.name);
 const tasks = { };
 
 let buildDone = 0;
@@ -53,7 +52,7 @@ const pkg = (x, y, f) => {
     dir: '.',
     platform: x,
     arch: y,
-    tmpdir: '/tmp/buildtmp',
+    tmpdir: '../buildtmp',
     out: `_/${pj.name}`,
     overwrite: true,
     'download.cache': 'cache',
@@ -71,7 +70,7 @@ const pkg = (x, y, f) => {
     buildVersion: isDyalogBuild ? process.env.APPVERSION : v,
     appCategoryType: 'public.app-category.developer-tools',
     extendInfo: isDyalogBuild ? 'packagescripts/osx/Info.plist' : null,
-    afterCopy: [
+/*    afterCopy: [
       (buildPath, electronVersion, platform, arch, cb) => {
         if (!isDyalogBuild) return cb();
         console.log(`Add Dyalog to ${buildPath}/../`);
@@ -90,7 +89,7 @@ const pkg = (x, y, f) => {
         console.log("Dyalog and CEF added.");
         cb();
       }
-    ],
+    ],*/
     win32metadata: { // ends up in Windows Explorer's right click > Properties
       CompanyName: 'Dyalog Ltd',
       FileDescription: 'Remote Integrated Development Environment for Dyalog APL',
