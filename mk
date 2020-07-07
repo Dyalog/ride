@@ -69,7 +69,7 @@ const pkg = (x, y, f) => {
     appVersion: isDyalogBuild ? process.env.APPVERSION : v,
     buildVersion: isDyalogBuild ? process.env.APPVERSION : v,
     appCategoryType: 'public.app-category.developer-tools',
-    extendInfo: isDyalogBuild ? 'packagescripts/osx/Info.plist' : null,
+    extendInfo: isDyalogBuild ? 'CI/packagescripts/osx/Info.plist' : null,
 /*    afterCopy: [
       (buildPath, electronVersion, platform, arch, cb) => {
         if (!isDyalogBuild) return cb();
