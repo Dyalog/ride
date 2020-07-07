@@ -59,12 +59,14 @@ pipeline {
             label 'Windows'
           }
           steps {
-            powershell 'rm  -r -f _ ship'
+            powershell 'rm -r ship'
+            powershell 'rm -r _'
             unstash 'ride-win'
             unstash 'ride-version'
             bat './CI/packagescripts/windows/packageWindows.bat'
             stash name: 'win-ship', includes: 'ship/*'
-            powershell 'rm  -r -f _ ship'
+            powershell 'rm -r ship'
+            powershell 'rm -r _'
           }
         }
       }
