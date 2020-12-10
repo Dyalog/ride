@@ -123,7 +123,7 @@
       });
     });
     me.onDidScrollChange((e) => {
-      se.btm = se.me.getLayoutInfo().contentHeight + e.scrollTop;
+      se.btm = se.me.getContentHeight() + e.scrollTop;
     });
     me.onDidFocusEditorText(() => { se.focusTS = +new Date(); se.ide.focusedWin = se; });
     me.onDidChangeCursorPosition(e => ide.setCursorPosition(e.position));
@@ -269,7 +269,7 @@
     updSize() {
       const se = this;
       const { me } = se;
-      const oldHeight = me.getLayoutInfo().contentHeight;
+      const oldHeight = me.getContentHeight();
       const top = me.getScrollTop();
       const lh = me.getOption(monaco.editor.EditorOption.lineHeight);
       const ll = me.getModel().getLineCount();
@@ -279,7 +279,7 @@
       const onbottom = endLineNumber === ll;
       me.layout({ width: se.dom.clientWidth, height: se.dom.clientHeight });
       const flt = me.getTopForLineNumber(startLineNumber);
-      const newHeight = me.getLayoutInfo().contentHeight;
+      const newHeight = me.getContentHeight();
       this.updPW();
       if (se.hadErrTmr) {
         me.revealLine(ll);
@@ -310,12 +310,12 @@
       // workaround for Monaco scrolling under GoldenLayout on Windows when editor is closed
       const { me } = this;
       if (this.btm == null) {
-        this.btm = me.getScrollTop() + me.getLayoutInfo().contentHeight;
+        this.btm = me.getScrollTop() + me.getContentHeight();
       }
     },
     restoreScrollPos() {
       if (this.btm != null) {
-        this.me.setScrollTop(this.btm - this.me.getLayoutInfo().contentHeight);
+        this.me.setScrollTop(this.btm - this.me.getContentHeight());
       }
     },
     stateChanged() {
