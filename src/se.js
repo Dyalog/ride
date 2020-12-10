@@ -271,7 +271,7 @@
       const { me } = se;
       const oldHeight = me.getLayoutInfo().contentHeight;
       const top = me.getScrollTop();
-      const lh = me.getConfiguration().lineHeight;
+      const lh = me.getOption(monaco.editor.EditorOption.lineHeight);
       const ll = me.getModel().getLineCount();
       const llt = me.getTopForLineNumber(ll);
       const ontop = top > (llt + lh + lh) - oldHeight;

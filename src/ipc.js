@@ -111,6 +111,8 @@
       parent: D.elw,
       alwaysOnTop: false,
       webPreferences: {
+        contextIsolation: false,
+        enableRemoteModule: true,
         nodeIntegration: true,
       },
     };

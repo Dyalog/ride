@@ -625,7 +625,7 @@
     },
   };
 
-  const getState = (m, l) => m._tokenization._tokenizationStateStore._beginState[l].h;
+  const getState = (m, l) => m._tokenization._tokenizationStateStore._beginState[l];
   const aplCompletions = (pk) => ({
     triggerCharacters: `1234567890:.⎕()[]${pk}`.split(''),
     provideCompletionItems: (model, position) => {
@@ -931,7 +931,7 @@
         let i = 0;
 
         (function defineRanges() {
-          const { length } = model._tokens._tokens;
+          const { length } = model._tokens._lineTokens;
           for (i; i < length; i++) {
             const a = ((getState(model, i) || {}).a || []).slice().reverse();
             if (!pa) pa = a;
@@ -967,7 +967,7 @@
   const aplFormat = {
     formatLines(model, range) {
       const from = range.startLineNumber || 1;
-      const to = range.endLineNumber || model._tokens._tokens.length;
+      const to = range.endLineNumber || model._tokens._lineTokens.length;
       const edits = [];
       for (let l = from; l <= to; l++) {
         const s = model.getLineContent(l);

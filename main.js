@@ -78,6 +78,8 @@ el.app.on('ready', () => {
     icon: D.win || D.mac ? undefined : `${__dirname}/D.png`,
     backgroundColor: '#7688d9',
     webPreferences: {
+      contextIsolation: false,
+      enableRemoteModule: true,
       nodeIntegration: true,
     },
   });
