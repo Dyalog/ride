@@ -9,7 +9,7 @@
     "dev": "npm run build-css && npm run start",
     "styler": "electron ./utils/style-picker/style-picker.js",
     "live-style": "grunt",
-    "test": "ava"
+    "test": "ava -s -c=1"
   },
   "repository": ".",
   "dependencies": {

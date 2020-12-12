@@ -1,5 +1,5 @@
-import test from 'ava';
-import { tfw } from './_utils';
+const test = require('ava');
+const  { tfw } = require('./_utils');
 
 tfw.init({ src: 'cn' });
 
@@ -9,7 +9,6 @@ test(
     const { app } = t.context;
     await app.client.waitUntilWindowLoaded();
     const win = app.browserWindow;
-
     t.is(await app.client.getWindowCount(), 3);
     t.false(await win.isMinimized());
     t.false(await win.isDevToolsOpened());
@@ -21,18 +20,23 @@ test(
   },
 );
 
+
 test(
   'cn-fav-new',
   async (t) => {
     t.plan(3);
     const { app } = t.context;
     const c = app.client;
-    await c.leftClick('#cn_neu');
-    t.is(await c.getValue('#cn_fav_name'), '');
-    await c.waitForExist('#cn_favs .list_sel .name');
-    t.is(await c.getText('#cn_favs .list_sel .name'), 'unnamed');
-    await c.setValue('#cn_fav_name', 'myFav');
-    t.is(await c.getText('#cn_favs .list_sel .name'), 'myFav');
+    await (await c.$('#cn_neu')).click();
+    
+    const fav_name = await c.$('#cn_fav_name');
+    const favs = await c.$('#cn_favs .list_sel .name');
+    
+    t.is(await fav_name.getValue(), '');
+    await favs.waitForExist();
+    t.is(await favs.getText(), 'unnamed');
+    await fav_name.setValue('myFav');
+    t.is(await favs.getText(), 'myFav');
   },
 );
 
@@ -42,17 +46,23 @@ test(
     t.plan(5);
     const { app } = t.context;
     const c = app.client;
-    await c.leftClick('#cn_cln');
-    t.is(await c.getValue('#cn_fav_name'), '(copy)');
-    await c.waitForExist('#cn_favs .list_sel .name');
-    t.is(await c.getText('#cn_favs .list_sel .name'), '(copy)');
-    await c.setValue('#cn_fav_name', 'myCopy');
-    t.is(await c.getText('#cn_favs .list_sel .name'), 'myCopy');
 
-    await c.leftClick('#cn_cln');
-    t.is(await c.getValue('#cn_fav_name'), 'myCopy(copy)');
-    await c.waitForExist('#cn_favs .list_sel .name');
-    t.is(await c.getText('#cn_favs .list_sel .name'), 'myCopy(copy)');
+    const cln = await c.$('#cn_cln');
+    await cln.click();
+    
+    const fav_name = await c.$('#cn_fav_name');
+    const favs = await c.$('#cn_favs .list_sel .name');
+    
+    t.is(await fav_name.getValue(), '(copy)');
+    await favs.waitForExist();
+    t.is(await favs.getText(), '(copy)');
+    await fav_name.setValue('myCopy');
+    t.is(await favs.getText(), 'myCopy');
+
+    await cln.click();
+    t.is(await fav_name.getValue(), 'myCopy(copy)');
+    await favs.waitForExist();
+    t.is(await favs.getText(), 'myCopy(copy)');
   },
 );
 
@@ -63,15 +73,22 @@ test(
     const { app } = t.context;
     const c = app.client;
 
-    await c.leftClick('#cn_neu');
-    await c.selectByValue('#cn_type', 'start');
-    t.is(await c.getValue('#cn_type'), 'start');
+    const cn_neu = await c.$('#cn_neu');
+    await cn_neu.click();
+    
+    const cn_type = await c.$('#cn_type');
+    await cn_type.selectByVisibleText('Start');
+    t.is(await cn_type.getValue(), 'start');
+    
+    const cn_subtype = await c.$('#cn_subtype');
+    await cn_subtype.selectByVisibleText('Local');
+    t.is(await cn_subtype.getValue(), 'raw');
 
-    await c.selectByValue('#cn_subtype', 'raw');
-    t.is(await c.getValue('#cn_subtype'), 'raw');
+    const cn_go = await c.$('#cn_go');
+    await cn_go.click();
 
-    await c.leftClick('#cn_go');
-    await c.waitForExist('#ide .lm_tab.lm_active');
-    t.is(await c.getAttribute('#ide .lm_tab.lm_active', 'title'), 'Session');
+    const ide = await c.$('#ide .lm_tab.lm_active');
+    await ide.waitForExist();
+    t.is(await ide.getAttribute('title'), 'Session');
   },
 );
