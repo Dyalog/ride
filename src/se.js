@@ -214,7 +214,8 @@
         se.edit([{ range: new monaco.Range(l, 1, l, 1 + s0.length), text: `${s0}\n${sp}` }]);
         me.setPosition(cp);
       } else {
-        sp = se.isReadOnly && !/^\s*$/.test(s0) ? (s0 + sp) : sp;
+        if (se.isReadOnly && !/^\s*$/.test(s0)) sp = s0 + sp; 
+        else if (se.promptType == 1) sp += s0;
         se.edit([{ range: new monaco.Range(l, 1, l, 1 + s0.length), text: sp }]);
         const ll = model.getLineCount();
         const lc = model.getLineMaxColumn(ll);
