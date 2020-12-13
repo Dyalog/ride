@@ -80,7 +80,8 @@ test(
     await edit_trace.waitForExist();
     
     await c.execute(() => D.wins[1].me_ready);
-    await c.keys(['Enter', 'ab', 'F2']);
+    await c.keys(['Enter', 'ab']);
+    await c.keys(['F2']);
     await c.keys([cc, 'a', 'c']);
     await c.keys(['Escape']);
     text = await app.electron.clipboard.readText();
