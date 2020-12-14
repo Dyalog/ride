@@ -546,7 +546,7 @@
               } else if ((m = sm.match(/^[/\\⌿⍀¨⍨⌸⌶&]+/))) {
                 addToken(offset, 'keyword.operator.monadic');
                 offset += m[0].length;
-              } else if ((m = sm.match(/^[.∘⍤⍣⍠@⌺]+/))) {
+              } else if ((m = sm.match(/^[.∘⍤⍥⍣⍠@⌺]+/))) {
                 addToken(offset, 'keyword.operator.dyadic');
                 offset += m[0].length;
               } else {
