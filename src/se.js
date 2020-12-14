@@ -123,7 +123,7 @@
       });
     });
     me.onDidScrollChange((e) => {
-      se.btm = se.me.getLayoutInfo().contentHeight + e.scrollTop;
+      se.btm = se.me.getContentHeight() + e.scrollTop;
     });
     me.onDidFocusEditorText(() => { se.focusTS = +new Date(); se.ide.focusedWin = se; });
     me.onDidChangeCursorPosition(e => ide.setCursorPosition(e.position));
@@ -214,7 +214,8 @@
         se.edit([{ range: new monaco.Range(l, 1, l, 1 + s0.length), text: `${s0}\n${sp}` }]);
         me.setPosition(cp);
       } else {
-        sp = se.isReadOnly && !/^\s*$/.test(s0) ? (s0 + sp) : sp;
+        if (se.isReadOnly && !/^\s*$/.test(s0)) sp = s0 + sp; 
+        else if (se.promptType == 1) sp += s0;
         se.edit([{ range: new monaco.Range(l, 1, l, 1 + s0.length), text: sp }]);
         const ll = model.getLineCount();
         const lc = model.getLineMaxColumn(ll);
@@ -269,9 +270,9 @@
     updSize() {
       const se = this;
       const { me } = se;
-      const oldHeight = me.getLayoutInfo().contentHeight;
+      const oldHeight = me.getContentHeight();
       const top = me.getScrollTop();
-      const lh = me.getConfiguration().lineHeight;
+      const lh = me.getOption(monaco.editor.EditorOption.lineHeight);
       const ll = me.getModel().getLineCount();
       const llt = me.getTopForLineNumber(ll);
       const ontop = top > (llt + lh + lh) - oldHeight;
@@ -279,7 +280,7 @@
       const onbottom = endLineNumber === ll;
       me.layout({ width: se.dom.clientWidth, height: se.dom.clientHeight });
       const flt = me.getTopForLineNumber(startLineNumber);
-      const newHeight = me.getLayoutInfo().contentHeight;
+      const newHeight = me.getContentHeight();
       this.updPW();
       if (se.hadErrTmr) {
         me.revealLine(ll);
@@ -310,12 +311,12 @@
       // workaround for Monaco scrolling under GoldenLayout on Windows when editor is closed
       const { me } = this;
       if (this.btm == null) {
-        this.btm = me.getScrollTop() + me.getLayoutInfo().contentHeight;
+        this.btm = me.getScrollTop() + me.getContentHeight();
       }
     },
     restoreScrollPos() {
       if (this.btm != null) {
-        this.me.setScrollTop(this.btm - this.me.getLayoutInfo().contentHeight);
+        this.me.setScrollTop(this.btm - this.me.getContentHeight());
       }
     },
     stateChanged() {
@@ -525,7 +526,7 @@
     UC() { this.me.trigger('editor', 'cursorUp'); },
     LC() { this.me.trigger('editor', 'cursorLeft'); },
     RC() { this.me.trigger('editor', 'cursorRight'); },
-    SA() { this.me.trigger('editor', 'selectAll'); },
+    SA() { this.me.setSelection(this.me.getModel().getFullModelRange()); },
     TO() { this.me.trigger('editor', 'editor.fold'); }, // (editor.unfold) is there a toggle?
     TVB() { D.prf.breakPts.toggle(); },
     TVO() { D.prf.fold.toggle(); },

@@ -100,6 +100,8 @@ const Console = console;
           minWidth: 655,
           minHeight: 600,
           webPreferences: {
+            contextIsolation: false,
+            enableRemoteModule: true,
             nodeIntegration: true,
           },
         });
@@ -118,6 +120,8 @@ const Console = console;
           minimizable: false,
           maximizable: false,
           webPreferences: {
+            contextIsolation: false,
+            enableRemoteModule: true,
             nodeIntegration: true,
           },
         });

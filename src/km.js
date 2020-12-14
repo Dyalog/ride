@@ -354,9 +354,9 @@
   };
   D.remDefaultMap = (me) => {
     const kbs = me._standaloneKeybindingService;
-    kbs.addDynamicKeybinding('-editor.action.insertCursorAtEndOfEachLineSelected');
-    kbs.addDynamicKeybinding('-editor.action.blockComment');
-    kbs.addDynamicKeybinding('-editor.action.formatDocument');
+    kbs.addDynamicKeybinding('-editor.action.insertCursorAtEndOfEachLineSelected', null, () => {});
+    kbs.addDynamicKeybinding('-editor.action.blockComment', null, () => {});
+    kbs.addDynamicKeybinding('-editor.action.formatDocument', null, () => {});
   };
   const l = {
     Unknown: 'unknown',

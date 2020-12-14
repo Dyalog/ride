@@ -88,7 +88,7 @@
         setTimeout(() => {
           const sw = me._contentWidgets['editor.widget.suggestWidget'];
           if (!sw) return;
-          const swv = sw.widget.suggestWidgetVisible.get();
+          const swv = sw.widget.ctxSuggestWidgetVisible.get();
           const r = e.changes[0].range;
           if (r.startLineNumber > model.getLineCount()) return;
           const l = model.getLineContent(r.startLineNumber).toLowerCase();
@@ -177,6 +177,7 @@
         const suggestions = x.options.map(i => ({
           label: i,
           insertText: i,
+          kind: monaco.languages.CompletionItemKind.Property,
           range: new monaco.Range(l, c - x.skip, l, c),
         }));
         ac.complete({

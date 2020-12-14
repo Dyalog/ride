@@ -1,18 +1,18 @@
-import test from 'ava';
-import { Application } from 'spectron';
-import electronPath from 'electron';
-import path from 'path';
-import temp from 'temp';
-import rimraf from 'rimraf';
+const test = require('ava');
+const { Application } = require('spectron');
+const electronPath = require('electron');
+const path = require('path');
+const temp = require('temp');
+const rimraf = require('rimraf');
 
-export function inWin(id, s) {
+exports.inWin = function (id, s) {
   const w = D.ide.wins[id];
   s.replace(/<(.+?)>|(.)/g, (_, x, y) => {
     y ? w.insert(y) : D.commands[x] && D.commands[x](w.me);
   });
 }
 
-export function sessionLastLines(n) {
+exports.sessionLastLines = function(n) {
   return D.ide.wins[0].me.getModel().getLinesContent().slice(-n);
 }
 
@@ -36,15 +36,16 @@ class TFW {
         args: ['.'],
         env,
         webdriverOptions: {
-          deprecationWarnings: false,
+          deprecationWarnings: true,
         },
-        port: (TFW.portMap[o.src] || 9515) + this.counter,
+        chromeDriverArgs: ['remote-debugging-port=9222'],
       });
 
       await x.app.start();
-      await x.app.client.waitUntilWindowLoaded();
-      await x.app.client.waitForVisible('#splash', 10000, true);
-      if (o.src !== 'cn') await x.app.client.waitForExist('#ide .lm_tab.lm_active');
+      const c = x.app.client;
+      await c.waitUntilWindowLoaded();
+      await (await c.$('#splash')).waitForDisplayed({timeout: 10000, reverse: true});
+      if (o.src !== 'cn') await (await c.$('#ide .lm_tab.lm_active')).waitForExist();
     });
 
     test.afterEach.always(async (t) => {
@@ -56,10 +57,4 @@ class TFW {
     });
   }
 }
-TFW.portMap = {
-  cn: 10000,
-  lb: 10010,
-  se: 10020,
-  ed: 10030,
-};
-export const tfw = new TFW();
+exports.tfw = new TFW();

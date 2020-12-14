@@ -21,7 +21,7 @@ D.prf = {};
   ['floatSingle',        1], //create single floating edit window
   ['fold',               1], //code folding
   ['ilf',                1], //when re-formating use ODE style (interpreter level formatting)
-  ['ime',                1], //switch to dyalog IME when RIDE starts (Windows-only)
+  ['ime',                0], //switch to dyalog IME when RIDE starts (Windows-only)
   ['indent',             4], //-1 disables autoindent
   ['indentComments',     0], //whether to touch comment-only lines at all
   ['indentMethods',      -1],//-1 makes methods use the same indent as all other blocks
