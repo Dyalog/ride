@@ -177,6 +177,7 @@
         const suggestions = x.options.map(i => ({
           label: i,
           insertText: i,
+          kind: monaco.languages.CompletionItemKind.Property,
           range: new monaco.Range(l, c - x.skip, l, c),
         }));
         ac.complete({

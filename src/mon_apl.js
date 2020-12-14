@@ -635,6 +635,7 @@
       const ch = s[c - 2];
       const pk2 = `${pk}${pk}`;
       const kind = monaco.languages.CompletionItemKind;
+      const insertTextRules = monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet;
       const { a } = getState(model, l - 1);
       const { t } = (a || []).slice(-1)[0] || {};
       const snippets = /^\s*:\w*$/.test(s.slice(0, c - 1)) && a && t !== '{';
@@ -675,6 +676,7 @@
         const suggestions = [];
         const textItem = i => ({
           label: i,
+          insertText: i,
           kind: kind.Snippet,
         });
         /* eslint-disable no-template-curly-in-string */
@@ -689,6 +691,7 @@
             label: 'Access',
             kind: kind.Snippet,
             insertText: 'Access ${1:Private} ${2:Instance}',
+            insertTextRules,
           });
         }
         if (t === 'select') {
@@ -710,6 +713,7 @@
                 '\t$0',
                 ':EndClass',
               ].join('\n'),
+              insertTextRules,
               documentation: 'Class script',
             },
             {
@@ -720,6 +724,7 @@
                 '\t$0',
                 ':EndNamespace',
               ].join('\n'),
+              insertTextRules,
               documentation: 'Namespace script',
             },
             {
@@ -730,6 +735,7 @@
                 '\t$0',
                 ':EndInterface',
               ].join('\n'),
+              insertTextRules,
               documentation: 'Interface script',
             },
             {
@@ -744,6 +750,7 @@
                 '\t∇',
                 ':EndProperty',
               ].join('\n'),
+              insertTextRules,
               documentation: 'Property declaration',
             },
             {
@@ -754,6 +761,7 @@
                 '\t$0',
                 ':EndSection',
               ].join('\n'),
+              insertTextRules,
               documentation: 'Section block',
             },
           );
@@ -768,6 +776,7 @@
               '\t$0',
               ':EndDisposable',
             ].join('\n'),
+            insertTextRules,
             documentation: 'Disposable Statement',
           },
           {
@@ -778,6 +787,7 @@
               '\t$0',
               ':EndFor',
             ].join('\n'),
+            insertTextRules,
             documentation: 'For loop',
           },
           {
@@ -788,6 +798,7 @@
               '\t$2',
               ':EndIf',
             ].join('\n'),
+            insertTextRules,
             documentation: 'If Statement',
           },
           {
@@ -800,6 +811,7 @@
               '\t$0',
               ':EndIf',
             ].join('\n'),
+            insertTextRules,
             documentation: 'If-Else Statement',
           },
           {
@@ -810,6 +822,7 @@
               '\t$0',
               ':EndRepeat',
             ].join('\n'),
+            insertTextRules,
             documentation: 'Repeat loop - endless',
           },
           {
@@ -820,6 +833,7 @@
               '\t$0',
               ':Until ${1:condition}',
             ].join('\n'),
+            insertTextRules,
             documentation: 'Repeat loop until',
           },
           {
@@ -833,6 +847,7 @@
               '\t$0',
               ':EndSelect',
             ].join('\n'),
+            insertTextRules,
             documentation: 'Select Statement',
           },
           {
@@ -845,6 +860,7 @@
               '\t$0',
               ':EndTrap',
             ].join('\n'),
+            insertTextRules,
             documentation: 'Trap-Else Statement',
           },
           {
@@ -855,6 +871,7 @@
               '\t$0',
               ':EndWhile',
             ].join('\n'),
+            insertTextRules,
             documentation: 'While loop',
           },
           {
@@ -865,6 +882,7 @@
               '\t$0',
               ':EndWith',
             ].join('\n'),
+            insertTextRules,
             documentation: 'With Statement',
           },
         );
