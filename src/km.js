@@ -127,7 +127,7 @@
       const c = me.getPosition();
       let s = me.getModel().getLineContent(c.lineNumber);
 
-      D.ide.requestHelp(s, Math.max(0, c.column - 2) ).then(
+      D.ide.requestHelp(s, c.column - 1 ).then(
         (url) => {
           D.openExternal(url); 
         },
