@@ -640,6 +640,7 @@ D.IDE = function IDE(opts = {}) {
             width: 800,
             height: 500,
             webPreferences: {
+              contextIsolation: true,
               nodeIntegration: false,
             },
           });
@@ -710,6 +711,7 @@ D.IDE = function IDE(opts = {}) {
           height: 400,
           parent: D.elw,
           webPreferences: {
+            contextIsolation: true,
             nodeIntegration: false,
           },
         });

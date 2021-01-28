@@ -170,6 +170,7 @@
         height: 500,
         parent: D.elw,
         webPreferences: {
+          contextIsolation: true,
           nodeIntegration: false,
         },
       });
