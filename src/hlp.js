@@ -35,12 +35,12 @@
     for (let i = 0; i < a.length; i++) h[`:${a[i]}`] = u + a[i] + q;
 
     u = `${p}Language/Symbols/`;
-    a = '&Ampersand @At ]Brackets ⊖Circle_Bar ○Circle ⌽Circle_Stile ⍪Comma_Bar ,Comma ⊥Decode_Symbol ¨Dieresis ⍣DieresisStar ⍨Dieresis_Tilde ÷Divide_Sign ⌹Domino .Dot ↓Down_Arrow ⌊Downstile ⊤Encode_Symbol ∊Epsilon ⍷Epsilon_Underbar =Equal_Sign ≡Equal_Underbar ≢Equal_Underbar_Slash !Exclamation_Mark ⍎Execute_Symbol ⍒Grade_Down ⍋Grade_Up ≥Greater_Than_Or_Equal_To_Sign >Greater_Than_Sign ⌶IBeam ⌷Index_Symbol ⍳Iota ⍸Iota_Underbar ⍤Jot_Diaresis ∘Jot ⊂Left_Shoe ⊆Left_Shoe_Underbar ⊣Left_Tack ≤Less_Than_Or_Equal_To_Sign <Less_Than_Sign ⍟Log ∧Logical_And ∨Logical_Or -Minus_Sign ⍲Nand_Symbol ⍱Nor_Symbol ≠Not_Equal_To +Plus_Sign ⌺Quad_Diamond ⌸Quad_Equal ?Question_Mark ⍴Rho →Right_Arrow ⊃Right_Shoe ⊢Right_Tack ∩Set_Intersection ∪Set_Union ⌿Slash_Bar /Slash ⍀Slope_Bar \\Slope *Star |Stile ⍕Thorn_Symbol ~Tilde ×Times_Sign ⍉Transpose ↑Up_Arrow ⌈Upstile ⍠Variant ⍬Zilde_Symbol'.split(' ');
+    a = '&Ampersand @At ]Brackets ⊖Circle_Bar ○Circle ⍥Circle_Dieresis ⌽Circle_Stile ⍪Comma_Bar ,Comma ⊥Decode_Symbol ¨Dieresis ⍣DieresisStar ⍨Dieresis_Tilde ÷Divide_Sign ⌹Domino .Dot ↓Down_Arrow ⌊Downstile ⊤Encode_Symbol ∊Epsilon ⍷Epsilon_Underbar =Equal_Sign ≡Equal_Underbar ≢Equal_Underbar_Slash !Exclamation_Mark ⍎Execute_Symbol ⍒Grade_Down ⍋Grade_Up ≥Greater_Than_Or_Equal_To_Sign >Greater_Than_Sign ⌶IBeam ⌷Index_Symbol ⍳Iota ⍸Iota_Underbar ⍤Jot_Diaresis ∘Jot ⊂Left_Shoe ⊆Left_Shoe_Underbar ⊣Left_Tack ≤Less_Than_Or_Equal_To_Sign <Less_Than_Sign ⍟Log ∧Logical_And ∨Logical_Or -Minus_Sign ⍲Nand_Symbol ⍱Nor_Symbol ≠Not_Equal_To +Plus_Sign ⌺Quad_Diamond ⌸Quad_Equal ?Question_Mark ⍴Rho →Right_Arrow ⊃Right_Shoe ⊢Right_Tack ∩Set_Intersection ∪Set_Union ⌿Slash_Bar /Slash ⍀Slope_Bar \\Slope *Star |Stile ⍕Thorn_Symbol ~Tilde ×Times_Sign ⍉Transpose ↑Up_Arrow ⌈Upstile ⍠Variant ⍬Zilde_Symbol'.split(' ');
     for (let i = 0; i < a.length; i++) h[a[i][0]] = u + a[i].slice(1).replace(/_/g, ' ') + q;
     const b = "#⍺⍵∇'⋄⍝:;¯";
     for (let i = 0; i < b.length; i++) h[b[i][0]] = `${u}Special Symbols${q}`;
 
-    u = `${p}Language/Primitive Operators/`; // I-beams
+    u = `${p}Language/I Beam Functions/`; // I-beams
     a = { // http://help.dyalog.com/XX.Y/Content/Language/Primitive%20Operators/I%20Beam.htm
       8: 'Inverted Table Index Of',
       85: 'Execute Expression',
