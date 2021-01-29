@@ -75,7 +75,7 @@ el.app.on('ready', () => {
     width,
     height,
     show: 0,
-    icon: D.win || D.mac ? undefined : `${__dirname}/D.png`,
+    ...(!D.win && !D.mac && { icon: `${__dirname}/D.png` }),
     backgroundColor: '#7688d9',
     webPreferences: {
       contextIsolation: false,
