@@ -125,22 +125,30 @@
     EXP(me) { me.trigger('editor', 'editor.action.smartSelect.grow'); },
     HLP(me) {
       const c = me.getPosition();
-      const s = me.getModel().getLineContent(c.lineNumber).toLowerCase();
-      const h = D.hlp;
-      let u; // u: the URL
-      let m; // m: match object
-      if ((m = /^ *(\)[a-z]+).*$/.exec(s))) u = h[m[1]] || h.WELCOME;
-      else if ((m = /^ *(\][a-z]+).*$/.exec(s))) u = h[m[1]] || h.UCMDS;
-      else if ((m = /(\d+) *⌶$/.exec(s.slice(0, c.ch)))) u = h[`${m[1]}⌶`] || `${h['⌶']}#${m[1]}`;
-      else {
-        const x = s.slice(s.slice(0, c.column).replace(/.[áa-z]*$/i, '').length)
-          .replace(/^([⎕:][áa-z]*|.).*$/i, '$1').replace(/^:end/, ':');
-        if (h[x]) u = h[x];
-        else if (x[0] === '⎕') u = h.SYSFNS;
-        else if (x[0] === ':') u = h.CTRLSTRUCTS;
-        else u = h.LANGELEMENTS;
-      }
-      D.openExternal(u);
+      let s = me.getModel().getLineContent(c.lineNumber);
+
+      D.ide.requestHelp(s, c.column - 1 ).then(
+        (url) => {
+          D.openExternal(url); 
+        },
+        () => {
+          const h = D.hlp;
+          let u; // u: the URL
+          let m; // m: match object
+          s = s.toLowerCase();
+          if ((m = /^ *(\)[a-z]+).*$/.exec(s))) u = h[m[1]] || h.WELCOME;
+          else if ((m = /^ *(\][a-z]+).*$/.exec(s))) u = h[m[1]] || h.UCMDS;
+          else if ((m = /(\d+) *⌶$/.exec(s.slice(0, c.ch)))) u = h[`${m[1]}⌶`] || `${h['⌶']}#${m[1]}`;
+          else {
+            const x = s.slice(s.slice(0, c.column).replace(/.[áa-z]*$/i, '').length)
+            .replace(/^([⎕:][áa-z]*|.).*$/i, '$1').replace(/^:end/, ':');
+            if (h[x]) u = h[x];
+            else if (x[0] === '⎕') u = h.SYSFNS;
+            else if (x[0] === ':') u = h.CTRLSTRUCTS;
+            else u = h.LANGELEMENTS;
+          }
+          D.openExternal(u);
+        });
     },
     LL(me) { me.trigger('editor', 'cursorHome'); },
     RL(me) {
@@ -171,6 +179,7 @@
         parent: D.elw,
         webPreferences: {
           nodeIntegration: false,
+          contextIsolation: true,
         },
       });
       const cn = nodeRequire(`${__dirname}/src/cn`);
