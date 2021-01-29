@@ -132,17 +132,24 @@
           D.openExternal(url); 
         },
         () => {
+          s = s.toLowerCase();
           const h = D.hlp;
           let u; // u: the URL
           let m; // m: match object
-          s = s.toLowerCase();
           if ((m = /^ *(\)[a-z]+).*$/.exec(s))) u = h[m[1]] || h.WELCOME;
           else if ((m = /^ *(\][a-z]+).*$/.exec(s))) u = h[m[1]] || h.UCMDS;
-          else if ((m = /(\d+) *⌶$/.exec(s.slice(0, c.ch)))) u = h[`${m[1]}⌶`] || `${h['⌶']}#${m[1]}`;
+          else if ((m = /(\d+) *⌶$/.exec(s.slice(0, c.column)))) u = h[`${m[1]}⌶`] || `${h['⌶']}#${m[1]}`;
           else {
+            const cc = c.column - 1;
+            const r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*'; // r:regex fragment used for a name
+            const word = (
+              ((RegExp(`⎕?${r}$`).exec(s.slice(0, cc)) || [])[0] || '') // match left of cursor
+              + ((RegExp(`^${r}`).exec(s.slice(cc)) || [])[0] || '') // match right of cursor
+            ).replace(/^\d+/, ''); // trim leading digits
             const x = s.slice(s.slice(0, c.column).replace(/.[áa-z]*$/i, '').length)
-            .replace(/^([⎕:][áa-z]*|.).*$/i, '$1').replace(/^:end/, ':');
-            if (h[x]) u = h[x];
+              .replace(/^([⎕:][áa-z]*|.).*$/i, '$1').replace(/^:end/, ':');
+            if (word.length > x.length) u = `${h.INDEX}#search-${word}`;
+            else if (h[x]) u = h[x];
             else if (x[0] === '⎕') u = h.SYSFNS;
             else if (x[0] === ':') u = h.CTRLSTRUCTS;
             else u = h.LANGELEMENTS;
