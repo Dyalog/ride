@@ -2,7 +2,8 @@
 {
   let d;
   let ta; // DOM elements for the dialog and the textarea
-  D.abt = function About() {
+
+  D.aboutDetails = function AboutDetails(){
     const v = D.versionInfo || {};
     const ri = D.remoteIdentification || {};
     const u = 'unknown';
@@ -13,7 +14,7 @@
       const x = db.key(i);
       s += `${i ? ',\n' : ''}    ${repr(x)}:${repr(db.getItem(x))}`;
     }
-    const details = 'IDE:'
+    return 'IDE:'
       + `\n  Version: ${v.version || u}`
       + `\n  Platform: ${navigator.platform || u}`
       + `\n  Date: ${v.date || u}`
@@ -24,7 +25,11 @@
       + `\n  Platform: ${ri.platform || u}`
       + `\n  Edition: ${ri.arch || u}`
       + `\n  Date: ${(ri.date || u).replace(/^Created: /, '')}\n`;
+  };
 
+  D.abt = function About() {
+    const details = D.aboutDetails();
+    
     if (D.el) {
       const w = new D.el.BrowserWindow({
         width: 600,

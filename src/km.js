@@ -59,6 +59,21 @@
     DOX() {
       D.openExternal(D.hlp.DOX);
     },
+    EMD() {
+      D.openExternal(D.hlp.MAILTO);
+    },
+    ENH() {
+      D.openExternal(D.hlp.ENHANCEMENTS);
+    },
+    LEL() {
+      D.openExternal(D.hlp.LANGELEMENTS);
+    },
+    RME() {
+      D.openExternal(D.hlp.README);
+    },
+    TPL() {
+      D.openExternal(D.hlp.THIRDPARTY);
+    },
     OWS() {
       if (D.el && D.ide.floating) {
         D.ipc.of.ride_master.emit('OWS');

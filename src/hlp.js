@@ -5,6 +5,7 @@
   function initHelp(version) {
     const v = version ? version.slice(0, 4) : '17.0';
     const v3 = v.replace(/\./, '');
+    const details = D.aboutDetails().replace(/\n/g, '%0A');
     const helpUri = `https://help.dyalog.com/${v}/`;
     const q = '.htm'; // prefix and suffix
     const p = parseFloat(v) < 17.1 ? `${helpUri}Content/` : `${helpUri}index${q}#`;
@@ -14,6 +15,10 @@
       WELCOME: `${p}MiscPages/HelpWelcome${q}`,
       UCMDS: `${p}UserGuide/The APL Environment/User Commands${q}`,
       LANGELEMENTS: `${p}Language/Introduction/Language Elements${q}`,
+      MAILTO: `mailto:support@dyalog.com?subject=Dyalog Support Query&body=%0A%0A${details}`,  // best if more version info can be added here
+      ENHANCEMENTS: `${helpUri}index.htm#RelNotes${v}/Key Features${q}`,
+      README: `https://docs.dyalog.com/${v}/dyalog_readme${q}`,
+      THIRDPARTY: `${p}MiscPages/Licences Overview${q}`,
     };
     D.hlp = h;
     let u = `${p}Language/System Commands/`;
