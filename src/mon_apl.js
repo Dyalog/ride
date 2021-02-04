@@ -7,41 +7,37 @@
   // /(\w+|\(\w+ +(\w+)(?: +\w+)?\)) *(?:\w+|\( *\w+(?: +\w+)* *\))?$/
   const tradFnRE = RegExp(`(${name}|\\( *${name} +(${name})(?: +${name})? *\\)) *(?:${name}|\\( *${name}(?: +${name})* *\\))? *$`);
   const end = '(?:⍝|$)';
-  const restartBlock = '|:else|:elseif|:andif|:orif';
-  const startBlock = ':class|:disposable|:for|:hold|:if|:interface|:namespace'
-    + `|:property|:repeat|:section|:select|:trap|:while|:with${restartBlock}`;
-  const endBlock = ':end|:endclass|:enddisposable|:endfor|:endhold|:endif|:endinterface'
-    + '|:endnamespace|:endproperty|:endrepeat|:endsection|:endselect|:endtrap'
-    + `|:endwhile|:endwith|:until${restartBlock}`;
   D.wordSeparators = `${D.informal.slice(0, -26).map(x => x[0]).join('').replace(/[⎕∆⍙]/g, '')}()[]{}%£#;:'"\`$^`;
 
-  const aplConfig = {
-    comments: {
-      lineComment: '⍝',
-    },
-    brackets: [
-      ['{', '}'],
-      ['[', ']'],
-      ['(', ')'],
-    ],
-    autoClosingPairs: [
-      { open: '{', close: '}' },
-      { open: '[', close: ']' },
-      { open: '(', close: ')' },
-    ],
-    surroundingPairs: [
-      { open: '{', close: '}' },
-      { open: '[', close: ']' },
-      { open: '(', close: ')' },
-      { open: '"', close: '"' },
-      { open: '\'', close: '\'' },
-    ],
-    indentationRules: {
-      decreaseIndentPattern: RegExp(`^((?!.*?⍝).*)?\\s*(${endBlock})\\b.*$`, 'i'),
-      increaseIndentPattern: RegExp(`^(?:(?!⍝).)*(${startBlock})\\b.*$`, 'i'),
-      unIndentedLinePattern: /^\s*⍝.*$/,
-    },
-    wordPattern: RegExp(name),
+  function aplConfig() {
+    return {
+      comments: {
+        lineComment: '⍝',
+      },
+      brackets: [
+        ['{', '}'],
+        ['[', ']'],
+        ['(', ')'],
+      ],
+      autoClosingPairs: [
+        { open: '{', close: '}' },
+        { open: '[', close: ']' },
+        { open: '(', close: ')' },
+      ],
+      surroundingPairs: [
+        { open: '{', close: '}' },
+        { open: '[', close: ']' },
+        { open: '(', close: ')' },
+        { open: '"', close: '"' },
+        { open: '\'', close: '\'' },
+      ],
+      indentationRules: {
+        decreaseIndentPattern: RegExp(`^((?!.*?⍝).*)?\\s*(${D.syntax.endBlock})\\b.*$`, 'i'),
+        increaseIndentPattern: RegExp(`^(?:(?!⍝).)*(${D.syntax.startBlock})\\b.*$`, 'i'),
+        unIndentedLinePattern: /^\s*⍝.*$/,
+      },
+      wordPattern: RegExp(name),
+    };
   };
 
   const aplSessionConfig = {
@@ -177,7 +173,6 @@
       let tkn;
       let s;
 
-      const sysvar = '⎕avu|⎕ct|⎕dct|⎕div|⎕fr|⎕io|⎕lx|⎕ml|⎕path|⎕pp|⎕pw|⎕rl|⎕rtl|⎕sm|⎕tname|⎕trap|⎕using|⎕wsid|⎕wx';
       const localRE = RegExp(`( *)(;)( *)(${D.syntax.sysvar}|${name})( *)(⍝?)`, 'i');
       const localVars = () => {
         let m;
@@ -1021,7 +1016,7 @@
       extensions: ['.dyapp', '.dyalog'],
     });
     ml.setTokensProvider('apl', aplTokens);
-    ml.setLanguageConfiguration('apl', aplConfig);
+    ml.setLanguageConfiguration('apl', aplConfig());
     ml.registerCompletionItemProvider('apl', aplCompletions(D.prf.prefixKey()));
     D.prf.prefixKey(x => ml.registerCompletionItemProvider('apl', aplCompletions(x)));
     ml.registerHoverProvider('apl', aplHover);
