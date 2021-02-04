@@ -56,6 +56,7 @@
       wordBasedSuggestions: false,
       wordSeparators: D.wordSeparators,
       wordWrap: D.prf.wrap() ? 'on' : 'off',
+      unusualLineTerminators: 'off',  // iss646: Prevent message prompt about unusual line endings
     });
     se.me = me;
     se.me_ready = new Promise((resolve) => {
