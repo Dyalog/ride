@@ -534,6 +534,20 @@ If sent to a Process manager, `remoteId` is a list of remote IDs returned by
 ["ReplyGetDetailedInformation",{"information":[i0,i1,...]}] // anything -> anything
 ```
 
+# GetHelpInformation
+RIDE can request help on current cursor position with
+<a name=GetHelpInformation></a>
+```json
+["GetHelpInformation",{"line":"r←1+ab","pos":4}] // RIDE -> Interpreter
+```
+* `line`: text containing the name where help is requested
+* `pos`: position of cursor within `line` (origin 0 is to the left of the first character)
+
+<a name=ReplyGetHelpInformation></a>
+```json
+["ReplyGetHelpInformation",{"url":"https://help.dyalog.com/18.1/#Language/Symbols/Plus%20Sign.htm"}] // Interpreter -> RIDE
+```
+
 # GetSyntaxInformation
 RIDE can request Syntax information specific to the version of the interpreter being run.
 <a name=GetSyntaxInformation></a>

@@ -125,22 +125,37 @@
     EXP(me) { me.trigger('editor', 'editor.action.smartSelect.grow'); },
     HLP(me) {
       const c = me.getPosition();
-      const s = me.getModel().getLineContent(c.lineNumber).toLowerCase();
-      const h = D.hlp;
-      let u; // u: the URL
-      let m; // m: match object
-      if ((m = /^ *(\)[a-z]+).*$/.exec(s))) u = h[m[1]] || h.WELCOME;
-      else if ((m = /^ *(\][a-z]+).*$/.exec(s))) u = h[m[1]] || h.UCMDS;
-      else if ((m = /(\d+) *⌶$/.exec(s.slice(0, c.ch)))) u = h[`${m[1]}⌶`] || `${h['⌶']}#${m[1]}`;
-      else {
-        const x = s.slice(s.slice(0, c.column).replace(/.[áa-z]*$/i, '').length)
-          .replace(/^([⎕:][áa-z]*|.).*$/i, '$1').replace(/^:end/, ':');
-        if (h[x]) u = h[x];
-        else if (x[0] === '⎕') u = h.SYSFNS;
-        else if (x[0] === ':') u = h.CTRLSTRUCTS;
-        else u = h.LANGELEMENTS;
-      }
-      D.openExternal(u);
+      let s = me.getModel().getLineContent(c.lineNumber);
+
+      D.ide.requestHelp(s, c.column - 1 ).then(
+        (url) => {
+          D.openExternal(url); 
+        },
+        () => {
+          s = s.toLowerCase();
+          const h = D.hlp;
+          let u; // u: the URL
+          let m; // m: match object
+          if ((m = /^ *(\)[a-z]+).*$/.exec(s))) u = h[m[1]] || h.WELCOME;
+          else if ((m = /^ *(\][a-z]+).*$/.exec(s))) u = h[m[1]] || h.UCMDS;
+          else if ((m = /(\d+) *⌶$/.exec(s.slice(0, c.column)))) u = h[`${m[1]}⌶`] || `${h['⌶']}#${m[1]}`;
+          else {
+            const cc = c.column - 1;
+            const r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*'; // r:regex fragment used for a name
+            const word = (
+              ((RegExp(`⎕?${r}$`).exec(s.slice(0, cc)) || [])[0] || '') // match left of cursor
+              + ((RegExp(`^${r}`).exec(s.slice(cc)) || [])[0] || '') // match right of cursor
+            ).replace(/^\d+/, ''); // trim leading digits
+            const x = s.slice(s.slice(0, c.column).replace(/.[áa-z]*$/i, '').length)
+              .replace(/^([⎕:][áa-z]*|.).*$/i, '$1').replace(/^:end/, ':');
+            if (word.length > x.length) u = `${h.INDEX}#search-${word}`;
+            else if (h[x]) u = h[x];
+            else if (x[0] === '⎕') u = h.SYSFNS;
+            else if (x[0] === ':') u = h.CTRLSTRUCTS;
+            else u = h.LANGELEMENTS;
+          }
+          D.openExternal(u);
+        });
     },
     LL(me) { me.trigger('editor', 'cursorHome'); },
     RL(me) {
@@ -170,7 +185,9 @@
         height: 500,
         parent: D.elw,
         webPreferences: {
+          contextIsolation: true,
           nodeIntegration: false,
+          contextIsolation: true,
         },
       });
       const cn = nodeRequire(`${__dirname}/src/cn`);

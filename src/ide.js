@@ -534,6 +534,10 @@ D.IDE = function IDE(opts = {}) {
     GotoWindow(x) { const w = ide.wins[x.win]; w && w.focus(); },
     WindowTypeChanged(x) { return ide.wins[x.win].setTC(x.tracer); },
     ReplyGetAutocomplete(x) { const w = ide.wins[x.token]; w && w.processAutocompleteReply(x); },
+    ReplyGetHelpInformation(x) {
+      if (x.url.length == 0) ide.getHelpExecutor.reject("No help found");
+      else ide.getHelpExecutor.resolve(x.url);
+    },
     ReplyGetSyntaxInformation(x) {
       D.ParseSyntaxInformation(x);
     },
@@ -644,6 +648,7 @@ D.IDE = function IDE(opts = {}) {
             width: 800,
             height: 500,
             webPreferences: {
+              contextIsolation: true,
               nodeIntegration: false,
             },
           });
@@ -714,6 +719,7 @@ D.IDE = function IDE(opts = {}) {
           height: 400,
           parent: D.elw,
           webPreferences: {
+            contextIsolation: true,
             nodeIntegration: false,
           },
         });
@@ -727,7 +733,9 @@ D.IDE = function IDE(opts = {}) {
     ReplyGetLog(x) { ide.wins[0].add(x.result.join('\n')); ide.bannerDone = 0; },
     UnknownCommand(x) {
       if (x.name === 'ClearTraceStopMonitor') {
-        toastr.warning('Clear all trace/stop/monitor not supported by the interpreter');
+         toastr.warning('Clear all trace/stop/monitor not supported by the interpreter');
+      } else if (x.name === 'GetHelpInformation') {
+        ide.getHelpExecutor.reject('GetHelpInformation not implemented on remote interpreter');
       }
     },
   };
@@ -889,5 +897,12 @@ D.IDE.prototype = {
         }
       });
     }
+  },
+  requestHelp(line, pos) {
+    return new Promise((resolve, reject) => {
+      const ide = this;
+      ide.getHelpExecutor = { resolve, reject };
+      D.send('GetHelpInformation', { line, pos });
+    });
   },
 };

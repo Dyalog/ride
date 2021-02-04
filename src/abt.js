@@ -34,6 +34,7 @@
         parent: D.elw,
         modal: true,
         webPreferences: {
+          contextIsolation: true,
           nodeIntegration: false,
         },
       });
