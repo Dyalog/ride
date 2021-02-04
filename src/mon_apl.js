@@ -142,21 +142,11 @@
       + ')'
     + ')');
 
-  const sysfns = ' a á af ai an arbin arbout arg at av avu base c class clear cmd cr cs csv ct cy d dct df div dl dm dmx dq dr dt ea ec ed em en env es et ex exception export fappend favail fc fchk fcopy fcreate fdrop ferase fhist fhold fix flib fmt fnames fnums fprops fr frdac frdci fread frename freplace fresize fsize fstac fstie ftie funtie fx inp instances io json kl l lc load lock lx map mkdir ml monitor na nappend nc ncopy ncreate ndelete nerase new nexists nget ninfo nl nlock nmove nnames nnums nparts nput nq nr nread nrename nreplace nresize ns nsi nsize ntie null nuntie nxlate off opt or path pfkey pp pr profile ps pt pw r refs rl rsi rtl s save sd se sh shadow si signal size sm sr src stack state stop svc sve svo svq svr svs syl tc tcnums tf tget this tid tkill tname tnums tpool tput trace trap treq ts tsync tz ucs ul using vfi vr wa wc wg wn ws wsid wx x xml xsi xt'.split(' ');
-  // « and » prevent tolerance for extra whitespace
-  // _ stands for «' '» (space as an APL character literal)
-  const idioms = '⍴⍴ /⍳ /⍳⍴ ⊃¨⊂ {} {⍺} {⍵} {⍺⍵} {0} {0}¨ ,/ ⊃⌽ ↑⌽ ⊃⌽, ↑⌽, 0=⍴ 0=⍴⍴ 0=≡ «⎕AV»⍳ ↓⍉↑ ↓⍉⊃ +/∧\\ +/∧\\_= {(↓⍺)⍳↓⍵} ~∘_¨↓ {(+/∨\\_≠⌽⍵)↑¨↓⍵} ∧\\_= {(∨\\_≠⍵)/⍵} {(+/∧\\_=⍵)↓⍵} 1=≡ 1=≡, 0∊⍴ ~0∊⍴ ⊃∘⍴¨ ↑∘⍴¨ ,← {⍵[⍋⍵]} {⍵[⍒⍵]} {⍵[⍋⍵;]} {⍵[⍒⍵;]} ⍪← ⍪/ *○ ⊣/ ⊢/ ⊣⌿ ⊢⌿ 0=⊃⍴ 0≠⊃⍴ ⌊«0.5»+ ≢⍴ ↓⍨← {(⊂⍋⍵)⌷⍵} {(⊂⍒⍵)⌷⍵}'.split(' ');
-  // function escRE(s) { return s.replace(/[\(\)\[\]\{\}\.\?\+\*\/\\\^\$\|]/g, x => `\\${x}`); }
-  function escRE(s) { return s.replace(/[()[\]{}.?+*/\\^$|]/g, x => `\\${x}`); }
-  function escIdiom(s) {
-    return s.replace(/«(.*?)»|(.)/g, (_, g1, g2) => { const g = g1 || g2; return ` *${(g === '_' ? "' '" : escRE(g))}`; }).slice(2);
-  }
   function dfnDepth(a) {
     let r = 0;
     for (let j = 0; j < a.length; j++) if (a[j].t === '{') r += 1; return r;
   }
 
-  const idiomsRE = RegExp(`^(?:${idioms.sort((x, y) => y.length - x.length).map(escIdiom).join('|')})`, 'i');
   const sw = 4; // default indent unit (vim calls that "sw" for "shift width")
   const swm = 2; // indent unit for methods
 
@@ -187,9 +177,8 @@
       let tkn;
       let s;
 
-      // localisable system variables, i.e. all but ⎕dmx ⎕se
       const sysvar = '⎕avu|⎕ct|⎕dct|⎕div|⎕fr|⎕io|⎕lx|⎕ml|⎕path|⎕pp|⎕pw|⎕rl|⎕rtl|⎕sm|⎕tname|⎕trap|⎕using|⎕wsid|⎕wx';
-      const localRE = RegExp(`( *)(;)( *)(${sysvar}|${name})( *)(⍝?)`, 'i');
+      const localRE = RegExp(`( *)(;)( *)(${D.syntax.sysvar}|${name})( *)(⍝?)`, 'i');
       const localVars = () => {
         let m;
         while ((m = sm.match(localRE)) && m.index === 0) {
@@ -287,7 +276,7 @@
           }
         } else if (offset === 0 && RegExp(`^ *; *${name}($|[ ;])`).test(sm)) {
           localVars();
-        } else if ((m = sm.match(idiomsRE))) {
+        } else if ((m = sm.match(D.syntax.idiomsRE))) {
           addToken(offset, 'predefined.idiom');
           offset += m[0].length;
         } else if ((m = sm.match(/^¯?(?:\d*\.)?\d+(?:e¯?\d+)?(?:j¯?(?:\d*\.)?\d+(?:e¯?\d+)?)?/i))) {
@@ -393,7 +382,7 @@
               const ml = (m || '').toLowerCase();
               if (!m) tkn = 'predefined.sysfn';
               else if (h.vars && h.vars.indexOf(`⎕${ml}`) >= 0) tkn = 'predefined.sysfn.local';
-              else if (sysfns.indexOf(ml) >= 0) tkn = 'predefined.sysfn';
+              else if (D.syntax.sysfns.indexOf(ml) >= 0) tkn = 'predefined.sysfn';
               else tkn = 'invalid.sysfn';
 
               addToken(offset, tkn); offset += 1 + ml.length; break;
@@ -563,9 +552,7 @@
       return lt;
     },
   };
-  const scmd = ('classes clear cmd continue copy cs drop ed erase events fns holds intro lib load methods ns objects obs off'
-    + ' ops pcopy props reset save sh sic si sinl tid vars wsid xload').split(' '); // system commands
-
+  
   const aplSessionTokens = {
     getInitialState: () => new SessionState(0, 1, aplTokens.getInitialState()),
     tokenize: (line, state) => {
@@ -599,7 +586,7 @@
           addToken(offset, 'white');
           offset += m[1].length;
         }
-        const token = scmd.indexOf(m[2].toLowerCase()) < 0 ? 'invalid.scmd' : 'predefined.scmd';
+        const token = D.syntax.scmd.indexOf(m[2].toLowerCase()) < 0 ? 'invalid.scmd' : 'predefined.scmd';
         addToken(offset, token);
         h.l += 1;
         return lt;

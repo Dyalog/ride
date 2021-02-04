@@ -51,6 +51,7 @@ D.IDE = function IDE(opts = {}) {
         wins[k].hasFocus() && (i = a.length);
         a.push(wins[k]);
       });
+      D.send('GetSyntaxInformation',{});
       const j = i < 0 ? 0 : (i + a.length + x) % a.length;
       const w = a[j];
       if (!w.bwId) D.elw.focus();
@@ -533,8 +534,11 @@ D.IDE = function IDE(opts = {}) {
     GotoWindow(x) { const w = ide.wins[x.win]; w && w.focus(); },
     WindowTypeChanged(x) { return ide.wins[x.win].setTC(x.tracer); },
     ReplyGetAutocomplete(x) { const w = ide.wins[x.token]; w && w.processAutocompleteReply(x); },
+    ReplyGetSyntaxInformation(x) {
+      D.ParseSyntaxInformation(x);
+    },
     ValueTip(x) { ide.wins[x.token].ValueTip(x); },
-    SetHighlightLine(x) {
+    SetHighlightLine(x) { 
       const w = D.wins[x.win];
       w.SetHighlightLine(x.line, ide.hadErr);
       ide.hadErr > 0 && (ide.hadErr -= 1);
@@ -722,7 +726,9 @@ D.IDE = function IDE(opts = {}) {
     },
     ReplyGetLog(x) { ide.wins[0].add(x.result.join('\n')); ide.bannerDone = 0; },
     UnknownCommand(x) {
-      if (x.name === 'ClearTraceStopMonitor') toastr.warning('Clear all trace/stop/monitor not supported by the interpreter');
+      if (x.name === 'ClearTraceStopMonitor') {
+        toastr.warning('Clear all trace/stop/monitor not supported by the interpreter');
+      }
     },
   };
 };
