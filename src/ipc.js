@@ -52,6 +52,7 @@
           });
         }, 100);
       });
+      rm.on('syntax', (x) => { D.syntax = x; });
     });
   };
 
@@ -170,6 +171,9 @@
       });
       srv.on('pfKey', x => D.ide.pfKey(x));
       srv.on('getStats', () => D.ide.getStats());
+      srv.on('getSyntax', (data, socket) => {
+        srv.emit(socket, 'syntax', D.syntax);
+      });
       srv.on('getUnsavedReply', (data) => {
         if (!D.pendingEdit) return;
         Object.keys(data).forEach((k) => {

@@ -548,6 +548,18 @@ RIDE can request help on current cursor position with
 ["ReplyGetHelpInformation",{"url":"https://help.dyalog.com/18.1/#Language/Symbols/Plus%20Sign.htm"}] // Interpreter -> RIDE
 ```
 
+# GetSyntaxInformation
+RIDE can request Syntax information specific to the version of the interpreter being run.
+<a name=GetSyntaxInformation></a>
+```json
+["GetHelpInformation",{}] // RIDE -> Interpreter
+```
+
+<a name=ReplyGetSyntaxInformation></a>
+```json
+["ReplyGetSyntaxInformation",{"url":"https://help.dyalog.com/18.1/#Language/Symbols/Plus%20Sign.htm"}] // Interpreter -> RIDE
+```
+
 # Proposed extensions
 * related to the process manager
 ```
