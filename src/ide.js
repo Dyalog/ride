@@ -119,8 +119,7 @@ D.IDE = function IDE(opts = {}) {
   ide.block = () => { blk += 1; };
   ide.unblock = () => { (blk -= 1) || rrd(); };
   ide.tracer = () => {
-    const tc = Object.keys(ide.wins).find(k => !!ide.wins[k].tc);
-    return tc && ide.wins[tc];
+    return ide.getMRUWin(1);
   };
   [{ comp_name: 'wse', prop_name: 'WSEwidth' }, { comp_name: 'dbg', prop_name: 'DBGwidth' }].forEach((obj) => {
     Object.defineProperty(ide, obj.prop_name, {
@@ -603,6 +602,7 @@ D.IDE = function IDE(opts = {}) {
       } else if (D.elw && !D.elw.isFocused()) D.elw.focus();
       if (done) return;
       const ed = new D.Ed(ide, editorOpts);
+      ed.focusTS =  +new Date();
       ide.wins[w] = ed;
       ed.me_ready.then(() => {
         ed.open(ee);
@@ -794,15 +794,22 @@ D.IDE.prototype = {
     } else if (this.hadErr < 0) { w.focus(); }
   },
   focusMRUWin() { // most recently used
-    const { wins } = this;
-    let t = 0;
-    let w = wins[t];
-    Object.keys(wins).forEach((k) => {
-      const x = wins[k];
-      if (x.id && t <= x.focusTS) { w = x; t = x.focusTS; }
-    });
+    const w = this.getMRUWin();
     D.elw && !w.bwId && D.elw.focus();
     w.focus();
+  },
+  getMRUWin(tracer) { // most recently focused window (filtered by tracer if set)
+    const { wins } = this;
+    let t = 0;
+    let w = wins[0];
+    Object.keys(wins).forEach((k) => {
+      const x = wins[k];
+      if (x.id && (!tracer || !!x.tc) && t <= x.focusTS) {
+         w = x; 
+         t = x.focusTS; 
+        }
+    });
+    return (!tracer || !!w.tc) && w;
   },
   zoom(z) {
     const b = this.dom.ownerDocument.body;
