@@ -1,5 +1,5 @@
 {
-  const pm = ('close die execCommand focus insert open processAutocompleteReply prompt saved setTC stateChanged' +
+  const pm = ('die execCommand focus insert open processAutocompleteReply prompt saved setTC stateChanged' +
     ' update zoom ReplyFormatCode SetHighlightLine ValueTip').split(' ');
   D.IPC_Client = function IPCClient(winId) {
     // start IPC client
@@ -22,6 +22,10 @@
       });
       pm.forEach(k => rm.on(k, ([id, ...x]) => { D.ide.wins[id][k](...x); }));
       rm.on('caption', (c) => { D.ide.caption = c; });
+      rm.on('close', ([id]) => { 
+        D.ide.wins[id].close(); 
+        rm.emit('unblock', 0);
+      });
       rm.on('getUnsaved', () => {
         rm.emit('getUnsavedReply', D.ide.getUnsaved());
       });
@@ -190,7 +194,7 @@
       srv.on('switchWin', data => D.ide.switchWin(data));
       srv.on('updPW', data => D.ide.updPW(data));
       srv.on('unblock', (id) => {
-        D.ide.wins[id].me_resolve(true);
+        !!id && D.ide.wins[id].me_resolve(true);
         D.ide.unblock();
       });
       srv.on('mounted', (id) => {
@@ -243,12 +247,12 @@
   D.IPC_WindowProxy.prototype = {
     emit(f, ...x) { D.ipc.server.emit(this.socket, f, [this.id, ...x]); },
     hasFocus() { return this === D.ide.focusedWin; },
-    close(x) {
+    close() {
       if (this === D.pwins[0] && D.prf.editWinsRememberPos()) {
         const b = D.el.BrowserWindow.fromId(this.bwId).getBounds();
         D.prf.editWins(Object.assign(D.prf.editWins(), b));
       }
-      this.emit('close', x);
+      this.emit('close');
     },
     setTC(x) { this.emit('setTC', x); this.tc = x; },
     ED() { this.emit('ED'); },
