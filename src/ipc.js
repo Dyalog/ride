@@ -221,6 +221,7 @@
     const ped = D.pendingEditors.shift();
     wp.id = ped.editorOpts.id;
     wp.tc = ped.editorOpts.tc;
+    wp.focusTS =  +new Date();
     D.wins[wp.id] = wp;
     D.ipc.server.emit(wp.socket, 'pendingEditor', ped);
   };
