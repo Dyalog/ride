@@ -14,6 +14,10 @@
       WELCOME: `${p}MiscPages/HelpWelcome${q}`,
       UCMDS: `${p}UserGuide/The APL Environment/User Commands${q}`,
       LANGELEMENTS: `${p}Language/Introduction/Language Elements${q}`,
+      MAILTO: `mailto:support@dyalog.com?subject=Dyalog Support Query&body=\n\n${D.aboutDetails()}`,
+      ENHANCEMENTS: `${helpUri}index.htm#RelNotes${v}/Key Features${q}`,
+      README: `https://docs.dyalog.com/${v}/dyalog_readme${q}`,
+      THIRDPARTY: `${p}MiscPages/Licences Overview${q}`,
     };
     D.hlp = h;
     let u = `${p}Language/System Commands/`;
