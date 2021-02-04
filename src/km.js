@@ -28,6 +28,7 @@
     if (s) for (let i = 0; i < s.length; i += 2) bq[s[i]] = s[i + 1];
   }
   updBQ(); D.prf.prefixMaps(updBQ); D.prf.kbdLocale(updBQ);
+  function openURI(uri) { D.openExternal(encodeURI(uri)); }
 
   D.keyMap.dyalogDefault = { };
 
@@ -54,25 +55,25 @@
       if (D.ide.dead) window.close();
     },
     DHI() {
-      D.openExternal(D.hlp.INDEX);
+      openURI(D.hlp.INDEX);
     },
     DOX() {
-      D.openExternal(D.hlp.DOX);
+      openURI(D.hlp.DOX);
     },
     EMD() {
-      D.openExternal(D.hlp.MAILTO);
+      openURI(D.hlp.MAILTO);
     },
     ENH() {
-      D.openExternal(D.hlp.ENHANCEMENTS);
+      openURI(D.hlp.ENHANCEMENTS);
     },
     LEL() {
-      D.openExternal(D.hlp.LANGELEMENTS);
+      openURI(D.hlp.LANGELEMENTS);
     },
     RME() {
-      D.openExternal(D.hlp.README);
+      openURI(D.hlp.README);
     },
     TPL() {
-      D.openExternal(D.hlp.THIRDPARTY);
+      openURI(D.hlp.THIRDPARTY);
     },
     OWS() {
       if (D.el && D.ide.floating) {
@@ -144,7 +145,7 @@
 
       D.ide.requestHelp(s, c.column - 1 ).then(
         (url) => {
-          D.openExternal(url); 
+          openURI(url); 
         },
         () => {
           s = s.toLowerCase();
@@ -169,7 +170,7 @@
             else if (x[0] === ':') u = h.CTRLSTRUCTS;
             else u = h.LANGELEMENTS;
           }
-          D.openExternal(u);
+          openURI(u);
         });
     },
     LL(me) { me.trigger('editor', 'cursorHome'); },
