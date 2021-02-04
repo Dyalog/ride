@@ -23,6 +23,7 @@
   const WS = /^\s*$/; // KV:regexes for parsing env vars
   const maxl = 1000;
   const cnFile = `${D.el.app.getPath('userData')}/connections.json`;
+  const lcnFile = `${D.el.app.getPath('userData')}/last_configuration.json`;
   const trunc = x => (x.length > maxl ? `${x.slice(0, maxl - 3)}...` : x);
   const shEsc = x => `'${x.replace(/'/g, "'\\''")}'`; // shell escape
   const toBuf = (x) => {
@@ -98,13 +99,16 @@
       );
       return;
     }
-    if (((+fs.statSync(cnFile).mtime) !== D.conns_modified)) {
+    if (fs.existsSync(cnFile) && ((+fs.statSync(cnFile).mtime) !== D.conns_modified)) {
       const r = $.confirm('Connections file has been modified, do you want to overwrite with your changes?');
       if (!r) return;
     }
     const a = q.favs.children;
     const b = [];
-    for (let i = 0; i < a.length; i++) b[i] = a[i].cnData;
+    for (let i = 0; i < a.length; i++) {
+      const conf = a[i].cnData;
+      conf.name != 'last configuration' && b.push(conf);
+    }
     D.conns = b;
     try {
       fs.writeFileSync(cnFile, JSON.stringify(D.conns));
@@ -113,6 +117,11 @@
     } catch (e) {
       toastr.error(`${e.name}: ${e.message}`, 'Save failed');
     }
+  };
+  const saveLastConf = (conf) => {
+    try {
+      fs.writeFileSync(lcnFile, JSON.stringify({ ...conf, name: 'last configuration' }));
+    } catch (e) { }
   };
   const favText = x => x.name || 'unnamed';
   const favDOM = (x) => {
@@ -353,6 +362,7 @@
   const go = (conf) => { // "Go" buttons in the favs or the "Go" button at the bottom
     const x = conf || sel;
     if (!validate(x)) return 0;
+    saveLastConf(x);
     D.spawned = 0;
     try {
       switch (x.type || 'connect') {
@@ -588,9 +598,12 @@
     if (fs.existsSync(cnFile)) {
       D.conns = JSON.parse(fs.readFileSync(cnFile).toString());
       D.conns_modified = +fs.statSync(cnFile).mtime;
-    } else {
-      fs.writeFileSync(cnFile, JSON.stringify([{ type: 'connect' }]));
-      D.conns_modified = +fs.statSync(cnFile).mtime;
+    }
+    if (fs.existsSync(lcnFile)) {
+      D.conns = [
+        JSON.parse(fs.readFileSync(lcnFile).toString()),
+        ...(D.conns || [])
+      ];
     }
     D.conns = D.conns || [{ type: 'connect' }];
     I.cn.onkeyup = (x) => {
@@ -768,7 +781,6 @@
       .on('click', '.go', (e) => {
         const t = $(e.target);
         const i = t.parentsUntil(q.favs).last().index();
-        D.prf.connectFav(i);
         $(q.favs).list('select', i);
         q.go.click();
       })
@@ -946,7 +958,7 @@
         return;
       }
     }
-    setTimeout(() => $(q.favs).list('select', D.prf.connectFav()), 1);
+    setTimeout(() => $(q.favs).list('select', 0), 1);
   };
 
   module.exports = () => {
