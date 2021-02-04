@@ -254,7 +254,7 @@
       const model = me.getModel();
       ed.name = ee.name;
       ed.container && ed.container.setTitle(ed.name);
-      // D.ide.floating && $('title', ed.dom.ownerDocument).text(`${ed.name} - ${ed.ide.caption}`);
+      D.ide.floating && $('title', ed.dom.ownerDocument).text(`${ed.name} - ${ed.ide.caption}`);
       model.winid = ed.id;
       model.setValue(ed.oText = ee.text.join(model.getEOL()));
       // model.setEOL(monaco.editor.EndOfLineSequence.LF);
@@ -314,7 +314,6 @@
         q = p; p = p.parent;
       } // reveal in golden layout
       if (D.ide.floating) {
-        // $('title', ed.dom.ownerDocument).text(ed.name);
         $('title', ed.dom.ownerDocument).text(`${ed.name} - ${ed.ide.caption}`);
         D.el.getCurrentWindow().focus();
       }
