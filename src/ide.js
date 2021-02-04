@@ -27,6 +27,7 @@ D.IDE = function IDE(opts = {}) {
   if (ide.floating) {
     ide.connected = 1;
     this._focusedWin = null;
+    ide.ipc.emit('getSyntax');
     Object.defineProperty(ide, 'focusedWin', {
       set(w) {
         ide.ipc.emit('focusedWin', w.id);
@@ -41,6 +42,7 @@ D.IDE = function IDE(opts = {}) {
     I.sb_threads.hidden = !1;
     ide.wins[0] = new D.Se(ide);
     D.wins = ide.wins;
+    D.send('GetSyntaxInformation',{});
 
     ide.focusedWin = ide.wins['0']; // last focused window, it might not have the focus right now
     ide.switchWin = (x) => { // x: +1 or -1
@@ -51,7 +53,6 @@ D.IDE = function IDE(opts = {}) {
         wins[k].hasFocus() && (i = a.length);
         a.push(wins[k]);
       });
-      D.send('GetSyntaxInformation',{});
       const j = i < 0 ? 0 : (i + a.length + x) % a.length;
       const w = a[j];
       if (!w.bwId) D.elw.focus();
@@ -540,6 +541,7 @@ D.IDE = function IDE(opts = {}) {
     },
     ReplyGetSyntaxInformation(x) {
       D.ParseSyntaxInformation(x);
+      D.ipc.server && D.ipc.server.broadcast('syntax', D.syntax);
     },
     ValueTip(x) { ide.wins[x.token].ValueTip(x); },
     SetHighlightLine(x) { 
