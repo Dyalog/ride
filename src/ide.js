@@ -801,7 +801,7 @@ D.IDE.prototype = {
   getMRUWin(tracer) { // most recently focused window (filtered by tracer if set)
     const { wins } = this;
     let t = 0;
-    let w = wins[t];
+    let w = wins[0];
     Object.keys(wins).forEach((k) => {
       const x = wins[k];
       if (x.id && (!tracer || !!x.tc) && t <= x.focusTS) {
