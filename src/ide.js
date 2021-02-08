@@ -558,6 +558,7 @@ D.IDE = function IDE(opts = {}) {
       const w = ide.wins[x.win];
       if (!w) return;
       if (w.bwId) {
+        ide.block();
         w.close();
         w.id = -1;
       } else if (w) {
