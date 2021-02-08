@@ -36,6 +36,7 @@ D.prf = {};
   ['minimapRenderCharacters',1], // minimap render characters
   ['minimapShowSlider',  "mouseover"], // show minimap slider
   ['otherExe',           ''],//content of the "exe" text box when "Other..." is selected in the Connect page
+  ['pauseOnError',       0], // whether the interpreter should 
   ['persistentHistory',  1], // save history between sessions
   ['persistentHistorySize',100], // max lines to save
   ['prefixKey',          '`'],
@@ -111,6 +112,11 @@ D.prf = {};
     + '\n  Clear all trace/stop/monitor =CAM'
     + '\n  Weak Interrupt           =WI'
     + '\n  Strong Interrupt         =SI'
+    + '\n&Threads'
+    + '\n  Pause on Error           =POE'
+    + '\n  Pause all Threads        =PAT'
+    + '\n  Resume all Threads       =RSU'
+    + '\n  Restart all Threads      =RST'
     + '\n&Help'
     + '\n  Getting &Started         =https://dyalog.com/introduction.htm'
     + '\n  -'
