@@ -252,7 +252,7 @@ Update the breakpoints.
 ```json
 ["TraceBackward",{"win":123}] // RIDE -> Interpreter
 ```
-Request the current line in a trace window be moved back.
+Request the current line in a trace window be moved back (skip back one line).
 
 <a name=ClearTraceStopMonitor></a>
 ```json
@@ -284,7 +284,7 @@ the current function.
 ```json
 ["TraceForward",{"win":123}] // RIDE -> Interpreter
 ```
-Request the current line in a trace window be moved forward.
+Request the current line in a trace window be moved forward (skip to next line).
 
 <a name=RestartThreads></a>
 ```json

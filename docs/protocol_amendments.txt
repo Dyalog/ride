@@ -1,0 +1,134 @@
+OpenWindow 
+ - new field "filename"
+
+ ['GetLanguageBar', {}]
+
+ ['ReplyGetLanguageBar', {
+     entries: [
+         {
+             name: '',
+             avchar: '',
+             helptext: ['',],
+         },
+     ]
+ }]
+ 
+
+ ['ConfigurationGet', {
+     names:['',],
+ }]
+ ['ReplyConfigurationGet', {
+     configurations: [
+         {
+             name:'',
+             value,
+         },
+     ]
+ }]
+
+ ['ConfigurationSet', {
+     configurations: [
+         {
+             name:'',
+             value,
+         },
+     ]
+ }]
+
+ ['ReplyConfigurationSet', {
+     configurations: [
+         {
+             name:'',
+             rc:, // 0=ok, 1= ...
+         },
+     ]
+ }]
+
+ ['SetThread', {tid:numeric}] // focus thread tid (already implemented)
+ ['ReplySetThread', {tid, rc}] // focus thread tid result (rc=0 if ok)
+
+// set attributes on single thread 
+ ['ThreadSetAttributes', {
+     tid: tid,
+     paused: bool,
+     interruptable: bool,
+ }]
+// reply may be redundant (see GetThreads)
+ ['ReplyThreadSetAttributes', {
+     tid,
+     paused: bool,
+     interruptable: bool,
+ }]
+
+ ['ThreadGetAttributes', {
+     tid: tid,
+ }]
+ ['ReplyThreadGetAttributes', {
+     tid: tid,
+     paused: bool,
+     interruptable: bool,
+ }]
+
+// set attributes on multiple threads
+['ThreadsSetAttributes', {
+     tids: [tid,-1],
+     paused: bool,
+     interruptable: bool,
+ }]
+
+['ThreadsSetAttributes', {
+     threads: [{
+         tid: tid|-1,
+         paused: bool,
+         interruptable: bool,
+     }]
+ }]
+
+['ReplyThreadsSetAttributes', { // maybe not in first draft
+     thread: [{
+         tid: tid|-1,
+         paused: bool,
+         interruptable: bool,
+     }]
+ }]
+
+['ThreadsGetAttributes', {
+     threads: [tid|-1,]  
+ }]
+ // if first item is -1, return info for all threads and stop processing
+ // if -1 found after first, ignore it
+
+['ReplyThreadsGetAttributes', {
+     threads: [{
+         tid: tid,
+         rc: numeric, // 0 if ok, 
+         paused: bool,
+         interruptable: bool,
+     }]
+ }]
+
+
+ ['ResumeAllThreads', {}] // check with Morten
+
+
+ ['TaskDialog', { // and potentially for OptionsDialog, extend with:
+    questionkey: '',      // key for specific question 
+    questionlabel: ''     // text to go with checkbox
+ }]
+
+['Subscribe', {
+  'status': 'all' | 'stack' |'threads' … 
+  'heartbeat': interval
+}]
+
+['Unsubscribe', {
+  'features': ['heartbeat', 'status']
+}]
+
+['InterpreterStatus',{
+    TBC
+}]
+
+['InterpreterHeartBeat',{
+    ping
+}]
