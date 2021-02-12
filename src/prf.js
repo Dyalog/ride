@@ -71,7 +71,7 @@ D.prf = {};
     + '\n  -                            '
     + '\n  &Quit                    =QIT'
     + '\n&File                           {!browser}'
-    + '\n  &Open...                 =OWS'
+    + '\n  &Open...                 =OWS {local}'
     + '\n  &New Session             =NEW'
     + '\n  &Connect...              =CNC'
     + '\n  -                             {!mac}'
@@ -133,7 +133,7 @@ D.prf = {};
     + '\n#   =http://example.com/  open a URL'
     + '\n#   {}   conditional display, a boolean expression'
     + '\n#          operators: && || ! ( )'
-    + '\n#          variables: browser mac win'
+    + '\n#          variables: local browser mac win' // Add 'local' variable to check if interpreter is being run locally.
     + '\n#   -    separator (when alone)'
     + '\n#   #    comment'
     + '\n'
