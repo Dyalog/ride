@@ -601,6 +601,11 @@ D.IDE = function IDE(opts = {}) {
       const w = ee.token;
       let done;
       const editorOpts = { id: w, name: ee.name, tc: ee.debugger };
+      // Check if a filename for a source file is provided.
+      // Make sure it isn't duplicated in the existing name.
+      if (ee.filename && (ee.name.indexOf(ee.filename) == -1 )) {
+        editorOpts.name = editorOpts.name.concat(" in ", ee.filename)
+      }
       !editorOpts.tc && (ide.hadErr = -1);
       ide.block(); // unblock the message queue once monaco ready
       if (D.el && D.prf.floating() && !ide.dead) {
