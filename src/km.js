@@ -212,7 +212,7 @@
       w.loadURL(`file://${__dirname}/empty.html`);
       w.webContents.executeJavaScript('var d = document, h=d.documentElement, b=d.body, e=d.createElement("div");'
                                     + 'b.style.fontFamily="monospace";b.style.overflow="scroll";'
-                                    + 'e.style.whiteSpace="pre";b.appendChild(e)');
+                                    + 'e.style.whiteSpace="pre";!!b.appendChild(e);');
       const f = (x) => {
         const t = JSON.stringify(`${x}\n`);
         w.webContents.executeJavaScript(`e.textContent += ${t}; h.scrollTop = h.scrollHeight`);
