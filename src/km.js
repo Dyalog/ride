@@ -81,11 +81,11 @@
         return;
       }
       if (D.el && D.lastSpawnedExe) {
-        const [v] = D.el.dialog.showOpenDialogSync(D.elw, {
+        const v = (x = D.el.dialog.showOpenDialogSync(D.elw, {
           title: 'Open file',
           filters: [],
           properties: ['openFile'],
-        });
+        })) ? x[0] : '';
         if (!v) return;
         if (/\.dws$/i.test(v)) {
           $.confirm(
