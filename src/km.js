@@ -81,12 +81,13 @@
         return;
       }
       if (D.el && D.lastSpawnedExe) {
-        const v = (x = D.el.dialog.showOpenDialogSync(D.elw, {
+        let x = D.el.dialog.showOpenDialogSync(D.elw, {
           title: 'Open file',
           filters: [],
           properties: ['openFile'],
-        })) ? x[0] : '';
-        if (!v) return;
+        })
+        if (!x) return;
+        const [v] = x
         if (/\.dws$/i.test(v)) {
           $.confirm(
             `Run Latent Expression of ${v.replace(/^.*[\\/]/, '')}?`,
