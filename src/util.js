@@ -202,17 +202,31 @@
       }
     },
     taskDialog(x, f) {
+      const conf = D.prf.confirmations();
+      const response = conf[x.questionkey];
+      if (response) {
+        f(response);
+        return;
+      }
       if (D.el && D.win) {
         const { bwId } = D.ide.focusedWin;
         const bw = bwId ? D.el.BrowserWindow.fromId(bwId) : D.elw;
-        const r = D.el.dialog.showMessageBoxSync(bw, {
+        D.el.dialog.showMessageBox(bw, {
           message: `${x.text}\n${x.subtext}`,
           title: x.title || '',
           buttons: x.options.concat(x.buttonText) || [''],
+          checkboxLabel: x.questionlabel,
+          checkboxChecked: false,
           type: 'question',
+        }).then((result) => {
+          const r = result.response;
+          const index = r < x.options.length ? r : 100 + (r - x.options.length);
+          if (result.checkboxChecked) {
+             conf[x.questionkey] = index;
+             D.prf.confirmations(conf);
+          }
+          f(index);
         });
-        const index = r < x.options.length ? r : 100 + (r - x.options.length);
-        f(index);
         return;
       } else if (D.dlg_bw) {
         dlgCb[x.token] = f;

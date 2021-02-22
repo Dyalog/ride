@@ -15,6 +15,7 @@ D.prf = {};
   ['autocompletionDelay',500],
   ['colourScheme',       'Default'], //name of the active colour scheme
   ['colourSchemes',      []],//objects describing user-defined colour schemes
+  ['confirmations',      {}],//saved responses to TaskDialog questions
   ['connectOnQuit',      0], // open connection page when active session ends
   ['floating',           0], //floating editor and tracer windows
   ['floatSingle',        1], //create single floating edit window

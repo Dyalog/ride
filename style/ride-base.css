@@ -1539,6 +1539,12 @@ input.lyt_g3:hover {
     display: none;
   }
 }
+/*Prefs>Saved Responses*/
+#resp_qns {
+  margin-top: 5px;
+  padding: 8px;
+  width: 100%;
+}
 /*Prefs>Title*/
 #title {
   text-align: left;
