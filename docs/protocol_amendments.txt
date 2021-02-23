@@ -14,11 +14,11 @@ OpenWindow
  }]
  
 
- ['ConfigurationGet', {
+ ['GetConfiguration', {
      names:['',],
  }]
- ['ReplyConfigurationGet', {
-     configurations: [
+ ['ReplyGetConfiguration', {
+     values: [
          {
              name:'',
              value,
