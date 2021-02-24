@@ -49,7 +49,7 @@ OpenWindow
  }]
 
  ['SetThread', {tid:numeric}] // focus thread tid (already implemented)
- ['ReplySetThread', {tid, rc}] // focus thread tid result (rc=0 if ok)
+ ['ReplySetThread', {tid, rc, message}] // focus thread tid result (rc=0 if ok), message when rc!=0
 
 // set attributes on single thread 
  ['ThreadSetAttributes', {
