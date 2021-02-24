@@ -18,7 +18,7 @@ OpenWindow
      names:['',],
  }]
  ['ReplyGetConfiguration', {
-     values: [
+     configurations: [
          {
              name:'',
              value,
@@ -39,7 +39,11 @@ OpenWindow
      configurations: [
          {
              name:'',
-             rc:, // 0=ok, 1= ...
+             rc:, 
+              // SO_OK           0
+              // SO_BAD_NAME     1
+              // SO_BAD_VALUE    2
+              // SO_CANT_SET     3
          },
      ]
  }]
