@@ -8,6 +8,7 @@
     "start": "electron .",
     "dev": "npm run build-css && npm run start",
     "styler": "electron ./utils/style-picker/style-picker.js",
+    "css": "grunt less",
     "live-style": "grunt",
     "test": "ava -s -c=1"
   },
