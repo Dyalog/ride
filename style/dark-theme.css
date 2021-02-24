@@ -282,39 +282,6 @@ select {
   border: 1px solid rgba(169, 169, 169, 0.3);
   color: white;
 }
-#lb {
-  background-color: #1c1e28;
-  border-bottom: 1px black solid;
-}
-#lb #lb_inner {
-  background: #1c1e28;
-}
-#lb b {
-  color: #a9a9a9;
-}
-#lb b:hover {
-  color: #7688d9;
-}
-#lb b:active,
-#lb b.pressed {
-  background-color: rgba(0, 0, 0, 0.2);
-  color: white;
-}
-#lb .lb_placeholder {
-  background: rgba(0, 0, 0, 0.2);
-}
-#lb .ui-sortable-helper {
-  color: black;
-}
-#lb_tip {
-  background: #1c1e28;
-  border: 1px solid black;
-  color: #a9a9a9;
-}
-#lb_tip hr {
-  border-top: 1px solid black;
-  border-bottom: 1px solid #2e303e;
-}
 /*menu (see ../src/menu.js for the DOM structure)*/
 .menu {
   background-color: #edeff5;
@@ -350,6 +317,39 @@ select {
 }
 .menu .m-box a:focus.m-checked {
   background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
+}
+#lb {
+  background-color: #1c1e28;
+  border-bottom: 1px black solid;
+}
+#lb #lb_inner {
+  background: #1c1e28;
+}
+#lb b {
+  color: #a9a9a9;
+}
+#lb b:hover {
+  color: #7688d9;
+}
+#lb b:active,
+#lb b.pressed {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: white;
+}
+#lb .lb_placeholder {
+  background: rgba(0, 0, 0, 0.2);
+}
+#lb .ui-sortable-helper {
+  color: black;
+}
+#lb_tip {
+  background: #1c1e28;
+  border: 1px solid black;
+  color: #a9a9a9;
+}
+#lb_tip hr {
+  border-top: 1px solid black;
+  border-bottom: 1px solid #2e303e;
 }
 .breakpoint {
   background: no-repeat transparent center center url(img/breakpoint.png);

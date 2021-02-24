@@ -540,7 +540,7 @@ D.IDE = function IDE(opts = {}) {
     },
     ReplyGetSyntaxInformation(x) {
       D.ParseSyntaxInformation(x);
-      D.ipc.server && D.ipc.server.broadcast('syntax', D.syntax);
+      D.ipc && D.ipc.server.broadcast('syntax', D.syntax);
     },
     ValueTip(x) { ide.wins[x.token].ValueTip(x); },
     SetHighlightLine(x) { 

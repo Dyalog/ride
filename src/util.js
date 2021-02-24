@@ -118,6 +118,7 @@
         I.gd_title_text.textContent = x.title || '';
         I.gd_content.innerHTML = text;
         I.gd_icon.style.display = 'none';
+        I.gd_footer.hidden = true;
         // I.gd_icon.className = `dlg_icon_${['warn', 'info', 'query', 'error'][x.type - 1]}`;
         I.gd_btns.innerHTML = (x.options || []).map(y => `<button>${D.util.esc(y)}</button>`).join('');
         const b = I.gd_btns.querySelector('button');
@@ -154,6 +155,7 @@
       I.gd_title_text.textContent = x.title || '';
       I.gd_content.innerText = x.text || '';
       I.gd_icon.style.display = 'none';
+      I.gd_footer.hidden = true;
       I.gd_content.insertAdjacentHTML('beforeend', '<br><input>');
       const inp = I.gd_content.querySelector('input');
       inp.value = x.initialValue || '';
@@ -191,13 +193,18 @@
           inp.focus();
         }
       };
-      D.util.dlg(I.gd, { w: 400, h: 250, modal: true });
+      D.util.dlg(I.gd, { w: 400, modal: true });
       setTimeout(() => { inp.focus(); }, 1);
     },
     replyDialog(t, r) {
       const f = dlgCb[t];
       if (f) {
-        f(r);
+        if (r.questionkey) {
+          const conf = D.prf.confirmations();      
+          conf[r.questionkey] = r.index;
+          D.prf.confirmations(conf);
+        }
+        f(r.index);
         delete dlgCb[t];
       }
     },
@@ -238,6 +245,7 @@
       const { esc } = D.util;
       I.gd_title_text.textContent = x.title || 'Task';
       I.gd_icon.style.display = 'none';
+      I.gd_footer.hidden = false;
       I.gd_content.innerHTML = esc(x.text || '') + (x.subtext ? `<div class=task_subtext>${esc(x.subtext)}</div>` : '');
       let content = (x.buttonText || []).map((y) => {
         const [caption, ...details] = esc(y).split('\n');
@@ -246,8 +254,13 @@
       }).join('');
       content += (x.footer ? `<div class=task_footer>${esc(x.footer)}</div>` : '');
       I.gd_btns.innerHTML = content;
+      I.gd_footer_btns.innerHTML = x.options.map((y) => `<button>${y}</button>`).join('');
+      I.gd_footer_qn_lbl.innerHTML = x.questionlabel;
+      I.gd_footer_qn.checked = false;
+
       const ret = (r) => {
         I.gd_btns.onclick = null;
+        I.gd_footer_btns.onclick = null;
         I.gd_close.onclick = null;
         I.gd.hidden = 1;
         I.dlg_modal_overlay.hidden = 1;
@@ -270,13 +283,19 @@
         }
       });
       I.gd_close.onclick = () => { ret(-1); };
-      btns.on('click', (e) => {
-        let t = e.currentTarget;
-        let i = 99;
+      const clickCb = (e) => {
+        let t = e.currentTarget == gd_footer_btns ? e.target : e.currentTarget;
+        let i = e.currentTarget == gd_footer_btns ? -1 : 99;
         while (t) { t = t.previousSibling; i += 1; }
+        if (I.gd_footer_qn.checked) {
+          conf[x.questionkey] = i;
+          D.prf.confirmations(conf);
+        }
         ret(i);
-      });
-      D.util.dlg(I.gd, { w: 400, h: 300, modal: true });
+      };
+      btns.on('click', clickCb);
+      I.gd_footer_btns.onclick = clickCb;
+      D.util.dlg(I.gd, { w: 400, modal: true });
       setTimeout(() => { fb.focus(); }, 1);
     },
   };

@@ -541,6 +541,33 @@ a:hover {
     display: none;
   }
 }
+#splash {
+  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #7688d9;
+}
+#ide {
+  background-color: #7688d9;
+}
+#apl_font {
+  color: #7688d9;
+}
+::selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+::-moz-selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+body {
+  font-family: Roboto, sans-serif;
+}
+#demo-keys span {
+  border: solid #333 1px;
+  background-color: grey;
+  color: white;
+}
 ::-webkit-scrollbar {
   background-color: white;
 }
@@ -568,33 +595,6 @@ a:hover {
 }
 ::-webkit-scrollbar-thumb:active {
   background-color: rgba(118, 136, 217, 0.9);
-}
-#splash {
-  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #7688d9;
-}
-#ide {
-  background-color: #7688d9;
-}
-#apl_font {
-  color: #7688d9;
-}
-::selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-::-moz-selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-body {
-  font-family: Roboto, sans-serif;
-}
-#demo-keys span {
-  border: solid #333 1px;
-  background-color: grey;
-  color: white;
 }
 #sb {
   background-color: white;
@@ -625,17 +625,6 @@ body {
   -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
 }
-.tooltip {
-  color: #7688d9;
-}
-/* Tooltip text */
-.tooltip .tooltiptext {
-  background-color: #dde0ec;
-  color: #4c4a4a;
-}
-.tooltip .tooltiptext::after {
-  border-color: transparent #dde0ec transparent transparent;
-}
 .toolbar {
   background-color: white;
   border-bottom: 1px solid #dde0ec;
@@ -662,6 +651,17 @@ body {
 .tb_sep {
   border: 0 solid #dde0ec;
   border-right-width: 1px;
+}
+.tooltip {
+  color: #7688d9;
+}
+/* Tooltip text */
+.tooltip .tooltiptext {
+  background-color: #dde0ec;
+  color: #4c4a4a;
+}
+.tooltip .tooltiptext::after {
+  border-color: transparent #dde0ec transparent transparent;
 }
 #vt_bln {
   border: solid black 1px;
