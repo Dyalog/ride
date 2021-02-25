@@ -29,6 +29,8 @@
     const bw = el.getCurrentWindow();
     const [width] = bw.getSize();
     const qp = require('querystring').parse(window.location.search.slice(1));
+    const iswin = /^win/i.test(process.platform);
+
     ipc.config.id = 'dialog';
     ipc.config.appspace = qp.appid;
     ipc.config.retry = 1500;
@@ -126,7 +128,7 @@
       }
       bw.resizable = true;
       setTimeout(() => {
-        bw.setSize(width, 39 + document.body.clientHeight);
+        bw.setSize(width, document.body.clientHeight + (iswin ? 39 : 0));
         bw.resizable = false;
       }, 1);
     }
