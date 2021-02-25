@@ -56,7 +56,10 @@
           });
         }, 100);
       });
-      rm.on('syntax', (x) => { D.syntax = x; });
+      rm.on('syntax', (x) => { 
+        D.syntax = x;
+        D.DefineSyntaxRegex();
+      });
     });
   };
 
