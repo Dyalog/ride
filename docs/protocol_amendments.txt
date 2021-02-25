@@ -51,66 +51,37 @@ OpenWindow
  ['SetThread', {tid:numeric}] // focus thread tid (already implemented)
  ['ReplySetThread', {tid, rc, message}] // focus thread tid result (rc=0 if ok), message when rc!=0
 
-// set attributes on single thread 
- ['ThreadSetAttributes', {
-     tid: tid,
-     paused: bool,
-     interruptable: bool,
- }]
-// reply may be redundant (see GetThreads)
- ['ReplyThreadSetAttributes', {
-     tid,
-     paused: bool,
-     interruptable: bool,
- }]
+// get attributes on multiple threads
 
- ['ThreadGetAttributes', {
-     tid: tid,
- }]
- ['ReplyThreadGetAttributes', {
-     tid: tid,
-     paused: bool,
-     interruptable: bool,
- }]
-
-// set attributes on multiple threads
-['ThreadsSetAttributes', {
-     tids: [tid,-1],
-     paused: bool,
-     interruptable: bool,
- }]
-
-['ThreadsSetAttributes', {
-     threads: [{
-         tid: tid|-1,
-         paused: bool,
-         interruptable: bool,
-     }]
- }]
-
-['ReplyThreadsSetAttributes', { // maybe not in first draft
-     thread: [{
-         tid: tid|-1,
-         paused: bool,
-         interruptable: bool,
-     }]
- }]
-
-['ThreadsGetAttributes', {
-     threads: [tid|-1,]  
+['GetThreadAttributes', {
+     threads: [tids|-1,]  
  }]
  // if first item is -1, return info for all threads and stop processing
- // if -1 found after first, ignore it
+ // if -1 found after first, return non zero in rc for that element
 
-['ReplyThreadsGetAttributes', {
+['ReplyGetThreadAttributes', {
      threads: [{
          tid: tid,
          rc: numeric, // 0 if ok, 
          paused: bool,
-         interruptable: bool,
+         noninterruptable: int, // bit fields. 0: interruptable, 1: interruptable, 2:children will be created as non-interruptable
      }]
  }]
 
+// set attributes on multiple threads
+
+['SetThreadAttributes', {
+     threads: [{
+         tid: tid|-1,
+         paused: bool,
+         noninterruptable: int, // as aboce
+
+     }]
+ }]
+
+['ReplySetThreadAttributes', { // maybe not in first draft
+         // contents the same as ReplySetThreadAttributes
+ }]
 
  ['ResumeAllThreads', {}] // check with Morten
 
