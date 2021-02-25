@@ -70,6 +70,10 @@ OpenWindow
 
 // set attributes on multiple threads
 
+// if first item is -1, set info for all threads and stop processing
+// if -1 found after first, return non zero in rc for that element
+
+
 ['SetThreadAttributes', {
      threads: [{
          tid: tid|-1,
