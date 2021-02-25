@@ -231,6 +231,11 @@
   <div id=gd_icon></div>
   <div class=dlg_content id=gd_content></div>
   <div class=dlg_btns    id=gd_btns   ></div>
+  <div id="gd_footer">
+    <div id="gd_footer_btns"></div>  
+    <input id=gd_footer_qn type="checkbox" name="question">
+    <label id=gd_footer_qn_lbl for=gd_footer_qn></label>
+  </div>
 </div>
 
 <!--IDE:language bar,session,editors,etc-->
@@ -362,6 +367,7 @@
     <a href=#code>General</a>
     <a href=#lyt class=sel>Keyboard</a>
     <a href=#shc>Shortcuts</a>
+    <a href=#resp>Saved Responses</a>
     <a href=#col>Colours</a>
     <a href=#title>Title</a>
     <a href=#pmenu>Menu</a>
@@ -457,6 +463,15 @@
       </div>
       <div id=shc_tbl_wr></div>
       <div id=shc_no_res hidden>No results</div>
+    </div>
+
+    <!--Saved Responses-->
+    <div id=resp hidden>
+      <div id=resp_ctrls>
+        <button id=resp_sel_all title="Select all responses"><u>S</u>elect All</button>
+        <button id=resp_del title="Delete response"><u>D</u>elete</button>
+      </div>
+      <select id=resp_qns multiple></select>
     </div>
 
     <!--Code-->
@@ -704,6 +719,7 @@
 <script src=src/prf_ui.js     ></script>
 <script src=src/prf_lyt.js    ></script>
 <script src=src/prf_shc.js    ></script>
+<script src=src/prf_resp.js   ></script>
 <script src=src/prf_code.js   ></script>
 <script src=src/prf_col.js    ></script>
 <script src=src/prf_title.js  ></script>
