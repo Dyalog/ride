@@ -64,7 +64,7 @@ OpenWindow
          tid: tid,
          rc: numeric, // 0 if ok, 
          paused: bool,
-         noninterruptable: int, // bit fields. 0: interruptable, 1: interruptable, 2:children will be created as non-interruptable
+         noninterruptable: int, // bit fields. 0: interruptable, 1: non-interruptable, 2:children will be created as non-interruptable
      }]
  }]
 
