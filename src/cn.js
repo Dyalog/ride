@@ -201,6 +201,10 @@
         $.err('"Interpreter" is required', () => { q.exe.focus(); });
         return 0;
       }
+      if (!!x.cwd && !fs.existsSync(untildify(x.cwd))) {
+        $.err(`${q.cwd.labels[0].innerText} "${untildify(x.cwd)}" does not exist`, () => { q.cwd.focus(); });
+        return 0;
+      }
       if (x === sel && ssh) {
         if (!q.ssh_pass.value && !q.ssh_key.value) {
           passwdPrompt(`Password for user ${x.user || user}:`, 'Password');
@@ -525,7 +529,7 @@
               if (x.args) args.push(...x.args.replace(/\n$/gm, '').split('\n'));
               try {
                 child = cp.spawn(x.exe, args, {
-                  cwd: untildify(x.cwd) || home,
+                  ...(!!x.cwd && { cwd: untildify(x.cwd) }),
                   stdio,
                   detached: true,
                   env: $.extend(
