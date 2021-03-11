@@ -155,7 +155,7 @@ method to another in a class will obliterate the current changes.
 The interpreter will parse that and may respond later with one of
 <a name=OpenWindow></a><a name=UpdateWindow></a>
 ```json
-["OpenWindow",{"name":"f","text":["r←f a","r←(+⌿÷≢)a"],"token":123,"currentRow":0,"debugger":false,
+["OpenWindow",{"name":"f","filename":"C:\\path\\to\\foo.txt","text":["r←f a","r←(+⌿÷≢)a"],"token":123,"currentRow":0,"debugger":false,
                "entityType":1,"offset":0,"readOnly":false,"size":0,"stop":[1],
                "tid":0,"tname":"Tid:0"}] // Interpreter -> RIDE
 ["UpdateWindow",...] // Interpreter -> RIDE (same args as OpenWindow)
@@ -313,12 +313,11 @@ Request the current line in a trace window is executed. (Step into)
 
 Request information about the current stack.
 
-Get information about the current threads.
+Get information about the current threads;
 <a name=GetThreads></a>
 ```json
 ["GetThreads",{}] // RIDE -> Interpreter
 ```
-The interpreter will respond with ReplyGetThreads:
 ```json
 ["ReplyGetThreads",{"threads":[
     {"description":"","state":"Session","tid":0,"flags":"Normal","Treq":""},
@@ -330,8 +329,71 @@ The interpreter will respond with ReplyGetThreads:
 * `flags`: e.g. Normal, Paused or Terminated
 * `Treq`: a string indicating any tokens that the thread is waiting for.
 
+```json
+["SetThread", {"tid":123}] //RIDE -> Interpreter
+```
+
+```json
+["ReplySetThread", {"tid":123, "rc":321, "message":"txt"}] // Interpreter -> RIDE
+```
+* `tid`: the thread ID (numeric)
+* `rc`: Return code. TID of focused thread, or -1 if unsuccessful.
+* `message`: Empty, or text description of the result if unsuccessful.
 
 
+Request attributes on multiple threads:
+```json
+["GetThreadAttributes",{ // RIDE -> Interpreter
+  "threads":[123 | -1]
+}]
+```
+```json
+["ReplyGetThreadAttributes",{ // Interpreter -> RIDE
+  "threads":[{
+    "tid": 123,
+    "rc": 321,
+    "paused": 1,
+    "noninterruptable": 2,
+  }]
+}]
+```
+* `tid`: The thread ID (numeric)
+* `rc`: Return code. TID of thread, or -1 if unsuccessful.
+* `paused`: boolean
+* `noninterruptable`: int;
+  - `0`: interruptable,
+  - `1`: noninterruptable,
+  - `2`: children will be created as non-interruptable
+
+Set attributes on multiple threads:
+```json
+["SetThreadAttributes",{ // RIDE -> Interpreter
+  "threads":[{
+    "tid":123,
+    "paused":0,
+    "noninterruptable": 2,
+  }]
+}]
+```
+If first item's tid is -1, set info for all threads and stop processing.
+The interpreter will respond with ReplySetThreadAttributes
+```json
+["ReplySetThreadAttributes",{ // Interpreter -> RIDE
+  "threads":[{
+    "tid":123,
+    "rc":0,
+    "paused":0,
+    "noninterruptable":2,
+  }]
+}]
+```
+* `tid`: The thread ID (numeric)
+* `rc`: Return code. TID of thread, or -1 if unsuccessful.
+* `paused`: boolean
+* `noninterruptable`: int;
+  - `0`: interruptable,
+  - `1`: noninterruptable,
+  - `2`: children will be created as non-interruptable
 
 # Interrupts
 APL supports two kinds of interrupts
@@ -417,7 +479,11 @@ A "task dialog" shows two sets of buttons -- vertically aligned `buttonText` and
                "subtext":"Do you want to save the changes to the document?",
                "buttonText":["Save in XML base format","Save in binary format"],
                "options":["No","Cancel"],
-               "footer":"Note: If you don't choose to save, your changes will be lost"}] // Interpreter -> RIDE
+               "footer":"Note: If you don't choose to save, your changes will be lost",
+               "questionkey":"SaveFileOptionsExtension:.xml",
+               "questionlabel":"Save this response for all files with a \".xml\" extension"}] // Interpreter -> RIDE
+```
+```json
 ["ReplyTaskDialog",{"index":"101","token":123}] // RIDE -> Interpreter
 ```
 In the response `index` can be:
@@ -559,6 +625,58 @@ RIDE can request Syntax information specific to the version of the interpreter b
 ```json
 ["ReplyGetSyntaxInformation",{"url":"https://help.dyalog.com/18.1/#Language/Symbols/Plus%20Sign.htm"}] // Interpreter -> RIDE
 ```
+
+# GetLanguageBar
+RIDE can request Language bar information specific to the version of the interpreter being run.
+<a name=GetLanguageBar></a>
+```json
+["GetLanguageBar",{}] // RIDE -> Interpreter
+```
+
+<a name=ReplyGetLanguageBar></a>
+```json
+["ReplyGetLanguageBar",{  // Interpreter -> RIDE
+  "entries":[
+    {"name":"0002:Left Arrow", "avchar":"←", "helptext":["...","...",]}
+    ]}]
+```
+
+# GetConfiguration
+
+Configuration parameters can be queried using the GetConfiguration method
+
+```json
+["GetConfiguration", {"names":["text"] // RIDE -> Interpreter
+```
+
+```json
+["ReplyGetConfiguration", { // Interpreter -> RIDE
+  "configurations":[
+    {"name":"string", "value":""},
+    ]}]
+```
+# ConfigurationSet
+Parameters can be set using the ConfigurationSet method. *[Currently only the AUTO_PAUSE_THREADS parameter is supported.]*
+```json
+["ConfigurationSet", { // RIDE -> Interpreter
+  "configurations": [
+    {"name":"", "value":""},
+    ]}]
+```
+```json
+["ReplyConfigurationSet", { // Interpreter -> RIDE
+  "configurations": [
+    {"name":"", "rc":0123,},
+    ]}]
+```
+
+* `name`: key of paramenter to set.
+* `value`: value to set it to.
+* `rc`: int, one of the following;
+  - `0`: SO_OK
+  - `1`: SO_BAD_NAME
+  - `2`: SO_BAD_VALUE
+  - `3`: SO_CANT_SET
 
 # Proposed extensions
 * related to the process manager
