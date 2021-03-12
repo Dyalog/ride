@@ -33,6 +33,7 @@
       folding: false,
       fontFamily: 'apl',
       fontSize: fs,
+      fixedOverflowWidgets: true,
       glyphMargin: se.breakpoints,
       iconsInSuggestions: false,
       language: 'apl-session',
