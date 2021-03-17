@@ -9,6 +9,7 @@ D.prf = {};
 [ // name                 default (type is determined from default value; setter enforces type and handles encoding)
   ['autoCloseBrackets',  1], //whether to insert {}[]() in pairs
   ['autocompletion',     'classic'],
+  ['autoPauseThreads',   0], // 1 will pause all threads on error
   ['autoPW',             0], // update PW on resize of window
   ['blockCursor',        0], // use block cursor selection?
   ['cursorBlinking',     'blink'], // cursor blinking
@@ -112,6 +113,7 @@ D.prf = {};
     + '\n  Clear all trace/stop/monitor =CAM'
     + '\n  Weak Interrupt           =WI'
     + '\n  Strong Interrupt         =SI'
+    + '\n  Auto Pause Threads       =APT'
     + '\n&Help'
     + '\n  Getting &Started         =https://dyalog.com/introduction.htm'
     + '\n  -'

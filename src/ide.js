@@ -388,6 +388,13 @@ D.IDE = function IDE(opts = {}) {
     I.sb.hidden = !x; updTopBtm();
     updMenu();
   });
+  const toggleAutoPauseThreads = () => {
+    D.prf.autoPauseThreads = !D.prf.autoPauseThreads
+  };
+  D.prf.autoPauseThreads((x) => {
+    toggleAutoPauseThreads();
+  });
+
   D.prf.menu(updMenu);
   D.prf.keys(updMenu);
   !ide.floating && setTimeout(updMenu, 100);
@@ -838,6 +845,7 @@ D.IDE.prototype = {
   TVB: D.prf.breakPts.toggle,
   LN: D.prf.lineNums.toggle,
   TVO: D.prf.fold.toggle,
+  APT: D.prf.autoPauseThreads.toggle,
   UND() { this.focusedWin.me.trigger('D', 'undo'); },
   RDO() { this.focusedWin.me.trigger('D', 'redo'); },
   Edit(data) {

@@ -37,6 +37,7 @@
       WRP: { checkBoxPref: D.prf.wrap },
       WSE: { checkBoxPref: D.prf.wse },
       DBG: { checkBoxPref: D.prf.dbg },
+      APT: { checkBoxPref: D.prf.autoPauseThreads },
     };
     const stk = [{ ind: -1, items: [] }];
     const lines = md.split('\n');

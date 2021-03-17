@@ -236,6 +236,7 @@
     DO(me) { me.trigger('editor', 'editor.action.removeCommentLine'); },
     DBG() { D.prf.dbg.toggle(); },
     WSE() { D.prf.wse.toggle(); },
+    APT() { D.prf.autoPauseThreads.toggle(); },
     ZM(me) {
       const w = me.dyalogCmds;
       w.container.parent.toggleMaximise();
