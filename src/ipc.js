@@ -262,6 +262,7 @@
     LN() { D.prf.lineNums.toggle(); },
     TVO() { D.prf.fold.toggle(); },
     TVB() { D.prf.breakPts.toggle(); },
+    APT() { D.prf.autoPauseThreads.toggle(); },
   };
   function handlerFor(k) {
     return function handler(...x) { this.emit(k, ...x); };

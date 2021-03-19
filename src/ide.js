@@ -388,11 +388,10 @@ D.IDE = function IDE(opts = {}) {
     I.sb.hidden = !x; updTopBtm();
     updMenu();
   });
-  const toggleAutoPauseThreads = () => {
-    D.prf.autoPauseThreads = !D.prf.autoPauseThreads
-  };
   D.prf.autoPauseThreads((x) => {
-    toggleAutoPauseThreads();
+    D.send('SetConfiguration', {"configurations":[
+      {"name":"AUTO_PAUSE_THREADS",
+      "value":D.prf.autoPauseThreads().toString()}]})
   });
 
   D.prf.menu(updMenu);
