@@ -655,16 +655,16 @@ Configuration parameters can be queried using the GetConfiguration method
     {"name":"string", "value":""},
     ]}]
 ```
-# ConfigurationSet
-Parameters can be set using the ConfigurationSet method. *[Currently only the AUTO_PAUSE_THREADS parameter is supported.]*
+# SetConfiguration
+Parameters can be set using the SetConfiguration method. *[Currently only the AUTO_PAUSE_THREADS parameter is supported.]*
 ```json
-["ConfigurationSet", { // RIDE -> Interpreter
+["SetConfiguration", { // RIDE -> Interpreter
   "configurations": [
     {"name":"", "value":""},
     ]}]
 ```
 ```json
-["ReplyConfigurationSet", { // Interpreter -> RIDE
+["ReplySetConfiguration", { // Interpreter -> RIDE
   "configurations": [
     {"name":"", "rc":0123,},
     ]}]
