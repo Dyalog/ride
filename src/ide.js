@@ -720,7 +720,6 @@ D.IDE = function IDE(opts = {}) {
         ide.wStatus = new D.el.BrowserWindow({
           width: 600,
           height: 400,
-          parent: D.elw,
           webPreferences: {
             contextIsolation: true,
             nodeIntegration: false,
