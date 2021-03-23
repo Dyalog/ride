@@ -43,6 +43,7 @@ D.IDE = function IDE(opts = {}) {
     ide.wins[0] = new D.Se(ide);
     D.wins = ide.wins;
     D.send('GetSyntaxInformation',{});
+    D.send('GetLanguageBar',{});
 
     ide.focusedWin = ide.wins['0']; // last focused window, it might not have the focus right now
     ide.switchWin = (x) => { // x: +1 or -1
@@ -537,6 +538,19 @@ D.IDE = function IDE(opts = {}) {
     ReplyGetHelpInformation(x) {
       if (x.url.length == 0) ide.getHelpExecutor.reject("No help found");
       else ide.getHelpExecutor.resolve(x.url);
+    },
+    ReplyGetLanguageBar(x) {
+      const { entries } = x;
+      D.lb.order = entries.map(k => k.avchar||' ').join('');
+      entries.forEach((k) => {
+        if (k.avchar) {
+          D.lb.tips[k.avchar] = [
+            `${k.name.slice(5)} (${k.avchar})`,
+            k.helptext.join('\n'),
+          ];
+        } 
+      });
+      ide.lbarRecreate();
     },
     ReplyGetSyntaxInformation(x) {
       D.ParseSyntaxInformation(x);
