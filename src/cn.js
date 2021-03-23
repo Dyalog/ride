@@ -443,6 +443,15 @@
             log(`interpreter connected from ${cHost}`);
             srv && srv.close();
             srv = 0;
+            const p = D.el.process.argv;
+            cp.spawn(p[0], p.slice(1), {
+              detached: true,
+              stdio: ['ignore', 'ignore', 'ignore'],
+              env: { 
+                ...process.env, 
+                RIDE_LISTEN: `${host}:${port}`,
+              },
+            });
             clt = c;
             initInterpreterConn();
             new D.IDE().setConnInfo(cHost, port, sel ? sel.name : '');
@@ -975,6 +984,7 @@
     const { env } = D.el.process;
     const h = { // h:args by name
       c: env.RIDE_CONNECT,
+      l: env.RIDE_LISTEN,
       s: env.RIDE_SPAWN || env.ride_spawn,
     };
     if (D.mac && env.DYALOG_SPAWN) {
@@ -986,6 +996,10 @@
       q = J.cn;
       const m = /^([^:]+|\[[^\]]+\])(?::(\d+))?$/.exec(h.c); // parse host and port
       m ? go({ type: 'connect', host: m[1], port: +m[2] || 4502 }) : $.err('Invalid $RIDE_CONNECT');
+    } else if (h.l) {
+      q = J.cn;
+      const m = /^([^:]+|\[[^\]]+\])?(?::(\d+))?$/.exec(h.l); // parse host and port
+      m ? go({ type: 'listen', host: m[1], port: +m[2] || 4502 }) : $.err('Invalid $RIDE_LISTEN');
     } else if (h.s) {
       const cnf = { type: 'start', exe: h.s };
       const open_file = rq('electron').remote.getGlobal('open_file');
