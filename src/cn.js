@@ -489,7 +489,7 @@
                 Object.keys(env).forEach((k) => { s0 += `${k}=${shEsc(env[k])} `; });
                 const args = x.args ? x.args.replace(/\n$/gm, '').split('\n') : [];
                 const s1 = dyalogArgs(args).map(shEsc).join(' ');
-                sm.write(`${s0}CLASSICMODE=1 SINGLETRACE=1 RIDE_INIT=CONNECT:127.0.0.1:${rport} RIDE_SPAWNED=1 ${shEsc(x.exe)} ${s1} +s -q >/dev/null\n`);
+                sm.write(`${s0}CLASSICMODE=1 SINGLETRACE=1 RIDE_INIT=CONNECT:127.0.0.1:${rport} RIDE_SPAWNED=1 ${shEsc(x.exe)} ${s1} +s -q -nokbd >/dev/null\n`);
                 hideDlgs();
               });
             });
@@ -522,7 +522,7 @@
               const hp = `${adr.address}:${adr.port}`;
               log(`listening for connections from spawned interpreter on ${hp}`);
               log(`spawning interpreter ${JSON.stringify(x.exe)}`);
-              let args = ['+s', '-q'];
+              let args = ['+s', '-q', '-nokbd'];
               const stdio = ['pipe', 'ignore', 'ignore'];
               if (/^win/i.test(process.platform)) { args = []; stdio[0] = 'ignore'; }
               args = dyalogArgs(args);
