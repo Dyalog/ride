@@ -759,6 +759,7 @@ D.IDE.prototype = {
     ide.dead = 1;
     ide.connected = 0;
     ide.dom.className += ' disconnected';
+    ide.wStatus && ide.wStatus.close();
     Object.keys(ide.wins).forEach((k) => { ide.wins[k].die(); });
   },
   updPW(x) { this.wins[0] && this.wins[0].updPW(x); },
