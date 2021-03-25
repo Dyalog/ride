@@ -548,7 +548,8 @@ D.IDE = function IDE(opts = {}) {
             `${k.name.slice(5)} (${k.avchar})`,
             k.helptext.join('\n'),
           ];
-        } 
+        D.sqglDesc[k.avchar] = `${k.name.slice(5)} (${k.avchar})`
+        };
       });
       ide.lbarRecreate();
     },
