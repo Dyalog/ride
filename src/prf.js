@@ -68,7 +68,7 @@ D.prf = {};
     + '\nDyalog                          {mac}'
     + '\n  About Dyalog             =ABT'
     + '\n  -'
-    + '\n  Preferences              =PRF'
+    + '\n  Preferences...           =PRF'
     + '\n  -                            '
     + '\n  &Quit                    =QIT'
     + '\n&File                           {!browser}'
@@ -86,7 +86,7 @@ D.prf = {};
     + '\n  Paste                    =PT  {!browser}'
     + '\n  Select All               =SA  {mac}'
     + '\n  -                             {!mac&&!browser}'
-    + '\n  Preferences              =PRF {!mac}'
+    + '\n  Preferences...           =PRF {!mac}'
     + '\n&View'
     + '\n  Show Language Bar        =LBR'
     + '\n  Show Status Bar          =SBR'
@@ -138,7 +138,7 @@ D.prf = {};
     + '\n#   -    separator (when alone)'
     + '\n#   #    comment'
     + '\n'
-    + '\n# The =PRF ("Preferences") menu item must be present.',
+    + '\n# The =PRF ("Preferences...") menu item must be present.',
   ],
 ].forEach((kd) => {
   const [k, d] = kd; // k:preference name (key), d:default value
