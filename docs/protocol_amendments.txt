@@ -93,6 +93,7 @@ OpenWindow
   pause:int // currently 0 or 1 to clear or set the "pause" bit on all threads
  }]
  // PauseAllThreads (pause=0) does not "restart" all threads, you'll need to send ResumeAllThreads if that's what you want
+ // PauseAllThreads does not send any response
 
 
  ['TaskDialog', { // and potentially for OptionsDialog, extend with:
