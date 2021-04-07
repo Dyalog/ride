@@ -96,18 +96,31 @@ OpenWindow
  }]
 
 ['Subscribe', {
-  'status': 'all' | 'stack' |'threads' … 
-  'heartbeat': interval
-}]
-
-['Unsubscribe', {
-  'features': ['heartbeat', 'status']
+  'status': [  // 0 or more of the following values
+               // values are not saved between calls       
+               // There is no unsubscribe, just resubscribe to those that you want
+              'statusfields',   // will result in InterpreterStatus response
+              'stack' ,         // will result in ReplyGetSIStack response
+              'threads'         // will result in ReplyGetSIStack response
+              ]
+  'heartbeat': interval  // interval is currently ignored
 }]
 
 ['InterpreterStatus',{
-    TBC
+   "IO":int    // current ⎕IO
+   "DQ":int,   // length of current message queue 
+   "WA":int,   // current available workspace (not currently implemented)
+   "SI":int,   // length of current SI stack
+   "TRAP":int, // Is there an active trap?
+   "ML":int,   // // current ⎕ML
+   "NumThreads":int, // current number of threads
+   "TID":int, // current thread id
+   "CompactCount":int, // number of compactions so far
+   "GarbageCount":int  // number of garbage collections so far (i.e. number of collections that have found garbage)
+   }
+   
 }]
 
 ['InterpreterHeartBeat',{
-    ping
+    'ping' : 'ping'  // maybe there will be additional reasons to ping
 }]
