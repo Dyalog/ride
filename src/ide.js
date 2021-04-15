@@ -352,6 +352,10 @@ D.IDE = function IDE(opts = {}) {
   });
   const toggleStats = () => {
     if (ide.floating) return;
+    // (un)subscribe to status here
+    // need old code as fallback for old interpreters
+    // perhaps a new property on the ide can indicate if
+    // new message supported by checking for an unknowncommand reply.
     if (statsTid && !D.prf.dbg() && !D.prf.sbar()) {
       clearInterval(statsTid); statsTid = 0;
     } else if (!statsTid && (D.prf.dbg() || D.prf.sbar())) {
@@ -721,6 +725,9 @@ D.IDE = function IDE(opts = {}) {
       I.sb_threads.classList.toggle('active', l > 1);
       ide.dbg && ide.dbg.threads.render(x.threads);
     },
+    InterpreterStatus(x) {
+      // update status bar fields here
+    },
     ReplyFormatCode(x) {
       const w = D.wins[x.win];
       w.ReplyFormatCode(x.text);
@@ -753,6 +760,9 @@ D.IDE = function IDE(opts = {}) {
          toastr.warning('Clear all trace/stop/monitor not supported by the interpreter');
       } else if (x.name === 'GetHelpInformation') {
         ide.getHelpExecutor.reject('GetHelpInformation not implemented on remote interpreter');
+      } else if (x.name === 'Subscribe') {
+        // flag to fallback for status updates.  
+        ide.subscribe_na = 1;
       }
     },
   };
