@@ -39,7 +39,7 @@ D.cmds = [
   ['LL', 'Left Limit',              ['Home']],
   ['LN', 'Toggle line numbers',     []],
   ['LOG','Show RIDE protocol log',  ['Ctrl-F12']],
-  ['MA', 'Continue execution of all threads',[]],
+  ['MA', 'Continue execution of all threads',[]], // This is the green continue button in the Dyalog IDE tracer, or 'Restart All Threads' in the Threads menu.
   ['NEW','New session',             [D.mac?'Cmd-N':'Ctrl-N']],
   ['NX' ,'Next match',              []],
   ['OWS','Open Workspace',          [D.mac?'Cmd-O':'Ctrl-O']],
@@ -53,8 +53,8 @@ D.cmds = [
   ['RD', 'Reformat',                ['NumPad_Divide']],
   ['RP', 'Replace',                 []],
   ['RL', 'Right Limit',             ['End']],
-  ['RST','Restart all Threads',     []],
-  ['RSU','Resume all Threads',      []],
+  ['RM', 'Resume execution of this thread',[]], // This is the blue continue button in the Dyalog IDE tracer.
+  ['RSU','Resume all Threads',      []],        // This is 'Resume All Threads' in the Threads menu.
   ['SA', 'Select All',              [D.mac?'Cmd-A':'Ctrl-A']],
   ['SC', 'Search',                  ['Ctrl-F']],
   ['SI', 'Strong interrupt',        []],

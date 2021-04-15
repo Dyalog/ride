@@ -530,6 +530,10 @@ D.IDE = function IDE(opts = {}) {
       se.hadErrTmr = setTimeout(() => { ide.hadErr = -1; delete se.hadErrTmr; }, 100);
       // gl mounted + SetHighlightLine + ReplyFormatCode
       ide.hadErr = 2 + (D.prf.ilf() && D.prf.indentOnOpen());
+      // Pause all threads if Pause On Error is set
+      if (D.prf.pauseOnError()) {
+        D.send('PauseAllThreads', {'pause':1});
+      };
     },
     GotoWindow(x) { const w = ide.wins[x.win]; w && w.focus(); },
     WindowTypeChanged(x) { return ide.wins[x.win].setTC(x.tracer); },

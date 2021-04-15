@@ -36,7 +36,7 @@ D.prf = {};
   ['minimapRenderCharacters',1], // minimap render characters
   ['minimapShowSlider',  "mouseover"], // show minimap slider
   ['otherExe',           ''],//content of the "exe" text box when "Other..." is selected in the Connect page
-  ['pauseOnError',       0], // whether the interpreter should 
+  ['pauseOnError',       0], // whether the interpreter should set thread status to 'Paused' on all threads when encountering an error on any.
   ['persistentHistory',  1], // save history between sessions
   ['persistentHistorySize',100], // max lines to save
   ['prefixKey',          '`'],
@@ -116,7 +116,7 @@ D.prf = {};
     + '\n  Pause on Error           =POE'
     + '\n  Pause all Threads        =PAT'
     + '\n  Resume all Threads       =RSU'
-    + '\n  Restart all Threads      =RST'
+    + '\n  Restart all Threads      =MA'
     + '\n&Help'
     + '\n  Getting &Started         =https://dyalog.com/introduction.htm'
     + '\n  -'
