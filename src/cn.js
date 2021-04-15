@@ -21,6 +21,7 @@
   const MIN_V = [15, 0];
   const KV = /^([a-z_]\w*)=(.*)$/i;
   const WS = /^\s*$/; // KV:regexes for parsing env vars
+  const HP = /^([^:]+|\[[^\]]+\])?(?::(\d+)?(\+)?)?$/;  // regex for parsing host and port
   const maxl = 1000;
   const cnFile = `${D.el.app.getPath('userData')}/connections.json`;
   const lcnFile = `${D.el.app.getPath('userData')}/last_configuration.json`;
@@ -154,6 +155,7 @@
     const t = q.type.value;
     const s = q.subtype.value;
     sel && (sel.subtype = s);
+    q.respawn.hidden = t !== 'listen';
     q.cwd_fld.hidden = !(q.ssh.hidden = s !== 'ssh');
     q.tcp_dtl.hidden = t === 'start' && s === 'raw';
     q.tcp_port.placeholder = q.tcp_dtl.hidden ? 0 : 4502;
@@ -443,6 +445,17 @@
             log(`interpreter connected from ${cHost}`);
             srv && srv.close();
             srv = 0;
+            if (x.respawn) {
+              const p = D.el.process.argv;
+              cp.spawn(p[0], p.slice(1), {
+                detached: true,
+                stdio: ['ignore', 'ignore', 'ignore'],
+                env: { 
+                  ...process.env, 
+                  RIDE_LISTEN: `${host}:${port}+`,
+                },
+              });
+            }
             clt = c;
             initInterpreterConn();
             new D.IDE().setConnInfo(cHost, port, sel ? sel.name : '');
@@ -637,6 +650,9 @@
       sel.exe = sel.exe || q.exe.value;
     };
     q.subtype.onchange = updSubtype;
+    q.respawn_cb.onclick = () => {
+      sel.respawn = q.respawn_cb.checked;
+    };
     q.ssh_user.placeholder = user;
     const enterConnect = (event) => { if (event.keyCode === 13) { $('#cn_go').click(); } };
     $('#cn_tcp_host').keyup(enterConnect);
@@ -975,6 +991,7 @@
     const { env } = D.el.process;
     const h = { // h:args by name
       c: env.RIDE_CONNECT,
+      l: env.RIDE_LISTEN,
       s: env.RIDE_SPAWN || env.ride_spawn,
     };
     if (D.mac && env.DYALOG_SPAWN) {
@@ -984,8 +1001,12 @@
     for (let i = 1; i < a.length; i++) if (a[i][0] === '-') { h[a[i].slice(1)] = a[i + 1]; i += 1; }
     if (h.c) {
       q = J.cn;
-      const m = /^([^:]+|\[[^\]]+\])(?::(\d+))?$/.exec(h.c); // parse host and port
+      const m = HP.exec(h.c); // parse host and port
       m ? go({ type: 'connect', host: m[1], port: +m[2] || 4502 }) : $.err('Invalid $RIDE_CONNECT');
+    } else if (h.l) {
+      q = J.cn;
+      const m = HP.exec(h.l); // parse host and port
+      m ? go({ type: 'listen', host: m[1], port: +m[2] || 4502 , respawn: !!m[3]}) : $.err('Invalid $RIDE_LISTEN');
     } else if (h.s) {
       const cnf = { type: 'start', exe: h.s };
       const open_file = rq('electron').remote.getGlobal('open_file');
