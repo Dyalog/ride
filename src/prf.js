@@ -15,6 +15,7 @@ D.prf = {};
   ['autocompletionDelay',500],
   ['colourScheme',       'Default'], //name of the active colour scheme
   ['colourSchemes',      []],//objects describing user-defined colour schemes
+  ['confirmations',      {}],//saved responses to TaskDialog questions
   ['connectOnQuit',      0], // open connection page when active session ends
   ['floating',           0], //floating editor and tracer windows
   ['floatSingle',        1], //create single floating edit window
@@ -68,11 +69,11 @@ D.prf = {};
     + '\nDyalog                          {mac}'
     + '\n  About Dyalog             =ABT'
     + '\n  -'
-    + '\n  Preferences              =PRF'
+    + '\n  Preferences...           =PRF'
     + '\n  -                            '
     + '\n  &Quit                    =QIT'
     + '\n&File                           {!browser}'
-    + '\n  &Open...                 =OWS'
+    + '\n  &Open...                 =OWS {local}'
     + '\n  &New Session             =NEW'
     + '\n  &Connect...              =CNC'
     + '\n  -                             {!mac}'
@@ -86,7 +87,7 @@ D.prf = {};
     + '\n  Paste                    =PT  {!browser}'
     + '\n  Select All               =SA  {mac}'
     + '\n  -                             {!mac&&!browser}'
-    + '\n  Preferences              =PRF {!mac}'
+    + '\n  Preferences...           =PRF {!mac}'
     + '\n&View'
     + '\n  Show Language Bar        =LBR'
     + '\n  Show Status Bar          =SBR'
@@ -139,11 +140,11 @@ D.prf = {};
     + '\n#   =http://example.com/  open a URL'
     + '\n#   {}   conditional display, a boolean expression'
     + '\n#          operators: && || ! ( )'
-    + '\n#          variables: browser mac win'
+    + '\n#          variables: local browser mac win' // Add 'local' variable to check if interpreter is being run locally.
     + '\n#   -    separator (when alone)'
     + '\n#   #    comment'
     + '\n'
-    + '\n# The =PRF ("Preferences") menu item must be present.',
+    + '\n# The =PRF ("Preferences...") menu item must be present.',
   ],
 ].forEach((kd) => {
   const [k, d] = kd; // k:preference name (key), d:default value

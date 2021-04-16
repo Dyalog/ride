@@ -81,12 +81,13 @@
         return;
       }
       if (D.el && D.lastSpawnedExe) {
-        const [v] = D.el.dialog.showOpenDialogSync(D.elw, {
+        let x = D.el.dialog.showOpenDialogSync(D.elw, {
           title: 'Open file',
           filters: [],
           properties: ['openFile'],
-        });
-        if (!v) return;
+        })
+        if (!x) return;
+        const [v] = x
         if (/\.dws$/i.test(v)) {
           $.confirm(
             `Run Latent Expression of ${v.replace(/^.*[\\/]/, '')}?`,
@@ -212,7 +213,7 @@
       w.loadURL(`file://${__dirname}/empty.html`);
       w.webContents.executeJavaScript('var d = document, h=d.documentElement, b=d.body, e=d.createElement("div");'
                                     + 'b.style.fontFamily="monospace";b.style.overflow="scroll";'
-                                    + 'e.style.whiteSpace="pre";b.appendChild(e)');
+                                    + 'e.style.whiteSpace="pre";!!b.appendChild(e);');
       const f = (x) => {
         const t = JSON.stringify(`${x}\n`);
         w.webContents.executeJavaScript(`e.textContent += ${t}; h.scrollTop = h.scrollHeight`);

@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset=utf-8>
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
   <title>Task</title>
   <link rel=stylesheet href='style/ride-base.css'>
   <link rel=stylesheet class=theme id=theme_dark href='style/dark-theme.css'>
@@ -12,6 +13,11 @@
   <div id=gd class="dlg floating"><!--generic dialog for processing OptionsDialog,StringDialog,TaskDialog-->
     <div class=dlg_content id=gd_content></div>
     <div class=dlg_btns    id=gd_btns   ></div>
+    <div id="gd_footer">
+      <div id="gd_footer_btns"></div>  
+      <input id=gd_footer_qn type="checkbox" name="question">
+      <label id=gd_footer_qn_lbl for=gd_footer_qn></label>
+    </div>
   </div>
   
   <script>
@@ -19,7 +25,12 @@
     const esc = s => s.replace(/[<>&'"]/g, x => ESC[x]);
 
     const ipc = require('node-ipc');
+    const el = require('electron').remote;
+    const bw = el.getCurrentWindow();
+    const [width] = bw.getSize();
     const qp = require('querystring').parse(window.location.search.slice(1));
+    const iswin = /^win/i.test(process.platform);
+
     ipc.config.id = 'dialog';
     ipc.config.appspace = qp.appid;
     ipc.config.retry = 1500;
@@ -30,7 +41,7 @@
       rm.on('connect', () => {
         window.onbeforeunload = (e) => {
           e.returnValue = false;
-          rm.emit('dialogClose', [token, task ? -1 : value]);
+          rm.emit('dialogClose', [token, { index: task ? -1 : value }]);
         };
         rm.emit('dialogCreated');
       });
@@ -48,6 +59,11 @@
 
     const gd_content = document.getElementById('gd_content');
     const gd_btns = document.getElementById('gd_btns');
+    const gd_footer = document.getElementById('gd_footer');
+    const gd_footer_btns = document.getElementById('gd_footer_btns');
+    const gd_footer_qn = document.getElementById('gd_footer_qn');
+    const gd_footer_qn_lbl = document.getElementById('gd_footer_qn_lbl');
+    
     let value;
     let task;
     let token;
@@ -57,6 +73,7 @@
       document.title = x.title || 'Dyalog';
       task = !!x.buttonText;
       value = x.defaultValue || null;
+      gd_footer.hidden = !task;
       if (task) {
         gd_content.innerHTML = esc(x.text || '') + (x.subtext ? `<div class=task_subtext>${esc(x.subtext)}</div>` : '');
         let btns = (x.buttonText || []).map((y) => {
@@ -64,19 +81,24 @@
           return '<button class=task><div class="btn_icon"><span class="fas fa-chevron-circle-right"></span></div>' +
             `${caption}<br><div class="task_detail">${details.join('<br>')}</div></button>`;
           }).join('');
-          btns += (x.footer ? `<div class=task_footer>${esc(x.footer)}</div>` : '');
           gd_btns.innerHTML = btns;
-          const ret = (r) => {
-            gd_btns.onclick = null;
-            rm.emit('dialogClose', [token, r]);
+          gd_footer_btns.innerHTML = x.options.map((y) => `<button>${y}</button>`).join('');
+          gd_footer_qn_lbl.innerHTML = x.questionlabel;
+          gd_footer_qn.checked = false;
+          const ret = (index, questionkey) => {
+            [...gd_btns.getElementsByTagName('button')].forEach(x => x.onclick = null);
+            gd_footer_btns.onclick = null;
+            rm.emit('dialogClose', [token, { index, questionkey }]);
           };
           const clickCb = (e) => {
-            let t = e.currentTarget;
-            let i = 99;
+            let t = e.currentTarget == gd_footer_btns ? e.target : e.currentTarget;
+            let i = e.currentTarget == gd_footer_btns ? -1 : 99;
             while (t) { t = t.previousSibling; i += 1; }
-            ret(i);
+            ret(i, gd_footer_qn.checked && x.questionkey);
           };
           [...gd_btns.getElementsByTagName('button')].forEach(x => x.onclick = clickCb);
+          gd_footer_btns.onclick = clickCb;
+
           gd_btns.querySelector('button').focus(); 
       } else {
         gd_content.innerText = x.text || '';
@@ -84,9 +106,9 @@
         const inp = gd_content.querySelector('input');
         inp.value = x.initialValue || '';
         gd_btns.innerHTML = '<button>OK</button><button>Cancel</button>';
-        const ret = (r) => {
+        const ret = (index) => {
           gd_btns.onclick = null;
-          rm.emit('dialogClose', [token, r]);
+          rm.emit('dialogClose', [token, { index }]);
         };
         gd_btns.onclick = (e) => {
           if (e.target.nodeName === 'BUTTON') {
@@ -104,6 +126,11 @@
         };
         setTimeout(() => { inp.focus(); }, 1);
       }
+      bw.resizable = true;
+      setTimeout(() => {
+        bw.setSize(width, document.body.clientHeight + (iswin ? 39 : 0));
+        bw.resizable = false;
+      }, 1);
     }
   </script>
 </body>

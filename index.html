@@ -71,6 +71,14 @@
           <div class="col col-xs-9"><input id=cn_tcp_port name=port size=4 placeholder=4502></div>
         </div>
       </div>
+      <div class="row">
+        <div class="col col-xs-12" id=cn_respawn>
+          <label class=cb_label>
+            <input type=checkbox id=cn_respawn_cb name=respawn>
+            <u>R</u>espawn listener on connection
+          </label>
+        </div>
+      </div>
       <div id=cn_ssh hidden>
         <div class="row">
           <div class="col col-xs-3"><label for=cn_ssh_port class=cn_label>SSH <u>P</u>ort:</label></div>
@@ -231,6 +239,11 @@
   <div id=gd_icon></div>
   <div class=dlg_content id=gd_content></div>
   <div class=dlg_btns    id=gd_btns   ></div>
+  <div id="gd_footer">
+    <div id="gd_footer_btns"></div>  
+    <input id=gd_footer_qn type="checkbox" name="question">
+    <label id=gd_footer_qn_lbl for=gd_footer_qn></label>
+  </div>
 </div>
 
 <!--IDE:language bar,session,editors,etc-->
@@ -362,6 +375,7 @@
     <a href=#code>General</a>
     <a href=#lyt class=sel>Keyboard</a>
     <a href=#shc>Shortcuts</a>
+    <a href=#resp>Saved Responses</a>
     <a href=#col>Colours</a>
     <a href=#title>Title</a>
     <a href=#pmenu>Menu</a>
@@ -457,6 +471,15 @@
       </div>
       <div id=shc_tbl_wr></div>
       <div id=shc_no_res hidden>No results</div>
+    </div>
+
+    <!--Saved Responses-->
+    <div id=resp hidden>
+      <div id=resp_ctrls>
+        <button id=resp_sel_all title="Select all responses"><u>S</u>elect All</button>
+        <button id=resp_del title="Delete response"><u>D</u>elete</button>
+      </div>
+      <select id=resp_qns multiple></select>
     </div>
 
     <!--Code-->
@@ -704,6 +727,7 @@
 <script src=src/prf_ui.js     ></script>
 <script src=src/prf_lyt.js    ></script>
 <script src=src/prf_shc.js    ></script>
+<script src=src/prf_resp.js   ></script>
 <script src=src/prf_code.js   ></script>
 <script src=src/prf_col.js    ></script>
 <script src=src/prf_title.js  ></script>

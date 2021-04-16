@@ -43,6 +43,7 @@ D.IDE = function IDE(opts = {}) {
     ide.wins[0] = new D.Se(ide);
     D.wins = ide.wins;
     D.send('GetSyntaxInformation',{});
+    D.send('GetLanguageBar',{});
 
     ide.focusedWin = ide.wins['0']; // last focused window, it might not have the focus right now
     ide.switchWin = (x) => { // x: +1 or -1
@@ -542,9 +543,23 @@ D.IDE = function IDE(opts = {}) {
       if (x.url.length == 0) ide.getHelpExecutor.reject("No help found");
       else ide.getHelpExecutor.resolve(x.url);
     },
+    ReplyGetLanguageBar(x) {
+      const { entries } = x;
+      D.lb.order = entries.map(k => k.avchar||' ').join('');
+      entries.forEach((k) => {
+        if (k.avchar) {
+          D.lb.tips[k.avchar] = [
+            `${k.name.slice(5)} (${k.avchar})`,
+            k.helptext.join('\n'),
+          ];
+        D.sqglDesc[k.avchar] = `${k.name.slice(5)} (${k.avchar})`
+        };
+      });
+      ide.lbarRecreate();
+    },
     ReplyGetSyntaxInformation(x) {
       D.ParseSyntaxInformation(x);
-      D.ipc.server && D.ipc.server.broadcast('syntax', D.syntax);
+      D.ipc && D.ipc.server.broadcast('syntax', D.syntax);
     },
     ValueTip(x) { ide.wins[x.token].ValueTip(x); },
     SetHighlightLine(x) { 
@@ -562,6 +577,7 @@ D.IDE = function IDE(opts = {}) {
       const w = ide.wins[x.win];
       if (!w) return;
       if (w.bwId) {
+        ide.block();
         w.close();
         w.id = -1;
       } else if (w) {
@@ -723,7 +739,6 @@ D.IDE = function IDE(opts = {}) {
         ide.wStatus = new D.el.BrowserWindow({
           width: 600,
           height: 400,
-          parent: D.elw,
           webPreferences: {
             contextIsolation: true,
             nodeIntegration: false,
@@ -763,6 +778,7 @@ D.IDE.prototype = {
     ide.dead = 1;
     ide.connected = 0;
     ide.dom.className += ' disconnected';
+    ide.wStatus && ide.wStatus.close();
     Object.keys(ide.wins).forEach((k) => { ide.wins[k].die(); });
   },
   updPW(x) { this.wins[0] && this.wins[0].updPW(x); },

@@ -97,7 +97,7 @@ const Console = console;
           alwaysOnTop: false,
           fullscreen: false,
           fullscreenable: false,
-          minWidth: 655,
+          minWidth: 790,
           minHeight: 600,
           webPreferences: {
             contextIsolation: false,

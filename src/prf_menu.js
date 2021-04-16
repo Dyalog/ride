@@ -51,11 +51,12 @@
     const evalExpr = (cond) => { 
       const mVars = {
         browser: !D.el,
+        local: !!D.lastSpawnedExe,
         mac: D.mac,
         win: D.win,
         true: true,
       };
-      const RE = /(!)?(mac|win|browser|(\(.*\)))/g;
+      const RE = /(!)?(mac|win|browser|local|(\(.*\)))/g;
       const test = (_, x, y) => {
         if (!y) return false;
         const exp = y[0] === '(' ? y.slice(1, y.length - 1).replace(RE, test) : y;
@@ -70,7 +71,7 @@
     for (let i = 0; i < lines.length; i++) {
       let s = lines[i];
       if (/^\s*$/.test(s = s.replace(/#.*/, ''))) continue;
-      let cond = ''; s = s.replace(/\{(.*)\}/, (_, x) => { cond = x; return ''; });
+      let cond = ''; s = s.replace(/\{(.*)\}/,  (_, x) => { cond = x; return ''; });
       let url = ''; s = s.replace(/\=(https?:\/\/\S+)/, (_, x) => { url = x; return ''; });
       let cmd = ''; s = s.replace(/\=([a-z][a-z0-9]+)/i, (_, x) => { cmd = x; return ''; });
       const h = { ind: s.replace(/\S.*/, '').length, '': s.replace(/^\s*|\s*$/g, '') };

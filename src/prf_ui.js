@@ -112,7 +112,7 @@
         d.className += ' web';
       }
     }
-    !D.el && D.util.dlg(d, { w: 655, h: 600 });
+    !D.el && D.util.dlg(d, { w: 765, h: 600 });
     Object.keys(tabs).forEach((i) => { tabs[i].load(); });
     $(typeof tab === 'string' ? `#prf_nav a[href$=${tab}]` : '#prf_nav .sel').mousedown();
   };

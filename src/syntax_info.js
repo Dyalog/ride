@@ -25,11 +25,11 @@
         return s.replace(/«(.*?)»|(.)/g, (_, g1, g2) => { const g = g1 || g2; return ` *${(g === '_' ? "' '" : escRE(g))}`; }).slice(2);
     }
     
-    function defineSyntaxRegex(){
+    D.DefineSyntaxRegex = function() {
         D.syntax.idiomsRE = RegExp(`^(?:${D.syntax.idioms.sort((x, y) => y.length - x.length).map(escIdiom).join('|')})`, 'i');
     }
 
-    D.ParseSyntaxInformation = function (x) {
+    D.ParseSyntaxInformation = function(x) {
          // If a SyntaxInfo object is returned, use it:
         // We need to process each of these to remove all of the lovely formatting that John provides.
         D.syntax.sysfns = [
@@ -45,7 +45,7 @@
         D.syntax.sysvar = x.quadvars.flat().join('|').toLowerCase();
         
         D.syntax.idioms = x.idioms;     // The ReplyGetSyntaxInformation message already returns a list of strings formatted as required.
-        defineSyntaxRegex();
+        D.DefineSyntaxRegex();
 
         //// The ReplyGetSyntaxInformation message does not return these in the same format, just a single 'keywords' array.
         //D.restartBlock = ;//???
@@ -53,5 +53,5 @@
         //D.endBlock = ;//???
 
     };
-    defineSyntaxRegex();
+    D.DefineSyntaxRegex();
 }
