@@ -44,6 +44,7 @@ D.IDE = function IDE(opts = {}) {
     D.wins = ide.wins;
     D.send('GetSyntaxInformation',{});
     D.send('GetLanguageBar',{});
+    D.send('GetConfiguration', { names: ['AUTO_PAUSE_THREADS'] });
 
     ide.focusedWin = ide.wins['0']; // last focused window, it might not have the focus right now
     ide.switchWin = (x) => { // x: +1 or -1
@@ -467,6 +468,11 @@ D.IDE = function IDE(opts = {}) {
   D.prf.minimapEnabled((x) => { eachWin(w => !w.bwId && w.minimapEnabled(!!x)); });
   D.prf.minimapRenderCharacters((x) => { eachWin(w => !w.bwId && w.minimapRenderCharacters(!!x)); });
   D.prf.minimapShowSlider((x) => { eachWin(w => !w.bwId && w.minimapShowSlider(x)); });
+  D.prf.pauseOnError((x) => { 
+    D.send('SetConfiguration', {
+      configurations: [{ name: 'AUTO_PAUSE_THREADS', value: x ? '1': '0' }],
+    });
+  });
   D.prf.selectionHighlight((x) => { eachWin(w => !w.bwId && w.selectionHighlight(x)); });
   D.prf.showEditorToolbar((x) => { $('.ride_win.edit_trace').toggleClass('no-toolbar', !x); });
   D.prf.snippetSuggestions((x) => { eachWin(w => !w.bwId && w.snippetSuggestions(x)); });
@@ -731,6 +737,11 @@ D.IDE = function IDE(opts = {}) {
       ide.hadErr > 0 && (ide.hadErr -= 1);
       ide.focusWin(w);
     },
+    ReplyGetConfiguration(x) {
+      x.configurations.forEach((c) => {
+        if (c.name === 'AUTO_PAUSE_THREADS') D.prf.pauseOnError(c.value === '1');
+      });
+    },
     ReplyTreeList(x) { ide.wse.replyTreeList(x); },
     StatusOutput(x) {
       let w = ide.wStatus;
@@ -757,6 +768,8 @@ D.IDE = function IDE(opts = {}) {
          toastr.warning('Clear all trace/stop/monitor not supported by the interpreter');
       } else if (x.name === 'GetHelpInformation') {
         ide.getHelpExecutor.reject('GetHelpInformation not implemented on remote interpreter');
+      } else if (x.name === 'ReplyGetConfiguration') {
+        ide.get_configuration_na = 1;
       }
     },
   };
