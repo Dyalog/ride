@@ -54,12 +54,32 @@
         local: !!D.lastSpawnedExe,
         mac: D.mac,
         win: D.win,
+        ver: D.remoteIdentification && D.remoteIdentification.version || '0.0.0',
         true: true,
       };
       const RE = /(!)?(mac|win|browser|local|(\(.*\)))/g;
       const test = (_, x, y) => {
+        function compareVer(va, comp, vb) { // e.g. Dyalog version '1.2.3', '>=', '1.0.0'
+          // Find the first non-equal element, and perform the supplied comparator.
+          // Input must be '.' delimited, numeric only versions (Not quite a semver checker).
+          const verA = va.split('.'); const verB = vb.split('.');
+          for (let i = 0; i < Math.min(verA.length, verB.length); i++) { // Only compare the elements they share.
+            var ind = (verA[i] == verB[i]) ? 0 : i; // Must use 'var' for function scope instead of block scope.
+            if (ind) { break; };  // Exit early if we reach a non-equal element.
+          };
+          switch (comp) { // Safer than eval()!
+            case '<' : return verA[ind] <  verB[ind];
+            case '<=': return verA[ind] <= verB[ind];
+            case '>' : return verA[ind] >  verB[ind];
+            case '>=': return verA[ind] >= verB[ind];
+            case '=' : return verA[ind] == verB[ind];
+            case '==': return verA[ind] == verB[ind]; // Just in case.
+            default  : return verA[ind] == verB[ind]; // Just in case, also.
+          };
+        };
         if (!y) return false;
         const exp = y[0] === '(' ? y.slice(1, y.length - 1).replace(RE, test) : y;
+        // Now that we have a working compareVer function I just need to figure out how to get it in here...
         const b = exp.split('||').reduce((op, oc) => {
           const g = oc.split('&&').reduce((ap, ac) => mVars[ac] && ap, true);
           return g || op;
