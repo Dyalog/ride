@@ -537,29 +537,25 @@ D.IDE = function IDE(opts = {}) {
       se.hadErrTmr = setTimeout(() => { ide.hadErr = -1; delete se.hadErrTmr; }, 100);
       // gl mounted + SetHighlightLine + ReplyFormatCode
       ide.hadErr = 2 + (D.prf.ilf() && D.prf.indentOnOpen());
-      // Pause all threads if Pause On Error is set
-      if (D.prf.pauseOnError()) {
-        D.send('PauseAllThreads', {'pause':1});
-      };
     },
     GotoWindow(x) { const w = ide.wins[x.win]; w && w.focus(); },
     WindowTypeChanged(x) { return ide.wins[x.win].setTC(x.tracer); },
     ReplyGetAutocomplete(x) { const w = ide.wins[x.token]; w && w.processAutocompleteReply(x); },
     ReplyGetHelpInformation(x) {
-      if (x.url.length == 0) ide.getHelpExecutor.reject("No help found");
+      if (x.url.length === 0) ide.getHelpExecutor.reject('No help found');
       else ide.getHelpExecutor.resolve(x.url);
     },
     ReplyGetLanguageBar(x) {
       const { entries } = x;
-      D.lb.order = entries.map(k => k.avchar||' ').join('');
+      D.lb.order = entries.map((k) => k.avchar || ' ').join('');
       entries.forEach((k) => {
         if (k.avchar) {
           D.lb.tips[k.avchar] = [
             `${k.name.slice(5)} (${k.avchar})`,
             k.helptext.join('\n'),
           ];
-        D.sqglDesc[k.avchar] = `${k.name.slice(5)} (${k.avchar})`
-        };
+          D.sqglDesc[k.avchar] = `${k.name.slice(5)} (${k.avchar})`;
+        }
       });
       ide.lbarRecreate();
     },
@@ -765,11 +761,12 @@ D.IDE = function IDE(opts = {}) {
     ReplyGetLog(x) { ide.wins[0].add(x.result.join('\n')); ide.bannerDone = 0; },
     UnknownCommand(x) {
       if (x.name === 'ClearTraceStopMonitor') {
-         toastr.warning('Clear all trace/stop/monitor not supported by the interpreter');
+        toastr.warning('Clear all trace/stop/monitor not supported by the interpreter');
       } else if (x.name === 'GetHelpInformation') {
         ide.getHelpExecutor.reject('GetHelpInformation not implemented on remote interpreter');
-      } else if (x.name === 'ReplyGetConfiguration') {
-        ide.get_configuration_na = 1;
+      } else if (x.name === 'GetConfiguration') {
+        D.get_configuration_na = 1;
+        updMenu();
       }
     },
   };
@@ -820,7 +817,7 @@ D.IDE.prototype = {
       '{RIDE_VER_C}': rvc,
       '{RIDE_VER}': v.version,
     };
-    ide.caption = D.prf.title().replace(/\{\w+\}/g, x => m[x.toUpperCase()] || x) || 'Dyalog';
+    ide.caption = D.prf.title().replace(/\{\w+\}/g, (x) => m[x.toUpperCase()] || x) || 'Dyalog';
     D.ipc && D.ipc.server.broadcast('caption', ide.caption);
     document.title = ide.caption;
   },
@@ -844,9 +841,9 @@ D.IDE.prototype = {
     Object.keys(wins).forEach((k) => {
       const x = wins[k];
       if (x.id && (!tracer || !!x.tc) && t <= x.focusTS) {
-         w = x; 
-         t = x.focusTS; 
-        }
+        w = x;
+        t = x.focusTS;
+      }
     });
     return (!tracer || !!w.tc) && w;
   },

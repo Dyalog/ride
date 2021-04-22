@@ -113,7 +113,7 @@ D.prf = {};
     + '\n  Clear all trace/stop/monitor =CAM'
     + '\n  Weak Interrupt           =WI'
     + '\n  Strong Interrupt         =SI'
-    + '\n&Threads'
+    + '\n&Threads                        {rp21}'
     + '\n  Pause on Error           =POE'
     + '\n  Pause all Threads        =PAT'
     + '\n  Resume all Threads       =RSU'
