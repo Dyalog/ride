@@ -209,16 +209,16 @@
       const model = me.getModel();
       const l = model.getLineCount();
       const s0 = model.getLineContent(l);
-      let sp = s;
+      const ssp = '      ';
+      let text = (s0 === ssp || se.promptType === 3) ? s : s0 + s;
+      if (s[s.length - 1] === '\n' && se.promptType === 1) text += ssp;
       se.isReadOnly && me.updateOptions({ readOnly: false });
       if (this.dirty[l] != null) {
         const cp = me.getPosition();
-        se.edit([{ range: new monaco.Range(l, 1, l, 1 + s0.length), text: `${s0}\n${sp}` }]);
+        se.edit([{ range: new monaco.Range(l, 1, l, 1 + s0.length), text: `${s0}\n${text}` }]);
         me.setPosition(cp);
       } else {
-        if (se.isReadOnly && !/^\s*$/.test(s0)) sp = s0 + sp; 
-        else if (se.promptType == 1) sp += s0;
-        se.edit([{ range: new monaco.Range(l, 1, l, 1 + s0.length), text: sp }]);
+        se.edit([{ range: new monaco.Range(l, 1, l, 1 + s0.length), text }]);
         const ll = model.getLineCount();
         const lc = model.getLineMaxColumn(ll);
         me.setPosition({ lineNumber: ll, column: lc });
@@ -239,21 +239,27 @@
       const se = this;
       const { me } = se;
       const model = me.getModel();
-      const l = model.getLineCount();
-      const t = model.getLineContent(l);
+      const ssp = '      ';
+      const line = model.getLineCount();
+      const column = model.getLineMaxColumn(line);
+      const t = model.getLineContent(line);
       const promtChanged = se.promptType !== x;
       se.promptType = x;
       se.isReadOnly = !x;
       me.updateOptions({ readOnly: !x });
-      if ((x === 1 && this.dirty[l] == null) || ![0, 1, 3, 4].includes(x)) {
+      if ((x === 1 && this.dirty[line] == null) || ![0, 1, 3, 4].includes(x)) {
+        const isEmpty = /^\s*$/.test(t);
+        const text = isEmpty ? ssp : `${t}\n${ssp}`;
         se.edit(
-          [{ range: new monaco.Range(l, 1, l, 1 + t.length), text: '      ' }],
-          promtChanged ? [new monaco.Selection(l, 7, l, 7)] : me.getSelections(),
+          [{ range: new monaco.Range(line, 1, line, column), text }],
+          (promtChanged || !isEmpty)
+            ? [new monaco.Selection(line + !isEmpty, 7, line + !isEmpty, 7)] : me.getSelections(),
         );
-      } else if (t === '      ') {
-        se.edit([{ range: new monaco.Range(l, 1, l, 7), text: '' }]);
+        se.oModel.setValue(me.getValue());
+      } else if (t === ssp) {
+        se.edit([{ range: new monaco.Range(line, 1, line, 7), text: '' }]);
       } else {
-        me.setPosition({ lineNumber: l, column: 1 + t.length });
+        me.setPosition({ lineNumber: line, column });
       }
       if (!x) {
         se.taBuffer.length = 0;
