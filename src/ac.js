@@ -129,10 +129,11 @@
           tgt.selectionEnd = p;
         }
       });
-      const fwr = fw._replaceInputBox.inputElement;
-      fwr.onkeydown = (be) => {
+      const fwr = fw._replaceInput.inputBox;
+      fw._replaceInput.onKeyDown((e) => {
         const pk = D.prf.prefixKey();
         const s = fwr.value;
+        const be = e.browserEvent;
         const tgt = be.target;
         const p = tgt.selectionStart;
         if (s[p - 1] === pk && D.bq[be.key]
@@ -143,7 +144,7 @@
           tgt.selectionStart = p;
           tgt.selectionEnd = p;
         }
-      };
+      });
     });
     return (x) => { // win:editor or session instance to set up autocompletion in
       const { ac } = me.getModel();
