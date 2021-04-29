@@ -45,6 +45,8 @@ D.IDE = function IDE(opts = {}) {
     I.sb_dq.hidden = !1;
     I.sb_sis.hidden = !1;
     I.sb_threads.hidden = !1;
+    I.sb_cc.hidden = !1;
+    I.sb_gc.hidden = !1;
     ide.wins[0] = new D.Se(ide);
     D.wins = ide.wins;
     D.send('GetSyntaxInformation', {});
@@ -358,10 +360,6 @@ D.IDE = function IDE(opts = {}) {
   const toggleStats = () => {
     if (ide.floating) return;
     // (un)subscribe to status here
-    // need old code as fallback for old interpreters
-    // perhaps a new property on the ide can indicate if
-    // new message supported by checking for an unknowncommand reply.
-
     if (ide.hasSubscribe) {
       // New code for interpreters that support the Subscribe message
       const sbarFields = [
@@ -747,6 +745,8 @@ D.IDE = function IDE(opts = {}) {
       // I.sb_trap.innerText = `⎕TRAP: ${x.TRAP}`; // TRAP doesn't display a value
       I.sb_dq.innerText = `⎕DQ: ${x.DQ}`;
       I.sb_threads.innerText = `&: ${x.NumThreads}`;
+      I.sb_cc.innerText = `CC: ${x.CompactCount}`;
+      I.sb_gc.innerText = `GC: ${x.GarbageCount}`;
       // Eventually we would like to read the default values from the interpreter.
       I.sb_ml.classList.toggle('active', x.ML !== 1);
       I.sb_io.classList.toggle('active', x.IO !== 1);
@@ -754,6 +754,8 @@ D.IDE = function IDE(opts = {}) {
       I.sb_trap.classList.toggle('active', x.TRAP !== 0);
       I.sb_dq.classList.toggle('active', x.DQ !== 0);
       I.sb_threads.classList.toggle('active', x.NumThreads > 1);
+      I.sb_cc.classList.toggle('active', x.CompactCount !== 1);
+      I.sb_gc.classList.toggle('active', x.GarbageCount !== 0);
     },
     ReplyFormatCode(x) {
       const w = D.wins[x.win];
