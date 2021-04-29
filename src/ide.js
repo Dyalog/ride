@@ -176,7 +176,7 @@ D.IDE = function IDE(opts = {}) {
       D.util.insert(ae, s);
       const fw = w.me._overlayWidgets['editor.contrib.findWidget'].widget;
       const fi = fw._findInput;
-      const fr = fw._replaceInputBox.inputElement;
+      const fr = fw._replaceInput.inputBox;
       if (fi.inputBox.input === ae) fi._onInput.fire();
       else if (fr === ae) fw._state.change({ replaceString: fr.value }, false);
     }
