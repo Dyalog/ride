@@ -37,25 +37,27 @@
       WRP: { checkBoxPref: D.prf.wrap },
       WSE: { checkBoxPref: D.prf.wse },
       DBG: { checkBoxPref: D.prf.dbg },
+      POE: { checkBoxPref: D.prf.pauseOnError },
     };
     const stk = [{ ind: -1, items: [] }];
     const lines = md.split('\n');
-    const cb = cmd => () => {
+    const cb = (cmd) => () => {
       const f = D.commands[cmd];
       const w = (D.ide || {}).focusedWin || {};
       if (f) f(w.me);
       else if (D.ide[cmd]) D.ide[cmd]();
       else $.err(`Unknown command: ${cmd}`);
     };
-    const evalExpr = (cond) => { 
+    const evalExpr = (cond) => {
       const mVars = {
         browser: !D.el,
         local: !!D.lastSpawnedExe,
         mac: D.mac,
         win: D.win,
+        rp21: !D.get_configuration_na,
         true: true,
       };
-      const RE = /(!)?(mac|win|browser|local|(\(.*\)))/g;
+      const RE = /(!)?(mac|win|browser|local|rp21|(\(.*\)))/g;
       const test = (_, x, y) => {
         if (!y) return false;
         const exp = y[0] === '(' ? y.slice(1, y.length - 1).replace(RE, test) : y;

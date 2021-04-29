@@ -516,7 +516,7 @@
     ER() { this.exec(0); },
     TC() { this.exec(1); },
     LN() { D.prf.lineNums.toggle(); },
-    MA() { D.send('RestartThreads', {}); },
+    MA() { D.send('RestartThreads', {}); }, // Threads > Restart All Threads
     DC() {
       const { me } = this;
       const model = me.getModel();

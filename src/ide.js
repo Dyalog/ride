@@ -51,6 +51,7 @@ D.IDE = function IDE(opts = {}) {
     D.wins = ide.wins;
     D.send('GetSyntaxInformation', {});
     D.send('GetLanguageBar', {});
+    D.send('GetConfiguration', { names: ['AUTO_PAUSE_THREADS'] });
 
     ide.focusedWin = ide.wins['0']; // last focused window, it might not have the focus right now
     ide.switchWin = (x) => { // x: +1 or -1
@@ -483,6 +484,11 @@ D.IDE = function IDE(opts = {}) {
   D.prf.minimapEnabled((x) => { eachWin(w => !w.bwId && w.minimapEnabled(!!x)); });
   D.prf.minimapRenderCharacters((x) => { eachWin(w => !w.bwId && w.minimapRenderCharacters(!!x)); });
   D.prf.minimapShowSlider((x) => { eachWin(w => !w.bwId && w.minimapShowSlider(x)); });
+  D.prf.pauseOnError((x) => { 
+    D.send('SetConfiguration', {
+      configurations: [{ name: 'AUTO_PAUSE_THREADS', value: x ? '1': '0' }],
+    });
+  });
   D.prf.selectionHighlight((x) => { eachWin(w => !w.bwId && w.selectionHighlight(x)); });
   D.prf.showEditorToolbar((x) => { $('.ride_win.edit_trace').toggleClass('no-toolbar', !x); });
   D.prf.snippetSuggestions((x) => { eachWin(w => !w.bwId && w.snippetSuggestions(x)); });
@@ -552,20 +558,20 @@ D.IDE = function IDE(opts = {}) {
     WindowTypeChanged(x) { return ide.wins[x.win].setTC(x.tracer); },
     ReplyGetAutocomplete(x) { const w = ide.wins[x.token]; w && w.processAutocompleteReply(x); },
     ReplyGetHelpInformation(x) {
-      if (x.url.length == 0) ide.getHelpExecutor.reject("No help found");
+      if (x.url.length === 0) ide.getHelpExecutor.reject('No help found');
       else ide.getHelpExecutor.resolve(x.url);
     },
     ReplyGetLanguageBar(x) {
       const { entries } = x;
-      D.lb.order = entries.map(k => k.avchar||' ').join('');
+      D.lb.order = entries.map((k) => k.avchar || ' ').join('');
       entries.forEach((k) => {
         if (k.avchar) {
           D.lb.tips[k.avchar] = [
             `${k.name.slice(5)} (${k.avchar})`,
             k.helptext.join('\n'),
           ];
-          D.sqglDesc[k.avchar] = `${k.name.slice(5)} (${k.avchar})`
-        };
+          D.sqglDesc[k.avchar] = `${k.name.slice(5)} (${k.avchar})`;
+        }
       });
       ide.lbarRecreate();
     },
@@ -763,6 +769,11 @@ D.IDE = function IDE(opts = {}) {
       ide.hadErr > 0 && (ide.hadErr -= 1);
       ide.focusWin(w);
     },
+    ReplyGetConfiguration(x) {
+      x.configurations.forEach((c) => {
+        if (c.name === 'AUTO_PAUSE_THREADS') D.prf.pauseOnError(c.value === '1');
+      });
+    },
     ReplyTreeList(x) { ide.wse.replyTreeList(x); },
     StatusOutput(x) {
       let w = ide.wStatus;
@@ -797,6 +808,9 @@ D.IDE = function IDE(opts = {}) {
         I.sb_trap.hidden = true;
         I.sb_dq.hidden = true;
         toggleStats();
+      } else if (x.name === 'GetConfiguration') {
+        D.get_configuration_na = 1;
+        updMenu();
       }
     },
   };
@@ -847,7 +861,7 @@ D.IDE.prototype = {
       '{RIDE_VER_C}': rvc,
       '{RIDE_VER}': v.version,
     };
-    ide.caption = D.prf.title().replace(/\{\w+\}/g, x => m[x.toUpperCase()] || x) || 'Dyalog';
+    ide.caption = D.prf.title().replace(/\{\w+\}/g, (x) => m[x.toUpperCase()] || x) || 'Dyalog';
     D.ipc && D.ipc.server.broadcast('caption', ide.caption);
     document.title = ide.caption;
   },
@@ -871,9 +885,9 @@ D.IDE.prototype = {
     Object.keys(wins).forEach((k) => {
       const x = wins[k];
       if (x.id && (!tracer || !!x.tc) && t <= x.focusTS) {
-         w = x; 
-         t = x.focusTS; 
-        }
+        w = x;
+        t = x.focusTS;
+      }
     });
     return (!tracer || !!w.tc) && w;
   },
