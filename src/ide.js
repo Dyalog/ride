@@ -524,7 +524,7 @@ D.IDE = function IDE(opts = {}) {
       ide.promptType = t;
       if (t && ide.pending.length) D.send('Execute', { trace: 0, text: `${ide.pending.shift()}\n` });
       else eachWin((w) => { w.prompt(t); });
-      t === 4 && ide.wins[0].focus(); // ⍞ input
+      (t === 2 || t === 4) && ide.wins[0].focus(); // ⎕ / ⍞ input
       t === 1 && ide.getStats();
       if (t === 1 && ide.bannerDone === 0) {
         // arrange for the banner to appear at the top of the session window
