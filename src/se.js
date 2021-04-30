@@ -93,6 +93,7 @@
           e.event.preventDefault();
           e.event.stopPropagation();
           se.ED(me);
+          me.setPosition(p);
         }
         mouseL = l; mouseC = c; mouseTS = e.event.timestamp;
       }
