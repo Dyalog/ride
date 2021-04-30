@@ -106,8 +106,10 @@
         || (ed.isReadOnly && t.type === mt.CONTENT_EMPTY)) {
         if (e.event.timestamp - mouseTS < 400 && mouseL === p.lineNumber && mouseC === p.column) {
           e.event.preventDefault(); e.event.stopPropagation();
-          ed.ED(me);
-          me.setPosition(p);
+          if (D.prf.doubleClickToEdit()) {
+            ed.ED(me);
+            me.setPosition(p);
+          }
         }
         mouseL = p.lineNumber; mouseC = p.column; mouseTS = e.event.timestamp;
       }

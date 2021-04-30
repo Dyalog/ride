@@ -92,8 +92,10 @@
         if (e.event.timestamp - mouseTS < 400 && mouseL === l && mouseC === c) {
           e.event.preventDefault();
           e.event.stopPropagation();
-          se.ED(me);
-          me.setPosition(p);
+          if (D.prf.doubleClickToEdit()) {
+            se.ED(me);
+            me.setPosition(p);
+          }
         }
         mouseL = l; mouseC = c; mouseTS = e.event.timestamp;
       }
