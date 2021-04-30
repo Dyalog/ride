@@ -15,6 +15,7 @@ D.IDE = function IDE(opts = {}) {
   // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.pending = [];
   ide.promptType = 1;
+  ide.hasSubscribe = true;
   ide.exec = (a, tc) => {
     if (a && a.length) {
       tc || (ide.pending = a.slice(1));
@@ -38,12 +39,18 @@ D.IDE = function IDE(opts = {}) {
     ide.switchWin = (x) => { ide.ipc.emit('switchWin', x); };
   } else {
     D.prf.title(ide.updTitle.bind(ide));
+    I.sb_ml.hidden = !1;
+    I.sb_io.hidden = !1;
+    I.sb_trap.hidden = !1;
+    I.sb_dq.hidden = !1;
     I.sb_sis.hidden = !1;
     I.sb_threads.hidden = !1;
+    I.sb_cc.hidden = !1;
+    I.sb_gc.hidden = !1;
     ide.wins[0] = new D.Se(ide);
     D.wins = ide.wins;
-    D.send('GetSyntaxInformation',{});
-    D.send('GetLanguageBar',{});
+    D.send('GetSyntaxInformation', {});
+    D.send('GetLanguageBar', {});
     D.send('GetConfiguration', { names: ['AUTO_PAUSE_THREADS'] });
 
     ide.focusedWin = ide.wins['0']; // last focused window, it might not have the focus right now
@@ -353,9 +360,18 @@ D.IDE = function IDE(opts = {}) {
   });
   const toggleStats = () => {
     if (ide.floating) return;
-    if (statsTid && !D.prf.dbg() && !D.prf.sbar()) {
+    // (un)subscribe to status here
+    if (ide.hasSubscribe) {
+      // New code for interpreters that support the Subscribe message
+      const sbarFields = [
+        ...(D.prf.sbar() ? ['statusfields'] : []),
+        ...(D.prf.dbg() ? ['stack', 'threads'] : []),
+      ];
+      const sbarReq = { status: sbarFields }; // Heartbeat not currently used.
+      D.send('Subscribe', sbarReq);
+    } else if (statsTid && !D.prf.dbg() && !D.prf.sbar()) { // Fallback code
       clearInterval(statsTid); statsTid = 0;
-    } else if (!statsTid && (D.prf.dbg() || D.prf.sbar())) {
+    } else if (!statsTid && !ide.hasSubscribe && (D.prf.dbg() || D.prf.sbar())) {
       ide.getStats();
       statsTid = statsTid || setInterval(ide.getStats, 5000);
     }
@@ -727,6 +743,26 @@ D.IDE = function IDE(opts = {}) {
       I.sb_threads.classList.toggle('active', l > 1);
       ide.dbg && ide.dbg.threads.render(x.threads);
     },
+    InterpreterStatus(x) {
+      // update status bar fields here
+      I.sb_ml.innerText = `⎕ML: ${x.ML}`;
+      I.sb_io.innerText = `⎕IO: ${x.IO}`;
+      I.sb_sis.innerText = `⎕SI: ${x.SI}`;
+      // I.sb_trap.innerText = `⎕TRAP: ${x.TRAP}`; // TRAP doesn't display a value
+      I.sb_dq.innerText = `⎕DQ: ${x.DQ}`;
+      I.sb_threads.innerText = `&: ${x.NumThreads}`;
+      I.sb_cc.innerText = `CC: ${x.CompactCount}`;
+      I.sb_gc.innerText = `GC: ${x.GarbageCount}`;
+      // Eventually we would like to read the default values from the interpreter.
+      I.sb_ml.classList.toggle('active', x.ML !== 1);
+      I.sb_io.classList.toggle('active', x.IO !== 1);
+      I.sb_sis.classList.toggle('active', x.SI > 0);
+      I.sb_trap.classList.toggle('active', x.TRAP !== 0);
+      I.sb_dq.classList.toggle('active', x.DQ !== 0);
+      I.sb_threads.classList.toggle('active', x.NumThreads > 1);
+      // I.sb_cc.classList.toggle('active', x.CompactCount !== 1);
+      // I.sb_gc.classList.toggle('active', x.GarbageCount !== 0);
+    },
     ReplyFormatCode(x) {
       const w = D.wins[x.win];
       w.ReplyFormatCode(x.text);
@@ -764,6 +800,14 @@ D.IDE = function IDE(opts = {}) {
         toastr.warning('Clear all trace/stop/monitor not supported by the interpreter');
       } else if (x.name === 'GetHelpInformation') {
         ide.getHelpExecutor.reject('GetHelpInformation not implemented on remote interpreter');
+      } else if (x.name === 'Subscribe') {
+        // flag to fallback for status updates.
+        ide.hasSubscribe = false;
+        I.sb_ml.hidden = true;
+        I.sb_io.hidden = true;
+        I.sb_trap.hidden = true;
+        I.sb_dq.hidden = true;
+        toggleStats();
       } else if (x.name === 'GetConfiguration') {
         D.get_configuration_na = 1;
         updMenu();
