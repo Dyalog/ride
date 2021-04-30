@@ -298,7 +298,7 @@
     const c = D.commands;
     c[x] || (c[x] = (me) => {
       const h = me.dyalogCmds;
-      h && h[x] && h.execCommand(x);
+      (h && h[x]) ? h.execCommand(x) : $.alert(`Command ${x} not implemented.`);
     });
   }
   ('CBP MA AC VAL indentOrComplete indentMoreOrAutocomplete STL TVO TVB'
