@@ -433,19 +433,6 @@
       const fs = D.zoom2fs[z + 10];
       me.updateOptions({ fontSize: fs, lineHeight: fs + 2 });
       me.revealRangeAtTop(r);
-
-      // const w = this;
-      // const b = w.getDocument().body;
-      // const top = w.cm.heightAtLine(w.cm.lastLine(), 'local') < w.btm;
-      // const i = w.cm.getScrollInfo();
-      // const line = w.cm.lineAtHeight(top ? i.top : w.btm, 'local');
-      // const diff = w.btm - (line * w.cm.defaultTextHeight());
-      // const ch = i.clientHeight;
-      // const cls = b.className.split(/\s+/).filter(s => !/^zoom-?\d+$/.test(s)).join(' ');
-      // b.className = `zoom${z} ${cls}`;
-      // w.refresh();
-      // w.btm = (w.cm.defaultTextHeight() * line) + (top ? ch + 5 : diff) +
-      //   (w.cm.getScrollInfo().clientHeight - ch);
     },
 
     ValueTip(x) {
