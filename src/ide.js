@@ -760,8 +760,8 @@ D.IDE = function IDE(opts = {}) {
       I.sb_trap.classList.toggle('active', x.TRAP !== 0);
       I.sb_dq.classList.toggle('active', x.DQ !== 0);
       I.sb_threads.classList.toggle('active', x.NumThreads > 1);
-      I.sb_cc.classList.toggle('active', x.CompactCount !== 1);
-      I.sb_gc.classList.toggle('active', x.GarbageCount !== 0);
+      // I.sb_cc.classList.toggle('active', x.CompactCount !== 1);
+      // I.sb_gc.classList.toggle('active', x.GarbageCount !== 0);
     },
     ReplyFormatCode(x) {
       const w = D.wins[x.win];
