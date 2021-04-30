@@ -1,5 +1,6 @@
 {
   // Preferences > Code
+  // Is this now Preferences > General?
 
   let q; // DOM elements whose ids start with "code_", keyed by the rest of the id
   D.prf_tabs.code = {
@@ -67,6 +68,7 @@
       q.ai.onchange();
       q.ac.onchange();
       q.ilf.onchange();
+      q.dce.checked = !!p.doubleClickToEdit();
     },
     activate() { q.ai.focus(); },
     save() {
@@ -96,6 +98,7 @@
       p.squiggleTips       (q.sqt.checked);
       p.sqp                (q.sqp.checked);
       p.snippetSuggestions (q.ss.checked);
+      p.doubleClickToEdit  (q.dce.checked);
     },
     validate() {
       const isInt = (x, minX) => +x === (+x | 0) && +x >= minX;

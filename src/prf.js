@@ -17,6 +17,7 @@ D.prf = {};
   ['colourSchemes',      []],//objects describing user-defined colour schemes
   ['confirmations',      {}],//saved responses to TaskDialog questions
   ['connectOnQuit',      0], // open connection page when active session ends
+  ['doubleClickToEdit',  1], // whether double clicking a function name in session or editor opens an editor on that function
   ['floating',           0], //floating editor and tracer windows
   ['floatSingle',        1], //create single floating edit window
   ['fold',               1], //code folding
