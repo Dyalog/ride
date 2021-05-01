@@ -38,6 +38,7 @@
       cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
       cursorBlinking: D.prf.cursorBlinking(),
       emptySelectionClipboard: false,
+      fixedOverflowWidgets: true,
       folding: ed.isCode && !!D.prf.fold(),
       fontFamily: 'apl',
       fontSize: fs,
