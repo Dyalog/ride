@@ -475,12 +475,20 @@
         }
         case 'start': {
           D.spawned = 1;
-          const env = {};
+          const envusr = {};
           const a = (x.env || '').split('\n');
           for (let i = 0; i < a.length; i++) {
             const [, k, v] = KV.exec(a[i]) || [];
-            k && (env[k] = v);
+            k && (envusr[k] = v);
           }
+          const env = {
+            ...envusr,
+            APLK0: 'default',
+            AUTOCOMPLETE_PREFIXSIZE: 0,
+            CLASSICMODE: 1,
+            SINGLETRACE: 1,
+            RIDE_SPAWNED: '1',                    
+          };
           if (x.subtype === 'ssh') {
             D.util.dlg(q.connecting_dlg, { modal: true });
             const o = {
@@ -502,7 +510,7 @@
                 Object.keys(env).forEach((k) => { s0 += `${k}=${shEsc(env[k])} `; });
                 const args = x.args ? x.args.replace(/\n$/gm, '').split('\n') : [];
                 const s1 = dyalogArgs(args).map(shEsc).join(' ');
-                sm.write(`${s0}CLASSICMODE=1 SINGLETRACE=1 RIDE_INIT=CONNECT:127.0.0.1:${rport} RIDE_SPAWNED=1 ${shEsc(x.exe)} ${s1} +s -q -nokbd >/dev/null\n`);
+                sm.write(`${s0}RIDE_INIT=CONNECT:127.0.0.1:${rport} ${shEsc(x.exe)} ${s1} +s -q -nokbd >/dev/null\n`);
                 hideDlgs();
               });
             });
@@ -545,16 +553,11 @@
                   ...(!!x.cwd && { cwd: untildify(x.cwd) }),
                   stdio,
                   detached: true,
-                  env: $.extend(
-                    {}, process.env, env,
-                    {
-                      CLASSICMODE: 1,
-                      SINGLETRACE: 1,
-                      RIDE_INIT: `CONNECT:${hp}`,
-                      RIDE_SPAWNED: '1',
-                      APLK0: 'default',
-                    },
-                  ),
+                  env: { 
+                    ...process.env, 
+                    ...env,
+                    RIDE_INIT: `CONNECT:${hp}`,
+                  },
                 });
               } catch (e) { err(e); return; }
               D.lastSpawnedExe = x.exe;
