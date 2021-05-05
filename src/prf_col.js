@@ -9,7 +9,31 @@
   let H = {}; // H:reverse lookup dict for G
   let M = {}; // H:reverse lookup dict for G
   let q; // dict of DOM elements whose ids start with "col_", keyed by the rest of the id
-  // D.addSynGrps(...) is the API for extensions, see ../sample-extensions/syntax-in-comments.js
+  let scms; // all schemes (built-in and user-defined) as objects
+  let scm = {}; //  the active scheme object
+  let me; //   Monaco editor instance for displaying sample code
+  let sel; //  the selected group's token type (.t)
+  // RGB() expands the hex representation of a colour, rgb() shrinks it
+  function RGB(x) {
+    const n = (x || '').length;
+    if (n === 6) return `#${x}`;
+    if (n === 3) return `#${x.replace(/(.)/g, '$1$1')}`;
+    return n === 1 ? `#${x.repeat(6)}` : x;
+  }
+  function RGBA(x, a) {
+    const r = RGB(x);
+    return `rgba(${[+`0x${r.slice(1, 3)}`, +`0x${r.slice(3, 5)}`, +`0x${r.slice(5, 7)}`, a]})`;
+  }
+  function RGBO(x, a) {
+    const o = a === undefined ? '' : `00${Math.round(a * 255).toString(16)}`.slice(-2);
+    return RGB(x) + o;
+  }
+  function rgb(x) {
+    if (!/^#.{6}$/.test(x)) return x;
+    const [, r, rr, g, gg, b, bb] = x;
+    if (r !== rr || g !== gg || b !== bb) return x.slice(1);
+    return r === g && g === b ? r : r + g + b;
+  }
   function encScm(x) {
     let s = '';
     Object.keys(x).forEach((g) => {
@@ -46,7 +70,7 @@
       }
     }
     if (!r.theme) { // check brightness and pick matching theme
-      const [rr, gg, bb] = RGB(r.norm.bg).match(/([0-9a-fA-F]{2})/g).map(c => parseInt(c, 16));
+      const [rr, gg, bb] = RGB(r.norm.bg).match(/([0-9a-fA-F]{2})/g).map((c) => parseInt(c, 16));
       const lum = Math.sqrt((0.241 * rr * rr) + (0.691 * gg * gg) + (0.068 * bb * bb));
       r.theme = lum < 130 ? 'dark' : 'light';
     }
@@ -131,43 +155,18 @@
   //     ...
   //   }
   // encScm() and decScm() convert between them
-  let scms; // all schemes (built-in and user-defined) as objects
-  let scm = {}; //  the active scheme object
-  let me; //   Monaco editor instance for displaying sample code
-  let sel; //  the selected group's token type (.t)
-  // RGB() expands the hex representation of a colour, rgb() shrinks it
-  function RGB(x) {
-    const n = (x || '').length;
-    if (n === 6) return `#${x}`;
-    if (n === 3) return `#${x.replace(/(.)/g, '$1$1')}`;
-    return n === 1 ? `#${x.repeat(6)}` : x;
-  }
-  function RGBA(x, a) {
-    const r = RGB(x);
-    return `rgba(${[+`0x${r.slice(1, 3)}`, +`0x${r.slice(3, 5)}`, +`0x${r.slice(5, 7)}`, a]})`;
-  }
-  function RGBO(x, a) {
-    const o = a === undefined ? '' : `00${Math.round(a * 255).toString(16)}`.slice(-2);
-    return RGB(x) + o;
-  }
-  function rgb(x) {
-    if (!/^#.{6}$/.test(x)) return x;
-    const [, r, rr, g, gg, b, bb] = x;
-    if (r !== rr || g !== gg || b !== bb) return x.slice(1);
-    return r === g && g === b ? r : r + g + b;
-  }
   function renderCSS(schema, isSample) {
     return G.map((g) => {
       const h = schema[g.t];
       if (!h || !g.c) return '';
-      const els = g.c.split(',').map(x => (isSample ? '#nonexistent' : x)).join(',');
+      const els = g.c.split(',').map((x) => (isSample ? '#nonexistent' : x)).join(',');
       const edmode = ['ca', 'cm', 'cv', 'cvv', 'ma', 'na', 'qor', 'dc'].includes(g.t);
       let cls;
       if (edmode) {
         cls = `${els} .monaco-editor-background,${els} .monaco-editor .margin{`;
         h.bg && (cls += `background-color:${RGB(h.bg)};`);
         h.bg && (cls += `background-color:${RGBA(h.bg, h.bgo == null ? 0.5 : h.bgo)};`);
-        cls += `}${els} .monaco-editor span{`;
+        cls += `}${els} .monaco-editor span,${els} .monaco-editor .line-numbers{`;
         h.fg && (cls += `color:${RGB(h.fg)};`);
         h.fg && (cls += `color:${RGBA(h.fg, h.fgo == null ? 1 : h.fgo)};`);
         h.B && (cls += 'font-weight:bold;');
@@ -220,7 +219,7 @@
         }
       }
     });
-    const name = `my${schema.name.split('').map(x => `${x.codePointAt(0)}`).join('')}`;
+    const name = `my${schema.name.split('').map((x) => `${x.codePointAt(0)}`).join('')}`;
     monaco.editor.defineTheme(name, {
       base: schema.theme === 'light' ? 'vs' : 'vs-dark',
       inherit: false,
@@ -386,7 +385,7 @@
         fg && u.indexOf(fg) < 0 && u.push(fg);
       });
       u.sort(); // u:unique colours
-      q.list.innerHTML = u.map(x => `<option value=${x}>`).join('');
+      q.list.innerHTML = u.map((x) => `<option value=${x}>`).join('');
       q.grp.innerHTML = G.map((g, i) => `<option value=${i}>${g.s}`).join('');
       q.scm.onchange = () => {
         scm = scms[+q.scm.selectedIndex];
@@ -447,7 +446,7 @@
         fontSize: fs,
         language: 'apl',
         lineHeight: fs + 2,
-        lineNumbers: x => `[${x - 1}]`,
+        lineNumbers: (x) => `[${x - 1}]`,
         minimap: { enabled: false },
         matchBrackets: true,
         mouseWheelZoom: false,
@@ -468,13 +467,15 @@
         + ':EndIf\n'
         + `${SC_MATCH}\n`,
       });
-      D.prf.blockCursor(x => me.updateOptions({ cursorStyle: x ? 'block' : 'line' }));
-      D.prf.cursorBlinking(x => me.updateOptions({ cursorBlinking: x }));
+      D.prf.blockCursor((x) => me.updateOptions({ cursorStyle: x ? 'block' : 'line' }));
+      D.prf.cursorBlinking((x) => me.updateOptions({ cursorBlinking: x }));
       let ss;
       function selGrpFromPosition(p) {
         const { lineNumber, column } = p;
         const s = ss[lineNumber - 1];
-        const si = s.tokens.map(x => x.startIndex).findIndex(x => x >= column - 1);
+        const si = s.tokens
+          .map((x) => x.startIndex)
+          .findIndex((x) => x >= column - 1);
         const t = s.tokens[si < 0 ? s.tokens.length - 1 : si - 1];
         let sc = t ? t.scopes.slice(0, -4) : '';
         while (!M[sc] && sc) sc = sc.slice(0, Math.max(0, sc.lastIndexOf('.')));
@@ -553,7 +554,7 @@
     },
     activate() { q.scm.focus(); },
     save() {
-      D.prf.colourSchemes(scms.filter(x => !x.frz).map(encScm));
+      D.prf.colourSchemes(scms.filter((x) => !x.frz).map(encScm));
       D.prf.colourScheme(scm.name);
     },
     resize() { },
