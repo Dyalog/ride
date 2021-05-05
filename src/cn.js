@@ -15,18 +15,18 @@
   const home = rq('os').homedir();
   const net = rq('net');
   const path = rq('path');
-  const untildify = x => (x && home ? x.replace(/^~(?=$|\/|\\)/, home) : x);
+  const untildify = (x) => (x && home ? x.replace(/^~(?=$|\/|\\)/, home) : x);
   const { esc } = D.util;
   const user = D.el ? (process.env.USER || process.env.USERNAME || '') : '';
   const MIN_V = [15, 0];
   const KV = /^([a-z_]\w*)=(.*)$/i;
   const WS = /^\s*$/; // KV:regexes for parsing env vars
-  const HP = /^([^:]+|\[[^\]]+\])?(?::(\d+)?(\+)?)?$/;  // regex for parsing host and port
+  const HP = /^([^:]+|\[[^\]]+\])?(?::(\d+)?(\+)?)?$/; // regex for parsing host and port
   const maxl = 1000;
   const cnFile = `${D.el.app.getPath('userData')}/connections.json`;
   const lcnFile = `${D.el.app.getPath('userData')}/last_configuration.json`;
-  const trunc = x => (x.length > maxl ? `${x.slice(0, maxl - 3)}...` : x);
-  const shEsc = x => `'${x.replace(/'/g, "'\\''")}'`; // shell escape
+  const trunc = (x) => (x.length > maxl ? `${x.slice(0, maxl - 3)}...` : x);
+  const shEsc = (x) => `'${x.replace(/'/g, "'\\''")}'`; // shell escape
   const toBuf = (x) => {
     const b = Buffer.from(`xxxxRIDE${x}`);
     b.writeInt32BE(b.length, 0);
@@ -34,7 +34,7 @@
   };
   const sendEach = (x) => {
     if (clt) {
-      x.forEach(y => log(`send ${trunc(y)}`));
+      x.forEach((y) => log(`send ${trunc(y)}`));
       clt.write(Buffer.concat(x.map(toBuf)));
     }
   };
@@ -45,8 +45,8 @@
   };
   // compare two versions of the form [major,minor]
   const cmpVer = (x, y) => x[0] - y[0] || x[1] - y[1] || 0;
-  const ls = x => fs.readdirSync(x);
-  const parseVer = x => x.split('.').map(y => +y);
+  const ls = (x) => fs.readdirSync(x);
+  const parseVer = (x) => x.split('.').map((y) => +y);
   const hideDlgs = () => {
     if (q) {
       I.dlg_modal_overlay.hidden = 1;
@@ -87,7 +87,7 @@
     ), 10);
   };
   const save = () => {
-    const names = $('.name', q.favs).toArray().map(x => x.innerText);
+    const names = $('.name', q.favs).toArray().map((x) => x.innerText);
     const dups = names.filter((a, i) => names.indexOf(a) !== i);
     if (dups.length) {
       $.alert(
@@ -108,7 +108,7 @@
     const b = [];
     for (let i = 0; i < a.length; i++) {
       const conf = a[i].cnData;
-      conf.name != 'last configuration' && b.push(conf);
+      conf.name !== 'last configuration' && b.push(conf);
     }
     D.conns = b;
     try {
@@ -122,9 +122,11 @@
   const saveLastConf = (conf) => {
     try {
       fs.writeFileSync(lcnFile, JSON.stringify({ ...conf, name: 'last configuration' }));
-    } catch (e) { }
+    } catch (e) {
+      toastr.error(`${e.name}: ${e.message}`, 'Save failed');
+    }
   };
-  const favText = x => x.name || 'unnamed';
+  const favText = (x) => x.name || 'unnamed';
   const favDOM = (x) => {
     const e = document.createElement('div');
     e.cnData = x;
@@ -138,7 +140,7 @@
         || (y.edition === 'unicode') - (x.edition === 'unicode')
         || (y.opt > x.opt) - (y.opt < x.opt))
       .map((x) => {
-        let s = `v${x.ver.join('.')}, ${x.bits}-bit, ${x.edition.replace(/^./, w => w.toUpperCase())}${x.opt ? `, ${x.opt}` : ''}`;
+        let s = `v${x.ver.join('.')}, ${x.bits}-bit, ${x.edition.replace(/^./, (w) => w.toUpperCase())}${x.opt ? `, ${x.opt}` : ''}`;
         const supported = cmpVer(x.ver, MIN_V) >= 0;
         supported || (s += ' (unsupported)');
         return `<option value="${esc(x.exe)}"${supported ? '' : ' disabled'}>${esc(s)}`;
@@ -336,7 +338,8 @@
           o.key = fs.readFileSync(x.key);
         }
         if (x.rootcertsdir) {
-          o.ca = fs.readdirSync(x.rootcertsdir).map(y => fs.readFileSync(path.join(x.rootcertsdir, y)));
+          o.ca = fs.readdirSync(x.rootcertsdir)
+            .map((y) => fs.readFileSync(path.join(x.rootcertsdir, y)));
         }
         o.checkServerIdentity = (servername, cert) => {
           if (!x.subj || x.host === cert.subject.CN) return;
@@ -450,8 +453,8 @@
               cp.spawn(p[0], p.slice(1), {
                 detached: true,
                 stdio: ['ignore', 'ignore', 'ignore'],
-                env: { 
-                  ...process.env, 
+                env: {
+                  ...process.env,
                   RIDE_LISTEN: `${host}:${port}+`,
                 },
               });
@@ -487,7 +490,7 @@
             AUTOCOMPLETE_PREFIXSIZE: 0,
             CLASSICMODE: 1,
             SINGLETRACE: 1,
-            RIDE_SPAWNED: '1',                    
+            RIDE_SPAWNED: '1',
           };
           if (x.subtype === 'ssh') {
             D.util.dlg(q.connecting_dlg, { modal: true });
@@ -553,8 +556,8 @@
                   ...(!!x.cwd && { cwd: untildify(x.cwd) }),
                   stdio,
                   detached: true,
-                  env: { 
-                    ...process.env, 
+                  env: {
+                    ...process.env,
                     ...env,
                     RIDE_INIT: `CONNECT:${hp}`,
                   },
@@ -622,7 +625,7 @@
     if (fs.existsSync(lcnFile)) {
       D.conns = [
         JSON.parse(fs.readFileSync(lcnFile).toString()),
-        ...(D.conns || [])
+        ...(D.conns || []),
       ];
     }
     D.conns = D.conns || [{ type: 'connect' }];
@@ -681,7 +684,7 @@
           interpretersSSH = [];
           sm.on('data', (x) => { s += x; })
             .on('close', () => {
-              interpretersSSH = s.split(/\r?\n/).filter(x => x).map((x) => {
+              interpretersSSH = s.split(/\r?\n/).filter((x) => x).map((x) => {
                 const a = x.split('/');
                 return a[1] === 'opt' ? {
                   exe: x,
@@ -944,7 +947,7 @@
         });
       } else {
         const rd = '/opt/mdyalog';
-        const sil = g => (x) => { try { g(x); } catch (_) { /* exception silencer */ } };
+        const sil = (g) => (x) => { try { g(x); } catch (_) { /* exception silencer */ } };
         ls(rd).forEach(sil((v) => {
           if (/^\d+\.\d+/.test(v)) {
             ls(`${rd}/${v}`).forEach(sil((b) => {
@@ -971,7 +974,7 @@
     document.title = 'RIDE-Dyalog Session';
     const conf = D.el.process.env.RIDE_CONF;
     if (conf) {
-      const i = [...q.favs.children].findIndex(x => x.cnData.name === conf);
+      const i = [...q.favs.children].findIndex((x) => x.cnData.name === conf);
       if (i < 0) $.err(`Configuration '${conf}' not found.`);
       else {
         setTimeout(() => {
@@ -998,7 +1001,7 @@
       s: env.RIDE_SPAWN || env.ride_spawn,
     };
     if (D.mac && env.DYALOG_SPAWN) {
-      const app = require('electron').remote.app.getAppPath();
+      const app = rq('electron').remote.app.getAppPath();
       h.s = `${app}${env.DYALOG_SPAWN}`;
     }
     for (let i = 1; i < a.length; i++) if (a[i][0] === '-') { h[a[i].slice(1)] = a[i + 1]; i += 1; }
@@ -1009,13 +1012,15 @@
     } else if (h.l) {
       q = J.cn;
       const m = HP.exec(h.l); // parse host and port
-      m ? go({ type: 'listen', host: m[1], port: +m[2] || 4502 , respawn: !!m[3]}) : $.err('Invalid $RIDE_LISTEN');
+      m ? go({
+        type: 'listen', host: m[1], port: +m[2] || 4502, respawn: !!m[3],
+      }) : $.err('Invalid $RIDE_LISTEN');
     } else if (h.s) {
       const cnf = { type: 'start', exe: h.s };
-      const open_file = rq('electron').remote.getGlobal('open_file');
-      if (open_file && /(dws|dcfg)$/i.test(open_file)) {
-        const qt = /\s/.test(open_file) ? '"' : '';
-        cnf.args = `LOAD=${qt}${open_file}${qt}`
+      const openfile = rq('electron').remote.getGlobal('open_file');
+      if (openfile && /(dws|dcfg)$/i.test(openfile)) {
+        const qt = /\s/.test(openfile) ? '"' : '';
+        cnf.args = `LOAD=${qt}${openfile}${qt}`;
       }
       q = J.cn;
       go(cnf);
