@@ -807,6 +807,8 @@ D.IDE = function IDE(opts = {}) {
         I.sb_io.hidden = true;
         I.sb_trap.hidden = true;
         I.sb_dq.hidden = true;
+        I.sb_cc.hidden = true;
+        I.sb_gc.hidden = true;
         toggleStats();
       } else if (x.name === 'GetConfiguration') {
         D.get_configuration_na = 1;
@@ -823,8 +825,8 @@ D.IDE.prototype = {
     ide.profile = z;
     ide.updTitle();
   },
-  setCursorPosition(p) {
-    I.sb_cp.innerText = `Ln ${p.lineNumber - 1}, Col ${p.column - 1}`;
+  setCursorPosition(p, lc) {
+    I.sb_cp.innerText = `Pos: ${p.lineNumber - 1}/${lc},${p.column - 1}`;
   },
   die() { // don't really, just pretend
     const ide = this;
