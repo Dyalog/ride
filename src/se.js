@@ -281,26 +281,25 @@
     updSize() {
       const se = this;
       const { me } = se;
-      const oldHeight = me.getContentHeight();
       const top = me.getScrollTop();
       const lh = me.getOption(monaco.editor.EditorOption.lineHeight);
       const ll = me.getModel().getLineCount();
       const llt = me.getTopForLineNumber(ll);
-      const ontop = top > (llt + lh + lh) - oldHeight;
-      const [{ startLineNumber, endLineNumber }] = me.getVisibleRanges();
-      const onbottom = endLineNumber === ll;
+      const onbottom = (me.getPosition().lineNumber === ll) 
+        && ((llt + lh + lh - top) > se.dom.clientHeight);
       me.layout({ width: se.dom.clientWidth, height: se.dom.clientHeight });
-      const flt = me.getTopForLineNumber(startLineNumber);
       const newHeight = me.getContentHeight();
       this.updPW();
       if (se.hadErrTmr) {
         me.revealLine(ll);
-      } else if (ontop) {
-        this.btm = flt + newHeight;
       } else if (onbottom) {
         me.setScrollTop(0);
         this.btm = null;
         me.revealLine(ll);
+      } else {
+        const [{ startLineNumber }] = me.getVisibleRanges();
+        const flt = me.getTopForLineNumber(startLineNumber);
+        this.btm = flt + newHeight;
       }
     },
     updPW(force) {
