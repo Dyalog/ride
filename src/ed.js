@@ -60,6 +60,7 @@
       quickSuggestionsDelay: D.prf.autocompletionDelay(),
       renderLineHighlight: D.prf.renderLineHighlight(),
       renderIndentGuides: false,
+      scrollBeyondLastLine: false,
       selectionHighlight: D.prf.selectionHighlight(),
       snippetSuggestions: D.prf.snippetSuggestions() ? 'bottom' : 'none',
       stopRenderingLineAfter: -1,
