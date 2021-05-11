@@ -53,8 +53,8 @@ D.cmds = [
   ['RD', 'Reformat',                ['NumPad_Divide']],
   ['RP', 'Replace',                 []],
   ['RL', 'Right Limit',             ['End']],
-  ['RM', 'Resume execution of this thread',[]], // This is the blue continue button in the Dyalog IDE tracer.
-  ['RSU','Resume all Threads',      []],        // This is 'Resume All Threads' in the Threads menu.
+  ['RM', 'Continue this thread',    []], // This is the blue continue button in the Dyalog IDE tracer.
+  ['RSU','Unpause all paused threads',[]], // This is 'Resume All Threads' in the Threads menu.
   ['SA', 'Select All',              [D.mac?'Cmd-A':'Ctrl-A']],
   ['SC', 'Search',                  ['Ctrl-F']],
   ['SI', 'Strong interrupt',        []],
