@@ -376,8 +376,9 @@
               [m] = sm.slice(1).match(RegExp(`^${name}`)) || [];
               const ml = (m || '').toLowerCase();
               if (!m) tkn = 'predefined.sysfn';
-              else if (h.vars && h.vars.indexOf(`⎕${ml}`) >= 0) tkn = 'predefined.sysfn.local';
-              else if (D.syntax.sysfns.indexOf(ml) >= 0) tkn = 'predefined.sysfn';
+              else if (h.vars && h.vars.includes(`⎕${ml}`)) tkn = 'predefined.sysfn.local';
+              else if (D.syntax.sysfns.includes(ml)) tkn = 'predefined.sysfn';
+              else if (D.isClassic && D.syntax.sysfns_classic.includes(ml)) tkn = 'predefined.sysfn';
               else tkn = 'invalid.sysfn';
 
               addToken(offset, tkn); offset += 1 + ml.length; break;

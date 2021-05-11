@@ -497,6 +497,18 @@ D.IDE = function IDE(opts = {}) {
   ide.handlers = { // for RIDE protocol messages
     Identify(x) {
       D.remoteIdentification = x;
+      D.isClassic = x.arch[0] === 'C';
+      if (D.isClassic) {
+        Object.keys(D.bq).forEach((k) => {
+          const sysfn = `u${D.bq[k].codePointAt(0).toString(16)}`;
+          if (D.syntax.sysfns_classic.includes(sysfn)) D.bq[k] = `⎕${sysfn}`;
+        });
+        D.bqbqc.forEach((p) => {
+          const sysfn = `u${p.text.codePointAt(0).toString(16)}`;
+          if (D.syntax.sysfns_classic.includes(sysfn)) p.text = `⎕${sysfn}`;
+        });
+      }
+      
       D.InitHelp(x.version);
       ide.updTitle();
       ide.connected = 1;
