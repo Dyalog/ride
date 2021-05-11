@@ -516,6 +516,7 @@ D.IDE = function IDE(opts = {}) {
       clearTimeout(D.tmr);
       delete D.tmr;
     },
+    InvalidSyntax() { $.err('Invalid syntax.', 'Interpreter error'); },
     Disconnect(x) {
       const m = x.message.toLowerCase(); ide.die();
       if (m === 'dyalog session has ended') {
