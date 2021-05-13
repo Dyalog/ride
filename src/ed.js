@@ -162,7 +162,7 @@
       const ed = this;
       const { me } = ed;
       const model = me.getModel();
-      ed.ide.setCursorPosition(e.position);
+      ed.ide.setCursorPosition(e.position, model.getLineCount());
       if (ed.xline == null) return;
       const n = model.getLineCount();
       const l = e.position.lineNumber;
@@ -331,7 +331,7 @@
       }
       window.focused || window.focus();
       ed.me.focus();
-      ed.ide.setCursorPosition(ed.me.getPosition());
+      ed.ide.setCursorPosition(ed.me.getPosition(), ed.me.getModel().getLineCount());
     },
     insert(ch) {
       this.isReadOnly || this.me.trigger('editor', 'type', { text: ch });

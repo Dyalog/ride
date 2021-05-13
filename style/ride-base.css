@@ -190,6 +190,27 @@
 #sistack {
   height: calc(100% - 24px);
 }
+.lm_content {
+  border: none !important;
+}
+.lm_header .lm_tab {
+  padding: 5px 15px 5px 10px !important;
+  margin-top: 0!important;
+  height: 15px!important;
+}
+.lm_close {
+  display: none !important;
+}
+.lm_splitter {
+  opacity: 1 !important;
+}
+.lm_header .lm_tab .lm_title {
+  padding: 0px 10px 2px 0px;
+}
+.lm_header .lm_tab .lm_close_tab {
+  top: 4px !important;
+  right: 6px !important;
+}
 /*various dialogs*/
 #dlg_modal_overlay {
   width: 100%;
@@ -985,27 +1006,6 @@ body .ui-tooltip {
 .ui-icon-closethick {
   background: no-repeat center center url(img/close.png);
 }
-.lm_content {
-  border: none !important;
-}
-.lm_header .lm_tab {
-  padding: 5px 15px 5px 10px !important;
-  margin-top: 0!important;
-  height: 15px!important;
-}
-.lm_close {
-  display: none !important;
-}
-.lm_splitter {
-  opacity: 1 !important;
-}
-.lm_header .lm_tab .lm_title {
-  padding: 0px 10px 2px 0px;
-}
-.lm_header .lm_tab .lm_close_tab {
-  top: 4px !important;
-  right: 6px !important;
-}
 #lb {
   font-family: apl, monospace;
   font-size: 18px;
@@ -1122,63 +1122,6 @@ body .ui-tooltip {
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
-}
-#sb {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}
-#sb div {
-  display: inline-block;
-  padding: 3px 6px 4px;
-  user-select: none;
-  cursor: default;
-}
-#sb div.right {
-  float: right;
-}
-#sb div[hidden] {
-  display: none;
-}
-#sb div .tb_btn {
-  padding: 0;
-}
-#sb #sb_prf {
-  padding: 2px 6px 3px;
-}
-.tooltip {
-  width: 16px;
-  height: 16px;
-  position: relative;
-  display: inline-block;
-}
-/* Tooltip text */
-.tooltip .tooltiptext {
-  visibility: hidden;
-  text-align: center;
-  padding: 5px;
-  border-radius: 6px;
-  /* Position the tooltip text - see examples below! */
-  position: absolute;
-  z-index: 1;
-  top: -5px;
-  left: 25px;
-  min-width: 30vw;
-}
-.tooltip .tooltiptext::after {
-  content: " ";
-  position: absolute;
-  top: 12px;
-  right: 100%;
-  /* To the left of the tooltip */
-  margin-top: -5px;
-  border-width: 5px;
-  border-style: solid;
-}
-/* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltiptext {
-  visibility: visible;
 }
 /* http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 License: none (public domain) */
 html,
@@ -1366,33 +1309,65 @@ h2 {
 #status .t8 {
   color: red;
 }
-#vt_bln {
-  font-family: apl, monospace;
-  font-size: 18px;
+#sb {
   position: absolute;
-  padding: 7px;
-  white-space: pre;
-  overflow: hidden;
+  left: 0;
+  right: 0;
+  bottom: 0;
 }
-#vt_tri {
+#sb div {
+  display: inline-block;
+  padding: 3px 6px 4px;
+  user-select: none;
+  cursor: default;
+}
+#sb div.right {
+  float: right;
+}
+#sb div[hidden] {
+  display: none;
+}
+#sb div .tb_btn {
+  padding: 0;
+}
+#sb #sb_cp {
+  min-width: 15em;
+}
+#sb #sb_prf {
+  padding: 2px 6px 3px;
+}
+.tooltip {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  display: inline-block;
+}
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  text-align: center;
+  padding: 5px;
+  border-radius: 6px;
+  /* Position the tooltip text - see examples below! */
   position: absolute;
-  border: solid;
-  border-width: 6px 6px 0 6px;
-  height: 6px;
-  bottom: -6px;
-  border-left-color: transparent!important;
-  border-right-color: transparent!important;
-  background-color: transparent!important;
-  content: "";
+  z-index: 1;
+  top: -5px;
+  left: 25px;
+  min-width: 30vw;
 }
-#vt_tri.inv {
-  border-width: 0 6px 6px 6px;
-  margin-top: -6px;
-  bottom: auto;
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 12px;
+  right: 100%;
+  /* To the left of the tooltip */
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
 }
-.vt_marker {
-  border: dotted transparent 2px;
-  margin: -2px;
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
 }
 .toolbar {
   cursor: default;
@@ -1429,6 +1404,34 @@ h2 {
 .tb_sep {
   margin: 0 8px 0 0;
   vertical-align: middle;
+}
+#vt_bln {
+  font-family: apl, monospace;
+  font-size: 18px;
+  position: absolute;
+  padding: 7px;
+  white-space: pre;
+  overflow: hidden;
+}
+#vt_tri {
+  position: absolute;
+  border: solid;
+  border-width: 6px 6px 0 6px;
+  height: 6px;
+  bottom: -6px;
+  border-left-color: transparent!important;
+  border-right-color: transparent!important;
+  background-color: transparent!important;
+  content: "";
+}
+#vt_tri.inv {
+  border-width: 0 6px 6px 6px;
+  margin-top: -6px;
+  bottom: auto;
+}
+.vt_marker {
+  border: dotted transparent 2px;
+  margin: -2px;
 }
 /*IDE page*/
 #splash,
@@ -1469,29 +1472,6 @@ body.floating-window {
   overflow: hidden!important;
   padding: 0!important;
   height: auto!important;
-}
-/*z-indices; CodeMirror uses 1-10; .dlg uses 100+ */
-.ui-tooltip {
-  z-index: 9999;
-}
-#lb_tip {
-  z-index: 300;
-}
-#vt_bln,
-#vt_tri {
-  z-index: 300;
-}
-.menu .m-box {
-  z-index: 200;
-}
-.ui-front {
-  z-index: 100;
-}
-.ui-selectable-helper {
-  z-index: 100;
-}
-.lm_splitter {
-  z-index: 11 !important;
 }
 /*workspace explorer*/
 /*variable*/
@@ -1601,6 +1581,29 @@ body.floating-window {
 }
 .bt_collapsed > div {
   display: none;
+}
+/*z-indices; CodeMirror uses 1-10; .dlg uses 100+ */
+.ui-tooltip {
+  z-index: 9999;
+}
+#lb_tip {
+  z-index: 300;
+}
+#vt_bln,
+#vt_tri {
+  z-index: 300;
+}
+.menu .m-box {
+  z-index: 200;
+}
+.ui-front {
+  z-index: 100;
+}
+.ui-selectable-helper {
+  z-index: 100;
+}
+.lm_splitter {
+  z-index: 11 !important;
 }
 .zoom12 #wse,
 .zoom12 #debug,

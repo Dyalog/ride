@@ -45,8 +45,12 @@ D.IDE = function IDE(opts = {}) {
     I.sb_dq.hidden = !1;
     I.sb_sis.hidden = !1;
     I.sb_threads.hidden = !1;
-    I.sb_cc.hidden = !1;
-    I.sb_gc.hidden = !1;
+    ide.showCCGC = (x) => {
+      I.sb_cc.hidden = !x;
+      I.sb_gc.hidden = I.sb_cc.hidden;
+    };
+    D.prf.showCCGC(showCCGC);
+    ide.showCCGC(D.prf.showCCGC());
     ide.wins[0] = new D.Se(ide);
     D.wins = ide.wins;
     D.send('GetSyntaxInformation', {});
@@ -773,8 +777,6 @@ D.IDE = function IDE(opts = {}) {
       I.sb_trap.classList.toggle('active', x.TRAP !== 0);
       I.sb_dq.classList.toggle('active', x.DQ !== 0);
       I.sb_threads.classList.toggle('active', x.NumThreads > 1);
-      // I.sb_cc.classList.toggle('active', x.CompactCount !== 1);
-      // I.sb_gc.classList.toggle('active', x.GarbageCount !== 0);
     },
     ReplyFormatCode(x) {
       const w = D.wins[x.win];
@@ -820,6 +822,8 @@ D.IDE = function IDE(opts = {}) {
         I.sb_io.hidden = true;
         I.sb_trap.hidden = true;
         I.sb_dq.hidden = true;
+        I.sb_cc.hidden = true;
+        I.sb_gc.hidden = true;
         toggleStats();
       } else if (x.name === 'GetConfiguration') {
         D.get_configuration_na = 1;
@@ -836,8 +840,8 @@ D.IDE.prototype = {
     ide.profile = z;
     ide.updTitle();
   },
-  setCursorPosition(p) {
-    I.sb_cp.innerText = `Ln ${p.lineNumber - 1}, Col ${p.column - 1}`;
+  setCursorPosition(p, lc) {
+    I.sb_cp.innerText = `Pos: ${p.lineNumber - 1}/${lc},${p.column - 1}`;
   },
   die() { // don't really, just pretend
     const ide = this;
