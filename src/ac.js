@@ -49,9 +49,10 @@
         o.changes.forEach((oc) => {
           const l1 = oc.range.startLineNumber;
           const c1 = oc.range.startColumn;
+          const sc = c1 + y.length - 1;
           const ec = c1 + chg.text.length;
           nr.push({ range: new monaco.Range(l1, c1 - 1, l1, ec), text: y });
-          ns.push(new monaco.Selection(l1, c1, l1, c1));
+          ns.push(new monaco.Selection(l1, sc, l1, sc));
         });
         bqCleanUpMe(me);
         setTimeout(() => {
