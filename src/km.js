@@ -237,8 +237,8 @@
     DBG() { D.prf.dbg.toggle(); },
     WSE() { D.prf.wse.toggle(); },
     POE() { D.prf.pauseOnError.toggle(); },
-    PAT() { D.send('PauseAllThreads', { pause: 1 }); }, // Threads > Pause All Threads.
-    RSU() { D.send('PauseAllThreads', { pause: 0 }); }, // Threads > Resume All Threads.
+    PAT() { D.send('PauseAllThreads', { pause: 1 }); },
+    UAT() { D.send('PauseAllThreads', { pause: 0 }); },
     ZM(me) {
       const w = me.dyalogCmds;
       w.container.parent.toggleMaximise();
