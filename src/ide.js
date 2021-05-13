@@ -49,7 +49,7 @@ D.IDE = function IDE(opts = {}) {
       I.sb_cc.hidden = !x;
       I.sb_gc.hidden = I.sb_cc.hidden;
     };
-    D.prf.showCCGC(showCCGC);
+    D.prf.showCCGC(ide.showCCGC);
     ide.showCCGC(D.prf.showCCGC());
     ide.wins[0] = new D.Se(ide);
     D.wins = ide.wins;
