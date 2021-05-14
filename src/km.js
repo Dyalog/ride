@@ -6,7 +6,23 @@
       m[`'${x}'`] = m[`'${old}'`]; delete m[`'${old}'`];
     }
   });
+  
+  D.defaultPrefix = lc => (/^d[ae]/.test(lc) ? '<' : D.prf.prefixKey.getDefault());
 
+  const { layouts } = D.kbds;
+  if (!layouts[D.prf.kbdLocale()]) {
+    const s = D.el ? nodeRequire('os-locale').sync() : navigator.language;
+    const l = s.slice(0, 2).toLowerCase(); // language
+    const c = s.slice(3, 5).toUpperCase(); // country
+    // default layout for country c
+    const d = Object.keys(layouts).filter(x => x.slice(3, 5) === c).sort()[0];
+    let lc;
+    if (D.mac && layouts[`${l}_${c}_Mac`]) lc = `${l}_${c}_Mac`;
+    else if (layouts[`${l}_${c}`]) lc = `${l}_${c}`;
+    else lc = d || 'en_US';
+    D.prf.kbdLocale(lc);
+    D.prf.prefixKey(D.defaultPrefix(lc));
+  }
   // D.kbds.layouts[lc] contains four strings describing how keys map to characters:
   //  0:normal  1:shifted
   //  2:APL     3:APL shifted
