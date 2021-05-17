@@ -33,8 +33,7 @@
       if (g[i][3]) { g[i][3].value = g3; g[i][3].title = tip(g3); }
     }
   }
-  const defaultPrefix = lc => (/^d[ae]/.test(lc) ? '<' : D.prf.prefixKey.getDefault());
-
+  
   D.prf_tabs.lyt = {
     name: 'Keyboard',
     init() {
@@ -58,22 +57,9 @@
         for (let j = 0; j < 4; j++) g[i][j] = e.querySelector(`.lyt_g${j}`);
       }
       q.ime_wr.hidden = !D.win;
-      if (!layouts[D.prf.kbdLocale()]) {
-        const s = D.el ? nodeRequire('os-locale').sync() : navigator.language;
-        const l = s.slice(0, 2).toLowerCase(); // language
-        const c = s.slice(3, 5).toUpperCase(); // country
-        // default layout for country c
-        const d = Object.keys(layouts).filter(x => x.slice(3, 5) === c).sort()[0];
-        let lc;
-        if (D.mac && layouts[`${l}_${c}_Mac`]) lc = `${l}_${c}_Mac`;
-        else if (layouts[`${l}_${c}`]) lc = `${l}_${c}`;
-        else lc = d || 'en_US';
-        D.prf.kbdLocale(lc);
-        D.prf.prefixKey(defaultPrefix(lc));
-      }
       const updateLocale = (e) => {
         const lc = q.lc.value;
-        q.pfx.value = defaultPrefix(lc);
+        q.pfx.value = D.defaultPrefix(lc);
         updPfx();
         if (e.target === q.rst) {
           model[lc] = [layouts[lc][2].split(''), layouts[lc][3].split('')];
