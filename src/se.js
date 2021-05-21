@@ -226,6 +226,7 @@
         const lc = model.getLineMaxColumn(ll);
         me.setPosition({ lineNumber: ll, column: lc });
         me.revealLine(ll);
+        me.setScrollLeft(0);
         se.btm = Math.max(se.dom.clientHeight + me.getScrollTop(), me.getTopForLineNumber(ll));
       }
       se.isReadOnly && me.updateOptions({ readOnly: true });
