@@ -249,7 +249,10 @@
       const promtChanged = se.promptType !== x;
       se.promptType = x;
       se.isReadOnly = !x;
-      me.updateOptions({ readOnly: !x });
+      me.updateOptions({ 
+        readOnly: !x,
+        quickSuggestions: [2, 4].includes(x) ? false : D.prf.autocompletion() === 'classic',
+      });
       if ((x === 1 && this.dirty[line] == null) || ![0, 1, 3, 4].includes(x)) {
         const isEmpty = /^\s*$/.test(t);
         const text = isEmpty ? ssp : `${t}\n${ssp}`;
