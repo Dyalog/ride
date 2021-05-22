@@ -366,11 +366,9 @@
       const p = me.getPosition();
       const c = p.column - 1;
       const s = me.getModel().getLineContent(p.lineNumber);
-      const r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*'; // r:regex fragment used for a name
-      return (
-        ((RegExp(`⎕?${r}$`).exec(s.slice(0, c)) || [])[0] || '') // match left of cursor
-        + ((RegExp(`^${r}`).exec(s.slice(c)) || [])[0] || '') // match right of cursor
-      ).replace(/^\d+/, ''); // trim leading digits
+      const [loc] = RegExp(`⎕?${D.syntax.name}?$`).exec(s.slice(0, c)); // match left of cursor
+      const [roc] = RegExp(`^⎕?[${D.syntax.letter}\\d]*`).exec(s.slice(c)); // match right of cursor
+      return RegExp(`^(${D.syntax.sysvar}|${D.syntax.name})?\\b`, 'i').exec(loc + roc)[0];
     },
     autoCloseBrackets(x) { this.me.updateOptions({ autoClosingBrackets: x }); },
     indent(x) { this.me.updateOptions({ autoIndent: x >= 0 }); },
