@@ -79,6 +79,22 @@
           </label>
         </div>
       </div>
+      <div class="row">
+        <div class="col col-xs-3">
+          <label class=cb_label>
+            <input type=checkbox id=cn_log_cb>
+            Save protocol <u>l</u>og</span>
+          </label>
+        </div>
+        <div class="col col-xs-9">
+          <div class="row">
+            <div class="col col-xs-12">
+              <input id=cn_log name=cert placeholder="Log file" class=browse>
+              <button id=cn_log_dots class=tb_btn><span class="fas fa-ellipsis-h"></span></button>
+            </div>
+          </div>
+        </div>
+      </div>
       <div id=cn_ssh hidden>
         <div class="row">
           <div class="col col-xs-3"><label for=cn_ssh_port class=cn_label>SSH <u>P</u>ort:</label></div>
@@ -548,8 +564,8 @@
       <hr>
       <h2>Other</h2>
       <p><label class=cb_label><input id=code_dce  type=checkbox>Double click to edit</label></p>
-      <p><label class=cb_label><input id=code_sqp   type=checkbox>Show <u>q</u>uit prompt</label></p>
-      <p><label class=cb_label><input id=code_set   type=checkbox>Show toolbar in editor/trace windows</label></p>
+      <p><label class=cb_label><input id=code_sqp  type=checkbox>Show <u>q</u>uit prompt</label></p>
+      <p><label class=cb_label><input id=code_set  type=checkbox>Show toolbar in editor/trace windows</label></p>
       <p><label class=cb_label><input id=code_coq  type=checkbox>Connect on quit</label></p>
     </div>
 
