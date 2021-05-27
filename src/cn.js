@@ -25,6 +25,11 @@
   const maxl = 1000;
   const cnFile = `${D.el.app.getPath('userData')}/connections.json`;
   const lcnFile = `${D.el.app.getPath('userData')}/last_configuration.json`;
+  let protocolLogFile;
+  const defaultProtocolLogFile = path.join(
+    D.el.app.getPath('temp'),
+    `RIDE-${D.versionInfo.version}-${D.el.process.pid}.log`,
+  );
   const trunc = (x) => (x.length > maxl ? `${x.slice(0, maxl - 3)}...` : x);
   const shEsc = (x) => `'${x.replace(/'/g, "'\\''")}'`; // shell escape
   const toBuf = (x) => {
@@ -372,6 +377,7 @@
     const x = conf || sel;
     if (!validate(x)) return 0;
     saveLastConf(x);
+    protocolLogFile = x.log;
     D.spawned = 0;
     try {
       switch (x.type || 'connect') {
@@ -746,6 +752,13 @@
       }
       return !1;
     };
+    q.log_cb.onchange = () => {
+      const noLog = !q.log_cb.checked;
+      q.log.disabled = noLog;
+      q.log_dots.disabled = noLog;
+      q.log.value = noLog ? '' : defaultProtocolLogFile;
+      D.util.elastic(q.log);
+    };
     q.cert_cb.onchange = () => {
       const noCert = !q.cert_cb.checked;
       q.cert.disabled = noCert;
@@ -784,6 +797,7 @@
       }
       return !1;
     };
+    q.log_dots.onclick = () => { browse(q.log, 'Protocol log'); };
     q.cert_dots.onclick = () => { browse(q.cert, 'Certificate'); };
     q.key_dots.onclick = () => { browse(q.key, 'Key'); };
     q.ssh_key_dots.onclick = () => { browse(q.ssh_key, 'SSH Key'); };
@@ -842,6 +856,11 @@
           for (let i = 0; i < a.length; i++) if (/^text(area)?$/.test(a[i].type)) D.util.elastic(a[i]);
           // q.ssh_auth_type.value = sel.ssh_auth_type || 'pass';
           // q.ssh_auth_type.onchange();
+          const nol = !sel.log;
+          q.log_cb.checked = !nol;
+          q.log.disabled = !sel.log;
+          q.log_dots.disabled = !sel.log;
+
           q.cert_cb.checked = !!sel.cert;
           const noc = !sel.cert;
           q.cert.disabled = noc;
@@ -999,6 +1018,7 @@
       c: env.RIDE_CONNECT,
       l: env.RIDE_LISTEN,
       s: env.RIDE_SPAWN || env.ride_spawn,
+      log: env.RIDE_LOG,
     };
     if (D.mac && env.DYALOG_SPAWN) {
       const app = rq('electron').remote.app.getAppPath();
@@ -1008,15 +1028,28 @@
     if (h.c) {
       q = J.cn;
       const m = HP.exec(h.c); // parse host and port
-      m ? go({ type: 'connect', host: m[1], port: +m[2] || 4502 }) : $.err('Invalid $RIDE_CONNECT');
+      m ? go({
+        type: 'connect',
+        host: m[1],
+        port: +m[2] || 4502,
+        log: h.log,
+      }) : $.err('Invalid $RIDE_CONNECT');
     } else if (h.l) {
       q = J.cn;
       const m = HP.exec(h.l); // parse host and port
       m ? go({
-        type: 'listen', host: m[1], port: +m[2] || 4502, respawn: !!m[3],
+        type: 'listen',
+        host: m[1], 
+        port: +m[2] || 4502, 
+        respawn: !!m[3],
+        log: h.log,
       }) : $.err('Invalid $RIDE_LISTEN');
     } else if (h.s) {
-      const cnf = { type: 'start', exe: h.s };
+      const cnf = {
+        type: 'start', 
+        exe: h.s,
+        log: h.log,
+      };
       const openfile = rq('electron').remote.getGlobal('open_file');
       if (openfile && /(dws|dcfg)$/i.test(openfile)) {
         const qt = /\s/.test(openfile) ? '"' : '';
@@ -1035,6 +1068,9 @@
     const t0 = +new Date();
     log = (x) => {
       const msg = `${new Date() - t0} ${x}`;
+      if (protocolLogFile) {
+        try { fs.appendFileSync(protocolLogFile, `${new Date().toISOString()} ${x}\n`); } catch {}
+      }
       a[i] = msg;
       i = (i + 1) % n;
       for (let j = 0; j < l.length; j++) l[j](msg);

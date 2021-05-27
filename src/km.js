@@ -220,7 +220,6 @@
         webPreferences: {
           contextIsolation: true,
           nodeIntegration: false,
-          contextIsolation: true,
         },
       });
       const cn = nodeRequire(`${__dirname}/src/cn`);
