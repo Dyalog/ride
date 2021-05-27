@@ -212,19 +212,30 @@
       const model = me.getModel();
       const l = model.getLineCount();
       const s0 = model.getLineContent(l);
+      const cp = se.cursorPosition || me.getPosition();
       const ssp = '      ';
-      let text = (s0 === ssp || se.promptType === 3) ? s : s0 + s;
+      let text;
+      let scp = cp.column;
+      if (se.promptType === 3) {
+        text = s;
+      } else {
+        const res = (s0 === ssp) ? se.preProcessOutput({ line: '', column: 1, input: s })
+          : se.preProcessOutput({ line: s0, column: scp, input: s });
+        scp = res.column;
+        text = res.text;
+      }
       if (s[s.length - 1] === '\n' && se.promptType === 1) text += ssp;
       se.isReadOnly && me.updateOptions({ readOnly: false });
       if (this.dirty[l] != null) {
-        const cp = me.getPosition();
         se.edit([{ range: new monaco.Range(l, 1, l, 1 + s0.length), text: `${s0}\n${text}` }]);
         me.setPosition(cp);
       } else {
         se.edit([{ range: new monaco.Range(l, 1, l, 1 + s0.length), text }]);
         const ll = model.getLineCount();
-        const lc = model.getLineMaxColumn(ll);
-        me.setPosition({ lineNumber: ll, column: lc });
+        const lc = se.isReadOnly ? scp : model.getLineMaxColumn(ll);
+        const ncp = { lineNumber: ll, column: lc };
+        me.setPosition(ncp);
+        se.isReadOnly && (se.cursorPosition = ncp);
         me.revealLine(ll);
         se.btm = Math.max(se.dom.clientHeight + me.getScrollTop(), me.getTopForLineNumber(ll));
       }
@@ -238,6 +249,26 @@
       me.executeEdits('D', edits, sel);
       me.listen = true;
     },
+    preProcessOutput(args) {
+      const { line, column, input } = args;
+      const x = line.split('');
+      let p = column - 1;
+      let nl = 0;
+      for (let i = 0; i < input.length; i++) {
+        const c = input[i];
+        if (c === '\b') {
+          (p > 0) && (x[p - 1] !== '\n') && (p -= 1);
+        } else if (c === '\n') {
+          x[x.length] = c;
+          p = x.length;
+          nl = p;
+        } else {
+          x[p] = c;
+          p += 1;
+        }
+      }
+      return { text: x.join(''), column: p - nl + 1 };
+    },
     prompt(x) {
       const se = this;
       const { me } = se;
@@ -246,19 +277,23 @@
       const line = model.getLineCount();
       const column = model.getLineMaxColumn(line);
       const t = model.getLineContent(line);
-      const promtChanged = se.promptType !== x;
+      const promptChanged = se.promptType !== x;
       se.promptType = x;
       se.isReadOnly = !x;
-      me.updateOptions({ 
+      me.updateOptions({
         readOnly: !x,
         quickSuggestions: [2, 4].includes(x) ? false : D.prf.autocompletion() === 'classic',
       });
+      if (promptChanged) {
+        if (x) delete se.cursorPosition;
+        else se.cursorPosition = me.getPosition();
+      }
       if ((x === 1 && this.dirty[line] == null) || ![0, 1, 3, 4].includes(x)) {
         const isEmpty = /^\s*$/.test(t);
         const text = isEmpty ? ssp : `${t}\n${ssp}`;
         se.edit(
           [{ range: new monaco.Range(line, 1, line, column), text }],
-          (promtChanged || !isEmpty)
+          (promptChanged || !isEmpty)
             ? [new monaco.Selection(line + !isEmpty, 7, line + !isEmpty, 7)] : me.getSelections(),
         );
         se.oModel.setValue(me.getValue());
@@ -279,7 +314,6 @@
         if (se.taCb) { se.taCb.dispose(); delete se.taCb; }
         se.taBuffer.length && se.taReplay();
       }
-      // x && model._commandManager.clear();
     },
     updSize() {
       const se = this;
