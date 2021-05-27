@@ -61,6 +61,22 @@
     </div>
     <hr>
     <div id=cn_dtl>
+      <div class="row">
+        <div class="col col-xs-3">
+          <label class=cb_label>
+            <input type=checkbox id=cn_log_cb>
+            Save protocol <u>l</u>og</span>
+          </label>
+        </div>
+        <div class="col col-xs-9">
+          <div class="row">
+            <div class="col col-xs-12">
+              <input id=cn_log name=log placeholder="Log file" class=browse>
+              <button id=cn_log_dots class=tb_btn><span class="fas fa-ellipsis-h"></span></button>
+            </div>
+          </div>
+        </div>
+      </div>
       <div id=cn_tcp_dtl>
         <div class="row">
           <div class="col col-xs-3"><label for=cn_tcp_host class=cn_label><u>H</u>ost:</label></div>
@@ -77,22 +93,6 @@
             <input type=checkbox id=cn_respawn_cb name=respawn>
             <u>R</u>espawn listener on connection
           </label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col col-xs-3">
-          <label class=cb_label>
-            <input type=checkbox id=cn_log_cb>
-            Save protocol <u>l</u>og</span>
-          </label>
-        </div>
-        <div class="col col-xs-9">
-          <div class="row">
-            <div class="col col-xs-12">
-              <input id=cn_log name=cert placeholder="Log file" class=browse>
-              <button id=cn_log_dots class=tb_btn><span class="fas fa-ellipsis-h"></span></button>
-            </div>
-          </div>
         </div>
       </div>
       <div id=cn_ssh hidden>
