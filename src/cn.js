@@ -757,6 +757,7 @@
       q.log.disabled = noLog;
       q.log_dots.disabled = noLog;
       q.log.value = noLog ? '' : defaultProtocolLogFile;
+      $(q.log).change();
       D.util.elastic(q.log);
     };
     q.cert_cb.onchange = () => {
@@ -1069,7 +1070,9 @@
     log = (x) => {
       const msg = `${new Date() - t0} ${x}`;
       if (protocolLogFile) {
-        try { fs.appendFileSync(protocolLogFile, `${new Date().toISOString()} ${x}\n`); } catch {}
+        try {
+          fs.appendFileSync(protocolLogFile, `${new Date().toISOString()} ${x}\n`);
+        } catch (e) { console.error(e); }
       }
       a[i] = msg;
       i = (i + 1) % n;
