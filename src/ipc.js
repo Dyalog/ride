@@ -57,7 +57,7 @@
         }, 100);
       });
       rm.on('syntax', (x) => {
-        D.syntax = x;
+        Object.assign(D.syntax, x);
         D.defineSyntaxRegex();
       });
     });
