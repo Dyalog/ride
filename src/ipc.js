@@ -22,8 +22,8 @@
       });
       pm.forEach(k => rm.on(k, ([id, ...x]) => { D.ide.wins[id][k](...x); }));
       rm.on('caption', (c) => { D.ide.caption = c; });
-      rm.on('close', ([id]) => { 
-        D.ide.wins[id].close(); 
+      rm.on('close', ([id]) => {
+        D.ide.wins[id].close();
         rm.emit('unblock', 0);
       });
       rm.on('getUnsaved', () => {
@@ -56,9 +56,9 @@
           });
         }, 100);
       });
-      rm.on('syntax', (x) => { 
+      rm.on('syntax', (x) => {
         D.syntax = x;
-        D.DefineSyntaxRegex();
+        D.defineSyntaxRegex();
       });
     });
   };
