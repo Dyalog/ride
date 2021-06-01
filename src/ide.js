@@ -593,11 +593,11 @@ D.IDE = function IDE(opts = {}) {
       ide.lbarRecreate();
     },
     ReplyGetSyntaxInformation(x) {
-      D.ParseSyntaxInformation(x);
+      D.parseSyntaxInformation(x);
       D.ipc && D.ipc.server.broadcast('syntax', D.syntax);
     },
     ValueTip(x) { ide.wins[x.token].ValueTip(x); },
-    SetHighlightLine(x) { 
+    SetHighlightLine(x) {
       const w = D.wins[x.win];
       w.SetHighlightLine(x.line, ide.hadErr);
       ide.hadErr > 0 && (ide.hadErr -= 1);
