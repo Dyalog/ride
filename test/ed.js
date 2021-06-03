@@ -1,5 +1,5 @@
 const test = require('ava');
-const  { sessionLastLines, tfw } = require('./_utils');
+const { sessionLastLines, tfw } = require('./_utils');
 
 tfw.init({ src: 'ed', RIDE_SPAWN: 'dyalog' });
 
@@ -23,36 +23,36 @@ test(
 
     await c.keys([')ED <]']);
     await c.keys([' ls', 'Enter']);
-  
+
     const edit_trace = await c.$('#ide .ride_win.edit_trace');
     await edit_trace.waitForExist();
-    
+
     await c.keys(['A', 'Enter', 'A']);
     await c.keys([cc, 'a', 'c']);
     await c.keys(['Escape']);
     text = await app.electron.clipboard.readText();
     t.is(text, `A${eol}A`);
-    
+
     await c.pause(1000);
-    
+
     const ride_win = await c.$('#ide .ride_win');
     await ride_win.waitForExist();
-    
+
     await c.keys([')ED f', 'Enter']);
     await edit_trace.waitForExist();
-    
+
     await c.keys(['Enter', '2']);
     await c.keys([cc, 'a', 'c']);
     await c.keys(['Escape']);
     text = await app.electron.clipboard.readText();
     t.is(text, `f${eol}2`);
-    
+
     await c.pause(1000);
 
     await c.keys([')ED f', 'Enter']);
-    
+
     await edit_trace.waitForExist();
-    
+
     await c.keys([cc, 'a', 'c']);
     await c.keys(['Escape']);
     text = await app.electron.clipboard.readText();
@@ -75,10 +75,10 @@ test(
     let text;
 
     await c.keys([')ED f', 'Enter']);
-    
+
     const edit_trace = await c.$('#ide .ride_win.edit_trace');
     await edit_trace.waitForExist();
-    
+
     await c.execute(() => D.wins[1].me_ready);
     await c.keys(['Enter', 'ab']);
     await c.keys(['F2']);
@@ -123,17 +123,17 @@ test(
 
     await c.keys(["⎕FIX ':Namespace Sol' '∇ foo' '⍝' '⍝' '⍝' '⍝' '∇' ':EndNamespace'", 'Enter']);
     await c.keys(['Sol.foo', 'Control', 'Enter', 'Control']);
-    
+
     const edit_trace = await c.$('#ide .ride_win.edit_trace');
     await edit_trace.waitForExist();
-    
+
     await c.keys(['F2']);
     await c.pause(500);
     await c.keys(['Escape']);
-    
+
     const ride_win = await c.$('#ide .ride_win');
     await ride_win.waitForExist();
-    
+
     await c.keys(["⎕STOP 'Sol.foo'", 'Enter']);
     await c.pause(500);
     const r = await c.execute(sessionLastLines, 2);
@@ -158,17 +158,17 @@ test.failing(
 
     await c.keys(["⎕FIX ':Namespace Sol' '∇ foo' '⍝' '⍝' '⍝' '⍝' '∇' ':EndNamespace'", 'Enter']);
     await c.keys(['Sol.foo', 'Control', 'Enter', 'Control']);
-    
+
     const edit_trace = await c.$('#ide .ride_win.edit_trace');
     await edit_trace.waitForExist();
-    
+
     await c.keys(['F2']);
     await c.pause(500);
     await c.keys(['Escape']);
-    
+
     const ride_win = await c.$('#ide .ride_win');
     await ride_win.waitForExist();
-    
+
     await c.keys(["⎕STOP 'Sol.foo'", 'Enter']);
     await c.pause(500);
     const r = await c.execute(sessionLastLines, 2);
