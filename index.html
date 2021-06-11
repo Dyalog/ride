@@ -61,6 +61,22 @@
     </div>
     <hr>
     <div id=cn_dtl>
+      <div class="row">
+        <div class="col col-xs-3">
+          <label class=cb_label>
+            <input type=checkbox id=cn_log_cb>
+            Save protocol <u>l</u>og</span>
+          </label>
+        </div>
+        <div class="col col-xs-9">
+          <div class="row">
+            <div class="col col-xs-12">
+              <input id=cn_log name=log placeholder="Log file" class=browse>
+              <button id=cn_log_dots class=tb_btn><span class="fas fa-ellipsis-h"></span></button>
+            </div>
+          </div>
+        </div>
+      </div>
       <div id=cn_tcp_dtl>
         <div class="row">
           <div class="col col-xs-3"><label for=cn_tcp_host class=cn_label><u>H</u>ost:</label></div>
@@ -256,8 +272,14 @@
 <div id=sb hidden>
   <div id=sb_prf><a class=tb_btn href=# title=Preferences><span class="fas fa-cog"></span></a></div>
   <div id=sb_cp class=right></div>
-  <div id=sb_threads class=right hidden></div>
-  <div id=sb_sis class=right hidden></div>
+  <div id=sb_ml class=right title="Migration Level" hidden>⎕ML: </div>
+  <div id=sb_io class=right title="Index Origin" hidden>⎕IO: </div>
+  <div id=sb_sis class=right title="State Indicator" hidden>⎕SI: </div>
+  <div id=sb_trap class=right title="Trap Event" hidden>⎕TRAP</div>
+  <div id=sb_dq class=right title="Dequeue Events" hidden>⎕DQ: </div>
+  <div id=sb_threads class=right title="Thread Count" hidden>&: </div>
+  <div id=sb_cc class=right title="Compaction Count" hidden>CC: </div>
+  <div id=sb_gc class=right title="Garbage collections" hidden>GC: </div>
 </div>
 <div id=ed_tmpl class="ride_win edit_trace" style=display:none>
   <div class=toolbar>
@@ -269,12 +291,7 @@
     </a>
     <span class='tb_sep'></span>
     <a href=# class='tb_btn tb_LN' title='Toggle line numbers'>
-      <span class="fa-layers">
-        <span class="fal fa-align-justify" data-fa-transform="shrink-3 right-2"></span>
-        <span class="fa-layers-text" data-fa-transform="shrink-10 left-8 up-6" style="font-weight:300">1</span>
-        <span class="fa-layers-text" data-fa-transform="shrink-10 left-8" style="font-weight:300">2</span>
-        <span class="fa-layers-text" data-fa-transform="shrink-10 left-8 down-6" style="font-weight:300">3</span>
-      </span>
+      <span class="fal fa-list-ol"></span>
     </a>
     <span class='tb_sep tc_only'></span>
     <a href=# class='tb_btn tb_ER tc_only' title='Execute line'>
@@ -287,7 +304,7 @@
       <span class="fas fa-level-up" data-fa-transform="shrink-3"></span>
     </a>
     <span class='tb_sep tc_only'></span>
-    <a href=# class='tb_btn tb_RM tc_only' title='Continue execution of this thread'>
+    <a href=# class='tb_btn tb_RM tc_only' title='Continue this thread'>
       <span class="fas fa-angle-right"></span>
     </a>
     <a href=# class='tb_btn tb_MA tc_only' title='Continue execution of all threads'>
@@ -546,8 +563,9 @@
       </p>
       <hr>
       <h2>Other</h2>
-      <p><label class=cb_label><input id=code_sqp   type=checkbox>Show <u>q</u>uit prompt</label></p>
-      <p><label class=cb_label><input id=code_set   type=checkbox>Show toolbar in editor/trace windows</label></p>
+      <p><label class=cb_label><input id=code_dce  type=checkbox>Double click to edit</label></p>
+      <p><label class=cb_label><input id=code_sqp  type=checkbox>Show <u>q</u>uit prompt</label></p>
+      <p><label class=cb_label><input id=code_set  type=checkbox>Show toolbar in editor/trace windows</label></p>
       <p><label class=cb_label><input id=code_coq  type=checkbox>Connect on quit</label></p>
     </div>
 
@@ -708,6 +726,7 @@
 <!--RIDE UI-->
 <script src=_/version.js      ></script>
 <script src=src/pre_init.js   ></script>
+<script src=src/syntax_info.js></script>
 <script src=src/bonsai.js     ></script>
 <script src=src/jq_list.js    ></script>
 <script src=src/jq_splitter.js></script>
@@ -741,7 +760,6 @@
 <script src=src/ipc.js        ></script>
 <script src=src/mon_apl.js    ></script>
 <script src=src/init.js       ></script>
-<script src=src/syntax_info.js></script>
 
 </body>
 

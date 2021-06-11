@@ -1,12 +1,8 @@
 {
-  const letter = 'A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ';
-  const name0 = RegExp(`[${letter}]`);
-  const name1 = RegExp(`[${letter}\\d]*`);
-  const name = `(?:[${letter}][${letter}\\d]*)`;
-  const notName = RegExp(`[^${letter}0-9]+`);
-  // /(\w+|\(\w+ +(\w+)(?: +\w+)?\)) *(?:\w+|\( *\w+(?: +\w+)* *\))?$/
-  const tradFnRE = RegExp(`(${name}|\\( *${name} +(${name})(?: +${name})? *\\)) *(?:${name}|\\( *${name}(?: +${name})* *\\))? *$`);
-  const end = '(?:⍝|$)';
+  const name0 = RegExp(`[${D.syntax.letter}]`);
+  const name1 = RegExp(`[${D.syntax.letter}\\d]*`);
+  const notName = RegExp(`[^${D.syntax.letter}\\d]+`);
+  
   D.wordSeparators = `${D.informal.slice(0, -26).map(x => x[0]).join('').replace(/[⎕∆⍙]/g, '')}()[]{}%£#;:'"\`$^`;
 
   function aplConfig() {
@@ -36,7 +32,7 @@
         increaseIndentPattern: RegExp(`^(?:(?!⍝).)*(${D.syntax.startBlock})\\b.*$`, 'i'),
         unIndentedLinePattern: /^\s*⍝.*$/,
       },
-      wordPattern: RegExp(name),
+      wordPattern: RegExp(D.syntax.name),
     };
   };
 
@@ -64,7 +60,7 @@
       { open: '\'', close: '\'' },
     ],
     indentationRules: {},
-    wordPattern: RegExp(name),
+    wordPattern: RegExp(D.syntax.name),
   };
   /* eslint max-classes-per-file: 0 */
   class State {
@@ -126,18 +122,6 @@
     }
   }
 
-  // best effort to tell the difference between a dfn vs tradfn header
-  const dfnHeader = RegExp(`^\\s*${name}\\s*←\\s*\\{\\s*`
-      + `(?:${end}|`
-      + `[^${letter}⍝\\s]|`
-      + `${name}\\s*(?:`
-        + `\\}\\s*${end}|`
-        + `${end}|`
-        + `[^${letter}\\d\\}⍝\\s]|`
-        + '\\s[^\\}⍝\\s]'
-      + ')'
-    + ')');
-
   function dfnDepth(a) {
     let r = 0;
     for (let j = 0; j < a.length; j++) if (a[j].t === '{') r += 1; return r;
@@ -173,7 +157,7 @@
       let tkn;
       let s;
 
-      const localRE = RegExp(`( *)(;)( *)(${D.syntax.sysvar}|${name})( *)(⍝?)`, 'i');
+      const localRE = RegExp(`( *)(;)( *)(${D.syntax.sysvar}|${D.syntax.name})( *)(⍝?)`, 'i');
       const localVars = () => {
         let m;
         while ((m = sm.match(localRE)) && m.index === 0) {
@@ -221,15 +205,15 @@
           h.hdr = 0;
           m = sm.match(/[^⍝\n\r]*/);
           [s] = m;
-          if (/^\s*:/.test(s) || dfnHeader.test(s)) {
+          if (/^\s*:/.test(s) || D.syntax.dfnHeader.test(s)) {
             // sm.backUp(s.length)
           } else {
             const [signature] = s.split(';');
-            const [, fn, op] = signature.match(tradFnRE) || [];
+            const [, fn, op] = signature.match(D.syntax.tradFnRE) || [];
             const fnop = op || fn;
             let si = -1;
             if (fnop) {
-              const sigm = signature.match(RegExp(`(^|[^${letter}0-9]+)${fnop}([^${letter}0-9]+|$)`));
+              const sigm = signature.match(RegExp(`(^|[^${D.syntax.letter}0-9]+)${fnop}([^${D.syntax.letter}0-9]+|$)`));
               si = sigm.index + sigm[1].length;
             }
             let i = 0;
@@ -252,7 +236,7 @@
                     addToken(offset + i, 'identifier.global');
                     i += fnop.length;
                   } else {
-                    m = signature.slice(i).match(name);
+                    m = signature.slice(i).match(D.syntax.name);
                     if (m) {
                       addToken(offset + i, 'identifier.local');
                       i += m[0].length;
@@ -269,7 +253,7 @@
             sm = line.slice(offset);
             localVars();
           }
-        } else if (offset === 0 && RegExp(`^ *; *${name}($|[ ;])`).test(sm)) {
+        } else if (offset === 0 && RegExp(`^ *; *${D.syntax.name}($|[ ;])`).test(sm)) {
           localVars();
         } else if ((m = sm.match(D.syntax.idiomsRE))) {
           addToken(offset, 'predefined.idiom');
@@ -373,11 +357,12 @@
               addToken(offset, tkn); offset += 1; break;
 
             case '⎕': {
-              [m] = sm.slice(1).match(RegExp(`^${name}`)) || [];
+              [m] = sm.slice(1).match(RegExp(`^${D.syntax.name}`)) || [];
               const ml = (m || '').toLowerCase();
               if (!m) tkn = 'predefined.sysfn';
-              else if (h.vars && h.vars.indexOf(`⎕${ml}`) >= 0) tkn = 'predefined.sysfn.local';
-              else if (D.syntax.sysfns.indexOf(ml) >= 0) tkn = 'predefined.sysfn';
+              else if (h.vars && h.vars.includes(`⎕${ml}`)) tkn = 'predefined.sysfn.local';
+              else if (D.syntax.sysfns.includes(ml)) tkn = 'predefined.sysfn';
+              else if (D.isClassic && D.syntax.sysfns_classic.includes(ml)) tkn = 'predefined.sysfn';
               else tkn = 'invalid.sysfn';
 
               addToken(offset, tkn); offset += 1 + ml.length; break;
@@ -518,7 +503,7 @@
                   addToken(offset, 'meta.label');
                   offset += 1;
                 } else if (dd || (h.vars && h.vars.includes(x))) {
-                  [x] = sm.match(RegExp(`(${name}\\.?)+`));
+                  [x] = sm.match(RegExp(`(${D.syntax.name}\\.?)+`));
                   addToken(offset, 'identifier.local');
                 } else {
                   addToken(offset, 'identifier.global');

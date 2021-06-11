@@ -135,7 +135,9 @@ D.installMenu = function Menu(mx) {
       }
       return !1;
     };
-    $m = $('<div class=menu>').prependTo('body').empty()
+    $m = $('div[class=menu]');
+    $m.length || ($m = $('<div class=menu>').prependTo('body'));
+    $m.empty()
       .addClass('menu')
       .append(arg.map(render));
     $m.find('>.m-sub>.m-opener').addClass('m-top');

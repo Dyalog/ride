@@ -6,7 +6,23 @@
       m[`'${x}'`] = m[`'${old}'`]; delete m[`'${old}'`];
     }
   });
+  
+  D.defaultPrefix = lc => (/^d[ae]/.test(lc) ? '<' : D.prf.prefixKey.getDefault());
 
+  const { layouts } = D.kbds;
+  if (!layouts[D.prf.kbdLocale()]) {
+    const s = D.el ? nodeRequire('os-locale').sync() : navigator.language;
+    const l = s.slice(0, 2).toLowerCase(); // language
+    const c = s.slice(3, 5).toUpperCase(); // country
+    // default layout for country c
+    const d = Object.keys(layouts).filter(x => x.slice(3, 5) === c).sort()[0];
+    let lc;
+    if (D.mac && layouts[`${l}_${c}_Mac`]) lc = `${l}_${c}_Mac`;
+    else if (layouts[`${l}_${c}`]) lc = `${l}_${c}`;
+    else lc = d || 'en_US';
+    D.prf.kbdLocale(lc);
+    D.prf.prefixKey(D.defaultPrefix(lc));
+  }
   // D.kbds.layouts[lc] contains four strings describing how keys map to characters:
   //  0:normal  1:shifted
   //  2:APL     3:APL shifted
@@ -204,7 +220,6 @@
         webPreferences: {
           contextIsolation: true,
           nodeIntegration: false,
-          contextIsolation: true,
         },
       });
       const cn = nodeRequire(`${__dirname}/src/cn`);
@@ -237,8 +252,8 @@
     DBG() { D.prf.dbg.toggle(); },
     WSE() { D.prf.wse.toggle(); },
     POE() { D.prf.pauseOnError.toggle(); },
-    PAT() { D.send('PauseAllThreads', { pause: 1 }); }, // Threads > Pause All Threads.
-    RSU() { D.send('PauseAllThreads', { pause: 0 }); }, // Threads > Resume All Threads.
+    PAT() { D.send('PauseAllThreads', { pause: 1 }); },
+    UAT() { D.send('PauseAllThreads', { pause: 0 }); },
     ZM(me) {
       const w = me.dyalogCmds;
       w.container.parent.toggleMaximise();
@@ -298,7 +313,7 @@
     const c = D.commands;
     c[x] || (c[x] = (me) => {
       const h = me.dyalogCmds;
-      h && h.execCommand(x);
+      (h && h[x]) ? h.execCommand(x) : $.alert(`Command ${x} not implemented.`);
     });
   }
   ('CBP MA AC VAL indentOrComplete indentMoreOrAutocomplete STL TVO TVB'

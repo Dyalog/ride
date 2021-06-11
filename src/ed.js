@@ -38,6 +38,7 @@
       cursorStyle: D.prf.blockCursor() ? 'block' : 'line',
       cursorBlinking: D.prf.cursorBlinking(),
       emptySelectionClipboard: false,
+      fixedOverflowWidgets: true,
       folding: ed.isCode && !!D.prf.fold(),
       fontFamily: 'apl',
       fontSize: fs,
@@ -47,7 +48,7 @@
       iconsInSuggestions: false,
       language: 'apl',
       lineHeight: fs + 2,
-      lineNumbers: D.prf.lineNums() ? (x => `[${x - 1}]`) : 'off',
+      lineNumbers: D.prf.lineNums() ? ((x) => `[${x - 1}]`) : 'off',
       matchBrackets: !!D.prf.matchBrackets(),
       minimap: {
         enabled: D.prf.minimapEnabled(),
@@ -59,6 +60,7 @@
       quickSuggestionsDelay: D.prf.autocompletionDelay(),
       renderLineHighlight: D.prf.renderLineHighlight(),
       renderIndentGuides: false,
+      scrollBeyondLastLine: false,
       selectionHighlight: D.prf.selectionHighlight(),
       snippetSuggestions: D.prf.snippetSuggestions() ? 'bottom' : 'none',
       stopRenderingLineAfter: -1,
@@ -67,8 +69,7 @@
       useTabStops: false,
       wordBasedSuggestions: false,
       wordSeparators: D.wordSeparators,
-      unusualLineTerminators: 'off',   // iss646: Prevent message prompt about unusual line endings
-      
+      unusualLineTerminators: 'off', // iss646: Prevent message prompt about unusual line endings
     });
     ed.me = me;
     ed.me_ready = new Promise((resolve) => {
@@ -106,7 +107,10 @@
         || (ed.isReadOnly && t.type === mt.CONTENT_EMPTY)) {
         if (e.event.timestamp - mouseTS < 400 && mouseL === p.lineNumber && mouseC === p.column) {
           e.event.preventDefault(); e.event.stopPropagation();
-          ed.ED(me);
+          if (D.prf.doubleClickToEdit()) {
+            ed.ED(me);
+            me.setPosition(p);
+          }
         }
         mouseL = p.lineNumber; mouseC = p.column; mouseTS = e.event.timestamp;
       }
@@ -137,7 +141,7 @@
       }
       return !0;
     });
-    ed.setPendent = $.debounce(100, x => ed.dom.classList.toggle('pendent', x));
+    ed.setPendent = $.debounce(100, (x) => ed.dom.classList.toggle('pendent', x));
     ed.setTC(!!ed.tc);
     ed.setLN(D.prf.lineNums());
     ed.firstOpen = true;
@@ -150,15 +154,15 @@
       const ed = this;
       const model = ed.me.getModel();
       ed.stop = new Set(model.getAllDecorations()
-        .filter(d => d.options.glyphMarginClassName === 'breakpoint')
-        .map(d => d.range.startLineNumber - 1));
+        .filter((d) => d.options.glyphMarginClassName === 'breakpoint')
+        .map((d) => d.range.startLineNumber - 1));
     },
     cursorActivity(e) { // handle "cursor activity" event
       // xline:the line number of the empty line inserted when you press <down> at eof
       const ed = this;
       const { me } = ed;
       const model = me.getModel();
-      ed.ide.setCursorPosition(e.position);
+      ed.ide.setCursorPosition(e.position, model.getLineCount());
       if (ed.xline == null) return;
       const n = model.getLineCount();
       const l = e.position.lineNumber;
@@ -198,7 +202,7 @@
     },
     setLN(x) { // update the display of line numbers and the state of the "[...]" button
       const ed = this;
-      ed.me.updateOptions({ lineNumbers: D.prf.lineNums() ? (l => `[${l - 1}]`) : 'off' });
+      ed.me.updateOptions({ lineNumbers: D.prf.lineNums() ? ((l) => `[${l - 1}]`) : 'off' });
       ed.dom.querySelector('.tb_LN').classList.toggle('pressed', !!x);
     },
     setTC(x) {
@@ -218,7 +222,7 @@
     },
     setStop() {
       const ed = this;
-      ed.stopDecorations = [...ed.stop].map(x => ({
+      ed.stopDecorations = [...ed.stop].map((x) => ({
         range: new monaco.Range(x + 1, 1, x + 1, 1),
         options: {
           isWholeLine: false,
@@ -243,7 +247,7 @@
     saveScrollPos() { },
     restoreScrollPos() { },
     updateSIStack(x) {
-      this.dom.querySelector('.si_stack').innerHTML = x.stack.map(o => `<option>${o}`).join('');
+      this.dom.querySelector('.si_stack').innerHTML = x.stack.map((o) => `<option>${o}`).join('');
     },
     stateChanged() {
       const w = this;
@@ -257,8 +261,8 @@
       ed.name = ee.name;
       // Check if a filename for a source file is provided.
       // Make sure it isn't duplicated in the existing name.
-      if (ee.filename && (ed.name.indexOf(ee.filename) == -1 )) {
-        ed.name = ed.name.concat(" in ", ee.filename)
+      if (ee.filename && (ed.name.indexOf(ee.filename) === -1)) {
+        ed.name = ed.name.concat(' in ', ee.filename);
       }
       ed.container && ed.container.setTitle(ed.name);
       D.ide.floating && $('title', ed.dom.ownerDocument).text(`${ed.name} - ${ed.ide.caption}`);
@@ -285,7 +289,8 @@
         me.setModel(monaco.editor.createModel(ed.oText, null, monaco.Uri.file(ee.name)));
       } else {
         monaco.editor.setModelLanguage(model, ed.isCode && !ed.isReadOnlyEntity ? 'apl' : 'plaintext');
-        etype && ed.dom.classList.toggle(etype, true);
+        ed.dom.classList.remove('charmat', 'chararr', 'numarr', 'mixarr', 'charvecvec', 'quador', 'charvec');
+        etype && ed.dom.classList.add(etype);
       }
       me.updateOptions({ folding: ed.isCode && !!D.prf.fold() });
       if (ed.isCode && D.prf.indentOnOpen()) ed.RD(me);
@@ -326,7 +331,7 @@
       }
       window.focused || window.focus();
       ed.me.focus();
-      ed.ide.setCursorPosition(ed.me.getPosition());
+      ed.ide.setCursorPosition(ed.me.getPosition(), ed.me.getModel().getLineCount());
     },
     insert(ch) {
       this.isReadOnly || this.me.trigger('editor', 'type', { text: ch });
@@ -361,11 +366,9 @@
       const p = me.getPosition();
       const c = p.column - 1;
       const s = me.getModel().getLineContent(p.lineNumber);
-      const r = '[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*'; // r:regex fragment used for a name
-      return (
-        ((RegExp(`⎕?${r}$`).exec(s.slice(0, c)) || [])[0] || '') // match left of cursor
-        + ((RegExp(`^${r}`).exec(s.slice(c)) || [])[0] || '') // match right of cursor
-      ).replace(/^\d+/, ''); // trim leading digits
+      const [loc] = RegExp(`⎕?${D.syntax.name}?$`).exec(s.slice(0, c)); // match left of cursor
+      const [roc] = RegExp(`^⎕?[${D.syntax.letter}\\d]*`).exec(s.slice(c)); // match right of cursor
+      return RegExp(`^(${D.syntax.sysvar}|${D.syntax.name})?\\b`, 'i').exec(loc + roc)[0];
     },
     autoCloseBrackets(x) { this.me.updateOptions({ autoClosingBrackets: x }); },
     indent(x) { this.me.updateOptions({ autoIndent: x >= 0 }); },
@@ -513,7 +516,7 @@
       const a = s.split(';');
       const head = a[0].replace(/\s+$/, '');
       let tail = a.length > 1 ? a.slice(1) : [];
-      tail = tail.map(x => x.replace(/\s+/g, ''));
+      tail = tail.map((x) => x.replace(/\s+/g, ''));
       const i = tail.indexOf(name); i < 0 ? tail.push(name) : tail.splice(i, 1);
       const text = [head].concat(tail.sort()).join(';') + (com || '');
       me.executeEdits('D', [{ range: new monaco.Range(l + 1, 1, l + 1, lt.length + 1), text }]);
@@ -540,13 +543,13 @@
           endLineNumber: q.lineNumber,
           endColumn: q.column,
         }, monaco.editor.EndOfLinePreference.LF).split('\n'); //  l:lines
-        const u = l.map(x => x.replace(/'[^']*'?/g, y => ' '.repeat(y.length))); // u:scrubbed strings
-        const c = u.map(x => x.indexOf('⍝')); // c:column index of ⍝
+        const u = l.map((x) => x.replace(/'[^']*'?/g, (y) => ' '.repeat(y.length))); // u:scrubbed strings
+        const c = u.map((x) => x.indexOf('⍝')); // c:column index of ⍝
         return {
           p, q, l, u, c,
         };
       });
-      const m = Math.max(...a.map(sel => Math.max(...sel.c)));
+      const m = Math.max(...a.map((sel) => Math.max(...sel.c)));
       const edits = a.map((sel) => {
         const r = sel.l.map((x, i) => {
           const ci = sel.c[i];

@@ -15,6 +15,7 @@ D.IDE = function IDE(opts = {}) {
   // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
   ide.pending = [];
   ide.promptType = 1;
+  ide.hasSubscribe = true;
   ide.exec = (a, tc) => {
     if (a && a.length) {
       tc || (ide.pending = a.slice(1));
@@ -38,12 +39,22 @@ D.IDE = function IDE(opts = {}) {
     ide.switchWin = (x) => { ide.ipc.emit('switchWin', x); };
   } else {
     D.prf.title(ide.updTitle.bind(ide));
+    I.sb_ml.hidden = !1;
+    I.sb_io.hidden = !1;
+    I.sb_trap.hidden = !1;
+    I.sb_dq.hidden = !1;
     I.sb_sis.hidden = !1;
     I.sb_threads.hidden = !1;
+    ide.showCCGC = (x) => {
+      I.sb_cc.hidden = !x;
+      I.sb_gc.hidden = I.sb_cc.hidden;
+    };
+    D.prf.showCCGC(ide.showCCGC);
+    ide.showCCGC(D.prf.showCCGC());
     ide.wins[0] = new D.Se(ide);
     D.wins = ide.wins;
-    D.send('GetSyntaxInformation',{});
-    D.send('GetLanguageBar',{});
+    D.send('GetSyntaxInformation', {});
+    D.send('GetLanguageBar', {});
     D.send('GetConfiguration', { names: ['AUTO_PAUSE_THREADS'] });
 
     ide.focusedWin = ide.wins['0']; // last focused window, it might not have the focus right now
@@ -176,7 +187,7 @@ D.IDE = function IDE(opts = {}) {
       D.util.insert(ae, s);
       const fw = w.me._overlayWidgets['editor.contrib.findWidget'].widget;
       const fi = fw._findInput;
-      const fr = fw._replaceInputBox.inputElement;
+      const fr = fw._replaceInput.inputBox;
       if (fi.inputBox.input === ae) fi._onInput.fire();
       else if (fr === ae) fw._state.change({ replaceString: fr.value }, false);
     }
@@ -353,9 +364,18 @@ D.IDE = function IDE(opts = {}) {
   });
   const toggleStats = () => {
     if (ide.floating) return;
-    if (statsTid && !D.prf.dbg() && !D.prf.sbar()) {
+    // (un)subscribe to status here
+    if (ide.hasSubscribe) {
+      // New code for interpreters that support the Subscribe message
+      const sbarFields = [
+        ...(D.prf.sbar() ? ['statusfields'] : []),
+        ...(D.prf.dbg() ? ['stack', 'threads'] : []),
+      ];
+      const sbarReq = { status: sbarFields }; // Heartbeat not currently used.
+      D.send('Subscribe', sbarReq);
+    } else if (statsTid && !D.prf.dbg() && !D.prf.sbar()) { // Fallback code
       clearInterval(statsTid); statsTid = 0;
-    } else if (!statsTid && (D.prf.dbg() || D.prf.sbar())) {
+    } else if (!statsTid && !ide.hasSubscribe && (D.prf.dbg() || D.prf.sbar())) {
       ide.getStats();
       statsTid = statsTid || setInterval(ide.getStats, 5000);
     }
@@ -481,6 +501,18 @@ D.IDE = function IDE(opts = {}) {
   ide.handlers = { // for RIDE protocol messages
     Identify(x) {
       D.remoteIdentification = x;
+      D.isClassic = x.arch[0] === 'C';
+      if (D.isClassic) {
+        Object.keys(D.bq).forEach((k) => {
+          const sysfn = `u${D.bq[k].codePointAt(0).toString(16)}`;
+          if (D.syntax.sysfns_classic.includes(sysfn)) D.bq[k] = `⎕${sysfn}`;
+        });
+        D.bqbqc.forEach((p) => {
+          const sysfn = `u${p.text.codePointAt(0).toString(16)}`;
+          if (D.syntax.sysfns_classic.includes(sysfn)) p.text = `⎕${sysfn}`;
+        });
+      }
+      
       D.InitHelp(x.version);
       ide.updTitle();
       ide.connected = 1;
@@ -488,6 +520,7 @@ D.IDE = function IDE(opts = {}) {
       clearTimeout(D.tmr);
       delete D.tmr;
     },
+    InvalidSyntax() { $.err('Invalid syntax.', 'Interpreter error'); },
     Disconnect(x) {
       const m = x.message.toLowerCase(); ide.die();
       if (m === 'dyalog session has ended') {
@@ -508,7 +541,7 @@ D.IDE = function IDE(opts = {}) {
       ide.promptType = t;
       if (t && ide.pending.length) D.send('Execute', { trace: 0, text: `${ide.pending.shift()}\n` });
       else eachWin((w) => { w.prompt(t); });
-      t === 4 && ide.wins[0].focus(); // ⍞ input
+      (t === 2 || t === 4) && ide.wins[0].focus(); // ⎕ / ⍞ input
       t === 1 && ide.getStats();
       if (t === 1 && ide.bannerDone === 0) {
         // arrange for the banner to appear at the top of the session window
@@ -560,11 +593,11 @@ D.IDE = function IDE(opts = {}) {
       ide.lbarRecreate();
     },
     ReplyGetSyntaxInformation(x) {
-      D.ParseSyntaxInformation(x);
+      D.parseSyntaxInformation(x);
       D.ipc && D.ipc.server.broadcast('syntax', D.syntax);
     },
     ValueTip(x) { ide.wins[x.token].ValueTip(x); },
-    SetHighlightLine(x) { 
+    SetHighlightLine(x) {
       const w = D.wins[x.win];
       w.SetHighlightLine(x.line, ide.hadErr);
       ide.hadErr > 0 && (ide.hadErr -= 1);
@@ -727,6 +760,24 @@ D.IDE = function IDE(opts = {}) {
       I.sb_threads.classList.toggle('active', l > 1);
       ide.dbg && ide.dbg.threads.render(x.threads);
     },
+    InterpreterStatus(x) {
+      // update status bar fields here
+      I.sb_ml.innerText = `⎕ML: ${x.ML}`;
+      I.sb_io.innerText = `⎕IO: ${x.IO}`;
+      I.sb_sis.innerText = `⎕SI: ${x.SI}`;
+      // I.sb_trap.innerText = `⎕TRAP: ${x.TRAP}`; // TRAP doesn't display a value
+      I.sb_dq.innerText = `⎕DQ: ${x.DQ}`;
+      I.sb_threads.innerText = `&: ${x.NumThreads}`;
+      I.sb_cc.innerText = `CC: ${x.CompactCount}`;
+      I.sb_gc.innerText = `GC: ${x.GarbageCount}`;
+      // Eventually we would like to read the default values from the interpreter.
+      I.sb_ml.classList.toggle('active', x.ML !== 1);
+      I.sb_io.classList.toggle('active', x.IO !== 1);
+      I.sb_sis.classList.toggle('active', x.SI > 0);
+      I.sb_trap.classList.toggle('active', x.TRAP !== 0);
+      I.sb_dq.classList.toggle('active', x.DQ !== 0);
+      I.sb_threads.classList.toggle('active', x.NumThreads > 1);
+    },
     ReplyFormatCode(x) {
       const w = D.wins[x.win];
       w.ReplyFormatCode(x.text);
@@ -764,6 +815,16 @@ D.IDE = function IDE(opts = {}) {
         toastr.warning('Clear all trace/stop/monitor not supported by the interpreter');
       } else if (x.name === 'GetHelpInformation') {
         ide.getHelpExecutor.reject('GetHelpInformation not implemented on remote interpreter');
+      } else if (x.name === 'Subscribe') {
+        // flag to fallback for status updates.
+        ide.hasSubscribe = false;
+        I.sb_ml.hidden = true;
+        I.sb_io.hidden = true;
+        I.sb_trap.hidden = true;
+        I.sb_dq.hidden = true;
+        I.sb_cc.hidden = true;
+        I.sb_gc.hidden = true;
+        toggleStats();
       } else if (x.name === 'GetConfiguration') {
         D.get_configuration_na = 1;
         updMenu();
@@ -779,8 +840,8 @@ D.IDE.prototype = {
     ide.profile = z;
     ide.updTitle();
   },
-  setCursorPosition(p) {
-    I.sb_cp.innerText = `Ln ${p.lineNumber - 1}, Col ${p.column - 1}`;
+  setCursorPosition(p, lc) {
+    I.sb_cp.innerText = `Pos: ${p.lineNumber - 1}/${lc},${p.column - 1}`;
   },
   die() { // don't really, just pretend
     const ide = this;

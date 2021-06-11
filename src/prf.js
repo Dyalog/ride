@@ -17,6 +17,7 @@ D.prf = {};
   ['colourSchemes',      []],//objects describing user-defined colour schemes
   ['confirmations',      {}],//saved responses to TaskDialog questions
   ['connectOnQuit',      0], // open connection page when active session ends
+  ['doubleClickToEdit',  1], // whether double clicking a function name in session or editor opens an editor on that function
   ['floating',           0], //floating editor and tracer windows
   ['floatSingle',        1], //create single floating edit window
   ['fold',               1], //code folding
@@ -47,6 +48,7 @@ D.prf = {};
   ['sbar',               1], //show status bar
   ['selectedExe',        ''],//which interpreter is selected in dropdown in the Connect page?
   ['selectionHighlight', 0],// hightlight matching words
+  ['showCCGC',           0], // show CC and GC in statusbar
   ['showEditorToolbar',  1],// show toolbar in editor windows
   ['snippetSuggestions', 1],// show snippet suggestions
   ['title',              '{WSID}'], //a.k.a. "caption"
@@ -119,8 +121,8 @@ D.prf = {};
     + '\n&Threads                        {rp21}'
     + '\n  Pause on Error           =POE'
     + '\n  Pause all Threads        =PAT'
-    + '\n  Resume all Threads       =RSU'
-    + '\n  Restart all Threads      =MA'
+    + '\n  Unpause all threads      =UAT'
+    + '\n  Continue all threads     =MA'
     + '\n&Help'
     + '\n  Getting &Started         =https://dyalog.com/introduction.htm'
     + '\n  -'
