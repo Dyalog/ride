@@ -59,8 +59,8 @@ pipeline {
             label 'Windows'
           }
           steps {
-            powershell 'if (Test-Path -Path ship) { rm -r ship }'
-            powershell 'if (Test-Path -Path _) { rm -r _ }'
+            powershell 'rm -r ship'
+            powershell 'rm -r _'
             unstash 'ride-win'
             unstash 'ride-version'
             bat './CI/packagescripts/windows/packageWindows.bat'
