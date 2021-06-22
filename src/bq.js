@@ -24,7 +24,7 @@ D.informal=[
   '= equal xnor logicalxnor iff',
   '≠ ne notequal uniquemask xor logicalxor nubsieve',
   '≤ le lessorequal fore logicalimplication',
-  '< lessthan before conversenonimplication'
+  '< lessthan before conversenonimplication',
   '> greaterthan after logicalnonimplication',
   '≥ ge greaterorequal aft converseimplication',
   '≡ match equalunderbar identical depth nestinglevel equivalent',
