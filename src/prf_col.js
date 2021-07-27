@@ -141,6 +141,25 @@
       + 'na=fg:#b48ead,bg:#434c5e,bgo:1 qor=fg:#eceff4,bg:#bf616a,bgo:1 op1=fg:#88c0d0 op2=fg:#8fbcbb',
     },
   ].map(decScm).map((x) => { x.frz = 1; return x; });
+
+  // Add JSON color schemes from {path}/themes/ to SCMS
+  // The {path} is the same as in {path}/prefs.json
+  const fs = nodeRequire('fs');
+  const el = nodeRequire('electron').remote;
+  const dirPath = `${el.app.getPath('userData')}/themes/`;
+  fs.readdirSync(dirPath).forEach(file => {
+    // Get JSON file contents & validate files
+    let fileContents; let fileJSON;
+    try { fileContents = fs.readFileSync(dirPath+file, {encoding: "utf8"}); } 
+    catch(e) { console.error(`Couldn't open themes/${file}.`); return; }
+    try { fileJSON = JSON.parse(fileContents); }
+    catch (e) { console.error(`themes/${file} could not be parsed as JSON.`); return; }
+
+    // If files validated, then add scheme to SCMS
+    if (fileJSON.name && fileJSON.theme && fileJSON.styles) { SCMS.push(decScm(fileJSON)); }
+    else { console.error(`themes/${file} missing one or more of 'name', 'theme' or 'styles'.`) }
+})
+
   // Colour schemes have two representations:
   // in memory (easier to manipulate)   in prefs.json (more compact)
   //   {                                {
