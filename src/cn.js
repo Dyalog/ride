@@ -550,6 +550,10 @@
             srv.listen(0, '127.0.0.1', () => {
               const adr = srv.address();
               const hp = `${adr.address}:${adr.port}`;
+              let cwd = untildify(x.cwd || process.cwd());
+              if (!x.cwd && (cwd === '/' || cwd === path.dirname(process.execPath))) {
+                cwd = home;
+              }
               log(`listening for connections from spawned interpreter on ${hp}`);
               log(`spawning interpreter ${JSON.stringify(x.exe)}`);
               let args = ['+s', '-q', '-nokbd'];
@@ -559,7 +563,7 @@
               if (x.args) args.push(...x.args.replace(/\n$/gm, '').split('\n'));
               try {
                 child = cp.spawn(x.exe, args, {
-                  ...(!!x.cwd && { cwd: untildify(x.cwd) }),
+                  cwd,
                   stdio,
                   detached: true,
                   env: {
