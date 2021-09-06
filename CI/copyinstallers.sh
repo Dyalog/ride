@@ -22,7 +22,8 @@ d=${BUILD_NUMBER}
 # We need the directory which contains index.html
 # `pwd`/_/version contains the full version number of RIDE; need the major.minor and majorminor to build path
 
-VER=$(sed 's/\.[^\.]*$//' _/version)
+export FULLVER=$(cat _/version)
+VER=$(echo ${FULLVER} | sed 's/\.[^\.]*$//')
 VERNODOT=$(echo $VER | tr -d ".")
 SRC_RIDEAPPDIR="_/ride${VERNODOT}/Ride-${VER}-linux-x64/resources/app"
 [ -d $SRC_RIDEAPPDIR ] || { echo "cannot find RideApplication directory $SRC_RIDEAPPDIR" ; exit 1 ; }
@@ -31,7 +32,7 @@ mkdir -p $r/$d/$RIDEAPPDIR
 
 cp -v ship/*.* $r/$d/
 cp -r $SRC_RIDEAPPDIR/* $r/$d/$RIDEAPPDIR
-( cd $r/$d ; zip -qr ZeroFootprintRIDE-${VER}.zip $RIDEAPPDIR; )
+( cd $r/$d ; zip -qr ride-${FULLVER}_zerofootprint.zip $RIDEAPPDIR; )
 
 echo 'updating "latest" symlink'; l=$r/latest; rm -f $l; ln -s $d $l
 echo 'cleaning up old releases'
