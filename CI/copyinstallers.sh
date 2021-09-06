@@ -31,6 +31,7 @@ mkdir -p $r/$d/$RIDEAPPDIR
 
 cp -v ship/*.* $r/$d/
 cp -r $SRC_RIDEAPPDIR/* $r/$d/$RIDEAPPDIR
+( cd $r/$d ; zip -qr ZeroFootprintRIDE-${VER}.zip $RIDEAPPDIR; )
 
 echo 'updating "latest" symlink'; l=$r/latest; rm -f $l; ln -s $d $l
 echo 'cleaning up old releases'
