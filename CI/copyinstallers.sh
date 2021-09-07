@@ -9,7 +9,7 @@ if [ "${GIT_BRANCH:0:2}" = "PR" ]; then
         exit 0
 fi
 
-
+ 
 ## Check /devt is mounted
 
 mountpoint /devt; echo "Devt is mounted: good"
