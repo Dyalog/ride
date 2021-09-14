@@ -216,7 +216,7 @@
       const ssp = '      ';
       let text;
       let scp = cp.column;
-      if (se.promptType === 3) {
+      if (se.promptType === 3 || se.promptType === 4) {
         text = s;
       } else {
         const res = (s0 === ssp) ? se.preProcessOutput({ line: '', column: 1, input: s })
