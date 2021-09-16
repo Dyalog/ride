@@ -141,7 +141,7 @@ test(
   },
 );
 
-test.failing(
+test(
   'ed-set-stops-in-traced-script-with-ilf',
   async (t) => {
     const { app } = t.context;
