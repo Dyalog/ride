@@ -89,21 +89,22 @@
         setTimeout(() => {
           const sw = me._contentWidgets['editor.widget.suggestWidget'];
           if (!sw) return;
-          const swv = sw.widget.ctxSuggestWidgetVisible.get();
+          const swv = sw.widget._widget._ctxSuggestWidgetVisible.get();
           const r = e.changes[0].range;
           if (r.startLineNumber > model.getLineCount()) return;
           const l = model.getLineContent(r.startLineNumber).toLowerCase();
           const bq2 = e.changes.length && RegExp(`${pk}${pk}\\w*`, 'i').test(l);
-          if (swv && !bq2 && sw.widget.list.length === 1) {
-            const t = sw.widget.focusedItem.completion.insertText.toLowerCase();
+          const swlist = sw.widget._widget._list;
+          if (swv && !bq2 && swlist.length === 1) {
+            const t = sw.widget._widget._focusedItem.completion.insertText.toLowerCase();
             if (l.slice(r.startColumn - t.length, r.startColumn) === t) {
               me.trigger('editor', 'hideSuggestWidget');
             } else {
               me.trigger('editor', 'editor.action.triggerSuggest');
             }
-          } else if (swv && !sw.widget.list.length) {
+          } else if (swv && !swlist.length) {
             me.trigger('editor', 'hideSuggestWidget');
-          } else if (swv && !bq2 && sw.widget.list.length > 1) {
+          } else if (swv && !bq2 && swlist.length > 1) {
             me.trigger('editor', 'editor.action.triggerSuggest');
           }
         }, 50);
