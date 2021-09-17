@@ -1,3 +1,77 @@
+.ctl_listview {
+  background-color: white;
+  color: black;
+}
+.ctl_listview tr {
+  background-color: rgba(118, 136, 217, 0.5);
+  border-bottom: 1px solid white;
+}
+.ctl_listview tr:hover {
+  background-color: rgba(118, 136, 217, 0.25);
+}
+.ctl_listview tr.selected {
+  background-color: #9eabe4;
+}
+#debug {
+  background: white;
+}
+#debug .ctl_listview_header {
+  background-color: #7688d9;
+  color: white;
+}
+#debug .ctl_listview_header h2 {
+  font-size: 16px;
+}
+/*various dialogs*/
+#dlg_modal_overlay {
+  background-color: black;
+  opacity: 0.2;
+}
+.dlg {
+  background-color: #edeff5;
+  outline: none;
+}
+.dlg div {
+  outline: none;
+}
+.dlg_title,
+.dlg_close {
+  color: #7688d9;
+}
+.dlg_close:hover {
+  background-color: white;
+}
+#cn_listen_dlg,
+#cn_connecting_dlg {
+  border: 1px solid #7688d9;
+}
+#gd.dlg {
+  background-color: #edeff5;
+}
+#gd .dlg_title,
+#gd .dlg_close {
+  color: #828282;
+}
+#gd .dlg_close:hover {
+  color: white;
+  background-color: #38393f;
+}
+#gd_content {
+  color: #4c4a4a;
+}
+.dlg_btns {
+  background-color: #dde0ec;
+}
+.dlg_btns button.task {
+  background-image: none;
+  background-color: rgba(0, 0, 0, 0);
+  color: #7688d9;
+  text-transform: none;
+  font-size: small;
+  font-weight: normal;
+  text-align: left;
+  border: 1px solid transparent;
+}
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),
 #cn textarea {
   border: 1px solid rgba(169, 169, 169, 0.3);
@@ -71,76 +145,6 @@
 .cn_dlg_content pre {
   font-size: 16px;
   font-family: monospace;
-}
-.ctl_listview {
-  background-color: white;
-  color: black;
-}
-.ctl_listview tr {
-  background-color: rgba(118, 136, 217, 0.5);
-  border-bottom: 1px solid white;
-}
-.ctl_listview tr:hover {
-  background-color: rgba(118, 136, 217, 0.25);
-}
-.ctl_listview tr.selected {
-  background-color: #9eabe4;
-}
-#debug {
-  background: white;
-}
-#debug .ctl_listview_header {
-  background-color: #7688d9;
-  color: white;
-}
-#debug .ctl_listview_header h2 {
-  font-size: 16px;
-}
-/*various dialogs*/
-#dlg_modal_overlay {
-  background-color: black;
-  opacity: 0.2;
-}
-.dlg {
-  background-color: #edeff5;
-}
-.dlg_title,
-.dlg_close {
-  color: #7688d9;
-}
-.dlg_close:hover {
-  background-color: white;
-}
-#cn_listen_dlg,
-#cn_connecting_dlg {
-  border: 1px solid #7688d9;
-}
-#gd.dlg {
-  background-color: #edeff5;
-}
-#gd .dlg_title,
-#gd .dlg_close {
-  color: #828282;
-}
-#gd .dlg_close:hover {
-  color: white;
-  background-color: #38393f;
-}
-#gd_content {
-  color: #4c4a4a;
-}
-.dlg_btns {
-  background-color: #dde0ec;
-}
-.dlg_btns button.task {
-  background-image: none;
-  background-color: rgba(0, 0, 0, 0);
-  color: #7688d9;
-  text-transform: none;
-  font-size: small;
-  font-weight: normal;
-  text-align: left;
-  border: 1px solid transparent;
 }
 /*Golden Layout*/
 .lm_goldenlayout {
@@ -315,6 +319,13 @@ select {
   border-top: 1px solid #d7d7d3;
   border-bottom: 1px solid white;
 }
+.breakpoint {
+  background: no-repeat transparent center center url(img/breakpoint.png);
+}
+.highlighted {
+  border: none;
+  outline: solid red 1px;
+}
 /*menu (see ../src/menu.js for the DOM structure)*/
 .menu {
   background-color: #edeff5;
@@ -350,13 +361,6 @@ select {
 }
 .menu .m-box a:focus.m-checked {
   background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
-}
-.breakpoint {
-  background: no-repeat transparent center center url(img/breakpoint.png);
-}
-.highlighted {
-  border: none;
-  outline: solid red 1px;
 }
 #prf_dlg hr {
   border-top: 1px solid #d7d7d3;
@@ -569,6 +573,25 @@ a:hover {
 ::-webkit-scrollbar-thumb:active {
   background-color: rgba(118, 136, 217, 0.9);
 }
+#sb {
+  background-color: white;
+  border-top: 1px solid #9eabe4;
+  color: #4c4a4a;
+  font-family: apl, monospace;
+}
+#sb div {
+  border-right: 1px solid #dde0ec;
+}
+#sb div.right {
+  border-right: none;
+  border-left: 1px solid #dde0ec;
+}
+#sb div.active {
+  color: #7688d9;
+}
+#sb_prf:active {
+  background-color: #dde0ec;
+}
 #splash {
   background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #7688d9;
 }
@@ -595,35 +618,6 @@ body {
   border: solid #333 1px;
   background-color: grey;
   color: white;
-}
-#sb {
-  background-color: white;
-  border-top: 1px solid #9eabe4;
-  color: #4c4a4a;
-  font-family: apl, monospace;
-}
-#sb div {
-  border-right: 1px solid #dde0ec;
-}
-#sb div.right {
-  border-right: none;
-  border-left: 1px solid #dde0ec;
-}
-#sb div.active {
-  color: #7688d9;
-}
-#sb_prf:active {
-  background-color: #dde0ec;
-}
-#toast-container {
-  font-family: Roboto;
-  font-size: 14px;
-  line-height: 20px;
-}
-#toast-container > div {
-  -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
 }
 .tooltip {
   color: #7688d9;
@@ -670,6 +664,16 @@ body {
 }
 #vt_tri {
   border-color: black;
+}
+#toast-container {
+  font-family: Roboto;
+  font-size: 14px;
+  line-height: 20px;
+}
+#toast-container > div {
+  -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
 }
 #wse {
   background-color: white;
