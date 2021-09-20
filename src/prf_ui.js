@@ -55,6 +55,7 @@
     }
     if (!d) {
       d = I.prf_dlg;
+      $(`#${d.id}>div`).attr('tabIndex', 0);
       d.onkeydown = (x) => {
         const k = D.util.fmtKey(x);
         if (k === 'Ctrl-Enter') {
@@ -84,6 +85,7 @@
         for (let i = 0; i < hdrs.length; i++) {
           const b = a === hdrs[i];
           payloads[i].hidden = !b;
+          payloads[i].tabIndex = b ? 0 : -1;
           hdrs[i].className = b ? 'sel' : '';
         }
         activeTab = tabs[a.href.replace(/.*#/, '')];
