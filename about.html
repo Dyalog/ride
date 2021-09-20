@@ -22,7 +22,6 @@
     </div>
   </div>
   <script>
-    document.getElementById('abt').tabIndex = 0;
     if (typeof require !== 'undefined') {
       document.getElementById('abt_contact').onclick = (x) => {
         if (x.target.nodeName === 'A' && /^http/.test(x.target.href)) {
@@ -32,21 +31,25 @@
         return !0;
       };
     }
-    let cpy = document.getElementById('abt_copy');
     document.getElementById('abt_close').onclick = () => { window.close() };;
+    let cpy = document.getElementById('abt_copy');
     cpy.onclick = () => {
       let ta = document.getElementById('abt_ta');
-        ta.select();
-        document.execCommand('copy');
-        ta.selectionEnd = 0;
-    }
-    cpy.hidden = !document.queryCommandSupported('copy');
-    document.getElementById('abt').onkeydown = (x) => {
+      ta.select();
+      document.execCommand('copy');
+      ta.selectionEnd = 0;
+    };
+    cpy.focus();
+    const abt = document.getElementById('abt');
+    abt.tabIndex = 0;
+    abt.onkeydown = (x) => {
       if (x.key === 'Escape') {
-          window.close();
-          return !1;
-        };
-    }
+        window.close();
+        return !1;
+      } else if (x.key === 'Enter') {
+        cpy.click();
+      }
+    };
   </script>
 </body>
 </html>
