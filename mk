@@ -52,7 +52,7 @@ const pkg = (x, y, f) => {
     dir: '.',
     platform: x,
     arch: y,
-    tmpdir: '../buildtmp',
+    tmpdir: '/tmp/ridebuild',
     out: `_/${pj.name}`,
     overwrite: true,
     'download.cache': 'cache',
@@ -112,7 +112,7 @@ const m = (f) => { b(e => (e ? f(e) : pkg('mas', 'x64', f))); };
 const a = (f) => { b(e => (e ? f(e) : pkg('linux', 'armv7l', f))); };
 const d = (f) => { async.series([l, w, o, a], (e) => { f(e); }); };
 
-const c = (f) => { rm('_'); rm('../buildtmp'); f(); };
+const c = (f) => { rm('_'); rm('/tmp/ridebuild'); f(); };
 
 tasks.b = b; tasks.build = b;
 tasks.l = l; tasks.linux = l;
