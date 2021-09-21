@@ -60,8 +60,13 @@ pipeline {
             label 'Windows'
           }
           steps {
+<<<<<<< HEAD
             powershell 'rm -r ship'
             powershell 'rm -r _'
+=======
+            powershell 'if (Test-Path -Path ship) { rm -r ship }'
+            powershell 'if (Test-Path -Path _) { rm -r _ }'
+>>>>>>> a8ef2c9a... fix rm -Rf on Powershell
             unstash 'ride-win'
             unstash 'ride-version'
             bat './CI/packagescripts/windows/packageWindows.bat'
