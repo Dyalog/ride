@@ -3,11 +3,10 @@ pipeline {
   stages {
     stage('Build Linux & Windows') {
       agent {
-//        docker {
-//          image 'dyalog/ubuntu:1804-build'
-//          args '-v /devt:/devt'
-//        }
-        label 'Linux && NodeJS'
+        docker {
+          image 'dyalog/node:lts'
+          args '-v /devt:/devt'
+        }
       }
       steps {
         checkout scm
@@ -26,7 +25,7 @@ pipeline {
         stage ('Linux Packaging') {
           agent {
             docker {
-              image 'dyalog/ubuntu:1804-build'
+              image 'dyalog/node:lts'
             }
           }
           steps {
@@ -72,7 +71,7 @@ pipeline {
     stage ('Copy install images') {
       agent {
         docker {
-          image 'dyalog/ubuntu:1804-build'
+          image 'dyalog/node:lts'
           args '-v /devt:/devt'
         }
       }
@@ -92,7 +91,7 @@ pipeline {
     stage ('Publish to Github') {
       agent {
         docker {
-          image 'dyalog/ubuntu:1804-build'
+          image 'dyalog/node:lts'
           args '-v /devt:/devt'
         }
       }
