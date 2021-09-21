@@ -5,6 +5,7 @@ pipeline {
       agent {
         docker {
           image 'dyalog/node:lts'
+          registryCredentialsId '0435817a-5f0f-47e1-9dcc-800d85e5c335'
           args '-v /devt:/devt'
         }
       }
@@ -26,6 +27,7 @@ pipeline {
           agent {
             docker {
               image 'dyalog/node:lts'
+              registryCredentialsId '0435817a-5f0f-47e1-9dcc-800d85e5c335'
             }
           }
           steps {
@@ -72,6 +74,7 @@ pipeline {
       agent {
         docker {
           image 'dyalog/node:lts'
+          registryCredentialsId '0435817a-5f0f-47e1-9dcc-800d85e5c335'
           args '-v /devt:/devt'
         }
       }
@@ -92,6 +95,7 @@ pipeline {
       agent {
         docker {
           image 'dyalog/node:lts'
+          registryCredentialsId '0435817a-5f0f-47e1-9dcc-800d85e5c335'
           args '-v /devt:/devt'
         }
       }
