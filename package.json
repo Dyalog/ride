@@ -14,6 +14,7 @@
   },
   "repository": ".",
   "dependencies": {
+    "@electron/remote": "^2.0.1",
     "jquery": "^3.6.0",
     "monaco-editor": "^0.27.0",
     "node-ipc": "^9.2.1",

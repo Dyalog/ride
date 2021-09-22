@@ -3,6 +3,7 @@ const rq = require;
 const fs = rq('fs');
 const ps = process;
 const el = rq('electron');
+require('@electron/remote/main').initialize();
 const D = {};
 
 // Detect platform: https://nodejs.org/api/process.html#process_process_platform
