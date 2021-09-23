@@ -228,7 +228,7 @@
     });
     monaco.editor.setTheme(name);
     if (D.el) {
-      nodeRequire('electron').remote.getGlobal('winstate').theme = schema.theme;
+      nodeRequire('@electron/remote').getGlobal('winstate').theme = schema.theme;
     }
   }
   function updStl() { // update global style from what's in prefs.json

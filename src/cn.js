@@ -1017,7 +1017,7 @@
         && !/Interrupt$|TreeList|Reply|FormatCode|GetAutocomplete|SaveChanges|CloseWindow|Exit/.test(x)) return;
       sendEach([JSON.stringify([x, y])]);
     };
-    const a = rq('electron').remote.process.argv;
+    const a = rq('@electron/remote').process.argv;
     const { env } = D.el.process;
     const h = { // h:args by name
       c: env.RIDE_CONNECT,
@@ -1026,7 +1026,7 @@
       log: env.RIDE_LOG,
     };
     if (D.mac && env.DYALOG_SPAWN) {
-      const app = rq('electron').remote.app.getAppPath();
+      const app = rq('@electron/remote').app.getAppPath();
       h.s = `${app}${env.DYALOG_SPAWN}`;
     }
     for (let i = 1; i < a.length; i++) if (a[i][0] === '-') { h[a[i].slice(1)] = a[i + 1]; i += 1; }
@@ -1055,7 +1055,7 @@
         exe: h.s,
         log: h.log,
       };
-      const openfile = rq('electron').remote.getGlobal('open_file');
+      const openfile = rq('@electron/remote').getGlobal('open_file');
       if (openfile && /(dws|dcfg)$/i.test(openfile)) {
         const qt = /\s/.test(openfile) ? '"' : '';
         cnf.args = `LOAD=${qt}${openfile}${qt}`;
