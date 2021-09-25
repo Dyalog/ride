@@ -1,4 +1,4 @@
-const fs=require('fs'),remote=require('electron').remote,dialog=remote.dialog;
+const fs=require('fs'),remote=require('@electron/remote'),dialog=remote.dialog;
 window.global={};
 
 (function(global){
