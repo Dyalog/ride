@@ -19,7 +19,7 @@
     "monaco-editor": "^0.27.0",
     "node-ipc": "^9.2.1",
     "os-locale": "^5.0.0",
-    "ssh2": "^0.8.9",
+    "ssh2": "^1.4.0",
     "toastr": "^2.1.4"
   },
   "devDependencies": {
