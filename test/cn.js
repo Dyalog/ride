@@ -28,10 +28,10 @@ test(
     const { app } = t.context;
     const c = app.client;
     await (await c.$('#cn_neu')).click();
-    
+
     const fav_name = await c.$('#cn_fav_name');
     const favs = await c.$('#cn_favs .list_sel .name');
-    
+
     t.is(await fav_name.getValue(), '');
     await favs.waitForExist();
     t.is(await favs.getText(), 'unnamed');
@@ -49,10 +49,10 @@ test(
 
     const cln = await c.$('#cn_cln');
     await cln.click();
-    
+
     const fav_name = await c.$('#cn_fav_name');
     const favs = await c.$('#cn_favs .list_sel .name');
-    
+
     t.is(await fav_name.getValue(), '(copy)');
     await favs.waitForExist();
     t.is(await favs.getText(), '(copy)');
@@ -75,11 +75,11 @@ test(
 
     const cn_neu = await c.$('#cn_neu');
     await cn_neu.click();
-    
+
     const cn_type = await c.$('#cn_type');
     await cn_type.selectByVisibleText('Start');
     t.is(await cn_type.getValue(), 'start');
-    
+
     const cn_subtype = await c.$('#cn_subtype');
     await cn_subtype.selectByVisibleText('Local');
     t.is(await cn_subtype.getValue(), 'raw');
