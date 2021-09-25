@@ -929,7 +929,7 @@
       if (/^win/.test(process.platform)) {
         const s = cp.execSync(
           'reg query "HKEY_CURRENT_USER\\Software\\Dyalog" /s /v localdyalogdir',
-          { timeout: 2000, encoding: 'UTF8' },
+          { timeout: 4000, encoding: 'UTF8' },
         );
         let b; // b:bits
         let v; // v:version
