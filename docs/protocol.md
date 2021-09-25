@@ -69,8 +69,7 @@ After it has received the Identify command the interpreter will send 0 or more "
 ["ReplyGetLog",{"result":["line 1","line 2"]}]
 ```
 
-They should then check the type of application they are connected to, and if not happy to continue, close the connection.  For instance, RIDE may check that the application it's connected to is an interpreter or a process
-manager. If it finds the peer is another RIDE, it should close the connection.
+They should then check the type of application they are connected to, and if not happy to continue, close the connection.  For instance, RIDE may check that the application it's connected to is an interpreter or a process manager. If it finds the peer is another RIDE, it should close the connection.
 
 :red_circle: In reality RIDE doesn't bother verifying that it's not talking to another RIDE.
 
@@ -843,6 +842,3 @@ DetailedProcessManagerInformation => [] // Placeholder - add any more informatio
 * list of valid I-beams and their descriptions
 * `ShowStack` and `ShowThreads`
 * drop workspace in RIDE
-* heartbeat
-  * ['InterpreterHeartBeat', {ping}]
-* ['InterpreterStatus', {TBC}]
