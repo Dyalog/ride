@@ -392,6 +392,7 @@ D.IDE = function IDE(opts = {}) {
   updTopBtm();
   $(window).resize(updTopBtm);
   const updMenu = () => {
+    if (D.ide.floating) return;
     try {
       D.installMenu(D.parseMenuDSL(D.prf.menu()));
     } catch (e) {
