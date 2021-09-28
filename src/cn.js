@@ -360,7 +360,7 @@
     });
     clt.on('error', (e) => {
       log(`connect failed: ${e}`);
-      if (D.tmr && D.ide && e.code === 'ECONNRESET') {
+      if (D.tmr && D.ide && e.code === 'ECONNABORTED') {
         err('The interpreter is already serving another RIDE client.', 'Connection closed by interpreter');
         D.ide.die();
         D.commands.CNC();
