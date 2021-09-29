@@ -582,7 +582,7 @@ D.IDE = function IDE(opts = {}) {
       const { entries } = x;
       D.lb.order = entries.map((k) => k.avchar || ' ').join('');
       entries.forEach((k) => {
-        nameSep = k.name.split(':',2);
+        const nameSep = k.name.split(':',2);
         if (k.avchar) {
           D.lb.tips[k.avchar] = [
             `${nameSep[1]} (${k.avchar})`,
