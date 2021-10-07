@@ -146,6 +146,92 @@
   text-align: left;
   border: 1px solid transparent;
 }
+/*Golden Layout*/
+.lm_goldenlayout {
+  background: #272937 !important;
+}
+.lm_goldenlayout .lm_header {
+  background: #272937 !important;
+}
+.lm_header,
+.lm_content {
+  border-color: #272937 !important;
+}
+.lm_dragProxy .lm_content {
+  box-shadow: 2px 2px 4px rgba(255, 255, 255, 0.2);
+}
+.lm_dropTargetIndicator {
+  box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.4);
+  outline: 1px dashed #7688d9;
+  margin: 1px;
+  transition: all 200ms ease;
+}
+.lm_dropTargetIndicator .lm_inner {
+  background: white;
+  opacity: 0.1;
+  filter: alpha(opacity=1);
+}
+.lm_tab {
+  font-family: Roboto!important;
+  letter-spacing: 0.5px;
+  font-size: 12px;
+  background-color: #323446 !important;
+  color: #a9a9a9 !important;
+  border-right: 1px #272937 solid !important;
+}
+.lm_tab.lm_active {
+  background-color: #1c1e28 !important;
+  border-right: 1px #272937 solid !important;
+  color: #7688d9 !important;
+}
+.lm_tab.lm_active .lm_close_tab {
+  color: #7688d9 !important;
+}
+.lm_splitter {
+  background-color: rgba(118, 136, 217, 0.3) !important;
+}
+.lm_splitter.lm_horizontal {
+  background: rgba(118, 136, 217, 0.3) url(img/grabber_vert.png) no-repeat center !important;
+  box-shadow: -1px 0 0 black inset, 1px 0 0 black inset;
+}
+.lm_splitter.lm_vertical {
+  background: rgba(118, 136, 217, 0.3) url(img/grabber_hor.png) no-repeat center !important;
+  box-shadow: 0 -1px 0 black inset, 0 1px 0 black inset;
+}
+.lm_header .lm_tab .lm_close_tab {
+  background-image: none !important;
+  color: #a9a9a9;
+  font-size: 16px;
+}
+.lm_header .lm_tab .lm_close_tab::before {
+  content: "×";
+}
+.lm_header .lm_tab:hover .lm_close_tab {
+  opacity: 1;
+  color: #7688d9 !important;
+}
+.lm_controls > li {
+  background-position: center center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+.lm_controls > li:hover {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.lm_header .lm_controls .lm_tabdropdown:before {
+  color: #a9a9a9 !important;
+}
+.lm_controls .lm_maximise {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAKElEQVR4nGP8////fwYCgImQAgYGBgYWKM2IR81/okwajIpgvsMbVgAwgQYRVakEKQAAAABJRU5ErkJggg==);
+}
+.lm_maximised .lm_controls .lm_maximise {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAJ0lEQVR4nGP8//8/AzGAiShVI1YhCwMDA8OsWbPwBmZaWhoj0SYCAN1lBxMAX4n0AAAAAElFTkSuQmCC);
+}
+.lm_transition_indicator {
+  background-color: white;
+  border: 1px dashed #7688d9;
+}
 label {
   color: #a9a9a9;
   font-family: Roboto;
@@ -232,92 +318,6 @@ select {
 #lb_tip hr {
   border-top: 1px solid black;
   border-bottom: 1px solid #2e303e;
-}
-/*Golden Layout*/
-.lm_goldenlayout {
-  background: #272937 !important;
-}
-.lm_goldenlayout .lm_header {
-  background: #272937 !important;
-}
-.lm_header,
-.lm_content {
-  border-color: #272937 !important;
-}
-.lm_dragProxy .lm_content {
-  box-shadow: 2px 2px 4px rgba(255, 255, 255, 0.2);
-}
-.lm_dropTargetIndicator {
-  box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.4);
-  outline: 1px dashed #7688d9;
-  margin: 1px;
-  transition: all 200ms ease;
-}
-.lm_dropTargetIndicator .lm_inner {
-  background: white;
-  opacity: 0.1;
-  filter: alpha(opacity=1);
-}
-.lm_tab {
-  font-family: Roboto!important;
-  letter-spacing: 0.5px;
-  font-size: 12px;
-  background-color: #323446 !important;
-  color: #a9a9a9 !important;
-  border-right: 1px #272937 solid !important;
-}
-.lm_tab.lm_active {
-  background-color: #1c1e28 !important;
-  border-right: 1px #272937 solid !important;
-  color: #7688d9 !important;
-}
-.lm_tab.lm_active .lm_close_tab {
-  color: #7688d9 !important;
-}
-.lm_splitter {
-  background-color: rgba(118, 136, 217, 0.3) !important;
-}
-.lm_splitter.lm_horizontal {
-  background: rgba(118, 136, 217, 0.3) url(img/grabber_vert.png) no-repeat center !important;
-  box-shadow: -1px 0 0 black inset, 1px 0 0 black inset;
-}
-.lm_splitter.lm_vertical {
-  background: rgba(118, 136, 217, 0.3) url(img/grabber_hor.png) no-repeat center !important;
-  box-shadow: 0 -1px 0 black inset, 0 1px 0 black inset;
-}
-.lm_header .lm_tab .lm_close_tab {
-  background-image: none !important;
-  color: #a9a9a9;
-  font-size: 16px;
-}
-.lm_header .lm_tab .lm_close_tab::before {
-  content: "×";
-}
-.lm_header .lm_tab:hover .lm_close_tab {
-  opacity: 1;
-  color: #7688d9 !important;
-}
-.lm_controls > li {
-  background-position: center center;
-  background-repeat: no-repeat;
-  position: relative;
-}
-.lm_controls > li:hover {
-  opacity: 1;
-  filter: alpha(opacity=100);
-}
-.lm_header .lm_controls .lm_tabdropdown:before {
-  color: #a9a9a9 !important;
-}
-.lm_controls .lm_maximise {
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAKElEQVR4nGP8////fwYCgImQAgYGBgYWKM2IR81/okwajIpgvsMbVgAwgQYRVakEKQAAAABJRU5ErkJggg==);
-}
-.lm_maximised .lm_controls .lm_maximise {
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAJ0lEQVR4nGP8//8/AzGAiShVI1YhCwMDA8OsWbPwBmZaWhoj0SYCAN1lBxMAX4n0AAAAAElFTkSuQmCC);
-}
-.lm_transition_indicator {
-  background-color: white;
-  border: 1px dashed #7688d9;
 }
 /*menu (see ../src/menu.js for the DOM structure)*/
 .menu {
@@ -600,16 +600,6 @@ body {
   background-color: grey;
   color: white;
 }
-#toast-container {
-  font-family: Roboto;
-  font-size: 14px;
-  line-height: 20px;
-}
-#toast-container > div {
-  -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-}
 #sb {
   background-color: #1c1e28;
   border-top: 1px solid black;
@@ -628,6 +618,16 @@ body {
 }
 #sb_prf:active {
   background-color: rgba(0, 0, 0, 0.2);
+}
+#toast-container {
+  font-family: Roboto;
+  font-size: 14px;
+  line-height: 20px;
+}
+#toast-container > div {
+  -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
 }
 .tooltip {
   color: #7688d9;
@@ -655,7 +655,7 @@ body {
 }
 .tb_btn:active,
 .tb_btn.pressed {
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: black;
   color: white;
 }
 .tb_btn:disabled {
