@@ -84,7 +84,7 @@
       + 'lnum=fg:008,bg:f,bgo:0 mod=bg:7,bgo:.25 mtch=bg:ff8,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 op1=fg:00f op2=fg:00f '
       + 'par=fg:00f quad=fg:808 qdl=fg:c0c sel=bg:48e,bgo:.5 semi=fg:00f sqbr=fg:00f srch=bg:f80,bgo:.5 str=fg:088 tc=bg:d,bgo:1 '
       + 'tcpe=bg:c8c8c8,bgo:1 trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f vtt=bg:ff0 '
-      + 'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:.1,fg:080 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff '
+      + 'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:1,fg:080 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff '
       + 'ma=bg:828282,bgo:1,fg:0ff na=bg:828282,bgo:1,fg:f qor=bg:f00,bgo:1,fg:f dc=bg:e2d3bb,bgo:1',
     }, {
       name: 'Francisco Goya',
