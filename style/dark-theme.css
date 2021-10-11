@@ -319,49 +319,6 @@ select {
   border-top: 1px solid black;
   border-bottom: 1px solid #2e303e;
 }
-/*menu (see ../src/menu.js for the DOM structure)*/
-.menu {
-  background-color: #edeff5;
-  border-bottom: solid grey 1px;
-}
-.menu a,
-.menu a:hover {
-  color: black;
-  font-size: 0.8em;
-}
-.menu .m-open {
-  background: rgba(0, 0, 0, 0.2);
-}
-.menu .m-open .m-top {
-  border-color: transparent;
-}
-.menu .m-box {
-  background-color: white;
-  border-color: rgba(0, 0, 0, 0.2);
-}
-.menu .m-box a {
-  border: none;
-  border-color: #edeff5;
-}
-.menu .m-box a .m-shc {
-  color: white;
-}
-.menu .m-box a:focus {
-  background: rgba(0, 0, 0, 0.2);
-}
-.menu .m-box a.m-checked {
-  background: transparent 5px center no-repeat url(img/menu_chk.png);
-}
-.menu .m-box a:focus.m-checked {
-  background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
-}
-.breakpoint {
-  background: no-repeat transparent center center url(img/breakpoint.png);
-}
-.highlighted {
-  border: none;
-  outline: solid red 1px;
-}
 #prf_dlg hr {
   border-top: 1px solid black;
   border-bottom: 1px solid #2e303e;
@@ -545,6 +502,42 @@ a:hover {
     display: none;
   }
 }
+/*menu (see ../src/menu.js for the DOM structure)*/
+.menu {
+  background-color: #edeff5;
+  border-bottom: solid grey 1px;
+}
+.menu a,
+.menu a:hover {
+  color: black;
+  font-size: 0.8em;
+}
+.menu .m-open {
+  background: rgba(0, 0, 0, 0.2);
+}
+.menu .m-open .m-top {
+  border-color: transparent;
+}
+.menu .m-box {
+  background-color: white;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.menu .m-box a {
+  border: none;
+  border-color: #edeff5;
+}
+.menu .m-box a .m-shc {
+  color: white;
+}
+.menu .m-box a:focus {
+  background: rgba(0, 0, 0, 0.2);
+}
+.menu .m-box a.m-checked {
+  background: transparent 5px center no-repeat url(img/menu_chk.png);
+}
+.menu .m-box a:focus.m-checked {
+  background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
+}
 ::-webkit-scrollbar {
   background-color: #1c1e28;
 }
@@ -619,6 +612,13 @@ body {
 #sb_prf:active {
   background-color: rgba(0, 0, 0, 0.2);
 }
+.breakpoint {
+  background: no-repeat transparent center center url(img/breakpoint.png);
+}
+.highlighted {
+  border: none;
+  outline: solid red 1px;
+}
 #toast-container {
   font-family: Roboto;
   font-size: 14px;
@@ -655,8 +655,8 @@ body {
 }
 .tb_btn:active,
 .tb_btn.pressed {
-  background-color: black;
-  color: white;
+  background-color: white;
+  color: #272937;
 }
 .tb_btn:disabled {
   background: transparent!important;
@@ -666,14 +666,6 @@ body {
 .tb_sep {
   border: 0 solid #272937;
   border-right-width: 1px;
-}
-#vt_bln {
-  border: solid black 1px;
-  background-color: black;
-  color: white;
-}
-#vt_tri {
-  border-color: black;
 }
 #wse {
   background-color: #1c1e28;
@@ -690,4 +682,12 @@ body {
 #wse .bt_text.selected {
   background-color: rgba(118, 136, 217, 0.75);
   outline: rgba(118, 136, 217, 0.75);
+}
+#vt_bln {
+  border: solid black 1px;
+  background-color: black;
+  color: white;
+}
+#vt_tri {
+  border-color: black;
 }
