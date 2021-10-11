@@ -470,26 +470,83 @@
   font-weight: 900;
   font-style: italic;
 }
-.lm_content {
-  border: none !important;
+button {
+  border: none;
+  font-family: Roboto;
+  font-weight: bold;
+  padding: 5px 0.5em;
+  transition: box-shadow 0.2s;
+  text-transform: uppercase;
+  cursor: pointer;
 }
-.lm_header .lm_tab {
-  padding: 5px 15px 5px 10px !important;
-  margin-top: 0!important;
-  height: 15px!important;
+button:active {
+  box-shadow: none;
 }
-.lm_close {
-  display: none !important;
+label input[type=checkbox] {
+  position: relative;
+  vertical-align: text-bottom;
 }
-.lm_splitter {
-  opacity: 1 !important;
+input[type=checkbox]:disabled,
+input[type=checkbox]:disabled:checked {
+  background-color: #ebebe4;
+  border-color: #4c4a4a;
 }
-.lm_header .lm_tab .lm_title {
-  padding: 0px 10px 2px 0px;
+input[type=checkbox]:disabled:after,
+input[type=checkbox]:disabled:checked:after {
+  color: #4c4a4a;
 }
-.lm_header .lm_tab .lm_close_tab {
-  top: 4px !important;
-  right: 6px !important;
+input[type=checkbox] {
+  -webkit-appearance: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
+  padding: 8px;
+  border-radius: 3px;
+  display: inline-block;
+  position: relative;
+  margin: 0 5px 0 0;
+}
+input[type=checkbox]:focus {
+  outline: none;
+  margin-right: 5px;
+}
+input[type=checkbox]:checked:after {
+  content: '\2714';
+  font-size: 11px;
+  position: absolute;
+  top: 0px;
+  left: 4px;
+}
+input,
+textarea,
+pre,
+tt {
+  font-family: Roboto;
+  font-size: 14px;
+}
+input,
+textarea,
+select,
+a {
+  outline: 0;
+}
+select {
+  overflow: hidden;
+  padding: 2px 34px 2px 4px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-height: 30px;
+  box-shadow: none;
+  font-weight: 500;
+  border-radius: 2px;
+}
+select option {
+  font-weight: 500;
+}
+select:focus {
+  outline: dotted black 1px;
+}
+textarea {
+  border: none;
+  padding: 0;
 }
 /*jQuery UI - v1.10.4 - 2014-01-17, heavily customized*/
 .ui-helper-hidden {
@@ -948,84 +1005,6 @@ body .ui-tooltip {
 }
 .ui-icon-closethick {
   background: no-repeat center center url(img/close.png);
-}
-button {
-  border: none;
-  font-family: Roboto;
-  font-weight: bold;
-  padding: 5px 0.5em;
-  transition: box-shadow 0.2s;
-  text-transform: uppercase;
-  cursor: pointer;
-}
-button:active {
-  box-shadow: none;
-}
-label input[type=checkbox] {
-  position: relative;
-  vertical-align: text-bottom;
-}
-input[type=checkbox]:disabled,
-input[type=checkbox]:disabled:checked {
-  background-color: #ebebe4;
-  border-color: #4c4a4a;
-}
-input[type=checkbox]:disabled:after,
-input[type=checkbox]:disabled:checked:after {
-  color: #4c4a4a;
-}
-input[type=checkbox] {
-  -webkit-appearance: none;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05), inset 0px -15px 10px -12px rgba(0, 0, 0, 0.05);
-  padding: 8px;
-  border-radius: 3px;
-  display: inline-block;
-  position: relative;
-  margin: 0 5px 0 0;
-}
-input[type=checkbox]:focus {
-  outline: none;
-  margin-right: 5px;
-}
-input[type=checkbox]:checked:after {
-  content: '\2714';
-  font-size: 11px;
-  position: absolute;
-  top: 0px;
-  left: 4px;
-}
-input,
-textarea,
-pre,
-tt {
-  font-family: Roboto;
-  font-size: 14px;
-}
-input,
-textarea,
-select,
-a {
-  outline: 0;
-}
-select {
-  overflow: hidden;
-  padding: 2px 34px 2px 4px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-height: 30px;
-  box-shadow: none;
-  font-weight: 500;
-  border-radius: 2px;
-}
-select option {
-  font-weight: 500;
-}
-select:focus {
-  outline: dotted black 1px;
-}
-textarea {
-  border: none;
-  padding: 0;
 }
 #lb {
   font-family: apl, monospace;
@@ -1984,41 +1963,6 @@ body.floating-window {
 #col.renaming #col_new_name {
   display: inline;
 }
-/*Prefs>Menu*/
-#pmenu_rst {
-  float: right;
-}
-#pmenu p {
-  margin: 10px 8px;
-  color: black;
-}
-#pmenu_ta_wr {
-  position: absolute;
-  left: 4px;
-  right: 4px;
-  top: 94px;
-  bottom: 70px;
-  overflow: hidden;
-  padding: 4px;
-}
-.web #pmenu_ta_wr {
-  top: 120px;
-}
-#pmenu_ta {
-  width: 100%;
-  height: 100%;
-  resize: none;
-}
-/*Prefs>Saved Responses*/
-#resp_qns {
-  margin: 8px 0;
-  width: 100%;
-  width: -moz-available;
-  /* WebKit-based browsers will ignore this. */
-  width: -webkit-fill-available;
-  /* Mozilla-based browsers will ignore this. */
-  width: fill-available;
-}
 /*Prefs>Layout*/
 /*The arrangement is: +-------+ */
 /*                    | g1 g3 | */
@@ -2222,6 +2166,41 @@ input.lyt_g3:hover {
   #lyt_rst {
     display: none;
   }
+}
+/*Prefs>Menu*/
+#pmenu_rst {
+  float: right;
+}
+#pmenu p {
+  margin: 10px 8px;
+  color: black;
+}
+#pmenu_ta_wr {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 94px;
+  bottom: 70px;
+  overflow: hidden;
+  padding: 4px;
+}
+.web #pmenu_ta_wr {
+  top: 120px;
+}
+#pmenu_ta {
+  width: 100%;
+  height: 100%;
+  resize: none;
+}
+/*Prefs>Saved Responses*/
+#resp_qns {
+  margin: 8px 0;
+  width: 100%;
+  width: -moz-available;
+  /* WebKit-based browsers will ignore this. */
+  width: -webkit-fill-available;
+  /* Mozilla-based browsers will ignore this. */
+  width: fill-available;
 }
 /*Prefs>Shortcuts*/
 #shc {
