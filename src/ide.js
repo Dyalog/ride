@@ -413,6 +413,14 @@ D.IDE = function IDE(opts = {}) {
     I.sb.hidden = !x; updTopBtm();
     updMenu();
   });
+  if ( D.prf.swin()) { 
+    D.el.BrowserWindow.fromId(D.stw_bw.id).show();
+  };
+  D.prf.swin((x) => {
+    const sw = D.el.BrowserWindow.fromId(D.stw_bw.id);
+    x ? sw.show() : sw.hide(), D.ide && D.ide.focusMRUWin();
+    updMenu();
+  });
   D.prf.menu(updMenu);
   D.prf.keys(updMenu);
   !ide.floating && setTimeout(updMenu, 100);
@@ -812,21 +820,8 @@ D.IDE = function IDE(opts = {}) {
     StatusOutput(x) {
       let w = ide.wStatus;
       if (!D.el) return;
-      if (!w) {
-        ide.wStatus = new D.el.BrowserWindow({
-          width: 600,
-          height: 400,
-          webPreferences: {
-            contextIsolation: true,
-            nodeIntegration: false,
-          },
-        });
-        w = ide.wStatus;
-        w.setTitle(`Status Output - ${document.title}`);
-        w.loadURL(`file://${__dirname}/status.html`);
-        w.on('closed', () => { delete ide.wStatus; });
-      }
-      w.webContents.executeJavaScript(`add(${JSON.stringify(x)})`);
+      D.ipc.server.emit(D.stw_bw.socket, 'add', x);
+
     },
     ReplyGetLog(x) { ide.wins[0].add(x.result.join('\n')); ide.bannerDone = 0; },
     UnknownCommand(x) {
@@ -948,6 +943,7 @@ D.IDE.prototype = {
   },
   LBR: D.prf.lbar.toggle,
   SBR: D.prf.sbar.toggle,
+  SSW: D.prf.swin.toggle,
   FLT: D.prf.floating.toggle,
   WRP: D.prf.wrap.toggle,
   TVB: D.prf.breakPts.toggle,
