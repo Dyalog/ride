@@ -59,6 +59,7 @@ D.cmds = [
   ['SC', 'Search',                  ['Ctrl-F']],
   ['SI', 'Strong interrupt',        []],
   ['SBR','Toggle status bar',       []],
+  ['SSW','Toggle status window',    []],
   ['STL','Skip to line',            []],
   ['TB', 'Tab between windows',     ['Ctrl-Tab']],
   ['TC', 'Trace line',              ['Ctrl-Enter']],

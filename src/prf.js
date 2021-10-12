@@ -51,6 +51,7 @@ D.prf = {};
   ['showCCGC',           0], // show CC and GC in statusbar
   ['showEditorToolbar',  1],// show toolbar in editor windows
   ['snippetSuggestions', 1],// show snippet suggestions
+  ['swin',               0], //show status window
   ['title',              '{WSID}'], //a.k.a. "caption"
   ['valueTips',          1], //value tips
   ['dbg',                0], //show debug panel
@@ -96,6 +97,7 @@ D.prf = {};
     + '\n&View'
     + '\n  Show Language Bar        =LBR'
     + '\n  Show Status Bar          =SBR'
+    + '\n  Show Status Window       =SSW'
     + '\n  Show Workspace Explorer  =WSE'
     + '\n  Show Debug               =DBG'
     + '\n  Line Wrapping in Session =WRP'
