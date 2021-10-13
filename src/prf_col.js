@@ -358,8 +358,9 @@
     q.U.checked = !!h.U;
     q.fgo.value = h.fgo == null ? 1 : h.fgo;
     q.bgo.value = h.bgo == null ? 0.5 : h.bgo;
-    const c = (G[i] || G[0]).ctrls || {};
-    if (bgoGrp) {
+    const g = G[i] || G[0];
+    const c = g.ctrls || {};
+    if (bgoGrp || g.e) {
       q.bg_p.hidden = c.bg != null && !c.bg;
       q.bgo_p.hidden = (c.bg != null && !c.bg) || !h.bg;
     } else {
