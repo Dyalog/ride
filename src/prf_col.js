@@ -344,6 +344,7 @@
   } // [sic]
   function selGrp(t, forceRefresh) {
     // update everything as necessary when selection in the Group dropdown changes
+    const bgoGrp = ['ca', 'cm', 'cv', 'cvv', 'dc','ma', 'na', 'norm', 'qor'].includes(t);
     if (!scm || (sel === t && !forceRefresh)) return;
     const i = H[t];
     const h = scm[t] || {};
@@ -358,10 +359,15 @@
     q.fgo.value = h.fgo == null ? 1 : h.fgo;
     q.bgo.value = h.bgo == null ? 0.5 : h.bgo;
     const c = (G[i] || G[0]).ctrls || {};
+    if (bgoGrp) {
+      q.bg_p.hidden = c.bg != null && !c.bg;
+      q.bgo_p.hidden = (c.bg != null && !c.bg) || !h.bg;
+    } else {
+      q.bg_p.hidden = true;
+      q.bgo_p.hidden = true;
+    }
     q.fg_p.hidden = c.fg != null && !c.fg;
-    q.bg_p.hidden = c.bg != null && !c.bg;
     q.fgo_p.hidden = (c.fg != null && !c.fg) || !h.fg;
-    q.bgo_p.hidden = (c.bg != null && !c.bg) || !h.bg;
     q.BIU_p.hidden = c.BIU != null && !c.BIU;
     q.bc_p.hidden = !c.bc;
     sel = t;
@@ -375,7 +381,7 @@
     selGrp('norm', 1);
     q.chrome.value = scm.theme;
   }
-  D.prf_tabs.col = {
+  D.prf_tabs.col =  {
     name: 'Colours',
     init() {
       q = J.col;
