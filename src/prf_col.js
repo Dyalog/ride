@@ -268,10 +268,10 @@
     // m: monaco theme token name
     // ctrls: what UI controls should be shown or hidden for this group (other than the default ones)
     {s:'assignment'      ,t:'asgn',m:'keyword.operator.assignment', fg:1, BIU:1}, //←
-    {s:'autocomplete sel',t:'acsl',e:'editorSuggestWidget.selectedBackground', ctrls:{bg:1,BIU:0,fg:0}},
+    {s:'autocomplete sel',t:'acsl',e:'editorSuggestWidget.selectedBackground', bg:1},
     {s:'bracket'         ,t:'sqbr',m:'delimiter.square', fg:1, BIU:1}, //[]
     {s:'comment'         ,t:'com' ,m:'comment', fg:1, BIU:1}, //⍝
-    {s:'cursor'          ,t:'cur' ,e:'editorCursor.foreground', ctrls:{bg:0,BIU:0,fg:1}},
+    {s:'cursor'          ,t:'cur' ,e:'editorCursor.foreground', bg:1},
     {s:'curly braces'    ,t:'cubr',m:'delimiter.curly', fg:1, BIU:1}, //{}
     {s:'dfn level 1'     ,t:'dfn1',m:'identifier.dfn.1', fg:1, BIU:1}, //{}
     {s:'dfn level 2'     ,t:'dfn2',m:'identifier.dfn.2', fg:1, BIU:1},
@@ -287,28 +287,28 @@
     {s:'idiom'           ,t:'idm' ,m:'predefined.idiom', fg:1, BIU:1}, //⊃⌽ ...
     {s:'keyword'         ,t:'kw'  ,m:'keyword', fg:1, BIU:1}, //:If ...
     {s:'label'           ,t:'lbl' ,m:'meta.label', fg:1, BIU:1}, //L:
-    {s:'line number'     ,t:'lnum',e:'editorLineNumber.foreground'},
-    {s:'matching bracket',t:'mtch',e:'editorBracketMatch.background'},
-    {s:'modified line'   ,t:'mod' ,c:'.modified'   }, //in the session - lines queued for execution
+    {s:'line number'     ,t:'lnum',e:'editorLineNumber.foreground', bg:1},
+    {s:'matching bracket',t:'mtch',e:'editorBracketMatch.background', bg:1},
+    {s:'modified line'   ,t:'mod' ,c:'.modified'   , bg:1}, //in the session - lines queued for execution
     {s:'monadic operator',t:'op1' ,m:'keyword.operator.monadic', fg:1, BIU:1}, //⌸ ...
     {s:'namespace'       ,t:'ns'  ,m:'namespace', fg:1, BIU:1}, //#
     {s:'name'            ,t:'var' ,m:'identifier.local', fg:1, BIU:1}, //a.k.a. identifier
-    {s:'normal'          ,t:'norm',c:'.ride_win_me'},
+    {s:'normal'          ,t:'norm',c:'.ride_win_me', bg:1},
     {s:'number'          ,t:'num' ,m:'number', fg:1, BIU:1}, //0 ...
     {s:'parenthesis'     ,t:'par' ,m:'delimiter.parenthesis', fg:1, BIU:1}, //()
     {s:'quad name'       ,t:'quad',m:'predefined.sysfn', fg:1, BIU:1}, //⎕XYZ
     {s:'quad name local' ,t:'qdl' ,m:'predefined.sysfn.local', fg:1, BIU:1}, // localized ⎕XYZ
-    {s:'search match'    ,t:'srch',e:'editor.findMatchBackground',ctrls:{fg:0,BIU:0}},
-    {s:'selection'       ,t:'sel' ,e:'editor.selectionBackground',ctrls:{fg:0,BIU:0}},
+    {s:'search match'    ,t:'srch',e:'editor.findMatchBackground', bg:1},
+    {s:'selection'       ,t:'sel' ,e:'editor.selectionBackground', bg:1},
     {s:'semicolon'       ,t:'semi',m:'delimiter.semicolon', fg:1, BIU:1}, //as in A[B;C]
     {s:'string'          ,t:'str' ,m:'string', fg:1, BIU:1}, //'a.k.a. character vector or scalar'
     {s:'system command'  ,t:'scmd',m:'predefined.scmd', fg:1, BIU:1}, //)XYZ
-    {s:'tracer'          ,t:'tc'  ,c:'/*noprefix*/.tracer .monaco-editor-background,/*noprefix*/.tracer .monaco-editor .margin'},
-    {s:'pendent'         ,t:'tcpe',c:'/*noprefix*/.tracer.pendent .monaco-editor-background,/*noprefix*/.tracer.pendent .monaco-editor .margin'},
+    {s:'tracer'          ,t:'tc'  ,c:'/*noprefix*/.tracer .monaco-editor-background,/*noprefix*/.tracer .monaco-editor .margin', bg:1},
+    {s:'pendent'         ,t:'tcpe',c:'/*noprefix*/.tracer.pendent .monaco-editor-background,/*noprefix*/.tracer.pendent .monaco-editor .margin', bg:1},
     {s:'tradfn'          ,t:'trad',m:'identifier.tradfn', fg:1, BIU:1}, //the header line (e.g. ∇{R}←A F B) or the closing ∇
     {s:'user command'    ,t:'ucmd',m:'predefined.ucmd', fg:1, BIU:1}, //]XYZ
-    {s:'value tip target',t:'vtt' ,c:'.vt_marker',ctrls:{bc:1,fg:0,BIU:0}}, //the rectangle around the token
-    {s:'value tip'       ,t:'vtip',c:'/*noprefix*/#vt_bln,/*noprefix*/#vt_tri',ctrls:{bc:1}}, //the balloon
+    {s:'value tip target',t:'vtt' ,c:'.vt_marker', bc:1, fg:0, BIU:0}, //the rectangle around the token
+    {s:'value tip'       ,t:'vtip',c:'/*noprefix*/#vt_bln,/*noprefix*/#vt_tri', bc:1}, //the balloon
     {s:'zilde'           ,t:'zld' ,m:'predefined.zilde', fg:1, BIU:1},  //⍬
     
     {s:'chararr'         ,t:'ca'  ,c:'.chararr', bg:1, fg:1, BIU:1},
@@ -344,7 +344,6 @@
   } // [sic]
   function selGrp(t, forceRefresh) {
     // update everything as necessary when selection in the Group dropdown changes
-    const bgoGrp = ['ca', 'cm', 'cv', 'cvv', 'dc','ma', 'na', 'norm', 'qor'].includes(t);
     if (!scm || (sel === t && !forceRefresh)) return;
     const i = H[t];
     const h = scm[t] || {};
@@ -358,19 +357,14 @@
     q.U.checked = !!h.U;
     q.fgo.value = h.fgo == null ? 1 : h.fgo;
     q.bgo.value = h.bgo == null ? 0.5 : h.bgo;
-    const g = G[i] || G[0];
-    const c = g.ctrls || {};
-    if (bgoGrp || g.e) {
-      q.bg_p.hidden = c.bg != null && !c.bg;
-      q.bgo_p.hidden = (c.bg != null && !c.bg) || !h.bg;
-    } else {
-      q.bg_p.hidden = true;
-      q.bgo_p.hidden = true;
-    }
-    q.fg_p.hidden = c.fg != null && !c.fg;
-    q.fgo_p.hidden = (c.fg != null && !c.fg) || !h.fg;
-    q.BIU_p.hidden = c.BIU != null && !c.BIU;
-    q.bc_p.hidden = !c.bc;
+    const g = G[i];
+    // const c = (G[i] || G[0]).ctrls || {}; are we going to use ctrls at all?
+    q.fg_p.hidden = !g.fg;
+    q.bg_p.hidden = !g.bg;
+    q.fgo_p.hidden = !g.fg || !h.fg;
+    q.bgo_p.hidden = !g.bg || !h.bg;
+    q.BIU_p.hidden = !g.BIU;
+    q.bc_p.hidden = !g.bc;
     sel = t;
   }
   function updScms() {
