@@ -10,6 +10,7 @@ D.cmds = [
   ['ABT','About Dyalog',            ['Shift-F1']],
   ['AC', 'Align comments',          []],
   ['AO', 'Comment out lines',       []],
+  ['ASW', 'Auto Status',            []],
   ['BH', 'Run to exit (in tracer)', []],
   ['BK', 'Backward or Undo',        ['Ctrl-Shift-Backspace']],
   ['BP', 'Toggle breakpoint',       []],
