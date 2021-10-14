@@ -10,6 +10,7 @@ D.prf = {};
   ['autoCloseBrackets',  1], //whether to insert {}[]() in pairs
   ['autocompletion',     'classic'],
   ['autoPW',             0], // update PW on resize of window
+  ['asw',                1], // toggle auto status
   ['blockCursor',        0], // use block cursor selection?
   ['cursorBlinking',     'blink'], // cursor blinking
   ['autocompletionDelay',500],
@@ -97,10 +98,12 @@ D.prf = {};
     + '\n&View'
     + '\n  Show Language Bar        =LBR'
     + '\n  Show Status Bar          =SBR'
-    + '\n  Show Status Window       =SSW'
     + '\n  Show Workspace Explorer  =WSE'
     + '\n  Show Debug               =DBG'
     + '\n  Line Wrapping in Session =WRP'
+    + '\n  -                             {!browser}'
+    + '\n  Show Status Window       =SSW'
+    + '\n  Auto Status              =ASW'
     + '\n  -                             {!browser}'
     + '\n  Stops                    =TVB'
     + '\n  Line Numbers             =LN'
