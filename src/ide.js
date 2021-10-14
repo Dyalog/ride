@@ -413,14 +413,14 @@ D.IDE = function IDE(opts = {}) {
     I.sb.hidden = !x; updTopBtm();
     updMenu();
   });
-  if ( D.prf.swin()) { 
-    D.el.BrowserWindow.fromId(D.stw_bw.id).show();
-  };
+  D.prf.swin(0);
   D.prf.swin((x) => {
     const sw = D.el.BrowserWindow.fromId(D.stw_bw.id);
-    x ? sw.show() : sw.hide(), D.ide && D.ide.focusMRUWin();
+    x ? sw.show() : sw.hide();
+    D.ide && D.ide.focusMRUWin();
     updMenu();
   });
+  D.prf.asw() && D.prf.swin(1);
   D.prf.menu(updMenu);
   D.prf.keys(updMenu);
   !ide.floating && setTimeout(updMenu, 100);
@@ -941,6 +941,7 @@ D.IDE.prototype = {
     Object.keys(wins).forEach((x) => { wins[x].zoom(z); });
     se && se.restoreScrollPos();
   },
+  ASW: D.prf.asw.toggle,
   LBR: D.prf.lbar.toggle,
   SBR: D.prf.sbar.toggle,
   SSW: D.prf.swin.toggle,
