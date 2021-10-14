@@ -267,58 +267,58 @@
     // c: css selector -- will be prefixed with "#col_cm" or ".ride_win" unless /*noprefix*/ is present
     // m: monaco theme token name
     // ctrls: what UI controls should be shown or hidden for this group (other than the default ones)
-    {s:'assignment'      ,t:'asgn',m:'keyword.operator.assignment'}, //←
+    {s:'assignment'      ,t:'asgn',m:'keyword.operator.assignment', fg:1, BIU:1}, //←
     {s:'autocomplete sel',t:'acsl',e:'editorSuggestWidget.selectedBackground', ctrls:{bg:1,BIU:0,fg:0}},
-    {s:'bracket'         ,t:'sqbr',m:'delimiter.square'}, //[]
-    {s:'comment'         ,t:'com' ,m:'comment'}, //⍝
+    {s:'bracket'         ,t:'sqbr',m:'delimiter.square', fg:1, BIU:1}, //[]
+    {s:'comment'         ,t:'com' ,m:'comment', fg:1, BIU:1}, //⍝
     {s:'cursor'          ,t:'cur' ,e:'editorCursor.foreground', ctrls:{bg:0,BIU:0,fg:1}},
-    {s:'curly braces'    ,t:'cubr',m:'delimiter.curly'}, //{}
-    {s:'dfn level 1'     ,t:'dfn1',m:'identifier.dfn.1'}, //{}
-    {s:'dfn level 2'     ,t:'dfn2',m:'identifier.dfn.2'},
-    {s:'dfn level 3'     ,t:'dfn3',m:'identifier.dfn.3'},
-    {s:'dfn level 4'     ,t:'dfn4',m:'identifier.dfn.4'},
-    {s:'dfn level 5'     ,t:'dfn5',m:'identifier.dfn.5'}, //{1 {2 {3 {4 {5} } } } }
-    {s:'dfn'             ,t:'dfn' ,m:'identifier.dfn'},
-    {s:'diamond'         ,t:'diam',m:'delimiter.diamond'}, //⋄
-    {s:'dyadic operator' ,t:'op2' ,m:'keyword.operator.dyadic'}, //⍣ ...
-    {s:'error'           ,t:'err' ,m:'invalid'},
-    {s:'function'        ,t:'fn'  ,m:'keyword.function'}, //+ ...
-    {s:'global name'     ,t:'glb' ,m:'identifier.global'},
-    {s:'idiom'           ,t:'idm' ,m:'predefined.idiom'}, //⊃⌽ ...
-    {s:'keyword'         ,t:'kw'  ,m:'keyword'}, //:If ...
-    {s:'label'           ,t:'lbl' ,m:'meta.label'}, //L:
+    {s:'curly braces'    ,t:'cubr',m:'delimiter.curly', fg:1, BIU:1}, //{}
+    {s:'dfn level 1'     ,t:'dfn1',m:'identifier.dfn.1', fg:1, BIU:1}, //{}
+    {s:'dfn level 2'     ,t:'dfn2',m:'identifier.dfn.2', fg:1, BIU:1},
+    {s:'dfn level 3'     ,t:'dfn3',m:'identifier.dfn.3', fg:1, BIU:1},
+    {s:'dfn level 4'     ,t:'dfn4',m:'identifier.dfn.4', fg:1, BIU:1},
+    {s:'dfn level 5'     ,t:'dfn5',m:'identifier.dfn.5', fg:1, BIU:1}, //{1 {2 {3 {4 {5} } } } }
+    {s:'dfn'             ,t:'dfn' ,m:'identifier.dfn', fg:1, BIU:1},
+    {s:'diamond'         ,t:'diam',m:'delimiter.diamond', fg:1, BIU:1}, //⋄
+    {s:'dyadic operator' ,t:'op2' ,m:'keyword.operator.dyadic', fg:1, BIU:1}, //⍣ ...
+    {s:'error'           ,t:'err' ,m:'invalid', fg:1, BIU:1},
+    {s:'function'        ,t:'fn'  ,m:'keyword.function', fg:1, BIU:1}, //+ ...
+    {s:'global name'     ,t:'glb' ,m:'identifier.global', fg:1, BIU:1},
+    {s:'idiom'           ,t:'idm' ,m:'predefined.idiom', fg:1, BIU:1}, //⊃⌽ ...
+    {s:'keyword'         ,t:'kw'  ,m:'keyword', fg:1, BIU:1}, //:If ...
+    {s:'label'           ,t:'lbl' ,m:'meta.label', fg:1, BIU:1}, //L:
     {s:'line number'     ,t:'lnum',e:'editorLineNumber.foreground'},
     {s:'matching bracket',t:'mtch',e:'editorBracketMatch.background'},
     {s:'modified line'   ,t:'mod' ,c:'.modified'   }, //in the session - lines queued for execution
-    {s:'monadic operator',t:'op1' ,m:'keyword.operator.monadic'}, //⌸ ...
-    {s:'namespace'       ,t:'ns'  ,m:'namespace'}, //#
-    {s:'name'            ,t:'var' ,m:'identifier.local'}, //a.k.a. identifier
+    {s:'monadic operator',t:'op1' ,m:'keyword.operator.monadic', fg:1, BIU:1}, //⌸ ...
+    {s:'namespace'       ,t:'ns'  ,m:'namespace', fg:1, BIU:1}, //#
+    {s:'name'            ,t:'var' ,m:'identifier.local', fg:1, BIU:1}, //a.k.a. identifier
     {s:'normal'          ,t:'norm',c:'.ride_win_me'},
-    {s:'number'          ,t:'num' ,m:'number'}, //0 ...
-    {s:'parenthesis'     ,t:'par' ,m:'delimiter.parenthesis'}, //()
-    {s:'quad name'       ,t:'quad',m:'predefined.sysfn'}, //⎕XYZ
-    {s:'quad name local' ,t:'qdl' ,m:'predefined.sysfn.local'}, // localized ⎕XYZ
+    {s:'number'          ,t:'num' ,m:'number', fg:1, BIU:1}, //0 ...
+    {s:'parenthesis'     ,t:'par' ,m:'delimiter.parenthesis', fg:1, BIU:1}, //()
+    {s:'quad name'       ,t:'quad',m:'predefined.sysfn', fg:1, BIU:1}, //⎕XYZ
+    {s:'quad name local' ,t:'qdl' ,m:'predefined.sysfn.local', fg:1, BIU:1}, // localized ⎕XYZ
     {s:'search match'    ,t:'srch',e:'editor.findMatchBackground',ctrls:{fg:0,BIU:0}},
     {s:'selection'       ,t:'sel' ,e:'editor.selectionBackground',ctrls:{fg:0,BIU:0}},
-    {s:'semicolon'       ,t:'semi',m:'delimiter.semicolon'}, //as in A[B;C]
-    {s:'string'          ,t:'str' ,m:'string'}, //'a.k.a. character vector or scalar'
-    {s:'system command'  ,t:'scmd',m:'predefined.scmd'}, //)XYZ
+    {s:'semicolon'       ,t:'semi',m:'delimiter.semicolon', fg:1, BIU:1}, //as in A[B;C]
+    {s:'string'          ,t:'str' ,m:'string', fg:1, BIU:1}, //'a.k.a. character vector or scalar'
+    {s:'system command'  ,t:'scmd',m:'predefined.scmd', fg:1, BIU:1}, //)XYZ
     {s:'tracer'          ,t:'tc'  ,c:'/*noprefix*/.tracer .monaco-editor-background,/*noprefix*/.tracer .monaco-editor .margin'},
     {s:'pendent'         ,t:'tcpe',c:'/*noprefix*/.tracer.pendent .monaco-editor-background,/*noprefix*/.tracer.pendent .monaco-editor .margin'},
-    {s:'tradfn'          ,t:'trad',m:'identifier.tradfn'}, //the header line (e.g. ∇{R}←A F B) or the closing ∇
-    {s:'user command'    ,t:'ucmd',m:'predefined.ucmd'}, //]XYZ
+    {s:'tradfn'          ,t:'trad',m:'identifier.tradfn', fg:1, BIU:1}, //the header line (e.g. ∇{R}←A F B) or the closing ∇
+    {s:'user command'    ,t:'ucmd',m:'predefined.ucmd', fg:1, BIU:1}, //]XYZ
     {s:'value tip target',t:'vtt' ,c:'.vt_marker',ctrls:{bc:1,fg:0,BIU:0}}, //the rectangle around the token
     {s:'value tip'       ,t:'vtip',c:'/*noprefix*/#vt_bln,/*noprefix*/#vt_tri',ctrls:{bc:1}}, //the balloon
-    {s:'zilde'           ,t:'zld' ,m:'predefined.zilde'},  //⍬
+    {s:'zilde'           ,t:'zld' ,m:'predefined.zilde', fg:1, BIU:1},  //⍬
     
-    {s:'chararr'         ,t:'ca'  ,c:'.chararr'},
-    {s:'charmat'         ,t:'cm'  ,c:'.charmat'},
-    {s:'charvec'         ,t:'cv'  ,c:'.charvec'},
-    {s:'charvecvec'      ,t:'cvv' ,c:'.charvecvec'},
-    {s:'mixarr'          ,t:'ma'  ,c:'.mixarr'},
-    {s:'numarr'          ,t:'na'  ,c:'.numarr'},
-    {s:'quador'          ,t:'qor' ,c:'.quador'},
-    {s:'disconnected'    ,t:'dc'  ,c:'.disconnected'},
+    {s:'chararr'         ,t:'ca'  ,c:'.chararr', bg:1, fg:1, BIU:1},
+    {s:'charmat'         ,t:'cm'  ,c:'.charmat', bg:1, fg:1, BIU:1},
+    {s:'charvec'         ,t:'cv'  ,c:'.charvec', bg:1, fg:1, BIU:1},
+    {s:'charvecvec'      ,t:'cvv' ,c:'.charvecvec', bg:1, fg:1, BIU:1},
+    {s:'mixarr'          ,t:'ma'  ,c:'.mixarr', bg:1, fg:1, BIU:1},
+    {s:'numarr'          ,t:'na'  ,c:'.numarr', bg:1, fg:1, BIU:1},
+    {s:'quador'          ,t:'qor' ,c:'.quador', bg:1, fg:1, BIU:1},
+    {s:'disconnected'    ,t:'dc'  ,c:'.disconnected', bg:1, fg:1, BIU:1},
     
   ]);
   /* eslint-enable */
