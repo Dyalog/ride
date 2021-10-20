@@ -13,6 +13,8 @@ D.IDE = function IDE(opts = {}) {
   ide.hadErr = -1;
   ide.ipc = opts.ipc;
   // lines to execute: AtInputPrompt consumes one item from the queue, HadError empties it
+  ide.valueTipRequests = {};
+  ide.valueTipToken = 0;
   ide.pending = [];
   ide.promptType = 1;
   ide.hasSubscribe = true;
@@ -598,7 +600,16 @@ D.IDE = function IDE(opts = {}) {
       D.parseSyntaxInformation(x);
       D.ipc && D.ipc.server.broadcast('syntax', D.syntax);
     },
-    ValueTip(x) { ide.wins[x.token].ValueTip(x); },
+    ValueTip(x) {
+      const req = ide.valueTipRequests[x.token] // id source
+      if (!req) return;
+      if (req.source === 'monaco') {
+        ide.wins[req.id].ValueTip(x); 
+      } else {
+        console.log(`unknown source: ${req.source}`);
+      }
+      delete ide.valueTipRequests[x.token];
+    },
     SetHighlightLine(x) {
       const w = D.wins[x.win];
       w.SetHighlightLine(x.line, ide.hadErr);
@@ -835,6 +846,12 @@ D.IDE = function IDE(opts = {}) {
   };
 };
 D.IDE.prototype = {
+  getValueTip(source, id, request) {
+    const ide = this;
+    request.token = ide.valueTipToken++;
+    ide.valueTipRequests[request.token] = { id, source };
+    D.send('GetValueTip', request);
+  },
   setConnInfo(x, y, z) {
     const ide = this;
     ide.host = x;
