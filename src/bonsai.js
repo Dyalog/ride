@@ -7,6 +7,7 @@
       bt.render = bt.render.bind(bt);
       bt.refresh = bt.refresh.bind(bt);
       bt.childrenCb = o.children;
+      bt.valueTipCb = o.valueTip;
       bt.dom = e;
       bt.rebuild();
 
@@ -18,8 +19,12 @@
         node.expanded = 1 - !!node.expanded; a.textContent = '+-'[+!!node.expanded];
         if (node.expanded) {
           bt.childrenCb(node.id, (children) => {
-            node.children = children;
+            node.children = children; 
             children.forEach((c) => { bt.nodes[c.id] = c; });
+              //bt.valueTipCb(c.id, path(c), (valueTip) => {
+              //  c.value = valueTip;
+              //});
+            //});
             const selected = a.nextSibling.classList.contains('selected');
             a.parentNode.outerHTML = bt.render(node, selected);
             if (selected) e.getElementsByClassName('selected')[0].focus();
@@ -109,10 +114,10 @@
       if (node.expanded) children = node.children.map(x => bt.render(x)).join('');
       if (node.expandable) expandable = `<a class=bt_node_expand>${'+-'[+!!node.expanded]}</a>`;
 
-      return `<div data-id="${node.id}">` +
+      return `<table data-id="${node.id}"><tr>` +
         `${expandable}<span tabIndex=-1 data-id=${node.id}` +
         ` class="bt_icon_${node.icon} bt_text ${node.selected || selected ? 'selected' : ''}">` +
-        `${node.text}</span>${children}</div>`;
+        `${node.text}</span></tr>${children}</table>`;
     }
 
     rebuild() {

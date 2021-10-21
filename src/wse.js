@@ -14,6 +14,11 @@
         click(path) {
           D.send('Edit', { win: 0, pos: 0, text: path.map(x => x.text).join('.') });
         },
+        valueTip(id, callback){
+          pending[id] = callback.bind(this);
+          D.send('GetValueTip', {"win":123,"line":"a←b+c","pos":2,"maxWidth":50,"maxHeight":20,"token":456}); // Place holder for bonsai vt
+         //('GetValueTip', {source: 'wse', id, req});
+        }
       });
     }
 
