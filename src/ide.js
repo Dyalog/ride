@@ -458,7 +458,7 @@ D.IDE = function IDE(opts = {}) {
   };
   const toggleWSE = (x) => {
     togglePanel(x, 'wse', 'Workspace Explorer', 1);
-    ide.wse.autoRefresh(x && 5000);
+    ide.wse.refresh();
     updMenu();
   };
   const toggleDBG = (x) => {
@@ -545,7 +545,10 @@ D.IDE = function IDE(opts = {}) {
       if (t && ide.pending.length) D.send('Execute', { trace: 0, text: `${ide.pending.shift()}\n` });
       else eachWin((w) => { w.prompt(t); });
       (t === 2 || t === 4) && ide.wins[0].focus(); // ⎕ / ⍞ input
-      t === 1 && ide.getStats();
+      if (t === 1) {
+         ide.getStats();
+         ide.wse && ide.wse.refresh();
+      }
       if (t === 1 && ide.bannerDone === 0) {
         // arrange for the banner to appear at the top of the session window
         ide.bannerDone = 1;
@@ -601,10 +604,12 @@ D.IDE = function IDE(opts = {}) {
       D.ipc && D.ipc.server.broadcast('syntax', D.syntax);
     },
     ValueTip(x) {
-      const req = ide.valueTipRequests[x.token] // id source
+      const req = ide.valueTipRequests[x.token]
       if (!req) return;
       if (req.source === 'monaco') {
         ide.wins[req.id].ValueTip(x); 
+      } else if (req.source === 'wse') {
+        ide.wse.valueTip(req.id, x); 
       } else {
         console.log(`unknown source: ${req.source}`);
       }
@@ -614,6 +619,7 @@ D.IDE = function IDE(opts = {}) {
       const w = D.wins[x.win];
       w.SetHighlightLine(x.line, ide.hadErr);
       ide.hadErr > 0 && (ide.hadErr -= 1);
+      D.prf.wse() && ide.wse.refresh();
       ide.focusWin(w);
     },
     UpdateWindow(x) {
