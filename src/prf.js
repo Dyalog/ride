@@ -10,7 +10,7 @@ D.prf = {};
   ['autoCloseBrackets',  1], //whether to insert {}[]() in pairs
   ['autocompletion',     'classic'],
   ['autoPW',             0], // update PW on resize of window
-  ['asw',                1], // toggle auto status
+  ['autoStatus',                1], // toggle auto status
   ['blockCursor',        0], // use block cursor selection?
   ['cursorBlinking',     'blink'], // cursor blinking
   ['autocompletionDelay',500],

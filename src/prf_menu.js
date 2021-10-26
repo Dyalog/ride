@@ -29,7 +29,7 @@
   };
   D.parseMenuDSL = (md) => { // md:menu description
     const extraOpts = {
-      ASW: { checkBoxPref: D.prf.asw },
+      ASW: { checkBoxPref: D.prf.autoStatus },
       LN: { checkBoxPref: D.prf.lineNums },
       TVO: { checkBoxPref: D.prf.fold },
       TVB: { checkBoxPref: D.prf.breakPts },

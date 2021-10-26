@@ -420,7 +420,7 @@ D.IDE = function IDE(opts = {}) {
     D.ide && D.ide.focusMRUWin();
     updMenu();
   });
-  D.prf.asw() && D.prf.statusWindow(1);
+  D.prf.autoStatus() && D.prf.statusWindow(1);
   D.prf.menu(updMenu);
   D.prf.keys(updMenu);
   !ide.floating && setTimeout(updMenu, 100);
@@ -941,7 +941,7 @@ D.IDE.prototype = {
     Object.keys(wins).forEach((x) => { wins[x].zoom(z); });
     se && se.restoreScrollPos();
   },
-  ASW: D.prf.asw.toggle,
+  ASW: D.prf.autoStatus.toggle,
   LBR: D.prf.lbar.toggle,
   SBR: D.prf.sbar.toggle,
   SSW: D.prf.statusWindow.toggle,

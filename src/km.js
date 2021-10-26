@@ -136,7 +136,7 @@
     DK(me) { me.trigger('editor', 'editor.action.deleteLines'); },
     QCP(me) { me.trigger('editor', 'editor.action.quickCommand'); },
     QIT() { D.quit(); },
-    ASW: D.prf.asw.toggle,
+    ASW: D.prf.autoStatus.toggle,
     LBR: D.prf.lbar.toggle,
     SBR: D.prf.sbar.toggle,
     SSW: D.prf.statusWindow.toggle,
