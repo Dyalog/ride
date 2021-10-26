@@ -266,6 +266,10 @@
     // s: string to display in the UI
     // c: css selector -- will be prefixed with "#col_cm" or ".ride_win" unless /*noprefix*/ is present
     // m: monaco theme token name
+    // bc: border color where applicable, bool
+    // bg: background color where applicable, bool 
+    // fg: foreground color where applicable, bool
+    // BIU: Bold, Italic and Underscore options where applicable, bool
     {s:'assignment'      ,t:'asgn',m:'keyword.operator.assignment', fg:1, BIU:1}, //←
     {s:'autocomplete sel',t:'acsl',e:'editorSuggestWidget.selectedBackground', bg:1},
     {s:'bracket'         ,t:'sqbr',m:'delimiter.square', fg:1, BIU:1}, //[]
@@ -292,7 +296,7 @@
     {s:'monadic operator',t:'op1' ,m:'keyword.operator.monadic', fg:1, BIU:1}, //⌸ ...
     {s:'namespace'       ,t:'ns'  ,m:'namespace', fg:1, BIU:1}, //#
     {s:'name'            ,t:'var' ,m:'identifier.local', fg:1, BIU:1}, //a.k.a. identifier
-    {s:'normal'          ,t:'norm',c:'.ride_win_me', bg:1},
+    {s:'normal'          ,t:'norm',c:'.ride_win_me', fg:1, bg:1},
     {s:'number'          ,t:'num' ,m:'number', fg:1, BIU:1}, //0 ...
     {s:'parenthesis'     ,t:'par' ,m:'delimiter.parenthesis', fg:1, BIU:1}, //()
     {s:'quad name'       ,t:'quad',m:'predefined.sysfn', fg:1, BIU:1}, //⎕XYZ
@@ -359,7 +363,7 @@
     const g = G[i];
     q.fg_p.hidden = !g.fg;
     q.bg_p.hidden = !g.bg;
-    q.fgo_p.hidden = !g.fg || !h.fg;
+    q.fgo_p.hidden = !!g.m || !g.fg || !h.fg;
     q.bgo_p.hidden = !g.bg || !h.bg;
     q.BIU_p.hidden = !g.BIU;
     q.bc_p.hidden = !g.bc;
