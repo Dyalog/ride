@@ -266,7 +266,6 @@
     // s: string to display in the UI
     // c: css selector -- will be prefixed with "#col_cm" or ".ride_win" unless /*noprefix*/ is present
     // m: monaco theme token name
-    // ctrls: what UI controls should be shown or hidden for this group (other than the default ones)
     {s:'assignment'      ,t:'asgn',m:'keyword.operator.assignment', fg:1, BIU:1}, //←
     {s:'autocomplete sel',t:'acsl',e:'editorSuggestWidget.selectedBackground', bg:1},
     {s:'bracket'         ,t:'sqbr',m:'delimiter.square', fg:1, BIU:1}, //[]
@@ -358,7 +357,6 @@
     q.fgo.value = h.fgo == null ? 1 : h.fgo;
     q.bgo.value = h.bgo == null ? 0.5 : h.bgo;
     const g = G[i];
-    // const c = (G[i] || G[0]).ctrls || {}; are we going to use ctrls at all?
     q.fg_p.hidden = !g.fg;
     q.bg_p.hidden = !g.bg;
     q.fgo_p.hidden = !g.fg || !h.fg;
