@@ -420,7 +420,6 @@ D.IDE = function IDE(opts = {}) {
     D.ide && D.ide.focusMRUWin();
     updMenu();
   });
-  D.prf.autoStatus() && D.prf.statusWindow(1);
   D.prf.menu(updMenu);
   D.prf.keys(updMenu);
   !ide.floating && setTimeout(updMenu, 100);
@@ -818,10 +817,9 @@ D.IDE = function IDE(opts = {}) {
     },
     ReplyTreeList(x) { ide.wse.replyTreeList(x); },
     StatusOutput(x) {
-      let w = ide.wStatus;
       if (!D.el) return;
       D.ipc.server.emit(D.stw_bw.socket, 'add', x);
-
+      !D.prf.statusWindow() && D.prf.autoStatus() && D.prf.statusWindow(1);
     },
     ReplyGetLog(x) { ide.wins[0].add(x.result.join('\n')); ide.bannerDone = 0; },
     UnknownCommand(x) {
@@ -869,7 +867,6 @@ D.IDE.prototype = {
     ide.dead = 1;
     ide.connected = 0;
     ide.dom.className += ' disconnected';
-    ide.wStatus && ide.wStatus.close();
     Object.keys(ide.wins).forEach((k) => { ide.wins[k].die(); });
   },
   updPW(x) { this.wins[0] && this.wins[0].updPW(x); },
