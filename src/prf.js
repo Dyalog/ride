@@ -10,7 +10,7 @@ D.prf = {};
   ['autoCloseBrackets',  1], //whether to insert {}[]() in pairs
   ['autocompletion',     'classic'],
   ['autoPW',             0], // update PW on resize of window
-  ['autoStatus',                1], // toggle auto status
+  ['autoStatus',         1], // toggle auto status
   ['blockCursor',        0], // use block cursor selection?
   ['cursorBlinking',     'blink'], // cursor blinking
   ['autocompletionDelay',500],
@@ -52,7 +52,7 @@ D.prf = {};
   ['showCCGC',           0], // show CC and GC in statusbar
   ['showEditorToolbar',  1],// show toolbar in editor windows
   ['snippetSuggestions', 1],// show snippet suggestions
-  ['statusWindow',               0], //show status window
+  ['statusWindow',       0], //show status window
   ['title',              '{WSID}'], //a.k.a. "caption"
   ['valueTips',          1], //value tips
   ['dbg',                0], //show debug panel
