@@ -52,7 +52,7 @@ D.prf = {};
   ['showCCGC',           0], // show CC and GC in statusbar
   ['showEditorToolbar',  1],// show toolbar in editor windows
   ['snippetSuggestions', 1],// show snippet suggestions
-  ['swin',               0], //show status window
+  ['statusWindow',               0], //show status window
   ['title',              '{WSID}'], //a.k.a. "caption"
   ['valueTips',          1], //value tips
   ['dbg',                0], //show debug panel

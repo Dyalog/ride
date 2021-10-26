@@ -162,7 +162,7 @@
         statLoaded(true);
       });
       srv.on('statClose', () => {
-        D.prf.swin(0);
+        D.prf.statusWindow(0);
       });
       srv.on('dialogCreated', (data, socket) => {
         D.dlg_bw.socket = socket;
