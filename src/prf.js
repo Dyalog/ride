@@ -193,7 +193,7 @@ D.prf = {};
 D.db = !nodeRequire ? localStorage : (function DB() {
   const rq = nodeRequire;
   const fs = rq('fs');
-  const el = rq('electron').remote;
+  const el = rq('@electron/remote');
   // file-backed storage with API similar to that of localStorage
   const k = []; // keys
   const v = []; // values

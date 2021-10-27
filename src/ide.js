@@ -392,6 +392,7 @@ D.IDE = function IDE(opts = {}) {
   updTopBtm();
   $(window).resize(updTopBtm);
   const updMenu = () => {
+    if (D.ide.floating) return;
     try {
       D.installMenu(D.parseMenuDSL(D.prf.menu()));
     } catch (e) {
@@ -582,12 +583,13 @@ D.IDE = function IDE(opts = {}) {
       const { entries } = x;
       D.lb.order = entries.map((k) => k.avchar || ' ').join('');
       entries.forEach((k) => {
+        const nameSep = k.name.split(':',2);
         if (k.avchar) {
           D.lb.tips[k.avchar] = [
-            `${k.name.slice(5)} (${k.avchar})`,
+            `${nameSep[1]} (${k.avchar})`,
             k.helptext.join('\n'),
           ];
-          D.sqglDesc[k.avchar] = `${k.name.slice(5)} (${k.avchar})`;
+          D.sqglDesc[k.avchar] = `${nameSep[1]} (${k.avchar})`;
         }
       });
       ide.lbarRecreate();

@@ -283,39 +283,40 @@
 </div>
 <div id=ed_tmpl class="ride_win edit_trace" style=display:none>
   <div class=toolbar>
-    <a href=# class='tb_btn tb_QT tc_only' title='Quit this function'>
-      <span class="far fa-times-circle"></span>
-    </a>
-    <a href=# class='tb_btn tb_EP ed_only' title='Save changes and return'>
-      <span class="far fa-times-circle"></span>
-    </a>
-    <span class='tb_sep'></span>
-    <a href=# class='tb_btn tb_LN' title='Toggle line numbers'>
-      <span class="fal fa-list-ol"></span>
-    </a>
-    <span class='tb_sep tc_only'></span>
     <a href=# class='tb_btn tb_ER tc_only' title='Execute line'>
       <span class="fas fa-eject" data-fa-transform="shrink-3 rotate-90"></span>
     </a>
     <a href=# class='tb_btn tb_TC tc_only' title='Trace into expression'>
       <span class="fas fa-level-down" data-fa-transform="shrink-3"></span>
     </a>
+    <a href=# class='tb_btn tb_BK tc_only' title='Go back one line'>
+      <span class="fas fa-arrow-left" data-fa-transform="shrink-3"></span>
+    </a>
+    <a href=# class='tb_btn tb_FD tc_only' title='Skip current line'>
+      <span class="fas fa-arrow-right" data-fa-transform="shrink-3"></span>
+    </a>
     <a href=# class='tb_btn tb_BH tc_only' title='Stop on next line of calling function'>
       <span class="fas fa-level-up" data-fa-transform="shrink-3"></span>
     </a>
-    <span class='tb_sep tc_only'></span>
     <a href=# class='tb_btn tb_RM tc_only' title='Continue this thread'>
       <span class="fas fa-angle-right"></span>
     </a>
     <a href=# class='tb_btn tb_MA tc_only' title='Continue execution of all threads'>
-      <span class="fas fa-angle-double-right"></span>
-    </a>
-    <a href=# class='tb_btn tb_WI tc_only' title='Interrupt'>
-      <span class="far fa-pause-circle"></span>
+      <span class="fas fa-angle-double-right"></span>   
     </a>
     <span class='tb_sep tc_only'></span>
     <a href=# class='tb_btn tb_ED tc_only' title='Edit name'>
       <span class="fas fa-pencil-alt"  data-fa-transform="shrink-3"></span>
+    </a>
+    <a href=# class='tb_btn tb_EP ed_only' title='Save changes and return'>
+      <span class="far fa-times-circle"></span>
+    </a>
+    <span class='tb_sep'></span>
+    <a href=# class='tb_btn tb_QT tc_only' title='Quit this function'>
+      <span class="far fa-times-circle"></span>
+    </a>
+    <a href=# class='tb_btn tb_WI tc_only' title='Interrupt'>
+      <span class="far fa-pause-circle"></span>
     </a>
     <a href=# class='tb_btn tb_CBP tc_only' title='Clear stops for this object'>
       <span class="fa-layers">
@@ -324,6 +325,10 @@
         <span class="fas fa-circle" data-fa-transform="shrink-8 down-4 left-4" style="color:red"></span>
         <span class="fas fa-times fa-inverse" data-fa-transform="shrink-10 down-4 left-4"></span>
       </span>      
+    </a>
+    <span class='tb_sep ed_only'></span>
+    <a href=# class='tb_btn tb_LN' title='Toggle line numbers'>
+      <span class="fal fa-list-ol"></span>
     </a>
     <span class='tb_sep ed_only'></span>
     <a href=# class='tb_btn tb_AO ed_only' title='Comment selected text'>
@@ -590,9 +595,9 @@
         <p><label><u>T</u>oken type:<br><select id=col_grp></select></label></p>
         <p id=col_fg_p>
           <label class=cb_label><input type=checkbox id=col_fg_cb><u>F</u>oreground</label> <input type=color id=col_fg list=col_list>
-        <p id=col_fgo_p><label>Transparency: <input id=col_fgo type=range min=0 max=1 step=.25></label>
+        <p id=col_fgo_p><label>Opacity: <input id=col_fgo type=range min=0 max=1 step=.25></label>
         <p id=col_bg_p><label class=cb_label><input type=checkbox id=col_bg_cb>B<u>a</u>ckground</label> <input type=color id=col_bg list=col_list>
-        <p id=col_bgo_p><label>Transparency: <input id=col_bgo type=range min=0 max=1 step=.25></label>
+        <p id=col_bgo_p><label>Opacity: <input id=col_bgo type=range min=0 max=1 step=.25></label>
         <p id=col_BIU_p><label class=cb_label><input type=checkbox id=col_B><u>B</u></label>
                         <label class=cb_label><input type=checkbox id=col_I><u>I</u></label>
                         <label class=cb_label><input type=checkbox id=col_U><u>U</u></label>

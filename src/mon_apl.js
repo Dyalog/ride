@@ -2,7 +2,7 @@
   const name0 = RegExp(`[${D.syntax.letter}]`);
   const name1 = RegExp(`[${D.syntax.letter}\\d]*`);
   const notName = RegExp(`[^${D.syntax.letter}\\d]+`);
-  
+
   D.wordSeparators = `${D.informal.slice(0, -26).map(x => x[0]).join('').replace(/[⎕∆⍙]/g, '')}()[]{}%£#;:'"\`$^`;
 
   function aplConfig() {
@@ -532,7 +532,7 @@
       return lt;
     },
   };
-  
+
   const aplSessionTokens = {
     getInitialState: () => new SessionState(0, 1, aplTokens.getInitialState()),
     tokenize: (line, state) => {
@@ -998,7 +998,8 @@
     const ml = monaco.languages;
     ml.register({
       id: 'apl',
-      extensions: ['.dyapp', '.dyalog'],
+      extensions: ['.apl', '.apla', '.aplc', '.aplf', '.apli', '.apln', '.aplo',
+        '.mipage', '.dyapp', 'dyalog'],
     });
     ml.setTokensProvider('apl', aplTokens);
     ml.setLanguageConfiguration('apl', aplConfig());

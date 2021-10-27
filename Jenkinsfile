@@ -3,11 +3,11 @@ pipeline {
   stages {
     stage('Build Linux & Windows') {
       agent {
-//        docker {
-//          image 'dyalog/ubuntu:1804-build'
-//          args '-v /devt:/devt'
-//        }
-        label 'Linux && NodeJS'
+        docker {
+          image 'dyalogci/node:lts'
+          registryCredentialsId '0435817a-5f0f-47e1-9dcc-800d85e5c335'
+          args '-v /devt:/devt'
+        }
       }
       steps {
         checkout scm
@@ -26,7 +26,8 @@ pipeline {
         stage ('Linux Packaging') {
           agent {
             docker {
-              image 'dyalog/ubuntu:1804-build'
+              image 'dyalogci/node:lts'
+              registryCredentialsId '0435817a-5f0f-47e1-9dcc-800d85e5c335'
             }
           }
           steps {
@@ -59,8 +60,8 @@ pipeline {
             label 'Windows'
           }
           steps {
-            powershell 'rm -r ship'
-            powershell 'rm -r _'
+            powershell 'if (Test-Path -Path ship) { rm -r ship }'
+            powershell 'if (Test-Path -Path _) { rm -r _ }'
             unstash 'ride-win'
             unstash 'ride-version'
             bat './CI/packagescripts/windows/packageWindows.bat'
@@ -74,7 +75,8 @@ pipeline {
     stage ('Copy install images') {
       agent {
         docker {
-          image 'dyalog/ubuntu:1804-build'
+          image 'dyalogci/node:lts'
+          registryCredentialsId '0435817a-5f0f-47e1-9dcc-800d85e5c335'
           args '-v /devt:/devt'
         }
       }
@@ -94,7 +96,8 @@ pipeline {
     stage ('Publish to Github') {
       agent {
         docker {
-          image 'dyalog/ubuntu:1804-build'
+          image 'dyalogci/node:lts'
+          registryCredentialsId '0435817a-5f0f-47e1-9dcc-800d85e5c335'
           args '-v /devt:/devt'
         }
       }

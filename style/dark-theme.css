@@ -1,27 +1,3 @@
-.ctl_listview {
-  background-color: #1c1e28;
-  color: white;
-}
-.ctl_listview tr {
-  background-color: rgba(118, 136, 217, 0.5);
-  border-bottom: 1px solid #1c1e28;
-}
-.ctl_listview tr:hover {
-  background-color: rgba(118, 136, 217, 0.25);
-}
-.ctl_listview tr.selected {
-  background-color: #1c1e28;
-}
-#debug {
-  background: #1c1e28;
-}
-#debug .ctl_listview_header {
-  background-color: #7688d9;
-  color: white;
-}
-#debug .ctl_listview_header h2 {
-  font-size: 16px;
-}
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),
 #cn textarea {
   border: 1px solid rgba(169, 169, 169, 0.3);
@@ -96,6 +72,30 @@
   font-size: 16px;
   font-family: monospace;
 }
+.ctl_listview {
+  background-color: #1c1e28;
+  color: white;
+}
+.ctl_listview tr {
+  background-color: rgba(118, 136, 217, 0.5);
+  border-bottom: 1px solid #1c1e28;
+}
+.ctl_listview tr:hover {
+  background-color: rgba(118, 136, 217, 0.25);
+}
+.ctl_listview tr.selected {
+  background-color: #1c1e28;
+}
+#debug {
+  background: #1c1e28;
+}
+#debug .ctl_listview_header {
+  background-color: #7688d9;
+  color: white;
+}
+#debug .ctl_listview_header h2 {
+  font-size: 16px;
+}
 /*various dialogs*/
 #dlg_modal_overlay {
   background-color: black;
@@ -103,6 +103,10 @@
 }
 .dlg {
   background-color: #1c1e28;
+  outline: none;
+}
+.dlg div {
+  outline: none;
 }
 .dlg_title,
 .dlg_close {
@@ -358,6 +362,80 @@ select {
   border: none;
   outline: solid red 1px;
 }
+::-webkit-scrollbar {
+  background-color: #1c1e28;
+}
+::-webkit-scrollbar-corner {
+  background-color: #1c1e28;
+}
+::-webkit-scrollbar-track {
+  background-color: #272937;
+  border: 1px solid #1c1e28;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(118, 136, 217, 0.3);
+  border: 1px solid #1c1e28;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  border-width: 1px 0;
+}
+::-webkit-scrollbar-thumb:vertical {
+  border-width: 0 1px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(118, 136, 217, 0.6);
+}
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(118, 136, 217, 0.9);
+}
+#splash {
+  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #1c1e28;
+}
+#ide {
+  background-color: #1c1e28;
+}
+#apl_font {
+  color: #1c1e28;
+}
+::selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+::-moz-selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+body {
+  font-family: Roboto, sans-serif;
+}
+#demo-keys span {
+  border: solid #333 1px;
+  background-color: grey;
+  color: white;
+}
+#sb {
+  background-color: #1c1e28;
+  border-top: 1px solid black;
+  color: #a9a9a9;
+  font-family: apl, monospace;
+}
+#sb div {
+  border-right: 1px solid #272937;
+}
+#sb div.right {
+  border-right: none;
+  border-left: 1px solid #272937;
+}
+#sb div.active {
+  color: #7688d9;
+}
+#sb_prf:active {
+  background-color: rgba(0, 0, 0, 0.2);
+}
 #prf_dlg hr {
   border-top: 1px solid black;
   border-bottom: 1px solid #2e303e;
@@ -541,80 +619,6 @@ a:hover {
     display: none;
   }
 }
-::-webkit-scrollbar {
-  background-color: #1c1e28;
-}
-::-webkit-scrollbar-corner {
-  background-color: #1c1e28;
-}
-::-webkit-scrollbar-track {
-  background-color: #272937;
-  border: 1px solid #1c1e28;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb {
-  background-color: rgba(118, 136, 217, 0.3);
-  border: 1px solid #1c1e28;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:horizontal {
-  border-width: 1px 0;
-}
-::-webkit-scrollbar-thumb:vertical {
-  border-width: 0 1px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(118, 136, 217, 0.6);
-}
-::-webkit-scrollbar-thumb:active {
-  background-color: rgba(118, 136, 217, 0.9);
-}
-#splash {
-  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #1c1e28;
-}
-#ide {
-  background-color: #1c1e28;
-}
-#apl_font {
-  color: #1c1e28;
-}
-::selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-::-moz-selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-body {
-  font-family: Roboto, sans-serif;
-}
-#demo-keys span {
-  border: solid #333 1px;
-  background-color: grey;
-  color: white;
-}
-#sb {
-  background-color: #1c1e28;
-  border-top: 1px solid black;
-  color: #a9a9a9;
-  font-family: apl, monospace;
-}
-#sb div {
-  border-right: 1px solid #272937;
-}
-#sb div.right {
-  border-right: none;
-  border-left: 1px solid #272937;
-}
-#sb div.active {
-  color: #7688d9;
-}
-#sb_prf:active {
-  background-color: rgba(0, 0, 0, 0.2);
-}
 #toast-container {
   font-family: Roboto;
   font-size: 14px;
@@ -651,8 +655,8 @@ body {
 }
 .tb_btn:active,
 .tb_btn.pressed {
-  background-color: rgba(0, 0, 0, 0.2);
-  color: white;
+  background-color: rgba(169, 169, 169, 0.75);
+  color: #1c1e28;
 }
 .tb_btn:disabled {
   background: transparent!important;

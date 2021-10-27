@@ -360,7 +360,7 @@
     });
     clt.on('error', (e) => {
       log(`connect failed: ${e}`);
-      if (D.tmr && D.ide && e.code === 'ECONNRESET') {
+      if (D.tmr && D.ide && e.code === 'ECONNABORTED') {
         err('The interpreter is already serving another RIDE client.', 'Connection closed by interpreter');
         D.ide.die();
         D.commands.CNC();
@@ -550,6 +550,10 @@
             srv.listen(0, '127.0.0.1', () => {
               const adr = srv.address();
               const hp = `${adr.address}:${adr.port}`;
+              let cwd = untildify(x.cwd || process.cwd());
+              if (!x.cwd && (cwd === '/' || cwd === path.dirname(process.execPath))) {
+                cwd = home;
+              }
               log(`listening for connections from spawned interpreter on ${hp}`);
               log(`spawning interpreter ${JSON.stringify(x.exe)}`);
               let args = ['+s', '-q', '-nokbd'];
@@ -559,7 +563,7 @@
               if (x.args) args.push(...x.args.replace(/\n$/gm, '').split('\n'));
               try {
                 child = cp.spawn(x.exe, args, {
-                  ...(!!x.cwd && { cwd: untildify(x.cwd) }),
+                  cwd,
                   stdio,
                   detached: true,
                   env: {
@@ -925,7 +929,7 @@
       if (/^win/.test(process.platform)) {
         const s = cp.execSync(
           'reg query "HKEY_CURRENT_USER\\Software\\Dyalog" /s /v localdyalogdir',
-          { timeout: 2000, encoding: 'UTF8' },
+          { timeout: 4000, encoding: 'UTF8' },
         );
         let b; // b:bits
         let v; // v:version
@@ -1013,7 +1017,7 @@
         && !/Interrupt$|TreeList|Reply|FormatCode|GetAutocomplete|SaveChanges|CloseWindow|Exit/.test(x)) return;
       sendEach([JSON.stringify([x, y])]);
     };
-    const a = rq('electron').remote.process.argv;
+    const a = rq('@electron/remote').process.argv;
     const { env } = D.el.process;
     const h = { // h:args by name
       c: env.RIDE_CONNECT,
@@ -1022,7 +1026,7 @@
       log: env.RIDE_LOG,
     };
     if (D.mac && env.DYALOG_SPAWN) {
-      const app = rq('electron').remote.app.getAppPath();
+      const app = rq('@electron/remote').app.getAppPath();
       h.s = `${app}${env.DYALOG_SPAWN}`;
     }
     for (let i = 1; i < a.length; i++) if (a[i][0] === '-') { h[a[i].slice(1)] = a[i + 1]; i += 1; }
@@ -1051,7 +1055,7 @@
         exe: h.s,
         log: h.log,
       };
-      const openfile = rq('electron').remote.getGlobal('open_file');
+      const openfile = rq('@electron/remote').getGlobal('open_file');
       if (openfile && /(dws|dcfg)$/i.test(openfile)) {
         const qt = /\s/.test(openfile) ? '"' : '';
         cnf.args = `LOAD=${qt}${openfile}${qt}`;
