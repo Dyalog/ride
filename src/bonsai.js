@@ -27,14 +27,9 @@
               bt.nodes[c.id] = c;
               c.depth = node.depth + 1;
               c.path = node.path ? `${node.path}.${c.text}` : c.text;
-              bt.valueTipCb(c, (vt) => {
-                c.value = vt.tip[0];
-                const elem = bt.dom.querySelector(`tr[data-id='${c.id}'] td.value_tip`);
-                elem.innerText = vt.tip[0];
-                elem.title = vt.tip.join('\n');
-              });        
+              bt.requestValueTip(c);        
             });
-            nodeElement.outerHTML = bt.render(node, selected);
+            // nodeElement.outerHTML = bt.render(node, selected);
             if (selected) e.getElementsByClassName('selected')[0].focus();
           });
         } else {
@@ -120,7 +115,7 @@
       return `<tr data-id="${node.id}">` +
         `<td style="padding-left:${node.depth}em;">${expandable}<span tabIndex=-1 data-id=${node.id} data-path=${node.path}` +
         ` class="bt_icon_${node.icon} bt_text ${node.selected || selected ? 'selected' : ''}">` +
-        `${node.text}</span></td><td class="value_tip">${node.value}</td></tr>${children}`;
+        `${node.text}</span></td><td class="value_tip" title="${node.value.join('\n')}">${node.value[0]}</td></tr>${children}`;
     }
 
     rebuild() {
@@ -131,7 +126,7 @@
           depth: 0,
           path: '',
           text: '',
-          value: '',
+          value: [''],
           expanded: 1,
         }
       };
@@ -144,12 +139,7 @@
       bt.newNodes[node.id] = node;
       node.depth = depth;
       node.path = path ? `${path}.${node.text}` : node.text;
-      bt.valueTipCb(node, (vt) => {
-        node.value = vt.tip[0];
-        const elem = bt.dom.querySelector(`tr[data-id='${node.id}'] td.value_tip`);
-        elem.innerText = vt.tip[0];
-        elem.title = vt.tip.join('\n');
-      });
+      bt.requestValueTip(node);
       if (oldNode && oldNode.text === node.text && oldNode.expanded && node.expandable) {
         bt.pendingCalls += 1;
         bt.childrenCb(node.id, (children) => {
@@ -170,7 +160,7 @@
       bt.refreshNode({
         id: 0,
         text: '',
-        value: '',
+        value: [''],
         expandable: 1,
         icon: '',
       }, '', 0);
@@ -178,17 +168,30 @@
 
     replaceTree() {
       const bt = this;
+      // const nodeElement = bt.dom.parentNode.parentNode;
+      // const anchorNode = bt.nodes[nodeElement.dataset.id];
       if (!bt.newNodes) return;
       const [sel] = bt.dom.getElementsByClassName('selected');
       const hasFocus = !!$(bt.dom).find(':focus').length > 0;
       if (sel) {
         const n = bt.newNodes[sel.dataset.id];
         n && (n.selected = 1);
-      }
+      }     
       bt.dom.innerHTML = `<table><tbody>${bt.newNodes[0].children.map(x => bt.render(x)).join('')}</tbody></table>`;
+      // anchorNode.outerHTML = bt.render(bt.newNodes[0], selected);
       bt.nodes = bt.newNodes;
       hasFocus && bt.focus();
       delete bt.newNodes;
+    }
+
+    requestValueTip(node) {
+      const bt = this;
+      bt.pendingCalls += 1;
+      bt.valueTipCb(node, (x) => {
+        node.value = x.tip;
+        bt.pendingCalls -= 1;
+        !bt.pendingCalls && bt.replaceTree();
+      });
     }
   }
   D.Bonsai = Bonsai;

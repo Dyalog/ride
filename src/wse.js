@@ -2,9 +2,11 @@
 {
   class WSE {
     constructor() {
+      const wse = this;
       const pending = {};
       this.pending = pending;
       const pendingValueTip = {};
+      const pendingValueTipTimeout = {};
       this.pendingValueTip = pendingValueTip;
       this.dom = I.wse;
       this.dom.hidden = 0;
@@ -16,15 +18,21 @@
         click(path) {
           D.send('Edit', { win: 0, pos: 0, text: path });
         },
-        valueTip(node, callback){
-          pendingValueTip[node.id] = callback.bind(this);
+        valueTip(node, callback) {
+          const valueTipRequest = {
+            handler: callback.bind(this),
+            timeoutId: setTimeout(function(node) {
+              this.valueTip(node.id, { tip: [''] });
+            }.bind(wse), 1000, node)
+          }
+          pendingValueTip[node.id] = valueTipRequest;
           D.ide.getValueTip('wse', node.id, { // ask interpreter
             win: 0,
             line: node.path,
             pos: 0,
             maxWidth: 200,
             maxHeight: 100,
-          });  
+          });
         }
       });
     }
@@ -40,7 +48,7 @@
         // x.classes uses constants from http://help.dyalog.com/17.0/Content/Language/System%20Functions/nc.htm
         id: c || `leaf_${x.nodeId}_${i}`,
         text: x.names[i],
-        value: '',
+        value: [],
         expandable: !!c,
         icon: `${Math.abs(x.classes[i])}`.replace('.', '_'),
       })));
@@ -52,10 +60,13 @@
     }
 
     valueTip(nodeId, x) { // handle response from interpreter
-      const f = this.pendingValueTip[nodeId];
-      if (!f) return;
-      f(x);
+      const valueTipRequest = this.pendingValueTip[nodeId];
+      if (!valueTipRequest) return;
       delete this.pendingValueTip[nodeId];
+      if (valueTipRequest.timeoutId) {
+        clearTimeout(valueTipRequest.timeoutId);
+      }
+      valueTipRequest.handler(x);
     }
 
     autoRefresh(ms) {
