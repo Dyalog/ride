@@ -29,11 +29,10 @@
               c.path = node.path ? `${node.path}.${c.text}` : c.text;
               bt.requestValueTip(c);        
             });
-            // nodeElement.outerHTML = bt.render(node, selected);
             if (selected) e.getElementsByClassName('selected')[0].focus();
           });
         } else {
-          bt.refresh();
+          bt.replaceTree();
         }
       };
 
@@ -168,23 +167,22 @@
 
     replaceTree() {
       const bt = this;
-      // const nodeElement = bt.dom.parentNode.parentNode;
-      // const anchorNode = bt.nodes[nodeElement.dataset.id];
-      if (!bt.newNodes) return;
+      if (bt.newNodes) {
       const [sel] = bt.dom.getElementsByClassName('selected');
       const hasFocus = !!$(bt.dom).find(':focus').length > 0;
       if (sel) {
         const n = bt.newNodes[sel.dataset.id];
         n && (n.selected = 1);
       }     
-      bt.dom.innerHTML = `<table><tbody>${bt.newNodes[0].children.map(x => bt.render(x)).join('')}</tbody></table>`;
-      // anchorNode.outerHTML = bt.render(bt.newNodes[0], selected);
       bt.nodes = bt.newNodes;
       hasFocus && bt.focus();
       delete bt.newNodes;
     }
+    bt.dom.innerHTML = `<table><tbody>${bt.nodes[0].children.map(x => bt.render(x)).join('')}</tbody></table>`;
+  }
 
     requestValueTip(node) {
+      if (node.id < 2) return;
       const bt = this;
       bt.pendingCalls += 1;
       bt.valueTipCb(node, (x) => {

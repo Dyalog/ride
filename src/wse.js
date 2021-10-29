@@ -10,6 +10,8 @@
       this.pendingValueTip = pendingValueTip;
       this.dom = I.wse;
       this.dom.hidden = 0;
+      this.VT_MAX_HEIGHT = 30;
+      this.VT_MAX_WIDTH = 100;
       this.bt = new D.Bonsai(this.dom, {
         children(id, callback) {
           pending[id] = callback.bind(this);
@@ -30,8 +32,8 @@
             win: 0,
             line: node.path,
             pos: 0,
-            maxWidth: 200,
-            maxHeight: 100,
+            maxWidth: wse.VT_MAX_WIDTH,
+            maxHeight: wse.VT_MAX_HEIGHT,
           });
         }
       });
@@ -48,7 +50,7 @@
         // x.classes uses constants from http://help.dyalog.com/17.0/Content/Language/System%20Functions/nc.htm
         id: c || `leaf_${x.nodeId}_${i}`,
         text: x.names[i],
-        value: [],
+        value: [''],
         expandable: !!c,
         icon: `${Math.abs(x.classes[i])}`.replace('.', '_'),
       })));
@@ -66,9 +68,13 @@
       if (valueTipRequest.timeoutId) {
         clearTimeout(valueTipRequest.timeoutId);
       }
+      if (x.tip.length === this.VT_MAX_HEIGHT) {
+         x.tip[this.VT_MAX_HEIGHT - 1] = '...';   
+      }
+      x.tip = x.tip.map((line) => line.length < this.VT_MAX_WIDTH ? line : line.substring(0, this.VT_MAX_WIDTH - 3) + '...');
       valueTipRequest.handler(x);
     }
-
+     
     autoRefresh(ms) {
       if (ms && !this.refreshTimer) {
         this.refreshTimer = setInterval(this.bt.refresh, ms);
@@ -79,3 +85,4 @@
   }
   D.WSE = WSE;
 }
+ 
