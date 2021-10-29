@@ -528,7 +528,7 @@
           cb.checked ? h[p] = rgb(q[p].value) : delete h[p];
           q[p].hidden = !cb.checked;
           updSampleStl();
-          if (p === 'fg') q.fgo_p.hidden = !cb.checked;
+          if (p === 'fg') q.fgo_p.hidden = !!G[H[sel]].m || !cb.checked;
           if (p === 'bg') q.bgo_p.hidden = !cb.checked;
         };
       });
