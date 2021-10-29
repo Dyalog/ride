@@ -2,18 +2,40 @@
 {
   class WSE {
     constructor() {
+      const wse = this;
       const pending = {};
       this.pending = pending;
+      const pendingValueTip = {};
+      const pendingValueTipTimeout = {};
+      this.pendingValueTip = pendingValueTip;
       this.dom = I.wse;
       this.dom.hidden = 0;
+      this.VT_MAX_HEIGHT = 30;
+      this.VT_MAX_WIDTH = 100;
       this.bt = new D.Bonsai(this.dom, {
         children(id, callback) {
           pending[id] = callback.bind(this);
           D.send('TreeList', { nodeId: id });
         },
         click(path) {
-          D.send('Edit', { win: 0, pos: 0, text: path.map(x => x.text).join('.') });
+          D.send('Edit', { win: 0, pos: 0, text: path });
         },
+        valueTip(node, callback) {
+          const valueTipRequest = {
+            handler: callback.bind(this),
+            timeoutId: setTimeout(function(node) {
+              this.valueTip(node.id, { tip: [''] });
+            }.bind(wse), 1000, node)
+          }
+          pendingValueTip[node.id] = valueTipRequest;
+          D.ide.getValueTip('wse', node.id, { // ask interpreter
+            win: 0,
+            line: node.path,
+            pos: 0,
+            maxWidth: wse.VT_MAX_WIDTH,
+            maxHeight: wse.VT_MAX_HEIGHT,
+          });
+        }
       });
     }
 
@@ -28,6 +50,7 @@
         // x.classes uses constants from http://help.dyalog.com/17.0/Content/Language/System%20Functions/nc.htm
         id: c || `leaf_${x.nodeId}_${i}`,
         text: x.names[i],
+        value: [''],
         expandable: !!c,
         icon: `${Math.abs(x.classes[i])}`.replace('.', '_'),
       })));
@@ -38,6 +61,20 @@
       this.bt.refresh();
     }
 
+    valueTip(nodeId, x) { // handle response from interpreter
+      const valueTipRequest = this.pendingValueTip[nodeId];
+      if (!valueTipRequest) return;
+      delete this.pendingValueTip[nodeId];
+      if (valueTipRequest.timeoutId) {
+        clearTimeout(valueTipRequest.timeoutId);
+      }
+      if (x.tip.length === this.VT_MAX_HEIGHT) {
+         x.tip[this.VT_MAX_HEIGHT - 1] = '...';   
+      }
+      x.tip = x.tip.map((line) => D.util.esc(line.length < this.VT_MAX_WIDTH ? line : line.substring(0, this.VT_MAX_WIDTH - 3) + '...'));
+      valueTipRequest.handler(x);
+    }
+     
     autoRefresh(ms) {
       if (ms && !this.refreshTimer) {
         this.refreshTimer = setInterval(this.bt.refresh, ms);
@@ -48,3 +85,4 @@
   }
   D.WSE = WSE;
 }
+ 

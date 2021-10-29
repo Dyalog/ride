@@ -888,9 +888,8 @@
         };
       }
       if (D.prf.valueTips() && /[^ ()[\]{}':;]/.test(c)) {
-        D.send('GetValueTip', { // ask interpreter
+        D.ide.getValueTip('monaco', m.winid, { // ask interpreter
           win: m.winid,
-          token: m.winid,
           line: s,
           pos: p.column - 1,
           maxWidth: 200,

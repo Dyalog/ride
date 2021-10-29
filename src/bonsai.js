@@ -7,25 +7,33 @@
       bt.render = bt.render.bind(bt);
       bt.refresh = bt.refresh.bind(bt);
       bt.childrenCb = o.children;
+      bt.valueTipCb = o.valueTip;
       bt.dom = e;
       bt.rebuild();
 
       const toggleNode = (tgt) => {
         if (bt.newNodes) return;
         const a = tgt;
-        const node = bt.nodes[a.parentNode.dataset.id];
+        const nodeElement = a.parentNode.parentNode;
+        const node = bt.nodes[nodeElement.dataset.id];
         if (!node || !node.expandable) return;
         node.expanded = 1 - !!node.expanded; a.textContent = '+-'[+!!node.expanded];
+        nodeElement.className = node.expanded ? '' : 'bt_collapsed';
         if (node.expanded) {
           bt.childrenCb(node.id, (children) => {
-            node.children = children;
-            children.forEach((c) => { bt.nodes[c.id] = c; });
             const selected = a.nextSibling.classList.contains('selected');
-            a.parentNode.outerHTML = bt.render(node, selected);
+            node.children = children;
+            children.forEach((c) => { 
+              bt.nodes[c.id] = c;
+              c.depth = node.depth + 1;
+              c.path = node.path ? `${node.path}.${c.text}` : c.text;
+              bt.requestValueTip(c);        
+            });
             if (selected) e.getElementsByClassName('selected')[0].focus();
           });
+        } else {
+          bt.replaceTree();
         }
-        a.parentNode.className = node.expanded ? '' : 'bt_collapsed';
       };
 
       const selectNode = (tgt, trg) => { // tgt=target,trg=trigger=1or0
@@ -33,15 +41,9 @@
           const [sel] = e.getElementsByClassName('selected');
           sel && sel.classList.remove('selected');
           tgt.classList.add('selected');
-          tgt.focus();
+          tgt.focus();  
           if (o.click && trg) {
-            const path = [];
-            let div = tgt.parentNode;
-            while (div && div !== e) {
-              path.unshift(bt.nodes[div.dataset.id]);
-              div = div.parentNode;
-            }
-            div && o.click(path);
+            o.click(tgt.dataset.path);
           }
         }
       };
@@ -109,10 +111,10 @@
       if (node.expanded) children = node.children.map(x => bt.render(x)).join('');
       if (node.expandable) expandable = `<a class=bt_node_expand>${'+-'[+!!node.expanded]}</a>`;
 
-      return `<div data-id="${node.id}">` +
-        `${expandable}<span tabIndex=-1 data-id=${node.id}` +
+      return `<tr data-id="${node.id}" title="${node.value.join('\n')}">` +
+        `<td style="padding-left:${node.depth}em;">${expandable}<span tabIndex=-1 data-id=${node.id} data-path=${node.path}` +
         ` class="bt_icon_${node.icon} bt_text ${node.selected || selected ? 'selected' : ''}">` +
-        `${node.text}</span>${children}</div>`;
+        `${node.text}</span></td><td class="value_tip">${node.value[0]}</td></tr>${children}`;
     }
 
     rebuild() {
@@ -120,23 +122,29 @@
       bt.nodes = {
         0: {
           id: 0,
+          depth: 0,
+          path: '',
           text: '',
+          value: [''],
           expanded: 1,
         }
       };
       bt.refresh();
     }
 
-    refreshNode(node) {
+    refreshNode(node, path, depth) {
       const bt = this;
       const oldNode = bt.nodes[node.id];
       bt.newNodes[node.id] = node;
+      node.depth = depth;
+      node.path = path ? `${path}.${node.text}` : node.text;
+      bt.requestValueTip(node);
       if (oldNode && oldNode.text === node.text && oldNode.expanded && node.expandable) {
         bt.pendingCalls += 1;
         bt.childrenCb(node.id, (children) => {
           node.expanded = 1;
           node.children = children;
-          children.forEach(bt.refreshNode.bind(bt));
+          children.forEach(c => bt.refreshNode(c, node.path, node.depth + 1));
           bt.pendingCalls -= 1;
           !bt.pendingCalls && bt.replaceTree();
         });
@@ -151,24 +159,37 @@
       bt.refreshNode({
         id: 0,
         text: '',
+        value: [''],
         expandable: 1,
         icon: '',
-      });
+      }, '', 0);
     }
 
     replaceTree() {
       const bt = this;
-      if (!bt.newNodes) return;
+      if (bt.newNodes) {
       const [sel] = bt.dom.getElementsByClassName('selected');
       const hasFocus = !!$(bt.dom).find(':focus').length > 0;
       if (sel) {
         const n = bt.newNodes[sel.dataset.id];
         n && (n.selected = 1);
-      }
-      bt.dom.innerHTML = bt.newNodes[0].children.map(x => bt.render(x)).join('');
+      }     
       bt.nodes = bt.newNodes;
       hasFocus && bt.focus();
       delete bt.newNodes;
+    }
+    bt.dom.innerHTML = `<table><tbody>${bt.nodes[0].children.map(x => bt.render(x)).join('')}</tbody></table>`;
+  }
+
+    requestValueTip(node) {
+      if (node.id < 2) return;
+      const bt = this;
+      bt.pendingCalls += 1;
+      bt.valueTipCb(node, (x) => {
+        node.value = x.tip;
+        bt.pendingCalls -= 1;
+        !bt.pendingCalls && bt.replaceTree();
+      });
     }
   }
   D.Bonsai = Bonsai;

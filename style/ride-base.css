@@ -373,27 +373,6 @@
   height: 100%;
   resize: none;
 }
-.lm_content {
-  border: none !important;
-}
-.lm_header .lm_tab {
-  padding: 5px 15px 5px 10px !important;
-  margin-top: 0!important;
-  height: 15px!important;
-}
-.lm_close {
-  display: none !important;
-}
-.lm_splitter {
-  opacity: 1 !important;
-}
-.lm_header .lm_tab .lm_title {
-  padding: 0px 10px 2px 0px;
-}
-.lm_header .lm_tab .lm_close_tab {
-  top: 4px !important;
-  right: 6px !important;
-}
 @font-face {
   font-family: 'apl';
   src: url('./fonts/Apl385.woff') format('woff'), url('./fonts/Apl385.ttf') format('truetype');
@@ -469,6 +448,27 @@
   src: url('./fonts/Roboto-BlackItalic.ttf') format('truetype');
   font-weight: 900;
   font-style: italic;
+}
+.lm_content {
+  border: none !important;
+}
+.lm_header .lm_tab {
+  padding: 5px 15px 5px 10px !important;
+  margin-top: 0!important;
+  height: 15px!important;
+}
+.lm_close {
+  display: none !important;
+}
+.lm_splitter {
+  opacity: 1 !important;
+}
+.lm_header .lm_tab .lm_title {
+  padding: 0px 10px 2px 0px;
+}
+.lm_header .lm_tab .lm_close_tab {
+  top: 4px !important;
+  right: 6px !important;
 }
 button {
   border: none;
@@ -1505,6 +1505,9 @@ body.floating-window {
 #wse > div {
   padding-left: 2px;
 }
+#wse .value_tip {
+  padding-left: 1.5em;
+}
 #wse .bt_text {
   border-radius: 3px;
 }
@@ -2192,15 +2195,40 @@ input.lyt_g3:hover {
   height: 100%;
   resize: none;
 }
-/*Prefs>Saved Responses*/
-#resp_qns {
-  margin: 8px 0;
+/*Prefs>Title*/
+#title {
+  text-align: left;
+  padding: 8px;
+}
+#title pre {
+  overflow: auto;
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 125px;
+  bottom: 70px;
+}
+#title table {
+  table-layout: fixed;
   width: 100%;
-  width: -moz-available;
-  /* WebKit-based browsers will ignore this. */
-  width: -webkit-fill-available;
-  /* Mozilla-based browsers will ignore this. */
-  width: fill-available;
+  margin-top: 10px;
+}
+#title table tr {
+  height: 1.3em;
+}
+#title table td {
+  vertical-align: middle;
+}
+#title table td:nth-child(1) {
+  width: 30%;
+}
+#title_inp {
+  width: calc(100% - 160px);
+  margin-left: 10px;
+  padding: 5px 0;
+}
+#title_rst {
+  float: right;
 }
 /*Prefs>Shortcuts*/
 #shc {
@@ -2319,42 +2347,17 @@ input.lyt_g3:hover {
     display: none;
   }
 }
-/*Prefs>Title*/
-#title {
-  text-align: left;
-  padding: 8px;
-}
-#title pre {
-  overflow: auto;
-  position: absolute;
-  left: 8px;
-  right: 8px;
-  top: 125px;
-  bottom: 70px;
-}
-#title table {
-  table-layout: fixed;
-  width: 100%;
-  margin-top: 10px;
-}
-#title table tr {
-  height: 1.3em;
-}
-#title table td {
-  vertical-align: middle;
-}
-#title table td:nth-child(1) {
-  width: 30%;
-}
-#title_inp {
-  width: calc(100% - 160px);
-  margin-left: 10px;
-  padding: 5px 0;
-}
-#title_rst {
-  float: right;
-}
 /*Prefs>Code*/
 #wins .row {
   padding: 3px 5px;
+}
+/*Prefs>Saved Responses*/
+#resp_qns {
+  margin: 8px 0;
+  width: 100%;
+  width: -moz-available;
+  /* WebKit-based browsers will ignore this. */
+  width: -webkit-fill-available;
+  /* Mozilla-based browsers will ignore this. */
+  width: fill-available;
 }

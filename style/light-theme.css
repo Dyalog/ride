@@ -362,6 +362,61 @@ select {
   border: none;
   outline: solid red 1px;
 }
+::-webkit-scrollbar {
+  background-color: white;
+}
+::-webkit-scrollbar-corner {
+  background-color: white;
+}
+::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+  border: 1px solid white;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(118, 136, 217, 0.3);
+  border: 1px solid white;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  border-width: 1px 0;
+}
+::-webkit-scrollbar-thumb:vertical {
+  border-width: 0 1px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(118, 136, 217, 0.6);
+}
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(118, 136, 217, 0.9);
+}
+#splash {
+  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #7688d9;
+}
+#ide {
+  background-color: #7688d9;
+}
+#apl_font {
+  color: #7688d9;
+}
+::selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+::-moz-selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+body {
+  font-family: Roboto, sans-serif;
+}
+#demo-keys span {
+  border: solid #333 1px;
+  background-color: grey;
+  color: white;
+}
 #prf_dlg hr {
   border-top: 1px solid #d7d7d3;
   border-bottom: 1px solid white;
@@ -545,61 +600,6 @@ a:hover {
     display: none;
   }
 }
-::-webkit-scrollbar {
-  background-color: white;
-}
-::-webkit-scrollbar-corner {
-  background-color: white;
-}
-::-webkit-scrollbar-track {
-  background-color: #f0f0f0;
-  border: 1px solid white;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb {
-  background-color: rgba(118, 136, 217, 0.3);
-  border: 1px solid white;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:horizontal {
-  border-width: 1px 0;
-}
-::-webkit-scrollbar-thumb:vertical {
-  border-width: 0 1px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(118, 136, 217, 0.6);
-}
-::-webkit-scrollbar-thumb:active {
-  background-color: rgba(118, 136, 217, 0.9);
-}
-#splash {
-  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #7688d9;
-}
-#ide {
-  background-color: #7688d9;
-}
-#apl_font {
-  color: #7688d9;
-}
-::selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-::-moz-selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-body {
-  font-family: Roboto, sans-serif;
-}
-#demo-keys span {
-  border: solid #333 1px;
-  background-color: grey;
-  color: white;
-}
 #sb {
   background-color: white;
   border-top: 1px solid #9eabe4;
@@ -640,6 +640,14 @@ body {
 .tooltip .tooltiptext::after {
   border-color: transparent #dde0ec transparent transparent;
 }
+#vt_bln {
+  border: solid black 1px;
+  background-color: black;
+  color: white;
+}
+#vt_tri {
+  border-color: black;
+}
 .toolbar {
   background-color: white;
   border-bottom: 1px solid #dde0ec;
@@ -666,14 +674,6 @@ body {
 .tb_sep {
   border: 0 solid #dde0ec;
   border-right-width: 1px;
-}
-#vt_bln {
-  border: solid black 1px;
-  background-color: black;
-  color: white;
-}
-#vt_tri {
-  border-color: black;
 }
 #wse {
   background-color: white;
