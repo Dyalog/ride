@@ -111,10 +111,10 @@
       if (node.expanded) children = node.children.map(x => bt.render(x)).join('');
       if (node.expandable) expandable = `<a class=bt_node_expand>${'+-'[+!!node.expanded]}</a>`;
 
-      return `<tr data-id="${node.id}">` +
+      return `<tr data-id="${node.id}" title="${node.value.join('\n')}">` +
         `<td style="padding-left:${node.depth}em;">${expandable}<span tabIndex=-1 data-id=${node.id} data-path=${node.path}` +
         ` class="bt_icon_${node.icon} bt_text ${node.selected || selected ? 'selected' : ''}">` +
-        `${node.text}</span></td><td class="value_tip" title="${node.value.join('\n')}">${node.value[0]}</td></tr>${children}`;
+        `${node.text}</span></td><td class="value_tip">${node.value[0]}</td></tr>${children}`;
     }
 
     rebuild() {
