@@ -127,6 +127,26 @@ const Console = console;
         });
         bw.loadURL(`file://${__dirname}/dialog.html?appid=${appid}`);
         D.dlg_bw = { id: bw.id };
+        bw = new D.el.BrowserWindow({
+          show: false,
+          parent: D.elw,
+          alwaysOnTop: false,
+          fullscreen: false,
+          fullscreenable: false,
+          modal: false,
+          width: 600,
+          height: 400,
+          resizable: true,
+          minimizable: true,
+          maximizable: true,
+          webPreferences: {
+            contextIsolation: false,
+            enableRemoteModule: true,
+            nodeIntegration: true,
+          },
+        });
+        bw.loadURL(`file://${__dirname}/status.html?appid=${appid}`);
+        D.stw_bw = { id: bw.id };
         D.elw.focus();
         Promise.all(winsLoaded).then(() => {
           I.splash.hidden = 1;

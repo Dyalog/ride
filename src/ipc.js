@@ -133,9 +133,11 @@
     // start IPC server
     let dlgLoaded;
     let prfLoaded;
+    let statLoaded;
     const winsLoaded = [
       new Promise((r) => { dlgLoaded = r; }),
       new Promise((r) => { prfLoaded = r; }),
+      new Promise((r) => { statLoaded = r; }),
     ];
     D.pwins = [];
     D.pendingEditors = [];
@@ -153,6 +155,14 @@
       srv.on('prfClose', () => {
         D.el.BrowserWindow.fromId(D.prf_bw.id).hide();
         D.ide && D.ide.focusMRUWin();
+      });
+      srv.on('statCreated', (data, socket) => {
+        D.stw_bw.socket = socket;
+        srv.emit(socket, 'setTheme', D.theme);
+        statLoaded(true);
+      });
+      srv.on('statClose', () => {
+        D.prf.statusWindow(0);
       });
       srv.on('dialogCreated', (data, socket) => {
         D.dlg_bw.socket = socket;

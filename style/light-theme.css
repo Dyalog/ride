@@ -72,30 +72,6 @@
   font-size: 16px;
   font-family: monospace;
 }
-.ctl_listview {
-  background-color: white;
-  color: black;
-}
-.ctl_listview tr {
-  background-color: rgba(118, 136, 217, 0.5);
-  border-bottom: 1px solid white;
-}
-.ctl_listview tr:hover {
-  background-color: rgba(118, 136, 217, 0.25);
-}
-.ctl_listview tr.selected {
-  background-color: #9eabe4;
-}
-#debug {
-  background: white;
-}
-#debug .ctl_listview_header {
-  background-color: #7688d9;
-  color: white;
-}
-#debug .ctl_listview_header h2 {
-  font-size: 16px;
-}
 /*various dialogs*/
 #dlg_modal_overlay {
   background-color: black;
@@ -146,59 +122,29 @@
   text-align: left;
   border: 1px solid transparent;
 }
-label {
-  color: #4c4a4a;
-  font-family: Roboto;
-  font-size: 14px;
-  font-weight: 600;
+.ctl_listview {
+  background-color: white;
+  color: black;
 }
-label.cb_label {
-  cursor: pointer;
+.ctl_listview tr {
+  background-color: rgba(118, 136, 217, 0.5);
+  border-bottom: 1px solid white;
 }
-button {
-  background: #7688d9;
-  color: white;
-  border-radius: 4px;
-  background-image: -moz-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
-  background-image: -webkit-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
-  background-image: -ms-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
+.ctl_listview tr:hover {
+  background-color: rgba(118, 136, 217, 0.25);
 }
-button:hover {
-  color: #4c4a4a;
+.ctl_listview tr.selected {
+  background-color: #9eabe4;
 }
-[type=checkbox] {
-  background-color: #edeff5;
-  border: 1px solid #7688d9;
+#debug {
+  background: white;
 }
-[type=checkbox]:checked {
+#debug .ctl_listview_header {
   background-color: #7688d9;
+  color: white;
 }
-[type=checkbox]:hover::before {
-  background: #9eabe4;
-}
-[type=checkbox]:active::before {
-  background: #7688d9;
-  color: #9eabe4;
-}
-[type=checkbox]:checked::before {
-  color: #7688d9;
-}
-[type=checkbox]:checked:after {
-  color: #edeff5;
-}
-[type=checkbox]:disabled::before {
-  color: transparent;
-  box-shadow: 0 0 0 1px #7688d9 inset;
-  background: #9eabe4;
-}
-[type=checkbox]:checked:disabled::before {
-  color: grayscale(#7688d9);
-  background: grayscale(#edeff5);
-}
-select {
-  background-color: #dde0ec;
-  border: 1px solid rgba(169, 169, 169, 0.3);
-  color: #4e65ce;
+#debug .ctl_listview_header h2 {
+  font-size: 16px;
 }
 /*Golden Layout*/
 .lm_goldenlayout {
@@ -286,6 +232,60 @@ select {
   background-color: black;
   border: 1px dashed #7688d9;
 }
+label {
+  color: #4c4a4a;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 600;
+}
+label.cb_label {
+  cursor: pointer;
+}
+button {
+  background: #7688d9;
+  color: white;
+  border-radius: 4px;
+  background-image: -moz-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
+  background-image: -webkit-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
+  background-image: -ms-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
+}
+button:hover {
+  color: #4c4a4a;
+}
+[type=checkbox] {
+  background-color: #edeff5;
+  border: 1px solid #7688d9;
+}
+[type=checkbox]:checked {
+  background-color: #7688d9;
+}
+[type=checkbox]:hover::before {
+  background: #9eabe4;
+}
+[type=checkbox]:active::before {
+  background: #7688d9;
+  color: #9eabe4;
+}
+[type=checkbox]:checked::before {
+  color: #7688d9;
+}
+[type=checkbox]:checked:after {
+  color: #edeff5;
+}
+[type=checkbox]:disabled::before {
+  color: transparent;
+  box-shadow: 0 0 0 1px #7688d9 inset;
+  background: #9eabe4;
+}
+[type=checkbox]:checked:disabled::before {
+  color: grayscale(#7688d9);
+  background: grayscale(#edeff5);
+}
+select {
+  background-color: #dde0ec;
+  border: 1px solid rgba(169, 169, 169, 0.3);
+  color: #4e65ce;
+}
 #lb {
   background-color: #edeff5;
   border-bottom: 1px #9eabe4 solid;
@@ -361,61 +361,6 @@ select {
 .highlighted {
   border: none;
   outline: solid red 1px;
-}
-::-webkit-scrollbar {
-  background-color: white;
-}
-::-webkit-scrollbar-corner {
-  background-color: white;
-}
-::-webkit-scrollbar-track {
-  background-color: #f0f0f0;
-  border: 1px solid white;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb {
-  background-color: rgba(118, 136, 217, 0.3);
-  border: 1px solid white;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:horizontal {
-  border-width: 1px 0;
-}
-::-webkit-scrollbar-thumb:vertical {
-  border-width: 0 1px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(118, 136, 217, 0.6);
-}
-::-webkit-scrollbar-thumb:active {
-  background-color: rgba(118, 136, 217, 0.9);
-}
-#splash {
-  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #7688d9;
-}
-#ide {
-  background-color: #7688d9;
-}
-#apl_font {
-  color: #7688d9;
-}
-::selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-::-moz-selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-body {
-  font-family: Roboto, sans-serif;
-}
-#demo-keys span {
-  border: solid #333 1px;
-  background-color: grey;
-  color: white;
 }
 #prf_dlg hr {
   border-top: 1px solid #d7d7d3;
@@ -600,6 +545,61 @@ a:hover {
     display: none;
   }
 }
+::-webkit-scrollbar {
+  background-color: white;
+}
+::-webkit-scrollbar-corner {
+  background-color: white;
+}
+::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+  border: 1px solid white;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(118, 136, 217, 0.3);
+  border: 1px solid white;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  border-width: 1px 0;
+}
+::-webkit-scrollbar-thumb:vertical {
+  border-width: 0 1px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(118, 136, 217, 0.6);
+}
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(118, 136, 217, 0.9);
+}
+#splash {
+  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #7688d9;
+}
+#ide {
+  background-color: #7688d9;
+}
+#apl_font {
+  color: #7688d9;
+}
+::selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+::-moz-selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+body {
+  font-family: Roboto, sans-serif;
+}
+#demo-keys span {
+  border: solid #333 1px;
+  background-color: grey;
+  color: white;
+}
 #sb {
   background-color: white;
   border-top: 1px solid #9eabe4;
@@ -618,6 +618,9 @@ a:hover {
 }
 #sb_prf:active {
   background-color: #dde0ec;
+}
+#status_body {
+  background-color: #edeff5;
 }
 #toast-container {
   font-family: Roboto;
@@ -639,14 +642,6 @@ a:hover {
 }
 .tooltip .tooltiptext::after {
   border-color: transparent #dde0ec transparent transparent;
-}
-#vt_bln {
-  border: solid black 1px;
-  background-color: black;
-  color: white;
-}
-#vt_tri {
-  border-color: black;
 }
 .toolbar {
   background-color: white;
@@ -674,6 +669,14 @@ a:hover {
 .tb_sep {
   border: 0 solid #dde0ec;
   border-right-width: 1px;
+}
+#vt_bln {
+  border: solid black 1px;
+  background-color: black;
+  color: white;
+}
+#vt_tri {
+  border-color: black;
 }
 #wse {
   background-color: white;

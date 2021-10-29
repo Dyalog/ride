@@ -413,6 +413,13 @@ D.IDE = function IDE(opts = {}) {
     I.sb.hidden = !x; updTopBtm();
     updMenu();
   });
+  D.prf.statusWindow(0);
+  D.prf.statusWindow((x) => {
+    const sw = D.el.BrowserWindow.fromId(D.stw_bw.id);
+    x ? sw.show() : sw.hide();
+    D.ide && D.ide.focusMRUWin();
+    updMenu();
+  });
   D.prf.menu(updMenu);
   D.prf.keys(updMenu);
   !ide.floating && setTimeout(updMenu, 100);
@@ -810,23 +817,9 @@ D.IDE = function IDE(opts = {}) {
     },
     ReplyTreeList(x) { ide.wse.replyTreeList(x); },
     StatusOutput(x) {
-      let w = ide.wStatus;
       if (!D.el) return;
-      if (!w) {
-        ide.wStatus = new D.el.BrowserWindow({
-          width: 600,
-          height: 400,
-          webPreferences: {
-            contextIsolation: true,
-            nodeIntegration: false,
-          },
-        });
-        w = ide.wStatus;
-        w.setTitle(`Status Output - ${document.title}`);
-        w.loadURL(`file://${__dirname}/status.html`);
-        w.on('closed', () => { delete ide.wStatus; });
-      }
-      w.webContents.executeJavaScript(`add(${JSON.stringify(x)})`);
+      D.ipc.server.emit(D.stw_bw.socket, 'add', x);
+      !D.prf.statusWindow() && D.prf.autoStatus() && D.prf.statusWindow(1);
     },
     ReplyGetLog(x) { ide.wins[0].add(x.result.join('\n')); ide.bannerDone = 0; },
     UnknownCommand(x) {
@@ -874,7 +867,6 @@ D.IDE.prototype = {
     ide.dead = 1;
     ide.connected = 0;
     ide.dom.className += ' disconnected';
-    ide.wStatus && ide.wStatus.close();
     Object.keys(ide.wins).forEach((k) => { ide.wins[k].die(); });
   },
   updPW(x) { this.wins[0] && this.wins[0].updPW(x); },
@@ -946,8 +938,10 @@ D.IDE.prototype = {
     Object.keys(wins).forEach((x) => { wins[x].zoom(z); });
     se && se.restoreScrollPos();
   },
+  ASW: D.prf.autoStatus.toggle,
   LBR: D.prf.lbar.toggle,
   SBR: D.prf.sbar.toggle,
+  SSW: D.prf.statusWindow.toggle,
   FLT: D.prf.floating.toggle,
   WRP: D.prf.wrap.toggle,
   TVB: D.prf.breakPts.toggle,
