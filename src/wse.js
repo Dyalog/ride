@@ -71,7 +71,7 @@
       if (x.tip.length === this.VT_MAX_HEIGHT) {
          x.tip[this.VT_MAX_HEIGHT - 1] = '...';   
       }
-      x.tip = x.tip.map((line) => line.length < this.VT_MAX_WIDTH ? line : line.substring(0, this.VT_MAX_WIDTH - 3) + '...');
+      x.tip = x.tip.map((line) => D.util.esc(line.length < this.VT_MAX_WIDTH ? line : line.substring(0, this.VT_MAX_WIDTH - 3) + '...'));
       valueTipRequest.handler(x);
     }
      
