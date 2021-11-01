@@ -127,7 +127,6 @@
           depth: 0,
           path: '',
           text: '',
-          // value: [''],
           expanded: 1,
         }
       };
@@ -183,11 +182,13 @@
     }
 
     requestValueTip(node) {
-      if (node.id < 2) return;
+      if (node.valueRequested || node.id < 2) return;
       const bt = this;
+      node.valueRequested = 1;
       bt.pendingCalls += 1;
       bt.valueTipCb(node, (x) => {
         node.value = x.tip;
+        delete node.valueRequested;
         bt.pendingCalls -= 1;
         !bt.pendingCalls && bt.replaceTree();
       });
