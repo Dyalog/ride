@@ -50,7 +50,6 @@
         // x.classes uses constants from http://help.dyalog.com/17.0/Content/Language/System%20Functions/nc.htm
         id: c || `leaf_${x.nodeId}_${i}`,
         text: x.names[i],
-        value: [''],
         expandable: !!c,
         icon: `${Math.abs(x.classes[i])}`.replace('.', '_'),
       })));

@@ -11,6 +11,8 @@
       bt.dom = e;
       bt.rebuild();
 
+      bt.dom.onscroll = $.debounce(100, bt.requestValueTips.bind(bt));
+
       const toggleNode = (tgt) => {
         if (bt.newNodes) return;
         const a = tgt;
@@ -27,9 +29,9 @@
               bt.nodes[c.id] = c;
               c.depth = node.depth + 1;
               c.path = node.path ? `${node.path}.${c.text}` : c.text;
-              bt.requestValueTip(c);        
             });
             if (selected) e.getElementsByClassName('selected')[0].focus();
+            bt.replaceTree();
           });
         } else {
           bt.replaceTree();
@@ -49,7 +51,7 @@
       };
 
       let clickTimer = 0;
-      e.onclick = (event) => {
+      bt.dom.onclick = (event) => {
         clearTimeout(clickTimer);
         if (event.target.matches('.bt_node_expand')) { toggleNode(event.target); }
         clickTimer = setTimeout(() => {
@@ -58,7 +60,7 @@
         return !1;
       };
 
-      e.ondblclick = (event) => {
+      bt.dom.ondblclick = (event) => {
         clearTimeout(clickTimer);
         const ps = event.target.previousSibling;
         if (ps && ps.matches('.bt_node_expand')) {
@@ -68,7 +70,7 @@
         return !1;
       };
 
-      e.onkeydown = (event) => {
+      bt.dom.onkeydown = (event) => {
         switch (event.which) {
           case 13:// case 37:case 38:case 39:case 40://Enter,Left,Up,Right,Down
             selectNode(event.target, 1);
@@ -111,10 +113,10 @@
       if (node.expanded) children = node.children.map(x => bt.render(x)).join('');
       if (node.expandable) expandable = `<a class=bt_node_expand>${'+-'[+!!node.expanded]}</a>`;
 
-      return `<tr data-id="${node.id}" title="${node.value.join('\n')}">` +
+      return `<tr data-id="${node.id}" title="${node.value ? node.value.join('\n') : ''}">` +
         `<td style="padding-left:${node.depth}em;">${expandable}<span tabIndex=-1 data-id=${node.id} data-path=${node.path}` +
         ` class="bt_icon_${node.icon} bt_text ${node.selected || selected ? 'selected' : ''}">` +
-        `${node.text}</span></td><td class="value_tip">${node.value[0]}</td></tr>${children}`;
+        `${node.text}</span></td><td class="value_tip">${node.value ? node.value[0]: ''}</td></tr>${children}`;
     }
 
     rebuild() {
@@ -125,7 +127,7 @@
           depth: 0,
           path: '',
           text: '',
-          value: [''],
+          // value: [''],
           expanded: 1,
         }
       };
@@ -138,7 +140,6 @@
       bt.newNodes[node.id] = node;
       node.depth = depth;
       node.path = path ? `${path}.${node.text}` : node.text;
-      bt.requestValueTip(node);
       if (oldNode && oldNode.text === node.text && oldNode.expanded && node.expandable) {
         bt.pendingCalls += 1;
         bt.childrenCb(node.id, (children) => {
@@ -159,7 +160,6 @@
       bt.refreshNode({
         id: 0,
         text: '',
-        value: [''],
         expandable: 1,
         icon: '',
       }, '', 0);
@@ -168,18 +168,19 @@
     replaceTree() {
       const bt = this;
       if (bt.newNodes) {
-      const [sel] = bt.dom.getElementsByClassName('selected');
-      const hasFocus = !!$(bt.dom).find(':focus').length > 0;
-      if (sel) {
-        const n = bt.newNodes[sel.dataset.id];
-        n && (n.selected = 1);
-      }     
-      bt.nodes = bt.newNodes;
-      hasFocus && bt.focus();
-      delete bt.newNodes;
+        const [sel] = bt.dom.getElementsByClassName('selected');
+        const hasFocus = !!$(bt.dom).find(':focus').length > 0;
+        if (sel) {
+          const n = bt.newNodes[sel.dataset.id];
+          n && (n.selected = 1);
+        }     
+        bt.nodes = bt.newNodes;
+        hasFocus && bt.focus();
+        delete bt.newNodes;
+      }
+      bt.dom.innerHTML = `<table><tbody>${bt.nodes[0].children.map(x => bt.render(x)).join('')}</tbody></table>`;
+      bt.requestValueTips();
     }
-    bt.dom.innerHTML = `<table><tbody>${bt.nodes[0].children.map(x => bt.render(x)).join('')}</tbody></table>`;
-  }
 
     requestValueTip(node) {
       if (node.id < 2) return;
@@ -190,6 +191,19 @@
         bt.pendingCalls -= 1;
         !bt.pendingCalls && bt.replaceTree();
       });
+    }
+
+    requestValueTips() {
+      const bt = this;
+      const rect = bt.dom.getBoundingClientRect();
+      const trs = bt.dom.getElementsByTagName('tr');
+      for (const tr of trs) {
+        const trrect = tr.getBoundingClientRect();
+        const node = bt.nodes[tr.dataset.id];
+        if (!node.value && trrect.top > 0 && trrect.bottom < rect.bottom) {
+          bt.requestValueTip(node);
+        };
+      }
     }
   }
   D.Bonsai = Bonsai;
