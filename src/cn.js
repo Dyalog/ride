@@ -583,6 +583,7 @@
                 delete D.tmr;
                 if (code !== 0) {
                   err(`Interpreter ${code != null ? `exited with code ${code}` : `received ${sig}`}`);
+                  D.ide && D.ide.die();
                 }
               });
               child.on('error', (y) => {

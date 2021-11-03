@@ -85,7 +85,7 @@
       + 'par=fg:00f quad=fg:808 qdl=fg:c0c sel=bg:48e,bgo:.5 semi=fg:00f sqbr=fg:00f srch=bg:f80,bgo:.5 str=fg:088 tc=bg:d,bgo:1 '
       + 'tcpe=bg:c8c8c8,bgo:1 trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f vtt=bg:ff0 '
       + 'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:1,fg:080 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff '
-      + 'ma=bg:828282,bgo:1,fg:0ff na=bg:828282,bgo:1,fg:f qor=bg:f00,bgo:1,fg:f dc=bg:e2d3bb,bgo:1',
+      + 'ma=bg:828282,bgo:1,fg:0ff na=bg:828282,bgo:1,fg:f qor=bg:f00,bgo:1,fg:f dc=bg:#993333,bgo:1',
     }, {
       name: 'Francisco Goya',
       theme: 'dark',
@@ -95,17 +95,17 @@
       + 'num=fg:a8b op1=fg:d95 op2=fg:fd6 sel=bg:048,bgo:.5 semi=fg:8 sqbr=fg:8 srch=bg:b96,bgo:.75,fg:0 str=fg:dae '
       + 'tc=bg:1,bgo:1 tcpe=bg:2,bgo:1 zld=fg:d9f,B:1 scmd=fg:0ff ucmd=fg:f80,B:1 vtip=bg:733,fg:ff0,bgo:1,bc:900 vtt=bc:f80 '
       + 'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:1,fg:0f0 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff '
-      + 'ma=bg:828282,bgo:1,fg:0ff na=bg:828282,bgo:1,fg:f qor=bg:f00,bgo:1,fg:f dc=bg:3,bgo:1',
+      + 'ma=bg:828282,bgo:1,fg:0ff na=bg:828282,bgo:1,fg:f qor=bg:f00,bgo:1,fg:f dc=bg:900,bgo:1',
     }, {
       name: 'Albrecht Dürer',
       theme: 'light',
       styles: 'com=I:1 diam=B:1 err=fg:0,bg:1,bgo:.5,B:1,I:1 glb=I:1 kw=B:1 '
       + 'lnum=bg:f,bgo:0 mod=bg:7,bgo:.25 mtch=bg:c,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 quad=fg:8 srch=bg:c,bgo:.5 '
-      + 'str=fg:8 tc=bg:e,bgo:1 tcpe=bg:dadada,bgo:1 zld=fg:8 vtt=bc:aaa dc=bg:e2d3bb,bgo:1',
+      + 'str=fg:8 tc=bg:e,bgo:1 tcpe=bg:dadada,bgo:1 zld=fg:8 vtt=bc:aaa dc=bg:#993333,bgo:1',
     }, {
       name: 'Kazimir Malevich',
       theme: 'light',
-      styles: 'norm=bg:f,bgo:1',
+      styles: 'norm=bg:f,bgo:1, dc=bg:#993333',
     }, {
       name: 'Dracula',
       theme: 'dark',
@@ -115,7 +115,7 @@
       + 'sqbr=fg:#50fa7b srch=bg:#bd93f9,bgo:0.5 str=fg:#f1fa8c tc=bg:#44475a,bgo:1 tcpe=bg:#44475a,bgo:1 zld=fg:#bd93f9 '
       + 'scmd=fg:#ff79c6 ucmd=fg:#ff79c6,B vtt=bg:#44475a,bgo:1 ca=bg:#44475a,bgo:1,fg:#ff5555 cm=bg:#282a36,bgo:1,fg:#50fa7b '
       + 'cv=bg:#44475a,bgo:1,fg:#f1fa8c cvv=bg:#282a36,bgo:1,fg:#8be9fd ma=bg:#44475a,bgo:1,fg:#8be9fd '
-      + 'na=bg:#44475a,bgo:1,fg:#bd93f9 qor=bg:#ff5555,bgo:1,fg:#f8f8f2 dc=bg:#6272a4,bgo:1 lbl=fg:#ff79c6,B glb=fg:#ffb86c '
+      + 'na=bg:#44475a,bgo:1,fg:#bd93f9 qor=bg:#ff5555,bgo:1,fg:#f8f8f2 dc=bg:#7f2a2a,bgo:1 lbl=fg:#ff79c6,B glb=fg:#ffb86c '
       + 'cubr=fg:#f8f8f2 par=fg:#f8f8f2 dfn=fg:#f8f8f2 qdl=fg:#f8f8f2 cur=fg:#f8f8f2,fgo:1 acsl=bg:#bd93f9,bgo:0.25',
     }, {
       name: 'New Moon',
@@ -126,7 +126,7 @@
       + 'sqbr=fg:#6ab0f3 srch=bg:#e1a6f2,bgo:0.25 str=fg:#92d192 tc=bg:#777c85,bgo:0.25 tcpe=bg:#777c85,bgo:0.25 zld=fg:#fca369 '
       + 'scmd=fg:#ffeea6 ucmd=fg:#ffeea6,B vtt=bg:#777c85,bgo:1 ca=bg:#777c85,bgo:0.25,fg:#f2777a cm=bg:#2d2d2d,bgo:1,fg:#92d192 '
       + 'cv=bg:#2d2d2d,bgo:1,fg:#ffeea6 cvv=bg:#2d2d2d,bgo:1,fg:#76d4d6 ma=bg:#777c85,bgo:0.25,fg:#76d4d6 '
-      + 'na=bg:#44475a,bgo:1,fg:#bd93f9 qor=bg:#f2777a,bgo:1,fg:#ffffff dc=bg:#777c85,bgo:1 lbl=fg:#ffd479 glb=fg:#f2777a '
+      + 'na=bg:#44475a,bgo:1,fg:#bd93f9 qor=bg:#f2777a,bgo:1,fg:#ffffff dc=bg:#7a3b3d,bgo:1 lbl=fg:#ffd479 glb=fg:#f2777a '
       + 'dfn=fg:#ffffff qdl=fg:#b3b9c5 cur=fg:#ffffff,fgo:1 acsl=bgo:0.25,bg:#e1a6f2',
     }, {
       name: 'Nord',
@@ -134,7 +134,7 @@
       styles: 'com=fg:#616e88 diam=B,fg:#81a1c1 err=fg:#bf616a,bgo:0.5,U glb=fg:#ebcb8b kw=fg:#81a1c1 lnum=bgo:0,fg:#4c566a '
       + 'mod=bg:#434c5e,bgo:0.25 mtch=bg:#434c5e,bgo:0.5 norm=bg:#2e3440,bgo:1,fg:#eceff4 num=fg:#b48ead quad=fg:#ebcb8b '
       + 'srch=bg:#434c5e,bgo:0.5 str=fg:#a3be8c tc=bg:#434c5e,bgo:1,fg:#eceff4 tcpe=bg:#434c5e,bgo:1,fg:#eceff4 zld=fg:#b48ead '
-      + 'vtt=bg:#434c5e dc=bg:#434c5e,bgo:1 cur=fg:#d8dee9 cubr=fg:#5e81ac asgn=fg:#88c0d0 lbl=fg:#81a1c1,B fn=fg:#81a1c1 '
+      + 'vtt=bg:#434c5e dc=bg:#603136,bgo:1 cur=fg:#d8dee9 cubr=fg:#5e81ac asgn=fg:#88c0d0 lbl=fg:#81a1c1,B fn=fg:#81a1c1 '
       + 'qdl=fg:#d8dee9 var=fg:#d8dee9 sqbr=fg:#81a1c1 semi=fg:#81a1c1 idm=fg:#d08770 sel=bg:#434c5e par=fg:#eceff4 '
       + 'scmd=fg:#81a1c1 ucmd=fg:#81a1c1 vtip=bg:#3b4252,fg:#eceff4,bgo:1 ca=fg:#bf616a,bg:#434c5e,bgo:1 '
       + 'cm=fg:#a3be8c,bg:#2e3440,bgo:1 cv=fg:#ebcb8b,bg:#2e3440 cvv=fg:#88c0d0,bg:#2e3440,bgo:1 ma=fg:#88c0d0,bg:#434c5e,bgo:1 '
