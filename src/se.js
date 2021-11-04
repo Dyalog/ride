@@ -14,6 +14,7 @@
     // inserted lines: lineNumber→0 (also used in syn.js)
     se.dirty = {};
     se.isReadOnly = !1;
+    se.multiLineBlocks = [];
 
     se.dom = document.createElement('div');
     se.dom.className = 'ride_win';
@@ -105,8 +106,17 @@
       e.changes.forEach((c) => {
         const l0 = c.range.startLineNumber;
         const l1 = c.range.endLineNumber;
+        let dl0 = l0;
+        let dl1 = l1;
         const m = (l1 - l0) + 1;
         const text = c.text.split('\n');
+        for (let i = 0; i < se.multiLineBlocks.length; i++) {
+          const element = se.multiLineBlocks[i];
+          if (l0 <= element.end && l1 >= element.start) {
+            dl0 = Math.min(dl0, element.start);
+            dl1 = Math.max(dl1, element.end);
+          }
+        }
         let n = text.length;
         if (m < n) {
           const h = se.dirty;
@@ -116,9 +126,13 @@
           for (let j = n; j < m; j++) text.push(''); // pad shrinking changes with empty lines
           se.edit([{ range: new monaco.Range(l0 + n, 1, l0 + 1, 1), text: '\n'.repeat(m - n) }]);
           n = m;
+        } 
+        if (dl0 < l0 && !se.dirty[dl0]) {
+          se.edit([{ range: new monaco.Range(dl0, 1, dl0, 1), text: ' '}]);
+          se.edit([{ range: new monaco.Range(dl0, 1, dl0, 2), text: ''}]);
         }
-        let l = l0;
-        while (l <= l1) {
+        let l = dl0;
+        while (l <= dl1) {
           const base = se.dirty;
           base[l] == null && (base[l] = se.oModel.getLineContent(l));
           l += 1;
@@ -206,7 +220,7 @@
         })),
       );
     },
-    add(s) { // append text to session
+    add(s, isEcho) { // append text to session
       const se = this;
       const { me } = se;
       const model = me.getModel();
@@ -241,6 +255,9 @@
         se.btm = Math.max(se.dom.clientHeight + me.getScrollTop(), me.getTopForLineNumber(ll));
       }
       se.isReadOnly && me.updateOptions({ readOnly: true });
+      if (se.promptType === 3 && isEcho) {
+        se.lastEchoLine = model.getLineCount();
+      }
       se.oModel.setValue(me.getValue());
       model._commandManager.clear();
     },
@@ -278,6 +295,7 @@
       const line = model.getLineCount();
       const column = model.getLineMaxColumn(line);
       const t = model.getLineContent(line);
+      const wasMultiLine = se.promptType === 3;
       const promptChanged = se.promptType !== x;
       se.promptType = x;
       se.isReadOnly = !x;
@@ -285,6 +303,13 @@
         readOnly: !x,
         quickSuggestions: [2, 4].includes(x) ? false : D.prf.autocompletion() === 'classic',
       });
+      if (!wasMultiLine && x === 3) {
+        se.lineEditBlock = { start: line - 1 };
+      } else if (wasMultiLine && x !== 3) {
+        se.lineEditBlock.end = se.lastEchoLine - 1;
+        se.multiLineBlocks.push(se.lineEditBlock);
+        delete se.lineEditBlock;
+      }
       if (promptChanged) {
         if (x) delete se.cursorPosition;
         else se.cursorPosition = me.getPosition();
@@ -412,9 +437,9 @@
       const { me } = se;
       const model = me.getModel();
       if (!se.promptType) return;
-      const ls = Object.keys(se.dirty)
-        .map(l => +l)
-        .filter(l => !/^\s*$/.test(model.getLineContent(l)));
+      const allLines = Object.keys(se.dirty)
+        .map(l => +l);
+      const ls = allLines.filter(l => !/^\s*$/.test(model.getLineContent(l)));
       if (ls.length) {
         ls.sort((x, y) => x - y);
         const max = model.getLineCount();
@@ -425,7 +450,7 @@
           }
           return model.getLineContent(l) || '';
         }); // strings to execute
-        ls.reverse().forEach((l) => {
+        allLines.reverse().forEach((l) => {
           if (se.dirty[l] === 0) {
             se.edit([{
               range: new monaco.Range(l, 1, l + 1, 1),
