@@ -545,12 +545,14 @@ D.IDE = function IDE(opts = {}) {
       ide.updTitle();
       ide.wse && ide.wse.refresh();
     },
-    EchoInput(x) { ide.wins[0].add(x.input); },
+    EchoInput(x) { ide.wins[0].add(x.input, 1); },
     SetPromptType(x) {
       const t = x.type;
       ide.promptType = t;
-      if (t && ide.pending.length) D.send('Execute', { trace: 0, text: `${ide.pending.shift()}\n` });
-      else eachWin((w) => { w.prompt(t); });
+      if (t && ide.pending.length) {
+        D.send('Execute', { trace: 0, text: `${ide.pending.shift()}\n` });
+        ide.wins[0].prompt(t);
+      } else eachWin((w) => { w.prompt(t); });      
       (t === 2 || t === 4) && ide.wins[0].focus(); // ⎕ / ⍞ input
       if (t === 1) {
          ide.getStats();
