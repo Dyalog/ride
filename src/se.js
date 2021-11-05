@@ -14,6 +14,7 @@
     // inserted lines: lineNumber→0 (also used in syn.js)
     se.dirty = {};
     se.isReadOnly = !1;
+    se.lineEditor = {};
     se.multiLineBlocks = [];
 
     se.dom = document.createElement('div');
@@ -112,7 +113,7 @@
         const text = c.text.split('\n');
         for (let i = 0; i < se.multiLineBlocks.length; i++) {
           const element = se.multiLineBlocks[i];
-          if (l0 <= element.end && l1 >= element.start) {
+          if (l0 <= (element.end || 0) && l1 >= element.start) {
             dl0 = Math.min(dl0, element.start);
             dl1 = Math.max(dl1, element.end);
           }
@@ -128,8 +129,8 @@
           n = m;
         } 
         if (dl0 < l0 && !se.dirty[dl0]) {
-          se.edit([{ range: new monaco.Range(dl0, 1, dl0, 1), text: ' '}]);
-          se.edit([{ range: new monaco.Range(dl0, 1, dl0, 2), text: ''}]);
+          se.edit([{ range: new monaco.Range(dl0, 1, dl0, 1), text: ' '},
+            { range: new monaco.Range(dl0, 1, dl0, 2), text: ''}]);
         }
         let l = dl0;
         while (l <= dl1) {
@@ -238,6 +239,10 @@
         scp = res.column;
         text = res.text;
       }
+      if (se.promptType === 3 && isEcho) {
+        se.lastEchoLine = l;
+        se.lineEditor[l] = true;
+      }
       if (s[s.length - 1] === '\n' && se.promptType === 1) text += ssp;
       se.isReadOnly && me.updateOptions({ readOnly: false });
       if (this.dirty[l] != null) {
@@ -255,9 +260,6 @@
         se.btm = Math.max(se.dom.clientHeight + me.getScrollTop(), me.getTopForLineNumber(ll));
       }
       se.isReadOnly && me.updateOptions({ readOnly: true });
-      if (se.promptType === 3 && isEcho) {
-        se.lastEchoLine = model.getLineCount();
-      }
       se.oModel.setValue(me.getValue());
       model._commandManager.clear();
     },
@@ -304,11 +306,13 @@
         quickSuggestions: [2, 4].includes(x) ? false : D.prf.autocompletion() === 'classic',
       });
       if (!wasMultiLine && x === 3) {
-        se.lineEditBlock = { start: line - 1 };
+        const pl = line - 1;
+        se.lineEditor[pl] = true;
+        se.multiLineBlocks.push({ start: pl });
+        se.edit([{ range: new monaco.Range(pl, 1, pl, 1), text: ' '},
+            { range: new monaco.Range(pl, 1, pl, 2), text: ''}]);
       } else if (wasMultiLine && x !== 3) {
-        se.lineEditBlock.end = se.lastEchoLine - 1;
-        se.multiLineBlocks.push(se.lineEditBlock);
-        delete se.lineEditBlock;
+        se.multiLineBlocks[se.multiLineBlocks.length - 1].end = se.lastEchoLine;
       }
       if (promptChanged) {
         if (x) delete se.cursorPosition;

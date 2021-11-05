@@ -556,7 +556,7 @@
       const eol = line.length;
       const h = lt.endState;
       let m; // m:regex match object
-      if (se.dirty[h.l + 1] == null) {
+      if (!se.lineEditor[h.l + 1] && se.dirty[h.l + 1] == null) {
         offset = eol;
         h.l += 1;
         return lt;
