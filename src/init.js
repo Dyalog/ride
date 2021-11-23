@@ -33,13 +33,8 @@ const Console = console;
         ];
         if (win && !win.session.get()) {
           const { me } = win;
-          if (fx || tc) {
+          if (tc) {
             cmitems.unshift(...[
-              {
-                label: 'Fix',
-                click: () => { win.FX(me); },
-                visible: fx,
-              },
               {
                 label: 'Skip to line',
                 click: () => { win.STL(me); },
