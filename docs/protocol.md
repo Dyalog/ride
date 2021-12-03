@@ -770,7 +770,7 @@ RIDE can request Language bar information specific to the version of the interpr
 ```json
 ["ReplyGetLanguageBar",{  // Interpreter -> RIDE
   "entries":[
-    {"name":"0002:Left Arrow", "avchar":"←", "helptext":["...","...",]}
+    {"name":"Left Arrow", "avchar":"←", "helptext":["...","...",]}
     ]}]
 ```
 
