@@ -595,13 +595,13 @@ D.IDE = function IDE(opts = {}) {
       const { entries } = x;
       D.lb.order = entries.map((k) => k.avchar || ' ').join('');
       entries.forEach((k) => {
-        const nameSep = k.name.split(':',2);
+        const name = k.name;
         if (k.avchar) {
           D.lb.tips[k.avchar] = [
-            `${nameSep[1]} (${k.avchar})`,
+            `${name} (${k.avchar})`,
             k.helptext.join('\n'),
           ];
-          D.sqglDesc[k.avchar] = `${nameSep[1]} (${k.avchar})`;
+          D.sqglDesc[k.avchar] = `${name} (${k.avchar})`;
         }
       });
       ide.lbarRecreate();
