@@ -60,8 +60,8 @@ pipeline {
             label 'Windows'
           }
           steps {
-            powershell 'if (Test-Path -Path ship) { rm -r ship }'
-            powershell 'if (Test-Path -Path _) { rm -r _ }'
+            powershell 'if (Test-Path -Path ship) {remove-item ship -Recurse -Force }'
+            powershell 'if (Test-Path -Path _) { remove-item _  -Recurse -Force }'
             unstash 'ride-win'
             unstash 'ride-version'
             bat './CI/packagescripts/windows/packageWindows.bat'
