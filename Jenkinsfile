@@ -61,13 +61,13 @@ pipeline {
           }
           steps {
             powershell 'if (Test-Path -Path ship) {remove-item ship -Recurse -Force }'
-            powershell 'if (Test-Path -Path _) { remove-item _  -Recurse -Force }'
+            powershell 'if (Test-Path -Path _) { remove-item _ -Recurse -Force }'
             unstash 'ride-win'
             unstash 'ride-version'
             bat './CI/packagescripts/windows/packageWindows.bat'
             stash name: 'win-ship', includes: 'ship/*'
-            powershell 'rm -r ship'
-            powershell 'rm -r _'
+            powershell 'remove-item ship -Recurse -Force'
+            powershell 'remove-item _ -Recurse -Force'
           }
         }
       }
