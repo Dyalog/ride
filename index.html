@@ -270,16 +270,21 @@
 </div>
 <div id=lb_tip hidden><div id=lb_tip_desc></div><hr><div id=lb_tip_body><pre id=lb_tip_text></pre></div></div>
 <div id=sb hidden>
-  <div id=sb_prf><a class=tb_btn href=# title=Preferences><span class="fas fa-cog"></span></a></div>
-  <div id=sb_cp class=right></div>
-  <div id=sb_ml class=right title="Migration Level" hidden>⎕ML: </div>
-  <div id=sb_io class=right title="Index Origin" hidden>⎕IO: </div>
-  <div id=sb_sis class=right title="State Indicator" hidden>⎕SI: </div>
-  <div id=sb_trap class=right title="Trap Event" hidden>⎕TRAP</div>
-  <div id=sb_dq class=right title="Dequeue Events" hidden>⎕DQ: </div>
-  <div id=sb_threads class=right title="Thread Count" hidden>&: </div>
-  <div id=sb_cc class=right title="Compaction Count" hidden>CC: </div>
-  <div id=sb_gc class=right title="Garbage collections" hidden>GC: </div>
+  <div id=left_group>
+    <div id=sb_prf><a class=tb_btn href=# title=Preferences><span class="fas fa-cog"></span></a></div>
+    <div id=sb_busy title="Busy" hidden><span class="fas fa-clock"></span></div>
+  </div>
+  <div id=right_group>
+    <div id=sb_cp ></div>
+    <div id=sb_gc title="Garbage collections" hidden>GC: </div>
+    <div id=sb_cc title="Compaction Count" hidden>CC: </div>
+    <div id=sb_threads title="Thread Count" hidden>&: </div>
+    <div id=sb_dq title="Dequeue Events" hidden>⎕DQ: </div>
+    <div id=sb_trap title="Trap Event" hidden>⎕TRAP</div>
+    <div id=sb_sis title="State Indicator" hidden>⎕SI: </div>
+    <div id=sb_io title="Index Origin" hidden>⎕IO: </div>
+    <div id=sb_ml title="Migration Level" hidden>⎕ML: </div>
+  </div>
 </div>
 <div id=ed_tmpl class="ride_win edit_trace" style=display:none>
   <div class=toolbar>
