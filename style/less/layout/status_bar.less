@@ -3,21 +3,28 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
+	display: flex;
+	justify-content: space-between;
 	div {
 		display: inline-block;
 		padding: 3px 6px 4px;
 		user-select: none;
 		cursor: default;
-	  &.right {
-			float: right;
-		}
 		&[hidden] {
 			display: none;
 		}
     .tb_btn {
-      padding:0;
+			padding:0;
     }
   }
+	#left_group {
+		display: flex;
+		border-right: none;	
+	}
+	#right_group {
+	 display: block;
+	 border-right: none;
+	}
   #sb_cp {
     min-width: 15em;
   }
