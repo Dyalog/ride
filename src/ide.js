@@ -41,6 +41,7 @@ D.IDE = function IDE(opts = {}) {
     ide.switchWin = (x) => { ide.ipc.emit('switchWin', x); };
   } else {
     D.prf.title(ide.updTitle.bind(ide));
+    I.sb_busy.hidden = true;
     I.sb_ml.hidden = !1;
     I.sb_io.hidden = !1;
     I.sb_trap.hidden = !1;
@@ -549,6 +550,7 @@ D.IDE = function IDE(opts = {}) {
     SetPromptType(x) {
       const t = x.type;
       ide.promptType = t;
+      I.sb_busy.hidden = t > 0;
       if (t && ide.pending.length) {
         D.send('Execute', { trace: 0, text: `${ide.pending.shift()}\n` });
         ide.wins[0].prompt(t);
