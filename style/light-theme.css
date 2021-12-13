@@ -72,6 +72,30 @@
   font-size: 16px;
   font-family: monospace;
 }
+.ctl_listview {
+  background-color: white;
+  color: black;
+}
+.ctl_listview tr {
+  background-color: rgba(118, 136, 217, 0.5);
+  border-bottom: 1px solid white;
+}
+.ctl_listview tr:hover {
+  background-color: rgba(118, 136, 217, 0.25);
+}
+.ctl_listview tr.selected {
+  background-color: #9eabe4;
+}
+#debug {
+  background: white;
+}
+#debug .ctl_listview_header {
+  background-color: #7688d9;
+  color: white;
+}
+#debug .ctl_listview_header h2 {
+  font-size: 16px;
+}
 /*various dialogs*/
 #dlg_modal_overlay {
   background-color: black;
@@ -121,30 +145,6 @@
   font-weight: normal;
   text-align: left;
   border: 1px solid transparent;
-}
-.ctl_listview {
-  background-color: white;
-  color: black;
-}
-.ctl_listview tr {
-  background-color: rgba(118, 136, 217, 0.5);
-  border-bottom: 1px solid white;
-}
-.ctl_listview tr:hover {
-  background-color: rgba(118, 136, 217, 0.25);
-}
-.ctl_listview tr.selected {
-  background-color: #9eabe4;
-}
-#debug {
-  background: white;
-}
-#debug .ctl_listview_header {
-  background-color: #7688d9;
-  color: white;
-}
-#debug .ctl_listview_header h2 {
-  font-size: 16px;
 }
 /*Golden Layout*/
 .lm_goldenlayout {
@@ -355,13 +355,6 @@ select {
 .menu .m-box a:focus.m-checked {
   background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
 }
-.breakpoint {
-  background: no-repeat transparent center center url(img/breakpoint.png);
-}
-.highlighted {
-  border: none;
-  outline: solid red 1px;
-}
 #prf_dlg hr {
   border-top: 1px solid #d7d7d3;
   border-bottom: 1px solid white;
@@ -545,6 +538,13 @@ a:hover {
     display: none;
   }
 }
+.breakpoint {
+  background: no-repeat transparent center center url(img/breakpoint.png);
+}
+.highlighted {
+  border: none;
+  outline: solid red 1px;
+}
 ::-webkit-scrollbar {
   background-color: white;
 }
@@ -606,15 +606,14 @@ body {
   color: #4c4a4a;
   font-family: apl, monospace;
 }
-#sb div {
-  border-right: 1px solid #dde0ec;
-}
-#sb div.right {
-  border-right: none;
-  border-left: 1px solid #dde0ec;
-}
 #sb div.active {
   color: #7688d9;
+}
+#sb_left > div {
+  border-right: 1px solid #dde0ec;
+}
+#sb_right > div {
+  border-left: 1px solid #dde0ec;
 }
 #sb_prf:active {
   background-color: #dde0ec;

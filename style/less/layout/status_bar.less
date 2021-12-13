@@ -5,6 +5,12 @@
 	bottom: 0;
 	display: flex;
 	justify-content: space-between;
+	&[hidden] {
+		display: none;
+	}
+}
+#sb_left, #sb_right {
+	display: flex;
 	div {
 		display: inline-block;
 		padding: 3px 6px 4px;
@@ -13,22 +19,14 @@
 		&[hidden] {
 			display: none;
 		}
-    .tb_btn {
+    	.tb_btn {
 			padding:0;
-    }
-  }
-	#left_group {
-		display: flex;
-		border-right: none;	
+		}
 	}
-	#right_group {
-	 display: block;
-	 border-right: none;
-	}
-  #sb_cp {
-    min-width: 15em;
-  }
-  #sb_prf {
-    padding: 2px 6px 3px;
-  }
+}
+#sb_cp {
+	min-width: 15em;
+}
+#sb_prf, #sb_busy {
+	padding: 2px 6px 3px;
 }
