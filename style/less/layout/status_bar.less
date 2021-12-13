@@ -3,25 +3,30 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
+	display: flex;
+	justify-content: space-between;
+	&[hidden] {
+		display: none;
+	}
+}
+#sb_left, #sb_right {
+	display: flex;
 	div {
 		display: inline-block;
 		padding: 3px 6px 4px;
 		user-select: none;
 		cursor: default;
-	  &.right {
-			float: right;
-		}
 		&[hidden] {
 			display: none;
 		}
-    .tb_btn {
-      padding:0;
-    }
-  }
-  #sb_cp {
-    min-width: 15em;
-  }
-  #sb_prf {
-    padding: 2px 6px 3px;
-  }
+    	.tb_btn {
+			padding:0;
+		}
+	}
+}
+#sb_cp {
+	min-width: 15em;
+}
+#sb_prf, #sb_busy {
+	padding: 2px 6px 3px;
 }
