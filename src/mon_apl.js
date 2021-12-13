@@ -993,6 +993,7 @@
     },
   };
   D.Tokenizer = aplTokens;
+  const acProviders = [];
   D.mop.then(() => {
     const ml = monaco.languages;
     ml.register({
@@ -1000,24 +1001,31 @@
       extensions: ['.apl', '.apla', '.aplc', '.aplf', '.apli', '.apln', '.aplo',
         '.mipage', '.dyapp', 'dyalog'],
     });
+
     ml.setTokensProvider('apl', aplTokens);
     ml.setLanguageConfiguration('apl', aplConfig());
-    ml.registerCompletionItemProvider('apl', aplCompletions(D.prf.prefixKey()));
-    D.prf.prefixKey(x => ml.registerCompletionItemProvider('apl', aplCompletions(x)));
     ml.registerHoverProvider('apl', aplHover);
     ml.registerFoldingRangeProvider('apl', aplFold);
     ml.registerDocumentFormattingEditProvider('apl', aplFormat);
     ml.registerDocumentRangeFormattingEditProvider('apl', aplFormat);
     ml.registerOnTypeFormattingEditProvider('apl', aplFormat);
-
+    
     ml.register({ id: 'apl-session' });
     ml.setTokensProvider('apl-session', aplSessionTokens);
     ml.setLanguageConfiguration('apl-session', aplSessionConfig);
-    ml.registerCompletionItemProvider('apl-session', aplCompletions(D.prf.prefixKey()));
-    D.prf.prefixKey(x => ml.registerCompletionItemProvider('apl-session', aplCompletions(x)));
     ml.registerHoverProvider('apl-session', aplHover);
     ml.registerDocumentFormattingEditProvider('apl-session', aplFormat);
     ml.registerDocumentRangeFormattingEditProvider('apl-session', aplFormat);
     ml.registerOnTypeFormattingEditProvider('apl-session', aplFormat);
+    
+    const ac = aplCompletions(D.prf.prefixKey());
+    acProviders.push(ml.registerCompletionItemProvider('apl', ac));
+    acProviders.push(ml.registerCompletionItemProvider('apl-session', ac));
+    D.prf.prefixKey((x) => {
+      while (p = acProviders.pop()) p.dispose();
+      const ac = aplCompletions(x);
+      acProviders.push(ml.registerCompletionItemProvider('apl', ac));
+      acProviders.push(ml.registerCompletionItemProvider('apl-session', ac));
+    });
   });
 }
