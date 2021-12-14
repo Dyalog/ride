@@ -94,6 +94,7 @@
       const t = e.target;
       const mt = monaco.editor.MouseTargetType;
       const p = t.position;
+      const inEmptySpace = t.type === mt.CONTENT_EMPTY;
       if (e.event.middleButton) {
         e.event.preventDefault();
         e.event.stopPropagation();
@@ -104,10 +105,10 @@
         ed.setStop();
         ed.tc && D.send('SetLineAttributes', { win: ed.id, stop: ed.getStops() });
       } else if (t.type === mt.CONTENT_TEXT
-        || (ed.isReadOnly && t.type === mt.CONTENT_EMPTY)) {
+        || (ed.tc && inEmptySpace)) {
         if (e.event.timestamp - mouseTS < 400 && mouseL === p.lineNumber && mouseC === p.column) {
-          if (D.prf.doubleClickToEdit() && D.ide.cword(me, p)) {
-            ed.ED(me);
+          if ((ed.tc && inEmptySpace) || (D.prf.doubleClickToEdit() && D.ide.cword(me, p))) {
+            ed.ED(me, inEmptySpace);
             me.setPosition(p);
           }
         }
@@ -456,12 +457,12 @@
         });
       }
     },
-    ED(me) {
+    ED(me, inEmptySpace) {
       this.addJump();
       const c = me.getPosition();
       const model = me.getModel();
       const text = model.getLineContent(c.lineNumber);
-      const pos = D.util.ucLength(text.slice(0, c.column - 1));
+      const pos = inEmptySpace ? text.length + 1 : D.util.ucLength(text.slice(0, c.column - 1));
       D.ide.Edit({ win: this.id, pos, text });
     },
     QT() { D.send('CloseWindow', { win: this.id }); },
