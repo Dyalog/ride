@@ -106,8 +106,7 @@
       } else if (t.type === mt.CONTENT_TEXT
         || (ed.isReadOnly && t.type === mt.CONTENT_EMPTY)) {
         if (e.event.timestamp - mouseTS < 400 && mouseL === p.lineNumber && mouseC === p.column) {
-          e.event.preventDefault(); e.event.stopPropagation();
-          if (D.prf.doubleClickToEdit()) {
+          if (D.prf.doubleClickToEdit() && D.ide.cword(me, p)) {
             ed.ED(me);
             me.setPosition(p);
           }
@@ -361,15 +360,6 @@
     die() { this.setRO(1); this.ide.connected = 0; },
     getDocument() { return this.dom.ownerDocument; },
     refresh() { },
-    cword() { // apl identifier under cursor
-      const { me } = this;
-      const p = me.getPosition();
-      const c = p.column - 1;
-      const s = me.getModel().getLineContent(p.lineNumber);
-      const [loc] = RegExp(`⎕?${D.syntax.name}?$`).exec(s.slice(0, c)); // match left of cursor
-      const [roc] = RegExp(`^⎕?[${D.syntax.letter}\\d]*`).exec(s.slice(c)); // match right of cursor
-      return RegExp(`^(${D.syntax.sysvar}|${D.syntax.name})?\\b`, 'i').exec(loc + roc)[0];
-    },
     autoCloseBrackets(x) { this.me.updateOptions({ autoClosingBrackets: x }); },
     indent(x) { this.me.updateOptions({ autoIndent: x >= 0 }); },
     fold(x) { this.me.updateOptions({ folding: this.isCode && !!x }); },
@@ -497,7 +487,7 @@
       D.send('SaveChanges', { win: ed.id, text: v.split(me.getModel().getEOL()), stop });
     },
     TL(me) { // toggle localisation
-      const name = this.cword();
+      const name = D.ide.cword(me);
       const model = me.getModel();
       const getState = (l) => model._tokenization._tokenizationStateStore._beginState[l];
       if (!name) return;
@@ -610,7 +600,7 @@
     VAL(me) {
       const a = me.getSelections();
       if (a.length !== 1 || monaco.Selection.spansMultipleLines(a[0])) return;
-      const s = a[0].isEmpty() ? this.cword() : me.getModel().getValueInRange(a[0]);
+      const s = a[0].isEmpty() ? D.ide.cword(me) : me.getModel().getValueInRange(a[0]);
       this.ide.exec([`      ${s}`], 0);
     },
     addJump() {

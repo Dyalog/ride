@@ -92,9 +92,7 @@
         const l = p.lineNumber;
         const c = p.column;
         if (e.event.timestamp - mouseTS < 400 && mouseL === l && mouseC === c) {
-          e.event.preventDefault();
-          e.event.stopPropagation();
-          if (D.prf.doubleClickToEdit()) {
+          if (D.prf.doubleClickToEdit() && D.ide.cword(me, p)) {
             se.ED(me);
             me.setPosition(p);
           }
