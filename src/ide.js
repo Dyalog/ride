@@ -864,6 +864,14 @@ D.IDE.prototype = {
   setCursorPosition(p, lc) {
     I.sb_cp.innerText = `Pos: ${p.lineNumber - 1}/${lc},${p.column - 1}`;
   },
+  cword(me, position) { // apl identifier under cursor
+    const p = position || me.getPosition();
+    const c = p.column - 1;
+    const s = me.getModel().getLineContent(p.lineNumber);
+    const [loc] = RegExp(`⎕?${D.syntax.name}?$`).exec(s.slice(0, c)); // match left of cursor
+    const [roc] = RegExp(`^⎕?[${D.syntax.letter}\\d]*`).exec(s.slice(c)); // match right of cursor
+    return (RegExp(`^(${D.syntax.sysvar}|${D.syntax.name})?\\b`, 'i').exec(loc + roc) || [''])[0];
+  },
   die() { // don't really, just pretend
     const ide = this;
     if (ide.dead) return;
