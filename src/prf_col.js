@@ -111,7 +111,7 @@
       theme: 'dark',
       styles: 'asgn=fg:#50fa7b com=fg:#6272a4 diam=fg:#ff79c6 err=fg:#ff5555,bgo:1,U fn=fg:#8be9fd idm=U kw=fg:#ff79c6 '
       + 'lnum=bgo:0,fg:6272a4 mod=bgo:0.5,bg:#44475a mtch=bgo:0.5,fg:#f8f8f2,bg:#44475a norm=bg:#282a36,bgo:1,fg:f8f8f2 '
-      + 'num=fg:#bd93f9 op1=fg:#50fa7b,fgo:1 op2=fg:#f1fa8c quad=fg:#ffb86c sel=bg:#6bb2ff,bgo:0.5 semi=fg:#50fa7b '
+      + 'num=fg:#bd93f9 op1=fg:#50fa7b,fgo:1 op2=fg:#f1fa8c quad=fg:#ffb86c sel=bg:#6bb2ff,bgo:0.25 semi=fg:#50fa7b '
       + 'sqbr=fg:#50fa7b srch=bg:#bd93f9,bgo:0.5 str=fg:#f1fa8c tc=bg:#44475a,bgo:1 tcpe=bg:#44475a,bgo:1 zld=fg:#bd93f9 '
       + 'scmd=fg:#ff79c6 ucmd=fg:#ff79c6,B vtt=bg:#44475a,bgo:1 ca=bg:#44475a,bgo:1,fg:#ff5555 cm=bg:#282a36,bgo:1,fg:#50fa7b '
       + 'cv=bg:#44475a,bgo:1,fg:#f1fa8c cvv=bg:#282a36,bgo:1,fg:#8be9fd ma=bg:#44475a,bgo:1,fg:#8be9fd '
