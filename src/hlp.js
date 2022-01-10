@@ -61,7 +61,7 @@
       819: 'Case Convert',
       900: 'Called Monadically',
       950: 'Loaded Libraries',
-      1111: 'Number of Threads',
+      1111: 'Number Of Threads',
       1112: 'Parallel Execution Threshold',
       1159: 'Update Function Timestamp',
       1500: 'Hash Array',
@@ -81,8 +81,8 @@
       2101: 'Close .NET AppDomain', // W
       2400: 'Set Workspace Save Options',
       2401: 'Expose Root Properties',
-      2501: 'Discard thread on exit', // W
-      2502: 'Discard parked threads', // W
+      2501: 'Discard Thread on Exit', // W
+      2502: 'Discard Parked Threads', // W
       2503: 'Mark Thread as Uninterruptible',
       2520: 'Use Separate Thread For .NET',
       2704: 'Continue Autosave',
