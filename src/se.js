@@ -359,6 +359,7 @@
       this.updPW();
       if (se.hadErrTmr) {
         me.revealLine(ll);
+        this.btm = null;
       } else if (onbottom) {
         me.setScrollTop(0);
         this.btm = null;
