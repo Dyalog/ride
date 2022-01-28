@@ -356,7 +356,7 @@
     },
     prompt(x) {
       this.setRO(this.tc || !x);
-      this.tc && this.setPendent(!x);
+      this.setPendent(!x);
     },
     die() { this.setRO(1); this.ide.connected = 0; },
     getDocument() { return this.dom.ownerDocument; },
