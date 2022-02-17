@@ -55,6 +55,7 @@
       q.bc.checked = !!p.blockCursor();
       q.cb.value = p.cursorBlinking();
       q.coq.checked = !!p.connectOnQuit();
+      q.fit.checked = !!p.filenameInTitle();
       q.rlh.value = p.renderLineHighlight();
       q.apw.checked = !!p.autoPW();
       q.ph.checked = !!p.persistentHistory();
@@ -89,6 +90,7 @@
       p.autoPW             (q.apw.checked);
       p.autocompletionDelay(q.acd.value);
       p.connectOnQuit      (q.coq.checked);
+      p.filenameInTitle    (q.fit.checked);
       p.renderLineHighlight(q.rlh.value);
       p.persistentHistory  (q.ph.checked);
       p.persistentHistorySize(q.phs.value);
