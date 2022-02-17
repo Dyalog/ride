@@ -261,7 +261,7 @@
       ed.name = ee.name;
       // Check if a filename for a source file is provided.
       // Make sure it isn't duplicated in the existing name.
-      if (ee.filename && (ed.name.indexOf(ee.filename) === -1)) {
+      if (ee.filename && (ed.name.indexOf(ee.filename) === -1) && D.prf.filenameInTitle()) {
         ed.name = ed.name.concat(' in ', ee.filename);
       }
       if (ed.container) {
