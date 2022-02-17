@@ -264,7 +264,10 @@
       if (ee.filename && (ed.name.indexOf(ee.filename) === -1)) {
         ed.name = ed.name.concat(' in ', ee.filename);
       }
-      ed.container && ed.container.setTitle(ed.name);
+      if (ed.container) {
+        ed.container.setTitle(ed.name);
+        ed.container.tab.header.parent.trigger('resize');
+      }
       D.ide.floating && $('title', ed.dom.ownerDocument).text(`${ed.name} - ${ed.ide.caption}`);
       model.winid = ed.id;
       model.setValue(ed.oText = ee.text.join(model.getEOL()));
