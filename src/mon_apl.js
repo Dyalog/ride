@@ -875,10 +875,10 @@
       const m = model;
       const p = position;
       const s = m.getLineContent(p.lineNumber);
-      const c = s[p.column - 2] || ' ';
+      const c = s[p.column - 1] || ' ';
       const lbt = D.lb.tips[c];
       if (D.prf.squiggleTips() && lbt
-        && !'⍺⍵'.includes(c) && !(c === '⎕' && /[áa-z]/i.test(s[p.column - 1] || ''))) {
+        && !'⍺⍵'.includes(c) && !(c === '⎕' && /[áa-z]/i.test(s[p.column] || ''))) {
         return {
           range: new monaco.Range(p.lineNumber, p.column - 1, p.lineNumber, p.column),
           contents: [
