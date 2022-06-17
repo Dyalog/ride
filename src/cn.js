@@ -688,7 +688,7 @@
           pass: q.ssh_pass.value,
           key: q.ssh_key.value,
         },
-        'PATH=/ setopt NO_NOMATCH 2>/dev/null ; /bin/ls -1 /opt/mdyalog/*/*/*/mapl /opt/mdyalog/*/*/*/*/mapl /Applications/Dyalog-*/Contents/Resources/Dyalog/mapl 2>/dev/null',
+        'PATH=/ unsetopt NOMATCH 2>/dev/null ; /bin/ls -1 /opt/mdyalog/*/*/*/mapl /opt/mdyalog/*/*/*/*/mapl /Applications/Dyalog-*/Contents/Resources/Dyalog/mapl 2>/dev/null',
         (e, sm) => {
           if (e) throw e;
           let s = '';
