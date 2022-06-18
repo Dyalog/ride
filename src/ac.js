@@ -175,6 +175,12 @@
         }
         if (!x.options.length || (D.prf.autocompletion() === 'shell' && !manual)) {
           me.trigger('editor', 'hideSuggestWidget');
+          if (manual) {
+            me.tabComplete = 0;
+            let i = D.prf.indent();
+            i = i > 0 ? i : 4;
+            me.trigger('editor', 'type', { text: ' '.repeat(i - ((c - 1) % i)) });
+          }
           return;
         }
         const suggestions = x.options.map(i => ({

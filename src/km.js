@@ -377,7 +377,7 @@
     me.addCommand(
       kc.Tab,
       () => ed.indentOrComplete(me),
-      '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode',
+      '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode && !editorTabMovesFocus',
     );
     me.addCommand(
       kc.RightArrow,

@@ -600,16 +600,13 @@
       const ci = c.column - 1;
       const s = me.getModel().getLineContent(c.lineNumber);
       const ch = s[ci - 1];
-      if (sels.length !== 1 || !sels[0].isEmpty()
-        || this.promptType === 4 || /^ *$/.test(s.slice(0, ci))) {
-        me.trigger('editor', 'editor.action.indentLines'); return;
-      }
-      if (!ch || ch === ' ') {
-        const i = D.prf.indent();
+      if (sels.length === 1 && sels[0].startLineNumber !== sels[0].endLineNumber) {
+        me.trigger('editor', 'editor.action.indentLines');
+      } else if (D.prf.autocompletion() === 'off' || this.promptType === 4) {
+        let i = D.prf.indent();
+        i = i > 0 ? i : 4;
         me.trigger('editor', 'type', { text: ' '.repeat(i - (ci % i)) });
-        return;
-      }
-      if (D.prf.autocompletion() !== 'off') {
+      } else {
         me.tabComplete += 1;
         me.trigger('editor', 'editor.action.triggerSuggest');
       }
