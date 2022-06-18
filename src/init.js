@@ -121,7 +121,6 @@ const Console = console;
             nodeIntegration: true,
           },
         });
-        console.log('prf', bw.webContents);
         D.elm.enable(bw.webContents);
         bw.loadURL(`file://${__dirname}/dialog.html?appid=${appid}`);
         D.dlg_bw = { id: bw.id };
