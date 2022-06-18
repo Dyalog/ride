@@ -740,6 +740,7 @@ D.IDE = function IDE(opts = {}) {
           });
           w = ide.w3500;
         }
+        D.elm.enable(w.webContents);
         w.loadURL(`file://${__dirname}/empty.html`);
         w.webContents.executeJavaScript(`document.body.innerHTML=${JSON.stringify(x.html)}`);
         w.setTitle(x.title || '3500 I-beam');

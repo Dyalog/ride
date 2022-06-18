@@ -126,6 +126,7 @@
     };
     opts = Object.assign(opts, WindowRect(seq, D.prf.editWins()));
     const bw = new D.el.BrowserWindow(opts);
+    D.elm.enable(bw.webContents);
     bw.loadURL(`${window.location}?type=editor&winId=${bw.id}&appid=${D.ipc.config.appspace}`);
   };
 

@@ -3,9 +3,10 @@ const rq = require;
 const fs = rq('fs');
 const ps = process;
 const el = rq('electron');
-require('@electron/remote/main').initialize();
+const elm = rq('@electron/remote/main');
 const D = {};
 
+elm.initialize();
 // Detect platform: https://nodejs.org/api/process.html#process_process_platform
 // https://stackoverflow.com/questions/19877924/what-is-the-list-of-possible-values-for-navigator-platform-as-of-today
 D.win = /^win/i.test(ps.platform);
@@ -84,7 +85,7 @@ el.app.on('ready', () => {
       nodeIntegration: true,
     },
   });
-
+  elm.enable(global.elw.webContents);
   el.Menu.setApplicationMenu(null);
 
   let w = global.elw;

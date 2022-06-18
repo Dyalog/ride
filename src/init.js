@@ -100,6 +100,7 @@ const Console = console;
             nodeIntegration: true,
           },
         });
+        D.elm.enable(bw.webContents);
         bw.loadURL(`${loc}?type=prf&appid=${appid}`);
         D.prf_bw = { id: bw.id };
         bw = new D.el.BrowserWindow({
@@ -120,6 +121,8 @@ const Console = console;
             nodeIntegration: true,
           },
         });
+        console.log('prf', bw.webContents);
+        D.elm.enable(bw.webContents);
         bw.loadURL(`file://${__dirname}/dialog.html?appid=${appid}`);
         D.dlg_bw = { id: bw.id };
         bw = new D.el.BrowserWindow({
@@ -140,6 +143,7 @@ const Console = console;
             nodeIntegration: true,
           },
         });
+        D.elm.enable(bw.webContents);
         bw.loadURL(`file://${__dirname}/status.html?appid=${appid}`);
         D.stw_bw = { id: bw.id };
         D.elw.focus();
