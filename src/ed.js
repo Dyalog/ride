@@ -625,21 +625,16 @@
     DO(me) { me.trigger('editor', 'editor.action.removeCommentLine'); },
     indentOrComplete(me) {
       const sels = me.getSelections();
-
-      if (sels.length !== 1 || !sels[0].isEmpty()) {
-        me.trigger('editor', 'editor.action.indentLines'); return;
-      }
+      
       const c = me.getPosition();
       const ci = c.column - 1;
-      const s = me.getModel().getLineContent(c.lineNumber);
-      const ch = s[ci - 1];
-      if (!ch || ch === ' ') {
+      if (sels.length === 1 && sels[0].startLineNumber !== sels[0].endLineNumber) {
+        me.trigger('editor', 'editor.action.indentLines');
+      } else if (D.prf.autocompletion() === 'off') {
         let i = D.prf.indent();
         i = i > 0 ? i : 4;
         me.trigger('editor', 'type', { text: ' '.repeat(i - (ci % i)) });
-        return;
-      }
-      if (D.prf.autocompletion() !== 'off') {
+      } else {
         me.tabComplete += 1;
         me.trigger('editor', 'editor.action.triggerSuggest');
       }
