@@ -557,9 +557,13 @@
       });
       me.executeEdits('D', edits, o);
     },
-    ER() {
-      D.send('RunCurrentLine', { win: this.id });
-      D.ide.getStats();
+    ER(me) {
+      if (this.tc) {
+        D.send('RunCurrentLine', { win: this.id });
+        D.ide.getStats();
+      } else {
+        me.trigger('editor', 'type', { text: '\n' });
+      }
     },
     BH() { D.send('ContinueTrace', { win: this.id }); },
     RM() { D.send('Continue', { win: this.id }); },
