@@ -224,6 +224,7 @@
           nodeIntegration: false,
         },
       });
+      D.elm.enable(w.webContents);
       const cn = nodeRequire(`${__dirname}/src/cn`);
       D.logw = w;
       w.setTitle(`Protocol Log - ${D.ide.caption}`);
