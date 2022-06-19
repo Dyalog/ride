@@ -29,6 +29,10 @@
         q.aim.disabled = x;
         q.icom.disabled = x;
       };
+      q.mme.onchange = () => {
+        q.mmrc.disabled = !q.mme.checked;
+        q.mmss.disabled = !q.mme.checked;
+      };
       q.ph.onchange = () => {
         q.phs.disabled = !q.ph.checked;
         q.ph.checked && q.phs.select();
@@ -69,6 +73,7 @@
       q.ai.onchange();
       q.ac.onchange();
       q.ilf.onchange();
+      q.mme.onchange();
       q.dce.checked = !!p.doubleClickToEdit();
     },
     activate() { q.ai.focus(); },
