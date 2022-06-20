@@ -3,10 +3,6 @@ label{
     font-family: Roboto;
     font-size:14px;
     font-weight: 600;
-    &.cb_label{
-      // color:@INPUT_COL;
-      cursor: pointer;
-    }
 }
 button{
   background:@BUTTON_BG_COL;
@@ -16,37 +12,40 @@ button{
   background-image: -moz-linear-gradient( 90deg, @THEME_PRIMARY 0%, @THEME_HIGHLIGHT 100%);
   background-image: -webkit-linear-gradient( 90deg, @THEME_PRIMARY 0%, @THEME_HIGHLIGHT 100%);
   background-image: -ms-linear-gradient( 90deg, @THEME_PRIMARY 0%, @THEME_HIGHLIGHT 100%);
-
-  // box-shadow: 0px 2px 2px 0px rgba(19, 19, 19, 0.2);
 }
-
+input+label{
+  cursor: pointer;
+  vertical-align: text-top;
+}
+input:disabled+label{
+  cursor: default;
+  color: @INPUT_OFF;
+}
 [type=checkbox]{
+    cursor: pointer;
     background-color: @CHECKBOX_BG;
     border: 1px solid @THEME_PRIMARY;
     &:checked{
       background-color: @CHECKBOX_COL;
     }
-    &:hover::before{
-      background:lighten(@THEME_WIN_BG,10%)
+    &:hover{
+      background:lighten(@CHECKBOX_COL,10%)
     }
-    &:active::before{
+    &:active{
       background:@CHECKBOX_COL;
       color:lighten(@THEME_WIN_BG,10%)
     }
-    &:checked::before{
+    &:checked{
       color:@CHECKBOX_COL
     }
-    &:checked:after{
+    &:checked::after{
       color:@CHECKBOX_BG;
     }
-    &:disabled::before{
-      color:transparent;
-      box-shadow:0 0 0 1px @CHECKBOX_COL inset;
-      background:lighten(@THEME_WIN_BG,10%)
-    }
-    &:checked:disabled::before{
-      color:grayscale(@CHECKBOX_COL);
-      background:grayscale(@CHECKBOX_BG)
+    &:disabled, &:disabled:checked{
+      cursor: default;
+      color: @INPUT_OFF;
+      background: @INPUT_OFF;
+      border-color: @INPUT_OFF;
     }
 }
 select{

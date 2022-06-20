@@ -232,60 +232,6 @@
   background-color: black;
   border: 1px dashed #7688d9;
 }
-label {
-  color: #4c4a4a;
-  font-family: Roboto;
-  font-size: 14px;
-  font-weight: 600;
-}
-label.cb_label {
-  cursor: pointer;
-}
-button {
-  background: #7688d9;
-  color: white;
-  border-radius: 4px;
-  background-image: -moz-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
-  background-image: -webkit-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
-  background-image: -ms-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
-}
-button:hover {
-  color: #4c4a4a;
-}
-[type=checkbox] {
-  background-color: #edeff5;
-  border: 1px solid #7688d9;
-}
-[type=checkbox]:checked {
-  background-color: #7688d9;
-}
-[type=checkbox]:hover::before {
-  background: #9eabe4;
-}
-[type=checkbox]:active::before {
-  background: #7688d9;
-  color: #9eabe4;
-}
-[type=checkbox]:checked::before {
-  color: #7688d9;
-}
-[type=checkbox]:checked:after {
-  color: #edeff5;
-}
-[type=checkbox]:disabled::before {
-  color: transparent;
-  box-shadow: 0 0 0 1px #7688d9 inset;
-  background: #9eabe4;
-}
-[type=checkbox]:checked:disabled::before {
-  color: grayscale(#7688d9);
-  background: grayscale(#edeff5);
-}
-select {
-  background-color: #dde0ec;
-  border: 1px solid rgba(169, 169, 169, 0.3);
-  color: #4e65ce;
-}
 #lb {
   background-color: #edeff5;
   border-bottom: 1px #9eabe4 solid;
@@ -355,6 +301,64 @@ select {
 .menu .m-box a:focus.m-checked {
   background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
 }
+label {
+  color: #4c4a4a;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 600;
+}
+button {
+  background: #7688d9;
+  color: white;
+  border-radius: 4px;
+  background-image: -moz-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
+  background-image: -webkit-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
+  background-image: -ms-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
+}
+button:hover {
+  color: #4c4a4a;
+}
+input + label {
+  cursor: pointer;
+  vertical-align: text-top;
+}
+input:disabled + label {
+  cursor: default;
+  color: #a4a2a2;
+}
+[type=checkbox] {
+  cursor: pointer;
+  background-color: #edeff5;
+  border: 1px solid #7688d9;
+}
+[type=checkbox]:checked {
+  background-color: #7688d9;
+}
+[type=checkbox]:hover {
+  background: #9eabe4;
+}
+[type=checkbox]:active {
+  background: #7688d9;
+  color: #9eabe4;
+}
+[type=checkbox]:checked {
+  color: #7688d9;
+}
+[type=checkbox]:checked::after {
+  color: #edeff5;
+}
+[type=checkbox]:disabled,
+[type=checkbox]:disabled:checked {
+  cursor: default;
+  color: #a4a2a2;
+  background: #a4a2a2;
+  border-color: #a4a2a2;
+}
+select {
+  background-color: #dde0ec;
+  border: 1px solid rgba(169, 169, 169, 0.3);
+  color: #4e65ce;
+}
 #prf_dlg hr {
   border-top: 1px solid #d7d7d3;
   border-bottom: 1px solid white;
@@ -376,15 +380,6 @@ select {
   color: #4e65ce;
 }
 #prf_content h2 {
-  color: #4c4a4a;
-}
-#prf_dlg_cancel {
-  background: transparent!important;
-  border: 1px solid #717b9e;
-  box-shadow: none!important;
-  color: #717b9e;
-}
-#prf_dlg_cancel:hover {
   color: #4c4a4a;
 }
 #lyt_kbd {
@@ -618,19 +613,6 @@ body {
 #sb_prf:active {
   background-color: #dde0ec;
 }
-#status_body {
-  background-color: #edeff5;
-}
-#toast-container {
-  font-family: Roboto;
-  font-size: 14px;
-  line-height: 20px;
-}
-#toast-container > div {
-  -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-}
 .tooltip {
   color: #7688d9;
 }
@@ -641,6 +623,16 @@ body {
 }
 .tooltip .tooltiptext::after {
   border-color: transparent #dde0ec transparent transparent;
+}
+#toast-container {
+  font-family: Roboto;
+  font-size: 14px;
+  line-height: 20px;
+}
+#toast-container > div {
+  -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
 }
 .toolbar {
   background-color: white;
@@ -692,4 +684,7 @@ body {
 #wse .bt_text.selected {
   background-color: rgba(118, 136, 217, 0.5);
   outline: rgba(118, 136, 217, 0.5);
+}
+#status_body {
+  background-color: #edeff5;
 }
