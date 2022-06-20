@@ -28,6 +28,8 @@
         q.ai.disabled = x;
         q.aim.disabled = x;
         q.icom.disabled = x;
+        q.sw.disabled = x;
+        q.swm.disabled = x;
       };
       q.mme.onchange = () => {
         q.mmrc.disabled = !q.mme.checked;
