@@ -63,8 +63,8 @@
     <div id=cn_dtl>
       <div class="row">
         <div class="col col-xs-3">
-          <label class=cb_label>
-            <input type=checkbox id=cn_log_cb>
+          <input type=checkbox id=cn_log_cb>
+          <label for=cn_log_cb>
             Save protocol <u>l</u>og</span>
           </label>
         </div>
@@ -89,8 +89,8 @@
       </div>
       <div class="row">
         <div class="col col-xs-12" id=cn_respawn>
-          <label class=cb_label>
-            <input type=checkbox id=cn_respawn_cb name=respawn>
+          <input type=checkbox id=cn_respawn_cb name=respawn>
+          <label for=cn_respawn_cb>
             <u>R</u>espawn listener on connection
           </label>
         </div>
@@ -119,8 +119,8 @@
       <div id=cn_ssl hidden>
         <div class="row">
           <div class="col col-xs-12">
-            <label class=cb_label>
-              <input type=checkbox id=cn_cert_cb>
+            <input type=checkbox id=cn_cert_cb>
+            <label for=cn_cert_cb>
               Provide user c<u>e</u>rtificate</span>
             </label>
           </div>
@@ -153,8 +153,8 @@
         </div>
         <div class="row">
           <div class="col col-xs-12">
-            <label class=cb_label for=cn_rootcertsdir_cb>
-              <input type=checkbox id=cn_rootcertsdir_cb>
+            <input type=checkbox id=cn_rootcertsdir_cb>
+            <label for=cn_rootcertsdir_cb>
               Custom root certificates
             </label>
           </div>
@@ -174,8 +174,8 @@
         </div>
         <div class="row">
           <div class="col col-xs-12">
-            <label class=cb_label for=cn_subj_cb>
-              <input type=checkbox id=cn_subj_cb>
+            <input type=checkbox id=cn_subj_cb>
+            <label for=cn_subj_cb>
               <u>V</u>alidate server subject common name matches hostname
             </label>
           </div>
@@ -485,8 +485,9 @@
           <b class=lyt_g0>Key</b><b class=lyt_g1 id=lyt_spc_g1>` Key</b>
         </b>
       </div>
-      <label id=lyt_ime_wr class=cb_label hidden>
-        <input type=checkbox id=lyt_ime>Also enable Dyalog IME (requires RIDE restart)
+      <input type=checkbox id=lyt_ime hidden>
+      <label id=lyt_ime_wr for=lyt_ime>
+        Also enable Dyalog IME (requires RIDE restart)
       </label>
     </div>
 
@@ -495,9 +496,8 @@
       <div id=shc_ctrls>
         <button id=shc_rst_all title="Reset all to their defaults"><u>R</u>eset</button>
         <input id=shc_sc placeholder=Search><a id=shc_sc_clr href=# hidden title="Clear search">×</a>
-        <label id=shc_defined_lb class=cb_label>
-          <input type=checkbox id=shc_defined>Only show defined shortcuts
-        </label>
+        <input type=checkbox id=shc_defined>
+        <label id=shc_defined_lb for=shc_defined>Only show defined shortcuts</label>
       </div>
       <div id=shc_tbl_wr></div>
       <div id=shc_no_res hidden>No results</div>
@@ -515,18 +515,22 @@
     <!--Code-->
     <div id=code hidden>
       <h2>Indentation</h2>
-      <p><label class=cb_label><input id=code_io   type=checkbox>I<u>n</u>dent content when an editor is opened</label></p>
-      <p><label class=cb_label><input id=code_ilf  type=checkbox>Handle <u>f</u>ormatting through the interpreter</label></p>
-      <p><label class=cb_label><input id=code_ai   type=checkbox>A<u>u</u>to-indent</label> <label><input id=code_sw  size=1> spaces</label></p>
-      <p><label class=cb_label><input id=code_aim  type=checkbox>in <u>m</u>ethods:</label> <label><input id=code_swm size=1> spaces</label></p>
-      <p><label class=cb_label><input id=code_icom type=checkbox><u>I</u>ndent lines that contain only a comment</label></p>
+      <p><input id=code_io   type=checkbox><label for=code_io  >I<u>n</u>dent content when an editor is opened</label></p>
+      <p><input id=code_ilf  type=checkbox><label for=code_ilf >Handle <u>f</u>ormatting through the interpreter</label></p>
+      <p><input id=code_ai   type=checkbox><label for=code_ai  >A<u>u</u>to-indent</label>
+         <input id=code_sw  size=1><label for=code_sw> spaces</label>
+      </p>
+      <p><input id=code_aim  type=checkbox><label for=code_aim >in <u>m</u>ethods:</label>
+         <input id=code_swm size=1><label for=code_swm> spaces</label>
+      </p>
+      <p><input id=code_icom type=checkbox><label for=code_icom><u>I</u>ndent lines that contain only a comment</label></p>
       <hr>
       <h2>Brackets</h2>
-      <p><label class=cb_label><input id=code_mb   type=checkbox><u>H</u>ighlight matching brackets: <tt>()[]{}</tt></label></p>
-      <p><label class=cb_label><input id=code_acbr type=checkbox>Au<u>t</u>o-close brackets</label></p>
+      <p><input id=code_mb   type=checkbox><label for=code_mb  ><u>H</u>ighlight matching brackets: <tt>()[]{}</tt></label></p>
+      <p><input id=code_acbr type=checkbox><label for=code_acbr>Au<u>t</u>o-close brackets</label></p>
       <hr>
       <h2>Contextual help</h2>
-      <p><label class=cb_label>Autocom<u>p</u>letion
+      <p><label>Autocom<u>p</u>letion
         <select id=code_ac>
           <option value="off">off</option>
           <option value="classic">classic</option>
@@ -534,17 +538,19 @@
         </select>
       </label></p>
       <p><label>Autocompletion a<u>f</u>ter <input id=code_acd size=5>ms</label></p>
-      <p><label class=cb_label><input id=code_ss   type=checkbox>Autocomplete control structures with snippets</label></p>
-      <p><label class=cb_label><input id=code_sh   type=checkbox>Highlight matching words</label></p>
-      <p><label class=cb_label><input id=code_vt   type=checkbox>Show <u>v</u>alue tips</label></p>
-      <p><label class=cb_label><input id=code_sqt  type=checkbox>Show tips for <u>g</u>lyphs</label></p>
+      <p><input id=code_ss  type=checkbox><label for=code_ss >Autocomplete control structures with snippets</label></p>
+      <p><input id=code_sh  type=checkbox><label for=code_sh >Highlight matching words</label></p>
+      <p><input id=code_vt  type=checkbox><label for=code_vt >Show <u>v</u>alue tips</label></p>
+      <p><input id=code_sqt type=checkbox><label for=code_sqt>Show tips for <u>g</u>lyphs</label></p>
       <hr>
       <h2>Session</h2>
-      <p><label class=cb_label><input id=code_apw  type=checkbox>Auto <u>P</u>W</label></p>
-      <p><label class=cb_label><input id=code_ph   type=checkbox>Persistent history</label> <label><input id=code_phs  size=4> lines</label></p>
+      <p><input id=code_apw type=checkbox><label for=code_apw>Auto <u>P</u>W</label></p>
+      <p><input id=code_ph  type=checkbox><label for=code_ph >Persistent history</label>
+         <input id=code_phs size=4><label for=code_phs> lines</label>
+      </p>
       <hr>
       <h2>Cursor</h2>
-      <p><label class=cb_label><input id=code_bc   type=checkbox><u>B</u>lock cursor</label></p>
+      <p><input id=code_bc type=checkbox><label for=code_bc><u>B</u>lock cursor</label></p>
       <p><label>Cursor blinking
         <select id=code_cb>
           <option value="blink">blink</option>
@@ -564,8 +570,8 @@
       </label></p>
       <hr>
       <h2>Minimap</h2>
-      <p><label class=cb_label><input id=code_mme  type=checkbox>Minimap enabled</label></p>
-      <p><label class=cb_label><input id=code_mmrc  type=checkbox>Minimap render characters</label></p>
+      <p><input id=code_mme  type=checkbox><label for=code_mme>Minimap enabled</label></p>
+      <p><input id=code_mmrc type=checkbox><label for=code_mmrc>Minimap render characters</label></p>
       <p>
         <label>Minimap show slider
           <select id=code_mmss>
@@ -576,11 +582,11 @@
       </p>
       <hr>
       <h2>Other</h2>
-      <p><label class=cb_label><input id=code_dce  type=checkbox>Double click to edit</label></p>
-      <p><label class=cb_label><input id=code_sqp  type=checkbox>Show <u>q</u>uit prompt</label></p>
-      <p><label class=cb_label><input id=code_set  type=checkbox>Show toolbar in editor/trace windows</label></p>
-      <p><label class=cb_label><input id=code_coq  type=checkbox>Connect on quit</label></p>
-      <p><label class=cb_label><input id=code_fit  type=checkbox>Include filename in editor title</label></p>
+      <p><input id=code_dce type=checkbox><label for=code_dce>Double click to edit</label></p>
+      <p><input id=code_sqp type=checkbox><label for=code_sqp>Show <u>q</u>uit prompt</label></p>
+      <p><input id=code_set type=checkbox><label for=code_set>Show toolbar in editor/trace windows</label></p>
+      <p><input id=code_coq type=checkbox><label for=code_coq>Connect on quit</label></p>
+      <p><input id=code_fit type=checkbox><label for=code_fit>Include filename in editor title</label></p>
     </div>
 
     <!--Colours-->
@@ -603,14 +609,20 @@
         </label>
         <p><label><u>T</u>oken type:<br><select id=col_grp></select></label></p>
         <p id=col_fg_p>
-          <label class=cb_label><input type=checkbox id=col_fg_cb><u>F</u>oreground</label> <input type=color id=col_fg list=col_list>
+          <input type=checkbox id=col_fg_cb><label for=col_fg_cb><u>F</u>oreground</label>
+          <input type=color id=col_fg list=col_list>
         <p id=col_fgo_p><label>Opacity: <input id=col_fgo type=range min=0 max=1 step=.25></label>
-        <p id=col_bg_p><label class=cb_label><input type=checkbox id=col_bg_cb>B<u>a</u>ckground</label> <input type=color id=col_bg list=col_list>
+        <p id=col_bg_p>
+          <input type=checkbox id=col_bg_cb><label for=col_bg_cb>B<u>a</u>ckground</label>
+          <input type=color id=col_bg list=col_list>
         <p id=col_bgo_p><label>Opacity: <input id=col_bgo type=range min=0 max=1 step=.25></label>
-        <p id=col_BIU_p><label class=cb_label><input type=checkbox id=col_B><u>B</u></label>
-                        <label class=cb_label><input type=checkbox id=col_I><u>I</u></label>
-                        <label class=cb_label><input type=checkbox id=col_U><u>U</u></label>
-        <p id=col_bc_p><label class=cb_label><input type=checkbox id=col_bc_cb>Border colour</label> <input type=color id=col_bc list=col_list>
+        <p id=col_BIU_p>
+          <input type=checkbox id=col_B><label for=col_B><u>B</u></label>
+          <input type=checkbox id=col_I><label for=col_I><u>I</u></label>
+          <input type=checkbox id=col_U><label for=col_U><u>U</u></label>
+        <p id=col_bc_p>
+          <input type=checkbox id=col_bc_cb><label for=col_bc_cb>Border colour</label>
+          <input type=color id=col_bc list=col_list>
       </div>
     </div>
 
@@ -649,20 +661,20 @@
     <div id=wins hidden>
       <div class="row">
         <div class="col col-xs-5">
-          <label class=cb_label>
-            <input id=wins_fw type=checkbox><u>F</u>loating windows</label>
+          <input id=wins_fw type=checkbox>
+          <label for=wins_fw><u>F</u>loating windows</label>
         </div>
       </div>
       <div class="row">
         <div class="col col-xs-5">
-          <label class=cb_label>
-            <input id=wins_fs type=checkbox><u>S</u>ingle floating window</label>
+          <input id=wins_fs type=checkbox>
+          <label for=wins_fs><u>S</u>ingle floating window</label>
         </div>
       </div>
       <div class="row">
         <div class="col col-xs-12">
-          <label class=cb_label>
-            <input id=wins_mm type=checkbox><u>R</u>emember previous window position</label>
+          <input id=wins_mm type=checkbox>
+          <label for=wins_mm><u>R</u>emember previous window position</label>
         </div>
       </div>
       <div class="row">

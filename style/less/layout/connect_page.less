@@ -24,10 +24,10 @@
     display: inline-block;
     width: 115px;
   }
-  .cb_label {
-    display: inline-block;
-    width: 100%;
-  }
+  // input[type=checkbox]+label {
+  //   display: inline-block;
+  //   width: 100%;
+  // }
 	.hsplitbar {
 		width: 7px;
 	}
@@ -107,7 +107,7 @@
   }
   .col{
     // >input,>select,>button{
-    >input,>select{
+    >input:not([type=checkbox]),>select{
       width:100%;
       &.browse {
         width: calc(100% - 35px);

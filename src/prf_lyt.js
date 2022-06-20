@@ -56,7 +56,7 @@
         const e = J.lyt[i];
         for (let j = 0; j < 4; j++) g[i][j] = e.querySelector(`.lyt_g${j}`);
       }
-      q.ime_wr.hidden = !D.win;
+      q.ime.hidden = !D.win;
       const updateLocale = (e) => {
         const lc = q.lc.value;
         q.pfx.value = D.defaultPrefix(lc);

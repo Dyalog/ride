@@ -96,143 +96,6 @@
 #debug .ctl_listview_header h2 {
   font-size: 16px;
 }
-#lb {
-  background-color: #1c1e28;
-  border-bottom: 1px black solid;
-}
-#lb #lb_inner {
-  background: #1c1e28;
-}
-#lb b {
-  color: #a9a9a9;
-}
-#lb b:hover {
-  color: #7688d9;
-}
-#lb b:active,
-#lb b.pressed {
-  background-color: rgba(0, 0, 0, 0.2);
-  color: white;
-}
-#lb .lb_placeholder {
-  background: rgba(0, 0, 0, 0.2);
-}
-#lb .ui-sortable-helper {
-  color: black;
-}
-#lb_tip {
-  background: #1c1e28;
-  border: 1px solid black;
-  color: #a9a9a9;
-}
-#lb_tip hr {
-  border-top: 1px solid black;
-  border-bottom: 1px solid #2e303e;
-}
-label {
-  color: #a9a9a9;
-  font-family: Roboto;
-  font-size: 14px;
-  font-weight: 600;
-}
-label.cb_label {
-  cursor: pointer;
-}
-button {
-  background: #7688d9;
-  color: white;
-  border-radius: 4px;
-  background-image: -moz-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
-  background-image: -webkit-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
-  background-image: -ms-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
-}
-button:hover {
-  color: #4c4a4a;
-}
-[type=checkbox] {
-  background-color: #1c1e28;
-  border: 1px solid #7688d9;
-}
-[type=checkbox]:checked {
-  background-color: #7688d9;
-}
-[type=checkbox]:hover::before {
-  background: #323446;
-}
-[type=checkbox]:active::before {
-  background: #7688d9;
-  color: #323446;
-}
-[type=checkbox]:checked::before {
-  color: #7688d9;
-}
-[type=checkbox]:checked:after {
-  color: #1c1e28;
-}
-[type=checkbox]:disabled::before {
-  color: transparent;
-  box-shadow: 0 0 0 1px #7688d9 inset;
-  background: #323446;
-}
-[type=checkbox]:checked:disabled::before {
-  color: grayscale(#7688d9);
-  background: grayscale(#1c1e28);
-}
-select {
-  background-color: #272937;
-  border: 1px solid rgba(169, 169, 169, 0.3);
-  color: white;
-}
-/*various dialogs*/
-#dlg_modal_overlay {
-  background-color: black;
-  opacity: 0.2;
-}
-.dlg {
-  background-color: #1c1e28;
-  outline: none;
-}
-.dlg div {
-  outline: none;
-}
-.dlg_title,
-.dlg_close {
-  color: #7688d9;
-}
-.dlg_close:hover {
-  background-color: white;
-}
-#cn_listen_dlg,
-#cn_connecting_dlg {
-  border: 1px solid #7688d9;
-}
-#gd.dlg {
-  background-color: #1c1e28;
-}
-#gd .dlg_title,
-#gd .dlg_close {
-  color: #828282;
-}
-#gd .dlg_close:hover {
-  color: white;
-  background-color: #323446;
-}
-#gd_content {
-  color: #a9a9a9;
-}
-.dlg_btns {
-  background-color: #323446;
-}
-.dlg_btns button.task {
-  background-image: none;
-  background-color: rgba(0, 0, 0, 0);
-  color: #7688d9;
-  text-transform: none;
-  font-size: small;
-  font-weight: normal;
-  text-align: left;
-  border: 1px solid transparent;
-}
 /*Golden Layout*/
 .lm_goldenlayout {
   background: #272937 !important;
@@ -319,6 +182,147 @@ select {
   background-color: white;
   border: 1px dashed #7688d9;
 }
+/*various dialogs*/
+#dlg_modal_overlay {
+  background-color: black;
+  opacity: 0.2;
+}
+.dlg {
+  background-color: #1c1e28;
+  outline: none;
+}
+.dlg div {
+  outline: none;
+}
+.dlg_title,
+.dlg_close {
+  color: #7688d9;
+}
+.dlg_close:hover {
+  background-color: white;
+}
+#cn_listen_dlg,
+#cn_connecting_dlg {
+  border: 1px solid #7688d9;
+}
+#gd.dlg {
+  background-color: #1c1e28;
+}
+#gd .dlg_title,
+#gd .dlg_close {
+  color: #828282;
+}
+#gd .dlg_close:hover {
+  color: white;
+  background-color: #323446;
+}
+#gd_content {
+  color: #a9a9a9;
+}
+.dlg_btns {
+  background-color: #323446;
+}
+.dlg_btns button.task {
+  background-image: none;
+  background-color: rgba(0, 0, 0, 0);
+  color: #7688d9;
+  text-transform: none;
+  font-size: small;
+  font-weight: normal;
+  text-align: left;
+  border: 1px solid transparent;
+}
+label {
+  color: #a9a9a9;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 600;
+}
+button {
+  background: #7688d9;
+  color: white;
+  border-radius: 4px;
+  background-image: -moz-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
+  background-image: -webkit-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
+  background-image: -ms-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
+}
+button:hover {
+  color: #4c4a4a;
+}
+input + label {
+  cursor: pointer;
+  vertical-align: text-top;
+}
+input:disabled + label {
+  cursor: default;
+  color: #646262;
+}
+[type=checkbox] {
+  cursor: pointer;
+  background-color: #1c1e28;
+  border: 1px solid #7688d9;
+}
+[type=checkbox]:checked {
+  background-color: #7688d9;
+}
+[type=checkbox]:hover {
+  background: #9eabe4;
+}
+[type=checkbox]:active {
+  background: #7688d9;
+  color: #323446;
+}
+[type=checkbox]:checked {
+  color: #7688d9;
+}
+[type=checkbox]:checked::after {
+  color: #1c1e28;
+}
+[type=checkbox]:disabled,
+[type=checkbox]:disabled:checked {
+  cursor: default;
+  color: #646262;
+  background: #646262;
+  border-color: #646262;
+}
+select {
+  background-color: #272937;
+  border: 1px solid rgba(169, 169, 169, 0.3);
+  color: white;
+}
+#lb {
+  background-color: #1c1e28;
+  border-bottom: 1px black solid;
+}
+#lb #lb_inner {
+  background: #1c1e28;
+}
+#lb b {
+  color: #a9a9a9;
+}
+#lb b:hover {
+  color: #7688d9;
+}
+#lb b:active,
+#lb b.pressed {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: white;
+}
+#lb .lb_placeholder {
+  background: rgba(0, 0, 0, 0.2);
+}
+#lb .ui-sortable-helper {
+  color: black;
+}
+#lb_tip {
+  background: #1c1e28;
+  border: 1px solid black;
+  color: #a9a9a9;
+}
+#lb_tip hr {
+  border-top: 1px solid black;
+  border-bottom: 1px solid #2e303e;
+}
 /*menu (see ../src/menu.js for the DOM structure)*/
 .menu {
   background-color: #edeff5;
@@ -362,61 +366,6 @@ select {
   border: none;
   outline: solid red 1px;
 }
-#splash {
-  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #1c1e28;
-}
-#ide {
-  background-color: #1c1e28;
-}
-#apl_font {
-  color: #1c1e28;
-}
-::selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-::-moz-selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-body {
-  font-family: Roboto, sans-serif;
-}
-#demo-keys span {
-  border: solid #333 1px;
-  background-color: grey;
-  color: white;
-}
-::-webkit-scrollbar {
-  background-color: #1c1e28;
-}
-::-webkit-scrollbar-corner {
-  background-color: #1c1e28;
-}
-::-webkit-scrollbar-track {
-  background-color: #272937;
-  border: 1px solid #1c1e28;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb {
-  background-color: rgba(118, 136, 217, 0.3);
-  border: 1px solid #1c1e28;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:horizontal {
-  border-width: 1px 0;
-}
-::-webkit-scrollbar-thumb:vertical {
-  border-width: 0 1px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(118, 136, 217, 0.6);
-}
-::-webkit-scrollbar-thumb:active {
-  background-color: rgba(118, 136, 217, 0.9);
-}
 #prf_dlg hr {
   border-top: 1px solid black;
   border-bottom: 1px solid #2e303e;
@@ -439,15 +388,6 @@ body {
 }
 #prf_content h2 {
   color: white;
-}
-#prf_dlg_cancel {
-  background: transparent!important;
-  border: 1px solid #717b9e;
-  box-shadow: none!important;
-  color: #717b9e;
-}
-#prf_dlg_cancel:hover {
-  color: #4c4a4a;
 }
 #lyt_kbd {
   color: black;
@@ -600,6 +540,34 @@ a:hover {
     display: none;
   }
 }
+::-webkit-scrollbar {
+  background-color: #1c1e28;
+}
+::-webkit-scrollbar-corner {
+  background-color: #1c1e28;
+}
+::-webkit-scrollbar-track {
+  background-color: #272937;
+  border: 1px solid #1c1e28;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(118, 136, 217, 0.3);
+  border: 1px solid #1c1e28;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  border-width: 1px 0;
+}
+::-webkit-scrollbar-thumb:vertical {
+  border-width: 0 1px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(118, 136, 217, 0.6);
+}
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(118, 136, 217, 0.9);
+}
 #sb {
   background-color: #1c1e28;
   border-top: 1px solid black;
@@ -620,6 +588,27 @@ a:hover {
 }
 #status_body {
   background-color: #1c1e28;
+}
+#toast-container {
+  font-family: Roboto;
+  font-size: 14px;
+  line-height: 20px;
+}
+#toast-container > div {
+  -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+}
+.tooltip {
+  color: #7688d9;
+}
+/* Tooltip text */
+.tooltip .tooltiptext {
+  background-color: #1c1e28;
+  color: #a9a9a9;
+}
+.tooltip .tooltiptext::after {
+  border-color: transparent #1c1e28 transparent transparent;
 }
 .toolbar {
   background-color: #1c1e28;
@@ -648,27 +637,6 @@ a:hover {
   border: 0 solid #272937;
   border-right-width: 1px;
 }
-.tooltip {
-  color: #7688d9;
-}
-/* Tooltip text */
-.tooltip .tooltiptext {
-  background-color: #1c1e28;
-  color: #a9a9a9;
-}
-.tooltip .tooltiptext::after {
-  border-color: transparent #1c1e28 transparent transparent;
-}
-#toast-container {
-  font-family: Roboto;
-  font-size: 14px;
-  line-height: 20px;
-}
-#toast-container > div {
-  -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-}
 #vt_bln {
   border: solid black 1px;
   background-color: black;
@@ -692,4 +660,31 @@ a:hover {
 #wse .bt_text.selected {
   background-color: rgba(118, 136, 217, 0.75);
   outline: rgba(118, 136, 217, 0.75);
+}
+#splash {
+  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #1c1e28;
+}
+#ide {
+  background-color: #1c1e28;
+}
+#apl_font {
+  color: #1c1e28;
+}
+::selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+::-moz-selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+body {
+  font-family: Roboto, sans-serif;
+}
+#demo-keys span {
+  border: solid #333 1px;
+  background-color: grey;
+  color: white;
 }
