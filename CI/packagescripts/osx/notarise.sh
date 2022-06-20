@@ -21,7 +21,7 @@ notarizefile() { # $1: path to file to notarize, $2: identifier
                                --username "$APPLE_ID" \
                                --password "$APPLE_APP_PASS" \
                                --asc-provider "$APPLE_TEAM" \
-                               --file "$filepath" \
+                               --file "$filepath" 2>&1 \
                   | awk '/RequestUUID/ { print $NF; }')
                                
     echo "Notarization RequestUUID: $requestUUID"
