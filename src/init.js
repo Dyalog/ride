@@ -183,6 +183,7 @@ const Console = console;
             } else {
               D.send('Disconnect', { message: 'User shutdown request' });
               D.ide.connected = 0;
+              D.ide.w3500 && D.ide.w3500.close();
               window.close();
             }
           }
