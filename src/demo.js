@@ -57,8 +57,7 @@
     },
     DMK() { // toggle key display mode
       if ($p) {
-        // $(document).off('.demo');
-        handlers.forEach(h => h.dispose()); handlers.length = 0;
+        handlers.forEach((h) => h.dispose()); handlers.length = 0;
         $('#demo-keys').remove();
         $p = null;
         return;
@@ -69,9 +68,6 @@
         const s = keyInfo(e)[0]; $p.text(s).toggle(!!s);
       }));
 
-      // $(document)
-      // .on('keydown.demo', (e) => { const s = keyInfo(e)[0]; $p.text(s).toggle(!!s); })
-      // .on('keyup.demo', (e) => {
       handlers.push(me.onKeyUp((e) => {
         const h = keyInfo(e);
         const [s, c] = h;
@@ -81,6 +77,11 @@
           setTimeout(() => { $k.fadeOut(1000); }, 2000);
         } else {
           $p.text(s).toggle(!!s);
+        }
+      }));
+      handlers.push(me.onDidBlurEditorText(() => {
+        if (!$p[0].hidden) {
+          setTimeout(() => { $p.fadeOut(1000); }, 2000);
         }
       }));
     },
