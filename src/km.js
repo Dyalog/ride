@@ -55,7 +55,10 @@
     CP() { document.execCommand('Copy'); },
     PT() { document.execCommand('Paste'); },
     PRF() { D.prf_ui(); },
-    ABT() { D.abt(); },
+    ABT() {
+      if (D.el && D.ide.floating) D.ipc.of.ride_master.emit('ABT');
+      else D.abt();
+    },
     CAM() {
       D.send('ClearTraceStopMonitor', { token: 0 });
       Object.keys(D.ide.wins).forEach((x) => { +x && D.ide.wins[x].execCommand('CBP'); });
@@ -164,7 +167,7 @@
 
       D.ide.requestHelp(s, c.column - 1 ).then(
         (url) => {
-          openURI(url); 
+          openURI(url);
         },
         () => {
           s = s.toLowerCase();
