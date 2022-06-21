@@ -225,7 +225,7 @@ const Console = console;
           const h = n.innerHTML;
           if (h !== c && h !== C) return undefined;
           let $i = $(n).closest(':input,label,a').eq(0);
-          if ($i.is('label')) $i = $(`#${$i.attr('for')}`).add($i.find(':input')).eq(0);
+          if ($i.is('label')) $i = $(`#${$i.attr('for')}`).add($i.find(':input')).not(':disabled').eq(0);
           return $i[0];
         });
         if ($a.length > 1) {
