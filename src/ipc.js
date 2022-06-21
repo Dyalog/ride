@@ -214,7 +214,8 @@
         D.ide.hadErr > 0 && (D.ide.hadErr -= 1);
         D.ide.focusWin(D.ide.wins[id]);
       });
-      srv.on('zoom', z => D.ide.zoom(z));
+      srv.on('zoom', (z) => D.ide.zoom(z));
+      srv.on('ABT', () => D.commands.ABT());
       srv.on('LOG', () => D.commands.LOG());
       srv.on('NEW', () => D.commands.NEW());
       srv.on('OWS', () => D.commands.OWS());
