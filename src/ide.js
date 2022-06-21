@@ -540,6 +540,7 @@ D.IDE = function IDE(opts = {}) {
       const m = x.message.toLowerCase(); ide.die();
       if (m === 'dyalog session has ended') {
         ide.connected = 0; window.close();
+        ide.w3500 && ide.w3500.close();
       } else { $.err(x.message, 'Interpreter disconnected'); }
     },
     SysError(x) { $.err(x.text, 'SysError'); ide.die(); },
