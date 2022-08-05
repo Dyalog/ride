@@ -89,6 +89,16 @@
     D.mapKeys(ed); D.prf.keys(D.mapKeys.bind(this, ed));
 
     me.onDidChangeCursorPosition(ed.cursorActivity.bind(ed));
+
+    me.getModel().onDidChangeContent((evt) => {
+      const range = evt.changes[0].range;
+      if (range.startLineNumber === 1 && range.endLineNumber === 1) {
+        if (ed.container) {
+          ed.container.setTitle(me.getValue().trimStart(1));
+        }
+      }
+    });
+    
     let mouseL = 0; let mouseC = 0; let mouseTS = 0;
     me.onMouseDown((e) => {
       const t = e.target;
