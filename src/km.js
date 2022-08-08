@@ -198,13 +198,13 @@
     LL(me) { me.trigger('editor', 'cursorHome'); },
     RL(me) {
       const sels = me.getSelections().map((c) => {
-        const el = c.positionLineNumber;
+        const pl = c.positionLineNumber;
         const sc = c.startColumn - 1;
-        const t = me.getModel().getLineContent(el);
+        const t = me.getModel().getLineContent(pl);
         const n = t.length;
         const m = t.replace(/ +$/, '').length;
         const nc = 1 + ((m <= sc && sc < n) || !m ? n : m);
-        return new monaco.Selection(el, nc, el, nc);
+        return new monaco.Selection(pl, nc, pl, nc);
       });
       me.setSelections(sels);
       me.revealRange(monaco.Range.fromPositions(me.getPosition()));
