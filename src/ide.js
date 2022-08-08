@@ -392,7 +392,7 @@ D.IDE = function IDE(opts = {}) {
     ide.dom.style.top = `${(D.prf.lbar() ? I.lb.offsetHeight : 0) + (D.el ? 0 : 23)}px`;
     ide.dom.style.bottom = `${I.sb.offsetHeight}px`;
     gl.updateSize(ide.dom.clientWidth, ide.dom.clientHeight);
-    ide.updPW(-1);
+    ide.updPW();
   });
   I.lb.hidden = !D.prf.lbar();
   I.sb.hidden = !D.prf.sbar();
@@ -531,7 +531,7 @@ D.IDE = function IDE(opts = {}) {
       D.InitHelp(x.version);
       ide.updTitle();
       ide.connected = 1;
-      ide.updPW(-1);
+      ide.updPW();
       clearTimeout(D.tmr);
       delete D.tmr;
     },

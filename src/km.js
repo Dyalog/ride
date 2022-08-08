@@ -264,9 +264,9 @@
       w.container.parent.toggleMaximise();
       setTimeout(() => { me && me.focus(); }, 100);
     },
-    ZMI() { D.prf.zoom(Math.min(12, D.prf.zoom() + 1)); D.ide.updPW(); },
-    ZMO() { D.prf.zoom(Math.max(-10, D.prf.zoom() - 1)); D.ide.updPW(); },
-    ZMR() { D.prf.zoom(0); D.ide.updPW(); },
+    ZMI() { D.prf.zoom(Math.min(12, D.prf.zoom() + 1)); },
+    ZMO() { D.prf.zoom(Math.max(-10, D.prf.zoom() - 1)); },
+    ZMR() { D.prf.zoom(0); },
 
   });
 

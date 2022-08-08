@@ -369,15 +369,13 @@
       }
     },
     updPW(force) {
-      // force: -1 => delayed update (once gl size established)
-      //         1 => immediate update
+      // force:emit a SetPW message even if the width hasn't changed
       const se = this;
       if (!D.prf.autoPW()) return;
-      if (force === -1) { se.setPW = !0; return; }
-      if (!se.setPW && force !== 1) return;
       const pw = Math.max(42, se.me.getLayoutInfo().viewportColumn);
-      if (pw !== se.pw && se.ide.connected) D.send('SetPW', { pw: se.pw = pw });
-      se.setPW = !1;
+      if ((force || pw !== se.pw) && se.ide.connected) {
+        D.send('SetPW', { pw: se.pw = pw });
+      }
     },
     scrollCursorIntoView() {
       const { me } = this;
