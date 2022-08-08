@@ -198,7 +198,7 @@
     LL(me) { me.trigger('editor', 'cursorHome'); },
     RL(me) {
       const sels = me.getSelections().map((c) => {
-        const el = c.endLineNumber;
+        const el = c.positionLineNumber;
         const sc = c.startColumn - 1;
         const t = me.getModel().getLineContent(el);
         const n = t.length;
