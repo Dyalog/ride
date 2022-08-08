@@ -371,6 +371,8 @@
           cond = 'tracer && !editorHasMultipleSelections && !findInputFocussed && !inSnippetMode';
         } else if (cmd === 'TC') {
           cond = 'tracer';
+        } else if (cmd === 'LL' || cmd === 'RL') {
+          cond = '!suggestWidgetVisible && !findInputFocussed';
         } else if (nkc === kc.Escape) cond = '!suggestWidgetVisible && !editorHasMultipleSelections && !findWidgetVisible && !inSnippetMode';
         me.addCommand(nkc, () => D.commands[cmd](me), cond);
       });
