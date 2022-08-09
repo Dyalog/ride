@@ -50,6 +50,7 @@ D.prf = {};
   ['sbar',               1], //show status bar
   ['selectedExe',        ''],//which interpreter is selected in dropdown in the Connect page?
   ['selectionHighlight', 0],// hightlight matching words
+  ['sessionLogSize',     0],// max lines of session log to show (0 = unlimited)
   ['showCCGC',           0], // show CC and GC in statusbar
   ['showEditorToolbar',  1],// show toolbar in editor windows
   ['snippetSuggestions', 1],// show snippet suggestions
