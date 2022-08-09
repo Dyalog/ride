@@ -92,12 +92,37 @@
 
     me.getModel().onDidChangeContent((evt) => {
       const range = evt.changes[0].range;
-      if (range.startLineNumber === 1 && range.endLineNumber === 1) {
-        if (ed.container) {
-          ed.container.setTitle(me.getValue().trimStart(1));
+      if (range.startLineNumber === 1) {
+        if (ed.isCode) {
+          const content = me.getModel().getLineContent(1);
+          m = content.match(/[^⍝\n\r]*/);
+          [s] = m;
+          if (!s) return ed.container.setTitle(ed.name);
+          const cdsStart = s.match(RegExp(`^(?::[${D.syntax.letter}]+ ?)([${D.syntax.letter}]?)`));
+          if (!cdsStart) {                                                                          // Preserve name. User might begin to write cds.
+            //
+          } else if (cdsStart[1] === "") {
+            return ed.container.setTitle(ed.name);
+          }
+          if (D.syntax.dfnHeader.test(s)) {
+            ed.container.setTitle(s.split('←')[0]);
+          } else {
+            const [sig] = s.split(';');
+            if (sig.match(RegExp(` *[0-9][${D.syntax.letter}]*`))) return ed.container.setTitle(''); // Do not allow numbers at start of names
+            const [, fn, op] = sig.match(D.syntax.tradFnRE) || [];
+            const nop = op || fn;
+            if (nop) {
+              const cds = sig.match(RegExp(`^(?::Class[ :]*|:Namespace|:Interface)+ +([${D.syntax.letter}]+)`));
+              if (cds) {
+                cds.length === 2? ed.container.setTitle(cds[1]): ed.container.setTitle(ed.name);
+                return;
+              }
+              nop.length > 0? ed.container.setTitle(nop): ed.container.setTitle('');
+            }
+          }
         }
       }
-    });
+    }); 
     
     let mouseL = 0; let mouseC = 0; let mouseTS = 0;
     me.onMouseDown((e) => {
