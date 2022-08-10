@@ -270,7 +270,13 @@
       }
       D.ide.floating && $('title', ed.dom.ownerDocument).text(`${ed.name} - ${ed.ide.caption}`);
       model.winid = ed.id;
-      model.setValue(ed.oText = ee.text.join(model.getEOL()));
+      if (ee.text.some((t) => /[\n\r]/.test(t))) {
+        ed.oText = ee.text.map((t) => t.replace('\n', '␤').replace('\r','␍')).join(model.getEOL());
+        ee.readOnly = true;
+      } else {
+        ed.oText = ee.text.join(model.getEOL());
+      }
+      model.setValue(ed.oText);
       // model.setEOL(monaco.editor.EndOfLineSequence.LF);
       // entityType:            16 NestedArray        512 AplClass
       // 1 DefinedFunction      32 QuadORObject      1024 AplInterface
