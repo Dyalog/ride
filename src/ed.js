@@ -89,6 +89,27 @@
     D.mapKeys(ed); D.prf.keys(D.mapKeys.bind(this, ed));
 
     me.onDidChangeCursorPosition(ed.cursorActivity.bind(ed));
+
+    me.getModel().onDidChangeContent((evt) => {
+      const range = evt.changes[0].range;
+      if (ed.isCode && range.startLineNumber === 1) {
+        const content = me.getModel().getLineContent(1);
+        m = content.match(/[^⍝\n\r;]*/);
+        [s] = m;
+        if (!s) return ed.container.setTitle(ed.name);
+        if (D.syntax.dfnHeader.test(s)) {
+          return ed.container.setTitle(s.split('←')[0]);
+        }
+        const cds = s.match(RegExp(`^:((?:Class[ :]*|Namespace|Interface) +(${D.syntax.name}))?`, 'i'));
+        if (cds) {
+          return ed.container.setTitle(cds[2] || ed.name);
+        }
+        const [, fn, op] = s.match(D.syntax.tradFnRE) || [];
+        const nop = op || fn;
+        return ed.container.setTitle(op || fn || ed.name);
+      }
+    }); 
+    
     let mouseL = 0; let mouseC = 0; let mouseTS = 0;
     me.onMouseDown((e) => {
       const t = e.target;
