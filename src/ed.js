@@ -92,35 +92,21 @@
 
     me.getModel().onDidChangeContent((evt) => {
       const range = evt.changes[0].range;
-      if (range.startLineNumber === 1) {
-        if (ed.isCode) {
-          const content = me.getModel().getLineContent(1);
-          m = content.match(/[^⍝\n\r]*/);
-          [s] = m;
-          if (!s) return ed.container.setTitle(ed.name);
-          const cdsStart = s.match(RegExp(`^(?::[${D.syntax.letter}]+ ?)([${D.syntax.letter}]?)`));
-          if (!cdsStart) {                                                                          // Preserve name. User might begin to write cds.
-            //
-          } else if (cdsStart[1] === "") {
-            return ed.container.setTitle(ed.name);
-          }
-          if (D.syntax.dfnHeader.test(s)) {
-            ed.container.setTitle(s.split('←')[0]);
-          } else {
-            const [sig] = s.split(';');
-            if (sig.match(RegExp(` *[0-9][${D.syntax.letter}]*`))) return ed.container.setTitle(''); // Do not allow numbers at start of names
-            const [, fn, op] = sig.match(D.syntax.tradFnRE) || [];
-            const nop = op || fn;
-            if (nop) {
-              const cds = sig.match(RegExp(`^(?::Class[ :]*|:Namespace|:Interface)+ +([${D.syntax.letter}]+)`));
-              if (cds) {
-                cds.length === 2? ed.container.setTitle(cds[1]): ed.container.setTitle(ed.name);
-                return;
-              }
-              nop.length > 0? ed.container.setTitle(nop): ed.container.setTitle('');
-            }
-          }
+      if (ed.isCode && range.startLineNumber === 1) {
+        const content = me.getModel().getLineContent(1);
+        m = content.match(/[^⍝\n\r;]*/);
+        [s] = m;
+        if (!s) return ed.container.setTitle(ed.name);
+        if (D.syntax.dfnHeader.test(s)) {
+          return ed.container.setTitle(s.split('←')[0]);
         }
+        const cds = s.match(RegExp(`^:((?:Class[ :]*|Namespace|Interface) +(${D.syntax.name}))?`, 'i'));
+        if (cds) {
+          return ed.container.setTitle(cds[2] || ed.name);
+        }
+        const [, fn, op] = s.match(D.syntax.tradFnRE) || [];
+        const nop = op || fn;
+        return ed.container.setTitle(op || fn || ed.name);
       }
     }); 
     
