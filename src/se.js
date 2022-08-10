@@ -261,6 +261,11 @@
         }
       }
       se.isReadOnly && me.updateOptions({ readOnly: false });
+      if (truncate) {
+        const top = me.getScrollTop();
+        const lh = me.getOption(monaco.editor.EditorOption.lineHeight);
+        me.setScrollTop(top - truncate * lh);
+      }
       if (this.dirty[l] != null) {
         se.edit([
           { range: new monaco.Range(l, 1, l, 1 + s0.length), text: `${s0}\n${text}` },
