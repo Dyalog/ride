@@ -81,7 +81,7 @@
       name: 'Default',
       theme: 'light',
       styles: 'asgn=fg:00f com=fg:088 dfn=fg:00f diam=fg:00f err=fg:f00 fn=fg:008 idm=fg:008 kw=fg:800 '
-      + 'lnum=fg:008,bg:f,bgo:0 mod=bg:7,bgo:.25 mtch=bg:ff8,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 op1=fg:00f op2=fg:00f '
+      + 'lnum=fg:008 lnac=fg:00f mod=bg:7,bgo:.25 mtch=bg:ff8,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 op1=fg:00f op2=fg:00f '
       + 'par=fg:00f quad=fg:808 qdl=fg:c0c sel=bg:48e,bgo:.5 semi=fg:00f sqbr=fg:00f srch=bg:f80,bgo:.5 str=fg:088 tc=bg:d,bgo:1 '
       + 'tcpe=bg:c8c8c8,bgo:1 trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f vtt=bg:ff0 '
       + 'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:1,fg:080 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff '
@@ -274,7 +274,7 @@
     {s:'autocomplete sel',t:'acsl',e:'editorSuggestWidget.selectedBackground', bg:1},
     {s:'bracket'         ,t:'sqbr',m:'delimiter.square', fg:1, BIU:1}, //[]
     {s:'comment'         ,t:'com' ,m:'comment', fg:1, BIU:1}, //⍝
-    {s:'cursor'          ,t:'cur' ,e:'editorCursor.foreground', bg:1},
+    {s:'cursor'          ,t:'cur' ,e:'editorCursor.foreground', fg:1},
     {s:'curly braces'    ,t:'cubr',m:'delimiter.curly', fg:1, BIU:1}, //{}
     {s:'dfn level 1'     ,t:'dfn1',m:'identifier.dfn.1', fg:1, BIU:1}, //{}
     {s:'dfn level 2'     ,t:'dfn2',m:'identifier.dfn.2', fg:1, BIU:1},
@@ -290,7 +290,8 @@
     {s:'idiom'           ,t:'idm' ,m:'predefined.idiom', fg:1, BIU:1}, //⊃⌽ ...
     {s:'keyword'         ,t:'kw'  ,m:'keyword', fg:1, BIU:1}, //:If ...
     {s:'label'           ,t:'lbl' ,m:'meta.label', fg:1, BIU:1}, //L:
-    {s:'line number'     ,t:'lnum',e:'editorLineNumber.foreground', bg:1},
+    {s:'line number'     ,t:'lnum',e:'editorLineNumber.foreground', fg:1},
+    {s:'line number active',t:'lnac',e:'editorLineNumber.activeForeground', fg:1},
     {s:'matching bracket',t:'mtch',e:'editorBracketMatch.background', bg:1},
     {s:'modified line'   ,t:'mod' ,c:'.modified'   , bg:1}, //in the session - lines queued for execution
     {s:'monadic operator',t:'op1' ,m:'keyword.operator.monadic', fg:1, BIU:1}, //⌸ ...
