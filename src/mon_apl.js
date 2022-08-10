@@ -212,11 +212,16 @@
             const [, fn, op] = signature.match(D.syntax.tradFnRE) || [];
             const fnop = op || fn;
             let si = -1;
+            let i = 0;
             if (fnop) {
               const sigm = signature.match(RegExp(`(^|[^${D.syntax.letter}0-9]+)${fnop}([^${D.syntax.letter}0-9]+|$)`));
-              si = sigm.index + sigm[1].length;
+              if (sigm) {
+                si = sigm.index + sigm[1].length;
+              } else {
+                addToken(offset, 'invalid');
+                i = signature.length;
+              }
             }
-            let i = 0;
             while (i < signature.length) {
               const ch = signature[i];
               switch (ch) {
