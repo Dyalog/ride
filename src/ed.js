@@ -297,7 +297,6 @@
       } else {
         ed.oText = ee.text.join(model.getEOL());
       }
-      model.setValue(ed.oText);
       // model.setEOL(monaco.editor.EndOfLineSequence.LF);
       // entityType:            16 NestedArray        512 AplClass
       // 1 DefinedFunction      32 QuadORObject      1024 AplInterface
@@ -314,6 +313,7 @@
         128: 'charvec',
       }[ee.entityType];
       ed.isCode = [1, 256, 512, 1024, 2048, 4096].indexOf(ee.entityType) >= 0;
+      model.setValue(ed.oText);
       ed.isReadOnlyEntity = !!ee.readOnly;
       if (/(\.|\\|\/)/.test(ee.name)) {
         me.setModel(monaco.editor.createModel(ed.oText, null, monaco.Uri.file(ee.name)));
