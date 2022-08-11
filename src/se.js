@@ -242,12 +242,41 @@
         se.lineEditor[l] = true;
       }
       if (s[s.length - 1] === '\n' && se.promptType === 1) text += ssp;
+      let truncate = 0;
+      const sls = D.prf.sessionLogSize();
+      if (sls > 0) {
+        const lines = text.split('\n');
+        const n = l - 1;
+        truncate = Math.max(0, (n + lines.length) - sls);
+        if (truncate > 0) {
+          const h = se.dirty;
+          se.dirty = {};
+          Object.keys(h).forEach((x) => {
+            if (+x > truncate) se.dirty[+x - truncate] = h[x];
+          });
+          if (truncate > n) {
+            text = lines.slice(truncate - n).join('\n');
+            truncate = n;
+          }
+        }
+      }
       se.isReadOnly && me.updateOptions({ readOnly: false });
+      if (truncate) {
+        const top = me.getScrollTop();
+        const lh = me.getOption(monaco.editor.EditorOption.lineHeight);
+        me.setScrollTop(top - truncate * lh);
+      }
       if (this.dirty[l] != null) {
-        se.edit([{ range: new monaco.Range(l, 1, l, 1 + s0.length), text: `${s0}\n${text}` }]);
+        se.edit([
+          { range: new monaco.Range(l, 1, l, 1 + s0.length), text: `${s0}\n${text}` },
+          { range: new monaco.Range(1, 1, 1 + truncate, 1), text: '' },
+        ]);
         me.setPosition(cp);
       } else {
-        se.edit([{ range: new monaco.Range(l, 1, l, 1 + s0.length), text }]);
+        se.edit([
+          { range: new monaco.Range(l, 1, l, 1 + s0.length), text },
+          { range: new monaco.Range(1, 1, 1 + truncate, 1), text: '' },
+        ]);
         const ll = model.getLineCount();
         const lc = se.isReadOnly ? scp : model.getLineMaxColumn(ll);
         const ncp = { lineNumber: ll, column: lc };
