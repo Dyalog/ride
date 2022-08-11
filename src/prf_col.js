@@ -81,7 +81,7 @@
       name: 'Default',
       theme: 'light',
       styles: 'asgn=fg:00f com=fg:088 dfn=fg:00f diam=fg:00f err=fg:f00 fn=fg:008 idm=fg:008 kw=fg:800 '
-      + 'lnum=fg:008 lnac=fg:2d2 mod=bg:7,bgo:.25 mtch=bg:ff8,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 op1=fg:00f op2=fg:00f '
+      + 'lnum=fg:008,bg:f,bgo:0 mod=bg:7,bgo:.25 mtch=bg:ff8,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 op1=fg:00f op2=fg:00f '
       + 'par=fg:00f quad=fg:808 qdl=fg:c0c sel=bg:48e,bgo:.5 semi=fg:00f sqbr=fg:00f srch=bg:f80,bgo:.5 str=fg:088 tc=bg:d,bgo:1 '
       + 'tcpe=bg:c8c8c8,bgo:1 trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f vtt=bg:ff0 '
       + 'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:1,fg:080 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff '
@@ -167,8 +167,8 @@
         h.bg && (cls += `background-color:${RGB(h.bg)};`);
         h.bg && (cls += `background-color:${RGBA(h.bg, h.bgo == null ? 0.5 : h.bgo)};`);
         cls += `}${els} .monaco-editor span,${els} .monaco-editor .line-numbers{`;
-        h.fg && (cls += `color:${RGB(h.fg)};`);
-        h.fg && (cls += `color:${RGBA(h.fg, h.fgo == null ? 1 : h.fgo)};`);
+        h.fg && (cls += `color:${RGB(h.fg)}!important;`);
+        h.fg && (cls += `color:${RGBA(h.fg, h.fgo == null ? 1 : h.fgo)}!important;`);
         h.B && (cls += 'font-weight:bold;');
         h.I && (cls += 'font-style:italic;');
         h.U && (cls += 'text-decoration:underline;');
