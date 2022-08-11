@@ -491,11 +491,11 @@
             k && (envusr[k] = v);
           }
           const env = {
+            SINGLETRACE: '1',
             ...envusr,
             APLK0: 'default',
             AUTOCOMPLETE_PREFIXSIZE: '0',
             CLASSICMODE: '1',
-            SINGLETRACE: '1',
             RIDE_SPAWNED: '1',
           };
           if (x.subtype === 'ssh') {
