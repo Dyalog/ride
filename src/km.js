@@ -54,6 +54,8 @@
     CT() { document.execCommand('Cut'); },
     CP() { document.execCommand('Copy'); },
     PT() { document.execCommand('Paste'); },
+    RDO(me) { me.trigger('D', 'redo'); },
+    UND(me) { me.trigger('D', 'undo'); },
     PRF() { D.prf_ui(); },
     ABT() {
       if (D.el && D.ide.floating) D.ipc.of.ride_master.emit('ABT');
