@@ -49,8 +49,8 @@
   D.keyMap.dyalogDefault = { };
 
   $.extend(D.commands, {
-    TB() { D.ide.switchWin(1); },
-    BT() { D.ide.switchWin(-1); },
+    TB() { D.ide.switchWin(-1); },
+    BT() { D.ide.switchWin(1); },
     CT() { document.execCommand('Cut'); },
     CP() { document.execCommand('Copy'); },
     PT() { document.execCommand('Paste'); },
