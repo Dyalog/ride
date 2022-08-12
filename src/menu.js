@@ -25,8 +25,6 @@ D.installMenu = function Menu(mx) {
         x.checkBoxPref((v) => { mi.checked = !!v; });
       }
       const roles = {
-        undo: 1,
-        redo: 1,
         cut: 1,
         copy: 1,
         paste: 1,

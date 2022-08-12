@@ -28,8 +28,18 @@ const Console = console;
           { label: 'Copy', role: 'copy', enabled: hasSelection },
           { label: 'Paste', role: 'paste', enabled: !isReadOnly },
           { type: 'separator' },
-          { label: 'Undo', role: 'undo', enabled: !tc },
-          { label: 'Redo', role: 'redo', enabled: !tc },
+          {
+            label: 'Redo',
+            ...win && { click: () => { D.commands.RDO(win.me); } },
+            ...!win && { role: 'redo' },
+            enabled: !tc
+          },
+          {
+            label: 'Undo',
+            ...win && { click: () => { D.commands.UND(win.me); } },
+            ...!win && { role: 'undo' },
+            enabled: !tc
+          },
         ];
         if (win && !win.session.get()) {
           const { me } = win;
