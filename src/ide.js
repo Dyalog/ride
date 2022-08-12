@@ -590,8 +590,7 @@ D.IDE = function IDE(opts = {}) {
       se.focus();
       // set timer in case no new window is opened
       se.hadErrTmr = setTimeout(() => { ide.hadErr = -1; delete se.hadErrTmr; }, 100);
-      // gl mounted + SetHighlightLine + ReplyFormatCode
-      ide.hadErr = 2 + (D.prf.ilf() && D.prf.indentOnOpen());
+      ide.hadErr = 0; // initialise counter to delay setting focus on session
     },
     GotoWindow(x) { const w = ide.wins[x.win]; w && w.focus(); },
     WindowTypeChanged(x) { return ide.wins[x.win].setTC(x.tracer); },
@@ -685,7 +684,11 @@ D.IDE = function IDE(opts = {}) {
         });
         return;
       }
-      ide.wins[0].hadErrTmr && clearTimeout(ide.wins[0].hadErrTmr);
+      if (ide.wins[0].hadErrTmr) {
+        clearTimeout(ide.wins[0].hadErrTmr);
+        // gl mounted + SetHighlightLine + [ReplyFormatCode]
+        ide.hadErr += 2 + (D.prf.ilf() && D.prf.indentOnOpen());
+      }
       const w = ee.token;
       let done;
       const editorOpts = { id: w, name: ee.name, tc: ee.debugger };
