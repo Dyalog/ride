@@ -93,6 +93,7 @@
           const r = e.changes[0].range;
           if (r.startLineNumber > model.getLineCount()) return;
           const l = model.getLineContent(r.startLineNumber).toLowerCase();
+          const dot = model.getLineContent(r.startLineNumber)[r.startColumn - 2];
           const bq2 = e.changes.length && RegExp(`${pk}${pk}\\w*`, 'i').test(l);
           const swlist = sw.widget._widget._list;
           if (swv && !bq2 && swlist.length === 1) {
@@ -105,6 +106,9 @@
           } else if (swv && !swlist.length) {
             me.trigger('editor', 'hideSuggestWidget');
           } else if (swv && !bq2 && swlist.length > 1) {
+            me.trigger('editor', 'editor.action.triggerSuggest');
+          } else if (D.prf.autocompletion() === 'classic' && e.changes.length === 1 //
+          && dot === '.' && !swv && e.changes[0].text === '') {
             me.trigger('editor', 'editor.action.triggerSuggest');
           }
         }, 50);
