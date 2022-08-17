@@ -203,6 +203,7 @@
           delete D.pendingEdit;
         }
       });
+      srv.on('getValueTip', (data) => D.ide.getValueTip(...data));
       srv.on('prf', ([k, x]) => { D.prf[k](x); });
       srv.on('switchWin', data => D.ide.switchWin(data));
       srv.on('updPW', data => D.ide.updPW(data));

@@ -858,9 +858,13 @@ D.IDE = function IDE(opts = {}) {
 D.IDE.prototype = {
   getValueTip(source, id, request) {
     const ide = this;
-    request.token = ide.valueTipToken++;
-    ide.valueTipRequests[request.token] = { id, source };
-    D.send('GetValueTip', request);
+    if (this.floating) {
+      this.ipc.emit('getValueTip', [source, id, request]);
+    } else {
+      request.token = ide.valueTipToken++;
+      ide.valueTipRequests[request.token] = { id, source };
+      D.send('GetValueTip', request);
+    }
   },
   setConnInfo(x, y, z) {
     const ide = this;
