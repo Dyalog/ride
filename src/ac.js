@@ -87,31 +87,36 @@
         model.bqc = e.changes[0].range.startColumn;
       } else if (!e.isRedoing && !e.isUndoing && !e.isFlush) {
         setTimeout(() => {
-          const sw = me._contentWidgets['editor.widget.suggestWidget'];
+          const swc = me.getContribution('editor.contrib.suggestController');
+          const sw = swc.widget.value;
           if (!sw) return;
-          const swv = sw.widget._widget._ctxSuggestWidgetVisible.get();
+          const swv = swc.model.state > 0;
           const r = e.changes[0].range;
           if (r.startLineNumber > model.getLineCount()) return;
           const limit = D.prf.autoCompleteCharacterLimit();
           const l = model.getLineContent(r.startLineNumber).toLowerCase();
           const bq2 = e.changes.length && RegExp(`${pk}${pk}\\w*`, 'i').test(l);
-          const swlist = sw.widget._widget._list;
+          const swlist = sw._list;
           if (swv && !bq2 && swlist.length === 1) {
-            const t = sw.widget._widget._focusedItem.completion.insertText.toLowerCase();
+            const t = sw._focusedItem.completion.insertText.toLowerCase();
             if (l.slice(r.startColumn - t.length, r.startColumn) === t) {
-              me.trigger('editor', 'hideSuggestWidget');
+              swc.cancelSuggestWidget();
             } else {
-              me.trigger('editor', 'editor.action.triggerSuggest');
+              swc.triggerSuggest();
             }
-          } else if (swv && !swlist.length) {
-            me.trigger('editor', 'hideSuggestWidget');
-          } else if (swv && !bq2 && swlist.length > 1) {
-            me.trigger('editor', 'editor.action.triggerSuggest');
-          } else if (e.changes.length === 1 && e.changes[0].text === '') {
+          } else if (!bq2 && e.changes.length === 1 && e.changes[0].text === '') {
             const cc = r.startColumn;
             const word = (((RegExp('⎕?[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*$').exec(l.slice(0, cc)) || [])[0] || '')); // match left of cursor
-            if (word.length > limit && (l[cc] || ' ') === ' ') me.trigger('editor', 'editor.action.triggerSuggest');
-          } 
+            if (word.length >= limit && (l[cc] || ' ') === ' ') {
+              swc.triggerSuggest();
+            } else {
+              swc.cancelSuggestWidget();
+            }
+          } else if (swv && !swlist.length) {
+            swc.cancelSuggestWidget();
+          } else if (swv && !bq2 && swlist.length > 1) {
+            swc.triggerSuggest();
+          }
         }, 50);
       }
     });
@@ -159,6 +164,7 @@
         const l = ac.position.lineNumber;
         const c = ac.position.column;
         const manual = me.tabComplete;
+        const swc = me.getContribution('editor.contrib.suggestController');
         if (D.prf.autocompletion() === 'shell' && manual) {
           const [, prefix] = x.options.join(' ').match(prefixRE) || [];
           if (prefix && prefix.length > x.skip) {
@@ -168,18 +174,18 @@
               [{ range: new monaco.Range(l, c - x.skip, l, c), text: prefix }],
               [new monaco.Selection(l, endCol, l, endCol)],
             );
-            me.trigger('editor', 'hideSuggestWidget');
+            swc.cancelSuggestWidget();
             me.tabComplete = 0;
             return;
           }
           if (me.tabComplete < 2) {
-            me.trigger('editor', 'hideSuggestWidget');
+            swc.cancelSuggestWidget();
             return;
           }
           me.tabComplete = 0;
         }
         if (!x.options.length || (D.prf.autocompletion() === 'shell' && !manual)) {
-          me.trigger('editor', 'hideSuggestWidget');
+          swc.cancelSuggestWidget();
           if (manual) {
             me.tabComplete = 0;
             let i = D.prf.indent();

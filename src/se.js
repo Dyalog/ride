@@ -625,8 +625,6 @@
 
       const c = me.getPosition();
       const ci = c.column - 1;
-      const s = me.getModel().getLineContent(c.lineNumber);
-      const ch = s[ci - 1];
       if (sels.length === 1 && sels[0].startLineNumber !== sels[0].endLineNumber) {
         me.trigger('editor', 'editor.action.indentLines');
       } else if (D.prf.autocompletion() === 'off' || this.promptType === 4) {
