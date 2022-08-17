@@ -862,7 +862,9 @@
         /* eslint-enable no-template-curly-in-string */
         return { suggestions };
       }
-      if (D.send) {
+      const word = (((RegExp('⎕?[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ0-9]*$').exec(s.slice(0, c)) || [])[0] || '')); // match left of cursor
+      const limit = D.prf.autoCompleteCharacterLimit();
+      if (D.send && word.length >= limit && (l[s] || ' ') === ' ') {
         D.send('GetAutocomplete', { line: s, pos: c - 1, token: model.winid });
         const m = model;
         return new Promise((complete, error, progress) => {
@@ -871,7 +873,7 @@
           };
         });
       }
-      return [];
+      return null;
     },
   });
   const aplHover = {
@@ -907,7 +909,7 @@
           };
         });
       }
-      return [];
+      return null;
     },
   };
   const aplFold = {
