@@ -478,7 +478,7 @@
         const { vt } = model;
         const l = vt.position.lineNumber;
         const value = '```'
-        + `${x.class === 2 ? 'plaintext' : 'apl'}\n`
+        + `${x.class === 2 || x.class === 14 ? 'plaintext' : 'apl'}\n`
         + `${x.tip.join('\n')}\n`
         + '```';
         vt.complete({
