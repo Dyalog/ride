@@ -71,7 +71,7 @@
       nodeRequire('child_process').spawn(p[0], p.slice(1), {
         detached: true,
         stdio: ['ignore', 'ignore', 'ignore'],
-        env: $.extend({}, process.env, { RIDE_SPAWN: '', DYALOG_SPAWN: '' }),
+        env: $.extend({}, process.env, { RIDE_CONNECT: '', RIDE_SPAWN: '', DYALOG_SPAWN: '' }),
       });
       if (D.ide.dead) window.close();
     },
