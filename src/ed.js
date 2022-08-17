@@ -257,7 +257,18 @@
       const ed = this;
       ed.decorations = ed.me.deltaDecorations(
         ed.decorations,
-        [...ed.stopDecorations, ...ed.hlDecorations],
+        [
+          {
+            range: new monaco.Range(1, 1, 1 + ed.me.getModel().getLineCount(), 1),
+            options: {
+              isWholeLine: false,
+              glyphMarginClassName: 'breakpointarea',
+              stickiness: monaco.editor.TrackedRangeStickiness.AlwaysGrowsWhenTypingAtEdges,
+            },
+          },
+          ...ed.stopDecorations,
+          ...ed.hlDecorations,
+        ],
       );
     },
     updSize() {
