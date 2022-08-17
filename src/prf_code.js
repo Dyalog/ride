@@ -119,7 +119,7 @@
       if (q.ai.checked && !isInt(q.sw.value, 0)) return { msg: 'Auto-indent must be a non-negative integer.', el: q.sw };
       if (q.aim.checked && !isInt(q.swm.value, 0)) return { msg: 'Auto-indent in methods must be a non-negative integer.', el: q.swm };
       if (q.ac.value === 'classic' && !isInt(q.acd.value, 0)) return { msg: 'Autocompletion delay must be a non-negative integer.', el: q.acd };
-      if (q.ac.value === 'classic' && !isInt(q.acl.value, 0)) return { msg: 'Autocompletion after N characters must not be a non-negative integer.', el: q.acl };
+      if (q.ac.value === 'classic' && !isInt(q.acl.value, 0)) return { msg: 'Autocompletion after N characters must be a non-negative integer.', el: q.acl };
       if (q.ph.checked && !isInt(q.phs.value, 1)) return { msg: 'Persistent history size must be a positive integer.', el: q.phs };
       return null;
     },
