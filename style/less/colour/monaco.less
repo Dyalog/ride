@@ -1,8 +1,19 @@
 // .disconnected .monaco-editor-background,.disconnected .monaco-editor .margin {
 //   background-color:@ME_DICONNECTED; /*beige*/
 // }
-.breakpoint{
-  background:no-repeat transparent center center url(img/breakpoint.png)
+.breakpointarea{
+  border-right: 1px solid @GLYPHMARGIN_BRD_COL;
+  cursor: pointer;
+  &:hover::before{
+    color: fade(red, 50);
+    content: '⬤';
+    font-size: 0.7em;
+  }
+  &.breakpoint::before{
+    color: red;
+    content: '⬤';
+    font-size: 0.8em;
+  }
 }
 .highlighted{
   border:none;
