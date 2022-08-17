@@ -14,6 +14,7 @@ D.prf = {};
   ['blockCursor',        0], // use block cursor selection?
   ['cursorBlinking',     'blink'], // cursor blinking
   ['autocompletionDelay',500],
+  ['autoCompleteCharacterLimit',1],
   ['colourScheme',       'Default'], //name of the active colour scheme
   ['colourSchemes',      []],//objects describing user-defined colour schemes
   ['confirmations',      {}],//saved responses to TaskDialog questions
