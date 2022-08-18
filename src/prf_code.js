@@ -21,6 +21,7 @@
       };
       q.ac.onchange = () => {
         q.acd.disabled = q.ac.value !== 'classic';
+        q.acl.disabled = q.ac.value !== 'classic';
         q.ac.value === 'classic' && q.acd.select();
       };
       q.ilf.onchange = () => {
@@ -58,6 +59,7 @@
       q.acbr.checked = !!p.autoCloseBrackets();
       q.ac.value = p.autocompletion();
       q.acd.value = p.autocompletionDelay();
+      q.acl.value = p.autoCompleteCharacterLimit();
       q.bc.checked = !!p.blockCursor();
       q.cb.value = p.cursorBlinking();
       q.coq.checked = !!p.connectOnQuit();
@@ -97,6 +99,7 @@
       p.autocompletion     (q.ac.value);
       p.autoPW             (q.apw.checked);
       p.autocompletionDelay(q.acd.value);
+      p.autoCompleteCharacterLimit (q.acl.value);
       p.connectOnQuit      (q.coq.checked);
       p.filenameInTitle    (q.fit.checked);
       p.renderLineHighlight(q.rlh.value);
@@ -116,6 +119,7 @@
       if (q.ai.checked && !isInt(q.sw.value, 0)) return { msg: 'Auto-indent must be a non-negative integer.', el: q.sw };
       if (q.aim.checked && !isInt(q.swm.value, 0)) return { msg: 'Auto-indent in methods must be a non-negative integer.', el: q.swm };
       if (q.ac.value === 'classic' && !isInt(q.acd.value, 0)) return { msg: 'Autocompletion delay must be a non-negative integer.', el: q.acd };
+      if (q.ac.value === 'classic' && !isInt(q.acl.value, 0)) return { msg: 'Autocompletion after N characters must be a non-negative integer.', el: q.acl };
       if (q.ph.checked && !isInt(q.phs.value, 1)) return { msg: 'Persistent history size must be a positive integer.', el: q.phs };
       return null;
     },
