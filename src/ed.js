@@ -399,7 +399,11 @@
       this.setRO(this.tc || !x);
       this.setPendent(!x);
     },
-    die() { this.setRO(1); this.ide.connected = 0; },
+    die() {
+      this.setRO(1);
+      this.ide.connected = 0;
+      this.ide.dom.classList.add('disconnected');
+    },
     getDocument() { return this.dom.ownerDocument; },
     refresh() { },
     autoCloseBrackets(x) { this.me.updateOptions({ autoClosingBrackets: x }); },
