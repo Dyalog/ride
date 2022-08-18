@@ -870,7 +870,7 @@
           q.log_cb.checked = !nol;
           q.log.disabled = !sel.log;
           q.log_dots.disabled = !sel.log;
-
+          
           q.cert_cb.checked = !!sel.cert;
           const noc = !sel.cert;
           q.cert.disabled = noc;
@@ -881,6 +881,7 @@
           q.rootcertsdir_cb.checked = !!sel.rootcertsdir;
           q.rootcertsdir.disabled = !sel.rootcertsdir;
           q.rootcertsdir_dots.disabled = !sel.rootcertsdir;
+          q.ssh_pass.value = '';
           q.exe.disabled = !!q.exes.value;
           q.exe.onchange();
         }
