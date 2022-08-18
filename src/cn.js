@@ -266,7 +266,11 @@
         }
       }
     });
-    clt.on('error', (x) => { clt && err(x); clt = 0; });
+    clt.on('error', (x) => {
+      clt && err(x);
+      clt = 0;
+      D.ide && D.ide.die();
+    });
     clt.on('end', () => {
       if (handshakeDone) {
         log('interpreter disconnected');
