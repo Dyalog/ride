@@ -178,7 +178,7 @@ const Console = console;
     }
     if (!D.quit) D.quit = window.close;
     window.onbeforeunload = (e) => {
-      if (D.ide && D.ide.connected) {
+      if (D.ide && D.ide.connected && !D.ide.closing) {
         e.returnValue = false;
         setTimeout(() => {
           let q = true;
@@ -187,22 +187,27 @@ const Console = console;
             $.confirm(`${msg} Are you sure?`, document.title, (x) => { q = x; });
           }
           if (q) {
+            D.ide.closing = true;
+            D.ide.w3500 && D.ide.w3500.close();
             if (D.spawned) {
               D.send('Exit', { code: 0 });
               // Wait for the disconnect message
             } else {
               D.send('Disconnect', { message: 'User shutdown request' });
               D.ide.connected = 0;
-              D.ide.w3500 && D.ide.w3500.close();
               window.close();
             }
           }
         }, 10);
-      } else {
+        return;
+      }
+      try {
         D.ipc && D.ipc.server.stop();
         D.ide && D.prf.connectOnQuit() && D.commands.CNC();
+        if (D.ide && !D.ide.connected && D.el) D.wins[0].histWrite();
+      } finally {
+        window.onbeforeunload = null;
       }
-      if (D.ide && !D.ide.connected && D.el) D.wins[0].histWrite();
     };
 
     let platform = '';
