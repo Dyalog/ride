@@ -237,7 +237,7 @@ D.Se.prototype = {
     if (se.promptType === 3 || se.promptType === 4) {
       text = s;
     } else {
-      const res = (s0 === ssp) ? se.preProcessOutput({ line: '', column: 1, input: s })
+      const res = (isEcho || s0 === ssp) ? se.preProcessOutput({ line: '', column: 1, input: s })
         : se.preProcessOutput({ line: s0, column: scp, input: s });
       scp = res.column;
       text = res.text;
@@ -618,6 +618,12 @@ D.Se.prototype = {
   TC() { this.exec(1); },
   LN() { D.prf.lineNums.toggle(); },
   MA() { D.send('RestartThreads', {}); }, // Threads > Restart All Threads
+  VAL() {
+    const se = this;
+    const l = se.me.getPosition().lineNumber;
+    se.dirty[l] = se.olines[l];
+    se.hl();
+  },
   DC() {
     const { me } = this;
     const model = me.getModel();
