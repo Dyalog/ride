@@ -101,6 +101,14 @@ D.Se = function Se(ide) { // constructor
     se.stashLines();
   });
   me.onMouseUp(se.stashLines.bind(se));
+  const messageContribution = me.getContribution('editor.contrib.messageController');
+  me.onDidAttemptReadOnlyEdit(() => {
+    if (!se.promptType) {
+      messageContribution.showMessage('Cannot edit while interpreter busy.', me.getPosition());
+    } else if (!se.ide.connected) {
+      messageContribution.showMessage('Cannot edit while disconnected from interpreter.', me.getPosition());
+    }
+  });
   me.onDidChangeModelContent((e) => {
     if (!me.listen || me.getModel().bqc) return;
     e.changes.forEach((c) => {
