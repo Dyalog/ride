@@ -136,6 +136,17 @@
         mouseL = p.lineNumber; mouseC = p.column; mouseTS = e.event.timestamp;
       }
     });
+    const messageContribution = me.getContribution('editor.contrib.messageController');
+    me.onDidAttemptReadOnlyEdit(() => {
+      if (ed.hasEmbeddedBreaks) {
+        messageContribution.showMessage('Cannot edit variable with embedded line breaks.', me.getPosition());
+      } else if (!ed.ide.connected) {
+        messageContribution.showMessage('Cannot edit while disconnected from interpreter.', me.getPosition());
+      } else {
+        messageContribution.showMessage('Cannot edit while interpreter busy.', me.getPosition());
+      } 
+    });
+
     me.onDidFocusEditorText(() => { ed.focusTS = +new Date(); ed.ide.focusedWin = ed; });
     ed.processAutocompleteReply = D.ac(me);
     ed.tb = $(ed.dom).find('a');
@@ -302,12 +313,13 @@
       }
       D.ide.floating && $('title', ed.dom.ownerDocument).text(`${ed.name} - ${ed.ide.caption}`);
       model.winid = ed.id;
-      if (ee.text.some((t) => /[\n\r]/.test(t))) {
-        ed.oText = ee.text.map((t) => t.replace('\n', '␤').replace('\r','␍')).join(model.getEOL());
-        ee.readOnly = true;
+      ed.hasEmbeddedBreaks = ee.text.some((t) => /[\n\r]/.test(t));
+      if (ed.hasEmbeddedBreaks) {
+        ed.oText = ee.text.map((t) => t.replace('\n', '␤').replace('\r', '␍')).join(model.getEOL());
       } else {
         ed.oText = ee.text.join(model.getEOL());
       }
+      ed.isReadOnlyEntity = !!ee.readOnly || ed.hasEmbeddedBreaks;
       // model.setEOL(monaco.editor.EndOfLineSequence.LF);
       // entityType:            16 NestedArray        512 AplClass
       // 1 DefinedFunction      32 QuadORObject      1024 AplInterface
@@ -315,17 +327,16 @@
       // 4 SimpleNumericArray  128 SimpleCharVector  4096 ExternalFunction
       // 8 MixedSimpleArray    256 AplNamespace
       const etype = {
-        2: ee.readOnly ? 'chararr' : 'charmat',
+        2: ed.isReadOnlyEntity ? 'chararr' : 'charmat',
         4: 'numarr',
         8: 'mixarr',
-        16: ee.readOnly ? 'mixarr' : 'charvecvec',
+        16: ed.isReadOnlyEntity ? 'mixarr' : 'charvecvec',
         32: 'quador',
         64: 'mixarr',
         128: 'charvec',
       }[ee.entityType];
       ed.isCode = [1, 256, 512, 1024, 2048, 4096].indexOf(ee.entityType) >= 0;
       model.setValue(ed.oText);
-      ed.isReadOnlyEntity = !!ee.readOnly;
       if (/(\.|\\|\/)/.test(ee.name)) {
         me.setModel(monaco.editor.createModel(ed.oText, null, monaco.Uri.file(ee.name)));
       } else {
@@ -671,7 +682,7 @@
     DO(me) { me.trigger('editor', 'editor.action.removeCommentLine'); },
     indentOrComplete(me) {
       const sels = me.getSelections();
-      
+
       const c = me.getPosition();
       const ci = c.column - 1;
       if (sels.length === 1 && sels[0].startLineNumber !== sels[0].endLineNumber) {
