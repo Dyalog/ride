@@ -23,19 +23,18 @@
 	filter: alpha(opacity=1);
 }
 .lm_tab {
-	font-family: Roboto!important;
 	letter-spacing: 0.5px;
 	font-size: 12px;
 	background-color: @GL_TAB_BG !important;
 	color: @GL_TAB_FG !important;
 	border-right:1px @GL_TAB_BRD_BG solid !important;
-}
-.lm_tab.lm_active {
-	background-color: @GL_ACT_TAB_BG !important;
-	border-right:1px @GL_TAB_BRD_BG solid !important;
-	color: @GL_ACT_TAB_FG !important;
-	.lm_close_tab{
+	&.lm_active {
+		background-color: @GL_ACT_TAB_BG !important;
+		border-right:1px @GL_TAB_BRD_BG solid !important;
 		color: @GL_ACT_TAB_FG !important;
+		.lm_close_tab{
+			color: @GL_ACT_TAB_FG !important;
+		}
 	}
 }
 .lm_splitter{
