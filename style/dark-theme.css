@@ -172,7 +172,6 @@
   filter: alpha(opacity=1);
 }
 .lm_tab {
-  font-family: Roboto!important;
   letter-spacing: 0.5px;
   font-size: 12px;
   background-color: #323446 !important;
@@ -579,24 +578,6 @@ a:hover {
 ::-webkit-scrollbar-thumb:active {
   background-color: rgba(118, 136, 217, 0.9);
 }
-#sb {
-  background-color: #1c1e28;
-  border-top: 1px solid black;
-  color: #a9a9a9;
-  font-family: apl, monospace;
-}
-#sb div.active {
-  color: #7688d9;
-}
-#sb_left > div {
-  border-right: 1px solid #272937;
-}
-#sb_right > div {
-  border-left: 1px solid #272937;
-}
-#sb_prf:active {
-  background-color: rgba(0, 0, 0, 0.2);
-}
 #splash {
   background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #1c1e28;
 }
@@ -624,18 +605,26 @@ body {
   background-color: grey;
   color: white;
 }
+#sb {
+  background-color: #1c1e28;
+  border-top: 1px solid black;
+  color: #a9a9a9;
+  font-family: apl, monospace;
+}
+#sb div.active {
+  color: #7688d9;
+}
+#sb_left > div {
+  border-right: 1px solid #272937;
+}
+#sb_right > div {
+  border-left: 1px solid #272937;
+}
+#sb_prf:active {
+  background-color: rgba(0, 0, 0, 0.2);
+}
 #status_body {
   background-color: #1c1e28;
-}
-#toast-container {
-  font-family: Roboto;
-  font-size: 14px;
-  line-height: 20px;
-}
-#toast-container > div {
-  -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
 }
 .tooltip {
   color: #7688d9;
@@ -647,6 +636,16 @@ body {
 }
 .tooltip .tooltiptext::after {
   border-color: transparent #1c1e28 transparent transparent;
+}
+#toast-container {
+  font-family: Roboto;
+  font-size: 14px;
+  line-height: 20px;
+}
+#toast-container > div {
+  -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
 }
 .toolbar {
   background-color: #1c1e28;
