@@ -108,7 +108,9 @@ const pkg = (x, y, f) => {
 const l = (f) => { b(e => (e ? f(e) : pkg('linux', 'x64', f))); };
 const w = (f) => { b(e => (e ? f(e) : pkg('win32', 'ia32', f))); };
 const o = (f) => { b(e => (e ? f(e) : pkg('darwin', 'x64', f))); };
+const oa= (f) => { b(e => (e ? f(e) : pkg('darwin', 'arm64', f))); };
 const m = (f) => { b(e => (e ? f(e) : pkg('mas', 'x64', f))); };
+const ma= (f) => { b(e => (e ? f(e) : pkg('mas', 'arm64', f))); };
 const a = (f) => { b(e => (e ? f(e) : pkg('linux', 'armv7l', f))); };
 const d = (f) => { async.series([l, w, o, a], (e) => { f(e); }); };
 
@@ -118,7 +120,9 @@ tasks.b = b; tasks.build = b;
 tasks.l = l; tasks.linux = l;
 tasks.w = w; tasks.win = w;
 tasks.o = o; tasks.osx = o;
+tasks.oa=oa; tasks.osxarm = oa;
 tasks.m = m; tasks.mas = m;
+tasks.ma=ma; tasks.masarm = ma;
 tasks.a = a; tasks.arm = a;
 tasks.d = d; tasks.dist = d;
 tasks.c = c; tasks.clean = c;
