@@ -16,8 +16,10 @@ if (ps.env.spectron_temp_dir) {
   el.app.setPath('userData', ps.env.spectron_temp_dir);
 }
 
+const winstate = ps.env.RIDE_CONF || 'winstate';
+
 // build db file path & set up empty db
-const dbf = `${el.app.getPath('userData')}/winstate.json`; // json "database" file for storing preferences
+const dbf = `${el.app.getPath('userData')}/${winstate}.json`; // json "database" file for storing preferences
 let db = {};
 // try reading the preferences
 try {
