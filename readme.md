@@ -12,7 +12,7 @@ repository.
 
 **Option 2:** Build RIDE from source:
 
-install [Git](https://git-scm.com/downloads) and [NodeJS v16.15.1](https://nodejs.org/download/release/v16.15.1/)
+install [Git](https://git-scm.com/downloads) and [NodeJS v16.16.0](https://nodejs.org/download/release/v16.16.0/)
 
     git clone https://github.com/dyalog/ride --depth=1
     cd ride
