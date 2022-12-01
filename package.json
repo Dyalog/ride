@@ -27,7 +27,7 @@
     "ava": "^3.15.0",
     "cheerio": "^1.0.0-rc.10",
     "compression": "^1.7.4",
-    "electron": "^21.2.2",
+    "electron": "^22.0.0",
     "electron-connect": "^0.6.3",
     "electron-packager": "^17.1.1",
     "eslint": "^7.32.0",
