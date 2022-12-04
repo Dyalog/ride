@@ -29,6 +29,7 @@
     "compression": "^1.7.4",
     "electron": "^22.0.0",
     "electron-connect": "^0.6.3",
+    "electron-osx-sign": "^0.6.0",
     "electron-packager": "^17.1.1",
     "eslint": "^7.32.0",
     "eslint-config-airbnb": "^18.2.1",
