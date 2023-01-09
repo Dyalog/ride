@@ -7,6 +7,7 @@ const fs = rq('fs');
 const path = rq('path');
 const { execSync } = rq('child_process');
 const async = rq('async');
+const { generateLicenses } = rq('./generate-licenses');
 const sh = x => execSync(x, { encoding: 'utf8' }).replace(/[\r\n]/g, ''); // exec in shell
 const rf = x => fs.readFileSync(x, 'utf8'); // read file
 const wf = (x, y) => fs.writeFileSync(x, y); // write file
@@ -70,26 +71,6 @@ const pkg = (x, y, f) => {
     buildVersion: isDyalogBuild ? process.env.APPVERSION : v,
     appCategoryType: 'public.app-category.developer-tools',
     extendInfo: isDyalogBuild ? 'CI/packagescripts/osx/Info.plist' : null,
-/*    afterCopy: [
-      (buildPath, electronVersion, platform, arch, cb) => {
-        if (!isDyalogBuild) return cb();
-        console.log(`Add Dyalog to ${buildPath}/../`);
-        execSync(`cp -r ${process.env.DYALOG_ROOT} ${buildPath}/../`);
-        console.log(`Add CEF to ${buildPath}/../../Frameworks`);
-        md(`${buildPath}/../../Frameworks/Chromium\ Embedded\ Framework.framework/Versions`);
-        const cef = 'Chromium\\ Embedded\\ Framework';
-        const cef_path = `${buildPath}/../../Frameworks/${cef}.framework/`;
-        execSync(`cp -r ${process.env.CEF_ROOT} ${cef_path}Versions/A`);
-        execSync(`ln -s ./A ${cef_path}Versions/Current`);
-        execSync(`ln -s ./Versions/Current/Libraries ${cef_path}Libraries`);
-        execSync(`ln -s ./Versions/Current/Resources ${cef_path}Resources`);
-        execSync(`ln -s ./Versions/Current/${cef} ${cef_path}${cef}`);
-        console.log(`Add symlink to Frameworks`);
-        execSync(`ln -s ../Frameworks ${buildPath}/../Frameworks`);
-        console.log("Dyalog and CEF added.");
-        cb();
-      }
-    ],*/
     win32metadata: { // ends up in Windows Explorer's right click > Properties
       CompanyName: 'Dyalog Ltd',
       FileDescription: 'Remote Integrated Development Environment for Dyalog APL',
@@ -101,6 +82,7 @@ const pkg = (x, y, f) => {
     const d = `_/${pj.name}/${pj.productName}-${x}-${y}`;
     rm(`${d}/version`);
     fs.existsSync(`${d}/LICENSE`) && mv(`${d}/LICENSE`, `${d}/LICENSE.electron`);
+    generateLicenses(`${d}/LICENSES.node.txt`);
     f();
   }, e => f(e));
 };
