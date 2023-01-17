@@ -82,7 +82,7 @@ const pkg = (x, y, f) => {
     const d = `_/${pj.name}/${pj.productName}-${x}-${y}`;
     rm(`${d}/version`);
     fs.existsSync(`${d}/LICENSE`) && mv(`${d}/LICENSE`, `${d}/LICENSE.electron`);
-    generateLicenses(`${d}/LICENSES.node.txt`);
+    generateLicenses(`${d}/ThirdPartyNotices.txt`);
     f();
   }, e => f(e));
 };
