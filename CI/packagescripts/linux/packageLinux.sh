@@ -204,6 +204,8 @@ createRPM() {
 		-a "${RPMCPUTYPE}"			\
 		--epoch 0				\
 		--description "Remote IDE for Dyalog APL"	\
+		--rpm-tag '%define _build_id_links none' \
+		--rpm-tag '%undefine _missing_build_ids_terminate_build' \
 		opt usr
 
 	command -v rpmlint > /dev/null && rpmlint -f CI/packagescripts/linux/rpmlint/config "ship/${PACKAGENAME}" || true
