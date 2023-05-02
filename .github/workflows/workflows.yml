@@ -24,26 +24,20 @@ jobs:
           echo 'PACKAGE_JSON<<EOF' >> $GITHUB_ENV
           cat ./package.json >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-      - run: |
-          echo 'VERSION_JSON<<EOF' >> $GITHUB_ENV
-          cat ./_/version.js >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
       - run: npm install strftime
       - uses: actions/github-script@v6
         id: date
-        env:
-          RAW_DATE: ${{ fromJson(env.VERSION_JSON).versionInfo.date }}
         with:
           result-encoding: string
           script: |
             const strftime = require('strftime');
-            const {RAW_DATE} = process.env; // "2023-05-02 12:01:02 +0200"
-            const date = new Date(RAW_DATE);
+            const {stdout} = await exec.getExecOutput('git show -s HEAD --pretty=format:%ci'); // "2023-05-02 12:01:02 +0200"
+            const date = new Date(stdout);
             const fmt = strtime('',date);
             return '%Y%m$d-%H%M%S';
       - name: Prepare zip
         run: |
-          cd _/${{ fromJson(env.PACKAGE_JSON).name }}/${{ fromJson(env.PACKAGE_JSON).prodyctName }}-win32-ia32
+          cd _/${{ fromJson(env.PACKAGE_JSON).name }}/${{ fromJson(env.PACKAGE_JSON).productName }}-win32-ia32
           zip -r -9 ../../../ride.zip *
       - name: Create Release
         id: create_release
