@@ -33,7 +33,7 @@ jobs:
             const strftime = require('strftime');
             const {stdout} = await exec.getExecOutput('git show -s HEAD --pretty=format:%ci'); // "2023-05-02 12:01:02 +0200"
             const date = new Date(stdout);
-            const fmt = strtime('',date);
+            const fmt = strftime('',date);
             return '%Y%m$d-%H%M%S';
       - name: Prepare zip
         run: |
