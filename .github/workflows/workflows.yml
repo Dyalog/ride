@@ -16,14 +16,19 @@ jobs:
         with:
           node-version: 18
           cache: npm
+      # hydrate node modules
       - run: npm install
+      # install wine64
       - run: sudo apt-get update -y
       - run: sudo apt-get install -y wine64
+      # make the windows client
       - run: node mk w
+      # import package.json
       - run: |
           echo 'PACKAGE_JSON<<EOF' >> $GITHUB_ENV
           cat ./package.json >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
+      # convert date to string usable in file name
       - run: npm install strftime
       - uses: actions/github-script@v6
         id: date
@@ -33,20 +38,20 @@ jobs:
             const strftime = require('strftime');
             const {stdout} = await exec.getExecOutput('git show -s HEAD --pretty=format:%ci'); // "2023-05-02 12:01:02 +0200"
             const date = new Date(stdout);
-            const fmt = strftime('%Y%m$d-%H%M%S',date);
+            const fmt = strftime('%Y%m%d-%H%M%S',date);
             return fmt;
+      # zip client
       - name: Prepare zip
         run: |
           cd _/${{ fromJson(env.PACKAGE_JSON).name }}/${{ fromJson(env.PACKAGE_JSON).productName }}-win32-ia32
           zip -r -9 ../../../ride.zip *
       - name: Create Release and Upload Assets
-        uses: KotwOSS/pipe-to-release@2.0.3
+        uses: meeDamian/github-release@2.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: v${{ steps.date.outputs.result }}
+          tag: v${{ steps.date.outputs.result }}
           name: Release ${{ steps.date.outputs.result }} (${{ github.ref }})
-          filemap: |
-            ./ride.zip>ride-${{ steps.date.outputs.result }}.zip
+          files: ride-${{ steps.date.outputs.result }}.zip:./ride.zip
           draft: false
           prerelease: false
 
