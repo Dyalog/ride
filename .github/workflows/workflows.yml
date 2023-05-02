@@ -1,0 +1,65 @@
+name: Build and ZIP for Windows
+
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+      - run: npm install
+      - run: sudo apt-get update -y
+      - run: sudo apt-get install -y wine64
+      - run: node mk w
+      - run: ls _ 
+      # - name: Prepare release archive unicode
+      #   run: >
+      #     zip -r -9 dfs_unicode.zip 
+      #     *.dyalog 
+      #     *.dyapp 
+      #     Core 
+      #     DFSConfig 
+      #     DFSMonitor 
+      #     Documentation 
+      #     ErrorPages 
+      #     Extensions 
+      #     PlugIns 
+      #     Utils 
+      #     *.dws
+      # - name: Create Release
+      #   id: create_release
+      #   uses: actions/create-release@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     # tag_name: ${{ github.ref }}
+      #     tag_name: v${{ steps.date.outputs.date }}
+      #     release_name: Release ${{steps.date.outputs.date }} (${{ github.ref }})
+      #     draft: false
+      #     prerelease: false
+      # - name: Upload Unicode
+      #   id: upload-unicode
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+      #     asset_path: ./dfs_unicode.zip
+      #     asset_name: dfs-${{ steps.date.outputs.date }}-unicode.zip
+      #     asset_content_type: application/zip
+      # - name: Upload Classic
+      #   id: upload-classic
+      #   uses: actions/upload-release-asset@v1
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+      #     asset_path: ./dfs_classic.zip
+      #     asset_name: dfs-${{ steps.date.outputs.date }}-classic.zip
+      #     asset_content_type: application/zip
