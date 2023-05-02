@@ -6,6 +6,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # - name: Get current date
+      #   id: date
+      #   run: echo "date=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_OUTPUT
       - uses: actions/checkout@v3
         with:
           fetch-depth: 1
@@ -17,51 +20,50 @@ jobs:
       - run: sudo apt-get update -y
       - run: sudo apt-get install -y wine64
       - run: node mk w
-      - run: ls _ -R
-      - run: cat _/version.js
-      - run: cat _/version
-      # - name: Prepare release archive unicode
-      #   run: >
-      #     zip -r -9 dfs_unicode.zip 
-      #     *.dyalog 
-      #     *.dyapp 
-      #     Core 
-      #     DFSConfig 
-      #     DFSMonitor 
-      #     Documentation 
-      #     ErrorPages 
-      #     Extensions 
-      #     PlugIns 
-      #     Utils 
-      #     *.dws
-      # - name: Create Release
-      #   id: create_release
-      #   uses: actions/create-release@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     # tag_name: ${{ github.ref }}
-      #     tag_name: v${{ steps.date.outputs.date }}
-      #     release_name: Release ${{steps.date.outputs.date }} (${{ github.ref }})
-      #     draft: false
-      #     prerelease: false
-      # - name: Upload Unicode
-      #   id: upload-unicode
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-      #     asset_path: ./dfs_unicode.zip
-      #     asset_name: dfs-${{ steps.date.outputs.date }}-unicode.zip
-      #     asset_content_type: application/zip
-      # - name: Upload Classic
-      #   id: upload-classic
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
-      #     asset_path: ./dfs_classic.zip
-      #     asset_name: dfs-${{ steps.date.outputs.date }}-classic.zip
-      #     asset_content_type: application/zip
+      - run: |
+          echo 'PACKAGE_JSON<<EOF' >> $GITHUB_ENV
+          cat ./package.json >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      - run: |
+          echo 'VERSION_JSON<<EOF' >> $GITHUB_ENV
+          cat ./_/version.js >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      - run: npm install strftime
+      - uses: actions/github-script@v6
+        id: date
+        env:
+          RAW_DATE: ${{ fromJson(env.VERSION_JSON).versionInfo.date }}
+        with:
+          result-encoding: string
+          script: |
+            const strftime = require('strftime');
+            const {RAW_DATE} = process.env; // "2023-05-02 12:01:02 +0200"
+            const date = new Date(RAW_DATE);
+            const fmt = strtime('',date);
+            return '%Y%m$d-%H%M%S';
+      - name: Prepare zip
+        run: |
+          cd _/${{ fromJson(env.PACKAGE_JSON).name }}/${{ fromJson(env.PACKAGE_JSON).prodyctName }}-win32-ia32
+          zip -r -9 ../../../ride.zip *
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVT_DATE: $${{ steps.date.outputs.result }}
+        with:
+          tag_name: v${{ EVT_DATE }}
+          release_name: Release ${{ EVT_DATE }} (${{ github.ref }})
+          draft: false
+          prerelease: false
+      - name: Upload Unicode
+        id: upload-unicode
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          EVT_DATE: $${{ steps.date.outputs.result }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing its ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+          asset_path: ./ride.zip
+          asset_name: ride-${{ EVT_DATE }}.zip
+          asset_content_type: application/zip
