@@ -39,20 +39,15 @@ jobs:
         run: |
           cd _/${{ fromJson(env.PACKAGE_JSON).name }}/${{ fromJson(env.PACKAGE_JSON).productName }}-win32-ia32
           zip -r -9 ../../../ride.zip *
-      - name: Create Release
-        id: create_release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: v${{ steps.date.outputs.result }}
-          name: Release ${{ steps.date.outputs.result }} (${{ github.ref }})
-          generate_release_notes: true
-          draft: false
-          prerelease: false
-      - name: Upload assets
-        uses: KotwOSS/pipe-to-release@2
+      - name: Create Release and Upload Assets
+        uses: KotwOSS/pipe-to-release@2.0.3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag_name: v${{ steps.date.outputs.result }}
+          name: Release ${{ steps.date.outputs.result }} (${{ github.ref }})
           filemap: |
             ./ride.zip>ride-${{ steps.date.outputs.result }}.zip
-          asset_content_type: application/zip
+          draft: false
+          prerelease: false
+
+
