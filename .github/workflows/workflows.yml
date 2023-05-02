@@ -50,10 +50,9 @@ jobs:
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          EVT_DATE: $${{ steps.date.outputs.result }}
         with:
-          tag_name: v${{ EVT_DATE }}
-          release_name: Release ${{ EVT_DATE }} (${{ github.ref }})
+          tag_name: v${{ steps.date.outputs.result }}
+          release_name: Release ${{ steps.date.outputs.result }} (${{ github.ref }})
           draft: false
           prerelease: false
       - name: Upload Unicode
@@ -61,9 +60,8 @@ jobs:
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          EVT_DATE: $${{ steps.date.outputs.result }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing its ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
           asset_path: ./ride.zip
-          asset_name: ride-${{ EVT_DATE }}.zip
+          asset_name: ride-${{ steps.date.outputs.result }}.zip
           asset_content_type: application/zip
