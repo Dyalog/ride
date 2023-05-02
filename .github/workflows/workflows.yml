@@ -17,7 +17,9 @@ jobs:
       - run: sudo apt-get update -y
       - run: sudo apt-get install -y wine64
       - run: node mk w
-      - run: ls _ 
+      - run: ls _ -R
+      - run: cat _/version.js
+      - run: cat _/version
       # - name: Prepare release archive unicode
       #   run: >
       #     zip -r -9 dfs_unicode.zip 
