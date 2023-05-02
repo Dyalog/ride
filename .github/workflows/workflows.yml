@@ -46,7 +46,7 @@ jobs:
           cd _/${{ fromJson(env.PACKAGE_JSON).name }}/${{ fromJson(env.PACKAGE_JSON).productName }}-win32-ia32
           zip -r -9 ../../../ride.zip *
       - name: Create Release and Upload Assets
-        uses: lstefano71/github-release@2.0
+        uses: lstefano71/github-release@2.0.4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           tag: v${{ steps.date.outputs.result }}
