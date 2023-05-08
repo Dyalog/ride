@@ -44,7 +44,7 @@ jobs:
       - name: Prepare zip
         run: |
           cd _/${{ fromJson(env.PACKAGE_JSON).name }}/${{ fromJson(env.PACKAGE_JSON).productName }}-win32-ia32
-          mv {{ fromJson(env.PACKAGE_JSON).productName }}.exe Ride.exe
+          mv ${{ fromJson(env.PACKAGE_JSON).productName }}.exe Ride.exe
           zip -r -9 ../../../ride.zip *
       - name: Create Release and Upload Assets
         uses: lstefano71/github-release@2.0.4
