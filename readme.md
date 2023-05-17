@@ -12,7 +12,7 @@ repository.
 
 **Option 2:** Build RIDE from source:
 
-install [Git](https://git-scm.com/downloads) and [NodeJS v16.17.1](https://nodejs.org/download/release/v16.17.1/)
+Install [Git](https://git-scm.com/downloads) and [NodeJS v16.17.1](https://nodejs.org/download/release/v16.17.1/)
 
     git clone https://github.com/dyalog/ride --depth=1
     cd ride
@@ -20,5 +20,24 @@ install [Git](https://git-scm.com/downloads) and [NodeJS v16.17.1](https://nodej
     npm start     # start RIDE (without building native apps)
     node mk dist  # build native apps under _/ride${version}/
     node mk c     # cleans your build directory
+
+`node mk dist` builds for all platforms. 
+
+You can also build platforms separately:
+
+    node mk {CODE}
+
+where `{CODE}` is one of
+
+|CODE|OS       |ARCH  |
+|----|---------|------|
+|w   | win32   |ia32  |
+|l   | linux   |x64   |
+|o   | darwin  |x64   |
+|oa  | darwin  |arm64 |
+|m   | mas     |x64   |
+|ma  | mas     |arm64 |
+|a   | linux   |armv7l|
+
 
 (`#` starts a comment)
