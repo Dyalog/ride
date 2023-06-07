@@ -54,8 +54,10 @@ JSON booleans `true` and `false` can be freely substituted with and should be tr
 ### Identify <a name=Identify></a>
 After the connection has been established and a protocol agreed, both peers immediately send an `Identify` message to indicate what type of application they are.
 ```json
-["Identify",{"identity":1}]
+["Identify",{"apiVersion":1,"identity":1}]
 ```
+The `apiVersion` is introduced as a mechanism to handle breaking changes in the API.
+
 Constants for `identity`:
 - `1` RIDE,
 - `2` interpreter,
@@ -63,15 +65,76 @@ Constants for `identity`:
 
 :red_circle: The interpreter sends an `Identify` that means something else and has different args.
 
-### ReplyGetLog <a name=ReplyGetLog></a>
-After it has received the Identify command the interpreter will send 0 or more "ReplyGetLog" messages containing the session log:
-```json
-["ReplyGetLog",{"result":["line 1","line 2"]}]
-```
+#### apiVersion < 1
+The interpreter responds with an Identify messsage containing details about the interpreter.
+
+#### apiVersion = 1
+The interpreter responds with a `ReplyIdentify` messsage containing details about the interpreter.
 
 They should then check the type of application they are connected to, and if not happy to continue, close the connection.  For instance, RIDE may check that the application it's connected to is an interpreter or a process manager. If it finds the peer is another RIDE, it should close the connection.
 
 :red_circle: In reality RIDE doesn't bother verifying that it's not talking to another RIDE.
+
+### ReplyIdentify <a name=ReplyIdentify></a>
+#### apiVersion = 1
+The interpreter responds with a `ReplyIdentify` messsage containing details about the interpreter.
+```json
+["ReplyIdentify",{ // Interpreter -> RIDE
+  "apiVersion":1,
+  "Port":0,
+  "IPAddress":"",
+  "Vendor":"Dyalog Limited",
+  "Language":"APL",
+  "version":"18.2.46943",
+  "Machine":"HOSTNAME",
+  "arch":"Unicode/64",
+  "Project":"CLEAR WS",
+  "Process":"dyalog.exe",
+  "User":"username",
+  "pid":1000,
+  "token":"{F53F7747-B404-4F7A-893D-954F2764CC74}",
+  "date":"Created: Apr 10 2023 at 19:29:32",
+  "platform":"Windows-64"
+}]
+```
+The `apiVersion` specifies the negotiated API version accepted by the interpreter.
+
+### GetLog <a name=GetLog></a>
+#### apiVersion = 1
+Request the session log from the interpreter. 
+```json
+["GetLog",{"format":"json","maxLines":0}] // RIDE -> Interpreter
+```
+`format` defaults to "json" if not specified.
+`maxLines` limits the number of lines returned (0 = unlimited)
+
+### ReplyGetLog <a name=ReplyGetLog></a>
+#### apiVersion < 1
+After it has received the Connect command the interpreter will send 0 or more "ReplyGetLog" messages containing the session log:
+```json
+["ReplyGetLog",{"result":["line 1","line 2"]}] // Interpreter -> RIDE
+```
+
+#### apiVersion = 1
+After it has received a "GetLog" command the interpreter will send 0 or more "ReplyGetLog" messages containing the session log in the format requested.
+For `text` format:
+```json
+["ReplyGetLog",{"result":["line 1","line 2"]}] // Interpreter -> RIDE
+```
+For `json` format:
+```json
+["ReplyGetLog",{"result":[ // Interpreter -> RIDE
+  {
+    "group": 1,
+    "type": 1,
+    "text": "line 1",
+  },{
+    "group": 1,
+    "type": 1,
+    "text": "line 2",
+  },
+  ]}]
+```
 
 ### SysError <a name=SysError></a>
 If at any time the interpreter crashes with a [syserror](http://help.dyalog.com/16.0/Content/Language/Errors/System%20Errors.htm), it sends;
