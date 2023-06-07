@@ -103,10 +103,10 @@ The `apiVersion` specifies the negotiated API version accepted by the interprete
 #### apiVersion = 1
 Request the session log from the interpreter. 
 ```json
-["GetLog",{"format":"json","maxLines":0}] // RIDE -> Interpreter
+["GetLog",{"format":"json","maxLines":100}] // RIDE -> Interpreter
 ```
 `format` defaults to "json" if not specified.
-`maxLines` limits the number of lines returned (0 = unlimited)
+`maxLines` limits the number of lines returned (-1 = unlimited)
 
 ### ReplyGetLog <a name=ReplyGetLog></a>
 #### apiVersion < 1
