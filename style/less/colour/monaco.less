@@ -19,3 +19,19 @@
   border:none;
   outline:solid @ME_HIGHLIGHTED 1px;
 }
+.sessionmargin{
+  border-right: 1px solid @GLYPHMARGIN_BRD_COL;
+  font-size: 1em;
+  &.group_start::before{
+    content: '┌';
+  }
+  &.group_middle::before{
+    content: '│';
+  }
+  &.group_end::before{
+    content: '└';
+  }
+  &.group_single::before{
+    content: '∙';
+  }
+}
