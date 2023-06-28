@@ -146,8 +146,9 @@ D.Se = function Se(ide) { // constructor
       }
       let l = dl0;
       while (l <= dl1) {
-        const base = se.dirty;
-        base[l] == null && (base[l] = se.olines[l]);
+        if (se.dirty[l] == null && se.lines[l - 1]) {
+          se.dirty[l] = se.lines[l - 1].text.slice(0, -1);
+        }
         l += 1;
       }
       while (l < l0 + n) se.dirty[l++] = 0;
@@ -233,7 +234,7 @@ D.Se.prototype = {
     }));
     se.setDecorations();
   },
-  add(s, isEcho) { // append text to session
+  add(s, type) { // append text to session
     const se = this;
     const { me } = se;
     const model = me.getModel();
@@ -241,13 +242,35 @@ D.Se.prototype = {
     const s0 = model.getLineContent(l);
     const cp = se.cursorPosition || me.getPosition();
     const ssp = '      ';
+    const isEcho = type === 1;
+    const isLog = type === 2;
     let text;
+    let texti;
     let scp = cp.column;
-    if (se.promptType === 3 || se.promptType === 4) {
-      text = s;
+    if (typeof s[0] === 'object') {
+      texti = s.map((line) => line.text).join('');
+      s.forEach((v) => {
+        const ll = se.lines[se.lines.length - 1];
+        if (!ll || ll.text[ll.text.length - 1] === '\n') {
+          se.lines.push(v);
+        } else {
+          ll.text += v.text;
+          ll.type = v.type;
+          ll.group = v.group;
+        }
+      });
+    } else if (typeof s === 'object') {
+      texti = s.join(isLog ? '\n' : '');
+      se.lines.push(s);
     } else {
-      const res = (isEcho || s0 === ssp) ? se.preProcessOutput({ line: '', column: 1, input: s })
-        : se.preProcessOutput({ line: s0, column: scp, input: s });
+      texti = s;
+    }
+    if (!type && texti[texti.length - 1] !== '\n') se.lines.pop();
+    if (se.promptType === 3 || se.promptType === 4) {
+      text = texti;
+    } else {
+      const res = (isEcho || s0 === ssp) ? se.preProcessOutput({ line: '', column: 1, input: texti })
+        : se.preProcessOutput({ line: s0, column: scp, input: texti });
       scp = res.column;
       text = res.text;
     }
@@ -255,7 +278,7 @@ D.Se.prototype = {
       se.lastEchoLine = l;
       se.lineEditor[l] = true;
     }
-    if (s[s.length - 1] === '\n' && se.promptType === 1) text += ssp;
+    if (texti[texti.length - 1] === '\n' && se.promptType === 1) text += ssp;
     let truncate = 0;
     const sls = D.prf.sessionLogSize();
     if (sls > 0) {
