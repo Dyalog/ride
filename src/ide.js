@@ -109,13 +109,13 @@ D.IDE = function IDE(opts = {}) {
     while (mq.length && !blk) {
       const a = mq.shift(); // a[0]:command name, a[1]:command args
       if (a[0] === 'AppendSessionOutput') { // special case: batch sequences of AppendSessionOutput together
-        let s = a[1].result;
+        const so = a[1];
+        const s = [{ text: so.result, group: so.group || 0, type: so.type || 0 }];
         const nq = Math.min(mq.length, 256);
-        if (typeof s === 'object') { s = s.join('\n'); ide.bannerDone = 0; }
         let i;
         for (i = 0; i < nq && mq[i][0] === 'AppendSessionOutput'; i++) {
-          const r = mq[i][1].result;
-          s += typeof r === 'string' ? r : r.join('\n');
+          const r = mq[i][1];
+          s.push({ text: r.result, group: r.group || 0, type: r.type || 0 });
         }
         i && mq.splice(0, i);
         ide.wins[0].add(s);
@@ -538,6 +538,8 @@ D.IDE = function IDE(opts = {}) {
         D.send('GetLog', { format: 'json' });
       }
     },
+    ReplyIdentify(x) { ide.handlers.Identify(x); },
+    ReplyIdentigy(x) { ide.handlers.Identify(x); }, // temporary until fixed
     InvalidSyntax() { $.err('Invalid syntax.', 'Interpreter error'); },
     Disconnect(x) {
       const m = x.message.toLowerCase(); ide.die();
@@ -554,7 +556,14 @@ D.IDE = function IDE(opts = {}) {
       ide.updTitle();
       ide.wse && ide.wse.refresh();
     },
-    EchoInput(x) { ide.wins[0].add(x.input, 1); },
+    UpdateSessionCaption(x) {
+      ide.sessionCaption = x.text;
+      ide.updTitle();
+      ide.wse && ide.wse.refresh();
+    },
+    EchoInput(x) {
+      ide.wins[0].add([{ text: x.input, group: x.group || 0, type: x.type || 0 }], 1);
+    },
     SetPromptType(x) {
       const t = x.type;
       ide.promptType = t;
@@ -562,11 +571,11 @@ D.IDE = function IDE(opts = {}) {
       if (t && ide.pending.length) {
         D.send('Execute', { trace: 0, text: `${ide.pending.shift()}\n` });
         ide.wins[0].prompt(t);
-      } else eachWin((w) => { w.prompt(t); });      
+      } else eachWin((w) => { w.prompt(t); });
       (t === 2 || t === 4) && ide.wins[0].focus(); // ⎕ / ⍞ input
       if (t === 1) {
-         ide.getStats();
-         ide.wse && ide.wse.refresh();
+        ide.getStats();
+        ide.wse && ide.wse.refresh();
       }
       if (t === 1 && ide.bannerDone === 0) {
         // arrange for the banner to appear at the top of the session window
@@ -836,7 +845,20 @@ D.IDE = function IDE(opts = {}) {
       D.ipc.server.emit(D.stw_bw.socket, 'add', x);
       !D.prf.statusWindow() && D.prf.autoStatus() && D.prf.statusWindow(1);
     },
-    ReplyGetLog(x) { ide.wins[0].add(x.result.join('\n')); ide.bannerDone = 0; },
+    ReplyGetLog(x) {
+      let lines;
+      if (typeof x.result[0] === 'string') {
+        lines = x.result.map((t) => ({ text: `${t}\n`, group: 0, type: 0 }));
+        if (lines[lines.length - 1].text === '\n') lines.pop();
+      } else {
+        lines = x.result.map((l) => ({ text: `${l.text}\n`, group: l.group, type: l.marks }));
+      }
+      ide.wins[0].add(lines, 2);
+      ide.bannerDone = 0;
+    },
+    SetSessionLineGroup(x) {
+      ide.wins[0].setLineGroup(x.line_offset, x.group);
+    },
     UnknownCommand(x) {
       if (x.name === 'ClearTraceStopMonitor') {
         toastr.warning('Clear all trace/stop/monitor not supported by the interpreter');
