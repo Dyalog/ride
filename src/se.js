@@ -9,12 +9,15 @@ D.Se = function Se(ide) { // constructor
   se.focusTS = 0;
   se.id = 0;
   se.decorations = [];
+  se.hlDecorations = [];
+  se.groupDecorations = [];
   // modified lines: lineNumber→originalContent
   // inserted lines: lineNumber→0 (also used in syn.js)
   se.dirty = {};
   se.isReadOnly = !1;
   se.lineEditor = {};
   se.multiLineBlocks = [];
+  se.lines = [];
 
   se.dom = document.createElement('div');
   se.dom.className = 'ride_win';
@@ -35,7 +38,7 @@ D.Se = function Se(ide) { // constructor
     fontFamily: 'apl',
     fontSize: fs,
     fixedOverflowWidgets: true,
-    glyphMargin: se.breakpoints,
+    glyphMargin: true, // D.apiVersion > 0,
     iconsInSuggestions: false,
     language: 'apl-session',
     lineHeight: fs + 2,
@@ -221,16 +224,14 @@ D.Se.prototype = {
   },
   hl() { // highlight modified lines
     const se = this;
-    se.decorations = se.me.deltaDecorations(
-      se.decorations,
-      Object.keys(se.dirty).map((l) => ({
-        range: new monaco.Range(+l, 1, +l, 1),
-        options: {
-          isWholeLine: true,
-          className: 'modified',
-        },
-      })),
-    );
+    se.hlDecorations = Object.keys(se.dirty).map((l) => ({
+      range: new monaco.Range(+l, 1, +l, 1),
+      options: {
+        isWholeLine: true,
+        className: 'modified',
+      },
+    }));
+    se.setDecorations();
   },
   add(s, isEcho) { // append text to session
     const se = this;
@@ -301,12 +302,14 @@ D.Se.prototype = {
     }
     se.isReadOnly && me.updateOptions({ readOnly: true });
     model._commandManager.clear();
+    se.setDecorations();
   },
   edit(edits, sel) {
     const { me } = this;
     me.listen = false;
     me.executeEdits('D', edits, sel);
     me.listen = true;
+    this.setDecorations();
   },
   preProcessOutput(args) {
     const { line, column, input } = args;
@@ -383,6 +386,64 @@ D.Se.prototype = {
     } else {
       if (se.taCb) { se.taCb.dispose(); delete se.taCb; }
       se.taBuffer.length && se.taReplay();
+    }
+  },
+  setDecorations() {
+    const se = this;
+    if (D.apiVersion > 0) {
+      se.groupDecorations = [{
+        range: new monaco.Range(1, 1, 1 + se.me.getModel().getLineCount(), 1),
+        options: {
+          isWholeLine: false,
+          glyphMarginClassName: 'sessionmargin',
+          stickiness: monaco.editor.TrackedRangeStickiness.AlwaysGrowsWhenTypingAtEdges,
+        },
+      }];
+      se.lines.forEach((x, i) => {
+        const prev = se.lines[i - 1] || {};
+        const next = se.lines[i + 1] || {};
+        let type;
+        if (x.group === 0) return;
+        if (x.group === prev.group
+          && (x.group === next.group
+            || (se.promptType === 3 && next.group === undefined))) type = 'middle';
+        else if (x.group === prev.group) type = 'end';
+        else if (x.group === next.group || next.group === undefined) type = 'start';
+        else if (se.dirty[i]) type = 'single';
+        else return;
+        se.groupDecorations.push({
+          range: new monaco.Range(i + 1, 1, i + 1, 1),
+          options: {
+            isWholeLine: false,
+            glyphMarginClassName: `group_${type}`,
+            stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
+          },
+        });
+      });
+      const li = se.lines.length - 1;
+      const ll = se.lines[li];
+      if (se.promptType === 3 && ll.group > 0) {
+        se.groupDecorations.push({
+          range: new monaco.Range(li + 2, 1, li + 2, 1),
+          options: {
+            isWholeLine: false,
+            glyphMarginClassName: 'group_end',
+            stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
+          },
+        });
+      }
+    }
+    se.decorations = se.me.deltaDecorations(
+      se.decorations,
+      se.groupDecorations,
+      se.hlDecorations,
+    );
+  },
+  setLineGroup(offset, group) {
+    const se = this;
+    if (offset > 0) {
+      se.lines[se.lines.length - offset].group = group;
+      se.setDecorations();
     }
   },
   stashLines() {
