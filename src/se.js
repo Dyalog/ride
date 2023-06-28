@@ -426,6 +426,16 @@ D.Se.prototype = {
         const prev = se.lines[i - 1] || {};
         const next = se.lines[i + 1] || {};
         let type;
+        if ([5, 6, 65].includes(x.type)) {
+          se.groupDecorations.push({
+            range: new monaco.Range(i + 1, 1, i + 1, 1),
+            options: {
+              isWholeLine: true,
+              className: 'sessionerror',
+              stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
+            },
+          });
+        }
         if (x.group === 0) return;
         if (x.group === prev.group
           && (x.group === next.group
