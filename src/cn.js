@@ -285,7 +285,7 @@
     });
     sendEach([
       'SupportedProtocols=2', 'UsingProtocol=2',
-      '["Identify",{"identity":1}]', '["Connect",{"remoteId":2}]', '["GetWindowLayout",{}]',
+      '["Identify",{"apiVersion":1,"identity":1}]', '["Connect",{"remoteId":2}]', '["GetWindowLayout",{}]',
     ]);
   };
   const sshExec = (x, cmd, f) => { // f:callback

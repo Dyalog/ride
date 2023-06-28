@@ -170,7 +170,7 @@ const Console = console;
       ws.onopen = () => {
         ws.send('SupportedProtocols=2');
         ws.send('UsingProtocol=2');
-        ws.send('["Identify",{"identity":1}]');
+        ws.send('["Identify",{"apiVersion":1,"identity":1}]');
         ws.send('["Connect",{"remoteId":2}]');
         ws.send('["GetWindowLayout",{}]');
       };

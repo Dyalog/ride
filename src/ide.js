@@ -516,6 +516,7 @@ D.IDE = function IDE(opts = {}) {
   ide.handlers = { // for RIDE protocol messages
     Identify(x) {
       D.remoteIdentification = x;
+      D.apiVersion = x.apiVersion || 0;
       D.isClassic = x.arch[0] === 'C';
       if (D.isClassic) {
         Object.keys(D.bq).forEach((k) => {
@@ -527,13 +528,15 @@ D.IDE = function IDE(opts = {}) {
           if (D.syntax.sysfns_classic.includes(sysfn)) p.text = `⎕${sysfn}`;
         });
       }
-      
       D.InitHelp(x.version);
       ide.updTitle();
       ide.connected = 1;
       ide.updPW();
       clearTimeout(D.tmr);
       delete D.tmr;
+      if (D.apiVersion > 0) {
+        D.send('GetLog', { format: 'json' });
+      }
     },
     InvalidSyntax() { $.err('Invalid syntax.', 'Interpreter error'); },
     Disconnect(x) {
