@@ -242,25 +242,18 @@ D.Se.prototype = {
     const isEcho = type === 1;
     const isLog = type === 2;
     let text;
-    let texti;
     let scp = cp.column;
-    if (typeof s[0] === 'object') {
-      texti = s.map((line) => line.text).join('');
-      s.forEach((v) => {
-        const ll = se.lines[se.lines.length - 1];
-        if (!ll || ll.text[ll.text.length - 1] === '\n') {
-          se.lines.push(v);
-        } else {
-          ll.text += v.text;
-          ll.type = v.type;
-          ll.group = v.group;
-        }
-      });
-    } else if (typeof s === 'object') {
-      texti = s.join(isLog ? '\n' : '');
-      se.lines.push(s);
-    } else {
-      texti = s;
+    const texti = s.map((line) => line.text).join('');
+    s.forEach((v) => {
+      const ll = se.lines[se.lines.length - 1];
+      if (!ll || ll.text[ll.text.length - 1] === '\n') {
+        se.lines.push(v);
+      } else {
+        ll.text += v.text;
+        ll.type = v.type;
+        ll.group = v.group;
+      }
+    });
     }
     if (!type && texti[texti.length - 1] !== '\n') se.lines.pop();
     if (se.promptType === 3 || se.promptType === 4) {
