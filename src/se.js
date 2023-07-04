@@ -723,8 +723,8 @@ D.Se.prototype = {
   VAL() {
     const se = this;
     const l = se.me.getPosition().lineNumber;
-    se.dirty[l] = se.olines[l];
-    se.hl();
+    se.me.executeEdits('D', [{ range: new monaco.Range(l, 1, l, 1), text: ' ' }]);
+    se.me.executeEdits('D', [{ range: new monaco.Range(l, 1, l, 2), text: '' }]);
   },
   DC() {
     const { me } = this;
