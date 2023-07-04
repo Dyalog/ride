@@ -601,10 +601,19 @@ D.Se.prototype = {
         }
         return model.getLineContent(l) || '';
       }); // strings to execute
-    } else {
+    } else { // no dirty lines, check selection
       const sel = me.getSelection();
-      if (sel.isEmpty()) {
-        es = [model.getLineContent(sel.startLineNumber)];
+      if (sel.isEmpty()) { // no selection
+        // check if cursor in multiline block
+        const block = se.multiLineBlocks.find(
+          (element) => sel.startLineNumber <= (element.end || 0)
+            && sel.startLineNumber >= element.start,
+        );
+        if (block) {
+          es = se.lines.slice(block.start - 1, block.end).map((l) => l.text.slice(0, -1));
+        } else {
+          es = [model.getLineContent(sel.startLineNumber)];
+        }
         trace && /^\s*$/.test(es[0]) && (w = se.ide.tracer()) && w.focus();
       } else {
         es = [model.getValueInRange(sel)];
