@@ -143,14 +143,15 @@ D.Se = function Se(ide) { // constructor
       }
       let l = dl0;
       while (l <= dl1) {
-        if (se.dirty[l] == null && se.lines[l - 1]) {
-          se.dirty[l] = se.lines[l - 1].text.slice(0, -1);
+        if (se.dirty[l] == null) {
+          const oldt = se.lines.length === l - 1 ? '      ' : se.lines[l - 1].text.slice(0, -1);
+          se.dirty[l] = oldt;
         }
         l += 1;
       }
       while (l < l0 + n) se.dirty[l++] = 0;
-      se.hl();
     });
+    se.hl();
   });
   me.onDidScrollChange((e) => {
     se.btm = se.me.getContentHeight() + e.scrollTop;
