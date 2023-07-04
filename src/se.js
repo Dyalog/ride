@@ -11,6 +11,7 @@ D.Se = function Se(ide) { // constructor
   se.decorations = [];
   se.hlDecorations = [];
   se.groupDecorations = [];
+  se.groupid = 0;
   // modified lines: lineNumber→originalContent
   // inserted lines: lineNumber→0 (also used in syn.js)
   se.dirty = {};
@@ -378,7 +379,14 @@ D.Se.prototype = {
         { range: new monaco.Range(pl, 1, pl, 2), text: '' },
       ]);
     } else if (wasMultiLine && x !== 3) {
-      se.multiLineBlocks[se.multiLineBlocks.length - 1].end = se.lastEchoLine;
+      const block = se.multiLineBlocks[se.multiLineBlocks.length - 1];
+      block.end = se.lastEchoLine;
+      if (D.apiVersion < 1) {
+        se.groupid += 1;
+        se.lines.slice(block.start - 1, block.end).forEach((ll) => { ll.group = se.groupid; });
+        se.setGroupDecorations();
+        se.setDecorations();
+      }
     }
     if (promptChanged) {
       if (x) delete se.cursorPosition;
