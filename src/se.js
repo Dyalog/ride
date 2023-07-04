@@ -80,8 +80,6 @@ D.Se = function Se(ide) { // constructor
   D.remDefaultMap(me);
   D.mapScanCodes(me);
   D.mapKeys(se); D.prf.keys(D.mapKeys.bind(this, se));
-  se.olines = {};
-  me.onKeyDown(se.stashLines.bind(se));
   let mouseL = 0; let mouseC = 0; let mouseTS = 0;
   me.onMouseDown((e) => {
     const t = e.target;
@@ -101,9 +99,7 @@ D.Se = function Se(ide) { // constructor
       }
       mouseL = l; mouseC = c; mouseTS = e.event.timestamp;
     }
-    se.stashLines();
   });
-  me.onMouseUp(se.stashLines.bind(se));
   const messageContribution = me.getContribution('editor.contrib.messageController');
   me.onDidAttemptReadOnlyEdit(() => {
     if (!se.promptType) {
@@ -485,16 +481,6 @@ D.Se.prototype = {
       se.setGroupDecorations();
       se.setDecorations();
     }
-  },
-  stashLines() {
-    const se = this;
-    const { me } = se;
-    const model = me.getModel();
-    me.getSelections().forEach((sel) => {
-      for (let ln = sel.startLineNumber; ln <= sel.endLineNumber; ln++) {
-        se.olines[ln] = model.getLineContent(ln);
-      }
-    });
   },
   updSize() {
     const se = this;
