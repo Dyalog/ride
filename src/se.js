@@ -254,6 +254,17 @@ D.Se.prototype = {
         ll.group = v.group;
       }
     });
+    if (isLog) {
+      const blocks = {};
+      se.lines.forEach((ll, i) => {
+        if (ll.group > 0) {
+          const group = blocks[ll.group] || {};
+          if (!group.start) group.start = i + 1;
+          group.end = i + 1;
+          blocks[ll.group] = group;
+        }
+      });
+      Object.keys(blocks).forEach((group) => se.multiLineBlocks.push(blocks[group]));
     }
     if (!type && texti[texti.length - 1] !== '\n') se.lines.pop();
     if (se.promptType === 3 || se.promptType === 4) {
