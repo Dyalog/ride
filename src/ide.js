@@ -539,7 +539,6 @@ D.IDE = function IDE(opts = {}) {
       }
     },
     ReplyIdentify(x) { ide.handlers.Identify(x); },
-    ReplyIdentigy(x) { ide.handlers.Identify(x); }, // temporary until fixed
     InvalidSyntax() { $.err('Invalid syntax.', 'Interpreter error'); },
     Disconnect(x) {
       const m = x.message.toLowerCase(); ide.die();
