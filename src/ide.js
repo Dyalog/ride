@@ -926,6 +926,7 @@ D.IDE.prototype = {
     const v = D.versionInfo || {};
     const [rva, rvb, rvc] = (v.version || '').split('.');
     const m = {
+      '{CAPTION}': ide.sessionCaption || ide.wsid,
       '{WSID}': ide.wsid,
       '{HOST}': ide.host,
       '{PORT}': ide.port,
