@@ -117,7 +117,7 @@ D.Se = function Se(ide) { // constructor
       let dl0 = l0;
       let dl1 = l1;
       const m = (l1 - l0) + 1;
-      const text = c.text.split('\n');
+      const text = c.text.split(/\r?\n/);
       for (let i = 0; i < se.multiLineBlocks.length; i++) {
         const element = se.multiLineBlocks[i];
         if (l0 <= (element.end || 0) && l1 >= element.start) {
@@ -132,7 +132,7 @@ D.Se = function Se(ide) { // constructor
         Object.keys(h).forEach((x) => { se.dirty[+x + ((n - m) * (+x > l1))] = h[x]; });
       } else if (n < m) {
         for (let j = n; j < m; j++) text.push(''); // pad shrinking changes with empty lines
-        se.edit([{ range: new monaco.Range(l0 + n, 1, l0 + 1, 1), text: '\n'.repeat(m - n) }]);
+        se.edit([{ range: new monaco.Range(l0 + n, 1, l0 + n, 1), text: '\n'.repeat(m - n) }]);
         n = m;
       }
       if (dl0 < l0 && !se.dirty[dl0]) {
@@ -149,7 +149,10 @@ D.Se = function Se(ide) { // constructor
         }
         l += 1;
       }
-      while (l < l0 + n) se.dirty[l++] = 0;
+      while (l <= dl1 + n - m) {
+        se.dirty[l] = 0;
+        l += 1;
+      }
     });
     se.hl();
   });
