@@ -56,7 +56,7 @@ D.prf = {};
   ['showEditorToolbar',  1],// show toolbar in editor windows
   ['snippetSuggestions', 1],// show snippet suggestions
   ['statusWindow',       0], //show status window
-  ['title',              '{WSID}'], //a.k.a. "caption"
+  ['title',              '{CAPTION}'], //a.k.a. "caption"
   ['valueTips',          1], //value tips
   ['dbg',                0], //show debug panel
   ['sqp',                1], //show quit prompt
