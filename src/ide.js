@@ -561,7 +561,7 @@ D.IDE = function IDE(opts = {}) {
       ide.wse && ide.wse.refresh();
     },
     EchoInput(x) {
-      ide.wins[0].add([{ text: x.input, group: x.group || 0, type: x.type || 0 }], 1);
+      ide.wins[0].add([{ text: x.input, group: x.group || 0, type: x.type || 14 }], 1);
     },
     SetPromptType(x) {
       const t = x.type;
