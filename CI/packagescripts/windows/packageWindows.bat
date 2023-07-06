@@ -14,7 +14,7 @@ IF not x%GHBRANCH:-=%==x%GHBRANCH% (GOTO PR) else (GOTO BUILD)
 
 :BUILD
 
-call "c:/Program files (x86)/Microsoft Visual Studio 8/VC/vcvarsall.bat"
+call "c:/Program files (x86)/Microsoft Visual Studio 14.0/VC/vcvarsall.bat"
 
 set RIDE_BRANCH=master
 
