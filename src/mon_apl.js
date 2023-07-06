@@ -5,36 +5,34 @@
 
   D.wordSeparators = `${D.informal.slice(0, -26).map(x => x[0]).join('').replace(/[⎕∆⍙]/g, '')}()[]{}%£#;:'"\`$^`;
 
-  function aplConfig() {
-    return {
-      comments: {
-        lineComment: '⍝',
-      },
-      brackets: [
-        ['{', '}'],
-        ['[', ']'],
-        ['(', ')'],
-      ],
-      autoClosingPairs: [
-        { open: '{', close: '}' },
-        { open: '[', close: ']' },
-        { open: '(', close: ')' },
-      ],
-      surroundingPairs: [
-        { open: '{', close: '}' },
-        { open: '[', close: ']' },
-        { open: '(', close: ')' },
-        { open: '"', close: '"' },
-        { open: '\'', close: '\'' },
-      ],
-      indentationRules: {
-        decreaseIndentPattern: RegExp(`^((?!.*?⍝).*)?\\s*(${D.syntax.endBlock})\\b.*$`, 'i'),
-        increaseIndentPattern: RegExp(`^(?:(?!⍝).)*(${D.syntax.startBlock})\\b.*$`, 'i'),
-        unIndentedLinePattern: /^\s*⍝.*$/,
-      },
-      wordPattern: RegExp(D.syntax.name),
-    };
-  };
+  const aplConfig = () => ({
+    comments: {
+      lineComment: '⍝',
+    },
+    brackets: [
+      ['{', '}'],
+      ['[', ']'],
+      ['(', ')'],
+    ],
+    autoClosingPairs: [
+      { open: '{', close: '}' },
+      { open: '[', close: ']' },
+      { open: '(', close: ')' },
+    ],
+    surroundingPairs: [
+      { open: '{', close: '}' },
+      { open: '[', close: ']' },
+      { open: '(', close: ')' },
+      { open: '"', close: '"' },
+      { open: '\'', close: '\'' },
+    ],
+    indentationRules: {
+      decreaseIndentPattern: RegExp(`^((?!.*?⍝).*)?\\s*(${D.syntax.endBlock})\\b.*$`, 'i'),
+      increaseIndentPattern: RegExp(`^(?:(?!⍝).)*(${D.syntax.startBlock})\\b.*$`, 'i'),
+      unIndentedLinePattern: /^\s*⍝.*$/,
+    },
+    wordPattern: RegExp(D.syntax.name),
+  });
 
   const aplSessionConfig = {
     comments: {
@@ -1017,7 +1015,7 @@
     ml.registerDocumentFormattingEditProvider('apl', aplFormat);
     ml.registerDocumentRangeFormattingEditProvider('apl', aplFormat);
     ml.registerOnTypeFormattingEditProvider('apl', aplFormat);
-    
+
     ml.register({ id: 'apl-session' });
     ml.setTokensProvider('apl-session', aplSessionTokens);
     ml.setLanguageConfiguration('apl-session', aplSessionConfig);
@@ -1025,15 +1023,16 @@
     ml.registerDocumentFormattingEditProvider('apl-session', aplFormat);
     ml.registerDocumentRangeFormattingEditProvider('apl-session', aplFormat);
     ml.registerOnTypeFormattingEditProvider('apl-session', aplFormat);
-    
+
     const ac = aplCompletions(D.prf.prefixKey());
     acProviders.push(ml.registerCompletionItemProvider('apl', ac));
     acProviders.push(ml.registerCompletionItemProvider('apl-session', ac));
     D.prf.prefixKey((x) => {
+      let p;
       while (p = acProviders.pop()) p.dispose();
-      const ac = aplCompletions(x);
-      acProviders.push(ml.registerCompletionItemProvider('apl', ac));
-      acProviders.push(ml.registerCompletionItemProvider('apl-session', ac));
+      const acs = aplCompletions(x);
+      acProviders.push(ml.registerCompletionItemProvider('apl', acs));
+      acProviders.push(ml.registerCompletionItemProvider('apl-session', acs));
     });
   });
 }
