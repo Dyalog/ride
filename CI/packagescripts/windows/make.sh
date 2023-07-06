@@ -124,8 +124,8 @@ echo "#define GUID_RIDE_UPGRADE \"{$GUID_RIDE_UPGRADE}\"" >> $OBJ_TMP/guids.h
 
 get_svn()
 {
-	${SVNDIR}/svn export --force -q http://svn.dyalog.bramley/svn/dyalog/branches/14.1.dss/svn/installs/win/allwidth/setup $OBJ_TMP/setup
-	${SVNDIR}/svn export --force -q http://svn.dyalog.bramley/svn/dyalog/branches/14.1.dss/svn/installs/win/allwidth/images $OBJ_TMP/images
+	svn export --force -q http://svn.dyalog.bramley/svn/dyalog/branches/14.1.dss/svn/installs/win/allwidth/setup $OBJ_TMP/setup
+	svn export --force -q http://svn.dyalog.bramley/svn/dyalog/branches/14.1.dss/svn/installs/win/allwidth/images $OBJ_TMP/images
 }
 
 get_upgrade_guid()
@@ -179,8 +179,7 @@ export RIDE_MAX_UPGRADE_VERSION=${RIDE_VERSION_AB_DOT}.$((${RIDE_VERSION_C} - 1)
 export GUID_RIDE="$(uuidgen | tr -d '\r\n')"
 export GUID_RIDE_UPGRADE=$(get_upgrade_guid)
 
-export WIXDIR="c:/wix36"
-export SVNDIR="c:/svn"
+export WIXDIR="u:/bin/wix10
 
 export RIDE_FILES_MEDIA_DISK_ID=1
 
