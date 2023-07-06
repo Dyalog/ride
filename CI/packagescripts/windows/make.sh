@@ -179,7 +179,7 @@ export RIDE_MAX_UPGRADE_VERSION=${RIDE_VERSION_AB_DOT}.$((${RIDE_VERSION_C} - 1)
 export GUID_RIDE="$(uuidgen | tr -d '\r\n')"
 export GUID_RIDE_UPGRADE=$(get_upgrade_guid)
 
-export WIXDIR="u:/bin/wix10
+export WIXDIR="u:/bin/wix10"
 
 export RIDE_FILES_MEDIA_DISK_ID=1
 
