@@ -522,7 +522,7 @@
                 addToken(offset, 'keyword.operator.dyadic');
                 offset += m[0].length;
               } else {
-                addToken(offset, 'invalid');
+                addToken(offset, 'invalid.token');
                 offset += 1;
               }
           }

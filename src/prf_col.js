@@ -86,7 +86,7 @@
       + 'tcpe=bg:c8c8c8,bgo:1 trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f vtt=bg:ff0 '
       + 'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:1,fg:080 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff '
       + 'ma=bg:828282,bgo:1,fg:0ff na=bg:828282,bgo:1,fg:f qor=bg:f00,bgo:1,fg:f dc=bg:#993333,bgo:1 '
-      + 'sae=bg:fbb,bgo:.25',
+      + 'sae=bg:fbb,bgo:.25 itk=fg:f00,U:1',
     }, {
       name: 'Francisco Goya',
       theme: 'dark',
@@ -286,6 +286,7 @@
     {s:'diamond'         ,t:'diam',m:'delimiter.diamond', fg:1, BIU:1}, //⋄
     {s:'dyadic operator' ,t:'op2' ,m:'keyword.operator.dyadic', fg:1, BIU:1}, //⍣ ...
     {s:'error'           ,t:'err' ,m:'invalid', fg:1, BIU:1},
+    {s:'invalid token'   ,t:'itk' ,m:'invalid.token', fg:1, BIU:1},
     {s:'function'        ,t:'fn'  ,m:'keyword.function', fg:1, BIU:1}, //+ ...
     {s:'global name'     ,t:'glb' ,m:'identifier.global', fg:1, BIU:1},
     {s:'idiom'           ,t:'idm' ,m:'predefined.idiom', fg:1, BIU:1}, //⊃⌽ ...
