@@ -446,16 +446,29 @@ D.Se.prototype = {
         stickiness: monaco.editor.TrackedRangeStickiness.AlwaysGrowsWhenTypingAtEdges,
       },
     }];
+    const logLineStyles = {
+      1: 'session-unpsec',
+      2: 'session-stdout',
+      3: 'session-stderr',
+      4: 'session-syscmd',
+      5: 'session-aplerr',
+      7: 'session-quad',
+      8: 'session-quotequad',
+      9: 'session-info',
+      11: 'session-echo-input',
+      12: 'session-trace',
+      14: 'session-input',
+    };
     se.lines.forEach((x, i) => {
       const prev = se.lines[i - 1] || {};
       const next = se.lines[i + 1] || {};
       let type;
-      if ([5, 6, 65].includes(x.type)) {
+      if (logLineStyles[x.type]) {
         se.groupDecorations.push({
           range: new monaco.Range(i + 1, 1, i + 1, 1),
           options: {
             isWholeLine: true,
-            className: 'sessionerror',
+            className: logLineStyles[x.type],
             stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
           },
         });

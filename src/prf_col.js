@@ -85,7 +85,8 @@
       + 'par=fg:00f quad=fg:808 qdl=fg:c0c sel=bg:48e,bgo:.5 semi=fg:00f sqbr=fg:00f srch=bg:f80,bgo:.5 str=fg:088 tc=bg:d,bgo:1 '
       + 'tcpe=bg:c8c8c8,bgo:1 trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f vtt=bg:ff0 '
       + 'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:1,fg:080 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff '
-      + 'ma=bg:828282,bgo:1,fg:0ff na=bg:828282,bgo:1,fg:f qor=bg:f00,bgo:1,fg:f dc=bg:#993333,bgo:1',
+      + 'ma=bg:828282,bgo:1,fg:0ff na=bg:828282,bgo:1,fg:f qor=bg:f00,bgo:1,fg:f dc=bg:#993333,bgo:1 '
+      + 'sae=bg:fbb,bgo:.25',
     }, {
       name: 'Francisco Goya',
       theme: 'dark',
@@ -323,6 +324,18 @@
     {s:'numarr'          ,t:'na'  ,c:'.numarr', bg:1, fg:1, BIU:1},
     {s:'quador'          ,t:'qor' ,c:'.quador', bg:1, fg:1, BIU:1},
     {s:'disconnected'    ,t:'dc'  ,c:'.disconnected', bg:1, fg:1, BIU:1},
+
+    {s:'session unspec'  ,t:'sus'  ,c:'.session-unspec', bg:1},
+    {s:'session stdout'  ,t:'sso'  ,c:'.session-stdout', bg:1},
+    {s:'session stderr'  ,t:'sse'  ,c:'.session-stderr', bg:1},
+    {s:'session syscmd'  ,t:'ssc'  ,c:'.session-syscmd', bg:1},
+    {s:'session aplerr'  ,t:'sae'  ,c:'.session-aplerr', bg:1},
+    {s:'session quad'    ,t:'sqo'  ,c:'.session-quad'  , bg:1},
+    {s:'session quotequad',t:'sqq' ,c:'.session-quotequad', bg:1},
+    {s:'session info'    ,t:'sif'  ,c:'.session-info'  , bg:1},
+    {s:'session echo input',t:'sei',c:'.session-echo-input',bg:1},
+    {s:'session trace'   ,t:'sto'  ,c:'.session-trace'  , bg:1},
+    {s:'session input'   ,t:'sin'  ,c:'.session-input'  , bg:1},
     
   ]);
   /* eslint-enable */
