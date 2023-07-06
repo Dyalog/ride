@@ -150,21 +150,43 @@ window (the session window):
 ```
 
 # Session control
-Any echoed input or interpreter output or the initial content of the session are sent to RIDE using either;
 
+#### apiVersion < 1
+Any echoed input or interpreter output are sent to RIDE using either;
 ### EchoInput <a name=EchoInput></a>
 ```json
 ["EchoInput",{"input":"      1 2 3+4 5 6\n"}] // Interpreter -> RIDE
 ```
-
 ### AppendSessionOutput <a name=AppendSessionOutput></a>
 ```json
-["AppendSessionOutput",{"result":["5 7 9"]}]  // Interpreter -> RIDE
+["AppendSessionOutput",{"result":"5 7 9"}]  // Interpreter -> RIDE
 ```
+These two perform essentially the same task except that `AppendSessionOutput` doesn't necessarily have trailing `"\n"`-s at the end of `result`.
 
-These two perform essentially the same task except that `AppendSessionOutput` doesn't have trailing `"\n"`-s at the end of each element of `result`.
+#### apiVersion = 1
+Any echoed input or interpreter output are sent to RIDE using either;
+```json
+["AppendSessionOutput",{"result":"5 7 9","type":1,"group":1}]  // Interpreter -> RIDE
+```
+`type` specifies the source of the output:
 
-:red_circle: Sometimes the interpreter returns `"result"` as a string, other times as an array of strings.
+|type| description                                  |
+|----|----------------------------------------------|
+| 0  | reserved                                     |
+| 1  | undetermined session output                  |
+| 2  | default output e.g. not assigned to ⎕ or ⍞ |
+| 3  | what would have been always sent to stderr   |
+| 4  | output from system commands                  |
+| 5  | APL error message. e.g. ^ and DOMAIN ERROR   |
+| 6  | reserved                                     |
+| 7  | ⎕ output                                    |
+| 8  | ⍞ output                                    |
+| 9  | "information" that would have gone to the "status window" |
+| 10 | reserved                                     |
+| 11 | echoed input                                 |
+| 12 | ⎕TRACE output                               |
+| 13 | reserved                                     |
+| 14 | A “normal” input line                        |
 
 ### SetPromptType <a name=SetPromptType></a>
 The interpreter informs RIDE about changes in its ability to accept user input with
@@ -689,9 +711,15 @@ Request RIDE shows some HTML. See [`3500⌶`](http://help.dyalog.com/16.0/Conten
 
 
 ### UpdateDisplayName <a name=UpdateDisplayName></a>
-RIDE can use the display name as the title of its application window.
+This message is sent by the interpreter when WSID is changed.
 ```json
 ["UpdateDisplayName",{"displayName":"CLEAR WS"}] // Interpreter -> RIDE
+```
+
+### UpdateSessionCaption <a name=UpdateSessionCaption></a>
+RIDE can use the display name as the title of its application window.
+```json
+["UpdateSessionCaption",{"text":"CLEAR WS - Dyalog APL/W-64"}] // Interpreter -> RIDE
 ```
 
 
