@@ -514,7 +514,7 @@
                   addToken(offset, 'identifier.global');
                 }
                 offset += x.length;
-              } else if ((m = sm.match(/^[+\-×÷⌈⌊|⍳⍸?*⍟○!⌹<≤=≥>≠≡≢∊⍷∪∩~∧∨⍲⍱⍴,⍪⌽⊖⍉↑↓⊆⊂⊃⌷⍋⍒⊤⊥⍕⍎⊣⊢→]+/))) {
+              } else if ((m = sm.match(/^[+\-×÷⌈⌊|⍳⍸?*⍟○!⌹<≤=≥>≠≡≢∊⍷∪∩~∧∨⍲⍱⍴,⍪⌽⊖⍉↑↓⊆⊂⊃⌷⍋⍒⊤⊥⍕⍎⊣⊢→^∣]+/))) {
                 addToken(offset, 'keyword.function');
                 offset += m[0].length;
               } else if ((m = sm.match(/^[/\\⌿⍀¨⍨⌸⌶&]+/))) {
