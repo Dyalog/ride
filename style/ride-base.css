@@ -152,6 +152,82 @@
 #cn_env {
   width: 100%;
 }
+@font-face {
+  font-family: 'apl';
+  src: url('./fonts/Apl385.woff') format('woff'), url('./fonts/Apl385.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-ThinItalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-BlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+}
 .ctl_listview {
   width: 100%;
   font-family: apl;
@@ -390,82 +466,6 @@
 }
 .lm_splitter {
   opacity: 1 !important;
-}
-@font-face {
-  font-family: 'apl';
-  src: url('./fonts/Apl385.woff') format('woff'), url('./fonts/Apl385.ttf') format('truetype');
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Thin.ttf') format('truetype');
-  font-weight: 100;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-ThinItalic.ttf') format('truetype');
-  font-weight: 100;
-  font-style: italic;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Light.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-LightItalic.ttf') format('truetype');
-  font-weight: 300;
-  font-style: italic;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Italic.ttf') format('truetype');
-  font-weight: 400;
-  font-style: italic;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-MediumItalic.ttf') format('truetype');
-  font-weight: 500;
-  font-style: italic;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Bold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-BoldItalic.ttf') format('truetype');
-  font-weight: 700;
-  font-style: italic;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Black.ttf') format('truetype');
-  font-weight: 900;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-BlackItalic.ttf') format('truetype');
-  font-weight: 900;
-  font-style: italic;
 }
 button {
   border: none;
@@ -1274,43 +1274,6 @@ h2 {
 .hidden {
   display: none;
 }
-#sb {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: space-between;
-}
-#sb[hidden] {
-  display: none;
-}
-#sb_left,
-#sb_right {
-  display: flex;
-}
-#sb_left div,
-#sb_right div {
-  display: inline-block;
-  padding: 3px 6px 4px;
-  user-select: none;
-  cursor: default;
-}
-#sb_left div[hidden],
-#sb_right div[hidden] {
-  display: none;
-}
-#sb_left div .tb_btn,
-#sb_right div .tb_btn {
-  padding: 0;
-}
-#sb_cp {
-  min-width: 15em;
-}
-#sb_prf,
-#sb_busy {
-  padding: 2px 6px 3px;
-}
 /*Status window*/
 /*info*/
 /*error*/
@@ -1435,45 +1398,42 @@ h2 {
   border: dotted transparent 2px;
   margin: -2px;
 }
-/*IDE page*/
-#splash,
-#ide,
-body.floating-window {
+#sb {
   position: absolute;
-  top: 0;
-  bottom: 0;
   left: 0;
   right: 0;
-}
-.ride_win {
-  width: 100%;
-  height: 100%;
+  bottom: 0;
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
 }
-.ride_win.edit_trace {
-  display: block;
+#sb[hidden] {
+  display: none;
 }
-.ride_win.edit_trace .ride_win_me {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
+#sb_left,
+#sb_right {
+  display: flex;
 }
-.ride_win.edit_trace.no-toolbar .ride_win_me {
-  height: 100%;
+#sb_left div,
+#sb_right div {
+  display: inline-block;
+  padding: 3px 6px 4px;
+  user-select: none;
+  cursor: default;
 }
-.win,
-.floating-window {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 32px;
-  bottom: 0;
-  overflow: hidden!important;
-  padding: 0!important;
-  height: auto!important;
+#sb_left div[hidden],
+#sb_right div[hidden] {
+  display: none;
+}
+#sb_left div .tb_btn,
+#sb_right div .tb_btn {
+  padding: 0;
+}
+#sb_cp {
+  min-width: 15em;
+}
+#sb_prf,
+#sb_busy {
+  padding: 2px 6px 3px;
 }
 /*workspace explorer*/
 /*variable*/
@@ -1586,6 +1546,69 @@ body.floating-window {
 }
 .bt_collapsed > div {
   display: none;
+}
+/*z-indices; CodeMirror uses 1-10; .dlg uses 100+ */
+.ui-tooltip {
+  z-index: 9999;
+}
+#lb_tip {
+  z-index: 300;
+}
+#vt_bln,
+#vt_tri {
+  z-index: 300;
+}
+.menu .m-box {
+  z-index: 200;
+}
+.ui-front {
+  z-index: 100;
+}
+.ui-selectable-helper {
+  z-index: 100;
+}
+.lm_splitter {
+  z-index: 11 !important;
+}
+/*IDE page*/
+#splash,
+#ide,
+body.floating-window {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.ride_win {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.ride_win.edit_trace {
+  display: block;
+}
+.ride_win.edit_trace .ride_win_me {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+.ride_win.edit_trace.no-toolbar .ride_win_me {
+  height: 100%;
+}
+.win,
+.floating-window {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 32px;
+  bottom: 0;
+  overflow: hidden!important;
+  padding: 0!important;
+  height: auto!important;
 }
 .zoom12 #wse,
 .zoom12 #debug,
@@ -1794,28 +1817,181 @@ body.floating-window {
 .zoom-10 .toolbar {
   font-size: 6px;
 }
-/*z-indices; CodeMirror uses 1-10; .dlg uses 100+ */
-.ui-tooltip {
-  z-index: 9999;
+#prf_dlg > hr {
+  margin-top: 0;
+  margin-bottom: 15px;
 }
-#lb_tip {
-  z-index: 300;
+#prf_nav {
+  display: inline-block;
+  width: 100%;
 }
-#vt_bln,
-#vt_tri {
-  z-index: 300;
+#prf_nav a {
+  float: left;
+  height: 13px;
+  padding: 4px 12px 4px 12px;
+  text-decoration: none;
+  color: #4c4a4a;
+  margin: 11px 5px 8px;
 }
-.menu .m-box {
-  z-index: 200;
+#prf_print {
+  font-size: 20px;
+  float: right;
+  margin: 7px 20px 0px 0px;
+  width: 28px;
 }
-.ui-front {
-  z-index: 100;
+#prf_content {
+  margin-top: -2px;
+  padding: 5px 10px 0;
 }
-.ui-selectable-helper {
-  z-index: 100;
+#prf_content button {
+  padding: 8px;
 }
-.lm_splitter {
-  z-index: 11 !important;
+#prf_content select {
+  overflow: hidden;
+  padding: 2px 34px 2px 4px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-height: 30px;
+  box-shadow: none;
+  font-weight: 500;
+}
+#prf_content select option {
+  font-weight: 500;
+}
+@media print {
+  #prf_dlg {
+    background: white;
+  }
+  #prf_dlg hr,
+  #prf_dlg #prf_nav,
+  #prf_dlg .dlg_btns,
+  #prf_dlg .dlg_title {
+    display: none;
+  }
+}
+/*Prefs>Code*/
+#code {
+  overflow: auto;
+  position: absolute;
+  top: 54px;
+  bottom: 70px;
+  left: 12px;
+  right: 3px;
+}
+#code p {
+  margin: 5px;
+}
+#code > hr {
+  margin-top: 5px !important;
+}
+.web #code {
+  top: 75px;
+}
+#code_aim {
+  margin-left: 48px;
+}
+/*Prefs>Menu*/
+#pmenu_rst {
+  float: right;
+}
+#pmenu p {
+  margin: 10px 8px;
+  color: black;
+}
+#pmenu_ta_wr {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 94px;
+  bottom: 70px;
+  overflow: hidden;
+  padding: 4px;
+}
+.web #pmenu_ta_wr {
+  top: 120px;
+}
+#pmenu_ta {
+  width: 100%;
+  height: 100%;
+  resize: none;
+}
+#col_top {
+  text-align: left;
+}
+#col_new_name {
+  display: none;
+}
+#col_me {
+  left: 8px;
+  right: 216px;
+  overflow: hidden;
+  text-align: left;
+  position: absolute;
+  top: 116px;
+  bottom: 70px;
+}
+#col_settings {
+  width: 200px;
+  right: 8px;
+  overflow: auto;
+  line-height: 1.5;
+  text-align: left;
+  position: absolute;
+  top: 116px;
+  bottom: 70px;
+}
+#col_settings p {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.web #col_me,
+.web #col_settings {
+  top: 126px;
+}
+#col_fg {
+  width: 48px;
+  padding: 0;
+  cursor: pointer;
+}
+#col_bg {
+  width: 48px;
+  padding: 0;
+  cursor: pointer;
+}
+#col_fgo_p,
+#col_bgo_p {
+  margin-left: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+#col_B + u {
+  font-weight: bold;
+  text-decoration: none;
+}
+#col_I + u {
+  font-style: italic;
+  text-decoration: none;
+}
+#col.frz #col_ren {
+  display: none;
+}
+#col.frz #col_del {
+  display: none;
+}
+#col.frz #col_chrome_fld {
+  display: none;
+}
+#col.frz #col_settings {
+  display: none;
+}
+#col.frz #col_me {
+  right: 8px;
+}
+#col.renaming #col_scm {
+  display: none;
+}
+#col.renaming #col_new_name {
+  display: inline;
 }
 /*Prefs>Layout*/
 /*The arrangement is: +-------+ */
@@ -2016,182 +2192,6 @@ input.lyt_g3:hover {
   #lyt_rst {
     display: none;
   }
-}
-/*Prefs>Code*/
-#code {
-  overflow: auto;
-  position: absolute;
-  top: 54px;
-  bottom: 70px;
-  left: 12px;
-  right: 3px;
-}
-#code p {
-  margin: 5px;
-}
-#code > hr {
-  margin-top: 5px !important;
-}
-.web #code {
-  top: 75px;
-}
-#code_aim {
-  margin-left: 48px;
-}
-#prf_dlg > hr {
-  margin-top: 0;
-  margin-bottom: 15px;
-}
-#prf_nav {
-  display: inline-block;
-  width: 100%;
-}
-#prf_nav a {
-  float: left;
-  height: 13px;
-  padding: 4px 12px 4px 12px;
-  text-decoration: none;
-  color: #4c4a4a;
-  margin: 11px 5px 8px;
-}
-#prf_print {
-  font-size: 20px;
-  float: right;
-  margin: 7px 20px 0px 0px;
-  width: 28px;
-}
-#prf_content {
-  margin-top: -2px;
-  padding: 5px 10px 0;
-}
-#prf_content button {
-  padding: 8px;
-}
-#prf_content select {
-  overflow: hidden;
-  padding: 2px 34px 2px 4px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-height: 30px;
-  box-shadow: none;
-  font-weight: 500;
-}
-#prf_content select option {
-  font-weight: 500;
-}
-@media print {
-  #prf_dlg {
-    background: white;
-  }
-  #prf_dlg hr,
-  #prf_dlg #prf_nav,
-  #prf_dlg .dlg_btns,
-  #prf_dlg .dlg_title {
-    display: none;
-  }
-}
-#col_top {
-  text-align: left;
-}
-#col_new_name {
-  display: none;
-}
-#col_me {
-  left: 8px;
-  right: 216px;
-  overflow: hidden;
-  text-align: left;
-  position: absolute;
-  top: 116px;
-  bottom: 70px;
-}
-#col_settings {
-  width: 200px;
-  right: 8px;
-  overflow: auto;
-  line-height: 1.5;
-  text-align: left;
-  position: absolute;
-  top: 116px;
-  bottom: 70px;
-}
-#col_settings p {
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
-.web #col_me,
-.web #col_settings {
-  top: 126px;
-}
-#col_fg {
-  width: 48px;
-  padding: 0;
-  cursor: pointer;
-}
-#col_bg {
-  width: 48px;
-  padding: 0;
-  cursor: pointer;
-}
-#col_fgo_p,
-#col_bgo_p {
-  margin-left: 16px;
-  padding-left: 8px;
-  padding-right: 8px;
-}
-#col_B + u {
-  font-weight: bold;
-  text-decoration: none;
-}
-#col_I + u {
-  font-style: italic;
-  text-decoration: none;
-}
-#col.frz #col_ren {
-  display: none;
-}
-#col.frz #col_del {
-  display: none;
-}
-#col.frz #col_chrome_fld {
-  display: none;
-}
-#col.frz #col_settings {
-  display: none;
-}
-#col.frz #col_me {
-  right: 8px;
-}
-#col.renaming #col_scm {
-  display: none;
-}
-#col.renaming #col_new_name {
-  display: inline;
-}
-/*Prefs>Menu*/
-#pmenu_rst {
-  float: right;
-}
-#pmenu p {
-  margin: 10px 8px;
-  color: black;
-}
-#pmenu_ta_wr {
-  position: absolute;
-  left: 4px;
-  right: 4px;
-  top: 94px;
-  bottom: 70px;
-  overflow: hidden;
-  padding: 4px;
-}
-.web #pmenu_ta_wr {
-  top: 120px;
-}
-#pmenu_ta {
-  width: 100%;
-  height: 100%;
-  resize: none;
 }
 /*Prefs>Saved Responses*/
 #resp_qns {
