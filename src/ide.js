@@ -850,7 +850,7 @@ D.IDE = function IDE(opts = {}) {
         lines = x.result.map((t) => ({ text: `${t}\n`, group: 0, type: 0 }));
         if (lines[lines.length - 1].text === '\n') lines.pop();
       } else {
-        lines = x.result.map((l) => ({ text: `${l.text}\n`, group: l.group, type: l.marks }));
+        lines = x.result.map((l) => ({ text: `${l.text}\n`, group: l.group, type: l.type }));
       }
       ide.wins[0].add(lines, 2);
       ide.bannerDone = 0;
