@@ -55,6 +55,7 @@ D.Se = function Se(ide) { // constructor
     quickSuggestionsDelay: D.prf.autocompletionDelay(),
     renderIndentGuides: false,
     renderLineHighlight: D.prf.renderLineHighlight(),
+    renderWhitespace: D.prf.renderWhitespace(),
     selectionHighlight: D.prf.selectionHighlight(),
     snippetSuggestions: D.prf.snippetSuggestions(),
     suggestOnTriggerCharacters: D.prf.autocompletion() === 'classic',
@@ -661,6 +662,7 @@ D.Se.prototype = {
   minimapRenderCharacters(x) { this.me.updateOptions({ minimap: { renderCharacters: !!x } }); },
   minimapShowSlider(x) { this.me.updateOptions({ minimap: { showSlider: x } }); },
   renderLineHighlight(x) { this.me.updateOptions({ renderLineHighlight: x }); },
+  renderWhitespace(x) { this.me.updateOptions({ renderWhitespace: x }); },
   selectionHighlight(x) { this.me.updateOptions({ selectionHighlight: x }); },
   snippetSuggestions(x) { this.me.updateOptions({ snippetSuggestions: x ? 'bottom' : 'none' }); },
   autocompletion(x) {

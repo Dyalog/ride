@@ -498,6 +498,7 @@ D.IDE = function IDE(opts = {}) {
   D.prf.blockCursor((x) => { eachWin(w => !w.bwId && w.blockCursor(!!x)); });
   D.prf.cursorBlinking((x) => { eachWin(w => !w.bwId && w.cursorBlinking(x)); });
   D.prf.renderLineHighlight((x) => { eachWin(w => !w.bwId && w.renderLineHighlight(x)); });
+  D.prf.renderWhitespace((x) => { eachWin(w => !w.bwId && w.renderWhitespace(x)); });
   D.prf.autocompletion((x) => { eachWin(w => !w.bwId && w.autocompletion(x === 'classic')); });
   D.prf.autocompletionDelay((x) => { eachWin(w => !w.bwId && w.autocompletionDelay(x)); });
   D.prf.minimapEnabled((x) => { eachWin(w => !w.bwId && w.minimapEnabled(!!x)); });

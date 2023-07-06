@@ -48,6 +48,7 @@ D.prf = {};
   ['prefixMaps',         {}],//per-locale strings of pairs of characters - diffs from the default map for that locale
   ['pfkeys',             [...Array(49)].map(() => '')], //command strings for pfkeys
   ['renderLineHighlight','none'], // highlight current line
+  ['renderWhitespace','selection'], // render whitespace
   ['sbar',               1], //show status bar
   ['selectedExe',        ''],//which interpreter is selected in dropdown in the Connect page?
   ['selectionHighlight', 0],// hightlight matching words

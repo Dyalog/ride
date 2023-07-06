@@ -65,6 +65,7 @@
       q.coq.checked = !!p.connectOnQuit();
       q.fit.checked = !!p.filenameInTitle();
       q.rlh.value = p.renderLineHighlight();
+      q.rws.value = p.renderWhitespace();
       q.apw.checked = !!p.autoPW();
       q.ph.checked = !!p.persistentHistory();
       q.phs.value = p.persistentHistorySize();
@@ -103,6 +104,7 @@
       p.connectOnQuit      (q.coq.checked);
       p.filenameInTitle    (q.fit.checked);
       p.renderLineHighlight(q.rlh.value);
+      p.renderWhitespace   (q.rws.value);
       p.persistentHistory  (q.ph.checked);
       p.persistentHistorySize(q.phs.value);
       p.valueTips          (q.vt.checked);

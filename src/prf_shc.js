@@ -49,6 +49,7 @@
       mouseWheelZoom: false,
       renderIndentGuides: false,
       renderLineHighlight: 'none',
+      renderWhitespace: 'none',
       scrollbar: { horizontal: 'hidden', vertical: 'hidden' },
       suggestOnTriggerCharacters: false,
       wordBasedSuggestions: false,
