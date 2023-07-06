@@ -243,8 +243,8 @@ D.Se.prototype = {
     const s0 = model.getLineContent(l);
     const cp = se.cursorPosition || me.getPosition();
     const ssp = '      ';
-    const isEcho = type === 1;
     const isLog = type === 2;
+    const isEcho = type === 1 || (!isLog && s[0].type === 14);
     let text;
     let scp = cp.column;
     const texti = s.map((line) => line.text).join('');
