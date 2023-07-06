@@ -59,6 +59,8 @@
     s.sysvar = x.quadvars.flat().join('|').toLowerCase();
 
     s.idioms = x.idioms;
+    s.idioms.push(...s.idioms.filter((d) => /∧/.test(d)).map((d) => d.replace(/∧/, '^')));
+    s.idioms.push(...s.idioms.filter((d) => /\|/.test(d)).map((d) => d.replace(/\|/, '∣')));
     D.defineSyntaxRegex();
 
     // The ReplyGetSyntaxInformation message does not return these in the same format,
