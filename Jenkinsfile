@@ -1,4 +1,7 @@
 pipeline {
+  options {
+    disableConcurrentBuilds()
+  }
   agent none
   stages {
     stage('Build Linux & Windows') {
