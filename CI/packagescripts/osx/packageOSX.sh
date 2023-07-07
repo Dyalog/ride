@@ -79,7 +79,7 @@ ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac.pkg" | tr
 "$ARCHIVENAME"
 
 # upload for notarization
-notarizefile "$ARCHIVENAME" "$identifier" 
+notarizefile "$ARCHIVENAME" 
 
 # staple result
 echo "## Stapling $ARCHIVENAME"
