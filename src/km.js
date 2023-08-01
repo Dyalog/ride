@@ -58,7 +58,7 @@
     UND(me) { me.trigger('D', 'undo'); },
     PRF() { D.prf_ui(); },
     ABT() {
-      if (D.el && D.ide.floating) D.ipc.of.ride_master.emit('ABT');
+      if (D.el && D.ide && D.ide.floating) D.ipc.of.ride_master.emit('ABT');
       else D.abt();
     },
     CAM() {

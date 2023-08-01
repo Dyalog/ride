@@ -55,6 +55,9 @@
       D.abtw = w;
       w.loadURL(`file://${__dirname}/about.html`);
       w.webContents.executeJavaScript(`document.getElementById('abt_ta').value=${JSON.stringify(details)};`);
+      w.webContents.executeJavaScript(`document.getElementById('theme_dark').disabled = ${D.theme !== 'dark'}`);
+      w.webContents.executeJavaScript(`document.getElementById('theme_light').disabled = ${D.theme !== 'light'};`);
+
       w.on('closed', () => { delete D.abtw; });
     } else {
       if (!d) {
