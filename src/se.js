@@ -44,6 +44,7 @@ D.Se = function Se(ide) { // constructor
     language: 'apl-session',
     lineHeight: fs + 2,
     lineNumbers: 'off',
+    lineDecorationsWidth: 0,
     matchBrackets: !!D.prf.matchBrackets(),
     minimap: {
       enabled: D.prf.minimapEnabled(),
@@ -231,6 +232,7 @@ D.Se.prototype = {
       options: {
         isWholeLine: true,
         className: 'modified',
+        glyphMarginClassName: 'modified',
       },
     }));
     se.setDecorations();
@@ -479,7 +481,6 @@ D.Se.prototype = {
           || (se.promptType === 3 && next.group === undefined))) type = 'middle';
       else if (x.group === prev.group) type = 'end';
       else if (x.group === next.group || next.group === undefined) type = 'start';
-      else if (se.dirty[i]) type = 'single';
       else return;
       se.groupDecorations.push({
         range: new monaco.Range(i + 1, 1, i + 1, 1),
