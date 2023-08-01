@@ -54,6 +54,7 @@ D.prf = {};
   ['sessionLogSize',     0],// max lines of session log to show (0 = unlimited)
   ['showCCGC',           0], // show CC and GC in statusbar
   ['showEditorToolbar',  1],// show toolbar in editor windows
+  ['showSessionMargin',  1],// show session margin
   ['snippetSuggestions', 1],// show snippet suggestions
   ['statusWindow',       0], //show status window
   ['title',              '{CAPTION}'], //a.k.a. "caption"
