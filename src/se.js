@@ -39,7 +39,7 @@ D.Se = function Se(ide) { // constructor
     fontFamily: 'apl',
     fontSize: fs,
     fixedOverflowWidgets: true,
-    glyphMargin: true, // D.apiVersion > 0,
+    glyphMargin: D.prf.showSessionMargin(),
     iconsInSuggestions: false,
     language: 'apl-session',
     lineHeight: fs + 2,
@@ -662,6 +662,7 @@ D.Se.prototype = {
   minimapShowSlider(x) { this.me.updateOptions({ minimap: { showSlider: x } }); },
   renderLineHighlight(x) { this.me.updateOptions({ renderLineHighlight: x }); },
   selectionHighlight(x) { this.me.updateOptions({ selectionHighlight: x }); },
+  showSessionMargin(x) { this.me.updateOptions({ glyphMargin: x }); },
   snippetSuggestions(x) { this.me.updateOptions({ snippetSuggestions: x ? 'bottom' : 'none' }); },
   autocompletion(x) {
     this.me.updateOptions({

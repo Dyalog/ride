@@ -509,6 +509,7 @@ D.IDE = function IDE(opts = {}) {
     });
   });
   D.prf.selectionHighlight((x) => { eachWin(w => !w.bwId && w.selectionHighlight(x)); });
+  D.prf.showSessionMargin((x) => { !ide.floating && ide.wins['0'].showSessionMargin(x); });
   D.prf.showEditorToolbar((x) => { $('.ride_win.edit_trace').toggleClass('no-toolbar', !x); });
   D.prf.snippetSuggestions((x) => { eachWin(w => !w.bwId && w.snippetSuggestions(x)); });
   D.prf.zoom(ide.zoom.bind(ide));

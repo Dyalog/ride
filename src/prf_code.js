@@ -73,6 +73,7 @@
       q.sqt.checked = !!p.squiggleTips();
       q.set.checked = !!p.showEditorToolbar();
       q.sls.value = p.sessionLogSize();
+      q.ssm.checked = !!p.showSessionMargin();
       q.sqp.checked = !!p.sqp();
       q.ss.checked = !!p.snippetSuggestions();
       q.ai.onchange();
@@ -108,6 +109,7 @@
       p.valueTips          (q.vt.checked);
       p.selectionHighlight (q.sh.checked);
       p.sessionLogSize     (q.sls.value);
+      p.showSessionMargin  (q.ssm.checked);
       p.showEditorToolbar  (q.set.checked);
       p.squiggleTips       (q.sqt.checked);
       p.sqp                (q.sqp.checked);
