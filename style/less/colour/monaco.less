@@ -31,7 +31,10 @@
   &.group_end::before{
     content: '└';
   }
-  &.group_single::before{
+  &.modified:not(.group_start,.group_middle,.group_end)::before{
     content: '∙';
+  }
+  &.modified::before{
+    color: red;
   }
 }

@@ -72,80 +72,6 @@
   font-size: 16px;
   font-family: monospace;
 }
-.ctl_listview {
-  background-color: #1c1e28;
-  color: white;
-}
-.ctl_listview tr {
-  background-color: rgba(118, 136, 217, 0.5);
-  border-bottom: 1px solid #1c1e28;
-}
-.ctl_listview tr:hover {
-  background-color: rgba(118, 136, 217, 0.25);
-}
-.ctl_listview tr.selected {
-  background-color: #1c1e28;
-}
-#debug {
-  background: #1c1e28;
-}
-#debug .ctl_listview_header {
-  background-color: #7688d9;
-  color: white;
-}
-#debug .ctl_listview_header h2 {
-  font-size: 16px;
-}
-/*various dialogs*/
-#dlg_modal_overlay {
-  background-color: black;
-  opacity: 0.2;
-}
-.dlg {
-  background-color: #1c1e28;
-  outline: none;
-}
-.dlg div {
-  outline: none;
-}
-.dlg_title,
-.dlg_close {
-  color: #7688d9;
-}
-.dlg_close:hover {
-  background-color: white;
-}
-#cn_listen_dlg,
-#cn_connecting_dlg {
-  border: 1px solid #7688d9;
-}
-#gd.dlg {
-  background-color: #1c1e28;
-}
-#gd .dlg_title,
-#gd .dlg_close {
-  color: #828282;
-}
-#gd .dlg_close:hover {
-  color: white;
-  background-color: #323446;
-}
-#gd_content {
-  color: #a9a9a9;
-}
-.dlg_btns {
-  background-color: #323446;
-}
-.dlg_btns button.task {
-  background-image: none;
-  background-color: rgba(0, 0, 0, 0);
-  color: #7688d9;
-  text-transform: none;
-  font-size: small;
-  font-weight: normal;
-  text-align: left;
-  border: 1px solid transparent;
-}
 /*Golden Layout*/
 .lm_goldenlayout {
   background: #272937 !important;
@@ -289,6 +215,56 @@ select {
   border: 1px solid rgba(169, 169, 169, 0.3);
   color: white;
 }
+/*various dialogs*/
+#dlg_modal_overlay {
+  background-color: black;
+  opacity: 0.2;
+}
+.dlg {
+  background-color: #1c1e28;
+  outline: none;
+}
+.dlg div {
+  outline: none;
+}
+.dlg_title,
+.dlg_close {
+  color: #7688d9;
+}
+.dlg_close:hover {
+  background-color: white;
+}
+#cn_listen_dlg,
+#cn_connecting_dlg {
+  border: 1px solid #7688d9;
+}
+#gd.dlg {
+  background-color: #1c1e28;
+}
+#gd .dlg_title,
+#gd .dlg_close {
+  color: #828282;
+}
+#gd .dlg_close:hover {
+  color: white;
+  background-color: #323446;
+}
+#gd_content {
+  color: #a9a9a9;
+}
+.dlg_btns {
+  background-color: #323446;
+}
+.dlg_btns button.task {
+  background-image: none;
+  background-color: rgba(0, 0, 0, 0);
+  color: #7688d9;
+  text-transform: none;
+  font-size: small;
+  font-weight: normal;
+  text-align: left;
+  border: 1px solid transparent;
+}
 #lb {
   background-color: #1c1e28;
   border-bottom: 1px black solid;
@@ -357,6 +333,67 @@ select {
 }
 .menu .m-box a:focus.m-checked {
   background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
+}
+.ctl_listview {
+  background-color: #1c1e28;
+  color: white;
+}
+.ctl_listview tr {
+  background-color: rgba(118, 136, 217, 0.5);
+  border-bottom: 1px solid #1c1e28;
+}
+.ctl_listview tr:hover {
+  background-color: rgba(118, 136, 217, 0.25);
+}
+.ctl_listview tr.selected {
+  background-color: #1c1e28;
+}
+#debug {
+  background: #1c1e28;
+}
+#debug .ctl_listview_header {
+  background-color: #7688d9;
+  color: white;
+}
+#debug .ctl_listview_header h2 {
+  font-size: 16px;
+}
+.breakpointarea {
+  border-right: 1px solid #272937;
+  cursor: pointer;
+}
+.breakpointarea:hover::before {
+  color: rgba(255, 0, 0, 0.5);
+  content: '⬤';
+  font-size: 0.7em;
+}
+.breakpointarea.breakpoint::before {
+  color: red;
+  content: '⬤';
+  font-size: 0.8em;
+}
+.highlighted {
+  border: none;
+  outline: solid red 1px;
+}
+.sessionmargin {
+  border-right: 1px solid #272937;
+  font-size: 1em;
+}
+.sessionmargin.group_start::before {
+  content: '┌';
+}
+.sessionmargin.group_middle::before {
+  content: '│';
+}
+.sessionmargin.group_end::before {
+  content: '└';
+}
+.sessionmargin.modified:not(.group_start,.group_middle,.group_end)::before {
+  content: '∙';
+}
+.sessionmargin.modified::before {
+  color: red;
 }
 #prf_dlg hr {
   border-top: 1px solid black;
@@ -532,39 +569,32 @@ a:hover {
     display: none;
   }
 }
-.breakpointarea {
-  border-right: 1px solid #272937;
-  cursor: pointer;
+#splash {
+  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #1c1e28;
 }
-.breakpointarea:hover::before {
-  color: rgba(255, 0, 0, 0.5);
-  content: '⬤';
-  font-size: 0.7em;
+#ide {
+  background-color: #1c1e28;
 }
-.breakpointarea.breakpoint::before {
-  color: red;
-  content: '⬤';
-  font-size: 0.8em;
+#apl_font {
+  color: #1c1e28;
 }
-.highlighted {
-  border: none;
-  outline: solid red 1px;
+::selection {
+  background: #7688d9;
+  color: white;
 }
-.sessionmargin {
-  border-right: 1px solid #272937;
-  font-size: 1em;
+/*must be separate rules*/
+::-moz-selection {
+  background: #7688d9;
+  color: white;
 }
-.sessionmargin.group_start::before {
-  content: '┌';
+/*must be separate rules*/
+body {
+  font-family: Roboto, sans-serif;
 }
-.sessionmargin.group_middle::before {
-  content: '│';
-}
-.sessionmargin.group_end::before {
-  content: '└';
-}
-.sessionmargin.group_single::before {
-  content: '∙';
+#demo-keys span {
+  border: solid #333 1px;
+  background-color: grey;
+  color: white;
 }
 ::-webkit-scrollbar {
   background-color: #1c1e28;
@@ -593,33 +623,6 @@ a:hover {
 }
 ::-webkit-scrollbar-thumb:active {
   background-color: rgba(118, 136, 217, 0.9);
-}
-#splash {
-  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #1c1e28;
-}
-#ide {
-  background-color: #1c1e28;
-}
-#apl_font {
-  color: #1c1e28;
-}
-::selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-::-moz-selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-body {
-  font-family: Roboto, sans-serif;
-}
-#demo-keys span {
-  border: solid #333 1px;
-  background-color: grey;
-  color: white;
 }
 #sb {
   background-color: #1c1e28;
