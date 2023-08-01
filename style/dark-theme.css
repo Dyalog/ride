@@ -1,3 +1,9 @@
+#abt_ta {
+  border: 1px solid rgba(169, 169, 169, 0.3);
+  background-color: #272937;
+  color: white;
+  font-family: apl, monospace;
+}
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),
 #cn textarea {
   border: 1px solid rgba(169, 169, 169, 0.3);
@@ -72,90 +78,29 @@
   font-size: 16px;
   font-family: monospace;
 }
-/*Golden Layout*/
-.lm_goldenlayout {
-  background: #272937 !important;
+.ctl_listview {
+  background-color: #1c1e28;
+  color: white;
 }
-.lm_goldenlayout .lm_header {
-  background: #272937 !important;
+.ctl_listview tr {
+  background-color: rgba(118, 136, 217, 0.5);
+  border-bottom: 1px solid #1c1e28;
 }
-.lm_header,
-.lm_content {
-  border-color: #272937 !important;
+.ctl_listview tr:hover {
+  background-color: rgba(118, 136, 217, 0.25);
 }
-.lm_dragProxy .lm_content {
-  box-shadow: 2px 2px 4px rgba(255, 255, 255, 0.2);
+.ctl_listview tr.selected {
+  background-color: #1c1e28;
 }
-.lm_dropTargetIndicator {
-  box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.4);
-  outline: 1px dashed #7688d9;
-  margin: 1px;
-  transition: all 200ms ease;
+#debug {
+  background: #1c1e28;
 }
-.lm_dropTargetIndicator .lm_inner {
-  background: white;
-  opacity: 0.1;
-  filter: alpha(opacity=1);
+#debug .ctl_listview_header {
+  background-color: #7688d9;
+  color: white;
 }
-.lm_tab {
-  letter-spacing: 0.5px;
-  font-size: 12px;
-  background-color: #323446 !important;
-  color: #a9a9a9 !important;
-  border-right: 1px #272937 solid !important;
-}
-.lm_tab.lm_active {
-  background-color: #1c1e28 !important;
-  border-right: 1px #272937 solid !important;
-  color: #7688d9 !important;
-}
-.lm_tab.lm_active .lm_close_tab {
-  color: #7688d9 !important;
-}
-.lm_splitter {
-  background-color: rgba(118, 136, 217, 0.3) !important;
-}
-.lm_splitter.lm_horizontal {
-  background: rgba(118, 136, 217, 0.3) url(img/grabber_vert.png) no-repeat center !important;
-  box-shadow: -1px 0 0 black inset, 1px 0 0 black inset;
-}
-.lm_splitter.lm_vertical {
-  background: rgba(118, 136, 217, 0.3) url(img/grabber_hor.png) no-repeat center !important;
-  box-shadow: 0 -1px 0 black inset, 0 1px 0 black inset;
-}
-.lm_header .lm_tab .lm_close_tab {
-  background-image: none !important;
-  color: #a9a9a9;
+#debug .ctl_listview_header h2 {
   font-size: 16px;
-}
-.lm_header .lm_tab .lm_close_tab::before {
-  content: "×";
-}
-.lm_header .lm_tab:hover .lm_close_tab {
-  opacity: 1;
-  color: #7688d9 !important;
-}
-.lm_controls > li {
-  background-position: center center;
-  background-repeat: no-repeat;
-  position: relative;
-}
-.lm_controls > li:hover {
-  opacity: 1;
-  filter: alpha(opacity=100);
-}
-.lm_header .lm_controls .lm_tabdropdown:before {
-  color: #a9a9a9 !important;
-}
-.lm_controls .lm_maximise {
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAKElEQVR4nGP8////fwYCgImQAgYGBgYWKM2IR81/okwajIpgvsMbVgAwgQYRVakEKQAAAABJRU5ErkJggg==);
-}
-.lm_maximised .lm_controls .lm_maximise {
-  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAJ0lEQVR4nGP8//8/AzGAiShVI1YhCwMDA8OsWbPwBmZaWhoj0SYCAN1lBxMAX4n0AAAAAElFTkSuQmCC);
-}
-.lm_transition_indicator {
-  background-color: white;
-  border: 1px dashed #7688d9;
 }
 label {
   color: #a9a9a9;
@@ -265,6 +210,91 @@ select {
   text-align: left;
   border: 1px solid transparent;
 }
+/*Golden Layout*/
+.lm_goldenlayout {
+  background: #272937 !important;
+}
+.lm_goldenlayout .lm_header {
+  background: #272937 !important;
+}
+.lm_header,
+.lm_content {
+  border-color: #272937 !important;
+}
+.lm_dragProxy .lm_content {
+  box-shadow: 2px 2px 4px rgba(255, 255, 255, 0.2);
+}
+.lm_dropTargetIndicator {
+  box-shadow: inset 0 0 30px rgba(255, 255, 255, 0.4);
+  outline: 1px dashed #7688d9;
+  margin: 1px;
+  transition: all 200ms ease;
+}
+.lm_dropTargetIndicator .lm_inner {
+  background: white;
+  opacity: 0.1;
+  filter: alpha(opacity=1);
+}
+.lm_tab {
+  letter-spacing: 0.5px;
+  font-size: 12px;
+  background-color: #323446 !important;
+  color: #a9a9a9 !important;
+  border-right: 1px #272937 solid !important;
+}
+.lm_tab.lm_active {
+  background-color: #1c1e28 !important;
+  border-right: 1px #272937 solid !important;
+  color: #7688d9 !important;
+}
+.lm_tab.lm_active .lm_close_tab {
+  color: #7688d9 !important;
+}
+.lm_splitter {
+  background-color: rgba(118, 136, 217, 0.3) !important;
+}
+.lm_splitter.lm_horizontal {
+  background: rgba(118, 136, 217, 0.3) url(img/grabber_vert.png) no-repeat center !important;
+  box-shadow: -1px 0 0 black inset, 1px 0 0 black inset;
+}
+.lm_splitter.lm_vertical {
+  background: rgba(118, 136, 217, 0.3) url(img/grabber_hor.png) no-repeat center !important;
+  box-shadow: 0 -1px 0 black inset, 0 1px 0 black inset;
+}
+.lm_header .lm_tab .lm_close_tab {
+  background-image: none !important;
+  color: #a9a9a9;
+  font-size: 16px;
+}
+.lm_header .lm_tab .lm_close_tab::before {
+  content: "×";
+}
+.lm_header .lm_tab:hover .lm_close_tab {
+  opacity: 1;
+  color: #7688d9 !important;
+}
+.lm_controls > li {
+  background-position: center center;
+  background-repeat: no-repeat;
+  position: relative;
+}
+.lm_controls > li:hover {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+.lm_header .lm_controls .lm_tabdropdown:before {
+  color: #a9a9a9 !important;
+}
+.lm_controls .lm_maximise {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAkAAAAJCAYAAADgkQYQAAAAKElEQVR4nGP8////fwYCgImQAgYGBgYWKM2IR81/okwajIpgvsMbVgAwgQYRVakEKQAAAABJRU5ErkJggg==);
+}
+.lm_maximised .lm_controls .lm_maximise {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAJ0lEQVR4nGP8//8/AzGAiShVI1YhCwMDA8OsWbPwBmZaWhoj0SYCAN1lBxMAX4n0AAAAAElFTkSuQmCC);
+}
+.lm_transition_indicator {
+  background-color: white;
+  border: 1px dashed #7688d9;
+}
 #lb {
   background-color: #1c1e28;
   border-bottom: 1px black solid;
@@ -333,30 +363,6 @@ select {
 }
 .menu .m-box a:focus.m-checked {
   background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
-}
-.ctl_listview {
-  background-color: #1c1e28;
-  color: white;
-}
-.ctl_listview tr {
-  background-color: rgba(118, 136, 217, 0.5);
-  border-bottom: 1px solid #1c1e28;
-}
-.ctl_listview tr:hover {
-  background-color: rgba(118, 136, 217, 0.25);
-}
-.ctl_listview tr.selected {
-  background-color: #1c1e28;
-}
-#debug {
-  background: #1c1e28;
-}
-#debug .ctl_listview_header {
-  background-color: #7688d9;
-  color: white;
-}
-#debug .ctl_listview_header h2 {
-  font-size: 16px;
 }
 .breakpointarea {
   border-right: 1px solid #272937;
@@ -537,7 +543,10 @@ a:hover {
   color: #7688d9;
 }
 #pmenu #pmenu_ta {
-  font-family: monospace;
+  border: 1px solid rgba(169, 169, 169, 0.3);
+  background-color: #272937;
+  color: white;
+  font-family: apl, monospace;
 }
 @media print {
   .lyt_k,
@@ -568,33 +577,6 @@ a:hover {
   #shc_tbl_wr tr .shc_key .shc_del {
     display: none;
   }
-}
-#splash {
-  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #1c1e28;
-}
-#ide {
-  background-color: #1c1e28;
-}
-#apl_font {
-  color: #1c1e28;
-}
-::selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-::-moz-selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-body {
-  font-family: Roboto, sans-serif;
-}
-#demo-keys span {
-  border: solid #333 1px;
-  background-color: grey;
-  color: white;
 }
 ::-webkit-scrollbar {
   background-color: #1c1e28;
@@ -642,8 +624,32 @@ body {
 #sb_prf:active {
   background-color: rgba(0, 0, 0, 0.2);
 }
-#status_body {
+#splash {
+  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #1c1e28;
+}
+#ide {
   background-color: #1c1e28;
+}
+#apl_font {
+  color: #1c1e28;
+}
+::selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+::-moz-selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+body {
+  font-family: Roboto, sans-serif;
+}
+#demo-keys span {
+  border: solid #333 1px;
+  background-color: grey;
+  color: white;
 }
 #toast-container {
   font-family: Roboto;
@@ -654,6 +660,9 @@ body {
   -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+}
+#status_body {
+  background-color: #1c1e28;
 }
 .tooltip {
   color: #7688d9;
