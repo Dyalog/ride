@@ -109,14 +109,15 @@
         })
         if (!x) return;
         const [v] = x
+        const qt = /\s/.test(v) ? '"' : '';
         if (/\.dws$/i.test(v)) {
           $.confirm(
             `Run Latent Expression of ${v.replace(/^.*[\\/]/, '')}?`,
             'Load Workspace',
-            (x) => D.ide.exec([`      )${(x ? '' : 'x')}load ${v}\n`], 0),
+            (x) => D.ide.exec([`      )${(x ? '' : 'x')}load ${qt}${v}${qt}\n`], 0),
           );
         } else {
-          D.ide.exec([`      )ED file://${v}\n`], 0);
+          D.ide.exec([`      )ED ${qt}file://${v}${qt}\n`], 0);
         }
       }
     },
