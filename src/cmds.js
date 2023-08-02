@@ -21,7 +21,6 @@ D.cmds = [
   ['CNC','Connect',                 []],
   ['DK', 'Delete lines',            []],
   ['DHI','Dyalog Help Index',       []],
-  ['DMK','Toggle key display mode', []],
   ['DMN','Next line in demo',       []],
   ['DMP','Previous line in demo',   []],
   ['DMR','Load demo file',          []],

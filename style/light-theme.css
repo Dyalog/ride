@@ -1,3 +1,10 @@
+#abt_ta {
+  border: 1px solid rgba(169, 169, 169, 0.3);
+  background-color: #dde0ec;
+  color: black;
+  cursor: auto;
+  font-family: apl, monospace;
+}
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),
 #cn textarea {
   border: 1px solid rgba(169, 169, 169, 0.3);
@@ -95,13 +102,6 @@
 }
 #debug .ctl_listview_header h2 {
   font-size: 16px;
-}
-#abt_ta {
-  border: 1px solid rgba(169, 169, 169, 0.3);
-  background-color: #dde0ec;
-  color: black;
-  cursor: auto;
-  font-family: apl, monospace;
 }
 /*various dialogs*/
 #dlg_modal_overlay {
@@ -238,41 +238,63 @@
   background-color: black;
   border: 1px dashed #7688d9;
 }
-/*menu (see ../src/menu.js for the DOM structure)*/
-.menu {
+label {
+  color: #4c4a4a;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 600;
+}
+button {
+  background: #7688d9;
+  color: white;
+  border-radius: 4px;
+  background-image: -moz-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
+  background-image: -webkit-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
+  background-image: -ms-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
+}
+button:hover {
+  color: #4c4a4a;
+}
+input + label {
+  cursor: pointer;
+  vertical-align: text-top;
+}
+input:disabled + label {
+  cursor: default;
+  color: #a4a2a2;
+}
+[type=checkbox] {
+  cursor: pointer;
   background-color: #edeff5;
-  border-bottom: solid grey 1px;
+  border: 1px solid #7688d9;
 }
-.menu a,
-.menu a:hover {
-  color: black;
-  font-size: 0.8em;
+[type=checkbox]:checked {
+  background-color: #7688d9;
 }
-.menu .m-open {
-  background: rgba(0, 0, 0, 0.2);
+[type=checkbox]:hover {
+  background: #9eabe4;
 }
-.menu .m-open .m-top {
-  border-color: transparent;
+[type=checkbox]:active {
+  background: #7688d9;
+  color: #9eabe4;
 }
-.menu .m-box {
-  background-color: white;
-  border-color: rgba(0, 0, 0, 0.2);
-}
-.menu .m-box a {
-  border: none;
-  border-color: #edeff5;
-}
-.menu .m-box a .m-shc {
+[type=checkbox]:checked {
   color: #7688d9;
 }
-.menu .m-box a:focus {
-  background: rgba(0, 0, 0, 0.2);
+[type=checkbox]:checked::after {
+  color: #edeff5;
 }
-.menu .m-box a.m-checked {
-  background: transparent 5px center no-repeat url(img/menu_chk.png);
+[type=checkbox]:disabled,
+[type=checkbox]:disabled:checked {
+  cursor: default;
+  color: #a4a2a2;
+  background: #a4a2a2;
+  border-color: #a4a2a2;
 }
-.menu .m-box a:focus.m-checked {
-  background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
+select {
+  background-color: #dde0ec;
+  border: 1px solid rgba(169, 169, 169, 0.3);
+  color: #4e65ce;
 }
 #lb {
   background-color: #edeff5;
@@ -522,63 +544,27 @@ a:hover {
     display: none;
   }
 }
-label {
-  color: #4c4a4a;
-  font-family: Roboto;
-  font-size: 14px;
-  font-weight: 600;
+#splash {
+  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #7688d9;
 }
-button {
-  background: #7688d9;
-  color: white;
-  border-radius: 4px;
-  background-image: -moz-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
-  background-image: -webkit-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
-  background-image: -ms-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
-}
-button:hover {
-  color: #4c4a4a;
-}
-input + label {
-  cursor: pointer;
-  vertical-align: text-top;
-}
-input:disabled + label {
-  cursor: default;
-  color: #a4a2a2;
-}
-[type=checkbox] {
-  cursor: pointer;
-  background-color: #edeff5;
-  border: 1px solid #7688d9;
-}
-[type=checkbox]:checked {
+#ide {
   background-color: #7688d9;
 }
-[type=checkbox]:hover {
-  background: #9eabe4;
-}
-[type=checkbox]:active {
-  background: #7688d9;
-  color: #9eabe4;
-}
-[type=checkbox]:checked {
+#apl_font {
   color: #7688d9;
 }
-[type=checkbox]:checked::after {
-  color: #edeff5;
+::selection {
+  background: #7688d9;
+  color: white;
 }
-[type=checkbox]:disabled,
-[type=checkbox]:disabled:checked {
-  cursor: default;
-  color: #a4a2a2;
-  background: #a4a2a2;
-  border-color: #a4a2a2;
+/*must be separate rules*/
+::-moz-selection {
+  background: #7688d9;
+  color: white;
 }
-select {
-  background-color: #dde0ec;
-  border: 1px solid rgba(169, 169, 169, 0.3);
-  color: #4e65ce;
+/*must be separate rules*/
+body {
+  font-family: Roboto, sans-serif;
 }
 ::-webkit-scrollbar {
   background-color: white;
@@ -608,43 +594,6 @@ select {
 ::-webkit-scrollbar-thumb:active {
   background-color: rgba(118, 136, 217, 0.9);
 }
-#splash {
-  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #7688d9;
-}
-#ide {
-  background-color: #7688d9;
-}
-#apl_font {
-  color: #7688d9;
-}
-::selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-::-moz-selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-body {
-  font-family: Roboto, sans-serif;
-}
-#demo-keys span {
-  border: solid #333 1px;
-  background-color: grey;
-  color: white;
-}
-#toast-container {
-  font-family: Roboto;
-  font-size: 14px;
-  line-height: 20px;
-}
-#toast-container > div {
-  -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-}
 #status_body {
   background-color: #edeff5;
 }
@@ -662,17 +611,6 @@ body {
 }
 #sb_right > div {
   border-left: 1px solid #dde0ec;
-}
-.tooltip {
-  color: #7688d9;
-}
-/* Tooltip text */
-.tooltip .tooltiptext {
-  background-color: #dde0ec;
-  color: #4c4a4a;
-}
-.tooltip .tooltiptext::after {
-  border-color: transparent #dde0ec transparent transparent;
 }
 .toolbar {
   background-color: white;
@@ -701,6 +639,25 @@ body {
   border: 0 solid #dde0ec;
   border-right-width: 1px;
 }
+.tooltip {
+  color: #7688d9;
+}
+/* Tooltip text */
+.tooltip .tooltiptext {
+  background-color: #dde0ec;
+  color: #4c4a4a;
+}
+.tooltip .tooltiptext::after {
+  border-color: transparent #dde0ec transparent transparent;
+}
+#vt_bln {
+  border: solid black 1px;
+  background-color: black;
+  color: white;
+}
+#vt_tri {
+  border-color: black;
+}
 #wse {
   background-color: white;
   color: black;
@@ -717,11 +674,49 @@ body {
   background-color: rgba(118, 136, 217, 0.5);
   outline: rgba(118, 136, 217, 0.5);
 }
-#vt_bln {
-  border: solid black 1px;
-  background-color: black;
-  color: white;
+/*menu (see ../src/menu.js for the DOM structure)*/
+.menu {
+  background-color: #edeff5;
+  border-bottom: solid grey 1px;
 }
-#vt_tri {
-  border-color: black;
+.menu a,
+.menu a:hover {
+  color: black;
+  font-size: 0.8em;
+}
+.menu .m-open {
+  background: rgba(0, 0, 0, 0.2);
+}
+.menu .m-open .m-top {
+  border-color: transparent;
+}
+.menu .m-box {
+  background-color: white;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.menu .m-box a {
+  border: none;
+  border-color: #edeff5;
+}
+.menu .m-box a .m-shc {
+  color: #7688d9;
+}
+.menu .m-box a:focus {
+  background: rgba(0, 0, 0, 0.2);
+}
+.menu .m-box a.m-checked {
+  background: transparent 5px center no-repeat url(img/menu_chk.png);
+}
+.menu .m-box a:focus.m-checked {
+  background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
+}
+#toast-container {
+  font-family: Roboto;
+  font-size: 14px;
+  line-height: 20px;
+}
+#toast-container > div {
+  -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
 }
