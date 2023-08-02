@@ -267,7 +267,7 @@
         } else if (sm[0]) {
           [c] = sm;
           switch (c) {
-            case ' ':
+            case ' ': case '\t': case '\r': case '\n':
               m = sm.match(/^[ \t\r\n]+/);
               addToken(offset, 'white');
               offset += m[0].length; break;
