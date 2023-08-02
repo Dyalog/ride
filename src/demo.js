@@ -55,35 +55,5 @@
       inp.value = '';
       inp.click();
     },
-    DMK() { // toggle key display mode
-      if ($p) {
-        handlers.forEach((h) => h.dispose()); handlers.length = 0;
-        $('#demo-keys').remove();
-        $p = null;
-        return;
-      }
-      $('body').append($('<div id=demo-keys>').append($p = $('<span>').hide()));
-      const { me } = D.wins[0];
-      handlers.push(me.onKeyDown((e) => {
-        const s = keyInfo(e)[0]; $p.text(s).toggle(!!s);
-      }));
-
-      handlers.push(me.onKeyUp((e) => {
-        const h = keyInfo(e);
-        const [s, c] = h;
-        if (c) {
-          $p.hide();
-          const $k = $('<span>').text(s).insertBefore($p);
-          setTimeout(() => { $k.fadeOut(1000); }, 2000);
-        } else {
-          $p.text(s).toggle(!!s);
-        }
-      }));
-      handlers.push(me.onDidBlurEditorText(() => {
-        if (!$p[0].hidden) {
-          setTimeout(() => { $p.fadeOut(1000); }, 2000);
-        }
-      }));
-    },
   });
 }());
