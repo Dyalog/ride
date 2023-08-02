@@ -54,6 +54,10 @@
 }
 .lm_header .lm_tab .lm_close_tab{
 	&::before {content: "×";}
+	&.modified::before {
+		content: "⬤";
+		font-size: 8px;
+	}
 	background-image: none !important;
 	color: @GL_TAB_FG;
 	font-size: 16px;

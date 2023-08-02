@@ -107,6 +107,7 @@ D.Ed = function Ed(ide, opts) { // constructor
       const [, fn, op] = s.match(D.syntax.tradFnRE) || [];
       return ed.container.setTitle(op || fn || ed.name);
     }
+    ed.container.tab.closeElement.toggleClass('modified', true);
   });
 
   let mouseL = 0; let mouseC = 0; let mouseTS = 0;
@@ -549,6 +550,7 @@ D.Ed.prototype = {
     const v = me.getValue();
     ed.updStops();
     const stop = ed.getStops();
+    ed.container.tab.closeElement.toggleClass('modified', false);
     if (ed.tc || (v === ed.oText && `${stop}` === `${ed.oStop}`)) { // if tracer or unchanged
       ed.isClosing && D.send('CloseWindow', { win: ed.id });
       return;
