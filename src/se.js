@@ -180,6 +180,7 @@ D.Se = function Se(ide) { // constructor
     else document.activeElement.dispatchEvent(k);
     setTimeout(se.taReplay, 1);
   };
+  se.setPendent = $.debounce(100, (x) => se.dom.classList.toggle('pendent', x));
 };
 D.Se.prototype = {
   histRead() {
@@ -380,6 +381,7 @@ D.Se.prototype = {
       readOnly: !x,
       quickSuggestions: [2, 4].includes(x) ? false : D.prf.autocompletion() === 'classic',
     });
+    se.setPendent(!x);
     if (!wasMultiLine && x === 3) {
       const pl = line - 1;
       se.lineEditor[pl] = true;
