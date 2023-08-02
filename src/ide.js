@@ -238,8 +238,6 @@ D.IDE = function IDE(opts = {}) {
   I.lb_prf.onmouseout = I.lb_tip.onmouseout;
   I.lb_prf.onmousedown = () => { D.prf_ui('shc'); return !1; };
   I.lb_prf.onclick = () => !1; // prevent # from appearing in the URL bar
-  I.sb_prf.onmousedown = () => { D.prf_ui(); return !1; };
-  I.sb_prf.onclick = () => !1; // prevent # from appearing in the URL bar
   $(I.lb_inner).sortable({
     forcePlaceholderSize: 1,
     placeholder: 'lb_placeholder',
