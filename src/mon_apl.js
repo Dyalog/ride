@@ -888,7 +888,7 @@
         return {
           range: new monaco.Range(p.lineNumber, p.column - 1, p.lineNumber, p.column),
           contents: [
-            { value: lbt[0] },
+            { value: lbt[0].replace(/\\/g, '\\\\') },
             { value: `\`\`\`plaintext\n${lbt[1]}\n\`\`\`` },
           ],
         };
