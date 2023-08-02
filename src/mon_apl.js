@@ -564,12 +564,12 @@
         h.l += 1;
         return lt;
       }
-      if (h.s && (m = line.match(/^(\s*)\)(\w+).*/))) {
+      if (h.s && (m = line.match(/^(\s*)\)(\w*).*/))) {
         if (m[1]) {
           addToken(offset, 'white');
           offset += m[1].length;
         }
-        const token = D.syntax.scmd.indexOf(m[2].toLowerCase()) < 0 ? 'invalid.scmd' : 'predefined.scmd';
+        const token = D.syntax.scmd.some((x)=> x.startsWith(m[2].toLowerCase())) ? 'predefined.scmd' : 'invalid.scmd' ;
         addToken(offset, token);
         h.l += 1;
         return lt;
