@@ -20,7 +20,9 @@ D.Ed = function Ed(ide, opts) { // constructor
   D.createContextMenu(ed.dom, ed);
   ed.oText = '';
   ed.oStop = []; // remember original text and "stops" to avoid pointless saving on EP
-  ed.stop = new Set(); // remember original text and "stops" to avoid pointless saving on EP
+  ed.monitor = new Set();
+  ed.stop = new Set();
+  ed.trace = new Set();
   ed.isCode = 1;
   ed.isReadOnly = !1;
   ed.isReadOnlyEntity = !1;
@@ -121,7 +123,7 @@ D.Ed = function Ed(ide, opts) { // constructor
       ed.updStops();
       ed.stop.has(l) ? ed.stop.delete(l) : ed.stop.add(l);
       ed.setStop();
-      ed.tc && D.send('SetLineAttributes', { win: ed.id, stop: ed.getStops() });
+      ed.setLineAttributes();
     } else if (t.type === mt.CONTENT_TEXT
       || (ed.tc && inEmptySpace)) {
       if (e.event.timestamp - mouseTS < 400 && mouseL === p.lineNumber && mouseC === p.column) {
@@ -261,6 +263,17 @@ D.Ed.prototype = {
     }));
     ed.setDecorations();
   },
+  setLineAttributes() {
+    const ed = this;
+    if (ed.tc) {
+      D.send('SetLineAttributes', {
+        win: ed.id,
+        monitor: [...ed.monitor],
+        stop: ed.getStops(),
+        trace: [...ed.trace],
+      });
+    }
+  },
   setDecorations() {
     const ed = this;
     ed.decorations = ed.me.deltaDecorations(
@@ -354,6 +367,8 @@ D.Ed.prototype = {
     ed.oStop = (ee.stop || []).slice(0).sort((x, y) => x - y);
     ed.stop = new Set(ed.oStop);
     ed.setStop();
+    ed.monitor = new Set(ee.monitor || []);
+    ed.trace = new Set(ee.trace || []);
   },
   update(x) {
     const ed = this;
@@ -538,7 +553,13 @@ D.Ed.prototype = {
       ed.isClosing && D.send('CloseWindow', { win: ed.id });
       return;
     }
-    D.send('SaveChanges', { win: ed.id, text: v.split(me.getModel().getEOL()), stop });
+    D.send('SaveChanges', {
+      win: ed.id,
+      text: v.split(me.getModel().getEOL()),
+      monitor: [...ed.monitor],
+      stop,
+      trace: [...ed.trace],
+    });
   },
   TL(me) { // toggle localisation
     const name = D.ide.cword(me);
@@ -622,7 +643,7 @@ D.Ed.prototype = {
     const ed = this;
     ed.stop.clear();
     ed.setStop();
-    ed.tc && D.send('SetLineAttributes', { win: ed.id, stop: ed.getStops() });
+    ed.setLineAttributes();
   },
   BP(me) { // toggle breakpoint
     const ed = this;
@@ -638,7 +659,7 @@ D.Ed.prototype = {
       }
     });
     ed.setStop();
-    ed.tc && D.send('SetLineAttributes', { win: ed.id, stop: ed.getStops() });
+    ed.setLineAttributes();
   },
   RD(me) {
     const ed = this;
