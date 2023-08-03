@@ -44,7 +44,7 @@ D.Se = function Se(ide) { // constructor
     language: 'apl-session',
     lineHeight: fs + 2,
     lineNumbers: 'off',
-    lineDecorationsWidth: 0,
+    lineDecorationsWidth: 1,
     matchBrackets: !!D.prf.matchBrackets(),
     minimap: {
       enabled: D.prf.minimapEnabled(),
