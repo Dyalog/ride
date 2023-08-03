@@ -24,7 +24,7 @@ notarizefile() { # $1: path to file to notarize
                                --password "$APPLE_APP_PASS" \
                                --team-id "$APPLE_TEAM" \
                                "$requestUUID"  2>&1 )
-    echo $resuest_info
+    echo $request_info
 
     request_status=$(echo "$request_info" | awk -F ': ' '/status:/ { print $2; }')
 
