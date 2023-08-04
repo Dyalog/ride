@@ -6,6 +6,7 @@ D.Ed = function Ed(ide, opts) { // constructor
   ed.ide = ide;
   ed.id = opts.id;
   ed.name = opts.name;
+  ed.title = ed.name;
   ed.tc = opts.tc;
   ed.HIGHLIGHT_LINE = 1;
   ed.decorations = [];
@@ -24,6 +25,7 @@ D.Ed = function Ed(ide, opts) { // constructor
   ed.stop = new Set();
   ed.trace = new Set();
   ed.isCode = 1;
+  ed.isModified = false;
   ed.isReadOnly = !1;
   ed.isReadOnlyEntity = !1;
   ed.breakpoints = D.prf.breakPts();
@@ -92,24 +94,31 @@ D.Ed = function Ed(ide, opts) { // constructor
   me.onDidChangeCursorPosition(ed.cursorActivity.bind(ed));
 
   me.getModel().onDidChangeContent((evt) => {
-    const range = evt.changes[0].range;
-    if (!ed.firstOpen) {
-      ed.container.tab.closeElement.toggleClass('modified', true);
-    }
-    ed.firstOpen &&= ed.isCode;
+    const { range } = evt.changes[0];
+    const wasModified = ed.isModified;
+    ed.isModified = !ed.firstOpen;
+    ed.firstOpen = ed.firstOpen && ed.isCode;
     if (ed.isCode && range.startLineNumber === 1) {
       const content = me.getModel().getLineContent(1);
       const [s] = content.match(/[^⍝\n\r;]*/);
-      if (!s) return ed.container.setTitle(ed.name);
-      if (D.syntax.dfnHeader.test(s)) {
-        return ed.container.setTitle(s.split('←')[0]);
+      if (!s) {
+        ed.title = ed.name;
+      } else if (D.syntax.dfnHeader.test(s)) {
+        ed.title = s.split('←')[0].trim(' ');
+      } else {
+        const cds = s.match(RegExp(`^:((?:Class[ :]*|Namespace|Interface) +(${D.syntax.name}))?`, 'i'));
+        if (cds) {
+          ed.title = cds[2] || ed.name;
+        } else {
+          const [, fn, op] = s.match(D.syntax.tradFnRE) || [];
+          ed.title = op || fn || ed.name;
+        }
       }
-      const cds = s.match(RegExp(`^:((?:Class[ :]*|Namespace|Interface) +(${D.syntax.name}))?`, 'i'));
-      if (cds) {
-        return ed.container.setTitle(cds[2] || ed.name);
-      }
-      const [, fn, op] = s.match(D.syntax.tradFnRE) || [];
-      return ed.container.setTitle(op || fn || ed.name);
+      ed.updateTitle();
+    }
+    if (wasModified !== ed.isModified) {
+      ed.updateTitle();
+      ed.container.tab.closeElement.toggleClass('modified', ed.isModified);
     }
   });
 
@@ -319,13 +328,9 @@ D.Ed.prototype = {
     // Check if a filename for a source file is provided.
     // Make sure it isn't duplicated in the existing name.
     if (ee.filename && (ed.name.indexOf(ee.filename) === -1) && D.prf.filenameInTitle()) {
-      ed.name = ed.name.concat(' in ', ee.filename);
+      ed.filename = ee.filename;
     }
-    if (ed.container) {
-      ed.container.setTitle(ed.name);
-      ed.container.tab.header.parent.trigger('resize');
-    }
-    D.ide.floating && $('title', ed.dom.ownerDocument).text(`${ed.name} - ${ed.ide.caption}`);
+    ed.updateTitle();
     model.winid = ed.id;
     ed.hasEmbeddedBreaks = ee.text.some((t) => /[\n\r]/.test(t));
     if (ed.hasEmbeddedBreaks) {
@@ -379,6 +384,17 @@ D.Ed.prototype = {
     ed.container && ed.container.setTitle(x.name);
     ed.me_ready.then(() => ed.open(x));
   },
+  updateTitle() {
+    const ed = this;
+    const filename = ed.filename ? ` in ${ed.filename}` : '';
+    if (ed.container) {
+      ed.container.setTitle(ed.title);
+      ed.container.tab.header.parent.trigger('resize');
+      ed.container.tab.titleElement[0].title = ed.filename;
+    }
+    const docTitle = `${ed.isModified ? '⬤ ' : ''}${ed.title}${filename} - ${ed.ide.caption}`;
+    D.ide.floating && $('title', ed.dom.ownerDocument).text(docTitle);
+  },
   blockCursor(x) { this.me.updateOptions({ cursorStyle: x ? 'block' : 'line' }); },
   cursorBlinking(x) { this.me.updateOptions({ cursorBlinking: x }); },
   hasFocus() { return this.me.hasTextFocus(); },
@@ -394,7 +410,7 @@ D.Ed.prototype = {
       q = p; p = p.parent;
     } // reveal in golden layout
     if (D.ide.floating) {
-      $('title', ed.dom.ownerDocument).text(`${ed.name} - ${ed.ide.caption}`);
+      ed.updateTitle();
       D.el.getCurrentWindow().focus();
     }
     window.focused || window.focus();
@@ -553,7 +569,8 @@ D.Ed.prototype = {
     const v = me.getValue();
     ed.updStops();
     const stop = ed.getStops();
-    ed.container.tab.closeElement.toggleClass('modified', false);
+    ed.isModified = false;
+    ed.updateTitle();
     if (ed.tc || (v === ed.oText && `${stop}` === `${ed.oStop}`)) { // if tracer or unchanged
       ed.isClosing && D.send('CloseWindow', { win: ed.id });
       return;
