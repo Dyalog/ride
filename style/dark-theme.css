@@ -79,30 +79,6 @@
   font-size: 16px;
   font-family: monospace;
 }
-.ctl_listview {
-  background-color: #1c1e28;
-  color: white;
-}
-.ctl_listview tr {
-  background-color: rgba(118, 136, 217, 0.5);
-  border-bottom: 1px solid #1c1e28;
-}
-.ctl_listview tr:hover {
-  background-color: rgba(118, 136, 217, 0.25);
-}
-.ctl_listview tr.selected {
-  background-color: #1c1e28;
-}
-#debug {
-  background: #1c1e28;
-}
-#debug .ctl_listview_header {
-  background-color: #7688d9;
-  color: white;
-}
-#debug .ctl_listview_header h2 {
-  font-size: 16px;
-}
 /*various dialogs*/
 #dlg_modal_overlay {
   background-color: black;
@@ -369,6 +345,30 @@ select {
 .menu .m-box a:focus.m-checked {
   background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
 }
+.ctl_listview {
+  background-color: #1c1e28;
+  color: white;
+}
+.ctl_listview tr {
+  background-color: rgba(118, 136, 217, 0.5);
+  border-bottom: 1px solid #1c1e28;
+}
+.ctl_listview tr:hover {
+  background-color: rgba(118, 136, 217, 0.25);
+}
+.ctl_listview tr.selected {
+  background-color: #1c1e28;
+}
+#debug {
+  background: #1c1e28;
+}
+#debug .ctl_listview_header {
+  background-color: #7688d9;
+  color: white;
+}
+#debug .ctl_listview_header h2 {
+  font-size: 16px;
+}
 .breakpointarea {
   border-right: 1px solid #272937;
   cursor: pointer;
@@ -378,8 +378,38 @@ select {
   content: '⬤';
   font-size: 0.7em;
 }
+.breakpointarea.monitorpoint.breakpoint.tracepoint::before {
+  color: brown;
+  content: '⬤';
+  font-size: 0.8em;
+}
+.breakpointarea.monitorpoint.breakpoint::before {
+  color: purple;
+  content: '⬤';
+  font-size: 0.8em;
+}
+.breakpointarea.monitorpoint.tracepoint::before {
+  color: green;
+  content: '⬤';
+  font-size: 0.8em;
+}
+.breakpointarea.breakpoint.tracepoint::before {
+  color: orange;
+  content: '⬤';
+  font-size: 0.8em;
+}
+.breakpointarea.monitorpoint::before {
+  color: blue;
+  content: '⬤';
+  font-size: 0.8em;
+}
 .breakpointarea.breakpoint::before {
   color: red;
+  content: '⬤';
+  font-size: 0.8em;
+}
+.breakpointarea.tracepoint::before {
+  color: yellow;
   content: '⬤';
   font-size: 0.8em;
 }
@@ -405,6 +435,34 @@ select {
 }
 .sessionmargin.modified::before {
   color: red;
+}
+::-webkit-scrollbar {
+  background-color: #1c1e28;
+}
+::-webkit-scrollbar-corner {
+  background-color: #1c1e28;
+}
+::-webkit-scrollbar-track {
+  background-color: #272937;
+  border: 1px solid #1c1e28;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(118, 136, 217, 0.3);
+  border: 1px solid #1c1e28;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  border-width: 1px 0;
+}
+::-webkit-scrollbar-thumb:vertical {
+  border-width: 0 1px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(118, 136, 217, 0.6);
+}
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(118, 136, 217, 0.9);
 }
 #prf_dlg hr {
   border-top: 1px solid black;
@@ -584,34 +642,6 @@ a:hover {
     display: none;
   }
 }
-::-webkit-scrollbar {
-  background-color: #1c1e28;
-}
-::-webkit-scrollbar-corner {
-  background-color: #1c1e28;
-}
-::-webkit-scrollbar-track {
-  background-color: #272937;
-  border: 1px solid #1c1e28;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb {
-  background-color: rgba(118, 136, 217, 0.3);
-  border: 1px solid #1c1e28;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:horizontal {
-  border-width: 1px 0;
-}
-::-webkit-scrollbar-thumb:vertical {
-  border-width: 0 1px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(118, 136, 217, 0.6);
-}
-::-webkit-scrollbar-thumb:active {
-  background-color: rgba(118, 136, 217, 0.9);
-}
 #splash {
   background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #1c1e28;
 }
@@ -700,6 +730,14 @@ body {
   border: 0 solid #272937;
   border-right-width: 1px;
 }
+#vt_bln {
+  border: solid black 1px;
+  background-color: black;
+  color: white;
+}
+#vt_tri {
+  border-color: black;
+}
 #wse {
   background-color: #1c1e28;
   color: white;
@@ -715,12 +753,4 @@ body {
 #wse .bt_text.selected {
   background-color: rgba(118, 136, 217, 0.75);
   outline: rgba(118, 136, 217, 0.75);
-}
-#vt_bln {
-  border: solid black 1px;
-  background-color: black;
-  color: white;
-}
-#vt_tri {
-  border-color: black;
 }
