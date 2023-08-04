@@ -186,7 +186,7 @@
       h.bg && (cls += `background-color:${RGBA(h.bg, h.bgo == null ? 0.5 : h.bgo)};`);
       cls += '}';
       return cls;
-    }).join('')
+    }).join('').concat(D.mac ? 'u{text-decoration:none;' : '')
   );
   const setMonacoTheme = (schema) => {
     const rules = [];
