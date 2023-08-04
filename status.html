@@ -7,7 +7,7 @@
 <link rel=stylesheet class=theme id=theme_light href='style/light-theme.css'>
 <script>
 
-    const ipc = require('node-ipc');
+    const ipc = require('node-ipc').default;
     const el = require('@electron/remote');
     const bw = el.getCurrentWindow();
     const [width] = bw.getSize();
