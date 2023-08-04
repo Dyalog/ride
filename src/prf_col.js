@@ -14,27 +14,27 @@
   let me; //   Monaco editor instance for displaying sample code
   let sel; //  the selected group's token type (.t)
   // RGB() expands the hex representation of a colour, rgb() shrinks it
-  function RGB(x) {
+  const RGB = (x) => {
     const n = (x || '').length;
     if (n === 6) return `#${x}`;
     if (n === 3) return `#${x.replace(/(.)/g, '$1$1')}`;
     return n === 1 ? `#${x.repeat(6)}` : x;
-  }
-  function RGBA(x, a) {
+  };
+  const RGBA = (x, a) => {
     const r = RGB(x);
     return `rgba(${[+`0x${r.slice(1, 3)}`, +`0x${r.slice(3, 5)}`, +`0x${r.slice(5, 7)}`, a]})`;
-  }
-  function RGBO(x, a) {
+  };
+  const RGBO = (x, a) => {
     const o = a === undefined ? '' : `00${Math.round(a * 255).toString(16)}`.slice(-2);
     return RGB(x) + o;
-  }
-  function rgb(x) {
+  };
+  const rgb = (x) => {
     if (!/^#.{6}$/.test(x)) return x;
     const [, r, rr, g, gg, b, bb] = x;
     if (r !== rr || g !== gg || b !== bb) return x.slice(1);
     return r === g && g === b ? r : r + g + b;
-  }
-  function encScm(x) {
+  };
+  const encScm = (x) => {
     let s = '';
     Object.keys(x).forEach((g) => {
       if (g !== 'name' && g !== 'theme') {
@@ -48,8 +48,8 @@
       }
     });
     return { name: x.name, theme: x.theme, styles: s.slice(1) };
-  }
-  function decScm(x) { // x:for example "num=fg:345,bg:f,B,U,bgo:.5 str=fg:2,I com=U"
+  };
+  const decScm = (x) => { // x:for example "num=fg:345,bg:f,B,U,bgo:.5 str=fg:2,I com=U"
     const r = { name: x.name, theme: x.theme }; // r:the result
     const a = (x.styles || '').split(/\s+/); // a:for example ["num=fg:345,bg:f,B,U,bgo:.5","str=fg:2,I","com=U"]
     for (let i = 0; i < a.length; i++) {
@@ -75,7 +75,7 @@
       r.theme = lum < 130 ? 'dark' : 'light';
     }
     return r;
-  }
+  };
   const SCMS = [ // built-in schemes
     {
       name: 'Default',
@@ -156,8 +156,8 @@
   //     ...
   //   }
   // encScm() and decScm() convert between them
-  function renderCSS(schema, isSample) {
-    return G.map((g) => {
+  const renderCSS = (schema, isSample) => (
+    G.map((g) => {
       const h = schema[g.t];
       if (!h || !g.c) return '';
       const els = g.c.split(',').map((x) => (isSample ? '#nonexistent' : x)).join(',');
@@ -186,9 +186,9 @@
       h.bg && (cls += `background-color:${RGBA(h.bg, h.bgo == null ? 0.5 : h.bgo)};`);
       cls += '}';
       return cls;
-    }).join('');
-  }
-  function setMonacoTheme(schema) {
+    }).join('').concat(D.mac ? 'u{text-decoration:none;' : '')
+  );
+  const setMonacoTheme = (schema) => {
     const rules = [];
     const colors = {};
     G.forEach((g) => {
@@ -231,8 +231,8 @@
     if (D.el) {
       nodeRequire('@electron/remote').getGlobal('winstate').theme = schema.theme;
     }
-  }
-  function updStl() { // update global style from what's in prefs.json
+  };
+  const updStl = () => { // update global style from what's in prefs.json
     const s = D.prf.colourScheme();
     const a = SCMS.concat(D.prf.colourSchemes().map(decScm));
     for (let i = 0; i < a.length; i++) {
@@ -249,7 +249,7 @@
         break;
       }
     }
-  }
+  };
   // $(updStl);
   D.addSynGrps = (x) => {
     G = G.concat(x);
@@ -342,7 +342,7 @@
   /* eslint-enable */
   D.mop.then(() => updStl());
   D.prf.colourScheme(updStl); D.prf.colourSchemes(updStl);
-  function uniqScmName(x) { // x:suggested root
+  const uniqScmName = (x) => { // x:suggested root
     const h = {};
     for (let i = 0; i < scms.length; i++) h[scms[i].name] = 1;
     let r = x;
@@ -352,15 +352,15 @@
       while (h[r = `${dx} (${i})`]) i += 1;
     }
     return r;
-  }
+  };
   const SC_MATCH = 'search match'; // sample text to illustrate it
-  function updSampleStl() {
+  const updSampleStl = () => {
     // I.col_sample_stl.textContent = renderCSS(scm, 1);
     monaco.editor.setTheme('vs');
     setMonacoTheme(scm);
     // me.layout();
-  } // [sic]
-  function selGrp(t, forceRefresh) {
+  }; // [sic]
+  const selGrp = (t, forceRefresh) => {
     // update everything as necessary when selection in the Group dropdown changes
     if (!scm || (sel === t && !forceRefresh)) return;
     const i = H[t];
@@ -383,8 +383,8 @@
     q.BIU_p.hidden = !g.BIU;
     q.bc_p.hidden = !g.bc;
     sel = t;
-  }
-  function updScms() {
+  };
+  const updScms = () => {
     q.scm.innerHTML = scms.map((x) => { const n = D.util.esc(x.name); return `<option value="${n}">${n}`; }).join('');
     q.scm.value = scm.name;
     q.scm.onchange();
@@ -392,8 +392,8 @@
     updSampleStl();
     selGrp('norm', 1);
     q.chrome.value = scm.theme;
-  }
-  D.prf_tabs.col =  {
+  };
+  D.prf_tabs.col = {
     name: 'Colours',
     init() {
       q = J.col;
