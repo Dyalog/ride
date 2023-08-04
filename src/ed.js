@@ -93,6 +93,10 @@ D.Ed = function Ed(ide, opts) { // constructor
 
   me.getModel().onDidChangeContent((evt) => {
     const range = evt.changes[0].range;
+    if (!ed.firstOpen) {
+      ed.container.tab.closeElement.toggleClass('modified', true);
+    }
+    ed.firstOpen &&= ed.isCode;
     if (ed.isCode && range.startLineNumber === 1) {
       const content = me.getModel().getLineContent(1);
       const [s] = content.match(/[^⍝\n\r;]*/);
@@ -107,7 +111,6 @@ D.Ed = function Ed(ide, opts) { // constructor
       const [, fn, op] = s.match(D.syntax.tradFnRE) || [];
       return ed.container.setTitle(op || fn || ed.name);
     }
-    ed.container.tab.closeElement.toggleClass('modified', true);
   });
 
   let mouseL = 0; let mouseC = 0; let mouseTS = 0;
