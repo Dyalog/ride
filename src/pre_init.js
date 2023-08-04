@@ -3,6 +3,7 @@ var D = typeof D === "undefined" ? {} : D;
 
 D.commands = {};
 D.keyMap = { dyalog: {}, dyalogDefault: {} };
+D.versionInfo = D.versionInfo || {};
 
 // all elements by id, eg I.lb_tip_text is document.getElementById('lb_tip_text')
 const I = {};
