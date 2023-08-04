@@ -17,41 +17,64 @@ const Console = console;
       el.oncontextmenu = (e) => {
         e.preventDefault();
         e.stopPropagation();
-        const hasSelection = win
-          ? !win.me.getSelection().isEmpty()
-          : el.getSelection().type === 'Range';
-        const isReadOnly = !!win && win.isReadOnly;
-        const tc = !!win && !!win.tc;
-        const fx = !!win && !tc && win.isCode && !win.isReadOnlyEntity;
-        const cmitems = [
-          { label: 'Cut', role: 'cut', enabled: hasSelection && !isReadOnly },
-          { label: 'Copy', role: 'copy', enabled: hasSelection },
-          { label: 'Paste', role: 'paste', enabled: !isReadOnly },
-          { type: 'separator' },
-          {
-            label: 'Redo',
-            ...win && { click: () => { D.commands.RDO(win.me); } },
-            ...!win && { role: 'redo' },
-            enabled: !tc
-          },
-          {
-            label: 'Undo',
-            ...win && { click: () => { D.commands.UND(win.me); } },
-            ...!win && { role: 'undo' },
-            enabled: !tc
-          },
-        ];
-        if (win && !win.session.get()) {
-          const { me } = win;
-          if (tc) {
-            cmitems.unshift(...[
-              {
-                label: 'Skip to line',
-                click: () => { win.STL(me); },
-                visible: tc,
-              },
-              { type: 'separator' },
-            ]);
+        let cmitems;
+        if (win.lineClicked) {
+          cmitems = [
+            {
+              label: 'Trace',
+              click: () => { win.toggleTrace(win.lineClicked); },
+              type: 'checkbox',
+              checked: win.trace.has(win.lineClicked),
+            },
+            {
+              label: 'Stop',
+              click: () => { win.toggleStop(win.lineClicked); },
+              type: 'checkbox',
+              checked: win.stop.has(win.lineClicked),
+            },
+            {
+              label: 'Monitor',
+              click: () => { win.toggleMonitor(win.lineClicked); },
+              type: 'checkbox',
+              checked: win.monitor.has(win.lineClicked),
+            },
+          ];
+        } else {
+          const hasSelection = win
+            ? !win.me.getSelection().isEmpty()
+            : el.getSelection().type === 'Range';
+          const isReadOnly = !!win && win.isReadOnly;
+          const tc = !!win && !!win.tc;
+          cmitems = [
+            { label: 'Cut', role: 'cut', enabled: hasSelection && !isReadOnly },
+            { label: 'Copy', role: 'copy', enabled: hasSelection },
+            { label: 'Paste', role: 'paste', enabled: !isReadOnly },
+            { type: 'separator' },
+            {
+              label: 'Redo',
+              ...win && { click: () => { D.commands.RDO(win.me); } },
+              ...!win && { role: 'redo' },
+              enabled: !tc,
+            },
+            {
+              label: 'Undo',
+              ...win && { click: () => { D.commands.UND(win.me); } },
+              ...!win && { role: 'undo' },
+              enabled: !tc,
+            },
+          ];
+          if (win && !win.session.get()) {
+            const { me } = win;
+            if (tc) {
+              cmitems.unshift(...[
+                {
+                  label: 'Skip to line',
+                  click: () => { win.STL(me); },
+                  visible: tc,
+                },
+                { type: 'separator' },
+              ]);
+            }
           }
         }
         const cmenu = D.el.Menu.buildFromTemplate(cmitems);

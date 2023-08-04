@@ -135,10 +135,11 @@ D.Ed = function Ed(ide, opts) { // constructor
       e.event.stopPropagation();
     } else if (t.type === mt.GUTTER_GLYPH_MARGIN) {
       const l = p.lineNumber - 1;
-      ed.updStops();
-      ed.stop.has(l) ? ed.stop.delete(l) : ed.stop.add(l);
-      ed.setStop();
-      ed.setLineAttributes();
+      if (e.event.buttons === 2) {
+        ed.lineClicked = l;
+      } else {
+        ed.toggleStop(l);
+      }
     } else if (t.type === mt.CONTENT_TEXT
       || (ed.tc && inEmptySpace)) {
       if (e.event.timestamp - mouseTS < 400 && mouseL === p.lineNumber && mouseC === p.column) {
@@ -268,14 +269,21 @@ D.Ed.prototype = {
   },
   setStop() {
     const ed = this;
-    ed.stopDecorations = [...ed.stop].map((x) => ({
-      range: new monaco.Range(x + 1, 1, x + 1, 1),
-      options: {
-        isWholeLine: false,
-        glyphMarginClassName: 'breakpoint',
-        stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
-      },
-    }));
+    const decorateLines = (lines, classname) => (
+      [...lines].map((x) => ({
+        range: new monaco.Range(x + 1, 1, x + 1, 1),
+        options: {
+          isWholeLine: false,
+          glyphMarginClassName: classname,
+          stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
+        },
+      }))
+    );
+    ed.stopDecorations = [
+      ...decorateLines(ed.monitor, 'monitorpoint'),
+      ...decorateLines(ed.stop, 'breakpoint'),
+      ...decorateLines(ed.trace, 'tracepoint'),
+    ];
     ed.setDecorations();
   },
   setLineAttributes() {
@@ -306,6 +314,27 @@ D.Ed.prototype = {
         ...ed.hlDecorations,
       ],
     );
+  },
+  toggleMonitor(l) {
+    const ed = this;
+    ed.updStops();
+    ed.monitor.has(l) ? ed.monitor.delete(l) : ed.monitor.add(l);
+    ed.setStop();
+    ed.setLineAttributes();
+  },
+  toggleStop(l) {
+    const ed = this;
+    ed.updStops();
+    ed.stop.has(l) ? ed.stop.delete(l) : ed.stop.add(l);
+    ed.setStop();
+    ed.setLineAttributes();
+  },
+  toggleTrace(l) {
+    const ed = this;
+    ed.updStops();
+    ed.trace.has(l) ? ed.trace.delete(l) : ed.trace.add(l);
+    ed.setStop();
+    ed.setLineAttributes();
   },
   updSize() {
     const ed = this;
@@ -377,9 +406,9 @@ D.Ed.prototype = {
     me.revealLineInCenter(line + 1);
     ed.oStop = (ee.stop || []).slice(0).sort((x, y) => x - y);
     ed.stop = new Set(ed.oStop);
-    ed.setStop();
     ed.monitor = new Set(ee.monitor || []);
     ed.trace = new Set(ee.trace || []);
+    ed.setStop();
   },
   update(x) {
     const ed = this;
