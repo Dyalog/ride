@@ -34,14 +34,23 @@
 	.indent {
 		margin-left: 24px;
 	}
+  .dlg_btns{
+    button { margin: 2px; }
+    .left{
+      text-align: left;
+    }
+    .right{
+      text-align: right;
+    }
+  }
 }
 
 #cn_favs {
   position:absolute;
-  top: 0;
+  top: 120px;
   left: 0;
   right: 0;
-  bottom: 42px;
+  bottom: 64px;
 	overflow: auto;
 	>div {
 		line-height: 46px;
@@ -68,22 +77,22 @@
 		position: relative;
 	}
 }
-#cn_fav_btns {
-  position:absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: 0;
-	overflow: hidden;
-	* {
-    text-align: center;
-    font-size: 16px;
-  }
-  .tb_btn {
-    height: 30px;
-    width: 30px;
-  }
-  
+
+#cn_gobig{
+  height: 120px;
+  position: relative;
+  * { font-size: unset;}
+  button {
+    #cn_gobig_type{ font-size: 1em;}
+    #cn_gobig_name{ font-size: 1.5em;}
+    svg {
+      font-size: 3em;
+      padding: 4px;
+    }
+    width:100%;
+    height:100%;
+    border-radius: 0;
+  }	
 }
 
 #cn_rhs>*>.row, #cn_rhs>.row, #cn_dtl>*>.row {
