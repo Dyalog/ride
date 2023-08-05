@@ -55,9 +55,6 @@
   background: #21222e;
   color: #a9a9a9;
 }
-#cn_fav_btns {
-  background: linear-gradient(#1c1e28, black);
-}
 #cn_lhs {
   background: #272937;
 }
@@ -128,6 +125,30 @@
   font-weight: normal;
   text-align: left;
   border: 1px solid transparent;
+}
+.ctl_listview {
+  background-color: #1c1e28;
+  color: white;
+}
+.ctl_listview tr {
+  background-color: rgba(118, 136, 217, 0.5);
+  border-bottom: 1px solid #1c1e28;
+}
+.ctl_listview tr:hover {
+  background-color: rgba(118, 136, 217, 0.25);
+}
+.ctl_listview tr.selected {
+  background-color: #1c1e28;
+}
+#debug {
+  background: #1c1e28;
+}
+#debug .ctl_listview_header {
+  background-color: #7688d9;
+  color: white;
+}
+#debug .ctl_listview_header h2 {
+  font-size: 16px;
 }
 /*Golden Layout*/
 .lm_goldenlayout {
@@ -235,6 +256,12 @@ button {
 button:hover {
   color: #4c4a4a;
 }
+button:disabled {
+  cursor: default;
+  color: rgba(255, 255, 255, 0.5);
+  background: #646262;
+  border-color: #646262;
+}
 input + label {
   cursor: pointer;
   vertical-align: text-top;
@@ -309,66 +336,6 @@ select {
   border-top: 1px solid black;
   border-bottom: 1px solid #2e303e;
 }
-/*menu (see ../src/menu.js for the DOM structure)*/
-.menu {
-  background-color: #edeff5;
-  border-bottom: solid grey 1px;
-}
-.menu a,
-.menu a:hover {
-  color: black;
-  font-size: 0.8em;
-}
-.menu .m-open {
-  background: rgba(0, 0, 0, 0.2);
-}
-.menu .m-open .m-top {
-  border-color: transparent;
-}
-.menu .m-box {
-  background-color: white;
-  border-color: rgba(0, 0, 0, 0.2);
-}
-.menu .m-box a {
-  border: none;
-  border-color: #edeff5;
-}
-.menu .m-box a .m-shc {
-  color: white;
-}
-.menu .m-box a:focus {
-  background: rgba(0, 0, 0, 0.2);
-}
-.menu .m-box a.m-checked {
-  background: transparent 5px center no-repeat url(img/menu_chk.png);
-}
-.menu .m-box a:focus.m-checked {
-  background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
-}
-.ctl_listview {
-  background-color: #1c1e28;
-  color: white;
-}
-.ctl_listview tr {
-  background-color: rgba(118, 136, 217, 0.5);
-  border-bottom: 1px solid #1c1e28;
-}
-.ctl_listview tr:hover {
-  background-color: rgba(118, 136, 217, 0.25);
-}
-.ctl_listview tr.selected {
-  background-color: #1c1e28;
-}
-#debug {
-  background: #1c1e28;
-}
-#debug .ctl_listview_header {
-  background-color: #7688d9;
-  color: white;
-}
-#debug .ctl_listview_header h2 {
-  font-size: 16px;
-}
 .breakpointarea {
   border-right: 1px solid #272937;
   cursor: pointer;
@@ -436,33 +403,41 @@ select {
 .sessionmargin.modified::before {
   color: red;
 }
-::-webkit-scrollbar {
-  background-color: #1c1e28;
+/*menu (see ../src/menu.js for the DOM structure)*/
+.menu {
+  background-color: #edeff5;
+  border-bottom: solid grey 1px;
 }
-::-webkit-scrollbar-corner {
-  background-color: #1c1e28;
+.menu a,
+.menu a:hover {
+  color: black;
+  font-size: 0.8em;
 }
-::-webkit-scrollbar-track {
-  background-color: #272937;
-  border: 1px solid #1c1e28;
-  border-radius: 10px;
+.menu .m-open {
+  background: rgba(0, 0, 0, 0.2);
 }
-::-webkit-scrollbar-thumb {
-  background-color: rgba(118, 136, 217, 0.3);
-  border: 1px solid #1c1e28;
-  border-radius: 10px;
+.menu .m-open .m-top {
+  border-color: transparent;
 }
-::-webkit-scrollbar-thumb:horizontal {
-  border-width: 1px 0;
+.menu .m-box {
+  background-color: white;
+  border-color: rgba(0, 0, 0, 0.2);
 }
-::-webkit-scrollbar-thumb:vertical {
-  border-width: 0 1px;
+.menu .m-box a {
+  border: none;
+  border-color: #edeff5;
 }
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(118, 136, 217, 0.6);
+.menu .m-box a .m-shc {
+  color: white;
 }
-::-webkit-scrollbar-thumb:active {
-  background-color: rgba(118, 136, 217, 0.9);
+.menu .m-box a:focus {
+  background: rgba(0, 0, 0, 0.2);
+}
+.menu .m-box a.m-checked {
+  background: transparent 5px center no-repeat url(img/menu_chk.png);
+}
+.menu .m-box a:focus.m-checked {
+  background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
 }
 #prf_dlg hr {
   border-top: 1px solid black;
@@ -641,6 +616,34 @@ a:hover {
   #shc_tbl_wr tr .shc_key .shc_del {
     display: none;
   }
+}
+::-webkit-scrollbar {
+  background-color: #1c1e28;
+}
+::-webkit-scrollbar-corner {
+  background-color: #1c1e28;
+}
+::-webkit-scrollbar-track {
+  background-color: #272937;
+  border: 1px solid #1c1e28;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(118, 136, 217, 0.3);
+  border: 1px solid #1c1e28;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  border-width: 1px 0;
+}
+::-webkit-scrollbar-thumb:vertical {
+  border-width: 0 1px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(118, 136, 217, 0.6);
+}
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(118, 136, 217, 0.9);
 }
 #splash {
   background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #1c1e28;

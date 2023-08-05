@@ -26,6 +26,7 @@
   const cnFile = `${D.el.app.getPath('userData')}/connections.json`;
   const lcnFile = `${D.el.app.getPath('userData')}/last_configuration.json`;
   let protocolLogFile;
+  const lastconfig = 'last configuration';
   const defaultProtocolLogFile = path.join(
     D.el.app.getPath('temp'),
     `RIDE-${D.versionInfo.version}-${D.el.process.pid}.log`,
@@ -91,6 +92,103 @@
       },
     ), 10);
   };
+  const formatInterpreters = (interpretersList) => {
+    interpretersList
+      .sort((x, y) => cmpVer(y.ver, x.ver) || +y.bits - +x.bits
+        || (y.edition === 'unicode') - (x.edition === 'unicode')
+        || (y.opt > x.opt) - (y.opt < x.opt))
+      .forEach((x) => {
+        x.supported = cmpVer(x.ver, MIN_V) >= 0;
+        x.name = `v${
+          x.ver.join('.')}, ${
+          x.bits}-bit, ${
+          x.edition.replace(/^./, (w) => w.toUpperCase())}${
+          x.opt ? `, ${x.opt}` : ''}${
+          x.supported ? '' : ' (unsupported)'}`;
+      });
+  };
+  const getLocalInterpreters = () => { // collect information about installed interpreters
+    interpreters.splice(0);
+    try {
+      if (/^win/.test(process.platform)) {
+        const s = cp.execSync(
+          'reg query "HKEY_CURRENT_USER\\Software\\Dyalog" /s /v localdyalogdir',
+          { timeout: 4000, encoding: 'UTF8' },
+        );
+        let b; // b:bits
+        let v; // v:version
+        let u; // u:edition
+        let n; // n:match object
+        s && s.split('\r\n').forEach((x) => {
+          if (x) {
+            if ((n = /^HK.*\\Dyalog APL\/W(-64)? (\d+\.\d+)( Unicode)?$/i.exec(x))) {
+              [, b, v, u] = n;
+              b = b ? 64 : 32;
+              u = u ? 'unicode' : 'classic';
+            } else if (v && (n = /^ *localdyalogdir +REG_SZ +(\S.*)$/i.exec(x))) {
+              interpreters.push({
+                exe: `${n[1]}\\dyalog.exe`,
+                ver: parseVer(v),
+                bits: b,
+                edition: u,
+                opt: '',
+              });
+            } else if (!/^\s*$/.test(x)) {
+              b = null;
+              v = null;
+              u = null;
+            }
+          }
+        });
+      } else if (process.platform === 'darwin') {
+        const rd = '/Applications';
+        ls(rd).forEach((x) => {
+          const n = /^Dyalog-(\d+\.\d+)\.app$/.exec(x);
+          const exe = `${rd}/${x}/Contents/Resources/Dyalog/mapl`;
+          n && fs.existsSync(exe) && interpreters.push({
+            exe,
+            ver: parseVer(n[1]),
+            bits: 64,
+            edition: 'unicode',
+            opt: '',
+          });
+        });
+      } else {
+        const rd = '/opt/mdyalog';
+        const sil = (g) => (x) => { try { g(x); } catch (_) { /* exception silencer */ } };
+        ls(rd).forEach(sil((v) => {
+          if (/^\d+\.\d+/.test(v)) {
+            ls(`${rd}/${v}`).forEach(sil((b) => {
+              if (b === '32' || b === '64') {
+                ls(`${rd}/${v}/${b}`).forEach(sil((u) => {
+                  if (u === 'unicode' || u === 'classic') {
+                    const exe = `${rd}/${v}/${b}/${u}/mapl`;
+                    fs.existsSync(exe) && interpreters.push({
+                      exe,
+                      ver: parseVer(v),
+                      bits: +b,
+                      edition: u,
+                      opt: '',
+                    });
+                  }
+                }));
+              }
+            }));
+          }
+        }));
+      }
+    } catch (e) { console.error(e); }
+    formatInterpreters(interpreters);
+  };
+  const createPresets = () => {
+    D.conns.push(...interpreters.filter((x) => x.supported).map((int) => ({
+      name: int.name,
+      type: 'start',
+      subtype: 'raw',
+      exe: int.exe,
+      preset: true,
+    })));
+  };
   const save = () => {
     const names = $('.name', q.favs).toArray().map((x) => x.innerText);
     const dups = names.filter((a, i) => names.indexOf(a) !== i);
@@ -99,7 +197,7 @@
         `The following name${dups.length ? 's are' : ' is'} duplicated:\n${dups.join('\n')}`,
         'Duplicate connection names',
         () => {
-          $(q.favs).list('select', names.lastIndexOf(dups[0]));
+          $(q.favs).list('select', names.indexOf(dups[0]));
           $(q.fav_name).focus();
         },
       );
@@ -109,15 +207,11 @@
       const r = $.confirm('Connections file has been modified, do you want to overwrite with your changes?');
       if (!r) return;
     }
-    const a = q.favs.children;
-    const b = [];
-    for (let i = 0; i < a.length; i++) {
-      const conf = a[i].cnData;
-      conf.name !== 'last configuration' && b.push(conf);
-    }
-    D.conns = b;
+    const b = [...q.favs.children]
+      .map((x) => x.cnData)
+      .filter((x) => x.name !== lastconfig && !x.preset);
     try {
-      fs.writeFileSync(cnFile, JSON.stringify(D.conns));
+      fs.writeFileSync(cnFile, JSON.stringify(b));
       D.conns_modified = +fs.statSync(cnFile).mtime;
       toastr.success(cnFile, 'Configuration saved.');
     } catch (e) {
@@ -126,7 +220,7 @@
   };
   const saveLastConf = (conf) => {
     try {
-      fs.writeFileSync(lcnFile, JSON.stringify({ ...conf, name: 'last configuration' }));
+      fs.writeFileSync(lcnFile, JSON.stringify({ ...conf, name: lastconfig }));
     } catch (e) {
       toastr.error(`${e.name}: ${e.message}`, 'Save failed');
     }
@@ -140,17 +234,9 @@
   };
   const updExes = () => {
     const ssh = q.subtype.value === 'ssh';
-    const h = (ssh ? interpretersSSH : interpreters)
-      .sort((x, y) => cmpVer(y.ver, x.ver) || +y.bits - +x.bits
-        || (y.edition === 'unicode') - (x.edition === 'unicode')
-        || (y.opt > x.opt) - (y.opt < x.opt))
-      .map((x) => {
-        let s = `v${x.ver.join('.')}, ${x.bits}-bit, ${x.edition.replace(/^./, (w) => w.toUpperCase())}${x.opt ? `, ${x.opt}` : ''}`;
-        const supported = cmpVer(x.ver, MIN_V) >= 0;
-        supported || (s += ' (unsupported)');
-        return `<option value="${esc(x.exe)}"${supported ? '' : ' disabled'}>${esc(s)}`;
-      }).join('');
-    q.exes.innerHTML = `${h}<option value="">Other...`;
+    q.exes.innerHTML = (ssh ? interpretersSSH : interpreters)
+      .map((x) => `<option value="${esc(x.exe)}"${x.supported ? '' : ' disabled'}>${esc(x.name)}`)
+      .join('').concat('<option value="">Other...');
     q.exes.value = q.exe.value;
     if (!q.exes.value) {
       q.exes.selectedIndex = 0;
@@ -180,6 +266,7 @@
     q.fetch.hidden = q.type.value !== 'start';
     q.start.hidden = q.fetch.hidden;
     q.go.innerHTML = `<u>${q.type.value[0]}</u>${q.type.value.substr(1)}`;
+    q.gobig_type.innerText = q.type.value;
   };
   const validate = (x) => {
     const t = x.type;
@@ -633,17 +720,17 @@
     const m = 'Dyalog\n  About Dyalog=ABT\n  -\n  Preferences=PRF\n  -\n  &Quit=QIT'
       + '\n&Edit\n  Undo=UND\n  Redo=RDO\n  -\n  Cut=CT\n  Copy=CP\n  Paste=PT\n  Select All=SA';
     setTimeout(() => D.installMenu(D.parseMenuDSL(m)), 100);
+    D.conns = [];
     if (fs.existsSync(cnFile)) {
-      D.conns = JSON.parse(fs.readFileSync(cnFile).toString());
+      D.conns.push(...JSON.parse(fs.readFileSync(cnFile).toString()));
       D.conns_modified = +fs.statSync(cnFile).mtime;
     }
+    getLocalInterpreters();
+    createPresets();
     if (fs.existsSync(lcnFile)) {
-      D.conns = [
-        JSON.parse(fs.readFileSync(lcnFile).toString()),
-        ...(D.conns || []),
-      ];
+      D.conns.push(JSON.parse(fs.readFileSync(lcnFile).toString()));
     }
-    D.conns = D.conns || [{ type: 'connect' }];
+    if (!D.conns.length) D.conns.push({ type: 'connect' });
     I.cn.onkeyup = (x) => {
       const k = D.util.fmtKey(x);
       if (D.el && k === 'F12') {
@@ -658,6 +745,7 @@
       if (u !== v) {
         v ? (sel.name = v) : delete sel.name;
         $sel.find('.name').text(favText(sel));
+        q.gobig_name.innerText = favText(sel);
       }
     };
     q.fav_name.onchange = q.fav_name.onkeyup;
@@ -699,7 +787,7 @@
           interpretersSSH = [];
           sm.on('data', (x) => { s += x; })
             .on('close', () => {
-              interpretersSSH = s.split(/\r?\n/).filter((x) => x).map((x) => {
+              interpretersSSH = formatInterpreters(s.split(/\r?\n/).filter((x) => x).map((x) => {
                 const a = x.split('/');
                 return a[1] === 'opt' ? {
                   exe: x,
@@ -714,7 +802,7 @@
                   edition: 'unicode',
                   opt: '',
                 };
-              });
+              }));
               updExes();
               if (sel) {
                 sel.exe = q.exe.value;
@@ -853,9 +941,17 @@
         sel = u ? $sel[0].cnData : null;
         if (u) {
           $(':checkbox[name]', q.rhs).each((_, x) => { x.checked = !!+sel[x.name]; });
+          const preset = sel.preset || sel.name === lastconfig;
+          q.type_dtl.hidden = preset;
+          q.exes_dtl.hidden = preset;
+          q.del.disabled = preset;
+          q.sve.disabled = preset;
+          q.def.disabled = sel.name === D.prf.defaultConfig();
           q.type.value = sel.type || 'connect';
           q.subtype.value = sel.subtype || 'raw';
           interpretersSSH = sel.exes || [];
+          q.gobig_name.innerText = sel.name;
+          q.gobig_type.innerText = sel.type;
           updFormDtl();
           updExes();
           q.fav_name.value = sel.name || '';
@@ -870,7 +966,6 @@
           q.log_cb.checked = !nol;
           q.log.disabled = !sel.log;
           q.log_dots.disabled = !sel.log;
-          
           q.cert_cb.checked = !!sel.cert;
           const noc = !sel.cert;
           q.cert.disabled = noc;
@@ -887,6 +982,10 @@
         }
       });
     { const [a] = q.favs.querySelectorAll('a'); a && a.focus(); }
+    q.def.onclick = () => {
+      D.prf.defaultConfig(sel.name);
+      q.def.disabled = true;
+    };
     q.sve.onclick = () => { save(); };
     q.neu.onclick = () => {
       const $e = $(favDOM({}));
@@ -896,10 +995,14 @@
     };
     q.cln.onclick = () => {
       if (sel) {
-        $(favDOM($.extend({}, sel))).insertBefore($sel);
-        $('a', $sel).focus();
-        q.fav_name.value += '(copy)';
-        $(q.fav_name).change();
+        const cnf = favDOM({
+          ...sel,
+          name: `${sel.name} (copy)`,
+          preset: false,
+        });
+        q.favs.insertBefore(cnf, sel.preset ? q.favs.firstChild : $sel);
+        save();
+        $(q.favs).list('select', $(cnf).index());
         q.fav_name.focus();
       }
     };
@@ -912,12 +1015,14 @@
           if (x) {
             const i = Math.min($sel.eq(0).index(), q.favs.children.length - 1);
             $sel.remove();
+            save();
             $(q.favs).list('select', i);
           }
         },
       );
     };
     q.go.onclick = () => { go(); return !1; };
+    q.gobig.onclick = () => { go(); return !1; };
     const a = q.rhs.querySelectorAll('input,textarea');
     for (let i = 0; i < a.length; i++) if (/^text(area)?$/.test(a[i].type)) D.util.elastic(a[i]);
     $(':text[name],textarea[name]', q.rhs).change((e) => {
@@ -930,76 +1035,6 @@
       const t = e.target;
       t.checked ? (sel[t.name] = 1) : delete sel[t.name];
     });
-    // collect information about installed interpreters
-    try {
-      if (/^win/.test(process.platform)) {
-        const s = cp.execSync(
-          'reg query "HKEY_CURRENT_USER\\Software\\Dyalog" /s /v localdyalogdir',
-          { timeout: 4000, encoding: 'UTF8' },
-        );
-        let b; // b:bits
-        let v; // v:version
-        let u; // u:edition
-        let n; // n:match object
-        s && s.split('\r\n').forEach((x) => {
-          if (x) {
-            if ((n = /^HK.*\\Dyalog APL\/W(-64)? (\d+\.\d+)( Unicode)?$/i.exec(x))) {
-              [, b, v, u] = n;
-              b = b ? 64 : 32;
-              u = u ? 'unicode' : 'classic';
-            } else if (v && (n = /^ *localdyalogdir +REG_SZ +(\S.*)$/i.exec(x))) {
-              interpreters.push({
-                exe: `${n[1]}\\dyalog.exe`,
-                ver: parseVer(v),
-                bits: b,
-                edition: u,
-                opt: '',
-              });
-            } else if (!/^\s*$/.test(x)) {
-              b = null;
-              v = null;
-              u = null;
-            }
-          }
-        });
-      } else if (process.platform === 'darwin') {
-        const rd = '/Applications';
-        ls(rd).forEach((x) => {
-          const n = /^Dyalog-(\d+\.\d+)\.app$/.exec(x);
-          const exe = `${rd}/${x}/Contents/Resources/Dyalog/mapl`;
-          n && fs.existsSync(exe) && interpreters.push({
-            exe,
-            ver: parseVer(n[1]),
-            bits: 64,
-            edition: 'unicode',
-            opt: '',
-          });
-        });
-      } else {
-        const rd = '/opt/mdyalog';
-        const sil = (g) => (x) => { try { g(x); } catch (_) { /* exception silencer */ } };
-        ls(rd).forEach(sil((v) => {
-          if (/^\d+\.\d+/.test(v)) {
-            ls(`${rd}/${v}`).forEach(sil((b) => {
-              if (b === '32' || b === '64') {
-                ls(`${rd}/${v}/${b}`).forEach(sil((u) => {
-                  if (u === 'unicode' || u === 'classic') {
-                    const exe = `${rd}/${v}/${b}/${u}/mapl`;
-                    fs.existsSync(exe) && interpreters.push({
-                      exe,
-                      ver: parseVer(v),
-                      bits: +b,
-                      edition: u,
-                      opt: '',
-                    });
-                  }
-                }));
-              }
-            }));
-          }
-        }));
-      }
-    } catch (e) { console.error(e); }
     updExes();
     document.title = 'RIDE-Dyalog Session';
     const conf = D.el.process.env.RIDE_CONF;
@@ -1014,7 +1049,10 @@
         return;
       }
     }
-    setTimeout(() => $(q.favs).list('select', 0), 1);
+    const defcfg = D.prf.defaultConfig();
+    let i = [...q.favs.children].findIndex((x) => x.cnData.name === defcfg);
+    if (i < 0) i = [...q.favs.children].findIndex((x) => x.cnData.preset);
+    setTimeout(() => $(q.favs).list('select', Math.max(0, i)), 1);
   };
 
   module.exports = () => {
@@ -1057,7 +1095,7 @@
       }) : $.err('Invalid $RIDE_LISTEN');
     } else if (h.s) {
       const cnf = {
-        type: 'start', 
+        type: 'start',
         exe: h.s,
         log: h.log,
       };

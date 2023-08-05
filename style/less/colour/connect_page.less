@@ -1,12 +1,12 @@
 #cn {
   input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),textarea{
     border: 1px solid @CN_INPUT_BORDER_COL;
-    background-color: 	@CN_INPUT_BG;
-		color:@CN_INPUT_FG;
+    background-color: @CN_INPUT_BG;
+	  color:@CN_INPUT_FG;
     &:disabled{
       background-color:	@CN_INPUT_DIS_BG;
-			border-color:	@CN_INPUT_BORDER_COL;
-			color:@CN_INPUT_DIS_FG;
+      border-color:	@CN_INPUT_BORDER_COL;
+			color: @CN_INPUT_DIS_FG;
 			&::-webkit-input-placeholder {
 				color: @CN_INPUT_DIS_FG;
 			}
@@ -48,9 +48,6 @@
 		background:@CN_FAV_BTN_UNSEL_BG;
 		color:@CN_FAV_BTN_UNSEL_FG;
 	}
-}
-#cn_fav_btns {
-  background:linear-gradient(@CN_RHS_BG, @CN_RHS_BG2);
 }
 #cn_lhs {
 	background: @CN_LHS_BG;

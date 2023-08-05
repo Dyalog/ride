@@ -8,6 +8,12 @@ button{
   background:@BUTTON_BG_COL;
   color:@BUTTON_COL;
   &:hover{color:@BUTTON_HOVER_COL}
+  &:disabled{
+    cursor: default;
+    color: fade(@BUTTON_COL, 50);
+    background: @INPUT_OFF;
+    border-color: @INPUT_OFF;
+  }
   border-radius: 4px;
   background-image: -moz-linear-gradient( 90deg, @THEME_PRIMARY 0%, @THEME_HIGHLIGHT 100%);
   background-image: -webkit-linear-gradient( 90deg, @THEME_PRIMARY 0%, @THEME_HIGHLIGHT 100%);
