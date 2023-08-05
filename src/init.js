@@ -18,27 +18,30 @@ const Console = console;
         e.preventDefault();
         e.stopPropagation();
         let cmitems;
-        if (win.lineClicked) {
+        if (e.target.classList.contains('breakpointarea')) {
+          if (!win.lineClicked) return;
+          const l = win.lineClicked - 1;
           cmitems = [
             {
               label: 'Trace',
-              click: () => { win.toggleTrace(win.lineClicked); },
+              click: () => { win.toggleTrace(l); },
               type: 'checkbox',
-              checked: win.trace.has(win.lineClicked),
+              checked: win.trace.has(l),
             },
             {
               label: 'Stop',
-              click: () => { win.toggleStop(win.lineClicked); },
+              click: () => { win.toggleStop(l); },
               type: 'checkbox',
-              checked: win.stop.has(win.lineClicked),
+              checked: win.stop.has(l),
             },
             {
               label: 'Monitor',
-              click: () => { win.toggleMonitor(win.lineClicked); },
+              click: () => { win.toggleMonitor(l); },
               type: 'checkbox',
-              checked: win.monitor.has(win.lineClicked),
+              checked: win.monitor.has(l),
             },
           ];
+          delete win.lineClicked;
         } else {
           const hasSelection = win
             ? !win.me.getSelection().isEmpty()

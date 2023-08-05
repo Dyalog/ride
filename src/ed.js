@@ -134,11 +134,10 @@ D.Ed = function Ed(ide, opts) { // constructor
       e.event.preventDefault();
       e.event.stopPropagation();
     } else if (t.type === mt.GUTTER_GLYPH_MARGIN) {
-      const l = p.lineNumber - 1;
       if (e.event.buttons === 2) {
-        ed.lineClicked = l;
+        ed.lineClicked = p.lineNumber;
       } else {
-        ed.toggleStop(l);
+        ed.toggleStop(p.lineNumber - 1);
       }
     } else if (t.type === mt.CONTENT_TEXT
       || (ed.tc && inEmptySpace)) {
