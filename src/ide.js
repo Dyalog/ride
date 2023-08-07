@@ -550,7 +550,7 @@ D.IDE = function IDE(opts = {}) {
       } else { $.err(x.message, 'Interpreter disconnected'); }
     },
     SysError(x) { $.err(x.text, 'SysError'); ide.die(); },
-    InternalError(x) { $.err(`An error (${x.error}) occurred processing ${x.message}`, 'Internal Error'); },
+    InternalError(x) { $.err(`An error (${x.error_text || x.error}) occurred processing ${x.message}`, 'Internal Error'); },
     NotificationMessage(x) { $.alert(x.message, 'Notification'); },
     UpdateDisplayName(x) {
       ide.wsid = x.displayName;
