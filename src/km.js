@@ -101,14 +101,14 @@
         D.ipc.of.ride_master.emit('OWS');
         return;
       }
-      if (D.el && D.lastSpawnedExe) {
-        let x = D.el.dialog.showOpenDialogSync(D.elw, {
+      if (D.el && D.isLocalInterpreter) {
+        const x = D.el.dialog.showOpenDialogSync(D.elw, {
           title: 'Open file',
           filters: [],
           properties: ['openFile'],
-        })
+        });
         if (!x) return;
-        const [v] = x
+        const [v] = x;
         const qt = /\s/.test(v) ? '"' : '';
         if (/\.dws$/i.test(v)) {
           $.confirm(

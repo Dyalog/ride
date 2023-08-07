@@ -13,6 +13,8 @@
   const fs = rq('fs');
   const cp = rq('child_process');
   const home = rq('os').homedir();
+  const nets = rq('os').networkInterfaces();
+  const localhosts = [...Object.keys(nets).map((intf) => nets[intf].map((k) => k.address)).flat(), 'localhost'];
   const net = rq('net');
   const path = rq('path');
   const untildify = (x) => (x && home ? x.replace(/^~(?=$|\/|\\)/, home) : x);
@@ -426,6 +428,7 @@
   const connect = (x) => {
     let m = net; // m:module used to create connection
     const o = { host: x.host, port: x.port }; // o:options for .connect()
+    D.isLocalInterpreter = localhosts.includes(x.host.toLowerCase());
     if (x.ssl) {
       try {
         m = rq('tls');
@@ -620,6 +623,7 @@
             });
             cancelOp(c);
           } else {
+            D.isLocalInterpreter = true;
             srv = net.createServer((y) => {
               log('spawned interpreter connected');
               const adr = srv.address();
