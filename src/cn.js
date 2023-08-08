@@ -181,7 +181,9 @@
     formatInterpreters(interpreters);
   };
   const createPresets = () => {
-    D.conns.push(...interpreters.filter((x) => x.supported).map((int) => ({
+    D.conns.push(...interpreters.filter((x) => (
+      x.supported && D.conns.findIndex((y) => y.preset && y.exe === x.exe) < 0
+    )).map((int) => ({
       name: int.name,
       type: 'start',
       subtype: 'raw',
@@ -209,7 +211,7 @@
     }
     const b = [...q.favs.children]
       .map((x) => x.cnData)
-      .filter((x) => x.name !== lastconfig && !x.preset);
+      .filter((x) => x.name !== lastconfig);
     try {
       fs.writeFileSync(cnFile, JSON.stringify(b));
       D.conns_modified = +fs.statSync(cnFile).mtime;
