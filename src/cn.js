@@ -942,8 +942,8 @@
           const preset = sel.preset || sel.name === lastconfig;
           q.type_dtl.hidden = preset;
           q.exes_dtl.hidden = preset;
-          q.del.disabled = preset;
-          q.sve.disabled = preset;
+          q.del.disabled = sel.name === lastconfig;
+          q.sve.disabled = sel.name === lastconfig;
           q.def.disabled = sel.name === D.prf.defaultConfig();
           q.type.value = sel.type || 'connect';
           q.subtype.value = sel.subtype || 'raw';
