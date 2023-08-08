@@ -266,7 +266,6 @@
     q.fetch.hidden = q.type.value !== 'start';
     q.start.hidden = q.fetch.hidden;
     q.go.innerHTML = `<u>${q.type.value[0]}</u>${q.type.value.substr(1)}`;
-    q.gobig_type.innerText = q.type.value;
   };
   const validate = (x) => {
     const t = x.type;
@@ -745,7 +744,6 @@
       if (u !== v) {
         v ? (sel.name = v) : delete sel.name;
         $sel.find('.name').text(favText(sel));
-        q.gobig_name.innerText = favText(sel);
       }
     };
     q.fav_name.onchange = q.fav_name.onkeyup;
@@ -950,8 +948,6 @@
           q.type.value = sel.type || 'connect';
           q.subtype.value = sel.subtype || 'raw';
           interpretersSSH = sel.exes || [];
-          q.gobig_name.innerText = sel.name;
-          q.gobig_type.innerText = sel.type;
           updFormDtl();
           updExes();
           q.fav_name.value = sel.name || '';
@@ -1022,7 +1018,6 @@
       );
     };
     q.go.onclick = () => { go(); return !1; };
-    q.gobig.onclick = () => { go(); return !1; };
     const a = q.rhs.querySelectorAll('input,textarea');
     for (let i = 0; i < a.length; i++) if (/^text(area)?$/.test(a[i].type)) D.util.elastic(a[i]);
     $(':text[name],textarea[name]', q.rhs).change((e) => {
