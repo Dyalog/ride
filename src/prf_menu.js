@@ -53,7 +53,7 @@
     const evalExpr = (cond) => {
       const mVars = {
         browser: !D.el,
-        local: !!D.lastSpawnedExe,
+        local: D.isLocalInterpreter,
         mac: D.mac,
         win: D.win,
         rp21: !D.get_configuration_na,

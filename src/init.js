@@ -293,7 +293,7 @@ const Console = console;
         } else if (files.length !== 1) {
           toastr.error('RIDE does not support dropping of multiple files.');
         } else {
-          if (!D.lastSpawnedExe) {
+          if (!D.isLocalInterpreter) {
             toastr.warning(
               'Drag and drop of workspaces works only for locally started interpreters.',
               'Load may fail',
