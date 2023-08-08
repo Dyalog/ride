@@ -35,9 +35,9 @@
 		color: @CN_FAV_BTN_FG;
 		opacity:1;
 		.go {
-			color:@CN_FAV_BTN_FG;
+			color:@CN_FAV_BTN_FG!important;
 			&:hover{
-				color:@BUTTON_HOVER_COL;
+				color:@BUTTON_HOVER_COL!important;
 			}
 		}
 	}
@@ -47,6 +47,13 @@
 	>div{
 		background:@CN_FAV_BTN_UNSEL_BG;
 		color:@CN_FAV_BTN_UNSEL_FG;
+		&:not(:first-child) {
+			.go {color:@CN_FAV_BTN_UNSEL_BG;}
+			&:hover .go {
+				color:@CN_FAV_BTN_FG;
+				&:hover {color:@BUTTON_HOVER_COL}
+			}
+		}
 	}
 }
 #cn_lhs {

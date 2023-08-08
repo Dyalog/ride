@@ -102,9 +102,9 @@
       .forEach((x) => {
         x.supported = cmpVer(x.ver, MIN_V) >= 0;
         x.name = `v${
-          x.ver.join('.')}, ${
-          x.bits}-bit, ${
-          x.edition.replace(/^./, (w) => w.toUpperCase())}${
+          x.ver.join('.')}${
+          x.bits === 64 ? '' : `, ${x.bits}-bit`}${
+          x.edition === 'unicode' ? '' : `, ${x.edition.replace(/^./, (w) => w.toUpperCase())}`}${
           x.opt ? `, ${x.opt}` : ''}${
           x.supported ? '' : ' (unsupported)'}`;
       });
@@ -183,7 +183,9 @@
     formatInterpreters(interpreters);
   };
   const createPresets = () => {
-    D.conns.push(...interpreters.filter((x) => x.supported).map((int) => ({
+    D.conns.push(...interpreters.filter((x) => (
+      x.supported && D.conns.findIndex((y) => y.preset && y.exe === x.exe) < 0
+    )).map((int) => ({
       name: int.name,
       type: 'start',
       subtype: 'raw',
@@ -211,7 +213,7 @@
     }
     const b = [...q.favs.children]
       .map((x) => x.cnData)
-      .filter((x) => x.name !== lastconfig && !x.preset);
+      .filter((x) => x.name !== lastconfig);
     try {
       fs.writeFileSync(cnFile, JSON.stringify(b));
       D.conns_modified = +fs.statSync(cnFile).mtime;
@@ -268,7 +270,6 @@
     q.fetch.hidden = q.type.value !== 'start';
     q.start.hidden = q.fetch.hidden;
     q.go.innerHTML = `<u>${q.type.value[0]}</u>${q.type.value.substr(1)}`;
-    q.gobig_type.innerText = q.type.value;
   };
   const validate = (x) => {
     const t = x.type;
@@ -749,7 +750,6 @@
       if (u !== v) {
         v ? (sel.name = v) : delete sel.name;
         $sel.find('.name').text(favText(sel));
-        q.gobig_name.innerText = favText(sel);
       }
     };
     q.fav_name.onchange = q.fav_name.onkeyup;
@@ -918,6 +918,7 @@
       cursor: 'move',
       revert: true,
       axis: 'y',
+      items: '>:not(:first-child)',
       // stop: save,
     })
       .on('click', '.go', (e) => {
@@ -948,14 +949,12 @@
           const preset = sel.preset || sel.name === lastconfig;
           q.type_dtl.hidden = preset;
           q.exes_dtl.hidden = preset;
-          q.del.disabled = preset;
-          q.sve.disabled = preset;
+          q.del.disabled = sel.name === lastconfig;
+          q.sve.disabled = sel.name === lastconfig;
           q.def.disabled = sel.name === D.prf.defaultConfig();
           q.type.value = sel.type || 'connect';
           q.subtype.value = sel.subtype || 'raw';
           interpretersSSH = sel.exes || [];
-          q.gobig_name.innerText = sel.name;
-          q.gobig_type.innerText = sel.type;
           updFormDtl();
           updExes();
           q.fav_name.value = sel.name || '';
@@ -989,6 +988,7 @@
     q.def.onclick = () => {
       D.prf.defaultConfig(sel.name);
       q.def.disabled = true;
+      q.favs.insertBefore($sel[0], q.favs.firstChild);
     };
     q.sve.onclick = () => { save(); };
     q.neu.onclick = () => {
@@ -1026,7 +1026,6 @@
       );
     };
     q.go.onclick = () => { go(); return !1; };
-    q.gobig.onclick = () => { go(); return !1; };
     const a = q.rhs.querySelectorAll('input,textarea');
     for (let i = 0; i < a.length; i++) if (/^text(area)?$/.test(a[i].type)) D.util.elastic(a[i]);
     $(':text[name],textarea[name]', q.rhs).change((e) => {

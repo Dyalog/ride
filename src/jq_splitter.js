@@ -26,7 +26,7 @@ $.fn.splitter=function(args){'strict mode' //based on http://methvin.com/splitte
     var $f=$('<a href=javascript:void(0)></a>') //focuser element, provides keyboard support
       .attr({tabIndex:0})
       .focus(function(){this.focus();$m.addClass(A)})
-      .keydown(function(e){var k=e.which,d=(k===h?40:39)-(k===h?38:37);d&&resplit($a[0][ohw]+8*d)})
+      .keydown(function(e){var k=e.which,d=(k===(h?40:39))-(k===(h?38:37));d&&resplit($a[0][ohw]+8*d)})
       .blur(function(){$m.removeClass(A)})
     //splitbar element, can be already in the doc or we create one
     var $m=$($p[2]||'<div>').insertAfter($a).append($f).addClass(vhsb).attr({unselectable:'on'})
