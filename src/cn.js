@@ -100,9 +100,9 @@
       .forEach((x) => {
         x.supported = cmpVer(x.ver, MIN_V) >= 0;
         x.name = `v${
-          x.ver.join('.')}, ${
-          x.bits}-bit, ${
-          x.edition.replace(/^./, (w) => w.toUpperCase())}${
+          x.ver.join('.')}${
+          x.bits === 64 ? '' : `, ${x.bits}-bit`}${
+          x.edition === 'unicode' ? '' : `, ${x.edition.replace(/^./, (w) => w.toUpperCase())}`}${
           x.opt ? `, ${x.opt}` : ''}${
           x.supported ? '' : ' (unsupported)'}`;
       });
