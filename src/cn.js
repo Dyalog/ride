@@ -914,6 +914,7 @@
       cursor: 'move',
       revert: true,
       axis: 'y',
+      items: '>:not(:first-child)',
       // stop: save,
     })
       .on('click', '.go', (e) => {
