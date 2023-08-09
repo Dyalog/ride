@@ -2,7 +2,7 @@
 // Preferences > Shortcuts
 
   let q; // DOM elements whose ids start with "shc_", keyed by the rest of the id
-  function updDups() { // check for duplicates and make them show in red
+  const updDups = () => { // check for duplicates and make them show in red
     const a = q.tbl_wr.querySelectorAll('.shc_text');
     const h = {}; // h:maps keystrokes to jQuery objects
     for (let i = 0; i < a.length; i++) {
@@ -10,8 +10,8 @@
       a[i].className = h[k] ? (h[k].className = 'shc_text shc_dup') : 'shc_text';
       h[k] = a[i];
     }
-  }
-  function getKeystroke(b, f) { // b:"+" button,f:callback
+  };
+  const getKeystroke = (b, f) => { // b:"+" button,f:callback
     const e = document.createElement('div');
     e.className = 'shc_editor';
     let r; // r:result
@@ -22,12 +22,15 @@
       const kn = monaco.KeyCode[x.keyCode];
       const be = x.browserEvent;
       const isMeta = meta.has(kn);
-      const s = (be.ctrlKey ? 'Ctrl-' : '') + (be.altKey ? 'Alt-' : '') +
-        (be.shiftKey && (be.type === 'keydown' || be.which) ? 'Shift-' : '') +
-        (be.metaKey ? 'Cmd-' : '') +
-        (isMeta ? '' : D.keyMap.labels[kn]);
+      const s = (be.ctrlKey ? 'Ctrl-' : '') + (be.altKey ? 'Alt-' : '')
+        + (be.shiftKey && (be.type === 'keydown' || be.which) ? 'Shift-' : '')
+        + (be.metaKey ? 'Cmd-' : '')
+        + (isMeta ? '' : D.keyMap.labels[kn]);
       me.setValue(s || 'Press keystroke...');
-      if (!isMeta) { r = s; close(); }
+      if (!isMeta) {
+        r = (x.keyCode === monaco.KeyCode.KEY_IN_COMPOSITION || !D.keyMap.labels[kn]) ? '' : s;
+        close();
+      }
       x.preventDefault(); x.stopPropagation(); return !1;
     };
     me = monaco.editor.create(e, {
@@ -58,18 +61,18 @@
     me.onDidBlurEditorText(close);
     b.parentNode.insertBefore(e, b);
     me.focus();
-  }
-  function keyHTML(x) {
-    return `<span class=shc_key><span class=shc_text>${x}</span>` +
-            '<a href=# class=shc_del title="Remove shortcut">×</a></span> ';
-  }
-  function updSC() {
+  };
+  const keyHTML = (x) => (
+    `<span class=shc_key><span class=shc_text>${x}</span>`
+      + '<a href=# class=shc_del title="Remove shortcut">×</a></span> '
+  );
+  const updSC = () => {
     const a = q.tbl_wr.querySelectorAll('tr');
     const s = q.sc.value.toLowerCase();
     let empty = 1;
     q.sc_clr.hidden = !s;
     for (let i = 0; i < a.length; i++) {
-      let h = [...a[i].childNodes].map(n => n.textContent).join(' ').toLowerCase().indexOf(s) < 0
+      let h = [...a[i].childNodes].map((n) => n.textContent).join(' ').toLowerCase().indexOf(s) < 0
         && !a[i].querySelectorAll('.shc_dup').length;
       if (q.defined.checked) {
         const v = a[i].querySelector('.shc_val');
@@ -79,31 +82,31 @@
       empty = empty && h;
     }
     q.no_res.hidden = !empty;
-  }
-  function loadFrom(h) {
+  };
+  const loadFrom = (h) => {
     let html = '<table>';
     const { cmds } = D;
-    const pfKey = c => `<input class=shc_val id=shc_val_${c}` +
-      ' placeholder="(<CMD>|text)*"' +
-      ' title="Sequence of commands (command code in angle brackets) to execute and/or text to type">';
+    const pfKey = (c) => `<input class=shc_val id=shc_val_${c}`
+      + ' placeholder="(<CMD>|text)*"'
+      + ' title="Sequence of commands (command code in angle brackets) to execute and/or text to type">';
     for (let i = 0; i < cmds.length; i++) {
       const x = cmds[i];
       const [c, s, d] = x; // c:code,s:description,d:default
-      html += `<tr data-code=${c}>` +
-        `<td class=shc_code>${c}` +
+      html += `<tr data-code=${c}>`
+        + `<td class=shc_code>${c}`
         // pfkeys show an <input> for the commands mapped to them
-        `<td>${s || pfKey(c)}` +
-        `<td id=shc_itm_${c}>${(h[c] || d).map(keyHTML).join('')}` +
-        '<button class=shc_add title="Add shortcut"><span class="fas fa-plus"></span></button>' +
-        `<td><button class=shc_rst title="Reset &quot;${c}&quot; to its defaults"><span class="fas fa-undo-alt"></span></button>`;
+        + `<td>${s || pfKey(c)}`
+        + `<td id=shc_itm_${c}>${(h[c] || d).map(keyHTML).join('')}`
+        + '<button class=shc_add title="Add shortcut"><span class="fas fa-plus"></span></button>'
+        + `<td><button class=shc_rst title="Reset &quot;${c}&quot; to its defaults"><span class="fas fa-undo-alt"></span></button>`;
     }
     q.tbl_wr.innerHTML = `${html}</table>`;
     const a = D.prf.pfkeys();
     for (let i = 1; i <= 48; i++) document.getElementById(`shc_val_PF${i}`).value = a[i] || '';
     updDups();
     if (q.sc.value || q.defined.checked) { q.sc.value = ''; updSC(); }
-  }
-  function updKeys(x) {
+  };
+  const updKeys = (x) => {
     const h = {};
     D.keyMap.dyalog = h;
     for (let i = 0; i < D.cmds.length; i++) {
@@ -117,7 +120,7 @@
         }
       }
     }
-  }
+  };
   D.prf.keys(updKeys);
   D.keyMap.dyalog = {}; // temporarily set keyMap.dyalog to something
   // wait until D.db is initialised in init.js, then set the real keymap
@@ -173,8 +176,8 @@
     },
     load() { loadFrom(D.prf.keys()); },
     validate() {
-      const a = q.tbl_wr.getElementsByClassName('shc_dup');
-      if (a.length) return { msg: 'Duplicate shortcuts', el: a[0] };
+      const dup = q.tbl_wr.getElementsByClassName('shc_dup');
+      if (dup.length) return { msg: 'Duplicate shortcuts', el: dup[0] };
       return null;
     },
     print() {
