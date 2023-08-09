@@ -31,11 +31,11 @@
 #cn_favs {
 	
 	>div.list_sel{
-		background:@CN_FAV_BTN_BG;
-		color: @CN_FAV_BTN_FG;
+		background:@CN_FAV_BTN_SEL_BG;
+		color: @CN_FAV_BTN_SEL_FG;
 		opacity:1;
 		.go {
-			color:@CN_FAV_BTN_FG!important;
+			color:@CN_FAV_BTN_SEL_FG!important;
 			&:hover{
 				color:@BUTTON_HOVER_COL!important;
 			}
@@ -45,13 +45,13 @@
 		outline: dotted black 1px;
 	}
 	>div{
-		background:@CN_FAV_BTN_UNSEL_BG;
-		color:@CN_FAV_BTN_UNSEL_FG;
+		background:@CN_FAV_BTN_BG;
+		color:@CN_FAV_BTN_FG;
 		&:not(:first-child) {
-			.go {color:@CN_FAV_BTN_UNSEL_BG;}
+			.go {color:@CN_FAV_BTN_BG;}
 			&:hover .go {
 				color:@CN_FAV_BTN_FG;
-				&:hover {color:@BUTTON_HOVER_COL}
+				&:hover {color: @CN_FAV_BTN_SEL_BG;}
 			}
 		}
 	}
