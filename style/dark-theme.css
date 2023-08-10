@@ -38,12 +38,12 @@
   border-left: solid 1px black;
 }
 #cn_favs > div.list_sel {
-  background: #21222e;
-  color: #7688d9;
+  background: #7688d9;
+  color: white;
   opacity: 1;
 }
 #cn_favs > div.list_sel .go {
-  color: #7688d9 !important;
+  color: white !important;
 }
 #cn_favs > div.list_sel .go:hover {
   color: #4c4a4a !important;
@@ -59,10 +59,10 @@
   color: #21222e;
 }
 #cn_favs > div:not(:first-child):hover .go {
-  color: #7688d9;
+  color: #a9a9a9;
 }
 #cn_favs > div:not(:first-child):hover .go:hover {
-  color: #4c4a4a;
+  color: #7688d9;
 }
 #cn_lhs {
   background: #272937;
@@ -84,30 +84,6 @@
 .cn_dlg_content pre {
   font-size: 16px;
   font-family: monospace;
-}
-.ctl_listview {
-  background-color: #1c1e28;
-  color: white;
-}
-.ctl_listview tr {
-  background-color: rgba(118, 136, 217, 0.5);
-  border-bottom: 1px solid #1c1e28;
-}
-.ctl_listview tr:hover {
-  background-color: rgba(118, 136, 217, 0.25);
-}
-.ctl_listview tr.selected {
-  background-color: #1c1e28;
-}
-#debug {
-  background: #1c1e28;
-}
-#debug .ctl_listview_header {
-  background-color: #7688d9;
-  color: white;
-}
-#debug .ctl_listview_header h2 {
-  font-size: 16px;
 }
 /*Golden Layout*/
 .lm_goldenlayout {
@@ -197,6 +173,30 @@
 .lm_transition_indicator {
   background-color: white;
   border: 1px dashed #7688d9;
+}
+.ctl_listview {
+  background-color: #1c1e28;
+  color: white;
+}
+.ctl_listview tr {
+  background-color: rgba(118, 136, 217, 0.5);
+  border-bottom: 1px solid #1c1e28;
+}
+.ctl_listview tr:hover {
+  background-color: rgba(118, 136, 217, 0.25);
+}
+.ctl_listview tr.selected {
+  background-color: #1c1e28;
+}
+#debug {
+  background: #1c1e28;
+}
+#debug .ctl_listview_header {
+  background-color: #7688d9;
+  color: white;
+}
+#debug .ctl_listview_header h2 {
+  font-size: 16px;
 }
 /*various dialogs*/
 #dlg_modal_overlay {
@@ -344,109 +344,6 @@ select {
 #lb_tip hr {
   border-top: 1px solid black;
   border-bottom: 1px solid #2e303e;
-}
-/*menu (see ../src/menu.js for the DOM structure)*/
-.menu {
-  background-color: #edeff5;
-  border-bottom: solid grey 1px;
-}
-.menu a,
-.menu a:hover {
-  color: black;
-  font-size: 0.8em;
-}
-.menu .m-open {
-  background: rgba(0, 0, 0, 0.2);
-}
-.menu .m-open .m-top {
-  border-color: transparent;
-}
-.menu .m-box {
-  background-color: white;
-  border-color: rgba(0, 0, 0, 0.2);
-}
-.menu .m-box a {
-  border: none;
-  border-color: #edeff5;
-}
-.menu .m-box a .m-shc {
-  color: white;
-}
-.menu .m-box a:focus {
-  background: rgba(0, 0, 0, 0.2);
-}
-.menu .m-box a.m-checked {
-  background: transparent 5px center no-repeat url(img/menu_chk.png);
-}
-.menu .m-box a:focus.m-checked {
-  background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
-}
-.breakpointarea {
-  border-right: 1px solid #272937;
-  cursor: pointer;
-}
-.breakpointarea:hover::before {
-  color: rgba(255, 0, 0, 0.5);
-  content: '⬤';
-  font-size: 0.7em;
-}
-.breakpointarea.monitorpoint.breakpoint.tracepoint::before {
-  color: brown;
-  content: '⬤';
-  font-size: 0.8em;
-}
-.breakpointarea.monitorpoint.breakpoint::before {
-  color: purple;
-  content: '⬤';
-  font-size: 0.8em;
-}
-.breakpointarea.monitorpoint.tracepoint::before {
-  color: green;
-  content: '⬤';
-  font-size: 0.8em;
-}
-.breakpointarea.breakpoint.tracepoint::before {
-  color: orange;
-  content: '⬤';
-  font-size: 0.8em;
-}
-.breakpointarea.monitorpoint::before {
-  color: blue;
-  content: '⬤';
-  font-size: 0.8em;
-}
-.breakpointarea.breakpoint::before {
-  color: red;
-  content: '⬤';
-  font-size: 0.8em;
-}
-.breakpointarea.tracepoint::before {
-  color: yellow;
-  content: '⬤';
-  font-size: 0.8em;
-}
-.highlighted {
-  border: none;
-  outline: solid red 1px;
-}
-.sessionmargin {
-  border-right: 1px solid #272937;
-  font-size: 1em;
-}
-.sessionmargin.group_start::before {
-  content: '┌';
-}
-.sessionmargin.group_middle::before {
-  content: '│';
-}
-.sessionmargin.group_end::before {
-  content: '└';
-}
-.sessionmargin.modified:not(.group_start,.group_middle,.group_end)::before {
-  content: '∙';
-}
-.sessionmargin.modified::before {
-  color: red;
 }
 #prf_dlg hr {
   border-top: 1px solid black;
@@ -625,6 +522,109 @@ a:hover {
   #shc_tbl_wr tr .shc_key .shc_del {
     display: none;
   }
+}
+.breakpointarea {
+  border-right: 1px solid #272937;
+  cursor: pointer;
+}
+.breakpointarea:hover::before {
+  color: rgba(255, 0, 0, 0.5);
+  content: '⬤';
+  font-size: 0.7em;
+}
+.breakpointarea.monitorpoint.breakpoint.tracepoint::before {
+  color: brown;
+  content: '⬤';
+  font-size: 0.8em;
+}
+.breakpointarea.monitorpoint.breakpoint::before {
+  color: purple;
+  content: '⬤';
+  font-size: 0.8em;
+}
+.breakpointarea.monitorpoint.tracepoint::before {
+  color: green;
+  content: '⬤';
+  font-size: 0.8em;
+}
+.breakpointarea.breakpoint.tracepoint::before {
+  color: orange;
+  content: '⬤';
+  font-size: 0.8em;
+}
+.breakpointarea.monitorpoint::before {
+  color: blue;
+  content: '⬤';
+  font-size: 0.8em;
+}
+.breakpointarea.breakpoint::before {
+  color: red;
+  content: '⬤';
+  font-size: 0.8em;
+}
+.breakpointarea.tracepoint::before {
+  color: yellow;
+  content: '⬤';
+  font-size: 0.8em;
+}
+.highlighted {
+  border: none;
+  outline: solid red 1px;
+}
+.sessionmargin {
+  border-right: 1px solid #272937;
+  font-size: 1em;
+}
+.sessionmargin.group_start::before {
+  content: '┌';
+}
+.sessionmargin.group_middle::before {
+  content: '│';
+}
+.sessionmargin.group_end::before {
+  content: '└';
+}
+.sessionmargin.modified:not(.group_start,.group_middle,.group_end)::before {
+  content: '∙';
+}
+.sessionmargin.modified::before {
+  color: red;
+}
+/*menu (see ../src/menu.js for the DOM structure)*/
+.menu {
+  background-color: #edeff5;
+  border-bottom: solid grey 1px;
+}
+.menu a,
+.menu a:hover {
+  color: black;
+  font-size: 0.8em;
+}
+.menu .m-open {
+  background: rgba(0, 0, 0, 0.2);
+}
+.menu .m-open .m-top {
+  border-color: transparent;
+}
+.menu .m-box {
+  background-color: white;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.menu .m-box a {
+  border: none;
+  border-color: #edeff5;
+}
+.menu .m-box a .m-shc {
+  color: white;
+}
+.menu .m-box a:focus {
+  background: rgba(0, 0, 0, 0.2);
+}
+.menu .m-box a.m-checked {
+  background: transparent 5px center no-repeat url(img/menu_chk.png);
+}
+.menu .m-box a:focus.m-checked {
+  background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
 }
 #splash {
   background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #1c1e28;
