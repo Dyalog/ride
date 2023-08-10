@@ -9,40 +9,32 @@
     content: '⬤';
     font-size: 0.7em;
   }
-  &.monitorpoint.breakpoint.tracepoint::before{
-    color: brown;
-    content: '⬤';
-    font-size: 0.8em;
+  &.monitorpoint.breakpoint.tracepoint::before,
+  &.monitorpoint.breakpoint::before,
+  &.monitorpoint.tracepoint::before,
+  &.breakpoint.tracepoint::before
+  {
+    color: #999;
+    content: '+';
+    font-size: 1.3em;
+    text-shadow: 1px 1px black,-1px -1px black,1px -1px black,-1px 1px black;
   }
-  &.monitorpoint.breakpoint::before{
-    color: purple;
-    content: '⬤';
-    font-size: 0.8em;
+  &.monitorpoint::before {
+    color: #000;
+    content: '🕘︎';
+    font-size: 0.6em;
   }
-  &.monitorpoint.tracepoint::before{
-    color: green;
-    content: '⬤';
-    font-size: 0.8em;
-  }
-  &.breakpoint.tracepoint::before{
-    color: orange;
-    content: '⬤';
-    font-size: 0.8em;
-  }
-  &.monitorpoint::before{
-    color: blue;
-    content: '⬤';
-    font-size: 0.8em;
-  }
-  &.breakpoint::before{
+  &.breakpoint::before {
     color: red;
     content: '⬤';
-    font-size: 0.8em;
+    font-size: 0.6em;
+    text-shadow: 1px 1px black,-1px -1px black,1px -1px black,-1px 1px black;
   }
-  &.tracepoint::before{
+  &.tracepoint::before {
     color: yellow;
     content: '⬤';
-    font-size: 0.8em;
+    font-size: 0.6em;
+    text-shadow: 1px 1px black,-1px -1px black,1px -1px black,-1px 1px black;
   }
 }
 .highlighted{
