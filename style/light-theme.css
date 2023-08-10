@@ -704,6 +704,14 @@ body {
   -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
 }
+#vt_bln {
+  border: solid black 1px;
+  background-color: black;
+  color: white;
+}
+#vt_tri {
+  border-color: black;
+}
 .tooltip {
   color: #7688d9;
 }
@@ -741,14 +749,6 @@ body {
 .tb_sep {
   border: 0 solid #dde0ec;
   border-right-width: 1px;
-}
-#vt_bln {
-  border: solid black 1px;
-  background-color: black;
-  color: white;
-}
-#vt_tri {
-  border-color: black;
 }
 #wse {
   background-color: white;

@@ -1,4 +1,30 @@
-/*Prefs>Code*/
+/*Prefs>Trace/Edit*/
+#wins {
+  overflow-y: auto;
+  position: absolute;
+  top: @PRF_CONTENT_TOP;
+  bottom: @PRF_CONTENT_BTM;
+  left: 12px;
+  right: 3px;
+
+  div {
+		margin-right: 0;
+  }  
+  p {
+		margin: 5px;
+  }
+  &>hr {
+    margin-top: 5px !important;
+  }
+}
+
+#wins_qns {
+	margin: 8px 8px 0 0;
+	width: 100%;
+	width: -moz-available;          /* WebKit-based browsers will ignore this. */
+	width: -webkit-fill-available;  /* Mozilla-based browsers will ignore this. */
+	width: fill-available;
+  }
 #wins .row{
 	padding: 3px 5px;
 }

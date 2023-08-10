@@ -412,11 +412,10 @@
     <a href=#code>General</a>
     <a href=#lyt class=sel>Keyboard</a>
     <a href=#shc>Shortcuts</a>
-    <a href=#resp>Saved Responses</a>
     <a href=#col>Colours</a>
     <a href=#title>Title</a>
     <a href=#pmenu>Menu</a>
-    <a href=#wins>Windows</a>
+    <a href=#wins>Trace/Edit</a>
     <button id=prf_print class=tb_btn><span class="fal fa-print"></span></button>
   </div>
   <hr>
@@ -510,28 +509,8 @@
       <div id=shc_no_res hidden>No results</div>
     </div>
 
-    <!--Saved Responses-->
-    <div id=resp hidden>
-      <div id=resp_ctrls>
-        <button id=resp_sel_all title="Select all responses"><u>S</u>elect All</button>
-        <button id=resp_del title="Delete response"><u>D</u>elete</button>
-      </div>
-      <select id=resp_qns multiple></select>
-    </div>
-
     <!--Code-->
     <div id=code hidden>
-      <h2>Indentation</h2>
-      <p><input id=code_io   type=checkbox><label for=code_io  >I<u>n</u>dent content when an editor is opened</label></p>
-      <p><input id=code_ilf  type=checkbox><label for=code_ilf >Handle <u>f</u>ormatting through the interpreter</label></p>
-      <p><input id=code_ai   type=checkbox><label for=code_ai  >A<u>u</u>to-indent</label>
-         <input id=code_sw  size=1><label for=code_sw> spaces</label>
-      </p>
-      <p><input id=code_aim  type=checkbox><label for=code_aim >in <u>m</u>ethods:</label>
-         <input id=code_swm size=1><label for=code_swm> spaces</label>
-      </p>
-      <p><input id=code_icom type=checkbox><label for=code_icom><u>I</u>ndent lines that contain only a comment</label></p>
-      <hr>
       <h2>Brackets</h2>
       <p><input id=code_mb   type=checkbox><label for=code_mb  ><u>H</u>ighlight matching brackets: <tt>()[]{}</tt></label></p>
       <p><input id=code_acbr type=checkbox><label for=code_acbr>Au<u>t</u>o-close brackets</label></p>
@@ -560,6 +539,8 @@
          <input id=code_sls size=6> lines (0 = unlimited)</label>
       </p>
       <p><input id=code_ssm type=checkbox><label for=code_ssm>Show session <u>m</u>argin</label></p>
+      <p><input id=code_sqp type=checkbox><label for=code_sqp>Show <u>q</u>uit prompt</label></p>
+      <p><input id=code_coq type=checkbox><label for=code_coq>Connect on quit</label></p>
       <hr>
       <h2>Cursor</h2>
       <p><input id=code_bc type=checkbox><label for=code_bc><u>B</u>lock cursor</label></p>
@@ -583,22 +564,15 @@
       <hr>
       <h2>Minimap</h2>
       <p><input id=code_mme  type=checkbox><label for=code_mme>Minimap enabled</label></p>
-      <p><input id=code_mmrc type=checkbox><label for=code_mmrc>Minimap render characters</label></p>
+      <p><input id=code_mmrc type=checkbox class="sub"><label for=code_mmrc>Render characters</label></p>
       <p>
-        <label>Minimap show slider
+        <label class="sub">Show slider
           <select id=code_mmss>
             <option value="always">always</option>
             <option value="mouseover">mouseover</option>
           </select>
         </label>
       </p>
-      <hr>
-      <h2>Other</h2>
-      <p><input id=code_dce type=checkbox><label for=code_dce>Double click to edit</label></p>
-      <p><input id=code_sqp type=checkbox><label for=code_sqp>Show <u>q</u>uit prompt</label></p>
-      <p><input id=code_set type=checkbox><label for=code_set>Show toolbar in editor/trace windows</label></p>
-      <p><input id=code_coq type=checkbox><label for=code_coq>Connect on quit</label></p>
-      <p><input id=code_fit type=checkbox><label for=code_fit>Include filename in editor title</label></p>
     </div>
 
     <!--Colours-->
@@ -670,8 +644,10 @@
       <div id=pmenu_ta_wr><textarea id=pmenu_ta wrap=off></textarea></div>
     </div>
    
-    <!--Windows-->
+    <!--Trace/Edit-->
     <div id=wins hidden>
+      <p><input id=wins_dce type=checkbox><label for=wins_dce>Double click to edit</label></p>
+      <p><input id=wins_set type=checkbox><label for=wins_set>Show toolbar</label></p>
       <div class="row">
         <div class="col col-xs-5">
           <input id=wins_fw type=checkbox>
@@ -680,36 +656,70 @@
       </div>
       <div class="row">
         <div class="col col-xs-5">
-          <input id=wins_fs type=checkbox>
+          <input id=wins_fit type=checkbox class="sub">
+          <label for=wins_fit>Include filename in editor title</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col col-xs-5">
+          <input id=wins_fs type=checkbox class="sub">
           <label for=wins_fs><u>S</u>ingle floating window</label>
         </div>
       </div>
       <div class="row">
-        <div class="col col-xs-12">
-          <input id=wins_mm type=checkbox>
+        <div class="col col-xs-6">
+          <input id=wins_mm type=checkbox class="sub">
           <label for=wins_mm><u>R</u>emember previous window position</label>
         </div>
       </div>
-      <div class="row">
-        <div class="col col-xs-2"><label for=wins_sw>Size <u>w</u>idth:</label></div>
-        <div class="col col-xs-1"><input id=wins_sw size=4></div>
-        <div class="col col-xs-1"><label for=wins_sh><u>h</u>eight:</label></div>
-        <div class="col col-xs-1"><input id=wins_sh size=4></div>
+      <div class="sub">
+        <div class="row">
+          <div class="col col-xs-2"><label for=wins_sw>Size <u>w</u>idth:</label></div>
+          <div class="col col-xs-1"><input id=wins_sw size=4></div>
+          <div class="col col-xs-1"><label for=wins_sh><u>h</u>eight:</label></div>
+          <div class="col col-xs-1"><input id=wins_sh size=4></div>
+        </div>
+        <div class="row">
+          <div class="col col-xs-2"><label for=wins_px>Posn <u>x</u>:</label></div>
+          <div class="col col-xs-1"><input id=wins_px size=4></div>
+          <div class="col col-xs-1"><label for=wins_py><u>y</u>:</label></div>
+          <div class="col col-xs-1"><input id=wins_py size=4></div>
+        </div>
+        <div class="row">
+          <div class="col col-xs-2"><label for=wins_ox>Offset <u>x</u>:</label></div>
+          <div class="col col-xs-1"><input id=wins_ox size=4></div>
+          <div class="col col-xs-1"><label for=wins_oy><u>y</u>:</label></div>
+          <div class="col col-xs-1"><input id=wins_oy size=4></div>
+        </div>
       </div>
-      <div class="row">
-        <div class="col col-xs-2"><label for=wins_px>Posn <u>x</u>:</label></div>
-        <div class="col col-xs-1"><input id=wins_px size=4></div>
-        <div class="col col-xs-1"><label for=wins_py><u>y</u>:</label></div>
-        <div class="col col-xs-1"><input id=wins_py size=4></div>
+      <hr>
+      <h2>Indentation</h2>
+      <p><input id=wins_io   type=checkbox><label for=wins_io  >I<u>n</u>dent content when an editor is opened</label></p>
+      <p>
+        <label for=wins_ilf >Handle <u>f</u>ormatting  
+          <select id=wins_ilf>
+            <option value="0">in RIDE</option>
+            <option value="1">through the interpreter</option>
+          </select>
+        </label>
+      </p>
+      <div class="sub">
+        <p><input id=wins_ai   type=checkbox><label for=wins_ai  >A<u>u</u>to-indent</label>
+          <input id=wins_isw  size=1><label for=wins_isw> spaces</label>
+        </p>
+        <p><input id=wins_aim  type=checkbox class="sub"><label for=wins_aim >in <u>m</u>ethods:</label>
+          <input id=wins_swm size=1><label for=wins_swm> spaces</label>
+        </p>
+        <p><input id=wins_icom type=checkbox><label for=wins_icom><u>I</u>ndent lines that contain only a comment</label></p>
       </div>
-      <div class="row">
-        <div class="col col-xs-2"><label for=wins_ox>Offset <u>x</u>:</label></div>
-        <div class="col col-xs-1"><input id=wins_ox size=4></div>
-        <div class="col col-xs-1"><label for=wins_oy><u>y</u>:</label></div>
-        <div class="col col-xs-1"><input id=wins_oy size=4></div>
+      <hr> 
+      <h2>Saved Responses</h2>
+      <div id=wins_resp>
+        <button id=wins_sel_all title="Select all responses"><u>S</u>elect All</button>
+        <button id=wins_del title="Delete response"><u>D</u>elete</button>
       </div>
+      <select id=wins_qns multiple></select>
     </div>
-
   </div>
   <div class=dlg_btns>
     <button id=prf_dlg_ok><u>O</u>K</button>
@@ -785,7 +795,6 @@
 <script src=src/prf_ui.js     ></script>
 <script src=src/prf_lyt.js    ></script>
 <script src=src/prf_shc.js    ></script>
-<script src=src/prf_resp.js   ></script>
 <script src=src/prf_code.js   ></script>
 <script src=src/prf_col.js    ></script>
 <script src=src/prf_title.js  ></script>
