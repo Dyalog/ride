@@ -390,40 +390,40 @@ select {
   content: '⬤';
   font-size: 0.7em;
 }
-.breakpointarea.monitorpoint.breakpoint.tracepoint::before {
-  color: brown;
-  content: '⬤';
-  font-size: 0.8em;
-}
-.breakpointarea.monitorpoint.breakpoint::before {
-  color: purple;
-  content: '⬤';
-  font-size: 0.8em;
-}
-.breakpointarea.monitorpoint.tracepoint::before {
-  color: green;
-  content: '⬤';
-  font-size: 0.8em;
-}
+.breakpointarea.monitorpoint.breakpoint.tracepoint::before,
+.breakpointarea.monitorpoint.breakpoint::before,
+.breakpointarea.monitorpoint.tracepoint::before,
 .breakpointarea.breakpoint.tracepoint::before {
-  color: orange;
-  content: '⬤';
-  font-size: 0.8em;
+  border: none;
+  background: none;
+  color: #999;
+  content: '+';
+  font-size: 1.3em;
+  text-shadow: 1px 1px black, -1px -1px black, 1px -1px black, -1px 1px black;
 }
 .breakpointarea.monitorpoint::before {
-  color: blue;
-  content: '⬤';
-  font-size: 0.8em;
+  color: black;
+  content: '┘';
+  font-size: 0.45em;
+  border: 1px solid black;
+  border-radius: 1em;
+  width: 3ex;
+  text-align: center;
+  line-height: 3ex;
+  background: white;
+  text-shadow: 1px 1px black,0 1px black,1px 0 black;
 }
 .breakpointarea.breakpoint::before {
   color: red;
   content: '⬤';
-  font-size: 0.8em;
+  font-size: 0.6em;
+  text-shadow: 1px 1px black, -1px -1px black, 1px -1px black, -1px 1px black;
 }
 .breakpointarea.tracepoint::before {
   color: yellow;
   content: '⬤';
-  font-size: 0.8em;
+  font-size: 0.6em;
+  text-shadow: 1px 1px black, -1px -1px black, 1px -1px black, -1px 1px black;
 }
 .highlighted {
   border: none;
@@ -704,14 +704,6 @@ body {
   -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
 }
-#vt_bln {
-  border: solid black 1px;
-  background-color: black;
-  color: white;
-}
-#vt_tri {
-  border-color: black;
-}
 .tooltip {
   color: #7688d9;
 }
@@ -749,6 +741,14 @@ body {
 .tb_sep {
   border: 0 solid #dde0ec;
   border-right-width: 1px;
+}
+#vt_bln {
+  border: solid black 1px;
+  background-color: black;
+  color: white;
+}
+#vt_tri {
+  border-color: black;
 }
 #wse {
   background-color: white;
