@@ -15,20 +15,23 @@
   &.breakpoint.tracepoint::before
   {
     border: none;
+    background: none;
     color: #999;
     content: '+';
     font-size: 1.3em;
     text-shadow: 1px 1px black,-1px -1px black,1px -1px black,-1px 1px black;
   }
   &.monitorpoint::before {
-    color: @ED_TRACE_COL;
+    color: black;
     content: '┘';
-    font-size: 0.5em;
-    border: 1px solid @ED_TRACE_COL;
+    font-size: 0.45em;
+    border: 1px solid black;
     border-radius: 1em;
-    width: 2.8ex;
+    width: 3ex;
     text-align: center;
-    line-height: 2.8ex;
+    line-height: 3ex;
+    background: white;
+    text-shadow: 1px 1px black,0 1px black,1px 0 black;
   }
   &.breakpoint::before {
     color: red;
