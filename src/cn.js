@@ -233,7 +233,9 @@
   const favDOM = (x) => {
     const e = document.createElement('div');
     e.cnData = x;
-    e.innerHTML = `<span class=name>${esc(favText(x))}</span><button class="go tb_btn"><span class="fas fa-play"></span></button>`;
+    e.innerHTML = `<span class=name>${
+      esc(favText(x))
+    }</span><button class="go tb_btn" title="Start now"><span class="fas fa-play"></span></button>`;
     return e;
   };
   const updExes = () => {
