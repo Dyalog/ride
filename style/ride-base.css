@@ -157,40 +157,6 @@
 #cn_env {
   width: 100%;
 }
-.ctl_listview {
-  width: 100%;
-  font-family: apl;
-  line-height: 1.3em;
-  overflow-x: auto;
-  overflow-y: auto;
-}
-.ctl_listview tr {
-  cursor: pointer;
-}
-.ctl_listview td {
-  padding: 3px 10px;
-}
-#threads > table,
-#sistack > table {
-  width: 100%;
-}
-#debug {
-  height: inherit;
-}
-#debug > div {
-  height: 50%;
-  display: block;
-}
-#debug .ctl_listview_header {
-  height: 14px;
-  padding: 5px;
-}
-#threads {
-  height: calc(100% - 60px);
-}
-#sistack {
-  height: calc(100% - 24px);
-}
 /*various dialogs*/
 #dlg_modal_overlay {
   width: 100%;
@@ -374,81 +340,39 @@
   height: 100%;
   resize: none;
 }
-@font-face {
-  font-family: 'apl';
-  src: url('./fonts/Apl385.woff') format('woff'), url('./fonts/Apl385.ttf') format('truetype');
+.ctl_listview {
+  width: 100%;
+  font-family: apl;
+  line-height: 1.3em;
+  overflow-x: auto;
+  overflow-y: auto;
 }
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Thin.ttf') format('truetype');
-  font-weight: 100;
-  font-style: normal;
+.ctl_listview tr {
+  cursor: pointer;
 }
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-ThinItalic.ttf') format('truetype');
-  font-weight: 100;
-  font-style: italic;
+.ctl_listview td {
+  padding: 3px 10px;
 }
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Light.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
+#threads > table,
+#sistack > table {
+  width: 100%;
 }
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-LightItalic.ttf') format('truetype');
-  font-weight: 300;
-  font-style: italic;
+#debug {
+  height: inherit;
 }
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
+#debug > div {
+  height: 50%;
+  display: block;
 }
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Italic.ttf') format('truetype');
-  font-weight: 400;
-  font-style: italic;
+#debug .ctl_listview_header {
+  height: 14px;
+  padding: 5px;
 }
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
+#threads {
+  height: calc(100% - 60px);
 }
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-MediumItalic.ttf') format('truetype');
-  font-weight: 500;
-  font-style: italic;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Bold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-BoldItalic.ttf') format('truetype');
-  font-weight: 700;
-  font-style: italic;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Black.ttf') format('truetype');
-  font-weight: 900;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-BlackItalic.ttf') format('truetype');
-  font-weight: 900;
-  font-style: italic;
+#sistack {
+  height: calc(100% - 24px);
 }
 .lm_content {
   border: none !important;
@@ -1006,6 +930,82 @@ body .ui-tooltip {
 .ui-icon-closethick {
   background: no-repeat center center url(img/close.png);
 }
+@font-face {
+  font-family: 'apl';
+  src: url('./fonts/Apl385.woff') format('woff'), url('./fonts/Apl385.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-ThinItalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-BlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+}
 #lb {
   font-family: apl, monospace;
   font-size: 18px;
@@ -1106,45 +1106,22 @@ body .ui-tooltip {
 .menu hr {
   margin: 3px 0 5px 0;
 }
+.monaco-editor .no-icons .icon {
+  display: none!important;
+}
+.monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main,
+.monaco-editor-hover .monaco-tokenized-source {
+  white-space: pre!important;
+}
+.pendent .monaco-editor .cursor {
+  visibility: hidden!important;
+}
+.pendent .tb_btn {
+  pointer-events: none;
+}
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
-}
-#sb {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: space-between;
-}
-#sb[hidden] {
-  display: none;
-}
-#sb_left,
-#sb_right {
-  display: flex;
-}
-#sb_left div,
-#sb_right div {
-  display: inline-block;
-  padding: 3px 6px 4px;
-  user-select: none;
-  cursor: default;
-}
-#sb_left div[hidden],
-#sb_right div[hidden] {
-  display: none;
-}
-#sb_left div .tb_btn,
-#sb_right div .tb_btn {
-  padding: 0;
-}
-#sb_cp {
-  min-width: 15em;
-}
-#sb_busy {
-  padding: 2px 6px 3px;
 }
 /* http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 License: none (public domain) */
 html,
@@ -1292,6 +1269,42 @@ h2 {
 .hidden {
   display: none;
 }
+#sb {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+}
+#sb[hidden] {
+  display: none;
+}
+#sb_left,
+#sb_right {
+  display: flex;
+}
+#sb_left div,
+#sb_right div {
+  display: inline-block;
+  padding: 3px 6px 4px;
+  user-select: none;
+  cursor: default;
+}
+#sb_left div[hidden],
+#sb_right div[hidden] {
+  display: none;
+}
+#sb_left div .tb_btn,
+#sb_right div .tb_btn {
+  padding: 0;
+}
+#sb_cp {
+  min-width: 15em;
+}
+#sb_busy {
+  padding: 2px 6px 3px;
+}
 /*Status window*/
 /*info*/
 /*error*/
@@ -1318,19 +1331,6 @@ h2 {
 }
 #status .t8 {
   color: red;
-}
-.monaco-editor .no-icons .icon {
-  display: none!important;
-}
-.monaco-editor .suggest-widget .monaco-list .monaco-list-row > .contents > .main,
-.monaco-editor-hover .monaco-tokenized-source {
-  white-space: pre!important;
-}
-.pendent .monaco-editor .cursor {
-  visibility: hidden!important;
-}
-.pendent .tb_btn {
-  pointer-events: none;
 }
 .tooltip {
   width: 16px;
@@ -1811,6 +1811,24 @@ body.floating-window {
 .zoom-10 .toolbar {
   font-size: 6px;
 }
+/*Prefs>Code*/
+#code {
+  overflow: auto;
+  position: absolute;
+  top: 54px;
+  bottom: 70px;
+  left: 12px;
+  right: 3px;
+}
+#code p {
+  margin: 5px;
+}
+#code > hr {
+  margin-top: 5px !important;
+}
+.web #code {
+  top: 75px;
+}
 #prf_dlg > hr {
   margin-top: 0;
   margin-bottom: 15px;
@@ -1943,24 +1961,6 @@ body.floating-window {
 }
 #col.renaming #col_new_name {
   display: inline;
-}
-/*Prefs>Code*/
-#code {
-  overflow: auto;
-  position: absolute;
-  top: 54px;
-  bottom: 70px;
-  left: 12px;
-  right: 3px;
-}
-#code p {
-  margin: 5px;
-}
-#code > hr {
-  margin-top: 5px !important;
-}
-.web #code {
-  top: 75px;
 }
 /*Prefs>Layout*/
 /*The arrangement is: +-------+ */
@@ -2187,6 +2187,71 @@ input.lyt_g3:hover {
   height: 100%;
   resize: none;
 }
+/*Prefs>Title*/
+#title {
+  text-align: left;
+  padding: 8px;
+}
+#title pre {
+  overflow: auto;
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 125px;
+  bottom: 70px;
+}
+#title table {
+  table-layout: fixed;
+  width: 100%;
+  margin-top: 10px;
+}
+#title table tr {
+  height: 1.3em;
+}
+#title table td {
+  vertical-align: middle;
+}
+#title table td:nth-child(1) {
+  width: 30%;
+}
+#title_inp {
+  width: calc(100% - 160px);
+  margin-left: 10px;
+  padding: 5px 0;
+}
+#title_rst {
+  float: right;
+}
+/*Prefs>Trace/Edit*/
+#wins {
+  overflow-y: auto;
+  position: absolute;
+  top: 54px;
+  bottom: 70px;
+  left: 12px;
+  right: 3px;
+}
+#wins div {
+  margin-right: 0;
+}
+#wins p {
+  margin: 5px;
+}
+#wins > hr {
+  margin-top: 5px !important;
+}
+#wins_qns {
+  margin: 8px 8px 0 0;
+  width: 100%;
+  width: -moz-available;
+  /* WebKit-based browsers will ignore this. */
+  width: -webkit-fill-available;
+  /* Mozilla-based browsers will ignore this. */
+  width: fill-available;
+}
+#wins .row {
+  padding: 3px 5px;
+}
 /*Prefs>Shortcuts*/
 #shc {
   position: absolute;
@@ -2303,69 +2368,4 @@ input.lyt_g3:hover {
   #shc_tbl_wr td:nth-child(4) {
     display: none;
   }
-}
-/*Prefs>Title*/
-#title {
-  text-align: left;
-  padding: 8px;
-}
-#title pre {
-  overflow: auto;
-  position: absolute;
-  left: 8px;
-  right: 8px;
-  top: 125px;
-  bottom: 70px;
-}
-#title table {
-  table-layout: fixed;
-  width: 100%;
-  margin-top: 10px;
-}
-#title table tr {
-  height: 1.3em;
-}
-#title table td {
-  vertical-align: middle;
-}
-#title table td:nth-child(1) {
-  width: 30%;
-}
-#title_inp {
-  width: calc(100% - 160px);
-  margin-left: 10px;
-  padding: 5px 0;
-}
-#title_rst {
-  float: right;
-}
-/*Prefs>Trace/Edit*/
-#wins {
-  overflow-y: auto;
-  position: absolute;
-  top: 54px;
-  bottom: 70px;
-  left: 12px;
-  right: 3px;
-}
-#wins div {
-  margin-right: 0;
-}
-#wins p {
-  margin: 5px;
-}
-#wins > hr {
-  margin-top: 5px !important;
-}
-#wins_qns {
-  margin: 8px 8px 0 0;
-  width: 100%;
-  width: -moz-available;
-  /* WebKit-based browsers will ignore this. */
-  width: -webkit-fill-available;
-  /* Mozilla-based browsers will ignore this. */
-  width: fill-available;
-}
-#wins .row {
-  padding: 3px 5px;
 }
