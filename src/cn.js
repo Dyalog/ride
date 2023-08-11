@@ -590,7 +590,7 @@
           const env = {
             SINGLETRACE: '1',
             ...envusr,
-            APLK0: 'default',
+            ...(!D.win || x.subtype === 'ssh') && { APLK0: 'default' },
             AUTOCOMPLETE_PREFIXSIZE: '0',
             CLASSICMODE: '1',
             RIDE_SPAWNED: '1',
