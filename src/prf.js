@@ -19,7 +19,8 @@ D.prf = {};
   ['colourSchemes',      []],//objects describing user-defined colour schemes
   ['confirmations',      {}],//saved responses to TaskDialog questions
   ['connectOnQuit',      0], // open connection page when active session ends
-  ['defaultConfig',     ''], // default session configuration
+  ['customAplFont',      ''], // custom APL font, e.g. Consolas
+  ['defaultConfig',      ''], // default session configuration
   ['doubleClickToEdit',  1], // whether double clicking a function name in session or editor opens an editor on that function
   ['filenameInTitle',    1], // include filename in editor title
   ['floating',           0], //floating editor and tracer windows

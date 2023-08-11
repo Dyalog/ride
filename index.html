@@ -578,11 +578,17 @@
     <!--Colours-->
     <div id=col hidden>
       <div id=col_top>
-        <label><u>S</u>cheme: <select id=col_scm></select></label>
-        <input id=col_new_name>
-        <button id=col_cln>C<u>l</u>one</button>
-        <button id=col_ren><u>R</u>ename</button>
-        <button id=col_del><u>D</u>elete</button>
+        <div>
+          <button id=col_fnt_rst class="pull-right"><u>R</u>eset</button>
+          <label for=col_fnt>Custom APL font:</label><input id=col_fnt placeholder="APL385 Unicode">
+        </div>
+        <div>
+          <label><u>S</u>cheme: <select id=col_scm></select></label>
+          <input id=col_new_name>
+          <button id=col_cln>C<u>l</u>one</button>
+          <button id=col_ren><u>R</u>ename</button>
+          <button id=col_del><u>D</u>elete</button>
+        </div>
       </div>
       <div id=col_me></div>
       <div id=col_settings>
