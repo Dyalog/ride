@@ -627,6 +627,49 @@
             cancelOp(c);
           } else {
             D.isLocalInterpreter = true;
+            const onExit = (code, sig) => {
+              srv && srv.close();
+              srv = 0;
+              clt = 0;
+              child = 0;
+              clearTimeout(D.tmr);
+              delete D.tmr;
+              if (code !== 0) {
+                err(`Interpreter ${code != null ? `exited with code ${code}` : `received ${sig}`}`);
+                D.ide && D.ide.die();
+              }
+            };
+            const onError = (y) => {
+              srv && srv.close();
+              srv = 0;
+              clt = 0;
+              child = 0;
+              clearTimeout(D.tmr);
+              delete D.tmr;
+              switch (y.code) {
+                case 'ENOENT': err('Cannot find the interpreter\'s executable'); return;
+                case 'EACCES': err('Access error when starting interpreter executable'); return;
+                default: err('Failed to start interpreter');
+              }
+            };
+            const cancel = (e) => {
+              if (e) {
+                clearTimeout(D.tmr);
+                delete D.tmr;
+              } else {
+                err('Timed out');
+              }
+              srv && srv.close();
+              srv = 0;
+              if (child) {
+                child.off('exit', onExit);
+                child.off('error', onError);
+                child.kill();
+                child = 0;
+              }
+              hideDlgs();
+              return !1;
+            };
             srv = net.createServer((y) => {
               log('spawned interpreter connected');
               const adr = srv.address();
@@ -672,43 +715,9 @@
                 });
               } catch (e) { err(e); return; }
               D.lastSpawnedExe = x.exe;
-              child.on('exit', (code, sig) => {
-                srv && srv.close();
-                srv = 0;
-                clt = 0;
-                child = 0;
-                clearTimeout(D.tmr);
-                delete D.tmr;
-                if (code !== 0) {
-                  err(`Interpreter ${code != null ? `exited with code ${code}` : `received ${sig}`}`);
-                  D.ide && D.ide.die();
-                }
-              });
-              child.on('error', (y) => {
-                srv && srv.close();
-                srv = 0;
-                clt = 0;
-                child = 0;
-                clearTimeout(D.tmr);
-                delete D.tmr;
-                err(y.code === 'ENOENT' ? 'Cannot find the interpreter\'s executable' : `${y}`);
-                console.error(y);
-              });
+              child.on('exit', onExit);
+              child.on('error', onError);
             });
-            const cancel = (e) => {
-              if (e) {
-                clearTimeout(D.tmr);
-                delete D.tmr;
-              } else {
-                err('Timed out');
-              }
-              srv && srv.close();
-              srv = 0;
-              child && child.kill();
-              child = 0;
-              hideDlgs();
-              return !1;
-            };
             D.tmr = setTimeout(cancel, ct);
             q && (q.connecting_dlg_close.onclick = cancel);
           }
