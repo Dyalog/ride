@@ -54,6 +54,10 @@
     CT() { document.execCommand('Cut'); },
     CP() { document.execCommand('Copy'); },
     PT() { document.execCommand('Paste'); },
+    SA(me) {
+      if (me) me.setSelection(me.getModel().getFullModelRange());
+      else document.execCommand('SelectAll');
+    },
     RDO(me) { me.trigger('D', 'redo'); },
     UND(me) { me.trigger('D', 'undo'); },
     PRF() { D.prf_ui(); },
@@ -321,8 +325,8 @@
   const defCmd = (x) => {
     const c = D.commands;
     c[x] || (c[x] = (me) => {
-      const h = me.dyalogCmds;
-      (h && h[x]) ? h.execCommand(x) : $.alert(`Command ${x} not implemented.`);
+        const h = me.dyalogCmds;
+        (h && h[x]) ? h.execCommand(x) : $.alert(`Command ${x} not implemented.`);
     });
   };
   ('CBP MA AC VAL indentOrComplete indentMoreOrAutocomplete STL TVO TVB'

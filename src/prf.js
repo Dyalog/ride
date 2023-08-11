@@ -95,7 +95,7 @@ D.prf = {};
     + '\n  Cut                      =CT  {!browser}'
     + '\n  Copy                     =CP  {!browser}'
     + '\n  Paste                    =PT  {!browser}'
-    + '\n  Select All               =SA  {mac}'
+    + '\n  Select All               =SA'
     + '\n  -                             {mac||!browser}'
     + '\n  &Find...                 =SC'
     + '\n  Find and &Replace...     =RP'
