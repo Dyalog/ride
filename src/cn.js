@@ -729,13 +729,42 @@
     return !1;
   };
   global.go = go;
+  const setUpMenu = () => {
+    D.InitHelp();
+    const m = 'Dyalog'
+    + '\n  About Dyalog=ABT'
+    + '\n  -'
+    + '\n  Preferences=PRF'
+    + '\n  -'
+    + '\n  &Quit=QIT'
+    + ''
+    + '\n&Edit'
+    + '\n  Undo=UND'
+    + '\n  Redo=RDO'
+    + '\n  -'
+    + '\n  Cut=CT'
+    + '\n  Copy=CP'
+    + '\n  Paste=PT'
+    + '\n  Select All=SA'
+    + '\n&Help'
+    + '\n  Getting &Started         =https://dyalog.com/introduction.htm'
+    + '\n  -'
+    + '\n  Dyalog &Help             =DHI'
+    + '\n  &Language Elements       =LEL'
+    + '\n  &Documentation Centre    =DOX'
+    + '\n  -'
+    + '\n  Dyalog &Website          =https://dyalog.com/'
+    + '\n  &Email Dyalog            =EMD'
+    + '\n  -'
+    + '\n  Read &Me                 =RME'
+    + '\n  &Third Party Licences    =TPL';
+    D.installMenu(D.parseMenuDSL(m));
+  };
   D.cn = () => { // set up Connect page
     q = J.cn;
     I.cn.hidden = 0;
     $(I.cn).splitter();
-    const m = 'Dyalog\n  About Dyalog=ABT\n  -\n  Preferences=PRF\n  -\n  &Quit=QIT'
-      + '\n&Edit\n  Undo=UND\n  Redo=RDO\n  -\n  Cut=CT\n  Copy=CP\n  Paste=PT\n  Select All=SA';
-    setTimeout(() => D.installMenu(D.parseMenuDSL(m)), 100);
+    setTimeout(setUpMenu, 100);
     D.conns = [];
     if (fs.existsSync(cnFile)) {
       D.conns.push(...JSON.parse(fs.readFileSync(cnFile).toString()));
