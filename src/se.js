@@ -774,7 +774,6 @@ D.Se.prototype = {
   UC() { this.me.trigger('editor', 'cursorUp'); },
   LC() { this.me.trigger('editor', 'cursorLeft'); },
   RC() { this.me.trigger('editor', 'cursorRight'); },
-  SA() { this.me.setSelection(this.me.getModel().getFullModelRange()); },
   TO() { this.me.trigger('editor', 'editor.fold'); }, // (editor.unfold) is there a toggle?
   TVB() { D.prf.breakPts.toggle(); },
   TVO() { D.prf.fold.toggle(); },

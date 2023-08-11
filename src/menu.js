@@ -28,7 +28,6 @@ D.installMenu = function Menu(mx) {
         cut: 1,
         copy: 1,
         paste: 1,
-        selectall: 1,
         togglefullscreen: 1,
         window: 1,
         help: 1,
