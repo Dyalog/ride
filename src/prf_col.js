@@ -186,7 +186,12 @@
       h.bg && (cls += `background-color:${RGBA(h.bg, h.bgo == null ? 0.5 : h.bgo)};`);
       cls += '}';
       return cls;
-    }).join('').concat(D.mac ? 'u{text-decoration:none;' : '')
+    }).join('')
+      .concat(D.mac ? 'u{text-decoration:none;}' : '')
+      .concat(`@font-face {font-family:'apl'; src: ${
+        [...D.prf.customAplFont().split(','), 'APL385 Unicode'].map((x) => x && `local('${x.trim()}'),`).join('')}
+        url('./style/fonts/Apl385.woff') format('woff'), url('./style/fonts/Apl385.ttf') format('truetype');'
+      }`)
   );
   const setMonacoTheme = (schema) => {
     const rules = [];
@@ -341,7 +346,9 @@
   ]);
   /* eslint-enable */
   D.mop.then(() => updStl());
-  D.prf.colourScheme(updStl); D.prf.colourSchemes(updStl);
+  D.prf.colourScheme(updStl);
+  D.prf.colourSchemes(updStl);
+  D.prf.customAplFont(updStl);
   const uniqScmName = (x) => { // x:suggested root
     const h = {};
     for (let i = 0; i < scms.length; i++) h[scms[i].name] = 1;
@@ -397,6 +404,11 @@
     name: 'Colours',
     init() {
       q = J.col;
+      q.fnt_rst.onclick = () => {
+        q.fnt.value = D.prf.customAplFont.getDefault();
+        q.fnt.focus();
+        return false;
+      };
       const u = [];
       Object.keys(scm).forEach((g) => {
         const { fg } = scm[g];
@@ -563,6 +575,7 @@
       });
     },
     load() {
+      q.fnt.value = D.prf.customAplFont();
       const a = SCMS.concat(D.prf.colourSchemes().map(decScm));
       scms = a;
       const s = D.prf.colourScheme();
@@ -572,6 +585,7 @@
     },
     activate() { q.scm.focus(); },
     save() {
+      D.prf.customAplFont(q.fnt.value);
       D.prf.colourSchemes(scms.filter((x) => !x.frz).map(encScm));
       D.prf.colourScheme(scm.name);
     },

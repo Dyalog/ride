@@ -85,30 +85,6 @@
   font-size: 16px;
   font-family: monospace;
 }
-.ctl_listview {
-  background-color: white;
-  color: black;
-}
-.ctl_listview tr {
-  background-color: rgba(118, 136, 217, 0.5);
-  border-bottom: 1px solid white;
-}
-.ctl_listview tr:hover {
-  background-color: rgba(118, 136, 217, 0.25);
-}
-.ctl_listview tr.selected {
-  background-color: #9eabe4;
-}
-#debug {
-  background: white;
-}
-#debug .ctl_listview_header {
-  background-color: #7688d9;
-  color: white;
-}
-#debug .ctl_listview_header h2 {
-  font-size: 16px;
-}
 /*various dialogs*/
 #dlg_modal_overlay {
   background-color: black;
@@ -448,6 +424,34 @@ select {
 .sessionmargin.modified::before {
   color: red;
 }
+::-webkit-scrollbar {
+  background-color: white;
+}
+::-webkit-scrollbar-corner {
+  background-color: white;
+}
+::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+  border: 1px solid white;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(118, 136, 217, 0.3);
+  border: 1px solid white;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  border-width: 1px 0;
+}
+::-webkit-scrollbar-thumb:vertical {
+  border-width: 0 1px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(118, 136, 217, 0.6);
+}
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(118, 136, 217, 0.9);
+}
 #prf_dlg hr {
   border-top: 1px solid #d7d7d3;
   border-bottom: 1px solid white;
@@ -626,34 +630,6 @@ a:hover {
     display: none;
   }
 }
-::-webkit-scrollbar {
-  background-color: white;
-}
-::-webkit-scrollbar-corner {
-  background-color: white;
-}
-::-webkit-scrollbar-track {
-  background-color: #f0f0f0;
-  border: 1px solid white;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb {
-  background-color: rgba(118, 136, 217, 0.3);
-  border: 1px solid white;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:horizontal {
-  border-width: 1px 0;
-}
-::-webkit-scrollbar-thumb:vertical {
-  border-width: 0 1px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(118, 136, 217, 0.6);
-}
-::-webkit-scrollbar-thumb:active {
-  background-color: rgba(118, 136, 217, 0.9);
-}
 #splash {
   background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #7688d9;
 }
@@ -765,4 +741,28 @@ body {
 #wse .bt_text.selected {
   background-color: rgba(118, 136, 217, 0.5);
   outline: rgba(118, 136, 217, 0.5);
+}
+.ctl_listview {
+  background-color: white;
+  color: black;
+}
+.ctl_listview tr {
+  background-color: rgba(118, 136, 217, 0.5);
+  border-bottom: 1px solid white;
+}
+.ctl_listview tr:hover {
+  background-color: rgba(118, 136, 217, 0.25);
+}
+.ctl_listview tr.selected {
+  background-color: #9eabe4;
+}
+#debug {
+  background: white;
+}
+#debug .ctl_listview_header {
+  background-color: #7688d9;
+  color: white;
+}
+#debug .ctl_listview_header h2 {
+  font-size: 16px;
 }
