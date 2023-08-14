@@ -717,6 +717,7 @@ D.Se.prototype = {
       D.ide.Edit({ win: 0, pos, text });
     }
   },
+  RD() { /* NA */ },
   BK() { this.histMove(1); },
   FD() { this.histMove(-1); },
   QT(me) {
