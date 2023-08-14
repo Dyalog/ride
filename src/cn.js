@@ -1044,7 +1044,7 @@
           name: `${sel.name} (copy)`,
           preset: false,
         });
-        q.favs.insertBefore(cnf, sel.preset ? q.favs.firstChild : $sel);
+        sel.preset ? q.favs.appendChild(cnf) : q.favs.insertBefore(cnf, $sel[0]);
         save();
         $(q.favs).list('select', $(cnf).index());
         q.fav_name.focus();
