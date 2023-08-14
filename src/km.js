@@ -355,7 +355,6 @@
     const ctrlcmd = {
       Ctrl: D.mac ? km.WinCtrl : km.CtrlCmd,
       Cmd: D.mac ? km.CtrlCmd : km.WinCtrl,
-      Command: km.CtrlCmd,
       Option: km.Alt,
       Win: km.WinCtrl,
       Meta: km.CtrlCmd,

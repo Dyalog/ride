@@ -5,11 +5,11 @@
   const updDups = () => { // check for duplicates and make them show in red
     const a = q.tbl_wr.querySelectorAll('.shc_text');
     const h = {}; // h:maps keystrokes to jQuery objects
-    for (let i = 0; i < a.length; i++) {
-      const k = a[i].textContent;
-      a[i].className = h[k] ? (h[k].className = 'shc_text shc_dup') : 'shc_text';
-      h[k] = a[i];
-    }
+    [...a].forEach((k) => {
+      const t = k.title;
+      k.classList.toggle('shc_dup', !!h[t]) && h[t].classList.add('shc_dup');
+      h[t] = k;
+    });
   };
   const keyLabels = {
     Ctrl: '⌃',
@@ -83,8 +83,7 @@
     }).join('+');
     const lbls = keys.map((k) => {
       let lbl = k;
-      // eslint-disable-next-line no-nested-ternary
-      if (k === 'Cmd') lbl = D.mac ? 'Command' : (D.win ? 'Win' : 'Meta');
+      if (k === 'Cmd' && !D.mac) lbl = D.win ? 'Win' : 'Meta';
       else if (k === 'Alt' && D.mac) lbl = 'Option';
       return lbl;
     }).join('+');
@@ -202,7 +201,10 @@
     load() { loadFrom(D.prf.keys()); },
     validate() {
       const dup = q.tbl_wr.getElementsByClassName('shc_dup');
-      if (dup.length) return { msg: 'Duplicate shortcuts', el: dup[0] };
+      if (dup.length) {
+        dup[0].scrollIntoViewIfNeeded();
+        return { msg: 'Duplicate shortcuts', el: dup[0] };
+      }
       return null;
     },
     print() {
