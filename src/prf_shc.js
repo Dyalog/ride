@@ -11,12 +11,6 @@
       h[t] = k;
     });
   };
-  const keyLabels = {
-    Ctrl: '⌃',
-    Shift: '⇧',
-    Option: '⌥',
-    Cmd: '⌘',
-  };
   const getKeystroke = (b, f) => { // b:"+" button,f:callback
     const e = document.createElement('div');
     e.className = 'shc_editor';
@@ -73,21 +67,18 @@
     b.parentNode.insertBefore(e, b);
     me.focus();
   };
+  const keyLabels = {
+    Ctrl: '⌃',
+    Shift: '⇧',
+    Option: '⌥',
+    Cmd: '⌘',
+  };
   const keyHTML = (x) => {
-    const keys = x.replace(/[+-](.)/g, '\n$1').split('\n');
-    const btns = keys.map((k) => {
-      let lbl = k;
-      if (D.mac) lbl = keyLabels[k] || k;
-      else if (k === 'Cmd') lbl = D.win ? 'Win' : 'Meta';
-      return `<div class=shc_key_btn>${lbl}</div>`;
-    }).join('+');
-    const lbls = keys.map((k) => {
-      let lbl = k;
-      if (k === 'Cmd' && !D.mac) lbl = D.win ? 'Win' : 'Meta';
-      else if (k === 'Alt' && D.mac) lbl = 'Option';
-      return lbl;
-    }).join('+');
-    return `<span class=shc_key><span class=shc_text title="${lbls}">${btns}</span>`
+    const keys = x.replace(/\+(.)/g, '\n$1').split('\n');
+    const btns = keys.map((k) => (
+      `<div class=shc_key_btn>${D.mac ? (keyLabels[k] || k) : k}</div>`
+    )).join('+');
+    return `<span class=shc_key><span class=shc_text title="${keys.join('+')}">${btns}</span>`
       + '<a href=# class=shc_del title="Remove shortcut">×</a></span> ';
   };
   const updSC = () => {
