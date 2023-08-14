@@ -11,6 +11,12 @@
       h[k] = a[i];
     }
   };
+  const keyLabels = {
+    Ctrl: '⌃',
+    Shift: '⇧',
+    Option: '⌥',
+    Cmd: '⌘',
+  };
   const getKeystroke = (b, f) => { // b:"+" button,f:callback
     const e = document.createElement('div');
     e.className = 'shc_editor';
@@ -22,10 +28,15 @@
       const kn = monaco.KeyCode[x.keyCode];
       const be = x.browserEvent;
       const isMeta = meta.has(kn);
-      const s = (be.ctrlKey ? 'Ctrl-' : '') + (be.altKey ? 'Alt-' : '')
-        + (be.shiftKey && (be.type === 'keydown' || be.which) ? 'Shift-' : '')
-        + (be.metaKey ? 'Cmd-' : '')
-        + (isMeta ? '' : D.keyMap.labels[kn]);
+      const s = [
+        be.ctrlKey ? 'Ctrl' : '',
+        be.shiftKey && (be.type === 'keydown' || be.which) ? 'Shift' : '',
+        // eslint-disable-next-line no-nested-ternary
+        be.altKey ? (D.mac ? 'Option' : 'Alt') : '',
+        // eslint-disable-next-line no-nested-ternary
+        be.metaKey ? (D.mac ? 'Cmd' : (D.win ? 'Win' : 'Meta')) : '',
+        isMeta ? '' : D.keyMap.labels[kn],
+      ].filter((k) => k).join('+');
       me.setValue(s || 'Press keystroke...');
       if (!isMeta) {
         r = (x.keyCode === monaco.KeyCode.KEY_IN_COMPOSITION || !D.keyMap.labels[kn]) ? '' : s;
@@ -62,10 +73,24 @@
     b.parentNode.insertBefore(e, b);
     me.focus();
   };
-  const keyHTML = (x) => (
-    `<span class=shc_key><span class=shc_text>${x}</span>`
-      + '<a href=# class=shc_del title="Remove shortcut">×</a></span> '
-  );
+  const keyHTML = (x) => {
+    const keys = x.replace(/[+-](.)/g, '\n$1').split('\n');
+    const btns = keys.map((k) => {
+      let lbl = k;
+      if (D.mac) lbl = keyLabels[k] || k;
+      else if (k === 'Cmd') lbl = D.win ? 'Win' : 'Meta';
+      return `<div class=shc_key_btn>${lbl}</div>`;
+    }).join('+');
+    const lbls = keys.map((k) => {
+      let lbl = k;
+      // eslint-disable-next-line no-nested-ternary
+      if (k === 'Cmd') lbl = D.mac ? 'Command' : (D.win ? 'Win' : 'Meta');
+      else if (k === 'Alt' && D.mac) lbl = 'Option';
+      return lbl;
+    }).join('+');
+    return `<span class=shc_key><span class=shc_text title="${lbls}">${btns}</span>`
+      + '<a href=# class=shc_del title="Remove shortcut">×</a></span> ';
+  };
   const updSC = () => {
     const a = q.tbl_wr.querySelectorAll('tr');
     const s = q.sc.value.toLowerCase();
@@ -192,7 +217,7 @@
         let shortcuts = a[i].querySelectorAll('[class^=shc_text]');
         const keys = [];
         if (shortcuts.length) {
-          shortcuts = shortcuts.forEach((e) => { keys.push(e.innerHTML); });
+          shortcuts = shortcuts.forEach((e) => { keys.push(e.title); });
         }
         h[cmdName] = keys;
       }
