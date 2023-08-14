@@ -420,7 +420,7 @@ D.Ed.prototype = {
     if (ed.container) {
       ed.container.setTitle(ed.title);
       ed.container.tab.header.parent.trigger('resize');
-      ed.container.tab.titleElement[0].title = ed.filename;
+      if (ed.filename) ed.container.tab.titleElement[0].title = ed.filename;
     }
     const docTitle = `${ed.isModified ? '⬤ ' : ''}${ed.title}${filename} - ${ed.ide.caption}`;
     D.ide.floating && $('title', ed.dom.ownerDocument).text(docTitle);
