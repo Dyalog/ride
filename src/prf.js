@@ -89,6 +89,8 @@ D.prf = {};
     + '\n  -                             {!mac}'
     + '\n  &Quit                    =QIT {!mac}'
     + '\n&Edit'
+    + '\n  Reformat                 =RD'
+    + '\n  -                             {!browser}'
     + '\n  Undo                     =UND {!browser}'
     + '\n  Redo                     =RDO {!browser}'
     + '\n  -                             {!browser}'
