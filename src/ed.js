@@ -99,7 +99,6 @@ D.Ed = function Ed(ide, opts) { // constructor
     const { range } = evt.changes[0];
     const wasModified = ed.isModified;
     ed.isModified = !ed.firstOpen;
-    ed.firstOpen = ed.firstOpen && ed.isCode;
     if (ed.isCode && range.startLineNumber === 1) {
       const content = me.getModel().getLineContent(1);
       const [s] = content.match(/[^⍝\n\r;]*/);
@@ -395,6 +394,7 @@ D.Ed.prototype = {
     }
     me.updateOptions({ folding: ed.isCode && !!D.prf.fold() });
     if (ed.isCode && D.prf.indentOnOpen()) ed.RD(me);
+    else ed.firstOpen = false;
     ed.setRO(ee.debugger);
     ed.setBP(ed.breakpoints);
     const line = ee.currentRow;
@@ -420,7 +420,7 @@ D.Ed.prototype = {
     if (ed.container) {
       ed.container.setTitle(ed.title);
       ed.container.tab.header.parent.trigger('resize');
-      ed.container.tab.titleElement[0].title = ed.filename;
+      if (ed.filename) ed.container.tab.titleElement[0].title = ed.filename;
     }
     const docTitle = `${ed.isModified ? '⬤ ' : ''}${ed.title}${filename} - ${ed.ide.caption}`;
     D.ide.floating && $('title', ed.dom.ownerDocument).text(docTitle);
