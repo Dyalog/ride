@@ -86,7 +86,7 @@
       + 'tcpe=bg:c8c8c8,bgo:1 trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f vtt=bg:ff0 '
       + 'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:1,fg:080 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff '
       + 'ma=bg:828282,bgo:1,fg:0ff na=bg:828282,bgo:1,fg:f qor=bg:f00,bgo:1,fg:f dc=bg:#993333,bgo:1 '
-      + 'sae=bg:fbb,bgo:.25 itk=fg:f00,U:1',
+      + 'itk=fg:f00,U:1',
     }, {
       name: 'Francisco Goya',
       theme: 'dark',
@@ -177,7 +177,7 @@
         return cls;
       }
       cls = `${els}{`;
-      h.fg && (cls += `color:${RGB(h.fg)};`);
+      h.fg && (cls += `color:${RGB(h.fg)}!important;`);
       h.B && (cls += 'font-weight:bold;');
       h.I && (cls += 'font-style:italic;');
       h.U && (cls += 'text-decoration:underline;');
@@ -290,7 +290,7 @@
     {s:'dfn'             ,t:'dfn' ,m:'identifier.dfn', fg:1, BIU:1},
     {s:'diamond'         ,t:'diam',m:'delimiter.diamond', fg:1, BIU:1}, //⋄
     {s:'dyadic operator' ,t:'op2' ,m:'keyword.operator.dyadic', fg:1, BIU:1}, //⍣ ...
-    {s:'error'           ,t:'err' ,m:'invalid', fg:1, BIU:1},
+    {s:'error'           ,t:'err' ,m:'invalid', c:'.session-aplerr', fg:1, BIU:1},
     {s:'invalid token'   ,t:'itk' ,m:'invalid.token', fg:1, BIU:1},
     {s:'function'        ,t:'fn'  ,m:'keyword.function', fg:1, BIU:1}, //+ ...
     {s:'global name'     ,t:'glb' ,m:'identifier.global', fg:1, BIU:1},
@@ -330,19 +330,6 @@
     {s:'numarr'          ,t:'na'  ,c:'.numarr', bg:1, fg:1, BIU:1},
     {s:'quador'          ,t:'qor' ,c:'.quador', bg:1, fg:1, BIU:1},
     {s:'disconnected'    ,t:'dc'  ,c:'.disconnected', bg:1, fg:1, BIU:1},
-
-    {s:'session unspec'  ,t:'sus'  ,c:'.session-unspec', bg:1},
-    {s:'session stdout'  ,t:'sso'  ,c:'.session-stdout', bg:1},
-    {s:'session stderr'  ,t:'sse'  ,c:'.session-stderr', bg:1},
-    {s:'session syscmd'  ,t:'ssc'  ,c:'.session-syscmd', bg:1},
-    {s:'session aplerr'  ,t:'sae'  ,c:'.session-aplerr', bg:1},
-    {s:'session quad'    ,t:'sqo'  ,c:'.session-quad'  , bg:1},
-    {s:'session quotequad',t:'sqq' ,c:'.session-quotequad', bg:1},
-    {s:'session info'    ,t:'sif'  ,c:'.session-info'  , bg:1},
-    {s:'session echo input',t:'sei',c:'.session-echo-input',bg:1},
-    {s:'session trace'   ,t:'sto'  ,c:'.session-trace'  , bg:1},
-    {s:'session input'   ,t:'sin'  ,c:'.session-input'  , bg:1},
-    
   ]);
   /* eslint-enable */
   D.mop.then(() => updStl());
