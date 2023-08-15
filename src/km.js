@@ -354,14 +354,15 @@
     const km = monaco.KeyMod;
     const ctrlcmd = {
       Ctrl: D.mac ? km.WinCtrl : km.CtrlCmd,
-      Cmd: km.CtrlCmd,
-      Win: km.CtrlCmd,
+      Cmd: D.mac ? km.CtrlCmd : km.WinCtrl,
+      Option: km.Alt,
+      Win: km.WinCtrl,
       Meta: km.CtrlCmd,
     };
     const stlkbs = [];
     const fxkbs = [];
     function monacoKeyBinding(ks) {
-      return ks.replace(/-(.)/g, '\n$1').split('\n').reduce((a, ko) => {
+      return ks.replace(/\+(.)/g, '\n$1').split('\n').reduce((a, ko) => {
         const k = D.keyMap.labels[ko] || ko;
         return a | (ctrlcmd[k] || km[k] || kc[k]); // eslint-disable-line no-bitwise
       }, 0);
