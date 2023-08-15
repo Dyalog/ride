@@ -23,12 +23,12 @@
       const be = x.browserEvent;
       const isMeta = meta.has(kn);
       const s = [
-        be.ctrlKey ? 'Ctrl' : '',
-        be.shiftKey && (be.type === 'keydown' || be.which) ? 'Shift' : '',
+        x.ctrlKey ? 'Ctrl' : '',
+        x.shiftKey && (be.type === 'keydown' || be.which) ? 'Shift' : '',
         // eslint-disable-next-line no-nested-ternary
-        be.altKey ? (D.mac ? 'Option' : 'Alt') : '',
+        x.altKey ? (D.mac ? 'Option' : 'Alt') : '',
         // eslint-disable-next-line no-nested-ternary
-        be.metaKey ? (D.mac ? 'Cmd' : (D.win ? 'Win' : 'Meta')) : '',
+        x.metaKey ? (D.mac ? 'Cmd' : (D.win ? 'Win' : 'Meta')) : '',
         isMeta ? '' : D.keyMap.labels[kn],
       ].filter((k) => k).join('+');
       me.setValue(s || 'Press keystroke...');
