@@ -47,6 +47,7 @@ for DIR in `ls _/${APP_NAME}`; do
 	echo "DEBUG: \$OSNAME=$OSNAME"
 
   cp -R _/${APP_NAME}/${DIR} $r/$d/${OSNAME}
+  chmod 755 $r/$d/${OSNAME}
 done
 
 echo 'fixing permissions'; chmod +x $r/$d/win32/{*.exe,*.dll}
