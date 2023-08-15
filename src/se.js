@@ -474,7 +474,7 @@ D.Se.prototype = {
           range: new monaco.Range(i + 1, 1, i + 1, 1),
           options: {
             isWholeLine: true,
-            className: logLineStyles[x.type],
+            inlineClassName: logLineStyles[x.type],
             stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
           },
         });
