@@ -53,7 +53,18 @@
     BT() { D.ide.switchWin(1); },
     CT() { document.execCommand('Cut'); },
     CP() { document.execCommand('Copy'); },
-    PT() { document.execCommand('Paste'); },
+    // PT() { document.execCommand('Paste'); },
+    PT(me) {
+      if (D.el) {
+        document.execCommand('Paste');
+      } else if (me) {
+        navigator.clipboard.readText().then((text) => {
+          me.executeEdits('D', me.getSelections().map((range) => ({ range, text, forceMoveMarkers: true })));
+        }, (error) => {
+          console.log('Failed to read clipboard', error);
+        });
+      }
+    },
     SA(me) {
       if (me) me.setSelection(me.getModel().getFullModelRange());
       else document.execCommand('SelectAll');
