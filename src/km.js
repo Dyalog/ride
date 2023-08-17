@@ -53,7 +53,6 @@
     BT() { D.ide.switchWin(1); },
     CT() { document.execCommand('Cut'); },
     CP() { document.execCommand('Copy'); },
-    // PT() { document.execCommand('Paste'); },
     PT(me) {
       if (D.el) {
         document.execCommand('Paste');
