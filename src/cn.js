@@ -1037,6 +1037,9 @@
       $(q.favs).list('select', $e.index());
       q.fav_name.focus();
     };
+    q.tgl_cfg.onclick = () => {
+      I.cn.toggleMaximize();
+    };
     q.cln.onclick = () => {
       if (sel) {
         const cnf = favDOM({
