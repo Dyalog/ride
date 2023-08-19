@@ -30,14 +30,20 @@ $.fn.splitter = function splitter(args) {
     // splitbar element, can be already in the doc or we create one
     const $m = $($p[2] || '<div>').insertAfter($a).append($f).addClass(vhsb)
       .attr({ unselectable: 'on' });
+    let restoreSize = 0; // size before maximize
     const resplit = (arg) => {
       const min = Math.min(arg, $a._max, $s._DA - $m._DA - $b._min);
       const p = Math.max($a._min, $s._DA - $b._max, min); // fit pane size limits
       // resize/position the two panes:
       $m._DA = $m[0][ohw];
-      $m.css(tl, p).css(wh, $s._DF);
-      $a.css(tl, 0).css(hw, p).css(wh, $s._DF);
-      $b.css(tl, p + $m._DA).css(hw, $s._DA - $m._DA - p).css(wh, $s._DF);
+      if (!restoreSize) {
+        $m.css(tl, p);
+        $a.css(tl, 0).css(hw, p);
+        $b.css(tl, p + $m._DA).css(hw, $s._DA - $m._DA - p);
+      }
+      $m.css(wh, $s._DF);
+      $a.css(wh, $s._DF);
+      $b.css(wh, $s._DF);
       $p.trigger('resize');
     };
     const doSplit = (e) => { resplit($a._posSplit + e[pyx]); };
@@ -100,5 +106,19 @@ $.fn.splitter = function splitter(args) {
       }
     }).trigger('resize', [p0]);
     $(window).on('resize', (e) => { e.target === window && $s.trigger('resize'); });
+    this.toggleMaximize = () => {
+      if (restoreSize) {
+        $b.show();
+        $m.show();
+        const size = restoreSize;
+        restoreSize = 0;
+        resplit(size);
+      } else {
+        restoreSize = $a[0][ohw];
+        $b.hide();
+        $m.hide();
+        $a.css('width', '100%');
+      }
+    };
   });
 };
