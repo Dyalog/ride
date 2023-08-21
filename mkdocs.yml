@@ -1,0 +1,56 @@
+site_name: RIDE User Guide
+repo_url: https://github.com/xpqz/ride-docs
+# repo_name: xpqz/ride-docs
+nav:
+  - index.md
+  - introduction.md
+  - installation.md
+  - "Starting a Session": starting_a_dyalog_session.md
+  - the_dyalog_development_environment.md
+  - input_windows.md
+  - ridespecific_language_features.md
+  - customising_your_session.md
+  - keyboard_shortcuts.md
+  - sample_configuration_file.md
+
+# - function_key_configuration.md
+# - input_windows.md
+# - operating_system_interaction.md
+# - preferences_dialog_box.md
+# - ridedyalog_menu_bar.md
+# - session_user_interface.md
+# 
+# 
+# - type_connect.md
+# - type_listen.md
+# - type_start.md
+# - underscored_characters.md
+# - underscored_characters_in_the_session.md
+# - underscored_characters_in_window_captions.md
+# - unsupported_language_elements.md
+# - zero_footprint.md
+
+theme:
+  favicon: 'img/favicon-32.png'
+  logo: 'img/dyalog-white.svg'
+  features:
+    - navigation.sections
+    - navigation.instant
+  name: material
+
+extra_css:
+  - style/main.css
+  - style/admonition-ucmdhelp.css
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - abbr
+
+extra:
+  version:
+    provider: mike
+
+
