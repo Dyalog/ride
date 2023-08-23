@@ -268,10 +268,9 @@
       || (q.type.value === 'start' && q.subtype.value === 'ssl')) q.subtype.value = 'raw';
     updSubtype();
     q.ssl_opt.hidden = q.type.value !== 'connect';
-    q.raw_opt.text = q.type.value === 'start' ? 'Local' : 'TCP';
+    q.raw_opt.text = q.type.value === 'start' ? 'on this computer' : 'via TCP';
     q.fetch.hidden = q.type.value !== 'start';
     q.start.hidden = q.fetch.hidden;
-    q.go.innerHTML = `<u>${q.type.value[0]}</u>${q.type.value.substr(1)}`;
   };
   const validate = (x) => {
     const t = x.type;
@@ -1039,7 +1038,10 @@
     };
     q.tgl_cfg.onclick = () => {
       I.cn.toggleMaximize();
+      const maximise = $(q.rhs).is(':visible');
+      q.tgl_cfg_arrow.innerHTML = `<i class="fas fa-chevron-double-${maximise ? 'right' : 'left'}"></i>`;
     };
+    q.tgl_cfg.click();
     q.cln.onclick = () => {
       if (sel) {
         const cnf = favDOM({

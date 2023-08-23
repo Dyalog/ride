@@ -23,8 +23,10 @@
     <div id=cn_favs></div>
     <div id=cn_fav_btns class=dlg_btns>
       <div class="col left">
-        <button id=cn_neu><u>N</u>ew Configuration</button>
-        <button id=cn_tgl_cfg class="pull-right">Custom options</button>
+        <button id=cn_neu><u>N</u>ew Configuration...</button>
+        <button id=cn_tgl_cfg class="pull-right"><u>C</u>ustom options
+          <span id=cn_tgl_cfg_arrow><span class="fas fa-chevron-double-left"></span></span>
+        </button>
       </div>
     </div>
   </div>
@@ -38,22 +40,21 @@
         <div class="row">
           <div class="col col-xs-3"><label for=cn_type><u>T</u>ype:</label></div>
           <div class="col col-xs-9">
-            <div class="row">
-              <div class="col col-xs-6">
-                <select id=cn_type class=cn_select>
-                  <option value=connect     title="Connect to an interpreter"                  >Connect
-                  <option value=start       title="Start and connect to an interpreter"        >Start
-                  <option value=listen      title="Start and connect to an interpreter via SSL">Listen
-                </select>
-              </div>
-              <div class="col col-xs-6">
-                <select id=cn_subtype hidden>
-                  <option value=raw title="Connect to an interpreter via raw TCP/IP" id=cn_raw_opt>TCP
-                  <option value=ssh title="Connect to an interpreter via SSH"                     >SSH
-                  <option value=ssl title="Connect to an interpreter using TLS/SSL"  id=cn_ssl_opt>TLS/SSL
-                </select>
-              </div>
-            </div>
+            <select id=cn_type class=cn_select>
+              <option value=connect     >Connect to an interpreter
+              <option value=start       >Start an interpreter
+              <option value=listen      >Listen for an incoming connection
+            </select>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col col-xs-3"></div>
+          <div class="col col-xs-9">
+            <select id=cn_subtype hidden>
+              <option value=raw  id=cn_raw_opt>via TCP
+              <option value=ssh               >via SSH
+              <option value=ssl   id=cn_ssl_opt>via TLS/SSL
+            </select>
           </div>
         </div>
         <hr>
@@ -236,8 +237,8 @@
         <button id=cn_cln><u>C</u>lone</button>
         <button id=cn_del><u>D</u>elete</button>
         <button id=cn_sve><u>S</u>ave</button>
-        <button id=cn_def>Make <u>D</u>efault</button>
-        <button id=cn_go class="pull-right"><u>C</u>onnect</button>
+        <button id=cn_def><u>M</u>ake Default</button>
+        <button id=cn_go class="pull-right"><u>O</u>k</button>
       </div>
     </div>
   </div>
