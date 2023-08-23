@@ -584,11 +584,11 @@
 <p>The RIDE can start a Session using an interpreter installed on a remote machine irrespective of whether Dyalog is installed on the machine on which the RIDE is running. In this situation:</p>
 <ul>
 <li>The operating system on which the remote interpreter is running is irrelevant – the instructions given in this chapter apply to the operating system on which the RIDE is running (the two operating systems do not have to be the same).</li>
-<li>The remote machine does not need to have the RIDE installed but the Dyalog Session must be RIDE-enabled (see <a href="../ride_init/">RIDE Init</a>).</li>
+<li>The remote machine does not need to have the RIDE installed but the Dyalog Session must be <a href="../ride_init/">RIDE-enabled</a>.</li>
 </ul>
 </li>
 </ul>
-<p>Connections between the RIDE and Dyalog interpreters are initialised through the RIDE-Dyalog Session dialog box. The exception to this is Zero Footprint use, which always requires Dyalog to be started first with suitable configuration parameters, after which the RIDE will appear when you direct a web browser at the APL interpreter. See <a href="../the_zero_footprint_ride/">Zero Footprint Ride</a> for more information on Zero Footprint mode.</p>
+<p>Connections between the RIDE and Dyalog interpreters are initialised through the <strong>RIDE-Dyalog Session</strong> dialog box. The exception to this is Zero Footprint use, which always requires Dyalog to be started first with suitable configuration parameters, after which the RIDE will appear when you direct a web browser at the APL interpreter. See <a href="../the_zero_footprint_ride/">Zero Footprint Ride</a> for more information on Zero Footprint mode.</p>
 <p>This chapter describes how to use the RIDE to run Dyalog Sessions, both local and remote.</p>
 <h2 id="the-ride-dyalog-session-dialog-box">The RIDE-Dyalog Session Dialog Box</h2>
 <p>When the RIDE is started, the <strong>RIDE‑Dyalog Session</strong> dialog box is displayed. The <strong>RIDE‑Dyalog Session</strong> dialog box comprises four areas, as shown below:</p>
@@ -701,10 +701,14 @@
 </table>
 <p>In addition to the buttons, the following actions can be performed when a configuration is selected in the <strong>list of configurations</strong>:</p>
 <ul>
-<li>activate the configuration</li>
-<li>amend the configuration</li>
+<li>
+<p>activate the configuration</p>
+<p>Click <strong>CONNECT/START/LISTEN</strong> (as appropriate) in the basic information area to start a Dyalog Session through the RIDE.
+- amend the configuration</p>
+<p>Change details in the basic or type-dependent information areas. Changes must be saved to be retained between RIDE sessions.</p>
+</li>
 </ul>
-<p>A configuration can also be activated by clicking the  button to the right of its name in the list of configurations.</p>
+<p>A configuration can also be activated by clicking the <img src="../img/screenshots/b_connectdialog_play.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px; height: 10px;" /> button to the right of its name in the list of configurations.</p>
 <h3 id="types">Types</h3>
 <p>The Type can be one of three options (selected from a drop-down list). The type that is selected determines the content of the type-dependent area. The options are:</p>
 <ul>
