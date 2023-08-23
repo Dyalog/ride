@@ -794,26 +794,28 @@
 <li>
 <p>On the machine that the interpreter will run on, start a Dyalog Session, optionally specifying an IP address/DNS name and port that it will listen for RIDE connections on using the <code>RIDE_INIT</code> configuration parameter. If specified, this will override any <code>RIDE_INIT</code> values defined in a <a href="../configuration_ini_file/">configuration file</a>.</p>
 <p>For example, if the RIDE is on a different machine and will connect to a Dyalog version 16.0 Unicode 64-bit interpreter through port 4502, then enter the following in a command window/at the command prompt:</p>
-<pre><code>- on AIX:&lt;br /&gt;`$ RIDE_INIT="SERVE:*:4502" /opt/mdyalog/16.0/64/unicode/p7/mapl`
-- on Linux:&lt;br /&gt;`$ RIDE_INIT="SERVE:*:4502" dyalog`
-- on macOS:&lt;br /&gt;`$ RIDE_INIT="SERVE:*:4502" /Dyalog/Dyalog-16.0.app/Contents/Resources/Dyalog/mapl`
-- on Microsoft Windows:&lt;br /&gt;`&amp;gt; cd "C:\Program Files\Dyalog\Dyalog APL-64 16.0 Unicode"&lt;br&gt;&lt;/br&gt;&amp;gt; dyalog RIDE_INIT=SERVE:*:4502`
+<ul>
+<li>on AIX:<br /><code>$ RIDE_INIT="SERVE:*:4502" /opt/mdyalog/16.0/64/unicode/p7/mapl</code></li>
+<li>on Linux:<br /><code>$ RIDE_INIT="SERVE:*:4502" dyalog</code></li>
+<li>on macOS:<br /><code>$ RIDE_INIT="SERVE:*:4502" /Dyalog/Dyalog-16.0.app/Contents/Resources/Dyalog/mapl</code></li>
+<li>
+<p>on Microsoft Windows:<br /><code>&amp;gt; cd "C:\Program Files\Dyalog\Dyalog APL-64 16.0 Unicode"&lt;br&gt;&lt;/br&gt;&amp;gt; dyalog RIDE_INIT=SERVE:*:4502</code></p>
+<p>Alternatively, create a shortcut with the appropriate settings:</p>
+<pre><code>1. Select the appropriate Dyalog installation and create a shortcut to it.
+2. Right-click on the shortcut icon and select **Properties** from the context menu that is displayed.
 
-    Alternatively, create a shortcut with the appropriate settings:
+    The **Properties** dialog box is displayed.
 
-        1. Select the appropriate Dyalog installation and create a shortcut to it.
-        2. Right-click on the shortcut icon and select **Properties** from the context menu that is displayed.
+3.In the **Shortcut** tab, go to the **Target** field and:
 
-            The **Properties** dialog box is displayed.
+    - place `"` marks around the path (if not already present)
+    - append `RIDE_INIT=SERVE:*:4502`
 
-        3.In the **Shortcut** tab, go to the **Target** field and:
-
-            - place `"` marks around the path (if not already present)
-            - append `RIDE_INIT=SERVE:*:4502`
-
-                For example: `"C:\Program Files\Dyalog\Dyalog APL-64 16.0 Unicode\dyalog.exe" RIDE_INIT=SERVE:*:4502`
-        4. Click **OK**.
+        For example: `"C:\Program Files\Dyalog\Dyalog APL-64 16.0 Unicode\dyalog.exe" RIDE_INIT=SERVE:*:4502`
+4. Click **OK**.
 </code></pre>
+</li>
+</ul>
 </li>
 <li>
 <p>On the machine that the RIDE is running on: </p>
