@@ -801,19 +801,22 @@
 <li>
 <p>on Microsoft Windows:<br /><code>&amp;gt; cd "C:\Program Files\Dyalog\Dyalog APL-64 16.0 Unicode"&lt;br&gt;&lt;/br&gt;&amp;gt; dyalog RIDE_INIT=SERVE:*:4502</code></p>
 <p>Alternatively, create a shortcut with the appropriate settings:</p>
-<pre><code>1. Select the appropriate Dyalog installation and create a shortcut to it.
-2. Right-click on the shortcut icon and select **Properties** from the context menu that is displayed.
+<ol>
+<li>Select the appropriate Dyalog installation and create a shortcut to it.</li>
+<li>
+<p>Right-click on the shortcut icon and select <strong>Properties</strong> from the context menu that is displayed.</p>
+<p>The <strong>Properties</strong> dialog box is displayed.</p>
+</li>
+</ol>
+<p>3.In the <strong>Shortcut</strong> tab, go to the <strong>Target</strong> field and:</p>
+<pre><code>- place `"` marks around the path (if not already present)
+- append `RIDE_INIT=SERVE:*:4502`
 
-    The **Properties** dialog box is displayed.
-
-3.In the **Shortcut** tab, go to the **Target** field and:
-
-    - place `"` marks around the path (if not already present)
-    - append `RIDE_INIT=SERVE:*:4502`
-
-        For example: `"C:\Program Files\Dyalog\Dyalog APL-64 16.0 Unicode\dyalog.exe" RIDE_INIT=SERVE:*:4502`
-4. Click **OK**.
+    For example: `"C:\Program Files\Dyalog\Dyalog APL-64 16.0 Unicode\dyalog.exe" RIDE_INIT=SERVE:*:4502`
 </code></pre>
+<ol>
+<li>Click <strong>OK</strong>.</li>
+</ol>
 </li>
 </ul>
 </li>
