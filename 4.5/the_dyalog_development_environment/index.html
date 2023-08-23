@@ -1,0 +1,1193 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../starting_a_dyalog_session/">
+      
+      
+        <link rel="next" href="../input_windows/">
+      
+      <link rel="icon" href="../img/favicon-32.png">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.1.21">
+    
+    
+      
+        <title>The Dyalog Development Environment - RIDE User Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.eebd395e.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../style/main.css">
+    
+      <link rel="stylesheet" href="../style/admonition-ucmdhelp.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-dyalog-development-environment" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="RIDE User Guide" class="md-header__button md-logo" aria-label="RIDE User Guide" data-md-component="logo">
+      
+  <img src="../img/dyalog-white.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            RIDE User Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              The Dyalog Development Environment
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/xpqz/ride-docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="RIDE User Guide" class="md-nav__button md-logo" aria-label="RIDE User Guide" data-md-component="logo">
+      
+  <img src="../img/dyalog-white.svg" alt="logo">
+
+    </a>
+    RIDE User Guide
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/xpqz/ride-docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        About This Document
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        Installation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../starting_a_dyalog_session/" class="md-nav__link">
+        Starting a Session
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          The Dyalog Development Environment
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        The Dyalog Development Environment
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#session-user-interface" class="md-nav__link">
+    Session User Interface
+  </a>
+  
+    <nav class="md-nav" aria-label="Session User Interface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caption" class="md-nav__link">
+    Caption
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#menu-bar" class="md-nav__link">
+    Menu Bar
+  </a>
+  
+    <nav class="md-nav" aria-label="Menu Bar">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#file-menu" class="md-nav__link">
+    File Menu
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#edit-menu" class="md-nav__link">
+    Edit Menu
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#view-menu" class="md-nav__link">
+    View Menu
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#action-menu" class="md-nav__link">
+    Action Menu
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#threads-menu" class="md-nav__link">
+    Threads Menu
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#window-menu" class="md-nav__link">
+    Window Menu
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#help-menu" class="md-nav__link">
+    Help Menu
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#language-bar" class="md-nav__link">
+    Language Bar
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#session-window" class="md-nav__link">
+    Session Window
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-bar" class="md-nav__link">
+    Status Bar
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workspace-explorer" class="md-nav__link">
+    Workspace Explorer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debug-information-window" class="md-nav__link">
+    Debug Information Window
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#context-menu" class="md-nav__link">
+    Context Menu
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keyboard-key-mappings-for-apl-glyphs" class="md-nav__link">
+    Keyboard Key Mappings for APL Glyphs
+  </a>
+  
+    <nav class="md-nav" aria-label="Keyboard Key Mappings for APL Glyphs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#other-keyboard-options" class="md-nav__link">
+    Other Keyboard Options
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../input_windows/" class="md-nav__link">
+        Input Windows
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ridespecific_language_features/" class="md-nav__link">
+        RIDE-Specific Language Features
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../customising_your_session/" class="md-nav__link">
+        Customising Your Session
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../keyboard_shortcuts/" class="md-nav__link">
+        Keyboard Shortcuts
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sample_configuration_file/" class="md-nav__link">
+        Sample Configuration File
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#session-user-interface" class="md-nav__link">
+    Session User Interface
+  </a>
+  
+    <nav class="md-nav" aria-label="Session User Interface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#caption" class="md-nav__link">
+    Caption
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#menu-bar" class="md-nav__link">
+    Menu Bar
+  </a>
+  
+    <nav class="md-nav" aria-label="Menu Bar">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#file-menu" class="md-nav__link">
+    File Menu
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#edit-menu" class="md-nav__link">
+    Edit Menu
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#view-menu" class="md-nav__link">
+    View Menu
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#action-menu" class="md-nav__link">
+    Action Menu
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#threads-menu" class="md-nav__link">
+    Threads Menu
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#window-menu" class="md-nav__link">
+    Window Menu
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#help-menu" class="md-nav__link">
+    Help Menu
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#language-bar" class="md-nav__link">
+    Language Bar
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#session-window" class="md-nav__link">
+    Session Window
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#status-bar" class="md-nav__link">
+    Status Bar
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#workspace-explorer" class="md-nav__link">
+    Workspace Explorer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debug-information-window" class="md-nav__link">
+    Debug Information Window
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#context-menu" class="md-nav__link">
+    Context Menu
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#keyboard-key-mappings-for-apl-glyphs" class="md-nav__link">
+    Keyboard Key Mappings for APL Glyphs
+  </a>
+  
+    <nav class="md-nav" aria-label="Keyboard Key Mappings for APL Glyphs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#other-keyboard-options" class="md-nav__link">
+    Other Keyboard Options
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="the-dyalog-development-environment">The Dyalog Development Environment</h1>
+<p>When a Dyalog Session is started through the RIDE, the Dyalog development environment is displayed. This means that:</p>
+<ul>
+<li>the <a href="../session_user_interface/">Dyalog Session</a> user interface is displayed - the <a href="../keyboard_key_mappings_for_apl_glyphs/">keyboard key mappings</a> for APL glyphs are enabled</li>
+</ul>
+<h2 id="session-user-interface">Session User Interface</h2>
+<p>The menu bar menu options on macOS are different to those on Microsoft Windows and Linux. This section details the options for Microsoft Windows and Linux; for the macOS options see the <a href="https://docs.dyalog.com/latest/Dyalog%20for%20macOS%20UI%20Guide.pdf">Dyalog for macOS UI Guide</a>.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The RIDE's UI can vary slightly across different operating systems (and window managers); in particular, RIDE-specific menu bars can be located either within the development environment or in the global menu bar.</p>
+</div>
+<p>By default, the Dyalog <strong>Session</strong> user interface includes five elements, as shown in </p>
+<p><img alt="Default GUI, Microsoft Windows" src="../img/screenshots/s_default_gui_windows.png" /></p>
+<ul>
+<li>a <a href="../caption/">caption</a></li>
+<li>a <a href="../menu_bar/">menu bar</a></li>
+<li>a <a href="../language_bar/">Language bar</a></li>
+<li>a <a href="../session_window/">Session window</a></li>
+<li>a <a href="../status_bar/">Status bar</a></li>
+</ul>
+<p>Additional elements can also be present, as shown in :</p>
+<p><img alt="Extended GUI" src="../img/screenshots/s_default_gui_windows_extended.png" /></p>
+<ul>
+<li>a <a href="../workspace_explorer/">workspace explorer</a></li>
+<li>a <a href="../debug_information_window/">debug information window</a></li>
+</ul>
+<p>The Dyalog Session user interface with workspace explorer and debug information window displayed (Microsoft Windows)</p>
+<p>A <a href="../context_menu/">context menu</a> is available in the <strong>Session</strong> window, all <strong>Edit</strong> windows and the <strong>Trace</strong> window.</p>
+<h3 id="caption">Caption</h3>
+<p>The caption at the top of the <strong>Session</strong> window is the name of the Session.</p>
+<p>The caption can be <a href="../title_tab/">customised</a>.</p>
+<h3 id="menu-bar">Menu Bar</h3>
+<p>The menu bar menu options on macOS are different to those on Microsoft Windows and Linux. This section details the options for Microsoft Windows and Linux; for the macOS options see the <a href="https://docs.dyalog.com/latest/Dyalog%20for%20macOS%20UI%20Guide.pdf">Dyalog for macOS UI Guide</a>.</p>
+<p>The menu names in the menu bar and the options under each menu can be <a href="../menu_tab/">customised</a>.</p>
+<h4 id="file-menu">File Menu</h4>
+<p>The options available under the File menu are detailed below. These control the RIDE‑enabled APL process connections (both on local and remote machines).</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Open...</td>
+<td>Prompts for a filename. If a workspace file is selected (a .dws file) then it is loaded into the Session; any other file is opened in the Edit window. Only relevant if the Session was started using the <a href="../type_start/">Start</a> connection type.</td>
+</tr>
+<tr>
+<td>New Session</td>
+<td>Starts a new Dyalog Session (a new instance of the interpreter). Only relevant if the Session was started using the <a href="../type_start/">Start</a> connection type.</td>
+</tr>
+<tr>
+<td>Connect…</td>
+<td>Opens the RIDE-Dyalog [Session dialog]((the_ridedyalog_session_dialog_box.md) box.</td>
+</tr>
+<tr>
+<td>Quit</td>
+<td><a href="../terminating_a_dyalog_session/">Terminates</a> the Dyalog Session.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="edit-menu">Edit Menu</h4>
+<p>The options available under the Edit menu assist with manipulating text within (and between) windows. They are detailed below.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Undo</td>
+<td>Reverses the previous action.</td>
+</tr>
+<tr>
+<td>Redo</td>
+<td>Reverses the effect of the previous Undo .</td>
+</tr>
+<tr>
+<td>Cut</td>
+<td>Deletes the selected text from the active window and places it on the clipboard.</td>
+</tr>
+<tr>
+<td>Copy</td>
+<td>Copies the selected text to the clipboard.</td>
+</tr>
+<tr>
+<td>Paste</td>
+<td>Pastes the text contents of the clipboard into the active window at the current location.</td>
+</tr>
+<tr>
+<td>Find...</td>
+<td>Enables a <a href="../search_and_replace_editwindow/">search</a> for every occurrence of a specified string (this can include APL glyphs) within the code in the active window (Session or Edit).</td>
+</tr>
+<tr>
+<td>Find and Replace...</td>
+<td>Enables a <a href="../search_and_replace_editwindow/">search</a> for every occurrence of a specified string (this can include APL glyphs) within the code in the active window (Session or Edit); optionally, a replacement string can be applied on an individual basis.</td>
+</tr>
+<tr>
+<td>Preferences</td>
+<td>Opens the <a href="../preferences_dialog_box/">Preferences</a> dialog box.</td>
+</tr>
+</tbody>
+</table>
+<p>A <a href="../context_menu/">context</a> menu that includes the Undo, Redo, Cut, Copy and Paste options from the Edit menu is available in the <strong>Session</strong> window, all <strong>Edit</strong> windows and the <strong>Trace</strong> window.</p>
+<h4 id="view-menu">View Menu</h4>
+<p>The View menu options enable the appearance of the Dyalog Session to be changed.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Show Language Bar</td>
+<td>Toggles display of the <a href="../language_bar/">Language bar</a> at the top of the Session window.</td>
+</tr>
+<tr>
+<td>Show Status bar</td>
+<td>Toggles display of the <a href="../status_bar/">Status bar</a> at the bottom of the Session window.</td>
+</tr>
+<tr>
+<td>Show Workspace Explorer</td>
+<td>Toggles display of the <a href="../workspace_explorer/">workspace explorer</a> to the left of the Session window.</td>
+</tr>
+<tr>
+<td>Show Debug</td>
+<td>Toggles display of the <a href="../debug_information_window/">debug information window</a> to the right of the Session window.</td>
+</tr>
+<tr>
+<td>Line Wrapping in Session</td>
+<td>Toggles line wrapping. When off, <code>⎕PW</code> is used to determine line length. When on, a combination of <code>⎕PW</code> and line wrapping is used.</td>
+</tr>
+<tr>
+<td>Show Status Window</td>
+<td>Toggles display of the Status window, which displays system messages and supplementary information.</td>
+</tr>
+<tr>
+<td>Auto Status</td>
+<td>When checked, displays the Status window when a new message is generated for it.</td>
+</tr>
+<tr>
+<td>Stops</td>
+<td>Toggles display of an additional column at the left-hand side of the Edit / Trace windows in which break-points can be set/unset. Hiding this column does not remove any previously-set break-points.</td>
+</tr>
+<tr>
+<td>Line Numbers</td>
+<td>Toggles display of line numbers in the Edit / Trace windows.</td>
+</tr>
+<tr>
+<td>Outline</td>
+<td>Toggles code folding/outlining for control structures (including <code>:Section</code> structures) and functions in Edit windows. When toggled, existing code in an open Edit window is automatically updated to reflect the new rules.</td>
+</tr>
+<tr>
+<td>Increase Font Size</td>
+<td>Increases the size of the font in all the windows.</td>
+</tr>
+<tr>
+<td>Decrease Font Size</td>
+<td>Decreases the size of the font in all the windows.</td>
+</tr>
+<tr>
+<td>Reset Font Size</td>
+<td>Sets the size of the font in all the windows to its default value.</td>
+</tr>
+<tr>
+<td>Toggle Full Screen</td>
+<td>Toggles the entire session between its current size and full screen size.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="action-menu">Action Menu</h4>
+<p>The options available under the Action menu enable Edit and Trace windows to be opened and allow currently-running APL code to be interrupted with trappable events.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Edit</td>
+<td>If the cursor is on or immediately after <code>&lt;object name&gt;</code> , then opens an Edit window on that name.</td>
+</tr>
+<tr>
+<td>Trace</td>
+<td>In the Session window: If the cursor is on a line containing calls to multi-line functions, a Trace window is opened and the functions traced ( explicit trace ). If the cursor is on a line containing no text and there is a suspended function (or operator) on the execution stack, open a Trace window for that function ( naked trace ) In a Trace window: Open a new Trace window for any multi-line function (or operator) in that line and trace that line as it is evaluated.</td>
+</tr>
+<tr>
+<td>Clear all trace/stop/monitor</td>
+<td>Removes any trace/stop/monitor flags  (as set by <code>⎕TRACE</code> / <code>⎕STOP</code> / <code>⎕MONITOR</code> ) from all functions in the workspace.</td>
+</tr>
+<tr>
+<td>Weak Interrupt</td>
+<td>Suspends execution at the start of the next line.</td>
+</tr>
+<tr>
+<td>Strong Interrupt</td>
+<td>Suspends execution after the current primitive operation.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="threads-menu">Threads Menu</h4>
+<p>The options available under the Threads menu are only relevant when connected to a compatible interpreter. For more information on threads, see the Dyalog Programming Reference Guide.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pause on Error</td>
+<td>Pauses all other threads when a thread suspends due to an error or an interrupt.</td>
+</tr>
+<tr>
+<td>Pause all Threads</td>
+<td>Pauses all threads (including currently-suspended threads).</td>
+</tr>
+<tr>
+<td>Unpause all threads</td>
+<td>Unpauses all paused threads (suspended threads remain suspended).</td>
+</tr>
+<tr>
+<td>Continue all threads</td>
+<td>Resumes all paused threads, restarts all suspended threads, and closes the Trace window.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="window-menu">Window Menu</h4>
+<p>The option available under the Window menu closes all open Edit and Trace windows.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Close All Windows</td>
+<td>Closes all open Edit and Trace windows (the Session window, workspace explorer and debug information window remain open).</td>
+</tr>
+</tbody>
+</table>
+<h4 id="help-menu">Help Menu</h4>
+<p>The options available under the Help menu provide access to the Dyalog documentation, website, and support.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Getting Started</td>
+<td>Opens your default web browser on the Getting Started page of Dyalog Ltd's website.</td>
+</tr>
+<tr>
+<td>Dyalog Help</td>
+<td>Opens your default web browser on the Welcome page of Dyalog's online documentation.</td>
+</tr>
+<tr>
+<td>Language Elements</td>
+<td>Opens your default web browser on the Language Elements page of Dyalog's online documentation.</td>
+</tr>
+<tr>
+<td>Documentation Centre</td>
+<td>Opens your default web browser on the Documentation Centre page of Dyalog Ltd's website.</td>
+</tr>
+<tr>
+<td>Dyalog Website</td>
+<td>Opens your default web browser on the home page of Dyalog Ltd's website.</td>
+</tr>
+<tr>
+<td>Email Dyalog</td>
+<td>Opens your email client with a pre-populated template for an email to Dyalog support (including subject line and IDE/interpreter information).</td>
+</tr>
+<tr>
+<td>Latest Enhancements</td>
+<td>Opens your default web browser on the Key Features page of Dyalog's online documentation.</td>
+</tr>
+<tr>
+<td>Read Me</td>
+<td>Opens your default web browser on the Dyalog ReadMe page, containing the latest information about Dyalog.</td>
+</tr>
+<tr>
+<td>Third Party Licences</td>
+<td>Opens your default web browser on the Licences for Third-Party Components page of Dyalog's online documentation.</td>
+</tr>
+<tr>
+<td>About</td>
+<td>Displays the About dialog box, which provides details of the current RIDE and connected Dyalog interpreter.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="language-bar">Language Bar</h3>
+<p>The Language bar is located at the top of the <strong>Session</strong> window, beneath the menu bar. It contains buttons for each of the glyphs used as primitives in Dyalog.</p>
+<p>When the cursor is positioned over one of the glyphs, information for that glyph is displayed. This includes the name of the glyph, the keyboard shortcut to enter it, its monadic/dyadic name and examples of its syntax, arguments and result.</p>
+<p>Clicking on one of the glyphs copies that glyph into the active <strong>Session/Edit</strong> window at the position of the input cursor (the same as typing it directly into the <strong>Session/Edit</strong> window).</p>
+<p>The order of glyphs in the Language bar can be customised by using the mouse to drag-and-drop individual glyphs to the required location.</p>
+<p>Display of the Language bar can be toggled with the <code>View &gt; Show Language Bar</code> menu option or by entering the Toggle Language bar command (<code>&lt;LBR&gt;</code>).</p>
+<p>On the right hand side of the Language bar is the <img src="../img/screenshots/b_shortcuts.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 12px;" />  button:</p>
+<ul>
+<li>Positioning the cursor over the <img src="../img/screenshots/b_shortcuts.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 12px;" /> button displays a dynamic tooltip showing all configured <a href="../keyboard_shortcuts_and_command_codes/">keyboard shortcuts for command codes</a>.</li>
+<li>Clicking on the  button displays the <a href="../preferences_dialog_box/">Preferences</a> dialog box (the same as selecting the <code>Edit &gt; Preferences</code> menu option).</li>
+</ul>
+<h3 id="session-window">Session Window</h3>
+<p>The primary purpose of the <a href="../session_window_input/">Session</a> window is to provide a scrolling area within which a user can enter APL expressions and view results.</p>
+<p>You can move, resize, maximise and minimise the <strong>Session</strong> window using the standard facilities provided by your operating system.</p>
+<h3 id="status-bar">Status Bar</h3>
+<p>The Status bar is located at the bottom of the <strong>Session</strong> window. It contains a button and seven Session status fields, detailed below.</p>
+<p><img alt="The Status Bar" src="../img/screenshots/s_Statusbar.png" /> </p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img alt="Cog symbol" src="../img/screenshots/i_intext_status.png" /></td>
+<td>Opens the <a href="../preferences_dialog_box/">Preferences dialog box</a>.</td>
+</tr>
+<tr>
+<td><code>&amp;: &lt;number&gt;</code></td>
+<td>Displays the number of threads currently running (minimum value is 1). Turns blue if greater than 1.</td>
+</tr>
+<tr>
+<td><code>⎕DQ: &lt;number&gt;</code></td>
+<td>Displays the number of events in the APL event queue. Turns blue if non‑zero.</td>
+</tr>
+<tr>
+<td><code>⎕TRAP</code></td>
+<td>Turns blue if <code>⎕TRAPSI</code> is set.</td>
+</tr>
+<tr>
+<td><code>⎕SI: &lt;number&gt;</code></td>
+<td>Displays the length of <code>⎕SI</code> . Turns blue if non‑zero.</td>
+</tr>
+<tr>
+<td><code>⎕IO: &lt;number&gt;</code></td>
+<td>Displays the value of <code>⎕IO</code> . Turns blue if not equal to the value defined by the Default_IO configuration parameter (default = 1).</td>
+</tr>
+<tr>
+<td><code>⎕ML: &lt;number&gt;</code></td>
+<td>Displays the value of <code>⎕ML</code> . Turns blue if not equal to the value defined by the Default_ML configuration parameter (default = 1).</td>
+</tr>
+<tr>
+<td><code>Pos &lt;n&gt;/&lt;n&gt;, &lt;n&gt;</code></td>
+<td>Displays the location of the cursor in the active window (line number/total lines, column number).</td>
+</tr>
+</tbody>
+</table>
+<h3 id="workspace-explorer">Workspace Explorer</h3>
+<p>The workspace explorer is located to the left of the Session window. It contains a hierarchical tree view of all the namespaces, classes, functions, operators and variables in the active workspace (under <code>#</code>) and in the system namespace (under <code>⎕SE</code>).</p>
+<p>Double-clicking on a namespace, class, function, operator or variable opens its definition in the Edit window.</p>
+<p>Display of the workspace explorer can be toggled with the View &gt; Show Workspace Explorer menu option or by entering the Toggle Workspace Explorer command (<code>&lt;WSE&gt;</code>).</p>
+<h3 id="debug-information-window">Debug Information Window</h3>
+<p>The debug information window is located to the right of the Session window. It comprises two areas:</p>
+<ul>
+<li>The Threads area lists the threads that are currently in existence. For each thread the following information is provided:a description comprising the thread ID (<code>⎕TID</code>) and name (<code>⎕TNAME</code>)the state of the thread, that is, what it is doing (for example, <code>Session</code>, <code>Pending</code>, <code>:Hold</code>, <code>⎕NA</code>)the thread requirements (<code>⎕TREQ</code>)a flag indicating whether the thread is Normal or Paused</li>
+<li>a description comprising the thread ID (<code>⎕TID</code>) and name (<code>⎕TNAME</code>)</li>
+<li>the state of the thread, that is, what it is doing (for example, <code>Session</code>, <code>Pending</code>, <code>:Hold</code>, <code>⎕NA</code>)</li>
+<li>the thread requirements (<code>⎕TREQ</code>)</li>
+<li>a flag indicating whether the thread is Normal or Paused</li>
+<li>The SI Stack area lists the functions in the execution stack; each function in the list also has the line number and source code of the line that caused the function to be added to the stack. Equivalent to the result of <code>)SI</code>.</li>
+</ul>
+<p>Display of the debug information window can be toggled with the View &gt; Show Debug menu option.</p>
+<h3 id="context-menu">Context Menu</h3>
+<p>A context menu is available by right-clicking within the Session, Edit and Trace windows. The options available under the context menu are dependent on the window from which it was accessed and are detailed below.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fix</td>
+<td>Edit : Fixes the function without closing the Edit window.</td>
+</tr>
+<tr>
+<td>Skip to line</td>
+<td>Trace : Moves the current execution marker to the line on which the cursor is positioned.</td>
+</tr>
+<tr>
+<td>Cut</td>
+<td>Session/Edit/Trace : Deletes the selected text from the active window and places it on the clipboard. Only enabled when text is selected. Never enabled in the Trace window.</td>
+</tr>
+<tr>
+<td>Copy</td>
+<td>Session/Edit/Trace : Copies the selected text to the clipboard. Only enabled when text is selected.</td>
+</tr>
+<tr>
+<td>Paste</td>
+<td>Session/Edit/Trace : Pastes the text contents of the clipboard into the active window at the current location. Never enabled in the Trace window.</td>
+</tr>
+<tr>
+<td>Undo</td>
+<td>Session/Edit/Trace : Reverses the previous action (where possible). Never enabled in the Trace window.</td>
+</tr>
+<tr>
+<td>Redo</td>
+<td>Session/Edit/Trace : Reverses the effect of the previous Undo. Never enabled in the Trace window.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="keyboard-key-mappings-for-apl-glyphs">Keyboard Key Mappings for APL Glyphs</h2>
+<p>A set of keyboard key mappings for APL glyphs is installed with the RIDE. When the RIDE is the active application, these key mappings are automatically enabled. The RIDE attempts to identify a user's locale and use the appropriate key mappings; if the locale cannot be identified or the locale-specific key mappings have not been configured, then the default configuration is used (key mappings for a US keyboard).</p>
+<p>Using this set of key mappings, APL glyphs are entered by pressing the prefix key followed by either the appropriate key or the SHIFT key with the appropriate key. The prefix key and key mappings can be <a href="../keyboard_tab/">customised</a>.</p>
+<h3 id="other-keyboard-options">Other Keyboard Options</h3>
+<p>Installing and enabling a set of key mappings allows Dyalog glyphs to be entered in other applications (for example, email). An alternative set of key mappings can also be used to replace the default key mappings for the RIDE.</p>
+<p>Information and the requisite downloadable files are available from <a href="https://www.dyalog.com/apl-font-keyboard.htm">Dyalog</a>.</p>
+<p>If you have the Dyalog Unicode IME installed, then the RIDE activates it by default. It can be disabled by unchecking the Also enable Dyalog IME checkbox in the <a href="../keyboard_tab/">Keyboard tab</a> of the Preferences dialog box.</p>
+<p>If Dyalog is not installed on the machine that the RIDE is running on, then the Dyalog Unicode IME can be downloaded and installed from [Dyalog])https://www.dyalog.com/apl-font-keyboard.htm).</p>
+<p>Most Linux distributions released after mid-2012 support Dyalog glyphs by default. For more information, see the Dyalog for UNIX Installation and Configuration Guide.</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.sections", "navigation.instant"], "search": "../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.220ee61c.min.js"></script>
+      
+    
+  </body>
+</html>

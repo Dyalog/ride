@@ -1,0 +1,52 @@
+utf8, no bom, \n as eol, eol at eof
+terse is better than verbose
+2-space indent (I would consider 1-space)
+soft limit of 120 chars per line
+  vertical space is precious, so make good use of the horizontal
+no unnecessary whitespace
+  except maybe when initializing multiple vars with long expressions:
+        var x=a(b,c)?d:e(f,g), y=0, z=[h,i,j[k],l], t
+  leave a space before //but not after it
+  align whatever looks suitable for alignment
+no blank lines unless really important
+alignment
+  either "egyptian" style:
+      if(a){
+        b();c()
+      }
+  or lisp style:
+      if(a){b()
+            c()}
+no unnecessary {}
+  except: if you {} the if, you should {} the else too, or vice versa
+no unnecessary ; at the eol
+  seriously, the dreaded ASI (automatic semicolon insertion) isn't as evil as people think
+  one exception: when a line begins with ( or [ put a ; before it
+  http://blog.izs.me/post/2353458699/an-open-letter-to-javascript-leaders-regarding
+'singly-quoted strings' unless "there's an apostrophe inside"
+=== instead of == (here's why: https://dorey.github.io/JavaScript-Equality-Table)
+  ==null can be fine, it captures both ===null and ===undefined.
+  same for !== and !=
+single-letter identifiers are fine, ideally with a comment on declaration
+  variable names for jQuery wrappers start with a $
+  be generous with the "var" keyword even when it can be omitted or merged with another "var"
+  usually:
+    x,y,z are the arguments
+    r is the result
+    _ is something ignored
+for-s should always have a var: for(var i=0;i<n;i++)
+prefer ternary if (a?b:c) over an if statement
+it's ok to use && and || as a substitute for if
+  assignment requires parens: a&&(b=c)
+no parens after arg-less constructor: d=new Date //instead of d=new Date()
+omit "new" if possible: RegExp(s) //instead of new RegExp(s)
+!!x converts to boolean, +x to number, ''+x to string
+prefer 0 and 1 over false and true
+  note that when returning false from a DOM event handler, 0 doesn't work but !1 does
+closures are faster than .bind()
+for is faster than .forEach() .map() .filter() and .reduce()
+the "soaking" pattern from CoffeeScript: a?.b?.c?.f?()
+  can be replaced with: var x=a;x=x&&x.b;x=x&&x.c;x=x&&x.f;x&&x()
+  or even:              var x=a&&a.b;x=x&&x.c;x&&x.f&&x.f()
+use es6 in .js files that have no chance of being loaded in ie<11 and mobile browsers
+rule#0: every rule has an exception

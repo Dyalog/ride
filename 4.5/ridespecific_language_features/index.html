@@ -1,0 +1,712 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../input_windows/">
+      
+      
+        <link rel="next" href="../customising_your_session/">
+      
+      <link rel="icon" href="../img/favicon-32.png">
+      <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.1.21">
+    
+    
+      
+        <title>RIDE-Specific Language Features - RIDE User Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.eebd395e.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../style/main.css">
+    
+      <link rel="stylesheet" href="../style/admonition-ucmdhelp.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ride-specific-language-features" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="RIDE User Guide" class="md-header__button md-logo" aria-label="RIDE User Guide" data-md-component="logo">
+      
+  <img src="../img/dyalog-white.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            RIDE User Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              RIDE-Specific Language Features
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/xpqz/ride-docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="RIDE User Guide" class="md-nav__button md-logo" aria-label="RIDE User Guide" data-md-component="logo">
+      
+  <img src="../img/dyalog-white.svg" alt="logo">
+
+    </a>
+    RIDE User Guide
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/xpqz/ride-docs" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.4.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        About This Document
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction/" class="md-nav__link">
+        Introduction
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        Installation
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../starting_a_dyalog_session/" class="md-nav__link">
+        Starting a Session
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../the_dyalog_development_environment/" class="md-nav__link">
+        The Dyalog Development Environment
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../input_windows/" class="md-nav__link">
+        Input Windows
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          RIDE-Specific Language Features
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        RIDE-Specific Language Features
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#i-beams" class="md-nav__link">
+    I-Beams
+  </a>
+  
+    <nav class="md-nav" aria-label="I-Beams">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3500-send-html-to-the-ride" class="md-nav__link">
+    3500⌶ (Send HTML to the RIDE)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3501-connected-to-the-ride" class="md-nav__link">
+    3501⌶ (Connected to the RIDE?)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3502-manage-ride-connectors" class="md-nav__link">
+    3502⌶ (Manage RIDE Connectors)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-parameters" class="md-nav__link">
+    Configuration Parameters
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ride_editor" class="md-nav__link">
+    RIDE_EDITOR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ride_init" class="md-nav__link">
+    RIDE_INIT
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../customising_your_session/" class="md-nav__link">
+        Customising Your Session
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../keyboard_shortcuts/" class="md-nav__link">
+        Keyboard Shortcuts
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sample_configuration_file/" class="md-nav__link">
+        Sample Configuration File
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#i-beams" class="md-nav__link">
+    I-Beams
+  </a>
+  
+    <nav class="md-nav" aria-label="I-Beams">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#3500-send-html-to-the-ride" class="md-nav__link">
+    3500⌶ (Send HTML to the RIDE)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3501-connected-to-the-ride" class="md-nav__link">
+    3501⌶ (Connected to the RIDE?)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3502-manage-ride-connectors" class="md-nav__link">
+    3502⌶ (Manage RIDE Connectors)
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-parameters" class="md-nav__link">
+    Configuration Parameters
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ride_editor" class="md-nav__link">
+    RIDE_EDITOR
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ride_init" class="md-nav__link">
+    RIDE_INIT
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+  
+
+
+<h1 id="ride-specific-language-features">RIDE-Specific Language Features</h1>
+<p>When running a Dyalog Session through the RIDE, the majority of language features remain unaltered. However, there are a few additional features (see <a href="../ibeams/">I-beams</a> and <a href="../configuration_parameters_ridespecific/">RIDE-Specific Configuration Parameters</a>) and some existing functionality that is meaningless (see <a href="../unsupported_language_elements/">Unsupported Language Elements</a>) when a Session is running through the RIDE.</p>
+<h2 id="i-beams">I-Beams</h2>
+<p>I-Beam is a monadic operator that provides a range of system-related services.</p>
+<p>Syntax: <code>R←{X}(A⌶)Y</code></p>
+<p>Any service provided using an I-Beam should be considered as experimental and subject to change – without notice – from one release to the next. Any use of I-Beams in applications should, therefore, be carefully isolated in cover-functions that can be adjusted if necessary.</p>
+<p>There are three I-Beams that are only relevant to the RIDE: <a href="../3500_ibeam_ride/">3500⌶</a>, <a href="../3501_ibeam_ride/">3501⌶</a> and <a href="../3502_ibeam_ride/">3502⌶</a>.</p>
+<h3 id="3500-send-html-to-the-ride">3500⌶ (Send HTML to the RIDE)</h3>
+<p>Syntax: <code>R←{X}(3500⌶)Y</code></p>
+<p>Optionally, <code>X</code> is a simple character vector or scalar, the contents of which are used as the caption of an embedded browser window opened by the RIDE client. If omitted, then the caption defaults to <code>3500⌶</code>.</p>
+<p><code>Y</code> is a simple character vector of HTML markup, the contents of which are displayed in the embedded browser tab.</p>
+<p><code>R</code> identifies whether the write to the RIDE was successful. </p>
+<p>Possible values are:</p>
+<ul>
+<li><code>0</code>: the write to the RIDE client was successful</li>
+<li><code>¯1</code>: the RIDE client is not enabled</li>
+</ul>
+<h3 id="3501-connected-to-the-ride">3501⌶ (Connected to the RIDE?)</h3>
+<p>Syntax: <code>R←{X}(3501⌶)Y</code></p>
+<p><code>X</code> and <code>Y</code> can be any value (ignored).</p>
+<p><code>R</code> identifies whether the Dyalog Session is running through the RIDE. </p>
+<p>Possible values are:</p>
+<ul>
+<li><code>0</code>: the Session is not running through the RIDE</li>
+<li><code>1</code>: the Session is running through the RIDE</li>
+</ul>
+<h3 id="3502-manage-ride-connectors">3502⌶ (Manage RIDE Connectors)</h3>
+<p>By default, the RIDE is not enabled on run-time executables. For security reasons, enabling the RIDE is a two-step process rather than using (for example) a single configuration parameter. To enable the RIDE, two steps must be taken:</p>
+<ol>
+<li>Set the <code>RIDE_INIT</code> configuration parameter (see <a href="../ride_init/">RIDE Init</a>) on the machine on which the run-time interpreter is running to an appropriate value.</li>
+<li>Execute <code>3502⌶1</code> in your application code.</li>
+</ol>
+<p>The run time interpreter can then attempt to connect to a RIDE client.</p>
+<p>Enabling the RIDE to access applications that use the run-time interpreter means that the APL code of those applications can be accessed. The I-beam mechanism described above means that the APL code itself must grant the right for a RIDE client to connect to the run time interpreter. Although Dyalog Ltd might change the details of this mechanism, the APL code will always need to grant connection rights. In particular, no mechanism that is only dependent on configuration parameters will be implemented.</p>
+<p>Syntax: <code>R←3502⌶Y</code></p>
+<p><code>R</code> is <code>0</code> if the call is successful, otherwise an integer (positive or negative) is returned.</p>
+<p><code>Y</code> can be any of the following possible values:</p>
+<ul>
+<li><code>0</code> : disable any active RIDE connections.<code>R</code> is always <code>0</code></li>
+<li><code>R</code> is always <code>0</code></li>
+<li><code>1</code> : enable the RIDE using the initialisation string defined in the RIDE_INIT configuration parameter: if <code>R</code> is <code>0</code>, then the RIDE was disabled and is now successfully enabledif <code>R</code> is <code>¯1</code>, then the RIDE was already activeif <code>R</code> is <code>32</code>, then the RIDE DLL/shared library is not availableif <code>R</code> is <code>64</code>, then the <code>RIDE_INIT</code> configuration parameter is not correctly defined</li>
+<li>if <code>R</code> is <code>0</code>, then the RIDE was disabled and is now successfully enabled</li>
+<li>if <code>R</code> is <code>¯1</code>, then the RIDE was already active</li>
+<li>if <code>R</code> is <code>32</code>, then the RIDE DLL/shared library is not available</li>
+<li>if <code>R</code> is <code>64</code>, then the RIDE_INIT configuration parameter is not correctly defined</li>
+<li>a simple character vector : replace the RIDE_INIT configuration parameter with the specified initialisation string, which should be in the format specified in <a href="../ride_init/">RIDE Init</a>. </li>
+</ul>
+<p>For example, <code>3502⌶'SERVE:*:4502'</code> configures the interpreter to accept incoming RIDE connections from any machine on port 4502, and then enables the RIDE with that configuration.if <code>R</code> is <code>0</code>, then the RIDE was disabledif <code>R</code> is <code>¯2</code>, then the RIDE was active
+- if <code>R</code> is <code>0</code>, then the RIDE was disabled
+- if <code>R</code> is <code>¯2</code>, then the RIDE was active</p>
+<p>On a run-time interpreter, <code>3502⌶1</code> is the only way to enable the RIDE.</p>
+<p>If the RIDE_INIT configuration parameter is set but the RIDE DLLs/shared libraries are not available, then a run-time interpreter will start but the subsequent call to <code>3502⌶</code> will be unsuccessful.</p>
+<h2 id="configuration-parameters">Configuration Parameters</h2>
+<p>Some customisation can be performed using configuration parameters outside a Session. For details of other configuration parameters that can be set, and the syntax used to set them, see the Dyalog for <code>&lt;operating system&gt; Installation and Configuration Guide</code> specific to the operating system that you are using.</p>
+<p>Changes made to configuration parameters in the dyalog.config file only impact local interpreters (that is, interpreters that are configured by that file) and do not impact interpreters that the RIDE can connect with on other machines.</p>
+<h3 id="ride_editor">RIDE_EDITOR</h3>
+<p>This configuration parameter specifies the fully-qualified path to the executable of the editor to use in a Dyalog Session instead of the RIDE's built-in editor (for example, vim, Emacs or Notepad++).</p>
+<h3 id="ride_init">RIDE_INIT</h3>
+<p>This configuration parameter specifies how
+How the interpreter should behave with respect to the RIDE protocol. Setting this configuration parameter on the machine that hosts the interpreter enables the interpreter-RIDE connection.</p>
+<p>The format of the value is <code>{mode:setting}[,mode:setting]</code></p>
+<p>where <code>mode</code> is the action that the interpreter should take and determines the content of the <code>setting</code>. Valid (case-insensitive) values are:</p>
+<ul>
+<li><code>SERVE</code> – listen for incoming connections from the RIDE client</li>
+<li><code>CONNECT</code> – attempt to connect to the specified RIDE client and end the session if this fails</li>
+<li><code>POLL</code> – attempt to connect to the specified RIDE client at regular intervals and reconnect if the connection is lost</li>
+<li><code>HTTP</code> – listen for incoming connections from the web browser, via <a href="../the_zero_footprint_ride/">zero footprint RIDE</a>)</li>
+<li><code>CONFIG</code> – retrieve values to use from a .ini <a href="../configuration_ini_file/">configuration file</a></li>
+</ul>
+<p>If two modes are specified, then:</p>
+<ul>
+<li>one of the modes must be <code>CONFIG</code>.</li>
+<li>the <code>SERVE</code>/<code>CONNECT</code>/<code>POLL</code>/<code>HTTP</code> values always override the equivalent values in the .ini configuration file.</li>
+</ul>
+<p>If <code>mode</code> is <code>SERVE</code> or <code>HTTP</code>, then <code>setting</code> is <code>address:port</code>, where:</p>
+<ul>
+<li><code>address</code> is the address of the interface on which the machine running the APL process should listen (that is, the address of the machine that is running the interpreter). </li>
+</ul>
+<p>Valid values are: </p>
+<ul>
+<li><empty> – listen on all loopback interfaces, that is, the interpreter only accepts connection from the local machine</li>
+<li><code>*</code> – listen on all local machine interfaces, that is, the interpreter listens for connections from any (local or remote) machine/interface</li>
+<li>the host/DNS name of the machine/interface running the interpreter – listen on that specific interface on the local machine</li>
+<li>the IPv4 address of the machine/interface running the interpreter – listen on that specific interface on the local machine</li>
+<li>the IPv6 address of the machine/interface running the interpreter – listen on that specific interface on the local machine</li>
+<li><code>port</code> is the TCP port to listen on</li>
+</ul>
+<p>If <code>mode</code> is <code>CONNECT</code> or <code>POLL</code>, then <code>setting</code> is <code>address:port</code>, where:</p>
+<ul>
+<li><code>address</code> is the destination address to attempt to connect to (the machine/interface running the RIDE client). Valid values are:the host/DNS name of a machine/interface running the RIDE clientthe IPv4 address of a machine/interface running the RIDE clientthe IPv6 address of a machine/interface running the RIDE client</li>
+<li>the host/DNS name of a machine/interface running the RIDE client</li>
+<li>the IPv4 address of a machine/interface running the RIDE client</li>
+<li>the IPv6 address of a machine/interface running the RIDE client</li>
+<li><code>port</code> is the TCP port to connect to</li>
+</ul>
+<p>If <code>mode</code> is <code>CONFIG</code>, then <code>setting</code> is <code>filename</code>, where:</p>
+<ul>
+<li><code>filename</code> is the fully-qualified path to, and name of, a .ini configuration file containing name-value pairs related to mode, certificate details, and so on. The default value for <code>setting</code> is <code>ride.ini</code> (for more information on the .ini configuration file, see <a href="../configuration_ini_file/">here</a>).</li>
+</ul>
+<p>Examples</p>
+<p>To listen on port 4502 for connection requests from a RIDE client running on any machine: <code>RIDE_INIT=SERVE:*:4502</code></p>
+<p>To attempt to connect to a RIDE client running on a different machine (with IPv4 address 10.0.38.1 and listening on port 4502) and end the Session if unable to do so:<code>RIDE_INIT=CONNECT:10.0.38.1:4502</code></p>
+<p>To establish a connection using the settings in the ride_sample.ini file:<code>RIDE_INIT=CONFIG:C:/tmp/ride_sample.ini</code></p>
+<p>To attempt to establish a secure connection with a RIDE client running on a different machine (with IPv4 address 10.0.38.1 and listening on port 4502) using certificate details specified in the ride_sample.ini file:<code>RIDE_INIT=CONFIG:C:\tmp\ride_sample.ini,CONNECT:10.0.38.1:4502</code>or<code>RIDE_INIT=CONNECT:10.0.38.1:4502,CONFIG:C:\tmp\ride_sample.ini</code></p>
+<p>With Dyalog and the RIDE installed on a machine with IPv4 address 10.0.38.1, to listen on port 4502 for connection requests from a web browser running on any machine (Zero Footprint RIDE – see <a href="../the_zero_footprint_ride/">Section </a>):<code>RIDE_INIT=HTTP:*:4502</code>To open the Zero Footprint RIDE in a web browser on:</p>
+<ul>
+<li>the local machine : URL = http://localhost:4502</li>
+<li>a different machine: URL = http://10.0.38.1:4502</li>
+</ul>
+<p>The <code>RIDE_INI</code> configuration parameter is set automatically when launching a new Dyalog Session from the RIDE (see <a href="../type_start/">Start</a>).</p>
+<p>If the <code>RIDE_INIT</code> configuration parameter is set but the RIDE DLLs/shared libraries are not available, then a run-time interpreter will start but the subsequent call to <code>3502⌶</code> will be unsuccessful – see <a href="../3502_ibeam_ride/">3502⌶</a>.</p>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["navigation.sections", "navigation.instant"], "search": "../assets/javascripts/workers/search.74e28a9f.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.220ee61c.min.js"></script>
+      
+    
+  </body>
+</html>
