@@ -371,13 +371,6 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#window-menu_1" class="md-nav__link">
-    Window Menu
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
   <a href="#help-menu" class="md-nav__link">
     Help Menu
   </a>
@@ -626,13 +619,6 @@
           <li class="md-nav__item">
   <a href="#threads-menu" class="md-nav__link">
     Threads Menu
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#window-menu_1" class="md-nav__link">
-    Window Menu
   </a>
   
 </li>
@@ -965,7 +951,7 @@
 </tbody>
 </table>
 <h4 id="threads-menu">Threads Menu</h4>
-<p>The options available under the Threads menu are only relevant when connected to a compatible interpreter. For more information on threads, see the Dyalog Programming Reference Guide.</p>
+<p>The options available under the Threads menu are only relevant when connected to a compatible interpreter. For more information on threads, see the <a href="https://docs.dyalog.com/latest/Dyalog%20Programming%20Reference%20Guide.pdf">Dyalog Programming Reference Guide</a>.</p>
 <table>
 <thead>
 <tr>
@@ -992,22 +978,6 @@
 </tr>
 </tbody>
 </table>
-<h4 id="window-menu_1">Window Menu</h4>
-<p>The option available under the Window menu closes all open Edit and Trace windows.</p>
-<table>
-<thead>
-<tr>
-<th>Item</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Close All Windows</td>
-<td>Closes all open Edit and Trace windows (the Session window, workspace explorer and debug information window remain open).</td>
-</tr>
-</tbody>
-</table>
 <h4 id="help-menu">Help Menu</h4>
 <p>The options available under the Help menu provide access to the Dyalog documentation, website, and support.</p>
 <table>
@@ -1020,23 +990,23 @@
 <tbody>
 <tr>
 <td>Getting Started</td>
-<td>Opens your default web browser on the Getting Started page of Dyalog Ltd's website.</td>
+<td>Opens your default web browser on the <a href="https://www.dyalog.com/getting-started.htm">Getting Started</a> page of Dyalog Ltd's website.</td>
 </tr>
 <tr>
 <td>Dyalog Help</td>
-<td>Opens your default web browser on the Welcome page of Dyalog's online documentation.</td>
+<td>Opens your default web browser on the <a href="https://help.dyalog.com/latest/">Welcome page</a> of Dyalog's online documentation.</td>
 </tr>
 <tr>
 <td>Language Elements</td>
-<td>Opens your default web browser on the Language Elements page of Dyalog's online documentation.</td>
+<td>Opens your default web browser on the <a href="https://help.dyalog.com/latest/index.htm#Language/Introduction/Language%20Elements.htm">Language Elements</a> page of Dyalog's online documentation.</td>
 </tr>
 <tr>
 <td>Documentation Centre</td>
-<td>Opens your default web browser on the Documentation Centre page of Dyalog Ltd's website.</td>
+<td>Opens your default web browser on the <a href="https://www.dyalog.com/documentation_182.htm">Documentation Centre</a> page of Dyalog Ltd's website.</td>
 </tr>
 <tr>
 <td>Dyalog Website</td>
-<td>Opens your default web browser on the home page of Dyalog Ltd's website.</td>
+<td>Opens your default web browser on the <a href="https://www.dyalog.com/">home page</a> of Dyalog Ltd's website.</td>
 </tr>
 <tr>
 <td>Email Dyalog</td>
@@ -1044,19 +1014,19 @@
 </tr>
 <tr>
 <td>Latest Enhancements</td>
-<td>Opens your default web browser on the Key Features page of Dyalog's online documentation.</td>
+<td>Opens your default web browser on the <a href="https://help.dyalog.com/18.2/index.htm#RelNotes18.2/Key%20Features.htm">Key Features</a> page of Dyalog's online documentation.</td>
 </tr>
 <tr>
 <td>Read Me</td>
-<td>Opens your default web browser on the Dyalog ReadMe page, containing the latest information about Dyalog.</td>
+<td>Opens your default web browser on the Dyalog <a href="https://docs.dyalog.com/18.2/dyalog_readme.htm">ReadMe</a> page, containing the latest information about Dyalog.</td>
 </tr>
 <tr>
 <td>Third Party Licences</td>
-<td>Opens your default web browser on the Licences for Third-Party Components page of Dyalog's online documentation.</td>
+<td>Opens your default web browser on the <a href="https://help.dyalog.com/18.2/index.htm#MiscPages/Licences%20Overview.htm">Licences</a> for Third-Party Components page of Dyalog's online documentation.</td>
 </tr>
 <tr>
 <td>About</td>
-<td>Displays the About dialog box, which provides details of the current RIDE and connected Dyalog interpreter.</td>
+<td>Displays the <strong>About</strong> dialog box, which provides details of the current RIDE and connected Dyalog interpreter.</td>
 </tr>
 </tbody>
 </table>
@@ -1126,12 +1096,18 @@
 <h3 id="debug-information-window">Debug Information Window</h3>
 <p>The debug information window is located to the right of the Session window. It comprises two areas:</p>
 <ul>
-<li>The Threads area lists the threads that are currently in existence. For each thread the following information is provided:a description comprising the thread ID (<code>⎕TID</code>) and name (<code>⎕TNAME</code>)the state of the thread, that is, what it is doing (for example, <code>Session</code>, <code>Pending</code>, <code>:Hold</code>, <code>⎕NA</code>)the thread requirements (<code>⎕TREQ</code>)a flag indicating whether the thread is Normal or Paused</li>
+<li>
+<p>The <strong>Threads</strong> area lists the threads that are currently in existence. For each thread the following information is provided:</p>
+<ul>
 <li>a description comprising the thread ID (<code>⎕TID</code>) and name (<code>⎕TNAME</code>)</li>
 <li>the state of the thread, that is, what it is doing (for example, <code>Session</code>, <code>Pending</code>, <code>:Hold</code>, <code>⎕NA</code>)</li>
 <li>the thread requirements (<code>⎕TREQ</code>)</li>
 <li>a flag indicating whether the thread is Normal or Paused</li>
-<li>The SI Stack area lists the functions in the execution stack; each function in the list also has the line number and source code of the line that caused the function to be added to the stack. Equivalent to the result of <code>)SI</code>.</li>
+</ul>
+</li>
+<li>
+<p>The SI Stack area lists the functions in the execution stack; each function in the list also has the line number and source code of the line that caused the function to be added to the stack. Equivalent to the result of <code>)SI</code>.</p>
+</li>
 </ul>
 <p>Display of the debug information window can be toggled with the View &gt; Show Debug menu option.</p>
 <h3 id="context-menu">Context Menu</h3>
