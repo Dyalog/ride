@@ -579,40 +579,40 @@
 <h2 id="session-window">Session Window</h2>
 <p>The <strong>Session</strong> window contains:</p>
 <ul>
-<li>the input line – the last line entered in the Session window; this is (usually) the line into which you type an expression to be evaluated.</li>
-<li>a gutter – the left-hand side of the window is a gutter that can include input/output information. Specifically:a small red circle in the gutter is present on every line that has been modified since last pressing Enter. This includes old lines that have been modified as well as new lines. These indicators show which lines will be executed when you subsequently hit Enter, at which point the indicator is removed.a left bracket indicates "groups" of default output (to distinguish it from <code>⎕</code> or <code>⍞</code> output).</li>
-<li>a small red circle in the gutter is present on every line that has been modified since last pressing Enter. This includes old lines that have been modified as well as new lines. These indicators show which lines will be executed when you subsequently hit Enter, at which point the indicator is removed.</li>
-<li>a left bracket indicates "groups" of default output (to distinguish it from <code>⎕</code> or <code>⍞</code> output).</li>
-<li>the Session log – a history of previously-entered expressions and the results they produced.</li>
+<li>the <em>input line</em> – the last line entered in the <strong>Session</strong> window; this is (usually) the line into which you type an expression to be evaluated.</li>
+<li>a <em>gutter</em> – the left-hand side of the window is a gutter that can include input/output information. Specifically: a small red circle in the gutter is present on every line that has been modified since last pressing Enter. This includes old lines that have been modified as well as new lines. These indicators show which lines will be executed when you subsequently hit Enter, at which point the indicator is removed.a left bracket indicates "groups" of default output (to distinguish it from <code>⎕</code> or <code>⍞</code> output).</li>
+<li>a small <em>red circle</em> in the gutter is present on every line that has been modified since last pressing <kbd>Enter</kbd>. This includes old lines that have been modified as well as new lines. These indicators show which lines will be executed when you subsequently hit <kbd>Enter</kbd>, at which point the indicator is removed.</li>
+<li>a <em>left bracket</em> indicates "groups" of default output (to distinguish it from <code>⎕</code> or <code>⍞</code> output).</li>
+<li>the <em>Session log</em> – a history of previously-entered expressions and the results they produced.</li>
 </ul>
 <p>If a log file is being used, then the Session log is loaded into memory when a Dyalog Session is started. When the Dyalog Session is closed, the Session log is written to the log file, replacing its previous contents.</p>
 <h2 id="edit-window">Edit Window</h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>This section applies to the RIDE's built-in editor. A different editor can be specified by setting the RIDE_EDITOR configuration parameter to the fully-qualified path of the desired editor's executable file.</p>
+<p>This section applies to the RIDE's built-in editor. A different editor can be specified by setting the <code>RIDE_EDITOR</code> configuration parameter to the fully-qualified path of the desired editor's executable file.</p>
 </div>
-<p>The Edit window is used to define new objects as well as view/amend existing objects.</p>
-<p>An Edit window can be opened from the Session window in any of the following ways:</p>
+<p>The <strong>Edit</strong> window is used to define new objects as well as view/amend existing objects.</p>
+<p>An <strong>Edit</strong> window can be opened from the Session window in any of the following ways:</p>
 <ul>
 <li>Enter <code>)ED &lt;object name&gt;</code></li>
 <li>Enter <code>⎕ED '&lt;object name&gt;'</code></li>
-<li>Enter <code>&lt;object name&gt;</code> <ED>(for an explanation of the <ED> syntax, see <a href="../keyboard_shortcuts_and_command_codes/">here</a>)</li>
+<li>Enter <code>&lt;object name&gt;</code> <a href="../keyboard_shortcuts_and_command_codes/"><ED></a></li>
 <li>Double-click on/after <code>&lt;object name&gt;</code></li>
 </ul>
-<p>If the object name does not already exist, then it is assumed to of function/operator type. Different types can be explicitly specified using the <code>)ED</code> or <code>⎕ED</code> options – see <code>)ED</code> or <code>⎕ED</code> in the Dyalog APL Language Reference Guide.</p>
-<p>An Edit window can be opened from the Trace window by entering the Edit command (<ED>), double‑clicking the cursor or clicking the <img src="../img/screenshots/i_intext_editname.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 12px;" /> button in the <a href="../toolbar_tracewindow/">toolbar</a>. The position of the cursor when this is done determines the name of the object that the Edit window is for:</p>
+<p>If the object name does not already exist, then it is assumed to of function/operator type. Different types can be explicitly specified using the <code>)ED</code> or <code>⎕ED</code> options – see <code>)ED</code> or <code>⎕ED</code> in the <a href="https://docs.dyalog.com/latest/Dyalog%20APL%20Language%20Reference%20Guide.pdf">Dyalog APL Language Reference Guide</a>.</p>
+<p>An Edit window can be opened from the Trace window by entering the Edit command (<code>&lt;ED&gt;</code>), double‑clicking the cursor or clicking the <img src="../img/screenshots/i_intext_editname.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 12px;" /> button in the <a href="../toolbar_tracewindow/">toolbar</a>. The position of the cursor when this is done determines the name of the object that the Edit window is for:</p>
 <ul>
 <li>If the cursor is on or immediately after <code>&lt;object name&gt;</code>, then the Edit window opens on that name.</li>
-<li>If the cursor is anywhere else, then the Edit window opens for the most recently-referenced function on the stack. This is a naked edit.</li>
+<li>If the cursor is anywhere else, then the <strong>Edit</strong> window opens for the most recently-referenced function on the stack. This is a naked edit.</li>
 </ul>
 <p>An Edit window can be opened from another Edit window in any of the following ways:</p>
 <ul>
-<li>Move the cursor over/after <code>&lt;object name&gt;</code> and enter the Edit command (<ED>)</li>
+<li>Move the cursor over/after <code>&lt;object name&gt;</code> and enter the Edit command (<code>&lt;ED&gt;</code>)</li>
 <li>Double-click on/after <code>&lt;object name&gt;</code></li>
 </ul>
-<p>By default, the Edit window is docked to the right of the Session Window.</p>
+<p>By default, the <strong>Edit</strong> window is docked to the right of the <strong>Session Window</strong>.</p>
 <h3 id="toolbar">Toolbar</h3>
-<p>The Edit Window's toolbar:</p>
+<p>The Edit Window's toolbar exposes the following actions:</p>
 <table>
 <thead>
 <tr>
@@ -623,27 +623,27 @@
 </thead>
 <tbody>
 <tr>
-<td></td>
+<td><img alt="Save and close" src="../img/screenshots/s_Tracewin_quitfunction.png" /></td>
 <td>Save changes and return</td>
 <td>Saves changes and closes the Edit Window.</td>
 </tr>
 <tr>
-<td></td>
+<td><img alt="Toggle line numbers" src="../img/screenshots/i_Editwin_togglelinenumbers.png" /></td>
 <td>Toggle line numbers</td>
 <td>Turns the display of line numbers on/off.</td>
 </tr>
 <tr>
-<td></td>
+<td><img alt="Comment selected" src="../img/screenshots/i_Editwin_commenttext.png" /></td>
 <td>Comment selected text</td>
 <td>Add a comment symbol (<code>⍝</code>) to the beginning of the line in which the cursor is positioned. If text has been selected, then a comment symbol is added at the start of the line on which the selection starts and at the start of each subsequent line of text within the selection. Same as the Comment Out command (<code>&lt;AO&gt;</code>).</td>
 </tr>
 <tr>
-<td></td>
+<td><img alt="Uncomment selected" src="../img/screenshots/i_Editwin_uncommenttext.png" /></td>
 <td>Uncomment selected text</td>
 <td>Removes the comment symbol (<code>⍝</code>) at the beginning of the line in which the cursor is positioned. If text has been selected, then comment symbols are removed from the start of each selected line of text. Comment symbols that are not at the start of a line of text cannot be removed. Same as the Uncomment command (<code>&lt;DO&gt;</code>).</td>
 </tr>
 <tr>
-<td></td>
+<td><img alt="Search" src="../img/screenshots/i_Editwin_search.png" /></td>
 <td>Search</td>
 <td>Opens the <a href="../search_and_replace_editwindow/">Search bar</a>, enabling a search to be performed.</td>
 </tr>
