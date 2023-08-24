@@ -2,11 +2,13 @@
 
 When a Dyalog Session is started through the RIDE, the Dyalog development environment is displayed. This means that:
 
-- the [Dyalog Session](session_user_interface.md) user interface is displayed - the [keyboard key mappings](keyboard_key_mappings_for_apl_glyphs.md) for APL glyphs are enabled
+- the [Dyalog Session](session_user_interface.md) user interface is displayed 
+- the [keyboard key mappings](keyboard_key_mappings_for_apl_glyphs.md) for APL glyphs are enabled
 
 ## Session User Interface
 
-The menu bar menu options on macOS are different to those on Microsoft Windows and Linux. This section details the options for Microsoft Windows and Linux; for the macOS options see the [Dyalog for macOS UI Guide](https://docs.dyalog.com/latest/Dyalog%20for%20macOS%20UI%20Guide.pdf).
+!!!note "macOS"
+    The menu bar menu options on macOS are different to those on Microsoft Windows and Linux. This section details the options for Microsoft Windows and Linux; for the macOS options see the [Dyalog for macOS UI Guide](https://docs.dyalog.com/latest/Dyalog%20for%20macOS%20UI%20Guide.pdf).
 
 !!!note
     The RIDE's UI can vary slightly across different operating systems (and window managers); in particular, RIDE-specific menu bars can be located either within the development environment or in the global menu bar.
@@ -40,7 +42,8 @@ The caption can be [customised](title_tab.md).
 
 ### Menu Bar
 
-The menu bar menu options on macOS are different to those on Microsoft Windows and Linux. This section details the options for Microsoft Windows and Linux; for the macOS options see the [Dyalog for macOS UI Guide](https://docs.dyalog.com/latest/Dyalog%20for%20macOS%20UI%20Guide.pdf).
+!!!note "Menu Bar Differences"
+    The menu bar menu options on macOS are different to those on Microsoft Windows and Linux. This section details the options for Microsoft Windows and Linux; for the macOS options see the [Dyalog for macOS UI Guide](https://docs.dyalog.com/latest/Dyalog%20for%20macOS%20UI%20Guide.pdf).
 
 The menu names in the menu bar and the options under each menu can be [customised](menu_tab.md).
 
@@ -52,7 +55,7 @@ The options available under the File menu are detailed below. These control the 
 | --- | --- |
 | Open... | Prompts for a filename. If a workspace file is selected (a .dws file) then it is loaded into the Session; any other file is opened in the Edit window. Only relevant if the Session was started using the [Start](type_start.md) connection type. |
 | New Session | Starts a new Dyalog Session (a new instance of the interpreter). Only relevant if the Session was started using the [Start](type_start.md) connection type. |
-| Connect… | Opens the RIDE-Dyalog [Session dialog]((the_ridedyalog_session_dialog_box.md) box. |
+| Connect… | Opens the RIDE-Dyalog [Session dialog](the_ridedyalog_session_dialog_box.md) box. |
 | Quit | [Terminates](terminating_a_dyalog_session.md) the Dyalog Session. |
 
 #### Edit Menu
@@ -93,21 +96,29 @@ The View menu options enable the appearance of the Dyalog Session to be changed.
 | Reset Font Size | Sets the size of the font in all the windows to its default value. |
 | Toggle Full Screen | Toggles the entire session between its current size and full screen size. |
 
-#### Action Menu
+#### Window Menu
 
-The options available under the Action menu enable Edit and Trace windows to be opened and allow currently-running APL code to be interrupted with trappable events.
+The option available under the Window menu is detailed below. This closes all open **Edit** and **Trace** windows.
 
 | Item | Description |
 | --- | --- |
-| Edit | If the cursor is on or immediately after `<object name>` , then opens an Edit window on that name. |
-| Trace | In the Session window: If the cursor is on a line containing calls to multi-line functions, a Trace window is opened and the functions traced ( explicit trace ). If the cursor is on a line containing no text and there is a suspended function (or operator) on the execution stack, open a Trace window for that function ( naked trace ) In a Trace window: Open a new Trace window for any multi-line function (or operator) in that line and trace that line as it is evaluated. |
+| Close All Windows | Closes all open **Edit** and **Trace** windows (the **Session window**, **workspace explorer** and **debug information window** remain open). |
+
+#### Action Menu
+
+The options available under the **Action** menu enable **Edit** and **Trace** windows to be opened and allow currently-running APL code to be interrupted with trappable events.
+
+| Item | Description |
+| --- | --- |
+| Edit | If the cursor is on or immediately after `<object name>` , then opens an **Edit** window on that name. |
+| Trace | In the **Session** window: <ul><li>If the cursor is on a line containing calls to multi-line functions, a **Trace** window is opened and the functions traced (explicit trace)</li><li>If the cursor is on a line containing no text and there is a suspended function (or operator) on the execution stack, open a **Trace** window for that function (naked trace)</li></ul>In a **Trace** window:<ul><li>Open a new Trace window for any multi-line function (or operator) in that line and trace that line as it is evaluated.</li></ul>|
 | Clear all trace/stop/monitor | Removes any trace/stop/monitor flags  (as set by `⎕TRACE` / `⎕STOP` / `⎕MONITOR` ) from all functions in the workspace. |
 | Weak Interrupt | Suspends execution at the start of the next line. |
 | Strong Interrupt | Suspends execution after the current primitive operation. |
 
 #### Threads Menu
 
-The options available under the Threads menu are only relevant when connected to a compatible interpreter. For more information on threads, see the Dyalog Programming Reference Guide.
+The options available under the Threads menu are only relevant when connected to a compatible interpreter. For more information on threads, see the [Dyalog Programming Reference Guide](https://docs.dyalog.com/latest/Dyalog%20Programming%20Reference%20Guide.pdf).
 
 | Item | Description |
 | --- | --- |
@@ -116,30 +127,22 @@ The options available under the Threads menu are only relevant when connected to
 | Unpause all threads | Unpauses all paused threads (suspended threads remain suspended). |
 | Continue all threads | Resumes all paused threads, restarts all suspended threads, and closes the Trace window. |
 
-#### Window Menu
-
-The option available under the Window menu closes all open Edit and Trace windows.
-
-| Item | Description |
-| --- | --- |
-| Close All Windows | Closes all open Edit and Trace windows (the Session window, workspace explorer and debug information window remain open). |
-
 #### Help Menu
 
 The options available under the Help menu provide access to the Dyalog documentation, website, and support.
 
 | Item | Description |
 | --- | --- |
-| Getting Started | Opens your default web browser on the Getting Started page of Dyalog Ltd's website. |
-| Dyalog Help | Opens your default web browser on the Welcome page of Dyalog's online documentation. |
-| Language Elements | Opens your default web browser on the Language Elements page of Dyalog's online documentation. |
-| Documentation Centre | Opens your default web browser on the Documentation Centre page of Dyalog Ltd's website. |
-| Dyalog Website | Opens your default web browser on the home page of Dyalog Ltd's website. |
+| Getting Started | Opens your default web browser on the [Getting Started](https://www.dyalog.com/getting-started.htm) page of Dyalog Ltd's website. |
+| Dyalog Help | Opens your default web browser on the [Welcome page](https://help.dyalog.com/latest/) of Dyalog's online documentation. |
+| Language Elements | Opens your default web browser on the [Language Elements](https://help.dyalog.com/latest/index.htm#Language/Introduction/Language%20Elements.htm) page of Dyalog's online documentation. |
+| Documentation Centre | Opens your default web browser on the [Documentation Centre](https://www.dyalog.com/documentation_182.htm) page of Dyalog Ltd's website. |
+| Dyalog Website | Opens your default web browser on the [home page](https://www.dyalog.com/) of Dyalog Ltd's website. |
 | Email Dyalog | Opens your email client with a pre-populated template for an email to Dyalog support (including subject line and IDE/interpreter information). |
-| Latest Enhancements | Opens your default web browser on the Key Features page of Dyalog's online documentation. |
-| Read Me | Opens your default web browser on the Dyalog ReadMe page, containing the latest information about Dyalog. |
-| Third Party Licences | Opens your default web browser on the Licences for Third-Party Components page of Dyalog's online documentation. |
-| About | Displays the About dialog box, which provides details of the current RIDE and connected Dyalog interpreter. |
+| Latest Enhancements | Opens your default web browser on the [Key Features](https://help.dyalog.com/18.2/index.htm#RelNotes18.2/Key%20Features.htm) page of Dyalog's online documentation. |
+| Read Me | Opens your default web browser on the Dyalog [ReadMe](https://docs.dyalog.com/18.2/dyalog_readme.htm) page, containing the latest information about Dyalog. |
+| Third Party Licences | Opens your default web browser on the [Licences](https://help.dyalog.com/18.2/index.htm#MiscPages/Licences%20Overview.htm) for Third-Party Components page of Dyalog's online documentation. |
+| About | Displays the **About** dialog box, which provides details of the current RIDE and connected Dyalog interpreter. |
 
 ### Language Bar
 
@@ -193,28 +196,64 @@ Display of the workspace explorer can be toggled with the View > Show Workspace 
 
 The debug information window is located to the right of the Session window. It comprises two areas:
 
-- The Threads area lists the threads that are currently in existence. For each thread the following information is provided:a description comprising the thread ID (`⎕TID`) and name (`⎕TNAME`)the state of the thread, that is, what it is doing (for example, `Session`, `Pending`, `:Hold`, `⎕NA`)the thread requirements (`⎕TREQ`)a flag indicating whether the thread is Normal or Paused
-- a description comprising the thread ID (`⎕TID`) and name (`⎕TNAME`)
-- the state of the thread, that is, what it is doing (for example, `Session`, `Pending`, `:Hold`, `⎕NA`)
-- the thread requirements (`⎕TREQ`)
-- a flag indicating whether the thread is Normal or Paused
-- The SI Stack area lists the functions in the execution stack; each function in the list also has the line number and source code of the line that caused the function to be added to the stack. Equivalent to the result of `)SI`.
+- The **Threads** area lists the threads that are currently in existence. For each thread the following information is provided:
+    - a description comprising the thread ID (`⎕TID`) and name (`⎕TNAME`)
+    - the state of the thread, that is, what it is doing (for example, `Session`, `Pending`, `:Hold`, `⎕NA`)
+    - the thread requirements (`⎕TREQ`)
+    - a flag indicating whether the thread is Normal or Paused
+
+        The threads area toobar provides the following functionality: <table style="border-collapse: collapse;margin-left: 0;margin-right: auto;mc-caption-repeat: true;width: auto;">
+        <col />
+        <col />
+        <thead>
+            <tr>
+                <th>Icon</th>
+                <th>Action</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td style="text-align: center;">
+                    <img src="../img/screenshots/s_Threadsarea_refresh.png" />
+                </td>
+                <td>Refresh now</td>
+                <td>Refresh the list of threads.</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">
+                    <img src="../img/screenshots/s_Tracewin_continue.png" />
+                </td>
+                <td>Continue execution of this thread</td>
+                <td>Resume execution of the currently selected thread.</td>
+            </tr>
+            <tr>
+                <td style="text-align: center;">
+                    <img src="../img/screenshots/s_Tracewin_continueall.png" />
+                </td>
+                <td>Continue execution of all threads</td>
+                <td>Resume execution of any paused threads. For information on threads, see the <a href="https://docs.dyalog.com/latest/Dyalog%20Programming%20Reference%20Guide.pdf">Dyalog Programming Reference Guide</a>.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    - The **SI Stack** area lists the functions in the execution stack; each function in the list also has the line number and source code of the line that caused the function to be added to the stack. Equivalent to the result of `)SI`.
 
 Display of the debug information window can be toggled with the View > Show Debug menu option.
 
 ### Context Menu
 
-A context menu is available by right-clicking within the Session, Edit and Trace windows. The options available under the context menu are dependent on the window from which it was accessed and are detailed below.
+A context menu is available by right-clicking within the **Session**, **Edit** and **Trace** windows. The options available under the context menu are dependent on the window from which it was accessed and are detailed below.
 
 | Item | Description |
 | --- | --- |
-| Fix | Edit : Fixes the function without closing the Edit window. |
-| Skip to line | Trace : Moves the current execution marker to the line on which the cursor is positioned. |
-| Cut | Session/Edit/Trace : Deletes the selected text from the active window and places it on the clipboard. Only enabled when text is selected. Never enabled in the Trace window. |
-| Copy | Session/Edit/Trace : Copies the selected text to the clipboard. Only enabled when text is selected. |
-| Paste | Session/Edit/Trace : Pastes the text contents of the clipboard into the active window at the current location. Never enabled in the Trace window. |
-| Undo | Session/Edit/Trace : Reverses the previous action (where possible). Never enabled in the Trace window. |
-| Redo | Session/Edit/Trace : Reverses the effect of the previous Undo. Never enabled in the Trace window. |
+| Fix | **Edit** : Fixes the function without closing the **Edit** window. |
+| Skip to line | **Trace** : Moves the current execution marker to the line on which the cursor is positioned. |
+| Cut | **Session/Edit/Trace** : Deletes the selected text from the active window and places it on the clipboard. Only enabled when text is selected. Never enabled in the **Trace** window. |
+| Copy | **Session/Edit/Trace** : Copies the selected text to the clipboard. Only enabled when text is selected. |
+| Paste | **Session/Edit/Trace** : Pastes the text contents of the clipboard into the active window at the current location. Never enabled in the **Trace** window. |
+| Undo | **Session/Edit/Trace** : Reverses the previous action (where possible). Never enabled in the **Trace** window. |
+| Redo | **Session/Edit/Trace** : Reverses the effect of the previous Undo. Never enabled in the **Trace** window. |
 
 ## Keyboard Key Mappings for APL Glyphs
 
@@ -226,13 +265,15 @@ Using this set of key mappings, APL glyphs are entered by pressing the prefix ke
 
 Installing and enabling a set of key mappings allows Dyalog glyphs to be entered in other applications (for example, email). An alternative set of key mappings can also be used to replace the default key mappings for the RIDE.
 
-Information and the requisite downloadable files are available from [Dyalog](https://www.dyalog.com/apl-font-keyboard.htm).
+Information and the requisite downloadable files are available from Dyalog's [APL Fonts and Keyboards](https://www.dyalog.com/apl-font-keyboard.htm) page.
 
-If you have the Dyalog Unicode IME installed, then the RIDE activates it by default. It can be disabled by unchecking the Also enable Dyalog IME checkbox in the [Keyboard tab](keyboard_tab.md) of the Preferences dialog box.
+!!!note "Microsoft Windows"
+    If you have the Dyalog Unicode IME installed, then the RIDE activates it by default. It can be disabled by unchecking the Also enable Dyalog IME checkbox in the [Keyboard tab](keyboard_tab.md) of the Preferences dialog box.
 
-If Dyalog is not installed on the machine that the RIDE is running on, then the Dyalog Unicode IME can be downloaded and installed from [Dyalog])https://www.dyalog.com/apl-font-keyboard.htm).
+    If Dyalog is not installed on the machine that the RIDE is running on, then the Dyalog Unicode IME can be downloaded and installed from Dyalog's [APL Fonts and Keyboards](https://www.dyalog.com/apl-font-keyboard.htm) page.
 
-Most Linux distributions released after mid-2012 support Dyalog glyphs by default. For more information, see the Dyalog for UNIX Installation and Configuration Guide.
+!!!note "Linux"
+    Most Linux distributions released after mid-2012 support Dyalog glyphs by default. For more information, see the [Dyalog for UNIX Installation and Configuration Guide](https://docs.dyalog.com/latest/Dyalog%20for%20UNIX%20Installation%20and%20Configuration%20Guide.pdf).
 
 
 
