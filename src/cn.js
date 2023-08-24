@@ -1031,6 +1031,9 @@
     };
     q.sve.onclick = () => { save(); };
     q.neu.onclick = () => {
+      if ($(q.rhs).is(':hidden')) {
+        I.cn.toggleMaximize();
+      }
       const $e = $(favDOM({}));
       q.favs.appendChild($e[0]);
       $(q.favs).list('select', $e.index());
