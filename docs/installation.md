@@ -4,7 +4,7 @@ This chapter describes how to install the RIDE.
 
 ## Pre-requisites
 
-RIDE  can only connect to a Dyalog interpreter that is version 15.0 or later.
+RIDE can only connect to a Dyalog interpreter that is version 15.0 or later.
 
 The RIDE is supported on the following operating systems:
 
@@ -21,9 +21,9 @@ The RIDE is supported on the following operating systems:
 For the zero-footprint RIDE:
 
 - a compatible browser must be installed.
-- the operating system must be supported by the underlying technology [Electron](https://github.com/electron/electron/blob/v13.4.0/docs/tutorial/support.md).
+- the operating system must be supported by the underlying [technology](https://electronjs.org).
 
-If Dyalog is not installed on the machine that the RIDE is being installed on, then the APL385 font and keyboard mappings installed with the RIDE mean that they are available when running a Dyalog Session through the RIDE. However, to be able to enter APL glyphs outside a Dyalog Session (for example, in text files or emails) you will need to download and install the appropriate files (files and instructions are available from [here](https://www.dyalog.com/apl-font-keyboard.htm), as is the Dyalog Unicode IME for Microsoft Windows).
+If Dyalog is not installed on the machine that the RIDE is being installed on, then the APL385 font and keyboard mappings installed with the RIDE mean that they are available when running a Dyalog Session through the RIDE. However, to be able to enter APL glyphs outside a Dyalog Session (for example, in text files or emails) you will need to download and install the [appropriate files](https://www.dyalog.com/apl-font-keyboard.htm) for your system.
 
 ## Installing the RIDE
 
@@ -45,8 +45,11 @@ The installation process for the RIDE is the same irrespective of whether it is 
 ---
 **To install the RIDE**
 
-1. Download the RIDE's **.deb** or **.rpm** file (whichever is appropriate for your Linux distribution) from my.dyalog.com. If your Linux distribution does not support either **.deb** or **.rpm** files, then please contact support@dyalog.com.
+1. Download the RIDE's **.deb** or **.rpm** file (whichever is appropriate for your Linux distribution) from the [RIDE releases page](https://github.com/Dyalog/ride/releases). If your Linux distribution does not support either **.deb** or **.rpm** files, then please contact support@dyalog.com.
 2. From the command line, use standard installation commands to install the package.
+
+    The RIDE is now installed and ready to use. The RIDE icon (shortcut) is added to the desktop.
+
 ---
 
 ### Installing on macOS
@@ -56,12 +59,18 @@ The RIDE is the default UI for Dyalog on macOS and is installed at the same time
 ---
 **To install the RIDE as a separate, stand-alone, product**
 
-1. Download the RIDE's **.pkg** file from [my.dyalog.com](https://my.dyalog.com/).
+1. Download the RIDE's **.pkg** file from the [RIDE releases page](https://github.com/Dyalog/ride/releases).
 2. Double-click on the RIDE's **.pkg** file.
+
+    The **RIDE Installer** window is displayed.
+
 3. Follow the instructions in the RIDE Installer window to successful completion of the installation process.
+
+    The RIDE is now installed and ready to use. The RIDE icon is added to the **Applications** directory (accessed by selecting **Applications** from the **Go** menu in the **Finder** menu bar).
+
 ---
 
-Starting the RIDE adds its icon to the dock. To keep the RIDE icon in the dock permanently, right-click on the icon and select `Options > Keep in Dock` from the drop-down list that appears.
+Starting the RIDE adds its icon to the dock. To keep the RIDE icon in the dock permanently, right-click on the icon and select **Options > Keep in Dock** from the drop-down list that appears.
 
 ### Installing on Microsoft Windows
 
@@ -70,10 +79,15 @@ The installation process for the RIDE is the same irrespective of whether it is 
 ---
 **To install the RIDE**
 
-1. Download the RIDE's **.zip** file from my.dyalog.com.
+1. Download the RIDE's **.zip** file from the [RIDE releases page](https://github.com/Dyalog/ride/releases).
 2. Unzip the downloaded **.zip** file, placing the `setup_ride.exe` and `setup_ride.msi` files in the same location as each other.
 3. Double-click on the `setup_ride.exe` file.
+
+    The **RIDE Installation window** is displayed.
 4. Follow the instructions in the RIDE Installation window to successful completion of the installation process.
+
+    The RIDE is now installed and ready to use. The RIDE icon (shortcut) is added to the desktop.
+    
 ---
 
 ## Configuration (.ini) File

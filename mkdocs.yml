@@ -1,6 +1,5 @@
 site_name: RIDE User Guide
-repo_url: https://github.com/xpqz/ride-docs
-# repo_name: xpqz/ride-docs
+repo_url: https://github.com/dyalog/ride
 nav:
   - index.md
   - introduction.md

@@ -12,5 +12,13 @@ From Dyalog version 17.0, the interpreter can easily be configured to act as a w
 The RIDE has two main modes of use:
 
 - Providing a user interface to an interpreter engine (local or remote).
+
+    The RIDE is the recommended IDE for Dyalog on macOS or Linux (including the Raspberry Pi). In these environments, an application icon is provided to launch RIDE and an APL interpreter together. In this mode, the RIDE and the interpreter can be thought of as a single unit. Under Microsoft Windows, the native Dyalog IDE continues to provide the richest environment for the development of APL applications for Microsoft Windows users.
+
 - As a tool for managing connections to a collection of interpreter sessions.
+
+    In this mode, the RIDE-Dyalog Session dialog box is used to launch or connect to one or more interpreters.
+    
+    !!!note
+        Although the RIDE can manage multiple concurrent Dyalog Sessions, each Dyalog Session can only be connected to a single instance of the RIDE at any one time.
 
