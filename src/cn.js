@@ -1041,7 +1041,7 @@
     };
     q.tgl_cfg.onclick = () => {
       I.cn.toggleMaximize();
-      const maximise = !$(q.rhs).is(':visible');
+      const maximise = $(q.rhs).is(':visible');
       q.tgl_cfg_arrow.innerHTML = `<i class="fas fa-chevron-double-${maximise ? 'right' : 'left'}"></i>`;
     };
     q.tgl_cfg.click();
