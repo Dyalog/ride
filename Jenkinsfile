@@ -44,7 +44,7 @@ pipeline {
         }
         stage ('Mac Build and Packaging') {
           agent {
-            label 'Mac && Build'
+            label 'Mac && x86 && Build'
           }
           steps {
             sh 'rm -Rf _ ship'
@@ -74,6 +74,11 @@ pipeline {
           }
         }
       }
+      when {
+        not {
+          branch 'PR-*'
+        }
+      }
     }
     stage ('Copy install images') {
       agent {
@@ -95,6 +100,11 @@ pipeline {
         sh './CI/copyinstallers.sh'
         sh 'rm -Rf _ ship'
       }
+      when {
+        not {
+          branch 'PR-*'
+        }
+      }
     }
     stage ('Publish to Github') {
       agent {
@@ -115,6 +125,11 @@ pipeline {
         unstash 'win-ship'
         sh './CI/GH-Release.sh'
         sh 'rm -Rf _ ship'
+      }
+      when {
+        not {
+          branch 'PR-*'
+        }
       }
     }
   }
