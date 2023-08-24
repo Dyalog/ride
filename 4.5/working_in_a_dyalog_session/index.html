@@ -9,6 +9,10 @@
       
       
       
+        <link rel="prev" href="../input_windows/">
+      
+      
+        <link rel="next" href="../ridespecific_language_features/">
       
       <link rel="icon" href="../img/favicon-32.png">
       <meta name="generator" content="mkdocs-1.5.2, mkdocs-material-9.1.21">
@@ -296,6 +300,199 @@
 
   
   
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Working in a Dyalog Session
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Working in a Dyalog Session
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#keyboard-shortcuts-and-command-codes" class="md-nav__link">
+    Keyboard Shortcuts and Command Codes
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#navigating-the-windows" class="md-nav__link">
+    Navigating the Windows
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#display-of-windows" class="md-nav__link">
+    Display of Windows
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#entering-apl-characters" class="md-nav__link">
+    Entering APL Characters
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#entering-expressions" class="md-nav__link">
+    Entering Expressions
+  </a>
+  
+    <nav class="md-nav" aria-label="Entering Expressions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#paired-enclosures" class="md-nav__link">
+    Paired Enclosures
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#autocomplete" class="md-nav__link">
+    Autocomplete
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#context-sensitive-help" class="md-nav__link">
+    Context-Sensitive Help
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#syntax-colouring" class="md-nav__link">
+    Syntax Colouring
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#executing-expressions" class="md-nav__link">
+    Executing Expressions
+  </a>
+  
+    <nav class="md-nav" aria-label="Executing Expressions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#executing-a-new-expression" class="md-nav__link">
+    Executing a New Expression
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#re-executing-a-previous-expression" class="md-nav__link">
+    Re-executing a Previous Expression
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#re-executing-multiple-previous-expressions" class="md-nav__link">
+    Re-executing Multiple Previous Expressions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#threads" class="md-nav__link">
+    Threads
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#suspending-execution" class="md-nav__link">
+    Suspending Execution
+  </a>
+  
+    <nav class="md-nav" aria-label="Suspending Execution">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#breakpoints" class="md-nav__link">
+    Breakpoints
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interrupts" class="md-nav__link">
+    Interrupts
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#terminating-a-dyalog-session-running-through-the-ride" class="md-nav__link">
+    Terminating a Dyalog Session Running Through the RIDE
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
   
     <li class="md-nav__item">
       <a href="../ridespecific_language_features/" class="md-nav__link">
@@ -539,24 +736,24 @@
 
 
 <h1 id="working-in-a-dyalog-session">Working in a Dyalog Session</h1>
-<p>The main purpose of a development environment is to enable a user to enter and execute expressions; this chapter describes how this can be achieved when running a Dyalog Session through the RIDE and explains the functionality that is provided to simplify the process. The functionality that is provided to simplify the process when running a Dyalog Session through the RIDE is detailed in:</p>
+<p>The main purpose of a development environment is to enable a user to enter and execute expressions; this chapter describes how this can be achieved when running a Dyalog Session through the RIDE and explains the functionality that is provided to simplify the process. </p>
 <h2 id="keyboard-shortcuts-and-command-codes">Keyboard Shortcuts and Command Codes</h2>
-<p>Keyboard shortcuts are keystrokes that execute an action rather than produce a symbol. The RIDE supports numerous keyboard shortcuts, each of which is identified by a command code and mapped to a keystroke combination; for example, the action to open the Trace window  is identified by the code TC (described in the documentation as <code>&lt;TC&gt;</code>). For a complete list of the command codes that can be used in a Dyalog Session running through the RIDE and the keyboard shortcuts for those command codes, see <a href="../keyboard_shortcuts/">Keyboard Shortcuts</a>.</p>
-<p>Positioning the cursor over the  button on the right hand side of the Language bar displays a dynamic tooltip showing all configured keyboard shortcuts for command codes. Clicking on the  button displays the Preferences dialog box (the same as selecting the <code>Edit &gt; Preferences</code> menu option), through which keyboard shortcuts can be customised (see <a href="../shortcuts_tab/">Shortcuts Tab</a>).</p>
+<p>Keyboard shortcuts are keystrokes that execute an action rather than produce a symbol. The RIDE supports numerous keyboard shortcuts, each of which is identified by a command code and mapped to a keystroke combination; for example, the action to open the <strong>Trace</strong> window  is identified by the code <strong>TC</strong> (described in the documentation as <code>&lt;TC&gt;</code>). For a complete list of the command codes that can be used in a Dyalog Session running through the RIDE and the keyboard shortcuts for those command codes, see <a href="../keyboard_shortcuts/">Keyboard Shortcuts</a>.</p>
+<p>Positioning the cursor over the <img src="../img/screenshots/b_shortcuts.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 12px;" /> button on the right hand side of the Language bar displays a dynamic tooltip showing all configured keyboard shortcuts for command codes. Clicking on the <img src="../img/screenshots/b_shortcuts.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 12px;" /> button displays the <strong>Preferences</strong> dialog box (the same as selecting the <code>Edit &gt; Preferences</code> menu option), through which keyboard shortcuts can be customised (see <a href="../shortcuts_tab/">Shortcuts Tab</a>).</p>
 <h2 id="navigating-the-windows">Navigating the Windows</h2>
 <p>When multiple windows are open, the window that has the focus is referred to as the active window. A window can be made the active window by clicking within it.</p>
-<p>The Session, Edit and Trace windows form a closed loop for the purpose of navigation:</p>
+<p>The <strong>Session</strong>, <strong>Edit</strong> and <strong>Trace</strong> windows form a closed loop for the purpose of navigation:</p>
 <ul>
 <li>to make the next window in this loop the active window, enter the Tab Window command (<code>&lt;TB&gt;</code>)</li>
 <li>to make the previous window in this loop the active window, enter the Back Tab Window command (<code>&lt;BT&gt;</code>)</li>
 </ul>
-<p>An active Edit/Trace window can be closed after changes have been made to its content:</p>
+<p>An active <strong>Edit/Trace</strong> window can be closed after changes have been made to its content:</p>
 <ul>
 <li>to save any changes in the content of the active window before closing it, enter the Escape command (<code>&lt;EP&gt;</code>), press the  button in its menu bar or, if the window is docked, press  in the window's tab.</li>
 <li>to discard any changes in the content of the active window before closing it, enter the Quit command (<code>&lt;QT&gt;</code>)</li>
 </ul>
 <h2 id="display-of-windows">Display of Windows</h2>
-<p>By default, the Trace window and Edit windows are docked beneath and to the right of the Session window respectively. If the menu option View &gt; Show Workspace Explorer is checked, then the workspace explorer is docked to the far left of any open windows; if the menu option <code>View &gt; Show Debug</code> is checked, then the debug information window is docked to the far right of any open windows (see <a href="../session_user_interface/#extendedUIwindows">Session User Interface</a>.</p>
+<p>By default, the Trace window and Edit windows are docked beneath and to the right of the Session window respectively. If the menu option View &gt; Show Workspace Explorer is checked, then the workspace explorer is docked to the far left of any open windows; if the menu option <code>View &gt; Show Debug</code> is checked, then the debug information window is docked to the far right of any open windows (see <a href="../session_user_interface/">Session User Interface</a>.</p>
 <p>Docked windows can be selected (by clicking within them), resized (by moving the splitter bar) and maximised/minimised (by toggling the icon at the top right of each window).</p>
 <p>New Edit and Trace windows can be floating rather than docked by selecting the Floating windows checkbox in the <a href="../windows_tab/">Windows tab</a> of the Preferences dialog box.</p>
 <p>Clicking in the tab of any window enables that window to be dragged to a different location.</p>
@@ -592,106 +789,141 @@
 - ⍉</code>^ <code>circlebackslash
 - ⍥ `O</code>circlediaeresis</p>
 <h2 id="entering-expressions">Entering Expressions</h2>
-<p>The RIDE provides several mechanisms that assist with accuracy and provide clarity when entering expressions in a Dyalog Session, including, <a href="../paired_enclosures/">paired enclosures</a>, <a href="../autocomplete/">autocomplete</a>, <a href="../context_sensitive_help/">context-sensitive help</a> and <a href="../syntax_colouring/">syntax clouring</a>.</p>
+<p>The RIDE provides several mechanisms that assist with accuracy and provide clarity when entering expressions in a Dyalog Session, including, <em>paired enclosures</em>, <em>autocomplete</em>, <em>context-sensitive help</em> and <em>syntax clouring</em>. These are explained below.</p>
 <h3 id="paired-enclosures">Paired Enclosures</h3>
-<p>Applicable in the Session window and the Edit window</p>
+<p>Applicable in the <strong>Session</strong> window and the <strong>Edit</strong> window</p>
 <p>Enclosures in the RIDE include:</p>
 <ul>
 <li>parentheses <code>( )</code></li>
 <li>braces <code>{ }</code></li>
 <li>brackets <code>[ ]</code></li>
 </ul>
-<p>Angle brackets <code>&lt; &gt;</code> are not enclosures.</p>
-<p>When an opening enclosure character is entered, the RIDE automatically includes its closing pair. This reduces the risk of an invalid expression being entered due to unbalanced enclosures. This feature can be disabled in the <a href="../general_tab/">General tab</a> of the Preferences dialog box.</p>
+<p>Angle brackets <code>&lt; &gt;</code> are <em>not</em> enclosures.</p>
+<p>When an opening enclosure character is entered, the RIDE automatically includes its closing pair. This reduces the risk of an invalid expression being entered due to unbalanced enclosures. This feature can be disabled in the General tab of the Preferences dialog box.</p>
 <h3 id="autocomplete">Autocomplete</h3>
-<p>Applicable in the Session window and the Edit window</p>
+<p>Applicable in the <em>Session</em> window and the I window</p>
 <p>The RIDE includes autocomplete functionality for names to reduce the likelihood of errors when including them in an expression (and to save the user having to enter complete names or remember cases for case-sensitive  names).</p>
 <p>As a name is entered, the RIDE displays a pop-up window of suggestions based on the characters already entered and the context in which the name is being used.</p>
 <p>For example, if you enter a <code>⎕</code> character, the pop-up list of suggestions includes all the system names (for example, system functions and system variables). Entering further characters filters the list so that only those system functions and variables that start with the exact string entered are included.</p>
-<p>When you start to enter a name in the Session window, the pop-up list of suggestions includes all the namespaces, variables, functions and operators that are defined in the current namespace. When you start to enter a name in the Edit window, the pop-up list of suggestions also includes all names that are localised in the function header.</p>
+<p>When you start to enter a name in the <em>Session</em> window, the pop-up list of suggestions includes all the namespaces, variables, functions and operators that are defined in the current namespace. When you start to enter a name in the <em>Edit</em> window, the pop-up list of suggestions also includes all names that are localised in the function header.</p>
 <p>To select a name from the pop-up list of suggestions, do one of the following:</p>
 <ul>
 <li>click the mouse on the name in the pop-up list</li>
 <li>use the right arrow key to select the top name in the pop-up list</li>
-<li>use the up and down arrow keys to navigate through the suggestions and the right arrow key or the TAB key to enter the currently-highlighted name</li>
+<li>use the up and down arrow keys to navigate through the suggestions and the right arrow key or the <kbd>tab</kbd> key to enter the currently-highlighted name</li>
 </ul>
 <p>The selected name is then completed in the appropriate window.</p>
-<p>This feature can be disabled or customised in the <a href="../general_tab/">General tab</a> of the Preferences dialog box.</p>
+<p>This feature can be disabled or customised in the General tab of the Preferences dialog box.</p>
 <h3 id="context-sensitive-help">Context-Sensitive Help</h3>
-<p>Applicable in the Session window, Edit window and Trace window</p>
-<p>With the cursor on or immediately after any system command, system name, control structure keyword or primitive glyph, enter the Help command (<code>&lt;HLP&gt;</code>). The documentation for that system command, system name, control structure keyword or primitive glyph will be displayed.</p>
+<p>Applicable in the <strong>Session</strong> window, <strong>Edit</strong> window and <strong>Trace</strong> window</p>
+<p>With the cursor on or immediately after any system command, system name, control structure keyword or primitive glyph, enter the <em>Help</em> command (<code>&lt;HLP&gt;</code>). The documentation for that system command, system name, control structure keyword or primitive glyph will be displayed.</p>
 <h3 id="syntax-colouring">Syntax Colouring</h3>
-<p>Applicable in the Edit window and Trace window</p>
+<p>Applicable in the <strong>Edit</strong> window and <strong>Trace</strong> window</p>
 <p>Syntax colouring assigns different colours to various components, making them easily identifiable. The default syntax colouring convention used is detailed below.</p>
-<table>
-<thead>
-<tr>
-<th>Colour</th>
-<th>Syntax</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td>black</td>
-</tr>
-<tr>
-<td></td>
-<td>grey</td>
-</tr>
-<tr>
-<td></td>
-<td>maroon</td>
-</tr>
-<tr>
-<td></td>
-<td>red</td>
-</tr>
-<tr>
-<td></td>
-<td>teal</td>
-</tr>
-<tr>
-<td></td>
-<td>navy</td>
-</tr>
-<tr>
-<td></td>
-<td>blue</td>
-</tr>
-<tr>
-<td></td>
-<td>purple</td>
-</tr>
-</tbody>
+<table style="border-collapse: collapse;margin-left: 0;margin-right: auto;mc-caption-repeat: true;width: auto;">
+    <col />
+    <col />
+    <thead>
+        <tr>
+            <th colspan="2">Colour</th>
+            <th>Syntax</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="background-color:black" width="30">
+            </td>
+            <td>black</td>
+            <td>
+                <p>global names</p>
+                <p>session input/output (unless specified elsewhere)</p>
+            </td>
+        </tr>
+        <tr>
+            <td style="background-color:gray">
+            </td>
+            <td>grey</td>
+            <td>names<br />namespaces<br />numbers<br />tradfn syntax (header line and final <code>∇</code> in scripted syntax)
+            </td>
+        </tr>
+        <tr>
+            <td style="background-color:maroon">
+            </td>
+            <td>maroon</td>
+            <td>control structure keywords</td>
+        </tr>
+        <tr>
+            <td style="background-color:red">
+            </td>
+            <td>red</td>
+            <td>errors (including unmatched parentheses, quotes and braces)</td>
+        </tr>
+        <tr>
+            <td style="background-color:teal">
+            </td>
+            <td>teal</td>
+            <td>strings<br />comments
+            </td>
+        </tr>
+        <tr>
+            <td style="background-color:navy">
+            </td>
+            <td>navy</td>
+            <td>primitive functions<br />zilde
+            </td>
+        </tr>
+        <tr>
+            <td style="background-color:blue">
+            </td>
+            <td>blue</td>
+            <td>idioms (this takes priority over any other syntax colouring)<br />operators<br />parentheses/braces/brackets<br />dfn syntax (specifically, <code>{ } ⍺ ⍵ ∇</code> and <code>:</code>)<br />assignment (<code>←</code>), diamond (<code>⋄</code>) and semi-colon (<code>;</code>)
+            </td>
+        </tr>
+        <tr>
+            <td style="background-color:purple">
+            </td>
+            <td>purple</td>
+            <td>system names</td>
+        </tr>
+    </tbody>
 </table>
-<p>The foreground colour and/or the background colour (highlighting) can be customised by syntax type – see <a href="../colours_tab/">Colours Tab</a>.</p>
+
+<p>The foreground colour and/or the background colour (highlighting) can be customised by syntax type.</p>
 <h2 id="executing-expressions">Executing Expressions</h2>
 <h3 id="executing-a-new-expression">Executing a New Expression</h3>
-<p>Applicable in the Session window</p>
-<p>After entering a new expression in the input line, that expression is executed by pressing the Enter key or with the Enter command (<ER>). Following execution, the expression (and any displayed results) become part of the Session log.</p>
+<p><em>Applicable in the </em><em>Session</em><em> window</em></p>
+<p>After entering a new expression in the input line, that expression is executed by pressing the <kbd>Enter</kbd> key or with the Enter command (<code>&lt;ER&gt;</code>). Following execution, the expression (and any displayed results) become part of the Session log.</p>
 <h3 id="re-executing-a-previous-expression">Re-executing a Previous Expression</h3>
-<p>Applicable in the Session window</p>
+<p><em>Applicable in the </em><em>Session</em><em> window</em></p>
 <p>Instead of entering a new expression in the input line, you can move back through the Session log and re-execute a previously-entered expression.</p>
-<p>To re-execute a previously-entered expression</p>
+<hr />
+<p><strong>To re-execute a previously-entered expression</strong></p>
 <ol>
-<li>Locate the expression to re-execute in one of the following ways:- Scroll back through the Session log.</li>
-<li>Use the Backward command (<code>&lt;BK&gt;</code>) and the Forward command (<code>&lt;FD&gt;</code>) to cycle backwards and forwards through the input history, successively copying previously-entered expressions into the input line.</li>
-<li>Position the cursor anywhere within the expression that you want to re execute and press the Enter key or use the Enter command (<code>&lt;ER&gt;</code>).</li>
-</ol>
-<p>If required, a previously-entered expression can be amended prior to execution. In this situation, when the amended expression is executed it is copied to the input line; the original expression in the Session log is not changed. If you start to edit a previous expression and then decide not to, use the Quit command (<code>&lt;QT&gt;</code>) to return the previous expression to its unaltered state.</p>
-<h3 id="re-executing-multiple-previous-expressions">Re-executing Multiple Previous Expressions</h3>
-<p>Applicable in the Session window</p>
-<p>Multiple expressions can be re-executed together irrespective of whether they were originally executed sequentially (certain system commands cause re‑execution to stop once they have been completed, for example, <code>)LOAD</code> and <code>)CLEAR</code>).</p>
-<p>To re-execute multiple previously-entered expressions</p>
-<ol>
-<li>Locate the first expression to re-execute in one of the following ways:</li>
+<li>Locate the expression to re-execute in one of the following ways:<ul>
 <li>Scroll back through the Session log.</li>
 <li>Use the Backward command (<code>&lt;BK&gt;</code>) and the Forward command (<code>&lt;FD&gt;</code>) to cycle backwards and forwards through the input history, successively copying previously-entered expressions into the input line.</li>
+</ul>
+</li>
+<li>Position the cursor anywhere within the expression that you want to re execute and press the <kbd>Enter</kbd> key or use the <em>Enter</em> command (<code>&lt;ER&gt;</code>).</li>
+</ol>
+<hr />
+<p>If required, a previously-entered expression can be amended prior to execution. In this situation, when the amended expression is executed it is copied to the input line; the original expression in the Session log is not changed. If you start to edit a previous expression and then decide not to, use the <em>Quit</em> command (<code>&lt;QT&gt;</code>) to return the previous expression to its unaltered state.</p>
+<h3 id="re-executing-multiple-previous-expressions">Re-executing Multiple Previous Expressions</h3>
+<p><em>Applicable in the </em><em>Session</em><em> window</em></p>
+<p>Multiple expressions can be re-executed together irrespective of whether they were originally executed sequentially (certain system commands cause re‑execution to stop once they have been completed, for example, <code>)LOAD</code> and <code>)CLEAR</code>).</p>
+<hr />
+<p>To re-execute multiple previously-entered expressions</p>
+<ol>
+<li>Locate the first expression to re-execute in one of the following ways:<ul>
+<li>Scroll back through the Session log.</li>
+<li>Use the Backward command (<code>&lt;BK&gt;</code>) and the Forward command (<code>&lt;FD&gt;</code>) to cycle backwards and forwards through the input history, successively copying previously-entered expressions into the input line.</li>
+</ul>
+</li>
 <li>Change the expression in some way. The change does not have to impact the purpose of the expression; it could be an additional space character.</li>
 <li>Scroll through the Session log to locate the next expression to re-execute and change it in some way. Repeat until all the required expressions have been changed.</li>
 <li>Press the Enter key or enter the Enter command (<code>&lt;ER&gt;</code>).</li>
 </ol>
+<hr />
 <p>The amended expressions are copied to the input line and executed in the order in which they appear in the Session log; the modified expressions in the Session log are restored to their original content.</p>
 <p>To re-execute contiguous previously-entered expressions</p>
 <ol>
@@ -704,25 +936,28 @@
 <p>This technique can also be used to move lines from the Edit window into the Session window and execute them.</p>
 <h2 id="threads">Threads</h2>
 <p>The RIDE supports multithreading. For information on threads, see the Dyalog Programming Reference Guide.</p>
-<p>The number of threads currently in use is displayed in the <a href="../status_bar/">Status bar</a>.</p>
+<p>The number of threads currently in use is displayed in the Status bar.</p>
 <h2 id="suspending-execution">Suspending Execution</h2>
-<p>To assist with investigations into the behaviour of a set of statements (debugging), the system can be instructed to suspend execution just before a particular statement. This is done by setting a <a href="../breakpoints/">breakpoint</a>.</p>
-<p>It is sometimes necessary to suspend the execution of a function, for example, if an  endless loop has been inadvertently created or a response is taking an unacceptably long time. This is done using an <a href="../interrupts/">interrupt</a>.</p>
+<p>To assist with investigations into the behaviour of a set of statements (debugging), the system can be instructed to suspend execution just before a particular statement. This is done by setting a <em>breakpoint</em>.</p>
+<p>It is sometimes necessary to suspend the execution of a function, for example, if an  endless loop has been inadvertently created or a response is taking an unacceptably long time. This is done using an <em>interrupt</em>.</p>
 <p>Suspended functions can be viewed through the stack; the most recently-referenced function is at the top of the stack. The content of the stack can be queried with the <code>)SI</code> system command; this generates a list of all suspended and pendent (that is, awaiting the return of a called function) functions, where suspended functions are indicated by a <code>*</code>. For more information on the stack and the state indicator, see the Dyalog Programming Reference Guide.</p>
 <h3 id="breakpoints">Breakpoints</h3>
-<p>Applicable in the Edit window and the Trace window</p>
-<p>When a function that includes a breakpoint is run, its execution is suspended immediately before executing the line on which the breakpoint is set and the Trace window is automatically opened (assuming that automatic <a href="../trace_window/">trace</a> is enabled.</p>
-<p>Breakpoints are defined by dyadic <code>⎕STOP</code> and can be toggled on and off in an Edit or Trace window by left-clicking on the far left of the line before which the breakpoint is to be applied or by placing the cursor anywhere in the line before which the breakpoint is to be applied and entering the Toggle Breakpoint command (<code>&lt;BP&gt;</code>). Note that:</p>
+<p>Applicable in the <strong>Edit</strong> window and the <strong>Trace</strong> window</p>
+<p>When a function that includes a breakpoint is run, its execution is suspended immediately before executing the line on which the breakpoint is set and the <strong>Trace</strong> window is automatically opened (assuming that automatic <a href="../trace_window/">trace</a> is enabled.</p>
+<p>Breakpoints are defined by dyadic <code>⎕STOP</code> and can be toggled on and off in an <strong>Edit</strong> or <strong>Trace</strong> window by left-clicking on the far left of the line before which the breakpoint is to be applied or by placing the cursor anywhere in the line before which the breakpoint is to be applied and entering the <em>Toggle Breakpoint</em> command (<code>&lt;BP&gt;</code>). Note that:</p>
 <ul>
-<li>Breakpoints set or cleared in an Edit window are not established until the function is fixed.</li>
-<li>Breakpoints set or cleared in a Trace window are established immediately.</li>
+<li>Breakpoints set or cleared in an <strong>Edit</strong> window are not established until the function is fixed.</li>
+<li>Breakpoints set or cleared in a <strong>Trace</strong> window are established immediately.</li>
 </ul>
-<p>When a breakpoint is reached during code execution, event 1001 is generated; this can be trapped. For more information, see  <code>⎕TRAP</code> in the Dyalog APL Language Reference Guide.</p>
+<p>When a breakpoint is reached during code execution, event 1001 is generated; this can be trapped. For more information, see  <code>⎕TRAP</code> in the <a href="https://docs.dyalog.com/latest/Dyalog%20APL%20Language%20Reference%20Guide.pdf">Dyalog APL Language Reference Guide</a>.</p>
 <h3 id="interrupts">Interrupts</h3>
 <p>A Dyalog Session running through the RIDE responds to both strong and weak interrupts.</p>
 <p>Entering a strong interrupt suspends execution as soon as possible (generally after completing execution of the primitive currently being processed). A strong interrupt is issued by selecting <code>Actions &gt; Strong Interrupt</code> in the menu options or by entering the Strong Interrupt command (<code>&lt;SI&gt;</code>).</p>
-<p>Entering a weak interrupt suspends execution at the start of the next line (generally after completing execution of the statement currently being processed). A weak interrupt is issued by selecting Actions &gt; Weak Interrupt in the menu options or by entering the Weak Interrupt command (<code>&lt;WI&gt;</code>).</p>
-<p>When a strong or weak interrupt is issued during code execution, event 1003 or 1002 (respectively) is generated; these can be trapped. For more information, see  <code>⎕TRAP</code> in the Dyalog APL Language Reference Guide.</p>
+<p>Entering a weak interrupt suspends execution at the start of the next line (generally after completing execution of the statement currently being processed). A weak interrupt is issued by selecting <code>Actions &gt; Weak Interrupt</code> in the menu options or by entering the Weak Interrupt command (<code>&lt;WI&gt;</code>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>When a strong or weak interrupt is issued during code execution, event 1003 or 1002 (respectively) is generated; these can be trapped. For more information, see  <code>⎕TRAP</code> in the <a href="https://docs.dyalog.com/latest/Dyalog%20APL%20Language%20Reference%20Guide.pdf">Dyalog APL Language Reference Guide</a>.</p>
+</div>
 <h2 id="terminating-a-dyalog-session-running-through-the-ride">Terminating a Dyalog Session Running Through the RIDE</h2>
 <p>The Dyalog Session can be terminated (without having to close any open windows first) in any of the following ways:</p>
 <ul>
@@ -739,11 +974,11 @@
 <ul>
 <li>Linux: <kbd>Ctrl</kbd> + <kbd>Q</kbd></li>
 <li>macOS : <kbd>⌘</kbd> + <kbd>Q</kbd></li>
-<li>Microsoft Windows: <kbd>Ctrl</kbd> + <kbd>Q</kbd> (only if the Dyalog Unicode IME is not enabled – see <a href="../keyboard_tab/">Keyboard Tab</a>)</li>
+<li>Microsoft Windows: <kbd>Ctrl</kbd> + <kbd>Q</kbd> (only if the Dyalog Unicode IME is not enabled).</li>
 </ul>
 </li>
 </ul>
-<p>In addition, when the Session window is the active window, the Dyalog Session can be terminated cleanly in any of the following ways:</p>
+<p>In addition, when the <strong>Session</strong> window is the active window, the Dyalog Session can be terminated cleanly in any of the following ways:</p>
 <ul>
 <li>Enter <code>)OFF</code></li>
 <li>Enter <code>⎕OFF</code></li>
