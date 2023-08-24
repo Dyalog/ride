@@ -7,6 +7,7 @@
 'use strict'
 D.prf = {};
 [ // name                 default (type is determined from default value; setter enforces type and handles encoding)
+  ['autoStart',          0], // Auto-start default configuration when RIDE starts
   ['autoCloseBrackets',  1], //whether to insert {}[]() in pairs
   ['autocompletion',     'classic'],
   ['autoPW',             0], // update PW on resize of window

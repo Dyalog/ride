@@ -23,6 +23,7 @@
     },
     load() {
       const p = D.prf;
+      q.ast.checked = !!p.autoStart();
       q.mb.checked = !!p.matchBrackets();
       q.mme.checked = !!p.minimapEnabled();
       q.mmrc.checked = !!p.minimapRenderCharacters();
@@ -51,6 +52,7 @@
     activate() { q.mb.focus(); },
     save() {
       const p = D.prf;
+      p.autoStart          (q.ast.checked);
       p.blockCursor        (q.bc.checked);
       p.cursorBlinking     (q.cb.value);
       p.matchBrackets      (q.mb.checked);

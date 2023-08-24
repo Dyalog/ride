@@ -1038,7 +1038,7 @@
     };
     q.tgl_cfg.onclick = () => {
       I.cn.toggleMaximize();
-      const maximise = $(q.rhs).is(':visible');
+      const maximise = !$(q.rhs).is(':visible');
       q.tgl_cfg_arrow.innerHTML = `<i class="fas fa-chevron-double-${maximise ? 'right' : 'left'}"></i>`;
     };
     q.tgl_cfg.click();
@@ -1100,7 +1100,10 @@
     const defcfg = D.prf.defaultConfig();
     let i = [...q.favs.children].findIndex((x) => x.cnData.name === defcfg);
     if (i < 0) i = [...q.favs.children].findIndex((x) => x.cnData.preset);
-    setTimeout(() => $(q.favs).list('select', Math.max(0, i)), 1);
+    setTimeout(() => {
+      $(q.favs).list('select', Math.max(0, i));
+      D.prf.autoStart() && q.go.click();
+    }, 1);
   };
 
   module.exports = () => {
