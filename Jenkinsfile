@@ -76,7 +76,7 @@ pipeline {
       }
       when {
         not {
-          env.BRANCH_NAME.startsWith('PR')
+          branch 'PR-*'
         }
       }
     }
@@ -100,11 +100,6 @@ pipeline {
         sh './CI/copyinstallers.sh'
         sh 'rm -Rf _ ship'
       }
-      when {
-        not {
-          env.BRANCH_NAME.startsWith('PR')
-        }
-      }
     }
     stage ('Publish to Github') {
       agent {
@@ -125,11 +120,6 @@ pipeline {
         unstash 'win-ship'
         sh './CI/GH-Release.sh'
         sh 'rm -Rf _ ship'
-      }
-      when {
-        not {
-          env.BRANCH_NAME.startsWith('PR')
-        }
       }
     }
   }
