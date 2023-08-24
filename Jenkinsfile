@@ -100,6 +100,11 @@ pipeline {
         sh './CI/copyinstallers.sh'
         sh 'rm -Rf _ ship'
       }
+      when {
+        not {
+          branch 'PR-*'
+        }
+      }
     }
     stage ('Publish to Github') {
       agent {
@@ -120,6 +125,11 @@ pipeline {
         unstash 'win-ship'
         sh './CI/GH-Release.sh'
         sh 'rm -Rf _ ship'
+      }
+    }
+    when {
+      not {
+        branch 'PR-*'
       }
     }
   }
