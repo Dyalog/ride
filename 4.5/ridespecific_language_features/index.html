@@ -649,11 +649,14 @@ How the interpreter should behave with respect to the RIDE protocol. Setting thi
 <li><code>HTTP</code> – listen for incoming connections from the web browser, via <a href="../the_zero_footprint_ride/">zero footprint RIDE</a>)</li>
 <li><code>CONFIG</code> – retrieve values to use from a .ini <a href="../configuration_ini_file/">configuration file</a></li>
 </ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
 <p>If two modes are specified, then:</p>
 <ul>
 <li>one of the modes must be <code>CONFIG</code>.</li>
-<li>the <code>SERVE</code>/<code>CONNECT</code>/<code>POLL</code>/<code>HTTP</code> values always override the equivalent values in the .ini configuration file.</li>
+<li>the <code>SERVE</code>/<code>CONNECT</code>/<code>POLL</code>/<code>HTTP</code> values always override the equivalent values in the <strong>.ini</strong> configuration file.</li>
 </ul>
+</div>
 <p>If <code>mode</code> is <code>SERVE</code> or <code>HTTP</code>, then <code>setting</code> is <code>address:port</code>, where:</p>
 <ul>
 <li><code>address</code> is the address of the interface on which the machine running the APL process should listen (that is, the address of the machine that is running the interpreter). </li>
