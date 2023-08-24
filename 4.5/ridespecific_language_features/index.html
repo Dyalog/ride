@@ -659,28 +659,35 @@ How the interpreter should behave with respect to the RIDE protocol. Setting thi
 </div>
 <p>If <code>mode</code> is <code>SERVE</code> or <code>HTTP</code>, then <code>setting</code> is <code>address:port</code>, where:</p>
 <ul>
-<li><code>address</code> is the address of the interface on which the machine running the APL process should listen (that is, the address of the machine that is running the interpreter). </li>
-</ul>
-<p>Valid values are: </p>
+<li>
+<p><code>address</code> is the address of the interface on which the machine running the APL process should listen (that is, the address of the machine that is running the interpreter). Valid values are: </p>
 <ul>
-<li><empty> – listen on all loopback interfaces, that is, the interpreter only accepts connection from the local machine</li>
+<li><code>&lt;empty&gt;</code> – listen on all loopback interfaces, that is, the interpreter only accepts connection from the local machine</li>
 <li><code>*</code> – listen on all local machine interfaces, that is, the interpreter listens for connections from any (local or remote) machine/interface</li>
 <li>the host/DNS name of the machine/interface running the interpreter – listen on that specific interface on the local machine</li>
 <li>the IPv4 address of the machine/interface running the interpreter – listen on that specific interface on the local machine</li>
 <li>the IPv6 address of the machine/interface running the interpreter – listen on that specific interface on the local machine</li>
 <li><code>port</code> is the TCP port to listen on</li>
 </ul>
+</li>
+</ul>
 <p>If <code>mode</code> is <code>CONNECT</code> or <code>POLL</code>, then <code>setting</code> is <code>address:port</code>, where:</p>
 <ul>
-<li><code>address</code> is the destination address to attempt to connect to (the machine/interface running the RIDE client). Valid values are:the host/DNS name of a machine/interface running the RIDE clientthe IPv4 address of a machine/interface running the RIDE clientthe IPv6 address of a machine/interface running the RIDE client</li>
+<li>
+<p><code>address</code> is the destination address to attempt to connect to (the machine/interface running the RIDE client). Valid values are:</p>
+<ul>
 <li>the host/DNS name of a machine/interface running the RIDE client</li>
 <li>the IPv4 address of a machine/interface running the RIDE client</li>
 <li>the IPv6 address of a machine/interface running the RIDE client</li>
-<li><code>port</code> is the TCP port to connect to</li>
+</ul>
+</li>
+<li>
+<p><code>port</code> is the TCP port to connect to</p>
+</li>
 </ul>
 <p>If <code>mode</code> is <code>CONFIG</code>, then <code>setting</code> is <code>filename</code>, where:</p>
 <ul>
-<li><code>filename</code> is the fully-qualified path to, and name of, a .ini configuration file containing name-value pairs related to mode, certificate details, and so on. The default value for <code>setting</code> is <code>ride.ini</code> (for more information on the .ini configuration file, see <a href="../configuration_ini_file/">here</a>).</li>
+<li><code>filename</code> is the fully-qualified path to, and name of, a <strong>.ini</strong> configuration file containing name-value pairs related to mode, certificate details, and so on. The default value for <code>setting</code> is <code>ride.ini</code>.</li>
 </ul>
 <p><strong>Examples</strong></p>
 <p>To listen on port 4502 for connection requests from a RIDE client running on any machine: <code>RIDE_INIT=SERVE:*:4502</code></p>
