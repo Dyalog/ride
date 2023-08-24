@@ -23,13 +23,13 @@
     "toastr": "^2.1.4"
   },
   "devDependencies": {
+    "@electron/osx-sign": "^1.0.4",
     "async": "^3.2.4",
     "ava": "^5.3.1",
     "cheerio": "^1.0.0-rc.12",
     "compression": "^1.7.4",
     "electron": "^25.3.2",
     "electron-connect": "^0.6.3",
-    "electron-osx-sign": "^0.6.0",
     "electron-packager": "^17.1.1",
     "eslint": "^8.46.0",
     "eslint-config-airbnb": "^19.0.4",
