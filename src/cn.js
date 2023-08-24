@@ -1105,7 +1105,10 @@
     if (i < 0) i = [...q.favs.children].findIndex((x) => x.cnData.preset);
     setTimeout(() => {
       $(q.favs).list('select', Math.max(0, i));
-      D.prf.autoStart() && q.go.click();
+      const autoStart = process.env.RIDE_AUTO_START ? process.env.RIDE_AUTO_START === '1' : D.prf.autoStart();
+      if (autoStart) {
+        q.go.click();
+      }
     }, 1);
   };
 
