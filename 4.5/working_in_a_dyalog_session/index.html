@@ -952,7 +952,7 @@
 <p>It is sometimes necessary to suspend the execution of a function, for example, if an  endless loop has been inadvertently created or a response is taking an unacceptably long time. This is done using an <em>interrupt</em>.</p>
 <p>Suspended functions can be viewed through the stack; the most recently-referenced function is at the top of the stack. The content of the stack can be queried with the <code>)SI</code> system command; this generates a list of all suspended and pendent (that is, awaiting the return of a called function) functions, where suspended functions are indicated by a <code>*</code>. For more information on the stack and the state indicator, see the Dyalog Programming Reference Guide.</p>
 <h3 id="breakpoints">Breakpoints</h3>
-<p>Applicable in the <strong>Edit</strong> window and the <strong>Trace</strong> window</p>
+<p><em>Applicable in the </em><em>Edit</em><em> window and the </em><em>Trace</em><em> window</em></p>
 <p>When a function that includes a breakpoint is run, its execution is suspended immediately before executing the line on which the breakpoint is set and the <strong>Trace</strong> window is automatically opened (assuming that automatic <a href="../trace_window/">trace</a> is enabled.</p>
 <p>Breakpoints are defined by dyadic <code>⎕STOP</code> and can be toggled on and off in an <strong>Edit</strong> or <strong>Trace</strong> window by left-clicking on the far left of the line before which the breakpoint is to be applied or by placing the cursor anywhere in the line before which the breakpoint is to be applied and entering the <em>Toggle Breakpoint</em> command (<code>&lt;BP&gt;</code>). Note that:</p>
 <ul>
