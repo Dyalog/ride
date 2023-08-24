@@ -126,10 +126,10 @@ pipeline {
         sh './CI/GH-Release.sh'
         sh 'rm -Rf _ ship'
       }
-    }
-    when {
-      not {
-        branch 'PR-*'
+      when {
+        not {
+          branch 'PR-*'
+        }
       }
     }
   }
