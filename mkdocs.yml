@@ -7,6 +7,7 @@ nav:
   - "Starting a Session": starting_a_dyalog_session.md
   - the_dyalog_development_environment.md
   - input_windows.md
+  - working_in_a_dyalog_session.md
   - ridespecific_language_features.md
   - customising_your_session.md
   - keyboard_shortcuts.md

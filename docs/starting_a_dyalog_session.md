@@ -228,7 +228,9 @@ The RIDE connects to a specific running (local or remote) Dyalog interpreter tha
                 - **Provide user certificate**: if selected, populate the Cert and Key fields with the fully-qualified paths to, and names of, the PEM encoded certificate file and key file respectively – the interpreter (RIDE server) uses this to verify that the RIDE client is permitted to connect to it.
                 - **Custom root certificates**: if selected, populate the **Directory** field with the fully-qualified path to, and name of, the directory that contains multiple root certificates and key files to use for authentication.
                 - **Validate server subject common name matches hostname**: verifies that the CN (Common Name) field of the server's certificate matches the hostname.
+
 5. Click **CONNECT**.
+
 ---
 
 #### Listen
@@ -238,23 +240,58 @@ The RIDE waits for a local or remote interpreter to connect to it. This approach
 ---
 **To start a Dyalog Session**
 
-1. On the machine that the RIDE is running on: Open the **RIDE-Dyalog Session** dialog box.Select Listen from the Type drop down list.
-The type-dependent information fields are displayed.In the Host field, specify the IP address/unique DNS name that the RIDE will bind to. By default, the RIDE will bind to all interfaces.In the Port field, specify the number of the port that the RIDE should listen on. By default, the RIDE listens on port 4502.
-Optionally, check Save protocol log – this  records all communications between the interpreter and the RIDE. The default path/filename for this interpreter‑independent protocol log can be changed. Click LISTEN.
-The **Waiting for connection...** dialog box is displayed.
+1. On the machine that the RIDE is running on: 
+    1. Open the **RIDE-Dyalog Session** dialog box.
+    2. Select Listen from the Type drop down list.
 
-2. Open the **RIDE-Dyalog Session** dialog box.
-3. Select Listen from the Type drop down list.
-4. Optionally, check Save protocol log – this  records all communications between the interpreter and the RIDE. The default path/filename for this interpreter‑independent protocol log can be changed.
-5. Click **LISTEN**.
-6. On the machine that the interpreter will run on, start a Dyalog Session from the command prompt. When doing this, the IP address/DNS name for the machine that the RIDE is running on and the same port number as the RIDE is listening on must be specified as connection properties.
-For example, if the RIDE is running on a machine that has DNS name `jaypc.dyalog.bramley` and is listening on port 4502, then enter the following in a command window/at the command prompt:
+        The type-dependent information fields are displayed.
+        
+        - In the **Host** field, specify the IP address/unique DNS name that the RIDE will bind to. By default, the RIDE will bind to all interfaces.
+        - In the **Port** field, specify the number of the port that the RIDE should listen on. By default, the RIDE listens on port 4502.
+    3. Optionally, check **Save protocol log** – this  records all communications between the interpreter and the RIDE. The default path/filename for this interpreter‑independent protocol log can be changed. 
+    4. Click LISTEN.
+
+        The **Waiting for connection...** dialog box is displayed.
+
+2. On the machine that the interpreter will run on, start a Dyalog Session from the command prompt. When doing this, the IP address/DNS name for the machine that the RIDE is running on and the same port number as the RIDE is listening on must be specified as connection properties.
+
+    For example, if the RIDE is running on a machine that has DNS name `jaypc.dyalog.bramley` and is listening on port 4502, then enter the following in a command window/at the command prompt:
+
     - AIX: `$ RIDE_INIT="CONNECT:jaypc.dyalog.bramley:4502" /opt/mdyalog/16.0/64/unicode/p7/mapl`
     - Linux: `$ RIDE_INIT="CONNECT:jaypc.dyalog.bramley:4502" dyalog`
     - macOS: `$ RIDE_INIT="CONNECT:jaypc.dyalog.bramley:4502" /Dyalog/Dyalog-16.0.app/Contents/Resources/Dyalog/mapl`
     - Microsoft Windows: `> cd "C:\Program Files\Dyalog\Dyalog APL-64 16.0 Unicode" > dyalog RIDE_INIT=CONNECT:jaypc.dyalog.bramley:4502`
+
+    The Dyalog Session starts.
+
 ---
-The Dyalog Session starts.
+
+Alternatively, start a Dyalog Session and enter:
+
+`3502⌶'CONNECT:jaypc.dyalog.bramley:4502' 3502⌶1`
+
+The new Dyalog Session will connect to the RIDE and remain connected until the Dyalog Session is terminated.
+
+!!! note
+    On Microsoft Windows, an alternative to using the command window is to create a shortcut with the appropriate settings.
+            
+---
+**To configure the shortcut**
+
+1. Select the appropriate Dyalog installation and create a shortcut to it.
+2. Right-click on the shortcut icon and select **Properties** from the context menu that is displayed.
+
+    The **Properties** dialog box is displayed.
+
+3. In the Shortcut tab, go to the **Target** field and:
+    1. place **"** marks around the path 
+    2. append `RIDE_INIT=CONNECT:10.0.38.1:4502`
+
+    For example: `>"C:\Program Files\Dyalog\Dyalog APL-64 16.0 Unicode\dyalog.exe" RIDE_INIT=CONNECT:10.0.38.1:4502`
+
+4. place **"** marks around the path
+5. append `RIDE_INIT=CONNECT:10.0.38.1:4502`
+6. Click OK.
 
 ## The Zero Footprint RIDE
 
@@ -269,27 +306,17 @@ The Zero Footprint RIDE provides the same features for viewing and developing AP
 - Behaviour that is provided by the browser (undo/redo, cut/copy/paste, change font size) does not appear in the RIDE's menus.
 - Window captions cannot be controlled.
 
-To make the Zero Footprint RIDE available from a web browser
+---
+**To make the Zero Footprint RIDE available from a web browser**
 
 1. Install Dyalog and the RIDE. These must both be installed on the same machine; the RIDE must be installed in its default location. On non-Windows platforms the Zero Footprint RIDE is automatically installed when Dyalog is installed. For information on installing the RIDE on Microsoft Windows, see [Installing on Windows](installing_on_windows.md)
 2. Set the `RIDE_INIT` configuration parameter to `HTTP:address:port` (see [RIDE Init](ride_init.md)), for example, `RIDE_INIT=HTTP:*:8080`.
 3. Start a Dyalog session.
+    
+    The Zero Footprint RIDE can now be accessed from a web browser by navigating to `http://<address>:<port>`, for example, `http://10.0.38.1:8080`.
 
-On non-Windows platforms (IBM AIX, macOS and Linux), the interpreter expects to find the Zero Footprint RIDE files in the DYALOG/RIDEapp directory; this removes the need to include the `HttpDir` field in a configuration file (if one is used – see [Configuration INI-file](configuration_ini_file.md)).
+---
 
-Alternatively, start a Dyalog Session and enter:
+On non-Windows platforms (IBM AIX, macOS and Linux), the interpreter expects to find the Zero Footprint RIDE files in the `[DYALOG]/RIDEapp` directory; this removes the need to include the `HttpDir` field in a [configuration file](installation.md#configuration-ini-file).
 
-`3502⌶'CONNECT:jaypc.dyalog.bramley:4502' 3502⌶1`
 
-The new Dyalog Session will connect to the RIDE and remain connected until the Dyalog Session is terminated.
-
-!!! note
-    On Microsoft Windows, an alternative to using the command window is to create a shortcut with the appropriate settings.
-            
-To configure the shortcut
-1. Select the appropriate Dyalog installation and create a shortcut to it.
-2. Right-click on the shortcut icon and select Properties from the context menu that is displayed.
-3. In the Shortcut tab, go to the Target field and:place " marks around the pathappend `RIDE_INIT=CONNECT:10.0.38.1:4502`
-4. place " marks around the path
-5. append `RIDE_INIT=CONNECT:10.0.38.1:4502`
-6. Click OK.
