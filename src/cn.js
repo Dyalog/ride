@@ -1032,7 +1032,7 @@
     q.sve.onclick = () => { save(); };
     q.neu.onclick = () => {
       if ($(q.rhs).is(':hidden')) {
-        I.cn.toggleMaximize();
+        q.tgl_cfg.click();
       }
       const $e = $(favDOM({}));
       q.favs.appendChild($e[0]);
