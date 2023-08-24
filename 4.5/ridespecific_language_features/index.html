@@ -599,6 +599,8 @@
 <li><code>1</code>: the Session is running through the RIDE</li>
 </ul>
 <h3 id="3502-manage-ride-connectors">3502⌶ (Manage RIDE Connectors)</h3>
+<div class="admonition note">
+<p class="admonition-title">Microsoft Windows</p>
 <p>By default, the RIDE is not enabled on run-time executables. For security reasons, enabling the RIDE is a two-step process rather than using (for example) a single configuration parameter. To enable the RIDE, two steps must be taken:</p>
 <ol>
 <li>Set the <code>RIDE_INIT</code> configuration parameter (see <a href="../ride_init/">RIDE Init</a>) on the machine on which the run-time interpreter is running to an appropriate value.</li>
@@ -606,6 +608,7 @@
 </ol>
 <p>The run time interpreter can then attempt to connect to a RIDE client.</p>
 <p>Enabling the RIDE to access applications that use the run-time interpreter means that the APL code of those applications can be accessed. The I-beam mechanism described above means that the APL code itself must grant the right for a RIDE client to connect to the run time interpreter. Although Dyalog Ltd might change the details of this mechanism, the APL code will always need to grant connection rights. In particular, no mechanism that is only dependent on configuration parameters will be implemented.</p>
+</div>
 <p><strong>Syntax</strong>: <code>R←3502⌶Y</code></p>
 <p><code>R</code> is <code>0</code> if the call is successful, otherwise an integer (positive or negative) is returned.</p>
 <p><code>Y</code> can be any of the following possible values:</p>
@@ -676,7 +679,7 @@ How the interpreter should behave with respect to the RIDE protocol. Setting thi
 <ul>
 <li><code>filename</code> is the fully-qualified path to, and name of, a .ini configuration file containing name-value pairs related to mode, certificate details, and so on. The default value for <code>setting</code> is <code>ride.ini</code> (for more information on the .ini configuration file, see <a href="../configuration_ini_file/">here</a>).</li>
 </ul>
-<p>Examples</p>
+<p><strong>Examples</strong></p>
 <p>To listen on port 4502 for connection requests from a RIDE client running on any machine: <code>RIDE_INIT=SERVE:*:4502</code></p>
 <p>To attempt to connect to a RIDE client running on a different machine (with IPv4 address 10.0.38.1 and listening on port 4502) and end the Session if unable to do so:<code>RIDE_INIT=CONNECT:10.0.38.1:4502</code></p>
 <p>To establish a connection using the settings in the ride_sample.ini file:<code>RIDE_INIT=CONFIG:C:/tmp/ride_sample.ini</code></p>
