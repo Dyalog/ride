@@ -1,6 +1,6 @@
 # About This Document
 
-This document introduces the Remote Integrated Development Environment (RIDE). It describes the installation process and the RIDE's user interface (windows, menus, customisation options, keycode/keystroke mappings, etc.).
+This document introduces the Remote Integrated Development Environment (RIDE). It describes the installation process and RIDE's user interface (windows, menus, customisation options, keycode/keystroke mappings, etc.).
 
 RIDE can be extensively customised; this document assumes that the default configuration is in use.
 

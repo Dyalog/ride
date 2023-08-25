@@ -1,24 +1,12 @@
 # Introduction
 
 !!!note
-    The use of the RIDE is subject to the conditions of the [MIT licence](https://github.com/Dyalog/ride/blob/master/licence). The installation and use of the RIDE does not convey any additional rights to use Dyalog or any other Dyalog products. Specifically, although the interpreter can be configured to allow the RIDE to debug runtime executables, you should only do this if your Dyalog licence also allows it.
+    The use of RIDE is subject to the conditions of the [MIT licence](https://github.com/Dyalog/ride/blob/master/licence). The installation and use of RIDE does not convey any additional rights to use Dyalog or any other Dyalog products. Specifically, although the interpreter can be configured to allow RIDE to debug runtime executables, you should only do this if your Dyalog licence also allows it.
 
-The Remote Integrated Development Environment (RIDE) is a cross-platform, graphical development environment capable of producing a rich user experience on a variety of platforms. It supports the interactive use of APL notation to explore data, discover algorithms and create solutions – or diagnose problems, resolve issues and resume the execution of running applications.
+RIDE is a cross-platform, graphical development environment capable of producing a rich user experience. With it, you can use APL interactively to explore data, discover algorithms and create solutions – or diagnose problems, resolve issues and resume the execution of running applications.
 
-The RIDE runs separately from the APL interpreter, and communicates with it using TCP/IP sockets. The RIDE can be run on macOS, Microsoft Windows and Linux (including the Raspberry Pi). In addition to being used as a front end for APL running locally, it can also be used to launch APL sessions on remote machines or to connect to APL interpreters that are already running – either locally or remotely.
+RIDE runs separately from the APL interpreter, but can communicate with any local or remote APL session. It can launch APL sessions on remote machines or to connect to APL interpreters that are already running.
 
-From Dyalog version 17.0, the interpreter can easily be configured to act as a web server which provides the RIDE application as a web page. This makes it possible to run the RIDE in a browser on any platform, without installing it locally. The RIDE needs to be installed on the machine where the interpreter is running, so the files can be provided as a webpage. Because no client-side installation is necessary, this mode is known as Zero Footprint.
+An interpreter can also provide RIDE's interface as a web page. This makes it possible to control a remote interpreter thorugh a browser, without installing RIDE on your machine. For this zero-footprint mode to work on Windows, RIDE needs to be installed on the machine where the interpreter is running, however, it comes with the interpreter installation on all other platforms.
 
-The RIDE has two main modes of use:
-
-- Providing a user interface to an interpreter engine (local or remote).
-
-    The RIDE is the recommended IDE for Dyalog on macOS or Linux (including the Raspberry Pi). In these environments, an application icon is provided to launch RIDE and an APL interpreter together. In this mode, the RIDE and the interpreter can be thought of as a single unit. Under Microsoft Windows, the native Dyalog IDE continues to provide the richest environment for the development of APL applications for Microsoft Windows users.
-
-- As a tool for managing connections to a collection of interpreter sessions.
-
-    In this mode, the RIDE-Dyalog Session dialog box is used to launch or connect to one or more interpreters.
-    
-    !!!note
-        Although the RIDE can manage multiple concurrent Dyalog Sessions, each Dyalog Session can only be connected to a single instance of the RIDE at any one time.
-
+On Windows, the interpreter has a built-in IDE, which continues to provide the richest environment, however, RIDE the recommended interface on all other platforms.
