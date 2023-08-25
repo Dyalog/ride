@@ -334,6 +334,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#navigating-the-windows" class="md-nav__link">
+    Navigating the Windows
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -457,6 +464,13 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#navigating-the-windows" class="md-nav__link">
+    Navigating the Windows
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -481,16 +495,16 @@
 <ul>
 <li>Enter <code>)ED &lt;item name&gt;</code> in the interactive session</li>
 <li>Enter <code>⎕ED '&lt;item name&gt;'</code> in the interactive session</li>
-<li>Press <kbd>Shift</kbd>+<kbd>Enter</kbd> (can be configured via Edit &gt; Preferences&gt; Shortcuts &gt; <code>ED</code>) while the text cursor is on or adjacent to any item name</li>
-<li>Double-click on or adjacent to an item name (can be toggled via Edit &gt; Preferences &gt; Trace/Edit &gt; Double click to edit)</li>
+<li>Press <kbd>Shift</kbd>+<kbd>Enter</kbd> (can be configured via <code>Edit &gt; Preferences&gt; Shortcuts &gt; ED</code>) while the text cursor is on or adjacent to any item name</li>
+<li>Double-click on or adjacent to an item name (can be toggled via <code>Edit &gt; Preferences &gt; Trace/Edit &gt; Double click to edit</code>)</li>
 </ul>
 <p>If the object name does not already exist, then it becomes a function or operator. Different types can be explicitly specified using the <code>)ED</code> or <code>⎕ED</code> options – see <code>)ED</code> or <code>⎕ED</code> in the <a href="https://docs.dyalog.com/latest/Dyalog%20APL%20Language%20Reference%20Guide.pdf">Dyalog APL Language Reference Guide</a>.</p>
 <p>A Trace window can be temporarily changed into an Edit by window by pressing <kbd>Shift</kbd>+<kbd>Enter</kbd> or clicking <img src="../img/screenshots/i_intext_editname.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 12px;" /> while the text cursor is not on or adjacent to any name.</p>
-<p>To save your changes and exit the  Edit window, press <kbd>Esc</kbd> (can be configured via Edit &gt; Preferences&gt; Shortcuts &gt; <code>EP</code>) or click <img src="../img/screenshots/i_intext_quit.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 14px;" />.</p>
-<p>To exit the Edit window without saving, press <kbd>Shift</kbd>+<kbd>Esc</kbd> (can be configured via Edit &gt; Preferences&gt; Shortcuts &gt; <code>QT</code>).</p>
+<p>To save your changes and exit the  Edit window, press <kbd>Esc</kbd> (can be configured via <code>Edit &gt; Preferences&gt; Shortcuts &gt; EP</code>) or click <img src="../img/screenshots/i_intext_quit.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 14px;" />.</p>
+<p>To exit the Edit window without saving, press <kbd>Shift</kbd>+<kbd>Esc</kbd> (can be configured via <code>Edit &gt; Preferences&gt; Shortcuts &gt; QT</code>).</p>
 <h2 id="trace">Trace</h2>
 <p>The <strong>Trace</strong> window aids debugging by enabling you to step through your code line by line, display variables in <strong>Edit</strong> windows and watch them change as the execution progresses.</p>
-<p>A <strong>Trace</strong> window can be opened from the Session window by pressing <kbd>Ctrl</kbd>+<kbd>Enter</kbd> (can be configured via Edit &gt; Preferences&gt; Shortcuts &gt; <code>TC</code>) after typing an expression.</p>
+<p>A <strong>Trace</strong> window can be opened from the <strong>Session</strong> window by pressing <kbd>Ctrl</kbd>+<kbd>Enter</kbd> (can be configured via <code>Edit &gt; Preferences &gt; Shortcuts &gt; TC</code>) after typing an expression.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>By default, Dyalog is also configured to initiate an automatic trace whenever an error occurs, that is, the <strong>Trace</strong> window opens and becomes the active window and the line that caused the execution to suspend is selected. This is controlled by the interpreter configuration parameter <code>TRACE_ON_ERROR</code>. For information on configuration parameters, see the Dyalog Installation and Configuration Guide for your operating system:</p>
@@ -500,10 +514,15 @@
 <li><a href="https://docs.dyalog.com/latest/Dyalog%20for%20UNIX%20Installation%20and%20Configuration%20Guide.pdf">UNIX Installation and Configuration Guide</a></li>
 </ul>
 </div>
-<p>To resume execution, press the |&gt; button (can be given a keyboard shortcut via Edit &gt; Preferences&gt; Shortcuts &gt; <code>RM</code>).</p>
-<p>To resume execution until the current function returns, press the |¯\. button (can be given a keyboard shortcut via Edit &gt; Preferences&gt; Shortcuts &gt; <code>BH</code>).</p>
+<p>To resume execution, press the |&gt; button (can be given a keyboard shortcut via <code>Edit &gt; Preferences&gt; Shortcuts &gt; RM</code>).</p>
+<p>To resume execution until the current function returns, press the |¯\. button (can be given a keyboard shortcut via <code>Edit &gt; Preferences&gt; Shortcuts &gt; BH</code>).</p>
 <p>To cut back the stack one level, press <kbd>Esc</kbd> (can be configured via Edit &gt; Preferences&gt; Shortcuts &gt; <code>EP</code>) or click <img src="../img/screenshots/i_intext_quit.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 14px;" />.</p>
-<p>You can also close all <strong>Trace/Edit</strong> windows without clearing the stack by selecting the <code>Window &gt; Close All Windows</code> menu option or using <a href="https://help.dyalog.com/latest/index.htm#Language/I%20Beam%20Functions/Close%20All%20Windows.htm?Highlight=2023%E2%8C%B6">2023⌶</a>.</p>
+<h2 id="navigating-the-windows">Navigating the Windows</h2>
+<p>New Edit and Trace windows can be floating rather than docked by selecting the <strong>Floating windows</strong> checkbox in the <a href="customising_your_session/.md#windows-tab">Windows tab</a> of the <strong>Preferences</strong> dialog box.</p>
+<p>Docked or not, the <strong>Session</strong>, <strong>Edit</strong> and <strong>Trace</strong> windows form a closed loop for the purpose of navigation:
+- to make the next window in this loop the active window, press <kbd>Tab</kbd> (can be configured via <code>Edit &gt; Preferences&gt; Shortcuts &gt; TB</code>)
+- to make the previous window in this loop the active window, press <kbd>Shift</kbd>+<kbd>Tab</kbd> (can be configured via <code>Edit &gt; Preferences&gt; Shortcuts &gt; BT</code>)</p>
+<p>You can close all <strong>Trace/Edit</strong> windows without clearing the stack by selecting the <code>Window &gt; Close All Windows</code> menu option or using <a href="https://help.dyalog.com/latest/index.htm#Language/I%20Beam%20Functions/Close%20All%20Windows.htm?Highlight=2023%E2%8C%B6">2023⌶</a>.</p>
 
 
 
