@@ -1,3 +1,34 @@
+#abt_ta {
+  border: 1px solid rgba(169, 169, 169, 0.3);
+  background-color: #dde0ec;
+  color: black;
+  cursor: auto;
+  font-family: apl, monospace;
+}
+.ctl_listview {
+  background-color: white;
+  color: black;
+}
+.ctl_listview tr {
+  background-color: rgba(118, 136, 217, 0.5);
+  border-bottom: 1px solid white;
+}
+.ctl_listview tr:hover {
+  background-color: rgba(118, 136, 217, 0.25);
+}
+.ctl_listview tr.selected {
+  background-color: #9eabe4;
+}
+#debug {
+  background: white;
+}
+#debug .ctl_listview_header {
+  background-color: #7688d9;
+  color: white;
+}
+#debug .ctl_listview_header h2 {
+  font-size: 16px;
+}
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),
 #cn textarea {
   border: 1px solid rgba(169, 169, 169, 0.3);
@@ -78,37 +109,6 @@
   font-size: 16px;
   font-family: monospace;
 }
-#abt_ta {
-  border: 1px solid rgba(169, 169, 169, 0.3);
-  background-color: #dde0ec;
-  color: black;
-  cursor: auto;
-  font-family: apl, monospace;
-}
-.ctl_listview {
-  background-color: white;
-  color: black;
-}
-.ctl_listview tr {
-  background-color: rgba(118, 136, 217, 0.5);
-  border-bottom: 1px solid white;
-}
-.ctl_listview tr:hover {
-  background-color: rgba(118, 136, 217, 0.25);
-}
-.ctl_listview tr.selected {
-  background-color: #9eabe4;
-}
-#debug {
-  background: white;
-}
-#debug .ctl_listview_header {
-  background-color: #7688d9;
-  color: white;
-}
-#debug .ctl_listview_header h2 {
-  font-size: 16px;
-}
 /*various dialogs*/
 #dlg_modal_overlay {
   background-color: black;
@@ -158,6 +158,39 @@
   font-weight: normal;
   text-align: left;
   border: 1px solid transparent;
+}
+#lb {
+  background-color: #edeff5;
+  border-bottom: 1px #9eabe4 solid;
+}
+#lb #lb_inner {
+  background: #edeff5;
+}
+#lb b {
+  color: #4c4a4a;
+}
+#lb b:hover {
+  color: #7688d9;
+}
+#lb b:active,
+#lb b.pressed {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: white;
+}
+#lb .lb_placeholder {
+  background: rgba(0, 0, 0, 0.2);
+}
+#lb .ui-sortable-helper {
+  color: black;
+}
+#lb_tip {
+  background: #edeff5;
+  border: 1px solid #d7d7d3;
+  color: black;
+}
+#lb_tip hr {
+  border-top: 1px solid #d7d7d3;
+  border-bottom: 1px solid white;
 }
 /*Golden Layout*/
 .lm_goldenlayout {
@@ -312,39 +345,6 @@ select {
   border: 1px solid rgba(169, 169, 169, 0.3);
   color: #4e65ce;
 }
-#lb {
-  background-color: #edeff5;
-  border-bottom: 1px #9eabe4 solid;
-}
-#lb #lb_inner {
-  background: #edeff5;
-}
-#lb b {
-  color: #4c4a4a;
-}
-#lb b:hover {
-  color: #7688d9;
-}
-#lb b:active,
-#lb b.pressed {
-  background-color: rgba(0, 0, 0, 0.2);
-  color: white;
-}
-#lb .lb_placeholder {
-  background: rgba(0, 0, 0, 0.2);
-}
-#lb .ui-sortable-helper {
-  color: black;
-}
-#lb_tip {
-  background: #edeff5;
-  border: 1px solid #d7d7d3;
-  color: black;
-}
-#lb_tip hr {
-  border-top: 1px solid #d7d7d3;
-  border-bottom: 1px solid white;
-}
 /*menu (see ../src/menu.js for the DOM structure)*/
 .menu {
   background-color: #edeff5;
@@ -380,6 +380,34 @@ select {
 }
 .menu .m-box a:focus.m-checked {
   background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
+}
+::-webkit-scrollbar {
+  background-color: white;
+}
+::-webkit-scrollbar-corner {
+  background-color: white;
+}
+::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+  border: 1px solid white;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgba(118, 136, 217, 0.3);
+  border: 1px solid white;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  border-width: 1px 0;
+}
+::-webkit-scrollbar-thumb:vertical {
+  border-width: 0 1px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(118, 136, 217, 0.6);
+}
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(118, 136, 217, 0.9);
 }
 #prf_dlg hr {
   border-top: 1px solid #d7d7d3;
@@ -561,34 +589,6 @@ a:hover {
     display: none;
   }
 }
-::-webkit-scrollbar {
-  background-color: white;
-}
-::-webkit-scrollbar-corner {
-  background-color: white;
-}
-::-webkit-scrollbar-track {
-  background-color: #f0f0f0;
-  border: 1px solid white;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb {
-  background-color: rgba(118, 136, 217, 0.3);
-  border: 1px solid white;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:horizontal {
-  border-width: 1px 0;
-}
-::-webkit-scrollbar-thumb:vertical {
-  border-width: 0 1px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(118, 136, 217, 0.6);
-}
-::-webkit-scrollbar-thumb:active {
-  background-color: rgba(118, 136, 217, 0.9);
-}
 .breakpointarea {
   border-right: 1px solid #dde0ec;
   cursor: pointer;
@@ -693,9 +693,6 @@ body {
 #sb_right > div {
   border-left: 1px solid #dde0ec;
 }
-#status_body {
-  background-color: #edeff5;
-}
 #toast-container {
   font-family: Roboto;
   font-size: 14px;
@@ -705,6 +702,9 @@ body {
   -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+}
+#status_body {
+  background-color: #edeff5;
 }
 .tooltip {
   color: #7688d9;
@@ -717,14 +717,6 @@ body {
 .tooltip .tooltiptext::after {
   border-color: transparent #dde0ec transparent transparent;
 }
-#vt_bln {
-  border: solid black 1px;
-  background-color: black;
-  color: white;
-}
-#vt_tri {
-  border-color: black;
-}
 .toolbar {
   background-color: white;
   border-bottom: 1px solid #dde0ec;
@@ -735,22 +727,50 @@ body {
   box-shadow: none!important;
   border-radius: 0!important;
 }
+.tb_btn svg {
+  vertical-align: middle;
+}
+.tb_btn path {
+  stroke: #4c4a4a;
+  stroke-width: 0.3px;
+}
 .tb_btn:hover {
   color: #7688d9;
+}
+.tb_btn:hover path {
+  fill: #7688d9;
+  stroke: #7688d9;
 }
 .tb_btn:active,
 .tb_btn.pressed {
   background-color: rgba(76, 74, 74, 0.75);
   color: white;
 }
+.tb_btn:active path,
+.tb_btn.pressed path {
+  fill: white;
+  stroke: white;
+}
 .tb_btn:disabled {
   background: transparent!important;
   color: rgba(169, 169, 169, 0.3);
   cursor: inherit;
 }
+.tb_btn:disabled path {
+  stroke: rgba(169, 169, 169, 0.3);
+  fill: rgba(169, 169, 169, 0.3);
+}
 .tb_sep {
   border: 0 solid #dde0ec;
   border-right-width: 1px;
+}
+#vt_bln {
+  border: solid black 1px;
+  background-color: black;
+  color: white;
+}
+#vt_tri {
+  border-color: black;
 }
 #wse {
   background-color: white;

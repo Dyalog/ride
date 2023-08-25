@@ -1,3 +1,10 @@
+#abt_ta {
+  border: 1px solid rgba(169, 169, 169, 0.3);
+  background-color: #272937;
+  color: white;
+  cursor: auto;
+  font-family: apl, monospace;
+}
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),
 #cn textarea {
   border: 1px solid rgba(169, 169, 169, 0.3);
@@ -77,13 +84,6 @@
 .cn_dlg_content pre {
   font-size: 16px;
   font-family: monospace;
-}
-#abt_ta {
-  border: 1px solid rgba(169, 169, 169, 0.3);
-  background-color: #272937;
-  color: white;
-  cursor: auto;
-  font-family: apl, monospace;
 }
 .ctl_listview {
   background-color: #1c1e28;
@@ -345,6 +345,42 @@ select {
   border-top: 1px solid black;
   border-bottom: 1px solid #2e303e;
 }
+/*menu (see ../src/menu.js for the DOM structure)*/
+.menu {
+  background-color: #edeff5;
+  border-bottom: solid grey 1px;
+}
+.menu a,
+.menu a:hover {
+  color: black;
+  font-size: 0.8em;
+}
+.menu .m-open {
+  background: rgba(0, 0, 0, 0.2);
+}
+.menu .m-open .m-top {
+  border-color: transparent;
+}
+.menu .m-box {
+  background-color: white;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+.menu .m-box a {
+  border: none;
+  border-color: #edeff5;
+}
+.menu .m-box a .m-shc {
+  color: white;
+}
+.menu .m-box a:focus {
+  background: rgba(0, 0, 0, 0.2);
+}
+.menu .m-box a.m-checked {
+  background: transparent 5px center no-repeat url(img/menu_chk.png);
+}
+.menu .m-box a:focus.m-checked {
+  background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
+}
 .breakpointarea {
   border-right: 1px solid #272937;
   cursor: pointer;
@@ -411,42 +447,6 @@ select {
 }
 .sessionmargin.modified::before {
   color: red;
-}
-/*menu (see ../src/menu.js for the DOM structure)*/
-.menu {
-  background-color: #edeff5;
-  border-bottom: solid grey 1px;
-}
-.menu a,
-.menu a:hover {
-  color: black;
-  font-size: 0.8em;
-}
-.menu .m-open {
-  background: rgba(0, 0, 0, 0.2);
-}
-.menu .m-open .m-top {
-  border-color: transparent;
-}
-.menu .m-box {
-  background-color: white;
-  border-color: rgba(0, 0, 0, 0.2);
-}
-.menu .m-box a {
-  border: none;
-  border-color: #edeff5;
-}
-.menu .m-box a .m-shc {
-  color: white;
-}
-.menu .m-box a:focus {
-  background: rgba(0, 0, 0, 0.2);
-}
-.menu .m-box a.m-checked {
-  background: transparent 5px center no-repeat url(img/menu_chk.png);
-}
-.menu .m-box a:focus.m-checked {
-  background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
 }
 #prf_dlg hr {
   border-top: 1px solid black;
@@ -628,6 +628,28 @@ a:hover {
     display: none;
   }
 }
+#splash {
+  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #1c1e28;
+}
+#ide {
+  background-color: #1c1e28;
+}
+#apl_font {
+  color: #1c1e28;
+}
+::selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+::-moz-selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+body {
+  font-family: Roboto, sans-serif;
+}
 ::-webkit-scrollbar {
   background-color: #1c1e28;
 }
@@ -656,28 +678,6 @@ a:hover {
 ::-webkit-scrollbar-thumb:active {
   background-color: rgba(118, 136, 217, 0.9);
 }
-#splash {
-  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #1c1e28;
-}
-#ide {
-  background-color: #1c1e28;
-}
-#apl_font {
-  color: #1c1e28;
-}
-::selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-::-moz-selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-body {
-  font-family: Roboto, sans-serif;
-}
 #sb {
   background-color: #1c1e28;
   border-top: 1px solid black;
@@ -693,6 +693,19 @@ body {
 #sb_right > div {
   border-left: 1px solid #272937;
 }
+#status_body {
+  background-color: #1c1e28;
+}
+#toast-container {
+  font-family: Roboto;
+  font-size: 14px;
+  line-height: 20px;
+}
+#toast-container > div {
+  -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+}
 .tooltip {
   color: #7688d9;
 }
@@ -704,17 +717,6 @@ body {
 .tooltip .tooltiptext::after {
   border-color: transparent #1c1e28 transparent transparent;
 }
-#status_body {
-  background-color: #1c1e28;
-}
-#vt_bln {
-  border: solid black 1px;
-  background-color: black;
-  color: white;
-}
-#vt_tri {
-  border-color: black;
-}
 .toolbar {
   background-color: #1c1e28;
   border-bottom: 1px solid #272937;
@@ -725,22 +727,50 @@ body {
   box-shadow: none!important;
   border-radius: 0!important;
 }
+.tb_btn svg {
+  vertical-align: middle;
+}
+.tb_btn path {
+  stroke: #a9a9a9;
+  stroke-width: 0.3px;
+}
 .tb_btn:hover {
   color: #7688d9;
+}
+.tb_btn:hover path {
+  fill: #7688d9;
+  stroke: #7688d9;
 }
 .tb_btn:active,
 .tb_btn.pressed {
   background-color: rgba(169, 169, 169, 0.75);
   color: #1c1e28;
 }
+.tb_btn:active path,
+.tb_btn.pressed path {
+  fill: #1c1e28;
+  stroke: #1c1e28;
+}
 .tb_btn:disabled {
   background: transparent!important;
   color: rgba(169, 169, 169, 0.3);
   cursor: inherit;
 }
+.tb_btn:disabled path {
+  stroke: rgba(169, 169, 169, 0.3);
+  fill: rgba(169, 169, 169, 0.3);
+}
 .tb_sep {
   border: 0 solid #272937;
   border-right-width: 1px;
+}
+#vt_bln {
+  border: solid black 1px;
+  background-color: black;
+  color: white;
+}
+#vt_tri {
+  border-color: black;
 }
 #wse {
   background-color: #1c1e28;
@@ -757,14 +787,4 @@ body {
 #wse .bt_text.selected {
   background-color: rgba(118, 136, 217, 0.75);
   outline: rgba(118, 136, 217, 0.75);
-}
-#toast-container {
-  font-family: Roboto;
-  font-size: 14px;
-  line-height: 20px;
-}
-#toast-container > div {
-  -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
 }
