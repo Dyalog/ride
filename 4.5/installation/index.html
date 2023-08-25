@@ -276,40 +276,33 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#pre-requisites" class="md-nav__link">
-    Pre-requisites
+  <a href="#font-and-keyboard-support" class="md-nav__link">
+    Font and Keyboard Support
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#installing-the-ride" class="md-nav__link">
-    Installing the RIDE
-  </a>
-  
-    <nav class="md-nav" aria-label="Installing the RIDE">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#zero-footprint" class="md-nav__link">
-    Zero Footprint
+    Zero-Footprint
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#installing-on-linux" class="md-nav__link">
-    Installing on Linux
+      
+        <li class="md-nav__item">
+  <a href="#linux" class="md-nav__link">
+    Linux
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#installing-on-macos" class="md-nav__link">
-    Installing on macOS
+      
+        <li class="md-nav__item">
+  <a href="#macos" class="md-nav__link">
+    macOS
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="macOS">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#installing-on-microsoft-windows" class="md-nav__link">
@@ -485,40 +478,33 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#pre-requisites" class="md-nav__link">
-    Pre-requisites
+  <a href="#font-and-keyboard-support" class="md-nav__link">
+    Font and Keyboard Support
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#installing-the-ride" class="md-nav__link">
-    Installing the RIDE
-  </a>
-  
-    <nav class="md-nav" aria-label="Installing the RIDE">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
   <a href="#zero-footprint" class="md-nav__link">
-    Zero Footprint
+    Zero-Footprint
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#installing-on-linux" class="md-nav__link">
-    Installing on Linux
+      
+        <li class="md-nav__item">
+  <a href="#linux" class="md-nav__link">
+    Linux
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#installing-on-macos" class="md-nav__link">
-    Installing on macOS
+      
+        <li class="md-nav__item">
+  <a href="#macos" class="md-nav__link">
+    macOS
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="macOS">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
   <a href="#installing-on-microsoft-windows" class="md-nav__link">
@@ -558,89 +544,49 @@
 
 
 <h1 id="installation">Installation</h1>
-<p>This chapter describes how to install the RIDE.</p>
-<h2 id="pre-requisites">Pre-requisites</h2>
-<p>RIDE can only connect to a Dyalog interpreter that is version 15.0 or later.</p>
-<p>The RIDE is supported on the following operating systems:</p>
-<ul>
-<li>
-<p>Linux x86_64 – the following distributions: </p>
-<ul>
-<li>Debian 8 onwards</li>
-<li>Fedora 25 onwards</li>
-<li>Ubuntu 14.04 onwards</li>
-</ul>
-<p>distributions built on top of these should also work (Linux distribution must also have libnss version 3.26 onwards)</p>
-</li>
-<li>
-<p>macOS – Yosemite onwards</p>
-</li>
-<li>Microsoft Windows – Windows 7 onwards</li>
-</ul>
-<p>For the zero-footprint RIDE:</p>
-<ul>
-<li>a compatible browser must be installed.</li>
-<li>the operating system must be supported by the underlying <a href="https://electronjs.org">technology</a>.</li>
-</ul>
-<p>If Dyalog is not installed on the machine that the RIDE is being installed on, then the APL385 font and keyboard mappings installed with the RIDE mean that they are available when running a Dyalog Session through the RIDE. However, to be able to enter APL glyphs outside a Dyalog Session (for example, in text files or emails) you will need to download and install the <a href="https://www.dyalog.com/apl-font-keyboard.htm">appropriate files</a> for your system.</p>
-<h2 id="installing-the-ride">Installing the RIDE</h2>
-<p>Installation instructions are dependent on operating system.</p>
-<h3 id="zero-footprint">Zero Footprint</h3>
-<p>The use of the RIDE from a browser requires no installation on the machine where the RIDE will run. However, the RIDE must be installed on the machine where APL is installed, so that Dyalog can act as a web server, making the necessary files available to the browser.</p>
+<h2 id="font-and-keyboard-support">Font and Keyboard Support</h2>
+<p>If Dyalog is not installed on the machine that RIDE is being installed on, then the APL385 Unicode font and keyboard mappings installed with RIDE mean that they are available within RIDE. However, to be able to enter APL glyphs outside RIDE, see <a href="https://www.dyalog.com/apl-font-keyboard.htm">APL Fonts and Keyboards</a>.</p>
+<h2 id="zero-footprint">Zero-Footprint</h2>
+<p>The use of RIDE from a browser requires no installation on the machine where RIDE will run; all you need is a  modern browser.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>When installing the RIDE, if you select the default location suggested by the installer then APL can be launched as a RIDE server without creating a <a href="../sample_configuration_file/">configuration file</a>.</p>
 </div>
-<p>On non-Windows platforms, the Zero Footprint RIDE is automatically installed to the default location (<strong>[DYALOG]/RIDEapp</strong>) when Dyalog is installed and no additional installation is necessary to use the <a href="../the_zero_footprint_ride/">Zero Footprint RIDE</a> from a browser.</p>
-<h3 id="installing-on-linux">Installing on Linux</h3>
-<p>The installation process for the RIDE is the same irrespective of whether it is installed as a stand-alone product or on a machine that already has Dyalog installed.</p>
-<hr />
-<p><strong>To install the RIDE</strong></p>
+<p>On non-Windows platforms, zero-footprint RIDE is automatically installed to the default location (<strong>[DYALOG]/RIDEapp</strong>) when Dyalog is installed and no additional installation is necessary. On Windows, zero-footprint RIDE needs separate installation.</p>
+<p>For details, see <a href="../the_zero_footprint_ride/">Zero Footprint RIDE</a>.</p>
+<h2 id="linux">Linux</h2>
+<p>RIDE requires Debian 8+, Fedora 14.04+, or Ubuntu 10.10+. Distributions built on top of the above should also work, provided that they have libnss version 3.26 or newer.</p>
 <ol>
-<li>Download the RIDE's <strong>.deb</strong> or <strong>.rpm</strong> file (whichever is appropriate for your Linux distribution) from the <a href="https://github.com/Dyalog/ride/releases">RIDE releases page</a>. If your Linux distribution does not support either <strong>.deb</strong> or <strong>.rpm</strong> files, then please contact support@dyalog.com.</li>
-<li>
-<p>From the command line, use standard installation commands to install the package.</p>
-<p>The RIDE is now installed and ready to use. The RIDE icon (shortcut) is added to the desktop.</p>
-</li>
+<li>Download the <strong>.deb</strong> or <strong>.rpm</strong> file (whichever is appropriate for your Linux distribution) from the <a href="https://github.com/Dyalog/ride/releases">RIDE releases page</a>. If your Linux distribution does not support either <strong>.deb</strong> or <strong>.rpm</strong> files, then please contact support@dyalog.com.</li>
+<li>From the command line, use standard installation commands to install the package.</li>
 </ol>
-<hr />
-<h3 id="installing-on-macos">Installing on macOS</h3>
+<p>A RIDE shortcut is added to the desktop.</p>
+<h2 id="macos">macOS</h2>
+<p>RIDE requires macOS Yosemite (10.10) or better.</p>
 <p>The RIDE is the default UI for Dyalog on macOS and is installed at the same time as Dyalog (see the <a href="https://docs.dyalog.com/latest/Dyalog%20for%20macOS%20Installation%20and%20Configuration%20Guide.pdf">Dyalog for macOS Installation and Configuration Guide</a>); no further installation is required.</p>
-<hr />
-<p><strong>To install the RIDE as a separate, stand-alone, product</strong></p>
+<p>You can also install RIDE as a separate, stand-alone, product, for example to work exclusively with remote APL interpreters:</p>
 <ol>
-<li>Download the RIDE's <strong>.pkg</strong> file from the <a href="https://github.com/Dyalog/ride/releases">RIDE releases page</a>.</li>
-<li>
-<p>Double-click on the RIDE's <strong>.pkg</strong> file.</p>
-<p>The <strong>RIDE Installer</strong> window is displayed.</p>
-</li>
-<li>
-<p>Follow the instructions in the RIDE Installer window to successful completion of the installation process.</p>
-<p>The RIDE is now installed and ready to use. The RIDE icon is added to the <strong>Applications</strong> directory (accessed by selecting <strong>Applications</strong> from the <strong>Go</strong> menu in the <strong>Finder</strong> menu bar).</p>
-</li>
+<li>Download the <strong>.pkg</strong> file from the <a href="https://github.com/Dyalog/ride/releases">RIDE releases page</a>.</li>
+<li>Double-click on the RIDE's <strong>.pkg</strong> file.</li>
+<li>Follow the instructions.</li>
 </ol>
+<p>RIDE is added to the <strong>Applications</strong> directory (accessed by selecting <strong>Applications</strong> from the <strong>Go</strong> menu in the <strong>Finder</strong> menu bar).</p>
 <hr />
 <p>Starting the RIDE adds its icon to the dock. To keep the RIDE icon in the dock permanently, right-click on the icon and select <strong>Options &gt; Keep in Dock</strong> from the drop-down list that appears.</p>
 <h3 id="installing-on-microsoft-windows">Installing on Microsoft Windows</h3>
-<p>The installation process for the RIDE is the same irrespective of whether it is installed as a stand-alone product or on a machine that already has Dyalog installed.</p>
-<hr />
-<p><strong>To install the RIDE</strong></p>
+<p>RIDE requires Windows 7 or newer.</p>
 <ol>
-<li>Download the RIDE's <strong>.zip</strong> file from the <a href="https://github.com/Dyalog/ride/releases">RIDE releases page</a>.</li>
+<li>Download the <strong>.zip</strong> file from the <a href="https://github.com/Dyalog/ride/releases">RIDE releases page</a>.</li>
 <li>Unzip the downloaded <strong>.zip</strong> file, placing the <code>setup_ride.exe</code> and <code>setup_ride.msi</code> files in the same location as each other.</li>
-<li>
-<p>Double-click on the <code>setup_ride.exe</code> file.</p>
-<p>The <strong>RIDE Installation window</strong> is displayed.
-4. Follow the instructions in the RIDE Installation window to successful completion of the installation process.</p>
-<p>The RIDE is now installed and ready to use. The RIDE icon (shortcut) is added to the desktop.</p>
-</li>
+<li>Double-click on the <code>setup_ride.exe</code> file.</li>
+<li>Follow the instructions.</li>
 </ol>
-<hr />
+<p>A RIDE shortcut is added to the desktop</p>
 <h2 id="configuration-ini-file">Configuration (.ini) File</h2>
 <p>A <strong>.ini</strong> configuration file can be used to define settings for the <code>RIDE_INIT</code> configuration parameter. By default, the interpreter will look for a <strong>ride.ini</strong> file in:</p>
 <ul>
 <li>the directory in which the default session and log files are stored, for example, <strong>C:\Users\JohnDoe\AppData\Local\Programs\Dyalog</strong> (on Microsoft Windows)</li>
-<li><strong>$HOME/.dyalog</strong> (on IBM AIX, macOS and Linux)</li>
+<li><strong>$HOME/.dyalog</strong> (on all other platforms)</li>
 </ul>
 <p>This file is not automatically created by Dyalog but can be created manually. Examples of the fields that you might want to include within the <strong>.ini</strong> configuration file are included in the <a href="../sample_configuration_file/">sample configuration file</a>.</p>
 <p>A different name and location for the .ini configuration file can be specified by including a second <code>mode</code>, <code>CONFIG</code>, in the <a href="../ride_init/">RIDE_INIT</a> parameter and setting it so that <code>CONFIG=&lt;filename&gt;</code>, where <code>&lt;filename&gt;</code> is the fully-qualified path to, and name of, a <strong>.ini</strong> configuration file containing name-value pairs related to mode, certificate details, and so on.</p>
