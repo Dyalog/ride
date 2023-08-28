@@ -109,56 +109,6 @@
 #debug .ctl_listview_header h2 {
   font-size: 16px;
 }
-/*various dialogs*/
-#dlg_modal_overlay {
-  background-color: black;
-  opacity: 0.2;
-}
-.dlg {
-  background-color: #1c1e28;
-  outline: none;
-}
-.dlg div {
-  outline: none;
-}
-.dlg_title,
-.dlg_close {
-  color: #7688d9;
-}
-.dlg_close:hover {
-  background-color: white;
-}
-#cn_listen_dlg,
-#cn_connecting_dlg {
-  border: 1px solid #7688d9;
-}
-#gd.dlg {
-  background-color: #1c1e28;
-}
-#gd .dlg_title,
-#gd .dlg_close {
-  color: #828282;
-}
-#gd .dlg_close:hover {
-  color: white;
-  background-color: #323446;
-}
-#gd_content {
-  color: #a9a9a9;
-}
-.dlg_btns {
-  background-color: #323446;
-}
-.dlg_btns button.task {
-  background-image: none;
-  background-color: rgba(0, 0, 0, 0);
-  color: #7688d9;
-  text-transform: none;
-  font-size: small;
-  font-weight: normal;
-  text-align: left;
-  border: 1px solid transparent;
-}
 /*Golden Layout*/
 .lm_goldenlayout {
   background: #272937 !important;
@@ -248,6 +198,89 @@
   background-color: white;
   border: 1px dashed #7688d9;
 }
+/*various dialogs*/
+#dlg_modal_overlay {
+  background-color: black;
+  opacity: 0.2;
+}
+.dlg {
+  background-color: #1c1e28;
+  outline: none;
+}
+.dlg div {
+  outline: none;
+}
+.dlg_title,
+.dlg_close {
+  color: #7688d9;
+}
+.dlg_close:hover {
+  background-color: white;
+}
+#cn_listen_dlg,
+#cn_connecting_dlg {
+  border: 1px solid #7688d9;
+}
+#gd.dlg {
+  background-color: #1c1e28;
+}
+#gd .dlg_title,
+#gd .dlg_close {
+  color: #828282;
+}
+#gd .dlg_close:hover {
+  color: white;
+  background-color: #323446;
+}
+#gd_content {
+  color: #a9a9a9;
+}
+.dlg_btns {
+  background-color: #323446;
+}
+.dlg_btns button.task {
+  background-image: none;
+  background-color: rgba(0, 0, 0, 0);
+  color: #7688d9;
+  text-transform: none;
+  font-size: small;
+  font-weight: normal;
+  text-align: left;
+  border: 1px solid transparent;
+}
+#lb {
+  background-color: #1c1e28;
+  border-bottom: 1px black solid;
+}
+#lb #lb_inner {
+  background: #1c1e28;
+}
+#lb b {
+  color: #a9a9a9;
+}
+#lb b:hover {
+  color: #7688d9;
+}
+#lb b:active,
+#lb b.pressed {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: white;
+}
+#lb .lb_placeholder {
+  background: rgba(0, 0, 0, 0.2);
+}
+#lb .ui-sortable-helper {
+  color: black;
+}
+#lb_tip {
+  background: #1c1e28;
+  border: 1px solid black;
+  color: #a9a9a9;
+}
+#lb_tip hr {
+  border-top: 1px solid black;
+  border-bottom: 1px solid #2e303e;
+}
 label {
   color: #a9a9a9;
   font-family: Roboto;
@@ -311,39 +344,6 @@ select {
   background-color: #272937;
   border: 1px solid rgba(169, 169, 169, 0.3);
   color: white;
-}
-#lb {
-  background-color: #1c1e28;
-  border-bottom: 1px black solid;
-}
-#lb #lb_inner {
-  background: #1c1e28;
-}
-#lb b {
-  color: #a9a9a9;
-}
-#lb b:hover {
-  color: #7688d9;
-}
-#lb b:active,
-#lb b.pressed {
-  background-color: rgba(0, 0, 0, 0.2);
-  color: white;
-}
-#lb .lb_placeholder {
-  background: rgba(0, 0, 0, 0.2);
-}
-#lb .ui-sortable-helper {
-  color: black;
-}
-#lb_tip {
-  background: #1c1e28;
-  border: 1px solid black;
-  color: #a9a9a9;
-}
-#lb_tip hr {
-  border-top: 1px solid black;
-  border-bottom: 1px solid #2e303e;
 }
 /*menu (see ../src/menu.js for the DOM structure)*/
 .menu {
@@ -447,6 +447,28 @@ select {
 }
 .sessionmargin.modified::before {
   color: red;
+}
+#splash {
+  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #1c1e28;
+}
+#ide {
+  background-color: #1c1e28;
+}
+#apl_font {
+  color: #1c1e28;
+}
+::selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+::-moz-selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+body {
+  font-family: Roboto, sans-serif;
 }
 #prf_dlg hr {
   border-top: 1px solid black;
@@ -628,28 +650,6 @@ a:hover {
     display: none;
   }
 }
-#splash {
-  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #1c1e28;
-}
-#ide {
-  background-color: #1c1e28;
-}
-#apl_font {
-  color: #1c1e28;
-}
-::selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-::-moz-selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-body {
-  font-family: Roboto, sans-serif;
-}
 ::-webkit-scrollbar {
   background-color: #1c1e28;
 }
@@ -696,16 +696,6 @@ body {
 #status_body {
   background-color: #1c1e28;
 }
-#toast-container {
-  font-family: Roboto;
-  font-size: 14px;
-  line-height: 20px;
-}
-#toast-container > div {
-  -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-}
 .tooltip {
   color: #7688d9;
 }
@@ -716,6 +706,40 @@ body {
 }
 .tooltip .tooltiptext::after {
   border-color: transparent #1c1e28 transparent transparent;
+}
+#toast-container {
+  font-family: Roboto;
+  font-size: 14px;
+  line-height: 20px;
+}
+#toast-container > div {
+  -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+}
+#vt_bln {
+  border: solid black 1px;
+  background-color: black;
+  color: white;
+}
+#vt_tri {
+  border-color: black;
+}
+#wse {
+  background-color: #1c1e28;
+  color: white;
+  font-family: apl;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: 1.1em;
+  text-align: left;
+}
+#wse .bt_text::before {
+  color: #1c1e28;
+}
+#wse .bt_text.selected {
+  background-color: rgba(118, 136, 217, 0.75);
+  outline: rgba(118, 136, 217, 0.75);
 }
 .toolbar {
   background-color: #1c1e28;
@@ -733,6 +757,22 @@ body {
 .tb_btn path {
   stroke: #a9a9a9;
   stroke-width: 0.3px;
+}
+.tb_btn .canvas {
+  fill: none;
+  opacity: 0;
+}
+.tb_btn .light {
+  fill: #a9a9a9;
+  opacity: 0.1;
+}
+.tb_btn .middle {
+  fill: #a9a9a9;
+  opacity: 0.5;
+}
+.tb_btn .full {
+  fill: #a9a9a9;
+  opacity: 1;
 }
 .tb_btn:hover {
   color: #7688d9;
@@ -763,28 +803,4 @@ body {
 .tb_sep {
   border: 0 solid #272937;
   border-right-width: 1px;
-}
-#vt_bln {
-  border: solid black 1px;
-  background-color: black;
-  color: white;
-}
-#vt_tri {
-  border-color: black;
-}
-#wse {
-  background-color: #1c1e28;
-  color: white;
-  font-family: apl;
-  font-size: 16px;
-  font-weight: 300;
-  line-height: 1.1em;
-  text-align: left;
-}
-#wse .bt_text::before {
-  color: #1c1e28;
-}
-#wse .bt_text.selected {
-  background-color: rgba(118, 136, 217, 0.75);
-  outline: rgba(118, 136, 217, 0.75);
 }

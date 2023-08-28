@@ -5,30 +5,6 @@
   cursor: auto;
   font-family: apl, monospace;
 }
-.ctl_listview {
-  background-color: white;
-  color: black;
-}
-.ctl_listview tr {
-  background-color: rgba(118, 136, 217, 0.5);
-  border-bottom: 1px solid white;
-}
-.ctl_listview tr:hover {
-  background-color: rgba(118, 136, 217, 0.25);
-}
-.ctl_listview tr.selected {
-  background-color: #9eabe4;
-}
-#debug {
-  background: white;
-}
-#debug .ctl_listview_header {
-  background-color: #7688d9;
-  color: white;
-}
-#debug .ctl_listview_header h2 {
-  font-size: 16px;
-}
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),
 #cn textarea {
   border: 1px solid rgba(169, 169, 169, 0.3);
@@ -159,38 +135,29 @@
   text-align: left;
   border: 1px solid transparent;
 }
-#lb {
-  background-color: #edeff5;
-  border-bottom: 1px #9eabe4 solid;
+.ctl_listview {
+  background-color: white;
+  color: black;
 }
-#lb #lb_inner {
-  background: #edeff5;
+.ctl_listview tr {
+  background-color: rgba(118, 136, 217, 0.5);
+  border-bottom: 1px solid white;
 }
-#lb b {
-  color: #4c4a4a;
+.ctl_listview tr:hover {
+  background-color: rgba(118, 136, 217, 0.25);
 }
-#lb b:hover {
-  color: #7688d9;
+.ctl_listview tr.selected {
+  background-color: #9eabe4;
 }
-#lb b:active,
-#lb b.pressed {
-  background-color: rgba(0, 0, 0, 0.2);
+#debug {
+  background: white;
+}
+#debug .ctl_listview_header {
+  background-color: #7688d9;
   color: white;
 }
-#lb .lb_placeholder {
-  background: rgba(0, 0, 0, 0.2);
-}
-#lb .ui-sortable-helper {
-  color: black;
-}
-#lb_tip {
-  background: #edeff5;
-  border: 1px solid #d7d7d3;
-  color: black;
-}
-#lb_tip hr {
-  border-top: 1px solid #d7d7d3;
-  border-bottom: 1px solid white;
+#debug .ctl_listview_header h2 {
+  font-size: 16px;
 }
 /*Golden Layout*/
 .lm_goldenlayout {
@@ -345,6 +312,39 @@ select {
   border: 1px solid rgba(169, 169, 169, 0.3);
   color: #4e65ce;
 }
+#lb {
+  background-color: #edeff5;
+  border-bottom: 1px #9eabe4 solid;
+}
+#lb #lb_inner {
+  background: #edeff5;
+}
+#lb b {
+  color: #4c4a4a;
+}
+#lb b:hover {
+  color: #7688d9;
+}
+#lb b:active,
+#lb b.pressed {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: white;
+}
+#lb .lb_placeholder {
+  background: rgba(0, 0, 0, 0.2);
+}
+#lb .ui-sortable-helper {
+  color: black;
+}
+#lb_tip {
+  background: #edeff5;
+  border: 1px solid #d7d7d3;
+  color: black;
+}
+#lb_tip hr {
+  border-top: 1px solid #d7d7d3;
+  border-bottom: 1px solid white;
+}
 /*menu (see ../src/menu.js for the DOM structure)*/
 .menu {
   background-color: #edeff5;
@@ -380,6 +380,73 @@ select {
 }
 .menu .m-box a:focus.m-checked {
   background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
+}
+.breakpointarea {
+  border-right: 1px solid #dde0ec;
+  cursor: pointer;
+}
+.breakpointarea:hover::before {
+  color: rgba(255, 0, 0, 0.5);
+  content: '⬤';
+  font-size: 0.7em;
+}
+.breakpointarea.monitorpoint.breakpoint.tracepoint::before,
+.breakpointarea.monitorpoint.breakpoint::before,
+.breakpointarea.monitorpoint.tracepoint::before,
+.breakpointarea.breakpoint.tracepoint::before {
+  border: none;
+  background: none;
+  color: #999;
+  content: '+';
+  font-size: 1.3em;
+  text-shadow: 1px 1px black, -1px -1px black, 1px -1px black, -1px 1px black;
+}
+.breakpointarea.monitorpoint::before {
+  color: black;
+  content: '┘';
+  font-size: 0.45em;
+  border: 1px solid black;
+  border-radius: 1em;
+  width: 3ex;
+  text-align: center;
+  line-height: 3ex;
+  background: white;
+  text-shadow: 1px 1px black,0 1px black,1px 0 black;
+}
+.breakpointarea.breakpoint::before {
+  color: red;
+  content: '⬤';
+  font-size: 0.6em;
+  text-shadow: 1px 1px black, -1px -1px black, 1px -1px black, -1px 1px black;
+}
+.breakpointarea.tracepoint::before {
+  color: yellow;
+  content: '⬤';
+  font-size: 0.6em;
+  text-shadow: 1px 1px black, -1px -1px black, 1px -1px black, -1px 1px black;
+}
+.highlighted {
+  border: none;
+  outline: solid red 1px;
+}
+.sessionmargin {
+  border-right: 1px solid #dde0ec;
+  font-size: 1em;
+}
+.sessionmargin.group_start::before {
+  content: '┌';
+}
+.sessionmargin.group_middle::before {
+  content: '│';
+}
+.sessionmargin.group_end::before {
+  content: '└';
+}
+.sessionmargin.modified:not(.group_start,.group_middle,.group_end)::before {
+  content: '∙';
+}
+.sessionmargin.modified::before {
+  color: red;
 }
 ::-webkit-scrollbar {
   background-color: white;
@@ -589,73 +656,6 @@ a:hover {
     display: none;
   }
 }
-.breakpointarea {
-  border-right: 1px solid #dde0ec;
-  cursor: pointer;
-}
-.breakpointarea:hover::before {
-  color: rgba(255, 0, 0, 0.5);
-  content: '⬤';
-  font-size: 0.7em;
-}
-.breakpointarea.monitorpoint.breakpoint.tracepoint::before,
-.breakpointarea.monitorpoint.breakpoint::before,
-.breakpointarea.monitorpoint.tracepoint::before,
-.breakpointarea.breakpoint.tracepoint::before {
-  border: none;
-  background: none;
-  color: #999;
-  content: '+';
-  font-size: 1.3em;
-  text-shadow: 1px 1px black, -1px -1px black, 1px -1px black, -1px 1px black;
-}
-.breakpointarea.monitorpoint::before {
-  color: black;
-  content: '┘';
-  font-size: 0.45em;
-  border: 1px solid black;
-  border-radius: 1em;
-  width: 3ex;
-  text-align: center;
-  line-height: 3ex;
-  background: white;
-  text-shadow: 1px 1px black,0 1px black,1px 0 black;
-}
-.breakpointarea.breakpoint::before {
-  color: red;
-  content: '⬤';
-  font-size: 0.6em;
-  text-shadow: 1px 1px black, -1px -1px black, 1px -1px black, -1px 1px black;
-}
-.breakpointarea.tracepoint::before {
-  color: yellow;
-  content: '⬤';
-  font-size: 0.6em;
-  text-shadow: 1px 1px black, -1px -1px black, 1px -1px black, -1px 1px black;
-}
-.highlighted {
-  border: none;
-  outline: solid red 1px;
-}
-.sessionmargin {
-  border-right: 1px solid #dde0ec;
-  font-size: 1em;
-}
-.sessionmargin.group_start::before {
-  content: '┌';
-}
-.sessionmargin.group_middle::before {
-  content: '│';
-}
-.sessionmargin.group_end::before {
-  content: '└';
-}
-.sessionmargin.modified:not(.group_start,.group_middle,.group_end)::before {
-  content: '∙';
-}
-.sessionmargin.modified::before {
-  color: red;
-}
 #splash {
   background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #7688d9;
 }
@@ -733,6 +733,22 @@ body {
 .tb_btn path {
   stroke: #4c4a4a;
   stroke-width: 0.3px;
+}
+.tb_btn .canvas {
+  fill: none;
+  opacity: 0;
+}
+.tb_btn .light {
+  fill: #4c4a4a;
+  opacity: 0.1;
+}
+.tb_btn .middle {
+  fill: #4c4a4a;
+  opacity: 0.5;
+}
+.tb_btn .full {
+  fill: #4c4a4a;
+  opacity: 1;
 }
 .tb_btn:hover {
   color: #7688d9;
