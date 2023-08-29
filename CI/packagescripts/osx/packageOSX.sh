@@ -1,5 +1,4 @@
 #!/bin/bash
-source "$(dirname "$0")/notarise.sh"
 set -x -e -o pipefail
 
 # The following variables must be set prior to invoking this script
@@ -78,11 +77,5 @@ ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac.pkg" | tr
 --sign "$APPLE_CERT_INSTALLER"                        \
 "$ARCHIVENAME"
 
-# upload for notarization
-notarizefile "$ARCHIVENAME" 
-
-# staple result
-echo "## Stapling $ARCHIVENAME"
-/usr/bin/xcrun stapler staple "$ARCHIVENAME"
 
 echo '## Done!'
