@@ -90,6 +90,7 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: '868dda6c-aaec-4ee4-845a-57362dec695b', passwordVariable: 'APPLE_APP_PASS', usernameVariable: 'APPLE_ID')]) {
           sh "CI/packagescripts/osx/notarise.sh"
         }
+        stash name: 'mac-ship', includes: 'ship/*'
       }
       when {
         not {
