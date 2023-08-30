@@ -7,52 +7,31 @@
   background: transparent;
   box-shadow: none!important;
   border-radius: 0!important;
-  // font-size: 18px;
-  svg { vertical-align: middle; }
-  path {
-    stroke: @TOOLBAR_FG_COL;
-    stroke-width: 0.3px;
+  svg { 
+    vertical-align: middle; 
+    .light {
+      opacity: 0.2;
+    }
+    .middle {
+      opacity: 0.6;
+    }
   }
-  .canvas {
-    fill: none;
-    opacity: 0;
-  }
-  .light {
-    fill: @TOOLBAR_FG_COL;
-    opacity: 0.1;
-  }
-  .middle {
-    fill: @TOOLBAR_FG_COL;
-    opacity: 0.5;
-  }
-  .full {
-    fill: @TOOLBAR_FG_COL;
-    opacity: 1;
-  }
-  &:hover{
-    // background-color: rgba(0,0,0,0.1);
-    color:@TOOLBAR_FG_HOVER_COL;
-    path {
-      fill:@TOOLBAR_FG_HOVER_COL;
-      stroke:@TOOLBAR_FG_HOVER_COL;
+  &:hover {
+    color: @TOOLBAR_FG_HOVER_COL;
+    .fa-layers svg {
+      color: @TOOLBAR_FG_HOVER_COL;
+      fill: @TOOLBAR_FG_HOVER_COL;
+      stroke: @TOOLBAR_FG_HOVER_COL;
     }
   }
   &:active, &.pressed {
     background-color: @TOOLBAR_BT_BG_COL;
     color: @TOOLBAR_BT_FG_COL;
-    path {
-      fill:@TOOLBAR_BT_FG_COL;
-      stroke:@TOOLBAR_BT_FG_COL;
-    }
   }
   &:disabled {
     background: transparent!important;
-    color:@CN_INPUT_DIS_BG;
+    color: @CN_INPUT_DIS_BG;
     cursor: inherit;
-    path {
-      stroke:@CN_INPUT_DIS_BG;
-      fill:@CN_INPUT_DIS_BG;
-    }
   }
 }
 .tb_sep{
