@@ -1,3 +1,10 @@
+#abt_ta {
+  border: 1px solid rgba(169, 169, 169, 0.3);
+  background-color: #dde0ec;
+  color: black;
+  cursor: auto;
+  font-family: apl, monospace;
+}
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),
 #cn textarea {
   border: 1px solid rgba(169, 169, 169, 0.3);
@@ -78,13 +85,6 @@
   font-size: 16px;
   font-family: monospace;
 }
-#abt_ta {
-  border: 1px solid rgba(169, 169, 169, 0.3);
-  background-color: #dde0ec;
-  color: black;
-  cursor: auto;
-  font-family: apl, monospace;
-}
 .ctl_listview {
   background-color: white;
   color: black;
@@ -108,56 +108,6 @@
 }
 #debug .ctl_listview_header h2 {
   font-size: 16px;
-}
-/*various dialogs*/
-#dlg_modal_overlay {
-  background-color: black;
-  opacity: 0.2;
-}
-.dlg {
-  background-color: #edeff5;
-  outline: none;
-}
-.dlg div {
-  outline: none;
-}
-.dlg_title,
-.dlg_close {
-  color: #7688d9;
-}
-.dlg_close:hover {
-  background-color: white;
-}
-#cn_listen_dlg,
-#cn_connecting_dlg {
-  border: 1px solid #7688d9;
-}
-#gd.dlg {
-  background-color: #edeff5;
-}
-#gd .dlg_title,
-#gd .dlg_close {
-  color: #828282;
-}
-#gd .dlg_close:hover {
-  color: white;
-  background-color: #38393f;
-}
-#gd_content {
-  color: #4c4a4a;
-}
-.dlg_btns {
-  background-color: #dde0ec;
-}
-.dlg_btns button.task {
-  background-image: none;
-  background-color: rgba(0, 0, 0, 0);
-  color: #7688d9;
-  text-transform: none;
-  font-size: small;
-  font-weight: normal;
-  text-align: left;
-  border: 1px solid transparent;
 }
 /*Golden Layout*/
 .lm_goldenlayout {
@@ -247,6 +197,56 @@
 .lm_transition_indicator {
   background-color: black;
   border: 1px dashed #7688d9;
+}
+/*various dialogs*/
+#dlg_modal_overlay {
+  background-color: black;
+  opacity: 0.2;
+}
+.dlg {
+  background-color: #edeff5;
+  outline: none;
+}
+.dlg div {
+  outline: none;
+}
+.dlg_title,
+.dlg_close {
+  color: #7688d9;
+}
+.dlg_close:hover {
+  background-color: white;
+}
+#cn_listen_dlg,
+#cn_connecting_dlg {
+  border: 1px solid #7688d9;
+}
+#gd.dlg {
+  background-color: #edeff5;
+}
+#gd .dlg_title,
+#gd .dlg_close {
+  color: #828282;
+}
+#gd .dlg_close:hover {
+  color: white;
+  background-color: #38393f;
+}
+#gd_content {
+  color: #4c4a4a;
+}
+.dlg_btns {
+  background-color: #dde0ec;
+}
+.dlg_btns button.task {
+  background-image: none;
+  background-color: rgba(0, 0, 0, 0);
+  color: #7688d9;
+  text-transform: none;
+  font-size: small;
+  font-weight: normal;
+  text-align: left;
+  border: 1px solid transparent;
 }
 label {
   color: #4c4a4a;
@@ -678,6 +678,9 @@ a:hover {
 body {
   font-family: Roboto, sans-serif;
 }
+#status_body {
+  background-color: #edeff5;
+}
 #sb {
   background-color: white;
   border-top: 1px solid #9eabe4;
@@ -693,9 +696,6 @@ body {
 #sb_right > div {
   border-left: 1px solid #dde0ec;
 }
-#status_body {
-  background-color: #edeff5;
-}
 #toast-container {
   font-family: Roboto;
   font-size: 14px;
@@ -705,6 +705,47 @@ body {
   -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+}
+.toolbar {
+  background-color: white;
+  border-bottom: 1px solid #dde0ec;
+}
+.tb_btn {
+  color: #4c4a4a;
+  background: transparent;
+  box-shadow: none!important;
+  border-radius: 0!important;
+}
+.tb_btn svg {
+  vertical-align: middle;
+}
+.tb_btn svg .light {
+  opacity: 0.2;
+}
+.tb_btn svg .middle {
+  opacity: 0.6;
+}
+.tb_btn:hover {
+  color: #7688d9;
+}
+.tb_btn:hover .fa-layers svg {
+  color: #7688d9;
+  fill: #7688d9;
+  stroke: #7688d9;
+}
+.tb_btn:active,
+.tb_btn.pressed {
+  background-color: rgba(76, 74, 74, 0.75);
+  color: white;
+}
+.tb_btn:disabled {
+  background: transparent!important;
+  color: rgba(169, 169, 169, 0.3);
+  cursor: inherit;
+}
+.tb_sep {
+  border: 0 solid #dde0ec;
+  border-right-width: 1px;
 }
 .tooltip {
   color: #7688d9;
@@ -724,33 +765,6 @@ body {
 }
 #vt_tri {
   border-color: black;
-}
-.toolbar {
-  background-color: white;
-  border-bottom: 1px solid #dde0ec;
-}
-.tb_btn {
-  color: #4c4a4a;
-  background: transparent;
-  box-shadow: none!important;
-  border-radius: 0!important;
-}
-.tb_btn:hover {
-  color: #7688d9;
-}
-.tb_btn:active,
-.tb_btn.pressed {
-  background-color: rgba(76, 74, 74, 0.75);
-  color: white;
-}
-.tb_btn:disabled {
-  background: transparent!important;
-  color: rgba(169, 169, 169, 0.3);
-  cursor: inherit;
-}
-.tb_sep {
-  border: 0 solid #dde0ec;
-  border-right-width: 1px;
 }
 #wse {
   background-color: white;

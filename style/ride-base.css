@@ -195,6 +195,103 @@
 #sistack {
   height: calc(100% - 24px);
 }
+.lm_content {
+  border: none !important;
+}
+.lm_header .lm_tab {
+  padding: 5px 15px 5px 10px !important;
+  margin-top: 0!important;
+  height: 15px!important;
+}
+.lm_header .lm_tab .lm_title {
+  font-family: apl, monospace !important;
+  padding: 0px 10px 2px 0px;
+}
+.lm_header .lm_tab .lm_close_tab {
+  right: 6px !important;
+}
+.lm_header .lm_tab .lm_close_tab:not(.modified),
+.lm_header .lm_tab .lm_close_tab:hover {
+  top: 4px !important;
+}
+.lm_close {
+  display: none !important;
+}
+.lm_splitter {
+  opacity: 1 !important;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Thin.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-ThinItalic.ttf') format('truetype');
+  font-weight: 100;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-LightItalic.ttf') format('truetype');
+  font-weight: 300;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-BoldItalic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roboto';
+  src: url('./fonts/Roboto-BlackItalic.ttf') format('truetype');
+  font-weight: 900;
+  font-style: italic;
+}
 /*various dialogs*/
 #dlg_modal_overlay {
   width: 100%;
@@ -377,103 +474,6 @@
   width: 100%;
   height: 100%;
   resize: none;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Thin.ttf') format('truetype');
-  font-weight: 100;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-ThinItalic.ttf') format('truetype');
-  font-weight: 100;
-  font-style: italic;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Light.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-LightItalic.ttf') format('truetype');
-  font-weight: 300;
-  font-style: italic;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Italic.ttf') format('truetype');
-  font-weight: 400;
-  font-style: italic;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Medium.ttf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-MediumItalic.ttf') format('truetype');
-  font-weight: 500;
-  font-style: italic;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Bold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-BoldItalic.ttf') format('truetype');
-  font-weight: 700;
-  font-style: italic;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-Black.ttf') format('truetype');
-  font-weight: 900;
-  font-style: normal;
-}
-@font-face {
-  font-family: 'Roboto';
-  src: url('./fonts/Roboto-BlackItalic.ttf') format('truetype');
-  font-weight: 900;
-  font-style: italic;
-}
-.lm_content {
-  border: none !important;
-}
-.lm_header .lm_tab {
-  padding: 5px 15px 5px 10px !important;
-  margin-top: 0!important;
-  height: 15px!important;
-}
-.lm_header .lm_tab .lm_title {
-  font-family: apl, monospace !important;
-  padding: 0px 10px 2px 0px;
-}
-.lm_header .lm_tab .lm_close_tab {
-  right: 6px !important;
-}
-.lm_header .lm_tab .lm_close_tab:not(.modified),
-.lm_header .lm_tab .lm_close_tab:hover {
-  top: 4px !important;
-}
-.lm_close {
-  display: none !important;
-}
-.lm_splitter {
-  opacity: 1 !important;
 }
 button {
   border: none;
@@ -1106,6 +1106,10 @@ body .ui-tooltip {
 .menu hr {
   margin: 3px 0 5px 0;
 }
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
 .monaco-editor .no-icons .icon {
   display: none!important;
 }
@@ -1118,6 +1122,42 @@ body .ui-tooltip {
 }
 .pendent .tb_btn {
   pointer-events: none;
+}
+#sb {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+}
+#sb[hidden] {
+  display: none;
+}
+#sb_left,
+#sb_right {
+  display: flex;
+}
+#sb_left div,
+#sb_right div {
+  display: inline-block;
+  padding: 3px 6px 4px;
+  user-select: none;
+  cursor: default;
+}
+#sb_left div[hidden],
+#sb_right div[hidden] {
+  display: none;
+}
+#sb_left div .tb_btn,
+#sb_right div .tb_btn {
+  padding: 0;
+}
+#sb_cp {
+  min-width: 15em;
+}
+#sb_busy {
+  padding: 2px 6px 3px;
 }
 /* http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 License: none (public domain) */
 html,
@@ -1268,10 +1308,6 @@ h2 {
 .hidden {
   display: none;
 }
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
 /*Status window*/
 /*info*/
 /*error*/
@@ -1298,42 +1334,6 @@ h2 {
 }
 #status .t8 {
   color: red;
-}
-#sb {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  display: flex;
-  justify-content: space-between;
-}
-#sb[hidden] {
-  display: none;
-}
-#sb_left,
-#sb_right {
-  display: flex;
-}
-#sb_left div,
-#sb_right div {
-  display: inline-block;
-  padding: 3px 6px 4px;
-  user-select: none;
-  cursor: default;
-}
-#sb_left div[hidden],
-#sb_right div[hidden] {
-  display: none;
-}
-#sb_left div .tb_btn,
-#sb_right div .tb_btn {
-  padding: 0;
-}
-#sb_cp {
-  min-width: 15em;
-}
-#sb_busy {
-  padding: 2px 6px 3px;
 }
 .tooltip {
   width: 16px;
@@ -1403,74 +1403,6 @@ h2 {
 .tb_sep {
   margin: 0 8px 0 0;
   vertical-align: middle;
-}
-#vt_bln {
-  font-family: apl, monospace;
-  font-size: 18px;
-  position: absolute;
-  padding: 7px;
-  white-space: pre;
-  overflow: hidden;
-}
-#vt_tri {
-  position: absolute;
-  border: solid;
-  border-width: 6px 6px 0 6px;
-  height: 6px;
-  bottom: -6px;
-  border-left-color: transparent!important;
-  border-right-color: transparent!important;
-  background-color: transparent!important;
-  content: "";
-}
-#vt_tri.inv {
-  border-width: 0 6px 6px 6px;
-  margin-top: -6px;
-  bottom: auto;
-}
-.vt_marker {
-  border: dotted transparent 2px;
-  margin: -2px;
-}
-/*IDE page*/
-#splash,
-#ide,
-body.floating-window {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
-.ride_win {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.ride_win.edit_trace {
-  display: block;
-}
-.ride_win.edit_trace .ride_win_me {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-}
-.ride_win.edit_trace.no-toolbar .ride_win_me {
-  height: 100%;
-}
-.win,
-.floating-window {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 32px;
-  bottom: 0;
-  overflow: hidden!important;
-  padding: 0!important;
-  height: auto!important;
 }
 /*workspace explorer*/
 /*variable*/
@@ -1583,6 +1515,46 @@ body.floating-window {
 }
 .bt_collapsed > div {
   display: none;
+}
+/*IDE page*/
+#splash,
+#ide,
+body.floating-window {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.ride_win {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.ride_win.edit_trace {
+  display: block;
+}
+.ride_win.edit_trace .ride_win_me {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+.ride_win.edit_trace.no-toolbar .ride_win_me {
+  height: 100%;
+}
+.win,
+.floating-window {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 32px;
+  bottom: 0;
+  overflow: hidden!important;
+  padding: 0!important;
+  height: auto!important;
 }
 /*z-indices; CodeMirror uses 1-10; .dlg uses 100+ */
 .ui-tooltip {
@@ -1814,6 +1786,107 @@ body.floating-window {
 .zoom-10 .toolbar {
   font-size: 6px;
 }
+#vt_bln {
+  font-family: apl, monospace;
+  font-size: 18px;
+  position: absolute;
+  padding: 7px;
+  white-space: pre;
+  overflow: hidden;
+}
+#vt_tri {
+  position: absolute;
+  border: solid;
+  border-width: 6px 6px 0 6px;
+  height: 6px;
+  bottom: -6px;
+  border-left-color: transparent!important;
+  border-right-color: transparent!important;
+  background-color: transparent!important;
+  content: "";
+}
+#vt_tri.inv {
+  border-width: 0 6px 6px 6px;
+  margin-top: -6px;
+  bottom: auto;
+}
+.vt_marker {
+  border: dotted transparent 2px;
+  margin: -2px;
+}
+#prf_dlg > hr {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+#prf_nav {
+  display: inline-block;
+  width: 100%;
+}
+#prf_nav a {
+  float: left;
+  height: 13px;
+  padding: 4px 12px 4px 12px;
+  text-decoration: none;
+  color: #4c4a4a;
+  margin: 11px 5px 8px;
+}
+#prf_print {
+  font-size: 20px;
+  float: right;
+  margin: 7px 20px 0px 0px;
+  width: 28px;
+}
+#prf_content {
+  margin-top: -2px;
+  padding: 5px 10px 0;
+}
+#prf_content button {
+  padding: 8px;
+}
+#prf_content select {
+  overflow: hidden;
+  padding: 2px 34px 2px 4px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-height: 30px;
+  box-shadow: none;
+  font-weight: 500;
+}
+#prf_content select option {
+  font-weight: 500;
+}
+#prf_content .sub {
+  margin-left: 24px;
+}
+@media print {
+  #prf_dlg {
+    background: white;
+  }
+  #prf_dlg hr,
+  #prf_dlg #prf_nav,
+  #prf_dlg .dlg_btns,
+  #prf_dlg .dlg_title {
+    display: none;
+  }
+}
+/*Prefs>Code*/
+#code {
+  overflow: auto;
+  position: absolute;
+  top: 54px;
+  bottom: 70px;
+  left: 12px;
+  right: 3px;
+}
+#code p {
+  margin: 5px;
+}
+#code > hr {
+  margin-top: 5px !important;
+}
+.web #code {
+  top: 75px;
+}
 #col_top {
   text-align: left;
   padding: 0 8px;
@@ -1900,61 +1973,6 @@ body.floating-window {
 }
 #col.renaming #col_new_name {
   display: inline;
-}
-#prf_dlg > hr {
-  margin-top: 0;
-  margin-bottom: 15px;
-}
-#prf_nav {
-  display: inline-block;
-  width: 100%;
-}
-#prf_nav a {
-  float: left;
-  height: 13px;
-  padding: 4px 12px 4px 12px;
-  text-decoration: none;
-  color: #4c4a4a;
-  margin: 11px 5px 8px;
-}
-#prf_print {
-  font-size: 20px;
-  float: right;
-  margin: 7px 20px 0px 0px;
-  width: 28px;
-}
-#prf_content {
-  margin-top: -2px;
-  padding: 5px 10px 0;
-}
-#prf_content button {
-  padding: 8px;
-}
-#prf_content select {
-  overflow: hidden;
-  padding: 2px 34px 2px 4px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-height: 30px;
-  box-shadow: none;
-  font-weight: 500;
-}
-#prf_content select option {
-  font-weight: 500;
-}
-#prf_content .sub {
-  margin-left: 24px;
-}
-@media print {
-  #prf_dlg {
-    background: white;
-  }
-  #prf_dlg hr,
-  #prf_dlg #prf_nav,
-  #prf_dlg .dlg_btns,
-  #prf_dlg .dlg_title {
-    display: none;
-  }
 }
 /*Prefs>Layout*/
 /*The arrangement is: +-------+ */
@@ -2156,24 +2174,6 @@ input.lyt_g3:hover {
     display: none;
   }
 }
-/*Prefs>Code*/
-#code {
-  overflow: auto;
-  position: absolute;
-  top: 54px;
-  bottom: 70px;
-  left: 12px;
-  right: 3px;
-}
-#code p {
-  margin: 5px;
-}
-#code > hr {
-  margin-top: 5px !important;
-}
-.web #code {
-  top: 75px;
-}
 /*Prefs>Menu*/
 #pmenu_rst {
   float: right;
@@ -2198,71 +2198,6 @@ input.lyt_g3:hover {
   width: 100%;
   height: 100%;
   resize: none;
-}
-/*Prefs>Trace/Edit*/
-#wins {
-  overflow-y: auto;
-  position: absolute;
-  top: 54px;
-  bottom: 70px;
-  left: 12px;
-  right: 3px;
-}
-#wins div {
-  margin-right: 0;
-}
-#wins p {
-  margin: 5px;
-}
-#wins > hr {
-  margin-top: 5px !important;
-}
-#wins_qns {
-  margin: 8px 8px 0 0;
-  width: 100%;
-  width: -moz-available;
-  /* WebKit-based browsers will ignore this. */
-  width: -webkit-fill-available;
-  /* Mozilla-based browsers will ignore this. */
-  width: fill-available;
-}
-#wins .row {
-  padding: 3px 5px;
-}
-/*Prefs>Title*/
-#title {
-  text-align: left;
-  padding: 0 8px;
-}
-#title pre {
-  overflow: auto;
-  position: absolute;
-  left: 8px;
-  right: 8px;
-  top: 125px;
-  bottom: 70px;
-}
-#title table {
-  table-layout: fixed;
-  width: 100%;
-  margin-top: 10px;
-}
-#title table tr {
-  height: 1.3em;
-}
-#title table td {
-  vertical-align: middle;
-}
-#title table td:nth-child(1) {
-  width: 30%;
-}
-#title_inp {
-  width: calc(100% - 160px);
-  margin-left: 10px;
-  padding: 5px 0;
-}
-#title_rst {
-  float: right;
 }
 /*Prefs>Shortcuts*/
 #shc {
@@ -2388,4 +2323,69 @@ input.lyt_g3:hover {
   #shc_tbl_wr td:nth-child(4) {
     display: none;
   }
+}
+/*Prefs>Title*/
+#title {
+  text-align: left;
+  padding: 0 8px;
+}
+#title pre {
+  overflow: auto;
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  top: 125px;
+  bottom: 70px;
+}
+#title table {
+  table-layout: fixed;
+  width: 100%;
+  margin-top: 10px;
+}
+#title table tr {
+  height: 1.3em;
+}
+#title table td {
+  vertical-align: middle;
+}
+#title table td:nth-child(1) {
+  width: 30%;
+}
+#title_inp {
+  width: calc(100% - 160px);
+  margin-left: 10px;
+  padding: 5px 0;
+}
+#title_rst {
+  float: right;
+}
+/*Prefs>Trace/Edit*/
+#wins {
+  overflow-y: auto;
+  position: absolute;
+  top: 54px;
+  bottom: 70px;
+  left: 12px;
+  right: 3px;
+}
+#wins div {
+  margin-right: 0;
+}
+#wins p {
+  margin: 5px;
+}
+#wins > hr {
+  margin-top: 5px !important;
+}
+#wins_qns {
+  margin: 8px 8px 0 0;
+  width: 100%;
+  width: -moz-available;
+  /* WebKit-based browsers will ignore this. */
+  width: -webkit-fill-available;
+  /* Mozilla-based browsers will ignore this. */
+  width: fill-available;
+}
+#wins .row {
+  padding: 3px 5px;
 }
