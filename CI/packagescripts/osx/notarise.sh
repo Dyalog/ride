@@ -40,7 +40,7 @@ notarizefile() { # $1: path to file to notarize
 
 ## This should be moved to a common script called by both notarise and package.
 
-PackageName=$(node -e "console.log($(cat package.json).productName)") # "Ride-4.0" or similar
+APPNAME=$(node -e "console.log($(cat package.json).productName)") # "Ride-4.0" or similar
 SHIPDIRECTORY=ship
 if [ -s _/version ]; then
 RIDEVERSION=`cat _/version`
