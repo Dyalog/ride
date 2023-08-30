@@ -1,4 +1,7 @@
 #!/bin/bash
+
+APPLE_TEAM="6LKE87V3BD"
+
 # functions for notarising a file
 
 notarizefile() { # $1: path to file to notarize
@@ -34,3 +37,22 @@ notarizefile() { # $1: path to file to notarize
     fi
     
 }
+
+## This should be moved to a common script called by both notarise and package.
+
+APPNAME=$(node -e "console.log($(cat package.json).productName)") # "Ride-4.0" or similar
+SHIPDIRECTORY=ship
+if [ -s _/version ]; then
+RIDEVERSION=`cat _/version`
+else
+RIDEVERSION=9.9.9
+fi
+REVISION_VERSION=`echo $RIDEVERSION | sed 's/[0-9]*\.[0-9]*\.\([0-9]*\)/\1/'`
+ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac.pkg" | tr '[:upper:]' '[:lower:]'`
+
+# upload for notarization
+ notarizefile "$ARCHIVENAME" 
+
+# staple result
+echo "## Stapling $ARCHIVENAME"
+/usr/bin/xcrun stapler staple "$ARCHIVENAME"
