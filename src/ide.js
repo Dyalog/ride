@@ -621,7 +621,7 @@ D.IDE = function IDE(opts = {}) {
             `${k.name} (${k.avchar})`,
             k.helptext.join('\n'),
           ];
-          D.sqglDesc[k.avchar] = `${k.name} (${k.avchar})`;
+          D.sqglDesc[k.avchar] = k.name;
         }
       });
       ide.lbarRecreate();
