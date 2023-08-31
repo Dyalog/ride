@@ -14,9 +14,9 @@ When running a Dyalog Session through RIDE, the Session can be:
     The RIDE can start a Session using an interpreter installed on a remote machine irrespective of whether Dyalog is installed on the machine on which RIDE is running. In this situation:
 
     - The operating system on which the remote interpreter is running is irrelevant – the instructions given in this chapter apply to the operating system on which RIDE is running (the two operating systems do not have to be the same).
-    - The remote machine does not need to have RIDE installed but the Dyalog Session must be [RIDE-enabled](ride_init.md).
+    - The remote machine does not need to have RIDE installed but the Dyalog Session must be [RIDE-enabled](ridespecific_language_features.md/#ride_init).
 
-Normally, connections between RIDE and interpreters are initialised from the **New Session** window. The exception to this is zero-footprint use, which always requires Dyalog to be started first with suitable configuration parameters, after which RIDE will appear when you direct a web browser at the APL interpreter. See [Zero Footprint Ride](the_zero_footprint_ride.md) for details.
+Normally, connections between RIDE and interpreters are initialised from the **New Session** window. The exception to this is zero-footprint use, which always requires Dyalog to be started first with suitable configuration parameters, after which RIDE will appear when you direct a web browser at the APL interpreter. See [Zero Footprint Ride](#zero-footprint-mode) for details.
 
 
 ## New Session screen
@@ -54,7 +54,7 @@ This mode has the following limitations:
 ### Accessing Zero-Footprint RIDE from a browser
 
 1. If on Windows, [install zero-footprint RIDE](installation.md/#windows)
-2. Set the `RIDE_INIT` configuration parameter to `HTTP:address:port` (see [RIDE Init](ride_init.md)), for example, `RIDE_INIT=HTTP:*:8080`.
+2. Set the `RIDE_INIT` configuration parameter to `HTTP:address:port` (see [RIDE Init](ridespecific_language_features.md/#ride_init)), for example, `RIDE_INIT=HTTP:*:8080`.
 3. Start a Dyalog session.
 4. Navigate to `http://<address>:<port>`, for example, `http://10.0.38.1:8080`.
 

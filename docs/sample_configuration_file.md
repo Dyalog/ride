@@ -21,9 +21,9 @@ AcceptCertDir= C:\apps\d150U64\TCerts\accept
 
 where:
 
-- `Direction`, `Address` and `Port` – as defined for the [RIDE_INIT](ride_init.md#) configuration parameter. `Direction` in the .ini file is equivalent to `mode` in the RIDE_INIT configuration parameter and has possible values of `Listen` (equivalent to RIDE_INIT's `Serve`), `Connect`, `Poll` and `HTTP`. No defaults are defined for `Direction` and `Address`; the default for `Port` is `4502`. Overridden if defined in RIDE_INIT.
+- `Direction`, `Address` and `Port` – as defined for the [RIDE_INIT](ridespecific_language_features.md/#ride_init) configuration parameter. `Direction` in the .ini file is equivalent to `mode` in the RIDE_INIT configuration parameter and has possible values of `Listen` (equivalent to RIDE_INIT's `Serve`), `Connect`, `Poll` and `HTTP`. No defaults are defined for `Direction` and `Address`; the default for `Port` is `4502`. Overridden if defined in RIDE_INIT.
 - `MaxBlockSize` is the maximum size (in bytes) allocated to the buffer that receives data transmissions. The default is 16,777,216.
-- `SSLValidation` is the sum of the relevant TLS flags (see [Section ](tls_flags.md#)). The default is `0`. Validity depends on the value of the `Secure` field.
+- `SSLValidation` is the sum of the relevant TLS flags (see [Section ](#tls_flags)). The default is `0`. Validity depends on the value of the `Secure` field.
 - `Protocol` is the communication protocol to use. Possible values are:`IPv4`: use the IPv4 connection protocol; if this is not possible then generate an error.`IPv6`: use the IPv6 connection protocol; if this is not possible then generate an error.<empty>: use the IPv6 connection protocol; if this is not possible then use the IPv4 connection protocol. This is the default.
 - `IPv4`: use the IPv4 connection protocol; if this is not possible then generate an error.
 - `IPv6`: use the IPv6 connection protocol; if this is not possible then generate an error.

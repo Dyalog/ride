@@ -89,7 +89,7 @@ Allows customisation of a variety of features.
         Select an autocompletion option from the drop-down list (autocompletion makes suggestions when entering the name of, for example, namespaces, variables, functions, operators, user commands and system names). Options include:
     
         - off – disables autocomplete functionality.
-        - classic – displays a pop-up window of suggestions based on the characters already entered and the context in which the name is being used (see [Section ](autocomplete.md#)).
+        - classic – displays a pop-up window of suggestions based on the characters already entered and the context in which the name is being used.
         - shell – resembles the autocomplete functionality of the Linux bash shell in its use of the tab key.
 
     - Autocompletion after `<time>` ms
@@ -185,7 +185,7 @@ Allows customisation of a variety of features.
 
 ### Keyboard Tab
 
-Allows customisation of the default keyboard key mappings for APL glyphs (see [Section ](keyboard_key_mappings_for_apl_glyphs.md#)). This is only relevant if a locale-specific keyboard has not been installed.
+Allows customisation of the default [keyboard mappings](the_dyalog_development_environment.md/#keyboard-mappings-for-apl-glyphs) for APL glyphs. This is only relevant if a locale-specific keyboard has not been installed.
 
 !!!note
     To replace the keyboard with a locale-specific keyboard in the Session, or to enter Dyalog glyphs in other applications (for example, email), see Dyalog's [APL Fonts and Keyboards](https://www.dyalog.com/apl-font-keyboard.htm) page.
