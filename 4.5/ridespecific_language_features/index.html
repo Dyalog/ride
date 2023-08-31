@@ -823,7 +823,7 @@
 <li>if <code>R</code> is <code>¯1</code>, then the RIDE was already active</li>
 <li>if <code>R</code> is <code>32</code>, then the RIDE DLL/shared library is not available</li>
 <li>if <code>R</code> is <code>64</code>, then the RIDE_INIT configuration parameter is not correctly defined</li>
-<li>a simple character vector : replace the RIDE_INIT configuration parameter with the specified initialisation string, which should be in the format specified in <a href="ride_init.md">RIDE Init</a>. </li>
+<li>a simple character vector : replace the RIDE_INIT configuration parameter with the specified initialisation string, which should be in the format specified in <a href="#ride_init">RIDE Init</a>. </li>
 </ul>
 <p>For example, <code>3502⌶'SERVE:*:4502'</code> configures the interpreter to accept incoming RIDE connections from any machine on port 4502, and then enables the RIDE with that configuration.if <code>R</code> is <code>0</code>, then the RIDE was disabledif <code>R</code> is <code>¯2</code>, then the RIDE was active
 - if <code>R</code> is <code>0</code>, then the RIDE was disabled
@@ -849,8 +849,8 @@ How the interpreter should behave with respect to the RIDE protocol. Setting thi
 <li><code>SERVE</code> – listen for incoming connections from the RIDE client</li>
 <li><code>CONNECT</code> – attempt to connect to the specified RIDE client and end the session if this fails</li>
 <li><code>POLL</code> – attempt to connect to the specified RIDE client at regular intervals and reconnect if the connection is lost</li>
-<li><code>HTTP</code> – listen for incoming connections from the web browser, via <a href="the_zero_footprint_ride.md#">zero footprint RIDE</a>)</li>
-<li><code>CONFIG</code> – retrieve values to use from a .ini <a href="configuration_ini_file.md">configuration file</a></li>
+<li><code>HTTP</code> – listen for incoming connections from the web browser, via <a href="../starting_a_dyalog_session/#zero-footprint-mode">zero footprint RIDE</a></li>
+<li><code>CONFIG</code> – retrieve values to use from a .ini <a href="../installation/#configuration-ini-file">configuration file</a></li>
 </ul>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
