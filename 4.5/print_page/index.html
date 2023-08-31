@@ -784,7 +784,7 @@ General note icons, and the type of material that they are used to emphasise, in
 <p>When installing RIDE, if you select the default location suggested by the installer then APL can be launched as a RIDE server without creating a <a href="#sample_configuration_file">configuration file</a>.</p>
 </div>
 <p>On non-Windows platforms, zero-footprint RIDE is automatically installed to the default location (<strong>[DYALOG]/RIDEapp</strong>) when Dyalog is installed and no additional installation is necessary. On Windows, zero-footprint RIDE needs separate installation.</p>
-<p>For details, see <a href="#installation-the_zero_footprint_ride.md">Zero Footprint RIDE</a>.</p>
+<p>For details, see <a href="#starting_a_dyalog_session-zero-footprint-mode">Zero Footprint RIDE</a>.</p>
 <h2 id="installation-linux">Linux</h2>
 <p>RIDE requires Debian 8+, Fedora 14.04+, or Ubuntu 10.10+. Distributions built on top of the above should also work, provided that they have libnss version 3.26 or newer.</p>
 <ol>
@@ -819,7 +819,7 @@ General note icons, and the type of material that they are used to emphasise, in
 <li><strong>$HOME/.dyalog</strong> (on all other platforms)</li>
 </ul>
 <p>This file is not automatically created by Dyalog but can be created manually. Examples of the fields that you might want to include within the <strong>.ini</strong> configuration file are included in the <a href="#sample_configuration_file">sample configuration file</a>.</p>
-<p>A different name and location for the .ini configuration file can be specified by including a second <code>mode</code>, <code>CONFIG</code>, in the <a href="#installation-ride_init.md">RIDE_INIT</a> parameter and setting it so that <code>CONFIG=&lt;filename&gt;</code>, where <code>&lt;filename&gt;</code> is the fully-qualified path to, and name of, a <strong>.ini</strong> configuration file containing name-value pairs related to mode, certificate details, and so on.</p>
+<p>A different name and location for the .ini configuration file can be specified by including a second <code>mode</code>, <code>CONFIG</code>, in the <a href="#ridespecific_language_features-ride_init">RIDE_INIT</a> parameter and setting it so that <code>CONFIG=&lt;filename&gt;</code>, where <code>&lt;filename&gt;</code> is the fully-qualified path to, and name of, a <strong>.ini</strong> configuration file containing name-value pairs related to mode, certificate details, and so on.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The <strong>.ini</strong> configuration file must be located on the machine on which the interpreter is running (this is not necessarily the same machine as the one on which RIDE is running).</p>
@@ -1267,7 +1267,7 @@ How the interpreter should behave with respect to the RIDE protocol. Setting thi
 <p>Select an autocompletion option from the drop-down list (autocompletion makes suggestions when entering the name of, for example, namespaces, variables, functions, operators, user commands and system names). Options include:</p>
 <ul>
 <li>off – disables autocomplete functionality.</li>
-<li>classic – displays a pop-up window of suggestions based on the characters already entered and the context in which the name is being used (see <a href="#customising_your_session-autocomplete.md-">Section </a>).</li>
+<li>classic – displays a pop-up window of suggestions based on the characters already entered and the context in which the name is being used.</li>
 <li>shell – resembles the autocomplete functionality of the Linux bash shell in its use of the tab key.</li>
 </ul>
 </li>
@@ -1370,7 +1370,7 @@ How the interpreter should behave with respect to the RIDE protocol. Setting thi
 </ul>
 </div>
 <h3 id="customising_your_session-keyboard-tab">Keyboard Tab</h3>
-<p>Allows customisation of the default keyboard key mappings for APL glyphs (see <a href="#customising_your_session-keyboard_key_mappings_for_apl_glyphs.md-">Section </a>). This is only relevant if a locale-specific keyboard has not been installed.</p>
+<p>Allows customisation of the default <a href="#the_dyalog_development_environment-keyboard-mappings-for-apl-glyphs">keyboard mappings</a> for APL glyphs. This is only relevant if a locale-specific keyboard has not been installed.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>To replace the keyboard with a locale-specific keyboard in the Session, or to enter Dyalog glyphs in other applications (for example, email), see Dyalog's <a href="https://www.dyalog.com/apl-font-keyboard.htm">APL Fonts and Keyboards</a> page.</p>
