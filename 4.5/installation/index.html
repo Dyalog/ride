@@ -636,7 +636,7 @@
 <p>When installing RIDE, if you select the default location suggested by the installer then APL can be launched as a RIDE server without creating a <a href="../sample_configuration_file/">configuration file</a>.</p>
 </div>
 <p>On non-Windows platforms, zero-footprint RIDE is automatically installed to the default location (<strong>[DYALOG]/RIDEapp</strong>) when Dyalog is installed and no additional installation is necessary. On Windows, zero-footprint RIDE needs separate installation.</p>
-<p>For details, see <a href="../the_zero_footprint_ride/">Zero Footprint RIDE</a>.</p>
+<p>For details, see <a href="the_zero_footprint_ride.md">Zero Footprint RIDE</a>.</p>
 <h2 id="linux">Linux</h2>
 <p>RIDE requires Debian 8+, Fedora 14.04+, or Ubuntu 10.10+. Distributions built on top of the above should also work, provided that they have libnss version 3.26 or newer.</p>
 <ol>
@@ -671,7 +671,7 @@
 <li><strong>$HOME/.dyalog</strong> (on all other platforms)</li>
 </ul>
 <p>This file is not automatically created by Dyalog but can be created manually. Examples of the fields that you might want to include within the <strong>.ini</strong> configuration file are included in the <a href="../sample_configuration_file/">sample configuration file</a>.</p>
-<p>A different name and location for the .ini configuration file can be specified by including a second <code>mode</code>, <code>CONFIG</code>, in the <a href="../ride_init/">RIDE_INIT</a> parameter and setting it so that <code>CONFIG=&lt;filename&gt;</code>, where <code>&lt;filename&gt;</code> is the fully-qualified path to, and name of, a <strong>.ini</strong> configuration file containing name-value pairs related to mode, certificate details, and so on.</p>
+<p>A different name and location for the .ini configuration file can be specified by including a second <code>mode</code>, <code>CONFIG</code>, in the <a href="ride_init.md">RIDE_INIT</a> parameter and setting it so that <code>CONFIG=&lt;filename&gt;</code>, where <code>&lt;filename&gt;</code> is the fully-qualified path to, and name of, a <strong>.ini</strong> configuration file containing name-value pairs related to mode, certificate details, and so on.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>The <strong>.ini</strong> configuration file must be located on the machine on which the interpreter is running (this is not necessarily the same machine as the one on which RIDE is running).</p>

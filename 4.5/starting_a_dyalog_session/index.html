@@ -652,11 +652,11 @@
 <p>The RIDE can start a Session using an interpreter installed on a remote machine irrespective of whether Dyalog is installed on the machine on which RIDE is running. In this situation:</p>
 <ul>
 <li>The operating system on which the remote interpreter is running is irrelevant – the instructions given in this chapter apply to the operating system on which RIDE is running (the two operating systems do not have to be the same).</li>
-<li>The remote machine does not need to have RIDE installed but the Dyalog Session must be <a href="../ride_init/">RIDE-enabled</a>.</li>
+<li>The remote machine does not need to have RIDE installed but the Dyalog Session must be <a href="ride_init.md">RIDE-enabled</a>.</li>
 </ul>
 </li>
 </ul>
-<p>Normally, connections between RIDE and interpreters are initialised from the <strong>New Session</strong> window. The exception to this is zero-footprint use, which always requires Dyalog to be started first with suitable configuration parameters, after which RIDE will appear when you direct a web browser at the APL interpreter. See <a href="../the_zero_footprint_ride/">Zero Footprint Ride</a> for details.</p>
+<p>Normally, connections between RIDE and interpreters are initialised from the <strong>New Session</strong> window. The exception to this is zero-footprint use, which always requires Dyalog to be started first with suitable configuration parameters, after which RIDE will appear when you direct a web browser at the APL interpreter. See <a href="the_zero_footprint_ride.md">Zero Footprint Ride</a> for details.</p>
 <h2 id="new-session-screen">New Session screen</h2>
 <p>The <strong>New Session</strong> window is displayed when RIDE starts, unless disabled in the preferences (the default on macOS). This window allows simple and advanced use.</p>
 <h3 id="simple-usage">Simple usage</h3>
@@ -682,7 +682,7 @@
 <h3 id="accessing-zero-footprint-ride-from-a-browser">Accessing Zero-Footprint RIDE from a browser</h3>
 <ol>
 <li>If on Windows, <a href="../installation/#windows">install zero-footprint RIDE</a></li>
-<li>Set the <code>RIDE_INIT</code> configuration parameter to <code>HTTP:address:port</code> (see <a href="../ride_init/">RIDE Init</a>), for example, <code>RIDE_INIT=HTTP:*:8080</code>.</li>
+<li>Set the <code>RIDE_INIT</code> configuration parameter to <code>HTTP:address:port</code> (see <a href="ride_init.md">RIDE Init</a>), for example, <code>RIDE_INIT=HTTP:*:8080</code>.</li>
 <li>Start a Dyalog session.</li>
 <li>Navigate to <code>http://&lt;address&gt;:&lt;port&gt;</code>, for example, <code>http://10.0.38.1:8080</code>.</li>
 </ol>
