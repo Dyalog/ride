@@ -98,6 +98,11 @@
     DHI() {
       openURI(D.hlp.INDEX);
     },
+    RIDEHLP() {
+      const v = D.versionInfo.version ? D.versionInfo.version.slice(0, 3) : '';
+      const vnr = D.hlp.RIDEHLP + v;
+      openURI(vnr);
+    },
     DOX() {
       openURI(D.hlp.DOX);
     },

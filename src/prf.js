@@ -140,6 +140,7 @@ D.prf = {};
     + '\n&Help'
     + '\n  Getting &Started         =https://dyalog.com/introduction.htm'
     + '\n  -'
+    + '\n  &RIDE User Guide         =RIDEHLP'
     + '\n  Dyalog &Help             =DHI'
     + '\n  &Language Elements       =LEL'
     + '\n  &Documentation Centre    =DOX'
