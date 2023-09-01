@@ -41,7 +41,6 @@ The Preferences dialog box can be used to customise:
 The Preferences dialog box can be opened in any of the following ways:
 
 - selecting the `Edit > Preferences` menu option
-- clicking the <img src="../img/screenshots/i_intext_status.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 12px;" /> icon on the left hand side of the Status bar
 - clicking on the <img src="../img/screenshots/b_shortcuts.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 12px;" />  button on the right hand side of the Language bar
 - entering the Show Preferences command (`<PRF>`)
 
@@ -114,7 +113,7 @@ Allows customisation of a variety of features.
 
     - Auto PW
 
-        Select this to display text in the Session window up to the full width of the Session window before wrapping (automatically updates when the Session is resized). Also sets `⎕PW` to this value.
+        Select this to display text in the Session window up to the full width of the Session window before wrapping (automatically updates when the Session is resized). Also sets [⎕PW](https://help.dyalog.com/latest/index.htm#Language/System%20Functions/pw.htm) to this value.
 
     - Persistent history `<number>` lines
 
@@ -139,7 +138,7 @@ Allows customisation of a variety of features.
 
     - Minimap enabled
 
-        Select this to display a dynamic impression of the entire (or very large portion of) contents of the Session/Edit window in a column on the right‑hand side of that window. Clicking within the minimap moves the display to that location.
+        Select this to display a dynamic impression of the entire (or very large portion of) contents of the **Session/Edit** window in a column on the right‑hand side of that window. Clicking within the minimap moves the display to that location.
 
     - Minimap render characters
 
@@ -181,7 +180,7 @@ Allows customisation of a variety of features.
 
     - opening a scripted object in the **Edit** window can cause the source of that object to change (when closing an **Edit** window, you might be prompted to save a function even though you have not made any changes to it).
     - viewing an object can change its file timestamp; source code management systems can subsequently report changes due to the changed file timestamp.
-    - source code changes resulting from reformatting will be evident in the results of system functions such as  `⎕AT`, `⎕SRC`, `⎕CR`, `⎕VR` and `⎕NR`.
+    - source code changes resulting from reformatting will be evident in the results of system functions such as [⎕ATX](https://help.dyalog.com/latest/index.htm#Language/System%20Functions/atx.htm), [⎕SRC](https://help.dyalog.com/latest/index.htm#Language/System%20Functions/src.htm), [⎕CR](https://help.dyalog.com/latest/index.htm#Language/System%20Functions/cr.htm), [⎕VR](https://help.dyalog.com/latest/index.htm#Language/System%20Functions/vr.htm) and [⎕NR](https://help.dyalog.com/latest/index.htm#Language/System%20Functions/nr.htm).
 
 ### Keyboard Tab
 
@@ -304,7 +303,6 @@ Allows customisation of the syntax colouring. Several schemes are provided, any 
 ---
 
 ### Title Tab
-
 
 Allows customisation of the caption at the top of the Session.
 

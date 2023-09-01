@@ -11,7 +11,7 @@ nav:
   - ridespecific_language_features.md
   - customising_your_session.md
   - keyboard_shortcuts.md
-  - sample_configuration_file.md
+  - "Sample Configuration File": sample_configuration_file.md
 
 theme:
   favicon: 'img/favicon-32.png'
