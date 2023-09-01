@@ -432,7 +432,26 @@
         
   
   <span class="md-ellipsis">
-    Sample Configuration File
+    Appendix: Sample Configuration File
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../protocol/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Appendix: the RIDE Protocol
   </span>
   
 
@@ -558,7 +577,14 @@
       
         <li class="md-nav__item">
   <a href="#sample_configuration_file" class="md-nav__link">
-    11. Sample Configuration File
+    11. Appendix: Sample Configuration File
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protocol" class="md-nav__link">
+    12. Appendix: the RIDE Protocol
   </a>
   
 </li>
@@ -667,7 +693,14 @@
       
         <li class="md-nav__item">
   <a href="#sample_configuration_file" class="md-nav__link">
-    11. Sample Configuration File
+    11. Appendix: Sample Configuration File
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#protocol" class="md-nav__link">
+    12. Appendix: the RIDE Protocol
   </a>
   
 </li>
@@ -1003,7 +1036,7 @@ General note icons, and the type of material that they are used to emphasise, in
 <p>A weak interrupt suspends execution at the start of the next line (generally after completing execution of the statement currently being processed). A weak interrupt is issued by selecting <code>Actions &gt; Weak Interrupt</code> in the menu options or by pressing <kbd>Break</kbd> (usually <kbd>Ctrl</kbd>+<kbd>Pause</kbd>, but configurable via <code>Edit &gt; Preferences &gt; Shortcuts &gt; WI</code>).</p>
 <h2 id="working_in_a_dyalog_session-terminating-a-dyalog-session-running-through-ride">Terminating a Dyalog Session Running Through RIDE</h2>
 <p>RIDE will close when the interpreter terminates, including through entering <code>)OFF</code> or <code>⎕OFF</code> in the interactive session.</p></section><section class="print-page" id="ridespecific_language_features"><h1 id="ridespecific_language_features-ride-specific-language-features">RIDE-Specific Language Features</h1>
-<p>When running a Dyalog Session through the RIDE, the majority of language features remain unaltered. However, there are a few additional features (see <a href="#ridespecific_language_features-i-beams">I-beams</a> and <a href="#ridespecific_language_features-configuration-parameters">RIDE-Specific Configuration Parameters</a>) and some existing functionality that is meaningless (see <a href="#ridespecific_language_features-unsupported_language_elements">Unsupported Language Elements</a>) when a Session is running through the RIDE.</p>
+<p>When running a Dyalog Session through RIDE, the majority of language features remain unaltered. However, there are a few additional features (see <a href="#ridespecific_language_features-i-beams">I-beams</a> and <a href="#ridespecific_language_features-configuration-parameters">RIDE-Specific Configuration Parameters</a>) and some existing functionality that is meaningless (see <a href="#ridespecific_language_features-unsupported_language_elements">Unsupported Language Elements</a>) when a Session is running through RIDE.</p>
 <h2 id="ridespecific_language_features-i-beams">I-Beams</h2>
 <p>I-Beam is a monadic operator that provides a range of system-related services.</p>
 <p><strong>Syntax</strong>: <code>R←{X}(A⌶)Y</code></p>
@@ -1011,55 +1044,27 @@ General note icons, and the type of material that they are used to emphasise, in
 <p class="admonition-title">Warning</p>
 <p>Any service provided using an I-Beam should be considered as experimental and subject to change – without notice – from one release to the next. Any use of I-Beams in applications should, therefore, be carefully isolated in cover-functions that can be adjusted if necessary.</p>
 </div>
-<p>There are three I-Beams that are only relevant to the RIDE: <a href="https://help.dyalog.com/latest/index.htm#Language/I%20Beam%20Functions/Send%20Text%20to%20RIDE-embedded%20Browser.htm?Highlight=3500%E2%8C%B6">3500⌶</a>, <a href="https://help.dyalog.com/latest/index.htm#Language/I%20Beam%20Functions/Connected%20to%20the%20RIDE.htm?Highlight=3501%E2%8C%B6">3501⌶</a> and <a href="https://help.dyalog.com/latest/index.htm#Language/I%20Beam%20Functions/Manage%20RIDE%20Connections.htm?Highlight=3502%E2%8C%B6">3502⌶</a>.</p>
-<h3 id="ridespecific_language_features-3500-send-html-to-the-ride">3500⌶ (Send HTML to the RIDE)</h3>
-<p><strong>Syntax</strong>: <code>R←{X}(3500⌶)Y</code></p>
-<p>Optionally, <code>X</code> is a simple character vector or scalar, the contents of which are used as the caption of an embedded browser window opened by the RIDE client. If omitted, then the caption defaults to <code>3500⌶</code>.</p>
-<p><code>Y</code> is a simple character vector of HTML markup, the contents of which are displayed in the embedded browser tab.</p>
-<p><code>R</code> identifies whether the write to the RIDE was successful. </p>
-<p>Possible values are:</p>
+<p>There are three I-Beams that are only relevant to RIDE. Consult the main Dyalog documentation for details: </p>
 <ul>
-<li><code>0</code>: the write to the RIDE client was successful</li>
-<li><code>¯1</code>: the RIDE client is not enabled</li>
+<li><a href="https://help.dyalog.com/latest/index.htm#Language/I%20Beam%20Functions/Send%20Text%20to%20RIDE-embedded%20Browser.htm?Highlight=3500%E2%8C%B6">3500⌶ (Send HTML to RIDE)</a></li>
+<li><a href="https://help.dyalog.com/latest/index.htm#Language/I%20Beam%20Functions/Connected%20to%20the%20RIDE.htm?Highlight=3501%E2%8C%B6">3501⌶ (Connected to RIDE?)</a></li>
+<li><a href="https://help.dyalog.com/latest/index.htm#Language/I%20Beam%20Functions/Manage%20RIDE%20Connections.htm?Highlight=3502%E2%8C%B6">3502⌶ (Manage RIDE Connectors)</a>.</li>
 </ul>
-<h3 id="ridespecific_language_features-3501-connected-to-the-ride">3501⌶ (Connected to the RIDE?)</h3>
-<p><strong>Syntax</strong>: <code>R←{X}(3501⌶)Y</code></p>
-<p><code>X</code> and <code>Y</code> can be any value (ignored).</p>
-<p><code>R</code> identifies whether the Dyalog Session is running through the RIDE. </p>
-<p>Possible values are:</p>
-<ul>
-<li><code>0</code>: the Session is not running through the RIDE</li>
-<li><code>1</code>: the Session is running through the RIDE</li>
-</ul>
-<h3 id="ridespecific_language_features-3502-manage-ride-connectors">3502⌶ (Manage RIDE Connectors)</h3>
 <div class="admonition note">
 <p class="admonition-title">Microsoft Windows</p>
-<p>By default, the RIDE is not enabled on run-time executables. For security reasons, enabling the RIDE is a two-step process rather than using (for example) a single configuration parameter. To enable the RIDE, two steps must be taken:</p>
+<p>By default, RIDE is not enabled on run-time executables. For security reasons, enabling RIDE is a two-step process rather than using (for example) a single configuration parameter. To enable RIDE, two steps must be taken:</p>
 <ol>
 <li>Set the <code>RIDE_INIT</code> configuration parameter (see <a href="#ridespecific_language_features-ride_init">RIDE_INIT</a>) on the machine on which the run-time interpreter is running to an appropriate value.</li>
 <li>Execute <code>3502⌶1</code> in your application code.</li>
 </ol>
 <p>The run time interpreter can then attempt to connect to a RIDE client.</p>
-<p>Enabling the RIDE to access applications that use the run-time interpreter means that the APL code of those applications can be accessed. The I-beam mechanism described above means that the APL code itself must grant the right for a RIDE client to connect to the run time interpreter. Although Dyalog Ltd might change the details of this mechanism, the APL code will always need to grant connection rights. In particular, no mechanism that is only dependent on configuration parameters will be implemented.</p>
+<p>Enabling RIDE to access applications that use the run-time interpreter means that the APL code of those applications can be accessed. The I-beam mechanism described above means that the APL code itself must grant the right for a RIDE client to connect to the run time interpreter. Although Dyalog Ltd might change the details of this mechanism, the APL code will always need to grant connection rights. In particular, no mechanism that is only dependent on configuration parameters will be implemented.</p>
 </div>
-<p><strong>Syntax</strong>: <code>R←3502⌶Y</code></p>
-<p><code>R</code> is <code>0</code> if the call is successful, otherwise an integer (positive or negative) is returned.</p>
-<p><code>Y</code> can be any of the following possible values:</p>
-<ul>
-<li><code>0</code> : disable any active RIDE connections.<code>R</code> is always <code>0</code></li>
-<li><code>R</code> is always <code>0</code></li>
-<li><code>1</code> : enable the RIDE using the initialisation string defined in the RIDE_INIT configuration parameter: if <code>R</code> is <code>0</code>, then the RIDE was disabled and is now successfully enabledif <code>R</code> is <code>¯1</code>, then the RIDE was already activeif <code>R</code> is <code>32</code>, then the RIDE DLL/shared library is not availableif <code>R</code> is <code>64</code>, then the <code>RIDE_INIT</code> configuration parameter is not correctly defined</li>
-<li>if <code>R</code> is <code>0</code>, then the RIDE was disabled and is now successfully enabled</li>
-<li>if <code>R</code> is <code>¯1</code>, then the RIDE was already active</li>
-<li>if <code>R</code> is <code>32</code>, then the RIDE DLL/shared library is not available</li>
-<li>if <code>R</code> is <code>64</code>, then the RIDE_INIT configuration parameter is not correctly defined</li>
-<li>a simple character vector : replace the RIDE_INIT configuration parameter with the specified initialisation string, which should be in the format specified in <a href="#ridespecific_language_features-ride_init">RIDE Init</a>. </li>
-</ul>
-<p>For example, <code>3502⌶'SERVE:*:4502'</code> configures the interpreter to accept incoming RIDE connections from any machine on port 4502, and then enables the RIDE with that configuration.if <code>R</code> is <code>0</code>, then the RIDE was disabledif <code>R</code> is <code>¯2</code>, then the RIDE was active
-- if <code>R</code> is <code>0</code>, then the RIDE was disabled
-- if <code>R</code> is <code>¯2</code>, then the RIDE was active</p>
-<p>On a run-time interpreter, <code>3502⌶1</code> is the only way to enable the RIDE.</p>
-<p>If the RIDE_INIT configuration parameter is set but the RIDE DLLs/shared libraries are not available, then a run-time interpreter will start but the subsequent call to <code>3502⌶</code> will be unsuccessful.</p>
+<p>For example, <code>3502⌶'SERVE:*:4502'</code> configures the interpreter to accept incoming RIDE connections from any machine on port 4502, and then enables RIDE with that configuration.if <code>R</code> is <code>0</code>, then RIDE was disabledif <code>R</code> is <code>¯2</code>, then RIDE was active
+- if <code>R</code> is <code>0</code>, then RIDE was disabled
+- if <code>R</code> is <code>¯2</code>, then RIDE was active</p>
+<p>On a run-time interpreter, <code>3502⌶1</code> is the only way to enable RIDE.</p>
+<p>If the <code>RIDE_INIT</code> configuration parameter is set but RIDE DLLs/shared libraries are not available, then a run-time interpreter will start but the subsequent call to <code>3502⌶</code> will be unsuccessful.</p>
 <h2 id="ridespecific_language_features-configuration-parameters">Configuration Parameters</h2>
 <p>Some customisation can be performed using configuration parameters outside a Session. For details of other configuration parameters that can be set, and the syntax used to set them, see the Dyalog Installation and Configuration Guide specific to the operating system that you are using:</p>
 <ul>
@@ -1067,16 +1072,16 @@ General note icons, and the type of material that they are used to emphasise, in
 <li><a href="https://docs.dyalog.com/latest/Dyalog%20for%20Microsoft%20Windows%20Installation%20and%20Configuration%20Guide.pdf">Microsoft Windows Installation and Configuration Guide</a></li>
 <li><a href="https://docs.dyalog.com/latest/Dyalog%20for%20UNIX%20Installation%20and%20Configuration%20Guide.pdf">UNIX Installation and Configuration Guide</a></li>
 </ul>
-<p>Changes made to configuration parameters in the <code>dyalog.config</code> file only impact local interpreters (that is, interpreters that are configured by that file) and do not impact interpreters that the RIDE can connect with on other machines.</p>
+<p>Changes made to configuration parameters in the <code>dyalog.config</code> file only impact local interpreters (that is, interpreters that are configured by that file) and do not impact interpreters that RIDE can connect with on other machines.</p>
 <h3 id="ridespecific_language_features-ride_editor">RIDE_EDITOR</h3>
-<p>This configuration parameter specifies the fully-qualified path to the executable of the editor to use in a Dyalog Session instead of the RIDE's built-in editor (for example, vim, Emacs or Notepad++).</p>
+<p>This configuration parameter specifies the fully-qualified path to the executable of the editor to use in a Dyalog Session instead of RIDE's built-in editor (for example, vim, Emacs or Notepad++).</p>
 <h3 id="ridespecific_language_features-ride_init">RIDE_INIT</h3>
 <p>This configuration parameter specifies how
-How the interpreter should behave with respect to the RIDE protocol. Setting this configuration parameter on the machine that hosts the interpreter enables the interpreter-RIDE connection.</p>
+How the interpreter should behave with respect to RIDE protocol. Setting this configuration parameter on the machine that hosts the interpreter enables the interpreter-RIDE connection.</p>
 <p>The format of the value is <code>{mode:setting}[,mode:setting]</code></p>
 <p>where <code>mode</code> is the action that the interpreter should take and determines the content of the <code>setting</code>. Valid (case-insensitive) values are:</p>
 <ul>
-<li><code>SERVE</code> – listen for incoming connections from the RIDE client</li>
+<li><code>SERVE</code> – listen for incoming connections from RIDE client</li>
 <li><code>CONNECT</code> – attempt to connect to the specified RIDE client and end the session if this fails</li>
 <li><code>POLL</code> – attempt to connect to the specified RIDE client at regular intervals and reconnect if the connection is lost</li>
 <li><code>HTTP</code> – listen for incoming connections from the web browser, via <a href="#starting_a_dyalog_session-zero-footprint-mode">zero footprint RIDE</a></li>
@@ -1109,11 +1114,11 @@ How the interpreter should behave with respect to the RIDE protocol. Setting thi
 <p>If <code>mode</code> is <code>CONNECT</code> or <code>POLL</code>, then <code>setting</code> is <code>address:port</code>, where:</p>
 <ul>
 <li>
-<p><code>address</code> is the destination address to attempt to connect to (the machine/interface running the RIDE client). Valid values are:</p>
+<p><code>address</code> is the destination address to attempt to connect to (the machine/interface running RIDE client). Valid values are:</p>
 <ul>
-<li>the host/DNS name of a machine/interface running the RIDE client</li>
-<li>the IPv4 address of a machine/interface running the RIDE client</li>
-<li>the IPv6 address of a machine/interface running the RIDE client</li>
+<li>the host/DNS name of a machine/interface running RIDE client</li>
+<li>the IPv4 address of a machine/interface running RIDE client</li>
+<li>the IPv6 address of a machine/interface running RIDE client</li>
 </ul>
 </li>
 <li>
@@ -1126,26 +1131,26 @@ How the interpreter should behave with respect to the RIDE protocol. Setting thi
 </ul>
 <p><strong>Examples</strong></p>
 <p>To listen on port 4502 for connection requests from a RIDE client running on any machine: <code>RIDE_INIT=SERVE:*:4502</code></p>
-<p>To attempt to connect to a RIDE client running on a different machine (with IPv4 address 10.0.38.1 and listening on port 4502) and end the Session if unable to do so:<code>RIDE_INIT=CONNECT:10.0.38.1:4502</code></p>
+<p>To attempt to connect to a RIDE client running on a different machine (with IPv4 address 10.0.38.1 and listening on port 4502) and end the Session if unable to do so: <code>RIDE_INIT=CONNECT:10.0.38.1:4502</code></p>
 <p>To establish a connection using the settings in the ride_sample.ini file:<code>RIDE_INIT=CONFIG:C:/tmp/ride_sample.ini</code></p>
-<p>To attempt to establish a secure connection with a RIDE client running on a different machine (with IPv4 address 10.0.38.1 and listening on port 4502) using certificate details specified in the ride_sample.ini file:<code>RIDE_INIT=CONFIG:C:\tmp\ride_sample.ini,CONNECT:10.0.38.1:4502</code>or<code>RIDE_INIT=CONNECT:10.0.38.1:4502,CONFIG:C:\tmp\ride_sample.ini</code></p>
-<p>With Dyalog and the RIDE installed on a machine with IPv4 address 10.0.38.1, to listen on port 4502 for connection requests from a web browser running on any machine (<a href="#starting_a_dyalog_session-the-zero-footprint-ride">Zero Footprint RIDE</a>):<code>RIDE_INIT=HTTP:*:4502</code></p>
+<p>To attempt to establish a secure connection with a RIDE client running on a different machine (with IPv4 address 10.0.38.1 and listening on port 4502) using certificate details specified in the ride_sample.ini file: <code>RIDE_INIT=CONFIG:C:\tmp\ride_sample.ini,CONNECT:10.0.38.1:4502</code> or <code>RIDE_INIT=CONNECT:10.0.38.1:4502,CONFIG:C:\tmp\ride_sample.ini</code></p>
+<p>With Dyalog and RIDE installed on a machine with IPv4 address 10.0.38.1, to listen on port 4502 for connection requests from a web browser running on any machine (<a href="#starting_a_dyalog_session-the-zero-footprint-ride">Zero Footprint RIDE</a>):<code>RIDE_INIT=HTTP:*:4502</code></p>
 <p>To open the Zero Footprint RIDE in a web browser on:</p>
 <ul>
 <li>the local machine: URL = <code>http://localhost:4502</code></li>
 <li>a different machine: URL = <code>http://10.0.38.1:4502</code></li>
 </ul>
-<p>The <code>RIDE_INI</code> configuration parameter is set automatically when launching a new Dyalog Session from the RIDE.</p>
+<p>The <code>RIDE_INI</code> configuration parameter is set automatically when launching a new Dyalog Session from RIDE.</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>If the <code>RIDE_INIT</code> configuration parameter is set but the RIDE DLLs/shared libraries are not available, then a run-time interpreter will start but the subsequent call to <code>3502⌶</code> will be unsuccessful – see <a href="https://help.dyalog.com/latest/index.htm#Language/I%20Beam%20Functions/Manage%20RIDE%20Connections.htm?Highlight=3502%E2%8C%B6">3502⌶</a>.</p>
+<p>If the <code>RIDE_INIT</code> configuration parameter is set but RIDE DLLs/shared libraries are not available, then a run-time interpreter will start but the subsequent call to <code>3502⌶</code> will be unsuccessful – see <a href="https://help.dyalog.com/latest/index.htm#Language/I%20Beam%20Functions/Manage%20RIDE%20Connections.htm?Highlight=3502%E2%8C%B6">3502⌶</a>.</p>
 </div>
 <h2 id="ridespecific_language_features-unsupported-language-elements">Unsupported Language Elements</h2>
-<p>When running a Dyalog Session through the RIDE, a few of the features that are available with non-RIDE Sessions do not function as might be expected.</p>
+<p>When running a Dyalog Session through RIDE, a few of the features that are available with non-RIDE Sessions do not function as might be expected.</p>
 <h3 id="ridespecific_language_features-underscored-characters">Underscored Characters</h3>
 <p>Underscored characters can be entered into the <strong>Session</strong> window and <strong>Edit</strong> windows using the <code>_&lt;letter&gt;` method, for example, enter</code>_f<code>to produce</code>Ⓕ`.</p>
 <h4 id="ridespecific_language_features-underscored-characters-in-window-captions">Underscored Characters in Window Captions</h4>
-<p>The RIDE is restricted by the operating system when it comes to displaying underscored characters in window titles (captions). This restriction means that:</p>
+<p>RIDE is restricted by the operating system when it comes to displaying underscored characters in window titles (captions). This restriction means that:</p>
 <ul>
 <li>if the APL385 font is installed (and the operating system has been configured to allow the title bar to use it), underscored characters are displayed as circled characters.</li>
 <li>if the APL385 font is not installed, underscored characters are displayed as a white rectangle, a black rectangle containing a question mark, or some other Unicode-compliant substitution.</li>
@@ -1157,25 +1162,25 @@ How the interpreter should behave with respect to the RIDE protocol. Setting thi
 <p>The <strong>Edit</strong> window that is opened displays the name correctly, but its title (caption) is displayed incorrectly, as shown below (assuming window is docked):</p>
 <p><img src="../img/screenshots/s_example_underscored.png" style="border:1px solid black" /></p>
 <h4 id="ridespecific_language_features-underscored-characters-in-the-session">Underscored Characters in the Session</h4>
-<p>If the RIDE is connected to a Unicode edition of Dyalog, then underscored characters are displayed correctly in the <strong>Session</strong> window, <strong>Edit</strong> windows and <strong>Trace</strong> windows. If the RIDE is connected to a classic edition of Dyalog, then the following command must be run in every APL Session to enable the underscored alphabet to be displayed correctly:</p>
+<p>If RIDE is connected to a Unicode edition of Dyalog, then underscored characters are displayed correctly in the <strong>Session</strong> window, <strong>Edit</strong> windows and <strong>Trace</strong> windows. If RIDE is connected to a classic edition of Dyalog, then the following command must be run in every APL Session to enable the underscored alphabet to be displayed correctly:</p>
 <pre><code class="language-apl">      ⎕IO←0
       ⎕AVU[97+⍳26]←9398+⍳2      
       2 ⎕NQ '.' 'SetUnicodeTable' ⎕AVU
 </code></pre>
 <h3 id="ridespecific_language_features-function-key-configuration">Function Key Configuration</h3>
-<p>Character strings (including command keys) can be associated with programmable function keys using the <code>⎕PFKEY</code> system function. When running a Dyalog Session through the RIDE, <code>⎕PFKEY</code> can be used to define/display the keystrokes for a designated function key; however, that function key does not acquire the defined set of keystrokes, rendering <code>⎕PFKEY</code> of no real use. Instead, function keys should be set through the Shortcuts tab of the Preferences dialog box.</p>
+<p>Character strings (including command keys) can be associated with programmable function keys using the <code>⎕PFKEY</code> system function. When running a Dyalog Session through RIDE, <code>⎕PFKEY</code> can be used to define/display the keystrokes for a designated function key; however, that function key does not acquire the defined set of keystrokes, rendering <code>⎕PFKEY</code> of no real use. Instead, function keys should be set through the Shortcuts tab of the Preferences dialog box.</p>
 <h3 id="ridespecific_language_features-operating-system-terminalcommand-window-interaction">Operating System Terminal/Command Window Interaction</h3>
-<p>Features that rely on interaction with an operating system terminal/command window (that is, <code>⎕SR</code> and <code>)SH</code> or <code>)CMD</code> with no argument) cannot work in a Dyalog Session that is running through the RIDE. Instead of behaving as documented in the Dyalog APL Language Reference Guide, their behaviour depends on the way in which the interpreter and the RIDE combined to start a Dyalog Session:</p>
+<p>Features that rely on interaction with an operating system terminal/command window (that is, <code>⎕SR</code> and <code>)SH</code> or <code>)CMD</code> with no argument) cannot work in a Dyalog Session that is running through RIDE. Instead of behaving as documented in the Dyalog APL Language Reference Guide, their behaviour depends on the way in which the interpreter and RIDE combined to start a Dyalog Session:</p>
 <ul>
 <li>
-<p>If the interpreter was started by the RIDE, then:</p>
+<p>If the interpreter was started by RIDE, then:</p>
 <ul>
 <li><code>⎕SR</code> generates a trappable error</li>
 <li><code>)SH</code> or <code>)CMD</code> with no argument produces a "Feature disabled in this environment" message.</li>
 </ul>
 </li>
 <li>
-<p>If the interpreter and the RIDE were started independently and then connected to each other, then the use of these features will appear to hang the Dyalog Session that is running through the RIDE. However, the Dyalog Session can be recovered by locating the operating system terminal/command window and using it to complete the operation. If there is no operating system terminal/command window, then the Dyalog Session is irrecoverable.</p>
+<p>If the interpreter and RIDE were started independently and then connected to each other, then the use of these features will appear to hang the Dyalog Session that is running through RIDE. However, the Dyalog Session can be recovered by locating the operating system terminal/command window and using it to complete the operation. If there is no operating system terminal/command window, then the Dyalog Session is irrecoverable.</p>
 </li>
 </ul></section><section class="print-page" id="customising_your_session"><h1 id="customising_your_session-customising-your-session">Customising Your Session</h1>
 <p>The appearance and behaviour of a Dyalog Session running through the RIDE can be customised to meet personal preferences and corporate guidelines. Configuration can be performed:</p>
@@ -2166,7 +2171,815 @@ IPV6= 2a02:2658:1012::35/64
 </tr>
 </tbody>
 </table>
-<p>TLS flags have the same meaning irrespective of whether the RIDE is acting as a server or a client. However, for a server they are applied each time a new connection is established whereas for a client they are only applied when the client object is created.</p></section></div>
+<p>TLS flags have the same meaning irrespective of whether the RIDE is acting as a server or a client. However, for a server they are applied each time a new connection is established whereas for a client they are only applied when the client object is created.</p></section><section class="print-page" id="protocol"><h1 id="protocol-appendix-the-ride-protocol">Appendix: The RIDE Protocol</h1>
+<h2 id="protocol-introduction">Introduction</h2>
+<blockquote>
+<p>Note: A red circle :red_circle: marks internal notes which won't appear in the final version.</p>
+</blockquote>
+<p>The RIDE protocol is formed of messages sent in either direction over a TCP connection.</p>
+<p>A message starts with a 4-byte big-endian <em>total length</em> field, followed by the ASCII bytes for <code>"RIDE"</code> and a
+UTF-8-encoded payload:</p>
+<pre><code>    8+len(payload)   &quot;RIDE&quot; magic number   payload
+┌───────────────────┬───────────────────┬─────~─────┐
+│0x00 0x00 0x00 0x0b│0x52 0x49 0x44 0x45│    ...    │
+└───────────────────┴───────────────────┴─────~─────┘
+</code></pre>
+<p><em>Total length</em> is 8 + the payload's length in bytes.
+The payload is almost always a 2-element JSON array consisting of a command name and arguments as key/value pairs:</p>
+<pre><code class="language-json">[&quot;CommandName&quot;,{&quot;key1&quot;:&quot;value1&quot;,&quot;key2&quot;:222,&quot;key3&quot;:[3,4,5]}]
+</code></pre>
+<p>The only exception are the first two messages that each side sends upon establishing a connection.
+These constitute the <em>handshake</em> and are not JSON-encoded.  Their payloads are:</p>
+<pre><code>SupportedProtocols=2
+UsingProtocol=2
+</code></pre>
+<p>Messages are independent and after the handshake can be sent/received in any order. Some messages infer that the other
+end will send a reply, but that reply may not be the next message to be received, or even ever be sent.</p>
+<h3 id="protocol-unknowncommand">UnknownCommand <a name=UnknownCommand></a></h3>
+<p>If the receiver of a message does not recognise it, it should respond with</p>
+<pre><code class="language-json">[&quot;UnknownCommand&quot;,{&quot;name&quot;:&quot;Xyz&quot;}]
+</code></pre>
+<h3 id="protocol-internalerror">InternalError <a name=InternalError></a></h3>
+<p>Should the interpreter generate an error during the processing of an incoming RIDE message it will respond with an InternalError message:</p>
+<pre><code class="language-json">[&quot;InternalError&quot;,{&quot;error&quot;:1,&quot;error_text&quot;:&quot;WS FULL&quot;,&quot;dmx&quot;:&quot;&quot;,&quot;message&quot;:&quot;Edit&quot;}]
+</code></pre>
+<ul>
+<li><code>error</code>: aka ⎕EN</li>
+<li><code>error_text</code>: aka ⎕EM </li>
+<li><code>dmx</code>: the DMX message for the error (currently always empty)</li>
+<li><code>message</code>: the name of the originating incoming RIDE message</li>
+</ul>
+<p>The connection may be closed at any time, leaving some messages undelivered or unprocessed.</p>
+<p>Command names and their arguments are case-sensitive.</p>
+<p>JSON booleans <code>true</code> and <code>false</code> can be freely substituted with and should be treated as equivalent to <code>1</code> and <code>0</code>.</p>
+<h2 id="protocol-connection-setup-and-teardown">Connection setup and teardown</h2>
+<h3 id="protocol-identify">Identify <a name=Identify></a></h3>
+<p>After the connection has been established and a protocol agreed, both peers immediately send an <code>Identify</code> message to indicate what type of application they are.</p>
+<pre><code class="language-json">[&quot;Identify&quot;,{&quot;apiVersion&quot;:1,&quot;identity&quot;:1}]
+</code></pre>
+<p>The <code>apiVersion</code> is introduced as a mechanism to handle breaking changes in the API.</p>
+<p>Constants for <code>identity</code>:
+- <code>1</code> RIDE,
+- <code>2</code> interpreter,
+- <code>3</code> process manager.</p>
+<p>:red_circle: The interpreter sends an <code>Identify</code> that means something else and has different args.</p>
+<h4 id="protocol-apiversion-1">apiVersion &lt; 1</h4>
+<p>The interpreter responds with an Identify messsage containing details about the interpreter.</p>
+<h4 id="protocol-apiversion-1_1">apiVersion = 1</h4>
+<p>The interpreter responds with a <code>ReplyIdentify</code> messsage containing details about the interpreter.</p>
+<p>They should then check the type of application they are connected to, and if not happy to continue, close the connection.  For instance, RIDE may check that the application it's connected to is an interpreter or a process manager. If it finds the peer is another RIDE, it should close the connection.</p>
+<p>:red_circle: In reality RIDE doesn't bother verifying that it's not talking to another RIDE.</p>
+<h3 id="protocol-replyidentify">ReplyIdentify <a name=ReplyIdentify></a></h3>
+<h4 id="protocol-apiversion-1_2">apiVersion = 1</h4>
+<p>The interpreter responds with a <code>ReplyIdentify</code> messsage containing details about the interpreter.</p>
+<pre><code class="language-json">[&quot;ReplyIdentify&quot;,{ // Interpreter -&gt; RIDE
+  &quot;apiVersion&quot;:1,
+  &quot;Port&quot;:0,
+  &quot;IPAddress&quot;:&quot;&quot;,
+  &quot;Vendor&quot;:&quot;Dyalog Limited&quot;,
+  &quot;Language&quot;:&quot;APL&quot;,
+  &quot;version&quot;:&quot;18.2.46943&quot;,
+  &quot;Machine&quot;:&quot;HOSTNAME&quot;,
+  &quot;arch&quot;:&quot;Unicode/64&quot;,
+  &quot;Project&quot;:&quot;CLEAR WS&quot;,
+  &quot;Process&quot;:&quot;dyalog.exe&quot;,
+  &quot;User&quot;:&quot;username&quot;,
+  &quot;pid&quot;:1000,
+  &quot;token&quot;:&quot;{F53F7747-B404-4F7A-893D-954F2764CC74}&quot;,
+  &quot;date&quot;:&quot;Created: Apr 10 2023 at 19:29:32&quot;,
+  &quot;platform&quot;:&quot;Windows-64&quot;
+}]
+</code></pre>
+<p>The <code>apiVersion</code> specifies the negotiated API version accepted by the interpreter.</p>
+<h3 id="protocol-getlog">GetLog <a name=GetLog></a></h3>
+<h4 id="protocol-apiversion-1_3">apiVersion = 1</h4>
+<p>Request the session log from the interpreter. </p>
+<pre><code class="language-json">[&quot;GetLog&quot;,{&quot;format&quot;:&quot;json&quot;,&quot;maxLines&quot;:100}] // RIDE -&gt; Interpreter
+</code></pre>
+<p><code>format</code> defaults to "json" if not specified.
+<code>maxLines</code> limits the number of lines returned (-1 = unlimited)</p>
+<h3 id="protocol-replygetlog">ReplyGetLog <a name=ReplyGetLog></a></h3>
+<h4 id="protocol-apiversion-1_4">apiVersion &lt; 1</h4>
+<p>After it has received the Connect command the interpreter will send 0 or more "ReplyGetLog" messages containing the session log:</p>
+<pre><code class="language-json">[&quot;ReplyGetLog&quot;,{&quot;result&quot;:[&quot;line 1&quot;,&quot;line 2&quot;]}] // Interpreter -&gt; RIDE
+</code></pre>
+<h4 id="protocol-apiversion-1_5">apiVersion = 1</h4>
+<p>After it has received a "GetLog" command the interpreter will send 0 or more "ReplyGetLog" messages containing the session log in the format requested.
+For <code>text</code> format:</p>
+<pre><code class="language-json">[&quot;ReplyGetLog&quot;,{&quot;result&quot;:[&quot;line 1&quot;,&quot;line 2&quot;]}] // Interpreter -&gt; RIDE
+</code></pre>
+<p>For <code>json</code> format:</p>
+<pre><code class="language-json">[&quot;ReplyGetLog&quot;,{&quot;result&quot;:[ // Interpreter -&gt; RIDE
+  {
+    &quot;group&quot;: 1,
+    &quot;type&quot;: 1,
+    &quot;text&quot;: &quot;line 1&quot;,
+  },{
+    &quot;group&quot;: 1,
+    &quot;type&quot;: 1,
+    &quot;text&quot;: &quot;line 2&quot;,
+  },
+  ]}]
+</code></pre>
+<h3 id="protocol-syserror">SysError <a name=SysError></a></h3>
+<p>If at any time the interpreter crashes with a <a href="http://help.dyalog.com/16.0/Content/Language/Errors/System%20Errors.htm">syserror</a>, it sends;</p>
+<pre><code class="language-json">[&quot;SysError&quot;,{&quot;text&quot;:&quot;apl: sys error 123 errno 456&quot;,&quot;stack&quot;:&quot;&quot;}] // Interpreter -&gt; RIDE
+</code></pre>
+<h3 id="protocol-exit">Exit <a name=Exit></a></h3>
+<p>If the interpreter has been started by RIDE, RIDE should shut it down cleanly when the user closes the main application
+window (the session window):</p>
+<pre><code class="language-json">[&quot;Exit&quot;,{&quot;code&quot;:0}] // RIDE -&gt; Interpreter
+</code></pre>
+<h2 id="protocol-session-control">Session control</h2>
+<h4 id="protocol-apiversion-1_6">apiVersion &lt; 1</h4>
+<p>Any echoed input or interpreter output are sent to RIDE using either;</p>
+<h3 id="protocol-echoinput">EchoInput <a name=EchoInput></a></h3>
+<pre><code class="language-json">[&quot;EchoInput&quot;,{&quot;input&quot;:&quot;      1 2 3+4 5 6\n&quot;}] // Interpreter -&gt; RIDE
+</code></pre>
+<h3 id="protocol-appendsessionoutput">AppendSessionOutput <a name=AppendSessionOutput></a></h3>
+<pre><code class="language-json">[&quot;AppendSessionOutput&quot;,{&quot;result&quot;:&quot;5 7 9&quot;}]  // Interpreter -&gt; RIDE
+</code></pre>
+<p>These two perform essentially the same task except that <code>AppendSessionOutput</code> doesn't necessarily have trailing <code>"\n"</code>-s at the end of <code>result</code>.</p>
+<h4 id="protocol-apiversion-1_7">apiVersion = 1</h4>
+<p>Any echoed input or interpreter output are sent to RIDE using either;</p>
+<pre><code class="language-json">[&quot;AppendSessionOutput&quot;,{&quot;result&quot;:&quot;5 7 9&quot;,&quot;type&quot;:1,&quot;group&quot;:1}]  // Interpreter -&gt; RIDE
+</code></pre>
+<p><code>type</code> specifies the source of the output:</p>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>reserved</td>
+</tr>
+<tr>
+<td>1</td>
+<td>undetermined session output</td>
+</tr>
+<tr>
+<td>2</td>
+<td>default output e.g. not assigned to ⎕ or ⍞</td>
+</tr>
+<tr>
+<td>3</td>
+<td>what would have been always sent to stderr</td>
+</tr>
+<tr>
+<td>4</td>
+<td>output from system commands</td>
+</tr>
+<tr>
+<td>5</td>
+<td>APL error message. e.g. ^ and DOMAIN ERROR</td>
+</tr>
+<tr>
+<td>6</td>
+<td>reserved</td>
+</tr>
+<tr>
+<td>7</td>
+<td>⎕ output</td>
+</tr>
+<tr>
+<td>8</td>
+<td>⍞ output</td>
+</tr>
+<tr>
+<td>9</td>
+<td>"information" that would have gone to the "status window"</td>
+</tr>
+<tr>
+<td>10</td>
+<td>reserved</td>
+</tr>
+<tr>
+<td>11</td>
+<td>echoed input</td>
+</tr>
+<tr>
+<td>12</td>
+<td>⎕TRACE output</td>
+</tr>
+<tr>
+<td>13</td>
+<td>reserved</td>
+</tr>
+<tr>
+<td>14</td>
+<td>A “normal” input line</td>
+</tr>
+</tbody>
+</table>
+<h3 id="protocol-setprompttype">SetPromptType <a name=SetPromptType></a></h3>
+<p>The interpreter informs RIDE about changes in its ability to accept user input with</p>
+<pre><code class="language-json">[&quot;SetPromptType&quot;,{&quot;type&quot;:5}] // Interpreter -&gt; RIDE
+</code></pre>
+<p>Constants for <code>type</code>: 
+- <code>0</code> no prompt,
+- <code>1</code> the usual 6-space APL prompt (a.k.a. Descalc or "desktop calculator"),
+- <code>2</code> <a href="http://help.dyalog.com/16.0/Content/Language/System%20Functions/Evaluated%20Input%20Output.htm">Quad(<code>⎕</code>)</a> input,
+- <code>3</code> line editor,
+- <code>4</code> <a href="http://help.dyalog.com/16.0/Content/Language/System%20Functions/Character%20Input%20Output.htm">Quote-Quad(<code>⍞</code>)</a> input,
+- <code>5</code> any prompt type unforeseen here.</p>
+<p>:red_circle: These modes need explaining with expected behaviour.</p>
+<h3 id="protocol-execute">Execute <a name=Execute></a></h3>
+<p>When the user presses <code>&lt;ER&gt;</code> (Enter) or <code>&lt;TC&gt;</code> (Ctrl-Enter), RIDE sends</p>
+<pre><code class="language-json">[&quot;Execute&quot;,{&quot;text&quot;:&quot;      1 2 3+4 5 6&quot;,&quot;trace&quot;:1}] // RIDE -&gt; Interpreter
+</code></pre>
+<ul>
+<li><code>text</code>: the APL code to evaluate</li>
+<li><code>trace</code>: 0 or 1, whether the expression should be evaluated in the tracer (<code>&lt;TC&gt;</code>)</li>
+</ul>
+<p>Note that RIDE can't assume that everything entered in the session will be echoed, e.g. quote quad input (<code>⍞</code>) doesn't
+echo.  Therefore, RIDE should wait for the <a href="#protocol-EchoInput"><code>EchoInput</code></a> message.</p>
+<p>If multiple lines have been modified in the session, RIDE should queue them up and send them one by one, waiting for
+a response of either <code>SetPromptType</code> with <code>type&gt;0</code> or HadError.</p>
+<h3 id="protocol-haderror">HadError <a name=HadError></a></h3>
+<p>RIDE should clear its queue of pending lines on <code>HadError</code> and focus the session.</p>
+<pre><code class="language-json">[&quot;HadError&quot;,{}] // Interpreter -&gt; RIDE
+</code></pre>
+<h3 id="protocol-setpw">SetPW <a name=SetPW></a></h3>
+<p>RIDE can optionally advise the interpreter about the session's width in characters with</p>
+<pre><code class="language-json">[&quot;SetPW&quot;,{&quot;pw&quot;:79}] // RIDE -&gt; Interpreter
+</code></pre>
+<p>Further output will wrap at that width (with a few exceptions).
+See <a href="http://help.dyalog.com/16.0/Content/Language/System%20Functions/pw.htm"><code>⎕PW</code></a>.</p>
+<h2 id="protocol-window-management">Window management</h2>
+<h3 id="protocol-edit">Edit <a name=Edit></a></h3>
+<p>When the user presses <code>&lt;ED&gt;</code> (Shift-Enter), RIDE should send;</p>
+<pre><code class="language-json">[&quot;Edit&quot;,{&quot;win&quot;:123,&quot;text&quot;:&quot;a←b+c×d&quot;,&quot;pos&quot;:4,&quot;unsaved&quot;:{&quot;124&quot;:&quot;f&quot;}}] // RIDE -&gt; Interpreter
+</code></pre>
+<p>to request opening an editor.  <code>pos</code> is the 0-based position of the cursor in <code>text</code>.
+<code>unsaved</code> is a mapping from window ids to unsaved content.</p>
+<p>:red_circle: "Edit" must be extended to submit the current content of all dirty windows, otherwise jumping from one
+method to another in a class will obliterate the current changes.</p>
+<h3 id="protocol-openwindow">OpenWindow <a name=OpenWindow></a></h3>
+<p>The interpreter will parse that and may respond later with one of;</p>
+<pre><code class="language-json">[&quot;OpenWindow&quot;,{&quot;name&quot;:&quot;f&quot;,&quot;filename&quot;:&quot;C:\\path\\to\\foo.txt&quot;,&quot;text&quot;:[&quot;r←f a&quot;,&quot;r←(+⌿÷≢)a&quot;],&quot;token&quot;:123,&quot;currentRow&quot;:0,&quot;debugger&quot;:false,
+               &quot;entityType&quot;:1,&quot;offset&quot;:0,&quot;readOnly&quot;:false,&quot;size&quot;:0,&quot;stop&quot;:[1],
+               &quot;tid&quot;:0,&quot;tname&quot;:&quot;Tid:0&quot;}] // Interpreter -&gt; RIDE
+</code></pre>
+<h3 id="protocol-updatewindow">UpdateWindow <a name=UpdateWindow></a></h3>
+<pre><code class="language-json">[&quot;UpdateWindow&quot;,...] // Interpreter -&gt; RIDE (same args as OpenWindow)
+</code></pre>
+<p>It may also send these in response to <a href="http://help.dyalog.com/16.0/Content/Language/System%20Commands/ed.htm"><code>)ed
+name</code></a> or
+<a href="http://help.dyalog.com/16.0/Content/Language/System%20Functions/ed.htm"><code>⎕ed'name'</code></a>, as well as when tracing into an
+object that is not currently being traced.</p>
+<p>Constants for <code>entityType</code>:</p>
+<table>
+<thead>
+<tr>
+<th>entityType</th>
+<th>Description</th>
+<th></th>
+<th>entityType</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1</code></td>
+<td>defined function</td>
+<td></td>
+<td><code>128</code></td>
+<td>simple character vector</td>
+</tr>
+<tr>
+<td><code>2</code></td>
+<td>simple character array</td>
+<td></td>
+<td><code>256</code></td>
+<td>APL namespace</td>
+</tr>
+<tr>
+<td><code>4</code></td>
+<td>simple numeric array</td>
+<td></td>
+<td><code>512</code></td>
+<td>APL class</td>
+</tr>
+<tr>
+<td><code>8</code></td>
+<td>mixed simple array</td>
+<td></td>
+<td><code>1024</code></td>
+<td>APL interface</td>
+</tr>
+<tr>
+<td><code>16</code></td>
+<td>nested array</td>
+<td></td>
+<td><code>2048</code></td>
+<td>APL session</td>
+</tr>
+<tr>
+<td><code>32</code></td>
+<td><a href="http://help.dyalog.com/16.0/Content/Language/System%20Functions/or.htm"><code>⎕OR</code></a> object</td>
+<td></td>
+<td><code>4096</code></td>
+<td>external function.</td>
+</tr>
+<tr>
+<td><code>64</code></td>
+<td>native file</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>:red_circle: TODO: describe the other arguments</p>
+<h3 id="protocol-gotowindow">GotoWindow <a name=GotoWindow></a></h3>
+<p>The interpreter can request transferring the focus to a particular window with;</p>
+<pre><code class="language-json">[&quot;GotoWindow&quot;,{&quot;win&quot;:123}] // Interpreter -&gt; RIDE
+</code></pre>
+<p>This could happen as a result of <code>)ED</code> or <code>⎕ED</code>.</p>
+<h3 id="protocol-windowtypechanged">WindowTypeChanged <a name=WindowTypeChanged></a></h3>
+<p>The interpreter may decide to change the type of a window (editor vs tracer) with;</p>
+<pre><code class="language-json">[&quot;WindowTypeChanged&quot;,{&quot;win&quot;:123,&quot;tracer&quot;:true}] // Interpreter -&gt; RIDE
+</code></pre>
+<h3 id="protocol-savechanges">SaveChanges <a name=SaveChanges></a></h3>
+<p>When the user presses <code>&lt;EP&gt;</code> (Esc), RIDE should request that the editor contents are fixed through;</p>
+<pre><code class="language-json">[&quot;SaveChanges&quot;,{&quot;win&quot;:123,&quot;text&quot;:[&quot;r←avg a&quot;,&quot;s←+⌿a&quot;,&quot;n←≢a&quot;,&quot;r←s÷n&quot;],&quot;stop&quot;:[2,3]}] // RIDE -&gt; Interpreter
+</code></pre>
+<ul>
+<li><code>stop</code> is an array of 0-based line numbers.</li>
+</ul>
+<h3 id="protocol-replysavechanges">ReplySaveChanges <a name=ReplySaveChanges></a></h3>
+<pre><code class="language-json">[&quot;ReplySaveChanges&quot;,{&quot;win&quot;:123,&quot;err&quot;:0}] // Interpreter -&gt; RIDE
+</code></pre>
+<p>If <code>err</code> is 0, save succeeded; otherwise it failed.</p>
+<h3 id="protocol-formatcode">FormatCode <a name=FormatCode></a></h3>
+<p>RIDE can request that the intepreter reformat code:</p>
+<pre><code class="language-json">[&quot;FormatCode&quot;,{&quot;win&quot;:123,&quot;text&quot;:[&quot;r←avg a&quot;,&quot;s←+⌿a&quot;,&quot;n ←    ≢a&quot;,&quot;r←s÷n&quot;]}] // RIDE -&gt; Interpreter
+</code></pre>
+<h3 id="protocol-replyformatcode">ReplyFormatCode <a name=ReplyFormatCode></a></h3>
+<pre><code class="language-json">[&quot;ReplyFormatCode&quot;,{&quot;win&quot;:123,&quot;text&quot;:[&quot;r←avg a&quot;,&quot;s←+⌿a&quot;,&quot;n←≢a&quot;,&quot;r←s÷n&quot;]}] // Interpreter -&gt; RIDE
+</code></pre>
+<ul>
+<li><code>win</code>: TENTATIVE: a window identifer. The interpreter needs a window in which to format the code (don't ask!). In the short term we'll insist that we can only format code in a window the interpreter is aware of.</li>
+</ul>
+<h3 id="protocol-closewindow">CloseWindow <a name=CloseWindow></a></h3>
+<p>When the user presses <code>&lt;EP&gt;</code> (Esc) and saving is successful or presses <code>&lt;QT&gt;</code> (Shift-Esc), RIDE sends;</p>
+<pre><code class="language-json">[&quot;CloseWindow&quot;,{&quot;win&quot;:123}] // RIDE -&gt; Interpreter  and  Interpreter -&gt; RIDE
+</code></pre>
+<p>but does not close the UI window until the interpreter replies with the same message.</p>
+<h3 id="protocol-closeallwindows">CloseAllWindows <a name=CloseAllWindows></a></h3>
+<p>To close all windows, but leave the SIstack unchanged RIDE can send the CloseAllWindows message.</p>
+<pre><code class="language-json">[&quot;CloseAllWindows&quot;,{}] // RIDE -&gt; Interpreter
+</code></pre>
+<p>In response the interpreter will send a CloseWindow messsage for each window that it is aware of. The CloseAllWindows message will leave the SIStack unchanged, it will just close all (trace and edit) windows in the interpreter.</p>
+<h2 id="protocol-debugging">Debugging</h2>
+<p>The following messages are used in relation to trace windows.</p>
+<h3 id="protocol-sethighlightline">SetHighlightLine <a name=SetHighlightLine></a></h3>
+<p>This tells RIDE where the currently executed line is.  Traditionally that's indicated by a red border around it.</p>
+<pre><code class="language-json">[&quot;SetHighlightLine&quot;,{&quot;win&quot;:123,&quot;line&quot;:45}] // Interpreter -&gt; RIDE
+</code></pre>
+<h3 id="protocol-setlineattributes">SetLineAttributes <a name=SetLineAttributes></a></h3>
+<p>Update the breakpoints.</p>
+<pre><code class="language-json">[&quot;SetLineAttributes&quot;,{&quot;win&quot;:123,&quot;stop&quot;:[2,3,5]}] // RIDE -&gt; Interpreter  or  Interpreter -&gt; RIDE
+</code></pre>
+<ul>
+<li><code>stop</code> is an array of 0-based line numbers.</li>
+</ul>
+<h3 id="protocol-tracebackward">TraceBackward <a name=TraceBackward></a></h3>
+<p>Request the current line in a trace window be moved back (skip back one line).</p>
+<pre><code class="language-json">[&quot;TraceBackward&quot;,{&quot;win&quot;:123}] // RIDE -&gt; Interpreter
+</code></pre>
+<h3 id="protocol-cleartracestopmonitor">ClearTraceStopMonitor <a name=ClearTraceStopMonitor></a></h3>
+<p>Request it clears all traces, stops, and monitors in the active workspace. The reply says how many of each thing were cleared.</p>
+<pre><code class="language-json">[&quot;ClearTraceStopMonitor&quot;,{&quot;token&quot;:123}] // RIDE -&gt; Interpreter
+</code></pre>
+<h3 id="protocol-replycleartracestopmonitor">ReplyClearTraceStopMonitor <a name=ReplyClearTraceStopMonitor></a></h3>
+<pre><code class="language-json">[&quot;ReplyClearTraceStopMonitor&quot;,{&quot;traces&quot;:0,&quot;stops&quot;:0,&quot;monitors&quot;:0,&quot;token&quot;:123}] // Interpreter -&gt; RIDE
+</code></pre>
+<h3 id="protocol-continue">Continue <a name=Continue></a></h3>
+<p>Request resume execution of the current thread.</p>
+<pre><code class="language-json">[&quot;Continue&quot;,{&quot;win&quot;:123}] // RIDE -&gt; Interpreter
+</code></pre>
+<h3 id="protocol-continuetrace">ContinueTrace <a name=ContinueTrace></a></h3>
+<p>Request resume execution of the current function, but stop on the next line of the calling function.</p>
+<pre><code class="language-json">[&quot;ContinueTrace&quot;,{&quot;win&quot;:123}] // RIDE -&gt; Interpreter
+</code></pre>
+<h3 id="protocol-cutback">Cutback <a name=Cutback></a></h3>
+<p>Request the stack is cut back one level.  This is equivalent to returning to the caller without executing the rest of the current function.</p>
+<pre><code class="language-json">[&quot;Cutback&quot;,{&quot;win&quot;:123}] // RIDE -&gt; Interpreter
+</code></pre>
+<h3 id="protocol-traceforward">TraceForward <a name=TraceForward></a></h3>
+<p>Request the current line in a trace window be moved forward (skip to next line).</p>
+<pre><code class="language-json">[&quot;TraceForward&quot;,{&quot;win&quot;:123}] // RIDE -&gt; Interpreter
+</code></pre>
+<h3 id="protocol-restartthreads">RestartThreads <a name=RestartThreads></a></h3>
+<p>Request resume execution of all threads.</p>
+<pre><code class="language-json">[&quot;RestartThreads&quot;,{}] // RIDE -&gt; Interpreter
+</code></pre>
+<h3 id="protocol-runcurrentline">RunCurrentLine <a name=RunCurrentLine></a></h3>
+<p>Request the current line in a trace window is executed. (Step over)</p>
+<pre><code class="language-json">[&quot;RunCurrentLine&quot;,{&quot;win&quot;:123}] // RIDE -&gt; Interpreter
+</code></pre>
+<h3 id="protocol-stepinto">StepInto <a name=StepInto></a></h3>
+<pre><code class="language-json">[&quot;StepInto&quot;,{&quot;win&quot;:123}] // RIDE -&gt; Interpreter
+</code></pre>
+<p>Request the current line in a trace window is executed. (Step into)</p>
+<h2 id="protocol-status-bar">Status Bar</h2>
+<p>RIDE requests status information from the interpreter to display in the status bar.</p>
+<h3 id="protocol-subscribe">Subscribe <a name=Subscribe></a></h3>
+<p>RIDE 4.4 now uses the Subscribe method to retrieve information from the interpreter for the status bar. Protocol messages are sent by the interpreter when a change is detected, as opposed to polling at an interval.</p>
+<pre><code class="language-json">[&quot;Subscribe&quot;, { // RIDE -&gt; Interpreter
+  &quot;status&quot;: [  // 0 or more of the following values
+               // values are not saved between calls       
+    &quot;statusfields&quot;,   // will result in InterpreterStatus messages
+    &quot;stack&quot; ,         // will result in ReplyGetSIStack messages
+    &quot;threads&quot;         // will result in ReplyGetSIStack messages
+  ],
+  &quot;heartbeat&quot;: interval    // interval is currently ignored
+}]
+</code></pre>
+<p>There is no unsubscribe method, a new Subscribe message should be sent with the relevant fields removed.</p>
+<h3 id="protocol-interpreterstatus">InterpreterStatus <a name=InterpreterStatus></a></h3>
+<pre><code class="language-json">[&quot;InterpreterStatus&quot;, { // Interpreter -&gt; RIDE
+   &quot;IO&quot;: int,   // current ⎕IO
+   &quot;DQ&quot;: int,   // length of current message queue 
+   &quot;WA&quot;: int,   // current available workspace (not currently implemented)
+   &quot;SI&quot;: int,   // length of current SI stack
+   &quot;TRAP&quot;: int, // Is there an active trap?
+   &quot;ML&quot;: int,   // // current ⎕ML
+   &quot;NumThreads&quot;: int, // current number of threads
+   &quot;TID&quot;: int, // current thread id
+   &quot;CompactCount&quot;: int, // number of compactions so far
+   &quot;GarbageCount&quot;: int  // number of garbage collections so far (i.e. number of collections that have found garbage)
+}]
+</code></pre>
+<h3 id="protocol-interpreterheartbeat">InterpreterHeartBeat <a name=InterpreterHeartBeat></a></h3>
+<pre><code class="language-json">[&quot;InterpreterHeartBeat&quot;, { // Interpreter -&gt; RIDE
+    &quot;ping&quot; : &quot;ping&quot;  // maybe there will be additional reasons to ping
+}]
+</code></pre>
+<h2 id="protocol-threads">Threads</h2>
+<h3 id="protocol-getsistack">GetSIStack <a name=GetSIStack></a></h3>
+<p>Request information about the current stack.</p>
+<pre><code class="language-json">[&quot;GetSIStack&quot;,{}] // RIDE -&gt; Interpreter
+</code></pre>
+<h3 id="protocol-replygetsistack">ReplyGetSIStack <a name=ReplyGetSIStack></a></h3>
+<pre><code class="language-json">[&quot;ReplyGetSIStack&quot;,{&quot;stack&quot;:[{&quot;description&quot;:&quot;#.f[12]*&quot;},{&quot;description&quot;:&quot;#.g[34]&quot;}],&quot;tid&quot;:2}] // Interpreter -&gt; RIDE
+</code></pre>
+<h3 id="protocol-getthreads">GetThreads <a name=GetThreads></a></h3>
+<p>Get information about the current threads.</p>
+<pre><code class="language-json">[&quot;GetThreads&quot;,{}] // RIDE -&gt; Interpreter
+</code></pre>
+<h3 id="protocol-replygetthreads">ReplyGetThreads <a name=ReplyGetThreads></a></h3>
+<pre><code class="language-json">[&quot;ReplyGetThreads&quot;,{&quot;threads&quot;:[
+    {&quot;description&quot;:&quot;&quot;,&quot;state&quot;:&quot;Session&quot;,&quot;tid&quot;:0,&quot;flags&quot;:&quot;Normal&quot;,&quot;Treq&quot;:&quot;&quot;},
+    ]}] // Interpreter -&gt; RIDE
+</code></pre>
+<ul>
+<li><code>description</code>: a text description of the thread. Derived from the Tid and ⎕TNAME for the thread</li>
+<li><code>state</code>: a string indicating the current location of the thread</li>
+<li><code>tid</code>: the Tid (numeric)</li>
+<li><code>flags</code>: e.g. Normal, Paused or Terminated</li>
+<li><code>Treq</code>: a string indicating any tokens that the thread is waiting for.</li>
+</ul>
+<h3 id="protocol-setthread">SetThread <a name=SetThread></a></h3>
+<p>Request the interpreter focus a specific thread.</p>
+<pre><code class="language-json">[&quot;SetThread&quot;, {&quot;tid&quot;:123}] // RIDE -&gt; Interpreter
+</code></pre>
+<h3 id="protocol-replysetthread">ReplySetThread <a name=ReplySetThread></a></h3>
+<pre><code class="language-json">[&quot;ReplySetThread&quot;, {&quot;tid&quot;:123, &quot;rc&quot;:321, &quot;message&quot;:&quot;txt&quot;}] // Interpreter -&gt; RIDE
+</code></pre>
+<ul>
+<li><code>tid</code>: the thread ID (numeric)</li>
+<li><code>rc</code>: Return code. TID of focused thread, or -1 if unsuccessful.</li>
+<li><code>message</code>: Empty, or text description of the result if unsuccessful.</li>
+</ul>
+<h3 id="protocol-getthreadattributes">GetThreadAttributes <a name=GetThreadAttributes></a></h3>
+<p>Request attributes on multiple threads:</p>
+<pre><code class="language-json">[&quot;GetThreadAttributes&quot;,{ // RIDE -&gt; Interpreter
+  &quot;threads&quot;:[123 | -1]
+}]
+</code></pre>
+<p>If first item is -1, return info for all threads and stop processing. If -1 is found after first, return non zero in rc for that element.</p>
+<h3 id="protocol-replygetthreadattributes">ReplyGetThreadAttributes <a name=ReplyGetThreadAttributes></a></h3>
+<pre><code class="language-json">[&quot;ReplyGetThreadAttributes&quot;,{ // Interpreter -&gt; RIDE
+  &quot;threads&quot;:[{
+    &quot;tid&quot;: 123,
+    &quot;rc&quot;: 321,
+    &quot;paused&quot;: 1,
+    &quot;noninterruptable&quot;: 2,
+  }]
+}]
+</code></pre>
+<ul>
+<li><code>tid</code>: The thread ID (numeric)</li>
+<li><code>rc</code>: Return code. TID of thread, or -1 if unsuccessful.</li>
+<li><code>paused</code>: boolean</li>
+<li><code>noninterruptable</code>: int;</li>
+<li><code>0</code>: interruptable,</li>
+<li><code>1</code>: non-interruptable,</li>
+<li><code>2</code>: children will be created as non-interruptable</li>
+</ul>
+<h3 id="protocol-setthreadattributes">SetThreadAttributes <a name=SetThreadAttributes></a></h3>
+<p>Set attributes on multiple threads.</p>
+<pre><code class="language-json">[&quot;SetThreadAttributes&quot;,{ // RIDE -&gt; Interpreter
+  &quot;threads&quot;:[{
+    &quot;tid&quot;:123,
+    &quot;paused&quot;:0,
+    &quot;noninterruptable&quot;: 2,
+  }]
+}]
+</code></pre>
+<p>If first item's tid is -1, set info for all threads and stop processing.
+The interpreter will respond with ReplySetThreadAttributes</p>
+<h3 id="protocol-replysetthreadattributes">ReplySetThreadAttributes <a name=ReplySetThreadAttributes></a></h3>
+<pre><code class="language-json">[&quot;ReplySetThreadAttributes&quot;,{ // Interpreter -&gt; RIDE
+  &quot;threads&quot;:[{
+    &quot;tid&quot;:123,
+    &quot;rc&quot;:0,
+    &quot;paused&quot;:0,
+    &quot;noninterruptable&quot;:2,
+  }]
+}]
+</code></pre>
+<ul>
+<li><code>tid</code>: The thread ID (numeric)</li>
+<li><code>rc</code>: Return code. TID of thread, or -1 if unsuccessful.</li>
+<li><code>paused</code>: boolean</li>
+<li><code>noninterruptable</code>: int;</li>
+<li><code>0</code>: interruptable,</li>
+<li><code>1</code>: noninterruptable,</li>
+<li><code>2</code>: children will be created as non-interruptable</li>
+</ul>
+<h3 id="protocol-pauseallthreads">PauseAllThreads <a name=PauseAllThreads></a></h3>
+<p>To pause all threads, pass a 1. To unpause all paused threads, pass a 0.</p>
+<pre><code class="language-json">[&quot;PauseAllThreads&quot;, { &quot;pause&quot;: 1 | 0}]
+</code></pre>
+<p>PauseAllThreads (pause=0) does not "restart" all threads, you'll need to send RestartThreads if that's what you want.
+PauseAllThreads does not send any response.</p>
+<h2 id="protocol-interrupts">Interrupts</h2>
+<p>APL supports two kinds of interrupts;</p>
+<h3 id="protocol-weakinterrupt">WeakInterrupt <a name=WeakInterrupt></a></h3>
+<pre><code class="language-json">[&quot;WeakInterrupt&quot;,  {}] // RIDE -&gt; Interpreter
+</code></pre>
+<h3 id="protocol-stronginterrupt">StrongInterrupt <a name=StrongInterrupt></a></h3>
+<pre><code class="language-json">[&quot;StrongInterrupt&quot;,{}] // RIDE -&gt; Interpreter
+</code></pre>
+<p>The interpreter message queue should check for strong interrupts and handle them immediately without needing to fully
+parse messages.</p>
+<p>:red_circle: I've no idea what the above sentence means -Nick</p>
+<h2 id="protocol-autocompletion">Autocompletion</h2>
+<h3 id="protocol-getautocomplete">GetAutocomplete <a name=GetAutocomplete></a></h3>
+<p>RIDE can request autocompletion information from the interpreter.</p>
+<pre><code class="language-json">[&quot;GetAutocomplete&quot;,{&quot;line&quot;:&quot;r←1+ab&quot;,&quot;pos&quot;:6,&quot;token&quot;:234}] // RIDE -&gt; Interpreter
+</code></pre>
+<ul>
+<li><code>line</code>: text containing the name that's being completed</li>
+<li><code>pos</code>: position of cursor within <code>line</code></li>
+<li><code>token</code>: is used by <a href="#protocol-ReplyGetAutocomplete"><code>ReplyGetAutocomplete</code></a> to identify which request it is a response to. RIDE
+may send multiple <code>GetAutocomplete</code> requests and the interpreter may only reply to some of them. Similarly, RIDE may
+ignore some of the replies if the state of the editor has changed since the <code>GetAutocomplete</code> request was sent.
+In order to remain responsive, RIDE should throttle its autocompletion requests (no more than N per second) and it
+shouldn't block while it's waiting for the response.</li>
+</ul>
+<p>:red_circle: The interpreter requires that "token" is the id of the window, so perhaps it should be renamed "win".</p>
+<p>:red_circle: If RIDE sends a different token, the interpreter doesn't respond.</p>
+<h3 id="protocol-replygetautocomplete">ReplyGetAutocomplete <a name=ReplyGetAutocomplete></a></h3>
+<pre><code class="language-json">[&quot;ReplyGetAutocomplete&quot;,{&quot;skip&quot;:2,&quot;options&quot;:[&quot;ab&quot;,&quot;abc&quot;,&quot;abde&quot;],&quot;token&quot;:234}] // Interpreter -&gt; RIDE
+</code></pre>
+<ul>
+<li><code>skip</code>: how many characters before the request's <code>pos</code> to replace with an element of <code>options</code></li>
+</ul>
+<h2 id="protocol-value-tips">Value tips</h2>
+<h3 id="protocol-getvaluetip">GetValueTip <a name=GetValueTip></a></h3>
+<p>When the user hovers a name with the mouse, RIDE should ask for a short textual representation of the current value:</p>
+<pre><code class="language-json">[&quot;GetValueTip&quot;,{&quot;win&quot;:123,&quot;line&quot;:&quot;a←b+c&quot;,&quot;pos&quot;:2,&quot;maxWidth&quot;:50,&quot;maxHeight&quot;:20,&quot;token&quot;:456}] // RIDE -&gt; Interpreter
+</code></pre>
+<h3 id="protocol-valuetip">ValueTip <a name=ValueTip></a></h3>
+<pre><code class="language-json">[&quot;ValueTip&quot;,{&quot;tip&quot;:[&quot;0 1 2&quot;,&quot;3 4 5&quot;],&quot;class&quot;:2,&quot;startCol&quot;:2,&quot;endCol&quot;:3,&quot;token&quot;:456}] // Interpreter -&gt; RIDE
+</code></pre>
+<ul>
+<li><code>token</code>: is used to correlate requests and responses, and there is no guarantee that they will arrive in the same order, if ever (like with autocompletion).</li>
+<li><code>maxHeight</code> and <code>maxWidth</code> can be used to limit the number of lines and columns in the result.</li>
+<li><code>class</code> indicates the <a href="http://help.dyalog.com/16.0/Content/Language/System%20Functions/nc.htm">nameclass</a> of the object. This information can be used to syntax-highlight the tooltip.</li>
+<li><code>startCol</code> and <code>endCol</code> describe the position of the whole name to which the value tip pertains. <code>startCol</code> is inclusive and <code>endCol</code> is exclusive.</li>
+</ul>
+<h2 id="protocol-dialogs">Dialogs</h2>
+<p>The interpreter can ask RIDE to interact with the user by showing a modal dialog.
+Several kinds of dialogs are supported:</p>
+<h3 id="protocol-options-dialog">Options dialog</h3>
+<p><a name=OptionsDialog></a></p>
+<pre><code class="language-json">[&quot;OptionsDialog&quot;,{&quot;title&quot;:&quot;&quot;,&quot;text&quot;:&quot;&quot;,&quot;type&quot;:1,&quot;options&quot;:[&quot;Yes&quot;,&quot;No&quot;,&quot;Cancel&quot;],&quot;token&quot;:123}] // Interpreter -&gt; RIDE
+</code></pre>
+<h3 id="protocol-replyoptionsdialog">ReplyOptionsDialog <a name=ReplyOptionsDialog></a></h3>
+<pre><code class="language-json">[&quot;ReplyOptionsDialog&quot;,{&quot;index&quot;:0,&quot;token&quot;:123}] // RIDE -&gt; Interpreter
+</code></pre>
+<p>Constants for type:
+- <code>1</code> warning,
+- <code>2</code> information,
+- <code>3</code> question,
+- <code>4</code> stop.</p>
+<p>If the user closes the dialog without choosing an option, RIDE responds with an <code>index</code> of <code>-1</code>.</p>
+<h3 id="protocol-stringdialog">StringDialog <a name=StringDialog></a></h3>
+<pre><code class="language-json">[&quot;StringDialog&quot;,{&quot;title&quot;:&quot;Name&quot;,&quot;text&quot;:&quot;Please enter a name:&quot;,&quot;initialValue&quot;:&quot;abc&quot;,&quot;defaultValue&quot;:null,&quot;token&quot;:123}] // Interpreter -&gt; RIDE
+</code></pre>
+<h3 id="protocol-replystringdialog">ReplyStringDialog <a name=ReplyStringDialog></a></h3>
+<pre><code class="language-json">[&quot;ReplyStringDialog&quot;,{&quot;value&quot;:&quot;abcd&quot;,&quot;token&quot;:123}] // RIDE -&gt; Interpreter
+</code></pre>
+<h3 id="protocol-taskdialog">TaskDialog <a name=TaskDialog></a></h3>
+<p>A "task dialog" shows two sets of buttons -- vertically aligned <code>buttonText</code> and below them the horizontally aligned <code>options</code>.</p>
+<pre><code class="language-json">[&quot;TaskDialog&quot;,{&quot;title&quot;:&quot;Save document&quot;,&quot;text&quot;:&quot;Save document options&quot;,
+               &quot;subtext&quot;:&quot;Do you want to save the changes to the document?&quot;,
+               &quot;buttonText&quot;:[&quot;Save in XML base format&quot;,&quot;Save in binary format&quot;],
+               &quot;options&quot;:[&quot;No&quot;,&quot;Cancel&quot;],
+               &quot;footer&quot;:&quot;Note: If you don't choose to save, your changes will be lost&quot;,
+               &quot;questionkey&quot;:&quot;SaveFileOptionsExtension:.xml&quot;,
+               &quot;questionlabel&quot;:&quot;Save this response for all files with a \&quot;.xml\&quot; extension&quot;}] // Interpreter -&gt; RIDE
+</code></pre>
+<h3 id="protocol-replytaskdialog">ReplyTaskDialog <a name=ReplyTaskDialog></a></h3>
+<pre><code class="language-json">[&quot;ReplyTaskDialog&quot;,{&quot;index&quot;:&quot;101&quot;,&quot;token&quot;:123}] // RIDE -&gt; Interpreter
+</code></pre>
+<p>In the response <code>index</code> can be:
+* <code>100+i</code> where <code>i</code> is the index of a <code>buttonText</code> button
+* the index of an <code>options</code> button
+* <code>-1</code> if the user closes the dialog</p>
+<h3 id="protocol-notificationmessage">NotificationMessage <a name=NotificationMessage></a></h3>
+<pre><code class="language-json">[&quot;NotificationMessage&quot;,{&quot;message&quot;:&quot;Object too large to edit&quot;,&quot;token&quot;:123}] // Interpreter -&gt; RIDE
+</code></pre>
+<h2 id="protocol-other">Other</h2>
+<h3 id="protocol-showhtml">ShowHTML <a name=ShowHTML></a></h3>
+<p>Request RIDE shows some HTML. See <a href="http://help.dyalog.com/16.0/Content/Language/Primitive%20Operators/Send%20Text%20to%20RIDE-embedded%20Browser.htm"><code>3500⌶</code></a>.</p>
+<pre><code class="language-json">[&quot;ShowHTML&quot;,{&quot;title&quot;:&quot;Example&quot;,&quot;html&quot;:&quot;&lt;i&gt;Hello&lt;/i&gt; &lt;b&gt;world&lt;/b&gt;&quot;}] // Interpreter -&gt; RIDE
+</code></pre>
+<h3 id="protocol-updatedisplayname">UpdateDisplayName <a name=UpdateDisplayName></a></h3>
+<p>This message is sent by the interpreter when WSID is changed.</p>
+<pre><code class="language-json">[&quot;UpdateDisplayName&quot;,{&quot;displayName&quot;:&quot;CLEAR WS&quot;}] // Interpreter -&gt; RIDE
+</code></pre>
+<h3 id="protocol-updatesessioncaption">UpdateSessionCaption <a name=UpdateSessionCaption></a></h3>
+<p>RIDE can use the display name as the title of its application window.</p>
+<pre><code class="language-json">[&quot;UpdateSessionCaption&quot;,{&quot;text&quot;:&quot;CLEAR WS - Dyalog APL/W-64&quot;}] // Interpreter -&gt; RIDE
+</code></pre>
+<h3 id="protocol-disconnect">Disconnect <a name=Disconnect></a></h3>
+<p>Sent from any peer to shut down the connection cleanly.</p>
+<pre><code class="language-json">[&quot;Disconnect&quot;,{&quot;message&quot;:&quot;...&quot;}]
+</code></pre>
+<p>:red_circle: Why do we need "Disconnect"?  Why not just close the TCP connection?  That shouldn't be any less "clean".</p>
+<h2 id="protocol-workspace-explorer">Workspace explorer</h2>
+<p>Optionally, RIDE can display a tree representing session content.</p>
+<h3 id="protocol-treelist">TreeList <a name=TreeList></a></h3>
+<p>It can query information about the children of a particular node with TreeList.</p>
+<pre><code class="language-json">[&quot;TreeList&quot;,{&quot;nodeId&quot;:12}] // RIDE -&gt; Interpreter
+</code></pre>
+<h3 id="protocol-replytreelist">ReplyTreeList <a name=ReplyTreeList></a></h3>
+<pre><code class="language-json">[&quot;ReplyTreeList&quot;,{&quot;nodeId&quot;:12,&quot;nodeIds&quot;:[34,0],&quot;names&quot;:[&quot;ab&quot;,&quot;cde&quot;],
+                  &quot;classes&quot;:[9.4,3.2],&quot;err&quot;:&quot;&quot;}] // Interpreter -&gt; RIDE
+</code></pre>
+<p>The root of the tree is assumed to have a node id of 0.
+* <code>nodeId</code> is the requested parent id.
+* <code>nodeIds</code> are the ids of the children; some of them can be 0 -- those children can't themselves have children.
+* <code>classes</code> are <a href="http://help.dyalog.com/16.0/Content/Language/System%20Functions/nc.htm#NameClassification">name classes</a>
+  that can be used to choose appropriate styling
+* <code>err</code> is non-empty only when an error has occurred in the interpreter, e.g. when <code>nodeId</code> is no longer invalid</p>
+<p>RIDE should query information only about the visible parts of the tree as they get expanded.</p>
+<p>When the user presses Enter or clicks on an editable node, RIDE should use the <a href="#protocol-Edit">Edit</a> command to notify the
+interpreter.  Then it can send back commands to open or focus an editor window.</p>
+<h2 id="protocol-status-window">Status window</h2>
+<h3 id="protocol-statusoutput">StatusOutput <a name=StatusOutput></a></h3>
+<p>The interpreter may request the display of messages in a separate "Status Output" window.</p>
+<pre><code class="language-json">[&quot;StatusOutput&quot;,{&quot;text&quot;:&quot;some very important message\r\n&quot;,&quot;flags&quot;:2}] // Interpreter -&gt; RIDE
+</code></pre>
+<p><code>flags</code> (despite its name) is the message type, one of:
+* <code>1</code>: info, usually shown in green
+* <code>2</code>: error, red
+* <code>4</code>: warning, blue
+* <code>8</code>: .Net function overload clash overload (red?)</p>
+<h2 id="protocol-process-manager">Process manager</h2>
+<p>:red_circle: As of April 2016 there is no process manager.</p>
+<h3 id="protocol-getavailableconnections">GetAvailableConnections <a name=GetAvailableConnections></a></h3>
+<pre><code class="language-json">[&quot;GetAvailableConnections&quot;,{&quot;connections&quot;:[c0,c1,...]}] // RIDE or Interpreter -&gt; PM
+</code></pre>
+<p>:red_circle: Specify what c0,c1,... look like</p>
+<h3 id="protocol-connectto">ConnectTo <a name=ConnectTo></a></h3>
+<p>Request a connection to a specific item (RIDE or interpreter).</p>
+<pre><code class="language-json">[&quot;ConnectTo&quot;,{&quot;remoteId&quot;:123}] // RIDE or Interpreter -&gt; PM
+</code></pre>
+<h3 id="protocol-connecttosucceded">ConnectToSucceded <a name=ConnectToSucceded></a></h3>
+<p>Tell the client that the ProcessManager is handing off the connection to a RIDE or Interpreter (as requested).
+The process manager knows the supported protocols so it can pick a supported protocol for the clients to switch to.
+Once this is received the client is no longer connected to the PM, but rather is connected to the specified process.</p>
+<pre><code class="language-json">[&quot;ConnectToSucceded&quot;,{&quot;remoteId&quot;:123,&quot;identity&quot;:1,&quot;protocolNumber&quot;:...}] // PM -&gt; RIDE or Interpreter
+</code></pre>
+<p><code>identity</code>: see <a href="#protocol-Identify">Identify</a></p>
+<h3 id="protocol-connecttofailed">ConnectToFailed <a name=ConnectToFailed></a></h3>
+<p>Tell the client that the attempt to connect to a particular process failed.</p>
+<pre><code class="language-json">[&quot;ConnectToFailed&quot;,{&quot;remoteId&quot;:123,&quot;reason&quot;:&quot;&quot;}] // PM -&gt; RIDE or Interpreter
+</code></pre>
+<h3 id="protocol-getdetailedinformation">GetDetailedInformation <a name=GetDetailedInformation></a></h3>
+<pre><code class="language-json">[&quot;GetDetailedInformation&quot;,{&quot;remoteId&quot;:[12,34,...]}] // anything -&gt; anything
+</code></pre>
+<p>If sent to a Process manager, <code>remoteId</code> is a list of remote IDs returned by
+<a href="#protocol-GetAvailableConnections"><code>GetAvailableConnections</code></a>. Otherwise it's an empty list.</p>
+<h3 id="protocol-replygetdetailedinformation">ReplyGetDetailedInformation <a name=ReplyGetDetailedInformation></a></h3>
+<pre><code class="language-json">[&quot;ReplyGetDetailedInformation&quot;,{&quot;information&quot;:[i0,i1,...]}] // anything -&gt; anything
+</code></pre>
+<h2 id="protocol-session-information-and-configuration">Session Information and Configuration</h2>
+<h3 id="protocol-help">Help</h3>
+<h4 id="protocol-gethelpinformation">GetHelpInformation <a name=GetHelpInformation></a></h4>
+<p>RIDE can request help on current cursor position.</p>
+<pre><code class="language-json">[&quot;GetHelpInformation&quot;,{&quot;line&quot;:&quot;r←1+ab&quot;,&quot;pos&quot;:4}] // RIDE -&gt; Interpreter
+</code></pre>
+<ul>
+<li><code>line</code>: text containing the name where help is requested</li>
+<li><code>pos</code>: position of cursor within <code>line</code> (origin 0 is to the left of the first character)</li>
+</ul>
+<h4 id="protocol-replygethelpinformation">ReplyGetHelpInformation <a name=ReplyGetHelpInformation></a></h4>
+<pre><code class="language-json">[&quot;ReplyGetHelpInformation&quot;,{&quot;url&quot;:&quot;https://help.dyalog.com/18.1/#Language/Symbols/Plus%20Sign.htm&quot;}] // Interpreter -&gt; RIDE
+</code></pre>
+<h3 id="protocol-syntax">Syntax</h3>
+<h4 id="protocol-getsyntaxinformation">GetSyntaxInformation <a name=GetSyntaxInformation></a></h4>
+<p>RIDE can request Syntax information specific to the version of the interpreter being run.</p>
+<pre><code class="language-json">[&quot;GetHelpInformation&quot;,{}] // RIDE -&gt; Interpreter
+</code></pre>
+<h3 id="protocol-replygetsyntaxinformation">⍕ ReplyGetSyntaxInformation <a name=ReplyGetSyntaxInformation></a></h3>
+<pre><code class="language-json">[&quot;ReplyGetSyntaxInformation&quot;,{&quot;url&quot;:&quot;https://help.dyalog.com/18.1/#Language/Symbols/Plus%20Sign.htm&quot;}] // Interpreter -&gt; RIDE
+</code></pre>
+<h3 id="protocol-languagebar">LanguageBar</h3>
+<h4 id="protocol-getlanguagebar">GetLanguageBar <a name=GetLanguageBar></a></h4>
+<p>RIDE can request Language bar information specific to the version of the interpreter being run.</p>
+<pre><code class="language-json">[&quot;GetLanguageBar&quot;,{}] // RIDE -&gt; Interpreter
+</code></pre>
+<h4 id="protocol-replygetlanguagebar">ReplyGetLanguageBar <a name=ReplyGetLanguageBar></a></h4>
+<pre><code class="language-json">[&quot;ReplyGetLanguageBar&quot;,{  // Interpreter -&gt; RIDE
+  &quot;entries&quot;:[
+    {&quot;name&quot;:&quot;Left Arrow&quot;, &quot;avchar&quot;:&quot;←&quot;, &quot;helptext&quot;:[&quot;...&quot;,&quot;...&quot;,]}
+    ]}]
+</code></pre>
+<h3 id="protocol-configuration">Configuration</h3>
+<h4 id="protocol-getconfiguration">GetConfiguration <a name=GetConfiguration></a></h4>
+<p>Configuration parameters can be queried using the GetConfiguration method</p>
+<pre><code class="language-json">[&quot;GetConfiguration&quot;, {&quot;names&quot;:[&quot;text&quot;] // RIDE -&gt; Interpreter
+</code></pre>
+<h4 id="protocol-replygetconfiguration">ReplyGetConfiguration <a name=ReplyGetConfiguration></a></h4>
+<pre><code class="language-json">[&quot;ReplyGetConfiguration&quot;, { // Interpreter -&gt; RIDE
+  &quot;configurations&quot;:[
+    {&quot;name&quot;:&quot;string&quot;, &quot;value&quot;:&quot;&quot;},
+    ]}]
+</code></pre>
+<h4 id="protocol-setconfiguration">SetConfiguration <a name=SetConfiguration></a></h4>
+<p>Parameters can be set using the SetConfiguration method. <em>[Currently only the AUTO_PAUSE_THREADS parameter is supported.]</em></p>
+<pre><code class="language-json">[&quot;SetConfiguration&quot;, { // RIDE -&gt; Interpreter
+  &quot;configurations&quot;: [
+    {&quot;name&quot;:&quot;&quot;, &quot;value&quot;:&quot;&quot;},
+    ]}]
+</code></pre>
+<h4 id="protocol-replysetconfiguration">ReplySetConfiguration <a name=ReplySetConfiguration></a></h4>
+<pre><code class="language-json">[&quot;ReplySetConfiguration&quot;, { // Interpreter -&gt; RIDE
+  &quot;configurations&quot;: [
+    {&quot;name&quot;:&quot;&quot;, &quot;rc&quot;:0123,},
+    ]}]
+</code></pre>
+<ul>
+<li><code>name</code>: key of paramenter to set.</li>
+<li><code>value</code>: value to set it to.</li>
+<li><code>rc</code>: int, one of the following;</li>
+<li><code>0</code>: SO_OK</li>
+<li><code>1</code>: SO_BAD_NAME</li>
+<li><code>2</code>: SO_BAD_VALUE</li>
+<li><code>3</code>: SO_CANT_SET</li>
+</ul>
+<h2 id="protocol-proposed-extensions">Proposed extensions</h2>
+<ul>
+<li>related to the process manager</li>
+</ul>
+<pre><code>AvailableConnection =&gt; [
+    int remoteID,       // Unique ID
+    string displayName  // Display name for the entry.
+]
+DetailedInformation =&gt; [
+  int remoteID,    // Unique ID if sent from a Process Manager, otherwise 0
+  identity identity,
+  (DetailedRideInformation|DetailedInterpreterInformation|DetailedProcessInformation) Information
+]
+DetailedRideInformation =&gt; [] // Placeholder - add any more information
+DetailedInterpreterInformation =&gt; [] // Placeholder - add any more information
+DetailedProcessManagerInformation =&gt; [] // Placeholder - add any more information
+</code></pre>
+<ul>
+<li><code>⎕PFKEY</code></li>
+<li>programmatic access to "current object"</li>
+</ul>
+<h3 id="protocol-setcurrentobject">SetCurrentObject <a name=SetCurrentObject></a></h3>
+<pre><code class="language-json">[&quot;SetCurrentObject&quot;,{&quot;text&quot;:&quot;&quot;}] // RIDE -&gt; Interpreter
+</code></pre>
+<ul>
+<li>compiler information</li>
+<li>list of valid I-beams and their descriptions</li>
+<li><code>ShowStack</code> and <code>ShowThreads</code></li>
+<li>drop workspace in RIDE</li>
+</ul></section></div>
 
 
 
