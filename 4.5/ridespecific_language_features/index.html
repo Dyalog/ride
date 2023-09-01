@@ -743,7 +743,7 @@
 <p>The run time interpreter can then attempt to connect to a RIDE client.</p>
 <p>Enabling RIDE to access applications that use the run-time interpreter means that the APL code of those applications can be accessed. The I-beam mechanism described above means that the APL code itself must grant the right for a RIDE client to connect to the run time interpreter. Although Dyalog Ltd might change the details of this mechanism, the APL code will always need to grant connection rights. In particular, no mechanism that is only dependent on configuration parameters will be implemented.</p>
 </div>
-<p>For example, <code>3502⌶'SERVE:*:4502'</code> configures the interpreter to accept incoming RIDE connections from any machine on port 4502, and then enables RIDE with that configuration.if <code>R</code> is <code>0</code>, then RIDE was disabledif <code>R</code> is <code>¯2</code>, then RIDE was active
+<p>For example, <code>R ← 3502⌶'SERVE:*:4502'</code> configures the interpreter to accept incoming RIDE connections from any machine on port 4502, and then enables RIDE with that configuration.
 - if <code>R</code> is <code>0</code>, then RIDE was disabled
 - if <code>R</code> is <code>¯2</code>, then RIDE was active</p>
 <p>On a run-time interpreter, <code>3502⌶1</code> is the only way to enable RIDE.</p>
@@ -759,12 +759,11 @@
 <h3 id="ride_editor">RIDE_EDITOR</h3>
 <p>This configuration parameter specifies the fully-qualified path to the executable of the editor to use in a Dyalog Session instead of RIDE's built-in editor (for example, vim, Emacs or Notepad++).</p>
 <h3 id="ride_init">RIDE_INIT</h3>
-<p>This configuration parameter specifies how
-How the interpreter should behave with respect to RIDE protocol. Setting this configuration parameter on the machine that hosts the interpreter enables the interpreter-RIDE connection.</p>
+<p>This configuration parameter specifies how the interpreter should behave with respect to the RIDE protocol. Setting this configuration parameter on the machine that hosts the interpreter enables the interpreter-RIDE connection.</p>
 <p>The format of the value is <code>{mode:setting}[,mode:setting]</code></p>
 <p>where <code>mode</code> is the action that the interpreter should take and determines the content of the <code>setting</code>. Valid (case-insensitive) values are:</p>
 <ul>
-<li><code>SERVE</code> – listen for incoming connections from RIDE client</li>
+<li><code>SERVE</code> – listen for incoming connections from a RIDE client</li>
 <li><code>CONNECT</code> – attempt to connect to the specified RIDE client and end the session if this fails</li>
 <li><code>POLL</code> – attempt to connect to the specified RIDE client at regular intervals and reconnect if the connection is lost</li>
 <li><code>HTTP</code> – listen for incoming connections from the web browser, via <a href="../starting_a_dyalog_session/#zero-footprint-mode">zero footprint RIDE</a></li>
@@ -817,7 +816,7 @@ How the interpreter should behave with respect to RIDE protocol. Setting this co
 <p>To attempt to connect to a RIDE client running on a different machine (with IPv4 address 10.0.38.1 and listening on port 4502) and end the Session if unable to do so: <code>RIDE_INIT=CONNECT:10.0.38.1:4502</code></p>
 <p>To establish a connection using the settings in the ride_sample.ini file:<code>RIDE_INIT=CONFIG:C:/tmp/ride_sample.ini</code></p>
 <p>To attempt to establish a secure connection with a RIDE client running on a different machine (with IPv4 address 10.0.38.1 and listening on port 4502) using certificate details specified in the ride_sample.ini file: <code>RIDE_INIT=CONFIG:C:\tmp\ride_sample.ini,CONNECT:10.0.38.1:4502</code> or <code>RIDE_INIT=CONNECT:10.0.38.1:4502,CONFIG:C:\tmp\ride_sample.ini</code></p>
-<p>With Dyalog and RIDE installed on a machine with IPv4 address 10.0.38.1, to listen on port 4502 for connection requests from a web browser running on any machine (<a href="../starting_a_dyalog_session/#the-zero-footprint-ride">Zero Footprint RIDE</a>):<code>RIDE_INIT=HTTP:*:4502</code></p>
+<p>With Dyalog and RIDE installed on a machine with IPv4 address 10.0.38.1, to listen on port 4502 for connection requests from a web browser running on any machine (<a href="../starting_a_dyalog_session/#the-zero-footprint-ride">Zero Footprint RIDE</a>): <code>RIDE_INIT=HTTP:*:4502</code></p>
 <p>To open the Zero Footprint RIDE in a web browser on:</p>
 <ul>
 <li>the local machine: URL = <code>http://localhost:4502</code></li>
@@ -853,7 +852,7 @@ How the interpreter should behave with respect to RIDE protocol. Setting this co
 <h3 id="function-key-configuration">Function Key Configuration</h3>
 <p>Character strings (including command keys) can be associated with programmable function keys using the <code>⎕PFKEY</code> system function. When running a Dyalog Session through RIDE, <code>⎕PFKEY</code> can be used to define/display the keystrokes for a designated function key; however, that function key does not acquire the defined set of keystrokes, rendering <code>⎕PFKEY</code> of no real use. Instead, function keys should be set through the Shortcuts tab of the Preferences dialog box.</p>
 <h3 id="operating-system-terminalcommand-window-interaction">Operating System Terminal/Command Window Interaction</h3>
-<p>Features that rely on interaction with an operating system terminal/command window (that is, <code>⎕SR</code> and <code>)SH</code> or <code>)CMD</code> with no argument) cannot work in a Dyalog Session that is running through RIDE. Instead of behaving as documented in the Dyalog APL Language Reference Guide, their behaviour depends on the way in which the interpreter and RIDE combined to start a Dyalog Session:</p>
+<p>Features that rely on interaction with an operating system terminal/command window (that is, <code>⎕SR</code> and <code>)SH</code> or <code>)CMD</code> with no argument) cannot work in a Dyalog Session that is running through RIDE. Instead of behaving as documented in the <a href="https://docs.dyalog.com/latest/Dyalog%20APL%20Language%20Reference%20Guide.pdf">Dyalog APL Language Reference Guide</a>, their behaviour depends on the way in which the interpreter and RIDE combined to start a Dyalog Session:</p>
 <ul>
 <li>
 <p>If the interpreter was started by RIDE, then:</p>
