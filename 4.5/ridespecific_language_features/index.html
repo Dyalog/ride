@@ -832,15 +832,9 @@
 <h2 id="unsupported-language-elements">Unsupported Language Elements</h2>
 <p>When running a Dyalog Session through RIDE, a few of the features that are available with non-RIDE Sessions do not function as might be expected.</p>
 <h3 id="underscored-characters">Underscored Characters</h3>
-<p>Underscored characters can be entered into the Session window and Edit windows using the <code>``_ &lt;letter&gt;</code> method (two backticks, followed by an underscore and a letter), for example, type <code>``_ F</code> to produce <u>F</u>.</p>
+<p>Underscored characters can be entered into the Session window and <strong>Edit</strong> windows using the <code>``_ &lt;letter&gt;</code> method (two backticks, followed by an underscore and a letter), for example, type <code>``_ F</code> to produce <u>F</u>.</p>
 <h4 id="underscored-characters-in-window-captions">Underscored Characters in Window Captions</h4>
 <p>RIDE is restricted by the operating system when it comes to displaying underscored characters in window titles (captions). This restriction means that underscored characters can be displayed as circled characters, white rectangles, or black lozenges containing a question mark. Tab captions use the APL font, so they will display underscored characters correctly.</p>
-<p><strong>Example</strong>:</p>
-<p>Open an <strong>Edit</strong> window for an object that has an underscored name:</p>
-<pre><code>)ed Ⓐ
-</code></pre>
-<p>The <strong>Edit</strong> window that is opened displays the name correctly, but its title (caption) is displayed incorrectly, as shown below (assuming window is docked):</p>
-<p><img src="../img/screenshots/s_example_underscored.png" style="border:1px solid black" /></p>
 <h4 id="underscored-characters-in-the-session">Underscored Characters in the Session</h4>
 <p>If RIDE is connected to a Unicode edition of Dyalog, then underscored characters are displayed correctly in the <strong>Session</strong> window, <strong>Edit</strong> windows and <strong>Trace</strong> windows. If RIDE is connected to a classic edition of Dyalog, then the following command must be run in every APL Session to enable the underscored alphabet to be displayed correctly:</p>
 <pre><code class="language-apl">      ⎕IO←0
@@ -848,7 +842,7 @@
       2 ⎕NQ '.' 'SetUnicodeTable' ⎕AVU
 </code></pre>
 <h3 id="function-key-configuration">Function Key Configuration</h3>
-<p>Character strings (including command keys) can be associated with programmable function keys using the <code>⎕PFKEY</code> system function. When running a Dyalog Session through RIDE, <code>⎕PFKEY</code> can be used to define/display the keystrokes for a designated function key; however, that function key does not acquire the defined set of keystrokes, rendering <code>⎕PFKEY</code> of no real use. Instead, function keys should be set through the Shortcuts tab of the Preferences dialog box.</p>
+<p>Character strings (including command keys) can be associated with programmable function keys using the <a href="https://help.dyalog.com/latest/index.htm#Language/System%20Functions/pfkey.htm">⎕PFKEY</a> system function. When running a Dyalog Session through RIDE, <code>⎕PFKEY</code> can be used to define/display the keystrokes for a designated function key; however, that function key does not acquire the defined set of keystrokes, rendering <code>⎕PFKEY</code> of no real use. Instead, function keys should be set through the Shortcuts tab of the Preferences dialog box.</p>
 <h3 id="operating-system-terminalcommand-window-interaction">Operating System Terminal/Command Window Interaction</h3>
 <p>Features that rely on interaction with an operating system terminal/command window (that is, <code>⎕SR</code> and <code>)SH</code> or <code>)CMD</code> with no argument) cannot work in a Dyalog Session that is running through RIDE. Instead of behaving as documented in the <a href="https://docs.dyalog.com/latest/Dyalog%20APL%20Language%20Reference%20Guide.pdf">Dyalog APL Language Reference Guide</a>, their behaviour depends on the way in which the interpreter and RIDE combined to start a Dyalog Session:</p>
 <ul>
