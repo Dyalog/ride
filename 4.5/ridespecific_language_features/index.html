@@ -832,13 +832,9 @@
 <h2 id="unsupported-language-elements">Unsupported Language Elements</h2>
 <p>When running a Dyalog Session through RIDE, a few of the features that are available with non-RIDE Sessions do not function as might be expected.</p>
 <h3 id="underscored-characters">Underscored Characters</h3>
-<p>Underscored characters can be entered into the <strong>Session</strong> window and <strong>Edit</strong> windows using the <code>_&lt;letter&gt;` method, for example, enter</code>_f<code>to produce</code>Ⓕ`.</p>
+<p>Underscored characters can be entered into the Session window and Edit windows using the <kbd><code>&lt;/kbd&gt;+&lt;kbd&gt;</code></kbd>+<kbd><em></kbd>+<kbd>letter</kbd> method, for example, type <kbd><code>&lt;/kbd&gt;+&lt;kbd&gt;</code></kbd>+<kbd></em></kbd>+<kbd>F</kbd> to produce <u>F</u>.</p>
 <h4 id="underscored-characters-in-window-captions">Underscored Characters in Window Captions</h4>
-<p>RIDE is restricted by the operating system when it comes to displaying underscored characters in window titles (captions). This restriction means that:</p>
-<ul>
-<li>if the APL385 font is installed (and the operating system has been configured to allow the title bar to use it), underscored characters are displayed as circled characters.</li>
-<li>if the APL385 font is not installed, underscored characters are displayed as a white rectangle, a black rectangle containing a question mark, or some other Unicode-compliant substitution.</li>
-</ul>
+<p>RIDE is restricted by the operating system when it comes to displaying underscored characters in window titles (captions). This restriction means that underscored characters can be displayed as circled characters, white rectangles, or black lozenges containing a question mark. Tab captions use the APL font, so they will display underscored characters correctly.</p>
 <p><strong>Example</strong>:</p>
 <p>Open an <strong>Edit</strong> window for an object that has an underscored name:</p>
 <pre><code>)ed Ⓐ
