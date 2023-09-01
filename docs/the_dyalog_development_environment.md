@@ -48,7 +48,7 @@ Display of the language bar can be toggled with the `View > Show Language Bar` m
 
 A set of keyboard key mappings for APL glyphs is installed with RIDE. When RIDE is the active application, these key mappings are automatically enabled. RIDE attempts to identify a user's locale and use the appropriate key mappings; if the locale cannot be identified or the locale-specific key mappings have not been configured, then the default configuration is used (key mappings for a US keyboard).
 
-Using this set of key mappings, APL glyphs are entered by pressing the prefix key followed by either the appropriate key or the SHIFT key with the appropriate key. The prefix key and key mappings can be [customised](keyboard_tab.md).
+Using this set of key mappings, APL glyphs are entered by pressing the prefix key followed by either the appropriate key or the SHIFT key with the appropriate key. The prefix key and key mappings can be [customised](customising_your_session.md/#keyboard-tab).
 
 ### Other Keyboard Options
 
@@ -57,7 +57,7 @@ Installing and enabling a set of key mappings allows Dyalog glyphs to be entered
 Information and the requisite downloadable files are available from Dyalog's [APL Fonts and Keyboards](https://www.dyalog.com/apl-font-keyboard.htm) page.
 
 !!!note "Microsoft Windows"
-    If you have the Dyalog Unicode IME installed, then RIDE activates it by default. It can be disabled by unchecking the Also enable Dyalog IME checkbox in the [Keyboard tab](keyboard_tab.md) of the Preferences dialog box.
+    If you have the Dyalog Unicode IME installed, then RIDE activates it by default. It can be disabled by unchecking the Also enable Dyalog IME checkbox in the [Keyboard tab](customising_your_session.md/#keyboard-tab) of the Preferences dialog box.
 
     If Dyalog is not installed on the machine that RIDE is running on, then the Dyalog Unicode IME can be downloaded and installed from Dyalog's [APL Fonts and Keyboards](https://www.dyalog.com/apl-font-keyboard.htm) page.
 

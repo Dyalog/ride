@@ -1,6 +1,6 @@
 # RIDE-Specific Language Features
 
-When running a Dyalog Session through the RIDE, the majority of language features remain unaltered. However, there are a few additional features (see [I-beams](ibeams.md) and [RIDE-Specific Configuration Parameters](configuration_parameters_ridespecific.md)) and some existing functionality that is meaningless (see [Unsupported Language Elements](unsupported_language_elements.md)) when a Session is running through the RIDE.
+When running a Dyalog Session through the RIDE, the majority of language features remain unaltered. However, there are a few additional features (see [I-beams](#i-beams) and [RIDE-Specific Configuration Parameters](#configuration-parameters)) and some existing functionality that is meaningless (see [Unsupported Language Elements](#unsupported_language_elements)) when a Session is running through the RIDE.
 
 ## I-Beams
 
@@ -66,7 +66,7 @@ Possible values are:
 - if `R` is `¯1`, then the RIDE was already active
 - if `R` is `32`, then the RIDE DLL/shared library is not available
 - if `R` is `64`, then the RIDE_INIT configuration parameter is not correctly defined
-- a simple character vector : replace the RIDE_INIT configuration parameter with the specified initialisation string, which should be in the format specified in [RIDE Init](ride_init.md). 
+- a simple character vector : replace the RIDE_INIT configuration parameter with the specified initialisation string, which should be in the format specified in [RIDE Init](#ride_init). 
 
 For example, `3502⌶'SERVE:*:4502'` configures the interpreter to accept incoming RIDE connections from any machine on port 4502, and then enables the RIDE with that configuration.if `R` is `0`, then the RIDE was disabledif `R` is `¯2`, then the RIDE was active
 - if `R` is `0`, then the RIDE was disabled
@@ -102,8 +102,8 @@ where `mode` is the action that the interpreter should take and determines the c
 - `SERVE` – listen for incoming connections from the RIDE client
 - `CONNECT` – attempt to connect to the specified RIDE client and end the session if this fails
 - `POLL` – attempt to connect to the specified RIDE client at regular intervals and reconnect if the connection is lost
-- `HTTP` – listen for incoming connections from the web browser, via [zero footprint RIDE](the_zero_footprint_ride.md#))
-- `CONFIG` – retrieve values to use from a .ini [configuration file](configuration_ini_file.md)
+- `HTTP` – listen for incoming connections from the web browser, via [zero footprint RIDE](starting_a_dyalog_session.md/#zero-footprint-mode)
+- `CONFIG` – retrieve values to use from a .ini [configuration file](installation.md/#configuration-ini-file)
 
 !!!note
     If two modes are specified, then:

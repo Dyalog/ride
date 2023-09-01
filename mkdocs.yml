@@ -13,23 +13,6 @@ nav:
   - keyboard_shortcuts.md
   - sample_configuration_file.md
 
-# - function_key_configuration.md
-# - input_windows.md
-# - operating_system_interaction.md
-# - preferences_dialog_box.md
-# - ridedyalog_menu_bar.md
-# - session_user_interface.md
-# 
-# 
-# - type_connect.md
-# - type_listen.md
-# - type_start.md
-# - underscored_characters.md
-# - underscored_characters_in_the_session.md
-# - underscored_characters_in_window_captions.md
-# - unsupported_language_elements.md
-# - zero_footprint.md
-
 theme:
   favicon: 'img/favicon-32.png'
   logo: 'img/dyalog-white.svg'
@@ -42,9 +25,6 @@ extra_css:
   - style/main.css
   - style/admonition-ucmdhelp.css
 
-plugins:
-  - search
-
 markdown_extensions:
   - admonition
   - abbr
@@ -53,4 +33,24 @@ extra:
   version:
     provider: mike
 
+plugins:
+  - search
+  - print-site:
+      add_to_navigation: true
+      print_page_title: 'Print Site'
+      add_print_site_banner: false
+      # Table of contents
+      add_table_of_contents: true
+      toc_title: 'Table of Contents'
+      toc_depth: 6
+      # Content-related
+      add_full_urls: true
+      enumerate_headings: true
+      enumerate_figures: true
+      add_cover_page: true
+      cover_page_template: ""
+      path_to_pdf: ""
+      include_css: true
+      enabled: true
+      exclude:
 
