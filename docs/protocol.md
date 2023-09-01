@@ -1,3 +1,7 @@
+# The RIDE Protocol
+
+## Introduction 
+
 > Note: A red circle :red_circle: marks internal notes which won't appear in the final version.
 
 The RIDE protocol is formed of messages sent in either direction over a TCP connection.
@@ -48,8 +52,7 @@ Command names and their arguments are case-sensitive.
 
 JSON booleans `true` and `false` can be freely substituted with and should be treated as equivalent to `1` and `0`.
 
-
-# Connection setup and teardown
+## Connection setup and teardown
 
 ### Identify <a name=Identify></a>
 After the connection has been established and a protocol agreed, both peers immediately send an `Identify` message to indicate what type of application they are.
@@ -137,7 +140,7 @@ For `json` format:
 ```
 
 ### SysError <a name=SysError></a>
-If at any time the interpreter crashes with a [syserror](http://help.dyalog.com/16.0/Content/Language/Errors/System%20Errors.htm), it sends;
+If at any time the interpreter crashes with a [syserror](http://help.dyalog.com/latest/Content/Language/Errors/System%20Errors.htm), it sends;
 ```json
 ["SysError",{"text":"apl: sys error 123 errno 456","stack":""}] // Interpreter -> RIDE
 ```
@@ -149,7 +152,7 @@ window (the session window):
 ["Exit",{"code":0}] // RIDE -> Interpreter
 ```
 
-# Session control
+## Session control
 
 #### apiVersion < 1
 Any echoed input or interpreter output are sent to RIDE using either;
@@ -196,9 +199,9 @@ The interpreter informs RIDE about changes in its ability to accept user input w
 Constants for `type`: 
 - `0` no prompt,
 - `1` the usual 6-space APL prompt (a.k.a. Descalc or "desktop calculator"),
-- `2` [Quad(`⎕`)](http://help.dyalog.com/16.0/Content/Language/System%20Functions/Evaluated%20Input%20Output.htm) input,
+- `2` [Quad(`⎕`)](http://help.dyalog.com/latest/Content/Language/System%20Functions/Evaluated%20Input%20Output.htm) input,
 - `3` line editor,
-- `4` [Quote-Quad(`⍞`)](http://help.dyalog.com/16.0/Content/Language/System%20Functions/Character%20Input%20Output.htm) input,
+- `4` [Quote-Quad(`⍞`)](http://help.dyalog.com/latest/Content/Language/System%20Functions/Character%20Input%20Output.htm) input,
 - `5` any prompt type unforeseen here.
 
 :red_circle: These modes need explaining with expected behaviour.
@@ -229,10 +232,10 @@ RIDE can optionally advise the interpreter about the session's width in characte
 ["SetPW",{"pw":79}] // RIDE -> Interpreter
 ```
 Further output will wrap at that width (with a few exceptions).
-See [`⎕PW`](http://help.dyalog.com/16.0/Content/Language/System%20Functions/pw.htm).
+See [`⎕PW`](http://help.dyalog.com/latest/Content/Language/System%20Functions/pw.htm).
 
 
-# Window management
+## Window management
 
 ### Edit <a name=Edit></a>
 When the user presses `<ED>` (Shift-Enter), RIDE should send;
@@ -257,8 +260,8 @@ The interpreter will parse that and may respond later with one of;
 ["UpdateWindow",...] // Interpreter -> RIDE (same args as OpenWindow)
 ```
 It may also send these in response to [`)ed
-name`](http://help.dyalog.com/16.0/Content/Language/System%20Commands/ed.htm) or
-[`⎕ed'name'`](http://help.dyalog.com/16.0/Content/Language/System%20Functions/ed.htm), as well as when tracing into an
+name`](http://help.dyalog.com/latest/Content/Language/System%20Commands/ed.htm) or
+[`⎕ed'name'`](http://help.dyalog.com/latest/Content/Language/System%20Functions/ed.htm), as well as when tracing into an
 object that is not currently being traced.
 
 Constants for `entityType`:
@@ -270,7 +273,7 @@ Constants for `entityType`:
 | `4` |  simple numeric array | | `512` |  APL class
 | `8` |  mixed simple array | | `1024` |  APL interface
 | `16` |  nested array | | `2048` |  APL session
-| `32` |  [`⎕OR`](http://help.dyalog.com/16.0/Content/Language/System%20Functions/or.htm) object | | `4096` |  external function.
+| `32` |  [`⎕OR`](http://help.dyalog.com/latest/Content/Language/System%20Functions/or.htm) object | | `4096` |  external function.
 | `64` |  native file
 
 :red_circle: TODO: describe the other arguments
@@ -335,7 +338,7 @@ To close all windows, but leave the SIstack unchanged RIDE can send the CloseAll
 ```
 In response the interpreter will send a CloseWindow messsage for each window that it is aware of. The CloseAllWindows message will leave the SIStack unchanged, it will just close all (trace and edit) windows in the interpreter.
 
-# Debugging
+## Debugging
 The following messages are used in relation to trace windows.
 
 ### SetHighlightLine <a name=SetHighlightLine></a>
@@ -415,7 +418,7 @@ Request the current line in a trace window is executed. (Step over)
 Request the current line in a trace window is executed. (Step into)
 
 
-# Status Bar
+## Status Bar
 RIDE requests status information from the interpreter to display in the status bar.
 
 ### Subscribe <a name=Subscribe></a>
@@ -456,7 +459,7 @@ There is no unsubscribe method, a new Subscribe message should be sent with the 
 }]
 ```
 
-# Threads
+## Threads
 
 ### GetSIStack <a name=GetSIStack></a>
 Request information about the current stack.
@@ -577,7 +580,7 @@ PauseAllThreads (pause=0) does not "restart" all threads, you'll need to send Re
 PauseAllThreads does not send any response.
 
 
-# Interrupts
+## Interrupts
 APL supports two kinds of interrupts;
 
 ### WeakInterrupt <a name=WeakInterrupt></a>
@@ -594,7 +597,7 @@ parse messages.
 
 :red_circle: I've no idea what the above sentence means -Nick
 
-# Autocompletion
+## Autocompletion
 
 ### GetAutocomplete <a name=GetAutocomplete></a>
 RIDE can request autocompletion information from the interpreter.
@@ -620,7 +623,7 @@ shouldn't block while it's waiting for the response.
 ```
 * `skip`: how many characters before the request's `pos` to replace with an element of `options`
 
-# Value tips
+## Value tips
 
 ### GetValueTip <a name=GetValueTip></a>
 When the user hovers a name with the mouse, RIDE should ask for a short textual representation of the current value:
@@ -635,12 +638,12 @@ When the user hovers a name with the mouse, RIDE should ask for a short textual 
 
 * `token`: is used to correlate requests and responses, and there is no guarantee that they will arrive in the same order, if ever (like with autocompletion).
 * `maxHeight` and `maxWidth` can be used to limit the number of lines and columns in the result.
-* `class` indicates the [nameclass](http://help.dyalog.com/16.0/Content/Language/System%20Functions/nc.htm) of the object. This information can be used to syntax-highlight the tooltip.
+* `class` indicates the [nameclass](http://help.dyalog.com/latest/Content/Language/System%20Functions/nc.htm) of the object. This information can be used to syntax-highlight the tooltip.
 * `startCol` and `endCol` describe the position of the whole name to which the value tip pertains. `startCol` is inclusive and `endCol` is exclusive.
 
 
 
-# Dialogs
+## Dialogs
 The interpreter can ask RIDE to interact with the user by showing a modal dialog.
 Several kinds of dialogs are supported:
 
@@ -701,10 +704,10 @@ In the response `index` can be:
 ["NotificationMessage",{"message":"Object too large to edit","token":123}] // Interpreter -> RIDE
 ```
 
-# Other
+## Other
 
 ### ShowHTML <a name=ShowHTML></a>
-Request RIDE shows some HTML. See [`3500⌶`](http://help.dyalog.com/16.0/Content/Language/Primitive%20Operators/Send%20Text%20to%20RIDE-embedded%20Browser.htm).
+Request RIDE shows some HTML. See [`3500⌶`](http://help.dyalog.com/latest/Content/Language/Primitive%20Operators/Send%20Text%20to%20RIDE-embedded%20Browser.htm).
 ```json
 ["ShowHTML",{"title":"Example","html":"<i>Hello</i> <b>world</b>"}] // Interpreter -> RIDE
 ```
@@ -731,7 +734,7 @@ Sent from any peer to shut down the connection cleanly.
 :red_circle: Why do we need "Disconnect"?  Why not just close the TCP connection?  That shouldn't be any less "clean".
 
 
-# Workspace explorer
+## Workspace explorer
 Optionally, RIDE can display a tree representing session content.
 
 ### TreeList <a name=TreeList></a>
@@ -749,7 +752,7 @@ It can query information about the children of a particular node with TreeList.
 The root of the tree is assumed to have a node id of 0.
 * `nodeId` is the requested parent id.
 * `nodeIds` are the ids of the children; some of them can be 0 -- those children can't themselves have children.
-* `classes` are [name classes](http://help.dyalog.com/16.0/Content/Language/System%20Functions/nc.htm#NameClassification)
+* `classes` are [name classes](http://help.dyalog.com/latest/Content/Language/System%20Functions/nc.htm#NameClassification)
   that can be used to choose appropriate styling
 * `err` is non-empty only when an error has occurred in the interpreter, e.g. when `nodeId` is no longer invalid
 
@@ -759,7 +762,7 @@ When the user presses Enter or clicks on an editable node, RIDE should use the [
 interpreter.  Then it can send back commands to open or focus an editor window.
 
 
-# Status window
+## Status window
 
 ### StatusOutput <a name=StatusOutput></a>
 The interpreter may request the display of messages in a separate "Status Output" window.
@@ -773,7 +776,7 @@ The interpreter may request the display of messages in a separate "Status Output
 * `8`: .Net function overload clash overload (red?)
 
 
-# Process manager
+## Process manager
 :red_circle: As of April 2016 there is no process manager.
 
 
@@ -819,11 +822,11 @@ If sent to a Process manager, `remoteId` is a list of remote IDs returned by
 ["ReplyGetDetailedInformation",{"information":[i0,i1,...]}] // anything -> anything
 ```
 
-# Session Information and Configuration
+## Session Information and Configuration
 
-## Help
+### Help
 
-### GetHelpInformation <a name=GetHelpInformation></a>
+#### GetHelpInformation <a name=GetHelpInformation></a>
 RIDE can request help on current cursor position.
 ```json
 ["GetHelpInformation",{"line":"r←1+ab","pos":4}] // RIDE -> Interpreter
@@ -831,33 +834,33 @@ RIDE can request help on current cursor position.
 * `line`: text containing the name where help is requested
 * `pos`: position of cursor within `line` (origin 0 is to the left of the first character)
 
-### ReplyGetHelpInformation <a name=ReplyGetHelpInformation></a>
+#### ReplyGetHelpInformation <a name=ReplyGetHelpInformation></a>
 ```json
 ["ReplyGetHelpInformation",{"url":"https://help.dyalog.com/18.1/#Language/Symbols/Plus%20Sign.htm"}] // Interpreter -> RIDE
 ```
 
-## Syntax
+### Syntax
 
-### GetSyntaxInformation <a name=GetSyntaxInformation></a>
+#### GetSyntaxInformation <a name=GetSyntaxInformation></a>
 RIDE can request Syntax information specific to the version of the interpreter being run.
 ```json
 ["GetHelpInformation",{}] // RIDE -> Interpreter
 ```
 
-### ReplyGetSyntaxInformation <a name=ReplyGetSyntaxInformation></a>
+###⍕ ReplyGetSyntaxInformation <a name=ReplyGetSyntaxInformation></a>
 ```json
 ["ReplyGetSyntaxInformation",{"url":"https://help.dyalog.com/18.1/#Language/Symbols/Plus%20Sign.htm"}] // Interpreter -> RIDE
 ```
 
-## LanguageBar
+### LanguageBar
 
-### GetLanguageBar <a name=GetLanguageBar></a>
+#### GetLanguageBar <a name=GetLanguageBar></a>
 RIDE can request Language bar information specific to the version of the interpreter being run.
 ```json
 ["GetLanguageBar",{}] // RIDE -> Interpreter
 ```
 
-### ReplyGetLanguageBar <a name=ReplyGetLanguageBar></a>
+#### ReplyGetLanguageBar <a name=ReplyGetLanguageBar></a>
 ```json
 ["ReplyGetLanguageBar",{  // Interpreter -> RIDE
   "entries":[
@@ -865,15 +868,15 @@ RIDE can request Language bar information specific to the version of the interpr
     ]}]
 ```
 
-## Configuration
+### Configuration
 
-### GetConfiguration <a name=GetConfiguration></a>
+#### GetConfiguration <a name=GetConfiguration></a>
 Configuration parameters can be queried using the GetConfiguration method
 ```json
 ["GetConfiguration", {"names":["text"] // RIDE -> Interpreter
 ```
 
-### ReplyGetConfiguration <a name=ReplyGetConfiguration></a>
+#### ReplyGetConfiguration <a name=ReplyGetConfiguration></a>
 ```json
 ["ReplyGetConfiguration", { // Interpreter -> RIDE
   "configurations":[
@@ -881,7 +884,7 @@ Configuration parameters can be queried using the GetConfiguration method
     ]}]
 ```
 
-### SetConfiguration <a name=SetConfiguration></a>
+#### SetConfiguration <a name=SetConfiguration></a>
 Parameters can be set using the SetConfiguration method. *[Currently only the AUTO_PAUSE_THREADS parameter is supported.]*
 ```json
 ["SetConfiguration", { // RIDE -> Interpreter
@@ -890,7 +893,7 @@ Parameters can be set using the SetConfiguration method. *[Currently only the AU
     ]}]
 ```
 
-### ReplySetConfiguration <a name=ReplySetConfiguration></a>
+#### ReplySetConfiguration <a name=ReplySetConfiguration></a>
 ```json
 ["ReplySetConfiguration", { // Interpreter -> RIDE
   "configurations": [
@@ -906,7 +909,7 @@ Parameters can be set using the SetConfiguration method. *[Currently only the AU
   - `2`: SO_BAD_VALUE
   - `3`: SO_CANT_SET
 
-# Proposed extensions
+## Proposed extensions
 * related to the process manager
 ```
 AvailableConnection => [
