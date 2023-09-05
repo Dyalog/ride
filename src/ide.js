@@ -762,8 +762,12 @@ D.IDE = function IDE(opts = {}) {
           w = ide.w3500;
         }
         D.elm.enable(w.webContents);
-        w.loadURL(`file://${__dirname}/empty.html`);
-        w.webContents.executeJavaScript(`document.body.innerHTML=${JSON.stringify(x.html)}`);
+        const fs = nodeRequire('fs');
+        const path = nodeRequire('path');
+        const file = path.join(D.el.app.getPath('temp'), 'ib3500.html');
+        fs.existsSync(file) && fs.rmSync(file, { force: true });
+        fs.writeFileSync(file, x.html, { encoding: 'utf8' });
+        w.loadURL(`file://${file}`);
         w.setTitle(x.title || '3500 I-beam');
       } else {
         const init = () => {
