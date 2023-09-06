@@ -348,7 +348,7 @@
         (h && h[x]) ? h.execCommand(x) : $.alert(`Command ${x} not implemented.`);
     });
   };
-  ('CBP MA AC VAL indentOrComplete indentMoreOrAutocomplete STL TVO TVB'
+  ('CLS CBP MA AC VAL indentOrComplete indentMoreOrAutocomplete STL TVO TVB'
   + ' TGC JBK JSC LOG WSE').split(' ').forEach(defCmd);
   for (let i = 0; i < C.length; i++) {
     if (C[i]) {

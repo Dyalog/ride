@@ -753,6 +753,7 @@ D.Se.prototype = {
     }
     se.hl();
   },
+  CLS() {},
   EP() { this.ide.focusMRUWin(); },
   ER() { this.exec(0); },
   TC() { this.exec(1); },

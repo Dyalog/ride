@@ -18,6 +18,7 @@ D.cmds = [
   ['CAM','Clear all trace/stop/monitor',[]],
   ['CAW','Close All Windows',[]],
   ['CBP','Clear stops for active object',[]],
+  ['CLS','Close window',            D.mac?['Cmd+W']:[]],
   ['CNC','Connect',                 []],
   ['DK', 'Delete lines',            []],
   ['DHI','Dyalog Help Index',       []],
