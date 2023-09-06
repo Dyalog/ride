@@ -25,15 +25,18 @@ D.installMenu = function Menu(mx) {
         x.checkBoxPref((v) => { mi.checked = !!v; });
       }
       const roles = {
-        cut: 1,
-        copy: 1,
-        paste: 1,
-        togglefullscreen: 1,
-        window: 1,
-        help: 1,
+        cut: 0,
+        copy: 0,
+        paste: 0,
+        togglefullscreen: 0,
+        window: 0,
+        help: 0,
+        hide: 0,
+        hideothers: 0,
+        showall: 'unhide',
       };
       const r = x[''].replace(/[& ]/g, '').toLowerCase();
-      if (r in roles) h.role = r;
+      if (r in roles) h.role = roles[r] || r;
       if (x.items) {
         h.submenu = new D.el.Menu();
         x.items.forEach((y) => { h.submenu.append(render(y)); });

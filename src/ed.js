@@ -593,6 +593,7 @@ D.Ed.prototype = {
     steps = Math.abs(steps);
     for (let i = 0; i < steps; i++) { D.send(cmd, { win: this.id }); }
   },
+  CLS() { this.onClose(); },
   EP(me) { this.isClosing = 1; this.FX(me); },
   FX(me) {
     const ed = this;
