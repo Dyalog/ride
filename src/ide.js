@@ -766,7 +766,8 @@ D.IDE = function IDE(opts = {}) {
         const path = nodeRequire('path');
         const file = path.join(D.el.app.getPath('temp'), 'ib3500.html');
         fs.existsSync(file) && fs.rmSync(file, { force: true });
-        fs.writeFileSync(file, x.html, { encoding: 'utf8' });
+        const html = `<?xml version="1.0" encoding="UTF-8"?>${x.html}`;
+        fs.writeFileSync(file, html, { encoding: 'utf8' });
         w.loadURL(`file://${file}`);
         w.setTitle(x.title || '3500 I-beam');
       } else {
