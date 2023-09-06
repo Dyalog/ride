@@ -45,7 +45,7 @@ D.cmds = [
   ['OWS','Open Workspace',          [D.mac?'Cmd+O':'Ctrl+O']],
   ['PAT','Pause all Threads',       []],
   ['POE','Pause on Error',          []],
-  ['PRF','Show preferences',        []],
+  ['PRF','Show preferences',        D.mac?['Cmd+,']:[]],
   ['PV' ,'Previous match',          []], 
   ['QCP','Quick Command Palette',   []], 
   ['QIT','Quit',                    [D.mac?'Cmd+Q':'Ctrl+Q']],
