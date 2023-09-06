@@ -748,7 +748,7 @@
     + '\n&Help'
     + '\n  Getting &Started         =https://dyalog.com/introduction.htm'
     + '\n  -'
-    + '\n  &RIDE User Guide         =RIDEHLP'
+    + '\n  &RIDE User Guide         =RHP'
     + '\n  Dyalog &Help             =DHI'
     + '\n  &Language Elements       =LEL'
     + '\n  &Documentation Centre    =DOX'

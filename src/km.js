@@ -98,10 +98,8 @@
     DHI() {
       openURI(D.hlp.INDEX);
     },
-    RIDEHLP() {
-      const v = D.versionInfo.version ? D.versionInfo.version.slice(0, 3) : '';
-      const vnr = D.hlp.RIDEHLP + v;
-      openURI(vnr);
+    RHP() {
+      openURI(D.hlp.RIDEHLP);
     },
     DOX() {
       openURI(D.hlp.DOX);

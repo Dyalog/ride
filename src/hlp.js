@@ -7,8 +7,9 @@ D.InitHelp = function initHelp(version) {
   const helpUri = `https://help.dyalog.com/${v}/`;
   const q = '.htm'; // prefix and suffix
   const p = parseFloat(v) < 17.1 ? `${helpUri}Content/` : `${helpUri}index${q}#`;
+  const rv = (D.versionInfo.version || '').slice(0, 3);
   const h = {
-    RIDEHLP: 'https://dyalog.github.io/ride/',
+    RIDEHLP: `https://dyalog.github.io/ride/${rv}`,
     DOX: `https://www.dyalog.com/documentation${v3}${q}`,
     INDEX: `${helpUri}index${q}`,
     WELCOME: `${p}MiscPages/HelpWelcome${q}`,
