@@ -161,65 +161,6 @@
 #cn_env {
   width: 100%;
 }
-.ctl_listview {
-  width: 100%;
-  font-family: apl;
-  line-height: 1.3em;
-  overflow-x: auto;
-  overflow-y: auto;
-}
-.ctl_listview tr {
-  cursor: pointer;
-}
-.ctl_listview td {
-  padding: 3px 10px;
-}
-#threads > table,
-#sistack > table {
-  width: 100%;
-}
-#debug {
-  height: inherit;
-}
-#debug > div {
-  height: 50%;
-  display: block;
-}
-#debug .ctl_listview_header {
-  height: 14px;
-  padding: 5px;
-}
-#threads {
-  height: calc(100% - 60px);
-}
-#sistack {
-  height: calc(100% - 24px);
-}
-.lm_content {
-  border: none !important;
-}
-.lm_header .lm_tab {
-  padding: 5px 15px 5px 10px !important;
-  margin-top: 0!important;
-  height: 15px!important;
-}
-.lm_header .lm_tab .lm_title {
-  font-family: apl, monospace !important;
-  padding: 0px 10px 2px 0px;
-}
-.lm_header .lm_tab .lm_close_tab {
-  right: 6px !important;
-}
-.lm_header .lm_tab .lm_close_tab:not(.modified),
-.lm_header .lm_tab .lm_close_tab:hover {
-  top: 4px !important;
-}
-.lm_close {
-  display: none !important;
-}
-.lm_splitter {
-  opacity: 1 !important;
-}
 @font-face {
   font-family: 'Roboto';
   src: url('./fonts/Roboto-Thin.ttf') format('truetype');
@@ -291,6 +232,31 @@
   src: url('./fonts/Roboto-BlackItalic.ttf') format('truetype');
   font-weight: 900;
   font-style: italic;
+}
+.lm_content {
+  border: none !important;
+}
+.lm_header .lm_tab {
+  padding: 5px 15px 5px 10px !important;
+  margin-top: 0!important;
+  height: 15px!important;
+}
+.lm_header .lm_tab .lm_title {
+  font-family: apl, monospace !important;
+  padding: 0px 10px 2px 0px;
+}
+.lm_header .lm_tab .lm_close_tab {
+  right: 6px !important;
+}
+.lm_header .lm_tab .lm_close_tab:not(.modified),
+.lm_header .lm_tab .lm_close_tab:hover {
+  top: 4px !important;
+}
+.lm_close {
+  display: none !important;
+}
+.lm_splitter {
+  opacity: 1 !important;
 }
 /*various dialogs*/
 #dlg_modal_overlay {
@@ -474,6 +440,40 @@
   width: 100%;
   height: 100%;
   resize: none;
+}
+.ctl_listview {
+  width: 100%;
+  font-family: apl;
+  line-height: 1.3em;
+  overflow-x: auto;
+  overflow-y: auto;
+}
+.ctl_listview tr {
+  cursor: pointer;
+}
+.ctl_listview td {
+  padding: 3px 10px;
+}
+#threads > table,
+#sistack > table {
+  width: 100%;
+}
+#debug {
+  height: inherit;
+}
+#debug > div {
+  height: 50%;
+  display: block;
+}
+#debug .ctl_listview_header {
+  height: 14px;
+  padding: 5px;
+}
+#threads {
+  height: calc(100% - 60px);
+}
+#sistack {
+  height: calc(100% - 24px);
 }
 button {
   border: none;
@@ -1106,10 +1106,6 @@ body .ui-tooltip {
 .menu hr {
   margin: 3px 0 5px 0;
 }
-::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
 .monaco-editor .no-icons .icon {
   display: none!important;
 }
@@ -1122,6 +1118,10 @@ body .ui-tooltip {
 }
 .pendent .tb_btn {
   pointer-events: none;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
 }
 #sb {
   position: absolute;
@@ -1158,6 +1158,33 @@ body .ui-tooltip {
 }
 #sb_busy {
   padding: 2px 6px 3px;
+}
+/*Status window*/
+/*info*/
+/*error*/
+/*warning*/
+/*.Net function overload clash overload*/
+#status_body {
+  overflow: scroll;
+}
+#status {
+  font-family: apl, monospace;
+  white-space: pre;
+}
+#status .m {
+  padding: 1px 8px;
+}
+#status .t1 {
+  color: green;
+}
+#status .t2 {
+  color: red;
+}
+#status .t4 {
+  color: blue;
+}
+#status .t8 {
+  color: red;
 }
 /* http://meyerweb.com/eric/tools/css/reset/ v2.0 | 20110126 License: none (public domain) */
 html,
@@ -1308,66 +1335,6 @@ h2 {
 .hidden {
   display: none;
 }
-/*Status window*/
-/*info*/
-/*error*/
-/*warning*/
-/*.Net function overload clash overload*/
-#status_body {
-  overflow: scroll;
-}
-#status {
-  font-family: apl, monospace;
-  white-space: pre;
-}
-#status .m {
-  padding: 1px 8px;
-}
-#status .t1 {
-  color: green;
-}
-#status .t2 {
-  color: red;
-}
-#status .t4 {
-  color: blue;
-}
-#status .t8 {
-  color: red;
-}
-.tooltip {
-  width: 16px;
-  height: 16px;
-  position: relative;
-  display: inline-block;
-}
-/* Tooltip text */
-.tooltip .tooltiptext {
-  visibility: hidden;
-  text-align: center;
-  padding: 5px;
-  border-radius: 6px;
-  /* Position the tooltip text - see examples below! */
-  position: absolute;
-  z-index: 1;
-  top: -5px;
-  left: 25px;
-  min-width: 30vw;
-}
-.tooltip .tooltiptext::after {
-  content: " ";
-  position: absolute;
-  top: 12px;
-  right: 100%;
-  /* To the left of the tooltip */
-  margin-top: -5px;
-  border-width: 5px;
-  border-style: solid;
-}
-/* Show the tooltip text when you mouse over the tooltip container */
-.tooltip:hover .tooltiptext {
-  visibility: visible;
-}
 .toolbar {
   cursor: default;
   overflow: hidden;
@@ -1403,6 +1370,107 @@ h2 {
 .tb_sep {
   margin: 0 8px 0 0;
   vertical-align: middle;
+}
+.tooltip {
+  width: 16px;
+  height: 16px;
+  position: relative;
+  display: inline-block;
+}
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  text-align: center;
+  padding: 5px;
+  border-radius: 6px;
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  z-index: 1;
+  top: -5px;
+  left: 25px;
+  min-width: 30vw;
+}
+.tooltip .tooltiptext::after {
+  content: " ";
+  position: absolute;
+  top: 12px;
+  right: 100%;
+  /* To the left of the tooltip */
+  margin-top: -5px;
+  border-width: 5px;
+  border-style: solid;
+}
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+#vt_bln {
+  font-family: apl, monospace;
+  font-size: 18px;
+  position: absolute;
+  padding: 7px;
+  white-space: pre;
+  overflow: hidden;
+}
+#vt_tri {
+  position: absolute;
+  border: solid;
+  border-width: 6px 6px 0 6px;
+  height: 6px;
+  bottom: -6px;
+  border-left-color: transparent!important;
+  border-right-color: transparent!important;
+  background-color: transparent!important;
+  content: "";
+}
+#vt_tri.inv {
+  border-width: 0 6px 6px 6px;
+  margin-top: -6px;
+  bottom: auto;
+}
+.vt_marker {
+  border: dotted transparent 2px;
+  margin: -2px;
+}
+/*IDE page*/
+#splash,
+#ide,
+body.floating-window {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.ride_win {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.ride_win.edit_trace {
+  display: block;
+}
+.ride_win.edit_trace .ride_win_me {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+}
+.ride_win.edit_trace.no-toolbar .ride_win_me {
+  height: 100%;
+}
+.win,
+.floating-window {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 32px;
+  bottom: 0;
+  overflow: hidden!important;
+  padding: 0!important;
+  height: auto!important;
 }
 /*workspace explorer*/
 /*variable*/
@@ -1515,46 +1583,6 @@ h2 {
 }
 .bt_collapsed > div {
   display: none;
-}
-/*IDE page*/
-#splash,
-#ide,
-body.floating-window {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
-.ride_win {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-.ride_win.edit_trace {
-  display: block;
-}
-.ride_win.edit_trace .ride_win_me {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
-}
-.ride_win.edit_trace.no-toolbar .ride_win_me {
-  height: 100%;
-}
-.win,
-.floating-window {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 32px;
-  bottom: 0;
-  overflow: hidden!important;
-  padding: 0!important;
-  height: auto!important;
 }
 /*z-indices; CodeMirror uses 1-10; .dlg uses 100+ */
 .ui-tooltip {
@@ -1786,34 +1814,6 @@ body.floating-window {
 .zoom-10 .toolbar {
   font-size: 6px;
 }
-#vt_bln {
-  font-family: apl, monospace;
-  font-size: 18px;
-  position: absolute;
-  padding: 7px;
-  white-space: pre;
-  overflow: hidden;
-}
-#vt_tri {
-  position: absolute;
-  border: solid;
-  border-width: 6px 6px 0 6px;
-  height: 6px;
-  bottom: -6px;
-  border-left-color: transparent!important;
-  border-right-color: transparent!important;
-  background-color: transparent!important;
-  content: "";
-}
-#vt_tri.inv {
-  border-width: 0 6px 6px 6px;
-  margin-top: -6px;
-  bottom: auto;
-}
-.vt_marker {
-  border: dotted transparent 2px;
-  margin: -2px;
-}
 #prf_dlg > hr {
   margin-top: 0;
   margin-bottom: 15px;
@@ -1837,7 +1837,6 @@ body.floating-window {
   width: 28px;
 }
 #prf_content {
-  margin-top: -2px;
   padding: 5px 10px 0;
 }
 #prf_content button {
@@ -1886,93 +1885,6 @@ body.floating-window {
 }
 .web #code {
   top: 75px;
-}
-#col_top {
-  text-align: left;
-  padding: 0 8px;
-}
-#col_top div {
-  padding-bottom: 8px;
-}
-#col_fnt {
-  padding: 5px;
-  margin-left: 10px;
-  width: calc(100% - 200px);
-}
-#col_new_name {
-  display: none;
-}
-#col_me {
-  left: 8px;
-  right: 216px;
-  overflow: hidden;
-  text-align: left;
-  position: absolute;
-  top: 140px;
-  bottom: 70px;
-}
-#col_settings {
-  width: 200px;
-  right: 8px;
-  overflow: auto;
-  line-height: 1.5;
-  text-align: left;
-  position: absolute;
-  top: 140px;
-  bottom: 70px;
-}
-#col_settings p {
-  padding-top: 8px;
-  padding-bottom: 8px;
-}
-.web #col_me,
-.web #col_settings {
-  top: 126px;
-}
-#col_fg {
-  width: 48px;
-  padding: 0;
-  cursor: pointer;
-}
-#col_bg {
-  width: 48px;
-  padding: 0;
-  cursor: pointer;
-}
-#col_fgo_p,
-#col_bgo_p {
-  margin-left: 16px;
-  padding-left: 8px;
-  padding-right: 8px;
-}
-#col_B + u {
-  font-weight: bold;
-  text-decoration: none;
-}
-#col_I + u {
-  font-style: italic;
-  text-decoration: none;
-}
-#col.frz #col_ren {
-  display: none;
-}
-#col.frz #col_del {
-  display: none;
-}
-#col.frz #col_chrome_fld {
-  display: none;
-}
-#col.frz #col_settings {
-  display: none;
-}
-#col.frz #col_me {
-  right: 8px;
-}
-#col.renaming #col_scm {
-  display: none;
-}
-#col.renaming #col_new_name {
-  display: inline;
 }
 /*Prefs>Layout*/
 /*The arrangement is: +-------+ */
@@ -2358,6 +2270,93 @@ input.lyt_g3:hover {
 }
 #title_rst {
   float: right;
+}
+#col_top {
+  text-align: left;
+  padding: 0 8px;
+}
+#col_top div {
+  padding-bottom: 8px;
+}
+#col_fnt {
+  padding: 5px;
+  margin-left: 10px;
+  width: calc(100% - 200px);
+}
+#col_new_name {
+  display: none;
+}
+#col_me {
+  left: 8px;
+  right: 216px;
+  overflow: hidden;
+  text-align: left;
+  position: absolute;
+  top: 140px;
+  bottom: 70px;
+}
+#col_settings {
+  width: 200px;
+  right: 8px;
+  overflow: auto;
+  line-height: 1.5;
+  text-align: left;
+  position: absolute;
+  top: 140px;
+  bottom: 70px;
+}
+#col_settings p {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.web #col_me,
+.web #col_settings {
+  top: 126px;
+}
+#col_fg {
+  width: 48px;
+  padding: 0;
+  cursor: pointer;
+}
+#col_bg {
+  width: 48px;
+  padding: 0;
+  cursor: pointer;
+}
+#col_fgo_p,
+#col_bgo_p {
+  margin-left: 16px;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+#col_B + u {
+  font-weight: bold;
+  text-decoration: none;
+}
+#col_I + u {
+  font-style: italic;
+  text-decoration: none;
+}
+#col.frz #col_ren {
+  display: none;
+}
+#col.frz #col_del {
+  display: none;
+}
+#col.frz #col_chrome_fld {
+  display: none;
+}
+#col.frz #col_settings {
+  display: none;
+}
+#col.frz #col_me {
+  right: 8px;
+}
+#col.renaming #col_scm {
+  display: none;
+}
+#col.renaming #col_new_name {
+  display: inline;
 }
 /*Prefs>Trace/Edit*/
 #wins {
