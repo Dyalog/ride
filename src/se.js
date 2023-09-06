@@ -644,7 +644,7 @@ D.Se.prototype = {
     allLines.reverse().forEach((l) => {
       if (se.dirty[l] === 0) {
         se.edit([{
-          range: new monaco.Range(l, 1, l + 1, 1),
+          range: new monaco.Range(l - 1, model.getLineMaxColumn(l - 1), l, 1),
           text: '',
         }]);
       } else {
