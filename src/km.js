@@ -98,6 +98,9 @@
     DHI() {
       openURI(D.hlp.INDEX);
     },
+    RHP() {
+      openURI(D.hlp.RIDEHLP);
+    },
     DOX() {
       openURI(D.hlp.DOX);
     },
