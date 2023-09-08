@@ -5,6 +5,30 @@
   cursor: auto;
   font-family: apl, monospace;
 }
+.ctl_listview {
+  background-color: white;
+  color: black;
+}
+.ctl_listview tr {
+  background-color: rgba(118, 136, 217, 0.5);
+  border-bottom: 1px solid white;
+}
+.ctl_listview tr:hover {
+  background-color: rgba(118, 136, 217, 0.25);
+}
+.ctl_listview tr.selected {
+  background-color: #9eabe4;
+}
+#debug {
+  background: white;
+}
+#debug .ctl_listview_header {
+  background-color: #7688d9;
+  color: white;
+}
+#debug .ctl_listview_header h2 {
+  font-size: 16px;
+}
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),
 #cn textarea {
   border: 1px solid rgba(169, 169, 169, 0.3);
@@ -85,29 +109,69 @@
   font-size: 16px;
   font-family: monospace;
 }
-.ctl_listview {
-  background-color: white;
-  color: black;
+label {
+  color: #4c4a4a;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 600;
 }
-.ctl_listview tr {
-  background-color: rgba(118, 136, 217, 0.5);
-  border-bottom: 1px solid white;
-}
-.ctl_listview tr:hover {
-  background-color: rgba(118, 136, 217, 0.25);
-}
-.ctl_listview tr.selected {
-  background-color: #9eabe4;
-}
-#debug {
-  background: white;
-}
-#debug .ctl_listview_header {
-  background-color: #7688d9;
+button {
+  background: #7688d9;
   color: white;
+  border-radius: 4px;
+  background-image: -moz-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
+  background-image: -webkit-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
+  background-image: -ms-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
 }
-#debug .ctl_listview_header h2 {
-  font-size: 16px;
+button:hover {
+  color: #4c4a4a;
+}
+button:disabled {
+  cursor: default;
+  color: rgba(255, 255, 255, 0.5);
+  background: #a4a2a2;
+  border-color: #a4a2a2;
+}
+input + label {
+  cursor: pointer;
+  vertical-align: text-top;
+}
+input:disabled + label {
+  cursor: default;
+  color: #a4a2a2;
+}
+[type=checkbox] {
+  cursor: pointer;
+  background-color: #edeff5;
+  border: 1px solid #7688d9;
+}
+[type=checkbox]:checked {
+  background-color: #7688d9;
+}
+[type=checkbox]:hover {
+  background: #9eabe4;
+}
+[type=checkbox]:active {
+  background: #7688d9;
+  color: #9eabe4;
+}
+[type=checkbox]:checked {
+  color: #7688d9;
+}
+[type=checkbox]:checked::after {
+  color: #edeff5;
+}
+[type=checkbox]:disabled,
+[type=checkbox]:disabled:checked {
+  cursor: default;
+  color: #a4a2a2;
+  background: #a4a2a2;
+  border-color: #a4a2a2;
+}
+select {
+  background-color: #dde0ec;
+  border: 1px solid rgba(169, 169, 169, 0.3);
+  color: #4e65ce;
 }
 /*various dialogs*/
 #dlg_modal_overlay {
@@ -248,70 +312,6 @@
   background-color: black;
   border: 1px dashed #7688d9;
 }
-label {
-  color: #4c4a4a;
-  font-family: Roboto;
-  font-size: 14px;
-  font-weight: 600;
-}
-button {
-  background: #7688d9;
-  color: white;
-  border-radius: 4px;
-  background-image: -moz-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
-  background-image: -webkit-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
-  background-image: -ms-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
-}
-button:hover {
-  color: #4c4a4a;
-}
-button:disabled {
-  cursor: default;
-  color: rgba(255, 255, 255, 0.5);
-  background: #a4a2a2;
-  border-color: #a4a2a2;
-}
-input + label {
-  cursor: pointer;
-  vertical-align: text-top;
-}
-input:disabled + label {
-  cursor: default;
-  color: #a4a2a2;
-}
-[type=checkbox] {
-  cursor: pointer;
-  background-color: #edeff5;
-  border: 1px solid #7688d9;
-}
-[type=checkbox]:checked {
-  background-color: #7688d9;
-}
-[type=checkbox]:hover {
-  background: #9eabe4;
-}
-[type=checkbox]:active {
-  background: #7688d9;
-  color: #9eabe4;
-}
-[type=checkbox]:checked {
-  color: #7688d9;
-}
-[type=checkbox]:checked::after {
-  color: #edeff5;
-}
-[type=checkbox]:disabled,
-[type=checkbox]:disabled:checked {
-  cursor: default;
-  color: #a4a2a2;
-  background: #a4a2a2;
-  border-color: #a4a2a2;
-}
-select {
-  background-color: #dde0ec;
-  border: 1px solid rgba(169, 169, 169, 0.3);
-  color: #4e65ce;
-}
 #lb {
   background-color: #edeff5;
   border-bottom: 1px #9eabe4 solid;
@@ -381,6 +381,28 @@ select {
 .menu .m-box a:focus.m-checked {
   background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
 }
+#splash {
+  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #7688d9;
+}
+#ide {
+  background-color: #7688d9;
+}
+#apl_font {
+  color: #7688d9;
+}
+::selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+::-moz-selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+body {
+  font-family: Roboto, sans-serif;
+}
 .breakpointarea {
   border-right: 1px solid #dde0ec;
   cursor: pointer;
@@ -447,34 +469,6 @@ select {
 }
 .sessionmargin.modified::before {
   color: red;
-}
-::-webkit-scrollbar {
-  background-color: white;
-}
-::-webkit-scrollbar-corner {
-  background-color: white;
-}
-::-webkit-scrollbar-track {
-  background-color: #f0f0f0;
-  border: 1px solid white;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb {
-  background-color: rgba(118, 136, 217, 0.3);
-  border: 1px solid white;
-  border-radius: 10px;
-}
-::-webkit-scrollbar-thumb:horizontal {
-  border-width: 1px 0;
-}
-::-webkit-scrollbar-thumb:vertical {
-  border-width: 0 1px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(118, 136, 217, 0.6);
-}
-::-webkit-scrollbar-thumb:active {
-  background-color: rgba(118, 136, 217, 0.9);
 }
 #prf_dlg hr {
   border-top: 1px solid #d7d7d3;
@@ -657,27 +651,33 @@ a:hover {
     display: none;
   }
 }
-#splash {
-  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #7688d9;
+::-webkit-scrollbar {
+  background-color: white;
 }
-#ide {
-  background-color: #7688d9;
+::-webkit-scrollbar-corner {
+  background-color: white;
 }
-#apl_font {
-  color: #7688d9;
+::-webkit-scrollbar-track {
+  background-color: #f0f0f0;
+  border: 1px solid white;
+  border-radius: 10px;
 }
-::selection {
-  background: #7688d9;
-  color: white;
+::-webkit-scrollbar-thumb {
+  background-color: rgba(118, 136, 217, 0.3);
+  border: 1px solid white;
+  border-radius: 10px;
 }
-/*must be separate rules*/
-::-moz-selection {
-  background: #7688d9;
-  color: white;
+::-webkit-scrollbar-thumb:horizontal {
+  border-width: 1px 0;
 }
-/*must be separate rules*/
-body {
-  font-family: Roboto, sans-serif;
+::-webkit-scrollbar-thumb:vertical {
+  border-width: 0 1px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(118, 136, 217, 0.6);
+}
+::-webkit-scrollbar-thumb:active {
+  background-color: rgba(118, 136, 217, 0.9);
 }
 #sb {
   background-color: white;

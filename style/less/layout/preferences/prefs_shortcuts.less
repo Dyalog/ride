@@ -30,6 +30,10 @@
 	float: right;
 	margin-right: 8px;
 }
+#shc_prnt {
+	float: right;
+  margin: 0 7px;
+}
 .shc_code {
 	padding: 2px 16px 2px 8px;
 }
@@ -109,6 +113,10 @@
     position: initial;
     overflow: unset;
   }
+  #shc_tbl_wr tr td .shc_text .shc_key_btn {
+    color: black;
+    background-color: white;
+  }
   #shc_ctrls {
     display: none;
   }
@@ -120,4 +128,9 @@
       display: none;
     }
   }
+  .shc_val {
+		&::placeholder {
+			color: transparent;
+		}
+  }  
 }

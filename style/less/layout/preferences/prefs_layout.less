@@ -29,6 +29,10 @@
 #lyt_rst {
 	float: right;
 }
+#lyt_prnt {
+	float: right;
+  margin: 0 7px;
+}
 #lyt_pfx_lbl {
 	float: left;
 	// margin: -5px 10px auto 5px;
@@ -186,7 +190,7 @@ input.lyt_g1, input.lyt_g3 {
 			border-radius: 2px 0 0 2px;
 			position: relative;
 			left: -30%;
-			width: 30%;
+			width: 28.5%;
 			height: 45px;
 			padding-right: 1px;
 		}
@@ -199,7 +203,23 @@ input.lyt_g1, input.lyt_g3 {
 	}
 }
 @media print {
-  #lyt_ime_wr, #lyt_rst {
+  #lyt_lc {
+    display: inline;
+  }
+  #lyt_lc_lbl, #lyt_ime, #lyt_ime_wr, #lyt_prnt, #lyt_rst {
     display: none;
+  }
+  #lyt_43:before{
+    border-width: 1px 0 1px 1px;
+    border-style: solid;
+    border-color: black;
+    position: relative;
+    top: -1px;
+    left: -1px;
+  }
+  .lyt_k {
+    color: white;
+    border: 1px solid black;
+    width: 5.5%;
   }
 }

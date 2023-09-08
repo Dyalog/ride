@@ -38,6 +38,10 @@
     name: 'Keyboard',
     init() {
       q = J.lyt;
+      q.prnt.onclick = () => {
+        q.pfx.blur();
+        D.el.getCurrentWindow().webContents.print({ printBackground: true });
+      };
       q.lc.innerHTML = `<option>${Object.keys(layouts).sort().join('<option>')}`;
       const inputs = q.kbd.querySelectorAll('input');
       const onBlurInput = (x) => {
@@ -101,10 +105,6 @@
     validate() {
       if (q.pfx.value.length !== 1) return { msg: 'Invalid prefix key', el: q.pfx };
       return null;
-    },
-    print() {
-      q.pfx.blur();
-      D.el.getCurrentWindow().webContents.print({ printBackground: true });
     },
     save() {
       D.prf.prefixKey(q.pfx.value);
