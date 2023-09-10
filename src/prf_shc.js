@@ -145,6 +145,9 @@
     name: 'Shortcuts',
     init(t) {
       q = J.shc;
+      q.prnt.onclick = () => {
+        D.el.getCurrentWindow().webContents.print({ printBackground: true });
+      };
       t.onmouseover = (e) => {
         const u = e.target.closest('.shc_del');
         if (u) u.parentNode.className += ' shc_del_hvr';
@@ -197,9 +200,6 @@
         return { msg: 'Duplicate shortcuts', el: dup[0] };
       }
       return null;
-    },
-    print() {
-      D.el.getCurrentWindow().webContents.print({ printBackground: true });
     },
     save() {
       const h = {};

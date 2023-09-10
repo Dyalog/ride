@@ -91,12 +91,8 @@
         activeTab = tabs[a.href.replace(/.*#/, '')];
         activeTab.resize && activeTab.resize();
         activeTab.activate && activeTab.activate();
-        I.prf_print.disabled = !activeTab.print;
         x.preventDefault();
         return !1;
-      };
-      I.prf_print.onclick = () => {
-        activeTab.print && activeTab.print();
       };
       for (let i = 0; i < hdrs.length; i++) {
         const id = hdrs[i].href.replace(/.*#/, '');

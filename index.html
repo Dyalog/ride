@@ -504,7 +504,6 @@
     <a href=#title>Title</a>
     <a href=#pmenu>Menu</a>
     <a href=#wins>Trace/Edit</a>
-    <button id=prf_print class=tb_btn><span class="fal fa-print"></span></button>
   </div>
   <div id=prf_content>
 
@@ -512,8 +511,10 @@
     <div id=lyt>
       <div id=lyt_ctrls>
         <button id=lyt_rst title="Restore defaults for selected locale"><u>R</u>eset</button>
+        <button id=lyt_prnt title="Print"><u>P</u>rint</button>
         <label id=lyt_pfx_lbl><u>P</u>refix: <input id=lyt_pfx size=1></label>
-        <label id=lyt_lc_lbl>Choose <u>l</u>ayout: <select id=lyt_lc></select></label>
+        <label id=lyt_lc_lbl for lyt_lc>Choose <u>l</u>ayout:</label>
+        <select id=lyt_lc></select>
       </div>
       <div id=lyt_kbd>
         <b id=lyt_1  class=lyt_k><b class=lyt_g2></b><input class=lyt_g3><br><b class=lyt_g0></b><input class=lyt_g1></b>
@@ -588,6 +589,7 @@
     <div id=shc hidden>
       <div id=shc_ctrls>
         <button id=shc_rst_all title="Reset all to their defaults"><u>R</u>eset</button>
+        <button id=shc_prnt title="Print"><u>P</u>rint</button>
         <input id=shc_sc placeholder=Search><a id=shc_sc_clr href=# hidden title="Clear search">×</a>
         <input type=checkbox id=shc_defined>
         <label id=shc_defined_lb for=shc_defined>Only show defined shortcuts</label>
