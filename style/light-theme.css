@@ -5,30 +5,6 @@
   cursor: auto;
   font-family: apl, monospace;
 }
-.ctl_listview {
-  background-color: white;
-  color: black;
-}
-.ctl_listview tr {
-  background-color: rgba(118, 136, 217, 0.5);
-  border-bottom: 1px solid white;
-}
-.ctl_listview tr:hover {
-  background-color: rgba(118, 136, 217, 0.25);
-}
-.ctl_listview tr.selected {
-  background-color: #9eabe4;
-}
-#debug {
-  background: white;
-}
-#debug .ctl_listview_header {
-  background-color: #7688d9;
-  color: white;
-}
-#debug .ctl_listview_header h2 {
-  font-size: 16px;
-}
 #cn input:not([type=button]):not([type=file]):not([type=submit]):not([type=checkbox]),
 #cn textarea {
   border: 1px solid rgba(169, 169, 169, 0.3);
@@ -108,120 +84,6 @@
 .cn_dlg_content pre {
   font-size: 16px;
   font-family: monospace;
-}
-label {
-  color: #4c4a4a;
-  font-family: Roboto;
-  font-size: 14px;
-  font-weight: 600;
-}
-button {
-  background: #7688d9;
-  color: white;
-  border-radius: 4px;
-  background-image: -moz-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
-  background-image: -webkit-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
-  background-image: -ms-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
-}
-button:hover {
-  color: #4c4a4a;
-}
-button:disabled {
-  cursor: default;
-  color: rgba(255, 255, 255, 0.5);
-  background: #a4a2a2;
-  border-color: #a4a2a2;
-}
-input + label {
-  cursor: pointer;
-  vertical-align: text-top;
-}
-input:disabled + label {
-  cursor: default;
-  color: #a4a2a2;
-}
-[type=checkbox] {
-  cursor: pointer;
-  background-color: #edeff5;
-  border: 1px solid #7688d9;
-}
-[type=checkbox]:checked {
-  background-color: #7688d9;
-}
-[type=checkbox]:hover {
-  background: #9eabe4;
-}
-[type=checkbox]:active {
-  background: #7688d9;
-  color: #9eabe4;
-}
-[type=checkbox]:checked {
-  color: #7688d9;
-}
-[type=checkbox]:checked::after {
-  color: #edeff5;
-}
-[type=checkbox]:disabled,
-[type=checkbox]:disabled:checked {
-  cursor: default;
-  color: #a4a2a2;
-  background: #a4a2a2;
-  border-color: #a4a2a2;
-}
-select {
-  background-color: #dde0ec;
-  border: 1px solid rgba(169, 169, 169, 0.3);
-  color: #4e65ce;
-}
-/*various dialogs*/
-#dlg_modal_overlay {
-  background-color: black;
-  opacity: 0.2;
-}
-.dlg {
-  background-color: #edeff5;
-  outline: none;
-}
-.dlg div {
-  outline: none;
-}
-.dlg_title,
-.dlg_close {
-  color: #7688d9;
-}
-.dlg_close:hover {
-  background-color: white;
-}
-#cn_listen_dlg,
-#cn_connecting_dlg {
-  border: 1px solid #7688d9;
-}
-#gd.dlg {
-  background-color: #edeff5;
-}
-#gd .dlg_title,
-#gd .dlg_close {
-  color: #828282;
-}
-#gd .dlg_close:hover {
-  color: white;
-  background-color: #38393f;
-}
-#gd_content {
-  color: #4c4a4a;
-}
-.dlg_btns {
-  background-color: #dde0ec;
-}
-.dlg_btns button.task {
-  background-image: none;
-  background-color: rgba(0, 0, 0, 0);
-  color: #7688d9;
-  text-transform: none;
-  font-size: small;
-  font-weight: normal;
-  text-align: left;
-  border: 1px solid transparent;
 }
 /*Golden Layout*/
 .lm_goldenlayout {
@@ -312,6 +174,144 @@ select {
   background-color: black;
   border: 1px dashed #7688d9;
 }
+.ctl_listview {
+  background-color: white;
+  color: black;
+}
+.ctl_listview tr {
+  background-color: rgba(118, 136, 217, 0.5);
+  border-bottom: 1px solid white;
+}
+.ctl_listview tr:hover {
+  background-color: rgba(118, 136, 217, 0.25);
+}
+.ctl_listview tr.selected {
+  background-color: #9eabe4;
+}
+#debug {
+  background: white;
+}
+#debug .ctl_listview_header {
+  background-color: #7688d9;
+  color: white;
+}
+#debug .ctl_listview_header h2 {
+  font-size: 16px;
+}
+/*various dialogs*/
+#dlg_modal_overlay {
+  background-color: black;
+  opacity: 0.2;
+}
+.dlg {
+  background-color: #edeff5;
+  outline: none;
+}
+.dlg div {
+  outline: none;
+}
+.dlg_title,
+.dlg_close {
+  color: #7688d9;
+}
+.dlg_close:hover {
+  background-color: white;
+}
+#cn_listen_dlg,
+#cn_connecting_dlg {
+  border: 1px solid #7688d9;
+}
+#gd.dlg {
+  background-color: #edeff5;
+}
+#gd .dlg_title,
+#gd .dlg_close {
+  color: #828282;
+}
+#gd .dlg_close:hover {
+  color: white;
+  background-color: #38393f;
+}
+#gd_content {
+  color: #4c4a4a;
+}
+.dlg_btns {
+  background-color: #dde0ec;
+}
+.dlg_btns button.task {
+  background-image: none;
+  background-color: rgba(0, 0, 0, 0);
+  color: #7688d9;
+  text-transform: none;
+  font-size: small;
+  font-weight: normal;
+  text-align: left;
+  border: 1px solid transparent;
+}
+label {
+  color: #4c4a4a;
+  font-family: Roboto;
+  font-size: 14px;
+  font-weight: 600;
+}
+button {
+  background: #7688d9;
+  color: white;
+  border-radius: 4px;
+  background-image: -moz-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
+  background-image: -webkit-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
+  background-image: -ms-linear-gradient(90deg, #7688d9 0%, #9eabe4 100%);
+}
+button:hover {
+  color: #4c4a4a;
+}
+button:disabled {
+  cursor: default;
+  color: rgba(255, 255, 255, 0.5);
+  background: #a4a2a2;
+  border-color: #a4a2a2;
+}
+input + label {
+  cursor: pointer;
+  vertical-align: text-top;
+}
+input:disabled + label {
+  cursor: default;
+  color: #a4a2a2;
+}
+[type=checkbox] {
+  cursor: pointer;
+  background-color: #edeff5;
+  border: 1px solid #7688d9;
+}
+[type=checkbox]:checked {
+  background-color: #7688d9;
+}
+[type=checkbox]:hover {
+  background: #9eabe4;
+}
+[type=checkbox]:active {
+  background: #7688d9;
+  color: #9eabe4;
+}
+[type=checkbox]:checked {
+  color: #7688d9;
+}
+[type=checkbox]:checked::after {
+  color: #edeff5;
+}
+[type=checkbox]:disabled,
+[type=checkbox]:disabled:checked {
+  cursor: default;
+  color: #a4a2a2;
+  background: #a4a2a2;
+  border-color: #a4a2a2;
+}
+select {
+  background-color: #dde0ec;
+  border: 1px solid rgba(169, 169, 169, 0.3);
+  color: #4e65ce;
+}
 #lb {
   background-color: #edeff5;
   border-bottom: 1px #9eabe4 solid;
@@ -380,95 +380,6 @@ select {
 }
 .menu .m-box a:focus.m-checked {
   background: rgba(0, 0, 0, 0.2) 5px center no-repeat url(img/menu_chk.png);
-}
-#splash {
-  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #7688d9;
-}
-#ide {
-  background-color: #7688d9;
-}
-#apl_font {
-  color: #7688d9;
-}
-::selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-::-moz-selection {
-  background: #7688d9;
-  color: white;
-}
-/*must be separate rules*/
-body {
-  font-family: Roboto, sans-serif;
-}
-.breakpointarea {
-  border-right: 1px solid #dde0ec;
-  cursor: pointer;
-}
-.breakpointarea:hover::before {
-  color: rgba(255, 0, 0, 0.5);
-  content: '⬤';
-  font-size: 0.7em;
-}
-.breakpointarea.monitorpoint.breakpoint.tracepoint::before,
-.breakpointarea.monitorpoint.breakpoint::before,
-.breakpointarea.monitorpoint.tracepoint::before,
-.breakpointarea.breakpoint.tracepoint::before {
-  border: none;
-  background: none;
-  color: #999;
-  content: '+';
-  font-size: 1.3em;
-  text-shadow: 1px 1px black, -1px -1px black, 1px -1px black, -1px 1px black;
-}
-.breakpointarea.monitorpoint::before {
-  color: black;
-  content: '┘';
-  font-size: 0.45em;
-  border: 1px solid black;
-  border-radius: 1em;
-  width: 3ex;
-  text-align: center;
-  line-height: 3ex;
-  background: white;
-  text-shadow: 1px 1px black,0 1px black,1px 0 black;
-}
-.breakpointarea.breakpoint::before {
-  color: red;
-  content: '⬤';
-  font-size: 0.6em;
-  text-shadow: 1px 1px black, -1px -1px black, 1px -1px black, -1px 1px black;
-}
-.breakpointarea.tracepoint::before {
-  color: yellow;
-  content: '⬤';
-  font-size: 0.6em;
-  text-shadow: 1px 1px black, -1px -1px black, 1px -1px black, -1px 1px black;
-}
-.highlighted {
-  border: none;
-  outline: solid red 1px;
-}
-.sessionmargin {
-  border-right: 1px solid #dde0ec;
-  font-size: 1em;
-}
-.sessionmargin.group_start::before {
-  content: '┌';
-}
-.sessionmargin.group_middle::before {
-  content: '│';
-}
-.sessionmargin.group_end::before {
-  content: '└';
-}
-.sessionmargin.modified:not(.group_start,.group_middle,.group_end)::before {
-  content: '∙';
-}
-.sessionmargin.modified::before {
-  color: red;
 }
 #prf_dlg hr {
   border-top: 1px solid #d7d7d3;
@@ -651,6 +562,110 @@ a:hover {
     display: none;
   }
 }
+.breakpointarea {
+  border-right: 1px solid #dde0ec;
+  cursor: pointer;
+}
+.breakpointarea:hover::before {
+  color: rgba(255, 0, 0, 0.5);
+  content: '⬤';
+  font-size: 0.7em;
+}
+.breakpointarea.monitorpoint.breakpoint.tracepoint::before,
+.breakpointarea.monitorpoint.breakpoint::before,
+.breakpointarea.monitorpoint.tracepoint::before,
+.breakpointarea.breakpoint.tracepoint::before {
+  border: none;
+  background: none;
+  color: #999;
+  content: '+';
+  font-size: 1.3em;
+  text-shadow: 1px 1px black, -1px -1px black, 1px -1px black, -1px 1px black;
+}
+.breakpointarea.monitorpoint::before {
+  color: black;
+  content: '┘';
+  font-size: 0.45em;
+  border: 1px solid black;
+  border-radius: 1em;
+  width: 3ex;
+  text-align: center;
+  line-height: 3ex;
+  background: white;
+  text-shadow: 1px 1px black,0 1px black,1px 0 black;
+}
+.breakpointarea.breakpoint::before {
+  color: red;
+  content: '⬤';
+  font-size: 0.6em;
+  text-shadow: 1px 1px black, -1px -1px black, 1px -1px black, -1px 1px black;
+}
+.breakpointarea.tracepoint::before {
+  color: yellow;
+  content: '⬤';
+  font-size: 0.6em;
+  text-shadow: 1px 1px black, -1px -1px black, 1px -1px black, -1px 1px black;
+}
+.highlighted {
+  border: none;
+  outline: solid red 1px;
+}
+.sessionmargin {
+  border-right: 1px solid #dde0ec;
+  font-size: 1em;
+}
+.sessionmargin.group_start::before {
+  content: '┌';
+}
+.sessionmargin.group_middle::before {
+  content: '│';
+}
+.sessionmargin.group_end::before {
+  content: '└';
+}
+.sessionmargin.modified:not(.group_start,.group_middle,.group_end)::before {
+  content: '∙';
+}
+.sessionmargin.modified::before {
+  color: red;
+}
+#splash {
+  background: url(img/RideLogo.png) center no-repeat, url(img/bg.jpg) center no-repeat #7688d9;
+}
+#ide {
+  background-color: #7688d9;
+}
+#apl_font {
+  color: #7688d9;
+}
+::selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+::-moz-selection {
+  background: #7688d9;
+  color: white;
+}
+/*must be separate rules*/
+body {
+  font-family: Roboto, sans-serif;
+}
+#sb {
+  background-color: white;
+  border-top: 1px solid #9eabe4;
+  color: #4c4a4a;
+  font-family: apl, monospace;
+}
+#sb div.active {
+  color: #7688d9;
+}
+#sb_left > div {
+  border-right: 1px solid #dde0ec;
+}
+#sb_right > div {
+  border-left: 1px solid #dde0ec;
+}
 ::-webkit-scrollbar {
   background-color: white;
 }
@@ -679,23 +694,18 @@ a:hover {
 ::-webkit-scrollbar-thumb:active {
   background-color: rgba(118, 136, 217, 0.9);
 }
-#sb {
-  background-color: white;
-  border-top: 1px solid #9eabe4;
-  color: #4c4a4a;
-  font-family: apl, monospace;
-}
-#sb div.active {
-  color: #7688d9;
-}
-#sb_left > div {
-  border-right: 1px solid #dde0ec;
-}
-#sb_right > div {
-  border-left: 1px solid #dde0ec;
-}
 #status_body {
   background-color: #edeff5;
+}
+#toast-container {
+  font-family: Roboto;
+  font-size: 14px;
+  line-height: 20px;
+}
+#toast-container > div {
+  -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
 }
 .tooltip {
   color: #7688d9;
@@ -707,16 +717,6 @@ a:hover {
 }
 .tooltip .tooltiptext::after {
   border-color: transparent #dde0ec transparent transparent;
-}
-#toast-container {
-  font-family: Roboto;
-  font-size: 14px;
-  line-height: 20px;
-}
-#toast-container > div {
-  -moz-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-  -webkit-box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
 }
 .toolbar {
   background-color: white;
