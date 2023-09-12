@@ -182,6 +182,9 @@ D.Ed = function Ed(ide, opts) { // constructor
       const c = t.className.replace(/^.*\btb_([A-Z]{2,3})\b.*$/, '$1');
       if (ed[c]) ed[c](ed.me);
       else if (D.commands[c]) D.commands[c](ed.me);
+      ed.updateTitle();
+      ed.container.tab.closeElement.toggleClass('modified', ed.isModified);
+
       return !1;
     }
     return !0;
