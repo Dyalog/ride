@@ -16,7 +16,7 @@ pipeline {
         checkout scm
         sh 'rm -Rf _ ship'
         sh 'npm i'
-        sh './mk l a w'
+        sh 'npm run build l a w'
         sh './CI/publish.sh'
         stash name: 'ride-win', includes: '_/ride*/Ride-*-win32-ia32/**'
         stash name: 'ride-linux', includes: '_/ride*/Ride-*-linux*/**'
@@ -49,7 +49,7 @@ pipeline {
           steps {
             sh 'rm -Rf _ ship'
             sh 'npm i'
-            sh './mk o'
+            sh 'npm run build o'
             withCredentials([usernamePassword(credentialsId: '868dda6c-aaec-4ee4-845a-57362dec695b', passwordVariable: 'APPLE_APP_PASS', usernameVariable: 'APPLE_ID')]) {
               sh './CI/packagescripts/osx/packageOSX.sh'
             }
