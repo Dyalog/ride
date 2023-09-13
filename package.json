@@ -6,11 +6,13 @@
   "productName": "Ride-4.5",
   "scripts": {
     "start": "electron .",
-    "dev": "npm run build-css && npm run start",
+    "dev": "npm run css && npm run start",
     "styler": "electron ./utils/style-picker/style-picker.js",
     "css": "grunt less",
     "live-style": "grunt",
-    "test": "ava -s -c=1"
+    "test": "ava -s -c=1",
+    "build": "npm run css && node ./mk",
+    "clean": "node ./mk c"
   },
   "repository": ".",
   "dependencies": {
