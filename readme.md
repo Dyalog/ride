@@ -16,16 +16,18 @@ Install [Git](https://git-scm.com/downloads) and [NodeJS v18.17.0](https://nodej
 
     git clone https://github.com/dyalog/ride --depth=1
     cd ride
-    npm i         # download dependencies
-    npm start     # start RIDE (without building native apps)
-    node mk dist  # build native apps under _/ride${version}/
-    node mk c     # cleans your build directory
+    npm i              # download dependencies
+    npm run css        # compile css
+    npm run dev        # compile css and start RIDE
+    npm start          # start RIDE (without building native apps)
+    npm run build dist # compile css and build native apps under _/ride${version}/
+    npm run clean      # cleans your build directory
 
-`node mk dist` builds for all platforms. 
+`npm run build dist` builds for all platforms. 
 
 You can also build platforms separately:
 
-    node mk {CODE}
+    npm run build {CODE}
 
 where `{CODE}` is one of
 
