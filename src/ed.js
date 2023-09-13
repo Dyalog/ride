@@ -424,6 +424,7 @@ D.Ed.prototype = {
     }
     const docTitle = `${ed.isModified ? '⬤ ' : ''}${ed.title}${filename} - ${ed.ide.caption}`;
     D.ide.floating && $('title', ed.dom.ownerDocument).text(docTitle);
+    ed.container.tab.closeElement.toggleClass('modified', ed.isModified);
   },
   blockCursor(x) { this.me.updateOptions({ cursorStyle: x ? 'block' : 'line' }); },
   cursorBlinking(x) { this.me.updateOptions({ cursorBlinking: x }); },
