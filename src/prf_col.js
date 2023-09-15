@@ -110,7 +110,7 @@
     }, {
       name: 'Dracula',
       theme: 'dark',
-      styles: 'asgn=fg:#50fa7b com=fg:#6272a4 diam=fg:#ff79c6 err=fg:#ff5555,bgo:1,U fn=fg:#8be9fd idm=U kw=fg:#ff79c6 '
+      styles: 'asgn=fg:#50fa7b com=fg:#6272a4 diam=fg:#ff79c6 err=fg:#ff5555,bgo:1 fn=fg:#8be9fd idm=U kw=fg:#ff79c6 '
       + 'lnum=bgo:0,fg:6272a4 mtch=bgo:0.5,fg:#f8f8f2,bg:#44475a norm=bg:#282a36,bgo:1,fg:f8f8f2 '
       + 'num=fg:#bd93f9 op1=fg:#50fa7b,fgo:1 op2=fg:#f1fa8c quad=fg:#ffb86c sel=bg:#6bb2ff,bgo:0.25 semi=fg:#50fa7b '
       + 'sqbr=fg:#50fa7b srch=bg:#bd93f9,bgo:0.5 str=fg:#f1fa8c tc=bg:#44475a,bgo:1 tcpe=bg:#44475a,bgo:1 zld=fg:#bd93f9 '
@@ -121,7 +121,7 @@
     }, {
       name: 'New Moon',
       theme: 'dark',
-      styles: 'asgn=fg:#6ab0f3 com=fg:#777c85 diam=fg:#ffeea6 err=fg:#f2777a,bgo:1,U fn=fg:#ac8d58 idm=U kw=fg:#ffeea6 '
+      styles: 'asgn=fg:#6ab0f3 com=fg:#777c85 diam=fg:#ffeea6 err=fg:#f2777a,bgo:1 fn=fg:#ac8d58 idm=U kw=fg:#ffeea6 '
       + 'lnum=bgo:0,fg:#777c85 mtch=bgo:0.5,bg:#777c85,fgo:1 norm=bg:#2d2d2d,bgo:1,fg:#b3b9c5 '
       + 'num=fg:#fca369 op1=fg:#6ab0f3,fgo:1 op2=fg:#76d4d6 quad=fg:#f2777a sel=bg:#6ab0f3,bgo:0.5 semi=fg:#6ab0f3 '
       + 'sqbr=fg:#6ab0f3 srch=bg:#e1a6f2,bgo:0.25 str=fg:#92d192 tc=bg:#777c85,bgo:0.25 tcpe=bg:#777c85,bgo:0.25 zld=fg:#fca369 '
@@ -132,7 +132,7 @@
     }, {
       name: 'Nord',
       theme: 'dark',
-      styles: 'com=fg:#616e88 diam=B,fg:#81a1c1 err=fg:#bf616a,bgo:0.5,U glb=fg:#ebcb8b kw=fg:#81a1c1 lnum=bgo:0,fg:#4c566a '
+      styles: 'com=fg:#616e88 diam=B,fg:#81a1c1 err=fg:#bf616a,bgo:0.5 glb=fg:#ebcb8b kw=fg:#81a1c1 lnum=bgo:0,fg:#4c566a '
       + 'mtch=bg:#434c5e,bgo:0.5 norm=bg:#2e3440,bgo:1,fg:#eceff4 num=fg:#b48ead quad=fg:#ebcb8b '
       + 'srch=bg:#434c5e,bgo:0.5 str=fg:#a3be8c tc=bg:#434c5e,bgo:1,fg:#eceff4 tcpe=bg:#434c5e,bgo:1,fg:#eceff4 zld=fg:#b48ead '
       + 'vtt=bg:#434c5e dc=bg:#603136,bgo:1 cur=fg:#d8dee9 cubr=fg:#5e81ac asgn=fg:#88c0d0 lbl=fg:#81a1c1,B fn=fg:#81a1c1 '
