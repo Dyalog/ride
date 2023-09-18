@@ -86,7 +86,7 @@
       + 'tcpe=bg:c8c8c8,bgo:1 trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f vtt=bg:ff0 '
       + 'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:1,fg:080 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff '
       + 'ma=bg:828282,bgo:1,fg:0ff na=bg:828282,bgo:1,fg:f qor=bg:f00,bgo:1,fg:f dc=bg:#993333,bgo:1 '
-      + 'itk=fg:f00,U:1',
+      + 'itk=fg:f00',
     }, {
       name: 'Francisco Goya',
       theme: 'dark',
