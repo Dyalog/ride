@@ -62,6 +62,7 @@ const pkg = (x, y, f) => {
       || /monaco-editor\/(dev|esm|min-maps)/.test(p)
       || /toastr\/(?!build($|\/toastr.min))/.test(p)
       || /jquery\/(?!dist($|\/jquery\.min\.js))/.test(p)
+      || /node_modules\/.*\/node_gyp_bins/.test(p)
       || /node_modules\/\.bin/.test(p)
       || /\/test/.test(p)
       || /\.map$/.test(p),
@@ -78,15 +79,6 @@ const pkg = (x, y, f) => {
       ProductName: 'RIDE',
       InternalName: 'RIDE',
     },
-    afterPrune: [(buildPath, electronVersion, platform) => {
-      if (platform === 'darwin') {
-        const dirs = rq('glob').sync(
-          path.join(buildPath, 'node_modules/**/node_gyp_bins'),
-          { onlyDirectories: true },
-        );
-        dirs.forEach((dir) => fs.rmSync(dir, { recursive: true, force: true }));
-      }
-    }],
   }).then(() => {
     const d = `_/${pj.name}/${pj.productName}-${x}-${y}`;
     rm(`${d}/version`);
