@@ -78,6 +78,15 @@ const pkg = (x, y, f) => {
       ProductName: 'RIDE',
       InternalName: 'RIDE',
     },
+    afterPrune: [(buildPath, electronVersion, platform) => {
+      if (platform === 'darwin') {
+        const dirs = rq('glob').sync(
+          path.join(buildPath, 'node_modules/**/node_gyp_bins'),
+          { onlyDirectories: true },
+        );
+        dirs.forEach((dir) => fs.rmSync(dir, { recursive: true, force: true }));
+      }
+    }],
   }).then(() => {
     const d = `_/${pj.name}/${pj.productName}-${x}-${y}`;
     rm(`${d}/version`);
