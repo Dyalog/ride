@@ -831,7 +831,7 @@
           interpretersSSH = [];
           sm.on('data', (x) => { s += x; })
             .on('close', () => {
-              interpretersSSH = formatInterpreters(s.split(/\r?\n/).filter((x) => x).map((x) => {
+              interpretersSSH = s.split(/\r?\n/).filter((x) => x).map((x) => {
                 const a = x.split('/');
                 return a[1] === 'opt' ? {
                   exe: x,
@@ -846,7 +846,8 @@
                   edition: 'unicode',
                   opt: '',
                 };
-              }));
+              });
+              formatInterpreters(interpretersSSH);
               updExes();
               if (sel) {
                 sel.exe = q.exe.value;
