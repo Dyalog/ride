@@ -1,3 +1,6 @@
+@CN_CONTENT_TOP: 34px;
+@CN_CONTENT_BTM: 64px;
+
 #cn {
 	position: absolute;
   z-index:2;
@@ -49,20 +52,20 @@
 }
 
 #cn_favs {
-  position:absolute;
-  top: 0;
+  position: absolute;
+  top: @CN_CONTENT_TOP;
   left: 0;
   right: 0;
-  bottom: 64px;
+  bottom: @CN_CONTENT_BTM;
 	overflow: auto;
 	>div {
-		line-height: 46px;
+		line-height: 36px;
 		padding: 0 2px 0 8px;
 		margin-bottom: 1px;
 		cursor: default;
     .go {
       float: right;
-      margin-top:6px;
+      margin-top:2px;
       margin-right:5px;
       width:32px;
       height:32px;
@@ -108,12 +111,15 @@
 #cn_rhs_inner {
   overflow-y: auto;
   overflow-x: hidden;
-	padding: 10px;
-  height:calc(100% - 64px);
+  padding: 2px 8px;
+  height:calc(100% - @CN_CONTENT_BTM - @CN_CONTENT_TOP);
   button{
     padding:8px;
     width: auto;
   }
+  .row .col-sm-12:first-child {
+    padding-bottom: 2px;
+  }  
   .col{
     // >input,>select,>button{
     >input:not([type=checkbox]),>select{
@@ -163,4 +169,12 @@
 
 #cn_args, #cn_env {
   width:100%;
+}
+.cn_head {
+  width:100%;
+  height: @CN_CONTENT_TOP;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  padding: 0 8px; 
 }

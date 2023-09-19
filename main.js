@@ -78,6 +78,8 @@ el.app.on('ready', () => {
     y,
     width,
     height,
+    minWidth: 900,
+    minHeight: 650,
     show: 0,
     ...(!D.win && !D.mac && { icon: `${__dirname}/D.png` }),
     backgroundColor: '#7688d9',

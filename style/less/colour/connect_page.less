@@ -45,6 +45,7 @@
 		outline: dotted black 1px;
 	}
 	>div{
+		border: 1px solid @DLG_BOTTOM_BG;
 		background:@CN_FAV_BTN_BG;
 		color:@CN_FAV_BTN_FG;
 		&:not(:first-child) {
@@ -56,11 +57,11 @@
 		}
 	}
 }
-#cn_lhs {
-	background: @CN_LHS_BG;
-}
-#cn, #cn_rhs {
-	background: linear-gradient(@CN_RHS_BG, @CN_RHS_BG2);
+#cn, #cn_lhs, #cn_rhs {
+	background-color: @CN_BG;
+	select{
+    background-color: @CN_INPUT_BG;
+  }
 }
 #cn_env_add {
 	color: @CN_LABEL_COL;
@@ -78,4 +79,8 @@
 		font-size: 16px;
 		font-family: monospace;
 	}
+}
+.cn_head {
+	background-color: @DLG_BOTTOM_BG;
+	color: @CN_INPUT_FG;
 }
