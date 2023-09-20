@@ -305,7 +305,7 @@
         $.err(`${q.cwd.labels[0].innerText} "${untildify(x.cwd)}" does not exist`, () => { q.cwd.focus(); });
         return 0;
       }
-      if (x === sel && ssh) {
+      if (ssh) {
         if (!q.ssh_pass.value && !q.ssh_key.value) {
           passwdPrompt(`Password for user ${x.user || user}:`, 'Password');
           return 0;
@@ -485,11 +485,6 @@
               port: +x.ssh_port || 22,
               user: x.user || user,
             };
-            // if (x.ssh_auth_type === 'key') {
-            //   o.key = x.ssh_key;
-            // } else {
-            //   o.pass = x === sel ? q.ssh_pass.value : '';
-            // }
             x.ssh_key && (o.key = x.ssh_key);
             x === sel && q.ssh_pass.value && (o.pass = q.ssh_pass.value);
             const c = sshExec(o, '/bin/sh', (e, sm) => {
@@ -1147,8 +1142,8 @@
       const m = HP.exec(h.l); // parse host and port
       m ? go({
         type: 'listen',
-        host: m[1], 
-        port: +m[2] || 4502, 
+        host: m[1],
+        port: +m[2] || 4502,
         respawn: !!m[3],
         log: h.log,
       }) : $.err('Invalid $RIDE_LISTEN');
