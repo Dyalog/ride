@@ -1025,6 +1025,7 @@
       D.prf.defaultConfig(sel.name);
       q.def.disabled = true;
       q.favs.insertBefore($sel[0], q.favs.firstChild);
+      save();
     };
     q.sve.onclick = () => { save(); };
     q.neu.onclick = () => {
