@@ -316,6 +316,7 @@
   };
   const initInterpreterConn = () => {
     hideDlgs();
+    nodeRequire('electron').ipcRenderer.send('save-win', false);
     let b = Buffer.alloc(0x100000);
     let ib = 0; // ib:offset in b
     let nb = 0; // nb:length in b
@@ -758,7 +759,10 @@
   D.cn = () => { // set up Connect page
     q = J.cn;
     I.cn.hidden = 0;
-    $(I.cn).splitter();
+    const winstate = D.el.getGlobal('winstate');
+    $(I.cn).splitter().on('splitter-resize', () => {
+      winstate.launchWin.width = q.lhs.offsetWidth;
+    });
     setTimeout(setUpMenu, 100);
     D.conns = [];
     if (fs.existsSync(cnFile)) {
@@ -1037,12 +1041,21 @@
       $(q.favs).list('select', $e.index());
       q.fav_name.focus();
     };
-    q.tgl_cfg.onclick = () => {
-      I.cn.toggleMaximize();
-      const maximise = $(q.rhs).is(':visible');
-      q.tgl_cfg_arrow.innerHTML = `<i class="fas fa-chevron-double-${maximise ? 'right' : 'left'}"></i>`;
+    const toggleConfig = (evt) => {
+      const expanded = (evt === undefined) ? winstate.launchWin.expanded : !$(q.rhs).is(':visible');
+      const { height } = D.elw.getContentBounds();
+      const newWidth = expanded ? winstate.launchWin.expandedWidth : winstate.launchWin.width;
+      $(q.tgl_cfg_exp).toggle(!expanded);
+      $(q.tgl_cfg_col).toggle(expanded);
+      winstate.launchWin.expanded = expanded;
+      const minwidth = winstate.dx + (expanded ? 885 : 400);
+      D.elw.setMinimumSize(minwidth, 400);
+      D.elw.setContentSize(newWidth, height);
+      setTimeout(() => { I.cn.toggleMaximize(expanded ? winstate.launchWin.width : 0); }, 10);
+      nodeRequire('electron').ipcRenderer.send('save-win', true);
     };
-    q.tgl_cfg.click();
+    q.tgl_cfg.onclick = toggleConfig;
+    toggleConfig();
     q.cln.onclick = () => {
       if (sel) {
         const cnf = favDOM({

@@ -51,6 +51,7 @@ $.fn.splitter = function splitter(args) {
       $m.removeClass(A);
       $p.css('-webkit-user-select', 'text');
       $(document).off('mousemove', doSplit).off('mouseup', endSplit);
+      $s.trigger('splitter-resize');
     };
     const startSplit = (e) => {
       $p.css('-webkit-user-select', 'none');
@@ -89,7 +90,7 @@ $.fn.splitter = function splitter(args) {
     if (window.isNaN(p0)) { // Solomon's algorithm
       p0 = Math.round(($s[0][ohw] - $s._PBA - $m._DA) / 2);
     }
-    $s.on('resize', function resize(e, size) {
+    const resize = (e, size) => {
       if (e.target !== this) return;
       // determine new width/height of splitter container
       $s._DF = $s[0][owh] - $s._PBF;
@@ -104,15 +105,16 @@ $.fn.splitter = function splitter(args) {
       } else {
         resplit($a[0][ohw]);
       }
-    }).trigger('resize', [p0]);
+    };
+    $s.on('resize', resize).trigger('resize', [p0]);
     $(window).on('resize', (e) => { e.target === window && $s.trigger('resize'); });
-    this.toggleMaximize = () => {
-      if (restoreSize) {
+    this.toggleMaximize = (newSize) => {
+      const size = newSize || restoreSize;
+      if (size) {
+        restoreSize = 0;
         $b.show();
         $m.show();
-        const size = restoreSize;
-        restoreSize = 0;
-        resplit(size);
+        $s.trigger('resize', [size]);
       } else {
         restoreSize = $a[0][ohw];
         $b.hide();

@@ -239,8 +239,8 @@
     bw.show();
     if (!D.prf.editWinsRememberPos()) {
       const o = WindowRect(1 + (wp.bwId - D.pwins[0].bwId), D.prf.editWins());
-      o.x && bw.setPosition(o.x, o.y);
-      bw.setSize(o.width, o.height);
+      if (o.x == null) bw.setContentSize(o.width, o.height);
+      else bw.setContentBounds(o);
     }
     const ped = D.pendingEditors.shift();
     wp.id = ped.editorOpts.id;
@@ -265,7 +265,7 @@
     hasFocus() { return this === D.ide.focusedWin; },
     close() {
       if (this === D.pwins[0] && D.prf.editWinsRememberPos()) {
-        const b = D.el.BrowserWindow.fromId(this.bwId).getBounds();
+        const b = D.el.BrowserWindow.fromId(this.bwId).getClientBounds();
         D.prf.editWins(Object.assign(D.prf.editWins(), b));
       }
       this.emit('close');
