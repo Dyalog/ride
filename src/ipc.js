@@ -265,7 +265,7 @@
     hasFocus() { return this === D.ide.focusedWin; },
     close() {
       if (this === D.pwins[0] && D.prf.editWinsRememberPos()) {
-        const b = D.el.BrowserWindow.fromId(this.bwId).getClientBounds();
+        const b = D.el.BrowserWindow.fromId(this.bwId).getContentBounds();
         D.prf.editWins(Object.assign(D.prf.editWins(), b));
       }
       this.emit('close');
