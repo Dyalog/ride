@@ -1043,14 +1043,14 @@
     };
     const toggleConfig = (evt) => {
       const expanded = (evt === undefined) ? winstate.launchWin.expanded : !$(q.rhs).is(':visible');
-      const { height } = D.elw.getBounds();
+      const { height } = D.elw.getContentBounds();
       const newWidth = expanded ? winstate.launchWin.expandedWidth : winstate.launchWin.width;
       $(q.tgl_cfg_exp).toggle(!expanded);
       $(q.tgl_cfg_col).toggle(expanded);
       winstate.launchWin.expanded = expanded;
       const minwidth = expanded ? 830 : 355;
       D.elw.setMinimumSize(minwidth, 400);
-      if (evt) D.elw.setSize(newWidth, height);
+      if (evt) D.elw.setContentSize(newWidth, height);
       setTimeout(() => { I.cn.toggleMaximize(expanded ? winstate.launchWin.width : 0); }, 10);
       nodeRequire('electron').ipcRenderer.send('save-win', true);
     };

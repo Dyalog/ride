@@ -10,7 +10,7 @@
     const ipc = require('node-ipc').default;
     const el = require('@electron/remote');
     const bw = el.getCurrentWindow();
-    const [width] = bw.getSize();
+    const [width] = bw.getContentSize();
     const qp = require('querystring').parse(window.location.search.slice(1));
     const iswin = /^win/i.test(process.platform);
 

@@ -28,13 +28,11 @@ try {
 } catch (e) { console.error(e); }
 
 let tid;
-let dx = 0;
-let dy = 0; // used to correct for bad coords misreported by Electron (NW.js has the same problem)
 
 if (!db.theme) db.theme = 'light';
 if (!db.launchWin) {
   db.launchWin = {
-    expandedWidth: 830,
+    expandedWidth: 900,
     width: 400,
     height: 400,
     expanded: false,
@@ -47,11 +45,11 @@ const svNow = () => { // save now
   tid = 0;
   try {
     const { elw } = global;
-    const bounds = elw.getBounds();
+    const bounds = elw.getContentBounds();
     const page = isOnLaunchPage ? 'launchWin' : 'mainWin';
     const win = db[page] || (db[page] = {});
-    win.x = bounds.x - dx;
-    win.y = bounds.y - dy;
+    win.x = bounds.x;
+    win.y = bounds.y;
     if (!isOnLaunchPage || !db.launchWin.expanded) win.width = bounds.width;
     else win.expandedWidth = bounds.width;
     win.height = bounds.height;
@@ -97,10 +95,6 @@ el.app.on('ready', () => {
 
   // create an electron renderer
   global.elw = new el.BrowserWindow({
-    x,
-    y,
-    width,
-    height,
     minWidth: db.launchWin.expanded ? 830 : 355,
     minHeight: 400,
     show: 0,
@@ -112,6 +106,12 @@ el.app.on('ready', () => {
       nodeIntegration: true,
     },
   });
+  if (x == null) global.elw.setContentSize(width, height);
+  else {
+    global.elw.setContentBounds({
+      x, y, width, height,
+    });
+  }
   elm.enable(global.elw.webContents);
   el.Menu.setApplicationMenu(null);
 
@@ -122,8 +122,12 @@ el.app.on('ready', () => {
     if (isOnLaunchPage !== onLaunch) {
       isOnLaunchPage = onLaunch;
       restoreWinPos('mainWin');
-      w.setSize(width, height);
-      if (x) w.setPosition(x, y);
+      if (x == null) x.setContentSize(width, height);
+      else {
+        w.setContentBounds({
+          x, y, width, height,
+        });
+      }
       if (db.mainWin.maximized) w.maximize();
     }
   });
@@ -143,13 +147,6 @@ el.app.on('ready', () => {
     .on('closed', () => {
       global.elw = 0;
       w = 0;
-    })
-    .on('show', () => {
-      if (x) {
-        const q = w.getPosition();
-        dx = q[0] - x;
-        dy = q[1] - y;
-      }
     })
     .on('ready-to-show', w.show);
 
