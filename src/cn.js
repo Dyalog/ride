@@ -1048,9 +1048,9 @@
       $(q.tgl_cfg_exp).toggle(!expanded);
       $(q.tgl_cfg_col).toggle(expanded);
       winstate.launchWin.expanded = expanded;
-      const minwidth = expanded ? 830 : 355;
+      const minwidth = winstate.dx + (expanded ? 885 : 400);
       D.elw.setMinimumSize(minwidth, 400);
-      if (evt) D.elw.setContentSize(newWidth, height);
+      D.elw.setContentSize(newWidth, height);
       setTimeout(() => { I.cn.toggleMaximize(expanded ? winstate.launchWin.width : 0); }, 10);
       nodeRequire('electron').ipcRenderer.send('save-win', true);
     };

@@ -94,9 +94,7 @@ el.app.on('ready', () => {
   restoreWinPos('launchWin');
 
   // create an electron renderer
-  global.elw = new el.BrowserWindow({
-    minWidth: db.launchWin.expanded ? 830 : 355,
-    minHeight: 400,
+  let w = new el.BrowserWindow({
     show: 0,
     ...(!D.win && !D.mac && { icon: `${__dirname}/D.png` }),
     backgroundColor: '#7688d9',
@@ -106,23 +104,23 @@ el.app.on('ready', () => {
       nodeIntegration: true,
     },
   });
-  if (x == null) global.elw.setContentSize(width, height);
+  global.elw = w;
+  if (x == null) w.setContentSize(width, height);
   else {
-    global.elw.setContentBounds({
+    w.setContentBounds({
       x, y, width, height,
     });
   }
-  elm.enable(global.elw.webContents);
+  db.dx = w.getSize()[0] - w.getContentSize()[0];
+  elm.enable(w.webContents);
   el.Menu.setApplicationMenu(null);
-
-  let w = global.elw;
 
   rq('electron').ipcMain.on('save-win', (evt, onLaunch) => {
     sv();
     if (isOnLaunchPage !== onLaunch) {
       isOnLaunchPage = onLaunch;
       restoreWinPos('mainWin');
-      if (x == null) x.setContentSize(width, height);
+      if (x == null) w.setContentSize(width, height);
       else {
         w.setContentBounds({
           x, y, width, height,
