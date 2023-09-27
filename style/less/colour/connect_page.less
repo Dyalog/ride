@@ -36,7 +36,7 @@
 		opacity:1;
 		.go {
 			color:@CN_FAV_BTN_SEL_FG!important;
-			&:hover{
+			&:hover, &:focus{
 				color:@BUTTON_HOVER_COL!important;
 			}
 		}
@@ -49,7 +49,12 @@
 		background:@CN_FAV_BTN_BG;
 		color:@CN_FAV_BTN_FG;
 		&:not(:first-child) {
-			.go {color:@CN_FAV_BTN_BG;}
+			.go {
+				color:@CN_FAV_BTN_BG;
+				&:focus{
+					color:@CN_FAV_BTN_SEL_BG;
+				}
+			}
 			&:hover .go {
 				color:@CN_FAV_BTN_FG;
 				&:hover {color: @CN_FAV_BTN_SEL_BG;}
