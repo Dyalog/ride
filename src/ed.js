@@ -155,6 +155,8 @@ D.Ed = function Ed(ide, opts) { // constructor
       messageContribution.showMessage('Cannot edit variable with embedded line breaks.', me.getPosition());
     } else if (!ed.ide.connected) {
       messageContribution.showMessage('Cannot edit while disconnected from interpreter.', me.getPosition());
+    } else if (ed.tc) {
+      messageContribution.showMessage('Cannot edit in read-only editor.', me.getPosition());
     } else {
       messageContribution.showMessage('Cannot edit while interpreter busy.', me.getPosition());
     }
