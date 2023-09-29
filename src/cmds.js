@@ -65,6 +65,7 @@ D.cmds = [
   ['STL','Skip to line',            []],
   ['TB', 'Tab between windows',     ['Ctrl+Tab']],
   ['TC', 'Trace line',              ['Ctrl+Enter']],
+  ['TP', 'Trace token',             ['Ctrl+Alt+Enter']],
   ['TGC','Toggle comment',          []],
   ['TIP','Show value tip',          []],
   ['TL', 'Toggle localisation',     ['Ctrl+Up']],

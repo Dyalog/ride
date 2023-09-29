@@ -8,7 +8,6 @@ D.Ed = function Ed(ide, opts) { // constructor
   ed.name = opts.name;
   ed.title = ed.name;
   ed.tc = opts.tc;
-  ed.HIGHLIGHT_LINE = 1;
   ed.decorations = [];
   ed.hlDecorations = [];
   ed.stopDecorations = [];
@@ -224,21 +223,32 @@ D.Ed.prototype = {
     }
     delete ed.xline;
   },
-  hl(l) { // highlight - set current line in tracer
+  hl() { // highlight - set current line in tracer
     const ed = this;
     const { me } = ed;
-    if (l == null) {
+    const { line, tbtStart, tbtLen } = ed.HIGHLIGHT || {};
+    ed.dom.classList.toggle('tbt', tbtStart > 0);
+    if (!line) {
       ed.hlDecorations = [];
     } else {
-      ed.hlDecorations = [{
-        range: new monaco.Range(l, 1, l, 1),
-        options: {
-          isWholeLine: true,
-          className: 'highlighted',
-        },
-      }];
-      me.setPosition({ lineNumber: l, column: 1 });
-      me.revealLineInCenter(l);
+      if (tbtStart > 0) {
+        ed.hlDecorations = [{
+          range: new monaco.Range(line, tbtStart, line, tbtStart + tbtLen),
+          options: {
+            inlineClassName: 'highlighted',
+          },
+        }];
+      } else {
+        ed.hlDecorations = [{
+          range: new monaco.Range(line, 1, line, 1),
+          options: {
+            isWholeLine: true,
+            className: 'highlighted',
+          },
+        }];
+      }
+      me.setPosition({ lineNumber: line, column: 1 });
+      me.revealLineInCenter(line);
     }
     ed.setDecorations();
   },
@@ -258,7 +268,8 @@ D.Ed.prototype = {
     ed.tc = x;
     ed.tracer.set(x);
     ed.dom.classList.toggle('tracer', !!x);
-    ed.hl(null);
+    ed.HIGHLIGHT = null;
+    ed.hl();
     ed.setRO(x);
   },
   setRO(x) {
@@ -543,8 +554,8 @@ D.Ed.prototype = {
     // model.setEOL(monaco.editor.EndOfLineSequence.LF);
     ed.setStop();
     if (ed.tc) {
-      ed.hl(ed.HIGHLIGHT_LINE);
-      u.lineNumber = ed.HIGHLIGHT_LINE;
+      ed.hl();
+      u.lineNumber = ed.HIGHLIGHT.line;
     }
     if (ed.firstOpen) {
       if (lines.length === 1 && /\s?[a-z|@]+$/.test(lines[0])) u.column = model.getLineContent(u.lineNumber).length + 1;
@@ -556,11 +567,11 @@ D.Ed.prototype = {
     ed.restoreScrollPos();
     me.setPosition(u);
   },
-  SetHighlightLine(line, hadErr) {
-    const w = this;
-    w.me_ready.then(() => w.hl(line + 1));
-    hadErr < 0 && w.focus();
-    w.HIGHLIGHT_LINE = line + 1;
+  SetHighlightLine(line, hadErr, tbtStart, tbtLen) {
+    const ed = this;
+    ed.HIGHLIGHT = { line, tbtStart, tbtLen };
+    ed.me_ready.then(() => ed.hl(line + 1, tbtStart + 1, tbtLen));
+    hadErr < 0 && ed.focus();
   },
   ValueTip(x) {
     const { me } = this;
@@ -591,7 +602,7 @@ D.Ed.prototype = {
   FD(me) { this.tc ? D.send('TraceForward', { win: this.id }) : me.trigger('D', 'redo'); },
   STL(me) {
     if (!this.tc) return;
-    let steps = me.getPosition().lineNumber - this.HIGHLIGHT_LINE;
+    let steps = me.getPosition().lineNumber - this.HIGHLIGHT.line;
     const cmd = steps > 0 ? 'TraceForward' : 'TraceBackward';
     steps = Math.abs(steps);
     for (let i = 0; i < steps; i++) { D.send(cmd, { win: this.id }); }
@@ -646,6 +657,7 @@ D.Ed.prototype = {
   TVO() { D.prf.fold.toggle(); },
   TVB() { D.prf.breakPts.toggle(); },
   TC() { D.send('StepInto', { win: this.id }); D.ide.getStats(); },
+  TP() { D.send('TraceToken', { win: this.id }); D.ide.getStats(); },
   AC(me) { // align comments
     const ed = this;
     const model = me.getModel();

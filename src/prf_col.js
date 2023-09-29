@@ -293,7 +293,9 @@
     ],
     'Editor/Tracer': [
       { s: 'Active tracer', t: 'tc', c: '/*noprefix*/.tracer .monaco-editor-background,/*noprefix*/.tracer .monaco-editor .margin', bg: 1 },
-      { s: 'Pendent tracer', t: 'tcpe', c: '/*noprefix*/.tracer.pendent .monaco-editor-background,/*noprefix*/.tracer.pendent .monaco-editor .margin', bg: 1 },
+      { s: 'Pendent tracer', t: 'tcpe',
+      c: '/*noprefix*/.tracer.pendent .monaco-editor-background,/*noprefix*/.tracer.pendent .monaco-editor .margin,'
+       + '/*noprefix*/.tracer.tbt .monaco-editor-background,/*noprefix*/.tracer.tbt .monaco-editor .margin', bg: 1 },
       { s: 'Vector of character vectors', t: 'cvv', c: '.charvecvec', bg: 1, fg: 1, BIU: 1 },
       { s: 'Simple numeric array ', t: 'na', c: '.numarr', bg: 1, fg: 1, BIU: 1 },
       { s: 'Simple character matrix', t: 'cm', c: '.charmat', bg: 1, fg: 1, BIU: 1 },
