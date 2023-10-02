@@ -400,7 +400,7 @@ D.Ed.prototype = {
     if (/(\.|\\|\/)/.test(ee.name)) {
       me.setModel(monaco.editor.createModel(ed.oText, null, monaco.Uri.file(ee.name)));
     } else {
-      monaco.editor.setModelLanguage(model, ed.isCode && !ed.isReadOnlyEntity ? 'apl' : 'plaintext');
+      monaco.editor.setModelLanguage(model, ed.isCode ? 'apl' : 'plaintext');
       ed.dom.classList.remove('charmat', 'chararr', 'numarr', 'mixarr', 'charvecvec', 'quador', 'charvec');
       etype && ed.dom.classList.add(etype);
     }
