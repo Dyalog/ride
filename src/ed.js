@@ -227,6 +227,7 @@ D.Ed.prototype = {
     const ed = this;
     const { me } = ed;
     const { line, tbtStart, tbtLen } = ed.HIGHLIGHT || {};
+    if (!me.getModel()) return; // sometimes window is closed just before this is called
     ed.dom.classList.toggle('tbt', tbtStart > 0);
     if (!line) {
       ed.hlDecorations = [];
@@ -365,6 +366,7 @@ D.Ed.prototype = {
     const ed = this;
     const { me } = ed;
     const model = me.getModel();
+    if (!model) return; // sometimes window is closed just after an UpdateWindow
     ed.name = ee.name;
     // Check if a filename for a source file is provided.
     // Make sure it isn't duplicated in the existing name.
@@ -423,6 +425,7 @@ D.Ed.prototype = {
   },
   update(x) {
     const ed = this;
+    ed.firstOpen = true;
     ed.container && ed.container.setTitle(x.name);
     ed.me_ready.then(() => ed.open(x));
   },
@@ -557,7 +560,7 @@ D.Ed.prototype = {
       u.lineNumber = ed.HIGHLIGHT.line;
     }
     if (ed.firstOpen) {
-      if (lines.length === 1 && /\s?[a-z|@]+$/.test(lines[0])) u.column = model.getLineContent(u.lineNumber).length + 1;
+      if (lines.length === 1 && /\s?[a-z|@]+$/.test(lines[0])) u.column = model.getLineContent(1).length + 1;
       else if (lines[0][0] === ':') u.column = 1;
       else u.column = 2;
       ed.firstOpen = false;
