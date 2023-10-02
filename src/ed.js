@@ -569,7 +569,7 @@ D.Ed.prototype = {
   SetHighlightLine(line, hadErr, tbtStart, tbtLen) {
     const ed = this;
     ed.HIGHLIGHT = { line, tbtStart, tbtLen };
-    ed.me_ready.then(() => ed.hl(line + 1, tbtStart + 1, tbtLen));
+    ed.me_ready.then(() => ed.hl(line, tbtStart, tbtLen));
     hadErr < 0 && ed.focus();
   },
   ValueTip(x) {
