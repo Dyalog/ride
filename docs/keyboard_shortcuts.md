@@ -9,7 +9,7 @@ The Dyalog keyboard shortcuts that are supported by the RIDE are listed below; t
 | AO* | Comment out lines |  | Session/Edit : Add comment symbol at start of each tagged or current line |
 | BH* | Run to exit (in tracer) |  | Trace : Continue execution from the current line to completion of the current function or operator. If successful, the selection advances to the next line of the calling function (if there is one). |
 | BK* | Backward or Undo | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Backspace</kbd> | Session : Show previous line in input history Edit : Undo last change (where possible) Trace : Skip back one line |
-| BP* | Toggle breakpoint |  | Edit/Trace : Toggle a breakpoint on the current line |
+| BP* | Toggle breakpoint |  | Trace/Edit : Toggle a breakpoint on the current line |
 | BT* | Back <kbd>Tab</kbd> between windows | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>Tab</kbd> | Move to previous window in loop |
 | CAM* | Clear all trace/ stop/monitor |  | Remove any trace/stop/monitor flags (as set by `⎕TRACE` , `⎕STOP` and `⎕MONITOR` ) from all functions in the workspace |
 | CAW* | Close all windows |  | Close all open Edit and Trace windows |
@@ -70,7 +70,7 @@ The Dyalog keyboard shortcuts that are supported by the RIDE are listed below; t
 | TIP* | Show value tips |  | For the name or glyph under or immediately before the cursor, highlight that name/glyph and display: for a name: its referent (for example, the value of a variable or the code of a function) for a glyph: the name of the glyph, the keyboard shortcut to enter it, its name and examples of its syntax, arguments and result |
 | TL* | Toggle localisation | <kbd>Ctrl</kbd> + <kbd>Up Arrow</kbd> | Edit : For tradfns, the name under the cursor is added to or removed from the list of localised names on the function's header line |
 | TO* | Toggle fold |  | Edit : Open/Close outlined blocks (by default, outlines are shown) |
-| TVB* | Toggle view steps |  | Edit/Trace : Toggle display of an additional column at the left-hand side of the window in which break-points can be set/unset. Hiding this column does not remove any previously-set break points. |
+| TVB* | Toggle view steps |  | Trace/Edit : Toggle display of an additional column at the left-hand side of the window in which break-points can be set/unset. Hiding this column does not remove any previously-set break points. |
 | TVO* | Toggle view outline |  | Edit : Toggle code folding/outlining for control structures (including `:Section` structures) and functions. When toggled, existing code in an open Edit window is automatically updated to reflect the new rules. |
 | TFR* | Refresh threads |  | Debug information window: Forces a refresh of the Threads area |
 | UC | Up cursor | <kbd>Up Arrow</kbd> | Move cursor up one character |

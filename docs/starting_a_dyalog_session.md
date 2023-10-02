@@ -49,7 +49,7 @@ This mode has the following limitations:
 - You can only interact with the APL interpreter that is serving you; the **New Session** window is not available.
 - Preferences are persisted in browser storage using cookies.
 - Window captions cannot be controlled.
-- The floating **Edit/Trace** windows option is not available.
+- The floating **Trace/Edit** windows option is not available.
 
 ### Accessing Zero-Footprint RIDE from a browser
 
