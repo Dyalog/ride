@@ -705,6 +705,7 @@ D.Se.prototype = {
       });
     }
   },
+  BP() { /* NA */ },
   ED(me) {
     const c = me.getPosition();
     const model = me.getModel();
