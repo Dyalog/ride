@@ -232,20 +232,21 @@ D.Ed.prototype = {
     if (!line) {
       ed.hlDecorations = [];
     } else {
-      ed.hlDecorations = [{
-        range: new monaco.Range(line, 1, line, 1),
-        options: {
-          isWholeLine: true,
-          className: 'highlighted',
-        },
-      }];
       if (tbtStart > 0) {
-        ed.hlDecorations.push({
+        ed.hlDecorations = [{
           range: new monaco.Range(line, tbtStart, line, tbtStart + tbtLen),
           options: {
-            inlineClassName: 'highlighted_token',
+            inlineClassName: 'highlighted',
           },
-        });
+        }];
+      } else {
+        ed.hlDecorations = [{
+          range: new monaco.Range(line, 1, line, 1),
+          options: {
+            isWholeLine: true,
+            className: 'highlighted',
+          },
+        }];
       }
       me.setPosition({ lineNumber: line, column: 1 });
       me.revealLineInCenter(line);
