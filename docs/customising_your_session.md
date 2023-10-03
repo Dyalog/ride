@@ -24,19 +24,19 @@ The View menu includes options that enable the appearance of the Dyalog Session 
 - show/hide the [Workspace Explorer](the_dyalog_development_environment.md/#workspace-explorer)
 - show/hide the [debug information window](the_dyalog_development_environment.md/#debug-information-window)
 - change the font size in all windows in the Session
-- configure the display/functionality of the **Edit/Trace** windows
+- configure the display/functionality of the **Trace/Edit** windows
 
 ## Preferences Dialog Box
 
 The Preferences dialog box can be used to customise:
 
-- the automatic formatting of text in an [Edit window](#general-tab))
-- the default [keyboard key mappings](#keyboard-tab) for APL glyphs
+- the automatic formatting of text in an [Edit window](#general-tab)
+- the default [keyboard](#keyboard-tab) key mappings for APL glyphs
 - the keyboard [shortcuts](#shortcuts-tab) for command codes
-- the [saved responses](#saved_responses-tab) for dialog box options
-- the [syntax colouring](#colours-tab) and background colour
+- the [style](#colours-tab) for syntax and background colouring
 - the [caption](#title-tab) of the **Session** window
-- the display of floating Edit/Trace [windows](#windows-tab) 
+- the [menu](#menu-tab) configuration
+- the display of floating [Trace/Edit](#windows-tab) windows 
 
 The Preferences dialog box can be opened in any of the following ways:
 
@@ -44,7 +44,7 @@ The Preferences dialog box can be opened in any of the following ways:
 - clicking on the <img src="../img/screenshots/b_shortcuts.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 12px;" />  button on the right hand side of the Language bar
 - entering the Show Preferences command (`<PRF>`)
 
-The Preferences dialog box comprises multiple tabs. The <img src="../img/screenshots/b_print.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 12px;" /> button enables the contents of the Keyboard and Shortcuts tabs to be printed.
+The Preferences dialog box comprises multiple tabs. The **Print** button enables the contents of the Keyboard and Shortcuts tabs to be printed.
 
 ### General Tab
 
@@ -55,26 +55,6 @@ Allows customisation of a variety of features.
 
 1. Open the General tab.
 2. Select the appropriate check boxes and set the variables as required:
-    - Indent content when an editor is opened
-
-        Select this to apply the indentation rules to the contents of an Edit window when it is opened.
-
-    - Handle formatting through the interpreter
-
-        Select this to use the interpreter to reformat code. This is useful to avoid formatting changes that could be detected by source code management systems when the RIDE is used to maintain a body of code that is also edited directly using the interpreter.
-
-    - Auto-indent `<number>` spaces
-
-        Only relevant when Handle formatting through the interpreter is not selected. Select this and define the number of spaces by which each level of nested code should be indented relative to the previous level of indentation in the Edit window. If not selected, code in the Edit window will be left justified.
-
-        - in methods:  `<number>`  spaces
-
-            Only relevant when Handle formatting through the interpreter is not selected. Select this and define the number of spaces by which the contents of tradfns should be indented relative to the start/end `∇` glyphs.
-
-    - Indent lines that contain only a comment
-
-        Only relevant when Handle formatting through the interpreter is not selected. Select this to apply the appropriate indentation to lines that start with the `⍝` glyph. If this is not selected, then lines that start with the `⍝` glyph remain as positioned by the user.
-
     - Highlight matching brackets: `() [] {}`
 
         Select this to automatically highlight the matching start and end enclosures when positioning the cursor before or after one of them (with contiguous brackets, the bracket immediately before the cursor has its other enclosure highlighted).
@@ -95,6 +75,10 @@ Allows customisation of a variety of features.
     
         Specify a time interval after which the RIDE's autocompletion functionality is activated.
 
+    - Make suggestions after `<time>` characters
+    
+        Decides after how many characters the suggestions shall be viewed.
+
     - Autocomplete control structure with snippets
 
         Select this to be presented with auto-completion template options for control structures in the Edit window.
@@ -111,6 +95,10 @@ Allows customisation of a variety of features.
 
         Select this to show the tooltip for a  glyph. When the cursor is positioned over or immediately after a glyph, the glyph is highlighted and information about it is displayed – this includes the name of the glyph, the keyboard shortcut to enter it, its monadic/dyadic name and examples of its syntax, arguments and result.
 
+    - Auto-start default configuration when RIDE starts
+
+        Ride starts with default configuration.
+
     - Auto PW
 
         Select this to display text in the Session window up to the full width of the Session window before wrapping (automatically updates when the Session is resized). Also sets [⎕PW](https://help.dyalog.com/latest/index.htm#Language/System%20Functions/pw.htm) to this value.
@@ -118,6 +106,22 @@ Allows customisation of a variety of features.
     - Persistent history `<number>` lines
 
         Select this and define the number of lines that are available to recall using the Backward/Undo command (`<BK>`). This specifies how many input lines RIDE remembers from the end of one RIDE session to the start of the next session.
+
+    - Session log size `<number>` lines (0 = unlimited)
+
+        Sets the number of lines in the session log.
+
+    - Show session margin
+
+        Toggles the session indicator margin.
+
+    - Show quit prompt
+
+        Select this to display a confirmation dialog box when exiting the RIDE session.
+
+    - Connect on quit
+
+        Select this to be returned to the RIDE-Dyalog Session dialog box on exiting a Session.
 
     - Block cursor
 
@@ -140,36 +144,16 @@ Allows customisation of a variety of features.
 
         Select this to display a dynamic impression of the entire (or very large portion of) contents of the **Session/Edit** window in a column on the right‑hand side of that window. Clicking within the minimap moves the display to that location.
 
-    - Minimap render characters
+    - Render characters
 
         Only relevant when Minimap enabled is selected. Select this to use tiny rendered font in the minimap rather than greeking (showing a representation of the text).
 
-    - Minimap show slider
+    - Show slider
 
         Only relevant when Minimap enabled is selected. Select an option from the drop-down list to indicate how the currently-displayed content of the window is highlighted in the minimap. Options include:
         
         - always – the current display is always highlighted in the minimap.
         - mouseover – the current display is only highlighted in the minimap when the mouse is positioned over the minimap.
-
-    - Double click to edit
-
-        Select this to open the Edit window when double-clicking within a word rather than selecting/highlighting the whole word.
-
-    - Show quit prompt
-
-        Select this to display a confirmation dialog box when exiting the RIDE session.
-
-    - Show toolbar in editor/trace windows
-
-        Select this to display the toolbar in the Edit/Trace windows.
-
-    - Connect on quit
-
-        Select this to be returned to the RIDE-Dyalog Session dialog box on exiting a Session.
-
-    - Include filename in editor title
-
-        Select this to include an object's associated filename in the caption at the top of the Edit window.
 
 3. Click **OK** to save your changes and close the **Preferences** dialog box, **Apply** to save your changes without closing the **Preferences** dialog box or **Cancel** to close the **Preferences** dialog box without saving your changes.
 
@@ -247,30 +231,14 @@ Allows customisation of the [keyboard shortcuts](keyboard_shortcuts.md) for comm
 
 The tooltip showing keyboard shortcuts for command codes (obtained by positioning the cursor over the <img src="../img/screenshots/b_shortcuts.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 12px;" /> button on the right hand side of the Language bar) is dynamically updated to any customisation.
 
-### Saved Responses Tab
-
-Allows saved option selections to be deleted.
-
-When using Link, options selected in dialog boxes are recorded in this tab. For example, saving file content opens a dialog box that offers options of fixing as code in the workspace, saving the file to disk, or discarding changes; the selected option for this file (or, optionally, all files with the same file extension) is recorded in this tab.
-
----
-**To delete a previously-saved option selection for a file**
-
-1. Open the **Saved Responses** tab.
-2. Select the file for which you want to delete the saved option.
-3. Click **Delete**.
-4. Click **OK** to save your changes and close the **Preferences** dialog box, **Apply** to save your changes without closing the **Preferences** dialog box or **Cancel** to close the **Preferences** dialog box without saving your changes.
-
----
-
-### Colours Tab
+### Style Tab
 
 Allows customisation of the syntax colouring. Several schemes are provided, any of which can be used as they are or further customised.
 
 ---
 **To change the syntax colouring to a predefined scheme**
 
-1. Open the **Colours** tab.
+1. Open the **Style** tab.
 2. In the **Scheme** field, select the syntax colouring scheme that you want to use. When a scheme is selected, the example shown is updated to use that colour scheme.
 3. Click **OK** to save your changes and close the **Preferences** dialog box, **Apply** to save your changes without closing the **Preferences** dialog box or **Cancel** to close the **Preferences** dialog box without saving your changes.
 
@@ -279,9 +247,9 @@ Allows customisation of the syntax colouring. Several schemes are provided, any 
 ---
 **To define a new syntax colouring scheme**
 
-1. Open the **Colours** tab.
+1. Open the **Style** tab.
 2. In the **Scheme** field, select the syntax colouring scheme that is closest to the scheme that you want to define. When a scheme is selected, the example shown is updated to use that colour scheme.
-3. Click **Clone**.
+3. Click **Clone & Edit**.
 
     A copy is made of the selected scheme and additional options are displayed to allow customisation of the scheme's name and syntax colouring.
 
@@ -350,21 +318,33 @@ Options within each of the menus can be:
 
 Changes do not take effect until the next time a Dyalog Session is started through the RIDE.
 
-### Windows Tab
+### Trace/Edit Tab
 
-Allows customisation of the size and position of floating **Edit/Trace** windows.
+Allows customisation of the size and position of floating **Trace/Edit** windows.
 
-To change the size/position of floating **Edit/Trace** windows
+To change the size/position of floating **Trace/Edit** windows
 
-1. Open the Windows tab.
+1. Open the Trace/Edit tab.
 2. Select the appropriate check boxes and set the variables as required:
+    - Double click to edit
+
+        Select this to open the Edit window when double-clicking within a word rather than selecting/highlighting the whole word.
+
+    - Show toolbar in editor/trace windows
+
+        Select this to display the toolbar in the Trace/Edit windows.
+
     - Floating windows
     
         Toggles whether new **Edit** and **Trace** windows are docked inside the Session or floating (undocked). The remaining fields on this tab are only relevant if windows are floating, that is, this option is selected.
 
+    - Include filename in editor title
+
+        Select this to include an object's associated filename in the caption at the top of the Edit window.
+
     - Single floating window
     
-        Select this to display a single floating window with multiple tabs for different **Edit/Trace** windows. If this option is not selected, then multiple floating windows are displayed for individual **Edit/Trace** windows.
+        Select this to display a single floating window with multiple tabs for different **Trace/Edit** windows. If this option is not selected, then multiple floating windows are displayed for individual **Trace/Edit** windows.
 
     - Remember previous window position
     
@@ -372,17 +352,53 @@ To change the size/position of floating **Edit/Trace** windows
 
     - Size width and height
     
-        Specifies the width and height of new **Edit/Trace** windows.
+        Specifies the width and height of new **Trace/Edit** windows.
 
     - Posn x and y
     
-        Specifies the x-y co-ordinates of the screen position for the top left corner of the first **Edit/Trace** window opened.
+        Specifies the x-y co-ordinates of the screen position for the top left corner of the first **Trace/Edit** window opened.
 
     - Offset x and y
     
-        Specifies the x-y offsets for the top left corner of **Edit/Trace** windows opened relative to the previously-opened window. Only relevant if Single floating window is not selected.
+        Specifies the x-y offsets for the top left corner of **Trace/Edit** windows opened relative to the previously-opened window. Only relevant if Single floating window is not selected.
 
-3. Click **OK** to save your changes and close the **Preferences** dialog box, **Apply** to save your changes without closing the **Preferences** dialog box or **Cancel** to close the **Preferences** dialog box without saving your changes.
+    - Indent content when an editor is opened
+		
+        Select this to apply the indentation rules to the contents of an Edit window when it is opened.
+
+    - Handle formatting through the interpreter
+
+        Select this to use the interpreter to reformat code. This is useful to avoid formatting changes that could be detected by source code management systems when the RIDE is used to maintain a body of code that is also edited directly using the interpreter.
+
+    - Auto-indent `<number>` spaces
+
+        Only relevant when Handle formatting through the interpreter is not selected. Select this and define the number of spaces by which each level of nested code should be indented relative to the previous level of indentation in the Edit window. If not selected, code in the Edit window will be left justified.
+
+        - in methods:  `<number>`  spaces
+
+            Only relevant when Handle formatting through the interpreter is not selected. Select this and define the number of spaces by which the contents of tradfns should be indented relative to the start/end `∇` glyphs.
+
+    - Indent lines that contain only a comment
+
+        Only relevant when Handle formatting through the interpreter is not selected. Select this to apply the appropriate indentation to lines that start with the `⍝` glyph. If this is not selected, then lines that start with the `⍝` glyph remain as positioned by the user.
+
+  	- Saved Responses
+
+		Allows saved option selections to be deleted.
+
+		When using Link, options selected in dialog boxes are recorded in this tab. For example, saving file content opens a dialog box that offers options of fixing as code in the workspace, saving the file to disk, or discarding changes; the selected option for this file (or, optionally, all files with the same file extension) is recorded in this tab.
+
+		---
+		**To delete a previously-saved option selection for a file**
+
+		1. Open the **Saved Responses** tab.
+		2. Select the file for which you want to delete the saved option.
+		3. Click **Delete**.
+		4. Click **OK** to save your changes and close the **Preferences** dialog box, **Apply** to save your changes without closing the **Preferences** dialog box or **Cancel** to close the **Preferences** dialog box without saving your changes.
+
+		---
+
+1. Click **OK** to save your changes and close the **Preferences** dialog box, **Apply** to save your changes without closing the **Preferences** dialog box or **Cancel** to close the **Preferences** dialog box without saving your changes.
 
 ---
 

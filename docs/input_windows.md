@@ -38,7 +38,7 @@ To cut back the stack one level, press <kbd>Esc</kbd> (can be configured via Edi
 
 ## Navigating the Windows
 
-New Edit and Trace windows can be floating rather than docked by selecting the **Floating windows** checkbox in the [Windows tab](customising_your_session.md/#windows-tab) of the **Preferences** dialog box.
+New Edit and Trace windows can be floating rather than docked by selecting the **Floating windows** checkbox in the [Trace/Edit](customising_your_session.md/#windows-tab) of the **Preferences** dialog box.
 
 Docked or not, the **Session**, **Edit** and **Trace** windows form a closed loop for the purpose of navigation:
 - to make the next window in this loop the active window, press <kbd>Tab</kbd> (can be configured via `Edit > Preferences> Shortcuts > TB`)
