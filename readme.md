@@ -1,6 +1,6 @@
 # RIDE
 
-RIDE is a remote IDE for [Dyalog](https://www.dyalog.com) APL.
+RIDE is a remote IDE for [Dyalog](https://www.dyalog.com) APL.  
 [Documentation](https://dyalog.github.io/ride) for Ride.
 
 ![Screenshot](/screenshot.png?raw=true)
