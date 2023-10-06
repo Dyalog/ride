@@ -847,10 +847,10 @@ General note icons, and the type of material that they are used to emphasise, in
 <h2 id="starting_a_dyalog_session-new-session-screen">New Session screen</h2>
 <p>The <strong>New Session</strong> window is displayed when RIDE starts, unless disabled in the preferences (the default on macOS). This window allows simple and advanced use.</p>
 <h3 id="starting_a_dyalog_session-simple-usage">Simple usage</h3>
-<p>Click |&gt; for the configuartion you want to launch. Configurations for all locally installed Dyalog versions are automatically shown. </p>
+<p>Click 🞂 for the configuartion you want to launch. Configurations for all locally installed Dyalog versions are automatically shown. </p>
 <h3 id="starting_a_dyalog_session-advanced-usage">Advanced usage</h3>
-<p>You can add new custom configurations (for example for remote interpreters) by clicking <kbd>NEW CONFIGURATION…</kbd>.</p>
-<p>You can modify an existing configuration by selecting it and clicking <kbd>CUSTOM OPTIONS</kbd>.</p>
+<p>You can add new custom configurations (for example for remote interpreters) by clicking <kbd>NEW…</kbd>.</p>
+<p>You can modify an existing configuration by selecting it and clicking <img src="../img/screenshots/expand-CfgDetails.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 14px;" />.</p>
 <p>Either of these will open the advanced configuration pane where you can choose connection type and protocol, provide the interpreter with arguments and configuration parameters, and more.</p>
 <p>For example:</p>
 <ul>
@@ -864,7 +864,7 @@ General note icons, and the type of material that they are used to emphasise, in
 <li>You can only interact with the APL interpreter that is serving you; the <strong>New Session</strong> window is not available.</li>
 <li>Preferences are persisted in browser storage using cookies.</li>
 <li>Window captions cannot be controlled.</li>
-<li>The floating <strong>Edit/Trace</strong> windows option is not available.</li>
+<li>The floating <strong>Trace/Edit</strong> windows option is not available.</li>
 </ul>
 <h3 id="starting_a_dyalog_session-accessing-zero-footprint-ride-from-a-browser">Accessing Zero-Footprint RIDE from a browser</h3>
 <ol>
@@ -968,7 +968,7 @@ General note icons, and the type of material that they are used to emphasise, in
 <p>To resume execution until the current function returns, press the |¯\. button (can be given a keyboard shortcut via <code>Edit &gt; Preferences&gt; Shortcuts &gt; BH</code>).</p>
 <p>To cut back the stack one level, press <kbd>Esc</kbd> (can be configured via Edit &gt; Preferences&gt; Shortcuts &gt; <code>EP</code>) or click <img src="../img/screenshots/i_intext_quit.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 14px;" />.</p>
 <h2 id="input_windows-navigating-the-windows">Navigating the Windows</h2>
-<p>New Edit and Trace windows can be floating rather than docked by selecting the <strong>Floating windows</strong> checkbox in the <a href="#customising_your_session-windows-tab">Windows tab</a> of the <strong>Preferences</strong> dialog box.</p>
+<p>New Edit and Trace windows can be floating rather than docked by selecting the <strong>Floating windows</strong> checkbox in the <a href="#customising_your_session-windows-tab">Trace/Edit</a> of the <strong>Preferences</strong> dialog box.</p>
 <p>Docked or not, the <strong>Session</strong>, <strong>Edit</strong> and <strong>Trace</strong> windows form a closed loop for the purpose of navigation:
 - to make the next window in this loop the active window, press <kbd>Tab</kbd> (can be configured via <code>Edit &gt; Preferences&gt; Shortcuts &gt; TB</code>)
 - to make the previous window in this loop the active window, press <kbd>Shift</kbd>+<kbd>Tab</kbd> (can be configured via <code>Edit &gt; Preferences&gt; Shortcuts &gt; BT</code>)</p>
@@ -1165,18 +1165,18 @@ General note icons, and the type of material that they are used to emphasise, in
 <li>show/hide the <a href="#the_dyalog_development_environment-workspace-explorer">Workspace Explorer</a></li>
 <li>show/hide the <a href="#the_dyalog_development_environment-debug-information-window">debug information window</a></li>
 <li>change the font size in all windows in the Session</li>
-<li>configure the display/functionality of the <strong>Edit/Trace</strong> windows</li>
+<li>configure the display/functionality of the <strong>Trace/Edit</strong> windows</li>
 </ul>
 <h2 id="customising_your_session-preferences-dialog-box">Preferences Dialog Box</h2>
 <p>The Preferences dialog box can be used to customise:</p>
 <ul>
-<li>the automatic formatting of text in an <a href="#customising_your_session-general-tab">Edit window</a>)</li>
-<li>the default <a href="#customising_your_session-keyboard-tab">keyboard key mappings</a> for APL glyphs</li>
+<li>the automatic formatting of text in an <a href="#customising_your_session-general-tab">Edit window</a></li>
+<li>the default <a href="#customising_your_session-keyboard-tab">keyboard</a> key mappings for APL glyphs</li>
 <li>the keyboard <a href="#customising_your_session-shortcuts-tab">shortcuts</a> for command codes</li>
-<li>the <a href="#customising_your_session-saved_responses-tab">saved responses</a> for dialog box options</li>
-<li>the <a href="#customising_your_session-colours-tab">syntax colouring</a> and background colour</li>
+<li>the <a href="#customising_your_session-colours-tab">style</a> for syntax and background colouring</li>
 <li>the <a href="#customising_your_session-title-tab">caption</a> of the <strong>Session</strong> window</li>
-<li>the display of floating Edit/Trace <a href="#customising_your_session-windows-tab">windows</a> </li>
+<li>the <a href="#customising_your_session-menu-tab">menu</a> configuration</li>
+<li>the display of floating <a href="#customising_your_session-windows-tab">Trace/Edit</a> windows </li>
 </ul>
 <p>The Preferences dialog box can be opened in any of the following ways:</p>
 <ul>
@@ -1184,7 +1184,7 @@ General note icons, and the type of material that they are used to emphasise, in
 <li>clicking on the <img src="../img/screenshots/b_shortcuts.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 12px;" />  button on the right hand side of the Language bar</li>
 <li>entering the Show Preferences command (<code>&lt;PRF&gt;</code>)</li>
 </ul>
-<p>The Preferences dialog box comprises multiple tabs. The <img src="../img/screenshots/b_print.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 12px;" /> button enables the contents of the Keyboard and Shortcuts tabs to be printed.</p>
+<p>The Preferences dialog box comprises multiple tabs. The <strong>Print</strong> button enables the contents of the Keyboard and Shortcuts tabs to be printed.</p>
 <h3 id="customising_your_session-general-tab">General Tab</h3>
 <p>Allows customisation of a variety of features.</p>
 <hr />
@@ -1194,28 +1194,6 @@ General note icons, and the type of material that they are used to emphasise, in
 <li>
 <p>Select the appropriate check boxes and set the variables as required:</p>
 <ul>
-<li>
-<p>Indent content when an editor is opened</p>
-<p>Select this to apply the indentation rules to the contents of an Edit window when it is opened.</p>
-</li>
-<li>
-<p>Handle formatting through the interpreter</p>
-<p>Select this to use the interpreter to reformat code. This is useful to avoid formatting changes that could be detected by source code management systems when the RIDE is used to maintain a body of code that is also edited directly using the interpreter.</p>
-</li>
-<li>
-<p>Auto-indent <code>&lt;number&gt;</code> spaces</p>
-<p>Only relevant when Handle formatting through the interpreter is not selected. Select this and define the number of spaces by which each level of nested code should be indented relative to the previous level of indentation in the Edit window. If not selected, code in the Edit window will be left justified.</p>
-<ul>
-<li>
-<p>in methods:  <code>&lt;number&gt;</code>  spaces</p>
-<p>Only relevant when Handle formatting through the interpreter is not selected. Select this and define the number of spaces by which the contents of tradfns should be indented relative to the start/end <code>∇</code> glyphs.</p>
-</li>
-</ul>
-</li>
-<li>
-<p>Indent lines that contain only a comment</p>
-<p>Only relevant when Handle formatting through the interpreter is not selected. Select this to apply the appropriate indentation to lines that start with the <code>⍝</code> glyph. If this is not selected, then lines that start with the <code>⍝</code> glyph remain as positioned by the user.</p>
-</li>
 <li>
 <p>Highlight matching brackets: <code>() [] {}</code></p>
 <p>Select this to automatically highlight the matching start and end enclosures when positioning the cursor before or after one of them (with contiguous brackets, the bracket immediately before the cursor has its other enclosure highlighted).</p>
@@ -1238,6 +1216,10 @@ General note icons, and the type of material that they are used to emphasise, in
 <p>Specify a time interval after which the RIDE's autocompletion functionality is activated.</p>
 </li>
 <li>
+<p>Make suggestions after <code>&lt;time&gt;</code> characters</p>
+<p>Decides after how many characters the suggestions shall be viewed.</p>
+</li>
+<li>
 <p>Autocomplete control structure with snippets</p>
 <p>Select this to be presented with auto-completion template options for control structures in the Edit window.</p>
 </li>
@@ -1254,12 +1236,32 @@ General note icons, and the type of material that they are used to emphasise, in
 <p>Select this to show the tooltip for a  glyph. When the cursor is positioned over or immediately after a glyph, the glyph is highlighted and information about it is displayed – this includes the name of the glyph, the keyboard shortcut to enter it, its monadic/dyadic name and examples of its syntax, arguments and result.</p>
 </li>
 <li>
+<p>Auto-start default configuration when RIDE starts</p>
+<p>Ride starts with default configuration.</p>
+</li>
+<li>
 <p>Auto PW</p>
 <p>Select this to display text in the Session window up to the full width of the Session window before wrapping (automatically updates when the Session is resized). Also sets <a href="https://help.dyalog.com/latest/index.htm#Language/System%20Functions/pw.htm">⎕PW</a> to this value.</p>
 </li>
 <li>
 <p>Persistent history <code>&lt;number&gt;</code> lines</p>
 <p>Select this and define the number of lines that are available to recall using the Backward/Undo command (<code>&lt;BK&gt;</code>). This specifies how many input lines RIDE remembers from the end of one RIDE session to the start of the next session.</p>
+</li>
+<li>
+<p>Session log size <code>&lt;number&gt;</code> lines (0 = unlimited)</p>
+<p>Sets the number of lines in the session log.</p>
+</li>
+<li>
+<p>Show session margin</p>
+<p>Toggles the session indicator margin.</p>
+</li>
+<li>
+<p>Show quit prompt</p>
+<p>Select this to display a confirmation dialog box when exiting the RIDE session.</p>
+</li>
+<li>
+<p>Connect on quit</p>
+<p>Select this to be returned to the RIDE-Dyalog Session dialog box on exiting a Session.</p>
 </li>
 <li>
 <p>Block cursor</p>
@@ -1284,36 +1286,16 @@ General note icons, and the type of material that they are used to emphasise, in
 <p>Select this to display a dynamic impression of the entire (or very large portion of) contents of the <strong>Session/Edit</strong> window in a column on the right‑hand side of that window. Clicking within the minimap moves the display to that location.</p>
 </li>
 <li>
-<p>Minimap render characters</p>
+<p>Render characters</p>
 <p>Only relevant when Minimap enabled is selected. Select this to use tiny rendered font in the minimap rather than greeking (showing a representation of the text).</p>
 </li>
 <li>
-<p>Minimap show slider</p>
+<p>Show slider</p>
 <p>Only relevant when Minimap enabled is selected. Select an option from the drop-down list to indicate how the currently-displayed content of the window is highlighted in the minimap. Options include:</p>
 <ul>
 <li>always – the current display is always highlighted in the minimap.</li>
 <li>mouseover – the current display is only highlighted in the minimap when the mouse is positioned over the minimap.</li>
 </ul>
-</li>
-<li>
-<p>Double click to edit</p>
-<p>Select this to open the Edit window when double-clicking within a word rather than selecting/highlighting the whole word.</p>
-</li>
-<li>
-<p>Show quit prompt</p>
-<p>Select this to display a confirmation dialog box when exiting the RIDE session.</p>
-</li>
-<li>
-<p>Show toolbar in editor/trace windows</p>
-<p>Select this to display the toolbar in the Edit/Trace windows.</p>
-</li>
-<li>
-<p>Connect on quit</p>
-<p>Select this to be returned to the RIDE-Dyalog Session dialog box on exiting a Session.</p>
-</li>
-<li>
-<p>Include filename in editor title</p>
-<p>Select this to include an object's associated filename in the caption at the top of the Edit window.</p>
 </li>
 </ul>
 </li>
@@ -1395,24 +1377,12 @@ General note icons, and the type of material that they are used to emphasise, in
 </ol>
 <hr />
 <p>The tooltip showing keyboard shortcuts for command codes (obtained by positioning the cursor over the <img src="../img/screenshots/b_shortcuts.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 12px;" /> button on the right hand side of the Language bar) is dynamically updated to any customisation.</p>
-<h3 id="customising_your_session-saved-responses-tab">Saved Responses Tab</h3>
-<p>Allows saved option selections to be deleted.</p>
-<p>When using Link, options selected in dialog boxes are recorded in this tab. For example, saving file content opens a dialog box that offers options of fixing as code in the workspace, saving the file to disk, or discarding changes; the selected option for this file (or, optionally, all files with the same file extension) is recorded in this tab.</p>
-<hr />
-<p><strong>To delete a previously-saved option selection for a file</strong></p>
-<ol>
-<li>Open the <strong>Saved Responses</strong> tab.</li>
-<li>Select the file for which you want to delete the saved option.</li>
-<li>Click <strong>Delete</strong>.</li>
-<li>Click <strong>OK</strong> to save your changes and close the <strong>Preferences</strong> dialog box, <strong>Apply</strong> to save your changes without closing the <strong>Preferences</strong> dialog box or <strong>Cancel</strong> to close the <strong>Preferences</strong> dialog box without saving your changes.</li>
-</ol>
-<hr />
-<h3 id="customising_your_session-colours-tab">Colours Tab</h3>
+<h3 id="customising_your_session-style-tab">Style Tab</h3>
 <p>Allows customisation of the syntax colouring. Several schemes are provided, any of which can be used as they are or further customised.</p>
 <hr />
 <p><strong>To change the syntax colouring to a predefined scheme</strong></p>
 <ol>
-<li>Open the <strong>Colours</strong> tab.</li>
+<li>Open the <strong>Style</strong> tab.</li>
 <li>In the <strong>Scheme</strong> field, select the syntax colouring scheme that you want to use. When a scheme is selected, the example shown is updated to use that colour scheme.</li>
 <li>Click <strong>OK</strong> to save your changes and close the <strong>Preferences</strong> dialog box, <strong>Apply</strong> to save your changes without closing the <strong>Preferences</strong> dialog box or <strong>Cancel</strong> to close the <strong>Preferences</strong> dialog box without saving your changes.</li>
 </ol>
@@ -1420,10 +1390,10 @@ General note icons, and the type of material that they are used to emphasise, in
 <hr />
 <p><strong>To define a new syntax colouring scheme</strong></p>
 <ol>
-<li>Open the <strong>Colours</strong> tab.</li>
+<li>Open the <strong>Style</strong> tab.</li>
 <li>In the <strong>Scheme</strong> field, select the syntax colouring scheme that is closest to the scheme that you want to define. When a scheme is selected, the example shown is updated to use that colour scheme.</li>
 <li>
-<p>Click <strong>Clone</strong>.</p>
+<p>Click <strong>Clone &amp; Edit</strong>.</p>
 <p>A copy is made of the selected scheme and additional options are displayed to allow customisation of the scheme's name and syntax colouring.</p>
 </li>
 <li>
@@ -1489,21 +1459,33 @@ General note icons, and the type of material that they are used to emphasise, in
 <li>deleted</li>
 </ul>
 <p>Changes do not take effect until the next time a Dyalog Session is started through the RIDE.</p>
-<h3 id="customising_your_session-windows-tab">Windows Tab</h3>
-<p>Allows customisation of the size and position of floating <strong>Edit/Trace</strong> windows.</p>
-<p>To change the size/position of floating <strong>Edit/Trace</strong> windows</p>
+<h3 id="customising_your_session-traceedit-tab">Trace/Edit Tab</h3>
+<p>Allows customisation of the size and position of floating <strong>Trace/Edit</strong> windows.</p>
+<p>To change the size/position of floating <strong>Trace/Edit</strong> windows</p>
 <ol>
-<li>Open the Windows tab.</li>
+<li>Open the Trace/Edit tab.</li>
 <li>
 <p>Select the appropriate check boxes and set the variables as required:</p>
 <ul>
+<li>
+<p>Double click to edit</p>
+<p>Select this to open the Edit window when double-clicking within a word rather than selecting/highlighting the whole word.</p>
+</li>
+<li>
+<p>Show toolbar in editor/trace windows</p>
+<p>Select this to display the toolbar in the Trace/Edit windows.</p>
+</li>
 <li>
 <p>Floating windows</p>
 <p>Toggles whether new <strong>Edit</strong> and <strong>Trace</strong> windows are docked inside the Session or floating (undocked). The remaining fields on this tab are only relevant if windows are floating, that is, this option is selected.</p>
 </li>
 <li>
+<p>Include filename in editor title</p>
+<p>Select this to include an object's associated filename in the caption at the top of the Edit window.</p>
+</li>
+<li>
 <p>Single floating window</p>
-<p>Select this to display a single floating window with multiple tabs for different <strong>Edit/Trace</strong> windows. If this option is not selected, then multiple floating windows are displayed for individual <strong>Edit/Trace</strong> windows.</p>
+<p>Select this to display a single floating window with multiple tabs for different <strong>Trace/Edit</strong> windows. If this option is not selected, then multiple floating windows are displayed for individual <strong>Trace/Edit</strong> windows.</p>
 </li>
 <li>
 <p>Remember previous window position</p>
@@ -1511,15 +1493,51 @@ General note icons, and the type of material that they are used to emphasise, in
 </li>
 <li>
 <p>Size width and height</p>
-<p>Specifies the width and height of new <strong>Edit/Trace</strong> windows.</p>
+<p>Specifies the width and height of new <strong>Trace/Edit</strong> windows.</p>
 </li>
 <li>
 <p>Posn x and y</p>
-<p>Specifies the x-y co-ordinates of the screen position for the top left corner of the first <strong>Edit/Trace</strong> window opened.</p>
+<p>Specifies the x-y co-ordinates of the screen position for the top left corner of the first <strong>Trace/Edit</strong> window opened.</p>
 </li>
 <li>
 <p>Offset x and y</p>
-<p>Specifies the x-y offsets for the top left corner of <strong>Edit/Trace</strong> windows opened relative to the previously-opened window. Only relevant if Single floating window is not selected.</p>
+<p>Specifies the x-y offsets for the top left corner of <strong>Trace/Edit</strong> windows opened relative to the previously-opened window. Only relevant if Single floating window is not selected.</p>
+</li>
+<li>
+<p>Indent content when an editor is opened</p>
+<p>Select this to apply the indentation rules to the contents of an Edit window when it is opened.</p>
+</li>
+<li>
+<p>Handle formatting through the interpreter</p>
+<p>Select this to use the interpreter to reformat code. This is useful to avoid formatting changes that could be detected by source code management systems when the RIDE is used to maintain a body of code that is also edited directly using the interpreter.</p>
+</li>
+<li>
+<p>Auto-indent <code>&lt;number&gt;</code> spaces</p>
+<p>Only relevant when Handle formatting through the interpreter is not selected. Select this and define the number of spaces by which each level of nested code should be indented relative to the previous level of indentation in the Edit window. If not selected, code in the Edit window will be left justified.</p>
+<ul>
+<li>
+<p>in methods:  <code>&lt;number&gt;</code>  spaces</p>
+<p>Only relevant when Handle formatting through the interpreter is not selected. Select this and define the number of spaces by which the contents of tradfns should be indented relative to the start/end <code>∇</code> glyphs.</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Indent lines that contain only a comment</p>
+<p>Only relevant when Handle formatting through the interpreter is not selected. Select this to apply the appropriate indentation to lines that start with the <code>⍝</code> glyph. If this is not selected, then lines that start with the <code>⍝</code> glyph remain as positioned by the user.</p>
+</li>
+<li>
+<p>Saved Responses</p>
+<p>Allows saved option selections to be deleted.</p>
+<p>When using Link, options selected in dialog boxes are recorded in this tab. For example, saving file content opens a dialog box that offers options of fixing as code in the workspace, saving the file to disk, or discarding changes; the selected option for this file (or, optionally, all files with the same file extension) is recorded in this tab.</p>
+<hr />
+<p><strong>To delete a previously-saved option selection for a file</strong></p>
+<ol>
+<li>Open the <strong>Saved Responses</strong> tab.</li>
+<li>Select the file for which you want to delete the saved option.</li>
+<li>Click <strong>Delete</strong>.</li>
+<li>Click <strong>OK</strong> to save your changes and close the <strong>Preferences</strong> dialog box, <strong>Apply</strong> to save your changes without closing the <strong>Preferences</strong> dialog box or <strong>Cancel</strong> to close the <strong>Preferences</strong> dialog box without saving your changes.</li>
+</ol>
+<hr />
 </li>
 </ul>
 </li>
@@ -1579,7 +1597,7 @@ General note icons, and the type of material that they are used to emphasise, in
 <td>BP*</td>
 <td>Toggle breakpoint</td>
 <td></td>
-<td>Edit/Trace : Toggle a breakpoint on the current line</td>
+<td>Trace/Edit : Toggle a breakpoint on the current line</td>
 </tr>
 <tr>
 <td>BT*</td>
@@ -1945,7 +1963,7 @@ General note icons, and the type of material that they are used to emphasise, in
 <td>TVB*</td>
 <td>Toggle view steps</td>
 <td></td>
-<td>Edit/Trace : Toggle display of an additional column at the left-hand side of the window in which break-points can be set/unset. Hiding this column does not remove any previously-set break points.</td>
+<td>Trace/Edit : Toggle display of an additional column at the left-hand side of the window in which break-points can be set/unset. Hiding this column does not remove any previously-set break points.</td>
 </tr>
 <tr>
 <td>TVO*</td>
