@@ -25,13 +25,13 @@ The **New Session** window is displayed when RIDE starts, unless disabled in the
 
 ### Simple usage
 
-Click |> for the configuartion you want to launch. Configurations for all locally installed Dyalog versions are automatically shown. 
+Click 🞂 for the configuartion you want to launch. Configurations for all locally installed Dyalog versions are automatically shown. 
 
 ### Advanced usage
 
-You can add new custom configurations (for example for remote interpreters) by clicking <kbd>NEW CONFIGURATION…</kbd>.
+You can add new custom configurations (for example for remote interpreters) by clicking <kbd>NEW…</kbd>.
 
-You can modify an existing configuration by selecting it and clicking <kbd>CUSTOM OPTIONS</kbd>.
+You can modify an existing configuration by selecting it and clicking <img src="../img/screenshots/expand-CfgDetails.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 14px;" />.
 
 Either of these will open the advanced configuration pane where you can choose connection type and protocol, provide the interpreter with arguments and configuration parameters, and more.
 
