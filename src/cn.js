@@ -28,7 +28,7 @@
   const cnFile = `${D.el.app.getPath('userData')}/connections.json`;
   const lcnFile = `${D.el.app.getPath('userData')}/last_configuration.json`;
   let protocolLogFile;
-  const lastconfig = 'last configuration';
+  const lastconfig = 'Last configuration';
   const defaultProtocolLogFile = path.join(
     D.el.app.getPath('temp'),
     `RIDE-${D.versionInfo.version}-${D.el.process.pid}.log`,
