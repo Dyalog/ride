@@ -62,13 +62,7 @@ mkdir -p ${SHIPDIRECTORY}
 
 ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac.pkg" | tr '[:upper:]' '[:lower:]'`
 
-./node_modules/.bin/electron-osx-sign ${RIDEDIR}/${PackageName}.app \
---identity="${APPLE_CERT_APPLICATION}" \
---entitlements="CI/packagescripts/osx/entitlements.plist" \
---entitlements-inherit="CI/packagescripts/osx/entitlements.plist" \
---hardened-runtime \
---no-gatekeeper-assess \
---no-strict-verify
+./CI/packagescripts/osx/sign.js ${RIDEDIR}/${PackageName}.app "${APPLE_CERT_APPLICATION}"
 
 /usr/bin/pkgbuild --root "$RIDEDIR"                   \
 --identifier "$identifier"                            \
