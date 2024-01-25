@@ -44,7 +44,7 @@ pipeline {
         }
         stage ('Mac Build and Packaging') {
           agent {
-            label 'Mac && x86 && Build'
+            label 'Mac && x86 && build'
           }
           steps {
             sh 'rm -Rf _ ship'
