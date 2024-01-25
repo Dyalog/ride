@@ -25,7 +25,7 @@
     "toastr": "^2.1.4"
   },
   "devDependencies": {
-    "@electron/osx-sign": "^1.0.4",
+    "@electron/osx-sign": "^1.0.5",
     "async": "^3.2.4",
     "ava": "^5.3.1",
     "cheerio": "^1.0.0-rc.12",
