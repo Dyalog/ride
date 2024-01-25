@@ -44,7 +44,7 @@ pipeline {
         }
         stage ('Mac Build and Packaging') {
           agent {
-            label 'Mac && x86 && build'
+            label 'mac && x86 && build'
           }
           steps {
             sh 'rm -Rf _ ship'
@@ -60,7 +60,7 @@ pipeline {
         }
         stage ('Windows Packaging') {
           agent {
-            label 'Windows && ride'
+            label 'win && ride'
           }
           steps {
             powershell 'if (Test-Path -Path ship) {remove-item ship -Recurse -Force }'
