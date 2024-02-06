@@ -78,7 +78,7 @@ D.prf = {};
     '# see below for syntax'
     + '\n'
     + '\nDyalog                          {mac}'
-    + '\n  About Dyalog             =ABT'
+    + '\n  About                    =ABT'
     + '\n  -'
     + '\n  Preferences...           =PRF'
     + '\n  -                            '

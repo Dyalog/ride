@@ -4,7 +4,7 @@ The Dyalog keyboard shortcuts that are supported by the RIDE are listed below; t
 
 | Code | Command | Default Keystrokes | Description |
 | --- | --- | --- | --- |
-| ABT* | About Dyalog | <kbd>Shift</kbd> + <kbd>F1</kbd> | Display the About Dyalog dialog box |
+| ABT* | About | <kbd>Shift</kbd> + <kbd>F1</kbd> | Display the About dialog box |
 | AC* | Align comments |  | Edit : Align comments to current column |
 | AO* | Comment out lines |  | Session/Edit : Add comment symbol at start of each tagged or current line |
 | BH* | Run to exit (in tracer) |  | Trace : Continue execution from the current line to completion of the current function or operator. If successful, the selection advances to the next line of the calling function (if there is one). |
