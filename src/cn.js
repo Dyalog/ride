@@ -967,7 +967,7 @@
         $(q.favs).list('select', i);
         q.go.click();
       })
-      .keydown((x) => {
+      .on('keydown', (x) => {
         switch (D.util.fmtKey(x)) {
           case 'Enter': q.go.hidden || q.go.click(); return !1;
           case 'Ctrl-N': q.neu.click(); return !1;
