@@ -30,7 +30,7 @@
     "ava": "^5.3.1",
     "cheerio": "^1.0.0-rc.12",
     "compression": "^1.7.4",
-    "electron": "^25.3.2",
+    "electron": "^26.6.9",
     "electron-connect": "^0.6.3",
     "electron-packager": "^17.1.1",
     "eslint": "^8.46.0",
