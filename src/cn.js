@@ -959,7 +959,7 @@
       revert: true,
       axis: 'y',
       items: '>:not(:first-child)',
-      // stop: save,
+      stop: save,
     })
       .on('click', '.go', (e) => {
         const t = $(e.target);
@@ -976,7 +976,7 @@
           default: return !0;
         }
       })
-      // .on('list-order-changed', save)
+      .on('list-order-changed', save)
       .on('list-selection-changed', () => {
         $sel = $('.list_sel', q.favs);
         const u = $sel.length === 1; // is selection unique?
