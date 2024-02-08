@@ -959,7 +959,7 @@
       revert: true,
       axis: 'y',
       items: '>:not(:first-child)',
-      // stop: save,
+      stop: save,
     })
       .on('click', '.go', (e) => {
         const t = $(e.target);
@@ -967,7 +967,7 @@
         $(q.favs).list('select', i);
         q.go.click();
       })
-      .keydown((x) => {
+      .on('keydown', (x) => {
         switch (D.util.fmtKey(x)) {
           case 'Enter': q.go.hidden || q.go.click(); return !1;
           case 'Ctrl-N': q.neu.click(); return !1;
@@ -976,7 +976,7 @@
           default: return !0;
         }
       })
-      // .on('list-order-changed', save)
+      .on('list-order-changed', save)
       .on('list-selection-changed', () => {
         $sel = $('.list_sel', q.favs);
         const u = $sel.length === 1; // is selection unique?
