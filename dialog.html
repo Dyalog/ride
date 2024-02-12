@@ -126,11 +126,7 @@
         };
         setTimeout(() => { inp.focus(); }, 1);
       }
-      bw.resizable = true;
-      setTimeout(() => {
-        bw.setContentSize(width, document.body.clientHeight);
-        bw.resizable = false;
-      }, 1);
+      bw.setContentSize(width, document.body.clientHeight);
     }
   </script>
 </body>
