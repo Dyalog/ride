@@ -217,7 +217,6 @@
     try {
       fs.writeFileSync(cnFile, JSON.stringify(b));
       D.conns_modified = +fs.statSync(cnFile).mtime;
-      toastr.success(cnFile, 'Configuration saved.');
     } catch (e) {
       toastr.error(`${e.name}: ${e.message}`, 'Save failed');
     }
@@ -990,7 +989,6 @@
           q.type_dtl.hidden = preset;
           q.exes_dtl.hidden = preset;
           q.del.disabled = sel.name === lastconfig;
-          q.sve.disabled = sel.name === lastconfig;
           q.def.disabled = sel.name === D.prf.defaultConfig();
           q.type.value = sel.type || 'connect';
           q.subtype.value = sel.subtype || 'raw';
@@ -1031,7 +1029,6 @@
       q.favs.insertBefore($sel[0], q.favs.firstChild);
       save();
     };
-    q.sve.onclick = () => { save(); };
     q.neu.onclick = () => {
       if ($(q.rhs).is(':hidden')) {
         q.tgl_cfg.click();
