@@ -1092,10 +1092,15 @@
       const k = t.name;
       const v = t.value;
       v ? (sel[k] = v) : delete sel[k];
+      save();
     });
     $(':checkbox[name]', q.rhs).change((e) => {
       const t = e.target;
       t.checked ? (sel[t.name] = 1) : delete sel[t.name];
+      save();
+    });
+    $('select[name]', q.rhs).change(() => {
+      save();
     });
     updExes();
     document.title = 'RIDE-Dyalog Session';

@@ -45,12 +45,12 @@
       <div id=cn_type_dtl>
         <div class="row">
           <div class="col col-sm-12 col-md-3"><label for=cn_fav_name>C<u>o</u>nfiguration name:</label></div>
-          <div class="col col-sm-12 col-md-9"><input id="cn_fav_name" placeholder="unnamed" maxlength="30"></div>
+          <div class="col col-sm-12 col-md-9"><input id="cn_fav_name" name=favname placeholder="unnamed" maxlength="30"></div>
         </div>
         <div class="row">
           <div class="col col-sm-12 col-md-3"><label for=cn_type><u>T</u>ype:</label></div>
           <div class="col col-sm-12 col-md-9">
-            <select id=cn_type class=cn_select>
+            <select id=cn_type name=type class=cn_select>
               <option value=connect     >Connect to an interpreter
               <option value=start       >Start an interpreter
               <option value=listen      >Listen for an incoming connection
@@ -60,7 +60,7 @@
         <div class="row">
           <div class="col col-sm-12 col-md-3"></div>
           <div class="col col-sm-12 col-md-9">
-            <select id=cn_subtype hidden>
+            <select id=cn_subtype name=subtype hidden>
               <option value=raw  id=cn_raw_opt>via TCP
               <option value=ssh               >via SSH
               <option value=ssl   id=cn_ssl_opt>via TLS/SSL
@@ -128,7 +128,7 @@
         <div id=cn_ssl hidden>
           <div class="row">
             <div class="col col-xs-12">
-              <input type=checkbox id=cn_cert_cb>
+              <input type=checkbox id=cn_cert_cb name=certcb>
               <label for=cn_cert_cb>
                 Provide user c<u>e</u>rtificate</span>
               </label>
@@ -162,7 +162,7 @@
           </div>
           <div class="row">
             <div class="col col-xs-12">
-              <input type=checkbox id=cn_rootcertsdir_cb>
+              <input type=checkbox id=cn_rootcertsdir_cb name=rootcertsdircb>
               <label for=cn_rootcertsdir_cb>
                 Custom root certificates
               </label>
@@ -183,7 +183,7 @@
           </div>
           <div class="row">
             <div class="col col-xs-12">
-              <input type=checkbox id=cn_subj_cb>
+              <input type=checkbox id=cn_subj_cb name=subjcb>
               <label for=cn_subj_cb>
                 <u>V</u>alidate server subject common name matches hostname
               </label>
@@ -194,7 +194,7 @@
           <div class="row" id=cn_exes_dtl>
             <div class="col col-sm-12 col-md-3"><label for=cn_exes class=cn_label><u>I</u>nterpreter:</label></div>
             <div class="col col-sm-12 col-md-9">
-              <select id=cn_exes name=exes class="cn_select browse"></select>
+              <select id=cn_exes  class="cn_select browse"></select>
               <button id=cn_fetch class=tb_btn title="Fetch list of interpreters through ssh">
                 <span class="fas fa-sync-alt"></span>
               </button>
