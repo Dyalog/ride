@@ -233,9 +233,13 @@
   const favDOM = (x) => {
     const e = document.createElement('div');
     e.cnData = x;
-    e.innerHTML = `<span class=name>${
-      esc(favText(x))
-    }</span><button class="go tb_btn" title="Start now"><span class="fas fa-play"></span></button>`;
+    e.innerHTML = `<span class="name">${esc(favText(x))}</span>\
+    <button class="go tb_btn" title="Start now">\
+      <span class="fas fa-play"></span>\
+    </button>\
+    <button class="cog tb_btn" title="Show config details">\
+      <span class="fas fa-cog"></span>\
+    </button>`;
     return e;
   };
   const updExes = () => {
@@ -968,7 +972,6 @@
       cursor: 'move',
       revert: true,
       axis: 'y',
-      items: '>:not(:first-child)',
       stop: save,
     })
       .on('click', '.go', (e) => {
@@ -1000,7 +1003,6 @@
           q.type_dtl.hidden = preset;
           q.exes_dtl.hidden = preset;
           q.del.disabled = sel.name === lastconfig;
-          q.def.disabled = sel.name === D.prf.defaultConfig();
           q.type.value = sel.type || 'connect';
           q.subtype.value = sel.subtype || 'raw';
           interpretersSSH = sel.exes || [];
@@ -1034,12 +1036,6 @@
         }
       });
     { const [a] = q.favs.querySelectorAll('a'); a && a.focus(); }
-    q.def.onclick = () => {
-      D.prf.defaultConfig(sel.name);
-      q.def.disabled = true;
-      q.favs.insertBefore($sel[0], q.favs.firstChild);
-      save();
-    };
     q.neu.onclick = () => {
       if ($(q.rhs).is(':hidden')) {
         q.tgl_cfg.click();

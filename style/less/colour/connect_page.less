@@ -34,7 +34,7 @@
 		background:@CN_FAV_BTN_SEL_BG;
 		color: @CN_FAV_BTN_SEL_FG;
 		opacity:1;
-		.go {
+		.go, .cog {
 			color:@CN_FAV_BTN_SEL_FG!important;
 			&:hover, &:focus{
 				color:@BUTTON_HOVER_COL!important;
@@ -48,18 +48,9 @@
 		border: 1px solid @DLG_BOTTOM_BG;
 		background:@CN_FAV_BTN_BG;
 		color:@CN_FAV_BTN_FG;
-		&:not(:first-child) {
-			.go {
-				color:@CN_FAV_BTN_BG;
-				&:focus{
-					color:@CN_FAV_BTN_SEL_BG;
-				}
-			}
-			&:hover .go {
-				color:@CN_FAV_BTN_FG;
-				&:hover {color: @CN_FAV_BTN_SEL_BG;}
-			}
-		}
+		&:not(:hover):not(:focus):not(.list_sel) .tb_btn {
+			visibility: hidden;
+	    }
 	}
 }
 #cn, #cn_lhs, #cn_rhs {
