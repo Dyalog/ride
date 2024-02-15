@@ -24,6 +24,7 @@
   const KV = /^([a-z_]\w*)=(.*)$/i;
   const WS = /^\s*$/; // KV:regexes for parsing env vars
   const HP = /^([^:]+|\[[^\]]+\])?(?::(\d+)?(\+)?)?$/; // regex for parsing host and port
+  const pathNotFound = /The system cannot find the path specified/; // regex to check response from ssh exec
   const maxl = 1000;
   const cnFile = `${D.el.app.getPath('userData')}/connections.json`;
   const lcnFile = `${D.el.app.getPath('userData')}/last_configuration.json`;
@@ -72,7 +73,7 @@
       $.err(...x);
     } else if (e.code === 'ENOTFOUND') {
       $.err(`The host "${e.hostname}" could not be found.`, 'Host not found');
-    } else if (e.code !== 'ETIMEDOUT') $.err(e.message, e.name);
+    } else if (!['ECONNRESET', 'ETIMEDOUT'].includes(e.code)) $.err(e.message, e.name);
   };
   const passwdPrompt = (text, title) => {
     setTimeout(() => D.util.stringDialog(
@@ -600,7 +601,12 @@
             x === sel && q.ssh_pass.value && (o.pass = q.ssh_pass.value);
             const c = sshExec(o, '/bin/sh', (e, sm) => {
               if (e) throw e;
+              let stdout = '';
+              sm.on('data', (xx) => { stdout += xx; });
               sm.on('close', (code, sig) => {
+                if (pathNotFound.test(stdout)) {
+                  err('Remote connections to Windows hosts is not supported', 'Windows host');
+                }
                 D.ide && D.ide._sshExited({ code, sig });
                 c.end();
               });
@@ -829,6 +835,11 @@
           interpretersSSH = [];
           sm.on('data', (x) => { s += x; })
             .on('close', () => {
+              if (pathNotFound.test(s)) {
+                err('Remote connections to Windows hosts is not supported', 'Windows host');
+                c.end();
+                return;
+              }
               interpretersSSH = s.split(/\r?\n/).filter((x) => x).map((x) => {
                 const a = x.split('/');
                 return a[1] === 'opt' ? {
