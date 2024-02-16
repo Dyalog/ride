@@ -1123,11 +1123,8 @@
         return;
       }
     }
-    const defcfg = D.prf.defaultConfig();
-    let i = [...q.favs.children].findIndex((x) => x.cnData.name === defcfg);
-    if (i < 0) i = [...q.favs.children].findIndex((x) => x.cnData.preset);
     setTimeout(() => {
-      $(q.favs).list('select', Math.max(0, i));
+      $(q.favs).list('select', 0);
       const autoStart = process.env.RIDE_AUTO_START ? process.env.RIDE_AUTO_START === '1' : D.prf.autoStart();
       if (autoStart) {
         q.go.click();
