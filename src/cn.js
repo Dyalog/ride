@@ -967,8 +967,8 @@
     //   q.ssh_key_dots.hidden = !k;
     //   sel.ssh_auth_type = q.ssh_auth_type.value;
     // };
-    const toggleConfig = (evt) => {
-      const expanded = (evt === undefined) ? winstate.launchWin.expanded : !$(q.rhs).is(':visible');
+    const toggleConfig = (show) => {
+      const expanded = (show === undefined) ? !$(q.rhs).is(':visible') : !!show;
       const { height } = D.elw.getContentBounds();
       const newWidth = expanded ? winstate.launchWin.expandedWidth : winstate.launchWin.width;
       winstate.launchWin.expanded = expanded;
@@ -978,7 +978,7 @@
       setTimeout(() => { I.cn.toggleMaximize(expanded ? winstate.launchWin.width : 0); }, 10);
       nodeRequire('electron').ipcRenderer.send('save-win', true);
     };
-    toggleConfig();
+    toggleConfig(winstate.launchWin.expanded);
     D.conns.forEach((x) => { q.favs.appendChild(favDOM(x)); });
     $(q.favs).list().sortable({
       cursor: 'move',
