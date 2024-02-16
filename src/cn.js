@@ -967,6 +967,18 @@
     //   q.ssh_key_dots.hidden = !k;
     //   sel.ssh_auth_type = q.ssh_auth_type.value;
     // };
+    const toggleConfig = (evt) => {
+      const expanded = (evt === undefined) ? winstate.launchWin.expanded : !$(q.rhs).is(':visible');
+      const { height } = D.elw.getContentBounds();
+      const newWidth = expanded ? winstate.launchWin.expandedWidth : winstate.launchWin.width;
+      winstate.launchWin.expanded = expanded;
+      const minwidth = winstate.dx + (expanded ? 885 : 400);
+      D.elw.setMinimumSize(minwidth, 400);
+      D.elw.setContentSize(newWidth, height);
+      setTimeout(() => { I.cn.toggleMaximize(expanded ? winstate.launchWin.width : 0); }, 10);
+      nodeRequire('electron').ipcRenderer.send('save-win', true);
+    };
+    toggleConfig();
     D.conns.forEach((x) => { q.favs.appendChild(favDOM(x)); });
     $(q.favs).list().sortable({
       cursor: 'move',
@@ -979,6 +991,12 @@
         const i = t.parentsUntil(q.favs).last().index();
         $(q.favs).list('select', i);
         q.go.click();
+      })
+      .on('click', '.cog', (e) => {
+        const t = $(e.target);
+        const i = t.parentsUntil(q.favs).last().index();
+        $(q.favs).list('select', i);
+        toggleConfig();
       })
       .on('keydown', (x) => {
         switch (D.util.fmtKey(x)) {
@@ -1038,28 +1056,13 @@
     { const [a] = q.favs.querySelectorAll('a'); a && a.focus(); }
     q.neu.onclick = () => {
       if ($(q.rhs).is(':hidden')) {
-        q.tgl_cfg.click();
+        toggleConfig();
       }
       const $e = $(favDOM({}));
       q.favs.appendChild($e[0]);
       $(q.favs).list('select', $e.index());
       q.fav_name.focus();
     };
-    const toggleConfig = (evt) => {
-      const expanded = (evt === undefined) ? winstate.launchWin.expanded : !$(q.rhs).is(':visible');
-      const { height } = D.elw.getContentBounds();
-      const newWidth = expanded ? winstate.launchWin.expandedWidth : winstate.launchWin.width;
-      $(q.tgl_cfg_exp).toggle(!expanded);
-      $(q.tgl_cfg_col).toggle(expanded);
-      winstate.launchWin.expanded = expanded;
-      const minwidth = winstate.dx + (expanded ? 885 : 400);
-      D.elw.setMinimumSize(minwidth, 400);
-      D.elw.setContentSize(newWidth, height);
-      setTimeout(() => { I.cn.toggleMaximize(expanded ? winstate.launchWin.width : 0); }, 10);
-      nodeRequire('electron').ipcRenderer.send('save-win', true);
-    };
-    q.tgl_cfg.onclick = toggleConfig;
-    toggleConfig();
     q.cln.onclick = () => {
       if (sel) {
         const cnf = favDOM({
