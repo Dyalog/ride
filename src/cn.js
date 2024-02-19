@@ -986,21 +986,14 @@
       axis: 'y',
       stop: save,
     })
-      .on('click', '.go', (e) => {
-        const t = $(e.target);
+      .on('click', '.go, .cog', (e) => {
+        const t = $(e.currentTarget);
         const i = t.parentsUntil(q.favs).last().index();
         $(q.favs).list('select', i);
-        q.go.click();
-      })
-      .on('click', '.cog', (e) => {
-        const t = $(e.target);
-        const i = t.parentsUntil(q.favs).last().index();
-        $(q.favs).list('select', i);
-        toggleConfig();
+        t.hasClass('go') ? q.go.click() : toggleConfig();
       })
       .on('keydown', (x) => {
         switch (D.util.fmtKey(x)) {
-          case 'Enter': q.go.hidden || q.go.click(); return !1;
           case 'Ctrl-N': q.neu.click(); return !1;
           case 'Delete': q.del.click(); return !1;
           case 'Ctrl-D': q.cln.click(); return !1;
