@@ -20,7 +20,6 @@
           if(!ak){
             switch(e.which){
               /*C-a */case 65:if(ck){$l.children().addClass(S).eq(0).focus();$l.trigger(ES);return!1};break
-              /*spc */case 32:$('>.'+F,$l).toggleClass(S);$l.trigger(ES);return!1
               /*up  */case 38:case 63232:$l.list('select',idx($l)-1         ,ck,sk);return!1
               /*down*/case 40:case 63233:$l.list('select',idx($l)+1         ,ck,sk);return!1
               /*home*/case 36:case 63273:$l.list('select',0                 ,ck,sk);return!1

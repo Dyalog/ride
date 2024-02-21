@@ -27,9 +27,7 @@
   const pathNotFound = /The system cannot find the path specified/; // regex to check response from ssh exec
   const maxl = 1000;
   const cnFile = `${D.el.app.getPath('userData')}/connections.json`;
-  const lcnFile = `${D.el.app.getPath('userData')}/last_configuration.json`;
   let protocolLogFile;
-  const lastconfig = 'Last configuration';
   const defaultProtocolLogFile = path.join(
     D.el.app.getPath('temp'),
     `RIDE-${D.versionInfo.version}-${D.el.process.pid}.log`,
@@ -213,18 +211,10 @@
       if (!r) return;
     }
     const b = [...q.favs.children]
-      .map((x) => x.cnData)
-      .filter((x) => x.name !== lastconfig);
+      .map((x) => x.cnData);
     try {
       fs.writeFileSync(cnFile, JSON.stringify(b));
       D.conns_modified = +fs.statSync(cnFile).mtime;
-    } catch (e) {
-      toastr.error(`${e.name}: ${e.message}`, 'Save failed');
-    }
-  };
-  const saveLastConf = (conf) => {
-    try {
-      fs.writeFileSync(lcnFile, JSON.stringify({ ...conf, name: lastconfig }));
     } catch (e) {
       toastr.error(`${e.name}: ${e.message}`, 'Save failed');
     }
@@ -233,9 +223,13 @@
   const favDOM = (x) => {
     const e = document.createElement('div');
     e.cnData = x;
-    e.innerHTML = `<span class=name>${
-      esc(favText(x))
-    }</span><button class="go tb_btn" title="Start now"><span class="fas fa-play"></span></button>`;
+    e.innerHTML = `<span class="name">${esc(favText(x))}</span>\
+    <button class="go tb_btn" title="Start now">\
+      <span class="fas fa-play"></span>\
+    </button>\
+    <button class="cog tb_btn" title="Show config details">\
+      <span class="fas fa-cog"></span>\
+    </button>`;
     return e;
   };
   const updExes = () => {
@@ -473,7 +467,7 @@
   const go = (conf) => { // "Go" buttons in the favs or the "Go" button at the bottom
     const x = conf || sel;
     if (!validate(x)) return 0;
-    saveLastConf(x);
+    D.prf.defaultConfig(x.name);
     protocolLogFile = x.log;
     D.spawned = 0;
     try {
@@ -776,9 +770,6 @@
     }
     getLocalInterpreters();
     createPresets();
-    if (fs.existsSync(lcnFile)) {
-      D.conns.push(JSON.parse(fs.readFileSync(lcnFile).toString()));
-    }
     if (!D.conns.length) D.conns.push({ type: 'connect' });
     I.cn.onkeyup = (x) => {
       const k = D.util.fmtKey(x);
@@ -963,23 +954,33 @@
     //   q.ssh_key_dots.hidden = !k;
     //   sel.ssh_auth_type = q.ssh_auth_type.value;
     // };
+    const toggleConfig = (show) => {
+      const expanded = (show === undefined) ? !$(q.rhs).is(':visible') : !!show;
+      const { height } = D.elw.getContentBounds();
+      const newWidth = expanded ? winstate.launchWin.expandedWidth : winstate.launchWin.width;
+      winstate.launchWin.expanded = expanded;
+      const minwidth = winstate.dx + (expanded ? 885 : 400);
+      D.elw.setMinimumSize(minwidth, 400);
+      D.elw.setContentSize(newWidth, height);
+      setTimeout(() => { I.cn.toggleMaximize(expanded ? winstate.launchWin.width : 0); }, 10);
+      nodeRequire('electron').ipcRenderer.send('save-win', true);
+    };
+    toggleConfig(winstate.launchWin.expanded);
     D.conns.forEach((x) => { q.favs.appendChild(favDOM(x)); });
     $(q.favs).list().sortable({
       cursor: 'move',
       revert: true,
       axis: 'y',
-      items: '>:not(:first-child)',
       stop: save,
     })
-      .on('click', '.go', (e) => {
-        const t = $(e.target);
+      .on('click', '.go, .cog', (e) => {
+        const t = $(e.currentTarget);
         const i = t.parentsUntil(q.favs).last().index();
         $(q.favs).list('select', i);
-        q.go.click();
+        t.hasClass('go') ? q.go.click() : toggleConfig();
       })
       .on('keydown', (x) => {
         switch (D.util.fmtKey(x)) {
-          case 'Enter': q.go.hidden || q.go.click(); return !1;
           case 'Ctrl-N': q.neu.click(); return !1;
           case 'Delete': q.del.click(); return !1;
           case 'Ctrl-D': q.cln.click(); return !1;
@@ -996,11 +997,8 @@
         sel = u ? $sel[0].cnData : null;
         if (u) {
           $(':checkbox[name]', q.rhs).each((_, x) => { x.checked = !!+sel[x.name]; });
-          const preset = sel.preset || sel.name === lastconfig;
-          q.type_dtl.hidden = preset;
-          q.exes_dtl.hidden = preset;
-          q.del.disabled = sel.name === lastconfig;
-          q.def.disabled = sel.name === D.prf.defaultConfig();
+          q.type_dtl.hidden = sel.preset;
+          q.exes_dtl.hidden = sel.preset;
           q.type.value = sel.type || 'connect';
           q.subtype.value = sel.subtype || 'raw';
           interpretersSSH = sel.exes || [];
@@ -1034,36 +1032,15 @@
         }
       });
     { const [a] = q.favs.querySelectorAll('a'); a && a.focus(); }
-    q.def.onclick = () => {
-      D.prf.defaultConfig(sel.name);
-      q.def.disabled = true;
-      q.favs.insertBefore($sel[0], q.favs.firstChild);
-      save();
-    };
     q.neu.onclick = () => {
       if ($(q.rhs).is(':hidden')) {
-        q.tgl_cfg.click();
+        toggleConfig();
       }
       const $e = $(favDOM({}));
       q.favs.appendChild($e[0]);
       $(q.favs).list('select', $e.index());
       q.fav_name.focus();
     };
-    const toggleConfig = (evt) => {
-      const expanded = (evt === undefined) ? winstate.launchWin.expanded : !$(q.rhs).is(':visible');
-      const { height } = D.elw.getContentBounds();
-      const newWidth = expanded ? winstate.launchWin.expandedWidth : winstate.launchWin.width;
-      $(q.tgl_cfg_exp).toggle(!expanded);
-      $(q.tgl_cfg_col).toggle(expanded);
-      winstate.launchWin.expanded = expanded;
-      const minwidth = winstate.dx + (expanded ? 885 : 400);
-      D.elw.setMinimumSize(minwidth, 400);
-      D.elw.setContentSize(newWidth, height);
-      setTimeout(() => { I.cn.toggleMaximize(expanded ? winstate.launchWin.width : 0); }, 10);
-      nodeRequire('electron').ipcRenderer.send('save-win', true);
-    };
-    q.tgl_cfg.onclick = toggleConfig;
-    toggleConfig();
     q.cln.onclick = () => {
       if (sel) {
         const cnf = favDOM({
@@ -1124,15 +1101,17 @@
         return;
       }
     }
-    const defcfg = D.prf.defaultConfig();
-    let i = [...q.favs.children].findIndex((x) => x.cnData.name === defcfg);
-    if (i < 0) i = [...q.favs.children].findIndex((x) => x.cnData.preset);
+    const autoStart = process.env.RIDE_AUTO_START ? process.env.RIDE_AUTO_START === '1' : D.prf.autoStart();
+    let i = 0;
+    if (!autoStart) {
+      const defcfg = D.prf.defaultConfig();
+      i = [...q.favs.children].findIndex((x) => x.cnData.name === defcfg);
+      if (i < 0) i = [...q.favs.children].findIndex((x) => x.cnData.preset);
+      if (i < 0) i = 0;
+    }
     setTimeout(() => {
-      $(q.favs).list('select', Math.max(0, i));
-      const autoStart = process.env.RIDE_AUTO_START ? process.env.RIDE_AUTO_START === '1' : D.prf.autoStart();
-      if (autoStart) {
-        q.go.click();
-      }
+      $(q.favs).list('select', i);
+      if (autoStart) q.go.click();
     }, 1);
   };
 

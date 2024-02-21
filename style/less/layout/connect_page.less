@@ -50,13 +50,6 @@
     resize: vertical;
   }
 }
-#cn_tgl_cfg {
-  position: absolute;
-  top: 4px;
-  right: 2px;
-  width: 30px;
-  height: 30px;
-}
 #cn_favs {
   position: absolute;
   top: @CN_CONTENT_TOP;
@@ -69,8 +62,14 @@
 		padding: 0 2px 0 8px;
 		margin-bottom: 1px;
 		cursor: default;
+
     .go {
+      float: left;
+    }
+    .cog {
       float: right;
+    }    
+    .go, .cog {
       margin-top:2px;
       margin-right:5px;
       width:32px;
@@ -80,20 +79,7 @@
       font-size:1em;
       line-height:0px;
     }
-    &:first-child{
-      line-height: 100px;
-      font-size: 1.2em;
-      .go {
-        float: right;
-        margin-top:15px;
-        width:70px;
-        height:70px;
-        border-radius:2px;
-        padding:1px 6px;
-        font-size:2.5em;
-      }
-    }
-	}
+  }
   
   .name{
     font-weight:600;
@@ -111,6 +97,7 @@
   min-width: 400px;
 	overflow: hidden;
   padding:0px;
+  user-select: none;
 }
 #cn_rhs {
   min-width: 475px;
