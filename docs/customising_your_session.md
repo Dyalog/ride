@@ -95,9 +95,9 @@ Allows customisation of a variety of features.
 
         Select this to show the tooltip for a  glyph. When the cursor is positioned over or immediately after a glyph, the glyph is highlighted and information about it is displayed – this includes the name of the glyph, the keyboard shortcut to enter it, its monadic/dyadic name and examples of its syntax, arguments and result.
 
-    - Auto-start default configuration when RIDE starts
+    - Auto-start top-most configuration when RIDE starts
 
-        Ride starts with default configuration.
+        Skips the New Session screen by immediately selecting the first configuration
 
     - Auto PW
 

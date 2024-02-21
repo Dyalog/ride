@@ -16,29 +16,31 @@ When running a Dyalog Session through RIDE, the Session can be:
     - The operating system on which the remote interpreter is running is irrelevant – the instructions given in this chapter apply to the operating system on which RIDE is running (the two operating systems do not have to be the same).
     - The remote machine does not need to have RIDE installed but the Dyalog Session must be [RIDE-enabled](ridespecific_language_features.md/#ride_init).
 
-Normally, connections between RIDE and interpreters are initialised from the **New Session** window. The exception to this is zero-footprint use, which always requires Dyalog to be started first with suitable configuration parameters, after which RIDE will appear when you direct a web browser at the APL interpreter. See [Zero Footprint Ride](#zero-footprint-mode) for details.
+Normally, connections between RIDE and interpreters are initialised from the **New Session** screen. The exception to this is zero-footprint use, which always requires Dyalog to be started first with suitable configuration parameters, after which RIDE will appear when you direct a web browser at the APL interpreter. See [Zero Footprint Ride](#zero-footprint-mode) for details.
 
 
-## New Session screen
+## New Session window
 
-The **New Session** window is displayed when RIDE starts, unless disabled in the preferences (the default on macOS). This window allows simple and advanced use.
+The **New Session** screen is displayed when RIDE starts, unless "Auto-start top-most configuration when RIDE starts" has been selected from Preferences > General > Session (the default on macOS). This screen allows simple and advanced use.
 
 ### Simple usage
 
-Click 🞂 for the configuartion you want to launch. Configurations for all locally installed Dyalog versions are automatically shown. 
+Click the 🞂 icon for the configuartion you want to launch. Configurations for all locally installed Dyalog versions are automatically shown unless manually removed. 
 
 ### Advanced usage
 
-You can add new custom configurations (for example for remote interpreters) by clicking <kbd>NEW…</kbd>.
+<kbd>↑</kbd>/<kbd>↓</kbd> select the previous/next configuration. <kbd>Home</kbd>/<kbd>End</kbd> selects the first/last configuration. <kbd>Alt</kbd>+<kbd>↑</kbd>/<kbd>↓</kbd> moves the currently selected configuration up/down in the list. 
 
-You can modify an existing configuration by selecting it and clicking <img src="../img/screenshots/expand-CfgDetails.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 14px;" />.
+You can add new custom configurations (for example for remote interpreters) by clicking <kbd>NEW…</kbd> or modify an existing configuration by clicking its ⚙ icon.
 
 Either of these will open the advanced configuration pane where you can choose connection type and protocol, provide the interpreter with arguments and configuration parameters, and more.
 
 For example:
 
-* If you want RIDE to connect to a remote interpreter that has been started with the configuration parameter `RIDE_INIT="SERVE:*:4502"` then create a new configuration of type "Connect", then specify IP address and port 4502.
+* If you want RIDE to connect to a remote interpreter that has been started with the configuration parameter `RIDE_INIT="SERVE:*:4502"` then create a new configuration of type "Connect to an interpreter", then specify IP address and port 4502.
 * If you want RIDE to await an incoming connection from a remote interpreter that will be started with the configuration parameter `RIDE_INIT="CONNECT:jaypc.dyalog.bramley:4502"` (where your address is `jaypc.dyalog.bramley`) then choose "Listen", and specify port 4502.
+
+Click <kbd>OK</kbd> to connect, start, or begin listening — per the current settings.
 
 ## Zero-Footprint Mode
 

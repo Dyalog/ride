@@ -14,7 +14,7 @@ The Dyalog keyboard shortcuts that are supported by the RIDE are listed below; t
 | CAM* | Clear all trace/ stop/monitor |  | Remove any trace/stop/monitor flags (as set by `⎕TRACE` , `⎕STOP` and `⎕MONITOR` ) from all functions in the workspace |
 | CAW* | Close all windows |  | Close all open Edit and Trace windows |
 | CBP* | Clear stops for active object |  | Edit / Trace : Clear all breakpoints (resets `⎕STOP` ) on the function(s). |
-| CNC* | Connect |  | Display the [RIDE-Dyalog Session dialog box](starting_a_dyalog_session.md/#new-session-screen) |
+| CNC* | Connect |  | Display the [New Session screen](starting_a_dyalog_session.md/#new-session-screen) |
 | CP | Copy | Linux: <kbd>Ctrl</kbd> + <kbd>C</kbd> macOS: <kbd>⌘</kbd> + <kbd>C</kbd> Windows: <kbd>Ctrl</kbd> + <kbd>C</kbd> | Session / Edit : Copy highlighted block of text to the clipboard |
 | CT | Cut | Linux: <kbd>Ctrl</kbd> + <kbd>X</kbd> macOS: <kbd>⌘</kbd> + <kbd>X</kbd> Windows: <kbd>Ctrl</kbd> + <kbd>X</kbd> | Session / Edit : Delete highlighted block of text and place it on the clipboard |
 | DB | Backspace | <kbd>Backspace</kbd> | Delete character to left of cursor |

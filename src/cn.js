@@ -1088,7 +1088,7 @@
       save();
     });
     updExes();
-    document.title = 'RIDE-Dyalog Session';
+    document.title = 'New Session - RIDE';
     const conf = D.el.process.env.RIDE_CONF;
     if (conf) {
       const i = [...q.favs.children].findIndex((x) => x.cnData.name === conf);

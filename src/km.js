@@ -159,7 +159,7 @@
         });
       } else {
         $.err('The current session is remote.\nTo connect elsewhere or\nlaunch a local interpreter,\n'
-            + 'please use "Connect..." instead.', 'Cannot Start New Session');
+            + 'please use "New Session..." instead.', 'Cannot Start New Session');
       }
     },
     DK(me) { me.trigger('editor', 'editor.action.deleteLines'); },
