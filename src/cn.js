@@ -1101,16 +1101,17 @@
         return;
       }
     }
-    const defcfg = D.prf.defaultConfig();
-    let i = [...q.favs.children].findIndex((x) => x.cnData.name === defcfg);
-    if (i < 0) i = [...q.favs.children].findIndex((x) => x.cnData.preset);
+    const autoStart = process.env.RIDE_AUTO_START ? process.env.RIDE_AUTO_START === '1' : D.prf.autoStart();
+    let i = 0;
+    if (!autoStart) {
+      const defcfg = D.prf.defaultConfig();
+      i = [...q.favs.children].findIndex((x) => x.cnData.name === defcfg);
+      if (i < 0) i = [...q.favs.children].findIndex((x) => x.cnData.preset);
+      if (i < 0) i = 0;
+    }
     setTimeout(() => {
-      $(q.favs).list('select', Math.max(0, i));
-      const autoStart = process.env.RIDE_AUTO_START ? process.env.RIDE_AUTO_START === '1' : D.prf.autoStart();
-      if (autoStart) {
-        $(q.favs).list('select', 0);
-        q.go.click();
-      }
+      $(q.favs).list('select', i);
+      if (autoStart) q.go.click();
     }, 1);
   };
 
