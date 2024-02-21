@@ -27,9 +27,7 @@
   const pathNotFound = /The system cannot find the path specified/; // regex to check response from ssh exec
   const maxl = 1000;
   const cnFile = `${D.el.app.getPath('userData')}/connections.json`;
-  const lcnFile = `${D.el.app.getPath('userData')}/last_configuration.json`;
   let protocolLogFile;
-  const lastconfig = 'Last configuration';
   const defaultProtocolLogFile = path.join(
     D.el.app.getPath('temp'),
     `RIDE-${D.versionInfo.version}-${D.el.process.pid}.log`,
@@ -213,18 +211,10 @@
       if (!r) return;
     }
     const b = [...q.favs.children]
-      .map((x) => x.cnData)
-      .filter((x) => x.name !== lastconfig);
+      .map((x) => x.cnData);
     try {
       fs.writeFileSync(cnFile, JSON.stringify(b));
       D.conns_modified = +fs.statSync(cnFile).mtime;
-    } catch (e) {
-      toastr.error(`${e.name}: ${e.message}`, 'Save failed');
-    }
-  };
-  const saveLastConf = (conf) => {
-    try {
-      fs.writeFileSync(lcnFile, JSON.stringify({ ...conf, name: lastconfig }));
     } catch (e) {
       toastr.error(`${e.name}: ${e.message}`, 'Save failed');
     }
@@ -477,7 +467,7 @@
   const go = (conf) => { // "Go" buttons in the favs or the "Go" button at the bottom
     const x = conf || sel;
     if (!validate(x)) return 0;
-    saveLastConf(x);
+    D.prf.defaultConfig(x.name);
     protocolLogFile = x.log;
     D.spawned = 0;
     try {
@@ -780,9 +770,6 @@
     }
     getLocalInterpreters();
     createPresets();
-    if (fs.existsSync(lcnFile)) {
-      D.conns.push(JSON.parse(fs.readFileSync(lcnFile).toString()));
-    }
     if (!D.conns.length) D.conns.push({ type: 'connect' });
     I.cn.onkeyup = (x) => {
       const k = D.util.fmtKey(x);
@@ -1010,10 +997,8 @@
         sel = u ? $sel[0].cnData : null;
         if (u) {
           $(':checkbox[name]', q.rhs).each((_, x) => { x.checked = !!+sel[x.name]; });
-          const preset = sel.preset || sel.name === lastconfig;
-          q.type_dtl.hidden = preset;
-          q.exes_dtl.hidden = preset;
-          q.del.disabled = sel.name === lastconfig;
+          q.type_dtl.hidden = sel.preset;
+          q.exes_dtl.hidden = sel.preset;
           q.type.value = sel.type || 'connect';
           q.subtype.value = sel.subtype || 'raw';
           interpretersSSH = sel.exes || [];
@@ -1116,10 +1101,14 @@
         return;
       }
     }
+    const defcfg = D.prf.defaultConfig();
+    let i = [...q.favs.children].findIndex((x) => x.cnData.name === defcfg);
+    if (i < 0) i = [...q.favs.children].findIndex((x) => x.cnData.preset);
     setTimeout(() => {
-      $(q.favs).list('select', 0);
+      $(q.favs).list('select', Math.max(0, i));
       const autoStart = process.env.RIDE_AUTO_START ? process.env.RIDE_AUTO_START === '1' : D.prf.autoStart();
       if (autoStart) {
+        $(q.favs).list('select', 0);
         q.go.click();
       }
     }, 1);
