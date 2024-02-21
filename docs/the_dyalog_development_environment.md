@@ -8,6 +8,24 @@ Along the left edge of the interactive session is a narrow area that shows input
 
 Display of the session indicator margin can be toggled via `Edit > Preferences > General > Session > Show session margin`.
 
+### Multi-line Session Input
+
+Sessions allow multi-line input.
+
+!!!note
+    This optional feature is on by default. To disable it, set the DYALOG_LINEEDITOR_MODE configuration parameter to 0 (for more information, see the [Dyalog for macOS Installation and Configuration Guide](https://docs.dyalog.com/latest/Dyalog%20for%20macOS%20Installation%20and%20Configuration%20Guide.pdf)).
+
+With multi-line input enabled:
+* grouped lines are syntax coloured in their entirety.
+* if a change is made to one or more lines in a group, then the whole group is marked to be re-executed when ER is pressed.
+* lines can be inserted into a group with the IL keystroke.
+* the current line can be cleared with the EL keystroke. (It is not possible to UNDO a delete line in the session).
+* if the interpreter detects an un-terminated control structure or dfn on a single line of input it:
+  * enters a new multi-line mode which accumulates lines until the control structure or dfn is terminated.
+  * executes a completed block of lines as if it were within a niladic defined function.
+
+Multi-line input can be terminated by correctly terminating the input. For example, if you started a block of multi-line input with a `{` character, then a matching and similarly nested `}` character terminates it. Similarly, if you started a block of multi-line input with `:If` then a matching and similarly nested `:EndIf` terminates it. Issuing a weak interrupt aborts the multi-line input and all changes are lost.
+
 ## Status Bar
 
 Below it, you will find the status bar which provides situational awareness. Items turn blue if non-default:
