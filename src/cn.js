@@ -1113,7 +1113,6 @@
     if (!autoStart) {
       const defcfg = D.prf.defaultConfig();
       i = [...q.favs.children].findIndex((x) => x.cnData.name === defcfg);
-      if (i < 0) i = [...q.favs.children].findIndex((x) => x.cnData.preset);
       if (i < 0) i = 0;
     }
     setTimeout(() => {
