@@ -182,7 +182,7 @@
     formatInterpreters(interpreters);
   };
   const createPresets = () => {
-    const prCr = D.prf.presetsCreated();
+    const prCr = [...D.prf.presetsCreated()];
     const newInterpreters = interpreters.filter((x) => {
       const inConns = D.conns.findIndex((y) => y.preset && y.exe === x.exe) >= 0;
       const inPrCr = prCr.indexOf(x.exe) >= 0;
@@ -743,6 +743,12 @@
     + '\n  -'
     + '\n  &Quit=QIT'
     + ''
+    + '\n&File'
+    + '\n  New configuration=CNNW'
+    + '\n  Clone configuration=CNCL'
+    + '\n  Delete configuration=CNDL'
+    + '\n  -'
+    + '\n  Re-create preset configurations=CNCP'
     + '\n&Edit'
     + '\n  Undo=UND'
     + '\n  Redo=RDO'
@@ -1044,7 +1050,7 @@
         }
       });
     { const [a] = q.favs.querySelectorAll('a'); a && a.focus(); }
-    q.neu.onclick = () => {
+    D.configNew = () => {
       if ($(q.rhs).is(':hidden')) {
         toggleConfig();
       }
@@ -1053,7 +1059,8 @@
       $(q.favs).list('select', $e.index());
       q.fav_name.focus();
     };
-    q.cln.onclick = () => {
+    q.neu.onclick = D.configNew;
+    D.configClone = () => {
       if (sel) {
         const cnf = favDOM({
           ...sel,
@@ -1066,7 +1073,8 @@
         q.fav_name.focus();
       }
     };
-    q.del.onclick = () => {
+    q.cln.onclick = D.configClone;
+    D.configDelete = () => {
       const n = $sel.length;
       n && $.confirm(
         `Are you sure you want to delete\nthe selected configuration${n > 1 ? 's' : ''}?`,
@@ -1075,12 +1083,15 @@
           if (x) {
             const i = Math.min($sel.eq(0).index(), q.favs.children.length - 1);
             $sel.remove();
+            const connsInd = D.conns.indexOf($sel[0].cnData);
+            if (connsInd >= 0) D.conns.splice(connsInd, 1);
             save();
             $(q.favs).list('select', i);
           }
         },
       );
     };
+    q.del.onclick = D.configDelete;
     q.go.onclick = () => { go(); return !1; };
     const a = q.rhs.querySelectorAll('input,textarea');
     for (let i = 0; i < a.length; i++) if (/^text(area)?$/.test(a[i].type)) D.util.elastic(a[i]);
@@ -1125,7 +1136,16 @@
       if (autoStart) q.go.click();
     }, 1);
   };
-
+  D.recreatePresets = () => {
+    D.prf.presetsCreated([]);
+    const hasCreated = createPresets();
+    if (!hasCreated) return;
+    const favItems = [...q.favs.children].map((x) => x.cnData);
+    D.conns.forEach((x) => {
+      if (!favItems.includes(x)) q.favs.appendChild(favDOM(x));
+    });
+    save();
+  };
   module.exports = () => {
     D.send = (x, y) => {
       if (D.ide && !D.ide.promptType
