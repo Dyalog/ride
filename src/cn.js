@@ -195,9 +195,13 @@
       exe: int.exe,
       preset: true,
     }));
-    prCr.push(...newPresets.map((x) => x.exe));
-    D.prf.presetsCreated(prCr);
-    D.conns.push(...newPresets);
+    const hasCreated = newPresets.length > 0;
+    if (hasCreated) {
+      prCr.push(...newPresets.map((x) => x.exe));
+      D.prf.presetsCreated(prCr);
+      D.conns.push(...newPresets);
+    }
+    return hasCreated;
   };
   const save = () => {
     const names = $('.name', q.favs).toArray().map((x) => x.innerText);
@@ -776,8 +780,10 @@
       D.conns_modified = +fs.statSync(cnFile).mtime;
     }
     getLocalInterpreters();
-    createPresets();
+    const hasCreated = createPresets();
     if (!D.conns.length) D.conns.push({ type: 'connect' });
+    D.conns.forEach((x) => { q.favs.appendChild(favDOM(x)); });
+    if (hasCreated) save();
     I.cn.onkeyup = (x) => {
       const k = D.util.fmtKey(x);
       if (D.el && k === 'F12') {
@@ -973,7 +979,6 @@
       nodeRequire('electron').ipcRenderer.send('save-win', true);
     };
     toggleConfig(winstate.launchWin.expanded);
-    D.conns.forEach((x) => { q.favs.appendChild(favDOM(x)); });
     $(q.favs).list().sortable({
       cursor: 'move',
       revert: true,
