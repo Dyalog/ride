@@ -182,15 +182,22 @@
     formatInterpreters(interpreters);
   };
   const createPresets = () => {
-    D.conns.push(...interpreters.filter((x) => (
-      x.supported && D.conns.findIndex((y) => y.preset && y.exe === x.exe) < 0
-    )).map((int) => ({
+    const prCr = D.prf.presetsCreated();
+    const newInterpreters = interpreters.filter((x) => {
+      const inConns = D.conns.findIndex((y) => y.preset && y.exe === x.exe) >= 0;
+      const inPrCr = prCr.indexOf(x.exe) >= 0;
+      return x.supported && !inConns && !inPrCr;
+    });
+    const newPresets = newInterpreters.map((int) => ({
       name: int.name,
       type: 'start',
       subtype: 'raw',
       exe: int.exe,
       preset: true,
-    })));
+    }));
+    prCr.push(...newPresets.map((x) => x.exe));
+    D.prf.presetsCreated(prCr);
+    D.conns.push(...newPresets);
   };
   const save = () => {
     const names = $('.name', q.favs).toArray().map((x) => x.innerText);

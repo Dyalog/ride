@@ -49,6 +49,7 @@ D.prf = {};
   ['persistentHistorySize',100], // max lines to save
   ['prefixKey',          '`'],
   ['prefixMaps',         {}],//per-locale strings of pairs of characters - diffs from the default map for that locale
+  ['presetsCreated',     []],
   ['pfkeys',             [...Array(49)].map(() => '')], //command strings for pfkeys
   ['renderLineHighlight','none'], // highlight current line
   ['sbar',               1], //show status bar
