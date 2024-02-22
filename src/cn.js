@@ -181,24 +181,6 @@
     } catch (e) { console.error(e); }
     formatInterpreters(interpreters);
   };
-  const createPresets = () => {
-    const prCr = D.prf.presetsCreated();
-    const newInterpreters = interpreters.filter((x) => {
-      const inConns = D.conns.findIndex((y) => y.preset && y.exe === x.exe) >= 0;
-      const inPrCr = prCr.indexOf(x.exe) >= 0;
-      return x.supported && !inConns && !inPrCr;
-    });
-    const newPresets = newInterpreters.map((int) => ({
-      name: int.name,
-      type: 'start',
-      subtype: 'raw',
-      exe: int.exe,
-      preset: true,
-    }));
-    prCr.push(...newPresets.map((x) => x.exe));
-    D.prf.presetsCreated(prCr);
-    D.conns.push(...newPresets);
-  };
   const save = () => {
     const names = $('.name', q.favs).toArray().map((x) => x.innerText);
     const dups = names.filter((a, i) => names.indexOf(a) !== i);
@@ -225,6 +207,28 @@
     } catch (e) {
       toastr.error(`${e.name}: ${e.message}`, 'Save failed');
     }
+  };
+  const createPresets = () => {
+    const prCr = D.prf.presetsCreated();
+    const newInterpreters = interpreters.filter((x) => {
+      const inConns = D.conns.findIndex((y) => y.preset && y.exe === x.exe) >= 0;
+      const inPrCr = prCr.indexOf(x.exe) >= 0;
+      return x.supported && !inConns && !inPrCr;
+    });
+    const newPresets = newInterpreters.map((int) => ({
+      name: int.name,
+      type: 'start',
+      subtype: 'raw',
+      exe: int.exe,
+      preset: true,
+    }));
+    const hasCreated = newPresets.length > 0;
+    if (hasCreated) {
+      prCr.push(...newPresets.map((x) => x.exe));
+      D.prf.presetsCreated(prCr);
+      D.conns.push(...newPresets);
+    }
+    return hasCreated;
   };
   const favText = (x) => x.name || 'unnamed';
   const favDOM = (x) => {
@@ -776,8 +780,10 @@
       D.conns_modified = +fs.statSync(cnFile).mtime;
     }
     getLocalInterpreters();
-    createPresets();
+    const hasCreated = createPresets();
     if (!D.conns.length) D.conns.push({ type: 'connect' });
+    D.conns.forEach((x) => { q.favs.appendChild(favDOM(x)); });
+    if (hasCreated) save();
     I.cn.onkeyup = (x) => {
       const k = D.util.fmtKey(x);
       if (D.el && k === 'F12') {
@@ -973,7 +979,6 @@
       nodeRequire('electron').ipcRenderer.send('save-win', true);
     };
     toggleConfig(winstate.launchWin.expanded);
-    D.conns.forEach((x) => { q.favs.appendChild(favDOM(x)); });
     $(q.favs).list().sortable({
       cursor: 'move',
       revert: true,
@@ -1113,7 +1118,6 @@
     if (!autoStart) {
       const defcfg = D.prf.defaultConfig();
       i = [...q.favs.children].findIndex((x) => x.cnData.name === defcfg);
-      if (i < 0) i = [...q.favs.children].findIndex((x) => x.cnData.preset);
       if (i < 0) i = 0;
     }
     setTimeout(() => {
