@@ -7,7 +7,7 @@
 D.cmds = [
   /* eslint-disable */
   //code description                default keys
-  ['ABT','About Dyalog',            ['Shift+F1']],
+  ['ABT','About RIDE',              ['Shift+F1']],
   ['AC', 'Align comments',          []],
   ['AO', 'Comment out lines',       []],
   ['ASW', 'Auto Status',            []],

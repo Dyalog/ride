@@ -736,8 +736,8 @@
   global.go = go;
   const setUpMenu = () => {
     D.InitHelp();
-    const m = 'Dyalog'
-    + '\n  About Dyalog=ABT'
+    const m = 'RIDE'
+    + '\n  About RIDE=ABT'
     + '\n  -'
     + '\n  Preferences=PRF'
     + '\n  -'
