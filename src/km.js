@@ -95,6 +95,10 @@
       });
       if (D.ide.dead) window.close();
     },
+    CNNW() { D.configNew(); },
+    CNCL() { D.configClone(); },
+    CNDL() { D.configDelete(); },
+    CNCP() { D.recreatePresets(); },
     DHI() {
       openURI(D.hlp.INDEX);
     },
