@@ -1,9 +1,9 @@
 {
-  "name": "ride45",
-  "version": "4.5.0",
+  "name": "ride46",
+  "version": "4.6.0",
   "private": true,
   "main": "main.js",
-  "productName": "Ride-4.5",
+  "productName": "Ride-4.6",
   "scripts": {
     "start": "electron .",
     "dev": "npm run css && npm run start",
