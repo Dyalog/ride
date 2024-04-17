@@ -2,9 +2,9 @@
 
 
 !!!note
-    RIDE is built on the [Electron](https://www.electronjs.org/) framework. To be able to install the current version of RIDE, your platform must support the Electron major release 26. Consult Electron's [platform support documentation](https://github.com/electron/electron/tree/26-x-y?tab=readme-ov-file#platform-support) if in any doubt.
+    RIDE is built on the [Electron](https://www.electronjs.org/) framework. To install this version of RIDE, your platform must support the Electron major release 26. Consult Electron's [platform support documentation](https://github.com/electron/electron/tree/26-x-y?tab=readme-ov-file#platform-support) if in any doubt.
 
-    RIDE can connect to version 15.0 or later of the Dyalog interpreter.
+    This version of RIDE can connect to version 15.0 or later of the Dyalog interpreter.
 
 ## Font and Keyboard Support
 
@@ -34,7 +34,7 @@ A RIDE shortcut is added to the desktop.
 
 RIDE requires macOS High Sierra (10.13) or later.
 
-The RIDE is the default UI for Dyalog on macOS and is installed at the same time as Dyalog (see the [Dyalog for macOS Installation and Configuration Guide](https://docs.dyalog.com/latest/Dyalog%20for%20macOS%20Installation%20and%20Configuration%20Guide.pdf)); no further installation is required.
+RIDE is the default UI for Dyalog on macOS and is installed at the same time as Dyalog (see the [Dyalog for macOS Installation and Configuration Guide](https://docs.dyalog.com/latest/Dyalog%20for%20macOS%20Installation%20and%20Configuration%20Guide.pdf)); no further installation is required.
 
 You can also install RIDE as a separate, stand-alone, product, for example to work exclusively with remote APL interpreters:
 
