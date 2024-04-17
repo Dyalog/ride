@@ -4,7 +4,7 @@
 !!!note
     RIDE is built on the [Electron](https://www.electronjs.org/) framework. To be able to install the current version of RIDE, your platform must support the Electron major release 26. Consult Electron's [platform support documentation](https://github.com/electron/electron/tree/26-x-y?tab=readme-ov-file#platform-support) if in any doubt.
 
-    RIDE can connect to version 15+ of the Dyalog interpreter.
+    RIDE can connect to version 15.0 or later of the Dyalog interpreter.
 
 ## Font and Keyboard Support
 
@@ -23,7 +23,7 @@ For details, see [Zero Footprint RIDE](starting_a_dyalog_session.md/#zero-footpr
 
 ## Linux
 
-RIDE requires Debian 8+, Fedora 24.04+, or Ubuntu 14.04+. Distributions built on top of the above should also work, provided that they have libnss version 3.26 or newer.
+RIDE requires Debian 8, Fedora 24.04, or Ubuntu 14.04 (or later). Distributions built on top of the above should also work, provided that they have libnss version 3.26 or newer.
 
 1. Download the **.deb** or **.rpm** file (whichever is appropriate for your Linux distribution) from the [RIDE releases page](https://github.com/Dyalog/ride/releases). If your Linux distribution does not support either **.deb** or **.rpm** files, then please contact support@dyalog.com.
 2. From the command line, use standard installation commands to install the package.
@@ -32,7 +32,7 @@ A RIDE shortcut is added to the desktop.
 
 ## macOS
 
-RIDE requires macOS High Sierra (10.13) or better.
+RIDE requires macOS High Sierra (10.13) or later.
 
 The RIDE is the default UI for Dyalog on macOS and is installed at the same time as Dyalog (see the [Dyalog for macOS Installation and Configuration Guide](https://docs.dyalog.com/latest/Dyalog%20for%20macOS%20Installation%20and%20Configuration%20Guide.pdf)); no further installation is required.
 
@@ -48,7 +48,7 @@ Starting RIDE will add RIDE's icon to the temporary "Recently Used Apps" area to
 
 ## Windows
 
-RIDE requires Windows 10 or newer.
+RIDE requires Windows 10 or later.
 
 1. Download the **.zip** file from the [RIDE releases page](https://github.com/Dyalog/ride/releases).
 2. Unzip the downloaded **.zip** file, placing the `setup_ride.exe` and `setup_ride.msi` files in the same location as each other.
