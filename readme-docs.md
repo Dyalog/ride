@@ -1,5 +1,14 @@
 # Building the docs
 
+## Pre-flight
+
+If you're about to push out a new docs release, check the following first:
+
+1. Are the version statements in the "installation.md" page still valid? If the version of Electron has been bumped, this page must be checked.
+
+
+## Build process
+
 The documentation for Ride lives at https://dyalog.github.io/ride. It is a GitHub Pages site, built with [mkdocs](https://www.mkdocs.org/), using the [material theme](https://squidfunk.github.io/mkdocs-material/).
 
 Install the following components:
