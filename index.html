@@ -7,7 +7,9 @@
     <meta http-equiv="refresh" content="1; url=4.5/" />
   </noscript>
   <script>
-    window.location.replace("4.5/" + window.location.hash);
+    window.location.replace(
+      "4.5/" + window.location.search + window.location.hash
+    );
   </script>
 </head>
 <body>
