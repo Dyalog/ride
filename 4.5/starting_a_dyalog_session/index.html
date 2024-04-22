@@ -12,7 +12,7 @@
         <link rel="prev" href="../installation/">
       
       
-        <link rel="next" href="../the_dyalog_development_environment/">
+        <link rel="next" href="../ride_in_the_browser/">
       
       
       <link rel="icon" href="../img/favicon-32.png">
@@ -375,34 +375,30 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#zero-footprint-mode" class="md-nav__link">
-    <span class="md-ellipsis">
-      Zero-Footprint Mode
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Zero-Footprint Mode">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#accessing-zero-footprint-ride-from-a-browser" class="md-nav__link">
-    <span class="md-ellipsis">
-      Accessing Zero-Footprint RIDE from a browser
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
     </ul>
   
 </nav>
       
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ride_in_the_browser/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    RIDE in the browser
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -626,30 +622,6 @@
   
 </li>
       
-        <li class="md-nav__item">
-  <a href="#zero-footprint-mode" class="md-nav__link">
-    <span class="md-ellipsis">
-      Zero-Footprint Mode
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Zero-Footprint Mode">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#accessing-zero-footprint-ride-from-a-browser" class="md-nav__link">
-    <span class="md-ellipsis">
-      Accessing Zero-Footprint RIDE from a browser
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
     </ul>
   
 </nav>
@@ -703,23 +675,6 @@
 <li>If you want RIDE to await an incoming connection from a remote interpreter that will be started with the configuration parameter <code>RIDE_INIT="CONNECT:jaypc.dyalog.bramley:4502"</code> (where your address is <code>jaypc.dyalog.bramley</code>) then choose "Listen", and specify port 4502.</li>
 </ul>
 <p>Click <kbd>OK</kbd> to connect, start, or begin listening — per the current settings.</p>
-<h2 id="zero-footprint-mode">Zero-Footprint Mode</h2>
-<p>Dyalog can serve RIDE to any modern web browser – this is known as "zero-footprint" operation since RIDE is not installed on the client machine but is downloaded by the web browser on demand. The advantage is that an APL session can be monitored and maintained from any device without installing anything.</p>
-<p>This mode has the following limitations:</p>
-<ul>
-<li>You can only interact with the APL interpreter that is serving you; the <strong>New Session</strong> window is not available.</li>
-<li>Preferences are persisted in browser storage using cookies.</li>
-<li>Window captions cannot be controlled.</li>
-<li>The floating <strong>Trace/Edit</strong> windows option is not available.</li>
-</ul>
-<h3 id="accessing-zero-footprint-ride-from-a-browser">Accessing Zero-Footprint RIDE from a browser</h3>
-<ol>
-<li>If on Windows, <a href="../installation/#windows">install zero-footprint RIDE</a></li>
-<li>Set the <code>RIDE_INIT</code> configuration parameter to <code>HTTP:address:port</code> (see <a href="../ridespecific_language_features/#ride_init">RIDE Init</a>), for example, <code>RIDE_INIT=HTTP:*:8080</code>.</li>
-<li>Start a Dyalog session.</li>
-<li>Navigate to <code>http://&lt;address&gt;:&lt;port&gt;</code>, for example, <code>http://10.0.38.1:8080</code>.</li>
-</ol>
-<p>On non-Windows platforms, the interpreter expects to find zero-footprint RIDE installed at the <code>[DYALOG]/RIDEapp</code> directory; this removes the need to include the <code>HTTPDIR</code> field in a <a href="../installation/#configuration-ini-file">configuration file</a>.</p>
 
 
 

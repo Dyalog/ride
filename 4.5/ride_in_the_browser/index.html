@@ -9,10 +9,10 @@
       
       
       
-        <link rel="prev" href="../the_dyalog_development_environment/">
+        <link rel="prev" href="../starting_a_dyalog_session/">
       
       
-        <link rel="next" href="../working_in_a_dyalog_session/">
+        <link rel="next" href="../the_dyalog_development_environment/">
       
       
       <link rel="icon" href="../img/favicon-32.png">
@@ -20,7 +20,7 @@
     
     
       
-        <title>Edit and Trace Windows - RIDE User Guide</title>
+        <title>RIDE in the browser - RIDE User Guide</title>
       
     
     
@@ -82,7 +82,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#edit-and-trace-windows" class="md-skip">
+        <a href="#ride-in-the-browser" class="md-skip">
           Skip to content
         </a>
       
@@ -121,7 +121,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Edit and Trace Windows
+              RIDE in the browser
             
           </span>
         </div>
@@ -314,10 +314,30 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../ride_in_the_browser/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    RIDE in the browser
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   <span class="md-ellipsis">
@@ -326,6 +346,35 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#accessing-zero-footprint-ride-from-a-browser" class="md-nav__link">
+    <span class="md-ellipsis">
+      Accessing Zero-Footprint RIDE from a browser
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -354,30 +403,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  <span class="md-ellipsis">
-    Edit and Trace Windows
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../input_windows/" class="md-nav__link">
         
   
   <span class="md-ellipsis">
@@ -386,53 +415,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table of contents
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#edit" class="md-nav__link">
-    <span class="md-ellipsis">
-      Edit
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#trace" class="md-nav__link">
-    <span class="md-ellipsis">
-      Trace
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#navigating-the-windows" class="md-nav__link">
-    <span class="md-ellipsis">
-      Navigating the Windows
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -584,27 +566,9 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#edit" class="md-nav__link">
+  <a href="#accessing-zero-footprint-ride-from-a-browser" class="md-nav__link">
     <span class="md-ellipsis">
-      Edit
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#trace" class="md-nav__link">
-    <span class="md-ellipsis">
-      Trace
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#navigating-the-windows" class="md-nav__link">
-    <span class="md-ellipsis">
-      Navigating the Windows
+      Accessing Zero-Footprint RIDE from a browser
     </span>
   </a>
   
@@ -628,40 +592,23 @@
   
 
 
-<h1 id="edit-and-trace-windows">Edit and Trace Windows</h1>
-<h2 id="edit">Edit</h2>
-<p>An <strong>Edit</strong> window can be opened in any of the following ways:</p>
+<h1 id="ride-in-the-browser">RIDE in the browser</h1>
+<p>Dyalog can serve RIDE to any modern web browser – this is known as "zero-footprint" operation since RIDE is not installed on the client machine but is downloaded by the web browser on demand. The advantage is that an APL session can be monitored and maintained from any device without installing anything.</p>
+<p>This mode has the following limitations:</p>
 <ul>
-<li>Enter <code>)ED &lt;item name&gt;</code> in the interactive session</li>
-<li>Enter <code>⎕ED '&lt;item name&gt;'</code> in the interactive session</li>
-<li>Press <kbd>Shift</kbd>+<kbd>Enter</kbd> (can be configured via <code>Edit &gt; Preferences&gt; Shortcuts &gt; ED</code>) while the text cursor is on or adjacent to any item name</li>
-<li>Double-click on or adjacent to an item name (can be toggled via <code>Edit &gt; Preferences &gt; Trace/Edit &gt; Double click to edit</code>)</li>
+<li>You can only interact with the APL interpreter that is serving you; the <strong>New Session</strong> window is not available.</li>
+<li>Preferences are persisted in browser storage using cookies.</li>
+<li>Window captions cannot be controlled.</li>
+<li>The floating <strong>Trace/Edit</strong> windows option is not available.</li>
 </ul>
-<p>If the object name does not already exist, then it becomes a function or operator. Different types can be explicitly specified using the <code>)ED</code> or <code>⎕ED</code> options – see <code>)ED</code> or <code>⎕ED</code> in the <a href="https://docs.dyalog.com/latest/Dyalog%20APL%20Language%20Reference%20Guide.pdf">Dyalog APL Language Reference Guide</a>.</p>
-<p>A <strong>Trace</strong> window can be temporarily changed into an <strong>Edit</strong> window by pressing <kbd>Shift</kbd>+<kbd>Enter</kbd> or clicking <img src="../img/screenshots/i_intext_editname.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 12px;" /> while the text cursor is not on or adjacent to any name.</p>
-<p>To save your changes and exit the <strong>Edit</strong> window, press <kbd>Esc</kbd> (can be configured via <code>Edit &gt; Preferences&gt; Shortcuts &gt; EP</code>) or click <img src="../img/screenshots/i_intext_quit.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 14px;" />.</p>
-<p>To exit the <strong>Edit</strong> window without saving, press <kbd>Shift</kbd>+<kbd>Esc</kbd> (can be configured via <code>Edit &gt; Preferences&gt; Shortcuts &gt; QT</code>).</p>
-<h2 id="trace">Trace</h2>
-<p>The <strong>Trace</strong> window aids debugging by enabling you to step through your code line by line, display variables in <strong>Edit</strong> windows and watch them change as the execution progresses.</p>
-<p>A <strong>Trace</strong> window can be opened from the <strong>Session</strong> window by pressing <kbd>Ctrl</kbd>+<kbd>Enter</kbd> (can be configured via <code>Edit &gt; Preferences &gt; Shortcuts &gt; TC</code>) after typing an expression.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>By default, Dyalog is also configured to initiate an automatic trace whenever an error occurs, that is, the <strong>Trace</strong> window opens and becomes the active window and the line that caused the execution to suspend is selected. This is controlled by the interpreter configuration parameter <code>TRACE_ON_ERROR</code>. For information on configuration parameters, see the Dyalog Installation and Configuration Guide for your operating system:</p>
-<ul>
-<li><a href="https://docs.dyalog.com/latest/Dyalog%20for%20macOS%20Installation%20and%20Configuration%20Guide.pdf">macOS Installation and Configuration Guide</a></li>
-<li><a href="https://docs.dyalog.com/latest/Dyalog%20for%20Microsoft%20Windows%20Installation%20and%20Configuration%20Guide.pdf">Microsoft Windows Installation and Configuration Guide</a></li>
-<li><a href="https://docs.dyalog.com/latest/Dyalog%20for%20UNIX%20Installation%20and%20Configuration%20Guide.pdf">UNIX Installation and Configuration Guide</a></li>
-</ul>
-</div>
-<p>To resume execution, press the |&gt; button (can be given a keyboard shortcut via <code>Edit &gt; Preferences&gt; Shortcuts &gt; RM</code>).</p>
-<p>To resume execution until the current function returns, press the |¯\. button (can be given a keyboard shortcut via <code>Edit &gt; Preferences&gt; Shortcuts &gt; BH</code>).</p>
-<p>To cut back the stack one level, press <kbd>Esc</kbd> (can be configured via Edit &gt; Preferences&gt; Shortcuts &gt; <code>EP</code>) or click <img src="../img/screenshots/i_intext_quit.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 14px;" />.</p>
-<h2 id="navigating-the-windows">Navigating the Windows</h2>
-<p>New Edit and Trace windows can be floating rather than docked by selecting the <strong>Floating windows</strong> checkbox in the <a href="../customising_your_session/#windows-tab">Trace/Edit</a> of the <strong>Preferences</strong> dialog box.</p>
-<p>Docked or not, the <strong>Session</strong>, <strong>Edit</strong> and <strong>Trace</strong> windows form a closed loop for the purpose of navigation:
-- to make the next window in this loop the active window, press <kbd>Tab</kbd> (can be configured via <code>Edit &gt; Preferences&gt; Shortcuts &gt; TB</code>)
-- to make the previous window in this loop the active window, press <kbd>Shift</kbd>+<kbd>Tab</kbd> (can be configured via <code>Edit &gt; Preferences&gt; Shortcuts &gt; BT</code>)</p>
-<p>You can close all <strong>Trace/Edit</strong> windows without clearing the stack by selecting the <code>Window &gt; Close All Windows</code> menu option or using <a href="https://help.dyalog.com/latest/index.htm#Language/I%20Beam%20Functions/Close%20All%20Windows.htm?Highlight=2023%E2%8C%B6">2023⌶</a>.</p>
+<h2 id="accessing-zero-footprint-ride-from-a-browser">Accessing Zero-Footprint RIDE from a browser</h2>
+<ol>
+<li>If on Windows, <a href="../installation/#windows">install zero-footprint RIDE</a></li>
+<li>Set the <code>RIDE_INIT</code> configuration parameter to <code>HTTP:address:port</code> (see <a href="../ridespecific_language_features/#ride_init">RIDE Init</a>), for example, <code>RIDE_INIT=HTTP:*:8080</code>.</li>
+<li>Start a Dyalog session.</li>
+<li>Navigate to <code>http://&lt;address&gt;:&lt;port&gt;</code>, for example, <code>http://10.0.38.1:8080</code>.</li>
+</ol>
+<p>On non-Windows platforms, the interpreter expects to find zero-footprint RIDE installed at the <code>[DYALOG]/RIDEapp</code> directory; this removes the need to include the <code>HTTPDIR</code> field in a <a href="../installation/#configuration-ini-file">configuration file</a>.</p>
 
 
 
