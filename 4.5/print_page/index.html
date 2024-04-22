@@ -941,12 +941,12 @@
 </ul>
 <h2 id="ride_in_the_browser-accessing-zero-footprint-ride-from-a-browser">Accessing Zero-Footprint RIDE from a browser</h2>
 <ol>
-<li>If on Windows, <a href="#installation-windows">install zero-footprint RIDE</a></li>
+<li>If Dyalog is running on Windows, <a href="#installation-windows">install zero-footprint RIDE</a></li>
 <li>Set the <code>RIDE_INIT</code> configuration parameter to <code>HTTP:address:port</code> (see <a href="#ridespecific_language_features-ride_init">RIDE Init</a>), for example, <code>RIDE_INIT=HTTP:*:8080</code>.</li>
 <li>Start a Dyalog session.</li>
 <li>Navigate to <code>http://&lt;address&gt;:&lt;port&gt;</code>, for example, <code>http://10.0.38.1:8080</code>.</li>
 </ol>
-<p>On non-Windows platforms, the interpreter expects to find zero-footprint RIDE installed at the <code>[DYALOG]/RIDEapp</code> directory; this removes the need to include the <code>HTTPDIR</code> field in a <a href="#installation-configuration-ini-file">configuration file</a>.</p></section><section class="print-page" id="the_dyalog_development_environment"><h1 id="the_dyalog_development_environment-the-dyalog-development-environment">The Dyalog Development Environment</h1>
+<p>If Dyalog is running on non-Windows platforms, the interpreter expects to find zero-footprint RIDE installed at the <code>[DYALOG]/RIDEapp</code> directory; this removes the need to include the <code>HTTPDIR</code> field in a <a href="#installation-configuration-ini-file">configuration file</a>.</p></section><section class="print-page" id="the_dyalog_development_environment"><h1 id="the_dyalog_development_environment-the-dyalog-development-environment">The Dyalog Development Environment</h1>
 <h2 id="the_dyalog_development_environment-interactive-session-window">Interactive Session Window</h2>
 <p>RIDE's main interface is an interactive session, where you enter expressions and the interpreter prints results.</p>
 <p>Along the left edge of the interactive session is a narrow area that shows input/output information. It indicates modified lines and code blocks (which will be executed next time you press <kbd>Enter</kbd>) and indicates which output lines belong together.</p>
@@ -1140,7 +1140,7 @@
 <li><code>SERVE</code> – listen for incoming connections from a RIDE client</li>
 <li><code>CONNECT</code> – attempt to connect to the specified RIDE client and end the session if this fails</li>
 <li><code>POLL</code> – attempt to connect to the specified RIDE client at regular intervals and reconnect if the connection is lost</li>
-<li><code>HTTP</code> – listen for incoming connections from the web browser, via <a href="#ride_in_the_browser">zero footprint RIDE</a></li>
+<li><code>HTTP</code> – listen for incoming connections from the web browser, via <a href="#ride_in_the_browser">Zero Footprint RIDE</a></li>
 <li><code>CONFIG</code> – retrieve values to use from a .ini <a href="#installation-configuration-ini-file">configuration file</a></li>
 </ul>
 <div class="admonition note">
@@ -1190,7 +1190,7 @@
 <p>To attempt to connect to a RIDE client running on a different machine (with IPv4 address 10.0.38.1 and listening on port 4502) and end the Session if unable to do so: <code>RIDE_INIT=CONNECT:10.0.38.1:4502</code></p>
 <p>To establish a connection using the settings in the ride_sample.ini file:<code>RIDE_INIT=CONFIG:C:/tmp/ride_sample.ini</code></p>
 <p>To attempt to establish a secure connection with a RIDE client running on a different machine (with IPv4 address 10.0.38.1 and listening on port 4502) using certificate details specified in the ride_sample.ini file: <code>RIDE_INIT=CONFIG:C:\tmp\ride_sample.ini,CONNECT:10.0.38.1:4502</code> or <code>RIDE_INIT=CONNECT:10.0.38.1:4502,CONFIG:C:\tmp\ride_sample.ini</code></p>
-<p>With Dyalog and RIDE installed on a machine with IPv4 address 10.0.38.1, to listen on port 4502 for connection requests from a web browser running on any machine (<a href="#starting_a_dyalog_session-the-zero-footprint-ride">Zero Footprint RIDE</a>): <code>RIDE_INIT=HTTP:*:4502</code></p>
+<p>With Dyalog and RIDE installed on a machine with IPv4 address 10.0.38.1, to listen on port 4502 for connection requests from a web browser running on any machine (<a href="#ride_in_the_browser">RIDE in the browser</a>): <code>RIDE_INIT=HTTP:*:4502</code></p>
 <p>To open the Zero Footprint RIDE in a web browser on:</p>
 <ul>
 <li>the local machine: URL = <code>http://localhost:4502</code></li>

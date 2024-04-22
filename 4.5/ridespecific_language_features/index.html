@@ -840,7 +840,7 @@
 <li><code>SERVE</code> – listen for incoming connections from a RIDE client</li>
 <li><code>CONNECT</code> – attempt to connect to the specified RIDE client and end the session if this fails</li>
 <li><code>POLL</code> – attempt to connect to the specified RIDE client at regular intervals and reconnect if the connection is lost</li>
-<li><code>HTTP</code> – listen for incoming connections from the web browser, via <a href="../ride_in_the_browser/">zero footprint RIDE</a></li>
+<li><code>HTTP</code> – listen for incoming connections from the web browser, via <a href="../ride_in_the_browser/">Zero Footprint RIDE</a></li>
 <li><code>CONFIG</code> – retrieve values to use from a .ini <a href="../installation/#configuration-ini-file">configuration file</a></li>
 </ul>
 <div class="admonition note">
@@ -890,7 +890,7 @@
 <p>To attempt to connect to a RIDE client running on a different machine (with IPv4 address 10.0.38.1 and listening on port 4502) and end the Session if unable to do so: <code>RIDE_INIT=CONNECT:10.0.38.1:4502</code></p>
 <p>To establish a connection using the settings in the ride_sample.ini file:<code>RIDE_INIT=CONFIG:C:/tmp/ride_sample.ini</code></p>
 <p>To attempt to establish a secure connection with a RIDE client running on a different machine (with IPv4 address 10.0.38.1 and listening on port 4502) using certificate details specified in the ride_sample.ini file: <code>RIDE_INIT=CONFIG:C:\tmp\ride_sample.ini,CONNECT:10.0.38.1:4502</code> or <code>RIDE_INIT=CONNECT:10.0.38.1:4502,CONFIG:C:\tmp\ride_sample.ini</code></p>
-<p>With Dyalog and RIDE installed on a machine with IPv4 address 10.0.38.1, to listen on port 4502 for connection requests from a web browser running on any machine (<a href="../starting_a_dyalog_session/#the-zero-footprint-ride">Zero Footprint RIDE</a>): <code>RIDE_INIT=HTTP:*:4502</code></p>
+<p>With Dyalog and RIDE installed on a machine with IPv4 address 10.0.38.1, to listen on port 4502 for connection requests from a web browser running on any machine (<a href="../ride_in_the_browser/">RIDE in the browser</a>): <code>RIDE_INIT=HTTP:*:4502</code></p>
 <p>To open the Zero Footprint RIDE in a web browser on:</p>
 <ul>
 <li>the local machine: URL = <code>http://localhost:4502</code></li>
