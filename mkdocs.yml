@@ -5,6 +5,7 @@ nav:
   - introduction.md
   - installation.md
   - "Starting a Session": starting_a_dyalog_session.md
+  - ride_in_the_browser.md
   - the_dyalog_development_environment.md
   - input_windows.md
   - working_in_a_dyalog_session.md
