@@ -62,7 +62,7 @@ where `mode` is the action that the interpreter should take and determines the c
 - `SERVE` – listen for incoming connections from a RIDE client
 - `CONNECT` – attempt to connect to the specified RIDE client and end the session if this fails
 - `POLL` – attempt to connect to the specified RIDE client at regular intervals and reconnect if the connection is lost
-- `HTTP` – listen for incoming connections from the web browser, via [zero footprint RIDE](starting_a_dyalog_session.md/#zero-footprint-mode)
+- `HTTP` – listen for incoming connections from the web browser, via [Zero Footprint RIDE](ride_in_the_browser.md)
 - `CONFIG` – retrieve values to use from a .ini [configuration file](installation.md/#configuration-ini-file)
 
 !!!note
@@ -106,7 +106,7 @@ To establish a connection using the settings in the ride_sample.ini file:`RIDE_I
 
 To attempt to establish a secure connection with a RIDE client running on a different machine (with IPv4 address 10.0.38.1 and listening on port 4502) using certificate details specified in the ride_sample.ini file: `RIDE_INIT=CONFIG:C:\tmp\ride_sample.ini,CONNECT:10.0.38.1:4502` or `RIDE_INIT=CONNECT:10.0.38.1:4502,CONFIG:C:\tmp\ride_sample.ini`
 
-With Dyalog and RIDE installed on a machine with IPv4 address 10.0.38.1, to listen on port 4502 for connection requests from a web browser running on any machine ([Zero Footprint RIDE](starting_a_dyalog_session.md/#the-zero-footprint-ride)): `RIDE_INIT=HTTP:*:4502`
+With Dyalog and RIDE installed on a machine with IPv4 address 10.0.38.1, to listen on port 4502 for connection requests from a web browser running on any machine ([RIDE in the browser](ride_in_the_browser.md)): `RIDE_INIT=HTTP:*:4502`
 
 To open the Zero Footprint RIDE in a web browser on:
 

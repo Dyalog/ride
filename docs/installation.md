@@ -10,16 +10,16 @@
 
 If Dyalog is not installed on the machine that RIDE is being installed on, then the APL385 Unicode font and keyboard mappings installed with RIDE mean that they are available within RIDE. However, to be able to enter APL glyphs outside RIDE, see [APL Fonts and Keyboards](https://www.dyalog.com/apl-font-keyboard.htm).
 
-## Zero-Footprint
+## RIDE in the Browser
 
-The use of RIDE from a browser requires no installation on the machine where RIDE will run; all you need is a  modern browser.
+The use of RIDE from a browser requires no installation on the machine where RIDE will run; all you need is a  modern browser. This is known as "zero-footprint RIDE".
 
 !!!note
     When installing RIDE, if you select the default location suggested by the installer then APL can be launched as a RIDE server without creating a [configuration file](sample_configuration_file.md).
 
 On non-Windows platforms, zero-footprint RIDE is automatically installed to the default location (**[DYALOG]/RIDEapp**) when Dyalog is installed and no additional installation is necessary. On Windows, zero-footprint RIDE needs separate installation.
 
-For details, see [Zero Footprint RIDE](starting_a_dyalog_session.md/#zero-footprint-mode).
+For details, see [RIDE in the browser](ride_in_the_browser.md).
 
 ## Linux
 

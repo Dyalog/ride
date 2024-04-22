@@ -16,7 +16,7 @@ When running a Dyalog Session through RIDE, the Session can be:
     - The operating system on which the remote interpreter is running is irrelevant – the instructions given in this chapter apply to the operating system on which RIDE is running (the two operating systems do not have to be the same).
     - The remote machine does not need to have RIDE installed but the Dyalog Session must be [RIDE-enabled](ridespecific_language_features.md/#ride_init).
 
-Normally, connections between RIDE and interpreters are initialised from the **New Session** screen. The exception to this is zero-footprint use, which always requires Dyalog to be started first with suitable configuration parameters, after which RIDE will appear when you direct a web browser at the APL interpreter. See [Zero Footprint Ride](#zero-footprint-mode) for details.
+Normally, connections between RIDE and interpreters are initialised from the **New Session** screen. The exception to this is zero-footprint use, which always requires Dyalog to be started first with suitable configuration parameters, after which RIDE will appear when you direct a web browser at the APL interpreter. See [RIDE in the browser](ride_in_the_browser.md) for details.
 
 
 ## New Session window
@@ -42,22 +42,3 @@ For example:
 
 Click <kbd>OK</kbd> to connect, start, or begin listening — per the current settings.
 
-## Zero-Footprint Mode
-
-Dyalog can serve RIDE to any modern web browser – this is known as "zero-footprint" operation since RIDE is not installed on the client machine but is downloaded by the web browser on demand. The advantage is that an APL session can be monitored and maintained from any device without installing anything.
-
-This mode has the following limitations:
-
-- You can only interact with the APL interpreter that is serving you; the **New Session** window is not available.
-- Preferences are persisted in browser storage using cookies.
-- Window captions cannot be controlled.
-- The floating **Trace/Edit** windows option is not available.
-
-### Accessing Zero-Footprint RIDE from a browser
-
-1. If on Windows, [install zero-footprint RIDE](installation.md/#windows)
-2. Set the `RIDE_INIT` configuration parameter to `HTTP:address:port` (see [RIDE Init](ridespecific_language_features.md/#ride_init)), for example, `RIDE_INIT=HTTP:*:8080`.
-3. Start a Dyalog session.
-4. Navigate to `http://<address>:<port>`, for example, `http://10.0.38.1:8080`.
-
-On non-Windows platforms, the interpreter expects to find zero-footprint RIDE installed at the `[DYALOG]/RIDEapp` directory; this removes the need to include the `HTTPDIR` field in a [configuration file](installation.md#configuration-ini-file).

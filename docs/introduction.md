@@ -7,6 +7,6 @@ RIDE is a cross-platform, graphical development environment capable of producing
 
 RIDE runs separately from the APL interpreter, but can communicate with any local or remote APL session. It can launch APL sessions on remote machines or to connect to APL interpreters that are already running.
 
-An interpreter can also provide RIDE's interface as a web page. This makes it possible to control a remote interpreter thorugh a browser, without installing RIDE on your machine. For this zero-footprint mode to work on Windows, RIDE needs to be installed on the machine where the interpreter is running, however, it comes with the interpreter installation on all other platforms.
+An interpreter can also provide [RIDE's interface as a web page](ride_in_the_browser.md). This makes it possible to control a remote interpreter thorugh a browser, without installing RIDE on your machine. For this zero-footprint mode to work on Windows, RIDE needs to be installed on the machine where the interpreter is running, however, it comes with the interpreter installation on all other platforms.
 
 On Windows, the interpreter has a built-in IDE, which continues to provide the richest environment, however, RIDE the recommended interface on all other platforms.
