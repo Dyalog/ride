@@ -16,7 +16,7 @@
   },
   "repository": ".",
   "dependencies": {
-    "@electron/remote": "^2.0.10",
+    "@electron/remote": "^2.1.2",
     "jquery": "^3.7.0",
     "monaco-editor": "^0.31.1",
     "node-ipc": "^10.1.0",
@@ -30,7 +30,7 @@
     "ava": "^5.3.1",
     "cheerio": "^1.0.0-rc.12",
     "compression": "^1.7.4",
-    "electron": "^26.6.9",
+    "electron": "^31.0.0",
     "electron-connect": "^0.6.3",
     "electron-packager": "^17.1.1",
     "eslint": "^8.46.0",
