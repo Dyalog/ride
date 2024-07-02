@@ -242,6 +242,7 @@ for CPUTYPE in x64 armv7l ; do
 	#find "${SBOXDIR}" -name ".git*" | xargs rm -r # for lintian
 	find "${SBOXDIR}" -type f "(" -name ".*" -o -name "*.c" ")" | xargs rm # for rpmlint
 	find "${SBOXDIR}" -xtype l | xargs rm -f # remove dangling symlinks, for rpmlint
+	chmod 4755 ${SBOXDIR}/opt/ride-${BASE_VERSION}/chrome-sandbox
 
 	mkdir -p ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps
 	cp "$ICON" ${SBOXDIR}/usr/share/icons/hicolor/scalable/apps/ride${BASE_VERSION_ND}.svg
