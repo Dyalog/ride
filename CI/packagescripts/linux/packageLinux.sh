@@ -146,9 +146,9 @@ createDEB() {
 		-C ${SBOXDIR}				\
 		-d 'libc6 >= 2.17'			\
 		-d 'libnss3 >= 3.26'			\
+		-d 'libgbm1'				\
 		-d 'libgtk-3-0'				\
 		-d 'libxss1'				\
-		-d 'libgconf-2-4'			\
 		-d 'libasound2'				\
 		-d 'libx11-xcb1'			\
 		--license "MIT"			\
@@ -187,8 +187,8 @@ createRPM() {
 		-C ${SBOXDIR}				\
 		-d 'libc.so.6(GLIBC_2.17)(64bit)'	\
 		-d 'libXss.so.1()(64bit)'		\
+		-d 'libgbm.so.1()(64bit)'		\
 		-d 'libgtk-3.so.0()(64bit)'		\
-		-d 'libgconf-2.so.4()(64bit)'		\
 		-d 'libasound.so.2()(64bit)'		\
 		-d 'libnss3.so()(64bit)'		\
 		-d 'libX11-xcb.so.1()(64bit)'		\
