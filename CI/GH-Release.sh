@@ -74,15 +74,15 @@ echo "SHA: ${COMMIT_SHA}"
 
 if [ $GH_VERSION_ND_LAST = 0 ]; then
 	echo "No releases of $VERSION_AB found, not populating changelog"
-	JSON_BODY=$(echo -e "Pre-Release of RIDE $VERSION_AB\n\nWARNING: This is a pre-release version of RIDE $VERSION_AB: it is possible that functionality may be added, removed or altered; we do not recommend using pre-release versions of RIDE in production environment." | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
+	JSON_BODY=$(echo -e "Pre-Release of Ride $VERSION_AB\n\nWARNING: This is a pre-release version of Ride $VERSION_AB: it is possible that functionality may be added, removed or altered; we do not recommend using pre-release versions of Ride in production environment." | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
 	PRERELEASE=true
 else
 	echo using log from $COMMIT_SHA from $GH_VERSION_ND_LAST
 	echo "Is Prerelease: ${PRERELEASE}"
 	if [ "${PRERELEASE}" = "false" ]; then
-		MSG_TEXT="Release RIDE ${VERSION_AB}\n\n"
+		MSG_TEXT="Release Ride ${VERSION_AB}\n\n"
   else
-	  MSG_TEXT="Pre-Release of RIDE $VERSION_AB\n\nWARNING: This is a pre-release version of RIDE $VERSION_AB: it is possible that functionality may be added, removed or altered; we do not recommend using pre-release versions of RIDE in production environments.\n\n"
+	  MSG_TEXT="Pre-Release of Ride $VERSION_AB\n\nWARNING: This is a pre-release version of Ride $VERSION_AB: it is possible that functionality may be added, removed or altered; we do not recommend using pre-release versions of Ride in production environments.\n\n"
 	fi
 	JSON_BODY=$( ( echo -e "${MSG_TEXT}Changelog:"; git log --format='%s' ${COMMIT_SHA}.. ) | grep -v -i todo | python -c 'import json,sys; print(json.dumps(sys.stdin.read()))')
 	

@@ -1,6 +1,6 @@
 //To use this extension:
 //  export RIDE_JS=/path/to/file.js
-//before starting RIDE.
+//before starting Ride.
 //Go to Preferences>Colours, select Token Type: ACME Number and style it.
 //Open an editor and type
 //  ⍝1: abc 123

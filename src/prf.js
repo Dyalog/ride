@@ -7,7 +7,7 @@
 'use strict'
 D.prf = {};
 [ // name                 default (type is determined from default value; setter enforces type and handles encoding)
-  ['autoStart',          0], // Auto-start default configuration when RIDE starts
+  ['autoStart',          0], // Auto-start default configuration when Ride starts
   ['autoCloseBrackets',  1], //whether to insert {}[]() in pairs
   ['autocompletion',     'classic'],
   ['autoPW',             0], // update PW on resize of window
@@ -28,7 +28,7 @@ D.prf = {};
   ['floatSingle',        1], //create single floating edit window
   ['fold',               1], //code folding
   ['ilf',                1], //when re-formating use ODE style (interpreter level formatting)
-  ['ime',                0], //switch to dyalog IME when RIDE starts (Windows-only)
+  ['ime',                0], //switch to dyalog IME when Ride starts (Windows-only)
   ['indent',             4], //-1 disables autoindent
   ['indentComments',     0], //whether to touch comment-only lines at all
   ['indentMethods',      -1],//-1 makes methods use the same indent as all other blocks
@@ -144,7 +144,7 @@ D.prf = {};
     + '\n&Help'
     + '\n  Getting &Started         =https://dyalog.com/introduction.htm'
     + '\n  -'
-    + '\n  &RIDE User Guide         =RHP'
+    + '\n  &Ride User Guide         =RHP'
     + '\n  Dyalog &Help             =DHI'
     + '\n  &Language Elements       =LEL'
     + '\n  &Documentation Centre    =DOX'

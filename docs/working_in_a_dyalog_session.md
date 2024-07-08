@@ -1,10 +1,10 @@
 # Working in a Dyalog Session
 
-The main purpose of a development environment is to enable a user to enter and execute expressions; this chapter describes how this can be achieved when running a Dyalog Session through RIDE and explains the functionality that is provided to simplify the process. 
+The main purpose of a development environment is to enable a user to enter and execute expressions; this chapter describes how this can be achieved when running a Dyalog Session through Ride and explains the functionality that is provided to simplify the process. 
 
 ## Keyboard Shortcuts and Command Codes
 
-Keyboard shortcuts are keystrokes that execute an action rather than produce a symbol. RIDE supports numerous keyboard shortcuts, each of which is identified by a command code and mapped to a keystroke combination; for example, the action to open the **Trace** window  is identified by the code **TC** (described in the documentation as `<TC>`). For a complete list of the command codes that can be used in a Dyalog Session running through RIDE and the keyboard shortcuts for those command codes, see [Keyboard Shortcuts](keyboard_shortcuts.md).
+Keyboard shortcuts are keystrokes that execute an action rather than produce a symbol. Ride supports numerous keyboard shortcuts, each of which is identified by a command code and mapped to a keystroke combination; for example, the action to open the **Trace** window  is identified by the code **TC** (described in the documentation as `<TC>`). For a complete list of the command codes that can be used in a Dyalog Session running through Ride and the keyboard shortcuts for those command codes, see [Keyboard Shortcuts](keyboard_shortcuts.md).
 
 Positioning the cursor over the <img src="../img/screenshots/b_shortcuts.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 12px;" /> button on the right hand side of the Language bar displays a dynamic tooltip showing all configured keyboard shortcuts for command codes. Clicking on the <img src="../img/screenshots/b_shortcuts.png" style="margin-left: 3px;margin-right: 3px;margin-bottom: 0px;height: 12px;" /> button displays the **Preferences** dialog box (the same as selecting the `Edit > Preferences` menu option), through which keyboard shortcuts can be customised (see [Shortcuts Tab](customising_your_session.md/#shortcuts-tab)).
 
@@ -21,7 +21,7 @@ You can select an entry from the list using mouse or keyboard, or keep typing un
 
 ## Executing Expressions
 
-RIDE provides several mechanisms that assist with accuracy when entering expressions in a Dyalog Session, including, auto-closing brackets, autocompleting control structures, and highlighting of matching words and brackets. These can be toggled via `Edit > Preferences > Contextual` help.
+Ride provides several mechanisms that assist with accuracy when entering expressions in a Dyalog Session, including, auto-closing brackets, autocompleting control structures, and highlighting of matching words and brackets. These can be toggled via `Edit > Preferences > Contextual` help.
 
 In the interactive session, you can use the cursor keys to navigate the log. Pressing <kbd>Enter</kbd> re-executes the current line, or all modified lines, if any. Modified lines are restored to their previous state, while their altered versions are copied to the bottom of the session log.
 
@@ -31,7 +31,7 @@ If you set a keyboard shortcut (configurable via `Edit > Preferences > Shortcuts
 
 ## Threads
 
-RIDE supports multithreading. For information on threads, see the [Dyalog Programming Reference Guide](https://docs.dyalog.com/latest/Dyalog%20Programming%20Reference%20Guide.pdf).
+Ride supports multithreading. For information on threads, see the [Dyalog Programming Reference Guide](https://docs.dyalog.com/latest/Dyalog%20Programming%20Reference%20Guide.pdf).
 
 ## Setting Stop, Trace, and Monitor points
 
@@ -45,12 +45,12 @@ Stop, Trace and Monitor points are indicated in the margin with a red circle, a 
 
 ### Interrupts
 
-A Dyalog Session running through RIDE responds to both strong and weak interrupts.
+A Dyalog Session running through Ride responds to both strong and weak interrupts.
 
 A strong interrupt suspends execution as soon as possible (generally after completing execution of the primitive currently being processed). A strong interrupt is issued by selecting `Actions > Strong Interrupt`. You can assign a keyboard shortcut for this via `Edit > Preferences > Shortcuts > SI`.
 
 A weak interrupt suspends execution at the start of the next line (generally after completing execution of the statement currently being processed). A weak interrupt is issued by selecting `Actions > Weak Interrupt` in the menu options or by pressing <kbd>Break</kbd> (usually <kbd>Ctrl</kbd>+<kbd>Pause</kbd>, but configurable via `Edit > Preferences > Shortcuts > WI`).
 
-## Terminating a Dyalog Session Running Through RIDE
+## Terminating a Dyalog Session Running Through Ride
 
-RIDE will close when the interpreter terminates, including through entering `)OFF` or `⎕OFF` in the interactive session.
+Ride will close when the interpreter terminates, including through entering `)OFF` or `⎕OFF` in the interactive session.

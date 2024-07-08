@@ -4,7 +4,7 @@ A .ini configuration file can be used to define settings for the `RIDE_INIT` con
 
 Examples of the fields that you might want to include within the .ini configuration file are:
 ```
-[RIDE]
+[Ride]
 Direction=Listen
 Address=
 Port=5002
@@ -38,7 +38,7 @@ where:
 - `Anonymous` – the connection is secure but no certificate is provided on the client side. The `SSLValidation` and `Priority fields` are valid.
 - `PublicCertFile` is the fully-qualified path to, and name of, the file containing the public certificate. Empty by default. Validity depends on the value of the `Secure` field.
 - `PrivateKeyFile` is the fully-qualified path to, and name of, the file containing the private key. Empty by default. Validity depends on the value of the `Secure` field.
-- `RootCertDir` is the full path to (and name of) the directory that contains Certificate Authority root certificates. Empty by default (on the Microsoft Windows operating system, the RIDE uses the Microsoft certicate store).
+- `RootCertDir` is the full path to (and name of) the directory that contains Certificate Authority root certificates. Empty by default (on the Microsoft Windows operating system, the Ride uses the Microsoft certicate store).
 - `Priority` is the GnuTLS priority string (for complete documentation of this, see http://www.gnutls.org/manual/gnutls.html#Priority-Strings). Empty by default. Validity depends on the value of the `Secure` field.
 - `AcceptCertDir` is the full path to (and name of) the directory that contains the public certificates of all users that are allowed to connect. Empty by default.
 
@@ -65,7 +65,7 @@ If `AllowEndPoints` is not included, all IP addresses are allowed to access the 
 
 ## TLS Flags
 
-TLS flags are employed as part of the certificate checking process; they determine whether a secure client or server can connect with a peer that does not have a valid certificate. When `Direction` is `Connect` or `Poll`, the RIDE acts as a server; when `Direction` is `Serve`, the RIDE acts as a client.
+TLS flags are employed as part of the certificate checking process; they determine whether a secure client or server can connect with a peer that does not have a valid certificate. When `Direction` is `Connect` or `Poll`, the Ride acts as a server; when `Direction` is `Serve`, the Ride acts as a client.
 
 The code numbers of the TLS flags described below can be added together and passed to the `SSLValidation` field to control the certificate checking process. If you do not require any of these flags, then the `SSLValidation` field should be set to `0`.
 
@@ -77,10 +77,10 @@ The code numbers of the TLS flags described below can be added together and pass
 | 8 | CertAcceptIfExpired | Accept the peer certificate even if it has expired (according to its valid to information). |
 | 16 | CertAcceptIfIncorrectHostName | Accept the peer certificate even if its hostname does not match the one it was trying to connect to. |
 | 32 | CertAcceptWithoutValidating | Accept the peer certificate without checking it (useful if the certificate is to be checked manually). |
-| 64 | RequestClientCertificate | Only valid when the RIDE is acting as a server; asks the client for a certificate but allows connections even if the client does not provide one. |
-| 128 | RequireClientCertificate | Only valid when the RIDE is acting as a server; asks the client for a certificate and refuses the connection if a valid certificate (subject to any other flags) is not provided by the client. |
+| 64 | RequestClientCertificate | Only valid when the Ride is acting as a server; asks the client for a certificate but allows connections even if the client does not provide one. |
+| 128 | RequireClientCertificate | Only valid when the Ride is acting as a server; asks the client for a certificate and refuses the connection if a valid certificate (subject to any other flags) is not provided by the client. |
 
-TLS flags have the same meaning irrespective of whether the RIDE is acting as a server or a client. However, for a server they are applied each time a new connection is established whereas for a client they are only applied when the client object is created.
+TLS flags have the same meaning irrespective of whether the Ride is acting as a server or a client. However, for a server they are applied each time a new connection is established whereas for a client they are only applied when the client object is created.
 
 
 

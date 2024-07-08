@@ -1,4 +1,4 @@
-// Electron's entry point (web-based RIDE doesn't load it)
+// Electron's entry point (web-based Ride doesn't load it)
 const rq = require;
 const fs = rq('fs');
 const ps = process;

@@ -88,9 +88,9 @@ D.InitHelp = function initHelp(version) {
     2520: 'Use Separate Thread For .NET',
     2704: 'Continue Autosave',
     3002: 'Disable Component Checksum Validation',
-    3500: 'Send Text to RIDE-embedded Browser',
-    3501: 'Connected to the RIDE',
-    3502: 'Manage RIDE Connections',
+    3500: 'Send Text to Ride-embedded Browser',
+    3501: 'Connected to the Ride',
+    3502: 'Manage Ride Connections',
     4000: 'Fork New Task', // X
     4001: 'Change User', // X
     4002: 'Reap Forked Tasks', // X

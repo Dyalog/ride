@@ -2,7 +2,7 @@
 
 ## Interactive Session Window
 
-RIDE's main interface is an interactive session, where you enter expressions and the interpreter prints results.
+Ride's main interface is an interactive session, where you enter expressions and the interpreter prints results.
 
 Along the left edge of the interactive session is a narrow area that shows input/output information. It indicates modified lines and code blocks (which will be executed next time you press <kbd>Enter</kbd>) and indicates which output lines belong together.
 
@@ -64,18 +64,18 @@ Display of the language bar can be toggled with the `View > Show Language Bar` m
 
 ## Keyboard Mappings for APL Glyphs
 
-A set of keyboard key mappings for APL glyphs is installed with RIDE. When RIDE is the active application, these key mappings are automatically enabled. RIDE attempts to identify a user's locale and use the appropriate key mappings; if the locale cannot be identified or the locale-specific key mappings have not been configured, then the default configuration is used (key mappings for a US keyboard).
+A set of keyboard key mappings for APL glyphs is installed with Ride. When Ride is the active application, these key mappings are automatically enabled. Ride attempts to identify a user's locale and use the appropriate key mappings; if the locale cannot be identified or the locale-specific key mappings have not been configured, then the default configuration is used (key mappings for a US keyboard).
 
 Using this set of key mappings, APL glyphs are entered by pressing the prefix key followed by either the appropriate key or the SHIFT key with the appropriate key. The prefix key and key mappings can be [customised](customising_your_session.md/#keyboard-tab).
 
 ### Other Keyboard Options
 
-Installing and enabling a set of key mappings allows Dyalog glyphs to be entered in other applications (for example, email). An alternative set of key mappings can also be used to replace the default key mappings for RIDE.
+Installing and enabling a set of key mappings allows Dyalog glyphs to be entered in other applications (for example, email). An alternative set of key mappings can also be used to replace the default key mappings for Ride.
 
 Information and the requisite downloadable files are available from Dyalog's [APL Fonts and Keyboards](https://www.dyalog.com/apl-font-keyboard.htm) page.
 
 !!!note "Microsoft Windows"
-    If you have the Dyalog Unicode IME installed, then RIDE activates it by default. It can be disabled by unchecking the Also enable Dyalog IME checkbox in the [Keyboard tab](customising_your_session.md/#keyboard-tab) of the Preferences dialog box.
+    If you have the Dyalog Unicode IME installed, then Ride activates it by default. It can be disabled by unchecking the Also enable Dyalog IME checkbox in the [Keyboard tab](customising_your_session.md/#keyboard-tab) of the Preferences dialog box.
 
-    If Dyalog is not installed on the machine that RIDE is running on, then the Dyalog Unicode IME can be downloaded and installed from Dyalog's [APL Fonts and Keyboards](https://www.dyalog.com/apl-font-keyboard.htm) page.
+    If Dyalog is not installed on the machine that Ride is running on, then the Dyalog Unicode IME can be downloaded and installed from Dyalog's [APL Fonts and Keyboards](https://www.dyalog.com/apl-font-keyboard.htm) page.
 

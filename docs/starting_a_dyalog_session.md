@@ -1,27 +1,27 @@
 # Starting a Dyalog Session
 
 !!!note
-    When running a Dyalog Session through RIDE, that Session should only be accessed through RIDE. One exception to this rule is when developing or running applications that are `⎕SM`/`⎕SR` based; access to the `⎕SM` window cannot be made through RIDE.
+    When running a Dyalog Session through Ride, that Session should only be accessed through Ride. One exception to this rule is when developing or running applications that are `⎕SM`/`⎕SR` based; access to the `⎕SM` window cannot be made through Ride.
 
-When running a Dyalog Session through RIDE, the Session can be:
+When running a Dyalog Session through Ride, the Session can be:
 
-- local to the machine on which RIDE is running. 
+- local to the machine on which Ride is running. 
     
-    This requires Dyalog to be installed on the machine on which RIDE is running.
+    This requires Dyalog to be installed on the machine on which Ride is running.
 
-- remote from the machine on which RIDE is running.
+- remote from the machine on which Ride is running.
 
-    The RIDE can start a Session using an interpreter installed on a remote machine irrespective of whether Dyalog is installed on the machine on which RIDE is running. In this situation:
+    The Ride can start a Session using an interpreter installed on a remote machine irrespective of whether Dyalog is installed on the machine on which Ride is running. In this situation:
 
-    - The operating system on which the remote interpreter is running is irrelevant – the instructions given in this chapter apply to the operating system on which RIDE is running (the two operating systems do not have to be the same).
-    - The remote machine does not need to have RIDE installed but the Dyalog Session must be [RIDE-enabled](ridespecific_language_features.md/#ride_init).
+    - The operating system on which the remote interpreter is running is irrelevant – the instructions given in this chapter apply to the operating system on which Ride is running (the two operating systems do not have to be the same).
+    - The remote machine does not need to have Ride installed but the Dyalog Session must be [Ride-enabled](ridespecific_language_features.md/#ride_init).
 
-Normally, connections between RIDE and interpreters are initialised from the **New Session** screen. The exception to this is zero-footprint use, which always requires Dyalog to be started first with suitable configuration parameters, after which RIDE will appear when you direct a web browser at the APL interpreter. See [RIDE in the browser](ride_in_the_browser.md) for details.
+Normally, connections between Ride and interpreters are initialised from the **New Session** screen. The exception to this is zero-footprint use, which always requires Dyalog to be started first with suitable configuration parameters, after which Ride will appear when you direct a web browser at the APL interpreter. See [Ride in the browser](ride_in_the_browser.md) for details.
 
 
 ## New Session window
 
-The **New Session** screen is displayed when RIDE starts, unless "Auto-start top-most configuration when RIDE starts" has been selected from Preferences > General > Session (the default on macOS). This screen allows simple and advanced use.
+The **New Session** screen is displayed when Ride starts, unless "Auto-start top-most configuration when Ride starts" has been selected from Preferences > General > Session (the default on macOS). This screen allows simple and advanced use.
 
 ### Simple usage
 
@@ -37,8 +37,8 @@ Either of these will open the advanced configuration pane where you can choose c
 
 For example:
 
-* If you want RIDE to connect to a remote interpreter that has been started with the configuration parameter `RIDE_INIT="SERVE:*:4502"` then create a new configuration of type "Connect to an interpreter", then specify IP address and port 4502.
-* If you want RIDE to await an incoming connection from a remote interpreter that will be started with the configuration parameter `RIDE_INIT="CONNECT:jaypc.dyalog.bramley:4502"` (where your address is `jaypc.dyalog.bramley`) then choose "Listen", and specify port 4502.
+* If you want Ride to connect to a remote interpreter that has been started with the configuration parameter `RIDE_INIT="SERVE:*:4502"` then create a new configuration of type "Connect to an interpreter", then specify IP address and port 4502.
+* If you want Ride to await an incoming connection from a remote interpreter that will be started with the configuration parameter `RIDE_INIT="CONNECT:jaypc.dyalog.bramley:4502"` (where your address is `jaypc.dyalog.bramley`) then choose "Listen", and specify port 4502.
 
 Click <kbd>OK</kbd> to connect, start, or begin listening — per the current settings.
 

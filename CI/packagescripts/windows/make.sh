@@ -64,7 +64,7 @@ make_ride()
 
 	LIGHT_OPTS="-nologo -spdb -dcl:high -loc English-US.wxl -reusecab -cc ${OBJ_CABINETS}"
 
-	do_candle "$OBJ_TMP/RIDE.wixobj" "ride.wxs"
+	do_candle "$OBJ_TMP/Ride.wixobj" "ride.wxs"
 	do_candle "$OBJ_TMP/RideUI.wixobj" "rideui.wxs"
 	do_candle "$OBJ_TMP/CommonUI.wixobj" "CommonUI.wxs"
 	do_candle "$OBJ_TMP/CommonUIText.wixobj" "CommonUIText.wxs"
@@ -73,7 +73,7 @@ make_ride()
 
 	${WIXDIR}/light.exe 	$LIGHT_OPTS					\
 				-out ${TARGET}							\
-				"$OBJ_TMP/RIDE.wixobj" 					\
+				"$OBJ_TMP/Ride.wixobj" 					\
 				"$OBJ_TMP/RideUI.wixobj" 	\
 				"$OBJ_TMP/CommonUI.wixobj" 				\
 				"$OBJ_TMP/CommonErrorText.wixobj" 		\
@@ -93,7 +93,7 @@ mkdir -p $RIDEDIR			# create tmp dir
 cp -R ${RIDE_SRC}/* $RIDEDIR	# copy from build to tmp
 
 HEATARGS="-srd"
-install_dir_contents RIDEDIR $RIDEDIR ${OBJ_TMP}/RIDE.wxi $RIDE_FILES_MEDIA_DISK_ID 
+install_dir_contents RIDEDIR $RIDEDIR ${OBJ_TMP}/Ride.wxi $RIDE_FILES_MEDIA_DISK_ID 
 )}
 
 make_ride_setup()
@@ -107,7 +107,7 @@ echo "#define GUID_RIDE_UPGRADE \"{$GUID_RIDE_UPGRADE}\"" >> $OBJ_TMP/guids.h
 	(
 	export SETUPTITLE="$RIDE_DESC"
 
-	export MK_SETUPDIR=$OBJ_TMP/RIDE
+	export MK_SETUPDIR=$OBJ_TMP/Ride
 	export MK_RIDE_SETUP=1
 	export MK_BITS=32
 	export MK_ICONDIR=$OBJ_TMP/images
@@ -146,7 +146,7 @@ echo $UPGRADE_GUID
 move_ride()
 {
 cd ${OBJ_FILES}/..
-echo "Compressing RIDE setup files"
+echo "Compressing Ride setup files"
 zip -r $RIDE_ZIP_FILENAME ride
 cp $RIDE_ZIP_FILENAME $RIDE_SHIP
 
@@ -186,11 +186,11 @@ export RIDE_FILES_MEDIA_DISK_ID=1
 export OBJ_TMP=$WORKSPACE/WinBuild
 export OBJ_FILES=${OBJ_TMP}/files/ride	# LMF [6886] 11-Feb-2011
 export OBJ_CABINETS=${OBJ_TMP}/cabs
-export RIDEDIR=$OBJ_TMP/RIDE
+export RIDEDIR=$OBJ_TMP/Ride
 
-export RIDE_DESC="Dyalog RIDE $RIDE_VERSION_AB_DOT"
+export RIDE_DESC="Dyalog Ride $RIDE_VERSION_AB_DOT"
 export RIDE_EXE="Ride-${RIDE_VERSION_AB_DOT}.exe"
-export RIDE_ICON_LABEL="RIDE ${RIDE_VERSION_AB_DOT}"
+export RIDE_ICON_LABEL="Ride ${RIDE_VERSION_AB_DOT}"
 
 #rm -rf $OBJ_TMP
 

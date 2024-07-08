@@ -1,6 +1,6 @@
 # Keyboard Shortcuts
 
-The Dyalog keyboard shortcuts that are supported by the RIDE are listed below; those that can be configured in the [Shortcuts tab](customising_your_session.md/#shortcuts-tab) of the Preferences dialog box are indicated with a * character.
+The Dyalog keyboard shortcuts that are supported by the Ride are listed below; those that can be configured in the [Shortcuts tab](customising_your_session.md/#shortcuts-tab) of the Preferences dialog box are indicated with a * character.
 
 | Code | Command | Default Keystrokes | Description |
 | --- | --- | --- | --- |
@@ -42,7 +42,7 @@ The Dyalog keyboard shortcuts that are supported by the RIDE are listed below; t
 | LC | Left cursor | <kbd>Left Arrow</kbd> | Move cursor left one character |
 | LL | Left limit | Linux: <kbd>Home</kbd> macOS: <kbd>Fn</kbd> + <kbd>Left Arrow</kbd> Windows: <kbd>Home</kbd> | Move cursor to the first non-blank character on the current line. If already there, move cursor to start of line. |
 | LN* | Toggle line numbers |  | Turn line numbers on/off in all windows of the same type as the active window |
-| LOG* | Show RIDE protocol log | <kbd>Ctrl</kbd> + <kbd>F12</kbd> | Display the RIDE protocol log. Only necessary if requested by Dyalog Ltd when reporting an issue. |
+| LOG* | Show Ride protocol log | <kbd>Ctrl</kbd> + <kbd>F12</kbd> | Display the Ride protocol log. Only necessary if requested by Dyalog Ltd when reporting an issue. |
 | MA* | Continue execution of all threads |  | Restart execution of any paused or suspended threads. For information on threads, see the Dyalog Programming Reference Guide . |
 | NEW* | New Session | <kbd>Ctrl</kbd> + <kbd>N</kbd> | Starts a new Dyalog Session (a new instance of the interpreter) |
 | NX* | Next match |  | Edit / Trace : When performing a Search/Replace, locate first match after current one |

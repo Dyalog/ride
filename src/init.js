@@ -289,9 +289,9 @@ const Console = console;
         if (!D.ide || !path) {
           // no session or no file dragged
         } else if (!/\.dws$/i.test(path)) {
-          toastr.error('RIDE supports drag and drop only for .dws files.');
+          toastr.error('Ride supports drag and drop only for .dws files.');
         } else if (files.length !== 1) {
-          toastr.error('RIDE does not support dropping of multiple files.');
+          toastr.error('Ride does not support dropping of multiple files.');
         } else {
           if (!D.isLocalInterpreter) {
             toastr.warning(

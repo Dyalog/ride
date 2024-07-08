@@ -1,6 +1,6 @@
 # Customising Your Session
 
-The appearance and behaviour of a Dyalog Session running through the RIDE can be customised to meet personal preferences and corporate guidelines. Configuration can be performed:
+The appearance and behaviour of a Dyalog Session running through the Ride can be customised to meet personal preferences and corporate guidelines. Configuration can be performed:
 
 - through the [View menu](#view_menu)
 - through the [Preferences dialog box](#preferences_dialog_box)
@@ -9,7 +9,7 @@ The appearance and behaviour of a Dyalog Session running through the RIDE can be
 Customisations performed using any of these methods persist between Sessions (they also persist when the installed version of Dyalog is upgraded).
 
 !!!note
-    To remove all customisations, reset all RIDE-specific settings and return to the initial default settings, rename/delete the following directory:
+    To remove all customisations, reset all Ride-specific settings and return to the initial default settings, rename/delete the following directory:
     
     - Linux: `$HOME/.config/Ride-<version>`
     - macOS: `$HOME/Library/Application Support/Ride-<version>` (hidden directory – access from the command line)
@@ -17,7 +17,7 @@ Customisations performed using any of these methods persist between Sessions (th
 
 ## View Menu
 
-The View menu includes options that enable the appearance of the Dyalog Session running through the RIDE to be changed. Select these options to:
+The View menu includes options that enable the appearance of the Dyalog Session running through the Ride to be changed. Select these options to:
 
 - show/hide the [Language bar](the_dyalog_development_environment.md/#language-bar)
 - show/hide the [Status bar](the_dyalog_development_environment.md/#status-bar)
@@ -73,7 +73,7 @@ Allows customisation of a variety of features.
 
     - Autocompletion after `<time>` ms
     
-        Specify a time interval after which the RIDE's autocompletion functionality is activated.
+        Specify a time interval after which the Ride's autocompletion functionality is activated.
 
     - Make suggestions after `<time>` characters
     
@@ -95,7 +95,7 @@ Allows customisation of a variety of features.
 
         Select this to show the tooltip for a  glyph. When the cursor is positioned over or immediately after a glyph, the glyph is highlighted and information about it is displayed – this includes the name of the glyph, the keyboard shortcut to enter it, its monadic/dyadic name and examples of its syntax, arguments and result.
 
-    - Auto-start top-most configuration when RIDE starts
+    - Auto-start top-most configuration when Ride starts
 
         Skips the New Session screen by immediately selecting the first configuration
 
@@ -105,7 +105,7 @@ Allows customisation of a variety of features.
 
     - Persistent history `<number>` lines
 
-        Select this and define the number of lines that are available to recall using the Backward/Undo command (`<BK>`). This specifies how many input lines RIDE remembers from the end of one RIDE session to the start of the next session.
+        Select this and define the number of lines that are available to recall using the Backward/Undo command (`<BK>`). This specifies how many input lines Ride remembers from the end of one Ride session to the start of the next session.
 
     - Session log size `<number>` lines (0 = unlimited)
 
@@ -117,11 +117,11 @@ Allows customisation of a variety of features.
 
     - Show quit prompt
 
-        Select this to display a confirmation dialog box when exiting the RIDE session.
+        Select this to display a confirmation dialog box when exiting the Ride session.
 
     - Connect on quit
 
-        Select this to be returned to the RIDE-Dyalog Session dialog box on exiting a Session.
+        Select this to be returned to the Ride-Dyalog Session dialog box on exiting a Session.
 
     - Block cursor
 
@@ -174,9 +174,9 @@ Allows customisation of the default [keyboard mappings](the_dyalog_development_e
     To replace the keyboard with a locale-specific keyboard in the Session, or to enter Dyalog glyphs in other applications (for example, email), see Dyalog's [APL Fonts and Keyboards](https://www.dyalog.com/apl-font-keyboard.htm) page.
 
 !!!note "Microsoft Windows"
-    If you have the Dyalog Unicode IME installed, then the RIDE activates it at start-up when the Also enable Dyalog IME (requires RIDE restart) checkbox is selected (selected by default).
+    If you have the Dyalog Unicode IME installed, then the Ride activates it at start-up when the Also enable Dyalog IME (requires Ride restart) checkbox is selected (selected by default).
             
-    If Dyalog is not installed on the machine that the RIDE is running on, then the Dyalog Unicode IME can be downloaded and installed from Dyalog's [APL Fonts and Keyboards](https://www.dyalog.com/apl-font-keyboard.htm) page.
+    If Dyalog is not installed on the machine that the Ride is running on, then the Dyalog Unicode IME can be downloaded and installed from Dyalog's [APL Fonts and Keyboards](https://www.dyalog.com/apl-font-keyboard.htm) page.
 
 !!!note "Linux"
     Most Linux distributions released after mid-2012 support Dyalog glyphs by default, for example, openSUSE 12.2, Ubuntu 12.10 and Fedora 17. For more information, see the [Dyalog for UNIX Installation and Configuration Guide](https://docs.dyalog.com/latest/Dyalog%20for%20UNIX%20Installation%20and%20Configuration%20Guide.pdf).
@@ -300,7 +300,7 @@ Allows customisation of the menu options in the menu bar.
 !!!warning
     Great care should be taken when customising the menu options; although the ability to make changes is provided, it is not an activity that Dyalog Ltd supports.
 
-    If menu options are customised, then updates to menu items are ignored when updating the installed version of RIDE (this can be avoided by resetting the menu options before upgrading RIDE).
+    If menu options are customised, then updates to menu items are ignored when updating the installed version of Ride (this can be avoided by resetting the menu options before upgrading Ride).
 
 Top-level options (menu names in the menu bar) can be:
 
@@ -316,7 +316,7 @@ Options within each of the menus can be:
 - renamed
 - deleted
 
-Changes do not take effect until the next time a Dyalog Session is started through the RIDE.
+Changes do not take effect until the next time a Dyalog Session is started through the Ride.
 
 ### Trace/Edit Tab
 
@@ -368,7 +368,7 @@ To change the size/position of floating **Trace/Edit** windows
 
     - Handle formatting through the interpreter
 
-        Select this to use the interpreter to reformat code. This is useful to avoid formatting changes that could be detected by source code management systems when the RIDE is used to maintain a body of code that is also edited directly using the interpreter.
+        Select this to use the interpreter to reformat code. This is useful to avoid formatting changes that could be detected by source code management systems when the Ride is used to maintain a body of code that is also edited directly using the interpreter.
 
     - Auto-indent `<number>` spaces
 
@@ -407,7 +407,7 @@ To change the size/position of floating **Trace/Edit** windows
 Some customisation can be performed using configuration parameters outside a Session. For details of other configuration parameters that can be set, and the syntax used to set them, see the Dyalog for <operating system> Installation and Configuration Guide specific to the operating system that you are using.
 
 !!!warning
-    Changes made to configuration parameters in the **dyalog.config** file only impact local interpreters (that is, interpreters that are configured by that file) and do not impact interpreters that the RIDE can connect with on other machines.
+    Changes made to configuration parameters in the **dyalog.config** file only impact local interpreters (that is, interpreters that are configured by that file) and do not impact interpreters that the Ride can connect with on other machines.
 
 
 

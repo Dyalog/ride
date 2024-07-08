@@ -11,11 +11,11 @@ module.exports = function gruntTask(grunt) {
     electron.start(['.', 'DEV_STYLE']);
   });
 
-  grunt.registerTask('restart', 'Restart RIDE and go into a session.', () => {
+  grunt.registerTask('restart', 'Restart Ride and go into a session.', () => {
     electron.broadcast('reboot', { message: 'Shutdown then restart.' });
   });
 
-  grunt.registerTask('reload-css', 'Attempt to live reload the CSS without having to restart/reload RIDE', () => {
+  grunt.registerTask('reload-css', 'Attempt to live reload the CSS without having to restart/reload Ride', () => {
     electron.broadcast('css_update', { message: 'Trigger styling reload.' });
   });
 

@@ -1,15 +1,15 @@
-# The RIDE Protocol
+# The Ride Protocol
 
 ## Introduction 
 
 > Note: A red circle :red_circle: marks internal notes which won't appear in the final version.
 
-The RIDE protocol is formed of messages sent in either direction over a TCP connection.
+The Ride protocol is formed of messages sent in either direction over a TCP connection.
 
-A message starts with a 4-byte big-endian *total length* field, followed by the ASCII bytes for `"RIDE"` and a
+A message starts with a 4-byte big-endian *total length* field, followed by the ASCII bytes for `"Ride"` and a
 UTF-8-encoded payload:
 ```
-    8+len(payload)   "RIDE" magic number   payload
+    8+len(payload)   "Ride" magic number   payload
 ┌───────────────────┬───────────────────┬─────~─────┐
 │0x00 0x00 0x00 0x0b│0x52 0x49 0x44 0x45│    ...    │
 └───────────────────┴───────────────────┴─────~─────┘
@@ -37,14 +37,14 @@ If the receiver of a message does not recognise it, it should respond with
 ```
 
 ### InternalError <a name=InternalError></a>
-Should the interpreter generate an error during the processing of an incoming RIDE message it will respond with an InternalError message:
+Should the interpreter generate an error during the processing of an incoming Ride message it will respond with an InternalError message:
 ```json
 ["InternalError",{"error":1,"error_text":"WS FULL","dmx":"","message":"Edit"}]
 ```
 * `error`: aka ⎕EN
 * `error_text`: aka ⎕EM 
 * `dmx`: the DMX message for the error (currently always empty)
-* `message`: the name of the originating incoming RIDE message
+* `message`: the name of the originating incoming Ride message
 
 The connection may be closed at any time, leaving some messages undelivered or unprocessed.
 
@@ -62,7 +62,7 @@ After the connection has been established and a protocol agreed, both peers imme
 The `apiVersion` is introduced as a mechanism to handle breaking changes in the API.
 
 Constants for `identity`:
-- `1` RIDE,
+- `1` Ride,
 - `2` interpreter,
 - `3` process manager.
 
@@ -74,15 +74,15 @@ The interpreter responds with an Identify messsage containing details about the 
 #### apiVersion = 1
 The interpreter responds with a `ReplyIdentify` messsage containing details about the interpreter.
 
-They should then check the type of application they are connected to, and if not happy to continue, close the connection.  For instance, RIDE may check that the application it's connected to is an interpreter or a process manager. If it finds the peer is another RIDE, it should close the connection.
+They should then check the type of application they are connected to, and if not happy to continue, close the connection.  For instance, Ride may check that the application it's connected to is an interpreter or a process manager. If it finds the peer is another Ride, it should close the connection.
 
-:red_circle: In reality RIDE doesn't bother verifying that it's not talking to another RIDE.
+:red_circle: In reality Ride doesn't bother verifying that it's not talking to another Ride.
 
 ### ReplyIdentify <a name=ReplyIdentify></a>
 #### apiVersion = 1
 The interpreter responds with a `ReplyIdentify` messsage containing details about the interpreter.
 ```json
-["ReplyIdentify",{ // Interpreter -> RIDE
+["ReplyIdentify",{ // Interpreter -> Ride
   "apiVersion":1,
   "Port":0,
   "IPAddress":"",
@@ -106,7 +106,7 @@ The `apiVersion` specifies the negotiated API version accepted by the interprete
 #### apiVersion = 1
 Request the session log from the interpreter. 
 ```json
-["GetLog",{"format":"json","maxLines":100}] // RIDE -> Interpreter
+["GetLog",{"format":"json","maxLines":100}] // Ride -> Interpreter
 ```
 `format` defaults to "json" if not specified.
 `maxLines` limits the number of lines returned (-1 = unlimited)
@@ -115,18 +115,18 @@ Request the session log from the interpreter.
 #### apiVersion < 1
 After it has received the Connect command the interpreter will send 0 or more "ReplyGetLog" messages containing the session log:
 ```json
-["ReplyGetLog",{"result":["line 1","line 2"]}] // Interpreter -> RIDE
+["ReplyGetLog",{"result":["line 1","line 2"]}] // Interpreter -> Ride
 ```
 
 #### apiVersion = 1
 After it has received a "GetLog" command the interpreter will send 0 or more "ReplyGetLog" messages containing the session log in the format requested.
 For `text` format:
 ```json
-["ReplyGetLog",{"result":["line 1","line 2"]}] // Interpreter -> RIDE
+["ReplyGetLog",{"result":["line 1","line 2"]}] // Interpreter -> Ride
 ```
 For `json` format:
 ```json
-["ReplyGetLog",{"result":[ // Interpreter -> RIDE
+["ReplyGetLog",{"result":[ // Interpreter -> Ride
   {
     "group": 1,
     "type": 1,
@@ -142,34 +142,34 @@ For `json` format:
 ### SysError <a name=SysError></a>
 If at any time the interpreter crashes with a [syserror](http://help.dyalog.com/latest/Content/Language/Errors/System%20Errors.htm), it sends;
 ```json
-["SysError",{"text":"apl: sys error 123 errno 456","stack":""}] // Interpreter -> RIDE
+["SysError",{"text":"apl: sys error 123 errno 456","stack":""}] // Interpreter -> Ride
 ```
 
 ### Exit <a name=Exit></a>
-If the interpreter has been started by RIDE, RIDE should shut it down cleanly when the user closes the main application
+If the interpreter has been started by Ride, Ride should shut it down cleanly when the user closes the main application
 window (the session window):
 ```json
-["Exit",{"code":0}] // RIDE -> Interpreter
+["Exit",{"code":0}] // Ride -> Interpreter
 ```
 
 ## Session control
 
 #### apiVersion < 1
-Any echoed input or interpreter output are sent to RIDE using either;
+Any echoed input or interpreter output are sent to Ride using either;
 ### EchoInput <a name=EchoInput></a>
 ```json
-["EchoInput",{"input":"      1 2 3+4 5 6\n"}] // Interpreter -> RIDE
+["EchoInput",{"input":"      1 2 3+4 5 6\n"}] // Interpreter -> Ride
 ```
 ### AppendSessionOutput <a name=AppendSessionOutput></a>
 ```json
-["AppendSessionOutput",{"result":"5 7 9"}]  // Interpreter -> RIDE
+["AppendSessionOutput",{"result":"5 7 9"}]  // Interpreter -> Ride
 ```
 These two perform essentially the same task except that `AppendSessionOutput` doesn't necessarily have trailing `"\n"`-s at the end of `result`.
 
 #### apiVersion = 1
-Any echoed input or interpreter output are sent to RIDE using either;
+Any echoed input or interpreter output are sent to Ride using either;
 ```json
-["AppendSessionOutput",{"result":"5 7 9","type":1,"group":1}]  // Interpreter -> RIDE
+["AppendSessionOutput",{"result":"5 7 9","type":1,"group":1}]  // Interpreter -> Ride
 ```
 `type` specifies the source of the output:
 
@@ -192,9 +192,9 @@ Any echoed input or interpreter output are sent to RIDE using either;
 | 14 | A “normal” input line                        |
 
 ### SetPromptType <a name=SetPromptType></a>
-The interpreter informs RIDE about changes in its ability to accept user input with
+The interpreter informs Ride about changes in its ability to accept user input with
 ```json
-["SetPromptType",{"type":5}] // Interpreter -> RIDE
+["SetPromptType",{"type":5}] // Interpreter -> Ride
 ```
 Constants for `type`: 
 - `0` no prompt,
@@ -208,28 +208,28 @@ Constants for `type`:
 
 
 ### Execute <a name=Execute></a>
-When the user presses `<ER>` (Enter) or `<TC>` (Ctrl-Enter), RIDE sends
+When the user presses `<ER>` (Enter) or `<TC>` (Ctrl-Enter), Ride sends
 ```json
-["Execute",{"text":"      1 2 3+4 5 6","trace":1}] // RIDE -> Interpreter
+["Execute",{"text":"      1 2 3+4 5 6","trace":1}] // Ride -> Interpreter
 ```
 * `text`: the APL code to evaluate
 * `trace`: 0 or 1, whether the expression should be evaluated in the tracer (`<TC>`)
 
-Note that RIDE can't assume that everything entered in the session will be echoed, e.g. quote quad input (`⍞`) doesn't
-echo.  Therefore, RIDE should wait for the [`EchoInput`](#EchoInput) message.
+Note that Ride can't assume that everything entered in the session will be echoed, e.g. quote quad input (`⍞`) doesn't
+echo.  Therefore, Ride should wait for the [`EchoInput`](#EchoInput) message.
 
-If multiple lines have been modified in the session, RIDE should queue them up and send them one by one, waiting for
+If multiple lines have been modified in the session, Ride should queue them up and send them one by one, waiting for
 a response of either `SetPromptType` with `type>0` or HadError.
 ### HadError <a name=HadError></a>
-RIDE should clear its queue of pending lines on `HadError` and focus the session.
+Ride should clear its queue of pending lines on `HadError` and focus the session.
 ```json
-["HadError",{}] // Interpreter -> RIDE
+["HadError",{}] // Interpreter -> Ride
 ```
 
 ### SetPW <a name=SetPW></a>
-RIDE can optionally advise the interpreter about the session's width in characters with
+Ride can optionally advise the interpreter about the session's width in characters with
 ```json
-["SetPW",{"pw":79}] // RIDE -> Interpreter
+["SetPW",{"pw":79}] // Ride -> Interpreter
 ```
 Further output will wrap at that width (with a few exceptions).
 See [`⎕PW`](http://help.dyalog.com/latest/Content/Language/System%20Functions/pw.htm).
@@ -238,9 +238,9 @@ See [`⎕PW`](http://help.dyalog.com/latest/Content/Language/System%20Functions/
 ## Window management
 
 ### Edit <a name=Edit></a>
-When the user presses `<ED>` (Shift-Enter), RIDE should send;
+When the user presses `<ED>` (Shift-Enter), Ride should send;
 ```json
-["Edit",{"win":123,"text":"a←b+c×d","pos":4,"unsaved":{"124":"f"}}] // RIDE -> Interpreter
+["Edit",{"win":123,"text":"a←b+c×d","pos":4,"unsaved":{"124":"f"}}] // Ride -> Interpreter
 ```
 to request opening an editor.  `pos` is the 0-based position of the cursor in `text`.
 `unsaved` is a mapping from window ids to unsaved content.
@@ -253,11 +253,11 @@ The interpreter will parse that and may respond later with one of;
 ```json
 ["OpenWindow",{"name":"f","filename":"C:\\path\\to\\foo.txt","text":["r←f a","r←(+⌿÷≢)a"],"token":123,"currentRow":0,"debugger":false,
                "entityType":1,"offset":0,"readOnly":false,"size":0,"stop":[1],
-               "tid":0,"tname":"Tid:0"}] // Interpreter -> RIDE
+               "tid":0,"tname":"Tid:0"}] // Interpreter -> Ride
 ```
 ### UpdateWindow <a name=UpdateWindow></a>
 ```json
-["UpdateWindow",...] // Interpreter -> RIDE (same args as OpenWindow)
+["UpdateWindow",...] // Interpreter -> Ride (same args as OpenWindow)
 ```
 It may also send these in response to [`)ed
 name`](http://help.dyalog.com/latest/Content/Language/System%20Commands/ed.htm) or
@@ -282,7 +282,7 @@ Constants for `entityType`:
 ### GotoWindow <a name=GotoWindow></a>
 The interpreter can request transferring the focus to a particular window with;
 ```json
-["GotoWindow",{"win":123}] // Interpreter -> RIDE
+["GotoWindow",{"win":123}] // Interpreter -> Ride
 ```
 This could happen as a result of `)ED` or `⎕ED`.
 
@@ -290,51 +290,51 @@ This could happen as a result of `)ED` or `⎕ED`.
 ### WindowTypeChanged <a name=WindowTypeChanged></a>
 The interpreter may decide to change the type of a window (editor vs tracer) with;
 ```json
-["WindowTypeChanged",{"win":123,"tracer":true}] // Interpreter -> RIDE
+["WindowTypeChanged",{"win":123,"tracer":true}] // Interpreter -> Ride
 ```
 
 
 ### SaveChanges <a name=SaveChanges></a>
-When the user presses `<EP>` (Esc), RIDE should request that the editor contents are fixed through;
+When the user presses `<EP>` (Esc), Ride should request that the editor contents are fixed through;
 ```json
-["SaveChanges",{"win":123,"text":["r←avg a","s←+⌿a","n←≢a","r←s÷n"],"stop":[2,3]}] // RIDE -> Interpreter
+["SaveChanges",{"win":123,"text":["r←avg a","s←+⌿a","n←≢a","r←s÷n"],"stop":[2,3]}] // Ride -> Interpreter
 ```
 - `stop` is an array of 0-based line numbers.
 
 
 ### ReplySaveChanges <a name=ReplySaveChanges></a>
 ```json
-["ReplySaveChanges",{"win":123,"err":0}] // Interpreter -> RIDE
+["ReplySaveChanges",{"win":123,"err":0}] // Interpreter -> Ride
 ```
 If `err` is 0, save succeeded; otherwise it failed.
 
 
 ### FormatCode <a name=FormatCode></a>
-RIDE can request that the intepreter reformat code:
+Ride can request that the intepreter reformat code:
 ```json
-["FormatCode",{"win":123,"text":["r←avg a","s←+⌿a","n ←    ≢a","r←s÷n"]}] // RIDE -> Interpreter
+["FormatCode",{"win":123,"text":["r←avg a","s←+⌿a","n ←    ≢a","r←s÷n"]}] // Ride -> Interpreter
 ```
 
 
 ### ReplyFormatCode <a name=ReplyFormatCode></a>
 ```json
-["ReplyFormatCode",{"win":123,"text":["r←avg a","s←+⌿a","n←≢a","r←s÷n"]}] // Interpreter -> RIDE
+["ReplyFormatCode",{"win":123,"text":["r←avg a","s←+⌿a","n←≢a","r←s÷n"]}] // Interpreter -> Ride
 ```
 * `win`: TENTATIVE: a window identifer. The interpreter needs a window in which to format the code (don't ask!). In the short term we'll insist that we can only format code in a window the interpreter is aware of.
 
 
 ### CloseWindow <a name=CloseWindow></a>
-When the user presses `<EP>` (Esc) and saving is successful or presses `<QT>` (Shift-Esc), RIDE sends;
+When the user presses `<EP>` (Esc) and saving is successful or presses `<QT>` (Shift-Esc), Ride sends;
 ```json
-["CloseWindow",{"win":123}] // RIDE -> Interpreter  and  Interpreter -> RIDE
+["CloseWindow",{"win":123}] // Ride -> Interpreter  and  Interpreter -> Ride
 ```
 but does not close the UI window until the interpreter replies with the same message.
 
 
 ### CloseAllWindows <a name=CloseAllWindows></a>
-To close all windows, but leave the SIstack unchanged RIDE can send the CloseAllWindows message.
+To close all windows, but leave the SIstack unchanged Ride can send the CloseAllWindows message.
 ```json
-["CloseAllWindows",{}] // RIDE -> Interpreter
+["CloseAllWindows",{}] // Ride -> Interpreter
 ```
 In response the interpreter will send a CloseWindow messsage for each window that it is aware of. The CloseAllWindows message will leave the SIStack unchanged, it will just close all (trace and edit) windows in the interpreter.
 
@@ -342,15 +342,15 @@ In response the interpreter will send a CloseWindow messsage for each window tha
 The following messages are used in relation to trace windows.
 
 ### SetHighlightLine <a name=SetHighlightLine></a>
-This tells RIDE where the currently executed line is.  Traditionally that's indicated by a red border around it.
+This tells Ride where the currently executed line is.  Traditionally that's indicated by a red border around it.
 ```json
-["SetHighlightLine",{"win":123,"line":45}] // Interpreter -> RIDE
+["SetHighlightLine",{"win":123,"line":45}] // Interpreter -> Ride
 ```
 
 ### SetLineAttributes <a name=SetLineAttributes></a>
 Update the breakpoints.
 ```json
-["SetLineAttributes",{"win":123,"stop":[2,3,5]}] // RIDE -> Interpreter  or  Interpreter -> RIDE
+["SetLineAttributes",{"win":123,"stop":[2,3,5]}] // Ride -> Interpreter  or  Interpreter -> Ride
 ```
 - `stop` is an array of 0-based line numbers.
 
@@ -358,73 +358,73 @@ Update the breakpoints.
 ### TraceBackward <a name=TraceBackward></a>
 Request the current line in a trace window be moved back (skip back one line).
 ```json
-["TraceBackward",{"win":123}] // RIDE -> Interpreter
+["TraceBackward",{"win":123}] // Ride -> Interpreter
 ```
 
 
 ### ClearTraceStopMonitor <a name=ClearTraceStopMonitor></a>
 Request it clears all traces, stops, and monitors in the active workspace. The reply says how many of each thing were cleared.
 ```json
-["ClearTraceStopMonitor",{"token":123}] // RIDE -> Interpreter
+["ClearTraceStopMonitor",{"token":123}] // Ride -> Interpreter
 ```
 
 ### ReplyClearTraceStopMonitor <a name=ReplyClearTraceStopMonitor></a>
 ```json
-["ReplyClearTraceStopMonitor",{"traces":0,"stops":0,"monitors":0,"token":123}] // Interpreter -> RIDE
+["ReplyClearTraceStopMonitor",{"traces":0,"stops":0,"monitors":0,"token":123}] // Interpreter -> Ride
 ```
 
 ### Continue <a name=Continue></a>
 Request resume execution of the current thread.
 ```json
-["Continue",{"win":123}] // RIDE -> Interpreter
+["Continue",{"win":123}] // Ride -> Interpreter
 ```
 
 ### ContinueTrace <a name=ContinueTrace></a>
 Request resume execution of the current function, but stop on the next line of the calling function.
 ```json
-["ContinueTrace",{"win":123}] // RIDE -> Interpreter
+["ContinueTrace",{"win":123}] // Ride -> Interpreter
 ```
 
 ### Cutback <a name=Cutback></a>
 Request the stack is cut back one level.  This is equivalent to returning to the caller without executing the rest of the current function.
 ```json
-["Cutback",{"win":123}] // RIDE -> Interpreter
+["Cutback",{"win":123}] // Ride -> Interpreter
 ```
 
 ### TraceForward <a name=TraceForward></a>
 Request the current line in a trace window be moved forward (skip to next line).
 ```json
-["TraceForward",{"win":123}] // RIDE -> Interpreter
+["TraceForward",{"win":123}] // Ride -> Interpreter
 ```
 
 
 ### RestartThreads <a name=RestartThreads></a>
 Request resume execution of all threads.
 ```json
-["RestartThreads",{}] // RIDE -> Interpreter
+["RestartThreads",{}] // Ride -> Interpreter
 ```
 
 
 ### RunCurrentLine <a name=RunCurrentLine></a>
 Request the current line in a trace window is executed. (Step over)
 ```json
-["RunCurrentLine",{"win":123}] // RIDE -> Interpreter
+["RunCurrentLine",{"win":123}] // Ride -> Interpreter
 ```
 
 ### StepInto <a name=StepInto></a>
 ```json
-["StepInto",{"win":123}] // RIDE -> Interpreter
+["StepInto",{"win":123}] // Ride -> Interpreter
 ```
 Request the current line in a trace window is executed. (Step into)
 
 
 ## Status Bar
-RIDE requests status information from the interpreter to display in the status bar.
+Ride requests status information from the interpreter to display in the status bar.
 
 ### Subscribe <a name=Subscribe></a>
-RIDE 4.4 now uses the Subscribe method to retrieve information from the interpreter for the status bar. Protocol messages are sent by the interpreter when a change is detected, as opposed to polling at an interval.
+Ride 4.4 now uses the Subscribe method to retrieve information from the interpreter for the status bar. Protocol messages are sent by the interpreter when a change is detected, as opposed to polling at an interval.
 ```json
-["Subscribe", { // RIDE -> Interpreter
+["Subscribe", { // Ride -> Interpreter
   "status": [  // 0 or more of the following values
                // values are not saved between calls       
     "statusfields",   // will result in InterpreterStatus messages
@@ -438,7 +438,7 @@ There is no unsubscribe method, a new Subscribe message should be sent with the 
 
 ### InterpreterStatus <a name=InterpreterStatus></a>
 ```json
-["InterpreterStatus", { // Interpreter -> RIDE
+["InterpreterStatus", { // Interpreter -> Ride
    "IO": int,   // current ⎕IO
    "DQ": int,   // length of current message queue 
    "WA": int,   // current available workspace (not currently implemented)
@@ -454,7 +454,7 @@ There is no unsubscribe method, a new Subscribe message should be sent with the 
 
 ### InterpreterHeartBeat <a name=InterpreterHeartBeat></a>
 ```json
-["InterpreterHeartBeat", { // Interpreter -> RIDE
+["InterpreterHeartBeat", { // Interpreter -> Ride
     "ping" : "ping"  // maybe there will be additional reasons to ping
 }]
 ```
@@ -464,25 +464,25 @@ There is no unsubscribe method, a new Subscribe message should be sent with the 
 ### GetSIStack <a name=GetSIStack></a>
 Request information about the current stack.
 ```json
-["GetSIStack",{}] // RIDE -> Interpreter
+["GetSIStack",{}] // Ride -> Interpreter
 ```
 
 ### ReplyGetSIStack <a name=ReplyGetSIStack></a>
 ```json
-["ReplyGetSIStack",{"stack":[{"description":"#.f[12]*"},{"description":"#.g[34]"}],"tid":2}] // Interpreter -> RIDE
+["ReplyGetSIStack",{"stack":[{"description":"#.f[12]*"},{"description":"#.g[34]"}],"tid":2}] // Interpreter -> Ride
 ```
 
 ### GetThreads <a name=GetThreads></a>
 Get information about the current threads.
 ```json
-["GetThreads",{}] // RIDE -> Interpreter
+["GetThreads",{}] // Ride -> Interpreter
 ```
 
 ### ReplyGetThreads <a name=ReplyGetThreads></a>
 ```json
 ["ReplyGetThreads",{"threads":[
     {"description":"","state":"Session","tid":0,"flags":"Normal","Treq":""},
-    ]}] // Interpreter -> RIDE
+    ]}] // Interpreter -> Ride
 ```
 * `description`: a text description of the thread. Derived from the Tid and ⎕TNAME for the thread
 * `state`: a string indicating the current location of the thread
@@ -494,13 +494,13 @@ Get information about the current threads.
 ### SetThread <a name=SetThread></a>
 Request the interpreter focus a specific thread.
 ```json
-["SetThread", {"tid":123}] // RIDE -> Interpreter
+["SetThread", {"tid":123}] // Ride -> Interpreter
 ```
 
 
 ### ReplySetThread <a name=ReplySetThread></a>
 ```json
-["ReplySetThread", {"tid":123, "rc":321, "message":"txt"}] // Interpreter -> RIDE
+["ReplySetThread", {"tid":123, "rc":321, "message":"txt"}] // Interpreter -> Ride
 ```
 * `tid`: the thread ID (numeric)
 * `rc`: Return code. TID of focused thread, or -1 if unsuccessful.
@@ -510,7 +510,7 @@ Request the interpreter focus a specific thread.
 ### GetThreadAttributes <a name=GetThreadAttributes></a>
 Request attributes on multiple threads:
 ```json
-["GetThreadAttributes",{ // RIDE -> Interpreter
+["GetThreadAttributes",{ // Ride -> Interpreter
   "threads":[123 | -1]
 }]
 ```
@@ -519,7 +519,7 @@ If first item is -1, return info for all threads and stop processing. If -1 is f
 
 ### ReplyGetThreadAttributes <a name=ReplyGetThreadAttributes></a>
 ```json
-["ReplyGetThreadAttributes",{ // Interpreter -> RIDE
+["ReplyGetThreadAttributes",{ // Interpreter -> Ride
   "threads":[{
     "tid": 123,
     "rc": 321,
@@ -540,7 +540,7 @@ If first item is -1, return info for all threads and stop processing. If -1 is f
 ### SetThreadAttributes <a name=SetThreadAttributes></a>
 Set attributes on multiple threads.
 ```json
-["SetThreadAttributes",{ // RIDE -> Interpreter
+["SetThreadAttributes",{ // Ride -> Interpreter
   "threads":[{
     "tid":123,
     "paused":0,
@@ -553,7 +553,7 @@ The interpreter will respond with ReplySetThreadAttributes
 
 ### ReplySetThreadAttributes <a name=ReplySetThreadAttributes></a>
 ```json
-["ReplySetThreadAttributes",{ // Interpreter -> RIDE
+["ReplySetThreadAttributes",{ // Interpreter -> Ride
   "threads":[{
     "tid":123,
     "rc":0,
@@ -585,12 +585,12 @@ APL supports two kinds of interrupts;
 
 ### WeakInterrupt <a name=WeakInterrupt></a>
 ```json
-["WeakInterrupt",  {}] // RIDE -> Interpreter
+["WeakInterrupt",  {}] // Ride -> Interpreter
 ```
 
 ### StrongInterrupt <a name=StrongInterrupt></a>
 ```json
-["StrongInterrupt",{}] // RIDE -> Interpreter
+["StrongInterrupt",{}] // Ride -> Interpreter
 ```
 The interpreter message queue should check for strong interrupts and handle them immediately without needing to fully
 parse messages.
@@ -600,40 +600,40 @@ parse messages.
 ## Autocompletion
 
 ### GetAutocomplete <a name=GetAutocomplete></a>
-RIDE can request autocompletion information from the interpreter.
+Ride can request autocompletion information from the interpreter.
 ```json
-["GetAutocomplete",{"line":"r←1+ab","pos":6,"token":234}] // RIDE -> Interpreter
+["GetAutocomplete",{"line":"r←1+ab","pos":6,"token":234}] // Ride -> Interpreter
 ```
 * `line`: text containing the name that's being completed
 * `pos`: position of cursor within `line`
-* `token`: is used by [`ReplyGetAutocomplete`](#ReplyGetAutocomplete) to identify which request it is a response to. RIDE
-may send multiple `GetAutocomplete` requests and the interpreter may only reply to some of them. Similarly, RIDE may
+* `token`: is used by [`ReplyGetAutocomplete`](#ReplyGetAutocomplete) to identify which request it is a response to. Ride
+may send multiple `GetAutocomplete` requests and the interpreter may only reply to some of them. Similarly, Ride may
 ignore some of the replies if the state of the editor has changed since the `GetAutocomplete` request was sent.
-In order to remain responsive, RIDE should throttle its autocompletion requests (no more than N per second) and it
+In order to remain responsive, Ride should throttle its autocompletion requests (no more than N per second) and it
 shouldn't block while it's waiting for the response.
 
 :red_circle: The interpreter requires that "token" is the id of the window, so perhaps it should be renamed "win".
 
-:red_circle: If RIDE sends a different token, the interpreter doesn't respond.
+:red_circle: If Ride sends a different token, the interpreter doesn't respond.
 
 
 ### ReplyGetAutocomplete <a name=ReplyGetAutocomplete></a>
 ```json
-["ReplyGetAutocomplete",{"skip":2,"options":["ab","abc","abde"],"token":234}] // Interpreter -> RIDE
+["ReplyGetAutocomplete",{"skip":2,"options":["ab","abc","abde"],"token":234}] // Interpreter -> Ride
 ```
 * `skip`: how many characters before the request's `pos` to replace with an element of `options`
 
 ## Value tips
 
 ### GetValueTip <a name=GetValueTip></a>
-When the user hovers a name with the mouse, RIDE should ask for a short textual representation of the current value:
+When the user hovers a name with the mouse, Ride should ask for a short textual representation of the current value:
 ```json
-["GetValueTip",{"win":123,"line":"a←b+c","pos":2,"maxWidth":50,"maxHeight":20,"token":456}] // RIDE -> Interpreter
+["GetValueTip",{"win":123,"line":"a←b+c","pos":2,"maxWidth":50,"maxHeight":20,"token":456}] // Ride -> Interpreter
 ```
 
 ### ValueTip <a name=ValueTip></a>
 ```json
-["ValueTip",{"tip":["0 1 2","3 4 5"],"class":2,"startCol":2,"endCol":3,"token":456}] // Interpreter -> RIDE
+["ValueTip",{"tip":["0 1 2","3 4 5"],"class":2,"startCol":2,"endCol":3,"token":456}] // Interpreter -> Ride
 ```
 
 * `token`: is used to correlate requests and responses, and there is no guarantee that they will arrive in the same order, if ever (like with autocompletion).
@@ -644,18 +644,18 @@ When the user hovers a name with the mouse, RIDE should ask for a short textual 
 
 
 ## Dialogs
-The interpreter can ask RIDE to interact with the user by showing a modal dialog.
+The interpreter can ask Ride to interact with the user by showing a modal dialog.
 Several kinds of dialogs are supported:
 
 ### Options dialog
 <a name=OptionsDialog></a>
 ```json
-["OptionsDialog",{"title":"","text":"","type":1,"options":["Yes","No","Cancel"],"token":123}] // Interpreter -> RIDE
+["OptionsDialog",{"title":"","text":"","type":1,"options":["Yes","No","Cancel"],"token":123}] // Interpreter -> Ride
 ```
 
 ### ReplyOptionsDialog <a name=ReplyOptionsDialog></a>
 ```json
-["ReplyOptionsDialog",{"index":0,"token":123}] // RIDE -> Interpreter
+["ReplyOptionsDialog",{"index":0,"token":123}] // Ride -> Interpreter
 ```
 
 Constants for type:
@@ -664,17 +664,17 @@ Constants for type:
 - `3` question,
 - `4` stop.
 
-If the user closes the dialog without choosing an option, RIDE responds with an `index` of `-1`.
+If the user closes the dialog without choosing an option, Ride responds with an `index` of `-1`.
 
 
 ### StringDialog <a name=StringDialog></a>
 ```json
-["StringDialog",{"title":"Name","text":"Please enter a name:","initialValue":"abc","defaultValue":null,"token":123}] // Interpreter -> RIDE
+["StringDialog",{"title":"Name","text":"Please enter a name:","initialValue":"abc","defaultValue":null,"token":123}] // Interpreter -> Ride
 ```
 
 ### ReplyStringDialog <a name=ReplyStringDialog></a>
 ```json
-["ReplyStringDialog",{"value":"abcd","token":123}] // RIDE -> Interpreter
+["ReplyStringDialog",{"value":"abcd","token":123}] // Ride -> Interpreter
 ```
 
 ### TaskDialog <a name=TaskDialog></a>
@@ -686,12 +686,12 @@ A "task dialog" shows two sets of buttons -- vertically aligned `buttonText` and
                "options":["No","Cancel"],
                "footer":"Note: If you don't choose to save, your changes will be lost",
                "questionkey":"SaveFileOptionsExtension:.xml",
-               "questionlabel":"Save this response for all files with a \".xml\" extension"}] // Interpreter -> RIDE
+               "questionlabel":"Save this response for all files with a \".xml\" extension"}] // Interpreter -> Ride
 ```
 
 ### ReplyTaskDialog <a name=ReplyTaskDialog></a>
 ```json
-["ReplyTaskDialog",{"index":"101","token":123}] // RIDE -> Interpreter
+["ReplyTaskDialog",{"index":"101","token":123}] // Ride -> Interpreter
 ```
 In the response `index` can be:
 * `100+i` where `i` is the index of a `buttonText` button
@@ -701,28 +701,28 @@ In the response `index` can be:
 
 ### NotificationMessage <a name=NotificationMessage></a>
 ```json
-["NotificationMessage",{"message":"Object too large to edit","token":123}] // Interpreter -> RIDE
+["NotificationMessage",{"message":"Object too large to edit","token":123}] // Interpreter -> Ride
 ```
 
 ## Other
 
 ### ShowHTML <a name=ShowHTML></a>
-Request RIDE shows some HTML. See [`3500⌶`](http://help.dyalog.com/latest/Content/Language/Primitive%20Operators/Send%20Text%20to%20RIDE-embedded%20Browser.htm).
+Request Ride shows some HTML. See [`3500⌶`](http://help.dyalog.com/latest/Content/Language/Primitive%20Operators/Send%20Text%20to%20RIDE-embedded%20Browser.htm).
 ```json
-["ShowHTML",{"title":"Example","html":"<i>Hello</i> <b>world</b>"}] // Interpreter -> RIDE
+["ShowHTML",{"title":"Example","html":"<i>Hello</i> <b>world</b>"}] // Interpreter -> Ride
 ```
 
 
 ### UpdateDisplayName <a name=UpdateDisplayName></a>
 This message is sent by the interpreter when WSID is changed.
 ```json
-["UpdateDisplayName",{"displayName":"CLEAR WS"}] // Interpreter -> RIDE
+["UpdateDisplayName",{"displayName":"CLEAR WS"}] // Interpreter -> Ride
 ```
 
 ### UpdateSessionCaption <a name=UpdateSessionCaption></a>
-RIDE can use the display name as the title of its application window.
+Ride can use the display name as the title of its application window.
 ```json
-["UpdateSessionCaption",{"text":"CLEAR WS - Dyalog APL/W-64"}] // Interpreter -> RIDE
+["UpdateSessionCaption",{"text":"CLEAR WS - Dyalog APL/W-64"}] // Interpreter -> Ride
 ```
 
 
@@ -735,18 +735,18 @@ Sent from any peer to shut down the connection cleanly.
 
 
 ## Workspace explorer
-Optionally, RIDE can display a tree representing session content.
+Optionally, Ride can display a tree representing session content.
 
 ### TreeList <a name=TreeList></a>
 It can query information about the children of a particular node with TreeList.
 ```json
-["TreeList",{"nodeId":12}] // RIDE -> Interpreter
+["TreeList",{"nodeId":12}] // Ride -> Interpreter
 ```
 
 ### ReplyTreeList <a name=ReplyTreeList></a>
 ```json
 ["ReplyTreeList",{"nodeId":12,"nodeIds":[34,0],"names":["ab","cde"],
-                  "classes":[9.4,3.2],"err":""}] // Interpreter -> RIDE
+                  "classes":[9.4,3.2],"err":""}] // Interpreter -> Ride
 ```
 
 The root of the tree is assumed to have a node id of 0.
@@ -756,9 +756,9 @@ The root of the tree is assumed to have a node id of 0.
   that can be used to choose appropriate styling
 * `err` is non-empty only when an error has occurred in the interpreter, e.g. when `nodeId` is no longer invalid
 
-RIDE should query information only about the visible parts of the tree as they get expanded.
+Ride should query information only about the visible parts of the tree as they get expanded.
 
-When the user presses Enter or clicks on an editable node, RIDE should use the [Edit](#Edit) command to notify the
+When the user presses Enter or clicks on an editable node, Ride should use the [Edit](#Edit) command to notify the
 interpreter.  Then it can send back commands to open or focus an editor window.
 
 
@@ -767,7 +767,7 @@ interpreter.  Then it can send back commands to open or focus an editor window.
 ### StatusOutput <a name=StatusOutput></a>
 The interpreter may request the display of messages in a separate "Status Output" window.
 ```json
-["StatusOutput",{"text":"some very important message\r\n","flags":2}] // Interpreter -> RIDE
+["StatusOutput",{"text":"some very important message\r\n","flags":2}] // Interpreter -> Ride
 ```
 `flags` (despite its name) is the message type, one of:
 * `1`: info, usually shown in green
@@ -782,23 +782,23 @@ The interpreter may request the display of messages in a separate "Status Output
 
 ### GetAvailableConnections <a name=GetAvailableConnections></a>
 ```json
-["GetAvailableConnections",{"connections":[c0,c1,...]}] // RIDE or Interpreter -> PM
+["GetAvailableConnections",{"connections":[c0,c1,...]}] // Ride or Interpreter -> PM
 ```
 :red_circle: Specify what c0,c1,... look like
 
 
 ### ConnectTo <a name=ConnectTo></a>
-Request a connection to a specific item (RIDE or interpreter).
+Request a connection to a specific item (Ride or interpreter).
 ```json
-["ConnectTo",{"remoteId":123}] // RIDE or Interpreter -> PM
+["ConnectTo",{"remoteId":123}] // Ride or Interpreter -> PM
 ```
 
 ### ConnectToSucceded <a name=ConnectToSucceded></a>
-Tell the client that the ProcessManager is handing off the connection to a RIDE or Interpreter (as requested).
+Tell the client that the ProcessManager is handing off the connection to a Ride or Interpreter (as requested).
 The process manager knows the supported protocols so it can pick a supported protocol for the clients to switch to.
 Once this is received the client is no longer connected to the PM, but rather is connected to the specified process.
 ```json
-["ConnectToSucceded",{"remoteId":123,"identity":1,"protocolNumber":...}] // PM -> RIDE or Interpreter
+["ConnectToSucceded",{"remoteId":123,"identity":1,"protocolNumber":...}] // PM -> Ride or Interpreter
 ```
 `identity`: see [Identify](#Identify)
 
@@ -806,7 +806,7 @@ Once this is received the client is no longer connected to the PM, but rather is
 ### ConnectToFailed <a name=ConnectToFailed></a>
 Tell the client that the attempt to connect to a particular process failed.
 ```json
-["ConnectToFailed",{"remoteId":123,"reason":""}] // PM -> RIDE or Interpreter
+["ConnectToFailed",{"remoteId":123,"reason":""}] // PM -> Ride or Interpreter
 ```
 
 ### GetDetailedInformation <a name=GetDetailedInformation></a>
@@ -827,42 +827,42 @@ If sent to a Process manager, `remoteId` is a list of remote IDs returned by
 ### Help
 
 #### GetHelpInformation <a name=GetHelpInformation></a>
-RIDE can request help on current cursor position.
+Ride can request help on current cursor position.
 ```json
-["GetHelpInformation",{"line":"r←1+ab","pos":4}] // RIDE -> Interpreter
+["GetHelpInformation",{"line":"r←1+ab","pos":4}] // Ride -> Interpreter
 ```
 * `line`: text containing the name where help is requested
 * `pos`: position of cursor within `line` (origin 0 is to the left of the first character)
 
 #### ReplyGetHelpInformation <a name=ReplyGetHelpInformation></a>
 ```json
-["ReplyGetHelpInformation",{"url":"https://help.dyalog.com/18.1/#Language/Symbols/Plus%20Sign.htm"}] // Interpreter -> RIDE
+["ReplyGetHelpInformation",{"url":"https://help.dyalog.com/18.1/#Language/Symbols/Plus%20Sign.htm"}] // Interpreter -> Ride
 ```
 
 ### Syntax
 
 #### GetSyntaxInformation <a name=GetSyntaxInformation></a>
-RIDE can request Syntax information specific to the version of the interpreter being run.
+Ride can request Syntax information specific to the version of the interpreter being run.
 ```json
-["GetHelpInformation",{}] // RIDE -> Interpreter
+["GetHelpInformation",{}] // Ride -> Interpreter
 ```
 
 ###⍕ ReplyGetSyntaxInformation <a name=ReplyGetSyntaxInformation></a>
 ```json
-["ReplyGetSyntaxInformation",{"url":"https://help.dyalog.com/18.1/#Language/Symbols/Plus%20Sign.htm"}] // Interpreter -> RIDE
+["ReplyGetSyntaxInformation",{"url":"https://help.dyalog.com/18.1/#Language/Symbols/Plus%20Sign.htm"}] // Interpreter -> Ride
 ```
 
 ### LanguageBar
 
 #### GetLanguageBar <a name=GetLanguageBar></a>
-RIDE can request Language bar information specific to the version of the interpreter being run.
+Ride can request Language bar information specific to the version of the interpreter being run.
 ```json
-["GetLanguageBar",{}] // RIDE -> Interpreter
+["GetLanguageBar",{}] // Ride -> Interpreter
 ```
 
 #### ReplyGetLanguageBar <a name=ReplyGetLanguageBar></a>
 ```json
-["ReplyGetLanguageBar",{  // Interpreter -> RIDE
+["ReplyGetLanguageBar",{  // Interpreter -> Ride
   "entries":[
     {"name":"Left Arrow", "avchar":"←", "helptext":["...","...",]}
     ]}]
@@ -873,12 +873,12 @@ RIDE can request Language bar information specific to the version of the interpr
 #### GetConfiguration <a name=GetConfiguration></a>
 Configuration parameters can be queried using the GetConfiguration method
 ```json
-["GetConfiguration", {"names":["text"] // RIDE -> Interpreter
+["GetConfiguration", {"names":["text"] // Ride -> Interpreter
 ```
 
 #### ReplyGetConfiguration <a name=ReplyGetConfiguration></a>
 ```json
-["ReplyGetConfiguration", { // Interpreter -> RIDE
+["ReplyGetConfiguration", { // Interpreter -> Ride
   "configurations":[
     {"name":"string", "value":""},
     ]}]
@@ -887,7 +887,7 @@ Configuration parameters can be queried using the GetConfiguration method
 #### SetConfiguration <a name=SetConfiguration></a>
 Parameters can be set using the SetConfiguration method. *[Currently only the AUTO_PAUSE_THREADS parameter is supported.]*
 ```json
-["SetConfiguration", { // RIDE -> Interpreter
+["SetConfiguration", { // Ride -> Interpreter
   "configurations": [
     {"name":"", "value":""},
     ]}]
@@ -895,7 +895,7 @@ Parameters can be set using the SetConfiguration method. *[Currently only the AU
 
 #### ReplySetConfiguration <a name=ReplySetConfiguration></a>
 ```json
-["ReplySetConfiguration", { // Interpreter -> RIDE
+["ReplySetConfiguration", { // Interpreter -> Ride
   "configurations": [
     {"name":"", "rc":0123,},
     ]}]
@@ -930,9 +930,9 @@ DetailedProcessManagerInformation => [] // Placeholder - add any more informatio
 
 ### SetCurrentObject <a name=SetCurrentObject></a>
 ```json
-["SetCurrentObject",{"text":""}] // RIDE -> Interpreter
+["SetCurrentObject",{"text":""}] // Ride -> Interpreter
 ```
 * compiler information
 * list of valid I-beams and their descriptions
 * `ShowStack` and `ShowThreads`
-* drop workspace in RIDE
+* drop workspace in Ride

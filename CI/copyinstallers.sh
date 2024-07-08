@@ -16,11 +16,11 @@ mountpoint /devt; echo "Devt is mounted: good"
 r=/devt/builds/${JOB_NAME}
 d=${BUILD_NUMBER}
 
-# Identify the location of the files that will be used for zero footprint RIDE.  These files are identical across
+# Identify the location of the files that will be used for zero footprint Ride.  These files are identical across
 # platforms; the only difference in resources/app/<platform> is that the Windows tree has windows-ime/set-ime.exe
 # which we most certainly do not want.  So let's select the Linux app directory.
 # We need the directory which contains index.html
-# `pwd`/_/version contains the full version number of RIDE; need the major.minor and majorminor to build path
+# `pwd`/_/version contains the full version number of Ride; need the major.minor and majorminor to build path
 
 export FULLVER=$(cat _/version)
 VER=$(echo ${FULLVER} | sed 's/\.[^\.]*$//')

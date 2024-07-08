@@ -1,7 +1,7 @@
 ### Describe the issue you are having
 <!-- Ride Issue -->
 
-### Did you connect to an already running interpreter or start the interpreter from RIDE?
+### Did you connect to an already running interpreter or start the interpreter from Ride?
 <!-- Connect to already running/Start an interpreter -->
 
 ### How do you reproduce the issue?

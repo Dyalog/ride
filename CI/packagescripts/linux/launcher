@@ -1,6 +1,6 @@
 #!/bin/sh
 # if ! grep -qw vfpv3 /proc/cpuinfo ; then
-# 	MSG="RIDE is not supported on this hardware."
+# 	MSG="Ride is not supported on this hardware."
 # 	zenity --warning --text="$MSG" 2> /dev/null || echo "$MSG" >&2
 # 	exit 1
 # fi

@@ -1,8 +1,8 @@
-// represents the main screen of a connected RIDE
+// represents the main screen of a connected Ride
 // holds refs to the session (.win[0]), editors/tracers (.win[i])
 // and an instance of the workspace explorer (.wse) defined in wse.js
 // manages the language bar, its tooltips, and the insertion of characters
-// processes incoming RIDE protocol messages
+// processes incoming Ride protocol messages
 D.IDE = function IDE(opts = {}) {
   const ide = this;
   I.cn.hidden = 1;
@@ -515,7 +515,7 @@ D.IDE = function IDE(opts = {}) {
   D.prf.snippetSuggestions((x) => { eachWin(w => !w.bwId && w.snippetSuggestions(x)); });
   D.prf.zoom(ide.zoom.bind(ide));
 
-  ide.handlers = { // for RIDE protocol messages
+  ide.handlers = { // for Ride protocol messages
     Identify(x) {
       D.remoteIdentification = x;
       D.apiVersion = x.apiVersion || 0;

@@ -74,10 +74,10 @@ const pkg = (x, y, f) => {
     extendInfo: isDyalogBuild ? 'CI/packagescripts/osx/Info.plist' : null,
     win32metadata: { // ends up in Windows Explorer's right click > Properties
       CompanyName: 'Dyalog Ltd',
-      FileDescription: 'Remote Integrated Development Environment for Dyalog APL',
+      FileDescription: 'Cross-platform IDE for Dyalog APL',
       OriginalFilename: `${pj.productName}.exe`,
-      ProductName: 'RIDE',
-      InternalName: 'RIDE',
+      ProductName: 'Ride',
+      InternalName: 'Ride',
     },
   }).then(() => {
     const d = `_/${pj.name}/${pj.productName}-${x}-${y}`;

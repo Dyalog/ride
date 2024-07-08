@@ -1,4 +1,4 @@
-Pre-RIDE command codes and their default shortcuts on Windows:
+Pre-Ride command codes and their default shortcuts on Windows:
 
 AC Align Comments
 AO Add comments

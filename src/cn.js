@@ -30,7 +30,7 @@
   let protocolLogFile;
   const defaultProtocolLogFile = path.join(
     D.el.app.getPath('temp'),
-    `RIDE-${D.versionInfo.version}-${D.el.process.pid}.log`,
+    `Ride-${D.versionInfo.version}-${D.el.process.pid}.log`,
   );
   const trunc = (x) => (x.length > maxl ? `${x.slice(0, maxl - 3)}...` : x);
   const shEsc = (x) => `'${x.replace(/'/g, "'\\''")}'`; // shell escape
@@ -290,7 +290,7 @@
     }
     if ((t === 'connect' && ssh) && x.tcp_port
       && (!/^\d*$/.test(x.tcp_port) || +x.tcp_port < 1 || +x.tcp_port > 0xffff)) {
-      $.err('Invalid RIDE port', () => { q.tcp_port.select(); });
+      $.err('Invalid Ride port', () => { q.tcp_port.select(); });
       return 0;
     }
     if (t === 'start') {
@@ -352,12 +352,12 @@
           D.recv && D.recv(u[0], u[1]);
         } else if (m[0] === '<' && !old) {
           old = 1;
-          err('This version of RIDE cannot talk to interpreters older than v15.0');
+          err('This version of Ride cannot talk to interpreters older than v15.0');
         } else if (/^UsingProtocol=/.test(m)) {
           if (m.slice(m.indexOf('=') + 1) === '2') {
             handshakeDone = true;
           } else {
-            err('Unsupported RIDE protocol version');
+            err('Unsupported Ride protocol version');
             break;
           }
         }
@@ -374,7 +374,7 @@
         D.ide && D.ide.die();
       } else {
         err('Either no interpreter is listening on the specified port'
-         + ' or the interpreter is already serving another RIDE client.', 'Connection rejected');
+         + ' or the interpreter is already serving another Ride client.', 'Connection rejected');
         D.ide && D.ide.die();
         D.commands.CNC();
       }
@@ -463,7 +463,7 @@
     clt.on('error', (e) => {
       log(`connect failed: ${e}`);
       if (D.tmr && D.ide && e.code === 'ECONNABORTED') {
-        err('The interpreter is already serving another RIDE client.', 'Connection closed by interpreter');
+        err('The interpreter is already serving another Ride client.', 'Connection closed by interpreter');
         D.ide.die();
         D.commands.CNC();
       } else err(e);
@@ -736,8 +736,8 @@
   global.go = go;
   const setUpMenu = () => {
     D.InitHelp();
-    const m = 'RIDE'
-    + '\n  About RIDE=ABT'
+    const m = 'Ride'
+    + '\n  About Ride=ABT'
     + '\n  -'
     + '\n  Preferences=PRF'
     + '\n  -'
@@ -760,7 +760,7 @@
     + '\n&Help'
     + '\n  Getting &Started         =https://dyalog.com/introduction.htm'
     + '\n  -'
-    + '\n  &RIDE User Guide         =RHP'
+    + '\n  &Ride User Guide         =RHP'
     + '\n  Dyalog &Help             =DHI'
     + '\n  &Language Elements       =LEL'
     + '\n  &Documentation Centre    =DOX'
@@ -1111,7 +1111,7 @@
       save();
     });
     updExes();
-    document.title = 'New Session - RIDE';
+    document.title = 'New Session - Ride';
     const conf = D.el.process.env.RIDE_CONF;
     if (conf) {
       const i = [...q.favs.children].findIndex((x) => x.cnData.name === conf);

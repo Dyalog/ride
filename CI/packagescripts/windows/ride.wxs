@@ -26,7 +26,7 @@
 		<AdminExecuteSequence/>
 		<AdminUISequence/>
 		<AdvertiseExecuteSequence/>
-		<Media Id="1" DiskPrompt="RIDE Disk 1" VolumeLabel="RIDEDisk1" Cabinet="ride.cab" EmbedCab="yes"/>
+		<Media Id="1" DiskPrompt="Ride Disk 1" VolumeLabel="RIDEDisk1" Cabinet="ride.cab" EmbedCab="yes"/>
 <Property Id="ALLUSERS" Value="2"/>
 <Property Id="MSIINSTALLPERUSER" Value="1"/>
 		<!-- LMF [6768] 25-Jan-2011 Set to "Per Machine" Install -->
@@ -65,6 +65,6 @@
 			</Component>
 		</DirectoryRef>
 	</Fragment>
-	<?include $(env.OBJ_TMP)/RIDE.wxi?>
+	<?include $(env.OBJ_TMP)/Ride.wxi?>
 	<!-- Component Groups -->
 </Wix>

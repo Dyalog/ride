@@ -289,7 +289,7 @@
       { s: 'Modified session line', t: 'mod', c: '.modified', bg: 1 }, //in the session - lines queued for execution
       { s: 'Value tip', t: 'vtip', c: '/*noprefix*/#vt_bln,/*noprefix*/#vt_tri', bc: 1 }, //the balloon
       { s: 'Value tip target', t: 'vtt', c: '.vt_marker', bc: 1, fg: 0, BIU: 0 }, //the rectangle around the token
-      { s: 'RIDE disconnected', t: 'dc', c: '.disconnected', bg: 1, fg: 1, BIU: 1 },
+      { s: 'Ride disconnected', t: 'dc', c: '.disconnected', bg: 1, fg: 1, BIU: 1 },
     ],
     'Editor/Tracer': [
       { s: 'Active tracer', t: 'tc', c: '/*noprefix*/.tracer .monaco-editor-background,/*noprefix*/.tracer .monaco-editor .margin', bg: 1 },

@@ -1,13 +1,13 @@
 // This is the list of command-to-keystroke mappings that are configurable in Preferences>Keys.
-// The list does not necessarily contain all commands and all keystrokes in RIDE,
+// The list does not necessarily contain all commands and all keystrokes in Ride,
 // only those in Preferences>Keys.
 // Some of the codes are inherited from Dyalog's old IDE
 // (see ../docs/cmd-codes.txt and near the end of km.js)
-// Others were made up for RIDE's purposes - those use no fewer than three letters.
+// Others were made up for Ride's purposes - those use no fewer than three letters.
 D.cmds = [
   /* eslint-disable */
   //code description                default keys
-  ['ABT','About RIDE',              ['Shift+F1']],
+  ['ABT','About Ride',              ['Shift+F1']],
   ['AC', 'Align comments',          []],
   ['AO', 'Comment out lines',       []],
   ['ASW', 'Auto Status',            []],
@@ -39,7 +39,7 @@ D.cmds = [
   ['LBR','Toggle language bar',     []],
   ['LL', 'Left Limit',              ['Home']],
   ['LN', 'Toggle line numbers',     []],
-  ['LOG','Show RIDE protocol log',  ['Ctrl+F12']],
+  ['LOG','Show Ride protocol log',  ['Ctrl+F12']],
   ['MA', 'Continue execution of all threads',[]],
   ['NEW','New session',             [D.mac?'Cmd+N':'Ctrl+N']],
   ['NX' ,'Next match',              []],

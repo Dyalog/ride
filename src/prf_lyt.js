@@ -97,7 +97,7 @@
       });
       updGlyphs();
       // "IME" is the key mapper in Windows;
-      // there's a checkbox to enable Dyalog's keymap when RIDE starts
+      // there's a checkbox to enable Dyalog's keymap when Ride starts
       // That's done in prf.js which spawns an external process - see also ../windows-ime/readme
       if (D.win) q.ime.checked = !!D.prf.ime();
     },
