@@ -1,6 +1,6 @@
 # Ride
 
-Ride is a cross-platform IDE for [Dyalog](https://www.dyalog.com) APL.  
+Ride is a cross-platform IDE for [Dyalog](https://www.dyalog.com) APL can also allow remote access.  
 [Documentation](https://dyalog.github.io/ride) for Ride.
 
 ![Screenshot](/screenshot.png?raw=true)
