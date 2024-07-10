@@ -299,7 +299,10 @@
     ZMI() { D.prf.zoom(Math.min(12, D.prf.zoom() + 1)); },
     ZMO() { D.prf.zoom(Math.max(-10, D.prf.zoom() - 1)); },
     ZMR() { D.prf.zoom(0); },
-
+    RLB() {
+      D.db.setItem('lbarOrder', D.lb.order);
+      D.ide.lbarRecreate();
+    },
   });
 
   const pfKey = (i) => () => D.ide.pfKey(i);
