@@ -673,7 +673,7 @@
         if (t === 'for' || t === 'while' || t === 'repeat') {
           suggestions.push(...['Continue', 'Leave'].map(textItem));
         }
-        if (t === 'class' || t === 'namesapce') {
+        if (t === 'class' || t === 'namespace') {
           suggestions.push(
             {
               label: 'Class',
@@ -708,6 +708,10 @@
               insertTextRules,
               documentation: 'Interface script',
             },
+          );
+        }
+        if (t === 'class' || t === 'interface') {
+          suggestions.push(
             {
               label: 'Property',
               kind: kind.Snippet,
@@ -722,17 +726,6 @@
               ].join('\n'),
               insertTextRules,
               documentation: 'Property declaration',
-            },
-            {
-              label: 'Section',
-              kind: kind.Snippet,
-              insertText: [
-                'Section ${1:name}',
-                '\t$0',
-                ':EndSection',
-              ].join('\n'),
-              insertTextRules,
-              documentation: 'Section block',
             },
           );
         }
@@ -805,6 +798,17 @@
             ].join('\n'),
             insertTextRules,
             documentation: 'Repeat loop until',
+          },
+          {
+            label: 'Section',
+            kind: kind.Snippet,
+            insertText: [
+              'Section ${1:name}',
+              '\t$0',
+              ':EndSection',
+            ].join('\n'),
+            insertTextRules,
+            documentation: 'Section block',
           },
           {
             label: 'Select',
