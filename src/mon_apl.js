@@ -676,6 +676,43 @@
         if (t === 'class' || t === 'namespace') {
           suggestions.push(
             {
+              label: 'Class',
+              kind: kind.Snippet,
+              insertText: [
+                'Class ${1:name}',
+                '\t$0',
+                ':EndClass',
+              ].join('\n'),
+              insertTextRules,
+              documentation: 'Class script',
+            },
+            {
+              label: 'Namespace',
+              kind: kind.Snippet,
+              insertText: [
+                'Namespace ${1:name}',
+                '\t$0',
+                ':EndNamespace',
+              ].join('\n'),
+              insertTextRules,
+              documentation: 'Namespace script',
+            },
+            {
+              label: 'Interface',
+              kind: kind.Snippet,
+              insertText: [
+                'Interface ${1:name}',
+                '\t$0',
+                ':EndInterface',
+              ].join('\n'),
+              insertTextRules,
+              documentation: 'Interface script',
+            },
+          );
+        }
+        if (t === 'class') {
+          suggestions.push(
+            {
               label: 'Property',
               kind: kind.Snippet,
               insertText: [
@@ -694,17 +731,6 @@
         }
         // if (!t || t === '∇') {
         suggestions.push(
-          {
-            label: 'Class',
-            kind: kind.Snippet,
-            insertText: [
-              'Class ${1:name}',
-              '\t$0',
-              ':EndClass',
-            ].join('\n'),
-            insertTextRules,
-            documentation: 'Class script',
-          },
           {
             label: 'Disposable',
             kind: kind.Snippet,
@@ -750,28 +776,6 @@
             ].join('\n'),
             insertTextRules,
             documentation: 'If-Else Statement',
-          },
-          {
-            label: 'Interface',
-            kind: kind.Snippet,
-            insertText: [
-              'Interface ${1:name}',
-              '\t$0',
-              ':EndInterface',
-            ].join('\n'),
-            insertTextRules,
-            documentation: 'Interface script',
-          },
-          {
-            label: 'Namespace',
-            kind: kind.Snippet,
-            insertText: [
-              'Namespace ${1:name}',
-              '\t$0',
-              ':EndNamespace',
-            ].join('\n'),
-            insertTextRules,
-            documentation: 'Namespace script',
           },
           {
             label: 'Repeat',
