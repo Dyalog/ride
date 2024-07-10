@@ -710,7 +710,7 @@
             },
           );
         }
-        if (t === 'class') {
+        if (t === 'class' || t === 'interface') {
           suggestions.push(
             {
               label: 'Property',
