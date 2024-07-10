@@ -673,41 +673,8 @@
         if (t === 'for' || t === 'while' || t === 'repeat') {
           suggestions.push(...['Continue', 'Leave'].map(textItem));
         }
-        if (t === 'class' || t === 'namesapce') {
+        if (t === 'class' || t === 'namespace') {
           suggestions.push(
-            {
-              label: 'Class',
-              kind: kind.Snippet,
-              insertText: [
-                'Class ${1:name}',
-                '\t$0',
-                ':EndClass',
-              ].join('\n'),
-              insertTextRules,
-              documentation: 'Class script',
-            },
-            {
-              label: 'Namespace',
-              kind: kind.Snippet,
-              insertText: [
-                'Namespace ${1:name}',
-                '\t$0',
-                ':EndNamespace',
-              ].join('\n'),
-              insertTextRules,
-              documentation: 'Namespace script',
-            },
-            {
-              label: 'Interface',
-              kind: kind.Snippet,
-              insertText: [
-                'Interface ${1:name}',
-                '\t$0',
-                ':EndInterface',
-              ].join('\n'),
-              insertTextRules,
-              documentation: 'Interface script',
-            },
             {
               label: 'Property',
               kind: kind.Snippet,
@@ -723,21 +690,21 @@
               insertTextRules,
               documentation: 'Property declaration',
             },
-            {
-              label: 'Section',
-              kind: kind.Snippet,
-              insertText: [
-                'Section ${1:name}',
-                '\t$0',
-                ':EndSection',
-              ].join('\n'),
-              insertTextRules,
-              documentation: 'Section block',
-            },
           );
         }
         // if (!t || t === '∇') {
         suggestions.push(
+          {
+            label: 'Class',
+            kind: kind.Snippet,
+            insertText: [
+              'Class ${1:name}',
+              '\t$0',
+              ':EndClass',
+            ].join('\n'),
+            insertTextRules,
+            documentation: 'Class script',
+          },
           {
             label: 'Disposable',
             kind: kind.Snippet,
@@ -785,6 +752,28 @@
             documentation: 'If-Else Statement',
           },
           {
+            label: 'Interface',
+            kind: kind.Snippet,
+            insertText: [
+              'Interface ${1:name}',
+              '\t$0',
+              ':EndInterface',
+            ].join('\n'),
+            insertTextRules,
+            documentation: 'Interface script',
+          },
+          {
+            label: 'Namespace',
+            kind: kind.Snippet,
+            insertText: [
+              'Namespace ${1:name}',
+              '\t$0',
+              ':EndNamespace',
+            ].join('\n'),
+            insertTextRules,
+            documentation: 'Namespace script',
+          },
+          {
             label: 'Repeat',
             kind: kind.Snippet,
             insertText: [
@@ -805,6 +794,17 @@
             ].join('\n'),
             insertTextRules,
             documentation: 'Repeat loop until',
+          },
+          {
+            label: 'Section',
+            kind: kind.Snippet,
+            insertText: [
+              'Section ${1:name}',
+              '\t$0',
+              ':EndSection',
+            ].join('\n'),
+            insertTextRules,
+            documentation: 'Section block',
           },
           {
             label: 'Select',
