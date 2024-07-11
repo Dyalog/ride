@@ -21,7 +21,6 @@ pipeline {
         stash name: 'ride-win', includes: '_/ride*/Ride-*-win32-ia32/**'
         stash name: 'ride-linux', includes: '_/ride*/Ride-*-linux*/**'
         stash name: 'ride-version', includes: '_/version, _/version.js'
-        sh 'rm -Rf _'
       }
     }
     stage ('Packaging') {
@@ -39,7 +38,6 @@ pipeline {
             unstash 'ride-version'
             sh './CI/packagescripts/linux/packageLinux.sh'
             stash name: 'linux-ship', includes: 'ship/*'
-            sh 'rm -Rf _ ship'
           }
         }
         stage ('Mac Build and Packaging') {
@@ -55,7 +53,6 @@ pipeline {
             }
             stash name: 'ride-mac', includes: '_/ride*/Ride-*-darwin*/**'
             stash name: 'mac-ship', includes: 'ship/*'
-            sh 'rm -Rf _ ship'
           }
         }
         stage ('Windows Packaging') {
@@ -85,8 +82,7 @@ pipeline {
         label 'notarytool'
       }
       steps {
-        sh 'rm -Rf ship'
-        sh 'rm -Rf _'
+        sh 'rm -Rf _ ship'
         unstash 'ride-version'
         unstash 'mac-ship'
         withCredentials([usernamePassword(credentialsId: '868dda6c-aaec-4ee4-845a-57362dec695b', passwordVariable: 'APPLE_APP_PASS', usernameVariable: 'APPLE_ID')]) {
@@ -118,7 +114,6 @@ pipeline {
         unstash 'mac-ship-notarised'
         unstash 'win-ship'
         sh './CI/copyinstallers.sh'
-        sh 'rm -Rf _ ship'
       }
       when {
         not {
@@ -144,7 +139,6 @@ pipeline {
         unstash 'mac-ship'
         unstash 'win-ship'
         sh './CI/GH-Release.sh'
-        sh 'rm -Rf _ ship'
       }
       when {
         not {
