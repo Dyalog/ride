@@ -92,7 +92,7 @@ pipeline {
         withCredentials([usernamePassword(credentialsId: '868dda6c-aaec-4ee4-845a-57362dec695b', passwordVariable: 'APPLE_APP_PASS', usernameVariable: 'APPLE_ID')]) {
           sh "CI/packagescripts/osx/notarise.sh"
         }
-        stash name: 'mac-ship', includes: 'ship/*'
+        stash name: 'mac-ship-notarised', includes: 'ship/*'
       }
       when {
         not {
@@ -115,7 +115,7 @@ pipeline {
         unstash 'ride-linux'
         unstash 'ride-version'
         unstash 'linux-ship'
-        unstash 'mac-ship'
+        unstash 'mac-ship-notarised'
         unstash 'win-ship'
         sh './CI/copyinstallers.sh'
         sh 'rm -Rf _ ship'
