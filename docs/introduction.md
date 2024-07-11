@@ -9,4 +9,4 @@ Ride runs separately from the APL interpreter, but can communicate with any loca
 
 An interpreter can also provide [Ride's interface as a web page](ride_in_the_browser.md). This makes it possible to control a remote interpreter thorugh a browser, without installing Ride on your machine. For this zero-footprint mode to work on Windows, Ride needs to be installed on the machine where the interpreter is running, however, it comes with the interpreter installation on all other platforms.
 
-On Windows, the interpreter has a built-in IDE, which continues to provide the richest environment, however, Ride the recommended interface on all other platforms.
+On Windows, the interpreter has a built-in IDE, which continues to provide the richest environment, however, Ride is the recommended interface on all other platforms.

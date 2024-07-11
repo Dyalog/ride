@@ -1,6 +1,6 @@
 # About This Document
 
-This document introduces the Remote Integrated Development Environment (Ride). It describes the installation process and Ride's user interface (windows, menus, customisation options, keycode/keystroke mappings, etc.).
+This document introduces Dyalog's cross-platform IDE (Ride). It describes the installation process and Ride's user interface (windows, menus, customisation options, keycode/keystroke mappings, etc.).
 
 Ride can be extensively customised; this document assumes that the default configuration is in use.
 

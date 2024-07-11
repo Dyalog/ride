@@ -11,7 +11,7 @@ When running a Dyalog Session through Ride, the Session can be:
 
 - remote from the machine on which Ride is running.
 
-    The Ride can start a Session using an interpreter installed on a remote machine irrespective of whether Dyalog is installed on the machine on which Ride is running. In this situation:
+    Ride can start a Session using an interpreter installed on a remote machine irrespective of whether Dyalog is installed on the machine on which Ride is running. In this situation:
 
     - The operating system on which the remote interpreter is running is irrelevant – the instructions given in this chapter apply to the operating system on which Ride is running (the two operating systems do not have to be the same).
     - The remote machine does not need to have Ride installed but the Dyalog Session must be [Ride-enabled](ridespecific_language_features.md/#ride_init).
