@@ -60,7 +60,7 @@ pipeline {
         }
         stage ('Windows Packaging') {
           agent {
-            label 'win && ride'
+            label 'win && build && 20.0'
           }
           steps {
             powershell 'if (Test-Path -Path ship) {remove-item ship -Recurse -Force }'

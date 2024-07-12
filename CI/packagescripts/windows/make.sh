@@ -112,7 +112,6 @@ echo "#define GUID_RIDE_UPGRADE \"{$GUID_RIDE_UPGRADE}\"" >> $OBJ_TMP/guids.h
 	export MK_BITS=32
 	export MK_ICONDIR=$OBJ_TMP/images
 
-	export LIB="$LIB;c:/Program Files (x86)/Microsoft SDKs/Windows/v7.1A/Lib"
 	cd $OBJ_TMP/setup
 	set +e
 	. ./make.ksh
