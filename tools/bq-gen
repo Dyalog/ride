@@ -5,7 +5,7 @@
     echo "//backquote-backquote name completions"
     echo "D.informal=["
     echo "  //'squiggle alias0 alias1 ...'"
-    svn cat http://svn.dyalog.bramley/svn/dyalog/trunk/apl/svn/ime/win/src/backtick.entries | sed -n -e 's/"	,NAMES("/ /' -e 's/","/ /g' -e "s/ENTRY(\"\(.*\)\"))/  '\\1',/p"
+    svn cat http://svn.dyalog.bramley/svn/dyalog/trunk/svn/ime/win/src/backtick.entries | sed -n -e 's/"	,NAMES("/ /' -e 's/","/ /g' -e "s/ENTRY(\"\(.*\)\"))/  '\\1',/p"
     echo "]"
     echo "for(var i=0;i<26;i++)D.informal.push(String.fromCharCode(i+0x24b6)+' _'+String.fromCharCode(i+0x61/*a*/)) //Ⓐ _a"
 } > ../src/bq.js
