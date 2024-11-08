@@ -61,6 +61,7 @@ D.informal=[
   '⍣ poweroperator stardiaeresis powerlimit fixedpoint fixpoint converge while inverse iterate loop until',
   '. dotproduct innerproduct namespaceseparator',
   '∘ jot compose bind curry ring outerproduct innerproduct bind with against beside after',
+  '⍛ jotunderscore jotunderbar reversecompose behind before',
   '⍤ jotdiaeresis rank paw atop upon of ewok',
   '⍞ quotequad input output characterinput rawinput',
   '⎕ quad evaluatedinput',
