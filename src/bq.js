@@ -57,7 +57,7 @@ D.informal=[
   '⊖ reversefirst rotatefirst circlebar rowel upset flip reflectfirst',
   '⍉ transpose circlebackslash cant diagonal reorderaxes reverseaxes slice diagonal',
   '¨ each diaeresis map foreach',
-  '⍨ commute switch selfie tildediaeresis swap constant swap',
+  '⍨ commute switch selfie tildediaeresis swap constant',
   '⍣ poweroperator stardiaeresis powerlimit fixedpoint fixpoint converge while inverse iterate loop until',
   '. dotproduct innerproduct namespaceseparator',
   '∘ jot compose bind curry ring outerproduct innerproduct bind with against beside after',
