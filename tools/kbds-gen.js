@@ -3,7 +3,7 @@
 //Mentioned in http://wiki.dyalog.bramley/index.php/New_Glyphs
 //Please contact john@dyalog.com (John Scholes) if the web page is incorrect.
 'use strict';process.chdir(__dirname)
-const rq=require,fs=rq('fs'),http=rq('http'),cheerio=rq('cheerio')
+const rq=require,fs=rq('fs'),http=rq('https'),cheerio=rq('cheerio')
 ,err=s=>{process.stderr.write(`ERROR: ${s}\n`);process.exit(1)}
 ,get=(host,path,f)=>{ //f:callback
   http.get({host,path},res=>{let s='';res.setEncoding('utf8');res.on('data',x=>{s+=x}).on('end',_=>{f(s)})})
