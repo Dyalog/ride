@@ -49,7 +49,7 @@ const incl = new RegExp('^$'
   + '|^/(src|lib|node_modules|_)(/|$)'
   + '|^/style($|/(fonts|img)|.*\\.css$)');
 const pkg = (x, y, f) => {
-  rq('electron-packager')({
+  rq('@electron/packager')({
     dir: '.',
     platform: x,
     arch: y,
