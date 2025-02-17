@@ -345,9 +345,9 @@ The following messages are used in relation to trace windows.
 
 ### SetHighlightLine <a name=SetHighlightLine></a>
 This tells Ride where the currently executed line is.  Traditionally that's indicated by a red border around it.
-Optionally, provides start and length of token to highlight with `tbt_start` and `tbt_len`.
+Optionally, provides end line and start/end column of area to highlight with `end_line`, `start_col` and `end_col`.
 ```json
-["SetHighlightLine",{"win":123,"line":45, "tbt_start": 3, "tbt_len": 1}] // Interpreter -> Ride
+["SetHighlightLine",{"win":123,"line":1,"end_line":1,"start_col":-1,"end_col":-1}] // Interpreter -> Ride
 ```
 
 ### SetLineAttributes <a name=SetLineAttributes></a>
@@ -420,11 +420,11 @@ Request the current line in a trace window is executed. (Step over)
 ```
 Request the current line in a trace window is executed. (Step into)
 
-### TraceToken <a name=TraceToken></a>
+### TracePrimitive <a name=TracePrimitive></a>
 ```json
-["TraceToken",{"win":123}] // Ride -> Interpreter
+["TracePrimitive",{"win":123}] // Ride -> Interpreter
 ```
-Request the current line in a trace window is executed token but token.
+Request the current line in a trace window is executed primitive but primitive.
 
 
 ## Status Bar
