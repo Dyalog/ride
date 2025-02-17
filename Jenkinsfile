@@ -7,7 +7,7 @@ pipeline {
     stage('Build Linux & Windows') {
       agent {
         docker {
-          image 'dyalogci/node:lts'
+          image 'dyalogci/node:22'
           registryCredentialsId '0435817a-5f0f-47e1-9dcc-800d85e5c335'
           args '-v /devt:/devt'
         }
@@ -29,7 +29,7 @@ pipeline {
         stage ('Linux Packaging') {
           agent {
             docker {
-              image 'dyalogci/node:lts'
+              image 'dyalogci/node:22'
               registryCredentialsId '0435817a-5f0f-47e1-9dcc-800d85e5c335'
             }
           }
@@ -103,7 +103,7 @@ pipeline {
     stage ('Copy install images') {
       agent {
         docker {
-          image 'dyalogci/node:lts'
+          image 'dyalogci/node:22'
           registryCredentialsId '0435817a-5f0f-47e1-9dcc-800d85e5c335'
           args '-v /devt:/devt'
         }
@@ -129,7 +129,7 @@ pipeline {
     stage ('Publish to Github') {
       agent {
         docker {
-          image 'dyalogci/node:lts'
+          image 'dyalogci/node:22'
           registryCredentialsId '0435817a-5f0f-47e1-9dcc-800d85e5c335'
           args '-v /devt:/devt'
         }
