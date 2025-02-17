@@ -644,7 +644,7 @@ D.IDE = function IDE(opts = {}) {
     },
     SetHighlightLine(x) {
       const w = D.wins[x.win];
-      w.SetHighlightLine(x.line, ide.hadErr);
+      w.SetHighlightLine(x.line + 1, ide.hadErr, x.tbt_start + 1, x.tbt_len);
       ide.hadErr > 0 && (ide.hadErr -= 1);
       D.prf.wse() && ide.wse.refresh();
       ide.focusWin(w);
