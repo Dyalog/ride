@@ -226,30 +226,30 @@ D.Ed.prototype = {
   hl() { // highlight - set current line in tracer
     const ed = this;
     const { me } = ed;
-    const { line, tbtStart, tbtLen } = ed.HIGHLIGHT || {};
+    const hlo = ed.HIGHLIGHT || {};
     if (!me.getModel()) return; // sometimes window is closed just before this is called
-    ed.dom.classList.toggle('tbt', tbtStart > 0);
-    if (!line) {
+    ed.dom.classList.toggle('tbt', hlo.colStart > 0);
+    if (!hlo.lineStart) {
       ed.hlDecorations = [];
     } else {
-      if (tbtStart > 0) {
+      if (hlo.colStart > 0) {
         ed.hlDecorations = [{
-          range: new monaco.Range(line, tbtStart, line, tbtStart + tbtLen),
+          range: new monaco.Range(hlo.lineStart, hlo.colStart, hlo.lineEnd, hlo.colEnd),
           options: {
             inlineClassName: 'highlighted',
           },
         }];
       } else {
         ed.hlDecorations = [{
-          range: new monaco.Range(line, 1, line, 1),
+          range: new monaco.Range(hlo.lineStart, 1, hlo.lineStart, 1),
           options: {
             isWholeLine: true,
             className: 'highlighted',
           },
         }];
       }
-      me.setPosition({ lineNumber: line, column: 1 });
-      me.revealLineInCenter(line);
+      me.setPosition({ lineNumber: hlo.lineStart, column: 1 });
+      me.revealLineInCenter(hlo.lineStart);
     }
     ed.setDecorations();
   },
@@ -558,7 +558,7 @@ D.Ed.prototype = {
     ed.setStop();
     if (ed.tc) {
       ed.hl();
-      u.lineNumber = ed.HIGHLIGHT.line;
+      u.lineNumber = ed.HIGHLIGHT.lineStart;
     }
     if (ed.firstOpen) {
       if (lines.length === 1 && /\s?[a-z|@]+$/.test(lines[0])) u.column = model.getLineContent(1).length + 1;
@@ -570,10 +570,12 @@ D.Ed.prototype = {
     ed.restoreScrollPos();
     me.setPosition(u);
   },
-  SetHighlightLine(line, hadErr, tbtStart, tbtLen) {
+  SetHighlightLine(hadErr, lineStart, lineEnd, colStart, colEnd) {
     const ed = this;
-    ed.HIGHLIGHT = { line, tbtStart, tbtLen };
-    ed.me_ready.then(() => ed.hl(line, tbtStart, tbtLen));
+    ed.HIGHLIGHT = {
+      lineStart, lineEnd, colStart, colEnd,
+    };
+    ed.me_ready.then(() => ed.hl());
     hadErr < 0 && ed.focus();
   },
   ValueTip(x) {
@@ -660,7 +662,7 @@ D.Ed.prototype = {
   TVO() { D.prf.fold.toggle(); },
   TVB() { D.prf.breakPts.toggle(); },
   TC() { D.send('StepInto', { win: this.id }); D.ide.getStats(); },
-  TP() { D.send('TraceToken', { win: this.id }); D.ide.getStats(); },
+  TP() { D.send('TracePrimitive', { win: this.id }); D.ide.getStats(); },
   AC(me) { // align comments
     const ed = this;
     const model = me.getModel();
