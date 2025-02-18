@@ -250,6 +250,13 @@ to request opening an editor.  `pos` is the 0-based position of the cursor in `t
 :red_circle: "Edit" must be extended to submit the current content of all dirty windows, otherwise jumping from one
 method to another in a class will obliterate the current changes.
 
+### ShowAsArrayNotation <a name=ShowAsArrayNotation></a>
+When user clicks on button `[⋄]` in an editor window for a variable that can be edited as APLAN, Ride should send;
+```json
+["ShowAsArrayNotation",{"win":123}] // Ride -> Interpreter
+```
+to request an update to the window with content changed to array notation. The interpreter will respond with a separate `UpdateWindow` command.
+
 ### OpenWindow <a name=OpenWindow></a>
 The interpreter will parse that and may respond later with one of;
 ```json
@@ -275,8 +282,8 @@ Constants for `entityType`:
 | `4` |  simple numeric array | | `512` |  APL class
 | `8` |  mixed simple array | | `1024` |  APL interface
 | `16` |  nested array | | `2048` |  APL session
-| `32` |  [`⎕OR`](http://help.dyalog.com/latest/Content/Language/System%20Functions/or.htm) object | | `4096` |  external function.
-| `64` |  native file
+| `32` |  [`⎕OR`](http://help.dyalog.com/latest/Content/Language/System%20Functions/or.htm) object | | `4096` |  external function
+| `64` |  native file | | `262144` | array notation (APLAN)
 
 :red_circle: TODO: describe the other arguments
 

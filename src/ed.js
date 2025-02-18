@@ -384,11 +384,11 @@ D.Ed.prototype = {
     }
     ed.isReadOnlyEntity = !!ee.readOnly || ed.hasEmbeddedBreaks;
     // model.setEOL(monaco.editor.EndOfLineSequence.LF);
-    // entityType:            16 NestedArray        512 AplClass
-    // 1 DefinedFunction      32 QuadORObject      1024 AplInterface
-    // 2 SimpleCharArray      64 NativeFile        2048 AplSession
-    // 4 SimpleNumericArray  128 SimpleCharVector  4096 ExternalFunction
-    // 8 MixedSimpleArray    256 AplNamespace
+    // entityType:            16 NestedArray          512 AplClass
+    // 1 DefinedFunction      32 QuadORObject        1024 AplInterface
+    // 2 SimpleCharArray      64 NativeFile          2048 AplSession
+    // 4 SimpleNumericArray  128 SimpleCharVector    4096 ExternalFunction
+    // 8 MixedSimpleArray    256 AplNamespace      262144 APLAN
     const etype = {
       2: ed.isReadOnlyEntity ? 'chararr' : 'charmat',
       4: 'numarr',
@@ -398,14 +398,18 @@ D.Ed.prototype = {
       64: 'mixarr',
       128: 'charvec',
     }[ee.entityType];
-    ed.isCode = [1, 256, 512, 1024, 2048, 4096].indexOf(ee.entityType) >= 0;
+    ed.isCode = [1, 256, 512, 1024, 2048, 4096, 262144].indexOf(ee.entityType) >= 0;
+    ed.canBeAplan = [2, 4, 8, 16, 128, 256].indexOf(ee.entityType) >= 0;
+    const isAplan = ee.entityType === 262144;
     model.setValue(ed.oText);
     if (/(\.|\\|\/)/.test(ee.name)) {
       me.setModel(monaco.editor.createModel(ed.oText, null, monaco.Uri.file(ee.name)));
     } else {
-      monaco.editor.setModelLanguage(model, ed.isCode ? 'apl' : 'plaintext');
-      ed.dom.classList.remove('charmat', 'chararr', 'numarr', 'mixarr', 'charvecvec', 'quador', 'charvec');
+      const lg = ['plaintext', 'aplan', 'apl'][1 + [isAplan, ed.isCode].indexOf(true)];
+      monaco.editor.setModelLanguage(model, lg);
+      ed.dom.classList.remove('variable', 'charmat', 'chararr', 'numarr', 'mixarr', 'charvecvec', 'quador', 'charvec');
       etype && ed.dom.classList.add(etype);
+      (isAplan || ed.canBeAplan) && ed.dom.classList.add('variable');
     }
     me.updateOptions({ folding: ed.isCode && !!D.prf.fold() });
     if (ed.isCode && D.prf.indentOnOpen()) ed.RD(me);
@@ -601,6 +605,9 @@ D.Ed.prototype = {
     const text = model.getLineContent(c.lineNumber);
     const pos = inEmptySpace ? text.length + 1 : D.util.ucLength(text.slice(0, c.column - 1));
     D.ide.Edit({ win: this.id, pos, text });
+  },
+  EDA() {
+    D.send('ShowAsArrayNotation', { win: this.id });
   },
   QT() { D.send('CloseWindow', { win: this.id }); },
   BK(me) { this.tc ? D.send('TraceBackward', { win: this.id }) : me.trigger('D', 'undo'); },
