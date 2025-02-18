@@ -23,7 +23,7 @@
           const valueTipRequest = {
             handler: callback.bind(this),
             timeoutId: setTimeout((n) => {
-              this.valueTip(n.id, { tip: [''] });
+              wse.valueTip(n.id, { tip: [''] });
             }, 1000, node),
           };
           pendingValueTip[node.id] = valueTipRequest;
@@ -34,7 +34,7 @@
             maxWidth: wse.VT_MAX_WIDTH,
             maxHeight: wse.VT_MAX_HEIGHT,
           });
-        }
+        },
       });
     }
 
