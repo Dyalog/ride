@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "monaco-vim": "^0.4.1"
+  }
+}
