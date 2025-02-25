@@ -199,6 +199,7 @@
         let m;
         let c;
         let dd;
+        let isAplan;
         if (h.hdr) {
           h.hdr = 0;
           m = sm.match(/[^⍝\n\r]*/);
@@ -279,13 +280,13 @@
             case '⋄':
               delete h.kw;
               tkn = 'delimiter.diamond';
+              tkn = la.isAplan ? 'delimiter.aplan' : 'delimiter.diamond';
               addToken(offset, tkn); offset += 1; break;
 
             case '←': addToken(offset, 'keyword.operator.assignment'); offset += 1; break;
 
             case "'":
-              if (sm.match(/^'(?:[^'\r\n]|'')*'/)) {
-                m = sm.match(/^'(?:[^'\r\n]|'')*'/);
+              if ((m = sm.match(/^'(?:[^'\r\n]|'')*'/))) {
                 addToken(offset, 'string');
                 offset += m[0].length;
               } else {
@@ -298,23 +299,27 @@
 
             case '(':
               h.rseq += 1;
+              isAplan = /^\(\s*(?:(?=.*⋄).*|(?:[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ][A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ\d]*:.*)|\s*\)?)\s*$/.test(sm);
               a.push({
                 t: c,
                 oi: la.oi,
                 ii: la.ii,
                 r: h.rseq,
+                isAplan,
               });
-              addToken(offset, 'delimiter.parenthesis'); offset += 1; break;
+              addToken(offset, isAplan ? 'delimiter.aplan' : 'delimiter.parenthesis'); offset += 1; break;
 
             case '[':
               h.rseq += 1;
+              isAplan = /^\[\s*(?:(?=.*⋄).*|(?:[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ][A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ\d]*:.*)|\s*\]?)\s*$/.test(sm);
               a.push({
                 t: c,
                 oi: la.oi,
                 ii: la.ii,
                 r: h.rseq,
+                isAplan,
               });
-              addToken(offset, 'delimiter.square'); offset += 1; break;
+              addToken(offset, isAplan ? 'delimiter.aplan' : 'delimiter.square'); offset += 1; break;
 
             case '{':
               h.rseq += 1;
@@ -330,7 +335,7 @@
             case ')':
               if (la.t === '(') {
                 a.pop();
-                addToken(offset, 'delimiter.parenthesis');
+                addToken(offset, la.isAplan ? 'delimiter.aplan' : 'delimiter.parenthesis');
               } else {
                 addToken(offset, 'invalid.parenthesis');
               }
@@ -339,7 +344,7 @@
             case ']':
               if (la.t === '[') {
                 a.pop();
-                addToken(offset, 'delimiter.square');
+                addToken(offset, la.isAplan ? 'delimiter.aplan' : 'delimiter.square');
               } else {
                 addToken(offset, 'invalid.square');
               }
@@ -503,7 +508,7 @@
                 let [x] = m;
                 dd = dfnDepth(a);
                 if (!dd && sm[x.length] === ':') {
-                  addToken(offset, 'meta.label');
+                  addToken(offset, la.isAplan ? 'identifier.local.aplan' : 'meta.label');
                   offset += 1;
                 } else if (dd || (h.vars && h.vars.includes(x))) {
                   [x] = sm.match(RegExp(`(${D.syntax.name}\\.?)+`));
