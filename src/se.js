@@ -234,7 +234,7 @@ D.Se.prototype = {
       range: new monaco.Range(+l, 1, +l, 1),
       options: {
         isWholeLine: true,
-        className: 'modified',
+        inlineClassName: 'modified',
         glyphMarginClassName: 'modified',
       },
     }));
@@ -434,11 +434,10 @@ D.Se.prototype = {
   },
   setDecorations() {
     const se = this;
-    const lines = se.hlDecorations.map((x) => x.range.startLineNumber);
     se.decorations = se.me.deltaDecorations(
       se.decorations,
       [
-        ...se.groupDecorations.filter((x) => !lines.includes(x.range.startLineNumber)),
+        ...se.groupDecorations,
         ...se.hlDecorations,
       ],
     );
