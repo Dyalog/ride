@@ -82,7 +82,7 @@
       theme: 'light',
       styles: 'asgn=fg:00f com=fg:088 dfn=fg:00f diam=fg:00f err=fg:f00 fn=fg:008 idm=fg:008 kw=fg:800 '
         + 'lnum=fg:008,bg:f,bgo:0 mtch=bg:ff8,bgo:.5 norm=bg:f,bgo:1 ns=fg:8 num=fg:8 op1=fg:00f op2=fg:00f '
-        + 'par=fg:00f quad=fg:808 qdl=fg:c0c sel=bg:48e,bgo:.5 semi=fg:00f sqbr=fg:00f srch=bg:f80,bgo:.5 str=fg:088 tc=bg:d,bgo:1 '
+        + 'an=fg:00f par=fg:00f quad=fg:808 qdl=fg:c0c sel=bg:48e,bgo:.5 semi=fg:00f sqbr=fg:00f srch=bg:f80,bgo:.5 str=fg:088 tc=bg:d,bgo:1 '
         + 'tcpe=bg:c8c8c8,bgo:1 trad=fg:8 var=fg:8 zld=fg:008 scmd=fg:00f ucmd=fg:00f vtt=bg:ff0 '
         + 'ca=bg:828282,bgo:1,fg:0f0 cm=bg:0,bgo:1,fg:080 cv=bg:f,bgo:1,fg:0 cvv=bg:0,bgo:1,fg:0ff '
         + 'ma=bg:828282,bgo:1,fg:0ff na=bg:828282,bgo:1,fg:f qor=bg:f00,bgo:1,fg:f dc=bg:#993333,bgo:1 '
@@ -328,6 +328,7 @@
       { s: 'Tradfn name in header', t: 'trad', m: 'identifier.tradfn', fg: 1, BIU: 1 }, //the header line (e.g. ∇{R}←A F B) or the closing ∇
       { s: 'User defined global', t: 'glb', m: 'identifier.global', fg: 1, BIU: 1 },
       { s: 'User defined local', t: 'var', m: 'identifier.local', fg: 1, BIU: 1 }, //a.k.a. identifier
+      { s: 'Array notation name', t: 'ann', m: 'identifier.local.aplan', fg: 1, BIU: 1 }, //a.k.a. identifier
       { s: 'Label', t: 'lbl', m: 'meta.label', fg: 1, BIU: 1 }, //L:
       { s: 'System name', t: 'quad', m: 'predefined.sysfn', fg: 1, BIU: 1 }, //⎕XYZ
       { s: 'System name local', t: 'qdl', m: 'predefined.sysfn.local', fg: 1, BIU: 1 }, // localized ⎕XYZ
@@ -335,6 +336,7 @@
       { s: 'User command', t: 'ucmd', m: 'predefined.ucmd', fg: 1, BIU: 1 }, //]XYZ
     ],
     'Enclosures': [
+      { s: 'Array notation', t: 'an', m: 'delimiter.aplan', fg: 1, BIU: 1 }, //()
       { s: 'Curly braces', t: 'cubr', m: 'delimiter.curly', fg: 1, BIU: 1 }, //{}
       { s: 'Round parenthesis', t: 'par', m: 'delimiter.parenthesis', fg: 1, BIU: 1 }, //()
       { s: 'Square bracket', t: 'sqbr', m: 'delimiter.square', fg: 1, BIU: 1 }, //[]
@@ -497,6 +499,7 @@
           + '  {⍵[⍋⍵]} ⋄ global←local←0\n'
           + '  ⎕error ) ] } :error \'unclosed\n'
           + ':EndIf\n'
+          + '(A:[1 2 3 ⋄ 4 5 6])\n'
           + `${SC_MATCH}\n`,
       });
       D.prf.blockCursor((x) => me.updateOptions({ cursorStyle: x ? 'block' : 'line' }));
