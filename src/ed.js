@@ -743,7 +743,7 @@ D.Ed.prototype = {
   },
   RD(me) {
     const ed = this;
-    if (D.prf.ilf()) {
+    if (D.prf.ilf() || me.getModel().getLanguageId() === 'aplan') {
       const text = me.getModel().getLinesContent();
       D.send('FormatCode', { win: this.id, text });
     } else if (me.getSelection().isEmpty()) {
