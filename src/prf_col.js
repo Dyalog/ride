@@ -482,6 +482,7 @@
         matchBrackets: true,
         mouseWheelZoom: false,
         renderIndentGuides: false,
+        unicodeHighlight: { ambiguousCharacters: false },
         useTabStops: false,
         wordBasedSuggestions: false,
         value: '{R}←{X}tradfn(Y Z);local\n'
