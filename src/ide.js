@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 // represents the main screen of a connected Ride
 // holds refs to the session (.win[0]), editors/tracers (.win[i])
 // and an instance of the workspace explorer (.wse) defined in wse.js
@@ -136,9 +137,7 @@ D.IDE = function IDE(opts = {}) {
   D.recv = (x, y) => { mq.push([x, y]); rrd(); };
   ide.block = () => { blk += 1; };
   ide.unblock = () => { (blk -= 1) || rrd(); };
-  ide.tracer = () => {
-    return ide.getMRUWin(1);
-  };
+  ide.tracer = () => ide.getMRUWin(1);
   [{ comp_name: 'wse', prop_name: 'WSEwidth' }, { comp_name: 'dbg', prop_name: 'DBGwidth' }].forEach((obj) => {
     Object.defineProperty(ide, obj.prop_name, {
       get() {
@@ -485,34 +484,36 @@ D.IDE = function IDE(opts = {}) {
   // OSX is stealing our focus.  Let's steal it back!  Bug #5
   D.mac && !ide.floating && setTimeout(() => { ide.wins[0].focus(); }, 500);
   D.prf.lineNums((x) => {
-    eachWin(w => w.setLN && w.setLN(x));
+    eachWin((w) => w.setLN && w.setLN(x));
     updMenu();
   });
   D.prf.breakPts((x) => {
-    eachWin(w => w.setBP && w.setBP(x));
+    eachWin((w) => w.setBP && w.setBP(x));
     updMenu();
   });
   D.prf.wrap(() => { updMenu(); });
-  D.prf.blockCursor((x) => { eachWin(w => !w.bwId && w.blockCursor(!!x)); });
-  D.prf.cursorBlinking((x) => { eachWin(w => !w.bwId && w.cursorBlinking(x)); });
-  D.prf.renderLineHighlight((x) => { eachWin(w => !w.bwId && w.renderLineHighlight(x)); });
-  D.prf.autocompletion((x) => { eachWin(w => !w.bwId && w.autocompletion(x === 'classic')); });
-  D.prf.autocompletionDelay((x) => { eachWin(w => !w.bwId && w.autocompletionDelay(x)); });
-  D.prf.minimapEnabled((x) => { eachWin(w => !w.bwId && w.minimapEnabled(!!x)); });
-  D.prf.minimapRenderCharacters((x) => { eachWin(w => !w.bwId && w.minimapRenderCharacters(!!x)); });
-  D.prf.minimapShowSlider((x) => { eachWin(w => !w.bwId && w.minimapShowSlider(x)); });
-  D.prf.pauseOnError((x) => { 
+  D.prf.blockCursor((x) => { eachWin((w) => !w.bwId && w.blockCursor(!!x)); });
+  D.prf.cursorBlinking((x) => { eachWin((w) => !w.bwId && w.cursorBlinking(x)); });
+  D.prf.renderLineHighlight((x) => { eachWin((w) => !w.bwId && w.renderLineHighlight(x)); });
+  D.prf.autocompletion((x) => { eachWin((w) => !w.bwId && w.autocompletion(x === 'classic')); });
+  D.prf.autocompletionDelay((x) => { eachWin((w) => !w.bwId && w.autocompletionDelay(x)); });
+  D.prf.minimapEnabled((x) => { eachWin((w) => !w.bwId && w.minimapEnabled(!!x)); });
+  D.prf.minimapRenderCharacters((x) => {
+    eachWin((w) => !w.bwId && w.minimapRenderCharacters(!!x));
+  });
+  D.prf.minimapShowSlider((x) => { eachWin((w) => !w.bwId && w.minimapShowSlider(x)); });
+  D.prf.pauseOnError((x) => {
     D.send('SetConfiguration', {
-      configurations: [{ name: 'AUTO_PAUSE_THREADS', value: x ? '1': '0' }],
+      configurations: [{ name: 'AUTO_PAUSE_THREADS', value: x ? '1' : '0' }],
     });
   });
-  D.prf.selectionHighlight((x) => { eachWin(w => !w.bwId && w.selectionHighlight(x)); });
+  D.prf.selectionHighlight((x) => { eachWin((w) => !w.bwId && w.selectionHighlight(x)); });
   D.prf.showSessionMargin((x) => { !ide.floating && ide.wins['0'].showSessionMargin(x); });
   D.prf.showEditorToolbar((x) => {
     $('.ride_win.edit_trace').toggleClass('no-toolbar', !x);
     updTopBtm();
   });
-  D.prf.snippetSuggestions((x) => { eachWin(w => !w.bwId && w.snippetSuggestions(x)); });
+  D.prf.snippetSuggestions((x) => { eachWin((w) => !w.bwId && w.snippetSuggestions(x)); });
   D.prf.zoom(ide.zoom.bind(ide));
 
   ide.handlers = { // for Ride protocol messages
@@ -631,12 +632,12 @@ D.IDE = function IDE(opts = {}) {
       D.ipc && D.ipc.server.broadcast('syntax', D.syntax);
     },
     ValueTip(x) {
-      const req = ide.valueTipRequests[x.token]
+      const req = ide.valueTipRequests[x.token];
       if (!req) return;
       if (req.source === 'monaco') {
-        ide.wins[req.id].ValueTip(x); 
+        ide.wins[req.id].ValueTip(x);
       } else if (req.source === 'wse') {
-        ide.wse.valueTip(req.id, x); 
+        ide.wse.valueTip(req.id, x);
       } else {
         console.log(`unknown source: ${req.source}`);
       }
@@ -713,7 +714,7 @@ D.IDE = function IDE(opts = {}) {
       } else if (D.elw && !D.elw.isFocused()) D.elw.focus();
       if (done) return;
       const ed = new D.Ed(ide, editorOpts);
-      ed.focusTS =  +new Date();
+      ed.focusTS = +new Date();
       ide.wins[w] = ed;
       ed.me_ready.then(() => {
         ed.open(ee);
@@ -721,7 +722,7 @@ D.IDE = function IDE(opts = {}) {
       });
       // add to golden layout:
       const tc = !!ee.debugger;
-      const bro = gl.root.getComponentsByName('win').filter(x => x.id && tc === !!x.tc)[0]; // existing editor
+      const bro = gl.root.getComponentsByName('win').filter((x) => x.id && tc === !!x.tc)[0]; // existing editor
       let p;
       if (bro) { // add next to existing editor
         p = bro.container.parent.parent;
@@ -983,7 +984,7 @@ D.IDE.prototype = {
   },
   zoom(z) {
     const b = this.dom.ownerDocument.body;
-    b.className = `zoom${z} ${b.className.split(/\s+/).filter(s => !/^zoom-?\d+$/.test(s)).join(' ')}`;
+    b.className = `zoom${z} ${b.className.split(/\s+/).filter((s) => !/^zoom-?\d+$/.test(s)).join(' ')}`;
     this.gl.container.resize();
     if (this.floating) {
       D.ipc.of.ride_master.emit('zoom', z);

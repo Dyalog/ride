@@ -613,7 +613,7 @@
       const pk2 = `${pk}${pk}`;
       const kind = monaco.languages.CompletionItemKind;
       const insertTextRules = monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet;
-      const { a } = getState(model, l - 1);
+      const { a } = getState(model, l - 1) || {};
       const { t } = (a || []).slice(-1)[0] || {};
       const snippets = /^\s*:\w*$/.test(s.slice(0, c - 1)) && a && t !== '{';
       const sc = model.bqc - 1;
