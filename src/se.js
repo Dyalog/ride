@@ -725,32 +725,44 @@ D.Se.prototype = {
     const se = this;
     const model = me.getModel();
     const c = me.getPosition();
-    const l = c.lineNumber;
+    const ln = c.lineNumber;
     const lc = model.getLineCount();
-    if (se.dirty[l] === 0) {
-      if (l === model.getLineCount()) {
-        se.edit([{ range: new monaco.Range(l, 1, l + 1, 1), text: '' }]);
-      } else {
-        se.edit([{
-          range: new monaco.Range(
-            l - 1, model.getLineMaxColumn(l - 1),
-            l, model.getLineMaxColumn(l),
-          ),
-          text: '',
-        }]);
+    let dl0 = ln;
+    let dl1 = ln;
+    se.multiLineBlocks.forEach((element) => {
+      if (ln <= (element.end || 0) && ln >= element.start) {
+        dl0 = Math.min(dl0, element.start);
+        dl1 = Math.max(dl1, element.end);
       }
-      delete se.dirty[l];
-      const h = se.dirty;
-      se.dirty = {};
-      Object.keys(h).forEach((x) => { se.dirty[+x - (+x > l)] = h[x]; });
-    } else if (se.dirty[l] != null) {
-      const text = l === lc && !se.dirty[l].length ? '      ' : se.dirty[l];
-      se.edit([{
-        range: new monaco.Range(l, 1, l, model.getLineMaxColumn(l)),
-        text,
-      }]);
-      me.setPosition({ lineNumber: l, column: 1 + text.search(/\S|$/) });
-      delete se.dirty[l];
+    });
+    for (let l = dl1; l >= dl0; l--) {
+      if (se.dirty[l] === 0) {
+        if (l === model.getLineCount()) {
+          se.edit([{ range: new monaco.Range(l, 1, l + 1, 1), text: '' }]);
+        } else {
+          se.edit([{
+            range: new monaco.Range(
+              l - 1,
+              model.getLineMaxColumn(l - 1),
+              l,
+              model.getLineMaxColumn(l),
+            ),
+            text: '',
+          }]);
+        }
+        delete se.dirty[l];
+        const h = se.dirty;
+        se.dirty = {};
+        Object.keys(h).forEach((x) => { se.dirty[+x - (+x > l)] = h[x]; });
+      } else if (se.dirty[l] != null) {
+        const text = l === lc && !se.dirty[l].length ? '      ' : se.dirty[l];
+        se.edit([{
+          range: new monaco.Range(l, 1, l, model.getLineMaxColumn(l)),
+          text,
+        }]);
+        me.setPosition({ lineNumber: l, column: 1 + text.search(/\S|$/) });
+        delete se.dirty[l];
+      }
     }
     se.hl();
   },
