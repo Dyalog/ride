@@ -586,7 +586,7 @@
         h.l += 1;
         return lt;
       }
-      if (h.s && (m = line.match(/^(\s*)\].*/))) {
+      if (h.s && (m = line.match(/^(\s*)\].*/)) && !h.h.a[h.h.a.length - 1].isAplan) {
         if (m[1]) {
           addToken(offset, 'white');
           offset += m[1].length;
