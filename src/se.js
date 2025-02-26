@@ -319,7 +319,7 @@ D.Se.prototype = {
         { range: new monaco.Range(1, 1, 1 + truncate, 1), text: '' },
       ]);
       me.setPosition(cp);
-    } else {
+    } else if (s0 !== text) {
       se.edit([
         { range: new monaco.Range(l, 1, l, 1 + s0.length), text },
         { range: new monaco.Range(1, 1, 1 + truncate, 1), text: '' },
@@ -414,7 +414,7 @@ D.Se.prototype = {
         (promptChanged || !isEmpty)
           ? [new monaco.Selection(line + !isEmpty, 7, line + !isEmpty, 7)] : me.getSelections(),
       );
-    } else if (t === ssp) {
+    } else if (x !== 3 && t === ssp) {
       se.edit([{ range: new monaco.Range(line, 1, line, 7), text: '' }]);
     } else {
       me.setPosition({ lineNumber: line, column });
