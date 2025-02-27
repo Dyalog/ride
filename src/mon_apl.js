@@ -299,7 +299,7 @@
 
             case '(':
               h.rseq += 1;
-              isAplan = /^\(\s*(?:(?=.*⋄).*|(?:[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ][A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ\d]*:.*)|\s*\)?)\s*$/.test(sm);
+              isAplan = /^\(\s*(?:(?=.*⋄).*|(?:[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ][A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ\d]*:.*)|\s*\)?|[^)]*)\s*$/.test(sm);
               a.push({
                 t: c,
                 oi: la.oi,
@@ -311,7 +311,7 @@
 
             case '[':
               h.rseq += 1;
-              isAplan = /^\[\s*(?:(?=.*⋄).*|(?:[A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ][A-Z_a-zÀ-ÖØ-Ýß-öø-üþ∆⍙Ⓐ-Ⓩ\d]*:.*)|\s*\]?)\s*$/.test(sm);
+              isAplan = /^\[\s*(?:(?=.*⋄).*|[^\]]*)\s*$/.test(sm);
               a.push({
                 t: c,
                 oi: la.oi,
@@ -504,10 +504,9 @@
             default:
               if (name0.test(c)) {
                 m = sm.match(name1);
-                // var x=sm.current(),dd=dfnDepth(a)
                 let [x] = m;
                 dd = dfnDepth(a);
-                if (!dd && sm[x.length] === ':') {
+                if (!dd && /\s*:/.test(sm.slice(x.length))) {
                   addToken(offset, la.isAplan ? 'identifier.local.aplan' : 'meta.label');
                   offset += 1;
                 } else if (dd || (h.vars && h.vars.includes(x))) {
