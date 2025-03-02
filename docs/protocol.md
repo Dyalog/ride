@@ -6,7 +6,7 @@
 
 The Ride protocol is formed of messages sent in either direction over a TCP connection.
 
-A message starts with a 4-byte big-endian *total length* field, followed by the ASCII bytes for `"Ride"` and a
+A message starts with a 4-byte big-endian *total length* field, followed by the ASCII bytes for `"RIDE"` and a
 UTF-8-encoded payload:
 ```
     8+len(payload)   "Ride" magic number   payload
