@@ -102,6 +102,7 @@ el.app.on('ready', () => {
       contextIsolation: false,
       enableRemoteModule: true,
       nodeIntegration: true,
+      enableDeprecatedPaste: true,
     },
   });
   global.elw = w;
