@@ -58,6 +58,9 @@
 .highlighted + .highlighted:not(:has(+ .highlighted)){ // last token
 	box-shadow: inset -1px -1px @ME_HIGHLIGHTED, inset 0px 1px @ME_HIGHLIGHTED;
 }
+.highlightedit{
+  background-color: fade(lighten(@ME_HIGHLIGHTED,20),50);
+}
 
 .sessionmargin{
   border-right: 1px solid @GLYPHMARGIN_BRD_COL;
