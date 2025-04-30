@@ -770,7 +770,7 @@ D.Se.prototype = {
   EP() { this.ide.focusMRUWin(); },
   ER() { this.exec(0); },
   TC() { this.exec(1); },
-  TP() { this.exec(2); },
+  IT() { this.exec(2); },
   LN() { D.prf.lineNums.toggle(); },
   MA() { D.send('RestartThreads', {}); }, // Threads > Restart All Threads
   VAL() {

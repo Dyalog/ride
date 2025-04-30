@@ -671,7 +671,7 @@ D.Ed.prototype = {
   TVO() { D.prf.fold.toggle(); },
   TVB() { D.prf.breakPts.toggle(); },
   TC() { D.send('StepInto', { win: this.id }); D.ide.getStats(); },
-  TP() { D.send('TracePrimitive', { win: this.id }); D.ide.getStats(); },
+  IT() { D.send('TracePrimitive', { win: this.id }); D.ide.getStats(); },
   AC(me) { // align comments
     const ed = this;
     const model = me.getModel();
