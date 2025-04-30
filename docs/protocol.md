@@ -215,7 +215,7 @@ When the user presses `<ER>` (Enter) or `<TC>` (Ctrl-Enter), Ride sends
 * `text`: the APL code to evaluate
 * `trace`: 0 = execute
            1 = evaluate in the tracer (`<TC>`)
-           2 = evaluate in the tracer token by token (`<TP>`)
+           2 = evaluate in the tracer token by token (`<IT>`)
 
 Note that Ride can't assume that everything entered in the session will be echoed, e.g. quote quad input (`⍞`) doesn't
 echo.  Therefore, Ride should wait for the [`EchoInput`](#EchoInput) message.
@@ -431,7 +431,7 @@ Request the current line in a trace window is executed. (Step into)
 ```json
 ["TracePrimitive",{"win":123}] // Ride -> Interpreter
 ```
-Request the current line in a trace window is executed primitive but primitive.
+Request the current line in a trace window is executed primitive by primitive.
 
 
 ## Status Bar
