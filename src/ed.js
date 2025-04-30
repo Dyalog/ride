@@ -228,15 +228,17 @@ D.Ed.prototype = {
     const { me } = ed;
     const hlo = ed.HIGHLIGHT || {};
     if (!me.getModel()) return; // sometimes window is closed just before this is called
-    ed.dom.classList.toggle('tbt', hlo.colStart > 0);
+    const isWholeLine = Number.isNaN(hlo.colEnd)
+                        || (hlo.lineStart === hlo.lineEnd && hlo.colStart === hlo.colEnd);
+    ed.dom.classList.toggle('tbt', !isWholeLine);
     if (!hlo.lineStart) {
       ed.hlDecorations = [];
     } else {
-      if (hlo.colStart > 0) {
+      if (!isWholeLine) {
         ed.hlDecorations = [{
           range: new monaco.Range(hlo.lineStart, hlo.colStart, hlo.lineEnd, hlo.colEnd),
           options: {
-            inlineClassName: 'highlighted',
+            inlineClassName: 'highlightedit',
           },
         }];
       } else {
