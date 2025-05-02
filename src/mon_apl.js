@@ -506,9 +506,13 @@
                 m = sm.match(name1);
                 let [x] = m;
                 dd = dfnDepth(a);
-                if (!dd && /\s*:/.test(sm.slice(x.length))) {
-                  addToken(offset, la.isAplan ? 'identifier.local.aplan' : 'meta.label');
-                  offset += 1;
+                if (!dd && /^\s*:(?!in)/i.test(sm.slice(x.length))) {
+                  if (la.isAplan) {
+                    addToken(offset, 'identifier.local.aplan');
+                  } else {
+                    offset += sm.slice(x.length).match(/^\s*:/)[0].length;
+                    addToken(offset, 'meta.label');
+                  }
                 } else if (dd || (h.vars && h.vars.includes(x))) {
                   [x] = sm.match(RegExp(`(${D.syntax.name}\\.?)+`));
                   addToken(offset, 'identifier.local');
