@@ -58,9 +58,9 @@ pipeline {
             sh 'rm -Rf _ ship'
           }
         }
-        stage ('Mac Build and Packaging') {
+        stage ('Mac Build and Packaging (arm)') {
           agent {
-            label 'mac && arm && build && ride (arm)'
+            label 'mac && arm && build && ride'
           }
           steps {
             sh 'rm -Rf _ ship'
