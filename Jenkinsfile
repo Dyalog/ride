@@ -42,9 +42,25 @@ pipeline {
             sh 'rm -Rf _ ship'
           }
         }
+        stage ('Mac Build and Packaging (x86)') {
+          agent {
+            label 'mac && x86 && build && ride'
+          }
+          steps {
+            sh 'rm -Rf _ ship'
+            sh 'npm i'
+            sh 'npm run build o'
+            withCredentials([usernamePassword(credentialsId: '868dda6c-aaec-4ee4-845a-57362dec695b', passwordVariable: 'APPLE_APP_PASS', usernameVariable: 'APPLE_ID')]) {
+              sh './CI/packagescripts/osx/packageOSX.sh'
+            }
+            stash name: 'ride-mac', includes: '_/ride*/Ride-*-darwin*/**'
+            stash name: 'mac-ship', includes: 'ship/*'
+            sh 'rm -Rf _ ship'
+          }
+        }
         stage ('Mac Build and Packaging') {
           agent {
-            label 'mac && arm && build && ride'
+            label 'mac && arm && build && ride (arm)'
           }
           steps {
             sh 'rm -Rf _ ship'
