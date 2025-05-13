@@ -69,8 +69,8 @@ pipeline {
             withCredentials([usernamePassword(credentialsId: '868dda6c-aaec-4ee4-845a-57362dec695b', passwordVariable: 'APPLE_APP_PASS', usernameVariable: 'APPLE_ID')]) {
               sh './CI/packagescripts/osx/packageOSX.sh'
             }
-            stash name: 'ride-mac', includes: '_/ride*/Ride-*-darwin*/**'
-            stash name: 'mac-ship', includes: 'ship/*'
+            stash name: 'ride-macarm', includes: '_/ride*/Ride-*-darwin*/**'
+            stash name: 'macarm-ship', includes: 'ship/*'
             sh 'rm -Rf _ ship'
           }
         }
@@ -105,6 +105,7 @@ pipeline {
         sh 'rm -Rf _'
         unstash 'ride-version'
         unstash 'mac-ship'
+        unstash 'macarm-ship'
         withCredentials([usernamePassword(credentialsId: '868dda6c-aaec-4ee4-845a-57362dec695b', passwordVariable: 'APPLE_APP_PASS', usernameVariable: 'APPLE_ID')]) {
           sh "CI/packagescripts/osx/notarise.sh"
         }
@@ -128,6 +129,7 @@ pipeline {
         sh 'rm -Rf _ ship'
         unstash 'ride-win'
         unstash 'ride-mac'
+        unstash 'ride-macarm'
         unstash 'ride-linux'
         unstash 'ride-version'
         unstash 'linux-ship'
@@ -157,7 +159,7 @@ pipeline {
         sh 'rm -Rf _ ship'
         unstash 'ride-version'
         unstash 'linux-ship'
-        unstash 'mac-ship'
+        unstash 'mac-ship-notarised'
         unstash 'win-ship'
         sh './CI/GH-Release.sh'
         sh 'rm -Rf _ ship'

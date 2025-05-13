@@ -67,7 +67,7 @@ cd ${BUILDROOTDIR}
 
 mkdir -p ${SHIPDIRECTORY}
 
-ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac.pkg" | tr '[:upper:]' '[:lower:]'`
+ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac_${R_ARCH}.pkg" | tr '[:upper:]' '[:lower:]'`
 
 ./CI/packagescripts/osx/sign.js ${RIDEDIR}/${PackageName}.app "${APPLE_CERT_APPLICATION}"
 

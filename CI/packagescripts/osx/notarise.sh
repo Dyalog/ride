@@ -48,7 +48,20 @@ else
 RIDEVERSION=9.9.9
 fi
 REVISION_VERSION=`echo $RIDEVERSION | sed 's/[0-9]*\.[0-9]*\.\([0-9]*\)/\1/'`
-ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac.pkg" | tr '[:upper:]' '[:lower:]'`
+
+## x64
+ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac_x64.pkg" | tr '[:upper:]' '[:lower:]'`
+
+# upload for notarization
+ notarizefile "$ARCHIVENAME" 
+
+# staple result
+echo "## Stapling $ARCHIVENAME"
+/usr/bin/xcrun stapler staple "$ARCHIVENAME"
+
+
+## arm64
+ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac_arm64.pkg" | tr '[:upper:]' '[:lower:]'`
 
 # upload for notarization
  notarizefile "$ARCHIVENAME" 
