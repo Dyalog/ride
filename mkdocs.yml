@@ -33,9 +33,11 @@ markdown_extensions:
 extra:
   version:
     provider: mike
+  dyalog_docs_host: https://dyalog.github.io/documentation/20.0
 
 plugins:
   - search
+  - macros
   - print-site:
       add_to_navigation: true
       print_page_title: 'Print Site'

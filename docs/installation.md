@@ -34,7 +34,7 @@ A Ride shortcut is added to the desktop.
 
 Ride requires macOS High Sierra (10.13) or later.
 
-Ride is the default UI for Dyalog on macOS and is installed at the same time as Dyalog (see the [Dyalog for macOS Installation and Configuration Guide](https://docs.dyalog.com/latest/Dyalog%20for%20macOS%20Installation%20and%20Configuration%20Guide.pdf)); no further installation is required.
+Ride is the default UI for Dyalog on macOS and is installed at the same time as Dyalog (see the [Dyalog for macOS Installation and Configuration Guide]({{ config.extra.dyalog_docs_host }}/Dyalog_for_macOS_Installation_and_Configuration_Guide.pdf)); no further installation is required.
 
 You can also install Ride as a separate, stand-alone, product, for example to work exclusively with remote APL interpreters:
 

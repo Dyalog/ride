@@ -101,7 +101,7 @@ Allows customisation of a variety of features.
 
     - Auto PW
 
-        Select this to display text in the Session window up to the full width of the Session window before wrapping (automatically updates when the Session is resized). Also sets [⎕PW](https://help.dyalog.com/latest/index.htm#Language/System%20Functions/pw.htm) to this value.
+        Select this to display text in the Session window up to the full width of the Session window before wrapping (automatically updates when the Session is resized). Also sets [⎕PW]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-functions/pw/) to this value.
 
     - Persistent history `<number>` lines
 
@@ -164,7 +164,7 @@ Allows customisation of a variety of features.
 
     - opening a scripted object in the **Edit** window can cause the source of that object to change (when closing an **Edit** window, you might be prompted to save a function even though you have not made any changes to it).
     - viewing an object can change its file timestamp; source code management systems can subsequently report changes due to the changed file timestamp.
-    - source code changes resulting from reformatting will be evident in the results of system functions such as [⎕ATX](https://help.dyalog.com/latest/index.htm#Language/System%20Functions/atx.htm), [⎕SRC](https://help.dyalog.com/latest/index.htm#Language/System%20Functions/src.htm), [⎕CR](https://help.dyalog.com/latest/index.htm#Language/System%20Functions/cr.htm), [⎕VR](https://help.dyalog.com/latest/index.htm#Language/System%20Functions/vr.htm) and [⎕NR](https://help.dyalog.com/latest/index.htm#Language/System%20Functions/nr.htm).
+    - source code changes resulting from reformatting will be evident in the results of system functions such as [⎕ATX]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-functions/atx/), [⎕SRC]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-functions/src/), [⎕CR]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-functions/cr/), [⎕VR]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-functions/vr/) and [⎕NR]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-functions/nr/).
 
 ### Keyboard Tab
 
@@ -179,7 +179,7 @@ Allows customisation of the default [keyboard mappings](the_dyalog_development_e
     If Dyalog is not installed on the machine that the Ride is running on, then the Dyalog Unicode IME can be downloaded and installed from Dyalog's [APL Fonts and Keyboards](https://www.dyalog.com/apl-font-keyboard.htm) page.
 
 !!!note "Linux"
-    Most Linux distributions released after mid-2012 support Dyalog glyphs by default, for example, openSUSE 12.2, Ubuntu 12.10 and Fedora 17. For more information, see the [Dyalog for UNIX Installation and Configuration Guide](https://docs.dyalog.com/latest/Dyalog%20for%20UNIX%20Installation%20and%20Configuration%20Guide.pdf).
+    Most Linux distributions released after mid-2012 support Dyalog glyphs by default, for example, openSUSE 12.2, Ubuntu 12.10 and Fedora 17. For more information, see the [Dyalog for UNIX Installation and Configuration Guide]({{ config.extra.dyalog_docs_host }}/Dyalog_for_UNIX_Installation_and_Configuration_Guide.pdf).
 
 ---
 **To customise the default keyboard's Prefix key**
@@ -408,27 +408,3 @@ Some customisation can be performed using configuration parameters outside a Ses
 
 !!!warning
     Changes made to configuration parameters in the **dyalog.config** file only impact local interpreters (that is, interpreters that are configured by that file) and do not impact interpreters that the Ride can connect with on other machines.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

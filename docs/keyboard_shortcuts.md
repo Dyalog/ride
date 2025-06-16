@@ -36,6 +36,7 @@ The Dyalog keyboard shortcuts that are supported by the Ride are listed below; t
 | FX* | Fix the current function |  | Edit : Fixes the function without closing the Edit window |
 | HLP* | Help | F1 | Display the documentation for the system command, system name, control structure keyword or primitive glyph immediately to the left of the cursor |
 | HO | <kbd>Home</kbd> cursor | Linux: <kbd>Ctrl</kbd> + <kbd>Home</kbd> macOS: <kbd>⌘</kbd> + <kbd>Up Arrow</kbd> Windows: <kbd>Ctrl</kbd> + <kbd>Home</kbd> | Session : Move cursor to top left corner of Session log Edit : Move cursor to top left corner of content |
+| IT* | Inline Trace | <kbd>Ctrl</kbd>+<kbd>Alt</kbd>+<kbd>Enter</kbd> | Inline trace |
 | JBK* | Jump back | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>J<kbd> | Edit (a class or namespace): move the cursor back to where the last double-click or Edit command (`<ED>`) was issued in the current **Edit** window. Repeatable. |
 | JSC* | Show JavaScript Console | <kbd>F12</kbd> | Display the JavaScript console. Only necessary if requested by Dyalog Ltd. when reporting an issue. |
 | LBR* | Toggle Language bar |  | Toggle display of the [Language bar](the_dyalog_development_environment.md/#language-bar) at the top of the **Session** window |
@@ -83,5 +84,3 @@ The Dyalog keyboard shortcuts that are supported by the Ride are listed below; t
 | ZMI* | Increase font size | <kbd>Ctrl</kbd> + <kbd>=</kbd> or <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>=</kbd> | Increase the size of the font in all the windows |
 | ZMO* | Decrease font size | <kbd>Ctrl</kbd> + <kbd>-</kbd> | Decrease the size of the font in all the windows |
 | ZMR* | Reset font size | <kbd>Ctrl</kbd> + <kbd>0</kbd> | Reset the size of the font in all the windows to its default value |
-
-

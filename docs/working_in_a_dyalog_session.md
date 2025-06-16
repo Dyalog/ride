@@ -31,11 +31,11 @@ If you set a keyboard shortcut (configurable via `Edit > Preferences > Shortcuts
 
 ## Threads
 
-Ride supports multithreading. For information on threads, see the [Dyalog Programming Reference Guide](https://docs.dyalog.com/latest/Dyalog%20Programming%20Reference%20Guide.pdf).
+Ride supports multithreading. For information on threads, see the [Dyalog Programming Reference Guide]({{ config.extra.dyalog_docs_host }}/Dyalog_Programming_Reference_Guide.pdf).
 
 ## Setting Stop, Trace, and Monitor points
 
-For information about stop (breakpoint), trace, and monitor points, see [Stop Controls](https://help.dyalog.com/latest/index.htm#Language/System%20Functions/stop.htm), [Trace Controls](https://help.dyalog.com/latest/index.htm#Language/System%20Functions/trace.htm), and [Monitor Controls](https://help.dyalog.com/latest/index.htm#Language/System%20Functions/monitor.htm).
+For information about stop (breakpoint), trace, and monitor points, see [Stop Controls]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-functions/set-stop/), [Trace Controls]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-functions/set-trace/), and [Monitor Controls]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-functions/set-monitor).
 
 To toggle a Stop point, click in the far left margin of a **Trace** or **Edit** window.
 

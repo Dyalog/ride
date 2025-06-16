@@ -13,9 +13,9 @@ I-Beam is a monadic operator that provides a range of system-related services.
 
 There are three I-Beams that are only relevant to Ride. Consult the main Dyalog documentation for details: 
 
-* [3500⌶ (Send HTML to Ride)](https://help.dyalog.com/latest/index.htm#Language/I%20Beam%20Functions/Send%20Text%20to%20RIDE-embedded%20Browser.htm?Highlight=3500%E2%8C%B6)
-* [3501⌶ (Connected to Ride?)](https://help.dyalog.com/latest/index.htm#Language/I%20Beam%20Functions/Connected%20to%20the%20RIDE.htm?Highlight=3501%E2%8C%B6)
-* [3502⌶ (Manage Ride Connectors)](https://help.dyalog.com/latest/index.htm#Language/I%20Beam%20Functions/Manage%20RIDE%20Connections.htm?Highlight=3502%E2%8C%B6).
+* [3500⌶ (Send HTML to Ride)]({{ config.extra.dyalog_docs_host }}/language-reference-guide/the-i-beam-operator/send-text-to-ride-embedded-browser/)
+* [3501⌶ (Connected to Ride?)]({{ config.extra.dyalog_docs_host }}/language-reference-guide/the-i-beam-operator/connected-to-the-ride/)
+* [3502⌶ (Manage Ride Connectors)]({{ config.extra.dyalog_docs_host }}/language-reference-guide/the-i-beam-operator/manage-ride-connections/).
 
 
 !!!note "Microsoft Windows"
@@ -41,9 +41,9 @@ If the `RIDE_INIT` configuration parameter is set but Ride DLLs/shared libraries
 
 Some customisation can be performed using configuration parameters outside a Session. For details of other configuration parameters that can be set, and the syntax used to set them, see the Dyalog Installation and Configuration Guide specific to the operating system that you are using:
 
-- [macOS Installation and Configuration Guide](https://docs.dyalog.com/latest/Dyalog%20for%20macOS%20Installation%20and%20Configuration%20Guide.pdf)
-- [Microsoft Windows Installation and Configuration Guide](https://docs.dyalog.com/latest/Dyalog%20for%20Microsoft%20Windows%20Installation%20and%20Configuration%20Guide.pdf)
-- [UNIX Installation and Configuration Guide](https://docs.dyalog.com/latest/Dyalog%20for%20UNIX%20Installation%20and%20Configuration%20Guide.pdf)
+- [macOS Installation and Configuration Guide]({{ config.extra.dyalog_docs_host }}/Dyalog_for_macOS_Installation_and_Configuration_Guide.pdf)
+- [Microsoft Windows Installation and Configuration Guide]({{ config.extra.dyalog_docs_host }}/Dyalog_for_Microsoft_Windows_Installation_and_Configuration_Guide.pdf)
+- [UNIX Installation and Configuration Guide]({{ config.extra.dyalog_docs_host }}/Dyalog_for_UNIX_Installation_and_Configuration_Guide.pdf)
 
 Changes made to configuration parameters in the `dyalog.config` file only impact local interpreters (that is, interpreters that are configured by that file) and do not impact interpreters that Ride can connect with on other machines.
 
@@ -116,7 +116,7 @@ To open the Zero Footprint Ride in a web browser on:
 The `RIDE_INI` configuration parameter is set automatically when launching a new Dyalog Session from Ride.
 
 !!!note
-    If the `RIDE_INIT` configuration parameter is set but Ride DLLs/shared libraries are not available, then a run-time interpreter will start but the subsequent call to `3502⌶` will be unsuccessful – see [3502⌶](https://help.dyalog.com/latest/index.htm#Language/I%20Beam%20Functions/Manage%20RIDE%20Connections.htm?Highlight=3502%E2%8C%B6).
+    If the `RIDE_INIT` configuration parameter is set but Ride DLLs/shared libraries are not available, then a run-time interpreter will start but the subsequent call to `3502⌶` will be unsuccessful – see [3502⌶]({{ config.extra.dyalog_docs_host }}/language-reference-guide/the-i-beam-operator/manage-ride-connections/).
 
 ## Unsupported Language Elements
 
@@ -141,11 +141,11 @@ If Ride is connected to a Unicode edition of Dyalog, then underscored characters
 
 ### Function Key Configuration
 
-Character strings (including command keys) can be associated with programmable function keys using the [⎕PFKEY](https://help.dyalog.com/latest/index.htm#Language/System%20Functions/pfkey.htm) system function. When running a Dyalog Session through Ride, `⎕PFKEY` can be used to define/display the keystrokes for a designated function key; however, that function key does not acquire the defined set of keystrokes, rendering `⎕PFKEY` of no real use. Instead, function keys should be set through the Shortcuts tab of the Preferences dialog box.
+Character strings (including command keys) can be associated with programmable function keys using the [⎕PFKEY]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-functions/pfkey/) system function. When running a Dyalog Session through Ride, `⎕PFKEY` can be used to define/display the keystrokes for a designated function key; however, that function key does not acquire the defined set of keystrokes, rendering `⎕PFKEY` of no real use. Instead, function keys should be set through the Shortcuts tab of the Preferences dialog box.
 
 ### Operating System Terminal/Command Window Interaction
 
-Features that rely on interaction with an operating system terminal/command window (that is, [⎕SR](https://help.dyalog.com/latest/index.htm#Language/System%20Functions/sr.htm) and [)SH](https://help.dyalog.com/latest/index.htm#Language/System%20Commands/sh.htm) or [)CMD](https://help.dyalog.com/latest/index.htm#Language/System%20Commands/cmd.htm) with no argument) cannot work in a Dyalog Session that is running through Ride. Instead of behaving as documented in the [Dyalog APL Language Reference Guide](https://docs.dyalog.com/latest/Dyalog%20APL%20Language%20Reference%20Guide.pdf), their behaviour depends on the way in which the interpreter and Ride combined to start a Dyalog Session:
+Features that rely on interaction with an operating system terminal/command window (that is, [⎕SR]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-functions/sr/) and [)SH]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-commands/sh/) or [)CMD]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-commands/cmd/) with no argument) cannot work in a Dyalog Session that is running through Ride. Instead of behaving as documented in the [Dyalog APL Language Reference Guide]({{ config.extra.dyalog_docs_host }}/Dyalog_APL_Language_Reference_Guide.pdf), their behaviour depends on the way in which the interpreter and Ride combined to start a Dyalog Session:
 
 - If the interpreter was started by Ride, then:
     - `⎕SR` generates a trappable error

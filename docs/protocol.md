@@ -140,7 +140,7 @@ For `json` format:
 ```
 
 ### SysError <a name=SysError></a>
-If at any time the interpreter crashes with a [syserror](http://help.dyalog.com/latest/Content/Language/Errors/System%20Errors.htm), it sends;
+If at any time the interpreter crashes with a [syserror]({{ config.extra.dyalog_docs_host }}/programming-reference-guide/error-messages/system-errors/), it sends;
 ```json
 ["SysError",{"text":"apl: sys error 123 errno 456","stack":""}] // Interpreter -> Ride
 ```
@@ -199,9 +199,9 @@ The interpreter informs Ride about changes in its ability to accept user input w
 Constants for `type`: 
 - `0` no prompt,
 - `1` the usual 6-space APL prompt (a.k.a. Descalc or "desktop calculator"),
-- `2` [Quad(`⎕`)](http://help.dyalog.com/latest/Content/Language/System%20Functions/Evaluated%20Input%20Output.htm) input,
+- `2` [Quad(`⎕`)]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-functions/evaluated-input-output/) input,
 - `3` line editor,
-- `4` [Quote-Quad(`⍞`)](http://help.dyalog.com/latest/Content/Language/System%20Functions/Character%20Input%20Output.htm) input,
+- `4` [Quote-Quad(`⍞`)]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-functions/character-input-output/) input,
 - `5` any prompt type unforeseen here.
 
 :red_circle: These modes need explaining with expected behaviour.
@@ -234,7 +234,7 @@ Ride can optionally advise the interpreter about the session's width in characte
 ["SetPW",{"pw":79}] // Ride -> Interpreter
 ```
 Further output will wrap at that width (with a few exceptions).
-See [`⎕PW`](http://help.dyalog.com/latest/Content/Language/System%20Functions/pw.htm).
+See [`⎕PW`]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-functions/pw/).
 
 
 ## Window management
@@ -269,8 +269,8 @@ The interpreter will parse that and may respond later with one of;
 ["UpdateWindow",...] // Interpreter -> Ride (same args as OpenWindow)
 ```
 It may also send these in response to [`)ed
-name`](http://help.dyalog.com/latest/Content/Language/System%20Commands/ed.htm) or
-[`⎕ed'name'`](http://help.dyalog.com/latest/Content/Language/System%20Functions/ed.htm), as well as when tracing into an
+name`]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-commands/ed/) or
+[`⎕ed'name'`]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-functions/ed/), as well as when tracing into an
 object that is not currently being traced.
 
 Constants for `entityType`:
@@ -282,7 +282,7 @@ Constants for `entityType`:
 | `4` |  simple numeric array | | `512` |  APL class
 | `8` |  mixed simple array | | `1024` |  APL interface
 | `16` |  nested array | | `2048` |  APL session
-| `32` |  [`⎕OR`](http://help.dyalog.com/latest/Content/Language/System%20Functions/or.htm) object | | `4096` |  external function
+| `32` |  [`⎕OR`]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-functions/or/) object | | `4096` |  external function
 | `64` |  native file | | `262144` | array notation (APLAN)
 
 :red_circle: TODO: describe the other arguments
@@ -345,7 +345,7 @@ To close all windows, but leave the SIstack unchanged Ride can send the CloseAll
 ```json
 ["CloseAllWindows",{}] // Ride -> Interpreter
 ```
-In response the interpreter will send a CloseWindow messsage for each window that it is aware of. The CloseAllWindows message will leave the SIStack unchanged, it will just close all (trace and edit) windows in the interpreter.
+In response the interpreter will send a CloseWindow message for each window that it is aware of. The CloseAllWindows message will leave the SIStack unchanged, it will just close all (trace and edit) windows in the interpreter.
 
 ## Debugging
 The following messages are used in relation to trace windows.
@@ -654,7 +654,7 @@ When the user hovers a name with the mouse, Ride should ask for a short textual 
 
 * `token`: is used to correlate requests and responses, and there is no guarantee that they will arrive in the same order, if ever (like with autocompletion).
 * `maxHeight` and `maxWidth` can be used to limit the number of lines and columns in the result.
-* `class` indicates the [nameclass](http://help.dyalog.com/latest/Content/Language/System%20Functions/nc.htm) of the object. This information can be used to syntax-highlight the tooltip.
+* `class` indicates the [nameclass]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-functions/nc/) of the object. This information can be used to syntax-highlight the tooltip.
 * `startCol` and `endCol` describe the position of the whole name to which the value tip pertains. `startCol` is inclusive and `endCol` is exclusive.
 
 
@@ -723,7 +723,7 @@ In the response `index` can be:
 ## Other
 
 ### ShowHTML <a name=ShowHTML></a>
-Request Ride shows some HTML. See [`3500⌶`](http://help.dyalog.com/latest/Content/Language/Primitive%20Operators/Send%20Text%20to%20RIDE-embedded%20Browser.htm).
+Request Ride shows some HTML. See [`3500⌶`]({{ config.extra.dyalog_docs_host }}/language-reference-guide/the-i-beam-operator/send-text-to-ride-embedded-browser/).
 ```json
 ["ShowHTML",{"title":"Example","html":"<i>Hello</i> <b>world</b>"}] // Interpreter -> Ride
 ```
@@ -768,7 +768,7 @@ It can query information about the children of a particular node with TreeList.
 The root of the tree is assumed to have a node id of 0.
 * `nodeId` is the requested parent id.
 * `nodeIds` are the ids of the children; some of them can be 0 -- those children can't themselves have children.
-* `classes` are [name classes](http://help.dyalog.com/latest/Content/Language/System%20Functions/nc.htm#NameClassification)
+* `classes` are [name classes]({{ config.extra.dyalog_docs_host }}/language-reference-guide/system-functions/nc/)
   that can be used to choose appropriate styling
 * `err` is non-empty only when an error has occurred in the interpreter, e.g. when `nodeId` is no longer invalid
 

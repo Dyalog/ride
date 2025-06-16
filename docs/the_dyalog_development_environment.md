@@ -13,7 +13,7 @@ Display of the session indicator margin can be toggled via `Edit > Preferences >
 Sessions allow multi-line input.
 
 !!!note
-    This optional feature is on by default. To disable it, set the DYALOG_LINEEDITOR_MODE configuration parameter to 0 (for more information, see the [Dyalog for macOS Installation and Configuration Guide](https://docs.dyalog.com/latest/Dyalog%20for%20macOS%20Installation%20and%20Configuration%20Guide.pdf)).
+    This optional feature is on by default. To disable it, set the DYALOG_LINEEDITOR_MODE configuration parameter to 0 (for more information, see the [Dyalog for macOS Installation and Configuration Guide]({{ config.extra.dyalog_docs_host }}/Dyalog_for_macOS_Installation_and_Configuration_Guide.pdf)).
 
 With multi-line input enabled:
 * grouped lines are syntax coloured in their entirety.
@@ -50,7 +50,7 @@ Display of the workspace explorer can be toggled with the `View > Show Workspace
 
 The debug window provides information about currently running threads and the current stack.
 
-The **Threads** area shows each thread's number (`⎕TID`) and name (`⎕TNAME`), its state (for example, `Session`, `Pending`, `:Hold`, `⎕NA`), and which tokens it awaits (`⎕TREQ`). For information on how to use threads, see the [Dyalog Programming Reference Guide](https://docs.dyalog.com/latest/Dyalog%20Programming%20Reference%20Guide.pdf).
+The **Threads** area shows each thread's number (`⎕TID`) and name (`⎕TNAME`), its state (for example, `Session`, `Pending`, `:Hold`, `⎕NA`), and which tokens it awaits (`⎕TREQ`). For information on how to use threads, see the [Dyalog Programming Reference Guide]({{ config.extra.dyalog_docs_host }}/Dyalog_Programming_Reference_Guide.pdf).
 
 The **SI Stack** area lists the functions in the execution stack, similar to the display of `)SI`.
 
