@@ -1,0 +1,1009 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../working_in_a_dyalog_session/">
+      
+      
+        <link rel="next" href="../customising_your_session/">
+      
+      
+      <link rel="icon" href="../img/favicon-32.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.12">
+    
+    
+      
+        <title>Ride-Specific Language Features - Ride User Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.2afb09e1.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../css/print-site.css">
+    
+      <link rel="stylesheet" href="../css/print-site-material.css">
+    
+      <link rel="stylesheet" href="../style/main.css">
+    
+      <link rel="stylesheet" href="../style/admonition-ucmdhelp.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ride-specific-language-features" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Ride User Guide" class="md-header__button md-logo" aria-label="Ride User Guide" data-md-component="logo">
+      
+  <img src="../img/dyalog-white.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Ride User Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Ride-Specific Language Features
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/dyalog/ride" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Ride User Guide" class="md-nav__button md-logo" aria-label="Ride User Guide" data-md-component="logo">
+      
+  <img src="../img/dyalog-white.svg" alt="logo">
+
+    </a>
+    Ride User Guide
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/dyalog/ride" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    About This Document
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../starting_a_dyalog_session/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Starting a Session
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ride_in_the_browser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ride in the browser
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../the_dyalog_development_environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    The Dyalog Development Environment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../input_windows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Edit and Trace Windows
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../working_in_a_dyalog_session/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Working in a Dyalog Session
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Ride-Specific Language Features
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ride-Specific Language Features
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#i-beams" class="md-nav__link">
+    <span class="md-ellipsis">
+      I-Beams
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration Parameters
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ride_editor" class="md-nav__link">
+    <span class="md-ellipsis">
+      RIDE_EDITOR
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ride_init" class="md-nav__link">
+    <span class="md-ellipsis">
+      RIDE_INIT
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unsupported-language-elements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Unsupported Language Elements
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Unsupported Language Elements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#underscored-characters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Underscored Characters
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Underscored Characters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#underscored-characters-in-window-captions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Underscored Characters in Window Captions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#underscored-characters-in-the-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      Underscored Characters in the Session
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-key-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Function Key Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operating-system-terminalcommand-window-interaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Operating System Terminal/Command Window Interaction
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../customising_your_session/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Customising Your Session
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../keyboard_shortcuts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Keyboard Shortcuts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sample_configuration_file/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sample Configuration File
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../print_page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Print Site
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#i-beams" class="md-nav__link">
+    <span class="md-ellipsis">
+      I-Beams
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#configuration-parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration Parameters
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration Parameters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ride_editor" class="md-nav__link">
+    <span class="md-ellipsis">
+      RIDE_EDITOR
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ride_init" class="md-nav__link">
+    <span class="md-ellipsis">
+      RIDE_INIT
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#unsupported-language-elements" class="md-nav__link">
+    <span class="md-ellipsis">
+      Unsupported Language Elements
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Unsupported Language Elements">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#underscored-characters" class="md-nav__link">
+    <span class="md-ellipsis">
+      Underscored Characters
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Underscored Characters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#underscored-characters-in-window-captions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Underscored Characters in Window Captions
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#underscored-characters-in-the-session" class="md-nav__link">
+    <span class="md-ellipsis">
+      Underscored Characters in the Session
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#function-key-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Function Key Configuration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#operating-system-terminalcommand-window-interaction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Operating System Terminal/Command Window Interaction
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="ride-specific-language-features">Ride-Specific Language Features</h1>
+<p>When running a Dyalog Session through Ride, the majority of language features remain unaltered. However, there are a few additional features (see <a href="#i-beams">I-beams</a> and <a href="#configuration-parameters">Ride-Specific Configuration Parameters</a>) and some existing functionality that is meaningless (see <a href="#unsupported_language_elements">Unsupported Language Elements</a>) when a Session is running through Ride.</p>
+<h2 id="i-beams">I-Beams</h2>
+<p>I-Beam is a monadic operator that provides a range of system-related services.</p>
+<p><strong>Syntax</strong>: <code>R←{X}(A⌶)Y</code></p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Any service provided using an I-Beam should be considered as experimental and subject to change – without notice – from one release to the next. Any use of I-Beams in applications should, therefore, be carefully isolated in cover-functions that can be adjusted if necessary.</p>
+</div>
+<p>There are three I-Beams that are only relevant to Ride. Consult the main Dyalog documentation for details: </p>
+<ul>
+<li><a href="https://help.dyalog.com/latest/index.htm#Language/I%20Beam%20Functions/Send%20Text%20to%20RIDE-embedded%20Browser.htm?Highlight=3500%E2%8C%B6">3500⌶ (Send HTML to Ride)</a></li>
+<li><a href="https://help.dyalog.com/latest/index.htm#Language/I%20Beam%20Functions/Connected%20to%20the%20RIDE.htm?Highlight=3501%E2%8C%B6">3501⌶ (Connected to Ride?)</a></li>
+<li><a href="https://help.dyalog.com/latest/index.htm#Language/I%20Beam%20Functions/Manage%20RIDE%20Connections.htm?Highlight=3502%E2%8C%B6">3502⌶ (Manage Ride Connectors)</a>.</li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Microsoft Windows</p>
+<p>By default, Ride is not enabled on run-time executables. For security reasons, enabling Ride is a two-step process rather than using (for example) a single configuration parameter. To enable Ride, two steps must be taken:</p>
+<ol>
+<li>Set the <code>RIDE_INIT</code> configuration parameter (see <a href="#ride_init">RIDE_INIT</a>) on the machine on which the run-time interpreter is running to an appropriate value.</li>
+<li>Execute <code>3502⌶1</code> in your application code.</li>
+</ol>
+<p>The run time interpreter can then attempt to connect to a Ride client.</p>
+<p>Enabling Ride to access applications that use the run-time interpreter means that the APL code of those applications can be accessed. The I-beam mechanism described above means that the APL code itself must grant the right for a Ride client to connect to the run time interpreter. Although Dyalog Ltd might change the details of this mechanism, the APL code will always need to grant connection rights. In particular, no mechanism that is only dependent on configuration parameters will be implemented.</p>
+</div>
+<p>For example, <code>R ← 3502⌶'SERVE:*:4502'</code> configures the interpreter to accept incoming Ride connections from any machine on port 4502, and then enables Ride with that configuration.</p>
+<ul>
+<li>if <code>R</code> is <code>0</code>, then Ride was disabled</li>
+<li>if <code>R</code> is <code>¯2</code>, then Ride was active</li>
+</ul>
+<p>On a run-time interpreter, <code>3502⌶1</code> is the only way to enable Ride.</p>
+<p>If the <code>RIDE_INIT</code> configuration parameter is set but Ride DLLs/shared libraries are not available, then a run-time interpreter will start but the subsequent call to <code>3502⌶</code> will be unsuccessful.</p>
+<h2 id="configuration-parameters">Configuration Parameters</h2>
+<p>Some customisation can be performed using configuration parameters outside a Session. For details of other configuration parameters that can be set, and the syntax used to set them, see the Dyalog Installation and Configuration Guide specific to the operating system that you are using:</p>
+<ul>
+<li><a href="https://docs.dyalog.com/latest/Dyalog%20for%20macOS%20Installation%20and%20Configuration%20Guide.pdf">macOS Installation and Configuration Guide</a></li>
+<li><a href="https://docs.dyalog.com/latest/Dyalog%20for%20Microsoft%20Windows%20Installation%20and%20Configuration%20Guide.pdf">Microsoft Windows Installation and Configuration Guide</a></li>
+<li><a href="https://docs.dyalog.com/latest/Dyalog%20for%20UNIX%20Installation%20and%20Configuration%20Guide.pdf">UNIX Installation and Configuration Guide</a></li>
+</ul>
+<p>Changes made to configuration parameters in the <code>dyalog.config</code> file only impact local interpreters (that is, interpreters that are configured by that file) and do not impact interpreters that Ride can connect with on other machines.</p>
+<h3 id="ride_editor">RIDE_EDITOR</h3>
+<p>This configuration parameter specifies the fully-qualified path to the executable of the editor to use in a Dyalog Session instead of Ride's built-in editor (for example, vim, Emacs or Notepad++).</p>
+<h3 id="ride_init">RIDE_INIT</h3>
+<p>This configuration parameter specifies how the interpreter should behave with respect to the Ride protocol. Setting this configuration parameter on the machine that hosts the interpreter enables the interpreter-Ride connection.</p>
+<p>The format of the value is <code>{mode:setting}[,mode:setting]</code></p>
+<p>where <code>mode</code> is the action that the interpreter should take and determines the content of the <code>setting</code>. Valid (case-insensitive) values are:</p>
+<ul>
+<li><code>SERVE</code> – listen for incoming connections from a Ride client</li>
+<li><code>CONNECT</code> – attempt to connect to the specified Ride client and end the session if this fails</li>
+<li><code>POLL</code> – attempt to connect to the specified Ride client at regular intervals and reconnect if the connection is lost</li>
+<li><code>HTTP</code> – listen for incoming connections from the web browser, via <a href="../ride_in_the_browser/">Zero Footprint Ride</a></li>
+<li><code>CONFIG</code> – retrieve values to use from a .ini <a href="../installation/#configuration-ini-file">configuration file</a></li>
+</ul>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If two modes are specified, then:</p>
+<ul>
+<li>one of the modes must be <code>CONFIG</code>.</li>
+<li>the <code>SERVE</code>/<code>CONNECT</code>/<code>POLL</code>/<code>HTTP</code> values always override the equivalent values in the <strong>.ini</strong> configuration file.</li>
+</ul>
+</div>
+<p>If <code>mode</code> is <code>SERVE</code> or <code>HTTP</code>, then <code>setting</code> is <code>address:port</code>, where:</p>
+<ul>
+<li>
+<p><code>address</code> is the address of the interface on which the machine running the APL process should listen (that is, the address of the machine that is running the interpreter). Valid values are: </p>
+<ul>
+<li><code>&lt;empty&gt;</code> – listen on all loopback interfaces, that is, the interpreter only accepts connection from the local machine</li>
+<li><code>*</code> – listen on all local machine interfaces, that is, the interpreter listens for connections from any (local or remote) machine/interface</li>
+<li>the host/DNS name of the machine/interface running the interpreter – listen on that specific interface on the local machine</li>
+<li>the IPv4 address of the machine/interface running the interpreter – listen on that specific interface on the local machine</li>
+<li>the IPv6 address of the machine/interface running the interpreter – listen on that specific interface on the local machine</li>
+</ul>
+</li>
+<li>
+<p><code>port</code> is the TCP port to listen on</p>
+</li>
+</ul>
+<p>If <code>mode</code> is <code>CONNECT</code> or <code>POLL</code>, then <code>setting</code> is <code>address:port</code>, where:</p>
+<ul>
+<li>
+<p><code>address</code> is the destination address to attempt to connect to (the machine/interface running Ride client). Valid values are:</p>
+<ul>
+<li>the host/DNS name of a machine/interface running Ride client</li>
+<li>the IPv4 address of a machine/interface running Ride client</li>
+<li>the IPv6 address of a machine/interface running Ride client</li>
+</ul>
+</li>
+<li>
+<p><code>port</code> is the TCP port to connect to</p>
+</li>
+</ul>
+<p>If <code>mode</code> is <code>CONFIG</code>, then <code>setting</code> is <code>filename</code>, where:</p>
+<ul>
+<li><code>filename</code> is the fully-qualified path to, and name of, a <strong>.ini</strong> configuration file containing name-value pairs related to mode, certificate details, and so on. The default value for <code>setting</code> is <code>ride.ini</code>.</li>
+</ul>
+<p><strong>Examples</strong></p>
+<p>To listen on port 4502 for connection requests from a Ride client running on any machine: <code>RIDE_INIT=SERVE:*:4502</code></p>
+<p>To attempt to connect to a Ride client running on a different machine (with IPv4 address 10.0.38.1 and listening on port 4502) and end the Session if unable to do so: <code>RIDE_INIT=CONNECT:10.0.38.1:4502</code></p>
+<p>To establish a connection using the settings in the ride_sample.ini file:<code>RIDE_INIT=CONFIG:C:/tmp/ride_sample.ini</code></p>
+<p>To attempt to establish a secure connection with a Ride client running on a different machine (with IPv4 address 10.0.38.1 and listening on port 4502) using certificate details specified in the ride_sample.ini file: <code>RIDE_INIT=CONFIG:C:\tmp\ride_sample.ini,CONNECT:10.0.38.1:4502</code> or <code>RIDE_INIT=CONNECT:10.0.38.1:4502,CONFIG:C:\tmp\ride_sample.ini</code></p>
+<p>With Dyalog and Ride installed on a machine with IPv4 address 10.0.38.1, to listen on port 4502 for connection requests from a web browser running on any machine (<a href="../ride_in_the_browser/">Ride in the browser</a>): <code>RIDE_INIT=HTTP:*:4502</code></p>
+<p>To open the Zero Footprint Ride in a web browser on:</p>
+<ul>
+<li>the local machine: URL = <code>http://localhost:4502</code></li>
+<li>a different machine: URL = <code>http://10.0.38.1:4502</code></li>
+</ul>
+<p>The <code>RIDE_INI</code> configuration parameter is set automatically when launching a new Dyalog Session from Ride.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>If the <code>RIDE_INIT</code> configuration parameter is set but Ride DLLs/shared libraries are not available, then a run-time interpreter will start but the subsequent call to <code>3502⌶</code> will be unsuccessful – see <a href="https://help.dyalog.com/latest/index.htm#Language/I%20Beam%20Functions/Manage%20RIDE%20Connections.htm?Highlight=3502%E2%8C%B6">3502⌶</a>.</p>
+</div>
+<h2 id="unsupported-language-elements">Unsupported Language Elements</h2>
+<p>When running a Dyalog Session through Ride, a few of the features that are available with non-Ride Sessions do not function as might be expected.</p>
+<h3 id="underscored-characters">Underscored Characters</h3>
+<p>Underscored characters can be entered into the Session window and <strong>Edit</strong> windows using the <code>``_ &lt;letter&gt;</code> method (two backticks, followed by an underscore and a letter), for example, type <code>``_ F</code> to produce <u>F</u>.</p>
+<h4 id="underscored-characters-in-window-captions">Underscored Characters in Window Captions</h4>
+<p>Ride is restricted by the operating system when it comes to displaying underscored characters in window titles (captions). This restriction means that underscored characters can be displayed as circled characters, white rectangles, or black lozenges containing a question mark. Tab captions use the APL font, so they will display underscored characters correctly.</p>
+<h4 id="underscored-characters-in-the-session">Underscored Characters in the Session</h4>
+<p>If Ride is connected to a Unicode edition of Dyalog, then underscored characters are displayed correctly in the <strong>Session</strong> window, <strong>Edit</strong> windows and <strong>Trace</strong> windows. If Ride is connected to a classic edition of Dyalog, then the following command must be run in every APL Session to enable the underscored alphabet to be displayed correctly:</p>
+<pre><code class="language-apl">      ⎕IO←0
+      ⎕AVU[97+⍳26]←9398+⍳2      
+      2 ⎕NQ '.' 'SetUnicodeTable' ⎕AVU
+</code></pre>
+<h3 id="function-key-configuration">Function Key Configuration</h3>
+<p>Character strings (including command keys) can be associated with programmable function keys using the <a href="https://help.dyalog.com/latest/index.htm#Language/System%20Functions/pfkey.htm">⎕PFKEY</a> system function. When running a Dyalog Session through Ride, <code>⎕PFKEY</code> can be used to define/display the keystrokes for a designated function key; however, that function key does not acquire the defined set of keystrokes, rendering <code>⎕PFKEY</code> of no real use. Instead, function keys should be set through the Shortcuts tab of the Preferences dialog box.</p>
+<h3 id="operating-system-terminalcommand-window-interaction">Operating System Terminal/Command Window Interaction</h3>
+<p>Features that rely on interaction with an operating system terminal/command window (that is, <a href="https://help.dyalog.com/latest/index.htm#Language/System%20Functions/sr.htm">⎕SR</a> and <a href="https://help.dyalog.com/latest/index.htm#Language/System%20Commands/sh.htm">)SH</a> or <a href="https://help.dyalog.com/latest/index.htm#Language/System%20Commands/cmd.htm">)CMD</a> with no argument) cannot work in a Dyalog Session that is running through Ride. Instead of behaving as documented in the <a href="https://docs.dyalog.com/latest/Dyalog%20APL%20Language%20Reference%20Guide.pdf">Dyalog APL Language Reference Guide</a>, their behaviour depends on the way in which the interpreter and Ride combined to start a Dyalog Session:</p>
+<ul>
+<li>
+<p>If the interpreter was started by Ride, then:</p>
+<ul>
+<li><code>⎕SR</code> generates a trappable error</li>
+<li><code>)SH</code> or <code>)CMD</code> with no argument produces a "Feature disabled in this environment" message.</li>
+</ul>
+</li>
+<li>
+<p>If the interpreter and Ride were started independently and then connected to each other, then the use of these features will appear to hang the Dyalog Session that is running through Ride. However, the Dyalog Session can be recovered by locating the operating system terminal/command window and using it to complete the operation. If there is no operating system terminal/command window, then the Dyalog Session is irrecoverable.</p>
+</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.sections", "navigation.instant"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+        <script src="../js/print-site.js"></script>
+      
+    
+  </body>
+</html>

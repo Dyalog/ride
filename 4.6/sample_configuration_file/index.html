@@ -1,0 +1,779 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../keyboard_shortcuts/">
+      
+      
+      
+      <link rel="icon" href="../img/favicon-32.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.12">
+    
+    
+      
+        <title>Sample Configuration File - Ride User Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.2afb09e1.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../css/print-site.css">
+    
+      <link rel="stylesheet" href="../css/print-site-material.css">
+    
+      <link rel="stylesheet" href="../style/main.css">
+    
+      <link rel="stylesheet" href="../style/admonition-ucmdhelp.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#sample-configuration-file" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Ride User Guide" class="md-header__button md-logo" aria-label="Ride User Guide" data-md-component="logo">
+      
+  <img src="../img/dyalog-white.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Ride User Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Sample Configuration File
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/dyalog/ride" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Ride User Guide" class="md-nav__button md-logo" aria-label="Ride User Guide" data-md-component="logo">
+      
+  <img src="../img/dyalog-white.svg" alt="logo">
+
+    </a>
+    Ride User Guide
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/dyalog/ride" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    About This Document
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../starting_a_dyalog_session/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Starting a Session
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ride_in_the_browser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ride in the browser
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../the_dyalog_development_environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    The Dyalog Development Environment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../input_windows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Edit and Trace Windows
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../working_in_a_dyalog_session/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Working in a Dyalog Session
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ridespecific_language_features/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ride-Specific Language Features
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../customising_your_session/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Customising Your Session
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../keyboard_shortcuts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Keyboard Shortcuts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Sample Configuration File
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sample Configuration File
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tls-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      TLS Flags
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../print_page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Print Site
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#tls-flags" class="md-nav__link">
+    <span class="md-ellipsis">
+      TLS Flags
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="sample-configuration-file">Sample Configuration File</h1>
+<p>A .ini configuration file can be used to define settings for the <code>RIDE_INIT</code> configuration parameter.</p>
+<p>Examples of the fields that you might want to include within the .ini configuration file are:</p>
+<pre><code>[RIDE]
+Direction=Listen
+Address=
+Port=5002
+MaxBlockSize=52428800
+SSLValidation=0
+Protocol=IPv4
+Secure=Secure
+PublicCertFile= C:\apps\d150U64\TCerts\server\localhost-cert.pem
+PrivateKeyFile= C:\apps\d150U64\TCerts\server\localhost-key.pem
+RootCertDir= C:\apps\d150U64\TCertss\ca
+Priority=
+AcceptCertDir= C:\apps\d150U64\TCerts\accept
+</code></pre>
+<p>where:</p>
+<ul>
+<li><code>Direction</code>, <code>Address</code> and <code>Port</code> – as defined for the <a href="../ridespecific_language_features/#ride_init">RIDE_INIT</a> configuration parameter. <code>Direction</code> in the .ini file is equivalent to <code>mode</code> in the RIDE_INIT configuration parameter and has possible values of <code>Listen</code> (equivalent to RIDE_INIT's <code>Serve</code>), <code>Connect</code>, <code>Poll</code> and <code>HTTP</code>. No defaults are defined for <code>Direction</code> and <code>Address</code>; the default for <code>Port</code> is <code>4502</code>. Overridden if defined in RIDE_INIT.</li>
+<li><code>MaxBlockSize</code> is the maximum size (in bytes) allocated to the buffer that receives data transmissions. The default is 16,777,216.</li>
+<li><code>SSLValidation</code> is the sum of the relevant TLS flags (see <a href="#tls_flags">Section </a>). The default is <code>0</code>. Validity depends on the value of the <code>Secure</code> field.</li>
+<li><code>Protocol</code> is the communication protocol to use. Possible values are:<code>IPv4</code>: use the IPv4 connection protocol; if this is not possible then generate an error.<code>IPv6</code>: use the IPv6 connection protocol; if this is not possible then generate an error.<empty>: use the IPv6 connection protocol; if this is not possible then use the IPv4 connection protocol. This is the default.</li>
+<li><code>IPv4</code>: use the IPv4 connection protocol; if this is not possible then generate an error.</li>
+<li><code>IPv6</code>: use the IPv6 connection protocol; if this is not possible then generate an error.</li>
+<li><empty>: use the IPv6 connection protocol; if this is not possible then use the IPv4 connection protocol. This is the default.</li>
+<li><code>Secure</code> specifies the security of the connection. Possible values depend on the value of <code>Direction</code>:If <code>Direction</code> is <code>Listen</code>, then <code>Secure</code> can be:<code>Secure</code> – the connection is secure and certificates are provided. The <code>PublicCertFile</code>, <code>PrivateKeyFile</code>, <code>SSLValidation</code> and <code>Priority</code> fields are valid.<empty> – the connection is unencrypted. This is the default.If <code>Direction</code> is <code>Connect</code> or <code>Poll</code>, then <code>Secure</code> can be:<code>Secure</code> – the connection is secure and certificates are provided. The <code>PublicCertFile</code>, <code>PrivateKeyFile</code>, <code>SSLValidation</code> and <code>Priority</code> fields are valid.<empty> – the connection is unencrypted. This is the default.<code>Anonymous</code> – the connection is secure but no certificate is provided on the client side. The <code>SSLValidation</code> and <code>Priority fields</code> are valid.</li>
+<li>If <code>Direction</code> is <code>Listen</code>, then <code>Secure</code> can be:<code>Secure</code> – the connection is secure and certificates are provided. The <code>PublicCertFile</code>, <code>PrivateKeyFile</code>, <code>SSLValidation</code> and <code>Priority</code> fields are valid.<empty> – the connection is unencrypted. This is the default.</li>
+<li><code>Secure</code> – the connection is secure and certificates are provided. The <code>PublicCertFile</code>, <code>PrivateKeyFile</code>, <code>SSLValidation</code> and <code>Priority</code> fields are valid.</li>
+<li><empty> – the connection is unencrypted. This is the default.</li>
+<li>If <code>Direction</code> is <code>Connect</code> or <code>Poll</code>, then <code>Secure</code> can be:<code>Secure</code> – the connection is secure and certificates are provided. The <code>PublicCertFile</code>, <code>PrivateKeyFile</code>, <code>SSLValidation</code> and <code>Priority</code> fields are valid.<empty> – the connection is unencrypted. This is the default.<code>Anonymous</code> – the connection is secure but no certificate is provided on the client side. The <code>SSLValidation</code> and <code>Priority fields</code> are valid.</li>
+<li><code>Secure</code> – the connection is secure and certificates are provided. The <code>PublicCertFile</code>, <code>PrivateKeyFile</code>, <code>SSLValidation</code> and <code>Priority</code> fields are valid.</li>
+<li><empty> – the connection is unencrypted. This is the default.</li>
+<li><code>Anonymous</code> – the connection is secure but no certificate is provided on the client side. The <code>SSLValidation</code> and <code>Priority fields</code> are valid.</li>
+<li><code>PublicCertFile</code> is the fully-qualified path to, and name of, the file containing the public certificate. Empty by default. Validity depends on the value of the <code>Secure</code> field.</li>
+<li><code>PrivateKeyFile</code> is the fully-qualified path to, and name of, the file containing the private key. Empty by default. Validity depends on the value of the <code>Secure</code> field.</li>
+<li><code>RootCertDir</code> is the full path to (and name of) the directory that contains Certificate Authority root certificates. Empty by default (on the Microsoft Windows operating system, Ride uses the Microsoft certicate store).</li>
+<li><code>Priority</code> is the GnuTLS priority string (for complete documentation of this, see http://www.gnutls.org/manual/gnutls.html#Priority-Strings). Empty by default. Validity depends on the value of the <code>Secure</code> field.</li>
+<li><code>AcceptCertDir</code> is the full path to (and name of) the directory that contains the public certificates of all users that are allowed to connect. Empty by default.</li>
+</ul>
+<p>Two additional sections can be included within the .ini configuration file to control the IP addresses that are allowed or denied access to the connection. These are:</p>
+<pre><code>[AllowEndPoints]
+[DenyEndPoints]
+</code></pre>
+<p>For each of these, IPv6/IPv4 addresses and/or address ranges can be specified (multiple entries must be separated by commas). For example:</p>
+<pre><code>[AllowEndPoints]
+IPV4=192.168.100.0/24,192.168.17.0/24,127.0.0.0/10
+IPV6= fe80:ccbd:aa34:3cfb::0/64
+</code></pre>
+<pre><code>[DenyEndPoints]
+IPV4=212.0.0.0/8
+IPV6= 2a02:2658:1012::35/64
+</code></pre>
+<p>If <code>AllowEndPoints</code> is not included, all IP addresses are allowed to access the connection unless explicitly denied access with the <code>DenyEndPoints</code> field.</p>
+<h2 id="tls-flags">TLS Flags</h2>
+<p>TLS flags are employed as part of the certificate checking process; they determine whether a secure client or server can connect with a peer that does not have a valid certificate. When <code>Direction</code> is <code>Connect</code> or <code>Poll</code>, Ride acts as a server; when <code>Direction</code> is <code>Serve</code>, Ride acts as a client.</p>
+<p>The code numbers of the TLS flags described below can be added together and passed to the <code>SSLValidation</code> field to control the certificate checking process. If you do not require any of these flags, then the <code>SSLValidation</code> field should be set to <code>0</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>CertAcceptIfIssuerUnknown</td>
+<td>Accept the peer certificate even if the issuer (root certificate) cannot be found.</td>
+</tr>
+<tr>
+<td>2</td>
+<td>CertAcceptIfSignerNotCA</td>
+<td>Accept the peer certificate even if it has been signed by a certificate not in the trusted root certificates' directory.</td>
+</tr>
+<tr>
+<td>4</td>
+<td>CertAcceptIfNotActivated</td>
+<td>Accept the peer certificate even if it is not yet valid (according to its valid from information).</td>
+</tr>
+<tr>
+<td>8</td>
+<td>CertAcceptIfExpired</td>
+<td>Accept the peer certificate even if it has expired (according to its valid to information).</td>
+</tr>
+<tr>
+<td>16</td>
+<td>CertAcceptIfIncorrectHostName</td>
+<td>Accept the peer certificate even if its hostname does not match the one it was trying to connect to.</td>
+</tr>
+<tr>
+<td>32</td>
+<td>CertAcceptWithoutValidating</td>
+<td>Accept the peer certificate without checking it (useful if the certificate is to be checked manually).</td>
+</tr>
+<tr>
+<td>64</td>
+<td>RequestClientCertificate</td>
+<td>Only valid when Ride is acting as a server; asks the client for a certificate but allows connections even if the client does not provide one.</td>
+</tr>
+<tr>
+<td>128</td>
+<td>RequireClientCertificate</td>
+<td>Only valid when Ride is acting as a server; asks the client for a certificate and refuses the connection if a valid certificate (subject to any other flags) is not provided by the client.</td>
+</tr>
+</tbody>
+</table>
+<p>TLS flags have the same meaning irrespective of whether Ride is acting as a server or a client. However, for a server they are applied each time a new connection is established whereas for a client they are only applied when the client object is created.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.sections", "navigation.instant"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+        <script src="../js/print-site.js"></script>
+      
+    
+  </body>
+</html>

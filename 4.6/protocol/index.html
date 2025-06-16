@@ -1,0 +1,2656 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+      
+      
+      <link rel="icon" href="../img/favicon-32.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.12">
+    
+    
+      
+        <title>The Ride Protocol - Ride User Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.2afb09e1.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../css/print-site.css">
+    
+      <link rel="stylesheet" href="../css/print-site-material.css">
+    
+      <link rel="stylesheet" href="../style/main.css">
+    
+      <link rel="stylesheet" href="../style/admonition-ucmdhelp.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#the-ride-protocol" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+      <div data-md-color-scheme="default" data-md-component="outdated" hidden>
+        
+      </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Ride User Guide" class="md-header__button md-logo" aria-label="Ride User Guide" data-md-component="logo">
+      
+  <img src="../img/dyalog-white.svg" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Ride User Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              The Ride Protocol
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/dyalog/ride" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Ride User Guide" class="md-nav__button md-logo" aria-label="Ride User Guide" data-md-component="logo">
+      
+  <img src="../img/dyalog-white.svg" alt="logo">
+
+    </a>
+    Ride User Guide
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/dyalog/ride" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    About This Document
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../introduction/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Introduction
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../starting_a_dyalog_session/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Starting a Session
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ride_in_the_browser/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ride in the browser
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../the_dyalog_development_environment/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    The Dyalog Development Environment
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../input_windows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Edit and Trace Windows
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../working_in_a_dyalog_session/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Working in a Dyalog Session
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../ridespecific_language_features/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Ride-Specific Language Features
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../customising_your_session/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Customising Your Session
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../keyboard_shortcuts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Keyboard Shortcuts
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../sample_configuration_file/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Sample Configuration File
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../print_page/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Print Site
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      Introduction
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Introduction">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#unknowncommand" class="md-nav__link">
+    <span class="md-ellipsis">
+      UnknownCommand
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internalerror" class="md-nav__link">
+    <span class="md-ellipsis">
+      InternalError
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connection-setup-and-teardown" class="md-nav__link">
+    <span class="md-ellipsis">
+      Connection setup and teardown
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Connection setup and teardown">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#identify" class="md-nav__link">
+    <span class="md-ellipsis">
+      Identify
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Identify">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apiversion-1" class="md-nav__link">
+    <span class="md-ellipsis">
+      apiVersion &lt; 1
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apiversion-1_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      apiVersion = 1
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replyidentify" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplyIdentify
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ReplyIdentify">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apiversion-1_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      apiVersion = 1
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getlog" class="md-nav__link">
+    <span class="md-ellipsis">
+      GetLog
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GetLog">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apiversion-1_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      apiVersion = 1
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replygetlog" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplyGetLog
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ReplyGetLog">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apiversion-1_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      apiVersion &lt; 1
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apiversion-1_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      apiVersion = 1
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#syserror" class="md-nav__link">
+    <span class="md-ellipsis">
+      SysError
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Exit
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#session-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      Session control
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Session control">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apiversion-1_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      apiVersion &lt; 1
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#echoinput" class="md-nav__link">
+    <span class="md-ellipsis">
+      EchoInput
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#appendsessionoutput" class="md-nav__link">
+    <span class="md-ellipsis">
+      AppendSessionOutput
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AppendSessionOutput">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#apiversion-1_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      apiVersion = 1
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setprompttype" class="md-nav__link">
+    <span class="md-ellipsis">
+      SetPromptType
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#execute" class="md-nav__link">
+    <span class="md-ellipsis">
+      Execute
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#haderror" class="md-nav__link">
+    <span class="md-ellipsis">
+      HadError
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setpw" class="md-nav__link">
+    <span class="md-ellipsis">
+      SetPW
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#window-management" class="md-nav__link">
+    <span class="md-ellipsis">
+      Window management
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Window management">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#edit" class="md-nav__link">
+    <span class="md-ellipsis">
+      Edit
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#showasarraynotation" class="md-nav__link">
+    <span class="md-ellipsis">
+      ShowAsArrayNotation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#openwindow" class="md-nav__link">
+    <span class="md-ellipsis">
+      OpenWindow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#updatewindow" class="md-nav__link">
+    <span class="md-ellipsis">
+      UpdateWindow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#gotowindow" class="md-nav__link">
+    <span class="md-ellipsis">
+      GotoWindow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#windowtypechanged" class="md-nav__link">
+    <span class="md-ellipsis">
+      WindowTypeChanged
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#savechanges" class="md-nav__link">
+    <span class="md-ellipsis">
+      SaveChanges
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replysavechanges" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplySaveChanges
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#formatcode" class="md-nav__link">
+    <span class="md-ellipsis">
+      FormatCode
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replyformatcode" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplyFormatCode
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#closewindow" class="md-nav__link">
+    <span class="md-ellipsis">
+      CloseWindow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#closeallwindows" class="md-nav__link">
+    <span class="md-ellipsis">
+      CloseAllWindows
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#debugging" class="md-nav__link">
+    <span class="md-ellipsis">
+      Debugging
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Debugging">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#sethighlightline" class="md-nav__link">
+    <span class="md-ellipsis">
+      SetHighlightLine
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setlineattributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      SetLineAttributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tracebackward" class="md-nav__link">
+    <span class="md-ellipsis">
+      TraceBackward
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cleartracestopmonitor" class="md-nav__link">
+    <span class="md-ellipsis">
+      ClearTraceStopMonitor
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replycleartracestopmonitor" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplyClearTraceStopMonitor
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#continue" class="md-nav__link">
+    <span class="md-ellipsis">
+      Continue
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#continuetrace" class="md-nav__link">
+    <span class="md-ellipsis">
+      ContinueTrace
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cutback" class="md-nav__link">
+    <span class="md-ellipsis">
+      Cutback
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#traceforward" class="md-nav__link">
+    <span class="md-ellipsis">
+      TraceForward
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#restartthreads" class="md-nav__link">
+    <span class="md-ellipsis">
+      RestartThreads
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runcurrentline" class="md-nav__link">
+    <span class="md-ellipsis">
+      RunCurrentLine
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stepinto" class="md-nav__link">
+    <span class="md-ellipsis">
+      StepInto
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#traceprimitive" class="md-nav__link">
+    <span class="md-ellipsis">
+      TracePrimitive
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#status-bar" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status Bar
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Status Bar">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#subscribe" class="md-nav__link">
+    <span class="md-ellipsis">
+      Subscribe
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interpreterstatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      InterpreterStatus
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interpreterheartbeat" class="md-nav__link">
+    <span class="md-ellipsis">
+      InterpreterHeartBeat
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#threads" class="md-nav__link">
+    <span class="md-ellipsis">
+      Threads
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Threads">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getsistack" class="md-nav__link">
+    <span class="md-ellipsis">
+      GetSIStack
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replygetsistack" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplyGetSIStack
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getthreads" class="md-nav__link">
+    <span class="md-ellipsis">
+      GetThreads
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replygetthreads" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplyGetThreads
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setthread" class="md-nav__link">
+    <span class="md-ellipsis">
+      SetThread
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replysetthread" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplySetThread
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getthreadattributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      GetThreadAttributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replygetthreadattributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplyGetThreadAttributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setthreadattributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      SetThreadAttributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replysetthreadattributes" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplySetThreadAttributes
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pauseallthreads" class="md-nav__link">
+    <span class="md-ellipsis">
+      PauseAllThreads
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#interrupts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Interrupts
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Interrupts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#weakinterrupt" class="md-nav__link">
+    <span class="md-ellipsis">
+      WeakInterrupt
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stronginterrupt" class="md-nav__link">
+    <span class="md-ellipsis">
+      StrongInterrupt
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#autocompletion" class="md-nav__link">
+    <span class="md-ellipsis">
+      Autocompletion
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Autocompletion">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getautocomplete" class="md-nav__link">
+    <span class="md-ellipsis">
+      GetAutocomplete
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replygetautocomplete" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplyGetAutocomplete
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#value-tips" class="md-nav__link">
+    <span class="md-ellipsis">
+      Value tips
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Value tips">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getvaluetip" class="md-nav__link">
+    <span class="md-ellipsis">
+      GetValueTip
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#valuetip" class="md-nav__link">
+    <span class="md-ellipsis">
+      ValueTip
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dialogs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dialogs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Dialogs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#options-dialog" class="md-nav__link">
+    <span class="md-ellipsis">
+      Options dialog
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replyoptionsdialog" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplyOptionsDialog
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stringdialog" class="md-nav__link">
+    <span class="md-ellipsis">
+      StringDialog
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replystringdialog" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplyStringDialog
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#taskdialog" class="md-nav__link">
+    <span class="md-ellipsis">
+      TaskDialog
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replytaskdialog" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplyTaskDialog
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#notificationmessage" class="md-nav__link">
+    <span class="md-ellipsis">
+      NotificationMessage
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#other" class="md-nav__link">
+    <span class="md-ellipsis">
+      Other
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Other">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#showhtml" class="md-nav__link">
+    <span class="md-ellipsis">
+      ShowHTML
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#updatedisplayname" class="md-nav__link">
+    <span class="md-ellipsis">
+      UpdateDisplayName
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#updatesessioncaption" class="md-nav__link">
+    <span class="md-ellipsis">
+      UpdateSessionCaption
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#disconnect" class="md-nav__link">
+    <span class="md-ellipsis">
+      Disconnect
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workspace-explorer" class="md-nav__link">
+    <span class="md-ellipsis">
+      Workspace explorer
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Workspace explorer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#treelist" class="md-nav__link">
+    <span class="md-ellipsis">
+      TreeList
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replytreelist" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplyTreeList
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#status-window" class="md-nav__link">
+    <span class="md-ellipsis">
+      Status window
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Status window">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#statusoutput" class="md-nav__link">
+    <span class="md-ellipsis">
+      StatusOutput
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#process-manager" class="md-nav__link">
+    <span class="md-ellipsis">
+      Process manager
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Process manager">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getavailableconnections" class="md-nav__link">
+    <span class="md-ellipsis">
+      GetAvailableConnections
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connectto" class="md-nav__link">
+    <span class="md-ellipsis">
+      ConnectTo
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connecttosucceded" class="md-nav__link">
+    <span class="md-ellipsis">
+      ConnectToSucceded
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connecttofailed" class="md-nav__link">
+    <span class="md-ellipsis">
+      ConnectToFailed
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getdetailedinformation" class="md-nav__link">
+    <span class="md-ellipsis">
+      GetDetailedInformation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replygetdetailedinformation" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplyGetDetailedInformation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#session-information-and-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Session Information and Configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Session Information and Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#help" class="md-nav__link">
+    <span class="md-ellipsis">
+      Help
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Help">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#gethelpinformation" class="md-nav__link">
+    <span class="md-ellipsis">
+      GetHelpInformation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replygethelpinformation" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplyGetHelpInformation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#syntax" class="md-nav__link">
+    <span class="md-ellipsis">
+      Syntax
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Syntax">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getsyntaxinformation" class="md-nav__link">
+    <span class="md-ellipsis">
+      GetSyntaxInformation
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replygetsyntaxinformation" class="md-nav__link">
+    <span class="md-ellipsis">
+      ⍕ ReplyGetSyntaxInformation
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#languagebar" class="md-nav__link">
+    <span class="md-ellipsis">
+      LanguageBar
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="LanguageBar">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getlanguagebar" class="md-nav__link">
+    <span class="md-ellipsis">
+      GetLanguageBar
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replygetlanguagebar" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplyGetLanguageBar
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      Configuration
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#getconfiguration" class="md-nav__link">
+    <span class="md-ellipsis">
+      GetConfiguration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replygetconfiguration" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplyGetConfiguration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setconfiguration" class="md-nav__link">
+    <span class="md-ellipsis">
+      SetConfiguration
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#replysetconfiguration" class="md-nav__link">
+    <span class="md-ellipsis">
+      ReplySetConfiguration
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#proposed-extensions" class="md-nav__link">
+    <span class="md-ellipsis">
+      Proposed extensions
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Proposed extensions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setcurrentobject" class="md-nav__link">
+    <span class="md-ellipsis">
+      SetCurrentObject
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="the-ride-protocol">The Ride Protocol</h1>
+<h2 id="introduction">Introduction</h2>
+<blockquote>
+<p>Note: A red circle :red_circle: marks internal notes which won't appear in the final version.</p>
+</blockquote>
+<p>The Ride protocol is formed of messages sent in either direction over a TCP connection.</p>
+<p>A message starts with a 4-byte big-endian <em>total length</em> field, followed by the ASCII bytes for <code>"RIDE"</code> and a
+UTF-8-encoded payload:</p>
+<pre><code>    8+len(payload)   &quot;Ride&quot; magic number   payload
+┌───────────────────┬───────────────────┬─────~─────┐
+│0x00 0x00 0x00 0x0b│0x52 0x49 0x44 0x45│    ...    │
+└───────────────────┴───────────────────┴─────~─────┘
+</code></pre>
+<p><em>Total length</em> is 8 + the payload's length in bytes.
+The payload is almost always a 2-element JSON array consisting of a command name and arguments as key/value pairs:</p>
+<pre><code class="language-json">[&quot;CommandName&quot;,{&quot;key1&quot;:&quot;value1&quot;,&quot;key2&quot;:222,&quot;key3&quot;:[3,4,5]}]
+</code></pre>
+<p>The only exception are the first two messages that each side sends upon establishing a connection.
+These constitute the <em>handshake</em> and are not JSON-encoded.  Their payloads are:</p>
+<pre><code>SupportedProtocols=2
+UsingProtocol=2
+</code></pre>
+<p>Messages are independent and after the handshake can be sent/received in any order. Some messages infer that the other
+end will send a reply, but that reply may not be the next message to be received, or even ever be sent.</p>
+<h3 id="unknowncommand">UnknownCommand <a name=UnknownCommand></a></h3>
+<p>If the receiver of a message does not recognise it, it should respond with</p>
+<pre><code class="language-json">[&quot;UnknownCommand&quot;,{&quot;name&quot;:&quot;Xyz&quot;}]
+</code></pre>
+<h3 id="internalerror">InternalError <a name=InternalError></a></h3>
+<p>Should the interpreter generate an error during the processing of an incoming Ride message it will respond with an InternalError message:</p>
+<pre><code class="language-json">[&quot;InternalError&quot;,{&quot;error&quot;:1,&quot;error_text&quot;:&quot;WS FULL&quot;,&quot;dmx&quot;:&quot;&quot;,&quot;message&quot;:&quot;Edit&quot;}]
+</code></pre>
+<ul>
+<li><code>error</code>: aka ⎕EN</li>
+<li><code>error_text</code>: aka ⎕EM </li>
+<li><code>dmx</code>: the DMX message for the error (currently always empty)</li>
+<li><code>message</code>: the name of the originating incoming Ride message</li>
+</ul>
+<p>The connection may be closed at any time, leaving some messages undelivered or unprocessed.</p>
+<p>Command names and their arguments are case-sensitive.</p>
+<p>JSON booleans <code>true</code> and <code>false</code> can be freely substituted with and should be treated as equivalent to <code>1</code> and <code>0</code>.</p>
+<h2 id="connection-setup-and-teardown">Connection setup and teardown</h2>
+<h3 id="identify">Identify <a name=Identify></a></h3>
+<p>After the connection has been established and a protocol agreed, both peers immediately send an <code>Identify</code> message to indicate what type of application they are.</p>
+<pre><code class="language-json">[&quot;Identify&quot;,{&quot;apiVersion&quot;:1,&quot;identity&quot;:1}]
+</code></pre>
+<p>The <code>apiVersion</code> is introduced as a mechanism to handle breaking changes in the API.</p>
+<p>Constants for <code>identity</code>:
+- <code>1</code> Ride,
+- <code>2</code> interpreter,
+- <code>3</code> process manager.</p>
+<p>:red_circle: The interpreter sends an <code>Identify</code> that means something else and has different args.</p>
+<h4 id="apiversion-1">apiVersion &lt; 1</h4>
+<p>The interpreter responds with an Identify messsage containing details about the interpreter.</p>
+<h4 id="apiversion-1_1">apiVersion = 1</h4>
+<p>The interpreter responds with a <code>ReplyIdentify</code> messsage containing details about the interpreter.</p>
+<p>They should then check the type of application they are connected to, and if not happy to continue, close the connection.  For instance, Ride may check that the application it's connected to is an interpreter or a process manager. If it finds the peer is another Ride, it should close the connection.</p>
+<p>:red_circle: In reality Ride doesn't bother verifying that it's not talking to another Ride.</p>
+<h3 id="replyidentify">ReplyIdentify <a name=ReplyIdentify></a></h3>
+<h4 id="apiversion-1_2">apiVersion = 1</h4>
+<p>The interpreter responds with a <code>ReplyIdentify</code> messsage containing details about the interpreter.</p>
+<pre><code class="language-json">[&quot;ReplyIdentify&quot;,{ // Interpreter -&gt; Ride
+  &quot;apiVersion&quot;:1,
+  &quot;Port&quot;:0,
+  &quot;IPAddress&quot;:&quot;&quot;,
+  &quot;Vendor&quot;:&quot;Dyalog Limited&quot;,
+  &quot;Language&quot;:&quot;APL&quot;,
+  &quot;version&quot;:&quot;18.2.46943&quot;,
+  &quot;Machine&quot;:&quot;HOSTNAME&quot;,
+  &quot;arch&quot;:&quot;Unicode/64&quot;,
+  &quot;Project&quot;:&quot;CLEAR WS&quot;,
+  &quot;Process&quot;:&quot;dyalog.exe&quot;,
+  &quot;User&quot;:&quot;username&quot;,
+  &quot;pid&quot;:1000,
+  &quot;token&quot;:&quot;{F53F7747-B404-4F7A-893D-954F2764CC74}&quot;,
+  &quot;date&quot;:&quot;Created: Apr 10 2023 at 19:29:32&quot;,
+  &quot;platform&quot;:&quot;Windows-64&quot;
+}]
+</code></pre>
+<p>The <code>apiVersion</code> specifies the negotiated API version accepted by the interpreter.</p>
+<h3 id="getlog">GetLog <a name=GetLog></a></h3>
+<h4 id="apiversion-1_3">apiVersion = 1</h4>
+<p>Request the session log from the interpreter. </p>
+<pre><code class="language-json">[&quot;GetLog&quot;,{&quot;format&quot;:&quot;json&quot;,&quot;maxLines&quot;:100}] // Ride -&gt; Interpreter
+</code></pre>
+<p><code>format</code> defaults to "json" if not specified.
+<code>maxLines</code> limits the number of lines returned (-1 = unlimited)</p>
+<h3 id="replygetlog">ReplyGetLog <a name=ReplyGetLog></a></h3>
+<h4 id="apiversion-1_4">apiVersion &lt; 1</h4>
+<p>After it has received the Connect command the interpreter will send 0 or more "ReplyGetLog" messages containing the session log:</p>
+<pre><code class="language-json">[&quot;ReplyGetLog&quot;,{&quot;result&quot;:[&quot;line 1&quot;,&quot;line 2&quot;]}] // Interpreter -&gt; Ride
+</code></pre>
+<h4 id="apiversion-1_5">apiVersion = 1</h4>
+<p>After it has received a "GetLog" command the interpreter will send 0 or more "ReplyGetLog" messages containing the session log in the format requested.
+For <code>text</code> format:</p>
+<pre><code class="language-json">[&quot;ReplyGetLog&quot;,{&quot;result&quot;:[&quot;line 1&quot;,&quot;line 2&quot;]}] // Interpreter -&gt; Ride
+</code></pre>
+<p>For <code>json</code> format:</p>
+<pre><code class="language-json">[&quot;ReplyGetLog&quot;,{&quot;result&quot;:[ // Interpreter -&gt; Ride
+  {
+    &quot;group&quot;: 1,
+    &quot;type&quot;: 1,
+    &quot;text&quot;: &quot;line 1&quot;,
+  },{
+    &quot;group&quot;: 1,
+    &quot;type&quot;: 1,
+    &quot;text&quot;: &quot;line 2&quot;,
+  },
+  ]}]
+</code></pre>
+<h3 id="syserror">SysError <a name=SysError></a></h3>
+<p>If at any time the interpreter crashes with a <a href="http://help.dyalog.com/latest/Content/Language/Errors/System%20Errors.htm">syserror</a>, it sends;</p>
+<pre><code class="language-json">[&quot;SysError&quot;,{&quot;text&quot;:&quot;apl: sys error 123 errno 456&quot;,&quot;stack&quot;:&quot;&quot;}] // Interpreter -&gt; Ride
+</code></pre>
+<h3 id="exit">Exit <a name=Exit></a></h3>
+<p>If the interpreter has been started by Ride, Ride should shut it down cleanly when the user closes the main application
+window (the session window):</p>
+<pre><code class="language-json">[&quot;Exit&quot;,{&quot;code&quot;:0}] // Ride -&gt; Interpreter
+</code></pre>
+<h2 id="session-control">Session control</h2>
+<h4 id="apiversion-1_6">apiVersion &lt; 1</h4>
+<p>Any echoed input or interpreter output are sent to Ride using either;</p>
+<h3 id="echoinput">EchoInput <a name=EchoInput></a></h3>
+<pre><code class="language-json">[&quot;EchoInput&quot;,{&quot;input&quot;:&quot;      1 2 3+4 5 6\n&quot;}] // Interpreter -&gt; Ride
+</code></pre>
+<h3 id="appendsessionoutput">AppendSessionOutput <a name=AppendSessionOutput></a></h3>
+<pre><code class="language-json">[&quot;AppendSessionOutput&quot;,{&quot;result&quot;:&quot;5 7 9&quot;}]  // Interpreter -&gt; Ride
+</code></pre>
+<p>These two perform essentially the same task except that <code>AppendSessionOutput</code> doesn't necessarily have trailing <code>"\n"</code>-s at the end of <code>result</code>.</p>
+<h4 id="apiversion-1_7">apiVersion = 1</h4>
+<p>Any echoed input or interpreter output are sent to Ride using either;</p>
+<pre><code class="language-json">[&quot;AppendSessionOutput&quot;,{&quot;result&quot;:&quot;5 7 9&quot;,&quot;type&quot;:1,&quot;group&quot;:1}]  // Interpreter -&gt; Ride
+</code></pre>
+<p><code>type</code> specifies the source of the output:</p>
+<table>
+<thead>
+<tr>
+<th>type</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>reserved</td>
+</tr>
+<tr>
+<td>1</td>
+<td>undetermined session output</td>
+</tr>
+<tr>
+<td>2</td>
+<td>default output e.g. not assigned to ⎕ or ⍞</td>
+</tr>
+<tr>
+<td>3</td>
+<td>what would have been always sent to stderr</td>
+</tr>
+<tr>
+<td>4</td>
+<td>output from system commands</td>
+</tr>
+<tr>
+<td>5</td>
+<td>APL error message. e.g. ^ and DOMAIN ERROR</td>
+</tr>
+<tr>
+<td>6</td>
+<td>reserved</td>
+</tr>
+<tr>
+<td>7</td>
+<td>⎕ output</td>
+</tr>
+<tr>
+<td>8</td>
+<td>⍞ output</td>
+</tr>
+<tr>
+<td>9</td>
+<td>"information" that would have gone to the "status window"</td>
+</tr>
+<tr>
+<td>10</td>
+<td>reserved</td>
+</tr>
+<tr>
+<td>11</td>
+<td>echoed input</td>
+</tr>
+<tr>
+<td>12</td>
+<td>⎕TRACE output</td>
+</tr>
+<tr>
+<td>13</td>
+<td>reserved</td>
+</tr>
+<tr>
+<td>14</td>
+<td>A “normal” input line</td>
+</tr>
+</tbody>
+</table>
+<h3 id="setprompttype">SetPromptType <a name=SetPromptType></a></h3>
+<p>The interpreter informs Ride about changes in its ability to accept user input with</p>
+<pre><code class="language-json">[&quot;SetPromptType&quot;,{&quot;type&quot;:5}] // Interpreter -&gt; Ride
+</code></pre>
+<p>Constants for <code>type</code>: 
+- <code>0</code> no prompt,
+- <code>1</code> the usual 6-space APL prompt (a.k.a. Descalc or "desktop calculator"),
+- <code>2</code> <a href="http://help.dyalog.com/latest/Content/Language/System%20Functions/Evaluated%20Input%20Output.htm">Quad(<code>⎕</code>)</a> input,
+- <code>3</code> line editor,
+- <code>4</code> <a href="http://help.dyalog.com/latest/Content/Language/System%20Functions/Character%20Input%20Output.htm">Quote-Quad(<code>⍞</code>)</a> input,
+- <code>5</code> any prompt type unforeseen here.</p>
+<p>:red_circle: These modes need explaining with expected behaviour.</p>
+<h3 id="execute">Execute <a name=Execute></a></h3>
+<p>When the user presses <code>&lt;ER&gt;</code> (Enter) or <code>&lt;TC&gt;</code> (Ctrl-Enter), Ride sends</p>
+<pre><code class="language-json">[&quot;Execute&quot;,{&quot;text&quot;:&quot;      1 2 3+4 5 6&quot;,&quot;trace&quot;:1}] // Ride -&gt; Interpreter
+</code></pre>
+<ul>
+<li><code>text</code>: the APL code to evaluate</li>
+<li><code>trace</code>: 0 = execute
+           1 = evaluate in the tracer (<code>&lt;TC&gt;</code>)
+           2 = evaluate in the tracer token by token (<code>&lt;IT&gt;</code>)</li>
+</ul>
+<p>Note that Ride can't assume that everything entered in the session will be echoed, e.g. quote quad input (<code>⍞</code>) doesn't
+echo.  Therefore, Ride should wait for the <a href="#EchoInput"><code>EchoInput</code></a> message.</p>
+<p>If multiple lines have been modified in the session, Ride should queue them up and send them one by one, waiting for
+a response of either <code>SetPromptType</code> with <code>type&gt;0</code> or HadError.</p>
+<h3 id="haderror">HadError <a name=HadError></a></h3>
+<p>Ride should clear its queue of pending lines on <code>HadError</code> and focus the session.</p>
+<pre><code class="language-json">[&quot;HadError&quot;,{}] // Interpreter -&gt; Ride
+</code></pre>
+<h3 id="setpw">SetPW <a name=SetPW></a></h3>
+<p>Ride can optionally advise the interpreter about the session's width in characters with</p>
+<pre><code class="language-json">[&quot;SetPW&quot;,{&quot;pw&quot;:79}] // Ride -&gt; Interpreter
+</code></pre>
+<p>Further output will wrap at that width (with a few exceptions).
+See <a href="http://help.dyalog.com/latest/Content/Language/System%20Functions/pw.htm"><code>⎕PW</code></a>.</p>
+<h2 id="window-management">Window management</h2>
+<h3 id="edit">Edit <a name=Edit></a></h3>
+<p>When the user presses <code>&lt;ED&gt;</code> (Shift-Enter), Ride should send;</p>
+<pre><code class="language-json">[&quot;Edit&quot;,{&quot;win&quot;:123,&quot;text&quot;:&quot;a←b+c×d&quot;,&quot;pos&quot;:4,&quot;unsaved&quot;:{&quot;124&quot;:&quot;f&quot;}}] // Ride -&gt; Interpreter
+</code></pre>
+<p>to request opening an editor.  <code>pos</code> is the 0-based position of the cursor in <code>text</code>.
+<code>unsaved</code> is a mapping from window ids to unsaved content.</p>
+<p>:red_circle: "Edit" must be extended to submit the current content of all dirty windows, otherwise jumping from one
+method to another in a class will obliterate the current changes.</p>
+<h3 id="showasarraynotation">ShowAsArrayNotation <a name=ShowAsArrayNotation></a></h3>
+<p>When user clicks on button <code>[⋄]</code> in an editor window for a variable that can be edited as APLAN, Ride should send;</p>
+<pre><code class="language-json">[&quot;ShowAsArrayNotation&quot;,{&quot;win&quot;:123}] // Ride -&gt; Interpreter
+</code></pre>
+<p>to request an update to the window with content changed to array notation. The interpreter will respond with a separate <code>UpdateWindow</code> command.</p>
+<h3 id="openwindow">OpenWindow <a name=OpenWindow></a></h3>
+<p>The interpreter will parse that and may respond later with one of;</p>
+<pre><code class="language-json">[&quot;OpenWindow&quot;,{&quot;name&quot;:&quot;f&quot;,&quot;filename&quot;:&quot;C:\\path\\to\\foo.txt&quot;,&quot;text&quot;:[&quot;r←f a&quot;,&quot;r←(+⌿÷≢)a&quot;],&quot;token&quot;:123,&quot;currentRow&quot;:0,&quot;debugger&quot;:false,
+               &quot;entityType&quot;:1,&quot;offset&quot;:0,&quot;readOnly&quot;:false,&quot;size&quot;:0,&quot;stop&quot;:[1],
+               &quot;tid&quot;:0,&quot;tname&quot;:&quot;Tid:0&quot;}] // Interpreter -&gt; Ride
+</code></pre>
+<h3 id="updatewindow">UpdateWindow <a name=UpdateWindow></a></h3>
+<pre><code class="language-json">[&quot;UpdateWindow&quot;,...] // Interpreter -&gt; Ride (same args as OpenWindow)
+</code></pre>
+<p>It may also send these in response to <a href="http://help.dyalog.com/latest/Content/Language/System%20Commands/ed.htm"><code>)ed
+name</code></a> or
+<a href="http://help.dyalog.com/latest/Content/Language/System%20Functions/ed.htm"><code>⎕ed'name'</code></a>, as well as when tracing into an
+object that is not currently being traced.</p>
+<p>Constants for <code>entityType</code>:</p>
+<table>
+<thead>
+<tr>
+<th>entityType</th>
+<th>Description</th>
+<th></th>
+<th>entityType</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>1</code></td>
+<td>defined function</td>
+<td></td>
+<td><code>128</code></td>
+<td>simple character vector</td>
+</tr>
+<tr>
+<td><code>2</code></td>
+<td>simple character array</td>
+<td></td>
+<td><code>256</code></td>
+<td>APL namespace</td>
+</tr>
+<tr>
+<td><code>4</code></td>
+<td>simple numeric array</td>
+<td></td>
+<td><code>512</code></td>
+<td>APL class</td>
+</tr>
+<tr>
+<td><code>8</code></td>
+<td>mixed simple array</td>
+<td></td>
+<td><code>1024</code></td>
+<td>APL interface</td>
+</tr>
+<tr>
+<td><code>16</code></td>
+<td>nested array</td>
+<td></td>
+<td><code>2048</code></td>
+<td>APL session</td>
+</tr>
+<tr>
+<td><code>32</code></td>
+<td><a href="http://help.dyalog.com/latest/Content/Language/System%20Functions/or.htm"><code>⎕OR</code></a> object</td>
+<td></td>
+<td><code>4096</code></td>
+<td>external function</td>
+</tr>
+<tr>
+<td><code>64</code></td>
+<td>native file</td>
+<td></td>
+<td><code>262144</code></td>
+<td>array notation (APLAN)</td>
+</tr>
+</tbody>
+</table>
+<p>:red_circle: TODO: describe the other arguments</p>
+<h3 id="gotowindow">GotoWindow <a name=GotoWindow></a></h3>
+<p>The interpreter can request transferring the focus to a particular window with;</p>
+<pre><code class="language-json">[&quot;GotoWindow&quot;,{&quot;win&quot;:123}] // Interpreter -&gt; Ride
+</code></pre>
+<p>This could happen as a result of <code>)ED</code> or <code>⎕ED</code>.</p>
+<h3 id="windowtypechanged">WindowTypeChanged <a name=WindowTypeChanged></a></h3>
+<p>The interpreter may decide to change the type of a window (editor vs tracer) with;</p>
+<pre><code class="language-json">[&quot;WindowTypeChanged&quot;,{&quot;win&quot;:123,&quot;tracer&quot;:true}] // Interpreter -&gt; Ride
+</code></pre>
+<h3 id="savechanges">SaveChanges <a name=SaveChanges></a></h3>
+<p>When the user presses <code>&lt;EP&gt;</code> (Esc), Ride should request that the editor contents are fixed through;</p>
+<pre><code class="language-json">[&quot;SaveChanges&quot;,{&quot;win&quot;:123,&quot;text&quot;:[&quot;r←avg a&quot;,&quot;s←+⌿a&quot;,&quot;n←≢a&quot;,&quot;r←s÷n&quot;],&quot;stop&quot;:[2,3]}] // Ride -&gt; Interpreter
+</code></pre>
+<ul>
+<li><code>stop</code> is an array of 0-based line numbers.</li>
+</ul>
+<h3 id="replysavechanges">ReplySaveChanges <a name=ReplySaveChanges></a></h3>
+<pre><code class="language-json">[&quot;ReplySaveChanges&quot;,{&quot;win&quot;:123,&quot;err&quot;:0}] // Interpreter -&gt; Ride
+</code></pre>
+<p>If <code>err</code> is 0, save succeeded; otherwise it failed.</p>
+<h3 id="formatcode">FormatCode <a name=FormatCode></a></h3>
+<p>Ride can request that the intepreter reformat code:</p>
+<pre><code class="language-json">[&quot;FormatCode&quot;,{&quot;win&quot;:123,&quot;text&quot;:[&quot;r←avg a&quot;,&quot;s←+⌿a&quot;,&quot;n ←    ≢a&quot;,&quot;r←s÷n&quot;]}] // Ride -&gt; Interpreter
+</code></pre>
+<h3 id="replyformatcode">ReplyFormatCode <a name=ReplyFormatCode></a></h3>
+<pre><code class="language-json">[&quot;ReplyFormatCode&quot;,{&quot;win&quot;:123,&quot;text&quot;:[&quot;r←avg a&quot;,&quot;s←+⌿a&quot;,&quot;n←≢a&quot;,&quot;r←s÷n&quot;]}] // Interpreter -&gt; Ride
+</code></pre>
+<ul>
+<li><code>win</code>: TENTATIVE: a window identifer. The interpreter needs a window in which to format the code (don't ask!). In the short term we'll insist that we can only format code in a window the interpreter is aware of.</li>
+</ul>
+<h3 id="closewindow">CloseWindow <a name=CloseWindow></a></h3>
+<p>When the user presses <code>&lt;EP&gt;</code> (Esc) and saving is successful or presses <code>&lt;QT&gt;</code> (Shift-Esc), Ride sends;</p>
+<pre><code class="language-json">[&quot;CloseWindow&quot;,{&quot;win&quot;:123}] // Ride -&gt; Interpreter  and  Interpreter -&gt; Ride
+</code></pre>
+<p>but does not close the UI window until the interpreter replies with the same message.</p>
+<h3 id="closeallwindows">CloseAllWindows <a name=CloseAllWindows></a></h3>
+<p>To close all windows, but leave the SIstack unchanged Ride can send the CloseAllWindows message.</p>
+<pre><code class="language-json">[&quot;CloseAllWindows&quot;,{}] // Ride -&gt; Interpreter
+</code></pre>
+<p>In response the interpreter will send a CloseWindow messsage for each window that it is aware of. The CloseAllWindows message will leave the SIStack unchanged, it will just close all (trace and edit) windows in the interpreter.</p>
+<h2 id="debugging">Debugging</h2>
+<p>The following messages are used in relation to trace windows.</p>
+<h3 id="sethighlightline">SetHighlightLine <a name=SetHighlightLine></a></h3>
+<p>This tells Ride where the currently executed line is.  Traditionally that's indicated by a red border around it.
+Optionally, provides end line and start/end column of area to highlight with <code>end_line</code>, <code>start_col</code> and <code>end_col</code>.</p>
+<pre><code class="language-json">[&quot;SetHighlightLine&quot;,{&quot;win&quot;:123,&quot;line&quot;:1,&quot;end_line&quot;:1,&quot;start_col&quot;:-1,&quot;end_col&quot;:-1}] // Interpreter -&gt; Ride
+</code></pre>
+<h3 id="setlineattributes">SetLineAttributes <a name=SetLineAttributes></a></h3>
+<p>Update the breakpoints.</p>
+<pre><code class="language-json">[&quot;SetLineAttributes&quot;,{&quot;win&quot;:123,&quot;stop&quot;:[2,3,5]}] // Ride -&gt; Interpreter  or  Interpreter -&gt; Ride
+</code></pre>
+<ul>
+<li><code>stop</code> is an array of 0-based line numbers.</li>
+</ul>
+<h3 id="tracebackward">TraceBackward <a name=TraceBackward></a></h3>
+<p>Request the current line in a trace window be moved back (skip back one line).</p>
+<pre><code class="language-json">[&quot;TraceBackward&quot;,{&quot;win&quot;:123}] // Ride -&gt; Interpreter
+</code></pre>
+<h3 id="cleartracestopmonitor">ClearTraceStopMonitor <a name=ClearTraceStopMonitor></a></h3>
+<p>Request it clears all traces, stops, and monitors in the active workspace. The reply says how many of each thing were cleared.</p>
+<pre><code class="language-json">[&quot;ClearTraceStopMonitor&quot;,{&quot;token&quot;:123}] // Ride -&gt; Interpreter
+</code></pre>
+<h3 id="replycleartracestopmonitor">ReplyClearTraceStopMonitor <a name=ReplyClearTraceStopMonitor></a></h3>
+<pre><code class="language-json">[&quot;ReplyClearTraceStopMonitor&quot;,{&quot;traces&quot;:0,&quot;stops&quot;:0,&quot;monitors&quot;:0,&quot;token&quot;:123}] // Interpreter -&gt; Ride
+</code></pre>
+<h3 id="continue">Continue <a name=Continue></a></h3>
+<p>Request resume execution of the current thread.</p>
+<pre><code class="language-json">[&quot;Continue&quot;,{&quot;win&quot;:123}] // Ride -&gt; Interpreter
+</code></pre>
+<h3 id="continuetrace">ContinueTrace <a name=ContinueTrace></a></h3>
+<p>Request resume execution of the current function, but stop on the next line of the calling function.</p>
+<pre><code class="language-json">[&quot;ContinueTrace&quot;,{&quot;win&quot;:123}] // Ride -&gt; Interpreter
+</code></pre>
+<h3 id="cutback">Cutback <a name=Cutback></a></h3>
+<p>Request the stack is cut back one level.  This is equivalent to returning to the caller without executing the rest of the current function.</p>
+<pre><code class="language-json">[&quot;Cutback&quot;,{&quot;win&quot;:123}] // Ride -&gt; Interpreter
+</code></pre>
+<h3 id="traceforward">TraceForward <a name=TraceForward></a></h3>
+<p>Request the current line in a trace window be moved forward (skip to next line).</p>
+<pre><code class="language-json">[&quot;TraceForward&quot;,{&quot;win&quot;:123}] // Ride -&gt; Interpreter
+</code></pre>
+<h3 id="restartthreads">RestartThreads <a name=RestartThreads></a></h3>
+<p>Request resume execution of all threads.</p>
+<pre><code class="language-json">[&quot;RestartThreads&quot;,{}] // Ride -&gt; Interpreter
+</code></pre>
+<h3 id="runcurrentline">RunCurrentLine <a name=RunCurrentLine></a></h3>
+<p>Request the current line in a trace window is executed. (Step over)</p>
+<pre><code class="language-json">[&quot;RunCurrentLine&quot;,{&quot;win&quot;:123}] // Ride -&gt; Interpreter
+</code></pre>
+<h3 id="stepinto">StepInto <a name=StepInto></a></h3>
+<pre><code class="language-json">[&quot;StepInto&quot;,{&quot;win&quot;:123}] // Ride -&gt; Interpreter
+</code></pre>
+<p>Request the current line in a trace window is executed. (Step into)</p>
+<h3 id="traceprimitive">TracePrimitive <a name=TracePrimitive></a></h3>
+<pre><code class="language-json">[&quot;TracePrimitive&quot;,{&quot;win&quot;:123}] // Ride -&gt; Interpreter
+</code></pre>
+<p>Request the current line in a trace window is executed primitive by primitive.</p>
+<h2 id="status-bar">Status Bar</h2>
+<p>Ride requests status information from the interpreter to display in the status bar.</p>
+<h3 id="subscribe">Subscribe <a name=Subscribe></a></h3>
+<p>Ride 4.4 now uses the Subscribe method to retrieve information from the interpreter for the status bar. Protocol messages are sent by the interpreter when a change is detected, as opposed to polling at an interval.</p>
+<pre><code class="language-json">[&quot;Subscribe&quot;, { // Ride -&gt; Interpreter
+  &quot;status&quot;: [  // 0 or more of the following values
+               // values are not saved between calls       
+    &quot;statusfields&quot;,   // will result in InterpreterStatus messages
+    &quot;stack&quot; ,         // will result in ReplyGetSIStack messages
+    &quot;threads&quot;         // will result in ReplyGetSIStack messages
+  ],
+  &quot;heartbeat&quot;: interval    // interval is currently ignored
+}]
+</code></pre>
+<p>There is no unsubscribe method, a new Subscribe message should be sent with the relevant fields removed.</p>
+<h3 id="interpreterstatus">InterpreterStatus <a name=InterpreterStatus></a></h3>
+<pre><code class="language-json">[&quot;InterpreterStatus&quot;, { // Interpreter -&gt; Ride
+   &quot;IO&quot;: int,   // current ⎕IO
+   &quot;DQ&quot;: int,   // length of current message queue 
+   &quot;WA&quot;: int,   // current available workspace (not currently implemented)
+   &quot;SI&quot;: int,   // length of current SI stack
+   &quot;TRAP&quot;: int, // Is there an active trap?
+   &quot;ML&quot;: int,   // // current ⎕ML
+   &quot;NumThreads&quot;: int, // current number of threads
+   &quot;TID&quot;: int, // current thread id
+   &quot;CompactCount&quot;: int, // number of compactions so far
+   &quot;GarbageCount&quot;: int  // number of garbage collections so far (i.e. number of collections that have found garbage)
+}]
+</code></pre>
+<h3 id="interpreterheartbeat">InterpreterHeartBeat <a name=InterpreterHeartBeat></a></h3>
+<pre><code class="language-json">[&quot;InterpreterHeartBeat&quot;, { // Interpreter -&gt; Ride
+    &quot;ping&quot; : &quot;ping&quot;  // maybe there will be additional reasons to ping
+}]
+</code></pre>
+<h2 id="threads">Threads</h2>
+<h3 id="getsistack">GetSIStack <a name=GetSIStack></a></h3>
+<p>Request information about the current stack.</p>
+<pre><code class="language-json">[&quot;GetSIStack&quot;,{}] // Ride -&gt; Interpreter
+</code></pre>
+<h3 id="replygetsistack">ReplyGetSIStack <a name=ReplyGetSIStack></a></h3>
+<pre><code class="language-json">[&quot;ReplyGetSIStack&quot;,{&quot;stack&quot;:[{&quot;description&quot;:&quot;#.f[12]*&quot;},{&quot;description&quot;:&quot;#.g[34]&quot;}],&quot;tid&quot;:2}] // Interpreter -&gt; Ride
+</code></pre>
+<h3 id="getthreads">GetThreads <a name=GetThreads></a></h3>
+<p>Get information about the current threads.</p>
+<pre><code class="language-json">[&quot;GetThreads&quot;,{}] // Ride -&gt; Interpreter
+</code></pre>
+<h3 id="replygetthreads">ReplyGetThreads <a name=ReplyGetThreads></a></h3>
+<pre><code class="language-json">[&quot;ReplyGetThreads&quot;,{&quot;threads&quot;:[
+    {&quot;description&quot;:&quot;&quot;,&quot;state&quot;:&quot;Session&quot;,&quot;tid&quot;:0,&quot;flags&quot;:&quot;Normal&quot;,&quot;Treq&quot;:&quot;&quot;},
+    ]}] // Interpreter -&gt; Ride
+</code></pre>
+<ul>
+<li><code>description</code>: a text description of the thread. Derived from the Tid and ⎕TNAME for the thread</li>
+<li><code>state</code>: a string indicating the current location of the thread</li>
+<li><code>tid</code>: the Tid (numeric)</li>
+<li><code>flags</code>: e.g. Normal, Paused or Terminated</li>
+<li><code>Treq</code>: a string indicating any tokens that the thread is waiting for.</li>
+</ul>
+<h3 id="setthread">SetThread <a name=SetThread></a></h3>
+<p>Request the interpreter focus a specific thread.</p>
+<pre><code class="language-json">[&quot;SetThread&quot;, {&quot;tid&quot;:123}] // Ride -&gt; Interpreter
+</code></pre>
+<h3 id="replysetthread">ReplySetThread <a name=ReplySetThread></a></h3>
+<pre><code class="language-json">[&quot;ReplySetThread&quot;, {&quot;tid&quot;:123, &quot;rc&quot;:321, &quot;message&quot;:&quot;txt&quot;}] // Interpreter -&gt; Ride
+</code></pre>
+<ul>
+<li><code>tid</code>: the thread ID (numeric)</li>
+<li><code>rc</code>: Return code. TID of focused thread, or -1 if unsuccessful.</li>
+<li><code>message</code>: Empty, or text description of the result if unsuccessful.</li>
+</ul>
+<h3 id="getthreadattributes">GetThreadAttributes <a name=GetThreadAttributes></a></h3>
+<p>Request attributes on multiple threads:</p>
+<pre><code class="language-json">[&quot;GetThreadAttributes&quot;,{ // Ride -&gt; Interpreter
+  &quot;threads&quot;:[123 | -1]
+}]
+</code></pre>
+<p>If first item is -1, return info for all threads and stop processing. If -1 is found after first, return non zero in rc for that element.</p>
+<h3 id="replygetthreadattributes">ReplyGetThreadAttributes <a name=ReplyGetThreadAttributes></a></h3>
+<pre><code class="language-json">[&quot;ReplyGetThreadAttributes&quot;,{ // Interpreter -&gt; Ride
+  &quot;threads&quot;:[{
+    &quot;tid&quot;: 123,
+    &quot;rc&quot;: 321,
+    &quot;paused&quot;: 1,
+    &quot;noninterruptable&quot;: 2,
+  }]
+}]
+</code></pre>
+<ul>
+<li><code>tid</code>: The thread ID (numeric)</li>
+<li><code>rc</code>: Return code. TID of thread, or -1 if unsuccessful.</li>
+<li><code>paused</code>: boolean</li>
+<li><code>noninterruptable</code>: int;</li>
+<li><code>0</code>: interruptable,</li>
+<li><code>1</code>: non-interruptable,</li>
+<li><code>2</code>: children will be created as non-interruptable</li>
+</ul>
+<h3 id="setthreadattributes">SetThreadAttributes <a name=SetThreadAttributes></a></h3>
+<p>Set attributes on multiple threads.</p>
+<pre><code class="language-json">[&quot;SetThreadAttributes&quot;,{ // Ride -&gt; Interpreter
+  &quot;threads&quot;:[{
+    &quot;tid&quot;:123,
+    &quot;paused&quot;:0,
+    &quot;noninterruptable&quot;: 2,
+  }]
+}]
+</code></pre>
+<p>If first item's tid is -1, set info for all threads and stop processing.
+The interpreter will respond with ReplySetThreadAttributes</p>
+<h3 id="replysetthreadattributes">ReplySetThreadAttributes <a name=ReplySetThreadAttributes></a></h3>
+<pre><code class="language-json">[&quot;ReplySetThreadAttributes&quot;,{ // Interpreter -&gt; Ride
+  &quot;threads&quot;:[{
+    &quot;tid&quot;:123,
+    &quot;rc&quot;:0,
+    &quot;paused&quot;:0,
+    &quot;noninterruptable&quot;:2,
+  }]
+}]
+</code></pre>
+<ul>
+<li><code>tid</code>: The thread ID (numeric)</li>
+<li><code>rc</code>: Return code. TID of thread, or -1 if unsuccessful.</li>
+<li><code>paused</code>: boolean</li>
+<li><code>noninterruptable</code>: int;</li>
+<li><code>0</code>: interruptable,</li>
+<li><code>1</code>: noninterruptable,</li>
+<li><code>2</code>: children will be created as non-interruptable</li>
+</ul>
+<h3 id="pauseallthreads">PauseAllThreads <a name=PauseAllThreads></a></h3>
+<p>To pause all threads, pass a 1. To unpause all paused threads, pass a 0.</p>
+<pre><code class="language-json">[&quot;PauseAllThreads&quot;, { &quot;pause&quot;: 1 | 0}]
+</code></pre>
+<p>PauseAllThreads (pause=0) does not "restart" all threads, you'll need to send RestartThreads if that's what you want.
+PauseAllThreads does not send any response.</p>
+<h2 id="interrupts">Interrupts</h2>
+<p>APL supports two kinds of interrupts;</p>
+<h3 id="weakinterrupt">WeakInterrupt <a name=WeakInterrupt></a></h3>
+<pre><code class="language-json">[&quot;WeakInterrupt&quot;,  {}] // Ride -&gt; Interpreter
+</code></pre>
+<h3 id="stronginterrupt">StrongInterrupt <a name=StrongInterrupt></a></h3>
+<pre><code class="language-json">[&quot;StrongInterrupt&quot;,{}] // Ride -&gt; Interpreter
+</code></pre>
+<p>The interpreter message queue should check for strong interrupts and handle them immediately without needing to fully
+parse messages.</p>
+<p>:red_circle: I've no idea what the above sentence means -Nick</p>
+<h2 id="autocompletion">Autocompletion</h2>
+<h3 id="getautocomplete">GetAutocomplete <a name=GetAutocomplete></a></h3>
+<p>Ride can request autocompletion information from the interpreter.</p>
+<pre><code class="language-json">[&quot;GetAutocomplete&quot;,{&quot;line&quot;:&quot;r←1+ab&quot;,&quot;pos&quot;:6,&quot;token&quot;:234}] // Ride -&gt; Interpreter
+</code></pre>
+<ul>
+<li><code>line</code>: text containing the name that's being completed</li>
+<li><code>pos</code>: position of cursor within <code>line</code></li>
+<li><code>token</code>: is used by <a href="#ReplyGetAutocomplete"><code>ReplyGetAutocomplete</code></a> to identify which request it is a response to. Ride
+may send multiple <code>GetAutocomplete</code> requests and the interpreter may only reply to some of them. Similarly, Ride may
+ignore some of the replies if the state of the editor has changed since the <code>GetAutocomplete</code> request was sent.
+In order to remain responsive, Ride should throttle its autocompletion requests (no more than N per second) and it
+shouldn't block while it's waiting for the response.</li>
+</ul>
+<p>:red_circle: The interpreter requires that "token" is the id of the window, so perhaps it should be renamed "win".</p>
+<p>:red_circle: If Ride sends a different token, the interpreter doesn't respond.</p>
+<h3 id="replygetautocomplete">ReplyGetAutocomplete <a name=ReplyGetAutocomplete></a></h3>
+<pre><code class="language-json">[&quot;ReplyGetAutocomplete&quot;,{&quot;skip&quot;:2,&quot;options&quot;:[&quot;ab&quot;,&quot;abc&quot;,&quot;abde&quot;],&quot;token&quot;:234}] // Interpreter -&gt; Ride
+</code></pre>
+<ul>
+<li><code>skip</code>: how many characters before the request's <code>pos</code> to replace with an element of <code>options</code></li>
+</ul>
+<h2 id="value-tips">Value tips</h2>
+<h3 id="getvaluetip">GetValueTip <a name=GetValueTip></a></h3>
+<p>When the user hovers a name with the mouse, Ride should ask for a short textual representation of the current value:</p>
+<pre><code class="language-json">[&quot;GetValueTip&quot;,{&quot;win&quot;:123,&quot;line&quot;:&quot;a←b+c&quot;,&quot;pos&quot;:2,&quot;maxWidth&quot;:50,&quot;maxHeight&quot;:20,&quot;token&quot;:456}] // Ride -&gt; Interpreter
+</code></pre>
+<h3 id="valuetip">ValueTip <a name=ValueTip></a></h3>
+<pre><code class="language-json">[&quot;ValueTip&quot;,{&quot;tip&quot;:[&quot;0 1 2&quot;,&quot;3 4 5&quot;],&quot;class&quot;:2,&quot;startCol&quot;:2,&quot;endCol&quot;:3,&quot;token&quot;:456}] // Interpreter -&gt; Ride
+</code></pre>
+<ul>
+<li><code>token</code>: is used to correlate requests and responses, and there is no guarantee that they will arrive in the same order, if ever (like with autocompletion).</li>
+<li><code>maxHeight</code> and <code>maxWidth</code> can be used to limit the number of lines and columns in the result.</li>
+<li><code>class</code> indicates the <a href="http://help.dyalog.com/latest/Content/Language/System%20Functions/nc.htm">nameclass</a> of the object. This information can be used to syntax-highlight the tooltip.</li>
+<li><code>startCol</code> and <code>endCol</code> describe the position of the whole name to which the value tip pertains. <code>startCol</code> is inclusive and <code>endCol</code> is exclusive.</li>
+</ul>
+<h2 id="dialogs">Dialogs</h2>
+<p>The interpreter can ask Ride to interact with the user by showing a modal dialog.
+Several kinds of dialogs are supported:</p>
+<h3 id="options-dialog">Options dialog</h3>
+<p><a name=OptionsDialog></a></p>
+<pre><code class="language-json">[&quot;OptionsDialog&quot;,{&quot;title&quot;:&quot;&quot;,&quot;text&quot;:&quot;&quot;,&quot;type&quot;:1,&quot;options&quot;:[&quot;Yes&quot;,&quot;No&quot;,&quot;Cancel&quot;],&quot;token&quot;:123}] // Interpreter -&gt; Ride
+</code></pre>
+<h3 id="replyoptionsdialog">ReplyOptionsDialog <a name=ReplyOptionsDialog></a></h3>
+<pre><code class="language-json">[&quot;ReplyOptionsDialog&quot;,{&quot;index&quot;:0,&quot;token&quot;:123}] // Ride -&gt; Interpreter
+</code></pre>
+<p>Constants for type:
+- <code>1</code> warning,
+- <code>2</code> information,
+- <code>3</code> question,
+- <code>4</code> stop.</p>
+<p>If the user closes the dialog without choosing an option, Ride responds with an <code>index</code> of <code>-1</code>.</p>
+<h3 id="stringdialog">StringDialog <a name=StringDialog></a></h3>
+<pre><code class="language-json">[&quot;StringDialog&quot;,{&quot;title&quot;:&quot;Name&quot;,&quot;text&quot;:&quot;Please enter a name:&quot;,&quot;initialValue&quot;:&quot;abc&quot;,&quot;defaultValue&quot;:null,&quot;token&quot;:123}] // Interpreter -&gt; Ride
+</code></pre>
+<h3 id="replystringdialog">ReplyStringDialog <a name=ReplyStringDialog></a></h3>
+<pre><code class="language-json">[&quot;ReplyStringDialog&quot;,{&quot;value&quot;:&quot;abcd&quot;,&quot;token&quot;:123}] // Ride -&gt; Interpreter
+</code></pre>
+<h3 id="taskdialog">TaskDialog <a name=TaskDialog></a></h3>
+<p>A "task dialog" shows two sets of buttons -- vertically aligned <code>buttonText</code> and below them the horizontally aligned <code>options</code>.</p>
+<pre><code class="language-json">[&quot;TaskDialog&quot;,{&quot;title&quot;:&quot;Save document&quot;,&quot;text&quot;:&quot;Save document options&quot;,
+               &quot;subtext&quot;:&quot;Do you want to save the changes to the document?&quot;,
+               &quot;buttonText&quot;:[&quot;Save in XML base format&quot;,&quot;Save in binary format&quot;],
+               &quot;options&quot;:[&quot;No&quot;,&quot;Cancel&quot;],
+               &quot;footer&quot;:&quot;Note: If you don't choose to save, your changes will be lost&quot;,
+               &quot;questionkey&quot;:&quot;SaveFileOptionsExtension:.xml&quot;,
+               &quot;questionlabel&quot;:&quot;Save this response for all files with a \&quot;.xml\&quot; extension&quot;}] // Interpreter -&gt; Ride
+</code></pre>
+<h3 id="replytaskdialog">ReplyTaskDialog <a name=ReplyTaskDialog></a></h3>
+<pre><code class="language-json">[&quot;ReplyTaskDialog&quot;,{&quot;index&quot;:&quot;101&quot;,&quot;token&quot;:123}] // Ride -&gt; Interpreter
+</code></pre>
+<p>In the response <code>index</code> can be:
+* <code>100+i</code> where <code>i</code> is the index of a <code>buttonText</code> button
+* the index of an <code>options</code> button
+* <code>-1</code> if the user closes the dialog</p>
+<h3 id="notificationmessage">NotificationMessage <a name=NotificationMessage></a></h3>
+<pre><code class="language-json">[&quot;NotificationMessage&quot;,{&quot;message&quot;:&quot;Object too large to edit&quot;,&quot;token&quot;:123}] // Interpreter -&gt; Ride
+</code></pre>
+<h2 id="other">Other</h2>
+<h3 id="showhtml">ShowHTML <a name=ShowHTML></a></h3>
+<p>Request Ride shows some HTML. See <a href="http://help.dyalog.com/latest/Content/Language/Primitive%20Operators/Send%20Text%20to%20RIDE-embedded%20Browser.htm"><code>3500⌶</code></a>.</p>
+<pre><code class="language-json">[&quot;ShowHTML&quot;,{&quot;title&quot;:&quot;Example&quot;,&quot;html&quot;:&quot;&lt;i&gt;Hello&lt;/i&gt; &lt;b&gt;world&lt;/b&gt;&quot;}] // Interpreter -&gt; Ride
+</code></pre>
+<h3 id="updatedisplayname">UpdateDisplayName <a name=UpdateDisplayName></a></h3>
+<p>This message is sent by the interpreter when WSID is changed.</p>
+<pre><code class="language-json">[&quot;UpdateDisplayName&quot;,{&quot;displayName&quot;:&quot;CLEAR WS&quot;}] // Interpreter -&gt; Ride
+</code></pre>
+<h3 id="updatesessioncaption">UpdateSessionCaption <a name=UpdateSessionCaption></a></h3>
+<p>Ride can use the display name as the title of its application window.</p>
+<pre><code class="language-json">[&quot;UpdateSessionCaption&quot;,{&quot;text&quot;:&quot;CLEAR WS - Dyalog APL/W-64&quot;}] // Interpreter -&gt; Ride
+</code></pre>
+<h3 id="disconnect">Disconnect <a name=Disconnect></a></h3>
+<p>Sent from any peer to shut down the connection cleanly.</p>
+<pre><code class="language-json">[&quot;Disconnect&quot;,{&quot;message&quot;:&quot;...&quot;}]
+</code></pre>
+<p>:red_circle: Why do we need "Disconnect"?  Why not just close the TCP connection?  That shouldn't be any less "clean".</p>
+<h2 id="workspace-explorer">Workspace explorer</h2>
+<p>Optionally, Ride can display a tree representing session content.</p>
+<h3 id="treelist">TreeList <a name=TreeList></a></h3>
+<p>It can query information about the children of a particular node with TreeList.</p>
+<pre><code class="language-json">[&quot;TreeList&quot;,{&quot;nodeId&quot;:12}] // Ride -&gt; Interpreter
+</code></pre>
+<h3 id="replytreelist">ReplyTreeList <a name=ReplyTreeList></a></h3>
+<pre><code class="language-json">[&quot;ReplyTreeList&quot;,{&quot;nodeId&quot;:12,&quot;nodeIds&quot;:[34,0],&quot;names&quot;:[&quot;ab&quot;,&quot;cde&quot;],
+                  &quot;classes&quot;:[9.4,3.2],&quot;err&quot;:&quot;&quot;}] // Interpreter -&gt; Ride
+</code></pre>
+<p>The root of the tree is assumed to have a node id of 0.
+* <code>nodeId</code> is the requested parent id.
+* <code>nodeIds</code> are the ids of the children; some of them can be 0 -- those children can't themselves have children.
+* <code>classes</code> are <a href="http://help.dyalog.com/latest/Content/Language/System%20Functions/nc.htm#NameClassification">name classes</a>
+  that can be used to choose appropriate styling
+* <code>err</code> is non-empty only when an error has occurred in the interpreter, e.g. when <code>nodeId</code> is no longer invalid</p>
+<p>Ride should query information only about the visible parts of the tree as they get expanded.</p>
+<p>When the user presses Enter or clicks on an editable node, Ride should use the <a href="#Edit">Edit</a> command to notify the
+interpreter.  Then it can send back commands to open or focus an editor window.</p>
+<h2 id="status-window">Status window</h2>
+<h3 id="statusoutput">StatusOutput <a name=StatusOutput></a></h3>
+<p>The interpreter may request the display of messages in a separate "Status Output" window.</p>
+<pre><code class="language-json">[&quot;StatusOutput&quot;,{&quot;text&quot;:&quot;some very important message\r\n&quot;,&quot;flags&quot;:2}] // Interpreter -&gt; Ride
+</code></pre>
+<p><code>flags</code> (despite its name) is the message type, one of:
+* <code>1</code>: info, usually shown in green
+* <code>2</code>: error, red
+* <code>4</code>: warning, blue
+* <code>8</code>: .Net function overload clash overload (red?)</p>
+<h2 id="process-manager">Process manager</h2>
+<p>:red_circle: As of April 2016 there is no process manager.</p>
+<h3 id="getavailableconnections">GetAvailableConnections <a name=GetAvailableConnections></a></h3>
+<pre><code class="language-json">[&quot;GetAvailableConnections&quot;,{&quot;connections&quot;:[c0,c1,...]}] // Ride or Interpreter -&gt; PM
+</code></pre>
+<p>:red_circle: Specify what c0,c1,... look like</p>
+<h3 id="connectto">ConnectTo <a name=ConnectTo></a></h3>
+<p>Request a connection to a specific item (Ride or interpreter).</p>
+<pre><code class="language-json">[&quot;ConnectTo&quot;,{&quot;remoteId&quot;:123}] // Ride or Interpreter -&gt; PM
+</code></pre>
+<h3 id="connecttosucceded">ConnectToSucceded <a name=ConnectToSucceded></a></h3>
+<p>Tell the client that the ProcessManager is handing off the connection to a Ride or Interpreter (as requested).
+The process manager knows the supported protocols so it can pick a supported protocol for the clients to switch to.
+Once this is received the client is no longer connected to the PM, but rather is connected to the specified process.</p>
+<pre><code class="language-json">[&quot;ConnectToSucceded&quot;,{&quot;remoteId&quot;:123,&quot;identity&quot;:1,&quot;protocolNumber&quot;:...}] // PM -&gt; Ride or Interpreter
+</code></pre>
+<p><code>identity</code>: see <a href="#Identify">Identify</a></p>
+<h3 id="connecttofailed">ConnectToFailed <a name=ConnectToFailed></a></h3>
+<p>Tell the client that the attempt to connect to a particular process failed.</p>
+<pre><code class="language-json">[&quot;ConnectToFailed&quot;,{&quot;remoteId&quot;:123,&quot;reason&quot;:&quot;&quot;}] // PM -&gt; Ride or Interpreter
+</code></pre>
+<h3 id="getdetailedinformation">GetDetailedInformation <a name=GetDetailedInformation></a></h3>
+<pre><code class="language-json">[&quot;GetDetailedInformation&quot;,{&quot;remoteId&quot;:[12,34,...]}] // anything -&gt; anything
+</code></pre>
+<p>If sent to a Process manager, <code>remoteId</code> is a list of remote IDs returned by
+<a href="#GetAvailableConnections"><code>GetAvailableConnections</code></a>. Otherwise it's an empty list.</p>
+<h3 id="replygetdetailedinformation">ReplyGetDetailedInformation <a name=ReplyGetDetailedInformation></a></h3>
+<pre><code class="language-json">[&quot;ReplyGetDetailedInformation&quot;,{&quot;information&quot;:[i0,i1,...]}] // anything -&gt; anything
+</code></pre>
+<h2 id="session-information-and-configuration">Session Information and Configuration</h2>
+<h3 id="help">Help</h3>
+<h4 id="gethelpinformation">GetHelpInformation <a name=GetHelpInformation></a></h4>
+<p>Ride can request help on current cursor position.</p>
+<pre><code class="language-json">[&quot;GetHelpInformation&quot;,{&quot;line&quot;:&quot;r←1+ab&quot;,&quot;pos&quot;:4}] // Ride -&gt; Interpreter
+</code></pre>
+<ul>
+<li><code>line</code>: text containing the name where help is requested</li>
+<li><code>pos</code>: position of cursor within <code>line</code> (origin 0 is to the left of the first character)</li>
+</ul>
+<h4 id="replygethelpinformation">ReplyGetHelpInformation <a name=ReplyGetHelpInformation></a></h4>
+<pre><code class="language-json">[&quot;ReplyGetHelpInformation&quot;,{&quot;url&quot;:&quot;https://help.dyalog.com/18.1/#Language/Symbols/Plus%20Sign.htm&quot;}] // Interpreter -&gt; Ride
+</code></pre>
+<h3 id="syntax">Syntax</h3>
+<h4 id="getsyntaxinformation">GetSyntaxInformation <a name=GetSyntaxInformation></a></h4>
+<p>Ride can request Syntax information specific to the version of the interpreter being run.</p>
+<pre><code class="language-json">[&quot;GetHelpInformation&quot;,{}] // Ride -&gt; Interpreter
+</code></pre>
+<h3 id="replygetsyntaxinformation">⍕ ReplyGetSyntaxInformation <a name=ReplyGetSyntaxInformation></a></h3>
+<pre><code class="language-json">[&quot;ReplyGetSyntaxInformation&quot;,{&quot;url&quot;:&quot;https://help.dyalog.com/18.1/#Language/Symbols/Plus%20Sign.htm&quot;}] // Interpreter -&gt; Ride
+</code></pre>
+<h3 id="languagebar">LanguageBar</h3>
+<h4 id="getlanguagebar">GetLanguageBar <a name=GetLanguageBar></a></h4>
+<p>Ride can request Language bar information specific to the version of the interpreter being run.</p>
+<pre><code class="language-json">[&quot;GetLanguageBar&quot;,{}] // Ride -&gt; Interpreter
+</code></pre>
+<h4 id="replygetlanguagebar">ReplyGetLanguageBar <a name=ReplyGetLanguageBar></a></h4>
+<pre><code class="language-json">[&quot;ReplyGetLanguageBar&quot;,{  // Interpreter -&gt; Ride
+  &quot;entries&quot;:[
+    {&quot;name&quot;:&quot;Left Arrow&quot;, &quot;avchar&quot;:&quot;←&quot;, &quot;helptext&quot;:[&quot;...&quot;,&quot;...&quot;,]}
+    ]}]
+</code></pre>
+<h3 id="configuration">Configuration</h3>
+<h4 id="getconfiguration">GetConfiguration <a name=GetConfiguration></a></h4>
+<p>Configuration parameters can be queried using the GetConfiguration method</p>
+<pre><code class="language-json">[&quot;GetConfiguration&quot;, {&quot;names&quot;:[&quot;text&quot;] // Ride -&gt; Interpreter
+</code></pre>
+<h4 id="replygetconfiguration">ReplyGetConfiguration <a name=ReplyGetConfiguration></a></h4>
+<pre><code class="language-json">[&quot;ReplyGetConfiguration&quot;, { // Interpreter -&gt; Ride
+  &quot;configurations&quot;:[
+    {&quot;name&quot;:&quot;string&quot;, &quot;value&quot;:&quot;&quot;},
+    ]}]
+</code></pre>
+<h4 id="setconfiguration">SetConfiguration <a name=SetConfiguration></a></h4>
+<p>Parameters can be set using the SetConfiguration method. <em>[Currently only the AUTO_PAUSE_THREADS parameter is supported.]</em></p>
+<pre><code class="language-json">[&quot;SetConfiguration&quot;, { // Ride -&gt; Interpreter
+  &quot;configurations&quot;: [
+    {&quot;name&quot;:&quot;&quot;, &quot;value&quot;:&quot;&quot;},
+    ]}]
+</code></pre>
+<h4 id="replysetconfiguration">ReplySetConfiguration <a name=ReplySetConfiguration></a></h4>
+<pre><code class="language-json">[&quot;ReplySetConfiguration&quot;, { // Interpreter -&gt; Ride
+  &quot;configurations&quot;: [
+    {&quot;name&quot;:&quot;&quot;, &quot;rc&quot;:0123,},
+    ]}]
+</code></pre>
+<ul>
+<li><code>name</code>: key of paramenter to set.</li>
+<li><code>value</code>: value to set it to.</li>
+<li><code>rc</code>: int, one of the following;</li>
+<li><code>0</code>: SO_OK</li>
+<li><code>1</code>: SO_BAD_NAME</li>
+<li><code>2</code>: SO_BAD_VALUE</li>
+<li><code>3</code>: SO_CANT_SET</li>
+</ul>
+<h2 id="proposed-extensions">Proposed extensions</h2>
+<ul>
+<li>related to the process manager</li>
+</ul>
+<pre><code>AvailableConnection =&gt; [
+    int remoteID,       // Unique ID
+    string displayName  // Display name for the entry.
+]
+DetailedInformation =&gt; [
+  int remoteID,    // Unique ID if sent from a Process Manager, otherwise 0
+  identity identity,
+  (DetailedRideInformation|DetailedInterpreterInformation|DetailedProcessInformation) Information
+]
+DetailedRideInformation =&gt; [] // Placeholder - add any more information
+DetailedInterpreterInformation =&gt; [] // Placeholder - add any more information
+DetailedProcessManagerInformation =&gt; [] // Placeholder - add any more information
+</code></pre>
+<ul>
+<li><code>⎕PFKEY</code></li>
+<li>programmatic access to "current object"</li>
+</ul>
+<h3 id="setcurrentobject">SetCurrentObject <a name=SetCurrentObject></a></h3>
+<pre><code class="language-json">[&quot;SetCurrentObject&quot;,{&quot;text&quot;:&quot;&quot;}] // Ride -&gt; Interpreter
+</code></pre>
+<ul>
+<li>compiler information</li>
+<li>list of valid I-beams and their descriptions</li>
+<li><code>ShowStack</code> and <code>ShowThreads</code></li>
+<li>drop workspace in Ride</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "..", "features": ["navigation.sections", "navigation.instant"], "search": "../assets/javascripts/workers/search.f8cc74c7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.c8b220af.min.js"></script>
+      
+        <script src="../js/print-site.js"></script>
+      
+    
+  </body>
+</html>
