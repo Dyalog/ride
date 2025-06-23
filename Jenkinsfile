@@ -16,7 +16,7 @@ pipeline {
         checkout scm
         sh 'rm -Rf _ ship'
         sh 'npm i'
-        sh 'npm run build l a w'
+        sh 'npm run build l a w a64'
         sh './CI/publish.sh'
         stash name: 'ride-win', includes: '_/ride*/Ride-*-win32-ia32/**'
         stash name: 'ride-linux', includes: '_/ride*/Ride-*-linux*/**'

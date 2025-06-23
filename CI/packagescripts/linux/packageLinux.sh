@@ -220,7 +220,7 @@ cleanup() {
 
 }
 
-for CPUTYPE in x64 armv7l ; do
+for CPUTYPE in arm64 x64 armv7l ; do
 
 	RIDEDIR="_/${BUILDNAME}/${APP_NAME}-linux-${CPUTYPE}"
 
@@ -230,6 +230,9 @@ for CPUTYPE in x64 armv7l ; do
 	elif [ "${CPUTYPE}" = "armv7l" ] ; then
 		DEBCPUTYPE="armhf"
 		RPMCPUTYPE="armhf"
+	elif [ "${CPUTYPE}" = "arm64" ] ; then
+		DEBCPUTYPE="arm64"
+		RPMCPUTYPE="arm64"
 	fi
 
 	checkEnvironment

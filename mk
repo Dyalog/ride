@@ -95,6 +95,7 @@ const oa= (f) => { b(e => (e ? f(e) : pkg('darwin', 'arm64', f))); };
 const m = (f) => { b(e => (e ? f(e) : pkg('mas', 'x64', f))); };
 const ma= (f) => { b(e => (e ? f(e) : pkg('mas', 'arm64', f))); };
 const a = (f) => { b(e => (e ? f(e) : pkg('linux', 'armv7l', f))); };
+const a64 = (f) => { b(e => (e ? f(e) : pkg('linux', 'arm64', f))); };
 const d = (f) => { async.series([l, w, o, a], (e) => { f(e); }); };
 
 const c = (f) => { rm('_'); rm('/tmp/ridebuild'); f(); };
@@ -107,6 +108,7 @@ tasks.oa=oa; tasks.osxarm = oa;
 tasks.m = m; tasks.mas = m;
 tasks.ma=ma; tasks.masarm = ma;
 tasks.a = a; tasks.arm = a;
+tasks.a64=a64; tasks.arm64 = a64;
 tasks.d = d; tasks.dist = d;
 tasks.c = c; tasks.clean = c;
 
