@@ -93,8 +93,8 @@ D.Se = function Se(ide) { // constructor
       e.event.preventDefault();
       e.event.stopPropagation();
     } else if (t.type === mt.GUTTER_GLYPH_MARGIN) {
-      if (se.promptType === 3 && p.lineNumber === se.lines.length + 1) {
-        D.send('ExitMultilineInput', {});
+      if (p.lineNumber === se.lines.length + 1) {
+        this.EMI();
       }
     } else if (t.type === mt.CONTENT_TEXT) {
       const l = p.lineNumber;
@@ -771,6 +771,7 @@ D.Se.prototype = {
     se.hl();
   },
   CLS() {},
+  EMI() { if (this.promptType === 3) D.send('ExitMultilineInput', {}); },
   EP() { this.ide.focusMRUWin(); },
   ER() { this.exec(0); },
   TC() { this.exec(1); },

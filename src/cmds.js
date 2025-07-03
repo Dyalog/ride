@@ -27,6 +27,7 @@ D.cmds = [
   ['DMR','Load demo file',          []],
   ['DOX','Documentation Centre',    []],
   ['DO', 'Uncomment lines',         []],
+  ['EMI','Exit multiline input',    []],
   ['ED', 'Edit',                    ['Shift+Enter']],
   ['EP', 'Exit (and save changes)', ['Escape']],
   ['ER', 'Execute line',            ['Enter']],

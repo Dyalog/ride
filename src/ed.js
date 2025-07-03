@@ -611,6 +611,7 @@ D.Ed.prototype = {
   EDA() {
     D.send('ShowAsArrayNotation', { win: this.id });
   },
+  EMI() {},
   QT() { D.send('CloseWindow', { win: this.id }); },
   BK(me) { this.tc ? D.send('TraceBackward', { win: this.id }) : me.trigger('D', 'undo'); },
   FD(me) { this.tc ? D.send('TraceForward', { win: this.id }) : me.trigger('D', 'redo'); },
