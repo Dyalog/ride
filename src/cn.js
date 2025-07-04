@@ -71,6 +71,8 @@
       $.err(...x);
     } else if (e.code === 'ENOTFOUND') {
       $.err(`The host "${e.hostname}" could not be found.`, 'Host not found');
+    } else if (e.errors && e.errors.length > 1) {
+      $.err(e.errors.map((y) => y.message).join('\n'), e.code);
     } else if (!['ECONNRESET', 'ETIMEDOUT'].includes(e.code)) $.err(e.message, e.name);
   };
   const passwdPrompt = (text, title) => {
