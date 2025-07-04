@@ -17,7 +17,7 @@ D.Se = function Se(ide) { // constructor
   se.dirty = {};
   se.isReadOnly = !1;
   se.lineEditor = {};
-  se.multiLineBlocks = [];
+  se.multiLineBlocks = {};
   se.lines = [];
 
   se.dom = document.createElement('div');
@@ -125,13 +125,14 @@ D.Se = function Se(ide) { // constructor
       let dl1 = l1;
       const m = (l1 - l0) + 1;
       const text = c.text.split(/\r?\n/);
-      for (let i = 0; i < se.multiLineBlocks.length; i++) {
-        const element = se.multiLineBlocks[i];
+      const blocks = Object.values(se.multiLineBlocks);
+      // ignore the last block if we are still in multiline prompt mode
+      ((se.promptType === 3) ? blocks.slice(0, -1) : blocks).forEach((element) => {
         if (l0 <= (element.end || 0) && l1 >= element.start) {
           dl0 = Math.min(dl0, element.start);
           dl1 = Math.max(dl1, element.end);
         }
-      }
+      });
       let n = text.length;
       if (m < n) {
         const h = se.dirty;
@@ -143,10 +144,8 @@ D.Se = function Se(ide) { // constructor
         n = m;
       }
       if (dl0 < l0 && !se.dirty[dl0]) {
-        se.edit([
-          { range: new monaco.Range(dl0, 1, dl0, 1), text: ' ' },
-          { range: new monaco.Range(dl0, 1, dl0, 2), text: '' },
-        ]);
+        se.edit([{ range: new monaco.Range(dl0, 1, dl0, 1), text: ' ' }]);
+        se.edit([{ range: new monaco.Range(dl0, 1, dl0, 2), text: '' }]);
       }
       let l = dl0;
       while (l <= dl1) {
@@ -257,6 +256,7 @@ D.Se.prototype = {
     let text;
     let scp = cp.column;
     const texti = s.map((line) => line.text).join('');
+    const startLine = se.lines.length;
     s.forEach((v) => {
       const ll = se.lines[se.lines.length - 1];
       if (!ll || ll.text[ll.text.length - 1] === '\n') {
@@ -267,18 +267,14 @@ D.Se.prototype = {
         ll.group = v.group;
       }
     });
-    if (isLog) {
-      const blocks = {};
-      se.lines.forEach((ll, i) => {
-        if (ll.group > 0) {
-          const group = blocks[ll.group] || {};
-          if (!group.start) group.start = i + 1;
-          group.end = i + 1;
-          blocks[ll.group] = group;
-        }
-      });
-      Object.keys(blocks).forEach((group) => se.multiLineBlocks.push(blocks[group]));
-    }
+    se.lines.slice(startLine).forEach((ll, i) => {
+      if (ll.group > 0) {
+        const group = se.multiLineBlocks[ll.group] || {};
+        if (!group.start) group.start = startLine + i + 1;
+        group.end = startLine + i + 1;
+        se.multiLineBlocks[ll.group] = group;
+      }
+    });
     if (!type && texti[texti.length - 1] !== '\n') se.lines.pop();
     if (se.promptType === 3 || se.promptType === 4) {
       text = texti;
@@ -391,20 +387,15 @@ D.Se.prototype = {
     if (!wasMultiLine && x === 3) {
       const pl = line - 1;
       se.lineEditor[pl] = true;
-      se.multiLineBlocks.push({ start: pl });
-      se.edit([
-        { range: new monaco.Range(pl, 1, pl, 1), text: ' ' },
-        { range: new monaco.Range(pl, 1, pl, 2), text: '' },
-      ]);
-    } else if (wasMultiLine && x !== 3) {
-      const block = se.multiLineBlocks[se.multiLineBlocks.length - 1];
+      se.edit([{ range: new monaco.Range(pl, 1, pl, 1), text: ' ' }]);
+      se.edit([{ range: new monaco.Range(pl, 1, pl, 2), text: '' }]);
+    } else if (wasMultiLine && x !== 3 && D.apiVersion < 1) {
+      const block = Object.values(se.multiLineBlocks).pop();
       block.end = se.lastEchoLine;
-      if (D.apiVersion < 1) {
-        se.groupid += 1;
-        se.lines.slice(block.start - 1, block.end).forEach((ll) => { ll.group = se.groupid; });
-        se.setGroupDecorations();
-        se.setDecorations();
-      }
+      se.groupid += 1;
+      se.lines.slice(block.start - 1, block.end).forEach((ll) => { ll.group = se.groupid; });
+      se.setGroupDecorations();
+      se.setDecorations();
     }
     if (promptChanged) {
       if (x) delete se.cursorPosition;
@@ -515,7 +506,12 @@ D.Se.prototype = {
   setLineGroup(offset, group) {
     const se = this;
     if (offset > 0) {
-      se.lines[se.lines.length - offset].group = group;
+      const li = se.lines.length - offset;
+      se.lines[li].group = group;
+      const block = se.multiLineBlocks[group] || {};
+      if (!block.start || block.start > li) block.start = li + 1;
+      if (!block.end || block.end <= li) block.end = li + 1;
+      se.multiLineBlocks[group] = block;
       se.setGroupDecorations();
       se.setDecorations();
     }
@@ -631,7 +627,7 @@ D.Se.prototype = {
       const sel = me.getSelection();
       if (sel.isEmpty()) { // no selection
         // check if cursor in multiline block
-        const block = se.multiLineBlocks.find(
+        const block = Object.values(se.multiLineBlocks).find(
           (element) => sel.startLineNumber <= (element.end || 0)
             && sel.startLineNumber >= element.start,
         );
@@ -733,7 +729,7 @@ D.Se.prototype = {
     const lc = model.getLineCount();
     let dl0 = ln;
     let dl1 = ln;
-    se.multiLineBlocks.forEach((element) => {
+    Object.values(se.multiLineBlocks).forEach((element) => {
       if (ln <= (element.end || 0) && ln >= element.start) {
         dl0 = Math.min(dl0, element.start);
         dl1 = Math.max(dl1, element.end);
