@@ -88,11 +88,15 @@ D.Se = function Se(ide) { // constructor
   me.onMouseDown((e) => {
     const t = e.target;
     const mt = monaco.editor.MouseTargetType;
+    const p = t.position;
     if (e.event.middleButton) {
       e.event.preventDefault();
       e.event.stopPropagation();
+    } else if (t.type === mt.GUTTER_GLYPH_MARGIN) {
+      if (p.lineNumber === se.lines.length + 1) {
+        this.EMI();
+      }
     } else if (t.type === mt.CONTENT_TEXT) {
-      const p = t.position;
       const l = p.lineNumber;
       const c = p.column;
       if (e.event.timestamp - mouseTS < 400 && mouseL === l && mouseC === c) {
@@ -502,7 +506,7 @@ D.Se.prototype = {
         range: new monaco.Range(li + 2, 1, li + 2, 1),
         options: {
           isWholeLine: false,
-          glyphMarginClassName: 'group_end',
+          glyphMarginClassName: 'group_end cancelable',
           stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
         },
       });
@@ -767,6 +771,7 @@ D.Se.prototype = {
     se.hl();
   },
   CLS() {},
+  EMI() { if (this.promptType === 3) D.send('ExitMultilineInput', {}); },
   EP() { this.ide.focusMRUWin(); },
   ER() { this.exec(0); },
   TC() { this.exec(1); },
