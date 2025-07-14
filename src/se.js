@@ -126,10 +126,15 @@ D.Se = function Se(ide) { // constructor
       const m = (l1 - l0) + 1;
       const text = c.text.split(/\r?\n/);
       const blocks = Object.values(se.multiLineBlocks);
+      const inputTypes = [11, 14];
       // ignore the last block if we are still in multiline prompt mode
       ((se.promptType === 3) ? blocks.slice(0, -1) : blocks).forEach((element) => {
-        if (l0 <= (element.end || 0) && l1 >= element.start) {
+        if (l0 <= (element.end || 0) && l0 <= se.lines.length
+         && inputTypes.includes(se.lines[l0 - 1].type)) {
           dl0 = Math.min(dl0, element.start);
+        }
+        if (l1 >= element.start && l1 <= se.lines.length
+          && inputTypes.includes(se.lines[l1 - 1].type)) {
           dl1 = Math.max(dl1, element.end);
         }
       });
