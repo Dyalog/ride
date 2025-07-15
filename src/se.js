@@ -512,11 +512,22 @@ D.Se.prototype = {
     const se = this;
     if (offset > 0) {
       const li = se.lines.length - offset;
-      se.lines[li].group = group;
+      const oldGroup = se.lines[li].group;
       const block = se.multiLineBlocks[group] || {};
-      if (!block.start || block.start > li) block.start = li + 1;
-      if (!block.end || block.end <= li) block.end = li + 1;
-      se.multiLineBlocks[group] = block;
+      const oldBlock = se.multiLineBlocks[oldGroup] || {};
+      if (oldBlock.start === li + 1 && oldBlock.end === li + 1) {
+        delete se.multiLineBlocks[oldGroup]; // single line in old block, remove block
+      } else if (oldBlock.start === li + 1) {
+        oldBlock.start = li + 2; // shift group to start on next line
+      } else if (oldBlock.end === li + 1) {
+        oldBlock.end = li; // shift group to end on previous line
+      }
+      if (group > 0) { // create new block or update exisiting
+        se.lines[li].group = group;
+        if (!block.start || block.start > li) block.start = li + 1;
+        if (!block.end || block.end <= li) block.end = li + 1;
+        se.multiLineBlocks[group] = block;
+      }
       se.setGroupDecorations();
       se.setDecorations();
     }
