@@ -89,6 +89,7 @@ const pkg = (x, y, f) => {
 };
 
 const l = (f) => { b(e => (e ? f(e) : pkg('linux', 'x64', f))); };
+const la= (f) => { b(e => (e ? f(e) : pkg('linux', 'arm64', f))); };
 const w = (f) => { b(e => (e ? f(e) : pkg('win32', 'ia32', f))); };
 const o = (f) => { b(e => (e ? f(e) : pkg('darwin', 'x64', f))); };
 const oa= (f) => { b(e => (e ? f(e) : pkg('darwin', 'arm64', f))); };
@@ -101,6 +102,7 @@ const c = (f) => { rm('_'); rm('/tmp/ridebuild'); f(); };
 
 tasks.b = b; tasks.build = b;
 tasks.l = l; tasks.linux = l;
+tasks.la = la; tasks.linuxarm = la;
 tasks.w = w; tasks.win = w;
 tasks.o = o; tasks.osx = o;
 tasks.oa=oa; tasks.osxarm = oa;

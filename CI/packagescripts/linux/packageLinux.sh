@@ -220,17 +220,24 @@ cleanup() {
 
 }
 
-for CPUTYPE in x64 armv7l ; do
+for CPUTYPE in x64 armv7l arm64 ; do
 
 	RIDEDIR="_/${BUILDNAME}/${APP_NAME}-linux-${CPUTYPE}"
 
-	if [ "${CPUTYPE}" = "x64" ] ; then
-		DEBCPUTYPE="amd64"
-		RPMCPUTYPE="x86_64"
-	elif [ "${CPUTYPE}" = "armv7l" ] ; then
-		DEBCPUTYPE="armhf"
-		RPMCPUTYPE="armhf"
-	fi
+	case ${CPUTYPE} in
+		"x64")
+			DEBCPUTYPE="amd64"
+			RPMCPUTYPE="x86_64"
+			;;
+		"armv7l")
+			DEBCPUTYPE="armhf"
+			RPMCPUTYPE="armhf"
+			;;
+		"arm64")
+			DEBCPUTYPE="aarch64"
+			RPMCPUTYPE="aarch64"
+			;;
+	esac
 
 	checkEnvironment
 	getVersionInfo
