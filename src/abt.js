@@ -19,12 +19,12 @@
       el = ''
         + `\n  Electron: ${D.el.process.versions.electron}`
         + `\n  Chrome: ${D.el.process.versions.chrome}`
-        + `\n  Node: ${D.el.process.versions.node}`;
+        + `\n  Node: ${D.el.process.versions.node}`
+        + `\n  Platform: ${D.el.process.platform}-${D.el.process.arch}`;
     }
     return 'IDE:'
       + `\n  Version: ${v.version || u}`
       + `${el}`
-      + `\n  Platform: ${navigator.platform || u}`
       + `\n  Date: ${v.date || u}`
       + `\n  Git commit: ${v.rev || u}`
       + `\n  Preferences:{\n${s}\n  }\n`

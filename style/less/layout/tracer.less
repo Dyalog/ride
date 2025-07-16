@@ -11,9 +11,12 @@
 .no-toolbar .toolbar {
   display:none;
 }
-.tracer .toolbar .ed_only{display:none}
+.tracer .toolbar .ed_only,
+.variable .toolbar .code_only,
+        .toolbar .var_only,
         .toolbar .tc_only{display:none}
-.tracer .toolbar .tc_only{
+.tracer .toolbar .tc_only,
+.variable .toolbar .var_only{
   display: inline-block;
   &.tb_sep {
     display:inline;

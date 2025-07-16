@@ -7,7 +7,7 @@ pipeline {
     stage('Build Linux & Windows') {
       agent {
         docker {
-          image 'dyalogci/node:lts'
+          image 'dyalogci/node:22'
           registryCredentialsId '0435817a-5f0f-47e1-9dcc-800d85e5c335'
           args '-v /devt:/devt'
         }
@@ -29,7 +29,7 @@ pipeline {
         stage ('Linux Packaging') {
           agent {
             docker {
-              image 'dyalogci/node:lts'
+              image 'dyalogci/node:22'
               registryCredentialsId '0435817a-5f0f-47e1-9dcc-800d85e5c335'
             }
           }
@@ -42,9 +42,9 @@ pipeline {
             sh 'rm -Rf _ ship'
           }
         }
-        stage ('Mac Build and Packaging') {
+        stage ('Mac Build and Packaging (x86)') {
           agent {
-            label 'mac && x86 && build'
+            label 'mac && x86 && build && ride'
           }
           steps {
             sh 'rm -Rf _ ship'
@@ -55,6 +55,22 @@ pipeline {
             }
             stash name: 'ride-mac', includes: '_/ride*/Ride-*-darwin*/**'
             stash name: 'mac-ship', includes: 'ship/*'
+            sh 'rm -Rf _ ship'
+          }
+        }
+        stage ('Mac Build and Packaging (arm)') {
+          agent {
+            label 'mac && arm && build && ride'
+          }
+          steps {
+            sh 'rm -Rf _ ship'
+            sh 'npm i'
+            sh 'npm run build oa'
+            withCredentials([usernamePassword(credentialsId: '868dda6c-aaec-4ee4-845a-57362dec695b', passwordVariable: 'APPLE_APP_PASS', usernameVariable: 'APPLE_ID')]) {
+              sh './CI/packagescripts/osx/packageOSX.sh'
+            }
+            stash name: 'ride-macarm', includes: '_/ride*/Ride-*-darwin*/**'
+            stash name: 'macarm-ship', includes: 'ship/*'
             sh 'rm -Rf _ ship'
           }
         }
@@ -89,6 +105,7 @@ pipeline {
         sh 'rm -Rf _'
         unstash 'ride-version'
         unstash 'mac-ship'
+        unstash 'macarm-ship'
         withCredentials([usernamePassword(credentialsId: '868dda6c-aaec-4ee4-845a-57362dec695b', passwordVariable: 'APPLE_APP_PASS', usernameVariable: 'APPLE_ID')]) {
           sh "CI/packagescripts/osx/notarise.sh"
         }
@@ -103,7 +120,7 @@ pipeline {
     stage ('Copy install images') {
       agent {
         docker {
-          image 'dyalogci/node:lts'
+          image 'dyalogci/node:22'
           registryCredentialsId '0435817a-5f0f-47e1-9dcc-800d85e5c335'
           args '-v /devt:/devt'
         }
@@ -112,6 +129,7 @@ pipeline {
         sh 'rm -Rf _ ship'
         unstash 'ride-win'
         unstash 'ride-mac'
+        unstash 'ride-macarm'
         unstash 'ride-linux'
         unstash 'ride-version'
         unstash 'linux-ship'
@@ -129,7 +147,7 @@ pipeline {
     stage ('Publish to Github') {
       agent {
         docker {
-          image 'dyalogci/node:lts'
+          image 'dyalogci/node:22'
           registryCredentialsId '0435817a-5f0f-47e1-9dcc-800d85e5c335'
           args '-v /devt:/devt'
         }
@@ -141,7 +159,7 @@ pipeline {
         sh 'rm -Rf _ ship'
         unstash 'ride-version'
         unstash 'linux-ship'
-        unstash 'mac-ship'
+        unstash 'mac-ship-notarised'
         unstash 'win-ship'
         sh './CI/GH-Release.sh'
         sh 'rm -Rf _ ship'

@@ -8,7 +8,6 @@ D.Ed = function Ed(ide, opts) { // constructor
   ed.name = opts.name;
   ed.title = ed.name;
   ed.tc = opts.tc;
-  ed.HIGHLIGHT_LINE = 1;
   ed.decorations = [];
   ed.hlDecorations = [];
   ed.stopDecorations = [];
@@ -224,21 +223,35 @@ D.Ed.prototype = {
     }
     delete ed.xline;
   },
-  hl(l) { // highlight - set current line in tracer
+  hl() { // highlight - set current line in tracer
     const ed = this;
     const { me } = ed;
-    if (l == null) {
+    const hlo = ed.HIGHLIGHT || {};
+    if (!me.getModel()) return; // sometimes window is closed just before this is called
+    const isWholeLine = Number.isNaN(hlo.colEnd)
+                        || (hlo.lineStart === hlo.lineEnd && hlo.colStart === hlo.colEnd);
+    ed.dom.classList.toggle('tbt', !isWholeLine);
+    if (!hlo.lineStart) {
       ed.hlDecorations = [];
     } else {
-      ed.hlDecorations = [{
-        range: new monaco.Range(l, 1, l, 1),
-        options: {
-          isWholeLine: true,
-          className: 'highlighted',
-        },
-      }];
-      me.setPosition({ lineNumber: l, column: 1 });
-      me.revealLineInCenter(l);
+      if (!isWholeLine) {
+        ed.hlDecorations = [{
+          range: new monaco.Range(hlo.lineStart, hlo.colStart, hlo.lineEnd, hlo.colEnd),
+          options: {
+            inlineClassName: 'highlightedit',
+          },
+        }];
+      } else {
+        ed.hlDecorations = [{
+          range: new monaco.Range(hlo.lineStart, 1, hlo.lineStart, 1),
+          options: {
+            isWholeLine: true,
+            className: 'highlighted',
+          },
+        }];
+      }
+      me.setPosition({ lineNumber: hlo.lineStart, column: 1 });
+      me.revealLineInCenter(hlo.lineStart);
     }
     ed.setDecorations();
   },
@@ -258,7 +271,8 @@ D.Ed.prototype = {
     ed.tc = x;
     ed.tracer.set(x);
     ed.dom.classList.toggle('tracer', !!x);
-    ed.hl(null);
+    ed.HIGHLIGHT = null;
+    ed.hl();
     ed.setRO(x);
   },
   setRO(x) {
@@ -355,6 +369,7 @@ D.Ed.prototype = {
     const ed = this;
     const { me } = ed;
     const model = me.getModel();
+    if (!model) return; // sometimes window is closed just after an UpdateWindow
     ed.name = ee.name;
     // Check if a filename for a source file is provided.
     // Make sure it isn't duplicated in the existing name.
@@ -371,11 +386,11 @@ D.Ed.prototype = {
     }
     ed.isReadOnlyEntity = !!ee.readOnly || ed.hasEmbeddedBreaks;
     // model.setEOL(monaco.editor.EndOfLineSequence.LF);
-    // entityType:            16 NestedArray        512 AplClass
-    // 1 DefinedFunction      32 QuadORObject      1024 AplInterface
-    // 2 SimpleCharArray      64 NativeFile        2048 AplSession
-    // 4 SimpleNumericArray  128 SimpleCharVector  4096 ExternalFunction
-    // 8 MixedSimpleArray    256 AplNamespace
+    // entityType:            16 NestedArray          512 AplClass
+    // 1 DefinedFunction      32 QuadORObject        1024 AplInterface
+    // 2 SimpleCharArray      64 NativeFile          2048 AplSession
+    // 4 SimpleNumericArray  128 SimpleCharVector    4096 ExternalFunction
+    // 8 MixedSimpleArray    256 AplNamespace      262144 APLAN
     const etype = {
       2: ed.isReadOnlyEntity ? 'chararr' : 'charmat',
       4: 'numarr',
@@ -385,14 +400,18 @@ D.Ed.prototype = {
       64: 'mixarr',
       128: 'charvec',
     }[ee.entityType];
-    ed.isCode = [1, 256, 512, 1024, 2048, 4096].indexOf(ee.entityType) >= 0;
+    ed.isCode = [1, 256, 512, 1024, 2048, 4096, 262144].indexOf(ee.entityType) >= 0;
+    ed.canBeAplan = [2, 4, 8, 16, 128, 256].indexOf(ee.entityType) >= 0;
+    const isAplan = ee.entityType === 262144;
     model.setValue(ed.oText);
     if (/(\.|\\|\/)/.test(ee.name)) {
       me.setModel(monaco.editor.createModel(ed.oText, null, monaco.Uri.file(ee.name)));
     } else {
-      monaco.editor.setModelLanguage(model, ed.isCode && !ed.isReadOnlyEntity ? 'apl' : 'plaintext');
-      ed.dom.classList.remove('charmat', 'chararr', 'numarr', 'mixarr', 'charvecvec', 'quador', 'charvec');
+      const lg = ['plaintext', 'aplan', 'apl'][1 + [isAplan, ed.isCode].indexOf(true)];
+      monaco.editor.setModelLanguage(model, lg);
+      ed.dom.classList.remove('variable', 'charmat', 'chararr', 'numarr', 'mixarr', 'charvecvec', 'quador', 'charvec');
       etype && ed.dom.classList.add(etype);
+      (isAplan || ed.canBeAplan) && ed.dom.classList.add('variable');
     }
     me.updateOptions({ folding: ed.isCode && !!D.prf.fold() });
     if (ed.isCode && D.prf.indentOnOpen()) ed.RD(me);
@@ -413,6 +432,7 @@ D.Ed.prototype = {
   },
   update(x) {
     const ed = this;
+    ed.firstOpen = true;
     ed.container && ed.container.setTitle(x.name);
     ed.me_ready.then(() => ed.open(x));
   },
@@ -543,11 +563,11 @@ D.Ed.prototype = {
     // model.setEOL(monaco.editor.EndOfLineSequence.LF);
     ed.setStop();
     if (ed.tc) {
-      ed.hl(ed.HIGHLIGHT_LINE);
-      u.lineNumber = ed.HIGHLIGHT_LINE;
+      ed.hl();
+      u.lineNumber = ed.HIGHLIGHT.lineStart;
     }
     if (ed.firstOpen) {
-      if (lines.length === 1 && /\s?[a-z|@]+$/.test(lines[0])) u.column = model.getLineContent(u.lineNumber).length + 1;
+      if (lines.length === 1 && /\s?[a-z|@]+$/.test(lines[0])) u.column = model.getLineContent(1).length + 1;
       else if (lines[0][0] === ':') u.column = 1;
       else u.column = 2;
       ed.firstOpen = false;
@@ -556,11 +576,13 @@ D.Ed.prototype = {
     ed.restoreScrollPos();
     me.setPosition(u);
   },
-  SetHighlightLine(line, hadErr) {
-    const w = this;
-    w.me_ready.then(() => w.hl(line + 1));
-    hadErr < 0 && w.focus();
-    w.HIGHLIGHT_LINE = line + 1;
+  SetHighlightLine(hadErr, lineStart, lineEnd, colStart, colEnd) {
+    const ed = this;
+    ed.HIGHLIGHT = {
+      lineStart, lineEnd, colStart, colEnd,
+    };
+    ed.me_ready.then(() => ed.hl());
+    hadErr < 0 && ed.focus();
   },
   ValueTip(x) {
     const { me } = this;
@@ -586,12 +608,16 @@ D.Ed.prototype = {
     const pos = inEmptySpace ? text.length + 1 : D.util.ucLength(text.slice(0, c.column - 1));
     D.ide.Edit({ win: this.id, pos, text });
   },
+  EDA() {
+    D.send('ShowAsArrayNotation', { win: this.id });
+  },
+  EMI() {},
   QT() { D.send('CloseWindow', { win: this.id }); },
   BK(me) { this.tc ? D.send('TraceBackward', { win: this.id }) : me.trigger('D', 'undo'); },
   FD(me) { this.tc ? D.send('TraceForward', { win: this.id }) : me.trigger('D', 'redo'); },
   STL(me) {
     if (!this.tc) return;
-    let steps = me.getPosition().lineNumber - this.HIGHLIGHT_LINE;
+    let steps = me.getPosition().lineNumber - this.HIGHLIGHT.line;
     const cmd = steps > 0 ? 'TraceForward' : 'TraceBackward';
     steps = Math.abs(steps);
     for (let i = 0; i < steps; i++) { D.send(cmd, { win: this.id }); }
@@ -646,6 +672,7 @@ D.Ed.prototype = {
   TVO() { D.prf.fold.toggle(); },
   TVB() { D.prf.breakPts.toggle(); },
   TC() { D.send('StepInto', { win: this.id }); D.ide.getStats(); },
+  IT() { D.send('TracePrimitive', { win: this.id }); D.ide.getStats(); },
   AC(me) { // align comments
     const ed = this;
     const model = me.getModel();
@@ -719,7 +746,7 @@ D.Ed.prototype = {
   },
   RD(me) {
     const ed = this;
-    if (D.prf.ilf()) {
+    if (D.prf.ilf() || me.getModel().getLanguageId() === 'aplan') {
       const text = me.getModel().getLinesContent();
       D.send('FormatCode', { win: this.id, text });
     } else if (me.getSelection().isEmpty()) {

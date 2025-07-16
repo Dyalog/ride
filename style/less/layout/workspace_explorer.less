@@ -39,13 +39,15 @@
 		border-radius: 3px;
 		&::before {
 			display: inline-block;
-			width: 1em;
+			width: 2ex;
 			height: 2ex;
+			padding: 2px;
 			border-radius: 30%;
-			text-align: center;
-			margin-right: .2em;
-			font-weight: 600;
-			color:#1c1e28 !important;
+			text-align:center;
+			margin-right: 0.2em;
+			line-height: 1;
+			font-size:90%;
+			text-transform:uppercase
 		}
 	}
 	.bt_node_expand {
@@ -69,45 +71,59 @@
 		text-align: center;
 		margin-right: .2em;
 	}
+	.bt_icon_1 {
+		&::before {
+			content: "l";
+			color:@WSE_ORANGE_LIGHT;
+			background:@WSE_ORANGE;
+		}
+	}
 	.bt_icon_2_1,.bt_icon_2_2,.bt_icon_2_3,.bt_icon_2_6 {
 		&::before {
-			content: "v";
+			content: "a";
+			color:@WSE_ORANGE_LIGHT;
 			background:@WSE_ORANGE;
 		}
 	}
 	.bt_icon_3_1,.bt_icon_3_2,.bt_icon_3_3,.bt_icon_3_6 {
 		&::before {
 			content: "f";
+			color:@WSE_GREEN_LIGHT;
 			background:@WSE_GREEN;
 		}
 	}
 	.bt_icon_4_1,.bt_icon_4_2,.bt_icon_4_3 {
 		&::before {
 			content: "o";
+			color:@WSE_PURPLE_LIGHT;
 			background:@WSE_PURPLE;
 		}
 	}
 	.bt_icon_8_6 {
 		&::before {
 			content: "e";
+			color:@WSE_YELLOW_LIGHT;
 			background:@WSE_YELLOW;
 		}
 	}
-	.bt_icon_9_1,.bt_icon_1,.bt_icon_9_2{
+	.bt_icon_9_1,.bt_icon_9_2{
 		&::before {
 			content: "n";
+			color:@WSE_YELLOW_LIGHT;
 			background:@WSE_YELLOW;
 		}
 	}
 	.bt_icon_9_4,.bt_icon_9_6 {
 		&::before {
 			content: "c";
+			color:@WSE_YELLOW_LIGHT;
 			background:@WSE_YELLOW;
 		}
 	}
 	.bt_icon_9_5,.bt_icon_9_7 {
 		&::before {
 			content: "i";
+			color:@WSE_YELLOW_LIGHT;
 			background:@WSE_YELLOW;
 		}
 	}

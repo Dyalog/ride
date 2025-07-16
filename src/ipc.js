@@ -122,6 +122,7 @@
         contextIsolation: false,
         enableRemoteModule: true,
         nodeIntegration: true,
+        enableDeprecatedPaste: true,
       },
     };
     opts = Object.assign(opts, WindowRect(seq, D.prf.editWins()));

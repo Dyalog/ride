@@ -6,7 +6,7 @@
 
 The Ride protocol is formed of messages sent in either direction over a TCP connection.
 
-A message starts with a 4-byte big-endian *total length* field, followed by the ASCII bytes for `"Ride"` and a
+A message starts with a 4-byte big-endian *total length* field, followed by the ASCII bytes for `"RIDE"` and a
 UTF-8-encoded payload:
 ```
     8+len(payload)   "Ride" magic number   payload
@@ -213,7 +213,9 @@ When the user presses `<ER>` (Enter) or `<TC>` (Ctrl-Enter), Ride sends
 ["Execute",{"text":"      1 2 3+4 5 6","trace":1}] // Ride -> Interpreter
 ```
 * `text`: the APL code to evaluate
-* `trace`: 0 or 1, whether the expression should be evaluated in the tracer (`<TC>`)
+* `trace`: 0 = execute
+           1 = evaluate in the tracer (`<TC>`)
+           2 = evaluate in the tracer token by token (`<IT>`)
 
 Note that Ride can't assume that everything entered in the session will be echoed, e.g. quote quad input (`⍞`) doesn't
 echo.  Therefore, Ride should wait for the [`EchoInput`](#EchoInput) message.
@@ -248,6 +250,13 @@ to request opening an editor.  `pos` is the 0-based position of the cursor in `t
 :red_circle: "Edit" must be extended to submit the current content of all dirty windows, otherwise jumping from one
 method to another in a class will obliterate the current changes.
 
+### ShowAsArrayNotation <a name=ShowAsArrayNotation></a>
+When user clicks on button `[⋄]` in an editor window for a variable that can be edited as APLAN, Ride should send;
+```json
+["ShowAsArrayNotation",{"win":123}] // Ride -> Interpreter
+```
+to request an update to the window with content changed to array notation. The interpreter will respond with a separate `UpdateWindow` command.
+
 ### OpenWindow <a name=OpenWindow></a>
 The interpreter will parse that and may respond later with one of;
 ```json
@@ -273,8 +282,8 @@ Constants for `entityType`:
 | `4` |  simple numeric array | | `512` |  APL class
 | `8` |  mixed simple array | | `1024` |  APL interface
 | `16` |  nested array | | `2048` |  APL session
-| `32` |  [`⎕OR`](http://help.dyalog.com/latest/Content/Language/System%20Functions/or.htm) object | | `4096` |  external function.
-| `64` |  native file
+| `32` |  [`⎕OR`](http://help.dyalog.com/latest/Content/Language/System%20Functions/or.htm) object | | `4096` |  external function
+| `64` |  native file | | `262144` | array notation (APLAN)
 
 :red_circle: TODO: describe the other arguments
 
@@ -343,8 +352,9 @@ The following messages are used in relation to trace windows.
 
 ### SetHighlightLine <a name=SetHighlightLine></a>
 This tells Ride where the currently executed line is.  Traditionally that's indicated by a red border around it.
+Optionally, provides end line and start/end column of area to highlight with `end_line`, `start_col` and `end_col`.
 ```json
-["SetHighlightLine",{"win":123,"line":45}] // Interpreter -> Ride
+["SetHighlightLine",{"win":123,"line":1,"end_line":1,"start_col":-1,"end_col":-1}] // Interpreter -> Ride
 ```
 
 ### SetLineAttributes <a name=SetLineAttributes></a>
@@ -416,6 +426,12 @@ Request the current line in a trace window is executed. (Step over)
 ["StepInto",{"win":123}] // Ride -> Interpreter
 ```
 Request the current line in a trace window is executed. (Step into)
+
+### TracePrimitive <a name=TracePrimitive></a>
+```json
+["TracePrimitive",{"win":123}] // Ride -> Interpreter
+```
+Request the current line in a trace window is executed primitive by primitive.
 
 
 ## Status Bar

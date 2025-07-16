@@ -6,7 +6,6 @@
       const pending = {};
       this.pending = pending;
       const pendingValueTip = {};
-      const pendingValueTipTimeout = {};
       this.pendingValueTip = pendingValueTip;
       this.dom = I.wse;
       this.dom.hidden = 0;
@@ -23,10 +22,10 @@
         valueTip(node, callback) {
           const valueTipRequest = {
             handler: callback.bind(this),
-            timeoutId: setTimeout(function(node) {
-              this.valueTip(node.id, { tip: [''] });
-            }.bind(wse), 1000, node)
-          }
+            timeoutId: setTimeout((n) => {
+              wse.valueTip(n.id, { tip: [''] });
+            }, 1000, node),
+          };
           pendingValueTip[node.id] = valueTipRequest;
           D.ide.getValueTip('wse', node.id, { // ask interpreter
             win: 0,
@@ -35,7 +34,7 @@
             maxWidth: wse.VT_MAX_WIDTH,
             maxHeight: wse.VT_MAX_HEIGHT,
           });
-        }
+        },
       });
     }
 
@@ -51,7 +50,7 @@
         id: c || `leaf_${x.nodeId}_${i}`,
         text: x.names[i],
         expandable: !!c,
-        icon: `${Math.abs(x.classes[i])}`.replace('.', '_'),
+        icon: `${x.classes[i] < 0 ? 9.1 : Math.abs(x.classes[i])}`.replace('.', '_'),
       })));
       delete this.pending[x.nodeId];
     }
@@ -68,12 +67,12 @@
         clearTimeout(valueTipRequest.timeoutId);
       }
       if (x.tip.length === this.VT_MAX_HEIGHT) {
-         x.tip[this.VT_MAX_HEIGHT - 1] = '...';   
+        x.tip[this.VT_MAX_HEIGHT - 1] = '...';
       }
-      x.tip = x.tip.map((line) => D.util.esc(line.length < this.VT_MAX_WIDTH ? line : line.substring(0, this.VT_MAX_WIDTH - 3) + '...'));
+      x.tip = x.tip.map((line) => D.util.esc(line.length < this.VT_MAX_WIDTH ? line : `${line.substring(0, this.VT_MAX_WIDTH - 3)}...`));
       valueTipRequest.handler(x);
     }
-     
+
     autoRefresh(ms) {
       if (ms && !this.refreshTimer) {
         this.refreshTimer = setInterval(this.bt.refresh, ms);
@@ -84,4 +83,3 @@
   }
   D.WSE = WSE;
 }
- 

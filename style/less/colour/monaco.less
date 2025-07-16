@@ -46,21 +46,59 @@
     text-shadow: 1px 1px black,-1px -1px black,1px -1px black,-1px 1px black;
   }
 }
-.highlighted{
-  border:none;
-  outline:solid @ME_HIGHLIGHTED 1px;
+.highlighted:not(:has(+ .highlighted)) { // single token
+	box-shadow: inset -1px -1px @ME_HIGHLIGHTED, inset 1px 1px @ME_HIGHLIGHTED;
 }
+.highlighted:has(+ .highlighted) { // first token
+	box-shadow: inset 0 -1px @ME_HIGHLIGHTED, inset 1px 1px @ME_HIGHLIGHTED;
+}
+.highlighted + .highlighted{ // middle token
+	box-shadow: inset 0px -1px @ME_HIGHLIGHTED, inset 0px 1px @ME_HIGHLIGHTED;
+}
+.highlighted + .highlighted:not(:has(+ .highlighted)){ // last token
+	box-shadow: inset -1px -1px @ME_HIGHLIGHTED, inset 0px 1px @ME_HIGHLIGHTED;
+}
+.highlightedit{
+  background-color: fade(lighten(@ME_HIGHLIGHTED,20),50);
+}
+
 .sessionmargin{
   border-right: 1px solid @GLYPHMARGIN_BRD_COL;
   font-size: 1em;
   &.group_start::before{
-    content: '┌';
+    content: ' ';
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' aria-hidden='true' role='img'%3E%3Cpolyline points='192,512 192,256 320,256' fill='none' stroke='black' stroke-width='1px' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+    width: 100%;
+    height: 100%;
   }
   &.group_middle::before{
-    content: '│';
+    content: ' ';
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' aria-hidden='true' role='img'%3E%3Cpolyline points='192,0 192,512' fill='none' stroke='black' stroke-width='1px' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+    width: 100%;
+    height: 100%;
   }
   &.group_end::before{
-    content: '└';
+    content: ' ';
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' aria-hidden='true' role='img'%3E%3Cpolyline points='192,0 192,256 320,256' fill='none' stroke='black' stroke-width='1px' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+    width: 100%;
+    height: 100%;
+  }
+  &.group_end.cancelable::before{
+    content: ' ';
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' aria-hidden='true' role='img'%3E%3Cpolyline points='192,0 192,256 320,256' fill='none' stroke='black' stroke-width='1px' vector-effect='non-scaling-stroke'/%3E%3Cg transform='translate(256 128) scale(0.5, 0.5)'%3E%3Cpath fill='blue' d='M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z'/%3E%3C/g%3E%3Cg transform='translate(312 160) scale(0.375, 0.375)'%3E%3Cpath fill='white' d='M323.1 441l53.9-53.9c9.4-9.4 9.4-24.5 0-33.9L279.8 256l97.2-97.2c9.4-9.4 9.4-24.5 0-33.9L323.1 71c-9.4-9.4-24.5-9.4-33.9 0L192 168.2 94.8 71c-9.4-9.4-24.5-9.4-33.9 0L7 124.9c-9.4 9.4-9.4 24.5 0 33.9l97.2 97.2L7 353.2c-9.4 9.4-9.4 24.5 0 33.9L60.9 441c9.4 9.4 24.5 9.4 33.9 0l97.2-97.2 97.2 97.2c9.3 9.3 24.5 9.3 33.9 0z'/%3E%3C/g%3E%3C/svg%3E");
+    width: 100%;
+    height: 100%;
+  }
+  &.group_end.cancelable:hover::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' aria-hidden='true' role='img'%3E%3Cpolyline points='192,0 192,256 320,256' fill='none' stroke='black' stroke-width='1px' vector-effect='non-scaling-stroke'/%3E%3Cg transform='translate(256 128) scale(0.5, 0.5)'%3E%3Cpath fill='red' d='M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z'/%3E%3C/g%3E%3Cg transform='translate(312 160) scale(0.375, 0.375)'%3E%3Cpath fill='white' d='M323.1 441l53.9-53.9c9.4-9.4 9.4-24.5 0-33.9L279.8 256l97.2-97.2c9.4-9.4 9.4-24.5 0-33.9L323.1 71c-9.4-9.4-24.5-9.4-33.9 0L192 168.2 94.8 71c-9.4-9.4-24.5-9.4-33.9 0L7 124.9c-9.4 9.4-9.4 24.5 0 33.9l97.2 97.2L7 353.2c-9.4 9.4-9.4 24.5 0 33.9L60.9 441c9.4 9.4 24.5 9.4 33.9 0l97.2-97.2 97.2 97.2c9.3 9.3 24.5 9.3 33.9 0z'/%3E%3C/g%3E%3C/svg%3E");
   }
   &.modified:not(.group_start,.group_middle,.group_end)::before{
     content: '∙';

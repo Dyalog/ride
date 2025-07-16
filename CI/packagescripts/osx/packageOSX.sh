@@ -34,7 +34,14 @@ APPLE_CERT_INSTALLER="Developer ID Installer: Dyalog Limited (6LKE87V3BD)"
 
 PackageName=$(node -e "console.log($(cat package.json).productName)") # "Ride-4.0" or similar
 BUILDNAME=$(node -e "console.log($(cat package.json).name)") # "ride40" or similar
-RIDEDIR="_/${BUILDNAME}/${PackageName}-darwin-x64"
+
+if [ "arm64" = "$(uname -m)" ]; then
+        R_ARCH=arm64
+else
+        R_ARCH=x64
+fi
+
+RIDEDIR="_/${BUILDNAME}/${PackageName}-darwin-${R_ARCH}"
 SHIPDIRECTORY=ship
 
 mkdir -p ${RIDEDIR}/${PackageName}.app/Contents/Resources/LICENCES
@@ -60,7 +67,7 @@ cd ${BUILDROOTDIR}
 
 mkdir -p ${SHIPDIRECTORY}
 
-ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac.pkg" | tr '[:upper:]' '[:lower:]'`
+ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac_${R_ARCH}.pkg" | tr '[:upper:]' '[:lower:]'`
 
 ./CI/packagescripts/osx/sign.js ${RIDEDIR}/${PackageName}.app "${APPLE_CERT_APPLICATION}"
 

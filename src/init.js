@@ -134,6 +134,7 @@ const Console = console;
             contextIsolation: false,
             enableRemoteModule: true,
             nodeIntegration: true,
+            enableDeprecatedPaste: true,
           },
         });
         D.elm.enable(bw.webContents);
@@ -155,6 +156,7 @@ const Console = console;
             contextIsolation: false,
             enableRemoteModule: true,
             nodeIntegration: true,
+            enableDeprecatedPaste: true,
           },
         });
         D.elm.enable(bw.webContents);

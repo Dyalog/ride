@@ -17,7 +17,7 @@ D.Se = function Se(ide) { // constructor
   se.dirty = {};
   se.isReadOnly = !1;
   se.lineEditor = {};
-  se.multiLineBlocks = [];
+  se.multiLineBlocks = {};
   se.lines = [];
 
   se.dom = document.createElement('div');
@@ -88,11 +88,15 @@ D.Se = function Se(ide) { // constructor
   me.onMouseDown((e) => {
     const t = e.target;
     const mt = monaco.editor.MouseTargetType;
+    const p = t.position;
     if (e.event.middleButton) {
       e.event.preventDefault();
       e.event.stopPropagation();
+    } else if (t.type === mt.GUTTER_GLYPH_MARGIN) {
+      if (p.lineNumber === se.lines.length + 1) {
+        this.EMI();
+      }
     } else if (t.type === mt.CONTENT_TEXT) {
-      const p = t.position;
       const l = p.lineNumber;
       const c = p.column;
       if (e.event.timestamp - mouseTS < 400 && mouseL === l && mouseC === c) {
@@ -121,13 +125,19 @@ D.Se = function Se(ide) { // constructor
       let dl1 = l1;
       const m = (l1 - l0) + 1;
       const text = c.text.split(/\r?\n/);
-      for (let i = 0; i < se.multiLineBlocks.length; i++) {
-        const element = se.multiLineBlocks[i];
-        if (l0 <= (element.end || 0) && l1 >= element.start) {
+      const blocks = Object.values(se.multiLineBlocks);
+      const inputTypes = [11, 14];
+      // ignore the last block if we are still in multiline prompt mode
+      ((se.promptType === 3) ? blocks.slice(0, -1) : blocks).forEach((element) => {
+        if (l0 <= (element.end || 0) && l0 <= se.lines.length
+         && inputTypes.includes(se.lines[l0 - 1].type)) {
           dl0 = Math.min(dl0, element.start);
+        }
+        if (l1 >= element.start && l1 <= se.lines.length
+          && inputTypes.includes(se.lines[l1 - 1].type)) {
           dl1 = Math.max(dl1, element.end);
         }
-      }
+      });
       let n = text.length;
       if (m < n) {
         const h = se.dirty;
@@ -139,10 +149,8 @@ D.Se = function Se(ide) { // constructor
         n = m;
       }
       if (dl0 < l0 && !se.dirty[dl0]) {
-        se.edit([
-          { range: new monaco.Range(dl0, 1, dl0, 1), text: ' ' },
-          { range: new monaco.Range(dl0, 1, dl0, 2), text: '' },
-        ]);
+        se.edit([{ range: new monaco.Range(dl0, 1, dl0, 1), text: ' ' }]);
+        se.edit([{ range: new monaco.Range(dl0, 1, dl0, 2), text: '' }]);
       }
       let l = dl0;
       while (l <= dl1) {
@@ -234,7 +242,7 @@ D.Se.prototype = {
       range: new monaco.Range(+l, 1, +l, 1),
       options: {
         isWholeLine: true,
-        className: 'modified',
+        inlineClassName: 'modified',
         glyphMarginClassName: 'modified',
       },
     }));
@@ -253,6 +261,7 @@ D.Se.prototype = {
     let text;
     let scp = cp.column;
     const texti = s.map((line) => line.text).join('');
+    const startLine = se.lines.length;
     s.forEach((v) => {
       const ll = se.lines[se.lines.length - 1];
       if (!ll || ll.text[ll.text.length - 1] === '\n') {
@@ -263,18 +272,14 @@ D.Se.prototype = {
         ll.group = v.group;
       }
     });
-    if (isLog) {
-      const blocks = {};
-      se.lines.forEach((ll, i) => {
-        if (ll.group > 0) {
-          const group = blocks[ll.group] || {};
-          if (!group.start) group.start = i + 1;
-          group.end = i + 1;
-          blocks[ll.group] = group;
-        }
-      });
-      Object.keys(blocks).forEach((group) => se.multiLineBlocks.push(blocks[group]));
-    }
+    se.lines.slice(startLine).forEach((ll, i) => {
+      if (ll.group > 0) {
+        const group = se.multiLineBlocks[ll.group] || {};
+        if (!group.start) group.start = startLine + i + 1;
+        group.end = startLine + i + 1;
+        se.multiLineBlocks[ll.group] = group;
+      }
+    });
     if (!type && texti[texti.length - 1] !== '\n') se.lines.pop();
     if (se.promptType === 3 || se.promptType === 4) {
       text = texti;
@@ -319,7 +324,7 @@ D.Se.prototype = {
         { range: new monaco.Range(1, 1, 1 + truncate, 1), text: '' },
       ]);
       me.setPosition(cp);
-    } else {
+    } else if (s0 !== text) {
       se.edit([
         { range: new monaco.Range(l, 1, l, 1 + s0.length), text },
         { range: new monaco.Range(1, 1, 1 + truncate, 1), text: '' },
@@ -387,20 +392,15 @@ D.Se.prototype = {
     if (!wasMultiLine && x === 3) {
       const pl = line - 1;
       se.lineEditor[pl] = true;
-      se.multiLineBlocks.push({ start: pl });
-      se.edit([
-        { range: new monaco.Range(pl, 1, pl, 1), text: ' ' },
-        { range: new monaco.Range(pl, 1, pl, 2), text: '' },
-      ]);
-    } else if (wasMultiLine && x !== 3) {
-      const block = se.multiLineBlocks[se.multiLineBlocks.length - 1];
+      se.edit([{ range: new monaco.Range(pl, 1, pl, 1), text: ' ' }]);
+      se.edit([{ range: new monaco.Range(pl, 1, pl, 2), text: '' }]);
+    } else if (wasMultiLine && x !== 3 && D.apiVersion < 1) {
+      const block = Object.values(se.multiLineBlocks).pop();
       block.end = se.lastEchoLine;
-      if (D.apiVersion < 1) {
-        se.groupid += 1;
-        se.lines.slice(block.start - 1, block.end).forEach((ll) => { ll.group = se.groupid; });
-        se.setGroupDecorations();
-        se.setDecorations();
-      }
+      se.groupid += 1;
+      se.lines.slice(block.start - 1, block.end).forEach((ll) => { ll.group = se.groupid; });
+      se.setGroupDecorations();
+      se.setDecorations();
     }
     if (promptChanged) {
       if (x) delete se.cursorPosition;
@@ -414,7 +414,7 @@ D.Se.prototype = {
         (promptChanged || !isEmpty)
           ? [new monaco.Selection(line + !isEmpty, 7, line + !isEmpty, 7)] : me.getSelections(),
       );
-    } else if (t === ssp) {
+    } else if (x !== 3 && t === ssp) {
       se.edit([{ range: new monaco.Range(line, 1, line, 7), text: '' }]);
     } else {
       me.setPosition({ lineNumber: line, column });
@@ -434,11 +434,10 @@ D.Se.prototype = {
   },
   setDecorations() {
     const se = this;
-    const lines = se.hlDecorations.map((x) => x.range.startLineNumber);
     se.decorations = se.me.deltaDecorations(
       se.decorations,
       [
-        ...se.groupDecorations.filter((x) => !lines.includes(x.range.startLineNumber)),
+        ...se.groupDecorations,
         ...se.hlDecorations,
       ],
     );
@@ -503,7 +502,7 @@ D.Se.prototype = {
         range: new monaco.Range(li + 2, 1, li + 2, 1),
         options: {
           isWholeLine: false,
-          glyphMarginClassName: 'group_end',
+          glyphMarginClassName: 'group_end cancelable',
           stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
         },
       });
@@ -512,7 +511,23 @@ D.Se.prototype = {
   setLineGroup(offset, group) {
     const se = this;
     if (offset > 0) {
-      se.lines[se.lines.length - offset].group = group;
+      const li = se.lines.length - offset;
+      const oldGroup = se.lines[li].group;
+      const block = se.multiLineBlocks[group] || {};
+      const oldBlock = se.multiLineBlocks[oldGroup] || {};
+      if (oldBlock.start === li + 1 && oldBlock.end === li + 1) {
+        delete se.multiLineBlocks[oldGroup]; // single line in old block, remove block
+      } else if (oldBlock.start === li + 1) {
+        oldBlock.start = li + 2; // shift group to start on next line
+      } else if (oldBlock.end === li + 1) {
+        oldBlock.end = li; // shift group to end on previous line
+      }
+      if (group > 0) { // create new block or update exisiting
+        se.lines[li].group = group;
+        if (!block.start || block.start > li) block.start = li + 1;
+        if (!block.end || block.end <= li) block.end = li + 1;
+        se.multiLineBlocks[group] = block;
+      }
       se.setGroupDecorations();
       se.setDecorations();
     }
@@ -628,7 +643,7 @@ D.Se.prototype = {
       const sel = me.getSelection();
       if (sel.isEmpty()) { // no selection
         // check if cursor in multiline block
-        const block = se.multiLineBlocks.find(
+        const block = Object.values(se.multiLineBlocks).find(
           (element) => sel.startLineNumber <= (element.end || 0)
             && sel.startLineNumber >= element.start,
         );
@@ -726,39 +741,53 @@ D.Se.prototype = {
     const se = this;
     const model = me.getModel();
     const c = me.getPosition();
-    const l = c.lineNumber;
+    const ln = c.lineNumber;
     const lc = model.getLineCount();
-    if (se.dirty[l] === 0) {
-      if (l === model.getLineCount()) {
-        se.edit([{ range: new monaco.Range(l, 1, l + 1, 1), text: '' }]);
-      } else {
-        se.edit([{
-          range: new monaco.Range(
-            l - 1, model.getLineMaxColumn(l - 1),
-            l, model.getLineMaxColumn(l),
-          ),
-          text: '',
-        }]);
+    let dl0 = ln;
+    let dl1 = ln;
+    Object.values(se.multiLineBlocks).forEach((element) => {
+      if (ln <= (element.end || 0) && ln >= element.start) {
+        dl0 = Math.min(dl0, element.start);
+        dl1 = Math.max(dl1, element.end);
       }
-      delete se.dirty[l];
-      const h = se.dirty;
-      se.dirty = {};
-      Object.keys(h).forEach((x) => { se.dirty[+x - (+x > l)] = h[x]; });
-    } else if (se.dirty[l] != null) {
-      const text = l === lc && !se.dirty[l].length ? '      ' : se.dirty[l];
-      se.edit([{
-        range: new monaco.Range(l, 1, l, model.getLineMaxColumn(l)),
-        text,
-      }]);
-      me.setPosition({ lineNumber: l, column: 1 + text.search(/\S|$/) });
-      delete se.dirty[l];
+    });
+    for (let l = dl1; l >= dl0; l--) {
+      if (se.dirty[l] === 0) {
+        if (l === model.getLineCount()) {
+          se.edit([{ range: new monaco.Range(l, 1, l + 1, 1), text: '' }]);
+        } else {
+          se.edit([{
+            range: new monaco.Range(
+              l - 1,
+              model.getLineMaxColumn(l - 1),
+              l,
+              model.getLineMaxColumn(l),
+            ),
+            text: '',
+          }]);
+        }
+        delete se.dirty[l];
+        const h = se.dirty;
+        se.dirty = {};
+        Object.keys(h).forEach((x) => { se.dirty[+x - (+x > l)] = h[x]; });
+      } else if (se.dirty[l] != null) {
+        const text = l === lc && !se.dirty[l].length ? '      ' : se.dirty[l];
+        se.edit([{
+          range: new monaco.Range(l, 1, l, model.getLineMaxColumn(l)),
+          text,
+        }]);
+        me.setPosition({ lineNumber: l, column: 1 + text.search(/\S|$/) });
+        delete se.dirty[l];
+      }
     }
     se.hl();
   },
   CLS() {},
+  EMI() { if (this.promptType === 3) D.send('ExitMultilineInput', {}); },
   EP() { this.ide.focusMRUWin(); },
   ER() { this.exec(0); },
   TC() { this.exec(1); },
+  IT() { this.exec(2); },
   LN() { D.prf.lineNums.toggle(); },
   MA() { D.send('RestartThreads', {}); }, // Threads > Restart All Threads
   VAL() {
