@@ -49,11 +49,13 @@ const incl = new RegExp('^$'
   + '|^/(src|lib|node_modules|_)(/|$)'
   + '|^/style($|/(fonts|img)|.*\\.css$)');
 const pkg = (x, y, f) => {
+  const version = isDyalogBuild ? process.env.APPVERSION : v;
+  const tmpdir = `/tmp/ridebuild_${version}_${rq('os').userInfo().username}`;
   rq('@electron/packager')({
     dir: '.',
     platform: x,
     arch: y,
-    tmpdir: '/tmp/ridebuild',
+    tmpdir,
     out: `_/${pj.name}`,
     overwrite: true,
     'download.cache': 'cache',
@@ -68,8 +70,8 @@ const pkg = (x, y, f) => {
       || /\.map$/.test(p),
     appBundleId: `com.dyalog.${pj.name}`,
     appCopyright: `(c) 2014-${new Date().getFullYear()} Dyalog Ltd`,
-    appVersion: isDyalogBuild ? process.env.APPVERSION : v,
-    buildVersion: isDyalogBuild ? process.env.APPVERSION : v,
+    appVersion: version,
+    buildVersion: version,
     appCategoryType: 'public.app-category.developer-tools',
     extendInfo: isDyalogBuild ? 'CI/packagescripts/osx/Info.plist' : null,
     win32metadata: { // ends up in Windows Explorer's right click > Properties
