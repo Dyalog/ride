@@ -144,7 +144,7 @@ D.prf = {};
     + '\n  Unpause all threads      =UAT'
     + '\n  Continue all threads     =MA'
     + '\n&Help'
-    + '\n  Getting &Started         =https://dyalog.com/introduction.htm'
+    + '\n  Getting &Started         =https://dyalog.com/getting-started.htm'
     + '\n  -'
     + '\n  &Ride User Guide         =RHP'
     + '\n  Dyalog &Help             =DHI'
