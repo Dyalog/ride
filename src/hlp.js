@@ -4,22 +4,39 @@
 D.InitHelp = function initHelp(version) {
   const v = version ? version.slice(0, 4) : 'latest';
   const v3 = version ? `_${v.replace(/\./, '')}` : '';
-  const helpUri = `https://help.dyalog.com/${v}/`;
+  const pre200 = parseFloat(v) < 20.0;
+  const helpUri = `https://${pre200 ? 'help' : 'docs'}.dyalog.com/${v}/`;
   const q = '.htm'; // prefix and suffix
   const p = parseFloat(v) < 17.1 ? `${helpUri}Content/` : `${helpUri}index${q}#`;
   const rv = (D.versionInfo.version || '').slice(0, 3);
-  const h = {
-    RIDEHLP: `https://dyalog.github.io/ride/${rv}`,
-    DOX: `https://www.dyalog.com/documentation${v3}${q}`,
-    INDEX: `${helpUri}index${q}`,
-    WELCOME: `${p}MiscPages/HelpWelcome${q}`,
-    UCMDS: `${p}UserGuide/The APL Environment/User Commands${q}`,
-    LANGELEMENTS: `${p}Language/Introduction/Language Elements${q}`,
-    MAILTO: `mailto:support@dyalog.com?subject=Dyalog Support Query&body=\n\n${D.aboutDetails()}`,
-    ENHANCEMENTS: `${helpUri}index.htm#RelNotes${v}/Key Features${q}`,
-    README: `https://docs.dyalog.com/${v}/dyalog_readme${q}`,
-    THIRDPARTY: `${p}MiscPages/Licences Overview${q}`,
-  };
+  let h;
+  if (pre200) {
+    h = {
+      RIDEHLP: `https://dyalog.github.io/ride/${rv}`,
+      DOX: `https://www.dyalog.com/documentation${v3}${q}`,
+      INDEX: `${helpUri}index${q}`,
+      WELCOME: `${p}MiscPages/HelpWelcome${q}`,
+      UCMDS: `${p}UserGuide/The APL Environment/User Commands${q}`,
+      LANGELEMENTS: `${p}Language/Introduction/Language Elements${q}`,
+      MAILTO: `mailto:support@dyalog.com?subject=Dyalog Support Query&body=\n\n${D.aboutDetails()}`,
+      ENHANCEMENTS: `${helpUri}index.htm#RelNotes${v}/Key Features${q}`,
+      README: `https://docs.dyalog.com/${v}/dyalog_readme${q}`,
+      THIRDPARTY: `${p}MiscPages/Licences Overview${q}`,
+    };
+  } else {
+    h = {
+      RIDEHLP: `https://dyalog.github.io/ride/${rv}`,
+      DOX: `https://www.dyalog.com/documentation${v3}${q}`,
+      INDEX: helpUri,
+      WELCOME: helpUri,
+      UCMDS: `${p}UserGuide/The APL Environment/User Commands${q}`,
+      LANGELEMENTS: `${helpUri}language-reference-guide/symbols/language-elements/`,
+      MAILTO: `mailto:support@dyalog.com?subject=Dyalog Support Query&body=\n\n${D.aboutDetails()}`,
+      ENHANCEMENTS: `${helpUri}release-notes/introduction/`,
+      README: `https://docs.dyalog.com/${v}/dyalog_readme${q}`,
+      THIRDPARTY: `${helpUri}licences-overview/`,
+    };
+  }
   D.hlp = h;
   let u = `${p}Language/System Commands/`;
   let a = 'classes clear cmd continue copy cs drop ed erase events fns holds lib load methods ns objects obs off ops pcopy props reset save sh sic si sinl tid vars wsid xload'.split(' ');
