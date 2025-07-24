@@ -610,7 +610,7 @@ D.IDE = function IDE(opts = {}) {
     WindowTypeChanged(x) { return ide.wins[x.win].setTC(x.tracer); },
     ReplyGetAutocomplete(x) { const w = ide.wins[x.token]; w && w.processAutocompleteReply(x); },
     ReplyGetHelpInformation(x) {
-      if (x.url.length === 0) ide.getHelpExecutor.reject('No help found');
+      if (x.url.length === 0) ide.getHelpExecutor.reject({ supported: true, msg: 'No help found' });
       else ide.getHelpExecutor.resolve(x.url);
     },
     ReplyGetLanguageBar(x) {
@@ -870,7 +870,7 @@ D.IDE = function IDE(opts = {}) {
       if (x.name === 'ClearTraceStopMonitor') {
         toastr.warning('Clear all trace/stop/monitor not supported by the interpreter');
       } else if (x.name === 'GetHelpInformation') {
-        ide.getHelpExecutor.reject('GetHelpInformation not implemented on remote interpreter');
+        ide.getHelpExecutor.reject({ supported: false, msg: 'GetHelpInformation not implemented on remote interpreter' });
       } else if (x.name === 'Subscribe') {
         // flag to fallback for status updates.
         ide.hasSubscribe = false;
