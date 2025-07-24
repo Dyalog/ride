@@ -199,7 +199,9 @@
         (url) => {
           openURI(url);
         },
-        () => {
+        (e) => {
+          console.log(e.msg);
+          if (e.supported) return;
           s = s.toLowerCase();
           const h = D.hlp;
           let u; // u: the URL
