@@ -51,7 +51,7 @@ const incl = new RegExp('^$'
 const pkg = (x, y, f) => {
   const version = isDyalogBuild ? process.env.APPVERSION : v;
   let tmpdir;
-  if (process.env.JOBNAME) {
+  if (process.env.JOB_NAME) {
     tmpdir = `${process.env.WORKSPACE}/tmp`;
   } else {
     tmpdir = `/tmp/ridebuild_${version}_${rq('os').userInfo().username}_${process.pid}`;
