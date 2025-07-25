@@ -20,7 +20,7 @@ D.InitHelp = function initHelp(version) {
       LANGELEMENTS: `${p}Language/Introduction/Language Elements${q}`,
       MAILTO: `mailto:support@dyalog.com?subject=Dyalog Support Query&body=\n\n${D.aboutDetails()}`,
       ENHANCEMENTS: `${helpUri}index.htm#RelNotes${v}/Key Features${q}`,
-      README: `https://docs.dyalog.com/${v}/files/dyalog_readme${q}`,
+      README: `https://docs.dyalog.com/${v}/dyalog_readme${q}`,
       THIRDPARTY: `${p}MiscPages/Licences Overview${q}`,
     };
   } else {
@@ -33,7 +33,7 @@ D.InitHelp = function initHelp(version) {
       LANGELEMENTS: `${helpUri}language-reference-guide/symbols/language-elements/`,
       MAILTO: `mailto:support@dyalog.com?subject=Dyalog Support Query&body=\n\n${D.aboutDetails()}`,
       ENHANCEMENTS: `${helpUri}release-notes/introduction/`,
-      README: `https://docs.dyalog.com/${v}/dyalog_readme${q}`,
+      README: `https://docs.dyalog.com/${v}/files/dyalog_readme${q}`,
       THIRDPARTY: `${helpUri}licences-overview/`,
     };
   }
