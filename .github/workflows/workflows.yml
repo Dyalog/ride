@@ -1,0 +1,60 @@
+name: Build and ZIP for Windows
+
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # - name: Get current date
+      #   id: date
+      #   run: echo "date=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_OUTPUT
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 18
+          cache: npm
+      # hydrate node modules
+      - run: npm install
+      # install wine64
+      - run: sudo apt-get update -y
+      - run: sudo apt-get install -y wine64
+      # make the windows client
+      - run: node mk w
+      # import package.json
+      - run: |
+          echo 'PACKAGE_JSON<<EOF' >> $GITHUB_ENV
+          cat ./package.json >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      # convert date to string usable in file name
+      - run: npm install strftime
+      - uses: actions/github-script@v6
+        id: date
+        with:
+          result-encoding: string
+          script: |
+            const strftime = require('strftime');
+            const {stdout} = await exec.getExecOutput('git show -s HEAD --pretty=format:%ci'); // "2023-05-02 12:01:02 +0200"
+            const date = new Date(stdout);
+            const fmt = strftime('%Y%m%d-%H%M%S',date);
+            return fmt;
+      # rename exe and zip client
+      - name: Prepare zip
+        run: |
+          cd _/${{ fromJson(env.PACKAGE_JSON).name }}/${{ fromJson(env.PACKAGE_JSON).productName }}-win32-ia32
+          mv ${{ fromJson(env.PACKAGE_JSON).productName }}.exe Ride.exe
+          zip -r -9 ../../../ride.zip *
+      - name: Create Release and Upload Assets
+        uses: lstefano71/github-release@2.0.4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          tag: v${{ steps.date.outputs.result }}
+          name: Release ${{ steps.date.outputs.result }} (${{ github.ref }})
+          files: ride-${{ steps.date.outputs.result }}.zip:./ride.zip
+          gzip: false
+          draft: false
+          prerelease: false
+
+
