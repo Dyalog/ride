@@ -133,7 +133,7 @@ pipeline {
         unstash 'ride-linux'
         unstash 'ride-version'
         unstash 'linux-ship'
-        unstash 'mac-ship-notarised'
+//AWS        unstash 'mac-ship-notarised'
         unstash 'win-ship'
         sh './CI/copyinstallers.sh'
         sh 'rm -Rf _ ship'
