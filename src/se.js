@@ -126,15 +126,14 @@ D.Se = function Se(ide) { // constructor
       const m = (l1 - l0) + 1;
       const text = c.text.split(/\r?\n/);
       const blocks = Object.values(se.multiLineBlocks);
-      const inputTypes = [11, 14];
       // ignore the last block if we are still in multiline prompt mode
       ((se.promptType === 3) ? blocks.slice(0, -1) : blocks).forEach((element) => {
         if (l0 <= (element.end || 0) && l0 <= se.lines.length
-         && inputTypes.includes(se.lines[l0 - 1].type)) {
+         && se.isInputLine(l0)) {
           dl0 = Math.min(dl0, element.start);
         }
         if (l1 >= element.start && l1 <= se.lines.length
-          && inputTypes.includes(se.lines[l1 - 1].type)) {
+          && se.isInputLine(l1)) {
           dl1 = Math.max(dl1, element.end);
         }
       });
@@ -247,6 +246,9 @@ D.Se.prototype = {
       },
     }));
     se.setDecorations();
+  },
+  isInputLine(line) { // line in []IO 1 (to match monaco)
+    return [11, 14].includes(this.lines[line - 1].type);
   },
   add(s, type) { // append text to session
     const se = this;
@@ -647,7 +649,7 @@ D.Se.prototype = {
           (element) => sel.startLineNumber <= (element.end || 0)
             && sel.startLineNumber >= element.start,
         );
-        if (block) {
+        if (se.isInputLine(sel.startLineNumber) && block) {
           es = se.lines.slice(block.start - 1, block.end).map((l) => l.text.slice(0, -1));
         } else {
           es = [model.getLineContent(sel.startLineNumber)];
