@@ -1021,7 +1021,7 @@
           q.exes_dtl.hidden = sel.preset;
           q.type.value = sel.type || 'connect';
           q.subtype.value = sel.subtype || 'raw';
-          interpretersSSH = sel.exes || [];
+          interpretersSSH = Array.isArray(sel.exes) ? sel.exes : [];
           updFormDtl();
           updExes();
           q.fav_name.value = sel.name || '';
