@@ -269,21 +269,21 @@ D.Se.prototype = {
     se.undoChanges();
     const model = me.getModel();
     const l = model.getLineCount();
-    const s0 = model.getLineContent(l);
     const cp = se.cursorPosition || me.getPosition();
     const ssp = '      ';
     const isLog = type === 2;
     const isEcho = type === 1 || (!isLog && s[0].type === 14);
     let text;
-    let scp = cp.column;
-    const texti = s.map((line) => line.text).join('');
-    const startLine = se.lines.length;
+    const scp = cp.column;
+    let startLine = se.lines.length;
+    if (startLine > 0 && se.lines.at(-1).text.at(-1) !== '\n') startLine -= 1;
     s.forEach((v) => {
-      const ll = se.lines[se.lines.length - 1];
-      if (!ll || ll.text[ll.text.length - 1] === '\n') {
+      const ll = se.lines.at(-1);
+      if (!ll || ll.text.at(-1) === '\n') {
+        v.text = se.preProcessOutput('', v.text);
         se.lines.push(v);
       } else {
-        ll.text += v.text;
+        ll.text = se.preProcessOutput(ll.text, v.text);
         ll.type = v.type;
         ll.group = v.group;
       }
@@ -296,64 +296,40 @@ D.Se.prototype = {
         se.multiLineBlocks[ll.group] = group;
       }
     });
-    if (!type && texti[texti.length - 1] !== '\n') se.lines.pop();
-    if (se.promptType === 3 || se.promptType === 4) {
-      text = texti;
-    } else {
-      const res = (isEcho || s0 === ssp) ? se.preProcessOutput({ line: '', column: 1, input: texti })
-        : se.preProcessOutput({ line: s0, column: scp, input: texti });
-      scp = res.column;
-      text = res.text;
-    }
     if (se.promptType === 3 && isEcho) {
       se.lastEchoLine = l;
       se.lineEditor[l] = true;
     }
-    if (texti[texti.length - 1] === '\n' && se.promptType === 1) text += ssp;
+    text = se.lines.slice(startLine).map((ll) => ll.text).join('');
+    if (text.at(-1) === '\n' && se.promptType === 1) text += ssp;
     let truncate = 0;
     const sls = D.prf.sessionLogSize();
     if (sls > 0) {
       const lines = text.split('\n');
       const n = l - 1;
       truncate = Math.max(0, (n + lines.length) - sls);
-      if (truncate > 0) {
-        const h = se.dirty;
-        se.dirty = {};
-        Object.keys(h).forEach((x) => {
-          if (+x > truncate) se.dirty[+x - truncate] = h[x];
-        });
-        if (truncate > n) {
-          text = lines.slice(truncate - n).join('\n');
-          truncate = n;
-        }
+      if (truncate > n) {
+        text = lines.slice(truncate - n).join('\n');
+        truncate = n;
       }
     }
-    se.isReadOnly && me.updateOptions({ readOnly: false });
     if (truncate) {
       const top = me.getScrollTop();
       const lh = me.getOption(monaco.editor.EditorOption.lineHeight);
       me.setScrollTop(top - truncate * lh);
     }
-    if (this.dirty[l] != null) {
-      se.edit([
-        { range: new monaco.Range(l, 1, l, 1 + s0.length), text: `${s0}\n${text}` },
-        { range: new monaco.Range(1, 1, 1 + truncate, 1), text: '' },
-      ]);
-      me.setPosition(cp);
-    } else if (s0 !== text) {
-      se.edit([
-        { range: new monaco.Range(l, 1, l, 1 + s0.length), text },
-        { range: new monaco.Range(1, 1, 1 + truncate, 1), text: '' },
-      ]);
-      const ll = model.getLineCount();
-      const lc = se.isReadOnly ? scp : model.getLineMaxColumn(ll);
-      const ncp = { lineNumber: ll, column: lc };
-      me.setPosition(ncp);
-      se.isReadOnly && (se.cursorPosition = ncp);
-      me.revealLine(ll);
-      me.setScrollLeft(0);
-      se.btm = Math.max(se.dom.clientHeight + me.getScrollTop(), me.getTopForLineNumber(ll));
-    }
+    se.edit([
+      { range: new monaco.Range(l, 1, l + 1, 1), text },
+      { range: new monaco.Range(1, 1, 1 + truncate, 1), text: '' },
+    ]);
+    const ll = model.getLineCount();
+    const lc = se.isReadOnly ? scp : model.getLineMaxColumn(ll);
+    const ncp = { lineNumber: ll, column: lc };
+    me.setPosition(ncp);
+    se.isReadOnly && (se.cursorPosition = ncp);
+    me.revealLine(ll);
+    me.setScrollLeft(0);
+    se.btm = Math.max(se.dom.clientHeight + me.getScrollTop(), me.getTopForLineNumber(ll));
     se.isReadOnly && me.updateOptions({ readOnly: true });
     model._commandManager.clear();
     se.setDecorations();
@@ -366,11 +342,10 @@ D.Se.prototype = {
     me.listen = true;
     se.setDecorations();
   },
-  preProcessOutput(args) {
-    const { line, column, input } = args;
+  preProcessOutput(line, input) {
+    if (!/\b/.test(input)) return line + input;
     const x = line.split('');
-    let p = column - 1;
-    let nl = 0;
+    let p = line.length;
     for (let i = 0; i < input.length; i++) {
       const c = input[i];
       if (c === '\b') {
@@ -378,13 +353,12 @@ D.Se.prototype = {
       } else if (c === '\n') {
         x[x.length] = c;
         p = x.length;
-        nl = p;
       } else {
         x[p] = c;
         p += 1;
       }
     }
-    return { text: x.join(''), column: p - nl + 1 };
+    return x.join('');
   },
   prompt(x) {
     const se = this;
