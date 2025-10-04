@@ -121,6 +121,8 @@ D.Se = function Se(ide) { // constructor
     e.changes.forEach((c) => {
       const l0 = c.range.startLineNumber;
       const l1 = c.range.endLineNumber;
+      const isInputL0 = se.isInputLine(l0);
+      const isInputL1 = se.isInputLine(l1);
       let dl0 = l0;
       let dl1 = l1;
       const m = (l1 - l0) + 1;
@@ -129,11 +131,11 @@ D.Se = function Se(ide) { // constructor
       // ignore the last block if we are still in multiline prompt mode
       ((se.promptType === 3) ? blocks.slice(0, -1) : blocks).forEach((element) => {
         if (l0 <= (element.end || 0) && l0 <= se.lines.length
-         && se.isInputLine(l0)) {
+         && isInputL0) {
           dl0 = Math.min(dl0, element.start);
         }
         if (l1 >= element.start && l1 <= se.lines.length
-          && se.isInputLine(l1)) {
+          && isInputL1) {
           dl1 = Math.max(dl1, element.end);
         }
       });
@@ -248,7 +250,7 @@ D.Se.prototype = {
     se.setDecorations();
   },
   isInputLine(line) { // line in []IO 1 (to match monaco)
-    return [11, 14].includes(this.lines[line - 1].type);
+    return this.lines[line - 1] && [11, 14].includes(this.lines[line - 1].type);
   },
   add(s, type) { // append text to session
     const se = this;
