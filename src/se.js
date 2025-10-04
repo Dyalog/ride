@@ -255,6 +255,8 @@ D.Se.prototype = {
   add(s, type) { // append text to session
     const se = this;
     const { me } = se;
+    se.isReadOnly && me.updateOptions({ readOnly: false });
+    se.undoChanges();
     const model = me.getModel();
     const l = model.getLineCount();
     const s0 = model.getLineContent(l);
@@ -623,6 +625,25 @@ D.Se.prototype = {
       range: new monaco.Range(l, 1, l, model.getLineMaxColumn(l)),
       text: s,
     }], [new monaco.Selection(l, s.length + 1, l, s.length + 1)]);
+  },
+  undoChanges() {
+    const se = this;
+    const model = se.me.getModel();
+    const allLines = Object.keys(se.dirty).map((l) => +l);
+    allLines.reverse().forEach((l) => {
+      if (se.dirty[l] === 0) {
+        se.edit([{
+          range: new monaco.Range(l - 1, model.getLineMaxColumn(l - 1), l, 1),
+          text: '',
+        }]);
+      } else {
+        se.edit([{
+          range: new monaco.Range(l, 1, l, model.getLineMaxColumn(l)),
+          text: se.dirty[l],
+        }]);
+      }
+    });
+    se.dirty = {};
   },
   exec(trace) {
     let w;
