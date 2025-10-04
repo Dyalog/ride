@@ -166,7 +166,7 @@ D.Se = function Se(ide) { // constructor
         l += 1;
       }
     });
-    se.hl();
+    se.setDecorations();
   });
   me.onDidScrollChange((e) => {
     se.btm = se.me.getContentHeight() + e.scrollTop;
@@ -192,6 +192,17 @@ D.Se = function Se(ide) { // constructor
     setTimeout(se.taReplay, 1);
   };
   se.setPendent = $.debounce(100, (x) => se.dom.classList.toggle('pendent', x));
+  se.setDecorations = $.debounce(100, () => {
+    se.setGroupDecorations();
+    se.hl();
+    se.decorations = se.me.deltaDecorations(
+      se.decorations,
+      [
+        ...se.groupDecorations,
+        ...se.hlDecorations,
+      ],
+    );
+  });
 };
 D.Se.prototype = {
   histRead() {
@@ -247,7 +258,6 @@ D.Se.prototype = {
         glyphMarginClassName: 'modified',
       },
     }));
-    se.setDecorations();
   },
   isInputLine(line) { // line in []IO 1 (to match monaco)
     return this.lines[line - 1] && [11, 14].includes(this.lines[line - 1].type);
@@ -346,7 +356,6 @@ D.Se.prototype = {
     }
     se.isReadOnly && me.updateOptions({ readOnly: true });
     model._commandManager.clear();
-    se.setGroupDecorations();
     se.setDecorations();
   },
   edit(edits, sel) {
@@ -355,7 +364,6 @@ D.Se.prototype = {
     me.listen = false;
     me.executeEdits('D', edits, sel);
     me.listen = true;
-    se.setGroupDecorations();
     se.setDecorations();
   },
   preProcessOutput(args) {
@@ -405,7 +413,6 @@ D.Se.prototype = {
       block.end = se.lastEchoLine;
       se.groupid += 1;
       se.lines.slice(block.start - 1, block.end).forEach((ll) => { ll.group = se.groupid; });
-      se.setGroupDecorations();
       se.setDecorations();
     }
     if (promptChanged) {
@@ -437,16 +444,6 @@ D.Se.prototype = {
       if (se.taCb) { se.taCb.dispose(); delete se.taCb; }
       se.taBuffer.length && se.taReplay();
     }
-  },
-  setDecorations() {
-    const se = this;
-    se.decorations = se.me.deltaDecorations(
-      se.decorations,
-      [
-        ...se.groupDecorations,
-        ...se.hlDecorations,
-      ],
-    );
   },
   setGroupDecorations() {
     const se = this;
@@ -534,7 +531,6 @@ D.Se.prototype = {
         if (!block.end || block.end <= li) block.end = li + 1;
         se.multiLineBlocks[group] = block;
       }
-      se.setGroupDecorations();
       se.setDecorations();
     }
   },
@@ -697,7 +693,7 @@ D.Se.prototype = {
     });
     se.ide.exec(es, trace);
     se.dirty = {};
-    se.hl();
+    se.setDecorations();
     se.histAdd(es.filter((x) => !/^\s*$/.test(x)));
     model._commandManager.clear();
   },
@@ -805,7 +801,7 @@ D.Se.prototype = {
         delete se.dirty[l];
       }
     }
-    se.hl();
+    se.setDecorations();
   },
   CLS() {},
   EMI() { if (this.promptType === 3) D.send('ExitMultilineInput', {}); },
