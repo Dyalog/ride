@@ -156,7 +156,7 @@ D.Se = function Se(ide) { // constructor
       let l = dl0;
       while (l <= dl1) {
         if (se.dirty[l] == null) {
-          const oldt = se.lines.length === l - 1 ? '      ' : se.lines[l - 1].text.slice(0, -1);
+          const oldt = se.lines.length < l ? '      ' : se.lines[l - 1].text.slice(0, -1);
           se.dirty[l] = oldt;
         }
         l += 1;
