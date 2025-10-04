@@ -283,6 +283,7 @@ D.Se.prototype = {
         v.text = se.preProcessOutput('', v.text);
         se.lines.push(v);
       } else {
+        if ([3, 4].includes(se.promptType) && ll.text === ssp) ll.text = '';
         ll.text = se.preProcessOutput(ll.text, v.text);
         ll.type = v.type;
         ll.group = v.group;
