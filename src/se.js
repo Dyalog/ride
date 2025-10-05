@@ -443,41 +443,50 @@ D.Se.prototype = {
       12: 'session-trace',
       14: 'session-input',
     };
-    se.lines.forEach((x, i) => {
-      const prev = se.lines[i - 1] || {};
-      const next = se.lines[i + 1] || {};
+    const rows = se.me.getModel().getLineCount();
+    let j = 0;
+    let prev = {};
+    let curr = {};
+    let next = se.lines[0];
+    for (let i = 0; i < rows; i++) {
+      if (se.dirty[i + 1] !== 0) {
+        prev = curr;
+        curr = next;
+        next = se.lines[j + 1] || {};
+        j += 1;
+      }
       let type;
-      if (logLineStyles[x.type]) {
+      if (logLineStyles[curr.type]) {
         se.groupDecorations.push({
           range: new monaco.Range(i + 1, 1, i + 1, 1),
           options: {
             isWholeLine: true,
-            inlineClassName: logLineStyles[x.type],
+            inlineClassName: logLineStyles[curr.type],
             stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
           },
         });
       }
-      if (x.group === 0) return;
-      if (x.group === prev.group
-        && (x.group === next.group
-          || (se.promptType === 3 && next.group === undefined))) type = 'middle';
-      else if (x.group === prev.group) type = 'end';
-      else if (x.group === next.group || next.group === undefined) type = 'start';
-      else return;
+      if (curr.group) {
+        if (curr.group === prev.group
+          && (curr.group === next.group
+            || (se.promptType === 3 && next.group === undefined))) type = 'middle';
+        else if (curr.group === prev.group) type = 'end';
+        else if (curr.group === next.group || next.group === undefined) type = 'start';
+      }
+      if (type) {
+        se.groupDecorations.push({
+          range: new monaco.Range(i + 1, 1, i + 1, 1),
+          options: {
+            isWholeLine: false,
+            glyphMarginClassName: `group_${type}`,
+            stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
+          },
+        });
+      }
+    }
+    if (se.promptType === 3 && curr.group > 0) {
       se.groupDecorations.push({
-        range: new monaco.Range(i + 1, 1, i + 1, 1),
-        options: {
-          isWholeLine: false,
-          glyphMarginClassName: `group_${type}`,
-          stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
-        },
-      });
-    });
-    const li = se.lines.length - 1;
-    const ll = se.lines[li];
-    if (se.promptType === 3 && ll.group > 0) {
-      se.groupDecorations.push({
-        range: new monaco.Range(li + 2, 1, li + 2, 1),
+        range: new monaco.Range(rows, 1, rows, 1),
         options: {
           isWholeLine: false,
           glyphMarginClassName: 'group_end cancelable',
