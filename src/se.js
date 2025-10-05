@@ -653,21 +653,8 @@ D.Se.prototype = {
         es = [model.getValueInRange(sel)];
       }
     }
-    allLines.reverse().forEach((l) => {
-      if (se.dirty[l] === 0) {
-        se.edit([{
-          range: new monaco.Range(l - 1, model.getLineMaxColumn(l - 1), l, 1),
-          text: '',
-        }]);
-      } else {
-        se.edit([{
-          range: new monaco.Range(l, 1, l, model.getLineMaxColumn(l)),
-          text: se.dirty[l],
-        }]);
-      }
-    });
+    se.undoChanges();
     se.ide.exec(es, trace);
-    se.dirty = {};
     se.setDecorations();
     se.histAdd(es.filter((x) => !/^\s*$/.test(x)));
     model._commandManager.clear();
