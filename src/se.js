@@ -154,9 +154,11 @@ D.Se = function Se(ide) { // constructor
         se.edit([{ range: new monaco.Range(dl0, 1, dl0, 2), text: '' }]);
       }
       let l = dl0;
+      const offset = Object.keys(se.dirty).reduce((n,x) => n + (x < l && se.dirty[x] === 0), 0);
       while (l <= dl1) {
         if (se.dirty[l] == null) {
-          const oldt = se.lines.length < l ? '      ' : se.lines[l - 1].text.slice(0, -1);
+          const seLine = l - offset;
+          const oldt = se.lines.length < seLine ? '      ' : se.lines[seLine - 1].text.slice(0, -1);
           se.dirty[l] = oldt;
         }
         l += 1;
@@ -737,12 +739,16 @@ D.Se.prototype = {
     const lc = model.getLineCount();
     let dl0 = ln;
     let dl1 = ln;
-    Object.values(se.multiLineBlocks).forEach((element) => {
-      if (ln <= (element.end || 0) && ln >= element.start) {
-        dl0 = Math.min(dl0, element.start);
-        dl1 = Math.max(dl1, element.end);
-      }
-    });
+    if (se.dirty[ln] !== 0) {
+      const offset = Object.keys(se.dirty).reduce((n,x) => n + (x < ln && se.dirty[x] === 0), 0);
+      const lno = ln - offset;
+      Object.values(se.multiLineBlocks).forEach((element) => {
+        if (lno <= (element.end || 0) && lno >= element.start) {
+          dl0 = Math.min(dl0, element.start + offset);
+          dl1 = Math.max(dl1, element.end + offset);
+        }
+      });
+    }
     for (let l = dl1; l >= dl0; l--) {
       if (se.dirty[l] === 0) {
         if (l === model.getLineCount()) {
