@@ -98,22 +98,22 @@
   }
 
   class SessionState {
-    // l:line number, .s:start of line ignoring whitespace, .h:inner state
-
-    constructor(l, s, h) {
-      this.l = l;
-      this.s = s;
-      this.h = h.clone();
+    constructor(l, o, s, h) {
+      this.l = l; // line number
+      this.o = o; // offset inserted lines
+      this.s = s; // start of line ignoring whitespace
+      this.h = h.clone(); // inner state
     }
 
     clone() {
-      return new SessionState(this.l, this.s, this.h);
+      return new SessionState(this.l, this.o, this.s, this.h);
     }
 
     equals(other) {
       if (other === this) return true;
       if (!other || !(other instanceof SessionState)) return false;
       if (this.l !== other.l) return false;
+      if (this.o !== other.o) return false;
       if (this.s !== other.s) return false;
       if (!this.h.equals(other.h)) return false;
       return true;
@@ -552,7 +552,7 @@
   };
 
   const aplSessionTokens = {
-    getInitialState: () => new SessionState(0, 1, aplTokens.getInitialState()),
+    getInitialState: () => new SessionState(0, 0, 1, aplTokens.getInitialState()),
     tokenize: (line, state) => {
       const se = D.wins && D.wins[0];
       const lt = {
@@ -573,8 +573,14 @@
       // const sol = offset === 0;
       const eol = line.length;
       const h = lt.endState;
+      h.o += se.dirty[h.l] === 0;
       let m; // m:regex match object
-      if (se.promptType === 4 || (!se.lineEditor[h.l + 1] && se.dirty[h.l + 1] == null)) {
+      if (se.promptType === 4 // skip tokenization if quote quad input
+        || (se.dirty[h.l + 1] == null // or if line modified
+          && !( // and not line editor
+            se.lineEditor[h.l - h.o + 1] // support for old interpreters (pre object lines)
+            || [11, 14].includes((se.lines[h.l - h.o] || {}).type) // object lines with type
+          ))) {
         offset = eol;
         h.l += 1;
         return lt;
