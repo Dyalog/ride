@@ -96,27 +96,27 @@ pipeline {
         }
       }
     }
-//AWS    stage ('OSX Notorise') {
-//AWS      agent {
-//AWS        label 'notarytool'
-//AWS      }
-//AWS      steps {
-//AWS        sh 'rm -Rf ship'
-//AWS        sh 'rm -Rf _'
-//AWS        unstash 'ride-version'
-//AWS        unstash 'mac-ship'
-//AWS        unstash 'macarm-ship'
-//AWS        withCredentials([usernamePassword(credentialsId: '868dda6c-aaec-4ee4-845a-57362dec695b', passwordVariable: 'APPLE_APP_PASS', usernameVariable: 'APPLE_ID')]) {
-//AWS          sh "CI/packagescripts/osx/notarise.sh"
-//AWS        }
-//AWS        stash name: 'mac-ship-notarised', includes: 'ship/*'
-//AWS      }
-//AWS      when {
-//AWS        not {
-//AWS          branch 'PR-*'
-//AWS        }
-//AWS      }
-//AWS    }
+    stage ('OSX Notorise') {
+      agent {
+        label 'notarytool'
+      }
+      steps {
+        sh 'rm -Rf ship'
+        sh 'rm -Rf _'
+        unstash 'ride-version'
+        unstash 'mac-ship'
+        unstash 'macarm-ship'
+        withCredentials([usernamePassword(credentialsId: '868dda6c-aaec-4ee4-845a-57362dec695b', passwordVariable: 'APPLE_APP_PASS', usernameVariable: 'APPLE_ID')]) {
+          sh "CI/packagescripts/osx/notarise.sh"
+        }
+        stash name: 'mac-ship-notarised', includes: 'ship/*'
+      }
+      when {
+        not {
+          branch 'PR-*'
+        }
+      }
+    }
     stage ('Copy install images') {
       agent {
         docker {
@@ -128,12 +128,12 @@ pipeline {
       steps {
         sh 'rm -Rf _ ship'
         unstash 'ride-win'
-//AWS        unstash 'ride-mac'
-//AWS        unstash 'ride-macarm'
+        unstash 'ride-mac'
+        unstash 'ride-macarm'
         unstash 'ride-linux'
         unstash 'ride-version'
         unstash 'linux-ship'
-//AWS        unstash 'mac-ship-notarised'
+        unstash 'mac-ship-notarised'
         unstash 'win-ship'
         sh './CI/copyinstallers.sh'
         sh 'rm -Rf _ ship'
@@ -159,7 +159,7 @@ pipeline {
         sh 'rm -Rf _ ship'
         unstash 'ride-version'
         unstash 'linux-ship'
- //AWS       unstash 'mac-ship-notarised'
+        unstash 'mac-ship-notarised'
         unstash 'win-ship'
         sh './CI/GH-Release.sh'
         sh 'rm -Rf _ ship'
