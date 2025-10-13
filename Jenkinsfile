@@ -58,22 +58,22 @@ pipeline {
             sh 'rm -Rf _ ship'
           }
         }
-        stage ('Mac Build and Packaging (ARM)') {
-          agent {
-            label 'mac && arm && build && ride'
-          }
-          steps {
-            sh 'rm -Rf _ ship'
-            sh 'npm i'
-            sh 'npm run build oa'
-            withCredentials([usernamePassword(credentialsId: '868dda6c-aaec-4ee4-845a-57362dec695b', passwordVariable: 'APPLE_APP_PASS', usernameVariable: 'APPLE_ID')]) {
-              sh './CI/packagescripts/osx/packageOSX.sh'
-            }
-            stash name: 'ride-macarm', includes: '_/ride*/Ride-*-darwin*/**'
-            stash name: 'macarm-ship', includes: 'ship/*'
-            sh 'rm -Rf _ ship'
-          }
-        }
+//AWS        stage ('Mac Build and Packaging (ARM)') {
+//AWS          agent {
+//AWS            label 'mac && arm && build && ride'
+//AWS          }
+//AWS          steps {
+//AWS            sh 'rm -Rf _ ship'
+//AWS            sh 'npm i'
+//AWS            sh 'npm run build oa'
+//AWS            withCredentials([usernamePassword(credentialsId: '868dda6c-aaec-4ee4-845a-57362dec695b', passwordVariable: 'APPLE_APP_PASS', usernameVariable: 'APPLE_ID')]) {
+//AWS              sh './CI/packagescripts/osx/packageOSX.sh'
+//AWS            }
+//AWS            stash name: 'ride-macarm', includes: '_/ride*/Ride-*-darwin*/**'
+//AWS            stash name: 'macarm-ship', includes: 'ship/*'
+//AWS            sh 'rm -Rf _ ship'
+//AWS          }
+//AWS        }
         stage ('Windows Packaging') {
           agent {
             label 'win && ride'
@@ -105,7 +105,7 @@ pipeline {
         sh 'rm -Rf _'
         unstash 'ride-version'
         unstash 'mac-ship'
-        unstash 'macarm-ship'
+//AWS        unstash 'macarm-ship'
         withCredentials([usernamePassword(credentialsId: '868dda6c-aaec-4ee4-845a-57362dec695b', passwordVariable: 'APPLE_APP_PASS', usernameVariable: 'APPLE_ID')]) {
           sh "CI/packagescripts/osx/notarise.sh"
         }
@@ -129,7 +129,7 @@ pipeline {
         sh 'rm -Rf _ ship'
         unstash 'ride-win'
         unstash 'ride-mac'
-        unstash 'ride-macarm'
+//AWS        unstash 'ride-macarm'
         unstash 'ride-linux'
         unstash 'ride-version'
         unstash 'linux-ship'
