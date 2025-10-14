@@ -59,8 +59,6 @@ ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac_x64.pkg" 
 echo "## Stapling $ARCHIVENAME"
 /usr/bin/xcrun stapler staple "$ARCHIVENAME"
 
-exit 0	# //AWS
-
 ## arm64
 ARCHIVENAME=`echo "${SHIPDIRECTORY}/${APPNAME}.${REVISION_VERSION}_mac_arm64.pkg" | tr '[:upper:]' '[:lower:]'`
 
