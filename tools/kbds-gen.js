@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 //This script scrapes keyboard definitions from http://dfns.dyalog.com/n_keyboards.htm and generates ../src/kbds.js
 //Mentioned in http://wiki.dyalog.bramley/index.php/New_Glyphs
-//Please contact john@dyalog.com (John Scholes) if the web page is incorrect.
+//Please contact support@dyalog.com if the web page is incorrect.
 'use strict';process.chdir(__dirname)
 const rq=require,fs=rq('fs'),http=rq('https'),cheerio=rq('cheerio')
 ,err=s=>{process.stderr.write(`ERROR: ${s}\n`);process.exit(1)}
