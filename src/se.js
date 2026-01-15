@@ -93,7 +93,7 @@ D.Se = function Se(ide) { // constructor
       e.event.preventDefault();
       e.event.stopPropagation();
     } else if (t.type === mt.GUTTER_GLYPH_MARGIN) {
-      if (p.lineNumber === se.lines.length + 1) {
+      if (p.lineNumber === se.lines.length) {
         this.EMI();
       }
     } else if (t.type === mt.CONTENT_TEXT) {
@@ -285,7 +285,7 @@ D.Se.prototype = {
         v.text = se.preProcessOutput('', v.text);
         se.lines.push(v);
       } else {
-        if ([3, 4].includes(se.promptType) && ll.text === ssp) ll.text = '';
+        if (v.type === 14 || se.promptType === 4) ll.text = '';
         ll.text = se.preProcessOutput(ll.text, v.text);
         ll.type = v.type;
         ll.group = v.group;
@@ -391,6 +391,8 @@ D.Se.prototype = {
       se.groupid += 1;
       se.lines.slice(block.start - 1, block.end).forEach((ll) => { ll.group = se.groupid; });
       se.setDecorations();
+    } else if (wasMultiLine && x !== 3 && D.apiVersion >= 1 && se.lines.at(-1).text === '      ') {
+      se.lines.pop();
     }
     if (promptChanged) {
       if (x) delete se.cursorPosition;
@@ -398,7 +400,7 @@ D.Se.prototype = {
     }
     if ((x === 1 && this.dirty[line] == null) || ![0, 1, 3, 4].includes(x)) {
       const isEmpty = /^\s*$/.test(t);
-      const text = isEmpty ? ssp : `${t}\n${ssp}`;
+      const text = isEmpty ? ssp : t;
       se.edit(
         [{ range: new monaco.Range(line, 1, line, column), text }],
         (promptChanged || !isEmpty)
@@ -487,11 +489,13 @@ D.Se.prototype = {
       }
     }
     if (se.promptType === 3 && curr.group > 0) {
+      const pre20 = +D.remoteIdentification.version.slice(0, 2) < 20;
+      const className = pre20 ? 'group_end' : 'group_end cancelable';
       se.groupDecorations.push({
         range: new monaco.Range(rows, 1, rows, 1),
         options: {
           isWholeLine: false,
-          glyphMarginClassName: 'group_end cancelable',
+          glyphMarginClassName: className,
           stickiness: monaco.editor.TrackedRangeStickiness.NeverGrowsWhenTypingAtEdges,
         },
       });
@@ -499,8 +503,10 @@ D.Se.prototype = {
   },
   setLineGroup(offset, group) {
     const se = this;
-    if (offset > 0) {
-      const li = se.lines.length - offset;
+    // offset needs to account for extra, non-terminated line when in multi line mode
+    const o = (se.promptType === 3 && se.lines.at(-1).text.at(-1) !== '\n') ? offset + 1 : offset;
+    if (o > 0) {
+      const li = se.lines.length - o;
       const oldGroup = se.lines[li].group;
       const block = se.multiLineBlocks[group] || {};
       const oldBlock = se.multiLineBlocks[oldGroup] || {};
@@ -511,8 +517,8 @@ D.Se.prototype = {
       } else if (oldBlock.end === li + 1) {
         oldBlock.end = li; // shift group to end on previous line
       }
+      se.lines[li].group = group;
       if (group > 0) { // create new block or update exisiting
-        se.lines[li].group = group;
         if (!block.start || block.start > li) block.start = li + 1;
         if (!block.end || block.end <= li) block.end = li + 1;
         se.multiLineBlocks[group] = block;
