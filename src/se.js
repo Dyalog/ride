@@ -285,7 +285,7 @@ D.Se.prototype = {
         v.text = se.preProcessOutput('', v.text);
         se.lines.push(v);
       } else {
-        if (v.type === 14 || se.promptType === 4) ll.text = '';
+        if ((ll.type !== 2 && v.type === 14) || se.promptType === 4) ll.text = '';
         ll.text = se.preProcessOutput(ll.text, v.text);
         ll.type = v.type;
         ll.group = v.group;
