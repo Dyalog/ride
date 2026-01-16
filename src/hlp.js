@@ -2,7 +2,7 @@
 // D.hlp['⍴']     -> 'http://help.dyalog.com/17.0/Content/Language/Symbols/Rho.htm'
 // D.hlp[')vars'] -> 'http://help.dyalog.com/17.0/Content/Language/System%20Commands/vars.htm'
 D.InitHelp = function initHelp(version) {
-  const v = version ? version.slice(0, 4) : 'latest';
+  const v = version ? version.slice(0, 4) : '20.0';
   const v3 = version ? `_${v.replace(/\./, '')}` : '';
   const pre200 = parseFloat(v) < 20.0;
   const helpUri = `https://${pre200 ? 'help' : 'docs'}.dyalog.com/${v}/`;
