@@ -85,8 +85,8 @@ pipeline {
             unstash 'ride-version'
             bat './CI/packagescripts/windows/packageWindows.bat'
             stash name: 'win-ship', includes: 'ship/*'
-            powershell 'remove-item ship -Recurse -Force'
-            powershell 'remove-item _ -Recurse -Force'
+//            powershell 'remove-item ship -Recurse -Force'
+//            powershell 'remove-item _ -Recurse -Force'
           }
         }
       }
