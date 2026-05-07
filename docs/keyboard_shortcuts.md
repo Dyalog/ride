@@ -37,7 +37,7 @@ The Dyalog keyboard shortcuts that are supported by the Ride are listed below; t
 | HLP* | Help | F1 | Display the documentation for the system command, system name, control structure keyword or primitive glyph immediately to the left of the cursor |
 | HO | <kbd>Home</kbd> cursor | Linux: <kbd>Ctrl</kbd> + <kbd>Home</kbd> macOS: <kbd>⌘</kbd> + <kbd>Up Arrow</kbd> Windows: <kbd>Ctrl</kbd> + <kbd>Home</kbd> | Session : Move cursor to top left corner of Session log Edit : Move cursor to top left corner of content |
 | JBK* | Jump back | <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>J<kbd> | Edit (a class or namespace): move the cursor back to where the last double-click or Edit command (`<ED>`) was issued in the current **Edit** window. Repeatable. |
-| JSC* | Show JavaScript Console | <kbd>F12</kbd> | Display the JavaScript console. Only necessary if requested by Dyalog Ltd. when reporting an issue. |
+| JSC* | Show JavaScript Console | <kbd>Shift</kbd> + <kbd>F12</kbd> | Display the JavaScript console. Only necessary if requested by Dyalog Ltd. when reporting an issue. |
 | LBR* | Toggle Language bar |  | Toggle display of the [Language bar](the_dyalog_development_environment.md/#language-bar) at the top of the **Session** window |
 | LC | Left cursor | <kbd>Left Arrow</kbd> | Move cursor left one character |
 | LL | Left limit | Linux: <kbd>Home</kbd> macOS: <kbd>Fn</kbd> + <kbd>Left Arrow</kbd> Windows: <kbd>Home</kbd> | Move cursor to the first non-blank character on the current line. If already there, move cursor to start of line. |
