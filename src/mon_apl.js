@@ -506,13 +506,19 @@
                 m = sm.match(name1);
                 let [x] = m;
                 dd = dfnDepth(a);
-                if (!dd && /^\s*:(?!in)/i.test(sm.slice(x.length))) {
+                const rest = sm.slice(x.length);
+                // : is tricky - in Aplan it has a purpose for key-value pairs
+                // so we try to deal with that
+                if (!dd && (la.isAplan ? /^\s*:/ : /^\s*:(?!in)/i).test(rest)) {
+                  const [gap] = rest.match(/^\s*/); // between the name and ":"
                   if (la.isAplan) {
                     addToken(offset, 'identifier.local.aplan');
+                    if (gap) addToken(offset + x.length, 'white');
+                    addToken(offset + x.length + gap.length, 'delimiter.aplan');
                   } else {
-                    offset += sm.slice(x.length).match(/^\s*:/)[0].length;
                     addToken(offset, 'meta.label');
                   }
+                  offset += gap.length + 1;
                 } else if (dd || (h.vars && h.vars.includes(x))) {
                   [x] = sm.match(RegExp(`(${D.syntax.name}\\.?)+`));
                   addToken(offset, 'identifier.local');
