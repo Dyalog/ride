@@ -1,0 +1,43 @@
+@font-face {
+	font-family: APL;
+	src: local("APL385 Unicode"), url("../assets/apl385.ttf");
+}
+.language-APL {
+	font-family: APL!important;
+	line-height: 1.2em!important;
+}
+code {
+	font-family: APL;
+}
+.md-logo > img{
+	width: 7rem!important;
+	height: 1.2rem!important;
+}
+@media screen and (max-width: 76.1875em) {
+	.md-logo > img{
+		width: 10rem!important;
+		height: 1.8rem!important;
+	}
+}
+/* Custom colors */
+:root {
+	--md-primary-fg-color: #ED7F00;
+	--md-primary-fg-color--dark: #563336;
+	--md-default-bg-color: #F8F8F8;
+}
+/* Code copy only input (see CONTRIBUTING.md) */
+pre + pre > button, pre + hr {
+    display: none!important;
+}
+pre > code {
+    padding-bottom: 1em!important;
+}
+hr + pre > button {
+    top: -0.2em!important;
+}
+pre + pre , hr + pre {
+    margin-top: -1.8em!important;
+}
+pre + pre > code, hr + pre > code {
+    padding-top: 0.2em!important;
+}

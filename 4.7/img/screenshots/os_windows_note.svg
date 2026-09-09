@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   version="1.1"
+   id="svg2"
+   viewBox="0 0 40 39.999878"
+   height="39.999878"
+   width="40">
+  <defs
+     id="defs4" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-231.91163,-443.95332)"
+     id="layer1">
+    <g
+       id="layer1-7"
+       transform="matrix(0.69398628,0,0,0.69398628,-113.31995,187.53978)">
+      <g
+         transform="translate(282.75443,-100.5505)"
+         id="layer1-6">
+        <g
+           id="g10"
+           transform="matrix(0.07980421,0,0,-0.07980421,213.69982,521.47039)">
+          <g
+             id="g12"
+             transform="scale(0.1,0.1)">
+            <path
+               d="m 2834.65,759.941 c -1145.83,0 -2074.709,928.889 -2074.709,2074.699 0,1145.83 928.879,2074.71 2074.709,2074.71 1145.82,0 2074.71,-928.88 2074.71,-2074.71 0,-1145.81 -928.89,-2074.699 -2074.71,-2074.699 z m 0,4783.109 c -1493.43,0 -2708.412,-1214.97 -2708.412,-2708.41 0,-1493.41 1214.982,-2708.39 2708.412,-2708.39 1493.43,0 2708.41,1214.98 2708.41,2708.39 0,1493.44 -1214.98,2708.41 -2708.41,2708.41"
+               style="fill:#ff9421;fill-opacity:1;fill-rule:nonzero;stroke:none"
+               id="path16" />
+            <path
+               d="m 2905,3817.94 0,-888.64 1293.33,0 0,1142.95 L 2905,3817.94 Z m 0,-1917.66 1293.33,-303.23 0,1194.52 -1293.33,0 0,-891.29 z m -1434.03,336.21 1293.33,-303.23 0,858.31 -1293.33,0 0,-555.08 z m 0,692.81 1293.33,0 0,860.97 -1293.33,-254.31 0,-606.66"
+               style="fill:#ff9421;fill-opacity:1;fill-rule:nonzero;stroke:none"
+               id="path18" />
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

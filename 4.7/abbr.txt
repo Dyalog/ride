@@ -1,0 +1,60 @@
+common abbreviations used throughout the code:
+
+bg    background
+btn   button
+cb    checkbox
+cfg   configuration
+clt   client (like in Conga)
+cm    CodeMirror
+cmd   command, a 2-or-3-uppercase-letter code for an IDE action
+col   colour; column
+com   comment
+dlg   dialog
+D     Dyalog
+ed    editor
+el    element
+eol   end of line
+esc   escape; usually referring to html characters: &→&amp; <→&lt; etc
+exe   executable (not necessarily a DOS MZ .exe file)
+fav   favourite(s), the list of remembered addresses of remote interpreters
+fg    foreground
+fmt   format
+fn    function
+geom  geometry, the mechanical layout of a keyboard
+grp   group
+hdr   header
+hvr   hover
+kbd   keyboard
+kw    keyword; sometimes used as a synonym for "control structure"
+lb    language bar
+lbl   label
+lc    locale
+lh    CodeMirror's LineHandle objects (see https://codemirror.net/doc/manual.html#getLineHandle)
+lhs   left-hand side
+lyt   layout
+msg   message
+pfx   prefix
+pos   position
+prf   preference(s)
+re    regular expression; sometimes used as a prefix to variable names
+rhs   right-hand side
+rp    replace (like Dyalog's RP command)
+rq    require
+rst   reset
+sc    search (like Dyalog's SC command)
+scm   scheme (like the typical extension for files containing mostly parens)
+sel   selection
+se    session
+sfx   suffix
+shc   shortcut
+sig   signal
+skt   socket
+sol   start of line (used by CodeMirror)
+srv   server (like in Conga)
+stk   stack
+stl   style
+sm    stream (for instance in the ssh client or in CodeMirror's tokenizer function)
+tb    toolbar
+tid   id returned by setTimeoutId()
+upd   update
+win   window (session or editor)

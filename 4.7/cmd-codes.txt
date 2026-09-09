@@ -1,0 +1,39 @@
+Pre-Ride command codes and their default shortcuts on Windows:
+
+AC Align Comments
+AO Add comments
+BH Run to exit (in tracer)
+BK Backward or Undo                Control+Shift+Back
+BP Toggle breakpoint
+BT Back Tab between windows
+CP Copy
+CT Cut
+DK Delete Block                    Control+Delete
+DO Del comments
+ED Edit                            Shift+Enter
+EP Exit (and save changes)         Esc
+FD Forward or Redo                 Control+Shift+Enter
+FX Fix the current function
+GL Go to Line
+LN Toggle Line numbers             Num -
+LS Left Screen
+MA Resume all threads (in tracer)
+MO Goto matching outline
+NX Next
+PT Paste
+PV Previous
+QT Quit (and lose changes)         Shift+Esc
+RD Reformat                        Num /
+RM Resume execution (in tracer)
+RP Replace
+RS Right Screen
+RZ Snap window size
+S1 Fix script and exit editor
+S2 Fix script but remain in editor
+SA Select all
+SC Search
+TB Tab between windows
+TC Trace                           Control+Enter
+TL Toggle localisation             Control+Up
+TO Toggle outline
+UA Undo all changes
