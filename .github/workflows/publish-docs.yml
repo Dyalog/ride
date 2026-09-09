@@ -1,0 +1,70 @@
+name: Publish Documentation
+
+# Manual, push-button publish of the mkdocs site to GitHub Pages via mike.
+# Pick the branch/tag to build from using the "Run workflow" ref selector.
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (e.g. 4.7)'
+        required: true
+        type: string
+      alias:
+        description: 'Alias to assign (e.g. latest) - leave empty for none'
+        required: false
+        default: ''
+        type: string
+      set_as_default:
+        description: 'Set this version as the default (redirect target)'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+# Avoid two publishes racing to update the gh-pages branch at once.
+concurrency:
+  group: docs-publish
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r CI/requirements-docs.txt
+
+      - name: Set up git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Fetch existing gh-pages branch
+        run: git fetch origin gh-pages --depth=1
+
+      - name: Deploy documentation
+        run: |
+          if [ -n "${{ inputs.alias }}" ]; then
+            mike deploy --push --update-aliases "${{ inputs.version }}" "${{ inputs.alias }}"
+          else
+            mike deploy --push "${{ inputs.version }}"
+          fi
+
+      - name: Set as default version
+        if: ${{ inputs.set_as_default }}
+        run: |
+          TARGET="${{ inputs.alias != '' && inputs.alias || inputs.version }}"
+          mike set-default --push "${TARGET}"

@@ -46,5 +46,13 @@ mike set-default [version]
 ```
 in order to configure the redirects, such that visitors to `.../ride` will be redirected to `.../ride/4.5/` (or whatever the default is set to).
 
-It is possible to build the docs automatically using an Action. See how [Link](https://github.com/Dyalog/link/blob/master/.github/workflows/mkdocs-mike-deploy.yml) does this in case this becomes necessary.
+The pinned versions of these components live in `CI/requirements-docs.txt`; install them with `pip install -r CI/requirements-docs.txt`.
+
+## Publishing via GitHub Actions
+
+The docs can also be published with the "Publish Documentation" workflow (`.github/workflows/publish-docs.yml`). It's push-button only: go to the Actions tab, select "Publish Documentation", choose the branch to build from (e.g. `ride4.7`) and click "Run workflow", supplying:
+
+- `version` - the version to publish, e.g. `4.7`
+- `alias` - optional, e.g. `latest`
+- `set_as_default` - tick this to make the version the site's default redirect target
 
