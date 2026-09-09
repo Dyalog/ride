@@ -1,0 +1,4 @@
+mkdocs==1.6.1
+mkdocs-material==9.7.7
+mkdocs-print-site-plugin==2.9
+mike==2.2.0
